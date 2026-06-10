@@ -282,6 +282,7 @@ let inst = {
   aantal:15, sessiecode:'', webhookUrl:'https://script.google.com/macros/s/AKfycbyQrtaCiKXId2Rq1GCcfqOVXv9Ebczo3j9-3V3rWuUkQ5JO75bTHhWTJvvNEVVF9BKH/exec',
 };
 const VASTE_WEBHOOK = 'https://script.google.com/macros/s/AKfycbyQrtaCiKXId2Rq1GCcfqOVXv9Ebczo3j9-3V3rWuUkQ5JO75bTHhWTJvvNEVVF9BKH/exec';
+let toetsBezig = false;
 let toets = { leerling:{naam:'',achternaam:'',klas:''}, sessiecode:'', vragen:[], huidig:0, antwoorden:[], tabWissels:0, tabLog:[] };
 
 const DOCENT_PW = 'latijn2025';
@@ -492,11 +493,62 @@ function levenshtein(a,b){
     dp[i][j]=a[i-1]===b[j-1]?dp[i-1][j-1]:1+Math.min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]);
   return dp[m][n];
 }
-function woordMatch(a,b){
-  const i=normaliseer(a),d=normaliseer(b);
+// Nederlandse synoniemen: als leerling dit invult, telt het als correct antwoord
+const NL_SYNONIEMEN = {
+  'niets': ['niks','niets'],
+  'niks': ['niets','niks'],
+  'iedereen': ['ieder','elk','iedereen'],
+  'ieder': ['iedereen','elk','ieder'],
+  'elk': ['ieder','iedereen','elk'],
+  'echter': ['maar','doch','echter','evenwel'],
+  'maar': ['echter','doch','maar','evenwel'],
+  'doch': ['maar','echter','doch'],
+  'want': ['immers','want'],
+  'immers': ['want','immers'],
+  'dus': ['derhalve','bijgevolg','daarom','dus'],
+  'derhalve': ['dus','bijgevolg','daarom','derhalve'],
+  'bijgevolg': ['dus','derhalve','daarom','bijgevolg'],
+  'toch': ['desalniettemin','toch'],
+  'ook': ['eveneens','ook'],
+  'eveneens': ['ook','eveneens'],
+  'altijd': ['steeds','voortdurend','altijd'],
+  'steeds': ['altijd','voortdurend','steeds'],
+  'vaak': ['dikwijls','meermalen','vaak'],
+  'dikwijls': ['vaak','meermalen','dikwijls'],
+  'nooit': ['nimmer','nooit'],
+  'nimmer': ['nooit','nimmer'],
+  'nauwelijks': ['ternauwernood','nauwelijks'],
+  'ternauwernood': ['nauwelijks','ternauwernood'],
+  'tevergeefs': ['vergeefs','tevergeefs'],
+  'vergeefs': ['tevergeefs','vergeefs'],
+  'liever': ['veeleer','eerder','liever'],
+  'veeleer': ['liever','eerder','veeleer'],
+  'bovendien': ['voorts','daarnaast','verder','bovendien'],
+  'voorts': ['bovendien','daarnaast','voorts'],
+  'weliswaar': ['zeker','immers','weliswaar'],
+  'opdat': ['om te','opdat'],
+  'zodat': ['opdat','zodat'],
+  'hoewel': ['ofschoon','hoewel'],
+  'ofschoon': ['hoewel','ofschoon'],
+  'nadat': ['zodra','nadat'],
+  'tenzij': ['als niet','tenzij'],
+  'omdat': ['aangezien','wijl','omdat'],
+  'aangezien': ['omdat','wijl','aangezien'],
+};
+
+function woordMatch(a, b){
+  const i=normaliseer(a), d=normaliseer(b);
   if(i===d) return true;
+  // Synoniemen-check
+  const syns = NL_SYNONIEMEN[i];
+  if(syns && syns.includes(d)) return true;
+  const syns2 = NL_SYNONIEMEN[d];
+  if(syns2 && syns2.includes(i)) return true;
+  // Levenshtein: strenger voor korte woorden
   const mx=Math.max(i.length,d.length);
-  return mx>0&&levenshtein(i,d)<=Math.max(1,Math.floor(mx*0.2));
+  if(mx===0) return true;
+  const maxDist = mx<=4 ? 0 : mx<=6 ? 1 : Math.floor(mx*0.2);
+  return levenshtein(i,d)<=maxDist;
 }
 function controleer(ingevoerd,woord){
   const v=woord.vertaling;
@@ -511,8 +563,9 @@ function controleer(ingevoerd,woord){
   const inp=ingevoerd.trim();
   if(!inp) return 'leeg';
   for(const k of kand){if(woordMatch(inp,k)) return 'goed';}
+  // Misschien: token-overlap, maar alleen bij langere tokens (>3 tekens) en strictere match
   const it=tokenize(inp), at=kand.flatMap(k=>tokenize(k));
-  if(it.filter(t=>t.length>2&&at.some(a=>woordMatch(t,a))).length>0) return 'misschien';
+  if(it.filter(t=>t.length>3&&at.some(a=>a===normaliseer(t))).length>0) return 'misschien';
   return 'fout';
 }
 
@@ -605,10 +658,7 @@ async function verzendResultaten(){
     antwoorden:ant.map(a=>({woord:a.woord,gegeven:a.gegeven,correct:a.vertaling.replace(/\n/g,' / '),uitslag:a.twijfel?'twijfel':a.uitslag})),
   };
   try{
-    // Stuur als form-data (werkt met no-cors ook vanuit lokale bestanden)
-    const form = new FormData();
-    form.append('payload', JSON.stringify(payload));
-    await fetch(hook, {method:'POST', mode:'no-cors', body:form});
+    await fetch(hook,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     toetsBezig = false;
     toonEinde();
   }catch(e){
@@ -635,7 +685,6 @@ function toonEinde(){
 }
 
 // ── TABBLAD DETECTIE ──
-let toetsBezig = false; // wordt true zodra toets start, false na verzenden
 
 document.addEventListener('visibilitychange', function(){
   if(!toetsBezig) return;
