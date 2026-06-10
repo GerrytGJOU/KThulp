@@ -451,7 +451,7 @@ function startToets(){
   const pool=bouwPool(inst);
   if(pool.length===0){err.textContent='Geen woorden beschikbaar. Vraag je docent de instellingen te controleren.';err.style.display='block';return;}
   const vragen=selecteerVragen(pool,inst.aantal,sessie,naam+acht);
-  toets={leerling:{naam,achternaam:acht,klas},sessiecode:sessie,vragen,huidig:0,antwoorden:[]};
+  toets={leerling:{naam,achternaam:acht,klas},sessiecode:sessie,vragen,huidig:0,antwoorden:[],tabWissels:0,tabLog:[]};
   toetsBezig = true;
   toonVraag();
   showScreen('screen-toets');
