@@ -453,6 +453,7 @@ function startToets(){
   const vragen=selecteerVragen(pool,inst.aantal,sessie,naam+acht);
   toets={leerling:{naam,achternaam:acht,klas},sessiecode:sessie,vragen,huidig:0,antwoorden:[],tabWissels:0,tabLog:[]};
   toetsBezig = true;
+  window.addEventListener("beforeunload", waarschuwVerlaten);
   toonVraag();
   showScreen('screen-toets');
 }
@@ -660,6 +661,7 @@ async function verzendResultaten(){
   try{
     await fetch(hook,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     toetsBezig = false;
+    window.removeEventListener("beforeunload", waarschuwVerlaten);
     toonEinde();
   }catch(e){
     btn.disabled=false; btn.innerHTML='Opnieuw proberen';
@@ -682,6 +684,12 @@ function toonEinde(){
     tbl.innerHTML+=`<tr class="${cls}"><td><strong>${a.woord}</strong></td><td>${a.gegeven||'—'}</td><td style="font-size:11px;color:var(--ink-light);">${vertKort}</td><td>${badge}</td></tr>`;
   });
   showScreen('screen-einde');
+}
+
+// ── VERLATEN WAARSCHUWING ──
+function waarschuwVerlaten(e){
+  e.preventDefault();
+  e.returnValue = '';
 }
 
 // ── TABBLAD DETECTIE ──
