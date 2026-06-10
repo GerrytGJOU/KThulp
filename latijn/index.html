@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Latijn">
+<meta name="theme-color" content="#16110c">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23160f09'/%3E%3Cpath d='M90 24c18 7 47 11 47 11v54c0 47-29 68-47 79-18-11-47-32-47-79V35s29-4 47-11z' fill='%235a120c' stroke='%23d4af37' stroke-width='5'/%3E%3Ctext x='90' y='112' font-size='62' fill='%23f0cf6b' text-anchor='middle' font-family='Georgia,serif' font-weight='bold'%3EL%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<title>Latijn — Klassieke Talen</title>
+<style>
+  :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--ox:#5a120c;--cream:#f3e9d2;
+        --muted:#b9a883;--s2:#221a12;--s3:#2f241a;--s4:#3d2f20;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'EB Garamond',Georgia,serif;min-height:100vh;color:var(--cream);
+    background:radial-gradient(ellipse at 50% -10%,rgba(212,175,55,.10),transparent 55%),
+               radial-gradient(ellipse at 50% 120%,rgba(168,38,26,.16),transparent 55%),
+               linear-gradient(160deg,#120d08,#1c140d 45%,#160f09);
+    background-attachment:fixed;padding:24px 16px 60px;}
+  .wrap{max-width:680px;margin:0 auto}
+  .top{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .back{width:42px;height:42px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    border-radius:11px;background:var(--s3);border:1px solid var(--s4);color:var(--gold);text-decoration:none}
+  .back svg{width:20px;height:20px}
+  .crest{width:46px;height:46px;flex:0 0 auto}
+  .ttl{flex:1}
+  .ttl h1{font-family:'Cinzel',serif;font-weight:800;color:var(--goldb);font-size:23px;letter-spacing:.03em;line-height:1}
+  .ttl .s{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:var(--muted);margin-top:4px;text-transform:uppercase}
+  .grid{display:grid;gap:14px}
+  a.app{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--cream);
+    background:linear-gradient(170deg,var(--s3),var(--s2));border:1px solid var(--s4);
+    border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px rgba(0,0,0,.5);
+    transition:transform .14s,border-color .14s;}
+  a.app:active{transform:scale(.98)}
+  a.app:hover{border-color:var(--goldd)}
+  .ic{width:50px;height:50px;flex:0 0 auto}
+  .app h2{font-family:'Cinzel',serif;font-size:19px;color:var(--cream);margin-bottom:3px}
+  .app p{font-size:14px;color:var(--muted);line-height:1.35}
+  .arrow{margin-left:auto;color:var(--gold);font-size:22px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="../" aria-label="Terug"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <svg class="crest" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8392a"/><stop offset="100%" stop-color="#5a120c"/></linearGradient></defs><path d="M50 8c10 4 26 6 26 6v30c0 26-16 38-26 44C40 82 24 70 24 44V14s16-2 26-6z" fill="url(#g)" stroke="#d4af37" stroke-width="3"/><text x="50" y="50" font-size="22" fill="#f0cf6b" text-anchor="middle" font-family="Cinzel" font-weight="700">L</text></svg>
+    <div class="ttl"><h1>LATIJN</h1><div class="s">Kies een oefening</div></div>
+  </div>
+
+  <div class="grid">
+
+    <a class="app" href="ludus/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6"><path d="M4 5a2 2 0 012-2h7v18H6a2 2 0 01-2-2zM20 5a2 2 0 00-2-2h-1v18h1a2 2 0 002-2z"/><path d="M13 3v18"/></svg>
+      <div><h2>Ludus Latinus</h2><p>Woordenschat, werkwoorden, zinnen vertalen, spellen &amp; meer</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a class="app" href="casus/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>
+      <div><h2>Casus-trainer</h2><p>Oefen en toets de naamvallen van alle declinaties</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a class="app" href="structura/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6"><path d="M4 7h16M4 12h10M4 17h7"/><circle cx="18" cy="15" r="3"/><path d="M18 12v-1M18 19v-1"/></svg>
+      <div><h2>Zinsontleding</h2><p>Ontleed Latijnse zinnen met de PSAOLMO-methode</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a class="app" href="verba/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.2a2.5 2.5 0 113 2.3V13M12 16.5h.01"/></svg>
+      <div><h2>Woordquiz</h2><p>Toets je kennis van de frequentielijst</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+  </div>
+  <footer>SPQR &middot; Klassieke Talen &middot; Latijn</footer>
+</div>
+</body>
+</html>
