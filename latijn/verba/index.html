@@ -605,7 +605,10 @@ async function verzendResultaten(){
     antwoorden:ant.map(a=>({woord:a.woord,gegeven:a.gegeven,correct:a.vertaling.replace(/\n/g,' / '),uitslag:a.twijfel?'twijfel':a.uitslag})),
   };
   try{
-    await fetch(hook,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    // Stuur als form-data (werkt met no-cors ook vanuit lokale bestanden)
+    const form = new FormData();
+    form.append('payload', JSON.stringify(payload));
+    await fetch(hook, {method:'POST', mode:'no-cors', body:form});
     toetsBezig = false;
     toonEinde();
   }catch(e){
