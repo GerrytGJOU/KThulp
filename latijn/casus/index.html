@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Casus Trainer — Latijnse Naamvallen</title>
+<style>
+  /* Offline-veilige fonts: werkt zonder internet op iPad/Chromebook */
+  :root {
+    --ink:#1a1209;--parchment:#f5eedc;--parchment-dark:#e8dfc6;--parchment-deep:#d4c9a8;
+    --red:#8b1a1a;--red-light:#c44040;--gold:#a07820;--gold-light:#c8a040;
+    --blue:#1a3a6b;--blue-light:#2a5a9b;--green:#1a5a2a;--green-light:#2a8a3a;
+    --shadow:rgba(26,18,9,0.18);--border:#b8a878;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif;background:var(--parchment);color:var(--ink);min-height:100vh;
+    background-image:radial-gradient(ellipse at 20% 20%,rgba(160,120,32,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,.06) 0%,transparent 60%)}
+  header{background:var(--ink);color:var(--parchment);padding:18px 24px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:100}
+  header h1{font-family:Georgia,'Times New Roman',serif;font-size:1.45rem;font-weight:900;letter-spacing:.03em;line-height:1.1}
+  header h1 span{display:block;font-size:.7rem;font-weight:400;letter-spacing:.12em;color:var(--gold-light);text-transform:uppercase;font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif}
+  #mode-badge{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:3px;border:1.5px solid}
+  .screen{display:none;padding:20px 16px 40px;max-width:700px;margin:0 auto}
+  .screen.active{display:block}
+  .home-title{font-family:Georgia,'Times New Roman',serif;font-size:2rem;font-weight:900;text-align:center;color:var(--ink);margin:24px 0 6px;line-height:1.15}
+  .home-sub{text-align:center;color:var(--gold);font-style:italic;font-size:1rem;margin-bottom:32px}
+  .mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+  .mode-card{background:white;border:2px solid var(--border);border-radius:8px;padding:24px 18px 20px;text-align:center;cursor:pointer;transition:all .18s;box-shadow:0 2px 8px var(--shadow)}
+  .mode-card:hover,.mode-card:active{transform:translateY(-2px);box-shadow:0 6px 18px var(--shadow)}
+  .mode-card.oefenen{border-color:var(--blue)}.mode-card.oefenen:hover{background:#f0f5ff}
+  .mode-card.toetsen{border-color:var(--red)}.mode-card.toetsen:hover{background:#fff0f0}
+  .mode-card .card-icon{font-size:2.2rem;margin-bottom:10px}
+  .mode-card h2{font-family:Georgia,'Times New Roman',serif;font-size:1.2rem;font-weight:700;margin-bottom:6px}
+  .mode-card.oefenen h2{color:var(--blue)}.mode-card.toetsen h2{color:var(--red)}
+  .mode-card p{font-size:.82rem;color:#555;line-height:1.4}
+  .btn{display:inline-block;padding:11px 22px;border-radius:5px;font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif;font-size:.9rem;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .15s;text-align:center;-webkit-tap-highlight-color:transparent}
+  .btn-primary{background:var(--blue);color:white;border-color:var(--blue)}.btn-primary:hover{background:var(--blue-light)}
+  .btn-red{background:var(--red);color:white;border-color:var(--red)}.btn-red:hover{background:var(--red-light)}
+  .btn-outline{background:transparent;color:var(--ink);border-color:var(--border)}.btn-outline:hover{background:var(--parchment-dark)}
+  .btn-sm{padding:7px 14px;font-size:.8rem}.btn-full{display:block;width:100%;margin:8px 0}.btn:disabled{opacity:.45;cursor:default}
+  .oef-menu{display:flex;flex-direction:column;gap:12px;margin:16px 0}
+  .oef-btn{background:white;border:2px solid var(--blue);border-radius:7px;padding:16px 18px;cursor:pointer;text-align:left;transition:all .15s;box-shadow:0 1px 4px var(--shadow)}
+  .oef-btn:hover,.oef-btn:active{background:#f0f5ff;transform:translateY(-1px)}
+  .oef-btn .oef-num{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);font-weight:700;margin-bottom:3px}
+  .oef-btn h3{font-family:Georgia,'Times New Roman',serif;font-size:1.05rem;color:var(--blue)}
+  .oef-btn p{font-size:.78rem;color:#555;margin-top:3px}
+  .section-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+  .section-header h2{font-family:Georgia,'Times New Roman',serif;font-size:1.25rem;color:var(--ink)}
+  .section-header .back-btn{font-size:1.1rem;cursor:pointer;color:var(--gold);padding:4px 8px;border-radius:4px;border:1.5px solid var(--border);background:white;line-height:1}
+  .schema-info{font-size:.82rem;color:#555;margin-bottom:14px;font-style:italic}
+  .schema-word{font-family:Georgia,'Times New Roman',serif;font-size:1.1rem;color:var(--blue);text-align:center;margin-bottom:14px;padding:10px;background:white;border:1.5px solid var(--blue);border-radius:6px}
+  .schema-word .word-info{font-size:.75rem;color:#777;font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif}
+  table.casus-table{width:100%;border-collapse:collapse;font-size:.88rem;margin-bottom:16px;background:white;border-radius:6px;overflow:hidden;box-shadow:0 1px 6px var(--shadow)}
+  table.casus-table th{background:var(--ink);color:var(--parchment);font-family:Georgia,'Times New Roman',serif;font-size:.8rem;font-weight:700;padding:8px 10px;text-align:center;letter-spacing:.04em}
+  table.casus-table td{padding:7px 10px;border-bottom:1px solid var(--parchment-dark);vertical-align:middle}
+  table.casus-table tr:last-child td{border-bottom:none}
+  table.casus-table td:first-child{font-weight:600;color:var(--gold);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;width:90px}
+  table.casus-table tr:nth-child(even){background:var(--parchment)}
+  table.casus-table input[type="text"]{width:100%;padding:5px 8px;border:1.5px solid var(--border);border-radius:4px;font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif;font-size:.88rem;background:var(--parchment);color:var(--ink);outline:none;transition:border-color .15s;-webkit-appearance:none}
+  table.casus-table input:focus{border-color:var(--blue);background:white}
+  table.casus-table input.correct{border-color:var(--green);background:#efffef;color:var(--green)}
+  table.casus-table input.wrong{border-color:var(--red);background:#fff0f0;color:var(--red)}
+  table.casus-table .answer-cell{display:flex;align-items:center;gap:6px}
+  table.casus-table .given{font-style:italic;color:#444}
+  .det-word{font-family:Georgia,'Times New Roman',serif;font-size:2rem;font-weight:900;text-align:center;color:var(--blue);padding:18px;background:white;border:2px solid var(--blue);border-radius:8px;margin-bottom:18px;box-shadow:0 2px 8px var(--shadow)}
+  .det-options{display:grid;gap:8px;margin-bottom:12px}
+  .det-opt-btn{padding:10px 16px;background:white;border:1.5px solid var(--border);border-radius:6px;font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif;font-size:.9rem;cursor:pointer;text-align:left;transition:all .13s;-webkit-tap-highlight-color:transparent}
+  .det-opt-btn:hover,.det-opt-btn:active{background:var(--parchment-dark)}
+  .det-opt-btn.correct{border-color:var(--green);background:#efffef;color:var(--green);font-weight:600}
+  .det-opt-btn.wrong{border-color:var(--red);background:#fff0f0;color:var(--red)}
+  .det-feedback{font-size:.85rem;padding:8px 12px;border-radius:5px;margin-top:6px;display:none}
+  .det-feedback.show{display:block}
+  .det-feedback.ok{background:#efffef;color:var(--green);border:1px solid var(--green)}
+  .det-feedback.nok{background:#fff0f0;color:var(--red);border:1px solid var(--red)}
+  .zin-display{font-size:1.05rem;line-height:1.9;padding:16px;background:white;border-radius:6px;border:1.5px solid var(--border);margin-bottom:14px;box-shadow:0 1px 4px var(--shadow)}
+  .zin-target{display:inline-block;border-bottom:2px dashed var(--gold);cursor:pointer;padding:2px 4px;border-radius:3px;transition:background .12s}
+  .zin-target.selected-zin{background:#fff3d0;border-color:var(--gold)}
+  .zin-target.correct-zin{background:#efffef;border-color:var(--green);color:var(--green);font-weight:600}
+  .zin-target.wrong-zin{background:#fff0f0;border-color:var(--red);color:var(--red)}
+  .zin-vraag{font-size:.85rem;color:var(--gold);font-weight:600;margin-bottom:8px;font-style:italic}
+  .score-box{background:white;border:2px solid var(--border);border-radius:8px;padding:20px;margin:16px 0;text-align:center;box-shadow:0 2px 8px var(--shadow)}
+  .score-pct{font-family:Georgia,'Times New Roman',serif;font-size:3rem;font-weight:900;color:var(--blue);line-height:1}
+  .score-cijfer{font-family:Georgia,'Times New Roman',serif;font-size:1.8rem;font-weight:700;margin-top:8px}
+  .score-label{font-size:.8rem;color:#777;margin-top:4px;letter-spacing:.06em;text-transform:uppercase}
+  .progress-bar-wrap{width:100%;background:var(--parchment-dark);border-radius:4px;height:8px;margin:10px 0}
+  .progress-bar{height:8px;border-radius:4px;background:var(--blue);transition:width .3s}
+  .norm-table{width:100%;font-size:.8rem;border-collapse:collapse;margin:12px 0}
+  .norm-table td{padding:4px 8px;border:1px solid var(--parchment-deep);text-align:center}
+  .norm-table tr.highlight{background:var(--gold-light);color:white;font-weight:700}
+  .counter{font-size:.78rem;color:#888;text-align:right;margin-bottom:8px}
+  .divider{border:none;border-top:1px solid var(--parchment-deep);margin:16px 0}
+  .tag{display:inline-block;font-size:.68rem;padding:2px 7px;border-radius:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+  .tag-m{background:#ddeeff;color:var(--blue)}.tag-f{background:#fddde6;color:#8b1a4a}.tag-n{background:#ddfde8;color:var(--green)}.tag-mf{background:#ecdde8;color:#5a1a4a}
+  .alert{padding:10px 14px;border-radius:5px;font-size:.85rem;margin:10px 0}
+  .alert-info{background:#eef4ff;border:1px solid var(--blue);color:var(--blue)}
+  .alert-warn{background:#fff8e6;border:1px solid var(--gold);color:#7a5500}
+  .flex-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .mt8{margin-top:8px}.mt16{margin-top:16px}.mb16{margin-bottom:16px}
+  .test-stripe{background:var(--red);color:white;text-align:center;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:5px;font-weight:700;margin-bottom:16px;border-radius:4px}
+  /* Kennisvragen */
+  .kv-card{background:white;border:2px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;box-shadow:0 1px 6px var(--shadow)}
+  .kv-vraag{font-family:Georgia,'Times New Roman',serif;font-size:1.1rem;color:var(--ink);margin-bottom:14px;line-height:1.4}
+  .kv-opts{display:flex;flex-direction:column;gap:8px}
+  .kv-opt{padding:10px 14px;background:var(--parchment);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:.9rem;text-align:left;transition:all .13s;-webkit-tap-highlight-color:transparent}
+  .kv-opt:hover,.kv-opt:active{background:var(--parchment-dark)}
+  .kv-opt.correct{border-color:var(--green);background:#efffef;color:var(--green);font-weight:600}
+  .kv-opt.wrong{border-color:var(--red);background:#fff0f0;color:var(--red)}
+  @media(max-width:600px){.mode-cards{grid-template-columns:1fr}.home-title{font-size:1.6rem}table.casus-table{font-size:.82rem}table.casus-table td:first-child{width:70px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Casus Trainer <span>Latijnse Naamvallen</span></h1>
+  <div id="mode-badge" style="display:none"></div>
+</header>
+
+<div id="screen-home" class="screen active">
+  <div class="home-title">Latijnse<br>Naamvallen</div>
+  <div class="home-sub">Casus Trainer — alle vijf declinaties</div>
+  <div class="mode-cards">
+    <div class="mode-card oefenen" onclick="goOefenen()">
+      <div class="card-icon">📖</div><h2>Oefenen</h2>
+      <p>Kies zelf een oefening en oefen op je eigen tempo</p>
+    </div>
+    <div class="mode-card toetsen" onclick="startToets()">
+      <div class="card-icon">📝</div><h2>Toets</h2>
+      <p>Maak een volledige toets en ontvang direct je cijfer</p>
+    </div>
+  </div>
+  <div class="alert alert-info" style="font-size:.78rem"><strong>Woordenlijst:</strong> top-frequentiewoorden uit alle vijf Latijnse declinaties (Stilus-lijst).</div>
+  <button class="btn btn-outline btn-sm mt8" onclick="showWordlist()" style="width:100%">📋 Bekijk de woordenlijst</button>
+</div>
+
+<div id="screen-wordlist" class="screen">
+  <div class="section-header"><button class="back-btn" onclick="goHome()">←</button><h2>Woordenlijst per declinatie</h2></div>
+  <div id="wordlist-content"></div>
+</div>
+
+<div id="screen-oefenmenu" class="screen">
+  <div class="section-header"><button class="back-btn" onclick="goHome()">←</button><h2>Oefeningen</h2></div>
+  <div class="oef-menu">
+    <div class="oef-btn" onclick="startSchemaOefening()">
+      <div class="oef-num">Oefening 1</div><h3>Schema invullen</h3>
+      <p>Vul het volledige verbuigingsschema in voor een woord</p>
+    </div>
+    <div class="oef-btn" onclick="startDeterminerenOefening()">
+      <div class="oef-num">Oefening 2</div><h3>Vormen determineren</h3>
+      <p>Geef getal en naamval van een losse woordvorm</p>
+    </div>
+    <div class="oef-btn" onclick="startZinsOefening()">
+      <div class="oef-num">Oefening 3</div><h3>Naamvallen in zinnen</h3>
+      <p>Klik de juiste naamval aan in een Latijnse zin</p>
+    </div>
+    <div class="oef-btn" onclick="startKennisvragen()">
+      <div class="oef-num">Oefening 4</div><h3>Kennisvragen</h3>
+      <p>Functie ↔ naamval: test je theoretische kennis via meerkeuzevragen</p>
+    </div>
+  </div>
+</div>
+
+<div id="screen-schema" class="screen">
+  <div class="section-header"><button class="back-btn" onclick="goOefenen()">←</button><h2>Schema invullen</h2></div>
+  <div id="schema-content"></div>
+</div>
+<div id="screen-det" class="screen">
+  <div class="section-header"><button class="back-btn" onclick="goOefenen()">←</button><h2>Vormen determineren</h2></div>
+  <div id="det-content"></div>
+</div>
+<div id="screen-zin" class="screen">
+  <div class="section-header"><button class="back-btn" onclick="goOefenen()">←</button><h2>Naamvallen in zinnen</h2></div>
+  <div id="zin-content"></div>
+</div>
+<div id="screen-kv" class="screen">
+  <div class="section-header"><button class="back-btn" onclick="goOefenen()">←</button><h2>Kennisvragen</h2></div>
+  <div id="kv-content"></div>
+</div>
+<div id="screen-toets" class="screen">
+  <div class="section-header"><button class="back-btn" onclick="confirmBack()">←</button><h2>Toets</h2></div>
+  <div class="test-stripe">⚠ Toetsmodus — dit wordt beoordeeld</div>
+  <div id="toets-content"></div>
+</div>
+<div id="screen-uitslag" class="screen">
+  <div class="section-header"><button class="back-btn" onclick="goHome()">←</button><h2>Uitslag</h2></div>
+  <div id="uitslag-content"></div>
+</div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════
+//  WOORDENLIJST
+// ═══════════════════════════════════════════════════════
+const WORDLIST = [
+  // ── 1e DECLINATIE (10 woorden) ──
+  {id:'vita',     nom:'vita',     gen:'vitae',    geslacht:'f',vert:'leven',             dec:1},
+  {id:'causa',    nom:'causa',    gen:'causae',   geslacht:'f',vert:'oorzaak',            dec:1},
+  {id:'terra',    nom:'terra',    gen:'terrae',   geslacht:'f',vert:'aarde, land',        dec:1},
+  {id:'fortuna',  nom:'fortuna',  gen:'fortunae', geslacht:'f',vert:'lot; geluk',         dec:1},
+  {id:'natura',   nom:'natura',   gen:'naturae',  geslacht:'f',vert:'natuur',             dec:1},
+  {id:'cura',     nom:'cura',     gen:'curae',    geslacht:'f',vert:'zorg',               dec:1},
+  {id:'via',      nom:'via',      gen:'viae',     geslacht:'f',vert:'weg, route',         dec:1},
+  {id:'fama',     nom:'fama',     gen:'famae',    geslacht:'f',vert:'reputatie; gerucht', dec:1},
+  {id:'poena',    nom:'poena',    gen:'poenae',   geslacht:'f',vert:'straf, boete',       dec:1},
+  {id:'femina',   nom:'femina',   gen:'feminae',  geslacht:'f',vert:'vrouw',              dec:1},
+  // ── 2e DECLINATIE (12 woorden) ──
+  // -us m: vocativus wijkt af (hasVoc:true)
+  {id:'animus',   nom:'animus',   gen:'animi',    geslacht:'m',vert:'geest; moed',        dec:2,hasVoc:true},
+  {id:'locus',    nom:'locus',    gen:'loci',     geslacht:'m',vert:'plaats',             dec:2,hasVoc:true},
+  {id:'populus',  nom:'populus',  gen:'populi',   geslacht:'m',vert:'volk',               dec:2,hasVoc:true},
+  {id:'annus',    nom:'annus',    gen:'anni',     geslacht:'m',vert:'jaar',               dec:2,hasVoc:true},
+  {id:'amicus',   nom:'amicus',   gen:'amici',    geslacht:'m',vert:'vriend',             dec:2,hasVoc:true},
+  {id:'servus',   nom:'servus',   gen:'servi',    geslacht:'m',vert:'slaaf',              dec:2,hasVoc:true},
+  // -um n: vocativus = nominativus
+  {id:'bellum',   nom:'bellum',   gen:'belli',    geslacht:'n',vert:'oorlog',             dec:2,hasVoc:false},
+  {id:'regnum',   nom:'regnum',   gen:'regni',    geslacht:'n',vert:'koningschap; rijk',  dec:2,hasVoc:false},
+  {id:'periculum',nom:'periculum',gen:'periculi', geslacht:'n',vert:'gevaar',             dec:2,hasVoc:false},
+  // overige 2e dec: vocativus = nominativus
+  {id:'vir',      nom:'vir',      gen:'viri',     geslacht:'m',vert:'man',                dec:2,hasVoc:false},
+  {id:'deus',     nom:'deus',     gen:'dei',      geslacht:'m',vert:'god',                dec:2,hasVoc:false},
+  {id:'puer',     nom:'puer',     gen:'pueri',    geslacht:'m',vert:'jongen; slaaf',      dec:2,hasVoc:false},
+  // ── 3e DECLINATIE (12 woorden) ──
+  {id:'rex',      nom:'rex',      gen:'regis',    geslacht:'m',vert:'koning',             dec:3},
+  {id:'pars',     nom:'pars',     gen:'partis',   geslacht:'f',vert:'deel',               dec:3},
+  {id:'homo',     nom:'homo',     gen:'hominis',  geslacht:'m',vert:'mens',               dec:3},
+  {id:'corpus',   nom:'corpus',   gen:'corporis', geslacht:'n',vert:'lichaam',            dec:3},
+  {id:'urbs',     nom:'urbs',     gen:'urbis',    geslacht:'f',vert:'stad',               dec:3},
+  {id:'tempus',   nom:'tempus',   gen:'temporis', geslacht:'n',vert:'tijd',               dec:3},
+  {id:'virtus',   nom:'virtus',   gen:'virtutis', geslacht:'f',vert:'moed; kwaliteit',    dec:3},
+  {id:'pater',    nom:'pater',    gen:'patris',   geslacht:'m',vert:'vader',              dec:3},
+  {id:'mors',     nom:'mors',     gen:'mortis',   geslacht:'f',vert:'dood',               dec:3},
+  {id:'nomen',    nom:'nomen',    gen:'nominis',  geslacht:'n',vert:'naam',               dec:3},
+  {id:'lex',      nom:'lex',      gen:'legis',    geslacht:'f',vert:'wet',                dec:3},
+  {id:'dux',      nom:'dux',      gen:'ducis',    geslacht:'m',vert:'leider, aanvoerder', dec:3},
+  {id:'mater',    nom:'mater',    gen:'matris',   geslacht:'f',vert:'moeder',             dec:3},
+  {id:'flumen',   nom:'flumen',   gen:'fluminis', geslacht:'n',vert:'rivier',             dec:3},
+  // ── 4e DECLINATIE (8 woorden) ──
+  // -us m/f
+  {id:'manus',    nom:'manus',    gen:'manus',    geslacht:'f',vert:'hand; groep',        dec:4},
+  {id:'exercitus',nom:'exercitus',gen:'exercitus',geslacht:'m',vert:'leger',              dec:4},
+  {id:'senatus',  nom:'senatus',  gen:'senatus',  geslacht:'m',vert:'senaat',             dec:4},
+  {id:'metus',    nom:'metus',    gen:'metus',    geslacht:'m',vert:'angst, vrees',       dec:4},
+  {id:'impetus',  nom:'impetus',  gen:'impetus',  geslacht:'m',vert:'aanval; vaart',      dec:4},
+  {id:'usus',     nom:'usus',     gen:'usus',     geslacht:'m',vert:'gebruik, nut',       dec:4},
+  // -u n
+  {id:'genu',     nom:'genu',     gen:'genus',    geslacht:'n',vert:'knie',               dec:4},
+  {id:'cornu',    nom:'cornu',    gen:'cornus',   geslacht:'n',vert:'hoorn; vleugel (leger)', dec:4},
+  // ── 5e DECLINATIE (5 woorden) ──
+  {id:'res',      nom:'res',      gen:'rei',      geslacht:'f',vert:'zaak, ding',         dec:5},
+  {id:'dies',     nom:'dies',     gen:'diei',     geslacht:'m',vert:'dag',                dec:5},
+  {id:'fides',    nom:'fides',    gen:'fidei',    geslacht:'f',vert:'trouw; vertrouwen',  dec:5},
+  {id:'spes',     nom:'spes',     gen:'spei',     geslacht:'f',vert:'hoop',               dec:5},
+  {id:'acies',    nom:'acies',    gen:'aciei',    geslacht:'f',vert:'slaglinie; scherpte', dec:5},
+];
+
+// Naamvallen: voor niet-2e-dec-us woorden laten we vocativus weg
+// showVoc(w) = true alleen als w.dec===2 && w.hasVoc===true
+function showVoc(w){ return w.dec===2 && w.hasVoc===true; }
+
+// Actieve casus-rijen voor een woord (indices in CASUS_SHORT)
+function activeCasusIdx(w){
+  const all=[0,1,2,3,4,5];
+  if(!showVoc(w)) return all.filter(i=>i!==5);
+  return all;
+}
+
+const CASUS_LABELS=['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'];
+const CASUS_SHORT =['nom','gen','dat','acc','abl','voc'];
+const NUMERI=['Enkelvoud','Meervoud'];
+
+// ── Vormen genereren ──
+function buildForms(w){
+  const sg={},pl={};
+  if(w.dec===1){
+    const st=w.nom.replace(/a$/,'');
+    sg.nom=w.nom;sg.gen=st+'ae';sg.dat=st+'ae';sg.acc=st+'am';sg.abl=st+'a';sg.voc=w.nom;
+    pl.nom=st+'ae';pl.gen=st+'arum';pl.dat=st+'is';pl.acc=st+'as';pl.abl=st+'is';pl.voc=st+'ae';
+  } else if(w.dec===2&&w.geslacht==='n'){
+    const st=w.nom.replace(/um$/,'');
+    sg.nom=w.nom;sg.gen=st+'i';sg.dat=st+'o';sg.acc=w.nom;sg.abl=st+'o';sg.voc=w.nom;
+    pl.nom=st+'a';pl.gen=st+'orum';pl.dat=st+'is';pl.acc=st+'a';pl.abl=st+'is';pl.voc=st+'a';
+  } else if(w.dec===2&&w.id==='vir'){
+    sg.nom='vir';sg.gen='viri';sg.dat='viro';sg.acc='virum';sg.abl='viro';sg.voc='vir';
+    pl.nom='viri';pl.gen='virorum';pl.dat='viris';pl.acc='viros';pl.abl='viris';pl.voc='viri';
+  } else if(w.dec===2&&w.id==='puer'){
+    // puer behoudt de -e- in de stam (puer/pueri); vocativus = nominativus
+    sg.nom='puer';sg.gen='pueri';sg.dat='puero';sg.acc='puerum';sg.abl='puero';sg.voc='puer';
+    pl.nom='pueri';pl.gen='puerorum';pl.dat='pueris';pl.acc='pueros';pl.abl='pueris';pl.voc='pueri';
+  } else if(w.dec===2){
+    const st=w.nom.endsWith('us')?w.nom.replace(/us$/,''):w.nom;
+    const voc=w.id==='deus'?'deus':st+'e';
+    sg.nom=w.nom;sg.gen=st+'i';sg.dat=st+'o';sg.acc=st+'um';sg.abl=st+'o';sg.voc=voc;
+    pl.nom=st+'i';pl.gen=st+'orum';pl.dat=st+'is';pl.acc=st+'os';pl.abl=st+'is';pl.voc=st+'i';
+  } else if(w.dec===3&&w.geslacht==='n'){
+    const st=w.gen.replace(/is$/,'');
+    // cons-stam neutra: nom/acc pl = stam + -a; flumen toegevoegd
+    const consNeutra=new Set(['corpus','tempus','nomen','flumen']);
+    const plNA=consNeutra.has(w.id)?st+'a':st+'ia';
+    sg.nom=w.nom;sg.gen=w.gen;sg.dat=st+'i';sg.acc=w.nom;sg.abl=st+'e';sg.voc=w.nom;
+    pl.nom=plNA;pl.gen=st+'um';pl.dat=st+'ibus';pl.acc=plNA;pl.abl=st+'ibus';pl.voc=plNA;
+  } else if(w.dec===3){
+    const st=w.gen.replace(/is$/,'');
+    const isIStem=new Set(['pars','urbs','virtus','mors','lex']).has(w.id);
+    sg.nom=w.nom;sg.gen=w.gen;sg.dat=st+'i';sg.acc=st+'em';sg.abl=st+'e';sg.voc=w.nom;
+    pl.nom=st+'es';pl.gen=isIStem?st+'ium':st+'um';pl.dat=st+'ibus';pl.acc=st+'es';pl.abl=st+'ibus';pl.voc=st+'es';
+  } else if(w.dec===4&&w.geslacht==='n'){
+    // -u neutrum: genu, cornu
+    const st=w.nom; // 'genu' / 'cornu'
+    const plSt=st.slice(0,-1); // 'gen' / 'corn' — voor -ibus
+    sg.nom=st;sg.gen=st+'s';sg.dat=st;sg.acc=st;sg.abl=st;sg.voc=st;
+    pl.nom=st+'a';pl.gen=st+'um';pl.dat=plSt+'ibus';pl.acc=st+'a';pl.abl=plSt+'ibus';pl.voc=st+'a';
+  } else if(w.dec===4){
+    const st=w.nom.replace(/us$/,'');
+    sg.nom=w.nom;sg.gen=w.nom;sg.dat=st+'ui';sg.acc=st+'um';sg.abl=st+'u';sg.voc=w.nom;
+    pl.nom=w.nom;pl.gen=st+'uum';pl.dat=st+'ibus';pl.acc=st+'us';pl.abl=st+'ibus';pl.voc=w.nom;
+  } else if(w.dec===5){
+    const st=w.nom.replace(/es$/,'');
+    sg.nom=w.nom;sg.gen=w.gen;sg.dat=st+'ei';sg.acc=st+'em';sg.abl=st+'e';sg.voc=w.nom;
+    pl.nom=w.nom;pl.gen=st+'erum';pl.dat=st+'ebus';pl.acc=st+'es';pl.abl=st+'ebus';pl.voc=w.nom;
+  }
+  return {sg,pl};
+}
+const FORMS={};
+WORDLIST.forEach(w=>{FORMS[w.id]=buildForms(w);});
+
+// ── Hulpfuncties ──
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function shuffle(arr){return[...arr].sort(()=>Math.random()-.5);}
+function pick(arr,n){return shuffle(arr).slice(0,n);}
+function normalize(s){return s.trim().toLowerCase().replace(/[^a-zāēīōū]/gi,'');}
+function check(input,correct){return normalize(input)===normalize(correct);}
+function getForm(wid,ni,ci){const f=FORMS[wid];return f[ni===0?'sg':'pl'][CASUS_SHORT[ci]];}
+
+// ── Badge & navigatie ──
+function setBadge(mode){
+  const b=document.getElementById('mode-badge');
+  b.style.display='';b.textContent=mode==='oefenen'?'Oefenen':'Toets';
+  b.style.color=mode==='oefenen'?'#2a5a9b':'#c44040';
+  b.style.borderColor=mode==='oefenen'?'#2a5a9b':'#c44040';
+  b.style.cssText+=';font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:3px;border:1.5px solid';
+  b.style.color=mode==='oefenen'?'#2a5a9b':'#c44040';b.style.borderColor=mode==='oefenen'?'#2a5a9b':'#c44040';
+}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');window.scrollTo(0,0);}
+function goHome(){showScreen('home');document.getElementById('mode-badge').style.display='none';}
+function goOefenen(){showScreen('oefenmenu');setBadge('oefenen');}
+function confirmBack(){if(confirm('Wil je de toets afbreken? Je voortgang gaat verloren.'))goHome();}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ══════════════════════════════
+//  WOORDENLIJST SCHERM
+// ══════════════════════════════
+function showWordlist(){
+  const decNames={1:'1e Declinatie (a-stammen)',2:'2e Declinatie (o-stammen)',3:'3e Declinatie',4:'4e Declinatie (u-stammen)',5:'5e Declinatie (e-stammen)'};
+  let html='';
+  [1,2,3,4,5].forEach(d=>{
+    const words=WORDLIST.filter(w=>w.dec===d);
+    html+=`<h3 style="font-family:Georgia,'Times New Roman',serif;color:var(--gold);margin:18px 0 8px;font-size:.95rem;text-transform:uppercase;letter-spacing:.06em">${decNames[d]}</h3>`;
+    html+=`<table style="width:100%;border-collapse:collapse;font-size:.83rem;margin-bottom:8px"><tr style="background:var(--ink);color:var(--parchment)"><th style="padding:6px 8px;text-align:left">Nom.</th><th style="padding:6px 8px;text-align:left">Gen.</th><th style="padding:6px 8px">G.</th><th style="padding:6px 8px;text-align:left">Betekenis</th></tr>`;
+    words.forEach((w,i)=>{
+      const bg=i%2===0?'white':'var(--parchment)';
+      const g=`<span class="tag tag-${w.geslacht}">${w.geslacht}</span>`;
+      html+=`<tr style="background:${bg}"><td style="padding:5px 8px;font-style:italic"><strong>${w.nom}</strong></td><td style="padding:5px 8px;font-style:italic">${w.gen}</td><td style="padding:5px 8px;text-align:center">${g}</td><td style="padding:5px 8px">${w.vert}</td></tr>`;
+    });
+    html+='</table>';
+  });
+  document.getElementById('wordlist-content').innerHTML=html;
+  showScreen('wordlist');
+}
+
+// ══════════════════════════════
+//  OEFENING 1 — SCHEMA
+// ══════════════════════════════
+let schemaState={};
+
+function startSchemaOefening(){
+  const w=rand(WORDLIST);
+  const casIdxList=activeCasusIdx(w);
+  // Bouw lijst van alle in te vullen cellen
+  const allCells=[];
+  ['sg','pl'].forEach((num,ni)=>casIdxList.forEach(ci=>allCells.push({num,ni,ci})));
+  // Geef 4-6 cellen als hint
+  const giveCount=4+Math.floor(Math.random()*3);
+  const given=new Set(pick(allCells,giveCount).map(x=>x.num+'_'+CASUS_SHORT[x.ci]));
+  schemaState={w,given,casIdxList};
+  renderSchema(false);
+  showScreen('schema');
+}
+
+function renderSchema(checked){
+  const{w,given,casIdxList}=schemaState;
+  const forms=FORMS[w.id];
+  const g=`<span class="tag tag-${w.geslacht}">${w.geslacht}</span>`;
+  let html='';
+  if(!checked) html+=`<p class="schema-info">Vul het volledige schema in. De ingevulde cellen zijn al gegeven.</p>`;
+  html+=`<div class="schema-word"><em>${w.nom}</em>, <em>${w.gen}</em> ${g}<br><span class="word-info">${w.vert} — ${w.dec}e declinatie</span></div>`;
+  html+=`<table class="casus-table"><tr><th>Casus</th><th>Enkelvoud</th><th>Meervoud</th></tr>`;
+  casIdxList.forEach(ci=>{
+    const c=CASUS_SHORT[ci];
+    html+=`<tr><td>${CASUS_LABELS[ci]}</td>`;
+    ['sg','pl'].forEach((num,ni)=>{
+      const key=`${num}_${c}`;
+      const val=forms[num][c];
+      html+=`<td>`;
+      if(given.has(key)){
+        html+=`<span class="given"><em>${val}</em></span>`;
+      } else {
+        const uid=`inp_${num}_${c}`;
+        const userVal=schemaState.inputs?schemaState.inputs[uid]:'';
+        const ok=checked?check(userVal,val):false;
+        const cls=checked?(ok?'correct':'wrong'):'';
+        html+=`<div class="answer-cell"><input type="text" id="${uid}" value="${escHtml(userVal)}" class="${cls}" ${checked?'readonly':''} autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">`;
+        if(checked&&!ok) html+=`<span style="color:var(--green);font-size:.8rem;font-style:italic">${val}</span>`;
+        html+=`</div>`;
+      }
+      html+=`</td>`;
+    });
+    html+=`</tr>`;
+  });
+  html+='</table>';
+  if(!checked){
+    html+=`<div class="flex-row"><button class="btn btn-primary" onclick="controleerSchema()">Controleren</button><button class="btn btn-outline" onclick="startSchemaOefening()">Nieuw woord</button></div>`;
+  } else {
+    const s=schemaState.lastScore;
+    html+=`<div class="alert ${s.pct>=80?'alert-info':'alert-warn'}" style="margin:12px 0"><strong>${s.goed} van ${s.totaal} correct</strong> (${s.pct}%)</div>`;
+    html+=`<div class="flex-row"><button class="btn btn-primary" onclick="startSchemaOefening()">Nieuw woord</button><button class="btn btn-outline" onclick="goOefenen()">Terug naar menu</button></div>`;
+  }
+  document.getElementById('schema-content').innerHTML=html;
+}
+
+function controleerSchema(){
+  const{w,given,casIdxList}=schemaState;
+  const forms=FORMS[w.id];
+  const inputs={};let goed=0,totaal=0;
+  casIdxList.forEach(ci=>{
+    const c=CASUS_SHORT[ci];
+    ['sg','pl'].forEach(num=>{
+      const key=`${num}_${c}`;
+      if(!given.has(key)){
+        const uid=`inp_${num}_${c}`;
+        const el=document.getElementById(uid);
+        const val=el?el.value:'';
+        inputs[uid]=val;totaal++;
+        if(check(val,forms[num][c]))goed++;
+      }
+    });
+  });
+  schemaState.inputs=inputs;
+  schemaState.lastScore={goed,totaal,pct:Math.round(goed/totaal*100)};
+  renderSchema(true);
+}
+
+// ══════════════════════════════
+//  OEFENING 2 — DETERMINEREN
+// ══════════════════════════════
+let detState={};
+
+function startDeterminerenOefening(){detState={score:{goed:0,totaal:0}};renderDet();showScreen('det');}
+
+function renderDet(){
+  const w=rand(WORDLIST);
+  const casIdxList=activeCasusIdx(w);
+  const numIdx=Math.floor(Math.random()*2);
+  const casIdx=casIdxList[Math.floor(Math.random()*casIdxList.length)];
+  const form=getForm(w.id,numIdx,casIdx);
+
+  // Alle geldige combinaties voor deze vorm
+  const allValid=[];
+  [0,1].forEach(ni=>casIdxList.forEach(ci=>{
+    if(getForm(w.id,ni,ci)===form) allValid.push({numIdx:ni,casIdx:ci,label:NUMERI[ni]+' — '+CASUS_LABELS[ci]});
+  }));
+  const validLabels=new Set(allValid.map(x=>x.label));
+
+  // Distractors: andere combinaties
+  const usedLabels=new Set(validLabels);
+  const distractors=[];
+  for(let a=0;a<60&&distractors.length<5;a++){
+    const ni=Math.floor(Math.random()*2);
+    const ci=casIdxList[Math.floor(Math.random()*casIdxList.length)];
+    const lbl=NUMERI[ni]+' — '+CASUS_LABELS[ci];
+    if(!usedLabels.has(lbl)){distractors.push(lbl);usedLabels.add(lbl);}
+  }
+  const options=shuffle([...validLabels,...distractors]);
+  detState={...detState,w,form,validLabels,options,answered:false};
+
+  const g=`<span class="tag tag-${w.geslacht}">${w.geslacht}</span>`;
+  let html=`<p class="counter">Goed: ${detState.score.goed} | Totaal: ${detState.score.totaal}</p>`;
+  html+=`<div class="det-word"><em>${form}</em><br><span style="font-size:.7rem;color:#888;font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif">${w.nom}, ${w.gen} ${g} — ${w.vert}</span></div>`;
+  html+=`<p style="font-size:.82rem;color:#555;margin-bottom:10px">Welk getal en welke naamval is dit?</p>`;
+  html+=`<div class="det-options">`;
+  options.forEach((opt,i)=>html+=`<button class="det-opt-btn" id="dopt${i}" onclick="selectDetOpt(${i},'${opt.replace(/'/g,"\\'")}')"> ${opt}</button>`);
+  html+=`</div><div id="det-feedback" class="det-feedback"></div>`;
+  html+=`<div class="flex-row mt8"><button class="btn btn-primary" id="det-volgende" style="display:none" onclick="renderDet()">Volgende →</button></div>`;
+  document.getElementById('det-content').innerHTML=html;
+}
+
+function selectDetOpt(i,label){
+  if(detState.answered)return;
+  detState.answered=true;detState.score.totaal++;
+  const ok=detState.validLabels.has(label);
+  if(ok)detState.score.goed++;
+  detState.options.forEach((opt,j)=>{
+    const btn=document.getElementById('dopt'+j);
+    if(detState.validLabels.has(opt))btn.className='det-opt-btn correct';
+    else if(j===i&&!ok)btn.className='det-opt-btn wrong';
+    else btn.className='det-opt-btn';
+    btn.disabled=true;
+  });
+  const fb=document.getElementById('det-feedback');
+  fb.className='det-feedback show '+(ok?'ok':'nok');
+  fb.textContent=ok?'✓ Correct!':'✗ Niet correct. Juist: '+[...detState.validLabels].join(' / ');
+  document.getElementById('det-volgende').style.display='';
+}
+
+// ══════════════════════════════
+//  ZINNEN DATABASE
+// ══════════════════════════════
+const ZINNEN=[
+  {id:'z1',zin:'Milites urbem oppugnaverunt.',
+   woorden:[{form:'milites',cas:0,num:1,vert:'soldaten'},{form:'urbem',cas:3,num:0,wid:'urbs',vert:'de stad'}],
+   vertaling:'De soldaten belegerden de stad.',vraag:'Klik op de accusativus.'},
+  {id:'z2',zin:'Pater filium amat.',
+   woorden:[{form:'pater',cas:0,num:0,wid:'pater',vert:'de vader'},{form:'filium',cas:3,num:0,vert:'zijn zoon'}],
+   vertaling:'De vader houdt van zijn zoon.',vraag:'Klik op het onderwerp (nominativus).'},
+  {id:'z3',zin:'Rex gloriam patriae amat.',
+   woorden:[{form:'rex',cas:0,num:0,wid:'rex',vert:'de koning'},{form:'gloriam',cas:3,num:0,wid:'gloria',vert:'de roem'},{form:'patriae',cas:1,num:0,vert:'van het vaderland'}],
+   vertaling:'De koning houdt van de roem van het vaderland.',vraag:'Klik op de genitivus.'},
+  {id:'z4',zin:'Natura hominum varia est.',
+   woorden:[{form:'natura',cas:0,num:0,wid:'natura',vert:'de aard'},{form:'hominum',cas:1,num:1,wid:'homo',vert:'van de mensen'}],
+   vertaling:'De aard van de mensen is veelzijdig.',vraag:'Klik op de genitivus.'},
+  {id:'z5',zin:'Senatus populo imperavit.',
+   woorden:[{form:'senatus',cas:0,num:0,wid:'senatus',vert:'de senaat'},{form:'populo',cas:2,num:0,vert:'aan het volk'}],
+   vertaling:'De senaat gaf het volk een bevel.',vraag:'Klik op de dativus.'},
+  {id:'z6',zin:'Manus manum lavat.',
+   woorden:[{form:'manus',cas:0,num:0,wid:'manus',vert:'een hand'},{form:'manum',cas:3,num:0,wid:'manus',vert:'de hand'}],
+   vertaling:'De ene hand wast de andere.',vraag:'Klik op de accusativus.'},
+  {id:'z7',zin:'Causa belli clara erat.',
+   woorden:[{form:'causa',cas:0,num:0,wid:'causa',vert:'de reden'},{form:'belli',cas:1,num:0,wid:'bellum',vert:'van de oorlog'}],
+   vertaling:'De reden van de oorlog was duidelijk.',vraag:'Klik op de genitivus.'},
+  {id:'z8',zin:'Exercitus in terram hostium venit.',
+   woorden:[{form:'exercitus',cas:0,num:0,wid:'exercitus',vert:'het leger'},{form:'terram',cas:3,num:0,wid:'terra',vert:'het land'},{form:'hostium',cas:1,num:1,vert:'van de vijanden'}],
+   vertaling:'Het leger trok het land van de vijanden binnen.',vraag:'Klik op de accusativus.'},
+  {id:'z9',zin:'Spei vitaeque finem timemus.',
+   woorden:[{form:'spei',cas:1,num:0,wid:'spes',vert:'van de hoop'},{form:'vitaeque',cas:1,num:0,wid:'vita',vert:'en van het leven'},{form:'finem',cas:3,num:0,vert:'het einde'}],
+   vertaling:'Wij vrezen het einde van hoop en leven.',vraag:'Klik op een genitivus.'},
+  {id:'z10',zin:'Dux militibus arma dedit.',
+   woorden:[{form:'dux',cas:0,num:0,wid:'dux',vert:'de aanvoerder'},{form:'militibus',cas:2,num:1,vert:'aan de soldaten'},{form:'arma',cas:3,num:1,vert:'wapens'}],
+   vertaling:'De aanvoerder gaf de soldaten wapens.',vraag:'Klik op de dativus.'},
+  {id:'z11',zin:'Res publica in periculo erat.',
+   woorden:[{form:'res',cas:0,num:0,wid:'res',vert:'de staat'},{form:'periculo',cas:4,num:0,wid:'periculum',vert:'gevaar'}],
+   vertaling:'De staat was in gevaar.',vraag:'Klik op de ablativus.'},
+  {id:'z12',zin:'Amor patriae animos movet.',
+   woorden:[{form:'amor',cas:0,num:0,vert:'de liefde'},{form:'patriae',cas:1,num:0,vert:'voor het vaderland'},{form:'animos',cas:3,num:1,wid:'animus',vert:'de gemoederen'}],
+   vertaling:'Vaderlandsliefde beweegt de gemoederen.',vraag:'Klik op de accusativus meervoud.'},
+];
+
+// ══════════════════════════════
+//  OEFENING 3 — ZINNEN
+// ══════════════════════════════
+let zinState={};
+function startZinsOefening(){zinState={score:{goed:0,totaal:0}};renderZin();showScreen('zin');}
+
+function renderZin(){
+  const z=rand(ZINNEN);zinState.z=z;zinState.answered=false;
+  let html=`<p class="counter">Goed: ${zinState.score.goed} | Totaal: ${zinState.score.totaal}</p>`;
+  html+=`<div class="zin-display">`;
+  z.zin.split(' ').forEach((tok,i)=>{
+    const clean=tok.replace(/[.,!?]/g,'');
+    const punct=tok.match(/[.,!?]+$/)?tok.match(/[.,!?]+$/)[0]:'';
+    const match=z.woorden.findIndex(w=>normalize(w.form)===normalize(clean));
+    if(match>=0) html+=`<span class="zin-target" data-idx="${match}" onclick="clickZinTarget(this)">${clean}</span>${punct} `;
+    else html+=`${tok} `;
+  });
+  html+=`</div><p class="zin-vraag">📌 ${z.vraag}</p>`;
+  html+=`<div id="zin-feedback" class="det-feedback"></div>`;
+  html+=`<div class="flex-row mt8"><button class="btn btn-primary" id="zin-volgende" style="display:none" onclick="renderZin()">Volgende zin →</button></div>`;
+  html+=`<p style="font-size:.78rem;color:#aaa;margin-top:16px;font-style:italic">Vertaling (na antwoord): ${z.vertaling}</p>`;
+  document.getElementById('zin-content').innerHTML=html;
+}
+
+function clickZinTarget(el){
+  if(zinState.answered)return;
+  zinState.answered=true;zinState.score.totaal++;
+  const idx=parseInt(el.dataset.idx);
+  const z=zinState.z;
+  const vraagText=z.vraag.toLowerCase();
+  const targetCas=vraagText.includes('accusativus')?3:vraagText.includes('genitivus')?1:vraagText.includes('dativus')?2:vraagText.includes('nominativus')?0:vraagText.includes('ablativus')?4:null;
+  const ok=targetCas!==null&&z.woorden[idx].cas===targetCas;
+  if(ok)zinState.score.goed++;
+  document.querySelectorAll('#zin-content .zin-target').forEach(btn=>{
+    const j=parseInt(btn.dataset.idx);
+    if(targetCas!==null&&z.woorden[j].cas===targetCas)btn.className='zin-target correct-zin';
+    else if(j===idx&&!ok)btn.className='zin-target wrong-zin';
+  });
+  const fb=document.getElementById('zin-feedback');
+  fb.className='det-feedback show '+(ok?'ok':'nok');
+  const correctForms=z.woorden.filter(w=>w.cas===targetCas).map(w=>`<em>${w.form}</em>`).join(', ');
+  fb.innerHTML=ok?`✓ Correct! <em>${z.woorden[idx].form}</em> is de gevraagde naamval.`:`✗ Niet juist.${correctForms?' Juist: '+correctForms:''}`;
+  document.getElementById('zin-volgende').style.display='';
+}
+
+// ══════════════════════════════
+//  OEFENING 4 — KENNISVRAGEN
+// ══════════════════════════════
+
+// Database van vragen: { vraag, correct (string of array), opties (alle mogelijke) }
+// Twee richtingen: functie→naamval en naamval→functie
+
+const KENNIS_VRAGEN = [
+  // ── Functie → Naamval ──
+  {
+    vraag: 'Welke naamval gebruik je voor het <strong>onderwerp</strong> van een zin?',
+    correct: ['Nominativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: 'Het onderwerp (wie/wat de handeling verricht) staat altijd in de <strong>nominativus</strong>.'
+  },
+  {
+    vraag: 'Welke naamval gebruik je voor het <strong>lijdend voorwerp</strong>?',
+    correct: ['Accusativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: 'Het lijdend voorwerp (het object dat de handeling ondergaat) staat in de <strong>accusativus</strong>.'
+  },
+  {
+    vraag: 'Welke naamval gebruik je voor het <strong>meewerkend voorwerp</strong> (indirect object)?',
+    correct: ['Dativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: 'Het meewerkend voorwerp (aan wie/voor wie iets gedaan wordt) staat in de <strong>dativus</strong>.'
+  },
+  {
+    vraag: 'Welke naamval druk je <strong>bezit of herkomst</strong> mee uit (de "van"-naamval)?',
+    correct: ['Genitivus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: 'De <strong>genitivus</strong> geeft bezit, herkomst of een nadere bepaling aan: <em>regis</em> = "van de koning".'
+  },
+  {
+    vraag: 'Welke naamval gebruik je als <strong>bijwoordelijke bepaling van middel, oorzaak of omstandigheid</strong>?',
+    correct: ['Ablativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: 'De <strong>ablativus</strong> heeft veel bijwoordelijke functies: middel ("met/door"), scheiding ("van/uit"), omstandigheid, en staat ook na veel voorzetsels (cum, in, ex, a/ab).'
+  },
+  {
+    vraag: 'Welke naamval gebruik je bij het <strong>aanspreken</strong> van een persoon?',
+    correct: ['Vocativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: 'De <strong>vocativus</strong> is de aanspreekvorm. Bij de 2e declinatie (-us) verschilt hij van de nominativus: <em>servus</em> → <em>serve</em>.'
+  },
+  {
+    vraag: 'Welke naamval gebruik je als <strong>lijdend voorwerp bij bewegingswerkwoorden</strong> (richting waarheen)?',
+    correct: ['Accusativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: 'Richting (waarheen?) staat in de <strong>accusativus</strong>, na voorzetsels als <em>in</em> + acc. of <em>ad</em>.'
+  },
+  {
+    vraag: 'Welke naamval gebruik je na het voorzetsel <strong><em>cum</em></strong> (= samen met)?',
+    correct: ['Ablativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: '<em>Cum</em> + <strong>ablativus</strong>. Bijv.: <em>cum amico</em> = samen met de vriend.'
+  },
+  {
+    vraag: 'Welke naamval gebruik je na het voorzetsel <strong><em>ad</em></strong> (= naar, bij)?',
+    correct: ['Accusativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: '<em>Ad</em> + <strong>accusativus</strong>. Bijv.: <em>ad urbem</em> = naar de stad.'
+  },
+  {
+    vraag: 'Welke naamval gebruik je na het voorzetsel <strong><em>in</em></strong> bij rust (= in, op)?',
+    correct: ['Ablativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus'],
+    uitleg: '<em>In</em> + <strong>ablativus</strong> = rust (waar?). Bijv.: <em>in urbe</em> = in de stad. Ter vergelijking: <em>in</em> + accusativus = beweging (waarheen?).'
+  },
+  {
+    vraag: 'Welke naamval gebruik je na het voorzetsel <strong><em>in</em></strong> bij beweging (= naar, in)?',
+    correct: ['Accusativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus'],
+    uitleg: '<em>In</em> + <strong>accusativus</strong> = beweging (waarheen?). Bijv.: <em>in urbem</em> = de stad in.'
+  },
+  {
+    vraag: 'Welke naamval gebruik je na het voorzetsel <strong><em>ex</em></strong> of <strong><em>e</em></strong> (= uit)?',
+    correct: ['Ablativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: '<em>Ex/e</em> + <strong>ablativus</strong>. Bijv.: <em>ex oppido</em> = uit de stad.'
+  },
+  {
+    vraag: 'Welke naamval gebruik je voor het <strong>naamwoordelijk gezegde</strong> (predicaat bij <em>esse</em>)?',
+    correct: ['Nominativus'],
+    opties: ['Nominativus','Genitivus','Dativus','Accusativus','Ablativus','Vocativus'],
+    uitleg: 'Bij een koppelwerkwoord (<em>esse</em>, zijn) staat het predicatief gebruikte zelfstandig of bijvoeglijk naamwoord in de <strong>nominativus</strong>. Bijv.: <em>Caesar dux erat</em>.'
+  },
+  // ── Naamval → Functie ──
+  {
+    vraag: 'Wat is de <strong>hoofdfunctie</strong> van de <strong>nominativus</strong>?',
+    correct: ['Onderwerp van de zin'],
+    opties: ['Onderwerp van de zin','Lijdend voorwerp','Bezit of herkomst ("van")','Meewerkend voorwerp','Bijwoordelijke bepaling','Aanspreken'],
+    uitleg: 'De <strong>nominativus</strong> is de naamval van het <strong>onderwerp</strong>: degene die de handeling verricht of de staat verkeert in.'
+  },
+  {
+    vraag: 'Wat is de <strong>hoofdfunctie</strong> van de <strong>genitivus</strong>?',
+    correct: ['Bezit of herkomst ("van")'],
+    opties: ['Onderwerp van de zin','Lijdend voorwerp','Bezit of herkomst ("van")','Meewerkend voorwerp','Bijwoordelijke bepaling','Aanspreken'],
+    uitleg: 'De <strong>genitivus</strong> drukt bezit, herkomst of een nadere bepaling uit. Vertaal als "van": <em>patris</em> = van de vader.'
+  },
+  {
+    vraag: 'Wat is de <strong>hoofdfunctie</strong> van de <strong>dativus</strong>?',
+    correct: ['Meewerkend voorwerp'],
+    opties: ['Onderwerp van de zin','Lijdend voorwerp','Bezit of herkomst ("van")','Meewerkend voorwerp','Bijwoordelijke bepaling','Aanspreken'],
+    uitleg: 'De <strong>dativus</strong> is het meewerkend voorwerp: aan wie of voor wie iets gedaan wordt. Bijv.: <em>patri dedi</em> = ik gaf (het) aan vader.'
+  },
+  {
+    vraag: 'Wat is de <strong>hoofdfunctie</strong> van de <strong>accusativus</strong>?',
+    correct: ['Lijdend voorwerp'],
+    opties: ['Onderwerp van de zin','Lijdend voorwerp','Bezit of herkomst ("van")','Meewerkend voorwerp','Bijwoordelijke bepaling','Aanspreken'],
+    uitleg: 'De <strong>accusativus</strong> is het lijdend voorwerp (wat of wie de handeling ondergaat), maar ook het doel van beweging na voorzetsels als <em>in</em> en <em>ad</em>.'
+  },
+  {
+    vraag: 'Wat is de <strong>hoofdfunctie</strong> van de <strong>ablativus</strong>?',
+    correct: ['Bijwoordelijke bepaling'],
+    opties: ['Onderwerp van de zin','Lijdend voorwerp','Bezit of herkomst ("van")','Meewerkend voorwerp','Bijwoordelijke bepaling','Aanspreken'],
+    uitleg: 'De <strong>ablativus</strong> heeft veel bijwoordelijke functies: middel, oorzaak, omstandigheid, scheiding, en staat na veel voorzetsels (<em>cum, in, ex, a/ab, de, sub</em> e.a.).'
+  },
+  {
+    vraag: 'Wat is de functie van de <strong>vocativus</strong>?',
+    correct: ['Aanspreken'],
+    opties: ['Onderwerp van de zin','Lijdend voorwerp','Bezit of herkomst ("van")','Meewerkend voorwerp','Bijwoordelijke bepaling','Aanspreken'],
+    uitleg: 'De <strong>vocativus</strong> gebruik je bij het direct aanspreken van een persoon. In de 2e declinatie is hij herkenbaar: <em>serve!</em> (= slaaf!, van <em>servus</em>).'
+  },
+  {
+    vraag: 'Bij welke declinatie verschilt de <strong>vocativus enkelvoud</strong> van de nominativus?',
+    correct: ['2e declinatie (-us woorden)'],
+    opties: ['1e declinatie','2e declinatie (-us woorden)','3e declinatie','4e declinatie','5e declinatie','Bij alle declinaties'],
+    uitleg: 'Alleen bij de <strong>2e declinatie</strong> (-us woorden) wijkt de vocativus af: <em>servus → serve</em>, <em>amicus → amice</em>. Bij andere declinaties is de vocativus gelijk aan de nominativus.'
+  },
+  {
+    vraag: 'Welke twee naamvallen zijn bij <strong>onzijdige zelfstandige naamwoorden</strong> (neutrum) altijd identiek?',
+    correct: ['Nominativus en accusativus'],
+    opties: ['Nominativus en accusativus','Genitivus en dativus','Dativus en ablativus','Nominativus en vocativus','Accusativus en ablativus'],
+    uitleg: 'Bij neutrum-woorden zijn de <strong>nominativus en accusativus</strong> altijd gelijk, in zowel enkelvoud als meervoud. Bijv.: <em>bellum</em> (nom./acc. sg.), <em>bella</em> (nom./acc. pl.).'
+  },
+  {
+    vraag: 'Hoe herken je een woord van de <strong>3e declinatie</strong> in het woordenboek?',
+    correct: ['Genitivus enkelvoud op -is'],
+    opties: ['Nominativus op -a','Genitivus enkelvoud op -is','Genitivus enkelvoud op -ae','Genitivus enkelvoud op -us','Genitivus enkelvoud op -ei'],
+    uitleg: 'Woorden van de <strong>3e declinatie</strong> hebben een genitivus enkelvoud op <strong>-is</strong>: bijv. <em>rex, regis</em>; <em>pars, partis</em>; <em>corpus, corporis</em>.'
+  },
+  {
+    vraag: 'Welke naamval en getal heeft de uitgang <strong>-arum</strong> (1e declinatie)?',
+    correct: ['Genitivus meervoud'],
+    opties: ['Nominativus enkelvoud','Genitivus enkelvoud','Dativus meervoud','Genitivus meervoud','Accusativus meervoud','Ablativus meervoud'],
+    uitleg: '<strong>-arum</strong> is de genitivus meervoud van de 1e declinatie. Bijv.: <em>vitarum</em> = van de levens.'
+  },
+  {
+    vraag: 'Welke naamval en getal heeft de uitgang <strong>-orum</strong> (2e declinatie)?',
+    correct: ['Genitivus meervoud'],
+    opties: ['Nominativus enkelvoud','Genitivus enkelvoud','Dativus meervoud','Genitivus meervoud','Accusativus meervoud','Ablativus meervoud'],
+    uitleg: '<strong>-orum</strong> is de genitivus meervoud van de 2e declinatie. Bijv.: <em>animorum</em> = van de geesten.'
+  },
+  {
+    vraag: 'De uitgangen <strong>-is</strong> (1e en 2e declinatie) en <strong>-ibus</strong> (3e–5e declinatie) zijn typisch voor welke twee naamvallen?',
+    correct: ['Dativus en ablativus meervoud'],
+    opties: ['Nominativus en vocativus meervoud','Dativus en ablativus meervoud','Genitivus en dativus meervoud','Accusativus en ablativus meervoud','Dativus enkelvoud en meervoud'],
+    uitleg: 'De <strong>dativus en ablativus meervoud</strong> zijn bij alle declinaties identiek: 1e/2e dec. <em>-is</em>, 3e/4e/5e dec. <em>-ibus</em>.'
+  },
+];
+
+let kvState={};
+function startKennisvragen(){kvState={score:{goed:0,totaal:0},usedIdx:[]};renderKv();showScreen('kv');}
+
+function renderKv(){
+  // Kies een vraag die nog niet recent gesteld is (na alle vragen reset)
+  if(kvState.usedIdx.length>=KENNIS_VRAGEN.length) kvState.usedIdx=[];
+  const remaining=KENNIS_VRAGEN.map((_,i)=>i).filter(i=>!kvState.usedIdx.includes(i));
+  const qi=rand(remaining);
+  kvState.usedIdx.push(qi);
+  const q=KENNIS_VRAGEN[qi];
+  kvState.q=q;kvState.answered=false;
+
+  const opts=shuffle(q.opties);
+  let html=`<p class="counter">Goed: ${kvState.score.goed} | Totaal: ${kvState.score.totaal}</p>`;
+  html+=`<div class="kv-card"><p class="kv-vraag">${q.vraag}</p><div class="kv-opts">`;
+  opts.forEach((opt,i)=>html+=`<button class="kv-opt" id="kvopt${i}" onclick="selectKv(${i},'${opt.replace(/'/g,"\\'")}')">${opt}</button>`);
+  html+=`</div></div>`;
+  html+=`<div id="kv-feedback" class="det-feedback"></div>`;
+  html+=`<div class="flex-row mt8"><button class="btn btn-primary" id="kv-volgende" style="display:none" onclick="renderKv()">Volgende vraag →</button></div>`;
+  document.getElementById('kv-content').innerHTML=html;
+  kvState.opts=opts;
+}
+
+function selectKv(i,label){
+  if(kvState.answered)return;
+  kvState.answered=true;kvState.score.totaal++;
+  const q=kvState.q;
+  const ok=q.correct.includes(label);
+  if(ok)kvState.score.goed++;
+  kvState.opts.forEach((opt,j)=>{
+    const btn=document.getElementById('kvopt'+j);
+    if(q.correct.includes(opt))btn.className='kv-opt correct';
+    else if(j===i&&!ok)btn.className='kv-opt wrong';
+    btn.disabled=true;
+  });
+  const fb=document.getElementById('kv-feedback');
+  fb.className='det-feedback show '+(ok?'ok':'nok');
+  fb.innerHTML=(ok?'✓ Correct! ':'✗ Niet correct. ')+q.uitleg;
+  document.getElementById('kv-volgende').style.display='';
+}
+
+// ══════════════════════════════
+//  TOETS
+// ══════════════════════════════
+// Puntenschema: Deel A schema's: 4 woorden × 2 pt = 8 pt max
+//   per woord: 2pt als alle vormen correct, -1 per fout, min 0
+// Deel B determineren: 10 woorden × 1 pt = 10 pt
+// Deel C zinnen: 2 zinnen × 1 pt = 2 pt
+// Totaal: 20 pt
+
+let toetsState={};
+
+function startToets(){
+  setBadge('toetsen');
+  // 4 schema-woorden (divers over declinaties)
+  const perDec=[[1,2,3,4,5]];
+  const schemaWords=[];
+  // Probeer 1 woord per declinatie, vul aan random
+  const decGroups=[1,2,3,4,5].map(d=>WORDLIST.filter(w=>w.dec===d));
+  const chosenDecs=pick([0,1,2,3,4],4); // 4 random declinaties
+  chosenDecs.forEach(di=>schemaWords.push(rand(decGroups[di])));
+
+  // 5 determineer-vormen
+  const detItems=[];
+  for(let i=0;i<10;i++){
+    const w=rand(WORDLIST);
+    const cas=activeCasusIdx(w);
+    const numIdx=Math.floor(Math.random()*2);
+    const casIdx=cas[Math.floor(Math.random()*cas.length)];
+    const form=getForm(w.id,numIdx,casIdx);
+    const allValid=[];
+    [0,1].forEach(ni=>cas.forEach(ci=>{if(getForm(w.id,ni,ci)===form)allValid.push({numIdx:ni,casIdx:ci});}));
+    detItems.push({w,numIdx,casIdx,form,allValid});
+  }
+  // 2 zinnen
+  const toetsZinnen=pick(ZINNEN,2);
+  toetsState={schemaWords,detItems,toetsZinnen,submitted:false};
+  renderToets();
+  showScreen('toets');
+}
+
+function renderToets(){
+  const{schemaWords,detItems,toetsZinnen}=toetsState;
+  let html='';
+
+  // ── Deel A ──
+  html+=`<h3 style="font-family:Georgia,'Times New Roman',serif;font-size:1.1rem;margin-bottom:4px">Deel A — Schema's invullen <span style="font-size:.78rem;color:#888;font-weight:400">(8 punten)</span></h3>`;
+  html+=`<p style="font-size:.8rem;color:#666;margin-bottom:14px">Vul het volledige verbuigingsschema in. De nominativus enkelvoud is alvast gegeven.</p>`;
+  schemaWords.forEach((w,wi)=>{
+    const forms=FORMS[w.id];
+    const cas=activeCasusIdx(w);
+    const g=`<span class="tag tag-${w.geslacht}">${w.geslacht}</span>`;
+    html+=`<div class="schema-word"><em>${w.nom}</em>, <em>${w.gen}</em> ${g}<br><span class="word-info">${w.vert} — ${w.dec}e declinatie</span></div>`;
+    html+=`<table class="casus-table" style="margin-bottom:14px"><tr><th>Casus</th><th>Enkelvoud</th><th>Meervoud</th></tr>`;
+    cas.forEach(ci=>{
+      const c=CASUS_SHORT[ci];
+      html+=`<tr><td>${CASUS_LABELS[ci]}</td>`;
+      ['sg','pl'].forEach(num=>{
+        if(c==='nom'&&num==='sg'){html+=`<td><span class="given"><em>${forms.sg.nom}</em></span></td>`;}
+        else{html+=`<td><input type="text" id="ts_${wi}_${num}_${c}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td>`;}
+      });
+      html+=`</tr>`;
+    });
+    html+='</table>';
+  });
+  html+='<hr class="divider">';
+
+  // ── Deel B ──
+  html+=`<h3 style="font-family:Georgia,'Times New Roman',serif;font-size:1.1rem;margin-bottom:4px">Deel B — Vormen determineren <span style="font-size:.78rem;color:#888;font-weight:400">(10 punten)</span></h3>`;
+  html+=`<p style="font-size:.8rem;color:#666;margin-bottom:14px">Geef getal en naamval van elke woordvorm.</p>`;
+  detItems.forEach((item,ii)=>{
+    const g=`<span class="tag tag-${item.w.geslacht}">${item.w.geslacht}</span>`;
+    html+=`<div style="background:white;border:1.5px solid var(--border);border-radius:6px;padding:12px;margin-bottom:10px">`;
+    html+=`<div style="font-family:Georgia,'Times New Roman',serif;font-size:1.2rem;color:var(--blue);margin-bottom:4px"><em>${item.form}</em></div>`;
+    html+=`<div style="font-size:.75rem;color:#888;margin-bottom:8px">${item.w.nom}, ${item.w.gen} ${g} — ${item.w.vert}</div>`;
+    html+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">`;
+    html+=`<div><label style="font-size:.72rem;color:#888;display:block;margin-bottom:3px">Getal</label><select id="td_${ii}_num" style="width:100%;padding:6px;border:1.5px solid var(--border);border-radius:4px;font-size:.85rem;background:var(--parchment);font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif"><option value="">—</option><option value="0">Enkelvoud</option><option value="1">Meervoud</option></select></div>`;
+    html+=`<div><label style="font-size:.72rem;color:#888;display:block;margin-bottom:3px">Naamval</label><select id="td_${ii}_cas" style="width:100%;padding:6px;border:1.5px solid var(--border);border-radius:4px;font-size:.85rem;background:var(--parchment);font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif"><option value="">—</option>`;
+    // Alleen naamvallen die voor dit woord relevant zijn
+    activeCasusIdx(item.w).forEach(ci=>html+=`<option value="${ci}">${CASUS_LABELS[ci]}</option>`);
+    html+=`</select></div></div></div>`;
+  });
+  html+='<hr class="divider">';
+
+  // ── Deel C ──
+  html+=`<h3 style="font-family:Georgia,'Times New Roman',serif;font-size:1.1rem;margin-bottom:4px">Deel C — Naamvallen in zinnen <span style="font-size:.78rem;color:#888;font-weight:400">(2 punten)</span></h3>`;
+  html+=`<p style="font-size:.8rem;color:#666;margin-bottom:14px">Klik op het gevraagde woord in de zin.</p>`;
+  toetsZinnen.forEach((z,zi)=>{
+    html+=`<div style="margin-bottom:16px"><p class="zin-vraag">Zin ${zi+1}: ${z.vraag}</p><div class="zin-display" id="tzin_${zi}">`;
+    z.zin.split(' ').forEach((tok,i)=>{
+      const clean=tok.replace(/[.,!?]/g,'');
+      const punct=tok.match(/[.,!?]+$/)?tok.match(/[.,!?]+$/)[0]:'';
+      const match=z.woorden.findIndex(w=>normalize(w.form)===normalize(clean));
+      if(match>=0) html+=`<span class="zin-target" id="tzt_${zi}_${match}" data-zin="${zi}" data-idx="${match}" onclick="selectToetsZin(this)">${clean}</span>${punct} `;
+      else html+=`${tok} `;
+    });
+    html+=`</div><div id="tsel_${zi}" style="font-size:.78rem;color:var(--gold);margin-top:4px;font-style:italic">Niets geselecteerd</div></div>`;
+  });
+
+  html+=`<button class="btn btn-red btn-full" style="margin-top:8px" onclick="submitToets()">Toets inleveren →</button>`;
+  document.getElementById('toets-content').innerHTML=html;
+  toetsState.zinSelections={};
+}
+
+function selectToetsZin(el){
+  if(toetsState.submitted)return;
+  const zi=parseInt(el.dataset.zin);
+  const midx=parseInt(el.dataset.idx);
+  toetsState.zinSelections[zi]=midx;
+  const z=toetsState.toetsZinnen[zi];
+  z.woorden.forEach((_,j)=>{const b=document.getElementById(`tzt_${zi}_${j}`);if(b)b.className='zin-target';});
+  el.className='zin-target selected-zin';
+  const sel=document.getElementById(`tsel_${zi}`);
+  if(sel)sel.textContent=`Geselecteerd: ${el.textContent}`;
+}
+
+function submitToets(){
+  if(!confirm('Toets inleveren? Je kunt daarna niets meer aanpassen.'))return;
+  toetsState.submitted=true;
+  const{schemaWords,detItems,toetsZinnen,zinSelections}=toetsState;
+  const breakdown=[];
+  let totalPts=0,earnedPts=0;
+
+  // ── Deel A: 2 pt per woord, -1 per fout, min 0 ──
+  let aEarned=0;
+  schemaWords.forEach((w,wi)=>{
+    const forms=FORMS[w.id];
+    const cas=activeCasusIdx(w);
+    let fouten=0;
+    cas.forEach(ci=>{
+      const c=CASUS_SHORT[ci];
+      ['sg','pl'].forEach(num=>{
+        if(c==='nom'&&num==='sg')return;
+        const el=document.getElementById(`ts_${wi}_${num}_${c}`);
+        if(!el)return;
+        const val=el.value;
+        const correct=forms[num][c];
+        const ok=check(val,correct);
+        if(!ok)fouten++;
+        el.readOnly=true;
+        el.className=ok?'correct':'wrong';
+        if(!ok){
+          const wrap=el.closest('.answer-cell')||el.parentElement;
+          if(!wrap.querySelector('.corr-hint')){
+            const hint=document.createElement('span');
+            hint.className='corr-hint';
+            hint.style.cssText='color:var(--green);font-size:.75rem;font-style:italic;margin-left:4px';
+            hint.textContent=correct;wrap.appendChild(hint);
+          }
+        }
+      });
+    });
+    const wordPts=Math.max(0,2-fouten);
+    aEarned+=wordPts;
+    // Voeg punt-label toe bij schema-header
+    const schemaWordEl=document.querySelectorAll('.schema-word')[wi];
+    if(schemaWordEl){
+      const lbl=document.createElement('div');
+      lbl.style.cssText=`margin-top:4px;font-size:.75rem;font-weight:700;color:${wordPts===2?'var(--green)':wordPts===1?'var(--gold)':'var(--red)'}`;
+      lbl.textContent=`${wordPts}/2 punten (${fouten} fout${fouten!==1?'en':''})`;
+      schemaWordEl.appendChild(lbl);
+    }
+  });
+  breakdown.push({label:'Deel A – Schema\'s',pts:aEarned,maxPts:8});
+  earnedPts+=aEarned;totalPts+=8;
+
+  // ── Deel B: 1 pt per woord ──
+  let bEarned=0;
+  detItems.forEach((item,ii)=>{
+    const numEl=document.getElementById(`td_${ii}_num`);
+    const casEl=document.getElementById(`td_${ii}_cas`);
+    const selNum=numEl?parseInt(numEl.value):-1;
+    const selCas=casEl?parseInt(casEl.value):-1;
+    const ok=item.allValid.some(v=>v.numIdx===selNum&&v.casIdx===selCas);
+    if(ok)bEarned++;
+    if(numEl)numEl.disabled=true;
+    if(casEl)casEl.disabled=true;
+    const card=numEl?numEl.closest('div[style]')||numEl.parentElement.parentElement:null;
+    if(card&&card.parentElement){
+      const hint=document.createElement('div');
+      hint.style.cssText=`margin-top:6px;font-size:.78rem;font-style:italic;color:${ok?'var(--green)':'var(--red)'}`;
+      const validLabels=item.allValid.map(v=>NUMERI[v.numIdx]+' '+CASUS_LABELS[v.casIdx]).join(' / ');
+      hint.textContent=ok?`✓ Correct (${validLabels})`:`✗ Juist: ${validLabels}`;
+      card.parentElement.appendChild(hint);
+    }
+  });
+  breakdown.push({label:'Deel B – Determineren',pts:bEarned,maxPts:10});
+  earnedPts+=bEarned;totalPts+=10;
+
+  // ── Deel C: 1 pt per zin ──
+  let cEarned=0;
+  toetsZinnen.forEach((z,zi)=>{
+    const selIdx=zinSelections.hasOwnProperty(zi)?zinSelections[zi]:-1;
+    const vt=z.vraag.toLowerCase();
+    const tc=vt.includes('accusativus')?3:vt.includes('genitivus')?1:vt.includes('dativus')?2:vt.includes('nominativus')?0:vt.includes('ablativus')?4:null;
+    const ok=selIdx>=0&&tc!==null&&z.woorden[selIdx].cas===tc;
+    if(ok)cEarned++;
+    z.woorden.forEach((ww,j)=>{
+      const btn=document.getElementById(`tzt_${zi}_${j}`);
+      if(!btn)return;
+      if(tc!==null&&ww.cas===tc)btn.className='zin-target correct-zin';
+      else if(j===selIdx&&!ok)btn.className='zin-target wrong-zin';
+      btn.onclick=null;
+    });
+  });
+  breakdown.push({label:'Deel C – Zinnen',pts:cEarned,maxPts:2});
+  earnedPts+=cEarned;totalPts+=2;
+
+  showUitslag({earnedPts,totalPts,breakdown});
+}
+
+// ── Normering: 20 pt totaal, 1 = 0pt, 10 = 20pt ──
+// Cijfer = 1 + 9*(behaald/20)  → lineair
+function ptsToCijfer(pts){
+  return Math.round((1+9*(pts/20))*10)/10;
+}
+
+function showUitslag({earnedPts,totalPts,breakdown}){
+  const cijfer=ptsToCijfer(earnedPts);
+  const kleur=cijfer>=5.5?'var(--green)':'var(--red)';
+  let html='';
+  html+=`<div class="score-box">`;
+  html+=`<div class="score-label">Behaald</div>`;
+  html+=`<div class="score-pct" style="color:${kleur}">${earnedPts}<span style="font-size:1.5rem;font-weight:400"> / ${totalPts}</span></div>`;
+  html+=`<div class="score-label" style="margin-top:2px">punten</div>`;
+  html+=`<div class="score-label" style="margin-top:12px">Cijfer</div>`;
+  html+=`<div class="score-cijfer" style="color:${kleur}">${cijfer.toFixed(1)}</div>`;
+  html+=`<div class="score-label">${cijfer>=5.5?'✓ Voldoende':'✗ Onvoldoende'}</div>`;
+  html+=`</div>`;
+
+  html+=`<h3 style="font-family:Georgia,'Times New Roman',serif;font-size:1rem;margin:16px 0 8px">Overzicht per onderdeel</h3>`;
+  breakdown.forEach(b=>{
+    const bpct=b.maxPts>0?Math.round(b.pts/b.maxPts*100):0;
+    html+=`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:3px"><span>${b.label}</span><span style="color:${bpct>=55?'var(--green)':'var(--red)'}">${b.pts} / ${b.maxPts} pt</span></div>`;
+    html+=`<div class="progress-bar-wrap"><div class="progress-bar" style="width:${bpct}%;background:${bpct>=55?'var(--green)':'var(--red)'}"></div></div></div>`;
+  });
+
+  // Normering tabel: 0–20 punten → cijfer
+  html+=`<h3 style="font-family:Georgia,'Times New Roman',serif;font-size:1rem;margin:16px 0 8px">Normering (20 punten totaal)</h3>`;
+  html+=`<table class="norm-table"><tr style="background:var(--ink);color:var(--parchment)"><td><strong>Punten</strong></td><td><strong>Cijfer</strong></td><td><strong>Punten</strong></td><td><strong>Cijfer</strong></td></tr>`;
+  // Genereer rijen voor 20 t/m 0
+  const rows=[];
+  for(let p=20;p>=0;p--) rows.push([p,ptsToCijfer(p)]);
+  for(let i=0;i<rows.length;i+=2){
+    const r1=rows[i],r2=rows[i+1]||null;
+    const hl1=r1[0]===earnedPts,hl2=r2&&r2[0]===earnedPts;
+    html+=`<tr${hl1||hl2?' class="highlight"':''}>`;
+    html+=`<td>${r1[0]}</td><td>${r1[1].toFixed(1)}</td>`;
+    html+=r2?`<td>${r2[0]}</td><td>${r2[1].toFixed(1)}</td>`:`<td></td><td></td>`;
+    html+=`</tr>`;
+  }
+  html+='</table>';
+  html+=`<div class="flex-row mt16"><button class="btn btn-primary" onclick="startToets()">Nieuwe toets</button><button class="btn btn-outline" onclick="goHome()">Home</button></div>`;
+  document.getElementById('uitslag-content').innerHTML=html;
+  showScreen('uitslag');
+}
+</script>
+</body>
+</html>
