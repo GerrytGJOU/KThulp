@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Klassieke Talen">
+<meta name="theme-color" content="#16110c">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23160f09'/%3E%3Cpath d='M90 24c18 7 47 11 47 11v54c0 47-29 68-47 79-18-11-47-32-47-79V35s29-4 47-11z' fill='%235a120c' stroke='%23d4af37' stroke-width='5'/%3E%3Ctext x='90' y='110' font-size='40' fill='%23f0cf6b' text-anchor='middle' font-family='Georgia,serif' font-weight='bold'%3ESPQR%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<title>Klassieke Talen</title>
+<style>
+  :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--ox:#5a120c;--cream:#f3e9d2;
+        --muted:#b9a883;--s2:#221a12;--s3:#2f241a;--s4:#3d2f20;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'EB Garamond',Georgia,serif;min-height:100vh;color:var(--cream);
+    background:radial-gradient(ellipse at 50% -10%,rgba(212,175,55,.10),transparent 55%),
+               radial-gradient(ellipse at 50% 120%,rgba(168,38,26,.16),transparent 55%),
+               linear-gradient(160deg,#120d08,#1c140d 45%,#160f09);
+    background-attachment:fixed;padding:34px 16px 60px;}
+  .wrap{max-width:680px;margin:0 auto}
+  .crest{width:84px;height:84px;display:block;margin:6px auto 16px}
+  h1{font-family:'Cinzel',serif;font-weight:800;text-align:center;color:var(--goldb);
+     font-size:30px;letter-spacing:.04em;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+  .sub{font-family:'Cinzel',serif;text-align:center;color:var(--muted);
+     font-size:11px;letter-spacing:.3em;margin:8px 0 30px;text-transform:uppercase}
+  .grid{display:grid;gap:14px}
+  a.lang{display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--cream);
+    background:linear-gradient(170deg,var(--s3),var(--s2));border:1px solid var(--s4);
+    border-radius:16px;padding:22px 22px;box-shadow:0 4px 16px rgba(0,0,0,.5);
+    transition:transform .14s,border-color .14s;}
+  a.lang:active{transform:scale(.98)}
+  a.lang:hover{border-color:var(--goldd)}
+  a.lang.soon{opacity:.5;pointer-events:none}
+  .ic{width:54px;height:54px;flex:0 0 auto}
+  .lang h2{font-family:'Cinzel',serif;font-size:21px;color:var(--cream);margin-bottom:3px}
+  .lang p{font-size:14px;color:var(--muted);line-height:1.35}
+  .pill{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    background:rgba(212,175,55,.14);color:var(--goldb);border:1px solid var(--goldd);
+    border-radius:14px;padding:2px 9px;margin-left:8px;vertical-align:middle}
+  .arrow{margin-left:auto;color:var(--gold);font-size:24px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:34px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg class="crest" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8392a"/><stop offset="100%" stop-color="#5a120c"/></linearGradient></defs><path d="M50 8c10 4 26 6 26 6v30c0 26-16 38-26 44C40 82 24 70 24 44V14s16-2 26-6z" fill="url(#g)" stroke="#d4af37" stroke-width="3"/><text x="50" y="48" font-size="18" fill="#f0cf6b" text-anchor="middle" font-family="Cinzel" font-weight="700">SPQR</text><path d="M38 58h24M50 22v8" stroke="#f0cf6b" stroke-width="2.5"/></svg>
+  <h1>KLASSIEKE TALEN</h1>
+  <div class="sub">Kies een taal</div>
+
+  <div class="grid">
+
+    <a class="lang" href="latijn/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h7v18H6a2 2 0 01-2-2zM20 5a2 2 0 00-2-2h-1v18h1a2 2 0 002-2z"/><path d="M13 3v18"/></svg>
+      <div><h2>Latijn</h2><p>Woordenschat, naamvallen, zinsontleding &amp; meer</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a class="lang soon" href="graece/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8 9c0-2 2-3 4-3s4 1 4 3-2 3-4 3M12 12v6M9 18h6"/></svg>
+      <div><h2>Grieks <span class="pill">Binnenkort</span></h2><p>Komt eraan zodra de Griekse apps klaar zijn</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+  </div>
+  <footer>SPQR &middot; Klassieke Talen</footer>
+</div>
+</body>
+</html>
