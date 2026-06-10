@@ -81,10 +81,13 @@
   .lock-icon{font-size:40px;margin-bottom:12px;opacity:.5;}
   .spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
   @keyframes spin{to{transform:rotate(360deg);}}
+  .tab-warning{position:fixed;top:0;left:0;right:0;z-index:9999;background:#8b1a1a;color:#fff;padding:12px 16px;font-family:'IM Fell English',serif;font-size:15px;text-align:center;letter-spacing:.03em;display:none;box-shadow:0 2px 8px rgba(0,0,0,.3);}
   .info-box{background:rgba(200,150,42,.1);border:1px solid var(--border);border-radius:3px;padding:10px 14px;font-size:13px;font-style:italic;color:var(--ink-light);margin-bottom:12px;width:100%;max-width:480px;}
 </style>
 </head>
 <body>
+
+<div id="tab-warning" class="tab-warning">⚠ Tabblad wisselen is geregistreerd — dit wordt aan je docent gemeld.</div>
 
 <!-- ── SCHERM 0: START ── -->
 <div id="screen-start" class="screen active">
@@ -279,7 +282,7 @@ let inst = {
   aantal:15, sessiecode:'', webhookUrl:'https://script.google.com/macros/s/AKfycbyQrtaCiKXId2Rq1GCcfqOVXv9Ebczo3j9-3V3rWuUkQ5JO75bTHhWTJvvNEVVF9BKH/exec',
 };
 const VASTE_WEBHOOK = 'https://script.google.com/macros/s/AKfycbyQrtaCiKXId2Rq1GCcfqOVXv9Ebczo3j9-3V3rWuUkQ5JO75bTHhWTJvvNEVVF9BKH/exec';
-let toets = { leerling:{naam:'',achternaam:'',klas:''}, sessiecode:'', vragen:[], huidig:0, antwoorden:[] };
+let toets = { leerling:{naam:'',achternaam:'',klas:''}, sessiecode:'', vragen:[], huidig:0, antwoorden:[], tabWissels:0, tabLog:[] };
 
 const DOCENT_PW = 'latijn2025';
 
@@ -448,6 +451,7 @@ function startToets(){
   if(pool.length===0){err.textContent='Geen woorden beschikbaar. Vraag je docent de instellingen te controleren.';err.style.display='block';return;}
   const vragen=selecteerVragen(pool,inst.aantal,sessie,naam+acht);
   toets={leerling:{naam,achternaam:acht,klas},sessiecode:sessie,vragen,huidig:0,antwoorden:[]};
+  toetsBezig = true;
   toonVraag();
   showScreen('screen-toets');
 }
@@ -543,21 +547,24 @@ function toonOverzicht(){
 }
 
 function berekenScore(ant){
-  const goed=ant.filter(a=>a.uitslag==='goed'||a.twijfel).length;
-  // twijfel telt als 0.5 voor voorlopige score — definitief na nakijk
+  const goed=ant.filter(a=>a.uitslag==='goed'&&!a.twijfel).length;
+  const twijfel=ant.filter(a=>a.twijfel).length;
+  const misschien=ant.filter(a=>a.uitslag==='misschien'&&!a.twijfel).length;
+  const fout=ant.filter(a=>a.uitslag==='fout'&&!a.twijfel).length;
+  // Score: goed=1pt, misschien=0.5pt, twijfel/fout=0 (twijfel wordt door docent nagekeken)
   const gewogen=ant.reduce((s,a)=>{
-    if(a.uitslag==='goed') return s+1;
-    if(a.uitslag==='misschien') return s+0.5;
+    if(a.uitslag==='goed'&&!a.twijfel) return s+1;
+    if(a.uitslag==='misschien'&&!a.twijfel) return s+0.5;
     return s;
   },0);
   const pct=Math.round(gewogen/ant.length*100);
-  return {goed:ant.filter(a=>a.uitslag==='goed').length,misschien:ant.filter(a=>a.uitslag==='misschien').length,fout:ant.filter(a=>a.uitslag==='fout').length,pct};
+  return {goed, twijfel, misschien, fout, pct};
 }
 
 function renderOverzicht(ant){
   const sc=berekenScore(ant);
   document.getElementById('overzicht-score').textContent=sc.pct+'%';
-  document.getElementById('overzicht-label').textContent=sc.goed+' goed · '+sc.misschien+' twijfelachtig · '+sc.fout+' fout';
+  document.getElementById('overzicht-label').textContent=sc.goed+' goed · '+sc.twijfel+' twijfel · '+sc.misschien+' misschien · '+sc.fout+' fout';
   document.getElementById('overzicht-naam').textContent=toets.leerling.naam+' '+toets.leerling.achternaam+' — '+toets.sessiecode;
   const tbl=document.getElementById('overzicht-table');
   tbl.innerHTML='<tr><th>Woord</th><th>Jouw antwoord</th><th>Correct</th><th></th><th></th></tr>';
@@ -594,11 +601,12 @@ async function verzendResultaten(){
     naam:toets.leerling.naam+' '+toets.leerling.achternaam,
     klas:toets.leerling.klas,
     tijdstip:new Date().toLocaleString('nl-NL'),
-    totaal:ant.length, goed:sc.goed, misschien:sc.misschien, fout:sc.fout, score_pct:sc.pct,
+    totaal:ant.length, goed:sc.goed, twijfel:sc.twijfel, misschien:sc.misschien, fout:sc.fout, score_pct:sc.pct, tabWissels:toets.tabWissels, tabLog:toets.tabLog.join(', ')||'—',
     antwoorden:ant.map(a=>({woord:a.woord,gegeven:a.gegeven,correct:a.vertaling.replace(/\n/g,' / '),uitslag:a.twijfel?'twijfel':a.uitslag})),
   };
   try{
     await fetch(hook,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    toetsBezig = false;
     toonEinde();
   }catch(e){
     btn.disabled=false; btn.innerHTML='Opnieuw proberen';
@@ -611,7 +619,7 @@ function toonEinde(){
   const ant=toets.antwoorden;
   const sc=berekenScore(ant);
   document.getElementById('einde-score').textContent=sc.pct+'%';
-  document.getElementById('einde-label').textContent=sc.goed+' goed · '+sc.misschien+' twijfelachtig · '+sc.fout+' fout — verzonden ✓';
+  document.getElementById('einde-label').textContent=sc.goed+' goed · '+sc.twijfel+' twijfel · '+sc.misschien+' misschien · '+sc.fout+' fout — verzonden ✓';
   const tbl=document.getElementById('einde-table');
   tbl.innerHTML='<tr><th>Woord</th><th>Jouw antwoord</th><th>Correct</th><th></th></tr>';
   ant.forEach(a=>{
@@ -622,6 +630,20 @@ function toonEinde(){
   });
   showScreen('screen-einde');
 }
+
+// ── TABBLAD DETECTIE ──
+let toetsBezig = false; // wordt true zodra toets start, false na verzenden
+
+document.addEventListener('visibilitychange', function(){
+  if(!toetsBezig) return;
+  if(document.hidden){
+    toets.tabWissels++;
+    toets.tabLog.push(new Date().toLocaleTimeString('nl-NL'));
+    const w=document.getElementById('tab-warning');
+    w.style.display='block';
+    setTimeout(()=>w.style.display='none', 4000);
+  }
+});
 </script>
 </body>
 </html>
