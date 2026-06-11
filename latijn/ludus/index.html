@@ -244,6 +244,28 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold-dim
   .card .word{font-size:34px}
   .tile h3{font-size:16px}
 }
+
+/* ===== help / accordion ===== */
+.help-section{border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--stone4)}
+.help-hd{display:flex;align-items:center;gap:12px;padding:15px 16px;background:linear-gradient(170deg,var(--stone3),var(--stone2));cursor:pointer;user-select:none;-webkit-user-select:none}
+.help-hd:active{background:var(--stone4)}
+.help-hd .hico{flex:0 0 auto;width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:rgba(212,175,55,.12);color:var(--gold)}
+.help-hd .htxt{flex:1}
+.help-hd .htxt b{font-family:'Cinzel',serif;font-size:15px;color:var(--cream);display:block}
+.help-hd .htxt span{font-size:12px;color:var(--muted)}
+.help-hd .arr{width:20px;height:20px;color:var(--muted2);transition:transform .25s;flex:0 0 auto}
+.help-hd.open .arr{transform:rotate(90deg)}
+.help-body{display:none;padding:16px;background:rgba(0,0,0,.18);border-top:1px solid var(--stone4);font-size:14px;color:var(--cream2);line-height:1.65}
+.help-body.open{display:block;animation:fade .2s ease}
+.help-body h4{font-family:'Cinzel',serif;font-size:13px;color:var(--gold);margin:14px 0 5px;letter-spacing:.06em}
+.help-body h4:first-child{margin-top:0}
+.help-body p{margin-bottom:8px}
+.help-body ul{padding-left:18px;margin-bottom:8px}
+.help-body li{margin-bottom:5px}
+.help-body .ex{display:inline-block;font-family:'Cinzel',serif;color:var(--gold-bright);background:rgba(212,175,55,.1);border:1px solid var(--gold-dim);border-radius:6px;padding:2px 8px;font-size:13px;margin:1px 2px}
+.help-body .badge-help{display:inline-flex;align-items:center;gap:5px;background:rgba(212,175,55,.14);color:var(--gold-bright);border:1px solid var(--gold-dim);border-radius:12px;padding:3px 10px;font-size:12px;font-family:'Cinzel',serif}
+.help-tip{margin-top:10px;padding:10px 13px;border-radius:10px;background:rgba(212,175,55,.08);border-left:3px solid var(--gold-dim);font-size:13px;color:var(--parch)}
+
 </style>
 </head>
 <body>
@@ -361,6 +383,7 @@ const I18N = {
     translate_sentence:"Vertaal deze zin", new_sentence:"Nieuwe zin", check_sentence:"Controleer",
     generating:"Zin maken…", model_translation:"Modelvertaling", your_answer:"Jouw antwoord",
     sentence_correct:"Goed vertaald!", sentence_partly:"Bijna — let op de details", sentence_wrong:"Niet juist",
+    nv_help:"Hulp", help_title:"Handleiding", help_sub:"Alles over Ludus Latinus",
   },
   en:{
     sub:"Learn Latin like a Roman",
@@ -435,6 +458,7 @@ const I18N = {
     translate_sentence:"Translate this sentence", new_sentence:"New sentence", check_sentence:"Check",
     generating:"Creating sentence…", model_translation:"Model translation", your_answer:"Your answer",
     sentence_correct:"Well translated!", sentence_partly:"Almost — mind the details", sentence_wrong:"Not correct",
+    nv_help:"Help", help_title:"Guide", help_sub:"Everything about Ludus Latinus",
   }
 };
 function t(k){return (I18N[S.lang]||I18N.nl)[k] ?? k;}
@@ -701,6 +725,8 @@ function toastAch(a){
   clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),3600);
 }
 function popupRank(r){
+  // Pause the Velox timer while the rank-up popup is open so no play time is lost
+  if(SPEED_TIMER){clearInterval(SPEED_TIMER);SPEED_TIMER=null;SPEED_PAUSED=true;}
   const ov=document.getElementById("overlay");
   ov.innerHTML=`<div class="modal"><div class="big">${medalSVG(r.medal,110)}</div>
     <div class="pill">${S.lang==="nl"?"Bevorderd!":"Promoted!"}</div>
@@ -708,7 +734,21 @@ function popupRank(r){
     <button class="btn btn-gold btn-block" onclick="closeOverlay()">${S.lang==="nl"?"Verder":"Continue"}</button></div>`;
   ov.classList.add("show");try{beep("rank");}catch(e){}
 }
-function closeOverlay(){document.getElementById("overlay").classList.remove("show");}
+let SPEED_PAUSED=false;
+function closeOverlay(){
+  document.getElementById("overlay").classList.remove("show");
+  // Resume Velox timer if it was paused by a rank-up popup mid-game
+  if(SPEED_PAUSED&&QSP&&QSP.timeLeft>0&&CURRENT==="speed"){
+    SPEED_PAUSED=false;
+    SPEED_TIMER=setInterval(()=>{
+      QSP.timeLeft--;
+      const el=document.getElementById("spTime");if(el)el.textContent=QSP.timeLeft+t("sec");
+      if(QSP.timeLeft<=0)finishSpeed();
+    },1000);
+  }else{
+    SPEED_PAUSED=false;
+  }
+}
 
 /* ============================ API LAYER (Gemini) ============================ */
 async function callAI(system,user,maxTokens=700){
@@ -851,7 +891,17 @@ RENDER.home=function(){
     <div style="flex:0 0 auto">${medalSVG("sundial",48)}</div>
     <div><div style="font-family:'Cinzel',serif;color:var(--gold-bright);font-size:15px">${t("welcome")}</div>
     <div class="note" style="margin-top:3px">${S.points===0?t("welcome_d"):t("streak_keep")}</div></div>
-  </div>`;
+  </div>
+  <button class="panel screen" onclick="go('help')" style="width:100%;text-align:left;display:flex;align-items:center;gap:14px;margin-top:10px;cursor:pointer">
+    <div style="flex:0 0 auto;width:48px;height:48px;border-radius:12px;background:rgba(212,175,55,.1);border:1px solid var(--gold-dim);display:flex;align-items:center;justify-content:center;color:var(--gold)">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg>
+    </div>
+    <div style="flex:1">
+      <div style="font-family:'Cinzel',serif;color:var(--cream);font-size:15px">${t("help_title")} — ${t("help_sub")}</div>
+      <div class="note" style="font-size:12px;margin-top:2px">Speluitleg, denarii, ranglijst, woordenlijsten importeren&hellip;</div>
+    </div>
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="var(--gold-dim)" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+  </button>`;
 };
 
 /* ---- ACHIEVEMENTS ---- */
@@ -1093,6 +1143,60 @@ function resetAll(){
   const keepKey=S.apiKey,keepLang=S.lang,keepMusic=S.music;
   S={...DEF,apiKey:keepKey,lang:keepLang,music:keepMusic};save();go('home');
 }
+
+
+/* ---- HELP / HANDLEIDING ---- */
+function toggleHelp(id){
+  const hd=document.getElementById("hd-"+id);
+  const bd=document.getElementById("bd-"+id);
+  if(!hd||!bd)return;
+  const isOpen=hd.classList.contains("open");
+  document.querySelectorAll(".help-hd.open").forEach(el=>el.classList.remove("open"));
+  document.querySelectorAll(".help-body.open").forEach(el=>el.classList.remove("open"));
+  if(!isOpen){hd.classList.add("open");bd.classList.add("open");}
+}
+function helpSection(id,icon,title,sub,body){
+  return `<div class="help-section screen"><div class="help-hd" id="hd-${id}" onclick="toggleHelp('${id}')"><div class="hico"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">${icon}</svg></div><div class="htxt"><b>${title}</b><span>${sub}</span></div><svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></div><div class="help-body" id="bd-${id}">${body}</div></div>`;
+}
+RENDER.help=function(){
+  const S0=`<h4>Stap 1 — Gemini-sleutel instellen</h4><p>Een aantal onderdelen controleren je antwoorden via het internet met een gratis AI. Daarvoor heb je een persoonlijke <b>Gemini-sleutel</b> nodig.</p><ul><li>Ga naar <b>Tempel</b> (tandwielicoon onderaan).</li><li>Plak je sleutel in het veld en tik op <b>Bewaar</b>.</li><li>De sleutel wordt opgeslagen op je eigen iPad — niemand anders ziet hem.</li></ul><p>Zonder sleutel kun je nog steeds alle <span class="ex">Offline</span>-spellen spelen: Cartae, Velox, Scriptor en Par.</p><div class="help-tip">&#128161; Je docent heeft mogelijk al een sleutel ingebakken. Staat er "sleutel ingebouwd"? Dan hoef je zelf niets in te stellen.</div>`;
+
+  const S1=`<h4>Hoe werkt het?</h4><p>Je oefent Latijnse woorden in twee rondes:</p><ul><li><b>Meerkeuze</b> — kies uit vier vertalingen. Goed = +5 denarii.</li><li><b>Typen</b> — typ de Nederlandse betekenis. Synoniemen en kleine spelfouten tellen ook als goed. Goed = +10 denarii.</li></ul><h4>Welke woorden?</h4><p>Kies vóór de oefening een woordset:</p><ul><li><span class="ex">Top 100</span> — de 100 meest voorkomende Latijnse woorden.</li><li><span class="ex">100–300</span>, <span class="ex">300–600</span>, <span class="ex">600–1000</span> — hogere niveaus.</li><li><span class="ex">Mijn lijst</span> — woorden die je zelf hebt geïmporteerd.</li></ul><p>Je kunt ook filteren op woordsoort met de chips bovenaan.</p><h4>Levens</h4><p>Je hebt 3 levens per ronde. Bij drie fouten stopt de ronde automatisch.</p><div class="help-tip">&#128161; Weet je het antwoord niet? Tik op <b>Ik weet het niet</b> — zo verlies je geen leven door te gokken.</div>`;
+
+  const S2=`<h4>Hoe werkt het?</h4><p>Je krijgt zes willekeurige <b>vervoegde werkwoordsvormen</b> (geen woordenboekvormen) te vertalen. Voorbeeld: <span class="ex">amabant</span> &#8594; "zij hielden van".</p><ul><li>Typ de Nederlandse vertaling van de exacte vorm.</li><li>De AI controleert persoon, getal, tijd en wijs.</li><li>Goed antwoord = +12 denarii.</li></ul><div class="help-tip">&#128161; Je ziet na elke vraag de grammaticale ontleding, ook als je het fout had. Zo leer je de vormen stap voor stap.</div>`;
+
+  const S3=`<h4>Niveaus</h4><ul><li><span class="ex">Facilis</span> — nominatief, accusatief, praesens. Korte zinnen (3–5 woorden).</li><li><span class="ex">Medius</span> — alle naamvallen, imperfectum, perfectum, bijvoeglijke naamwoorden.</li><li><span class="ex">Difficilis</span> — A.c.I., participia, bijzinnen, futurum.</li><li><span class="ex">Expertus</span> — coniunctivus, ablativus absolutus, complexe perioden.</li></ul><h4>Hoe werkt het?</h4><p>Er verschijnt een Latijnse zin. Typ je Nederlandse vertaling en tik op <b>Controleer</b>. De AI beoordeelt of betekenis en grammatica kloppen.</p><h4>Punten per niveau</h4><ul><li>Facilis: 10 (goed) / 4 (bijna goed) denarii</li><li>Medius: 15/6 — Difficilis: 22/9 — Expertus: 30/12</li></ul><div class="help-tip">&#128161; De zinnen komen uit een vaste bank en worden aangevuld door de AI — je krijgt nooit exact dezelfde zin twee keer.</div>`;
+
+  const S4=`<h4>Hoe werkt het?</h4><p>Typ een Latijns woord (bv. <span class="ex">servus</span>, <span class="ex">amo</span> of <span class="ex">magnus</span>) en tik op <b>Zoek op</b>. Je krijgt:</p><ul><li>Voor zelfstandige naamwoorden en bijvoeglijke naamwoorden: alle naamvallen, enkelvoud en meervoud.</li><li>Voor werkwoorden: principale delen en de belangrijkste vormen.</li></ul><p>Als het woord in de ingebouwde lijst staat, zie je direct een basiskaart (ook offline). Met een Gemini-sleutel volgt het volledige paradigma.</p>`;
+
+  const S5=`<p>Deze vier spellen werken zonder internet en zonder Gemini-sleutel.</p><h4>&#127183; Cartae (Flashcards)</h4><p>Draai de kaart om door erop te tikken. Tik daarna <b>Wist ik</b> of <b>Nog niet</b>.</p><h4>&#9889; Velox (Snelle match)</h4><p>Kies zo snel mogelijk de juiste vertaling uit vier opties. Je hebt 60 seconden. Een foute keuze kost 2 seconden.</p><h4>&#9997;&#65039; Scriptor (Typen)</h4><p>Typ zelf de Nederlandse vertaling — puur offline. Gebruik <b>Toon antwoord</b> als je het niet weet.</p><h4>&#128279; Par (Paren)</h4><p>Koppel 6 Latijnse woorden aan de juiste betekenis. Tik twee tegels die bij elkaar horen. Hoe snel doe jij het?</p><div class="help-tip">&#128161; Vóór elk offline spel kun je filteren op woordsoort of kiezen voor je eigen geïmporteerde lijst.</div>`;
+
+  const S6=`<h4>Methode 1 — Tekst plakken</h4><p>Ga naar <b>Boeken</b> (boekenplankicoon onderaan) &#8594; <b>Eigen lijst importeren</b>. Plak je woorden in het tekstveld, één per regel:</p><ul><li><span class="ex">servus = slaaf</span></li><li><span class="ex">amo = liefhebben, houden van</span></li><li><span class="ex">magnus = groot, groots</span></li></ul><p>Scheid Latijn en betekenis met <b>=</b>, <b>:</b>, <b>—</b> of een tab. Tik daarna op <b>Lijst opslaan</b>.</p><h4>Methode 2 — Bestand uploaden</h4><p>Tik op <b>Bestand kiezen</b> en selecteer een bestand:</p><ul><li><span class="ex">.xlsx / .xls</span> — Excel. Latijn in kolom A, betekenis in kolom B.</li><li><span class="ex">.csv / .txt</span> — tekstbestand, gescheiden door komma, puntkomma of tab.</li></ul><p>Na het opslaan kun je bij alle oefeningen <span class="ex">Mijn lijst</span> kiezen als woordset.</p><div class="help-tip">&#128161; Heeft je docent een Studygo- of Quizlet-export gegeven? Kopieer de woorden of sla ze op als .xlsx — dan heb je precies de toetsstof in de app.</div>`;
+
+  const S7=`<h4>XP en rangen</h4><p>Elke goed beantwoorde vraag levert <b>XP</b> op. Met genoeg XP stijg je op naar een hogere rang:</p><p style="font-family:'Cinzel',serif;font-size:12px;color:var(--gold);line-height:2">Tiro &#8594; Miles &#8594; Optio &#8594; Signifer &#8594; Centurio &#8594; Tribunus &#8594; Praefectus &#8594; Legatus &#8594; Praetor &#8594; Consul &#8594; Dictator &#8594; Imperator</p><p>Bij een nieuwe rang verschijnt er een popup — daarna speel je gewoon verder.</p><h4>Eerbewijzen</h4><p>Naast rangen zijn er 22 speciale eerbewijzen voor bijzondere prestaties: dagelijkse reeksen, perfecte rondes, alle spellen gespeeld, snelste tijd in Par, enzovoort. Bekijk ze via <b>Honores</b> onderaan.</p><div class="help-tip">&#128161; XP kun je nooit kwijtraken — die tellen altijd mee voor je rang.</div>`;
+
+  const S8=`<h4>Wat zijn denarii?</h4><p>Denarii zijn de munteenheid van Ludus Latinus. Je verdient ze door vragen goed te beantwoorden — net als XP, maar denarii kun je ook <em>uitgeven</em>.</p><h4>Wat kun je kopen in de Macellum?</h4><ul><li><b>Thema's</b> — verander de kleur van de app (Marmer, Nachtblauw, Keizerlijk paars…).</li><li><b>Muziek</b> — kies een ander achtergrondthema (Lier, Fluit, Slagwerk…).</li><li><b>Wapenschild</b> — een persoonlijk symbool op je profielkaart.</li><li><b>Titels</b> — een bijnaam achter je rang, zoals <span class="ex">Fortis</span> of <span class="ex">Magnus</span>.</li></ul><p>Tik op <b>Gebruik</b> om een gekocht item te activeren.</p><div class="help-tip">&#128161; Je denarii-saldo staat rechts bovenaan het hoofdscherm. Tik erop om snel naar de Macellum te gaan.</div>`;
+
+  const S9=`<h4>Hoe werkt de reeks?</h4><p>Oefen je vandaag? Reeks +1. Oefen je morgen ook? Reeks +2. Mis je een dag? Reeks terug naar 0.</p><p>Je reeks zie je bovenaan het hoofdscherm (vlammend pictogram).</p><h4>Eerbewijzen voor reeksen</h4><p>Reeksen van 3, 7, 14, 30, 60 en 100 dagen leveren elk een speciaal eerbewijs op.</p><div class="help-tip">&#128161; Zelfs één minuutje oefenen per dag telt mee. Speel een snelle ronde Velox als je weinig tijd hebt.</div>`;
+
+  const sections=[
+    helpSection("start",`<circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/>`,"Hoe begin ik?","De eerste stappen",S0),
+    helpSection("vocab",`<path d="M4 5a2 2 0 012-2h7v18H6a2 2 0 01-2-2zM20 5a2 2 0 00-2-2h-1v18h1a2 2 0 002-2z"/>`,"Woordenschat","Meerkeuze & typen",S1),
+    helpSection("verbs",`<path d="M12 4l8 4-8 4-8-4zM4 12l8 4 8-4M4 16l8 4 8-4"/>`,"Werkwoorden & vormen","Online, met AI-controle",S2),
+    helpSection("sentences",`<path d="M4 7h16M4 12h16M4 17h10"/><path d="M18 16l2 2 3-3"/>`,"Sententiae — Zinnen vertalen","Vier niveaus",S3),
+    helpSection("lookup",`<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>`,"Vormen opzoeken","Paradigma van elk Latijns woord",S4),
+    helpSection("offline",`<path d="M9 3l1.5 4.5L15 9l-4.5 1.5L9 15l-1.5-4.5L3 9l4.5-1.5z"/><circle cx="18" cy="17" r="2.5"/>`,"Offline spellen","Cartae · Velox · Scriptor · Par",S5),
+    helpSection("import",`<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>`,"Eigen woordenlijst importeren","Boeken &#8594; Eigen lijst",S6),
+    helpSection("ranks",`<path d="M7 4h10v5a5 5 0 01-10 0zM5 4H3v2a3 3 0 003 3M19 4h2v2a3 3 0 01-3 3M9 16h6M8 20h8M12 14v2"/>`,"Rangen, XP & eerbewijzen","Hoe stijg je op?",S7),
+    helpSection("denarii",`<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9 9h4.5a1.5 1.5 0 010 3H9h4.5a1.5 1.5 0 010 3H9"/>`,"Denarii & de Macellum","De winkel",S8),
+    helpSection("streak",`<path d="M12 2c2 3 4 5 4 8a4 4 0 01-8 0c0-2 1-3 2-5 .5 1.5 1 2 1.5.5C12 4 11 3 12 2z"/>`,"Reeks (streak)","Elke dag oefenen loont",S9),
+  ];
+  app.innerHTML=`<div class="scrhead"><button class="back" onclick="go('home')">${ICONS.back}</button><h2>${t("help_title")}</h2></div>
+  <div class="note screen" style="margin:-6px 0 16px">${t("help_sub")} — tik een onderwerp aan voor uitleg.</div>
+  ${sections.join("")}
+  <div class="note screen" style="text-align:center;margin-top:18px;opacity:.5;font-size:12px">Ludus Latinus</div>`;
+};
+
 function applyNavLabels(){
   document.getElementById("nv-home").textContent=t("nv_home");
   document.getElementById("nv-ach").textContent=t("nv_ach");
@@ -1819,7 +1923,6 @@ function typeoffResult(ok,w){
   if(ok){
     QT.correct++;addPoints(8);beep("good");
     fd.innerHTML=`<div class="feedback ok"><b>${t("correct")}</b></div>`;
-    setTimeout(nextTypeoff,900);
   }else{
     beep("bad");
     fd.innerHTML=`<div class="feedback no"><b>${t("incorrect")}.</b> ${t("answer_was")}: <b>${cleanNL(w.nl)}</b>.</div>`;
