@@ -40,6 +40,8 @@
     background:rgba(212,175,55,.14);color:var(--goldb);border:1px solid var(--goldd);
     border-radius:14px;padding:2px 9px;margin-left:8px;vertical-align:middle}
   .arrow{margin-left:auto;color:var(--gold);font-size:24px}
+  .sec-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase;margin:28px 0 12px;text-align:center;display:flex;align-items:center;gap:10px}
+  .sec-label::before,.sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--goldd),transparent)}
   footer{text-align:center;color:var(--muted);font-size:12px;margin-top:34px;font-style:italic}
 </style>
 </head>
@@ -64,6 +66,24 @@
     </a>
 
   </div>
+
+  <div class="sec-label">Hulpmiddelen</div>
+  <div class="grid">
+
+    <a class="lang" href="frequentie/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><path d="M4 20h16M4 20V10l4-4M20 20V6l-4-4M12 20V4"/><path d="M8 6h4M12 6h4"/></svg>
+      <div><h2>Woordenlijst op frequentie</h2><p>Maak een frequentielijst van elke Latijnse of Griekse tekst</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a class="lang" href="kcv/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M2 12h4M18 12h4M12 2v4M12 18v4"/><path d="M6.3 6.3l2.8 2.8M14.9 14.9l2.8 2.8M17.7 6.3l-2.8 2.8M9.1 14.9l-2.8 2.8"/></svg>
+      <div><h2>Cultuur &amp; Civilisatie</h2><p>Tijdlijnen, VR-rondleidingen en meer</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+  </div>
+
   <footer>Hulp bij Klassieke Talen &middot; Gerben de Jong &middot; 2026</footer>
 </div>
 </body>
