@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="KCV">
+<meta name="theme-color" content="#16110c">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23160f09'/%3E%3Cpath d='M90 24c18 7 47 11 47 11v54c0 47-29 68-47 79-18-11-47-32-47-79V35s29-4 47-11z' fill='%235a120c' stroke='%23d4af37' stroke-width='5'/%3E%3Ctext x='90' y='108' font-size='44' fill='%23f0cf6b' text-anchor='middle' font-family='Georgia,serif' font-weight='bold'%3EKCV%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<title>KCV — Klassieke Talen</title>
+<style>
+  :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--ox:#5a120c;--cream:#f3e9d2;
+        --muted:#b9a883;--s2:#221a12;--s3:#2f241a;--s4:#3d2f20;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'EB Garamond',Georgia,serif;min-height:100vh;color:var(--cream);
+    background:radial-gradient(ellipse at 50% -10%,rgba(212,175,55,.10),transparent 55%),
+               radial-gradient(ellipse at 50% 120%,rgba(168,38,26,.16),transparent 55%),
+               linear-gradient(160deg,#120d08,#1c140d 45%,#160f09);
+    background-attachment:fixed;padding:24px 16px 60px;}
+  .wrap{max-width:680px;margin:0 auto}
+  .top{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+  .back{width:42px;height:42px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
+    border-radius:11px;background:var(--s3);border:1px solid var(--s4);color:var(--gold);text-decoration:none}
+  .back svg{width:20px;height:20px}
+  .crest{width:46px;height:46px;flex:0 0 auto}
+  .ttl{flex:1}
+  .ttl h1{font-family:'Cinzel',serif;font-weight:800;color:var(--goldb);font-size:23px;letter-spacing:.03em;line-height:1}
+  .ttl .s{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:var(--muted);margin-top:4px;text-transform:uppercase}
+  .grid{display:grid;gap:14px}
+  a.app{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--cream);
+    background:linear-gradient(170deg,var(--s3),var(--s2));border:1px solid var(--s4);
+    border-radius:16px;padding:18px 20px;box-shadow:0 4px 16px rgba(0,0,0,.5);
+    transition:transform .14s,border-color .14s;}
+  a.app:active{transform:scale(.98)}
+  a.app:hover{border-color:var(--goldd)}
+  a.app.soon{opacity:.5;pointer-events:none}
+  .pill{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    background:rgba(212,175,55,.14);color:var(--goldb);border:1px solid var(--goldd);
+    border-radius:14px;padding:2px 9px;margin-left:8px;vertical-align:middle}
+  .ic{width:50px;height:50px;flex:0 0 auto}
+  .app h2{font-family:'Cinzel',serif;font-size:19px;color:var(--cream);margin-bottom:3px}
+  .app p{font-size:14px;color:var(--muted);line-height:1.35}
+  .arrow{margin-left:auto;color:var(--gold);font-size:22px}
+  .sec-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:var(--muted);
+    text-transform:uppercase;margin:24px 0 12px;text-align:center;
+    display:flex;align-items:center;gap:10px}
+  .sec-label::before,.sec-label::after{content:'';flex:1;height:1px;
+    background:linear-gradient(90deg,transparent,var(--goldd),transparent)}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="../" aria-label="Terug"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+    <!-- Kolomzuil als KCV-icoon -->
+    <svg class="crest" viewBox="0 0 100 100">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#c8392a"/><stop offset="100%" stop-color="#5a120c"/>
+      </linearGradient></defs>
+      <path d="M50 8c10 4 26 6 26 6v30c0 26-16 38-26 44C40 82 24 70 24 44V14s16-2 26-6z" fill="url(#g)" stroke="#d4af37" stroke-width="3"/>
+      <!-- drie zuiltjes -->
+      <rect x="34" y="38" width="6" height="22" rx="1" fill="#f0cf6b"/>
+      <rect x="47" y="32" width="6" height="28" rx="1" fill="#f0cf6b"/>
+      <rect x="60" y="38" width="6" height="22" rx="1" fill="#f0cf6b"/>
+      <rect x="30" y="60" width="40" height="3" rx="1" fill="#f0cf6b"/>
+      <rect x="30" y="35" width="40" height="3" rx="1" fill="#f0cf6b"/>
+    </svg>
+    <div class="ttl"><h1>KCV</h1><div class="s">Cultuur &amp; Civilisatie</div></div>
+  </div>
+
+  <div class="sec-label">Geschiedenis &amp; Tijd</div>
+  <div class="grid">
+
+    <a class="app" href="tijdlijnen/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6">
+        <path d="M3 12h18M3 12l4-4M3 12l4 4"/>
+        <circle cx="8" cy="12" r="2" fill="#d4af37" stroke="none"/>
+        <circle cx="13" cy="12" r="2" fill="#d4af37" stroke="none"/>
+        <circle cx="18" cy="12" r="2" fill="#d4af37" stroke="none"/>
+        <path d="M8 12v-5M13 12v5M18 12v-5"/>
+      </svg>
+      <div><h2>Tijdlijnen</h2><p>Overzichten van de Griekse en Romeinse geschiedenis</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+  </div>
+
+  <div class="sec-label">Wereld &amp; Ruimte</div>
+  <div class="grid">
+
+    <a class="app soon" href="vr/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6">
+        <path d="M2 8a2 2 0 012-2h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2z"/>
+        <circle cx="8.5" cy="12" r="2.5"/>
+        <circle cx="15.5" cy="12" r="2.5"/>
+        <path d="M11 12h2"/>
+      </svg>
+      <div><h2>VR-rondleidingen <span class="pill">Binnenkort</span></h2><p>Verken Rome, Athene en Pompeii in 360°</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a class="app soon" href="kaarten/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6">
+        <path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3z"/>
+        <path d="M9 4v13M15 7v13"/>
+      </svg>
+      <div><h2>Kaarten <span class="pill">Binnenkort</span></h2><p>Interactieve kaarten van de antieke wereld</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+  </div>
+
+  <div class="sec-label">Oefenen &amp; Toetsen</div>
+  <div class="grid">
+
+    <a class="app" href="spellen/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6">
+        <rect x="2" y="6" width="20" height="14" rx="3"/>
+        <path d="M8 13v-2M7 12h2"/>
+        <circle cx="16" cy="11.5" r=".8" fill="#d4af37" stroke="none"/>
+        <circle cx="16" cy="14.5" r=".8" fill="#d4af37" stroke="none"/>
+      </svg>
+      <div><h2>Spellen</h2><p>Speel je kennis bij met interactieve cultuurspellen</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a class="app soon" href="quizzes/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.6">
+        <circle cx="12" cy="12" r="9"/>
+        <path d="M9.5 9.2a2.5 2.5 0 113 2.3V13M12 16.5h.01"/>
+      </svg>
+      <div><h2>Quizzes <span class="pill">Binnenkort</span></h2><p>Toets je kennis van Griekse en Romeinse cultuur</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+  </div>
+
+  <footer>SPQR &middot; Klassieke Talen &middot; KCV</footer>
+</div>
+</body>
+</html>
