@@ -391,14 +391,15 @@ function renderSchema(checked){
   let html='';
   if(!checked) html+=`<p class="schema-info">Vul het volledige schema in. De ingevulde cellen zijn al gegeven.</p>`;
   html+=`<div class="schema-word"><em>${w.nom}</em>, <em>${w.gen}</em> ${g}<br><span class="word-info">${w.vert} — ${w.dec}e declinatie</span></div>`;
-  html+=`<table class="casus-table"><tr><th>Casus</th><th>Enkelvoud</th><th>Meervoud</th></tr>`;
-  casIdxList.forEach(ci=>{
-    const c=CASUS_SHORT[ci];
-    html+=`<tr><td>${CASUS_LABELS[ci]}</td>`;
-    ['sg','pl'].forEach((num,ni)=>{
+  html+=`<table class="casus-table"><tr><th>Casus</th><th>Vorm</th></tr>`;
+  // Eerst enkelvoud, dan meervoud
+  ['sg','pl'].forEach((num,ni)=>{
+    html+=`<tr><td colspan="2" style="background:var(--ink);color:var(--parchment);font-family:Georgia,'Times New Roman',serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-align:center;padding:5px 10px">${NUMERI[ni]}</td></tr>`;
+    casIdxList.forEach(ci=>{
+      const c=CASUS_SHORT[ci];
       const key=`${num}_${c}`;
       const val=forms[num][c];
-      html+=`<td>`;
+      html+=`<tr><td>${CASUS_LABELS[ci]}</td><td>`;
       if(given.has(key)){
         html+=`<span class="given"><em>${val}</em></span>`;
       } else {
@@ -410,9 +411,8 @@ function renderSchema(checked){
         if(checked&&!ok) html+=`<span style="color:var(--green);font-size:.8rem;font-style:italic">${val}</span>`;
         html+=`</div>`;
       }
-      html+=`</td>`;
+      html+=`</td></tr>`;
     });
-    html+=`</tr>`;
   });
   html+='</table>';
   if(!checked){
@@ -429,9 +429,9 @@ function controleerSchema(){
   const{w,given,casIdxList}=schemaState;
   const forms=FORMS[w.id];
   const inputs={};let goed=0,totaal=0;
-  casIdxList.forEach(ci=>{
-    const c=CASUS_SHORT[ci];
-    ['sg','pl'].forEach(num=>{
+  ['sg','pl'].forEach(num=>{
+    casIdxList.forEach(ci=>{
+      const c=CASUS_SHORT[ci];
       const key=`${num}_${c}`;
       if(!given.has(key)){
         const uid=`inp_${num}_${c}`;
@@ -851,15 +851,16 @@ function renderToets(){
     const cas=activeCasusIdx(w);
     const g=`<span class="tag tag-${w.geslacht}">${w.geslacht}</span>`;
     html+=`<div class="schema-word"><em>${w.nom}</em>, <em>${w.gen}</em> ${g}<br><span class="word-info">${w.vert} — ${w.dec}e declinatie</span></div>`;
-    html+=`<table class="casus-table" style="margin-bottom:14px"><tr><th>Casus</th><th>Enkelvoud</th><th>Meervoud</th></tr>`;
-    cas.forEach(ci=>{
-      const c=CASUS_SHORT[ci];
-      html+=`<tr><td>${CASUS_LABELS[ci]}</td>`;
-      ['sg','pl'].forEach(num=>{
+    html+=`<table class="casus-table" style="margin-bottom:14px"><tr><th>Casus</th><th>Vorm</th></tr>`;
+    ['sg','pl'].forEach((num,ni)=>{
+      html+=`<tr><td colspan="2" style="background:var(--ink);color:var(--parchment);font-family:Georgia,'Times New Roman',serif;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-align:center;padding:5px 10px">${NUMERI[ni]}</td></tr>`;
+      cas.forEach(ci=>{
+        const c=CASUS_SHORT[ci];
+        html+=`<tr><td>${CASUS_LABELS[ci]}</td>`;
         if(c==='nom'&&num==='sg'){html+=`<td><span class="given"><em>${forms.sg.nom}</em></span></td>`;}
         else{html+=`<td><input type="text" id="ts_${wi}_${num}_${c}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td>`;}
+        html+=`</tr>`;
       });
-      html+=`</tr>`;
     });
     html+='</table>';
   });
