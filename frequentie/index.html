@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frequentie Woordenlijst — Latijn & Oudgrieks</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<style>
+:root{--parchment:#f5edd6;--parchment-dark:#e8d9b5;--ink:#2c1f0e;--ink-light:#5c4a2a;--rust:#8b3a1a;--gold:#c9952a;--gold-light:#e8c96a;--green:#1a5c3a;--shadow:rgba(44,31,14,.18)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#c8b89a;background-image:radial-gradient(ellipse at 20% 30%,#d4c4a2 0,transparent 60%),radial-gradient(ellipse at 80% 70%,#b8a882 0,transparent 60%);min-height:100vh;font-family:'Spectral',Georgia,serif;color:var(--ink);padding:24px 16px 48px}
+.page{max-width:860px;margin:0 auto}
+header{text-align:center;margin-bottom:28px}
+.title-ornament{font-size:1rem;color:var(--gold);letter-spacing:.3em;text-transform:uppercase;margin-bottom:8px}
+h1{font-family:'IM Fell English',serif;font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.15;margin-bottom:6px}
+.subtitle{font-style:italic;color:var(--ink-light)}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.divider span{color:var(--gold);font-size:1.2rem}
+.card{background:var(--parchment);border-radius:4px;box-shadow:0 4px 24px var(--shadow),inset 0 0 0 1px rgba(201,149,42,.25);padding:26px;margin-bottom:20px}
+.card h2{font-family:'IM Fell English',serif;font-size:1.15rem;color:var(--rust);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.sec{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid rgba(201,149,42,.25)}
+.sec:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.label{font-size:.78rem;color:var(--ink-light);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+.grp{display:flex;flex-direction:column;gap:5px;flex:1;min-width:150px}
+.grp label{font-size:.78rem;color:var(--ink-light);text-transform:uppercase;letter-spacing:.05em}
+input,select,textarea{font-family:'Spectral',serif;color:var(--ink);background:#fff;border:1.5px solid var(--parchment-dark);border-radius:3px;outline:none;transition:border-color .2s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+.grp input,.grp select{padding:8px 10px;font-size:.92rem}
+input[type=text],input[type=password]{padding:9px 12px;font-size:.9rem}
+.toggle{display:flex;border:1.5px solid var(--gold);border-radius:4px;overflow:hidden;width:fit-content}
+.toggle button{padding:9px 22px;background:transparent;border:none;font-family:'Spectral',serif;font-size:.95rem;cursor:pointer;color:var(--ink-light);border-right:1px solid var(--gold)}
+.toggle button:last-child{border-right:none}
+.toggle button.active{background:var(--gold);color:#fff;font-weight:600}
+.tabs{display:flex;border-bottom:2px solid var(--gold);margin-bottom:16px}
+.tabs button{padding:8px 18px;background:transparent;border:none;font-family:'Spectral',serif;font-size:.9rem;cursor:pointer;color:var(--ink-light);border-bottom:2px solid transparent;margin-bottom:-2px}
+.tabs button.active{color:var(--rust);border-bottom-color:var(--rust);font-weight:600}
+.panel{display:none}.panel.active{display:block}
+#fileInput,#fileInput2{display:block;width:100%;padding:14px;background:#fff;border:2px dashed var(--gold);border-radius:4px;font-size:.9rem;cursor:pointer}
+#fileInput::file-selector-button,#fileInput2::file-selector-button{font-family:'Spectral',serif;background:var(--gold);color:#fff;border:none;border-radius:3px;padding:7px 14px;margin-right:12px;cursor:pointer;font-size:.88rem}
+.upload-hint{font-size:.78rem;color:var(--ink-light);margin-top:6px;font-style:italic}
+textarea{width:100%;min-height:130px;padding:12px;font-size:.95rem;resize:vertical;line-height:1.6}
+textarea::placeholder{color:#b8a882;font-style:italic}
+.keyhint{font-size:.75rem;color:var(--ink-light);margin-top:6px;line-height:1.6}
+.keyhint a{color:var(--rust)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px 28px;background:var(--rust);color:#fff;border:none;border-radius:3px;font-family:'IM Fell English',serif;font-size:1.1rem;cursor:pointer;box-shadow:0 2px 8px rgba(139,58,26,.3);transition:background .2s;margin-top:6px}
+.btn:hover{background:#7a3016}
+.btn:disabled{background:#b8a882;cursor:not-allowed;box-shadow:none}
+.cb-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cb-row label{font-size:.88rem;cursor:pointer;display:flex;align-items:center;gap:6px}
+input[type=checkbox]{accent-color:var(--rust);width:16px;height:16px}
+.method-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.method-row button{padding:5px 12px;border:1.5px solid var(--parchment-dark);border-radius:3px;background:#fff;font-family:'Spectral',serif;font-size:.82rem;cursor:pointer;color:var(--ink-light)}
+.method-row button.active{border-color:var(--rust);color:var(--rust);background:#fdf0ec}
+.hint{font-size:.78rem;color:var(--ink-light);font-style:italic;margin-top:8px}
+.progress{display:none;margin-top:16px}.progress.on{display:block}
+.bar-wrap{height:6px;background:var(--parchment-dark);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--rust),var(--gold));border-radius:3px;transition:width .4s}
+.log{font-size:.82rem;color:var(--ink-light);font-style:italic;min-height:1.3em}
+.err{background:#fdf0ec;border:1px solid var(--rust);border-radius:3px;padding:12px 16px;color:var(--rust);font-size:.9rem;margin-top:12px;display:none}
+.err.on{display:block}
+#results{display:none}#results.on{display:block}
+.res-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.res-head h2{font-family:'IM Fell English',serif;font-size:1.25rem;color:var(--rust)}
+.res-meta{font-size:.83rem;color:var(--ink-light);font-style:italic;margin-top:3px}
+.exports{display:flex;gap:8px;flex-wrap:wrap}
+.exports button{padding:7px 14px;border:1.5px solid var(--gold);border-radius:3px;background:transparent;font-family:'Spectral',serif;font-size:.85rem;color:var(--ink);cursor:pointer;white-space:nowrap}
+.exports button:hover{background:var(--parchment-dark)}
+.filters{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.filters input[type=text]{flex:1;min-width:140px;max-width:240px}
+.filters label{font-size:.82rem;color:var(--ink-light);display:flex;align-items:center;gap:5px;cursor:pointer}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.93rem}
+thead th{text-align:left;padding:10px 12px;font-family:'IM Fell English',serif;font-size:.92rem;color:var(--rust);border-bottom:2px solid var(--gold);white-space:nowrap;cursor:pointer;user-select:none}
+thead th .si{font-size:.68rem;margin-left:3px;opacity:.4}
+tbody tr{border-bottom:1px solid rgba(201,149,42,.2)}
+tbody tr:hover{background:var(--parchment-dark)}
+tbody tr.known{opacity:.45}
+tbody tr.known .td-lemma{text-decoration:line-through}
+tbody td{padding:8px 12px;vertical-align:middle}
+.td-rank{color:var(--ink-light);font-size:.8rem;width:36px}
+.td-freq{font-weight:600;color:var(--rust);width:70px}
+.td-lemma{font-style:italic}
+.td-gram{font-size:.78rem;color:var(--ink-light);max-width:160px;line-height:1.4}
+.td-nl{max-width:200px}
+.freq-bar{height:4px;background:linear-gradient(90deg,var(--rust),var(--gold-light));border-radius:3px;margin-top:4px}
+.badge{display:inline-block;padding:1px 6px;border-radius:2px;font-size:.68rem;font-style:normal;text-transform:uppercase;margin-left:4px}
+.badge-la{background:#e8d9b5;color:var(--rust)}.badge-grc{background:#d5e8e0;color:var(--green)}
+.badge-known{background:#e0e8e0;color:#3a6a3a;font-size:.65rem}
+.loading td{text-align:center;padding:20px;color:var(--ink-light);font-style:italic}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.legend div{display:flex;align-items:center;gap:5px;font-size:.8rem;color:var(--ink-light)}
+.dot{width:10px;height:10px;border-radius:50%}
+.modal{position:fixed;inset:0;background:rgba(44,31,14,.55);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.on{display:flex}
+.modal-box{background:var(--parchment);border-radius:6px;box-shadow:0 8px 40px rgba(44,31,14,.35);padding:30px 26px;max-width:480px;width:100%;position:relative}
+.modal-box h3{font-family:'IM Fell English',serif;font-size:1.4rem;color:var(--rust);margin-bottom:4px}
+.modal-meta{font-size:.82rem;color:var(--ink-light);font-style:italic;margin-bottom:20px}
+.q-word{font-family:'IM Fell English',serif;font-size:2rem;font-style:italic;text-align:center;padding:18px 10px}
+.q-freq{text-align:center;font-size:.82rem;color:var(--ink-light);margin-bottom:18px}
+.q-ans{background:var(--parchment-dark);border-radius:4px;padding:16px;text-align:center;margin-bottom:18px;display:none}
+.q-ans.on{display:block}
+.q-ans .nl{font-size:1.15rem;margin-bottom:4px}.q-ans .gr{font-size:.82rem;color:var(--ink-light);font-style:italic}
+.q-btns{display:flex;gap:10px;flex-wrap:wrap}
+.q-btns button{flex:1;padding:11px;border:none;border-radius:3px;font-family:'Spectral',serif;font-size:.95rem;cursor:pointer}
+.b-show{background:var(--gold);color:#fff}.b-ok{background:#2e7d52;color:#fff}.b-no{background:#8b3a1a;color:#fff}.b-skip{background:var(--parchment-dark);color:var(--ink-light)}
+.q-bar-wrap{height:4px;background:var(--parchment-dark);border-radius:2px;margin-bottom:16px;overflow:hidden}
+.q-bar{height:100%;width:0;background:var(--gold);transition:width .3s}
+.q-score{display:flex;gap:16px;justify-content:center;font-size:.88rem;color:var(--ink-light);margin-bottom:14px}
+.modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--ink-light)}
+@media (max-width:600px){.card{padding:18px 14px}.row{flex-direction:column}h1{font-size:1.7rem}.q-word{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="title-ornament">✦ Klassieke Talen ✦</div>
+    <h1>Frequentie Woordenlijst</h1>
+    <p class="subtitle">Latijn &amp; Oudgrieks — lemmatisering, vertaling &amp; oefenen</p>
+    <div class="divider"><span>❧</span></div>
+  </header>
+
+  <div class="card">
+    <h2><span>📜</span> Tekst invoeren</h2>
+
+    <div class="sec">
+      <div class="label">AI-provider</div>
+      <div class="row" style="margin-bottom:12px">
+        <div class="grp">
+          <label>Provider</label>
+          <select id="provider" onchange="onProvider()">
+            <option value="claude">Claude (Anthropic)</option>
+            <option value="gemini">Gemini 2.5 Flash (Google — gratis)</option>
+            <option value="openai">ChatGPT GPT-4o (OpenAI)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <input type="password" id="apiKey" placeholder="sk-ant-api03-…" oninput="saveKey()" style="flex:1;min-width:220px;font-family:monospace">
+        <button onclick="toggleKey()" style="padding:8px 12px;border:1.5px solid var(--parchment-dark);border-radius:3px;background:#fff;cursor:pointer">👁</button>
+      </div>
+      <div class="keyhint" id="keyHint"></div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Taal</div>
+      <div class="toggle">
+        <button class="active" id="langLa" onclick="setLang('la')">Latijn</button>
+        <button id="langGrc" onclick="setLang('grc')">Oudgrieks</button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="tabs">
+        <button class="active" id="tabUpBtn" onclick="setTab('up')">📂 Bestand uploaden</button>
+        <button id="tabPasteBtn" onclick="setTab('paste')">✏️ Tekst plakken</button>
+      </div>
+      <div class="panel active" id="panelUp">
+        <input type="file" id="fileInput" accept=".txt,.docx,.pdf,.jpg,.jpeg,.png,.gif,.webp" multiple onchange="onFiles()">
+        <div class="upload-hint">.docx · .txt · .pdf · afbeeldingen (.jpg .png …) — meerdere tegelijk mogelijk</div>
+      </div>
+      <div class="panel" id="panelPaste">
+        <textarea id="pasteInput" placeholder="Plak hier je Latijnse of Griekse tekst…" oninput="onPaste()"></textarea>
+        <div class="hint" id="pasteCount"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Opties</div>
+      <div class="row">
+        <div class="grp"><label>Min. frequentie</label><input type="number" id="minFreq" value="1" min="1" max="100"></div>
+        <div class="grp"><label>Max. woorden</label><input type="number" id="maxWords" value="200" min="10" max="1000"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="label">Basiswoordenschat uitsluiten</div>
+      <div class="cb-row">
+        <label><input type="checkbox" id="excludeBasic" onchange="onExclude()"> Woorden uit de methode markeren als "bekend"</label>
+      </div>
+      <div class="method-row" id="methodRow" style="display:none">
+        <button class="active" data-m="roma" onclick="setMethod('roma')">Roma</button>
+        <button data-m="pons" onclick="setMethod('pons')">Pons</button>
+        <button data-m="suburani" onclick="setMethod('suburani')">Suburani</button>
+        <button data-m="custom" onclick="setMethod('custom')">Eigen lijst</button>
+      </div>
+      <div id="customRow" style="display:none;margin-top:8px">
+        <textarea id="customVocab" placeholder="Plak eigen basiswoorden, één per regel of kommagescheiden…" style="min-height:70px"></textarea>
+      </div>
+      <div class="hint" id="vocabHint" style="display:none"></div>
+    </div>
+
+    <div class="err" id="err"></div>
+    <button class="btn" id="analyseBtn" onclick="analyse()" disabled>✦ Analyseer &amp; vertaal tekst</button>
+    <div class="progress" id="progress">
+      <div class="bar-wrap"><div class="bar" id="bar"></div></div>
+      <div class="log" id="log">Bezig…</div>
+    </div>
+  </div>
+
+  <div class="card" id="compareCard" style="display:none">
+    <h2><span>⚖️</span> Tweede tekst vergelijken <span style="font-family:'Spectral',serif;font-size:.82rem;color:var(--ink-light);font-weight:400">(optioneel)</span></h2>
+    <p class="hint" style="margin-bottom:12px">Zie welke woorden in beide teksten voorkomen en welke uniek zijn.</p>
+    <div class="tabs">
+      <button class="active" id="tab2UpBtn" onclick="setTab2('up')">📂 Bestand</button>
+      <button id="tab2PasteBtn" onclick="setTab2('paste')">✏️ Plakken</button>
+    </div>
+    <div class="panel active" id="panel2Up">
+      <input type="file" id="fileInput2" accept=".txt,.docx,.pdf,.jpg,.jpeg,.png,.gif,.webp" multiple onchange="onFiles2()">
+    </div>
+    <div class="panel" id="panel2Paste">
+      <textarea id="pasteInput2" placeholder="Plak hier de tweede tekst…" style="min-height:100px" oninput="onPaste2()"></textarea>
+    </div>
+    <button class="btn" id="compareBtn" onclick="compare()" disabled style="background:#4a6fa5;margin-top:14px">⚖️ Vergelijk teksten</button>
+    <div class="progress" id="progress2">
+      <div class="bar-wrap"><div class="bar" id="bar2"></div></div>
+      <div class="log" id="log2">Bezig…</div>
+    </div>
+  </div>
+
+  <div id="results">
+    <div class="card">
+      <div class="res-head">
+        <div><h2>Woordenlijst</h2><div class="res-meta" id="resMeta"></div></div>
+        <div class="exports">
+          <button onclick="exportCSV()">⬇ CSV</button>
+          <button onclick="exportTSV()">⬇ TSV</button>
+          <button onclick="exportPrint()">🖨 Oefenlijst</button>
+          <button onclick="openQuiz()">🎯 Flashcards</button>
+        </div>
+      </div>
+      <div class="filters">
+        <input type="text" id="search" placeholder="Zoek op lemma of vertaling…" oninput="renderTable()">
+        <label><input type="checkbox" id="hideHapax" onchange="renderTable()"> Verberg freq. = 1</label>
+        <label><input type="checkbox" id="hideKnown" onchange="renderTable()"> Verberg bekende</label>
+      </div>
+      <div class="legend" id="legend" style="display:none">
+        <div><span class="dot" style="background:var(--gold)"></span> In beide</div>
+        <div><span class="dot" style="background:var(--rust)"></span> Alleen tekst 1</div>
+        <div><span class="dot" style="background:var(--green)"></span> Alleen tekst 2</div>
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th class="td-rank">#</th>
+            <th onclick="sortBy('freq')">Freq. <span class="si" id="si-freq">▼</span></th>
+            <th onclick="sortBy('lemma')">Lemma <span class="si" id="si-lemma">⇅</span></th>
+            <th>Grammatica</th>
+            <th onclick="sortBy('nl')">Betekenis <span class="si" id="si-nl">⇅</span></th>
+            <th id="colCompare" style="display:none">Tekst</th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="quiz">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeQuiz()">✕</button>
+    <h3>🎯 Flashcards</h3>
+    <div class="modal-meta" id="qMeta"></div>
+    <div class="q-bar-wrap"><div class="q-bar" id="qBar"></div></div>
+    <div class="q-score"><span>✓ <b style="color:#2e7d52" id="qOk">0</b></span><span>✗ <b style="color:var(--rust)" id="qNo">0</b></span><span id="qRemain"></span></div>
+    <div class="q-word" id="qWord"></div>
+    <div class="q-freq" id="qFreq"></div>
+    <div class="q-ans" id="qAns"><div class="nl" id="qAnsNl"></div><div class="gr" id="qAnsGr"></div></div>
+    <div class="q-btns" id="qBtns1"><button class="b-show" onclick="quizShow()">Toon betekenis</button><button class="b-skip" onclick="quizSkip()">Sla over</button></div>
+    <div class="q-btns" id="qBtns2" style="display:none"><button class="b-ok" onclick="quizMark(true)">✓ Kende ik</button><button class="b-no" onclick="quizMark(false)">✗ Wist ik niet</button></div>
+    <div id="qDone" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:2rem;margin-bottom:10px">🏛️</div>
+      <div style="font-family:'IM Fell English',serif;font-size:1.3rem;color:var(--rust);margin-bottom:8px">Sessie voltooid!</div>
+      <div style="font-size:.9rem;color:var(--ink-light)" id="qFinal"></div>
+      <button class="btn" onclick="quizRestart()" style="margin-top:18px;font-size:1rem">↺ Opnieuw</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+// ════════ STATE ════════
+var lang='la', provider='claude', tab='up', tab2='up', method='roma';
+var words=[], words2=[], compareOn=false;
+var sortField='freq', sortAsc=false;
+var quizQ=[], quizI=0, quizOk=0, quizNo=0;
+
+// ════════ PROVIDER META ════════
+var PROVIDERS={
+  claude:{ph:'sk-ant-api03-…',hint:'Sleutel via <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>',sk:'cl_claude_key'},
+  gemini:{ph:'AIza…',hint:'Gratis sleutel via <a href="https://aistudio.google.com/apikey" target="_blank">Google AI Studio</a> · max. 1500 req/dag',sk:'cl_gemini_key'},
+  openai:{ph:'sk-…',hint:'Sleutel via <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a> · betaald',sk:'cl_openai_key'}
+};
+
+// ════════ BASIS VOCAB ════════
+var BASIC={
+  roma:new Set(['sum','possum','do','dico','facio','eo','video','venio','peto','mitto','capio','ago','habeo','fero','volo','nolo','malo','cedo','pono','scribo','lego','rego','relinquo','audio','dormio','servo','amo','laudo','narro','voco','porto','paro','neco','sto','intro','rex','servus','dominus','puella','puer','vir','femina','filius','filia','mater','pater','frater','soror','amicus','miles','deus','via','terra','aqua','silva','urbs','domus','roma','magnus','parvus','bonus','malus','longus','multus','novus','pulcher','et','sed','non','in','ad','ex','cum','de','per','sub','ante','post','iam','nunc','tum','hic','ille','is','qui','ego','tu','nos','vos','se','unus','duo','tres','omnis','nullus']),
+  pons:new Set(['sum','habeo','facio','dico','video','venio','eo','mitto','capio','possum','fero','volo','ago','pono','duco','relinquo','vinco','lego','scribo','audio','servo','amo','laudo','voco','paro','porto','sto','intro','do','peto','rex','servus','dominus','puella','puer','vir','homo','miles','deus','via','terra','urbs','domus','annus','dies','tempus','locus','magnus','parvus','bonus','malus','multus','omnis','novus','et','sed','non','aut','que','in','ad','ex','cum','de','per','sub','ante','post','iam','nunc','saepe','semper','hic','ille','is','qui','ego','tu','nos','vos','se','unus','duo','tres','nullus']),
+  suburani:new Set(['sum','habeo','facio','dico','video','venio','eo','mitto','possum','fero','volo','ago','vivo','ludo','lego','scribo','audio','dormio','servo','amo','laudo','voco','paro','porto','sto','intro','do','peto','ambulo','specto','clamo','rideo','pugno','servus','dominus','domina','puella','puer','homo','canis','via','terra','urbs','domus','cena','atrium','hortus','magnus','parvus','bonus','malus','laetus','iratus','multus','et','sed','non','in','ad','ex','cum','de','per','sub','iam','nunc','hic','ille','is','qui','ego','tu','nos','vos'])
+};
+
+// ════════ HELPERS ════════
+function $(id){return document.getElementById(id);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showErr(m){var e=$('err');e.textContent='⚠ '+m;e.classList.add('on');}
+function hideErr(){$('err').classList.remove('on');}
+function setProg(pct,msg,bar,log){$(bar||'bar').style.width=pct+'%';$(log||'log').textContent=msg;}
+
+// ════════ PROVIDER & KEY ════════
+function onProvider(){
+  provider=$('provider').value;
+  var m=PROVIDERS[provider];
+  $('apiKey').placeholder=m.ph;
+  try{$('apiKey').value=localStorage.getItem(m.sk)||'';}catch(e){}
+  $('keyHint').innerHTML=m.hint+' — sleutel wordt alleen lokaal opgeslagen.';
+  try{localStorage.setItem('cl_provider',provider);}catch(e){}
+  refreshBtn();
+}
+function getKey(){return $('apiKey').value.trim();}
+function saveKey(){try{localStorage.setItem(PROVIDERS[provider].sk,getKey());}catch(e){}refreshBtn();}
+function toggleKey(){var i=$('apiKey');i.type=i.type==='password'?'text':'password';}
+
+// ════════ LANG / TAB / VOCAB UI ════════
+function setLang(l){lang=l;$('langLa').classList.toggle('active',l==='la');$('langGrc').classList.toggle('active',l==='grc');}
+function setTab(t){tab=t;$('panelUp').classList.toggle('active',t==='up');$('panelPaste').classList.toggle('active',t==='paste');$('tabUpBtn').classList.toggle('active',t==='up');$('tabPasteBtn').classList.toggle('active',t==='paste');refreshBtn();}
+function setTab2(t){tab2=t;$('panel2Up').classList.toggle('active',t==='up');$('panel2Paste').classList.toggle('active',t==='paste');$('tab2UpBtn').classList.toggle('active',t==='up');$('tab2PasteBtn').classList.toggle('active',t==='paste');refreshCompareBtn();}
+function onExclude(){var on=$('excludeBasic').checked;$('methodRow').style.display=on?'flex':'none';$('vocabHint').style.display=on?'block':'none';if(on)updVocabHint();}
+function setMethod(m){method=m;document.querySelectorAll('.method-row button').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-m')===m);});$('customRow').style.display=m==='custom'?'block':'none';updVocabHint();}
+function updVocabHint(){var h=$('vocabHint');if(method==='custom'){h.textContent='Voer je eigen woorden in.';return;}var n=BASIC[method]?BASIC[method].size:0;h.textContent=n+' woorden worden als "bekend" gemarkeerd.';}
+function basicSet(){if(!$('excludeBasic').checked)return new Set();if(method==='custom'){return new Set($('customVocab').value.split(/[\n,;]+/).map(function(w){return w.trim().toLowerCase();}).filter(Boolean));}return BASIC[method]||new Set();}
+
+// ════════ INPUT STATE ════════
+function onFiles(){refreshBtn();}
+function onFiles2(){refreshCompareBtn();}
+function onPaste(){var t=$('pasteInput').value.trim();var wc=t?t.split(/\s+/).length:0;$('pasteCount').textContent=wc?wc+' woorden':'';refreshBtn();}
+function onPaste2(){refreshCompareBtn();}
+function refreshBtn(){
+  var hasInput=tab==='up'?($('fileInput').files.length>0):($('pasteInput').value.trim().length>2);
+  $('analyseBtn').disabled=!(hasInput&&getKey().length>10);
+}
+function refreshCompareBtn(){
+  var hasInput=tab2==='up'?($('fileInput2').files.length>0):($('pasteInput2').value.trim().length>2);
+  $('compareBtn').disabled=!(hasInput&&getKey().length>10);
+}
+
+// ════════ READ FILES ════════
+function readInput(fileId,pasteId,activeTab){
+  if(activeTab==='paste')return Promise.resolve($(pasteId).value);
+  var files=Array.prototype.slice.call($(fileId).files);
+  var chain=Promise.resolve('');
+  files.forEach(function(f){
+    chain=chain.then(function(acc){
+      return readOne(f).then(function(txt){return acc+txt+'\n';});
+    });
+  });
+  return chain;
+}
+function readOne(f){
+  var name=f.name.toLowerCase();
+  if(f.size>8*1024*1024&&(name.match(/\.(pdf|jpe?g|png|gif|webp)$/))){
+    return Promise.reject(new Error('Bestand "'+f.name+'" is groter dan 8 MB.'));
+  }
+  if(name.match(/\.docx$/))return readDocx(f);
+  if(name.match(/\.(pdf|jpe?g|png|gif|webp|bmp)$/)){setProg(6,'Tekst herkennen uit '+f.name+'…');return readOCR(f);}
+  return f.text();
+}
+function readDocx(f){
+  return new Promise(function(res,rej){
+    var r=new FileReader();
+    r.onload=function(e){mammoth.extractRawText({arrayBuffer:e.target.result}).then(function(x){res(x.value);}).catch(function(err){rej(new Error('Kon Word-bestand niet lezen: '+err.message));});};
+    r.onerror=function(){rej(new Error('Bestand kon niet worden gelezen.'));};
+    r.readAsArrayBuffer(f);
+  });
+}
+function readOCR(f){
+  var isPdf=f.name.toLowerCase().match(/\.pdf$/);
+  var mt=isPdf?'application/pdf':(f.type||'image/jpeg');
+  return new Promise(function(res,rej){
+    var r=new FileReader();
+    r.onload=function(e){res(e.target.result.split(',')[1]);};
+    r.onerror=function(){rej(new Error('Bestand kon niet worden gelezen.'));};
+    r.readAsDataURL(f);
+  }).then(function(b64){
+    var ln=lang==='la'?'Latijn':'Oudgrieks';
+    var src=isPdf?{type:'document',source:{type:'base64',media_type:mt,data:b64}}:{type:'image',source:{type:'base64',media_type:mt,data:b64}};
+    var msgs=[{role:'user',content:[src,{type:'text',text:'Dit is een '+(isPdf?'PDF':'afbeelding')+' met een '+ln+'se tekst. Geef ALLEEN de volledige tekst terug zoals hij staat, zonder uitleg.'}]}];
+    return callAI(msgs,4000);
+  });
+}
+
+// ════════ TOKENISE ════════
+function tokenise(text){
+  text=text.replace(/<[^>]+>/g,' ');
+  var t;
+  if(lang==='grc')t=text.match(/[\u0370-\u03FF\u1F00-\u1FFF]+/g)||[];
+  else t=text.match(/[a-zA-ZÀ-ÖØ-öø-ÿāēīōūĀĒĪŌŪ]{2,}/g)||[];
+  return t.map(function(x){return x.toLowerCase();});
+}
+function countTokens(tokens){var f={};tokens.forEach(function(t){f[t]=(f[t]||0)+1;});return f;}
+
+// ════════ AI API ════════
+function callAI(messages,maxTokens){
+  if(provider==='gemini')return callGemini(messages,maxTokens);
+  if(provider==='openai')return callOpenAI(messages,maxTokens);
+  return callClaude(messages,maxTokens);
+}
+function apiFetch(url,opts,name){
+  return fetch(url,opts).catch(function(e){throw new Error('Netwerkfout ('+name+'): '+e.message);}).then(function(r){
+    if(!r.ok){return r.text().catch(function(){return'';}).then(function(t){
+      if(r.status===429)throw new Error(name+' quotum overschreden (429). Wacht even en probeer opnieuw.');
+      if(r.status===401)throw new Error(name+' ongeldige API-sleutel (401). Controleer je sleutel.');
+      throw new Error(name+' API-fout ('+r.status+'): '+t.slice(0,250));
+    });}
+    return r.json();
+  });
+}
+function callClaude(messages,maxTokens){
+  return apiFetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:maxTokens,messages:messages})
+  },'Claude').then(function(d){return d.content.filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');});
+}
+function geminiParts(content){
+  if(!Array.isArray(content))return[{text:content}];
+  return content.map(function(p){
+    if(p.type==='text')return{text:p.text};
+    if(p.type==='image'||p.type==='document')return{inline_data:{mime_type:p.source.media_type,data:p.source.data}};
+    return{text:JSON.stringify(p)};
+  });
+}
+function callGemini(messages,maxTokens){
+  var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+encodeURIComponent(getKey());
+  var contents=messages.map(function(m){return{role:m.role==='assistant'?'model':'user',parts:geminiParts(m.content)};});
+  var cfg={maxOutputTokens:maxTokens,temperature:0.1};
+  if(messages._json)cfg.responseMimeType='application/json';
+  return apiFetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:contents,generationConfig:cfg})},'Gemini')
+    .then(function(d){try{return d.candidates[0].content.parts.map(function(p){return p.text||'';}).join('');}catch(e){throw new Error('Onverwacht antwoord van Gemini.');}});
+}
+function openaiMsgs(messages){
+  return messages.map(function(m){
+    if(!Array.isArray(m.content))return{role:m.role,content:m.content};
+    var parts=m.content.map(function(p){
+      if(p.type==='text')return{type:'text',text:p.text};
+      if(p.type==='image')return{type:'image_url',image_url:{url:'data:'+p.source.media_type+';base64,'+p.source.data}};
+      if(p.type==='document')return{type:'text',text:'[PDF — niet ondersteund door OpenAI; gebruik Claude of Gemini voor PDF]'};
+      return{type:'text',text:JSON.stringify(p)};
+    });
+    return{role:m.role,content:parts};
+  });
+}
+function callOpenAI(messages,maxTokens){
+  var body={model:'gpt-4o',max_tokens:maxTokens,temperature:0.1,messages:openaiMsgs(messages)};
+  if(messages._json)body.response_format={type:'json_object'};
+  return apiFetch('https://api.openai.com/v1/chat/completions',{
+    method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+getKey()},body:JSON.stringify(body)
+  },'OpenAI').then(function(d){try{return d.choices[0].message.content;}catch(e){throw new Error('Onverwacht antwoord van OpenAI.');}});
+}
+
+// ════════ JSON PARSE ════════
+function parseJson(text){
+  var clean=text.replace(/```(?:json)?/g,'').replace(/```/g,'').trim();
+  clean=clean.replace(/<think>[\s\S]*?<\/think>/gi,'').trim();
+  // OpenAI json_object mode returns {items:[...]} — unwrap to the array
+  if(clean.charAt(0)==='{'){
+    try{var obj=JSON.parse(clean);for(var k in obj){if(Array.isArray(obj[k]))return obj[k];}}catch(_e){}
+  }
+  var s=clean.indexOf('['), e=clean.lastIndexOf(']');
+  var slice=(s!==-1&&e!==-1&&e>s)?clean.slice(s,e+1):clean.slice(s>=0?s:0);
+  // Try 1: straight parse
+  try{return JSON.parse(slice);}catch(_e){}
+  // Try 2: remove trailing commas
+  try{return JSON.parse(slice.replace(/,\s*([}\]])/g,'$1'));}catch(_e){}
+  // Try 3 (salvage truncated array): extract every complete {…} object individually
+  var objs=salvageObjects(clean);
+  if(objs.length)return objs;
+  throw new Error('Kon AI-respons niet als JSON lezen. Begin: '+text.slice(0,150));
+}
+
+// Walk the string and collect every top-level {...} block that parses cleanly.
+// This rescues responses that were cut off mid-array by the token limit.
+function salvageObjects(str){
+  var out=[], depth=0, start=-1, inStr=false, escNext=false;
+  for(var i=0;i<str.length;i++){
+    var ch=str[i];
+    if(escNext){escNext=false;continue;}
+    if(ch==='\\'){escNext=true;continue;}
+    if(ch==='"'){inStr=!inStr;continue;}
+    if(inStr)continue;
+    if(ch==='{'){if(depth===0)start=i;depth++;}
+    else if(ch==='}'){depth--;if(depth===0&&start>=0){
+      var frag=str.slice(start,i+1);
+      try{out.push(JSON.parse(frag));}catch(_e){}
+      start=-1;
+    }}
+  }
+  return out;
+}
+
+// ════════ LEMMATISE ════════
+function lemmatise(freqMap,bar,log){
+  var maxWords=parseInt($('maxWords').value)||200;
+  var minFreq=parseInt($('minFreq').value)||1;
+  var ln=lang==='la'?'Latijn':'Oudgrieks';
+  var entries=Object.keys(freqMap).map(function(k){return[k,freqMap[k]];}).filter(function(e){return e[1]>=minFreq;}).sort(function(a,b){return b[1]-a[1];}).slice(0,Math.min(maxWords*3,800));
+  if(!entries.length)return Promise.reject(new Error('Geen woorden gevonden boven de minimumfrequentie.'));
+  var chunkSize=45, chunks=[];
+  for(var i=0;i<entries.length;i+=chunkSize)chunks.push(entries.slice(i,i+chunkSize));
+  setProg(10,entries.length+' woordvormen gevonden…',bar,log);
+  var collected={};
+  var chain=Promise.resolve();
+  chunks.forEach(function(chunk,ci){
+    chain=chain.then(function(){
+      setProg(15+Math.round(ci/chunks.length*68),'Chunk '+(ci+1)+'/'+chunks.length+' verwerken…',bar,log);
+      var wait=(ci>0&&provider==='gemini')?new Promise(function(r){setTimeout(r,6000);}):Promise.resolve();
+      return wait.then(function(){
+        var wl=chunk.map(function(e){return e[0]+' ('+e[1]+'×)';}).join('\n');
+        var gi=lang==='la'?'Werkwoorden: "voco, vocare". Zn: "servus, -i m.". Bn: "bonus, -a, -um".':'Werkwoorden: 1e pers. sg. praesens. Zn: nom.+gen.+lidwoord.';
+        var prompt='Je bent expert in '+ln+'. Gegeven woordvormen met frequenties.\n1. Geef de lemma (woordenboeksvorm): '+gi+'\n2. Woordsoort in het Nederlands.\n3. Korte Nederlandse betekenis (max 6 woorden).\n4. Groepeer vormen van hetzelfde lemma en tel frequenties op.\nRetourneer UITSLUITEND een JSON-array, geen markdown, begin met [ eindig met ].\nFormaat: [{"lemma":"voco, vocare","grammar":"werkwoord","nl":"roepen","freq":5}]\nWoordvormen:\n'+wl;
+        var msgs=[{role:'user',content:prompt}];msgs._json=true;
+        return callAI(msgs,8000).then(function(raw){
+          var parsed=parseJson(raw);
+          parsed.forEach(function(it){
+            if(!it.lemma)return;
+            var key=it.lemma.toLowerCase().split(/[,\s]/)[0].trim();
+            if(!key)return;
+            if(collected[key]){collected[key].freq+=(it.freq||0);}
+            else collected[key]={lemma:it.lemma,grammar:it.grammar||'',nl:it.nl||'',freq:it.freq||0,lang:lang};
+          });
+        });
+      });
+    });
+  });
+  return chain.then(function(){
+    setProg(85,'Bekende woorden markeren…',bar,log);
+    var bs=basicSet();
+    return Object.keys(collected).map(function(k){return collected[k];}).filter(function(w){return w.freq>=minFreq;}).map(function(w){
+      var key=w.lemma.toLowerCase().split(/[,\s]/)[0].trim();
+      w.known=bs.size>0&&bs.has(key);return w;
+    }).sort(function(a,b){return b.freq-a.freq;}).slice(0,maxWords);
+  });
+}
+
+// ════════ ANALYSE ════════
+function analyse(){
+  hideErr();
+  if(!getKey()){showErr('Voer eerst een API-sleutel in.');return;}
+  $('analyseBtn').disabled=true;
+  $('progress').classList.add('on');
+  $('results').classList.remove('on');
+  compareOn=false;$('legend').style.display='none';$('colCompare').style.display='none';
+  setProg(3,'Tekst lezen…');
+  readInput('fileInput','pasteInput',tab).then(function(raw){
+    var tokens=tokenise(raw);
+    if(!tokens.length)throw new Error('Geen herkenbare woorden gevonden. Controleer bestand en taal.');
+    setProg(7,tokens.length+' tokens gevonden…');
+    return lemmatise(countTokens(tokens));
+  }).then(function(result){
+    words=result;
+    setProg(100,'Klaar!');
+    setTimeout(function(){$('progress').classList.remove('on');renderResults();$('compareCard').style.display='block';},500);
+  }).catch(function(e){
+    showErr(e.message);$('progress').classList.remove('on');
+  }).then(function(){
+    $('analyseBtn').disabled=false;refreshBtn();
+  });
+}
+
+// ════════ COMPARE ════════
+function compare(){
+  hideErr();
+  $('compareBtn').disabled=true;$('progress2').classList.add('on');
+  setProg(3,'Tweede tekst lezen…','bar2','log2');
+  readInput('fileInput2','pasteInput2',tab2).then(function(raw){
+    var tokens=tokenise(raw);
+    if(!tokens.length)throw new Error('Geen woorden in tweede tekst.');
+    setProg(8,'Lemmatisering…','bar2','log2');
+    return lemmatise(countTokens(tokens),'bar2','log2');
+  }).then(function(result){
+    words2=result;
+    var set2={},set1={};
+    words2.forEach(function(w){set2[w.lemma.toLowerCase().split(/[,\s]/)[0]]=1;});
+    words.forEach(function(w){set1[w.lemma.toLowerCase().split(/[,\s]/)[0]]=1;});
+    words.forEach(function(w){var k=w.lemma.toLowerCase().split(/[,\s]/)[0];w.tag=set2[k]?'both':'only1';});
+    words2.forEach(function(w){var k=w.lemma.toLowerCase().split(/[,\s]/)[0];w.tag=set1[k]?'both':'only2';});
+    compareOn=true;
+    setProg(100,'Klaar!','bar2','log2');
+    setTimeout(function(){$('progress2').classList.remove('on');$('legend').style.display='flex';$('colCompare').style.display='';renderResults();},400);
+  }).catch(function(e){
+    showErr(e.message);$('progress2').classList.remove('on');
+  }).then(function(){
+    $('compareBtn').disabled=false;refreshCompareBtn();
+  });
+}
+
+// ════════ RENDER ════════
+function renderResults(){
+  $('results').classList.add('on');
+  var known=words.filter(function(w){return w.known;}).length;
+  var note=compareOn?' · vergelijking actief ('+words2.length+' in tekst 2)':'';
+  $('resMeta').textContent=words.length+" lemma's · "+known+' bekend · '+(lang==='la'?'Latijn':'Oudgrieks')+note;
+  renderTable();
+  $('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function getView(){
+  var search=$('search').value.toLowerCase();
+  var hH=$('hideHapax').checked, hK=$('hideKnown').checked;
+  var data=compareOn?words.concat(words2.filter(function(w){return w.tag==='only2';})):words.slice();
+  if(search)data=data.filter(function(w){return w.lemma.toLowerCase().indexOf(search)>=0||w.nl.toLowerCase().indexOf(search)>=0;});
+  if(hH)data=data.filter(function(w){return w.freq>1;});
+  if(hK)data=data.filter(function(w){return !w.known;});
+  data.sort(function(a,b){
+    var c=sortField==='freq'?b.freq-a.freq:sortField==='lemma'?a.lemma.localeCompare(b.lemma,'la'):a.nl.localeCompare(b.nl,'nl');
+    return sortAsc?-c:c;
+  });
+  return data;
+}
+function renderTable(){
+  var data=getView();
+  var maxF=data.reduce(function(m,w){return Math.max(m,w.freq);},1);
+  var tb=$('tbody');
+  if(!data.length){tb.innerHTML='<tr class="loading"><td colspan="6">Geen resultaten.</td></tr>';return;}
+  var cols={both:'var(--gold)',only1:'var(--rust)',only2:'var(--green)'};
+  var labs={both:'Beide',only1:'Tekst 1',only2:'Tekst 2'};
+  tb.innerHTML=data.map(function(w,i){
+    var bw=Math.max(3,Math.round(w.freq/maxF*100));
+    var badge='<span class="badge badge-'+w.lang+'">'+(w.lang==='la'?'LA':'GR')+'</span>';
+    var kb=w.known?'<span class="badge badge-known">bekend</span>':'';
+    var cc='';
+    if(compareOn){var t=w.tag||'only1';cc='<td style="white-space:nowrap"><span class="dot" style="display:inline-block;background:'+cols[t]+';margin-right:5px"></span><span style="font-size:.78rem;color:var(--ink-light)">'+labs[t]+'</span></td>';}
+    return '<tr class="'+(w.known?'known':'')+'"><td class="td-rank">'+(i+1)+'</td><td class="td-freq">'+w.freq+'<div class="freq-bar" style="width:'+bw+'%"></div></td><td class="td-lemma">'+esc(w.lemma)+badge+kb+'</td><td class="td-gram">'+esc(w.grammar)+'</td><td class="td-nl">'+esc(w.nl)+'</td>'+(compareOn?cc:'')+'</tr>';
+  }).join('');
+}
+function sortBy(f){
+  if(sortField===f)sortAsc=!sortAsc;else{sortField=f;sortAsc=false;}
+  ['freq','lemma','nl'].forEach(function(x){var el=$('si-'+x);if(el)el.textContent=x===sortField?(sortAsc?'▲':'▼'):'⇅';});
+  renderTable();
+}
+
+// ════════ EXPORT ════════
+function download(text,filename,mime){
+  var blob=new Blob(['\uFEFF'+text],{type:mime});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download=filename;a.target='_blank';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
+}
+function rows(){
+  var r=[['Rang','Frequentie','Lemma','Grammatica','Nederlandse betekenis','Taal','Bekend']];
+  getView().forEach(function(w,i){r.push([i+1,w.freq,w.lemma,w.grammar,w.nl,w.lang==='la'?'Latijn':'Oudgrieks',w.known?'ja':'nee']);});
+  return r;
+}
+function exportCSV(){download(rows().map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n'),'woordenlijst.csv','text/csv;charset=utf-8;');}
+function exportTSV(){download(rows().map(function(r){return r.join('\t');}).join('\n'),'woordenlijst.tsv','text/tab-separated-values;charset=utf-8;');}
+function exportPrint(){
+  var data=getView().filter(function(w){return !w.known;});
+  var trs=data.map(function(w,i){return '<tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-style:italic">'+(i+1)+'. '+esc(w.lemma)+'</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-size:.8em;color:#666">'+esc(w.grammar)+'</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;min-width:160px">&nbsp;</td></tr>';}).join('');
+  var html='<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><title>Oefenlijst</title><style>body{font-family:Georgia,serif;padding:30px;max-width:700px;margin:0 auto}h2{margin-bottom:4px}p{font-size:.85em;color:#666;margin-bottom:16px}table{width:100%;border-collapse:collapse}th{text-align:left;padding:6px 10px;border-bottom:2px solid #999;font-size:.85em;color:#555}@media print{button{display:none}}</style></head><body><h2>Woordenlijst oefenen</h2><p>'+data.length+' woorden — vul zelf de betekenis in</p><button onclick="window.print()" style="margin-bottom:16px;padding:8px 16px;cursor:pointer">🖨 Afdrukken</button><table><thead><tr><th>Lemma</th><th>Woordsoort</th><th>Betekenis</th></tr></thead><tbody>'+trs+'</tbody></table></body></html>';
+  var w=window.open('','_blank');if(w){w.document.write(html);w.document.close();}else{showErr('Pop-up geblokkeerd. Sta pop-ups toe om de oefenlijst te openen.');}
+}
+
+// ════════ QUIZ ════════
+function openQuiz(){
+  var data=getView().filter(function(w){return !w.known;});
+  if(!data.length){showErr('Geen woorden beschikbaar voor flashcards.');return;}
+  quizQ=data.slice().sort(function(){return Math.random()-0.5;});
+  quizI=0;quizOk=0;quizNo=0;
+  $('qDone').style.display='none';$('qBtns1').style.display='flex';$('qBtns2').style.display='none';
+  $('quiz').classList.add('on');quizCard();
+}
+function closeQuiz(){$('quiz').classList.remove('on');}
+function quizCard(){
+  if(quizI>=quizQ.length){quizDone();return;}
+  var w=quizQ[quizI], n=quizQ.length;
+  $('qMeta').textContent=(quizI+1)+' / '+n+' woorden';
+  $('qBar').style.width=(quizI/n*100)+'%';
+  $('qOk').textContent=quizOk;$('qNo').textContent=quizNo;$('qRemain').textContent=(n-quizI)+' resterend';
+  $('qWord').textContent=w.lemma;$('qFreq').textContent='komt '+w.freq+'× voor';
+  $('qAns').classList.remove('on');$('qAnsNl').textContent=w.nl;$('qAnsGr').textContent=w.grammar;
+  $('qBtns1').style.display='flex';$('qBtns2').style.display='none';
+}
+function quizShow(){$('qAns').classList.add('on');$('qBtns1').style.display='none';$('qBtns2').style.display='flex';}
+function quizMark(ok){if(ok)quizOk++;else quizNo++;quizI++;quizCard();}
+function quizSkip(){quizI++;quizCard();}
+function quizDone(){
+  $('qBtns1').style.display='none';$('qBtns2').style.display='none';
+  $('qWord').textContent='';$('qFreq').textContent='';$('qAns').classList.remove('on');$('qBar').style.width='100%';
+  var pct=quizQ.length?Math.round(quizOk/quizQ.length*100):0;
+  $('qFinal').textContent=quizOk+' van de '+quizQ.length+' goed ('+pct+'%)';
+  $('qDone').style.display='block';
+}
+function quizRestart(){quizQ=quizQ.sort(function(){return Math.random()-0.5;});quizI=0;quizOk=0;quizNo=0;$('qDone').style.display='none';quizCard();}
+
+// ════════ INIT ════════
+(function init(){
+  try{
+    var sp=localStorage.getItem('cl_provider')||'claude';
+    $('provider').value=sp;
+  }catch(e){}
+  onProvider();
+  $('quiz').addEventListener('click',function(e){if(e.target===$('quiz'))closeQuiz();});
+})();
+</script>
+</body>
+</html>
