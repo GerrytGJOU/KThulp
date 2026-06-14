@@ -1913,6 +1913,7 @@ function startTypeoff(){
 RENDER.typeoff=function(){drawTypeoff();};
 function drawTypeoff(){
   if(QT.i>=QT.words.length)return finishTypeoff();
+  QT.answered=false;
   const w=QT.words[QT.i];const prog=Math.round(QT.i/QT.words.length*100);
   app.innerHTML=gameTop(t("g_typeoff"),`${QT.i+1} / ${QT.words.length}`)+`
   <div class="quiztop"><div class="qbar"><i style="width:${prog}%"></i></div></div>
