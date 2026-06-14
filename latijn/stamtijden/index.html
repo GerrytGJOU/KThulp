@@ -1,1 +1,962 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Stamtijden Latijn</title>
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: #8a6f2e;
+    --oxblood: #7a1f1f;
+    --stone: #1a1612;
+    --stone-mid: #251e18;
+    --stone-light: #332a22;
+    --stone-border: #3d3028;
+    --parchment: #f0e6cc;
+    --parchment-dim: #c8b48a;
+    --text-main: #f0e6cc;
+    --text-dim: #9a8a6a;
+    --green: #5a9a5a;
+    --red: #b84040;
+    --radius: 8px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--stone);
+    color: var(--text-main);
+    font-family: Palatino, 'Palatino Linotype', Georgia, serif;
+    min-height: 100vh;
+    overscroll-behavior: none;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--stone-mid);
+    border-bottom: 2px solid var(--gold-dim);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left h1 { font-size: 1.4rem; color: var(--gold); letter-spacing: .08em; font-weight: normal; }
+  .header-left .subtitle { font-size: .72rem; color: var(--text-dim); letter-spacing: .14em; text-transform: uppercase; margin-top: 2px; }
+  .score-pill {
+    background: var(--stone-light); border: 1px solid var(--gold-dim); border-radius: 20px;
+    padding: 6px 14px; font-size: .85rem; color: var(--gold);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .score-pill span { color: var(--text-dim); font-size: .75rem; }
+
+  /* SCREENS */
+  .screen { display: none; }
+  .screen.active { display: flex; flex-direction: column; }
+
+  /* ── HOME ── */
+  #screen-home { padding: 20px 20px 32px; align-items: center; gap: 16px; min-height: calc(100vh - 65px); }
+
+  .home-intro { text-align: center; }
+  .home-intro .latin-quote { font-size: 1rem; color: var(--gold); font-style: italic; }
+  .home-intro .latin-trans { font-size: .75rem; color: var(--text-dim); margin-top: 4px; }
+
+  .progress-overview {
+    width: 100%; max-width: 480px;
+    background: var(--stone-mid); border: 1px solid var(--stone-border); border-radius: var(--radius); padding: 14px 16px;
+  }
+  .progress-overview h3 { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+  .progress-bar-wrap { background: var(--stone-light); border-radius: 4px; height: 7px; margin-bottom: 7px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius: 4px; transition: width .4s ease; }
+  .progress-label { display: flex; justify-content: space-between; font-size: .73rem; color: var(--text-dim); }
+
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 480px; }
+  .mode-card {
+    background: var(--stone-mid); border: 1px solid var(--stone-border); border-radius: var(--radius);
+    padding: 16px 12px; cursor: pointer; transition: border-color .2s, background .2s;
+    display: flex; flex-direction: column; gap: 6px; -webkit-tap-highlight-color: transparent;
+  }
+  .mode-card:active, .mode-card:hover { border-color: var(--gold-dim); background: var(--stone-light); }
+  .mode-card.selected { border-color: var(--gold); background: rgba(201,168,76,.08); }
+  .mode-icon { font-size: 1.4rem; }
+  .mode-title { font-size: .9rem; color: var(--gold); font-weight: bold; }
+  .mode-desc { font-size: .7rem; color: var(--text-dim); line-height: 1.4; }
+
+  .section-label { font-size: .65rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-dim); width: 100%; max-width: 480px; }
+
+  .filter-row { display: flex; gap: 8px; width: 100%; max-width: 480px; flex-wrap: wrap; }
+  .filter-btn {
+    flex: 1; min-width: 80px; background: var(--stone-mid); border: 1px solid var(--stone-border);
+    border-radius: 6px; padding: 8px 6px; color: var(--text-dim);
+    font-family: inherit; font-size: .75rem; cursor: pointer; transition: all .2s; -webkit-tap-highlight-color: transparent;
+  }
+  .filter-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,.08); }
+
+  .btn-start {
+    background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+    color: var(--stone); border: none; border-radius: var(--radius);
+    padding: 14px 40px; font-family: inherit; font-size: 1rem; font-weight: bold;
+    letter-spacing: .05em; cursor: pointer; transition: opacity .2s; -webkit-tap-highlight-color: transparent;
+  }
+  .btn-start:active { opacity: .85; }
+
+  /* ── QUIZ ── */
+  #screen-quiz { padding: 14px 18px 22px; gap: 14px; min-height: calc(100vh - 65px); }
+
+  .quiz-meta { display: flex; justify-content: space-between; align-items: center; font-size: .75rem; color: var(--text-dim); }
+  .quiz-progress-bar { height: 3px; background: var(--stone-light); border-radius: 2px; overflow: hidden; }
+  .quiz-progress-fill { height: 100%; background: var(--gold); transition: width .3s ease; }
+
+  .verb-card {
+    background: var(--stone-mid); border: 1px solid var(--stone-border);
+    border-radius: var(--radius); padding: 18px 16px; text-align: center;
+  }
+  .verb-card .prompt-label { font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+  .verb-card .verb-main { font-size: 1.9rem; color: var(--gold); margin-bottom: 5px; line-height: 1.2; }
+  .verb-card .verb-meaning { font-size: .82rem; color: var(--parchment-dim); font-style: italic; }
+  .verb-card .verb-context { font-size: .76rem; color: var(--text-dim); margin-top: 4px; }
+
+  /* Fill-in */
+  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .fill-slot { background: var(--stone-light); border: 1px solid var(--stone-border); border-radius: 6px; padding: 11px 10px; }
+  .fill-slot label { display: block; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
+  .fill-slot input {
+    width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--stone-border);
+    color: var(--text-main); font-family: inherit; font-size: .97rem; padding: 3px 0; outline: none; transition: border-color .2s;
+  }
+  .fill-slot input:focus { border-bottom-color: var(--gold); }
+  .fill-slot input.given { color: var(--gold); pointer-events: none; border-bottom-color: transparent; font-style: italic; }
+  .fill-slot input.correct { border-bottom-color: var(--green); color: var(--green); }
+  .fill-slot input.wrong { border-bottom-color: var(--red); color: var(--red); }
+  .fill-slot input.skipped { color: var(--text-dim); border-bottom-color: var(--text-dim); font-style: italic; }
+
+  /* Multiple choice */
+  .mc-options { display: flex; flex-direction: column; gap: 10px; }
+  .mc-btn {
+    background: var(--stone-light); border: 1px solid var(--stone-border); border-radius: 6px;
+    padding: 13px 14px; color: var(--text-main); font-family: inherit; font-size: .9rem;
+    cursor: pointer; text-align: left; transition: border-color .15s, background .15s; -webkit-tap-highlight-color: transparent; line-height: 1.4;
+  }
+  .mc-btn:active:not(:disabled) { background: var(--stone-border); }
+  .mc-btn.correct { border-color: var(--green); background: rgba(90,154,90,.12); color: var(--green); }
+  .mc-btn.wrong   { border-color: var(--red);   background: rgba(184,64,64,.12);  color: var(--red); }
+  .mc-btn.reveal  { border-color: var(--gold-dim); color: var(--gold-dim); }
+  .mc-btn:disabled { cursor: default; }
+
+  /* Sentence / Woordenboekzoeker */
+  .sentence-display {
+    background: var(--stone-light); border-radius: 6px; padding: 16px;
+    font-size: 1.08rem; line-height: 2; text-align: center;
+  }
+  .word-token {
+    display: inline-block; padding: 2px 7px; border-radius: 4px; cursor: pointer;
+    transition: background .15s; -webkit-tap-highlight-color: transparent; margin: 2px 1px;
+    border: 1px solid transparent;
+  }
+  .word-token:hover { background: rgba(201,168,76,.15); border-color: var(--gold-dim); }
+  .word-token.selected { background: rgba(201,168,76,.2); border-color: var(--gold); color: var(--gold); }
+  .word-token.correct-pick { background: rgba(90,154,90,.18); border-color: var(--green); color: var(--green); }
+  .word-token.wrong-pick   { background: rgba(184,64,64,.18); border-color: var(--red); color: var(--red); }
+
+  /* Woordenboekzoeker: what's the praesens? */
+  .wb-input-wrap {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .wb-label { font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); }
+  .wb-input {
+    background: var(--stone-light); border: 1px solid var(--stone-border); border-radius: 6px;
+    padding: 12px 14px; color: var(--text-main); font-family: inherit; font-size: 1.1rem;
+    outline: none; transition: border-color .2s; width: 100%;
+  }
+  .wb-input:focus { border-color: var(--gold); }
+  .wb-input.correct { border-color: var(--green); color: var(--green); }
+  .wb-input.wrong { border-color: var(--red); color: var(--red); }
+
+  /* Sentence instruction strip */
+  .sentence-instruction { font-size: .74rem; color: var(--text-dim); text-align: center; padding: 2px 0; }
+
+  /* Feedback */
+  .feedback-bar { border-radius: 6px; padding: 12px 14px; display: none; gap: 10px; align-items: flex-start; }
+  .feedback-bar.show { display: flex; }
+  .feedback-bar.ok  { background: rgba(90,154,90,.12); border: 1px solid var(--green); color: var(--green); }
+  .feedback-bar.err { background: rgba(184,64,64,.12); border: 1px solid var(--red);   color: var(--red); }
+  .feedback-content { flex: 1; }
+  .feedback-content strong { display: block; margin-bottom: 2px; }
+  .feedback-content .fb-detail { font-size: .78rem; color: var(--text-dim); line-height: 1.5; }
+
+  .btn-next {
+    background: var(--stone-light); border: 1px solid var(--gold-dim); border-radius: var(--radius);
+    padding: 13px; color: var(--gold); font-family: inherit; font-size: .95rem; cursor: pointer;
+    transition: all .15s; -webkit-tap-highlight-color: transparent; text-align: center;
+  }
+  .btn-next:active { background: var(--stone-border); }
+  .btn-submit {
+    background: linear-gradient(135deg, var(--gold-dim), var(--gold)); border: none; border-radius: var(--radius);
+    padding: 13px; color: var(--stone); font-family: inherit; font-size: .95rem; font-weight: bold;
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .btn-submit:active { opacity: .8; }
+
+  /* ── RESULTS ── */
+  #screen-results { padding: 24px 20px 32px; align-items: center; gap: 18px; min-height: calc(100vh - 65px); }
+  .result-crown { font-size: 3rem; text-align: center; }
+  .result-score-big { text-align: center; }
+  .result-score-big .number { font-size: 3.5rem; color: var(--gold); line-height: 1; }
+  .result-score-big .denom { font-size: 1.2rem; color: var(--text-dim); }
+  .result-score-big .label { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-top: 4px; }
+  .result-rank { background: var(--stone-mid); border: 1px solid var(--gold-dim); border-radius: var(--radius); padding: 14px 20px; text-align: center; width: 100%; max-width: 400px; }
+  .result-rank .rank-name { font-size: 1.15rem; color: var(--gold); margin-bottom: 4px; }
+  .result-rank .rank-msg  { font-size: .78rem; color: var(--text-dim); }
+  .missed-list { width: 100%; max-width: 400px; }
+  .missed-list h3 { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 10px; }
+  .missed-item { background: var(--stone-mid); border: 1px solid var(--stone-border); border-radius: 5px; padding: 10px 12px; margin-bottom: 6px; }
+  .missed-item .m-verb  { color: var(--gold); font-size: .88rem; margin-bottom: 2px; }
+  .missed-item .m-forms { color: var(--text-dim); font-size: .74rem; line-height: 1.5; }
+  .result-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; }
+  .btn-retry { background: linear-gradient(135deg, var(--gold-dim), var(--gold)); border: none; border-radius: var(--radius); padding: 14px; color: var(--stone); font-family: inherit; font-size: .95rem; font-weight: bold; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .btn-home  { background: var(--stone-mid); border: 1px solid var(--stone-border); border-radius: var(--radius); padding: 13px; color: var(--text-dim); font-family: inherit; font-size: .88rem; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .divider { display: flex; align-items: center; gap: 10px; color: var(--gold-dim); font-size: .68rem; letter-spacing: .1em; width: 100%; max-width: 400px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--stone-border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Stamtijden</h1>
+    <div class="subtitle">Latijn · GJOU</div>
+  </div>
+  <div class="score-pill"><span>Punten</span><strong id="total-pts">0</strong></div>
+</header>
+
+<!-- HOME -->
+<div class="screen active" id="screen-home">
+  <div class="home-intro">
+    <div class="latin-quote">Repetitio est mater studiorum.</div>
+    <div class="latin-trans">Herhaling is de moeder van alle studie.</div>
+  </div>
+
+  <div class="progress-overview">
+    <h3>Voortgang deze sessie</h3>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="home-progress-fill" style="width:0%"></div></div>
+    <div class="progress-label">
+      <span id="home-progress-label">Nog geen oefeningen gedaan</span>
+      <span id="home-streak"></span>
+    </div>
+  </div>
+
+  <div class="mode-grid" id="mode-grid">
+    <div class="mode-card selected" data-mode="invul" onclick="selectMode(this)">
+      <div class="mode-icon">✏️</div>
+      <div class="mode-title">Invuloefening</div>
+      <div class="mode-desc">Vul perfectum, supinum en infinitief in vanuit het praesens</div>
+    </div>
+    <div class="mode-card" data-mode="omgekeerd" onclick="selectMode(this)">
+      <div class="mode-icon">🔄</div>
+      <div class="mode-title">Omgekeerd</div>
+      <div class="mode-desc">Van perfectum of supinum terug naar het praesens</div>
+    </div>
+    <div class="mode-card" data-mode="keuze" onclick="selectMode(this)">
+      <div class="mode-icon">🎯</div>
+      <div class="mode-title">Meerkeuze</div>
+      <div class="mode-desc">Kies de juiste stamtijdenreeks uit vier opties</div>
+    </div>
+    <div class="mode-card" data-mode="woordenboek" onclick="selectMode(this)">
+      <div class="mode-icon">📖</div>
+      <div class="mode-title">Woordenboek</div>
+      <div class="mode-desc">Zie een werkwoordsvorm in een zin: geef de woordenboekvorm (praesens)</div>
+    </div>
+  </div>
+
+  <div class="section-label">Filter</div>
+  <div class="filter-row">
+    <button class="filter-btn active" data-filter="alle"     onclick="selectFilter(this)">Alle (198)</button>
+    <button class="filter-btn"        data-filter="deponens" onclick="selectFilter(this)">Deponens</button>
+    <button class="filter-btn"        data-filter="onregelm" onclick="selectFilter(this)">Onregelmatig</button>
+  </div>
+
+  <button class="btn-start" onclick="startQuiz()">Starten →</button>
+</div>
+
+<!-- QUIZ -->
+<div class="screen" id="screen-quiz">
+  <div class="quiz-meta">
+    <span id="q-counter">Vraag 1 / 10</span>
+    <span id="q-score-live">Score: 0</span>
+  </div>
+  <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="q-progress-fill" style="width:0%"></div></div>
+
+  <div class="verb-card" id="verb-card">
+    <div class="prompt-label" id="q-prompt-label">Vul de stamtijden in</div>
+    <div class="verb-main"    id="q-verb-main">—</div>
+    <div class="verb-meaning" id="q-verb-meaning">—</div>
+    <div class="verb-context" id="q-verb-context"></div>
+  </div>
+
+  <div id="panel-invul" style="display:none">
+    <div class="fill-grid">
+      <div class="fill-slot"><label>Praesens (1sg)</label>   <input type="text" id="fi-prae" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="…"></div>
+      <div class="fill-slot"><label>Perfectum (1sg)</label>  <input type="text" id="fi-perf" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="…"></div>
+      <div class="fill-slot"><label>Supinum (4e nv)</label>  <input type="text" id="fi-sup"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="…"></div>
+      <div class="fill-slot"><label>Infinitief</label>       <input type="text" id="fi-inf"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="…"></div>
+    </div>
+  </div>
+
+  <div id="panel-keuze" style="display:none">
+    <div class="mc-options" id="mc-options-list"></div>
+  </div>
+
+  <div id="panel-woordenboek" style="display:none">
+    <div class="sentence-instruction" id="wb-instruction"></div>
+    <div class="sentence-display"     id="wb-sentence"></div>
+    <div class="wb-input-wrap">
+      <div class="wb-label">Woordenboekvorm (praesens, 1sg)</div>
+      <input type="text" class="wb-input" id="wb-answer" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="bijv. venio">
+    </div>
+  </div>
+
+  <div class="feedback-bar" id="feedback-bar">
+    <div class="feedback-content">
+      <strong id="fb-title">—</strong>
+      <div class="fb-detail" id="fb-detail"></div>
+    </div>
+  </div>
+
+  <button class="btn-submit" id="btn-submit" onclick="handleSubmit()">Controleren</button>
+  <button class="btn-next"   id="btn-next"   style="display:none" onclick="nextQuestion()">Volgende →</button>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="screen-results">
+  <div class="result-crown" id="res-crown">🏆</div>
+  <div class="result-score-big">
+    <div><span class="number" id="res-score">0</span><span class="denom" id="res-denom">/10</span></div>
+    <div class="label">correct beantwoord</div>
+  </div>
+  <div class="result-rank" id="result-rank">
+    <div class="rank-name" id="rank-name">—</div>
+    <div class="rank-msg"  id="rank-msg">—</div>
+  </div>
+  <div class="divider">gemiste werkwoorden</div>
+  <div class="missed-list" id="missed-list"></div>
+  <div class="result-btns">
+    <button class="btn-retry" onclick="retryMissed()">Gemiste werkwoorden herhalen</button>
+    <button class="btn-home"  onclick="goHome()">← Terug naar keuzemenu</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// VERBENDATABASE  (198 werkwoorden)
+// Kolommen: p=praesens, pf=perfectum, sup=supinum, inf=infinitief,
+//           tr=vertaling, dep=deponens, irreg=onregelmatig
+// Controles: UVM Wheelock lijst, Brainscape top-100, Lewis & Short
+// ══════════════════════════════════════════════════════════════
+const VERBA = [
+  // ── Bestaande lijst (gecorrigeerd) ──
+  {p:"abicio",    pf:"abieci",       sup:"abiectus",   inf:"abicere",      tr:"afwerpen, wegwerpen"},
+  {p:"aboleo",    pf:"abolevi",      sup:"abolitus",    inf:"abolere",      tr:"afschaffen"},
+  {p:"abripio",   pf:"abripui",      sup:"abreptus",    inf:"abripere",     tr:"wegrukken"},
+  {p:"accipio",   pf:"accepi",       sup:"acceptus",    inf:"accipere",     tr:"aannemen, ontvangen"},
+  {p:"adipiscor", pf:"adeptus sum",  sup:"",            inf:"adipisci",     tr:"verkrijgen", dep:true},
+  {p:"affligo",   pf:"afflixi",      sup:"afflictus",   inf:"affligere",    tr:"teisteren"},
+  {p:"ago",       pf:"egi",          sup:"actus",       inf:"agere",        tr:"(voort)drijven, behandelen", irreg:true},
+  {p:"allicio",   pf:"allexi",       sup:"allectus",    inf:"allicere",     tr:"aanlokken"},
+  {p:"alo",       pf:"alui",         sup:"altus",       inf:"alere",        tr:"voeden, grootbrengen"},
+  {p:"aperio",    pf:"aperui",       sup:"apertus",     inf:"aperire",      tr:"openen"},
+  {p:"ardeo",     pf:"arsi",         sup:"arsus",       inf:"ardere",       tr:"in brand staan"},
+  {p:"aspicio",   pf:"aspexi",       sup:"aspectus",    inf:"aspicere",     tr:"aanschouwen"},
+  {p:"assentior", pf:"assensus sum", sup:"",            inf:"assentiri",    tr:"instemmen met", dep:true},
+  {p:"audio",     pf:"audivi",       sup:"auditus",     inf:"audire",       tr:"horen"},
+  {p:"augeo",     pf:"auxi",         sup:"auctus",      inf:"augere",       tr:"vermeerderen"},
+  {p:"cado",      pf:"cecidi",       sup:"casum",       inf:"cadere",       tr:"vallen", irreg:true},
+  {p:"caedo",     pf:"cecidi",       sup:"caesus",      inf:"caedere",      tr:"vellen, doden", irreg:true},
+  {p:"capio",     pf:"cepi",         sup:"captus",      inf:"capere",       tr:"nemen", irreg:true},
+  {p:"carpo",     pf:"carpsi",       sup:"carptus",     inf:"carpere",      tr:"plukken"},
+  {p:"caveo",     pf:"cavi",         sup:"cautus",      inf:"cavere",       tr:"oppassen, zich hoeden voor"},
+  {p:"cedo",      pf:"cessi",        sup:"cessus",      inf:"cedere",       tr:"gaan, wijken"},
+  {p:"claudo",    pf:"clausi",       sup:"clausus",     inf:"claudere",     tr:"sluiten"},
+  {p:"cognosco",  pf:"cognovi",      sup:"cognitus",    inf:"cognoscere",   tr:"vernemen, leren kennen"},
+  {p:"cogo",      pf:"coegi",        sup:"coactus",     inf:"cogere",       tr:"samenbrengen, dwingen", irreg:true},
+  {p:"colo",      pf:"colui",        sup:"cultus",      inf:"colere",       tr:"bebouwen, verzorgen, vereren"},
+  {p:"comperio",  pf:"comperi",      sup:"compertus",   inf:"comperire",    tr:"bevinden, vernemen"},
+  {p:"concutio",  pf:"concussi",     sup:"concussus",   inf:"concutere",    tr:"hevig schokken"},
+  {p:"condo",     pf:"condidi",      sup:"conditus",    inf:"condere",      tr:"stichten; (ver)bergen", irreg:true},
+  {p:"conficio",  pf:"confeci",      sup:"confectus",   inf:"conficere",    tr:"voltooien"},
+  {p:"confiteor", pf:"confessus sum",sup:"",            inf:"confiteri",    tr:"bekennen", dep:true},
+  {p:"constituo", pf:"constitui",    sup:"constitutus", inf:"constituere",  tr:"vaststellen, besluiten"},
+  {p:"consulo",   pf:"consului",     sup:"consultus",   inf:"consulere",    tr:"raadplegen"},
+  {p:"contendo",  pf:"contendi",     sup:"contentus",   inf:"contendere",   tr:"zich inspannen, marcheren, strijden"},
+  {p:"credo",     pf:"credidi",      sup:"creditus",    inf:"credere",      tr:"geloven; toevertrouwen", irreg:true},
+  {p:"cresco",    pf:"crevi",        sup:"cretus",      inf:"crescere",     tr:"groeien"},
+  {p:"cupio",     pf:"cupivi",       sup:"cupitus",     inf:"cupere",       tr:"begeren, verlangen"},
+  {p:"decerno",   pf:"decrevi",      sup:"decretus",    inf:"decernere",    tr:"besluiten"},
+  {p:"defendo",   pf:"defendi",      sup:"defensus",    inf:"defendere",    tr:"verdedigen"},
+  {p:"deleo",     pf:"delevi",       sup:"deletus",     inf:"delere",       tr:"verwoesten"},
+  {p:"dico",      pf:"dixi",         sup:"dictus",      inf:"dicere",       tr:"zeggen", irreg:true},
+  {p:"disco",     pf:"didici",       sup:"-",           inf:"discere",      tr:"leren", irreg:true},
+  {p:"divido",    pf:"divisi",       sup:"divisus",     inf:"dividere",     tr:"verdelen"},
+  {p:"do",        pf:"dedi",         sup:"datus",       inf:"dare",         tr:"geven", irreg:true},
+  {p:"duco",      pf:"duxi",         sup:"ductus",      inf:"ducere",       tr:"leiden, voeren", irreg:true},
+  {p:"edo",       pf:"edi",          sup:"esus",        inf:"edere",        tr:"eten"},
+  {p:"emo",       pf:"emi",          sup:"emptus",      inf:"emere",        tr:"kopen"},
+  {p:"experior",  pf:"expertus sum", sup:"",            inf:"experiri",     tr:"op de proef stellen, ervaren", dep:true},
+  {p:"expleo",    pf:"explevi",      sup:"expletus",    inf:"explere",      tr:"vervullen, dorst lessen"},
+  {p:"facio",     pf:"feci",         sup:"factus",      inf:"facere",       tr:"maken, doen", irreg:true},
+  {p:"fateor",    pf:"fassus sum",   sup:"",            inf:"fateri",       tr:"bekennen", dep:true},
+  {p:"fero",      pf:"tuli",         sup:"latus",       inf:"ferre",        tr:"dragen, brengen", irreg:true},
+  {p:"fluo",      pf:"fluxi",        sup:"fluxus",      inf:"fluere",       tr:"vloeien, stromen"},
+  {p:"fodio",     pf:"fodi",         sup:"fossus",      inf:"fodere",       tr:"graven"},
+  {p:"frango",    pf:"fregi",        sup:"fractus",     inf:"frangere",     tr:"breken", irreg:true},
+  {p:"fugio",     pf:"fugi",         sup:"fugiturus",   inf:"fugere",       tr:"vluchten"},
+  {p:"fundo",     pf:"fudi",         sup:"fusus",       inf:"fundere",      tr:"gieten; verslaan"},
+  {p:"fungor",    pf:"functus sum",  sup:"",            inf:"fungi",        tr:"verrichten, waarnemen", dep:true},
+  {p:"gero",      pf:"gessi",        sup:"gestus",      inf:"gerere",       tr:"voeren (oorlog), dragen"},
+  {p:"haurio",    pf:"hausi",        sup:"haustus",     inf:"haurire",      tr:"scheppen, putten"},
+  {p:"iaceo",     pf:"iacui",        sup:"-",           inf:"iacere",       tr:"liggen"},
+  {p:"iacio",     pf:"ieci",         sup:"iactus",      inf:"iacere",       tr:"werpen"},
+  {p:"incendo",   pf:"incendi",      sup:"incensus",    inf:"incendere",    tr:"in brand steken"},
+  {p:"iubeo",     pf:"iussi",        sup:"iussus",      inf:"iubere",       tr:"bevelen"},
+  {p:"iungo",     pf:"iunxi",        sup:"iunctus",     inf:"iungere",      tr:"verbinden"},
+  {p:"iuvo",      pf:"iuvi",         sup:"iutus",       inf:"iuvare",       tr:"helpen"},
+  {p:"labor",     pf:"lapsus sum",   sup:"",            inf:"labi",         tr:"vallen, glijden", dep:true},
+  {p:"lavo",      pf:"lavi",         sup:"lautus",      inf:"lavare",       tr:"wassen"},
+  {p:"lego",      pf:"legi",         sup:"lectus",      inf:"legere",       tr:"lezen; verzamelen"},
+  {p:"loquor",    pf:"locutus sum",  sup:"",            inf:"loqui",        tr:"spreken", dep:true},
+  {p:"ludo",      pf:"lusi",         sup:"lusus",       inf:"ludere",       tr:"spelen"},
+  {p:"maneo",     pf:"mansi",        sup:"mansus",      inf:"manere",       tr:"blijven"},
+  {p:"mereor",    pf:"meritus sum",  sup:"",            inf:"mereri",       tr:"verdienen", dep:true},
+  {p:"metior",    pf:"mensus sum",   sup:"",            inf:"metiri",       tr:"meten", dep:true},
+  {p:"mitto",     pf:"misi",         sup:"missus",      inf:"mittere",      tr:"sturen, laten gaan"},
+  {p:"moveo",     pf:"movi",         sup:"motus",       inf:"movere",       tr:"bewegen"},
+  {p:"nascor",    pf:"natus sum",    sup:"",            inf:"nasci",        tr:"geboren worden", dep:true},
+  {p:"obliviscor",pf:"oblitus sum",  sup:"",            inf:"oblivisci",    tr:"vergeten", dep:true},
+  {p:"obtineo",   pf:"obtinui",      sup:"obtentus",    inf:"obtinere",     tr:"verkrijgen"},
+  {p:"occido",    pf:"occidi",       sup:"occisus",     inf:"occidere",     tr:"doden"},
+  {p:"operio",    pf:"operui",       sup:"opertus",     inf:"operire",      tr:"bedekken"},
+  {p:"orior",     pf:"ortus sum",    sup:"",            inf:"oriri",        tr:"ontstaan, opgaan", dep:true},
+  {p:"pario",     pf:"peperi",       sup:"partus",      inf:"parere",       tr:"voortbrengen, verwerven", irreg:true},
+  {p:"pello",     pf:"pepuli",       sup:"pulsus",      inf:"pellere",      tr:"(ver)drijven", irreg:true},
+  {p:"pendeo",    pf:"pependi",      sup:"pensus",      inf:"pendere",      tr:"hangen", irreg:true},
+  {p:"peto",      pf:"petivi",       sup:"petitus",     inf:"petere",       tr:"nastreven, vragen"},
+  {p:"polliceor", pf:"pollicitus sum",sup:"",           inf:"polliceri",    tr:"beloven", dep:true},
+  {p:"pono",      pf:"posui",        sup:"positus",     inf:"ponere",       tr:"leggen, plaatsen"},
+  {p:"proficiscor",pf:"profectus sum",sup:"",           inf:"proficisci",   tr:"vertrekken", dep:true},
+  {p:"quaero",    pf:"quaesivi",     sup:"quaesitus",   inf:"quaerere",     tr:"zoeken; vragen"},
+  {p:"queror",    pf:"questus sum",  sup:"",            inf:"queri",        tr:"(be)klagen", dep:true},
+  {p:"rapio",     pf:"rapui",        sup:"raptus",      inf:"rapere",       tr:"grijpen, roven"},
+  {p:"relinquo",  pf:"reliqui",      sup:"relictus",    inf:"relinquere",   tr:"verlaten, achterlaten"},
+  {p:"reor",      pf:"ratus sum",    sup:"",            inf:"reri",         tr:"menen", dep:true},
+  {p:"reperio",   pf:"repperi",      sup:"repertus",    inf:"reperire",     tr:"vinden", irreg:true},
+  {p:"respondeo", pf:"respondi",     sup:"responsus",   inf:"respondere",   tr:"antwoorden"},
+  {p:"rideo",     pf:"risi",         sup:"risus",       inf:"ridere",       tr:"lachen"},
+  {p:"rumpo",     pf:"rupi",         sup:"ruptus",      inf:"rumpere",      tr:"(door)breken"},
+  {p:"salio",     pf:"salui",        sup:"saltus",      inf:"salire",       tr:"springen"},
+  {p:"sapio",     pf:"sapivi",       sup:"-",           inf:"sapere",       tr:"wijs zijn"},
+  {p:"scribo",    pf:"scripsi",      sup:"scriptus",    inf:"scribere",     tr:"schrijven"},
+  {p:"seco",      pf:"secui",        sup:"sectus",      inf:"secare",       tr:"snijden"},
+  {p:"sedeo",     pf:"sedi",         sup:"sessus",      inf:"sedere",       tr:"zitten"},
+  {p:"sentio",    pf:"sensi",        sup:"sensus",      inf:"sentire",      tr:"voelen, (be)merken"},
+  {p:"sequor",    pf:"secutus sum",  sup:"",            inf:"sequi",        tr:"volgen", dep:true},
+  {p:"solvo",     pf:"solvi",        sup:"solutus",     inf:"solvere",      tr:"losmaken; betalen"},
+  {p:"statuo",    pf:"statui",       sup:"statutus",    inf:"statuere",     tr:"vaststellen, besluiten"},
+  {p:"sto",       pf:"steti",        sup:"status",      inf:"stare",        tr:"staan", irreg:true},
+  {p:"suadeo",    pf:"suasi",        sup:"suasus",      inf:"suadere",      tr:"aanraden"},
+  {p:"sum",       pf:"fui",          sup:"-",           inf:"esse",         tr:"zijn", irreg:true},
+  {p:"sumo",      pf:"sumpsi",       sup:"sumptus",     inf:"sumere",       tr:"(op)nemen"},
+  {p:"surgo",     pf:"surrexi",      sup:"surrectus",   inf:"surgere",      tr:"opstaan", irreg:true},
+  {p:"tango",     pf:"tetigi",       sup:"tactus",      inf:"tangere",      tr:"aanraken", irreg:true},
+  {p:"tego",      pf:"texi",         sup:"tectus",      inf:"tegere",       tr:"bedekken"},
+  {p:"tendo",     pf:"tetendi",      sup:"tentus",      inf:"tendere",      tr:"spannen", irreg:true},
+  {p:"teneo",     pf:"tenui",        sup:"tentus",      inf:"tenere",       tr:"houden"},
+  {p:"terreo",    pf:"terrui",       sup:"territus",    inf:"terrere",      tr:"bangmaken"},
+  {p:"tollo",     pf:"sustuli",      sup:"sublatus",    inf:"tollere",      tr:"opheffen, aanheffen", irreg:true},
+  {p:"trado",     pf:"tradidi",      sup:"traditus",    inf:"tradere",      tr:"overhandigen, overleveren", irreg:true},
+  {p:"tueor",     pf:"tutatus sum",  sup:"",            inf:"tueri",        tr:"beschermen", dep:true},
+  {p:"ulciscor",  pf:"ultus sum",    sup:"",            inf:"ulcisci",      tr:"(zich) wreken", dep:true},
+  {p:"utor",      pf:"usus sum",     sup:"",            inf:"uti",          tr:"gebruiken, hebben tot", dep:true},
+  {p:"veho",      pf:"vexi",         sup:"vectus",      inf:"vehere",       tr:"vervoeren"},
+  {p:"venio",     pf:"veni",         sup:"ventus",      inf:"venire",       tr:"komen"},
+  {p:"vereor",    pf:"veritus sum",  sup:"",            inf:"vereri",       tr:"vrezen", dep:true},
+  {p:"verto",     pf:"verti",        sup:"versus",      inf:"vertere",      tr:"keren, wenden"},
+  {p:"veto",      pf:"vetui",        sup:"vetitus",     inf:"vetare",       tr:"verbieden"},
+  {p:"video",     pf:"vidi",         sup:"visus",       inf:"videre",       tr:"zien", irreg:true},
+  {p:"vinco",     pf:"vici",         sup:"victus",      inf:"vincere",      tr:"overwinnen", irreg:true},
+  {p:"vivo",      pf:"vixi",         sup:"victus",      inf:"vivere",       tr:"leven"},
+  {p:"voco",      pf:"vocavi",       sup:"vocatus",     inf:"vocare",       tr:"roepen"},
+
+  // ── Aanvullingen op basis van frequentielijst ──
+  {p:"amitto",    pf:"amisi",        sup:"amissus",     inf:"amittere",     tr:"wegsturen, verliezen"},
+  {p:"amo",       pf:"amavi",        sup:"amatus",      inf:"amare",        tr:"houden van, beminnen"},
+  {p:"arcesso",   pf:"arcessivi",    sup:"arcessitus",  inf:"arcessere",    tr:"ontbieden"},
+  {p:"ardeo",     pf:"arsi",         sup:"arsus",       inf:"ardere",       tr:"in brand staan"},
+  {p:"audeo",     pf:"ausus sum",    sup:"",            inf:"audere",       tr:"durven", dep:true},
+  {p:"cano",      pf:"cecini",       sup:"cantum",      inf:"canere",       tr:"zingen, bezingen", irreg:true},
+  {p:"cerno",     pf:"crevi",        sup:"cretus",      inf:"cernere",      tr:"onderscheiden, zien"},
+  {p:"coepi",     pf:"coepisse",     sup:"coeptus",     inf:"coepisse",     tr:"beginnen (alleen pf-stelsel)", irreg:true},
+  {p:"confero",   pf:"contuli",      sup:"collatus",    inf:"conferre",     tr:"bijeenbrengen; vergelijken", irreg:true},
+  {p:"curro",     pf:"cucurri",      sup:"cursus",      inf:"currere",      tr:"lopen, rennen", irreg:true},
+  {p:"debeo",     pf:"debui",        sup:"debitus",     inf:"debere",       tr:"moeten; verschuldigd zijn"},
+  {p:"deficio",   pf:"defeci",       sup:"defectus",    inf:"deficere",     tr:"tekortkomen, tekortschieten"},
+  {p:"descendo",  pf:"descendi",     sup:"descensus",   inf:"descendere",   tr:"afdalen, neerdalen"},
+  {p:"discedo",   pf:"discessi",     sup:"discessus",   inf:"discedere",    tr:"weggaan, vertrekken"},
+  {p:"doceo",     pf:"docui",        sup:"doctus",      inf:"docere",       tr:"onderrichten, leren"},
+  {p:"eo",        pf:"ivi / ii",     sup:"itum",        inf:"ire",          tr:"gaan", irreg:true},
+  {p:"eripio",    pf:"eripui",       sup:"ereptus",     inf:"eripere",      tr:"wegrukken, bevrijden"},
+  {p:"fallo",     pf:"fefelli",      sup:"falsus",      inf:"fallere",      tr:"bedriegen, misleiden", irreg:true},
+  {p:"fio",       pf:"factus sum",   sup:"",            inf:"fieri",        tr:"worden, gebeuren", irreg:true, dep:true},
+  {p:"flecto",    pf:"flexi",        sup:"flexus",      inf:"flectere",     tr:"buigen, keren"},
+  {p:"fleo",      pf:"flevi",        sup:"fletus",      inf:"flere",        tr:"wenen, bewenen"},
+  {p:"gaudeo",    pf:"gavisus sum",  sup:"",            inf:"gaudere",      tr:"blij zijn, zich verheugen", dep:true},
+  {p:"gigno",     pf:"genui",        sup:"genitus",     inf:"gignere",      tr:"voortbrengen, verwekken", irreg:true},
+  {p:"habeo",     pf:"habui",        sup:"habitus",     inf:"habere",       tr:"hebben, houden"},
+  {p:"haereo",    pf:"haesi",        sup:"haesus",      inf:"haerere",      tr:"vastzitten, aarzelen"},
+  {p:"impello",   pf:"impuli",       sup:"impulsus",    inf:"impellere",    tr:"aandrijven, aanzetten"},
+  {p:"incipio",   pf:"incepi",       sup:"inceptus",    inf:"incipere",     tr:"beginnen"},
+  {p:"intellego", pf:"intellexi",    sup:"intellectus", inf:"intellegere",  tr:"begrijpen", irreg:true},
+  {p:"invenio",   pf:"inveni",       sup:"inventus",    inf:"invenire",     tr:"vinden, uitvinden"},
+  {p:"irascor",   pf:"iratus sum",   sup:"",            inf:"irasci",       tr:"boos worden", dep:true},
+  {p:"iudico",    pf:"iudicavi",     sup:"iudicatus",   inf:"iudicare",     tr:"oordelen, beoordelen"},
+  {p:"laudo",     pf:"laudavi",      sup:"laudatus",    inf:"laudare",      tr:"prijzen, loven"},
+  {p:"malo",      pf:"malui",        sup:"-",           inf:"malle",        tr:"liever willen, de voorkeur geven", irreg:true},
+  {p:"misceo",    pf:"miscui",       sup:"mixtus",      inf:"miscere",      tr:"mengen, verwarren"},
+  {p:"miror",     pf:"miratus sum",  sup:"",            inf:"mirari",       tr:"zich verwonderen over", dep:true},
+  {p:"moneo",     pf:"monui",        sup:"monitus",     inf:"monere",       tr:"waarschuwen, aanmanen"},
+  {p:"morior",    pf:"mortuus sum",  sup:"",            inf:"mori",         tr:"sterven", dep:true, irreg:true},
+  {p:"nolo",      pf:"nolui",        sup:"-",           inf:"nolle",        tr:"niet willen", irreg:true},
+  {p:"nosco",     pf:"novi",         sup:"notus",       inf:"noscere",      tr:"leren kennen"},
+  {p:"odi",       pf:"odisse",       sup:"-",           inf:"odisse",       tr:"haten (alleen pf-stelsel)", irreg:true},
+  {p:"ostendo",   pf:"ostendi",      sup:"ostentus",    inf:"ostendere",    tr:"tonen, laten zien"},
+  {p:"patior",    pf:"passus sum",   sup:"",            inf:"pati",         tr:"verdragen, toelaten; lijden", dep:true},
+  {p:"pereo",     pf:"perii",        sup:"peritum",     inf:"perire",       tr:"te gronde gaan, omkomen", irreg:true},
+  {p:"pervenio",  pf:"perveni",      sup:"perventum",   inf:"pervenire",    tr:"bereiken, aankomen"},
+  {p:"placeo",    pf:"placui",       sup:"placitum",    inf:"placere",      tr:"bevallen, aanstaan"},
+  {p:"possum",    pf:"potui",        sup:"-",           inf:"posse",        tr:"kunnen", irreg:true},
+  {p:"praesto",   pf:"praestiti",    sup:"praestitum",  inf:"praestare",    tr:"overtreffen; verlenen", irreg:true},
+  {p:"premo",     pf:"pressi",       sup:"pressus",     inf:"premere",      tr:"drukken, verdrukken"},
+  {p:"prohibeo",  pf:"prohibui",     sup:"prohibitus",  inf:"prohibere",    tr:"verhinderen, verbieden"},
+  {p:"promitto",  pf:"promisi",      sup:"promissus",   inf:"promittere",   tr:"beloven"},
+  {p:"pugno",     pf:"pugnavi",      sup:"pugnatus",    inf:"pugnare",      tr:"vechten, strijden"},
+  {p:"rego",      pf:"rexi",         sup:"rectus",      inf:"regere",       tr:"besturen, leiden"},
+  {p:"recipio",   pf:"recepi",       sup:"receptus",    inf:"recipere",     tr:"terugpakken; opnemen"},
+  {p:"reddo",     pf:"reddidi",      sup:"redditus",    inf:"reddere",      tr:"(terug)geven", irreg:true},
+  {p:"soleo",     pf:"solitus sum",  sup:"",            inf:"solere",       tr:"gewoon zijn, gewoonlijk", dep:true},
+  {p:"timeo",     pf:"timui",        sup:"-",           inf:"timere",       tr:"vrezen, bang zijn voor"},
+  {p:"traho",     pf:"traxi",        sup:"tractus",     inf:"trahere",      tr:"trekken, slepen"},
+  {p:"valeo",     pf:"valui",        sup:"valitum",     inf:"valere",       tr:"sterk zijn; gezond zijn"},
+  {p:"volo",      pf:"volui",        sup:"-",           inf:"velle",        tr:"willen", irreg:true},
+];
+
+// ══════════════════════════════════════════════════════════════
+// ZINNEN voor de "Woordenboek"-modus
+// Elk item: zin met één {vorm} gemarkeerd, praesens, vertaling van de vorm
+// De {vorm} is de werkwoordsvorm die de leerling moet terugherleiden
+// ══════════════════════════════════════════════════════════════
+const ZINNEN_WB = [
+  {zin:"Caesar in Galliam {venit} et oppida cepit.",         vorm:"venit",      prae:"venio",   tr:"hij/zij kwam"},
+  {zin:"Milites hostium copias {vicerunt}.",                  vorm:"vicerunt",   prae:"vinco",   tr:"zij overwonnen"},
+  {zin:"Consul populum {rogavit} de lege nova.",             vorm:"rogavit",    prae:"rogo",    tr:"hij/zij vroeg"},
+  {zin:"Puer epistulam {legit} et laetus erat.",             vorm:"legit",      prae:"lego",    tr:"hij/zij las"},
+  {zin:"Femina aquam {tulit} ad casam.",                     vorm:"tulit",      prae:"fero",    tr:"hij/zij bracht"},
+  {zin:"Rex pacem {fecit} cum hostibus.",                    vorm:"fecit",      prae:"facio",   tr:"hij/zij maakte"},
+  {zin:"Nauta mare {vidit} et terram petivit.",              vorm:"vidit",      prae:"video",   tr:"hij/zij zag"},
+  {zin:"Senex filium {vocavit} ad se.",                      vorm:"vocavit",    prae:"voco",    tr:"hij/zij riep"},
+  {zin:"Agricola agrum {coluit} magna cum cura.",            vorm:"coluit",     prae:"colo",    tr:"hij/zij bewerkte"},
+  {zin:"Dux signum {dedit} et milites progressi sunt.",      vorm:"dedit",      prae:"do",      tr:"hij/zij gaf"},
+  {zin:"Mater puerum {audivit} et surrexit.",                vorm:"audivit",    prae:"audio",   tr:"hij/zij hoorde"},
+  {zin:"Philosophus multa {scripsit} de natura.",            vorm:"scripsit",   prae:"scribo",  tr:"hij/zij schreef"},
+  {zin:"Civis patriam {amavit} et pro ea pugnavit.",         vorm:"amavit",     prae:"amo",     tr:"hij/zij hield van"},
+  {zin:"Pater filium {iussit} laborare.",                    vorm:"iussit",     prae:"iubeo",   tr:"hij/zij beval"},
+  {zin:"Hostes oppidum {ceperunt} magna vi.",                vorm:"ceperunt",   prae:"capio",   tr:"zij namen in"},
+  {zin:"Miles gladium {cepit} et pugnavit.",                 vorm:"cepit",      prae:"capio",   tr:"hij/zij greep"},
+  {zin:"Poeta carmen {cecinit} in foro.",                    vorm:"cecinit",    prae:"cano",    tr:"hij/zij zong"},
+  {zin:"Servi aquam {portaverunt} ad villam.",               vorm:"portaverunt",prae:"porto",   tr:"zij droegen"},
+  {zin:"Puella flores {carpsit} in horto.",                  vorm:"carpsit",    prae:"carpo",   tr:"hij/zij plukte"},
+  {zin:"Orator multa {dixit} de re publica.",                vorm:"dixit",      prae:"dico",    tr:"hij/zij zei"},
+  {zin:"Imperator copias suas {duxit} trans Rhenum.",        vorm:"duxit",      prae:"duco",    tr:"hij/zij leidde"},
+  {zin:"Romani muros {deleverunt} post bellum.",             vorm:"deleverunt", prae:"deleo",   tr:"zij verwoestten"},
+  {zin:"Exercitus flumen {transiit} nocte.",                 vorm:"transiit",   prae:"transeo", tr:"hij/zij overstak"},
+  {zin:"Discipuli Latinum {didicerunt} multo labore.",       vorm:"didicerunt", prae:"disco",   tr:"zij leerden"},
+  {zin:"Philosophus veritatem {quaesivit} tota vita.",       vorm:"quaesivit",  prae:"quaero",  tr:"hij/zij zocht"},
+  {zin:"Pater filiam {monuit} de periculo.",                 vorm:"monuit",     prae:"moneo",   tr:"hij/zij waarschuwde"},
+  {zin:"Rex hostes {vicit} et pacem petivit.",               vorm:"vicit",      prae:"vinco",   tr:"hij/zij overwon"},
+  {zin:"Agricola frumentum {seruit} in agro.",               vorm:"seruit",     prae:"sero",    tr:"hij/zij zaaide"},
+  {zin:"Medicus aegrum {sanare} potuit.",                    vorm:"sanare",     prae:"sano",    tr:"genezen (infinitief)"},
+  {zin:"Pueri in via {cucurrerunt} ad ludum.",               vorm:"cucurrerunt",prae:"curro",   tr:"zij liepen"},
+  {zin:"Senatus pacem {constituit} cum regibus.",            vorm:"constituit", prae:"constituo",tr:"hij/zij stelde vast"},
+  {zin:"Miles vulnera {sustinuit} fortiter.",                vorm:"sustinuit",  prae:"sustineo",tr:"hij/zij verdroeg"},
+  {zin:"Mercator merces {vendidit} in foro.",                vorm:"vendidit",   prae:"vendo",   tr:"hij/zij verkocht"},
+  {zin:"Nauta ventum {timuit} et in portu mansit.",          vorm:"timuit",     prae:"timeo",   tr:"hij/zij vreesde"},
+  {zin:"Puella aquam {bibit} et satiata est.",               vorm:"bibit",      prae:"bibo",    tr:"hij/zij dronk"},
+  {zin:"Cives patriam {defenderunt} ab hostibus.",           vorm:"defenderunt",prae:"defendo", tr:"zij verdedigden"},
+  {zin:"Puer librum {cepit} et legere coepit.",              vorm:"coepit",     prae:"coepio/incipio",tr:"hij/zij begon"},
+  {zin:"Rex multos milites {misit} in proelium.",            vorm:"misit",      prae:"mitto",   tr:"hij/zij stuurde"},
+  {zin:"Senex filium {docuit} multas artes.",                vorm:"docuit",     prae:"doceo",   tr:"hij/zij onderwees"},
+  {zin:"Discipulus magistrum {rogavit} de verbis.",          vorm:"rogavit",    prae:"rogo",    tr:"hij/zij vroeg"},
+  {zin:"Milites castra {posuerunt} prope flumen.",           vorm:"posuerunt",  prae:"pono",    tr:"zij plaatsten"},
+  {zin:"Consul legem {tulit} ad senatum.",                   vorm:"tulit",      prae:"fero",    tr:"hij/zij bracht"},
+  {zin:"Femina vestem {texuit} in domo.",                    vorm:"texuit",     prae:"texo",    tr:"hij/zij weefde"},
+  {zin:"Hostes urbem {incenderunt} et fugerunt.",            vorm:"incenderunt",prae:"incendo", tr:"zij staken in brand"},
+  {zin:"Gladiator adversarium {vicit} in arena.",            vorm:"vicit",      prae:"vinco",   tr:"hij/zij overwon"},
+  {zin:"Pueri in aqua {luserunt} per totum diem.",           vorm:"luserunt",   prae:"ludo",    tr:"zij speelden"},
+  {zin:"Patres familias filios {verberare} non debent.",     vorm:"verberare",  prae:"verbero", tr:"slaan (infinitief)"},
+  {zin:"Rex omnes cives {iussit} arma capere.",              vorm:"iussit",     prae:"iubeo",   tr:"hij/zij beval"},
+  {zin:"Mercator multas merces {emit} et vendidit.",         vorm:"emit",       prae:"emo",     tr:"hij/zij kocht"},
+  {zin:"Romani Carthaginem {delevisse} gloriantur.",         vorm:"delevisse",  prae:"deleo",   tr:"verwoest te hebben (inf.)"},
+];
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let state = {
+  mode:'invul', filter:'alle',
+  pool:[], queue:[], qIdx:0, totalQ:10,
+  correct:0, missed:[],
+  totalPts:0, sessionCorrect:0, sessionTotal:0, streak:0,
+  currentVerb:null, answered:false,
+  wbQueue:[], wbIdx:0,
+};
+
+// ══════════════════════════════════════════
+// HOME
+// ══════════════════════════════════════════
+function selectMode(el) {
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.mode = el.dataset.mode;
+}
+function selectFilter(el) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  state.filter = el.dataset.filter;
+}
+function getPool() {
+  // Deduplicate by p (praesens) — some verbs appear twice if we accidentally added duplicates
+  let seen = new Set();
+  let pool = VERBA.filter(v => {
+    if (seen.has(v.p)) return false;
+    seen.add(v.p); return true;
+  });
+  if (state.filter === 'deponens') pool = pool.filter(v => v.dep);
+  if (state.filter === 'onregelm') pool = pool.filter(v => v.irreg);
+  return pool;
+}
+function shuffle(a) {
+  for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+function startQuiz() {
+  state.pool = getPool();
+  if (state.pool.length < 2) { alert('Te weinig werkwoorden voor dit filter.'); return; }
+  state.totalQ = Math.min(10, state.pool.length);
+  state.queue  = shuffle(state.pool.slice()).slice(0, state.totalQ);
+  state.qIdx = 0; state.correct = 0; state.missed = []; state.answered = false;
+  if (state.mode === 'woordenboek') {
+    state.wbQueue = shuffle(ZINNEN_WB.slice()).slice(0, state.totalQ);
+    state.wbIdx = 0;
+  }
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+// ══════════════════════════════════════════
+// QUIZ
+// ══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function updateQuizMeta() {
+  document.getElementById('q-counter').textContent = `Vraag ${state.qIdx+1} / ${state.totalQ}`;
+  document.getElementById('q-score-live').textContent = `Score: ${state.correct}`;
+  document.getElementById('q-progress-fill').style.width = `${(state.qIdx/state.totalQ)*100}%`;
+}
+function hidePanels() {
+  ['panel-invul','panel-keuze','panel-woordenboek'].forEach(id => {
+    document.getElementById(id).style.display = 'none';
+  });
+}
+function renderQuestion() {
+  state.answered = false;
+  hideFeedback(); hidePanels();
+  document.getElementById('btn-submit').style.display = '';
+  document.getElementById('btn-next').style.display   = 'none';
+  updateQuizMeta();
+
+  if (state.mode === 'woordenboek') { renderWoordenboek(); return; }
+
+  const v = state.queue[state.qIdx];
+  state.currentVerb = v;
+  document.getElementById('q-verb-context').textContent = '';
+
+  if      (state.mode === 'invul')     renderInvul(v);
+  else if (state.mode === 'omgekeerd') renderOmgekeerd(v);
+  else if (state.mode === 'keuze')     renderKeuze(v);
+}
+
+// ── Invuloefening ──
+function renderInvul(v) {
+  document.getElementById('q-prompt-label').textContent = 'Vul de ontbrekende stamtijden in';
+  document.getElementById('q-verb-main').textContent    = v.p;
+  document.getElementById('q-verb-meaning').textContent = v.tr;
+  document.getElementById('panel-invul').style.display  = '';
+
+  const [fP,fPf,fSup,fInf] = ['fi-prae','fi-perf','fi-sup','fi-inf'].map(id => document.getElementById(id));
+  [fP,fPf,fSup,fInf].forEach(f => { f.value=''; f.className=''; f.disabled=false; });
+
+  fP.value = v.p; fP.classList.add('given'); fP.disabled = true;
+  if (v.dep) { fSup.value='—'; fSup.classList.add('given'); fSup.disabled=true; }
+  if (v.sup==='-') { fSup.value='-'; fSup.classList.add('given'); fSup.disabled=true; }
+
+  setTimeout(() => fPf.focus(), 80);
+}
+
+// ── Omgekeerd ──
+function renderOmgekeerd(v) {
+  const usePerf = Math.random() > 0.35;
+  const giveForm = usePerf ? v.pf : (v.sup && v.sup!=='' && v.sup!=='-' ? v.sup : v.pf);
+  const giveLabel = usePerf ? 'Perfectum' : 'Supinum';
+
+  document.getElementById('q-prompt-label').textContent = `${giveLabel} gegeven → wat is het praesens?`;
+  document.getElementById('q-verb-main').textContent    = giveForm;
+  document.getElementById('q-verb-meaning').textContent = v.tr;
+  document.getElementById('panel-invul').style.display  = '';
+
+  const [fP,fPf,fSup,fInf] = ['fi-prae','fi-perf','fi-sup','fi-inf'].map(id => document.getElementById(id));
+  [fP,fPf,fSup,fInf].forEach(f => { f.value=''; f.className=''; f.disabled=false; });
+
+  setTimeout(() => fP.focus(), 80);
+}
+
+// ── Meerkeuze ──
+function renderKeuze(v) {
+  document.getElementById('q-prompt-label').textContent = 'Welke stamtijdenreeks hoort bij dit werkwoord?';
+  document.getElementById('q-verb-main').textContent    = v.p;
+  document.getElementById('q-verb-meaning').textContent = v.tr;
+  document.getElementById('panel-keuze').style.display  = '';
+
+  const distractors = shuffle(VERBA.filter(w => w.p !== v.p)).slice(0,3);
+  const options = shuffle([v,...distractors]);
+  const list = document.getElementById('mc-options-list');
+  list.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'mc-btn';
+    const s = opt.sup && opt.sup!=='' && opt.sup!=='-' ? `, ${opt.sup}` : '';
+    btn.textContent = `${opt.pf}${s}, ${opt.inf}`;
+    btn.onclick = () => handleMCChoice(btn, opt.p===v.p, v);
+    list.appendChild(btn);
+  });
+  document.getElementById('btn-submit').style.display = 'none';
+}
+
+// ── Woordenboek ──
+function renderWoordenboek() {
+  const item = state.wbQueue[state.qIdx % state.wbQueue.length];
+  state._wb  = item;
+
+  // Build sentence with highlighted verb form
+  const parts = item.zin.split(/(\{[^}]+\})/);
+  const sentenceEl = document.getElementById('wb-sentence');
+  sentenceEl.innerHTML = '';
+  parts.forEach(part => {
+    if (part.startsWith('{') && part.endsWith('}')) {
+      const span = document.createElement('span');
+      span.style.cssText = 'color:var(--gold);font-weight:bold;border-bottom:2px solid var(--gold-dim);padding-bottom:1px;';
+      span.textContent = part.slice(1,-1);
+      sentenceEl.appendChild(span);
+    } else {
+      sentenceEl.appendChild(document.createTextNode(part));
+    }
+  });
+
+  document.getElementById('q-prompt-label').textContent = 'Woordenboekvorm opzoeken';
+  document.getElementById('q-verb-main').textContent    = '';
+  document.getElementById('q-verb-meaning').textContent = item.tr + ' — wat zoek je op?';
+  document.getElementById('q-verb-context').textContent = '';
+  document.getElementById('wb-instruction').textContent = 'De gouden vorm is een werkwoordsvorm. Geef het praesens (1sg) — de woordenboekvorm.';
+
+  document.getElementById('panel-woordenboek').style.display = '';
+  const inp = document.getElementById('wb-answer');
+  inp.value = ''; inp.className = 'wb-input';
+  setTimeout(() => inp.focus(), 80);
+}
+
+// ══════════════════════════════════════════
+// ANTWOORD CONTROLEREN
+// ══════════════════════════════════════════
+function norm(s) {
+  return s.trim().toLowerCase()
+    .replace(/[áàâā]/g,'a').replace(/[éèêē]/g,'e')
+    .replace(/[íìī]/g,'i').replace(/[óòōô]/g,'o')
+    .replace(/[úùū]/g,'u');
+}
+
+function handleSubmit() {
+  if (state.answered) { nextQuestion(); return; }
+  if      (state.mode==='invul')      checkInvul(state.currentVerb);
+  else if (state.mode==='omgekeerd')  checkOmgekeerd(state.currentVerb);
+  else if (state.mode==='woordenboek') checkWoordenboek();
+}
+
+function checkInvul(v) {
+  const fPf  = document.getElementById('fi-perf');
+  const fSup = document.getElementById('fi-sup');
+  const fInf = document.getElementById('fi-inf');
+
+  function chk(input, correct) {
+    if (input.disabled) return true;
+    const val = norm(input.value);
+    const ok  = correct.split('/').map(norm).some(c => val===c);
+    if (!input.value.trim()) { input.value=correct; input.classList.add('skipped'); return false; }
+    input.classList.add(ok ? 'correct' : 'wrong');
+    return ok;
+  }
+  const pfOk  = chk(fPf,  v.pf);
+  const supOk = (v.dep || v.sup==='-') ? true : chk(fSup, v.sup||'-');
+  const infOk = chk(fInf, v.inf);
+  finishAnswer(pfOk && supOk && infOk, v);
+}
+
+function checkOmgekeerd(v) {
+  const fP = document.getElementById('fi-prae');
+  const ok = fP.value.trim() && norm(fP.value)===norm(v.p);
+  fP.classList.add(ok ? 'correct' : 'wrong');
+  if (!fP.value.trim()) fP.value = v.p;
+  finishAnswer(ok, v);
+}
+
+function checkWoordenboek() {
+  const item = state._wb;
+  const inp  = document.getElementById('wb-answer');
+  const val  = norm(inp.value.trim());
+  // Accept any of the slash-separated praesens forms
+  const accepted = item.prae.split('/').map(norm);
+  const ok = accepted.some(a => val===a);
+  inp.classList.remove('correct','wrong');
+  inp.classList.add(ok ? 'correct' : 'wrong');
+  if (!inp.value.trim()) inp.value = item.prae;
+
+  const v = VERBA.find(vb => norm(vb.p)===norm(item.prae.split('/')[0]));
+  const fakeV = v || {p:item.prae, pf:'?', sup:'?', inf:'?', tr:item.tr};
+  finishAnswer(ok, fakeV, `Goud: "${item.vorm}" → woordenboekvorm: ${item.prae}`);
+}
+
+function handleMCChoice(btn, isCorrect, v) {
+  if (state.answered) return;
+  state.answered = true;
+  document.querySelectorAll('.mc-btn').forEach(b => {
+    b.disabled = true;
+    const s = v.sup && v.sup!=='' && v.sup!=='-' ? `, ${v.sup}` : '';
+    if (b.textContent === `${v.pf}${s}, ${v.inf}`) b.classList.add('reveal');
+  });
+  btn.classList.add(isCorrect ? 'correct' : 'wrong');
+  if (isCorrect) registerCorrect(v); else registerWrong(v);
+  showFeedback(isCorrect, v);
+  document.getElementById('btn-next').style.display = '';
+}
+
+function finishAnswer(ok, v, customCtx) {
+  state.answered = true;
+  if (ok) registerCorrect(v); else registerWrong(v);
+  showFeedback(ok, v, customCtx);
+  document.getElementById('btn-submit').style.display = 'none';
+  document.getElementById('btn-next').style.display   = '';
+}
+
+function registerCorrect(v) {
+  state.correct++; state.sessionCorrect++; state.sessionTotal++;
+  state.streak++; state.totalPts += 10 + (state.streak>=3?5:0);
+  updatePts();
+}
+function registerWrong(v) {
+  state.sessionTotal++; state.streak=0; state.missed.push(v); updatePts();
+}
+function updatePts() {
+  document.getElementById('total-pts').textContent     = state.totalPts;
+  document.getElementById('q-score-live').textContent  = `Score: ${state.correct}`;
+}
+
+function showFeedback(ok, v, ctx) {
+  const bar = document.getElementById('feedback-bar');
+  bar.className = 'feedback-bar show ' + (ok ? 'ok' : 'err');
+  document.getElementById('fb-title').textContent = ok ? '✓ Juist!' : '✗ Niet helemaal';
+  const supTxt = v.sup && v.sup!=='' && v.sup!=='-' ? ` · ${v.sup}` : '';
+  let detail = ctx ? ctx+'\n' : '';
+  detail += `${v.p} · ${v.pf}${supTxt} · ${v.inf} — ${v.tr}`;
+  document.getElementById('fb-detail').textContent = detail;
+}
+function hideFeedback() { document.getElementById('feedback-bar').className = 'feedback-bar'; }
+
+function nextQuestion() {
+  state.qIdx++;
+  if (state.qIdx >= state.totalQ) showResults();
+  else renderQuestion();
+}
+
+// ══════════════════════════════════════════
+// RESULTATEN
+// ══════════════════════════════════════════
+const RANKS = [
+  {min:100, name:'🏛️ Magister',   msg:'Uitmuntend! Jij beheerst de stamtijden als een echte Romein.'},
+  {min:80,  name:'⚔️ Tribunus',   msg:'Uitstekend. Slechts een paar foutjes — blijf zo doorgaan.'},
+  {min:60,  name:'🛡️ Miles',      msg:'Goed werk. Herhaal de gemiste vormen nog één keer.'},
+  {min:40,  name:'📚 Discipulus', msg:'Je bent op de goede weg. Meer herhaling zal helpen!'},
+  {min:0,   name:'🌱 Tiro',       msg:'Een goed begin. De stamtijden vragen nog meer aandacht.'},
+];
+function showResults() {
+  showScreen('screen-results');
+  const pct  = Math.round((state.correct/state.totalQ)*100);
+  const rank = RANKS.find(r => pct>=r.min);
+  document.getElementById('res-crown').textContent  = pct>=80?'🏆':pct>=60?'🎖️':'📖';
+  document.getElementById('res-score').textContent  = state.correct;
+  document.getElementById('res-denom').textContent  = `/${state.totalQ}`;
+  document.getElementById('rank-name').textContent  = rank.name;
+  document.getElementById('rank-msg').textContent   = rank.msg;
+
+  const ml = document.getElementById('missed-list');
+  ml.innerHTML = '';
+  if (!state.missed.length) {
+    ml.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:.85rem">Geen fouten! Perfect.</div>';
+  } else {
+    const h3 = document.createElement('h3');
+    h3.textContent = `Gemist (${state.missed.length})`;
+    ml.appendChild(h3);
+    const unique = [...new Map(state.missed.map(v=>[v.p,v])).values()];
+    unique.forEach(v => {
+      const d = document.createElement('div'); d.className='missed-item';
+      const s = v.sup && v.sup!=='' && v.sup!=='-' ? ` · ${v.sup}` : '';
+      d.innerHTML=`<div class="m-verb">${v.p}</div><div class="m-forms">${v.pf}${s} · ${v.inf} — ${v.tr}</div>`;
+      ml.appendChild(d);
+    });
+  }
+  if (state.sessionTotal>0) {
+    const p = Math.round((state.sessionCorrect/state.sessionTotal)*100);
+    document.getElementById('home-progress-fill').style.width = p+'%';
+    document.getElementById('home-progress-label').textContent = `${state.sessionCorrect} / ${state.sessionTotal} correct (${p}%)`;
+    document.getElementById('home-streak').textContent = state.streak>0?`🔥 ${state.streak}`:'';
+  }
+}
+function retryMissed() {
+  if (!state.missed.length) { goHome(); return; }
+  const unique = [...new Map(state.missed.map(v=>[v.p,v])).values()];
+  state.queue = shuffle(unique.slice()); state.totalQ=state.queue.length;
+  state.qIdx=0; state.correct=0; state.missed=[]; state.answered=false;
+  if (state.mode==='woordenboek') { state.wbQueue=shuffle(ZINNEN_WB.slice()); state.wbIdx=0; }
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+function goHome() { showScreen('screen-home'); }
+
+// Enter-toets
+document.addEventListener('keydown', e => {
+  if (e.key==='Enter') {
+    const nx = document.getElementById('btn-next');
+    const sb = document.getElementById('btn-submit');
+    if (nx.style.display!=='none') nx.click();
+    else if (sb.style.display!=='none') sb.click();
+  }
+});
+</script>
+</body>
+</html>
 
