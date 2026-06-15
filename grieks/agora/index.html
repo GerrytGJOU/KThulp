@@ -178,9 +178,15 @@ nav button svg{width:22px;height:22px}
 .lv-btn .lv-name{font-size:18px;color:var(--gold);display:block;margin-bottom:4px}
 .lv-btn .lv-sub{font-size:13px;color:var(--muted)}
 .lv-btn .lv-pts{font-size:12px;color:var(--azure2);margin-top:6px}
+.music-fab{position:fixed;right:14px;top:14px;z-index:45;width:42px;height:42px;border-radius:50%;background:linear-gradient(180deg,var(--aegean3),var(--aegean2));border:1px solid var(--gold-dim);display:flex;align-items:center;justify-content:center;color:var(--gold);box-shadow:0 4px 12px var(--shadow);cursor:pointer}
+.music-fab svg{width:20px;height:20px}
+.music-fab.playing{color:var(--gold-bright);box-shadow:0 0 0 1px var(--gold-dim),0 0 14px rgba(212,175,55,.4)}
 </style>
 </head>
 <body>
+<button class="music-fab" id="musicFab" onclick="toggleMusic()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="musicIcon"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><path d="M3 3l18 18" stroke-width="2"/></svg>
+</button>
 <div class="wrap" id="app"></div>
 <div class="ov" id="overlay"><div class="ovbox" id="ovbox"></div></div>
 <div class="toast-wrap" id="toasts"></div>
@@ -1309,29 +1315,66 @@ const RANKS = [
   {gr:"Σοφός",nl:"Wijze",min:60000,color:"#f0cf6b"}
 ];
 
+/* ===== MEDAL SVG for achievements ===== */
+function medalSVG(type,size){
+  const s=size||64;
+  const G='<defs><radialGradient id="mg" cx="38%" cy="32%" r="75%"><stop offset="0%" stop-color="#c8e8f8"/><stop offset="45%" stop-color="#3a7bd5"/><stop offset="100%" stop-color="#1a3a6a"/></radialGradient><linearGradient id="mt" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e05a38"/><stop offset="100%" stop-color="#7a2010"/></linearGradient></defs>';
+  const ring='<circle cx="50" cy="50" r="46" fill="url(#mg)" stroke="#1a3a6a" stroke-width="2.5"/><circle cx="50" cy="50" r="40" fill="none" stroke="#3a7bd5" stroke-width="1" opacity=".6"/>';
+  const ICON={
+    owl:'<ellipse cx="50" cy="48" rx="16" ry="20" fill="#f0cf6b" stroke="#8a6010" stroke-width="2"/><circle cx="44" cy="44" r="7" fill="#1a1a1a"/><circle cx="56" cy="44" r="7" fill="#1a1a1a"/><circle cx="44" cy="44" r="4" fill="#f0cf6b"/><circle cx="56" cy="44" r="4" fill="#f0cf6b"/><circle cx="44" cy="44" r="2" fill="#111"/><circle cx="56" cy="44" r="2" fill="#111"/><path d="M47 52 L50 56 L53 52" fill="#d4af37" stroke="none"/><path d="M42 36 L50 32 L58 36" fill="#c09010" stroke="none"/>',
+    olive:'<path d="M50 72 L50 30" stroke="#5a7a20" stroke-width="3" fill="none"/><ellipse cx="38" cy="42" rx="9" ry="5" fill="#5a9a20" transform="rotate(-30 38 42)"/><ellipse cx="62" cy="42" rx="9" ry="5" fill="#5a9a20" transform="rotate(30 62 42)"/><ellipse cx="36" cy="56" rx="9" ry="5" fill="#4a8a18" transform="rotate(-20 36 56)"/><ellipse cx="64" cy="56" rx="9" ry="5" fill="#4a8a18" transform="rotate(20 64 56)"/><ellipse cx="42" cy="34" rx="8" ry="4" fill="#6aaa28" transform="rotate(-45 42 34)"/>',
+    lyre:'<path d="M35 70 L35 40 Q35 28 50 28 Q65 28 65 40 L65 70" fill="none" stroke="#c09010" stroke-width="4" stroke-linecap="round"/><line x1="35" y1="70" x2="65" y2="70" stroke="#c09010" stroke-width="4"/><line x1="42" y1="42" x2="42" y2="70" stroke="#8a6010" stroke-width="2"/><line x1="50" y1="38" x2="50" y2="70" stroke="#8a6010" stroke-width="2"/><line x1="58" y1="42" x2="58" y2="70" stroke="#8a6010" stroke-width="2"/>',
+    sun:'<circle cx="50" cy="50" r="16" fill="#f0cf6b" stroke="#c09010" stroke-width="2"/><g stroke="#f0cf6b" stroke-width="3" stroke-linecap="round"><line x1="50" y1="26" x2="50" y2="32"/><line x1="50" y1="68" x2="50" y2="74"/><line x1="26" y1="50" x2="32" y2="50"/><line x1="68" y1="50" x2="74" y2="50"/><line x1="33" y1="33" x2="37" y2="37"/><line x1="63" y1="63" x2="67" y2="67"/><line x1="67" y1="33" x2="63" y2="37"/><line x1="33" y1="67" x2="37" y2="63"/></g>',
+    flame:'<path d="M50 26c6 8 14 14 14 26a14 14 0 01-28 0c0-7 3-11 7-16 1 5 3 6 5 2 1-6-3-9 2-12z" fill="url(#mt)" stroke="#5a1a08" stroke-width="1.5"/><path d="M50 46c3 4 6 7 6 12a6 6 0 01-12 0c0-4 3-6 6-12z" fill="#f6dd8e"/>',
+    scroll:'<rect x="34" y="32" width="32" height="36" rx="3" fill="#f0e8d0" stroke="#8a6010" stroke-width="2"/><path d="M38 42h24M38 50h24M38 58h16" stroke="#8a6010" stroke-width="1.5"/><rect x="30" y="30" width="40" height="6" rx="3" fill="#7d1a10"/><rect x="30" y="64" width="40" height="6" rx="3" fill="#7d1a10"/>',
+    lightning:'<path d="M56 28 L40 52 L50 52 L44 72 L64 46 L52 46 Z" fill="#f0cf6b" stroke="#8a6010" stroke-width="1.5"/>',
+    trireme:'<path d="M28 58 Q50 50 72 58 L68 64 L32 64 Z" fill="#c09010" stroke="#8a6010" stroke-width="2"/><rect x="46" y="30" width="4" height="28" rx="1" fill="#8a6010"/><path d="M50 30 L72 46 L50 46 Z" fill="#d4af37" stroke="#8a6010" stroke-width="1.5"/><line x1="28" y1="56" x2="24" y2="62" stroke="#8a6010" stroke-width="2"/><line x1="72" y1="56" x2="76" y2="62" stroke="#8a6010" stroke-width="2"/>',
+    coin:'<circle cx="50" cy="50" r="22" fill="#f6dd8e" stroke="#8a6010" stroke-width="2.5"/><circle cx="50" cy="50" r="17" fill="none" stroke="#9c7c1f" stroke-width="1"/><text x="50" y="57" font-size="20" fill="#7d3a10" text-anchor="middle" font-family="Georgia,serif" font-weight="700">δ</text>',
+    wreath:'<path d="M50 30 Q36 34 30 56" fill="none" stroke="#4a7d1a" stroke-width="4" stroke-linecap="round"/><path d="M50 30 Q64 34 70 56" fill="none" stroke="#4a7d1a" stroke-width="4" stroke-linecap="round"/><g fill="#5a9a22"><ellipse cx="33" cy="44" rx="4" ry="2.5" transform="rotate(-35 33 44)"/><ellipse cx="31" cy="56" rx="4" ry="2.5" transform="rotate(-15 31 56)"/><ellipse cx="67" cy="44" rx="4" ry="2.5" transform="rotate(35 67 44)"/><ellipse cx="69" cy="56" rx="4" ry="2.5" transform="rotate(15 69 56)"/></g><circle cx="50" cy="28" r="5" fill="#d4af37"/>',
+    sundial:'<circle cx="50" cy="56" r="20" fill="#f0e8d0" stroke="#8a6010" stroke-width="2"/><path d="M50 56 L60 44" stroke="#c0472a" stroke-width="3" stroke-linecap="round"/><g stroke="#8a6010" stroke-width="1.5"><line x1="50" y1="38" x2="50" y2="42"/><line x1="64" y1="42" x2="61" y2="45"/><line x1="68" y1="56" x2="64" y2="56"/><line x1="50" y1="74" x2="50" y2="70"/><line x1="32" y1="56" x2="36" y2="56"/><line x1="36" y1="42" x2="39" y2="45"/></g>',
+    shield:'<path d="M50 26 Q68 30 68 30 L68 52 Q68 66 50 74 Q32 66 32 52 L32 30 Q32 30 50 26Z" fill="url(#mt)" stroke="#8a6010" stroke-width="2.5"/><line x1="50" y1="36" x2="50" y2="66" stroke="#f0cf6b" stroke-width="2"/><line x1="38" y1="50" x2="62" y2="50" stroke="#f0cf6b" stroke-width="2"/>',
+    helmet:'<path d="M30 62 Q30 40 50 36 Q70 40 70 62 L66 62 L62 52 L58 62 L54 62 L50 52 L46 62 L42 62 L38 52 L34 62 Z" fill="#4a6a9a" stroke="#1a3a6a" stroke-width="2"/><path d="M46 24 Q50 20 54 24 L56 34 L44 34 Z" fill="#c0472a" stroke="#8a2010" stroke-width="1.5"/><path d="M32 62 L68 62 L68 65 L32 65 Z" fill="#2a4a7a"/>',
+    star:'<polygon points="50,26 56,42 74,42 60,52 66,68 50,58 34,68 40,52 26,42 44,42" fill="#f0cf6b" stroke="#c09010" stroke-width="1.5"/>',
+    crown:'<path d="M28 64 L28 42 L38 52 L50 34 L62 52 L72 42 L72 64 Z" fill="url(#mt)" stroke="#8a6010" stroke-width="2"/><rect x="28" y="64" width="44" height="8" rx="2" fill="#9c7c1f"/><circle cx="38" cy="54" r="3" fill="#f0cf6b"/><circle cx="50" cy="50" r="4" fill="#f6e070"/><circle cx="62" cy="54" r="3" fill="#f0cf6b"/>',
+  };
+  return '<svg viewBox="0 0 100 100" width="'+s+'" height="'+s+'" xmlns="http://www.w3.org/2000/svg">'+G+ring+(ICON[type]||ICON.star)+'</svg>';
+}
+
 const ACHIEVEMENTS = [
-  {id:"first_step",gr:"Πρῶτον Βῆμα",nl:"Eerste stap",desc:"Beantwoord je eerste vraag goed.",icon:"🏛️"},
-  {id:"nike",gr:"Νίκη",nl:"Overwinning",desc:"Voltooi je eerste ronde.",icon:"🏆"},
-  {id:"athlete",gr:"Ἀθλητής",nl:"Atleet",desc:"Perfecte ronde zonder fouten.",icon:"🏅"},
-  {id:"hemera",gr:"Ἡμέρα",nl:"Dag",desc:"Oefen 3 dagen achter elkaar.",icon:"☀️"},
-  {id:"hebdomas",gr:"Ἑβδομάς",nl:"Week",desc:"Oefen 7 dagen achter elkaar.",icon:"🌙"},
-  {id:"olympias",gr:"Ὀλυμπιάς",nl:"Olympiade",desc:"Oefen 30 dagen achter elkaar.",icon:"🔥"},
-  {id:"pentathlon",gr:"Πεντάθλον",nl:"Vijfkamp",desc:"Speel alle 5 onderdelen.",icon:"⚡"},
-  {id:"tachytes",gr:"Ταχύτης",nl:"Snelheid",desc:"Haal een highscore van 20+ in Tachys.",icon:"💨"},
-  {id:"polygnoster",gr:"Πολύγνωστος",nl:"Veelweter",desc:"Beantwoord 500 woorden correct.",icon:"📚"},
-  {id:"sophistes",gr:"Σοφιστής",nl:"Sofist",desc:"Beantwoord 1000 woorden correct.",icon:"🎓"},
-  {id:"hoplites",gr:"Ὁπλίτης Β'",nl:"Schilddrager",desc:"Bereik rang Ὁπλίτης.",icon:"🛡️"},
-  {id:"archon",gr:"Ἄρχων Β'",nl:"Magistraat",desc:"Bereik rang Ἄρχων.",icon:"⚖️"},
-  {id:"sophos",gr:"Σοφός Β'",nl:"Wijze",desc:"Bereik de hoogste rang Σοφός.",icon:"🦉"},
-  {id:"rich",gr:"Πλούσιος",nl:"Rijkaard",desc:"Verzamel 1000 drachmen.",icon:"💰"},
-  {id:"collector",gr:"Συλλέκτης",nl:"Verzamelaar",desc:"Koop 5 items in de Agora.",icon:"🏺"},
-  {id:"verb_master",gr:"Ῥηματικός",nl:"Werkwoordenkenner",desc:"Voltooi 10 werkwoordsronden.",icon:"✍️"},
-  {id:"sent_master",gr:"Λογογράφος",nl:"Zinnenvertaler",desc:"Vertaal 20 zinnen.",icon:"📜"},
-  {id:"streak_typer",gr:"Γραφεύς Β'",nl:"Schrijver",desc:"Typ 20 woorden achter elkaar correct.",icon:"🖊️"},
-  {id:"flashcard_pro",gr:"Μνήμων",nl:"Geheugenmeester",desc:"Doorloop 100 flashcards.",icon:"🃏"},
-  {id:"import_user",gr:"Διδάσκαλος",nl:"Eigen lijstmaker",desc:"Importeer een eigen woordenlijst.",icon:"📂"},
-  {id:"pairs_quick",gr:"Ταχύπους",nl:"Snelle paarder",desc:"Voltooi Sympleko in minder dan 30 seconden.",icon:"🎯"},
-  {id:"all_bands",gr:"Πολυμαθής",nl:"Belezenheid",desc:"Oefen alle frequentiebanden.",icon:"📖"}
+  {id:"first_step",gr:"Πρῶτον Βῆμα",nl:"Eerste stap",desc:"Beantwoord je eerste vraag goed.",medal:"star"},
+  {id:"nike",gr:"Νίκη",nl:"Overwinning",desc:"Voltooi je eerste ronde.",medal:"wreath"},
+  {id:"athlete",gr:"Ἀθλητής",nl:"Atleet",desc:"Perfecte ronde zonder fouten.",medal:"olive"},
+  {id:"perfect5",gr:"Ἀπταίστως",nl:"Vijf keer perfect",desc:"Voltooi 5 ronden zonder fouten.",medal:"crown"},
+  {id:"hemera",gr:"Ἡμέρα",nl:"Dag",desc:"Oefen 3 dagen achter elkaar.",medal:"sun"},
+  {id:"hebdomas",gr:"Ἑβδομάς",nl:"Week",desc:"Oefen 7 dagen achter elkaar.",medal:"flame"},
+  {id:"deka",gr:"Δεκάς",nl:"Tien dagen",desc:"Oefen 14 dagen achter elkaar.",medal:"flame"},
+  {id:"olympias",gr:"Ὀλυμπιάς",nl:"Olympiade",desc:"Oefen 30 dagen achter elkaar.",medal:"wreath"},
+  {id:"perennis",gr:"Ἀΐδιος",nl:"Eeuwig",desc:"Oefen 60 dagen achter elkaar.",medal:"crown"},
+  {id:"correct50",gr:"Σπουδαῖος",nl:"Eerstejaars",desc:"Beantwoord 50 woorden correct.",medal:"star"},
+  {id:"polygnoster",gr:"Πολύγνωστος",nl:"Veelweter",desc:"Beantwoord 500 woorden correct.",medal:"scroll"},
+  {id:"sophistes",gr:"Σοφιστής",nl:"Sofist",desc:"Beantwoord 1000 woorden correct.",medal:"owl"},
+  {id:"eruditus",gr:"Πεπαιδευμένος",nl:"Geleerde",desc:"Beantwoord 2500 woorden correct.",medal:"lyre"},
+  {id:"sophosmax",gr:"Σοφώτατος",nl:"Allerwuste",desc:"Beantwoord 5000 woorden correct.",medal:"crown"},
+  {id:"daily5",gr:"Ἐπιμελής",nl:"Ijverig",desc:"Oefen 5 minuten op één dag.",medal:"sundial"},
+  {id:"daily15",gr:"Φιλόπονος",nl:"Hardwerkend",desc:"Oefen 15 minuten op één dag.",medal:"sundial"},
+  {id:"pentathlon",gr:"Πεντάθλον",nl:"Vijfkamp",desc:"Speel alle onderdelen minstens één keer.",medal:"star"},
+  {id:"tachytes",gr:"Ταχύτης",nl:"Snelheid",desc:"Haal een highscore van 20+ in Ταχύς.",medal:"lightning"},
+  {id:"hoplites",gr:"Ὁπλίτης",nl:"Schilddrager",desc:"Bereik rang Ὁπλίτης.",medal:"shield"},
+  {id:"archon",gr:"Ἄρχων",nl:"Magistraat",desc:"Bereik rang Ἄρχων.",medal:"helmet"},
+  {id:"sophos",gr:"Σοφός",nl:"Wijze",desc:"Bereik de hoogste rang Σοφός.",medal:"crown"},
+  {id:"verb_master",gr:"Ῥηματικός",nl:"Werkwoordenkenner",desc:"Beantwoord 20 werkwoordsvormen correct.",medal:"scroll"},
+  {id:"verb_expert",gr:"Γραμματικός",nl:"Grammaticus",desc:"Beantwoord 100 werkwoordsvormen correct.",medal:"lyre"},
+  {id:"explorer",gr:"Ἐρευνητής",nl:"Onderzoeker",desc:"Zoek 10 woordvormen op via de opzoekfunctie.",medal:"star"},
+  {id:"explorer2",gr:"Λεξικογράφος",nl:"Woordenboekschrijver",desc:"Zoek 50 woordvormen op.",medal:"scroll"},
+  {id:"sent_master",gr:"Λογογράφος",nl:"Zinnenvertaler",desc:"Vertaal 25 zinnen correct.",medal:"scroll"},
+  {id:"expert_sent",gr:"Ῥήτωρ",nl:"Redenaar",desc:"Vertaal een zin van het Σοφόν-niveau correct.",medal:"crown"},
+  {id:"rich",gr:"Πλούσιος",nl:"Rijkaard",desc:"Bezit 2000 drachmen tegelijk.",medal:"coin"},
+  {id:"collector",gr:"Συλλέκτης",nl:"Verzamelaar",desc:"Koop 3 items in de Agora.",medal:"coin"},
+  {id:"streak_typer",gr:"Γραφεύς",nl:"Schrijver",desc:"Typ 20 woorden achter elkaar correct in Γραφεύς.",medal:"scroll"},
+  {id:"flashcard_pro",gr:"Μνήμων",nl:"Geheugenmeester",desc:"Doorloop 100 flashcards.",medal:"star"},
+  {id:"import_user",gr:"Διδάσκαλος",nl:"Eigen lijstmaker",desc:"Importeer een eigen woordenlijst.",medal:"scroll"},
+  {id:"pairs_quick",gr:"Ταχύπους",nl:"Snelle paarder",desc:"Voltooi Συμπλέκω in minder dan 30 seconden.",medal:"lightning"},
+  {id:"all_bands",gr:"Πολυμαθής",nl:"Belezenheid",desc:"Oefen alle frequentiebanden.",medal:"lyre"}
 ];
 
 const SHOP = {
@@ -1343,10 +1386,10 @@ const SHOP = {
     {id:"gold",name:"Goudgeel",desc:"Stralend goud als de zon",price:300,preview:"#3a2800"}
   ],
   music:[
-    {id:"none",name:"Stilte",desc:"Geen muziek",price:0,icon:"🔇"},
+    {id:"none",name:"Stilte",desc:"Geen achtergrondmuziek",price:0,icon:"🔇"},
     {id:"lier",name:"Lier",desc:"Zachte liermelodieën",price:100,icon:"🎵"},
-    {id:"aulos",name:"Aulos",desc:"Dubbelfluitmuziek",price:150,icon:"🎶"},
-    {id:"kithara",name:"Kithara",desc:"Kithara-akkoorden",price:200,icon:"🎸"},
+    {id:"aulos",name:"Aulos",desc:"Attische dwarsfluit",price:150,icon:"🎶"},
+    {id:"kithara",name:"Kithara",desc:"Snaarinstrument-akkoorden",price:200,icon:"🎸"},
     {id:"drums",name:"Slagwerk",desc:"Ritmisch slagwerk",price:180,icon:"🥁"}
   ],
   shields:[
@@ -1377,11 +1420,13 @@ const FREQ_BANDS = [
 
 const DEF = {
   xp:0,denarii:0,streak:0,lastDay:"",longestStreak:0,
-  achievements:[],owned:["none"],theme:"none",music:"none",shield:"none",title:"none",
-  apiKey:"",lang:"nl",showTr:true,music_on:true,
+  achievements:[],owned:["none"],theme:"none",music_skin:"none",shield:"none",title:"none",
+  apiKey:"",lang:"nl",showTr:true,music:false,
   played:{},
-  totalCorrect:0,verbRounds:0,sentCount:0,fcCount:0,graphStreak:0,purchaseCount:0,allBands:{},
-  tachysHigh:0,pairsQuick:false,imported:[]
+  totalCorrect:0,verbCorrect:0,sentCorrect:0,expertDone:false,lookups:0,
+  fcCount:0,graphStreak:0,purchaseCount:0,allBands:{},perfectRounds:0,
+  tachysHigh:0,pairsQuick:false,imported:[],
+  todaySeconds:0,todayDay:null
 };
 let S = load();
 let CURRENT = "home";
@@ -1424,47 +1469,154 @@ function unlock(id){
 }
 function checkAchievements(){
   if((S.totalCorrect||0)>=1)unlock("first_step");
+  if((S.totalCorrect||0)>=50)unlock("correct50");
   if((S.totalCorrect||0)>=500)unlock("polygnoster");
   if((S.totalCorrect||0)>=1000)unlock("sophistes");
+  if((S.totalCorrect||0)>=2500)unlock("eruditus");
+  if((S.totalCorrect||0)>=5000)unlock("sophosmax");
   if((S.streak||0)>=3)unlock("hemera");
   if((S.streak||0)>=7)unlock("hebdomas");
+  if((S.streak||0)>=14)unlock("deka");
   if((S.streak||0)>=30)unlock("olympias");
+  if((S.streak||0)>=60)unlock("perennis");
+  if((S.todaySeconds||0)>=300)unlock("daily5");
+  if((S.todaySeconds||0)>=900)unlock("daily15");
   if((S.tachysHigh||0)>=20)unlock("tachytes");
-  if((S.denarii||0)>=1000||(S.xp||0)>=1000)unlock("rich");
-  if((S.purchaseCount||0)>=5)unlock("collector");
-  if((S.verbRounds||0)>=10)unlock("verb_master");
-  if((S.sentCount||0)>=20)unlock("sent_master");
+  if((S.denarii||0)>=2000)unlock("rich");
+  if((S.purchaseCount||0)>=3)unlock("collector");
+  if((S.verbCorrect||0)>=20)unlock("verb_master");
+  if((S.verbCorrect||0)>=100)unlock("verb_expert");
+  if((S.lookups||0)>=10)unlock("explorer");
+  if((S.lookups||0)>=50)unlock("explorer2");
+  if((S.sentCorrect||0)>=25)unlock("sent_master");
+  if(S.expertDone)unlock("expert_sent");
   if((S.fcCount||0)>=100)unlock("flashcard_pro");
   if((S.graphStreak||0)>=20)unlock("streak_typer");
   if(S.imported&&S.imported.length>0)unlock("import_user");
   if(S.pairsQuick)unlock("pairs_quick");
+  if((S.perfectRounds||0)>=1)unlock("athlete");
+  if((S.perfectRounds||0)>=5)unlock("perfect5");
   if(rankFor(S.xp).min>=700)unlock("hoplites");
   if(rankFor(S.xp).min>=6000)unlock("archon");
   if(rankFor(S.xp).min>=60000)unlock("sophos");
   if(S.allBands&&Object.keys(S.allBands).length>=4)unlock("all_bands");
   if(Object.keys(S.played||{}).length>=5)unlock("pentathlon");
 }
+/* Time-on-task tracking (like Ludus) */
+setInterval(()=>{
+  const d=todayStr();
+  if(S.todayDay!==d){S.todayDay=d;S.todaySeconds=0;}
+  if(document.visibilityState==="visible"){S.todaySeconds=(S.todaySeconds||0)+5;save();checkAchievements();}
+},5000);
 function markPlayed(k){if(!S.played)S.played={};if(!S.played[k]){S.played[k]=true;save();checkAchievements();}}
 function rankFor(pts){let r=RANKS[0];for(const x of RANKS)if(pts>=x.min)r=x;return r;}
 function nextRank(pts){for(const x of RANKS)if(pts<x.min)return x;return null;}
 function shopItem(cat,id){return(SHOP[cat]||[]).find(x=>x.id===id);}
 function owns(id){return(S.owned||[]).includes(id)||id==="none";}
 
-let _synth=null;
+let _sfxSynth=null;
+let musicParts=[];let musicSynths=[];let audioReady=false;
+async function ensureAudio(){
+  if(audioReady)return;
+  if(typeof Tone==="undefined")return;
+  try{await Tone.start();audioReady=true;}catch(e){}
+}
+function disposeMusic(){
+  musicParts.forEach(p=>{try{p.stop();p.dispose();}catch(e){}});
+  musicSynths.forEach(s=>{try{s.dispose();}catch(e){}});
+  musicParts=[];musicSynths=[];
+}
+function buildMusic(){
+  if(typeof Tone==="undefined"||musicParts.length)return;
+  const skin=S.music_skin||"none";if(skin==="none")return;
+  const reverb=new Tone.Reverb({decay:4,wet:.3}).toDestination();
+  const vol=new Tone.Volume(-14).connect(reverb);
+  if(skin==="lier"){
+    const lyre=new Tone.PluckSynth({volume:-8,attackNoise:1,dampening:3500,resonance:.9}).connect(vol);
+    const notes=["A3","C4","E4","A4","E4","C4","D4","F4","A4","D5","A4","F4"];
+    let i=0;const seq=new Tone.Loop(time=>{lyre.triggerAttackRelease(notes[i%notes.length],"8n",time);i++;},"4n");
+    const droneS=new Tone.AMSynth({volume:-22,envelope:{attack:3,release:4}}).connect(vol);
+    const drone=new Tone.Loop(time=>{droneS.triggerAttackRelease("A2","2m",time);},"2m");
+    Tone.Transport.bpm.value=72;drone.start(0);seq.start("1m");
+    musicParts=[seq,drone];musicSynths=[lyre,droneS,reverb,vol];
+  } else if(skin==="aulos"){
+    const flute=new Tone.MonoSynth({volume:-12,oscillator:{type:"triangle"},envelope:{attack:.12,decay:.2,sustain:.7,release:.5},filter:{type:"lowpass",Q:1},filterEnvelope:{attack:.1,baseFrequency:600,octaves:2}}).connect(vol);
+    const motif=[["A4","4n"],["B4","8n"],["C5","4n"],["B4","8n"],["A4","4n"],["E4","2n"],["G4","4n"],["A4","8n"],["B4","4n"],["A4","2n"],[null,"4n"]];
+    let i=0;const seq=new Tone.Loop(time=>{const[n,d]=motif[i%motif.length];i++;if(n)flute.triggerAttackRelease(n,d,time);},"4n");
+    const padS=new Tone.PolySynth(Tone.Synth,{volume:-26,envelope:{attack:2,release:3}}).connect(vol);
+    const pad=new Tone.Loop(time=>{padS.triggerAttackRelease(["A2","E3"],"2m",time);},"2m");
+    Tone.Transport.bpm.value=66;pad.start(0);seq.start("2n");
+    musicParts=[seq,pad];musicSynths=[flute,padS,reverb,vol];
+  } else if(skin==="kithara"){
+    const kit=new Tone.PluckSynth({volume:-6,attackNoise:.5,dampening:4000,resonance:.95}).connect(vol);
+    const chord=[["E3","B3","E4"],["A3","E4","A4"],["D3","A3","D4"],["G3","D4","G4"]];
+    let i=0;const seq=new Tone.Loop(time=>{chord[i%chord.length].forEach((n,j)=>kit.triggerAttackRelease(n,"4n",time+j*0.06));i++;},"2n");
+    Tone.Transport.bpm.value=80;seq.start(0);musicParts=[seq];musicSynths=[kit,reverb,vol];
+  } else if(skin==="drums"){
+    const kick=new Tone.MembraneSynth({volume:-4,octaves:5,pitchDecay:.06}).connect(vol);
+    const tom=new Tone.MembraneSynth({volume:-8,octaves:3,pitchDecay:.08}).connect(vol);
+    let b=0;const drum=new Tone.Loop(time=>{const s=b%8;if(s===0||s===3||s===6)kick.triggerAttackRelease("C2","8n",time);if(s===4)tom.triggerAttackRelease("G2","8n",time);b++;},"8n");
+    Tone.Transport.bpm.value=96;drum.start(0);musicParts=[drum];musicSynths=[kick,tom,reverb,vol];
+  }
+}
+async function rebuildMusic(){
+  if(typeof Tone==="undefined")return;
+  await ensureAudio();Tone.Transport.pause();disposeMusic();buildMusic();
+  if(S.music)Tone.Transport.start();
+}
+async function previewMusic(id){
+  await ensureAudio();
+  const prev=S.music_skin;S.music_skin=id;Tone.Transport.pause();disposeMusic();buildMusic();Tone.Transport.start();
+  setTimeout(()=>{if(!S.music){Tone.Transport.pause();disposeMusic();S.music_skin=prev;buildMusic();}},3500);
+}
+async function toggleMusic(){
+  S.music=!S.music;save();
+  if(S.music){await ensureAudio();buildMusic();if(typeof Tone!=="undefined")Tone.Transport.start();}
+  else{if(typeof Tone!=="undefined")Tone.Transport.pause();}
+  reflectMusicFab();
+  if(CURRENT==="settings")RENDER.settings();
+}
+function reflectMusicFab(){
+  const fab=document.getElementById("musicFab");if(!fab)return;
+  fab.classList.toggle("playing",!!S.music);
+  document.getElementById("musicIcon").innerHTML=S.music
+    ?'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>'
+    :'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><path d="M3 3l18 18" stroke-width="2"/>';
+}
+document.addEventListener("pointerdown",function once(){ensureAudio();document.removeEventListener("pointerdown",once);},{once:true});
+
 function playNote(freq,type,vol){
-  if(!S.music_on)return;
+  if(!S.music_on&&!audioReady)return;
   if(typeof Tone==="undefined")return;
   try{
-    if(!_synth){_synth=new Tone.Synth({oscillator:{type:"triangle"},envelope:{attack:0.02,decay:0.1,sustain:0.2,release:0.3}}).toDestination();}
+    if(!_sfxSynth){_sfxSynth=new Tone.Synth({volume:-10,oscillator:{type:"triangle"},envelope:{attack:.005,decay:.15,sustain:0,release:.1}}).toDestination();}
     if(Tone.context.state!=="running")Tone.start();
-    _synth.volume.value=Tone.gainToDb(vol||0.18);
-    _synth.oscillator.type=type||"triangle";
-    _synth.triggerAttackRelease(freq,"8n");
+    const now=Tone.now();
+    if(freq)_sfxSynth.triggerAttackRelease(freq,"8n",now);
   }catch(e){}
 }
-function playCorrect(){playNote(523.25,"triangle",.2);setTimeout(()=>playNote(659.25,"triangle",.2),120);}
-function playWrong(){playNote(196,"sawtooth",.15);}
-function playFanfare(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>playNote(f,"triangle",.2),i*120));}
+function playCorrect(){
+  if(typeof Tone==="undefined")return;
+  try{
+    if(!_sfxSynth){_sfxSynth=new Tone.Synth({volume:-10,oscillator:{type:"triangle"},envelope:{attack:.005,decay:.15,sustain:0,release:.1}}).toDestination();}
+    const now=Tone.now();_sfxSynth.triggerAttackRelease("C5",.09,now);_sfxSynth.triggerAttackRelease("G5",.12,now+.09);
+  }catch(e){}
+}
+function playWrong(){
+  if(typeof Tone==="undefined")return;
+  try{
+    if(!_sfxSynth){_sfxSynth=new Tone.Synth({volume:-10,oscillator:{type:"triangle"},envelope:{attack:.005,decay:.15,sustain:0,release:.1}}).toDestination();}
+    _sfxSynth.triggerAttackRelease("A3",.18,Tone.now());
+  }catch(e){}
+}
+function playFanfare(){
+  if(typeof Tone==="undefined")return;
+  try{
+    if(!_sfxSynth){_sfxSynth=new Tone.Synth({volume:-10,oscillator:{type:"triangle"},envelope:{attack:.005,decay:.15,sustain:0,release:.1}}).toDestination();}
+    const now=Tone.now();
+    [["C5",.1],["E5",.1],["G5",.1],["C6",.22]].forEach(([n,d],i)=>_sfxSynth.triggerAttackRelease(n,d,now+i*.12));
+  }catch(e){}
+}
 
 function applyTheme(id){
   const themes={
@@ -1611,11 +1763,19 @@ RENDER.home=function(){
   '<div class="nameen">'+r.nl+'</div><div class="progbar"><i style="width:'+pct+'%"></i></div>'+
   '<div class="progtxt">'+S.xp+' XP'+(nr?' · nog '+(nr.min-S.xp)+' tot '+nr.gr:'')+'</div></div>'+
   '<div class="meander"></div>'+
+  '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">'+
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--azure2)" stroke-width="2"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M12 8v4l3 3"/></svg>'+
+  '<span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--azure2)">Online — Gemini AI vereist</span></div>'+
   '<div class="tiles">'+
   '<button class="tile wide" onclick="go(\'setpick\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><h3>Woordenschat</h3><p>Meerkeuze en typen met AI-controle</p></button>'+
   '<button class="tile" onclick="go(\'verbquiz\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><h3>Werkwoorden</h3><p>Vervoegde vormen oefenen</p></button>'+
   '<button class="tile" onclick="go(\'sentlevel\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h3>Zinnen vertalen</h3><p>4 niveaus, AI-beoordeling</p></button>'+
   '<button class="tile" onclick="go(\'lookup\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div><h3>Vormen opzoeken</h3><p>Paradigma\'s via AI</p></button>'+
+  '</div>'+
+  '<div style="display:flex;align-items:center;gap:10px;margin:16px 0 10px">'+
+  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-bright)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>'+
+  '<span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--green-bright)">Offline — werkt altijd, ook zonder internet</span></div>'+
+  '<div class="tiles">'+
   '<button class="tile" onclick="go(\'flashcards\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><h3>Φλάσκαρτα</h3><p>Flashcards — offline</p></button>'+
   '<button class="tile" onclick="go(\'tachys\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div><h3>Ταχύς</h3><p>60 seconden snelmatch</p></button>'+
   '<button class="tile" onclick="go(\'grapheus\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><h3>Γραφεύς</h3><p>Typ de vertaling — offline</p></button>'+
@@ -1630,10 +1790,17 @@ RENDER.home=function(){
 RENDER.achievements=function(){
   const app=document.getElementById("app");
   const unlocked=S.achievements||[];
-  app.innerHTML=scrhead("Τιμαί — Eerbewijzen")+'<div class="ach-grid">'+
+  app.innerHTML=scrhead("Τιμαί — Eerbewijzen")+
+  '<p style="color:var(--muted);font-size:13px;margin-bottom:14px">'+unlocked.length+'/'+ACHIEVEMENTS.length+' ontgrendeld</p>'+
+  '<div class="ach-grid">'+
   ACHIEVEMENTS.map(a=>{
     const u=unlocked.includes(a.id);
-    return '<div class="ach '+(u?"unlocked":"locked")+'"><div class="icon">'+a.icon+'</div><h4>'+a.gr+'</h4><p>'+(u?a.desc:a.nl)+'</p></div>';
+    return '<div class="ach '+(u?"unlocked":"locked")+'">'
+      +'<div style="width:64px;height:64px;margin:0 auto 8px">'+medalSVG(a.medal||"star",64)+'</div>'
+      +'<h4>'+a.gr+'</h4>'
+      +'<p style="font-size:11px;color:var(--muted);margin-top:2px;font-style:italic">'+a.nl+'</p>'
+      +(u?'<p style="font-size:12px;color:var(--cream2);margin-top:4px">'+a.desc+'</p>':'<p style="font-size:12px;color:var(--muted);margin-top:4px">'+a.desc+'</p>')
+      +'</div>';
   }).join("")+'</div>';
 };
 
@@ -1648,9 +1815,10 @@ function setShopTab(id){SHOPTAB=id;document.getElementById("shopItems").innerHTM
 function shopItemsHTML(){
   return(SHOP[SHOPTAB]||[]).map(it=>{
     const o=owns(it.id);
-    const eq=(SHOPTAB==="themes"&&S.theme===it.id)||(SHOPTAB==="music"&&S.music===it.id)||(SHOPTAB==="shields"&&S.shield===it.id)||(SHOPTAB==="titles"&&S.title===it.id);
+    const eq=(SHOPTAB==="themes"&&S.theme===it.id)||(SHOPTAB==="music"&&S.music_skin===it.id)||(SHOPTAB==="shields"&&S.shield===it.id)||(SHOPTAB==="titles"&&S.title===it.id);
     let visual=SHOPTAB==="themes"?'<div style="width:48px;height:48px;border-radius:10px;background:'+it.preview+';border:2px solid var(--gold-dim)"></div>':'<div class="shop-visual">'+(it.icon||"🔮")+'</div>';
-    const btn=o?(eq?'<button class="btn btn-ghost" disabled>Uitgerust</button>':'<button class="btn btn-blue" onclick="equipItem(\''+SHOPTAB+'\',\''+it.id+'\')">Uitrusten</button>'):
+    const previewBtn=SHOPTAB==="music"&&it.id!=="none"?'<button class="btn btn-ghost" onclick="previewMusic(\''+it.id+'\')" style="padding:6px 12px;font-size:12px;margin-left:6px">▶</button>':"";
+    const btn=o?(eq?'<button class="btn btn-ghost" disabled>Uitgerust</button>'+previewBtn:'<button class="btn btn-blue" onclick="equipItem(\''+SHOPTAB+'\',\''+it.id+'\')">Uitrusten</button>'+previewBtn):
       (it.price===0?'<button class="btn btn-ghost" disabled>Gratis</button>':'<button class="btn btn-gold" onclick="buyItem(\''+SHOPTAB+'\',\''+it.id+'\')">'+(it.price)+' δρ.</button>');
     return '<div class="shop-item">'+visual+'<div class="shop-info"><h4>'+(it.name||it.gr||"")+'</h4><p>'+(it.desc||"")+'</p></div>'+btn+'</div>';
   }).join("");
@@ -1665,7 +1833,7 @@ function buyItem(cat,id){
 function equipItem(cat,id,silent){
   if(!owns(id)){toast("Eerst kopen!");return;}
   if(cat==="themes"){S.theme=id;applyTheme(id);}
-  else if(cat==="music")S.music=id;
+  else if(cat==="music"){S.music_skin=id;rebuildMusic();}
   else if(cat==="shields")S.shield=id;
   else if(cat==="titles")S.title=id;
   save();if(!silent)toast("Uitgerust!");RENDER.shop();
@@ -1760,7 +1928,7 @@ RENDER.settings=function(){
   '<div class="panel"><div class="row"><label>Gemini API-sleutel</label></div><input class="inp" id="keyInp" type="password" placeholder="Plak je sleutel hier…" value="'+(S.apiKey||"")+'"><button class="btn btn-primary" onclick="saveKey()" style="margin-top:10px">Opslaan</button></div>'+
   '<div class="panel">'+
   '<div class="row"><label>Transliteratie tonen</label><button class="btn '+(S.showTr?"btn-primary":"btn-ghost")+'" onclick="S.showTr=!S.showTr;save();RENDER.settings()">'+(S.showTr?"Aan":"Uit")+'</button></div>'+
-  '<div class="row"><label>Muziek</label><button class="btn '+(S.music_on?"btn-primary":"btn-ghost")+'" onclick="S.music_on=!S.music_on;save();RENDER.settings()">'+(S.music_on?"Aan":"Uit")+'</button></div>'+
+  '<div class="row"><label>Achtergrondmuziek</label><button class="btn '+(S.music?"btn-primary":"btn-ghost")+'" onclick="toggleMusic()">'+(S.music?"Aan":"Uit")+'</button></div>'+
   '</div>'+
   '<div class="panel"><h3 style="color:var(--gold);margin-bottom:10px">Frequentieband</h3><div style="display:flex;flex-wrap:wrap;gap:8px">'+
   FREQ_BANDS.map(b=>'<button class="chip '+((S.curBand||"all")===b.id?"active":"")+'" onclick="S.curBand=\''+b.id+'\';save();RENDER.settings()">'+b.nl+'</button>').join("")+'</div></div>'+
@@ -1769,8 +1937,8 @@ RENDER.settings=function(){
 function saveKey(){const v=document.getElementById("keyInp").value.trim();S.apiKey=v;save();toast("Sleutel opgeslagen!");}
 function resetAll(){
   if(!confirm("Weet je zeker dat je alle voortgang wilt wissen?"))return;
-  const kk=S.apiKey,kl=S.lang,km=S.music_on;
-  S={...DEF,apiKey:kk,lang:kl,music_on:km};save();go("home");
+  const kk=S.apiKey,kl=S.lang,km=S.music;
+  S={...DEF,apiKey:kk,lang:kl,music:km};save();go("home");
 }
 
 function toggleHelp(id){
@@ -1878,7 +2046,7 @@ function typeResult(ok,w,fb){
 function skipType(){QV.i++;QV.step="mc";drawVocabStep();}
 function nextVocab(){if(QV.lives<=0){finishVocab();return;}QV.i++;QV.step="mc";drawVocabStep();window.scrollTo(0,0);}
 function finishVocab(){
-  const perfect=QV.lives===3;if(perfect)unlock("athlete");unlock("nike");playFanfare();
+  const perfect=QV.lives===3;if(perfect){S.perfectRounds=(S.perfectRounds||0)+1;}unlock("nike");playFanfare();
   document.getElementById("app").innerHTML=scrhead("Ronde afgelopen!")+
   '<div class="panel" style="text-align:center"><div style="font-size:60px;margin-bottom:12px">'+(perfect?"🏆":"🏛️")+'</div><h2 style="color:var(--gold);margin-bottom:8px">'+(perfect?"Τέλεια!":"Καλῶς!")+'</h2><p style="font-size:18px;color:var(--cream)">'+(QV.correct||0)+' woorden correct</p><p style="color:var(--muted);margin:8px 0">+'+(QV.score||0)+' drachmen</p><div style="margin-top:20px;display:flex;flex-direction:column;gap:10px"><button class="btn btn-primary" onclick="startVocab(\''+(QV.which||"main")+'\')">Opnieuw</button><button class="btn btn-ghost" onclick="go(\'home\')">Terug</button></div></div>';
 }
@@ -1915,13 +2083,13 @@ async function submitVerb(){
   document.getElementById("vbtns").innerHTML='<div style="text-align:center;color:var(--muted)">AI controleert…</div>';
   const res=await callAI("Je bent een Griekse grammaticadocent. Geef ALLEEN JSON: {\"correct\":true/false,\"feedback\":\"...\"}","Werkwoordsvorm: \""+q.form+"\" van \""+q.word+"\". Correct antwoord: \""+q.answer+"\". Leerlingantwoord: \""+ans+"\". Is dit correct?");
   QW.answered=true;const j=parseJSON(res);const ok=j&&j.correct;
-  if(ok){addPoints(12);QW.score=(QW.score||0)+12;playCorrect();}else playWrong();
+  if(ok){addPoints(12);QW.score=(QW.score||0)+12;S.verbCorrect=(S.verbCorrect||0)+1;playCorrect();}else playWrong();
   document.getElementById("vfb").innerHTML='<div class="feedback '+(ok?"ok":"err")+'">'+(ok?"✓":"✗")+" "+(j&&j.feedback||"")+'<br><small>Correct: <b>'+q.answer+'</b></small></div>';
   document.getElementById("vbtns").innerHTML='<button class="btn btn-primary" onclick="nextVerb()" style="width:100%">Volgende</button>';
 }
 function nextVerb(){QW.i++;drawVerbQuestion();window.scrollTo(0,0);}
 function finishVerb(){
-  S.verbRounds=(S.verbRounds||0)+1;save();checkAchievements();playFanfare();
+  save();checkAchievements();playFanfare();
   document.getElementById("app").innerHTML=scrhead("Ronde afgelopen!")+
   '<div class="panel" style="text-align:center"><div style="font-size:60px;margin-bottom:12px">✍️</div><h2 style="color:var(--gold);margin-bottom:8px">Εὖγε!</h2><p style="color:var(--cream)">+'+(QW.score||0)+' drachmen</p><div style="margin-top:20px;display:flex;flex-direction:column;gap:10px"><button class="btn btn-primary" onclick="RENDER.verbquiz()">Opnieuw</button><button class="btn btn-ghost" onclick="go(\'home\')">Terug</button></div></div>';
 }
@@ -1957,7 +2125,8 @@ async function submitSent(){
   const res=await callAI("Je bent een Griekse docent. Geef ALLEEN JSON: {\"correct\":true/false,\"feedback\":\"...\",\"model\":\"...\"}","Griekse zin: \""+s.gr+"\"\nModelvertaling: \""+s.nl+"\"\nLeerlingvertaling: \""+ans+"\"\nIs de leerling correct (betekenis en grammatica)?");
   QS.answered=true;const j=parseJSON(res);const ok=j&&j.correct;
   addPoints(ok?QS.pts.ok:QS.pts.fail);QS.score=(QS.score||0)+(ok?QS.pts.ok:QS.pts.fail);
-  S.sentCount=(S.sentCount||0)+1;save();checkAchievements();if(ok)playCorrect();else playWrong();
+  if(ok){S.sentCorrect=(S.sentCorrect||0)+1;if(QS.level==="expert")S.expertDone=true;}
+  save();checkAchievements();if(ok)playCorrect();else playWrong();
   document.getElementById("sfb").innerHTML='<div class="feedback '+(ok?"ok":"err")+'">'+(ok?"✓ Goed!":"✗ Niet correct.")+" "+(j&&j.feedback||"")+'</div><div class="feedback hint">Modelvertaling: <em>'+(j&&j.model||s.nl)+'</em></div>';
   document.getElementById("sbtns").innerHTML='<button class="btn btn-primary" onclick="nextSent()" style="width:100%">Volgende</button>';
 }
@@ -1977,6 +2146,7 @@ function localLookup(q){
   const res=document.getElementById("lookResult");if(!q.trim()){res.innerHTML="";return;}
   const w=VOCAB.find(v=>v.gr===q.trim()||v.tr.toLowerCase()===q.trim().toLowerCase());
   if(!w){res.innerHTML='<div class="panel" style="color:var(--muted)">Niet gevonden in de lijst.</div>';return;}
+  S.lookups=(S.lookups||0)+1;save();checkAchievements();
   res.innerHTML='<div class="panel"><div style="font-size:30px;color:var(--marble);margin-bottom:4px">'+w.gr+'</div>'+(w.tr?'<div style="color:var(--muted);font-style:italic;margin-bottom:8px">'+w.tr+'</div>':'')+'<div style="color:var(--azure2);font-size:13px;margin-bottom:8px">'+(w.pos||"")+(w.ge?" · "+w.ge:"")+'</div><div style="color:var(--cream2);margin-bottom:10px">'+cleanNL(w.nl)+'</div>'+(w.ex?'<div style="color:var(--muted);font-size:13px;font-style:italic">'+w.ex+'</div>':'')+(w.vw?'<div style="color:var(--gold-dim);font-size:13px;margin-top:8px">Verwant: '+w.vw+'</div>':'')+(getKey()?'<div class="meander"></div><button class="btn btn-blue" onclick="aiParadigm(\''+w.gr.replace(/'/g,"\\'").replace(/\\/g,"\\\\")+"','" +w.tr.replace(/'/g,"\\'")+'\',\''+w.pos+'\',\''+w.ex.replace(/\n/g,", ").replace(/'/g,"\\'")+'\')  " style="width:100%">Paradigma via AI</button>':"")+
   '<div id="paradigm_res"></div></div>';
 }
@@ -2113,6 +2283,8 @@ function finishPairs(t){
 }
 
 applyTheme(S.theme||"none");
+reflectMusicFab();
+if(S.todayDay!==todayStr()){S.todayDay=todayStr();S.todaySeconds=0;save();}
 go("home");
 
 </script>
