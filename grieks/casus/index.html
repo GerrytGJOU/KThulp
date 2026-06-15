@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<!-- Πτώσεις Trainer v1.0 -->
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Πτώσεις">
+<meta name="theme-color" content="#0d1f3c">
+<title>ΠΤΩΣΕΙΣ TRAINER</title>
+<style>
+:root{
+  --aegean:#0d1f3c;--aegean2:#152a50;--aegean3:#1c3566;--aegean4:#24427d;
+  --marble:#f5f0e8;--marble2:#ede4d4;
+  --terracotta:#c0472a;--terra2:#a33820;--terra3:#e05a38;
+  --gold:#d4af37;--gold-bright:#f0cf6b;--gold-dim:#9c7c1f;
+  --azure:#3a7bd5;--azure2:#5a9be8;--azure3:#2560b8;
+  --cream:#f0e8d8;--cream2:#ddd0b8;
+  --muted:#b0a888;--muted2:#8a806a;
+  --shadow:rgba(0,0,0,.5);
+  --green:#3a7d4a;--green-bright:#5cb872;
+  --red:#c0472a;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  font-family:'Palatino Linotype',Palatino,Georgia,'Times New Roman',serif;
+  background:radial-gradient(ellipse at 50% -10%,rgba(58,123,213,.15),transparent 55%),
+    radial-gradient(ellipse at 80% 100%,rgba(192,71,42,.12),transparent 50%),
+    linear-gradient(160deg,#080f1e 0%,#0d1928 45%,#091524 100%);
+  background-attachment:fixed;
+  color:var(--cream);
+  min-height:100%;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 0h10v10H0zM10 10h10v10H10zM20 0h10v10H20zM30 10h10v10H30zM0 20h10v10H0zM30 30h10v10H30z' fill='%23d4af37'/%3E%3C/svg%3E");
+}
+.wrap{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:14px 14px 80px;min-height:100vh}
+h1,h2,h3{font-family:'Optima','Palatino Linotype',Palatino,Georgia,serif;letter-spacing:.04em}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font-family:inherit}
+.hidden{display:none!important}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.crest{width:44px;height:44px;flex:0 0 auto}
+.brand .t{font-family:'Optima','Palatino Linotype',Palatino,Georgia,serif;font-weight:900;font-size:20px;color:var(--gold);line-height:1;letter-spacing:.06em}
+.brand .s{font-size:10px;letter-spacing:.28em;color:var(--muted);margin-top:3px}
+
+/* ── MEANDER DIVIDER ── */
+.meander{height:4px;background:linear-gradient(90deg,var(--aegean3) 0%,var(--gold-dim) 25%,var(--terracotta) 50%,var(--gold-dim) 75%,var(--aegean3) 100%);border-radius:2px;margin:16px 0}
+
+/* ── PANEL ── */
+.panel{background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--aegean4);border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 4px 16px var(--shadow)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-block;padding:12px 22px;border-radius:11px;font-size:15px;font-weight:600;cursor:pointer;transition:transform .12s,box-shadow .12s;border:none}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:linear-gradient(135deg,var(--terracotta),var(--terra2));color:#fff;box-shadow:0 4px 14px rgba(192,71,42,.45)}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#0a0a0a;box-shadow:0 4px 14px rgba(212,175,55,.4)}
+.btn-ghost{border:1px solid var(--aegean4);color:var(--muted);background:transparent;padding:10px 18px}
+.btn-blue{background:linear-gradient(135deg,var(--azure),var(--azure3));color:#fff;box-shadow:0 4px 14px rgba(58,123,213,.4)}
+.btn-danger{background:linear-gradient(135deg,#7d1a10,#a01508);color:#fff}
+.btn-sm{padding:8px 16px;font-size:13px;border-radius:8px}
+.btn-full{width:100%;text-align:center}
+.btn-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+
+/* ── CHIPS ── */
+.chip{display:inline-block;padding:6px 14px;border-radius:20px;font-size:13px;border:1px solid var(--aegean4);background:var(--aegean2);color:var(--muted);cursor:pointer;transition:all .12s;margin:3px}
+.chip.active{background:var(--azure3);border-color:var(--azure);color:#fff}
+.chip-row{display:flex;flex-wrap:wrap;gap:2px;margin-bottom:10px}
+
+/* ── SCRHEAD ── */
+.scrhead{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.scrhead h2{font-size:20px;color:var(--gold);flex:1}
+.back-btn{width:38px;height:38px;border-radius:50%;background:var(--aegean3);border:1px solid var(--aegean4);display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--cream)}
+
+/* ── HOME TILES ── */
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.tile{position:relative;border-radius:15px;padding:20px 16px;text-align:left;background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--aegean4);box-shadow:0 4px 16px var(--shadow),inset 0 1px 0 rgba(255,255,255,.04);transition:transform .14s,border-color .14s;cursor:pointer;color:var(--cream)}
+.tile:active{transform:scale(.97)}
+.tile:hover{border-color:var(--gold-dim)}
+.tile .ic{font-size:32px;margin-bottom:10px;line-height:1}
+.tile h3{font-size:16px;color:var(--cream);margin-bottom:3px}
+.tile p{font-size:12px;color:var(--muted);line-height:1.35}
+.tile.wide{grid-column:1/-1}
+.tile.locked{opacity:.5;cursor:not-allowed}
+.tile.locked::after{content:"🔒";position:absolute;top:12px;right:14px;font-size:16px}
+
+/* ── STAT BADGES ── */
+.stats-row{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.stat-badge{background:linear-gradient(180deg,var(--aegean3),var(--aegean2));border:1px solid var(--gold-dim);border-radius:10px;padding:8px 14px;display:flex;flex-direction:column;align-items:center;min-width:70px}
+.stat-badge .val{font-family:'Optima',Palatino,Georgia,serif;font-size:22px;color:var(--gold-bright);line-height:1}
+.stat-badge .lbl{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+
+/* ── WORD CARD ── */
+.word-card{background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--aegean4);border-radius:18px;padding:24px 20px;margin-bottom:16px;text-align:center;box-shadow:0 6px 20px var(--shadow)}
+.word-gr{font-size:40px;color:var(--marble);margin-bottom:4px;letter-spacing:.03em;line-height:1.1}
+.word-tr{font-size:15px;color:var(--muted);font-style:italic;margin-bottom:6px}
+.word-nl{font-size:16px;color:var(--cream2);margin-bottom:6px}
+.word-decl{font-size:12px;color:var(--azure2);letter-spacing:.12em;text-transform:uppercase}
+.word-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:12px;border:1px solid var(--gold-dim);color:var(--gold);background:rgba(212,175,55,.08);margin-bottom:10px}
+
+/* ── PARADIGM TABLE ── */
+.paradigm-wrap{overflow-x:auto;margin-bottom:14px}
+.paradigm-table{width:100%;border-collapse:collapse;font-size:14px}
+.paradigm-table th{background:rgba(36,66,125,.6);color:var(--gold);padding:8px 10px;text-align:left;font-size:12px;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--aegean4)}
+.paradigm-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.06);color:var(--cream2);vertical-align:middle}
+.paradigm-table tr:last-child td{border-bottom:none}
+.paradigm-table .case-col{color:var(--muted);font-size:12px;letter-spacing:.06em;width:120px}
+.paradigm-table .greek-col{font-size:17px;color:var(--marble);letter-spacing:.03em}
+.paradigm-table .tr-col{font-size:12px;color:var(--muted);font-style:italic}
+.paradigm-table tr.highlight td{background:rgba(58,123,213,.12)}
+
+/* ── INPUT FIELD ── */
+.inp{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--aegean4);border-radius:10px;padding:11px 14px;color:var(--cream);font-size:16px;outline:none;-webkit-appearance:none}
+.inp:focus{border-color:var(--azure)}
+.inp.correct{border-color:var(--green-bright);background:rgba(58,125,74,.12)}
+.inp.wrong{border-color:var(--terracotta);background:rgba(192,71,42,.12)}
+
+/* ── FEEDBACK ── */
+.feedback{padding:12px 16px;border-radius:10px;font-size:14px;margin:10px 0;line-height:1.55}
+.feedback.ok{background:rgba(58,125,74,.18);border:1px solid var(--green-bright);color:var(--green-bright)}
+.feedback.err{background:rgba(192,71,42,.18);border:1px solid var(--terracotta);color:var(--terra3)}
+.feedback.info{background:rgba(58,123,213,.18);border:1px solid var(--azure);color:var(--azure2)}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{margin-bottom:14px}
+.prog-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px}
+.progbar{height:7px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden;border:1px solid rgba(212,175,55,.2)}
+.progbar i{display:block;height:100%;background:linear-gradient(90deg,var(--azure3),var(--azure));border-radius:4px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
+
+/* ── TEST MODE TABLE ── */
+.test-grid{display:grid;grid-template-columns:auto 1fr 1fr;gap:1px;background:var(--aegean4);border-radius:12px;overflow:hidden;margin-bottom:14px}
+.tg-head{background:rgba(36,66,125,.8);color:var(--gold);padding:8px 10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.tg-cell{background:var(--aegean2);padding:8px 10px;font-size:14px}
+.tg-cell.case-lbl{color:var(--muted);font-size:12px}
+.tg-cell.sg{color:var(--marble);font-size:17px}
+.tg-cell.pl{color:var(--marble);font-size:17px}
+.tg-inp{width:100%;background:transparent;border:none;border-bottom:1px solid var(--aegean4);color:var(--cream);font-size:15px;padding:4px 2px;outline:none;font-family:inherit}
+.tg-inp.ok{border-color:var(--green-bright);color:var(--green-bright)}
+.tg-inp.err{border-color:var(--terracotta);color:var(--terracotta)}
+
+/* ── SCORE RING ── */
+.score-ring{display:flex;flex-direction:column;align-items:center;gap:4px;margin:20px 0}
+.score-big{font-family:'Optima',Palatino,Georgia,serif;font-size:64px;color:var(--gold-bright);line-height:1}
+.score-out{font-size:16px;color:var(--muted)}
+
+/* ── RESULTS ── */
+.result-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px}
+.result-row:last-child{border-bottom:none}
+.result-icon{font-size:18px;flex:0 0 24px;text-align:center}
+.result-case{color:var(--muted);flex:0 0 130px;font-size:12px}
+.result-correct{color:var(--marble)}
+.result-given{color:var(--terracotta);font-size:13px}
+
+/* ── PARADIGM OVERVIEW ── */
+.decl-section{margin-bottom:20px}
+.decl-title{font-size:18px;color:var(--gold);margin-bottom:2px}
+.decl-sub{font-size:12px;color:var(--muted);margin-bottom:10px}
+.word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.word-pill{background:var(--aegean3);border:1px solid var(--aegean4);border-radius:10px;padding:8px 10px;cursor:pointer;transition:border-color .14s}
+.word-pill:hover{border-color:var(--gold-dim)}
+.word-pill .wp-gr{font-size:16px;color:var(--marble)}
+.word-pill .wp-tr{font-size:11px;color:var(--muted);font-style:italic}
+.word-pill .wp-nl{font-size:12px;color:var(--cream2)}
+
+/* ── TOAST ── */
+.toast-wrap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;pointer-events:none}
+.toast{background:var(--aegean2);border:1px solid var(--gold-dim);color:var(--cream);padding:10px 22px;border-radius:30px;font-size:14px;box-shadow:0 4px 16px var(--shadow);animation:toastin .3s ease forwards;white-space:nowrap;margin-bottom:6px;text-align:center}
+@keyframes toastin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── NAV BAR ── */
+nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:rgba(10,18,36,.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid rgba(212,175,55,.2);display:flex;justify-content:space-around;padding:8px 0 max(8px,env(safe-area-inset-bottom))}
+nav button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 10px;border-radius:10px;font-size:10px;color:var(--muted);transition:color .15s}
+nav button.active,nav button:active{color:var(--gold)}
+nav button svg{width:22px;height:22px}
+
+/* ── SELECT ── */
+select.inp{cursor:pointer}
+
+/* ── OVERRIDES for mobile ── */
+@media(max-width:420px){
+  .tiles{grid-template-columns:1fr}
+  .tile.wide{grid-column:1}
+  .test-grid{grid-template-columns:auto 1fr}
+}
+
+/* ── GREEK KEYBOARD ── */
+.gk-wrap{background:linear-gradient(170deg,#0f2540,#0a1828);border:1px solid var(--gold-dim);border-radius:14px;padding:10px 8px 8px;margin-top:10px;box-shadow:0 6px 20px var(--shadow)}
+.gk-label{font-size:10px;letter-spacing:.2em;color:var(--gold-dim);text-transform:uppercase;margin-bottom:6px;padding:0 2px}
+.gk-rows{display:flex;flex-direction:column;gap:5px}
+.gk-row{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+.gk-btn{min-width:34px;height:40px;border-radius:7px;background:linear-gradient(180deg,#1e3a60,#152a48);border:1px solid rgba(255,255,255,.12);color:var(--marble);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .1s,transform .08s;flex:0 0 auto;padding:0 5px;line-height:1;font-family:Georgia,'Times New Roman',serif}
+.gk-btn:active{transform:scale(.92);background:var(--azure3)}
+.gk-btn.gk-wide{min-width:52px;font-size:13px;color:var(--muted)}
+.gk-btn.gk-accent{background:linear-gradient(180deg,#2a2a50,#1e1e3c);color:var(--gold)}
+.gk-toggle{display:flex;align-items:center;gap:6px;margin-top:8px;cursor:pointer;font-size:12px;color:var(--muted);user-select:none}
+.gk-toggle svg{width:16px;height:16px;flex:0 0 auto}
+.gk-switch{width:32px;height:18px;border-radius:9px;background:var(--aegean4);position:relative;transition:background .2s;flex:0 0 auto}
+.gk-switch.on{background:var(--azure3)}
+.gk-switch::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .2s}
+.gk-switch.on::after{left:16px}
+.acc-hd{display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:12px 0;color:var(--cream)}
+.acc-hd .acc-ic{color:var(--gold);font-size:20px;font-weight:700}
+.acc-body{color:var(--muted);font-size:14px;line-height:1.65;padding-bottom:8px}
+.acc-body p{margin-bottom:6px}
+
+/* ── EXERCISE MODE ── */
+.ex-prompt{font-size:14px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.case-ask{display:inline-block;padding:4px 12px;border-radius:10px;background:rgba(58,123,213,.2);border:1px solid var(--azure);color:var(--azure2);font-size:13px;margin-bottom:12px}
+.hint-text{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="toast-wrap" id="toasts"></div>
+<nav>
+  <button data-nav="home" onclick="go('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    <span>Ἀρχή</span>
+  </button>
+  <button data-nav="paradigms" onclick="go('paradigms')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 012-2h7v18H6a2 2 0 01-2-2z"/><path d="M20 5a2 2 0 00-2-2h-1v18h1a2 2 0 002-2z"/></svg>
+    <span>Παραδείγματα</span>
+  </button>
+  <button data-nav="oefenen" onclick="go('oefenen')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+    <span>Oefenen</span>
+  </button>
+  <button data-nav="test" onclick="go('test_setup')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    <span>Toets</span>
+  </button>
+</nav>
+
+<script>
+// ═══════════════════════════════════════════════════
+// GREEK DECLENSION DATABASE
+// ═══════════════════════════════════════════════════
+
+// Declension types:
+// A1 = eerste declinatie -α lang (θεά)
+// A2 = eerste declinatie -η (ψυχή)
+// A3 = eerste declinatie -ας (νεανίας)
+// B1 = tweede declinatie -ος m/f (λόγος)
+// B2 = tweede declinatie -ον n (ἔργον)
+// C1 = derde declinatie consonantstam
+// C2 = derde declinatie -ις/-εως (πόλις)
+// C3 = derde declinatie -ευς (βασιλεύς)
+// C4 = derde declinatie -ων/-ον (comp.)
+
+// Format: {id, gr, tr, nl, genus, decl, type, forms:{nom_sg,gen_sg,...}}
+// Cases: nom acc gen dat (sg and pl) + voc_sg
+
+const WORDS = [
+  // ── EERSTE DECLINATIE -α lang (A1) ──
+  {
+    id:"A1_thea", gr:"θεά", tr:"thea", nl:"godin", genus:"f", decl:1, type:"A1",
+    label:"1e declinatie -ᾱ (θεά)",
+    forms:{
+      nom_sg:"θεά", acc_sg:"θεάν", gen_sg:"θεᾶς", dat_sg:"θεᾷ", voc_sg:"θεά",
+      nom_pl:"θεαί", acc_pl:"θεάς", gen_pl:"θεῶν", dat_pl:"θεαῖς"
+    }
+  },
+  {
+    id:"A1_chora", gr:"χώρα", tr:"chōra", nl:"land, gebied", genus:"f", decl:1, type:"A1",
+    label:"1e declinatie -ᾱ (χώρα)",
+    forms:{
+      nom_sg:"χώρα", acc_sg:"χώρᾱν", gen_sg:"χώρας", dat_sg:"χώρᾳ", voc_sg:"χώρα",
+      nom_pl:"χῶραι", acc_pl:"χώρας", gen_pl:"χωρῶν", dat_pl:"χώραις"
+    }
+  },
+  {
+    id:"A1_nike", gr:"νίκη", tr:"nikē", nl:"overwinning", genus:"f", decl:1, type:"A2",
+    label:"1e declinatie -η (νίκη)",
+    forms:{
+      nom_sg:"νίκη", acc_sg:"νίκην", gen_sg:"νίκης", dat_sg:"νίκῃ", voc_sg:"νίκη",
+      nom_pl:"νῖκαι", acc_pl:"νίκας", gen_pl:"νικῶν", dat_pl:"νίκαις"
+    }
+  },
+  // ── EERSTE DECLINATIE -η (A2) ──
+  {
+    id:"A2_psyche", gr:"ψυχή", tr:"psychē", nl:"ziel, adem, leven", genus:"f", decl:1, type:"A2",
+    label:"1e declinatie -η (ψυχή)",
+    forms:{
+      nom_sg:"ψυχή", acc_sg:"ψυχήν", gen_sg:"ψυχῆς", dat_sg:"ψυχῇ", voc_sg:"ψυχή",
+      nom_pl:"ψυχαί", acc_pl:"ψυχάς", gen_pl:"ψυχῶν", dat_pl:"ψυχαῖς"
+    }
+  },
+  {
+    id:"A2_arche", gr:"ἀρχή", tr:"archē", nl:"begin, heerschappij, ambt", genus:"f", decl:1, type:"A2",
+    label:"1e declinatie -η (ἀρχή)",
+    forms:{
+      nom_sg:"ἀρχή", acc_sg:"ἀρχήν", gen_sg:"ἀρχῆς", dat_sg:"ἀρχῇ", voc_sg:"ἀρχή",
+      nom_pl:"ἀρχαί", acc_pl:"ἀρχάς", gen_pl:"ἀρχῶν", dat_pl:"ἀρχαῖς"
+    }
+  },
+  {
+    id:"A1_hemera", gr:"ἡμέρα", tr:"hēmera", nl:"dag", genus:"f", decl:1, type:"A1",
+    label:"1e declinatie -ᾱ (ἡμέρα, na ρ)",
+    forms:{
+      nom_sg:"ἡμέρα", acc_sg:"ἡμέραν", gen_sg:"ἡμέρας", dat_sg:"ἡμέρᾳ", voc_sg:"ἡμέρα",
+      nom_pl:"ἡμέραι", acc_pl:"ἡμέρας", gen_pl:"ἡμερῶν", dat_pl:"ἡμέραις"
+    }
+  },
+  {
+    id:"A2_arete", gr:"ἀρετή", tr:"aretē", nl:"voortreffelijkheid, deugd", genus:"f", decl:1, type:"A2",
+    label:"1e declinatie -η (ἀρετή)",
+    forms:{
+      nom_sg:"ἀρετή", acc_sg:"ἀρετήν", gen_sg:"ἀρετῆς", dat_sg:"ἀρετῇ", voc_sg:"ἀρετή",
+      nom_pl:"ἀρεταί", acc_pl:"ἀρετάς", gen_pl:"ἀρετῶν", dat_pl:"ἀρεταῖς"
+    }
+  },
+  {
+    id:"A2_ge", gr:"γῆ", tr:"gē", nl:"aarde, land, grond", genus:"f", decl:1, type:"A2",
+    label:"1e declinatie -η (γῆ)",
+    forms:{
+      nom_sg:"γῆ", acc_sg:"γῆν", gen_sg:"γῆς", dat_sg:"γῇ", voc_sg:"γῆ",
+      nom_pl:"—", acc_pl:"—", gen_pl:"—", dat_pl:"—"
+    }
+  },
+  // ── EERSTE DECLINATIE -ας (A3, masculinum) ──
+  {
+    id:"A3_neanias", gr:"νεανίας", tr:"neanias", nl:"jongeling, jongeman", genus:"m", decl:1, type:"A3",
+    label:"1e declinatie -ᾱς (νεανίας, m)",
+    forms:{
+      nom_sg:"νεανίας", acc_sg:"νεανίᾱν", gen_sg:"νεανίου", dat_sg:"νεανίᾳ", voc_sg:"νεανία",
+      nom_pl:"νεανίαι", acc_pl:"νεανίας", gen_pl:"νεανιῶν", dat_pl:"νεανίαις"
+    }
+  },
+  {
+    id:"A3_stratiotes", gr:"στρατιώτης", tr:"stratiōtēs", nl:"soldaat", genus:"m", decl:1, type:"A3",
+    label:"1e declinatie -ης (στρατιώτης, m)",
+    forms:{
+      nom_sg:"στρατιώτης", acc_sg:"στρατιώτην", gen_sg:"στρατιώτου", dat_sg:"στρατιώτῃ", voc_sg:"στρατιῶτα",
+      nom_pl:"στρατιῶται", acc_pl:"στρατιώτας", gen_pl:"στρατιωτῶν", dat_pl:"στρατιώταις"
+    }
+  },
+  {
+    id:"A3_poietes", gr:"ποιητής", tr:"poiētēs", nl:"dichter, maker", genus:"m", decl:1, type:"A3",
+    label:"1e declinatie -ης (ποιητής, m)",
+    forms:{
+      nom_sg:"ποιητής", acc_sg:"ποιητήν", gen_sg:"ποιητοῦ", dat_sg:"ποιητῇ", voc_sg:"ποιητά",
+      nom_pl:"ποιηταί", acc_pl:"ποιητάς", gen_pl:"ποιητῶν", dat_pl:"ποιηταῖς"
+    }
+  },
+  // ── TWEEDE DECLINATIE -ος (B1) ──
+  {
+    id:"B1_logos", gr:"λόγος", tr:"logos", nl:"woord, redevoering, rede", genus:"m", decl:2, type:"B1",
+    label:"2e declinatie -ος (λόγος, m)",
+    forms:{
+      nom_sg:"λόγος", acc_sg:"λόγον", gen_sg:"λόγου", dat_sg:"λόγῳ", voc_sg:"λόγε",
+      nom_pl:"λόγοι", acc_pl:"λόγους", gen_pl:"λόγων", dat_pl:"λόγοις"
+    }
+  },
+  {
+    id:"B1_anthropos", gr:"ἄνθρωπος", tr:"anthrōpos", nl:"mens", genus:"m", decl:2, type:"B1",
+    label:"2e declinatie -ος (ἄνθρωπος, m)",
+    forms:{
+      nom_sg:"ἄνθρωπος", acc_sg:"ἄνθρωπον", gen_sg:"ἀνθρώπου", dat_sg:"ἀνθρώπῳ", voc_sg:"ἄνθρωπε",
+      nom_pl:"ἄνθρωποι", acc_pl:"ἀνθρώπους", gen_pl:"ἀνθρώπων", dat_pl:"ἀνθρώποις"
+    }
+  },
+  {
+    id:"B1_theos", gr:"θεός", tr:"theos", nl:"god", genus:"m", decl:2, type:"B1",
+    label:"2e declinatie -ος (θεός, m/f)",
+    forms:{
+      nom_sg:"θεός", acc_sg:"θεόν", gen_sg:"θεοῦ", dat_sg:"θεῷ", voc_sg:"θεέ",
+      nom_pl:"θεοί", acc_pl:"θεούς", gen_pl:"θεῶν", dat_pl:"θεοῖς"
+    }
+  },
+  {
+    id:"B1_polemos", gr:"πόλεμος", tr:"polemos", nl:"oorlog", genus:"m", decl:2, type:"B1",
+    label:"2e declinatie -ος (πόλεμος, m)",
+    forms:{
+      nom_sg:"πόλεμος", acc_sg:"πόλεμον", gen_sg:"πολέμου", dat_sg:"πολέμῳ", voc_sg:"πόλεμε",
+      nom_pl:"πόλεμοι", acc_pl:"πολέμους", gen_pl:"πολέμων", dat_pl:"πολέμοις"
+    }
+  },
+  {
+    id:"B1_nomos", gr:"νόμος", tr:"nomos", nl:"wet, gewoonte", genus:"m", decl:2, type:"B1",
+    label:"2e declinatie -ος (νόμος, m)",
+    forms:{
+      nom_sg:"νόμος", acc_sg:"νόμον", gen_sg:"νόμου", dat_sg:"νόμῳ", voc_sg:"νόμε",
+      nom_pl:"νόμοι", acc_pl:"νόμους", gen_pl:"νόμων", dat_pl:"νόμοις"
+    }
+  },
+  {
+    id:"B1_demos", gr:"δῆμος", tr:"dēmos", nl:"(gewone) volk, district", genus:"m", decl:2, type:"B1",
+    label:"2e declinatie -ος (δῆμος, m)",
+    forms:{
+      nom_sg:"δῆμος", acc_sg:"δῆμον", gen_sg:"δήμου", dat_sg:"δήμῳ", voc_sg:"δῆμε",
+      nom_pl:"δῆμοι", acc_pl:"δήμους", gen_pl:"δήμων", dat_pl:"δήμοις"
+    }
+  },
+  {
+    id:"B1_doulos", gr:"δοῦλος", tr:"doulos", nl:"slaaf", genus:"m", decl:2, type:"B1",
+    label:"2e declinatie -ος (δοῦλος, m)",
+    forms:{
+      nom_sg:"δοῦλος", acc_sg:"δοῦλον", gen_sg:"δούλου", dat_sg:"δούλῳ", voc_sg:"δοῦλε",
+      nom_pl:"δοῦλοι", acc_pl:"δούλους", gen_pl:"δούλων", dat_pl:"δούλοις"
+    }
+  },
+  {
+    id:"B1_oikos", gr:"οἶκος", tr:"oikos", nl:"huis, woning, familie", genus:"m", decl:2, type:"B1",
+    label:"2e declinatie -ος (οἶκος, m)",
+    forms:{
+      nom_sg:"οἶκος", acc_sg:"οἶκον", gen_sg:"οἴκου", dat_sg:"οἴκῳ", voc_sg:"οἶκε",
+      nom_pl:"οἶκοι", acc_pl:"οἴκους", gen_pl:"οἴκων", dat_pl:"οἴκοις"
+    }
+  },
+  // ── TWEEDE DECLINATIE -ον (B2, neutrum) ──
+  {
+    id:"B2_ergon", gr:"ἔργον", tr:"ergon", nl:"werk, daad, prestatie", genus:"n", decl:2, type:"B2",
+    label:"2e declinatie -ον (ἔργον, n)",
+    forms:{
+      nom_sg:"ἔργον", acc_sg:"ἔργον", gen_sg:"ἔργου", dat_sg:"ἔργῳ", voc_sg:"ἔργον",
+      nom_pl:"ἔργα", acc_pl:"ἔργα", gen_pl:"ἔργων", dat_pl:"ἔργοις"
+    }
+  },
+  {
+    id:"B2_doron", gr:"δῶρον", tr:"dōron", nl:"geschenk, gave", genus:"n", decl:2, type:"B2",
+    label:"2e declinatie -ον (δῶρον, n)",
+    forms:{
+      nom_sg:"δῶρον", acc_sg:"δῶρον", gen_sg:"δώρου", dat_sg:"δώρῳ", voc_sg:"δῶρον",
+      nom_pl:"δῶρα", acc_pl:"δῶρα", gen_pl:"δώρων", dat_pl:"δώροις"
+    }
+  },
+  {
+    id:"B2_pragma", gr:"πρᾶγμα", tr:"pragma", nl:"ding, zaak", genus:"n", decl:3, type:"C1",
+    label:"3e declinatie -μα (πρᾶγμα, n)",
+    forms:{
+      nom_sg:"πρᾶγμα", acc_sg:"πρᾶγμα", gen_sg:"πράγματος", dat_sg:"πράγματι", voc_sg:"πρᾶγμα",
+      nom_pl:"πράγματα", acc_pl:"πράγματα", gen_pl:"πραγμάτων", dat_pl:"πράγμασι(ν)"
+    }
+  },
+  {
+    id:"B2_soma", gr:"σῶμα", tr:"sōma", nl:"lichaam", genus:"n", decl:3, type:"C1",
+    label:"3e declinatie -μα (σῶμα, n)",
+    forms:{
+      nom_sg:"σῶμα", acc_sg:"σῶμα", gen_sg:"σώματος", dat_sg:"σώματι", voc_sg:"σῶμα",
+      nom_pl:"σώματα", acc_pl:"σώματα", gen_pl:"σωμάτων", dat_pl:"σώμασι(ν)"
+    }
+  },
+  {
+    id:"B2_onoma", gr:"ὄνομα", tr:"onoma", nl:"naam, roem", genus:"n", decl:3, type:"C1",
+    label:"3e declinatie -μα (ὄνομα, n)",
+    forms:{
+      nom_sg:"ὄνομα", acc_sg:"ὄνομα", gen_sg:"ὀνόματος", dat_sg:"ὀνόματι", voc_sg:"ὄνομα",
+      nom_pl:"ὀνόματα", acc_pl:"ὀνόματα", gen_pl:"ὀνομάτων", dat_pl:"ὀνόμασι(ν)"
+    }
+  },
+  {
+    id:"B2_pneuma", gr:"πνεῦμα", tr:"pneuma", nl:"wind, adem, geest", genus:"n", decl:3, type:"C1",
+    label:"3e declinatie -μα (πνεῦμα, n)",
+    forms:{
+      nom_sg:"πνεῦμα", acc_sg:"πνεῦμα", gen_sg:"πνεύματος", dat_sg:"πνεύματι", voc_sg:"πνεῦμα",
+      nom_pl:"πνεύματα", acc_pl:"πνεύματα", gen_pl:"πνευμάτων", dat_pl:"πνεύμασι(ν)"
+    }
+  },
+  // ── DERDE DECLINATIE consonantstam (C1) ──
+  {
+    id:"C1_aner", gr:"ἀνήρ", tr:"anēr", nl:"man, echtgenoot", genus:"m", decl:3, type:"C1",
+    label:"3e declinatie (ἀνήρ, m)",
+    forms:{
+      nom_sg:"ἀνήρ", acc_sg:"ἄνδρα", gen_sg:"ἀνδρός", dat_sg:"ἀνδρί", voc_sg:"ἄνερ",
+      nom_pl:"ἄνδρες", acc_pl:"ἄνδρας", gen_pl:"ἀνδρῶν", dat_pl:"ἀνδράσι(ν)"
+    }
+  },
+  {
+    id:"C1_pater", gr:"πατήρ", tr:"patēr", nl:"vader", genus:"m", decl:3, type:"C1",
+    label:"3e declinatie (πατήρ, m)",
+    forms:{
+      nom_sg:"πατήρ", acc_sg:"πατέρα", gen_sg:"πατρός", dat_sg:"πατρί", voc_sg:"πάτερ",
+      nom_pl:"πατέρες", acc_pl:"πατέρας", gen_pl:"πατέρων", dat_pl:"πατράσι(ν)"
+    }
+  },
+  {
+    id:"C1_meter", gr:"μήτηρ", tr:"mētēr", nl:"moeder", genus:"f", decl:3, type:"C1",
+    label:"3e declinatie (μήτηρ, f)",
+    forms:{
+      nom_sg:"μήτηρ", acc_sg:"μητέρα", gen_sg:"μητρός", dat_sg:"μητρί", voc_sg:"μῆτερ",
+      nom_pl:"μητέρες", acc_pl:"μητέρας", gen_pl:"μητέρων", dat_pl:"μητράσι(ν)"
+    }
+  },
+  {
+    id:"C1_cheir", gr:"χείρ", tr:"cheir", nl:"hand", genus:"f", decl:3, type:"C1",
+    label:"3e declinatie (χείρ, f)",
+    forms:{
+      nom_sg:"χείρ", acc_sg:"χεῖρα", gen_sg:"χειρός", dat_sg:"χειρί", voc_sg:"χείρ",
+      nom_pl:"χεῖρες", acc_pl:"χεῖρας", gen_pl:"χειρῶν", dat_pl:"χερσί(ν)"
+    }
+  },
+  {
+    id:"C1_nyx", gr:"νύξ", tr:"nyx", nl:"nacht", genus:"f", decl:3, type:"C1",
+    label:"3e declinatie (νύξ, f)",
+    forms:{
+      nom_sg:"νύξ", acc_sg:"νύκτα", gen_sg:"νυκτός", dat_sg:"νυκτί", voc_sg:"νύξ",
+      nom_pl:"νύκτες", acc_pl:"νύκτας", gen_pl:"νυκτῶν", dat_pl:"νυξί(ν)"
+    }
+  },
+  {
+    id:"C1_pous", gr:"πούς", tr:"pous", nl:"voet", genus:"m", decl:3, type:"C1",
+    label:"3e declinatie (πούς, m)",
+    forms:{
+      nom_sg:"πούς", acc_sg:"πόδα", gen_sg:"ποδός", dat_sg:"ποδί", voc_sg:"πούς",
+      nom_pl:"πόδες", acc_pl:"πόδας", gen_pl:"ποδῶν", dat_pl:"ποσί(ν)"
+    }
+  },
+  {
+    id:"C1_agon", gr:"ἀγών", tr:"agōn", nl:"wedstrijd, strijd", genus:"m", decl:3, type:"C1",
+    label:"3e declinatie -ων (ἀγών, m)",
+    forms:{
+      nom_sg:"ἀγών", acc_sg:"ἀγῶνα", gen_sg:"ἀγῶνος", dat_sg:"ἀγῶνι", voc_sg:"ἀγών",
+      nom_pl:"ἀγῶνες", acc_pl:"ἀγῶνας", gen_pl:"ἀγώνων", dat_pl:"ἀγῶσι(ν)"
+    }
+  },
+  {
+    id:"C1_daimon", gr:"δαίμων", tr:"daimōn", nl:"geest, godheid", genus:"m", decl:3, type:"C1",
+    label:"3e declinatie -ων (δαίμων, m/f)",
+    forms:{
+      nom_sg:"δαίμων", acc_sg:"δαίμονα", gen_sg:"δαίμονος", dat_sg:"δαίμονι", voc_sg:"δαῖμον",
+      nom_pl:"δαίμονες", acc_pl:"δαίμονας", gen_pl:"δαιμόνων", dat_pl:"δαίμοσι(ν)"
+    }
+  },
+  {
+    id:"C1_hegemon", gr:"ἡγεμών", tr:"hēgemōn", nl:"leider, aanvoerder", genus:"m", decl:3, type:"C1",
+    label:"3e declinatie -ών (ἡγεμών, m)",
+    forms:{
+      nom_sg:"ἡγεμών", acc_sg:"ἡγεμόνα", gen_sg:"ἡγεμόνος", dat_sg:"ἡγεμόνι", voc_sg:"ἡγεμών",
+      nom_pl:"ἡγεμόνες", acc_pl:"ἡγεμόνας", gen_pl:"ἡγεμόνων", dat_pl:"ἡγεμόσι(ν)"
+    }
+  },
+  {
+    id:"C1_charis", gr:"χάρις", tr:"charis", nl:"gratie, gunst, dank", genus:"f", decl:3, type:"C1",
+    label:"3e declinatie -ις (χάρις, f)",
+    forms:{
+      nom_sg:"χάρις", acc_sg:"χάριν", gen_sg:"χάριτος", dat_sg:"χάριτι", voc_sg:"χάρι",
+      nom_pl:"χάριτες", acc_pl:"χάριτας", gen_pl:"χαρίτων", dat_pl:"χάρισι(ν)"
+    }
+  },
+  {
+    id:"C1_elpis", gr:"ἐλπίς", tr:"elpis", nl:"hoop, verwachting", genus:"f", decl:3, type:"C1",
+    label:"3e declinatie -ίς (ἐλπίς, f)",
+    forms:{
+      nom_sg:"ἐλπίς", acc_sg:"ἐλπίδα", gen_sg:"ἐλπίδος", dat_sg:"ἐλπίδι", voc_sg:"ἐλπί",
+      nom_pl:"ἐλπίδες", acc_pl:"ἐλπίδας", gen_pl:"ἐλπίδων", dat_pl:"ἐλπίσι(ν)"
+    }
+  },
+  {
+    id:"C1_thanatos", gr:"θάνατος", tr:"thanatos", nl:"dood", genus:"m", decl:2, type:"B1",
+    label:"2e declinatie -ος (θάνατος, m)",
+    forms:{
+      nom_sg:"θάνατος", acc_sg:"θάνατον", gen_sg:"θανάτου", dat_sg:"θανάτῳ", voc_sg:"θάνατε",
+      nom_pl:"θάνατοι", acc_pl:"θανάτους", gen_pl:"θανάτων", dat_pl:"θανάτοις"
+    }
+  },
+  // ── DERDE DECLINATIE -ις/-εως (C2) ──
+  {
+    id:"C2_polis", gr:"πόλις", tr:"polis", nl:"stad, stadstaat", genus:"f", decl:3, type:"C2",
+    label:"3e declinatie -ις/-εως (πόλις, f)",
+    forms:{
+      nom_sg:"πόλις", acc_sg:"πόλιν", gen_sg:"πόλεως", dat_sg:"πόλει", voc_sg:"πόλι",
+      nom_pl:"πόλεις", acc_pl:"πόλεις", gen_pl:"πόλεων", dat_pl:"πόλεσι(ν)"
+    }
+  },
+  {
+    id:"C2_dynamis", gr:"δύναμις", tr:"dynamis", nl:"kracht, sterkte, macht", genus:"f", decl:3, type:"C2",
+    label:"3e declinatie -ις/-εως (δύναμις, f)",
+    forms:{
+      nom_sg:"δύναμις", acc_sg:"δύναμιν", gen_sg:"δυνάμεως", dat_sg:"δυνάμει", voc_sg:"δύναμι",
+      nom_pl:"δυνάμεις", acc_pl:"δυνάμεις", gen_pl:"δυνάμεων", dat_pl:"δυνάμεσι(ν)"
+    }
+  },
+  {
+    id:"C2_physis", gr:"φύσις", tr:"physis", nl:"natuur, aard", genus:"f", decl:3, type:"C2",
+    label:"3e declinatie -ις/-εως (φύσις, f)",
+    forms:{
+      nom_sg:"φύσις", acc_sg:"φύσιν", gen_sg:"φύσεως", dat_sg:"φύσει", voc_sg:"φύσι",
+      nom_pl:"φύσεις", acc_pl:"φύσεις", gen_pl:"φύσεων", dat_pl:"φύσεσι(ν)"
+    }
+  },
+  {
+    id:"C2_gnomis", gr:"γνώμη", tr:"gnōmē", nl:"gedachte, inzicht, mening", genus:"f", decl:1, type:"A2",
+    label:"1e declinatie -η (γνώμη, f)",
+    forms:{
+      nom_sg:"γνώμη", acc_sg:"γνώμην", gen_sg:"γνώμης", dat_sg:"γνώμῃ", voc_sg:"γνώμη",
+      nom_pl:"γνῶμαι", acc_pl:"γνώμας", gen_pl:"γνωμῶν", dat_pl:"γνώμαις"
+    }
+  },
+  {
+    id:"C2_pistis", gr:"πίστις", tr:"pistis", nl:"vertrouwen, geloof", genus:"f", decl:3, type:"C2",
+    label:"3e declinatie -ις/-εως (πίστις, f)",
+    forms:{
+      nom_sg:"πίστις", acc_sg:"πίστιν", gen_sg:"πίστεως", dat_sg:"πίστει", voc_sg:"πίστι",
+      nom_pl:"πίστεις", acc_pl:"πίστεις", gen_pl:"πίστεων", dat_pl:"πίστεσι(ν)"
+    }
+  },
+  // ── DERDE DECLINATIE -εύς (C3) ──
+  {
+    id:"C3_basileus", gr:"βασιλεύς", tr:"basileus", nl:"koning", genus:"m", decl:3, type:"C3",
+    label:"3e declinatie -εύς (βασιλεύς, m)",
+    forms:{
+      nom_sg:"βασιλεύς", acc_sg:"βασιλέᾱ", gen_sg:"βασιλέως", dat_sg:"βασιλεῖ", voc_sg:"βασιλεῦ",
+      nom_pl:"βασιλεῖς", acc_pl:"βασιλέᾱς", gen_pl:"βασιλέων", dat_pl:"βασιλεῦσι(ν)"
+    }
+  },
+  {
+    id:"C3_hippeus", gr:"ἱππεύς", tr:"hippeus", nl:"ruiter", genus:"m", decl:3, type:"C3",
+    label:"3e declinatie -εύς (ἱππεύς, m)",
+    forms:{
+      nom_sg:"ἱππεύς", acc_sg:"ἱππέᾱ", gen_sg:"ἱππέως", dat_sg:"ἱππεῖ", voc_sg:"ἱππεῦ",
+      nom_pl:"ἱππεῖς", acc_pl:"ἱππέᾱς", gen_pl:"ἱππέων", dat_pl:"ἱππεῦσι(ν)"
+    }
+  },
+  // ── DERDE DECLINATIE -ος (C_neuter) ──
+  {
+    id:"Cn_genos", gr:"γένος", tr:"genos", nl:"geslacht, afkomst, soort", genus:"n", decl:3, type:"C1",
+    label:"3e declinatie -ος/-ους (γένος, n)",
+    forms:{
+      nom_sg:"γένος", acc_sg:"γένος", gen_sg:"γένους", dat_sg:"γένει", voc_sg:"γένος",
+      nom_pl:"γένη", acc_pl:"γένη", gen_pl:"γενῶν", dat_pl:"γένεσι(ν)"
+    }
+  },
+  {
+    id:"Cn_ethos", gr:"ἦθος", tr:"ēthos", nl:"karakter, aard, gewoonte", genus:"n", decl:3, type:"C1",
+    label:"3e declinatie -ος/-ους (ἦθος, n)",
+    forms:{
+      nom_sg:"ἦθος", acc_sg:"ἦθος", gen_sg:"ἤθους", dat_sg:"ἤθει", voc_sg:"ἦθος",
+      nom_pl:"ἤθη", acc_pl:"ἤθη", gen_pl:"ἠθῶν", dat_pl:"ἤθεσι(ν)"
+    }
+  },
+  {
+    id:"Cn_eidos", gr:"εἶδος", tr:"eidos", nl:"vorm, gedaante, soort", genus:"n", decl:3, type:"C1",
+    label:"3e declinatie -ος/-ους (εἶδος, n)",
+    forms:{
+      nom_sg:"εἶδος", acc_sg:"εἶδος", gen_sg:"εἴδους", dat_sg:"εἴδει", voc_sg:"εἶδος",
+      nom_pl:"εἴδη", acc_pl:"εἴδη", gen_pl:"εἰδῶν", dat_pl:"εἴδεσι(ν)"
+    }
+  }
+];
+
+const CASE_LABELS = [
+  {key:"nom_sg", nl:"nominatief enkelvoud", abbr:"nom. ev."},
+  {key:"gen_sg", nl:"genitief enkelvoud",   abbr:"gen. ev."},
+  {key:"dat_sg", nl:"datief enkelvoud",     abbr:"dat. ev."},
+  {key:"acc_sg", nl:"accusatief enkelvoud", abbr:"acc. ev."},
+  {key:"voc_sg", nl:"vocatief enkelvoud",   abbr:"voc. ev."},
+  {key:"nom_pl", nl:"nominatief meervoud",  abbr:"nom. mv."},
+  {key:"gen_pl", nl:"genitief meervoud",    abbr:"gen. mv."},
+  {key:"dat_pl", nl:"datief meervoud",      abbr:"dat. mv."},
+  {key:"acc_pl", nl:"accusatief meervoud",  abbr:"acc. mv."}
+];
+
+const TYPE_NAMES = {
+  "A1":"1e declinatie -ᾱ",
+  "A2":"1e declinatie -η",
+  "A3":"1e declinatie -ης/-ας (m)",
+  "B1":"2e declinatie -ος",
+  "B2":"2e declinatie -ον",
+  "C1":"3e declinatie",
+  "C2":"3e declinatie -ις/-εως",
+  "C3":"3e declinatie -εύς"
+};
+
+const GENUS_NL = {m:"mannelijk", f:"vrouwelijk", n:"onzijdig"};
+
+// ── STATE ──
+const KEY = "ptoseis_v1";
+let ST = loadState();
+let SCREEN = "home";
+
+// exercise state
+let EX = {};
+// test state
+let TST = {};
+
+function loadState(){
+  try{
+    const r = localStorage.getItem(KEY);
+    const def = {totalOk:0, totalDone:0, streak:0, bestStreak:0, testScores:[]};
+    return r ? {...def,...JSON.parse(r)} : {...def};
+  } catch(e){
+    return {totalOk:0, totalDone:0, streak:0, bestStreak:0, testScores:[]};
+  }
+}
+function saveState(){try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){}}
+
+function toast(msg){
+  const w = document.getElementById("toasts");
+  if(!w) return;
+  const d = document.createElement("div");
+  d.className = "toast";
+  d.textContent = msg;
+  w.appendChild(d);
+  setTimeout(()=>{d.style.opacity="0";d.style.transition="opacity .4s";setTimeout(()=>d.remove(),400);},2200);
+}
+
+function shuffle(a){
+  a = a.slice();
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+function norm(s){
+  return (s||"").trim()
+    .replace(/\(ν\)/g,"ν").replace(/\(n\)/g,"n")  // optional ν
+    .replace(/[\u0301\u0300\u0308\u0313\u0314\u0342\u0345]/g,"") // strip diacritics for lenient
+    .toLowerCase().replace(/\s+/g,"");
+}
+
+function checkAnswer(given, correct){
+  if(!given.trim() || !correct || correct==="—") return correct==="—" && !given.trim();
+  const g = norm(given), c = norm(correct);
+  if(g===c) return true;
+  // strip trailing ν variant
+  if(g===c.replace(/ν$/,"")) return true;
+  if(c===g.replace(/ν$/,"")) return true;
+  return false;
+}
+
+function crestSVG(){
+  return `<svg class="crest" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="22" cy="22" r="21" fill="#0d1f3c" stroke="#d4af37" stroke-width="2.2"/>
+    <text x="22" y="30" font-size="20" fill="#f0cf6b" text-anchor="middle" font-family="Georgia,serif" font-weight="bold">Π</text>
+  </svg>`;
+}
+
+function backBtn(target){
+  return `<button class="back-btn" onclick="go('${target}')">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+  </button>`;
+}
+
+function topbar(){
+  return `<div class="topbar">
+    ${crestSVG()}
+    <div class="brand">
+      <div class="t">ΠΤΩΣΕΙΣ</div>
+      <div class="s">GRIEKSE NAAMVALLEN</div>
+    </div>
+  </div>`;
+}
+
+function go(screen, data){
+  SCREEN = screen;
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  const map = {home:"home",paradigms:"paradigms",oefenen:"oefenen",ex_run:"oefenen",ex_mc:"oefenen",ex_paradigm:"oefenen",test_setup:"test",test_run:"test",test_result:"test",help:"home"};
+  const nk = map[screen];
+  if(nk){const btn=document.querySelector(`nav button[data-nav="${nk}"]`);if(btn)btn.classList.add("active");}
+  if(RENDER[screen]) RENDER[screen](data);
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════════════════════════════════
+// RENDER: HOME
+// ═══════════════════════════════════════════════════
+RENDER = {};
+RENDER.home = function(){
+  const app = document.getElementById("app");
+  const pct = ST.totalDone > 0 ? Math.round(ST.totalOk/ST.totalDone*100) : 0;
+  const bestScore = ST.testScores.length ? Math.max(...ST.testScores) : 0;
+  app.innerHTML = topbar() + `
+  <div class="stats-row">
+    <div class="stat-badge"><div class="val">${ST.totalOk}</div><div class="lbl">Goed</div></div>
+    <div class="stat-badge"><div class="val">${ST.totalDone}</div><div class="lbl">Geprobeerd</div></div>
+    <div class="stat-badge"><div class="val">${pct}%</div><div class="lbl">Score</div></div>
+    <div class="stat-badge"><div class="val">${ST.streak}</div><div class="lbl">Reeks</div></div>
+  </div>
+
+  <div class="meander"></div>
+
+  <div class="tiles">
+    <button class="tile wide" onclick="go('paradigms')">
+      <div class="ic">📖</div>
+      <h3>Παραδείγματα</h3>
+      <p>Bekijk paradigma's van alle declinaties en woorden</p>
+    </button>
+    <button class="tile" onclick="go('oefenen')">
+      <div class="ic">✍️</div>
+      <h3>Oefenen</h3>
+      <p>Vormen oefenen per woord of declinatie</p>
+    </button>
+    <button class="tile" onclick="go('test_setup')">
+      <div class="ic">📋</div>
+      <h3>Toets</h3>
+      <p>Toets jezelf en krijg een cijfer op 20</p>
+    </button>
+    <button class="tile" onclick="go('help')">
+      <div class="ic">❓</div>
+      <h3>Hulp</h3>
+      <p>Uitleg over naamvallen en gebruik</p>
+    </button>
+  </div>
+
+  <div class="meander"></div>
+  <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:8px">
+    <b style="color:var(--gold)">Woorden in deze app (${WORDS.length})</b><br>
+    Gebaseerd op de GJOU Grieks frequentielijst. Alle paradigma's zijn Attisch Grieks.
+  </div>
+  <div style="text-align:center;color:var(--muted);font-size:11px;margin-top:16px;letter-spacing:.08em">
+    Hulp bij Klassieke Talen · Gerben de Jong · 2026
+  </div>`;
+};
+
+// ═══════════════════════════════════════════════════
+// RENDER: PARADIGMS
+// ═══════════════════════════════════════════════════
+RENDER.paradigms = function(selected){
+  const app = document.getElementById("app");
+
+  // Group by declinatie type
+  const groups = {};
+  for(const w of WORDS){
+    const t = w.type;
+    if(!groups[t]) groups[t]=[];
+    groups[t].push(w);
+  }
+
+  const typeOrder = ["A1","A2","A3","B1","B2","C1","C2","C3"];
+
+  let html = `<div class="scrhead">${backBtn("home")}<h2>Παραδείγματα</h2></div>`;
+
+  for(const type of typeOrder){
+    const ws = groups[type];
+    if(!ws || !ws.length) continue;
+    html += `<div class="decl-section"><div class="decl-title">${TYPE_NAMES[type]||type}</div>
+    <div class="decl-sub">${ws.length} woord${ws.length!==1?"en":""}</div>
+    <div class="word-grid">`;
+    for(const w of ws){
+      html += `<button class="word-pill" onclick="showParadigm('${w.id}')">
+        <div class="wp-gr">${w.gr}</div>
+        <div class="wp-tr">${w.tr}</div>
+        <div class="wp-nl">${w.nl.split(",")[0].split(";")[0].trim()}</div>
+      </button>`;
+    }
+    html += `</div></div>`;
+  }
+
+  app.innerHTML = html;
+
+  if(selected) showParadigm(selected);
+};
+
+window.showParadigm = function(id){
+  const w = WORDS.find(x=>x.id===id);
+  if(!w) return;
+
+  const rows = CASE_LABELS.map(c=>{
+    const form = w.forms[c.key]||"—";
+    return `<tr>
+      <td class="case-col">${c.nl}</td>
+      <td class="greek-col">${form}</td>
+    </tr>`;
+  }).join("");
+
+  const overlay = document.createElement("div");
+  overlay.style.cssText = "position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);display:flex;align-items:flex-end;justify-content:center;";
+  overlay.innerHTML = `
+    <div style="background:linear-gradient(170deg,var(--aegean3),var(--aegean));border:1px solid var(--gold-dim);border-radius:20px 20px 0 0;padding:24px 20px;width:100%;max-width:600px;max-height:88vh;overflow-y:auto;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+        <div>
+          <div style="font-size:34px;color:var(--marble);letter-spacing:.03em">${w.gr}</div>
+          <div style="font-size:14px;color:var(--muted);font-style:italic;margin-top:2px">${w.tr} · ${GENUS_NL[w.genus]||w.genus}</div>
+          <div style="font-size:13px;color:var(--azure2);margin-top:4px">${w.nl}</div>
+          <div style="font-size:11px;color:var(--gold-dim);margin-top:6px;letter-spacing:.06em">${w.label}</div>
+        </div>
+        <button onclick="this.closest('div[style*=fixed]').remove()" style="font-size:26px;color:var(--muted);padding:4px 8px;cursor:pointer;background:none;border:none">×</button>
+      </div>
+      <div class="meander"></div>
+      <div class="paradigm-wrap">
+        <table class="paradigm-table">
+          <thead><tr><th>Naamval</th><th>Vorm</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn btn-primary btn-full" onclick="this.closest('div[style*=fixed]').remove();go('oefenen',{wordId:'${w.id}'})">Oefenen</button>
+        <button class="btn btn-ghost btn-full" onclick="this.closest('div[style*=fixed]').remove()">Sluiten</button>
+      </div>
+    </div>`;
+  overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.remove();});
+  document.body.appendChild(overlay);
+};
+
+// ═══════════════════════════════════════════════════
+// RENDER: OEFENEN (setup)
+// ═══════════════════════════════════════════════════
+RENDER.oefenen = function(data){
+  const app = document.getElementById("app");
+
+  const typeOrder = ["A1","A2","A3","B1","B2","C1","C2","C3"];
+  const typeChips = typeOrder.map(t=>`<button class="chip" data-type="${t}" onclick="toggleType(this,'${t}')">${TYPE_NAMES[t]||t}</button>`).join("");
+
+  app.innerHTML = `<div class="scrhead">${backBtn("home")}<h2>Oefenen</h2></div>
+
+  <div class="panel">
+    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;letter-spacing:.06em;text-transform:uppercase">Oefenvorm</div>
+    <div class="chip-row">
+      <button class="chip active" id="exmode_type" onclick="setExMode('type',this)">✍️ Typen</button>
+      <button class="chip" id="exmode_mc" onclick="setExMode('mc',this)">🔤 Meerkeuze</button>
+      <button class="chip" id="exmode_paradigm" onclick="setExMode('paradigm',this)">📋 Volledig paradigma</button>
+    </div>
+    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;margin-top:12px;letter-spacing:.06em;text-transform:uppercase">Declinatie</div>
+    <div class="chip-row" id="typeChips">${typeChips}</div>
+    <div id="caseSection">
+    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;margin-top:12px;letter-spacing:.06em;text-transform:uppercase">Naamvallen</div>
+    <div class="chip-row" id="caseChips">
+      ${CASE_LABELS.map(c=>`<button class="chip active" data-case="${c.key}" onclick="toggleCase(this,'${c.key}')">${c.abbr}</button>`).join("")}
+    </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary btn-full" onclick="startOefenen()" style="margin-bottom:14px">Start oefening</button>
+  `;
+
+  // pre-select if word given
+  if(data && data.wordId){
+    const w = WORDS.find(x=>x.id===data.wordId);
+    if(w){
+      document.querySelectorAll("#typeChips .chip").forEach(c=>{
+        if(c.dataset.type===w.type) c.classList.add("active");
+      });
+    }
+  } else {
+    // default: all types active
+    document.querySelectorAll("#typeChips .chip").forEach(c=>c.classList.add("active"));
+  }
+
+  window._exMode = "type";
+};
+
+window.toggleType = function(btn, type){
+  btn.classList.toggle("active");
+};
+window.toggleCase = function(btn, key){
+  btn.classList.toggle("active");
+};
+window.setExMode = function(mode, btn){
+  window._exMode = mode;
+  document.querySelectorAll(".chip[id^='exmode_']").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  // hide/show case section for paradigm mode
+  const cs = document.getElementById("caseSection");
+  if(cs) cs.style.display = mode==="paradigm" ? "none" : "block";
+};
+
+window.startOefenen = function(){
+  const activeTypes = [...document.querySelectorAll("#typeChips .chip.active")].map(b=>b.dataset.type);
+  const activeCases = [...document.querySelectorAll("#caseChips .chip.active")].map(b=>b.dataset.case);
+  const mode = window._exMode || "type";
+
+  if(!activeTypes.length){toast("Selecteer minstens één declinatie.");return;}
+
+  const pool = WORDS.filter(w=>activeTypes.includes(w.type));
+  if(!pool.length){toast("Geen woorden gevonden voor deze selectie.");return;}
+
+  if(mode==="paradigm"){
+    // Paradigma-invul modus: pick words, fill in full paradigm
+    const words = shuffle(pool).slice(0, 10);
+    EX = { mode:"paradigm", words, i:0, ok:0, totalForms:0, streak:0 };
+    go("ex_paradigm");
+    return;
+  }
+
+  if(!activeCases.length){toast("Selecteer minstens één naamval.");return;}
+
+  let questions = [];
+  for(const w of pool){
+    for(const c of activeCases){
+      const form = w.forms[c];
+      if(!form || form==="—") continue;
+      questions.push({word:w, caseKey:c, form});
+    }
+  }
+  questions = shuffle(questions);
+  if(questions.length > 40) questions = questions.slice(0,40);
+
+  EX = {
+    mode,
+    questions,
+    i: 0,
+    ok: 0,
+    total: questions.length,
+    streak: 0
+  };
+  go(mode==="mc" ? "ex_mc" : "ex_run");
+};
+
+RENDER.ex_run = function(){
+  if(EX.i >= EX.total) return finishOefenen();
+  const q = EX.questions[EX.i];
+  const w = q.word;
+  const cl = CASE_LABELS.find(c=>c.key===q.caseKey);
+  const app = document.getElementById("app");
+  const pct = Math.round(EX.i/EX.total*100);
+
+  app.innerHTML = `
+  <div class="scrhead">${backBtn("oefenen")}<h2>Typen</h2><span style="font-size:12px;color:var(--muted)">${EX.i+1}/${EX.total}</span></div>
+
+  <div class="prog-wrap">
+    <div class="prog-label"><span>Voortgang</span><span>${EX.ok} goed</span></div>
+    <div class="progbar"><i style="width:${pct}%"></i></div>
+  </div>
+
+  <div class="word-card">
+    <div class="word-badge">${w.label}</div>
+    <div class="word-gr">${w.gr}</div>
+    <div class="word-tr">${w.tr}</div>
+    <div class="word-nl">${w.nl.split(",")[0].trim()}</div>
+    <div class="word-decl">${GENUS_NL[w.genus]||w.genus}</div>
+  </div>
+
+  <div class="case-ask">${cl.nl}</div>
+  <p class="ex-prompt">Geef de <b>${cl.nl}</b> van <b>${w.nl.split(",")[0].trim()}</b></p>
+
+  <input class="inp" id="exInp" placeholder="Griekse vorm…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+    onkeydown="if(event.key==='Enter')submitEx()">
+  <div id="exFb"></div>
+  <div id="exBtns" style="margin-top:12px">
+    <button class="btn btn-primary btn-full" onclick="submitEx()">Controleer</button>
+    <button class="btn btn-ghost btn-full" onclick="skipEx()" style="margin-top:8px">Overslaan</button>
+  </div>`;
+
+  document.getElementById("exInp").focus();
+  attachKeyboard("exInp", "exInp");
+};
+
+window.submitEx = function(){
+  const inp = document.getElementById("exInp");
+  if(!inp) return;
+  const given = inp.value.trim();
+  if(!given){toast("Typ een antwoord.");return;}
+
+  const q = EX.questions[EX.i];
+  const correct = q.form;
+  const ok = checkAnswer(given, correct);
+
+  ST.totalDone++;
+  if(ok){
+    ST.totalOk++;
+    EX.ok++;
+    EX.streak=(EX.streak||0)+1;
+    if(EX.streak>=(ST.bestStreak||0)) ST.bestStreak=EX.streak;
+  } else {
+    EX.streak=0;
+  }
+  saveState();
+
+  inp.classList.add(ok?"correct":"wrong");
+  inp.disabled = true;
+
+  const fb = document.getElementById("exFb");
+  if(ok){
+    fb.innerHTML = `<div class="feedback ok">✓ Correct! — <b>${correct}</b></div>`;
+  } else {
+    fb.innerHTML = `<div class="feedback err">✗ Fout. Het juiste antwoord: <b>${correct}</b></div>
+      <div class="feedback info">Paradigma: ${q.word.gr} — ${CASE_LABELS.find(c=>c.key===q.caseKey).nl} = <b>${correct}</b></div>`;
+  }
+
+  document.getElementById("exBtns").innerHTML =
+    `<button class="btn btn-primary btn-full" onclick="nextEx()">Volgende</button>`;
+};
+
+window.skipEx = function(){ EX.i++; go("ex_run"); };
+window.nextEx = function(){ EX.i++; go("ex_run"); window.scrollTo(0,0); };
+
+// ═══════════════════════════════════════════════════
+// RENDER: MEERKEUZE (MC)
+// ═══════════════════════════════════════════════════
+RENDER.ex_mc = function(){
+  if(EX.i >= EX.total) return finishOefenen();
+  const q = EX.questions[EX.i];
+  const w = q.word;
+  const cl = CASE_LABELS.find(c=>c.key===q.caseKey);
+  const app = document.getElementById("app");
+  const pct = Math.round(EX.i/EX.total*100);
+
+  // Build 4 options: correct form + 3 other forms of the SAME word
+  const allOtherForms = Object.entries(w.forms)
+    .filter(([k, v]) => k !== q.caseKey && v && v !== "—" && v !== q.form)
+    .map(([, v]) => v);
+  // deduplicate (some forms are identical, e.g. nom/acc neuter)
+  const uniqueOthers = [...new Set(allOtherForms)];
+  const distractors = shuffle(uniqueOthers).slice(0, 3);
+  // If there aren't enough distinct forms (e.g. highly syncretic paradigms),
+  // pad with forms from same-type words to always show 4 options
+  if(distractors.length < 3){
+    const sameType = WORDS.filter(x => x.type === w.type && x.id !== w.id);
+    for(const sw of shuffle(sameType)){
+      for(const [k, v] of Object.entries(sw.forms)){
+        if(v && v !== "—" && v !== q.form && !distractors.includes(v)){
+          distractors.push(v);
+          if(distractors.length >= 3) break;
+        }
+      }
+      if(distractors.length >= 3) break;
+    }
+  }
+  const opts = shuffle([q.form, ...distractors.slice(0,3)]);
+
+  EX._mcAnswered = false;
+
+  app.innerHTML = `
+  <div class="scrhead">${backBtn("oefenen")}<h2>Meerkeuze</h2><span style="font-size:12px;color:var(--muted)">${EX.i+1}/${EX.total}</span></div>
+
+  <div class="prog-wrap">
+    <div class="prog-label"><span>Voortgang</span><span>${EX.ok} goed</span></div>
+    <div class="progbar"><i style="width:${pct}%"></i></div>
+  </div>
+
+  <div class="word-card">
+    <div class="word-badge">${w.label}</div>
+    <div class="word-gr">${w.gr}</div>
+    <div class="word-tr">${w.tr}</div>
+    <div class="word-nl">${w.nl.split(",")[0].trim()}</div>
+    <div class="word-decl">${GENUS_NL[w.genus]||w.genus}</div>
+  </div>
+
+  <p class="ex-prompt" style="margin-bottom:14px">Wat is de <b>${cl.nl}</b> van dit woord?</p>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="mcOpts">
+    ${opts.map((o,i)=>`<button class="mc-opt" id="mco${i}" onclick="pickMC(${i},'${o}','${q.form}')"
+      style="padding:16px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+      font-size:18px;color:var(--cream);cursor:pointer;transition:all .14s;font-family:inherit;letter-spacing:.03em">${o}</button>`).join("")}
+  </div>`;
+};
+
+window.pickMC = function(i, chosen, correct){
+  if(EX._mcAnswered) return;
+  EX._mcAnswered = true;
+  const ok = chosen === correct;
+
+  ST.totalDone++;
+  if(ok){ ST.totalOk++; EX.ok++; EX.streak=(EX.streak||0)+1; if(EX.streak>ST.bestStreak) ST.bestStreak=EX.streak; }
+  else { EX.streak=0; }
+  saveState();
+
+  document.querySelectorAll("[id^='mco']").forEach(b=>{
+    b.disabled = true;
+    if(b.textContent===correct) b.style.cssText += ";background:rgba(58,125,74,.3);border-color:var(--green-bright);color:var(--green-bright)";
+    else if(b.textContent===chosen && !ok) b.style.cssText += ";background:rgba(192,71,42,.2);border-color:var(--terracotta);color:var(--terracotta)";
+  });
+
+  const fb = document.createElement("div");
+  fb.className = "feedback " + (ok?"ok":"err");
+  fb.innerHTML = ok ? `✓ Correct! — <b>${correct}</b>` : `✗ Fout. Het juiste antwoord: <b>${correct}</b>`;
+  fb.style.marginTop = "14px";
+  document.getElementById("mcOpts").insertAdjacentElement("afterend", fb);
+
+  const btn = document.createElement("button");
+  btn.className = "btn btn-primary btn-full";
+  btn.style.marginTop = "12px";
+  btn.textContent = "Volgende";
+  btn.onclick = ()=>{ EX.i++; go("ex_mc"); window.scrollTo(0,0); };
+  fb.insertAdjacentElement("afterend", btn);
+};
+
+// ═══════════════════════════════════════════════════
+// RENDER: VOLLEDIG PARADIGMA INVULLEN
+// ═══════════════════════════════════════════════════
+RENDER.ex_paradigm = function(){
+  if(EX.i >= EX.words.length) return finishParadigm();
+  const w = EX.words[EX.i];
+  const app = document.getElementById("app");
+  const pct = Math.round(EX.i/EX.words.length*100);
+
+  // build table rows with inputs
+  const rows = CASE_LABELS.map(c=>{
+    const form = w.forms[c.key]||"—";
+    if(form==="—") return "";
+    return `<tr>
+      <td style="padding:7px 10px;color:var(--muted);font-size:12px;white-space:nowrap">${c.nl}</td>
+      <td style="padding:7px 10px">
+        <input class="inp" data-key="${c.key}" data-correct="${form}"
+          placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          style="padding:6px 10px;font-size:15px;"
+          onkeydown="if(event.key==='Enter')nextInput(this)">
+      </td>
+    </tr>`;
+  }).filter(Boolean).join("");
+
+  app.innerHTML = `
+  <div class="scrhead">${backBtn("oefenen")}<h2>Paradigma</h2><span style="font-size:12px;color:var(--muted)">${EX.i+1}/${EX.words.length}</span></div>
+
+  <div class="prog-wrap">
+    <div class="prog-label"><span>Voortgang</span><span>${EX.i} van ${EX.words.length} woorden</span></div>
+    <div class="progbar"><i style="width:${pct}%"></i></div>
+  </div>
+
+  <div class="word-card">
+    <div class="word-badge">${w.label}</div>
+    <div class="word-gr">${w.gr}</div>
+    <div class="word-tr">${w.tr} · ${GENUS_NL[w.genus]||w.genus}</div>
+    <div class="word-nl">${w.nl.split(",")[0].trim()}</div>
+  </div>
+
+  <p class="ex-prompt">Vul het volledige paradigma in:</p>
+
+  <div style="overflow-x:auto;margin-bottom:14px">
+    <table style="width:100%;border-collapse:collapse" id="parTable">
+      ${rows}
+    </table>
+  </div>
+
+  <div id="parFb"></div>
+  <div id="parBtns">
+    <button class="btn btn-primary btn-full" onclick="submitParadigm()">Controleer</button>
+    <button class="btn btn-ghost btn-full" onclick="showParadigmAnswer()" style="margin-top:8px">Toon antwoord</button>
+  </div>`;
+
+  // focus first input + attach keyboard
+  const allInps = [...document.querySelectorAll("#parTable input")];
+  if(allInps.length){
+    GK_TARGET = allInps[0];
+    allInps.forEach(i=>i.addEventListener("focus",()=>{ GK_TARGET=i; }));
+    allInps[0].focus();
+    // build keyboard once, after first input
+    const toggle = buildGKToggle();
+    const kb = buildKeyboard();
+    const parFb = document.getElementById("parFb");
+    parFb.insertAdjacentElement("beforebegin", toggle);
+    parFb.insertAdjacentElement("beforebegin", kb);
+  }
+};
+
+window.nextInput = function(inp){
+  const inputs = [...document.querySelectorAll("#parTable input")];
+  const idx = inputs.indexOf(inp);
+  if(idx < inputs.length-1) inputs[idx+1].focus();
+  else submitParadigm();
+};
+
+window.submitParadigm = function(){
+  const inputs = document.querySelectorAll("#parTable input");
+  let ok=0, total=0;
+  inputs.forEach(inp=>{
+    if(inp.disabled) return;
+    const correct = inp.dataset.correct;
+    const given = inp.value.trim();
+    const isOk = checkAnswer(given, correct);
+    inp.classList.add(isOk?"correct":"wrong");
+    inp.disabled = true;
+    // show correct answer if wrong
+    if(!isOk){
+      const hint = document.createElement("div");
+      hint.style.cssText = "font-size:12px;color:var(--terracotta);margin-top:2px";
+      hint.textContent = "→ " + correct;
+      inp.insertAdjacentElement("afterend", hint);
+    }
+    if(isOk) ok++;
+    total++;
+  });
+
+  EX.ok += ok;
+  EX.totalForms = (EX.totalForms||0) + total;
+  ST.totalOk += ok;
+  ST.totalDone += total;
+  saveState();
+
+  const pct = total>0 ? Math.round(ok/total*100) : 0;
+  const fb = document.getElementById("parFb");
+  fb.innerHTML = `<div class="feedback ${pct>=70?"ok":"err"}">${ok}/${total} vormen correct (${pct}%)</div>`;
+
+  document.getElementById("parBtns").innerHTML =
+    `<button class="btn btn-primary btn-full" onclick="nextParadigm()">Volgende woord</button>`;
+};
+
+window.showParadigmAnswer = function(){
+  const inputs = document.querySelectorAll("#parTable input");
+  inputs.forEach(inp=>{
+    inp.value = inp.dataset.correct;
+    inp.classList.add("correct");
+    inp.disabled = true;
+  });
+  document.getElementById("parBtns").innerHTML =
+    `<button class="btn btn-primary btn-full" onclick="nextParadigm()">Volgende woord</button>`;
+};
+
+window.nextParadigm = function(){ EX.i++; go("ex_paradigm"); window.scrollTo(0,0); };
+
+function finishParadigm(){
+  const total = EX.totalForms||0;
+  const ok = EX.ok||0;
+  const pct = total>0 ? Math.round(ok/total*100) : 0;
+  const emoji = pct>=90?"🏆":pct>=70?"🎯":pct>=50?"💪":"📚";
+  document.getElementById("app").innerHTML = `
+  <div class="scrhead">${backBtn("oefenen")}<h2>Klaar!</h2></div>
+  <div class="panel" style="text-align:center">
+    <div style="font-size:56px;margin-bottom:10px">${emoji}</div>
+    <div class="score-big">${ok}/${total}</div>
+    <div class="score-out">${pct}% vormen correct</div>
+    <div class="btn-row" style="justify-content:center;margin-top:20px">
+      <button class="btn btn-primary" onclick="go('oefenen')">Opnieuw</button>
+      <button class="btn btn-ghost" onclick="go('home')">Terug</button>
+    </div>
+  </div>`;
+}
+
+function finishOefenen(){
+  const pct = EX.total>0 ? Math.round(EX.ok/EX.total*100) : 0;
+  const emoji = pct>=90?"🏆":pct>=70?"🎯":pct>=50?"💪":"📚";
+  document.getElementById("app").innerHTML = `
+  <div class="scrhead">${backBtn("oefenen")}<h2>Oefening klaar</h2></div>
+  <div class="panel" style="text-align:center">
+    <div style="font-size:56px;margin-bottom:10px">${emoji}</div>
+    <div class="score-big">${EX.ok}/${EX.total}</div>
+    <div class="score-out">${pct}% goed</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:8px">Reeks: ${EX.streak||0}</div>
+    <div class="btn-row" style="justify-content:center;margin-top:20px">
+      <button class="btn btn-primary" onclick="go('oefenen')">Opnieuw</button>
+      <button class="btn btn-ghost" onclick="go('home')">Terug</button>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+// RENDER: TEST SETUP
+// ═══════════════════════════════════════════════════
+RENDER.test_setup = function(){
+  const app = document.getElementById("app");
+  const typeOrder = ["A1","A2","A3","B1","B2","C1","C2","C3"];
+
+  const best = ST.testScores.length ? `Beste: ${Math.max(...ST.testScores).toFixed(1)}/20` : "Nog geen toets gemaakt";
+
+  app.innerHTML = `<div class="scrhead">${backBtn("home")}<h2>Toets instellen</h2></div>
+
+  <div class="panel">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:12px">${best}</div>
+    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;letter-spacing:.06em;text-transform:uppercase">Declinaties</div>
+    <div class="chip-row" id="tTypeChips">
+      ${typeOrder.map(t=>`<button class="chip" data-type="${t}" onclick="this.classList.toggle('active')">${TYPE_NAMES[t]||t}</button>`).join("")}
+    </div>
+    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;margin-top:12px;letter-spacing:.06em;text-transform:uppercase">Naamvallen</div>
+    <div class="chip-row" id="tCaseChips">
+      ${CASE_LABELS.map(c=>`<button class="chip active" data-case="${c.key}" onclick="this.classList.toggle('active')">${c.abbr}</button>`).join("")}
+    </div>
+    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;margin-top:12px;letter-spacing:.06em;text-transform:uppercase">Aantal vragen</div>
+    <div class="chip-row">
+      <button class="chip" data-n="10" onclick="setN(this)">10</button>
+      <button class="chip active" data-n="20" onclick="setN(this)">20</button>
+      <button class="chip" data-n="30" onclick="setN(this)">30</button>
+    </div>
+  </div>
+
+  <button class="btn btn-primary btn-full" onclick="startTest()" style="margin-bottom:14px">Start toets</button>
+  `;
+
+  // default: all types active
+  document.querySelectorAll("#tTypeChips .chip").forEach(c=>c.classList.add("active"));
+  window._testN = 20;
+};
+
+window.setN = function(btn){
+  document.querySelectorAll("[data-n]").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  window._testN = parseInt(btn.dataset.n);
+};
+
+window.startTest = function(){
+  const activeTypes = [...document.querySelectorAll("#tTypeChips .chip.active")].map(b=>b.dataset.type);
+  const activeCases = [...document.querySelectorAll("#tCaseChips .chip.active")].map(b=>b.dataset.case);
+  const n = window._testN || 20;
+
+  if(!activeTypes.length){toast("Selecteer minstens één declinatie.");return;}
+  if(!activeCases.length){toast("Selecteer minstens één naamval.");return;}
+
+  const pool = WORDS.filter(w=>activeTypes.includes(w.type));
+  if(!pool.length){toast("Geen woorden beschikbaar.");return;}
+
+  let questions = [];
+  for(const w of pool){
+    for(const c of activeCases){
+      const form = w.forms[c];
+      if(!form||form==="—") continue;
+      questions.push({word:w, caseKey:c, form, given:"", checked:false, ok:null});
+    }
+  }
+  questions = shuffle(questions).slice(0, n);
+
+  TST = {questions, i:0, ok:0, total:questions.length, submitted:false};
+  go("test_run");
+};
+
+// ═══════════════════════════════════════════════════
+// RENDER: TEST RUN (one question at a time)
+// ═══════════════════════════════════════════════════
+RENDER.test_run = function(){
+  if(TST.submitted) return go("test_result");
+  if(TST.i >= TST.total) return submitTest();
+
+  const q = TST.questions[TST.i];
+  const w = q.word;
+  const cl = CASE_LABELS.find(c=>c.key===q.caseKey);
+  const app = document.getElementById("app");
+  const pct = Math.round(TST.i/TST.total*100);
+
+  app.innerHTML = `
+  <div class="scrhead">${backBtn("test_setup")}<h2>Toets</h2><span style="font-size:12px;color:var(--muted)">${TST.i+1}/${TST.total}</span></div>
+
+  <div class="prog-wrap">
+    <div class="prog-label"><span>Voortgang</span><span>${TST.i} van ${TST.total}</span></div>
+    <div class="progbar"><i style="width:${pct}%"></i></div>
+  </div>
+
+  <div class="word-card">
+    <div class="word-badge">${w.label}</div>
+    <div class="word-gr">${w.gr}</div>
+    <div class="word-tr">${w.tr}</div>
+    <div class="word-nl">${w.nl.split(",")[0].trim()}</div>
+    <div class="word-decl">${GENUS_NL[w.genus]||w.genus}</div>
+  </div>
+
+  <div class="case-ask">${cl.nl}</div>
+
+  <input class="inp" id="tstInp" placeholder="Griekse vorm…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+    onkeydown="if(event.key==='Enter')nextTest()">
+  <div class="hint-text" id="tstHint">Schrijf de Griekse naamvalsvorm (met accenten indien mogelijk)</div>
+
+  <div class="btn-row" style="margin-top:14px">
+    <button class="btn btn-primary" style="flex:1" onclick="nextTest()">Volgende →</button>
+    ${TST.i>0?`<button class="btn btn-ghost" onclick="prevTest()">← Vorige</button>`:""}
+  </div>`;
+
+  const inp = document.getElementById("tstInp");
+  inp.value = q.given || "";
+  inp.focus();
+  inp.addEventListener("input",()=>{ TST.questions[TST.i].given = inp.value; });
+  GK_TARGET = inp;
+  attachKeyboard("tstInp", "tstHint");
+};
+
+window.nextTest = function(){
+  const inp = document.getElementById("tstInp");
+  TST.questions[TST.i].given = (inp&&inp.value)||"";
+  TST.i++;
+  if(TST.i >= TST.total) submitTest();
+  else go("test_run");
+};
+
+window.prevTest = function(){
+  const inp = document.getElementById("tstInp");
+  TST.questions[TST.i].given = (inp&&inp.value)||"";
+  TST.i--;
+  go("test_run");
+};
+
+function submitTest(){
+  TST.submitted = true;
+  let ok = 0;
+  for(const q of TST.questions){
+    q.ok = checkAnswer(q.given, q.form);
+    if(q.ok) ok++;
+  }
+  TST.ok = ok;
+  const score = Math.round((ok/TST.total)*20*10)/10;
+  TST.score = score;
+  ST.testScores = ST.testScores || [];
+  ST.testScores.push(score);
+  if(ST.testScores.length > 50) ST.testScores = ST.testScores.slice(-50);
+  saveState();
+  go("test_result");
+}
+
+// ═══════════════════════════════════════════════════
+// RENDER: TEST RESULT
+// ═══════════════════════════════════════════════════
+RENDER.test_result = function(){
+  const app = document.getElementById("app");
+  const score = TST.score;
+  const emoji = score>=18?"🏆":score>=15?"🎯":score>=12?"💪":score>=10?"📚":"📖";
+  const color = score>=15?"var(--green-bright)":score>=10?"var(--gold)":"var(--terracotta)";
+
+  // Results list
+  let resultsHtml = "";
+  for(const q of TST.questions){
+    const cl = CASE_LABELS.find(c=>c.key===q.caseKey);
+    const given = q.given||"(leeg)";
+    resultsHtml += `<div class="result-row">
+      <div class="result-icon">${q.ok?"✓":"✗"}</div>
+      <div class="result-case">${q.word.gr} ${cl.abbr}</div>
+      <div style="flex:1">
+        <div class="result-correct">${q.form}</div>
+        ${!q.ok?`<div class="result-given">Jij: ${given}</div>`:""}
+      </div>
+    </div>`;
+  }
+
+  app.innerHTML = `
+  <div class="scrhead">${backBtn("test_setup")}<h2>Toetsresultaat</h2></div>
+
+  <div class="panel" style="text-align:center">
+    <div style="font-size:56px;margin-bottom:8px">${emoji}</div>
+    <div style="font-family:'Optima',Palatino,Georgia,serif;font-size:72px;color:${color};line-height:1">${score.toFixed(1)}</div>
+    <div style="font-size:18px;color:var(--muted);margin-bottom:4px">op 20</div>
+    <div style="font-size:15px;color:var(--cream2)">${TST.ok} van ${TST.total} vragen goed</div>
+    ${ST.testScores.length>1?`<div style="font-size:12px;color:var(--muted);margin-top:6px">Beste score: ${Math.max(...ST.testScores).toFixed(1)}/20</div>`:""}
+  </div>
+
+  <div class="meander"></div>
+
+  <div class="panel">
+    <h3 style="color:var(--gold);margin-bottom:14px;font-size:16px">Overzicht</h3>
+    ${resultsHtml}
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" style="flex:1" onclick="go('test_setup')">Nieuwe toets</button>
+    <button class="btn btn-ghost" style="flex:1" onclick="go('home')">Terug</button>
+  </div>`;
+};
+
+// ═══════════════════════════════════════════════════
+// RENDER: HELP
+// ═══════════════════════════════════════════════════
+RENDER.help = function(){
+  const app = document.getElementById("app");
+
+  const sections = [
+    ["nom","Nominatief (nom.)",`De nominatief is de <b>onderwerpsvorm</b>. Het onderwerp van een zin staat in de nominatief.<br><br>
+      Voorbeeld: <em>ὁ <b>ἄνθρωπος</b> λέγει</em> — De <b>mens</b> spreekt.`],
+    ["acc","Accusatief (acc.)",`De accusatief is de <b>meewerkend/lijdend voorwerpsvorm</b>: het directe object.<br><br>
+      Voorbeeld: <em>ὁ στρατηγὸς τοὺς <b>πολεμίους</b> νικᾷ</em> — De generaal verslaat de <b>vijanden</b>.`],
+    ["gen","Genitief (gen.)",`De genitief geeft <b>bezit of betrekking</b> aan ('van'). Ook gebruikt na sommige voorzetsels (ἀπό, ἐκ, περί).<br><br>
+      Voorbeeld: <em>ὁ τοῦ <b>πατρός</b> νόμος</em> — De wet <b>van de vader</b>.`],
+    ["dat","Datief (dat.)",`De datief is de <b>meewerkend voorwerpsvorm</b>. Geeft de begunstigde aan ('aan/voor').<br><br>
+      Voorbeeld: <em>δίδωμι τῷ <b>δούλῳ</b> δῶρον</em> — Ik geef de <b>slaaf</b> een geschenk.`],
+    ["voc","Vocatief (voc.)",`De vocatief wordt gebruikt voor <b>aanspreken</b> (aanspreeksvorm).<br><br>
+      Voorbeeld: <em><b>ὦ ἄνθρωπε</b>, τί λέγεις;</em> — <b>O mens</b>, wat zeg je?`],
+    ["decl","Declinaties",`Het Grieks kent drie declinaties:<br><br>
+      <b>1e declinatie:</b> eindigt op -η of -ᾱ, meestal vrouwelijk; -ης/-ας mannelijk.<br>
+      <b>2e declinatie:</b> eindigt op -ος (m/f) of -ον (n).<br>
+      <b>3e declinatie:</b> allerlei stammen; genitief onthullt de stam. Bevat -ις/-εως en -εύς types.`],
+    ["accentua","Accenten",`In deze app worden accenten weergegeven. Bij het invullen worden accenten <em>niet strikt gecontroleerd</em> — de vorm is correct ook zonder accent. Probeer wel zo nauwkeurig mogelijk te schrijven.`]
+  ];
+
+  let html = `<div class="scrhead">${backBtn("home")}<h2>Hulp</h2></div>`;
+  for(const [id, title, body] of sections){
+    html += `<div class="panel" style="padding:0;overflow:hidden;margin-bottom:10px">
+      <div class="acc-hd" onclick="toggleAcc('${id}')">
+        <span><b>${title}</b></span>
+        <span class="acc-ic" id="ai_${id}">+</span>
+      </div>
+      <div class="acc-body" id="ab_${id}" style="display:none"><p>${body}</p></div>
+    </div>`;
+  }
+
+  html += `<div class="panel" style="margin-top:6px">
+    <div style="font-size:13px;color:var(--muted);line-height:1.7">
+      <b style="color:var(--gold)">Over deze app</b><br>
+      Πτώσεις Trainer is een offline oefentool voor Griekse naamvallen. Alle paradigma's zijn Attisch Grieks, gebaseerd op de GJOU frequentielijst. De app werkt volledig zonder internetverbinding.<br><br>
+      <b style="color:var(--gold)">${WORDS.length} woorden</b> — verdeeld over alle drie declinaties.
+    </div>
+  </div>`;
+
+  app.innerHTML = html;
+};
+
+window.toggleAcc = function(id){
+  const body = document.getElementById("ab_"+id);
+  const ic = document.getElementById("ai_"+id);
+  if(!body) return;
+  const open = body.style.display!=="none";
+  document.querySelectorAll("[id^='ab_']").forEach(e=>e.style.display="none");
+  document.querySelectorAll("[id^='ai_']").forEach(e=>e.textContent="+");
+  if(!open){body.style.display="block";if(ic)ic.textContent="−";}
+};
+
+// ═══════════════════════════════════════════════════
+// GRIEKS TOETSENBORD
+// ═══════════════════════════════════════════════════
+
+// Keyboard layout: rows of {label, insert} objects.
+// 'insert' is the character to insert; label may differ for display.
+// Special keys: {action:'backspace'}, {action:'space'}, {action:'accent', acc:'...'} (dead key)
+
+const GK_ROWS = [
+  // Row 1: lowercase letters (no accents here – accents via accent dead keys)
+  [
+    {l:"α",i:"α"},{l:"β",i:"β"},{l:"γ",i:"γ"},{l:"δ",i:"δ"},{l:"ε",i:"ε"},
+    {l:"ζ",i:"ζ"},{l:"η",i:"η"},{l:"θ",i:"θ"},{l:"ι",i:"ι"},{l:"κ",i:"κ"},
+    {l:"λ",i:"λ"},{l:"μ",i:"μ"},{l:"ν",i:"ν"},{l:"ξ",i:"ξ"}
+  ],
+  [
+    {l:"ο",i:"ο"},{l:"π",i:"π"},{l:"ρ",i:"ρ"},{l:"σ",i:"σ"},{l:"τ",i:"τ"},
+    {l:"υ",i:"υ"},{l:"φ",i:"φ"},{l:"χ",i:"χ"},{l:"ψ",i:"ψ"},{l:"ω",i:"ω"},
+    {l:"ς",i:"ς"} // final sigma
+  ],
+  // Row 3: accented vowels (pre-composed, meest gebruikt)
+  [
+    {l:"ά",i:"ά"},{l:"έ",i:"έ"},{l:"ή",i:"ή"},{l:"ί",i:"ί"},
+    {l:"ό",i:"ό"},{l:"ύ",i:"ύ"},{l:"ώ",i:"ώ"}
+  ],
+  // Row 4: with rough/smooth breathing + accent combos
+  [
+    {l:"ἀ",i:"ἀ"},{l:"ἁ",i:"ἁ"},{l:"ἂ",i:"ἂ"},{l:"ἃ",i:"ἃ"},{l:"ἄ",i:"ἄ"},{l:"ἅ",i:"ἅ"},{l:"ᾳ",i:"ᾳ"},{l:"ᾶ",i:"ᾶ"},
+    {l:"ἐ",i:"ἐ"},{l:"ἑ",i:"ἑ"},{l:"ἔ",i:"ἔ"},{l:"ἕ",i:"ἕ"}
+  ],
+  [
+    {l:"ἠ",i:"ἠ"},{l:"ἡ",i:"ἡ"},{l:"ἢ",i:"ἢ"},{l:"ἣ",i:"ἣ"},{l:"ἤ",i:"ἤ"},{l:"ἥ",i:"ἥ"},{l:"ῆ",i:"ῆ"},{l:"ῇ",i:"ῇ"},{l:"ῃ",i:"ῃ"},
+    {l:"ἰ",i:"ἰ"},{l:"ἱ",i:"ἱ"},{l:"ἴ",i:"ἴ"},{l:"ἵ",i:"ἵ"},{l:"ῖ",i:"ῖ"}
+  ],
+  [
+    {l:"ὀ",i:"ὀ"},{l:"ὁ",i:"ὁ"},{l:"ὄ",i:"ὄ"},{l:"ὅ",i:"ὅ"},
+    {l:"ὐ",i:"ὐ"},{l:"ὑ",i:"ὑ"},{l:"ὔ",i:"ὔ"},{l:"ὕ",i:"ὕ"},{l:"ῦ",i:"ῦ"},
+    {l:"ὠ",i:"ὠ"},{l:"ὡ",i:"ὡ"},{l:"ὤ",i:"ὤ"},{l:"ὥ",i:"ὥ"},{l:"ῶ",i:"ῶ"},{l:"ῳ",i:"ῳ"}
+  ],
+  // Row 7: subscript iota combos + misc
+  [
+    {l:"ᾷ",i:"ᾷ"},{l:"ᾧ",i:"ᾧ"},{l:"ῄ",i:"ῄ"},{l:"ῲ",i:"ῲ"},
+    {l:"ϊ",i:"ϊ"},{l:"ΐ",i:"ΐ"},{l:"ϋ",i:"ϋ"},{l:"ΰ",i:"ΰ"}
+  ],
+  // Row 8: utility
+  [
+    {l:"⌫", action:"backspace", wide:true},
+    {l:"spatie", action:"space", wide:true},
+    {l:"·", i:"·"}, // middle dot
+    {l:"—", i:"—"}
+  ]
+];
+
+let GK_TARGET = null; // the currently active input
+let GK_VISIBLE = JSON.parse(localStorage.getItem("gk_visible")||"true");
+
+function gkInsert(ch){
+  if(!GK_TARGET) return;
+  const inp = GK_TARGET;
+  const start = inp.selectionStart;
+  const end = inp.selectionEnd;
+  const val = inp.value;
+  inp.value = val.slice(0,start) + ch + val.slice(end);
+  inp.selectionStart = inp.selectionEnd = start + ch.length;
+  inp.focus();
+  inp.dispatchEvent(new Event("input"));
+}
+
+function gkBackspace(){
+  if(!GK_TARGET) return;
+  const inp = GK_TARGET;
+  const start = inp.selectionStart;
+  const end = inp.selectionEnd;
+  if(start===end && start>0){
+    inp.value = inp.value.slice(0,start-1)+inp.value.slice(start);
+    inp.selectionStart = inp.selectionEnd = start-1;
+  } else if(start!==end){
+    inp.value = inp.value.slice(0,start)+inp.value.slice(end);
+    inp.selectionStart = inp.selectionEnd = start;
+  }
+  inp.focus();
+  inp.dispatchEvent(new Event("input"));
+}
+
+function buildKeyboard(){
+  const wrap = document.createElement("div");
+  wrap.className = "gk-wrap";
+  wrap.id = "gk-panel";
+  if(!GK_VISIBLE) wrap.style.display = "none";
+
+  const label = document.createElement("div");
+  label.className = "gk-label";
+  label.textContent = "Grieks toetsenbord";
+  wrap.appendChild(label);
+
+  const rows = document.createElement("div");
+  rows.className = "gk-rows";
+
+  for(const row of GK_ROWS){
+    const rowEl = document.createElement("div");
+    rowEl.className = "gk-row";
+    for(const key of row){
+      const btn = document.createElement("button");
+      btn.className = "gk-btn" + (key.wide?" gk-wide":"");
+      btn.textContent = key.l;
+      btn.type = "button"; // prevent form submit
+      if(key.action==="backspace"){
+        btn.addEventListener("mousedown", e=>{e.preventDefault(); gkBackspace();});
+        btn.addEventListener("touchstart", e=>{e.preventDefault(); gkBackspace();},{passive:false});
+      } else if(key.action==="space"){
+        btn.addEventListener("mousedown", e=>{e.preventDefault(); gkInsert(" ");});
+        btn.addEventListener("touchstart", e=>{e.preventDefault(); gkInsert(" ");},{passive:false});
+      } else {
+        const ch = key.i;
+        btn.addEventListener("mousedown", e=>{e.preventDefault(); gkInsert(ch);});
+        btn.addEventListener("touchstart", e=>{e.preventDefault(); gkInsert(ch);},{passive:false});
+      }
+      rowEl.appendChild(btn);
+    }
+    rows.appendChild(rowEl);
+  }
+  wrap.appendChild(rows);
+  return wrap;
+}
+
+// Toggle switch shown above every Greek input
+function buildGKToggle(){
+  const div = document.createElement("div");
+  div.className = "gk-toggle";
+  div.id = "gk-toggle";
+  const sw = document.createElement("div");
+  sw.className = "gk-switch" + (GK_VISIBLE?" on":"");
+  sw.id = "gk-switch";
+  div.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h4M7 12h2M7 16h6M14 12h3M14 16h3"/></svg>`;
+  div.appendChild(sw);
+  const lbl = document.createElement("span");
+  lbl.textContent = "Grieks toetsenbord";
+  div.appendChild(lbl);
+  div.addEventListener("click", ()=>{
+    GK_VISIBLE = !GK_VISIBLE;
+    localStorage.setItem("gk_visible", JSON.stringify(GK_VISIBLE));
+    document.querySelectorAll(".gk-switch").forEach(s=>s.classList.toggle("on", GK_VISIBLE));
+    document.querySelectorAll("#gk-panel").forEach(p=>p.style.display=GK_VISIBLE?"":"none");
+  });
+  return div;
+}
+
+// Call after rendering any screen that has a Greek input.
+// anchorId: insert keyboard after this element (defaults to input itself)
+function attachKeyboard(inputId, anchorId){
+  const inp = document.getElementById(inputId);
+  if(!inp) return;
+  GK_TARGET = inp;
+  inp.addEventListener("focus", ()=>{ GK_TARGET = inp; });
+
+  const anchor = (anchorId && document.getElementById(anchorId)) || inp;
+  const toggle = buildGKToggle();
+  const kb = buildKeyboard();
+  anchor.insertAdjacentElement("afterend", kb);
+  anchor.insertAdjacentElement("afterend", toggle);
+}
+
+// ── INIT ──
+go("home");
+</script>
+</body>
+</html>
