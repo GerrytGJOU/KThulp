@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Grieks Ontleedcoach</title>
+<style>
+  :root {
+    --papyrus:#f7f3e8;--papyrus-dark:#ece5cc;--ink:#1a1a2e;--ink-light:#3a3a5c;
+    --blue:#1a3a6c;--blue-light:#2e5fa3;--gold:#c9a227;--gold-light:#e8c244;
+    --red:#8b1a2e;--green:#2a6040;--purple:#5c2a6c;--teal:#1a5c52;
+    --olive:#6b6b1a;--terracotta:#8b3a1a;--grey:#6b6b6b;--white:#fdfaf3;
+    --shadow:0 4px 24px rgba(26,26,46,0.13);--shadow-sm:0 2px 8px rgba(26,26,46,0.10);
+    /* Polytonisch-veilige fontstack: Palatino Linotype (Windows), Palatino (iPad/Mac),
+       Noto Serif (Chromebook) — alle met volledige polytonische Griekse dekking. */
+    --greek-font:'Palatino Linotype','Palatino','Noto Serif','Cambria','Times New Roman',serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  button{touch-action:manipulation;}
+
+  @media(max-width:400px){
+    header h1{font-size:1.15rem;}
+    .header-sub{display:none;}
+    .progress-badge{font-size:0.7rem;padding:4px 9px;}
+    .screen{padding:14px 10px 48px;}
+    .level-card{padding:14px 14px;gap:12px;}
+    .level-num{font-size:1.6rem;width:36px;}
+    .level-info h3{font-size:0.95rem;}
+    .level-info p{font-size:0.74rem;}
+    .word-btn{font-size:1rem;padding:8px 10px;}
+    .instruction-text{font-size:0.85rem;}
+    .hint{font-size:0.74rem;}
+    .step-pill{font-size:0.68rem;padding:6px 9px;}
+    .vw-btn{font-size:0.76rem;padding:9px 6px;}
+    .gloss-latin{font-size:0.82rem;}
+    .gloss-nl{font-size:0.66rem;}
+    .gloss-card{padding:5px 8px;}
+    .btn-primary{padding:14px;font-size:0.95rem;}
+    .translation-input{font-size:0.95rem;}
+    .score-banner .score-num{font-size:2.6rem;}
+  }
+
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:var(--papyrus);color:var(--ink);min-height:100vh;
+    background-image:
+      radial-gradient(ellipse at 15% 60%,rgba(201,162,39,0.08) 0%,transparent 55%),
+      radial-gradient(ellipse at 85% 15%,rgba(26,58,108,0.07) 0%,transparent 50%);
+  }
+
+  /* HEADER — Griekse stijl: diepblauw met gouden accenten */
+  header{
+    background:var(--blue);color:var(--papyrus);
+    padding:0;position:sticky;top:0;z-index:100;
+    box-shadow:0 3px 16px rgba(26,26,46,0.35);
+  }
+  .header-meander{
+    height:5px;
+    background:repeating-linear-gradient(
+      90deg,
+      var(--gold) 0px, var(--gold) 8px,
+      var(--blue) 8px, var(--blue) 12px,
+      var(--gold) 12px, var(--gold) 16px,
+      var(--blue-light) 16px, var(--blue-light) 24px
+    );
+  }
+  .header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 20px 10px;}
+  header h1{font-size:1.35rem;font-weight:700;letter-spacing:0.04em;line-height:1;font-style:italic;}
+  header h1 span{color:var(--gold-light);}
+  .header-sub{font-size:0.66rem;color:var(--papyrus-dark);margin-top:3px;letter-spacing:0.1em;text-transform:uppercase;}
+  .progress-badge{background:var(--gold);color:var(--blue);border-radius:20px;padding:4px 12px;font-size:0.78rem;font-weight:700;white-space:nowrap;}
+
+  /* SCREENS */
+  .screen{display:none;padding:20px 14px 48px;max-width:720px;margin:0 auto;}
+  .screen.active{display:block;}
+
+  /* LEVEL SELECT */
+  .level-intro{text-align:center;margin-bottom:28px;}
+  .level-intro h2{font-size:1.65rem;font-weight:700;margin-bottom:6px;font-style:italic;}
+  .level-intro .greek-sub{font-family:var(--greek-font);font-size:1.2rem;color:var(--blue);margin-bottom:6px;letter-spacing:0.05em;}
+  .level-intro p{color:var(--ink-light);font-size:0.9rem;font-style:italic;line-height:1.6;}
+  .levels-grid{display:flex;flex-direction:column;gap:12px;}
+  .level-card{
+    background:var(--white);border:2px solid var(--papyrus-dark);border-radius:14px;
+    padding:18px 20px;cursor:pointer;transition:all 0.18s ease;
+    box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:16px;
+    position:relative;overflow:hidden;
+  }
+  .level-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:14px 0 0 14px;}
+  .level-card:nth-child(1)::before{background:var(--green);}
+  .level-card:nth-child(2)::before{background:var(--blue-light);}
+  .level-card:nth-child(3)::before{background:var(--gold);}
+  .level-card:nth-child(4)::before{background:var(--terracotta);}
+  .level-card:nth-child(5)::before{background:var(--red);}
+  .level-card:active{transform:scale(0.98);background:var(--papyrus);}
+  .level-num{font-size:2rem;font-weight:900;line-height:1;width:44px;text-align:center;flex-shrink:0;font-style:italic;}
+  .level-card:nth-child(1) .level-num{color:var(--green);}
+  .level-card:nth-child(2) .level-num{color:var(--blue-light);}
+  .level-card:nth-child(3) .level-num{color:var(--gold);}
+  .level-card:nth-child(4) .level-num{color:var(--terracotta);}
+  .level-card:nth-child(5) .level-num{color:var(--red);}
+  .level-info h3{font-size:1.02rem;font-weight:700;margin-bottom:2px;}
+  .level-info p{font-size:0.79rem;color:var(--ink-light);font-style:italic;line-height:1.4;}
+  .level-count{margin-left:auto;font-size:0.72rem;color:var(--grey);text-align:right;flex-shrink:0;}
+
+  /* EXERCISE HEADER */
+  .ex-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .btn-back{background:none;border:2px solid var(--papyrus-dark);border-radius:10px;padding:7px 12px;cursor:pointer;font-size:0.82rem;color:var(--ink-light);font-family:Georgia,serif;transition:all 0.15s;flex-shrink:0;}
+  .btn-back:active{background:var(--papyrus-dark);}
+  .ex-title{font-size:0.95rem;font-weight:700;font-style:italic;}
+  .ex-counter{margin-left:auto;font-size:0.8rem;color:var(--grey);flex-shrink:0;}
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap{background:var(--papyrus-dark);border-radius:20px;height:5px;margin-bottom:16px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--blue-light));border-radius:20px;transition:width 0.4s ease;}
+
+  /* STEP PILLS */
+  .psolmo-steps{display:flex;gap:5px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+  .psolmo-steps::-webkit-scrollbar{height:3px;}
+  .psolmo-steps::-webkit-scrollbar-thumb{background:var(--papyrus-dark);border-radius:3px;}
+  .step-pill{
+    padding:7px 11px;border-radius:20px;font-size:0.73rem;font-weight:700;letter-spacing:0.03em;
+    border:2px solid transparent;transition:all 0.2s;opacity:0.38;white-space:nowrap;
+    cursor:pointer;flex-shrink:0;font-family:Georgia,serif;
+  }
+  .step-pill.active{opacity:1;transform:scale(1.06);box-shadow:0 2px 8px rgba(0,0,0,0.15);}
+  .step-pill.done{opacity:0.72;}
+  .step-pill.locked{cursor:default;}
+  .step-pill[data-step="P"]      {background:#e0f0e8;color:var(--green);      border-color:var(--green);}
+  .step-pill[data-step="S"]      {background:#e0e8f8;color:var(--blue-light); border-color:var(--blue-light);}
+  .step-pill[data-step="A"]      {background:#fdf5e0;color:#7a5c00;            border-color:#c9a227;}
+  .step-pill[data-step="ACI"]    {background:#f5e8f5;color:#8b3a8b;            border-color:#8b3a8b;}
+  .step-pill[data-step="GenAbs"] {background:#e0f0f0;color:#2e6b6b;            border-color:#2e6b6b;}
+  .step-pill[data-step="O"]      {background:#e8eef8;color:var(--blue);       border-color:var(--blue);}
+  .step-pill[data-step="L"]      {background:#fdf3e8;color:var(--terracotta); border-color:var(--terracotta);}
+  .step-pill[data-step="M"]      {background:#f3e8fd;color:var(--purple);     border-color:var(--purple);}
+  .step-pill[data-step="Rest"]   {background:#f8e8e8;color:var(--red);        border-color:var(--red);}
+
+  /* A-GROUP COLOURS */
+  .word-btn.tagged-A1{background:#fff8cc;border-color:#c9a800;color:#7a5c00;font-weight:700;}
+  .word-btn.tagged-A2{background:#fce8ff;border-color:#9b30c0;color:#6a1a8a;font-weight:700;}
+  .word-btn.tagged-A3{background:#e0f7ff;border-color:#1a7fa0;color:#0d4a60;font-weight:700;}
+  .word-btn.tagged-A4{background:#fff0e0;border-color:#c06030;color:#7a3000;font-weight:700;}
+  .word-btn.tagged-A5{background:#e8ffe8;border-color:#30a050;color:#0a4a20;font-weight:700;}
+  .tagged-A1 .word-tag{background:#c9a800;}
+  .tagged-A2 .word-tag{background:#9b30c0;}
+  .tagged-A3 .word-tag{background:#1a7fa0;}
+  .tagged-A4 .word-tag{background:#c06030;}
+  .tagged-A5 .word-tag{background:#30a050;}
+
+  /* INSTRUCTION BOX */
+  .instruction-box{
+    background:var(--white);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;
+    padding:12px 14px;margin-bottom:16px;box-shadow:var(--shadow-sm);
+  }
+  .step-label{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);font-weight:700;margin-bottom:3px;}
+  .instruction-text{font-size:0.92rem;color:var(--ink);line-height:1.5;}
+  .hint{font-size:0.78rem;color:var(--ink-light);font-style:italic;margin-top:4px;}
+
+  /* SENTENCE CARD */
+  .sentence-card{
+    background:var(--white);border:2px solid var(--papyrus-dark);border-radius:16px;
+    padding:20px 16px;margin-bottom:14px;box-shadow:var(--shadow);text-align:center;
+  }
+  .sentence-context{font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey);margin-bottom:10px;}
+  .sentence-words{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;line-height:1;}
+
+  /* WORD BUTTONS */
+  .word-btn{
+    font-family:var(--greek-font);font-size:1.18rem;
+    padding:9px 12px;border-radius:10px;border:2px solid var(--papyrus-dark);
+    background:var(--papyrus);cursor:pointer;transition:all 0.15s;color:var(--ink);position:relative;
+  }
+  .word-btn:active{transform:scale(0.94);}
+  .word-btn.selectable:hover{border-color:var(--gold);background:#fdf9f0;}
+  .word-btn.tagged-P      {background:#e0f0e8;border-color:var(--green);      color:var(--green);      font-weight:700;}
+  .word-btn.tagged-Sn     {background:#dce8f8;border-color:var(--blue-light); color:var(--blue-light); font-weight:700;}
+  .word-btn.tagged-So     {background:#c8d8f0;border-color:var(--blue);       color:var(--blue);       font-weight:700;}
+  .word-btn.tagged-O      {background:#e8eef8;border-color:var(--blue);       color:var(--blue);       font-weight:700;}
+  .word-btn.tagged-L      {background:#fdf3e8;border-color:var(--terracotta); color:var(--terracotta); font-weight:700;}
+  .word-btn.tagged-M      {background:#f3e8fd;border-color:var(--purple);     color:var(--purple);     font-weight:700;}
+  .word-btn.tagged-Rest   {background:#f8e8e8;border-color:var(--red);        color:var(--red);        font-weight:700;}
+  .word-btn.tagged-ACI    {background:#f5e8f5;border-color:#8b3a8b;color:#8b3a8b;font-weight:700;}
+  .word-btn.tagged-GenAbs {background:#e0f0f0;border-color:#2e6b6b;color:#2e6b6b;font-weight:700;}
+  .word-btn.wrong{animation:shake 0.3s ease;border-color:#cc0000!important;background:#fff0f0!important;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+  /* WORD TAG BADGE */
+  .word-tag{position:absolute;top:-7px;right:-7px;min-width:17px;height:17px;border-radius:9px;padding:0 3px;font-size:7.5px;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;font-style:normal;font-family:Georgia,serif;}
+  .tagged-P    .word-tag{background:var(--green);}
+  .tagged-Sn   .word-tag{background:var(--blue-light);}
+  .tagged-So   .word-tag{background:var(--blue);}
+  .tagged-O    .word-tag{background:var(--blue);}
+  .tagged-L    .word-tag{background:var(--terracotta);}
+  .tagged-M    .word-tag{background:var(--purple);}
+  .tagged-Rest .word-tag{background:var(--red);}
+  .tagged-ACI .word-tag{background:#8b3a8b;}
+  .tagged-GenAbs .word-tag{background:#2e6b6b;}
+
+  /* VOEGWOORD CHOOSER */
+  .vw-chooser{display:none;background:var(--white);border:2px solid var(--blue-light);border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:var(--shadow-sm);}
+  .vw-chooser.show{display:block;}
+  .vw-chooser p{font-size:0.85rem;margin-bottom:10px;color:var(--ink);}
+  .vw-chooser strong{font-family:var(--greek-font);font-weight:700;}
+  .vw-btns{display:flex;gap:8px;}
+  .vw-btn{flex:1;padding:10px 8px;border-radius:10px;border:2px solid;cursor:pointer;font-family:Georgia,serif;font-size:0.82rem;font-weight:700;transition:all 0.15s;text-align:center;}
+  .vw-btn.neven{background:#dce8f8;border-color:var(--blue-light);color:var(--blue-light);}
+  .vw-btn.neven:active{background:var(--blue-light);color:white;}
+  .vw-btn.onder{background:#c8d8f0;border-color:var(--blue);color:var(--blue);}
+  .vw-btn.onder:active{background:var(--blue);color:white;}
+
+  /* SKIP BUTTON */
+  .skip-btn{display:block;width:100%;background:none;border:2px dashed var(--papyrus-dark);border-radius:10px;padding:9px;color:var(--grey);font-family:Georgia,serif;font-size:0.82rem;cursor:pointer;margin-bottom:14px;transition:all 0.15s;}
+  .skip-btn:active{background:var(--papyrus-dark);}
+
+  /* FEEDBACK */
+  .feedback-box{border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:0.88rem;line-height:1.5;display:none;}
+  .feedback-box.show{display:block;}
+  .feedback-box.correct  {background:#e0f0e8;border:2px solid var(--green);color:#1a4a2e;}
+  .feedback-box.incorrect{background:#fdf0e8;border:2px solid var(--terracotta);color:#5a2e0f;}
+  .feedback-box strong{display:block;margin-bottom:3px;}
+
+  /* TRANSLATION */
+  .translation-section{margin-top:6px;}
+  .translation-section label{display:block;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink-light);margin-bottom:7px;font-weight:600;}
+  .translation-input{width:100%;border:2px solid var(--papyrus-dark);border-radius:12px;padding:12px 14px;font-family:Georgia,serif;font-size:1rem;color:var(--ink);background:var(--white);resize:none;min-height:78px;transition:border-color 0.15s;-webkit-appearance:none;}
+  .translation-input:focus{outline:none;border-color:var(--gold);}
+
+  /* BUTTONS */
+  .btn-primary{width:100%;background:var(--blue);color:var(--papyrus);border:none;border-radius:12px;padding:15px;font-family:Georgia,serif;font-size:1rem;font-weight:700;cursor:pointer;margin-top:10px;transition:all 0.15s;letter-spacing:0.03em;}
+  .btn-primary:active{transform:scale(0.98);background:var(--ink);}
+  .btn-primary.gold{background:var(--gold);color:var(--blue);}
+
+  /* RESULT SCREENS */
+  .result-card{background:var(--white);border:2px solid var(--papyrus-dark);border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow-sm);}
+  .result-card .sentence-latin{font-family:var(--greek-font);font-size:1.02rem;margin-bottom:9px;color:var(--ink);}
+  .result-row{display:flex;align-items:flex-start;gap:9px;margin-bottom:5px;font-size:0.86rem;}
+  .result-label{font-weight:700;min-width:76px;color:var(--ink-light);font-size:0.75rem;text-transform:uppercase;letter-spacing:0.05em;padding-top:1px;flex-shrink:0;}
+  .result-value{color:var(--ink);line-height:1.4;}
+  .result-value.student{font-style:italic;color:var(--blue-light);}
+  .score-banner{text-align:center;background:var(--blue);color:var(--papyrus);border-radius:16px;padding:22px;margin-bottom:22px;}
+  .score-banner .score-num{font-size:3.2rem;font-weight:900;color:var(--gold-light);line-height:1;}
+  .score-banner .score-label{font-size:0.82rem;color:var(--papyrus-dark);margin-top:3px;}
+  .score-banner .score-msg{font-size:0.95rem;margin-top:9px;font-style:italic;}
+  .divider{border:none;border-top:1px solid var(--papyrus-dark);margin:10px 0;}
+
+  /* WORD GLOSS */
+  .gloss-section{margin-top:0;margin-bottom:14px;display:none;}
+  .gloss-section.show{display:block;}
+  .gloss-label{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.09em;color:var(--ink-light);font-weight:700;margin-bottom:8px;}
+  .gloss-grid{display:flex;flex-wrap:wrap;gap:6px;}
+  .gloss-card{border-radius:10px;border:2px solid;padding:6px 10px;min-width:60px;text-align:center;flex-shrink:0;transition:all 0.15s;}
+  .gloss-latin{font-family:var(--greek-font);font-size:0.9rem;font-weight:700;display:block;line-height:1.2;}
+  .gloss-nl{font-size:0.72rem;display:block;margin-top:2px;line-height:1.2;opacity:0.85;}
+  .gloss-P    {background:#e0f0e8;border-color:var(--green);      color:var(--green);}
+  .gloss-Sn   {background:#dce8f8;border-color:var(--blue-light); color:var(--blue-light);}
+  .gloss-So   {background:#c8d8f0;border-color:var(--blue);       color:var(--blue);}
+  .gloss-A1   {background:#fff8cc;border-color:#c9a800;color:#7a5c00;}
+  .gloss-A2   {background:#fce8ff;border-color:#9b30c0;color:#6a1a8a;}
+  .gloss-A3   {background:#e0f7ff;border-color:#1a7fa0;color:#0d4a60;}
+  .gloss-A4   {background:#fff0e0;border-color:#c06030;color:#7a3000;}
+  .gloss-A5   {background:#e8ffe8;border-color:#30a050;color:#0a4a20;}
+  .gloss-O    {background:#e8eef8;border-color:var(--blue);       color:var(--blue);}
+  .gloss-L    {background:#fdf3e8;border-color:var(--terracotta); color:var(--terracotta);}
+  .gloss-M    {background:#f3e8fd;border-color:var(--purple);     color:var(--purple);}
+  .gloss-Rest {background:#f8e8e8;border-color:var(--red);        color:var(--red);}
+  .gloss-ACI  {background:#f5e8f5;border-color:#8b3a8b;color:#8b3a8b;}
+  .gloss-GenAbs{background:#e0f0f0;border-color:#2e6b6b;color:#2e6b6b;}
+  .gloss-none {background:var(--papyrus);border-color:var(--papyrus-dark);color:var(--ink-light);}
+
+  /* FOOTER */
+  footer{
+    text-align:center;padding:18px 14px 28px;
+    font-size:0.7rem;color:var(--grey);font-style:italic;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-meander"></div>
+  <div class="header-inner">
+    <div>
+      <h1>Grieks <span>Ontleedcoach</span></h1>
+      <div class="header-sub">Ρ·Υ·Α·Μ·Ε — Stap voor stap</div>
+    </div>
+    <div class="progress-badge" id="headerBadge">Kies niveau</div>
+  </div>
+</header>
+
+<!-- SCREEN 1: LEVEL SELECT -->
+<div class="screen active" id="screenLevel">
+  <div class="level-intro">
+    <h2>Kies een niveau</h2>
+    <div class="greek-sub">Ἕλου ἐπίπεδον</div>
+    <p>Ontleed Griekse zinnen stap voor stap<br>via het R·U·A·M·E-systeem.</p>
+  </div>
+  <div class="levels-grid" id="levelsGrid"></div>
+  <footer>Grieks Ontleedcoach · Gerben de Jong · 2026</footer>
+</div>
+
+<!-- SCREEN 2: EXERCISE -->
+<div class="screen" id="screenExercise">
+  <div class="ex-header">
+    <button class="btn-back" onclick="goToLevelSelect()">← Terug</button>
+    <span class="ex-title" id="exTitle"></span>
+    <span class="ex-counter" id="exCounter"></span>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="psolmo-steps" id="psolmoSteps"></div>
+  <div class="instruction-box" id="instructionBox">
+    <div class="step-label" id="stepLabel"></div>
+    <div class="instruction-text" id="stepInstruction"></div>
+    <div class="hint" id="stepHint"></div>
+  </div>
+  <div class="sentence-card">
+    <div class="sentence-context" id="sentenceContext"></div>
+    <div class="sentence-words" id="sentenceWords"></div>
+  </div>
+  <div class="vw-chooser" id="vwChooser">
+    <p>Wat voor voegwoord is <strong id="vwWord"></strong>?</p>
+    <div class="vw-btns">
+      <button class="vw-btn neven" onclick="confirmVoegwoord('Sn')">🔗 Nevenschikkend</button>
+      <button class="vw-btn onder" onclick="confirmVoegwoord('So')">↳ Onderschikkend</button>
+    </div>
+  </div>
+  <button class="skip-btn" id="skipBtn" onclick="skipStep()"></button>
+  <div class="feedback-box" id="feedbackBox"></div>
+  <div class="gloss-section" id="glossSection">
+    <div class="gloss-label">Woordbetekenissen</div>
+    <div class="gloss-grid" id="glossGrid"></div>
+  </div>
+  <div class="translation-section" id="translationSection" style="display:none">
+    <label>Jouw Nederlandse vertaling:</label>
+    <textarea class="translation-input" id="translationInput" placeholder="Schrijf hier je vertaling..."></textarea>
+    <button class="btn-primary gold" onclick="submitTranslation()">Vertaling bekijken →</button>
+  </div>
+</div>
+
+<!-- SCREEN 3: SENTENCE RESULT -->
+<div class="screen" id="screenSentenceResult">
+  <div class="ex-header"><span class="ex-title">Resultaat</span></div>
+  <div id="sentenceResultContent"></div>
+  <button class="btn-primary" id="btnNextSentence" onclick="nextSentence()">Volgende zin →</button>
+</div>
+
+<!-- SCREEN 4: LEVEL RESULT -->
+<div class="screen" id="screenLevelResult">
+  <div class="score-banner" id="scoreBanner"></div>
+  <div id="levelResultList"></div>
+  <button class="btn-primary gold" onclick="goToLevelSelect()">Terug naar niveaus</button>
+  <button class="btn-primary" onclick="retryLevel()" style="margin-top:10px;">Opnieuw proberen</button>
+  <footer style="padding-top:24px;">Grieks Ontleedcoach · Gerben de Jong · 2026</footer>
+</div>
+
+<script>
+// ============================================================
+// STAP-DEFINITIES
+// R = Rhèma (persoonsvorm), U = Hypotaxis (voegwoord), A = Antikeimenon (onderwerp),
+// M = Mesos (lijdend voorwerp / indirecte obj.), E = Extra (overige bepalingen)
+// Stappen per niveau:
+//   1: R, A, M
+//   2: R, U, A, M, E
+//   3: R, U, A, M, Attr, E
+//   4-5: R, U, A, ACI, M, Attr, E
+// ============================================================
+const ALL_STEPS = [
+  { key:"P", naam:"Persoonsvorm(en)",
+    label:"Persoonsvorm(en) — Ῥῆμα",
+    instructie:"Tik op alle vervoegde werkwoorden (de persoonsvorm) in de zin.",
+    heeftGeen:false, skipTekst:null, kleur:"var(--green)", minLevel:1 },
+  { key:"S", naam:"Voegwoord(en)",
+    label:"Voegwoord(en) — Σύνδεσμος",
+    instructie:"Tik op de voegwoorden en geef aan of het nevenschikkend of onderschikkend is.",
+    heeftGeen:true, skipTekst:"Geen voegwoord in deze zin", kleur:"var(--blue-light)", minLevel:2 },
+  { key:"O", naam:"Onderwerp",
+    label:"Onderwerp — Ὑποκείμενον",
+    instructie:"Tik op het kernwoord van het onderwerp (nominativus).",
+    heeftGeen:true, skipTekst:"Onderwerp zit verborgen in de persoonsvorm", kleur:"var(--blue)", minLevel:1 },
+  { key:"ACI", naam:"Accusativus + infinitief",
+    label:"Accusativus + Infinitief (AcI)",
+    instructie:"Tik op de accusativus van de AcI-constructie. De infinitief gaat naar 'Overige bepalingen'.",
+    heeftGeen:true, skipTekst:"Geen AcI-constructie in deze zin", kleur:"#8b3a8b", minLevel:4 },
+  { key:"L", naam:"Lijdend voorwerp",
+    label:"Lijdend voorwerp — Αἴτιον",
+    instructie:"Tik op het kernwoord van het lijdend voorwerp (accusativus).",
+    heeftGeen:true, skipTekst:"Geen lijdend voorwerp in deze zin", kleur:"var(--terracotta)", minLevel:1 },
+  { key:"M", naam:"Meewerkend/indirect voorwerp",
+    label:"Indirect voorwerp — Δοτική",
+    instructie:"Tik op het kernwoord van het indirect voorwerp (datief).",
+    heeftGeen:true, skipTekst:"Geen indirect voorwerp in deze zin", kleur:"var(--purple)", minLevel:2 },
+  { key:"GenAbs", naam:"Genitivus Absolutus",
+    label:"Genitivus Absolutus — Gen. Abs.",
+    instructie:"Tik op de woorden van de genitivus absolutus (substantief + participium in de genitief).",
+    heeftGeen:true, skipTekst:"Geen genitivus absolutus in deze zin", kleur:"#2e6b6b", minLevel:3 },
+  { key:"A", naam:"Attribuutgroep(en)",
+    label:"Attribuutgroep(en) — Ἐπίθετον",
+    instructie:"Tik op het kernwoord van een naamwoordgroep. Attributen worden automatisch gekleurd.",
+    heeftGeen:true, skipTekst:"Geen attribuutgroepen in deze zin", kleur:"#c9a227", minLevel:3 },
+  { key:"Rest", naam:"Overige bepalingen",
+    label:"Overige bepalingen — Λοιπά",
+    instructie:"Tik op alle resterende woorden.",
+    heeftGeen:true, skipTekst:"Klaar — ga naar de vertaling", kleur:"var(--red)", minLevel:2 }
+];
+
+function getStepsForLevel(lvl){
+  return ALL_STEPS.filter(s => s.minLevel <= lvl);
+}
+
+function stepOfTag(tag){
+  if(tag==='Sn'||tag==='So') return 'S';
+  if(tag==='A1'||tag==='A2'||tag==='A3'||tag==='A4'||tag==='A5') return 'A';
+  return tag;
+}
+
+function tagLabel(tag){
+  const map={P:'persoonsvorm',Sn:'nevenschikkend voegwoord',So:'onderschikkend voegwoord',
+    A1:'attribuutgroep 1',A2:'attribuutgroep 2',A3:'attribuutgroep 3',A4:'attribuutgroep 4',A5:'attribuutgroep 5',
+    O:'onderwerp',ACI:'AcI (accusativus)',L:'lijdend voorwerp',M:'indirect voorwerp',GenAbs:'genitivus absolutus',Rest:'overige bepaling'};
+  return map[tag]||tag;
+}
+
+// ============================================================
+// DATABASE — Griekse zinnen (5 niveaus)
+// psolmo.S: { Sn:[nevenschikkend indices], So:[onderschikkend indices] }
+// psolmo.A: array van groepen [ {kern:idx, attr:[idx,...]}, ... ]
+// psolmo.GenAbs: genitivus absolutus (Grieks equivalent van ablativus absolutus)
+// ============================================================
+const DATABASE = {
+  1:{
+    naam:"Niveau 1 — Beginner",
+    beschrijving:"Eenvoudige enkelvoudige zinnen, basiswoorden",
+    zinnen:[
+      { latijn:["ὁ","παῖς","τρέχει."], context:"Oefenzin",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
+        vertaling:"Het kind rent.",
+        woorden:["de (art.)","kind","hij/zij rent"],
+        uitleg:{P:"Τρέχει = hij/zij rent. Praesens actief, 3e pers. ev.",S:"",ACI:"",GenAbs:"",A:"",O:"Παῖς = kind, nominativus.",L:"",M:"",Rest:"Ὁ = lidwoord bij παῖς."}},
+      { latijn:["ἡ","γυνὴ","βλέπει."], context:"Oefenzin",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
+        vertaling:"De vrouw kijkt.",
+        woorden:["de (art.)","vrouw","zij kijkt"],
+        uitleg:{P:"Βλέπει = zij kijkt. 3e pers. ev. praesens.",S:"",ACI:"",GenAbs:"",A:"",O:"Γυνή = vrouw, nominativus.",L:"",M:"",Rest:"Ἡ = lidwoord (fem.)."}},
+      { latijn:["ὁ","στρατηγὸς","λέγει."], context:"Oefenzin",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
+        vertaling:"De aanvoerder spreekt.",
+        woorden:["de (art.)","aanvoerder","hij spreekt"],
+        uitleg:{P:"Λέγει = hij spreekt. 3e pers. ev.",S:"",ACI:"",GenAbs:"",A:"",O:"Στρατηγός = aanvoerder, nominativus.",L:"",M:"",Rest:"Ὁ = lidwoord."}},
+      { latijn:["οἱ","πολῖται","φεύγουσιν."], context:"Oefenzin",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
+        vertaling:"De burgers vluchten.",
+        woorden:["de (art. mv.)","burgers","zij vluchten"],
+        uitleg:{P:"Φεύγουσιν = zij vluchten. 3e pers. mv. praesens.",S:"",ACI:"",GenAbs:"",A:"",O:"Πολῖται = burgers, nominativus mv.",L:"",M:"",Rest:"Οἱ = lidwoord (mv.)."}},
+      { latijn:["ὁ","νεανίας","γράφει."], context:"Oefenzin",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
+        vertaling:"De jongeman schrijft.",
+        woorden:["de (art.)","jongeman","hij schrijft"],
+        uitleg:{P:"Γράφει = hij schrijft. 3e pers. ev.",S:"",ACI:"",GenAbs:"",A:"",O:"Νεανίας = jongeman, nominativus (1e declinatie, masc.).",L:"",M:"",Rest:""}},
+      { latijn:["ἡ","κόρη","καλή","ἐστιν."], context:"Oefenzin",
+        psolmo:{P:[3],S:{Sn:[],So:[]},A:[{kern:1,attr:[2]}],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
+        vertaling:"Het meisje is mooi.",
+        woorden:["de (art.)","meisje","mooi","is"],
+        uitleg:{P:"Ἐστιν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Κόρη = meisje (predicatief: ἡ κόρη ἐστίν).",L:"",M:"",Rest:"Καλή = mooi: predicatief bijv. nw."}},
+      { latijn:["ὁ","παῖς","τὸν","κύνα","βλέπει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"Het kind ziet de hond.",
+        woorden:["de (art.)","kind","de (art. acc.)","hond (acc.)","hij ziet"],
+        uitleg:{P:"Βλέπει = hij ziet.",S:"",ACI:"",GenAbs:"",A:"",O:"Παῖς = kind, nominativus.",L:"Κύνα = hond, accusativus.",M:"",Rest:"Τόν = accusativus lidwoord bij κύνα."}},
+      { latijn:["ἡ","γυνὴ","τὴν","οἰκίαν","φυλάττει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De vrouw bewaakt het huis.",
+        woorden:["de (art.)","vrouw","het (art. acc.)","huis (acc.)","zij bewaakt"],
+        uitleg:{P:"Φυλάττει = zij bewaakt.",S:"",ACI:"",GenAbs:"",A:"",O:"Γυνή = vrouw, nominativus.",L:"Οἰκίαν = huis, accusativus.",M:"",Rest:"Τήν = accusatief lidwoord."}},
+      { latijn:["οἱ","στρατιῶται","μάχονται."], context:"Oefenzin",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
+        vertaling:"De soldaten vechten.",
+        woorden:["de (art. mv.)","soldaten","zij vechten"],
+        uitleg:{P:"Μάχονται = zij vechten. Deponens, 3e pers. mv.",S:"",ACI:"",GenAbs:"",A:"",O:"Στρατιῶται = soldaten, nominativus mv.",L:"",M:"",Rest:"Οἱ = lidwoord."}},
+      { latijn:["ὁ","φιλόσοφος","διδάσκει."], context:"Oefenzin",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
+        vertaling:"De filosoof onderwijst.",
+        woorden:["de (art.)","filosoof","hij onderwijst"],
+        uitleg:{P:"Διδάσκει = hij onderwijst.",S:"",ACI:"",GenAbs:"",A:"",O:"Φιλόσοφος = filosoof.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","ποιητὴς","γράφει","τοὺς","λόγους."], context:"Oefenzin",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[4],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"De dichter schrijft de woorden/toespraken.",
+        woorden:["de (art.)","dichter","hij schrijft","de (art. acc. mv.)","woorden (acc.)"],
+        uitleg:{P:"Γράφει = hij schrijft.",S:"",ACI:"",GenAbs:"",A:"",O:"Ποιητής = dichter.",L:"Λόγους = woorden/toespraken, accusativus mv.",M:"",Rest:"Τούς = acc. lidwoord mv."}},
+      { latijn:["ἡ","θεὰ","τοὺς","ἀνθρώπους","σῴζει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De godin redt de mensen.",
+        woorden:["de (art.)","godin","de (art. acc. mv.)","mensen (acc.)","zij redt"],
+        uitleg:{P:"Σῴζει = zij redt.",S:"",ACI:"",GenAbs:"",A:"",O:"Θεά = godin, nominativus.",L:"Ἀνθρώπους = mensen, accusativus mv.",M:"",Rest:""}},
+      { latijn:["ὁ","δοῦλος","τρέχει","καὶ","ὁ","κύριος","βλέπει."], context:"Oefenzin — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[3],So:[]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"De slaaf rent en de meester kijkt.",
+        woorden:["de","slaaf","hij rent","en","de","meester","hij kijkt"],
+        uitleg:{P:"Τρέχει en βλέπει: twee persoonsvormen.",S:"Καί = en: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Δοῦλος = onderwerp 1e; κύριος = onderwerp 2e.",L:"",M:"",Rest:""}},
+      { latijn:["ἡ","κόρη","ᾄδει","καὶ","ὁ","παῖς","παίζει."], context:"Oefenzin — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[3],So:[]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"Het meisje zingt en het kind speelt.",
+        woorden:["het","meisje","zij zingt","en","het","kind","hij speelt"],
+        uitleg:{P:"ᾌδει en παίζει: twee persoonsvormen.",S:"Καί = en: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Κόρη = onderwerp 1e; παῖς = onderwerp 2e.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","νόμος","καλός","ἐστιν."], context:"Oefenzin",
+        psolmo:{P:[3],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[2],art:{0:1}},
+        vertaling:"De wet is goed/mooi.",
+        woorden:["de","wet","goed","is"],
+        uitleg:{P:"Ἐστιν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Νόμος = wet, nominativus.",L:"",M:"",Rest:"Καλός = goed: predicatief bijv. nw."}},
+      { latijn:["οἱ","νέοι","ἀθλοῦσιν."], context:"Oefenzin",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
+        vertaling:"De jongeren oefenen/sporten.",
+        woorden:["de","jongeren","zij sporten"],
+        uitleg:{P:"Ἀθλοῦσιν = zij sporten. 3e pers. mv.",S:"",ACI:"",GenAbs:"",A:"",O:"Νέοι = jongeren.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","ἄνθρωπος","τὴν","ἀλήθειαν","λέγει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De mens spreekt de waarheid.",
+        woorden:["de","mens","de (acc.)","waarheid (acc.)","hij spreekt"],
+        uitleg:{P:"Λέγει = hij spreekt.",S:"",ACI:"",GenAbs:"",A:"",O:"Ἄνθρωπος = mens.",L:"Ἀλήθειαν = waarheid, accusativus.",M:"",Rest:""}},
+      { latijn:["ἡ","ψυχὴ","ἀθάνατός","ἐστιν."], context:"Oefenzin — filosofisch",
+        psolmo:{P:[3],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[2],art:{0:1}},
+        vertaling:"De ziel is onsterfelijk.",
+        woorden:["de","ziel","onsterfelijk","is"],
+        uitleg:{P:"Ἐστιν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Ψυχή = ziel, nominativus.",L:"",M:"",Rest:"Ἀθάνατος = onsterfelijk: predicatief."}}
+    ]
+  },
+  2:{
+    naam:"Niveau 2 — Onderbouw",
+    beschrijving:"Voegwoorden, indirect voorwerp, eenvoudige bijzinnen",
+    zinnen:[
+      { latijn:["ὁ","διδάσκαλος","τοῖς","παισὶ","τοὺς","νόμους","διδάσκει."], context:"Schoolscène",
+        psolmo:{P:[6],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[5],M:[3],Rest:[],art:{0:1,2:3,4:5}},
+        vertaling:"De leraar onderwijst de kinderen de wetten.",
+        woorden:["de","leraar","de (dat. mv.)","kinderen (dat.)","de (acc. mv.)","wetten (acc.)","hij onderwijst"],
+        uitleg:{P:"Διδάσκει = hij onderwijst.",S:"",ACI:"",GenAbs:"",A:"",O:"Διδάσκαλος = leraar.",L:"Νόμους = wetten, accusativus mv.",M:"Παισί = kinderen, datief mv.",Rest:""}},
+      { latijn:["ὁ","πατὴρ","τῷ","υἱῷ","δῶρον","δίδωσιν."], context:"Familie",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[4],M:[3],Rest:[],art:{0:1,2:3}},
+        vertaling:"De vader geeft de zoon een geschenk.",
+        woorden:["de","vader","de (dat.)","zoon (dat.)","geschenk (acc.)","hij geeft"],
+        uitleg:{P:"Δίδωσιν = hij geeft. 3e pers. ev. van δίδωμι.",S:"",ACI:"",GenAbs:"",A:"",O:"Πατήρ = vader.",L:"Δῶρον = geschenk, accusativus.",M:"Υἱῷ = aan de zoon, datief.",Rest:""}},
+      { latijn:["ὁ","ποιητὴς","γράφει","ὅτι","ἡ","ζωὴ","βραχεῖά","ἐστιν."], context:"Filosofische uitspraak — samengesteld",
+        psolmo:{P:[2,7],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[6],art:{0:1,4:5}},
+        vertaling:"De dichter schrijft dat het leven kort is.",
+        woorden:["de","dichter","hij schrijft","dat","het","leven","kort","is"],
+        uitleg:{P:"Γράφει en ἐστίν: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend voegwoord (indirecte rede).",ACI:"",GenAbs:"",A:"",O:"Ποιητής = onderwerp hoofdzin; ζωή = onderwerp bijzin.",L:"",M:"",Rest:"Βραχεῖα = kort: predicatief bijv. nw."}},
+      { latijn:["οἱ","Ἀθηναῖοι","τοὺς","πολεμίους","νικῶσιν."], context:"Geschiedenis",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De Atheners overwinnen de vijanden.",
+        woorden:["de","Atheners","de (acc. mv.)","vijanden (acc.)","zij overwinnen"],
+        uitleg:{P:"Νικῶσιν = zij overwinnen. 3e pers. mv.",S:"",ACI:"",GenAbs:"",A:"",O:"Ἀθηναῖοι = Atheners, nominativus mv.",L:"Πολεμίους = vijanden, accusativus mv.",M:"",Rest:""}},
+      { latijn:["ὁ","δοῦλος","τρέχει","ὅτι","τὸν","κύριον","φοβεῖται."], context:"Dagelijks leven — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[],So:[3]},A:[],O:[1],ACI:[],GenAbs:[],L:[5],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"De slaaf rent omdat hij de meester vreest.",
+        woorden:["de","slaaf","hij rent","omdat","de (acc.)","meester (acc.)","hij vreest"],
+        uitleg:{P:"Τρέχει en φοβεῖται: twee persoonsvormen.",S:"Ὅτι = omdat: onderschikkend causaal.",ACI:"",GenAbs:"",A:"",O:"Δοῦλος = onderwerp; onderwerp bijzin in φοβεῖται.",L:"Κύριον = meester, accusativus.",M:"",Rest:""}},
+      { latijn:["ὁ","στρατηγὸς","τοῖς","στρατιώταις","ἐπιτάττει","καὶ","αὐτοὶ","πείθονται."], context:"Militair — samengesteld",
+        psolmo:{P:[4,7],S:{Sn:[5],So:[]},A:[],O:[1,6],ACI:[],GenAbs:[],L:[],M:[3],Rest:[],art:{0:1,2:3}},
+        vertaling:"De aanvoerder geeft de soldaten bevelen en zij gehoorzamen.",
+        woorden:["de","aanvoerder","de (dat. mv.)","soldaten (dat.)","hij beveelt","en","zij zelf","zij gehoorzamen"],
+        uitleg:{P:"Ἐπιτάττει en πείθονται: twee persoonsvormen.",S:"Καί = en: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Στρατηγός = onderwerp 1e; αὐτοί = onderwerp 2e.",L:"",M:"Στρατιώταις = aan de soldaten, datief.",Rest:""}},
+      { latijn:["ἡ","μήτηρ","τῇ","θυγατρί","τροφὴν","φέρει."], context:"Familie",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[4],M:[3],Rest:[],art:{0:1,2:3}},
+        vertaling:"De moeder brengt de dochter voedsel.",
+        woorden:["de","moeder","de (dat.)","dochter (dat.)","voedsel (acc.)","zij brengt"],
+        uitleg:{P:"Φέρει = zij brengt.",S:"",ACI:"",GenAbs:"",A:"",O:"Μήτηρ = moeder.",L:"Τροφήν = voedsel, accusativus.",M:"Θυγατρί = aan de dochter, datief.",Rest:""}},
+      { latijn:["ὁ","φιλόσοφος","λέγει","ὅτι","ἡ","ἀρετὴ","ἀγαθή","ἐστιν."], context:"Filosofisch — samengesteld",
+        psolmo:{P:[2,7],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[6],art:{0:1,4:5}},
+        vertaling:"De filosoof zegt dat deugdzaamheid goed is.",
+        woorden:["de","filosoof","hij zegt","dat","de","deugd","goed","is"],
+        uitleg:{P:"Λέγει en ἐστίν: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend (indirecte rede).",ACI:"",GenAbs:"",A:"",O:"Φιλόσοφος = onderwerp; ἀρετή = onderwerp bijzin.",L:"",M:"",Rest:""}},
+      { latijn:["οἱ","νέοι","ἀσκοῦσιν","ἵνα","ἰσχυροὶ","γίγνωνται."], context:"Sport — samengesteld",
+        psolmo:{P:[2,5],S:{Sn:[],So:[3]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[4],art:{0:1}},
+        vertaling:"De jongeren trainen opdat zij sterk worden.",
+        woorden:["de","jongeren","zij trainen","opdat","sterk","zij worden"],
+        uitleg:{P:"Ἀσκοῦσιν en γίγνωνται: twee persoonsvormen.",S:"Ἵνα = opdat: onderschikkend finaal.",ACI:"",GenAbs:"",A:"",O:"Νέοι = onderwerp; onderwerp bijzin in γίγνωνται.",L:"",M:"",Rest:"Ἰσχυροί = sterk: predicatief."}},
+      { latijn:["ὁ","στρατηγὸς","νικᾷ","ἀλλ᾽","ὁ","στρατὸς","φεύγει."], context:"Militair — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[3],So:[]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"De aanvoerder wint maar het leger vlucht.",
+        woorden:["de","aanvoerder","hij wint","maar","het","leger","het vlucht"],
+        uitleg:{P:"Νικᾷ en φεύγει: twee persoonsvormen.",S:"Ἀλλά = maar: nevenschikkend adversatief.",ACI:"",GenAbs:"",A:"",O:"Στρατηγός = onderwerp 1e; στρατός = onderwerp 2e.",L:"",M:"",Rest:""}},
+      { latijn:["οἱ","πολῖται","τοῖς","θεοῖς","θύουσιν."], context:"Religie",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[3],Rest:[],art:{0:1,2:3}},
+        vertaling:"De burgers offeren aan de goden.",
+        woorden:["de","burgers","de (dat. mv.)","goden (dat.)","zij offeren"],
+        uitleg:{P:"Θύουσιν = zij offeren. 3e pers. mv.",S:"",ACI:"",GenAbs:"",A:"",O:"Πολῖται = burgers.",L:"Θύω neemt datief: aan de goden.",M:"Θεοῖς = aan de goden, datief.",Rest:""}},
+      { latijn:["ἡ","γυνὴ","πιστεύει","ὅτι","οἱ","θεοὶ","ἀγαθοί","εἰσιν."], context:"Religie — samengesteld",
+        psolmo:{P:[2,7],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[6],art:{0:1,4:5}},
+        vertaling:"De vrouw gelooft dat de goden goed zijn.",
+        woorden:["de","vrouw","zij gelooft","dat","de","goden","goed","zijn"],
+        uitleg:{P:"Πιστεύει en εἰσίν: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend.",ACI:"",GenAbs:"",A:"",O:"Γυνή = onderwerp; θεοί = onderwerp bijzin.",L:"",M:"",Rest:""}},
+      { latijn:["οἱ","Ἕλληνες","τοὺς","νόμους","φυλάττουσιν","ἵνα","εἰρήνη","ᾖ."], context:"Politiek — samengesteld",
+        psolmo:{P:[4,7],S:{Sn:[],So:[5]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[6],art:{0:1,2:3}},
+        vertaling:"De Grieken bewaken de wetten opdat er vrede is.",
+        woorden:["de","Grieken","de (acc.)","wetten (acc.)","zij bewaken","opdat","vrede","er is"],
+        uitleg:{P:"Φυλάττουσιν en ᾖ: twee persoonsvormen.",S:"Ἵνα = opdat: onderschikkend finaal.",ACI:"",GenAbs:"",A:"",O:"Ἕλληνες = onderwerp; onderwerp bijzin in ᾖ.",L:"Νόμους = wetten, accusativus.",M:"",Rest:"Εἰρήνη = vrede: onderwerp bijzin."}},
+      { latijn:["ὁ","δικαστὴς","τῷ","νέῳ","τὴν","ἐλευθερίαν","δίδωσιν."], context:"Rechtbank",
+        psolmo:{P:[6],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[5],M:[3],Rest:[],art:{0:1,2:3,4:5}},
+        vertaling:"De rechter geeft de jongeman de vrijheid.",
+        woorden:["de","rechter","de (dat.)","jongeman (dat.)","de (acc.)","vrijheid (acc.)","hij geeft"],
+        uitleg:{P:"Δίδωσιν = hij geeft.",S:"",ACI:"",GenAbs:"",A:"",O:"Δικαστής = rechter.",L:"Ἐλευθερίαν = vrijheid, accusativus.",M:"Νέῳ = aan de jongeman, datief.",Rest:""}},
+      { latijn:["ὁ","παῖς","μανθάνει","ὅταν","ὁ","διδάσκαλος","διδάσκῃ."], context:"School — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"Het kind leert wanneer de leraar onderwijst.",
+        woorden:["het","kind","hij/zij leert","wanneer","de","leraar","hij onderwijst"],
+        uitleg:{P:"Μανθάνει en διδάσκῃ: twee persoonsvormen.",S:"Ὅταν = wanneer: onderschikkend temporeel.",ACI:"",GenAbs:"",A:"",O:"Παῖς = onderwerp; διδάσκαλος = onderwerp bijzin.",L:"",M:"",Rest:""}},
+      { latijn:["ἡ","πόλις","τοὺς","στρατηγοὺς","τιμᾷ","ἀλλ᾽","αὐτοὶ","οὐ","πείθονται."], context:"Politiek — samengesteld",
+        psolmo:{P:[4,8],S:{Sn:[5],So:[]},A:[],O:[1,6],ACI:[],GenAbs:[],L:[3],M:[],Rest:[7],art:{0:1,2:3}},
+        vertaling:"De stad eert de aanvoerders maar zij gehoorzamen niet.",
+        woorden:["de","stad","de (acc.)","aanvoerders (acc.)","zij eert","maar","zij","niet","zij gehoorzamen"],
+        uitleg:{P:"Τιμᾷ en πείθονται: twee persoonsvormen.",S:"Ἀλλά = maar: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Πόλις = onderwerp 1e; αὐτοί = onderwerp 2e.",L:"Στρατηγούς = aanvoerders, accusativus.",M:"",Rest:"Οὐ = niet."}}
+    ]
+  },
+  3:{
+    naam:"Niveau 3 — Middenbouw",
+    beschrijving:"Thucydides, Xenophon, Plato (bewerkt), genitivus absolutus",
+    zinnen:[
+      { latijn:["τῶν","βαρβάρων","φευγόντων,","οἱ","Ἕλληνες","ἐνίκησαν."], context:"Genitivus absolutus",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1,2],L:[],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Terwijl de barbaren vluchtten, overwonnen de Grieken.",
+        woorden:["van de barbaren (gen.)","vluchtend (gen. part.)","overwonnen","de","Grieken","zij overwonnen"],
+        uitleg:{P:"Ἐνίκησαν = zij overwonnen. Aoristus actief.",S:"Geen voegwoord — de tijdsrelatie wordt uitgedrukt door de genitivus absolutus.",ACI:"",GenAbs:"Τῶν βαρβάρων φευγόντων = gen. abs.: terwijl de barbaren vluchtten. Beide woorden in de genitief.",A:"",O:"Ἕλληνες = Grieken, nominativus.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","Σωκράτης","ἔλεγεν","ὅτι","ἡ","ψυχὴ","ἀθάνατός","ἐστιν."], context:"Plato, Phaedo (bewerkt)",
+        psolmo:{P:[2,7],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[6],art:{0:1,4:5}},
+        vertaling:"Socrates zei dat de ziel onsterfelijk is.",
+        woorden:["de","Socrates","hij zei","dat","de","ziel","onsterfelijk","is"],
+        uitleg:{P:"Ἔλεγεν en ἐστίν: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend voegwoord van de indirecte rede.",ACI:"",GenAbs:"",A:"",O:"Σωκράτης = onderwerp; ψυχή = onderwerp bijzin.",L:"",M:"",Rest:"Ἀθάνατος = onsterfelijk: predicatief bijv. nw."}},
+      { latijn:["ὁ","Κῦρος","τοῖς","στρατιώταις","πολλὰ","χρήματα","ἔδωκεν."], context:"Xenophon, Anabasis (bewerkt)",
+        psolmo:{P:[6],S:{Sn:[],So:[]},A:[{kern:4,attr:[]}],O:[1],ACI:[],GenAbs:[],L:[4],M:[3],Rest:[5],art:{0:1,2:3}},
+        vertaling:"Cyrus gaf de soldaten veel geld.",
+        woorden:["de","Cyrus","de (dat. mv.)","soldaten (dat.)","veel","geld (acc.)","hij gaf"],
+        uitleg:{P:"Ἔδωκεν = hij gaf. Aoristus van δίδωμι.",S:"",ACI:"",GenAbs:"",A:"Πολλὰ χρήματα: χρήματα (kern) + πολλά (bijv. nw.: veel).",O:"Κῦρος = Cyrus, nominativus.",L:"Χρήματα = geld (kernwoord), accusativus mv.",M:"Στρατιώταις = aan de soldaten, datief.",Rest:""}},
+      { latijn:["οἱ","Ἀθηναῖοι","τοῦ","Θεμιστοκλέους","ἤκουον","ὅτε","ὁ","πόλεμος","ἦν."], context:"Thucydides (bewerkt) — samengesteld",
+        psolmo:{P:[4,8],S:{Sn:[],So:[5]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[3],Rest:[7],art:{0:1,2:3,6:7}},
+        vertaling:"De Atheners luisterden naar Themistocles toen de oorlog er was.",
+        woorden:["de","Atheners","van (gen.)","Themistocles (gen.)","zij luisterden","toen","de","oorlog","hij was"],
+        uitleg:{P:"Ἤκουον en ἦν: twee persoonsvormen.",S:"Ὅτε = toen: onderschikkend temporeel.",ACI:"",GenAbs:"",A:"",O:"Ἀθηναῖοι = onderwerp; πόλεμος = onderwerp bijzin.",L:"Ἀκούω neemt genitief.",M:"Θεμιστοκλέους = genitief bij ἤκουον.",Rest:""}},
+      { latijn:["τῆς","μάχης","γενομένης,","οἱ","πολέμιοι","ἔφυγον."], context:"Thucydides (bewerkt) — genitivus absolutus",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1,2],L:[],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Nadat de slag had plaatsgevonden, vluchtten de vijanden.",
+        woorden:["van de slag (gen.)","plaatsgevonden hebbend (gen. part.)","vluchtten","de","vijanden","zij vluchtten"],
+        uitleg:{P:"Ἔφυγον = zij vluchtten. Aoristus.",S:"",ACI:"",GenAbs:"Τῆς μάχης γενομένης = gen. abs.: nadat de slag had plaatsgevonden. Beide in de genitief.",A:"",O:"Πολέμιοι = vijanden, nominativus.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","Σωκράτης","τοὺς","νέους","ἐπαίδευεν","ἵνα","σοφοὶ","γίγνωνται."], context:"Plato (bewerkt) — samengesteld",
+        psolmo:{P:[4,7],S:{Sn:[],So:[5]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[6],art:{0:1,2:3}},
+        vertaling:"Socrates onderwees de jongeren opdat zij wijs zouden worden.",
+        woorden:["de","Socrates","de (acc. mv.)","jongeren (acc.)","hij onderwees","opdat","wijs","zij zouden worden"],
+        uitleg:{P:"Ἐπαίδευεν en γίγνωνται: twee persoonsvormen.",S:"Ἵνα = opdat: onderschikkend finaal.",ACI:"",GenAbs:"",A:"",O:"Σωκράτης = onderwerp; onderwerp bijzin in γίγνωνται.",L:"Νέους = jongeren, accusativus.",M:"",Rest:"Σοφοί = wijs: predicatief."}},
+      { latijn:["ὁ","Θουκυδίδης","τὸν","πόλεμον","τῶν","Ἀθηναίων","καὶ","Λακεδαιμονίων","ἔγραψεν."], context:"Thucydides I.1 (bewerkt)",
+        psolmo:{P:[8],S:{Sn:[6],So:[]},A:[{kern:3,attr:[5,6,7]}],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3,4:5}},
+        vertaling:"Thucydides beschreef de oorlog van de Atheners en de Spartanen.",
+        woorden:["de","Thucydides","de (acc.)","oorlog (acc.)","van de (gen. mv.)","Atheners (gen.)","en","Spartanen (gen.)","hij schreef"],
+        uitleg:{P:"Ἔγραψεν = hij schreef. Aoristus.",S:"Καί = en: nevenschikkend (verbindt twee genitivusgroepen).",ACI:"",GenAbs:"",A:"Τὸν πόλεμον τῶν Ἀθηναίων καὶ Λακεδαιμονίων: πόλεμον (kern) + τῶν Ἀθηναίων καὶ Λακεδαιμονίων (genitivus).",O:"Θουκυδίδης = nominativus.",L:"Πόλεμον = oorlog (kernwoord), accusativus.",M:"",Rest:""}},
+      { latijn:["ὁ","Ξενοφῶν","εἶπεν","ὅτι","οἱ","στρατιῶται","ἀγαθοὶ","εἰσίν."], context:"Xenophon, Anabasis (bewerkt) — samengesteld",
+        psolmo:{P:[2,7],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[6],art:{0:1,4:5}},
+        vertaling:"Xenophon zei dat de soldaten goed/moedig zijn.",
+        woorden:["de","Xenophon","hij zei","dat","de","soldaten","goed","zij zijn"],
+        uitleg:{P:"Εἶπεν en εἰσίν: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend.",ACI:"",GenAbs:"",A:"",O:"Ξενοφῶν = onderwerp; στρατιῶται = onderwerp bijzin.",L:"",M:"",Rest:""}},
+      { latijn:["τοῦ","Σωκράτους","ἀποθανόντος,","οἱ","μαθηταὶ","ἔκλαιον."], context:"Plato (bewerkt) — genitivus absolutus",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1,2],L:[],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Nadat Socrates gestorven was, weenden de leerlingen.",
+        woorden:["van Socrates (gen.)","gestorven zijnde (gen. part.)","weenden","de","leerlingen","zij weenden"],
+        uitleg:{P:"Ἔκλαιον = zij weenden. Imperfectum.",S:"",ACI:"",GenAbs:"Τοῦ Σωκράτους ἀποθανόντος = gen. abs.: nadat Socrates gestorven was. Beide in de genitief.",A:"",O:"Μαθηταί = leerlingen, nominativus.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","Περικλῆς","τῇ","ἐκκλησίᾳ","εἶπεν","ὅτι","δεῖ","μάχεσθαι."], context:"Thucydides (bewerkt) — samengesteld",
+        psolmo:{P:[4,7],S:{Sn:[],So:[5]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[3],Rest:[6],art:{0:1,2:3}},
+        vertaling:"Pericles zei aan de volksvergadering dat het nodig is te vechten.",
+        woorden:["de","Pericles","de (dat.)","volksvergadering (dat.)","hij zei","dat","het is nodig","te vechten (inf.)"],
+        uitleg:{P:"Εἶπεν en δεῖ: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend.",ACI:"",GenAbs:"",A:"",O:"Περικλῆς = onderwerp; onpersoonlijk: δεῖ heeft geen nominatief onderwerp.",L:"",M:"Ἐκκλησίᾳ = aan de volksvergadering, datief.",Rest:"Μάχεσθαι = te vechten: infinitief."}},
+      { latijn:["οἱ","βάρβαροι","ἦλθον","ἐπεὶ","οἱ","Ἕλληνες","οὐκ","εἶχον","στρατηγόν."], context:"Xenophon (bewerkt) — samengesteld",
+        psolmo:{P:[2,7],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[8],M:[],Rest:[6],art:{0:1,4:5}},
+        vertaling:"De barbaren kwamen omdat de Grieken geen aanvoerder hadden.",
+        woorden:["de","barbaren","zij kwamen","omdat","de","Grieken","niet","zij hadden","aanvoerder (acc.)"],
+        uitleg:{P:"Ἦλθον en εἶχον: twee persoonsvormen.",S:"Ἐπεί = omdat: onderschikkend causaal.",ACI:"",GenAbs:"",A:"",O:"Βάρβαροι = onderwerp; Ἕλληνες = onderwerp bijzin.",L:"Στρατηγόν = aanvoerder, accusativus.",M:"",Rest:"Οὐκ = niet."}},
+      { latijn:["ἡ","πόλις","ἣν","ἐφύλαττον","οἱ","νέοι","ἐσῴζετο."], context:"Thucydides (bewerkt) — samengesteld",
+        psolmo:{P:[6],S:{Sn:[],So:[2]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[3],art:{0:1,4:5}},
+        vertaling:"De stad die de jongeren bewaakten, werd gered.",
+        woorden:["de","stad","die","zij bewaakten","de","jongeren","zij werd gered"],
+        uitleg:{P:"Ἐφύλαττον (bijzin) en ἐσῴζετο (hoofdzin): twee persoonsvormen.",S:"Ἥν = die: onderschikkend relatief.",ACI:"",GenAbs:"",A:"",O:"Πόλις = onderwerp (passief); νέοι = onderwerp bijzin.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","Σόλων","νόμους","ἔγραψεν","ὥστε","τοὺς","πολίτας","εὐδαίμονας","εἶναι."], context:"Solon (bewerkt) — samengesteld",
+        psolmo:{P:[3,8],S:{Sn:[],So:[4]},A:[{kern:6,attr:[7]}],O:[1],ACI:[],GenAbs:[],L:[2],M:[],Rest:[],art:{0:1,5:6}},
+        vertaling:"Solon schreef wetten zodat de burgers gelukkig zouden zijn.",
+        woorden:["de","Solon","wetten (acc.)","hij schreef","zodat","de (acc. mv.)","burgers (acc.)","gelukkig (acc.)","te zijn"],
+        uitleg:{P:"Ἔγραψεν en εἶναι (infinitief bij ὥστε).",S:"Ὥστε = zodat: onderschikkend consecutief/finaal.",ACI:"",GenAbs:"",A:"Τοὺς πολίτας εὐδαίμονας: πολίτας (kern) + εὐδαίμονας (predicatief bijv. nw. in AcI).",O:"Σόλων = nominativus.",L:"Νόμους = wetten, accusativus.",M:"",Rest:"Εἶναι = te zijn: infinitief."}},
+      { latijn:["τοῦ","ἡλίου","δύνοντος,","οἱ","στρατιῶται","κατέλυσαν."], context:"Xenophon, Anabasis (bewerkt) — genitivus absolutus",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1,2],L:[],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Nadat de zon was ondergegaan, sloegen de soldaten hun kamp op.",
+        woorden:["van de zon (gen.)","ondergaand (gen. part.)","sloegen op","de","soldaten","zij sloegen op"],
+        uitleg:{P:"Κατέλυσαν = zij sloegen op. Aoristus.",S:"",ACI:"",GenAbs:"Τοῦ ἡλίου δύνοντος = gen. abs.: nadat/terwijl de zon onderging. Beide in de genitief.",A:"",O:"Στρατιῶται = soldaten, nominativus.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","Ξενοφῶν","εἶπεν","ἵνα","οἱ","στρατιῶται","μὴ","φεύγοιεν."], context:"Xenophon, Anabasis (bewerkt) — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[7],art:{0:1,4:5}},
+        vertaling:"Xenophon sprak opdat de soldaten niet zouden vluchten.",
+        woorden:["de","Xenophon","hij sprak","opdat","de","soldaten","niet","zij zouden vluchten"],
+        uitleg:{P:"Εἶπεν en φεύγοιεν: twee persoonsvormen.",S:"Ἵνα = opdat: onderschikkend finaal.",ACI:"",GenAbs:"",A:"",O:"Ξενοφῶν = onderwerp; στρατιῶται = onderwerp bijzin.",L:"",M:"",Rest:"Μή = niet (negatief in bijzin)."}},
+      { latijn:["ὁ","Θουκυδίδης","ἔγραψεν","ἃ","εἶδεν","ἐν","τῷ","πολέμῳ."], context:"Thucydides I (bewerkt) — samengesteld",
+        psolmo:{P:[2,4],S:{Sn:[],So:[3]},A:[],O:[1],ACI:[],GenAbs:[],L:[3,4],M:[],Rest:[5,7],art:{0:1,6:7}},
+        vertaling:"Thucydides schreef wat hij zag in de oorlog.",
+        woorden:["de","Thucydides","hij schreef","wat","hij zag","in","de (dat.)","oorlog (dat.)"],
+        uitleg:{P:"Ἔγραψεν en εἶδεν: twee persoonsvormen.",S:"Ἅ = wat: onderschikkend relatief.",ACI:"",GenAbs:"",A:"",O:"Θουκυδίδης = onderwerp; onderwerp bijzin in εἶδεν.",L:"Ἅ = wat hij zag: accusativus.",M:"",Rest:"Ἐν τῷ πολέμῳ = in de oorlog."}}
+    ]
+  },
+  4:{
+    naam:"Niveau 4 — Bovenbouw",
+    beschrijving:"Authentieke teksten: Plato, Thucydides, Herodotus, Xenophon",
+    zinnen:[
+      { latijn:["γνῶθι","σεαυτόν."], context:"Inscriptie Delphi",
+        psolmo:{P:[0],S:{Sn:[],So:[]},A:[],O:[],ACI:[],GenAbs:[],L:[1],M:[],Rest:[]},
+        vertaling:"Ken uzelf.",
+        woorden:["ken (imp.)","jezelf (acc.)"],
+        uitleg:{P:"Γνῶθι = ken! Aoristus-imperatief van γιγνώσκω. Onderwerp (σύ) verborgen.",S:"",ACI:"",GenAbs:"",A:"",O:"Onderwerp verborgen in het imperatief.",L:"Σεαυτόν = jezelf, reflexief accusativus.",M:"",Rest:""}},
+      { latijn:["ὁ","Σωκράτης","ἔλεγεν","οὐδὲν","εἰδέναι."], context:"Plato, Apologia (bewerkt)",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3,4],M:[],Rest:[],art:{0:1}},
+        vertaling:"Socrates zei niets te weten.",
+        woorden:["de","Socrates","hij zei","niets","te weten (inf.)"],
+        uitleg:{P:"Ἔλεγεν = hij zei. Imperfectum.",S:"",ACI:"Οὐδὲν εἰδέναι = AcI: [zichzelf als accusativus begrepen] + εἰδέναι (infinitief). Verkorte AcI.",GenAbs:"",A:"",O:"Σωκράτης = nominativus.",L:"Οὐδὲν εἰδέναι = AcI als lijdend voorwerp.",M:"",Rest:""}},
+      { latijn:["ὁ","Ἡρόδοτος","ἱστορίην","ἀπόδεξιν","τήνδε","γράφει."], context:"Herodotus, prooemium",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[{kern:1,attr:[2,3,4]}],O:[],ACI:[],GenAbs:[],L:[1],M:[],Rest:[],art:{0:1}},
+        vertaling:"Herodotus schrijft deze uiteenzetting van zijn onderzoek.",
+        woorden:["de (gen.?)","Herodotus","onderzoek (acc.)","uiteenzetting (acc.)","deze","hij schrijft"],
+        uitleg:{P:"Γράφει = hij schrijft.",S:"",ACI:"",GenAbs:"",A:"Ἱστορίην ἀπόδεξιν τήνδε: ἀπόδεξιν (kern) + ἱστορίην (appositie/bepaling) + τήνδε (demonstratief).",O:"Ἡρόδοτος = nominativus.",L:"Ἀπόδεξιν = uiteenzetting (kernwoord), accusativus.",M:"",Rest:""}},
+      { latijn:["ὁ","Σωκράτης","ἔπεισε","τοὺς","νέους","ὥστε","αὐτοῦ","ἀκούειν."], context:"Plato (bewerkt) — AcI-constructie",
+        psolmo:{P:[2],S:{Sn:[],So:[5]},A:[],O:[1],ACI:[4,6,7],GenAbs:[],L:[4],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Socrates overtuigde de jongeren zodat zij naar hem luisterden.",
+        woorden:["de","Socrates","hij overtuigde","de (acc. mv.)","jongeren (acc.)","zodat","van hem (gen.)","te luisteren (inf.)"],
+        uitleg:{P:"Ἔπεισε = hij overtuigde. Aoristus.",S:"Ὥστε = zodat: onderschikkend consecutief.",ACI:"Τοὺς νέους αὐτοῦ ἀκούειν: ὥστε + acc. + inf. als resultaatszin.",GenAbs:"",A:"",O:"Σωκράτης = nominativus.",L:"Νέους = jongeren (als object van πείθω).",M:"",Rest:""}},
+      { latijn:["οἱ","Σπαρτιᾶται","τῇ","Θερμοπύλαις","ἐμάχοντο","ἵνα","τὴν","Ἑλλάδα","σῴζοιεν."], context:"Thermopylai, 480 v.Chr. — samengesteld",
+        psolmo:{P:[4,8],S:{Sn:[],So:[5]},A:[],O:[1],ACI:[],GenAbs:[],L:[7],M:[],Rest:[3],art:{0:1,2:3,6:7}},
+        vertaling:"De Spartanen vochten bij de Thermopylai opdat zij Hellas zouden redden.",
+        woorden:["de","Spartanen","de (dat.)","Thermopylai (dat.)","zij vochten","opdat","het (acc.)","Hellas (acc.)","zij zouden redden"],
+        uitleg:{P:"Ἐμάχοντο en σῴζοιεν: twee persoonsvormen.",S:"Ἵνα = opdat: onderschikkend finaal.",ACI:"",GenAbs:"",A:"",O:"Σπαρτιᾶται = onderwerp; onderwerp bijzin in σῴζοιεν.",L:"Ἑλλάδα = Hellas, accusativus.",M:"",Rest:"Τῇ Θερμοπύλαις = bij de Thermopylai: datief van plaats."}},
+      { latijn:["τοῦ","νόμου","κελεύοντος,","ὁ","δικαστὴς","ἔκρινεν","τὸν","κατήγορον."], context:"Rechtbank — genitivus absolutus",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[],ACI:[],GenAbs:[1],L:[7],M:[],Rest:[2,4],art:{0:1,3:4,6:7}},
+        vertaling:"Omdat de wet het beval, oordeelde de rechter over de aanklager.",
+        woorden:["van de wet (gen.)","bevelend (gen. part.)","oordeelde","de","rechter","hij oordeelde","de (acc.)","aanklager (acc.)"],
+        uitleg:{P:"Ἔκρινεν = hij oordeelde. Aoristus.",S:"",ACI:"",GenAbs:"Τοῦ νόμου κελεύοντος = gen. abs.: omdat de wet het beval.",A:"",O:"Δικαστής = rechter.",L:"Κατήγορον = aanklager, accusativus.",M:"",Rest:""}},
+      { latijn:["ὁ","Ξενοφῶν","ἔγραψεν","ἃ","ἑώρα","ἐν","τῇ","ἀναβάσει."], context:"Xenophon, Anabasis — samengesteld",
+        psolmo:{P:[2,4],S:{Sn:[],So:[3]},A:[{kern:7,attr:[5]}],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[5,7],art:{0:1,6:7}},
+        vertaling:"Xenophon beschreef wat hij zag tijdens de tocht naar boven.",
+        woorden:["de","Xenophon","hij schreef","wat","hij zag","in","de (dat.)","tocht (dat.)"],
+        uitleg:{P:"Ἔγραψεν en ἑώρα: twee persoonsvormen.",S:"Ἅ = wat: onderschikkend relatief.",ACI:"",GenAbs:"",A:"Ἐν τῇ ἀναβάσει: ἀναβάσει (kern) + τῇ (lidwoord).",O:"Ξενοφῶν = nominativus.",L:"Ἅ = wat hij zag, accusativus.",M:"",Rest:"Ἐν τῇ ἀναβάσει = in de tocht."}},
+      { latijn:["ὁ","Σωκράτης","εἶπεν","ὅτι","ὁ","ἀνεξέταστος","βίος","οὐ","βιωτός","ἐστιν."], context:"Plato, Apologia 38a",
+        psolmo:{P:[2,9],S:{Sn:[],So:[3]},A:[{kern:6,attr:[5]}],O:[1,6],ACI:[],GenAbs:[],L:[],M:[],Rest:[7,8],art:{0:1,4:5}},
+        vertaling:"Socrates zei dat het ononderzochte leven het niet waard is geleefd te worden.",
+        woorden:["de","Socrates","hij zei","dat","het","ononderzochte","leven","niet","het waard te leven","is"],
+        uitleg:{P:"Εἶπεν en ἐστίν: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend.",ACI:"",GenAbs:"",A:"Ὁ ἀνεξέταστος βίος: βίος (kern) + ἀνεξέταστος (bijv. nw.) + ὁ (lidwoord).",O:"Σωκράτης = onderwerp; βίος = onderwerp bijzin.",L:"",M:"",Rest:"Οὐ βιωτός = niet het waard te leven."}},
+      { latijn:["ὁ","Θεμιστοκλῆς","ἔπεισε","τοὺς","Ἀθηναίους","ναῦς","ποιεῖσθαι."], context:"Thucydides I (bewerkt)",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[4,5,6],GenAbs:[],L:[4,5,6],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Themistocles overtuigde de Atheners schepen te bouwen.",
+        woorden:["de","Themistocles","hij overtuigde","de (acc. mv.)","Atheners (acc.)","schepen (acc.)","te bouwen (inf.)"],
+        uitleg:{P:"Ἔπεισε = hij overtuigde. Aoristus.",S:"",ACI:"Τοὺς Ἀθηναίους ναῦς ποιεῖσθαι: AcI: accusativus (Ἀθηναίους) + infinitief (ποιεῖσθαι).",GenAbs:"",A:"",O:"Θεμιστοκλῆς = nominativus.",L:"AcI als lijdend voorwerp van ἔπεισε.",M:"",Rest:""}},
+      { latijn:["ὁ","Κῦρος","ἐπεπαίδευτο","ἵνα","βασιλεὺς","γίγνοιτο."], context:"Xenophon, Cyropaedia (bewerkt)",
+        psolmo:{P:[2,5],S:{Sn:[],So:[3]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[4],art:{0:1}},
+        vertaling:"Cyrus was opgevoed opdat hij koning zou worden.",
+        woorden:["de","Cyrus","hij was opgevoed","opdat","koning","hij zou worden"],
+        uitleg:{P:"Ἐπεπαίδευτο en γίγνοιτο: twee persoonsvormen.",S:"Ἵνα = opdat: onderschikkend finaal.",ACI:"",GenAbs:"",A:"",O:"Κῦρος = onderwerp; onderwerp bijzin in γίγνοιτο.",L:"",M:"",Rest:"Βασιλεύς = koning: predicatief."}},
+      { latijn:["ὁ","Ἡρόδοτος","ἔγραψεν","ἵνα","τὰ","ἔργα","τῶν","ἀνθρώπων","μὴ","ἐξίτηλα","γένηται."], context:"Herodotus, Prooemium (bewerkt)",
+        psolmo:{P:[2,10],S:{Sn:[],So:[3]},A:[{kern:5,attr:[7]}],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[8,9],art:{0:1,4:5,6:7}},
+        vertaling:"Herodotus schreef opdat de daden van de mensen niet vergeten zouden worden.",
+        woorden:["de","Herodotus","hij schreef","opdat","de (acc. mv.)","daden (acc.)","van de (gen. mv.)","mensen (gen.)","niet","vervaagd","zij zouden worden"],
+        uitleg:{P:"Ἔγραψεν en γένηται: twee persoonsvormen.",S:"Ἵνα = opdat: onderschikkend finaal.",ACI:"",GenAbs:"",A:"Τὰ ἔργα τῶν ἀνθρώπων: ἔργα (kern) + τῶν ἀνθρώπων (genitivus).",O:"Ἡρόδοτος = nominativus.",L:"Ἔργα = daden (kern), accusativus.",M:"",Rest:"Μὴ ἐξίτηλα = niet vervaagd."}},
+      { latijn:["τῶν","Περσῶν","ἐλθόντων,","οἱ","Ἀθηναῖοι","ἔπεμψαν","ἀγγέλους","εἰς","Σπάρτην."], context:"Herodotus (bewerkt) — samengesteld",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1],L:[6],M:[],Rest:[2,7,8],art:{0:1,3:4}},
+        vertaling:"Nadat de Perzen gekomen waren, stuurden de Atheners boodschappers naar Sparta.",
+        woorden:["van de Perzen (gen.)","gekomen zijnde (gen. part.)","stuurden","de","Atheners","zij stuurden","boodschappers (acc.)","naar","Sparta (acc.)"],
+        uitleg:{P:"Ἔπεμψαν = zij stuurden. Aoristus.",S:"",ACI:"",GenAbs:"Τῶν Περσῶν ἐλθόντων = gen. abs.: nadat de Perzen gekomen waren.",A:"",O:"Ἀθηναῖοι = nominativus.",L:"Ἀγγέλους = boodschappers, accusativus.",M:"",Rest:"Εἰς Σπάρτην = naar Sparta."}},
+      { latijn:["ὁ","Πλάτων","ἔλεγεν","ὅτι","ἡ","ἀρετὴ","ἐπιστήμη","ἐστίν."], context:"Plato, Meno (bewerkt) — samengesteld",
+        psolmo:{P:[2,7],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[6],art:{0:1,4:5}},
+        vertaling:"Plato zei dat deugd kennis is.",
+        woorden:["de","Plato","hij zei","dat","de","deugd","kennis","is"],
+        uitleg:{P:"Ἔλεγεν en ἐστίν: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend.",ACI:"",GenAbs:"",A:"",O:"Πλάτων = onderwerp; ἀρετή = onderwerp bijzin.",L:"",M:"",Rest:"Ἐπιστήμη = kennis: predicatief nominativus."}},
+      { latijn:["ὁ","Ἀλκιβιάδης","ἔπεισε","τοὺς","Ἀθηναίους","εἰς","Σικελίαν","στρατεύεσθαι."], context:"Thucydides VI (bewerkt)",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[4,5,6,7],GenAbs:[],L:[4,5,6,7],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Alcibiades overtuigde de Atheners naar Sicilië op te trekken.",
+        woorden:["de","Alcibiades","hij overtuigde","de (acc. mv.)","Atheners (acc.)","naar","Sicilië (acc.)","op te trekken (inf.)"],
+        uitleg:{P:"Ἔπεισε = hij overtuigde. Aoristus.",S:"",ACI:"Τοὺς Ἀθηναίους στρατεύεσθαι = AcI: accusativus + infinitief als lijdend voorwerp.",GenAbs:"",A:"",O:"Ἀλκιβιάδης = nominativus.",L:"AcI als geheel = lijdend voorwerp van ἔπεισε.",M:"",Rest:"Εἰς Σικελίαν = naar Sicilië."}},
+      { latijn:["εἰ","βούλει","εἰρήνην","ἔχειν,","ἑτοίμαζε","πόλεμον."], context:"Spreekwoord",
+        psolmo:{P:[1,4],S:{Sn:[],So:[0]},A:[],O:[],ACI:[],GenAbs:[],L:[2,5],M:[],Rest:[3]},
+        vertaling:"Als je vrede wilt hebben, bereid je voor op oorlog.",
+        woorden:["als","jij wilt","vrede (acc.)","te hebben (inf.)","bereid voor (imp.)","oorlog (acc.)"],
+        uitleg:{P:"Βούλει (bijzin) en ἑτοίμαζε (hoofdzin: imperatief): twee werkwoordsvormen.",S:"Εἰ = als: onderschikkend conditioneel.",ACI:"",GenAbs:"",A:"",O:"Onderwerp (σύ) verborgen in βούλει en ἑτοίμαζε.",L:"Εἰρήνην = vrede (acc. bij ἔχειν); πόλεμον = oorlog (acc. hoofdzin).",M:"",Rest:"Ἔχειν = te hebben: infinitief."}},
+      { latijn:["ὁ","Κῦρος","ἐνόμιζε","τοὺς","ἀγαθοὺς","στρατιώτας","νικήσειν."], context:"Xenophon, Cyropaedia (bewerkt) — AcI",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[{kern:5,attr:[4]}],O:[1],ACI:[],GenAbs:[],L:[4,5,6],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Cyrus meende dat de goede soldaten zouden overwinnen.",
+        woorden:["de","Cyrus","hij meende","de (acc. mv.)","goede (acc.)","soldaten (acc.)","te overwinnen (inf. fut.)"],
+        uitleg:{P:"Ἐνόμιζε = hij meende. Imperfectum.",S:"",ACI:"Τοὺς ἀγαθοὺς στρατιώτας νικήσειν = AcI: accusativus (τοὺς ἀγαθοὺς στρατιώτας) + infinitief futurum (νικήσειν).",GenAbs:"",A:"Τοὺς ἀγαθοὺς στρατιώτας: στρατιώτας (kern) + ἀγαθούς (bijv. nw.).",O:"Κῦρος = nominativus.",L:"AcI als lijdend voorwerp.",M:"",Rest:""}}
+    ]
+  },
+  5:{
+    naam:"Niveau 5 — Examenniveau",
+    beschrijving:"Authentieke teksten: Plato, Thucydides, Herodotus, Xenophon",
+    zinnen:[
+      { latijn:["ἓν","οἶδα","ὅτι","οὐδὲν","οἶδα."], context:"Socratische uitspraak",
+        psolmo:{P:[1,4],S:{Sn:[],So:[2]},A:[],O:[],ACI:[],GenAbs:[],L:[0,3],M:[],Rest:[]},
+        vertaling:"Één ding weet ik: dat ik niets weet.",
+        woorden:["één (acc.)","ik weet","dat","niets (acc.)","ik weet"],
+        uitleg:{P:"Οἶδα (hoofdzin) en οἶδα (bijzin): twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend.",ACI:"",GenAbs:"",A:"",O:"Onderwerp (ἐγώ) verborgen in beide οἶδα.",L:"Ἕν = één ding (acc.); οὐδέν = niets (acc. in bijzin).",M:"",Rest:""}},
+      { latijn:["ἄνδρα","μοι","ἔννεπε,","Μοῦσα,","πολύτροπον."], context:"Homerus, Odysseia I.1",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[{kern:0,attr:[4]}],O:[],ACI:[],GenAbs:[],L:[0],M:[1],Rest:[3]},
+        vertaling:"Zing mij van de man, Muze, de veelzijdige.",
+        woorden:["de man (acc.)","mij (dat.)","zing (imp.)","Muze (voc.)","veelzijdig (acc.)"],
+        uitleg:{P:"Ἔννεπε = zing! Aoristus-imperatief. Onderwerp (σύ = Muze) verborgen.",S:"",ACI:"",GenAbs:"",A:"Ἄνδρα πολύτροπον: ἄνδρα (kern) + πολύτροπον (bijv. nw.: veelzijdig).",O:"Μοῦσα = vocativus (aangesproken).",L:"Ἄνδρα = de man, accusativus (kernwoord).",M:"Μοι = mij, datief.",Rest:""}},
+      { latijn:["ὁ","Θουκυδίδης","Ἀθηναῖος","ξυνέγραψε","τὸν","πόλεμον","τῶν","Πελοποννησίων","καὶ","Ἀθηναίων."], context:"Thucydides I.1",
+        psolmo:{P:[3],S:{Sn:[8],So:[]},A:[{kern:1,attr:[2]},{kern:5,attr:[7,8,9]}],O:[1],ACI:[],GenAbs:[],L:[5],M:[],Rest:[],art:{0:1,4:5,6:7}},
+        vertaling:"Thucydides de Athener beschreef de oorlog van de Peloponnesiërs en de Atheners.",
+        woorden:["de","Thucydides","Athener (appositie)","hij beschreef","de (acc.)","oorlog (acc.)","van de (gen. mv.)","Peloponnesiërs (gen.)","en","Atheners (gen.)"],
+        uitleg:{P:"Ξυνέγραψε = hij beschreef. Aoristus.",S:"Καί = en: nevenschikkend (verbindt twee genitivusgroepen).",ACI:"",GenAbs:"",A:"Θουκυδίδης Ἀθηναῖος: Θουκυδίδης (kern) + Ἀθηναῖος (appositie). Τὸν πόλεμον τῶν... : πόλεμον (kern) + genitivusgroep.",O:"Θουκυδίδης = nominativus.",L:"Πόλεμον = oorlog (kernwoord), accusativus.",M:"",Rest:""}},
+      { latijn:["ὁ","Σωκράτης","νομίζει","τοὺς","θεοὺς","πάντα","εἰδέναι."], context:"Plato, Apologia (bewerkt) — AcI",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[{kern:4,attr:[]}],O:[1],ACI:[],GenAbs:[],L:[4,5,6],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Socrates meent dat de goden alles weten.",
+        woorden:["de","Socrates","hij meent","de (acc. mv.)","goden (acc.)","alles (acc.)","te weten (inf.)"],
+        uitleg:{P:"Νομίζει = hij meent. Praesens.",S:"",ACI:"Τοὺς θεοὺς πάντα εἰδέναι = AcI: τοὺς θεούς (accusativus als subject) + εἰδέναι (infinitief perfectum) + πάντα (object infinitief).",GenAbs:"",A:"Τοὺς θεούς: θεούς (kern) + τούς (lidwoord).",O:"Σωκράτης = nominativus.",L:"AcI als lijdend voorwerp van νομίζει.",M:"",Rest:""}},
+      { latijn:["ὁ","Ξενοφῶν","εἶπεν","ὅτι","οἱ","στρατιῶται","εἶδον","θάλατταν","καὶ","ἀνέκραγον","Θάλαττα","Θάλαττα."], context:"Xenophon, Anabasis IV.7 (bewerkt)",
+        psolmo:{P:[2,6,9],S:{Sn:[8],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[7,10,11],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"Xenophon zei dat de soldaten de zee zagen en 'Zee! Zee!' riepen.",
+        woorden:["de","Xenophon","hij zei","dat","de","soldaten","zij zagen","zee (acc.)","en","zij riepen","zee (acc.)","zee (acc.)"],
+        uitleg:{P:"Εἶπεν, εἶδον, ἀνέκραγον: drie persoonsvormen.",S:"Ὅτι = dat: onderschikkend. Καί = en: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Ξενοφῶν = onderwerp; στρατιῶται = onderwerp bijzin.",L:"Θάλατταν = zee, accusativus.",M:"",Rest:""}},
+      { latijn:["τῶν","Ἀθηναίων","ἀποχωρησάντων,","οἱ","Λακεδαιμόνιοι","τὴν","πόλιν","εἷλον."], context:"Thucydides (bewerkt) — genitivus absolutus",
+        psolmo:{P:[6],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1],L:[7],M:[],Rest:[2],art:{0:1,3:4,5:6}},
+        vertaling:"Nadat de Atheners waren weggegaan, namen de Spartanen de stad in.",
+        woorden:["van de Atheners (gen.)","weggegaan zijnde (gen. part.)","namen in","de","Spartanen","de (acc.)","stad (acc.)","zij namen in"],
+        uitleg:{P:"Εἷλον = zij namen in. Aoristus van αἱρέω.",S:"",ACI:"",GenAbs:"Τῶν Ἀθηναίων ἀποχωρησάντων = gen. abs.: nadat de Atheners waren weggegaan.",A:"",O:"Λακεδαιμόνιοι = Spartanen, nominativus.",L:"Πόλιν = stad, accusativus.",M:"",Rest:""}},
+      { latijn:["ἡ","δίκη","ἰσχυροτέρα","ἐστὶν","τῶν","νόμων","οὓς","οἱ","ἄνθρωποι","θέσαν."], context:"Plato (bewerkt) — samengesteld",
+        psolmo:{P:[3,9],S:{Sn:[],So:[6]},A:[{kern:0,attr:[2]}],O:[],ACI:[],GenAbs:[],L:[8],M:[],Rest:[1,5],art:{0:1,4:5,7:8}},
+        vertaling:"Rechtvaardigheid is sterker dan de wetten die de mensen stelden.",
+        woorden:["de","rechtvaardigheid","sterker","is","van de (gen. mv.)","wetten (gen.)","die","de","mensen","zij stelden"],
+        uitleg:{P:"Ἐστίν en θέσαν: twee persoonsvormen.",S:"Οὕς = die: onderschikkend relatief.",ACI:"",GenAbs:"",A:"Ἡ δίκη: δίκη (kern) + ἡ (lidwoord).",O:"Δίκη = rechtvaardigheid, nominativus.",L:"",M:"",Rest:"Ἰσχυροτέρα τῶν νόμων = sterker dan de wetten (comparatief + genitief)."}},
+      { latijn:["ὁ","Ἡρόδοτος","λέγει","ὅτι","οἱ","Λύδιοι","πρῶτοι","νόμισμα","ἐχρήσαντο."], context:"Herodotus I (bewerkt) — samengesteld",
+        psolmo:{P:[2,8],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[7],M:[],Rest:[6],art:{0:1,4:5}},
+        vertaling:"Herodotus zegt dat de Lydiërs als eersten munten gebruikten.",
+        woorden:["de","Herodotus","hij zegt","dat","de","Lydiërs","als eersten","munten (acc.)","zij gebruikten"],
+        uitleg:{P:"Λέγει en ἐχρήσαντο: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend.",ACI:"",GenAbs:"",A:"",O:"Ἡρόδοτος = onderwerp; Λύδιοι = onderwerp bijzin.",L:"Νόμισμα = munten, accusativus.",M:"",Rest:"Πρῶτοι = als eersten."}},
+      { latijn:["ὁ","Σωκράτης","ἠρώτα","τοὺς","νέους","τί","ἐστιν","ἡ","ἀρετή."], context:"Plato, Meno (bewerkt) — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[],So:[5]},A:[],O:[1,8],ACI:[],GenAbs:[],L:[4],M:[],Rest:[],art:{0:1,3:4,7:8}},
+        vertaling:"Socrates vroeg de jongeren wat deugd is.",
+        woorden:["de","Socrates","hij vroeg","de (acc. mv.)","jongeren (acc.)","wat","is","de","deugd"],
+        uitleg:{P:"Ἠρώτα en ἐστίν: twee persoonsvormen.",S:"Τί = wat: onderschikkend (indirecte vraag).",ACI:"",GenAbs:"",A:"",O:"Σωκράτης = onderwerp; ἀρετή = onderwerp bijzin.",L:"Νέους = jongeren, accusativus.",M:"",Rest:""}},
+      { latijn:["ἔτι","ζῶ","καὶ","ἔτι","φιλοσοφῶ."], context:"Naar Plato, Apologia",
+        psolmo:{P:[1,4],S:{Sn:[2],So:[]},A:[],O:[],ACI:[],GenAbs:[],L:[],M:[],Rest:[0,3]},
+        vertaling:"Ik leef nog en ik filosofeer nog.",
+        woorden:["nog","ik leef","en","nog","ik filosofeer"],
+        uitleg:{P:"Ζῶ en φιλοσοφῶ: twee persoonsvormen. Ἐγώ verborgen.",S:"Καί = en: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Ἐγώ verborgen in ζῶ en φιλοσοφῶ.",L:"",M:"",Rest:"Ἔτι = nog."}},
+      { latijn:["ἡ","πόλις","ἐκεῖ","οἰκεῖται","ὅπου","οἱ","νόμοι","κρατοῦσιν."], context:"Naar Aristoteles (bewerkt)",
+        psolmo:{P:[3,7],S:{Sn:[],So:[4]},A:[],O:[1,6],ACI:[],GenAbs:[],L:[],M:[],Rest:[2],art:{0:1,5:6}},
+        vertaling:"De stad wordt daar bewoond waar de wetten heersen.",
+        woorden:["de","stad","daar","zij wordt bewoond","waar","de","wetten","zij heersen"],
+        uitleg:{P:"Οἰκεῖται en κρατοῦσιν: twee persoonsvormen.",S:"Ὅπου = waar: onderschikkend relatief.",ACI:"",GenAbs:"",A:"",O:"Πόλις = onderwerp (passief); νόμοι = onderwerp bijzin.",L:"",M:"",Rest:"Ἐκεῖ = daar; ὅπου = waar."}},
+      { latijn:["τῶν","νόμων","λυθέντων,","ἡ","πόλις","ἀπόλλυται."], context:"Plato, Crito (bewerkt) — genitivus absolutus",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1],L:[],M:[],Rest:[2],art:{0:1,3:4}},
+        vertaling:"Nadat de wetten zijn opgeheven, gaat de stad ten onder.",
+        woorden:["van de wetten (gen.)","opgeheven zijnde (gen. part.)","gaat ten onder","de","stad","zij vergaat"],
+        uitleg:{P:"Ἀπόλλυται = zij gaat ten onder. Praesens (gnomisch).",S:"",ACI:"",GenAbs:"Τῶν νόμων λυθέντων = gen. abs.: nadat/wanneer de wetten zijn opgeheven.",A:"",O:"Πόλις = stad, nominativus.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","Πλάτων","ἔγραψεν","ἃ","ὁ","Σωκράτης","ἔλεγεν","ἵνα","μὴ","ἐπιλαθόμεθα."], context:"Plato (bewerkt) — samengesteld",
+        psolmo:{P:[2,6,9],S:{Sn:[],So:[3,7]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[3],M:[],Rest:[8],art:{0:1,4:5}},
+        vertaling:"Plato schreef wat Socrates zei opdat wij het niet zouden vergeten.",
+        woorden:["de","Plato","hij schreef","wat","de","Socrates","hij zei","opdat","niet","wij vergaten"],
+        uitleg:{P:"Ἔγραψεν, ἔλεγεν, ἐπιλαθόμεθα: drie persoonsvormen.",S:"Ἅ = wat: onderschikkend relatief. Ἵνα = opdat: onderschikkend finaal.",ACI:"",GenAbs:"",A:"",O:"Πλάτων = onderwerp; Σωκράτης = onderwerp bijzin 1; ἡμεῖς in ἐπιλαθόμεθα.",L:"Ἅ = wat hij zei, accusativus.",M:"",Rest:""}},
+      { latijn:["πάντες","ἄνθρωποι","τοῦ","εἰδέναι","ὀρέγονται","φύσει."], context:"Aristoteles, Metaphysica I.1",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[{kern:0,attr:[1]}],O:[0],ACI:[],GenAbs:[],L:[],M:[3],Rest:[5],art:{2:3}},
+        vertaling:"Alle mensen streven van nature naar kennis.",
+        woorden:["alle","mensen","van het (gen.)","te weten (gen. inf.)","zij streven","van nature"],
+        uitleg:{P:"Ὀρέγονται = zij streven. 3e pers. mv. praesens.",S:"",ACI:"",GenAbs:"",A:"Πάντες ἄνθρωποι: ἄνθρωποι (kern) + πάντες (bijv. nw.).",O:"Ἄνθρωποι = mensen, nominativus.",L:"",M:"Τοῦ εἰδέναι = van het weten: genitief van doel bij ὀρέγομαι.",Rest:"Φύσει = van nature: datief."}},
+      { latijn:["ἐν","ἀρχῇ","ἦν","ὁ","λόγος."], context:"Naar het Griekse NT (Joh. 1:1)",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[],L:[],M:[],Rest:[0,1],art:{3:4}},
+        vertaling:"In het begin was het woord.",
+        woorden:["in","het begin (dat.)","was","het","woord"],
+        uitleg:{P:"Ἦν = was. Imperfectum van εἰμί.",S:"",ACI:"",GenAbs:"",A:"",O:"Ὁ λόγος = het woord, nominativus.",L:"",M:"",Rest:"Ἐν ἀρχῇ = in het begin: voorzetsel + datief."}},
+      { latijn:["ὁ","Σωκράτης","ἀπέθανεν","οὐ","διότι","ἥμαρτεν","ἀλλὰ","διότι","τὴν","ἀλήθειαν","εἶπεν."], context:"Plato, Apologia (bewerkt) — samengesteld",
+        psolmo:{P:[2,5,10],S:{Sn:[6],So:[4,7]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[3,9],art:{0:1,8:9}},
+        vertaling:"Socrates stierf niet omdat hij zondigde, maar omdat hij de waarheid sprak.",
+        woorden:["de","Socrates","hij stierf","niet","omdat","hij zondigde","maar","omdat","de (acc.)","waarheid (acc.)","hij sprak"],
+        uitleg:{P:"Ἀπέθανεν, ἥμαρτεν, εἶπεν: drie persoonsvormen.",S:"Διότι = omdat: onderschikkend causaal (2x). Ἀλλά = maar: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Σωκράτης = onderwerp; onderwerp bijzinnen in ἥμαρτεν en εἶπεν.",L:"Ἀλήθειαν = waarheid, accusativus.",M:"",Rest:"Οὐ = niet."}}
+    ]
+  }
+};
+
+// ============================================================
+// APP STATE
+// ============================================================
+let PSOLMO = ALL_STEPS;
+let state = {
+  level:null, zinnen:[], zinIndex:0,
+  currentStepKey:"P",
+  selectedWords:{},
+  completedSteps:{},
+  attrGroupsDone:new Set(),
+  pendingVwIndex:null,
+  results:[]
+};
+
+// ============================================================
+// INIT
+// ============================================================
+function init(){ renderLevelSelect(); }
+
+function renderLevelSelect(){
+  const grid=document.getElementById('levelsGrid');
+  grid.innerHTML='';
+  Object.entries(DATABASE).forEach(([lvl,data])=>{
+    const card=document.createElement('div');
+    card.className='level-card';
+    card.innerHTML=`<div class="level-num">${lvl}</div>
+      <div class="level-info"><h3>${data.naam}</h3><p>${data.beschrijving}</p></div>
+      <div class="level-count">${data.zinnen.length} zinnen</div>`;
+    card.onclick=()=>startLevel(parseInt(lvl));
+    grid.appendChild(card);
+  });
+  showScreen('screenLevel');
+  document.getElementById('headerBadge').textContent='Kies niveau';
+}
+
+function startLevel(lvl){
+  state.level=lvl;
+  PSOLMO=getStepsForLevel(lvl);
+  const shuffled=[...DATABASE[lvl].zinnen].sort(()=>Math.random()-0.5);
+  state.zinnen=shuffled.slice(0,Math.min(6,shuffled.length));
+  state.zinIndex=0; state.results=[];
+  document.getElementById('headerBadge').textContent=`Niveau ${lvl}`;
+  loadZin(); showScreen('screenExercise');
+}
+
+function loadZin(){
+  state.currentStepKey='P';
+  state.selectedWords={};
+  state.completedSteps={};
+  state.attrGroupsDone=new Set();
+  state.pendingVwIndex=null;
+  const zin=state.zinnen[state.zinIndex];
+  document.getElementById('exTitle').textContent=DATABASE[state.level].naam;
+  document.getElementById('exCounter').textContent=`${state.zinIndex+1} / ${state.zinnen.length}`;
+  document.getElementById('progressFill').style.width=`${(state.zinIndex/state.zinnen.length)*100}%`;
+  document.getElementById('sentenceContext').textContent=zin.context;
+  document.getElementById('vwChooser').classList.remove('show');
+  document.getElementById('glossSection').classList.remove('show');
+  document.getElementById('translationSection').style.display='none';
+  document.getElementById('translationInput').value='';
+  hideFeedback();
+  renderWords(); renderPills(); loadStep();
+}
+
+function renderWords(){
+  const zin=state.zinnen[state.zinIndex];
+  const container=document.getElementById('sentenceWords');
+  container.innerHTML='';
+  zin.latijn.forEach((word,i)=>{
+    const btn=document.createElement('button');
+    btn.className='word-btn selectable';
+    btn.dataset.index=i;
+    const tag=state.selectedWords[i];
+    if(tag){ btn.classList.add(`tagged-${tag}`); }
+    const wordSpan=document.createElement('span');
+    wordSpan.textContent=word;
+    btn.appendChild(wordSpan);
+    if(tag){
+      const mark=document.createElement('span');
+      mark.className='word-tag';
+      const labels={P:'Ρ',Sn:'Σ↔',So:'Σ↳',
+        A1:'Α1',A2:'Α2',A3:'Α3',A4:'Α4',A5:'Α5',
+        O:'Υ',ACI:'AcI',GenAbs:'Gen',L:'Λ',M:'Δ',Rest:'✓'};
+      mark.textContent=labels[tag]||tag;
+      btn.appendChild(mark);
+    }
+    btn.onclick=()=>onWordTap(i);
+    container.appendChild(btn);
+  });
+}
+
+function renderPills(){
+  const container=document.getElementById('psolmoSteps');
+  container.innerHTML='';
+  PSOLMO.forEach(step=>{
+    const pill=document.createElement('div');
+    pill.className='step-pill';
+    pill.dataset.step=step.key;
+    const isActive=step.key===state.currentStepKey;
+    const isDone=state.completedSteps[step.key];
+    if(isActive) pill.classList.add('active');
+    if(isDone)   pill.classList.add('done');
+    const labels={P:'Ρ — Persoonsvorm',S:'Σ — Voegwoord',O:'Υ — Onderwerp',
+      ACI:'AcI',L:'Λ — Lijd. vw.',M:'Δ — Ind. vw.',GenAbs:'Gen. Abs.',A:'Α — Attribuut',Rest:'Λ — Overig'};
+    pill.textContent=(isDone?'✓ ':'')+labels[step.key];
+    pill.onclick=()=>jumpToStep(step.key);
+    container.appendChild(pill);
+  });
+}
+
+function jumpToStep(key){
+  if(key===state.currentStepKey) return;
+  hideFeedback();
+  document.getElementById('vwChooser').classList.remove('show');
+  state.pendingVwIndex=null;
+  state.currentStepKey=key;
+  renderPills(); loadStep();
+}
+
+function loadStep(){
+  const step=PSOLMO.find(s=>s.key===state.currentStepKey);
+  document.getElementById('stepLabel').textContent=step.label;
+  document.getElementById('stepInstruction').textContent=step.instructie;
+  document.getElementById('stepHint').textContent='';
+  document.getElementById('instructionBox').style.borderLeftColor=step.kleur;
+  document.getElementById('stepLabel').style.color=step.kleur;
+  const skipBtn=document.getElementById('skipBtn');
+  if(step.heeftGeen){
+    skipBtn.style.display='block';
+    skipBtn.textContent=`↩ ${step.skipTekst}`;
+  } else {
+    skipBtn.style.display='none';
+  }
+  hideFeedback();
+}
+
+function onWordTap(wordIndex){
+  if(state.pendingVwIndex!==null){
+    document.getElementById('vwChooser').classList.remove('show');
+    state.pendingVwIndex=null;
+    return;
+  }
+  const step=PSOLMO.find(s=>s.key===state.currentStepKey);
+  const zin=state.zinnen[state.zinIndex];
+  const tag=state.selectedWords[wordIndex];
+
+  if(tag && stepOfTag(tag)===state.currentStepKey){
+    if(state.currentStepKey==='A'){
+      const groupTag=tag;
+      Object.keys(state.selectedWords).forEach(k=>{
+        if(state.selectedWords[k]===groupTag) delete state.selectedWords[k];
+      });
+      const groups=zin.psolmo.A||[];
+      const gIdx=groups.findIndex(g=>g.kern===wordIndex);
+      if(gIdx!==-1 && state.attrGroupsDone){
+        state.attrGroupsDone.delete(gIdx);
+        groups[gIdx].attr.forEach(i=>{ delete state.selectedWords[i]; });
+      }
+      state.completedSteps['A']=false;
+    } else {
+      delete state.selectedWords[wordIndex];
+      state.completedSteps[state.currentStepKey]=false;
+    }
+    renderWords(); hideFeedback(); return;
+  }
+  if(tag && stepOfTag(tag)!==state.currentStepKey){
+    showFeedback(false,`Dit woord is al aangewezen als <strong>${tagLabel(tag)}</strong>. Ga naar die stap om het te wijzigen.`);
+    return;
+  }
+
+  switch(state.currentStepKey){
+    case 'P': handleP(wordIndex,zin,step); break;
+    case 'S': handleS(wordIndex,zin,step); break;
+    case 'A': handleA(wordIndex,zin,step); break;
+    default:  handleDefault(wordIndex,zin,step); break;
+  }
+}
+
+function handleP(wordIndex,zin,step){
+  const correct=zin.psolmo.P;
+  if(correct.includes(wordIndex)){
+    state.selectedWords[wordIndex]='P';
+    renderWords();
+    const allDone=correct.every(i=>state.selectedWords[i]==='P');
+    if(allDone){ stepDone(step,zin.uitleg.P); }
+  } else {
+    shake(wordIndex);
+    showFeedback(false,'Niet de persoonsvorm. Zoek het vervoegde werkwoord.');
+  }
+}
+
+function handleS(wordIndex,zin,step){
+  const allS=[...zin.psolmo.S.Sn,...zin.psolmo.S.So];
+  if(!allS.includes(wordIndex)){
+    shake(wordIndex);
+    showFeedback(false,'Dit is geen voegwoord in deze zin.');
+    return;
+  }
+  state.pendingVwIndex=wordIndex;
+  document.getElementById('vwWord').textContent=zin.latijn[wordIndex];
+  document.getElementById('vwChooser').classList.add('show');
+  hideFeedback();
+}
+
+function confirmVoegwoord(type){
+  const wordIndex=state.pendingVwIndex;
+  if(wordIndex===null) return;
+  const zin=state.zinnen[state.zinIndex];
+  const step=PSOLMO.find(s=>s.key==='S');
+  const correctType=zin.psolmo.S.Sn.includes(wordIndex)?'Sn':'So';
+  document.getElementById('vwChooser').classList.remove('show');
+  state.pendingVwIndex=null;
+  if(type===correctType){
+    state.selectedWords[wordIndex]=type;
+    renderWords();
+    const allSn=zin.psolmo.S.Sn.every(i=>state.selectedWords[i]==='Sn');
+    const allSo=zin.psolmo.S.So.every(i=>state.selectedWords[i]==='So');
+    if(allSn&&allSo){ stepDone(step,zin.uitleg.S); }
+    else { showFeedback(true,'Goed! Er zijn nog meer voegwoorden in deze zin.'); }
+  } else {
+    shake(wordIndex);
+    const verwacht=correctType==='Sn'?'nevenschikkend':'onderschikkend';
+    showFeedback(false,`Niet juist. Dit voegwoord is ${verwacht}. ${zin.uitleg.S}`);
+  }
+}
+
+function handleA(wordIndex,zin,step){
+  const groups=zin.psolmo.A;
+  if(!groups||groups.length===0){
+    shake(wordIndex);
+    showFeedback(false,'Er zijn geen attribuutgroepen in deze zin. Gebruik de knop hieronder.');
+    return;
+  }
+  const groupIdx=groups.findIndex(g=>g.kern===wordIndex||g.attr.includes(wordIndex));
+  if(groupIdx===-1){
+    shake(wordIndex);
+    showFeedback(false,'Dit woord is geen kern of attribuut van een woordgroep. Tik op het hoofdsubstantief.');
+    return;
+  }
+  const group=groups[groupIdx];
+  if(wordIndex!==group.kern){
+    showFeedback(false,`Tik op het kernwoord van deze groep: <em>${zin.latijn[group.kern]}</em>.`);
+    return;
+  }
+  const groupTags=['A1','A2','A3','A4','A5'];
+  const usedTags=new Set(Object.values(state.selectedWords).filter(t=>t&&t.startsWith('A')));
+  const groupTag=groupTags.find(t=>!usedTags.has(t))||'A1';
+  group.attr.forEach(i=>{ state.selectedWords[i]=groupTag; });
+  if(!state.selectedWords[group.kern]){
+    state.selectedWords[group.kern]=groupTag;
+  }
+  if(!state.attrGroupsDone) state.attrGroupsDone=new Set();
+  state.attrGroupsDone.add(groupIdx);
+  renderWords();
+  const allDone=groups.every((_,i)=>state.attrGroupsDone&&state.attrGroupsDone.has(i));
+  if(allDone){
+    stepDone(step,zin.uitleg.A||'Goed! Alle woordgroepen zijn aangewezen.');
+  } else {
+    const remaining=groups.length-(state.attrGroupsDone?state.attrGroupsDone.size:0);
+    showFeedback(true,`Groep gemarkeerd! Er ${remaining===1?'is nog 1 groep':'zijn nog '+remaining+' groepen'} te vinden.`);
+  }
+}
+
+function handleDefault(wordIndex,zin,step){
+  const key=step.key;
+  const correct=zin.psolmo[key];
+  if(correct.includes(wordIndex)){
+    state.selectedWords[wordIndex]=key;
+    renderWords();
+    const allDone=correct.every(i=>state.selectedWords[i]===key);
+    if(allDone){ stepDone(step,zin.uitleg[key]); }
+  } else {
+    shake(wordIndex);
+    if(correct.length===0){
+      showFeedback(false,`Er is geen ${step.naam.toLowerCase()} in deze zin. Gebruik de knop hieronder.`);
+    } else {
+      showFeedback(false,`Niet juist. Denk aan de naamval of de functie van de ${step.naam.toLowerCase()}.`);
+    }
+  }
+}
+
+function stepDone(step,uitlegTekst){
+  state.completedSteps[step.key]=true;
+  renderPills();
+  if(uitlegTekst){
+    showFeedback(true,uitlegTekst);
+    setTimeout(()=>{ hideFeedback(); tryAutoAdvance(); },2000);
+  } else {
+    tryAutoAdvance();
+  }
+}
+
+function tryAutoAdvance(){
+  if(allWordsCovered()){
+    PSOLMO.forEach(s=>{ state.completedSteps[s.key]=true; });
+    renderPills();
+    checkAllDone();
+    return;
+  }
+  const keys=PSOLMO.map(s=>s.key);
+  const cur=keys.indexOf(state.currentStepKey);
+  for(let i=cur+1;i<keys.length;i++){
+    if(!state.completedSteps[keys[i]]){
+      state.currentStepKey=keys[i];
+      renderPills(); loadStep(); return;
+    }
+  }
+  checkAllDone();
+}
+
+function allWordsCovered(){
+  const zin=state.zinnen[state.zinIndex];
+  const n=zin.latijn.length;
+  const tagged=new Set(Object.keys(state.selectedWords).map(Number));
+  for(let i=0;i<n;i++){
+    if(!tagged.has(i)) return false;
+  }
+  return true;
+}
+
+function checkAllDone(){
+  const allDone=PSOLMO.every(s=>state.completedSteps[s.key]);
+  if(allDone){
+    renderGloss();
+    document.getElementById('glossSection').classList.add('show');
+    document.getElementById('translationSection').style.display='block';
+    document.getElementById('skipBtn').style.display='none';
+    document.getElementById('stepLabel').textContent='Vertaling';
+    document.getElementById('stepInstruction').textContent='Uitstekend! Gebruik de woordbetekenissen hieronder en schrijf je volledige Nederlandse vertaling.';
+    document.getElementById('stepHint').textContent='';
+    document.getElementById('instructionBox').style.borderLeftColor='var(--gold)';
+    document.getElementById('stepLabel').style.color='var(--gold)';
+    document.getElementById('progressFill').style.width=`${((state.zinIndex+0.8)/state.zinnen.length)*100}%`;
+  }
+}
+
+function renderGloss(){
+  const zin=state.zinnen[state.zinIndex];
+  const grid=document.getElementById('glossGrid');
+  grid.innerHTML='';
+  zin.latijn.forEach((word,i)=>{
+    const tag=state.selectedWords[i]||'none';
+    const meaning=(zin.woorden&&zin.woorden[i])||'—';
+    const card=document.createElement('div');
+    card.className=`gloss-card gloss-${tag}`;
+    const cleanWord=word.replace(/[.,;:?!…]+$/,'');
+    card.innerHTML=`<span class="gloss-latin">${cleanWord}</span><span class="gloss-nl">${meaning}</span>`;
+    grid.appendChild(card);
+  });
+}
+
+function skipStep(){
+  const step=PSOLMO.find(s=>s.key===state.currentStepKey);
+  const zin=state.zinnen[state.zinIndex];
+  let hasContent=false;
+  if(step.key==='S'){
+    hasContent=(zin.psolmo.S.Sn.length>0||zin.psolmo.S.So.length>0);
+  } else if(step.key==='A'){
+    hasContent=(zin.psolmo.A&&zin.psolmo.A.length>0);
+  } else if(step.key==='ACI'){
+    hasContent=(zin.psolmo.ACI&&zin.psolmo.ACI.length>0);
+  } else if(step.key==='GenAbs'){
+    hasContent=(zin.psolmo.GenAbs&&zin.psolmo.GenAbs.length>0);
+  } else {
+    hasContent=(zin.psolmo[step.key]&&zin.psolmo[step.key].length>0);
+  }
+  if(hasContent){
+    showFeedback(false,`Er is wél ${step.key==='A'?'een attribuutgroep':'een '+step.naam.toLowerCase()} in deze zin. Zoek goed!`);
+    return;
+  }
+  const uitleg=zin.uitleg[step.key];
+  if(uitleg){ showFeedback(true,uitleg); setTimeout(()=>{ hideFeedback(); stepDone(step,''); },1800); }
+  else { stepDone(step,''); }
+}
+
+function submitTranslation(){
+  const input=document.getElementById('translationInput').value.trim();
+  if(!input) return;
+  const zin=state.zinnen[state.zinIndex];
+  state.results.push({latijn:zin.latijn.join(' '),context:zin.context,correcteVertaling:zin.vertaling,studentVertaling:input});
+  const isLast=state.zinIndex>=state.zinnen.length-1;
+  document.getElementById('sentenceResultContent').innerHTML=`
+    <div class="result-card">
+      <div class="sentence-latin">${zin.latijn.join(' ')}</div>
+      <div class="result-row"><span class="result-label">Correct</span><span class="result-value">${zin.vertaling}</span></div>
+      <hr class="divider">
+      <div class="result-row"><span class="result-label">Jouw vertaling</span><span class="result-value student">${input}</span></div>
+    </div>
+    <p style="font-size:0.82rem;color:var(--grey);font-style:italic;margin-bottom:8px;">
+      Vergelijk zelf: klopt de betekenis? Let op naamvallen, persoon en tijd.
+    </p>`;
+  document.getElementById('btnNextSentence').textContent=isLast?'Bekijk eindresultaat →':'Volgende zin →';
+  showScreen('screenSentenceResult');
+}
+
+function nextSentence(){
+  state.zinIndex++;
+  if(state.zinIndex>=state.zinnen.length){ showLevelResult(); }
+  else { loadZin(); showScreen('screenExercise'); }
+}
+
+function showLevelResult(){
+  document.getElementById('progressFill').style.width='100%';
+  const msgs=[
+    "Axios! Waardig! 🏛️",
+    "Kalós kai agathós! 🏆",
+    "Socrates zou trots zijn! 📜",
+    "Aristos! De beste! 🌿",
+    "Optimos mathetes! ✨"
+  ];
+  document.getElementById('scoreBanner').innerHTML=`
+    <div class="score-num">${state.zinnen.length}</div>
+    <div class="score-label">zinnen voltooid — Niveau ${state.level}</div>
+    <div class="score-msg">${msgs[Math.floor(Math.random()*msgs.length)]}</div>`;
+  const list=document.getElementById('levelResultList');
+  list.innerHTML='<h3 style="font-size:1.1rem;font-weight:700;margin-bottom:12px;font-style:italic;">Overzicht</h3>';
+  state.results.forEach((r,i)=>{
+    const card=document.createElement('div'); card.className='result-card';
+    card.innerHTML=`<div style="font-size:0.72rem;color:var(--grey);margin-bottom:3px;">${i+1}. ${r.context}</div>
+      <div class="sentence-latin" style="font-size:0.92rem;margin-bottom:7px;">${r.latijn}</div>
+      <div class="result-row"><span class="result-label">Correct</span><span class="result-value">${r.correcteVertaling}</span></div>
+      <div class="result-row"><span class="result-label">Jij</span><span class="result-value student">${r.studentVertaling}</span></div>`;
+    list.appendChild(card);
+  });
+  showScreen('screenLevelResult');
+  document.getElementById('headerBadge').textContent=`Niveau ${state.level} ✓`;
+}
+
+function retryLevel(){ startLevel(state.level); }
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goToLevelSelect(){ renderLevelSelect(); }
+function showFeedback(correct,tekst){
+  const box=document.getElementById('feedbackBox');
+  box.className=`feedback-box show ${correct?'correct':'incorrect'}`;
+  box.innerHTML=`<strong>${correct?'✓ Goed!':'✗ Probeer opnieuw'}</strong>${tekst}`;
+}
+function hideFeedback(){
+  const box=document.getElementById('feedbackBox');
+  box.className='feedback-box'; box.innerHTML='';
+}
+function shake(wordIndex){
+  const btn=document.querySelector(`.word-btn[data-index="${wordIndex}"]`);
+  if(btn){ btn.classList.add('wrong'); setTimeout(()=>btn.classList.remove('wrong'),400); }
+}
+
+init();
+</script>
+</body>
+</html>
