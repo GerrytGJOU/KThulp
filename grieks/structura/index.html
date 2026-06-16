@@ -197,6 +197,13 @@
   .tagged-ACI .word-tag{background:#8b3a8b;}
   .tagged-GenAbs .word-tag{background:#2e6b6b;}
 
+  /* ARTICLES — attached to their head word (auto-coloured, no role badge) */
+  .word-btn.article-attached{opacity:0.66;font-size:0.95rem;padding:7px 9px;}
+  .word-btn.article-attached .art-link{position:absolute;top:-6px;right:-6px;width:14px;height:14px;border-radius:7px;font-size:8px;display:flex;align-items:center;justify-content:center;color:white;background:rgba(0,0,0,0.35);}
+  /* loose article awaiting a link */
+  .word-btn.article-loose{border-style:dashed;border-color:var(--gold);background:#fdf6e3;color:var(--ink-light);}
+  .word-btn.article-pending{border-color:var(--gold);background:#fff3d6;box-shadow:0 0 0 3px rgba(201,162,39,0.3);}
+
   /* VOEGWOORD CHOOSER */
   .vw-chooser{display:none;background:var(--white);border:2px solid var(--blue-light);border-radius:14px;padding:14px;margin-bottom:14px;box-shadow:var(--shadow-sm);}
   .vw-chooser.show{display:block;}
@@ -218,6 +225,7 @@
   .feedback-box.show{display:block;}
   .feedback-box.correct  {background:#e0f0e8;border:2px solid var(--green);color:#1a4a2e;}
   .feedback-box.incorrect{background:#fdf0e8;border:2px solid var(--terracotta);color:#5a2e0f;}
+  .feedback-box.info     {background:#fdf6e3;border:2px solid var(--gold);color:#5a4500;}
   .feedback-box strong{display:block;margin-bottom:3px;}
 
   /* TRANSLATION */
@@ -455,11 +463,11 @@ const DATABASE = {
         vertaling:"De jongeman schrijft.",
         woorden:["de (art.)","jongeman","hij schrijft"],
         uitleg:{P:"Γράφει = hij schrijft. 3e pers. ev.",S:"",ACI:"",GenAbs:"",A:"",O:"Νεανίας = jongeman, nominativus (1e declinatie, masc.).",L:"",M:"",Rest:""}},
-      { latijn:["ἡ","κόρη","καλή","ἐστιν."], context:"Oefenzin",
-        psolmo:{P:[3],S:{Sn:[],So:[]},A:[{kern:1,attr:[2]}],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
-        vertaling:"Het meisje is mooi.",
-        woorden:["de (art.)","meisje","mooi","is"],
-        uitleg:{P:"Ἐστιν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Κόρη = meisje (predicatief: ἡ κόρη ἐστίν).",L:"",M:"",Rest:"Καλή = mooi: predicatief bijv. nw."}},
+      { latijn:["ἡ","κόρη","τὸν","ἄρτον","ἐσθίει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"Het meisje eet het brood.",
+        woorden:["het","meisje","het (acc.)","brood (acc.)","zij eet"],
+        uitleg:{P:"Ἐσθίει = zij eet.",S:"",ACI:"",GenAbs:"",A:"",O:"Κόρη = meisje, nominativus.",L:"Ἄρτον = brood, accusativus.",M:"",Rest:""}},
       { latijn:["ὁ","παῖς","τὸν","κύνα","βλέπει."], context:"Oefenzin",
         psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
         vertaling:"Het kind ziet de hond.",
@@ -490,21 +498,21 @@ const DATABASE = {
         vertaling:"De godin redt de mensen.",
         woorden:["de (art.)","godin","de (art. acc. mv.)","mensen (acc.)","zij redt"],
         uitleg:{P:"Σῴζει = zij redt.",S:"",ACI:"",GenAbs:"",A:"",O:"Θεά = godin, nominativus.",L:"Ἀνθρώπους = mensen, accusativus mv.",M:"",Rest:""}},
-      { latijn:["ὁ","δοῦλος","τρέχει","καὶ","ὁ","κύριος","βλέπει."], context:"Oefenzin — samengesteld",
-        psolmo:{P:[2,6],S:{Sn:[3],So:[]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1,4:5}},
-        vertaling:"De slaaf rent en de meester kijkt.",
-        woorden:["de","slaaf","hij rent","en","de","meester","hij kijkt"],
-        uitleg:{P:"Τρέχει en βλέπει: twee persoonsvormen.",S:"Καί = en: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Δοῦλος = onderwerp 1e; κύριος = onderwerp 2e.",L:"",M:"",Rest:""}},
-      { latijn:["ἡ","κόρη","ᾄδει","καὶ","ὁ","παῖς","παίζει."], context:"Oefenzin — samengesteld",
-        psolmo:{P:[2,6],S:{Sn:[3],So:[]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1,4:5}},
-        vertaling:"Het meisje zingt en het kind speelt.",
-        woorden:["het","meisje","zij zingt","en","het","kind","hij speelt"],
-        uitleg:{P:"ᾌδει en παίζει: twee persoonsvormen.",S:"Καί = en: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Κόρη = onderwerp 1e; παῖς = onderwerp 2e.",L:"",M:"",Rest:""}},
-      { latijn:["ὁ","νόμος","καλός","ἐστιν."], context:"Oefenzin",
-        psolmo:{P:[3],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[2],art:{0:1}},
-        vertaling:"De wet is goed/mooi.",
-        woorden:["de","wet","goed","is"],
-        uitleg:{P:"Ἐστιν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Νόμος = wet, nominativus.",L:"",M:"",Rest:"Καλός = goed: predicatief bijv. nw."}},
+      { latijn:["ὁ","δοῦλος","τὸν","δεσπότην","φοβεῖται."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De slaaf vreest de meester.",
+        woorden:["de","slaaf","de (acc.)","meester (acc.)","hij vreest"],
+        uitleg:{P:"Φοβεῖται = hij vreest. Deponens.",S:"",ACI:"",GenAbs:"",A:"",O:"Δοῦλος = slaaf, nominativus.",L:"Δεσπότην = meester, accusativus.",M:"",Rest:""}},
+      { latijn:["ἡ","κόρη","τὸ","βιβλίον","ἀναγιγνώσκει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"Het meisje leest het boek.",
+        woorden:["het","meisje","het (acc.)","boek (acc.)","zij leest"],
+        uitleg:{P:"Ἀναγιγνώσκει = zij leest.",S:"",ACI:"",GenAbs:"",A:"",O:"Κόρη = meisje, nominativus.",L:"Βιβλίον = boek, accusativus (onzijdig).",M:"",Rest:""}},
+      { latijn:["ὁ","γεωργὸς","τοὺς","βοῦς","ἄγει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De boer drijft de ossen.",
+        woorden:["de","boer","de (acc. mv.)","ossen (acc.)","hij drijft"],
+        uitleg:{P:"Ἄγει = hij drijft/leidt.",S:"",ACI:"",GenAbs:"",A:"",O:"Γεωργός = boer, nominativus.",L:"Βοῦς = ossen, accusativus mv.",M:"",Rest:""}},
       { latijn:["οἱ","νέοι","ἀθλοῦσιν."], context:"Oefenzin",
         psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1}},
         vertaling:"De jongeren oefenen/sporten.",
@@ -515,11 +523,52 @@ const DATABASE = {
         vertaling:"De mens spreekt de waarheid.",
         woorden:["de","mens","de (acc.)","waarheid (acc.)","hij spreekt"],
         uitleg:{P:"Λέγει = hij spreekt.",S:"",ACI:"",GenAbs:"",A:"",O:"Ἄνθρωπος = mens.",L:"Ἀλήθειαν = waarheid, accusativus.",M:"",Rest:""}},
-      { latijn:["ἡ","ψυχὴ","ἀθάνατός","ἐστιν."], context:"Oefenzin — filosofisch",
-        psolmo:{P:[3],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[2],art:{0:1}},
-        vertaling:"De ziel is onsterfelijk.",
-        woorden:["de","ziel","onsterfelijk","is"],
-        uitleg:{P:"Ἐστιν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Ψυχή = ziel, nominativus.",L:"",M:"",Rest:"Ἀθάνατος = onsterfelijk: predicatief."}}
+      { latijn:["οἱ","θεοὶ","τὴν","πόλιν","σῴζουσιν."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De goden redden de stad.",
+        woorden:["de","goden","de (acc.)","stad (acc.)","zij redden"],
+        uitleg:{P:"Σῴζουσιν = zij redden, 3e pers. mv.",S:"",ACI:"",GenAbs:"",A:"",O:"Θεοί = goden, nominativus mv.",L:"Πόλιν = stad, accusativus.",M:"",Rest:""}}
+    ,
+      { latijn:["ὁ","δοῦλος","τὸν","οἶνον","φέρει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De slaaf draagt de wijn.",
+        woorden:["de","slaaf","de (acc.)","wijn (acc.)","hij draagt"],
+        uitleg:{P:"Φέρει = hij draagt.",S:"",ACI:"",GenAbs:"",A:"",O:"Δοῦλος = slaaf, nominativus.",L:"Οἶνον = wijn, accusativus.",M:"",Rest:""}},
+      { latijn:["ἡ","κόρη","τὸ","δῶρον","φέρει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"Het meisje brengt het geschenk.",
+        woorden:["het","meisje","het (acc.)","geschenk (acc.)","zij brengt"],
+        uitleg:{P:"Φέρει = zij brengt.",S:"",ACI:"",GenAbs:"",A:"",O:"Κόρη = meisje.",L:"Δῶρον = geschenk, accusativus (onzijdig).",M:"",Rest:""}},
+      { latijn:["ὁ","στρατιώτης","τὸ","ξίφος","ἔχει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De soldaat heeft het zwaard.",
+        woorden:["de","soldaat","het (acc.)","zwaard (acc.)","hij heeft"],
+        uitleg:{P:"Ἔχει = hij heeft.",S:"",ACI:"",GenAbs:"",A:"",O:"Στρατιώτης = soldaat.",L:"Ξίφος = zwaard, accusativus.",M:"",Rest:""}},
+      { latijn:["οἱ","παῖδες","τοὺς","λόγους","γράφουσιν."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De kinderen schrijven de woorden.",
+        woorden:["de","kinderen","de (acc. mv.)","woorden (acc.)","zij schrijven"],
+        uitleg:{P:"Γράφουσιν = zij schrijven, 3e pers. mv.",S:"",ACI:"",GenAbs:"",A:"",O:"Παῖδες = kinderen, nominativus mv.",L:"Λόγους = woorden, accusativus mv.",M:"",Rest:""}},
+      { latijn:["ὁ","διδάσκαλος","τοὺς","παῖδας","παύει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De leraar laat de kinderen ophouden.",
+        woorden:["de","leraar","de (acc. mv.)","kinderen (acc.)","hij doet ophouden"],
+        uitleg:{P:"Παύει = hij doet ophouden.",S:"",ACI:"",GenAbs:"",A:"",O:"Διδάσκαλος = leraar.",L:"Παῖδας = kinderen, accusativus mv.",M:"",Rest:""}},
+      { latijn:["ἡ","μήτηρ","τὸν","ἵππον","λύει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De moeder maakt het paard los.",
+        woorden:["de","moeder","het (acc.)","paard (acc.)","zij maakt los"],
+        uitleg:{P:"Λύει = zij maakt los.",S:"",ACI:"",GenAbs:"",A:"",O:"Μήτηρ = moeder, 3e declinatie.",L:"Ἵππον = paard, accusativus.",M:"",Rest:""}},
+      { latijn:["ὁ","νεανίας","τὴν","ναῦν","λείπει."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De jongeman verlaat het schip.",
+        woorden:["de","jongeman","het (acc.)","schip (acc.)","hij verlaat"],
+        uitleg:{P:"Λείπει = hij verlaat.",S:"",ACI:"",GenAbs:"",A:"",O:"Νεανίας = jongeman.",L:"Ναῦν = schip, accusativus.",M:"",Rest:""}},
+      { latijn:["οἱ","πολῖται","τοὺς","νόμους","φυλάττουσιν."], context:"Oefenzin",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De burgers bewaken de wetten.",
+        woorden:["de","burgers","de (acc. mv.)","wetten (acc.)","zij bewaken"],
+        uitleg:{P:"Φυλάττουσιν = zij bewaken, 3e pers. mv.",S:"",ACI:"",GenAbs:"",A:"",O:"Πολῖται = burgers, nominativus mv.",L:"Νόμους = wetten, accusativus mv.",M:"",Rest:""}}
     ]
   },
   2:{
@@ -606,6 +655,57 @@ const DATABASE = {
         vertaling:"De stad eert de aanvoerders maar zij gehoorzamen niet.",
         woorden:["de","stad","de (acc.)","aanvoerders (acc.)","zij eert","maar","zij","niet","zij gehoorzamen"],
         uitleg:{P:"Τιμᾷ en πείθονται: twee persoonsvormen.",S:"Ἀλλά = maar: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Πόλις = onderwerp 1e; αὐτοί = onderwerp 2e.",L:"Στρατηγούς = aanvoerders, accusativus.",M:"",Rest:"Οὐ = niet."}}
+    ,
+      { latijn:["ὁ","ἄγγελος","τῷ","βασιλεῖ","τὴν","ἐπιστολὴν","φέρει."], context:"Bericht",
+        psolmo:{P:[6],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[5],M:[3],Rest:[],art:{0:1,2:3,4:5}},
+        vertaling:"De bode brengt de koning de brief.",
+        woorden:["de","bode","aan (dat.)","koning (dat.)","de (acc.)","brief (acc.)","hij brengt"],
+        uitleg:{P:"Φέρει = hij brengt.",S:"",ACI:"",GenAbs:"",A:"",O:"Ἄγγελος = bode.",L:"Ἐπιστολήν = brief, accusativus.",M:"Βασιλεῖ = aan de koning, datief.",Rest:""}},
+      { latijn:["ὁ","στρατηγὸς","τοῖς","στρατιώταις","δῶρα","δίδωσιν."], context:"Militair",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[4],M:[3],Rest:[],art:{0:1,2:3}},
+        vertaling:"De aanvoerder geeft de soldaten geschenken.",
+        woorden:["de","aanvoerder","aan (dat. mv.)","soldaten (dat.)","geschenken (acc.)","hij geeft"],
+        uitleg:{P:"Δίδωσιν = hij geeft.",S:"",ACI:"",GenAbs:"",A:"",O:"Στρατηγός = aanvoerder.",L:"Δῶρα = geschenken, accusativus mv.",M:"Στρατιώταις = aan de soldaten, datief mv.",Rest:""}},
+      { latijn:["ὁ","παῖς","τρέχει","καὶ","ἡ","κόρη","γράφει."], context:"Oefenzin — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[3],So:[]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"Het kind rent en het meisje schrijft.",
+        woorden:["het","kind","hij rent","en","het","meisje","zij schrijft"],
+        uitleg:{P:"Τρέχει en γράφει: twee persoonsvormen.",S:"Καί = en: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Παῖς = onderwerp 1e; κόρη = onderwerp 2e.",L:"",M:"",Rest:""}},
+      { latijn:["οἱ","Ἕλληνες","μάχονται","ὅτι","τοὺς","θεοὺς","τιμῶσιν."], context:"Religie — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[],So:[3]},A:[],O:[1],ACI:[],GenAbs:[],L:[5],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"De Grieken vechten omdat zij de goden eren.",
+        woorden:["de","Grieken","zij vechten","omdat","de (acc. mv.)","goden (acc.)","zij eren"],
+        uitleg:{P:"Μάχονται en τιμῶσιν: twee persoonsvormen.",S:"Ὅτι = omdat: onderschikkend causaal.",ACI:"",GenAbs:"",A:"",O:"Ἕλληνες = onderwerp.",L:"Θεούς = goden, accusativus mv.",M:"",Rest:""}},
+      { latijn:["ὁ","δοῦλος","φεύγει","ἐπεὶ","τὸν","κύριον","φοβεῖται."], context:"Dagelijks leven — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[],So:[3]},A:[],O:[1],ACI:[],GenAbs:[],L:[5],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"De slaaf vlucht omdat hij de meester vreest.",
+        woorden:["de","slaaf","hij vlucht","omdat","de (acc.)","meester (acc.)","hij vreest"],
+        uitleg:{P:"Φεύγει en φοβεῖται: twee persoonsvormen.",S:"Ἐπεί = omdat: onderschikkend causaal.",ACI:"",GenAbs:"",A:"",O:"Δοῦλος = onderwerp.",L:"Κύριον = meester, accusativus.",M:"",Rest:""}},
+      { latijn:["ἡ","μήτηρ","τῇ","θυγατρὶ","τὸ","δῶρον","δίδωσιν."], context:"Familie",
+        psolmo:{P:[6],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[5],M:[3],Rest:[],art:{0:1,2:3,4:5}},
+        vertaling:"De moeder geeft de dochter het geschenk.",
+        woorden:["de","moeder","aan (dat.)","dochter (dat.)","het (acc.)","geschenk (acc.)","zij geeft"],
+        uitleg:{P:"Δίδωσιν = zij geeft.",S:"",ACI:"",GenAbs:"",A:"",O:"Μήτηρ = moeder.",L:"Δῶρον = geschenk, accusativus.",M:"Θυγατρί = aan de dochter, datief.",Rest:""}},
+      { latijn:["ὁ","ποιητὴς","ᾄδει","καὶ","οἱ","πολῖται","ἀκούουσιν."], context:"Oefenzin — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[3],So:[]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"De dichter zingt en de burgers luisteren.",
+        woorden:["de","dichter","hij zingt","en","de","burgers","zij luisteren"],
+        uitleg:{P:"ᾌδει en ἀκούουσιν: twee persoonsvormen.",S:"Καί = en: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Ποιητής = onderwerp 1e; πολῖται = onderwerp 2e.",L:"",M:"",Rest:""}},
+      { latijn:["οἱ","στρατιῶται","οὐ","μάχονται","ἀλλὰ","φεύγουσιν."], context:"Militair — samengesteld",
+        psolmo:{P:[3,5],S:{Sn:[4],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[2],art:{0:1}},
+        vertaling:"De soldaten vechten niet maar vluchten.",
+        woorden:["de","soldaten","niet","zij vechten","maar","zij vluchten"],
+        uitleg:{P:"Μάχονται en φεύγουσιν: twee persoonsvormen.",S:"Ἀλλά = maar: nevenschikkend adversatief.",ACI:"",GenAbs:"",A:"",O:"Στρατιῶται = gedeeld onderwerp.",L:"",M:"",Rest:"Οὐ = niet."}},
+      { latijn:["ὁ","βασιλεὺς","τοῖς","πολίταις","τὴν","εἰρήνην","ἀγγέλλει."], context:"Politiek",
+        psolmo:{P:[6],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[5],M:[3],Rest:[],art:{0:1,2:3,4:5}},
+        vertaling:"De koning kondigt de burgers de vrede aan.",
+        woorden:["de","koning","aan (dat. mv.)","burgers (dat.)","de (acc.)","vrede (acc.)","hij kondigt aan"],
+        uitleg:{P:"Ἀγγέλλει = hij kondigt aan.",S:"",ACI:"",GenAbs:"",A:"",O:"Βασιλεύς = koning.",L:"Εἰρήνην = vrede, accusativus.",M:"Πολίταις = aan de burgers, datief mv.",Rest:""}},
+      { latijn:["ὁ","διδάσκαλος","λέγει","ὅτι","οἱ","παῖδες","μανθάνουσιν."], context:"School — samengesteld",
+        psolmo:{P:[2,6],S:{Sn:[],So:[3]},A:[],O:[1,5],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{0:1,4:5}},
+        vertaling:"De leraar zegt dat de kinderen leren.",
+        woorden:["de","leraar","hij zegt","dat","de","kinderen","zij leren"],
+        uitleg:{P:"Λέγει en μανθάνουσιν: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend.",ACI:"",GenAbs:"",A:"",O:"Διδάσκαλος = onderwerp; παῖδες = onderwerp bijzin.",L:"",M:"",Rest:""}}
     ]
   },
   3:{
@@ -692,6 +792,57 @@ const DATABASE = {
         vertaling:"Thucydides schreef wat hij zag in de oorlog.",
         woorden:["de","Thucydides","hij schreef","wat","hij zag","in","de (dat.)","oorlog (dat.)"],
         uitleg:{P:"Ἔγραψεν en εἶδεν: twee persoonsvormen.",S:"Ἅ = wat: onderschikkend relatief.",ACI:"",GenAbs:"",A:"",O:"Θουκυδίδης = onderwerp; onderwerp bijzin in εἶδεν.",L:"Ἅ = wat hij zag: accusativus.",M:"",Rest:"Ἐν τῷ πολέμῳ = in de oorlog."}}
+    ,
+      { latijn:["τοῦ","στρατηγοῦ","κελεύοντος,","οἱ","στρατιῶται","ἐμάχοντο."], context:"Genitivus absolutus",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1,2],L:[],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Omdat de aanvoerder het beval, vochten de soldaten.",
+        woorden:["van de (gen.)","aanvoerder (gen.)","bevelend (gen. part.)","de","soldaten","zij vochten"],
+        uitleg:{P:"Ἐμάχοντο = zij vochten. Imperfectum.",S:"",ACI:"",GenAbs:"Τοῦ στρατηγοῦ κελεύοντος = gen. abs.: terwijl/omdat de aanvoerder beval.",A:"",O:"Στρατιῶται = soldaten, nominativus.",L:"",M:"",Rest:""}},
+      { latijn:["τῶν","πολεμίων","προσιόντων,","οἱ","πολῖται","ἔφευγον."], context:"Genitivus absolutus",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1,2],L:[],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Toen de vijanden naderden, vluchtten de burgers.",
+        woorden:["van de (gen. mv.)","vijanden (gen.)","naderend (gen. part.)","de","burgers","zij vluchtten"],
+        uitleg:{P:"Ἔφευγον = zij vluchtten. Imperfectum.",S:"",ACI:"",GenAbs:"Τῶν πολεμίων προσιόντων = gen. abs.: terwijl de vijanden naderden.",A:"",O:"Πολῖται = burgers, nominativus.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","Σωκράτης","τοὺς","νέους","ἐδίδασκεν","ὥστε","σοφοὶ","γίγνεσθαι."], context:"Plato (bewerkt) — samengesteld",
+        psolmo:{P:[4,7],S:{Sn:[],So:[5]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[6],art:{0:1,2:3}},
+        vertaling:"Socrates onderwees de jongeren zodat zij wijs werden.",
+        woorden:["de","Socrates","de (acc. mv.)","jongeren (acc.)","hij onderwees","zodat","wijs","te worden"],
+        uitleg:{P:"Ἐδίδασκεν en γίγνεσθαι: persoonsvorm + infinitief bij ὥστε.",S:"Ὥστε = zodat: onderschikkend consecutief.",ACI:"",GenAbs:"",A:"",O:"Σωκράτης = onderwerp.",L:"Νέους = jongeren, accusativus.",M:"",Rest:"Σοφοί = wijs: predicatief bij de infinitief."}},
+      { latijn:["ἡ","πόλις","ἣν","οἱ","πολῖται","φυλάττουσιν","ἐλευθέρα","ἐστίν."], context:"Politiek — samengesteld",
+        psolmo:{P:[5,7],S:{Sn:[],So:[2]},A:[],O:[1,4],ACI:[],GenAbs:[],L:[],M:[],Rest:[6],art:{0:1,3:4}},
+        vertaling:"De stad die de burgers bewaken, is vrij.",
+        woorden:["de","stad","die (acc.)","de","burgers","zij bewaken","vrij","is"],
+        uitleg:{P:"Φυλάττουσιν (bijzin) en ἐστίν (hoofdzin): twee persoonsvormen.",S:"Ἥν = die: onderschikkend relatief.",ACI:"",GenAbs:"",A:"",O:"Πόλις = onderwerp hoofdzin; πολῖται = onderwerp bijzin.",L:"",M:"",Rest:"Ἐλευθέρα = vrij: predicatief bij ἐστίν."}},
+      { latijn:["ὁ","Ξενοφῶν","τοὺς","τῶν","Περσῶν","νόμους","ἔγραψεν."], context:"Xenophon (bewerkt)",
+        psolmo:{P:[6],S:{Sn:[],So:[]},A:[{kern:5,attr:[4]}],O:[1],ACI:[],GenAbs:[],L:[5],M:[],Rest:[],art:{0:1,2:5,3:4}},
+        vertaling:"Xenophon beschreef de wetten van de Perzen.",
+        woorden:["de","Xenophon","de (acc. mv.)","van de (gen. mv.)","Perzen (gen.)","wetten (acc.)","hij beschreef"],
+        uitleg:{P:"Ἔγραψεν = hij beschreef. Aoristus.",S:"",ACI:"",GenAbs:"",A:"Τοὺς τῶν Περσῶν νόμους: νόμους (kern) + τῶν Περσῶν (genitivus-attribuut). Let op: het lidwoord τούς staat los van νόμους (met de genitief ertussen) en moet worden gekoppeld.",O:"Ξενοφῶν = nominativus.",L:"Νόμους = wetten (kernwoord), accusativus.",M:"",Rest:""}},
+      { latijn:["ὁ","Περικλῆς","τοῖς","Ἀθηναίοις","εἶπεν","ὅτι","ἡ","πόλις","ἰσχυρά","ἐστιν."], context:"Thucydides (bewerkt) — samengesteld",
+        psolmo:{P:[4,9],S:{Sn:[],So:[5]},A:[],O:[1,7],ACI:[],GenAbs:[],L:[],M:[3],Rest:[8],art:{0:1,2:3,6:7}},
+        vertaling:"Pericles zei aan de Atheners dat de stad sterk is.",
+        woorden:["de","Pericles","aan (dat. mv.)","Atheners (dat.)","hij zei","dat","de","stad","sterk","is"],
+        uitleg:{P:"Εἶπεν en ἐστιν: twee persoonsvormen.",S:"Ὅτι = dat: onderschikkend.",ACI:"",GenAbs:"",A:"",O:"Περικλῆς = onderwerp; πόλις = onderwerp bijzin.",L:"",M:"Ἀθηναίοις = aan de Atheners, datief mv.",Rest:"Ἰσχυρά = sterk: predicatief."}},
+      { latijn:["τῆς","νυκτὸς","γενομένης,","οἱ","στρατιῶται","ἀνεχώρησαν."], context:"Genitivus absolutus",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1,2],L:[],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Toen de nacht gekomen was, trokken de soldaten terug.",
+        woorden:["van de (gen.)","nacht (gen.)","gekomen zijnde (gen. part.)","de","soldaten","zij trokken terug"],
+        uitleg:{P:"Ἀνεχώρησαν = zij trokken terug. Aoristus.",S:"",ACI:"",GenAbs:"Τῆς νυκτὸς γενομένης = gen. abs.: nadat de nacht gevallen was.",A:"",O:"Στρατιῶται = soldaten, nominativus.",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","Θουκυδίδης","ἔγραψεν","ἃ","ἐν","τῷ","πολέμῳ","ἐγένετο."], context:"Thucydides (bewerkt) — samengesteld",
+        psolmo:{P:[2,7],S:{Sn:[],So:[3]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[4,6],art:{0:1,5:6}},
+        vertaling:"Thucydides beschreef wat in de oorlog gebeurde.",
+        woorden:["de","Thucydides","hij beschreef","wat","in","de (dat.)","oorlog (dat.)","het gebeurde"],
+        uitleg:{P:"Ἔγραψεν en ἐγένετο: twee persoonsvormen.",S:"Ἅ = wat: onderschikkend relatief.",ACI:"",GenAbs:"",A:"",O:"Θουκυδίδης = onderwerp.",L:"",M:"",Rest:"Ἐν τῷ πολέμῳ = in de oorlog: voorzetsel + datief."}},
+      { latijn:["οἱ","Ἀθηναῖοι","ναῦς","ἐποιοῦντο","ἵνα","τοὺς","Πέρσας","νικῷεν."], context:"Geschiedenis — samengesteld",
+        psolmo:{P:[3,7],S:{Sn:[],So:[4]},A:[],O:[1],ACI:[],GenAbs:[],L:[2,6],M:[],Rest:[],art:{0:1,5:6}},
+        vertaling:"De Atheners bouwden schepen opdat zij de Perzen zouden overwinnen.",
+        woorden:["de","Atheners","schepen (acc.)","zij bouwden","opdat","de (acc. mv.)","Perzen (acc.)","zij zouden overwinnen"],
+        uitleg:{P:"Ἐποιοῦντο en νικῷεν: twee persoonsvormen.",S:"Ἵνα = opdat: onderschikkend finaal.",ACI:"",GenAbs:"",A:"",O:"Ἀθηναῖοι = onderwerp.",L:"Ναῦς = schepen (hoofdzin); Πέρσας = Perzen (bijzin), accusativus.",M:"",Rest:""}},
+      { latijn:["τοῦ","Κύρου","ἀποθανόντος,","οἱ","στρατιῶται","ἄνευ","ἡγεμόνος","ἦσαν."], context:"Xenophon (bewerkt) — genitivus absolutus",
+        psolmo:{P:[7],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1,2],L:[],M:[],Rest:[5,6],art:{0:1,3:4}},
+        vertaling:"Nadat Cyrus gestorven was, waren de soldaten zonder leider.",
+        woorden:["van (gen.)","Cyrus (gen.)","gestorven zijnde (gen. part.)","de","soldaten","zonder","leider (gen.)","zij waren"],
+        uitleg:{P:"Ἦσαν = zij waren. Imperfectum van εἰμί.",S:"",ACI:"",GenAbs:"Τοῦ Κύρου ἀποθανόντος = gen. abs.: nadat Cyrus gestorven was.",A:"",O:"Στρατιῶται = soldaten, nominativus.",L:"",M:"",Rest:"Ἄνευ ἡγεμόνος = zonder leider: voorzetsel + genitief."}}
     ]
   },
   4:{
@@ -778,6 +929,57 @@ const DATABASE = {
         vertaling:"Cyrus meende dat de goede soldaten zouden overwinnen.",
         woorden:["de","Cyrus","hij meende","de (acc. mv.)","goede (acc.)","soldaten (acc.)","te overwinnen (inf. fut.)"],
         uitleg:{P:"Ἐνόμιζε = hij meende. Imperfectum.",S:"",ACI:"Τοὺς ἀγαθοὺς στρατιώτας νικήσειν = AcI: accusativus (τοὺς ἀγαθοὺς στρατιώτας) + infinitief futurum (νικήσειν).",GenAbs:"",A:"Τοὺς ἀγαθοὺς στρατιώτας: στρατιώτας (kern) + ἀγαθούς (bijv. nw.).",O:"Κῦρος = nominativus.",L:"AcI als lijdend voorwerp.",M:"",Rest:""}}
+    ,
+      { latijn:["ὁ","Σωκράτης","ἐνόμιζε","τοὺς","θεοὺς","πάντα","ὁρᾶν."], context:"Plato (bewerkt) — AcI",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[4],GenAbs:[],L:[5,6],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Socrates meende dat de goden alles zien.",
+        woorden:["de","Socrates","hij meende","de (acc. mv.)","goden (acc.)","alles (acc.)","te zien (inf.)"],
+        uitleg:{P:"Ἐνόμιζε = hij meende.",S:"",ACI:"Τοὺς θεούς = accusativus van de AcI (onderwerp van ὁρᾶν).",GenAbs:"",A:"",O:"Σωκράτης = nominativus.",L:"Πάντα ὁρᾶν = de rest van de AcI: object + infinitief.",M:"",Rest:""}},
+      { latijn:["ὁ","Κῦρος","ἤλπιζε","τοὺς","στρατιώτας","νικήσειν."], context:"Xenophon (bewerkt) — AcI",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[4],GenAbs:[],L:[5],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Cyrus hoopte dat de soldaten zouden overwinnen.",
+        woorden:["de","Cyrus","hij hoopte","de (acc. mv.)","soldaten (acc.)","te zullen overwinnen (inf. fut.)"],
+        uitleg:{P:"Ἤλπιζε = hij hoopte.",S:"",ACI:"Τοὺς στρατιώτας = accusativus van de AcI.",GenAbs:"",A:"",O:"Κῦρος = nominativus.",L:"Νικήσειν = infinitief futurum van de AcI.",M:"",Rest:""}},
+      { latijn:["ὁ","Δημοσθένης","τοὺς","Ἀθηναίους","ἔπεισε","τῷ","βασιλεῖ","μὴ","πείθεσθαι."], context:"Demosthenes (bewerkt) — AcI",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[3],GenAbs:[],L:[8],M:[6],Rest:[7],art:{0:1,2:3,5:6}},
+        vertaling:"Demosthenes overtuigde de Atheners de koning niet te gehoorzamen.",
+        woorden:["de","Demosthenes","de (acc. mv.)","Atheners (acc.)","hij overtuigde","aan (dat.)","koning (dat.)","niet","te gehoorzamen (inf.)"],
+        uitleg:{P:"Ἔπεισε = hij overtuigde. Aoristus.",S:"",ACI:"Τοὺς Ἀθηναίους = accusativus van de AcI.",GenAbs:"",A:"",O:"Δημοσθένης = nominativus.",L:"Πείθεσθαι = infinitief van de AcI.",M:"Βασιλεῖ = aan de koning, datief (object van πείθεσθαι).",Rest:"Μή = niet."}},
+      { latijn:["ὁ","ἄγγελος","ἔλεγε","τοὺς","πολεμίους","προσιέναι."], context:"Militair (bewerkt) — AcI",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[4],GenAbs:[],L:[5],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"De bode zei dat de vijanden naderden.",
+        woorden:["de","bode","hij zei","de (acc. mv.)","vijanden (acc.)","te naderen (inf.)"],
+        uitleg:{P:"Ἔλεγε = hij zei. Imperfectum.",S:"",ACI:"Τοὺς πολεμίους = accusativus van de AcI.",GenAbs:"",A:"",O:"Ἄγγελος = nominativus.",L:"Προσιέναι = infinitief van de AcI.",M:"",Rest:""}},
+      { latijn:["ὁ","στρατηγὸς","τοὺς","στρατιώτας","ἀνδρείως","μαχομένους","ἐπῄνεσεν."], context:"Militair — participiumgroep",
+        psolmo:{P:[6],S:{Sn:[],So:[]},A:[{kern:3,attr:[5]}],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[4],art:{0:1,2:3}},
+        vertaling:"De aanvoerder prees de soldaten die dapper vochten.",
+        woorden:["de","aanvoerder","de (acc. mv.)","soldaten (acc.)","dapper","vechtend (part.)","hij prees"],
+        uitleg:{P:"Ἐπῄνεσεν = hij prees. Aoristus.",S:"",ACI:"",GenAbs:"",A:"Τοὺς στρατιώτας μαχομένους: στρατιώτας (kern) + μαχομένους (participium-attribuut).",O:"Στρατηγός = nominativus.",L:"Στρατιώτας = soldaten (kernwoord), accusativus.",M:"",Rest:"Ἀνδρείως = dapper: bijwoord bij het participium."}},
+      { latijn:["τοῦ","χειμῶνος","γενομένου,","ὁ","στόλος","ἐν","τῷ","λιμένι","ἔμεινεν."], context:"Geschiedenis — genitivus absolutus",
+        psolmo:{P:[8],S:{Sn:[],So:[]},A:[],O:[4],ACI:[],GenAbs:[1,2],L:[],M:[],Rest:[5,7],art:{0:1,3:4,6:7}},
+        vertaling:"Toen de winter gekomen was, bleef de vloot in de haven.",
+        woorden:["van de (gen.)","winter (gen.)","gekomen zijnde (gen. part.)","de","vloot","in","de (dat.)","haven (dat.)","hij bleef"],
+        uitleg:{P:"Ἔμεινεν = hij bleef. Aoristus.",S:"",ACI:"",GenAbs:"Τοῦ χειμῶνος γενομένου = gen. abs.: nadat de winter gekomen was.",A:"",O:"Στόλος = vloot, nominativus.",L:"",M:"",Rest:"Ἐν τῷ λιμένι = in de haven: datief van plaats."}},
+      { latijn:["ὁ","Πλάτων","ἡγεῖτο","τὴν","ψυχὴν","ἀθάνατον","εἶναι."], context:"Plato (bewerkt) — AcI",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[4],GenAbs:[],L:[5,6],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Plato meende dat de ziel onsterfelijk is.",
+        woorden:["de","Plato","hij meende","de (acc.)","ziel (acc.)","onsterfelijk (acc.)","te zijn (inf.)"],
+        uitleg:{P:"Ἡγεῖτο = hij meende. Imperfectum.",S:"",ACI:"Τὴν ψυχήν = accusativus van de AcI.",GenAbs:"",A:"",O:"Πλάτων = nominativus.",L:"Ἀθάνατον εἶναι = predicatief + infinitief van de AcI.",M:"",Rest:""}},
+      { latijn:["ὁ","Ἡρόδοτος","λέγει","τοὺς","Αἰγυπτίους","σοφοὺς","εἶναι."], context:"Herodotus (bewerkt) — AcI",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[4],GenAbs:[],L:[5,6],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Herodotus zegt dat de Egyptenaren wijs zijn.",
+        woorden:["de","Herodotus","hij zegt","de (acc. mv.)","Egyptenaren (acc.)","wijs (acc.)","te zijn (inf.)"],
+        uitleg:{P:"Λέγει = hij zegt.",S:"",ACI:"Τοὺς Αἰγυπτίους = accusativus van de AcI.",GenAbs:"",A:"",O:"Ἡρόδοτος = nominativus.",L:"Σοφοὺς εἶναι = predicatief + infinitief van de AcI.",M:"",Rest:""}},
+      { latijn:["οἱ","Πέρσαι","ἐνόμιζον","τὸν","βασιλέα","θεὸν","εἶναι."], context:"Herodotus (bewerkt) — AcI",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[4],GenAbs:[],L:[5,6],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"De Perzen meenden dat de koning een god was.",
+        woorden:["de","Perzen","zij meenden","de (acc.)","koning (acc.)","god (acc.)","te zijn (inf.)"],
+        uitleg:{P:"Ἐνόμιζον = zij meenden. Imperfectum.",S:"",ACI:"Τὸν βασιλέα = accusativus van de AcI.",GenAbs:"",A:"",O:"Πέρσαι = nominativus mv.",L:"Θεὸν εἶναι = predicatief + infinitief van de AcI.",M:"",Rest:""}},
+      { latijn:["ὁ","Σωκράτης","ἔφη","τὴν","ἀρετὴν","διδακτὴν","εἶναι."], context:"Plato, Protagoras (bewerkt) — AcI",
+        psolmo:{P:[2],S:{Sn:[],So:[]},A:[],O:[1],ACI:[4],GenAbs:[],L:[5,6],M:[],Rest:[],art:{0:1,3:4}},
+        vertaling:"Socrates zei dat deugd leerbaar is.",
+        woorden:["de","Socrates","hij zei","de (acc.)","deugd (acc.)","leerbaar (acc.)","te zijn (inf.)"],
+        uitleg:{P:"Ἔφη = hij zei.",S:"",ACI:"Τὴν ἀρετήν = accusativus van de AcI.",GenAbs:"",A:"",O:"Σωκράτης = nominativus.",L:"Διδακτὴν εἶναι = predicatief + infinitief van de AcI.",M:"",Rest:""}}
     ]
   },
   5:{
@@ -815,7 +1017,7 @@ const DATABASE = {
         woorden:["van de Atheners (gen.)","weggegaan zijnde (gen. part.)","namen in","de","Spartanen","de (acc.)","stad (acc.)","zij namen in"],
         uitleg:{P:"Εἷλον = zij namen in. Aoristus van αἱρέω.",S:"",ACI:"",GenAbs:"Τῶν Ἀθηναίων ἀποχωρησάντων = gen. abs.: nadat de Atheners waren weggegaan.",A:"",O:"Λακεδαιμόνιοι = Spartanen, nominativus.",L:"Πόλιν = stad, accusativus.",M:"",Rest:""}},
       { latijn:["ἡ","δίκη","ἰσχυροτέρα","ἐστὶν","τῶν","νόμων","οὓς","οἱ","ἄνθρωποι","θέσαν."], context:"Plato (bewerkt) — samengesteld",
-        psolmo:{P:[3,9],S:{Sn:[],So:[6]},A:[{kern:0,attr:[2]}],O:[],ACI:[],GenAbs:[],L:[8],M:[],Rest:[1,5],art:{0:1,4:5,7:8}},
+        psolmo:{P:[3,9],S:{Sn:[],So:[6]},A:[],O:[1,8],ACI:[],GenAbs:[],L:[],M:[],Rest:[2,5],art:{0:1,4:5,7:8}},
         vertaling:"Rechtvaardigheid is sterker dan de wetten die de mensen stelden.",
         woorden:["de","rechtvaardigheid","sterker","is","van de (gen. mv.)","wetten (gen.)","die","de","mensen","zij stelden"],
         uitleg:{P:"Ἐστίν en θέσαν: twee persoonsvormen.",S:"Οὕς = die: onderschikkend relatief.",ACI:"",GenAbs:"",A:"Ἡ δίκη: δίκη (kern) + ἡ (lidwoord).",O:"Δίκη = rechtvaardigheid, nominativus.",L:"",M:"",Rest:"Ἰσχυροτέρα τῶν νόμων = sterker dan de wetten (comparatief + genitief)."}},
@@ -864,6 +1066,57 @@ const DATABASE = {
         vertaling:"Socrates stierf niet omdat hij zondigde, maar omdat hij de waarheid sprak.",
         woorden:["de","Socrates","hij stierf","niet","omdat","hij zondigde","maar","omdat","de (acc.)","waarheid (acc.)","hij sprak"],
         uitleg:{P:"Ἀπέθανεν, ἥμαρτεν, εἶπεν: drie persoonsvormen.",S:"Διότι = omdat: onderschikkend causaal (2x). Ἀλλά = maar: nevenschikkend.",ACI:"",GenAbs:"",A:"",O:"Σωκράτης = onderwerp; onderwerp bijzinnen in ἥμαρτεν en εἶπεν.",L:"Ἀλήθειαν = waarheid, accusativus.",M:"",Rest:"Οὐ = niet."}}
+    ,
+      { latijn:["πάντα","ῥεῖ."], context:"Herakleitos (spreuk)",
+        psolmo:{P:[1],S:{Sn:[],So:[]},A:[],O:[0],ACI:[],GenAbs:[],L:[],M:[],Rest:[],art:{}},
+        vertaling:"Alles stroomt.",
+        woorden:["alles (nom.)","het stroomt"],
+        uitleg:{P:"Ῥεῖ = het stroomt. 3e pers. ev.",S:"",ACI:"",GenAbs:"",A:"",O:"Πάντα = alles, nominativus onzijdig mv. (als geheel onderwerp).",L:"",M:"",Rest:""}},
+      { latijn:["ὁ","ἄνθρωπος","φύσει","πολιτικὸν","ζῷόν","ἐστιν."], context:"Aristoteles, Politica I.2",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[2,3,4],art:{0:1}},
+        vertaling:"De mens is van nature een politiek wezen.",
+        woorden:["de","mens","van nature (dat.)","politiek (acc.→nom.)","wezen","is"],
+        uitleg:{P:"Ἐστιν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Ἄνθρωπος = mens, nominativus.",L:"",M:"",Rest:"Φύσει = van nature (datief); πολιτικὸν ζῷον = een politiek wezen: naamwoordelijk deel van het gezegde."}},
+      { latijn:["χαλεπὰ","τὰ","καλά","ἐστιν."], context:"Plato (spreekwoord)",
+        psolmo:{P:[3],S:{Sn:[],So:[]},A:[],O:[2],ACI:[],GenAbs:[],L:[],M:[],Rest:[0],art:{1:2}},
+        vertaling:"Het schone is moeilijk.",
+        woorden:["moeilijk (nom.)","het (nom.)","schone (nom.)","is"],
+        uitleg:{P:"Ἐστιν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Τὰ καλά = het schone, nominativus onzijdig mv. (onderwerp).",L:"",M:"",Rest:"Χαλεπά = moeilijk: naamwoordelijk deel van het gezegde."}},
+      { latijn:["οἱ","στρατιῶται","τὴν","θάλατταν","ἰδόντες","ἐβόησαν."], context:"Xenophon, Anabasis (bewerkt) — participium",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[{kern:1,attr:[4]}],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De soldaten riepen luid toen zij de zee zagen.",
+        woorden:["de","soldaten","de (acc.)","zee (acc.)","gezien hebbend (part.)","zij riepen"],
+        uitleg:{P:"Ἐβόησαν = zij riepen. Aoristus.",S:"",ACI:"",GenAbs:"",A:"Οἱ στρατιῶται ἰδόντες: στρατιῶται (kern) + ἰδόντες (participium-attribuut: gezien hebbend).",O:"Στρατιῶται = soldaten (kern), nominativus.",L:"Θάλατταν = zee, accusativus (object van het participium).",M:"",Rest:""}},
+      { latijn:["ὁ","πόλεμος","βίαιος","διδάσκαλός","ἐστιν."], context:"Thucydides III.82 (bewerkt)",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[2,3],art:{0:1}},
+        vertaling:"De oorlog is een gewelddadige leermeester.",
+        woorden:["de","oorlog","gewelddadig","leermeester","is"],
+        uitleg:{P:"Ἐστιν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Πόλεμος = oorlog, nominativus.",L:"",M:"",Rest:"Βίαιος διδάσκαλος = een gewelddadige leermeester: naamwoordelijk deel van het gezegde."}},
+      { latijn:["ὁ","θεὸς","τὸν","κόσμον","ἐποίησεν."], context:"Plato (bewerkt)",
+        psolmo:{P:[4],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[],art:{0:1,2:3}},
+        vertaling:"De god maakte de kosmos.",
+        woorden:["de","god","de (acc.)","kosmos (acc.)","hij maakte"],
+        uitleg:{P:"Ἐποίησεν = hij maakte. Aoristus.",S:"",ACI:"",GenAbs:"",A:"",O:"Θεός = god, nominativus.",L:"Κόσμον = kosmos/wereld, accusativus.",M:"",Rest:""}},
+      { latijn:["ὁ","Κῦρος","τοὺς","Πέρσας","ἐλευθέρους","ἐποίησεν."], context:"Herodotus (bewerkt)",
+        psolmo:{P:[5],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[3],M:[],Rest:[4],art:{0:1,2:3}},
+        vertaling:"Cyrus maakte de Perzen vrij.",
+        woorden:["de","Cyrus","de (acc. mv.)","Perzen (acc.)","vrij (acc.)","hij maakte"],
+        uitleg:{P:"Ἐποίησεν = hij maakte. Aoristus.",S:"",ACI:"",GenAbs:"",A:"",O:"Κῦρος = nominativus.",L:"Πέρσας = Perzen, accusativus mv.",M:"",Rest:"Ἐλευθέρους = vrij: predicatieve bepaling bij het object."}},
+      { latijn:["ὁ","θεὸς","ἀγάπη","ἐστίν."], context:"Grieks NT (1 Joh. 4:8)",
+        psolmo:{P:[3],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[],M:[],Rest:[2],art:{0:1}},
+        vertaling:"God is liefde.",
+        woorden:["de","god","liefde (nom.)","is"],
+        uitleg:{P:"Ἐστίν = is. Koppelwerkwoord.",S:"",ACI:"",GenAbs:"",A:"",O:"Θεός = God, nominativus.",L:"",M:"",Rest:"Ἀγάπη = liefde: naamwoordelijk deel van het gezegde."}},
+      { latijn:["ὁ","Κῦρος","ἐβούλετο","τοὺς","φίλους","εὖ","ποιεῖν."], context:"Xenophon, Cyropaedia (bewerkt)",
+        psolmo:{P:[2,6],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[4],M:[],Rest:[5],art:{0:1,3:4}},
+        vertaling:"Cyrus wilde zijn vrienden weldoen.",
+        woorden:["de","Cyrus","hij wilde","de (acc. mv.)","vrienden (acc.)","goed","te doen (inf.)"],
+        uitleg:{P:"Ἐβούλετο (persoonsvorm) en ποιεῖν (infinitief, lijdend voorwerp).",S:"",ACI:"",GenAbs:"",A:"",O:"Κῦρος = nominativus.",L:"Φίλους = vrienden, accusativus (object van ποιεῖν).",M:"",Rest:"Εὖ = goed: bijwoord."}},
+      { latijn:["ὁ","χρόνος","πάντα","λύει."], context:"Spreekwoord",
+        psolmo:{P:[3],S:{Sn:[],So:[]},A:[],O:[1],ACI:[],GenAbs:[],L:[2],M:[],Rest:[],art:{0:1}},
+        vertaling:"De tijd lost alles op.",
+        woorden:["de","tijd","alles (acc.)","hij lost op"],
+        uitleg:{P:"Λύει = hij lost op / maakt los.",S:"",ACI:"",GenAbs:"",A:"",O:"Χρόνος = tijd, nominativus.",L:"Πάντα = alles, accusativus onzijdig mv.",M:"",Rest:""}}
     ]
   }
 };
@@ -879,6 +1132,8 @@ let state = {
   completedSteps:{},
   attrGroupsDone:new Set(),
   pendingVwIndex:null,
+  pendingArtIndex:null,
+  linkedArt:{},
   results:[]
 };
 
@@ -919,6 +1174,8 @@ function loadZin(){
   state.completedSteps={};
   state.attrGroupsDone=new Set();
   state.pendingVwIndex=null;
+  state.pendingArtIndex=null;
+  state.linkedArt={};
   const zin=state.zinnen[state.zinIndex];
   document.getElementById('exTitle').textContent=DATABASE[state.level].naam;
   document.getElementById('exCounter').textContent=`${state.zinIndex+1} / ${state.zinnen.length}`;
@@ -932,8 +1189,30 @@ function loadZin(){
   renderWords(); renderPills(); loadStep();
 }
 
+function cleanWord(w){ return (w||'').replace(/[.,;:·!?…]+$/,''); }
+
+// A word is an article if it is a key in the sentence's art-map.
+function artMap(zin){ return (zin.psolmo && zin.psolmo.art) || {}; }
+function isArticle(zin,i){ return Object.prototype.hasOwnProperty.call(artMap(zin),i); }
+function isAdjacentArt(zin,a){ return artMap(zin)[a] === a+1; }
+function isArtLinked(zin,a){ return isAdjacentArt(zin,a) || !!state.linkedArt[a]; }
+
+// Articles mirror the tag of their head word (only once linked/adjacent).
+function propagateArticles(zin){
+  const art=artMap(zin);
+  Object.keys(art).forEach(aStr=>{
+    const a=+aStr, h=art[aStr];
+    if(isArtLinked(zin,a) && state.selectedWords[h]!==undefined){
+      state.selectedWords[a]=state.selectedWords[h];
+    } else {
+      delete state.selectedWords[a];
+    }
+  });
+}
+
 function renderWords(){
   const zin=state.zinnen[state.zinIndex];
+  propagateArticles(zin);
   const container=document.getElementById('sentenceWords');
   container.innerHTML='';
   zin.latijn.forEach((word,i)=>{
@@ -941,11 +1220,25 @@ function renderWords(){
     btn.className='word-btn selectable';
     btn.dataset.index=i;
     const tag=state.selectedWords[i];
-    if(tag){ btn.classList.add(`tagged-${tag}`); }
+    const article=isArticle(zin,i);
     const wordSpan=document.createElement('span');
     wordSpan.textContent=word;
     btn.appendChild(wordSpan);
-    if(tag){
+
+    if(article){
+      // articles follow their head; they don't carry a role badge themselves
+      if(tag){
+        btn.classList.add(`tagged-${tag}`,'article-attached');
+        const link=document.createElement('span');
+        link.className='art-link'; link.textContent='↳';
+        btn.appendChild(link);
+      } else if(state.pendingArtIndex===i){
+        btn.classList.add('article-pending');
+      } else if(!isArtLinked(zin,i)){
+        btn.classList.add('article-loose');           // loose article awaiting a link
+      }
+    } else if(tag){
+      btn.classList.add(`tagged-${tag}`);
       const mark=document.createElement('span');
       mark.className='word-tag';
       const labels={P:'Ρ',Sn:'Σ↔',So:'Σ↳',
@@ -983,8 +1276,9 @@ function jumpToStep(key){
   hideFeedback();
   document.getElementById('vwChooser').classList.remove('show');
   state.pendingVwIndex=null;
+  state.pendingArtIndex=null;
   state.currentStepKey=key;
-  renderPills(); loadStep();
+  renderPills(); loadStep(); renderWords();
 }
 
 function loadStep(){
@@ -1005,13 +1299,53 @@ function loadStep(){
 }
 
 function onWordTap(wordIndex){
+  const zin=state.zinnen[state.zinIndex];
+  const art=artMap(zin);
+
+  // --- Linking flow: a loose article is awaiting its head word ---
+  if(state.pendingArtIndex!==null){
+    const a=state.pendingArtIndex;
+    if(wordIndex===a){ // tapping the article again cancels
+      state.pendingArtIndex=null; renderWords(); hideFeedback(); return;
+    }
+    if(wordIndex===art[a]){
+      state.linkedArt[a]=true;
+      state.pendingArtIndex=null;
+      renderWords();
+      showFeedback(true,`Lidwoord <strong>${cleanWord(zin.latijn[a])}</strong> hoort bij <strong>${cleanWord(zin.latijn[wordIndex])}</strong>. Het kleurt mee zodra dat woord een functie krijgt.`);
+    } else {
+      state.pendingArtIndex=null;
+      shake(wordIndex);
+      renderWords();
+      showFeedback(false,'Dat is niet het woord waar dit lidwoord bij hoort. Tik opnieuw op het lidwoord om het te koppelen.');
+    }
+    return;
+  }
+
   if(state.pendingVwIndex!==null){
     document.getElementById('vwChooser').classList.remove('show');
     state.pendingVwIndex=null;
     return;
   }
+
+  // --- Article tapped directly ---
+  if(isArticle(zin,wordIndex)){
+    const h=art[wordIndex];
+    if(isAdjacentArt(zin,wordIndex)){
+      showInfo(`Dit lidwoord hoort bij <strong>${cleanWord(zin.latijn[h])}</strong>. Wijs dat woord aan — het lidwoord kleurt dan vanzelf mee.`);
+    } else if(state.linkedArt[wordIndex]){
+      delete state.linkedArt[wordIndex];
+      renderWords();
+      showInfo('Koppeling ongedaan gemaakt. Tik nogmaals om dit losse lidwoord opnieuw te koppelen.');
+    } else {
+      state.pendingArtIndex=wordIndex;
+      renderWords();
+      showInfo(`Dit lidwoord staat los. Bij welk woord hoort <strong>${cleanWord(zin.latijn[wordIndex])}</strong>? Tik op dat woord.`);
+    }
+    return;
+  }
+
   const step=PSOLMO.find(s=>s.key===state.currentStepKey);
-  const zin=state.zinnen[state.zinIndex];
   const tag=state.selectedWords[wordIndex];
 
   if(tag && stepOfTag(tag)===state.currentStepKey){
@@ -1183,6 +1517,7 @@ function allWordsCovered(){
   const n=zin.latijn.length;
   const tagged=new Set(Object.keys(state.selectedWords).map(Number));
   for(let i=0;i<n;i++){
+    if(isArticle(zin,i)) continue; // articles follow their head word automatically
     if(!tagged.has(i)) return false;
   }
   return true;
@@ -1308,6 +1643,11 @@ function showFeedback(correct,tekst){
   const box=document.getElementById('feedbackBox');
   box.className=`feedback-box show ${correct?'correct':'incorrect'}`;
   box.innerHTML=`<strong>${correct?'✓ Goed!':'✗ Probeer opnieuw'}</strong>${tekst}`;
+}
+function showInfo(tekst){
+  const box=document.getElementById('feedbackBox');
+  box.className='feedback-box show info';
+  box.innerHTML=`<strong>ℹ Lidwoord</strong>${tekst}`;
 }
 function hideFeedback(){
   const box=document.getElementById('feedbackBox');
