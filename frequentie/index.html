@@ -6,6 +6,7 @@
 <title>Frequentie Woordenlijst — Latijn & Oudgrieks</title>
 <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{--parchment:#f5edd6;--parchment-dark:#e8d9b5;--ink:#2c1f0e;--ink-light:#5c4a2a;--rust:#8b3a1a;--gold:#c9952a;--gold-light:#e8c96a;--green:#1a5c3a;--shadow:rgba(44,31,14,.18)}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -227,6 +228,7 @@ tbody td{padding:8px 12px;vertical-align:middle}
         <div class="exports">
           <button onclick="exportCSV()">⬇ CSV</button>
           <button onclick="exportTSV()">⬇ TSV</button>
+          <button onclick="exportLudus()">⚔️ Exporteer naar Ludus</button>
           <button onclick="exportPrint()">🖨 Oefenlijst</button>
           <button onclick="openQuiz()">🎯 Flashcards</button>
         </div>
@@ -390,13 +392,69 @@ function readOCR(f){
   });
 }
 
+// ════════ FILTER WORDS (Dutch + English) ════════
+var NL_EN=new Set([
+  // Dutch function words & common words
+  'de','het','een','van','en','in','is','dat','op','te','zijn','er','maar',
+  'die','aan','voor','niet','ook','om','door','als','met','bij','uit','over',
+  'naar','dan','wel','nog','zo','hier','dit','wat','hoe','wie','waar',
+  'wanneer','welke','welk','kan','moet','mogen','zal','zou','hebben','wordt',
+  'worden','was','waren','heeft','had','hadden','bent','ben','wij','zij',
+  'hun','hem','haar','ons','jullie','deze','nu','meer','veel','heel','goed',
+  'groot','klein','geen','elk','ieder','zelf','want','omdat','hoewel',
+  'terwijl','toch','soms','altijd','nooit','vaak','reeds','al','ze','ik',
+  'jij','je','mij','mee','dan','tot','toch','heeft','worden','zien','gaan',
+  'doen','zeggen','komen','weten','willen','kunnen','moeten','laten','staan',
+  'liggen','zitten','vinden','denken','lijken','blijven','nieuwe','eerste',
+  'andere','eigen','les','tekst','pagina','hoofdstuk','boek','noot',
+  'vertaling','regel','oefening','opdracht','vraag','antwoord','uitleg',
+  'inleiding','titel','alinea','zin','woord','betekenis','werkwoord',
+  'naamwoord','bijwoord','hoofdstuk','paragraaf','bladzijde','nummer',
+  // English function words & common words
+  'the','and','for','are','but','not','you','all','can','had','her','was',
+  'one','our','out','day','get','has','him','his','how','man','new','now',
+  'old','see','two','way','who','boy','did','its','let','put','say','she',
+  'too','use','than','then','them','these','they','this','time','will','with',
+  'have','from','that','what','been','were','when','your','come','could',
+  'here','just','like','long','make','many','more','only','over','such',
+  'take','well','also','back','after','first','never','where','while',
+  'about','those','which','would','there','their','other','should','through',
+  'chapter','text','page','book','note','translation','line','exercise',
+  'question','answer','introduction','title','passage','word','sentence',
+  'paragraph','meaning','verb','noun','adjective','adverb','grammar',
+  'latin','greek','english','dutch','read','write','translate','vocabulary'
+]);
+
+// Letter patterns that cannot appear in classical Latin (but are normal in Dutch/English)
+var NON_LATIN_RE=/ij|^w|aa|oo|ee|ck|wh/i;
+// Explanation:
+//   ij  → exclusively Dutch
+//   ^w  → classical Latin has no W
+//   aa  → Dutch vowel (baan, naam); not in classical Latin
+//   oo  → Dutch (boot, groot); not in classical Latin
+//   ee  → Dutch (geen, been); not in classical Latin
+//   ck  → Dutch/English (back, stuk); not in Latin
+//   wh  → exclusively English
+
+function isLatin(w){
+  if(NON_LATIN_RE.test(w))return false;
+  if(NL_EN.has(w))return false;
+  return true;
+}
+
 // ════════ TOKENISE ════════
 function tokenise(text){
   text=text.replace(/<[^>]+>/g,' ');
   var t;
-  if(lang==='grc')t=text.match(/[\u0370-\u03FF\u1F00-\u1FFF]+/g)||[];
-  else t=text.match(/[a-zA-ZÀ-ÖØ-öø-ÿāēīōūĀĒĪŌŪ]{2,}/g)||[];
-  return t.map(function(x){return x.toLowerCase();});
+  if(lang==='grc'){
+    // Greek Unicode only — Dutch/English naturally excluded
+    t=text.match(/[\u0370-\u03FF\u1F00-\u1FFF]+/g)||[];
+    return t.map(function(x){return x.toLowerCase();});
+  } else {
+    // Latin: extract all alphabetic tokens, then filter non-Latin
+    t=text.match(/[a-zA-ZÀ-ÖØ-öø-ÿāēīōūĀĒĪŌŪ]{2,}/g)||[];
+    return t.map(function(x){return x.toLowerCase();}).filter(isLatin);
+  }
 }
 function countTokens(tokens){var f={};tokens.forEach(function(t){f[t]=(f[t]||0)+1;});return f;}
 
@@ -432,12 +490,27 @@ function geminiParts(content){
   });
 }
 function callGemini(messages,maxTokens){
-  var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key='+encodeURIComponent(getKey());
+  // gemini-2.5-flash-lite: laagste latentie + hoogste gratis quota, en
+  // we zetten 'thinking' UIT zodat het volledige tokenbudget naar het
+  // eigenlijke JSON-antwoord gaat (anders raakt een grote chunk afgekapt).
+  var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key='+encodeURIComponent(getKey());
   var contents=messages.map(function(m){return{role:m.role==='assistant'?'model':'user',parts:geminiParts(m.content)};});
-  var cfg={maxOutputTokens:maxTokens,temperature:0.1};
+  var cfg={
+    maxOutputTokens:Math.max(maxTokens,1024),
+    temperature:0.1,
+    thinkingConfig:{thinkingBudget:0}
+  };
   if(messages._json)cfg.responseMimeType='application/json';
   return apiFetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:contents,generationConfig:cfg})},'Gemini')
-    .then(function(d){try{return d.candidates[0].content.parts.map(function(p){return p.text||'';}).join('');}catch(e){throw new Error('Onverwacht antwoord van Gemini.');}});
+    .then(function(d){
+      // Detecteer een afgekapte/lege respons en geef een nette fout terug
+      // zodat de herhaalpoging-logica kan ingrijpen.
+      var cand=(d.candidates&&d.candidates[0])||null;
+      if(d.promptFeedback&&d.promptFeedback.blockReason)throw new Error('Gemini blokkeerde de tekst ('+d.promptFeedback.blockReason+').');
+      var txt=(cand&&cand.content&&cand.content.parts)?cand.content.parts.map(function(p){return p.text||'';}).join(''):'';
+      if(!txt)throw new Error('Gemini gaf een leeg antwoord (mogelijk tokenlimiet).');
+      return txt;
+    });
 }
 function openaiMsgs(messages){
   return messages.map(function(m){
@@ -500,13 +573,45 @@ function salvageObjects(str){
 }
 
 // ════════ LEMMATISE ════════
+// Verwerkt één chunk met automatische herhaalpogingen. Een chunk kan mislukken
+// door een tijdelijke leegte/afkapping (tokenlimiet) of een 429 rate-limit;
+// in beide gevallen proberen we het opnieuw i.p.v. de hele analyse te laten crashen.
+function processChunk(chunk,ln,collected,attempt){
+  attempt=attempt||1;
+  var MAX_ATTEMPTS=3;
+  var wl=chunk.map(function(e){return e[0]+' ('+e[1]+'×)';}).join('\n');
+  var gi=lang==='la'?'Werkwoorden: "voco, vocare". Zn: "servus, -i m.". Bn: "bonus, -a, -um".':'Werkwoorden: 1e pers. sg. praesens. Zn: nom.+gen.+lidwoord.';
+  var prompt='Je bent expert in '+ln+'. Gegeven woordvormen met frequenties.\n1. Geef de lemma (woordenboeksvorm): '+gi+'\n2. Woordsoort in het Nederlands.\n3. Korte Nederlandse betekenis (max 6 woorden).\n4. Groepeer vormen van hetzelfde lemma en tel frequenties op.\nRetourneer UITSLUITEND een JSON-array, geen markdown, begin met [ eindig met ].\nFormaat: [{"lemma":"voco, vocare","grammar":"werkwoord","nl":"roepen","freq":5}]\nWoordvormen:\n'+wl;
+  var msgs=[{role:'user',content:prompt}];msgs._json=true;
+  return callAI(msgs,8000).then(function(raw){
+    var parsed=parseJson(raw);
+    parsed.forEach(function(it){
+      if(!it.lemma)return;
+      var key=it.lemma.toLowerCase().split(/[,\s]/)[0].trim();
+      if(!key)return;
+      if(collected[key]){collected[key].freq+=(it.freq||0);}
+      else collected[key]={lemma:it.lemma,grammar:it.grammar||'',nl:it.nl||'',freq:it.freq||0,lang:lang};
+    });
+  }).catch(function(err){
+    if(attempt>=MAX_ATTEMPTS)throw err;
+    // Backoff: bij 429 wat langer wachten, anders kort. Daarna opnieuw.
+    var is429=/429|quotum/i.test(err.message||'');
+    var waitMs=is429?(8000*attempt):(1500*attempt);
+    return new Promise(function(r){setTimeout(r,waitMs);}).then(function(){
+      return processChunk(chunk,ln,collected,attempt+1);
+    });
+  });
+}
+
 function lemmatise(freqMap,bar,log){
   var maxWords=parseInt($('maxWords').value)||200;
   var minFreq=parseInt($('minFreq').value)||1;
   var ln=lang==='la'?'Latijn':'Oudgrieks';
   var entries=Object.keys(freqMap).map(function(k){return[k,freqMap[k]];}).filter(function(e){return e[1]>=minFreq;}).sort(function(a,b){return b[1]-a[1];}).slice(0,Math.min(maxWords*3,800));
   if(!entries.length)return Promise.reject(new Error('Geen woorden gevonden boven de minimumfrequentie.'));
-  var chunkSize=45, chunks=[];
+  // Kleinere chunks (30) houden elke respons ruim onder het tokenplafond,
+  // wat afkapping bij grote teksten voorkomt.
+  var chunkSize=30, chunks=[];
   for(var i=0;i<entries.length;i+=chunkSize)chunks.push(entries.slice(i,i+chunkSize));
   setProg(10,entries.length+' woordvormen gevonden…',bar,log);
   var collected={};
@@ -514,23 +619,9 @@ function lemmatise(freqMap,bar,log){
   chunks.forEach(function(chunk,ci){
     chain=chain.then(function(){
       setProg(15+Math.round(ci/chunks.length*68),'Chunk '+(ci+1)+'/'+chunks.length+' verwerken…',bar,log);
-      var wait=(ci>0&&provider==='gemini')?new Promise(function(r){setTimeout(r,6000);}):Promise.resolve();
-      return wait.then(function(){
-        var wl=chunk.map(function(e){return e[0]+' ('+e[1]+'×)';}).join('\n');
-        var gi=lang==='la'?'Werkwoorden: "voco, vocare". Zn: "servus, -i m.". Bn: "bonus, -a, -um".':'Werkwoorden: 1e pers. sg. praesens. Zn: nom.+gen.+lidwoord.';
-        var prompt='Je bent expert in '+ln+'. Gegeven woordvormen met frequenties.\n1. Geef de lemma (woordenboeksvorm): '+gi+'\n2. Woordsoort in het Nederlands.\n3. Korte Nederlandse betekenis (max 6 woorden).\n4. Groepeer vormen van hetzelfde lemma en tel frequenties op.\nRetourneer UITSLUITEND een JSON-array, geen markdown, begin met [ eindig met ].\nFormaat: [{"lemma":"voco, vocare","grammar":"werkwoord","nl":"roepen","freq":5}]\nWoordvormen:\n'+wl;
-        var msgs=[{role:'user',content:prompt}];msgs._json=true;
-        return callAI(msgs,8000).then(function(raw){
-          var parsed=parseJson(raw);
-          parsed.forEach(function(it){
-            if(!it.lemma)return;
-            var key=it.lemma.toLowerCase().split(/[,\s]/)[0].trim();
-            if(!key)return;
-            if(collected[key]){collected[key].freq+=(it.freq||0);}
-            else collected[key]={lemma:it.lemma,grammar:it.grammar||'',nl:it.nl||'',freq:it.freq||0,lang:lang};
-          });
-        });
-      });
+      // Korte pauze tussen chunks bij Gemini om onder de rate-limit te blijven
+      var wait=(ci>0&&provider==='gemini')?new Promise(function(r){setTimeout(r,4000);}):Promise.resolve();
+      return wait.then(function(){return processChunk(chunk,ln,collected,1);});
     });
   });
   return chain.then(function(){
@@ -654,6 +745,56 @@ function rows(){
 }
 function exportCSV(){download(rows().map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"';}).join(',');}).join('\n'),'woordenlijst.csv','text/csv;charset=utf-8;');}
 function exportTSV(){download(rows().map(function(r){return r.join('\t');}).join('\n'),'woordenlijst.tsv','text/tab-separated-values;charset=utf-8;');}
+// ════════ EXPORT NAAR LUDUS ════════
+// Ludus leest xlsx-bestanden in via ingestRows(), die zoekt naar:
+//   - kolom met header die "latijn" of "lat" bevat  → w.la  (de Latijnse kant)
+//   - kolom met header die "vertaling" of "betekenis" bevat → w.nl (de Nederlandse kant)
+// Overige kolommen worden genegeerd door Ludus.
+//
+// Kolomvolgorde: Latijn (vol lemma) | vertaling | woordsoort | frequentie
+// Het volledige lemma ("voco, vocare", "servus, -i m.") gaat ongesplitst in
+// kolom Latijn, zodat Ludus's flashcards de stamtijden direct tonen.
+function exportLudus(){
+  if(!window.XLSX){showErr('SheetJS nog niet geladen. Probeer opnieuw.');return;}
+  var data=getView();
+  if(!data.length){showErr('Geen woorden om te exporteren.');return;}
+
+  // Stilus-stijl afkortingen voor woordsoort (extra info, door Ludus zelf niet ingelezen)
+  var ABBR={
+    'werkwoord':'verb.','zelfstandig naamwoord':'subst.','bijvoeglijk naamwoord':'adj.',
+    'bijwoord':'adv.','voornaamwoord':'pron.','voegwoord':'cj.','voorzetsel':'prep.',
+    'partikel':'part.','telwoord':'num.','uitroep':'interj.','numeraal':'num.'
+  };
+  function abbr(g){
+    var gl=g.toLowerCase();
+    for(var k in ABBR){if(gl.indexOf(k)>=0)return ABBR[k];}
+    return g;
+  }
+
+  // Kolom 0 "Latijn"    → Ludus leest als w.la  (vol lemma incl. stamtijden)
+  // Kolom 1 "vertaling" → Ludus leest als w.nl
+  // Kolom 2 "woordsoort"→ door Ludus genegeerd, handig voor eigen referentie
+  // Kolom 3 "frequentie"→ door Ludus genegeerd, handig voor eigen referentie
+  var exportRows=[['Latijn','vertaling','woordsoort','frequentie']];
+  data.forEach(function(w){
+    exportRows.push([w.lemma, w.nl, abbr(w.grammar), w.freq]);
+  });
+
+  var ws=XLSX.utils.aoa_to_sheet(exportRows);
+  ws['!cols']=[{wch:30},{wch:32},{wch:12},{wch:12}];
+
+  // Vet koptekst
+  var range=XLSX.utils.decode_range(ws['!ref']);
+  for(var c=range.s.c;c<=range.e.c;c++){
+    var cell=ws[XLSX.utils.encode_cell({r:0,c:c})];
+    if(cell)cell.s={font:{bold:true}};
+  }
+
+  var wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,'woordenlijst');
+  XLSX.writeFile(wb,'woordenlijst_ludus.xlsx');
+}
+
 function exportPrint(){
   var data=getView().filter(function(w){return !w.known;});
   var trs=data.map(function(w,i){return '<tr><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-style:italic">'+(i+1)+'. '+esc(w.lemma)+'</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;font-size:.8em;color:#666">'+esc(w.grammar)+'</td><td style="padding:6px 10px;border-bottom:1px solid #ddd;min-width:160px">&nbsp;</td></tr>';}).join('');
