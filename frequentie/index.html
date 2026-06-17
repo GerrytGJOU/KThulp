@@ -458,6 +458,21 @@ function tokenise(text){
 }
 function countTokens(tokens){var f={};tokens.forEach(function(t){f[t]=(f[t]||0)+1;});return f;}
 
+// Maak een dedup-sleutel uit een lemma. Cruciaal voor Grieks: een lemma als
+// "ὁ ἄνθρωπος, τοῦ ἀνθρώπου" mag NIET op "ὁ" worden gededupliceerd (dan vallen
+// alle mannelijke zn. samen). We strippen eerst een eventueel Grieks lidwoord
+// (ὁ/ἡ/τό/οἱ/αἱ/τά), nemen dan het eerste echte woord vóór een komma.
+function lemmaKey(lemma){
+  var s=(lemma||'').toLowerCase().trim();
+  // verwijder leidend Grieks lidwoord + spatie
+  s=s.replace(/^(ὁ|ἡ|τό|οἱ|αἱ|τά|τὰ|τὸ)\s+/,'');
+  // neem het deel vóór de eerste komma (scheidt nom van gen)
+  s=s.split(',')[0].trim();
+  // neem het eerste woord (voor 't geval er nog een spatie in staat)
+  s=s.split(/\s+/)[0].trim();
+  return s;
+}
+
 // ════════ AI API ════════
 function callAI(messages,maxTokens){
   if(provider==='gemini')return callGemini(messages,maxTokens);
@@ -580,14 +595,50 @@ function processChunk(chunk,ln,collected,attempt){
   attempt=attempt||1;
   var MAX_ATTEMPTS=3;
   var wl=chunk.map(function(e){return e[0]+' ('+e[1]+'×)';}).join('\n');
-  var gi=lang==='la'?'Werkwoorden: "voco, vocare". Zn: "servus, -i m.". Bn: "bonus, -a, -um".':'Werkwoorden: 1e pers. sg. praesens. Zn: nom.+gen.+lidwoord.';
-  var prompt='Je bent expert in '+ln+'. Gegeven woordvormen met frequenties.\n1. Geef de lemma (woordenboeksvorm): '+gi+'\n2. Woordsoort in het Nederlands.\n3. Korte Nederlandse betekenis (max 6 woorden).\n4. Groepeer vormen van hetzelfde lemma en tel frequenties op.\nRetourneer UITSLUITEND een JSON-array, geen markdown, begin met [ eindig met ].\nFormaat: [{"lemma":"voco, vocare","grammar":"werkwoord","nl":"roepen","freq":5}]\nWoordvormen:\n'+wl;
+  var prompt;
+  if(lang==='la'){
+    prompt='Je bent een expert in het Latijn. Hieronder staat een lijst Latijnse woordVORMEN uit een tekst, elk met hoe vaak ze voorkomen.\n\n'
+      +'BELANGRIJK: bijna elk woord in de lijst is een VERBOGEN of VERVOEGDE vorm. Breng ELKE vorm terug naar zijn woordenboekvorm (lemma). Voorbeelden:\n'
+      +'- "vocat", "vocant", "vocabat" -> lemma "voco, vocare"\n'
+      +'- "servi", "servum", "servo", "servis" -> lemma "servus, -i m."\n'
+      +'- "bonae", "bonum", "meliorem" -> lemma "bonus, -a, -um"\n'
+      +'- "regis", "regem", "rege" -> lemma "rex, regis m."\n\n'
+      +'Regels:\n'
+      +'1. Geef voor IEDERE woordvorm in de lijst een lemma. Sla NIETS over, ook geen functiewoorden (et, in, ad, est, qui...).\n'
+      +'2. Werkwoorden: "voco, vocare". Zelfstandige naamwoorden: "servus, -i m." (nom + gen + genus). Bijvoeglijke naamwoorden: "bonus, -a, -um".\n'
+      +'3. Woordsoort in het Nederlands (werkwoord / zelfstandig naamwoord / bijvoeglijk naamwoord / bijwoord / voornaamwoord / voegwoord / voorzetsel / telwoord).\n'
+      +'4. Korte Nederlandse betekenis (max 6 woorden).\n'
+      +'5. Tel de frequenties van vormen met HETZELFDE lemma bij elkaar op (bv. servi 3x + servum 2x = servus, -i m. freq 5).\n';
+  } else {
+    prompt='Je bent een expert in het Attisch/Oudgrieks. Hieronder staat een lijst Griekse woordVORMEN uit een tekst, elk met hoe vaak ze voorkomen.\n\n'
+      +'ZEER BELANGRIJK: bijna elk woord in de lijst is een VERBOGEN of VERVOEGDE vorm (een naamval, een persoonsvorm, een participium enz.), NIET de woordenboekvorm. Je MOET elke vorm herkennen en terugbrengen naar zijn lemma. Voorbeelden:\n'
+      +'- "λέγει", "ἔλεγον", "εἶπον", "λέγουσι" -> lemma "λέγω"\n'
+      +'- "ἀνθρώπου", "ἀνθρώπῳ", "ἀνθρώπους", "ἄνθρωποι" -> lemma "ὁ ἄνθρωπος, τοῦ ἀνθρώπου"\n'
+      +'- "καλήν", "καλοῦ", "καλοῖς" -> lemma "καλός, -ή, -όν"\n'
+      +'- "ἐστιν", "ἦν", "εἰσίν", "ἔσται" -> lemma "εἰμί"\n'
+      +'- "πόλεως", "πόλει", "πόλιν", "πόλεις" -> lemma "ἡ πόλις, τῆς πόλεως"\n'
+      +'- "τοῦ", "τῷ", "τόν", "οἱ", "τάς" -> lemma "ὁ, ἡ, τό" (lidwoord)\n\n'
+      +'Regels:\n'
+      +'1. Geef voor IEDERE woordvorm in de lijst een lemma. Sla NIETS over, ook geen lidwoorden, partikels of voegwoorden (ὁ, καί, δέ, γάρ, μέν, τε, ἐν, εἰς...).\n'
+      +'2. Werkwoorden: 1e pers. enkelvoud praesens (bv. "λέγω", "γράφω"); deponentia in de mediale vorm (bv. "γίγνομαι").\n'
+      +'3. Zelfstandige naamwoorden: lidwoord + nominatief + genitief (bv. "ὁ λόγος, τοῦ λόγου"; "ἡ πόλις, τῆς πόλεως").\n'
+      +'4. Bijvoeglijke naamwoorden: "καλός, -ή, -όν".\n'
+      +'5. Woordsoort in het Nederlands (werkwoord / zelfstandig naamwoord / bijvoeglijk naamwoord / bijwoord / voornaamwoord / lidwoord / voegwoord / voorzetsel / partikel / telwoord).\n'
+      +'6. Korte Nederlandse betekenis (max 6 woorden).\n'
+      +'7. Tel de frequenties van vormen met HETZELFDE lemma bij elkaar op.\n'
+      +'8. Behoud alle Griekse accenten en spiritus correct in het lemma.\n';
+  }
+  prompt+='\nRetourneer UITSLUITEND een JSON-array, geen uitleg, geen markdown. Begin met [ en eindig met ]. Elk woord uit de lijst MOET in een object voorkomen (eventueel samengevoegd onder een gedeeld lemma).\n'
+    +'Formaat: '+(lang==='la'
+      ? '[{"lemma":"voco, vocare","grammar":"werkwoord","nl":"roepen","freq":5}]'
+      : '[{"lemma":"λέγω","grammar":"werkwoord","nl":"zeggen, spreken","freq":5}]')
+    +'\n\nWoordvormen:\n'+wl;
   var msgs=[{role:'user',content:prompt}];msgs._json=true;
   return callAI(msgs,8000).then(function(raw){
     var parsed=parseJson(raw);
     parsed.forEach(function(it){
       if(!it.lemma)return;
-      var key=it.lemma.toLowerCase().split(/[,\s]/)[0].trim();
+      var key=lemmaKey(it.lemma);
       if(!key)return;
       if(collected[key]){collected[key].freq+=(it.freq||0);}
       else collected[key]={lemma:it.lemma,grammar:it.grammar||'',nl:it.nl||'',freq:it.freq||0,lang:lang};
@@ -607,7 +658,10 @@ function lemmatise(freqMap,bar,log){
   var maxWords=parseInt($('maxWords').value)||200;
   var minFreq=parseInt($('minFreq').value)||1;
   var ln=lang==='la'?'Latijn':'Oudgrieks';
-  var entries=Object.keys(freqMap).map(function(k){return[k,freqMap[k]];}).filter(function(e){return e[1]>=minFreq;}).sort(function(a,b){return b[1]-a[1];}).slice(0,Math.min(maxWords*3,800));
+  // NB: hier NIET op minFreq filteren — verbogen vormen komen los vaak maar 1x
+  // voor en moeten eerst gegroepeerd worden tot hun lemma. minFreq pas NA het
+  // groeperen toepassen (zie onder).
+  var entries=Object.keys(freqMap).map(function(k){return[k,freqMap[k]];}).sort(function(a,b){return b[1]-a[1];}).slice(0,Math.min(maxWords*4,1000));
   if(!entries.length)return Promise.reject(new Error('Geen woorden gevonden boven de minimumfrequentie.'));
   // Kleinere chunks (30) houden elke respons ruim onder het tokenplafond,
   // wat afkapping bij grote teksten voorkomt.
@@ -628,8 +682,7 @@ function lemmatise(freqMap,bar,log){
     setProg(85,'Bekende woorden markeren…',bar,log);
     var bs=basicSet();
     return Object.keys(collected).map(function(k){return collected[k];}).filter(function(w){return w.freq>=minFreq;}).map(function(w){
-      var key=w.lemma.toLowerCase().split(/[,\s]/)[0].trim();
-      w.known=bs.size>0&&bs.has(key);return w;
+      w.known=bs.size>0&&bs.has(lemmaKey(w.lemma));return w;
     }).sort(function(a,b){return b.freq-a.freq;}).slice(0,maxWords);
   });
 }
@@ -672,10 +725,10 @@ function compare(){
   }).then(function(result){
     words2=result;
     var set2={},set1={};
-    words2.forEach(function(w){set2[w.lemma.toLowerCase().split(/[,\s]/)[0]]=1;});
-    words.forEach(function(w){set1[w.lemma.toLowerCase().split(/[,\s]/)[0]]=1;});
-    words.forEach(function(w){var k=w.lemma.toLowerCase().split(/[,\s]/)[0];w.tag=set2[k]?'both':'only1';});
-    words2.forEach(function(w){var k=w.lemma.toLowerCase().split(/[,\s]/)[0];w.tag=set1[k]?'both':'only2';});
+    words2.forEach(function(w){set2[lemmaKey(w.lemma)]=1;});
+    words.forEach(function(w){set1[lemmaKey(w.lemma)]=1;});
+    words.forEach(function(w){var k=lemmaKey(w.lemma);w.tag=set2[k]?'both':'only1';});
+    words2.forEach(function(w){var k=lemmaKey(w.lemma);w.tag=set1[k]?'both':'only2';});
     compareOn=true;
     setProg(100,'Klaar!','bar2','log2');
     setTimeout(function(){$('progress2').classList.remove('on');$('legend').style.display='flex';$('colCompare').style.display='';renderResults();},400);
