@@ -871,6 +871,69 @@
     font-weight: 600;
   }
 
+  /* ── AI-ANALYSE MODULE ── */
+  .ai-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0 10px;
+    padding: 12px 14px;
+    background: var(--stone3);
+    border-radius: 5px;
+    border: 1px solid var(--gold-dim);
+  }
+  .ai-struct-view {
+    background: var(--stone3);
+    border: 1px solid var(--gold-dim);
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-top: 6px;
+  }
+  .ai-clause-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+    line-height: 2;
+  }
+  .ai-clause-label {
+    font-family: 'Cinzel', serif;
+    font-size: .68rem;
+    letter-spacing: .05em;
+    min-width: 96px;
+    flex-shrink: 0;
+  }
+  .ai-clause-label.lbl-hs { color: #e08080; }
+  .ai-clause-label.lbl-bs { color: #8abcde; }
+  .ai-clause-text { font-style: italic; font-size: 1.08rem; }
+  .ai-word {
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin: 0 1px;
+    display: inline-block;
+  }
+  .ai-word.w-pv       { background: #e8d800; color: #1a1a00; font-weight: 600; }
+  .ai-word.w-ondersch { background: #2ea84a; color: #fff; font-weight: 600; }
+  .ai-word.w-betr     { background: #c0392b; color: #fff; font-weight: 600; }
+  .ai-word.w-nevensch { background: #2980b9; color: #fff; font-weight: 600; }
+  .ai-word.w-special  { background: #8a6e2f; color: #fff; font-weight: 600; }
+  .ai-conn-translation {
+    font-style: normal;
+    font-size: .82rem;
+    color: var(--cream2);
+    background: var(--stone2);
+    border-radius: 3px;
+    padding: 1px 6px;
+    margin-left: 4px;
+  }
+  .ai-clause-note {
+    font-size: .82rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-left: 108px;
+    margin-bottom: 10px;
+  }
+
   /* ── FOOTER ── */
   footer {
     text-align: center;
@@ -902,6 +965,7 @@
   <button onclick="showModule('analysis')">③ Zinsontleding</button>
   <button onclick="showModule('structuur')">④ Zinsstructuur</button>
   <button onclick="showModule('translation')">⑤ Vertalen</button>
+  <button onclick="showModule('ai')">⑥ AI-analyse</button>
 </nav>
 
 <main>
@@ -1482,6 +1546,43 @@
 
   <div id="translation-feedback" class="mt-12"></div>
   <div id="model-translation" class="mt-12 hidden"></div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MODULE: AI-ANALYSE
+══════════════════════════════════════ -->
+<section id="module-ai" class="module">
+  <h2 class="module-title">⑥ AI-analyse van je eigen zin</h2>
+  <p class="intro-text">Voer een samengestelde Latijnse zin in. De AI bepaalt de hoofd- en bijzinnen, markeert de persoonsvormen en inleidende woorden, en toont de zin in een ingesprongen structuur. Zo zie je hoe de zin in elkaar zit — maar je vertaalt zelf!</p>
+
+  <div class="api-key-section">
+    <label>Gemini API-sleutel</label>
+    <input type="password" id="ai-api-key-input" placeholder="Plak hier je Gemini API-sleutel...">
+    <div style="font-size:.8rem;color:var(--muted);margin-top:8px;">Je sleutel wordt alleen in je eigen browser gebruikt en niet opgeslagen of gedeeld.</div>
+  </div>
+
+  <label style="font-family:'Cinzel',serif;font-size:.78rem;color:var(--cream2);letter-spacing:.05em;display:block;margin:6px 0 8px">Latijnse zin:</label>
+  <textarea class="translation-input" id="ai-sentence-input" placeholder="Bijv.: Postquam dux hostes vicit, cives qui in urbe manebant gaudebant." style="min-height:70px;"></textarea>
+
+  <div class="flex-row mt-12">
+    <button class="btn btn-gold" onclick="analyzeWithAI()">Analyseer zinsstructuur</button>
+    <button class="btn btn-outline btn-sm" onclick="resetAiAnalysis()">Wis</button>
+  </div>
+
+  <div class="ai-legend" id="ai-legend" style="display:none;">
+    <span class="struct-key" style="background:#e8d800;color:#1a1a00;">PV</span>
+    <span class="struct-key" style="background:#2ea84a;color:#fff;">ondersch. vw.</span>
+    <span class="struct-key" style="background:#c0392b;color:#fff;">betr. vnw.</span>
+    <span class="struct-key" style="background:#2980b9;color:#fff;">nevensch. vw.</span>
+    <span class="struct-key" style="background:#8a6e2f;color:#fff;">AcI / AblAbs</span>
+  </div>
+
+  <div id="ai-result" class="mt-12"></div>
+
+  <div class="warning-box" id="ai-disclaimer" style="display:none;margin-top:16px;">
+    <strong>⚠ Let op</strong>
+    De AI helpt je de structuur te zien, maar kan fouten maken bij heel complexe of dubbelzinnige zinnen. Controleer de analyse altijd zelf met de theorie en je woordenboek. De vertaling maak je zelf — alleen de voegwoorden zijn al ingevuld als steun.
+  </div>
 </section>
 
 </main>
@@ -4109,13 +4210,13 @@ Focus op de zinsbouw (hoofd-/bijzin) en de rol van het verbindingswoord "${s.con
 
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.4, maxOutputTokens: 512 }
+          generationConfig: { temperature: 0.4, maxOutputTokens: 1024, thinkingConfig: { thinkingBudget: 0 } }
         })
       }
     );
@@ -4368,6 +4469,147 @@ function checkStructure(){
   document.getElementById('struct-answer-text').innerHTML=renderStructureView(s)+`<div style="margin-top:10px;font-size:.88rem;color:var(--cream2);font-style:italic">${s.explanation}</div>`;
 }
 function resetStructure(){structRows=[];document.getElementById('struct-result').innerHTML='';document.getElementById('struct-answer').classList.add('hidden');renderDragBank(getStructFiltered()[structIdx]);renderStructRows();}
+
+/* ═══════════════════════════════════════════════════════
+   MODULE 6: AI-ANALYSE
+═══════════════════════════════════════════════════════ */
+function resetAiAnalysis(){
+  document.getElementById('ai-sentence-input').value='';
+  document.getElementById('ai-result').innerHTML='';
+  document.getElementById('ai-legend').style.display='none';
+  document.getElementById('ai-disclaimer').style.display='none';
+}
+
+function aiWordClass(role){
+  switch(role){
+    case 'pv': return 'w-pv';
+    case 'ondersch': return 'w-ondersch';
+    case 'betr': return 'w-betr';
+    case 'nevensch': return 'w-nevensch';
+    case 'special': return 'w-special';
+    default: return '';
+  }
+}
+
+function renderAiAnalysis(data){
+  // data.clauses = [{type:'HS'|'BS'|'AcI'|'AblAbs', depth:int, soort:string, words:[{text, role, vertaling}], note}]
+  if(!data || !Array.isArray(data.clauses)) {
+    return '<div class="ai-feedback-box" style="border-color:var(--red)"><strong style="color:#e08080">Fout:</strong> de AI gaf geen geldige structuur terug. Probeer het opnieuw.</div>';
+  }
+  let html='<div class="ai-struct-view">';
+  data.clauses.forEach(cl=>{
+    const depth = cl.depth || (cl.type==='HS'||cl.type==='AblAbs' ? 0 : 1);
+    const indent = depth * 36;
+    const isMain = cl.type==='HS';
+    const lblClass = isMain ? 'lbl-hs' : 'lbl-bs';
+    // Label tonen met soort erbij
+    let lblText = cl.type;
+    if(cl.soort && cl.type!=='HS') lblText += ' ('+cl.soort+')';
+    const wordsHtml = (cl.words||[]).map(w=>{
+      const cls = aiWordClass(w.role);
+      const transl = (w.role==='ondersch'||w.role==='betr'||w.role==='nevensch') && w.vertaling
+        ? `<span class="ai-conn-translation">= ${escapeHtml(w.vertaling)}</span>` : '';
+      return `<span class="ai-word ${cls}">${escapeHtml(w.text)}</span>${transl}`;
+    }).join(' ');
+    html += `<div class="ai-clause-row" style="padding-left:${indent}px;">
+      <span class="ai-clause-label ${lblClass}">${escapeHtml(lblText)}</span>
+      <span class="ai-clause-text">${wordsHtml}</span>
+    </div>`;
+    if(cl.note){
+      html += `<div class="ai-clause-note" style="margin-left:${indent+108}px;">${escapeHtml(cl.note)}</div>`;
+    }
+  });
+  html += '</div>';
+  if(data.toelichting){
+    html += `<div style="margin-top:12px;font-size:.9rem;color:var(--cream2);line-height:1.7;">${escapeHtml(data.toelichting)}</div>`;
+  }
+  return html;
+}
+
+function escapeHtml(str){
+  if(str===undefined||str===null) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function analyzeWithAI(){
+  const sentence = document.getElementById('ai-sentence-input').value.trim();
+  const apiKey = document.getElementById('ai-api-key-input').value.trim();
+  const resultEl = document.getElementById('ai-result');
+
+  if(!sentence){
+    resultEl.innerHTML = '<span class="badge badge-info">Voer eerst een Latijnse zin in.</span>';
+    return;
+  }
+  if(!apiKey){
+    resultEl.innerHTML = '<span class="badge badge-info">Vul eerst je Gemini API-sleutel in.</span>';
+    return;
+  }
+
+  resultEl.innerHTML = '<div class="ai-feedback-box"><span class="loading">De AI analyseert de zinsstructuur... even geduld.</span></div>';
+
+  const prompt = `Je bent een classicus en ervaren docent Latijn op een Nederlands gymnasium. Analyseer de zinsbouw van de onderstaande Latijnse zin volgens de traditionele schoolgrammatica (vergelijk Allen & Greenough en Pinkster).
+
+Latijnse zin: "${sentence}"
+
+Verdeel de zin in zinsdelen (clausules): hoofdzinnen (HS), bijzinnen (BS), en daarnaast AcI (accusativus cum infinitivo) en ablativus absolutus (AblAbs), die in het Nederlands als bijzin vertaald worden maar geen echte bijzin zijn.
+
+Regels voor de analyse:
+- Bepaal voor elk WOORD een rol: "pv" (persoonsvorm / finiete werkwoordsvorm), "ondersch" (onderschikkend voegwoord), "betr" (betrekkelijk voornaamwoord), "nevensch" (nevenschikkend voegwoord), of "geen" (geen bijzondere rol).
+- Een infinitivus in een AcI is GEEN pv. Een participium in een AblAbs is GEEN pv.
+- Geef bij ondersch/betr/nevensch een Nederlandse vertaling van DAT woord (bijv. "omdat", "die", "en"). Geef GEEN vertaling bij andere woorden — de leerling vertaalt de rest zelf.
+- Bepaal het inspringniveau (depth): HS en AblAbs = 0, een bijzin direct onder de hoofdzin = 1, een bijzin binnen een bijzin = 2, enzovoort.
+- Geef per bijzin de "soort": betrekkelijk, causaal, temporeel, finaal, consecutief, concessief, conditioneel, indirecte vraag, of vergelijkend. Bij HS, AcI en AblAbs mag soort leeg zijn.
+- Behoud de woordvolgorde van de originele zin per clausule. Als een hoofdzin onderbroken wordt door een bijzin, mag je de hoofdzin in twee HS-delen splitsen.
+
+Antwoord UITSLUITEND met geldige JSON, zonder enige extra tekst of markdown, in exact dit formaat:
+{
+  "clauses": [
+    {
+      "type": "HS",
+      "depth": 0,
+      "soort": "",
+      "words": [
+        {"text": "woord", "role": "pv", "vertaling": ""}
+      ],
+      "note": ""
+    }
+  ],
+  "toelichting": "Korte uitleg in het Nederlands over de structuur (max 2 zinnen). Vertaal hierin GEEN inhoudswoorden."
+}`;
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.2, maxOutputTokens: 2048, thinkingConfig: { thinkingBudget: 0 } }
+        })
+      }
+    );
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+    let text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    if(!text) throw new Error('Geen antwoord ontvangen van de AI.');
+    // Strip eventuele markdown-fences
+    text = text.replace(/```json/gi,'').replace(/```/g,'').trim();
+    // Pak het JSON-object eruit
+    const first = text.indexOf('{');
+    const last = text.lastIndexOf('}');
+    if(first===-1||last===-1) throw new Error('De AI gaf geen geldige JSON terug.');
+    const parsed = JSON.parse(text.slice(first, last+1));
+    resultEl.innerHTML = renderAiAnalysis(parsed);
+    document.getElementById('ai-legend').style.display = 'flex';
+    document.getElementById('ai-disclaimer').style.display = 'block';
+  } catch (err) {
+    resultEl.innerHTML = `<div class="ai-feedback-box" style="border-color:var(--red)">
+      <strong style="color:#e08080">Fout:</strong> ${escapeHtml(err.message)}<br>
+      <span style="color:var(--muted);font-size:.85rem">Controleer je API-sleutel of probeer het opnieuw. Heel lange of ongebruikelijke zinnen kunnen lastig zijn voor de AI.</span>
+    </div>`;
+  }
+}
 
 /* ═══════════════════════════════════════════════════════
    INLEIDENDE WOORDEN TABS
