@@ -851,11 +851,24 @@ window.showParadigm = function(id){
   const w = WORDS.find(x=>x.id===id);
   if(!w) return;
 
-  const rows = CASE_LABELS.map(c=>{
-    const form = w.forms[c.key]||"—";
+  // NL case order: nom – gen – dat – acc – voc (ev. + mv. as columns)
+  const CASE_ORDER = [
+    {abbr:"nom.", nl:"nominatief", sg:"nom_sg", pl:"nom_pl"},
+    {abbr:"gen.", nl:"genitief",   sg:"gen_sg", pl:"gen_pl"},
+    {abbr:"dat.", nl:"datief",     sg:"dat_sg", pl:"dat_pl"},
+    {abbr:"acc.", nl:"accusatief", sg:"acc_sg", pl:"acc_pl"},
+    {abbr:"voc.", nl:"vocatief",   sg:"voc_sg", pl:null}
+  ];
+
+  const rows = CASE_ORDER.map(c=>{
+    const sg = w.forms[c.sg]||"—";
+    const pl = c.pl ? (w.forms[c.pl]||"—") : "—";
+    // highlight if sg===pl (syncretic forms, e.g. neuter nom=acc)
+    const syncSg = sg!=="—" && sg===pl ? " style='color:var(--gold-dim)'" : "";
     return `<tr>
-      <td class="case-col">${c.nl}</td>
-      <td class="greek-col">${form}</td>
+      <td style="padding:7px 10px;color:var(--muted);font-size:12px;white-space:nowrap;width:90px">${c.nl}</td>
+      <td style="padding:7px 10px;font-size:18px;color:var(--marble);letter-spacing:.03em"${syncSg}>${sg}</td>
+      <td style="padding:7px 10px;font-size:18px;color:var(--marble);letter-spacing:.03em"${syncSg}>${pl}</td>
     </tr>`;
   }).join("");
 
@@ -873,10 +886,16 @@ window.showParadigm = function(id){
         <button onclick="this.closest('div[style*=fixed]').remove()" style="font-size:26px;color:var(--muted);padding:4px 8px;cursor:pointer;background:none;border:none">×</button>
       </div>
       <div class="meander"></div>
-      <div class="paradigm-wrap">
-        <table class="paradigm-table">
-          <thead><tr><th>Naamval</th><th>Vorm</th></tr></thead>
-          <tbody>${rows}</tbody>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr>
+              <th style="padding:7px 10px;text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:rgba(36,66,125,.6);border-bottom:1px solid var(--aegean4)"></th>
+              <th style="padding:7px 10px;text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:rgba(36,66,125,.6);border-bottom:1px solid var(--aegean4)">Enkelvoud</th>
+              <th style="padding:7px 10px;text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);background:rgba(36,66,125,.6);border-bottom:1px solid var(--aegean4)">Meervoud</th>
+            </tr>
+          </thead>
+          <tbody style="background:var(--aegean2)">${rows}</tbody>
         </table>
       </div>
       <div style="display:flex;gap:10px;margin-top:16px">
@@ -1164,26 +1183,56 @@ window.pickMC = function(i, chosen, correct){
 // ═══════════════════════════════════════════════════
 // RENDER: VOLLEDIG PARADIGMA INVULLEN
 // ═══════════════════════════════════════════════════
+
+// NL case order used in paradigma schema's
+const PAR_CASE_ORDER = [
+  {abbr:"nom.", nl:"nominatief", sg:"nom_sg", pl:"nom_pl"},
+  {abbr:"gen.", nl:"genitief",   sg:"gen_sg", pl:"gen_pl"},
+  {abbr:"dat.", nl:"datief",     sg:"dat_sg", pl:"dat_pl"},
+  {abbr:"acc.", nl:"accusatief", sg:"acc_sg", pl:"acc_pl"},
+  {abbr:"voc.", nl:"vocatief",   sg:"voc_sg", pl:null}
+];
+
 RENDER.ex_paradigm = function(){
   if(EX.i >= EX.words.length) return finishParadigm();
   const w = EX.words[EX.i];
   const app = document.getElementById("app");
   const pct = Math.round(EX.i/EX.words.length*100);
 
-  // build table rows with inputs
-  const rows = CASE_LABELS.map(c=>{
-    const form = w.forms[c.key]||"—";
-    if(form==="—") return "";
-    return `<tr>
-      <td style="padding:7px 10px;color:var(--muted);font-size:12px;white-space:nowrap">${c.nl}</td>
-      <td style="padding:7px 10px">
-        <input class="inp" data-key="${c.key}" data-correct="${form}"
-          placeholder="…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-          style="padding:6px 10px;font-size:15px;"
-          onkeydown="if(event.key==='Enter')nextInput(this)">
-      </td>
+  // Build rows: naamval | enkelvoud input | meervoud input
+  const rows = PAR_CASE_ORDER.map(c=>{
+    const sgForm = w.forms[c.sg]||"—";
+    const plForm = c.pl ? (w.forms[c.pl]||"—") : null;
+
+    const sgCell = sgForm==="—"
+      ? `<td style="padding:6px 8px;font-size:16px;color:var(--muted)">—</td>`
+      : `<td style="padding:6px 8px">
+          <input class="inp par-inp" data-key="${c.sg}" data-correct="${sgForm}"
+            placeholder="ev." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            style="padding:5px 8px;font-size:15px;"
+            onkeydown="if(event.key==='Enter')nextInput(this)">
+        </td>`;
+
+    let plCell;
+    if(plForm===null){
+      plCell = `<td style="padding:6px 8px;font-size:13px;color:var(--muted);font-style:italic">—</td>`;
+    } else if(plForm==="—"){
+      plCell = `<td style="padding:6px 8px;font-size:16px;color:var(--muted)">—</td>`;
+    } else {
+      plCell = `<td style="padding:6px 8px">
+          <input class="inp par-inp" data-key="${c.pl}" data-correct="${plForm}"
+            placeholder="mv." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            style="padding:5px 8px;font-size:15px;"
+            onkeydown="if(event.key==='Enter')nextInput(this)">
+        </td>`;
+    }
+
+    return `<tr style="border-bottom:1px solid rgba(255,255,255,.06)">
+      <td style="padding:7px 8px;color:var(--muted);font-size:12px;white-space:nowrap;width:80px">${c.nl}</td>
+      ${sgCell}
+      ${plCell}
     </tr>`;
-  }).filter(Boolean).join("");
+  }).join("");
 
   app.innerHTML = `
   <div class="scrhead">${backBtn("oefenen")}<h2>Paradigma</h2><span style="font-size:12px;color:var(--muted)">${EX.i+1}/${EX.words.length}</span></div>
@@ -1202,9 +1251,16 @@ RENDER.ex_paradigm = function(){
 
   <p class="ex-prompt">Vul het volledige paradigma in:</p>
 
-  <div style="overflow-x:auto;margin-bottom:14px">
+  <div style="overflow-x:auto;margin-bottom:14px;background:var(--aegean2);border:1px solid var(--aegean4);border-radius:12px">
     <table style="width:100%;border-collapse:collapse" id="parTable">
-      ${rows}
+      <thead>
+        <tr style="background:rgba(36,66,125,.6)">
+          <th style="padding:7px 8px;text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--aegean4)"></th>
+          <th style="padding:7px 8px;text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--aegean4)">Enkelvoud</th>
+          <th style="padding:7px 8px;text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--aegean4)">Meervoud</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
     </table>
   </div>
 
@@ -1215,12 +1271,11 @@ RENDER.ex_paradigm = function(){
   </div>`;
 
   // focus first input + attach keyboard
-  const allInps = [...document.querySelectorAll("#parTable input")];
+  const allInps = [...document.querySelectorAll("#parTable .par-inp")];
   if(allInps.length){
     GK_TARGET = allInps[0];
     allInps.forEach(i=>i.addEventListener("focus",()=>{ GK_TARGET=i; }));
     allInps[0].focus();
-    // build keyboard once, after first input
     const toggle = buildGKToggle();
     const kb = buildKeyboard();
     const parFb = document.getElementById("parFb");
@@ -1230,14 +1285,14 @@ RENDER.ex_paradigm = function(){
 };
 
 window.nextInput = function(inp){
-  const inputs = [...document.querySelectorAll("#parTable input")];
+  const inputs = [...document.querySelectorAll("#parTable .par-inp")];
   const idx = inputs.indexOf(inp);
   if(idx < inputs.length-1) inputs[idx+1].focus();
   else submitParadigm();
 };
 
 window.submitParadigm = function(){
-  const inputs = document.querySelectorAll("#parTable input");
+  const inputs = document.querySelectorAll("#parTable .par-inp");
   let ok=0, total=0;
   inputs.forEach(inp=>{
     if(inp.disabled) return;
@@ -1272,7 +1327,7 @@ window.submitParadigm = function(){
 };
 
 window.showParadigmAnswer = function(){
-  const inputs = document.querySelectorAll("#parTable input");
+  const inputs = document.querySelectorAll("#parTable .par-inp");
   inputs.forEach(inp=>{
     inp.value = inp.dataset.correct;
     inp.classList.add("correct");
