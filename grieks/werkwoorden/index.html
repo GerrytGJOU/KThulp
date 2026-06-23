@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Griekse Werkwoorden</title>
+<style>
+:root {
+  --bg:#1a1f2e; --surf:#242938; --surf2:#2e3448; --surf3:#38404e;
+  --border:#3a4260; --gold:#c8a84b; --gold-l:#e0c06a; --gold-d:#8a6a20;
+  --blue:#4a7fa5; --blue-l:#6fa3cc; --terra:#b05a3a; --terra-l:#d4795a;
+  --green:#3d8c5c; --green-l:#5ab87d; --red:#b04040; --red-l:#d46060;
+  --text:#e8dfc8; --dim:#8888a0; --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Palatino Linotype',Palatino,'Book Antiqua','Noto Serif',Georgia,serif;
+  background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── HEADER ── */
+header{background:var(--surf);border-bottom:2px solid var(--gold);padding:14px 20px;text-align:center;}
+header h1{font-size:1.5rem;color:var(--gold);letter-spacing:.05em;}
+header p{font-size:.8rem;color:var(--dim);margin-top:2px;}
+.meander{height:10px;background:repeating-linear-gradient(90deg,var(--gold) 0,var(--gold) 3px,transparent 3px,transparent 7px);opacity:.35;}
+
+/* ── SCREENS ── */
+.screen{display:none;flex:1;flex-direction:column;overflow-y:auto;}
+.screen.active{display:flex;}
+
+/* ── MAIN MENU ── */
+#menu{align-items:center;justify-content:flex-start;padding:20px 16px 24px;}
+.menu-title{color:var(--gold);font-size:1.1rem;text-align:center;margin-bottom:18px;letter-spacing:.03em;}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:560px;}
+.menu-card{background:var(--surf);border:2px solid var(--border);border-radius:var(--r);
+  padding:18px 14px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;
+  -webkit-tap-highlight-color:transparent;}
+.menu-card:hover,.menu-card:active{border-color:var(--gold);background:var(--surf2);}
+.menu-card .mc-icon{font-size:2rem;margin-bottom:8px;}
+.menu-card .mc-label{font-size:.95rem;color:var(--gold-l);font-weight:bold;margin-bottom:4px;}
+.menu-card .mc-desc{font-size:.78rem;color:var(--dim);line-height:1.4;}
+.menu-card.wide{grid-column:1/-1;}
+
+/* ── INNER NAV ── */
+.inner-nav{background:var(--surf);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;padding:10px 14px;}
+.btn-back{background:none;border:1px solid var(--border);border-radius:6px;
+  color:var(--dim);font-family:inherit;font-size:.85rem;padding:6px 12px;cursor:pointer;}
+.btn-back:hover{color:var(--text);border-color:var(--gold);}
+.inner-title{color:var(--gold);font-size:1rem;font-weight:bold;}
+
+/* ── SETUP PANEL ── */
+.setup-panel{padding:20px 16px;max-width:540px;width:100%;margin:0 auto;}
+.setup-panel h2{color:var(--gold);font-size:1.05rem;margin-bottom:8px;}
+.setup-panel p{font-size:.84rem;color:var(--dim);margin-bottom:16px;line-height:1.5;}
+.field-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.field-row label{font-size:.84rem;color:var(--dim);}
+select,input[type=number]{background:var(--surf2);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font-family:inherit;font-size:.9rem;padding:7px 10px;}
+.btn-start{display:block;width:100%;padding:14px;background:var(--gold);color:#1a1220;
+  border:none;border-radius:var(--r);font-family:inherit;font-size:1rem;font-weight:bold;
+  cursor:pointer;letter-spacing:.04em;margin-top:6px;}
+.btn-start:hover{background:var(--gold-l);}
+
+/* ── EXERCISE SHELL ── */
+.ex-wrap{flex:1;display:flex;flex-direction:column;padding:14px 16px;
+  max-width:680px;width:100%;margin:0 auto;}
+.prog-bar{background:var(--surf2);border-radius:3px;height:5px;margin-bottom:10px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--gold);transition:width .3s;}
+.ex-header{display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:12px;font-size:.83rem;color:var(--dim);}
+.score-pill{background:var(--surf2);border:1px solid var(--border);
+  border-radius:20px;padding:3px 12px;font-size:.83rem;}
+
+/* ── VERB CARD ── */
+.verb-card{background:var(--surf);border:1px solid var(--gold);border-radius:var(--r);
+  padding:16px;text-align:center;margin-bottom:14px;}
+.verb-form{font-size:2.1rem;color:var(--gold-l);font-style:italic;margin-bottom:4px;}
+.verb-sub{font-size:.82rem;color:var(--dim);}
+
+/* ══════════════════════════════════════════════
+   ONTLEDEN — SEGMENT CLICK
+   ══════════════════════════════════════════════ */
+.segment-area{background:var(--surf2);border:1px solid var(--border);border-radius:var(--r);
+  padding:14px 12px;margin-bottom:12px;}
+.seg-title{font-size:.78rem;color:var(--dim);margin-bottom:10px;text-align:center;}
+.seg-form-display{display:flex;justify-content:center;gap:3px;flex-wrap:wrap;
+  margin-bottom:14px;}
+.seg-chip{font-size:1.5rem;font-style:italic;color:var(--text);
+  background:var(--surf3);border:2px solid var(--border);border-radius:6px;
+  padding:6px 10px;cursor:pointer;transition:background .15s,border-color .15s;
+  user-select:none;-webkit-tap-highlight-color:transparent;min-width:36px;text-align:center;}
+.seg-chip:hover{background:var(--surf2);}
+.seg-chip.selected{border-color:var(--gold);background:#2a2540;}
+.seg-chip.assigned-aug{background:#1e2e40;border-color:#4a9fcc;color:#7fd4f8;}
+.seg-chip.assigned-stem{background:#1e3020;border-color:#4aaa60;color:#80e090;}
+.seg-chip.assigned-tk{background:#2e2010;border-color:#bb8030;color:#f0b840;}
+.seg-chip.assigned-end{background:#2e1030;border-color:#9a40bb;color:#d080f0;}
+.seg-chip.disabled{cursor:default;opacity:.7;}
+
+.slot-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+@media(max-width:400px){.slot-row{grid-template-columns:repeat(2,1fr);}}
+.slot{border:2px dashed var(--border);border-radius:8px;padding:8px 6px;
+  min-height:64px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.slot:hover{border-color:var(--gold-d);}
+.slot.active-slot{border-color:var(--gold);background:#22203a;}
+.slot-label{font-size:.72rem;color:var(--dim);margin-bottom:4px;line-height:1.2;}
+.slot-value{font-size:1rem;font-style:italic;min-height:22px;color:var(--text);}
+.slot.has-aug .slot-value{color:#7fd4f8;}
+.slot.has-stem .slot-value{color:#80e090;}
+.slot.has-tk .slot-value{color:#f0b840;}
+.slot.has-end .slot-value{color:#d080f0;}
+.slot.correct-slot{border-color:var(--green);background:#1a2e20;}
+.slot.wrong-slot{border-color:var(--red);background:#2e1a1a;}
+
+.vert-row{margin-top:10px;}
+.vert-row label{font-size:.8rem;color:var(--dim);display:block;margin-bottom:4px;}
+.vert-row input{width:100%;background:var(--surf2);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font-family:inherit;font-size:.95rem;padding:8px 10px;}
+.vert-row input.correct{border-color:var(--green);color:var(--green-l);}
+.vert-row input.wrong{border-color:var(--red);color:var(--red-l);}
+
+/* ══════════════════════════════════════════════
+   DETERMINEREN
+   ══════════════════════════════════════════════ */
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+@media(max-width:380px){.det-grid{grid-template-columns:1fr;}}
+.det-field{display:flex;flex-direction:column;gap:4px;}
+.det-field label{font-size:.8rem;color:var(--gold);}
+.det-field select,.det-field input{width:100%;font-size:.9rem;}
+.det-field select.ok,.det-field input.ok{border-color:var(--green);color:var(--green-l);}
+.det-field select.err,.det-field input.err{border-color:var(--red);color:var(--red-l);}
+
+/* ══════════════════════════════════════════════
+   VERTALEN
+   ══════════════════════════════════════════════ */
+.vert-input{width:100%;background:var(--surf2);border:1px solid var(--border);
+  border-radius:var(--r);color:var(--text);font-family:inherit;font-size:1rem;
+  padding:12px;margin-bottom:12px;resize:none;min-height:56px;}
+.vert-input.ok{border-color:var(--green);}
+.vert-input.err{border-color:var(--red);}
+
+/* ── FEEDBACK ── */
+.fb{background:var(--surf2);border-radius:var(--r);padding:10px 14px;
+  margin-bottom:10px;font-size:.86rem;display:none;}
+.fb.show{display:block;}
+.fb.ok{border-left:4px solid var(--green);}
+.fb.err{border-left:4px solid var(--red);}
+.fb-row{display:flex;gap:6px;margin-bottom:3px;flex-wrap:wrap;align-items:baseline;}
+.fb-lbl{color:var(--dim);min-width:90px;font-size:.8rem;}
+.fb-got{color:var(--red-l);}
+.fb-cor{color:var(--green-l);}
+
+/* ── BUTTONS ── */
+.btn-row{display:flex;gap:10px;margin-top:auto;padding-top:8px;}
+.btn{flex:1;padding:13px;border:none;border-radius:var(--r);
+  font-family:inherit;font-size:.95rem;cursor:pointer;font-weight:bold;}
+.btn-check{background:var(--blue);color:#fff;}
+.btn-next{background:var(--gold);color:#1a1220;}
+.btn-stop{background:var(--surf2);color:var(--dim);border:1px solid var(--border);
+  flex:0;padding:13px 16px;}
+.btn:active{opacity:.8;}
+
+/* ══════════════════════════════════════════════
+   PARADIGMA SCREEN
+   ══════════════════════════════════════════════ */
+.para-wrap{padding:14px 14px 24px;max-width:680px;width:100%;margin:0 auto;}
+.para-section{margin-bottom:22px;}
+.para-section h2{color:var(--gold);font-size:1rem;margin-bottom:4px;padding-bottom:4px;
+  border-bottom:1px solid var(--gold-d);}
+.para-section p{font-size:.82rem;color:var(--dim);margin-bottom:10px;line-height:1.5;}
+.para-table{width:100%;border-collapse:collapse;font-size:.84rem;margin-bottom:8px;}
+.para-table th{background:var(--surf2);border:1px solid var(--border);
+  padding:6px 8px;text-align:left;color:var(--gold);font-weight:normal;}
+.para-table td{border:1px solid var(--border);padding:5px 8px;vertical-align:top;}
+.para-table tr:nth-child(even) td{background:var(--surf2);}
+.para-table .gk{font-style:italic;color:var(--gold-l);}
+.para-table .dim{color:var(--dim);font-size:.78rem;}
+.legend-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:.8rem;}
+.leg-box{width:14px;height:14px;border-radius:3px;flex-shrink:0;}
+.para-note{font-size:.8rem;color:var(--dim);background:var(--surf2);
+  border-left:3px solid var(--gold-d);padding:8px 10px;border-radius:0 6px 6px 0;
+  margin-bottom:10px;line-height:1.5;}
+.build-row{display:flex;gap:4px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px;}
+.build-cell{flex:1;min-width:96px;background:var(--bg);border:2px solid var(--bc);
+  border-radius:8px;padding:8px 6px;text-align:center;display:flex;flex-direction:column;gap:4px;}
+.build-cell .build-top{font-size:.85rem;color:var(--tx);font-weight:bold;}
+.build-cell .build-mid{font-size:.86rem;color:var(--tx);font-weight:bold;line-height:1.2;}
+.build-cell .build-bot{font-size:.68rem;color:var(--dim);line-height:1.25;}
+
+/* ── RESULTS ── */
+.results-wrap{padding:20px 16px;max-width:520px;width:100%;margin:0 auto;text-align:center;}
+.results-wrap h2{color:var(--gold);font-size:1.2rem;margin-bottom:6px;}
+.big-score{font-size:2.8rem;color:var(--gold-l);margin:14px 0 4px;}
+.grade-txt{font-size:1rem;color:var(--dim);margin-bottom:18px;}
+.result-list{background:var(--surf2);border-radius:var(--r);padding:12px;
+  margin-bottom:16px;text-align:left;}
+.result-list h3{color:var(--gold);font-size:.9rem;margin-bottom:8px;}
+.ri{display:flex;gap:6px;padding:5px 0;border-bottom:1px solid var(--border);
+  font-size:.84rem;flex-wrap:wrap;align-items:baseline;}
+.ri:last-child{border-bottom:none;}
+.ri-verb{font-style:italic;color:var(--gold-l);min-width:100px;}
+.ri-dim{color:var(--dim);font-size:.78rem;}
+
+footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
+  border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+<header>
+  <h1>Griekse Werkwoorden</h1>
+  <p>Oefenen &amp; Paradigma's</p>
+</header>
+<div class="meander"></div>
+
+<!-- ════════════════════════════════
+     HOOFDMENU
+     ════════════════════════════════ -->
+<div id="menu" class="screen active">
+  <div class="menu-title">Kies een oefening</div>
+  <div class="menu-grid">
+    <div class="menu-card" onclick="gotoSetup('ontleed')">
+      <div class="mc-icon">🔍</div>
+      <div class="mc-label">① Ontleden</div>
+      <div class="mc-desc">Wijs augment, stam, tijdskenletter en uitgang aan in de werkwoordsvorm</div>
+    </div>
+    <div class="menu-card" onclick="gotoSetup('determ')">
+      <div class="mc-icon">📋</div>
+      <div class="mc-label">② Determineren</div>
+      <div class="mc-desc">Geef persoon, getal, tijd en vertaling van de gegeven vorm</div>
+    </div>
+    <div class="menu-card" onclick="gotoSetup('vertaal')">
+      <div class="mc-icon">🌐</div>
+      <div class="mc-label">③ Vertalen</div>
+      <div class="mc-desc">Vertaal de werkwoordsvorm naar het Nederlands</div>
+    </div>
+    <div class="menu-card" onclick="gotoScreen('paradigma')">
+      <div class="mc-icon">📖</div>
+      <div class="mc-label">Paradigma's</div>
+      <div class="mc-desc">Overzicht van alle uitgangen, tijden en vertalingen</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SETUP ONTLEED
+     ════════════════════════════════ -->
+<div id="setup-ontleed" class="screen">
+  <div class="inner-nav">
+    <button class="btn-back" onclick="gotoScreen('menu')">← Menu</button>
+    <span class="inner-title">🔍 Ontleden</span>
+  </div>
+  <div class="setup-panel">
+    <h2>Werkwoordsvorm ontleden</h2>
+    <p>Je ziet een Griekse werkwoordsvorm. Wijs door te klikken de onderdelen aan:<br>
+    <strong style="color:#7fd4f8">augment</strong> · <strong style="color:#80e090">stam</strong> · <strong style="color:#f0b840">tijdskenletter</strong> · <strong style="color:#d080f0">persoonsuitgang</strong><br>
+    Daarna geef je ook de Nederlandse vertaling. Bij onregelmatige vormen (crasis, elisie) worden de onderdelen als geheel weergegeven.</p>
+    <div class="field-row">
+      <label>Tijden:</label>
+      <select id="o-tfilter" multiple style="height:76px;">
+        <option value="praesens" selected>Praesens</option>
+        <option value="imperfectum" selected>Imperfectum</option>
+        <option value="aoristus" selected>Aoristus</option>
+        <option value="futurum">Futurum</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <label>Vragen:</label>
+      <input type="number" id="o-cnt" value="10" min="3" max="30" style="width:65px;">
+    </div>
+    <button class="btn-start" onclick="startExercise('ontleed')">Start →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SETUP DETERM
+     ════════════════════════════════ -->
+<div id="setup-determ" class="screen">
+  <div class="inner-nav">
+    <button class="btn-back" onclick="gotoScreen('menu')">← Menu</button>
+    <span class="inner-title">📋 Determineren</span>
+  </div>
+  <div class="setup-panel">
+    <h2>Werkwoordsvorm determineren</h2>
+    <p>Je ziet een Griekse werkwoordsvorm zonder lemma. Geef de grammaticale eigenschappen en de vertaling.</p>
+    <div class="field-row">
+      <label>Tijden:</label>
+      <select id="d-tfilter" multiple style="height:76px;">
+        <option value="praesens" selected>Praesens</option>
+        <option value="imperfectum" selected>Imperfectum</option>
+        <option value="aoristus" selected>Aoristus</option>
+        <option value="futurum">Futurum</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <label>Vragen:</label>
+      <input type="number" id="d-cnt" value="10" min="3" max="30" style="width:65px;">
+    </div>
+    <button class="btn-start" onclick="startExercise('determ')">Start →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     SETUP VERTAAL
+     ════════════════════════════════ -->
+<div id="setup-vertaal" class="screen">
+  <div class="inner-nav">
+    <button class="btn-back" onclick="gotoScreen('menu')">← Menu</button>
+    <span class="inner-title">🌐 Vertalen</span>
+  </div>
+  <div class="setup-panel">
+    <h2>Werkwoordsvorm vertalen</h2>
+    <p>Je ziet een Griekse werkwoordsvorm met het bijbehorende lemma en de grondbetekenis. Geef de correcte Nederlandse vertaling van de <em>gegeven vorm</em> (persoon en getal).</p>
+    <div class="field-row">
+      <label>Tijden:</label>
+      <select id="v-tfilter" multiple style="height:76px;">
+        <option value="praesens" selected>Praesens</option>
+        <option value="imperfectum" selected>Imperfectum</option>
+        <option value="aoristus" selected>Aoristus</option>
+        <option value="futurum">Futurum</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <label>Vragen:</label>
+      <input type="number" id="v-cnt" value="10" min="3" max="30" style="width:65px;">
+    </div>
+    <button class="btn-start" onclick="startExercise('vertaal')">Start →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     EXERCISE ONTLEED
+     ════════════════════════════════ -->
+<div id="ex-ontleed" class="screen">
+  <div class="inner-nav">
+    <button class="btn-back" onclick="stopEx('ontleed')">← Stop</button>
+    <span class="inner-title" id="o-title">Ontleden</span>
+  </div>
+  <div class="ex-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="o-prog"></div></div>
+    <div class="ex-header">
+      <span id="o-qn">Vraag 1/10</span>
+      <span class="score-pill">✓<span id="o-sc">0</span> ✗<span id="o-wr">0</span></span>
+    </div>
+    <div class="verb-card">
+      <div class="verb-form" id="o-form">ἔλυσα</div>
+      <div class="verb-sub" id="o-sub"></div>
+    </div>
+
+    <div class="segment-area">
+      <div class="seg-title">Klik op een <strong style="color:var(--gold)">vakje hieronder</strong>, dan op de <strong style="color:var(--gold)">letters hierboven</strong> die daarbij horen</div>
+      <div class="seg-form-display" id="o-chips"></div>
+      <div class="slot-row">
+        <div class="slot" id="slot-aug" onclick="selectSlot('aug')">
+          <div class="slot-label">Augment<br><span style="font-size:.68rem;color:#7fd4f8">●</span></div>
+          <div class="slot-value" id="sv-aug">—</div>
+        </div>
+        <div class="slot" id="slot-stem" onclick="selectSlot('stem')">
+          <div class="slot-label">Stam<br><span style="font-size:.68rem;color:#80e090">●</span></div>
+          <div class="slot-value" id="sv-stem"></div>
+        </div>
+        <div class="slot" id="slot-tk" onclick="selectSlot('tk')">
+          <div class="slot-label">Tijdskenletter<br><span style="font-size:.68rem;color:#f0b840">●</span></div>
+          <div class="slot-value" id="sv-tk">—</div>
+        </div>
+        <div class="slot" id="slot-end" onclick="selectSlot('end')">
+          <div class="slot-label">Persoons&shy;uitgang<br><span style="font-size:.68rem;color:#d080f0">●</span></div>
+          <div class="slot-value" id="sv-end"></div>
+        </div>
+      </div>
+      <div class="vert-row" style="margin-top:12px;">
+        <label>Vertaling van de hele vorm:</label>
+        <input type="text" id="o-vert" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="bv. ik maakte los">
+      </div>
+    </div>
+
+    <div class="fb" id="o-fb"></div>
+    <div class="btn-row">
+      <button class="btn btn-stop" onclick="stopEx('ontleed')">✕</button>
+      <button class="btn btn-check" id="o-cbtn" onclick="checkOntleed()">Controleer</button>
+      <button class="btn btn-next" id="o-nbtn" style="display:none" onclick="nextQ('ontleed')">Volgende →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     EXERCISE DETERM
+     ════════════════════════════════ -->
+<div id="ex-determ" class="screen">
+  <div class="inner-nav">
+    <button class="btn-back" onclick="stopEx('determ')">← Stop</button>
+    <span class="inner-title">Determineren</span>
+  </div>
+  <div class="ex-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="d-prog"></div></div>
+    <div class="ex-header">
+      <span id="d-qn">Vraag 1/10</span>
+      <span class="score-pill">✓<span id="d-sc">0</span> ✗<span id="d-wr">0</span></span>
+    </div>
+    <div class="verb-card">
+      <div class="verb-form" id="d-form">ἔλυσα</div>
+    </div>
+    <div class="det-grid">
+      <div class="det-field">
+        <label>Persoon</label>
+        <select id="d-pers"><option value="">— kies —</option>
+          <option value="1">1e persoon</option><option value="2">2e persoon</option><option value="3">3e persoon</option>
+        </select>
+      </div>
+      <div class="det-field">
+        <label>Getal</label>
+        <select id="d-getal"><option value="">— kies —</option>
+          <option value="ev">enkelvoud</option><option value="mv">meervoud</option>
+        </select>
+      </div>
+      <div class="det-field">
+        <label>Tijd</label>
+        <select id="d-tijd"><option value="">— kies —</option>
+          <option value="praesens">praesens</option><option value="imperfectum">imperfectum</option>
+          <option value="aoristus">aoristus</option><option value="futurum">futurum</option>
+          <option value="perfectum">perfectum</option>
+        </select>
+      </div>
+      <div class="det-field">
+        <label>Vertaling</label>
+        <input type="text" id="d-vert" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="bv. hij liep">
+      </div>
+    </div>
+    <div class="fb" id="d-fb"></div>
+    <div class="btn-row">
+      <button class="btn btn-stop" onclick="stopEx('determ')">✕</button>
+      <button class="btn btn-check" id="d-cbtn" onclick="checkDeterm()">Controleer</button>
+      <button class="btn btn-next" id="d-nbtn" style="display:none" onclick="nextQ('determ')">Volgende →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     EXERCISE VERTAAL
+     ════════════════════════════════ -->
+<div id="ex-vertaal" class="screen">
+  <div class="inner-nav">
+    <button class="btn-back" onclick="stopEx('vertaal')">← Stop</button>
+    <span class="inner-title">Vertalen</span>
+  </div>
+  <div class="ex-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="v-prog"></div></div>
+    <div class="ex-header">
+      <span id="v-qn">Vraag 1/10</span>
+      <span class="score-pill">✓<span id="v-sc">0</span> ✗<span id="v-wr">0</span></span>
+    </div>
+    <div class="verb-card">
+      <div class="verb-form" id="v-form">ἔλυσα</div>
+      <div class="verb-sub" id="v-sub"></div>
+    </div>
+    <textarea class="vert-input" id="v-vert" rows="2"
+      placeholder="Vertaal de werkwoordsvorm…" autocorrect="off" autocomplete="off" spellcheck="false"></textarea>
+    <div class="fb" id="v-fb"></div>
+    <div class="btn-row">
+      <button class="btn btn-stop" onclick="stopEx('vertaal')">✕</button>
+      <button class="btn btn-check" id="v-cbtn" onclick="checkVertaal()">Controleer</button>
+      <button class="btn btn-next" id="v-nbtn" style="display:none" onclick="nextQ('vertaal')">Volgende →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     PARADIGMA
+     ════════════════════════════════ -->
+<div id="paradigma" class="screen">
+  <div class="inner-nav">
+    <button class="btn-back" onclick="gotoScreen('menu')">← Menu</button>
+    <span class="inner-title">📖 Paradigma's</span>
+  </div>
+  <div class="para-wrap">
+
+    <div class="para-section">
+      <h2>Opbouw van een werkwoordsvorm</h2>
+      <p>Een Griekse werkwoordsvorm is opgebouwd als een trein van betekenisdragende lagen. Elke laag voegt één stukje informatie toe. Lees je een vorm van links naar rechts, dan ontcijfer je achtereenvolgens: <em>welke tijd</em>, <em>welk werkwoord</em>, <em>opnieuw welke tijd/aspect</em>, <em>welke modus</em> en ten slotte <em>welke persoon en welk getal</em>.</p>
+
+      <div class="build-row">
+        <div class="build-cell" style="--bc:#4a9fcc;--bg:#1e2e40;--tx:#7fd4f8">
+          <div class="build-top">①</div>
+          <div class="build-mid">elementen<br>vóór de stam</div>
+          <div class="build-bot">augment · reduplicatie · voorvoegsel</div>
+        </div>
+        <div class="build-cell" style="--bc:#4aaa60;--bg:#1e3020;--tx:#80e090">
+          <div class="build-top">②</div>
+          <div class="build-mid">stam</div>
+          <div class="build-bot">de kern: welk werkwoord</div>
+        </div>
+        <div class="build-cell" style="--bc:#bb8030;--bg:#2e2010;--tx:#f0b840">
+          <div class="build-top">③</div>
+          <div class="build-mid">tempus&shy;kenmerk</div>
+          <div class="build-bot">σ (fut./aor.), θ (aor.pass.), κ (pf.)</div>
+        </div>
+        <div class="build-cell" style="--bc:#cc6a4a;--bg:#301c14;--tx:#f0a080">
+          <div class="build-top">④</div>
+          <div class="build-mid">modus&shy;kenmerk</div>
+          <div class="build-bot">bindvocaal ο/ε · coni. ω/η · opt. οι/αι</div>
+        </div>
+        <div class="build-cell" style="--bc:#9a40bb;--bg:#2e1030;--tx:#d080f0">
+          <div class="build-top">⑤</div>
+          <div class="build-mid">persoons&shy;uitgang</div>
+          <div class="build-bot">persoon · getal · genus</div>
+        </div>
+      </div>
+
+      <div class="para-note">
+        Niet elke vorm heeft alle vijf de lagen. Het <strong>praesens</strong> heeft geen elementen vóór de stam en geen tempuskenmerk: λύ(②) + ο(④) + μεν(⑤) = λύομεν. Pas in de verleden tijden en bij coniunctivus/optativus worden meer lagen zichtbaar.
+      </div>
+
+      <p style="margin-top:12px;">Twee voorbeelden volledig uitgesplitst:</p>
+      <table class="para-table">
+        <tr>
+          <th>Vorm</th>
+          <th style="color:#7fd4f8">① vóór de stam</th>
+          <th style="color:#80e090">② stam</th>
+          <th style="color:#f0b840">③ tempus</th>
+          <th style="color:#f0a080">④ modus</th>
+          <th style="color:#d080f0">⑤ uitgang</th>
+        </tr>
+        <tr>
+          <td class="gk">ἐλύσαμεν</td>
+          <td><span style="color:#7fd4f8">ἐ</span> <span class="dim">augm.</span></td>
+          <td><span style="color:#80e090">λυ</span></td>
+          <td><span style="color:#f0b840">σ</span> <span class="dim">aor.</span></td>
+          <td><span style="color:#f0a080">ᾰ</span> <span class="dim">ind.</span></td>
+          <td><span style="color:#d080f0">μεν</span> <span class="dim">1e mv.</span></td>
+        </tr>
+        <tr>
+          <td class="gk">λύωμεν</td>
+          <td class="dim">—</td>
+          <td><span style="color:#80e090">λυ</span></td>
+          <td class="dim">—</td>
+          <td><span style="color:#f0a080">ω</span> <span class="dim">coni.</span></td>
+          <td><span style="color:#d080f0">μεν</span> <span class="dim">1e mv.</span></td>
+        </tr>
+        <tr>
+          <td class="gk">λελύκαμεν</td>
+          <td><span style="color:#7fd4f8">λε</span> <span class="dim">redupl.</span></td>
+          <td><span style="color:#80e090">λυ</span></td>
+          <td><span style="color:#f0b840">κ</span> <span class="dim">pf.</span></td>
+          <td><span style="color:#f0a080">ᾰ</span> <span class="dim">ind.</span></td>
+          <td><span style="color:#d080f0">μεν</span> <span class="dim">1e mv.</span></td>
+        </tr>
+      </table>
+      <div class="para-note">
+        In het ontleedscherm splits je een vorm in vier velden (augment, stam, tijdskenletter, uitgang). Het <strong>moduskenmerk</strong> (bindvocaal / coniunctivus-ω-η / optativus-οι) zit daar verstopt bij de tijdskenletter of de uitgang; je hoeft het daar niet apart te benoemen, maar het is goed te weten dat het er als aparte laag is.
+      </div>
+
+      <div class="para-note">
+        <strong>① Elementen vóór de stam — augment &amp; reduplicatie:</strong><br>
+        • <em>Syllabisch augment</em> (verleden tijd, stam op medeklinker): ἐ- → ἔ-λυον<br>
+        • <em>Temporeel augment</em> (verleden tijd, stam op klinker): verlenging → ἀκούω → <strong>ἤ</strong>κουον (α/ε→η, ο→ω, αι→ῃ, οι→ῳ, αυ→ηυ)<br>
+        • <em>Reduplicatie</em> (perfectum): medeklinker + ε → λέ-λυκα, γέ-γραφα<br>
+        • <em>Bij composita</em> staat het augment ná het voorvoegsel: προσφέρω → προσ-έ-φερον<br>
+        • <em>Onregelmatig:</em> εἶχον (van ἔχω), ηὗρον (van εὑρίσκω)
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Primaire (presens/futurum) uitgangen — actief</h2>
+      <p>Gebruikt bij praesens en futurum (primaire tijden).</p>
+      <table class="para-table">
+        <tr><th>Persoon</th><th>Enkelvoud</th><th>Vertaling</th><th>Meervoud</th><th>Vertaling</th></tr>
+        <tr><td>1e</td><td class="gk">-ω</td><td>ik …</td><td class="gk">-ομεν</td><td>wij …</td></tr>
+        <tr><td>2e</td><td class="gk">-εις</td><td>jij …</td><td class="gk">-ετε</td><td>jullie …</td></tr>
+        <tr><td>3e</td><td class="gk">-ει</td><td>hij/zij/het …</td><td class="gk">-ουσι(ν)</td><td>zij …</td></tr>
+      </table>
+      <div class="para-note">De verbindingsklinker is ο/ε (thematisch): λύ<strong>ο</strong>μεν, λύ<strong>ε</strong>τε. De 1e ev. samentrekking: λύ+ο+ω → λύω.</div>
+    </div>
+
+    <div class="para-section">
+      <h2>Secundaire (verleden) uitgangen — actief</h2>
+      <p>Gebruikt bij imperfectum, aoristus actief en perfectum actief.</p>
+      <table class="para-table">
+        <tr><th>Persoon</th><th>Enkelvoud</th><th>Vertaling (imperf.)</th><th>Meervoud</th><th>Vertaling</th></tr>
+        <tr><td>1e</td><td class="gk">-ον</td><td>ik …de / ik …te</td><td class="gk">-ομεν</td><td>wij …den</td></tr>
+        <tr><td>2e</td><td class="gk">-ες</td><td>jij …de</td><td class="gk">-ετε</td><td>jullie …den</td></tr>
+        <tr><td>3e</td><td class="gk">-ε(ν)</td><td>hij …de</td><td class="gk">-ον</td><td>zij …den</td></tr>
+      </table>
+      <div class="para-note">Let op: 3e ev. heeft geen uitgang (of enkel ν movabile). De aoristus sigmaticus heeft eigen uitgangen: -σα, -σας, -σε(ν) / -σαμεν, -σατε, -σαν.</div>
+    </div>
+
+    <div class="para-section">
+      <h2>Primaire uitgangen — medium/passief</h2>
+      <p>De eigenlijke (oorspronkelijke) uitgangen staan in de kolom "athematisch / onsamengetrokken". Bij de thematische werkwoorden zijn deze door samentrekking met de bindvocaal vervormd — vandaar de op het oog "vreemde" 2e ev.</p>
+      <table class="para-table">
+        <tr><th>Persoon</th><th>Athematisch (onsamengetrokken)</th><th>Thematisch (samengetrokken)</th><th>Meervoud</th></tr>
+        <tr><td>1e ev.</td><td class="gk">-μαι</td><td class="gk">-ομαι</td><td class="gk">-ομεθα</td></tr>
+        <tr><td>2e ev.</td><td class="gk">-σαι</td><td class="gk">-ει / -ῃ</td><td class="gk">-εσθε</td></tr>
+        <tr><td>3e ev.</td><td class="gk">-ται</td><td class="gk">-εται</td><td class="gk">-ονται</td></tr>
+      </table>
+      <div class="para-note">
+        <strong>Waar komt λύῃ (2e ev.) vandaan?</strong> De oorspronkelijke uitgang is <span class="gk">-σαι</span>. Bij thematische werkwoorden komt daar de bindvocaal ε vóór: λύ-ε-σαι. De σ tussen twee klinkers valt weg (intervocalische sigma): λύ-ε-αι, waarna ε+αι samentrekt tot -ῃ (of -ει): <span class="gk">λύῃ</span>. Bij athematische werkwoorden blijft de σ wél staan, omdat er geen bindvocaal is: <span class="gk">δίδο-σαι</span>, <span class="gk">τίθε-σαι</span>, <span class="gk">δύνα-σαι</span>. Zo zie je de "echte" uitgang nog onaangetast.
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Secundaire uitgangen — medium/passief</h2>
+      <table class="para-table">
+        <tr><th>Persoon</th><th>Athematisch (onsamengetrokken)</th><th>Thematisch (samengetrokken)</th><th>Meervoud</th></tr>
+        <tr><td>1e ev.</td><td class="gk">-μην</td><td class="gk">-ομην</td><td class="gk">-ομεθα</td></tr>
+        <tr><td>2e ev.</td><td class="gk">-σο</td><td class="gk">-ου</td><td class="gk">-εσθε</td></tr>
+        <tr><td>3e ev.</td><td class="gk">-το</td><td class="gk">-ετο</td><td class="gk">-οντο</td></tr>
+      </table>
+      <div class="para-note">
+        Ook hier zie je dezelfde verklaring voor de "vreemde" 2e ev. <span class="gk">-ου</span>: de oorspronkelijke uitgang is <span class="gk">-σο</span>. Thematisch: ἐλύ-ε-σο → (σ valt weg) ἐλύ-ε-ο → samengetrokken <span class="gk">ἐλύου</span>. Athematisch blijft de σ staan: <span class="gk">ἐδίδο-σο</span>, <span class="gk">ἐτίθε-σο</span>.
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Tijdkenmerken — overzicht</h2>
+      <table class="para-table">
+        <tr><th>Tijd</th><th>Kenmerk</th><th>Voorbeeld (1e ev.)</th><th>Vertaling</th></tr>
+        <tr><td>Praesens act.</td><td class="dim">geen augment, geen tijdskenletter</td><td class="gk">λύω</td><td>ik maak los</td></tr>
+        <tr><td>Imperfectum act.</td><td class="dim">augment + secundaire uitgang</td><td class="gk">ἔλυον</td><td>ik maakte los (duurzaam)</td></tr>
+        <tr><td>Aoristus sigm.</td><td class="dim">augment + σ + secundaire uitgang</td><td class="gk">ἔλυσα</td><td>ik maakte los (enkelvoudig)</td></tr>
+        <tr><td>Aoristus them.</td><td class="dim">augment + andere stam + sec. uitgang</td><td class="gk">ἔλαβον</td><td>ik nam</td></tr>
+        <tr><td>Aoristus passief</td><td class="dim">augment + stam + θη/η + passief uitgang</td><td class="gk">ἐλύθην</td><td>ik werd losgemaakt</td></tr>
+        <tr><td>Futurum act.</td><td class="dim">stam + σ + primaire uitgang</td><td class="gk">λύσω</td><td>ik zal losmaken</td></tr>
+        <tr><td>Futurum med.</td><td class="dim">stam + σ + prim. med. uitgang</td><td class="gk">λύσομαι</td><td>ik zal losmaken (med.)</td></tr>
+        <tr><td>Perfectum act.</td><td class="dim">reduplicatie + κ + perfectum-uitgang</td><td class="gk">λέλυκα</td><td>ik heb losgemaakt</td></tr>
+      </table>
+    </div>
+
+    <div class="para-section">
+      <h2>Samentrekkingsverba (εω, αω, οω)</h2>
+      <p>Stambeginselvocaal + verbindingsvocaal samentrekken:</p>
+      <table class="para-table">
+        <tr><th>Infinitief</th><th>1e ev. pres.</th><th>3e ev. pres.</th><th>1e mv. pres.</th><th>Betekenis</th></tr>
+        <tr><td class="gk">ποιεῖν</td><td class="gk">ποιῶ</td><td class="gk">ποιεῖ</td><td class="gk">ποιοῦμεν</td><td>maken</td></tr>
+        <tr><td class="gk">καλεῖν</td><td class="gk">καλῶ</td><td class="gk">καλεῖ</td><td class="gk">καλοῦμεν</td><td>roepen</td></tr>
+        <tr><td class="gk">ὁρᾶν</td><td class="gk">ὁρῶ</td><td class="gk">ὁρᾷ</td><td class="gk">ὁρῶμεν</td><td>zien</td></tr>
+        <tr><td class="gk">δηλοῦν</td><td class="gk">δηλῶ</td><td class="gk">δηλοῖ</td><td class="gk">δηλοῦμεν</td><td>tonen</td></tr>
+      </table>
+      <div class="para-note">ε+ε→ει, ε+ο→ου, ε+ω→ω; α+ε→α, α+ει→ᾳ, α+ο→ω; ο+ε→οι, ο+ω→ω</div>
+    </div>
+
+    <div class="para-section">
+      <h2>εἰμί — zijn (volledig paradigma)</h2>
+      <table class="para-table">
+        <tr><th>Persoon</th><th>Praesens</th><th>Vertaling</th><th>Imperfectum</th><th>Vertaling</th></tr>
+        <tr><td>1e ev.</td><td class="gk">εἰμί</td><td>ik ben</td><td class="gk">ἦν</td><td>ik was</td></tr>
+        <tr><td>2e ev.</td><td class="gk">εἶ</td><td>jij bent</td><td class="gk">ἦσθα</td><td>jij was</td></tr>
+        <tr><td>3e ev.</td><td class="gk">ἐστί(ν)</td><td>hij/zij/het is</td><td class="gk">ἦν</td><td>hij was</td></tr>
+        <tr><td>1e mv.</td><td class="gk">ἐσμέν</td><td>wij zijn</td><td class="gk">ἦμεν</td><td>wij waren</td></tr>
+        <tr><td>2e mv.</td><td class="gk">ἐστέ</td><td>jullie zijn</td><td class="gk">ἦτε</td><td>jullie waren</td></tr>
+        <tr><td>3e mv.</td><td class="gk">εἰσί(ν)</td><td>zij zijn</td><td class="gk">ἦσαν</td><td>zij waren</td></tr>
+      </table>
+      <div class="para-note">Futurum: ἔσομαι (ik zal zijn). Infinitief praesens: εἶναι. εἰμί is enclitisch, behalve in 1e ev. en als predicaat.</div>
+    </div>
+
+    <div class="para-section">
+      <h2>Vertaalschema per persoon en getal</h2>
+      <table class="para-table">
+        <tr><th>Persoon/Getal</th><th>Praesens act.</th><th>Imperfectum act.</th><th>Aoristus act.</th><th>Futurum act.</th></tr>
+        <tr><td>1e ev.</td><td>ik …</td><td>ik …de / ik …te</td><td>ik …de (eenmalig)</td><td>ik zal …</td></tr>
+        <tr><td>2e ev.</td><td>jij …</td><td>jij …de</td><td>jij …de</td><td>jij zult …</td></tr>
+        <tr><td>3e ev.</td><td>hij/zij/het …</td><td>hij …de</td><td>hij …de</td><td>hij zal …</td></tr>
+        <tr><td>1e mv.</td><td>wij …en</td><td>wij …den</td><td>wij …den</td><td>wij zullen …</td></tr>
+        <tr><td>2e mv.</td><td>jullie …en</td><td>jullie …den</td><td>jullie …den</td><td>jullie zullen …</td></tr>
+        <tr><td>3e mv.</td><td>zij …en</td><td>zij …den</td><td>zij …den</td><td>zij zullen …</td></tr>
+      </table>
+      <div class="para-note">
+        <strong>Imperfectum vs. aoristus:</strong> Het imperfectum drukt een duurzame, herhaalde of voortdurende handeling in het verleden uit. De aoristus drukt een enkelvoudige of afgeronde handeling uit. In Nederlandse vertaling is dit onderscheid vaak niet zichtbaar; geef bij twijfel de aoristus als 'eenvoudige verleden tijd'.
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Onregelmatige stamtijden (CEVO-lijst)</h2>
+      <table class="para-table">
+        <tr><th>Praesens</th><th>Futurum</th><th>Aoristus</th><th>Perfectum</th><th>Betekenis</th></tr>
+        <tr><td class="gk">λέγω</td><td class="gk">ἐρῶ</td><td class="gk">εἶπον</td><td class="gk">εἴρηκα</td><td>zeggen</td></tr>
+        <tr><td class="gk">ὁράω</td><td class="gk">ὄψομαι</td><td class="gk">εἶδον</td><td class="gk">ἑόρακα</td><td>zien</td></tr>
+        <tr><td class="gk">ἔρχομαι</td><td class="gk">εἶμι</td><td class="gk">ἦλθον</td><td class="gk">ἐλήλυθα</td><td>komen, gaan</td></tr>
+        <tr><td class="gk">φέρω</td><td class="gk">οἴσω</td><td class="gk">ἤνεγκον</td><td class="gk">ἐνήνοχα</td><td>dragen, brengen</td></tr>
+        <tr><td class="gk">ἔχω</td><td class="gk">ἕξω / σχήσω</td><td class="gk">ἔσχον</td><td class="gk">ἔσχηκα</td><td>hebben, houden</td></tr>
+        <tr><td class="gk">λαμβάνω</td><td class="gk">λήψομαι</td><td class="gk">ἔλαβον</td><td class="gk">εἴληφα</td><td>nemen, krijgen</td></tr>
+        <tr><td class="gk">γίγνομαι</td><td class="gk">γενήσομαι</td><td class="gk">ἐγενόμην</td><td class="gk">γέγονα</td><td>worden, gebeuren</td></tr>
+        <tr><td class="gk">πάσχω</td><td class="gk">πείσομαι</td><td class="gk">ἔπαθον</td><td class="gk">πέπονθα</td><td>lijden, ondergaan</td></tr>
+        <tr><td class="gk">εὑρίσκω</td><td class="gk">εὑρήσω</td><td class="gk">ηὗρον</td><td class="gk">ηὕρηκα</td><td>vinden</td></tr>
+        <tr><td class="gk">ἀκούω</td><td class="gk">ἀκούσομαι</td><td class="gk">ἤκουσα</td><td class="gk">ἀκήκοα</td><td>horen</td></tr>
+        <tr><td class="gk">βάλλω</td><td class="gk">βαλῶ</td><td class="gk">ἔβαλον</td><td class="gk">βέβληκα</td><td>gooien, treffen</td></tr>
+        <tr><td class="gk">βαίνω</td><td class="gk">βήσομαι</td><td class="gk">ἔβην</td><td class="gk">βέβηκα</td><td>gaan, lopen</td></tr>
+        <tr><td class="gk">τυγχάνω</td><td class="gk">τεύξομαι</td><td class="gk">ἔτυχον</td><td class="gk">τετύχηκα</td><td>treffen; toevallig</td></tr>
+        <tr><td class="gk">μανθάνω</td><td class="gk">μαθήσομαι</td><td class="gk">ἔμαθον</td><td class="gk">μεμάθηκα</td><td>leren, begrijpen</td></tr>
+        <tr><td class="gk">λείπω</td><td class="gk">λείψω</td><td class="gk">ἔλιπον</td><td class="gk">λέλοιπα</td><td>verlaten, achterlaten</td></tr>
+      </table>
+    </div>
+
+    <div class="para-section">
+      <h2>De drie genera (actief · medium · passief)</h2>
+      <p>Naast de tijd geeft elke werkwoordsvorm ook het <em>genus</em> aan. De uitgangen verschillen per genus.</p>
+      <table class="para-table">
+        <tr><th>Genus</th><th>Betekenis</th><th>Voorbeeld</th><th>Vertaling</th></tr>
+        <tr><td>Actief</td><td class="dim">onderwerp doet de handeling</td><td class="gk">λύω</td><td>ik maak los</td></tr>
+        <tr><td>Medium</td><td class="dim">handeling raakt onderwerp zelf / in eigen belang</td><td class="gk">λύομαι</td><td>ik maak voor mezelf los; ik bevrijd me</td></tr>
+        <tr><td>Passief</td><td class="dim">onderwerp ondergaat de handeling</td><td class="gk">λύομαι</td><td>ik word losgemaakt</td></tr>
+      </table>
+      <div class="para-note">
+        In praesens, imperfectum, perfectum en plusquamperfectum zijn de <strong>medium- en passiefvormen identiek</strong>; de context bepaalt de vertaling. Alleen in de <em>aoristus</em> en het <em>futurum</em> hebben medium en passief eigen vormen (passief met -θη-/-η-). <strong>Deponentia</strong> hebben mediale/passieve vorm maar actieve betekenis: γίγνομαι = "ik word" (niet "ik word geworden").
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Aspect — de kern van het Griekse werkwoord</h2>
+      <p>Het Grieks legt minder nadruk op het <em>tijdstip</em> en meer op de <em>aard</em> (aspect) van de handeling. Dit bepaalt vaak de vertaling.</p>
+      <table class="para-table">
+        <tr><th>Aspect</th><th>Tijden</th><th>Betekenis van de handeling</th></tr>
+        <tr><td>Duratief / imperfectief</td><td class="dim">praesens, imperfectum</td><td>duur, herhaling of poging ("hij was aan het …", "hij probeerde te …")</td></tr>
+        <tr><td>Aoristisch / perfectief</td><td class="dim">aoristus</td><td>punctueel of constaterend; alleen het feit dát het gebeurde, begin- of eindpunt</td></tr>
+        <tr><td>Resultatief</td><td class="dim">perfectum, plusquamperfectum</td><td>een toestand als resultaat van een voltooide handeling</td></tr>
+      </table>
+      <div class="para-note">
+        <strong>Imperfectum vs. aoristus (beide verleden tijd):</strong> ἔλυον = "ik was aan het losmaken / ik maakte herhaaldelijk los" (duur); ἔλυσα = "ik maakte los" (eenmalig feit). In het Nederlands valt dit verschil vaak weg; bij de aoristus volstaat de eenvoudige verleden tijd.
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>De vier modi (wijzen)</h2>
+      <p>De CEVO-lijst vraagt indicativus, coniunctivus, optativus en imperativus (van de imperativus alleen de 2e personen), plus de infinitivus en het participium.</p>
+      <table class="para-table">
+        <tr><th>Modus</th><th>Herkenning</th><th>Voorbeeld (3e ev.)</th><th>Functie</th></tr>
+        <tr><td>Indicativus</td><td class="dim">korte bindvocaal ο/ε</td><td class="gk">λύει</td><td>vaststelling / werkelijkheid</td></tr>
+        <tr><td>Coniunctivus</td><td class="dim">lange bindvocaal ω/η</td><td class="gk">λύῃ</td><td>aansporing, doel, twijfel, na ἄν</td></tr>
+        <tr><td>Optativus</td><td class="dim">kenletter -οι-/-αι-/-ιη-</td><td class="gk">λύοι</td><td>wens, mogelijkheid (met ἄν)</td></tr>
+        <tr><td>Imperativus</td><td class="dim">eigen uitgangen (2e pers.)</td><td class="gk">λῦε</td><td>bevel, verzoek</td></tr>
+      </table>
+    </div>
+
+    <div class="para-section">
+      <h2>Coniunctivus — vorming en gebruik</h2>
+      <p>De coniunctivus herken je aan de <strong>lange bindvocaal</strong>: ω en η in plaats van ο en ε. Er is geen augment.</p>
+      <table class="para-table">
+        <tr><th>Persoon</th><th>Actief ev.</th><th>Actief mv.</th><th>Medio-passief ev.</th><th>Medio-passief mv.</th></tr>
+        <tr><td>1e</td><td class="gk">λύω</td><td class="gk">λύωμεν</td><td class="gk">λύωμαι</td><td class="gk">λυώμεθα</td></tr>
+        <tr><td>2e</td><td class="gk">λύῃς</td><td class="gk">λύητε</td><td class="gk">λύῃ</td><td class="gk">λύησθε</td></tr>
+        <tr><td>3e</td><td class="gk">λύῃ</td><td class="gk">λύωσι(ν)</td><td class="gk">λύηται</td><td class="gk">λύωνται</td></tr>
+      </table>
+      <div class="para-note">
+        <strong>Gebruik:</strong> in hoofdzinnen → aansporing (δεῦτε λύωμεν "laten we losmaken"), twijfel of verbod (μὴ λύσῃς "maak niet los"); in bijzinnen → doelaangevend (ἵνα/ὅπως + coni. "opdat"), na werkwoorden van vrezen, en met ἄν voor herhaalde of toekomstige gebeurtenissen. De coniunctivus komt voor in praesens en aoristus (aspectverschil, geen tijdverschil).
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Optativus — vorming en gebruik</h2>
+      <p>De optativus herken je aan de kenletters <strong>-οι-</strong> (thematisch) of <strong>-αι-</strong> (aoristus) of <strong>-ιη-</strong> (athematisch).</p>
+      <table class="para-table">
+        <tr><th>Persoon</th><th>Praesens act. ev.</th><th>Praesens act. mv.</th><th>Aoristus act. ev.</th></tr>
+        <tr><td>1e</td><td class="gk">λύοιμι</td><td class="gk">λύοιμεν</td><td class="gk">λύσαιμι</td></tr>
+        <tr><td>2e</td><td class="gk">λύοις</td><td class="gk">λύοιτε</td><td class="gk">λύσαις / λύσειας</td></tr>
+        <tr><td>3e</td><td class="gk">λύοι</td><td class="gk">λύοιεν</td><td class="gk">λύσαι / λύσειε(ν)</td></tr>
+      </table>
+      <div class="para-note">
+        <strong>Gebruik:</strong> in hoofdzinnen zonder ἄν → wens (εἴθε λύοι "moge hij losmaken"); met ἄν → mogelijkheid of beleefde mening (λύοι ἄν "hij zou kunnen losmaken"); in bijzinnen na een hoofdzin in verleden tijd vervangt de optativus de coniunctivus of indicativus (optativus obliquus).
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Imperativus (2e personen)</h2>
+      <table class="para-table">
+        <tr><th></th><th>Actief</th><th>Vertaling</th><th>Medio-passief</th></tr>
+        <tr><td>2e ev. praes.</td><td class="gk">λῦε</td><td>maak los!</td><td class="gk">λύου</td></tr>
+        <tr><td>2e mv. praes.</td><td class="gk">λύετε</td><td>maakt los!</td><td class="gk">λύεσθε</td></tr>
+        <tr><td>2e ev. aor.</td><td class="gk">λῦσον</td><td>maak los!</td><td class="gk">λῦσαι</td></tr>
+        <tr><td>2e mv. aor.</td><td class="gk">λύσατε</td><td>maakt los!</td><td class="gk">λύσασθε</td></tr>
+      </table>
+      <div class="para-note">Verbod wordt niet met de imperativus, maar met μή + coniunctivus aoristus uitgedrukt: μὴ λύσῃς "maak niet los". Het aspectverschil tussen praesens- en aoristus-imperativus: duur/herhaling tegenover eenmalig.</div>
+    </div>
+
+    <div class="para-section">
+      <h2>Infinitivus — vorming en vertijdelijking</h2>
+      <p>De infinitivus drukt geen tijd uit, maar aspect én een verhouding (gelijktijdig / voortijdig / natijdig) ten opzichte van het hoofdwerkwoord.</p>
+      <table class="para-table">
+        <tr><th>Tijd</th><th>Actief</th><th>Medio-passief</th><th>Verhouding (in a.c.i.)</th></tr>
+        <tr><td>Praesens</td><td class="gk">λύειν</td><td class="gk">λύεσθαι</td><td>gelijktijdig</td></tr>
+        <tr><td>Aoristus</td><td class="gk">λῦσαι</td><td class="gk">λύσασθαι</td><td>voortijdig</td></tr>
+        <tr><td>Aor. passief</td><td class="gk">λυθῆναι</td><td class="dim">—</td><td>voortijdig (passief)</td></tr>
+        <tr><td>Futurum</td><td class="gk">λύσειν</td><td class="gk">λύσεσθαι</td><td>natijdig</td></tr>
+        <tr><td>Perfectum</td><td class="gk">λελυκέναι</td><td class="gk">λελύσθαι</td><td>voltooid / resultaat</td></tr>
+      </table>
+      <div class="para-note">In de <strong>a.c.i.</strong> (accusativus cum infinitivo) na werkwoorden van zeggen, menen en weten: het praesens = gelijktijdig, de aoristus = voortijdig, het futurum = natijdig met het hoofdwerkwoord.</div>
+    </div>
+
+    <div class="para-section">
+      <h2>Participium — vorming en vertaling</h2>
+      <p>Het participium is een verbaal bijvoeglijk naamwoord: het verbuigt (in alle naamvallen) én drukt aspect/verhouding uit.</p>
+      <table class="para-table">
+        <tr><th>Tijd</th><th>Actief (m. nom. ev.)</th><th>Medio-passief</th><th>Verhouding</th></tr>
+        <tr><td>Praesens</td><td class="gk">λύων, λύουσα, λῦον</td><td class="gk">λυόμενος</td><td>gelijktijdig: "terwijl …"</td></tr>
+        <tr><td>Aoristus</td><td class="gk">λύσας, λύσασα, λῦσαν</td><td class="gk">λυσάμενος</td><td>voortijdig: "nadat …"</td></tr>
+        <tr><td>Aor. passief</td><td class="gk">λυθείς, λυθεῖσα, λυθέν</td><td class="dim">—</td><td>voortijdig passief</td></tr>
+        <tr><td>Futurum</td><td class="gk">λύσων, λύσουσα, λῦσον</td><td class="gk">λυσόμενος</td><td>natijdig / doel: "om te …"</td></tr>
+        <tr><td>Perfectum</td><td class="gk">λελυκώς, -υῖα, -ός</td><td class="gk">λελυμένος</td><td>resultaat / toestand</td></tr>
+      </table>
+      <div class="para-note">
+        Bij het vertalen let je op: (1) de <em>tijd</em> van het participium (verhouding tot het hoofdwerkwoord), (2) de <em>naamval</em> (met welk woord het congrueert), (3) of het zelfstandig (gesubstantiveerd) gebruikt is. In de <strong>genitivus absolutus</strong> staat een participium met zijn onderwerp in de genitivus, los van de rest van de zin.
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Volledig stelsel van λύω — indicativus per tijd</h2>
+      <p>De achtste vorm (1e ev.) per tijd, met vormingskenmerk en vertaling. Dit is het ruggengraat-overzicht dat CEVO veronderstelt.</p>
+      <table class="para-table">
+        <tr><th>Tijd</th><th>Actief</th><th>Vertaling</th><th>Medio-passief</th><th>Vertaling</th></tr>
+        <tr><td>Praesens</td><td class="gk">λύω</td><td>ik maak los</td><td class="gk">λύομαι</td><td>ik word losgemaakt</td></tr>
+        <tr><td>Imperfectum</td><td class="gk">ἔλυον</td><td>ik maakte los</td><td class="gk">ἐλυόμην</td><td>ik werd losgemaakt</td></tr>
+        <tr><td>Aoristus</td><td class="gk">ἔλυσα</td><td>ik maakte los</td><td class="gk">ἐλυσάμην</td><td>ik maakte voor mij los</td></tr>
+        <tr><td>Aor. passief</td><td class="gk">ἐλύθην</td><td>ik werd losgemaakt</td><td class="dim">(= passief)</td><td>—</td></tr>
+        <tr><td>Futurum</td><td class="gk">λύσω</td><td>ik zal losmaken</td><td class="gk">λύσομαι</td><td>ik zal voor mij losmaken</td></tr>
+        <tr><td>Fut. passief</td><td class="gk">λυθήσομαι</td><td>ik zal losgemaakt worden</td><td class="dim">—</td><td>—</td></tr>
+        <tr><td>Perfectum</td><td class="gk">λέλυκα</td><td>ik heb losgemaakt</td><td class="gk">λέλυμαι</td><td>ik ben losgemaakt</td></tr>
+        <tr><td>Plusquamperf.</td><td class="gk">ἐλελύκη</td><td>ik had losgemaakt</td><td class="gk">ἐλελύμην</td><td>ik was losgemaakt</td></tr>
+      </table>
+      <div class="para-note">
+        <strong>Reduplicatie</strong> (perfectum): herhaling van de beginmedeklinker + ε: λέ-λυκα, γέ-γραφα. Begint de stam met een klinker of meerdere medeklinkers, dan verschijnt in plaats daarvan een augment-achtige ε/verlenging. De <strong>θ</strong> is het kenmerk van de aoristus passief (ἐλύ-θη-ν), de <strong>κ</strong> dat van het perfectum actief (λέλυ-κ-α).
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Athematische werkwoorden (-μι)</h2>
+      <p>Deze hebben géén bindvocaal; de uitgang sluit direct op de stam aan. CEVO vraagt τίθημι, ἵημι, δίδωμι, ἵστημι en δείκνυμι, plus εἰμί en εἶμι.</p>
+      <table class="para-table">
+        <tr><th>Praesens 1e ev.</th><th>Betekenis</th><th>Aoristus</th><th>Bijzonderheid</th></tr>
+        <tr><td class="gk">τίθημι</td><td>plaatsen, stellen</td><td class="gk">ἔθηκα</td><td>κ-aoristus</td></tr>
+        <tr><td class="gk">δίδωμι</td><td>geven</td><td class="gk">ἔδωκα</td><td>κ-aoristus</td></tr>
+        <tr><td class="gk">ἵημι</td><td>zenden, werpen</td><td class="gk">ἧκα</td><td>κ-aoristus</td></tr>
+        <tr><td class="gk">ἵστημι</td><td>plaatsen / (intr.) gaan staan</td><td class="gk">ἔστησα / ἔστην</td><td>tr. sigm. / intr. stamaor.</td></tr>
+        <tr><td class="gk">δείκνυμι</td><td>tonen, aanwijzen</td><td class="gk">ἔδειξα</td><td>-νυμι-type</td></tr>
+      </table>
+      <div class="para-note">De stamaoristi (zonder σ en zonder bindvocaal) die CEVO expliciet noemt: ἔβην (gaan), ἔστην (gaan staan), ἔδυν (duiken), ἔφυν (groeien), ἔγνων (leren kennen).</div>
+    </div>
+
+    <div class="para-section">
+      <h2>εἶμι — gaan (let op: ≠ εἰμί)</h2>
+      <table class="para-table">
+        <tr><th>Persoon</th><th>Praesens</th><th>Vertaling</th></tr>
+        <tr><td>1e ev.</td><td class="gk">εἶμι</td><td>ik ga / ik zal gaan</td></tr>
+        <tr><td>2e ev.</td><td class="gk">εἶ</td><td>jij gaat</td></tr>
+        <tr><td>3e ev.</td><td class="gk">εἶσι(ν)</td><td>hij gaat</td></tr>
+        <tr><td>1e mv.</td><td class="gk">ἴμεν</td><td>wij gaan</td></tr>
+        <tr><td>2e mv.</td><td class="gk">ἴτε</td><td>jullie gaan</td></tr>
+        <tr><td>3e mv.</td><td class="gk">ἴασι(ν)</td><td>zij gaan</td></tr>
+      </table>
+      <div class="para-note">In het Attisch heeft εἶμι meestal <em>toekomstige</em> betekenis ("ik zal gaan") en fungeert het als futurum bij ἔρχομαι. Infinitief: ἰέναι. Verwar εἶμι (gaan) niet met εἰμί (zijn) — het accent en de iota maken het verschil.</div>
+    </div>
+
+    <div class="para-section">
+      <h2>Augment &amp; reduplicatie — samenvatting</h2>
+      <table class="para-table">
+        <tr><th>Verschijnsel</th><th>Waar</th><th>Vorm</th><th>Voorbeeld</th></tr>
+        <tr><td>Syllabisch augment</td><td class="dim">verleden tijd, stam op medeklinker</td><td class="gk">ἐ-</td><td class="gk">ἔ-λυον</td></tr>
+        <tr><td>Temporeel augment</td><td class="dim">verleden tijd, stam op klinker</td><td class="dim">verlenging</td><td class="gk">ἀκούω → ἤκουον</td></tr>
+        <tr><td>Augment bij compositum</td><td class="dim">tussen voorvoegsel en stam</td><td class="dim">—</td><td class="gk">προσφέρω → προσέφερον</td></tr>
+        <tr><td>Reduplicatie</td><td class="dim">perfectum, stam op één medeklinker</td><td class="gk">C+ε-</td><td class="gk">λέ-λυκα</td></tr>
+      </table>
+      <div class="para-note">
+        Temporele verlenging: α/ε → η, ο → ω, αι → ῃ, οι → ῳ, αυ → ηυ, ι → ῑ, υ → ῡ. Het augment staat <em>alleen</em> in de indicativus van de historische tijden (imperfectum, aoristus, plusquamperfectum) — niet in coniunctivus, optativus, imperativus, infinitivus of participium. <em>(Dubbel augment, zoals ἑώρων, valt buiten de CEVO-eisen.)</em>
+      </div>
+    </div>
+
+    <div class="para-section">
+      <h2>Wat moet je kennen voor het examen? (CEVO)</h2>
+      <div class="para-note">
+        <strong>Genera:</strong> actief, medium, passief (incl. deponentia).<br>
+        <strong>Modi:</strong> indicativus, coniunctivus, optativus, imperativus (alleen 2e personen), infinitivus, participium (alle naamvallen).<br>
+        <strong>Getal:</strong> enkelvoud en meervoud (de dualis hoeft niet).<br>
+        <strong>Tijden:</strong> praesens, imperfectum, aoristus (sigmatisch, pseudo-sigmatisch, stamaoristus, thematisch, op -θην/-ην), futurum, perfectum, plusquamperfectum.<br>
+        <strong>Werkwoordstypen:</strong> thematische werkwoorden (behalve contracta met ο-stam), athematische (-μι), εἰμί en εἶμι.<br>
+        <strong>Verschijnselen:</strong> augment, reduplicatie (geen dubbel augment), bindvocaal, coniunctivus-verlenging.<br>
+        <strong>Aspect:</strong> duur/poging/herhaling (praes./impf.) — punctueel/constaterend (aor.) — resultaat/toestand (pf./plqpf.).
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     RESULTS
+     ════════════════════════════════ -->
+<div id="results" class="screen">
+  <div class="inner-nav">
+    <button class="btn-back" onclick="gotoScreen('menu')">← Menu</button>
+    <span class="inner-title">Resultaat</span>
+  </div>
+  <div id="results-content" class="results-wrap"></div>
+</div>
+
+<footer>Griekse Werkwoorden · Gerben de Jong · 2026</footer>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  VERB DATABASE  (segments: array of {chars, role})
+//  roles: aug | stem | tk | end  (null = irregular/whole)
+// ══════════════════════════════════════════════════════
+const VERBS = [
+ {pres:'λύω',meaning:'losmaken',forms:[
+  {f:'λύω',    t:'praesens',   p:1,n:'ev',tr:'ik maak los',   segs:[{c:'λυ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'λύεις',  t:'praesens',   p:2,n:'ev',tr:'jij maakt los', segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λύει',   t:'praesens',   p:3,n:'ev',tr:'hij maakt los', segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λύομεν', t:'praesens',   p:1,n:'mv',tr:'wij maken los', segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'λύετε',  t:'praesens',   p:2,n:'mv',tr:'jullie maken los',segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
+  {f:'λύουσι(ν)',t:'praesens', p:3,n:'mv',tr:'zij maken los', segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'υσι(ν)',r:'end'}]},
+  {f:'ἔλυον',  t:'imperfectum',p:1,n:'ev',tr:'ik maakte los', segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔλυες',  t:'imperfectum',p:2,n:'ev',tr:'jij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ς',r:'end'}]},
+  {f:'ἔλυε(ν)',t:'imperfectum', p:3,n:'ev',tr:'hij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἐλύομεν',t:'imperfectum',p:1,n:'mv',tr:'wij maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἐλύετε', t:'imperfectum',p:2,n:'mv',tr:'jullie maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
+  {f:'ἔλυσα',  t:'aoristus',   p:1,n:'ev',tr:'ik maakte los', segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔλυσας', t:'aoristus',   p:2,n:'ev',tr:'jij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
+  {f:'ἔλυσε(ν)',t:'aoristus',  p:3,n:'ev',tr:'hij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐλύσαμεν',t:'aoristus',  p:1,n:'mv',tr:'wij maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰμεν',r:'end'}]},
+  {f:'λύσω',   t:'futurum',    p:1,n:'ev',tr:'ik zal losmaken',segs:[{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
+  {f:'λύσεις', t:'futurum',    p:2,n:'ev',tr:'jij zult losmaken',segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λύσει',  t:'futurum',    p:3,n:'ev',tr:'hij zal losmaken',segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ι',r:'end'}]},
+ ]},
+ {pres:'λαμβάνω',meaning:'nemen, krijgen',forms:[
+  {f:'λαμβάνω', t:'praesens',   p:1,n:'ev',tr:'ik neem',   segs:[{c:'λαμβαν',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'λαμβάνεις',t:'praesens',  p:2,n:'ev',tr:'jij neemt', segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λαμβάνει', t:'praesens',  p:3,n:'ev',tr:'hij neemt', segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λαμβάνομεν',t:'praesens', p:1,n:'mv',tr:'wij nemen', segs:[{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'λαμβάνετε',t:'praesens',  p:2,n:'mv',tr:'jullie nemen',segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
+  {f:'ἐλάμβανον',t:'imperfectum',p:1,n:'ev',tr:'ik nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἐλάμβανε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij nam', segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἐλαμβάνομεν',t:'imperfectum',p:1,n:'mv',tr:'wij namen',segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔλαβον',  t:'aoristus',   p:1,n:'ev',tr:'ik nam',    segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
+  {f:'ἔλαβες',  t:'aoristus',   p:2,n:'ev',tr:'jij nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ες',r:'end'}]},
+  {f:'ἔλαβε(ν)',t:'aoristus',   p:3,n:'ev',tr:'hij nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐλάβομεν',t:'aoristus',   p:1,n:'mv',tr:'wij namen', segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
+  {f:'λήψομαι', t:'futurum',    p:1,n:'ev',tr:'ik zal nemen',segs:null},
+ ]},
+ {pres:'ἔχω',meaning:'hebben, houden',forms:[
+  {f:'ἔχω',    t:'praesens',   p:1,n:'ev',tr:'ik heb',     segs:[{c:'ἐχ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'ἔχεις',  t:'praesens',   p:2,n:'ev',tr:'jij hebt',   segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'ἔχει',   t:'praesens',   p:3,n:'ev',tr:'hij heeft',  segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἔχομεν', t:'praesens',   p:1,n:'mv',tr:'wij hebben', segs:[{c:'ἐχ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'εἶχον',  t:'imperfectum',p:1,n:'ev',tr:'ik had',     segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'εἶχε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij had',    segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'εἴχομεν',t:'imperfectum',p:1,n:'mv',tr:'wij hadden', segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔσχον',  t:'aoristus',   p:1,n:'ev',tr:'ik kreeg',   segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
+  {f:'ἔσχε(ν)',t:'aoristus',   p:3,n:'ev',tr:'hij kreeg',  segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἕξω',    t:'futurum',    p:1,n:'ev',tr:'ik zal hebben',segs:null},
+ ]},
+ {pres:'λέγω',meaning:'zeggen, spreken',forms:[
+  {f:'λέγω',   t:'praesens',   p:1,n:'ev',tr:'ik zeg',     segs:[{c:'λεγ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'λέγεις', t:'praesens',   p:2,n:'ev',tr:'jij zegt',   segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λέγει',  t:'praesens',   p:3,n:'ev',tr:'hij zegt',   segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λέγομεν',t:'praesens',   p:1,n:'mv',tr:'wij zeggen', segs:[{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔλεγον', t:'imperfectum',p:1,n:'ev',tr:'ik zei',     segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔλεγε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij zei',   segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'εἶπον',  t:'aoristus',   p:1,n:'ev',tr:'ik zei',     segs:null},
+  {f:'εἶπε(ν)',t:'aoristus',   p:3,n:'ev',tr:'hij zei',    segs:null},
+  {f:'εἴπομεν',t:'aoristus',   p:1,n:'mv',tr:'wij zeiden', segs:null},
+  {f:'ἐρῶ',    t:'futurum',    p:1,n:'ev',tr:'ik zal zeggen',segs:null},
+ ]},
+ {pres:'εἰμί',meaning:'zijn',forms:[
+  {f:'εἰμί',   t:'praesens',   p:1,n:'ev',tr:'ik ben',     segs:null},
+  {f:'εἶ',     t:'praesens',   p:2,n:'ev',tr:'jij bent',   segs:null},
+  {f:'ἐστί(ν)',t:'praesens',   p:3,n:'ev',tr:'hij is',     segs:null},
+  {f:'ἐσμέν',  t:'praesens',   p:1,n:'mv',tr:'wij zijn',   segs:null},
+  {f:'ἐστέ',   t:'praesens',   p:2,n:'mv',tr:'jullie zijn',segs:null},
+  {f:'εἰσί(ν)',t:'praesens',   p:3,n:'mv',tr:'zij zijn',   segs:null},
+  {f:'ἦν',     t:'imperfectum',p:1,n:'ev',tr:'ik was',     segs:null},
+  {f:'ἦσθα',   t:'imperfectum',p:2,n:'ev',tr:'jij was',    segs:null},
+  {f:'ἦν',     t:'imperfectum',p:3,n:'ev',tr:'hij was',    segs:null},
+  {f:'ἦμεν',   t:'imperfectum',p:1,n:'mv',tr:'wij waren',  segs:null},
+  {f:'ἦτε',    t:'imperfectum',p:2,n:'mv',tr:'jullie waren',segs:null},
+  {f:'ἦσαν',   t:'imperfectum',p:3,n:'mv',tr:'zij waren',  segs:null},
+  {f:'ἔσομαι', t:'futurum',    p:1,n:'ev',tr:'ik zal zijn',segs:null},
+ ]},
+ {pres:'γράφω',meaning:'schrijven',forms:[
+  {f:'γράφω',  t:'praesens',   p:1,n:'ev',tr:'ik schrijf', segs:[{c:'γραφ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'γράφεις',t:'praesens',   p:2,n:'ev',tr:'jij schrijft',segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'γράφει', t:'praesens',   p:3,n:'ev',tr:'hij schrijft',segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'γράφομεν',t:'praesens',  p:1,n:'mv',tr:'wij schrijven',segs:[{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔγραφον',t:'imperfectum',p:1,n:'ev',tr:'ik schreef', segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔγραφε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἔγραψα', t:'aoristus',   p:1,n:'ev',tr:'ik schreef', segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔγραψας',t:'aoristus',   p:2,n:'ev',tr:'jij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
+  {f:'ἔγραψε(ν)',t:'aoristus', p:3,n:'ev',tr:'hij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'γράψω',  t:'futurum',    p:1,n:'ev',tr:'ik zal schrijven',segs:[{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
+ ]},
+ {pres:'ποιέω',meaning:'maken, doen',forms:[
+  {f:'ποιῶ',   t:'praesens',   p:1,n:'ev',tr:'ik maak',    segs:null},
+  {f:'ποιεῖς', t:'praesens',   p:2,n:'ev',tr:'jij maakt',  segs:null},
+  {f:'ποιεῖ',  t:'praesens',   p:3,n:'ev',tr:'hij maakt',  segs:null},
+  {f:'ποιοῦμεν',t:'praesens',  p:1,n:'mv',tr:'wij maken',  segs:null},
+  {f:'ποιεῖτε',t:'praesens',   p:2,n:'mv',tr:'jullie maken',segs:null},
+  {f:'ἐποίουν',t:'imperfectum',p:1,n:'ev',tr:'ik maakte',  segs:null},
+  {f:'ἐποίει', t:'imperfectum',p:3,n:'ev',tr:'hij maakte', segs:null},
+  {f:'ἐποίησα',t:'aoristus',   p:1,n:'ev',tr:'ik maakte',  segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησα',r:'end'}]},
+  {f:'ἐποίησε(ν)',t:'aoristus',p:3,n:'ev',tr:'hij maakte', segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησε(ν)',r:'end'}]},
+  {f:'ποιήσω', t:'futurum',    p:1,n:'ev',tr:'ik zal maken',segs:[{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ήσω',r:'end'}]},
+ ]},
+ {pres:'ὁράω',meaning:'zien',forms:[
+  {f:'ὁρῶ',   t:'praesens',   p:1,n:'ev',tr:'ik zie',     segs:null},
+  {f:'ὁρᾷ',   t:'praesens',   p:3,n:'ev',tr:'hij ziet',   segs:null},
+  {f:'ὁρῶμεν',t:'praesens',   p:1,n:'mv',tr:'wij zien',   segs:null},
+  {f:'ἑώρων', t:'imperfectum',p:1,n:'ev',tr:'ik zag',     segs:null},
+  {f:'ἑώρα',  t:'imperfectum',p:3,n:'ev',tr:'hij zag',    segs:null},
+  {f:'εἶδον', t:'aoristus',   p:1,n:'ev',tr:'ik zag',     segs:null},
+  {f:'εἶδες', t:'aoristus',   p:2,n:'ev',tr:'jij zag',    segs:null},
+  {f:'εἶδε(ν)',t:'aoristus',  p:3,n:'ev',tr:'hij zag',    segs:null},
+  {f:'ὄψομαι',t:'futurum',    p:1,n:'ev',tr:'ik zal zien',segs:null},
+ ]},
+ {pres:'ἀκούω',meaning:'horen, luisteren',forms:[
+  {f:'ἀκούω',  t:'praesens',   p:1,n:'ev',tr:'ik hoor',   segs:[{c:'ἀκου',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'ἀκούεις',t:'praesens',   p:2,n:'ev',tr:'jij hoort', segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'ἀκούει', t:'praesens',   p:3,n:'ev',tr:'hij hoort', segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἤκουον', t:'imperfectum',p:1,n:'ev',tr:'ik hoorde', segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἤκουε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἤκουσα', t:'aoristus',   p:1,n:'ev',tr:'ik hoorde', segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἤκουσας',t:'aoristus',   p:2,n:'ev',tr:'jij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
+  {f:'ἤκουσε(ν)',t:'aoristus', p:3,n:'ev',tr:'hij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἀκούσομαι',t:'futurum',  p:1,n:'ev',tr:'ik zal horen',segs:null},
+ ]},
+ {pres:'πάσχω',meaning:'lijden, ondergaan',forms:[
+  {f:'πάσχω',  t:'praesens',   p:1,n:'ev',tr:'ik lijd',   segs:[{c:'πασχ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'πάσχεις',t:'praesens',   p:2,n:'ev',tr:'jij lijdt', segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'πάσχει', t:'praesens',   p:3,n:'ev',tr:'hij lijdt', segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἔπασχον',t:'imperfectum',p:1,n:'ev',tr:'ik leed',   segs:[{c:'ἐ',r:'aug'},{c:'πασχ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔπαθον', t:'aoristus',   p:1,n:'ev',tr:'ik leed',   segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
+  {f:'ἔπαθε(ν)',t:'aoristus',  p:3,n:'ev',tr:'hij leed',  segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐπάθομεν',t:'aoristus',  p:1,n:'mv',tr:'wij leden', segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
+ ]},
+ {pres:'γίγνομαι',meaning:'worden, geboren worden, gebeuren',forms:[
+  {f:'γίγνομαι',t:'praesens',  p:1,n:'ev',tr:'ik word',   segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
+  {f:'γίγνεται',t:'praesens',  p:3,n:'ev',tr:'hij wordt', segs:[{c:'γιγν',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
+  {f:'γίγνονται',t:'praesens', p:3,n:'mv',tr:'zij worden',segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'νται',r:'end'}]},
+  {f:'ἐγιγνόμην',t:'imperfectum',p:1,n:'ev',tr:'ik werd', segs:[{c:'ἐ',r:'aug'},{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
+  {f:'ἐγένετο',t:'aoristus',   p:3,n:'ev',tr:'hij werd',  segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ετο',r:'end'}]},
+  {f:'ἐγενόμην',t:'aoristus',  p:1,n:'ev',tr:'ik werd',   segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ομην',r:'end'}]},
+  {f:'γενήσομαι',t:'futurum',  p:1,n:'ev',tr:'ik zal worden',segs:null},
+ ]},
+ {pres:'ἔρχομαι',meaning:'komen, gaan',forms:[
+  {f:'ἔρχομαι',t:'praesens',   p:1,n:'ev',tr:'ik kom',    segs:[{c:'ἐρχ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
+  {f:'ἔρχεται',t:'praesens',   p:3,n:'ev',tr:'hij komt',  segs:[{c:'ἐρχ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
+  {f:'ἦλθον',  t:'aoristus',   p:1,n:'ev',tr:'ik kwam',   segs:null},
+  {f:'ἦλθε(ν)',t:'aoristus',   p:3,n:'ev',tr:'hij kwam',  segs:null},
+  {f:'ἤλθομεν',t:'aoristus',   p:1,n:'mv',tr:'wij kwamen',segs:null},
+  {f:'εἶμι',   t:'futurum',    p:1,n:'ev',tr:'ik zal gaan',segs:null},
+ ]},
+ {pres:'φέρω',meaning:'dragen, brengen',forms:[
+  {f:'φέρω',   t:'praesens',   p:1,n:'ev',tr:'ik draag',  segs:[{c:'φερ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'φέρεις', t:'praesens',   p:2,n:'ev',tr:'jij draagt',segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'φέρει',  t:'praesens',   p:3,n:'ev',tr:'hij draagt',segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἔφερον', t:'imperfectum',p:1,n:'ev',tr:'ik droeg',  segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔφερε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij droeg',segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἤνεγκον',t:'aoristus',   p:1,n:'ev',tr:'ik bracht', segs:null},
+  {f:'ἤνεγκε(ν)',t:'aoristus', p:3,n:'ev',tr:'hij bracht',segs:null},
+  {f:'οἴσω',   t:'futurum',    p:1,n:'ev',tr:'ik zal dragen',segs:null},
+ ]},
+ {pres:'νομίζω',meaning:'menen, gewend zijn',forms:[
+  {f:'νομίζω', t:'praesens',   p:1,n:'ev',tr:'ik meen',   segs:[{c:'νομιζ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'νομίζεις',t:'praesens',  p:2,n:'ev',tr:'jij meent', segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'νομίζει',t:'praesens',   p:3,n:'ev',tr:'hij meent', segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἐνόμιζον',t:'imperfectum',p:1,n:'ev',tr:'ik meende',segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἐνόμιζε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij meende',segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἐνόμισα',t:'aoristus',   p:1,n:'ev',tr:'ik meende', segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἐνόμισε(ν)',t:'aoristus',p:3,n:'ev',tr:'hij meende',segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+ ]},
+ {pres:'πείθω',meaning:'overtuigen',forms:[
+  {f:'πείθω',  t:'praesens',   p:1,n:'ev',tr:'ik overtuig',segs:[{c:'πειθ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'πείθεις',t:'praesens',   p:2,n:'ev',tr:'jij overtuigt',segs:[{c:'πειθ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'ἔπειθον',t:'imperfectum',p:1,n:'ev',tr:'ik overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔπεισα', t:'aoristus',   p:1,n:'ev',tr:'ik overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔπεισε(ν)',t:'aoristus', p:3,n:'ev',tr:'hij overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+ ]},
+ {pres:'βούλομαι',meaning:'willen',forms:[
+  {f:'βούλομαι',t:'praesens',  p:1,n:'ev',tr:'ik wil',    segs:[{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
+  {f:'βούλεται',t:'praesens',  p:3,n:'ev',tr:'hij wil',   segs:[{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
+  {f:'ἐβουλόμην',t:'imperfectum',p:1,n:'ev',tr:'ik wilde',segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
+  {f:'ἐβούλετο',t:'imperfectum',p:3,n:'ev',tr:'hij wilde',segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'το',r:'end'}]},
+  {f:'ἐβουλήθην',t:'aoristus', p:1,n:'ev',tr:'ik wilde',  segs:null},
+  {f:'βουλήσομαι',t:'futurum', p:1,n:'ev',tr:'ik zal willen',segs:null},
+ ]},
+ {pres:'καλέω',meaning:'roepen, noemen',forms:[
+  {f:'καλῶ',   t:'praesens',   p:1,n:'ev',tr:'ik roep',   segs:null},
+  {f:'καλεῖς', t:'praesens',   p:2,n:'ev',tr:'jij roept', segs:null},
+  {f:'καλεῖ',  t:'praesens',   p:3,n:'ev',tr:'hij roept', segs:null},
+  {f:'ἐκάλουν',t:'imperfectum',p:1,n:'ev',tr:'ik riep',   segs:null},
+  {f:'ἐκάλει', t:'imperfectum',p:3,n:'ev',tr:'hij riep',  segs:null},
+  {f:'ἐκάλεσα',t:'aoristus',   p:1,n:'ev',tr:'ik riep',   segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσα',r:'end'}]},
+  {f:'ἐκάλεσε(ν)',t:'aoristus',p:3,n:'ev',tr:'hij riep',  segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσε(ν)',r:'end'}]},
+  {f:'ἐκαλεῖτε',t:'imperfectum',p:2,n:'mv',tr:'jullie riepen',segs:null},
+ ]},
+];
+
+// ══════════════════════════════════════════════
+//  NAV
+// ══════════════════════════════════════════════
+function gotoScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function gotoSetup(mode){ gotoScreen('setup-'+mode); }
+function stopEx(mode){ gotoScreen('setup-'+mode); }
+
+// ══════════════════════════════════════════════
+//  SHARED STATE
+// ══════════════════════════════════════════════
+const ST = {};
+
+function getTenses(filterId){
+  const sel = document.getElementById(filterId);
+  return Array.from(sel.selectedOptions).map(o=>o.value);
+}
+
+function buildPool(tenses){
+  const pool=[];
+  VERBS.forEach(v=>v.forms.forEach(f=>{
+    if(tenses.includes(f.t)) pool.push({...f,pres:v.pres,meaning:v.meaning});
+  }));
+  return pool;
+}
+
+function shuffle(a){
+  const r=[...a];
+  for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}
+  return r;
+}
+
+function normalNl(s){
+  return (s||'').trim().toLowerCase().replace(/[,.;!]/g,'').replace(/\s+/g,' ');
+}
+
+function matchNl(user,correct){
+  const u=normalNl(user), c=normalNl(correct);
+  if(u===c) return true;
+  const words=c.split(' ').filter(w=>w.length>2&&!/^(het|een|ik|jij|hij|zij|wij|we|jullie|zich|de|der)$/.test(w));
+  if(!words.length) return u.includes(c.slice(0,4));
+  return words.filter(w=>u.includes(w)).length >= Math.ceil(words.length*.7);
+}
+
+function tijdNl(t){return{praesens:'praesens',imperfectum:'imperfectum',aoristus:'aoristus',futurum:'futurum',perfectum:'perfectum'}[t]||t;}
+function persNl(p,n){return{1:'1e',2:'2e',3:'3e'}[p]+' persoon '+(n==='ev'?'ev.':'mv.');}
+
+function updateHeader(mode,idx,total,sc,wr){
+  document.getElementById(mode[0]+'-qn').textContent=`Vraag ${idx+1}/${total}`;
+  document.getElementById(mode[0]+'-sc').textContent=sc;
+  document.getElementById(mode[0]+'-wr').textContent=wr;
+  document.getElementById(mode[0]+'-prog').style.width=`${(idx/total)*100}%`;
+}
+
+// ══════════════════════════════════════════════
+//  ONTLEED EXERCISE
+// ══════════════════════════════════════════════
+let O = {}; // ontleed state
+let oActiveSlot = null;
+
+function startExercise(mode){
+  const tfilter = mode==='ontleed'?'o-tfilter':mode==='determ'?'d-tfilter':'v-tfilter';
+  const cntId   = mode==='ontleed'?'o-cnt':mode==='determ'?'d-cnt':'v-cnt';
+  const tenses  = getTenses(tfilter);
+  const cnt     = parseInt(document.getElementById(cntId).value)||10;
+  const pool    = buildPool(tenses);
+  if(!pool.length){alert('Geen vormen beschikbaar voor de gekozen tijden.');return;}
+  const qs = shuffle(pool).slice(0,Math.min(cnt,pool.length));
+  if(mode==='ontleed'){
+    O={qs,idx:0,sc:0,wr:0,res:[]};
+    gotoScreen('ex-ontleed');
+    drawOntleed();
+  } else if(mode==='determ'){
+    ST.determ={qs,idx:0,sc:0,wr:0,res:[]};
+    gotoScreen('ex-determ');
+    drawDeterm();
+  } else {
+    ST.vertaal={qs,idx:0,sc:0,wr:0,res:[]};
+    gotoScreen('ex-vertaal');
+    drawVertaal();
+  }
+}
+
+function drawOntleed(){
+  const q=O.qs[O.idx];
+  updateHeader('ontleed',O.idx,O.qs.length,O.sc,O.wr);
+  document.getElementById('o-form').textContent=q.f;
+  document.getElementById('o-sub').textContent=''; // no lemma shown
+  oActiveSlot=null;
+  // reset slots
+  ['aug','stem','tk','end'].forEach(k=>{
+    document.getElementById('slot-'+k).className='slot';
+    document.getElementById('sv-'+k).textContent=k==='aug'||k==='tk'?'—':'';
+  });
+  O.assigned={aug:null,stem:null,tk:null,end:null};
+  // reset vert
+  const vert=document.getElementById('o-vert');
+  vert.value='';vert.className='';vert.disabled=false;
+  // feedback
+  document.getElementById('o-fb').className='fb';
+  document.getElementById('o-fb').innerHTML='';
+  document.getElementById('o-cbtn').style.display='';
+  document.getElementById('o-nbtn').style.display='none';
+
+  // build chips
+  const chips=document.getElementById('o-chips');
+  chips.innerHTML='';
+
+  if(!q.segs){
+    // irregular: show note, skip segment interaction
+    chips.innerHTML='<span style="color:var(--terra-l);font-size:.85rem;padding:4px 8px;background:var(--surf3);border-radius:6px">Onregelmatige vorm — segmentindeling niet van toepassing</span>';
+    ['aug','stem','tk','end'].forEach(k=>{
+      const sl=document.getElementById('slot-'+k);
+      sl.classList.add('disabled');
+      document.getElementById('sv-'+k).textContent='—';
+    });
+    O.assigned={aug:'—',stem:'—',tk:'—',end:'—'};
+  } else {
+    q.segs.forEach((seg,i)=>{
+      const chip=document.createElement('div');
+      chip.className='seg-chip';
+      chip.dataset.idx=i;
+      chip.dataset.role=seg.r;
+      chip.dataset.chars=seg.c;
+      chip.textContent=seg.c;
+      chip.addEventListener('click',()=>onChipClick(chip,seg));
+      chips.appendChild(chip);
+    });
+    // pre-assign '—' chips automatically
+    q.segs.forEach(seg=>{
+      if(seg.c==='—') O.assigned[seg.r]='—';
+    });
+  }
+}
+
+function selectSlot(key){
+  ['aug','stem','tk','end'].forEach(k=>{
+    document.getElementById('slot-'+k).classList.remove('active-slot');
+  });
+  if(oActiveSlot===key){oActiveSlot=null;return;}
+  oActiveSlot=key;
+  document.getElementById('slot-'+key).classList.add('active-slot');
+}
+
+function onChipClick(chip,seg){
+  if(!oActiveSlot) return;
+  // un-assign any chip previously assigned to this slot
+  document.querySelectorAll('.seg-chip').forEach(c=>{
+    if(c.dataset.assignedTo===oActiveSlot){
+      c.dataset.assignedTo='';
+      c.className='seg-chip';
+    }
+  });
+  // assign chip to slot
+  chip.dataset.assignedTo=oActiveSlot;
+  const colorMap={aug:'assigned-aug',stem:'assigned-stem',tk:'assigned-tk',end:'assigned-end'};
+  chip.className='seg-chip '+colorMap[oActiveSlot];
+  // update slot display
+  O.assigned[oActiveSlot]=seg.c;
+  document.getElementById('sv-'+oActiveSlot).textContent=seg.c;
+  const classMap={aug:'has-aug',stem:'has-stem',tk:'has-tk',end:'has-end'};
+  document.getElementById('slot-'+oActiveSlot).className='slot '+classMap[oActiveSlot];
+  oActiveSlot=null;
+  document.getElementById('slot-'+oActiveSlot+'').classList&&document.getElementById('slot-aug').classList.remove('active-slot');
+  ['aug','stem','tk','end'].forEach(k=>document.getElementById('slot-'+k).classList.remove('active-slot'));
+}
+
+function checkOntleed(){
+  const q=O.qs[O.idx];
+  const isIrr=!q.segs;
+  let segOk=isIrr;
+  let fbLines=[];
+
+  if(!isIrr){
+    segOk=true;
+    const expected={};
+    q.segs.forEach(s=>expected[s.r]=s.c);
+    ['aug','stem','tk','end'].forEach(k=>{
+      const got=O.assigned[k];
+      const exp=expected[k]||'—';
+      const ok = (got||'—')===exp ||(got===null&&exp==='—');
+      if(!ok){segOk=false;}
+      const sl=document.getElementById('slot-'+k);
+      sl.classList.remove('has-aug','has-stem','has-tk','has-end');
+      sl.classList.add(ok?'correct-slot':'wrong-slot');
+      if(!ok) fbLines.push(`<div class="fb-row"><span class="fb-lbl">${{aug:'Augment',stem:'Stam',tk:'Tijdskenletter',end:'Uitgang'}[k]}:</span><span class="fb-got">${got||'?'}</span> → <span class="fb-cor">${exp}</span></div>`);
+    });
+    // disable chips
+    document.querySelectorAll('.seg-chip').forEach(c=>c.classList.add('disabled'));
+  }
+
+  const vertEl=document.getElementById('o-vert');
+  const vertOk=matchNl(vertEl.value,q.tr);
+  vertEl.className=vertOk?'correct':'wrong';
+  vertEl.disabled=true;
+  if(!vertOk) fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${vertEl.value||'—'}</span> → <span class="fb-cor">${q.tr}</span></div>`);
+
+  const allOk=segOk&&vertOk;
+  if(allOk){O.sc++;}else{O.wr++;}
+  O.res.push({f:q.f,pres:q.pres,ok:allOk,t:q.t});
+  document.getElementById('o-sc').textContent=O.sc;
+  document.getElementById('o-wr').textContent=O.wr;
+
+  const fb=document.getElementById('o-fb');
+  if(allOk){
+    fb.className='fb ok show';
+    fb.innerHTML='<strong style="color:var(--green-l)">✓ Correct!</strong>';
+  } else {
+    fb.className='fb err show';
+    fb.innerHTML=fbLines.join('');
+  }
+  document.getElementById('o-cbtn').style.display='none';
+  document.getElementById('o-nbtn').style.display='';
+}
+
+// ══════════════════════════════════════════════
+//  DETERMINEER EXERCISE
+// ══════════════════════════════════════════════
+function drawDeterm(){
+  const s=ST.determ, q=s.qs[s.idx];
+  updateHeader('determ',s.idx,s.qs.length,s.sc,s.wr);
+  document.getElementById('d-form').textContent=q.f;
+  ['d-pers','d-getal','d-tijd','d-vert'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.value='';el.classList.remove('ok','err');el.disabled=false;
+  });
+  document.getElementById('d-fb').className='fb';
+  document.getElementById('d-cbtn').style.display='';
+  document.getElementById('d-nbtn').style.display='none';
+  document.getElementById('d-vert').focus();
+}
+
+function checkDeterm(){
+  const s=ST.determ, q=s.qs[s.idx];
+  const checks=[
+    {id:'d-pers', exp:String(q.p),            label:'Persoon'},
+    {id:'d-getal',exp:q.n,                    label:'Getal'},
+    {id:'d-tijd', exp:q.t,                    label:'Tijd'},
+    {id:'d-vert', exp:q.tr, nl:true,          label:'Vertaling'},
+  ];
+  let allOk=true, fbLines=[];
+  checks.forEach(c=>{
+    const el=document.getElementById(c.id);
+    const ok=c.nl?matchNl(el.value,c.exp):el.value===c.exp;
+    el.classList.remove('ok','err');el.classList.add(ok?'ok':'err');el.disabled=true;
+    if(!ok){allOk=false;
+      const disp=c.id==='d-tijd'?tijdNl(c.exp):c.id==='d-getal'?(c.exp==='ev'?'enkelvoud':'meervoud'):c.id==='d-pers'?c.exp+'e persoon':c.exp;
+      fbLines.push(`<div class="fb-row"><span class="fb-lbl">${c.label}:</span><span class="fb-got">${el.value||'—'}</span> → <span class="fb-cor">${disp}</span></div>`);
+    }
+  });
+  if(allOk){s.sc++;}else{s.wr++;}
+  s.res.push({f:q.f,pres:q.pres,ok:allOk,t:q.t});
+  document.getElementById('d-sc').textContent=s.sc;
+  document.getElementById('d-wr').textContent=s.wr;
+  const fb=document.getElementById('d-fb');
+  fb.className=allOk?'fb ok show':'fb err show';
+  fb.innerHTML=allOk?'<strong style="color:var(--green-l)">✓ Correct!</strong>':fbLines.join('');
+  document.getElementById('d-cbtn').style.display='none';
+  document.getElementById('d-nbtn').style.display='';
+}
+
+// ══════════════════════════════════════════════
+//  VERTAAL EXERCISE
+// ══════════════════════════════════════════════
+function drawVertaal(){
+  const s=ST.vertaal, q=s.qs[s.idx];
+  updateHeader('vertaal',s.idx,s.qs.length,s.sc,s.wr);
+  document.getElementById('v-form').textContent=q.f;
+  document.getElementById('v-sub').textContent=`${q.pres} — ${q.meaning} · ${persNl(q.p,q.n)} · ${tijdNl(q.t)}`;
+  const v=document.getElementById('v-vert');
+  v.value='';v.classList.remove('ok','err');v.disabled=false;
+  document.getElementById('v-fb').className='fb';
+  document.getElementById('v-cbtn').style.display='';
+  document.getElementById('v-nbtn').style.display='none';
+  v.focus();
+}
+
+function checkVertaal(){
+  const s=ST.vertaal, q=s.qs[s.idx];
+  const v=document.getElementById('v-vert');
+  const ok=matchNl(v.value,q.tr);
+  v.classList.remove('ok','err');v.classList.add(ok?'ok':'err');v.disabled=true;
+  if(ok){s.sc++;}else{s.wr++;}
+  s.res.push({f:q.f,pres:q.pres,ok,t:q.t});
+  document.getElementById('v-sc').textContent=s.sc;
+  document.getElementById('v-wr').textContent=s.wr;
+  const fb=document.getElementById('v-fb');
+  fb.className=ok?'fb ok show':'fb err show';
+  fb.innerHTML=ok?`<strong style="color:var(--green-l)">✓ Correct!</strong> <span style="color:var(--dim)">${q.tr}</span>`:
+    `<div class="fb-row"><span class="fb-lbl">Jij:</span><span class="fb-got">${v.value||'—'}</span></div><div class="fb-row"><span class="fb-lbl">Correct:</span><span class="fb-cor">${q.tr}</span></div>`;
+  document.getElementById('v-cbtn').style.display='none';
+  document.getElementById('v-nbtn').style.display='';
+}
+
+// ══════════════════════════════════════════════
+//  NEXT / RESULTS
+// ══════════════════════════════════════════════
+function nextQ(mode){
+  if(mode==='ontleed'){
+    O.idx++;
+    if(O.idx>=O.qs.length){showResults('ontleed',O);}else{drawOntleed();}
+  } else if(mode==='determ'){
+    const s=ST.determ; s.idx++;
+    if(s.idx>=s.qs.length){showResults('determ',s);}else{drawDeterm();}
+  } else {
+    const s=ST.vertaal; s.idx++;
+    if(s.idx>=s.qs.length){showResults('vertaal',s);}else{drawVertaal();}
+  }
+}
+
+function showResults(mode,s){
+  const pct=Math.round(s.sc/s.qs.length*100);
+  const grade=pct>=90?'Uitstekend! 🏆':pct>=75?'Goed gedaan! ✓':pct>=55?'Voldoende 👍':'Herhaal de stof 📚';
+  const wrongs=s.res.filter(r=>!r.ok);
+  let wHtml='';
+  if(wrongs.length){
+    wHtml=`<div class="result-list"><h3>Te herhalen (${wrongs.length})</h3>${
+      wrongs.map(r=>`<div class="ri"><span class="ri-verb">${r.f}</span><span class="ri-dim">van ${r.pres} · ${tijdNl(r.t)}</span></div>`).join('')
+    }</div>`;
+  }
+  const modeNames={ontleed:'Ontleden',determ:'Determineren',vertaal:'Vertalen'};
+  document.getElementById('results-content').innerHTML=`
+    <h2>${modeNames[mode]}</h2>
+    <div class="big-score">${s.sc}/${s.qs.length}</div>
+    <div class="grade-txt">${grade}</div>
+    ${wHtml}
+    <button class="btn-start" onclick="gotoSetup('${mode}')">Opnieuw oefenen →</button>
+  `;
+  gotoScreen('results');
+}
+
+// ══════════════════════════════════════════════
+//  ENTER KEY
+// ══════════════════════════════════════════════
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter'||e.target.tagName==='TEXTAREA') return;
+  const screens={
+    'ex-ontleed':['o-cbtn',()=>checkOntleed(),'o-nbtn',()=>nextQ('ontleed')],
+    'ex-determ': ['d-cbtn',()=>checkDeterm(), 'd-nbtn',()=>nextQ('determ')],
+    'ex-vertaal':['v-cbtn',()=>checkVertaal(),'v-nbtn',()=>nextQ('vertaal')],
+  };
+  for(const[sid,[cb,cf,nb,nf]] of Object.entries(screens)){
+    const sc=document.getElementById(sid);
+    if(sc&&sc.classList.contains('active')){
+      if(document.getElementById(cb).style.display!=='none') cf();
+      else if(document.getElementById(nb).style.display!=='none') nf();
+      break;
+    }
+  }
+});
+</script>
+</body>
+</html>
