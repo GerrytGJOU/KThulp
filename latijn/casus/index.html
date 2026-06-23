@@ -104,7 +104,27 @@
   .kv-opt:hover,.kv-opt:active{background:var(--parchment-dark)}
   .kv-opt.correct{border-color:var(--green);background:#efffef;color:var(--green);font-weight:600}
   .kv-opt.wrong{border-color:var(--red);background:#fff0f0;color:var(--red)}
-  @media(max-width:600px){.mode-cards{grid-template-columns:1fr}.home-title{font-size:1.6rem}table.casus-table{font-size:.82rem}table.casus-table td:first-child{width:70px}}
+  /* ── PARADIGMA SCHERM ── */
+  .decl-section-title{font-family:Georgia,'Times New Roman',serif;font-size:.9rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin:18px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--border)}
+  .word-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:4px}
+  .word-pill{background:white;border:1.5px solid var(--border);border-radius:8px;padding:10px 10px 8px;cursor:pointer;text-align:left;transition:all .14s;box-shadow:0 1px 4px var(--shadow)}
+  .word-pill:hover,.word-pill:active{border-color:var(--blue);background:#f0f5ff;transform:translateY(-1px)}
+  .word-pill .wp-nom{font-style:italic;font-size:.95rem;color:var(--ink);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .word-pill .wp-gen{font-size:.72rem;color:#888;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .word-pill .wp-nl{font-size:.72rem;color:#555;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .word-pill .wp-tag{display:inline-block;font-size:.6rem;padding:1px 6px;border-radius:8px;margin-top:4px;font-weight:600;letter-spacing:.04em}
+  /* Paradigma modal */
+  .par-modal-bg{position:fixed;inset:0;z-index:200;background:rgba(26,18,9,.6);display:flex;align-items:flex-end;justify-content:center}
+  .par-modal{background:var(--parchment);border:2px solid var(--border);border-radius:16px 16px 0 0;padding:22px 18px 32px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;box-shadow:0 -4px 24px var(--shadow)}
+  .par-modal-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+  .par-modal-close{font-size:1.6rem;line-height:1;cursor:pointer;color:#888;background:none;border:none;padding:0 4px}
+  .par-modal-word{font-style:italic;font-size:1.5rem;color:var(--blue);font-family:Georgia,'Times New Roman',serif}
+  .par-modal-meta{font-size:.78rem;color:#777;margin-top:2px}
+  .par-modal .casus-table td:first-child{width:100px}
+  .par-divider{border:none;border-top:1px solid var(--border);margin:8px 0}
+  @media(max-width:600px){.word-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}}
+  .btn-gold{background:var(--gold);color:white;border-color:var(--gold)}.btn-gold:hover{background:var(--gold-light)}
+
 </style>
 </head>
 <body>
@@ -125,9 +145,20 @@
       <div class="card-icon">📝</div><h2>Toets</h2>
       <p>Maak een volledige toets en ontvang direct je cijfer</p>
     </div>
+    <div class="mode-card oefenen" onclick="showParadigmas()" style="border-color:var(--gold)">
+      <div class="card-icon">🏛️</div><h2 style="color:var(--gold)">Paradigma's</h2>
+      <p>Bekijk de volledige verbuigingsschema's van alle woorden</p>
+    </div>
+    <div class="mode-card oefenen" onclick="showWordlist()" style="border-color:var(--border)">
+      <div class="card-icon">📋</div><h2 style="color:#555">Woordenlijst</h2>
+      <p>Overzicht van alle woorden per declinatie</p>
+    </div>
   </div>
-  <div class="alert alert-info" style="font-size:.78rem"><strong>Woordenlijst:</strong> top-frequentiewoorden uit alle vijf Latijnse declinaties (Stilus-lijst).</div>
-  <button class="btn btn-outline btn-sm mt8" onclick="showWordlist()" style="width:100%">📋 Bekijk de woordenlijst</button>
+</div>
+
+<div id="screen-paradigmas" class="screen">
+  <div class="section-header"><button class="back-btn" onclick="goHome()">←</button><h2>Paradigma's</h2></div>
+  <div id="paradigmas-content"></div>
 </div>
 
 <div id="screen-wordlist" class="screen">
@@ -347,6 +378,87 @@ function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').
 // ══════════════════════════════
 //  WOORDENLIJST SCHERM
 // ══════════════════════════════
+// ══════════════════════════════
+//  PARADIGMA SCHERM
+// ══════════════════════════════
+const DEC_NAMEN = {1:'1e Declinatie (a-stammen)',2:'2e Declinatie (o-stammen)',3:'3e Declinatie',4:'4e Declinatie (u-stammen)',5:'5e Declinatie (e-stammen)'};
+
+function showParadigmas(){
+  let html='';
+  [1,2,3,4,5].forEach(d=>{
+    const words=WORDLIST.filter(w=>w.dec===d);
+    html+=`<div class="decl-section-title">${DEC_NAMEN[d]}</div><div class="word-grid">`;
+    words.forEach(w=>{
+      const g=`<span class="wp-tag tag-${w.geslacht}">${w.geslacht}</span>`;
+      html+=`<button class="word-pill" onclick="showParadigmaModal('${w.id}')">
+        <div class="wp-nom">${w.nom}</div>
+        <div class="wp-gen">${w.gen}</div>
+        <div class="wp-nl">${w.vert.split(';')[0].split(',')[0].trim()}</div>
+        ${g}
+      </button>`;
+    });
+    html+=`</div>`;
+  });
+  document.getElementById('paradigmas-content').innerHTML=html;
+  showScreen('paradigmas');
+}
+
+function showParadigmaModal(wid){
+  const w=WORDLIST.find(x=>x.id===wid);
+  if(!w)return;
+  const forms=FORMS[w.id];
+  const cas=activeCasusIdx(w);
+  const g=`<span class="tag tag-${w.geslacht}">${w.geslacht}</span>`;
+
+  // Bouw tabel: enkelvoud-blok dan meervoud-blok
+  let rows='';
+  ['sg','pl'].forEach((num,ni)=>{
+    rows+=`<tr><td colspan="2" style="background:var(--ink);color:var(--parchment);font-family:Georgia,'Times New Roman',serif;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-align:center;padding:5px 10px">${NUMERI[ni]}</td></tr>`;
+    cas.forEach(ci=>{
+      const c=CASUS_SHORT[ci];
+      const val=forms[num][c];
+      rows+=`<tr><td style="color:var(--gold);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;width:110px">${CASUS_LABELS[ci]}</td><td style="font-style:italic">${val}</td></tr>`;
+    });
+  });
+
+  // Modal aanmaken
+  const bg=document.createElement('div');
+  bg.className='par-modal-bg';
+  bg.innerHTML=`<div class="par-modal">
+    <div class="par-modal-head">
+      <div>
+        <div class="par-modal-word"><em>${w.nom}</em>, <em>${w.gen}</em> ${g}</div>
+        <div class="par-modal-meta">${w.vert} — ${w.dec}e declinatie</div>
+      </div>
+      <button class="par-modal-close" onclick="this.closest('.par-modal-bg').remove()">×</button>
+    </div>
+    <hr class="par-divider">
+    <table class="casus-table par-modal">${rows}</table>
+    <div class="flex-row mt8">
+      <button class="btn btn-primary btn-sm" onclick="this.closest('.par-modal-bg').remove();startSchemaMetWoord('${w.id}')">Oefenen met dit woord</button>
+      <button class="btn btn-outline btn-sm" onclick="this.closest('.par-modal-bg').remove()">Sluiten</button>
+    </div>
+  </div>`;
+  // Sluit bij klik op achtergrond
+  bg.addEventListener('click',e=>{if(e.target===bg)bg.remove();});
+  document.body.appendChild(bg);
+}
+
+function startSchemaMetWoord(wid){
+  // Start schema-oefening direct met een specifiek woord
+  const w=WORDLIST.find(x=>x.id===wid);
+  if(!w)return;
+  const casIdxList=activeCasusIdx(w);
+  const allCells=[];
+  ['sg','pl'].forEach((num,ni)=>casIdxList.forEach(ci=>allCells.push({num,ni,ci})));
+  const giveCount=4+Math.floor(Math.random()*3);
+  const given=new Set(pick(allCells,giveCount).map(x=>x.num+'_'+CASUS_SHORT[x.ci]));
+  schemaState={w,given,casIdxList};
+  renderSchema(false);
+  goOefenen(); // zet badge
+  showScreen('schema');
+}
+
 function showWordlist(){
   const decNames={1:'1e Declinatie (a-stammen)',2:'2e Declinatie (o-stammen)',3:'3e Declinatie',4:'4e Declinatie (u-stammen)',5:'5e Declinatie (e-stammen)'};
   let html='';
