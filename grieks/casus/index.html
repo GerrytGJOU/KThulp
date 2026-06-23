@@ -707,6 +707,8 @@ function shuffle(a){
   return a;
 }
 
+function rand(arr){return arr[Math.floor(Math.random()*arr.length)];}
+
 function norm(s){
   return (s||"").trim()
     .replace(/\(ν\)/g,"ν").replace(/\(n\)/g,"n")  // optional ν
@@ -750,7 +752,7 @@ function topbar(){
 function go(screen, data){
   SCREEN = screen;
   document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-  const map = {home:"home",paradigms:"paradigms",oefenen:"oefenen",ex_run:"oefenen",ex_mc:"oefenen",ex_paradigm:"oefenen",test_setup:"test",test_run:"test",test_result:"test",help:"home"};
+  const map = {home:"home",paradigms:"paradigms",woordenlijst:"paradigms",oefenen:"oefenen",ex_schema_setup:"oefenen",ex_run_schema:"oefenen",ex_det_setup:"oefenen",ex_det_run:"oefenen",ex_mc:"oefenen",ex_kv:"oefenen",ex_paradigm:"oefenen",test_setup:"test",test_run:"test",test_result:"test",help:"home"};
   const nk = map[screen];
   if(nk){const btn=document.querySelector(`nav button[data-nav="${nk}"]`);if(btn)btn.classList.add("active");}
   if(RENDER[screen]) RENDER[screen](data);
@@ -764,37 +766,37 @@ RENDER = {};
 RENDER.home = function(){
   const app = document.getElementById("app");
   const pct = ST.totalDone > 0 ? Math.round(ST.totalOk/ST.totalDone*100) : 0;
-  const bestScore = ST.testScores.length ? Math.max(...ST.testScores) : 0;
+  const bestScore = ST.testScores.length ? Math.max(...ST.testScores).toFixed(1) : "—";
   app.innerHTML = topbar() + `
   <div class="stats-row">
     <div class="stat-badge"><div class="val">${ST.totalOk}</div><div class="lbl">Goed</div></div>
     <div class="stat-badge"><div class="val">${ST.totalDone}</div><div class="lbl">Geprobeerd</div></div>
     <div class="stat-badge"><div class="val">${pct}%</div><div class="lbl">Score</div></div>
-    <div class="stat-badge"><div class="val">${ST.streak}</div><div class="lbl">Reeks</div></div>
+    <div class="stat-badge"><div class="val">${bestScore}</div><div class="lbl">Beste cijfer</div></div>
   </div>
 
   <div class="meander"></div>
 
   <div class="tiles">
-    <button class="tile wide" onclick="go('paradigms')">
-      <div class="ic">📖</div>
+    <button class="tile" onclick="go('paradigms')">
+      <div class="ic">🏛️</div>
       <h3>Παραδείγματα</h3>
-      <p>Bekijk paradigma's van alle declinaties en woorden</p>
+      <p>Bekijk de volledige verbuigingsschema's van alle woorden</p>
     </button>
     <button class="tile" onclick="go('oefenen')">
       <div class="ic">✍️</div>
       <h3>Oefenen</h3>
-      <p>Vormen oefenen per woord of declinatie</p>
+      <p>Vier oefeningen op eigen tempo</p>
     </button>
     <button class="tile" onclick="go('test_setup')">
-      <div class="ic">📋</div>
+      <div class="ic">📝</div>
       <h3>Toets</h3>
-      <p>Toets jezelf en krijg een cijfer op 20</p>
+      <p>Drie onderdelen, cijfer op 10</p>
     </button>
-    <button class="tile" onclick="go('help')">
-      <div class="ic">❓</div>
-      <h3>Hulp</h3>
-      <p>Uitleg over naamvallen en gebruik</p>
+    <button class="tile" onclick="go('woordenlijst')">
+      <div class="ic">📋</div>
+      <h3>Woordenlijst</h3>
+      <p>Overzicht per declinatie</p>
     </button>
   </div>
 
@@ -899,7 +901,7 @@ window.showParadigm = function(id){
         </table>
       </div>
       <div style="display:flex;gap:10px;margin-top:16px">
-        <button class="btn btn-primary btn-full" onclick="this.closest('div[style*=fixed]').remove();go('oefenen',{wordId:'${w.id}'})">Oefenen</button>
+        <button class="btn btn-primary btn-full" onclick="this.closest('div[style*=fixed]').remove();go('oefenen',{wordId:'${w.id}',mode:'schema'})">Oefenen met dit woord</button>
         <button class="btn btn-ghost btn-full" onclick="this.closest('div[style*=fixed]').remove()">Sluiten</button>
       </div>
     </div>`;
@@ -908,243 +910,365 @@ window.showParadigm = function(id){
 };
 
 // ═══════════════════════════════════════════════════
-// RENDER: OEFENEN (setup)
+// RENDER: WOORDENLIJST
+// ═══════════════════════════════════════════════════
+RENDER.woordenlijst = function(){
+  const app = document.getElementById("app");
+  const typeOrder = ["A1","A2","A3","B1","B2","C1","C2","C3"];
+  const groups = {};
+  for(const w of WORDS){ (groups[w.type]||(groups[w.type]=[])).push(w); }
+
+  let html = `<div class="scrhead">${backBtn("home")}<h2>Woordenlijst</h2></div>`;
+  for(const type of typeOrder){
+    const ws = groups[type];
+    if(!ws||!ws.length) continue;
+    html += `<div style="font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--aegean4)">${TYPE_NAMES[type]||type}</div>
+    <div style="background:var(--aegean2);border:1px solid var(--aegean4);border-radius:10px;overflow:hidden;margin-bottom:4px">
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:rgba(36,66,125,.7)">
+        <th style="padding:6px 10px;text-align:left;color:var(--gold);font-size:11px;letter-spacing:.06em">Woordvorm</th>
+        <th style="padding:6px 10px;text-align:left;color:var(--gold);font-size:11px;letter-spacing:.06em">Gen.</th>
+        <th style="padding:6px 10px;text-align:center;color:var(--gold);font-size:11px;letter-spacing:.06em">G.</th>
+        <th style="padding:6px 10px;text-align:left;color:var(--gold);font-size:11px;letter-spacing:.06em">Betekenis</th>
+      </tr></thead>
+      <tbody>`;
+    ws.forEach((w,i)=>{
+      const bg = i%2===0?"background:var(--aegean2)":"background:rgba(36,66,125,.2)";
+      const gkleur = {m:"var(--azure2)",f:"var(--terracotta)",n:"var(--green-bright)","m/f":"var(--gold)"}[w.genus]||"var(--muted)";
+      html += `<tr style="${bg}">
+        <td style="padding:6px 10px;font-size:16px;color:var(--marble)">${w.gr}</td>
+        <td style="padding:6px 10px;font-size:13px;color:var(--muted);font-style:italic">${w.tr}</td>
+        <td style="padding:6px 10px;text-align:center;font-size:11px;font-weight:700;color:${gkleur}">${w.genus}</td>
+        <td style="padding:6px 10px;font-size:13px;color:var(--cream2)">${w.nl.split(",")[0].split(";")[0].trim()}</td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+  app.innerHTML = html;
+};
+
+// ═══════════════════════════════════════════════════
+// RENDER: OEFENMENU — 4 oefeningen, menu-stijl
 // ═══════════════════════════════════════════════════
 RENDER.oefenen = function(data){
   const app = document.getElementById("app");
 
-  const typeOrder = ["A1","A2","A3","B1","B2","C1","C2","C3"];
-  const typeChips = typeOrder.map(t=>`<button class="chip" data-type="${t}" onclick="toggleType(this,'${t}')">${TYPE_NAMES[t]||t}</button>`).join("");
-
-  app.innerHTML = `<div class="scrhead">${backBtn("home")}<h2>Oefenen</h2></div>
-
-  <div class="panel">
-    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;letter-spacing:.06em;text-transform:uppercase">Oefenvorm</div>
-    <div class="chip-row">
-      <button class="chip active" id="exmode_type" onclick="setExMode('type',this)">✍️ Typen</button>
-      <button class="chip" id="exmode_mc" onclick="setExMode('mc',this)">🔤 Meerkeuze</button>
-      <button class="chip" id="exmode_paradigm" onclick="setExMode('paradigm',this)">📋 Volledig paradigma</button>
-    </div>
-    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;margin-top:12px;letter-spacing:.06em;text-transform:uppercase">Declinatie</div>
-    <div class="chip-row" id="typeChips">${typeChips}</div>
-    <div id="caseSection">
-    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;margin-top:12px;letter-spacing:.06em;text-transform:uppercase">Naamvallen</div>
-    <div class="chip-row" id="caseChips">
-      ${CASE_LABELS.map(c=>`<button class="chip active" data-case="${c.key}" onclick="toggleCase(this,'${c.key}')">${c.abbr}</button>`).join("")}
-    </div>
-    </div>
-  </div>
-
-  <button class="btn btn-primary btn-full" onclick="startOefenen()" style="margin-bottom:14px">Start oefening</button>
-  `;
-
-  // pre-select if word given
-  if(data && data.wordId){
-    const w = WORDS.find(x=>x.id===data.wordId);
-    if(w){
-      document.querySelectorAll("#typeChips .chip").forEach(c=>{
-        if(c.dataset.type===w.type) c.classList.add("active");
-      });
-    }
-  } else {
-    // default: all types active
-    document.querySelectorAll("#typeChips .chip").forEach(c=>c.classList.add("active"));
-  }
-
-  window._exMode = "type";
-};
-
-window.toggleType = function(btn, type){
-  btn.classList.toggle("active");
-};
-window.toggleCase = function(btn, key){
-  btn.classList.toggle("active");
-};
-window.setExMode = function(mode, btn){
-  window._exMode = mode;
-  document.querySelectorAll(".chip[id^='exmode_']").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  // hide/show case section for paradigm mode
-  const cs = document.getElementById("caseSection");
-  if(cs) cs.style.display = mode==="paradigm" ? "none" : "block";
-};
-
-window.startOefenen = function(){
-  const activeTypes = [...document.querySelectorAll("#typeChips .chip.active")].map(b=>b.dataset.type);
-  const activeCases = [...document.querySelectorAll("#caseChips .chip.active")].map(b=>b.dataset.case);
-  const mode = window._exMode || "type";
-
-  if(!activeTypes.length){toast("Selecteer minstens één declinatie.");return;}
-
-  const pool = WORDS.filter(w=>activeTypes.includes(w.type));
-  if(!pool.length){toast("Geen woorden gevonden voor deze selectie.");return;}
-
-  if(mode==="paradigm"){
-    // Paradigma-invul modus: pick words, fill in full paradigm
-    const words = shuffle(pool).slice(0, 10);
-    EX = { mode:"paradigm", words, i:0, ok:0, totalForms:0, streak:0 };
-    go("ex_paradigm");
+  // If called with a wordId and mode, jump straight to that exercise
+  if(data && data.wordId && data.mode==="schema"){
+    startSchemaMetWoord(data.wordId);
     return;
   }
 
-  if(!activeCases.length){toast("Selecteer minstens één naamval.");return;}
+  app.innerHTML = `<div class="scrhead">${backBtn("home")}<h2>Oefeningen</h2></div>
+  <div style="display:flex;flex-direction:column;gap:12px;margin:4px 0">
 
-  let questions = [];
-  for(const w of pool){
-    for(const c of activeCases){
-      const form = w.forms[c];
-      if(!form || form==="—") continue;
-      questions.push({word:w, caseKey:c, form});
-    }
-  }
-  questions = shuffle(questions);
-  if(questions.length > 40) questions = questions.slice(0,40);
+    <button onclick="go('ex_schema_setup')" style="background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--aegean4);border-radius:12px;padding:16px 18px;text-align:left;cursor:pointer;transition:border-color .14s;color:var(--cream)">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--azure2);font-weight:700;margin-bottom:4px">Oefening 1</div>
+      <div style="font-size:17px;color:var(--marble);margin-bottom:3px">Schema invullen</div>
+      <div style="font-size:13px;color:var(--muted)">Vul het volledige verbuigingsschema in voor een woord</div>
+    </button>
 
-  EX = {
-    mode,
-    questions,
-    i: 0,
-    ok: 0,
-    total: questions.length,
-    streak: 0
-  };
-  go(mode==="mc" ? "ex_mc" : "ex_run");
+    <button onclick="go('ex_det_setup')" style="background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--aegean4);border-radius:12px;padding:16px 18px;text-align:left;cursor:pointer;transition:border-color .14s;color:var(--cream)">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--azure2);font-weight:700;margin-bottom:4px">Oefening 2</div>
+      <div style="font-size:17px;color:var(--marble);margin-bottom:3px">Vormen determineren</div>
+      <div style="font-size:13px;color:var(--muted)">Geef naamval en getal van een losse woordvorm</div>
+    </button>
+
+    <button onclick="go('ex_mc')" style="background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--aegean4);border-radius:12px;padding:16px 18px;text-align:left;cursor:pointer;transition:border-color .14s;color:var(--cream)">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--azure2);font-weight:700;margin-bottom:4px">Oefening 3</div>
+      <div style="font-size:17px;color:var(--marble);margin-bottom:3px">Meerkeuze</div>
+      <div style="font-size:13px;color:var(--muted)">Kies de juiste naamvalsvorm uit vier opties</div>
+    </button>
+
+    <button onclick="go('ex_kv')" style="background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--aegean4);border-radius:12px;padding:16px 18px;text-align:left;cursor:pointer;transition:border-color .14s;color:var(--cream)">
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--azure2);font-weight:700;margin-bottom:4px">Oefening 4</div>
+      <div style="font-size:17px;color:var(--marble);margin-bottom:3px">Kennisvragen</div>
+      <div style="font-size:13px;color:var(--muted)">Functie ↔ naamval: meerkeuzevragen over grammatica</div>
+    </button>
+
+  </div>`;
 };
 
-RENDER.ex_run = function(){
-  if(EX.i >= EX.total) return finishOefenen();
-  const q = EX.questions[EX.i];
-  const w = q.word;
-  const cl = CASE_LABELS.find(c=>c.key===q.caseKey);
+// Global gkFocus — works for all Greek input screens
+window.gkFocus = function(inp){
+  GK_TARGET = inp;
+  document.querySelectorAll(".par-inp").forEach(i=>{
+    i.style.borderColor = i===GK_TARGET ? "var(--azure)" : "";
+    i.style.background  = i===GK_TARGET ? "rgba(58,123,213,.1)" : "";
+  });
+};
+
+// ── Schema-oefening: setup (declinatie kiezen) ──
+RENDER.ex_schema_setup = function(){
   const app = document.getElementById("app");
-  const pct = Math.round(EX.i/EX.total*100);
-
-  app.innerHTML = `
-  <div class="scrhead">${backBtn("oefenen")}<h2>Typen</h2><span style="font-size:12px;color:var(--muted)">${EX.i+1}/${EX.total}</span></div>
-
-  <div class="prog-wrap">
-    <div class="prog-label"><span>Voortgang</span><span>${EX.ok} goed</span></div>
-    <div class="progbar"><i style="width:${pct}%"></i></div>
+  const typeOrder = ["A1","A2","A3","B1","B2","C1","C2","C3"];
+  const typeChips = typeOrder.map(t=>`<button class="chip active" data-type="${t}" onclick="this.classList.toggle('active')">${TYPE_NAMES[t]||t}</button>`).join("");
+  app.innerHTML = `<div class="scrhead">${backBtn("oefenen")}<h2>Schema invullen</h2></div>
+  <div class="panel">
+    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;letter-spacing:.06em;text-transform:uppercase">Declinatie</div>
+    <div class="chip-row" id="schTypeChips">${typeChips}</div>
   </div>
+  <button class="btn btn-primary btn-full" onclick="startSchemaOefening()">Start oefening</button>`;
+};
 
-  <div class="word-card">
-    <div class="word-badge">${w.label}</div>
-    <div class="word-gr">${w.gr}</div>
-    <div class="word-tr">${w.tr}</div>
-    <div class="word-nl">${w.nl.split(",")[0].trim()}</div>
-    <div class="word-decl">${GENUS_NL[w.genus]||w.genus}</div>
+// ── Determineren-oefening: setup ──
+RENDER.ex_det_setup = function(){
+  const app = document.getElementById("app");
+  const typeOrder = ["A1","A2","A3","B1","B2","C1","C2","C3"];
+  const typeChips = typeOrder.map(t=>`<button class="chip active" data-type="${t}" onclick="this.classList.toggle('active')">${TYPE_NAMES[t]||t}</button>`).join("");
+  app.innerHTML = `<div class="scrhead">${backBtn("oefenen")}<h2>Vormen determineren</h2></div>
+  <div class="panel">
+    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;letter-spacing:.06em;text-transform:uppercase">Declinatie</div>
+    <div class="chip-row" id="detTypeChips">${typeChips}</div>
   </div>
+  <button class="btn btn-primary btn-full" onclick="startDetOefening()">Start oefening</button>`;
+};
 
-  <div class="case-ask">${cl.nl}</div>
-  <p class="ex-prompt">Geef de <b>${cl.nl}</b> van <b>${w.nl.split(",")[0].trim()}</b></p>
+window.startSchemaOefening = function(){
+  const chips = document.querySelectorAll("#schTypeChips .chip.active");
+  const types = chips.length ? [...chips].map(b=>b.dataset.type) : Object.keys(TYPE_NAMES);
+  const pool = WORDS.filter(w=>types.includes(w.type));
+  if(!pool.length){toast("Geen woorden beschikbaar.");return;}
+  const w = rand(pool);
+  // Give 3–5 cells as hints (nom_sg always given)
+  const allKeys = PAR_CASE_ORDER.flatMap(c=>[c.sg, c.pl].filter(Boolean)).filter(k=>w.forms[k]&&w.forms[k]!=="—"&&k!=="nom_sg");
+  const giveCount = 2+Math.floor(Math.random()*3);
+  const givenExtra = new Set(shuffle(allKeys).slice(0,giveCount));
+  EX = {mode:"schema_single", word:w, givenExtra, ok:0, totalForms:0};
+  go("ex_run_schema");
+};
 
-  <input class="inp" id="exInp" placeholder="Griekse vorm…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-    onkeydown="if(event.key==='Enter')submitEx()">
-  <div id="exFb"></div>
-  <div id="exBtns" style="margin-top:12px">
-    <button class="btn btn-primary btn-full" onclick="submitEx()">Controleer</button>
-    <button class="btn btn-ghost btn-full" onclick="skipEx()" style="margin-top:8px">Overslaan</button>
+window.startDetOefening = function(){
+  const chips = document.querySelectorAll("#detTypeChips .chip.active");
+  const types = chips.length ? [...chips].map(b=>b.dataset.type) : Object.keys(TYPE_NAMES);
+  const pool = WORDS.filter(w=>types.includes(w.type));
+  if(!pool.length){toast("Geen woorden beschikbaar.");return;}
+  EX = {mode:"det", pool, score:{ok:0,total:0}};
+  go("ex_det_run");
+};
+
+window.startSchemaMetWoord = function(wordId){
+  const w = WORDS.find(x=>x.id===wordId);
+  if(!w) return;
+  const allKeys = PAR_CASE_ORDER.flatMap(c=>[c.sg,c.pl].filter(Boolean)).filter(k=>w.forms[k]&&w.forms[k]!=="—"&&k!=="nom_sg");
+  const giveCount = 2+Math.floor(Math.random()*3);
+  const givenExtra = new Set(shuffle(allKeys).slice(0,giveCount));
+  EX = {mode:"schema_single", word:w, givenExtra, ok:0, totalForms:0};
+  go("ex_run_schema");
+};
+
+// RENDER aliases so go() can find these screens
+RENDER.ex_run_schema = function(){ renderSchemaExercise(); };
+RENDER.ex_det_run    = function(){ renderDetExercise(); };
+
+// ═══════════════════════════════════════════════════
+// OEFENING 1: SCHEMA INVULLEN (single word, 3-column table)
+// ═══════════════════════════════════════════════════
+function renderSchemaExercise(){
+  const {word:w, givenExtra} = EX;
+  const app = document.getElementById("app");
+
+  const rows = PAR_CASE_ORDER.map(c=>{
+    const sgForm = w.forms[c.sg]||"—";
+    const plForm = c.pl ? (w.forms[c.pl]||"—") : null;
+    const isGivenSg = c.sg==="nom_sg" || givenExtra.has(c.sg);
+    const isGivenPl = c.pl && givenExtra.has(c.pl);
+
+    const sgCell = sgForm==="—" ? `<td style="padding:6px 8px;color:var(--muted)">—</td>` :
+      isGivenSg ? `<td style="padding:6px 8px;font-size:17px;color:var(--gold-bright);font-style:italic">${sgForm}</td>` :
+      `<td style="padding:5px 6px"><input class="inp par-inp" id="sch_${c.sg}"
+          data-key="${c.sg}" data-correct="${sgForm}" placeholder="ev."
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          inputmode="none" readonly
+          style="padding:5px 8px;font-size:15px;cursor:default;caret-color:transparent"
+          onclick="gkFocus(this)"></td>`;
+
+    let plCell;
+    if(!c.pl){ plCell=`<td style="padding:6px 8px;color:var(--muted);font-style:italic">—</td>`; }
+    else if(plForm==="—"){ plCell=`<td style="padding:6px 8px;color:var(--muted)">—</td>`; }
+    else if(isGivenPl){ plCell=`<td style="padding:6px 8px;font-size:17px;color:var(--gold-bright);font-style:italic">${plForm}</td>`; }
+    else { plCell=`<td style="padding:5px 6px"><input class="inp par-inp" id="sch_${c.pl}"
+        data-key="${c.pl}" data-correct="${plForm}" placeholder="mv."
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        inputmode="none" readonly
+        style="padding:5px 8px;font-size:15px;cursor:default;caret-color:transparent"
+        onclick="gkFocus(this)"></td>`; }
+
+    return `<tr style="border-bottom:1px solid rgba(255,255,255,.06)">
+      <td style="padding:6px 8px;color:var(--muted);font-size:12px;white-space:nowrap;width:80px">${c.nl}</td>
+      ${sgCell}${plCell}</tr>`;
+  }).join("");
+
+  app.innerHTML = `<div class="scrhead">${backBtn("oefenen")}<h2>Schema invullen</h2></div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:14px;font-style:italic">Vul het schema in. Goudkleurige cellen zijn al gegeven.</p>
+  <div style="text-align:center;background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--gold-dim);border-radius:12px;padding:14px;margin-bottom:14px">
+    <div style="font-size:24px;color:var(--marble)">${w.gr}</div>
+    <div style="font-size:13px;color:var(--muted);font-style:italic">${w.tr} · ${GENUS_NL[w.genus]||w.genus} · ${w.nl.split(",")[0].trim()}</div>
+    <div style="font-size:11px;color:var(--azure2);margin-top:4px">${w.label}</div>
+  </div>
+  <div style="overflow-x:auto;margin-bottom:14px;background:var(--aegean2);border:1px solid var(--aegean4);border-radius:12px">
+    <table style="width:100%;border-collapse:collapse" id="schTable">
+      <thead><tr style="background:rgba(36,66,125,.7)">
+        <th style="padding:7px 8px;text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--aegean4)"></th>
+        <th style="padding:7px 8px;text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--aegean4)">Enkelvoud</th>
+        <th style="padding:7px 8px;text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--aegean4)">Meervoud</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>
+  <div id="schFb"></div>
+  <div id="schKbAnchor"></div>
+  <div id="schBtns">
+    <button class="btn btn-primary btn-full" onclick="controleerSchema()">Controleren</button>
+    <button class="btn btn-ghost btn-full" onclick="toonSchemaAntwoord()" style="margin-top:8px">Toon antwoord</button>
   </div>`;
 
-  document.getElementById("exInp").focus();
-  attachKeyboard("exInp", "exInp");
+  // Keyboard
+  const allInps = [...document.querySelectorAll("#schTable .par-inp")];
+  if(allInps.length){
+    GK_TARGET = allInps[0];
+    const anchor = document.getElementById("schKbAnchor");
+    anchor.appendChild(buildGKToggle());
+    anchor.appendChild(buildKeyboard());
+    gkFocus(allInps[0]);
+  }
+}
+
+window.controleerSchema = function(){
+  const inputs = document.querySelectorAll("#schTable .par-inp");
+  let ok=0, total=0;
+  inputs.forEach(inp=>{
+    const correct = inp.dataset.correct;
+    const given = inp.value.trim();
+    const isOk = checkAnswer(given, correct);
+    inp.style.borderColor = isOk ? "var(--green-bright)" : "var(--terracotta)";
+    inp.style.color = isOk ? "var(--green-bright)" : "var(--terracotta)";
+    if(!isOk && !inp.nextSibling?.classList?.contains("corr-hint")){
+      const hint = document.createElement("div");
+      hint.className = "corr-hint";
+      hint.style.cssText = "font-size:12px;color:var(--green-bright);margin-top:2px;font-style:italic";
+      hint.textContent = "→ " + correct;
+      inp.insertAdjacentElement("afterend", hint);
+    }
+    if(isOk) ok++;
+    total++;
+  });
+  ST.totalOk+=ok; ST.totalDone+=total; saveState();
+  const pct = total>0 ? Math.round(ok/total*100) : 0;
+  document.getElementById("schFb").innerHTML =
+    `<div class="feedback ${pct>=80?"ok":"err"}" style="margin-bottom:12px"><b>${ok} van ${total} correct</b> (${pct}%)</div>`;
+  document.getElementById("schBtns").innerHTML =
+    `<button class="btn btn-primary btn-full" onclick="window.startSchemaOefening()">Nieuw woord</button>
+     <button class="btn btn-ghost btn-full" onclick="go('oefenen')" style="margin-top:8px">Terug naar menu</button>`;
 };
 
-window.submitEx = function(){
-  const inp = document.getElementById("exInp");
-  if(!inp) return;
-  const given = inp.value.trim();
-  if(!given){toast("Typ een antwoord.");return;}
-
-  const q = EX.questions[EX.i];
-  const correct = q.form;
-  const ok = checkAnswer(given, correct);
-
-  ST.totalDone++;
-  if(ok){
-    ST.totalOk++;
-    EX.ok++;
-    EX.streak=(EX.streak||0)+1;
-    if(EX.streak>=(ST.bestStreak||0)) ST.bestStreak=EX.streak;
-  } else {
-    EX.streak=0;
-  }
-  saveState();
-
-  inp.classList.add(ok?"correct":"wrong");
-  inp.disabled = true;
-
-  const fb = document.getElementById("exFb");
-  if(ok){
-    fb.innerHTML = `<div class="feedback ok">✓ Correct! — <b>${correct}</b></div>`;
-  } else {
-    fb.innerHTML = `<div class="feedback err">✗ Fout. Het juiste antwoord: <b>${correct}</b></div>
-      <div class="feedback info">Paradigma: ${q.word.gr} — ${CASE_LABELS.find(c=>c.key===q.caseKey).nl} = <b>${correct}</b></div>`;
-  }
-
-  document.getElementById("exBtns").innerHTML =
-    `<button class="btn btn-primary btn-full" onclick="nextEx()">Volgende</button>`;
+window.toonSchemaAntwoord = function(){
+  document.querySelectorAll("#schTable .par-inp").forEach(inp=>{
+    inp.value = inp.dataset.correct;
+    inp.style.borderColor = "var(--gold-dim)";
+    inp.style.color = "var(--gold-bright)";
+  });
+  document.getElementById("schBtns").innerHTML =
+    `<button class="btn btn-primary btn-full" onclick="window.startSchemaOefening()">Nieuw woord</button>
+     <button class="btn btn-ghost btn-full" onclick="go('oefenen')" style="margin-top:8px">Terug naar menu</button>`;
 };
 
-window.skipEx = function(){ EX.i++; go("ex_run"); };
-window.nextEx = function(){ EX.i++; go("ex_run"); window.scrollTo(0,0); };
-
 // ═══════════════════════════════════════════════════
-// RENDER: MEERKEUZE (MC)
+// OEFENING 2: VORMEN DETERMINEREN
 // ═══════════════════════════════════════════════════
-RENDER.ex_mc = function(){
-  if(EX.i >= EX.total) return finishOefenen();
-  const q = EX.questions[EX.i];
-  const w = q.word;
-  const cl = CASE_LABELS.find(c=>c.key===q.caseKey);
+function renderDetExercise(){
   const app = document.getElementById("app");
-  const pct = Math.round(EX.i/EX.total*100);
+  const {pool, score} = EX;
+  const w = rand(pool);
+  const availKeys = CASE_LABELS.filter(cl=>w.forms[cl.key]&&w.forms[cl.key]!=="—");
+  if(!availKeys.length){ EX.pool=EX.pool.filter(x=>x.id!==w.id); renderDetExercise(); return; }
+  const cl = rand(availKeys);
+  const form = w.forms[cl.key];
+  const allValid = CASE_LABELS.filter(x=>w.forms[x.key]&&w.forms[x.key]===form);
+  const validNls = new Set(allValid.map(x=>x.nl));
+  const others = shuffle(CASE_LABELS.filter(x=>!validNls.has(x.nl))).slice(0,3).map(x=>x.nl);
+  const opts = shuffle([...validNls,...others]);
+  EX._detCurrent = {w,cl,form,validNls,opts,answered:false};
 
-  // Build 4 options: correct form + 3 other forms of the SAME word
-  const allOtherForms = Object.entries(w.forms)
-    .filter(([k, v]) => k !== q.caseKey && v && v !== "—" && v !== q.form)
-    .map(([, v]) => v);
-  // deduplicate (some forms are identical, e.g. nom/acc neuter)
-  const uniqueOthers = [...new Set(allOtherForms)];
-  const distractors = shuffle(uniqueOthers).slice(0, 3);
-  // If there aren't enough distinct forms (e.g. highly syncretic paradigms),
-  // pad with forms from same-type words to always show 4 options
-  if(distractors.length < 3){
-    const sameType = WORDS.filter(x => x.type === w.type && x.id !== w.id);
-    for(const sw of shuffle(sameType)){
-      for(const [k, v] of Object.entries(sw.forms)){
-        if(v && v !== "—" && v !== q.form && !distractors.includes(v)){
-          distractors.push(v);
-          if(distractors.length >= 3) break;
-        }
+  app.innerHTML = `<div class="scrhead">${backBtn("oefenen")}<h2>Vormen determineren</h2></div>
+  <p style="font-size:12px;color:var(--muted);text-align:right;margin-bottom:8px">Goed: ${score.ok} | Totaal: ${score.total}</p>
+  <div style="text-align:center;background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--aegean4);border-radius:14px;padding:24px;margin-bottom:18px">
+    <div style="font-size:42px;color:var(--gold-bright);letter-spacing:.03em;margin-bottom:8px;font-style:italic">${form}</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:4px">${w.gr} — ${w.nl.split(",")[0].trim()}</div>
+    <div style="font-size:12px;color:var(--azure2)">${w.tr} · ${GENUS_NL[w.genus]||w.genus} · ${w.label}</div>
+  </div>
+  <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Welke naamval en welk getal is dit?</p>
+  <div style="display:flex;flex-direction:column;gap:8px" id="detOpts">
+    ${opts.map((opt,i)=>`<button id="detopt_${i}" onclick="selectDetOpt(${i},'${opt.replace(/'/g,"\\'")}')"
+      style="padding:11px 16px;border-radius:10px;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.1);
+      font-size:14px;color:var(--cream);text-align:left;cursor:pointer;font-family:inherit;transition:all .12s">${opt}</button>`).join("")}
+  </div>
+  <div id="detFb" style="margin-top:12px"></div>
+  <div style="margin-top:12px"><button id="detVolgende" class="btn btn-primary btn-full" style="display:none" onclick="go('ex_det_run')">Volgende →</button></div>`;
+}
+
+window.selectDetOpt = function(i, opt){
+  if(EX._detCurrent.answered)return;
+  EX._detCurrent.answered=true; EX.score.total++;
+  const ok=EX._detCurrent.validNls.has(opt);
+  if(ok)EX.score.ok++;
+  ST.totalDone++;if(ok)ST.totalOk++;saveState();
+  document.querySelectorAll("[id^='detopt_']").forEach((b,j)=>{
+    if(EX._detCurrent.validNls.has(EX._detCurrent.opts[j])){b.style.borderColor="var(--green-bright)";b.style.color="var(--green-bright)";}
+    else if(j===i&&!ok){b.style.borderColor="var(--terracotta)";b.style.color="var(--terracotta)";}
+    b.disabled=true;
+  });
+  document.getElementById("detFb").innerHTML=ok
+    ?`<div class="feedback ok">✓ Correct!</div>`
+    :`<div class="feedback err">✗ Niet correct. Juist: ${[...EX._detCurrent.validNls].join(" / ")}</div>`;
+  document.getElementById("detVolgende").style.display="";
+};
+RENDER.ex_mc = function(){
+  const app = document.getElementById("app");
+  if(!EX._mcPool){
+    EX._mcPool = [];
+    for(const w of WORDS){
+      for(const cl of CASE_LABELS){
+        const form = w.forms[cl.key];
+        if(form && form!=="—") EX._mcPool.push({w, cl, form});
       }
-      if(distractors.length >= 3) break;
+    }
+    EX._mcPool = shuffle(EX._mcPool);
+    EX._mcIdx = 0;
+    EX._mcScore = {ok:0, total:0};
+  }
+  if(EX._mcIdx >= EX._mcPool.length){ EX._mcIdx=0; EX._mcPool=shuffle(EX._mcPool); }
+  const {w, cl, form} = EX._mcPool[EX._mcIdx];
+
+  // Distractors: other forms of same word
+  const allOtherForms = Object.entries(w.forms)
+    .filter(([k,v])=>k!==cl.key&&v&&v!=="—"&&v!==form).map(([,v])=>v);
+  const unique = [...new Set(allOtherForms)];
+  const distractors = shuffle(unique).slice(0,3);
+  if(distractors.length<3){
+    const sameType = WORDS.filter(x=>x.type===w.type&&x.id!==w.id);
+    for(const sw of shuffle(sameType)){
+      for(const [,v] of Object.entries(sw.forms)){
+        if(v&&v!=="—"&&v!==form&&!distractors.includes(v)){distractors.push(v);if(distractors.length>=3)break;}
+      }
+      if(distractors.length>=3)break;
     }
   }
-  const opts = shuffle([q.form, ...distractors.slice(0,3)]);
-
+  const opts = shuffle([form,...distractors.slice(0,3)]);
   EX._mcAnswered = false;
 
-  app.innerHTML = `
-  <div class="scrhead">${backBtn("oefenen")}<h2>Meerkeuze</h2><span style="font-size:12px;color:var(--muted)">${EX.i+1}/${EX.total}</span></div>
-
-  <div class="prog-wrap">
-    <div class="prog-label"><span>Voortgang</span><span>${EX.ok} goed</span></div>
-    <div class="progbar"><i style="width:${pct}%"></i></div>
-  </div>
-
+  app.innerHTML = `<div class="scrhead">${backBtn("oefenen")}<h2>Meerkeuze</h2></div>
+  <p style="font-size:12px;color:var(--muted);text-align:right;margin-bottom:8px">Goed: ${EX._mcScore.ok} | Totaal: ${EX._mcScore.total}</p>
   <div class="word-card">
     <div class="word-badge">${w.label}</div>
     <div class="word-gr">${w.gr}</div>
-    <div class="word-tr">${w.tr}</div>
+    <div class="word-tr">${w.tr} · ${GENUS_NL[w.genus]||w.genus}</div>
     <div class="word-nl">${w.nl.split(",")[0].trim()}</div>
-    <div class="word-decl">${GENUS_NL[w.genus]||w.genus}</div>
   </div>
-
+  <div class="case-ask">${cl.nl}</div>
   <p class="ex-prompt" style="margin-bottom:14px">Wat is de <b>${cl.nl}</b> van dit woord?</p>
-
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px" id="mcOpts">
-    ${opts.map((o,i)=>`<button class="mc-opt" id="mco${i}" onclick="pickMC(${i},'${o}','${q.form}')"
+    ${opts.map((o,i)=>`<button class="mc-opt" id="mco${i}" onclick="pickMC(${i},\'${o}\',\'${form}\')"
       style="padding:16px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
       font-size:18px;color:var(--cream);cursor:pointer;transition:all .14s;font-family:inherit;letter-spacing:.03em">${o}</button>`).join("")}
   </div>`;
@@ -1153,32 +1277,70 @@ RENDER.ex_mc = function(){
 window.pickMC = function(i, chosen, correct){
   if(EX._mcAnswered) return;
   EX._mcAnswered = true;
-  const ok = chosen === correct;
-
-  ST.totalDone++;
-  if(ok){ ST.totalOk++; EX.ok++; EX.streak=(EX.streak||0)+1; if(EX.streak>ST.bestStreak) ST.bestStreak=EX.streak; }
-  else { EX.streak=0; }
-  saveState();
-
-  document.querySelectorAll("[id^='mco']").forEach(b=>{
-    b.disabled = true;
-    if(b.textContent===correct) b.style.cssText += ";background:rgba(58,125,74,.3);border-color:var(--green-bright);color:var(--green-bright)";
-    else if(b.textContent===chosen && !ok) b.style.cssText += ";background:rgba(192,71,42,.2);border-color:var(--terracotta);color:var(--terracotta)";
+  EX._mcScore.total++;
+  const ok = chosen===correct;
+  if(ok) EX._mcScore.ok++;
+  ST.totalDone++; if(ok) ST.totalOk++; saveState();
+  document.querySelectorAll("[id^=\'mco\']").forEach(b=>{
+    b.disabled=true;
+    if(b.textContent===correct) b.style.cssText+=";background:rgba(58,125,74,.3);border-color:var(--green-bright);color:var(--green-bright)";
+    else if(b.textContent===chosen&&!ok) b.style.cssText+=";background:rgba(192,71,42,.2);border-color:var(--terracotta);color:var(--terracotta)";
   });
-
-  const fb = document.createElement("div");
-  fb.className = "feedback " + (ok?"ok":"err");
-  fb.innerHTML = ok ? `✓ Correct! — <b>${correct}</b>` : `✗ Fout. Het juiste antwoord: <b>${correct}</b>`;
-  fb.style.marginTop = "14px";
-  document.getElementById("mcOpts").insertAdjacentElement("afterend", fb);
-
-  const btn = document.createElement("button");
-  btn.className = "btn btn-primary btn-full";
-  btn.style.marginTop = "12px";
-  btn.textContent = "Volgende";
-  btn.onclick = ()=>{ EX.i++; go("ex_mc"); window.scrollTo(0,0); };
-  fb.insertAdjacentElement("afterend", btn);
+  const fb=document.createElement("div"); fb.className="feedback "+(ok?"ok":"err");
+  fb.innerHTML=ok?`✓ Correct! — <b>${correct}</b>`:`✗ Fout. Het juiste antwoord: <b>${correct}</b>`;
+  fb.style.marginTop="14px";
+  document.getElementById("mcOpts").insertAdjacentElement("afterend",fb);
+  const btn=document.createElement("button"); btn.className="btn btn-primary btn-full";
+  btn.style.marginTop="12px"; btn.textContent="Volgende";
+  btn.onclick=()=>{ EX._mcIdx++; go("ex_mc"); window.scrollTo(0,0); };
+  fb.insertAdjacentElement("afterend",btn);
 };
+
+// ═══════════════════════════════════════════════════
+// OEFENING 4: KENNISVRAGEN
+// ═══════════════════════════════════════════════════
+RENDER.ex_kv = function(){
+  const app = document.getElementById("app");
+  if(!EX._kvUsed) EX._kvUsed=[];
+  if(EX._kvUsed.length>=KENNIS_DB.length) EX._kvUsed=[];
+  const remaining=KENNIS_DB.map((_,i)=>i).filter(i=>!EX._kvUsed.includes(i));
+  const qi=rand(remaining); EX._kvUsed.push(qi);
+  const q=KENNIS_DB[qi]; EX._kvCurrent={q,answered:false};
+  if(!EX._kvScore) EX._kvScore={ok:0,total:0};
+
+  app.innerHTML=`<div class="scrhead">${backBtn("oefenen")}<h2>Kennisvragen</h2></div>
+  <p style="font-size:12px;color:var(--muted);text-align:right;margin-bottom:8px">Goed: ${EX._kvScore.ok} | Totaal: ${EX._kvScore.total}</p>
+  <div class="panel">
+    <div style="font-size:16px;color:var(--cream);line-height:1.55;margin-bottom:16px">${q.v}</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${q.opts.map((opt,i)=>`<button id="kvopt${i}" onclick="selectKvOef(${i},\'${opt.replace(/\'/g,"\\'")}\')"
+        style="padding:11px 14px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.1);
+        border-radius:9px;cursor:pointer;font-size:14px;color:var(--cream);text-align:left;font-family:inherit;transition:all .13s">${opt}</button>`).join("")}
+    </div>
+  </div>
+  <div id="kvFb"></div>
+  <div style="margin-top:10px"><button id="kvVolgende" class="btn btn-primary btn-full" style="display:none" onclick="go(\'ex_kv\')">Volgende vraag →</button></div>`;
+};
+
+window.selectKvOef=function(i,opt){
+  if(EX._kvCurrent.answered)return;
+  EX._kvCurrent.answered=true; EX._kvScore.total++;
+  const ok=EX._kvCurrent.q.correct.includes(opt);
+  if(ok)EX._kvScore.ok++;
+  ST.totalDone++;if(ok)ST.totalOk++;saveState();
+  EX._kvCurrent.q.opts.forEach((o,j)=>{
+    const b=document.getElementById("kvopt"+j);
+    if(EX._kvCurrent.q.correct.includes(o)){b.style.borderColor="var(--green-bright)";b.style.color="var(--green-bright)";}
+    else if(j===i&&!ok){b.style.borderColor="var(--terracotta)";b.style.color="var(--terracotta)";}
+    b.disabled=true;
+  });
+  document.getElementById("kvFb").innerHTML=`<div class="feedback ${ok?"ok":"err"}" style="margin-top:8px">${ok?"✓ Correct!":"✗ Niet correct."} ${EX._kvCurrent.q.uitleg}</div>`;
+  document.getElementById("kvVolgende").style.display="";
+};
+
+// Legacy stubs
+RENDER.ex_run=function(){go("ex_schema_setup");};
+function finishOefenen(){go("oefenen");}
 
 // ═══════════════════════════════════════════════════
 // RENDER: VOLLEDIG PARADIGMA INVULLEN
@@ -1209,8 +1371,9 @@ RENDER.ex_paradigm = function(){
       : `<td style="padding:6px 8px">
           <input class="inp par-inp" data-key="${c.sg}" data-correct="${sgForm}"
             placeholder="ev." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-            style="padding:5px 8px;font-size:15px;"
-            onkeydown="if(event.key==='Enter')nextInput(this)">
+            inputmode="none" readonly
+            style="padding:5px 8px;font-size:15px;cursor:default;caret-color:transparent"
+            onclick="gkFocus(this)">
         </td>`;
 
     let plCell;
@@ -1222,8 +1385,9 @@ RENDER.ex_paradigm = function(){
       plCell = `<td style="padding:6px 8px">
           <input class="inp par-inp" data-key="${c.pl}" data-correct="${plForm}"
             placeholder="mv." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-            style="padding:5px 8px;font-size:15px;"
-            onkeydown="if(event.key==='Enter')nextInput(this)">
+            inputmode="none" readonly
+            style="padding:5px 8px;font-size:15px;cursor:default;caret-color:transparent"
+            onclick="gkFocus(this)">
         </td>`;
     }
 
@@ -1395,11 +1559,12 @@ RENDER.test_setup = function(){
     <div class="chip-row" id="tCaseChips">
       ${CASE_LABELS.map(c=>`<button class="chip active" data-case="${c.key}" onclick="this.classList.toggle('active')">${c.abbr}</button>`).join("")}
     </div>
-    <div style="font-size:13px;color:var(--gold);margin-bottom:8px;margin-top:12px;letter-spacing:.06em;text-transform:uppercase">Aantal vragen</div>
-    <div class="chip-row">
-      <button class="chip" data-n="10" onclick="setN(this)">10</button>
-      <button class="chip active" data-n="20" onclick="setN(this)">20</button>
-      <button class="chip" data-n="30" onclick="setN(this)">30</button>
+    <div style="font-size:12px;color:var(--muted);margin-top:14px;line-height:1.6">
+      De toets bestaat uit drie onderdelen:<br>
+      <b style="color:var(--azure2)">Deel A</b> — 4 paradigma's invullen (8 pt) &nbsp;·&nbsp;
+      <b style="color:var(--terracotta)">Deel B</b> — 8 vormen determineren (8 pt) &nbsp;·&nbsp;
+      <b style="color:var(--gold)">Deel C</b> — 4 kennisvragen (4 pt) &nbsp;·&nbsp;
+      <b>Totaal 20 pt → cijfer 1–10</b>
     </div>
   </div>
 
@@ -1408,19 +1573,172 @@ RENDER.test_setup = function(){
 
   // default: all types active
   document.querySelectorAll("#tTypeChips .chip").forEach(c=>c.classList.add("active"));
-  window._testN = 20;
 };
 
-window.setN = function(btn){
-  document.querySelectorAll("[data-n]").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  window._testN = parseInt(btn.dataset.n);
-};
+// ═══════════════════════════════════════════════════
+// KENNISVRAGEN DATABASE
+// ═══════════════════════════════════════════════════
+const KENNIS_DB = [
+  // ── Functie → Naamval ──
+  {
+    v:"Welke naamval gebruik je voor het <b>onderwerp</b> van een zin?",
+    correct:["nominatief"],
+    opts:["nominatief","genitief","datief","accusatief","vocatief"],
+    uitleg:"Het onderwerp (wie/wat de handeling verricht) staat in de <b>nominatief</b>."
+  },
+  {
+    v:"Welke naamval gebruik je voor het <b>lijdend voorwerp</b>?",
+    correct:["accusatief"],
+    opts:["nominatief","genitief","datief","accusatief","vocatief"],
+    uitleg:"Het lijdend voorwerp (wat de handeling ondergaat) staat in de <b>accusatief</b>."
+  },
+  {
+    v:"Welke naamval gebruik je voor het <b>meewerkend voorwerp</b> (indirect object)?",
+    correct:["datief"],
+    opts:["nominatief","genitief","datief","accusatief","vocatief"],
+    uitleg:"Het meewerkend voorwerp (aan wie/voor wie iets gedaan wordt) staat in de <b>datief</b>."
+  },
+  {
+    v:"Welke naamval drukt <b>bezit of nadere bepaling</b> uit (de 'van'-naamval)?",
+    correct:["genitief"],
+    opts:["nominatief","genitief","datief","accusatief","vocatief"],
+    uitleg:"De <b>genitief</b> geeft bezit, herkomst of een nadere bepaling aan: <em>τοῦ πατρός</em> = van de vader."
+  },
+  {
+    v:"Welke naamval gebruik je bij het <b>aanspreken</b> van een persoon?",
+    correct:["vocatief"],
+    opts:["nominatief","genitief","datief","accusatief","vocatief"],
+    uitleg:"De <b>vocatief</b> is de aanspreekvorm. Bijv.: <em>ὦ ἄνθρωπε</em> = o mens!"
+  },
+  {
+    v:"Welke naamval gebruik je na het voorzetsel <b>ἐν</b> (= in, op)?",
+    correct:["datief"],
+    opts:["nominatief","genitief","datief","accusatief"],
+    uitleg:"<em>ἐν</em> + <b>datief</b>. Bijv.: <em>ἐν τῇ ἀγορᾷ</em> = op de marktplaats."
+  },
+  {
+    v:"Welke naamval gebruik je na het voorzetsel <b>εἰς</b> (= naar, in)?",
+    correct:["accusatief"],
+    opts:["nominatief","genitief","datief","accusatief"],
+    uitleg:"<em>εἰς</em> + <b>accusatief</b> (beweging/richting). Bijv.: <em>εἰς τὴν πόλιν</em> = naar de stad."
+  },
+  {
+    v:"Welke naamval gebruik je na het voorzetsel <b>ἀπό</b> (= van, vanaf)?",
+    correct:["genitief"],
+    opts:["nominatief","genitief","datief","accusatief"],
+    uitleg:"<em>ἀπό</em> + <b>genitief</b>. Bijv.: <em>ἀπὸ τῆς πόλεως</em> = van de stad."
+  },
+  {
+    v:"Welke naamval gebruik je na het voorzetsel <b>ἐκ / ἐξ</b> (= uit)?",
+    correct:["genitief"],
+    opts:["nominatief","genitief","datief","accusatief"],
+    uitleg:"<em>ἐκ/ἐξ</em> + <b>genitief</b>. Bijv.: <em>ἐκ τῆς οἰκίας</em> = uit het huis."
+  },
+  {
+    v:"Welke naamval gebruik je na het voorzetsel <b>πρός</b> (= naar, bij)?",
+    correct:["accusatief"],
+    opts:["nominatief","genitief","datief","accusatief"],
+    uitleg:"<em>πρός</em> + <b>accusatief</b> voor beweging/richting. Bijv.: <em>πρὸς τὴν πόλιν</em> = naar de stad."
+  },
+  {
+    v:"Welke naamval staat na het voorzetsel <b>παρά</b> bij de betekenis 'bij, naast'?",
+    correct:["datief"],
+    opts:["nominatief","genitief","datief","accusatief"],
+    uitleg:"<em>παρά</em> + <b>datief</b> = naast, bij (rust). Bijv.: <em>παρὰ τῷ βασιλεῖ</em> = bij de koning."
+  },
+  {
+    v:"Welke naamval gebruik je voor het <b>naamwoordelijk gezegde</b> bij εἶναι?",
+    correct:["nominatief"],
+    opts:["nominatief","genitief","datief","accusatief","vocatief"],
+    uitleg:"Het predicatief gebruikte woord bij een koppelwerkwoord (εἶναι) staat in de <b>nominatief</b>. Bijv.: <em>ὁ ἄνθρωπος σοφός ἐστιν</em>."
+  },
+  // ── Naamval → Functie ──
+  {
+    v:"Wat is de <b>hoofdfunctie</b> van de <b>nominatief</b>?",
+    correct:["onderwerp van de zin"],
+    opts:["onderwerp van de zin","lijdend voorwerp","bezit/nadere bepaling ('van')","meewerkend voorwerp","aanspreken"],
+    uitleg:"De <b>nominatief</b> is de naamval van het onderwerp: degene die de handeling verricht."
+  },
+  {
+    v:"Wat is de <b>hoofdfunctie</b> van de <b>genitief</b>?",
+    correct:["bezit/nadere bepaling ('van')"],
+    opts:["onderwerp van de zin","lijdend voorwerp","bezit/nadere bepaling ('van')","meewerkend voorwerp","aanspreken"],
+    uitleg:"De <b>genitief</b> drukt bezit of een nadere bepaling uit: vertaal als 'van'."
+  },
+  {
+    v:"Wat is de <b>hoofdfunctie</b> van de <b>datief</b>?",
+    correct:["meewerkend voorwerp"],
+    opts:["onderwerp van de zin","lijdend voorwerp","bezit/nadere bepaling ('van')","meewerkend voorwerp","aanspreken"],
+    uitleg:"De <b>datief</b> is het meewerkend voorwerp: aan wie of voor wie iets gedaan wordt."
+  },
+  {
+    v:"Wat is de <b>hoofdfunctie</b> van de <b>accusatief</b>?",
+    correct:["lijdend voorwerp"],
+    opts:["onderwerp van de zin","lijdend voorwerp","bezit/nadere bepaling ('van')","meewerkend voorwerp","aanspreken"],
+    uitleg:"De <b>accusatief</b> is het lijdend voorwerp, maar ook de richting na voorzetsels als <em>εἰς</em> en <em>πρός</em>."
+  },
+  {
+    v:"Wat is de functie van de <b>vocatief</b>?",
+    correct:["aanspreken"],
+    opts:["onderwerp van de zin","lijdend voorwerp","bezit/nadere bepaling ('van')","meewerkend voorwerp","aanspreken"],
+    uitleg:"De <b>vocatief</b> gebruik je bij het direct aanspreken van een persoon. Altijd met <em>ὦ</em>."
+  },
+  // ── Grammatica-kennis ──
+  {
+    v:"Bij welke declinatie heeft de <b>genitief enkelvoud</b> de uitgang <b>-ου</b>?",
+    correct:["2e declinatie"],
+    opts:["1e declinatie","2e declinatie","3e declinatie"],
+    uitleg:"De <b>2e declinatie</b> heeft -ου in de genitief enkelvoud. Bijv.: <em>λόγου</em>, <em>θεοῦ</em>."
+  },
+  {
+    v:"Bij welke declinatie heeft de <b>genitief enkelvoud</b> de uitgang <b>-ης / -ας</b>?",
+    correct:["1e declinatie"],
+    opts:["1e declinatie","2e declinatie","3e declinatie"],
+    uitleg:"De <b>1e declinatie</b> heeft -ης (bijv. <em>ψυχῆς</em>) of -ας (bijv. <em>χώρας</em>) in de genitief enkelvoud."
+  },
+  {
+    v:"Welke twee naamvallen zijn bij <b>onzijdige zelfstandige naamwoorden</b> altijd identiek?",
+    correct:["nominatief en accusatief"],
+    opts:["nominatief en accusatief","genitief en datief","datief en accusatief","nominatief en vocatief"],
+    uitleg:"Bij onzijdige woorden zijn <b>nominatief en accusatief</b> altijd gelijk, in enkelvoud én meervoud. Bijv.: <em>ἔργον</em> (nom./acc. ev.), <em>ἔργα</em> (nom./acc. mv.)."
+  },
+  {
+    v:"Hoe herken je een <b>3e-declinatie</b>-woord in het woordenboek?",
+    correct:["genitief enkelvoud op -ος"],
+    opts:["genitief enkelvoud op -ης","genitief enkelvoud op -ου","genitief enkelvoud op -ος","genitief enkelvoud op -εως"],
+    uitleg:"Woorden van de <b>3e declinatie</b> hebben een genitief enkelvoud op <b>-ος</b>: bijv. <em>ἀνήρ, ἀνδρός</em>; <em>πόλεμος, πολέμου</em>."
+  },
+  {
+    v:"Welke uitgang heeft de <b>datief meervoud</b> van de 3e declinatie?",
+    correct:["-σι(ν)"],
+    opts:["-ων","-ις","-σι(ν)","-εσι"],
+    uitleg:"De datief meervoud van de 3e declinatie eindigt op <b>-σι(ν)</b>, soms met vocaalstam: bijv. <em>ἀνδράσι</em>, <em>πόλεσι</em>."
+  },
+  {
+    v:"Wat is het kenmerk van de <b>-ις/-εως</b> declinatie (C2)?",
+    correct:["genitief op -εως i.p.v. -ος"],
+    opts:["genitief op -εως i.p.v. -ος","datief op -ει","accusatief op -ιν","nominatief meervoud op -εις"],
+    uitleg:"De <b>-ις/-εως</b> declinatie (bijv. <em>πόλις, πόλεως</em>) valt op door de genitief op -εως i.p.v. verwacht -ος, en accusatief enkelvoud op -ιν."
+  },
+  {
+    v:"Wat is de <b>datief enkelvoud</b> van woorden op <b>-εύς</b> (3e declinatie, bijv. βασιλεύς)?",
+    correct:["βασιλεῖ (-εῖ)"],
+    opts:["βασιλέῳ (-έῳ)","βασιλεῖ (-εῖ)","βασιλέᾳ (-έᾳ)","βασιλέοις (-έοις)"],
+    uitleg:"Woorden op <b>-εύς</b> hebben datief enkelvoud op <b>-εῖ</b>: <em>βασιλεῖ</em>. Nominatief meervoud is -εῖς, accusatief -έᾱ(ς)."
+  }
+];
+
+// ═══════════════════════════════════════════════════
+// TOETS: SETUP, RUN, RESULT
+// Deel A — Paradigma's invullen   (8 pt: 2 per woord, max 4 woorden)
+// Deel B — Vormen determineren    (8 pt: 1 per vraag, 8 vragen)
+// Deel C — Kennisvragen           (4 pt: 1 per vraag, 4 vragen)
+// Totaal 20 pt → cijfer 1–10
+// ═══════════════════════════════════════════════════
 
 window.startTest = function(){
   const activeTypes = [...document.querySelectorAll("#tTypeChips .chip.active")].map(b=>b.dataset.type);
   const activeCases = [...document.querySelectorAll("#tCaseChips .chip.active")].map(b=>b.dataset.case);
-  const n = window._testN || 20;
 
   if(!activeTypes.length){toast("Selecteer minstens één declinatie.");return;}
   if(!activeCases.length){toast("Selecteer minstens één naamval.");return;}
@@ -1428,97 +1746,286 @@ window.startTest = function(){
   const pool = WORDS.filter(w=>activeTypes.includes(w.type));
   if(!pool.length){toast("Geen woorden beschikbaar.");return;}
 
-  let questions = [];
-  for(const w of pool){
-    for(const c of activeCases){
-      const form = w.forms[c];
-      if(!form||form==="—") continue;
-      questions.push({word:w, caseKey:c, form, given:"", checked:false, ok:null});
-    }
-  }
-  questions = shuffle(questions).slice(0, n);
+  // ── Deel A: 4 woorden, gespreid over gekozen declinaties ──
+  const typeGroups = {};
+  for(const w of pool){ (typeGroups[w.type]||(typeGroups[w.type]=[])).push(w); }
+  const availTypes = Object.keys(typeGroups);
+  const chosenTypes = shuffle(availTypes).slice(0, Math.min(4, availTypes.length));
+  // fill to 4
+  while(chosenTypes.length < 4) chosenTypes.push(chosenTypes[Math.floor(Math.random()*chosenTypes.length)]);
+  const schemaWords = chosenTypes.slice(0,4).map(t => rand(typeGroups[t]));
 
-  TST = {questions, i:0, ok:0, total:questions.length, submitted:false};
+  // ── Deel B: 8 determineer-vragen ──
+  const detItems = [];
+  for(let i=0; i<8; i++){
+    const w = rand(pool);
+    const availCases = CASE_LABELS.filter(cl=>activeCases.includes(cl.key)&&w.forms[cl.key]&&w.forms[cl.key]!=="—");
+    if(!availCases.length) continue;
+    const cl = rand(availCases);
+    const form = w.forms[cl.key];
+    // All valid case labels that match this exact form in this word
+    const allValid = CASE_LABELS.filter(x =>
+      w.forms[x.key] && w.forms[x.key]!=="—" && w.forms[x.key]===form
+    );
+    // Build 4 MC options: correct + 3 others from same word's forms
+    const others = CASE_LABELS
+      .filter(x=>x.key!==cl.key && w.forms[x.key] && w.forms[x.key]!=="—" && w.forms[x.key]!==form)
+      .map(x=>x.nl);
+    const dedup = [...new Set(others)];
+    while(dedup.length < 3){
+      const extra = rand(CASE_LABELS.filter(x=>!dedup.includes(x.nl)&&x.nl!==cl.nl));
+      if(extra) dedup.push(extra.nl);
+    }
+    const validNls = new Set(allValid.map(x=>x.nl));
+    const opts = shuffle([...validNls, ...dedup.filter(nl=>!validNls.has(nl)).slice(0, 3-validNls.size+1)]);
+    detItems.push({w, caseKey:cl.key, form, validNls, opts, selNl:""});
+  }
+
+  // ── Deel C: 4 kennisvragen ──
+  const kvItems = shuffle(KENNIS_DB).slice(0, 4).map(q=>({...q, selOpt:""}));
+
+  TST = {
+    schemaWords, detItems, kvItems,
+    activeCases,
+    submitted: false,
+    score: null
+  };
   go("test_run");
 };
 
 // ═══════════════════════════════════════════════════
-// RENDER: TEST RUN (one question at a time)
+// RENDER: TEST RUN — één lang formulier, inleveren onderaan
 // ═══════════════════════════════════════════════════
 RENDER.test_run = function(){
-  if(TST.submitted) return go("test_result");
-  if(TST.i >= TST.total) return submitTest();
-
-  const q = TST.questions[TST.i];
-  const w = q.word;
-  const cl = CASE_LABELS.find(c=>c.key===q.caseKey);
+  if(TST.submitted){ go("test_result"); return; }
   const app = document.getElementById("app");
-  const pct = Math.round(TST.i/TST.total*100);
+  const {schemaWords, detItems, kvItems, activeCases} = TST;
 
-  app.innerHTML = `
-  <div class="scrhead">${backBtn("test_setup")}<h2>Toets</h2><span style="font-size:12px;color:var(--muted)">${TST.i+1}/${TST.total}</span></div>
-
-  <div class="prog-wrap">
-    <div class="prog-label"><span>Voortgang</span><span>${TST.i} van ${TST.total}</span></div>
-    <div class="progbar"><i style="width:${pct}%"></i></div>
-  </div>
-
-  <div class="word-card">
-    <div class="word-badge">${w.label}</div>
-    <div class="word-gr">${w.gr}</div>
-    <div class="word-tr">${w.tr}</div>
-    <div class="word-nl">${w.nl.split(",")[0].trim()}</div>
-    <div class="word-decl">${GENUS_NL[w.genus]||w.genus}</div>
-  </div>
-
-  <div class="case-ask">${cl.nl}</div>
-
-  <input class="inp" id="tstInp" placeholder="Griekse vorm…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-    onkeydown="if(event.key==='Enter')nextTest()">
-  <div class="hint-text" id="tstHint">Schrijf de Griekse naamvalsvorm (met accenten indien mogelijk)</div>
-
-  <div class="btn-row" style="margin-top:14px">
-    <button class="btn btn-primary" style="flex:1" onclick="nextTest()">Volgende →</button>
-    ${TST.i>0?`<button class="btn btn-ghost" onclick="prevTest()">← Vorige</button>`:""}
+  let html = `<div class="scrhead">${backBtn("test_setup")}<h2>Toets</h2></div>
+  <div style="background:var(--terracotta);color:#fff;text-align:center;font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:7px;border-radius:8px;margin-bottom:18px;font-weight:600">
+    ⚠ Toetsmodus — dit wordt beoordeeld
   </div>`;
 
-  const inp = document.getElementById("tstInp");
-  inp.value = q.given || "";
-  inp.focus();
-  inp.addEventListener("input",()=>{ TST.questions[TST.i].given = inp.value; });
-  GK_TARGET = inp;
-  attachKeyboard("tstInp", "tstHint");
+  // ── DEEL A ──
+  html += `<div style="font-family:'Optima',Palatino,Georgia,serif;font-size:18px;color:var(--gold);margin-bottom:4px">Deel A — Paradigma's invullen</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Vul het volledige verbuigingsschema in. De nominatief enkelvoud is alvast gegeven. (8 punten: 2 per woord)</div>`;
+
+  schemaWords.forEach((w, wi)=>{
+    html += `<div style="text-align:center;background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--gold-dim);border-radius:12px;padding:14px;margin-bottom:10px">
+      <div style="font-size:22px;color:var(--marble)">${w.gr}</div>
+      <div style="font-size:13px;color:var(--muted);font-style:italic">${w.tr} · ${GENUS_NL[w.genus]||w.genus}</div>
+      <div style="font-size:11px;color:var(--azure2);margin-top:3px">${w.label}</div>
+    </div>
+    <div style="overflow-x:auto;margin-bottom:18px;background:var(--aegean2);border:1px solid var(--aegean4);border-radius:12px">
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr style="background:rgba(36,66,125,.7)">
+        <th style="padding:7px 8px;text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--aegean4)"></th>
+        <th style="padding:7px 8px;text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--aegean4)">Enkelvoud</th>
+        <th style="padding:7px 8px;text-align:left;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--aegean4)">Meervoud</th>
+      </tr></thead>
+      <tbody>`;
+    PAR_CASE_ORDER.forEach(c=>{
+      const sgForm = w.forms[c.sg]||"—";
+      const plForm = c.pl ? (w.forms[c.pl]||"—") : null;
+      // Only show rows for cases in activeCases, plus always show nom for the given hint
+      const sgActive = activeCases.includes(c.sg) || c.sg==="nom_sg";
+      const plActive = c.pl && activeCases.includes(c.pl);
+      if(!sgActive && !plActive) return;
+
+      const sgCell = !sgActive ? `<td style="padding:6px 8px;color:var(--muted)">—</td>` :
+        sgForm==="—" ? `<td style="padding:6px 8px;color:var(--muted)">—</td>` :
+        c.sg==="nom_sg" ?
+          `<td style="padding:6px 8px;font-size:17px;color:var(--gold-bright);font-style:italic">${sgForm}</td>` :
+          `<td style="padding:5px 6px"><input class="inp par-inp" id="ts_${wi}_${c.sg}"
+              data-wi="${wi}" data-key="${c.sg}" data-correct="${sgForm}"
+              placeholder="ev." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+              inputmode="none" readonly
+              style="padding:5px 8px;font-size:14px;cursor:default;caret-color:transparent"
+              onclick="gkFocus(this)"></td>`;
+
+      let plCell;
+      if(!c.pl || (!plActive && c.pl)){
+        plCell = `<td style="padding:6px 8px;color:var(--muted);font-style:italic">—</td>`;
+      } else if(plForm==="—"){
+        plCell = `<td style="padding:6px 8px;color:var(--muted)">—</td>`;
+      } else {
+        plCell = `<td style="padding:5px 6px"><input class="inp par-inp" id="ts_${wi}_${c.pl}"
+            data-wi="${wi}" data-key="${c.pl}" data-correct="${plForm}"
+            placeholder="mv." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+            inputmode="none" readonly
+            style="padding:5px 8px;font-size:14px;cursor:default;caret-color:transparent"
+            onclick="gkFocus(this)"></td>`;
+      }
+
+      html += `<tr style="border-bottom:1px solid rgba(255,255,255,.06)">
+        <td style="padding:6px 8px;color:var(--muted);font-size:11px;white-space:nowrap;width:80px">${c.nl}</td>
+        ${sgCell}${plCell}
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  });
+
+  // Keyboard anchor after Deel A
+  html += `<div id="toetsKbAnchor"></div>`;
+  html += `<div class="meander"></div>`;
+
+  // ── DEEL B ──
+  html += `<div style="font-family:'Optima',Palatino,Georgia,serif;font-size:18px;color:var(--gold);margin-bottom:4px">Deel B — Vormen determineren</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Welke naamval is de vetgedrukte vorm? Kies het juiste antwoord. (8 punten: 1 per vraag)</div>`;
+
+  detItems.forEach((item, ii)=>{
+    html += `<div style="background:var(--aegean2);border:1px solid var(--aegean4);border-radius:12px;padding:14px;margin-bottom:12px">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">${item.w.gr} — ${item.w.nl.split(",")[0].trim()} · ${GENUS_NL[item.w.genus]||item.w.genus}</div>
+      <div style="font-size:30px;color:var(--gold-bright);letter-spacing:.03em;margin-bottom:12px;font-style:italic">${item.form}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px" id="det_${ii}">`;
+    item.opts.forEach((opt, oi)=>{
+      html += `<button class="det-opt" id="dopt_${ii}_${oi}" onclick="selectDet(${ii},${oi},'${opt.replace(/'/g,"\\'")}',this)"
+        style="padding:10px 8px;border-radius:9px;font-size:13px;cursor:pointer;font-family:inherit;text-align:left;
+        border:2px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--cream);transition:all .12s">${opt}</button>`;
+    });
+    html += `</div></div>`;
+  });
+
+  html += `<div class="meander"></div>`;
+
+  // ── DEEL C ──
+  html += `<div style="font-family:'Optima',Palatino,Georgia,serif;font-size:18px;color:var(--gold);margin-bottom:4px">Deel C — Kennisvragen</div>
+  <div style="font-size:13px;color:var(--muted);margin-bottom:16px">Theorie over Griekse naamvallen. (4 punten: 1 per vraag)</div>`;
+
+  kvItems.forEach((q, qi)=>{
+    html += `<div style="background:var(--aegean2);border:1px solid var(--aegean4);border-radius:12px;padding:14px;margin-bottom:12px">
+      <div style="font-size:15px;color:var(--cream);line-height:1.5;margin-bottom:12px">${q.v}</div>
+      <div style="display:flex;flex-direction:column;gap:7px" id="kv_${qi}">`;
+    q.opts.forEach((opt, oi)=>{
+      html += `<button class="kv-opt-t" id="kvopt_${qi}_${oi}" onclick="selectKv(${qi},${oi},'${opt.replace(/'/g,"\\'")}',this)"
+        style="padding:10px 12px;border-radius:9px;font-size:14px;cursor:pointer;font-family:inherit;text-align:left;
+        border:2px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--cream);transition:all .12s">${opt}</button>`;
+    });
+    html += `</div></div>`;
+  });
+
+  html += `<button class="btn btn-primary btn-full" onclick="confirmSubmitTest()" style="margin-top:8px">Toets inleveren →</button>`;
+
+  app.innerHTML = html;
+
+  // Attach keyboard at anchor after Deel A
+  const anchor = document.getElementById("toetsKbAnchor");
+  if(anchor){
+    const toggle = buildGKToggle();
+    const kb = buildKeyboard();
+    anchor.appendChild(toggle);
+    anchor.appendChild(kb);
+  }
+
+  // Focus first schema input
+  const first = document.querySelector(".par-inp");
+  if(first){ GK_TARGET = first; first.focus(); }
 };
 
-window.nextTest = function(){
-  const inp = document.getElementById("tstInp");
-  TST.questions[TST.i].given = (inp&&inp.value)||"";
-  TST.i++;
-  if(TST.i >= TST.total) submitTest();
-  else go("test_run");
+window.nextParInput = function(inp){
+  const inputs = [...document.querySelectorAll(".par-inp")];
+  const idx = inputs.indexOf(inp);
+  if(idx < inputs.length-1){ inputs[idx+1].focus(); GK_TARGET=inputs[idx+1]; }
 };
 
-window.prevTest = function(){
-  const inp = document.getElementById("tstInp");
-  TST.questions[TST.i].given = (inp&&inp.value)||"";
-  TST.i--;
-  go("test_run");
+window.selectDet = function(ii, oi, opt, btn){
+  if(TST.submitted) return;
+  TST.detItems[ii].selNl = opt;
+  document.querySelectorAll(`#det_${ii} .det-opt`).forEach((b,j)=>{
+    const sel = j===oi;
+    b.style.border = sel ? "2px solid var(--azure)" : "2px solid rgba(255,255,255,.1)";
+    b.style.background = sel ? "rgba(58,123,213,.2)" : "rgba(255,255,255,.04)";
+    b.style.color = sel ? "var(--azure2)" : "var(--cream)";
+  });
+};
+
+window.selectKv = function(qi, oi, opt, btn){
+  if(TST.submitted) return;
+  TST.kvItems[qi].selOpt = opt;
+  document.querySelectorAll(`#kv_${qi} .kv-opt-t`).forEach((b,j)=>{
+    const sel = j===oi;
+    b.style.border = sel ? "2px solid var(--azure)" : "2px solid rgba(255,255,255,.1)";
+    b.style.background = sel ? "rgba(58,123,213,.2)" : "rgba(255,255,255,.04)";
+    b.style.color = sel ? "var(--azure2)" : "var(--cream)";
+  });
+};
+
+window.confirmSubmitTest = function(){
+  if(!confirm("Toets inleveren? Je kunt daarna niets meer aanpassen.")) return;
+  submitTest();
 };
 
 function submitTest(){
   TST.submitted = true;
-  let ok = 0;
-  for(const q of TST.questions){
-    q.ok = checkAnswer(q.given, q.form);
-    if(q.ok) ok++;
-  }
-  TST.ok = ok;
-  const score = Math.round((ok/TST.total)*20*10)/10;
+  const {schemaWords, detItems, kvItems, activeCases} = TST;
+  let totalPts = 0, earnedPts = 0;
+  const breakdown = [];
+
+  // ── Deel A: 2 pt per woord; -1 per fout, min 0 ──
+  let aEarned = 0;
+  const schemaResults = schemaWords.map((w, wi)=>{
+    let fouten = 0;
+    const cellResults = [];
+    PAR_CASE_ORDER.forEach(c=>{
+      [c.sg, c.pl].filter(Boolean).forEach(key=>{
+        if(key==="nom_sg") return; // given
+        if(!activeCases.includes(key)) return;
+        const inp = document.getElementById(`ts_${wi}_${key}`);
+        if(!inp) return;
+        const correct = w.forms[key]||"—";
+        if(correct==="—") return;
+        const given = inp.value.trim();
+        const ok = checkAnswer(given, correct);
+        if(!ok) fouten++;
+        inp.classList.add(ok?"correct":"wrong");
+        inp.disabled = true;
+        if(!ok){
+          const cl = CASE_LABELS.find(cl=>cl.key===key);
+          cellResults.push({key, cl:cl?cl.nl:key, correct, given, ok});
+        }
+      });
+    });
+    const pts = Math.max(0, 2-fouten);
+    aEarned += pts;
+    return {w, pts, fouten, cellResults};
+  });
+  totalPts += 8; earnedPts += aEarned;
+  breakdown.push({label:"Deel A — Paradigma's", earned:aEarned, max:8});
+
+  // ── Deel B: 1 pt per vraag ──
+  let bEarned = 0;
+  const detResults = detItems.map((item, ii)=>{
+    const ok = item.validNls.has(item.selNl);
+    if(ok) bEarned++;
+    return {item, ok};
+  });
+  totalPts += 8; earnedPts += bEarned;
+  breakdown.push({label:"Deel B — Determineren", earned:bEarned, max:8});
+
+  // ── Deel C: 1 pt per vraag ──
+  let cEarned = 0;
+  const kvResults = kvItems.map((q, qi)=>{
+    const ok = q.correct.includes(q.selOpt);
+    if(ok) cEarned++;
+    return {q, ok};
+  });
+  totalPts += 4; earnedPts += cEarned;
+  breakdown.push({label:"Deel C — Kennisvragen", earned:cEarned, max:4});
+
+  // cijfer 1–10 lineair
+  const score = Math.round((1 + 9*(earnedPts/totalPts))*10)/10;
   TST.score = score;
-  ST.testScores = ST.testScores || [];
+  TST.earnedPts = earnedPts; TST.totalPts = totalPts;
+  TST.breakdown = breakdown;
+  TST.schemaResults = schemaResults;
+  TST.detResults = detResults;
+  TST.kvResults = kvResults;
+
+  ST.testScores = ST.testScores||[];
   ST.testScores.push(score);
-  if(ST.testScores.length > 50) ST.testScores = ST.testScores.slice(-50);
+  if(ST.testScores.length>50) ST.testScores=ST.testScores.slice(-50);
   saveState();
+
   go("test_result");
 }
 
@@ -1527,48 +2034,125 @@ function submitTest(){
 // ═══════════════════════════════════════════════════
 RENDER.test_result = function(){
   const app = document.getElementById("app");
-  const score = TST.score;
-  const emoji = score>=18?"🏆":score>=15?"🎯":score>=12?"💪":score>=10?"📚":"📖";
-  const color = score>=15?"var(--green-bright)":score>=10?"var(--gold)":"var(--terracotta)";
+  const {score, earnedPts, totalPts, breakdown, schemaResults, detResults, kvResults} = TST;
+  const kleur = score>=5.5 ? "var(--green-bright)" : "var(--terracotta)";
+  const emoji = score>=9?"🏆":score>=7.5?"🎯":score>=5.5?"💪":score>=4?"📚":"📖";
 
-  // Results list
-  let resultsHtml = "";
-  for(const q of TST.questions){
-    const cl = CASE_LABELS.find(c=>c.key===q.caseKey);
-    const given = q.given||"(leeg)";
-    resultsHtml += `<div class="result-row">
-      <div class="result-icon">${q.ok?"✓":"✗"}</div>
-      <div class="result-case">${q.word.gr} ${cl.abbr}</div>
-      <div style="flex:1">
-        <div class="result-correct">${q.form}</div>
-        ${!q.ok?`<div class="result-given">Jij: ${given}</div>`:""}
+  let html = `<div class="scrhead">${backBtn("test_setup")}<h2>Toetsresultaat</h2></div>`;
+
+  // ── Cijfer box ──
+  html += `<div class="panel" style="text-align:center;margin-bottom:18px">
+    <div style="font-size:56px;margin-bottom:8px">${emoji}</div>
+    <div style="font-family:'Optima',Palatino,Georgia,serif;font-size:80px;color:${kleur};line-height:1">${score.toFixed(1)}</div>
+    <div style="font-size:16px;color:var(--muted);margin-bottom:4px">${score>=5.5?"✓ Voldoende":"✗ Onvoldoende"}</div>
+    <div style="font-size:14px;color:var(--cream2)">${earnedPts} van ${totalPts} punten</div>
+    ${ST.testScores.length>1?`<div style="font-size:12px;color:var(--muted);margin-top:6px">Beste score: ${Math.max(...ST.testScores).toFixed(1)}</div>`:""}
+  </div>`;
+
+  // ── Overzicht per onderdeel ──
+  html += `<div class="panel" style="margin-bottom:18px">
+    <div style="font-size:14px;color:var(--gold);margin-bottom:12px;font-weight:600">Overzicht per onderdeel</div>`;
+  breakdown.forEach(b=>{
+    const pct = b.max>0 ? Math.round(b.earned/b.max*100) : 0;
+    const kleurB = pct>=55 ? "var(--green-bright)" : "var(--terracotta)";
+    html += `<div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+        <span style="color:var(--cream)">${b.label}</span>
+        <span style="color:${kleurB};font-weight:600">${b.earned}/${b.max} pt</span>
+      </div>
+      <div style="height:7px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden;border:1px solid rgba(255,255,255,.08)">
+        <div style="height:100%;width:${pct}%;background:${kleurB};border-radius:4px;transition:width .4s"></div>
       </div>
     </div>`;
+  });
+  html += `</div>`;
+
+  // ── Normering tabel ──
+  html += `<div class="panel" style="margin-bottom:18px">
+    <div style="font-size:14px;color:var(--gold);margin-bottom:10px;font-weight:600">Normering (${totalPts} punten → cijfer)</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--aegean4);border-radius:8px;overflow:hidden;font-size:12px">
+      <div style="background:rgba(36,66,125,.7);padding:5px;text-align:center;color:var(--gold);font-size:10px;letter-spacing:.06em">PT</div>
+      <div style="background:rgba(36,66,125,.7);padding:5px;text-align:center;color:var(--gold);font-size:10px;letter-spacing:.06em">CIJFER</div>
+      <div style="background:rgba(36,66,125,.7);padding:5px;text-align:center;color:var(--gold);font-size:10px;letter-spacing:.06em">PT</div>
+      <div style="background:rgba(36,66,125,.7);padding:5px;text-align:center;color:var(--gold);font-size:10px;letter-spacing:.06em">CIJFER</div>`;
+  for(let p=totalPts; p>=0; p-=2){
+    const c1 = (1+9*(p/totalPts)).toFixed(1);
+    const p2 = p-1;
+    const c2 = p2>=0 ? (1+9*(p2/totalPts)).toFixed(1) : "";
+    const hl1 = p===earnedPts, hl2 = p2===earnedPts;
+    const bg1 = hl1?"background:var(--gold-dim);color:#000;font-weight:700":"background:var(--aegean2);color:var(--cream2)";
+    const bg2 = hl2?"background:var(--gold-dim);color:#000;font-weight:700":"background:var(--aegean2);color:var(--cream2)";
+    html += `<div style="${bg1};padding:5px;text-align:center">${p}</div>
+      <div style="${bg1};padding:5px;text-align:center">${c1}</div>
+      <div style="${bg2};padding:5px;text-align:center">${p2>=0?p2:""}</div>
+      <div style="${bg2};padding:5px;text-align:center">${c2}</div>`;
   }
+  html += `</div></div>`;
 
-  app.innerHTML = `
-  <div class="scrhead">${backBtn("test_setup")}<h2>Toetsresultaat</h2></div>
+  // ── Deel A detail ──
+  html += `<div class="panel" style="margin-bottom:18px">
+    <div style="font-size:14px;color:var(--gold);margin-bottom:12px;font-weight:600">Deel A — Paradigma's</div>`;
+  schemaResults.forEach(({w, pts, fouten, cellResults})=>{
+    const kleurW = pts===2?"var(--green-bright)":pts===1?"var(--gold)":"var(--terracotta)";
+    html += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+      <div>
+        <span style="font-size:17px;color:var(--marble)">${w.gr}</span>
+        <span style="font-size:12px;color:var(--muted);margin-left:8px">${w.nl.split(",")[0].trim()}</span>
+      </div>
+      <span style="color:${kleurW};font-weight:600;font-size:14px">${pts}/2 pt${fouten>0?` (${fouten}✗)`:""}</span>
+    </div>`;
+    cellResults.forEach(r=>{
+      html += `<div style="font-size:12px;color:var(--terracotta);padding:3px 0 3px 12px">
+        ${r.cl}: <span style="color:var(--marble)">${r.correct}</span>
+        ${r.given?`<span style="color:var(--muted)"> (jij: ${r.given})</span>`:""}
+      </div>`;
+    });
+  });
+  html += `</div>`;
 
-  <div class="panel" style="text-align:center">
-    <div style="font-size:56px;margin-bottom:8px">${emoji}</div>
-    <div style="font-family:'Optima',Palatino,Georgia,serif;font-size:72px;color:${color};line-height:1">${score.toFixed(1)}</div>
-    <div style="font-size:18px;color:var(--muted);margin-bottom:4px">op 20</div>
-    <div style="font-size:15px;color:var(--cream2)">${TST.ok} van ${TST.total} vragen goed</div>
-    ${ST.testScores.length>1?`<div style="font-size:12px;color:var(--muted);margin-top:6px">Beste score: ${Math.max(...ST.testScores).toFixed(1)}/20</div>`:""}
-  </div>
+  // ── Deel B detail ──
+  html += `<div class="panel" style="margin-bottom:18px">
+    <div style="font-size:14px;color:var(--gold);margin-bottom:12px;font-weight:600">Deel B — Determineren</div>`;
+  detResults.forEach(({item, ok})=>{
+    const correctLabel = [...item.validNls].join(" / ");
+    html += `<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+      <div style="font-size:18px">${ok?"✓":"✗"}</div>
+      <div style="flex:1">
+        <span style="font-size:17px;color:var(--gold-bright);font-style:italic">${item.form}</span>
+        <span style="font-size:12px;color:var(--muted);margin-left:8px">(${item.w.gr})</span><br>
+        <span style="font-size:13px;color:var(--marble)">${correctLabel}</span>
+        ${!ok&&item.selNl?`<span style="font-size:12px;color:var(--muted)"> — jij: ${item.selNl}</span>`:""}
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
 
-  <div class="meander"></div>
+  // ── Deel C detail ──
+  html += `<div class="panel" style="margin-bottom:18px">
+    <div style="font-size:14px;color:var(--gold);margin-bottom:12px;font-weight:600">Deel C — Kennisvragen</div>`;
+  kvResults.forEach(({q, ok})=>{
+    html += `<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="font-size:18px">${ok?"✓":"✗"}</div>
+        <div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:4px">${q.v.replace(/<[^>]+>/g,"")}</div>
+          <div style="font-size:13px;color:var(--marble)">✓ ${q.correct[0]}</div>
+          ${!ok&&q.selOpt?`<div style="font-size:12px;color:var(--terracotta)">Jij: ${q.selOpt}</div>`:""}
+          <div style="font-size:12px;color:var(--azure2);margin-top:4px">${q.uitleg}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
 
-  <div class="panel">
-    <h3 style="color:var(--gold);margin-bottom:14px;font-size:16px">Overzicht</h3>
-    ${resultsHtml}
-  </div>
-
-  <div class="btn-row">
+  html += `<div class="btn-row">
     <button class="btn btn-primary" style="flex:1" onclick="go('test_setup')">Nieuwe toets</button>
     <button class="btn btn-ghost" style="flex:1" onclick="go('home')">Terug</button>
   </div>`;
+
+  app.innerHTML = html;
 };
+
 
 // ═══════════════════════════════════════════════════
 // RENDER: HELP
@@ -1685,29 +2269,30 @@ let GK_VISIBLE = JSON.parse(localStorage.getItem("gk_visible")||"true");
 function gkInsert(ch){
   if(!GK_TARGET) return;
   const inp = GK_TARGET;
-  const start = inp.selectionStart;
-  const end = inp.selectionEnd;
+  const wasReadonly = inp.readOnly;
+  inp.readOnly = false;
+  const start = inp.selectionStart || inp.value.length;
+  const end = inp.selectionEnd || start;
   const val = inp.value;
   inp.value = val.slice(0,start) + ch + val.slice(end);
   inp.selectionStart = inp.selectionEnd = start + ch.length;
-  inp.focus();
+  if(wasReadonly) inp.readOnly = true;
   inp.dispatchEvent(new Event("input"));
+  highlightActiveInput();
 }
 
 function gkBackspace(){
   if(!GK_TARGET) return;
   const inp = GK_TARGET;
-  const start = inp.selectionStart;
-  const end = inp.selectionEnd;
-  if(start===end && start>0){
-    inp.value = inp.value.slice(0,start-1)+inp.value.slice(start);
-    inp.selectionStart = inp.selectionEnd = start-1;
-  } else if(start!==end){
-    inp.value = inp.value.slice(0,start)+inp.value.slice(end);
-    inp.selectionStart = inp.selectionEnd = start;
+  const wasReadonly = inp.readOnly;
+  inp.readOnly = false;
+  const val = inp.value;
+  if(val.length > 0){
+    inp.value = val.slice(0, -1);
   }
-  inp.focus();
+  if(wasReadonly) inp.readOnly = true;
   inp.dispatchEvent(new Event("input"));
+  highlightActiveInput();
 }
 
 function buildKeyboard(){
