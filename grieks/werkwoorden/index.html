@@ -117,6 +117,8 @@ select,input[type=number]{background:var(--surf2);border:1px solid var(--border)
 
 .slot-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 @media(max-width:400px){.slot-row{grid-template-columns:repeat(2,1fr);}}
+.slot-row.pulse .slot{animation:slotpulse .5s ease;}
+@keyframes slotpulse{0%,100%{border-color:var(--border);}50%{border-color:var(--gold);background:#22203a;}}
 .slot{border:2px dashed var(--border);border-radius:8px;padding:8px 6px;
   min-height:64px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;
   display:flex;flex-direction:column;align-items:center;justify-content:center;}
@@ -1493,34 +1495,59 @@ function drawOntleed(){
 }
 
 function selectSlot(key){
+  // irregular forms: slots disabled, ignore
+  const q=O.qs[O.idx];
+  if(!q.segs) return;
+  const wasActive = (oActiveSlot===key);
+  // clear all highlights first
   ['aug','stem','tk','end'].forEach(k=>{
     document.getElementById('slot-'+k).classList.remove('active-slot');
   });
-  if(oActiveSlot===key){oActiveSlot=null;return;}
+  if(wasActive){ oActiveSlot=null; return; }
   oActiveSlot=key;
   document.getElementById('slot-'+key).classList.add('active-slot');
 }
 
 function onChipClick(chip,seg){
-  if(!oActiveSlot) return;
-  // un-assign any chip previously assigned to this slot
+  if(!oActiveSlot){
+    // no slot chosen yet: pulse the slot row so the student knows what to do
+    const row=document.querySelector('.slot-row');
+    if(row){
+      row.classList.remove('pulse');
+      void row.offsetWidth;   // force reflow to restart animation
+      row.classList.add('pulse');
+    }
+    return;
+  }
+  const target=oActiveSlot;               // capture before we reset
+  const colorMap={aug:'assigned-aug',stem:'assigned-stem',tk:'assigned-tk',end:'assigned-end'};
+  const classMap={aug:'has-aug',stem:'has-stem',tk:'has-tk',end:'has-end'};
+
+  // 1) if THIS chip was already assigned to another slot, free that slot
+  const prevSlot=chip.dataset.assignedTo;
+  if(prevSlot && prevSlot!==target){
+    O.assigned[prevSlot]=null;
+    document.getElementById('sv-'+prevSlot).textContent=(prevSlot==='aug'||prevSlot==='tk')?'—':'';
+    document.getElementById('slot-'+prevSlot).className='slot';
+  }
+
+  // 2) free any chip currently sitting in the target slot
   document.querySelectorAll('.seg-chip').forEach(c=>{
-    if(c.dataset.assignedTo===oActiveSlot){
+    if(c!==chip && c.dataset.assignedTo===target){
       c.dataset.assignedTo='';
       c.className='seg-chip';
     }
   });
-  // assign chip to slot
-  chip.dataset.assignedTo=oActiveSlot;
-  const colorMap={aug:'assigned-aug',stem:'assigned-stem',tk:'assigned-tk',end:'assigned-end'};
-  chip.className='seg-chip '+colorMap[oActiveSlot];
-  // update slot display
-  O.assigned[oActiveSlot]=seg.c;
-  document.getElementById('sv-'+oActiveSlot).textContent=seg.c;
-  const classMap={aug:'has-aug',stem:'has-stem',tk:'has-tk',end:'has-end'};
-  document.getElementById('slot-'+oActiveSlot).className='slot '+classMap[oActiveSlot];
+
+  // 3) assign this chip to the target slot
+  chip.dataset.assignedTo=target;
+  chip.className='seg-chip '+colorMap[target];
+  O.assigned[target]=seg.c;
+  document.getElementById('sv-'+target).textContent=seg.c;
+  document.getElementById('slot-'+target).className='slot '+classMap[target];
+
+  // 4) clear active highlight
   oActiveSlot=null;
-  document.getElementById('slot-'+oActiveSlot+'').classList&&document.getElementById('slot-aug').classList.remove('active-slot');
   ['aug','stem','tk','end'].forEach(k=>document.getElementById('slot-'+k).classList.remove('active-slot'));
 }
 
@@ -1625,7 +1652,7 @@ function drawVertaal(){
   const s=ST.vertaal, q=s.qs[s.idx];
   updateHeader('vertaal',s.idx,s.qs.length,s.sc,s.wr);
   document.getElementById('v-form').textContent=q.f;
-  document.getElementById('v-sub').textContent=`${q.pres} — ${q.meaning} · ${persNl(q.p,q.n)} · ${tijdNl(q.t)}`;
+  document.getElementById('v-sub').textContent=`${q.pres} — ${q.meaning}`;
   const v=document.getElementById('v-vert');
   v.value='';v.classList.remove('ok','err');v.disabled=false;
   document.getElementById('v-fb').className='fb';
