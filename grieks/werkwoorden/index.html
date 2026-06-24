@@ -96,42 +96,45 @@ select,input[type=number]{background:var(--surf2);border:1px solid var(--border)
 .verb-sub{font-size:.82rem;color:var(--dim);}
 
 /* ══════════════════════════════════════════════
-   ONTLEDEN — SEGMENT CLICK
+   ONTLEDEN — KNIPPEN & BENOEMEN
    ══════════════════════════════════════════════ */
 .segment-area{background:var(--surf2);border:1px solid var(--border);border-radius:var(--r);
   padding:14px 12px;margin-bottom:12px;}
-.seg-title{font-size:.78rem;color:var(--dim);margin-bottom:10px;text-align:center;}
-.seg-form-display{display:flex;justify-content:center;gap:3px;flex-wrap:wrap;
-  margin-bottom:14px;}
-.seg-chip{font-size:1.5rem;font-style:italic;color:var(--text);
-  background:var(--surf3);border:2px solid var(--border);border-radius:6px;
-  padding:6px 10px;cursor:pointer;transition:background .15s,border-color .15s;
-  user-select:none;-webkit-tap-highlight-color:transparent;min-width:36px;text-align:center;}
-.seg-chip:hover{background:var(--surf2);}
-.seg-chip.selected{border-color:var(--gold);background:#2a2540;}
-.seg-chip.assigned-aug{background:#1e2e40;border-color:#4a9fcc;color:#7fd4f8;}
-.seg-chip.assigned-stem{background:#1e3020;border-color:#4aaa60;color:#80e090;}
-.seg-chip.assigned-tk{background:#2e2010;border-color:#bb8030;color:#f0b840;}
-.seg-chip.assigned-end{background:#2e1030;border-color:#9a40bb;color:#d080f0;}
-.seg-chip.disabled{cursor:default;opacity:.7;}
+.seg-title{font-size:.8rem;color:var(--dim);margin-bottom:12px;line-height:1.5;}
 
-.slot-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-@media(max-width:400px){.slot-row{grid-template-columns:repeat(2,1fr);}}
-.slot-row.pulse .slot{animation:slotpulse .5s ease;}
-@keyframes slotpulse{0%,100%{border-color:var(--border);}50%{border-color:var(--gold);background:#22203a;}}
-.slot{border:2px dashed var(--border);border-radius:8px;padding:8px 6px;
-  min-height:64px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.slot:hover{border-color:var(--gold-d);}
-.slot.active-slot{border-color:var(--gold);background:#22203a;}
-.slot-label{font-size:.72rem;color:var(--dim);margin-bottom:4px;line-height:1.2;}
-.slot-value{font-size:1rem;font-style:italic;min-height:22px;color:var(--text);}
-.slot.has-aug .slot-value{color:#7fd4f8;}
-.slot.has-stem .slot-value{color:#80e090;}
-.slot.has-tk .slot-value{color:#f0b840;}
-.slot.has-end .slot-value{color:#d080f0;}
-.slot.correct-slot{border-color:var(--green);background:#1a2e20;}
-.slot.wrong-slot{border-color:var(--red);background:#2e1a1a;}
+/* ── STAP 1: KNIPPEN ── */
+.cut-form{display:flex;justify-content:center;align-items:stretch;flex-wrap:wrap;
+  margin:18px 0 8px;row-gap:14px;}
+.cut-letter{font-size:1.9rem;font-style:italic;color:var(--gold-l);
+  padding:4px 1px;user-select:none;line-height:1.2;}
+.cut-gap{width:18px;cursor:pointer;position:relative;display:flex;align-items:center;
+  justify-content:center;-webkit-tap-highlight-color:transparent;}
+.cut-gap::before{content:"";width:2px;height:34px;background:transparent;border-radius:2px;
+  transition:background .15s;}
+.cut-gap:hover::before{background:var(--gold-d);}
+.cut-gap.cut::before{background:var(--gold);width:3px;}
+.cut-gap.cut::after{content:"✂";position:absolute;top:-16px;font-size:.7rem;color:var(--gold);}
+.cut-gap.locked{cursor:default;}
+.cut-gap.locked:hover::before{background:var(--gold);}
+.cut-hint{font-size:.76rem;color:var(--dim);text-align:center;min-height:18px;}
+
+/* ── STAP 2: BENOEMEN ── */
+.label-list{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.label-item{display:flex;align-items:center;gap:10px;background:var(--bg);
+  border:1px solid var(--border);border-radius:8px;padding:8px 10px;}
+.label-piece{font-size:1.4rem;font-style:italic;color:var(--gold-l);min-width:54px;
+  text-align:center;padding:2px 8px;background:var(--surf3);border-radius:6px;flex-shrink:0;}
+.label-sel{flex:1;}
+.label-sel select{width:100%;background:var(--surf2);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font-family:inherit;font-size:.9rem;padding:8px 10px;}
+.label-sel select.ok{border-color:var(--green);color:var(--green-l);}
+.label-sel select.err{border-color:var(--red);color:var(--red-l);}
+.label-item.correct-row{border-color:var(--green);}
+.label-item.wrong-row{border-color:var(--red);}
+.label-fix{font-size:.78rem;color:var(--green-l);flex-shrink:0;}
+
+.irr-note{color:var(--terra-l);font-size:.88rem;padding:10px 12px;background:var(--surf3);
+  border-radius:8px;text-align:center;margin:10px 0;line-height:1.5;}
 
 .vert-row{margin-top:10px;}
 .vert-row label{font-size:.8rem;color:var(--dim);display:block;margin-bottom:4px;}
@@ -446,27 +449,19 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
     </div>
 
     <div class="segment-area">
-      <div class="seg-title">Klik op een <strong style="color:var(--gold)">vakje hieronder</strong>, dan op de <strong style="color:var(--gold)">letters hierboven</strong> die daarbij horen</div>
-      <div class="seg-form-display" id="o-chips"></div>
-      <div class="slot-row">
-        <div class="slot" id="slot-aug" onclick="selectSlot('aug')">
-          <div class="slot-label">Augment<br><span style="font-size:.68rem;color:#7fd4f8">●</span></div>
-          <div class="slot-value" id="sv-aug">—</div>
-        </div>
-        <div class="slot" id="slot-stem" onclick="selectSlot('stem')">
-          <div class="slot-label">Stam<br><span style="font-size:.68rem;color:#80e090">●</span></div>
-          <div class="slot-value" id="sv-stem"></div>
-        </div>
-        <div class="slot" id="slot-tk" onclick="selectSlot('tk')">
-          <div class="slot-label">Tijdskenletter<br><span style="font-size:.68rem;color:#f0b840">●</span></div>
-          <div class="slot-value" id="sv-tk">—</div>
-        </div>
-        <div class="slot" id="slot-end" onclick="selectSlot('end')">
-          <div class="slot-label">Persoons&shy;uitgang<br><span style="font-size:.68rem;color:#d080f0">●</span></div>
-          <div class="slot-value" id="sv-end"></div>
-        </div>
+      <div class="seg-step" id="o-step1">
+        <div class="seg-title"><strong style="color:var(--gold)">Stap 1 — Knippen.</strong> Tik tussen de letters waar een grens hoort tussen augment, stam, tijdskenletter en uitgang. Tik nog eens om een knip ongedaan te maken.</div>
+        <div class="cut-form" id="o-cutform"></div>
+        <div class="cut-hint" id="o-cuthint"></div>
+        <button class="btn btn-check" id="o-cut-done" onclick="cutDone()" style="margin-top:12px;">Klaar met knippen →</button>
       </div>
-      <div class="vert-row" style="margin-top:12px;">
+
+      <div class="seg-step" id="o-step2" style="display:none;">
+        <div class="seg-title"><strong style="color:var(--gold)">Stap 2 — Benoemen.</strong> Geef elk stuk de juiste naam.</div>
+        <div class="label-list" id="o-labellist"></div>
+      </div>
+
+      <div class="vert-row" id="o-vertrow" style="margin-top:12px;display:none;">
         <label>Vertaling van de hele vorm:</label>
         <input type="text" id="o-vert" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="bv. ik maakte los">
       </div>
@@ -475,7 +470,7 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
     <div class="fb" id="o-fb"></div>
     <div class="btn-row">
       <button class="btn btn-stop" onclick="stopEx('ontleed')">✕</button>
-      <button class="btn btn-check" id="o-cbtn" onclick="checkOntleed()">Controleer</button>
+      <button class="btn btn-check" id="o-cbtn" onclick="checkOntleed()" style="display:none;">Controleer</button>
       <button class="btn btn-next" id="o-nbtn" style="display:none" onclick="nextQ('ontleed')">Volgende →</button>
     </div>
   </div>
@@ -1119,59 +1114,59 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
 // ══════════════════════════════════════════════════════
 const VERBS = [
  {pres:'λύω',type:'themat',meaning:'losmaken',forms:[
-  {f:'λύω',g:'act',    t:'praesens',   p:1,n:'ev',tr:'ik maak los',   segs:[{c:'λυ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'λύεις',g:'act',  t:'praesens',   p:2,n:'ev',tr:'jij maakt los', segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'λύει',g:'act',   t:'praesens',   p:3,n:'ev',tr:'hij maakt los', segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'λύομεν',g:'act', t:'praesens',   p:1,n:'mv',tr:'wij maken los', segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'λύετε',g:'act',  t:'praesens',   p:2,n:'mv',tr:'jullie maken los',segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
-  {f:'λύουσι(ν)',g:'act',t:'praesens', p:3,n:'mv',tr:'zij maken los', segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'υσι(ν)',r:'end'}]},
-  {f:'ἔλυον',g:'act',  t:'imperfectum',p:1,n:'ev',tr:'ik maakte los', segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔλυες',g:'act',  t:'imperfectum',p:2,n:'ev',tr:'jij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ς',r:'end'}]},
-  {f:'ἔλυε(ν)',g:'act',t:'imperfectum', p:3,n:'ev',tr:'hij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἐλύομεν',g:'act',t:'imperfectum',p:1,n:'mv',tr:'wij maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἐλύετε',g:'act', t:'imperfectum',p:2,n:'mv',tr:'jullie maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
-  {f:'ἔλυσα',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik maakte los', segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἔλυσας',g:'act', t:'aoristus',   p:2,n:'ev',tr:'jij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
-  {f:'ἔλυσε(ν)',g:'act',t:'aoristus',  p:3,n:'ev',tr:'hij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'ἐλύσαμεν',g:'act',t:'aoristus',  p:1,n:'mv',tr:'wij maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰμεν',r:'end'}]},
-  {f:'λύσω',g:'act',   t:'futurum',    p:1,n:'ev',tr:'ik zal losmaken',segs:[{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
-  {f:'λύσεις',g:'act', t:'futurum',    p:2,n:'ev',tr:'jij zult losmaken',segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'λύσει',g:'act',  t:'futurum',    p:3,n:'ev',tr:'hij zal losmaken',segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λύω',g:'act',    t:'praesens',   p:1,n:'ev',tr:'ik maak los',   cut:{pieces:[{t:'λύ',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'λυ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'λύεις',g:'act',  t:'praesens',   p:2,n:'ev',tr:'jij maakt los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λύει',g:'act',   t:'praesens',   p:3,n:'ev',tr:'hij maakt los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λύομεν',g:'act', t:'praesens',   p:1,n:'mv',tr:'wij maken los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'ο',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'λύετε',g:'act',  t:'praesens',   p:2,n:'mv',tr:'jullie maken los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'ε',r:'tk'},{t:'τε',r:'end'}],fused:false},segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
+  {f:'λύουσι(ν)',g:'act',t:'praesens', p:3,n:'mv',tr:'zij maken los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'ο',r:'tk'},{t:'υσι(ν)',r:'end'}],fused:false},segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'υσι(ν)',r:'end'}]},
+  {f:'ἔλυον',g:'act',  t:'imperfectum',p:1,n:'ev',tr:'ik maakte los', cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λυ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔλυες',g:'act',  t:'imperfectum',p:2,n:'ev',tr:'jij maakte los',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λυ',r:'stem'},{t:'ε',r:'tk'},{t:'ς',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ς',r:'end'}]},
+  {f:'ἔλυε(ν)',g:'act',t:'imperfectum', p:3,n:'ev',tr:'hij maakte los',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λυ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἐλύομεν',g:'act',t:'imperfectum',p:1,n:'mv',tr:'wij maakten los',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λύ',r:'stem'},{t:'ο',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἐλύετε',g:'act', t:'imperfectum',p:2,n:'mv',tr:'jullie maakten los',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λύ',r:'stem'},{t:'ε',r:'tk'},{t:'τε',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
+  {f:'ἔλυσα',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik maakte los', cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λυ',r:'stem'},{t:'σ',r:'tk'},{t:'α',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔλυσας',g:'act', t:'aoristus',   p:2,n:'ev',tr:'jij maakte los',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λυ',r:'stem'},{t:'σ',r:'tk'},{t:'ας',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
+  {f:'ἔλυσε(ν)',g:'act',t:'aoristus',  p:3,n:'ev',tr:'hij maakte los',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λυ',r:'stem'},{t:'σ',r:'tk'},{t:'ε(ν)',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐλύσαμεν',g:'act',t:'aoristus',  p:1,n:'mv',tr:'wij maakten los',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'αμεν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰμεν',r:'end'}]},
+  {f:'λύσω',g:'act',   t:'futurum',    p:1,n:'ev',tr:'ik zal losmaken',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ω',r:'end'}],fused:false},segs:[{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
+  {f:'λύσεις',g:'act', t:'futurum',    p:2,n:'ev',tr:'jij zult losmaken',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λύσει',g:'act',  t:'futurum',    p:3,n:'ev',tr:'hij zal losmaken',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ι',r:'end'}]},
  ]},
  {pres:'λαμβάνω',type:'themat',meaning:'nemen, krijgen',forms:[
-  {f:'λαμβάνω',g:'act', t:'praesens',   p:1,n:'ev',tr:'ik neem',   segs:[{c:'λαμβαν',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'λαμβάνεις',g:'act',t:'praesens',  p:2,n:'ev',tr:'jij neemt', segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'λαμβάνει',g:'act', t:'praesens',  p:3,n:'ev',tr:'hij neemt', segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'λαμβάνομεν',g:'act',t:'praesens', p:1,n:'mv',tr:'wij nemen', segs:[{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'λαμβάνετε',g:'act',t:'praesens',  p:2,n:'mv',tr:'jullie nemen',segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
-  {f:'ἐλάμβανον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἐλάμβανε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij nam', segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἐλαμβάνομεν',g:'act',t:'imperfectum',p:1,n:'mv',tr:'wij namen',segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἔλαβον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik nam',    segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
-  {f:'ἔλαβες',g:'act',  t:'aoristus',   p:2,n:'ev',tr:'jij nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ες',r:'end'}]},
-  {f:'ἔλαβε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'ἐλάβομεν',g:'act',t:'aoristus',   p:1,n:'mv',tr:'wij namen', segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
+  {f:'λαμβάνω',g:'act', t:'praesens',   p:1,n:'ev',tr:'ik neem',   cut:{pieces:[{t:'λαμβάν',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'λαμβαν',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'λαμβάνεις',g:'act',t:'praesens',  p:2,n:'ev',tr:'jij neemt', cut:{pieces:[{t:'λαμβάν',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λαμβάνει',g:'act', t:'praesens',  p:3,n:'ev',tr:'hij neemt', cut:{pieces:[{t:'λαμβάν',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λαμβάνομεν',g:'act',t:'praesens', p:1,n:'mv',tr:'wij nemen', cut:{pieces:[{t:'λαμβάν',r:'stem'},{t:'ο',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'λαμβάνετε',g:'act',t:'praesens',  p:2,n:'mv',tr:'jullie nemen',cut:{pieces:[{t:'λαμβάν',r:'stem'},{t:'ε',r:'tk'},{t:'τε',r:'end'}],fused:false},segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
+  {f:'ἐλάμβανον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik nam',   cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λάμβαν',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἐλάμβανε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij nam', cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λάμβαν',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἐλαμβάνομεν',g:'act',t:'imperfectum',p:1,n:'mv',tr:'wij namen',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λαμβάν',r:'stem'},{t:'ο',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔλαβον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik nam',    cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λαβ',r:'stem'},{t:'ον',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
+  {f:'ἔλαβες',g:'act',  t:'aoristus',   p:2,n:'ev',tr:'jij nam',   cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λαβ',r:'stem'},{t:'ες',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ες',r:'end'}]},
+  {f:'ἔλαβε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij nam',   cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λαβ',r:'stem'},{t:'ε(ν)',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐλάβομεν',g:'act',t:'aoristus',   p:1,n:'mv',tr:'wij namen', cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λάβ',r:'stem'},{t:'ομεν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
   {f:'λήψομαι',g:'med', t:'futurum',    p:1,n:'ev',tr:'ik zal nemen',segs:null},
  ]},
  {pres:'ἔχω',type:'themat',meaning:'hebben, houden',forms:[
-  {f:'ἔχω',g:'act',    t:'praesens',   p:1,n:'ev',tr:'ik heb',     segs:[{c:'ἐχ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'ἔχεις',g:'act',  t:'praesens',   p:2,n:'ev',tr:'jij hebt',   segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'ἔχει',g:'act',   t:'praesens',   p:3,n:'ev',tr:'hij heeft',  segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἔχομεν',g:'act', t:'praesens',   p:1,n:'mv',tr:'wij hebben', segs:[{c:'ἐχ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'εἶχον',g:'act',  t:'imperfectum',p:1,n:'ev',tr:'ik had',     segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'εἶχε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij had',    segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'εἴχομεν',g:'act',t:'imperfectum',p:1,n:'mv',tr:'wij hadden', segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἔσχον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik kreeg',   segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
-  {f:'ἔσχε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij kreeg',  segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἔχω',g:'act',    t:'praesens',   p:1,n:'ev',tr:'ik heb',     cut:{pieces:[{t:'ἔχ',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'ἐχ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'ἔχεις',g:'act',  t:'praesens',   p:2,n:'ev',tr:'jij hebt',   cut:{pieces:[{t:'ἔχ',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'ἔχει',g:'act',   t:'praesens',   p:3,n:'ev',tr:'hij heeft',  cut:{pieces:[{t:'ἔχ',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἔχομεν',g:'act', t:'praesens',   p:1,n:'mv',tr:'wij hebben', cut:{pieces:[{t:'ἔχ',r:'stem'},{t:'ο',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'ἐχ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'εἶχον',g:'act',  t:'imperfectum',p:1,n:'ev',tr:'ik had',     cut:{pieces:[{t:'εἶ',r:'aug'},{t:'χ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'εἶχε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij had',    cut:{pieces:[{t:'εἶ',r:'aug'},{t:'χ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'εἴχομεν',g:'act',t:'imperfectum',p:1,n:'mv',tr:'wij hadden', cut:{pieces:[{t:'εἴ',r:'aug'},{t:'χ',r:'stem'},{t:'ο',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔσχον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik kreeg',   cut:{pieces:[{t:'ἔ',r:'aug'},{t:'σχ',r:'stem'},{t:'ον',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
+  {f:'ἔσχε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij kreeg',  cut:{pieces:[{t:'ἔ',r:'aug'},{t:'σχ',r:'stem'},{t:'ε(ν)',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
   {f:'ἕξω',g:'act',    t:'futurum',    p:1,n:'ev',tr:'ik zal hebben',segs:null},
  ]},
  {pres:'λέγω',type:'themat',meaning:'zeggen, spreken',forms:[
-  {f:'λέγω',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik zeg',     segs:[{c:'λεγ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'λέγεις',g:'act', t:'praesens',   p:2,n:'ev',tr:'jij zegt',   segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'λέγει',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij zegt',   segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'λέγομεν',g:'act',t:'praesens',   p:1,n:'mv',tr:'wij zeggen', segs:[{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἔλεγον',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik zei',     segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔλεγε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij zei',   segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'λέγω',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik zeg',     cut:{pieces:[{t:'λέγ',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'λεγ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'λέγεις',g:'act', t:'praesens',   p:2,n:'ev',tr:'jij zegt',   cut:{pieces:[{t:'λέγ',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λέγει',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij zegt',   cut:{pieces:[{t:'λέγ',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λέγομεν',g:'act',t:'praesens',   p:1,n:'mv',tr:'wij zeggen', cut:{pieces:[{t:'λέγ',r:'stem'},{t:'ο',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔλεγον',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik zei',     cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λεγ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔλεγε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij zei',   cut:{pieces:[{t:'ἔ',r:'aug'},{t:'λεγ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
   {f:'εἶπον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik zei',     segs:null},
   {f:'εἶπε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij zei',    segs:null},
   {f:'εἴπομεν',g:'act',t:'aoristus',   p:1,n:'mv',tr:'wij zeiden', segs:null},
@@ -1193,16 +1188,16 @@ const VERBS = [
   {f:'ἔσομαι',g:'med', t:'futurum',    p:1,n:'ev',tr:'ik zal zijn',segs:null},
  ]},
  {pres:'γράφω',type:'themat',meaning:'schrijven',forms:[
-  {f:'γράφω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik schrijf', segs:[{c:'γραφ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'γράφεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij schrijft',segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'γράφει',g:'act', t:'praesens',   p:3,n:'ev',tr:'hij schrijft',segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'γράφομεν',g:'act',t:'praesens',  p:1,n:'mv',tr:'wij schrijven',segs:[{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἔγραφον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik schreef', segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔγραφε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἔγραψα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik schreef', segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἔγραψας',g:'act',t:'aoristus',   p:2,n:'ev',tr:'jij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
-  {f:'ἔγραψε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'γράψω',g:'act',  t:'futurum',    p:1,n:'ev',tr:'ik zal schrijven',segs:[{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
+  {f:'γράφω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik schrijf', cut:{pieces:[{t:'γράφ',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'γραφ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'γράφεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij schrijft',cut:{pieces:[{t:'γράφ',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'γράφει',g:'act', t:'praesens',   p:3,n:'ev',tr:'hij schrijft',cut:{pieces:[{t:'γράφ',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'γράφομεν',g:'act',t:'praesens',  p:1,n:'mv',tr:'wij schrijven',cut:{pieces:[{t:'γράφ',r:'stem'},{t:'ο',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔγραφον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik schreef', cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραφ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔγραφε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij schreef',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραφ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἔγραψα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik schreef', cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραψ',r:'stem'},{t:'α',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔγραψας',g:'act',t:'aoristus',   p:2,n:'ev',tr:'jij schreef',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραψ',r:'stem'},{t:'α',r:'tk'},{t:'ς',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
+  {f:'ἔγραψε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij schreef',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραψ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'γράψω',g:'act',  t:'futurum',    p:1,n:'ev',tr:'ik zal schrijven',cut:{pieces:[{t:'γράψ',r:'stem'},{t:'ω',r:'tk'}],fused:true},segs:[{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
  ]},
  {pres:'ποιέω',type:'contract',meaning:'maken, doen',forms:[
   {f:'ποιῶ',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik maak',    segs:null},
@@ -1212,9 +1207,9 @@ const VERBS = [
   {f:'ποιεῖτε',g:'act',t:'praesens',   p:2,n:'mv',tr:'jullie maken',segs:null},
   {f:'ἐποίουν',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik maakte',  segs:null},
   {f:'ἐποίει',g:'act', t:'imperfectum',p:3,n:'ev',tr:'hij maakte', segs:null},
-  {f:'ἐποίησα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik maakte',  segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησα',r:'end'}]},
-  {f:'ἐποίησε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij maakte', segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησε(ν)',r:'end'}]},
-  {f:'ποιήσω',g:'act', t:'futurum',    p:1,n:'ev',tr:'ik zal maken',segs:[{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ήσω',r:'end'}]},
+  {f:'ἐποίησα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik maakte',  cut:{pieces:[{t:'ἐ',r:'aug'},{t:'ποί',r:'stem'},{t:'η',r:'tk'},{t:'σα',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησα',r:'end'}]},
+  {f:'ἐποίησε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij maakte', cut:{pieces:[{t:'ἐ',r:'aug'},{t:'ποί',r:'stem'},{t:'η',r:'tk'},{t:'σε(ν)',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησε(ν)',r:'end'}]},
+  {f:'ποιήσω',g:'act', t:'futurum',    p:1,n:'ev',tr:'ik zal maken',cut:{pieces:[{t:'ποι',r:'stem'},{t:'ή',r:'tk'},{t:'σω',r:'end'}],fused:true},segs:[{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ήσω',r:'end'}]},
  ]},
  {pres:'ὁράω',type:'contract',meaning:'zien',forms:[
   {f:'ὁρῶ',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik zie',     segs:null},
@@ -1228,73 +1223,73 @@ const VERBS = [
   {f:'ὄψομαι',g:'med',t:'futurum',    p:1,n:'ev',tr:'ik zal zien',segs:null},
  ]},
  {pres:'ἀκούω',type:'themat',meaning:'horen, luisteren',forms:[
-  {f:'ἀκούω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik hoor',   segs:[{c:'ἀκου',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'ἀκούεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij hoort', segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'ἀκούει',g:'act', t:'praesens',   p:3,n:'ev',tr:'hij hoort', segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἤκουον',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik hoorde', segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἤκουε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἤκουσα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik hoorde', segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἤκουσας',g:'act',t:'aoristus',   p:2,n:'ev',tr:'jij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
-  {f:'ἤκουσε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἀκούω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik hoor',   cut:{pieces:[{t:'ἀκού',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'ἀκου',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'ἀκούεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij hoort', cut:{pieces:[{t:'ἀκού',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'ἀκούει',g:'act', t:'praesens',   p:3,n:'ev',tr:'hij hoort', cut:{pieces:[{t:'ἀκού',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἤκουον',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik hoorde', cut:{pieces:[{t:'ἤ',r:'aug'},{t:'κου',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἤκουε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij hoorde',cut:{pieces:[{t:'ἤ',r:'aug'},{t:'κου',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἤκουσα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik hoorde', cut:{pieces:[{t:'ἤ',r:'aug'},{t:'κου',r:'stem'},{t:'σ',r:'tk'},{t:'α',r:'end'}],fused:false},segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἤκουσας',g:'act',t:'aoristus',   p:2,n:'ev',tr:'jij hoorde',cut:{pieces:[{t:'ἤ',r:'aug'},{t:'κου',r:'stem'},{t:'σ',r:'tk'},{t:'ας',r:'end'}],fused:false},segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
+  {f:'ἤκουσε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij hoorde',cut:{pieces:[{t:'ἤ',r:'aug'},{t:'κου',r:'stem'},{t:'σ',r:'tk'},{t:'ε(ν)',r:'end'}],fused:false},segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
   {f:'ἀκούσομαι',g:'med',t:'futurum',  p:1,n:'ev',tr:'ik zal horen',segs:null},
  ]},
  {pres:'πάσχω',type:'themat',meaning:'lijden, ondergaan',forms:[
-  {f:'πάσχω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik lijd',   segs:[{c:'πασχ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'πάσχεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij lijdt', segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'πάσχει',g:'act', t:'praesens',   p:3,n:'ev',tr:'hij lijdt', segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἔπασχον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik leed',   segs:[{c:'ἐ',r:'aug'},{c:'πασχ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔπαθον',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik leed',   segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
-  {f:'ἔπαθε(ν)',g:'act',t:'aoristus',  p:3,n:'ev',tr:'hij leed',  segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'ἐπάθομεν',g:'act',t:'aoristus',  p:1,n:'mv',tr:'wij leden', segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
+  {f:'πάσχω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik lijd',   cut:{pieces:[{t:'πάσχ',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'πασχ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'πάσχεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij lijdt', cut:{pieces:[{t:'πάσχ',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'πάσχει',g:'act', t:'praesens',   p:3,n:'ev',tr:'hij lijdt', cut:{pieces:[{t:'πάσχ',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἔπασχον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik leed',   cut:{pieces:[{t:'ἔ',r:'aug'},{t:'πασχ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'πασχ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔπαθον',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik leed',   cut:{pieces:[{t:'ἔ',r:'aug'},{t:'παθ',r:'stem'},{t:'ον',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
+  {f:'ἔπαθε(ν)',g:'act',t:'aoristus',  p:3,n:'ev',tr:'hij leed',  cut:{pieces:[{t:'ἔ',r:'aug'},{t:'παθ',r:'stem'},{t:'ε(ν)',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐπάθομεν',g:'act',t:'aoristus',  p:1,n:'mv',tr:'wij leden', cut:{pieces:[{t:'ἐ',r:'aug'},{t:'πάθ',r:'stem'},{t:'ομεν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
  ]},
  {pres:'γίγνομαι',type:'mediumdep',meaning:'worden, geboren worden, gebeuren',forms:[
-  {f:'γίγνομαι',g:'med',t:'praesens',  p:1,n:'ev',tr:'ik word',   segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
-  {f:'γίγνεται',g:'med',t:'praesens',  p:3,n:'ev',tr:'hij wordt', segs:[{c:'γιγν',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
-  {f:'γίγνονται',g:'med',t:'praesens', p:3,n:'mv',tr:'zij worden',segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'νται',r:'end'}]},
-  {f:'ἐγιγνόμην',g:'med',t:'imperfectum',p:1,n:'ev',tr:'ik werd', segs:[{c:'ἐ',r:'aug'},{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
-  {f:'ἐγένετο',g:'med',t:'aoristus',   p:3,n:'ev',tr:'hij werd',  segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ετο',r:'end'}]},
-  {f:'ἐγενόμην',g:'med',t:'aoristus',  p:1,n:'ev',tr:'ik werd',   segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ομην',r:'end'}]},
+  {f:'γίγνομαι',g:'med',t:'praesens',  p:1,n:'ev',tr:'ik word',   cut:{pieces:[{t:'γίγν',r:'stem'},{t:'ο',r:'tk'},{t:'μαι',r:'end'}],fused:false},segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
+  {f:'γίγνεται',g:'med',t:'praesens',  p:3,n:'ev',tr:'hij wordt', cut:{pieces:[{t:'γίγν',r:'stem'},{t:'ε',r:'tk'},{t:'ται',r:'end'}],fused:false},segs:[{c:'γιγν',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
+  {f:'γίγνονται',g:'med',t:'praesens', p:3,n:'mv',tr:'zij worden',cut:{pieces:[{t:'γίγν',r:'stem'},{t:'ο',r:'tk'},{t:'νται',r:'end'}],fused:false},segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'νται',r:'end'}]},
+  {f:'ἐγιγνόμην',g:'med',t:'imperfectum',p:1,n:'ev',tr:'ik werd', cut:{pieces:[{t:'ἐ',r:'aug'},{t:'γιγν',r:'stem'},{t:'ό',r:'tk'},{t:'μην',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
+  {f:'ἐγένετο',g:'med',t:'aoristus',   p:3,n:'ev',tr:'hij werd',  cut:{pieces:[{t:'ἐ',r:'aug'},{t:'γέν',r:'stem'},{t:'ετο',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ετο',r:'end'}]},
+  {f:'ἐγενόμην',g:'med',t:'aoristus',  p:1,n:'ev',tr:'ik werd',   cut:{pieces:[{t:'ἐ',r:'aug'},{t:'γεν',r:'stem'},{t:'όμην',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ομην',r:'end'}]},
   {f:'γενήσομαι',g:'med',t:'futurum',  p:1,n:'ev',tr:'ik zal worden',segs:null},
  ]},
  {pres:'ἔρχομαι',type:'mediumdep',meaning:'komen, gaan',forms:[
-  {f:'ἔρχομαι',g:'med',t:'praesens',   p:1,n:'ev',tr:'ik kom',    segs:[{c:'ἐρχ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
-  {f:'ἔρχεται',g:'med',t:'praesens',   p:3,n:'ev',tr:'hij komt',  segs:[{c:'ἐρχ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
+  {f:'ἔρχομαι',g:'med',t:'praesens',   p:1,n:'ev',tr:'ik kom',    cut:{pieces:[{t:'ἔρχ',r:'stem'},{t:'ο',r:'tk'},{t:'μαι',r:'end'}],fused:false},segs:[{c:'ἐρχ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
+  {f:'ἔρχεται',g:'med',t:'praesens',   p:3,n:'ev',tr:'hij komt',  cut:{pieces:[{t:'ἔρχ',r:'stem'},{t:'ε',r:'tk'},{t:'ται',r:'end'}],fused:false},segs:[{c:'ἐρχ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
   {f:'ἦλθον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik kwam',   segs:null},
   {f:'ἦλθε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij kwam',  segs:null},
   {f:'ἤλθομεν',g:'act',t:'aoristus',   p:1,n:'mv',tr:'wij kwamen',segs:null},
   {f:'εἶμι',g:'act',   t:'futurum',    p:1,n:'ev',tr:'ik zal gaan',segs:null},
  ]},
  {pres:'φέρω',type:'themat',meaning:'dragen, brengen',forms:[
-  {f:'φέρω',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik draag',  segs:[{c:'φερ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'φέρεις',g:'act', t:'praesens',   p:2,n:'ev',tr:'jij draagt',segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'φέρει',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij draagt',segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἔφερον',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik droeg',  segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔφερε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij droeg',segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'φέρω',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik draag',  cut:{pieces:[{t:'φέρ',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'φερ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'φέρεις',g:'act', t:'praesens',   p:2,n:'ev',tr:'jij draagt',cut:{pieces:[{t:'φέρ',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'φέρει',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij draagt',cut:{pieces:[{t:'φέρ',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἔφερον',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik droeg',  cut:{pieces:[{t:'ἔ',r:'aug'},{t:'φερ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔφερε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij droeg',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'φερ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
   {f:'ἤνεγκον',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik bracht', segs:null},
   {f:'ἤνεγκε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij bracht',segs:null},
   {f:'οἴσω',g:'act',   t:'futurum',    p:1,n:'ev',tr:'ik zal dragen',segs:null},
  ]},
  {pres:'νομίζω',type:'themat',meaning:'menen, gewend zijn',forms:[
-  {f:'νομίζω',g:'act', t:'praesens',   p:1,n:'ev',tr:'ik meen',   segs:[{c:'νομιζ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'νομίζεις',g:'act',t:'praesens',  p:2,n:'ev',tr:'jij meent', segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'νομίζει',g:'act',t:'praesens',   p:3,n:'ev',tr:'hij meent', segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἐνόμιζον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik meende',segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἐνόμιζε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij meende',segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἐνόμισα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik meende', segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἐνόμισε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij meende',segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'νομίζω',g:'act', t:'praesens',   p:1,n:'ev',tr:'ik meen',   cut:{pieces:[{t:'νομίζ',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'νομιζ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'νομίζεις',g:'act',t:'praesens',  p:2,n:'ev',tr:'jij meent', cut:{pieces:[{t:'νομίζ',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'νομίζει',g:'act',t:'praesens',   p:3,n:'ev',tr:'hij meent', cut:{pieces:[{t:'νομίζ',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἐνόμιζον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik meende',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμιζ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἐνόμιζε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij meende',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμιζ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἐνόμισα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik meende', cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμισ',r:'stem'},{t:'α',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἐνόμισε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij meende',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμισ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
  ]},
  {pres:'πείθω',type:'themat',meaning:'overtuigen',forms:[
-  {f:'πείθω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik overtuig',segs:[{c:'πειθ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'πείθεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij overtuigt',segs:[{c:'πειθ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'ἔπειθον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔπεισα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἔπεισε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'πείθω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik overtuig',cut:{pieces:[{t:'πείθ',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'πειθ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'πείθεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij overtuigt',cut:{pieces:[{t:'πείθ',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'πειθ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'ἔπειθον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik overtuigde',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'πειθ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔπεισα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik overtuigde',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'πεισ',r:'stem'},{t:'α',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔπεισε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij overtuigde',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'πεισ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
  ]},
  {pres:'βούλομαι',type:'mediumdep',meaning:'willen',forms:[
-  {f:'βούλομαι',g:'med',t:'praesens',  p:1,n:'ev',tr:'ik wil',    segs:[{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
-  {f:'βούλεται',g:'med',t:'praesens',  p:3,n:'ev',tr:'hij wil',   segs:[{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
-  {f:'ἐβουλόμην',g:'med',t:'imperfectum',p:1,n:'ev',tr:'ik wilde',segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
-  {f:'ἐβούλετο',g:'med',t:'imperfectum',p:3,n:'ev',tr:'hij wilde',segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'το',r:'end'}]},
+  {f:'βούλομαι',g:'med',t:'praesens',  p:1,n:'ev',tr:'ik wil',    cut:{pieces:[{t:'βούλ',r:'stem'},{t:'ο',r:'tk'},{t:'μαι',r:'end'}],fused:false},segs:[{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
+  {f:'βούλεται',g:'med',t:'praesens',  p:3,n:'ev',tr:'hij wil',   cut:{pieces:[{t:'βούλ',r:'stem'},{t:'ε',r:'tk'},{t:'ται',r:'end'}],fused:false},segs:[{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
+  {f:'ἐβουλόμην',g:'med',t:'imperfectum',p:1,n:'ev',tr:'ik wilde',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'βουλ',r:'stem'},{t:'ό',r:'tk'},{t:'μην',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
+  {f:'ἐβούλετο',g:'med',t:'imperfectum',p:3,n:'ev',tr:'hij wilde',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'βούλ',r:'stem'},{t:'ε',r:'tk'},{t:'το',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'το',r:'end'}]},
   {f:'ἐβουλήθην',g:'act',t:'aoristus', p:1,n:'ev',tr:'ik wilde',  segs:null},
   {f:'βουλήσομαι',g:'med',t:'futurum', p:1,n:'ev',tr:'ik zal willen',segs:null},
  ]},
@@ -1304,8 +1299,8 @@ const VERBS = [
   {f:'καλεῖ',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij roept', segs:null},
   {f:'ἐκάλουν',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik riep',   segs:null},
   {f:'ἐκάλει',g:'act', t:'imperfectum',p:3,n:'ev',tr:'hij riep',  segs:null},
-  {f:'ἐκάλεσα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik riep',   segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσα',r:'end'}]},
-  {f:'ἐκάλεσε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij riep',  segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσε(ν)',r:'end'}]},
+  {f:'ἐκάλεσα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik riep',   cut:{pieces:[{t:'ἐ',r:'aug'},{t:'κάλ',r:'stem'},{t:'ε',r:'tk'},{t:'σα',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσα',r:'end'}]},
+  {f:'ἐκάλεσε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij riep',  cut:{pieces:[{t:'ἐ',r:'aug'},{t:'κάλ',r:'stem'},{t:'ε',r:'tk'},{t:'σε(ν)',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσε(ν)',r:'end'}]},
   {f:'ἐκαλεῖτε',g:'act',t:'imperfectum',p:2,n:'mv',tr:'jullie riepen',segs:null},
  ]},
 ];
@@ -1414,7 +1409,6 @@ function updateHeader(mode,idx,total,sc,wr){
 //  ONTLEED EXERCISE
 // ══════════════════════════════════════════════
 let O = {}; // ontleed state
-let oActiveSlot = null;
 
 function startExercise(mode){
   const pref  = mode[0]; // o / d / v
@@ -1442,146 +1436,218 @@ function startExercise(mode){
   }
 }
 
+const ROLE_NAMES={aug:'Augment',stem:'Stam',tk:'Tijdskenletter',end:'Persoonsuitgang'};
+
 function drawOntleed(){
   const q=O.qs[O.idx];
   updateHeader('ontleed',O.idx,O.qs.length,O.sc,O.wr);
   document.getElementById('o-form').textContent=q.f;
-  document.getElementById('o-sub').textContent=''; // no lemma shown
-  oActiveSlot=null;
-  // reset slots
-  ['aug','stem','tk','end'].forEach(k=>{
-    document.getElementById('slot-'+k).className='slot';
-    document.getElementById('sv-'+k).textContent=k==='aug'||k==='tk'?'—':'';
-  });
-  O.assigned={aug:null,stem:null,tk:null,end:null};
+  document.getElementById('o-sub').textContent='';
+
+  // reset feedback + buttons
+  document.getElementById('o-fb').className='fb';
+  document.getElementById('o-fb').innerHTML='';
+  document.getElementById('o-cbtn').style.display='none';
+  document.getElementById('o-nbtn').style.display='none';
   // reset vert
   const vert=document.getElementById('o-vert');
   vert.value='';vert.className='';vert.disabled=false;
-  // feedback
-  document.getElementById('o-fb').className='fb';
-  document.getElementById('o-fb').innerHTML='';
-  document.getElementById('o-cbtn').style.display='';
-  document.getElementById('o-nbtn').style.display='none';
+  document.getElementById('o-vertrow').style.display='none';
 
-  // build chips
-  const chips=document.getElementById('o-chips');
-  chips.innerHTML='';
+  const step1=document.getElementById('o-step1');
+  const step2=document.getElementById('o-step2');
+  step2.style.display='none';
+  step2.innerHTML='<div class="seg-title"><strong style="color:var(--gold)">Stap 2 — Benoemen.</strong> Geef elk stuk de juiste naam.</div><div class="label-list" id="o-labellist"></div>';
 
-  if(!q.segs){
-    // irregular: show note, skip segment interaction
-    chips.innerHTML='<span style="color:var(--terra-l);font-size:.85rem;padding:4px 8px;background:var(--surf3);border-radius:6px">Onregelmatige vorm — segmentindeling niet van toepassing</span>';
-    ['aug','stem','tk','end'].forEach(k=>{
-      const sl=document.getElementById('slot-'+k);
-      sl.classList.add('disabled');
-      document.getElementById('sv-'+k).textContent='—';
-    });
-    O.assigned={aug:'—',stem:'—',tk:'—',end:'—'};
-  } else {
-    q.segs.forEach((seg,i)=>{
-      const chip=document.createElement('div');
-      chip.className='seg-chip';
-      chip.dataset.idx=i;
-      chip.dataset.role=seg.r;
-      chip.dataset.chars=seg.c;
-      chip.textContent=seg.c;
-      chip.addEventListener('click',()=>onChipClick(chip,seg));
-      chips.appendChild(chip);
-    });
-    // pre-assign '—' chips automatically
-    q.segs.forEach(seg=>{
-      if(seg.c==='—') O.assigned[seg.r]='—';
-    });
-  }
-}
-
-function selectSlot(key){
-  // irregular forms: slots disabled, ignore
-  const q=O.qs[O.idx];
-  if(!q.segs) return;
-  const wasActive = (oActiveSlot===key);
-  // clear all highlights first
-  ['aug','stem','tk','end'].forEach(k=>{
-    document.getElementById('slot-'+k).classList.remove('active-slot');
-  });
-  if(wasActive){ oActiveSlot=null; return; }
-  oActiveSlot=key;
-  document.getElementById('slot-'+key).classList.add('active-slot');
-}
-
-function onChipClick(chip,seg){
-  if(!oActiveSlot){
-    // no slot chosen yet: pulse the slot row so the student knows what to do
-    const row=document.querySelector('.slot-row');
-    if(row){
-      row.classList.remove('pulse');
-      void row.offsetWidth;   // force reflow to restart animation
-      row.classList.add('pulse');
-    }
+  // IRREGULAR / no cut data → label-only-skip, just translation
+  if(!q.cut){
+    step1.style.display='none';
+    document.getElementById('o-vertrow').style.display='';
+    // show irregular note inside segment-area (reuse step2 container)
+    step2.style.display='';
+    step2.innerHTML='<div class="irr-note">Onregelmatige vorm — deze laat zich niet in augment / stam / tijdskenletter / uitgang knippen. Geef alleen de vertaling.</div>';
+    O.mode='irr';
+    O.cutState=null;
+    document.getElementById('o-cbtn').style.display='';
     return;
   }
-  const target=oActiveSlot;               // capture before we reset
-  const colorMap={aug:'assigned-aug',stem:'assigned-stem',tk:'assigned-tk',end:'assigned-end'};
-  const classMap={aug:'has-aug',stem:'has-stem',tk:'has-tk',end:'has-end'};
 
-  // 1) if THIS chip was already assigned to another slot, free that slot
-  const prevSlot=chip.dataset.assignedTo;
-  if(prevSlot && prevSlot!==target){
-    O.assigned[prevSlot]=null;
-    document.getElementById('sv-'+prevSlot).textContent=(prevSlot==='aug'||prevSlot==='tk')?'—':'';
-    document.getElementById('slot-'+prevSlot).className='slot';
-  }
+  // CUT step setup
+  O.mode='cut';
+  step1.style.display='';
+  const cf=document.getElementById('o-cutform');
+  cf.innerHTML='';
+  const letters=q.cut.pieces.flatMap(p=>splitLetters(p.t));
+  O.cutState={letters, cuts:new Set(), fused:q.cut.fused, expectedCuts:computeExpectedCuts(q.cut.pieces)};
 
-  // 2) free any chip currently sitting in the target slot
-  document.querySelectorAll('.seg-chip').forEach(c=>{
-    if(c!==chip && c.dataset.assignedTo===target){
-      c.dataset.assignedTo='';
-      c.className='seg-chip';
+  // If fused, pre-place the correct boundaries and lock them (student only labels)
+  letters.forEach((ltr,i)=>{
+    const span=document.createElement('span');
+    span.className='cut-letter';
+    span.textContent=ltr;
+    cf.appendChild(span);
+    if(i<letters.length-1){
+      const gap=document.createElement('span');
+      gap.className='cut-gap';
+      gap.dataset.pos=i; // cut after letter i
+      if(q.cut.fused){
+        // pre-mark expected boundaries, lock them
+        if(O.cutState.expectedCuts.has(i)){ gap.classList.add('cut'); }
+        gap.classList.add('locked');
+      } else {
+        gap.addEventListener('click',()=>toggleCut(gap));
+      }
+      cf.appendChild(gap);
     }
   });
 
-  // 3) assign this chip to the target slot
-  chip.dataset.assignedTo=target;
-  chip.className='seg-chip '+colorMap[target];
-  O.assigned[target]=seg.c;
-  document.getElementById('sv-'+target).textContent=seg.c;
-  document.getElementById('slot-'+target).className='slot '+classMap[target];
+  const hint=document.getElementById('o-cuthint');
+  if(q.cut.fused){
+    hint.innerHTML='Bij deze vorm zijn klanken <em>versmolten</em> (bv. φ+σ→ψ); de grenzen staan daarom al vast. Klik op “Klaar met knippen”.';
+  } else {
+    hint.textContent='';
+  }
+  document.getElementById('o-cut-done').style.display='';
+}
 
-  // 4) clear active highlight
-  oActiveSlot=null;
-  ['aug','stem','tk','end'].forEach(k=>document.getElementById('slot-'+k).classList.remove('active-slot'));
+// split a piece text into display letters, keeping (ν) with its letter
+function splitLetters(text){
+  const out=[]; let i=0;
+  while(i<text.length){
+    if(text.slice(i,i+3)==='(ν)'){ if(out.length) out[out.length-1]+='(ν)'; i+=3; continue; }
+    out.push(text[i]); i++;
+  }
+  return out;
+}
+
+// expected cut positions = cumulative letter counts at each piece boundary (excluding last)
+function computeExpectedCuts(pieces){
+  const cuts=new Set();
+  let acc=0;
+  for(let k=0;k<pieces.length-1;k++){
+    acc+=splitLetters(pieces[k].t).length;
+    cuts.add(acc-1); // cut AFTER letter index (acc-1)
+  }
+  return cuts;
+}
+
+function toggleCut(gap){
+  const pos=parseInt(gap.dataset.pos);
+  if(O.cutState.cuts.has(pos)){ O.cutState.cuts.delete(pos); gap.classList.remove('cut'); }
+  else { O.cutState.cuts.add(pos); gap.classList.add('cut'); }
+}
+
+// STAP 1 done → build pieces from cuts, go to labelling
+function cutDone(){
+  const q=O.qs[O.idx];
+  const cs=O.cutState;
+  // build student's pieces from cut positions
+  const cutSet = cs.fused ? cs.expectedCuts : cs.cuts;
+  const pieces=[]; let buf='';
+  cs.letters.forEach((ltr,i)=>{
+    buf+=ltr;
+    if(cutSet.has(i)){ pieces.push(buf); buf=''; }
+  });
+  if(buf) pieces.push(buf);
+  O.studentPieces=pieces;
+
+  // hide step1, show step2 with a dropdown per piece
+  document.getElementById('o-step1').style.display='none';
+  const step2=document.getElementById('o-step2');
+  step2.style.display='';
+  const list=document.getElementById('o-labellist');
+  list.innerHTML='';
+  pieces.forEach((pc,i)=>{
+    const row=document.createElement('div');
+    row.className='label-item';
+    row.innerHTML=`<span class="label-piece">${pc}</span>
+      <div class="label-sel">
+        <select id="o-lbl-${i}">
+          <option value="">— kies onderdeel —</option>
+          <option value="aug">Augment</option>
+          <option value="stem">Stam</option>
+          <option value="tk">Tijdskenletter</option>
+          <option value="end">Persoonsuitgang</option>
+        </select>
+      </div>`;
+    list.appendChild(row);
+  });
+  document.getElementById('o-vertrow').style.display='';
+  document.getElementById('o-cbtn').style.display='';
+  document.getElementById('o-cut-done').style.display='none';
 }
 
 function checkOntleed(){
   const q=O.qs[O.idx];
-  const isIrr=!q.segs;
-  let segOk=isIrr;
   let fbLines=[];
+  let structureOk=true;
 
-  if(!isIrr){
-    segOk=true;
-    const expected={};
-    q.segs.forEach(s=>expected[s.r]=s.c);
-    ['aug','stem','tk','end'].forEach(k=>{
-      const got=O.assigned[k];
-      const exp=expected[k]||'—';
-      const ok = (got||'—')===exp ||(got===null&&exp==='—');
-      if(!ok){segOk=false;}
-      const sl=document.getElementById('slot-'+k);
-      sl.classList.remove('has-aug','has-stem','has-tk','has-end');
-      sl.classList.add(ok?'correct-slot':'wrong-slot');
-      if(!ok) fbLines.push(`<div class="fb-row"><span class="fb-lbl">${{aug:'Augment',stem:'Stam',tk:'Tijdskenletter',end:'Uitgang'}[k]}:</span><span class="fb-got">${got||'?'}</span> → <span class="fb-cor">${exp}</span></div>`);
+  if(O.mode==='irr'){
+    structureOk=true; // no structure to grade
+  } else {
+    // 1) Was the cut correct? (only matters for non-fused; fused boundaries are locked-correct)
+    const cs=O.cutState;
+    let cutOk=true;
+    if(!cs.fused){
+      // student's cut set must equal expected
+      cutOk = (cs.cuts.size===cs.expectedCuts.size) &&
+              [...cs.expectedCuts].every(p=>cs.cuts.has(p));
+    }
+
+    // 2) Were the labels correct? Compare student's pieces+labels to the canonical pieces.
+    // Canonical pieces (role per piece) from q.cut.pieces
+    const canon=q.cut.pieces.map(p=>({t:joinLetters(splitLetters(p.t)), r:p.r}));
+    const studentLabels=O.studentPieces.map((pc,i)=>{
+      const sel=document.getElementById('o-lbl-'+i);
+      return {t:pc, r:sel?sel.value:''};
     });
-    // disable chips
-    document.querySelectorAll('.seg-chip').forEach(c=>c.classList.add('disabled'));
+
+    let labelsOk=true;
+    // If the cut was correct (same number of pieces as canon), grade piece-by-piece
+    if(studentLabels.length===canon.length){
+      studentLabels.forEach((sp,i)=>{
+        const sel=document.getElementById('o-lbl-'+i);
+        const ok = sp.r===canon[i].r;
+        if(sel){ sel.classList.remove('ok','err'); sel.classList.add(ok?'ok':'err'); sel.disabled=true; }
+        const row=sel?sel.closest('.label-item'):null;
+        if(row){ row.classList.add(ok?'correct-row':'wrong-row'); }
+        if(!ok){
+          labelsOk=false;
+          if(row){
+            const fix=document.createElement('span');
+            fix.className='label-fix';
+            fix.textContent='→ '+ROLE_NAMES[canon[i].r];
+            row.appendChild(fix);
+          }
+        }
+      });
+    } else {
+      // cut count differs from canonical → mark all labels disabled, structure wrong
+      labelsOk=false;
+      studentLabels.forEach((sp,i)=>{
+        const sel=document.getElementById('o-lbl-'+i);
+        if(sel){ sel.classList.add('err'); sel.disabled=true; }
+      });
+    }
+
+    structureOk=cutOk&&labelsOk;
+    if(!cutOk){
+      fbLines.push(`<div class="fb-row"><span class="fb-lbl">Knippen:</span> de grenzen klopten nog niet. Juiste indeling: <span class="fb-cor">${canon.map(c=>c.t).join(' · ')}</span></div>`);
+    }
+    if(cutOk && !labelsOk){
+      const corr=canon.map(c=>`${c.t} = ${ROLE_NAMES[c.r]}`).join(' · ');
+      fbLines.push(`<div class="fb-row"><span class="fb-lbl">Benoemen:</span> <span class="fb-cor">${corr}</span></div>`);
+    }
   }
 
+  // translation
   const vertEl=document.getElementById('o-vert');
   const vertOk=matchNl(vertEl.value,q.tr);
   vertEl.className=vertOk?'correct':'wrong';
   vertEl.disabled=true;
   if(!vertOk) fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${vertEl.value||'—'}</span> → <span class="fb-cor">${q.tr}</span></div>`);
 
-  const allOk=segOk&&vertOk;
+  const allOk=structureOk&&vertOk;
   if(allOk){O.sc++;}else{O.wr++;}
   O.res.push({f:q.f,pres:q.pres,ok:allOk,t:q.t});
   document.getElementById('o-sc').textContent=O.sc;
@@ -1598,6 +1664,8 @@ function checkOntleed(){
   document.getElementById('o-cbtn').style.display='none';
   document.getElementById('o-nbtn').style.display='';
 }
+
+function joinLetters(arr){ return arr.join(''); }
 
 // ══════════════════════════════════════════════
 //  DETERMINEER EXERCISE
@@ -1720,8 +1788,18 @@ function showResults(mode,s){
 // ══════════════════════════════════════════════
 document.addEventListener('keydown',e=>{
   if(e.key!=='Enter'||e.target.tagName==='TEXTAREA') return;
+  // ontleden has an extra "Klaar met knippen" step
+  const exO=document.getElementById('ex-ontleed');
+  if(exO&&exO.classList.contains('active')){
+    const cutBtn=document.getElementById('o-cut-done');
+    const chkBtn=document.getElementById('o-cbtn');
+    const nxtBtn=document.getElementById('o-nbtn');
+    if(cutBtn.style.display!=='none' && document.getElementById('o-step1').style.display!=='none'){ cutDone(); }
+    else if(chkBtn.style.display!=='none'){ checkOntleed(); }
+    else if(nxtBtn.style.display!=='none'){ nextQ('ontleed'); }
+    return;
+  }
   const screens={
-    'ex-ontleed':['o-cbtn',()=>checkOntleed(),'o-nbtn',()=>nextQ('ontleed')],
     'ex-determ': ['d-cbtn',()=>checkDeterm(), 'd-nbtn',()=>nextQ('determ')],
     'ex-vertaal':['v-cbtn',()=>checkVertaal(),'v-nbtn',()=>nextQ('vertaal')],
   };
