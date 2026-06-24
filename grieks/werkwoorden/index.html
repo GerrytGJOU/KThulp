@@ -27,9 +27,16 @@ header p{font-size:.8rem;color:var(--dim);margin-top:2px;}
 .screen.active{display:flex;}
 
 /* ── MAIN MENU ── */
-#menu{align-items:center;justify-content:flex-start;padding:20px 16px 24px;}
-.menu-title{color:var(--gold);font-size:1.1rem;text-align:center;margin-bottom:18px;letter-spacing:.03em;}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:560px;}
+#menu{align-items:center;justify-content:flex-start;padding:20px 16px 28px;}
+.menu-inner{width:100%;max-width:560px;}
+.menu-section-label{display:flex;align-items:center;gap:12px;margin:6px 0 14px;}
+.menu-section-label::before,.menu-section-label::after{content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-d),transparent);}
+.menu-section-label span{color:var(--gold);font-size:.95rem;letter-spacing:.18em;
+  text-transform:uppercase;white-space:nowrap;}
+.menu-section-label:not(:first-child){margin-top:26px;}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;width:100%;}
+@media(max-width:480px){.menu-grid{grid-template-columns:1fr;}}
 .menu-card{background:var(--surf);border:2px solid var(--border);border-radius:var(--r);
   padding:18px 14px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;
   -webkit-tap-highlight-color:transparent;}
@@ -59,6 +66,18 @@ select,input[type=number]{background:var(--surf2);border:1px solid var(--border)
   border:none;border-radius:var(--r);font-family:inherit;font-size:1rem;font-weight:bold;
   cursor:pointer;letter-spacing:.04em;margin-top:6px;}
 .btn-start:hover{background:var(--gold-l);}
+.filter-group{margin-bottom:16px;}
+.filter-label{font-size:.82rem;color:var(--gold);margin-bottom:8px;letter-spacing:.03em;}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+.fchip{background:var(--surf2);border:1.5px solid var(--border);border-radius:20px;
+  color:var(--dim);font-family:inherit;font-size:.84rem;padding:7px 14px;cursor:pointer;
+  transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.fchip:hover{border-color:var(--gold-d);}
+.fchip.on{background:#2a2540;border-color:var(--gold);color:var(--gold-l);}
+.cnt-input{background:var(--surf2);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);font-family:inherit;font-size:.95rem;padding:7px 10px;width:80px;}
+.filter-count{font-size:.8rem;color:var(--dim);margin-bottom:14px;min-height:18px;}
+.filter-count.warn{color:var(--terra-l);}
 
 /* ── EXERCISE SHELL ── */
 .ex-wrap{flex:1;display:flex;flex-direction:column;padding:14px 16px;
@@ -187,6 +206,24 @@ select,input[type=number]{background:var(--surf2);border:1px solid var(--border)
 .build-cell .build-top{font-size:.85rem;color:var(--tx);font-weight:bold;}
 .build-cell .build-mid{font-size:.86rem;color:var(--tx);font-weight:bold;line-height:1.2;}
 .build-cell .build-bot{font-size:.68rem;color:var(--dim);line-height:1.25;}
+/* ── FULL λύω OVERVIEW TABLE ── */
+.luo-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-bottom:10px;
+  border:1px solid var(--border);border-radius:8px;}
+.luo-table{border-collapse:collapse;font-size:.74rem;min-width:760px;}
+.luo-table th,.luo-table td{border:1px solid var(--border);padding:5px 7px;
+  text-align:left;vertical-align:top;white-space:nowrap;}
+.luo-table thead th{background:var(--surf3);color:var(--gold);font-weight:normal;
+  text-align:center;position:sticky;top:0;}
+.luo-table .luo-h1 th{background:var(--gold-d);color:#1a1220;font-weight:bold;
+  letter-spacing:.05em;text-transform:uppercase;font-size:.78rem;}
+.luo-table .luo-corner{background:var(--surf3);border:none;}
+.luo-table .luo-rl{background:var(--surf2);color:var(--gold-l);font-weight:bold;
+  text-align:center;vertical-align:middle;position:sticky;left:0;z-index:1;
+  white-space:nowrap;}
+.luo-table tbody td{color:var(--gold-l);font-style:italic;}
+.luo-table tbody tr:nth-child(even) td{background:var(--surf2);}
+.luo-table tbody tr:nth-child(even) .luo-rl{background:var(--surf3);}
+.luo-table .ont{color:var(--dim);font-style:italic;font-size:.72rem;}
 
 /* ── RESULTS ── */
 .results-wrap{padding:20px 16px;max-width:520px;width:100%;margin:0 auto;text-align:center;}
@@ -217,28 +254,36 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
      HOOFDMENU
      ════════════════════════════════ -->
 <div id="menu" class="screen active">
-  <div class="menu-title">Kies een oefening</div>
-  <div class="menu-grid">
-    <div class="menu-card" onclick="gotoSetup('ontleed')">
-      <div class="mc-icon">🔍</div>
-      <div class="mc-label">① Ontleden</div>
-      <div class="mc-desc">Wijs augment, stam, tijdskenletter en uitgang aan in de werkwoordsvorm</div>
+  <div class="menu-inner">
+
+    <div class="menu-section-label"><span>Oefenen</span></div>
+    <div class="menu-grid">
+      <div class="menu-card" onclick="gotoSetup('ontleed')">
+        <div class="mc-icon">🔍</div>
+        <div class="mc-label">① Ontleden</div>
+        <div class="mc-desc">Wijs augment, stam, tijdskenletter en uitgang aan in de werkwoordsvorm</div>
+      </div>
+      <div class="menu-card" onclick="gotoSetup('determ')">
+        <div class="mc-icon">📋</div>
+        <div class="mc-label">② Determineren</div>
+        <div class="mc-desc">Geef persoon, getal, tijd en vertaling van de gegeven vorm</div>
+      </div>
+      <div class="menu-card" onclick="gotoSetup('vertaal')">
+        <div class="mc-icon">🌐</div>
+        <div class="mc-label">③ Vertalen</div>
+        <div class="mc-desc">Vertaal de werkwoordsvorm naar het Nederlands</div>
+      </div>
     </div>
-    <div class="menu-card" onclick="gotoSetup('determ')">
-      <div class="mc-icon">📋</div>
-      <div class="mc-label">② Determineren</div>
-      <div class="mc-desc">Geef persoon, getal, tijd en vertaling van de gegeven vorm</div>
+
+    <div class="menu-section-label"><span>Theorie</span></div>
+    <div class="menu-grid">
+      <div class="menu-card wide" onclick="gotoScreen('paradigma')">
+        <div class="mc-icon">📖</div>
+        <div class="mc-label">Paradigma's</div>
+        <div class="mc-desc">Opbouw van de werkwoordsvorm, alle uitgangen, modi, tijden en vertalingen — afgestemd op de CEVO-examenstof</div>
+      </div>
     </div>
-    <div class="menu-card" onclick="gotoSetup('vertaal')">
-      <div class="mc-icon">🌐</div>
-      <div class="mc-label">③ Vertalen</div>
-      <div class="mc-desc">Vertaal de werkwoordsvorm naar het Nederlands</div>
-    </div>
-    <div class="menu-card" onclick="gotoScreen('paradigma')">
-      <div class="mc-icon">📖</div>
-      <div class="mc-label">Paradigma's</div>
-      <div class="mc-desc">Overzicht van alle uitgangen, tijden en vertalingen</div>
-    </div>
+
   </div>
 </div>
 
@@ -255,19 +300,36 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
     <p>Je ziet een Griekse werkwoordsvorm. Wijs door te klikken de onderdelen aan:<br>
     <strong style="color:#7fd4f8">augment</strong> · <strong style="color:#80e090">stam</strong> · <strong style="color:#f0b840">tijdskenletter</strong> · <strong style="color:#d080f0">persoonsuitgang</strong><br>
     Daarna geef je ook de Nederlandse vertaling. Bij onregelmatige vormen (crasis, elisie) worden de onderdelen als geheel weergegeven.</p>
-    <div class="field-row">
-      <label>Tijden:</label>
-      <select id="o-tfilter" multiple style="height:76px;">
-        <option value="praesens" selected>Praesens</option>
-        <option value="imperfectum" selected>Imperfectum</option>
-        <option value="aoristus" selected>Aoristus</option>
-        <option value="futurum">Futurum</option>
-      </select>
+    <div class="filter-group">
+      <div class="filter-label">Tijden</div>
+      <div class="chip-row" id="o-f-tijd">
+        <button class="fchip on" data-v="praesens">Praesens</button>
+        <button class="fchip on" data-v="imperfectum">Imperfectum</button>
+        <button class="fchip on" data-v="aoristus">Aoristus</button>
+        <button class="fchip" data-v="futurum">Futurum</button>
+      </div>
     </div>
-    <div class="field-row">
-      <label>Vragen:</label>
-      <input type="number" id="o-cnt" value="10" min="3" max="30" style="width:65px;">
+    <div class="filter-group">
+      <div class="filter-label">Genus</div>
+      <div class="chip-row" id="o-f-genus">
+        <button class="fchip on" data-v="act">Actief</button>
+        <button class="fchip on" data-v="med">Medium / passief</button>
+      </div>
     </div>
+    <div class="filter-group">
+      <div class="filter-label">Type werkwoord</div>
+      <div class="chip-row" id="o-f-type">
+        <button class="fchip on" data-v="themat">Thematisch</button>
+        <button class="fchip on" data-v="contract">Contracta</button>
+        <button class="fchip on" data-v="athemat">Athematisch (-μι)</button>
+        <button class="fchip on" data-v="mediumdep">Deponentia</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Aantal vragen</div>
+      <input type="number" id="o-cnt" value="10" min="3" max="40" class="cnt-input">
+    </div>
+    <div class="filter-count" id="o-avail"></div>
     <button class="btn-start" onclick="startExercise('ontleed')">Start →</button>
   </div>
 </div>
@@ -283,19 +345,36 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
   <div class="setup-panel">
     <h2>Werkwoordsvorm determineren</h2>
     <p>Je ziet een Griekse werkwoordsvorm zonder lemma. Geef de grammaticale eigenschappen en de vertaling.</p>
-    <div class="field-row">
-      <label>Tijden:</label>
-      <select id="d-tfilter" multiple style="height:76px;">
-        <option value="praesens" selected>Praesens</option>
-        <option value="imperfectum" selected>Imperfectum</option>
-        <option value="aoristus" selected>Aoristus</option>
-        <option value="futurum">Futurum</option>
-      </select>
+    <div class="filter-group">
+      <div class="filter-label">Tijden</div>
+      <div class="chip-row" id="d-f-tijd">
+        <button class="fchip on" data-v="praesens">Praesens</button>
+        <button class="fchip on" data-v="imperfectum">Imperfectum</button>
+        <button class="fchip on" data-v="aoristus">Aoristus</button>
+        <button class="fchip" data-v="futurum">Futurum</button>
+      </div>
     </div>
-    <div class="field-row">
-      <label>Vragen:</label>
-      <input type="number" id="d-cnt" value="10" min="3" max="30" style="width:65px;">
+    <div class="filter-group">
+      <div class="filter-label">Genus</div>
+      <div class="chip-row" id="d-f-genus">
+        <button class="fchip on" data-v="act">Actief</button>
+        <button class="fchip on" data-v="med">Medium / passief</button>
+      </div>
     </div>
+    <div class="filter-group">
+      <div class="filter-label">Type werkwoord</div>
+      <div class="chip-row" id="d-f-type">
+        <button class="fchip on" data-v="themat">Thematisch</button>
+        <button class="fchip on" data-v="contract">Contracta</button>
+        <button class="fchip on" data-v="athemat">Athematisch (-μι)</button>
+        <button class="fchip on" data-v="mediumdep">Deponentia</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Aantal vragen</div>
+      <input type="number" id="d-cnt" value="10" min="3" max="40" class="cnt-input">
+    </div>
+    <div class="filter-count" id="d-avail"></div>
     <button class="btn-start" onclick="startExercise('determ')">Start →</button>
   </div>
 </div>
@@ -311,19 +390,36 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
   <div class="setup-panel">
     <h2>Werkwoordsvorm vertalen</h2>
     <p>Je ziet een Griekse werkwoordsvorm met het bijbehorende lemma en de grondbetekenis. Geef de correcte Nederlandse vertaling van de <em>gegeven vorm</em> (persoon en getal).</p>
-    <div class="field-row">
-      <label>Tijden:</label>
-      <select id="v-tfilter" multiple style="height:76px;">
-        <option value="praesens" selected>Praesens</option>
-        <option value="imperfectum" selected>Imperfectum</option>
-        <option value="aoristus" selected>Aoristus</option>
-        <option value="futurum">Futurum</option>
-      </select>
+    <div class="filter-group">
+      <div class="filter-label">Tijden</div>
+      <div class="chip-row" id="v-f-tijd">
+        <button class="fchip on" data-v="praesens">Praesens</button>
+        <button class="fchip on" data-v="imperfectum">Imperfectum</button>
+        <button class="fchip on" data-v="aoristus">Aoristus</button>
+        <button class="fchip" data-v="futurum">Futurum</button>
+      </div>
     </div>
-    <div class="field-row">
-      <label>Vragen:</label>
-      <input type="number" id="v-cnt" value="10" min="3" max="30" style="width:65px;">
+    <div class="filter-group">
+      <div class="filter-label">Genus</div>
+      <div class="chip-row" id="v-f-genus">
+        <button class="fchip on" data-v="act">Actief</button>
+        <button class="fchip on" data-v="med">Medium / passief</button>
+      </div>
     </div>
+    <div class="filter-group">
+      <div class="filter-label">Type werkwoord</div>
+      <div class="chip-row" id="v-f-type">
+        <button class="fchip on" data-v="themat">Thematisch</button>
+        <button class="fchip on" data-v="contract">Contracta</button>
+        <button class="fchip on" data-v="athemat">Athematisch (-μι)</button>
+        <button class="fchip on" data-v="mediumdep">Deponentia</button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Aantal vragen</div>
+      <input type="number" id="v-cnt" value="10" min="3" max="40" class="cnt-input">
+    </div>
+    <div class="filter-count" id="v-avail"></div>
     <button class="btn-start" onclick="startExercise('vertaal')">Start →</button>
   </div>
 </div>
@@ -801,8 +897,132 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
     </div>
 
     <div class="para-section">
-      <h2>Volledig stelsel van λύω — indicativus per tijd</h2>
-      <p>De achtste vorm (1e ev.) per tijd, met vormingskenmerk en vertaling. Dit is het ruggengraat-overzicht dat CEVO veronderstelt.</p>
+      <h2>Volledig overzicht van λύω — alle vormen</h2>
+      <p>Dit is het complete schema van een regelmatig werkwoord: vier stamtijden (praesens, aoristus, perfectum, futurum), elk in actief, medium en/of passief, en per modus (indicativus, coniunctivus, optativus, imperativus) plus infinitivus en participium. Zo zie je in één oogopslag hoe een Grieks werkwoord is opgebouwd. Veeg horizontaal om alle kolommen te zien.</p>
+      <div class="luo-scroll">
+      <table class="luo-table">
+        <thead>
+        <tr class="luo-h1">
+          <th class="luo-corner" rowspan="2"></th>
+          <th colspan="2">Praesens</th>
+          <th colspan="3">Aoristus</th>
+          <th colspan="2">Perfectum</th>
+          <th colspan="3">Futurum</th>
+        </tr>
+        <tr class="luo-h2">
+          <th>actief</th>
+          <th>med.-pass.</th>
+          <th>actief</th>
+          <th>medium</th>
+          <th>passief</th>
+          <th>actief</th>
+          <th>med.-pass.</th>
+          <th>actief</th>
+          <th>medium</th>
+          <th>passief</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <th class="luo-rl">ind.<br>primair</th>
+          <td>λύω<br>λύεις<br>λύει<br>λύομεν<br>λύετε<br>λύουσι(ν)</td>
+          <td>λύομαι<br>λύει / -ῃ<br>λύεται<br>λυόμεθα<br>λύεσθε<br>λύονται</td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td>λέλυκα<br>λέλυκας<br>λέλυκε(ν)<br>λελύκαμεν<br>λελύκατε<br>λελύκασι(ν)</td>
+          <td>λέλυμαι<br>λέλυσαι<br>λέλυται<br>λελύμεθα<br>λέλυσθε<br>λέλυνται</td>
+          <td>λύσω<br>λύσεις<br>λύσει<br>λύσομεν<br>λύσετε<br>λύσουσι(ν)</td>
+          <td>λύσομαι<br>λύσει / -ῃ<br>λύσεται<br>λυσόμεθα<br>λύσεσθε<br>λύσονται</td>
+          <td>λυθήσομαι<br>λυθήσει / -ῃ<br>λυθήσεται<br>λυθησόμεθα<br>λυθήσεσθε<br>λυθήσονται</td>
+        </tr>
+        <tr>
+          <th class="luo-rl">ind.<br>secundair</th>
+          <td>ἔλυον<br>ἔλυες<br>ἔλυε(ν)<br>ἐλύομεν<br>ἐλύετε<br>ἔλυον</td>
+          <td>ἐλυόμην<br>ἐλύου<br>ἐλύετο<br>ἐλυόμεθα<br>ἐλύεσθε<br>ἐλύοντο</td>
+          <td>ἔλυσα<br>ἔλυσας<br>ἔλυσε(ν)<br>ἐλύσαμεν<br>ἐλύσατε<br>ἔλυσαν</td>
+          <td>ἐλυσάμην<br>ἐλύσω<br>ἐλύσατο<br>ἐλυσάμεθα<br>ἐλύσασθε<br>ἐλύσαντο</td>
+          <td>ἐλύθην<br>ἐλύθης<br>ἐλύθη<br>ἐλύθημεν<br>ἐλύθητε<br>ἐλύθησαν</td>
+          <td>ἐλελύκειν<br>ἐλελύκεις<br>ἐλελύκει(ν)<br>ἐλελύκεμεν<br>ἐλελύκετε<br>ἐλελύκεσαν</td>
+          <td>ἐλελύμην<br>ἐλέλυσο<br>ἐλέλυτο<br>ἐλελύμεθα<br>ἐλέλυσθε<br>ἐλέλυντο</td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td><span class="ont">ontbreekt</span></td>
+        </tr>
+        <tr>
+          <th class="luo-rl">coni.</th>
+          <td>λύω<br>λύῃς<br>λύῃ<br>λύωμεν<br>λύητε<br>λύωσι(ν)</td>
+          <td>λύωμαι<br>λύῃ<br>λύηται<br>λυώμεθα<br>λύησθε<br>λύωνται</td>
+          <td>λύσω<br>λύσῃς<br>λύσῃ<br>λύσωμεν<br>λύσητε<br>λύσωσι(ν)</td>
+          <td>λύσωμαι<br>λύσῃ<br>λύσηται<br>λυσώμεθα<br>λύσησθε<br>λύσωνται</td>
+          <td>λυθῶ<br>λυθῇς<br>λυθῇ<br>λυθῶμεν<br>λυθῆτε<br>λυθῶσι(ν)</td>
+          <td>λελύκω<br>λελύκῃς<br>λελύκῃ<br>λελύκωμεν<br>λελύκητε<br>λελύκωσι(ν)</td>
+          <td>λελυμένος ὦ<br>ᾖς<br>ᾖ<br>λελυμένοι ὦμεν<br>ἦτε<br>ὦσι(ν)</td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td><span class="ont">ontbreekt</span></td>
+        </tr>
+        <tr>
+          <th class="luo-rl">opt.</th>
+          <td>λύοιμι<br>λύοις<br>λύοι<br>λύοιμεν<br>λύοιτε<br>λύοιεν</td>
+          <td>λυοίμην<br>λύοιο<br>λύοιτο<br>λυοίμεθα<br>λύοισθε<br>λύοιντο</td>
+          <td>λύσαιμι<br>λύσειας<br>λύσειε(ν)<br>λύσαιμεν<br>λύσαιτε<br>λύσειαν</td>
+          <td>λυσαίμην<br>λύσαιο<br>λύσαιτο<br>λυσαίμεθα<br>λύσαισθε<br>λύσαιντο</td>
+          <td>λυθείην<br>λυθείης<br>λυθείη<br>λυθεῖμεν<br>λυθεῖτε<br>λυθεῖεν</td>
+          <td>λελύκοιμι<br>λελύκοις<br>λελύκοι<br>λελύκοιμεν<br>λελύκοιτε<br>λελύκοιεν</td>
+          <td>λελυμένος εἴην<br>εἴης<br>εἴη<br>λελυμένοι εἶμεν<br>εἶτε<br>εἶεν</td>
+          <td>λύσοιμι<br>λύσοις<br>λύσοι<br>λύσοιμεν<br>λύσοιτε<br>λύσοιεν</td>
+          <td>λυσοίμην<br>λύσοιο<br>λύσοιτο<br>λυσοίμεθα<br>λύσοισθε<br>λύσοιντο</td>
+          <td>λυθησοίμην<br>λυθήσοιο<br>λυθήσοιτο<br>λυθησοίμεθα<br>λυθήσοισθε<br>λυθήσοιντο</td>
+        </tr>
+        <tr>
+          <th class="luo-rl">imperat.</th>
+          <td>λῦε<br>λυέτω<br>λύετε<br>λυόντων</td>
+          <td>λύου<br>λυέσθω<br>λύεσθε<br>λυέσθων</td>
+          <td>λῦσον<br>λυσάτω<br>λύσατε<br>λυσάντων</td>
+          <td>λῦσαι<br>λυσάσθω<br>λύσασθε<br>λυσάσθων</td>
+          <td>λύθητι<br>λυθήτω<br>λύθητε<br>λυθέντων</td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td>λέλυσο<br>λελύσθω<br>λέλυσθε<br>λελύσθων</td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td><span class="ont">ontbreekt</span></td>
+          <td><span class="ont">ontbreekt</span></td>
+        </tr>
+        <tr>
+          <th class="luo-rl">inf.</th>
+          <td>λύειν</td>
+          <td>λύεσθαι</td>
+          <td>λῦσαι</td>
+          <td>λύσασθαι</td>
+          <td>λυθῆναι</td>
+          <td>λελυκέναι</td>
+          <td>λελύσθαι</td>
+          <td>λύσειν</td>
+          <td>λύσεσθαι</td>
+          <td>λυθήσεσθαι</td>
+        </tr>
+        <tr>
+          <th class="luo-rl">partic.</th>
+          <td>λύων, -οντος<br>λύουσα, -ης<br>λῦον, -οντος</td>
+          <td>λυόμενος, -ου<br>λυομένη, -ης<br>λυόμενον, -ου</td>
+          <td>λύσας, -αντος<br>λύσασα, -ης<br>λῦσαν, -αντος</td>
+          <td>λυσάμενος, -ου<br>λυσαμένη, -ης<br>λυσάμενον, -ου</td>
+          <td>λυθείς, -έντος<br>λυθεῖσα, -είσης<br>λυθέν, -έντος</td>
+          <td>λελυκώς, -ότος<br>λελυκυῖα, -ας<br>λελυκός, -ότος</td>
+          <td>λελυμένος, -ου<br>λελυμένη, -ης<br>λελυμένον, -ου</td>
+          <td>λύσων, -οντος<br>λύσουσα, -ης<br>λῦσον, -οντος</td>
+          <td>λυσόμενος, -ου<br>λυσομένη, -ης<br>λυσόμενον, -ου</td>
+          <td>λυθησόμενος, -ου<br>λυθησομένη, -ης<br>λυθησόμενον, -ου</td>
+        </tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="para-note">De aoristus en het futurum hebben aparte medium- en passiefvormen; in praesens en perfectum vallen medium en passief samen (med.-pass.). Lege vakken ("ontbreekt") bestaan niet in het Grieks: er is bijvoorbeeld geen indicativus van de aoristus zonder augment in het primaire stelsel, en het perfectum en futurum hebben geen imperativus die je actief hoeft te kennen.</div>
+    </div>
+
+    <div class="para-section">
+      <h2>λύω — indicativus per tijd (met vertaling)</h2>
+      <p>Een beknopt overzicht van de 1e ev. per tijd, met vormingskenmerk en Nederlandse vertaling. Voor het complete schema met alle modi: zie het overzicht hierboven.</p>
       <table class="para-table">
         <tr><th>Tijd</th><th>Actief</th><th>Vertaling</th><th>Medio-passief</th><th>Vertaling</th></tr>
         <tr><td>Praesens</td><td class="gk">λύω</td><td>ik maak los</td><td class="gk">λύομαι</td><td>ik word losgemaakt</td></tr>
@@ -896,195 +1116,195 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
 //  roles: aug | stem | tk | end  (null = irregular/whole)
 // ══════════════════════════════════════════════════════
 const VERBS = [
- {pres:'λύω',meaning:'losmaken',forms:[
-  {f:'λύω',    t:'praesens',   p:1,n:'ev',tr:'ik maak los',   segs:[{c:'λυ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'λύεις',  t:'praesens',   p:2,n:'ev',tr:'jij maakt los', segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'λύει',   t:'praesens',   p:3,n:'ev',tr:'hij maakt los', segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'λύομεν', t:'praesens',   p:1,n:'mv',tr:'wij maken los', segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'λύετε',  t:'praesens',   p:2,n:'mv',tr:'jullie maken los',segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
-  {f:'λύουσι(ν)',t:'praesens', p:3,n:'mv',tr:'zij maken los', segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'υσι(ν)',r:'end'}]},
-  {f:'ἔλυον',  t:'imperfectum',p:1,n:'ev',tr:'ik maakte los', segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔλυες',  t:'imperfectum',p:2,n:'ev',tr:'jij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ς',r:'end'}]},
-  {f:'ἔλυε(ν)',t:'imperfectum', p:3,n:'ev',tr:'hij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἐλύομεν',t:'imperfectum',p:1,n:'mv',tr:'wij maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἐλύετε', t:'imperfectum',p:2,n:'mv',tr:'jullie maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
-  {f:'ἔλυσα',  t:'aoristus',   p:1,n:'ev',tr:'ik maakte los', segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἔλυσας', t:'aoristus',   p:2,n:'ev',tr:'jij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
-  {f:'ἔλυσε(ν)',t:'aoristus',  p:3,n:'ev',tr:'hij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'ἐλύσαμεν',t:'aoristus',  p:1,n:'mv',tr:'wij maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰμεν',r:'end'}]},
-  {f:'λύσω',   t:'futurum',    p:1,n:'ev',tr:'ik zal losmaken',segs:[{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
-  {f:'λύσεις', t:'futurum',    p:2,n:'ev',tr:'jij zult losmaken',segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'λύσει',  t:'futurum',    p:3,n:'ev',tr:'hij zal losmaken',segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ι',r:'end'}]},
+ {pres:'λύω',type:'themat',meaning:'losmaken',forms:[
+  {f:'λύω',g:'act',    t:'praesens',   p:1,n:'ev',tr:'ik maak los',   segs:[{c:'λυ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'λύεις',g:'act',  t:'praesens',   p:2,n:'ev',tr:'jij maakt los', segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λύει',g:'act',   t:'praesens',   p:3,n:'ev',tr:'hij maakt los', segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λύομεν',g:'act', t:'praesens',   p:1,n:'mv',tr:'wij maken los', segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'λύετε',g:'act',  t:'praesens',   p:2,n:'mv',tr:'jullie maken los',segs:[{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
+  {f:'λύουσι(ν)',g:'act',t:'praesens', p:3,n:'mv',tr:'zij maken los', segs:[{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'υσι(ν)',r:'end'}]},
+  {f:'ἔλυον',g:'act',  t:'imperfectum',p:1,n:'ev',tr:'ik maakte los', segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔλυες',g:'act',  t:'imperfectum',p:2,n:'ev',tr:'jij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'ς',r:'end'}]},
+  {f:'ἔλυε(ν)',g:'act',t:'imperfectum', p:3,n:'ev',tr:'hij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἐλύομεν',g:'act',t:'imperfectum',p:1,n:'mv',tr:'wij maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἐλύετε',g:'act', t:'imperfectum',p:2,n:'mv',tr:'jullie maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
+  {f:'ἔλυσα',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik maakte los', segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔλυσας',g:'act', t:'aoristus',   p:2,n:'ev',tr:'jij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
+  {f:'ἔλυσε(ν)',g:'act',t:'aoristus',  p:3,n:'ev',tr:'hij maakte los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐλύσαμεν',g:'act',t:'aoristus',  p:1,n:'mv',tr:'wij maakten los',segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰμεν',r:'end'}]},
+  {f:'λύσω',g:'act',   t:'futurum',    p:1,n:'ev',tr:'ik zal losmaken',segs:[{c:'λυ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
+  {f:'λύσεις',g:'act', t:'futurum',    p:2,n:'ev',tr:'jij zult losmaken',segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λύσει',g:'act',  t:'futurum',    p:3,n:'ev',tr:'hij zal losmaken',segs:[{c:'λυ',r:'stem'},{c:'σε',r:'tk'},{c:'ι',r:'end'}]},
  ]},
- {pres:'λαμβάνω',meaning:'nemen, krijgen',forms:[
-  {f:'λαμβάνω', t:'praesens',   p:1,n:'ev',tr:'ik neem',   segs:[{c:'λαμβαν',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'λαμβάνεις',t:'praesens',  p:2,n:'ev',tr:'jij neemt', segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'λαμβάνει', t:'praesens',  p:3,n:'ev',tr:'hij neemt', segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'λαμβάνομεν',t:'praesens', p:1,n:'mv',tr:'wij nemen', segs:[{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'λαμβάνετε',t:'praesens',  p:2,n:'mv',tr:'jullie nemen',segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
-  {f:'ἐλάμβανον',t:'imperfectum',p:1,n:'ev',tr:'ik nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἐλάμβανε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij nam', segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἐλαμβάνομεν',t:'imperfectum',p:1,n:'mv',tr:'wij namen',segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἔλαβον',  t:'aoristus',   p:1,n:'ev',tr:'ik nam',    segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
-  {f:'ἔλαβες',  t:'aoristus',   p:2,n:'ev',tr:'jij nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ες',r:'end'}]},
-  {f:'ἔλαβε(ν)',t:'aoristus',   p:3,n:'ev',tr:'hij nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'ἐλάβομεν',t:'aoristus',   p:1,n:'mv',tr:'wij namen', segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
-  {f:'λήψομαι', t:'futurum',    p:1,n:'ev',tr:'ik zal nemen',segs:null},
+ {pres:'λαμβάνω',type:'themat',meaning:'nemen, krijgen',forms:[
+  {f:'λαμβάνω',g:'act', t:'praesens',   p:1,n:'ev',tr:'ik neem',   segs:[{c:'λαμβαν',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'λαμβάνεις',g:'act',t:'praesens',  p:2,n:'ev',tr:'jij neemt', segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λαμβάνει',g:'act', t:'praesens',  p:3,n:'ev',tr:'hij neemt', segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λαμβάνομεν',g:'act',t:'praesens', p:1,n:'mv',tr:'wij nemen', segs:[{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'λαμβάνετε',g:'act',t:'praesens',  p:2,n:'mv',tr:'jullie nemen',segs:[{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'τε',r:'end'}]},
+  {f:'ἐλάμβανον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἐλάμβανε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij nam', segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἐλαμβάνομεν',g:'act',t:'imperfectum',p:1,n:'mv',tr:'wij namen',segs:[{c:'ἐ',r:'aug'},{c:'λαμβαν',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔλαβον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik nam',    segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
+  {f:'ἔλαβες',g:'act',  t:'aoristus',   p:2,n:'ev',tr:'jij nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ες',r:'end'}]},
+  {f:'ἔλαβε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij nam',   segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐλάβομεν',g:'act',t:'aoristus',   p:1,n:'mv',tr:'wij namen', segs:[{c:'ἐ',r:'aug'},{c:'λαβ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
+  {f:'λήψομαι',g:'med', t:'futurum',    p:1,n:'ev',tr:'ik zal nemen',segs:null},
  ]},
- {pres:'ἔχω',meaning:'hebben, houden',forms:[
-  {f:'ἔχω',    t:'praesens',   p:1,n:'ev',tr:'ik heb',     segs:[{c:'ἐχ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'ἔχεις',  t:'praesens',   p:2,n:'ev',tr:'jij hebt',   segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'ἔχει',   t:'praesens',   p:3,n:'ev',tr:'hij heeft',  segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἔχομεν', t:'praesens',   p:1,n:'mv',tr:'wij hebben', segs:[{c:'ἐχ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'εἶχον',  t:'imperfectum',p:1,n:'ev',tr:'ik had',     segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'εἶχε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij had',    segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'εἴχομεν',t:'imperfectum',p:1,n:'mv',tr:'wij hadden', segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἔσχον',  t:'aoristus',   p:1,n:'ev',tr:'ik kreeg',   segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
-  {f:'ἔσχε(ν)',t:'aoristus',   p:3,n:'ev',tr:'hij kreeg',  segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'ἕξω',    t:'futurum',    p:1,n:'ev',tr:'ik zal hebben',segs:null},
+ {pres:'ἔχω',type:'themat',meaning:'hebben, houden',forms:[
+  {f:'ἔχω',g:'act',    t:'praesens',   p:1,n:'ev',tr:'ik heb',     segs:[{c:'ἐχ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'ἔχεις',g:'act',  t:'praesens',   p:2,n:'ev',tr:'jij hebt',   segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'ἔχει',g:'act',   t:'praesens',   p:3,n:'ev',tr:'hij heeft',  segs:[{c:'ἐχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἔχομεν',g:'act', t:'praesens',   p:1,n:'mv',tr:'wij hebben', segs:[{c:'ἐχ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'εἶχον',g:'act',  t:'imperfectum',p:1,n:'ev',tr:'ik had',     segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'εἶχε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij had',    segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'εἴχομεν',g:'act',t:'imperfectum',p:1,n:'mv',tr:'wij hadden', segs:[{c:'εἰ',r:'aug'},{c:'χ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔσχον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik kreeg',   segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
+  {f:'ἔσχε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij kreeg',  segs:[{c:'ἐ',r:'aug'},{c:'σχ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἕξω',g:'act',    t:'futurum',    p:1,n:'ev',tr:'ik zal hebben',segs:null},
  ]},
- {pres:'λέγω',meaning:'zeggen, spreken',forms:[
-  {f:'λέγω',   t:'praesens',   p:1,n:'ev',tr:'ik zeg',     segs:[{c:'λεγ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'λέγεις', t:'praesens',   p:2,n:'ev',tr:'jij zegt',   segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'λέγει',  t:'praesens',   p:3,n:'ev',tr:'hij zegt',   segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'λέγομεν',t:'praesens',   p:1,n:'mv',tr:'wij zeggen', segs:[{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἔλεγον', t:'imperfectum',p:1,n:'ev',tr:'ik zei',     segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔλεγε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij zei',   segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'εἶπον',  t:'aoristus',   p:1,n:'ev',tr:'ik zei',     segs:null},
-  {f:'εἶπε(ν)',t:'aoristus',   p:3,n:'ev',tr:'hij zei',    segs:null},
-  {f:'εἴπομεν',t:'aoristus',   p:1,n:'mv',tr:'wij zeiden', segs:null},
-  {f:'ἐρῶ',    t:'futurum',    p:1,n:'ev',tr:'ik zal zeggen',segs:null},
+ {pres:'λέγω',type:'themat',meaning:'zeggen, spreken',forms:[
+  {f:'λέγω',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik zeg',     segs:[{c:'λεγ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'λέγεις',g:'act', t:'praesens',   p:2,n:'ev',tr:'jij zegt',   segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'λέγει',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij zegt',   segs:[{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'λέγομεν',g:'act',t:'praesens',   p:1,n:'mv',tr:'wij zeggen', segs:[{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔλεγον',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik zei',     segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔλεγε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij zei',   segs:[{c:'ἐ',r:'aug'},{c:'λεγ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'εἶπον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik zei',     segs:null},
+  {f:'εἶπε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij zei',    segs:null},
+  {f:'εἴπομεν',g:'act',t:'aoristus',   p:1,n:'mv',tr:'wij zeiden', segs:null},
+  {f:'ἐρῶ',g:'act',    t:'futurum',    p:1,n:'ev',tr:'ik zal zeggen',segs:null},
  ]},
- {pres:'εἰμί',meaning:'zijn',forms:[
-  {f:'εἰμί',   t:'praesens',   p:1,n:'ev',tr:'ik ben',     segs:null},
-  {f:'εἶ',     t:'praesens',   p:2,n:'ev',tr:'jij bent',   segs:null},
-  {f:'ἐστί(ν)',t:'praesens',   p:3,n:'ev',tr:'hij is',     segs:null},
-  {f:'ἐσμέν',  t:'praesens',   p:1,n:'mv',tr:'wij zijn',   segs:null},
-  {f:'ἐστέ',   t:'praesens',   p:2,n:'mv',tr:'jullie zijn',segs:null},
-  {f:'εἰσί(ν)',t:'praesens',   p:3,n:'mv',tr:'zij zijn',   segs:null},
-  {f:'ἦν',     t:'imperfectum',p:1,n:'ev',tr:'ik was',     segs:null},
-  {f:'ἦσθα',   t:'imperfectum',p:2,n:'ev',tr:'jij was',    segs:null},
-  {f:'ἦν',     t:'imperfectum',p:3,n:'ev',tr:'hij was',    segs:null},
-  {f:'ἦμεν',   t:'imperfectum',p:1,n:'mv',tr:'wij waren',  segs:null},
-  {f:'ἦτε',    t:'imperfectum',p:2,n:'mv',tr:'jullie waren',segs:null},
-  {f:'ἦσαν',   t:'imperfectum',p:3,n:'mv',tr:'zij waren',  segs:null},
-  {f:'ἔσομαι', t:'futurum',    p:1,n:'ev',tr:'ik zal zijn',segs:null},
+ {pres:'εἰμί',type:'athemat',meaning:'zijn',forms:[
+  {f:'εἰμί',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik ben',     segs:null},
+  {f:'εἶ',g:'act',     t:'praesens',   p:2,n:'ev',tr:'jij bent',   segs:null},
+  {f:'ἐστί(ν)',g:'act',t:'praesens',   p:3,n:'ev',tr:'hij is',     segs:null},
+  {f:'ἐσμέν',g:'act',  t:'praesens',   p:1,n:'mv',tr:'wij zijn',   segs:null},
+  {f:'ἐστέ',g:'act',   t:'praesens',   p:2,n:'mv',tr:'jullie zijn',segs:null},
+  {f:'εἰσί(ν)',g:'act',t:'praesens',   p:3,n:'mv',tr:'zij zijn',   segs:null},
+  {f:'ἦν',g:'act',     t:'imperfectum',p:1,n:'ev',tr:'ik was',     segs:null},
+  {f:'ἦσθα',g:'act',   t:'imperfectum',p:2,n:'ev',tr:'jij was',    segs:null},
+  {f:'ἦν',g:'act',     t:'imperfectum',p:3,n:'ev',tr:'hij was',    segs:null},
+  {f:'ἦμεν',g:'act',   t:'imperfectum',p:1,n:'mv',tr:'wij waren',  segs:null},
+  {f:'ἦτε',g:'act',    t:'imperfectum',p:2,n:'mv',tr:'jullie waren',segs:null},
+  {f:'ἦσαν',g:'act',   t:'imperfectum',p:3,n:'mv',tr:'zij waren',  segs:null},
+  {f:'ἔσομαι',g:'med', t:'futurum',    p:1,n:'ev',tr:'ik zal zijn',segs:null},
  ]},
- {pres:'γράφω',meaning:'schrijven',forms:[
-  {f:'γράφω',  t:'praesens',   p:1,n:'ev',tr:'ik schrijf', segs:[{c:'γραφ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'γράφεις',t:'praesens',   p:2,n:'ev',tr:'jij schrijft',segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'γράφει', t:'praesens',   p:3,n:'ev',tr:'hij schrijft',segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'γράφομεν',t:'praesens',  p:1,n:'mv',tr:'wij schrijven',segs:[{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
-  {f:'ἔγραφον',t:'imperfectum',p:1,n:'ev',tr:'ik schreef', segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔγραφε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἔγραψα', t:'aoristus',   p:1,n:'ev',tr:'ik schreef', segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἔγραψας',t:'aoristus',   p:2,n:'ev',tr:'jij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
-  {f:'ἔγραψε(ν)',t:'aoristus', p:3,n:'ev',tr:'hij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'γράψω',  t:'futurum',    p:1,n:'ev',tr:'ik zal schrijven',segs:[{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
+ {pres:'γράφω',type:'themat',meaning:'schrijven',forms:[
+  {f:'γράφω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik schrijf', segs:[{c:'γραφ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'γράφεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij schrijft',segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'γράφει',g:'act', t:'praesens',   p:3,n:'ev',tr:'hij schrijft',segs:[{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'γράφομεν',g:'act',t:'praesens',  p:1,n:'mv',tr:'wij schrijven',segs:[{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
+  {f:'ἔγραφον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik schreef', segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔγραφε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἔγραψα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik schreef', segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔγραψας',g:'act',t:'aoristus',   p:2,n:'ev',tr:'jij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
+  {f:'ἔγραψε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij schreef',segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'γράψω',g:'act',  t:'futurum',    p:1,n:'ev',tr:'ik zal schrijven',segs:[{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
  ]},
- {pres:'ποιέω',meaning:'maken, doen',forms:[
-  {f:'ποιῶ',   t:'praesens',   p:1,n:'ev',tr:'ik maak',    segs:null},
-  {f:'ποιεῖς', t:'praesens',   p:2,n:'ev',tr:'jij maakt',  segs:null},
-  {f:'ποιεῖ',  t:'praesens',   p:3,n:'ev',tr:'hij maakt',  segs:null},
-  {f:'ποιοῦμεν',t:'praesens',  p:1,n:'mv',tr:'wij maken',  segs:null},
-  {f:'ποιεῖτε',t:'praesens',   p:2,n:'mv',tr:'jullie maken',segs:null},
-  {f:'ἐποίουν',t:'imperfectum',p:1,n:'ev',tr:'ik maakte',  segs:null},
-  {f:'ἐποίει', t:'imperfectum',p:3,n:'ev',tr:'hij maakte', segs:null},
-  {f:'ἐποίησα',t:'aoristus',   p:1,n:'ev',tr:'ik maakte',  segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησα',r:'end'}]},
-  {f:'ἐποίησε(ν)',t:'aoristus',p:3,n:'ev',tr:'hij maakte', segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησε(ν)',r:'end'}]},
-  {f:'ποιήσω', t:'futurum',    p:1,n:'ev',tr:'ik zal maken',segs:[{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ήσω',r:'end'}]},
+ {pres:'ποιέω',type:'contract',meaning:'maken, doen',forms:[
+  {f:'ποιῶ',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik maak',    segs:null},
+  {f:'ποιεῖς',g:'act', t:'praesens',   p:2,n:'ev',tr:'jij maakt',  segs:null},
+  {f:'ποιεῖ',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij maakt',  segs:null},
+  {f:'ποιοῦμεν',g:'act',t:'praesens',  p:1,n:'mv',tr:'wij maken',  segs:null},
+  {f:'ποιεῖτε',g:'act',t:'praesens',   p:2,n:'mv',tr:'jullie maken',segs:null},
+  {f:'ἐποίουν',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik maakte',  segs:null},
+  {f:'ἐποίει',g:'act', t:'imperfectum',p:3,n:'ev',tr:'hij maakte', segs:null},
+  {f:'ἐποίησα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik maakte',  segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησα',r:'end'}]},
+  {f:'ἐποίησε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij maakte', segs:[{c:'ἐ',r:'aug'},{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ησε(ν)',r:'end'}]},
+  {f:'ποιήσω',g:'act', t:'futurum',    p:1,n:'ev',tr:'ik zal maken',segs:[{c:'ποι',r:'stem'},{c:'σ',r:'tk'},{c:'ήσω',r:'end'}]},
  ]},
- {pres:'ὁράω',meaning:'zien',forms:[
-  {f:'ὁρῶ',   t:'praesens',   p:1,n:'ev',tr:'ik zie',     segs:null},
-  {f:'ὁρᾷ',   t:'praesens',   p:3,n:'ev',tr:'hij ziet',   segs:null},
-  {f:'ὁρῶμεν',t:'praesens',   p:1,n:'mv',tr:'wij zien',   segs:null},
-  {f:'ἑώρων', t:'imperfectum',p:1,n:'ev',tr:'ik zag',     segs:null},
-  {f:'ἑώρα',  t:'imperfectum',p:3,n:'ev',tr:'hij zag',    segs:null},
-  {f:'εἶδον', t:'aoristus',   p:1,n:'ev',tr:'ik zag',     segs:null},
-  {f:'εἶδες', t:'aoristus',   p:2,n:'ev',tr:'jij zag',    segs:null},
-  {f:'εἶδε(ν)',t:'aoristus',  p:3,n:'ev',tr:'hij zag',    segs:null},
-  {f:'ὄψομαι',t:'futurum',    p:1,n:'ev',tr:'ik zal zien',segs:null},
+ {pres:'ὁράω',type:'contract',meaning:'zien',forms:[
+  {f:'ὁρῶ',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik zie',     segs:null},
+  {f:'ὁρᾷ',g:'act',   t:'praesens',   p:3,n:'ev',tr:'hij ziet',   segs:null},
+  {f:'ὁρῶμεν',g:'act',t:'praesens',   p:1,n:'mv',tr:'wij zien',   segs:null},
+  {f:'ἑώρων',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik zag',     segs:null},
+  {f:'ἑώρα',g:'act',  t:'imperfectum',p:3,n:'ev',tr:'hij zag',    segs:null},
+  {f:'εἶδον',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik zag',     segs:null},
+  {f:'εἶδες',g:'act', t:'aoristus',   p:2,n:'ev',tr:'jij zag',    segs:null},
+  {f:'εἶδε(ν)',g:'act',t:'aoristus',  p:3,n:'ev',tr:'hij zag',    segs:null},
+  {f:'ὄψομαι',g:'med',t:'futurum',    p:1,n:'ev',tr:'ik zal zien',segs:null},
  ]},
- {pres:'ἀκούω',meaning:'horen, luisteren',forms:[
-  {f:'ἀκούω',  t:'praesens',   p:1,n:'ev',tr:'ik hoor',   segs:[{c:'ἀκου',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'ἀκούεις',t:'praesens',   p:2,n:'ev',tr:'jij hoort', segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'ἀκούει', t:'praesens',   p:3,n:'ev',tr:'hij hoort', segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἤκουον', t:'imperfectum',p:1,n:'ev',tr:'ik hoorde', segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἤκουε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἤκουσα', t:'aoristus',   p:1,n:'ev',tr:'ik hoorde', segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἤκουσας',t:'aoristus',   p:2,n:'ev',tr:'jij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
-  {f:'ἤκουσε(ν)',t:'aoristus', p:3,n:'ev',tr:'hij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'ἀκούσομαι',t:'futurum',  p:1,n:'ev',tr:'ik zal horen',segs:null},
+ {pres:'ἀκούω',type:'themat',meaning:'horen, luisteren',forms:[
+  {f:'ἀκούω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik hoor',   segs:[{c:'ἀκου',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'ἀκούεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij hoort', segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'ἀκούει',g:'act', t:'praesens',   p:3,n:'ev',tr:'hij hoort', segs:[{c:'ἀκου',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἤκουον',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik hoorde', segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἤκουε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἤκουσα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik hoorde', segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἤκουσας',g:'act',t:'aoristus',   p:2,n:'ev',tr:'jij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
+  {f:'ἤκουσε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij hoorde',segs:[{c:'ἤ',r:'aug'},{c:'κου',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἀκούσομαι',g:'med',t:'futurum',  p:1,n:'ev',tr:'ik zal horen',segs:null},
  ]},
- {pres:'πάσχω',meaning:'lijden, ondergaan',forms:[
-  {f:'πάσχω',  t:'praesens',   p:1,n:'ev',tr:'ik lijd',   segs:[{c:'πασχ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'πάσχεις',t:'praesens',   p:2,n:'ev',tr:'jij lijdt', segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'πάσχει', t:'praesens',   p:3,n:'ev',tr:'hij lijdt', segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἔπασχον',t:'imperfectum',p:1,n:'ev',tr:'ik leed',   segs:[{c:'ἐ',r:'aug'},{c:'πασχ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔπαθον', t:'aoristus',   p:1,n:'ev',tr:'ik leed',   segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
-  {f:'ἔπαθε(ν)',t:'aoristus',  p:3,n:'ev',tr:'hij leed',  segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'ἐπάθομεν',t:'aoristus',  p:1,n:'mv',tr:'wij leden', segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
+ {pres:'πάσχω',type:'themat',meaning:'lijden, ondergaan',forms:[
+  {f:'πάσχω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik lijd',   segs:[{c:'πασχ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'πάσχεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij lijdt', segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'πάσχει',g:'act', t:'praesens',   p:3,n:'ev',tr:'hij lijdt', segs:[{c:'πασχ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἔπασχον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik leed',   segs:[{c:'ἐ',r:'aug'},{c:'πασχ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔπαθον',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik leed',   segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ον',r:'end'}]},
+  {f:'ἔπαθε(ν)',g:'act',t:'aoristus',  p:3,n:'ev',tr:'hij leed',  segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐπάθομεν',g:'act',t:'aoristus',  p:1,n:'mv',tr:'wij leden', segs:[{c:'ἐ',r:'aug'},{c:'παθ',r:'stem'},{c:'—',r:'tk'},{c:'ομεν',r:'end'}]},
  ]},
- {pres:'γίγνομαι',meaning:'worden, geboren worden, gebeuren',forms:[
-  {f:'γίγνομαι',t:'praesens',  p:1,n:'ev',tr:'ik word',   segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
-  {f:'γίγνεται',t:'praesens',  p:3,n:'ev',tr:'hij wordt', segs:[{c:'γιγν',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
-  {f:'γίγνονται',t:'praesens', p:3,n:'mv',tr:'zij worden',segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'νται',r:'end'}]},
-  {f:'ἐγιγνόμην',t:'imperfectum',p:1,n:'ev',tr:'ik werd', segs:[{c:'ἐ',r:'aug'},{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
-  {f:'ἐγένετο',t:'aoristus',   p:3,n:'ev',tr:'hij werd',  segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ετο',r:'end'}]},
-  {f:'ἐγενόμην',t:'aoristus',  p:1,n:'ev',tr:'ik werd',   segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ομην',r:'end'}]},
-  {f:'γενήσομαι',t:'futurum',  p:1,n:'ev',tr:'ik zal worden',segs:null},
+ {pres:'γίγνομαι',type:'mediumdep',meaning:'worden, geboren worden, gebeuren',forms:[
+  {f:'γίγνομαι',g:'med',t:'praesens',  p:1,n:'ev',tr:'ik word',   segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
+  {f:'γίγνεται',g:'med',t:'praesens',  p:3,n:'ev',tr:'hij wordt', segs:[{c:'γιγν',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
+  {f:'γίγνονται',g:'med',t:'praesens', p:3,n:'mv',tr:'zij worden',segs:[{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'νται',r:'end'}]},
+  {f:'ἐγιγνόμην',g:'med',t:'imperfectum',p:1,n:'ev',tr:'ik werd', segs:[{c:'ἐ',r:'aug'},{c:'γιγν',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
+  {f:'ἐγένετο',g:'med',t:'aoristus',   p:3,n:'ev',tr:'hij werd',  segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ετο',r:'end'}]},
+  {f:'ἐγενόμην',g:'med',t:'aoristus',  p:1,n:'ev',tr:'ik werd',   segs:[{c:'ἐ',r:'aug'},{c:'γεν',r:'stem'},{c:'—',r:'tk'},{c:'ομην',r:'end'}]},
+  {f:'γενήσομαι',g:'med',t:'futurum',  p:1,n:'ev',tr:'ik zal worden',segs:null},
  ]},
- {pres:'ἔρχομαι',meaning:'komen, gaan',forms:[
-  {f:'ἔρχομαι',t:'praesens',   p:1,n:'ev',tr:'ik kom',    segs:[{c:'ἐρχ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
-  {f:'ἔρχεται',t:'praesens',   p:3,n:'ev',tr:'hij komt',  segs:[{c:'ἐρχ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
-  {f:'ἦλθον',  t:'aoristus',   p:1,n:'ev',tr:'ik kwam',   segs:null},
-  {f:'ἦλθε(ν)',t:'aoristus',   p:3,n:'ev',tr:'hij kwam',  segs:null},
-  {f:'ἤλθομεν',t:'aoristus',   p:1,n:'mv',tr:'wij kwamen',segs:null},
-  {f:'εἶμι',   t:'futurum',    p:1,n:'ev',tr:'ik zal gaan',segs:null},
+ {pres:'ἔρχομαι',type:'mediumdep',meaning:'komen, gaan',forms:[
+  {f:'ἔρχομαι',g:'med',t:'praesens',   p:1,n:'ev',tr:'ik kom',    segs:[{c:'ἐρχ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
+  {f:'ἔρχεται',g:'med',t:'praesens',   p:3,n:'ev',tr:'hij komt',  segs:[{c:'ἐρχ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
+  {f:'ἦλθον',g:'act',  t:'aoristus',   p:1,n:'ev',tr:'ik kwam',   segs:null},
+  {f:'ἦλθε(ν)',g:'act',t:'aoristus',   p:3,n:'ev',tr:'hij kwam',  segs:null},
+  {f:'ἤλθομεν',g:'act',t:'aoristus',   p:1,n:'mv',tr:'wij kwamen',segs:null},
+  {f:'εἶμι',g:'act',   t:'futurum',    p:1,n:'ev',tr:'ik zal gaan',segs:null},
  ]},
- {pres:'φέρω',meaning:'dragen, brengen',forms:[
-  {f:'φέρω',   t:'praesens',   p:1,n:'ev',tr:'ik draag',  segs:[{c:'φερ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'φέρεις', t:'praesens',   p:2,n:'ev',tr:'jij draagt',segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'φέρει',  t:'praesens',   p:3,n:'ev',tr:'hij draagt',segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἔφερον', t:'imperfectum',p:1,n:'ev',tr:'ik droeg',  segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔφερε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij droeg',segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἤνεγκον',t:'aoristus',   p:1,n:'ev',tr:'ik bracht', segs:null},
-  {f:'ἤνεγκε(ν)',t:'aoristus', p:3,n:'ev',tr:'hij bracht',segs:null},
-  {f:'οἴσω',   t:'futurum',    p:1,n:'ev',tr:'ik zal dragen',segs:null},
+ {pres:'φέρω',type:'themat',meaning:'dragen, brengen',forms:[
+  {f:'φέρω',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik draag',  segs:[{c:'φερ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'φέρεις',g:'act', t:'praesens',   p:2,n:'ev',tr:'jij draagt',segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'φέρει',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij draagt',segs:[{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἔφερον',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik droeg',  segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔφερε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij droeg',segs:[{c:'ἐ',r:'aug'},{c:'φερ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἤνεγκον',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik bracht', segs:null},
+  {f:'ἤνεγκε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij bracht',segs:null},
+  {f:'οἴσω',g:'act',   t:'futurum',    p:1,n:'ev',tr:'ik zal dragen',segs:null},
  ]},
- {pres:'νομίζω',meaning:'menen, gewend zijn',forms:[
-  {f:'νομίζω', t:'praesens',   p:1,n:'ev',tr:'ik meen',   segs:[{c:'νομιζ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'νομίζεις',t:'praesens',  p:2,n:'ev',tr:'jij meent', segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'νομίζει',t:'praesens',   p:3,n:'ev',tr:'hij meent', segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
-  {f:'ἐνόμιζον',t:'imperfectum',p:1,n:'ev',tr:'ik meende',segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἐνόμιζε(ν)',t:'imperfectum',p:3,n:'ev',tr:'hij meende',segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἐνόμισα',t:'aoristus',   p:1,n:'ev',tr:'ik meende', segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἐνόμισε(ν)',t:'aoristus',p:3,n:'ev',tr:'hij meende',segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+ {pres:'νομίζω',type:'themat',meaning:'menen, gewend zijn',forms:[
+  {f:'νομίζω',g:'act', t:'praesens',   p:1,n:'ev',tr:'ik meen',   segs:[{c:'νομιζ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'νομίζεις',g:'act',t:'praesens',  p:2,n:'ev',tr:'jij meent', segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'νομίζει',g:'act',t:'praesens',   p:3,n:'ev',tr:'hij meent', segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
+  {f:'ἐνόμιζον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik meende',segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἐνόμιζε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij meende',segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
+  {f:'ἐνόμισα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik meende', segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἐνόμισε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij meende',segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
  ]},
- {pres:'πείθω',meaning:'overtuigen',forms:[
-  {f:'πείθω',  t:'praesens',   p:1,n:'ev',tr:'ik overtuig',segs:[{c:'πειθ',r:'stem'},{c:'ω',r:'end'}]},
-  {f:'πείθεις',t:'praesens',   p:2,n:'ev',tr:'jij overtuigt',segs:[{c:'πειθ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
-  {f:'ἔπειθον',t:'imperfectum',p:1,n:'ev',tr:'ik overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔπεισα', t:'aoristus',   p:1,n:'ev',tr:'ik overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἔπεισε(ν)',t:'aoristus', p:3,n:'ev',tr:'hij overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+ {pres:'πείθω',type:'themat',meaning:'overtuigen',forms:[
+  {f:'πείθω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik overtuig',segs:[{c:'πειθ',r:'stem'},{c:'ω',r:'end'}]},
+  {f:'πείθεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij overtuigt',segs:[{c:'πειθ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
+  {f:'ἔπειθον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
+  {f:'ἔπεισα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔπεισε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij overtuigde',segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
  ]},
- {pres:'βούλομαι',meaning:'willen',forms:[
-  {f:'βούλομαι',t:'praesens',  p:1,n:'ev',tr:'ik wil',    segs:[{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
-  {f:'βούλεται',t:'praesens',  p:3,n:'ev',tr:'hij wil',   segs:[{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
-  {f:'ἐβουλόμην',t:'imperfectum',p:1,n:'ev',tr:'ik wilde',segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
-  {f:'ἐβούλετο',t:'imperfectum',p:3,n:'ev',tr:'hij wilde',segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'το',r:'end'}]},
-  {f:'ἐβουλήθην',t:'aoristus', p:1,n:'ev',tr:'ik wilde',  segs:null},
-  {f:'βουλήσομαι',t:'futurum', p:1,n:'ev',tr:'ik zal willen',segs:null},
+ {pres:'βούλομαι',type:'mediumdep',meaning:'willen',forms:[
+  {f:'βούλομαι',g:'med',t:'praesens',  p:1,n:'ev',tr:'ik wil',    segs:[{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
+  {f:'βούλεται',g:'med',t:'praesens',  p:3,n:'ev',tr:'hij wil',   segs:[{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'ται',r:'end'}]},
+  {f:'ἐβουλόμην',g:'med',t:'imperfectum',p:1,n:'ev',tr:'ik wilde',segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μην',r:'end'}]},
+  {f:'ἐβούλετο',g:'med',t:'imperfectum',p:3,n:'ev',tr:'hij wilde',segs:[{c:'ἐ',r:'aug'},{c:'βουλ',r:'stem'},{c:'ε',r:'tk'},{c:'το',r:'end'}]},
+  {f:'ἐβουλήθην',g:'act',t:'aoristus', p:1,n:'ev',tr:'ik wilde',  segs:null},
+  {f:'βουλήσομαι',g:'med',t:'futurum', p:1,n:'ev',tr:'ik zal willen',segs:null},
  ]},
- {pres:'καλέω',meaning:'roepen, noemen',forms:[
-  {f:'καλῶ',   t:'praesens',   p:1,n:'ev',tr:'ik roep',   segs:null},
-  {f:'καλεῖς', t:'praesens',   p:2,n:'ev',tr:'jij roept', segs:null},
-  {f:'καλεῖ',  t:'praesens',   p:3,n:'ev',tr:'hij roept', segs:null},
-  {f:'ἐκάλουν',t:'imperfectum',p:1,n:'ev',tr:'ik riep',   segs:null},
-  {f:'ἐκάλει', t:'imperfectum',p:3,n:'ev',tr:'hij riep',  segs:null},
-  {f:'ἐκάλεσα',t:'aoristus',   p:1,n:'ev',tr:'ik riep',   segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσα',r:'end'}]},
-  {f:'ἐκάλεσε(ν)',t:'aoristus',p:3,n:'ev',tr:'hij riep',  segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσε(ν)',r:'end'}]},
-  {f:'ἐκαλεῖτε',t:'imperfectum',p:2,n:'mv',tr:'jullie riepen',segs:null},
+ {pres:'καλέω',type:'contract',meaning:'roepen, noemen',forms:[
+  {f:'καλῶ',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik roep',   segs:null},
+  {f:'καλεῖς',g:'act', t:'praesens',   p:2,n:'ev',tr:'jij roept', segs:null},
+  {f:'καλεῖ',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij roept', segs:null},
+  {f:'ἐκάλουν',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik riep',   segs:null},
+  {f:'ἐκάλει',g:'act', t:'imperfectum',p:3,n:'ev',tr:'hij riep',  segs:null},
+  {f:'ἐκάλεσα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik riep',   segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσα',r:'end'}]},
+  {f:'ἐκάλεσε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij riep',  segs:[{c:'ἐ',r:'aug'},{c:'καλ',r:'stem'},{c:'σ',r:'tk'},{c:'εσε(ν)',r:'end'}]},
+  {f:'ἐκαλεῖτε',g:'act',t:'imperfectum',p:2,n:'mv',tr:'jullie riepen',segs:null},
  ]},
 ];
 
@@ -1096,26 +1316,69 @@ function gotoScreen(id){
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-function gotoSetup(mode){ gotoScreen('setup-'+mode); }
-function stopEx(mode){ gotoScreen('setup-'+mode); }
+function gotoSetup(mode){ gotoScreen('setup-'+mode); updateAvail(mode[0]); }
+function stopEx(mode){ gotoScreen('setup-'+mode); updateAvail(mode[0]); }
 
 // ══════════════════════════════════════════════
 //  SHARED STATE
 // ══════════════════════════════════════════════
 const ST = {};
 
-function getTenses(filterId){
-  const sel = document.getElementById(filterId);
-  return Array.from(sel.selectedOptions).map(o=>o.value);
+// ── FILTER CHIPS ──
+function getChips(rowId){
+  const row=document.getElementById(rowId);
+  if(!row) return [];
+  return Array.from(row.querySelectorAll('.fchip.on')).map(b=>b.dataset.v);
 }
 
-function buildPool(tenses){
+function readFilters(pref){
+  return {
+    tenses: getChips(pref+'-f-tijd'),
+    genera: getChips(pref+'-f-genus'),
+    types:  getChips(pref+'-f-type'),
+  };
+}
+
+function buildPool(filt){
   const pool=[];
-  VERBS.forEach(v=>v.forms.forEach(f=>{
-    if(tenses.includes(f.t)) pool.push({...f,pres:v.pres,meaning:v.meaning});
-  }));
+  VERBS.forEach(v=>{
+    if(!filt.types.includes(v.type)) return;
+    v.forms.forEach(f=>{
+      if(!filt.tenses.includes(f.t)) return;
+      if(!filt.genera.includes(f.g)) return;
+      pool.push({...f,pres:v.pres,meaning:v.meaning,type:v.type});
+    });
+  });
   return pool;
 }
+
+// Live count of available forms for current filter selection
+function updateAvail(pref){
+  const el=document.getElementById(pref+'-avail');
+  if(!el) return;
+  const filt=readFilters(pref);
+  const n=buildPool(filt).length;
+  if(n===0){
+    el.className='filter-count warn';
+    el.textContent='Geen vormen bij deze selectie — kies meer opties.';
+  } else {
+    el.className='filter-count';
+    el.textContent=`${n} vormen beschikbaar bij deze selectie.`;
+  }
+}
+
+// Toggle chips + refresh count (delegated)
+document.addEventListener('click',e=>{
+  const chip=e.target.closest('.fchip');
+  if(!chip) return;
+  chip.classList.toggle('on');
+  // figure out which mode prefix this chip belongs to
+  const row=chip.closest('.chip-row');
+  if(row){
+    const pref=row.id.split('-')[0];
+    updateAvail(pref);
+  }
+});
 
 function shuffle(a){
   const r=[...a];
@@ -1152,12 +1415,15 @@ let O = {}; // ontleed state
 let oActiveSlot = null;
 
 function startExercise(mode){
-  const tfilter = mode==='ontleed'?'o-tfilter':mode==='determ'?'d-tfilter':'v-tfilter';
-  const cntId   = mode==='ontleed'?'o-cnt':mode==='determ'?'d-cnt':'v-cnt';
-  const tenses  = getTenses(tfilter);
-  const cnt     = parseInt(document.getElementById(cntId).value)||10;
-  const pool    = buildPool(tenses);
-  if(!pool.length){alert('Geen vormen beschikbaar voor de gekozen tijden.');return;}
+  const pref  = mode[0]; // o / d / v
+  const cntId = pref+'-cnt';
+  const filt  = readFilters(pref);
+  const cnt   = parseInt(document.getElementById(cntId).value)||10;
+  if(!filt.tenses.length){alert('Kies minstens één tijd.');return;}
+  if(!filt.genera.length){alert('Kies minstens één genus (actief / medium).');return;}
+  if(!filt.types.length){alert('Kies minstens één type werkwoord.');return;}
+  const pool = buildPool(filt);
+  if(!pool.length){alert('Geen vormen beschikbaar bij deze selectie. Kies meer opties.');return;}
   const qs = shuffle(pool).slice(0,Math.min(cnt,pool.length));
   if(mode==='ontleed'){
     O={qs,idx:0,sc:0,wr:0,res:[]};
