@@ -248,12 +248,12 @@
     <div class="mode-card selected" data-mode="invul" onclick="selectMode(this)">
       <div class="mode-icon">✏️</div>
       <div class="mode-title">Invuloefening</div>
-      <div class="mode-desc">Vul perfectum, supinum en infinitief in vanuit het praesens</div>
+      <div class="mode-desc">Vul perfectum, PPP en infinitief in vanuit het praesens</div>
     </div>
     <div class="mode-card" data-mode="omgekeerd" onclick="selectMode(this)">
       <div class="mode-icon">🔄</div>
       <div class="mode-title">Omgekeerd</div>
-      <div class="mode-desc">Van perfectum of supinum terug naar het praesens</div>
+      <div class="mode-desc">Van perfectum of PPP terug naar het praesens</div>
     </div>
     <div class="mode-card" data-mode="keuze" onclick="selectMode(this)">
       <div class="mode-icon">🎯</div>
@@ -296,7 +296,7 @@
     <div class="fill-grid">
       <div class="fill-slot"><label>Praesens (1sg)</label>   <input type="text" id="fi-prae" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="…"></div>
       <div class="fill-slot"><label>Perfectum (1sg)</label>  <input type="text" id="fi-perf" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="…"></div>
-      <div class="fill-slot"><label>Supinum (4e nv)</label>  <input type="text" id="fi-sup"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="…"></div>
+      <div class="fill-slot"><label>PPP</label>  <input type="text" id="fi-sup"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="…"></div>
       <div class="fill-slot"><label>Infinitief</label>       <input type="text" id="fi-inf"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="…"></div>
     </div>
   </div>
@@ -347,7 +347,7 @@
 <script>
 // ══════════════════════════════════════════════════════════════
 // VERBENDATABASE  (198 werkwoorden)
-// Kolommen: p=praesens, pf=perfectum, sup=supinum, inf=infinitief,
+// Kolommen: p=praesens, pf=perfectum, sup=PPP, inf=infinitief,
 //           tr=vertaling, dep=deponens, irreg=onregelmatig
 // Controles: UVM Wheelock lijst, Brainscape top-100, Lewis & Short
 // ══════════════════════════════════════════════════════════════
@@ -714,7 +714,7 @@ function renderInvul(v) {
 function renderOmgekeerd(v) {
   const usePerf = Math.random() > 0.35;
   const giveForm = usePerf ? v.pf : (v.sup && v.sup!=='' && v.sup!=='-' ? v.sup : v.pf);
-  const giveLabel = usePerf ? 'Perfectum' : 'Supinum';
+  const giveLabel = usePerf ? 'Perfectum' : 'PPP';
 
   document.getElementById('q-prompt-label').textContent = `${giveLabel} gegeven → wat is het praesens?`;
   document.getElementById('q-verb-main').textContent    = giveForm;
@@ -803,6 +803,27 @@ function checkInvul(v) {
   const fSup = document.getElementById('fi-sup');
   const fInf = document.getElementById('fi-inf');
 
+  // Geeft alle geldige PPP-varianten terug: -us, -um, -a (en eventueel al aanwezige slash-alternatieven)
+  function pppVariants(sup) {
+    const bases = sup.split('/').map(s => s.trim());
+    const variants = new Set();
+    bases.forEach(b => {
+      variants.add(b);
+      // vervang uitgangen: -us→-um→-a en omgekeerd
+      if (b.endsWith('us')) {
+        variants.add(b.slice(0,-2)+'um');
+        variants.add(b.slice(0,-2)+'a');
+      } else if (b.endsWith('um')) {
+        variants.add(b.slice(0,-2)+'us');
+        variants.add(b.slice(0,-2)+'a');
+      } else if (b.endsWith('a') && b.length > 3) {
+        variants.add(b.slice(0,-1)+'us');
+        variants.add(b.slice(0,-1)+'um');
+      }
+    });
+    return [...variants].join('/');
+  }
+
   function chk(input, correct) {
     if (input.disabled) return true;
     const val = norm(input.value);
@@ -812,7 +833,7 @@ function checkInvul(v) {
     return ok;
   }
   const pfOk  = chk(fPf,  v.pf);
-  const supOk = (v.dep || v.sup==='-') ? true : chk(fSup, v.sup||'-');
+  const supOk = (v.dep || v.sup==='-') ? true : chk(fSup, pppVariants(v.sup||'-'));
   const infOk = chk(fInf, v.inf);
   finishAnswer(pfOk && supOk && infOk, v);
 }
@@ -959,4 +980,3 @@ document.addEventListener('keydown', e => {
 </script>
 </body>
 </html>
-
