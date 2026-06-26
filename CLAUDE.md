@@ -1,0 +1,25 @@
+# KThulp — afspraken voor Claude
+
+## Algemeen
+- Alle leerling-gerichte tekst en alle communicatie: in het Nederlands.
+- Apps zijn offline-first, één enkel HTML-bestand (HTML/CSS/JS), geen frameworks.
+  Externe CDN's alleen waar nodig: Tone.js, SheetJS, Firebase, Gemini.
+- Latijn- en Grieks-apps zijn parallelle paren: pas je iets aan in de één,
+  stel dezelfde wijziging voor in de ander.
+
+## Conventies
+- Naamval-volgorde altijd: nominativus, genitivus, dativus, accusativus,
+  (ablativus), vocativus.
+- Footer van elke app: "© Gerben de Jong · [jaar]".
+  Footer van portalen: "[Portaalnaam] · Gerben de Jong · [jaar]".
+- iPad-veilig: zichtbare <label>-bestandskiezers (nooit display:none + .click()),
+  viewport met maximum-scale.
+- Na elke wijziging aan een scriptblok: `node --check` draaien voordat je oplevert.
+- Gemini-aanroepen altijd met thinkingBudget:0.
+
+## Stijl
+- Donkere steen-achtergrond, goud; oxblood-accent voor Latijn,
+  Aegeïsch blauw voor Grieks. Palatino in apps.
+
+## Hosting
+- GitHub Pages: https://gerrytgjou.github.io/KThulp/
