@@ -341,6 +341,7 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 | **M5** | Slagveld-animaties · formatie-layout · log-gestuurde client-side animaties · `meta.animations` schakelaar | ✅ Gebouwd |
 | **M6** | Avatar-aanpassing · XP/niveau 1–20 · class mastery ★–★★★★★ · achievements | ✅ Gebouwd |
 | **M7** | Snel setup-scherm · Live dashboard (avatar-kaarten, participatiebalk, pauze/sla over/herstart) · Award-ceremony · Analytics (HP-chart, top 5 gemiste woorden, leerlingentabel) · CSV-export | ✅ Gebouwd |
+| **M8** | Modularisering (core.js / net.js / games.js / battle.js) · War Mode-hooks gedocumenteerd · Analytics BATTLE_MODE.md bijgewerkt | ✅ Gebouwd |
 | M8 | Campaign builder voor docenten | — |
 
 ---
@@ -490,6 +491,60 @@ Nieuw per player-node in Firebase:
 Nieuw per log-entry:
 - `participants` — aantal spelers dat de ronde beantwoordde
 - `events[].pids` — array van PIDs bij combo-events
+
+---
+
+## M8 — Modularisering & Architectuurhaken ✅
+
+### Definitieve bestandsstructuur
+
+```
+certamen/
+  index.html    HTML-skelet, CSS, Firebase-config, CDN-tags, init-script (486 regels)
+  core.js       Vocab, helpers, CATS, profiel, iconen, geluid, toast, router  (250 regels)
+  net.js        Firebase-init, FBNet, DemoNet, Net=null                        (53 regels)
+  games.js      Touwtrekken, Marathon, Snelvuur — alle host- en speler-schermen (611 regels)
+  battle.js     Battle Mode volledig — config, logic, schermen, War Mode-hooks  (2020+ regels)
+```
+
+Laadvolgorde in index.html: `Firebase CDN → core.js → net.js → games.js → battle.js → init`.
+
+Alle globale variabelen zijn gedefinieerd in core.js (SCREENS, go, cleanup, DRAFT, P, etc.) en zijn beschikbaar in alle modules die daarna laden.
+
+### Overzicht configuratietabellen (battle.js)
+
+| Tabel | Variabele | Inhoud |
+|---|---|---|
+| Klassen | `BM_CLASSES` | 8 klassen, elk met passive + 3 abilities |
+| Synergieën | `BM_SYNERGY` | Teambonus bij specifieke klassencombinatie |
+| Combo-abilities | `BM_COMBOS` | 3 combo's: vereisen 2 klassen + teamgenoot |
+| Facties/Thema's | `BM_FACTIONS` | 3 facties: Romein, Grieks, Vikingen + CSS-vars |
+| Avatar-onderdelen | `BM_AVATAR_PARTS` | 7 secties, ontgrendelbaar via niveau/mastery |
+| Niveaudrempels | `BM_LEVELS` | 20 niveaus, XP-drempel + titel per niveau |
+| Mastery-tiers | `BM_MASTERY_TIERS` | 6 tiers (score → 0–5 sterren) |
+| Achievements | `BM_ACHIEVEMENTS` | 13 achievements (id, naam, omschrijving) |
+
+### War Mode — toekomstige systemen
+
+Alle aansluitpunten staan als gedocumenteerde hooks onderaan `battle.js`. Naamconventie: `// WAR MODE HOOK: naam(params)` gevolgd door een `//`-beschrijving en het aansluitpunt in bestaande code.
+
+| Hook | Signatuur | Omschrijving | Aansluitpunt |
+|---|---|---|---|
+| morale | `morale(teamId, delta)` | Moreel beïnvloedt BE-winst per ronde | `bmResolve()` — na correcte antwoorden-reeks |
+| momentum | `momentum(teamId, delta)` | Hoog momentum → tijdelijke schade-bonus | `bmResolve()` — na streak |
+| supplyCheck | `supplyCheck(teamId)` | Geeft false als acties beperkt zijn door gebrek aan voorraden | `bmDistributeQs()` — vóór ability-uitdeling |
+| fortificationApply | `fortificationApply(teamId, type)` | Voeg versterking toe als HP-buffer | `bmResolve()` — action-fase, Fortify-ability |
+| heroHealthUpdate | `heroHealthUpdate(pid, delta)` | Eigen HP per speler; bij 0 → respawn | `bmResolve()` — na teamHP-update |
+| objectiveCaptured | `objectiveCaptured(objId, teamId)` | Registreer verovering van doelpunt | `bmResolve()` — als capture-conditie voldaan |
+| fogOfWarUpdate | `fogOfWarUpdate(state)` | Herbereken zichtbaarheid per speler | `bmHostUpdatePlayers()` + `bmPlayerRender()` |
+
+### Bekende beperkingen
+
+- **Battle Mode vereist Firebase.** De drie bestaande modi werken ook in oefenmodus (DemoNet).
+- **Host-autoritair patroon.** Alle HP-mutaties gaan via de hostbrowser. Bij host-disconnect stopt het gevecht.
+- **Adaptief leren is rudimentair.** Gemiste woorden komen vaker terug via gewicht in `bmPersonalPool()`, maar er is geen volledige spaced-repetition-logica.
+- **Maximale schaalgrootte niet getest boven 50 spelers.** Firebase-listeners zijn per room, maar rendering in `bmHostUpdatePlayers()` vervangt de volledige grid bij elke update.
+- **Geen persistentie van Analytics.** Alle analytics worden client-side berekend uit het Firebase-log. Als de host de sessie afsluit vóór de analytics-pagina, is het log niet meer beschikbaar.
 
 ---
 
