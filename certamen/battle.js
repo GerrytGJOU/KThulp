@@ -739,49 +739,41 @@ function bmPersonalPool(pid,pool){
 
 /* ---- SCHERM: battleHostGame ---- */
 SCREENS.battleHostGame = function(){
-  H(brand(false)+`
-  <div class="scrhead">
-    <button class="back" onclick="bmEndGame()">${iconSVG("shield",20,"currentColor")}</button>
-    <h2>⚔️ ${esc(bmFaction(BM_META?.theme).nm)}</h2><span class="pill">code ${BM_CODE}</span>
-  </div>
-  <div class="panel" style="padding:12px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-      <span id="bmRndLabel" class="pill">Ronde —</span>
-      <span id="bmPhaseLabel" class="pill">—</span>
-      <span id="bmTimer" style="color:var(--hi-bright);font-size:18px;font-weight:700;min-width:36px;text-align:right">—</span>
+  bmApplyTheme(BM_META?.theme);
+  const appEl=document.getElementById("app");
+  if(appEl)appEl.classList.add("bm-host-mode");
+  H(`<div class="bm-host-wrap">
+    <div class="bm-ctrl-bar">
+      <span id="bmRndLabel" class="bm-cb-round">Ronde —</span>
+      <span id="bmPhaseLabel" class="bm-cb-phase">—</span>
+      <span id="bmTimer" class="bm-cb-timer">—</span>
+      <button id="bmPauseBtn" onclick="bmTogglePause()">⏸ Pauzeer</button>
+      <button onclick="bmSkipRound()">⏭ Sla over</button>
+      <button onclick="bmReplaceQ()">🔄 Vervang</button>
+      <button onclick="bmRestartRound()">↩ Herstart</button>
+      <button class="bm-btn-end" style="margin-left:auto" onclick="bmEndGame()">✕ Beëindig</button>
     </div>
-    <div id="bmField">
+    <div class="bm-hp-row">
+      <div class="bm-hp-side" id="bmArmyA"></div>
+      <div class="bm-hp-vs">⚔️</div>
+      <div class="bm-hp-side side-b" id="bmArmyB"></div>
+    </div>
+    <div id="bmField" class="${bmBgTheme(BM_META?.theme)}">
       <div id="bmFormA" class="bm-form"></div>
-      <div class="bm-center">
-        <div id="bmArmyA"></div>
-        <div style="text-align:center;color:var(--muted);font-size:10px;padding:2px 0">vs</div>
-        <div id="bmArmyB"></div>
-      </div>
       <div id="bmFormB" class="bm-form"></div>
       <div id="bmBfx"></div>
     </div>
-    <div style="margin-top:7px">
-      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:2px">
-        <span id="bmStatusNote"></span>
-        <span id="bmPartPct" style="color:var(--green-bright)"></span>
-      </div>
-      <div style="height:5px;border-radius:3px;background:rgba(0,0,0,.4);overflow:hidden">
+    <div class="bm-status-row">
+      <span id="bmStatusNote"></span>
+      <span style="flex:1"></span>
+      <span id="bmPartPct" style="color:var(--green-bright)"></span>
+      <div style="width:70px;height:4px;border-radius:2px;background:rgba(0,0,0,.4);overflow:hidden;margin-left:6px">
         <div id="bmPartBar" style="height:100%;width:0%;background:var(--green-bright);transition:width .35s"></div>
       </div>
     </div>
-  </div>
-  <div class="panel" style="padding:8px 12px"><div id="bmPlayerGrid" style="display:flex;flex-wrap:wrap;gap:5px"></div></div>
-  <div class="panel" style="padding:8px 12px">
-    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-      <button class="chip" id="bmPauseBtn" onclick="bmTogglePause()">⏸ Pauzeer</button>
-      <button class="chip" onclick="bmSkipRound()">⏭ Sla over</button>
-      <button class="chip" onclick="bmReplaceQ()">🔄 Vervang vraag</button>
-      <button class="chip" onclick="bmRestartRound()">↩ Herstart</button>
-      <button class="chip" style="margin-left:auto;background:rgba(90,18,12,.35);color:#e07060;border-color:rgba(90,18,12,.5)" onclick="bmEndGame()">✕ Beëindig</button>
-    </div>
-  </div>
-  ${foot()}`);
-  // Timer-display (apart van game-logic tick)
+    <div class="bm-pgrid" id="bmPlayerGrid"></div>
+  </div>`);
+  BM_UNSUBS=[()=>{if(appEl)appEl.classList.remove("bm-host-mode");}];
   const timerInterval=setInterval(()=>{
     const round=BM_STATE.round||{};
     const te=el("bmTimer");if(!te)return;
@@ -789,7 +781,7 @@ SCREENS.battleHostGame = function(){
     const tl=round.deadline?Math.max(0,Math.round((round.deadline-Date.now())/1000)):0;
     te.textContent=tl+"s";
   },500);
-  BM_UNSUBS=[()=>clearInterval(timerInterval)];
+  BM_UNSUBS.push(()=>clearInterval(timerInterval));
   const rS=fbDB.ref("rooms/"+BM_CODE+"/state"),fS=rS.on("value",s=>{
     BM_STATE=s.val()||{};
     bmHostUpdateRound();
@@ -811,7 +803,13 @@ SCREENS.battleHostGame = function(){
 function bmHostUpdateRound(){
   const round=BM_STATE.round||{};
   const rndLbl=el("bmRndLabel");if(rndLbl)rndLbl.textContent="Ronde "+(round.n||"—");
-  const phLbl=el("bmPhaseLabel");if(phLbl)phLbl.textContent=round.phase==="question"?"Vraagfase":round.phase==="action"?"Actiefase":"—";
+  const phLbl=el("bmPhaseLabel");
+  if(phLbl){
+    if(round.phase==="question"){phLbl.textContent="VRAAGFASE";phLbl.style.color="var(--hi-bright)";}
+    else if(round.phase==="action"){phLbl.textContent="ACTIEFASE";phLbl.style.color="var(--hi)";}
+    else if(round.phase){phLbl.textContent="RESOLUTIE";phLbl.style.color="var(--muted2)";}
+    else{phLbl.textContent="—";phLbl.style.color="";}
+  }
   bmHostUpdateNote();
 }
 function bmHostUpdateArmies(){
@@ -867,11 +865,15 @@ function bmArmyBarHTML(team,nm,d){
   const scale=d.maxHealth?Math.max(0,d.health/d.maxHealth):0;
   const col=team==="A"?"var(--teamA)":"var(--teamB)";
   const crit=d.maxHealth&&d.health/d.maxHealth<0.25?" bm-crit":"";
-  return `<div><div style="display:flex;justify-content:space-between;margin-bottom:3px">
-    <span style="color:${col};font-size:12px">${nm}</span><span style="font-size:12px">${d.health}/${d.maxHealth}</span>
-  </div><div style="height:10px;border-radius:5px;background:rgba(0,0,0,.4);border:1px solid var(--stone4);overflow:hidden">
-    <div class="bm-hbar${crit}" style="height:100%;width:100%;background:${col};transform:scaleX(${scale});transform-origin:left center;transition:transform .4s;will-change:transform"></div>
-  </div></div>`;
+  const isB=team==="B";
+  const origin=isB?"right center":"left center";
+  return `<div>
+    <div class="bm-hp-nm${isB?" side-b":""}" style="color:${col}">${esc(nm)}</div>
+    <div class="bm-hp-track">
+      <div class="bm-hp-fill${crit}" style="width:100%;background:${col};transform:scaleX(${scale});transform-origin:${origin};will-change:transform"></div>
+    </div>
+    <div class="bm-hp-num${isB?" side-b":""}">${d.health}/${d.maxHealth} HP</div>
+  </div>`;
 }
 function bmClsName(id){const c=BM_CLASSES.find(x=>x.id===id);return c?c.nm:id;}
 
@@ -880,6 +882,201 @@ function bmClsName(id){const c=BM_CLASSES.find(x=>x.id===id);return c?c.nm:id;}
    Alle animaties draaien client-side op basis van log-events.
    Enige Firebase-sync: host schrijft log; clients lezen het.
    ====================================================== */
+
+/* ======================================================
+   BATTLE MODE M9 — SVG SPRITES & LANDSCHAPSTHEMA
+   ====================================================== */
+
+// Achtergrondklasse op basis van factie-thema
+function bmBgTheme(theme){
+  const greek=["athenai","spartiatai","hellas","makedones"];
+  const gods=["theoi","titanes","olympici","chthonioi"];
+  if(greek.includes(theme))return"bm-bg-greek";
+  if(gods.includes(theme))return"bm-bg-gods";
+  return"bm-bg-roman";
+}
+
+// Confetti-regen bij overwinning
+function bmConfetti(){
+  if(BM_META?.animations===false)return;
+  const cont=el("bmField");if(!cont)return;
+  const cols=["#ffd700","#c83020","#4080c8","#40a860","#d47820","#9040c0","#ffffff"];
+  for(let i=0;i<24;i++){
+    const d=document.createElement("div");
+    d.className="bm-confetti";
+    d.style.cssText=`left:${5+Math.random()*90}%;bottom:${15+Math.random()*65}%;background:${cols[i%cols.length]};animation-delay:${(Math.random()*.6).toFixed(2)}s;animation-duration:${(1.3+Math.random()*.8).toFixed(2)}s`;
+    cont.appendChild(d);
+    setTimeout(()=>d.remove(),2800);
+  }
+}
+
+// SVG pijl-projectiel (vervangt emoji voor boogschutter)
+function bmArrowProj(teamFrom, row){
+  if(BM_META?.animations===false)return;
+  const cont=el("bmBfx");if(!cont)return;
+  const isR=teamFrom==="A";
+  const d=document.createElement("div");
+  d.className="bm-arrow "+(isR?"r":"l");
+  d.style.setProperty("--row",row||0);
+  d.innerHTML=`<svg viewBox="0 0 40 8" width="40" height="8" xmlns="http://www.w3.org/2000/svg">
+    <line x1="0" y1="4" x2="36" y2="4" stroke="#c8a060" stroke-width="2"/>
+    <polygon points="40,4 32,1 32,7" fill="#c89020"/>
+    <line x1="2" y1="4" x2="2" y2="1" stroke="#8b5010" stroke-width="1.5"/>
+    <line x1="5" y1="4" x2="5" y2="1.5" stroke="#8b5010" stroke-width="1"/>
+  </svg>`;
+  cont.appendChild(d);
+  setTimeout(()=>d.remove(),950);
+}
+
+// Zij-aanzicht SVG sprite per klasse (altijd naar rechts; team B wordt gespiegeld via CSS)
+function bmSpriteSVG(clsId){
+  const sh=`<ellipse cx="30" cy="88" rx="15" ry="3.5" fill="rgba(0,0,0,.28)"/>`;
+  switch(clsId){
+    case"hopliet":return`<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" class="bm-sprite" style="overflow:visible;display:block">
+      ${sh}
+      <rect x="21" y="63" width="9" height="22" rx="3" fill="#b08030"/>
+      <rect x="32" y="63" width="9" height="22" rx="3" fill="#b08030"/>
+      <rect x="17" y="35" width="28" height="28" rx="5" fill="#b08030" stroke="#d4a030" stroke-width="1.2"/>
+      <line x1="17" y1="47" x2="45" y2="47" stroke="#d4a030" stroke-width=".8" opacity=".5"/>
+      <rect x="17" y="58" width="28" height="6" rx="2" fill="#c8392a" opacity=".75"/>
+      <ellipse cx="11" cy="49" rx="12" ry="15" fill="#c8392a" stroke="#d4a030" stroke-width="1.5"/>
+      <ellipse cx="11" cy="49" rx="7.5" ry="9.5" fill="none" stroke="#d4a030" stroke-width="1" opacity=".55"/>
+      <line x1="50" y1="7" x2="46" y2="78" stroke="#7a5018" stroke-width="2.5"/>
+      <polygon points="50,5 45.5,17 54.5,13" fill="#c0c0c0"/>
+      <circle cx="31" cy="22" r="10" fill="#d4a574"/>
+      <path d="M20 20 Q31 5 42 20 L39.5 25 Q31 13 22.5 25Z" fill="#c8392a" stroke="#d4a030" stroke-width=".8"/>
+      <rect x="29" y="14" width="4" height="14" rx="1.5" fill="#c8392a"/>
+      <path d="M21.5 14 Q31 3 40.5 14" stroke="#8b1010" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    </svg>`;
+    case"spartaan":return`<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" class="bm-sprite" style="overflow:visible;display:block">
+      ${sh}
+      <rect x="21" y="63" width="9" height="22" rx="3" fill="#8b1a1a"/>
+      <rect x="32" y="63" width="9" height="22" rx="3" fill="#8b1a1a"/>
+      <rect x="21" y="67" width="9" height="15" rx="2" fill="#5a0808" opacity=".8"/>
+      <rect x="32" y="67" width="9" height="15" rx="2" fill="#5a0808" opacity=".8"/>
+      <rect x="16" y="34" width="29" height="29" rx="5" fill="#5a0808" stroke="#8b1a1a" stroke-width="1.2"/>
+      <text x="30.5" y="53" text-anchor="middle" font-size="11" fill="#8b1a1a" font-family="serif" font-weight="bold" font-style="italic">λ</text>
+      <ellipse cx="9" cy="48" rx="13" ry="16.5" fill="#8b1a1a" stroke="#c03020" stroke-width="2"/>
+      <ellipse cx="9" cy="48" rx="8.5" ry="10.5" fill="none" stroke="#c03020" stroke-width="1.2"/>
+      <text x="9" y="52" text-anchor="middle" font-size="9" fill="#c03020" font-weight="bold" font-family="serif">λ</text>
+      <line x1="52" y1="5" x2="46" y2="82" stroke="#6a3010" stroke-width="2.5"/>
+      <polygon points="52,3 47,15 57,11" fill="#b5b5b5"/>
+      <circle cx="31" cy="21" r="10" fill="#d4a574"/>
+      <path d="M20 19 Q31 4 42 19 L40 24.5 Q31 12 22 24.5Z" fill="#8b1a1a"/>
+      <rect x="29" y="14" width="4" height="14.5" rx="1.5" fill="#8b1a1a"/>
+      <path d="M20.5 13 Q31 1 41.5 13" stroke="#0a0a0a" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+    </svg>`;
+    case"centurio":return`<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" class="bm-sprite" style="overflow:visible;display:block">
+      ${sh}
+      <rect x="21" y="63" width="9" height="22" rx="3" fill="#6b2d8b"/>
+      <rect x="32" y="63" width="9" height="22" rx="3" fill="#6b2d8b"/>
+      <rect x="17" y="34" width="28" height="28" rx="4" fill="#c0a060" stroke="#d4a030" stroke-width="1.2"/>
+      <line x1="17" y1="42" x2="45" y2="42" stroke="#d4a030" stroke-width=".9" opacity=".6"/>
+      <line x1="17" y1="50" x2="45" y2="50" stroke="#d4a030" stroke-width=".9" opacity=".6"/>
+      <rect x="17" y="58" width="28" height="5" rx="2" fill="#6b2d8b" opacity=".8"/>
+      <rect x="5" y="36" width="17" height="27" rx="3" fill="#6b2d8b" stroke="#d4b060" stroke-width="1.5"/>
+      <line x1="13.5" y1="36" x2="13.5" y2="63" stroke="#d4b060" stroke-width="1.5"/>
+      <line x1="5" y1="49.5" x2="22" y2="49.5" stroke="#d4b060" stroke-width="1.5"/>
+      <rect x="47" y="38" width="4" height="28" rx="2" fill="#c8c8c8"/>
+      <rect x="44" y="36" width="10" height="4" rx="1.5" fill="#8b6010"/>
+      <rect x="46" y="32" width="6" height="6" rx="1" fill="#d4a030"/>
+      <circle cx="31" cy="21" r="10" fill="#d4a574"/>
+      <path d="M21 19.5 Q31 7 41 19.5 L39 24 Q31 12 23 24Z" fill="#c0a060" stroke="#d4a030" stroke-width=".8"/>
+      <path d="M17 13 L45 13" stroke="#c83020" stroke-width="4.5" stroke-linecap="round"/>
+    </svg>`;
+    case"boogschutter":return`<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" class="bm-sprite" style="overflow:visible;display:block">
+      ${sh}
+      <rect x="22" y="62" width="9" height="23" rx="3" fill="#2e6fb0"/>
+      <rect x="33" y="62" width="9" height="23" rx="3" fill="#2e6fb0"/>
+      <rect x="18" y="36" width="25" height="26" rx="5" fill="#1a3060" stroke="#2e6fb0" stroke-width="1"/>
+      <rect x="42" y="28" width="8" height="26" rx="3" fill="#5a3010"/>
+      <rect x="43" y="26" width="6" height="5" rx="1" fill="#7a5020"/>
+      <line x1="44.5" y1="29" x2="44" y2="22" stroke="#c8a060" stroke-width="1.5"/>
+      <line x1="46.5" y1="29" x2="47" y2="21" stroke="#c8a060" stroke-width="1.5"/>
+      <line x1="48.5" y1="29" x2="49" y2="22" stroke="#c8a060" stroke-width="1.5"/>
+      <path d="M8 20 Q1 46 8 72" stroke="#7a5010" stroke-width="3.2" fill="none"/>
+      <line x1="8" y1="20" x2="8" y2="72" stroke="#d4a060" stroke-width="1.2" stroke-dasharray="2,4"/>
+      <line x1="8" y1="46" x2="22" y2="46" stroke="#c8a060" stroke-width="1.5"/>
+      <polygon points="22,46 18,43 18,49" fill="#b08030"/>
+      <rect x="9" y="38" width="7" height="17" rx="3.5" fill="#d4a574" transform="rotate(-8,12,46.5)"/>
+      <rect x="15" y="40" width="13" height="6" rx="3" fill="#d4a574" transform="rotate(-5,21,43)"/>
+      <circle cx="31" cy="21" r="10" fill="#d4a574"/>
+      <path d="M21 21 Q31 7 41 21Z" fill="#2e6fb0" stroke="#1a3060" stroke-width=".8"/>
+      <circle cx="31" cy="9.5" r="2.2" fill="#2e6fb0"/>
+    </svg>`;
+    case"cavalerie":return`<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" class="bm-sprite" style="overflow:visible;display:block">
+      ${sh}
+      <ellipse cx="31" cy="72" rx="24" ry="11" fill="#7a5020"/>
+      <ellipse cx="46" cy="60" rx="10.5" ry="8" fill="#7a5020" transform="rotate(-20,46,60)"/>
+      <ellipse cx="51.5" cy="52" rx="6.5" ry="8.5" fill="#8b5e28" transform="rotate(-30,51.5,52)"/>
+      <circle cx="53.5" cy="49" r="1.5" fill="#1a0a00"/>
+      <rect x="12" y="78" width="5.5" height="13" rx="2.2" fill="#6a4018"/>
+      <rect x="21" y="78" width="5.5" height="13" rx="2.2" fill="#6a4018"/>
+      <rect x="35" y="78" width="5.5" height="13" rx="2.2" fill="#6a4018"/>
+      <rect x="44" y="78" width="5.5" height="13" rx="2.2" fill="#6a4018"/>
+      <rect x="18" y="37" width="23" height="23" rx="5" fill="#9b6914" stroke="#d4a030" stroke-width="1.2"/>
+      <line x1="18" y1="48" x2="41" y2="48" stroke="#d4a030" stroke-width=".8" opacity=".5"/>
+      <line x1="49" y1="18" x2="25" y2="60" stroke="#8b5010" stroke-width="2.5"/>
+      <polygon points="49,16 44.5,26 53.5,24" fill="#c0c0c0"/>
+      <circle cx="29" cy="24" r="9.5" fill="#d4a574"/>
+      <path d="M19.5 23.5 Q29 10 38.5 23.5 L36.5 28 Q29 16 21.5 28Z" fill="#9b6914" stroke="#d4a030" stroke-width=".8"/>
+      <line x1="29" y1="10" x2="29" y2="3" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity=".9"/>
+    </svg>`;
+    case"priester":return`<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" class="bm-sprite" style="overflow:visible;display:block">
+      ${sh}
+      <path d="M16 37 L15 85 Q30 89 45 85 L44 37Z" fill="#1a4028" stroke="#3f9d52" stroke-width="1.2"/>
+      <path d="M16 37 Q9 58 11 85" stroke="#3f9d52" stroke-width="2.2" fill="none"/>
+      <path d="M44 37 Q51 58 49 85" stroke="#3f9d52" stroke-width="2.2" fill="none"/>
+      <line x1="46" y1="16" x2="48.5" y2="82" stroke="#5a3010" stroke-width="2.5"/>
+      <circle cx="46" cy="14" r="5.5" fill="#d4a030" opacity=".92"/>
+      <circle cx="46" cy="14" r="3.2" fill="none" stroke="#3f9d52" stroke-width="1.5"/>
+      <rect x="40" y="44" width="7.5" height="13" rx="3.5" fill="#d4a574"/>
+      <circle cx="30" cy="22" r="10" fill="#d4a574"/>
+      <path d="M20 22 Q30 10 40 22" fill="none" stroke="#3f9d52" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="21" cy="22" r="2.2" fill="#3f9d52"/>
+      <circle cx="25.5" cy="14.5" r="2" fill="#3f9d52"/>
+      <circle cx="30" cy="12" r="2.2" fill="#3f9d52"/>
+      <circle cx="34.5" cy="14.5" r="2" fill="#3f9d52"/>
+      <circle cx="39" cy="22" r="2.2" fill="#3f9d52"/>
+    </svg>`;
+    case"genie":return`<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" class="bm-sprite" style="overflow:visible;display:block">
+      ${sh}
+      <rect x="22" y="62" width="9" height="23" rx="3" fill="#7a4010"/>
+      <rect x="33" y="62" width="9" height="23" rx="3" fill="#7a4010"/>
+      <rect x="18" y="36" width="25" height="27" rx="5" fill="#7a4010" stroke="#c87533" stroke-width="1.2"/>
+      <rect x="18" y="57" width="25" height="4.5" rx="1.5" fill="#c87533"/>
+      <line x1="42" y1="62" x2="55" y2="35" stroke="#5a3010" stroke-width="3"/>
+      <rect x="50" y="26" width="11" height="11" rx="2" fill="#707070" transform="rotate(30,55.5,31.5)"/>
+      <rect x="39" y="42" width="8.5" height="17" rx="3.5" fill="#d4a574" transform="rotate(-22,43,50.5)"/>
+      <circle cx="11" cy="51" r="9.5" fill="#c87533" stroke="#d47820" stroke-width="1.5"/>
+      <circle cx="11" cy="51" r="4.5" fill="#d47820" opacity=".55"/>
+      <circle cx="30" cy="22" r="9.5" fill="#d4a574"/>
+      <path d="M21 22 Q30 9.5 39 22Z" fill="#c87533" stroke="#d47820" stroke-width=".8"/>
+      <rect x="21" y="19.5" width="18" height="4" rx="2" fill="#c87533" opacity=".75"/>
+    </svg>`;
+    case"verkenner":return`<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" class="bm-sprite" style="overflow:visible;display:block">
+      ${sh}
+      <rect x="22" y="59" width="9" height="25" rx="3" fill="#1a4a3a" transform="rotate(-6,26.5,71.5)"/>
+      <rect x="33" y="61" width="9" height="24" rx="3" fill="#1a4a3a" transform="rotate(6,37.5,73)"/>
+      <rect x="19" y="36" width="24" height="24" rx="5" fill="#1a4a3a" stroke="#2d8b7a" stroke-width="1"/>
+      <path d="M19 36 Q7 54 10 83" stroke="#2d8b7a" stroke-width="3" fill="none" stroke-linecap="round" opacity=".75"/>
+      <rect x="6" y="42" width="3.5" height="15" rx="1.8" fill="#d0d0d0" transform="rotate(22,7.75,49.5)"/>
+      <rect x="4" y="41" width="7.5" height="3.5" rx="1" fill="#5a3010" transform="rotate(22,7.75,49.5)"/>
+      <rect x="47" y="40" width="3.5" height="15" rx="1.8" fill="#d0d0d0" transform="rotate(-16,48.75,47.5)"/>
+      <rect x="45" y="39" width="7.5" height="3.5" rx="1" fill="#5a3010" transform="rotate(-16,48.75,47.5)"/>
+      <rect x="8" y="38" width="7.5" height="13" rx="3.5" fill="#d4a574" transform="rotate(26,11.75,44.5)"/>
+      <rect x="42" y="38" width="7.5" height="13" rx="3.5" fill="#d4a574" transform="rotate(-18,45.75,44.5)"/>
+      <circle cx="30" cy="21" r="10" fill="#d4a574"/>
+      <path d="M19 24 Q30 5.5 41 24 Q30 18 19 24Z" fill="#2d8b7a" opacity=".88"/>
+      <path d="M21 22 Q30 13 39 22 Q30 18.5 21 22Z" fill="rgba(0,0,0,.32)"/>
+    </svg>`;
+    default:return`<svg viewBox="0 0 60 90" xmlns="http://www.w3.org/2000/svg" class="bm-sprite" style="overflow:visible;display:block">
+      ${sh}<rect x="22" y="60" width="9" height="24" rx="3" fill="#888"/><rect x="33" y="60" width="9" height="24" rx="3" fill="#888"/>
+      <rect x="18" y="36" width="25" height="25" rx="5" fill="#666"/><circle cx="30" cy="22" r="10" fill="#d4a574"/>
+    </svg>`;
+  }
+}
+
 // Klasse → formatiepositie (voor/midden/achter)
 const BM_FORM_POS={
   front:["hopliet","spartaan","centurio"],
@@ -960,13 +1157,16 @@ function bmGlowFx(team,col){
 // Bouw formatie-HTML voor één team
 function bmFormationHTML(team){
   const members=Object.entries(BM_PLAYERS).filter(([,p])=>p.team===team);
+  const round=BM_STATE.round||{};
   const cols={front:[],mid:[],back:[]};
   for(const[pid,p]of members){
     const pos=bmFormPos(p.class);
-    const cls=BM_CLASSES.find(c=>c.id===p.class);
-    const col=cls?.color||"var(--muted)";
+    const hasAnswered=p.answeredRound===round.n;
+    const hasLocked=!!p.lockedAction;
+    const dotCls=hasAnswered?"on":hasLocked?"locked":"";
     cols[pos].push(`<div class="bm-av cls-${p.class||""}" id="${bmAvId(pid)}" title="${esc(p.name)} · ${esc(bmClsNmThemed(p.class||""))}">
-      <div class="avc" style="background:${col}22">${iconSVG(cls?.icon||"helmet",18,col)}</div>
+      ${bmSpriteSVG(p.class)}
+      <div class="bm-dot ${dotCls}"></div>
       <div class="avn">${esc(p.name)}</div>
     </div>`);
   }
@@ -982,9 +1182,10 @@ function bmFormationHTML(team){
 // (Her)bouw het volledige slagveld (aangeroepen na speler-update of ronde-start)
 function bmBuildBattlefield(){
   const fA=el("bmFormA"),fB=el("bmFormB");
-  // Herbouw formatie ALLEEN als klasse-/team-samenstelling wijzigt, zodat
-  // lopende CSS-animaties niet worden afgebroken door innerHTML-vervanging.
-  const hash=Object.entries(BM_PLAYERS).map(([id,p])=>id+":"+p.class+":"+p.team).sort().join("|");
+  // Herbouw formatie als samenstelling of participatiestatus wijzigt
+  const hash=Object.entries(BM_PLAYERS).map(([id,p])=>
+    id+":"+p.class+":"+p.team+":"+(p.answeredRound||0)+":"+(p.lockedAction?"L":"")
+  ).sort().join("|");
   if(hash!==_bmFormHash){
     _bmFormHash=hash;
     if(fA)fA.innerHTML=bmFormationHTML("A");
@@ -992,16 +1193,19 @@ function bmBuildBattlefield(){
   }
   const field=el("bmField");
   if(field){
+    // Landscape-thema
+    ["bm-bg-roman","bm-bg-greek","bm-bg-gods"].forEach(cl=>field.classList.remove(cl));
+    field.classList.add(bmBgTheme(BM_META?.theme));
     if(BM_META?.animations===false)field.classList.add("bm-noanim");
     else field.classList.remove("bm-noanim");
   }
-  // Kritieke health check
+  // Kritieke health check (nieuwe klasse bm-hp-fill)
   const tA=BM_TEAMS.A||{health:0,maxHealth:100};
   const tB=BM_TEAMS.B||{health:0,maxHealth:100};
   const critA=tA.maxHealth&&tA.health/tA.maxHealth<0.25;
   const critB=tB.maxHealth&&tB.health/tB.maxHealth<0.25;
-  document.querySelectorAll("#bmArmyA .bm-hbar").forEach(b=>critA?b.classList.add("bm-crit"):b.classList.remove("bm-crit"));
-  document.querySelectorAll("#bmArmyB .bm-hbar").forEach(b=>critB?b.classList.add("bm-crit"):b.classList.remove("bm-crit"));
+  document.querySelectorAll("#bmArmyA .bm-hp-fill").forEach(b=>critA?b.classList.add("bm-crit"):b.classList.remove("bm-crit"));
+  document.querySelectorAll("#bmArmyB .bm-hp-fill").forEach(b=>critB?b.classList.add("bm-crit"):b.classList.remove("bm-crit"));
 }
 
 // Hoofddispatcher: trigger animaties vanuit één log-entry
@@ -1036,7 +1240,7 @@ function bmPlayAnimations(entry){
         const atkCls=cls==="cavalerie"?(isR?"anim-chg-r":"anim-chg-l"):(isR?"anim-atk-r":"anim-atk-l");
         bmAnimAv(pid,atkCls,750);
         // klasse-specifiek projectiel
-        if(cls==="boogschutter")bmProj("🏹",team,false,0);
+        if(cls==="boogschutter")bmArrowProj(team,0);
         else if(cls==="genie")bmProj("🪨",team,true,0);
         else if(cls==="verkenner")bmProj("⚡",team,false,0);
         const enemy=team==="A"?"B":"A";
@@ -1058,7 +1262,7 @@ function bmPlayAnimations(entry){
   // Eind-animaties (overwinning / nederlaag)
   if(winner==="A"||winner==="B"){
     const loser=winner==="A"?"B":"A";
-    setTimeout(()=>{bmAnimTeam(winner,"anim-win",1400);bmAnimTeam(loser,"anim-lose",1300);},900);
+    setTimeout(()=>{bmAnimTeam(winner,"anim-win",1400);bmAnimTeam(loser,"anim-lose",1300);bmConfetti();},900);
   }
 }
 
@@ -1674,17 +1878,22 @@ function bmPickClass(cid){
 SCREENS.battlePlayerGame = function(){
   bmApplyTheme(BM_META?.theme);
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_MY_BE=0;BM_MY_Q=null;
-  const myClsObj=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
-  const myCol=myClsObj?.color||"var(--muted)";
-  H(brand(false)+`
-  <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button>
-    <div class="bm-av" id="bmMyAv" style="display:inline-flex;margin-right:4px">
-      <div class="avc" style="background:${myCol}22;border-color:${myCol}88">${iconSVG(myClsObj?.icon||"helmet",22,myCol)}</div>
+  H(`<div class="bm-player-wrap">
+    <div class="bm-player-field" style="position:relative">
+      <div id="bmField" class="${bmBgTheme(BM_META?.theme)}">
+        <div id="bmFormA" class="bm-form"></div>
+        <div id="bmFormB" class="bm-form"></div>
+        <div id="bmBfx"></div>
+      </div>
+      <button class="bm-back-btn" onclick="cleanup();bmLeave();go('battleHome')" title="Verlaat gevecht">
+        ${iconSVG("shield",16,"currentColor")}
+      </button>
     </div>
-    <h2 style="font-size:17px">${esc(BM_IDENT?.name||"")} · ${esc(bmClsNmThemed(BM_MY_CLASS||""))}</h2>
-  </div>
-  <div id="bmPR"></div>${foot()}`);
-  // scoped: aparte listeners voor round-data en game-status — geen listener op alle spelers
+    <div class="bm-player-panel" id="bmPR"></div>
+  </div>`);
+  // Spelers-listener voor sprites op slagveld
+  const rP=fbDB.ref("rooms/"+BM_CODE+"/players"),
+    fP=rP.on("value",s=>{BM_PLAYERS=s.val()||{};bmBuildBattlefield();});
   const rR=fbDB.ref("rooms/"+BM_CODE+"/state/round"),
     fR=rR.on("value",s=>{BM_STATE.round=s.val()||{};bmPlayerRender();});
   const rSt=fbDB.ref("rooms/"+BM_CODE+"/state/status"),
@@ -1698,8 +1907,9 @@ SCREENS.battlePlayerGame = function(){
     fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_MY_CLASS=p.class||null;BM_MY_TEAM=p.team||null;BM_ACTION_LOCKED=!!p.lockedAction;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);BM_MY_CORRECT=p.correct||0;BM_MY_WRONG=p.wrong||0;}bmPlayerRender();});
   const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),
     fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
-  BM_UNSUBS=[()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT)];
+  BM_UNSUBS=[()=>rP.off("value",fP),()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT)];
   bmSubscribeLog(BM_CODE);
+  bmBuildBattlefield();
 };
 function bmPlayerRender(){
   const root=el("bmPR"); if(!root)return;
@@ -1784,9 +1994,10 @@ function bmPlayerRender(){
     content=`<div class="panel" style="text-align:center"><div class="note">Resolutie…</div></div>`;
   }
   root.innerHTML=`
-  <div class="panel" style="margin-bottom:10px;position:relative">
-    ${miniBar(bmTeamNm("A"),"A",tA)}<div style="height:6px"></div>${miniBar(bmTeamNm("B"),"B",tB)}
-    <div id="bmBfx" style="position:absolute;inset:0;pointer-events:none;overflow:hidden"></div>
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid var(--stone4)">
+    ${miniBar(bmTeamNm("A"),"A",tA)}
+    <span style="color:var(--muted2);font-size:11px">vs</span>
+    ${miniBar(bmTeamNm("B"),"B",tB)}
   </div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span class="pill">Ronde ${round.n||"—"}</span>
@@ -1808,7 +2019,7 @@ function bmAnswer(idx){
     c.disabled=true;
   });
   beep(ok?"good":"bad");
-  bmAnimTmp(el("bmMyAv"),ok?"anim-ok":"anim-bad",600);
+  bmAnimAv(BM_PID,ok?"anim-ok":"anim-bad",600);
   const round=BM_STATE.round||{};
   const at=BM_META?.answerTimer||10;
   const timeLeft=round.deadline?Math.max(0,(round.deadline-Date.now())/1000):0;
