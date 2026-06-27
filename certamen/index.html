@@ -1212,27 +1212,89 @@ function buyOrEquip(id){
 }
 
 /* ============================================================================
-   ⚔️  BATTLE MODE — Milestone 1
+   ⚔️  BATTLE MODE — Milestone 3
    Identiteitssysteem · Host · Speler · Rondelus · Resultaat
-   Klassen: Hopliet · Boogschutter · Priester
-   Acties:  Aanval · Verdedig · Heel
+   8 klassen (data-gedreven) · Synergie · Combo-abilities · Class Mastery
    ============================================================================ */
 
-/* ---- KLASSEN & ACTIES ---- */
+/* ---- CONFIGURATIETABEL: KLASSEN (8 stuks) ---- */
+// Alle balanswaarden staan hier. Pas getallen aan zonder de logica te wijzigen.
 const BM_CLASSES = [
-  { id:"hopliet",      nm:"Hopliet",      icon:"shield", color:"#c8392a", passive:"+1 BE bij Verdedigen" },
-  { id:"boogschutter", nm:"Boogschutter", icon:"eagle",  color:"#2e6fb0", passive:"+1 schade bij Aanval" },
-  { id:"priester",     nm:"Priester",     icon:"torch",  color:"#3f9d52", passive:"+1 heling bij Heel"   },
-  // M3: Spartaan, Cavalerie, Centurio, Genie, Verkenner — zie BATTLE_MODE.md
+  { id:"hopliet",      nm:"Hopliet",     icon:"shield", color:"#c8392a",
+    passive:{ desc:"+1 BE bij Verdedigen",                    type:"be_on_defend", val:1 },
+    abilities:[
+      { id:"schildmuur",    nm:"Schildmuur",    tier:"basic",    cost:2,  desc:"Geeft je team +4 schild",                   type:"team_shield",          shld:4 },
+      { id:"formatie",      nm:"Formatie",      tier:"advanced", cost:5,  desc:"Alle teamgenoten +2 BE",                    type:"team_be",              teamBE:2 },
+      { id:"achilleshiel",  nm:"Achilleshiel",  tier:"ultimate", cost:9,  desc:"Aanval (+6) die tegenschild omzeilt",       type:"attack_bypass",        dmg:6 },
+    ]},
+  { id:"spartaan",     nm:"Spartaan",    icon:"helmet", color:"#8B1A1A",
+    passive:{ desc:"+20% aanvalsschade",                       type:"atk_bonus",   val:0.20 },
+    abilities:[
+      { id:"speer",         nm:"Speeraanval",   tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+6)",      type:"attack",               dmg:6 },
+      { id:"berserk",       nm:"Berserk",       tier:"advanced", cost:5,  desc:"Zware aanval op het vijandelijk leger (+9)",type:"attack",               dmg:9 },
+      { id:"leeuwensprong", nm:"Leeuwensprong", tier:"ultimate", cost:10, desc:"Massieve aanval die schild omzeilt (+14)",  type:"attack_bypass",        dmg:14 },
+    ]},
+  { id:"boogschutter", nm:"Boogschutter",icon:"eagle",  color:"#2e6fb0",
+    passive:{ desc:"+1 schade bij aanval",                     type:"atk_flat",    val:1 },
+    abilities:[
+      { id:"pijlregen",     nm:"Pijlregen",     tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
+      { id:"zwakpunt",      nm:"Zwak punt",      tier:"advanced", cost:5,  desc:"Aanval (+7, of +17 als vijand ≤30% HP)",  type:"attack_weakspot",      dmg:7, bonusDmg:10 },
+      { id:"dodenarrow",    nm:"Dodenarrow",    tier:"ultimate", cost:9,  desc:"Dodelijke pijl op het vijandelijk leger (+13)", type:"attack",           dmg:13 },
+    ]},
+  { id:"cavalerie",    nm:"Cavalerie",   icon:"column", color:"#9B6914",
+    passive:{ desc:"+2 BE bij snel correct antwoord",          type:"be_on_fast",  val:2 },
+    abilities:[
+      { id:"charge",        nm:"Charge",        tier:"basic",    cost:3,  desc:"Snelle aanval op het vijandelijk leger (+7)", type:"attack",             dmg:7 },
+      { id:"flankbeweging", nm:"Flankbeweging", tier:"advanced", cost:5,  desc:"Aanval (+5) én schild voor je team (+3)",   type:"attack_and_defend",    dmg:5, shld:3 },
+      { id:"stormloop",     nm:"Stormloop",     tier:"ultimate", cost:9,  desc:"Verwoestende aanval (+13)",                  type:"attack",               dmg:13 },
+    ]},
+  { id:"priester",     nm:"Priester",    icon:"torch",  color:"#3f9d52",
+    passive:{ desc:"+1 heling bij helen",                      type:"heal_flat",   val:1 },
+    abilities:[
+      { id:"gebed",         nm:"Gebed",         tier:"basic",    cost:3,  desc:"Heelt je eigen leger (+9)",                 type:"heal",                 heal:9 },
+      { id:"zegen",         nm:"Zegen",         tier:"advanced", cost:5,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
+      { id:"godenvuur",     nm:"Godenvuur",     tier:"ultimate", cost:9,  desc:"Heelt leger (+12) én schaadt vijand (+4)",  type:"heal_and_attack",      heal:12, dmg:4 },
+    ]},
+  { id:"centurio",     nm:"Centurio",    icon:"laurel", color:"#6B2D8B",
+    passive:{ desc:"+1 BE per ronde (altijd)",                 type:"be_passive",  val:1 },
+    abilities:[
+      { id:"bevel",         nm:"Bevel",         tier:"basic",    cost:2,  desc:"Geeft je team +3 schild",                   type:"team_shield",          shld:3 },
+      { id:"strijdformatie",nm:"Strijdformatie",tier:"advanced", cost:4,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
+      { id:"testudo",       nm:"Testudo",       tier:"ultimate", cost:8,  desc:"Massiefschild (+7) én team +2 BE",          type:"testudo",              shld:7, teamBE:2 },
+    ]},
+  { id:"genie",        nm:"Genie",       icon:"amphora",color:"#C87533",
+    passive:{ desc:"Aanvallen verminderen ook vijandelijk schild (−2)", type:"shld_pierce", val:2 },
+    abilities:[
+      { id:"katapult",      nm:"Katapult",      tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
+      { id:"valgreppel",    nm:"Valgreppel",    tier:"advanced", cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
+      { id:"vuurtoren",     nm:"Vuurtoren",     tier:"ultimate", cost:8,  desc:"Zware aanval (+9) én schild weg (−4)",     type:"attack_siege",         dmg:9, shldRemove:4 },
+    ]},
+  { id:"verkenner",    nm:"Verkenner",   icon:"eagle",  color:"#2D8B7A",
+    passive:{ desc:"Basis-abilities kosten 1 BE minder",       type:"cost_reduce", val:1 },
+    abilities:[
+      { id:"verkenning",    nm:"Verkenning",    tier:"basic",    cost:2,  desc:"Aanval (+4) én saboteer vijandelijk schild (−2)", type:"attack_and_shld_remove", dmg:4, shldRemove:2 },
+      { id:"sabotage",      nm:"Sabotage",      tier:"advanced", cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
+      { id:"hinderlaag",    nm:"Hinderlaag",    tier:"ultimate", cost:7,  desc:"Zware aanval (+10) én schild voor team (+3)", type:"attack_and_defend",   dmg:10, shld:3 },
+    ]},
 ];
-const BM_ACTIONS = [
-  { id:"aanval",   nm:"Aanval",   icon:"helmet", cost:3, desc:"Beschadig het vijandelijk leger" },
-  { id:"verdedig", nm:"Verdedig", icon:"shield", cost:2, desc:"Schild voor je team deze ronde"  },
-  { id:"heel",     nm:"Heel",     icon:"torch",  cost:3, desc:"Herstel je eigen leger"          },
+
+/* ---- CONFIGURATIETABEL: SYNERGIE ---- */
+// Flat BE-bonus per speler per ronde op basis van klasdiversiteit binnen het team.
+const BM_SYNERGY = [
+  { minClasses:3, beBonus:2 },  // ≥3 unieke klassen → +2 BE per speler
+  { minClasses:5, beBonus:4 },  // ≥5 unieke klassen → +4 BE per speler
+  { minClasses:7, beBonus:6 },  // ≥7 unieke klassen → +6 BE per speler
 ];
-// Synergie (M3) en combo-abilities (M3) — leeg gelaten
-// const BM_SYNERGY = [{ minClasses:3, beBonus:.05 }, { minClasses:5, beBonus:.10 }, { minClasses:7, beBonus:.15 }];
-// const BM_COMBOS  = [];
+
+/* ---- CONFIGURATIETABEL: COMBO-ABILITIES ---- */
+// Beide spelers moeten in dezelfde ronde "Combo" kiezen; host detecteert het bij resolutie.
+const BM_COMBOS = [
+  { id:"schildmuur_schieten", nm:"Schildmuur met Schieten", classes:["hopliet","boogschutter"],     cost:4, desc:"Schild (+6) én gecombineerde pijlaanval (+6)",                  shld:6, dmg:6 },
+  { id:"strijdszegen",        nm:"Strijdszegen",            classes:["priester","spartaan"],         cost:4, desc:"Massale BE-bonus voor het hele team (+5 per speler)",            teamBE:5 },
+  { id:"vuursalvo",           nm:"Vuursalvo",               classes:["genie","boogschutter"],        cost:4, desc:"Gecombineerde zware aanval (+12)",                               dmg:12 },
+  { id:"testudo_formatie",    nm:"Testudo-formatie",         classes:["centurio","hopliet"],          cost:4, desc:"Massief gecombineerd schild voor het hele team (+10)",            shld:10 },
+  { id:"hinderlaag_aanval",   nm:"Hinderlaag & Aanval",      classes:["verkenner","cavalerie"],       cost:4, desc:"Gecombineerde aanval (+13) én vijandelijk schild weg (−3)",     dmg:13, shldRemove:3 },
+];
 
 /* ---- BATTLE IDENTITY ---- */
 const BM_IDENT_KEY = "certamen_battle_identity";
@@ -1244,15 +1306,52 @@ function bmIdentClear(){ try{ localStorage.removeItem(BM_IDENT_KEY); }catch(e){}
 async function bmIdentGet(klas,lcode){ if(!fbDB)return null; const s=await fbDB.ref("identities/"+klas+"/"+lcode).once("value"); return s.exists()?s.val():null; }
 async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,avatar:P.avatar,color:P.color,classHistory:{}}; if(fbDB)await fbDB.ref("identities/"+klas+"/"+lcode).set(d); return d; }
 
+/* ---- ABILITY HELPERS ---- */
+function bmGetAbilityCost(cls,abl){
+  let c=abl.cost;
+  if(cls?.passive?.type==="cost_reduce"&&abl.tier==="basic") c=Math.max(1,c-cls.passive.val);
+  return c;
+}
+function bmCalcAbilityEffect(p,cls,abl){
+  const fx={dmg:0,heal:0,shld:0,teamBE:0,selfBE:0,shldRemove:0,bypass:false};
+  const t=abl.type, pasv=cls?.passive, mt=p.team;
+  const isDmg=["attack","attack_bypass","attack_weakspot","attack_and_defend","attack_and_shld_remove","attack_siege","heal_and_attack"].includes(t);
+  if(isDmg){
+    let d=abl.dmg||0;
+    if(pasv?.type==="atk_flat")  d+=pasv.val;
+    if(pasv?.type==="atk_bonus") d=Math.round(d*(1+pasv.val));
+    if(t==="attack_weakspot"){
+      const et=mt==="A"?"B":"A";const eh=BM_TEAMS[et]||{health:100,maxHealth:100};
+      if(eh.maxHealth>0&&eh.health/eh.maxHealth<=0.30) d+=(abl.bonusDmg||0);
+    }
+    fx.dmg=d; fx.bypass=(t==="attack_bypass");
+    if(pasv?.type==="shld_pierce") fx.shldRemove+=pasv.val; // genie passief
+  }
+  if(["team_shield","testudo","attack_and_defend"].includes(t)) fx.shld=abl.shld||0;
+  if(["team_shield","testudo"].includes(t)&&pasv?.type==="be_on_defend") fx.selfBE+=pasv.val;
+  if(["heal","heal_and_attack"].includes(t)){ let h=abl.heal||0; if(pasv?.type==="heal_flat") h+=pasv.val; fx.heal=h; }
+  if(["team_be","testudo"].includes(t)) fx.teamBE=abl.teamBE||0;
+  if(["shield_remove","attack_and_shld_remove","attack_siege"].includes(t)) fx.shldRemove+=(abl.shldRemove||0);
+  return fx;
+}
+function bmCalcSynergy(players,team){
+  const unique=new Set(Object.values(players).filter(p=>p.team===team&&p.class).map(p=>p.class)).size;
+  let bonus=0;
+  for(const tier of BM_SYNERGY){if(unique>=tier.minClasses)bonus=tier.beBonus;}
+  return bonus;
+}
+
 /* ---- BATTLE GAME STATE ---- */
 let BM_CODE=null, BM_PID=null, BM_META=null;
 let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={};
-let BM_MY_BE=0, BM_MY_Q=null, BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
+let BM_MY_BE=0, BM_MY_Q=null, BM_MY_CLASS=null, BM_MY_TEAM=null;
+let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
 const BM_MISSED={}; // { pid:{ wordLa:count } } host-only, adaptief leren
 
 function bmLeave(){
   BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};
-  BM_MY_BE=0;BM_MY_Q=null;BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;
+  BM_MY_BE=0;BM_MY_Q=null;BM_MY_CLASS=null;BM_MY_TEAM=null;
+  BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;
 }
 
 /* ---- SCHERM: battleHome ---- */
@@ -1429,16 +1528,31 @@ async function bmStartGame(){
 
 /* ---- VRAGEN VERDELEN (host) ---- */
 async function bmDistributeQs(roundN){
-  const pids=Object.keys(BM_PLAYERS); if(!pids.length)return;
+  const pids=Object.keys(BM_PLAYERS);if(!pids.length)return;
   const at=BM_META?.answerTimer||10;
+  // Synergiebonus (flat BE per speler) + passief BE voor Centurio
+  const synA=bmCalcSynergy(BM_PLAYERS,"A"),synB=bmCalcSynergy(BM_PLAYERS,"B");
   const up={};
   for(const pid of pids){
+    const p=BM_PLAYERS[pid]||{};
+    const cls=BM_CLASSES.find(c=>c.id===p.class);
+    let beBonus=p.team==="A"?synA:synB;
+    if(cls?.passive?.type==="be_passive") beBonus+=cls.passive.val;
     const pool=bmPersonalPool(pid,POOL);
     up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
     up["players/"+pid+"/answeredRound"]=-1;
     up["players/"+pid+"/lockedAction"]=null;
+    if(beBonus>0) up["players/"+pid+"/be"]=(p.be||0)+beBonus;
   }
-  up["state"]={status:"playing",round:{n:roundN,phase:"question",deadline:Date.now()+at*1000},winner:null};
+  // Team-klassenlijst schrijven zodat spelers combo's kunnen zien
+  const clsA=[...new Set(Object.values(BM_PLAYERS).filter(p=>p.team==="A"&&p.class).map(p=>p.class))];
+  const clsB=[...new Set(Object.values(BM_PLAYERS).filter(p=>p.team==="B"&&p.class).map(p=>p.class))];
+  // Schrijf state-velden apart zodat resolvedRound niet wordt overschreven
+  up["state/status"]="playing";
+  up["state/round"]={n:roundN,phase:"question",deadline:Date.now()+at*1000};
+  up["state/winner"]=null;
+  up["teams/A/classes"]=clsA;
+  up["teams/B/classes"]=clsB;
   await fbDB.ref("rooms/"+BM_CODE).update(up);
 }
 function bmPersonalPool(pid,pool){
@@ -1556,53 +1670,112 @@ async function bmTick(){
   }
 }
 
-/* ---- RESOLUTIE (host-autoritair) ---- */
+/* ---- RESOLUTIE (host-autoritair, data-gedreven) ---- */
 async function bmResolve(roundN){
   BM_RESOLVING=true;
   try{
-    // idempotentiebewaker: sla op welke ronde al verrekend is zodat herverbinding niet dubbel telt
     const guardSnap=await fbDB.ref("rooms/"+BM_CODE+"/state/resolvedRound").once("value");
     if(guardSnap.val()===roundN)return;
     await fbDB.ref("rooms/"+BM_CODE+"/state/resolvedRound").set(roundN);
+
     const players=BM_PLAYERS;
-    let dmgA=0,dmgB=0,healA=0,healB=0,shldA=0,shldB=0;
+    // Effecten komend VAN elk team (richting het andere)
+    const from={A:{dmg:0,bypassDmg:0,shldRemove:0},B:{dmg:0,bypassDmg:0,shldRemove:0}};
+    // Effecten TEN VOORDELE van elk team
+    const for_={A:{heal:0,shld:0,teamBE:0},B:{heal:0,shld:0,teamBE:0}};
     const events=[];
+    const pUpd={}; // pid → {be, damage, healing, lockedAction:null}
+
+    // Pas 1: individuele abilities
     for(const[pid,p]of Object.entries(players)){
-      const action=p.lockedAction; if(!action)continue;
+      const action=p.lockedAction;
+      if(!action||action.type==="combo")continue;
       const cls=BM_CLASSES.find(c=>c.id===p.class);
-      const isA=p.team==="A"; const cost=action.cost||0;
-      const be=Math.max(0,(p.be||0)-cost);
-      if(action.type==="aanval"){
-        let dmg=5; if(cls?.id==="boogschutter")dmg++;
-        if(isA)dmgB+=dmg;else dmgA+=dmg;
-        await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update({damage:(p.damage||0)+dmg,be,lockedAction:null});
-        events.push({pid,type:"aanval",dmg,team:p.team});
-      } else if(action.type==="verdedig"){
-        let shld=3; if(cls?.id==="hopliet")shld++;
-        if(isA)shldA+=shld;else shldB+=shld;
-        const beBonus=cls?.id==="hopliet"?1:0;
-        await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update({be:be+beBonus,lockedAction:null});
-        events.push({pid,type:"verdedig",shld,team:p.team});
-      } else if(action.type==="heel"){
-        let heal=8; if(cls?.id==="priester")heal++;
-        if(isA)healA+=heal;else healB+=heal;
-        await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update({healing:(p.healing||0)+heal,be,lockedAction:null});
-        events.push({pid,type:"heel",heal,team:p.team});
-      }
+      const abl=cls?.abilities.find(a=>a.id===action.abilityId);
+      if(!abl)continue;
+      const mt=p.team,et=mt==="A"?"B":"A";
+      const fx=bmCalcAbilityEffect(p,cls,abl);
+      if(fx.bypass)  from[mt].bypassDmg+=fx.dmg;
+      else           from[mt].dmg+=fx.dmg;
+      from[mt].shldRemove+=fx.shldRemove;
+      for_[mt].shld+=fx.shld;
+      for_[mt].heal+=fx.heal;
+      for_[mt].teamBE+=fx.teamBE;
+      pUpd[pid]={be:Math.max(0,(p.be||0)-(action.cost||0)+(fx.selfBE||0)),
+                 damage:(p.damage||0)+fx.dmg, healing:(p.healing||0)+fx.heal, lockedAction:null};
+      events.push({pid,abilityId:abl.id,team:mt,dmg:fx.dmg,heal:fx.heal,shld:fx.shld});
     }
-    const efA=Math.max(0,dmgA-shldB),efB=Math.max(0,dmgB-shldA);
+
+    // Pas 2: combo's — zoek overeenkomende paren binnen hetzelfde team
+    const comboPids=Object.entries(players).filter(([,p])=>p.lockedAction?.type==="combo");
+    for(const combo of BM_COMBOS){
+      const[c0,c1]=combo.classes;
+      const pa=comboPids.find(([,p])=>p.class===c0&&p.lockedAction?.comboId===combo.id);
+      const pb=comboPids.find(([,p])=>p.class===c1&&p.lockedAction?.comboId===combo.id&&p.team===(pa?.[1]?.team));
+      if(!pa||!pb)continue;
+      const mt=pa[1].team;
+      if(combo.dmg)   from[mt].dmg+=(combo.dmg||0);
+      if(combo.shld)  for_[mt].shld+=(combo.shld||0);
+      if(combo.heal)  for_[mt].heal+=(combo.heal||0);
+      if(combo.teamBE)for_[mt].teamBE+=(combo.teamBE||0);
+      if(combo.shldRemove)from[mt].shldRemove+=(combo.shldRemove||0);
+      for(const[pid]of[pa,pb]){
+        const p=players[pid];
+        const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0};
+        pUpd[pid]={...prev,be:Math.max(0,prev.be-(combo.cost||4)),lockedAction:null};
+      }
+      events.push({type:"combo",comboId:combo.id,team:mt});
+    }
+
+    // Pas 3: teamBE verdelen over alle teamgenoten
+    for(const[pid,p]of Object.entries(players)){
+      const bonus=for_[p.team]?.teamBE||0;
+      if(!bonus)continue;
+      const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0,lockedAction:null};
+      pUpd[pid]={...prev,be:(prev.be)+bonus};
+    }
+
+    // Schrijf spelerupdates
+    for(const[pid,upd]of Object.entries(pUpd)){
+      await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update(upd);
+    }
+
+    // Berekening effectieve schade (schild absorbeert, bypass negeert schild)
+    const shldA=Math.max(0,for_.A.shld-from.B.shldRemove);
+    const shldB=Math.max(0,for_.B.shld-from.A.shldRemove);
+    const efA=Math.max(0,from.B.dmg-shldA)+from.B.bypassDmg;
+    const efB=Math.max(0,from.A.dmg-shldB)+from.A.bypassDmg;
     const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
-    const newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-efA+healA));
-    const newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-efB+healB));
+    const newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-efA+for_.A.heal));
+    const newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-efB+for_.B.heal));
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
-    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,dmgA:efA,dmgB:efB,healA,healB,newHA,newHB});
+    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,newHA,newHB});
+
+    // Mastery bijhouden in identities (fire-and-forget)
+    bmUpdateMastery(players,pUpd,events);
+
     if(newHA<=0||newHB<=0){
       await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:newHA<=0?"B":"A"});
       return;
     }
     await bmDistributeQs(roundN+1);
     bmHostStartTimer();
-  } finally{ BM_RESOLVING=false; }
+  }finally{BM_RESOLVING=false;}
+}
+
+function bmUpdateMastery(players,pUpd,events){
+  if(!fbDB)return;
+  for(const[pid,p]of Object.entries(players)){
+    const cls=p.class;if(!cls||!p.identityKey)continue;
+    const[klas,lcode]=(p.identityKey||"").split(":");if(!klas||!lcode)continue;
+    const evs=events.filter(e=>e.pid===pid);
+    const contrib={
+      rounds:firebase.database.ServerValue.increment(1),
+      damage:firebase.database.ServerValue.increment(evs.reduce((s,e)=>s+(e.dmg||0),0)),
+      healing:firebase.database.ServerValue.increment(evs.reduce((s,e)=>s+(e.heal||0),0)),
+    };
+    fbDB.ref("identities/"+klas+"/"+lcode+"/classHistory/"+cls).update(contrib).catch(()=>{});
+  }
 }
 function bmEndGame(){
   if(fbDB)fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:"_stopped"});
@@ -1711,37 +1884,45 @@ async function bmRejoin(){
 
 /* ---- SCHERM: battlePlayerLobby ---- */
 SCREENS.battlePlayerLobby = function(){
+  const myClass=BM_MY_CLASS||BM_PLAYERS[BM_PID]?.class||null;
   H(brand(false)+`
   <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle Lobby</h2></div>
   <div class="panel" style="text-align:center">
-    ${avatarHTML(BM_IDENT?.avatar||P.avatar,BM_IDENT?.color||P.color,54)}
-    <div style="font-size:20px;margin-top:8px">${esc(BM_IDENT?.name||"")}</div>
+    ${avatarHTML(BM_IDENT?.avatar||P.avatar,BM_IDENT?.color||P.color,48)}
+    <div style="font-size:18px;margin-top:6px">${esc(BM_IDENT?.name||"")}</div>
     <div class="note">Spelcode: ${BM_CODE}</div>
   </div>
   <div class="panel">
     <div class="eyebrow l">Kies je klasse</div>
-    ${BM_CLASSES.map(c=>`
-      <button class="tile" style="margin-bottom:8px;padding:14px 16px" onclick="bmPickClass('${c.id}')">
-        <div style="display:flex;align-items:center;gap:12px">
-          ${iconSVG(c.icon,32,c.color)}<div>
-            <div style="font-size:16px;font-weight:700">${c.nm}</div>
-            <div class="note">${c.passive}</div>
+    ${BM_CLASSES.map(c=>{
+      const sel=myClass===c.id;
+      return `<button class="tile" style="margin-bottom:8px;padding:12px 14px${sel?";border:2px solid "+c.color:""}" onclick="bmPickClass('${c.id}')">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          ${iconSVG(c.icon,30,c.color)}
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;color:${c.color}">${c.nm}</div>
+            <div class="note" style="margin:2px 0">⚡ ${c.passive.desc}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">
+              ${c.abilities.map(a=>`<span class="pill" style="font-size:10px">${a.nm}&nbsp;${bmGetAbilityCost(c,a)}BE</span>`).join("")}
+            </div>
           </div>
-          <span id="bmCC_${c.id}" style="margin-left:auto;font-size:20px;display:none">✅</span>
+          ${sel?`<span style="font-size:20px;align-self:center">✅</span>`:""}
         </div>
-      </button>`).join("")}
+      </button>`;
+    }).join("")}
   </div>
   <div class="note" style="text-align:center">Wachten tot de docent het gevecht start…</div>
   ${foot()}`);
-  const r=fbDB.ref("rooms/"+BM_CODE+"/state");
-  const f=r.on("value",s=>{const st=s.val()||{};if(st.status==="playing"){r.off("value",f);go("battlePlayerGame");}});
-  BM_UNSUBS=[()=>r.off("value",f)];
+  // scoped: alleen state/status
+  const rSt=fbDB.ref("rooms/"+BM_CODE+"/state/status");
+  const fSt=rSt.on("value",s=>{if(s.val()==="playing"){rSt.off("value",fSt);go("battlePlayerGame");}});
+  BM_UNSUBS=[()=>rSt.off("value",fSt)];
 };
 function bmPickClass(cid){
-  BM_CLASSES.forEach(c=>{const e=el("bmCC_"+c.id);if(e)e.style.display="none";});
-  const ce=el("bmCC_"+cid);if(ce)ce.style.display="";
+  BM_MY_CLASS=cid;
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({class:cid});
   toast("Klasse gekozen",bmClsName(cid));
+  SCREENS.battlePlayerLobby(); // herrender met selectie
 }
 
 /* ---- SCHERM: battlePlayerGame ---- */
@@ -1761,7 +1942,7 @@ SCREENS.battlePlayerGame = function(){
       }
     });
   const rM=fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID),
-    fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);}bmPlayerRender();});
+    fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_MY_CLASS=p.class||null;BM_MY_TEAM=p.team||null;BM_ACTION_LOCKED=!!p.lockedAction;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);}bmPlayerRender();});
   const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),
     fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
   BM_UNSUBS=[()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT)];
@@ -1809,19 +1990,41 @@ function bmPlayerRender(){
     if(BM_ACTION_LOCKED){
       content=`<div class="panel" style="text-align:center"><div style="font-size:40px">⚔️</div><div class="note">Actie vergrendeld — resolutie volgt…</div></div>`;
     } else {
-      content=`<div class="panel">
-        <div class="eyebrow l">Kies een actie — ${tl}s</div>
-        ${BM_ACTIONS.map(a=>`
-          <button class="tile" style="margin-bottom:8px;padding:14px 16px${BM_MY_BE<a.cost?";opacity:.4;pointer-events:none":""}" onclick="bmChooseAction('${a.id}',${a.cost})">
-            <div style="display:flex;align-items:center;gap:12px">
-              ${iconSVG(a.icon,30,"var(--hi)")}<div>
-                <div style="font-size:16px;font-weight:700">${a.nm} <span class="pill">${a.cost} BE</span></div>
-                <div class="note">${a.desc}</div>
-              </div>
-            </div>
-          </button>`).join("")}
-        <div class="note" style="margin-top:6px">Je hebt ${BM_MY_BE} ⚡ BE. Geen keuze = sparen.</div>
-      </div>`;
+      const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
+      if(!cls){
+        content=`<div class="panel"><div class="note warn">Kies eerst een klasse in de lobby voordat je een actie kunt uitvoeren.</div></div>`;
+      } else {
+        const teamClasses=BM_TEAMS[BM_MY_TEAM||"A"]?.classes||[];
+        const availCombos=BM_COMBOS.filter(combo=>
+          combo.classes.includes(BM_MY_CLASS)&&
+          combo.classes.some(c=>c!==BM_MY_CLASS&&teamClasses.includes(c))
+        );
+        const tierDot=t=>t==="basic"?"●":t==="advanced"?"●●":"●●●";
+        content=`<div class="panel">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-weight:700;color:${cls.color}">${cls.nm}</span>
+            <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE} BE — ${tl}s</span>
+          </div>
+          ${cls.abilities.map(a=>{
+            const cost=bmGetAbilityCost(cls,a);
+            const ok=BM_MY_BE>=cost;
+            return `<button class="tile" style="margin-bottom:6px;padding:11px 13px${ok?"":";opacity:.4;pointer-events:none"}" onclick="bmChooseAbility('${a.id}',${cost})">
+              <div style="font-size:13px;font-weight:700">${a.nm} <span class="pill">${cost}&nbsp;BE</span> <span style="opacity:.6;font-size:10px">${tierDot(a.tier)}</span></div>
+              <div class="note" style="margin-top:2px">${a.desc}</div>
+            </button>`;
+          }).join("")}
+          ${availCombos.map(combo=>{
+            const ok=BM_MY_BE>=combo.cost;
+            const partnerNm=BM_CLASSES.find(c=>c.id===combo.classes.find(x=>x!==BM_MY_CLASS))?.nm||"";
+            return `<button class="tile" style="margin-bottom:6px;padding:11px 13px;border:1px solid var(--hi)${ok?"":";opacity:.4;pointer-events:none"}" onclick="bmChooseCombo('${combo.id}',${combo.cost})">
+              <div style="font-size:13px;font-weight:700">⚡ ${combo.nm} <span class="pill">${combo.cost}&nbsp;BE</span></div>
+              <div class="note" style="margin-top:2px">${combo.desc}</div>
+              <div class="note" style="color:var(--hi);margin-top:2px">Vraag ${esc(partnerNm)} ook Combo te kiezen!</div>
+            </button>`;
+          }).join("")}
+          <div class="note" style="margin-top:6px">Geen keuze = BE sparen voor de volgende ronde.</div>
+        </div>`;
+      }
     }
   } else {
     content=`<div class="panel" style="text-align:center"><div class="note">Resolutie…</div></div>`;
@@ -1852,7 +2055,10 @@ function bmAnswer(idx){
   const round=BM_STATE.round||{};
   const at=BM_META?.answerTimer||10;
   const timeLeft=round.deadline?Math.max(0,(round.deadline-Date.now())/1000):0;
-  const beGain=ok?(timeLeft>at/2?4:3):0;
+  const fast=ok&&timeLeft>at/2;
+  const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
+  let beGain=ok?3:0;
+  if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?cls.passive.val:1; }
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).once("value").then(s=>{
     const p=s.val()||{};
     fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
@@ -1863,11 +2069,19 @@ function bmAnswer(idx){
     });
   });
 }
-function bmChooseAction(type,cost){
+function bmChooseAbility(abilityId,cost){
   if(BM_ACTION_LOCKED||BM_MY_BE<cost)return;
   BM_ACTION_LOCKED=true;
-  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type,cost}});
-  toast("Vergrendeld",BM_ACTIONS.find(a=>a.id===type)?.nm||type);
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type:"ability",abilityId,cost}});
+  const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
+  toast("Actie vergrendeld",cls?.abilities.find(a=>a.id===abilityId)?.nm||abilityId);
+  bmPlayerRender();
+}
+function bmChooseCombo(comboId,cost){
+  if(BM_ACTION_LOCKED||BM_MY_BE<cost)return;
+  BM_ACTION_LOCKED=true;
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type:"combo",comboId,cost}});
+  toast("Combo aangekondigd!",BM_COMBOS.find(c=>c.id===comboId)?.nm||comboId);
   bmPlayerRender();
 }
 
