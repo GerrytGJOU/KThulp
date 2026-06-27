@@ -565,12 +565,15 @@ let STATE={}, PLAYERS={};
 let DRAFT = { game:"touwtrekken", lang:"la", source:"freq", fromN:1, toN:100, cat:"all", customText:"",
   target:15, penalty:"back", freezeSec:4 };
 let myStreak=0;
+let BM_UNSUBS=[], BM_PHASE_TIMER=null, _bmTicking=false;
 
 function cleanup(){
   if(unsubState){unsubState();unsubState=null;}
   if(unsubPlayers){unsubPlayers();unsubPlayers=null;}
   if(botTimer){clearInterval(botTimer);botTimer=null;}
   if(freezeTimer){clearInterval(freezeTimer);freezeTimer=null;}
+  BM_UNSUBS.forEach(u=>{try{u();}catch(e){}});BM_UNSUBS=[];
+  if(BM_PHASE_TIMER){clearInterval(BM_PHASE_TIMER);BM_PHASE_TIMER=null;}_bmTicking=false;
 }
 function leaveAll(){ cleanup(); CODE=null;PID=null;ROLE=null;POOL=[];META=null;STATE={};PLAYERS={}; }
 
@@ -616,6 +619,11 @@ SCREENS.home = function(){
     <span class="ic">${iconSVG("amphora",44,"currentColor")}</span>
     <h3>Mijn verzameling</h3>
     <p>Eerbewijzen, munten en avatars die je hebt verdiend.</p>
+  </button>
+  <button class="tile" onclick="go('battleHome')">
+    <span class="ic">${iconSVG("eagle",44,"currentColor")}</span>
+    <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">NIEUW</span></h3>
+    <p>Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden.</p>
   </button>
   ${!hasFirebase?`<div class="panel"><div class="note warn">Firebase is nog niet ingesteld. Je kunt de spellen nu al uitproberen in de <b>oefenmodus</b> (met computer-spelers). Voor échte leerlingen op aparte iPads: vul je Firebase-gegevens in (zie de instructies bovenaan het bestand).</div></div>`:""}
   ${foot()}`);
@@ -746,6 +754,7 @@ function confirmSource(){
   if(DRAFT.source==="custom"){ const box=el("customBox"); if(box)DRAFT.customText=box.value; }
   const pool=buildPool(DRAFT);
   if(pool.length<4){ toast("Te weinig woorden","Kies een groter bereik of voeg meer woorden toe."); return; }
+  if(DRAFT.game==="battle"){ go("battleHostSettings"); return; }
   go("hostSettings");
 }
 
@@ -1201,6 +1210,607 @@ function buyOrEquip(id){
   P.coins-=a.cost; P.owned.push(id); P.avatar=id; saveProfile(); checkAch(); beep("ach");
   toast("Gekocht!", a.nm); SCREENS.collection();
 }
+
+/* ============================================================================
+   ⚔️  BATTLE MODE — Milestone 1
+   Identiteitssysteem · Host · Speler · Rondelus · Resultaat
+   Klassen: Hopliet · Boogschutter · Priester
+   Acties:  Aanval · Verdedig · Heel
+   ============================================================================ */
+
+/* ---- KLASSEN & ACTIES ---- */
+const BM_CLASSES = [
+  { id:"hopliet",      nm:"Hopliet",      icon:"shield", color:"#c8392a", passive:"+1 BE bij Verdedigen" },
+  { id:"boogschutter", nm:"Boogschutter", icon:"eagle",  color:"#2e6fb0", passive:"+1 schade bij Aanval" },
+  { id:"priester",     nm:"Priester",     icon:"torch",  color:"#3f9d52", passive:"+1 heling bij Heel"   },
+  // M3: Spartaan, Cavalerie, Centurio, Genie, Verkenner — zie BATTLE_MODE.md
+];
+const BM_ACTIONS = [
+  { id:"aanval",   nm:"Aanval",   icon:"helmet", cost:3, desc:"Beschadig het vijandelijk leger" },
+  { id:"verdedig", nm:"Verdedig", icon:"shield", cost:2, desc:"Schild voor je team deze ronde"  },
+  { id:"heel",     nm:"Heel",     icon:"torch",  cost:3, desc:"Herstel je eigen leger"          },
+];
+// Synergie (M3) en combo-abilities (M3) — leeg gelaten
+// const BM_SYNERGY = [{ minClasses:3, beBonus:.05 }, { minClasses:5, beBonus:.10 }, { minClasses:7, beBonus:.15 }];
+// const BM_COMBOS  = [];
+
+/* ---- BATTLE IDENTITY ---- */
+const BM_IDENT_KEY = "certamen_battle_identity";
+let BM_IDENT = null;
+
+function bmIdentLoad(){ try{ const r=localStorage.getItem(BM_IDENT_KEY); return r?JSON.parse(r):null; }catch(e){return null;} }
+function bmIdentSave(o){ try{ localStorage.setItem(BM_IDENT_KEY,JSON.stringify(o)); }catch(e){} }
+function bmIdentClear(){ try{ localStorage.removeItem(BM_IDENT_KEY); }catch(e){} }
+async function bmIdentGet(klas,lcode){ if(!fbDB)return null; const s=await fbDB.ref("identities/"+klas+"/"+lcode).once("value"); return s.exists()?s.val():null; }
+async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,avatar:P.avatar,color:P.color,classHistory:{}}; if(fbDB)await fbDB.ref("identities/"+klas+"/"+lcode).set(d); return d; }
+
+/* ---- BATTLE GAME STATE ---- */
+let BM_CODE=null, BM_PID=null, BM_META=null;
+let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={};
+let BM_MY_BE=0, BM_MY_Q=null, BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
+const BM_MISSED={}; // { pid:{ wordLa:count } } host-only, adaptief leren
+
+function bmLeave(){
+  BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};
+  BM_MY_BE=0;BM_MY_Q=null;BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;
+}
+
+/* ---- SCHERM: battleHome ---- */
+SCREENS.battleHome = function(){
+  document.body.classList.remove("greek");
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ Battle Mode</h2></div>
+  <div class="panel"><div class="note">Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden en kies je aanval.</div></div>
+  <button class="tile" onclick="bmStartHost()">
+    <span class="corner">${iconSVG("column",88,"currentColor")}</span>
+    <span class="ic">${iconSVG("helmet",44,"currentColor")}</span>
+    <h3>Gevecht starten — docent</h3>
+    <p>Kies woorden, verdeel teams en start het gevecht.</p>
+  </button>
+  <button class="tile" onclick="go('battleIdentity')">
+    <span class="ic">${iconSVG("shield",44,"currentColor")}</span>
+    <h3>Meedoen — leerling</h3>
+    <p>Meld je aan en doe mee aan het gevecht van de docent.</p>
+  </button>
+  ${!hasFirebase?`<div class="panel"><div class="note warn">Firebase is vereist voor Battle Mode (identiteitssysteem + realtime sync).</div></div>`:""}
+  ${foot()}`);
+};
+function bmStartHost(){
+  if(!hasFirebase){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
+  ROLE="host"; DRAFT.game="battle"; go("hostSource");
+}
+
+/* ---- SCHERM: battleIdentity ---- */
+SCREENS.battleIdentity = function(){
+  if(!hasFirebase){ toast("Firebase vereist","Battle Mode vereist Firebase."); go("battleHome"); return; }
+  const saved=bmIdentLoad();
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Aanmelden</h2></div>
+  ${saved?`
+  <div class="panel" style="text-align:center">
+    <div style="margin-bottom:10px">${avatarHTML(saved.avatar||P.avatar,saved.color||P.color,54)}</div>
+    <div style="font-size:22px">${esc(saved.name)}</div>
+    <div class="note" style="margin-top:4px">${esc(saved.klascode)} · ${esc(saved.leerlingcode)}</div>
+    <div class="btnrow" style="margin-top:16px;justify-content:center">
+      <button class="btn btn-gold lg" onclick="bmIdentContinue()">Verdergaan</button>
+      <button class="btn btn-ghost" onclick="bmIdentSwitch()">Andere leerling?</button>
+    </div>
+  </div>
+  `:`
+  <div class="panel">
+    <label class="fld">Klascode (van de docent)</label>
+    <input id="bmKlas" type="text" placeholder="bv. LATIJN3B" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+    <label class="fld" style="margin-top:12px">Leerlingcode (zelf gekozen)</label>
+    <input id="bmLcode" type="text" placeholder="bv. marcus42">
+    <label class="fld" style="margin-top:12px">Weergavenaam</label>
+    <input id="bmNaam" type="text" placeholder="bv. Marcus">
+  </div>
+  <div id="bmIdentErr" class="note warn" style="display:none;margin-bottom:10px"></div>
+  <button class="btn btn-gold btn-block lg" onclick="bmIdentLogin()">Aanmelden</button>
+  `}
+  ${foot()}`);
+};
+async function bmIdentLogin(){
+  const klas=(el("bmKlas")?.value||"").trim().toUpperCase();
+  const lcode=(el("bmLcode")?.value||"").trim().toLowerCase();
+  const name=(el("bmNaam")?.value||"").trim();
+  const err=el("bmIdentErr");
+  if(!klas||!lcode||!name){if(err){err.textContent="Vul alle velden in.";err.style.display="";}return;}
+  if(err)err.style.display="none";
+  try{
+    let data=await bmIdentGet(klas,lcode);
+    if(!data)data=await bmIdentCreate(klas,lcode,name);
+    BM_IDENT={klascode:klas,leerlingcode:lcode,...data,name};
+    bmIdentSave({klascode:klas,leerlingcode:lcode,name,avatar:data.avatar,color:data.color});
+    go("battleJoin");
+  }catch(e){if(err){err.textContent="Aanmelden mislukt — controleer je internetverbinding.";err.style.display="";}}
+}
+async function bmIdentContinue(){
+  const saved=bmIdentLoad(); if(!saved){SCREENS.battleIdentity();return;}
+  BM_IDENT=saved;
+  try{const d=await bmIdentGet(saved.klascode,saved.leerlingcode);if(d)BM_IDENT={...saved,...d};}catch(e){}
+  go("battleJoin");
+}
+function bmIdentSwitch(){bmIdentClear();BM_IDENT=null;SCREENS.battleIdentity();}
+
+/* ---- SCHERM: battleHostSettings ---- */
+SCREENS.battleHostSettings = function(){
+  if(!BM_META)BM_META={};
+  const ah=BM_META.armyHealth||100, at=BM_META.answerTimer||10, adp=BM_META.adaptive!==false;
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('hostSource')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle — Instellingen</h2></div>
+  <div class="panel">
+    <label class="fld">Legersterkte per team</label>
+    <div class="chips">${[50,100,150,200].map(n=>`<button class="chip ${ah===n?"on":""}" onclick="BM_META.armyHealth=${n};SCREENS.battleHostSettings()">${n}</button>`).join("")}</div>
+  </div>
+  <div class="panel">
+    <label class="fld">Antwoordtijd per ronde</label>
+    <div class="chips">${[8,10,12,15].map(n=>`<button class="chip ${at===n?"on":""}" onclick="BM_META.answerTimer=${n};SCREENS.battleHostSettings()">${n}s</button>`).join("")}</div>
+  </div>
+  <div class="panel">
+    <label class="fld">Adaptief leren</label>
+    <div class="chips">
+      <button class="chip ${adp?"on":""}" onclick="BM_META.adaptive=true;SCREENS.battleHostSettings()">Aan</button>
+      <button class="chip ${!adp?"on":""}" onclick="BM_META.adaptive=false;SCREENS.battleHostSettings()">Uit</button>
+    </div>
+    <div class="note" style="margin-top:8px">Fout beantwoorde woorden komen voor die leerling vaker terug.</div>
+  </div>
+  <button class="btn btn-gold btn-block lg" onclick="bmCreateRoom()">Gevecht aanmaken</button>
+  ${foot()}`);
+};
+
+/* ---- KAMER AANMAKEN ---- */
+async function bmCreateRoom(){
+  const pool=buildPool(DRAFT);
+  if(pool.length<4){toast("Te weinig woorden","Kies een groter bereik of voeg meer woorden toe.");return;}
+  POOL=pool;
+  if(!BM_META)BM_META={};
+  const ah=BM_META.armyHealth||100;
+  const meta={game:"battle",lang:DRAFT.lang,source:DRAFT.source,fromN:DRAFT.fromN,toN:DRAFT.toN,
+    cat:DRAFT.cat,customText:DRAFT.customText||"",armyHealth:ah,
+    answerTimer:BM_META.answerTimer||10,adaptive:BM_META.adaptive!==false,status:"lobby"};
+  BM_META=meta;
+  let code=code4();
+  for(let i=0;i<5;i++){const ex=await FBNet.exists(code);if(!ex)break;code=code4();}
+  BM_CODE=CODE=code;
+  await fbDB.ref("rooms/"+code).set({
+    meta,pool,
+    state:{status:"lobby",round:null,winner:null},
+    teams:{A:{health:ah,maxHealth:ah},B:{health:ah,maxHealth:ah}},
+    players:{},log:{}
+  });
+  go("battleHostLobby");
+}
+
+/* ---- SCHERM: battleHostLobby ---- */
+SCREENS.battleHostLobby = function(){
+  H(brand(false)+`
+  <div class="scrhead"><button class="back" onclick="leaveAll();bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle Lobby</h2></div>
+  <div class="codecard">
+    <div class="lbl">Spelcode — geef dit aan de klas</div>
+    <div class="code">${BM_CODE}</div>
+  </div>
+  <div class="panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <h3 style="margin:0">Spelers <span id="bmLN"></span></h3>
+      <button class="btn btn-ghost" style="padding:9px 14px" onclick="bmAutoTeams()">⚖ Teams</button>
+    </div>
+    <div class="plist" id="bmPlist"></div>
+  </div>
+  <button class="btn btn-gold btn-block lg" id="bmSB" onclick="bmStartGame()" disabled>Start het gevecht</button>
+  ${foot()}`);
+  const rP=fbDB.ref("rooms/"+BM_CODE+"/players"), fP=rP.on("value",s=>{BM_PLAYERS=s.val()||{};bmRenderHostLobby();});
+  const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"), fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};});
+  BM_UNSUBS=[()=>rP.off("value",fP),()=>rT.off("value",fT)];
+};
+function bmRenderHostLobby(){
+  const ln=el("bmLN"); if(ln)ln.textContent="("+Object.keys(BM_PLAYERS).length+")";
+  const pl=el("bmPlist"); if(!pl)return;
+  pl.innerHTML=Object.values(BM_PLAYERS).map(p=>`<span class="ptag">
+    ${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],30)} ${esc(p.name)}
+    ${p.team?`<span class="pill" style="background:${p.team==="A"?"var(--teamA)":"var(--teamB)"};border:none">${p.team==="A"?"Rood":"Blauw"}</span>`:""}
+    ${p.class?`<span class="pill">${bmClsName(p.class)}</span>`:""}
+  </span>`).join("")||`<div class="note">Wachten op spelers…</div>`;
+  const sb=el("bmSB"); if(sb)sb.disabled=Object.keys(BM_PLAYERS).length<2;
+}
+function bmAutoTeams(){
+  const pids=shuffle(Object.keys(BM_PLAYERS)),up={};
+  pids.forEach((pid,i)=>{up[pid+"/team"]=i%2===0?"A":"B";});
+  fbDB.ref("rooms/"+BM_CODE+"/players").update(up);
+}
+async function bmStartGame(){
+  if(Object.keys(BM_PLAYERS).length<2){toast("Te weinig spelers","Wacht op minstens 2 deelnemers.");return;}
+  const unassigned=Object.keys(BM_PLAYERS).filter(pid=>!BM_PLAYERS[pid]?.team);
+  if(unassigned.length)bmAutoTeams();
+  await new Promise(r=>setTimeout(r,300));
+  await bmDistributeQs(1);
+  go("battleHostGame");
+}
+
+/* ---- VRAGEN VERDELEN (host) ---- */
+async function bmDistributeQs(roundN){
+  const pids=Object.keys(BM_PLAYERS); if(!pids.length)return;
+  const at=BM_META?.answerTimer||10;
+  const up={};
+  for(const pid of pids){
+    const pool=bmPersonalPool(pid,POOL);
+    up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
+    up["players/"+pid+"/answeredRound"]=-1;
+    up["players/"+pid+"/lockedAction"]=null;
+  }
+  up["state"]={status:"playing",round:{n:roundN,phase:"question",deadline:Date.now()+at*1000},winner:null};
+  await fbDB.ref("rooms/"+BM_CODE).update(up);
+}
+function bmPersonalPool(pid,pool){
+  if(!BM_META?.adaptive)return pool;
+  const missed=BM_MISSED[pid]||{};
+  const w=[...pool];
+  pool.forEach(word=>{const c=missed[word.la]||0;for(let i=0;i<Math.min(c,3);i++)w.push(word);});
+  return w.length?w:pool;
+}
+
+/* ---- SCHERM: battleHostGame ---- */
+SCREENS.battleHostGame = function(){
+  H(brand(false)+`
+  <div class="scrhead">
+    <button class="back" onclick="bmEndGame()">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>⚔️ Battle Mode</h2><span class="pill">code ${BM_CODE}</span>
+  </div>
+  <div id="bmHR"></div>${foot()}`);
+  const rS=fbDB.ref("rooms/"+BM_CODE+"/state"),fS=rS.on("value",s=>{BM_STATE=s.val()||{};bmHostRender();if(BM_STATE.status==="finished")bmHostResult();});
+  const rP=fbDB.ref("rooms/"+BM_CODE+"/players"),fP=rP.on("value",s=>{BM_PLAYERS=s.val()||{};bmHostRender();});
+  const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmHostRender();});
+  BM_UNSUBS=[()=>rS.off("value",fS),()=>rP.off("value",fP),()=>rT.off("value",fT)];
+  bmHostStartTimer();
+};
+function bmHostRender(){
+  const root=el("bmHR"); if(!root)return;
+  const round=BM_STATE.round||{};
+  const tl=round.deadline?Math.max(0,Math.round((round.deadline-Date.now())/1000)):0;
+  const phase=round.phase==="question"?"Vraagfase":round.phase==="action"?"Actiefase":"—";
+  const answered=Object.values(BM_PLAYERS).filter(p=>p.answeredRound===round.n).length;
+  const locked=Object.values(BM_PLAYERS).filter(p=>p.lockedAction).length;
+  const total=Object.keys(BM_PLAYERS).length;
+  const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
+  root.innerHTML=`
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+      <span class="pill">Ronde ${round.n||"—"}</span>
+      <span class="pill">${phase}</span>
+      <span style="color:var(--hi-bright);font-size:18px">${tl}s</span>
+    </div>
+    ${bmArmyBarHTML("A","🔴 Rood",tA)}
+    <div style="text-align:center;color:var(--muted);font-size:11px;padding:4px 0">vs</div>
+    ${bmArmyBarHTML("B","🔵 Blauw",tB)}
+    <div class="note" style="margin-top:8px">
+      ${round.phase==="question"?`Beantwoord: ${answered} / ${total}`:""}
+      ${round.phase==="action"?`Actie vergrendeld: ${locked} / ${total}`:""}
+    </div>
+  </div>
+  <div class="panel"><div style="display:flex;flex-wrap:wrap;gap:8px">
+    ${Object.values(BM_PLAYERS).map(p=>`<span class="ptag">
+      ${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],22)}
+      <span style="font-size:12px">${esc(p.name)}</span>
+      ${round.phase==="question"&&p.answeredRound===round.n?`<span style="color:var(--green-bright)">✓</span>`:""}
+      ${round.phase==="action"&&p.lockedAction?`<span>⚔</span>`:""}
+    </span>`).join("")}
+  </div></div>
+  <button class="btn btn-ghost btn-block" onclick="bmEndGame()">Gevecht beëindigen</button>`;
+}
+function bmArmyBarHTML(team,nm,d){
+  const pct=d.maxHealth?Math.round((d.health/d.maxHealth)*100):0;
+  const col=team==="A"?"var(--teamA)":"var(--teamB)";
+  return `<div><div style="display:flex;justify-content:space-between;margin-bottom:4px">
+    <span style="color:${col}">${nm}</span><span style="font-size:14px">${d.health}/${d.maxHealth}</span>
+  </div><div style="height:14px;border-radius:7px;background:rgba(0,0,0,.4);border:1px solid var(--stone4);overflow:hidden">
+    <div style="height:100%;width:${pct}%;background:${col};transition:width .4s"></div>
+  </div></div>`;
+}
+function bmClsName(id){const c=BM_CLASSES.find(x=>x.id===id);return c?c.nm:id;}
+
+/* ---- HOST TIMER ---- */
+function bmHostStartTimer(){
+  if(_bmTicking)return; _bmTicking=true;
+  BM_PHASE_TIMER=setInterval(bmTick,500);
+}
+async function bmTick(){
+  if(!BM_STATE.round||BM_STATE.status!=="playing"||BM_RESOLVING)return;
+  const{phase,deadline,n}=BM_STATE.round;
+  if(Date.now()<deadline)return;
+  clearInterval(BM_PHASE_TIMER);BM_PHASE_TIMER=null;_bmTicking=false;
+  if(phase==="question"){
+    await fbDB.ref("rooms/"+BM_CODE+"/state/round").update({phase:"action",deadline:Date.now()+10000});
+    bmHostStartTimer();
+  } else if(phase==="action"){
+    await bmResolve(n);
+  }
+}
+
+/* ---- RESOLUTIE (host-autoritair) ---- */
+async function bmResolve(roundN){
+  BM_RESOLVING=true;
+  try{
+    const players=BM_PLAYERS;
+    let dmgA=0,dmgB=0,healA=0,healB=0,shldA=0,shldB=0;
+    const events=[];
+    for(const[pid,p]of Object.entries(players)){
+      const action=p.lockedAction; if(!action)continue;
+      const cls=BM_CLASSES.find(c=>c.id===p.class);
+      const isA=p.team==="A"; const cost=action.cost||0;
+      const be=Math.max(0,(p.be||0)-cost);
+      if(action.type==="aanval"){
+        let dmg=5; if(cls?.id==="boogschutter")dmg++;
+        if(isA)dmgB+=dmg;else dmgA+=dmg;
+        await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update({damage:(p.damage||0)+dmg,be,lockedAction:null});
+        events.push({pid,type:"aanval",dmg,team:p.team});
+      } else if(action.type==="verdedig"){
+        let shld=3; if(cls?.id==="hopliet")shld++;
+        if(isA)shldA+=shld;else shldB+=shld;
+        const beBonus=cls?.id==="hopliet"?1:0;
+        await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update({be:be+beBonus,lockedAction:null});
+        events.push({pid,type:"verdedig",shld,team:p.team});
+      } else if(action.type==="heel"){
+        let heal=8; if(cls?.id==="priester")heal++;
+        if(isA)healA+=heal;else healB+=heal;
+        await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update({healing:(p.healing||0)+heal,be,lockedAction:null});
+        events.push({pid,type:"heel",heal,team:p.team});
+      }
+    }
+    const efA=Math.max(0,dmgA-shldB),efB=Math.max(0,dmgB-shldA);
+    const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
+    const newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-efA+healA));
+    const newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-efB+healB));
+    await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
+    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,dmgA:efA,dmgB:efB,healA,healB,newHA,newHB});
+    if(newHA<=0||newHB<=0){
+      await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:newHA<=0?"B":"A"});
+      return;
+    }
+    await bmDistributeQs(roundN+1);
+    bmHostStartTimer();
+  } finally{ BM_RESOLVING=false; }
+}
+function bmEndGame(){
+  if(fbDB)fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:"_stopped"});
+  cleanup();bmLeave();go("home");
+}
+function bmHostResult(){
+  cleanup();
+  const w=BM_STATE.winner;
+  const all=Object.values(BM_PLAYERS);
+  const topDmg=all.length?all.reduce((a,b)=>(a.damage||0)>=(b.damage||0)?a:b):null;
+  const topAcc=all.filter(p=>(p.correct||0)+(p.wrong||0)>0).sort((a,b)=>
+    ((b.correct||0)/((b.correct||0)+(b.wrong||0)))-((a.correct||0)/((a.correct||0)+(a.wrong||0))))[0]||null;
+  const ov=el("overlay"); if(!ov)return;
+  ov.innerHTML=`<div class="modal">
+    <div class="big">${medalSVG("laurel",120)}</div>
+    <h2>${w==="A"?"🔴 Rood wint!":w==="B"?"🔵 Blauw wint!":"Gevecht gestopt"}</h2>
+    <div style="margin:14px 0">
+      ${topDmg?`<div class="podline"><span class="av">${avatarHTML(topDmg.avatar||"helmet",topDmg.color||COLORS[0],32)}</span><span class="nm">⚔️ Meeste schade</span><span class="sc">${esc(topDmg.name)} — ${topDmg.damage||0}</span></div>`:""}
+      ${topAcc?`<div class="podline"><span class="av">${avatarHTML(topAcc.avatar||"helmet",topAcc.color||COLORS[0],32)}</span><span class="nm">📚 Scholar</span><span class="sc">${esc(topAcc.name)} — ${topAcc.correct||0}/${(topAcc.correct||0)+(topAcc.wrong||0)}</span></div>`:""}
+    </div>
+    <button class="btn btn-gold btn-block" onclick="closeOverlay();bmLeave();go('home')">Terug</button>
+  </div>`;
+  ov.classList.add("show");beep("win");
+}
+
+/* ---- SCHERM: battleJoin ---- */
+SCREENS.battleJoin = function(){
+  if(!BM_IDENT){go("battleIdentity");return;}
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Meedoen</h2></div>
+  <div class="panel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      ${avatarHTML(BM_IDENT.avatar||P.avatar,BM_IDENT.color||P.color,44)}
+      <div><div style="font-size:20px">${esc(BM_IDENT.name)}</div>
+        <div class="note">${esc(BM_IDENT.klascode)} · ${esc(BM_IDENT.leerlingcode)}</div></div>
+    </div>
+    <label class="fld">Spelcode van het bord</label>
+    <input id="bmJC" type="text" placeholder="ABCD" style="text-transform:uppercase;font-size:26px;text-align:center;letter-spacing:.2em" maxlength="4" oninput="this.value=this.value.toUpperCase()">
+    <div id="bmJE" class="note warn" style="display:none;margin-top:8px"></div>
+  </div>
+  <button class="btn btn-gold btn-block lg" onclick="bmDoJoin()">Doe mee</button>
+  ${foot()}`);
+};
+async function bmDoJoin(){
+  const code=(el("bmJC")?.value||"").trim().toUpperCase();
+  const err=el("bmJE");
+  if(code.length<3){if(err){err.textContent="Voer de spelcode in.";err.style.display="";}return;}
+  if(err)err.style.display="none";
+  let meta;
+  try{const s=await fbDB.ref("rooms/"+code+"/meta").once("value");meta=s.val();}
+  catch(e){if(err){err.textContent="Kan kamer niet vinden — controleer je internetverbinding.";err.style.display="";}return;}
+  if(!meta||meta.game!=="battle"){if(err){err.textContent="Geen Battle Mode spel met code "+code+".";err.style.display="";}return;}
+  if(meta.status==="finished"){if(err){err.textContent="Dit spel is al afgelopen.";err.style.display="";}return;}
+  BM_CODE=CODE=code;BM_META=meta;
+  const pd={name:BM_IDENT.name,color:BM_IDENT.color||P.color,avatar:BM_IDENT.avatar||P.avatar,
+    team:null,class:null,be:0,correct:0,wrong:0,damage:0,healing:0,
+    answeredRound:-1,lockedAction:null,online:true,
+    identityKey:BM_IDENT.klascode+":"+BM_IDENT.leerlingcode};
+  const ref=fbDB.ref("rooms/"+code+"/players").push();
+  ref.onDisconnect().update({online:false});
+  await ref.set(pd);BM_PID=ref.key;
+  go("battlePlayerLobby");
+}
+
+/* ---- SCHERM: battlePlayerLobby ---- */
+SCREENS.battlePlayerLobby = function(){
+  H(brand(false)+`
+  <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle Lobby</h2></div>
+  <div class="panel" style="text-align:center">
+    ${avatarHTML(BM_IDENT?.avatar||P.avatar,BM_IDENT?.color||P.color,54)}
+    <div style="font-size:20px;margin-top:8px">${esc(BM_IDENT?.name||"")}</div>
+    <div class="note">Spelcode: ${BM_CODE}</div>
+  </div>
+  <div class="panel">
+    <div class="eyebrow l">Kies je klasse</div>
+    ${BM_CLASSES.map(c=>`
+      <button class="tile" style="margin-bottom:8px;padding:14px 16px" onclick="bmPickClass('${c.id}')">
+        <div style="display:flex;align-items:center;gap:12px">
+          ${iconSVG(c.icon,32,c.color)}<div>
+            <div style="font-size:16px;font-weight:700">${c.nm}</div>
+            <div class="note">${c.passive}</div>
+          </div>
+          <span id="bmCC_${c.id}" style="margin-left:auto;font-size:20px;display:none">✅</span>
+        </div>
+      </button>`).join("")}
+  </div>
+  <div class="note" style="text-align:center">Wachten tot de docent het gevecht start…</div>
+  ${foot()}`);
+  const r=fbDB.ref("rooms/"+BM_CODE+"/state");
+  const f=r.on("value",s=>{const st=s.val()||{};if(st.status==="playing"){r.off("value",f);go("battlePlayerGame");}});
+  BM_UNSUBS=[()=>r.off("value",f)];
+};
+function bmPickClass(cid){
+  BM_CLASSES.forEach(c=>{const e=el("bmCC_"+c.id);if(e)e.style.display="none";});
+  const ce=el("bmCC_"+cid);if(ce)ce.style.display="";
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({class:cid});
+  toast("Klasse gekozen",bmClsName(cid));
+}
+
+/* ---- SCHERM: battlePlayerGame ---- */
+SCREENS.battlePlayerGame = function(){
+  BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_MY_BE=0;BM_MY_Q=null;
+  H(brand(false)+`
+  <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ Battle Mode</h2></div>
+  <div id="bmPR"></div>${foot()}`);
+  const rS=fbDB.ref("rooms/"+BM_CODE+"/state"),fS=rS.on("value",s=>{BM_STATE=s.val()||{};if(BM_STATE.status==="finished"){cleanup();go("battleResult");}else bmPlayerRender();});
+  const rM=fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID),fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);}bmPlayerRender();});
+  const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
+  BM_UNSUBS=[()=>rS.off("value",fS),()=>rM.off("value",fM),()=>rT.off("value",fT)];
+};
+function bmPlayerRender(){
+  const root=el("bmPR"); if(!root)return;
+  const round=BM_STATE.round||{};
+  const tl=round.deadline?Math.max(0,Math.round((round.deadline-Date.now())/1000)):0;
+  const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
+  function miniBar(nm,team,d){
+    const pct=d.maxHealth?Math.round((d.health/d.maxHealth)*100):0;
+    const col=team==="A"?"var(--teamA)":"var(--teamB)";
+    return `<div style="display:flex;align-items:center;gap:8px">
+      <span style="color:${col};font-size:12px;width:36px">${nm}</span>
+      <div style="flex:1;height:8px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${col};transition:width .4s"></div>
+      </div><span style="font-size:11px;color:var(--muted)">${d.health}</span>
+    </div>`;
+  }
+  let content="";
+  if(round.phase==="question"){
+    if(BM_ANSWERED){
+      content=`<div class="panel" style="text-align:center"><div style="font-size:40px">✅</div><div class="note">Wachten op andere spelers…</div></div>`;
+    } else if(!BM_MY_Q||BM_MY_Q._round!==round.n){
+      fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID+"/currentQ").once("value").then(s=>{
+        if(s.val()){try{BM_MY_Q={...JSON.parse(s.val()),_round:round.n};BM_ANSWERED=false;bmPlayerRender();}catch(e){}}
+      });
+      content=`<div class="note" style="text-align:center">Vraag laden…</div>`;
+    } else {
+      const lang=BM_META?.lang==="el"?"Griekse":"Latijnse";
+      content=`
+      <div class="qcard">
+        <div class="kick">Vertaal het ${lang} woord</div>
+        <div class="word">${esc(BM_MY_Q.la)}</div>
+        ${BM_MY_Q.pos?`<div class="pos">${esc(BM_MY_Q.pos)}</div>`:""}
+      </div>
+      <div class="choices">
+        ${(BM_MY_Q.options||[]).map((opt,i)=>`
+          <button class="choice" id="bmC${i}" onclick="bmAnswer(${i})">
+            <span class="n">${i+1}</span>${esc(opt)}
+          </button>`).join("")}
+      </div>`;
+    }
+  } else if(round.phase==="action"){
+    if(BM_ACTION_LOCKED){
+      content=`<div class="panel" style="text-align:center"><div style="font-size:40px">⚔️</div><div class="note">Actie vergrendeld — resolutie volgt…</div></div>`;
+    } else {
+      content=`<div class="panel">
+        <div class="eyebrow l">Kies een actie — ${tl}s</div>
+        ${BM_ACTIONS.map(a=>`
+          <button class="tile" style="margin-bottom:8px;padding:14px 16px${BM_MY_BE<a.cost?";opacity:.4;pointer-events:none":""}" onclick="bmChooseAction('${a.id}',${a.cost})">
+            <div style="display:flex;align-items:center;gap:12px">
+              ${iconSVG(a.icon,30,"var(--hi)")}<div>
+                <div style="font-size:16px;font-weight:700">${a.nm} <span class="pill">${a.cost} BE</span></div>
+                <div class="note">${a.desc}</div>
+              </div>
+            </div>
+          </button>`).join("")}
+        <div class="note" style="margin-top:6px">Je hebt ${BM_MY_BE} ⚡ BE. Geen keuze = sparen.</div>
+      </div>`;
+    }
+  } else {
+    content=`<div class="panel" style="text-align:center"><div class="note">Resolutie…</div></div>`;
+  }
+  root.innerHTML=`
+  <div class="panel" style="margin-bottom:10px">
+    ${miniBar("Rood","A",tA)}<div style="height:6px"></div>${miniBar("Blauw","B",tB)}
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <span class="pill">Ronde ${round.n||"—"}</span>
+    <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE} BE</span>
+    <span style="color:var(--muted)">${tl}s</span>
+  </div>
+  ${content}`;
+}
+function bmAnswer(idx){
+  if(BM_ANSWERED||!BM_MY_Q)return;
+  BM_ANSWERED=true;
+  const ok=idx===BM_MY_Q.correctIdx;
+  [0,1,2,3].forEach(i=>{
+    const c=el("bmC"+i);if(!c)return;
+    if(i===BM_MY_Q.correctIdx)c.classList.add("correct");
+    else if(i===idx&&!ok)c.classList.add("wrong");
+    else c.classList.add("dim");
+    c.disabled=true;
+  });
+  beep(ok?"good":"bad");
+  const round=BM_STATE.round||{};
+  const at=BM_META?.answerTimer||10;
+  const timeLeft=round.deadline?Math.max(0,(round.deadline-Date.now())/1000):0;
+  const beGain=ok?(timeLeft>at/2?4:3):0;
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).once("value").then(s=>{
+    const p=s.val()||{};
+    fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
+      answeredRound:round.n||0,
+      be:(p.be||0)+beGain,
+      correct:ok?(p.correct||0)+1:(p.correct||0),
+      wrong:!ok?(p.wrong||0)+1:(p.wrong||0)
+    });
+  });
+}
+function bmChooseAction(type,cost){
+  if(BM_ACTION_LOCKED||BM_MY_BE<cost)return;
+  BM_ACTION_LOCKED=true;
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type,cost}});
+  toast("Vergrendeld",BM_ACTIONS.find(a=>a.id===type)?.nm||type);
+  bmPlayerRender();
+}
+
+/* ---- SCHERM: battleResult ---- */
+SCREENS.battleResult = function(){
+  const w=BM_STATE.winner;
+  H(brand(false)+`
+  <div class="scrhead"><button class="back" onclick="bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Gevecht voorbij</h2></div>
+  <div class="panel" style="text-align:center">
+    <div style="font-size:56px">${w==="A"?"🔴":w==="B"?"🔵":"⚔️"}</div>
+    <h2 style="color:var(--hi-bright);margin:8px 0">${w==="A"?"Rood wint!":w==="B"?"Blauw wint!":"Gevecht gestopt"}</h2>
+  </div>
+  <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="bmLeave();go('home')">Terug naar hoofdmenu</button>
+  ${foot()}`);
+};
+
+/* ---- ARCHITECTUURHAKEN (M3+, leeg gelaten) ---- */
+// function bmCalcMorale(team){}      // M3: moreel geeft BE-bonus
+// function bmCalcMomentum(round){}   // M3: doorlopende reeks correcte antwoorden
+// function bmCalcSupply(round){}     // M4: voorraden beperken acties per ronde
+// function bmCalcFortifications(){}  // M4: kasteelmuren als HP-buffer
+// function bmHeroHealth(pid){}       // M5: eigen HP per leerling
+// function bmTargetSelection(){}     // M5: doelkeuze per aanval
+// function bmRespawn(pid){}          // M5: terugkomen na uitschakeling
+// function bmCastleSiege(){}         // M4: burchtstorm-einddoel
+// function bmObjectives(){}          // M5: neutraliseren van doelpunten op de kaart
+// function bmFogOfWar(pid){}         // M6: beperkt zichtveld per faction
+// function bmCampaign(){}            // M6: meerdere gevechten, één campagne
+// function bmGuilds(){}              // M6: permanente gilden / facties
+// function bmRanked(){}              // M7: competitief seizoensysteem
 
 /* ============================================================================
    INIT
