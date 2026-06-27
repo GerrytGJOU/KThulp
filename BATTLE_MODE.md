@@ -325,7 +325,7 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 // function bmFogOfWar(pid){}         // M6: beperkt zichtveld per factie
 // function bmCampaign(){}            // M6: meerdere gevechten, één campagne
 // function bmGuilds(){}              // M6: permanente gilden / facties
-// function bmRanked(){}              // M7: competitief seizoensysteem
+// function bmRanked(){}              // toekomstig: competitief seizoensysteem
 ```
 
 ---
@@ -340,7 +340,7 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 | **M4** | Factie/thema-systeem · 6 startfacties · CSS-variabelen theming · docentkeuze via dropdown | ✅ Gebouwd |
 | **M5** | Slagveld-animaties · formatie-layout · log-gestuurde client-side animaties · `meta.animations` schakelaar | ✅ Gebouwd |
 | **M6** | Avatar-aanpassing · XP/niveau 1–20 · class mastery ★–★★★★★ · achievements | ✅ Gebouwd |
-| M7 | Ranked seizoen · leaderboard | — |
+| **M7** | Snel setup-scherm · Live dashboard (avatar-kaarten, participatiebalk, pauze/sla over/herstart) · Award-ceremony · Analytics (HP-chart, top 5 gemiste woorden, leerlingentabel) · CSV-export | ✅ Gebouwd |
 | M8 | Campaign builder voor docenten | — |
 
 ---
@@ -427,6 +427,69 @@ Categorieën: `first_blood`, `scholar`, `unbreakable`, `versatile`, `veteran` + 
 
 - **`battleProfile`** — niveau, XP-balk, class mastery per klasse, achievement-overzicht
 - **`battleAvatarEdit`** — live SVG-preview per onderdeel, vergrendelde opties zichtbaar maar disabled
+
+---
+
+## M7 — Docent-dashboard & Analytics ✅
+
+### Setup-scherm (< 30 sec)
+
+Twee zones:
+1. **Snelle instellingen** (altijd zichtbaar): factie/thema, antwoordtijd, knop "Gevecht aanmaken"
+2. **Geavanceerde instellingen** (inklapbaar via `BM_ADV_OPEN`): legersterkte, adaptief leren, combo's, mastery-bonussen, animaties, geluidseffecten
+
+### Live dashboard (`battleHostGame`)
+
+- **Avatar-kaarten** (`.bm-pcard`): inline SVG-avatar + naam + klasse per speler
+- **Statuspunt** (`.bm-pdot`): groen = antwoord gegeven · goud = actie vergrendeld · grijs = wacht
+- **Participatiebalk**: visuele voortgangsbalk + "X/Y (Z%)" teller
+- **Controlepaneel** (host-only):
+  - ⏸ Pauzeer / ▶ Hervatten — bevriest deadline in Firebase, herstelt resterende tijd
+  - ⏭ Sla ronde over — roept `bmDistributeQs(n+1)` aan
+  - 🔄 Vervang vraag — nieuwe vraagdistributie voor dezelfde rondenummering
+  - ↩ Herstart ronde — reset `answeredRound` + `lockedAction` van alle spelers, nieuwe deadline
+  - ✕ Beëindig gevecht
+
+### Award-ceremony (`battleHostAwards`)
+
+Sequentieel onthullen (~3,5s per kaart) met `bmNextAward()`:
+1. Winnaar-overlay (animatie)
+2. Zes awards berekend via `bmComputeAwards(players, log)`:
+   - ⚔️ Meeste Schade — hoogste `damage`
+   - 🛡️ Beste Verdediger — meeste schild-events in log
+   - 💚 Beste Support — hoogste `healing`
+   - 📚 Scholar — hoogste correctheid (min. 3 vragen)
+   - ⚡ Snelste Denker — laagste gemiddelde responstijd (min. 2 rondes)
+   - 🤝 Beste Teamspeler — meeste combo-participaties (via `pids` in log-events)
+3. Doorsturen naar Analytics
+
+Data-flow: `BM_PLAYERS` wordt bewaard als `BM_AWARD_DATA` vóór `cleanup()`. Log wordt async opgehaald uit `/rooms/{code}/log`.
+
+### Analytics (`battleHostAnalytics`)
+
+**Klas-tab:**
+- SVG lijndiagram HP-verloop per ronde (`bmHPChart`) — geen externe libraries
+- Gemiddelde accuratesse klasse
+- Top 5 gemiste woorden (opgeteld over alle spelers, uit `player.missed`)
+
+**Leerlingen-tab:**
+- Tabel gesorteerd op accuratesse; klikbaar voor detailpopup
+- Detailpopup: avatar, accuratesse, gem. responstijd, schade, healing, top-5 gemiste woorden
+
+**CSV-export** via `bmExportCSV()` (SheetJS) — kolommen: Naam, Klas, Klasse, Goed%, Goed, Fout, Gemiste woorden, Schade, Healing, Rondes actief.
+
+### Datamodel-uitbreidingen (M7)
+
+Nieuw per player-node in Firebase:
+- `missed/{wordKey}/c` — aantal keer fout
+- `missed/{wordKey}/p` — originele Latijnse/Griekse vorm
+- `missed/{wordKey}/a` — correct antwoord
+- `totalResponseMs` — cumulatieve responstijd in ms
+- `respondCount` — aantal rondes beantwoord
+
+Nieuw per log-entry:
+- `participants` — aantal spelers dat de ronde beantwoordde
+- `events[].pids` — array van PIDs bij combo-events
 
 ---
 
