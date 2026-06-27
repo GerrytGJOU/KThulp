@@ -103,14 +103,52 @@ Waarden in `BM_COMBOS` in de code (aanpasbaar).
 
 ---
 
-## Facties (M6)
+## Facties / Thema's (M4)
+
+De docent kiest vóór het gevecht een **factie**. Dit herthemert de volledige presentatie — teamnamen, kleuren, iconen, slagvelduitstraling — terwijl de spellogica identiek blijft.
+
+### Startfacties (`BM_FACTIONS` in de code)
+
+| Id | Naam | Team A | Team B |
+|---|---|---|---|
+| `rome_gaul` | Romeinen vs Galliërs *(standaard)* | Legio Romani (rood) | Gallische Stam (groen) |
+| `athene_sparta` | Athene vs Sparta | Atheners (blauw) | Spartanen (donkerrood) |
+| `grieken_perzen` | Grieken vs Perzen | Hellenen (blauw) | Perzen (paars) |
+| `rome_carthago` | Romeinen vs Carthago | Legio Romani (rood) | Carthago (goud) |
+| `grieken_trojanen` | Grieken vs Trojanen | Grieken (blauw) | Trojanen (goud) |
+| `goden_titanen` | Goden vs Titanen | Olympiërs (goud) | Titanen (dieppaars) |
+
+### CSS-themasysteem
+
+Elke factie overschrijft CSS-variabelen op `:root`:
+- `--teamA`, `--glowA`: kleur en glow van team A
+- `--teamB`, `--glowB`: kleur en glow van team B
+- Optioneel: `--stone`/`--stone2`/`--stone3`/`--stone4` (bijv. Goden vs Titanen gebruikt een paars steenpalet)
+
+`bmApplyTheme(id)` slaat de huidige waarden op en overschrijft ze. `bmClearTheme()` zet ze terug (aangeroepen door `bmLeave()`). Alle M1–M3-schermen pikken de theming automatisch op via de CSS-variabelen.
+
+### Klasse-labeloverschrijvingen
+
+Facties kunnen optioneel weergavenamen van klassen aanpassen (`classLabels`), bijv. `priester → Orakel` bij Goden vs Titanen. De onderliggende class-id's blijven ongewijzigd.
+
+### Opslag
+
+De geselecteerde factie wordt opgeslagen als `meta.theme` in de Firebase-kamer (host-gestuurd). Leerlingen ontvangen de theming automatisch via hun bestaande `meta`-abonnement.
+
+### Nieuwe factie toevoegen
+
+Voeg één entry toe aan `BM_FACTIONS` — geen andere code wijzigen.
+
+---
+
+## Facties (M6 — persistent)
 
 Langdurige groepen waartoe leerlingen behoren, ongeacht het actuele gevecht. Elke factie heeft een eigen identiteit en faction-klasse:
 
 | Factie | Sfeer | Exclusieve klasse |
 |---|---|---|
 | Legio Romani | Orde, discipline | Centurio |
-| Agora Athenai | Kennis, list | Farao (nee, Redenaar) |
+| Agora Athenai | Kennis, list | Redenaar |
 | Sparta Kryptos | Kracht, geheimhouding | Spartaan |
 | Memphis Papyri | Magie, herstel | Farao |
 
@@ -138,7 +176,7 @@ Faction-XP en -rang zijn persistent (blijven over gevechtssessies heen).
 
 ```
 /rooms/{code}/
-  meta/       game:"battle", lang, armyHealth, answerTimer, adaptive, status
+  meta/       game:"battle", lang, armyHealth, answerTimer, adaptive, theme, status
   pool/       [array van woordobjecten]
   state/      status, round:{ n, phase, deadline }, winner
   teams/      A:{ health, maxHealth }  B:{ health, maxHealth }
@@ -223,7 +261,8 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 | **M1** | Identiteit · 3 klassen · 3 acties · rondelus · host panel · eindscherm | ✅ Gebouwd |
 | **M2** | Klaslokaal-bestendig: harde deadlines · idempotente resolutie · reconnect · late join · scoped listeners · Chromebook-perf | ✅ Gebouwd |
 | **M3** | 8 klassen · data-gedreven abilities · synergie · combo's · class mastery | ✅ Gebouwd |
-| M4 | Kasteelmuren · voorraden · burchtstorm-einddoel | — |
+| **M4** | Factie/thema-systeem · 6 startfacties · CSS-variabelen theming · docentkeuze via dropdown | ✅ Gebouwd |
+| M5 | Kasteelmuren · voorraden · burchtstorm-einddoel | — |
 | M5 | Eigen HP · doelkeuze · respawn · doelpunten op kaart | — |
 | M6 | Facties · campagne · fog of war | — |
 | M7 | Ranked seizoen · leaderboard | — |
