@@ -428,6 +428,35 @@ body.greek .qcard .word{color:#143a5e}
 .bm-opt.on{border-color:var(--hi-bright);background:rgba(212,175,55,.14)}
 .bm-opt.locked{opacity:.4;cursor:not-allowed;filter:grayscale(.75)}
 .bm-opt .onm{font-size:10px;color:var(--muted);text-align:center;line-height:1.2;max-width:52px}
+
+/* ======================================================
+   BATTLE MODE M7 — DASHBOARD / AWARDS / ANALYTICS
+   ====================================================== */
+/* Spelerskaart in host-dashboard */
+.bm-pcard{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;
+  border-radius:10px;background:var(--stone3);border:1px solid var(--stone4);min-width:52px;position:relative}
+.bm-pname{font-size:10px;font-weight:700;text-align:center;max-width:56px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bm-pcls{font-size:9px;color:var(--muted);text-align:center}
+/* Status-bolletje per leerling */
+.bm-pdot{width:10px;height:10px;border-radius:50%;background:var(--stone4);border:2px solid var(--stone3);
+  position:absolute;top:3px;right:3px}
+.bm-pdot.on{background:var(--green-bright)}
+.bm-pdot.locked{background:var(--hi)}
+
+/* Award-kaart (award ceremony) */
+@keyframes bmAwardIn{from{opacity:0;transform:scale(.55) translateY(28px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.bm-award-card{display:flex;flex-direction:column;align-items:center;gap:4px;
+  padding:20px 24px;border-radius:16px;
+  background:linear-gradient(160deg,var(--stone3),var(--stone2));
+  border:2px solid var(--hi-dim);box-shadow:0 0 32px rgba(212,175,55,.2);
+  animation:bmAwardIn .55s cubic-bezier(.34,1.56,.64,1) forwards;text-align:center}
+
+/* Analytics-tabel */
+.bm-tbl{width:100%;border-collapse:collapse}
+.bm-tbl th{font-size:10px;color:var(--muted);text-align:left;padding:8px 12px;border-bottom:1px solid var(--stone4);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.bm-tbl td{padding:8px 10px;border-bottom:1px solid var(--stone4);font-size:12px;vertical-align:middle}
+.bm-tbl tr:last-child td{border-bottom:none}
+.bm-tbl tr:hover td{background:rgba(255,255,255,.03)}
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
 </head>
@@ -1911,47 +1940,68 @@ async function bmIdentContinue(){
 function bmIdentSwitch(){bmIdentClear();BM_IDENT=null;SCREENS.battleIdentity();}
 
 /* ---- SCHERM: battleHostSettings ---- */
+let BM_ADV_OPEN=false;
 SCREENS.battleHostSettings = function(){
   if(!BM_META)BM_META={};
-  const ah=BM_META.armyHealth||100, at=BM_META.answerTimer||10, adp=BM_META.adaptive!==false;
   const th=BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id;
   if(!BM_META.theme)BM_META.theme=th;
+  const at=BM_META.answerTimer||10;
+  const ah=BM_META.armyHealth||100;
+  const adp=BM_META.adaptive!==false;
+  const anim=BM_META.animations!==false;
+  const combos=BM_META.combos!==false;
+  const mastery=BM_META.masteryBonuses!==false;
+  const sfx=BM_META.sfx!==false;
+  const tog=(key,val)=>`BM_META.${key}=${val};SCREENS.battleHostSettings()`;
+  const chips=(key,vals,cur,fmt=v=>v)=>vals.map(v=>`<button class="chip ${cur===v?"on":""}" onclick="${tog(key,JSON.stringify(v))}">${fmt(v)}</button>`).join("");
+  const onoff=(key,cur)=>`<button class="chip ${cur?"on":""}" onclick="${tog(key,true)}">Aan</button><button class="chip ${!cur?"on":""}" onclick="${tog(key,false)}">Uit</button>`;
+  const fac=bmFaction(th);
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('hostSource')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle — Instellingen</h2></div>
   <div class="panel">
     <label class="fld">Factie / Thema</label>
-    <select id="bmThemeSel" style="width:100%;padding:10px 12px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:15px;font-family:inherit" onchange="BM_META.theme=this.value;SCREENS.battleHostSettings()">
+    <select style="width:100%;padding:10px 12px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:15px;font-family:inherit" onchange="BM_META.theme=this.value;SCREENS.battleHostSettings()">
       ${BM_FACTIONS.map(f=>`<option value="${f.id}"${th===f.id?" selected":""}>${f.nm}</option>`).join("")}
     </select>
-    <div class="note" style="margin-top:6px">
-      ${(()=>{const f=bmFaction(th);return `${iconSVG(f.teams.A.icon,14,f.cssVars["--teamA"]||"var(--teamA)")} ${f.teams.A.nm} vs ${iconSVG(f.teams.B.icon,14,f.cssVars["--teamB"]||"var(--teamB)")} ${f.teams.B.nm}`;})()}
-    </div>
-  </div>
-  <div class="panel">
-    <label class="fld">Legersterkte per team</label>
-    <div class="chips">${[50,100,150,200].map(n=>`<button class="chip ${ah===n?"on":""}" onclick="BM_META.armyHealth=${n};SCREENS.battleHostSettings()">${n}</button>`).join("")}</div>
+    <div class="note" style="margin-top:6px">${iconSVG(fac.teams.A.icon,13,fac.cssVars["--teamA"]||"var(--teamA)")} ${esc(fac.teams.A.nm)} vs ${iconSVG(fac.teams.B.icon,13,fac.cssVars["--teamB"]||"var(--teamB)")} ${esc(fac.teams.B.nm)}</div>
   </div>
   <div class="panel">
     <label class="fld">Antwoordtijd per ronde</label>
-    <div class="chips">${[8,10,12,15].map(n=>`<button class="chip ${at===n?"on":""}" onclick="BM_META.answerTimer=${n};SCREENS.battleHostSettings()">${n}s</button>`).join("")}</div>
+    <div class="chips">${chips("answerTimer",[8,10,12,15],at,v=>v+"s")}</div>
+  </div>
+  <button class="btn btn-gold btn-block lg" onclick="bmCreateRoom()">Gevecht aanmaken</button>
+  <button class="btn btn-ghost btn-block" onclick="BM_ADV_OPEN=!BM_ADV_OPEN;SCREENS.battleHostSettings()" style="margin-top:8px">
+    ${BM_ADV_OPEN?"▲":"▼"} Geavanceerde instellingen
+  </button>
+  ${BM_ADV_OPEN?`
+  <div class="panel" style="margin-top:8px">
+    <label class="fld">Legersterkte per team</label>
+    <div class="chips">${chips("armyHealth",[50,100,150,200],ah)}</div>
   </div>
   <div class="panel">
     <label class="fld">Adaptief leren</label>
-    <div class="chips">
-      <button class="chip ${adp?"on":""}" onclick="BM_META.adaptive=true;SCREENS.battleHostSettings()">Aan</button>
-      <button class="chip ${!adp?"on":""}" onclick="BM_META.adaptive=false;SCREENS.battleHostSettings()">Uit</button>
-    </div>
-    <div class="note" style="margin-top:8px">Fout beantwoorde woorden komen voor die leerling vaker terug.</div>
+    <div class="chips">${onoff("adaptive",adp)}</div>
+    <div class="note" style="margin-top:6px">Foute woorden komen vaker terug voor die leerling.</div>
+  </div>
+  <div class="panel">
+    <label class="fld">Combo-abilities</label>
+    <div class="chips">${onoff("combos",combos)}</div>
+    <div class="note" style="margin-top:6px">Stelt spelers in staat samen combo-aanvallen te doen.</div>
+  </div>
+  <div class="panel">
+    <label class="fld">Mastery-bonussen</label>
+    <div class="chips">${onoff("masteryBonuses",mastery)}</div>
+    <div class="note" style="margin-top:6px">★★★+ klassemastery geeft +1 starting BE.</div>
   </div>
   <div class="panel">
     <label class="fld">Slagveld-animaties</label>
-    <div class="chips">
-      <button class="chip ${BM_META.animations!==false?"on":""}" onclick="BM_META.animations=true;SCREENS.battleHostSettings()">Aan</button>
-      <button class="chip ${BM_META.animations===false?"on":""}" onclick="BM_META.animations=false;SCREENS.battleHostSettings()">Uit</button>
-    </div>
-    <div class="note" style="margin-top:8px">Schakel uit bij trage apparaten (Chromebook, oude tablets).</div>
+    <div class="chips">${onoff("animations",anim)}</div>
+    <div class="note" style="margin-top:6px">Schakel uit bij trage Chromebooks.</div>
   </div>
-  <button class="btn btn-gold btn-block lg" onclick="bmCreateRoom()">Gevecht aanmaken</button>
+  <div class="panel">
+    <label class="fld">Geluidseffecten</label>
+    <div class="chips">${onoff("sfx",sfx)}</div>
+  </div>`:""}
   ${foot()}`);
 };
 
@@ -1967,6 +2017,9 @@ async function bmCreateRoom(){
     answerTimer:BM_META.answerTimer||10,adaptive:BM_META.adaptive!==false,
     theme:BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id,
     animations:BM_META.animations!==false,
+    combos:BM_META.combos!==false,
+    masteryBonuses:BM_META.masteryBonuses!==false,
+    sfx:BM_META.sfx!==false,
     status:"lobby"};
   BM_META=meta;
   let code=code4();
@@ -2040,7 +2093,7 @@ async function bmDistributeQs(roundN){
     const cls=BM_CLASSES.find(c=>c.id===p.class);
     let beBonus=p.team==="A"?synA:synB;
     if(cls?.passive?.type==="be_passive") beBonus+=cls.passive.val;
-    beBonus+=(p.masteryBonus||0); // +1 BE bij mastery ★★★+
+    if(BM_META?.masteryBonuses!==false) beBonus+=(p.masteryBonus||0);
     const pool=bmPersonalPool(pid,POOL);
     up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
     up["players/"+pid+"/answeredRound"]=-1;
@@ -2077,7 +2130,7 @@ SCREENS.battleHostGame = function(){
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <span id="bmRndLabel" class="pill">Ronde —</span>
       <span id="bmPhaseLabel" class="pill">—</span>
-      <span id="bmTimer" style="color:var(--hi-bright);font-size:18px">—</span>
+      <span id="bmTimer" style="color:var(--hi-bright);font-size:18px;font-weight:700;min-width:36px;text-align:right">—</span>
     </div>
     <div id="bmField">
       <div id="bmFormA" class="bm-form"></div>
@@ -2089,17 +2142,35 @@ SCREENS.battleHostGame = function(){
       <div id="bmFormB" class="bm-form"></div>
       <div id="bmBfx"></div>
     </div>
-    <div id="bmStatusNote" class="note" style="margin-top:6px;text-align:center"></div>
+    <div style="margin-top:7px">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:2px">
+        <span id="bmStatusNote"></span>
+        <span id="bmPartPct" style="color:var(--green-bright)"></span>
+      </div>
+      <div style="height:5px;border-radius:3px;background:rgba(0,0,0,.4);overflow:hidden">
+        <div id="bmPartBar" style="height:100%;width:0%;background:var(--green-bright);transition:width .35s"></div>
+      </div>
+    </div>
   </div>
-  <div class="panel" style="padding:10px 12px"><div id="bmPlayerGrid" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
-  <button class="btn btn-ghost btn-block" onclick="bmEndGame()">Gevecht beëindigen</button>
+  <div class="panel" style="padding:8px 12px"><div id="bmPlayerGrid" style="display:flex;flex-wrap:wrap;gap:5px"></div></div>
+  <div class="panel" style="padding:8px 12px">
+    <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+      <button class="chip" id="bmPauseBtn" onclick="bmTogglePause()">⏸ Pauzeer</button>
+      <button class="chip" onclick="bmSkipRound()">⏭ Sla over</button>
+      <button class="chip" onclick="bmReplaceQ()">🔄 Vervang vraag</button>
+      <button class="chip" onclick="bmRestartRound()">↩ Herstart</button>
+      <button class="chip" style="margin-left:auto;background:rgba(90,18,12,.35);color:#e07060;border-color:rgba(90,18,12,.5)" onclick="bmEndGame()">✕ Beëindig</button>
+    </div>
+  </div>
   ${foot()}`);
-  // timer display only — apart van de game-logic tick (bmHostStartTimer op 500 ms)
+  // Timer-display (apart van game-logic tick)
   const timerInterval=setInterval(()=>{
     const round=BM_STATE.round||{};
+    const te=el("bmTimer");if(!te)return;
+    if(BM_PAUSED){te.textContent="⏸";return;}
     const tl=round.deadline?Math.max(0,Math.round((round.deadline-Date.now())/1000)):0;
-    const te=el("bmTimer");if(te)te.textContent=tl+"s";
-  },1000);
+    te.textContent=tl+"s";
+  },500);
   BM_UNSUBS=[()=>clearInterval(timerInterval)];
   const rS=fbDB.ref("rooms/"+BM_CODE+"/state"),fS=rS.on("value",s=>{
     BM_STATE=s.val()||{};
@@ -2133,29 +2204,45 @@ function bmHostUpdateArmies(){
 }
 function bmHostUpdatePlayers(){
   const round=BM_STATE.round||{};
+  const entries=Object.entries(BM_PLAYERS);
+  const total=entries.length;
+  const answered=entries.filter(([,p])=>p.answeredRound===round.n).length;
+
+  // Participatie-balk
+  const pct=total>0?Math.round(answered/total*100):0;
+  const pb=el("bmPartBar"); if(pb)pb.style.width=pct+"%";
+  const pp=el("bmPartPct"); if(pp)pp.textContent=answered+"/"+total+" ("+pct+"%)";
+
+  // Spelersgrid
   const grid=el("bmPlayerGrid");if(!grid)return;
-  grid.innerHTML=Object.values(BM_PLAYERS).map(p=>{
+  grid.innerHTML=entries.map(([,p])=>{
     const cls=BM_CLASSES.find(c=>c.id===p.class);
-    const col=cls?.color||p.color||COLORS[0];
-    return `<span class="ptag">
-      <span style="width:22px;height:22px;border-radius:50%;background:${col}33;display:inline-flex;align-items:center;justify-content:center;border:1px solid ${col}66">${iconSVG(cls?.icon||"helmet",14,col)}</span>
-      <span style="font-size:12px">${esc(p.name)}</span>
-      ${round.phase==="question"&&p.answeredRound===round.n?`<span style="color:var(--green-bright)">✓</span>`:""}
-      ${round.phase==="action"&&p.lockedAction?`<span>⚔</span>`:""}
-    </span>`;
+    const col=cls?.color||"var(--muted)";
+    const hasAnswered=p.answeredRound===round.n;
+    const hasLocked=!!p.lockedAction;
+    const dotCls=hasAnswered?"on":hasLocked?"locked":"";
+    return `<div class="bm-pcard" style="border-color:${col}44">
+      <div style="position:relative">
+        ${bmAvatarSVG(bmAvatarMerge(p.avatar),32)}
+        <span class="bm-pdot ${dotCls}"></span>
+      </div>
+      <div class="bm-pname">${esc(p.name)}</div>
+      <div class="bm-pcls" style="color:${col}">${esc(cls?.nm||"")}</div>
+    </div>`;
   }).join("");
+
   bmHostUpdateNote();
-  // Herbouw formatie wanneer klassen of teams wijzigen
   if(el("bmFormA"))bmBuildBattlefield();
 }
 function bmHostUpdateNote(){
   const round=BM_STATE.round||{};
   const note=el("bmStatusNote");if(!note)return;
-  const answered=Object.values(BM_PLAYERS).filter(p=>p.answeredRound===round.n).length;
-  const locked=Object.values(BM_PLAYERS).filter(p=>p.lockedAction).length;
-  const total=Object.keys(BM_PLAYERS).length;
-  if(round.phase==="question")note.textContent="Beantwoord: "+answered+" / "+total;
-  else if(round.phase==="action")note.textContent="Actie vergrendeld: "+locked+" / "+total;
+  const all=Object.values(BM_PLAYERS);
+  const answered=all.filter(p=>p.answeredRound===round.n).length;
+  const locked=all.filter(p=>p.lockedAction).length;
+  const total=all.length;
+  if(round.phase==="question")note.textContent="Beantwoord: "+answered+"/"+total;
+  else if(round.phase==="action")note.textContent="Actie vergrendeld: "+locked+"/"+total;
   else note.textContent="";
 }
 function bmArmyBarHTML(team,nm,d){
@@ -2445,7 +2532,7 @@ async function bmResolve(roundN){
         const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0};
         pUpd[pid]={...prev,be:Math.max(0,prev.be-(combo.cost||4)),lockedAction:null};
       }
-      events.push({type:"combo",comboId:combo.id,team:mt});
+      events.push({type:"combo",comboId:combo.id,team:mt,pids:[pa[0],pb[0]]});
     }
 
     // Pas 3: teamBE verdelen over alle teamgenoten
@@ -2471,7 +2558,8 @@ async function bmResolve(roundN){
     const newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-efB+for_.B.heal));
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
     const logWinner=newHA<=0?"B":newHB<=0?"A":null;
-    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner});
+    const roundParticipants=Object.values(players).filter(p=>p.answeredRound===roundN).length;
+    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants});
 
     // Mastery bijhouden in identities (fire-and-forget)
     bmUpdateMastery(players,pUpd,events);
@@ -2503,24 +2591,329 @@ function bmEndGame(){
   if(fbDB)fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:"_stopped"});
   cleanup();bmLeave();go("home");
 }
+
+/* ---- GEVECHTSCONTROLE (host-side, live) ---- */
+let BM_PAUSED=false, BM_PAUSED_DEADLINE=0;
+function bmTogglePause(){
+  const btn=el("bmPauseBtn");
+  if(!BM_PAUSED){
+    BM_PAUSED=true;
+    BM_PAUSED_DEADLINE=BM_STATE.round?.deadline||Date.now();
+    clearInterval(BM_PHASE_TIMER);BM_PHASE_TIMER=null;_bmTicking=false;
+    // Zet deadline ver weg zodat de leerling-timer niet afloopt
+    if(fbDB)fbDB.ref("rooms/"+BM_CODE+"/state/round/deadline").set(Date.now()+99999000);
+    if(btn)btn.textContent="▶ Hervatten";
+  } else {
+    BM_PAUSED=false;
+    const remainingMs=Math.max(3000,BM_PAUSED_DEADLINE-Date.now());
+    const newDeadline=Date.now()+remainingMs;
+    if(fbDB)fbDB.ref("rooms/"+BM_CODE+"/state/round/deadline").set(newDeadline);
+    BM_PAUSED_DEADLINE=0;
+    if(btn)btn.textContent="⏸ Pauzeer";
+    bmHostStartTimer();
+  }
+}
+async function bmSkipRound(){
+  if(!BM_STATE.round||BM_RESOLVING)return;
+  clearInterval(BM_PHASE_TIMER);BM_PHASE_TIMER=null;_bmTicking=false;BM_PAUSED=false;
+  await bmDistributeQs((BM_STATE.round.n||0)+1);
+  bmHostStartTimer();
+}
+async function bmReplaceQ(){
+  if(!BM_STATE.round||BM_RESOLVING)return;
+  clearInterval(BM_PHASE_TIMER);BM_PHASE_TIMER=null;_bmTicking=false;
+  await bmDistributeQs(BM_STATE.round.n||1);
+  bmHostStartTimer();
+}
+async function bmRestartRound(){
+  if(!BM_STATE.round||BM_RESOLVING)return;
+  const at=BM_META?.answerTimer||10;
+  const n=BM_STATE.round.n||1;
+  const up={"state/round/deadline":Date.now()+at*1000,"state/round/phase":"question"};
+  for(const pid of Object.keys(BM_PLAYERS)){
+    up["players/"+pid+"/answeredRound"]=-1;
+    up["players/"+pid+"/lockedAction"]=null;
+  }
+  clearInterval(BM_PHASE_TIMER);BM_PHASE_TIMER=null;_bmTicking=false;BM_PAUSED=false;
+  await fbDB.ref("rooms/"+BM_CODE).update(up);
+  bmHostStartTimer();
+}
+
+/* ---- EINDE GEVECHT → AWARD-CEREMONY ---- */
+let BM_AWARD_DATA=null,BM_AWARD_STEP=0,BM_AWARD_TIMER=null;
+let BM_LOG=null;
+
 function bmHostResult(){
   cleanup();
-  const w=BM_STATE.winner;
-  const all=Object.values(BM_PLAYERS);
-  const topDmg=all.length?all.reduce((a,b)=>(a.damage||0)>=(b.damage||0)?a:b):null;
-  const topAcc=all.filter(p=>(p.correct||0)+(p.wrong||0)>0).sort((a,b)=>
-    ((b.correct||0)/((b.correct||0)+(b.wrong||0)))-((a.correct||0)/((a.correct||0)+(a.wrong||0))))[0]||null;
-  const ov=el("overlay"); if(!ov)return;
-  ov.innerHTML=`<div class="modal">
-    <div class="big">${medalSVG("laurel",120)}</div>
-    <h2>${w==="A"||w==="B"?esc(bmTeamNm(w))+" wint!":"Gevecht gestopt"}</h2>
-    <div style="margin:14px 0">
-      ${topDmg?`<div class="podline"><span class="av">${avatarHTML(topDmg.avatar||"helmet",topDmg.color||COLORS[0],32)}</span><span class="nm">⚔️ Meeste schade</span><span class="sc">${esc(topDmg.name)} — ${topDmg.damage||0}</span></div>`:""}
-      ${topAcc?`<div class="podline"><span class="av">${avatarHTML(topAcc.avatar||"helmet",topAcc.color||COLORS[0],32)}</span><span class="nm">📚 Scholar</span><span class="sc">${esc(topAcc.name)} — ${topAcc.correct||0}/${(topAcc.correct||0)+(topAcc.wrong||0)}</span></div>`:""}
-    </div>
-    <button class="btn btn-gold btn-block" onclick="closeOverlay();bmLeave();go('home')">Terug</button>
+  BM_PAUSED=false;
+  // Sla spelerdata op vóór BM_PLAYERS wordt gereset
+  BM_AWARD_DATA={winner:BM_STATE.winner,all:Object.values(BM_PLAYERS)};
+  go("battleHostAwards");
+}
+
+/* ---- M7: AWARD-BEREKENING ---- */
+function bmComputeAwards(players, log){
+  const entries=Object.values(log||{}).sort((a,b)=>(a.round||0)-(b.round||0));
+  const shieldCnt={},comboCnt={};
+  entries.forEach(e=>(e.events||[]).forEach(ev=>{
+    if(ev.anim==="shield"&&ev.pid) shieldCnt[ev.pid]=(shieldCnt[ev.pid]||0)+1;
+    if(ev.type==="combo")(ev.pids||[]).forEach(pid=>{comboCnt[pid]=(comboCnt[pid]||0)+1;});
+  }));
+  const pidMap={};
+  Object.entries(BM_PLAYERS).forEach(([pid,p])=>pidMap[pid]=p);
+  const sort=(arr,fn)=>[...arr].sort(fn);
+  const byDmg=sort(players,(a,b)=>(b.damage||0)-(a.damage||0));
+  const byHeal=sort(players,(a,b)=>(b.healing||0)-(a.healing||0));
+  const byAcc=players.filter(p=>(p.correct||0)+(p.wrong||0)>=3)
+    .sort((a,b)=>{const ta=(a.correct||0)+(a.wrong||0),tb=(b.correct||0)+(b.wrong||0);
+      return (b.correct||0)/tb-(a.correct||0)/ta;});
+  const bySpd=players.filter(p=>(p.respondCount||0)>=2)
+    .sort((a,b)=>(a.totalResponseMs||0)/a.respondCount-(b.totalResponseMs||0)/b.respondCount);
+  const shldTop=Object.entries(shieldCnt).sort((a,b)=>b[1]-a[1])[0];
+  const cmbTop=Object.entries(comboCnt).sort((a,b)=>b[1]-a[1])[0];
+  const p2=(e)=>e?{...(pidMap[e[0]]||{}),_val:e[1]}:null;
+  return[
+    {nm:"Meeste Schade",    emoji:"⚔️",  player:byDmg[0]||null,  value:byDmg[0]?(byDmg[0].damage||0)+" schade":""},
+    {nm:"Beste Verdediger", emoji:"🛡️",  player:p2(shldTop),      value:shldTop?shldTop[1]+" schild-acties":""},
+    {nm:"Beste Support",    emoji:"💚",  player:byHeal[0]||null,  value:byHeal[0]?(byHeal[0].healing||0)+" healing":""},
+    {nm:"Scholar",          emoji:"📚",  player:byAcc[0]||null,   value:byAcc[0]?Math.round((byAcc[0].correct||0)/((byAcc[0].correct||0)+(byAcc[0].wrong||0))*100)+"%":""},
+    {nm:"Snelste Denker",   emoji:"⚡",  player:bySpd[0]||null,   value:bySpd[0]?Math.round((bySpd[0].totalResponseMs||0)/(bySpd[0].respondCount||1)/100)/10+"s gem.":""},
+    {nm:"Beste Teamspeler", emoji:"🤝",  player:p2(cmbTop),       value:cmbTop?cmbTop[1]+" combo's":""},
+  ];
+}
+
+function bmComputeAnalytics(players,log){
+  const logEntries=Object.values(log||{}).sort((a,b)=>(a.round||0)-(b.round||0));
+  const maxHP=(BM_TEAMS?.A?.maxHealth||BM_META?.armyHealth||100);
+  const hpTimeline=logEntries.map(e=>({round:e.round,hA:Math.max(0,e.newHA||0),hB:Math.max(0,e.newHB||0),part:e.participants||0}));
+  const wordMap={};
+  players.forEach(p=>Object.entries(p.missed||{}).forEach(([,v])=>{
+    const key=v.p||"";if(!key)return;
+    if(!wordMap[key])wordMap[key]={p:v.p,a:v.a||"",c:0};
+    wordMap[key].c+=(v.c||0);
+  }));
+  const topMissed=Object.values(wordMap).sort((a,b)=>b.c-a.c).slice(0,5);
+  const totC=players.reduce((s,p)=>s+(p.correct||0),0);
+  const totA=players.reduce((s,p)=>s+(p.correct||0)+(p.wrong||0),0);
+  const avgAcc=totA>0?Math.round(totC/totA*100):null;
+  return{hpTimeline,topMissed,avgAcc,maxHP,players};
+}
+
+function bmHPChart(timeline,maxHP){
+  if(!timeline.length)return`<div class="note" style="text-align:center">Geen rondedata beschikbaar.</div>`;
+  const W=320,H=100,n=timeline.length;
+  const px=i=>32+i*(W-42)/Math.max(1,n-1);
+  const py=v=>H-12-(Math.max(0,v)/maxHP)*(H-22);
+  const ptA=timeline.map((e,i)=>px(i)+","+py(e.hA)).join(" ");
+  const ptB=timeline.map((e,i)=>px(i)+","+py(e.hB)).join(" ");
+  const step=Math.max(1,Math.floor(n/7));
+  const labels=timeline.map((e,i)=>{if(i%step!==0&&i!==n-1)return"";
+    return`<text x="${px(i)}" y="${H-2}" fill="var(--muted)" font-size="8" text-anchor="middle">${e.round}</text>`;}).join("");
+  const colA="var(--teamA)",colB="var(--teamB)";
+  return`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-height:100px" xmlns="http://www.w3.org/2000/svg">
+    <line x1="32" y1="${py(0)}" x2="${W-10}" y2="${py(0)}" stroke="var(--stone4)" stroke-width="1"/>
+    <line x1="32" y1="${py(maxHP*.5)}" x2="${W-10}" y2="${py(maxHP*.5)}" stroke="var(--stone4)" stroke-width="1" stroke-dasharray="3,3"/>
+    <polyline points="${ptA}" fill="none" stroke="${colA}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <polyline points="${ptB}" fill="none" stroke="${colB}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <rect x="34" y="7" width="12" height="4" fill="${colA}" rx="1"/>
+    <text x="49" y="12" fill="var(--muted)" font-size="9">${esc(bmTeamNm("A"))}</text>
+    <rect x="34" y="14" width="12" height="4" fill="${colB}" rx="1"/>
+    <text x="49" y="19" fill="var(--muted)" font-size="9">${esc(bmTeamNm("B"))}</text>
+    ${labels}
+  </svg>`;
+}
+
+async function bmExportCSV(){
+  const players=BM_AWARD_DATA?.all||Object.values(BM_PLAYERS);
+  let XLSX;try{XLSX=await loadSheetJS();}catch(e){toast("Fout","SheetJS kon niet worden geladen.");return;}
+  const rows=players.map(p=>{
+    const total=(p.correct||0)+(p.wrong||0);
+    const acc=total>0?Math.round((p.correct||0)/total*100):0;
+    const missed=Object.values(p.missed||{}).sort((a,b)=>(b.c||0)-(a.c||0)).map(w=>w.p||"").join(", ");
+    return{"Naam":p.name||"","Klas":(p.identityKey||"").split(":")[0]||"","Klasse":bmClsName(p.class)||"",
+      "Goed%":acc,"Goed":p.correct||0,"Fout":p.wrong||0,"Gemiste woorden":missed,
+      "Schade":p.damage||0,"Healing":p.healing||0,"Rondes actief":total};
+  });
+  const ws=XLSX.utils.json_to_sheet(rows);
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,"Gevecht");
+  XLSX.writeFile(wb,"battlemode_"+(BM_CODE||"export")+"_"+new Date().toISOString().substring(0,10)+".csv");
+}
+
+function bmNextAward(){
+  if(BM_AWARD_TIMER){clearTimeout(BM_AWARD_TIMER);BM_AWARD_TIMER=null;}
+  BM_AWARD_STEP++;
+  const stage=el("bmAwardStage");if(!stage)return;
+  const aw=BM_AWARD_DATA;if(!aw)return;
+
+  if(BM_AWARD_STEP===1){
+    const w=aw.winner;
+    const wonHTML=w==="A"||w==="B"
+      ?`${iconSVG(bmTeamIcon(w),72,"var(--team"+w+")")}<h2 style="color:var(--hi-bright);font-size:28px;margin:10px 0;animation:bmAwardIn .6s">${esc(bmTeamNm(w))} wint!</h2>`
+      :`<div style="font-size:64px">⚔️</div><h2 style="color:var(--muted);font-size:24px;margin:10px 0">Gevecht gestopt</h2>`;
+    stage.innerHTML=`<div style="animation:bmWin .7s;text-align:center">${wonHTML}</div>`;
+    beep("win");
+    BM_AWARD_TIMER=setTimeout(bmNextAward,3500);
+    return;
+  }
+
+  const awards=aw.awards||[];
+  const idx=BM_AWARD_STEP-2;
+  if(idx>=awards.length){
+    stage.innerHTML=`<div style="text-align:center"><div style="font-size:48px">📊</div>
+      <h2 style="color:var(--hi-bright);margin:10px 0">Klassenoverzicht</h2>
+      <div class="note">Momentje…</div></div>`;
+    BM_AWARD_TIMER=setTimeout(()=>go("battleHostAnalytics"),1500);
+    return;
+  }
+
+  const award=awards[idx];
+  const p=award.player;
+  if(!p||!p.name){BM_AWARD_STEP++;bmNextAward();return;} // geen winnaar → oversla
+
+  stage.innerHTML=`<div class="bm-award-card">
+    <div style="font-size:36px">${award.emoji}</div>
+    <div style="font-size:14px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">${esc(award.nm)}</div>
+    ${bmAvatarSVG(bmAvatarMerge(p.avatar),80)}
+    <div style="font-size:24px;font-weight:700;margin-top:8px">${esc(p.name)}</div>
+    <div style="font-size:20px;color:var(--hi-bright)">${esc(String(award.value))}</div>
   </div>`;
-  ov.classList.add("show");beep("win");
+  beep("good");
+  BM_AWARD_TIMER=setTimeout(bmNextAward,3500);
+}
+
+/* ---- SCHERM: battleHostAwards ---- */
+SCREENS.battleHostAwards = async function(){
+  if(!BM_AWARD_DATA){go("home");return;}
+  BM_AWARD_STEP=0;
+  if(BM_AWARD_TIMER){clearTimeout(BM_AWARD_TIMER);BM_AWARD_TIMER=null;}
+  H(brand(false)+`
+  <div class="scrhead"><h2>⚔️ Gevecht afgelopen</h2></div>
+  <div id="bmAwardStage" style="min-height:55vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 16px;gap:8px">
+    <div class="note" style="text-align:center">Laden…</div>
+  </div>
+  <div style="padding:0 16px 8px;display:flex;gap:8px">
+    <button class="btn btn-gold" style="flex:1" onclick="bmNextAward()">Volgende ▶</button>
+    <button class="btn" onclick="go('battleHostAnalytics')">Sla over →</button>
+  </div>
+  ${foot()}`);
+  try{
+    if(fbDB&&BM_CODE){const snap=await fbDB.ref("rooms/"+BM_CODE+"/log").once("value");BM_LOG=snap.val()||{};}
+  }catch(e){BM_LOG={};}
+  if(!el("bmAwardStage"))return;
+  BM_AWARD_DATA.awards=bmComputeAwards(BM_AWARD_DATA.all,BM_LOG);
+  bmNextAward();
+};
+
+/* ---- SCHERM: battleHostAnalytics ---- */
+let BM_ANALYTICS_TAB="klas";
+SCREENS.battleHostAnalytics = async function(){
+  const players=BM_AWARD_DATA?.all||Object.values(BM_PLAYERS);
+  H(brand(false)+`
+  <div class="scrhead">
+    <button class="back" onclick="bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>📊 Klassenoverzicht</h2>
+  </div>
+  <div class="panel" style="padding:8px 12px">
+    <div class="chips">
+      <button class="chip${BM_ANALYTICS_TAB==="klas"?" on":""}" onclick="BM_ANALYTICS_TAB='klas';SCREENS.battleHostAnalytics()">Klas</button>
+      <button class="chip${BM_ANALYTICS_TAB==="leerlingen"?" on":""}" onclick="BM_ANALYTICS_TAB='leerlingen';SCREENS.battleHostAnalytics()">Leerlingen</button>
+    </div>
+  </div>
+  <div id="bmAnalContent"><div class="panel"><div class="note" style="text-align:center">Laden…</div></div></div>
+  <div style="padding:0 16px 8px">
+    <button class="btn btn-block" onclick="bmExportCSV()">📥 Exporteer CSV</button>
+  </div>
+  ${foot()}`);
+  if(!BM_LOG&&fbDB&&BM_CODE){
+    try{const snap=await fbDB.ref("rooms/"+BM_CODE+"/log").once("value");BM_LOG=snap.val()||{};}catch(e){BM_LOG={};}
+  }
+  const content=el("bmAnalContent");if(!content)return;
+  const an=bmComputeAnalytics(players,BM_LOG);
+
+  if(BM_ANALYTICS_TAB==="klas"){
+    const chart=bmHPChart(an.hpTimeline,an.maxHP);
+    const missedHTML=an.topMissed.length
+      ?an.topMissed.map(w=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--stone4)">
+          <div><div style="font-size:13px">${esc(w.p)}</div><div style="font-size:11px;color:var(--muted)">${esc(w.a)}</div></div>
+          <div style="color:var(--acc2);font-weight:700;flex:0 0 auto;margin-left:8px">${w.c}×</div></div>`).join("")
+      :`<div class="note">Geen gemiste woorden bijgehouden (vereist speeldata uit dit gevecht).</div>`;
+    content.innerHTML=`
+    <div class="panel">
+      <div class="eyebrow l">HP-verloop per ronde</div>
+      ${chart}
+    </div>
+    <div class="panel">
+      <div class="eyebrow l">Gemiddelde accuratesse</div>
+      <div style="font-size:32px;font-weight:700;color:var(--hi-bright);text-align:center;padding:6px 0">${an.avgAcc!==null?an.avgAcc+"%":"—"}</div>
+    </div>
+    <div class="panel">
+      <div class="eyebrow l">Top 5 gemiste woorden</div>
+      ${missedHTML}
+    </div>`;
+  } else {
+    const sorted=[...players].sort((a,b)=>{
+      const ta=(a.correct||0)+(a.wrong||0),tb=(b.correct||0)+(b.wrong||0);
+      return tb>0&&ta>0?(b.correct||0)/tb-(a.correct||0)/ta:tb-ta;
+    });
+    const rows=sorted.map(p=>{
+      const tot=(p.correct||0)+(p.wrong||0);
+      const acc=tot>0?Math.round((p.correct||0)/tot*100):null;
+      const contrib=(p.damage||0)+(p.healing||0);
+      const cls=BM_CLASSES.find(c=>c.id===p.class);
+      const pid=Object.keys(BM_PLAYERS).find(k=>BM_PLAYERS[k]===p)||"";
+      return`<tr onclick="bmShowPlayerDetail('${pid}')" style="cursor:pointer">
+        <td><div style="display:flex;align-items:center;gap:7px">
+          ${bmAvatarSVG(bmAvatarMerge(p.avatar),24)}
+          <div><div style="font-size:12px;font-weight:700">${esc(p.name)}</div>
+          <div style="font-size:10px;color:${cls?.color||"var(--muted)"}">${esc(cls?.nm||"")}</div></div>
+        </div></td>
+        <td style="text-align:center;font-weight:700;color:${acc!==null&&acc>=80?"var(--green-bright)":""}">${acc!==null?acc+"%":"—"}</td>
+        <td style="text-align:center">${contrib}</td>
+        <td style="text-align:center">${tot}</td>
+      </tr>`;
+    }).join("");
+    content.innerHTML=`
+    <div class="panel" style="padding:0;overflow:hidden">
+      <table class="bm-tbl">
+        <thead><tr><th>Leerling</th><th>Goed%</th><th>Bijdr.</th><th>Actief</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+    <div class="note" style="text-align:center;margin-bottom:8px">Klik op een leerling voor details.</div>`;
+  }
+};
+
+function bmShowPlayerDetail(pid){
+  const p=BM_PLAYERS[pid];if(!p)return;
+  const tot=(p.correct||0)+(p.wrong||0);
+  const acc=tot>0?Math.round((p.correct||0)/tot*100):null;
+  const avgMs=p.respondCount>0?Math.round(p.totalResponseMs/p.respondCount/100)/10:null;
+  const missed=Object.values(p.missed||{}).sort((a,b)=>(b.c||0)-(a.c||0)).slice(0,5);
+  const missedHTML=missed.length
+    ?missed.map(w=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--stone4)">
+        <div style="font-size:12px">${esc(w.p)} <span style="color:var(--muted)">→ ${esc(w.a)}</span></div>
+        <div style="color:var(--acc2);font-weight:700;font-size:12px">${w.c}×</div></div>`).join("")
+    :`<div class="note">Geen gemiste woorden.</div>`;
+  const cls=BM_CLASSES.find(c=>c.id===p.class);
+  const ov=el("overlay");if(!ov)return;
+  ov.innerHTML=`<div class="modal">
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:14px">
+      ${bmAvatarSVG(bmAvatarMerge(p.avatar),60)}
+      <div><div style="font-size:20px;font-weight:700">${esc(p.name)}</div>
+        <div class="pill" style="margin-top:4px;background:${cls?.color||""}22;color:${cls?.color||"var(--muted)"}">${esc(cls?.nm||"")}</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+      <div class="panel" style="text-align:center;padding:10px"><div style="font-size:24px;font-weight:700;color:var(--hi-bright)">${acc!==null?acc+"%":"—"}</div><div class="note">Accuratesse</div></div>
+      <div class="panel" style="text-align:center;padding:10px"><div style="font-size:24px;font-weight:700">${avgMs!==null?avgMs+"s":"—"}</div><div class="note">Gem. responstijd</div></div>
+      <div class="panel" style="text-align:center;padding:10px"><div style="font-size:24px;font-weight:700">${p.damage||0}</div><div class="note">Schade</div></div>
+      <div class="panel" style="text-align:center;padding:10px"><div style="font-size:24px;font-weight:700">${p.healing||0}</div><div class="note">Healing</div></div>
+    </div>
+    <div class="eyebrow l">Gemiste woorden</div>
+    <div style="margin-bottom:14px">${missedHTML}</div>
+    <button class="btn btn-block" onclick="closeOverlay()">Sluiten</button>
+  </div>`;
+  ov.classList.add("show");
 }
 
 /* ---- SCHERM: battleJoin ---- */
@@ -2737,7 +3130,7 @@ function bmPlayerRender(){
         content=`<div class="panel"><div class="note warn">Kies eerst een klasse in de lobby voordat je een actie kunt uitvoeren.</div></div>`;
       } else {
         const teamClasses=BM_TEAMS[BM_MY_TEAM||"A"]?.classes||[];
-        const availCombos=BM_COMBOS.filter(combo=>
+        const availCombos=BM_META?.combos===false?[]:BM_COMBOS.filter(combo=>
           combo.classes.includes(BM_MY_CLASS)&&
           combo.classes.some(c=>c!==BM_MY_CLASS&&teamClasses.includes(c))
         );
@@ -2783,6 +3176,7 @@ function bmPlayerRender(){
   </div>
   ${content}`;
 }
+function bmWordKey(w){ return (w||"").replace(/[.#$\[\]\/]/g,"_").substring(0,80); }
 function bmAnswer(idx){
   if(BM_ANSWERED||!BM_MY_Q)return;
   BM_ANSWERED=true;
@@ -2803,14 +3197,27 @@ function bmAnswer(idx){
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
   let beGain=ok?3:0;
   if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?cls.passive.val:1; }
+  // Responstijd meten (ms verstreken sinds start vraagfase)
+  const elapsedMs=Math.max(200,at*1000-Math.max(0,round.deadline?round.deadline-Date.now():0));
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).once("value").then(s=>{
     const p=s.val()||{};
-    fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
+    const upd={
       answeredRound:round.n||0,
       be:(p.be||0)+beGain,
       correct:ok?(p.correct||0)+1:(p.correct||0),
-      wrong:!ok?(p.wrong||0)+1:(p.wrong||0)
-    });
+      wrong:!ok?(p.wrong||0)+1:(p.wrong||0),
+      totalResponseMs:(p.totalResponseMs||0)+elapsedMs,
+      respondCount:(p.respondCount||0)+1,
+    };
+    if(!ok&&BM_MY_Q){
+      // Gemist woord bijhouden voor analytics (host leest na afloop)
+      const wk=bmWordKey(BM_MY_Q.la);
+      const prev=p.missed?.[wk]||{c:0};
+      upd["missed/"+wk+"/c"]=(prev.c||0)+1;
+      upd["missed/"+wk+"/p"]=BM_MY_Q.la;
+      upd["missed/"+wk+"/a"]=BM_MY_Q.options?.[BM_MY_Q.correctIdx]||"";
+    }
+    fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update(upd);
   });
 }
 function bmChooseAbility(abilityId,cost){
