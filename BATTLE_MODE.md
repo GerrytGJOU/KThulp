@@ -339,8 +339,7 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 | **M3** | 8 klassen · data-gedreven abilities · synergie · combo's · class mastery | ✅ Gebouwd |
 | **M4** | Factie/thema-systeem · 6 startfacties · CSS-variabelen theming · docentkeuze via dropdown | ✅ Gebouwd |
 | **M5** | Slagveld-animaties · formatie-layout · log-gestuurde client-side animaties · `meta.animations` schakelaar | ✅ Gebouwd |
-| M6 | Kasteelmuren · voorraden · burchtstorm-einddoel | — |
-| M6 | Facties · campagne · fog of war | — |
+| **M6** | Avatar-aanpassing · XP/niveau 1–20 · class mastery ★–★★★★★ · achievements | ✅ Gebouwd |
 | M7 | Ranked seizoen · leaderboard | — |
 | M8 | Campaign builder voor docenten | — |
 
@@ -365,12 +364,69 @@ Elke browsertab telt als één verbinding. Bij 50 leerlingen + 1 host = 51 verbi
 
 ## Technische conventies
 
-- Screens: `battleHome`, `battleIdentity`, `battleJoin`, `battleHostSettings`, `battleHostLobby`, `battleHostGame`, `battlePlayerLobby`, `battlePlayerGame`, `battleResult`
+- Screens: `battleHome`, `battleIdentity`, `battleJoin`, `battleHostSettings`, `battleHostLobby`, `battleHostGame`, `battlePlayerLobby`, `battlePlayerGame`, `battleResult`, `battleProfile`, `battleAvatarEdit`
 - Alle leerling-gerichte tekst: Nederlands
 - Code-identificatoren: Engels
 - Firebase SDK: compat v10.12.5 (RTDB, geen Firestore)
 - `node --check` na elke wijziging aan scriptblok
 - Geen M2 beginnen zonder goedkeuring
+
+---
+
+## M6 — Avatar & Progressiesysteem ✅
+
+### Avatar
+
+Elke leerling heeft een vectoravatar opgebouwd uit 9 onderdelen:
+
+| Onderdeel | Standaard opties | Vereist ontgrendeling |
+|---|---|---|
+| Helm | Standaard, Open | Federhelm (Niv. 5), Kroon (Mastery ★★★+) |
+| Haar | Kort, Lang, Kaal | Vlecht (Niv. 3) |
+| Gezichtshaar | Geen, Baard, Snor | — |
+| Wapenrusting | Licht, Middel | Zwaar (Niv. 5), Ceremonieel (Mastery ★★★★★) |
+| Schild | Rond, Ovaal, Vierkant | Toren (Niv. 7) |
+| Wapen | Zwaard, Speer, Boog | Staf (Niv. 4) |
+| Cape | Geen, Kort | Lang (Niv. 6) |
+| Banierkleur | 12 kleuren | — |
+| Overwinningsanimatie | Juichen | Zwaard heffen (Niv. 5) |
+
+De avatar wordt gerenderd als inline SVG via `bmAvatarSVG(av, size)`. Backward-compat: pre-M6 string-avatars worden via `bmAvatarMerge()` omgezet naar het nieuwe objectformaat.
+
+Opgeslagen in `/identities/{klas}/{code}/avatar` (object).
+
+### XP en niveaus (1–20)
+
+XP-winst per gevecht:
+
+| Situatie | XP |
+|---|---|
+| Per correct antwoord | +10 |
+| Per ronde actief meegedaan | +5 |
+| Gewonnen als team | +25 |
+| Scholar (≥90% correct, min. 3 vragen) | +10 |
+
+Niveaus en titels staan in `BM_LEVELS` (aanpasbaar). Bij niveau-omhoog worden cosmetics ontgrendeld; alle ontgrendeling-checks via `bmIsUnlocked(opt, ident)`.
+
+### Class Mastery (0–5 sterren)
+
+Score per klasse = `rounds * 5 + damage + healing`. Drempelwaarden in `BM_MASTERY_TIERS`.
+
+- **★★★+**: +1 starting BE (minimale spelbonus; geschreven als `masteryBonus` op het player-node bij klassewissel)
+- **★★★★★**: cosmetic unlock (`ceremonieel`-wapenrusting)
+
+Mastery-voortgang staat in `/identities/{klas}/{code}/classHistory/{cls}`.
+
+### Achievements (13 stuks)
+
+Gecontroleerd na elk gevecht in `bmCheckAchievements()`. Opgeslagen als array van id-strings in `/identities/{klas}/{code}/achievements`.
+
+Categorieën: `first_blood`, `scholar`, `unbreakable`, `versatile`, `veteran` + één per klasse voor mastery ★★★★★.
+
+### Nieuwe schermen
+
+- **`battleProfile`** — niveau, XP-balk, class mastery per klasse, achievement-overzicht
+- **`battleAvatarEdit`** — live SVG-preview per onderdeel, vergrendelde opties zichtbaar maar disabled
 
 ---
 

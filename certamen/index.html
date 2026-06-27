@@ -405,6 +405,29 @@ body.greek .qcard .word{color:#143a5e}
 
 /* ── Speler-eigen miniavatar ── */
 #bmMyAv .avc{width:38px;height:38px}
+
+/* ======================================================
+   BATTLE MODE M6 — PROFIEL / AVATAR-EDITOR
+   ====================================================== */
+/* Achievement badge */
+.bm-ach{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border-radius:11px;
+  background:linear-gradient(170deg,var(--stone3),var(--stone2));border:1px solid var(--stone4)}
+.bm-ach.locked{opacity:.45;filter:grayscale(.8)}
+.bm-ach .aic{width:32px;height:32px;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
+.bm-ach .atx{flex:1}
+.bm-ach .anm{font-size:13px;color:var(--hi-bright)}
+.bm-ach.locked .anm{color:var(--muted2)}
+.bm-ach .ads{font-size:11px;color:var(--muted)}
+
+/* Avatar-editor opties */
+.bm-opts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.bm-opt{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 6px;
+  border-radius:10px;border:2px solid var(--stone4);background:var(--stone3);
+  cursor:pointer;transition:border-color .12s,transform .1s;min-width:54px}
+.bm-opt:active{transform:scale(.93)}
+.bm-opt.on{border-color:var(--hi-bright);background:rgba(212,175,55,.14)}
+.bm-opt.locked{opacity:.4;cursor:not-allowed;filter:grayscale(.75)}
+.bm-opt .onm{font-size:10px;color:var(--muted);text-align:center;line-height:1.2;max-width:52px}
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
 </head>
@@ -687,6 +710,8 @@ let DRAFT = { game:"touwtrekken", lang:"la", source:"freq", fromN:1, toN:100, ca
   target:15, penalty:"back", freezeSec:4 };
 let myStreak=0;
 let BM_UNSUBS=[], BM_PHASE_TIMER=null, _bmTicking=false, _bmFormHash="";
+let BM_MY_CORRECT=0, BM_MY_WRONG=0; // voor XP-berekening na gevecht
+let BM_AV_EDIT=null;                 // werkkopie in de avatar-editor
 
 function cleanup(){
   if(unsubState){unsubState();unsubState=null;}
@@ -1448,6 +1473,112 @@ const BM_FACTIONS = [
     classLabels:{ priester:"Orakel", centurio:"Halfgod" } },
 ];
 
+/* ---- CONFIGURATIETABELLEN: M6 AVATAR / NIVEAU / MASTERY / ACHIEVEMENTS ---- */
+
+// Alle avatar-onderdelen. requires:{level:N} of {mastery:N} = vereist niveau/mastery om te ontgrendelen.
+const BM_AVATAR_PARTS = {
+  helm:   { nm:"Helm",             opts:[
+    { id:"standard", nm:"Standaard" },
+    { id:"open",     nm:"Open" },
+    { id:"fedder",   nm:"Federhelm",  requires:{level:5} },
+    { id:"kroon",    nm:"Kroon",      requires:{mastery:3} },
+  ]},
+  haar:   { nm:"Haar",             opts:[
+    { id:"kort",   nm:"Kort" },
+    { id:"lang",   nm:"Lang" },
+    { id:"kaal",   nm:"Kaal" },
+    { id:"vlecht", nm:"Vlecht",       requires:{level:3} },
+  ]},
+  baard:  { nm:"Gezichtshaar",     opts:[
+    { id:"geen",  nm:"Geen" },
+    { id:"baard", nm:"Baard" },
+    { id:"snor",  nm:"Snor" },
+  ]},
+  armor:  { nm:"Wapenrusting",     opts:[
+    { id:"licht",       nm:"Licht" },
+    { id:"middel",      nm:"Middel" },
+    { id:"zwaar",       nm:"Zwaar",       requires:{level:5} },
+    { id:"ceremonieel", nm:"Ceremonieel", requires:{mastery:5} },
+  ]},
+  schild: { nm:"Schild",           opts:[
+    { id:"rond",     nm:"Rond" },
+    { id:"ovaal",    nm:"Ovaal" },
+    { id:"vierkant", nm:"Vierkant" },
+    { id:"tower",    nm:"Toren",         requires:{level:7} },
+  ]},
+  wapen:  { nm:"Wapen",            opts:[
+    { id:"zwaard", nm:"Zwaard" },
+    { id:"speer",  nm:"Speer" },
+    { id:"boog",   nm:"Boog" },
+    { id:"staf",   nm:"Staf",           requires:{level:4} },
+  ]},
+  cape:   { nm:"Cape",             opts:[
+    { id:"geen", nm:"Geen" },
+    { id:"kort", nm:"Kort" },
+    { id:"lang", nm:"Lang",            requires:{level:6} },
+  ]},
+  kleur:  { nm:"Banierkleur",      opts:[
+    {id:"#b03a2e"},{id:"#2e6fb0"},{id:"#3a7a30"},{id:"#9b6914"},
+    {id:"#6b2d8b"},{id:"#3f9d52"},{id:"#c87533"},{id:"#2d8b7a"},
+    {id:"#d4af37"},{id:"#8b1a1a"},{id:"#1a3a6b"},{id:"#4a2d6a"},
+  ]},
+  victoryAnim: { nm:"Overwinningsanimatie", opts:[
+    { id:"juichen",      nm:"Juichen" },
+    { id:"zwaardhefffen",nm:"Zwaard heffen", requires:{level:5} },
+  ]},
+};
+
+// XP-drempels en titels per niveau (1–20). Aanpasbaar zonder logica te wijzigen.
+const BM_LEVELS = [
+  { level:1,  xp:0,     title:"Rekruut",    unlock:null },
+  { level:2,  xp:50,    title:"Soldaat",    unlock:{part:"haar",       opt:"lang"} },
+  { level:3,  xp:120,   title:"Legionair",  unlock:{part:"haar",       opt:"vlecht"} },
+  { level:4,  xp:220,   title:"Optio",      unlock:{part:"wapen",      opt:"staf"} },
+  { level:5,  xp:350,   title:"Centurio",   unlock:{part:"helm",       opt:"fedder"} },
+  { level:6,  xp:500,   title:"Senior",     unlock:{part:"cape",       opt:"lang"} },
+  { level:7,  xp:700,   title:"Veteraan",   unlock:{part:"schild",     opt:"tower"} },
+  { level:8,  xp:950,   title:"Primipilus", unlock:{part:"armor",      opt:"zwaar"} },
+  { level:9,  xp:1250,  title:"Tribune",    unlock:null },
+  { level:10, xp:1600,  title:"Legate",     unlock:{part:"helm",       opt:"kroon"} },
+  { level:11, xp:2000,  title:"Proconsul",  unlock:null },
+  { level:12, xp:2500,  title:"Praetor",    unlock:{part:"armor",      opt:"ceremonieel"} },
+  { level:13, xp:3100,  title:"Quaestor",   unlock:null },
+  { level:14, xp:3800,  title:"Aedilis",    unlock:null },
+  { level:15, xp:4600,  title:"Consul",     unlock:{part:"victoryAnim",opt:"zwaardhefffen"} },
+  { level:16, xp:5500,  title:"Pontifex",   unlock:null },
+  { level:17, xp:6500,  title:"Imperator",  unlock:null },
+  { level:18, xp:7700,  title:"Augustus",   unlock:null },
+  { level:19, xp:9000,  title:"Caesar",     unlock:null },
+  { level:20, xp:10500, title:"Divus",      unlock:null },
+];
+
+// score = rounds*5 + damage + healing  → mastery-sterren (0–5)
+const BM_MASTERY_TIERS = [
+  { stars:0, score:0   },
+  { stars:1, score:15  },
+  { stars:2, score:40  },
+  { stars:3, score:80  },
+  { stars:4, score:140 },
+  { stars:5, score:220 },
+];
+
+// Uitbreidbaar via één extra entry; geen andere code wijzigen.
+const BM_ACHIEVEMENTS = [
+  { id:"first_blood",       nm:"Eerste bloed",        desc:"Je eerste Battle Mode gevecht gespeeld",              icon:"eagle"   },
+  { id:"scholar",           nm:"Scholar",              desc:"≥90% accuratesse in een gevecht (min. 3 vragen)",     icon:"torch"   },
+  { id:"unbreakable",       nm:"Onbreekbaar",          desc:"Een gevecht gewonnen als winnend team",               icon:"shield"  },
+  { id:"versatile",         nm:"Veelzijdig",           desc:"4 verschillende klassen gespeeld",                    icon:"column"  },
+  { id:"veteran",           nm:"Veteraan",             desc:"10 gevechten gespeeld",                               icon:"laurel"  },
+  { id:"master_hopliet",    nm:"Meester Hopliet",      desc:"Hopliet mastery ★★★★★ bereikt",                       icon:"shield"  },
+  { id:"master_spartaan",   nm:"Meester Spartaan",     desc:"Spartaan mastery ★★★★★ bereikt",                      icon:"helmet"  },
+  { id:"master_boogschutter",nm:"Meester Boogschutter",desc:"Boogschutter mastery ★★★★★ bereikt",                  icon:"eagle"   },
+  { id:"master_cavalerie",  nm:"Meester Cavalerie",    desc:"Cavalerie mastery ★★★★★ bereikt",                     icon:"column"  },
+  { id:"master_priester",   nm:"Meester Priester",     desc:"Priester mastery ★★★★★ bereikt",                      icon:"torch"   },
+  { id:"master_centurio",   nm:"Meester Centurio",     desc:"Centurio mastery ★★★★★ bereikt",                      icon:"laurel"  },
+  { id:"master_genie",      nm:"Meester Genie",        desc:"Genie mastery ★★★★★ bereikt",                         icon:"amphora" },
+  { id:"master_verkenner",  nm:"Meester Verkenner",    desc:"Verkenner mastery ★★★★★ bereikt",                     icon:"eagle"   },
+];
+
 /* ---- BATTLE IDENTITY ---- */
 const BM_IDENT_KEY = "certamen_battle_identity";
 let BM_IDENT = null;
@@ -1456,7 +1587,168 @@ function bmIdentLoad(){ try{ const r=localStorage.getItem(BM_IDENT_KEY); return 
 function bmIdentSave(o){ try{ localStorage.setItem(BM_IDENT_KEY,JSON.stringify(o)); }catch(e){} }
 function bmIdentClear(){ try{ localStorage.removeItem(BM_IDENT_KEY); }catch(e){} }
 async function bmIdentGet(klas,lcode){ if(!fbDB)return null; const s=await fbDB.ref("identities/"+klas+"/"+lcode).once("value"); return s.exists()?s.val():null; }
-async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,avatar:P.avatar,color:P.color,classHistory:{}}; if(fbDB)await fbDB.ref("identities/"+klas+"/"+lcode).set(d); return d; }
+async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,battles:0,level:1,avatar:bmAvatarDefaults(),color:P.color,classHistory:{},achievements:[]}; if(fbDB)await fbDB.ref("identities/"+klas+"/"+lcode).set(d); return d; }
+
+/* ---- M6: AVATAR / NIVEAU / MASTERY HELPERS ---- */
+
+function bmAvatarDefaults(){
+  return{helm:"standard",haar:"kort",baard:"geen",armor:"licht",
+         schild:"rond",wapen:"zwaard",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen"};
+}
+function bmAvatarMerge(saved){
+  // backward compat: string-avatar (pre-M6) → object
+  if(!saved||typeof saved==="string") return bmAvatarDefaults();
+  return{...bmAvatarDefaults(),...saved};
+}
+
+function bmAvatarSVG(av,size=60){
+  const a=bmAvatarMerge(av);
+  const col=a.kleur||"#b03a2e";
+  const armorFill={licht:"#9a8870",middel:"#6a5840",zwaar:"#3e3230",ceremonieel:col}[a.armor]||"#9a8870";
+  const helmFill={standard:"#7a6a48",open:"#8a7a58",fedder:col,kroon:"#d4af37"}[a.helm]||"#7a6a48";
+  const hairFill={kort:"#5c3c1a",lang:"#3c280c",kaal:null,vlecht:"#5c3c1a"}[a.haar];
+  const skin="#d4a476"; const wc="#c8a860";
+
+  const cape=a.cape==="lang"
+    ?`<path d="M18,30 Q7,55 10,76 Q30,70 50,76 Q53,55 42,30" fill="${col}" opacity=".65"/>`
+    :a.cape==="kort"
+    ?`<path d="M20,30 Q13,50 16,66 Q30,62 44,66 Q47,50 40,30" fill="${col}" opacity=".65"/>`
+    :"";
+
+  const shields={
+    rond:`<circle cx="9" cy="44" r="8" fill="${col}" opacity=".85"/><circle cx="9" cy="44" r="5.5" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.2"/>`,
+    ovaal:`<ellipse cx="9" cy="44" rx="6" ry="9" fill="${col}" opacity=".85"/>`,
+    vierkant:`<rect x="2" y="36" width="14" height="16" rx="2" fill="${col}" opacity=".85"/>`,
+    tower:`<path d="M3,32 L3,56 Q9,60 15,56 L15,32 Q12,28 9,32 Q6,28 3,32Z" fill="${col}" opacity=".85"/>`,
+  };
+  const weapons={
+    zwaard:`<line x1="52" y1="24" x2="52" y2="54" stroke="${wc}" stroke-width="3" stroke-linecap="round"/><line x1="47" y1="37" x2="57" y2="37" stroke="${wc}" stroke-width="2.5" stroke-linecap="round"/>`,
+    speer:`<line x1="52" y1="16" x2="52" y2="58" stroke="#a08040" stroke-width="2.5" stroke-linecap="round"/><polygon points="52,10 55,22 49,22" fill="${wc}"/>`,
+    boog:`<path d="M52,18 Q62,38 52,58" fill="none" stroke="#a08040" stroke-width="2.5"/><line x1="52" y1="18" x2="52" y2="58" stroke="${wc}" stroke-width="1"/>`,
+    staf:`<line x1="52" y1="14" x2="52" y2="60" stroke="#7a5030" stroke-width="3" stroke-linecap="round"/><circle cx="52" cy="12" r="5" fill="#d4af37" opacity=".9"/>`,
+  };
+  const helms={
+    standard:`<path d="M18,20 Q18,9 30,8 Q42,9 42,20 L40,24 L20,24 Z" fill="${helmFill}"/><rect x="18" y="24" width="24" height="3" rx="1" fill="${helmFill}" opacity=".75"/>`,
+    open:`<path d="M19,22 Q19,10 30,9 Q41,10 41,22" fill="none" stroke="${helmFill}" stroke-width="4.5" stroke-linecap="round"/>`,
+    fedder:`<path d="M18,20 Q18,9 30,8 Q42,9 42,20 L40,24 L20,24 Z" fill="${helmFill}"/><rect x="18" y="24" width="24" height="3" rx="1" fill="${helmFill}" opacity=".75"/><path d="M22,9 Q14,2 9,6 Q13,14 20,16" fill="${col}" opacity=".9"/>`,
+    kroon:`<path d="M18,22 L18,12 L24,17 L30,10 L36,17 L42,12 L42,22 Z" fill="${helmFill}"/>`,
+  };
+  const hairSVG=!hairFill?"":a.haar==="vlecht"
+    ?`<path d="M24,20 Q21,28 24,34" fill="none" stroke="${hairFill}" stroke-width="4" stroke-linecap="round"/>`
+    :a.haar==="lang"
+    ?`<path d="M20,22 Q17,32 20,42" fill="none" stroke="${hairFill}" stroke-width="5" stroke-linecap="round"/><path d="M40,22 Q43,32 40,42" fill="none" stroke="${hairFill}" stroke-width="5" stroke-linecap="round"/>`
+    :`<path d="M20,22 Q20,14 30,13 Q40,14 40,22" fill="${hairFill}"/>`;
+  const bc=hairFill||"#5c3c1a";
+  const beards={
+    geen:"",
+    baard:`<path d="M22,32 Q30,40 38,32 Q37,38 30,41 Q23,38 22,32" fill="${bc}"/>`,
+    snor:`<path d="M24,30 Q30,33 36,30 Q33,33 30,34 Q27,33 24,30" fill="${bc}"/>`,
+  };
+  const w=size, h=Math.round(size*80/60);
+  return `<svg viewBox="0 0 60 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" style="display:block">
+    ${cape}${shields[a.schild]||shields.rond}
+    <rect x="19" y="30" width="22" height="24" rx="3" fill="${armorFill}"/>
+    <rect x="19" y="30" width="22" height="5" rx="2" fill="${armorFill}" opacity=".65"/>
+    <rect x="15" y="34" width="6" height="12" rx="2" fill="${armorFill}" opacity=".8"/>
+    <rect x="39" y="34" width="6" height="12" rx="2" fill="${armorFill}" opacity=".8"/>
+    ${weapons[a.wapen]||weapons.zwaard}
+    <circle cx="30" cy="24" r="11" fill="${skin}"/>
+    ${hairSVG}${beards[a.baard]||""}${helms[a.helm]||helms.standard}
+  </svg>`;
+}
+
+function bmCalcLevel(xp){
+  let cur=BM_LEVELS[0];
+  for(const l of BM_LEVELS){if((xp||0)>=l.xp)cur=l;else break;}
+  const next=BM_LEVELS.find(l=>l.level===cur.level+1)||null;
+  const prog=next?Math.min(1,((xp||0)-cur.xp)/(next.xp-cur.xp)):1;
+  return{...cur,next,progress:prog};
+}
+function bmCalcMastery(hist){
+  if(!hist)return 0;
+  const score=(hist.rounds||0)*5+(hist.damage||0)+(hist.healing||0);
+  let stars=0; for(const t of BM_MASTERY_TIERS){if(score>=t.score)stars=t.stars;} return stars;
+}
+function bmIsUnlocked(opt,ident){
+  if(!opt.requires)return true;
+  const{level:rL,mastery:rM}=opt.requires;
+  if(rL&&bmCalcLevel(ident?.xp||0).level<rL)return false;
+  if(rM&&!Object.values(ident?.classHistory||{}).some(h=>bmCalcMastery(h)>=rM))return false;
+  return true;
+}
+function bmStars(n,max=5){
+  return Array.from({length:max},(_,i)=>`<span style="color:${i<n?"#d4af37":"var(--stone4)"};font-size:14px">★</span>`).join("");
+}
+
+// Toekennen van XP en achievements na afloop van een gevecht (player-side).
+async function bmAwardBattle(){
+  if(!BM_IDENT||!fbDB)return null;
+  const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+  if(!klas||!lcode)return null;
+  // Dubbele toekenning voorkomen per kamer-sessie
+  const guardKey="bm_award_"+BM_CODE;
+  if(sessionStorage.getItem(guardKey))return null;
+  try{sessionStorage.setItem(guardKey,"1");}catch(e){}
+
+  const correct=BM_MY_CORRECT||0, wrong=BM_MY_WRONG||0, total=correct+wrong;
+  const won=BM_STATE.winner===BM_MY_TEAM;
+  const isScholar=total>=3&&correct/total>=0.9;
+  const xpEarned=correct*10+total*5+(won?25:0)+(isScholar?10:0);
+
+  const snap=await fbDB.ref("identities/"+klas+"/"+lcode).once("value");
+  const data=snap.val()||{};
+  const oldXp=data.xp||0, newXp=oldXp+xpEarned;
+  const battles=(data.battles||0)+1;
+  const oldLv=bmCalcLevel(oldXp), newLv=bmCalcLevel(newXp);
+
+  // Mastery recalculeren voor huidige klasse
+  const cls=BM_MY_CLASS;
+  const masteryStars=cls?bmCalcMastery(data.classHistory?.[cls]):0;
+  const upd={xp:newXp,battles};
+  if(cls)upd["classHistory/"+cls+"/mastery"]=masteryStars;
+
+  await fbDB.ref("identities/"+klas+"/"+lcode).update(upd);
+  const merged={...data,...upd,xp:newXp,battles,achievements:data.achievements||[]};
+  BM_IDENT={...BM_IDENT,...merged};
+  bmIdentSave({...bmIdentLoad(),...BM_IDENT});
+
+  const earned=await bmCheckAchievements(merged,{won,isScholar});
+  return{xpEarned,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
+}
+async function bmCheckAchievements(ident,result={}){
+  if(!fbDB||!BM_IDENT)return[];
+  const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+  if(!klas||!lcode)return[];
+  const current=ident.achievements||[], newOnes=[];
+  const check=(id,cond)=>{if(!current.includes(id)&&cond)newOnes.push(id);};
+  check("first_blood",true);
+  check("scholar",result.isScholar);
+  check("unbreakable",result.won);
+  check("versatile",Object.keys(ident.classHistory||{}).length>=4);
+  check("veteran",(ident.battles||0)>=10);
+  for(const cls of BM_CLASSES){
+    check("master_"+cls.id,bmCalcMastery(ident.classHistory?.[cls.id])>=5);
+  }
+  if(newOnes.length){
+    const updated=[...new Set([...current,...newOnes])];
+    await fbDB.ref("identities/"+klas+"/"+lcode+"/achievements").set(updated);
+    BM_IDENT={...BM_IDENT,achievements:updated};
+    bmIdentSave({...bmIdentLoad(),...BM_IDENT,achievements:updated});
+  }
+  return newOnes;
+}
+async function bmSaveAvatar(){
+  if(!BM_AV_EDIT||!BM_IDENT||!fbDB)return;
+  const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+  try{
+    await fbDB.ref("identities/"+klas+"/"+lcode+"/avatar").set(BM_AV_EDIT);
+    BM_IDENT={...BM_IDENT,avatar:{...BM_AV_EDIT}};
+    bmIdentSave({...bmIdentLoad(),...BM_IDENT});
+    BM_AV_EDIT=null;
+    toast("Opgeslagen!","Avatar bijgewerkt.");
+    go("battleProfile");
+  }catch(e){toast("Fout","Avatar opslaan mislukt.");}
+}
 
 /* ---- ABILITY HELPERS ---- */
 function bmGetAbilityCost(cls,abl){
@@ -1548,6 +1840,15 @@ SCREENS.battleHome = function(){
     <h3>Meedoen — leerling</h3>
     <p>Meld je aan en doe mee aan het gevecht van de docent.</p>
   </button>
+  ${BM_IDENT?`
+  <button class="tile" onclick="go('battleProfile')">
+    <span class="ic" style="position:relative">
+      <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${bmAvatarSVG(bmAvatarMerge(BM_IDENT.avatar),44)}</span>
+    </span>
+    <h3>Mijn profiel</h3>
+    <p>${esc(BM_IDENT.name||"")} · Niveau ${bmCalcLevel(BM_IDENT.xp||0).level} · ${esc(bmCalcLevel(BM_IDENT.xp||0).title)}</p>
+  </button>`:""
+  }
   ${!hasFirebase?`<div class="panel"><div class="note warn">Firebase is vereist voor Battle Mode (identiteitssysteem + realtime sync).</div></div>`:""}
   ${foot()}`);
 };
@@ -1596,7 +1897,7 @@ async function bmIdentLogin(){
   try{
     let data=await bmIdentGet(klas,lcode);
     if(!data)data=await bmIdentCreate(klas,lcode,name);
-    BM_IDENT={klascode:klas,leerlingcode:lcode,...data,name};
+    BM_IDENT={klascode:klas,leerlingcode:lcode,...data,name,avatar:bmAvatarMerge(data.avatar)};
     bmIdentSave({klascode:klas,leerlingcode:lcode,name,avatar:data.avatar,color:data.color});
     go("battleJoin");
   }catch(e){if(err){err.textContent="Aanmelden mislukt — controleer je internetverbinding.";err.style.display="";}}
@@ -1739,6 +2040,7 @@ async function bmDistributeQs(roundN){
     const cls=BM_CLASSES.find(c=>c.id===p.class);
     let beBonus=p.team==="A"?synA:synB;
     if(cls?.passive?.type==="be_passive") beBonus+=cls.passive.val;
+    beBonus+=(p.masteryBonus||0); // +1 BE bij mastery ★★★+
     const pool=bmPersonalPool(pid,POOL);
     up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
     up["players/"+pid+"/answeredRound"]=-1;
@@ -2311,21 +2613,26 @@ SCREENS.battlePlayerLobby = function(){
   const fac=bmFaction(BM_META?.theme);
   H(brand(false)+`
   <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>${esc(fac.nm)}</h2></div>
-  <div class="panel" style="text-align:center">
-    ${avatarHTML(BM_IDENT?.avatar||P.avatar,BM_IDENT?.color||P.color,48)}
-    <div style="font-size:18px;margin-top:6px">${esc(BM_IDENT?.name||"")}</div>
-    <div class="note">Spelcode: ${BM_CODE}</div>
+  <div class="panel" style="display:flex;gap:14px;align-items:center">
+    ${bmAvatarSVG(bmAvatarMerge(BM_IDENT?.avatar),56)}
+    <div style="flex:1">
+      <div style="font-size:18px;font-weight:700">${esc(BM_IDENT?.name||"")}</div>
+      <div class="pill" style="margin:4px 0">Niveau ${bmCalcLevel(BM_IDENT?.xp||0).level} · ${esc(bmCalcLevel(BM_IDENT?.xp||0).title)}</div>
+      <div class="note">Code: ${BM_CODE}</div>
+    </div>
+    <button class="btn" onclick="go('battleAvatarEdit')" title="Avatar aanpassen" style="flex:0 0 auto;padding:6px 10px">${iconSVG("column",18,"currentColor")}</button>
   </div>
   <div class="panel">
     <div class="eyebrow l">Kies je klasse</div>
     ${BM_CLASSES.map(c=>{
       const sel=myClass===c.id;
+      const ms=bmCalcMastery(BM_IDENT?.classHistory?.[c.id]);
       return `<button class="tile" style="margin-bottom:8px;padding:12px 14px${sel?";border:2px solid "+c.color:""}" onclick="bmPickClass('${c.id}')">
         <div style="display:flex;align-items:flex-start;gap:12px">
           ${iconSVG(c.icon,30,c.color)}
           <div style="flex:1">
-            <div style="font-size:15px;font-weight:700;color:${c.color}">${c.nm}</div>
-            <div class="note" style="margin:2px 0">⚡ ${c.passive.desc}</div>
+            <div style="font-size:15px;font-weight:700;color:${c.color}">${c.nm} <span style="font-size:11px;opacity:.7">${bmStars(ms)}</span></div>
+            <div class="note" style="margin:2px 0">⚡ ${c.passive.desc}${ms>=3?" · +1 BE":""}</div>
             <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">
               ${c.abilities.map(a=>`<span class="pill" style="font-size:10px">${a.nm}&nbsp;${bmGetAbilityCost(c,a)}BE</span>`).join("")}
             </div>
@@ -2344,9 +2651,11 @@ SCREENS.battlePlayerLobby = function(){
 };
 function bmPickClass(cid){
   BM_MY_CLASS=cid;
-  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({class:cid});
-  toast("Klasse gekozen",bmClsName(cid));
-  SCREENS.battlePlayerLobby(); // herrender met selectie
+  // mastery-bonus: ★★★+ geeft +1 starting BE (minimale spelbonus)
+  const ms=bmCalcMastery(BM_IDENT?.classHistory?.[cid]);
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({class:cid,masteryBonus:ms>=3?1:0});
+  toast("Klasse gekozen",bmClsName(cid)+(ms>=3?" · +1 BE mastery-bonus":""));
+  SCREENS.battlePlayerLobby();
 }
 
 /* ---- SCHERM: battlePlayerGame ---- */
@@ -2374,7 +2683,7 @@ SCREENS.battlePlayerGame = function(){
       }
     });
   const rM=fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID),
-    fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_MY_CLASS=p.class||null;BM_MY_TEAM=p.team||null;BM_ACTION_LOCKED=!!p.lockedAction;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);}bmPlayerRender();});
+    fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_MY_CLASS=p.class||null;BM_MY_TEAM=p.team||null;BM_ACTION_LOCKED=!!p.lockedAction;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);BM_MY_CORRECT=p.correct||0;BM_MY_WRONG=p.wrong||0;}bmPlayerRender();});
   const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),
     fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
   BM_UNSUBS=[()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT)];
@@ -2529,7 +2838,124 @@ SCREENS.battleResult = function(){
     <div style="font-size:56px">${w==="A"||w==="B"?iconSVG(bmTeamIcon(w),56,"var(--team"+w+")"):"⚔️"}</div>
     <h2 style="color:var(--hi-bright);margin:8px 0">${w==="A"||w==="B"?esc(bmTeamNm(w))+" wint!":"Gevecht gestopt"}</h2>
   </div>
+  <div id="bmXpResult" class="panel" style="text-align:center;color:var(--muted)">XP berekenen…</div>
   <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="bmLeave();go('home')">Terug naar hoofdmenu</button>
+  <button class="btn btn-block" style="margin-top:8px" onclick="bmLeave();go('battleProfile')">Mijn profiel bekijken</button>
+  ${foot()}`);
+  // XP toekennen (fire-and-forget; toont resultaat in #bmXpResult)
+  bmAwardBattle().then(r=>{
+    const box=el("bmXpResult"); if(!box)return;
+    if(!r){box.textContent="";return;}
+    const lvUp=r.levelUp?`<div style="color:var(--hi-bright);font-size:16px;margin-top:6px">🎉 Niveau omhoog! Je bent nu ${esc(r.newLv.title)} (${r.newLv.level})</div>`:"";
+    const achHTML=r.earned.length?`<div style="margin-top:6px;color:var(--hi)">${r.earned.map(id=>{const a=BM_ACHIEVEMENTS.find(x=>x.id===id);return a?"🏅 "+esc(a.nm):""}).join(" · ")}</div>`:"";
+    box.innerHTML=`<div style="font-size:22px;font-weight:700;color:var(--hi-bright)">+${r.xpEarned} XP</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">Totaal: ${BM_IDENT?.xp||r.newLv.xp} XP · Niveau ${r.newLv.level} · ${esc(r.newLv.title)}</div>
+      ${lvUp}${achHTML}`;
+  }).catch(()=>{const b=el("bmXpResult");if(b)b.textContent="";});
+};
+
+/* ---- SCHERM: battleProfile ---- */
+SCREENS.battleProfile = function(){
+  if(!BM_IDENT){go("battleIdentity");return;}
+  const av=bmAvatarMerge(BM_IDENT.avatar);
+  const xp=BM_IDENT.xp||0;
+  const lv=bmCalcLevel(xp);
+  const prog=Math.round(lv.progress*100);
+  const battles=BM_IDENT.battles||0;
+  const achs=BM_IDENT.achievements||[];
+  const xpLeft=lv.next?lv.next.xp-xp:null;
+
+  const masteryHTML=BM_CLASSES.map(c=>{
+    const ms=bmCalcMastery(BM_IDENT.classHistory?.[c.id]);
+    return `<div style="background:${c.color}18;border:1px solid ${c.color}44;border-radius:10px;padding:8px 4px;text-align:center">
+      ${iconSVG(c.icon,20,c.color)}
+      <div style="font-size:9px;color:var(--muted);margin:2px 0">${esc(c.nm)}</div>
+      <div style="line-height:1">${bmStars(ms)}</div>
+    </div>`;
+  }).join("");
+
+  const achHTML=BM_ACHIEVEMENTS.map(a=>{
+    const got=achs.includes(a.id);
+    return `<div class="bm-ach${got?"":" locked"}">
+      <div class="aic">${got?iconSVG(a.icon,24,"var(--hi)"):iconSVG(a.icon,22,"var(--muted2)")}</div>
+      <div class="atx">
+        <div class="anm">${got?"":"🔒 "}${esc(a.nm)}</div>
+        <div class="ads">${esc(a.desc)}</div>
+      </div>
+    </div>`;
+  }).join("");
+
+  const from=history.state?.from||"battleHome";
+  H(brand(false)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('${from}')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Mijn profiel</h2>
+  </div>
+  <div class="panel" style="display:flex;gap:14px;align-items:center">
+    <div style="flex:0 0 auto">${bmAvatarSVG(av,72)}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-size:20px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(BM_IDENT.name||"")}</div>
+      <div class="pill" style="margin:4px 0">Niveau ${lv.level} · ${esc(lv.title)}</div>
+      <div style="font-size:12px;color:var(--muted)">${xp} XP · ${battles} gevecht${battles!==1?"en":""}</div>
+      <div style="margin-top:6px">
+        <div style="height:7px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
+          <div style="height:100%;width:${prog}%;background:linear-gradient(90deg,var(--hi-dim),var(--hi-bright));transition:width .5s"></div>
+        </div>
+        ${xpLeft!==null?`<div style="font-size:10px;color:var(--muted);margin-top:2px">${xpLeft} XP naar ${esc(lv.next.title)}</div>`:`<div style="font-size:10px;color:var(--hi);margin-top:2px">Maximaal niveau bereikt!</div>`}
+      </div>
+    </div>
+  </div>
+  <button class="btn btn-gold btn-block" onclick="go('battleAvatarEdit')" style="margin-bottom:14px">Avatar aanpassen</button>
+  <div class="eyebrow l">Class Mastery</div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">${masteryHTML}</div>
+  <div class="eyebrow l">Achievements (${achs.length}/${BM_ACHIEVEMENTS.length})</div>
+  <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">${achHTML}</div>
+  ${foot()}`);
+};
+
+/* ---- SCHERM: battleAvatarEdit ---- */
+SCREENS.battleAvatarEdit = function(){
+  if(!BM_IDENT){go("battleIdentity");return;}
+  if(!BM_AV_EDIT) BM_AV_EDIT={...bmAvatarMerge(BM_IDENT.avatar)};
+  const av=BM_AV_EDIT;
+
+  function partSection(partId){
+    const part=BM_AVATAR_PARTS[partId]; if(!part)return"";
+    if(partId==="kleur"){
+      const sw=part.opts.map(o=>`<button
+        onclick="BM_AV_EDIT.kleur='${o.id}';SCREENS.battleAvatarEdit()"
+        style="width:32px;height:32px;border-radius:50%;background:${o.id};
+        border:3px solid ${av.kleur===o.id?"var(--hi-bright)":"transparent"};
+        cursor:pointer;flex:0 0 auto"></button>`).join("");
+      return`<div class="eyebrow l">${esc(part.nm)}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${sw}</div>`;
+    }
+    const opts=part.opts.map(o=>{
+      const locked=!bmIsUnlocked(o,BM_IDENT);
+      const sel=av[partId]===o.id;
+      const preview=bmAvatarSVG({...av,[partId]:o.id},38);
+      const title=locked?(o.requires?.level?"Niveau "+o.requires.level+" vereist":"Mastery ★★★+ vereist"):"";
+      return `<button class="bm-opt${sel?" on":""}${locked?" locked":""}"
+        ${locked?`disabled title="${title}"`:`onclick="BM_AV_EDIT['${partId}']='${o.id}';SCREENS.battleAvatarEdit()"`}>
+        ${preview}
+        <div class="onm">${esc(o.nm)}</div>
+        ${locked?`<div style="font-size:9px;color:var(--muted2)">🔒</div>`:""}
+      </button>`;
+    }).join("");
+    return`<div class="eyebrow l">${esc(part.nm)}</div>
+      <div class="bm-opts">${opts}</div>`;
+  }
+
+  H(brand(false)+`
+  <div class="scrhead">
+    <button class="back" onclick="BM_AV_EDIT=null;go('battleProfile')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Avatar aanpassen</h2>
+  </div>
+  <div class="panel" style="text-align:center;padding:20px 16px">
+    ${bmAvatarSVG(av,96)}
+  </div>
+  ${Object.keys(BM_AVATAR_PARTS).map(partSection).join("")}
+  <button class="btn btn-gold btn-block lg" onclick="bmSaveAvatar()" style="margin-bottom:16px">Opslaan</button>
   ${foot()}`);
 };
 
