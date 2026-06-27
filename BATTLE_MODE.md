@@ -160,13 +160,30 @@ Faction-XP en -rang zijn persistent (blijven over gevechtssessies heen).
 | M | Inhoud | Status |
 |---|---|---|
 | **M1** | Identiteit · 3 klassen · 3 acties · rondelus · host panel · eindscherm | ✅ Gebouwd |
-| M2 | Visuele polish: animaties, schadegetallen, klasse-icoontjes per avatar | ⏳ In review |
+| **M2** | Klaslokaal-bestendig: harde deadlines · idempotente resolutie · reconnect · late join · scoped listeners · Chromebook-perf | ✅ Gebouwd |
 | M3 | +5 klassen · synergie · combo's · klasse-specifieke acties · moreel | — |
 | M4 | Kasteelmuren · voorraden · burchtstorm-einddoel | — |
 | M5 | Eigen HP · doelkeuze · respawn · doelpunten op kaart | — |
 | M6 | Facties · campagne · fog of war | — |
 | M7 | Ranked seizoen · leaderboard | — |
 | M8 | Campaign builder voor docenten | — |
+
+---
+
+## Firebase verbindingslimiet (Spark-plan)
+
+Het gratis Firebase Spark-plan staat **100 gelijktijdige verbindingen** toe per database.
+
+| Scenario | Verbindingen |
+|---|---|
+| 1 host | 1 |
+| 30 leerlingen | 30 |
+| 50 leerlingen | 50 |
+| **Totaal (50 leerlingen)** | **51** ✅ ruim binnen de limiet |
+
+Elke browsertab telt als één verbinding. Bij 50 leerlingen + 1 host = 51 verbindingen — ruim onder de grens van 100. Pas bij ~90 leerlingen wordt upgraden naar Blaze relevant. Op Blaze geldt $0,06 per GB download en geen verbindingslimiet.
+
+**Scoped listeners (M2):** spelers luisteren uitsluitend naar `state/round`, `state/status`, eigen `players/{pid}` en `teams`. Niet naar het volledige `players`-object (dat doet alleen de host). Dit beperkt ook de bandbreedte bij grote klassen.
 
 ---
 

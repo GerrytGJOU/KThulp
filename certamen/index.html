@@ -1456,54 +1456,83 @@ SCREENS.battleHostGame = function(){
     <button class="back" onclick="bmEndGame()">${iconSVG("shield",20,"currentColor")}</button>
     <h2>⚔️ Battle Mode</h2><span class="pill">code ${BM_CODE}</span>
   </div>
-  <div id="bmHR"></div>${foot()}`);
-  const rS=fbDB.ref("rooms/"+BM_CODE+"/state"),fS=rS.on("value",s=>{BM_STATE=s.val()||{};bmHostRender();if(BM_STATE.status==="finished")bmHostResult();});
-  const rP=fbDB.ref("rooms/"+BM_CODE+"/players"),fP=rP.on("value",s=>{BM_PLAYERS=s.val()||{};bmHostRender();});
-  const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmHostRender();});
-  BM_UNSUBS=[()=>rS.off("value",fS),()=>rP.off("value",fP),()=>rT.off("value",fT)];
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+      <span id="bmRndLabel" class="pill">Ronde —</span>
+      <span id="bmPhaseLabel" class="pill">—</span>
+      <span id="bmTimer" style="color:var(--hi-bright);font-size:18px">—</span>
+    </div>
+    <div id="bmArmyA"></div>
+    <div style="text-align:center;color:var(--muted);font-size:11px;padding:4px 0">vs</div>
+    <div id="bmArmyB"></div>
+    <div id="bmStatusNote" class="note" style="margin-top:8px"></div>
+  </div>
+  <div class="panel"><div id="bmPlayerGrid" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
+  <button class="btn btn-ghost btn-block" onclick="bmEndGame()">Gevecht beëindigen</button>
+  ${foot()}`);
+  // timer display only — apart van de game-logic tick (bmHostStartTimer op 500 ms)
+  const timerInterval=setInterval(()=>{
+    const round=BM_STATE.round||{};
+    const tl=round.deadline?Math.max(0,Math.round((round.deadline-Date.now())/1000)):0;
+    const te=el("bmTimer");if(te)te.textContent=tl+"s";
+  },1000);
+  BM_UNSUBS=[()=>clearInterval(timerInterval)];
+  const rS=fbDB.ref("rooms/"+BM_CODE+"/state"),fS=rS.on("value",s=>{
+    BM_STATE=s.val()||{};
+    bmHostUpdateRound();
+    if(BM_STATE.status==="finished")bmHostResult();
+  });
+  const rP=fbDB.ref("rooms/"+BM_CODE+"/players"),fP=rP.on("value",s=>{
+    BM_PLAYERS=s.val()||{};
+    bmHostUpdatePlayers();
+  });
+  const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),fT=rT.on("value",s=>{
+    BM_TEAMS=s.val()||{};
+    bmHostUpdateArmies();
+  });
+  BM_UNSUBS.push(()=>rS.off("value",fS),()=>rP.off("value",fP),()=>rT.off("value",fT));
   bmHostStartTimer();
 };
-function bmHostRender(){
-  const root=el("bmHR"); if(!root)return;
+function bmHostUpdateRound(){
   const round=BM_STATE.round||{};
-  const tl=round.deadline?Math.max(0,Math.round((round.deadline-Date.now())/1000)):0;
-  const phase=round.phase==="question"?"Vraagfase":round.phase==="action"?"Actiefase":"—";
+  const rndLbl=el("bmRndLabel");if(rndLbl)rndLbl.textContent="Ronde "+(round.n||"—");
+  const phLbl=el("bmPhaseLabel");if(phLbl)phLbl.textContent=round.phase==="question"?"Vraagfase":round.phase==="action"?"Actiefase":"—";
+  bmHostUpdateNote();
+}
+function bmHostUpdateArmies(){
+  const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
+  const ea=el("bmArmyA"),eb=el("bmArmyB");
+  if(ea)ea.innerHTML=bmArmyBarHTML("A","🔴 Rood",tA);
+  if(eb)eb.innerHTML=bmArmyBarHTML("B","🔵 Blauw",tB);
+}
+function bmHostUpdatePlayers(){
+  const round=BM_STATE.round||{};
+  const grid=el("bmPlayerGrid");if(!grid)return;
+  grid.innerHTML=Object.values(BM_PLAYERS).map(p=>`<span class="ptag">
+    ${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],22)}
+    <span style="font-size:12px">${esc(p.name)}</span>
+    ${round.phase==="question"&&p.answeredRound===round.n?`<span style="color:var(--green-bright)">✓</span>`:""}
+    ${round.phase==="action"&&p.lockedAction?`<span>⚔</span>`:""}
+  </span>`).join("");
+  bmHostUpdateNote();
+}
+function bmHostUpdateNote(){
+  const round=BM_STATE.round||{};
+  const note=el("bmStatusNote");if(!note)return;
   const answered=Object.values(BM_PLAYERS).filter(p=>p.answeredRound===round.n).length;
   const locked=Object.values(BM_PLAYERS).filter(p=>p.lockedAction).length;
   const total=Object.keys(BM_PLAYERS).length;
-  const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
-  root.innerHTML=`
-  <div class="panel">
-    <div style="display:flex;justify-content:space-between;margin-bottom:10px">
-      <span class="pill">Ronde ${round.n||"—"}</span>
-      <span class="pill">${phase}</span>
-      <span style="color:var(--hi-bright);font-size:18px">${tl}s</span>
-    </div>
-    ${bmArmyBarHTML("A","🔴 Rood",tA)}
-    <div style="text-align:center;color:var(--muted);font-size:11px;padding:4px 0">vs</div>
-    ${bmArmyBarHTML("B","🔵 Blauw",tB)}
-    <div class="note" style="margin-top:8px">
-      ${round.phase==="question"?`Beantwoord: ${answered} / ${total}`:""}
-      ${round.phase==="action"?`Actie vergrendeld: ${locked} / ${total}`:""}
-    </div>
-  </div>
-  <div class="panel"><div style="display:flex;flex-wrap:wrap;gap:8px">
-    ${Object.values(BM_PLAYERS).map(p=>`<span class="ptag">
-      ${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],22)}
-      <span style="font-size:12px">${esc(p.name)}</span>
-      ${round.phase==="question"&&p.answeredRound===round.n?`<span style="color:var(--green-bright)">✓</span>`:""}
-      ${round.phase==="action"&&p.lockedAction?`<span>⚔</span>`:""}
-    </span>`).join("")}
-  </div></div>
-  <button class="btn btn-ghost btn-block" onclick="bmEndGame()">Gevecht beëindigen</button>`;
+  if(round.phase==="question")note.textContent="Beantwoord: "+answered+" / "+total;
+  else if(round.phase==="action")note.textContent="Actie vergrendeld: "+locked+" / "+total;
+  else note.textContent="";
 }
 function bmArmyBarHTML(team,nm,d){
-  const pct=d.maxHealth?Math.round((d.health/d.maxHealth)*100):0;
+  const scale=d.maxHealth?Math.max(0,d.health/d.maxHealth):0;
   const col=team==="A"?"var(--teamA)":"var(--teamB)";
   return `<div><div style="display:flex;justify-content:space-between;margin-bottom:4px">
     <span style="color:${col}">${nm}</span><span style="font-size:14px">${d.health}/${d.maxHealth}</span>
   </div><div style="height:14px;border-radius:7px;background:rgba(0,0,0,.4);border:1px solid var(--stone4);overflow:hidden">
-    <div style="height:100%;width:${pct}%;background:${col};transition:width .4s"></div>
+    <div style="height:100%;width:100%;background:${col};transform:scaleX(${scale});transform-origin:left center;transition:transform .4s"></div>
   </div></div>`;
 }
 function bmClsName(id){const c=BM_CLASSES.find(x=>x.id===id);return c?c.nm:id;}
@@ -1515,6 +1544,7 @@ function bmHostStartTimer(){
 }
 async function bmTick(){
   if(!BM_STATE.round||BM_STATE.status!=="playing"||BM_RESOLVING)return;
+  if(Object.keys(BM_PLAYERS).length===0)return; // wacht tot spelers geladen zijn na herverbinding
   const{phase,deadline,n}=BM_STATE.round;
   if(Date.now()<deadline)return;
   clearInterval(BM_PHASE_TIMER);BM_PHASE_TIMER=null;_bmTicking=false;
@@ -1530,6 +1560,10 @@ async function bmTick(){
 async function bmResolve(roundN){
   BM_RESOLVING=true;
   try{
+    // idempotentiebewaker: sla op welke ronde al verrekend is zodat herverbinding niet dubbel telt
+    const guardSnap=await fbDB.ref("rooms/"+BM_CODE+"/state/resolvedRound").once("value");
+    if(guardSnap.val()===roundN)return;
+    await fbDB.ref("rooms/"+BM_CODE+"/state/resolvedRound").set(roundN);
     const players=BM_PLAYERS;
     let dmgA=0,dmgB=0,healA=0,healB=0,shldA=0,shldB=0;
     const events=[];
@@ -1597,8 +1631,13 @@ function bmHostResult(){
 /* ---- SCHERM: battleJoin ---- */
 SCREENS.battleJoin = function(){
   if(!BM_IDENT){go("battleIdentity");return;}
+  const savedSess=(()=>{try{const s=sessionStorage.getItem("bm_session");return s?JSON.parse(s):null;}catch(e){return null;}})();
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Meedoen</h2></div>
+  ${savedSess?`<div class="panel"><div class="note">Je was al actief in gevecht <b>${esc(savedSess.code)}</b>.</div>
+    <button class="btn btn-gold btn-block" style="margin-top:8px" onclick="bmRejoin()">Heraansluiten</button>
+    <button class="btn btn-ghost btn-block" style="margin-top:6px" onclick="sessionStorage.removeItem('bm_session');SCREENS.battleJoin()">Nieuw spel</button>
+  </div>`:""}
   <div class="panel">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
       ${avatarHTML(BM_IDENT.avatar||P.avatar,BM_IDENT.color||P.color,44)}
@@ -1617,20 +1656,57 @@ async function bmDoJoin(){
   const err=el("bmJE");
   if(code.length<3){if(err){err.textContent="Voer de spelcode in.";err.style.display="";}return;}
   if(err)err.style.display="none";
-  let meta;
-  try{const s=await fbDB.ref("rooms/"+code+"/meta").once("value");meta=s.val();}
-  catch(e){if(err){err.textContent="Kan kamer niet vinden — controleer je internetverbinding.";err.style.display="";}return;}
+  let meta,stateSnap;
+  try{
+    const[ms,ss]=await Promise.all([
+      fbDB.ref("rooms/"+code+"/meta").once("value"),
+      fbDB.ref("rooms/"+code+"/state").once("value")
+    ]);
+    meta=ms.val();stateSnap=ss.val();
+  }catch(e){if(err){err.textContent="Kan kamer niet vinden — controleer je internetverbinding.";err.style.display="";}return;}
   if(!meta||meta.game!=="battle"){if(err){err.textContent="Geen Battle Mode spel met code "+code+".";err.style.display="";}return;}
-  if(meta.status==="finished"){if(err){err.textContent="Dit spel is al afgelopen.";err.style.display="";}return;}
+  if(stateSnap?.status==="finished"){if(err){err.textContent="Dit spel is al afgelopen.";err.style.display="";}return;}
   BM_CODE=CODE=code;BM_META=meta;
+  const isPlaying=stateSnap?.status==="playing";
+  let team=null;
+  if(isPlaying){
+    // late join: wijs toe aan kleinste team
+    const ps=await fbDB.ref("rooms/"+code+"/players").once("value");
+    const all=Object.values(ps.val()||{});
+    const cA=all.filter(p=>p.team==="A").length,cB=all.filter(p=>p.team==="B").length;
+    team=cA<=cB?"A":"B";
+  }
   const pd={name:BM_IDENT.name,color:BM_IDENT.color||P.color,avatar:BM_IDENT.avatar||P.avatar,
-    team:null,class:null,be:0,correct:0,wrong:0,damage:0,healing:0,
-    answeredRound:-1,lockedAction:null,online:true,
+    team,class:null,be:0,correct:0,wrong:0,damage:0,healing:0,
+    answeredRound:isPlaying?(stateSnap.round?.n||0):- 1, // sla huidige ronde over bij late join
+    lockedAction:null,online:true,
     identityKey:BM_IDENT.klascode+":"+BM_IDENT.leerlingcode};
   const ref=fbDB.ref("rooms/"+code+"/players").push();
   ref.onDisconnect().update({online:false});
   await ref.set(pd);BM_PID=ref.key;
-  go("battlePlayerLobby");
+  try{sessionStorage.setItem("bm_session",JSON.stringify({pid:BM_PID,code:BM_CODE}));}catch(e){}
+  go(isPlaying?"battlePlayerGame":"battlePlayerLobby");
+}
+
+async function bmRejoin(){
+  try{
+    const s=sessionStorage.getItem("bm_session");if(!s)return false;
+    const{pid,code}=JSON.parse(s);
+    const[ps,ms,ss]=await Promise.all([
+      fbDB.ref("rooms/"+code+"/players/"+pid).once("value"),
+      fbDB.ref("rooms/"+code+"/meta").once("value"),
+      fbDB.ref("rooms/"+code+"/state").once("value")
+    ]);
+    const p=ps.val(),meta=ms.val(),st=ss.val();
+    if(!p||!meta||meta.game!=="battle"||st?.status==="finished")return false;
+    BM_CODE=CODE=code;BM_PID=pid;BM_META=meta;
+    BM_IDENT=bmIdentLoad()||BM_IDENT;BM_MY_BE=p.be||0;
+    const ref=fbDB.ref("rooms/"+code+"/players/"+pid);
+    ref.onDisconnect().update({online:false});
+    await ref.update({online:true});
+    go(st?.status==="playing"?"battlePlayerGame":"battlePlayerLobby");
+    return true;
+  }catch(e){return false;}
 }
 
 /* ---- SCHERM: battlePlayerLobby ---- */
@@ -1674,10 +1750,21 @@ SCREENS.battlePlayerGame = function(){
   H(brand(false)+`
   <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ Battle Mode</h2></div>
   <div id="bmPR"></div>${foot()}`);
-  const rS=fbDB.ref("rooms/"+BM_CODE+"/state"),fS=rS.on("value",s=>{BM_STATE=s.val()||{};if(BM_STATE.status==="finished"){cleanup();go("battleResult");}else bmPlayerRender();});
-  const rM=fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID),fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);}bmPlayerRender();});
-  const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
-  BM_UNSUBS=[()=>rS.off("value",fS),()=>rM.off("value",fM),()=>rT.off("value",fT)];
+  // scoped: aparte listeners voor round-data en game-status — geen listener op alle spelers
+  const rR=fbDB.ref("rooms/"+BM_CODE+"/state/round"),
+    fR=rR.on("value",s=>{BM_STATE.round=s.val()||{};bmPlayerRender();});
+  const rSt=fbDB.ref("rooms/"+BM_CODE+"/state/status"),
+    fSt=rSt.on("value",s=>{
+      BM_STATE.status=s.val();
+      if(BM_STATE.status==="finished"){
+        fbDB.ref("rooms/"+BM_CODE+"/state/winner").once("value").then(ws=>{BM_STATE.winner=ws.val();cleanup();go("battleResult");});
+      }
+    });
+  const rM=fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID),
+    fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);}bmPlayerRender();});
+  const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),
+    fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
+  BM_UNSUBS=[()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT)];
 };
 function bmPlayerRender(){
   const root=el("bmPR"); if(!root)return;
@@ -1685,12 +1772,12 @@ function bmPlayerRender(){
   const tl=round.deadline?Math.max(0,Math.round((round.deadline-Date.now())/1000)):0;
   const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
   function miniBar(nm,team,d){
-    const pct=d.maxHealth?Math.round((d.health/d.maxHealth)*100):0;
+    const scale=d.maxHealth?Math.max(0,d.health/d.maxHealth):0;
     const col=team==="A"?"var(--teamA)":"var(--teamB)";
     return `<div style="display:flex;align-items:center;gap:8px">
       <span style="color:${col};font-size:12px;width:36px">${nm}</span>
       <div style="flex:1;height:8px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
-        <div style="height:100%;width:${pct}%;background:${col};transition:width .4s"></div>
+        <div style="height:100%;width:100%;background:${col};transform:scaleX(${scale});transform-origin:left center;transition:transform .4s"></div>
       </div><span style="font-size:11px;color:var(--muted)">${d.health}</span>
     </div>`;
   }
