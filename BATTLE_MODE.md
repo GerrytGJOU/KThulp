@@ -141,6 +141,82 @@ Voeg één entry toe aan `BM_FACTIONS` — geen andere code wijzigen.
 
 ---
 
+## Slagveld-animaties (M5)
+
+### Architectuur
+
+Animaties draaien volledig **client-side**. De enige Firebase-sync is het log-event dat de host schrijft na resolutie (`rooms/{code}/log`). Clients abonneren via `.limitToLast(1).on("child_added")` en triggeren lokaal `bmPlayAnimations(entry)`. Geen enkele animatietoestand wordt gesynchroniseerd.
+
+### Formatie-indeling (host-scherm)
+
+```
+[ Achter (ranged) | Midden (support) | Voor (tanks) ]  vs  [ Voor (tanks) | Midden (support) | Achter (ranged) ]
+  Boogschutter        Priester           Hopliet              Hopliet          Priester          Boogschutter
+  Cavalerie           Genie              Spartaan             Spartaan         Genie             Cavalerie
+  Verkenner                              Centurio             Centurio                           Verkenner
+```
+
+Team A staat links (front rechts, richting vijand), Team B staat rechts (front links, richting vijand).
+
+### Animatie-overzicht
+
+| Type | CSS-keyframe | Trigger |
+|---|---|---|
+| Idle | `bmIdle` — 2px op-neer (staggered per avatar) | Altijd actief tussen rondes |
+| Correct antwoord | `bmOk` — schaal + sprong | `bmAnswer()` op spelerscherm |
+| Fout antwoord | `bmBad` — schud horizontaal | `bmAnswer()` op spelerscherm |
+| Aanval (melee) | `bmAtkR`/`bmAtkL` — 20px naar vijand | Log-event `anim:"attack"` |
+| Charge (Cavalerie) | `bmChgR`/`bmChgL` — 32px, terugstoot | Log-event, klasse `cavalerie` |
+| Geraakt | `bmHit` — schuiven + opacity flash | Na aanval-animatie (+320ms) |
+| Heling | `bmHeal` — schaal + groene kleurshift | Log-event `anim:"heal"` |
+| Schild | `bmShld` — blauwe glow ring | Log-event `anim:"shield"` |
+| Combo flash | `bmCombo` — schaal + brightness burst | Log-event `type:"combo"` |
+| Overwinning | `bmWin` — springen (3×) | Na `winner` in log |
+| Nederlaag | `bmLose` — zakken + fade out | Na `winner` in log (verliezend team) |
+| Kritieke health (<25%) | `bmCrit` — health-balk pulseert rood | `bmBuildBattlefield()` |
+
+### Projectielen
+
+| Klasse | Emoji | Animatie |
+|---|---|---|
+| Boogschutter | 🏹 | Lineaire vlucht (`bmProjR`/`bmProjL`) |
+| Genie | 🪨 | Boog-traject (`bmArcR`/`bmArcL`) |
+| Verkenner | ⚡ | Lineaire vlucht (sneller) |
+| Combo | ✨ | Lineaire vlucht |
+
+### Prestaties — Chromebook-overwegingen
+
+- **Geen layout-reflow**: alle animaties gebruiken uitsluitend `transform` en `opacity` (GPU-pad).
+- **`will-change: transform`** op `.bm-av .avc` voor pre-compositing.
+- **Stagger**: idle-animaties hebben per avatar een versprongen `animation-delay` (0–2.1 s) zodat ze niet synchroon lopen.
+- **30 spelers**: 30 avatar-elementen × 1 idle-keyframe per 2,6 s. Meetbaar verwaarloosbaar op moderne Chromebooks (2021+). Op Chromebook gen. 1 (2013–2015) wordt `meta.animations=false` aanbevolen.
+- **Animaties uit**: klasse `.bm-noanim` op `#bmField` onderdrukt alle keyframes en verbergt projectielen/gloed. Instelling `meta.animations=false` in de host-instellingen; doorgegeven via Firebase-meta.
+- **Floating text**: maximaal 4 gelijktijdige `bm-float`-elementen; ze verwijderen zichzelf na 1,4 s.
+- **Log-backfill**: `bmSubscribeLog` slaat de initiële Firebase-`child_added` over (backfill-guard) zodat geen animaties afspelen bij herverbinding.
+
+### Log-entry structuur (na M5)
+
+```
+/rooms/{code}/log/{pushId}/
+  round     — rondenummer
+  events[]  — per speler: { pid, abilityId, team, dmg, heal, shld, cls, anim }
+              per combo:  { type:"combo", comboId, team }
+  efA, efB  — effectieve schade op team A resp. B
+  healA, healB — totale heling per team
+  newHA, newHB — nieuwe HP na ronde
+```
+
+`cls` en `anim` zijn M5-toevoegingen zodat clients de juiste animatie kunnen kiezen zonder `BM_PLAYERS` te kennen.
+
+### `meta.animations` schakelaar
+
+Instelbaar in de host-instellingen vóór het aanmaken van de kamer. Standaard: `true`. Bij `false`:
+- Klasse `.bm-noanim` onderdrukt alle CSS-keyframes via `animation:none!important`
+- Projectielen en gloed-effecten krijgen `display:none!important`
+- Drijvende getallen worden niet aangemaakt
+
+---
+
 ## Facties (M6 — persistent)
 
 Langdurige groepen waartoe leerlingen behoren, ongeacht het actuele gevecht. Elke factie heeft een eigen identiteit en faction-klasse:
@@ -262,8 +338,8 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 | **M2** | Klaslokaal-bestendig: harde deadlines · idempotente resolutie · reconnect · late join · scoped listeners · Chromebook-perf | ✅ Gebouwd |
 | **M3** | 8 klassen · data-gedreven abilities · synergie · combo's · class mastery | ✅ Gebouwd |
 | **M4** | Factie/thema-systeem · 6 startfacties · CSS-variabelen theming · docentkeuze via dropdown | ✅ Gebouwd |
-| M5 | Kasteelmuren · voorraden · burchtstorm-einddoel | — |
-| M5 | Eigen HP · doelkeuze · respawn · doelpunten op kaart | — |
+| **M5** | Slagveld-animaties · formatie-layout · log-gestuurde client-side animaties · `meta.animations` schakelaar | ✅ Gebouwd |
+| M6 | Kasteelmuren · voorraden · burchtstorm-einddoel | — |
 | M6 | Facties · campagne · fog of war | — |
 | M7 | Ranked seizoen · leaderboard | — |
 | M8 | Campaign builder voor docenten | — |

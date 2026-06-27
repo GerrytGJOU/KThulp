@@ -284,6 +284,127 @@ body.greek .qcard .word{color:#143a5e}
 .fb-warn{font-size:12px;color:var(--muted2);text-align:center;margin-top:8px}
 @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .screen{animation:fade .3s ease}
+
+/* ======================================================
+   BATTLE MODE M5 — SLAGVELD & ANIMATIES
+   Alleen transform/opacity geanimeerd; nooit width/height/top/left
+   zodat de GPU-compositing-laag de animaties afhandelt.
+   ====================================================== */
+/* Slagveld-layout */
+#bmField{display:flex;align-items:stretch;gap:6px;min-height:120px;position:relative;
+  overflow:hidden;background:rgba(0,0,0,.18);border-radius:12px;padding:8px;margin-bottom:10px}
+.bm-form{flex:1;display:flex;flex-direction:row;gap:3px;align-items:flex-end}
+#bmFormA{justify-content:flex-end}   /* A: front rechts, richting vijand */
+#bmFormB{justify-content:flex-start} /* B: front links, richting vijand */
+.bm-fcol{display:flex;flex-direction:column;gap:3px;align-items:center}
+.bm-center{flex:0 0 96px;display:flex;flex-direction:column;gap:5px;justify-content:center;position:relative}
+#bmBfx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:10}
+
+/* Avatar */
+.bm-av{display:inline-flex;flex-direction:column;align-items:center;gap:1px;position:relative}
+.bm-av .avc{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;border:1.5px solid transparent;will-change:transform}
+.bm-av .avn{font-size:8px;color:var(--muted);max-width:34px;overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;text-align:center;line-height:1.2}
+/* Klasse-randkleur */
+.bm-av.cls-hopliet .avc{border-color:#c8392a88}
+.bm-av.cls-spartaan .avc{border-color:#8b1a1a88}
+.bm-av.cls-boogschutter .avc{border-color:#2e6fb088}
+.bm-av.cls-cavalerie .avc{border-color:#9b691488}
+.bm-av.cls-priester .avc{border-color:#3f9d5288}
+.bm-av.cls-centurio .avc{border-color:#6b2d8b88}
+.bm-av.cls-genie .avc{border-color:#c8753388}
+.bm-av.cls-verkenner .avc{border-color:#2d8b7a88}
+
+/* ── Idle ── */
+@keyframes bmIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+.bm-av .avc{animation:bmIdle 2.6s ease-in-out infinite}
+.bm-av:nth-child(2) .avc{animation-delay:.35s}
+.bm-av:nth-child(3) .avc{animation-delay:.7s}
+.bm-av:nth-child(4) .avc{animation-delay:1.05s}
+.bm-av:nth-child(5) .avc{animation-delay:1.4s}
+.bm-av:nth-child(6) .avc{animation-delay:1.75s}
+.bm-av:nth-child(7) .avc{animation-delay:2.1s}
+
+/* ── Correct / Wrong (eigen avatar op spelerscherm) ── */
+@keyframes bmOk{0%{transform:scale(1) translateY(0)}35%{transform:scale(1.3) translateY(-7px)}70%{transform:scale(1.1) translateY(-2px)}100%{transform:scale(1) translateY(0)}}
+@keyframes bmBad{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.bm-av.anim-ok .avc{animation:bmOk .5s ease-out!important}
+.bm-av.anim-bad .avc{animation:bmBad .45s ease-out!important}
+
+/* ── Aanval rechts (team A → B) ── */
+@keyframes bmAtkR{0%{transform:translateX(0)}40%{transform:translateX(20px)}100%{transform:translateX(0)}}
+.bm-av.anim-atk-r .avc{animation:bmAtkR .55s ease-in-out!important}
+
+/* ── Aanval links (team B → A) ── */
+@keyframes bmAtkL{0%{transform:translateX(0)}40%{transform:translateX(-20px)}100%{transform:translateX(0)}}
+.bm-av.anim-atk-l .avc{animation:bmAtkL .55s ease-in-out!important}
+
+/* ── Charge (Cavalerie, grotere beweging) ── */
+@keyframes bmChgR{0%{transform:translateX(0)}35%{transform:translateX(32px)}65%{transform:translateX(26px)}100%{transform:translateX(0)}}
+@keyframes bmChgL{0%{transform:translateX(0)}35%{transform:translateX(-32px)}65%{transform:translateX(-26px)}100%{transform:translateX(0)}}
+.bm-av.anim-chg-r .avc{animation:bmChgR .7s ease-in-out!important}
+.bm-av.anim-chg-l .avc{animation:bmChgL .7s ease-in-out!important}
+
+/* ── Geraakt ── */
+@keyframes bmHit{0%{transform:translateX(0);opacity:1;filter:none}25%{transform:translateX(-7px);opacity:.4;filter:brightness(3) saturate(0)}65%{transform:translateX(3px);opacity:.8}100%{transform:translateX(0);opacity:1;filter:none}}
+.bm-av.anim-hit .avc{animation:bmHit .5s ease-out!important}
+
+/* ── Heling ── */
+@keyframes bmHeal{0%{transform:scale(1);filter:none}40%{transform:scale(1.18);filter:brightness(1.7) hue-rotate(60deg)}100%{transform:scale(1);filter:none}}
+.bm-av.anim-heal .avc{animation:bmHeal .6s ease-out!important}
+
+/* ── Schild ── */
+@keyframes bmShld{0%,100%{box-shadow:none}40%{box-shadow:0 0 0 5px rgba(100,160,255,.75)}80%{box-shadow:0 0 0 9px rgba(100,160,255,.25)}}
+.bm-av.anim-shield .avc{animation:bmShld .7s ease-out!important}
+
+/* ── Combo flash ── */
+@keyframes bmCombo{0%{transform:scale(1);filter:none}25%{transform:scale(1.35);filter:brightness(2.2)}70%{transform:scale(1.12)}100%{transform:scale(1);filter:none}}
+.bm-av.anim-combo .avc{animation:bmCombo .7s ease-out!important}
+
+/* ── Overwinning ── */
+@keyframes bmWin{0%,100%{transform:translateY(0)}22%{transform:translateY(-10px)}55%{transform:translateY(-5px)}78%{transform:translateY(-9px)}}
+.bm-av.anim-win .avc{animation:bmWin 1.4s ease-in-out 3!important}
+
+/* ── Nederlaag ── */
+@keyframes bmLose{0%{transform:translateY(0);opacity:1}100%{transform:translateY(8px);opacity:.25}}
+.bm-av.anim-lose .avc{animation:bmLose 1.3s ease-in forwards!important}
+
+/* ── Projectiel: pijl ── */
+.bm-proj{position:absolute;pointer-events:none;font-size:14px;line-height:1;
+  top:calc(20% + var(--row,0) * 20%);will-change:transform,opacity}
+@keyframes bmProjR{0%{transform:translateX(0) scaleX(1);opacity:1}100%{transform:translateX(130px) scaleX(1);opacity:0}}
+@keyframes bmProjL{0%{transform:translateX(0) scaleX(-1);opacity:1}100%{transform:translateX(-130px) scaleX(-1);opacity:0}}
+.bm-proj.r{right:50%;animation:bmProjR .5s ease-in forwards}
+.bm-proj.l{left:50%;animation:bmProjL .5s ease-in forwards}
+
+/* ── Boogvlucht (steen) ── */
+@keyframes bmArcR{0%{transform:translate(0,0) rotate(0deg);opacity:1}50%{transform:translate(60px,-28px) rotate(180deg)}100%{transform:translate(120px,4px) rotate(360deg);opacity:.15}}
+@keyframes bmArcL{0%{transform:translate(0,0) rotate(0deg);opacity:1}50%{transform:translate(-60px,-28px) rotate(-180deg)}100%{transform:translate(-120px,4px) rotate(-360deg);opacity:.15}}
+.bm-proj.arc.r{animation:bmArcR .7s ease-in forwards}
+.bm-proj.arc.l{animation:bmArcL .7s ease-in forwards}
+
+/* ── Gloed-ring (heling / combo) ── */
+.bm-glow{position:absolute;pointer-events:none;border-radius:50%;will-change:transform,opacity}
+@keyframes bmGlowR{0%{transform:scale(.5);opacity:.9}70%{transform:scale(1.5);opacity:.5}100%{transform:scale(2);opacity:0}}
+.bm-glow{animation:bmGlowR .85s ease-out forwards}
+
+/* ── Drijvend getal ── */
+.bm-float{position:absolute;pointer-events:none;font-weight:800;font-size:14px;white-space:nowrap;
+  will-change:transform,opacity;left:50%;transform:translateX(-50%)}
+@keyframes bmFl{0%{transform:translateX(-50%) translateY(0);opacity:1}80%{opacity:1}100%{transform:translateX(-50%) translateY(-40px);opacity:0}}
+.bm-float{animation:bmFl 1.3s ease-out forwards}
+
+/* ── Kritieke health balk ── */
+@keyframes bmCrit{0%,100%{opacity:1}50%{opacity:.3}}
+.bm-crit{animation:bmCrit 1s ease-in-out infinite}
+
+/* ── Animaties UIT (meta.animations=false) ── */
+.bm-noanim .bm-av .avc{animation:none!important}
+.bm-noanim .bm-float,.bm-noanim .bm-proj,.bm-noanim .bm-glow{display:none!important}
+
+/* ── Speler-eigen miniavatar ── */
+#bmMyAv .avc{width:38px;height:38px}
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
 </head>
@@ -565,7 +686,7 @@ let STATE={}, PLAYERS={};
 let DRAFT = { game:"touwtrekken", lang:"la", source:"freq", fromN:1, toN:100, cat:"all", customText:"",
   target:15, penalty:"back", freezeSec:4 };
 let myStreak=0;
-let BM_UNSUBS=[], BM_PHASE_TIMER=null, _bmTicking=false;
+let BM_UNSUBS=[], BM_PHASE_TIMER=null, _bmTicking=false, _bmFormHash="";
 
 function cleanup(){
   if(unsubState){unsubState();unsubState=null;}
@@ -1403,6 +1524,7 @@ let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
 const BM_MISSED={}; // { pid:{ wordLa:count } } host-only, adaptief leren
 
 function bmLeave(){
+  _bmFormHash="";
   bmClearTheme();
   BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};
   BM_MY_BE=0;BM_MY_Q=null;BM_MY_CLASS=null;BM_MY_TEAM=null;
@@ -1520,6 +1642,14 @@ SCREENS.battleHostSettings = function(){
     </div>
     <div class="note" style="margin-top:8px">Fout beantwoorde woorden komen voor die leerling vaker terug.</div>
   </div>
+  <div class="panel">
+    <label class="fld">Slagveld-animaties</label>
+    <div class="chips">
+      <button class="chip ${BM_META.animations!==false?"on":""}" onclick="BM_META.animations=true;SCREENS.battleHostSettings()">Aan</button>
+      <button class="chip ${BM_META.animations===false?"on":""}" onclick="BM_META.animations=false;SCREENS.battleHostSettings()">Uit</button>
+    </div>
+    <div class="note" style="margin-top:8px">Schakel uit bij trage apparaten (Chromebook, oude tablets).</div>
+  </div>
   <button class="btn btn-gold btn-block lg" onclick="bmCreateRoom()">Gevecht aanmaken</button>
   ${foot()}`);
 };
@@ -1535,6 +1665,7 @@ async function bmCreateRoom(){
     cat:DRAFT.cat,customText:DRAFT.customText||"",armyHealth:ah,
     answerTimer:BM_META.answerTimer||10,adaptive:BM_META.adaptive!==false,
     theme:BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id,
+    animations:BM_META.animations!==false,
     status:"lobby"};
   BM_META=meta;
   let code=code4();
@@ -1638,20 +1769,27 @@ SCREENS.battleHostGame = function(){
   H(brand(false)+`
   <div class="scrhead">
     <button class="back" onclick="bmEndGame()">${iconSVG("shield",20,"currentColor")}</button>
-    <h2>⚔️ Battle Mode</h2><span class="pill">code ${BM_CODE}</span>
+    <h2>⚔️ ${esc(bmFaction(BM_META?.theme).nm)}</h2><span class="pill">code ${BM_CODE}</span>
   </div>
-  <div class="panel">
-    <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+  <div class="panel" style="padding:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
       <span id="bmRndLabel" class="pill">Ronde —</span>
       <span id="bmPhaseLabel" class="pill">—</span>
       <span id="bmTimer" style="color:var(--hi-bright);font-size:18px">—</span>
     </div>
-    <div id="bmArmyA"></div>
-    <div style="text-align:center;color:var(--muted);font-size:11px;padding:4px 0">vs</div>
-    <div id="bmArmyB"></div>
-    <div id="bmStatusNote" class="note" style="margin-top:8px"></div>
+    <div id="bmField">
+      <div id="bmFormA" class="bm-form"></div>
+      <div class="bm-center">
+        <div id="bmArmyA"></div>
+        <div style="text-align:center;color:var(--muted);font-size:10px;padding:2px 0">vs</div>
+        <div id="bmArmyB"></div>
+      </div>
+      <div id="bmFormB" class="bm-form"></div>
+      <div id="bmBfx"></div>
+    </div>
+    <div id="bmStatusNote" class="note" style="margin-top:6px;text-align:center"></div>
   </div>
-  <div class="panel"><div id="bmPlayerGrid" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
+  <div class="panel" style="padding:10px 12px"><div id="bmPlayerGrid" style="display:flex;flex-wrap:wrap;gap:6px"></div></div>
   <button class="btn btn-ghost btn-block" onclick="bmEndGame()">Gevecht beëindigen</button>
   ${foot()}`);
   // timer display only — apart van de game-logic tick (bmHostStartTimer op 500 ms)
@@ -1675,6 +1813,8 @@ SCREENS.battleHostGame = function(){
     bmHostUpdateArmies();
   });
   BM_UNSUBS.push(()=>rS.off("value",fS),()=>rP.off("value",fP),()=>rT.off("value",fT));
+  bmSubscribeLog(BM_CODE);
+  bmBuildBattlefield();
   bmHostStartTimer();
 };
 function bmHostUpdateRound(){
@@ -1692,13 +1832,19 @@ function bmHostUpdateArmies(){
 function bmHostUpdatePlayers(){
   const round=BM_STATE.round||{};
   const grid=el("bmPlayerGrid");if(!grid)return;
-  grid.innerHTML=Object.values(BM_PLAYERS).map(p=>`<span class="ptag">
-    ${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],22)}
-    <span style="font-size:12px">${esc(p.name)}</span>
-    ${round.phase==="question"&&p.answeredRound===round.n?`<span style="color:var(--green-bright)">✓</span>`:""}
-    ${round.phase==="action"&&p.lockedAction?`<span>⚔</span>`:""}
-  </span>`).join("");
+  grid.innerHTML=Object.values(BM_PLAYERS).map(p=>{
+    const cls=BM_CLASSES.find(c=>c.id===p.class);
+    const col=cls?.color||p.color||COLORS[0];
+    return `<span class="ptag">
+      <span style="width:22px;height:22px;border-radius:50%;background:${col}33;display:inline-flex;align-items:center;justify-content:center;border:1px solid ${col}66">${iconSVG(cls?.icon||"helmet",14,col)}</span>
+      <span style="font-size:12px">${esc(p.name)}</span>
+      ${round.phase==="question"&&p.answeredRound===round.n?`<span style="color:var(--green-bright)">✓</span>`:""}
+      ${round.phase==="action"&&p.lockedAction?`<span>⚔</span>`:""}
+    </span>`;
+  }).join("");
   bmHostUpdateNote();
+  // Herbouw formatie wanneer klassen of teams wijzigen
+  if(el("bmFormA"))bmBuildBattlefield();
 }
 function bmHostUpdateNote(){
   const round=BM_STATE.round||{};
@@ -1713,13 +1859,215 @@ function bmHostUpdateNote(){
 function bmArmyBarHTML(team,nm,d){
   const scale=d.maxHealth?Math.max(0,d.health/d.maxHealth):0;
   const col=team==="A"?"var(--teamA)":"var(--teamB)";
-  return `<div><div style="display:flex;justify-content:space-between;margin-bottom:4px">
-    <span style="color:${col}">${nm}</span><span style="font-size:14px">${d.health}/${d.maxHealth}</span>
-  </div><div style="height:14px;border-radius:7px;background:rgba(0,0,0,.4);border:1px solid var(--stone4);overflow:hidden">
-    <div style="height:100%;width:100%;background:${col};transform:scaleX(${scale});transform-origin:left center;transition:transform .4s"></div>
+  const crit=d.maxHealth&&d.health/d.maxHealth<0.25?" bm-crit":"";
+  return `<div><div style="display:flex;justify-content:space-between;margin-bottom:3px">
+    <span style="color:${col};font-size:12px">${nm}</span><span style="font-size:12px">${d.health}/${d.maxHealth}</span>
+  </div><div style="height:10px;border-radius:5px;background:rgba(0,0,0,.4);border:1px solid var(--stone4);overflow:hidden">
+    <div class="bm-hbar${crit}" style="height:100%;width:100%;background:${col};transform:scaleX(${scale});transform-origin:left center;transition:transform .4s;will-change:transform"></div>
   </div></div>`;
 }
 function bmClsName(id){const c=BM_CLASSES.find(x=>x.id===id);return c?c.nm:id;}
+
+/* ======================================================
+   BATTLE MODE M5 — ANIMATIE-ENGINE
+   Alle animaties draaien client-side op basis van log-events.
+   Enige Firebase-sync: host schrijft log; clients lezen het.
+   ====================================================== */
+// Klasse → formatiepositie (voor/midden/achter)
+const BM_FORM_POS={
+  front:["hopliet","spartaan","centurio"],
+  mid:["priester","genie"],
+  back:["boogschutter","cavalerie","verkenner"]
+};
+function bmFormPos(clsId){
+  for(const[p,ids]of Object.entries(BM_FORM_POS))if(ids.includes(clsId))return p;
+  return "mid";
+}
+
+// Ability-type → animatie-categorie (geschreven in log voor clients)
+function bmAblAnim(ablType){
+  if(!ablType)return"none";
+  const ATK=["attack","attack_bypass","attack_weakspot","attack_and_shld_remove",
+              "attack_siege","attack_and_defend","heal_and_attack"];
+  if(ATK.includes(ablType))return"attack";
+  if(ablType==="heal")return"heal";
+  if(ablType==="team_shield"||ablType==="testudo")return"shield";
+  if(ablType==="team_be")return"teambe";
+  if(ablType==="shield_remove")return"shldremove";
+  return"none";
+}
+
+// Avatar DOM-id (veilig voor Firebase push-ids)
+function bmAvId(pid){return"bmAv-"+pid.replace(/\W/g,"_");}
+
+// Verwijder een animatie-klasse na aflopen
+function bmAnimTmp(el,cls,ms){
+  if(!el)return;
+  el.classList.add(cls);
+  setTimeout(()=>el.classList.remove(cls),ms||700);
+}
+function bmAnimAv(pid,cls,ms){bmAnimTmp(el(bmAvId(pid)),cls,ms);}
+function bmAnimTeam(team,cls,ms){
+  if(BM_META?.animations===false)return;
+  Object.entries(BM_PLAYERS).filter(([,p])=>p.team===team)
+    .forEach(([pid])=>bmAnimAv(pid,cls,ms));
+}
+
+// Drijvend tekstgetal (dmg/heal) boven het slagveld-midden
+function bmFloat(text,color,offsetPct){
+  if(BM_META?.animations===false)return;
+  const cont=el("bmBfx");if(!cont)return;
+  const d=document.createElement("div");
+  d.className="bm-float";
+  d.style.cssText=`color:${color};bottom:${30+(offsetPct||0)*20}%`;
+  d.textContent=text;
+  cont.appendChild(d);
+  setTimeout(()=>d.remove(),1400);
+}
+
+// Vliegend projectiel of boogvlucht
+function bmProj(emoji,teamFrom,arc,row){
+  if(BM_META?.animations===false)return;
+  const cont=el("bmBfx");if(!cont)return;
+  const isR=teamFrom==="A";
+  const d=document.createElement("div");
+  d.className="bm-proj"+(arc?" arc":"")+" "+(isR?"r":"l");
+  d.style.setProperty("--row",row||0);
+  d.textContent=emoji;
+  cont.appendChild(d);
+  setTimeout(()=>d.remove(),900);
+}
+
+// Gloed-ring op positie (linker- of rechterkant van slagveld)
+function bmGlowFx(team,col){
+  if(BM_META?.animations===false)return;
+  const cont=el("bmBfx");if(!cont)return;
+  const d=document.createElement("div");
+  d.className="bm-glow";
+  d.style.cssText=`width:70px;height:70px;background:radial-gradient(circle,${col||"rgba(212,175,55,.65)"},transparent 70%);`+
+    (team==="A"?"left:8%;top:15%":"right:8%;top:15%");
+  cont.appendChild(d);
+  setTimeout(()=>d.remove(),950);
+}
+
+// Bouw formatie-HTML voor één team
+function bmFormationHTML(team){
+  const members=Object.entries(BM_PLAYERS).filter(([,p])=>p.team===team);
+  const cols={front:[],mid:[],back:[]};
+  for(const[pid,p]of members){
+    const pos=bmFormPos(p.class);
+    const cls=BM_CLASSES.find(c=>c.id===p.class);
+    const col=cls?.color||"var(--muted)";
+    cols[pos].push(`<div class="bm-av cls-${p.class||""}" id="${bmAvId(pid)}" title="${esc(p.name)} · ${esc(bmClsNmThemed(p.class||""))}">
+      <div class="avc" style="background:${col}22">${iconSVG(cls?.icon||"helmet",18,col)}</div>
+      <div class="avn">${esc(p.name)}</div>
+    </div>`);
+  }
+  // Team A: back | mid | front (front rechts, naar vijand)
+  // Team B: front | mid | back (front links, naar vijand)
+  const order=team==="A"?["back","mid","front"]:["front","mid","back"];
+  return order.map(k=>cols[k].length
+    ?`<div class="bm-fcol">${cols[k].join("")}</div>`
+    :""
+  ).join("");
+}
+
+// (Her)bouw het volledige slagveld (aangeroepen na speler-update of ronde-start)
+function bmBuildBattlefield(){
+  const fA=el("bmFormA"),fB=el("bmFormB");
+  // Herbouw formatie ALLEEN als klasse-/team-samenstelling wijzigt, zodat
+  // lopende CSS-animaties niet worden afgebroken door innerHTML-vervanging.
+  const hash=Object.entries(BM_PLAYERS).map(([id,p])=>id+":"+p.class+":"+p.team).sort().join("|");
+  if(hash!==_bmFormHash){
+    _bmFormHash=hash;
+    if(fA)fA.innerHTML=bmFormationHTML("A");
+    if(fB)fB.innerHTML=bmFormationHTML("B");
+  }
+  const field=el("bmField");
+  if(field){
+    if(BM_META?.animations===false)field.classList.add("bm-noanim");
+    else field.classList.remove("bm-noanim");
+  }
+  // Kritieke health check
+  const tA=BM_TEAMS.A||{health:0,maxHealth:100};
+  const tB=BM_TEAMS.B||{health:0,maxHealth:100};
+  const critA=tA.maxHealth&&tA.health/tA.maxHealth<0.25;
+  const critB=tB.maxHealth&&tB.health/tB.maxHealth<0.25;
+  document.querySelectorAll("#bmArmyA .bm-hbar").forEach(b=>critA?b.classList.add("bm-crit"):b.classList.remove("bm-crit"));
+  document.querySelectorAll("#bmArmyB .bm-hbar").forEach(b=>critB?b.classList.add("bm-crit"):b.classList.remove("bm-crit"));
+}
+
+// Hoofddispatcher: trigger animaties vanuit één log-entry
+function bmPlayAnimations(entry){
+  if(!entry||BM_META?.animations===false)return;
+  const{events=[],efA=0,efB=0,healA=0,healB=0,winner}=entry;
+
+  // Drijvende totaalgetallen
+  if(efA>0)setTimeout(()=>bmFloat("-"+efA,"#e05555",0),500);
+  if(efB>0)setTimeout(()=>bmFloat("-"+efB,"#e05555",1),550);
+  if(healA>0)setTimeout(()=>bmFloat("+"+healA,"var(--green-bright)",2),600);
+  if(healB>0)setTimeout(()=>bmFloat("+"+healB,"var(--green-bright)",3),650);
+
+  // Per event met stagger
+  let d=0;
+  for(const ev of events){
+    const delay=d;d+=130;
+    setTimeout(()=>{
+      if(ev.type==="combo"){
+        const combo=BM_COMBOS.find(c=>c.id===ev.comboId)||{};
+        bmAnimTeam(ev.team,"anim-combo",750);
+        if(combo.dmg)bmProj("✨",ev.team,false,1);
+        if(combo.shld)bmGlowFx(ev.team,"rgba(100,160,255,.6)");
+        if(combo.heal)bmGlowFx(ev.team,"rgba(100,210,100,.6)");
+        const enemy=ev.team==="A"?"B":"A";
+        if(combo.dmg)setTimeout(()=>bmAnimTeam(enemy,"anim-hit",500),320);
+        return;
+      }
+      const{pid,team,cls,anim,dmg=0,heal=0}=ev;
+      const isR=team==="A";
+      if(anim==="attack"){
+        const atkCls=cls==="cavalerie"?(isR?"anim-chg-r":"anim-chg-l"):(isR?"anim-atk-r":"anim-atk-l");
+        bmAnimAv(pid,atkCls,750);
+        // klasse-specifiek projectiel
+        if(cls==="boogschutter")bmProj("🏹",team,false,0);
+        else if(cls==="genie")bmProj("🪨",team,true,0);
+        else if(cls==="verkenner")bmProj("⚡",team,false,0);
+        const enemy=team==="A"?"B":"A";
+        setTimeout(()=>bmAnimTeam(enemy,"anim-hit",500),320);
+      } else if(anim==="heal"){
+        bmAnimAv(pid,"anim-heal",650);
+        bmAnimTeam(team,"anim-heal",700);
+        bmGlowFx(team,"rgba(100,210,100,.65)");
+      } else if(anim==="shield"){
+        bmAnimAv(pid,"anim-shield",750);
+        bmAnimTeam(team,"anim-shield",700);
+        bmGlowFx(team,"rgba(100,160,255,.55)");
+      } else if(anim==="teambe"){
+        bmGlowFx(team,"rgba(212,175,55,.6)");
+      }
+    },delay);
+  }
+
+  // Eind-animaties (overwinning / nederlaag)
+  if(winner==="A"||winner==="B"){
+    const loser=winner==="A"?"B":"A";
+    setTimeout(()=>{bmAnimTeam(winner,"anim-win",1400);bmAnimTeam(loser,"anim-lose",1300);},900);
+  }
+}
+
+// Abonneer op log; trigger animaties bij nieuwe entry (beperkt tot laatste 1 om backfill te vermijden)
+function bmSubscribeLog(code){
+  if(!fbDB)return;
+  let firstFire=true; // sla initieel backfill-event over
+  const rLog=fbDB.ref("rooms/"+code+"/log").limitToLast(1);
+  const fLog=rLog.on("child_added",s=>{
+    if(firstFire){firstFire=false;return;} // Firebase vuurt direct bij subscribe
+    const entry=s.val();
+    if(el("bmFormA"))bmBuildBattlefield(); // formatie bijwerken
+    setTimeout(()=>bmPlayAnimations(entry),250);
+  });
+  BM_UNSUBS.push(()=>rLog.off("child_added",fLog));
+}
 
 /* ---- HOST TIMER ---- */
 function bmHostStartTimer(){
@@ -1773,7 +2121,8 @@ async function bmResolve(roundN){
       for_[mt].teamBE+=fx.teamBE;
       pUpd[pid]={be:Math.max(0,(p.be||0)-(action.cost||0)+(fx.selfBE||0)),
                  damage:(p.damage||0)+fx.dmg, healing:(p.healing||0)+fx.heal, lockedAction:null};
-      events.push({pid,abilityId:abl.id,team:mt,dmg:fx.dmg,heal:fx.heal,shld:fx.shld});
+      events.push({pid,abilityId:abl.id,team:mt,dmg:fx.dmg,heal:fx.heal,shld:fx.shld,
+                   cls:p.class,anim:bmAblAnim(abl.type)});
     }
 
     // Pas 2: combo's — zoek overeenkomende paren binnen hetzelfde team
@@ -1819,7 +2168,8 @@ async function bmResolve(roundN){
     const newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-efA+for_.A.heal));
     const newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-efB+for_.B.heal));
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
-    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,newHA,newHB});
+    const logWinner=newHA<=0?"B":newHB<=0?"A":null;
+    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner});
 
     // Mastery bijhouden in identities (fire-and-forget)
     bmUpdateMastery(players,pUpd,events);
@@ -2003,8 +2353,15 @@ function bmPickClass(cid){
 SCREENS.battlePlayerGame = function(){
   bmApplyTheme(BM_META?.theme);
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_MY_BE=0;BM_MY_Q=null;
+  const myClsObj=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
+  const myCol=myClsObj?.color||"var(--muted)";
   H(brand(false)+`
-  <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ Battle Mode</h2></div>
+  <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button>
+    <div class="bm-av" id="bmMyAv" style="display:inline-flex;margin-right:4px">
+      <div class="avc" style="background:${myCol}22;border-color:${myCol}88">${iconSVG(myClsObj?.icon||"helmet",22,myCol)}</div>
+    </div>
+    <h2 style="font-size:17px">${esc(BM_IDENT?.name||"")} · ${esc(bmClsNmThemed(BM_MY_CLASS||""))}</h2>
+  </div>
   <div id="bmPR"></div>${foot()}`);
   // scoped: aparte listeners voor round-data en game-status — geen listener op alle spelers
   const rR=fbDB.ref("rooms/"+BM_CODE+"/state/round"),
@@ -2021,6 +2378,7 @@ SCREENS.battlePlayerGame = function(){
   const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),
     fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
   BM_UNSUBS=[()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT)];
+  bmSubscribeLog(BM_CODE);
 };
 function bmPlayerRender(){
   const root=el("bmPR"); if(!root)return;
@@ -2105,8 +2463,9 @@ function bmPlayerRender(){
     content=`<div class="panel" style="text-align:center"><div class="note">Resolutie…</div></div>`;
   }
   root.innerHTML=`
-  <div class="panel" style="margin-bottom:10px">
+  <div class="panel" style="margin-bottom:10px;position:relative">
     ${miniBar(bmTeamNm("A"),"A",tA)}<div style="height:6px"></div>${miniBar(bmTeamNm("B"),"B",tB)}
+    <div id="bmBfx" style="position:absolute;inset:0;pointer-events:none;overflow:hidden"></div>
   </div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span class="pill">Ronde ${round.n||"—"}</span>
@@ -2127,6 +2486,7 @@ function bmAnswer(idx){
     c.disabled=true;
   });
   beep(ok?"good":"bad");
+  bmAnimTmp(el("bmMyAv"),ok?"anim-ok":"anim-bad",600);
   const round=BM_STATE.round||{};
   const at=BM_META?.answerTimer||10;
   const timeLeft=round.deadline?Math.max(0,(round.deadline-Date.now())/1000):0;
