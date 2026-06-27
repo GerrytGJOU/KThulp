@@ -1296,6 +1296,37 @@ const BM_COMBOS = [
   { id:"hinderlaag_aanval",   nm:"Hinderlaag & Aanval",      classes:["verkenner","cavalerie"],       cost:4, desc:"Gecombineerde aanval (+13) én vijandelijk schild weg (−3)",     dmg:13, shldRemove:3 },
 ];
 
+/* ---- CONFIGURATIETABEL: FACTIES / THEMA'S ---- */
+// cssVars: alleen de velden die afwijken van de standaard hoeven ingevuld.
+// Nieuwe factie toevoegen = één entry hier; geen andere code wijzigen.
+const BM_FACTIONS = [
+  { id:"rome_gaul",       nm:"Romeinen vs Galliërs",    default:true,
+    teams:{ A:{ nm:"Legio Romani",   icon:"laurel"  }, B:{ nm:"Gallische Stam",  icon:"shield"  }},
+    cssVars:{ "--teamA":"#b03a2e","--glowA":"176,58,46","--teamB":"#3a7a30","--glowB":"58,122,48" },
+    classLabels:{} },
+  { id:"athene_sparta",   nm:"Athene vs Sparta",
+    teams:{ A:{ nm:"Atheners",       icon:"column"  }, B:{ nm:"Spartanen",       icon:"helmet"  }},
+    cssVars:{ "--teamA":"#2e6fb0","--glowA":"46,111,176","--teamB":"#8b1a1a","--glowB":"139,26,26" },
+    classLabels:{ hopliet:"Atheense Hopliet", spartaan:"Lakedaimoniër" } },
+  { id:"grieken_perzen",  nm:"Grieken vs Perzen",
+    teams:{ A:{ nm:"Hellenen",       icon:"column"  }, B:{ nm:"Perzen",          icon:"eagle"   }},
+    cssVars:{ "--teamA":"#2e6fb0","--glowA":"46,111,176","--teamB":"#7a3a80","--glowB":"122,58,128" },
+    classLabels:{} },
+  { id:"rome_carthago",   nm:"Romeinen vs Carthago",
+    teams:{ A:{ nm:"Legio Romani",   icon:"laurel"  }, B:{ nm:"Carthago",        icon:"amphora" }},
+    cssVars:{ "--teamA":"#b03a2e","--glowA":"176,58,46","--teamB":"#9b6914","--glowB":"155,105,20" },
+    classLabels:{} },
+  { id:"grieken_trojanen",nm:"Grieken vs Trojanen",
+    teams:{ A:{ nm:"Grieken",        icon:"column"  }, B:{ nm:"Trojanen",        icon:"helmet"  }},
+    cssVars:{ "--teamA":"#2e6fb0","--glowA":"46,111,176","--teamB":"#9b6914","--glowB":"155,105,20" },
+    classLabels:{} },
+  { id:"goden_titanen",   nm:"Goden vs Titanen",
+    teams:{ A:{ nm:"Olympiërs",      icon:"torch"   }, B:{ nm:"Titanen",         icon:"shield"  }},
+    cssVars:{ "--teamA":"#d4af37","--glowA":"212,175,55","--teamB":"#4a2d6a","--glowB":"74,45,106",
+              "--stone":"#100a1a","--stone2":"#180f28","--stone3":"#1f1530","--stone4":"#2a1a3e" },
+    classLabels:{ priester:"Orakel", centurio:"Halfgod" } },
+];
+
 /* ---- BATTLE IDENTITY ---- */
 const BM_IDENT_KEY = "certamen_battle_identity";
 let BM_IDENT = null;
@@ -1341,6 +1372,29 @@ function bmCalcSynergy(players,team){
   return bonus;
 }
 
+/* ---- FACTIE / THEMA HELPERS ---- */
+let BM_THEME_SAVED=[]; // opgeslagen originele CSS-var-waarden voor herstel bij bmLeave
+function bmFaction(id){ return BM_FACTIONS.find(f=>f.id===id)||BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]; }
+function bmApplyTheme(themeId){
+  bmClearTheme(); // herstel eerst eventueel vorig thema
+  const f=bmFaction(themeId);
+  const root=document.documentElement;
+  for(const[k,v]of Object.entries(f.cssVars||{})){
+    BM_THEME_SAVED.push([k,root.style.getPropertyValue(k)]);
+    root.style.setProperty(k,v);
+  }
+}
+function bmClearTheme(){
+  const root=document.documentElement;
+  for(const[k,v]of BM_THEME_SAVED){
+    if(v)root.style.setProperty(k,v);else root.style.removeProperty(k);
+  }
+  BM_THEME_SAVED=[];
+}
+function bmTeamNm(team){ return bmFaction(BM_META?.theme).teams[team]?.nm||(team==="A"?"Team A":"Team B"); }
+function bmTeamIcon(team){ return bmFaction(BM_META?.theme).teams[team]?.icon||(team==="A"?"shield":"helmet"); }
+function bmClsNmThemed(clsId){ return bmFaction(BM_META?.theme).classLabels?.[clsId]||bmClsName(clsId); }
+
 /* ---- BATTLE GAME STATE ---- */
 let BM_CODE=null, BM_PID=null, BM_META=null;
 let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={};
@@ -1349,6 +1403,7 @@ let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
 const BM_MISSED={}; // { pid:{ wordLa:count } } host-only, adaptief leren
 
 function bmLeave(){
+  bmClearTheme();
   BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};
   BM_MY_BE=0;BM_MY_Q=null;BM_MY_CLASS=null;BM_MY_TEAM=null;
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;
@@ -1436,8 +1491,19 @@ function bmIdentSwitch(){bmIdentClear();BM_IDENT=null;SCREENS.battleIdentity();}
 SCREENS.battleHostSettings = function(){
   if(!BM_META)BM_META={};
   const ah=BM_META.armyHealth||100, at=BM_META.answerTimer||10, adp=BM_META.adaptive!==false;
+  const th=BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id;
+  if(!BM_META.theme)BM_META.theme=th;
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('hostSource')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle — Instellingen</h2></div>
+  <div class="panel">
+    <label class="fld">Factie / Thema</label>
+    <select id="bmThemeSel" style="width:100%;padding:10px 12px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:15px;font-family:inherit" onchange="BM_META.theme=this.value;SCREENS.battleHostSettings()">
+      ${BM_FACTIONS.map(f=>`<option value="${f.id}"${th===f.id?" selected":""}>${f.nm}</option>`).join("")}
+    </select>
+    <div class="note" style="margin-top:6px">
+      ${(()=>{const f=bmFaction(th);return `${iconSVG(f.teams.A.icon,14,f.cssVars["--teamA"]||"var(--teamA)")} ${f.teams.A.nm} vs ${iconSVG(f.teams.B.icon,14,f.cssVars["--teamB"]||"var(--teamB)")} ${f.teams.B.nm}`;})()}
+    </div>
+  </div>
   <div class="panel">
     <label class="fld">Legersterkte per team</label>
     <div class="chips">${[50,100,150,200].map(n=>`<button class="chip ${ah===n?"on":""}" onclick="BM_META.armyHealth=${n};SCREENS.battleHostSettings()">${n}</button>`).join("")}</div>
@@ -1467,7 +1533,9 @@ async function bmCreateRoom(){
   const ah=BM_META.armyHealth||100;
   const meta={game:"battle",lang:DRAFT.lang,source:DRAFT.source,fromN:DRAFT.fromN,toN:DRAFT.toN,
     cat:DRAFT.cat,customText:DRAFT.customText||"",armyHealth:ah,
-    answerTimer:BM_META.answerTimer||10,adaptive:BM_META.adaptive!==false,status:"lobby"};
+    answerTimer:BM_META.answerTimer||10,adaptive:BM_META.adaptive!==false,
+    theme:BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id,
+    status:"lobby"};
   BM_META=meta;
   let code=code4();
   for(let i=0;i<5;i++){const ex=await FBNet.exists(code);if(!ex)break;code=code4();}
@@ -1483,8 +1551,10 @@ async function bmCreateRoom(){
 
 /* ---- SCHERM: battleHostLobby ---- */
 SCREENS.battleHostLobby = function(){
+  bmApplyTheme(BM_META?.theme);
+  const fac=bmFaction(BM_META?.theme);
   H(brand(false)+`
-  <div class="scrhead"><button class="back" onclick="leaveAll();bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle Lobby</h2></div>
+  <div class="scrhead"><button class="back" onclick="leaveAll();bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>${esc(fac.nm)} — Lobby</h2></div>
   <div class="codecard">
     <div class="lbl">Spelcode — geef dit aan de klas</div>
     <div class="code">${BM_CODE}</div>
@@ -1507,7 +1577,7 @@ function bmRenderHostLobby(){
   const pl=el("bmPlist"); if(!pl)return;
   pl.innerHTML=Object.values(BM_PLAYERS).map(p=>`<span class="ptag">
     ${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],30)} ${esc(p.name)}
-    ${p.team?`<span class="pill" style="background:${p.team==="A"?"var(--teamA)":"var(--teamB)"};border:none">${p.team==="A"?"Rood":"Blauw"}</span>`:""}
+    ${p.team?`<span class="pill" style="background:${p.team==="A"?"var(--teamA)":"var(--teamB)"};border:none">${esc(bmTeamNm(p.team))}</span>`:""}
     ${p.class?`<span class="pill">${bmClsName(p.class)}</span>`:""}
   </span>`).join("")||`<div class="note">Wachten op spelers…</div>`;
   const sb=el("bmSB"); if(sb)sb.disabled=Object.keys(BM_PLAYERS).length<2;
@@ -1616,8 +1686,8 @@ function bmHostUpdateRound(){
 function bmHostUpdateArmies(){
   const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
   const ea=el("bmArmyA"),eb=el("bmArmyB");
-  if(ea)ea.innerHTML=bmArmyBarHTML("A","🔴 Rood",tA);
-  if(eb)eb.innerHTML=bmArmyBarHTML("B","🔵 Blauw",tB);
+  if(ea)ea.innerHTML=bmArmyBarHTML("A",bmTeamNm("A"),tA);
+  if(eb)eb.innerHTML=bmArmyBarHTML("B",bmTeamNm("B"),tB);
 }
 function bmHostUpdatePlayers(){
   const round=BM_STATE.round||{};
@@ -1791,7 +1861,7 @@ function bmHostResult(){
   const ov=el("overlay"); if(!ov)return;
   ov.innerHTML=`<div class="modal">
     <div class="big">${medalSVG("laurel",120)}</div>
-    <h2>${w==="A"?"🔴 Rood wint!":w==="B"?"🔵 Blauw wint!":"Gevecht gestopt"}</h2>
+    <h2>${w==="A"||w==="B"?esc(bmTeamNm(w))+" wint!":"Gevecht gestopt"}</h2>
     <div style="margin:14px 0">
       ${topDmg?`<div class="podline"><span class="av">${avatarHTML(topDmg.avatar||"helmet",topDmg.color||COLORS[0],32)}</span><span class="nm">⚔️ Meeste schade</span><span class="sc">${esc(topDmg.name)} — ${topDmg.damage||0}</span></div>`:""}
       ${topAcc?`<div class="podline"><span class="av">${avatarHTML(topAcc.avatar||"helmet",topAcc.color||COLORS[0],32)}</span><span class="nm">📚 Scholar</span><span class="sc">${esc(topAcc.name)} — ${topAcc.correct||0}/${(topAcc.correct||0)+(topAcc.wrong||0)}</span></div>`:""}
@@ -1840,6 +1910,7 @@ async function bmDoJoin(){
   if(!meta||meta.game!=="battle"){if(err){err.textContent="Geen Battle Mode spel met code "+code+".";err.style.display="";}return;}
   if(stateSnap?.status==="finished"){if(err){err.textContent="Dit spel is al afgelopen.";err.style.display="";}return;}
   BM_CODE=CODE=code;BM_META=meta;
+  bmApplyTheme(meta.theme);
   const isPlaying=stateSnap?.status==="playing";
   let team=null;
   if(isPlaying){
@@ -1874,6 +1945,7 @@ async function bmRejoin(){
     if(!p||!meta||meta.game!=="battle"||st?.status==="finished")return false;
     BM_CODE=CODE=code;BM_PID=pid;BM_META=meta;
     BM_IDENT=bmIdentLoad()||BM_IDENT;BM_MY_BE=p.be||0;
+    bmApplyTheme(meta.theme);
     const ref=fbDB.ref("rooms/"+code+"/players/"+pid);
     ref.onDisconnect().update({online:false});
     await ref.update({online:true});
@@ -1884,9 +1956,11 @@ async function bmRejoin(){
 
 /* ---- SCHERM: battlePlayerLobby ---- */
 SCREENS.battlePlayerLobby = function(){
+  bmApplyTheme(BM_META?.theme);
   const myClass=BM_MY_CLASS||BM_PLAYERS[BM_PID]?.class||null;
+  const fac=bmFaction(BM_META?.theme);
   H(brand(false)+`
-  <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle Lobby</h2></div>
+  <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>${esc(fac.nm)}</h2></div>
   <div class="panel" style="text-align:center">
     ${avatarHTML(BM_IDENT?.avatar||P.avatar,BM_IDENT?.color||P.color,48)}
     <div style="font-size:18px;margin-top:6px">${esc(BM_IDENT?.name||"")}</div>
@@ -1927,6 +2001,7 @@ function bmPickClass(cid){
 
 /* ---- SCHERM: battlePlayerGame ---- */
 SCREENS.battlePlayerGame = function(){
+  bmApplyTheme(BM_META?.theme);
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_MY_BE=0;BM_MY_Q=null;
   H(brand(false)+`
   <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ Battle Mode</h2></div>
@@ -2031,7 +2106,7 @@ function bmPlayerRender(){
   }
   root.innerHTML=`
   <div class="panel" style="margin-bottom:10px">
-    ${miniBar("Rood","A",tA)}<div style="height:6px"></div>${miniBar("Blauw","B",tB)}
+    ${miniBar(bmTeamNm("A"),"A",tA)}<div style="height:6px"></div>${miniBar(bmTeamNm("B"),"B",tB)}
   </div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span class="pill">Ronde ${round.n||"—"}</span>
@@ -2091,8 +2166,8 @@ SCREENS.battleResult = function(){
   H(brand(false)+`
   <div class="scrhead"><button class="back" onclick="bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Gevecht voorbij</h2></div>
   <div class="panel" style="text-align:center">
-    <div style="font-size:56px">${w==="A"?"🔴":w==="B"?"🔵":"⚔️"}</div>
-    <h2 style="color:var(--hi-bright);margin:8px 0">${w==="A"?"Rood wint!":w==="B"?"Blauw wint!":"Gevecht gestopt"}</h2>
+    <div style="font-size:56px">${w==="A"||w==="B"?iconSVG(bmTeamIcon(w),56,"var(--team"+w+")"):"⚔️"}</div>
+    <h2 style="color:var(--hi-bright);margin:8px 0">${w==="A"||w==="B"?esc(bmTeamNm(w))+" wint!":"Gevecht gestopt"}</h2>
   </div>
   <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="bmLeave();go('home')">Terug naar hoofdmenu</button>
   ${foot()}`);
