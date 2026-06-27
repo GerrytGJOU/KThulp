@@ -636,16 +636,20 @@ async function bmCreateRoom(){
     sfx:BM_META.sfx!==false,
     status:"lobby"};
   BM_META=meta;
-  let code=code4();
-  for(let i=0;i<5;i++){const ex=await FBNet.exists(code);if(!ex)break;code=code4();}
-  BM_CODE=CODE=code;
-  await fbDB.ref("rooms/"+code).set({
-    meta,pool,
-    state:{status:"lobby",round:null,winner:null},
-    teams:{A:{health:ah,maxHealth:ah},B:{health:ah,maxHealth:ah}},
-    players:{},log:{}
-  });
-  go("battleHostLobby");
+  try{
+    let code=code4();
+    for(let i=0;i<5;i++){const ex=await FBNet.exists(code);if(!ex)break;code=code4();}
+    BM_CODE=CODE=code;
+    await fbDB.ref("rooms/"+code).set({
+      meta,pool,
+      state:{status:"lobby",round:null,winner:null},
+      teams:{A:{health:ah,maxHealth:ah},B:{health:ah,maxHealth:ah}},
+      players:{},log:{}
+    });
+    go("battleHostLobby");
+  }catch(e){
+    toast("Fout bij aanmaken","Fout: "+(e&&e.message?e.message:String(e)));
+  }
 }
 
 /* ---- SCHERM: battleHostLobby ---- */
