@@ -29,57 +29,77 @@ BE accumuleert over rondes. Acties kosten BE; als je niet genoeg hebt, kun je di
 
 ---
 
-## Klassen (M1: 3 · M3: 8 · M6: 12)
+## Klassen (M3: 8 · M6: 12)
 
-### M1-klassen
+Alle balanswaarden staan in `BM_CLASSES`, `BM_SYNERGY` en `BM_COMBOS` in `certamen/index.html`.
 
-| Klasse | Passief | Basis-actie (M3) | Geavanceerd (M3) | Ultiem (M5) |
+### Alle 8 klassen
+
+| Klasse | Passief | Basis (BE) | Geavanceerd (BE) | Ultiem (BE) |
 |---|---|---|---|---|
-| **Hopliet** | +1 BE bij Verdedigen | Schildmuur (groeps-schild) | Formatie (teambonus) | Achilleshiel (bypass schild) |
-| **Boogschutter** | +1 schade bij Aanval | Pijlregen (AOE-schade) | Zwak punt (dubbele schade op laag HP) | Dodenarrow (instant uitschakeling) |
-| **Priester** | +1 heling bij Heel | Zegen (bonus-BE voor team) | Wederopstanding (teamlid terug na knock-out M5) | Godenvuur (massale schade + heling) |
-
-### M3-klassen (gepland)
-
-Spartaan, Cavalerie, Centurio, Genie, Verkenner
+| **Hopliet** | +1 BE bij Verdedigen | Schildmuur +4 schild (2) | Formatie team +2 BE (5) | Achilleshiel bypass +6 (9) |
+| **Spartaan** | +20% aanvalsschade | Speeraanval +6 dmg (3) | Berserk +9 dmg (5) | Leeuwensprong bypass +14 (10) |
+| **Boogschutter** | +1 schade bij aanval | Pijlregen +5 dmg (3) | Zwak punt +7/+17 dmg (5) | Dodenarrow +13 dmg (9) |
+| **Cavalerie** | +2 BE bij snel correct | Charge +7 dmg (3) | Flankbeweging +5 dmg +3 schild (5) | Stormloop +13 dmg (9) |
+| **Priester** | +1 heling bij helen | Gebed +9 heal (3) | Zegen team +3 BE (5) | Godenvuur +12 heal +4 dmg (9) |
+| **Centurio** | +1 BE per ronde (altijd) | Bevel +3 schild (2) | Strijdformatie team +3 BE (4) | Testudo +7 schild + team +2 BE (8) |
+| **Genie** | Aanvallen -2 vijandelijk schild | Katapult +5 dmg (3) | Valgreppel -6 vijandelijk schild (4) | Vuurtoren +9 dmg -4 schild (8) |
+| **Verkenner** | Basis-abilities -1 BE | Verkenning +4 dmg -2 schild (2) | Sabotage -6 vijandelijk schild (4) | Hinderlaag +10 dmg +3 schild (7) |
 
 ### M6-klassen (gepland)
 
-Farao, Druïde, Augur, Pontifex (fractieklassen — zie §Facties)
+Farao, Druide, Augur, Pontifex (fractieklassen -- zie Facties)
 
 ---
 
-## Acties (M1: 3 · M3+: meer)
+## Ability-typen (resolutie-engine)
 
-| Actie | Kosten | Effect M1 |
-|---|---|---|
-| **Aanval** | 3 BE | 5 schade (Boogschutter: +1) |
-| **Verdedig** | 2 BE | 3 schild dit ronde (Hopliet: +1, passief: +1 BE) |
-| **Heel** | 3 BE | 8 heling (Priester: +1) |
+| Type | Effect |
+|---|---|
+| `attack` | Schade op vijandelijk team (passieven: atk_flat, atk_bonus) |
+| `attack_bypass` | Schade die tegenschild volledig omzeilt |
+| `attack_weakspot` | Schade; bonus als vijand <= 30% HP |
+| `attack_and_defend` | Schade + schild voor eigen team |
+| `attack_and_shld_remove` | Schade + verwijder vijandelijk schild |
+| `attack_siege` | Schade + verwijder vijandelijk schild |
+| `team_shield` | Schild voor eigen team |
+| `heal` | Heling voor eigen team |
+| `heal_and_attack` | Heling + schade |
+| `team_be` | Bonus BE voor alle teamgenoten |
+| `testudo` | Schild + team BE |
+| `shield_remove` | Verwijder vijandelijk schild |
 
-Schild absorbeert _inkomende_ schade van dat ronde. Niet bestede BE blijft behouden.
+Schild absorbeert inkomende schade voor berekening. Bypass-schade telt apart. Niet bestede BE blijft behouden.
 
 ---
 
 ## Synergie (M3)
 
-Als een team genoeg verschillende klassen heeft, krijgt het een team-BE-bonus aan het begin van elke ronde:
+Flat BE-bonus per speler per ronde op basis van klassendiversiteit in het team:
 
-| Unieke klassen | Team-BE-bonus |
+| Unieke klassen in team | BE-bonus per speler per ronde |
 |---|---|
-| ≥ 3 | +5 % |
-| ≥ 5 | +10 % |
-| ≥ 7 | +15 % |
+| >= 3 | +2 BE |
+| >= 5 | +4 BE |
+| >= 7 | +6 BE |
+
+Waarden in `BM_SYNERGY` in de code (aanpasbaar).
 
 ---
 
 ## Combo-abilities (M3)
 
-Twee spelers van specifieke klassecombinaties kunnen een gecombineerde actie uitvoeren:
+Beide spelers kiezen "Combo" in dezelfde ronde; de host detecteert het bij resolutie.
 
-- Hopliet + Boogschutter → **Schildmuur met Schieten** (schild + pijlregen)
-- Priester + Spartaan → **Strijdszegen** (massale BE + moreel)
-- *(Volledige lijst in M3-sprint)*
+| Combo | Klassen | Kosten | Effect |
+|---|---|---|---|
+| Schildmuur met Schieten | Hopliet + Boogschutter | 4 BE elk | +6 schild + +6 dmg |
+| Strijdszegen | Priester + Spartaan | 4 BE elk | Heel team +5 BE |
+| Vuursalvo | Genie + Boogschutter | 4 BE elk | +12 dmg |
+| Testudo-formatie | Centurio + Hopliet | 4 BE elk | +10 schild voor team |
+| Hinderlaag & Aanval | Verkenner + Cavalerie | 4 BE elk | +13 dmg + -3 vijandelijk schild |
+
+Waarden in `BM_COMBOS` in de code (aanpasbaar).
 
 ---
 
@@ -135,6 +155,47 @@ Faction-XP en -rang zijn persistent (blijven over gevechtssessies heen).
 
 ---
 
+## Balansgetallen — overzicht voor de docent
+
+Dit zijn alle getallen die je kunt bijstellen zonder in de logica te hoeven zitten. Alles staat in de drie configuratietabellen bovenaan het `<script>`-blok in `certamen/index.html`.
+
+### BE-economie (antwoordfase)
+| Situatie | BE |
+|---|---|
+| Correct antwoord | +3 |
+| Correct én snel (> helft tijd resterend) | +4 (standaard) |
+| Cavalerie: correct én snel | +5 (passief be_on_fast: +2) |
+| Fout antwoord | 0 |
+
+### Ability-kosten en -effecten per klasse
+Zie tabel in §Klassen hierboven. Aanpassen: zoek de klasse in `BM_CLASSES` en wijzig `cost`, `dmg`, `heal`, `shld` of `teamBE`.
+
+### Passief-waarden
+| Klasse | Passief-type | Huidige waarde | Wat het doet |
+|---|---|---|---|
+| Hopliet | be_on_defend | 1 | Extra BE wanneer team_shield-ability gekozen |
+| Spartaan | atk_bonus | 0.20 | Vermenigvuldigt aanvalsschade met (1 + val) |
+| Boogschutter | atk_flat | 1 | Telt op bij elke aanval |
+| Cavalerie | be_on_fast | 2 | Extra BE bovenop de standaard snelheidsbonus |
+| Priester | heal_flat | 1 | Telt op bij elke healing-ability |
+| Centurio | be_passive | 1 | Elke ronde gratis BE (ook zonder actie) |
+| Genie | shld_pierce | 2 | Elke aanval verwijdert ook vijandelijk schild |
+| Verkenner | cost_reduce | 1 | Verlaagt kosten van basic-tier abilities (min. 1) |
+
+### Synergiebonus
+In `BM_SYNERGY`: `{ minClasses, beBonus }`. Huidige waarden: 3 klassen → +2 BE, 5 → +4 BE, 7 → +6 BE per speler per ronde.
+
+### Combo-kosten en -effecten
+In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `shld`, `heal`, `teamBE`, `shldRemove`. Huidige standaard: 4 BE per speler.
+
+### Legersterktes (instelbaar via host-settings)
+50 / 100 / 150 / 200 HP. Aanpassen: `battleHostSettings`-scherm of de chips in de code.
+
+### Antwoordtimer
+8 / 10 / 12 / 15 seconden. De "snelheidsbonus" treedt in werking als meer dan de helft van de tijd over is.
+
+---
+
 ## Architectuurhaken (leeg gelaten in M1, uitbreidpunten in code)
 
 ```javascript
@@ -161,7 +222,7 @@ Faction-XP en -rang zijn persistent (blijven over gevechtssessies heen).
 |---|---|---|
 | **M1** | Identiteit · 3 klassen · 3 acties · rondelus · host panel · eindscherm | ✅ Gebouwd |
 | **M2** | Klaslokaal-bestendig: harde deadlines · idempotente resolutie · reconnect · late join · scoped listeners · Chromebook-perf | ✅ Gebouwd |
-| M3 | +5 klassen · synergie · combo's · klasse-specifieke acties · moreel | — |
+| **M3** | 8 klassen · data-gedreven abilities · synergie · combo's · class mastery | ✅ Gebouwd |
 | M4 | Kasteelmuren · voorraden · burchtstorm-einddoel | — |
 | M5 | Eigen HP · doelkeuze · respawn · doelpunten op kaart | — |
 | M6 | Facties · campagne · fog of war | — |
