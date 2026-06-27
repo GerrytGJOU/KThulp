@@ -529,6 +529,7 @@ SCREENS.battleIdentity = function(){
   ${foot()}`);
 };
 async function bmIdentLogin(){
+  initFirebase(); // beste-effort; bmIdentGet/Create werken ook offline (lokale fallback)
   const klas=(el("bmKlas")?.value||"").trim().toUpperCase();
   const lcode=(el("bmLcode")?.value||"").trim().toLowerCase();
   const name=(el("bmNaam")?.value||"").trim();
@@ -619,6 +620,7 @@ SCREENS.battleHostSettings = function(){
 
 /* ---- KAMER AANMAKEN ---- */
 async function bmCreateRoom(){
+  if(!initFirebase()){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
   const pool=buildPool(DRAFT);
   if(pool.length<4){toast("Te weinig woorden","Kies een groter bereik of voeg meer woorden toe.");return;}
   POOL=pool;
@@ -1552,6 +1554,7 @@ SCREENS.battleJoin = function(){
   ${foot()}`);
 };
 async function bmDoJoin(){
+  if(!initFirebase()){toast("Firebase vereist","Battle Mode vereist Firebase.");return;}
   const code=(el("bmJC")?.value||"").trim().toUpperCase();
   const err=el("bmJE");
   if(code.length<3){if(err){err.textContent="Voer de spelcode in.";err.style.display="";}return;}
