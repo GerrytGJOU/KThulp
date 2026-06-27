@@ -44,9 +44,15 @@ SCREENS.hostGamePick = function(){
     <h3>Marathon <span class="pill">Grieks thema</span></h3>
     <p>Iedereen rent tegelijk. Goed = vooruit, fout = terug of even stilstaan. Eerste over de finish wint.</p>
   </button>
+  <button class="tile" onclick="pickGame('snelvuur')">
+    <span class="corner">${iconSVG("torch",88,"currentColor")}</span>
+    <span class="ic">${iconSVG("torch",44,"currentColor")}</span>
+    <h3>Snelvuur</h3>
+    <p>Iedereen speelt tegelijk. Geef in de beschikbare tijd zoveel mogelijk goede antwoorden. De hoogste score wint.</p>
+  </button>
   ${foot()}`);
 };
-function pickGame(g){ DRAFT.game=g; DRAFT.target = g==="touwtrekken"?15:20; go("hostSource"); }
+function pickGame(g){ DRAFT.game=g; DRAFT.target = g==="touwtrekken"?15:g==="snelvuur"?120:20; go("hostSource"); }
 
 /* ---- HOST: woordbron ---- */
 SCREENS.hostSource = function(){
@@ -161,9 +167,14 @@ function confirmSource(){
 SCREENS.hostSettings = function(){
   const g=DRAFT.game;
   const poolN = buildPool(DRAFT).length;
+  const gameNm=g==="touwtrekken"?"Touwtrekken":g==="snelvuur"?"Snelvuur":"Marathon";
   H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('hostSource')">${iconSVG("shield",20,"currentColor")}</button><h2>Instellingen</h2></div>
-  <div class="panel"><div class="note">Spel: <b>${g==="touwtrekken"?"Touwtrekken":"Marathon"}</b> · ${poolN} woorden geselecteerd.</div></div>
-  ${g==="touwtrekken"?`
+  <div class="panel"><div class="note">Spel: <b>${gameNm}</b> · ${poolN} woorden geselecteerd.</div></div>
+  ${g==="snelvuur"?`
+  <div class="panel">
+    <label class="fld">Tijdsduur</label>
+    <div class="chips">${[60,90,120,180,300].map(n=>`<button class="chip ${DRAFT.target===n?'on':''}" onclick="DRAFT.target=${n};SCREENS.hostSettings()">${n<120?n+"s":n/60+"min"}</button>`).join("")}</div>
+  </div>`:g==="touwtrekken"?`
   <div class="panel">
     <label class="fld">Lengte van het touw (punten voorsprong om te winnen)</label>
     <div class="chips">${[10,15,20,30].map(n=>`<button class="chip ${DRAFT.target===n?'on':''}" onclick="DRAFT.target=${n};SCREENS.hostSettings()">${n}</button>`).join("")}</div>
@@ -207,7 +218,7 @@ async function createRoom(){
 /* ---- HOST: lobby ---- */
 SCREENS.hostLobby = function(){
   const url = location.origin+location.pathname+"?room="+CODE;
-  H(brand(false)+`<div class="scrhead"><button class="back" onclick="leaveAll();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>${META.game==="touwtrekken"?"Touwtrekken":"Marathon"}</h2></div>
+  H(brand(false)+`<div class="scrhead"><button class="back" onclick="leaveAll();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>${META.game==="touwtrekken"?"Touwtrekken":META.game==="snelvuur"?"Snelvuur":"Marathon"}</h2></div>
   <div class="codecard">
     <div class="lbl">Speelcode</div>
     <div class="code">${CODE}</div>
@@ -258,8 +269,9 @@ function shuffleTeams(){
 
 /* ---- HOST: spel starten ---- */
 function startGame(){
-  Net.setState(CODE, { status:"playing", startedAt:Net.serverTime(), ropePos:0, winner:null });
-  // reset speler-posities
+  const stPatch={ status:"playing", startedAt:Net.serverTime(), ropePos:0, winner:null };
+  if(META.game==="snelvuur") stPatch.deadline = Date.now() + (META.target||120)*1000;
+  Net.setState(CODE, stPatch);
   Object.keys(PLAYERS).forEach(id=>Net.updatePlayer(CODE,id,{pos:0,correct:0,wrong:0,finished:false,frozenUntil:0}));
   go("hostGame");
 }
@@ -267,14 +279,26 @@ function startGame(){
 /* ---- HOST: spelweergave (projectie) ---- */
 SCREENS.hostGame = function(){
   const greek = META.game==="marathon";
+  const gameNm=META.game==="touwtrekken"?"Touwtrekken":META.game==="snelvuur"?"Snelvuur":"Marathon";
   H(brand(false)+`<div class="scrhead"><button class="back" onclick="endGameManual()">${iconSVG("shield",20,"currentColor")}</button>
-    <h2>${greek?"Marathon":"Touwtrekken"}</h2><span class="pill">code ${CODE}</span></div>
+    <h2>${gameNm}</h2><span class="pill">code ${CODE}</span></div>
     <div id="gameRoot"></div>${foot()}`);
-  if(META.game==="touwtrekken") buildRope(); else buildTrack();
+  if(META.game==="touwtrekken") buildRope();
+  else if(META.game==="snelvuur") buildScoreboard();
+  else buildTrack();
   unsubState = Net.onState(CODE, s=>{ STATE=s||{}; if(STATE.status==="finished"){ showResultHost(); } else { updateGameView(); } });
   unsubPlayers = Net.onPlayers(CODE, ps=>{ PLAYERS=ps||{}; updateGameView(); hostCheckEnd(); });
-  // bots aansturen (zowel demo als firebase: host bestuurt eventuele bots)
   startBots();
+  // Snelvuur: countdown-display bijwerken elke seconde
+  if(META.game==="snelvuur"){
+    if(freezeTimer)clearInterval(freezeTimer);
+    freezeTimer=setInterval(()=>{
+      const ct=el("snelvuurCountdown"); if(!ct)return;
+      const left=Math.max(0,Math.ceil(((STATE.deadline||Date.now())-Date.now())/1000));
+      ct.textContent=left+"s";
+      if(left===0){clearInterval(freezeTimer);freezeTimer=null;}
+    },500);
+  }
 };
 function endGameManual(){ Net.setState(CODE,{status:"finished",winner:"_stopped"}); }
 
@@ -282,8 +306,10 @@ function startBots(){
   if(botTimer)clearInterval(botTimer);
   botTimer=setInterval(()=>{
     if(STATE.status!=="playing")return;
+    if(META.game==="snelvuur"){hostCheckEnd();}
     Object.keys(PLAYERS).forEach(id=>{
-      const p=PLAYERS[id]; if(!p.isBot||p.finished)return;
+      const p=PLAYERS[id]; if(!p.isBot)return;
+      if(META.game!=="snelvuur"&&p.finished)return;
       if(p.frozenUntil&&nowMs()<p.frozenUntil)return;
       if(Math.random()<0.45){ // niet elke tick
         const ok = Math.random() < (p.skill||0.6);
@@ -295,6 +321,10 @@ function startBots(){
 
 /* gedeelde antwoord-afhandeling (gebruikt door bots op host én door spelers lokaal) */
 function applyAnswer(pid, p, ok){
+  if(META.game==="snelvuur"){
+    Net.updatePlayer(CODE, pid, ok?{correct:(p.correct||0)+1}:{wrong:(p.wrong||0)+1});
+    return;
+  }
   if(META.game==="touwtrekken"){
     const dir = p.team==="A" ? -1 : 1;       // A trekt naar links (negatief), B naar rechts
     const delta = ok ? dir : -dir;
@@ -321,6 +351,12 @@ function hostCheckEnd(){
     const rp=STATE.ropePos||0;
     if(rp<=-META.target){ _ending=true; Net.setState(CODE,{status:"finished",winner:"A"}); }
     else if(rp>=META.target){ _ending=true; Net.setState(CODE,{status:"finished",winner:"B"}); }
+  } else if(META.game==="snelvuur"){
+    if(STATE.deadline && Date.now() >= STATE.deadline){
+      const sorted=Object.entries(PLAYERS).sort((a,b)=>(b[1].correct||0)-(a[1].correct||0));
+      _ending=true;
+      Net.setState(CODE,{status:"finished",winner:sorted.length?sorted[0][0]:"_stopped"});
+    }
   } else {
     const fin=Object.entries(PLAYERS).filter(([id,p])=>p.finished).sort((a,b)=>(a[1].finishedAt||0)-(b[1].finishedAt||0));
     if(fin.length){ _ending=true; Net.setState(CODE,{status:"finished",winner:fin[0][0]}); }
@@ -347,8 +383,29 @@ function buildTrack(){
   root.innerHTML=`<div class="track" id="trackBox"></div>`;
   updateGameView();
 }
+function buildScoreboard(){
+  const root=el("gameRoot"); if(!root)return;
+  root.innerHTML=`<div style="margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+    <div style="font-size:28px;font-weight:700">Tijd: <span id="snelvuurCountdown" style="color:var(--hi)">—</span></div>
+    <div style="font-size:13px;color:var(--muted)">${Object.keys(PLAYERS).length} speler(s)</div>
+  </div>
+  <div id="scoreList" style="display:flex;flex-direction:column;gap:6px"></div>`;
+  updateGameView();
+}
 function updateGameView(){
   if(!el("gameRoot"))return;
+  if(META.game==="snelvuur"){
+    const sl=el("scoreList"); if(!sl)return;
+    const sorted=Object.values(PLAYERS).sort((a,b)=>(b.correct||0)-(a.correct||0));
+    sl.innerHTML=sorted.map((p,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--stone3);border-radius:8px">
+      <span style="font-size:18px;font-weight:700;color:var(--muted);min-width:22px">${i+1}</span>
+      ${avatarHTML(p.avatar,p.color,30)}
+      <span style="flex:1;font-size:14px">${esc(p.name)}</span>
+      <span style="font-size:20px;font-weight:700;color:var(--hi)">${p.correct||0}</span>
+      <span style="font-size:11px;color:var(--muted)">goed</span>
+    </div>`).join("") || `<div class="note">Nog geen antwoorden…</div>`;
+    return;
+  }
   if(META.game==="touwtrekken"){
     const rp=clamp(STATE.ropePos||0,-META.target,META.target);
     const pct = 50 + (rp/META.target)*44; // 6%..94% effectief
@@ -377,7 +434,13 @@ function showResultHost(){
   cleanup();
   const winner=STATE.winner;
   let title, medal, podium="";
-  if(META.game==="touwtrekken"){
+  if(META.game==="snelvuur"){
+    const w=PLAYERS[winner];
+    title = w?`${esc(w.name)} wint met ${w.correct||0} goede antwoorden!`:"Wedstrijd gestopt";
+    medal = medalSVG("crown",120);
+    const order=Object.values(PLAYERS).sort((a,b)=>(b.correct||0)-(a.correct||0));
+    podium=`<div class="podium">${order.slice(0,6).map((p,i)=>`<div class="podline"><span class="rk">${i+1}</span><span class="av">${avatarHTML(p.avatar,p.color,32)}</span><span class="nm">${esc(p.name)}</span><span class="sc">${p.correct||0} goed</span></div>`).join("")}</div>`;
+  } else if(META.game==="touwtrekken"){
     const team = winner==="A"?"Rubri (Rood)":winner==="B"?"Caerulei (Blauw)":null;
     title = team?`${team} wint!`:"Wedstrijd gestopt";
     medal = medalSVG("laurel",120);
@@ -457,7 +520,7 @@ async function assignTeam(){
 SCREENS.playerLobby = function(){
   const greek=META.game==="marathon";
   document.body.classList.toggle("greek",greek);
-  H(brand(false)+`<div class="scrhead"><button class="back" onclick="leaveAll();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>${greek?"Marathon":"Touwtrekken"}</h2></div>
+  H(brand(false)+`<div class="scrhead"><button class="back" onclick="leaveAll();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>${META.game==="snelvuur"?"Snelvuur":greek?"Marathon":"Touwtrekken"}</h2></div>
   <div class="codecard"><div class="lbl">Je doet mee als</div><div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:8px">${avatarHTML(P.avatar,P.color,44)}<span style="font-size:24px">${esc(P.name)}</span></div>
   ${META.game==="touwtrekken"?`<div style="margin-top:10px" class="pill" id="teamPill">Team —</div>`:""}</div>
   <div class="panel"><div class="note" style="text-align:center">Wachten tot de docent start… <span id="lobbyN"></span></div></div>
@@ -477,9 +540,23 @@ SCREENS.playerGame = function(){
   unsubState = Net.onState(CODE, s=>{ STATE=s||{}; if(STATE.status==="finished")go("result"); else updatePlayerMini(); });
   unsubPlayers = Net.onPlayers(CODE, ps=>{ PLAYERS=ps||{}; updatePlayerMini(); });
   drawQuestion();
+  if(META.game==="snelvuur"){
+    if(freezeTimer)clearInterval(freezeTimer);
+    freezeTimer=setInterval(()=>{ updatePlayerMini(); },1000);
+  }
 };
 function myPlayer(){ return PLAYERS[PID]||{pos:0,team:"A"}; }
 function miniHTML(){
+  if(META.game==="snelvuur"){
+    const me=myPlayer();
+    const left=STATE.deadline?Math.max(0,Math.ceil((STATE.deadline-Date.now())/1000)):0;
+    const pct=META.target?Math.round(left/META.target*100):100;
+    return `<div class="ministat">
+      <span style="font-weight:700">Score: ${me.correct||0}</span>
+      <div class="seg"><i style="left:0;width:${pct}%;background:linear-gradient(90deg,var(--hi-dim),var(--hi))"></i></div>
+      <span style="font-weight:700;color:${left<=10?"#e05555":"var(--hi)"}">${left}s</span></div>
+      <div class="note" style="text-align:center;margin-top:-6px;margin-bottom:10px">Zo snel mogelijk goede antwoorden geven!</div>`;
+  }
   if(META.game==="touwtrekken"){
     const rp=clamp(STATE.ropePos||0,-META.target,META.target);
     const me=myPlayer(); const mine = me.team==="A"?-1:1;
@@ -535,7 +612,8 @@ function answer(i){
   else { myStreak=0; beep("bad"); }
   saveProfile();
   applyAnswer(PID, me, ok);
-  setTimeout(()=>{ if(STATE.status==="playing")drawQuestion(); }, ok?520:900);
+  const delay=META.game==="snelvuur"?600:(ok?520:900);
+  setTimeout(()=>{ if(STATE.status==="playing")drawQuestion(); }, delay);
 }
 
 /* ---- resultaat (leerling) ---- */
@@ -546,6 +624,10 @@ SCREENS.result = function(){
   if(META.game==="touwtrekken"){
     won = STATE.winner===me.team;
     line = STATE.winner==="A"?"Rood wint!":STATE.winner==="B"?"Blauw wint!":"Wedstrijd gestopt";
+  } else if(META.game==="snelvuur"){
+    won = STATE.winner===PID;
+    const w=PLAYERS[STATE.winner];
+    line = w?(won?`Jij wint met ${me.correct||0} goede antwoorden!`:`${esc(w.name)} wint (${w.correct||0} goed)`):"Wedstrijd gestopt";
   } else {
     won = STATE.winner===PID;
     const w=PLAYERS[STATE.winner];
