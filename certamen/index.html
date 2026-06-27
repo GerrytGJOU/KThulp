@@ -286,125 +286,185 @@ body.greek .qcard .word{color:#143a5e}
 .screen{animation:fade .3s ease}
 
 /* ======================================================
-   BATTLE MODE M5 — SLAGVELD & ANIMATIES
-   Alleen transform/opacity geanimeerd; nooit width/height/top/left
-   zodat de GPU-compositing-laag de animaties afhandelt.
+   BATTLE MODE M9 — VOLLEDIG SLAGVELD
+   Alleen transform/opacity geanimeerd; GPU-compositing.
    ====================================================== */
-/* Slagveld-layout */
-#bmField{display:flex;align-items:stretch;gap:6px;min-height:120px;position:relative;
-  overflow:hidden;background:rgba(0,0,0,.18);border-radius:12px;padding:8px;margin-bottom:10px}
-.bm-form{flex:1;display:flex;flex-direction:row;gap:3px;align-items:flex-end}
-#bmFormA{justify-content:flex-end}   /* A: front rechts, richting vijand */
-#bmFormB{justify-content:flex-start} /* B: front links, richting vijand */
-.bm-fcol{display:flex;flex-direction:column;gap:3px;align-items:center}
-.bm-center{flex:0 0 96px;display:flex;flex-direction:column;gap:5px;justify-content:center;position:relative}
+
+/* HOST: schermvullend */
+#app.bm-host-mode{max-width:none!important;padding:0!important;height:100vh!important;overflow:hidden!important;display:flex!important;flex-direction:column!important}
+.bm-host-wrap{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* Controls-balk */
+.bm-ctrl-bar{display:flex;align-items:center;gap:6px;padding:6px 12px;flex-shrink:0;background:rgba(18,14,10,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--stone4);z-index:20;flex-wrap:wrap}
+.bm-ctrl-bar .bm-cb-round{font-size:18px;color:var(--muted2);white-space:nowrap;font-weight:600}
+.bm-ctrl-bar .bm-cb-phase{font-size:24px;font-weight:700;color:var(--hi-bright);flex:1;text-align:center;letter-spacing:.04em}
+.bm-ctrl-bar .bm-cb-timer{font-size:22px;font-weight:700;color:var(--hi);min-width:50px;text-align:right}
+.bm-ctrl-bar button{padding:4px 9px;border-radius:6px;border:1px solid var(--stone4);background:rgba(255,255,255,.07);color:var(--fg);font-size:12px;cursor:pointer;white-space:nowrap}
+.bm-ctrl-bar button:hover{background:rgba(255,255,255,.14)}
+.bm-ctrl-bar .bm-btn-end{background:rgba(90,18,12,.35);color:#e07060;border-color:rgba(90,18,12,.5)}
+
+/* Health-balken rij */
+.bm-hp-row{display:flex;align-items:center;gap:10px;padding:5px 14px;flex-shrink:0;background:rgba(0,0,0,.45)}
+.bm-hp-side{flex:1}
+.bm-hp-nm{font-size:20px;font-weight:700;margin-bottom:3px}
+.bm-hp-nm.side-b{text-align:right}
+.bm-hp-track{height:13px;border-radius:7px;background:rgba(0,0,0,.55);border:1px solid var(--stone4);overflow:hidden}
+.bm-hp-fill{height:100%;will-change:transform;transition:transform .5s}
+.bm-hp-num{font-size:11px;color:var(--muted);margin-top:2px}
+.bm-hp-num.side-b{text-align:right}
+.bm-hp-vs{flex:0 0 28px;text-align:center;font-size:18px}
+
+/* Slagveld container */
+#bmField{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding-bottom:10px}
+
+/* Formaties */
+.bm-form{flex:1;display:flex;flex-direction:row;gap:6px;align-items:flex-end;padding:0 6px;position:relative;z-index:2}
+#bmFormA{justify-content:flex-end}
+#bmFormB{justify-content:flex-start}
+.bm-fcol{display:flex;flex-direction:column;gap:6px;align-items:center}
 #bmBfx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:10}
 
-/* Avatar */
-.bm-av{display:inline-flex;flex-direction:column;align-items:center;gap:1px;position:relative}
-.bm-av .avc{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
-  justify-content:center;border:1.5px solid transparent;will-change:transform}
-.bm-av .avn{font-size:8px;color:var(--muted);max-width:34px;overflow:hidden;
-  text-overflow:ellipsis;white-space:nowrap;text-align:center;line-height:1.2}
-/* Klasse-randkleur */
-.bm-av.cls-hopliet .avc{border-color:#c8392a88}
-.bm-av.cls-spartaan .avc{border-color:#8b1a1a88}
-.bm-av.cls-boogschutter .avc{border-color:#2e6fb088}
-.bm-av.cls-cavalerie .avc{border-color:#9b691488}
-.bm-av.cls-priester .avc{border-color:#3f9d5288}
-.bm-av.cls-centurio .avc{border-color:#6b2d8b88}
-.bm-av.cls-genie .avc{border-color:#c8753388}
-.bm-av.cls-verkenner .avc{border-color:#2d8b7a88}
+/* ── Landschapsachtergronden ── */
+.bm-bg-roman{background:linear-gradient(180deg,#7ab3e0 0%,#a8d4f0 18%,#8bc45a 44%,#6a9040 58%,#4a6028 100%)}
+.bm-bg-roman::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 540'%3E%3Cellipse cx='400' cy='620' rx='520' ry='260' fill='%234a6028'/%3E%3Cellipse cx='1200' cy='630' rx='600' ry='290' fill='%235a7030'/%3E%3Cellipse cx='860' cy='570' rx='460' ry='210' fill='%236a8040'/%3E%3Crect x='830' y='330' width='260' height='75' fill='%23c8a878'/%3E%3Crect x='808' y='290' width='28' height='118' fill='%23b89868'/%3E%3Crect x='1082' y='290' width='28' height='118' fill='%23b89868'/%3E%3Crect x='840' y='272' width='56' height='22' fill='%23c8a878'/%3E%3Crect x='1000' y='272' width='56' height='22' fill='%23c8a878'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.75}
+.bm-bg-greek{background:linear-gradient(180deg,#4a8fc8 0%,#87ceeb 22%,#c8d8a0 54%,#d4c870 70%,#b8a850 100%)}
+.bm-bg-greek::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 540'%3E%3Crect x='700' y='195' width='38' height='225' fill='%23e8dfc0'/%3E%3Crect x='688' y='185' width='62' height='18' rx='3' fill='%23d8c8a0'/%3E%3Crect x='676' y='416' width='86' height='12' fill='%23d8c8a0'/%3E%3Crect x='820' y='215' width='38' height='205' fill='%23e8dfc0'/%3E%3Crect x='808' y='205' width='62' height='18' rx='3' fill='%23d8c8a0'/%3E%3Crect x='796' y='416' width='86' height='12' fill='%23d8c8a0'/%3E%3Crect x='1080' y='205' width='38' height='215' fill='%23e8dfc0'/%3E%3Crect x='1068' y='195' width='62' height='18' rx='3' fill='%23d8c8a0'/%3E%3Crect x='1056' y='416' width='86' height='12' fill='%23d8c8a0'/%3E%3Crect x='1200' y='225' width='38' height='195' fill='%23e8dfc0'/%3E%3Crect x='1188' y='215' width='62' height='18' rx='3' fill='%23d8c8a0'/%3E%3Crect x='1176' y='416' width='86' height='12' fill='%23d8c8a0'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.85}
+.bm-bg-gods{background:linear-gradient(180deg,#08001e 0%,#1a0840 22%,#3a1868 42%,#6a38a0 62%,#a060c8 78%,#d4a0e0 100%)}
+.bm-bg-gods::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 540'%3E%3Cpolyline points='960%2C60%20938%2C195%20968%2C195%20938%2C350' stroke='%23ffd700' stroke-width='5' fill='none' opacity='.45'/%3E%3Cellipse cx='280' cy='170' rx='185' ry='58' fill='rgba(200%2C160%2C240%2C.18)'/%3E%3Cellipse cx='1620' cy='145' rx='205' ry='68' fill='rgba(200%2C160%2C240%2C.18)'/%3E%3Cellipse cx='950' cy='92' rx='155' ry='48' fill='rgba(220%2C180%2C255%2C.14)'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.9}
 
-/* ── Idle ── */
-@keyframes bmIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-.bm-av .avc{animation:bmIdle 2.6s ease-in-out infinite}
-.bm-av:nth-child(2) .avc{animation-delay:.35s}
-.bm-av:nth-child(3) .avc{animation-delay:.7s}
-.bm-av:nth-child(4) .avc{animation-delay:1.05s}
-.bm-av:nth-child(5) .avc{animation-delay:1.4s}
-.bm-av:nth-child(6) .avc{animation-delay:1.75s}
-.bm-av:nth-child(7) .avc{animation-delay:2.1s}
+/* ── Avatar-sprite ── */
+.bm-av{display:inline-flex;flex-direction:column;align-items:center;gap:3px;position:relative;cursor:default}
+.bm-sprite{will-change:transform;display:block;overflow:visible}
+/* Team B gespiegeld */
+#bmFormB .bm-av .bm-sprite{transform:scaleX(-1)}
+.bm-av .avn{font-size:9px;color:var(--fg);max-width:55px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;line-height:1.2;text-shadow:0 1px 4px rgba(0,0,0,.9)}
 
-/* ── Correct / Wrong (eigen avatar op spelerscherm) ── */
-@keyframes bmOk{0%{transform:scale(1) translateY(0)}35%{transform:scale(1.3) translateY(-7px)}70%{transform:scale(1.1) translateY(-2px)}100%{transform:scale(1) translateY(0)}}
-@keyframes bmBad{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
-.bm-av.anim-ok .avc{animation:bmOk .5s ease-out!important}
-.bm-av.anim-bad .avc{animation:bmBad .45s ease-out!important}
+/* ── Participatie-bolletje ── */
+.bm-dot{position:absolute;top:3px;right:2px;width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(0,0,0,.5);background:var(--stone4);z-index:5;transition:background .3s}
+.bm-dot.on{background:var(--green-bright)}
+.bm-dot.locked{background:var(--hi)}
 
-/* ── Aanval rechts (team A → B) ── */
-@keyframes bmAtkR{0%{transform:translateX(0)}40%{transform:translateX(20px)}100%{transform:translateX(0)}}
-.bm-av.anim-atk-r .avc{animation:bmAtkR .55s ease-in-out!important}
+/* ── Idle animatie (sprite) ── */
+@keyframes bmIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.bm-sprite{animation:bmIdle 2.6s ease-in-out infinite}
+.bm-av:nth-child(2) .bm-sprite{animation-delay:.35s}
+.bm-av:nth-child(3) .bm-sprite{animation-delay:.7s}
+.bm-av:nth-child(4) .bm-sprite{animation-delay:1.05s}
+.bm-av:nth-child(5) .bm-sprite{animation-delay:1.4s}
+.bm-av:nth-child(6) .bm-sprite{animation-delay:1.75s}
+.bm-av:nth-child(7) .bm-sprite{animation-delay:2.1s}
+/* Team B: idle zonder scaleX(-1) interferentie */
+#bmFormB .bm-av .bm-sprite{animation-name:bmIdleB}
+@keyframes bmIdleB{0%,100%{transform:scaleX(-1) translateY(0)}50%{transform:scaleX(-1) translateY(-4px)}}
+#bmFormB .bm-av:nth-child(2) .bm-sprite{animation-delay:.35s}
+#bmFormB .bm-av:nth-child(3) .bm-sprite{animation-delay:.7s}
+#bmFormB .bm-av:nth-child(4) .bm-sprite{animation-delay:1.05s}
+#bmFormB .bm-av:nth-child(5) .bm-sprite{animation-delay:1.4s}
+#bmFormB .bm-av:nth-child(6) .bm-sprite{animation-delay:1.75s}
+#bmFormB .bm-av:nth-child(7) .bm-sprite{animation-delay:2.1s}
 
-/* ── Aanval links (team B → A) ── */
-@keyframes bmAtkL{0%{transform:translateX(0)}40%{transform:translateX(-20px)}100%{transform:translateX(0)}}
-.bm-av.anim-atk-l .avc{animation:bmAtkL .55s ease-in-out!important}
+/* ── Actie-animaties (alle op .bm-sprite) ── */
+@keyframes bmOk{0%{transform:scale(1) translateY(0)}35%{transform:scale(1.3) translateY(-10px)}70%{transform:scale(1.12) translateY(-3px)}100%{transform:scale(1) translateY(0)}}
+@keyframes bmBad{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+@keyframes bmAtkR{0%{transform:translateX(0)}40%{transform:translateX(28px)}100%{transform:translateX(0)}}
+@keyframes bmAtkL{0%{transform:scaleX(-1) translateX(0)}40%{transform:scaleX(-1) translateX(28px)}100%{transform:scaleX(-1) translateX(0)}}
+@keyframes bmChgR{0%{transform:translateX(0)}35%{transform:translateX(46px)}65%{transform:translateX(38px)}100%{transform:translateX(0)}}
+@keyframes bmChgL{0%{transform:scaleX(-1) translateX(0)}35%{transform:scaleX(-1) translateX(46px)}65%{transform:scaleX(-1) translateX(38px)}100%{transform:scaleX(-1) translateX(0)}}
+@keyframes bmHit{0%{transform:translateX(0);opacity:1;filter:none}25%{transform:translateX(-10px);opacity:.4;filter:brightness(3) saturate(0)}65%{transform:translateX(4px);opacity:.8}100%{transform:translateX(0);opacity:1;filter:none}}
+@keyframes bmHitB{0%{transform:scaleX(-1) translateX(0);opacity:1}25%{transform:scaleX(-1) translateX(-10px);opacity:.4;filter:brightness(3) saturate(0)}65%{transform:scaleX(-1) translateX(4px);opacity:.8}100%{transform:scaleX(-1) translateX(0);opacity:1;filter:none}}
+@keyframes bmHeal{0%{transform:scale(1);filter:none}40%{transform:scale(1.2);filter:brightness(1.8) hue-rotate(60deg)}100%{transform:scale(1);filter:none}}
+@keyframes bmHealB{0%{transform:scaleX(-1) scale(1);filter:none}40%{transform:scaleX(-1) scale(1.2);filter:brightness(1.8) hue-rotate(60deg)}100%{transform:scaleX(-1) scale(1);filter:none}}
+@keyframes bmShld{0%,100%{filter:none}35%{filter:drop-shadow(0 0 8px rgba(100,160,255,.9))}75%{filter:drop-shadow(0 0 14px rgba(100,160,255,.5))}}
+@keyframes bmShldB{0%,100%{transform:scaleX(-1);filter:none}35%{transform:scaleX(-1);filter:drop-shadow(0 0 8px rgba(100,160,255,.9))}75%{transform:scaleX(-1);filter:drop-shadow(0 0 14px rgba(100,160,255,.5))}}
+@keyframes bmCombo{0%{transform:scale(1);filter:none}25%{transform:scale(1.4);filter:brightness(2.4)}70%{transform:scale(1.15)}100%{transform:scale(1);filter:none}}
+@keyframes bmComboB{0%{transform:scaleX(-1) scale(1)}25%{transform:scaleX(-1) scale(1.4);filter:brightness(2.4)}70%{transform:scaleX(-1) scale(1.15)}100%{transform:scaleX(-1) scale(1);filter:none}}
+@keyframes bmWin{0%,100%{transform:translateY(0)}22%{transform:translateY(-14px)}55%{transform:translateY(-7px)}78%{transform:translateY(-12px)}}
+@keyframes bmWinB{0%,100%{transform:scaleX(-1) translateY(0)}22%{transform:scaleX(-1) translateY(-14px)}55%{transform:scaleX(-1) translateY(-7px)}78%{transform:scaleX(-1) translateY(-12px)}}
+@keyframes bmLose{0%{opacity:1}100%{transform:translateY(10px);opacity:.2}}
+@keyframes bmLoseB{0%{transform:scaleX(-1);opacity:1}100%{transform:scaleX(-1) translateY(10px);opacity:.2}}
 
-/* ── Charge (Cavalerie, grotere beweging) ── */
-@keyframes bmChgR{0%{transform:translateX(0)}35%{transform:translateX(32px)}65%{transform:translateX(26px)}100%{transform:translateX(0)}}
-@keyframes bmChgL{0%{transform:translateX(0)}35%{transform:translateX(-32px)}65%{transform:translateX(-26px)}100%{transform:translateX(0)}}
-.bm-av.anim-chg-r .avc{animation:bmChgR .7s ease-in-out!important}
-.bm-av.anim-chg-l .avc{animation:bmChgL .7s ease-in-out!important}
+/* Animatie-klassen voor team A */
+.bm-av.anim-ok .bm-sprite{animation:bmOk .55s ease-out!important}
+.bm-av.anim-bad .bm-sprite{animation:bmBad .48s ease-out!important}
+.bm-av.anim-atk-r .bm-sprite{animation:bmAtkR .85s ease-in-out!important}
+.bm-av.anim-atk-l .bm-sprite{animation:bmAtkL .85s ease-in-out!important}
+.bm-av.anim-chg-r .bm-sprite{animation:bmChgR .95s ease-in-out!important}
+.bm-av.anim-chg-l .bm-sprite{animation:bmChgL .95s ease-in-out!important}
+.bm-av.anim-hit .bm-sprite{animation:bmHit .55s ease-out!important}
+.bm-av.anim-heal .bm-sprite{animation:bmHeal .65s ease-out!important}
+.bm-av.anim-shield .bm-sprite{animation:bmShld .8s ease-out!important}
+.bm-av.anim-combo .bm-sprite{animation:bmCombo .78s ease-out!important}
+.bm-av.anim-win .bm-sprite{animation:bmWin 1.5s ease-in-out 3!important}
+.bm-av.anim-lose .bm-sprite{animation:bmLose 1.4s ease-in forwards!important}
+/* Team B: animaties met ingebakken scaleX(-1) */
+#bmFormB .bm-av.anim-ok .bm-sprite{animation:bmOk .55s ease-out!important}
+#bmFormB .bm-av.anim-bad .bm-sprite{animation:bmBad .48s ease-out!important}
+#bmFormB .bm-av.anim-atk-r .bm-sprite{animation:bmAtkR .85s ease-in-out!important}
+#bmFormB .bm-av.anim-atk-l .bm-sprite{animation:bmAtkL .85s ease-in-out!important}
+#bmFormB .bm-av.anim-chg-r .bm-sprite{animation:bmChgR .95s ease-in-out!important}
+#bmFormB .bm-av.anim-chg-l .bm-sprite{animation:bmChgL .95s ease-in-out!important}
+#bmFormB .bm-av.anim-hit .bm-sprite{animation:bmHitB .55s ease-out!important}
+#bmFormB .bm-av.anim-heal .bm-sprite{animation:bmHealB .65s ease-out!important}
+#bmFormB .bm-av.anim-shield .bm-sprite{animation:bmShldB .8s ease-out!important}
+#bmFormB .bm-av.anim-combo .bm-sprite{animation:bmComboB .78s ease-out!important}
+#bmFormB .bm-av.anim-win .bm-sprite{animation:bmWinB 1.5s ease-in-out 3!important}
+#bmFormB .bm-av.anim-lose .bm-sprite{animation:bmLoseB 1.4s ease-in forwards!important}
 
-/* ── Geraakt ── */
-@keyframes bmHit{0%{transform:translateX(0);opacity:1;filter:none}25%{transform:translateX(-7px);opacity:.4;filter:brightness(3) saturate(0)}65%{transform:translateX(3px);opacity:.8}100%{transform:translateX(0);opacity:1;filter:none}}
-.bm-av.anim-hit .avc{animation:bmHit .5s ease-out!important}
+/* ── Projectielen ── */
+.bm-proj{position:absolute;pointer-events:none;font-size:18px;line-height:1;top:calc(32%+var(--row,0)*14%);will-change:transform,opacity;z-index:8}
+@keyframes bmProjR{0%{transform:translateX(0);opacity:1}100%{transform:translateX(220px);opacity:0}}
+@keyframes bmProjL{0%{transform:translateX(0) scaleX(-1);opacity:1}100%{transform:translateX(-220px) scaleX(-1);opacity:0}}
+.bm-proj.r{right:50%;animation:bmProjR .85s ease-in forwards}
+.bm-proj.l{left:50%;animation:bmProjL .85s ease-in forwards}
+@keyframes bmArcR{0%{transform:translate(0,0) rotate(0deg);opacity:1}45%{transform:translate(90px,-70px) rotate(180deg)}100%{transform:translate(200px,15px) rotate(400deg);opacity:.15}}
+@keyframes bmArcL{0%{transform:translate(0,0) rotate(0deg);opacity:1}45%{transform:translate(-90px,-70px) rotate(-180deg)}100%{transform:translate(-200px,15px) rotate(-400deg);opacity:.15}}
+.bm-proj.arc.r{animation:bmArcR 1.05s ease-in forwards}
+.bm-proj.arc.l{animation:bmArcL 1.05s ease-in forwards}
 
-/* ── Heling ── */
-@keyframes bmHeal{0%{transform:scale(1);filter:none}40%{transform:scale(1.18);filter:brightness(1.7) hue-rotate(60deg)}100%{transform:scale(1);filter:none}}
-.bm-av.anim-heal .avc{animation:bmHeal .6s ease-out!important}
+/* ── SVG pijl-projectiel ── */
+.bm-arrow{position:absolute;pointer-events:none;will-change:transform,opacity;top:calc(32%+var(--row,0)*14%);z-index:8}
+@keyframes bmArrowR{0%{transform:translateX(0) rotate(-5deg);opacity:1}100%{transform:translateX(220px) rotate(-5deg);opacity:0}}
+@keyframes bmArrowL{0%{transform:translateX(0) rotate(185deg);opacity:1}100%{transform:translateX(-220px) rotate(185deg);opacity:0}}
+.bm-arrow.r{right:50%;animation:bmArrowR .85s ease-in forwards}
+.bm-arrow.l{left:50%;animation:bmArrowL .85s ease-in forwards}
 
-/* ── Schild ── */
-@keyframes bmShld{0%,100%{box-shadow:none}40%{box-shadow:0 0 0 5px rgba(100,160,255,.75)}80%{box-shadow:0 0 0 9px rgba(100,160,255,.25)}}
-.bm-av.anim-shield .avc{animation:bmShld .7s ease-out!important}
-
-/* ── Combo flash ── */
-@keyframes bmCombo{0%{transform:scale(1);filter:none}25%{transform:scale(1.35);filter:brightness(2.2)}70%{transform:scale(1.12)}100%{transform:scale(1);filter:none}}
-.bm-av.anim-combo .avc{animation:bmCombo .7s ease-out!important}
-
-/* ── Overwinning ── */
-@keyframes bmWin{0%,100%{transform:translateY(0)}22%{transform:translateY(-10px)}55%{transform:translateY(-5px)}78%{transform:translateY(-9px)}}
-.bm-av.anim-win .avc{animation:bmWin 1.4s ease-in-out 3!important}
-
-/* ── Nederlaag ── */
-@keyframes bmLose{0%{transform:translateY(0);opacity:1}100%{transform:translateY(8px);opacity:.25}}
-.bm-av.anim-lose .avc{animation:bmLose 1.3s ease-in forwards!important}
-
-/* ── Projectiel: pijl ── */
-.bm-proj{position:absolute;pointer-events:none;font-size:14px;line-height:1;
-  top:calc(20% + var(--row,0) * 20%);will-change:transform,opacity}
-@keyframes bmProjR{0%{transform:translateX(0) scaleX(1);opacity:1}100%{transform:translateX(130px) scaleX(1);opacity:0}}
-@keyframes bmProjL{0%{transform:translateX(0) scaleX(-1);opacity:1}100%{transform:translateX(-130px) scaleX(-1);opacity:0}}
-.bm-proj.r{right:50%;animation:bmProjR .5s ease-in forwards}
-.bm-proj.l{left:50%;animation:bmProjL .5s ease-in forwards}
-
-/* ── Boogvlucht (steen) ── */
-@keyframes bmArcR{0%{transform:translate(0,0) rotate(0deg);opacity:1}50%{transform:translate(60px,-28px) rotate(180deg)}100%{transform:translate(120px,4px) rotate(360deg);opacity:.15}}
-@keyframes bmArcL{0%{transform:translate(0,0) rotate(0deg);opacity:1}50%{transform:translate(-60px,-28px) rotate(-180deg)}100%{transform:translate(-120px,4px) rotate(-360deg);opacity:.15}}
-.bm-proj.arc.r{animation:bmArcR .7s ease-in forwards}
-.bm-proj.arc.l{animation:bmArcL .7s ease-in forwards}
-
-/* ── Gloed-ring (heling / combo) ── */
-.bm-glow{position:absolute;pointer-events:none;border-radius:50%;will-change:transform,opacity}
-@keyframes bmGlowR{0%{transform:scale(.5);opacity:.9}70%{transform:scale(1.5);opacity:.5}100%{transform:scale(2);opacity:0}}
-.bm-glow{animation:bmGlowR .85s ease-out forwards}
+/* ── Gloed-ring ── */
+.bm-glow{position:absolute;pointer-events:none;border-radius:50%;will-change:transform,opacity;z-index:8}
+@keyframes bmGlowFx{0%{transform:scale(.4);opacity:.95}70%{transform:scale(1.8);opacity:.5}100%{transform:scale(2.4);opacity:0}}
+.bm-glow{animation:bmGlowFx .9s ease-out forwards}
 
 /* ── Drijvend getal ── */
-.bm-float{position:absolute;pointer-events:none;font-weight:800;font-size:14px;white-space:nowrap;
-  will-change:transform,opacity;left:50%;transform:translateX(-50%)}
-@keyframes bmFl{0%{transform:translateX(-50%) translateY(0);opacity:1}80%{opacity:1}100%{transform:translateX(-50%) translateY(-40px);opacity:0}}
-.bm-float{animation:bmFl 1.3s ease-out forwards}
+.bm-float{position:absolute;pointer-events:none;font-weight:800;font-size:20px;white-space:nowrap;will-change:transform,opacity;left:50%;z-index:9;text-shadow:0 2px 6px rgba(0,0,0,.7)}
+@keyframes bmFl{0%{transform:translateX(-50%) translateY(0);opacity:1}75%{opacity:.9}100%{transform:translateX(-50%) translateY(-70px);opacity:0}}
+.bm-float{animation:bmFl 1.5s ease-out forwards}
 
-/* ── Kritieke health balk ── */
-@keyframes bmCrit{0%,100%{opacity:1}50%{opacity:.3}}
-.bm-crit{animation:bmCrit 1s ease-in-out infinite}
+/* ── Kritieke health-balk ── */
+@keyframes bmCrit{0%,100%{opacity:1}50%{opacity:.28}}
+.bm-hp-fill.bm-crit{animation:bmCrit 1s ease-in-out infinite}
 
-/* ── Animaties UIT (meta.animations=false) ── */
-.bm-noanim .bm-av .avc{animation:none!important}
-.bm-noanim .bm-float,.bm-noanim .bm-proj,.bm-noanim .bm-glow{display:none!important}
+/* ── Confetti bij overwinning ── */
+@keyframes bmConf{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-140px) rotate(720deg);opacity:0}}
+.bm-confetti{position:absolute;pointer-events:none;width:9px;height:9px;border-radius:2px;will-change:transform,opacity;animation:bmConf 1.7s ease-out forwards;z-index:15}
 
-/* ── Speler-eigen miniavatar ── */
-#bmMyAv .avc{width:38px;height:38px}
+/* ── Speler-weergave ── */
+.bm-player-wrap{display:flex;flex-direction:column;min-height:100vh;overflow:hidden}
+.bm-player-field{flex:0 0 55vh;position:relative;overflow:hidden}
+.bm-player-field #bmField{position:absolute;inset:0;height:100%}
+.bm-player-panel{flex:1;background:rgba(18,14,10,.88);backdrop-filter:blur(10px);border-top:1px solid var(--stone4);overflow-y:auto;padding:10px 12px;max-height:45vh}
+/* Terugknop op slagveld */
+.bm-back-btn{position:absolute;top:8px;left:8px;z-index:20;width:34px;height:34px;border-radius:50%;background:rgba(18,14,10,.7);border:1px solid var(--stone4);color:var(--fg);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.bm-back-btn:hover{background:rgba(18,14,10,.9)}
+
+/* ── Status-balk en spelersgrid ── */
+.bm-status-row{display:flex;align-items:center;gap:8px;padding:4px 12px;font-size:12px;background:rgba(0,0,0,.45);flex-shrink:0;color:var(--muted)}
+.bm-pgrid{display:flex;flex-wrap:wrap;gap:4px;padding:5px 10px;background:rgba(0,0,0,.35);flex-shrink:0}
+
+/* ── Animaties UIT ── */
+.bm-noanim .bm-sprite{animation:none!important}
+.bm-noanim .bm-float,.bm-noanim .bm-proj,.bm-noanim .bm-arrow,.bm-noanim .bm-glow,.bm-noanim .bm-confetti{display:none!important}
+
+/* ── Speler eigen avatar (kleine variant in paneel) ── */
+#bmMyAv .bm-sprite{width:30px!important;height:40px!important}
 
 /* ======================================================
    BATTLE MODE M6 — PROFIEL / AVATAR-EDITOR
