@@ -442,6 +442,19 @@ function bmRouteHeroDamage(team,incoming,players,out){
   return dmg; // overschot → leger
 }
 
+/* Herrijzing (Fase 1): een gevallen held vult per goed antwoord zijn meter;
+   bij het bereiken van de drempel herrijst hij met volle HP. Pure functie zodat
+   ze testbaar is — geeft de te schrijven velden terug of null als er niets verandert. */
+function bmRespawnProgress(p){
+  if(!BM_META?.heroMode||!p||p.isAlive!==false)return null;
+  const need=Math.max(1,BM_META.respawnRequired||5);
+  const meter=(p.respawnMeter||0)+1;
+  if(meter>=need){
+    return {revived:true, upd:{isAlive:true, hp:p.maxHp||BM_META.heroMaxHp||15, armor:0, respawnMeter:0}};
+  }
+  return {revived:false, upd:{respawnMeter:meter}};
+}
+
 /* ---- FACTIE / THEMA HELPERS ---- */
 let BM_THEME_SAVED=[]; // opgeslagen originele CSS-var-waarden voor herstel bij bmLeave
 function bmFaction(id){ return BM_FACTIONS.find(f=>f.id===id)||BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]; }
@@ -611,6 +624,7 @@ SCREENS.battleHostSettings = function(){
   const sfx=BM_META.sfx!==false;
   const hero=BM_META.heroMode===true;
   const hhp=BM_META.heroMaxHp||15;
+  const rsp=BM_META.respawnRequired||5;
   const tog=(key,val)=>`BM_META.${key}=${val};SCREENS.battleHostSettings()`;
   const chips=(key,vals,cur,fmt=v=>v)=>vals.map(v=>`<button class="chip ${cur===v?"on":""}" onclick="${tog(key,JSON.stringify(v))}">${fmt(v)}</button>`).join("");
   const onoff=(key,cur)=>`<button class="chip ${cur?"on":""}" onclick="${tog(key,true)}">Aan</button><button class="chip ${!cur?"on":""}" onclick="${tog(key,false)}">Uit</button>`;
@@ -642,7 +656,10 @@ SCREENS.battleHostSettings = function(){
     <div class="chips">${onoff("heroMode",hero)}</div>
     <div class="note" style="margin-top:6px">Elke speler krijgt een eigen held met persoonlijke HP. Helden vormen een frontlinie die het leger beschermt: schade treft eerst de levende helden, daarna pas het leger.</div>
     ${hero?`<label class="fld" style="margin-top:10px">HP per held</label>
-    <div class="chips">${chips("heroMaxHp",[10,15,20,30],hhp)}</div>`:""}
+    <div class="chips">${chips("heroMaxHp",[10,15,20,30],hhp)}</div>
+    <label class="fld" style="margin-top:10px">Goede antwoorden om te herrijzen</label>
+    <div class="chips">${chips("respawnRequired",[3,5,8],rsp)}</div>
+    <div class="note" style="margin-top:6px">Een gevallen held herrijst zodra de speler dit aantal vragen goed beantwoordt.</div>`:""}
   </div>
   <div class="panel">
     <label class="fld">Adaptief leren</label>
@@ -689,6 +706,7 @@ async function bmCreateRoom(){
     sfx:BM_META.sfx!==false,
     heroMode:BM_META.heroMode===true,
     heroMaxHp:BM_META.heroMaxHp||15,
+    respawnRequired:BM_META.respawnRequired||5,
     status:"lobby"};
   BM_META=meta;
   try{
@@ -779,6 +797,7 @@ async function bmDistributeQs(roundN){
       up["players/"+pid+"/maxHp"]=hhp;
       up["players/"+pid+"/armor"]=0;
       up["players/"+pid+"/isAlive"]=true;
+      up["players/"+pid+"/respawnMeter"]=0;
     }
   }
   // Team-klassenlijst schrijven zodat spelers combo's kunnen zien
@@ -1224,6 +1243,13 @@ function bmHeroHpHTML(p){
   const pct=Math.max(0,Math.min(1,(p.hp||0)/p.maxHp));
   const dead=p.isAlive===false||pct<=0;
   const col=dead?"#777":pct<0.3?"#c0392b":"#3f9d52";
+  if(dead){
+    const need=Math.max(1,BM_META.respawnRequired||5);
+    const meter=Math.min(need,p.respawnMeter||0);
+    return `<div class="bm-hero-hp" title="Gevallen — herrijst bij ${need} goede antwoorden">
+      <div class="bm-hero-hp-fill" style="transform:scaleX(${meter/need});background:var(--hi)"></div>
+    </div><div class="bm-hero-respawn">↻ ${meter}/${need}</div>`;
+  }
   return `<div class="bm-hero-hp" title="Held: ${p.hp||0}/${p.maxHp} HP">
       <div class="bm-hero-hp-fill" style="transform:scaleX(${pct});background:${col}"></div>
     </div>${p.armor?`<div class="bm-hero-armor">🛡 ${p.armor}</div>`:""}`;
@@ -1260,7 +1286,7 @@ function bmBuildBattlefield(){
   // Herbouw formatie als samenstelling of participatiestatus wijzigt
   const hash=Object.entries(BM_PLAYERS).map(([id,p])=>
     id+":"+p.class+":"+p.team+":"+(p.answeredRound||0)+":"+(p.lockedAction?"L":"")
-    +":"+(p.hp??"")+":"+(p.armor||0)+":"+(p.isAlive===false?"D":"")
+    +":"+(p.hp??"")+":"+(p.armor||0)+":"+(p.isAlive===false?"D":"")+":"+(p.respawnMeter||0)
   ).sort().join("|");
   if(hash!==_bmFormHash){
     _bmFormHash=hash;
@@ -2132,6 +2158,11 @@ function bmAnswer(idx){
       upd["missed/"+wk+"/c"]=(prev.c||0)+1;
       upd["missed/"+wk+"/p"]=BM_MY_Q.la;
       upd["missed/"+wk+"/a"]=BM_MY_Q.options?.[BM_MY_Q.correctIdx]||"";
+    }
+    // Heldenmodus: gevallen held vult zijn herrijzingsmeter met goede antwoorden
+    if(ok){
+      const rs=bmRespawnProgress(p);
+      if(rs){ Object.assign(upd,rs.upd); if(rs.revived){ beep("win"); toast("Je held herrijst!","Terug in de strijd met volle HP.",medalSVG("laurel",34)); } }
     }
     fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update(upd);
   });
