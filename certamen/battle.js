@@ -494,7 +494,7 @@ SCREENS.battleIdentity = function(){
   if(!hasFirebase){ toast("Firebase vereist","Battle Mode vereist Firebase."); go("battleHome"); return; }
   const saved=bmIdentLoad();
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Aanmelden</h2></div>
+  <div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Aanmelden</h2></div>
   ${saved?`
   <div class="panel" style="text-align:center">
     <div style="margin-bottom:10px">${avatarHTML(saved.avatar||P.avatar,saved.color||P.color,54)}</div>
@@ -1744,7 +1744,7 @@ SCREENS.battleJoin = function(){
   if(!BM_IDENT){go("battleIdentity");return;}
   const savedSess=(()=>{try{const s=sessionStorage.getItem("bm_session");return s?JSON.parse(s):null;}catch(e){return null;}})();
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Meedoen</h2></div>
+  <div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Meedoen — Battle Mode</h2></div>
   ${savedSess?`<div class="panel"><div class="note">Je was al actief in gevecht <b>${esc(savedSess.code)}</b>.</div>
     <button class="btn btn-gold btn-block" style="margin-top:8px" onclick="bmRejoin()">Heraansluiten</button>
     <button class="btn btn-ghost btn-block" style="margin-top:6px" onclick="sessionStorage.removeItem('bm_session');SCREENS.battleJoin()">Nieuw spel</button>
