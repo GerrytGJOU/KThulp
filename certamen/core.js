@@ -76,7 +76,9 @@ function makeQuestion(pool){
   const w = pick(pool);
   const correct = ansText(w);
   const opts=[correct];
-  for(const x of shuffle(pool)){
+  const samePos = w.pos ? pool.filter(x=>x.pos===w.pos) : pool;
+  const distPool = samePos.length >= 4 ? samePos : pool;
+  for(const x of shuffle(distPool)){
     const a = ansText(x);
     if(!opts.some(o=>norm(o)===norm(a))){ opts.push(a); if(opts.length>=4) break; }
   }
