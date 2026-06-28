@@ -12,6 +12,10 @@
   (ablativus), vocativus.
 - Footer van elke app: "© Gerben de Jong · [jaar]".
   Footer van portalen: "[Portaalnaam] · Gerben de Jong · [jaar]".
+- Elke app (geen portaal) krijgt linksboven een "Terug naar portaal"-knop:
+  `<a class="portal-back" href="../" aria-label="Terug naar portaal">` met
+  pijl-SVG, position:fixed top-left, z-index 9999. Zie frequentie/ of certamen/
+  voor de exacte markup en CSS.
 - iPad-veilig: zichtbare <label>-bestandskiezers (nooit display:none + .click()),
   viewport met maximum-scale.
 - Na elke wijziging aan een scriptblok: `node --check` draaien voordat je oplevert.
