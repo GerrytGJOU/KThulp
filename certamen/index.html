@@ -350,6 +350,12 @@ body.greek .qcard .word{color:#143a5e}
 .bm-dot{position:absolute;top:3px;right:2px;width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(0,0,0,.5);background:var(--stone4);z-index:5;transition:background .3s}
 .bm-dot.on{background:var(--green-bright)}
 .bm-dot.locked{background:var(--hi)}
+/* Heldenmodus: persoonlijke HP-balk onder een sprite */
+.bm-hero-hp{width:34px;height:4px;border-radius:2px;background:rgba(0,0,0,.55);overflow:hidden;margin:1px auto 0}
+.bm-hero-hp-fill{height:100%;width:100%;transform-origin:left center;border-radius:2px;will-change:transform;transition:transform .35s}
+.bm-hero-armor{font-size:8px;line-height:1;text-align:center;color:#9cc8ff;margin-top:1px}
+.bm-av.bm-hero-dead{opacity:.4;filter:grayscale(1)}
+.bm-av.bm-hero-dead .avn::after{content:" ✝"}
 
 /* ── Idle animatie (sprite) ── */
 @keyframes bmIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
