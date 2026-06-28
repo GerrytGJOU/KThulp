@@ -171,26 +171,16 @@ const BM_AVATAR_PARTS = {
 
 // XP-drempels en titels per niveau (1–20). Aanpasbaar zonder logica te wijzigen.
 const BM_LEVELS = [
-  { level:1,  xp:0,     title:"Rekruut",    unlock:null },
-  { level:2,  xp:50,    title:"Soldaat",    unlock:{part:"haar",       opt:"lang"} },
-  { level:3,  xp:120,   title:"Legionair",  unlock:{part:"haar",       opt:"vlecht"} },
-  { level:4,  xp:220,   title:"Optio",      unlock:{part:"wapen",      opt:"staf"} },
-  { level:5,  xp:350,   title:"Centurio",   unlock:{part:"helm",       opt:"fedder"} },
-  { level:6,  xp:500,   title:"Senior",     unlock:{part:"cape",       opt:"lang"} },
-  { level:7,  xp:700,   title:"Veteraan",   unlock:{part:"schild",     opt:"tower"} },
-  { level:8,  xp:950,   title:"Primipilus", unlock:{part:"armor",      opt:"zwaar"} },
-  { level:9,  xp:1250,  title:"Tribune",    unlock:null },
-  { level:10, xp:1600,  title:"Legate",     unlock:{part:"helm",       opt:"kroon"} },
-  { level:11, xp:2000,  title:"Proconsul",  unlock:null },
-  { level:12, xp:2500,  title:"Praetor",    unlock:{part:"armor",      opt:"ceremonieel"} },
-  { level:13, xp:3100,  title:"Quaestor",   unlock:null },
-  { level:14, xp:3800,  title:"Aedilis",    unlock:null },
-  { level:15, xp:4600,  title:"Consul",     unlock:{part:"victoryAnim",opt:"zwaardhefffen"} },
-  { level:16, xp:5500,  title:"Pontifex",   unlock:null },
-  { level:17, xp:6500,  title:"Imperator",  unlock:null },
-  { level:18, xp:7700,  title:"Augustus",   unlock:null },
-  { level:19, xp:9000,  title:"Caesar",     unlock:null },
-  { level:20, xp:10500, title:"Divus",      unlock:null },
+  { level:1,  xp:0,    title:"Tiro",       unlock:null },
+  { level:2,  xp:100,  title:"Miles",      unlock:{part:"haar",       opt:"lang"} },
+  { level:3,  xp:250,  title:"Optio",      unlock:{part:"haar",       opt:"vlecht"} },
+  { level:4,  xp:500,  title:"Signifer",   unlock:{part:"wapen",      opt:"staf"} },
+  { level:5,  xp:900,  title:"Aquilifer",  unlock:{part:"helm",       opt:"fedder"} },
+  { level:6,  xp:1400, title:"Centurio",   unlock:{part:"cape",       opt:"lang"} },
+  { level:7,  xp:2100, title:"Praefectus", unlock:{part:"schild",     opt:"tower"} },
+  { level:8,  xp:3000, title:"Tribunus",   unlock:{part:"armor",      opt:"zwaar"} },
+  { level:9,  xp:4200, title:"Legatus",    unlock:{part:"helm",       opt:"kroon"} },
+  { level:10, xp:6000, title:"Imperator",  unlock:{part:"victoryAnim",opt:"zwaardhefffen"} },
 ];
 
 // score = rounds*5 + damage + healing  → mastery-sterren (0–5)
@@ -204,21 +194,7 @@ const BM_MASTERY_TIERS = [
 ];
 
 // Uitbreidbaar via één extra entry; geen andere code wijzigen.
-const BM_ACHIEVEMENTS = [
-  { id:"first_blood",       nm:"Eerste bloed",        desc:"Je eerste Battle Mode gevecht gespeeld",              icon:"eagle"   },
-  { id:"scholar",           nm:"Scholar",              desc:"≥90% accuratesse in een gevecht (min. 3 vragen)",     icon:"torch"   },
-  { id:"unbreakable",       nm:"Onbreekbaar",          desc:"Een gevecht gewonnen als winnend team",               icon:"shield"  },
-  { id:"versatile",         nm:"Veelzijdig",           desc:"4 verschillende klassen gespeeld",                    icon:"column"  },
-  { id:"veteran",           nm:"Veteraan",             desc:"10 gevechten gespeeld",                               icon:"laurel"  },
-  { id:"master_hopliet",    nm:"Meester Hopliet",      desc:"Hopliet mastery ★★★★★ bereikt",                       icon:"shield"  },
-  { id:"master_spartaan",   nm:"Meester Spartaan",     desc:"Spartaan mastery ★★★★★ bereikt",                      icon:"helmet"  },
-  { id:"master_boogschutter",nm:"Meester Boogschutter",desc:"Boogschutter mastery ★★★★★ bereikt",                  icon:"eagle"   },
-  { id:"master_cavalerie",  nm:"Meester Cavalerie",    desc:"Cavalerie mastery ★★★★★ bereikt",                     icon:"column"  },
-  { id:"master_priester",   nm:"Meester Priester",     desc:"Priester mastery ★★★★★ bereikt",                      icon:"torch"   },
-  { id:"master_centurio",   nm:"Meester Centurio",     desc:"Centurio mastery ★★★★★ bereikt",                      icon:"laurel"  },
-  { id:"master_genie",      nm:"Meester Genie",        desc:"Genie mastery ★★★★★ bereikt",                         icon:"amphora" },
-  { id:"master_verkenner",  nm:"Meester Verkenner",    desc:"Verkenner mastery ★★★★★ bereikt",                     icon:"eagle"   },
-];
+// BM_ACHIEVEMENTS is vervangen door ACHIEVEMENTS_DEF in core.js (geunificeerd systeem)
 
 /* ---- BATTLE IDENTITY ---- */
 const BM_IDENT_KEY = "certamen_battle_identity";
@@ -299,16 +275,14 @@ function bmAvatarSVG(av,size=60){
 }
 
 function bmCalcLevel(xp){
-  let cur=BM_LEVELS[0];
-  for(const l of BM_LEVELS){if((xp||0)>=l.xp)cur=l;else break;}
-  const next=BM_LEVELS.find(l=>l.level===cur.level+1)||null;
-  const prog=next?Math.min(1,((xp||0)-cur.xp)/(next.xp-cur.xp)):1;
-  return{...cur,next,progress:prog};
+  const lv=calcLevel(xp);  // XP_LEVELS uit core.js
+  const lvDef=BM_LEVELS.find(l=>l.level===lv.level)||BM_LEVELS[0];
+  return{...lv, title:lvDef.title, unlock:lvDef.unlock};
 }
 function bmCalcMastery(hist){
   if(!hist)return 0;
-  const score=(hist.rounds||0)*5+(hist.damage||0)+(hist.healing||0);
-  let stars=0; for(const t of BM_MASTERY_TIERS){if(score>=t.score)stars=t.stars;} return stars;
+  const r=hist.rounds||0, tiers=[5,15,35,70,120];
+  let stars=0; for(const t of tiers){if(r>=t)stars++;} return stars;
 }
 function bmIsUnlocked(opt,ident){
   if(!opt.requires)return true;
@@ -333,8 +307,9 @@ async function bmAwardBattle(){
 
   const correct=BM_MY_CORRECT||0, wrong=BM_MY_WRONG||0, total=correct+wrong;
   const won=BM_STATE.winner===BM_MY_TEAM;
-  const isScholar=total>=3&&correct/total>=0.9;
-  const xpEarned=correct*10+total*5+(won?25:0)+(isScholar?10:0);
+  const isScholar=total>=5&&correct/total>=0.9;
+  // Nieuwe XP-formule: +2/goed, +5/deelname, +1/ronde, +15/winst, +8/scholar
+  const xpEarned=correct*2+5+total*1+(won?15:0)+(isScholar?8:0);
 
   const snap=await fbDB.ref("identities/"+klas+"/"+lcode).once("value");
   const data=snap.val()||{};
@@ -342,16 +317,27 @@ async function bmAwardBattle(){
   const battles=(data.battles||0)+1;
   const oldLv=bmCalcLevel(oldXp), newLv=bmCalcLevel(newXp);
 
-  // Mastery recalculeren voor huidige klasse
+  // Mastery-rondes bijwerken voor huidige klasse
   const cls=BM_MY_CLASS;
-  const masteryStars=cls?bmCalcMastery(data.classHistory?.[cls]):0;
   const upd={xp:newXp,battles};
-  if(cls)upd["classHistory/"+cls+"/mastery"]=masteryStars;
+  if(cls){
+    const hist=data.classHistory?.[cls]||{};
+    upd["classHistory/"+cls+"/rounds"]=(hist.rounds||0)+Math.max(1,total);
+    upd["classHistory/"+cls+"/damage"]=(hist.damage||0)+(BM_MY_DMG||0);
+    upd["classHistory/"+cls+"/healing"]=(hist.healing||0)+(BM_MY_HEAL||0);
+  }
 
   await fbDB.ref("identities/"+klas+"/"+lcode).update(upd);
   const merged={...data,...upd,xp:newXp,battles,achievements:data.achievements||[]};
   BM_IDENT={...BM_IDENT,...merged};
   bmIdentSave({...bmIdentLoad(),...BM_IDENT});
+
+  // Lokaal profiel (core.js) bijwerken
+  P.stats.battlesPlayed++; if(won)P.stats.battlesWon++;
+  P.stats.totalCorrect+=correct; P.stats.totalWrong+=wrong;
+  P.stats.totalDamage+=(BM_MY_DMG||0); P.stats.totalHealing+=(BM_MY_HEAL||0);
+  addXP(xpEarned);  // addXP roept saveProfile() aan
+  checkAch({mode:"battle", won, isScholar});
 
   const earned=await bmCheckAchievements(merged,{won,isScholar});
   return{xpEarned,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
@@ -362,13 +348,17 @@ async function bmCheckAchievements(ident,result={}){
   if(!klas||!lcode)return[];
   const current=ident.achievements||[], newOnes=[];
   const check=(id,cond)=>{if(!current.includes(id)&&cond)newOnes.push(id);};
-  check("first_blood",true);
+  check("eerste_gevecht",true);
   check("scholar",result.isScholar);
-  check("unbreakable",result.won);
-  check("versatile",Object.keys(ident.classHistory||{}).length>=4);
-  check("veteran",(ident.battles||0)>=10);
+  check("onbreekbaar",result.won&&result.noHealthLoss);
+  check("overwinnaar",result.won);
+  const clsPlayed=Object.keys(ident.classHistory||{});
+  check("strateeg",clsPlayed.length>=5);
+  check("commandant",clsPlayed.length>=8);
   for(const cls of BM_CLASSES){
-    check("master_"+cls.id,bmCalcMastery(ident.classHistory?.[cls.id])>=5);
+    const stars=bmCalcMastery(ident.classHistory?.[cls.id]);
+    check("vet_"+cls.id, stars>=3);
+    check("mees_"+cls.id, stars>=5);
   }
   if(newOnes.length){
     const updated=[...new Set([...current,...newOnes])];
@@ -462,6 +452,7 @@ function bmLeave(){
   BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};
   BM_MY_BE=0;BM_MY_Q=null;BM_MY_CLASS=null;BM_MY_TEAM=null;
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;
+  BM_MY_CORRECT=0;BM_MY_WRONG=0;BM_MY_DMG=0;BM_MY_HEAL=0;
 }
 
 /* ---- SCHERM: battleHome ---- */
@@ -538,7 +529,17 @@ async function bmIdentLogin(){
   if(err)err.style.display="none";
   try{
     let data=await bmIdentGet(klas,lcode);
+    const isNew=!data;
     if(!data)data=await bmIdentCreate(klas,lcode,name);
+    // Eenmalige migratie: lokaal profiel importeren als Firebase-identiteit nieuw is
+    if(isNew&&fbDB){
+      const localXp=P.xp||0, localCorrect=P.stats?.totalCorrect||0;
+      if((localXp>0||localCorrect>0)&&confirm("Je hebt al Certamen-voortgang ("+localCorrect+" goede antwoorden, "+localXp+" XP). Wil je deze importeren in je Battle Mode-profiel?")){
+        const imp={xp:localXp,coins:P.coins||0,achievements:P.achievements||[]};
+        await fbDB.ref("identities/"+klas+"/"+lcode).update(imp);
+        data={...data,...imp};
+      }
+    }
     BM_IDENT={klascode:klas,leerlingcode:lcode,...data,name,avatar:bmAvatarMerge(data.avatar)};
     bmIdentSave({klascode:klas,leerlingcode:lcode,name,avatar:data.avatar,color:data.color});
     go("battleJoin");
@@ -2084,7 +2085,7 @@ SCREENS.battleResult = function(){
     const box=el("bmXpResult"); if(!box)return;
     if(!r){box.textContent="";return;}
     const lvUp=r.levelUp?`<div style="color:var(--hi-bright);font-size:16px;margin-top:6px">🎉 Niveau omhoog! Je bent nu ${esc(r.newLv.title)} (${r.newLv.level})</div>`:"";
-    const achHTML=r.earned.length?`<div style="margin-top:6px;color:var(--hi)">${r.earned.map(id=>{const a=BM_ACHIEVEMENTS.find(x=>x.id===id);return a?"🏅 "+esc(a.nm):""}).join(" · ")}</div>`:"";
+    const achHTML=r.earned.length?`<div style="margin-top:6px;color:var(--hi)">${r.earned.map(id=>{const a=ACHIEVEMENTS_DEF.find(x=>x.id===id);return a?"🏅 "+esc(a.nm):""}).join(" · ")}</div>`:"";
     box.innerHTML=`<div style="font-size:22px;font-weight:700;color:var(--hi-bright)">+${r.xpEarned} XP</div>
       <div style="font-size:12px;color:var(--muted);margin-top:2px">Totaal: ${BM_IDENT?.xp||r.newLv.xp} XP · Niveau ${r.newLv.level} · ${esc(r.newLv.title)}</div>
       ${lvUp}${achHTML}`;
@@ -2111,13 +2112,15 @@ SCREENS.battleProfile = function(){
     </div>`;
   }).join("");
 
-  const achHTML=BM_ACHIEVEMENTS.map(a=>{
+  const bmAchDef=ACHIEVEMENTS_DEF.filter(a=>a.mode==="battle"||["eerste_gevecht","overwinnaar","scholar","onbreekbaar","strateeg","commandant","combokunstenaar","legendarisch"].includes(a.id));
+  const achHTML=bmAchDef.map(a=>{
     const got=achs.includes(a.id);
+    if(a.secret&&!got) return `<div class="bm-ach locked"><div class="aic">${iconSVG("star",22,"var(--muted2)")}</div><div class="atx"><div class="anm">🔒 ???</div><div class="ads">Geheim eerbewijs</div></div></div>`;
     return `<div class="bm-ach${got?"":" locked"}">
       <div class="aic">${got?iconSVG(a.icon,24,"var(--hi)"):iconSVG(a.icon,22,"var(--muted2)")}</div>
       <div class="atx">
         <div class="anm">${got?"":"🔒 "}${esc(a.nm)}</div>
-        <div class="ads">${esc(a.desc)}</div>
+        <div class="ads">${esc(a.ds)}</div>
       </div>
     </div>`;
   }).join("");
@@ -2145,7 +2148,7 @@ SCREENS.battleProfile = function(){
   <button class="btn btn-gold btn-block" onclick="go('battleAvatarEdit')" style="margin-bottom:14px">Avatar aanpassen</button>
   <div class="eyebrow l">Class Mastery</div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">${masteryHTML}</div>
-  <div class="eyebrow l">Achievements (${achs.length}/${BM_ACHIEVEMENTS.length})</div>
+  <div class="eyebrow l">Achievements (${achs.length}/${bmAchDef.length})</div>
   <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">${achHTML}</div>
   ${foot()}`);
 };
