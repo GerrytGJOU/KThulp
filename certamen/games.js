@@ -733,7 +733,7 @@ SCREENS.collection = function(){
     <div class="eyebrow l">Klasbeheersing</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:4px">${masteryGrid}</div>
     <div class="eyebrow l" style="margin-top:16px">Battle eerbewijzen</div>
-    ${bmAchRows}`;
+    <div class="achgrid">${bmAchRows}</div>`;
   } else {
     bmSection=`<div class="eyebrow l" style="margin-top:20px">⚔️ Battle Mode</div>
     <div class="panel"><div class="note">Je hebt nog geen Battle Mode-profiel. Doe mee via het hoofdmenu om je avatar en klasse-mastery op te bouwen.</div>
@@ -788,7 +788,7 @@ SCREENS.collection = function(){
     </button>`;
   }).join("")}</div>
   <div class="eyebrow l" style="margin-top:20px">Eerbewijzen</div>
-  ${generalAchHTML}
+  <div class="achgrid">${generalAchHTML}</div>
   ${foot()}`);
   // Ververs Battle Mode-gegevens uit Firebase en herrender als er nieuwere data is
   if(typeof bmRefreshIdentCache==="function" && bmIdent){

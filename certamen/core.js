@@ -8,7 +8,10 @@ const VOCAB_EL = [{"f":1,"la":"ὁ","nl":"de, het","pos":"lidw."},{"f":2,"la":"�
 
 /* ---------- mini helpers ---------- */
 const app = document.getElementById("app");
-function H(html){ app.innerHTML = html; window.scrollTo(0,0); }
+// Vervangt de scherminhoud. Scrollt NIET automatisch naar boven, zodat een
+// in-place herrender (bv. een optie aanklikken) de scrollpositie behoudt.
+// Echte navigatie scrollt wel naar boven via go().
+function H(html){ app.innerHTML = html; }
 function el(id){ return document.getElementById(id); }
 function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function rand(n){ return Math.floor(Math.random()*n); }
@@ -349,7 +352,7 @@ function foot(){ return `<div class="foot">© Gerben de Jong · 2026 · ${hasFir
 
 /* ====================== SCHERMEN ====================== */
 const SCREENS = {};
-function go(name){ cleanup(); document.body.classList.toggle("greek", themeFor(name)==="greek"); SCREENS[name](); }
+function go(name){ cleanup(); document.body.classList.toggle("greek", themeFor(name)==="greek"); SCREENS[name](); window.scrollTo(0,0); }
 function themeFor(name){
   // marathon-gerelateerde schermen krijgen het Griekse thema
   if((ROLE==="host" && DRAFT.game==="marathon") || (META && META.game==="marathon")) {

@@ -279,6 +279,13 @@ body.greek .qcard .word{color:#143a5e}
 .ach .m{width:46px;height:46px;flex:0 0 auto}
 .ach .nm{font-family:'Optima',serif;font-size:15px;color:var(--hi-bright)}
 .ach .ds{font-size:13px;color:var(--muted)}
+/* Eerbewijzen in een responsief raster: meer kolommen op brede schermen/iPad */
+.achgrid{display:grid;grid-template-columns:1fr;gap:9px;margin-bottom:9px}
+.achgrid .ach{margin-bottom:0;min-width:0}
+.achgrid .ach .m{width:40px;height:40px}
+.achgrid .ach .nm,.achgrid .ach .ds{overflow:hidden;text-overflow:ellipsis}
+@media(min-width:620px){.achgrid{grid-template-columns:1fr 1fr}}
+@media(min-width:980px){.achgrid{grid-template-columns:1fr 1fr 1fr}}
 
 .foot{margin-top:auto;padding-top:22px;text-align:center;color:var(--muted2);font-size:12px;letter-spacing:.05em}
 .fb-warn{font-size:12px;color:var(--muted2);text-align:center;margin-top:8px}
