@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="nl" data-taal="la">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Stijlfiguren · Klassieke Talen</title>
+<style>
+  :root{
+    --bg:#16140f;
+    --bg-2:#1d1b14;
+    --panel:#221f17;
+    --panel-2:#2a261c;
+    --line:#3a3527;
+    --ink:#ece2cc;
+    --ink-soft:#cabfa4;
+    --muted:#9c9078;
+    --gold:#c9a24a;
+    /* accenten wisselen per taal */
+    --accent:#c9a24a;
+    --accent-2:#8a3324;
+    --accent-soft:#3a2c1c;
+    --halo:rgba(201,162,74,.16);
+    --radius:7px;
+    --serif:"Palatino Linotype","Palatino","Book Antiqua",Georgia,"Times New Roman",serif;
+    --grieks:"Palatino Linotype",Palatino,"Noto Serif","DejaVu Serif",Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  html[data-taal="gr"]{
+    --accent:#5a8fb8;
+    --accent-2:#c4663a;
+    --accent-soft:#1f2c33;
+    --halo:rgba(90,143,184,.18);
+    --bg:#10130f;
+    --bg-2:#14180f;
+    --panel:#191e16;
+    --panel-2:#1f261c;
+    --line:#2c3528;
+    --ink:#e7e6d6;
+    --ink-soft:#bcc2ac;
+    --muted:#8a9580;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--serif);
+    line-height:1.5;
+    -webkit-text-size-adjust:100%;
+    -webkit-font-smoothing:antialiased;
+    min-height:100dvh;
+    transition:background .5s ease;
+  }
+  body::before{
+    /* subtiele "steen" textuur */
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(circle at 18% 12%,var(--halo),transparent 42%),
+      radial-gradient(circle at 84% 88%,var(--halo),transparent 46%);
+    opacity:.9;transition:background .5s ease;
+  }
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 18px 80px;}
+
+  /* ---------- Masthead ---------- */
+  header{padding:34px 0 10px;text-align:center;}
+  .crest{
+    width:58px;height:58px;margin:0 auto 14px;display:block;
+  }
+  .eyebrow{
+    font-family:var(--sans);font-size:.66rem;letter-spacing:.42em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 10px;padding-left:.42em;
+  }
+  h1{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(2rem,6.5vw,3.3rem);
+    letter-spacing:.16em;text-transform:uppercase;
+    margin:0;color:var(--ink);
+    text-indent:.16em;
+  }
+  .rule{
+    width:min(420px,80%);height:0;margin:16px auto 6px;border:0;
+    border-top:1px solid var(--accent);position:relative;opacity:.85;
+  }
+  .rule::after{content:"";position:absolute;left:0;right:0;top:3px;border-top:1px solid var(--accent);opacity:.45;}
+  .tagline{font-family:var(--sans);font-size:.82rem;color:var(--ink-soft);letter-spacing:.04em;margin:14px 0 0;}
+
+  /* ---------- Taalschakelaar ---------- */
+  .toggle{
+    display:inline-flex;margin:24px auto 6px;border:1px solid var(--line);
+    border-radius:999px;overflow:hidden;background:var(--panel);
+  }
+  .toggle button{
+    appearance:none;border:0;background:transparent;cursor:pointer;
+    font-family:var(--sans);font-size:.82rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);padding:11px 26px;min-height:44px;transition:.25s;
+  }
+  .toggle button[aria-pressed="true"]{
+    background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 78%,#000));
+    color:#16140f;font-weight:600;
+  }
+  .toggle button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  /* ---------- Bedieningsbalk ---------- */
+  .controls{margin:26px 0 6px;}
+  .searchwrap{position:relative;max-width:520px;margin:0 auto 16px;}
+  .searchwrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--muted);}
+  #zoek{
+    width:100%;font-family:var(--serif);font-size:16px;color:var(--ink);
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:13px 14px 13px 40px;min-height:48px;
+  }
+  #zoek::placeholder{color:var(--muted);}
+  #zoek:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .chip{
+    appearance:none;cursor:pointer;font-family:var(--sans);font-size:.74rem;letter-spacing:.05em;
+    color:var(--ink-soft);background:var(--panel);border:1px solid var(--line);
+    border-radius:999px;padding:8px 15px;min-height:38px;transition:.2s;
+  }
+  .chip[aria-pressed="true"]{border-color:var(--accent);color:var(--ink);background:var(--accent-soft);}
+  .chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  .meta{font-family:var(--sans);font-size:.76rem;color:var(--muted);text-align:center;margin:20px 0 4px;letter-spacing:.04em;}
+
+  /* ---------- Kaartenraster ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:14px;margin-top:14px;}
+  .card{
+    position:relative;text-align:left;cursor:pointer;
+    background:linear-gradient(180deg,var(--panel),var(--bg-2));
+    border:1px solid var(--line);border-radius:var(--radius);
+    padding:16px 16px 15px;color:var(--ink);font-family:var(--serif);
+    transition:transform .15s ease,border-color .2s ease,box-shadow .2s ease;
+    overflow:hidden;
+  }
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:.7;}
+  .card:hover,.card:focus-visible{transform:translateY(-2px);border-color:var(--accent);box-shadow:0 6px 22px rgba(0,0,0,.35);outline:none;}
+  .card .cat{font-family:var(--sans);font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:0 0 7px;}
+  .card .naam{font-size:1.22rem;letter-spacing:.02em;margin:0 0 6px;font-weight:600;}
+  .card .kort{font-size:.92rem;color:var(--ink-soft);margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .card .tags{margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;}
+  .tag{font-family:var(--sans);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:4px;padding:2px 6px;}
+  .tag.auteur{color:var(--accent-2);border-color:color-mix(in srgb,var(--accent-2) 50%,var(--line));}
+
+  .leeg{text-align:center;color:var(--muted);font-family:var(--sans);padding:48px 0;font-size:.95rem;}
+
+  /* ---------- Detail (sheet/modal) ---------- */
+  .overlay{
+    position:fixed;inset:0;z-index:30;background:rgba(8,7,5,.62);
+    display:none;align-items:flex-end;justify-content:center;
+    backdrop-filter:blur(2px);
+  }
+  .overlay.open{display:flex;}
+  .sheet{
+    width:100%;max-width:720px;max-height:92dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:14px 14px 0 0;padding:0 0 34px;
+    animation:rise .28s ease;
+  }
+  @media(min-width:680px){
+    .overlay{align-items:center;}
+    .sheet{border-radius:14px;max-height:88dvh;}
+  }
+  @keyframes rise{from{transform:translateY(26px);opacity:.4;}to{transform:translateY(0);opacity:1;}}
+  .sheet-head{
+    position:sticky;top:0;z-index:2;background:var(--panel);
+    border-bottom:1px solid var(--line);padding:16px 22px 14px;
+  }
+  .back{
+    appearance:none;background:transparent;border:0;cursor:pointer;color:var(--accent);
+    font-family:var(--sans);font-size:.78rem;letter-spacing:.08em;display:inline-flex;align-items:center;gap:7px;
+    padding:6px 2px;min-height:40px;
+  }
+  .back svg{width:15px;height:15px;}
+  .sheet-cat{font-family:var(--sans);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:8px 0 4px;}
+  .sheet h2{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.2rem);letter-spacing:.03em;margin:0;font-weight:600;}
+  .sheet-tags{margin-top:12px;display:flex;gap:7px;flex-wrap:wrap;}
+  .ttag{font-family:var(--sans);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:5px;border:1px solid var(--line);color:var(--ink-soft);}
+  .ttag.la{color:#e6c46e;border-color:#6e5524;}
+  .ttag.gr{color:#7fb1d6;border-color:#365063;}
+  .ttag.auteur{color:var(--accent-2);border-color:color-mix(in srgb,var(--accent-2) 55%,var(--line));}
+
+  .sheet-body{padding:20px 22px 0;}
+  .def{font-size:1.12rem;color:var(--ink);margin:0 0 6px;}
+  .note{font-family:var(--sans);font-size:.85rem;color:var(--muted);background:var(--bg-2);border-left:2px solid var(--accent);padding:9px 12px;border-radius:4px;margin:14px 0 0;}
+
+  .vb-titel{font-family:var(--sans);font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin:26px 0 4px;}
+  .vb-titel .lijn{display:inline-block;width:32px;height:1px;background:var(--accent);vertical-align:middle;margin-left:10px;}
+
+  .vb{
+    position:relative;margin:14px 0;padding:14px 16px 14px 18px;
+    background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);
+  }
+  .vb::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;background:var(--accent);opacity:.6;}
+  .tessera{
+    display:inline-block;font-family:var(--sans);font-size:.58rem;letter-spacing:.14em;font-weight:700;
+    padding:3px 8px;border-radius:4px;margin-bottom:9px;text-transform:uppercase;
+  }
+  .tessera.nl{background:#2a3a2a;color:#bfe0bf;}
+  .tessera.en{background:#2c3242;color:#bccbe6;}
+  .tessera.gr{background:#27343d;color:#9fc9e6;}
+  .tessera.la{background:#3a2f1c;color:#e3c576;}
+  .vb-tekst{font-size:1.16rem;color:var(--ink);margin:0;}
+  .vb-tekst.grieks{font-family:var(--grieks);font-size:1.28rem;line-height:1.55;}
+  .vb-tekst.latijn{font-style:italic;}
+  .vb-vert{font-family:var(--serif);font-size:.98rem;color:var(--ink-soft);margin:7px 0 0;font-style:italic;}
+  .vb-bron{font-family:var(--sans);font-size:.7rem;letter-spacing:.06em;color:var(--muted);margin:8px 0 0;text-transform:uppercase;}
+
+  footer{margin-top:54px;padding-top:18px;border-top:1px solid var(--line);text-align:center;}
+  footer p{font-family:var(--sans);font-size:.72rem;letter-spacing:.06em;color:var(--muted);margin:4px 0;}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg class="crest" id="crest" viewBox="0 0 60 60" aria-hidden="true"></svg>
+    <p class="eyebrow">Klassieke Talen · VWO bovenbouw</p>
+    <h1>Stijlfiguren</h1>
+    <hr class="rule">
+    <p class="tagline">Stilistiek · narratologie · argumentatie — voor het Centraal Examen</p>
+
+    <div class="toggle" role="group" aria-label="Kies taal">
+      <button id="btn-la" aria-pressed="true" onclick="kiesTaal('la')">Latijn</button>
+      <button id="btn-gr" aria-pressed="false" onclick="kiesTaal('gr')">Grieks</button>
+    </div>
+  </header>
+
+  <section class="controls" aria-label="Filteren en zoeken">
+    <div class="searchwrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="zoek" type="search" inputmode="search" autocomplete="off" placeholder="Zoek een stijlfiguur of trefwoord…" aria-label="Zoeken" oninput="render()">
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Categorie"></div>
+  </section>
+
+  <p class="meta" id="teller"></p>
+  <div class="grid" id="grid"></div>
+  <p class="leeg" id="leeg" hidden>Geen stijlfiguren gevonden. Pas je zoekterm of categorie aan.</p>
+
+  <footer>
+    <p>Stijlfiguren · interactief overzicht voor Latijn &amp; Grieks</p>
+    <p>© Gerben de Jong · 2026</p>
+  </footer>
+</div>
+
+<!-- Detailweergave -->
+<div class="overlay" id="overlay" onclick="if(event.target===this)sluit()">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="d-naam">
+    <div class="sheet-head">
+      <button class="back" onclick="sluit()" aria-label="Terug naar overzicht">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Terug
+      </button>
+      <p class="sheet-cat" id="d-cat"></p>
+      <h2 id="d-naam"></h2>
+      <div class="sheet-tags" id="d-tags"></div>
+    </div>
+    <div class="sheet-body" id="d-body"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   STIJLFIGUREN — data
+   talen: welke minimumlijst(en) het figuur verplicht stelt  ('la' / 'gr')
+   auteur: optioneel — auteur/genre waarvoor het figuur specifiek geldt
+   vb: voorbeelden  l = taal (nl/en/gr/la), t = tekst, v = NL-vertaling, b = bron
+   ========================================================================= */
+const CATS = [
+  ["alle","Alle"],
+  ["klank","Klank-, woord- & zinfiguren"],
+  ["gedachte","Gedachtefiguren"],
+  ["narr","Narratologische middelen"],
+  ["arg","Argumentatieve middelen"],
+  ["metr","Metriek & verstechniek"]
+];
+
+const DATA = [
+/* ---------------- KLANK-, WOORD- & ZINFIGUREN ---------------- */
+{naam:"Alliteratie",cat:"klank",talen:["la","gr"],
+ def:"De gelijkheid van de beginmedeklinkers van twee of meer woorden die dicht bij elkaar staan.",
+ vb:[
+  {l:"nl",t:"Leentje leerde Lotje lopen langs de lange Lindenlaan."},
+  {l:"en",t:"Peter Piper picked a peck of pickled peppers."},
+  {l:"la",t:"o utinam possim populos reparare paternis / artibus…",v:"Och, kon ik maar met mijn vaders kunsten de volkeren herstellen…",b:"Ovidius, Metamorphoses 1.363-364"},
+  {l:"gr",t:"Καὶ σύ τοι παίδων πατὴρ / πέφυκας.",v:"Ook jij bent toch een vader van kinderen.",b:"Euripides, Medea 344-345"}
+ ]},
+{naam:"Assonantie",cat:"klank",talen:["la"],
+ def:"De herhaling van dezelfde beklemtoonde klinker(s) in woorden die dicht bij elkaar staan.",
+ vb:[
+  {l:"nl",t:"Denkend aan Holland zie ik brede rivieren traag door oneindig laagland gaan.",b:"H. Marsman, Herinnering aan Holland"},
+  {l:"en",t:"The rain in Spain stays mainly in the plain."},
+  {l:"la",t:"…subde caput corpusque simul, simul elue crimen.",v:"…dompel je hoofd en tegelijk je lichaam onder, en was tegelijk je schuld weg.",b:"Ovidius, Metamorphoses 11.140-141"}
+ ]},
+{naam:"Anafoor",cat:"klank",talen:["la","gr"],
+ def:"De herhaling van hetzelfde tekstelement aan het begin van opeenvolgende (delen van) zinnen of versregels. Let op: de elementen hoeven niet in dezelfde vorm te staan.",
+ vb:[
+  {l:"nl",t:"dag stoel naast de tafel / dag brood op de tafel / dag visserke-vis met de pijp",b:"P. van Ostaijen, Marc groet 's morgens de dingen"},
+  {l:"en",t:"Mad world! Mad kings! Mad composition!",b:"Shakespeare, King John 2.1"},
+  {l:"la",t:"Ille mi par esse deo videtur, / ille, si fas est, superare divos…",v:"Hij lijkt mij gelijk aan een god, hij, als het geoorloofd is, de goden te overtreffen…",b:"Catullus, carmen 51"},
+  {l:"gr",t:"ἐκεῖνος εἶναί φησι Διόνυσον θεόν, / ἐκεῖνος ἐν μηρῷ ποτ' ἐρράφθαι Διός.",v:"Híj beweert dat Dionysus een god is, híj dat hij ooit ingenaaid is in de dij van Zeus.",b:"Euripides, Bacchae 243-244"}
+ ]},
+{naam:"Antithese",cat:"klank",talen:["la","gr"],
+ def:"Het dicht bij elkaar plaatsen van inhoudelijk tegengestelde begrippen.",
+ vb:[
+  {l:"nl",t:"Die twee zijn als water en vuur."},
+  {l:"en",t:"It was the best of times, it was the worst of times.",b:"Dickens, A Tale of Two Cities"},
+  {l:"la",t:"alieni adpetens, sui profusus.",v:"begerig naar bezit van anderen, kwistig met dat van zichzelf.",b:"Sallustius, De coniuratione Catilinae 5"},
+  {l:"gr",t:"φίλων ἐρῆμοι, τῶν δ' ἀπολλύντων πλέαι.",v:"van vrienden verstoken, maar vol van moordenaars.",b:"Sophocles, Electra 1404-1405"}
+ ]},
+{naam:"Asyndeton",cat:"klank",talen:["la","gr"],
+ def:"De opeenvolging van twee of meer tekstelementen zonder verbindingswoord.",
+ vb:[
+  {l:"nl",t:"…in het Maleis, Javaans, Soendaas, Alfoers, Boeginees, Battaks.",b:"Multatuli, Max Havelaar"},
+  {l:"en",t:"I came, I saw, I conquered."},
+  {l:"la",t:"…dat digitis gemmas, dat longa monilia collo; / aure leves bacae, redimicula pectore pendent.",v:"…hij geeft edelstenen aan haar vingers, lange halssnoeren aan haar hals; in haar oor lichte parels, op haar borst hangen linten.",b:"Ovidius, Metamorphoses 10.264-265"},
+  {l:"gr",t:"Ἀκηκόατε, ἑοράκατε, πεπόνθατε, ἔχετε· δικάζετε.",v:"U hebt gehoord, gezien, geleden; u hebt hem hier: spreek recht.",b:"Lysias 12.100"}
+ ]},
+{naam:"Chiasme",cat:"klank",talen:["la","gr"],
+ def:"De kruisgewijze plaatsing van grammaticaal en/of inhoudelijk gelijkwaardige tekstelementen.",
+ extra:"Notatie op het CE: … (a) … (b) … (b) … (a).",
+ vb:[
+  {l:"nl",t:"laat mij je gezicht (a) zien, laat mij je stem (b) horen, / want zoet is je stem (b) en je gezicht (a) is bekoorlijk.",b:"Hooglied 2:14b"},
+  {l:"en",t:"Fair (a) is foul (b), and foul (b) is fair (a).",b:"Shakespeare, Macbeth 1.1"},
+  {l:"la",t:"fundantem (a) arces (b) ac tecta (b) novantem (a).",v:"bezig met het stichten van burchten en het vernieuwen van huizen.",b:"Vergilius, Aeneis 4.260"},
+  {l:"gr",t:"βαρεῖαν (a) ἐχθροῖς (b) καὶ φίλοισιν (b) εὐμενῆ (a).",v:"geducht (a) voor vijanden (b), maar voor vrienden (b) welgezind (a).",b:"Euripides, Medea 809"}
+ ]},
+{naam:"Parallellisme",cat:"klank",talen:["la","gr"],
+ def:"De onderdelen van twee of meer gelijkwaardige tekstelementen staan in dezelfde volgorde.",
+ extra:"Notatie op het CE: … (a) … (b) … (a) … (b).",
+ vb:[
+  {l:"nl",t:"Wie het eerst (a) komt (b), het eerst (a) maalt (b)."},
+  {l:"en",t:"Like father (a) — like son (b)."},
+  {l:"la",t:"arbor (a) ibi niveis uberrima pomis, / ardua morus (a), erat, gelido contermina fonti.",v:"Daar stond een boom (a), rijk aan sneeuwwitte vruchten, een hoge moerbei (a), grenzend aan een koele bron.",b:"Ovidius, Metamorphoses 4.89-90"},
+  {l:"gr",t:"πρᾳότητα (a) μὲν πορίζων (b), ἀγριότητα (a) δ' ἐξορίζων (b).",v:"hij verschaft (b) vriendelijkheid (a), en verdrijft (b) grofheid (a).",b:"Plato, Symposium 197d"}
+ ]},
+{naam:"Hyperbaton",cat:"klank",talen:["la","gr"],
+ def:"Tussen woorden die samen een woordgroep vormen staan een of meer woorden die geen deel uitmaken van die woordgroep. Vooral in poëzie, dankzij de vrije woordvolgorde.",
+ vb:[
+  {l:"la",t:"In nova fert animus mutatas dicere formas / corpora.",v:"Mijn geest drijft mij ertoe te spreken over vormen die veranderd zijn in nieuwe lichamen (nova … corpora).",b:"Ovidius, Metamorphoses 1.1-2"},
+  {l:"gr",t:"Πενθέως ἡ τάλαιν' ἔχω κάρα.",v:"Ik, ongelukkige, houd het hoofd van Pentheus vast (Πενθέως … κάρα).",b:"Euripides, Bacchae 1284"}
+ ]},
+{naam:"Polysyndeton",cat:"klank",talen:["la","gr"],
+ def:"De opeenvolging van twee of meer tekstelementen die telkens door een nevenschikkend voegwoord met elkaar verbonden zijn.",
+ vb:[
+  {l:"nl",t:"Die zorgt en waakt en slaaft en ploegt en zwoegt en zweet.",b:"Joost van den Vondel, Palamedes"},
+  {l:"en",t:"…and the earth was without form, and void; and darkness was upon the face of the deep.",b:"Genesis 1:2 (KJV)"},
+  {l:"la",t:"…laudat digitosque manusque / bracchiaque et nudos media plus parte lacertos.",v:"…hij prijst haar vingers én haar handen én haar armen en haar voor meer dan de helft naakte bovenarmen.",b:"Ovidius, Metamorphoses 1.500-501"},
+  {l:"gr",t:"…ἠέ τινα τριπόδων… ἠὲ λεβήτων, / ἠὲ δύ' ἡμιόνους ἠὲ χρύσειον ἄλεισον.",v:"…óf een van de drievoeten óf van de kommen, óf twee muilezels óf een gouden drinkbeker.",b:"Homerus, Odyssee 15.84-85"}
+ ]},
+{naam:"Tricolon",cat:"klank",talen:["la","gr"],
+ def:"Een opsomming of constructie die bestaat uit drie (vaak gelijkvormige) delen.",
+ vb:[
+  {l:"nl",t:"Snel, slim en sterk."},
+  {l:"en",t:"Life, liberty, and the pursuit of happiness."},
+  {l:"la",t:"nec mora; quod pontus, quod terra, quod educat aer.",v:"en zonder dralen: wat de zee, wat het land, wat de lucht voortbrengt.",b:"Ovidius, Metamorphoses 8.830"},
+  {l:"gr",t:"Αἱρεῖ γὰρ ἀνδρῶν ὄμματ', ἐξαιρεῖ πόλεις, πίμπρησιν οἴκους.",v:"Want zij verovert de ogen van mannen, verwoest steden, steekt huizen in brand.",b:"Euripides, Troades 892-893"}
+ ]},
+{naam:"Tautologie",cat:"klank",talen:["gr"],
+ def:"Het nevenschikkend herhalen van een begrip in andere woorden.",
+ vb:[
+  {l:"nl",t:"gratis en voor niks."},
+  {l:"en",t:"null and void."},
+  {l:"gr",t:"τὰς γὰρ ἐνθάδε / θυσίας ἐπιστάμεσθα καὶ γιγνώσκομεν.",v:"want wij kennen de offers hier en zijn ervan op de hoogte.",b:"Euripides, Iphigeneia in Tauris 490-491"}
+ ]},
+{naam:"Pleonasme",cat:"klank",talen:["gr"],
+ def:"Het aan een begrip toekennen van een kwalificatie die al in dat begrip zelf besloten ligt.",
+ vb:[
+  {l:"nl",t:"een witte schimmel · een ronde cirkel."},
+  {l:"en",t:"a free gift · a frozen ice."},
+  {l:"gr",t:"…περιναιέται ἀμφὶς ἐόντες / τείρουσι.",v:"…de omwonenden, die om hem heen wonen, kwellen hem.",b:"Homerus, Ilias 24.488-489"}
+ ]},
+{naam:"Hypallage",cat:"klank",talen:["gr"],
+ def:"Een bijvoeglijk naamwoord congrueert grammaticaal met een ander zelfstandig naamwoord dan waar het qua betekenis bij hoort.",
+ vb:[
+  {l:"nl",t:"een slapeloze nacht.",v:"(de persoon slaapt niet, niet de nacht)"},
+  {l:"la",t:"ibant obscuri sola sub nocte.",v:"ze gingen, donker, onder de eenzame nacht (= eenzaam onder de donkere nacht).",b:"Vergilius, Aeneis 6.268"},
+  {l:"gr",t:"νεῖκος ἀνδρῶν ξύναιμον.",v:"een verwante ruzie van mannen (= een ruzie tussen verwante mannen).",b:"naar de syllabus"}
+ ]},
+{naam:"Dichterlijk meervoud",cat:"klank",talen:["gr"],auteur:"poëzie",
+ def:"Het gebruik van een meervoud van een zelfstandig naamwoord waar een enkelvoud begrepen moet worden. Komt alleen voor in poëzie.",
+ vb:[
+  {l:"gr",t:"ὣς ἔφατ', ἐν στήθεσσι… φίλον ἦτορ.",v:"Zo sprak hij, terwijl hij zijn hart in zijn borst (στήθεσσι, mv.) tot de orde riep.",b:"Homerus, Odyssee 20.22"},
+  {l:"gr",t:"ἀναίνεται δὲ λέκτρα κοὐ ψαύει γάμων.",v:"Hij wijst het bed (λέκτρα, mv.) af en raakt het huwelijk niet aan.",b:"Euripides, Hippolytus 14"}
+ ]},
+{naam:"Woordplaatsing",cat:"klank",talen:["la"],
+ def:"Woorden die aan het begin of het einde van een regel of zin worden geplaatst, krijgen daardoor nadruk.",
+ vb:[
+  {l:"la",t:"Eurydicenque suam iam tuto respicit Orpheus.",v:"En zijn Eurydice kijkt Orpheus nu zonder gevaar achterom — Orpheus krijgt nadruk door de eindplaatsing.",b:"Ovidius, Metamorphoses 11.66"}
+ ]},
+{naam:"Ellips",cat:"klank",talen:["la"],auteur:"o.a. Cicero",
+ def:"Het weglaten van een of meer tekstelementen die uit de context gemakkelijk aangevuld kunnen worden. Een vorm van brevitas (beknoptheid).",
+ vb:[
+  {l:"nl",t:"Opa gaf aan Jan een fiets, aan Piet een step.",v:"(‘gaf’ is weggelaten)"},
+  {l:"en",t:"Some like coffee; others, tea."},
+  {l:"la",t:"…ne, si demissior ibis, / unda gravet pennas, si celsior (ibis), ignis adurat.",v:"…opdat niet, als je te laag gaat, de golf je veren verzwaart, en als je (gaat) te hoog, het vuur ze verschroeit.",b:"Ovidius, Metamorphoses 8.204-205"}
+ ]},
+{naam:"Exclamatio",cat:"klank",talen:["la"],auteur:"Cicero (rhetor)",
+ def:"Een uitroep waarmee de spreker emotie of verontwaardiging uitdrukt.",
+ vb:[
+  {l:"la",t:"O tempora, o mores!",v:"O tijden, o zeden!",b:"Cicero, In Catilinam 1.2"}
+ ]},
+{naam:"Praeteritio",cat:"gedachte",talen:["la"],auteur:"Cicero (rhetor)",
+ def:"Het meedelen dat men iets onvermeld zal laten, terwijl men het juist daardoor toch vermeldt.",
+ vb:[
+  {l:"nl",t:"Ik zwijg nog maar over de keer dat je te laat kwam…"},
+  {l:"la",t:"Praetermitto ruinas fortunarum tuarum…",v:"Ik ga voorbij aan de ineenstorting van je vermogen… (en noemt het juist daardoor).",b:"Cicero, In Catilinam 1.14"}
+ ]},
+
+/* ---------------- GEDACHTEFIGUREN ---------------- */
+{naam:"Vergelijking",cat:"gedachte",talen:["la","gr"],
+ def:"Een begrip wordt vergeleken met een ander begrip, met behulp van ‘als’, ‘zoals’, ‘gelijk aan’ e.d.",
+ extra:"Drie vaste elementen: 1) afgebeelde (wat vergeleken wordt), 2) beeld (waarmee vergeleken wordt), 3) tertium comparationis / punt van overeenkomst (het gemeenschappelijke aspect).",
+ vb:[
+  {l:"nl",t:"De jongen werd zo rood als een kreeft.",v:"afgebeelde: de jongen · beeld: de kreeft · punt van overeenkomst: de roodheid"},
+  {l:"en",t:"as busy as a bee."},
+  {l:"la",t:"cruor emicat alte, / non aliter quam cum vitiato fistula plumbo / scinditur…",v:"Het bloed spuit hoog op, net zoals wanneer een loden buis met een gebrek openbarst…",b:"Ovidius, Metamorphoses 4.121-123"},
+  {l:"gr",t:"οἳ δὲ λύκοι ὣς / ἀλλήλοις ἐπόρουσαν.",v:"en zij stormden als wolven op elkaar af.",b:"Homerus, Ilias 4.471-472"}
+ ]},
+{naam:"Metafoor",cat:"gedachte",talen:["la","gr"],
+ def:"De vervanging van een begrip door een begrip dat daarmee een gelijkenis vertoont; alleen het beeld wordt genoemd, dus zónder ‘als’ of ‘zoals’.",
+ vb:[
+  {l:"nl",t:"Hij woont in een zwijnenstal."},
+  {l:"en",t:"Time is money."},
+  {l:"la",t:"…vulnus alit venis et caeco carpitur igni.",v:"…zij voedt de wond in haar aderen en wordt verteerd door een onzichtbaar vuur (= liefde).",b:"Vergilius, Aeneis 4.2"},
+  {l:"gr",t:"ἐς δὲ τὴν τύχην / πεσοῦσ' ὅσην… πῶς ἂν ἐκνεῦσαι δοκεῖς;",v:"nu je in zo'n moeilijke situatie terecht bent gekomen, hoe denk je er dan uit te kunnen zwemmen (= ontsnappen)?",b:"Euripides, Hippolytus 469-470"}
+ ]},
+{naam:"Metonymia",cat:"gedachte",talen:["gr"],
+ def:"De vervanging van een begrip door een begrip dat er nauw mee samenhangt.",
+ extra:"Veelvoorkomende typen: abstractum pro concreto (abstract i.p.v. concreet), een godennaam i.p.v. zijn invloedssfeer, het materiaal i.p.v. het voorwerp, en pars pro toto (deel i.p.v. geheel).",
+ vb:[
+  {l:"nl",t:"Het Witte Huis verklaarde… (= de Amerikaanse regering)."},
+  {l:"en",t:"The pen is mightier than the sword."},
+  {l:"gr",t:"σπλάγχνα δ' ἄρ' ἀμπείραντες ὑπείρεχον Ἡφαίστοιο.",v:"na de ingewanden aan het spit te hebben geregen, hielden ze die boven Hephaestus (= het vuur).",b:"Homerus, Ilias 2.426"},
+  {l:"gr",t:"…χαλκὸν ἐνὶ στήθεσσι βαλὼν ἐκ θυμὸν ἕλοιτο.",v:"…door brons (= een speer/zwaard) in zijn borst te steken het leven te benemen.",b:"Homerus, Ilias 5.316-317"}
+ ]},
+{naam:"Pars pro toto",cat:"gedachte",talen:["la","gr"],
+ def:"Het noemen van een deel in plaats van het geheel. (Een vorm van metonymia.)",
+ vb:[
+  {l:"nl",t:"Even koppen tellen. (= mensen tellen)"},
+  {l:"en",t:"All hands on deck. (= alle bemanningsleden)"},
+  {l:"la",t:"…tectis urbis sine fine furenti.",v:"…terwijl ik zonder ophouden door de daken (= huizen) van de stad raasde.",b:"Vergilius, Aeneis 2.771"},
+  {l:"gr",t:"ἅπασα δὲ / στέγη πυκνοῖσιν ἐκτύπει δραμήμασιν.",v:"en heel het dak (= huis) dreunde van het drukke gehol.",b:"Euripides, Medea 1179-1180"}
+ ]},
+{naam:"Litotes",cat:"gedachte",talen:["la","gr"],
+ def:"De ontkenning van een begrip met als doel het tegendeel te benadrukken.",
+ vb:[
+  {l:"nl",t:"Dat is niet verkeerd. (= heel goed)"},
+  {l:"en",t:"no small feat. (= een hele prestatie)"},
+  {l:"la",t:"…numquam, regina, negabo / promeritam…",v:"…nooit zal ik ontkennen, koningin, dat u (lof) verdiend hebt… (= u hebt veel verdiend).",b:"Vergilius, Aeneis 4.333-334"},
+  {l:"gr",t:"…ἔπαινον εἶχε οὐκ ὀλίγον.",v:"…hij verwierf niet weinig (= heel veel) lof.",b:"Herodotus, Historiae 1.96"}
+ ]},
+{naam:"Hyperbool",cat:"gedachte",talen:["la","gr"],
+ def:"Een sterke overdrijving.",
+ vb:[
+  {l:"nl",t:"Ik heb het je al duizend keer gezegd."},
+  {l:"en",t:"I'm so hungry I could eat a horse."},
+  {l:"la",t:"…velum adversa ferit, fluctusque ad sidera tollit.",v:"…de storm raakt het zeil van voren en tilt de golven tot aan de sterren.",b:"Vergilius, Aeneis 1.103"},
+  {l:"gr",t:"μυρία δ' ὀπισθόπους / φίλων ἅμ' ἔστειχ' ἡλίκων… ὁμήγυρις.",v:"en een eindeloze stoet van vrienden en leeftijdsgenoten liep met hem mee.",b:"Euripides, Hippolytus 1179-1180"}
+ ]},
+{naam:"Eufemisme",cat:"gedachte",talen:["la","gr"],
+ def:"De weergave van een negatief geladen begrip door een verzachtende aanduiding.",
+ vb:[
+  {l:"nl",t:"De dierenarts heeft onze hond laten inslapen. (= gedood)"},
+  {l:"en",t:"She passed away. (= died)"},
+  {l:"la",t:"civitates, quas… pacaverat.",v:"de stammen, die hij ‘tot vrede had gebracht’ (= onderworpen).",b:"Caesar, De bello Gallico 7.65"},
+  {l:"gr",t:"…ἐς ἄλλο σχῆμ' ἀποστάντες βίου.",v:"…wanneer jullie zijn weggegaan naar een andere vorm van leven (= gestorven zijn).",b:"Euripides, Medea 1039"}
+ ]},
+{naam:"Climax",cat:"gedachte",talen:["la","gr"],
+ def:"Een reeks van ten minste drie tekstelementen waarvan de inhoud (en/of lengte) een stijgende lijn vertoont.",
+ vb:[
+  {l:"nl",t:"Uren, dagen, maanden, jaren / vliegen als een schaduw heen.",b:"Rhijnvis Feith, Nieuwjaarslied"},
+  {l:"la",t:"…laudat digitosque manusque / bracchiaque et nudos media plus parte lacertos.",v:"…hij prijst haar vingers, haar handen, haar armen en haar voor meer dan de helft naakte bovenarmen.",b:"Ovidius, Metamorphoses 1.500-501"},
+  {l:"gr",t:"…καὶ κύσε χεῖρας, / δεινάς, ἀνδροφόνους, αἵ οἱ πολέας κτάνον υἷας.",v:"…en hij kuste de handen, de geduchte, mannenmoordende, die vele zonen van hem gedood hadden.",b:"Homerus, Ilias 24.478-479"}
+ ]},
+{naam:"Retorische vraag",cat:"gedachte",talen:["la","gr"],
+ def:"Een vraag waarbij het niet de bedoeling van de vragensteller is dat er een antwoord gegeven wordt; er klinkt juist een sterke bewering of aansporing in door.",
+ vb:[
+  {l:"nl",t:"Wie wil er nou niet gelukkig zijn?"},
+  {l:"en",t:"Who do you think you are?"},
+  {l:"la",t:"Quo usque tandem abutere, Catilina, patientia nostra?",v:"Hoe lang nog, Catilina, zul je misbruik maken van ons geduld?",b:"Cicero, In Catilinam 1.1"},
+  {l:"gr",t:"Κακῶς πέπρακται πανταχῇ· τίς ἀντερεῖ;",v:"Het staat er in alle opzichten slecht voor; wie zal dat tegenspreken?",b:"Euripides, Medea 364"}
+ ]},
+{naam:"Personificatie",cat:"gedachte",talen:["la","gr"],auteur:"Lat.: Cicero",
+ def:"Een vorm van beeldspraak waarbij levenloze dingen, voorwerpen of abstracties als levende wezens worden voorgesteld of menselijke eigenschappen krijgen.",
+ vb:[
+  {l:"nl",t:"De wind huilde door de nacht."},
+  {l:"la",t:"…si mecum patria… loquatur: ‘M. Tulli, quid agis?’",v:"…als het vaderland tot mij zou spreken: ‘Marcus Tullius, wat doe je?’",b:"Cicero, In Catilinam 1.27"},
+  {l:"gr",t:"μῆλα, τὰ δὴ κατέκειτ' ἐσφαγμένα νηλέϊ χαλκῷ.",v:"kleinvee, dat neerlag, afgeslacht door het meedogenloze brons.",b:"Homerus, Odyssee 11.45"}
+ ]},
+{naam:"Paradox",cat:"gedachte",talen:["gr"],
+ def:"Een schijnbare tegenstrijdigheid die bij nader inzien wel kloppend (of betekenisvol) is.",
+ vb:[
+  {l:"nl",t:"Schrijven is schrappen."},
+  {l:"en",t:"Less is more."},
+  {l:"gr",t:"Τεθνᾶσι κοὐ τεθνᾶσι.",v:"Ze zijn dood en ze zijn niet dood (over Castor en Pollux, als sterren aan de hemel).",b:"Euripides, Helena 138"}
+ ]},
+{naam:"Ironie",cat:"gedachte",talen:["la"],
+ def:"Een opmerking waarbij spottend het tegendeel naar voren wordt gebracht van wat eigenlijk bedoeld wordt.",
+ vb:[
+  {l:"nl",t:"Lekker weertje! (in de stromende regen)"},
+  {l:"en",t:"Oh, great. (when something goes wrong)"},
+  {l:"la",t:"…hic insidiator…",v:"…deze hinderlaaglegger… (over Milo, terwijl Cicero juist betoogt dat hij niét de aanvaller was).",b:"Cicero, Pro Milone 28"}
+ ]},
+{naam:"Pathos",cat:"gedachte",talen:["la"],
+ def:"Het opwekken van betrokkenheid bij of medelijden met een personage bij de toehoorder of lezer.",
+ vb:[
+  {l:"la",t:"‘Pyrame,’ clamavit, ‘quis te mihi casus ademit? / Pyrame, responde!’",v:"‘Pyramus,’ riep ze, ‘welk ongeluk heeft jou van mij weggenomen? Pyramus, antwoord!’",b:"Ovidius, Metamorphoses 4.142-143"}
+ ]},
+{naam:"Sententia / Γνώμη",cat:"gedachte",talen:["la","gr"],
+ def:"Een kernachtige, algemeen geldende uitspraak (een ‘wijsheid’).",
+ vb:[
+  {l:"nl",t:"Oost west, thuis best."},
+  {l:"en",t:"Actions speak louder than words."},
+  {l:"la",t:"homines, dum docent, discunt.",v:"mensen leren terwijl ze onderwijzen.",b:"Seneca, Epistulae 7.8"},
+  {l:"gr",t:"αἱ δεύτεραί πως φροντίδες σοφώτεραι.",v:"de tweede gedachten zijn doorgaans verstandiger.",b:"Euripides, Hippolytus 436"}
+ ]},
+
+/* ---------------- NARRATOLOGISCHE MIDDELEN ---------------- */
+{naam:"Alwetende verteller",cat:"narr",talen:["la","gr"],
+ def:"De vertellende instantie die volledige kennis heeft van alle gebeurtenissen, achtergronden en de afloop, en die ook weet wat er in het innerlijk van de personages omgaat.",
+ vb:[
+  {l:"nl",t:"De verteller weet wat ieder personage denkt en hoe het verhaal afloopt, nog vóór de personages dat zelf weten."}
+ ]},
+{naam:"Vertelperspectief",cat:"narr",talen:["la","gr"],
+ def:"Het gezichtspunt van waaruit de lezer de gebeurtenissen ziet. Dit kan bij de verteller liggen of bij een van de personages.",
+ vb:[
+  {l:"nl",t:"Schuift het perspectief naar een personage, dan zien we de wereld even door diens ogen."}
+ ]},
+{naam:"Verteltempo",cat:"narr",talen:["la","gr"],
+ def:"De verhouding tussen verteltijd (de tijd die nodig is om iets te vertellen) en vertelde tijd (de tijdsduur van de gebeurtenissen zelf).",
+ extra:"Versnelling: verteltijd korter dan vertelde tijd (bijv. een samenvatting of tijdsprong). Vertraging: verteltijd langer dan vertelde tijd (bijv. een uitvoerige beschrijving).",
+ vb:[
+  {l:"nl",t:"‘Tien jaar later…’ (versnelling) tegenover een halve bladzijde over één blik (vertraging)."}
+ ]},
+{naam:"Apostrofe",cat:"narr",talen:["la","gr"],
+ def:"De verteller (of een personage) richt zich rechtstreeks tot een ding, een begrip of een personage dat niet aanwezig is.",
+ vb:[
+  {l:"en",t:"O Death, where is thy sting?",b:"1 Korintiërs 15:55 (KJV)"},
+  {l:"la",t:"…primi vidistis amantes / et vocis fecistis iter…",v:"…jullie, geliefden, hebben als eersten (een weg voor de stem) gevonden… (de verteller spreekt de geliefden aan).",b:"Ovidius, Metamorphoses 4.68-69"},
+  {l:"gr",t:"Ἔνθ' ἄρα τοι, Πάτροκλε, φάνη βιότοιο τελευτή.",v:"Toen, Patroclus, verscheen voor jou het einde van je leven.",b:"Homerus, Ilias 16.787"}
+ ]},
+{naam:"Dramatische ironie",cat:"narr",talen:["la","gr"],
+ def:"Een of meer personages hebben minder kennis van de situatie dan de lezer of toehoorder.",
+ vb:[
+  {l:"la",t:"‘Hanc ego, care gener… do tibi…’",v:"Pandion vertrouwt zijn dochter aan Tereus toe — zonder te weten welke begeerte Tereus al koestert.",b:"Ovidius, Metamorphoses 6.496 e.v."},
+  {l:"gr",t:"…ζητῶν τὸν αὐτόχειρα τοῦ φόνου λαβεῖν.",v:"‘…om te proberen de moordenaar te grijpen’ — Oedipus weet nog niet dat hij dat zelf is.",b:"Sophocles, Oedipus Tyrannus 266"}
+ ]},
+{naam:"Prospectie (flashforward)",cat:"narr",talen:["la","gr"],
+ def:"De verteller of een personage verwijst vooruit naar gebeurtenissen die later zullen plaatsvinden.",
+ vb:[
+  {l:"la",t:"dedit oscula nato / non iterum repetenda suo.",v:"hij gaf zijn zoon kussen die niet opnieuw gegeven zouden worden (vooruitwijzing naar Icarus' dood).",b:"Ovidius, Metamorphoses 8.211-212"},
+  {l:"gr",t:"χρῆν γὰρ Κανδαύλῃ γενέσθαι κακῶς.",v:"want het was voorbeschikt dat het slecht zou aflopen met Candaules.",b:"Herodotus, Historiae 1.8"}
+ ]},
+{naam:"Retrospectie (flashback)",cat:"narr",talen:["la","gr"],
+ def:"De verteller of een personage verwijst terug naar gebeurtenissen die eerder hebben plaatsgevonden.",
+ vb:[
+  {l:"la",t:"Stipes erat, quem… in flammam… posuere sorores…",v:"Er was een houtblok, dat de schikgodinnen ooit in het vuur hadden gelegd… (terugblik op Meleagers lot).",b:"Ovidius, Metamorphoses 8.451 e.v."},
+  {l:"gr",t:"…ὅτε Κύκλωψ / εἴλει ἐνὶ σπῆι γλαφυρῷ κρατερῆφι βίηφιν.",v:"…toen de Cycloop ons met bruut geweld opsloot in zijn gewelfde grot.",b:"Homerus, Odyssee 12.209-210"}
+ ]},
+{naam:"Ringcompositie",cat:"narr",talen:["la","gr"],
+ def:"Het afbakenen van een tekstsegment door aan het einde een tekstelement uit het begin (al dan niet letterlijk) te herhalen.",
+ vb:[
+  {l:"la",t:"Fulsere quondam candidi tibi soles… / …Fulsere vere candidi tibi soles.",v:"Eens straalden voor jou heldere dagen… / …Werkelijk straalden voor jou heldere dagen.",b:"Catullus, carmen 8.3-8"},
+  {l:"gr",t:"Ἄνδρα μοι ἔννεπε, Μοῦσα… / …θεά, θύγατερ Διός, εἰπὲ καὶ ἡμῖν.",v:"Bezing mij de man, Muze… / …godin, dochter van Zeus, vertel het ook aan ons.",b:"Homerus, Odyssee 1.1 en 1.10"}
+ ]},
+{naam:"Vertellerscommentaar",cat:"narr",talen:["la"],
+ def:"Het (terloops) leveren van commentaar op gebeurtenissen of personages door de verteller, gericht tot de lezer.",
+ vb:[
+  {l:"la",t:"…quid non sentit amor?",v:"…wat merkt de liefde niet op? (commentaar van de verteller).",b:"Ovidius, Metamorphoses 4.68"}
+ ]},
+{naam:"Raamvertelling",cat:"narr",talen:["la"],
+ def:"Een verhaal dat als een kader één of meer andere verhalen omsluit.",
+ vb:[
+  {l:"nl",t:"De Duizend-en-één-nacht: Sheherazade vertelt verhaal na verhaal binnen één raamvertelling."},
+  {l:"la",t:"Het diner bij Dido als kader waarbinnen Aeneas zijn eigen verhalen vertelt (Aeneis 2-3)."}
+ ]},
+{naam:"Visualiseren",cat:"narr",talen:["la"],auteur:"Livius",
+ def:"Het levendig maken van gebeurtenissen door het opnemen van sprekende, concrete details, zodat de lezer de scène voor zich ziet.",
+ vb:[
+  {l:"la",t:"Scipio schetst de erbarmelijke toestand van de Carthagers gedetailleerd, om zijn soldaten tot dapperheid aan te sporen.",b:"Livius, Ab urbe condita 21.40 e.v."}
+ ]},
+{naam:"Epitheton ornans",cat:"narr",talen:["gr"],auteur:"Homerus",
+ def:"Een herhaaldelijk gebruikte vaste bijvoeglijke bepaling die een vaste eigenschap van een persoon of zaak weergeeft, ongeacht of die op dat moment relevant is.",
+ vb:[
+  {l:"en",t:"rosy-fingered Dawn."},
+  {l:"gr",t:"…ποδάρκης δῖος Ἀχιλλεύς.",v:"…de snelvoetige, edele Achilles.",b:"Homerus, Ilias 1.121"}
+ ]},
+{naam:"Formule",cat:"narr",talen:["gr"],auteur:"Homerus",
+ def:"Een herhaaldelijk gebruikte, vaste formulering (een woordgroep of hele versregel).",
+ vb:[
+  {l:"gr",t:"Τὸν δ' ἠμείβετ' ἔπειτα ποδάρκης δῖος Ἀχιλλεύς.",v:"Hem antwoordde daarna de snelvoetige, edele Achilles. (komt ruim 70× voor)",b:"Homerus, Ilias 1.121"}
+ ]},
+{naam:"Typische scène",cat:"narr",talen:["gr"],auteur:"Homerus",
+ def:"Een groep (bijna) woordelijk herhaalde verzen waarmee een telkens terugkerende activiteit beschreven wordt (bijv. een aankomst, een badscène, een offer, een bewapening of een maaltijd).",
+ vb:[
+  {l:"gr",t:"Αὐτὰρ ἐπεὶ λοῦσέν τε καὶ ἔχρισεν λίπ' ἐλαίῳ…",v:"Maar nadat zij hem gewassen had en met olijfolie ingesmeerd… (een badscène).",b:"Homerus, Odyssee 10.364 e.v."}
+ ]},
+{naam:"Homerische vergelijking",cat:"narr",talen:["gr"],auteur:"Homerus",
+ def:"Een uitgebreide vergelijking waarbij het beeld uitvoerig wordt uitgewerkt, vaak over meerdere regels.",
+ vb:[
+  {l:"gr",t:"Ὡς δ' ὅτ' ἐπὶ προβόλῳ ἁλιεὺς περιμήκει ῥάβδῳ… / …ὣς οἵ γ' ἀσπαίροντες ἀείροντο προτὶ πέτρας.",v:"Zoals een visser op een rots met zijn lange hengel… zó werden zij spartelend opgehaald naar de rotsen.",b:"Homerus, Odyssee 12.251-255"}
+ ]},
+{naam:"Patronymicum",cat:"narr",talen:["gr"],auteur:"Homerus / tragedie",
+ def:"Een persoonsaanduiding die is afgeleid van de naam van de (groot)vader.",
+ vb:[
+  {l:"gr",t:"Ἀτρεΐδης",v:"zoon van Atreus (= Agamemnon).",b:"Homerus, Ilias 1.7"},
+  {l:"gr",t:"ἡ… Τυνδαρίς, μήτηρ ἐμή…",v:"de dochter van Tyndareüs (= Clytaemnestra), mijn moeder…",b:"Euripides, Electra 60-61"}
+ ]},
+{naam:"Epanalepsis",cat:"narr",talen:["gr"],auteur:"Herodotus",
+ def:"Het hervatten van het hoofdverhaal na een uitweiding (digressie) door (al dan niet letterlijk) een deel van het voorafgaande te herhalen.",
+ vb:[
+  {l:"gr",t:"…ἐς τὴν ἔρημον ἀπίκοντο. Ἡ δ' ἔρημος αὕτη… Ἐπεὶ ὦν ὁ Δαρεῖος ἦλθε ἐς τὴν ἔρημον…",v:"…ze kwamen in de woestijn aan. Die woestijn nu… (uitweiding) … Toen Darius dus in de woestijn was gekomen…",b:"Herodotus, Historiae 4.123-124"}
+ ]},
+{naam:"Kop-staartconstructie",cat:"narr",talen:["gr"],auteur:"Herodotus",
+ def:"Aan het begin van een zin (de ‘kop’) wordt een werkwoord uit het einde van de vorige zin (de ‘staart’) herhaald, vaak als participium.",
+ vb:[
+  {l:"gr",t:"…ἠράσθη τῆς ἑωυτοῦ γυναικός, ἐρασθεὶς δέ…",v:"…hij werd verliefd op zijn eigen vrouw, en doordat hij verliefd was geworden…",b:"Herodotus, Historiae 1.8"}
+ ]},
+{naam:"Stichomythie",cat:"narr",talen:["gr"],auteur:"tragedie",
+ def:"Een dialoog waarin de personages om de beurt telkens één regel spreken; dit verhoogt de spanning van een woordenwisseling.",
+ vb:[
+  {l:"gr",t:"ΠΕ. Πρῶτον μὲν ἁβρὸν βόστρυχον τεμῶ σέθεν. / ΔΙ. Ἱερὸς ὁ πλόκαμος· τῷ θεῷ δ' αὐτὸν τρέφω.",v:"PE. Eerst zal ik die fijne lokken van je afsnijden. / DI. Mijn haar is heilig; ik laat het groeien voor de god.",b:"Euripides, Bacchae 493-494"}
+ ]},
+
+/* ---------------- ARGUMENTATIEVE MIDDELEN ---------------- */
+{naam:"Syllogisme",cat:"arg",talen:["la","gr"],
+ def:"Een redenering waarbij uit twee premissen — een algemene (maior) en een specifieke (minor) — een conclusie wordt getrokken.",
+ vb:[
+  {l:"nl",t:"Alle mensen zijn sterfelijk (maior). Socrates is een mens (minor). Dus: Socrates is sterfelijk (conclusio)."},
+  {l:"la",t:"Wat zichzelf beweegt is eeuwig (maior). De ziel beweegt zichzelf (minor). Dus: de ziel is eeuwig (conclusio).",b:"naar Cicero, De re publica 6.27-28"}
+ ]},
+{naam:"A-fortiori-redenering",cat:"arg",talen:["la","gr"],
+ def:"Een redenering die stelt dat, wanneer iets in een bepaald geval al geldt, het in een ander geval met des te meer reden geldt.",
+ vb:[
+  {l:"nl",t:"Als een volwassene deze steen al niet kan optillen, dan een kind al helemaal niet."},
+  {l:"la",t:"…ne in deum quidem cadere videatur ut sciat quid casu… futurum sit.",v:"…als zelfs een god niet weet wat door toeval zal gebeuren, dan een mens zeker niet.",b:"Cicero, De divinatione 2.18"},
+  {l:"gr",t:"παρὰ γὰρ τοῖσι Λυδοῖσι… καὶ ἄνδρα ὀφθῆναι γυμνὸν ἐς αἰσχύνην μεγάλην φέρει.",v:"want bij de Lydiërs geldt zelfs een man naakt zien al als een grote schande (laat staan een vrouw).",b:"Herodotus, Historiae 1.10"}
+ ]},
+{naam:"Analogie-redenering",cat:"arg",talen:["la","gr"],
+ def:"Het verdedigen van een bewering door een vergelijkbaar (parallel) geval aan te halen.",
+ vb:[
+  {l:"la",t:"Ut… Athenas et Lacedaemonem… conditas esse… sic quaecumque sunt in omni mundo deorum atque hominum putanda sunt.",v:"Zoals Athene en Sparta gesticht zijn voor hun bewoners, zo moet alles in de hele wereld geacht worden er te zijn voor goden en mensen.",b:"Cicero, De natura deorum 2.154"},
+  {l:"gr",t:"ῥέει γὰρ ἐκ Λιβύης ὁ Νεῖλος… τῷ Ἴστρῳ ἐκ τῶν ἴσων μέτρων ὁρμᾶται.",v:"de Nijl stroomt door Libië over een even grote afstand als de Donau door Europa (parallel geval).",b:"Herodotus, Historiae 2.33"}
+ ]},
+{naam:"Autoriteitsargument",cat:"arg",talen:["la","gr"],
+ def:"De verwijzing naar een uitspraak van een belangrijk of bekend persoon om de eigen bewering kracht bij te zetten.",
+ vb:[
+  {l:"la",t:"…(Democritus en Epicurus worden geciteerd om Seneca's gedachte te bevestigen).",b:"Seneca, Epistulae 7.10-12"},
+  {l:"gr",t:"…τῶν καὶ Ὅμηρος ὁ ἐποποιὸς ἄνδρα ἄριστον ἔφησε…",v:"…van wie ook Homerus, de dichter, zei dat de beste (legeraanvoerder) een Athener was.",b:"Herodotus, Historiae 7.161"}
+ ]},
+{naam:"Fictieve uitspraak / opponent",cat:"arg",talen:["la","gr"],
+ def:"Het zelf onder woorden brengen van een mogelijke reactie of tegenwerping, om daar vervolgens op voorhand op in te kunnen gaan.",
+ vb:[
+  {l:"la",t:"Dicet aliquis: ‘Quid mihi prodest philosophia, si fatum est?’",v:"Iemand zal zeggen: ‘Wat heb ik aan filosofie, als alles toch door het lot bepaald wordt?’",b:"Seneca, Epistulae 16.4"},
+  {l:"gr",t:"ἴσως γὰρ ἂν… ἔροιντ' ἂν ἡμᾶς· ‘Ὦ Πρωταγόρα τε καὶ Σώκρατες…’",v:"want misschien zouden zij ons vragen: ‘Protagoras en Socrates…’",b:"Plato, Protagoras 353a"}
+ ]},
+
+/* ---------------- METRIEK & VERSTECHNIEK ---------------- */
+{naam:"Dactylische hexameter & metrum",cat:"metr",talen:["la","gr"],auteur:"epos",
+ def:"De versmaat van het epos: zes versvoeten per regel, opgebouwd uit dactyli (– ⏑ ⏑) en spondeeën (– –). De afwisseling kan de inhoud ondersteunen.",
+ extra:"Veel spondeeën kunnen plechtigheid, somberheid of traagheid uitdrukken; veel dactyli juist snelheid, luchtigheid of opwinding.",
+ vb:[
+  {l:"gr",t:"Αὖτις ἔπειτα πέδονδε κυλίνδετο λᾶας ἀναιδής.",v:"Daarna rolde de onbeschaamde steen weer naar de vlakte (veel dactyli → snelheid).",b:"Homerus, Odyssee 11.598"},
+  {l:"gr",t:"ψυχὴν κικλήσκων Πατροκλῆος δειλοῖο.",v:"terwijl hij de schim van de ongelukkige Patroclus aanriep (veel spondeeën → somberheid).",b:"Homerus, Ilias 23.221"}
+ ]},
+{naam:"Elisie",cat:"metr",talen:["la","gr"],auteur:"poëzie",
+ def:"Als een woord eindigt op een klinker (of –m) en het volgende woord met een klinker (of h–) begint, valt de slotlettergreep in uitspraak en metrum weg. Veelvuldige elisie kan emotie of beweging suggereren.",
+ vb:[
+  {l:"la",t:"illa redit iuvenemque oculis animoque requirit.",v:"zij keert terug en zoekt de jongeman met haar ogen en haar hart (iuvenem(que) oculis, anim(o)…).",b:"Ovidius, Metamorphoses 4.129"}
+ ]},
+{naam:"Enjambement",cat:"metr",talen:["la","gr"],auteur:"poëzie",
+ def:"Het doorlopen van een zin of zinsdeel voorbij het einde van een versregel, waarbij niet meer dan twee woorden van die eenheid op de volgende regel staan. Het woord op de nieuwe regel krijgt nadruk.",
+ vb:[
+  {l:"la",t:"…vestigia vidit in alto / pulvere certa ferae totoque expalluit ore / Pyramus.",v:"…hij zag de duidelijke sporen van een wild dier in het diepe stof en verbleekte over zijn hele gezicht — Pyramus.",b:"Ovidius, Metamorphoses 4.105-107"},
+  {l:"gr",t:"Ἄνδρα μοι ἔννεπε, Μοῦσα, πολύτροπον, ὃς μάλα πολλὰ / πλάγχθη.",v:"Bezing mij, Muze, de listige man, die zeer veel zwierf.",b:"Homerus, Odyssee 1.1-2"}
+ ]}
+];
+
+/* =========================================================================
+   App-logica
+   ========================================================================= */
+let huidigeTaal = "la";
+let huidigeCat = "alle";
+
+const crestLA = '<g fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="30" cy="30" r="26"/><path d="M30 8v44M14 22h32M16 38h28" stroke-width="1.6"/></g><text x="30" y="35" text-anchor="middle" font-family="var(--serif)" font-size="13" font-weight="700" letter-spacing="1" fill="var(--accent)">SPQR</text>';
+const crestGR = '<g fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="30" cy="30" r="26"/></g><text x="30" y="40" text-anchor="middle" font-family="var(--grieks)" font-size="30" font-weight="700" fill="var(--accent)">Α</text>';
+
+function buildChips(){
+  const c = document.getElementById("chips");
+  c.innerHTML = "";
+  CATS.forEach(([id,label])=>{
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = label;
+    b.setAttribute("aria-pressed", id===huidigeCat ? "true":"false");
+    b.onclick = ()=>{ huidigeCat = id; buildChips(); render(); };
+    c.appendChild(b);
+  });
+}
+
+function kiesTaal(t){
+  huidigeTaal = t;
+  document.documentElement.setAttribute("data-taal", t);
+  document.getElementById("btn-la").setAttribute("aria-pressed", t==="la"?"true":"false");
+  document.getElementById("btn-gr").setAttribute("aria-pressed", t==="gr"?"true":"false");
+  document.getElementById("crest").innerHTML = t==="la" ? crestLA : crestGR;
+  render();
+}
+
+function catLabel(id){ const f = CATS.find(c=>c[0]===id); return f?f[1]:""; }
+
+function gefilterd(){
+  const q = document.getElementById("zoek").value.trim().toLowerCase();
+  return DATA.filter(f=>{
+    if(!f.talen.includes(huidigeTaal)) return false;
+    if(huidigeCat!=="alle" && f.cat!==huidigeCat) return false;
+    if(q){
+      const hooi = (f.naam+" "+f.def+" "+(f.extra||"")+" "+(f.auteur||"")).toLowerCase();
+      if(!hooi.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function render(){
+  const lijst = gefilterd();
+  const grid = document.getElementById("grid");
+  const leeg = document.getElementById("leeg");
+  const teller = document.getElementById("teller");
+
+  // sorteer per categorie-volgorde, dan alfabetisch
+  const order = CATS.map(c=>c[0]);
+  lijst.sort((a,b)=>{
+    const d = order.indexOf(a.cat)-order.indexOf(b.cat);
+    return d!==0 ? d : a.naam.localeCompare(b.naam,"nl");
+  });
+
+  teller.textContent = lijst.length + " stijlfiguren · minimumlijst " + (huidigeTaal==="la"?"Latijn":"Grieks");
+
+  grid.innerHTML = "";
+  if(lijst.length===0){ leeg.hidden=false; return; }
+  leeg.hidden=true;
+
+  lijst.forEach((f)=>{
+    const i = DATA.indexOf(f);
+    const card = document.createElement("button");
+    card.className = "card";
+    card.type = "button";
+    card.onclick = ()=>open(i);
+    let tags = '<span class="tag">'+catLabel(f.cat).split(" ")[0]+'</span>';
+    if(f.auteur) tags += '<span class="tag auteur">'+f.auteur+'</span>';
+    card.innerHTML =
+      '<p class="cat">'+catLabel(f.cat)+'</p>'+
+      '<p class="naam">'+f.naam+'</p>'+
+      '<p class="kort">'+f.def+'</p>'+
+      '<div class="tags">'+tags+'</div>';
+    grid.appendChild(card);
+  });
+}
+
+const namen = {nl:"Nederlands",en:"Engels",gr:"Grieks",la:"Latijn"};
+function open(i){
+  const f = DATA[i];
+  document.getElementById("d-cat").textContent = catLabel(f.cat);
+  document.getElementById("d-naam").textContent = f.naam;
+
+  let tags = "";
+  if(f.talen.includes("la")) tags += '<span class="ttag la">Examen Latijn</span>';
+  if(f.talen.includes("gr")) tags += '<span class="ttag gr">Examen Grieks</span>';
+  if(f.auteur) tags += '<span class="ttag auteur">'+f.auteur+'</span>';
+  document.getElementById("d-tags").innerHTML = tags;
+
+  let body = '<p class="def">'+f.def+'</p>';
+  if(f.extra) body += '<div class="note">'+f.extra+'</div>';
+  body += '<p class="vb-titel">Voorbeelden<span class="lijn"></span></p>';
+
+  f.vb.forEach(v=>{
+    let cls = "vb-tekst";
+    if(v.l==="gr") cls += " grieks";
+    if(v.l==="la") cls += " latijn";
+    body += '<div class="vb">';
+    body += '<span class="tessera '+v.l+'">'+namen[v.l]+'</span>';
+    body += '<p class="'+cls+'">'+v.t+'</p>';
+    if(v.v) body += '<p class="vb-vert">'+v.v+'</p>';
+    if(v.b) body += '<p class="vb-bron">'+v.b+'</p>';
+    body += '</div>';
+  });
+
+  document.getElementById("d-body").innerHTML = body;
+  const ov = document.getElementById("overlay");
+  ov.classList.add("open");
+  ov.querySelector(".sheet").scrollTop = 0;
+  document.body.style.overflow = "hidden";
+}
+function sluit(){
+  document.getElementById("overlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") sluit(); });
+
+/* init */
+buildChips();
+kiesTaal("la");
+</script>
+</body>
+</html>
