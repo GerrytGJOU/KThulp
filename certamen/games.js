@@ -3,26 +3,26 @@ SCREENS.home = function(){
   document.body.classList.remove("greek");
   H(brand(true)+`
   <div class="eyebrow l">Kies wat je wilt doen</div>
-  <button class="tile" onclick="startHost()">
-    <span class="corner">${iconSVG("column",88,"currentColor")}</span>
-    <span class="ic">${iconSVG("helmet",44,"currentColor")}</span>
-    <h3>Wedstrijd starten</h3>
-    <p>Voor docenten. Kies woorden en een spel, en projecteer de code op het bord.</p>
-  </button>
   <button class="tile" onclick="go('join')">
     <span class="ic">${iconSVG("shield",44,"currentColor")}</span>
     <h3>Meedoen</h3>
-    <p>Voor leerlingen. Voer de code in die op het bord staat.</p>
+    <p>Voor leerlingen. Voer de code in die op het bord staat, of doe mee aan Battle Mode.</p>
+  </button>
+  <button class="tile" onclick="go('battleHome')">
+    <span class="ic">${iconSVG("eagle",44,"currentColor")}</span>
+    <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+    <p>Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden.</p>
   </button>
   <button class="tile" onclick="go('collection')">
     <span class="ic">${iconSVG("amphora",44,"currentColor")}</span>
     <h3>Mijn verzameling</h3>
     <p>Eerbewijzen, munten en avatars die je hebt verdiend.</p>
   </button>
-  <button class="tile" onclick="go('battleHome')">
-    <span class="ic">${iconSVG("eagle",44,"currentColor")}</span>
-    <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">NIEUW</span></h3>
-    <p>Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden.</p>
+  <button class="tile" onclick="startHost()">
+    <span class="corner">${iconSVG("column",88,"currentColor")}</span>
+    <span class="ic">${iconSVG("helmet",44,"currentColor")}</span>
+    <h3>Andere spellen</h3>
+    <p>Voor docenten. Touwtrekken, Marathon of Snelvuur starten en projecteer de code op het bord.</p>
   </button>
   <button class="tile" onclick="go('teacherLogin')">
     <span class="ic">${iconSVG("column",44,"currentColor")}</span>
@@ -488,7 +488,13 @@ SCREENS.join = function(){
     <label class="fld" style="margin-top:14px">Avatar <small style="text-transform:none">(meer in je verzameling)</small></label>
     <div class="chips" id="avPick">${P.owned.map(id=>{const a=AVATARS.find(x=>x.id===id);return a?`<button class="chip ${P.avatar===id?'on':''}" onclick="setAvatar('${id}')">${avatarHTML(id,P.color,26)}</button>`:""}).join("")}</div>
   </div>
-  <button class="btn btn-gold btn-block lg" onclick="doJoin()">Doe mee</button>
+  <button class="btn btn-gold btn-block lg" onclick="doJoin()">Doe mee aan klassiek spel</button>
+  <div style="display:flex;align-items:center;gap:10px;margin:14px 0 4px">
+    <hr style="flex:1;border:none;border-top:1px solid var(--stone3)">
+    <span class="note">of</span>
+    <hr style="flex:1;border:none;border-top:1px solid var(--stone3)">
+  </div>
+  <button class="btn btn-block" style="border:1px solid var(--ox);color:var(--ox)" onclick="go('battleJoin')">⚔️ Doe mee aan Battle Mode</button>
   ${foot()}`);
 };
 function setColor(c){ P.color=c; saveProfile(); SCREENS.join(); }
