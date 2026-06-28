@@ -98,42 +98,152 @@ const AVATARS = [
 ];
 const COLORS = ["#c0392b","#2e6fb0","#e0b15a","#3f9d52","#8e44ad","#d35400","#16a085","#c44569","#2c89c9","#e08e3b"];
 
-const ACHS = [
-  {id:"first",  nm:"Eerste wedstrijd", ds:"Speel je eerste spel mee",        icon:"helmet"},
-  {id:"win1",   nm:"Victoria",          ds:"Win je eerste spel",              icon:"laurel"},
-  {id:"win5",   nm:"Veteraan",          ds:"Win 5 spellen",                   icon:"eagle"},
-  {id:"streak10",nm:"Op dreef",         ds:"10 goede antwoorden op rij",      icon:"torch"},
-  {id:"correct100",nm:"Geleerde",       ds:"100 goede antwoorden totaal",     icon:"owl"},
-  {id:"correct500",nm:"Magister",       ds:"500 goede antwoorden totaal",     icon:"crown"},
-  {id:"both",   nm:"Veelzijdig",        ds:"Speel beide spellen",             icon:"amphora"},
-  {id:"rich",   nm:"Mecenas",           ds:"Verzamel 500 munten tegelijk",    icon:"amphora"},
-  {id:"collector",nm:"Verzamelaar",     ds:"Bezit 5 avatars",                 icon:"trident"},
+/* ---- XP-niveaus en rangen (10 niveaus) ---- */
+const XP_LEVELS = [
+  {level:1,  xp:0,    rank:"Tiro"},
+  {level:2,  xp:100,  rank:"Miles"},
+  {level:3,  xp:250,  rank:"Optio"},
+  {level:4,  xp:500,  rank:"Signifer"},
+  {level:5,  xp:900,  rank:"Aquilifer"},
+  {level:6,  xp:1400, rank:"Centurio"},
+  {level:7,  xp:2100, rank:"Praefectus"},
+  {level:8,  xp:3000, rank:"Tribunus"},
+  {level:9,  xp:4200, rank:"Legatus"},
+  {level:10, xp:6000, rank:"Imperator"},
+];
+function calcLevel(xp){
+  let cur=XP_LEVELS[0];
+  for(const l of XP_LEVELS){if((xp||0)>=l.xp)cur=l;else break;}
+  const next=XP_LEVELS.find(l=>l.level===cur.level+1)||null;
+  const prog=next?Math.min(1,((xp||0)-cur.xp)/(next.xp-cur.xp)):1;
+  return{...cur,next,progress:prog};
+}
+
+/* ---- Data-gedreven achievement-definities ---- */
+const _BM_CLS_IDS = ["hopliet","spartaan","boogschutter","cavalerie","priester","centurio","genie","verkenner"];
+const _BM_CLS_NMS = {hopliet:"Hopliet",spartaan:"Spartaan",boogschutter:"Boogschutter",cavalerie:"Cavalerie",priester:"Priester",centurio:"Centurio",genie:"Genie",verkenner:"Verkenner"};
+const ACHIEVEMENTS_DEF = [
+  // Algemeen
+  {id:"eerste_stap",    nm:"Eerste stap",      ds:"Speel voor het eerst Certamen",               icon:"helmet"},
+  {id:"woordenkenner",  nm:"Woordenkenner",     ds:"100 vragen goed beantwoord",                  icon:"owl"},
+  {id:"taalmeester",    nm:"Taalmeester",       ds:"500 vragen goed beantwoord",                  icon:"crown"},
+  {id:"veelzijdig",     nm:"Veelzijdig",        ds:"Alle vier de modi gespeeld",                  icon:"amphora"},
+  {id:"veteraan_all",   nm:"Veteraan",          ds:"50 spellen gespeeld",                         icon:"eagle"},
+  {id:"snelle_geest",   nm:"Snelle geest",      ds:"10 vragen op rij goed beantwoord",            icon:"torch"},
+  // Touwtrekken
+  {id:"eerste_bloed",   nm:"Eerste bloed",      ds:"Je eerste Touwtrekken gewonnen",              icon:"shield"},
+  {id:"anker",          nm:"Ankerman/-vrouw",   ds:"5 Touwtrekkens gewonnen",                    icon:"laurel"},
+  // Marathon
+  {id:"doorzetter",     nm:"Doorzetter",        ds:"Eerste Marathon gespeeld",                    icon:"horse"},
+  {id:"finisher",       nm:"Finisher",          ds:"Eerste Marathon gewonnen",                    icon:"laurel"},
+  // Snelvuur
+  {id:"vonk",           nm:"Vonk",              ds:"Eerste Snelvuur gespeeld",                    icon:"torch"},
+  {id:"bliksem",        nm:"Bliksem",           ds:"Eerste plek in Snelvuur",                     icon:"star"},
+  {id:"ontembaar",      nm:"Ontembaar",         ds:"Drie keer eerste plek in Snelvuur",           icon:"crown"},
+  // Battle Mode — algemeen
+  {id:"eerste_gevecht", nm:"Eerste gevecht",    ds:"Eerste Battle Mode gespeeld",                 icon:"helmet"},
+  {id:"overwinnaar",    nm:"Overwinnaar",        ds:"Eerste Battle Mode gewonnen",                 icon:"laurel"},
+  {id:"scholar",        nm:"Scholar",           ds:"≥90% accuratesse in een gevecht (min. 5 vr.)",icon:"owl"},
+  {id:"onbreekbaar",    nm:"Onbreekbaar",       ds:"Gewonnen zonder health-verlies van je team",  icon:"shield"},
+  {id:"strateeg",       nm:"Strateeg",          ds:"5 verschillende klassen gespeeld",            icon:"column"},
+  {id:"commandant",     nm:"Commandant",        ds:"Alle 8 klassen minstens één keer gespeeld",   icon:"eagle"},
+  {id:"combokunstenaar",nm:"Combokunstenaar",   ds:"10 combo-abilities uitgevoerd",               icon:"trident"},
+  {id:"legendarisch",   nm:"Legendarisch",      ds:"Niveau 10 (Imperator) bereikt",              icon:"crown"},
+  // Klasse-mastery (ster 3 en ster 5, voor alle 8 klassen)
+  ..._BM_CLS_IDS.flatMap(c=>[
+    {id:"vet_"+c,  nm:"Veteraan "+_BM_CLS_NMS[c],  ds:"Ster 3 bereikt als "+_BM_CLS_NMS[c],  icon:"helmet", mode:"battle"},
+    {id:"mees_"+c, nm:"Meester "+_BM_CLS_NMS[c],   ds:"Ster 5 bereikt als "+_BM_CLS_NMS[c],  icon:"crown",  mode:"battle"},
+  ]),
+  // Geheimen
+  {id:"geheim_rij",   nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true},
+  {id:"geheim_groot", nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true},
+  {id:"geheim_heal",  nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true},
 ];
 
-const PKEY = "certamen_profile_v1";
+/* ---- Profiel (localStorage) ---- */
+const PKEY = "certamen_profile_v2";
 function loadProfile(){
-  const def = { name:"", color:COLORS[0], avatar:"helmet",
-    coins:0, correct:0, wins:0, played:0, gamesPlayed:{}, owned:["helmet","laurel","shield"],
-    achievements:[], bestStreak:0 };
-  try{ const r=localStorage.getItem(PKEY); return r?Object.assign(def,JSON.parse(r)):def; }catch(e){ return def; }
+  const def = {
+    name:"", color:COLORS[0], avatar:"helmet",
+    coins:0, owned:["helmet","laurel","shield"],
+    achievements:[], xp:0, level:1, rank:"Tiro",
+    stats:{
+      totalCorrect:0, totalWrong:0, currentStreak:0, bestStreak:0, totalCombos:0,
+      tournamentsPlayed:0, tournamentsWon:0,
+      marathonsPlayed:0,   marathonsWon:0,
+      snelvuurPlayed:0,    snelvuurWon:0,
+      battlesPlayed:0,     battlesWon:0,
+      totalDamage:0,       totalHealing:0
+    }
+  };
+  try{
+    const v2=localStorage.getItem(PKEY);
+    if(v2){
+      const p=JSON.parse(v2);
+      if(!p.stats) p.stats=def.stats;
+      else p.stats=Object.assign({},def.stats,p.stats);
+      return Object.assign({},def,p);
+    }
+    // Migreer van v1
+    const v1=localStorage.getItem("certamen_profile_v1");
+    if(v1){
+      const o=JSON.parse(v1);
+      def.coins=o.coins||0; def.owned=o.owned||def.owned;
+      def.avatar=o.avatar||def.avatar; def.name=o.name||"";
+      def.color=o.color||def.color;
+      def.stats.totalCorrect=o.correct||0;
+      def.stats.bestStreak=o.bestStreak||0;
+      if(o.gamesPlayed?.touwtrekken) def.stats.tournamentsPlayed=1;
+      if(o.gamesPlayed?.marathon)    def.stats.marathonsPlayed=1;
+      if(o.gamesPlayed?.snelvuur)    def.stats.snelvuurPlayed=1;
+      def.xp=Math.min(500,(o.correct||0)*2+(o.wins||0)*10);
+      const lv=calcLevel(def.xp); def.level=lv.level; def.rank=lv.rank;
+    }
+    return def;
+  }catch(e){ return def; }
 }
 function saveProfile(){ try{ localStorage.setItem(PKEY, JSON.stringify(P)); }catch(e){} }
 let P = loadProfile();
 
 function addCoins(n){ P.coins += n; if(P.coins<0)P.coins=0; saveProfile(); }
-function checkAch(){
-  const got=[];
-  const add=(id)=>{ if(!P.achievements.includes(id)){ P.achievements.push(id); got.push(id); } };
-  if(P.played>=1) add("first");
-  if(P.wins>=1) add("win1");
-  if(P.wins>=5) add("win5");
-  if(P.bestStreak>=10) add("streak10");
-  if(P.correct>=100) add("correct100");
-  if(P.correct>=500) add("correct500");
-  if(Object.keys(P.gamesPlayed).length>=2) add("both");
-  if(P.coins>=500) add("rich");
-  if(P.owned.length>=5) add("collector");
-  if(got.length){ saveProfile(); got.forEach((id,i)=>setTimeout(()=>toastAch(ACHS.find(a=>a.id===id)), i*900)); }
+function addXP(n){
+  if(!n||n<=0) return;
+  P.xp=(P.xp||0)+n;
+  const lv=calcLevel(P.xp);
+  if(lv.level>(P.level||1)){
+    P.level=lv.level; P.rank=lv.rank;
+    setTimeout(()=>toast("Niveau omhoog!","Je bent nu "+lv.rank+" (niveau "+lv.level+")",medalSVG("crown",34)),400);
+  } else { P.level=lv.level; P.rank=lv.rank; }
+  saveProfile();
+}
+function checkAch(ctx={}){
+  const got=[], s=P.stats;
+  const add=(id,cond)=>{ if(cond&&!P.achievements.includes(id)){ P.achievements.push(id); got.push(id); } };
+  const allP=s.tournamentsPlayed+s.marathonsPlayed+s.snelvuurPlayed+s.battlesPlayed;
+  add("eerste_stap",   allP>=1);
+  add("woordenkenner", s.totalCorrect>=100);
+  add("taalmeester",   s.totalCorrect>=500);
+  add("veelzijdig",    s.tournamentsPlayed>=1&&s.marathonsPlayed>=1&&s.snelvuurPlayed>=1&&s.battlesPlayed>=1);
+  add("veteraan_all",  allP>=50);
+  add("snelle_geest",  s.bestStreak>=10);
+  add("eerste_bloed",  s.tournamentsWon>=1);
+  add("anker",         s.tournamentsWon>=5);
+  add("doorzetter",    s.marathonsPlayed>=1);
+  add("finisher",      s.marathonsWon>=1);
+  add("vonk",          s.snelvuurPlayed>=1);
+  add("ontembaar",     s.snelvuurWon>=3);
+  add("eerste_gevecht",s.battlesPlayed>=1);
+  add("overwinnaar",   s.battlesWon>=1);
+  add("combokunstenaar",s.totalCombos>=10);
+  add("legendarisch",  (P.level||1)>=10);
+  add("bliksem",       ctx.isFirst&&ctx.mode==="snelvuur");
+  add("geheim_rij",    s.bestStreak>=10);
+  add("geheim_groot",  ctx.largeGame);
+  add("geheim_heal",   ctx.healOnly);
+  if(got.length){
+    saveProfile();
+    got.forEach((id,i)=>setTimeout(()=>{ const a=ACHIEVEMENTS_DEF.find(x=>x.id===id); if(a)toastAch(a); },i*900));
+  }
 }
 
 /* ---------- icon / medal art ---------- */
@@ -214,7 +324,7 @@ let DRAFT = { game:"touwtrekken", lang:"la", source:"freq", fromN:1, toN:100, ca
   target:15, penalty:"back", freezeSec:4 };
 let myStreak=0;
 let BM_UNSUBS=[], BM_PHASE_TIMER=null, _bmTicking=false, _bmFormHash="";
-let BM_MY_CORRECT=0, BM_MY_WRONG=0; // voor XP-berekening na gevecht
+let BM_MY_CORRECT=0, BM_MY_WRONG=0, BM_MY_DMG=0, BM_MY_HEAL=0; // voor XP/stats na gevecht
 let BM_AV_EDIT=null;                 // werkkopie in de avatar-editor
 
 function cleanup(){

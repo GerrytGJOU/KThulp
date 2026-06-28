@@ -612,9 +612,10 @@ function answer(i){
     b.onclick=null;
   });
   // stats + munten
-  P.played = P.played; // no-op
-  if(ok){ myStreak++; P.correct++; if(myStreak>P.bestStreak)P.bestStreak=myStreak; addCoins(2); beep("good"); }
-  else { myStreak=0; beep("bad"); }
+  if(ok){ myStreak++; P.stats.totalCorrect++; P.stats.currentStreak++;
+    if(P.stats.currentStreak>P.stats.bestStreak)P.stats.bestStreak=P.stats.currentStreak;
+    addCoins(2); beep("good"); }
+  else { myStreak=0; P.stats.currentStreak=0; P.stats.totalWrong++; beep("bad"); }
   saveProfile();
   applyAnswer(PID, me, ok);
   const delay=META.game==="snelvuur"?600:(ok?520:900);
@@ -640,18 +641,29 @@ SCREENS.result = function(){
   }
   // tel resultaat 1x
   if(!STATE._counted_for_me){ STATE._counted_for_me=true;
-    P.played++; P.gamesPlayed[META.game]=true; if(won){P.wins++; addCoins(15);} addCoins((me.correct||0)*1); saveProfile(); checkAch();
+    const _g=META.game, _c=me.correct||0, _w=me.wrong||0;
+    if(_g==="touwtrekken"){ P.stats.tournamentsPlayed++; if(won)P.stats.tournamentsWon++; }
+    else if(_g==="marathon"){ P.stats.marathonsPlayed++; if(won)P.stats.marathonsWon++; }
+    else if(_g==="snelvuur"){ P.stats.snelvuurPlayed++; if(won)P.stats.snelvuurWon++; }
+    const _xp=_c*2+5+(won?10:0);
+    addXP(_xp); addCoins(_c+(won?15:0));
+    saveProfile();
+    const _tot=_c+_w, _allWon=P.stats.tournamentsWon+P.stats.marathonsWon+P.stats.snelvuurWon+P.stats.battlesWon;
+    checkAch({mode:_g, won, isFirst:won&&_g==="snelvuur", accurate:_tot>0?_c/_tot:0});
   }
   const medal = won?medalSVG("laurel",120):iconSVG("shield",110,"var(--muted)");
   beep(won?"win":"good");
+  const _lv=calcLevel(P.xp), _xpFill=Math.round(_lv.progress*100);
   H(brand(true)+`<div class="screen" style="text-align:center;padding-top:20px">
     <div style="width:120px;margin:0 auto 10px">${medal}</div>
     <h2 style="color:var(--hi-bright);font-size:26px">${line}</h2>
     <div class="note" style="margin:6px 0 18px">Je had <b>${me.correct||0}</b> goed${won?" en je wint 15 munten!":""}.</div>
     <div class="panel" style="text-align:left">
       <div style="display:flex;justify-content:space-between"><span>Munten</span><b>${P.coins}</b></div>
-      <div style="display:flex;justify-content:space-between;margin-top:6px"><span>Gewonnen totaal</span><b>${P.wins}</b></div>
-      <div style="display:flex;justify-content:space-between;margin-top:6px"><span>Goed totaal</span><b>${P.correct}</b></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px"><span>Rang</span><b>${P.rank} (niv.${P.level})</b></div>
+      <div style="margin-top:8px;height:8px;background:var(--stone3);border-radius:4px;overflow:hidden">
+        <div style="height:100%;width:${_xpFill}%;background:var(--hi);border-radius:4px;transition:width .6s"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:4px"><span>Totaal goed</span><b>${P.stats.totalCorrect}</b></div>
     </div>
     <button class="btn btn-gold btn-block lg" onclick="backToLobbyPlayer()">Wachten op volgende ronde</button>
     <button class="btn btn-ghost btn-block" style="margin-top:10px" onclick="leaveAll();go('collection')">Mijn verzameling</button>
@@ -667,13 +679,49 @@ function backToLobbyPlayer(){
    ============================================================================ */
 SCREENS.collection = function(){
   document.body.classList.remove("greek");
+  const s=P.stats, lv=calcLevel(P.xp), fill=Math.round(lv.progress*100);
+  const allP=s.tournamentsPlayed+s.marathonsPlayed+s.snelvuurPlayed+s.battlesPlayed;
+  const allW=s.tournamentsWon+s.marathonsWon+s.snelvuurWon+s.battlesWon;
+  const xpNext=lv.next?lv.next.xp:lv.xp;
+  function statsRow(l,v){ return `<div style="display:flex;justify-content:space-between;margin-top:4px"><span class="note">${l}</span><b>${v}</b></div>`; }
+  const achHTML = ACHIEVEMENTS_DEF.map(a=>{
+    const got=P.achievements.includes(a.id);
+    if(a.secret&&!got) return `<div class="ach locked"><span class="m" style="filter:grayscale(1) opacity(.3)">${medalSVG("star",46)}</span>
+      <div><div class="nm">???</div><div class="ds">Geheim eerbewijs</div></div></div>`;
+    return `<div class="ach ${got?'':'locked'}"><span class="m">${medalSVG(a.icon,46)}</span>
+      <div><div class="nm">${a.nm}</div><div class="ds">${a.ds}</div></div></div>`;
+  }).join("");
   H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Mijn verzameling</h2></div>
   <div class="panel">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div><div class="note">Munten</div><div style="font-size:28px;color:var(--hi-bright);font-weight:800">${P.coins}</div></div>
-      <div style="text-align:right"><div class="note">Gewonnen · Goed</div><div style="font-size:20px">${P.wins} · ${P.correct}</div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div><div class="note">Rang</div><div style="font-size:22px;color:var(--hi-bright);font-weight:800">${P.rank}</div>
+        <div class="note">Niveau ${lv.level}</div></div>
+      <div style="text-align:right"><div class="note">Munten</div>
+        <div style="font-size:22px;color:var(--hi-bright);font-weight:800">${P.coins}</div></div>
     </div>
+    <div style="height:10px;background:var(--stone3);border-radius:5px;overflow:hidden">
+      <div style="height:100%;width:${fill}%;background:var(--hi);border-radius:5px;transition:width .6s"></div></div>
+    <div style="display:flex;justify-content:space-between;margin-top:3px">
+      <span class="note">${P.xp} XP</span>
+      <span class="note">${lv.next?"→ "+xpNext+" XP voor "+lv.next.rank:"Max niveau bereikt"}</span></div>
   </div>
+  <details style="margin:0 0 4px"><summary class="eyebrow l" style="cursor:pointer">Statistieken per modus</summary>
+  <div class="panel" style="margin-top:0">
+    <div class="note" style="font-weight:700;margin-bottom:4px">Totaal</div>
+    ${statsRow("Goed beantwoord",s.totalCorrect)}
+    ${statsRow("Langste serie",s.bestStreak)}
+    ${statsRow("Spellen gespeeld",allP)}
+    ${statsRow("Gewonnen",allW)}
+    <div class="note" style="font-weight:700;margin:10px 0 4px">Touwtrekken</div>
+    ${statsRow("Gespeeld",s.tournamentsPlayed)} ${statsRow("Gewonnen",s.tournamentsWon)}
+    <div class="note" style="font-weight:700;margin:10px 0 4px">Marathon</div>
+    ${statsRow("Gespeeld",s.marathonsPlayed)} ${statsRow("Gewonnen",s.marathonsWon)}
+    <div class="note" style="font-weight:700;margin:10px 0 4px">Snelvuur</div>
+    ${statsRow("Gespeeld",s.snelvuurPlayed)} ${statsRow("1e plek",s.snelvuurWon)}
+    <div class="note" style="font-weight:700;margin:10px 0 4px">Battle Mode</div>
+    ${statsRow("Gespeeld",s.battlesPlayed)} ${statsRow("Gewonnen",s.battlesWon)}
+    ${statsRow("Schade gegeven",s.totalDamage)} ${statsRow("Genezen",s.totalHealing)}
+  </div></details>
   <div class="eyebrow l">Avatars</div>
   <div class="collgrid">${AVATARS.map(a=>{
     const owned=P.owned.includes(a.id), on=P.avatar===a.id;
@@ -683,10 +731,7 @@ SCREENS.collection = function(){
     </button>`;
   }).join("")}</div>
   <div class="eyebrow l" style="margin-top:20px">Eerbewijzen</div>
-  ${ACHS.map(a=>{ const got=P.achievements.includes(a.id);
-    return `<div class="ach ${got?'':'locked'}"><span class="m">${medalSVG(a.icon,46)}</span>
-      <div><div class="nm">${a.nm}</div><div class="ds">${a.ds}</div></div></div>`;
-  }).join("")}
+  ${achHTML}
   ${foot()}`);
 };
 function buyOrEquip(id){
