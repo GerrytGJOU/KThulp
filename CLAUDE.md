@@ -20,6 +20,12 @@
   viewport met maximum-scale.
 - Na elke wijziging aan een scriptblok: `node --check` draaien voordat je oplevert.
 - Gemini-aanroepen altijd met thinkingBudget:0.
+- Battle Mode heeft een ingebouwde Handleiding/FAQ (`SCREENS.battleFAQ` in
+  certamen/battle.js). De klassen-, combo- en synergiesecties zijn data-gedreven
+  (uit BM_CLASSES/BM_COMBOS/BM_SYNERGY) en lopen vanzelf mee; de prozasecties
+  (spelverloop, BE, heldenmodus, profiel, docent-instellingen) niet. Werk bij
+  elke Battle Mode-wijziging die de spelregels, klassen of features raakt ook
+  deze FAQ bij.
 
 ## Stijl
 - Donkere steen-achtergrond, goud; oxblood-accent voor Latijn,

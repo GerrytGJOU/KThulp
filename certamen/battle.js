@@ -511,6 +511,11 @@ SCREENS.battleHome = function(){
     <h3>Meedoen — leerling</h3>
     <p>Meld je aan en doe mee aan het gevecht van de docent.</p>
   </button>
+  <button class="tile" onclick="go('battleFAQ')">
+    <span class="ic">${iconSVG("torch",44,"currentColor")}</span>
+    <h3>Handleiding & FAQ</h3>
+    <p>Hoe werkt Battle Mode? Lees over de klassen, combo's, helden en meer.</p>
+  </button>
   ${BM_IDENT?`
   <button class="tile" onclick="go('battleProfile')">
     <span class="ic" style="position:relative">
@@ -527,6 +532,129 @@ function bmStartHost(){
   if(!hasFirebase){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
   ROLE="host"; DRAFT.game="battle"; go("hostSource");
 }
+
+/* ============================================================================
+   SCHERM: battleFAQ — Handleiding & uitleg
+   Klassen, combo's en synergie worden DATA-GEDREVEN gerenderd uit BM_CLASSES /
+   BM_COMBOS / BM_SYNERGY, zodat ze automatisch meelopen met spelwijzigingen.
+   De prozasecties (spelverloop, BE, heldenmodus, profiel) werk je handmatig bij.
+   Conventie: bij elke Battle Mode-wijziging deze FAQ controleren/updaten.
+   ============================================================================ */
+function bmTierBadge(tier){
+  const m={basic:["Basis","#3f9d52"],advanced:["Gevorderd","#2e6fb0"],ultimate:["Ultiem","#C87533"]};
+  const[lbl,col]=m[tier]||[tier,"var(--muted)"];
+  return `<span class="pill" style="background:${col};border:none;font-size:10px">${lbl}</span>`;
+}
+SCREENS.battleFAQ = function(){
+  document.body.classList.remove("greek");
+  const sec=(title,open,body)=>`<details ${open?"open":""} style="margin-bottom:8px">
+    <summary class="eyebrow l" style="cursor:pointer;list-style:revert">${title}</summary>
+    <div class="panel" style="margin-top:6px">${body}</div></details>`;
+
+  // Klassen — data-gedreven uit BM_CLASSES
+  const classesHTML=BM_CLASSES.map(c=>`
+    <div style="border-top:1px solid var(--stone4);padding:10px 0">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="flex:0 0 auto">${iconSVG(c.icon,30,c.color)}</span>
+        <div><div style="font-size:16px;font-weight:700;color:${c.color}">${esc(c.nm)}</div>
+        <div class="note">Passief: ${esc(c.passive?.desc||"—")}</div></div>
+      </div>
+      <div style="margin-top:8px;display:flex;flex-direction:column;gap:5px">
+        ${c.abilities.map(a=>`<div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap">
+          ${bmTierBadge(a.tier)}
+          <b style="font-size:13px">${esc(a.nm)}</b>
+          <span class="note" style="color:var(--hi)">${a.cost} BE</span>
+          <span class="note" style="flex:1 1 100%;margin-left:2px">${esc(a.desc)}</span>
+        </div>`).join("")}
+      </div>
+    </div>`).join("");
+
+  // Combo's — data-gedreven uit BM_COMBOS
+  const comboHTML=BM_COMBOS.map(co=>{
+    const eff=[co.dmg?`schade +${co.dmg}`:"",co.shld?`schild +${co.shld}`:"",
+      co.heal?`heling +${co.heal}`:"",co.teamBE?`+${co.teamBE} BE p.p.`:"",
+      co.shldRemove?`vijandschild −${co.shldRemove}`:""].filter(Boolean).join(", ");
+    const namen=co.classes.map(id=>bmClsName(id)).join(" + ");
+    return `<div style="border-top:1px solid var(--stone4);padding:8px 0">
+      <b style="font-size:13px">${esc(co.nm)}</b> <span class="note" style="color:var(--hi)">${co.cost} BE p.p.</span>
+      <div class="note">${esc(namen)} — ${esc(eff)}</div>
+      <div class="note" style="opacity:.8">${esc(co.desc)}</div></div>`;
+  }).join("");
+
+  // Synergie — data-gedreven uit BM_SYNERGY
+  const synHTML=BM_SYNERGY.map(s=>`<li>${s.minClasses}+ verschillende klassen in je team → <b>+${s.beBonus} BE</b> per speler per ronde</li>`).join("");
+
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Handleiding & FAQ</h2></div>
+
+  ${sec("Wat is Battle Mode?",true,`
+    <div class="note">Battle Mode is een teamspel om woordkennis. Twee teams (A en B) strijden tot het
+    leger van één team op 0 HP staat. Je verslaat de tegenstander niet door snelheid alleen, maar door
+    <b>samen te werken</b>: goede antwoorden geven je <b>Battle Energy (BE)</b>, en met die energie kies je
+    aanvallen, schilden of helingen. Elke leerling speelt op een eigen apparaat; de docent projecteert het
+    slagveld op het bord.</div>`)}
+
+  ${sec("Hoe verloopt een ronde?",false,`
+    <ol style="margin:0;padding-left:18px;font-size:13px;line-height:1.6">
+      <li><b>Vraagfase</b> — iedereen krijgt een woord en kiest het juiste antwoord. Goed = je verdient BE
+        (sneller antwoorden kan extra opleveren).</li>
+      <li><b>Actiefase</b> — geef je BE uit aan een ability van je klasse. Je kunt ook samen een
+        <b>combo</b> kiezen.</li>
+      <li><b>Resolutie</b> — alle acties van beide teams worden tegelijk uitgevoerd: schade, schilden en
+        helingen verrekend, en het slagveld animeert het resultaat.</li>
+    </ol>
+    <div class="note" style="margin-top:6px">Dit herhaalt zich tot een leger verslagen is.</div>`)}
+
+  ${sec("Battle Energy (BE)",false,`
+    <div class="note">BE is je actiemunt. Je verdient het door vragen goed te beantwoorden. Elke ability kost
+    BE (zie hieronder). Sommige klassen genereren extra BE voor zichzelf of het hele team. Spaar je BE op
+    voor een krachtige <b>ultieme</b> ability, of geef het meteen uit aan goedkope acties — dat is jouw
+    tactische keuze.</div>`)}
+
+  ${sec("De acht klassen",false,classesHTML)}
+
+  ${sec("Combo-aanvallen",false,`
+    <div class="note" style="margin-bottom:4px">Twee teamgenoten van de juiste klassen kiezen in dezelfde
+    ronde allebei <b>Combo</b>. Dan voert het team samen een krachtige gecombineerde actie uit:</div>
+    ${comboHTML}`)}
+
+  ${sec("Teamsynergie",false,`
+    <div class="note" style="margin-bottom:4px">Hoe diverser je team, hoe meer bonus-BE iedereen krijgt:</div>
+    <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.6">${synHTML}</ul>
+    <div class="note" style="margin-top:6px">Een gevarieerd team met verschillende rollen is dus sterker dan
+    vijf dezelfde klassen.</div>`)}
+
+  ${sec("Heldenmodus (optioneel)",false,`
+    <div class="note">De docent kan <b>Heldenmodus</b> aanzetten. Dan krijgt elke speler een persoonlijke
+    <b>held met eigen HP</b> die als frontlinie het leger beschermt:</div>
+    <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
+      <li>Vijandelijke schade treft <b>eerst de levende helden</b> (pantser, dan HP); pas als die vallen
+        krijgt het leger klappen.</li>
+      <li>Een <b>gevallen held</b> blijft gewoon meespelen: je verdient nog BE en kiest acties — je held
+        is alleen even geen schild meer voor het leger.</li>
+      <li><b>Herrijzen:</b> beantwoord een aantal vragen goed (de docent stelt het aantal in) en je held
+        keert terug met volle HP. De gouden meter <b>↻</b> onder je held toont je voortgang.</li>
+    </ul>`)}
+
+  ${sec("Profiel, rang en eerbewijzen",false,`
+    <div class="note">Alles wat je doet telt mee voor één profiel (zie <b>Mijn profiel</b> in het
+    hoofdmenu):</div>
+    <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
+      <li><b>XP &amp; rang</b> — je klimt van Tiro tot Imperator door te spelen en te winnen.</li>
+      <li><b>Klasbeheersing</b> — speel je vaak dezelfde klasse, dan verdien je sterren (★ tot ★★★★★).</li>
+      <li><b>Eerbewijzen</b> — speciale prestaties, ook geheime. Verschijnen op je profiel.</li>
+      <li><b>Avatar</b> — pas je held-avatar aan via je profiel; nieuwe onderdelen unlock je door te levelen.</li>
+    </ul>`)}
+
+  ${sec("Voor docenten",false,`
+    <div class="note">Bij het starten van een gevecht stel je in: woordbereik en taal, antwoordtijd, en onder
+    <b>Geavanceerde instellingen</b> o.a. legersterkte, adaptief leren (foute woorden komen vaker terug),
+    combo's aan/uit, mastery-bonussen, animaties (uit bij trage Chromebooks), geluid, en de
+    <b>Heldenmodus</b> met HP-per-held en herrijz-drempel. Battle Mode vereist Firebase voor de realtime
+    synchronisatie en het identiteitssysteem.</div>`)}
+
+  ${foot()}`);
+};
 
 /* ---- SCHERM: battleIdentity ---- */
 SCREENS.battleIdentity = function(){
