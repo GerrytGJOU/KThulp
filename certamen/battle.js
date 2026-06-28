@@ -541,15 +541,32 @@ async function bmIdentLogin(){
       }
     }
     BM_IDENT={klascode:klas,leerlingcode:lcode,...data,name,avatar:bmAvatarMerge(data.avatar)};
-    bmIdentSave({klascode:klas,leerlingcode:lcode,name,avatar:data.avatar,color:data.color});
+    // Volledige identiteit cachen (xp, classHistory, battles, achievements) zodat 'Mijn profiel' offline klopt
+    bmIdentSave({klascode:klas,leerlingcode:lcode,...data,name});
     go("battleJoin");
   }catch(e){if(err){err.textContent="Aanmelden mislukt — controleer je internetverbinding.";err.style.display="";}}
 }
 async function bmIdentContinue(){
   const saved=bmIdentLoad(); if(!saved){SCREENS.battleIdentity();return;}
   BM_IDENT=saved;
-  try{const d=await bmIdentGet(saved.klascode,saved.leerlingcode);if(d)BM_IDENT={...saved,...d};}catch(e){}
+  try{const d=await bmIdentGet(saved.klascode,saved.leerlingcode);if(d){BM_IDENT={...saved,...d};bmIdentSave({...saved,...d});}}catch(e){}
   go("battleJoin");
+}
+
+// Haalt de nieuwste Battle Mode-identiteit uit Firebase en ververst de cache + (optioneel) het scherm.
+async function bmRefreshIdentCache(rerenderScreen){
+  const saved=(typeof bmIdentLoad==="function")?bmIdentLoad():null;
+  if(!saved||!saved.klascode||!saved.leerlingcode)return;
+  if(!initFirebase())return;
+  try{
+    const d=await bmIdentGet(saved.klascode,saved.leerlingcode);
+    if(d){
+      const merged={...saved,...d};
+      bmIdentSave(merged);
+      if(BM_IDENT)BM_IDENT={...BM_IDENT,...d};
+      if(rerenderScreen&&SCREENS[rerenderScreen])SCREENS[rerenderScreen]();
+    }
+  }catch(e){}
 }
 function bmIdentSwitch(){bmIdentClear();BM_IDENT=null;SCREENS.battleIdentity();}
 
