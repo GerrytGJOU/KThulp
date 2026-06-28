@@ -24,6 +24,11 @@ SCREENS.home = function(){
     <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">NIEUW</span></h3>
     <p>Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden.</p>
   </button>
+  <button class="tile" onclick="go('teacherLogin')">
+    <span class="ic">${iconSVG("column",44,"currentColor")}</span>
+    <h3>Docentenportaal</h3>
+    <p>Klassen beheren, leerlingen verplaatsen en resultaten bekijken.</p>
+  </button>
   ${!hasFirebase?`<div class="panel"><div class="note warn">Firebase is nog niet ingesteld. Je kunt de spellen nu al uitproberen in de <b>oefenmodus</b> (met computer-spelers). Voor échte leerlingen op aparte iPads: vul je Firebase-gegevens in (zie de instructies bovenaan het bestand).</div></div>`:""}
   ${foot()}`);
 };
@@ -691,3 +696,185 @@ function buyOrEquip(id){
   P.coins-=a.cost; P.owned.push(id); P.avatar=id; saveProfile(); checkAch(); beep("ach");
   toast("Gekocht!", a.nm); SCREENS.collection();
 }
+
+
+/* ============================================================
+   DOCENTENPORTAAL — login · klasoverzicht · leerlingbeheer
+   ============================================================ */
+
+let _tpClasses = {};        // geladen klassendata
+let _tpCurrentClass = null; // actief geselecteerde klas-ID
+
+// Kies de juiste netwerkimplementatie (Firebase of in-memory demo)
+function teacherNet(){ return hasFirebase ? FBNet : DemoNet; }
+
+/* ---- SCHERM: inloggen ---- */
+SCREENS.teacherLogin = function(){
+  const demo = !hasFirebase;
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Docentenportaal</h2>
+  </div>
+  <div class="panel">
+    ${demo?`<div class="note warn" style="margin-bottom:14px">Firebase niet ingesteld — <b>demo-modus</b>. Elk wachtwoord werkt.</div>`:""}
+    <label class="fld">E-mailadres</label>
+    <input type="email" id="tpEmail" placeholder="jouw@email.nl" autocomplete="email" style="width:100%;box-sizing:border-box">
+    <label class="fld" style="margin-top:12px">Wachtwoord</label>
+    <input type="password" id="tpPw" autocomplete="current-password" style="width:100%;box-sizing:border-box"
+      onkeydown="if(event.key==='Enter')teacherDoLogin()">
+    <button class="btn btn-gold btn-block lg" style="margin-top:16px" onclick="teacherDoLogin()">Inloggen</button>
+  </div>
+  ${foot()}`);
+  setTimeout(()=>{ const e=el("tpEmail"); if(e)e.focus(); }, 120);
+};
+
+function teacherDoLogin(){
+  const email=(el("tpEmail")?.value||"").trim();
+  const pw=el("tpPw")?.value||"";
+  if(!email){ toast("E-mailadres vereist","Vul een e-mailadres in."); return; }
+  if(!pw){ toast("Wachtwoord vereist","Vul een wachtwoord in."); return; }
+  teacherNet().loginTeacher(email,pw)
+    .then(()=>go("teacherPortal"))
+    .catch(e=>toast("Inloggen mislukt",typeof e==="string"?e:(e?.message||"Controleer je gegevens.")));
+}
+
+/* ---- SCHERM: klasoverzicht ---- */
+SCREENS.teacherPortal = function(){
+  if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Docentenportaal</h2>
+    <button class="chip" style="margin-left:auto" onclick="teacherLogout()">Uitloggen</button>
+  </div>
+  <div id="tpClassList"><div class="note" style="text-align:center;padding:20px">Klassen laden…</div></div>
+  <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
+  ${foot()}`);
+  tpLoadClasses();
+};
+
+function tpLoadClasses(){
+  return teacherNet().getClasses()
+    .then(cls=>{ _tpClasses=cls||{}; tpRenderClasses(); })
+    .catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"Kon klassen niet laden")));
+}
+
+function tpRenderClasses(){
+  const cont=el("tpClassList"); if(!cont) return;
+  const entries=Object.entries(_tpClasses);
+  if(!entries.length){
+    cont.innerHTML=`<div class="note" style="text-align:center;padding:20px">Nog geen klassen. Voeg een klas toe hieronder.</div>`;
+    return;
+  }
+  cont.innerHTML=entries.map(([cid,cls])=>{
+    const count=Object.keys(cls.students||{}).length;
+    return `<div class="panel" style="margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <div style="flex:1;min-width:140px">
+        <div style="font-weight:700;font-size:16px">${esc(cls.className||cid)}</div>
+        <div class="note">${count} leerling${count!==1?"en":""}</div>
+      </div>
+      <button class="chip" onclick="tpOpenClass(${JSON.stringify(cid)})">${iconSVG("helmet",13,"currentColor")} Leerlingen</button>
+      <button class="chip" onclick="tpRenameClass(${JSON.stringify(cid)})">${iconSVG("column",13,"currentColor")} Hernoem</button>
+      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteClass(${JSON.stringify(cid)})">✕</button>
+    </div>`;
+  }).join("");
+}
+
+function teacherAddClass(){
+  const nm=(prompt("Naam van de nieuwe klas:")||"").trim();
+  if(!nm) return;
+  const id="class_"+Date.now();
+  teacherNet().saveClass(id,nm)
+    .then(()=>{ toast("Klas aangemaakt",nm); return tpLoadClasses(); })
+    .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
+}
+
+function tpRenameClass(classId){
+  const huidig=_tpClasses[classId]?.className||classId;
+  const nm=(prompt("Nieuwe naam voor '"+huidig+"':",huidig)||"").trim();
+  if(!nm||nm===huidig) return;
+  teacherNet().saveClass(classId,nm)
+    .then(()=>{ toast("Naam gewijzigd",nm); return tpLoadClasses(); })
+    .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
+}
+
+function tpDeleteClass(classId){
+  const nm=_tpClasses[classId]?.className||classId;
+  if(!confirm("Klas '"+nm+"' inclusief alle leerlingen verwijderen?")) return;
+  teacherNet().deleteClass(classId)
+    .then(()=>{ toast("Klas verwijderd",nm); return tpLoadClasses(); })
+    .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
+}
+
+function teacherLogout(){
+  teacherNet().logoutTeacher().then(()=>go("teacherLogin"));
+}
+
+/* ---- SCHERM: leerlingen in één klas ---- */
+SCREENS.teacherClass = function(){
+  if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
+  if(!_tpCurrentClass){ go("teacherPortal"); return; }
+  const cls=_tpClasses[_tpCurrentClass]||{};
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('teacherPortal')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>${esc(cls.className||_tpCurrentClass)}</h2>
+  </div>
+  <div id="tpStudentList"><div class="note" style="text-align:center;padding:16px">Laden…</div></div>
+  ${foot()}`);
+  tpRenderStudents();
+};
+
+function tpOpenClass(classId){
+  _tpCurrentClass=classId;
+  go("teacherClass");
+}
+
+function tpRenderStudents(){
+  const cont=el("tpStudentList"); if(!cont) return;
+  const cls=_tpClasses[_tpCurrentClass]||{};
+  const students=Object.entries(cls.students||{});
+  if(!students.length){
+    cont.innerHTML=`<div class="note" style="text-align:center;padding:16px">Geen leerlingen in deze klas.</div>`;
+    return;
+  }
+  const otherOptions=Object.entries(_tpClasses)
+    .filter(([cid])=>cid!==_tpCurrentClass)
+    .map(([cid,c])=>`<option value="${cid}">${esc(c.className||cid)}</option>`)
+    .join("");
+  cont.innerHTML=students.map(([sid,s])=>`
+    <div class="panel" style="margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <div style="flex:1;min-width:130px">
+        <div style="font-weight:600">${esc(s.displayName||sid)}</div>
+        ${s.level||s.coins?`<div class="note">Level ${s.level||"—"}${s.coins?" · "+s.coins+" munten":""}</div>`:""}
+      </div>
+      ${otherOptions?`
+      <select id="mv_${sid}" style="padding:5px 8px;border-radius:7px;border:1px solid var(--stone4);background:var(--stone2);color:var(--fg);font-size:13px">
+        <option value="">Verplaats naar…</option>
+        ${otherOptions}
+      </select>
+      <button class="chip" onclick="tpMoveStudent(${JSON.stringify(sid)})">Verplaats</button>`:""}
+      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteStudent(${JSON.stringify(sid)},${JSON.stringify(s.displayName||sid)})">✕ Verwijder</button>
+    </div>`).join("");
+}
+
+function tpDeleteStudent(sid,nm){
+  if(!confirm("Leerling '"+nm+"' verwijderen?")) return;
+  teacherNet().deleteStudent(_tpCurrentClass,sid)
+    .then(()=>{ toast("Verwijderd",nm); return tpLoadClasses(); })
+    .then(()=>tpRenderStudents())
+    .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
+}
+
+function tpMoveStudent(sid){
+  const sel=el("mv_"+sid); if(!sel||!sel.value){ toast("Kies een klas","Selecteer een doelklas in het uitklapmenu."); return; }
+  const toClassId=sel.value;
+  const studentData=(_tpClasses[_tpCurrentClass]?.students||{})[sid];
+  if(!studentData){ toast("Fout","Leerling niet gevonden."); return; }
+  teacherNet().moveStudent(_tpCurrentClass,toClassId,sid,studentData)
+    .then(()=>{ toast("Verplaatst",_tpClasses[toClassId]?.className||toClassId); return tpLoadClasses(); })
+    .then(()=>tpRenderStudents())
+    .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
+}
+
