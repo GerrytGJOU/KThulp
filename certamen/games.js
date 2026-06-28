@@ -790,6 +790,13 @@ SCREENS.collection = function(){
   <div class="eyebrow l" style="margin-top:20px">Eerbewijzen</div>
   ${generalAchHTML}
   ${foot()}`);
+  // Ververs Battle Mode-gegevens uit Firebase en herrender als er nieuwere data is
+  if(typeof bmRefreshIdentCache==="function" && bmIdent){
+    bmRefreshIdentCache().then(()=>{
+      const fresh = typeof bmIdentLoad==="function" ? bmIdentLoad() : null;
+      if(fresh && JSON.stringify(fresh)!==JSON.stringify(bmIdent)) SCREENS.collection();
+    });
+  }
 };
 function buyOrEquip(id){
   const a=AVATARS.find(x=>x.id===id); if(!a)return;
