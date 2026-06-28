@@ -32,4 +32,4 @@
   Aegeïsch blauw voor Grieks. Palatino in apps.
 
 ## Hosting
-- GitHub Pages: https://gerrytgjou.github.io/KThulp/
+- GitHub Pages: https://GerrytGJOU.github.io/KThulp/
