@@ -711,7 +711,7 @@ async function bmIdentLogin(){
     // Volledige identiteit cachen (xp, classHistory, battles, achievements) zodat 'Mijn profiel' offline klopt
     bmIdentSave({klascode:klas,leerlingcode:lcode,...data,name});
     go("battleJoin");
-  }catch(e){if(err){err.textContent="Aanmelden mislukt — controleer je internetverbinding.";err.style.display="";}}
+  }catch(e){console.error("bmIdentLogin fout:",e);if(err){err.textContent="Aanmelden mislukt: "+(e?.message||e||"onbekende fout");err.style.display="";}}
 }
 async function bmIdentContinue(){
   const saved=bmIdentLoad(); if(!saved){SCREENS.battleIdentity();return;}
