@@ -416,6 +416,32 @@ function bmCalcSynergy(players,team){
   return bonus;
 }
 
+/* ============================================================================
+   ⚔️ HELDENMODUS — schaderoutering (Fase 1)
+   Levende helden vormen een frontlinie: binnenkomende teamschade put eerst
+   pantser+HP van de levende helden uit (in stabiele volgorde), het overschot
+   gaat naar het leger. Totale schade blijft behouden — geen vermenigvuldiging.
+   Schrijft per getroffen held {hp,armor,isAlive} naar `out` (los van pUpd).
+   Geeft de resterende schade voor het leger terug.
+   ============================================================================ */
+function bmRouteHeroDamage(team,incoming,players,out){
+  let dmg=incoming;
+  if(dmg<=0)return 0;
+  const heroes=Object.entries(players)
+    .filter(([,p])=>p.team===team&&p.isAlive!==false&&(p.maxHp||0)>0)
+    .sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0);
+  for(const[pid,p]of heroes){
+    if(dmg<=0)break;
+    let armor=p.armor||0, hp=p.hp||0;
+    if(armor>0){const a=Math.min(armor,dmg);armor-=a;dmg-=a;}
+    if(dmg>0){const h=Math.min(hp,dmg);hp-=h;dmg-=h;}
+    const u={armor,hp};
+    if(hp<=0)u.isAlive=false;
+    out[pid]=u;
+  }
+  return dmg; // overschot → leger
+}
+
 /* ---- FACTIE / THEMA HELPERS ---- */
 let BM_THEME_SAVED=[]; // opgeslagen originele CSS-var-waarden voor herstel bij bmLeave
 function bmFaction(id){ return BM_FACTIONS.find(f=>f.id===id)||BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]; }
@@ -583,6 +609,8 @@ SCREENS.battleHostSettings = function(){
   const combos=BM_META.combos!==false;
   const mastery=BM_META.masteryBonuses!==false;
   const sfx=BM_META.sfx!==false;
+  const hero=BM_META.heroMode===true;
+  const hhp=BM_META.heroMaxHp||15;
   const tog=(key,val)=>`BM_META.${key}=${val};SCREENS.battleHostSettings()`;
   const chips=(key,vals,cur,fmt=v=>v)=>vals.map(v=>`<button class="chip ${cur===v?"on":""}" onclick="${tog(key,JSON.stringify(v))}">${fmt(v)}</button>`).join("");
   const onoff=(key,cur)=>`<button class="chip ${cur?"on":""}" onclick="${tog(key,true)}">Aan</button><button class="chip ${!cur?"on":""}" onclick="${tog(key,false)}">Uit</button>`;
@@ -608,6 +636,13 @@ SCREENS.battleHostSettings = function(){
   <div class="panel" style="margin-top:8px">
     <label class="fld">Legersterkte per team</label>
     <div class="chips">${chips("armyHealth",[50,100,150,200],ah)}</div>
+  </div>
+  <div class="panel">
+    <label class="fld">Heldenmodus <span class="pill" style="background:var(--ox);border:none">BETA</span></label>
+    <div class="chips">${onoff("heroMode",hero)}</div>
+    <div class="note" style="margin-top:6px">Elke speler krijgt een eigen held met persoonlijke HP. Helden vormen een frontlinie die het leger beschermt: schade treft eerst de levende helden, daarna pas het leger.</div>
+    ${hero?`<label class="fld" style="margin-top:10px">HP per held</label>
+    <div class="chips">${chips("heroMaxHp",[10,15,20,30],hhp)}</div>`:""}
   </div>
   <div class="panel">
     <label class="fld">Adaptief leren</label>
@@ -652,6 +687,8 @@ async function bmCreateRoom(){
     combos:BM_META.combos!==false,
     masteryBonuses:BM_META.masteryBonuses!==false,
     sfx:BM_META.sfx!==false,
+    heroMode:BM_META.heroMode===true,
+    heroMaxHp:BM_META.heroMaxHp||15,
     status:"lobby"};
   BM_META=meta;
   try{
@@ -735,6 +772,14 @@ async function bmDistributeQs(roundN){
     up["players/"+pid+"/answeredRound"]=-1;
     up["players/"+pid+"/lockedAction"]=null;
     if(beBonus>0) up["players/"+pid+"/be"]=(p.be||0)+beBonus;
+    // Heldenmodus: initialiseer persoonlijke HP bij de eerste ronde
+    if(roundN===1&&BM_META?.heroMode){
+      const hhp=BM_META.heroMaxHp||15;
+      up["players/"+pid+"/hp"]=hhp;
+      up["players/"+pid+"/maxHp"]=hhp;
+      up["players/"+pid+"/armor"]=0;
+      up["players/"+pid+"/isAlive"]=true;
+    }
   }
   // Team-klassenlijst schrijven zodat spelers combo's kunnen zien
   const clsA=[...new Set(Object.values(BM_PLAYERS).filter(p=>p.team==="A"&&p.class).map(p=>p.class))];
@@ -1173,6 +1218,16 @@ function bmGlowFx(team,col){
 }
 
 // Bouw formatie-HTML voor één team
+// Kleine HP-balk onder een held-sprite (alleen in heldenmodus)
+function bmHeroHpHTML(p){
+  if(!BM_META?.heroMode||!p.maxHp)return"";
+  const pct=Math.max(0,Math.min(1,(p.hp||0)/p.maxHp));
+  const dead=p.isAlive===false||pct<=0;
+  const col=dead?"#777":pct<0.3?"#c0392b":"#3f9d52";
+  return `<div class="bm-hero-hp" title="Held: ${p.hp||0}/${p.maxHp} HP">
+      <div class="bm-hero-hp-fill" style="transform:scaleX(${pct});background:${col}"></div>
+    </div>${p.armor?`<div class="bm-hero-armor">🛡 ${p.armor}</div>`:""}`;
+}
 function bmFormationHTML(team){
   const members=Object.entries(BM_PLAYERS).filter(([,p])=>p.team===team);
   const round=BM_STATE.round||{};
@@ -1182,10 +1237,12 @@ function bmFormationHTML(team){
     const hasAnswered=p.answeredRound===round.n;
     const hasLocked=!!p.lockedAction;
     const dotCls=hasAnswered?"on":hasLocked?"locked":"";
-    cols[pos].push(`<div class="bm-av cls-${p.class||""}" id="${bmAvId(pid)}" title="${esc(p.name)} · ${esc(bmClsNmThemed(p.class||""))}">
+    const dead=BM_META?.heroMode&&p.isAlive===false;
+    cols[pos].push(`<div class="bm-av cls-${p.class||""}${dead?" bm-hero-dead":""}" id="${bmAvId(pid)}" title="${esc(p.name)} · ${esc(bmClsNmThemed(p.class||""))}">
       ${bmSpriteSVG(p.class)}
       <div class="bm-dot ${dotCls}"></div>
       <div class="avn">${esc(p.name)}</div>
+      ${bmHeroHpHTML(p)}
     </div>`);
   }
   // Team A: back | mid | front (front rechts, naar vijand)
@@ -1203,6 +1260,7 @@ function bmBuildBattlefield(){
   // Herbouw formatie als samenstelling of participatiestatus wijzigt
   const hash=Object.entries(BM_PLAYERS).map(([id,p])=>
     id+":"+p.class+":"+p.team+":"+(p.answeredRound||0)+":"+(p.lockedAction?"L":"")
+    +":"+(p.hp??"")+":"+(p.armor||0)+":"+(p.isAlive===false?"D":"")
   ).sort().join("|");
   if(hash!==_bmFormHash){
     _bmFormHash=hash;
@@ -1394,8 +1452,18 @@ async function bmResolve(roundN){
     const efA=Math.max(0,from.B.dmg-shldA)+from.B.bypassDmg;
     const efB=Math.max(0,from.A.dmg-shldB)+from.A.bypassDmg;
     const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
-    const newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-efA+for_.A.heal));
-    const newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-efB+for_.B.heal));
+    // Heldenmodus: route schade eerst door de levende helden, overschot naar het leger
+    let armyDmgA=efA, armyDmgB=efB;
+    if(BM_META?.heroMode){
+      const heroUpd={};
+      armyDmgA=bmRouteHeroDamage("A",efA,players,heroUpd);
+      armyDmgB=bmRouteHeroDamage("B",efB,players,heroUpd);
+      for(const[pid,u]of Object.entries(heroUpd)){
+        await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update(u);
+      }
+    }
+    const newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-armyDmgA+for_.A.heal));
+    const newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-armyDmgB+for_.B.heal));
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
     const logWinner=newHA<=0?"B":newHB<=0?"A":null;
     const roundParticipants=Object.values(players).filter(p=>p.answeredRound===roundN).length;
