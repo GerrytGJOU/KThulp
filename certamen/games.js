@@ -13,16 +13,16 @@ SCREENS.home = function(){
     <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
     <p>Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden.</p>
   </button>
-  <button class="tile" onclick="go('collection')">
-    <span class="ic">${iconSVG("amphora",44,"currentColor")}</span>
-    <h3>Mijn verzameling</h3>
-    <p>Eerbewijzen, munten en avatars die je hebt verdiend.</p>
-  </button>
   <button class="tile" onclick="startHost()">
     <span class="corner">${iconSVG("column",88,"currentColor")}</span>
     <span class="ic">${iconSVG("helmet",44,"currentColor")}</span>
     <h3>Andere spellen</h3>
     <p>Voor docenten. Touwtrekken, Marathon of Snelvuur starten en projecteer de code op het bord.</p>
+  </button>
+  <button class="tile" onclick="go('collection')">
+    <span class="ic">${iconSVG("amphora",44,"currentColor")}</span>
+    <h3>Mijn profiel</h3>
+    <p>Rang, XP, eerbewijzen, munten en avatars die je hebt verdiend.</p>
   </button>
   <button class="tile" onclick="go('teacherLogin')">
     <span class="ic">${iconSVG("column",44,"currentColor")}</span>
@@ -697,7 +697,7 @@ SCREENS.collection = function(){
     return `<div class="ach ${got?'':'locked'}"><span class="m">${medalSVG(a.icon,46)}</span>
       <div><div class="nm">${a.nm}</div><div class="ds">${a.ds}</div></div></div>`;
   }).join("");
-  H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Mijn verzameling</h2></div>
+  H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Mijn profiel</h2></div>
   <div class="panel">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
       <div><div class="note">Rang</div><div style="font-size:22px;color:var(--hi-bright);font-weight:800">${P.rank}</div>
