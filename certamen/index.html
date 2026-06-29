@@ -322,7 +322,7 @@ body.greek .qcard .word{color:#143a5e}
 .bm-hp-vs{flex:0 0 28px;text-align:center;font-size:18px}
 
 /* Slagveld container */
-#bmField{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding-bottom:10px}
+#bmField{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding-bottom:10px;transition:background-image .4s ease-in-out,background-color .4s ease-in-out}
 
 /* Formaties */
 .bm-form{flex:1;display:flex;flex-direction:row;gap:8px;align-items:flex-end;padding:0 8px;position:relative;z-index:2}
@@ -409,33 +409,35 @@ body.greek .qcard .word{color:#143a5e}
 .pixel-preview{overflow:hidden}
 .pixel-preview .sprite-layer{animation:none!important;background-position-x:0!important}
 .pixel-preview .sprite-weapon{display:none!important}
-/* pp-weapon: toon het wapen statisch (eerste frame) in de avatar-editor */
+/* pp-weapon: toon het wapen statisch (rust-frame) in de avatar-editor */
 .pixel-preview.pp-weapon{overflow:visible}
-.pixel-preview.pp-weapon .sprite-weapon{display:block!important;animation:none!important;background-position-x:0!important}
+.pixel-preview.pp-weapon .sprite-weapon{display:block!important;animation:none!important}
 /* Sticky preview-paneel: avatar blijft in beeld terwijl je door de opties scrollt */
 .bm-av-sticky{position:sticky;top:6px;z-index:30;background:var(--stone2,#241a12)}
 
 /* ── Wapen-laag (288×64 = 3 aanvals-frames van 96×64) ── */
-/* In rust en preview verborgen; verschijnt tijdens een aanval en speelt de
-   3-frame zwaai synchroon met de karakter-aanval (0.85s). Facing erft via
-   .dir-right .sprite-weapon (scaleX) hierboven; keyframe animeert alleen X. */
+/* Het wapen wordt vastgehouden in de achterste hand: het valt ACHTER het
+   lichaam (DOM-volgorde, geen z-index) en vóór de cape. In rust statisch op
+   het LAATSTE frame (rust/houd-stand); tijdens een aanval speelt de 3-frame
+   zwaai (eindigt weer op het laatste frame). Facing erft via
+   .dir-right .sprite-weapon (scaleX). */
 .sprite-weapon{
-  display:none;animation:none!important;
+  display:block;animation:none!important;
   background-size:432px 96px;       /* 288×64 op schaal 1.5× */
-  background-position:0 0;
+  background-position-x:-288px;     /* frame 2 (rust/houd) = 2×144 */
+  background-position-y:0;
   width:144px;height:96px;          /* één frame (96×64) op 1.5× */
   inset:auto;top:auto;bottom:0;left:50%;margin-left:-72px;
-  z-index:8;pointer-events:none
+  pointer-events:none
 }
 @media(min-width:900px){
-  .sprite-weapon{background-size:648px 144px;width:216px;height:144px;margin-left:-108px}
+  .sprite-weapon{background-size:648px 144px;width:216px;height:144px;margin-left:-108px;background-position-x:-432px}
 }
-/* Aanvals-animatie wapen: zichtbaar + 3-frame zwaai synchroon met .85s aanval */
+/* Aanvals-animatie wapen: 3-frame zwaai synchroon met .85s aanval, eindigt op frame 2 */
 .bm-av.anim-atk-r .sprite-weapon,
 .bm-av.anim-atk-l .sprite-weapon,
 .bm-av.anim-chg-r .sprite-weapon,
 .bm-av.anim-chg-l .sprite-weapon{
-  display:block;
   animation:weaponAttack .85s steps(3) 1 forwards!important
 }
 @keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-432px}}
@@ -628,10 +630,10 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-<script src="core.js?v=20260630"></script>
-<script src="net.js?v=20260630"></script>
-<script src="games.js?v=20260630"></script>
-<script src="battle.js?v=20260630"></script>
+<script src="core.js?v=20260701"></script>
+<script src="net.js?v=20260701"></script>
+<script src="games.js?v=20260701"></script>
+<script src="battle.js?v=20260701"></script>
 <script>
 /* ---- INIT ---- */
 (function(){
