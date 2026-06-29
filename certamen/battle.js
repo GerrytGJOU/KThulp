@@ -399,21 +399,6 @@ function bmIsUnlocked(opt,ident){
   if(rM&&!Object.values(ident?.classHistory||{}).some(h=>bmCalcMastery(h)>=rM))return false;
   return true;
 }
-async function bmSetAdmin(){
-  if(!fbDB){toast("Firebase vereist","Verbind Firebase om admin-vlag te zetten.");return;}
-  const klas=(document.getElementById("bmAdminKlas")?.value||"").trim().toUpperCase();
-  const name=(document.getElementById("bmAdminName")?.value||"").trim().toLowerCase();
-  if(!klas||!name){toast("Vul klascode en naam in","");return;}
-  const snap=await fbDB.ref("identities/"+klas).once("value");
-  if(!snap.exists()){toast("Klas niet gevonden","Controleer de klascode.");return;}
-  const updates={};
-  snap.forEach(child=>{
-    if((child.val().name||"").toLowerCase()===name) updates["identities/"+klas+"/"+child.key+"/admin"]=true;
-  });
-  if(!Object.keys(updates).length){toast("Account niet gevonden","Naam '"+name+"' niet gevonden in klas "+klas+".");return;}
-  await fbDB.ref().update(updates);
-  toast("Admin ingesteld","Alle unlocks zijn nu actief voor '"+name+"'.");
-}
 function bmStars(n,max=5){
   return Array.from({length:max},(_,i)=>`<span style="color:${i<n?"#d4af37":"var(--stone4)"};font-size:14px">★</span>`).join("");
 }
@@ -958,15 +943,6 @@ SCREENS.battleHostSettings = function(){
   <div class="panel">
     <label class="fld">Geluidseffecten</label>
     <div class="chips">${onoff("sfx",sfx)}</div>
-  </div>
-  <div class="panel">
-    <label class="fld">Admin-account (alle unlocks)</label>
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <input id="bmAdminKlas" placeholder="Klascode" style="flex:1;min-width:90px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
-      <input id="bmAdminName" placeholder="Naam (bijv. Gerryt)" style="flex:2;min-width:120px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
-      <button class="btn btn-gold" style="padding:8px 14px" onclick="bmSetAdmin()">Zet admin</button>
-    </div>
-    <div class="note" style="margin-top:6px">Geeft dit account toegang tot alle avatar-opties, ongeacht niveau.</div>
   </div>`:""}
   ${foot()}`);
 };

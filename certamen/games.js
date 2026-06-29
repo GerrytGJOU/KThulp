@@ -13,6 +13,12 @@ SCREENS.home = function(){
     <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
     <p>Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden.</p>
   </button>
+  <button class="tile" onclick="go('totalWar')">
+    <span class="corner">${iconSVG("crown",88,"currentColor")}</span>
+    <span class="ic">${iconSVG("crown",44,"currentColor")}</span>
+    <h3>🗺️ Total War <span style="font-size:11px;background:var(--stone4);color:var(--hi-bright);border:1px solid var(--hi-dim);border-radius:4px;padding:2px 6px;vertical-align:middle;margin-left:4px">BINNENKORT</span></h3>
+    <p>Doorlopende veldtocht: elke klas is een beschaving en verovert samen de kaart van Europa. Nog in ontwerp — docenten kunnen het voorbeeld bekijken.</p>
+  </button>
   <button class="tile" onclick="startHost()">
     <span class="corner">${iconSVG("column",88,"currentColor")}</span>
     <span class="ic">${iconSVG("helmet",44,"currentColor")}</span>
@@ -859,6 +865,16 @@ SCREENS.teacherPortal = function(){
   </div>
   <div id="tpClassList"><div class="note" style="text-align:center;padding:20px">Klassen laden…</div></div>
   <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
+  <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">🗺️ Total War — voorbeeld <span class="pill" style="background:var(--stone4);color:var(--hi-bright);margin-left:6px">Binnenkort</span></button>
+  <div class="panel" style="margin-top:16px">
+    <label class="fld">Battle Mode — admin-account</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <input id="tpAdminKlas" placeholder="Klascode" style="flex:1;min-width:90px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
+      <input id="tpAdminName" placeholder="Naam speler" style="flex:2;min-width:120px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
+      <button class="btn btn-gold" style="padding:8px 14px" onclick="tpSetAdmin()">Zet admin</button>
+    </div>
+    <div class="note" style="margin-top:6px">Geeft dit account alle avatar-unlocks, ongeacht niveau.</div>
+  </div>
   ${foot()}`);
   tpLoadClasses();
 };
@@ -918,6 +934,15 @@ function tpDeleteClass(classId){
 
 function teacherLogout(){
   teacherNet().logoutTeacher().then(()=>go("teacherLogin"));
+}
+
+function tpSetAdmin(){
+  const klas=(el("tpAdminKlas")?.value||"").trim().toUpperCase();
+  const name=(el("tpAdminName")?.value||"").trim();
+  if(!klas||!name){ toast("Vul klascode en naam in",""); return; }
+  teacherNet().setAdminFlag(klas,name)
+    .then(()=>toast("Admin ingesteld","Alle avatar-unlocks zijn nu actief voor '"+name+"'."))
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"Onbekende fout")));
 }
 
 /* ---- SCHERM: leerlingen in één klas ---- */
