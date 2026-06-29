@@ -874,6 +874,7 @@ SCREENS.teacherPortal = function(){
       <button class="btn btn-gold" style="padding:8px 14px" onclick="tpLoadBmAccounts()">Zoek</button>
     </div>
     <div id="tpBmAccounts" style="margin-top:10px"></div>
+    <div id="tpBmUnassigned" style="margin-top:6px"></div>
   </div>
   ${foot()}`);
   tpLoadClasses();
@@ -938,27 +939,67 @@ function teacherLogout(){
 
 function tpLoadBmAccounts(){
   const klas=(el("tpBmKlas")?.value||"").trim().toUpperCase();
-  const cont=el("tpBmAccounts"); if(!cont) return;
+  const cont=el("tpBmAccounts");
+  const unCont=el("tpBmUnassigned");
+  if(!cont) return;
   if(!klas){ toast("Vul een klascode in",""); return; }
   cont.innerHTML=`<div class="note" style="padding:8px 0">Laden…</div>`;
-  teacherNet().getIdentities(klas)
-    .then(idents=>{
-      const entries=Object.entries(idents);
-      if(!entries.length){ cont.innerHTML=`<div class="note">Geen accounts gevonden in klas ${esc(klas)}.</div>`; return; }
-      cont.innerHTML=entries.map(([lid,id])=>`
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:0.5px solid var(--stone4)">
-          <div style="flex:1;min-width:120px">
-            <span style="font-weight:600">${esc(id.name||lid)}</span>
-            <span class="note" style="margin-left:8px">Niv. ${id.level||1}</span>
-            ${id.admin?`<span class="pill" style="margin-left:6px;background:var(--hi);color:#000;border:none;font-size:11px">admin</span>`:""}
-          </div>
+  if(unCont) unCont.innerHTML="";
+
+  teacherNet().getIdentities(klas).then(idents=>{
+    const entries=Object.entries(idents);
+    if(!entries.length){
+      cont.innerHTML=`<div class="note">Geen accounts gevonden in klas ${esc(klas)}.</div>`;
+      return;
+    }
+
+    // Verzamel alle bmKlas+bmLid combinaties die al in een portaalgroep zitten
+    const assigned=new Set();
+    Object.values(_tpClasses||{}).forEach(cls=>{
+      Object.values(cls.students||{}).forEach(s=>{
+        if(s.bmKlas&&s.bmLid) assigned.add(s.bmKlas+"/"+s.bmLid);
+      });
+    });
+
+    // Klasopties voor toewijzing
+    const classOpts=Object.entries(_tpClasses||{})
+      .map(([cid,c])=>`<option value="${cid}">${esc(c.className||cid)}</option>`).join("");
+
+    const rows=entries.map(([lid,id])=>{
+      const isAssigned=assigned.has(klas+"/"+lid);
+      return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:0.5px solid var(--stone4)${isAssigned?"":";background:rgba(180,120,0,.07)"}">
+        <div style="flex:1;min-width:120px">
+          <span style="font-weight:600">${esc(id.name||lid)}</span>
+          <span class="note" style="margin-left:8px">Niv. ${id.level||1}</span>
+          ${id.admin?`<span class="pill" style="margin-left:6px;background:var(--hi);color:#000;border:none;font-size:11px">admin</span>`:""}
+          ${isAssigned?`<span class="pill" style="margin-left:6px;font-size:11px">toegewezen</span>`:`<span class="pill" style="margin-left:6px;font-size:11px;background:var(--ox);border:none;color:var(--cream)">niet toegewezen</span>`}
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+          ${classOpts?`<select id="cls_${lid}" style="padding:5px 8px;border-radius:7px;border:1px solid var(--stone4);background:var(--stone2);color:var(--fg);font-size:13px">
+            <option value="">Wijs toe aan…</option>${classOpts}</select>
+          <button class="chip" onclick="tpAssignStudent(${JSON.stringify(klas)},${JSON.stringify(lid)},${JSON.stringify(id.name||lid)},${JSON.stringify(id.level||1)})">Toewijzen</button>`:""}
           ${id.admin
             ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpRemoveAdmin(${JSON.stringify(klas)},${JSON.stringify(lid)},${JSON.stringify(id.name||lid)})">Admin intrekken</button>`
-            :`<button class="chip" onclick="tpGrantAdmin(${JSON.stringify(klas)},${JSON.stringify(lid)},${JSON.stringify(id.name||lid)})">Zet admin</button>`
-          }
-        </div>`).join("");
-    })
-    .catch(e=>{ cont.innerHTML=`<div class="note warn">${esc(typeof e==="string"?e:(e?.message||"Fout"))}</div>`; });
+            :`<button class="chip" onclick="tpGrantAdmin(${JSON.stringify(klas)},${JSON.stringify(lid)},${JSON.stringify(id.name||lid)})">Zet admin</button>`}
+        </div>
+      </div>`;
+    });
+
+    const unassignedCount=entries.filter(([lid])=>!assigned.has(klas+"/"+lid)).length;
+    cont.innerHTML=`<div class="note" style="margin-bottom:6px">${entries.length} account${entries.length!==1?"s":""} gevonden · <b>${unassignedCount} niet toegewezen</b></div>`+rows.join("");
+  })
+  .catch(e=>{ cont.innerHTML=`<div class="note warn">${esc(typeof e==="string"?e:(e?.message||"Fout"))}</div>`; });
+}
+
+function tpAssignStudent(klas,lid,nm,level){
+  const sel=el("cls_"+lid);
+  const classId=sel?.value;
+  if(!classId){ toast("Kies een klas","Selecteer een doelklas in het uitklapmenu."); return; }
+  const studentData={ displayName:nm, bmKlas:klas, bmLid:lid, level:level };
+  teacherNet().assignStudent(classId, klas+"_"+lid, studentData)
+    .then(()=>{ toast("Toegewezen",nm+" → "+(_tpClasses[classId]?.className||classId)); return tpLoadClasses(); })
+    .then(()=>tpLoadBmAccounts())
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
 }
 
 function tpGrantAdmin(klas,lid,nm){
@@ -972,15 +1013,6 @@ function tpRemoveAdmin(klas,lid,nm){
   teacherNet().removeAdminFlag(klas,lid)
     .then(()=>{ toast("Admin ingetrokken",nm); tpLoadBmAccounts(); })
     .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
-}
-
-function tpSetAdmin(){
-  const klas=(el("tpBmKlas")?.value||"").trim().toUpperCase();
-  const nm=(prompt("Naam van de speler om admin te maken:")||"").trim();
-  if(!klas||!nm){ return; }
-  teacherNet().setAdminFlag(klas,nm)
-    .then(()=>{ toast("Admin ingesteld",nm); tpLoadBmAccounts(); })
-    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"Onbekende fout")));
 }
 
 /* ---- SCHERM: leerlingen in één klas ---- */
