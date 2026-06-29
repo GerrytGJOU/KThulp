@@ -106,6 +106,10 @@ FBNet.moveStudent = function(fromClassId, toClassId, studentId, studentData){
     return this.teacherRef().update(updates);
   }catch(e){ return Promise.reject(e.message); }
 };
+FBNet.assignStudent = function(classId, studentId, studentData){
+  try{ return this.teacherRef().child("classes/"+classId+"/students/"+studentId).set(studentData); }
+  catch(e){ return Promise.reject(e.message); }
+};
 FBNet.removeAdminFlag = function(klascode, lid){
   if(!fbDB) initFirebase();
   return fbDB.ref("identities/"+klascode+"/"+lid+"/admin").remove();
@@ -167,8 +171,9 @@ DemoNet.moveStudent = function(fromClassId, toClassId, studentId, studentData){
   }
   return Promise.resolve();
 };
-DemoNet.setAdminFlag = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.setAdminFlag    = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.removeAdminFlag = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
-DemoNet.deleteRoom = function(){ return Promise.resolve(); };
-DemoNet.getIdentities = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.assignStudent   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.deleteRoom      = function(){ return Promise.resolve(); };
+DemoNet.getIdentities   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 
