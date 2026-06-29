@@ -1484,7 +1484,7 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     : L(A.baard[baardId],"",haarStyle);
   return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
     ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
-    ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon")}
+    ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon wpn-"+(cosm.wapen||"zwaard"))}
     ${L(baseSrc)}
     ${baardLayers}
     ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
