@@ -118,6 +118,14 @@ const BM_FACTIONS = [
 
 // Alle avatar-onderdelen. requires:{level:N} of {mastery:N} = vereist niveau/mastery om te ontgrendelen.
 const BM_AVATAR_PARTS = {
+  geslacht:{ nm:"Geslacht",        opts:[
+    { id:"man",   nm:"Man" },
+    { id:"vrouw", nm:"Vrouw" },
+  ]},
+  huid:   { nm:"Huidskleur",       opts:[
+    { id:"licht",  nm:"Licht" },
+    { id:"donker", nm:"Donker" },
+  ]},
   helm:   { nm:"Helm",             opts:[
     { id:"standard", nm:"Standaard" },
     { id:"open",     nm:"Open" },
@@ -211,7 +219,7 @@ async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,battle
 function bmAvatarDefaults(){
   return{helm:"standard",haar:"kort",baard:"geen",armor:"licht",
          schild:"rond",wapen:"zwaard",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen",
-         huid:"licht"};
+         huid:"licht",geslacht:"man"};
 }
 function bmAvatarMerge(saved){
   // backward compat: string-avatar (pre-M6) → object
@@ -1300,8 +1308,10 @@ const BM_PIXEL_ART = true;
 // Character sprites: 576×384px (RPG Maker MV 8-char sheet, frame = 48×48).
 // Wapen sprites:     288×64px  (3 aanvals-frames, elk 96×64).
 const PIXEL_ASSETS = {
-  bases:  { "licht":"assets/sprites/base_light.png",
-            "donker":"assets/sprites/base_dark.png" },
+  bases:  { "licht":       "assets/sprites/base_light.png",
+            "donker":      "assets/sprites/base_dark.png",
+            "licht_vrouw": "assets/sprites/base_light_female.png",
+            "donker_vrouw":"assets/sprites/base_dark_female.png" },
   armor:  { "licht":"assets/sprites/armor_licht.png",
             "middel":"assets/sprites/armor_middel.png",
             "zwaar":"assets/sprites/armor_zwaar.png",
@@ -1333,18 +1343,22 @@ const PIXEL_ASSETS = {
 // Rendert een gelaagde pixel art held (RPG Maker MV paper doll).
 // Laagvolgorde: base → cape → armor → schild → wapen → haar → baard → helm.
 // Valt terug op bmSpriteSVG() als BM_PIXEL_ART=false of base-asset ontbreekt.
-function renderPixelHero(pid, p, team) {
-  if (!BM_PIXEL_ART) return bmSpriteSVG(p.class);
-  const cosm = p.avatar ? bmAvatarMerge(p.avatar) : bmAvatarDefaults();
-  const baseSrc = PIXEL_ASSETS.bases[cosm.huid || "licht"];
-  if (!baseSrc) return bmSpriteSVG(p.class); // fallback als bases ontbreken
+// Kiest de juiste base-sprite op basis van huid + geslacht.
+function _bmBaseKey(cosm){
+  const h = cosm.huid || "licht";
+  return (cosm.geslacht === "vrouw") ? h + "_vrouw" : h;
+}
 
-  const dirCls = team === "B" ? "dir-left" : "dir-right";
-  function L(src, extra="") {
-    return src ? `<div class="sprite-layer${extra}" style="background-image:url('${src}')"></div>` : "";
+// Bouwt de gelaagde sprite-lagen als HTML-string.
+// extraClass op de buitenste div (bv. "pixel-preview" voor statische weergave).
+function _bmPixelLayers(cosm, dirCls, extraClass="") {
+  const baseSrc = PIXEL_ASSETS.bases[_bmBaseKey(cosm)];
+  if (!baseSrc) return null;
+  function L(src, cls="") {
+    return src ? `<div class="sprite-layer${cls}" style="background-image:url('${src}')"></div>` : "";
   }
   const A = PIXEL_ASSETS;
-  return `<div class="pixel-hero ${dirCls}">
+  return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
     ${L(baseSrc)}
     ${L(A.cape[cosm.cape||"geen"])}
     ${L(A.armor[cosm.armor||"licht"])}
@@ -1354,6 +1368,21 @@ function renderPixelHero(pid, p, team) {
     ${L(A.baard[cosm.baard||"geen"])}
     ${L(A.helm[cosm.helm||"standard"])}
   </div>`;
+}
+
+// Geanimeerde sprite voor het slagveld.
+function renderPixelHero(pid, p, team) {
+  if (!BM_PIXEL_ART) return bmSpriteSVG(p.class);
+  const cosm = p.avatar ? bmAvatarMerge(p.avatar) : bmAvatarDefaults();
+  return _bmPixelLayers(cosm, team === "B" ? "dir-left" : "dir-right") || bmSpriteSVG(p.class);
+}
+
+// Statische vooraanzicht-sprite voor profiel en avatar-editor.
+// Toont middelste frame, kijkrichting naar rechts (geen loopanimatie).
+function renderPixelHeroPreview(av) {
+  if (!BM_PIXEL_ART) return "";
+  const cosm = bmAvatarMerge(av);
+  return _bmPixelLayers(cosm, "dir-right", "pixel-preview") || "";
 }
 
 // Klasse → formatiepositie (voor/midden/achter)
@@ -2446,7 +2475,7 @@ SCREENS.battleProfile = function(){
     <h2>Mijn profiel</h2>
   </div>
   <div class="panel" style="display:flex;gap:14px;align-items:center">
-    <div style="flex:0 0 auto">${bmAvatarSVG(av,72)}</div>
+    <div style="flex:0 0 auto">${renderPixelHeroPreview(av) || bmAvatarSVG(av,72)}</div>
     <div style="flex:1;min-width:0">
       <div style="font-size:20px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(BM_IDENT.name||"")}</div>
       <div class="pill" style="margin:4px 0">Niveau ${lv.level} · ${esc(lv.title)}</div>
@@ -2505,8 +2534,8 @@ SCREENS.battleAvatarEdit = function(){
     <button class="back" onclick="BM_AV_EDIT=null;go('battleProfile')">${iconSVG("shield",20,"currentColor")}</button>
     <h2>Avatar aanpassen</h2>
   </div>
-  <div class="panel" style="text-align:center;padding:20px 16px">
-    ${bmAvatarSVG(av,96)}
+  <div class="panel" style="text-align:center;padding:20px 16px;display:flex;justify-content:center;align-items:flex-end;min-height:130px">
+    ${renderPixelHeroPreview(av) || bmAvatarSVG(av,96)}
   </div>
   ${Object.keys(BM_AVATAR_PARTS).map(partSection).join("")}
   <button class="btn btn-gold btn-block lg" onclick="bmSaveAvatar()" style="margin-bottom:16px">Opslaan</button>
