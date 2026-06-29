@@ -1296,48 +1296,64 @@ function bmSpriteSVG(clsId){
 // Zolang false: automatische fallback naar de ingebouwde SVG-sprites.
 const BM_PIXEL_ART = false;
 
+// Sleutel = avatar-id (uit BM_AVATAR_PARTS), waarde = pad naar spritesheet.
+// Character sprites: 576×384px (RPG Maker MV 8-char sheet, frame = 48×48).
+// Wapen sprites:     288×64px  (3 aanvals-frames, elk 96×64).
 const PIXEL_ASSETS = {
-  bases: {
-    "licht":  "assets/sprites/base_light.png",
-    "donker": "assets/sprites/base_dark.png"
-  },
-  classes: {
-    "hopliet":     "assets/sprites/armor_hopliet.png",
-    "spartaan":    "assets/sprites/armor_spartaan.png",
-    "centurio":    "assets/sprites/armor_centurio.png",
-    "boogschutter":"assets/sprites/armor_boogschutter.png",
-    "cavalerie":   "assets/sprites/armor_cavalerie.png",
-    "priester":    "assets/sprites/armor_priester.png",
-    "genie":       "assets/sprites/armor_genie.png",
-    "verkenner":   "assets/sprites/armor_verkenner.png"
-  },
-  helmets: {
-    "standard":    "assets/sprites/helm_standard.png",
-    "ceremonieel": "assets/sprites/helm_ceremonieel.png",
-    "none":        ""
-  }
+  bases:  { "licht":"assets/sprites/base_light.png",
+            "donker":"assets/sprites/base_dark.png" },
+  armor:  { "licht":"assets/sprites/armor_licht.png",
+            "middel":"assets/sprites/armor_middel.png",
+            "zwaar":"assets/sprites/armor_zwaar.png",
+            "ceremonieel":"assets/sprites/armor_ceremonieel.png" },
+  helm:   { "standard":"assets/sprites/helm_standaard.png",
+            "open":"assets/sprites/helm_open.png",
+            "fedder":"assets/sprites/helm_fedder.png",
+            "kroon":"assets/sprites/helm_kroon.png" },
+  haar:   { "kort":"assets/sprites/haar_kort.png",
+            "lang":"assets/sprites/haar_lang.png",
+            "kaal":"assets/sprites/haar_kaal.png",
+            "vlecht":"assets/sprites/haar_vlecht.png" },
+  baard:  { "geen":"assets/sprites/baard_geen.png",
+            "baard":"assets/sprites/baard_baard.png",
+            "snor":"assets/sprites/baard_snor.png" },
+  schild: { "rond":"assets/sprites/schild_rond.png",
+            "ovaal":"assets/sprites/schild_ovaal.png",
+            "vierkant":"assets/sprites/schild_vierkant.png",
+            "tower":"assets/sprites/schild_tower.png" },
+  wapen:  { "zwaard":"assets/sprites/wapen_zwaard.png",
+            "speer":"assets/sprites/wapen_speer.png",
+            "boog":"assets/sprites/wapen_boog.png",
+            "staf":"assets/sprites/wapen_staf.png" },
+  cape:   { "geen":"assets/sprites/cape_geen.png",
+            "kort":"assets/sprites/cape_kort.png",
+            "lang":"assets/sprites/cape_lang.png" },
 };
 
-// Rendert een gelaagde pixel art held.
-// Richting (links/rechts) via CSS-klasse; Y-positie in spritesheet via CSS.
-// Valt terug op bmSpriteSVG() als BM_PIXEL_ART=false of asset ontbreekt.
+// Rendert een gelaagde pixel art held (RPG Maker MV paper doll).
+// Laagvolgorde: base → cape → armor → schild → wapen → haar → baard → helm.
+// Valt terug op bmSpriteSVG() als BM_PIXEL_ART=false of base-asset ontbreekt.
 function renderPixelHero(pid, p, team) {
-  const src = BM_PIXEL_ART && PIXEL_ASSETS.classes[p.class];
-  if (!src) return bmSpriteSVG(p.class);
-
+  if (!BM_PIXEL_ART) return bmSpriteSVG(p.class);
   const cosm = p.avatar ? bmAvatarMerge(p.avatar) : bmAvatarDefaults();
-  const dirCls = team === "B" ? "dir-left" : "dir-right";
-  const baseSrc = PIXEL_ASSETS.bases[cosm.huid || "licht"] || "";
-  const helmSrc = (cosm.helm && cosm.helm !== "none")
-    ? (PIXEL_ASSETS.helmets[cosm.helm] || PIXEL_ASSETS.helmets["standard"] || "")
-    : "";
+  const baseSrc = PIXEL_ASSETS.bases[cosm.huid || "licht"];
+  if (!baseSrc) return bmSpriteSVG(p.class); // fallback als bases ontbreken
 
-  let html = `<div class="pixel-hero ${dirCls}">`;
-  if (baseSrc) html += `<div class="sprite-layer" style="background-image:url('${baseSrc}')"></div>`;
-  html += `<div class="sprite-layer" style="background-image:url('${src}')"></div>`;
-  if (helmSrc) html += `<div class="sprite-layer" style="background-image:url('${helmSrc}')"></div>`;
-  html += `</div>`;
-  return html;
+  const dirCls = team === "B" ? "dir-left" : "dir-right";
+  function L(src, extra="") {
+    return src ? `<div class="sprite-layer${extra}" style="background-image:url('${src}')"></div>` : "";
+  }
+  const A = PIXEL_ASSETS;
+  return `<div class="pixel-hero ${dirCls}">
+    ${L(baseSrc)}
+    ${L(A.cape[cosm.cape||"geen"])}
+    ${L(A.armor[cosm.armor||"licht"])}
+    ${L(A.schild[cosm.schild||"rond"])}
+    ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon")}
+    ${L(A.haar[cosm.haar||"kort"])}
+    ${L(A.baard[cosm.baard||"geen"])}
+    ${L(A.helm[cosm.helm||"standard"])}
+  </div>`;
 }
 
 // Klasse → formatiepositie (voor/midden/achter)
