@@ -1430,7 +1430,7 @@ function _bmBaseKey(cosm){
 
 // Versie-achtervoegsel voor sprite-bestanden → forceert verse download na een
 // asset-wijziging (bump dit getal als je een PNG vervangt).
-const SPRITE_VER = "v=3";
+const SPRITE_VER = "v=4";
 
 // CSS-filters per haarkleur (sprites zijn standaard blond in RPG Maker MV).
 const BM_HAARKLEUR_FILTER = {
