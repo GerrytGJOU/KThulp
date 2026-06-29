@@ -1294,7 +1294,7 @@ function bmSpriteSVG(clsId){
 
 // Zet op true zodra de sprite-bestanden in assets/sprites/ aanwezig zijn.
 // Zolang false: automatische fallback naar de ingebouwde SVG-sprites.
-const BM_PIXEL_ART = false;
+const BM_PIXEL_ART = true;
 
 // Sleutel = avatar-id (uit BM_AVATAR_PARTS), waarde = pad naar spritesheet.
 // Character sprites: 576×384px (RPG Maker MV 8-char sheet, frame = 48×48).
