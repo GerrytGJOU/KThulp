@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 600" fill="#1a0a04">
+  <!-- Kronos — Titan van de tijd, zeis, donkere gewaden, dreigend en oud -->
+  <!-- Verwarde wilde haren (oud en dreigend) -->
+  <path d="M100 64 Q74 36 68 72 Q64 96 82 108"/>
+  <path d="M200 64 Q226 36 232 72 Q236 96 218 108"/>
+  <path d="M108 52 Q90 18 98 52"/>
+  <path d="M128 44 Q116 12 122 42"/>
+  <path d="M172 44 Q184 12 178 42"/>
+  <path d="M192 52 Q210 18 202 52"/>
+  <!-- Hoofd (oud, gebogen) -->
+  <ellipse cx="150" cy="106" rx="40" ry="44"/>
+  <!-- Lange vervaarlijke baard -->
+  <path d="M108 132 Q110 162 114 180 Q124 210 150 218 Q176 210 186 180 Q190 162 192 132 L186 148 Q176 194 150 200 Q124 194 114 148Z"/>
+  <!-- Rimpels/ouderdom hints -->
+  <path d="M118 108 Q130 104 150 106 Q170 104 182 108" stroke="#0a0500" stroke-width="2" fill="none"/>
+  <!-- Nek -->
+  <rect x="136" y="146" width="28" height="18" rx="5"/>
+  <!-- Donkere Titan-gewaden (zwaar, oud, geraffeld) -->
+  <path d="M80 162 Q94 144 150 142 Q206 144 220 162 L248 500 L52 500Z"/>
+  <!-- Rafels onderaan gewaden -->
+  <path d="M52 500 Q70 488 88 498 Q106 488 124 498 Q142 488 160 498 Q178 488 196 498 Q214 488 232 498 Q240 492 248 500"/>
+  <!-- Donkere sluier/cape over schouders -->
+  <path d="M80 162 L36 220 L28 360 L56 355 L62 260 L84 200Z"/>
+  <path d="M220 162 L264 220 L272 360 L244 355 L238 260 L216 200Z"/>
+  <!-- Linkerarm (gebogen naar voren) -->
+  <path d="M84 168 L50 200 L42 228 L76 214Z"/>
+  <ellipse cx="36" cy="238" rx="16" ry="14"/>
+  <!-- Rechterarm omhoog met zeis -->
+  <path d="M216 168 L254 138 L266 114 L230 150Z"/>
+  <!-- Zeis (gebogen mes + lange steel) -->
+  <!-- Steel -->
+  <rect x="258" y="56" width="9" height="320" rx="4" transform="rotate(15 262 160)"/>
+  <!-- Gebogen zeisblad -->
+  <path d="M264 52 Q310 30 318 70 Q318 100 290 110 Q310 80 302 62 Q286 50 264 60Z" transform="rotate(15 262 160)"/>
+  <!-- Zware sandalen/voeten zichtbaar -->
+  <path d="M118 496 Q130 516 152 516 Q172 512 176 496Z"/>
+  <path d="M122 496 Q150 504 182 496"/>
+</svg>

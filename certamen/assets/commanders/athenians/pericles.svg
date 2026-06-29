@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 600" fill="#1a0a04">
+  <!-- Pericles — Korinthische helm, chiton, strategische pose met speer -->
+  <!-- Helmpluim -->
+  <path d="M146 16 Q150 10 154 16 L164 44 L156 48 L150 26 L144 48 L136 44Z"/>
+  <!-- Korinthische helm (achterover gedraaid, beschaafde stijl) -->
+  <path d="M108 82 Q110 52 150 50 Q190 52 192 82 L194 112 Q188 132 184 138 Q168 146 164 138 Q160 152 150 154 Q140 152 136 138 Q132 146 116 132 Q112 124 106 112Z"/>
+  <!-- Vizier opening -->
+  <ellipse cx="150" cy="104" rx="16" ry="24" fill="#0a0500"/>
+  <!-- Nek -->
+  <rect x="138" y="152" width="24" height="16" rx="3"/>
+  <!-- Mantel (himation) over schouder -->
+  <path d="M198 165 Q245 200 250 320 L228 315 Q222 245 200 215Z"/>
+  <path d="M102 165 Q80 185 74 240 L94 238 Q100 202 104 178Z"/>
+  <!-- Chiton (tuniek) -->
+  <path d="M102 162 L96 420 L204 420 L198 162 Q174 148 150 147 Q126 148 102 162Z"/>
+  <!-- Riem -->
+  <rect x="110" y="252" width="80" height="10" rx="3"/>
+  <!-- Linkerarm opgeheven (redenaar pose) -->
+  <path d="M102 168 L68 148 L60 132 L94 158Z"/>
+  <!-- Linkerhand gebaar -->
+  <ellipse cx="55" cy="126" rx="14" ry="12"/>
+  <!-- Rechterarm met speer laag -->
+  <path d="M198 168 L232 182 L240 196 L206 178Z"/>
+  <!-- Speer verticaal -->
+  <rect x="236" y="100" width="8" height="320" rx="3"/>
+  <polygon points="240,98 234,110 246,110"/>
+  <!-- Sandalen -->
+  <path d="M98 418 Q108 436 130 436 Q144 432 148 418Z"/>
+  <path d="M152 418 Q156 432 170 436 Q192 436 202 418Z"/>
+</svg>

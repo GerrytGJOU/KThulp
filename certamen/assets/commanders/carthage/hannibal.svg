@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 600" fill="#1a0a04">
+  <!-- Hannibal — Punisch/hellenistisch helm, mantel, kromzwaard -->
+  <!-- Punisch-hellenistische helm met wang-stukken -->
+  <path d="M108 62 Q110 42 150 40 Q190 42 192 62 L196 96 Q196 114 186 124 L178 132 Q172 140 168 132 L164 120 Q158 130 150 132 Q142 130 136 120 L132 132 Q128 140 122 132 L114 124 Q104 114 104 96Z"/>
+  <!-- Wangstukken -->
+  <path d="M108 90 L98 106 L104 124 L114 120 L114 96Z"/>
+  <path d="M192 90 L202 106 L196 124 L186 120 L186 96Z"/>
+  <!-- Helm kam (klein) -->
+  <rect x="140" y="36" width="20" height="8" rx="3"/>
+  <!-- Vizier/gezicht opening -->
+  <ellipse cx="150" cy="100" rx="26" ry="30" fill="#0a0500"/>
+  <!-- Gezicht -->
+  <ellipse cx="150" cy="100" rx="20" ry="24" fill="#1a0a04"/>
+  <!-- Ogen (lichte opening) -->
+  <ellipse cx="143" cy="94" rx="5" ry="4" fill="#0a0500"/>
+  <ellipse cx="157" cy="94" rx="5" ry="4" fill="#0a0500"/>
+  <!-- Nek -->
+  <rect x="138" y="130" width="24" height="18" rx="4"/>
+  <!-- Mantel (Punisch, zwaar) -->
+  <path d="M202 160 Q252 196 258 320 L236 315 Q228 244 206 212Z"/>
+  <!-- Wapenrusting (Carthaags, mix Punisch/Grieks) -->
+  <path d="M98 150 L92 282 L208 282 L202 150 Q176 136 150 135 Q124 136 98 150Z"/>
+  <!-- Schouderstukken -->
+  <ellipse cx="100" cy="158" rx="24" ry="12" transform="rotate(-15 100 158)"/>
+  <ellipse cx="200" cy="158" rx="24" ry="12" transform="rotate(15 200 158)"/>
+  <!-- Linkerarm met schild (ovaal, Punisch) -->
+  <path d="M98 156 L62 170 L56 194 L88 186Z"/>
+  <ellipse cx="46" cy="210" rx="22" ry="32"/>
+  <!-- Rechterarm met kromzwaard (falcata) -->
+  <path d="M202 156 L238 168 L246 186 L210 176Z"/>
+  <!-- Falcata (gebogen zwaard) -->
+  <path d="M248 162 Q280 148 284 130 Q282 110 268 108 Q256 110 252 126 Q248 140 252 158Z"/>
+  <!-- Benen + laarzen -->
+  <path d="M112 282 L104 436 L142 436 L150 308 L158 436 L196 436 L188 282Z"/>
+  <path d="M96 434 Q106 452 130 452 Q142 448 142 434Z"/>
+  <path d="M158 434 Q158 448 170 452 Q194 452 204 434Z"/>
+</svg>
