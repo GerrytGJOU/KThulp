@@ -903,6 +903,7 @@ function tpRenderClasses(){
     cont.innerHTML=`<div class="note" style="text-align:center;padding:20px">Nog geen klassen. Voeg een klas toe hieronder.</div>`;
     return;
   }
+  const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
   cont.innerHTML=entries.map(([cid,cls])=>{
     const count=Object.keys(cls.students||{}).length;
     return `<div class="panel" style="margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -910,9 +911,9 @@ function tpRenderClasses(){
         <div style="font-weight:700;font-size:16px">${esc(cls.className||cid)}</div>
         <div class="note">${count} leerling${count!==1?"en":""}</div>
       </div>
-      <button class="chip" onclick="tpOpenClass(${JSON.stringify(cid)})">${iconSVG("helmet",13,"currentColor")} Leerlingen</button>
-      <button class="chip" onclick="tpRenameClass(${JSON.stringify(cid)})">${iconSVG("column",13,"currentColor")} Hernoem</button>
-      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteClass(${JSON.stringify(cid)})">✕</button>
+      <button class="chip" onclick="tpOpenClass(${q(cid)})">${iconSVG("helmet",13,"currentColor")} Leerlingen</button>
+      <button class="chip" onclick="tpRenameClass(${q(cid)})">${iconSVG("column",13,"currentColor")} Hernoem</button>
+      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteClass(${q(cid)})">✕</button>
     </div>`;
   }).join("");
 }
@@ -1111,6 +1112,7 @@ function tpRenderStudents(){
     .filter(([cid])=>cid!==_tpCurrentClass)
     .map(([cid,c])=>`<option value="${cid}">${esc(c.className||cid)}</option>`)
     .join("");
+  const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
   cont.innerHTML=students.map(([sid,s])=>`
     <div class="panel" style="margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <div style="flex:1;min-width:130px">
@@ -1122,8 +1124,8 @@ function tpRenderStudents(){
         <option value="">Verplaats naar…</option>
         ${otherOptions}
       </select>
-      <button class="chip" onclick="tpMoveStudent(${JSON.stringify(sid)})">Verplaats</button>`:""}
-      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteStudent(${JSON.stringify(sid)},${JSON.stringify(s.displayName||sid)})">✕ Verwijder</button>
+      <button class="chip" onclick="tpMoveStudent(${q(sid)})">Verplaats</button>`:""}
+      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteStudent(${q(sid)},${q(s.displayName||sid)})">✕ Verwijder</button>
     </div>`).join("");
 }
 
