@@ -126,57 +126,62 @@ const BM_AVATAR_PARTS = {
     { id:"licht",  nm:"Licht" },
     { id:"donker", nm:"Donker" },
   ]},
+  armor:  { nm:"Wapenrusting",     opts:[
+    { id:"vodden",      nm:"Vodden" },
+    { id:"robe",        nm:"Mantel" },
+    { id:"licht",       nm:"Licht",        requires:{level:2} },
+    { id:"middel",      nm:"Middel",       requires:{level:5} },
+    { id:"hopliet",     nm:"Hopliet",      requires:{level:7} },
+    { id:"zwaar",       nm:"Zwaar",        requires:{level:9} },
+    { id:"ceremonieel", nm:"Ceremonieel",  requires:{mastery:5} },
+  ]},
   helm:   { nm:"Helm",             opts:[
     { id:"geen",     nm:"Geen helm" },
-    { id:"standard", nm:"Standaard" },
-    { id:"open",     nm:"Open" },
-    { id:"hopliet",  nm:"Hopliet",     requires:{level:5} },
-    { id:"kroon",    nm:"Kroon",      requires:{mastery:3} },
+    { id:"standard", nm:"Standaard",      requires:{level:2} },
+    { id:"open",     nm:"Open",           requires:{level:4} },
+    { id:"hopliet",  nm:"Hopliet",        requires:{level:8} },
+    { id:"kroon",    nm:"Kroon",          requires:{level:10} },
+  ]},
+  schild: { nm:"Schild",           opts:[
+    { id:"geen",     nm:"Geen schild" },
+    { id:"rond",     nm:"Rond",           requires:{level:3} },
+    { id:"ovaal",    nm:"Puntig",         requires:{level:3} },
+    { id:"vierkant", nm:"Metaal Rond",    requires:{level:6} },
+    { id:"tower",    nm:"Metaal Puntig",  requires:{level:6} },
+  ]},
+  wapen:  { nm:"Wapen",            opts:[
+    { id:"knuppel", nm:"Knuppel" },
+    { id:"stok",    nm:"Stok" },
+    { id:"hooivork",nm:"Hooivork" },
+    { id:"zwaard",  nm:"Zwaard",          requires:{level:2} },
+    { id:"speer",   nm:"Speer",           requires:{level:2} },
+    { id:"boog",    nm:"Boog",            requires:{level:4} },
+    { id:"staf",    nm:"Staf",            requires:{level:4} },
   ]},
   haar:   { nm:"Haar",             opts:[
     { id:"kort",   nm:"Kort" },
     { id:"lang",   nm:"Lang" },
     { id:"kaal",   nm:"Kaal" },
-    { id:"vlecht", nm:"Vlecht",       requires:{level:3} },
+    { id:"vlecht", nm:"Vlecht",           requires:{level:6} },
   ]},
   haarkleur:{ nm:"Haarkleur",      opts:[
     { id:"blond",  nm:"Blond" },
     { id:"bruin",  nm:"Bruin" },
     { id:"zwart",  nm:"Zwart" },
     { id:"rood",   nm:"Rood" },
-    { id:"blauw",  nm:"Blauw",        requires:{level:4} },
-    { id:"groen",  nm:"Groen",        requires:{level:4} },
+    { id:"blauw",  nm:"Blauw",            requires:{level:8} },
+    { id:"groen",  nm:"Groen",            requires:{level:8} },
   ]},
   baard:  { nm:"Gezichtshaar",     opts:[
     { id:"geen",      nm:"Geen" },
-    { id:"baard",     nm:"Baard" },
     { id:"snor",      nm:"Snor" },
+    { id:"baard",     nm:"Baard" },
     { id:"baardsnor", nm:"Baard en snor" },
-  ]},
-  armor:  { nm:"Wapenrusting",     opts:[
-    { id:"licht",       nm:"Licht" },
-    { id:"middel",      nm:"Middel" },
-    { id:"hopliet",     nm:"Hopliet",     requires:{level:3} },
-    { id:"zwaar",       nm:"Zwaar",       requires:{level:5} },
-    { id:"ceremonieel", nm:"Ceremonieel", requires:{mastery:5} },
-  ]},
-  schild: { nm:"Schild",           opts:[
-    { id:"geen",     nm:"Geen schild" },
-    { id:"rond",     nm:"Rond" },
-    { id:"ovaal",    nm:"Puntig" },
-    { id:"vierkant", nm:"Metaal Rond" },
-    { id:"tower",    nm:"Metaal Puntig", requires:{level:7} },
-  ]},
-  wapen:  { nm:"Wapen",            opts:[
-    { id:"zwaard", nm:"Zwaard" },
-    { id:"speer",  nm:"Speer" },
-    { id:"boog",   nm:"Boog" },
-    { id:"staf",   nm:"Staf",           requires:{level:4} },
   ]},
   cape:   { nm:"Cape",             opts:[
     { id:"geen", nm:"Geen" },
-    { id:"kort", nm:"Kort" },
-    { id:"lang", nm:"Lang",            requires:{level:6} },
+    { id:"kort", nm:"Kort",              requires:{level:5} },
+    { id:"lang", nm:"Lang",              requires:{level:7} },
   ]},
   capekleur:{ nm:"Capekleur",      opts:[
     { id:"goud",   nm:"Goud" },
@@ -187,23 +192,23 @@ const BM_AVATAR_PARTS = {
     { id:"oranje", nm:"Oranje" },
   ]},
   victoryAnim: { nm:"Overwinningsanimatie", opts:[
-    { id:"juichen",      nm:"Juichen" },
-    { id:"zwaardhefffen",nm:"Zwaard heffen", requires:{level:5} },
+    { id:"juichen",       nm:"Juichen" },
+    { id:"zwaardhefffen", nm:"Zwaard heffen", requires:{level:5} },
   ]},
 };
 
-// XP-drempels en titels per niveau (1–20). Aanpasbaar zonder logica te wijzigen.
+// XP-drempels en titels per niveau (1–10). Aanpasbaar zonder logica te wijzigen.
 const BM_LEVELS = [
   { level:1,  xp:0,    title:"Tiro",       unlock:null },
-  { level:2,  xp:100,  title:"Miles",      unlock:{part:"haar",       opt:"lang"} },
-  { level:3,  xp:250,  title:"Optio",      unlock:{part:"haar",       opt:"vlecht"} },
-  { level:4,  xp:500,  title:"Signifer",   unlock:{part:"wapen",      opt:"staf"} },
-  { level:5,  xp:900,  title:"Aquilifer",  unlock:{part:"helm",       opt:"fedder"} },
-  { level:6,  xp:1400, title:"Centurio",   unlock:{part:"cape",       opt:"lang"} },
-  { level:7,  xp:2100, title:"Praefectus", unlock:{part:"schild",     opt:"tower"} },
-  { level:8,  xp:3000, title:"Tribunus",   unlock:{part:"armor",      opt:"zwaar"} },
-  { level:9,  xp:4200, title:"Legatus",    unlock:{part:"helm",       opt:"kroon"} },
-  { level:10, xp:6000, title:"Imperator",  unlock:{part:"victoryAnim",opt:"zwaardhefffen"} },
+  { level:2,  xp:100,  title:"Miles",      unlock:{part:"armor",      opt:"licht",        nm:"Wapenrusting: Licht"} },
+  { level:3,  xp:250,  title:"Optio",      unlock:{part:"schild",     opt:"rond",         nm:"Schild: Rond & Puntig"} },
+  { level:4,  xp:500,  title:"Signifer",   unlock:{part:"helm",       opt:"open",         nm:"Helm: Open"} },
+  { level:5,  xp:900,  title:"Aquilifer",  unlock:{part:"cape",       opt:"kort",         nm:"Cape: Kort & Zwaard heffen"} },
+  { level:6,  xp:1400, title:"Centurio",   unlock:{part:"schild",     opt:"vierkant",     nm:"Schild: Metaal Rond & Metaal Puntig"} },
+  { level:7,  xp:2100, title:"Praefectus", unlock:{part:"armor",      opt:"hopliet",      nm:"Wapenrusting: Hopliet & Cape: Lang"} },
+  { level:8,  xp:3000, title:"Tribunus",   unlock:{part:"helm",       opt:"hopliet",      nm:"Helm: Hopliet & Haarkleur: Blauw/Groen"} },
+  { level:9,  xp:4200, title:"Legatus",    unlock:{part:"armor",      opt:"zwaar",        nm:"Wapenrusting: Zwaar"} },
+  { level:10, xp:6000, title:"Imperator",  unlock:{part:"helm",       opt:"kroon",        nm:"Helm: Kroon"} },
 ];
 
 // score = rounds*5 + damage + healing  → mastery-sterren (0–5)
@@ -234,8 +239,8 @@ async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,battle
 /* ---- M6: AVATAR / NIVEAU / MASTERY HELPERS ---- */
 
 function bmAvatarDefaults(){
-  return{helm:"standard",haar:"kort",baard:"geen",armor:"licht",
-         schild:"rond",wapen:"zwaard",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen",
+  return{helm:"geen",haar:"kort",baard:"geen",armor:"vodden",
+         schild:"geen",wapen:"knuppel",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen",
          huid:"licht",geslacht:"man",haarkleur:"blond",capekleur:"goud"};
 }
 function bmAvatarMerge(saved){
@@ -1399,7 +1404,9 @@ const PIXEL_ASSETS = {
             "donker":      "assets/sprites/base_dark.png",
             "licht_vrouw": "assets/sprites/base_light_female.png",
             "donker_vrouw":"assets/sprites/base_dark_female.png" },
-  armor:  { "licht":"assets/sprites/armor_licht.png",
+  armor:  { "vodden":"assets/sprites/armor_vodden.png",
+            "robe":"assets/sprites/armor_robe.png",
+            "licht":"assets/sprites/armor_licht.png",
             "middel":"assets/sprites/armor_middel.png",
             "zwaar":"assets/sprites/armor_zwaar.png",
             "hopliet":"assets/sprites/armor_hopliet.png",
@@ -1421,7 +1428,10 @@ const PIXEL_ASSETS = {
             "ovaal":"assets/sprites/schild_ovaal.png",
             "vierkant":"assets/sprites/schild_vierkant.png",
             "tower":"assets/sprites/schild_tower.png" },
-  wapen:  { "zwaard":"assets/sprites/wapen_zwaard.png",
+  wapen:  { "knuppel":"assets/sprites/wapen_knuppel.png",
+            "stok":"assets/sprites/wapen_stok.png",
+            "hooivork":"assets/sprites/wapen_hooivork.png",
+            "zwaard":"assets/sprites/wapen_zwaard.png",
             "speer":"assets/sprites/wapen_speer.png",
             "boog":"assets/sprites/wapen_boog.png",
             "staf":"assets/sprites/wapen_staf.png" },
@@ -1441,7 +1451,7 @@ function _bmBaseKey(cosm){
 
 // Versie-achtervoegsel voor sprite-bestanden → forceert verse download na een
 // asset-wijziging (bump dit getal als je een PNG vervangt).
-const SPRITE_VER = "v=4";
+const SPRITE_VER = "v=5";
 
 // CSS-filters per haarkleur (sprites zijn standaard blond in RPG Maker MV).
 const BM_HAARKLEUR_FILTER = {
