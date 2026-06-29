@@ -410,6 +410,10 @@ body.greek .qcard .word{color:#143a5e}
 /* Middelste frame (rust) als animaties uit staan */
 .bm-noanim .sprite-layer{animation:none!important;background-position-x:-96px}
 @media(min-width:900px){.bm-noanim .sprite-layer{background-position-x:-144px}}
+/* Statische preview (editor/profiel): geen animatie, middelste frame, vooraanzicht */
+.pixel-preview .sprite-layer{animation:none!important;background-position-x:-96px;background-position-y:0!important}
+.pixel-preview .sprite-weapon{background-position-x:-192px;background-position-y:0!important}
+@media(min-width:900px){.pixel-preview .sprite-layer{background-position-x:-144px}.pixel-preview .sprite-weapon{background-position-x:-288px}}
 
 /* ── Wapen-laag (288×64, 3 aanvals-frames elk 96×64) ── */
 /* Normaal: stilstaand middelste frame. Bij aanval: 3-frame animatie synchroon
