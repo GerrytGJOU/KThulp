@@ -380,33 +380,67 @@ body.greek .qcard .word{color:#143a5e}
 #bmFormB .bm-av:nth-child(6) .bm-sprite{animation-delay:1.75s}
 #bmFormB .bm-av:nth-child(7) .bm-sprite{animation-delay:2.1s}
 
-/* ── Pixel Art Paper Doll (RPG Maker VX Ace, 32×32 per frame) ── */
-/* Schaal 2.5×: 32px → 80px; drie frames → 240px breedte */
-.pixel-hero{position:relative;width:80px;height:80px;image-rendering:pixelated;image-rendering:crisp-edges;flex-shrink:0}
-.sprite-layer{position:absolute;inset:0;background-size:240px auto;background-repeat:no-repeat;animation:pixelWalk .8s steps(3) infinite}
-/* RPG Maker Y-rij: rij 1 (links) = 32px×2.5=80px, rij 2 (rechts) = 64px×2.5=160px */
-.pixel-hero.dir-right .sprite-layer{background-position-y:-160px}
-.pixel-hero.dir-left  .sprite-layer{background-position-y:-80px}
-@keyframes pixelWalk{from{background-position-x:0}to{background-position-x:-240px}}
-/* Desktop ≥900px: schaal 3.5× → 112px; drie frames → 336px */
+/* ── Pixel Art Paper Doll (RPG Maker MV, 48×48 per frame) ── */
+/* MV 8-char sheet: 576×384. Schaal 2×: frame 96×96, bg-size 1152×768.
+   Richting Y-rijen (per char-blok 192px hoog):
+     rij 0 omlaag  y=0     → 2×:   0px   3×:   0px
+     rij 1 links   y=48    → 2×:  96px   3×: 144px
+     rij 2 rechts  y=96    → 2×: 192px   3×: 288px
+     rij 3 omhoog  y=144   → 2×: 288px   3×: 432px           */
+.pixel-hero{position:relative;width:96px;height:96px;overflow:visible;image-rendering:pixelated;image-rendering:crisp-edges;flex-shrink:0}
+.sprite-layer{position:absolute;inset:0;background-size:1152px 768px;background-repeat:no-repeat;animation:pixelWalk .6s steps(3) infinite}
+.pixel-hero.dir-right .sprite-layer{background-position-y:-192px}
+.pixel-hero.dir-left  .sprite-layer{background-position-y:-96px}
+@keyframes pixelWalk{from{background-position-x:0}to{background-position-x:-288px}}
+/* Desktop ≥900px: schaal 3× → 144×144, bg-size 1728×1152 */
 @media(min-width:900px){
-  .pixel-hero{width:112px;height:112px}
-  .sprite-layer{background-size:336px auto;animation-name:pixelWalkL}
-  .pixel-hero.dir-right .sprite-layer{background-position-y:-224px}
-  .pixel-hero.dir-left  .sprite-layer{background-position-y:-112px}
+  .pixel-hero{width:144px;height:144px}
+  .sprite-layer{background-size:1728px 1152px;animation-name:pixelWalkL}
+  .pixel-hero.dir-right .sprite-layer{background-position-y:-288px}
+  .pixel-hero.dir-left  .sprite-layer{background-position-y:-144px}
 }
-@keyframes pixelWalkL{from{background-position-x:0}to{background-position-x:-336px}}
-/* Stagger loop per speler */
-.bm-av:nth-child(2) .sprite-layer{animation-delay:.27s}
-.bm-av:nth-child(3) .sprite-layer{animation-delay:.54s}
-.bm-av:nth-child(4) .sprite-layer{animation-delay:.81s}
-.bm-av:nth-child(5) .sprite-layer{animation-delay:1.08s}
-.bm-av:nth-child(6) .sprite-layer{animation-delay:1.35s}
-.bm-av:nth-child(7) .sprite-layer{animation-delay:1.62s}
-/* Stilstand op middelste frame als animaties uit staan */
-.bm-noanim .sprite-layer{animation:none!important;background-position-x:-80px}
-.bm-noanim .sprite-layer:is(@media(min-width:900px) *){background-position-x:-112px}
-/* Actie-animaties (direction-agnostisch: richting zit in Y-rij van sprite) */
+@keyframes pixelWalkL{from{background-position-x:0}to{background-position-x:-432px}}
+/* Stagger walk cycle per speler */
+.bm-av:nth-child(2) .sprite-layer{animation-delay:.2s}
+.bm-av:nth-child(3) .sprite-layer{animation-delay:.4s}
+.bm-av:nth-child(4) .sprite-layer{animation-delay:.6s}
+.bm-av:nth-child(5) .sprite-layer{animation-delay:.8s}
+.bm-av:nth-child(6) .sprite-layer{animation-delay:1s}
+.bm-av:nth-child(7) .sprite-layer{animation-delay:1.2s}
+/* Middelste frame (rust) als animaties uit staan */
+.bm-noanim .sprite-layer{animation:none!important;background-position-x:-96px}
+@media(min-width:900px){.bm-noanim .sprite-layer{background-position-x:-144px}}
+
+/* ── Wapen-laag (288×64, 3 aanvals-frames elk 96×64) ── */
+/* Normaal: stilstaand middelste frame. Bij aanval: 3-frame animatie synchroon
+   met de karakter-aanvalsbeweging (0.85s). Team B: horizontaal gespiegeld. */
+.sprite-weapon{
+  animation:none!important;         /* geen loopanimatie */
+  background-size:576px 128px;      /* 288×64 op schaal 2× */
+  background-position-x:-192px;     /* middelste/rustframe (frame 1) */
+  background-position-y:0!important;/* wapen heeft geen richtingsrijen */
+  width:192px;height:128px;         /* één frame op schaal 2× */
+  top:auto;bottom:0;left:0;right:auto /* uitlijnen op basis van karakter */
+}
+@media(min-width:900px){
+  .sprite-weapon{background-size:864px 192px;background-position-x:-288px;width:288px;height:192px}
+}
+/* Team B: spiegel het wapen horizontaal (richting karakter is al correct via Y-rij) */
+#bmFormB .sprite-weapon{transform:scaleX(-1);left:auto;right:0}
+/* Aanvals-animatie wapen: synchroon met .85s karakter-aanval */
+.bm-av.anim-atk-r .sprite-weapon,
+.bm-av.anim-atk-l .sprite-weapon,
+.bm-av.anim-chg-r .sprite-weapon,
+.bm-av.anim-chg-l .sprite-weapon{
+  animation:weaponAttack .85s steps(3) 1 forwards!important;
+  background-position-x:0
+}
+@keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-576px}}
+@media(min-width:900px){
+  @keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-864px}}
+}
+
+/* Actie-animaties op pixel-hero wrapper (direction-agnostisch) */
 .bm-av.anim-ok    .pixel-hero{animation:bmOk .55s ease-out!important}
 .bm-av.anim-bad   .pixel-hero{animation:bmBad .48s ease-out!important}
 .bm-av.anim-hit   .pixel-hero{animation:bmPixelHit .55s ease-out!important}
@@ -415,7 +449,6 @@ body.greek .qcard .word{color:#143a5e}
 .bm-av.anim-combo  .pixel-hero{animation:bmCombo .78s ease-out!important}
 .bm-av.anim-win    .pixel-hero{animation:bmWin 1.5s ease-in-out 3!important}
 .bm-av.anim-lose   .pixel-hero{animation:bmLose 1.4s ease-in forwards!important}
-/* Aanval: Team A naar rechts, Team B naar links (richting sprite is al correct) */
 #bmFormA .bm-av.anim-atk-r .pixel-hero,
 #bmFormA .bm-av.anim-chg-r .pixel-hero{animation:bmAtkPixelR .85s ease-in-out!important}
 #bmFormB .bm-av.anim-atk-l .pixel-hero,
