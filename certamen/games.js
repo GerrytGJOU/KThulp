@@ -975,22 +975,27 @@ function tpLoadBmAccounts(){
     const classOpts=Object.entries(_tpClasses||{})
       .map(([cid,c])=>`<option value="${cid}">${esc(c.className||cid)}</option>`).join("");
 
+    // Enkelvoudig-geciteerde JS-string, HTML-veilig voor gebruik in onclick="..."
+    const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
+
     const rows=entries.map(([lid,id])=>{
       const isAssigned=assigned.has(klas+"/"+lid);
+      const nm=id.name||lid;
+      const lv=id.level||1;
       return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:0.5px solid var(--stone4)${isAssigned?"":";background:rgba(180,120,0,.07)"}">
         <div style="flex:1;min-width:120px">
-          <span style="font-weight:600">${esc(id.name||lid)}</span>
-          <span class="note" style="margin-left:8px">Niv. ${id.level||1}</span>
+          <span style="font-weight:600">${esc(nm)}</span>
+          <span class="note" style="margin-left:8px">Niv. ${lv}</span>
           ${id.admin?`<span class="pill" style="margin-left:6px;background:var(--hi);color:#000;border:none;font-size:11px">admin</span>`:""}
           ${isAssigned?`<span class="pill" style="margin-left:6px;font-size:11px">toegewezen</span>`:`<span class="pill" style="margin-left:6px;font-size:11px;background:var(--ox);border:none;color:var(--cream)">niet toegewezen</span>`}
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
           ${classOpts?`<select id="cls_${lid}" style="padding:5px 8px;border-radius:7px;border:1px solid var(--stone4);background:var(--stone2);color:var(--fg);font-size:13px">
             <option value="">Wijs toe aan…</option>${classOpts}</select>
-          <button class="chip" onclick="tpAssignStudent(${JSON.stringify(klas)},${JSON.stringify(lid)},${JSON.stringify(id.name||lid)},${JSON.stringify(id.level||1)})">Toewijzen</button>`:""}
+          <button class="chip" onclick="tpAssignStudent(${q(klas)},${q(lid)},${q(nm)},${lv})">Toewijzen</button>`:""}
           ${id.admin
-            ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpRemoveAdmin(${JSON.stringify(klas)},${JSON.stringify(lid)},${JSON.stringify(id.name||lid)})">Admin intrekken</button>`
-            :`<button class="chip" onclick="tpGrantAdmin(${JSON.stringify(klas)},${JSON.stringify(lid)},${JSON.stringify(id.name||lid)})">Zet admin</button>`}
+            ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpRemoveAdmin(${q(klas)},${q(lid)},${q(nm)})">Admin intrekken</button>`
+            :`<button class="chip" onclick="tpGrantAdmin(${q(klas)},${q(lid)},${q(nm)})">Maak admin</button>`}
         </div>
       </div>`;
     });
