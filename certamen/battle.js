@@ -138,6 +138,14 @@ const BM_AVATAR_PARTS = {
     { id:"kaal",   nm:"Kaal" },
     { id:"vlecht", nm:"Vlecht",       requires:{level:3} },
   ]},
+  haarkleur:{ nm:"Haarkleur",      opts:[
+    { id:"blond",  nm:"Blond" },
+    { id:"bruin",  nm:"Bruin" },
+    { id:"zwart",  nm:"Zwart" },
+    { id:"rood",   nm:"Rood" },
+    { id:"blauw",  nm:"Blauw",        requires:{level:4} },
+    { id:"groen",  nm:"Groen",        requires:{level:4} },
+  ]},
   baard:  { nm:"Gezichtshaar",     opts:[
     { id:"geen",  nm:"Geen" },
     { id:"baard", nm:"Baard" },
@@ -219,7 +227,7 @@ async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,battle
 function bmAvatarDefaults(){
   return{helm:"standard",haar:"kort",baard:"geen",armor:"licht",
          schild:"rond",wapen:"zwaard",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen",
-         huid:"licht",geslacht:"man"};
+         huid:"licht",geslacht:"man",haarkleur:"blond"};
 }
 function bmAvatarMerge(saved){
   // backward compat: string-avatar (pre-M6) → object
@@ -1349,14 +1357,28 @@ function _bmBaseKey(cosm){
   return (cosm.geslacht === "vrouw") ? h + "_vrouw" : h;
 }
 
+// CSS-filters per haarkleur (sprites zijn standaard blond in RPG Maker MV).
+const BM_HAARKLEUR_FILTER = {
+  "blond":  "none",
+  "bruin":  "hue-rotate(-30deg) brightness(0.6) saturate(0.8)",
+  "zwart":  "brightness(0.2) saturate(0.2)",
+  "rood":   "hue-rotate(-20deg) saturate(1.5)",
+  "blauw":  "hue-rotate(140deg) brightness(0.9)",
+  "groen":  "hue-rotate(60deg) brightness(0.9)",
+};
+
 // Bouwt de gelaagde sprite-lagen als HTML-string.
 // extraClass op de buitenste div (bv. "pixel-preview" voor statische weergave).
 function _bmPixelLayers(cosm, dirCls, extraClass="") {
   const baseSrc = PIXEL_ASSETS.bases[_bmBaseKey(cosm)];
   if (!baseSrc) return null;
-  function L(src, cls="") {
-    return src ? `<div class="sprite-layer${cls}" style="background-image:url('${src}')"></div>` : "";
+  function L(src, cls="", style="") {
+    if (!src) return "";
+    const st = `background-image:url('${src}')${style?";"+style:""}`;
+    return `<div class="sprite-layer${cls}" style="${st}"></div>`;
   }
+  const haarFilter = BM_HAARKLEUR_FILTER[cosm.haarkleur||"blond"] || "none";
+  const haarStyle = haarFilter !== "none" ? `filter:${haarFilter}` : "";
   const A = PIXEL_ASSETS;
   return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
     ${L(baseSrc)}
@@ -1364,8 +1386,8 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     ${L(A.armor[cosm.armor||"licht"])}
     ${L(A.schild[cosm.schild||"rond"])}
     ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon")}
-    ${L(A.haar[cosm.haar||"kort"])}
-    ${L(A.baard[cosm.baard||"geen"])}
+    ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
+    ${L(A.baard[cosm.baard||"geen"],"",haarStyle)}
     ${L(A.helm[cosm.helm||"standard"])}
   </div>`;
 }
