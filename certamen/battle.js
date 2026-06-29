@@ -820,6 +820,13 @@ async function bmIdentLogin(){
   try{
     let data=await bmIdentGet(klas,lcode);
     const isNew=!data;
+    if(isNew&&fbDB){
+      const valid=await fbDB.ref("klascodes/"+klas).once("value");
+      if(!valid.exists()){
+        if(err){err.textContent="Klascode '"+klas+"' is onbekend. Vraag je docent om de juiste code.";err.style.display="";}
+        return;
+      }
+    }
     if(!data)data=await bmIdentCreate(klas,lcode,name);
     // Eenmalige migratie: lokaal profiel importeren als Firebase-identiteit nieuw is
     if(isNew&&fbDB){

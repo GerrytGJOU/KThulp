@@ -867,6 +867,15 @@ SCREENS.teacherPortal = function(){
   <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
   <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">🗺️ Total War — voorbeeld <span class="pill" style="background:var(--stone4);color:var(--hi-bright);margin-left:6px">Binnenkort</span></button>
   <div class="panel" style="margin-top:16px">
+    <label class="fld">Battle Mode — klascodes</label>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <input id="tpNewKlas" placeholder="Nieuwe code (bijv. LATIJN3B)" style="flex:1;min-width:140px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit;text-transform:uppercase"
+        oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')tpCreateKlascode()">
+      <button class="btn btn-gold" style="padding:8px 14px" onclick="tpCreateKlascode()">+ Aanmaken</button>
+    </div>
+    <div id="tpKlascodeList" style="margin-top:10px"><div class="note" style="padding:4px 0">Laden…</div></div>
+  </div>
+  <div class="panel" style="margin-top:16px">
     <label class="fld">Battle Mode — accounts per klascode</label>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <input id="tpBmKlas" placeholder="Klascode (bijv. TEST)" style="flex:1;min-width:120px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit"
@@ -878,6 +887,7 @@ SCREENS.teacherPortal = function(){
   </div>
   ${foot()}`);
   tpLoadClasses();
+  tpLoadKlascodes();
 };
 
 function tpLoadClasses(){
@@ -1012,6 +1022,55 @@ function tpRemoveAdmin(klas,lid,nm){
   if(!confirm("Admin-status intrekken van '"+nm+"'?")) return;
   teacherNet().removeAdminFlag(klas,lid)
     .then(()=>{ toast("Admin ingetrokken",nm); tpLoadBmAccounts(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
+}
+
+function tpLoadKlascodes(){
+  const cont=el("tpKlascodeList"); if(!cont) return;
+  teacherNet().getKlascodes().then(({approved,used})=>{
+    if(!approved.length&&!used.length){
+      cont.innerHTML=`<div class="note">Nog geen klascodes. Maak er een aan hierboven.</div>`;
+      return;
+    }
+    const allCodes=[...new Set([...approved,...used])].sort();
+    cont.innerHTML=allCodes.map(code=>{
+      const isApproved=approved.includes(code);
+      const inUse=used.includes(code);
+      return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:0.5px solid var(--stone4)">
+        <div style="flex:1;font-weight:600">${esc(code)}
+          ${isApproved?`<span class="pill" style="font-size:11px;margin-left:6px">goedgekeurd</span>`:`<span class="pill" style="font-size:11px;margin-left:6px;background:var(--ox);border:none;color:var(--cream)">niet goedgekeurd</span>`}
+          ${inUse?`<span class="pill" style="font-size:11px;margin-left:4px;background:var(--stone4);border:none">in gebruik</span>`:""}
+        </div>
+        <div style="display:flex;gap:6px">
+          <button class="chip" onclick="el('tpBmKlas').value='${esc(code)}';tpLoadBmAccounts()">Accounts</button>
+          ${isApproved
+            ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteKlascode('${esc(code)}')">Verwijder</button>`
+            :`<button class="chip" onclick="tpApproveKlascode('${esc(code)}')">Goedkeuren</button>`}
+        </div>
+      </div>`;
+    }).join("");
+  }).catch(e=>{ cont.innerHTML=`<div class="note warn">${esc(typeof e==="string"?e:(e?.message||"Fout"))}</div>`; });
+}
+
+function tpCreateKlascode(){
+  const code=(el("tpNewKlas")?.value||"").trim().toUpperCase();
+  if(!code){ toast("Vul een code in",""); return; }
+  if(!/^[A-Z0-9]{2,12}$/.test(code)){ toast("Ongeldige code","Gebruik 2–12 letters of cijfers, geen spaties."); return; }
+  teacherNet().createKlascode(code)
+    .then(()=>{ toast("Klascode aangemaakt",code); if(el("tpNewKlas"))el("tpNewKlas").value=""; tpLoadKlascodes(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
+}
+
+function tpApproveKlascode(code){
+  teacherNet().createKlascode(code)
+    .then(()=>{ toast("Goedgekeurd",code); tpLoadKlascodes(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
+}
+
+function tpDeleteKlascode(code){
+  if(!confirm("Klascode '"+code+"' verwijderen? Leerlingen met deze code kunnen dan niet meer aanmelden.")) return;
+  teacherNet().deleteKlascode(code)
+    .then(()=>{ toast("Verwijderd",code); tpLoadKlascodes(); })
     .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
 }
 
