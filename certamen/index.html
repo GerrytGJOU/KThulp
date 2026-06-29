@@ -393,13 +393,13 @@ body.greek .qcard .word{color:#143a5e}
 /* Per-wapen uitlijning van het handvat op de hand. --wx = nudge naar de
    kijkrichting (voren), --wy = naar beneden. Facing-bewust: de scaleX bij
    dir-right keert de X om, dus beide teams schuiven naar hun eigen voorkant. */
-.sprite-weapon.wpn-zwaard{--wx:6px}
+.sprite-weapon.wpn-zwaard{--wx:10px}
 .sprite-weapon.wpn-speer{--wy:9px}
-.sprite-weapon.wpn-boog{--wx:13px}
+.sprite-weapon.wpn-boog{--wx:36px}
 @media(min-width:900px){
-  .sprite-weapon.wpn-zwaard{--wx:9px}
+  .sprite-weapon.wpn-zwaard{--wx:15px}
   .sprite-weapon.wpn-speer{--wy:14px}
-  .sprite-weapon.wpn-boog{--wx:20px}
+  .sprite-weapon.wpn-boog{--wx:54px}
 }
 .pixel-hero.dir-right .sprite-weapon{transform:scaleX(-1) translate(calc(-1 * var(--wx,0px)),var(--wy,0px))}
 .pixel-hero.dir-left  .sprite-weapon{transform:translate(calc(-1 * var(--wx,0px)),var(--wy,0px))}
@@ -646,10 +646,10 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-<script src="core.js?v=20260705"></script>
-<script src="net.js?v=20260705"></script>
-<script src="games.js?v=20260705"></script>
-<script src="battle.js?v=20260705"></script>
+<script src="core.js?v=20260706"></script>
+<script src="net.js?v=20260706"></script>
+<script src="games.js?v=20260706"></script>
+<script src="battle.js?v=20260706"></script>
 <script>
 /* ---- INIT ---- */
 (function(){
