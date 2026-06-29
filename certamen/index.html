@@ -380,63 +380,51 @@ body.greek .qcard .word{color:#143a5e}
 #bmFormB .bm-av:nth-child(6) .bm-sprite{animation-delay:1.75s}
 #bmFormB .bm-av:nth-child(7) .bm-sprite{animation-delay:2.1s}
 
-/* ── Pixel Art Paper Doll (RPG Maker MV, 48×48 per frame) ── */
-/* MV 8-char sheet: 576×384. Schaal 2×: frame 96×96, bg-size 1152×768.
-   Richting Y-rijen (per char-blok 192px hoog):
-     rij 0 omlaag  y=0     → 2×:   0px   3×:   0px
-     rij 1 links   y=48    → 2×:  96px   3×: 144px
-     rij 2 rechts  y=96    → 2×: 192px   3×: 288px
-     rij 3 omhoog  y=144   → 2×: 288px   3×: 432px           */
+/* ── Sideview Battler Paper Doll (RPG Maker MV, 64×64 per frame) ── */
+/* Body/cosmetic sheets zijn SV-battler grids: 576×384 = 9 kolommen × 6 rijen
+   van 64×64. We tonen rij 0, frames 0-2 als idle-cyclus (192px verplaatsing
+   native). SV-sprites kijken van nature naar LINKS; facing per team via
+   scaleX-spiegeling op de lagen. Schaal 1.5× (mobiel 96px) / 2.25× (≥900px). */
 .pixel-hero{position:relative;width:96px;height:96px;overflow:visible;image-rendering:pixelated;image-rendering:crisp-edges;flex-shrink:0}
-.sprite-layer{position:absolute;inset:0;background-size:1152px 768px;background-repeat:no-repeat;animation:pixelWalk .6s steps(3) infinite}
-.pixel-hero.dir-right .sprite-layer{background-position-y:-192px}
-.pixel-hero.dir-left  .sprite-layer{background-position-y:-96px}
-@keyframes pixelWalk{from{background-position-x:0}to{background-position-x:-288px}}
-/* Desktop ≥900px: schaal 3× → 144×144, bg-size 1728×1152 */
+.sprite-layer{position:absolute;inset:0;background-size:864px 576px;background-repeat:no-repeat;background-position:0 0;animation:svIdle .6s steps(3) infinite}
+@keyframes svIdle{from{background-position-x:0}to{background-position-x:-288px}}
+/* Facing: team A (dir-right) gespiegeld naar rechts; team B (dir-left) natuurlijk links */
+.pixel-hero.dir-right .sprite-layer,.pixel-hero.dir-right .sprite-weapon{transform:scaleX(-1)}
+/* Desktop ≥900px: schaal 2.25× → 144×144, bg-size 1296×864 */
 @media(min-width:900px){
   .pixel-hero{width:144px;height:144px}
-  .sprite-layer{background-size:1728px 1152px;animation-name:pixelWalkL}
-  .pixel-hero.dir-right .sprite-layer{background-position-y:-288px}
-  .pixel-hero.dir-left  .sprite-layer{background-position-y:-144px}
+  .sprite-layer{background-size:1296px 864px;animation-name:svIdleL}
 }
-@keyframes pixelWalkL{from{background-position-x:0}to{background-position-x:-432px}}
-/* Stagger walk cycle per speler */
-.bm-av:nth-child(2) .sprite-layer{animation-delay:.2s}
-.bm-av:nth-child(3) .sprite-layer{animation-delay:.4s}
-.bm-av:nth-child(4) .sprite-layer{animation-delay:.6s}
-.bm-av:nth-child(5) .sprite-layer{animation-delay:.8s}
-.bm-av:nth-child(6) .sprite-layer{animation-delay:1s}
-.bm-av:nth-child(7) .sprite-layer{animation-delay:1.2s}
-/* Middelste frame (rust) als animaties uit staan */
-.bm-noanim .sprite-layer{animation:none!important;background-position-x:-96px}
-@media(min-width:900px){.bm-noanim .sprite-layer{background-position-x:-144px}}
-/* Statische preview (editor/profiel): geen animatie, middelste frame, vooraanzicht.
-   overflow:hidden clipt elke laag strikt op de karakter-box (geen losse fragmenten). */
+@keyframes svIdleL{from{background-position-x:0}to{background-position-x:-432px}}
+/* Stagger idle-cyclus per speler */
+.bm-av:nth-child(2) .sprite-layer{animation-delay:.15s}
+.bm-av:nth-child(3) .sprite-layer{animation-delay:.3s}
+.bm-av:nth-child(4) .sprite-layer{animation-delay:.45s}
+.bm-av:nth-child(5) .sprite-layer{animation-delay:.6s}
+.bm-av:nth-child(6) .sprite-layer{animation-delay:.75s}
+.bm-av:nth-child(7) .sprite-layer{animation-delay:.9s}
+/* Eerste frame als animaties uit staan */
+.bm-noanim .sprite-layer{animation:none!important;background-position-x:0}
+/* Statische preview (editor/profiel): geen animatie, eerste frame; clip op box */
 .pixel-preview{overflow:hidden}
-.pixel-preview .sprite-layer{animation:none!important;background-position-x:-96px;background-position-y:0!important}
+.pixel-preview .sprite-layer{animation:none!important;background-position-x:0!important}
 .pixel-preview .sprite-weapon{display:none!important}
-@media(min-width:900px){.pixel-preview .sprite-layer{background-position-x:-144px}}
 
-/* ── Wapen-laag (288×64, 3 aanvals-frames elk 96×64) ── */
-/* De 3 frames vormen samen één aanvals-zwaai. In rust en in de preview is het
-   wapen ONZICHTBAAR; het verschijnt alleen tijdens een aanval en speelt dan
-   de 3-frame zwaai synchroon met de karakter-aanvalsbeweging (0.85s).
-   Geschaald op karaktergrootte (96px native frame → ~96px), bottom-gecentreerd. */
+/* ── Wapen-laag (288×64 = 3 aanvals-frames van 96×64) ── */
+/* In rust en preview verborgen; verschijnt tijdens een aanval en speelt de
+   3-frame zwaai synchroon met de karakter-aanval (0.85s). Facing erft via
+   .dir-right .sprite-weapon (scaleX) hierboven; keyframe animeert alleen X. */
 .sprite-weapon{
-  display:none;                     /* standaard verborgen */
-  animation:none!important;         /* geen loopanimatie */
-  background-size:288px 64px;       /* 3 frames × 96×64, native schaal */
-  background-position-x:0;
-  background-position-y:0!important;/* wapen heeft geen richtingsrijen */
-  width:96px;height:64px;           /* één frame */
-  inset:auto;top:auto;bottom:20px;left:50%;margin-left:-40px;
-  z-index:6;pointer-events:none
+  display:none;animation:none!important;
+  background-size:432px 96px;       /* 288×64 op schaal 1.5× */
+  background-position:0 0;
+  width:144px;height:96px;          /* één frame (96×64) op 1.5× */
+  inset:auto;top:auto;bottom:0;left:50%;margin-left:-72px;
+  z-index:8;pointer-events:none
 }
 @media(min-width:900px){
-  .sprite-weapon{background-size:432px 96px;width:144px;height:96px;bottom:32px;margin-left:-60px}
+  .sprite-weapon{background-size:648px 144px;width:216px;height:144px;margin-left:-108px}
 }
-/* Team B: spiegel het wapen horizontaal */
-#bmFormB .sprite-weapon{transform:scaleX(-1)}
 /* Aanvals-animatie wapen: zichtbaar + 3-frame zwaai synchroon met .85s aanval */
 .bm-av.anim-atk-r .sprite-weapon,
 .bm-av.anim-atk-l .sprite-weapon,
@@ -445,17 +433,9 @@ body.greek .qcard .word{color:#143a5e}
   display:block;
   animation:weaponAttack .85s steps(3) 1 forwards!important
 }
-#bmFormB .bm-av.anim-atk-r .sprite-weapon,
-#bmFormB .bm-av.anim-atk-l .sprite-weapon,
-#bmFormB .bm-av.anim-chg-r .sprite-weapon,
-#bmFormB .bm-av.anim-chg-l .sprite-weapon{
-  animation:weaponAttackB .85s steps(3) 1 forwards!important
-}
-@keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-288px}}
-@keyframes weaponAttackB{from{transform:scaleX(-1);background-position-x:0}to{transform:scaleX(-1);background-position-x:-288px}}
+@keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-432px}}
 @media(min-width:900px){
-  @keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-432px}}
-  @keyframes weaponAttackB{from{transform:scaleX(-1);background-position-x:0}to{transform:scaleX(-1);background-position-x:-432px}}
+  @keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-648px}}
 }
 
 /* Actie-animaties op pixel-hero wrapper (direction-agnostisch) */
@@ -643,10 +623,10 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-<script src="core.js"></script>
-<script src="net.js"></script>
-<script src="games.js"></script>
-<script src="battle.js"></script>
+<script src="core.js?v=20260629"></script>
+<script src="net.js?v=20260629"></script>
+<script src="games.js?v=20260629"></script>
+<script src="battle.js?v=20260629"></script>
 <script>
 /* ---- INIT ---- */
 (function(){
