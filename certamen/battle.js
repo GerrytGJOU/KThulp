@@ -210,7 +210,8 @@ async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,battle
 
 function bmAvatarDefaults(){
   return{helm:"standard",haar:"kort",baard:"geen",armor:"licht",
-         schild:"rond",wapen:"zwaard",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen"};
+         schild:"rond",wapen:"zwaard",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen",
+         huid:"licht"};
 }
 function bmAvatarMerge(saved){
   // backward compat: string-avatar (pre-M6) → object
@@ -1287,6 +1288,58 @@ function bmSpriteSVG(clsId){
   }
 }
 
+/* ============================================================================
+   PIXEL ART PAPER DOLL ENGINE (RPG Maker VX Ace $-sprite, 32×32 per frame)
+   ============================================================================ */
+
+// Zet op true zodra de sprite-bestanden in assets/sprites/ aanwezig zijn.
+// Zolang false: automatische fallback naar de ingebouwde SVG-sprites.
+const BM_PIXEL_ART = false;
+
+const PIXEL_ASSETS = {
+  bases: {
+    "licht":  "assets/sprites/base_light.png",
+    "donker": "assets/sprites/base_dark.png"
+  },
+  classes: {
+    "hopliet":     "assets/sprites/armor_hopliet.png",
+    "spartaan":    "assets/sprites/armor_spartaan.png",
+    "centurio":    "assets/sprites/armor_centurio.png",
+    "boogschutter":"assets/sprites/armor_boogschutter.png",
+    "cavalerie":   "assets/sprites/armor_cavalerie.png",
+    "priester":    "assets/sprites/armor_priester.png",
+    "genie":       "assets/sprites/armor_genie.png",
+    "verkenner":   "assets/sprites/armor_verkenner.png"
+  },
+  helmets: {
+    "standard":    "assets/sprites/helm_standard.png",
+    "ceremonieel": "assets/sprites/helm_ceremonieel.png",
+    "none":        ""
+  }
+};
+
+// Rendert een gelaagde pixel art held.
+// Richting (links/rechts) via CSS-klasse; Y-positie in spritesheet via CSS.
+// Valt terug op bmSpriteSVG() als BM_PIXEL_ART=false of asset ontbreekt.
+function renderPixelHero(pid, p, team) {
+  const src = BM_PIXEL_ART && PIXEL_ASSETS.classes[p.class];
+  if (!src) return bmSpriteSVG(p.class);
+
+  const cosm = p.avatar ? bmAvatarMerge(p.avatar) : bmAvatarDefaults();
+  const dirCls = team === "B" ? "dir-left" : "dir-right";
+  const baseSrc = PIXEL_ASSETS.bases[cosm.huid || "licht"] || "";
+  const helmSrc = (cosm.helm && cosm.helm !== "none")
+    ? (PIXEL_ASSETS.helmets[cosm.helm] || PIXEL_ASSETS.helmets["standard"] || "")
+    : "";
+
+  let html = `<div class="pixel-hero ${dirCls}">`;
+  if (baseSrc) html += `<div class="sprite-layer" style="background-image:url('${baseSrc}')"></div>`;
+  html += `<div class="sprite-layer" style="background-image:url('${src}')"></div>`;
+  if (helmSrc) html += `<div class="sprite-layer" style="background-image:url('${helmSrc}')"></div>`;
+  html += `</div>`;
+  return html;
+}
+
 // Klasse → formatiepositie (voor/midden/achter)
 const BM_FORM_POS={
   front:["hopliet","spartaan","centurio"],
@@ -1393,7 +1446,7 @@ function bmFormationHTML(team){
     const dotCls=hasAnswered?"on":hasLocked?"locked":"";
     const dead=BM_META?.heroMode&&p.isAlive===false;
     cols[pos].push(`<div class="bm-av cls-${p.class||""}${dead?" bm-hero-dead":""}" id="${bmAvId(pid)}" title="${esc(p.name)} · ${esc(bmClsNmThemed(p.class||""))}">
-      ${bmSpriteSVG(p.class)}
+      ${renderPixelHero(pid, p, team)}
       <div class="bm-dot ${dotCls}"></div>
       <div class="avn">${esc(p.name)}</div>
       <div class="avncls">${esc(bmClsNmThemed(p.class||""))}</div>
