@@ -1152,21 +1152,38 @@ function bmBgTheme(theme){
    Plaats de PNG's in assets/battlebacks/ (zie README aldaar). "geen" = val
    terug op het standaard CSS-landschapsthema. */
 const BATTLE_BACKGROUNDS = {
-  "grasland": { nm:"Grasvlakte", floor:"assets/battlebacks/Grassland1.png", wall:"assets/battlebacks/Grassland2.png" },
-  "woestijn": { nm:"Woestijn",   floor:"assets/battlebacks/Desert1.png",    wall:"assets/battlebacks/Desert2.png" },
-  "tempel":   { nm:"Tempel",     floor:"assets/battlebacks/Paved1.png",     wall:"assets/battlebacks/Temple2.png" },
-  "fort":     { nm:"Fort",       floor:"assets/battlebacks/Fort1.png",      wall:"assets/battlebacks/Fort2.png" },
+  // Tweelaags (RPG Maker MV): floor = Battleback1, wall = Battleback2.
+  "grasland":    { nm:"Grasvlakte",  floor:"assets/battlebacks/Grassland1.png",  wall:"assets/battlebacks/Grassland2.png" },
+  "woestijn":    { nm:"Woestijn",    floor:"assets/battlebacks/Desert1.png",     wall:"assets/battlebacks/Desert2.png" },
+  "tempel":      { nm:"Tempel",      floor:"assets/battlebacks/Temple1.png",     wall:"assets/battlebacks/Temple2.png" },
+  "ruines":      { nm:"Ruïnes",      floor:"assets/battlebacks/Ruins1.png",      wall:"assets/battlebacks/Ruins2.png" },
+  "fort":        { nm:"Fort",        floor:"assets/battlebacks/Fort1.png",       wall:"assets/battlebacks/Fort2.png" },
+  "stad":        { nm:"Stad",        floor:"assets/battlebacks/Town1.png",       wall:"assets/battlebacks/Town2.png" },
+  "haven":       { nm:"Haven",       floor:"assets/battlebacks/Port1.png",       wall:"assets/battlebacks/Port2.png" },
+  "wolken":      { nm:"Wolken",      floor:"assets/battlebacks/Clouds1.png",     wall:"assets/battlebacks/Clouds2.png" },
+  "hemel":       { nm:"Hemel",       floor:"assets/battlebacks/Sky1.png",        wall:"assets/battlebacks/Sky2.png" },
+  "onderwereld": { nm:"Onderwereld", floor:"assets/battlebacks/Underworld1.png", wall:"assets/battlebacks/Underworld2.png" },
+  // Enkellaags (één afbeelding, bv. een foto/JPG): gebruik 'single'.
+  "olympus":     { nm:"Olympus",     single:"assets/battlebacks/Olympus.jpg", smooth:true },
 };
 // Inline style-string voor #bmField op basis van de gekozen achtergrond.
-// Muur eerst genoemd (bovenste laag), vloer als tweede (eronder).
+// Tweelaags: muur eerst genoemd (bovenste laag), vloer als tweede (eronder).
+// Enkellaags ('single'): één afbeelding die het hele veld vult.
 function bmArenaBgStyle(){
   const key=BM_META&&BM_META.background;
   const bg=key&&BATTLE_BACKGROUNDS[key];
   if(!bg||key==="geen")return"";
   const v=SPRITE_VER?("?"+SPRITE_VER):"";
+  // 'smooth' (bv. fotomateriaal/JPG) niet pixelaten; pixel-art battlebacks wel.
+  const render=bg.smooth?"auto":"pixelated";
+  if(bg.single){
+    return `background-image:url('${bg.single}${v}');`
+         + `background-repeat:no-repeat;background-position:center bottom;`
+         + `background-size:cover;image-rendering:${render};`;
+  }
   return `background-image:url('${bg.wall}${v}'),url('${bg.floor}${v}');`
        + `background-repeat:no-repeat,no-repeat;background-position:center bottom,center bottom;`
-       + `background-size:cover,cover;image-rendering:pixelated;`;
+       + `background-size:cover,cover;image-rendering:${render};`;
 }
 // Herbevestig de achtergrond op een bestaand #bmField (na herbouw).
 function bmApplyArenaBg(field){
