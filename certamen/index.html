@@ -403,6 +403,12 @@ body.greek .qcard .word{color:#143a5e}
 }
 .pixel-hero.dir-right .sprite-weapon{transform:scaleX(-1) translate(calc(-1 * var(--wx,0px)),var(--wy,0px))}
 .pixel-hero.dir-left  .sprite-weapon{transform:translate(calc(-1 * var(--wx,0px)),var(--wy,0px))}
+/* Helm-uitlijning: staat net te ver naar voren; facing-bewuste nudge terug.
+   --hx positief = naar de kijkrichting; negatief = naar achteren. */
+.sprite-helm{--hx:-2px}
+@media(min-width:900px){.sprite-helm{--hx:-3px}}
+.pixel-hero.dir-right .sprite-helm{transform:scaleX(-1) translateX(calc(-1 * var(--hx,0px)))}
+.pixel-hero.dir-left  .sprite-helm{transform:translateX(calc(-1 * var(--hx,0px)))}
 /* Desktop ≥900px: schaal 2.25× → 144×144, bg-size 1296×864 */
 @media(min-width:900px){
   .pixel-hero{width:144px;height:144px}
@@ -646,10 +652,10 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-<script src="core.js?v=20260707"></script>
-<script src="net.js?v=20260707"></script>
-<script src="games.js?v=20260707"></script>
-<script src="battle.js?v=20260707"></script>
+<script src="core.js?v=20260708"></script>
+<script src="net.js?v=20260708"></script>
+<script src="games.js?v=20260708"></script>
+<script src="battle.js?v=20260708"></script>
 <script>
 /* ---- INIT ---- */
 (function(){

@@ -1491,7 +1491,7 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     ${L(A.armor[cosm.armor||"licht"])}
     ${baardLayers}
     ${L(A.schild[cosm.schild||"rond"])}
-    ${L(A.helm[cosm.helm||"standard"])}
+    ${L(A.helm[cosm.helm||"standard"]," sprite-helm")}
   </div>`;
 }
 
