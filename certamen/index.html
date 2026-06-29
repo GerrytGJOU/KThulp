@@ -409,6 +409,11 @@ body.greek .qcard .word{color:#143a5e}
 .pixel-preview{overflow:hidden}
 .pixel-preview .sprite-layer{animation:none!important;background-position-x:0!important}
 .pixel-preview .sprite-weapon{display:none!important}
+/* pp-weapon: toon het wapen statisch (eerste frame) in de avatar-editor */
+.pixel-preview.pp-weapon{overflow:visible}
+.pixel-preview.pp-weapon .sprite-weapon{display:block!important;animation:none!important;background-position-x:0!important}
+/* Sticky preview-paneel: avatar blijft in beeld terwijl je door de opties scrollt */
+.bm-av-sticky{position:sticky;top:6px;z-index:30;background:var(--stone2,#241a12)}
 
 /* ── Wapen-laag (288×64 = 3 aanvals-frames van 96×64) ── */
 /* In rust en preview verborgen; verschijnt tijdens een aanval en speelt de
@@ -623,10 +628,10 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-<script src="core.js?v=20260629"></script>
-<script src="net.js?v=20260629"></script>
-<script src="games.js?v=20260629"></script>
-<script src="battle.js?v=20260629"></script>
+<script src="core.js?v=20260630"></script>
+<script src="net.js?v=20260630"></script>
+<script src="games.js?v=20260630"></script>
+<script src="battle.js?v=20260630"></script>
 <script>
 /* ---- INIT ---- */
 (function(){
