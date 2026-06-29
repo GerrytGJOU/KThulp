@@ -14,21 +14,32 @@ De docent kiest een set bij Battle — Instellingen > Slagveld-achtergrond.
 
 Verwachte sets en bestandsnamen
 -------------------------------
-(Plaats de PNG's hier; namen moeten exact kloppen.)
+(Plaats de bestanden hier; namen moeten exact kloppen.)
 
-  grasland : Grassland1.png  (vloer) + Grassland2.png (muur)
-  woestijn : Desert1.png     (vloer) + Desert2.png    (muur)
-  tempel   : Paved1.png      (vloer) + Temple2.png    (muur)   <- Grieks/Romeinse tempel
-  fort     : Fort1.png       (vloer) + Fort2.png      (muur)
+Tweelaags (vloer = Battleback1, muur = Battleback2):
+  grasland    : Grassland1.png  + Grassland2.png
+  woestijn    : Desert1.png     + Desert2.png
+  tempel      : Temple1.png     + Temple2.png      <- Grieks/Romeinse tempel
+  ruines      : Ruins1.png      + Ruins2.png
+  fort        : Fort1.png       + Fort2.png
+  stad        : Town1.png       + Town2.png
+  haven       : Port1.png       + Port2.png
+  wolken      : Clouds1.png     + Clouds2.png
+  hemel       : Sky1.png        + Sky2.png
+  onderwereld : Underworld1.png + Underworld2.png
+
+Enkellaags (één afbeelding, bv. een foto/JPG):
+  olympus     : Olympus.jpg     (smooth = niet gepixeld geschaald)
 
 "Standaard (thema-landschap)" gebruikt geen afbeeldingen maar het
 ingebouwde CSS-landschap dat bij de gekozen factie/thema hoort.
 
 Een set toevoegen of hernoemen
 ------------------------------
-Pas de BATTLE_BACKGROUNDS-registry boven in certamen/battle.js aan
-(sleutel, weergavenaam, floor- en wall-pad). De dropdown bij de
-docent-instellingen loopt automatisch mee.
+Pas de BATTLE_BACKGROUNDS-registry boven in certamen/battle.js aan.
+Tweelaags: { nm, floor, wall }. Enkellaags: { nm, single, smooth:true }
+(smooth voorkomt blokkerig schalen bij foto's i.p.v. pixel-art).
+De dropdown bij de docent-instellingen loopt automatisch mee.
 
 Aanbevolen formaat
 ------------------
