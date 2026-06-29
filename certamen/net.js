@@ -18,6 +18,7 @@ const FBNet = {
   mode:"firebase",
   roomRef(code){ return fbDB.ref("rooms/"+code); },
   createRoom(code, data){ return this.roomRef(code).set(data); },
+  deleteRoom(code){ return this.roomRef(code).remove(); },
   exists(code){ return this.roomRef(code+"/meta").once("value").then(s=>s.exists()); },
   getMeta(code){ return this.roomRef(code+"/meta").once("value").then(s=>s.val()); },
   getPool(code){ return this.roomRef(code+"/pool").once("value").then(s=>s.val()||[]); },
@@ -105,6 +106,19 @@ FBNet.moveStudent = function(fromClassId, toClassId, studentId, studentData){
     return this.teacherRef().update(updates);
   }catch(e){ return Promise.reject(e.message); }
 };
+FBNet.removeAdminFlag = function(klascode, lid){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("identities/"+klascode+"/"+lid+"/admin").remove();
+};
+FBNet.getIdentities = function(klascode){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("identities/"+klascode.toUpperCase()).once("value").then(snap=>{
+    if(!snap.exists()) return Promise.reject("Klas '"+klascode+"' niet gevonden in Battle Mode.");
+    const out={};
+    snap.forEach(child=>{ out[child.key]=child.val(); });
+    return out;
+  });
+};
 FBNet.setAdminFlag = function(klascode, name){
   if(!fbDB) initFirebase();
   return fbDB.ref("identities/"+klascode).once("value").then(snap=>{
@@ -154,4 +168,7 @@ DemoNet.moveStudent = function(fromClassId, toClassId, studentId, studentData){
   return Promise.resolve();
 };
 DemoNet.setAdminFlag = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.removeAdminFlag = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.deleteRoom = function(){ return Promise.resolve(); };
+DemoNet.getIdentities = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 
