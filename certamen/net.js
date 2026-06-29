@@ -123,6 +123,28 @@ FBNet.getIdentities = function(klascode){
     return out;
   });
 };
+FBNet.getKlascodes = function(){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("klascodes").once("value").then(snap=>{
+    const approved=snap.exists()?Object.keys(snap.val()):[];
+    return fbDB.ref("identities").once("value").then(iSnap=>{
+      const used=iSnap.exists()?Object.keys(iSnap.val()):[];
+      return {approved, used};
+    });
+  });
+};
+FBNet.createKlascode = function(code){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("klascodes/"+code.toUpperCase()).set({created:Date.now()});
+};
+FBNet.deleteKlascode = function(code){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("klascodes/"+code.toUpperCase()).remove();
+};
+FBNet.validateKlascode = function(code){
+  if(!fbDB) return Promise.resolve(true); // offline: altijd toestaan
+  return fbDB.ref("klascodes/"+code.toUpperCase()).once("value").then(s=>s.exists());
+};
 FBNet.setAdminFlag = function(klascode, name){
   if(!fbDB) initFirebase();
   return fbDB.ref("identities/"+klascode).once("value").then(snap=>{
@@ -176,4 +198,8 @@ DemoNet.removeAdminFlag = function(){ return Promise.reject("Niet beschikbaar in
 DemoNet.assignStudent   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.deleteRoom      = function(){ return Promise.resolve(); };
 DemoNet.getIdentities   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.getKlascodes    = function(){ return Promise.resolve({approved:[],used:[]}); };
+DemoNet.createKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.deleteKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.validateKlascode= function(){ return Promise.resolve(true); };
 
