@@ -867,13 +867,13 @@ SCREENS.teacherPortal = function(){
   <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
   <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">🗺️ Total War — voorbeeld <span class="pill" style="background:var(--stone4);color:var(--hi-bright);margin-left:6px">Binnenkort</span></button>
   <div class="panel" style="margin-top:16px">
-    <label class="fld">Battle Mode — admin-account</label>
+    <label class="fld">Battle Mode — accounts per klascode</label>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <input id="tpAdminKlas" placeholder="Klascode" style="flex:1;min-width:90px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
-      <input id="tpAdminName" placeholder="Naam speler" style="flex:2;min-width:120px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
-      <button class="btn btn-gold" style="padding:8px 14px" onclick="tpSetAdmin()">Zet admin</button>
+      <input id="tpBmKlas" placeholder="Klascode (bijv. TEST)" style="flex:1;min-width:120px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit"
+        onkeydown="if(event.key==='Enter')tpLoadBmAccounts()">
+      <button class="btn btn-gold" style="padding:8px 14px" onclick="tpLoadBmAccounts()">Zoek</button>
     </div>
-    <div class="note" style="margin-top:6px">Geeft dit account alle avatar-unlocks, ongeacht niveau.</div>
+    <div id="tpBmAccounts" style="margin-top:10px"></div>
   </div>
   ${foot()}`);
   tpLoadClasses();
@@ -936,12 +936,50 @@ function teacherLogout(){
   teacherNet().logoutTeacher().then(()=>go("teacherLogin"));
 }
 
+function tpLoadBmAccounts(){
+  const klas=(el("tpBmKlas")?.value||"").trim().toUpperCase();
+  const cont=el("tpBmAccounts"); if(!cont) return;
+  if(!klas){ toast("Vul een klascode in",""); return; }
+  cont.innerHTML=`<div class="note" style="padding:8px 0">Laden…</div>`;
+  teacherNet().getIdentities(klas)
+    .then(idents=>{
+      const entries=Object.entries(idents);
+      if(!entries.length){ cont.innerHTML=`<div class="note">Geen accounts gevonden in klas ${esc(klas)}.</div>`; return; }
+      cont.innerHTML=entries.map(([lid,id])=>`
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:0.5px solid var(--stone4)">
+          <div style="flex:1;min-width:120px">
+            <span style="font-weight:600">${esc(id.name||lid)}</span>
+            <span class="note" style="margin-left:8px">Niv. ${id.level||1}</span>
+            ${id.admin?`<span class="pill" style="margin-left:6px;background:var(--hi);color:#000;border:none;font-size:11px">admin</span>`:""}
+          </div>
+          ${id.admin
+            ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpRemoveAdmin(${JSON.stringify(klas)},${JSON.stringify(lid)},${JSON.stringify(id.name||lid)})">Admin intrekken</button>`
+            :`<button class="chip" onclick="tpGrantAdmin(${JSON.stringify(klas)},${JSON.stringify(lid)},${JSON.stringify(id.name||lid)})">Zet admin</button>`
+          }
+        </div>`).join("");
+    })
+    .catch(e=>{ cont.innerHTML=`<div class="note warn">${esc(typeof e==="string"?e:(e?.message||"Fout"))}</div>`; });
+}
+
+function tpGrantAdmin(klas,lid,nm){
+  teacherNet().setAdminFlag(klas,nm)
+    .then(()=>{ toast("Admin ingesteld",nm); tpLoadBmAccounts(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
+}
+
+function tpRemoveAdmin(klas,lid,nm){
+  if(!confirm("Admin-status intrekken van '"+nm+"'?")) return;
+  teacherNet().removeAdminFlag(klas,lid)
+    .then(()=>{ toast("Admin ingetrokken",nm); tpLoadBmAccounts(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
+}
+
 function tpSetAdmin(){
-  const klas=(el("tpAdminKlas")?.value||"").trim().toUpperCase();
-  const name=(el("tpAdminName")?.value||"").trim();
-  if(!klas||!name){ toast("Vul klascode en naam in",""); return; }
-  teacherNet().setAdminFlag(klas,name)
-    .then(()=>toast("Admin ingesteld","Alle avatar-unlocks zijn nu actief voor '"+name+"'."))
+  const klas=(el("tpBmKlas")?.value||"").trim().toUpperCase();
+  const nm=(prompt("Naam van de speler om admin te maken:")||"").trim();
+  if(!klas||!nm){ return; }
+  teacherNet().setAdminFlag(klas,nm)
+    .then(()=>{ toast("Admin ingesteld",nm); tpLoadBmAccounts(); })
     .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"Onbekende fout")));
 }
 

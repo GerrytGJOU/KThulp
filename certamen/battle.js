@@ -1977,6 +1977,7 @@ async function bmResolve(roundN){
 
     if(newHA<=0||newHB<=0){
       await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:newHA<=0?"B":"A"});
+      setTimeout(()=>Net.deleteRoom(BM_CODE).catch(()=>{}), 5000);
       return;
     }
     await bmDistributeQs(roundN+1);
@@ -1999,7 +2000,8 @@ function bmUpdateMastery(players,pUpd,events){
   }
 }
 function bmEndGame(){
-  if(fbDB)fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:"_stopped"});
+  if(fbDB)fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:"_stopped"})
+    .then(()=>Net.deleteRoom(BM_CODE)).catch(()=>{});
   cleanup();bmLeave();go("home");
 }
 
