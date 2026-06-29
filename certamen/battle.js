@@ -159,9 +159,9 @@ const BM_AVATAR_PARTS = {
   ]},
   schild: { nm:"Schild",           opts:[
     { id:"rond",     nm:"Rond" },
-    { id:"ovaal",    nm:"Ovaal" },
-    { id:"vierkant", nm:"Vierkant" },
-    { id:"tower",    nm:"Toren",         requires:{level:7} },
+    { id:"ovaal",    nm:"Puntig" },
+    { id:"vierkant", nm:"Metaal Rond" },
+    { id:"tower",    nm:"Metaal Puntig", requires:{level:7} },
   ]},
   wapen:  { nm:"Wapen",            opts:[
     { id:"zwaard", nm:"Zwaard" },
@@ -174,10 +174,13 @@ const BM_AVATAR_PARTS = {
     { id:"kort", nm:"Kort" },
     { id:"lang", nm:"Lang",            requires:{level:6} },
   ]},
-  kleur:  { nm:"Banierkleur",      opts:[
-    {id:"#b03a2e"},{id:"#2e6fb0"},{id:"#3a7a30"},{id:"#9b6914"},
-    {id:"#6b2d8b"},{id:"#3f9d52"},{id:"#c87533"},{id:"#2d8b7a"},
-    {id:"#d4af37"},{id:"#8b1a1a"},{id:"#1a3a6b"},{id:"#4a2d6a"},
+  capekleur:{ nm:"Capekleur",      opts:[
+    { id:"goud",   nm:"Goud" },
+    { id:"rood",   nm:"Rood" },
+    { id:"blauw",  nm:"Blauw" },
+    { id:"groen",  nm:"Groen" },
+    { id:"paars",  nm:"Paars" },
+    { id:"oranje", nm:"Oranje" },
   ]},
   victoryAnim: { nm:"Overwinningsanimatie", opts:[
     { id:"juichen",      nm:"Juichen" },
@@ -229,7 +232,7 @@ async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,battle
 function bmAvatarDefaults(){
   return{helm:"standard",haar:"kort",baard:"geen",armor:"licht",
          schild:"rond",wapen:"zwaard",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen",
-         huid:"licht",geslacht:"man",haarkleur:"blond"};
+         huid:"licht",geslacht:"man",haarkleur:"blond",capekleur:"goud"};
 }
 function bmAvatarMerge(saved){
   // backward compat: string-avatar (pre-M6) → object
@@ -1363,6 +1366,10 @@ function _bmBaseKey(cosm){
   return (cosm.geslacht === "vrouw") ? h + "_vrouw" : h;
 }
 
+// Versie-achtervoegsel voor sprite-bestanden → forceert verse download na een
+// asset-wijziging (bump dit getal als je een PNG vervangt).
+const SPRITE_VER = "v=2";
+
 // CSS-filters per haarkleur (sprites zijn standaard blond in RPG Maker MV).
 const BM_HAARKLEUR_FILTER = {
   "blond":  "none",
@@ -1373,28 +1380,48 @@ const BM_HAARKLEUR_FILTER = {
   "groen":  "hue-rotate(60deg) brightness(0.9)",
 };
 
+// CSS-filters per capekleur (cape_kort.png is goud/geel als basis).
+const BM_CAPEKLEUR_FILTER = {
+  "goud":   "none",
+  "rood":   "hue-rotate(-55deg) brightness(0.75) saturate(1.4)",
+  "blauw":  "hue-rotate(165deg) brightness(0.75) saturate(1.3)",
+  "groen":  "hue-rotate(65deg) brightness(0.65) saturate(1.1)",
+  "paars":  "hue-rotate(215deg) brightness(0.65) saturate(1.3)",
+  "oranje": "hue-rotate(-25deg) brightness(0.85) saturate(1.5)",
+};
+// Weergavekleur (swatch) per capekleur, afgestemd op de team-banierkleuren.
+const BM_CAPEKLEUR_SWATCH = {
+  "goud":"#d4af37","rood":"#b03a2e","blauw":"#2e6fb0",
+  "groen":"#3a7a30","paars":"#6b2d8b","oranje":"#c87533",
+};
+
 // Bouwt de gelaagde sprite-lagen als HTML-string.
+// Laagvolgorde: base → cape → armor → wapen → haar → baard → helm → schild.
+// (Schild is de bovenste laag zodat het vóór lang haar valt.)
 // extraClass op de buitenste div (bv. "pixel-preview" voor statische weergave).
 function _bmPixelLayers(cosm, dirCls, extraClass="") {
   const baseSrc = PIXEL_ASSETS.bases[_bmBaseKey(cosm)];
   if (!baseSrc) return null;
   function L(src, cls="", style="") {
     if (!src) return "";
-    const st = `background-image:url('${src}')${style?";"+style:""}`;
+    const url = src + (src.indexOf("?")<0 ? "?"+SPRITE_VER : "");
+    const st = `background-image:url('${url}')${style?";"+style:""}`;
     return `<div class="sprite-layer${cls}" style="${st}"></div>`;
   }
   const haarFilter = BM_HAARKLEUR_FILTER[cosm.haarkleur||"blond"] || "none";
   const haarStyle = haarFilter !== "none" ? `filter:${haarFilter}` : "";
+  const capeFilter = BM_CAPEKLEUR_FILTER[cosm.capekleur||"goud"] || "none";
+  const capeStyle = capeFilter !== "none" ? `filter:${capeFilter}` : "";
   const A = PIXEL_ASSETS;
   return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
     ${L(baseSrc)}
-    ${L(A.cape[cosm.cape||"geen"])}
+    ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
     ${L(A.armor[cosm.armor||"licht"])}
-    ${L(A.schild[cosm.schild||"rond"])}
     ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon")}
     ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
     ${L(A.baard[cosm.baard||"geen"],"",haarStyle)}
     ${L(A.helm[cosm.helm||"standard"])}
+    ${L(A.schild[cosm.schild||"rond"])}
   </div>`;
 }
 
@@ -1406,11 +1433,13 @@ function renderPixelHero(pid, p, team) {
 }
 
 // Statische vooraanzicht-sprite voor profiel en avatar-editor.
-// Toont middelste frame, kijkrichting naar rechts (geen loopanimatie).
-function renderPixelHeroPreview(av) {
+// Toont het eerste frame, geen animatie. showWeapon=true toont ook het wapen
+// (in de avatar-editor, zodat je je held mét wapen ziet).
+function renderPixelHeroPreview(av, showWeapon) {
   if (!BM_PIXEL_ART) return "";
   const cosm = bmAvatarMerge(av);
-  return _bmPixelLayers(cosm, "dir-right", "pixel-preview") || "";
+  const cls = "pixel-preview" + (showWeapon ? " pp-weapon" : "");
+  return _bmPixelLayers(cosm, "dir-right", cls) || "";
 }
 
 // Klasse → formatiepositie (voor/midden/achter)
@@ -2537,12 +2566,15 @@ SCREENS.battleAvatarEdit = function(){
 
   function partSection(partId){
     const part=BM_AVATAR_PARTS[partId]; if(!part)return"";
-    if(partId==="kleur"){
-      const sw=part.opts.map(o=>`<button
-        onclick="BM_AV_EDIT.kleur='${o.id}';SCREENS.battleAvatarEdit()"
-        style="width:32px;height:32px;border-radius:50%;background:${o.id};
-        border:3px solid ${av.kleur===o.id?"var(--hi-bright)":"transparent"};
-        cursor:pointer;flex:0 0 auto"></button>`).join("");
+    if(partId==="capekleur"){
+      const sw=part.opts.map(o=>{
+        const col=BM_CAPEKLEUR_SWATCH[o.id]||"#d4af37";
+        return `<button title="${esc(o.nm)}"
+          onclick="BM_AV_EDIT.capekleur='${o.id}';SCREENS.battleAvatarEdit()"
+          style="width:34px;height:34px;border-radius:50%;background:${col};
+          border:3px solid ${av.capekleur===o.id?"var(--hi-bright)":"transparent"};
+          cursor:pointer;flex:0 0 auto"></button>`;
+      }).join("");
       return`<div class="eyebrow l">${esc(part.nm)}</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${sw}</div>`;
     }
@@ -2567,8 +2599,8 @@ SCREENS.battleAvatarEdit = function(){
     <button class="back" onclick="BM_AV_EDIT=null;go(BM_AV_RETURN||'battleProfile')">${iconSVG("shield",20,"currentColor")}</button>
     <h2>Avatar aanpassen</h2>
   </div>
-  <div class="panel" style="text-align:center;padding:20px 16px;display:flex;justify-content:center;align-items:flex-end;min-height:130px">
-    ${renderPixelHeroPreview(av) || bmAvatarSVG(av,96)}
+  <div class="panel bm-av-sticky" style="text-align:center;padding:14px 16px;display:flex;justify-content:center;align-items:flex-end;min-height:120px">
+    ${renderPixelHeroPreview(av,true) || bmAvatarSVG(av,96)}
   </div>
   ${Object.keys(BM_AVATAR_PARTS).map(partSection).join("")}
   <button class="btn btn-gold btn-block lg" onclick="bmSaveAvatar()" style="margin-bottom:16px">Opslaan</button>
