@@ -124,20 +124,20 @@ const BM_COMMANDERS = {
     B: { nm:"Vercingetorix",   img:"assets/commanders/gauls/vercingetorix.png" },
   },
   athene_sparta: {
-    A: { nm:"Pericles",        img:"assets/commanders/athenians/pericles.svg"  },
-    B: { nm:"Leonidas",        img:"assets/commanders/spartans/leonidas.svg"   },
+    A: { nm:"Pericles",        img:"assets/commanders/athenians/pericles.png"  },
+    B: { nm:"Leonidas",        img:"assets/commanders/spartans/leonidas.png"   },
   },
   grieken_perzen: {
-    A: { nm:"Themistokles",    img:"assets/commanders/athenians/pericles.svg"  },
-    B: { nm:"Xerxes",          img:"assets/commanders/persians/xerxes.svg"     },
+    A: { nm:"Themistokles",    img:"assets/commanders/athenians/pericles.png"  },
+    B: { nm:"Xerxes",          img:"assets/commanders/persians/xerxes.png"     },
   },
   rome_carthago: {
     A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.svg"       },
-    B: { nm:"Hannibal",        img:"assets/commanders/carthage/hannibal.svg"   },
+    B: { nm:"Hannibal",        img:"assets/commanders/carthage/hannibal.png"   },
   },
   grieken_trojanen: {
-    A: { nm:"Agamemnon",       img:"assets/commanders/greeks/agamemnon.svg"    },
-    B: { nm:"Hector",          img:"assets/commanders/trojans/hector.svg"      },
+    A: { nm:"Agamemnon",       img:"assets/commanders/greeks/agamemnon.png"    },
+    B: { nm:"Hector",          img:"assets/commanders/trojans/hector.png"      },
   },
   goden_titanen: {
     A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.svg"           },
