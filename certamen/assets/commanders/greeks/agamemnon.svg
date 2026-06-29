@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 600" fill="#1a0a04">
+  <!-- Agamemnon — gouden masker/helm, koninklijke mantel, scepter en speer -->
+  <!-- Grote helm met brede kam (koninklijk) -->
+  <path d="M140 14 Q150 6 160 14 L180 52 L162 58 L150 24 L138 58 L120 52Z"/>
+  <!-- Helm (breder, koninklijker dan standaard) -->
+  <path d="M100 84 Q102 50 150 48 Q198 50 200 84 L202 116 Q194 138 188 144 L168 150 Q160 158 150 160 Q140 158 132 150 L112 144 Q106 138 98 116Z"/>
+  <!-- Masker/vizier (Agamemnon's gouden masker) -->
+  <rect x="120" y="84" width="60" height="60" rx="8" fill="#0f0600"/>
+  <ellipse cx="138" cy="102" rx="8" ry="7" fill="#1a0a04"/>
+  <ellipse cx="162" cy="102" rx="8" ry="7" fill="#1a0a04"/>
+  <path d="M132 128 Q150 136 168 128" fill="none" stroke="#1a0a04" stroke-width="3"/>
+  <!-- Nek -->
+  <rect x="138" y="158" width="24" height="16" rx="4"/>
+  <!-- Koninklijke mantel (lang, imposant) -->
+  <path d="M200 168 Q255 210 262 360 L238 354 Q230 258 208 220Z"/>
+  <path d="M100 168 Q72 196 68 280 L88 276 Q94 214 104 186Z"/>
+  <!-- Wapenrusting (bronzen harnas, koninklijk) -->
+  <path d="M96 158 L88 295 L212 295 L204 158 Q178 142 150 141 Q122 142 96 158Z"/>
+  <!-- Borstplaat detail -->
+  <ellipse cx="150" cy="210" rx="28" ry="22"/>
+  <!-- Schouderstukken (groot) -->
+  <ellipse cx="96" cy="166" rx="28" ry="14" transform="rotate(-18 96 166)"/>
+  <ellipse cx="204" cy="166" rx="28" ry="14" transform="rotate(18 204 166)"/>
+  <!-- Pteryges -->
+  <rect x="90"  y="290" width="14" height="40" rx="3"/>
+  <rect x="108" y="290" width="14" height="44" rx="3"/>
+  <rect x="126" y="290" width="14" height="46" rx="3"/>
+  <rect x="144" y="290" width="14" height="46" rx="3"/>
+  <rect x="162" y="290" width="14" height="44" rx="3"/>
+  <rect x="180" y="290" width="14" height="40" rx="3"/>
+  <rect x="198" y="290" width="14" height="36" rx="3"/>
+  <!-- Linkerarm + aspis -->
+  <path d="M96 164 L60 178 L54 202 L86 192Z"/>
+  <circle cx="42" cy="218" r="34"/>
+  <circle cx="42" cy="218" r="26" fill="#0f0602"/>
+  <!-- Scepter (koninklijk, verticaal) -->
+  <rect x="222" y="80" width="9" height="340" rx="4"/>
+  <ellipse cx="226" cy="76" rx="18" ry="16"/>
+  <!-- Benen -->
+  <path d="M114 295 L106 446 L143 446 L150 318 L157 446 L194 446 L186 295Z"/>
+  <!-- Sandalen -->
+  <path d="M98 444 Q108 462 132 462 Q144 458 146 444Z"/>
+  <path d="M154 444 Q156 458 168 462 Q192 462 202 444Z"/>
+</svg>

@@ -114,6 +114,78 @@ const BM_FACTIONS = [
     classLabels:{ priester:"Orakel", centurio:"Halfgod" } },
 ];
 
+/* ---- CONFIGURATIETABEL: COMMANDER SPECTRES ---- */
+// Puur visueel — verschijnt als semi-transparante geest bij combo's / ultimates / team-buffs.
+// Nieuwe factie toevoegen: 1) voeg afbeelding toe in assets/commanders/, 2) voeg één entry toe.
+// Vervang .svg door .png zodra echte artwork beschikbaar is (één regelwijziging per commandant).
+const BM_COMMANDERS = {
+  rome_gaul: {
+    A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.png"       },
+    B: { nm:"Vercingetorix",   img:"assets/commanders/gauls/vercingetorix.png" },
+  },
+  athene_sparta: {
+    A: { nm:"Pericles",        img:"assets/commanders/athenians/pericles.svg"  },
+    B: { nm:"Leonidas",        img:"assets/commanders/spartans/leonidas.svg"   },
+  },
+  grieken_perzen: {
+    A: { nm:"Themistokles",    img:"assets/commanders/athenians/pericles.svg"  },
+    B: { nm:"Xerxes",          img:"assets/commanders/persians/xerxes.svg"     },
+  },
+  rome_carthago: {
+    A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.svg"       },
+    B: { nm:"Hannibal",        img:"assets/commanders/carthage/hannibal.svg"   },
+  },
+  grieken_trojanen: {
+    A: { nm:"Agamemnon",       img:"assets/commanders/greeks/agamemnon.svg"    },
+    B: { nm:"Hector",          img:"assets/commanders/trojans/hector.svg"      },
+  },
+  goden_titanen: {
+    A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.svg"           },
+    B: { nm:"Kronos",          img:"assets/commanders/titans/kronos.svg"       },
+  },
+};
+
+/* ---- COMMANDER SPECTRE MODULE ---- */
+// Herbruikbaar visueel component. Gebruik CommanderSpectre.show(team) vanuit elke game mode.
+const CommanderSpectre = (() => {
+  // Automatisch afgeleid uit BM_CLASSES — loopt mee met toekomstige ability-wijzigingen.
+  const ULTIMATE_IDS = new Set(
+    BM_CLASSES.flatMap(c => c.abilities.filter(a => a.tier === "ultimate").map(a => a.id))
+  );
+
+  function _ensureEls() {
+    const field = document.getElementById("bmField");
+    if (!field) return false;
+    for (const t of ["A", "B"]) {
+      if (!document.getElementById("bm-spectre-" + t)) {
+        const d = document.createElement("div");
+        d.id = "bm-spectre-" + t;
+        d.className = "bm-spectre bm-spectre-" + t;
+        field.insertBefore(d, field.firstChild);
+      }
+    }
+    return true;
+  }
+
+  function show(team) {
+    if (BM_META?.animations === false) return;
+    const cfg = BM_COMMANDERS[BM_META?.theme]?.[team];
+    if (!cfg) return;
+    if (!_ensureEls()) return;
+    const el = document.getElementById("bm-spectre-" + team);
+    if (!el) return;
+    el.style.backgroundImage = `url("${cfg.img}")`;
+    el.title = cfg.nm;
+    el.classList.remove("bm-spectre-active");
+    void el.offsetWidth; // herstart animatie
+    el.classList.add("bm-spectre-active");
+  }
+
+  function isUltimate(abilityId) { return ULTIMATE_IDS.has(abilityId); }
+
+  return { show, isUltimate };
+})();
+
 /* ---- CONFIGURATIETABELLEN: M6 AVATAR / NIVEAU / MASTERY / ACHIEVEMENTS ---- */
 
 // Alle avatar-onderdelen. requires:{level:N} of {mastery:N} = vereist niveau/mastery om te ontgrendelen.
@@ -1041,6 +1113,7 @@ SCREENS.battleHostGame = function(){
       <button onclick="bmSkipRound()">⏭ Sla over</button>
       <button onclick="bmReplaceQ()">🔄 Vervang</button>
       <button onclick="bmRestartRound()">↩ Herstart</button>
+      <button onclick="bmShowCommanders()" title="Toon commandanten van beide teams">👁 Commanders</button>
       <button class="bm-btn-end" style="margin-left:auto" onclick="bmEndGame()">✕ Beëindig</button>
     </div>
     <div class="bm-hp-row">
@@ -1735,6 +1808,7 @@ function bmPlayAnimations(entry){
         if(combo.heal)bmGlowFx(ev.team,"rgba(100,210,100,.6)");
         const enemy=ev.team==="A"?"B":"A";
         if(combo.dmg)setTimeout(()=>bmAnimTeam(enemy,"anim-hit",500),320);
+        setTimeout(()=>CommanderSpectre.show(ev.team),200);
         return;
       }
       const{pid,team,cls,anim,dmg=0,heal=0}=ev;
@@ -1759,6 +1833,10 @@ function bmPlayAnimations(entry){
       } else if(anim==="teambe"){
         bmGlowFx(team,"rgba(212,175,55,.6)");
       }
+      // Commander Spectre bij ultimates en team-buffs
+      if(CommanderSpectre.isUltimate(ev.abilityId)||anim==="teambe"){
+        setTimeout(()=>CommanderSpectre.show(team),200);
+      }
     },delay);
   }
 
@@ -1767,6 +1845,11 @@ function bmPlayAnimations(entry){
     const loser=winner==="A"?"B":"A";
     setTimeout(()=>{bmAnimTeam(winner,"anim-win",1400);bmAnimTeam(loser,"anim-lose",1300);bmConfetti();},900);
   }
+}
+
+function bmShowCommanders(){
+  CommanderSpectre.show("A");
+  CommanderSpectre.show("B");
 }
 
 // Abonneer op log; trigger animaties bij nieuwe entry (beperkt tot laatste 1 om backfill te vermijden)

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 600" fill="#1a0a04">
+  <!-- Leonidas — Korinthische helm met hoge kam, ronde aspis, lange speer -->
+  <!-- Helmpluim / kam -->
+  <path d="M148 18 Q152 12 156 18 L172 48 L160 52 L152 28 L144 52 L132 48Z"/>
+  <!-- Korinthische helm -->
+  <path d="M106 80 Q108 50 150 48 Q192 50 194 80 L196 110 Q190 130 186 136 Q170 144 166 136 Q162 150 150 152 Q138 150 134 136 Q130 144 114 136 Q110 130 104 110Z"/>
+  <!-- Neus/vizier opening -->
+  <ellipse cx="150" cy="102" rx="14" ry="22" fill="#0a0500"/>
+  <!-- Nek -->
+  <rect x="138" y="150" width="24" height="16" rx="3"/>
+  <!-- Cloak achter -->
+  <path d="M195 162 Q240 190 248 300 L226 295 Q218 240 196 210Z"/>
+  <!-- Schildriem over borst -->
+  <path d="M100 155 L130 175 L130 180 L98 165Z"/>
+  <!-- Linothorax (linnen wapenrusting) -->
+  <path d="M100 162 L94 285 L206 285 L200 162 Q175 148 150 147 Q125 148 100 162Z"/>
+  <!-- Pteryges (leren strips) -->
+  <rect x="96"  y="280" width="14" height="38" rx="3"/>
+  <rect x="114" y="280" width="14" height="42" rx="3"/>
+  <rect x="132" y="280" width="14" height="44" rx="3"/>
+  <rect x="150" y="280" width="14" height="44" rx="3"/>
+  <rect x="168" y="280" width="14" height="42" rx="3"/>
+  <rect x="186" y="280" width="14" height="38" rx="3"/>
+  <!-- Linkerarm met aspis (ronde schild) -->
+  <path d="M100 165 L65 178 L60 200 L92 192Z"/>
+  <circle cx="50" cy="215" r="36"/>
+  <circle cx="50" cy="215" r="28" fill="#0f0602"/>
+  <!-- Rechterarm met speer -->
+  <path d="M200 165 L234 150 L242 134 L208 154Z"/>
+  <!-- Speer -->
+  <rect x="236" y="30" width="8" height="290" rx="3" transform="rotate(8 240 160)"/>
+  <polygon points="266,28 256,36 262,62" transform="rotate(8 240 160)"/>
+  <!-- Benen (bloot, Spartaans) -->
+  <path d="M114 285 L106 438 L142 438 L150 310 L158 438 L194 438 L186 285Z"/>
+  <!-- Sandalen -->
+  <path d="M98 436 Q108 452 130 452 Q142 448 142 436Z"/>
+  <path d="M158 436 Q158 448 170 452 Q192 452 202 436Z"/>
+</svg>
