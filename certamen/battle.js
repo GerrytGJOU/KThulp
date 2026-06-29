@@ -127,9 +127,10 @@ const BM_AVATAR_PARTS = {
     { id:"donker", nm:"Donker" },
   ]},
   helm:   { nm:"Helm",             opts:[
+    { id:"geen",     nm:"Geen helm" },
     { id:"standard", nm:"Standaard" },
     { id:"open",     nm:"Open" },
-    { id:"fedder",   nm:"Federhelm",  requires:{level:5} },
+    { id:"hopliet",  nm:"Hopliet",     requires:{level:5} },
     { id:"kroon",    nm:"Kroon",      requires:{mastery:3} },
   ]},
   haar:   { nm:"Haar",             opts:[
@@ -147,17 +148,20 @@ const BM_AVATAR_PARTS = {
     { id:"groen",  nm:"Groen",        requires:{level:4} },
   ]},
   baard:  { nm:"Gezichtshaar",     opts:[
-    { id:"geen",  nm:"Geen" },
-    { id:"baard", nm:"Baard" },
-    { id:"snor",  nm:"Snor" },
+    { id:"geen",      nm:"Geen" },
+    { id:"baard",     nm:"Baard" },
+    { id:"snor",      nm:"Snor" },
+    { id:"baardsnor", nm:"Baard en snor" },
   ]},
   armor:  { nm:"Wapenrusting",     opts:[
     { id:"licht",       nm:"Licht" },
     { id:"middel",      nm:"Middel" },
+    { id:"hopliet",     nm:"Hopliet",     requires:{level:3} },
     { id:"zwaar",       nm:"Zwaar",       requires:{level:5} },
     { id:"ceremonieel", nm:"Ceremonieel", requires:{mastery:5} },
   ]},
   schild: { nm:"Schild",           opts:[
+    { id:"geen",     nm:"Geen schild" },
     { id:"rond",     nm:"Rond" },
     { id:"ovaal",    nm:"Puntig" },
     { id:"vierkant", nm:"Metaal Rond" },
@@ -796,6 +800,14 @@ SCREENS.battleHostSettings = function(){
     <label class="fld">Antwoordtijd per ronde</label>
     <div class="chips">${chips("answerTimer",[8,10,12,15],at,v=>v+"s")}</div>
   </div>
+  <div class="panel">
+    <label class="fld">Slagveld-achtergrond</label>
+    <select style="width:100%;padding:10px 12px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:15px;font-family:inherit" onchange="BM_META.background=this.value;SCREENS.battleHostSettings()">
+      <option value="geen"${(BM_META.background||"geen")==="geen"?" selected":""}>Standaard (thema-landschap)</option>
+      ${Object.entries(BATTLE_BACKGROUNDS).map(([k,b])=>`<option value="${k}"${BM_META.background===k?" selected":""}>${esc(b.nm)}</option>`).join("")}
+    </select>
+    <div class="note" style="margin-top:6px">Kies een veldslag-decor (vloer + horizon). Plaats de afbeeldingen in <code>assets/battlebacks/</code>.</div>
+  </div>
   <button class="btn btn-gold btn-block lg" onclick="bmCreateRoom()">Gevecht aanmaken</button>
   <button class="btn btn-ghost btn-block" onclick="BM_ADV_OPEN=!BM_ADV_OPEN;SCREENS.battleHostSettings()" style="margin-top:8px">
     ${BM_ADV_OPEN?"▲":"▼"} Geavanceerde instellingen
@@ -854,6 +866,7 @@ async function bmCreateRoom(){
     cat:DRAFT.cat,customText:DRAFT.customText||"",armyHealth:ah,
     answerTimer:BM_META.answerTimer||10,adaptive:BM_META.adaptive!==false,
     theme:BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id,
+    background:BM_META.background||"geen",
     animations:BM_META.animations!==false,
     combos:BM_META.combos!==false,
     masteryBonuses:BM_META.masteryBonuses!==false,
@@ -994,7 +1007,7 @@ SCREENS.battleHostGame = function(){
       <div class="bm-hp-vs">⚔️</div>
       <div class="bm-hp-side side-b" id="bmArmyB"></div>
     </div>
-    <div id="bmField" class="${bmBgTheme(BM_META?.theme)}">
+    <div id="bmField" class="${bmBgTheme(BM_META?.theme)}" style="${bmArenaBgStyle()}">
       <div id="bmFormA" class="bm-form"></div>
       <div id="bmFormB" class="bm-form"></div>
       <div id="bmBfx"></div>
@@ -1130,6 +1143,35 @@ function bmBgTheme(theme){
   if(greek.includes(theme))return"bm-bg-greek";
   if(gods.includes(theme))return"bm-bg-gods";
   return"bm-bg-roman";
+}
+
+/* ── Slagveld-achtergronden (Battleback) ──────────────────────────────────
+   RPG Maker MV bouwt achtergronden uit twee lagen: een 'vloer' (Battleback1)
+   en een 'muur'/horizon (Battleback2). De docent kiest een set bij de
+   instellingen; we leggen ze via inline CSS over elkaar op #bmField.
+   Plaats de PNG's in assets/battlebacks/ (zie README aldaar). "geen" = val
+   terug op het standaard CSS-landschapsthema. */
+const BATTLE_BACKGROUNDS = {
+  "grasland": { nm:"Grasvlakte", floor:"assets/battlebacks/Grassland1.png", wall:"assets/battlebacks/Grassland2.png" },
+  "woestijn": { nm:"Woestijn",   floor:"assets/battlebacks/Desert1.png",    wall:"assets/battlebacks/Desert2.png" },
+  "tempel":   { nm:"Tempel",     floor:"assets/battlebacks/Paved1.png",     wall:"assets/battlebacks/Temple2.png" },
+  "fort":     { nm:"Fort",       floor:"assets/battlebacks/Fort1.png",      wall:"assets/battlebacks/Fort2.png" },
+};
+// Inline style-string voor #bmField op basis van de gekozen achtergrond.
+// Muur eerst genoemd (bovenste laag), vloer als tweede (eronder).
+function bmArenaBgStyle(){
+  const key=BM_META&&BM_META.background;
+  const bg=key&&BATTLE_BACKGROUNDS[key];
+  if(!bg||key==="geen")return"";
+  const v=SPRITE_VER?("?"+SPRITE_VER):"";
+  return `background-image:url('${bg.wall}${v}'),url('${bg.floor}${v}');`
+       + `background-repeat:no-repeat,no-repeat;background-position:center bottom,center bottom;`
+       + `background-size:cover,cover;image-rendering:pixelated;`;
+}
+// Herbevestig de achtergrond op een bestaand #bmField (na herbouw).
+function bmApplyArenaBg(field){
+  if(!field)return;
+  field.style.cssText=bmArenaBgStyle();
 }
 
 // Confetti-regen bij overwinning
@@ -1332,10 +1374,12 @@ const PIXEL_ASSETS = {
   armor:  { "licht":"assets/sprites/armor_licht.png",
             "middel":"assets/sprites/armor_middel.png",
             "zwaar":"assets/sprites/armor_zwaar.png",
+            "hopliet":"assets/sprites/armor_hopliet.png",
             "ceremonieel":"assets/sprites/armor_ceremonieel.png" },
-  helm:   { "standard":"assets/sprites/helm_standaard.png",
+  helm:   { "geen":"",
+            "standard":"assets/sprites/helm_standaard.png",
             "open":"assets/sprites/helm_open.png",
-            "fedder":"assets/sprites/helm_fedder.png",
+            "hopliet":"assets/sprites/helm_hopliet.png",
             "kroon":"assets/sprites/helm_kroon.png" },
   haar:   { "kort":"assets/sprites/haar_kort.png",
             "lang":"assets/sprites/haar_lang.png",
@@ -1344,7 +1388,8 @@ const PIXEL_ASSETS = {
   baard:  { "geen":"assets/sprites/baard_geen.png",
             "baard":"assets/sprites/baard_baard.png",
             "snor":"assets/sprites/baard_snor.png" },
-  schild: { "rond":"assets/sprites/schild_rond.png",
+  schild: { "geen":"",
+            "rond":"assets/sprites/schild_rond.png",
             "ovaal":"assets/sprites/schild_ovaal.png",
             "vierkant":"assets/sprites/schild_vierkant.png",
             "tower":"assets/sprites/schild_tower.png" },
@@ -1368,7 +1413,7 @@ function _bmBaseKey(cosm){
 
 // Versie-achtervoegsel voor sprite-bestanden → forceert verse download na een
 // asset-wijziging (bump dit getal als je een PNG vervangt).
-const SPRITE_VER = "v=2";
+const SPRITE_VER = "v=3";
 
 // CSS-filters per haarkleur (sprites zijn standaard blond in RPG Maker MV).
 const BM_HAARKLEUR_FILTER = {
@@ -1396,8 +1441,10 @@ const BM_CAPEKLEUR_SWATCH = {
 };
 
 // Bouwt de gelaagde sprite-lagen als HTML-string.
-// Laagvolgorde: base → cape → armor → wapen → haar → baard → helm → schild.
-// (Schild is de bovenste laag zodat het vóór lang haar valt.)
+// Z-index van achter naar voren (RPG Maker MV SV correct):
+//   cape → wapen → base → baard → haar → pantser → schild → helm.
+// Het wapen valt áchter het lichaam (achterste hand), vóór de cape; het schild
+// valt vóór het pantser; de helm is de bovenste laag.
 // extraClass op de buitenste div (bv. "pixel-preview" voor statische weergave).
 function _bmPixelLayers(cosm, dirCls, extraClass="") {
   const baseSrc = PIXEL_ASSETS.bases[_bmBaseKey(cosm)];
@@ -1413,15 +1460,20 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
   const capeFilter = BM_CAPEKLEUR_FILTER[cosm.capekleur||"goud"] || "none";
   const capeStyle = capeFilter !== "none" ? `filter:${capeFilter}` : "";
   const A = PIXEL_ASSETS;
+  // Gezichtshaar: 'baardsnor' stapelt baard + snor; anders één laag.
+  const baardId = cosm.baard||"geen";
+  const baardLayers = baardId==="baardsnor"
+    ? L(A.baard.baard,"",haarStyle)+L(A.baard.snor,"",haarStyle)
+    : L(A.baard[baardId],"",haarStyle);
   return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
-    ${L(baseSrc)}
     ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
-    ${L(A.armor[cosm.armor||"licht"])}
     ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon")}
+    ${L(baseSrc)}
+    ${baardLayers}
     ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
-    ${L(A.baard[cosm.baard||"geen"],"",haarStyle)}
-    ${L(A.helm[cosm.helm||"standard"])}
+    ${L(A.armor[cosm.armor||"licht"])}
     ${L(A.schild[cosm.schild||"rond"])}
+    ${L(A.helm[cosm.helm||"standard"])}
   </div>`;
 }
 
@@ -1584,6 +1636,7 @@ function bmBuildBattlefield(){
     field.classList.add(bmBgTheme(BM_META?.theme));
     if(BM_META?.animations===false)field.classList.add("bm-noanim");
     else field.classList.remove("bm-noanim");
+    bmApplyArenaBg(field); // docent-gekozen battleback (overschrijft thema-bg)
   }
   // Kritieke health check (nieuwe klasse bm-hp-fill)
   const tA=BM_TEAMS.A||{health:0,maxHealth:100};
@@ -1655,15 +1708,24 @@ function bmPlayAnimations(entry){
 // Abonneer op log; trigger animaties bij nieuwe entry (beperkt tot laatste 1 om backfill te vermijden)
 function bmSubscribeLog(code){
   if(!fbDB)return;
-  let firstFire=true; // sla initieel backfill-event over
   const rLog=fbDB.ref("rooms/"+code+"/log").limitToLast(1);
-  const fLog=rLog.on("child_added",s=>{
-    if(firstFire){firstFire=false;return;} // Firebase vuurt direct bij subscribe
-    const entry=s.val();
-    if(el("bmFormA"))bmBuildBattlefield(); // formatie bijwerken
-    setTimeout(()=>bmPlayAnimations(entry),250);
+  // Bepaal eerst de bestaande laatste ronde (backfill), abonneer daarná pas.
+  // Zo slaan we alleen écht bestaande entries over — de éérste ronde van een
+  // nieuw gevecht (lege log) wordt nu wél geanimeerd. Voorheen sloeg de
+  // 'firstFire'-vlag bij een lege log onterecht de eerste aanval over.
+  rLog.once("value").then(snap=>{
+    let lastRound=-1;
+    snap.forEach(ch=>{const r=ch.val()&&ch.val().round; if(typeof r==="number")lastRound=Math.max(lastRound,r);});
+    const fLog=rLog.on("child_added",s=>{
+      const entry=s.val();
+      const r=entry&&typeof entry.round==="number"?entry.round:null;
+      if(r!==null&&r<=lastRound)return;      // backfill / al verwerkt → overslaan
+      if(r!==null)lastRound=r;
+      if(el("bmFormA"))bmBuildBattlefield();   // formatie bijwerken
+      setTimeout(()=>bmPlayAnimations(entry),250);
+    });
+    BM_UNSUBS.push(()=>rLog.off("child_added",fLog));
   });
-  BM_UNSUBS.push(()=>rLog.off("child_added",fLog));
 }
 
 /* ---- HOST TIMER ---- */
@@ -2276,7 +2338,7 @@ SCREENS.battlePlayerGame = function(){
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_MY_BE=0;BM_MY_Q=null;
   H(`<div class="bm-player-wrap">
     <div class="bm-player-field" style="position:relative">
-      <div id="bmField" class="${bmBgTheme(BM_META?.theme)}">
+      <div id="bmField" class="${bmBgTheme(BM_META?.theme)}" style="${bmArenaBgStyle()}">
         <div id="bmFormA" class="bm-form"></div>
         <div id="bmFormB" class="bm-form"></div>
         <div id="bmBfx"></div>
