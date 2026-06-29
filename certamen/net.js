@@ -105,6 +105,19 @@ FBNet.moveStudent = function(fromClassId, toClassId, studentId, studentData){
     return this.teacherRef().update(updates);
   }catch(e){ return Promise.reject(e.message); }
 };
+FBNet.setAdminFlag = function(klascode, name){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("identities/"+klascode).once("value").then(snap=>{
+    if(!snap.exists()) return Promise.reject("Klas '"+klascode+"' niet gevonden.");
+    const updates={};
+    snap.forEach(child=>{
+      if((child.val().name||"").toLowerCase()===name.toLowerCase())
+        updates["identities/"+klascode+"/"+child.key+"/admin"]=true;
+    });
+    if(!Object.keys(updates).length) return Promise.reject("Naam '"+name+"' niet gevonden in klas "+klascode+".");
+    return fbDB.ref().update(updates).then(()=>Object.keys(updates).length);
+  });
+};
 
 /* ---- DemoNet: in-memory spiegel voor oefenmodus ---- */
 let _demoTeacherLoggedIn = false;
@@ -140,4 +153,5 @@ DemoNet.moveStudent = function(fromClassId, toClassId, studentId, studentData){
   }
   return Promise.resolve();
 };
+DemoNet.setAdminFlag = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 
