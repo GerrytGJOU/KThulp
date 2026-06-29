@@ -325,33 +325,36 @@ body.greek .qcard .word{color:#143a5e}
 #bmField{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding-bottom:10px}
 
 /* Formaties */
-.bm-form{flex:1;display:flex;flex-direction:row;gap:6px;align-items:flex-end;padding:0 6px;position:relative;z-index:2}
-#bmFormA{justify-content:flex-end}
-#bmFormB{justify-content:flex-start}
-.bm-fcol{display:flex;flex-direction:column;gap:6px;align-items:center}
+.bm-form{flex:1;display:flex;flex-direction:row;gap:8px;align-items:flex-end;padding:0 8px;position:relative;z-index:2}
+#bmFormA{justify-content:flex-start}
+#bmFormB{justify-content:flex-end}
+.bm-fcol{display:flex;flex-direction:column;gap:8px;align-items:center}
 #bmBfx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:10}
 
 /* ── Landschapsachtergronden ── */
 .bm-bg-roman{background:linear-gradient(180deg,#7ab3e0 0%,#a8d4f0 18%,#8bc45a 44%,#6a9040 58%,#4a6028 100%)}
-.bm-bg-roman::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 540'%3E%3Cellipse cx='400' cy='620' rx='520' ry='260' fill='%234a6028'/%3E%3Cellipse cx='1200' cy='630' rx='600' ry='290' fill='%235a7030'/%3E%3Cellipse cx='860' cy='570' rx='460' ry='210' fill='%236a8040'/%3E%3Crect x='830' y='330' width='260' height='75' fill='%23c8a878'/%3E%3Crect x='808' y='290' width='28' height='118' fill='%23b89868'/%3E%3Crect x='1082' y='290' width='28' height='118' fill='%23b89868'/%3E%3Crect x='840' y='272' width='56' height='22' fill='%23c8a878'/%3E%3Crect x='1000' y='272' width='56' height='22' fill='%23c8a878'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.75}
+.bm-bg-roman::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%20540'%3E%3Cellipse%20cx='400'%20cy='620'%20rx='520'%20ry='260'%20fill='%234a6028'/%3E%3Cellipse%20cx='1200'%20cy='630'%20rx='600'%20ry='290'%20fill='%235a7030'/%3E%3Cellipse%20cx='860'%20cy='570'%20rx='460'%20ry='210'%20fill='%236a8040'/%3E%3Crect%20x='0'%20y='438'%20width='1920'%20height='2'%20fill='%233a5020'%20opacity='.35'/%3E%3Crect%20x='124'%20y='224'%20width='8'%20height='266'%20fill='%23a07828'/%3E%3Ccircle%20cx='128'%20cy='217'%20r='11'%20fill='%23c8a020'/%3E%3Crect%20x='104'%20y='255'%20width='50'%20height='7'%20rx='2'%20fill='%23987020'/%3E%3Crect%20x='108'%20y='262'%20width='42'%20height='57'%20fill='%23c8392a'/%3E%3Crect%20x='108'%20y='319'%20width='42'%20height='6'%20fill='%23c8a020'/%3E%3Cline%20x1='129'%20y1='272'%20x2='129'%20y2='309'%20stroke='%23e8c840'%20stroke-width='1.8'%20opacity='.8'/%3E%3Cline%20x1='114'%20y1='284'%20x2='144'%20y2='284'%20stroke='%23e8c840'%20stroke-width='1.8'%20opacity='.8'/%3E%3Crect%20x='1783'%20y='234'%20width='10'%20height='256'%20fill='%235a2e10'/%3E%3Crect%20x='1766'%20y='272'%20width='44'%20height='8'%20rx='2'%20fill='%234a2008'/%3E%3Crect%20x='1771'%20y='316'%20width='34'%20height='7'%20rx='2'%20fill='%234a2008'/%3E%3Ccircle%20cx='1788'%20cy='226'%20r='10'%20fill='%23c8b080'/%3E%3Cellipse%20cx='1784'%20cy='224'%20rx='2.5'%20ry='3'%20fill='%23333'/%3E%3Cellipse%20cx='1792'%20cy='224'%20rx='2.5'%20ry='3'%20fill='%23333'/%3E%3Cpath%20d='M1784%20231%20Q1788%20235%201792%20231'%20stroke='%23555'%20stroke-width='1.5'%20fill='none'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.75}
 .bm-bg-greek{background:linear-gradient(180deg,#4a8fc8 0%,#87ceeb 22%,#c8d8a0 54%,#d4c870 70%,#b8a850 100%)}
-.bm-bg-greek::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 540'%3E%3Crect x='700' y='195' width='38' height='225' fill='%23e8dfc0'/%3E%3Crect x='688' y='185' width='62' height='18' rx='3' fill='%23d8c8a0'/%3E%3Crect x='676' y='416' width='86' height='12' fill='%23d8c8a0'/%3E%3Crect x='820' y='215' width='38' height='205' fill='%23e8dfc0'/%3E%3Crect x='808' y='205' width='62' height='18' rx='3' fill='%23d8c8a0'/%3E%3Crect x='796' y='416' width='86' height='12' fill='%23d8c8a0'/%3E%3Crect x='1080' y='205' width='38' height='215' fill='%23e8dfc0'/%3E%3Crect x='1068' y='195' width='62' height='18' rx='3' fill='%23d8c8a0'/%3E%3Crect x='1056' y='416' width='86' height='12' fill='%23d8c8a0'/%3E%3Crect x='1200' y='225' width='38' height='195' fill='%23e8dfc0'/%3E%3Crect x='1188' y='215' width='62' height='18' rx='3' fill='%23d8c8a0'/%3E%3Crect x='1176' y='416' width='86' height='12' fill='%23d8c8a0'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.85}
+.bm-bg-greek::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%20540'%3E%3Cellipse%20cx='320'%20cy='580'%20rx='480'%20ry='220'%20fill='%23b8c888'/%3E%3Cellipse%20cx='1560'%20cy='590'%20rx='500'%20ry='230'%20fill='%23c0c870'/%3E%3Cellipse%20cx='940'%20cy='560'%20rx='600'%20ry='200'%20fill='%23c8d890'/%3E%3Crect%20x='60'%20y='202'%20width='36'%20height='228'%20fill='%23e0d4a8'/%3E%3Crect%20x='48'%20y='192'%20width='60'%20height='16'%20rx='3'%20fill='%23d0c090'/%3E%3Crect%20x='36'%20y='426'%20width='84'%20height='12'%20fill='%23d0c090'/%3E%3Crect%20x='130'%20y='218'%20width='36'%20height='212'%20fill='%23e0d4a8'/%3E%3Crect%20x='118'%20y='208'%20width='60'%20height='16'%20rx='3'%20fill='%23d0c090'/%3E%3Crect%20x='106'%20y='426'%20width='84'%20height='12'%20fill='%23d0c090'/%3E%3Crect%20x='1754'%20y='210'%20width='36'%20height='220'%20fill='%23e0d4a8'/%3E%3Crect%20x='1742'%20y='200'%20width='60'%20height='16'%20rx='3'%20fill='%23d0c090'/%3E%3Crect%20x='1730'%20y='426'%20width='84'%20height='12'%20fill='%23d0c090'/%3E%3Crect%20x='1824'%20y='198'%20width='36'%20height='232'%20fill='%23e0d4a8'/%3E%3Crect%20x='1812'%20y='188'%20width='60'%20height='16'%20rx='3'%20fill='%23d0c090'/%3E%3Crect%20x='1800'%20y='426'%20width='84'%20height='12'%20fill='%23d0c090'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.85}
 .bm-bg-gods{background:linear-gradient(180deg,#08001e 0%,#1a0840 22%,#3a1868 42%,#6a38a0 62%,#a060c8 78%,#d4a0e0 100%)}
 .bm-bg-gods::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 540'%3E%3Cpolyline points='960%2C60%20938%2C195%20968%2C195%20938%2C350' stroke='%23ffd700' stroke-width='5' fill='none' opacity='.45'/%3E%3Cellipse cx='280' cy='170' rx='185' ry='58' fill='rgba(200%2C160%2C240%2C.18)'/%3E%3Cellipse cx='1620' cy='145' rx='205' ry='68' fill='rgba(200%2C160%2C240%2C.18)'/%3E%3Cellipse cx='950' cy='92' rx='155' ry='48' fill='rgba(220%2C180%2C255%2C.14)'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.9}
 
 /* ── Avatar-sprite ── */
 .bm-av{display:inline-flex;flex-direction:column;align-items:center;gap:3px;position:relative;cursor:default}
-.bm-sprite{will-change:transform;display:block;overflow:visible}
+.bm-sprite{will-change:transform;display:block;overflow:visible;width:80px;height:107px}
 /* Team B gespiegeld */
 #bmFormB .bm-av .bm-sprite{transform:scaleX(-1)}
-.bm-av .avn{font-size:9px;color:var(--fg);max-width:55px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;line-height:1.2;text-shadow:0 1px 4px rgba(0,0,0,.9)}
+.bm-av .avn{font-size:13px;color:#fff;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;line-height:1.2;text-shadow:0 1px 5px rgba(0,0,0,.95),0 0 8px rgba(0,0,0,.8)}
+.bm-av .avncls{font-size:10px;color:var(--hi);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;line-height:1.1;text-shadow:0 1px 4px rgba(0,0,0,.9)}
+@media(min-width:900px){.bm-sprite{width:120px;height:160px}.bm-av .avn{font-size:15px;max-width:110px}.bm-av .avncls{font-size:12px;max-width:110px}}
 
 /* ── Participatie-bolletje ── */
 .bm-dot{position:absolute;top:3px;right:2px;width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(0,0,0,.5);background:var(--stone4);z-index:5;transition:background .3s}
 .bm-dot.on{background:var(--green-bright)}
 .bm-dot.locked{background:var(--hi)}
 /* Heldenmodus: persoonlijke HP-balk onder een sprite */
-.bm-hero-hp{width:34px;height:4px;border-radius:2px;background:rgba(0,0,0,.55);overflow:hidden;margin:1px auto 0}
+.bm-hero-hp{width:60px;height:5px;border-radius:2px;background:rgba(0,0,0,.55);overflow:hidden;margin:1px auto 0}
+@media(min-width:900px){.bm-hero-hp{width:90px;height:6px}}
 .bm-hero-hp-fill{height:100%;width:100%;transform-origin:left center;border-radius:2px;will-change:transform;transition:transform .35s}
 .bm-hero-armor{font-size:8px;line-height:1;text-align:center;color:#9cc8ff;margin-top:1px}
 .bm-hero-respawn{font-size:8px;line-height:1;text-align:center;color:var(--hi);margin-top:1px;font-weight:700}
