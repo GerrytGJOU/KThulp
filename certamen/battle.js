@@ -320,6 +320,17 @@ function bmIsUnlocked(opt,ident){
 function bmStars(n,max=5){
   return Array.from({length:max},(_,i)=>`<span style="color:${i<n?"#d4af37":"var(--stone4)"};font-size:14px">★</span>`).join("");
 }
+// Leesbare ontgrendel-voorwaarde voor een avatar-optie ({short, full} of null).
+function bmReqText(opt){
+  const r=opt&&opt.requires; if(!r) return null;
+  if(r.level)   return { short:"Niv. "+r.level, full:"Bereik niveau "+r.level };
+  if(r.mastery) return { short:r.mastery+"★",   full:r.mastery+"★ beheersing in één klasse (speel veel rondes met die klasse)" };
+  return null;
+}
+// Toon de voorwaarde bij het aantikken van een vergrendelde optie (touch-vriendelijk).
+function bmShowLockInfo(optNm, full){
+  toast("🔒 "+optNm, full+" om dit te ontgrendelen.");
+}
 
 // Toekennen van XP en achievements na afloop van een gevecht (player-side).
 async function bmAwardBattle(){
@@ -2662,12 +2673,20 @@ SCREENS.battleAvatarEdit = function(){
       const locked=!bmIsUnlocked(o,BM_IDENT);
       const sel=av[partId]===o.id;
       const preview=bmAvatarSVG({...av,[partId]:o.id},38);
-      const title=locked?(o.requires?.level?"Niveau "+o.requires.level+" vereist":"Mastery ★★★+ vereist"):"";
-      return `<button class="bm-opt${sel?" on":""}${locked?" locked":""}"
-        ${locked?`disabled title="${title}"`:`onclick="BM_AV_EDIT['${partId}']='${o.id}';SCREENS.battleAvatarEdit()"`}>
+      const req=locked?bmReqText(o):null;
+      if(locked&&req){
+        // Vergrendeld: niet kiezen, maar hover (title) en tik (toast) tonen de voorwaarde.
+        return `<button class="bm-opt locked" title="🔒 ${esc(req.full)}"
+          onclick="bmShowLockInfo('${esc(o.nm)}','${esc(req.full)}')">
+          ${preview}
+          <div class="onm">${esc(o.nm)}</div>
+          <div class="bm-lockreq">🔒 ${esc(req.short)}</div>
+        </button>`;
+      }
+      return `<button class="bm-opt${sel?" on":""}"
+        onclick="BM_AV_EDIT['${partId}']='${o.id}';SCREENS.battleAvatarEdit()">
         ${preview}
         <div class="onm">${esc(o.nm)}</div>
-        ${locked?`<div style="font-size:9px;color:var(--muted2)">🔒</div>`:""}
       </button>`;
     }).join("");
     return`<div class="eyebrow l">${esc(part.nm)}</div>
