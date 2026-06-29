@@ -409,9 +409,12 @@ body.greek .qcard .word{color:#143a5e}
 .pixel-preview{overflow:hidden}
 .pixel-preview .sprite-layer{animation:none!important;background-position-x:0!important}
 .pixel-preview .sprite-weapon{display:none!important}
-/* pp-weapon: toon het wapen statisch (rust-frame) in de avatar-editor */
+/* pp-weapon: toon het wapen statisch op frame 2 (rust/houd-stand) in de editor.
+   De algemene .pixel-preview .sprite-layer-regel zet alle lagen op frame 0;
+   het wapen moet juist op het laatste frame staan, dus expliciet overschrijven. */
 .pixel-preview.pp-weapon{overflow:visible}
-.pixel-preview.pp-weapon .sprite-weapon{display:block!important;animation:none!important}
+.pixel-preview.pp-weapon .sprite-weapon{display:block!important;animation:none!important;background-position-x:-288px!important}
+@media(min-width:900px){.pixel-preview.pp-weapon .sprite-weapon{background-position-x:-432px!important}}
 /* Sticky preview-paneel: avatar blijft in beeld terwijl je door de opties scrollt */
 .bm-av-sticky{position:sticky;top:6px;z-index:30;background:var(--stone2,#241a12)}
 
@@ -630,10 +633,10 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-<script src="core.js?v=20260703"></script>
-<script src="net.js?v=20260703"></script>
-<script src="games.js?v=20260703"></script>
-<script src="battle.js?v=20260703"></script>
+<script src="core.js?v=20260704"></script>
+<script src="net.js?v=20260704"></script>
+<script src="games.js?v=20260704"></script>
+<script src="battle.js?v=20260704"></script>
 <script>
 /* ---- INIT ---- */
 (function(){
