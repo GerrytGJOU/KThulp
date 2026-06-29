@@ -607,8 +607,13 @@ body.greek .qcard .word{color:#143a5e}
   cursor:pointer;transition:border-color .12s,transform .1s;min-width:54px}
 .bm-opt:active{transform:scale(.93)}
 .bm-opt.on{border-color:var(--hi-bright);background:rgba(212,175,55,.14)}
-.bm-opt.locked{opacity:.4;cursor:not-allowed;filter:grayscale(.75)}
+/* Vergrendeld: alleen het voorbeeld vergrijzen, de voorwaarde blijft leesbaar.
+   cursor:help + tik toont de voorwaarde (hover-tooltip via title=). */
+.bm-opt.locked{cursor:help}
+.bm-opt.locked>svg{opacity:.45;filter:grayscale(.8)}
+.bm-opt.locked .onm{color:var(--muted2)}
 .bm-opt .onm{font-size:10px;color:var(--muted);text-align:center;line-height:1.2;max-width:52px}
+.bm-opt .bm-lockreq{font-size:9px;color:var(--hi);font-weight:700;white-space:nowrap;letter-spacing:.2px}
 
 /* ======================================================
    BATTLE MODE M7 — DASHBOARD / AWARDS / ANALYTICS
@@ -652,10 +657,10 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-<script src="core.js?v=20260708"></script>
-<script src="net.js?v=20260708"></script>
-<script src="games.js?v=20260708"></script>
-<script src="battle.js?v=20260708"></script>
+<script src="core.js?v=20260709"></script>
+<script src="net.js?v=20260709"></script>
+<script src="games.js?v=20260709"></script>
+<script src="battle.js?v=20260709"></script>
 <script>
 /* ---- INIT ---- */
 (function(){
