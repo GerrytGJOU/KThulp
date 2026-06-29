@@ -209,6 +209,7 @@ const BM_AVATAR_PARTS = {
   ]},
   helm:   { nm:"Helm",             opts:[
     { id:"geen",     nm:"Geen helm" },
+    { id:"bandana",  nm:"Bandana" },
     { id:"standard", nm:"Standaard",      requires:{level:2} },
     { id:"open",     nm:"Open",           requires:{level:4} },
     { id:"hopliet",  nm:"Hopliet",        requires:{level:8} },
@@ -231,10 +232,13 @@ const BM_AVATAR_PARTS = {
     { id:"staf",    nm:"Staf",            requires:{level:4} },
   ]},
   haar:   { nm:"Haar",             opts:[
-    { id:"kort",   nm:"Kort" },
-    { id:"lang",   nm:"Lang" },
-    { id:"kaal",   nm:"Kaal" },
-    { id:"vlecht", nm:"Vlecht",           requires:{level:6} },
+    { id:"kort",    nm:"Kort" },
+    { id:"lang",    nm:"Lang" },
+    { id:"kaal",    nm:"Kaal" },
+    { id:"vlecht",  nm:"Vlecht",          requires:{level:6} },
+    { id:"middel",  nm:"Middel",          requires:{level:6} },
+    { id:"knot",    nm:"Knot",            requires:{level:7} },
+    { id:"hanekam", nm:"Hanekam",         requires:{level:7} },
   ]},
   haarkleur:{ nm:"Haarkleur",      opts:[
     { id:"blond",  nm:"Blond" },
@@ -1510,6 +1514,7 @@ const PIXEL_ASSETS = {
             "hopliet":"assets/sprites/armor_hopliet.png",
             "ceremonieel":"assets/sprites/armor_ceremonieel.png" },
   helm:   { "geen":"",
+            "bandana":"assets/sprites/helm_bandana.png",
             "standard":"assets/sprites/helm_standaard.png",
             "open":"assets/sprites/helm_open.png",
             "hopliet":"assets/sprites/helm_hopliet.png",
@@ -1517,7 +1522,10 @@ const PIXEL_ASSETS = {
   haar:   { "kort":"assets/sprites/haar_kort.png",
             "lang":"assets/sprites/haar_lang.png",
             "kaal":"assets/sprites/haar_kaal.png",
-            "vlecht":"assets/sprites/haar_vlecht.png" },
+            "vlecht":"assets/sprites/haar_vlecht.png",
+            "middel":"assets/sprites/haar_middel.png",
+            "knot":"assets/sprites/haar_knot.png",
+            "hanekam":"assets/sprites/haar_hanekam.png" },
   baard:  { "geen":"assets/sprites/baard_geen.png",
             "baard":"assets/sprites/baard_baard.png",
             "snor":"assets/sprites/baard_snor.png" },
@@ -1549,7 +1557,7 @@ function _bmBaseKey(cosm){
 
 // Versie-achtervoegsel voor sprite-bestanden → forceert verse download na een
 // asset-wijziging (bump dit getal als je een PNG vervangt).
-const SPRITE_VER = "v=5";
+const SPRITE_VER = "v=6";
 
 // CSS-filters per haarkleur (sprites zijn standaard blond in RPG Maker MV).
 const BM_HAARKLEUR_FILTER = {
