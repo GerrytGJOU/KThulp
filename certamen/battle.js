@@ -1459,9 +1459,10 @@ const BM_CAPEKLEUR_SWATCH = {
 
 // Bouwt de gelaagde sprite-lagen als HTML-string.
 // Z-index van achter naar voren (RPG Maker MV SV correct):
-//   cape → wapen → base → baard → haar → pantser → schild → helm.
-// Het wapen valt áchter het lichaam (achterste hand), vóór de cape; het schild
-// valt vóór het pantser; de helm is de bovenste laag.
+//   cape → wapen → base → haar → pantser → baard → schild → helm.
+// Het wapen valt áchter het lichaam (achterste hand), vóór de cape; de baard
+// valt vóór het pantser (anders bedekt de kraag hem); het schild valt vóór het
+// pantser; de helm is de bovenste laag.
 // extraClass op de buitenste div (bv. "pixel-preview" voor statische weergave).
 function _bmPixelLayers(cosm, dirCls, extraClass="") {
   const baseSrc = PIXEL_ASSETS.bases[_bmBaseKey(cosm)];
@@ -1486,9 +1487,9 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
     ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon wpn-"+(cosm.wapen||"zwaard"))}
     ${L(baseSrc)}
-    ${baardLayers}
     ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
     ${L(A.armor[cosm.armor||"licht"])}
+    ${baardLayers}
     ${L(A.schild[cosm.schild||"rond"])}
     ${L(A.helm[cosm.helm||"standard"])}
   </div>`;
