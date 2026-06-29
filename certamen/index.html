@@ -412,36 +412,46 @@ body.greek .qcard .word{color:#143a5e}
 @media(min-width:900px){.bm-noanim .sprite-layer{background-position-x:-144px}}
 /* Statische preview (editor/profiel): geen animatie, middelste frame, vooraanzicht */
 .pixel-preview .sprite-layer{animation:none!important;background-position-x:-96px;background-position-y:0!important}
-.pixel-preview .sprite-weapon{background-position-x:-192px;background-position-y:0!important}
-@media(min-width:900px){.pixel-preview .sprite-layer{background-position-x:-144px}.pixel-preview .sprite-weapon{background-position-x:-288px}}
 
 /* ── Wapen-laag (288×64, 3 aanvals-frames elk 96×64) ── */
-/* Normaal: stilstaand middelste frame. Bij aanval: 3-frame animatie synchroon
-   met de karakter-aanvalsbeweging (0.85s). Team B: horizontaal gespiegeld. */
+/* De 3 frames vormen samen één aanvals-zwaai. In rust en in de preview is het
+   wapen ONZICHTBAAR; het verschijnt alleen tijdens een aanval en speelt dan
+   de 3-frame zwaai synchroon met de karakter-aanvalsbeweging (0.85s).
+   Geschaald op karaktergrootte (96px native frame → ~96px), bottom-gecentreerd. */
 .sprite-weapon{
+  display:none;                     /* standaard verborgen */
   animation:none!important;         /* geen loopanimatie */
-  background-size:576px 128px;      /* 288×64 op schaal 2× */
-  background-position-x:-192px;     /* middelste/rustframe (frame 1) */
+  background-size:288px 64px;       /* 3 frames × 96×64, native schaal */
+  background-position-x:0;
   background-position-y:0!important;/* wapen heeft geen richtingsrijen */
-  width:192px;height:128px;         /* één frame op schaal 2× */
-  top:auto;bottom:0;left:0;right:auto /* uitlijnen op basis van karakter */
+  width:96px;height:64px;           /* één frame */
+  inset:auto;top:auto;bottom:20px;left:50%;margin-left:-40px;
+  z-index:6;pointer-events:none
 }
 @media(min-width:900px){
-  .sprite-weapon{background-size:864px 192px;background-position-x:-288px;width:288px;height:192px}
+  .sprite-weapon{background-size:432px 96px;width:144px;height:96px;bottom:32px;margin-left:-60px}
 }
-/* Team B: spiegel het wapen horizontaal (richting karakter is al correct via Y-rij) */
-#bmFormB .sprite-weapon{transform:scaleX(-1);left:auto;right:0}
-/* Aanvals-animatie wapen: synchroon met .85s karakter-aanval */
+/* Team B: spiegel het wapen horizontaal */
+#bmFormB .sprite-weapon{transform:scaleX(-1)}
+/* Aanvals-animatie wapen: zichtbaar + 3-frame zwaai synchroon met .85s aanval */
 .bm-av.anim-atk-r .sprite-weapon,
 .bm-av.anim-atk-l .sprite-weapon,
 .bm-av.anim-chg-r .sprite-weapon,
 .bm-av.anim-chg-l .sprite-weapon{
-  animation:weaponAttack .85s steps(3) 1 forwards!important;
-  background-position-x:0
+  display:block;
+  animation:weaponAttack .85s steps(3) 1 forwards!important
 }
-@keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-576px}}
+#bmFormB .bm-av.anim-atk-r .sprite-weapon,
+#bmFormB .bm-av.anim-atk-l .sprite-weapon,
+#bmFormB .bm-av.anim-chg-r .sprite-weapon,
+#bmFormB .bm-av.anim-chg-l .sprite-weapon{
+  animation:weaponAttackB .85s steps(3) 1 forwards!important
+}
+@keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-288px}}
+@keyframes weaponAttackB{from{transform:scaleX(-1);background-position-x:0}to{transform:scaleX(-1);background-position-x:-288px}}
 @media(min-width:900px){
-  @keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-864px}}
+  @keyframes weaponAttack{from{background-position-x:0}to{background-position-x:-432px}}
+  @keyframes weaponAttackB{from{transform:scaleX(-1);background-position-x:0}to{transform:scaleX(-1);background-position-x:-432px}}
 }
 
 /* Actie-animaties op pixel-hero wrapper (direction-agnostisch) */
