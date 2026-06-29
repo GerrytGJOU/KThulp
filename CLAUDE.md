@@ -20,6 +20,7 @@
   viewport met maximum-scale.
 - Na elke wijziging aan een scriptblok: `node --check` draaien voordat je oplevert.
 - Gemini-aanroepen altijd met thinkingBudget:0.
+- In de Battle Mode avatar-editor staan opties altijd gesorteerd: altijd-vrije opties eerst, daarna oplopend op vereist niveau.
 - Battle Mode heeft een ingebouwde Handleiding/FAQ (`SCREENS.battleFAQ` in
   certamen/battle.js). De klassen-, combo- en synergiesecties zijn data-gedreven
   (uit BM_CLASSES/BM_COMBOS/BM_SYNERGY) en lopen vanzelf mee; de prozasecties
