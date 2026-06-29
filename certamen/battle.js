@@ -1396,6 +1396,7 @@ function bmFormationHTML(team){
       ${bmSpriteSVG(p.class)}
       <div class="bm-dot ${dotCls}"></div>
       <div class="avn">${esc(p.name)}</div>
+      <div class="avncls">${esc(bmClsNmThemed(p.class||""))}</div>
       ${bmHeroHpHTML(p)}
     </div>`);
   }
