@@ -728,7 +728,7 @@ SCREENS.collection = function(){
         <span class="note">${bmXp} XP</span>
         <span class="note">${bmLv.next?"→ "+bmLv.next.xp+" XP voor "+(bmLv.next.title||bmLv.next.rank):"Max niveau bereikt"}</span></div>
       ${statsRow("Gevechten gespeeld",bmIdent.battles||0)}
-      <button class="btn btn-ghost btn-block" style="margin-top:10px;font-size:13px" onclick="go('battleAvatarEdit')">Avatar aanpassen</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:10px;font-size:13px" onclick="BM_AV_RETURN='collection';go('battleAvatarEdit')">Avatar aanpassen</button>
     </div>
     <div class="eyebrow l">Klasbeheersing</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:4px">${masteryGrid}</div>

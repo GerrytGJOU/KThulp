@@ -215,6 +215,8 @@ const BM_MASTERY_TIERS = [
 /* ---- BATTLE IDENTITY ---- */
 const BM_IDENT_KEY = "certamen_battle_identity";
 let BM_IDENT = null;
+// Scherm waar de avatar-editor naar terugkeert (gezet door de oproepende knop).
+let BM_AV_RETURN = "battleProfile";
 
 function bmIdentLoad(){ try{ const r=localStorage.getItem(BM_IDENT_KEY); return r?JSON.parse(r):null; }catch(e){return null;} }
 function bmIdentSave(o){ try{ localStorage.setItem(BM_IDENT_KEY,JSON.stringify(o)); }catch(e){} }
@@ -386,15 +388,19 @@ async function bmCheckAchievements(ident,result={}){
   return newOnes;
 }
 async function bmSaveAvatar(){
-  if(!BM_AV_EDIT||!BM_IDENT||!fbDB)return;
-  const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+  if(!BM_AV_EDIT||!BM_IDENT)return;
+  if(!fbDB && typeof initFirebase==="function") initFirebase(); // beste-effort
   try{
-    await fbDB.ref("identities/"+klas+"/"+lcode+"/avatar").set(BM_AV_EDIT);
+    // Sla op in Firebase indien beschikbaar; altijd in lokale cache.
+    if(fbDB){
+      const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+      await fbDB.ref("identities/"+klas+"/"+lcode+"/avatar").set(BM_AV_EDIT);
+    }
     BM_IDENT={...BM_IDENT,avatar:{...BM_AV_EDIT}};
     bmIdentSave({...bmIdentLoad(),...BM_IDENT});
     BM_AV_EDIT=null;
     toast("Opgeslagen!","Avatar bijgewerkt.");
-    go("battleProfile");
+    go(BM_AV_RETURN||"battleProfile");
   }catch(e){toast("Fout","Avatar opslaan mislukt.");}
 }
 
@@ -2510,7 +2516,7 @@ SCREENS.battleProfile = function(){
       </div>
     </div>
   </div>
-  <button class="btn btn-gold btn-block" onclick="go('battleAvatarEdit')" style="margin-bottom:14px">Avatar aanpassen</button>
+  <button class="btn btn-gold btn-block" onclick="BM_AV_RETURN='battleProfile';go('battleAvatarEdit')" style="margin-bottom:14px">Avatar aanpassen</button>
   <div class="eyebrow l">Class Mastery</div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">${masteryHTML}</div>
   <div class="eyebrow l">Achievements (${achs.length}/${bmAchDef.length})</div>
@@ -2520,7 +2526,12 @@ SCREENS.battleProfile = function(){
 
 /* ---- SCHERM: battleAvatarEdit ---- */
 SCREENS.battleAvatarEdit = function(){
-  if(!BM_IDENT){go("battleIdentity");return;}
+  // Geen actieve sessie nodig: laad identiteit uit cache (bv. vanuit 'Mijn profiel').
+  if(!BM_IDENT){
+    const cached=(typeof bmIdentLoad==="function")?bmIdentLoad():null;
+    if(cached) BM_IDENT=cached;
+    else { go("battleIdentity"); return; }
+  }
   if(!BM_AV_EDIT) BM_AV_EDIT={...bmAvatarMerge(BM_IDENT.avatar)};
   const av=BM_AV_EDIT;
 
@@ -2553,7 +2564,7 @@ SCREENS.battleAvatarEdit = function(){
 
   H(brand(false)+`
   <div class="scrhead">
-    <button class="back" onclick="BM_AV_EDIT=null;go('battleProfile')">${iconSVG("shield",20,"currentColor")}</button>
+    <button class="back" onclick="BM_AV_EDIT=null;go(BM_AV_RETURN||'battleProfile')">${iconSVG("shield",20,"currentColor")}</button>
     <h2>Avatar aanpassen</h2>
   </div>
   <div class="panel" style="text-align:center;padding:20px 16px;display:flex;justify-content:center;align-items:flex-end;min-height:130px">

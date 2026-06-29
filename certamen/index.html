@@ -410,8 +410,12 @@ body.greek .qcard .word{color:#143a5e}
 /* Middelste frame (rust) als animaties uit staan */
 .bm-noanim .sprite-layer{animation:none!important;background-position-x:-96px}
 @media(min-width:900px){.bm-noanim .sprite-layer{background-position-x:-144px}}
-/* Statische preview (editor/profiel): geen animatie, middelste frame, vooraanzicht */
+/* Statische preview (editor/profiel): geen animatie, middelste frame, vooraanzicht.
+   overflow:hidden clipt elke laag strikt op de karakter-box (geen losse fragmenten). */
+.pixel-preview{overflow:hidden}
 .pixel-preview .sprite-layer{animation:none!important;background-position-x:-96px;background-position-y:0!important}
+.pixel-preview .sprite-weapon{display:none!important}
+@media(min-width:900px){.pixel-preview .sprite-layer{background-position-x:-144px}}
 
 /* ── Wapen-laag (288×64, 3 aanvals-frames elk 96×64) ── */
 /* De 3 frames vormen samen één aanvals-zwaai. In rust en in de preview is het
