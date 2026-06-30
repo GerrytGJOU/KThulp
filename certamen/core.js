@@ -351,7 +351,8 @@ function foot(){ return `<div class="foot">© Gerben de Jong · 2026 · ${hasFir
 
 /* ====================== SCHERMEN ====================== */
 const SCREENS = {};
-function go(name){ cleanup(); document.body.classList.toggle("greek", themeFor(name)==="greek"); SCREENS[name](); window.scrollTo(0,0); }
+let _screen='home';
+function go(name){ _screen=name; cleanup(); document.body.classList.toggle("greek", themeFor(name)==="greek"); SCREENS[name](); window.scrollTo(0,0); }
 function themeFor(name){
   // marathon-gerelateerde schermen krijgen het Griekse thema
   if((ROLE==="host" && DRAFT.game==="marathon") || (META && META.game==="marathon")) {

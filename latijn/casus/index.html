@@ -97,10 +97,10 @@
   .mt8{margin-top:8px}.mt16{margin-top:16px}.mb16{margin-bottom:16px}
   .test-stripe{background:var(--red);color:white;text-align:center;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;padding:5px;font-weight:700;margin-bottom:16px;border-radius:4px}
   /* Kennisvragen */
-  .kv-card{background:white;border:2px solid var(--border);border-radius:8px;padding:18px;margin-bottom:16px;box-shadow:0 1px 6px var(--shadow)}
-  .kv-vraag{font-family:Georgia,'Times New Roman',serif;font-size:1.1rem;color:var(--ink);margin-bottom:14px;line-height:1.4}
-  .kv-opts{display:flex;flex-direction:column;gap:8px}
-  .kv-opt{padding:10px 14px;background:var(--parchment);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:.9rem;text-align:left;transition:all .13s;-webkit-tap-highlight-color:transparent}
+  .kv-card{background:white;border:2px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 6px var(--shadow)}
+  .kv-vraag{font-family:Georgia,'Times New Roman',serif;font-size:1.1rem;color:var(--ink);margin-bottom:12px;line-height:1.4}
+  .kv-opts{display:flex;flex-direction:column;gap:7px}
+  .kv-opt{padding:8px 14px;background:var(--parchment);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:.9rem;text-align:left;transition:all .13s;-webkit-tap-highlight-color:transparent}
   .kv-opt:hover,.kv-opt:active{background:var(--parchment-dark)}
   .kv-opt.correct{border-color:var(--green);background:#efffef;color:var(--green);font-weight:600}
   .kv-opt.wrong{border-color:var(--red);background:#fff0f0;color:var(--red)}
@@ -129,7 +129,7 @@
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
 </head>
 <body>
-<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<a class="portal-back" href="../" onclick="if(!document.getElementById('screen-home').classList.contains('active')){event.preventDefault();goHome();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
 <header>
   <h1>Casus Trainer <span>Latijnse Naamvallen</span></h1>
   <div id="mode-badge" style="display:none"></div>
@@ -887,7 +887,7 @@ function renderKv(){
   const opts=q.gesorteerd?q.opties:shuffle(q.opties);
   let html=`<p class="counter">Goed: ${kvState.score.goed} | Totaal: ${kvState.score.totaal}</p>`;
   html+=`<div class="kv-card"><p class="kv-vraag">${q.vraag}</p><div class="kv-opts">`;
-  opts.forEach((opt,i)=>html+=`<button class="kv-opt" id="kvopt${i}" onclick="selectKv(${i},'${opt.replace(/'/g,"\\'")}')">${opt}</button>`);
+  opts.forEach((opt,i)=>html+=`<button class="kv-opt" id="kvopt${i}" onclick="selectKv(${i})">${opt}</button>`);
   html+=`</div></div>`;
   html+=`<div id="kv-feedback" class="det-feedback"></div>`;
   html+=`<div class="flex-row mt8"><button class="btn btn-primary" id="kv-volgende" style="display:none" onclick="renderKv()">Volgende vraag →</button></div>`;
@@ -895,10 +895,11 @@ function renderKv(){
   kvState.opts=opts;
 }
 
-function selectKv(i,label){
+function selectKv(i){
   if(kvState.answered)return;
   kvState.answered=true;kvState.score.totaal++;
   const q=kvState.q;
+  const label=kvState.opts[i];
   const ok=q.correct.includes(label);
   if(ok)kvState.score.goed++;
   kvState.opts.forEach((opt,j)=>{
