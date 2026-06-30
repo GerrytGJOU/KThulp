@@ -134,7 +134,7 @@ const BM_COMMANDERS = {
     B: { nm:"Xerxes",          img:"assets/commanders/persians/xerxes.png"     },
   },
   rome_carthago: {
-    A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.svg"       },
+    A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.png"       },
     B: { nm:"Hannibal",        img:"assets/commanders/carthage/hannibal.png"   },
   },
   grieken_trojanen: {
@@ -142,7 +142,7 @@ const BM_COMMANDERS = {
     B: { nm:"Hector",          img:"assets/commanders/trojans/hector.png"      },
   },
   goden_titanen: {
-    A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.svg"           },
+    A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.png"           },
     B: { nm:"Kronos",          img:"assets/commanders/titans/kronos.svg"       },
   },
 };
