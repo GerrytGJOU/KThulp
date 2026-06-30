@@ -25,16 +25,30 @@
   5. Klaar. Zonder config werkt de OEFENMODUS (met computer-spelers) gewoon,
      zodat je de spellen meteen kunt uitproberen.
 
-  Aanbevolen databaseregels (Realtime Database -> Regels) â€” beperkt tot /rooms:
+  Aanbevolen databaseregels (Realtime Database -> Regels):
   {
-    "rules": {
-      "rooms": {
-        "$code": { ".read": true, ".write": true }
+    “rules”: {
+      “rooms”: {
+        “$code”: { “.read”: true, “.write”: true }
+      },
+      “identities”: {
+        “.read”: “auth != null”,
+        “$klascode”: {
+          “$lid”: { “.read”: true, “.write”: true }
+        }
+      },
+      “klascodes”: {
+        “.read”: true,
+        “.write”: “auth != null”
+      },
+      “teachers”: {
+        “$uid”: { “.read”: “auth != null && auth.uid === $uid”, “.write”: “auth != null && auth.uid === $uid” }
       }
     }
   }
-  (Voor een klaslokaal prima; speelcodes zijn tijdelijk. Wil je het strenger,
-   zet dan anonieme aanmelding aan en beperk schrijven verder.)
+  (identities/$lid: iedereen mag schrijven = account aanmaken/updaten.
+   identities root lezen vereist auth = alleen docentenportaal.
+   klascodes lezen = iedereen (validatie bij registratie); schrijven = alleen auth.)
   ============================================================================
 -->
 <script>
