@@ -95,22 +95,22 @@
   }
   .btn-start:active { opacity: .85; }
 
-  #screen-quiz { padding: 14px 18px 22px; gap: 14px; min-height: calc(100vh - 65px); }
+  #screen-quiz { padding: 10px 18px 16px; gap: 10px; min-height: calc(100vh - 65px); }
   .quiz-meta { display: flex; justify-content: space-between; align-items: center; font-size: .75rem; color: var(--text-dim); }
   .quiz-progress-bar { height: 3px; background: var(--stone-light); border-radius: 2px; overflow: hidden; }
   .quiz-progress-fill { height: 100%; background: var(--gold); transition: width .3s ease; }
 
   .verb-card {
     background: var(--stone-mid); border: 1px solid var(--stone-border);
-    border-radius: var(--radius); padding: 18px 16px; text-align: center;
+    border-radius: var(--radius); padding: 12px 16px; text-align: center;
   }
   .verb-card .prompt-label { font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
   .verb-card .verb-main { font-size: 1.9rem; color: var(--gold); margin-bottom: 5px; line-height: 1.2; }
   .verb-card .verb-meaning { font-size: .82rem; color: var(--parchment-dim); font-style: italic; }
   .verb-card .verb-context { font-size: .76rem; color: var(--text-dim); margin-top: 4px; }
 
-  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .fill-slot { background: var(--stone-light); border: 1px solid var(--stone-border); border-radius: 6px; padding: 11px 10px; }
+  .fill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .fill-slot { background: var(--stone-light); border: 1px solid var(--stone-border); border-radius: 6px; padding: 8px 10px; }
   .fill-slot label { display: block; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 6px; }
   .fill-slot input {
     width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--stone-border);
@@ -219,7 +219,7 @@
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
 </head>
 <body>
-<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<a class="portal-back" href="../" onclick="if(!document.getElementById('screen-home').classList.contains('active')){event.preventDefault();goHome();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
 
 <header>
   <div class="header-left">
@@ -382,7 +382,7 @@ const VERBA = [
   {p:"αἱρέω",        fut:"αἱρήσω",       aor:"εἷλον",      pf:"",              inf:"αἱρεῖν",         tr:"nemen; (med.) kiezen",               type:"aor_them"},
   {p:"αἰσθάνομαι",   fut:"",             aor:"ᾐσθόμην",    pf:"",              inf:"αἰσθάνεσθαι",    tr:"(be)merken",                         type:"aor_them"},
   {p:"ἀποθνῄσκω",    fut:"ἀποθανοῦμαι", aor:"ἀπέθανον",   pf:"τέθνηκα",       inf:"ἀποθνῄσκειν",   tr:"sterven",                            type:"aor_them"},
-  {p:"ἀπόλλυμαι",    fut:"",             aor:"ἀπωλόμην",   pf:"ἀπόλωλα",       inf:"ἀπόλλυσθαι",    tr:"te gronde gaan, omkomen",            type:"aor_them"},
+  {p:"ἀπόλλυμαι",    fut:"",             aor:"ἀπωλόμην",   pf:"ἀπόλωλα",       inf:"ἀπόλλυσθαι",    tr:"te gronde gaan, omkomen",            type:"aor_them", pAlt:"ἀπόλλυμι"},
   {p:"ἀπόλλυμι",     fut:"",             aor:"ἀπώλεσα",    pf:"",              inf:"ἀπολλύναι",      tr:"te gronde richten",                  type:"aor_sig"},
   {p:"ἀφικνέομαι",   fut:"",             aor:"ἀφικόμην",   pf:"ἀφῖγμαι",       inf:"ἀφικνεῖσθαι",   tr:"aankomen",                          type:"aor_them"},
   {p:"βάλλω",        fut:"",             aor:"ἔβαλον",     pf:"βέβληκα",       inf:"βάλλειν",        tr:"werpen, gooien, treffen",            type:"aor_them"},
@@ -771,6 +771,12 @@ function normGreek(s) {
   return s.trim().normalize('NFD').replace(/[\u0300-\u036f\u0313\u0314\u0301\u0300\u0342\u0308\u0345]/g,'').normalize('NFC').toLowerCase();
 }
 
+// Accepteer een alternatieve praesensvorm bij het controleren (bv. actief
+// ἀπόλλυμι naast medium ἀπόλλυμαι), terwijl de weergave canoniek v.p blijft.
+function praesensAccept(v) {
+  return v.pAlt ? v.p + '/' + v.pAlt : v.p;
+}
+
 function greekMatch(input, correct) {
   if (!input.trim() || !correct) return false;
   // Accept exact match or diacritic-stripped match
@@ -790,7 +796,7 @@ function handleSubmit() {
 
 function checkInvul(v) {
   const fields = [
-    {id:'fi-prae', correct:v.p},
+    {id:'fi-prae', correct:praesensAccept(v), display:v.p},
     {id:'fi-fut',  correct:v.fut},
     {id:'fi-aor',  correct:v.aor},
     {id:'fi-perf', correct:v.pf},
@@ -801,7 +807,7 @@ function checkInvul(v) {
     if (inp.disabled) return;
     if (!f.correct || !f.correct.trim()) return; // blank = skip
     const ok = greekMatch(inp.value, f.correct);
-    if (!inp.value.trim()) { inp.value = f.correct; inp.classList.add('skipped'); allOk = false; }
+    if (!inp.value.trim()) { inp.value = f.display || f.correct; inp.classList.add('skipped'); allOk = false; }
     else { inp.classList.add(ok ? 'correct' : 'wrong'); if (!ok) allOk = false; }
   });
   finishAnswer(allOk, v);
@@ -809,7 +815,7 @@ function checkInvul(v) {
 
 function checkOmgekeerd(v) {
   const inp = document.getElementById('fi-prae-rev');
-  const ok  = greekMatch(inp.value, v.p);
+  const ok  = greekMatch(inp.value, praesensAccept(v));
   inp.classList.add(ok ? 'correct' : 'wrong');
   if (!inp.value.trim()) inp.value = v.p;
   finishAnswer(ok, v);
