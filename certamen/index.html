@@ -421,12 +421,13 @@ body.greek .qcard .word{color:#143a5e}
 }
 .pixel-hero.dir-right .sprite-weapon{transform:scaleX(-1) translate(calc(-1 * var(--wx,0px)),var(--wy,0px))}
 .pixel-hero.dir-left  .sprite-weapon{transform:translate(calc(-1 * var(--wx,0px)),var(--wy,0px))}
-/* Helm-uitlijning: staat net te ver naar voren; facing-bewuste nudge terug.
-   --hx positief = naar de kijkrichting; negatief = naar achteren. */
-.sprite-helm{--hx:-2px}
+/* Helm-uitlijning. --hx = nudge naar kijkrichting, --hy = omlaag, --hscale = schaal. */
+.sprite-helm{--hx:-2px;--hy:0px;--hscale:1}
 @media(min-width:900px){.sprite-helm{--hx:-3px}}
-.pixel-hero.dir-right .sprite-helm{transform:scaleX(-1) translateX(calc(-1 * var(--hx,0px)))}
-.pixel-hero.dir-left  .sprite-helm{transform:translateX(calc(-1 * var(--hx,0px)))}
+.pixel-hero.dir-right .sprite-helm{transform:scaleX(-1) translate(calc(-1 * var(--hx,0px)),var(--hy,0px)) scale(var(--hscale,1))}
+.pixel-hero.dir-left  .sprite-helm{transform:translate(calc(-1 * var(--hx,0px)),var(--hy,0px)) scale(var(--hscale,1))}
+.sprite-helm.hlm-hopliet{--hy:-4px;--hscale:1.12}
+@media(min-width:900px){.sprite-helm.hlm-hopliet{--hy:-6px;--hscale:1.12}}
 /* Desktop â‰¥900px: schaal 2.25Ã— â†’ 144Ã—144, bg-size 1296Ã—864 */
 @media(min-width:900px){
   .pixel-hero{width:144px;height:144px}
@@ -688,7 +689,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="net.js?v=20260709"></script>
 <script src="games.js?v=20260629tw"></script>
 <script src="battle-data.js?v=20260630s"></script>
-<script src="battle.js?v=20260701"></script>
+<script src="battle.js?v=20260701b"></script>
 <script src="totalwar.js?v=20260629tw"></script>
 <script>
 /* ---- INIT ---- */
