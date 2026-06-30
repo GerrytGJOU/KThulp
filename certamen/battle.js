@@ -224,7 +224,6 @@ const BM_AVATAR_PARTS = {
   ]},
   wapen:  { nm:"Wapen",            opts:[
     { id:"knuppel", nm:"Knuppel" },
-    { id:"stok",    nm:"Stok" },
     { id:"hooivork",nm:"Hooivork" },
     { id:"zwaard",  nm:"Zwaard",          requires:{level:2} },
     { id:"speer",   nm:"Speer",           requires:{level:2} },
@@ -1518,7 +1517,6 @@ const PIXEL_ASSETS = {
             "vierkant":"assets/sprites/schild_vierkant.png",
             "tower":"assets/sprites/schild_tower.png" },
   wapen:  { "knuppel":"assets/sprites/wapen_knuppel.png",
-            "stok":"assets/sprites/wapen_stok.png",
             "hooivork":"assets/sprites/wapen_hooivork.png",
             "zwaard":"assets/sprites/wapen_zwaard.png",
             "speer":"assets/sprites/wapen_speer.png",
