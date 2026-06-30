@@ -4,146 +4,9 @@
    8 klassen (data-gedreven) · Synergie · Combo-abilities · Class Mastery
    ============================================================================ */
 
-/* ---- CONFIGURATIETABEL: KLASSEN (8 stuks) ---- */
-// Alle balanswaarden staan hier. Pas getallen aan zonder de logica te wijzigen.
-const BM_CLASSES = [
-  { id:"hopliet",      nm:"Hopliet",     icon:"shield", color:"#c8392a",
-    passive:{ desc:"+1 BE bij Verdedigen",                    type:"be_on_defend", val:1 },
-    abilities:[
-      { id:"schildmuur",    nm:"Schildmuur",    tier:"basic",    cost:2,  desc:"Geeft je team +4 schild",                   type:"team_shield",          shld:4 },
-      { id:"formatie",      nm:"Formatie",      tier:"advanced", cost:5,  desc:"Alle teamgenoten +2 BE",                    type:"team_be",              teamBE:2 },
-      { id:"achilleshiel",  nm:"Achilleshiel",  tier:"ultimate", cost:9,  desc:"Aanval (+6) die tegenschild omzeilt",       type:"attack_bypass",        dmg:6 },
-    ]},
-  { id:"spartaan",     nm:"Spartaan",    icon:"helmet", color:"#8B1A1A",
-    passive:{ desc:"+20% aanvalsschade",                       type:"atk_bonus",   val:0.20 },
-    abilities:[
-      { id:"speer",         nm:"Speeraanval",   tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+6)",      type:"attack",               dmg:6 },
-      { id:"berserk",       nm:"Berserk",       tier:"advanced", cost:5,  desc:"Zware aanval op het vijandelijk leger (+9)",type:"attack",               dmg:9 },
-      { id:"leeuwensprong", nm:"Leeuwensprong", tier:"ultimate", cost:10, desc:"Massieve aanval die schild omzeilt (+14)",  type:"attack_bypass",        dmg:14 },
-    ]},
-  { id:"boogschutter", nm:"Boogschutter",icon:"eagle",  color:"#2e6fb0",
-    passive:{ desc:"+1 schade bij aanval",                     type:"atk_flat",    val:1 },
-    abilities:[
-      { id:"pijlregen",     nm:"Pijlregen",     tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
-      { id:"zwakpunt",      nm:"Zwak punt",      tier:"advanced", cost:5,  desc:"Aanval (+7, of +17 als vijand ≤30% HP)",  type:"attack_weakspot",      dmg:7, bonusDmg:10 },
-      { id:"dodenarrow",    nm:"Dodenarrow",    tier:"ultimate", cost:9,  desc:"Dodelijke pijl op het vijandelijk leger (+13)", type:"attack",           dmg:13 },
-    ]},
-  { id:"cavalerie",    nm:"Cavalerie",   icon:"column", color:"#9B6914",
-    passive:{ desc:"+2 BE bij snel correct antwoord",          type:"be_on_fast",  val:2 },
-    abilities:[
-      { id:"charge",        nm:"Charge",        tier:"basic",    cost:3,  desc:"Snelle aanval op het vijandelijk leger (+7)", type:"attack",             dmg:7 },
-      { id:"flankbeweging", nm:"Flankbeweging", tier:"advanced", cost:5,  desc:"Aanval (+5) én schild voor je team (+3)",   type:"attack_and_defend",    dmg:5, shld:3 },
-      { id:"stormloop",     nm:"Stormloop",     tier:"ultimate", cost:9,  desc:"Verwoestende aanval (+13)",                  type:"attack",               dmg:13 },
-    ]},
-  { id:"priester",     nm:"Priester",    icon:"torch",  color:"#3f9d52",
-    passive:{ desc:"+1 heling bij helen",                      type:"heal_flat",   val:1 },
-    abilities:[
-      { id:"gebed",         nm:"Gebed",         tier:"basic",    cost:3,  desc:"Heelt je eigen leger (+9)",                 type:"heal",                 heal:9 },
-      { id:"zegen",         nm:"Zegen",         tier:"advanced", cost:5,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
-      { id:"godenvuur",     nm:"Godenvuur",     tier:"ultimate", cost:9,  desc:"Heelt leger (+12) én schaadt vijand (+4)",  type:"heal_and_attack",      heal:12, dmg:4 },
-    ]},
-  { id:"centurio",     nm:"Centurio",    icon:"laurel", color:"#6B2D8B",
-    passive:{ desc:"+1 BE per ronde (altijd)",                 type:"be_passive",  val:1 },
-    abilities:[
-      { id:"bevel",         nm:"Bevel",         tier:"basic",    cost:2,  desc:"Geeft je team +3 schild",                   type:"team_shield",          shld:3 },
-      { id:"strijdformatie",nm:"Strijdformatie",tier:"advanced", cost:4,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
-      { id:"testudo",       nm:"Testudo",       tier:"ultimate", cost:8,  desc:"Massiefschild (+7) én team +2 BE",          type:"testudo",              shld:7, teamBE:2 },
-    ]},
-  { id:"genie",        nm:"Genie",       icon:"amphora",color:"#C87533",
-    passive:{ desc:"Aanvallen verminderen ook vijandelijk schild (−2)", type:"shld_pierce", val:2 },
-    abilities:[
-      { id:"katapult",      nm:"Katapult",      tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
-      { id:"valgreppel",    nm:"Valgreppel",    tier:"advanced", cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
-      { id:"vuurtoren",     nm:"Vuurtoren",     tier:"ultimate", cost:8,  desc:"Zware aanval (+9) én schild weg (−4)",     type:"attack_siege",         dmg:9, shldRemove:4 },
-    ]},
-  { id:"verkenner",    nm:"Verkenner",   icon:"eagle",  color:"#2D8B7A",
-    passive:{ desc:"Basis-abilities kosten 1 BE minder",       type:"cost_reduce", val:1 },
-    abilities:[
-      { id:"verkenning",    nm:"Verkenning",    tier:"basic",    cost:2,  desc:"Aanval (+4) én saboteer vijandelijk schild (−2)", type:"attack_and_shld_remove", dmg:4, shldRemove:2 },
-      { id:"sabotage",      nm:"Sabotage",      tier:"advanced", cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
-      { id:"hinderlaag",    nm:"Hinderlaag",    tier:"ultimate", cost:7,  desc:"Zware aanval (+10) én schild voor team (+3)", type:"attack_and_defend",   dmg:10, shld:3 },
-    ]},
-];
-
-/* ---- CONFIGURATIETABEL: SYNERGIE ---- */
-// Flat BE-bonus per speler per ronde op basis van klasdiversiteit binnen het team.
-const BM_SYNERGY = [
-  { minClasses:3, beBonus:2 },  // ≥3 unieke klassen → +2 BE per speler
-  { minClasses:5, beBonus:4 },  // ≥5 unieke klassen → +4 BE per speler
-  { minClasses:7, beBonus:6 },  // ≥7 unieke klassen → +6 BE per speler
-];
-
-/* ---- CONFIGURATIETABEL: COMBO-ABILITIES ---- */
-// Beide spelers moeten in dezelfde ronde "Combo" kiezen; host detecteert het bij resolutie.
-const BM_COMBOS = [
-  { id:"schildmuur_schieten", nm:"Schildmuur met Schieten", classes:["hopliet","boogschutter"],     cost:4, desc:"Schild (+6) én gecombineerde pijlaanval (+6)",                  shld:6, dmg:6 },
-  { id:"strijdszegen",        nm:"Strijdszegen",            classes:["priester","spartaan"],         cost:4, desc:"Massale BE-bonus voor het hele team (+5 per speler)",            teamBE:5 },
-  { id:"vuursalvo",           nm:"Vuursalvo",               classes:["genie","boogschutter"],        cost:4, desc:"Gecombineerde zware aanval (+12)",                               dmg:12 },
-  { id:"testudo_formatie",    nm:"Testudo-formatie",         classes:["centurio","hopliet"],          cost:4, desc:"Massief gecombineerd schild voor het hele team (+10)",            shld:10 },
-  { id:"hinderlaag_aanval",   nm:"Hinderlaag & Aanval",      classes:["verkenner","cavalerie"],       cost:4, desc:"Gecombineerde aanval (+13) én vijandelijk schild weg (−3)",     dmg:13, shldRemove:3 },
-];
-
-/* ---- CONFIGURATIETABEL: FACTIES / THEMA'S ---- */
-// cssVars: alleen de velden die afwijken van de standaard hoeven ingevuld.
-// Nieuwe factie toevoegen = één entry hier; geen andere code wijzigen.
-const BM_FACTIONS = [
-  { id:"rome_gaul",       nm:"Romeinen vs Galliërs",    default:true,
-    teams:{ A:{ nm:"Legio Romani",   icon:"laurel"  }, B:{ nm:"Gallische Stam",  icon:"shield"  }},
-    cssVars:{ "--teamA":"#b03a2e","--glowA":"176,58,46","--teamB":"#3a7a30","--glowB":"58,122,48" },
-    classLabels:{} },
-  { id:"athene_sparta",   nm:"Athene vs Sparta",
-    teams:{ A:{ nm:"Atheners",       icon:"column"  }, B:{ nm:"Spartanen",       icon:"helmet"  }},
-    cssVars:{ "--teamA":"#2e6fb0","--glowA":"46,111,176","--teamB":"#8b1a1a","--glowB":"139,26,26" },
-    classLabels:{ hopliet:"Atheense Hopliet", spartaan:"Lakedaimoniër" } },
-  { id:"grieken_perzen",  nm:"Grieken vs Perzen",
-    teams:{ A:{ nm:"Hellenen",       icon:"column"  }, B:{ nm:"Perzen",          icon:"eagle"   }},
-    cssVars:{ "--teamA":"#2e6fb0","--glowA":"46,111,176","--teamB":"#7a3a80","--glowB":"122,58,128" },
-    classLabels:{} },
-  { id:"rome_carthago",   nm:"Romeinen vs Carthago",
-    teams:{ A:{ nm:"Legio Romani",   icon:"laurel"  }, B:{ nm:"Carthago",        icon:"amphora" }},
-    cssVars:{ "--teamA":"#b03a2e","--glowA":"176,58,46","--teamB":"#9b6914","--glowB":"155,105,20" },
-    classLabels:{} },
-  { id:"grieken_trojanen",nm:"Grieken vs Trojanen",
-    teams:{ A:{ nm:"Grieken",        icon:"column"  }, B:{ nm:"Trojanen",        icon:"helmet"  }},
-    cssVars:{ "--teamA":"#2e6fb0","--glowA":"46,111,176","--teamB":"#9b6914","--glowB":"155,105,20" },
-    classLabels:{} },
-  { id:"goden_titanen",   nm:"Goden vs Titanen",
-    teams:{ A:{ nm:"Olympiërs",      icon:"torch"   }, B:{ nm:"Titanen",         icon:"shield"  }},
-    cssVars:{ "--teamA":"#d4af37","--glowA":"212,175,55","--teamB":"#4a2d6a","--glowB":"74,45,106",
-              "--stone":"#100a1a","--stone2":"#180f28","--stone3":"#1f1530","--stone4":"#2a1a3e" },
-    classLabels:{ priester:"Orakel", centurio:"Halfgod" } },
-];
-
-/* ---- CONFIGURATIETABEL: COMMANDER SPECTRES ---- */
-// Puur visueel — verschijnt als semi-transparante geest bij combo's / ultimates / team-buffs.
-// Nieuwe factie toevoegen: 1) voeg afbeelding toe in assets/commanders/, 2) voeg één entry toe.
-// Vervang .svg door .png zodra echte artwork beschikbaar is (één regelwijziging per commandant).
-const BM_COMMANDERS = {
-  rome_gaul: {
-    A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.png"       },
-    B: { nm:"Vercingetorix",   img:"assets/commanders/gauls/vercingetorix.png" },
-  },
-  athene_sparta: {
-    A: { nm:"Pericles",        img:"assets/commanders/athenians/pericles.png"  },
-    B: { nm:"Leonidas",        img:"assets/commanders/spartans/leonidas.png"   },
-  },
-  grieken_perzen: {
-    A: { nm:"Themistokles",    img:"assets/commanders/athenians/pericles.png"  },
-    B: { nm:"Xerxes",          img:"assets/commanders/persians/xerxes.png"     },
-  },
-  rome_carthago: {
-    A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.svg"       },
-    B: { nm:"Hannibal",        img:"assets/commanders/carthage/hannibal.png"   },
-  },
-  grieken_trojanen: {
-    A: { nm:"Agamemnon",       img:"assets/commanders/greeks/agamemnon.png"    },
-    B: { nm:"Hector",          img:"assets/commanders/trojans/hector.png"      },
-  },
-  goden_titanen: {
-    A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.svg"           },
-    B: { nm:"Kronos",          img:"assets/commanders/titans/kronos.svg"       },
-  },
-};
+/* Configuratie- en balanstabellen staan in battle-data.js (vóór dit bestand
+   geladen): BM_CLASSES, BM_SYNERGY, BM_COMBOS, facties/themas, BM_COMMANDERS,
+   BM_AVATAR_PARTS en de niveau-/mastery-tabellen. */
 
 /* ---- COMMANDER SPECTRE MODULE ---- */
 // Herbruikbaar visueel component. Gebruik CommanderSpectre.show(team) vanuit elke game mode.
@@ -185,119 +48,6 @@ const CommanderSpectre = (() => {
 
   return { show, isUltimate };
 })();
-
-/* ---- CONFIGURATIETABELLEN: M6 AVATAR / NIVEAU / MASTERY / ACHIEVEMENTS ---- */
-
-// Alle avatar-onderdelen. requires:{level:N} of {mastery:N} = vereist niveau/mastery om te ontgrendelen.
-const BM_AVATAR_PARTS = {
-  geslacht:{ nm:"Geslacht",        opts:[
-    { id:"man",   nm:"Man" },
-    { id:"vrouw", nm:"Vrouw" },
-  ]},
-  huid:   { nm:"Huidskleur",       opts:[
-    { id:"licht",  nm:"Licht" },
-    { id:"donker", nm:"Donker" },
-  ]},
-  armor:  { nm:"Wapenrusting",     opts:[
-    { id:"vodden",      nm:"Vodden" },
-    { id:"robe",        nm:"Mantel" },
-    { id:"licht",       nm:"Licht",        requires:{level:2} },
-    { id:"middel",      nm:"Middel",       requires:{level:5} },
-    { id:"hopliet",     nm:"Hopliet",      requires:{level:7} },
-    { id:"zwaar",       nm:"Zwaar",        requires:{level:9} },
-    { id:"ceremonieel", nm:"Ceremonieel",  requires:{mastery:5} },
-  ]},
-  helm:   { nm:"Helm",             opts:[
-    { id:"geen",     nm:"Geen helm" },
-    { id:"bandana",  nm:"Bandana" },
-    { id:"standard", nm:"Standaard",      requires:{level:2} },
-    { id:"open",     nm:"Open",           requires:{level:4} },
-    { id:"hopliet",  nm:"Hopliet",        requires:{level:8} },
-    { id:"kroon",    nm:"Kroon",          requires:{level:10} },
-  ]},
-  schild: { nm:"Schild",           opts:[
-    { id:"geen",     nm:"Geen schild" },
-    { id:"rond",     nm:"Rond",           requires:{level:3} },
-    { id:"ovaal",    nm:"Puntig",         requires:{level:3} },
-    { id:"vierkant", nm:"Metaal Rond",    requires:{level:6} },
-    { id:"tower",    nm:"Metaal Puntig",  requires:{level:6} },
-  ]},
-  wapen:  { nm:"Wapen",            opts:[
-    { id:"knuppel", nm:"Knuppel" },
-    { id:"hooivork",nm:"Hooivork" },
-    { id:"zwaard",  nm:"Zwaard",          requires:{level:2} },
-    { id:"speer",   nm:"Speer",           requires:{level:2} },
-    { id:"boog",    nm:"Boog",            requires:{level:4} },
-    { id:"staf",    nm:"Staf",            requires:{level:4} },
-  ]},
-  haar:   { nm:"Haar",             opts:[
-    { id:"kort",    nm:"Kort" },
-    { id:"lang",    nm:"Lang" },
-    { id:"kaal",    nm:"Kaal" },
-    { id:"vlecht",  nm:"Vlecht",          requires:{level:6} },
-    { id:"middel",  nm:"Middel",          requires:{level:6} },
-    { id:"knot",    nm:"Knot",            requires:{level:7} },
-    { id:"hanekam", nm:"Hanekam",         requires:{level:7} },
-  ]},
-  haarkleur:{ nm:"Haarkleur",      opts:[
-    { id:"blond",  nm:"Blond" },
-    { id:"bruin",  nm:"Bruin" },
-    { id:"zwart",  nm:"Zwart" },
-    { id:"rood",   nm:"Rood" },
-    { id:"blauw",  nm:"Blauw",            requires:{level:8} },
-    { id:"groen",  nm:"Groen",            requires:{level:8} },
-  ]},
-  baard:  { nm:"Gezichtshaar",     opts:[
-    { id:"geen",      nm:"Geen" },
-    { id:"snor",      nm:"Snor" },
-    { id:"baard",     nm:"Baard" },
-    { id:"baardsnor", nm:"Baard en snor" },
-  ]},
-  cape:   { nm:"Cape",             opts:[
-    { id:"geen", nm:"Geen" },
-    { id:"kort", nm:"Kort",              requires:{level:5} },
-    { id:"lang", nm:"Lang",              requires:{level:7} },
-  ]},
-  capekleur:{ nm:"Capekleur",      opts:[
-    { id:"goud",   nm:"Goud" },
-    { id:"rood",   nm:"Rood" },
-    { id:"blauw",  nm:"Blauw" },
-    { id:"groen",  nm:"Groen" },
-    { id:"paars",  nm:"Paars" },
-    { id:"oranje", nm:"Oranje" },
-  ]},
-  victoryAnim: { nm:"Overwinningsanimatie", opts:[
-    { id:"juichen",       nm:"Juichen" },
-    { id:"zwaardhefffen", nm:"Zwaard heffen", requires:{level:5} },
-  ]},
-};
-
-// XP-drempels en titels per niveau (1–10). Aanpasbaar zonder logica te wijzigen.
-const BM_LEVELS = [
-  { level:1,  xp:0,    title:"Tiro",       unlock:null },
-  { level:2,  xp:100,  title:"Miles",      unlock:{part:"armor",      opt:"licht",        nm:"Wapenrusting: Licht"} },
-  { level:3,  xp:250,  title:"Optio",      unlock:{part:"schild",     opt:"rond",         nm:"Schild: Rond & Puntig"} },
-  { level:4,  xp:500,  title:"Signifer",   unlock:{part:"helm",       opt:"open",         nm:"Helm: Open"} },
-  { level:5,  xp:900,  title:"Aquilifer",  unlock:{part:"cape",       opt:"kort",         nm:"Cape: Kort & Zwaard heffen"} },
-  { level:6,  xp:1400, title:"Centurio",   unlock:{part:"schild",     opt:"vierkant",     nm:"Schild: Metaal Rond & Metaal Puntig"} },
-  { level:7,  xp:2100, title:"Praefectus", unlock:{part:"armor",      opt:"hopliet",      nm:"Wapenrusting: Hopliet & Cape: Lang"} },
-  { level:8,  xp:3000, title:"Tribunus",   unlock:{part:"helm",       opt:"hopliet",      nm:"Helm: Hopliet & Haarkleur: Blauw/Groen"} },
-  { level:9,  xp:4200, title:"Legatus",    unlock:{part:"armor",      opt:"zwaar",        nm:"Wapenrusting: Zwaar"} },
-  { level:10, xp:6000, title:"Imperator",  unlock:{part:"helm",       opt:"kroon",        nm:"Helm: Kroon"} },
-];
-
-// score = rounds*5 + damage + healing  → mastery-sterren (0–5)
-const BM_MASTERY_TIERS = [
-  { stars:0, score:0   },
-  { stars:1, score:15  },
-  { stars:2, score:40  },
-  { stars:3, score:80  },
-  { stars:4, score:140 },
-  { stars:5, score:220 },
-];
-
-// Uitbreidbaar via één extra entry; geen andere code wijzigen.
-// BM_ACHIEVEMENTS is vervangen door ACHIEVEMENTS_DEF in core.js (geunificeerd systeem)
 
 /* ---- BATTLE IDENTITY ---- */
 const BM_IDENT_KEY = "certamen_battle_identity";
@@ -1008,21 +758,66 @@ SCREENS.battleHostLobby = function(){
     </div>
     <div class="plist" id="bmPlist"></div>
   </div>
+  <div class="panel">
+    <label class="fld">AI-teamgenoten toevoegen</label>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <select id="bmBotTeam" style="padding:7px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
+        <option value="A">${esc(fac.teams.A.nm)}</option>
+        <option value="B">${esc(fac.teams.B.nm)}</option>
+      </select>
+      <select id="bmBotAcc" style="padding:7px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
+        <option value="0.95">Excellent (95%)</option>
+        <option value="0.75" selected>Gemiddeld (75%)</option>
+        <option value="0.5">Zwak (50%)</option>
+        <option value="0.25">Erg zwak (25%)</option>
+      </select>
+      <button class="btn btn-gold" style="padding:8px 14px" onclick="bmAddBot()">+ Bot</button>
+    </div>
+    <div class="note" style="margin-top:6px">Bots beantwoorden vragen automatisch en kiezen een willekeurige actie.</div>
+  </div>
   <button class="btn btn-gold btn-block lg" id="bmSB" onclick="bmStartGame()" disabled>Start het gevecht</button>
   ${foot()}`);
   const rP=fbDB.ref("rooms/"+BM_CODE+"/players"), fP=rP.on("value",s=>{BM_PLAYERS=s.val()||{};bmRenderHostLobby();});
   const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"), fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};});
   BM_UNSUBS=[()=>rP.off("value",fP),()=>rT.off("value",fT)];
 };
+function bmAddBot(){
+  const team=el("bmBotTeam")?.value||"A";
+  const acc=parseFloat(el("bmBotAcc")?.value||"0.75");
+  const cls=BM_CLASSES[Math.floor(Math.random()*BM_CLASSES.length)];
+  const names=["Maximus","Iulia","Marcus","Livia","Brutus","Cornelia","Titus","Flavia","Cassius","Helena"];
+  const name=names[Math.floor(Math.random()*names.length)]+" (bot)";
+  const pid="bot_"+Date.now();
+  const bot={name,team,class:cls.id,isBot:true,botAcc:acc,be:2,correct:0,wrong:0,damage:0,healing:0,
+    avatar:bmAvatarDefaults(),color:cls.color||COLORS[0],identityKey:"bot:"+pid};
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).set(bot);
+}
 function bmRenderHostLobby(){
   const ln=el("bmLN"); if(ln)ln.textContent="("+Object.keys(BM_PLAYERS).length+")";
   const pl=el("bmPlist"); if(!pl)return;
-  pl.innerHTML=Object.values(BM_PLAYERS).map(p=>`<span class="ptag">
-    ${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],30)} ${esc(p.name)}
-    ${p.team?`<span class="pill" style="background:${p.team==="A"?"var(--teamA)":"var(--teamB)"};border:none">${esc(bmTeamNm(p.team))}</span>`:""}
-    ${p.class?`<span class="pill">${bmClsName(p.class)}</span>`:""}
-  </span>`).join("")||`<div class="note">Wachten op spelers…</div>`;
-  const sb=el("bmSB"); if(sb)sb.disabled=Object.keys(BM_PLAYERS).length<2;
+  const fac=bmFaction(BM_META?.theme);
+  const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
+  pl.innerHTML=Object.entries(BM_PLAYERS).map(([pid,p])=>`<div class="ptag" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:5px 0;border-bottom:0.5px solid var(--stone4)">
+    <span style="flex:1;display:flex;align-items:center;gap:6px">
+      ${p.isBot?`<span style="font-size:16px" title="AI-bot">🤖</span>`:`${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],26)}`}
+      <span>${esc(p.name)}</span>
+      ${p.team?`<span class="pill" style="background:${p.team==="A"?"var(--teamA)":"var(--teamB)"};border:none;font-size:11px">${esc(p.team==="A"?fac.teams.A.nm:fac.teams.B.nm)}</span>`:""}
+      ${p.class?`<span class="pill" style="font-size:11px">${esc(bmClsName(p.class))}</span>`:""}
+    </span>
+    <button class="chip" style="font-size:11px" title="Wissel van team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>
+    <button class="chip" style="font-size:11px;color:#e07060;border-color:rgba(90,18,12,.4)" title="Verwijder" onclick="bmKickPlayer(${q(pid)})">✕</button>
+  </div>`).join("")||`<div class="note">Wachten op spelers…</div>`;
+  const sb=el("bmSB"); if(sb)sb.disabled=Object.keys(BM_PLAYERS).length<1;
+}
+function bmSwitchTeam(pid){
+  const p=BM_PLAYERS[pid]; if(!p) return;
+  const newTeam=p.team==="A"?"B":"A";
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+pid+"/team").set(newTeam);
+}
+function bmKickPlayer(pid){
+  const p=BM_PLAYERS[pid]; if(!p) return;
+  if(!confirm("Verwijder '"+p.name+"' uit het spel?")) return;
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).remove();
 }
 function bmAutoTeams(){
   const pids=shuffle(Object.keys(BM_PLAYERS)),up={};
@@ -1076,6 +871,30 @@ async function bmDistributeQs(roundN){
   up["teams/A/classes"]=clsA;
   up["teams/B/classes"]=clsB;
   await fbDB.ref("rooms/"+BM_CODE).update(up);
+  // Bot auto-answer: bots antwoorden na een willekeurige vertraging
+  const botEntries=Object.entries(BM_PLAYERS).filter(([,p])=>p.isBot);
+  if(botEntries.length){
+    for(const[pid,p] of botEntries){
+      const acc=p.botAcc??0.75;
+      const delay=1500+Math.random()*Math.max(0,(at-3)*1000);
+      setTimeout(()=>{
+        const correct=Math.random()<acc;
+        const botBe=(BM_PLAYERS[pid]?.be||0)+(correct?1:0);
+        const cls=BM_CLASSES.find(c=>c.id===p.class);
+        const abilities=cls?.abilities||[];
+        const affordable=abilities.filter(a=>(a.cost||0)<=botBe);
+        const chosenAbility=affordable.length?affordable[Math.floor(Math.random()*affordable.length)]:null;
+        const action=chosenAbility?{type:"ability",abilityId:chosenAbility.id,cost:chosenAbility.cost||0}:null;
+        const botUp={};
+        botUp["players/"+pid+"/answeredRound"]=roundN;
+        botUp["players/"+pid+"/correct"]=(p.correct||0)+(correct?1:0);
+        botUp["players/"+pid+"/wrong"]=(p.wrong||0)+(correct?0:1);
+        botUp["players/"+pid+"/be"]=Math.max(0,botBe-(action?.cost||0));
+        if(action) botUp["players/"+pid+"/lockedAction"]=action;
+        fbDB.ref("rooms/"+BM_CODE).update(botUp).catch(()=>{});
+      },delay);
+    }
+  }
 }
 function bmPersonalPool(pid,pool){
   if(!BM_META?.adaptive)return pool;
@@ -1180,19 +999,25 @@ function bmHostUpdatePlayers(){
 
   // Spelersgrid
   const grid=el("bmPlayerGrid");if(!grid)return;
-  grid.innerHTML=entries.map(([,p])=>{
+  const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
+  grid.innerHTML=entries.map(([pid,p])=>{
     const cls=BM_CLASSES.find(c=>c.id===p.class);
     const col=cls?.color||"var(--muted)";
     const hasAnswered=p.answeredRound===round.n;
     const hasLocked=!!p.lockedAction;
     const dotCls=hasAnswered?"on":hasLocked?"locked":"";
+    const teamCol=p.team==="A"?"var(--teamA)":p.team==="B"?"var(--teamB)":"var(--muted)";
     return `<div class="bm-pcard" style="border-color:${col}44">
       <div style="position:relative">
-        ${bmAvatarSVG(bmAvatarMerge(p.avatar),32)}
+        ${p.isBot?`<span style="font-size:24px;line-height:32px;display:block;text-align:center">🤖</span>`:bmAvatarSVG(bmAvatarMerge(p.avatar),32)}
         <span class="bm-pdot ${dotCls}"></span>
       </div>
-      <div class="bm-pname">${esc(p.name)}</div>
+      <div class="bm-pname" style="border-bottom:2px solid ${teamCol}40">${esc(p.name)}</div>
       <div class="bm-pcls" style="color:${col}">${esc(cls?.nm||"")}</div>
+      <div style="display:flex;gap:4px;margin-top:4px;justify-content:center">
+        <button class="chip" style="font-size:10px;padding:2px 6px" title="Wissel team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>
+        <button class="chip" style="font-size:10px;padding:2px 6px;color:#e07060;border-color:rgba(90,18,12,.4)" title="Verwijder" onclick="bmKickPlayer(${q(pid)})">✕</button>
+      </div>
     </div>`;
   }).join("");
 

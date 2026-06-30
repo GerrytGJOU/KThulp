@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
@@ -7,15 +7,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Certamen">
 <meta name="theme-color" content="#16110c">
-<title>CERTAMEN — Klassieke Talen Arena</title>
+<title>CERTAMEN â€” Klassieke Talen Arena</title>
 <!--
   ============================================================================
-  CERTAMEN — realtime multiplayer woordspel (Latijn / Grieks)
-  © Gerben de Jong · 2026
+  CERTAMEN â€” realtime multiplayer woordspel (Latijn / Grieks)
+  Â© Gerben de Jong Â· 2026
   ============================================================================
   HOSTEN: GitHub Pages (statisch). Realtime werkt via Firebase Realtime Database.
 
-  >>> EENMALIG INSTELLEN (ong. 10 min) — daarna kan elke klas meespelen:
+  >>> EENMALIG INSTELLEN (ong. 10 min) â€” daarna kan elke klas meespelen:
   1. Ga naar https://console.firebase.google.com  en maak een (gratis) project.
   2. Klik "Realtime Database" -> "Database maken" -> regio "europe-west1"
      -> start in TESTMODUS (of zet later de regels hieronder).
@@ -25,7 +25,7 @@
   5. Klaar. Zonder config werkt de OEFENMODUS (met computer-spelers) gewoon,
      zodat je de spellen meteen kunt uitproberen.
 
-  Aanbevolen databaseregels (Realtime Database -> Regels) — beperkt tot /rooms:
+  Aanbevolen databaseregels (Realtime Database -> Regels) â€” beperkt tot /rooms:
   {
     "rules": {
       "rooms": {
@@ -293,7 +293,7 @@ body.greek .qcard .word{color:#143a5e}
 .screen{animation:fade .3s ease}
 
 /* ======================================================
-   BATTLE MODE M9 — VOLLEDIG SLAGVELD
+   BATTLE MODE M9 â€” VOLLEDIG SLAGVELD
    Alleen transform/opacity geanimeerd; GPU-compositing.
    ====================================================== */
 
@@ -331,7 +331,7 @@ body.greek .qcard .word{color:#143a5e}
 .bm-fcol{display:flex;flex-direction:column;gap:8px;align-items:center}
 #bmBfx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:10}
 
-/* ── Landschapsachtergronden ── */
+/* â”€â”€ Landschapsachtergronden â”€â”€ */
 .bm-bg-roman{background:linear-gradient(180deg,#7ab3e0 0%,#a8d4f0 18%,#8bc45a 44%,#6a9040 58%,#4a6028 100%)}
 .bm-bg-roman::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%20540'%3E%3Cellipse%20cx='400'%20cy='620'%20rx='520'%20ry='260'%20fill='%234a6028'/%3E%3Cellipse%20cx='1200'%20cy='630'%20rx='600'%20ry='290'%20fill='%235a7030'/%3E%3Cellipse%20cx='860'%20cy='570'%20rx='460'%20ry='210'%20fill='%236a8040'/%3E%3Crect%20x='0'%20y='438'%20width='1920'%20height='2'%20fill='%233a5020'%20opacity='.35'/%3E%3Crect%20x='124'%20y='224'%20width='8'%20height='266'%20fill='%23a07828'/%3E%3Ccircle%20cx='128'%20cy='217'%20r='11'%20fill='%23c8a020'/%3E%3Crect%20x='104'%20y='255'%20width='50'%20height='7'%20rx='2'%20fill='%23987020'/%3E%3Crect%20x='108'%20y='262'%20width='42'%20height='57'%20fill='%23c8392a'/%3E%3Crect%20x='108'%20y='319'%20width='42'%20height='6'%20fill='%23c8a020'/%3E%3Cline%20x1='129'%20y1='272'%20x2='129'%20y2='309'%20stroke='%23e8c840'%20stroke-width='1.8'%20opacity='.8'/%3E%3Cline%20x1='114'%20y1='284'%20x2='144'%20y2='284'%20stroke='%23e8c840'%20stroke-width='1.8'%20opacity='.8'/%3E%3Crect%20x='1783'%20y='234'%20width='10'%20height='256'%20fill='%235a2e10'/%3E%3Crect%20x='1766'%20y='272'%20width='44'%20height='8'%20rx='2'%20fill='%234a2008'/%3E%3Crect%20x='1771'%20y='316'%20width='34'%20height='7'%20rx='2'%20fill='%234a2008'/%3E%3Ccircle%20cx='1788'%20cy='226'%20r='10'%20fill='%23c8b080'/%3E%3Cellipse%20cx='1784'%20cy='224'%20rx='2.5'%20ry='3'%20fill='%23333'/%3E%3Cellipse%20cx='1792'%20cy='224'%20rx='2.5'%20ry='3'%20fill='%23333'/%3E%3Cpath%20d='M1784%20231%20Q1788%20235%201792%20231'%20stroke='%23555'%20stroke-width='1.5'%20fill='none'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.75}
 .bm-bg-greek{background:linear-gradient(180deg,#4a8fc8 0%,#87ceeb 22%,#c8d8a0 54%,#d4c870 70%,#b8a850 100%)}
@@ -339,7 +339,7 @@ body.greek .qcard .word{color:#143a5e}
 .bm-bg-gods{background:linear-gradient(180deg,#08001e 0%,#1a0840 22%,#3a1868 42%,#6a38a0 62%,#a060c8 78%,#d4a0e0 100%)}
 .bm-bg-gods::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 540'%3E%3Cpolyline points='960%2C60%20938%2C195%20968%2C195%20938%2C350' stroke='%23ffd700' stroke-width='5' fill='none' opacity='.45'/%3E%3Cellipse cx='280' cy='170' rx='185' ry='58' fill='rgba(200%2C160%2C240%2C.18)'/%3E%3Cellipse cx='1620' cy='145' rx='205' ry='68' fill='rgba(200%2C160%2C240%2C.18)'/%3E%3Cellipse cx='950' cy='92' rx='155' ry='48' fill='rgba(220%2C180%2C255%2C.14)'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.9}
 
-/* ── Avatar-sprite ── */
+/* â”€â”€ Avatar-sprite â”€â”€ */
 .bm-av{display:inline-flex;flex-direction:column;align-items:center;gap:3px;position:relative;cursor:default}
 .bm-sprite{will-change:transform;display:block;overflow:visible;width:80px;height:107px}
 /* Team B gespiegeld */
@@ -348,7 +348,7 @@ body.greek .qcard .word{color:#143a5e}
 .bm-av .avncls{font-size:10px;color:var(--hi);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center;line-height:1.1;text-shadow:0 1px 4px rgba(0,0,0,.9)}
 @media(min-width:900px){.bm-sprite{width:120px;height:160px}.bm-av .avn{font-size:15px;max-width:110px}.bm-av .avncls{font-size:12px;max-width:110px}}
 
-/* ── Participatie-bolletje ── */
+/* â”€â”€ Participatie-bolletje â”€â”€ */
 .bm-dot{position:absolute;top:3px;right:2px;width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(0,0,0,.5);background:var(--stone4);z-index:5;transition:background .3s}
 .bm-dot.on{background:var(--green-bright)}
 .bm-dot.locked{background:var(--hi)}
@@ -359,9 +359,9 @@ body.greek .qcard .word{color:#143a5e}
 .bm-hero-armor{font-size:8px;line-height:1;text-align:center;color:#9cc8ff;margin-top:1px}
 .bm-hero-respawn{font-size:8px;line-height:1;text-align:center;color:var(--hi);margin-top:1px;font-weight:700}
 .bm-av.bm-hero-dead{opacity:.4;filter:grayscale(1)}
-.bm-av.bm-hero-dead .avn::after{content:" ✝"}
+.bm-av.bm-hero-dead .avn::after{content:" âœ"}
 
-/* ── Idle animatie (sprite) ── */
+/* â”€â”€ Idle animatie (sprite) â”€â”€ */
 @keyframes bmIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .bm-sprite{animation:bmIdle 2.6s ease-in-out infinite}
 .bm-av:nth-child(2) .bm-sprite{animation-delay:.35s}
@@ -380,11 +380,11 @@ body.greek .qcard .word{color:#143a5e}
 #bmFormB .bm-av:nth-child(6) .bm-sprite{animation-delay:1.75s}
 #bmFormB .bm-av:nth-child(7) .bm-sprite{animation-delay:2.1s}
 
-/* ── Sideview Battler Paper Doll (RPG Maker MV, 64×64 per frame) ── */
-/* Body/cosmetic sheets zijn SV-battler grids: 576×384 = 9 kolommen × 6 rijen
-   van 64×64. We tonen rij 0, frames 0-2 als idle-cyclus (192px verplaatsing
+/* â”€â”€ Sideview Battler Paper Doll (RPG Maker MV, 64Ã—64 per frame) â”€â”€ */
+/* Body/cosmetic sheets zijn SV-battler grids: 576Ã—384 = 9 kolommen Ã— 6 rijen
+   van 64Ã—64. We tonen rij 0, frames 0-2 als idle-cyclus (192px verplaatsing
    native). SV-sprites kijken van nature naar LINKS; facing per team via
-   scaleX-spiegeling op de lagen. Schaal 1.5× (mobiel 96px) / 2.25× (≥900px). */
+   scaleX-spiegeling op de lagen. Schaal 1.5Ã— (mobiel 96px) / 2.25Ã— (â‰¥900px). */
 .pixel-hero{position:relative;width:96px;height:96px;overflow:visible;image-rendering:pixelated;image-rendering:crisp-edges;flex-shrink:0}
 .sprite-layer{position:absolute;inset:0;background-size:864px 576px;background-repeat:no-repeat;background-position:0 0;animation:svIdle .6s steps(3) infinite}
 @keyframes svIdle{from{background-position-x:0}to{background-position-x:-288px}}
@@ -413,7 +413,7 @@ body.greek .qcard .word{color:#143a5e}
 @media(min-width:900px){.sprite-helm{--hx:-3px}}
 .pixel-hero.dir-right .sprite-helm{transform:scaleX(-1) translateX(calc(-1 * var(--hx,0px)))}
 .pixel-hero.dir-left  .sprite-helm{transform:translateX(calc(-1 * var(--hx,0px)))}
-/* Desktop ≥900px: schaal 2.25× → 144×144, bg-size 1296×864 */
+/* Desktop â‰¥900px: schaal 2.25Ã— â†’ 144Ã—144, bg-size 1296Ã—864 */
 @media(min-width:900px){
   .pixel-hero{width:144px;height:144px}
   .sprite-layer{background-size:1296px 864px;animation-name:svIdleL}
@@ -441,18 +441,18 @@ body.greek .qcard .word{color:#143a5e}
 /* Sticky preview-paneel: avatar blijft in beeld terwijl je door de opties scrollt */
 .bm-av-sticky{position:sticky;top:6px;z-index:30;background:var(--stone2,#241a12)}
 
-/* ── Wapen-laag (288×64 = 3 aanvals-frames van 96×64) ── */
+/* â”€â”€ Wapen-laag (288Ã—64 = 3 aanvals-frames van 96Ã—64) â”€â”€ */
 /* Het wapen wordt vastgehouden in de achterste hand: het valt ACHTER het
-   lichaam (DOM-volgorde, geen z-index) en vóór de cape. In rust statisch op
+   lichaam (DOM-volgorde, geen z-index) en vÃ³Ã³r de cape. In rust statisch op
    het LAATSTE frame (rust/houd-stand); tijdens een aanval speelt de 3-frame
    zwaai (eindigt weer op het laatste frame). Facing erft via
    .dir-right .sprite-weapon (scaleX). */
 .sprite-weapon{
   display:block;animation:none!important;
-  background-size:432px 96px;       /* 288×64 op schaal 1.5× */
-  background-position-x:-288px;     /* frame 2 (rust/houd) = 2×144 */
+  background-size:432px 96px;       /* 288Ã—64 op schaal 1.5Ã— */
+  background-position-x:-288px;     /* frame 2 (rust/houd) = 2Ã—144 */
   background-position-y:0;
-  width:144px;height:96px;          /* één frame (96×64) op 1.5× */
+  width:144px;height:96px;          /* Ã©Ã©n frame (96Ã—64) op 1.5Ã— */
   inset:auto;top:auto;bottom:0;left:50%;margin-left:-72px;
   pointer-events:none
 }
@@ -488,7 +488,7 @@ body.greek .qcard .word{color:#143a5e}
 @keyframes bmAtkPixelL{0%{transform:translateX(0)}40%{transform:translateX(-28px)}100%{transform:translateX(0)}}
 @keyframes bmPixelHit{0%{transform:translateX(0);opacity:1;filter:none}25%{transform:translateX(-8px);opacity:.4;filter:brightness(3) saturate(0)}65%{transform:translateX(3px);opacity:.8}100%{transform:translateX(0);opacity:1;filter:none}}
 
-/* ── Actie-animaties (alle op .bm-sprite) ── */
+/* â”€â”€ Actie-animaties (alle op .bm-sprite) â”€â”€ */
 @keyframes bmOk{0%{transform:scale(1) translateY(0)}35%{transform:scale(1.3) translateY(-10px)}70%{transform:scale(1.12) translateY(-3px)}100%{transform:scale(1) translateY(0)}}
 @keyframes bmBad{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
 @keyframes bmAtkR{0%{transform:translateX(0)}40%{transform:translateX(28px)}100%{transform:translateX(0)}}
@@ -535,7 +535,7 @@ body.greek .qcard .word{color:#143a5e}
 #bmFormB .bm-av.anim-win .bm-sprite{animation:bmWinB 1.5s ease-in-out 3!important}
 #bmFormB .bm-av.anim-lose .bm-sprite{animation:bmLoseB 1.4s ease-in forwards!important}
 
-/* ── Projectielen ── */
+/* â”€â”€ Projectielen â”€â”€ */
 .bm-proj{position:absolute;pointer-events:none;font-size:18px;line-height:1;top:calc(32%+var(--row,0)*14%);will-change:transform,opacity;z-index:8}
 @keyframes bmProjR{0%{transform:translateX(0);opacity:1}100%{transform:translateX(220px);opacity:0}}
 @keyframes bmProjL{0%{transform:translateX(0) scaleX(-1);opacity:1}100%{transform:translateX(-220px) scaleX(-1);opacity:0}}
@@ -546,32 +546,32 @@ body.greek .qcard .word{color:#143a5e}
 .bm-proj.arc.r{animation:bmArcR 1.05s ease-in forwards}
 .bm-proj.arc.l{animation:bmArcL 1.05s ease-in forwards}
 
-/* ── SVG pijl-projectiel ── */
+/* â”€â”€ SVG pijl-projectiel â”€â”€ */
 .bm-arrow{position:absolute;pointer-events:none;will-change:transform,opacity;top:calc(32%+var(--row,0)*14%);z-index:8}
 @keyframes bmArrowR{0%{transform:translateX(0) rotate(-5deg);opacity:1}100%{transform:translateX(220px) rotate(-5deg);opacity:0}}
 @keyframes bmArrowL{0%{transform:translateX(0) rotate(185deg);opacity:1}100%{transform:translateX(-220px) rotate(185deg);opacity:0}}
 .bm-arrow.r{right:50%;animation:bmArrowR .85s ease-in forwards}
 .bm-arrow.l{left:50%;animation:bmArrowL .85s ease-in forwards}
 
-/* ── Gloed-ring ── */
+/* â”€â”€ Gloed-ring â”€â”€ */
 .bm-glow{position:absolute;pointer-events:none;border-radius:50%;will-change:transform,opacity;z-index:8}
 @keyframes bmGlowFx{0%{transform:scale(.4);opacity:.95}70%{transform:scale(1.8);opacity:.5}100%{transform:scale(2.4);opacity:0}}
 .bm-glow{animation:bmGlowFx .9s ease-out forwards}
 
-/* ── Drijvend getal ── */
+/* â”€â”€ Drijvend getal â”€â”€ */
 .bm-float{position:absolute;pointer-events:none;font-weight:800;font-size:20px;white-space:nowrap;will-change:transform,opacity;left:50%;z-index:9;text-shadow:0 2px 6px rgba(0,0,0,.7)}
 @keyframes bmFl{0%{transform:translateX(-50%) translateY(0);opacity:1}75%{opacity:.9}100%{transform:translateX(-50%) translateY(-70px);opacity:0}}
 .bm-float{animation:bmFl 1.5s ease-out forwards}
 
-/* ── Kritieke health-balk ── */
+/* â”€â”€ Kritieke health-balk â”€â”€ */
 @keyframes bmCrit{0%,100%{opacity:1}50%{opacity:.28}}
 .bm-hp-fill.bm-crit{animation:bmCrit 1s ease-in-out infinite}
 
-/* ── Confetti bij overwinning ── */
+/* â”€â”€ Confetti bij overwinning â”€â”€ */
 @keyframes bmConf{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-140px) rotate(720deg);opacity:0}}
 .bm-confetti{position:absolute;pointer-events:none;width:9px;height:9px;border-radius:2px;will-change:transform,opacity;animation:bmConf 1.7s ease-out forwards;z-index:15}
 
-/* ── Commander Spectre ── */
+/* â”€â”€ Commander Spectre â”€â”€ */
 .bm-spectre{position:absolute;bottom:0;height:100%;width:50%;background-size:auto 85%;background-repeat:no-repeat;pointer-events:none;opacity:0;z-index:1;filter:drop-shadow(0 0 28px rgba(255,210,80,.5)) drop-shadow(0 0 60px rgba(255,180,40,.2))}
 .bm-spectre-A{left:0;background-position:30% bottom}
 .bm-spectre-B{right:0;background-position:70% bottom;transform:scaleX(-1)}
@@ -579,7 +579,7 @@ body.greek .qcard .word{color:#143a5e}
 @keyframes bmSpectreFade{0%{opacity:0}18%{opacity:.28}62%{opacity:.28}100%{opacity:0}}
 .bm-noanim .bm-spectre{display:none}
 
-/* ── Speler-weergave ── */
+/* â”€â”€ Speler-weergave â”€â”€ */
 .bm-player-wrap{display:flex;flex-direction:column;min-height:100vh;overflow:hidden}
 .bm-player-field{flex:0 0 55vh;position:relative;overflow:hidden}
 .bm-player-field #bmField{position:absolute;inset:0;height:100%}
@@ -588,19 +588,19 @@ body.greek .qcard .word{color:#143a5e}
 .bm-back-btn{position:absolute;top:8px;left:8px;z-index:20;width:34px;height:34px;border-radius:50%;background:rgba(18,14,10,.7);border:1px solid var(--stone4);color:var(--fg);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .bm-back-btn:hover{background:rgba(18,14,10,.9)}
 
-/* ── Status-balk en spelersgrid ── */
+/* â”€â”€ Status-balk en spelersgrid â”€â”€ */
 .bm-status-row{display:flex;align-items:center;gap:8px;padding:4px 12px;font-size:12px;background:rgba(0,0,0,.45);flex-shrink:0;color:var(--muted)}
 .bm-pgrid{display:flex;flex-wrap:wrap;gap:4px;padding:5px 10px;background:rgba(0,0,0,.35);flex-shrink:0}
 
-/* ── Animaties UIT ── */
+/* â”€â”€ Animaties UIT â”€â”€ */
 .bm-noanim .bm-sprite{animation:none!important}
 .bm-noanim .bm-float,.bm-noanim .bm-proj,.bm-noanim .bm-arrow,.bm-noanim .bm-glow,.bm-noanim .bm-confetti{display:none!important}
 
-/* ── Speler eigen avatar (kleine variant in paneel) ── */
+/* â”€â”€ Speler eigen avatar (kleine variant in paneel) â”€â”€ */
 #bmMyAv .bm-sprite{width:30px!important;height:40px!important}
 
 /* ======================================================
-   BATTLE MODE M6 — PROFIEL / AVATAR-EDITOR
+   BATTLE MODE M6 â€” PROFIEL / AVATAR-EDITOR
    ====================================================== */
 /* Achievement badge */
 .bm-ach{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border-radius:11px;
@@ -628,7 +628,7 @@ body.greek .qcard .word{color:#143a5e}
 .bm-opt .bm-lockreq{font-size:9px;color:var(--hi);font-weight:700;white-space:nowrap;letter-spacing:.2px}
 
 /* ======================================================
-   BATTLE MODE M7 — DASHBOARD / AWARDS / ANALYTICS
+   BATTLE MODE M7 â€” DASHBOARD / AWARDS / ANALYTICS
    ====================================================== */
 /* Spelerskaart in host-dashboard */
 .bm-pcard{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;
@@ -664,16 +664,18 @@ body.greek .qcard .word{color:#143a5e}
 <div class="toast" id="toast"><span class="m" id="toastM"></span><div><div class="tt" id="toastT"></div><div class="tn" id="toastN"></div></div></div>
 <div class="overlay" id="overlay"></div>
 
-<!-- Firebase (compat) — alleen nodig voor echt multiplayer; faalt stil als offline/leeg -->
+<!-- Firebase (compat) â€” alleen nodig voor echt multiplayer; faalt stil als offline/leeg -->
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
-<script src="core.js?v=20260709"></script>
+<script src="vocab.js?v=20260630s"></script>
+<script src="core.js?v=20260630s"></script>
 <script src="net.js?v=20260709"></script>
 <script src="games.js?v=20260629tw"></script>
-<script src="battle.js?v=20260630"></script>
-<script src="totalwar.js?v=20260629"></script>
+<script src="battle-data.js?v=20260630s"></script>
+<script src="battle.js?v=20260701"></script>
+<script src="totalwar.js?v=20260629tw"></script>
 <script>
 /* ---- INIT ---- */
 (function(){
