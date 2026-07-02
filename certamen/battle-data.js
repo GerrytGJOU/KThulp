@@ -126,11 +126,11 @@ const BM_COMMANDERS = {
     B: { nm:"Vercingetorix",   img:"assets/commanders/gauls/vercingetorix.png" },
   },
   athene_sparta: {
-    A: { nm:"Pericles",        img:"assets/commanders/athenians/pericles.png"  },
+    A: { nm:"Pericles",        img:"assets/commanders/athenians/perikles.png"  },
     B: { nm:"Leonidas",        img:"assets/commanders/spartans/leonidas.png"   },
   },
   grieken_perzen: {
-    A: { nm:"Themistokles",    img:"assets/commanders/athenians/pericles.png"  },
+    A: { nm:"Themistokles",    img:"assets/commanders/athenians/themistocles.png" },
     B: { nm:"Xerxes",          img:"assets/commanders/persians/xerxes.png"     },
   },
   rome_carthago: {
@@ -143,7 +143,7 @@ const BM_COMMANDERS = {
   },
   goden_titanen: {
     A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.png"           },
-    B: { nm:"Kronos",          img:"assets/commanders/titans/kronos.svg"       },
+    B: { nm:"Kronos",          img:"assets/commanders/titans/kronos.png"       },
   },
 };
 
@@ -214,7 +214,7 @@ const BM_AVATAR_PARTS = {
     { id:"snor",      nm:"Snor" },
     { id:"baard",     nm:"Baard" },
     { id:"baardsnor", nm:"Baard en snor" },
-    { id:"sikensnor", nm:"Sik en snor" },
+    { id:"sikensnor", nm:"Sik en snor",   requires:{level:7} },
   ]},
   cape:   { nm:"Cape",             opts:[
     { id:"geen", nm:"Geen" },
@@ -252,6 +252,16 @@ const BM_AVATAR_PARTS = {
     { id:"odysseus",  nm:"Odysseus",       requires:{coins:600} },
     { id:"aeneas",    nm:"Aeneas",         requires:{coins:600} },
   ]},
+};
+
+// ── Legendarische strijders: vervangen de HELE avatar (zie _bmPixelLayers)
+// én geven een vaste gevechtsbonus. Vermenigvuldigers zijn +N% t.o.v. de
+// normale waarde. Uitbreidbaar: nieuwe entry hier + optie hierboven volstaat.
+const BM_LEGENDARY_BONUS = {
+  achilles: { nm:"Achilles",      desc:"+20% aanvalsschade",        atkMult:0.20 },
+  ajax:     { nm:"Ajax de Grote", desc:"+25% schildsterkte",        shldMult:0.25 },
+  odysseus: { nm:"Odysseus",      desc:"+25% munten na het gevecht",incomeMult:0.25 },
+  aeneas:   { nm:"Aeneas",        desc:"+20% genezing",             healMult:0.20 },
 };
 
 // XP-drempels en titels per niveau (1–10). Aanpasbaar zonder logica te wijzigen.
