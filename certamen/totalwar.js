@@ -10,9 +10,11 @@
    het volledige ontwerp en het beoogde datamodel.
 
    Dit bestand bevat:
-   - TW_CIVS / TW_MAP : voorlopig datamodel + voorbeeldstand
-   - SCREENS.totalWar        : publieke "Binnenkort"-uitleg
-   - SCREENS.totalWarPreview : docent-voorbeeld (achter login)
+   - TW_CIVS                  : beschavingen (kleuren)
+   - TW_DEMO_*                : voorbeeldstand op de echte kaart
+   - SCREENS.totalWar         : publieke "Binnenkort"-uitleg
+   - SCREENS.totalWarPreview  : docent-voorbeeld met de echte
+                                provinciekaart (certamen/map/)
    ============================================================ */
 
 /* ---- Beschavingen (klassen krijgen er later vast één toegewezen) ---- */
@@ -27,56 +29,29 @@ const TW_CIVS = {
 /* ---- Maximale verdediging: gebieden blijven altijd veroverbaar ---- */
 const TW_DEFENSE_CAP = 100;
 
-/* ---- Gebieden: bestaan uit steden, hebben buren en (mock) eigenaar ----
-   x/y = positie op de schematische kaart (viewBox 0 0 820 560).
-   defense = huidige (voorbeeld) verdedigingssterkte 0..TW_DEFENSE_CAP.
-   Dit is bewust een SCHEMATISCHE knooppuntkaart, geen geografie:
-   ze maakt de kern­regel ("gedeelde grens ⇒ aanvalbaar") meteen zichtbaar. */
-const TW_MAP = [
-  { id:"britannia", nm:"Britannia", x:70,  y:30,  owner:"neutral", defense:0,
-    bonus:"Tin & zilver — extra muntopbrengst.",
-    cities:["Londinium","Camulodunum","Eboracum"],
-    neighbors:["gallia"] },
-  { id:"germania", nm:"Germania", x:330, y:30,  owner:"neutral", defense:0,
-    bonus:"Wouden — snellere verdedigingsopbouw.",
-    cities:["Colonia","Mogontiacum","Treveri"],
-    neighbors:["gallia","italia","macedonia"] },
-  { id:"gallia", nm:"Gallia", x:150, y:160, owner:"gallii", defense:80,
-    bonus:"Graanschuur — meer Battle Energy per ronde.",
-    cities:["Lutetia","Massilia","Alesia"],
-    neighbors:["britannia","germania","hispania","italia"] },
-  { id:"hispania", nm:"Hispania", x:60,  y:320, owner:"gallii", defense:35,
-    bonus:"Mijnen — bonus op zeldzame avatars.",
-    cities:["Gades","Carthago Nova","Numantia"],
-    neighbors:["gallia","africa"] },
-  { id:"italia", nm:"Italia", x:360, y:210, owner:"roma", defense:90,
-    bonus:"Hoofdstad — sterkste fortbonus van de kaart.",
-    cities:["Roma","Capua","Tarentum"],
-    neighbors:["gallia","germania","macedonia","graecia","africa"] },
-  { id:"macedonia", nm:"Macedonia", x:480, y:130, owner:"neutral", defense:0,
-    bonus:"Falanx — verdediging daalt trager bij verlies.",
-    cities:["Pella","Thessalonica","Amphipolis"],
-    neighbors:["germania","italia","graecia","asia"] },
-  { id:"graecia", nm:"Graecia", x:480, y:290, owner:"athenae", defense:60,
-    bonus:"Academie — extra XP voor de hele beschaving.",
-    cities:["Athene","Sparta","Korinthe"],
-    neighbors:["italia","macedonia","asia","aegyptus"] },
-  { id:"asia", nm:"Asia", x:650, y:210, owner:"persae", defense:45,
-    bonus:"Handelsroutes — korting in de winkel.",
-    cities:["Troje","Efeze","Pergamon"],
-    neighbors:["macedonia","graecia","aegyptus"] },
-  { id:"africa", nm:"Africa", x:310, y:430, owner:"neutral", defense:0,
-    bonus:"Olifanten — eenmalige aanvalsbonus bij invasie.",
-    cities:["Carthago","Utica","Hippo"],
-    neighbors:["hispania","italia","aegyptus"] },
-  { id:"aegyptus", nm:"Aegyptus", x:560, y:430, owner:"neutral", defense:0,
-    bonus:"Bibliotheek — verlaagt de kosten van forten.",
-    cities:["Alexandria","Memphis","Thebe"],
-    neighbors:["africa","graecia","asia"] },
-];
+/* ---- Voorbeeldstand: welke beschaving bezit welke echte provincie ----
+   Sleutels = provincie-id's uit certamen/map/provinces.svg (== provinces.json).
+   Puur ter illustratie van het concept; nog geen echte veldtocht. */
+const TW_DEMO_OWN = {
+  italia:"roma", sicilia:"roma", sardinia:"roma", corsica:"roma",
+  dalmatia:"roma", gallia_narbonensis:"roma",
+  gallia_belgica:"gallii", gallia_lugdunensis:"gallii",
+  gallia_aquitania:"gallii", germania_superior:"gallii", germania_inferior:"gallii",
+  macedonia:"athenae", achaea:"athenae", thracia:"athenae", asia:"athenae",
+  cappadocia:"persae", galatia:"persae", syria:"persae",
+  armenia:"persae", mesopotamia:"persae",
+};
+const TW_DEMO_DEF = {
+  italia:95, sicilia:40, sardinia:30, corsica:25, dalmatia:55, gallia_narbonensis:60,
+  gallia_belgica:70, gallia_lugdunensis:65, gallia_aquitania:45,
+  germania_superior:80, germania_inferior:60,
+  macedonia:60, achaea:50, thracia:45, asia:70,
+  cappadocia:50, galatia:35, syria:75, armenia:40, mesopotamia:30,
+};
 
-function twTerr(id){ return TW_MAP.find(t=>t.id===id); }
-function twCiv(id){ return TW_CIVS[id] || TW_CIVS.neutral; }
+/* Cache: SVG-tekst en het provincieregister worden één keer opgehaald. */
+let _twSvgCache = null;
+let _twRegistry = null;
 
 /* ------------------------------------------------------------
    SCHERM: publieke "Binnenkort"-uitleg
@@ -123,16 +98,27 @@ SCREENS.totalWar = function(){
       actieve kleine klas net zo sterk kan zijn als een grote.</p></div>
   </div>
 
+  <div class="panel">
+    <h3>Veldtochtkaart (voorbeeld)</h3>
+    <p class="note" style="margin-bottom:10px">Zo kan de kaart er tijdens een
+    veldtocht uitzien — elke kleur is een beschaving. (Alleen-lezen voorbeeld.)</p>
+    <div id="twMapHost" style="background:#9fc7f4;border:1px solid var(--stone4);border-radius:14px;overflow:hidden;min-height:120px">
+      <div class="note" style="padding:22px;text-align:center">Kaart laden…</div>
+    </div>
+    <div id="twLegendBox" class="chips" style="margin-top:12px"></div>
+  </div>
+
   <div class="panel" style="text-align:center">
-    <p class="note" style="margin-bottom:12px">Ben je docent? Bekijk het voorbeeld van de veldtochtkaart.</p>
+    <p class="note" style="margin-bottom:12px">Ben je docent? Bekijk het interactieve voorbeeld van de veldtochtkaart.</p>
     <button class="btn btn-gold" onclick="go('totalWarPreview')">${iconSVG("column",18,"currentColor")} Docent-voorbeeld</button>
   </div>
   ${foot()}`);
+  twLoadMap(false);
 };
 
 /* ------------------------------------------------------------
    SCHERM: docent-voorbeeld (achter docentenlogin)
-   Statische mock van de veldtochtkaart. Niets is hier speelbaar.
+   Echte provinciekaart van het Romeinse Rijk met voorbeeldstand.
    ------------------------------------------------------------ */
 SCREENS.totalWarPreview = function(){
   // Alleen docenten: bij twijfel (of een auth-fout) terug naar de login.
@@ -151,86 +137,110 @@ SCREENS.totalWarPreview = function(){
 
   <div class="panel" style="border-color:var(--hi-dim)">
     <div class="note warn" style="text-align:center">
-      <b>Concept-voorbeeld.</b> Schematische kaart met voorbeeldstand —
-      nog geen echte veldtocht of opslag.
+      <b>Concept-voorbeeld.</b> Echte kaart van het Romeinse Rijk (Trajanus) met
+      een voorbeeldstand — <b>klik op een provincie</b>. Nog geen echte veldtocht
+      of opslag.
     </div>
   </div>
 
   <div class="panel">
     <h3>Veldtochtkaart</h3>
-    ${twMapSVG()}
-    <div class="chips" style="margin-top:12px">${twLegend()}</div>
-  </div>
-
-  <div class="panel">
-    <h3>Gebieden, steden & bonussen</h3>
-    ${twTerritoryList()}
+    <div id="twMapHost" style="background:#9fc7f4;border:1px solid var(--stone4);border-radius:14px;overflow:hidden;min-height:120px">
+      <div class="note" style="padding:22px;text-align:center">Kaart laden…</div>
+    </div>
+    <div id="twInfo" class="panel" style="margin:12px 0 0">
+      <span class="note">Klik op een provincie voor details.</span>
+    </div>
+    <div id="twLegendBox" class="chips" style="margin-top:12px"></div>
   </div>
   ${foot()}`);
+  twLoadMap();
 };
 
-/* ---- Schematische SVG-knooppuntkaart ---- */
-function twMapSVG(){
-  const W=152, H=64;
-  // verbindingslijnen tussen buren (één keer per paar)
-  let lines="";
-  TW_MAP.forEach(t=>{
-    (t.neighbors||[]).forEach(nid=>{
-      if(t.id<nid){
-        const n=twTerr(nid); if(!n) return;
-        lines+=`<line x1="${t.x+W/2}" y1="${t.y+H/2}" x2="${n.x+W/2}" y2="${n.y+H/2}"
-          stroke="rgba(212,175,55,.28)" stroke-width="2" stroke-dasharray="4 5"/>`;
-      }
-    });
-  });
-  // knooppunten
-  const nodes=TW_MAP.map(t=>{
-    const civ=twCiv(t.owner);
-    const owned=t.owner!=="neutral";
-    const dw=Math.round((t.defense/TW_DEFENSE_CAP)*(W-20));
-    const shield=owned?`<g transform="translate(${t.x+W-26},${t.y+8})">${iconSVG("shield",18,"rgba(255,255,255,.85)")}</g>`:"";
-    return `<g>
-      <rect x="${t.x}" y="${t.y}" width="${W}" height="${H}" rx="11"
-        fill="${civ.soft}" stroke="${owned?civ.color:'#4a4238'}" stroke-width="${owned?3:1.5}"/>
-      <text x="${t.x+12}" y="${t.y+24}" fill="#f3e9d2" font-size="16" font-weight="700"
-        font-family="Optima,Palatino,serif">${esc(t.nm)}</text>
-      <text x="${t.x+12}" y="${t.y+41}" fill="rgba(243,233,210,.7)" font-size="11"
-        font-family="Palatino,serif">${owned?esc(civ.nm):'neutraal'} · ${t.cities.length} steden</text>
-      <rect x="${t.x+12}" y="${t.y+48}" width="${W-24}" height="7" rx="3.5" fill="rgba(0,0,0,.45)"/>
-      <rect x="${t.x+12}" y="${t.y+48}" width="${owned?dw:0}" height="7" rx="3.5" fill="${civ.color}"/>
-      ${shield}
-    </g>`;
-  }).join("");
-  return `<div style="overflow-x:auto"><svg viewBox="0 0 820 560" width="100%"
-    style="min-width:560px;background:radial-gradient(ellipse at 50% 40%,rgba(212,175,55,.06),transparent 70%);
-    border:1px solid var(--stone4);border-radius:14px" xmlns="http://www.w3.org/2000/svg">
-    ${lines}${nodes}
-  </svg></div>`;
+/* ---- Kaart laden (fetch + inline SVG) en voorbeeldstand toepassen ----
+   interactive=false → alleen-lezen (geen klikselectie); default true. */
+async function twLoadMap(interactive){
+  interactive = interactive !== false;
+  const host = el("twMapHost"); if(!host) return;
+  try{
+    if(!_twSvgCache){
+      const V = "?v=20260702m3";
+      const [svg, reg] = await Promise.all([
+        fetch("map/provinces.svg"+V).then(r=>{ if(!r.ok) throw new Error("SVG "+r.status); return r.text(); }),
+        fetch("map/provinces.json"+V).then(r=> r.ok ? r.json() : {}).catch(()=>({})),
+      ]);
+      _twSvgCache = svg; _twRegistry = reg;
+    }
+    host.innerHTML = _twSvgCache;
+    const svgEl = host.querySelector("svg");
+    if(svgEl){
+      svgEl.removeAttribute("width");
+      svgEl.removeAttribute("height");
+      svgEl.setAttribute("style","width:100%;height:auto;display:block");
+    }
+    twApplyDemo();
+    if(interactive) twBindMapClicks(host);
+    const lg = el("twLegendBox"); if(lg) lg.innerHTML = twLegend();
+  }catch(e){
+    host.innerHTML = `<div class="note warn" style="padding:18px">De kaart kon niet
+      geladen worden (${esc(e.message)}). Open de app via de webserver
+      (GitHub Pages), niet als los <code>file://</code>-bestand.</div>`;
+  }
 }
 
-/* ---- Legenda van beschavingen ---- */
+/* ---- Voorbeeldstand kleuren via de MapAPI-helper (map/provinces.js) ---- */
+function twApplyDemo(){
+  if(typeof MapAPI==="undefined") return;
+  Object.entries(TW_DEMO_OWN).forEach(([id,civId])=>{
+    const c=TW_CIVS[civId];
+    if(c && civId!=="neutral") MapAPI.setProvinceOwner(id, c.color);
+  });
+  Object.entries(TW_DEMO_DEF).forEach(([id,v])=> MapAPI.setProvinceDefense(id, v));
+}
+
+/* ---- Klik op een provincie → selecteren + detailpaneel bijwerken ---- */
+function twBindMapClicks(host){
+  host.addEventListener("click", ev=>{
+    const p = ev.target.closest && ev.target.closest(".province");
+    if(!p) return;
+    twSelectProvince(p.getAttribute("data-province") || p.id);
+  });
+}
+
+function twSelectProvince(id){
+  const host = el("twMapHost"); if(!host || !id) return;
+  host.querySelectorAll(".province.selected").forEach(e=>e.classList.remove("selected"));
+  // Selecteer alle fragmenten van dezelfde provincie (bv. Cyprus = 2 paden).
+  host.querySelectorAll(`[id="${id}"], [data-province="${id}"]`).forEach(e=>e.classList.add("selected"));
+  const info = el("twInfo"); if(info) info.innerHTML = twProvinceInfo(id);
+}
+
+function twProvinceInfo(id){
+  const reg  = _twRegistry && _twRegistry[id];
+  const nm   = (reg && reg.displayName) || id;
+  const civId= TW_DEMO_OWN[id] || "neutral";
+  const civ  = TW_CIVS[civId] || TW_CIVS.neutral;
+  const owned= civId !== "neutral";
+  const def  = TW_DEMO_DEF[id] || 0;
+  const cities = (reg && reg.cities) || [];
+  return `
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <b style="font-size:16px">${esc(nm)}</b>
+      <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">
+        ${owned ? esc(civ.nm) : "neutraal — veroverbaar"}</span>
+    </div>
+    ${owned ? `<div class="note" style="margin-top:6px">Verdediging: ${def}/${TW_DEFENSE_CAP}</div>` : ""}
+    <div class="note" style="margin-top:4px">Steden: ${cities.length ? cities.map(esc).join(" · ") : "—"}</div>`;
+}
+
+/* ---- Legenda van beschavingen met aantal gebieden in de voorbeeldstand ---- */
 function twLegend(){
+  const counts = {};
+  Object.values(TW_DEMO_OWN).forEach(c=> counts[c]=(counts[c]||0)+1);
   return Object.entries(TW_CIVS).map(([id,c])=>{
-    const owned=TW_MAP.filter(t=>t.owner===id).length;
+    const owned = counts[id] || 0;
     return `<span class="chip"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;
       background:${c.color};margin-right:6px;vertical-align:middle"></span>${esc(c.nm)}${
-      id!=="neutral"?` <small>${owned} gebied${owned!==1?'en':''}</small>`:""}</span>`;
-  }).join("");
-}
-
-/* ---- Gebiedslijst met steden en bonussen ---- */
-function twTerritoryList(){
-  return TW_MAP.map(t=>{
-    const civ=twCiv(t.owner);
-    const owned=t.owner!=="neutral";
-    return `<div class="panel" style="margin-bottom:8px;border-left:4px solid ${owned?civ.color:'#4a4238'}">
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <b style="font-size:15px">${esc(t.nm)}</b>
-        <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">${owned?esc(civ.nm):'neutraal'}</span>
-        ${owned?`<span class="note" style="margin-left:auto">verdediging ${t.defense}/${TW_DEFENSE_CAP}</span>`:`<span class="note" style="margin-left:auto">veroverbaar</span>`}
-      </div>
-      <div class="note" style="margin-top:6px">Steden: ${t.cities.map(esc).join(" · ")}</div>
-      <div class="note" style="margin-top:2px">Bonus: ${esc(t.bonus)}</div>
-    </div>`;
+      id!=="neutral" ? ` <small>${owned} gebied${owned!==1?'en':''}</small>` : ""}</span>`;
   }).join("");
 }
