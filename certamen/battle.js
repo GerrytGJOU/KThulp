@@ -187,16 +187,21 @@ async function bmAwardBattle(){
   const isScholar=total>=5&&correct/total>=0.9;
   // Nieuwe XP-formule: +2/goed, +5/deelname, +1/ronde, +15/winst, +8/scholar
   const xpEarned=correct*2+5+total*1+(won?15:0)+(isScholar?8:0);
+  // Muntbeloning: +1/goed, +3/deelname, +10/winst; Odysseus (legendarisch) geeft +% bonus
+  const legBonus=bmLegendaryOf(BM_IDENT);
+  let coinsEarned=correct*1+3+(won?10:0);
+  if(legBonus?.incomeMult) coinsEarned=Math.round(coinsEarned*(1+legBonus.incomeMult));
 
   const snap=await fbDB.ref("identities/"+klas+"/"+lcode).once("value");
   const data=snap.val()||{};
   const oldXp=data.xp||0, newXp=oldXp+xpEarned;
+  const newCoins=(data.coins||0)+coinsEarned;
   const battles=(data.battles||0)+1;
   const oldLv=bmCalcLevel(oldXp), newLv=bmCalcLevel(newXp);
 
   // Mastery-rondes bijwerken voor huidige klasse
   const cls=BM_MY_CLASS;
-  const upd={xp:newXp,battles};
+  const upd={xp:newXp,battles,coins:newCoins};
   if(cls){
     const hist=data.classHistory?.[cls]||{};
     upd["classHistory/"+cls+"/rounds"]=(hist.rounds||0)+Math.max(1,total);
@@ -217,7 +222,7 @@ async function bmAwardBattle(){
   checkAch({mode:"battle", won, isScholar});
 
   const earned=await bmCheckAchievements(merged,{won,isScholar});
-  return{xpEarned,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
+  return{xpEarned,coinsEarned,legendaryBonus:legBonus,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
 }
 async function bmCheckAchievements(ident,result={}){
   if(!fbDB||!BM_IDENT)return[];
@@ -286,6 +291,15 @@ function bmBuyPart(partId, optId, price, optNm){
   SCREENS.battleAvatarEdit();
 }
 
+// Legendarische bonus van een speler (of null). Werkt op zowel BM_PLAYERS-
+// entries (p.avatar) als op een los identiteits-object ({avatar}).
+function bmLegendaryOf(p){
+  const raw=p&&p.avatar; if(!raw)return null;
+  const av=bmAvatarMerge(raw);
+  const id=av.legendary&&av.legendary!=="geen"?av.legendary:null;
+  return id?(BM_LEGENDARY_BONUS[id]||null):null;
+}
+
 /* ---- ABILITY HELPERS ---- */
 function bmGetAbilityCost(cls,abl){
   let c=abl.cost;
@@ -295,6 +309,7 @@ function bmGetAbilityCost(cls,abl){
 function bmCalcAbilityEffect(p,cls,abl){
   const fx={dmg:0,heal:0,shld:0,teamBE:0,selfBE:0,shldRemove:0,bypass:false};
   const t=abl.type, pasv=cls?.passive, mt=p.team;
+  const leg=bmLegendaryOf(p); // legendarische avatar-bonus (Achilles/Ajax/Aeneas/Odysseus)
   const isDmg=["attack","attack_bypass","attack_weakspot","attack_and_defend","attack_and_shld_remove","attack_siege","heal_and_attack"].includes(t);
   if(isDmg){
     let d=abl.dmg||0;
@@ -304,12 +319,21 @@ function bmCalcAbilityEffect(p,cls,abl){
       const et=mt==="A"?"B":"A";const eh=BM_TEAMS[et]||{health:100,maxHealth:100};
       if(eh.maxHealth>0&&eh.health/eh.maxHealth<=0.30) d+=(abl.bonusDmg||0);
     }
+    if(leg?.atkMult) d=Math.round(d*(1+leg.atkMult)); // Achilles
     fx.dmg=d; fx.bypass=(t==="attack_bypass");
     if(pasv?.type==="shld_pierce") fx.shldRemove+=pasv.val; // genie passief
   }
-  if(["team_shield","testudo","attack_and_defend"].includes(t)) fx.shld=abl.shld||0;
+  if(["team_shield","testudo","attack_and_defend"].includes(t)){
+    let s=abl.shld||0;
+    if(leg?.shldMult) s=Math.round(s*(1+leg.shldMult)); // Ajax de Grote
+    fx.shld=s;
+  }
   if(["team_shield","testudo"].includes(t)&&pasv?.type==="be_on_defend") fx.selfBE+=pasv.val;
-  if(["heal","heal_and_attack"].includes(t)){ let h=abl.heal||0; if(pasv?.type==="heal_flat") h+=pasv.val; fx.heal=h; }
+  if(["heal","heal_and_attack"].includes(t)){
+    let h=abl.heal||0; if(pasv?.type==="heal_flat") h+=pasv.val;
+    if(leg?.healMult) h=Math.round(h*(1+leg.healMult)); // Aeneas
+    fx.heal=h;
+  }
   if(["team_be","testudo"].includes(t)) fx.teamBE=abl.teamBE||0;
   if(["shield_remove","attack_and_shld_remove","attack_siege"].includes(t)) fx.shldRemove+=(abl.shldRemove||0);
   return fx;
@@ -2591,9 +2615,13 @@ SCREENS.battleResult = function(){
     if(!r){box.textContent="";return;}
     const lvUp=r.levelUp?`<div style="color:var(--hi-bright);font-size:16px;margin-top:6px">🎉 Niveau omhoog! Je bent nu ${esc(r.newLv.title)} (${r.newLv.level})</div>`:"";
     const achHTML=r.earned.length?`<div style="margin-top:6px;color:var(--hi)">${r.earned.map(id=>{const a=ACHIEVEMENTS_DEF.find(x=>x.id===id);return a?"🏅 "+esc(a.nm):""}).join(" · ")}</div>`:"";
-    box.innerHTML=`<div style="font-size:22px;font-weight:700;color:var(--hi-bright)">+${r.xpEarned} XP</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px">Totaal: ${BM_IDENT?.xp||r.newLv.xp} XP · Niveau ${r.newLv.level} · ${esc(r.newLv.title)}</div>
-      ${lvUp}${achHTML}`;
+    const legHTML=r.legendaryBonus?`<div style="margin-top:4px;font-size:12px;color:var(--hi)">⚡ ${esc(r.legendaryBonus.nm)}-bonus: ${esc(r.legendaryBonus.desc)}</div>`:"";
+    box.innerHTML=`<div style="display:flex;justify-content:center;gap:18px">
+        <div><div style="font-size:22px;font-weight:700;color:var(--hi-bright)">+${r.xpEarned} XP</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--hi-bright)">+${r.coinsEarned} 🪙</div></div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">Totaal: ${BM_IDENT?.xp||r.newLv.xp} XP · ${BM_IDENT?.coins||0} ${esc(bmCoinName())} · Niveau ${r.newLv.level} · ${esc(r.newLv.title)}</div>
+      ${lvUp}${achHTML}${legHTML}`;
   }).catch(()=>{const b=el("bmXpResult");if(b)b.textContent="";});
 };
 
@@ -2641,7 +2669,7 @@ SCREENS.battleProfile = function(){
     <div style="flex:1;min-width:0">
       <div style="font-size:20px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(BM_IDENT.name||"")}</div>
       <div class="pill" style="margin:4px 0">Niveau ${lv.level} · ${esc(lv.title)}</div>
-      <div style="font-size:12px;color:var(--muted)">${xp} XP · ${battles} gevecht${battles!==1?"en":""}</div>
+      <div style="font-size:12px;color:var(--muted)">${xp} XP · ${battles} gevecht${battles!==1?"en":""} · ${BM_IDENT.coins||0} 🪙 ${esc(bmCoinName())}</div>
       <div style="margin-top:6px">
         <div style="height:7px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
           <div style="height:100%;width:${prog}%;background:linear-gradient(90deg,var(--hi-dim),var(--hi-bright));transition:width .5s"></div>
@@ -2702,13 +2730,17 @@ SCREENS.battleAvatarEdit = function(){
       const locked=!bmIsUnlocked(o,BM_IDENT,key);
       const sel=av[partId]===o.id;
       const preview=bmAvatarSVG({...av,[partId]:o.id},38);
+      // Legendarische strijders geven ook een vaste gevechtsbonus: toon 'm.
+      const bonus=partId==="legendary"?BM_LEGENDARY_BONUS[o.id]:null;
+      const bonusHTML=bonus?`<div class="bm-lockreq" style="color:var(--hi)">⚡ ${esc(bonus.desc)}</div>`:"";
       // Coin-onderdeel dat nog niet gekocht is: tik = koopdialoog.
       if(locked&&coinReq&&!purchased){
-        return `<button class="bm-opt locked" title="Koop ${esc(o.nm)} voor ${coinReq} ${esc(bmCoinName())}"
+        return `<button class="bm-opt locked" title="Koop ${esc(o.nm)} voor ${coinReq} ${esc(bmCoinName())}${bonus?" · "+esc(bonus.desc):""}"
           onclick="bmBuyPart('${partId}','${o.id}',${coinReq},'${esc(o.nm)}')">
           ${preview}
           <div class="onm">${esc(o.nm)}</div>
           <div class="bm-lockreq">🪙 ${coinReq}</div>
+          ${bonusHTML}
         </button>`;
       }
       const req=locked?bmReqText(o):null;
@@ -2720,10 +2752,11 @@ SCREENS.battleAvatarEdit = function(){
           <div class="bm-lockreq">🔒 ${esc(req.short)}</div>
         </button>`;
       }
-      return `<button class="bm-opt${sel?" on":""}"
+      return `<button class="bm-opt${sel?" on":""}" title="${bonus?esc(bonus.desc):""}"
         onclick="BM_AV_EDIT['${partId}']='${o.id}';SCREENS.battleAvatarEdit()">
         ${preview}
         <div class="onm">${esc(o.nm)}</div>
+        ${bonusHTML}
       </button>`;
     }).join("");
     return`<div class="eyebrow l">${esc(part.nm)}</div>
