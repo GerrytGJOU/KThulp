@@ -767,6 +767,7 @@ SCREENS.collection = function(){
       <span class="note">${P.xp} XP</span>
       <span class="note">${lv.next?"→ "+xpNext+" XP voor "+lv.next.rank:"Max niveau bereikt"}</span></div>
   </div>
+  ${syncStatusHTML(bmIdent)}
   <details style="margin:0 0 4px"><summary class="eyebrow l" style="cursor:pointer">Statistieken per modus</summary>
   <div class="panel" style="margin-top:0">
     <div class="note" style="font-weight:700;margin-bottom:4px">Totaal</div>
@@ -803,7 +804,52 @@ SCREENS.collection = function(){
       if(fresh && JSON.stringify(fresh)!==JSON.stringify(bmIdent)) SCREENS.collection();
     });
   }
+  // Ververs de algemene XP (P.xp) vanuit dezelfde gedeelde identiteit, zodat
+  // dit toestel altijd bijwerkt als er elders (ander toestel) is gespeeld.
+  if(typeof syncProfileFromCloud==="function") syncProfileFromCloud("collection");
 };
+
+/* ---- "Koppel dit toestel": algemeen profiel (buiten Battle Mode) delen via
+   dezelfde klascode+leerlingcode-identiteit, zodat XP overal gelijk blijft.
+   Geen verplichting: zonder koppeling werkt alles gewoon lokaal, zoals voorheen. ---- */
+let _gpLinkOpen=false;
+function syncStatusHTML(bmIdent){
+  if(bmIdent){
+    return `<div class="note" style="text-align:center;margin:6px 0 2px">
+      🔗 Gekoppeld aan <b>${esc(bmIdent.klascode)}</b> · <b>${esc(bmIdent.leerlingcode)}</b> — je XP loopt gelijk op al je toestellen.</div>`;
+  }
+  if(!_gpLinkOpen){
+    return `<div class="panel" style="text-align:center;padding:12px 16px">
+      <div class="note" style="margin-bottom:8px">Je voortgang staat nu alleen lokaal op dit toestel. Koppel een klascode + leerlingcode om je XP op al je toestellen gelijk te houden.</div>
+      <button class="btn btn-ghost" style="font-size:13px" onclick="_gpLinkOpen=true;SCREENS.collection()">Koppel dit toestel</button>
+    </div>`;
+  }
+  return `<div class="panel">
+    <label class="fld">Klascode (van de docent)</label>
+    <input id="gpKlas" type="text" placeholder="bv. LATIJN3B" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+    <label class="fld" style="margin-top:12px">Leerlingcode (zelf gekozen)</label>
+    <input id="gpLcode" type="text" placeholder="bv. marcus42">
+    <label class="fld" style="margin-top:12px">Weergavenaam</label>
+    <input id="gpNaam" type="text" placeholder="bv. Marcus">
+    <div id="gpLinkErr" class="note warn" style="display:none;margin-top:8px"></div>
+    <div class="btnrow" style="margin-top:12px">
+      <button class="btn btn-gold" onclick="gpLinkProfile()">Koppelen</button>
+      <button class="btn btn-ghost" onclick="_gpLinkOpen=false;SCREENS.collection()">Annuleer</button>
+    </div>
+  </div>`;
+}
+async function gpLinkProfile(){
+  if(typeof bmIdentDoLogin!=="function")return;
+  const klas=el("gpKlas")?.value, lcode=el("gpLcode")?.value, name=el("gpNaam")?.value;
+  const err=el("gpLinkErr");
+  if(err)err.style.display="none";
+  const r=await bmIdentDoLogin(klas,lcode,name);
+  if(!r.ok){ if(err){err.textContent=r.error;err.style.display="";} return; }
+  _gpLinkOpen=false;
+  toast("Gekoppeld!","Je XP loopt nu gelijk op al je toestellen.");
+  SCREENS.collection();
+}
+
 function buyOrEquip(id){
   const a=AVATARS.find(x=>x.id===id); if(!a)return;
   if(P.owned.includes(id)){ P.avatar=id; saveProfile(); SCREENS.collection(); return; }
