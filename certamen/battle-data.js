@@ -195,6 +195,7 @@ const BM_AVATAR_PARTS = {
     { id:"kort",    nm:"Kort" },
     { id:"lang",    nm:"Lang" },
     { id:"kaal",    nm:"Kaal" },
+    { id:"wild",    nm:"Wild",            requires:{level:5} },
     { id:"vlecht",  nm:"Vlecht",          requires:{level:6} },
     { id:"middel",  nm:"Middel",          requires:{level:6} },
     { id:"knot",    nm:"Knot",            requires:{level:7} },
@@ -213,6 +214,7 @@ const BM_AVATAR_PARTS = {
     { id:"snor",      nm:"Snor" },
     { id:"baard",     nm:"Baard" },
     { id:"baardsnor", nm:"Baard en snor" },
+    { id:"sikensnor", nm:"Sik en snor" },
   ]},
   cape:   { nm:"Cape",             opts:[
     { id:"geen", nm:"Geen" },
@@ -230,6 +232,25 @@ const BM_AVATAR_PARTS = {
   victoryAnim: { nm:"Overwinningsanimatie", opts:[
     { id:"juichen",       nm:"Juichen" },
     { id:"zwaardhefffen", nm:"Zwaard heffen", requires:{level:5} },
+  ]},
+  // ── Onderaan: coin-only categorieën. requires:{coins:N} = ontgrendelen met
+  //    munten (denarii/drachmae). Verdienen van munten regelen we later.
+  extra:  { nm:"Extra's",       opts:[
+    { id:"geen",       nm:"Geen" },
+    { id:"blush",      nm:"Blos",          requires:{coins:60} },
+    { id:"oorbel",     nm:"Oorbel",        requires:{coins:80} },
+    { id:"litteken",   nm:"Litteken",      requires:{coins:80} },
+    { id:"ooglapje",   nm:"Ooglapje",      requires:{coins:100} },
+    { id:"darkeyes",   nm:"Donkere ogen",  requires:{coins:120} },
+    { id:"warstripes", nm:"Oorlogsverf",   requires:{coins:150} },
+    { id:"clown",      nm:"Clown",         requires:{coins:200} },
+  ]},
+  legendary: { nm:"Legendarisch",  opts:[
+    { id:"geen",      nm:"Geen" },
+    { id:"achilles",  nm:"Achilles",       requires:{coins:500} },
+    { id:"ajax",      nm:"Ajax de Grote",  requires:{coins:500} },
+    { id:"odysseus",  nm:"Odysseus",       requires:{coins:600} },
+    { id:"aeneas",    nm:"Aeneas",         requires:{coins:600} },
   ]},
 };
 

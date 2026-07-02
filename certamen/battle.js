@@ -66,7 +66,8 @@ async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,battle
 function bmAvatarDefaults(){
   return{helm:"geen",haar:"kort",baard:"geen",armor:"vodden",
          schild:"geen",wapen:"knuppel",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen",
-         huid:"licht",geslacht:"man",haarkleur:"blond",capekleur:"goud"};
+         huid:"licht",geslacht:"man",haarkleur:"blond",capekleur:"goud",
+         extra:"geen",legendary:"geen"};
 }
 function bmAvatarMerge(saved){
   // backward compat: string-avatar (pre-M6) → object
@@ -140,13 +141,20 @@ function bmCalcMastery(hist){
   const r=hist.rounds||0, tiers=[5,15,35,70,120];
   let stars=0; for(const t of tiers){if(r>=t)stars++;} return stars;
 }
-function bmIsUnlocked(opt,ident){
+function bmIsUnlocked(opt,ident,key){
   if(!opt.requires)return true;
   if(ident?.admin)return true;
-  const{level:rL,mastery:rM}=opt.requires;
+  const{level:rL,mastery:rM,coins:rC}=opt.requires;
+  // Coin-onderdeel: alleen ontgrendeld ná aankoop (staat in ident.unlocked).
+  if(rC) return (ident?.unlocked||[]).includes(key);
   if(rL&&bmCalcLevel(ident?.xp||0).level<rL)return false;
   if(rM&&!Object.values(ident?.classHistory||{}).some(h=>bmCalcMastery(h)>=rM))return false;
   return true;
+}
+// Muntnaam volgens thema (Latijn = denarii, Grieks = drachmae).
+function bmCoinName(){
+  const t=(BM_META&&BM_META.theme)||"";
+  return /griek|greek|athen|sparta|troje|troy|goden|titan|olymp/i.test(t) ? "drachmae" : "denarii";
 }
 function bmStars(n,max=5){
   return Array.from({length:max},(_,i)=>`<span style="color:${i<n?"#d4af37":"var(--stone4)"};font-size:14px">★</span>`).join("");
@@ -156,6 +164,7 @@ function bmReqText(opt){
   const r=opt&&opt.requires; if(!r) return null;
   if(r.level)   return { short:"Niv. "+r.level, full:"Bereik niveau "+r.level };
   if(r.mastery) return { short:r.mastery+"★",   full:r.mastery+"★ beheersing in één klasse (speel veel rondes met die klasse)" };
+  if(r.coins)   return { short:r.coins+" 🪙",   full:"Koop voor "+r.coins+" "+bmCoinName() };
   return null;
 }
 // Toon de voorwaarde bij het aantikken van een vergrendelde optie (touch-vriendelijk).
@@ -251,6 +260,30 @@ async function bmSaveAvatar(){
     toast("Opgeslagen!","Avatar bijgewerkt.");
     go(BM_AV_RETURN||"battleProfile");
   }catch(e){toast("Fout","Avatar opslaan mislukt.");}
+}
+
+// Bewaar munten + ontgrendelingen (lokaal + Firebase indien beschikbaar).
+function bmPersistIdentity(){
+  try{ bmIdentSave({...bmIdentLoad(),...BM_IDENT}); }catch(e){}
+  if(fbDB && BM_IDENT && BM_IDENT.klascode && BM_IDENT.leerlingcode){
+    try{ fbDB.ref("identities/"+BM_IDENT.klascode+"/"+BM_IDENT.leerlingcode)
+      .update({coins:BM_IDENT.coins||0, unlocked:BM_IDENT.unlocked||[]}); }catch(e){}
+  }
+}
+// Koop een coin-vergrendeld avatar-onderdeel en rust het direct uit.
+function bmBuyPart(partId, optId, price, optNm){
+  if(!BM_IDENT||!BM_AV_EDIT) return;
+  const key=partId+":"+optId;
+  if((BM_IDENT.unlocked||[]).includes(key)){ BM_AV_EDIT[partId]=optId; SCREENS.battleAvatarEdit(); return; }
+  const coins=BM_IDENT.coins||0;
+  if(coins<price){ toast("Niet genoeg "+bmCoinName(), "Je hebt "+price+" nodig, je hebt "+coins+"."); return; }
+  if(!confirm(optNm+" kopen voor "+price+" "+bmCoinName()+"?")) return;
+  BM_IDENT.coins=coins-price;
+  BM_IDENT.unlocked=[...(BM_IDENT.unlocked||[]), key];
+  BM_AV_EDIT[partId]=optId;
+  bmPersistIdentity();
+  toast("Ontgrendeld!", optNm+" is nu van jou.");
+  SCREENS.battleAvatarEdit();
 }
 
 /* ---- ABILITY HELPERS ---- */
@@ -515,7 +548,9 @@ SCREENS.battleFAQ = function(){
       <li><b>XP &amp; rang</b> — je klimt van Tiro tot Imperator door te spelen en te winnen.</li>
       <li><b>Klasbeheersing</b> — speel je vaak dezelfde klasse, dan verdien je sterren (★ tot ★★★★★).</li>
       <li><b>Eerbewijzen</b> — speciale prestaties, ook geheime. Verschijnen op je profiel.</li>
-      <li><b>Avatar</b> — pas je held-avatar aan via je profiel; nieuwe onderdelen unlock je door te levelen.</li>
+      <li><b>Avatar</b> — pas je held-avatar aan via je profiel. De meeste onderdelen unlock je door te
+      levelen; de categorieën <b>Extra's</b> en <b>Legendarisch</b> (onderaan) koop je met munten
+      (denarii/drachmae).</li>
     </ul>`)}
 
   ${sec("Voor docenten",false,`
@@ -1344,13 +1379,29 @@ const PIXEL_ASSETS = {
   haar:   { "kort":"assets/sprites/haar_kort.png",
             "lang":"assets/sprites/haar_lang.png",
             "kaal":"assets/sprites/haar_kaal.png",
+            "wild":"assets/sprites/haar_wild.png",
             "vlecht":"assets/sprites/haar_vlecht.png",
             "middel":"assets/sprites/haar_middel.png",
             "knot":"assets/sprites/haar_knot.png",
             "hanekam":"assets/sprites/haar_hanekam.png" },
   baard:  { "geen":"assets/sprites/baard_geen.png",
             "baard":"assets/sprites/baard_baard.png",
-            "snor":"assets/sprites/baard_snor.png" },
+            "snor":"assets/sprites/baard_snor.png",
+            "sikensnor":"assets/sprites/baard_sik%20en%20snor.png" },
+  // Coin-only categorieën (576×384 SV-battler sheets, net als de rest).
+  extra:  { "geen":"",
+            "blush":"assets/sprites/extra_blush.png",
+            "clown":"assets/sprites/extra_clown.png",
+            "darkeyes":"assets/sprites/extra_dark%20eyes.png",
+            "litteken":"assets/sprites/extra_litteken.png",
+            "ooglapje":"assets/sprites/extra_ooglapje.png",
+            "oorbel":"assets/sprites/extra_oorbel.png",
+            "warstripes":"assets/sprites/extra_warstripes.png" },
+  legendary:{ "geen":"",
+            "achilles":"assets/sprites/legendary_Achilles.png",
+            "aeneas":"assets/sprites/legendary_Aeneas.png",
+            "ajax":"assets/sprites/legendary_Ajax%20de%20Grote.png",
+            "odysseus":"assets/sprites/legendary_Odysseus.png" },
   schild: { "geen":"",
             "rond":"assets/sprites/schild_rond.png",
             "ovaal":"assets/sprites/schild_ovaal.png",
@@ -1378,7 +1429,7 @@ function _bmBaseKey(cosm){
 
 // Versie-achtervoegsel voor sprite-bestanden → forceert verse download na een
 // asset-wijziging (bump dit getal als je een PNG vervangt).
-const SPRITE_VER = "v=6";
+const SPRITE_VER = "v=7";
 
 // CSS-filters per haarkleur (sprites zijn standaard blond in RPG Maker MV).
 const BM_HAARKLEUR_FILTER = {
@@ -1404,6 +1455,11 @@ const BM_CAPEKLEUR_SWATCH = {
   "goud":"#d4af37","rood":"#b03a2e","blauw":"#2e6fb0",
   "groen":"#3a7a30","paars":"#6b2d8b","oranje":"#c87533",
 };
+// Weergavekleur (swatch) per haarkleur — zelfde kleurenkiezer-stijl als de cape.
+const BM_HAARKLEUR_SWATCH = {
+  "blond":"#e3c56b","bruin":"#7a4a24","zwart":"#2a2a2a",
+  "rood":"#a5442a","blauw":"#3a6ea5","groen":"#3a7d3a",
+};
 
 // Bouwt de gelaagde sprite-lagen als HTML-string.
 // Z-index van achter naar voren (RPG Maker MV SV correct):
@@ -1413,6 +1469,14 @@ const BM_CAPEKLEUR_SWATCH = {
 // pantser; de helm is de bovenste laag.
 // extraClass op de buitenste div (bv. "pixel-preview" voor statische weergave).
 function _bmPixelLayers(cosm, dirCls, extraClass="") {
+  // Legendarische held: volledige vervanging van de paper doll (één sheet).
+  const legId = cosm.legendary && cosm.legendary!=="geen" ? cosm.legendary : null;
+  if (legId && PIXEL_ASSETS.legendary[legId]) {
+    const lurl = PIXEL_ASSETS.legendary[legId] + "?"+SPRITE_VER;
+    return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
+      <div class="sprite-layer" style="background-image:url('${lurl}')"></div>
+    </div>`;
+  }
   const baseSrc = PIXEL_ASSETS.bases[_bmBaseKey(cosm)];
   if (!baseSrc) return null;
   function L(src, cls="", style="") {
@@ -1438,6 +1502,7 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
     ${L(A.armor[cosm.armor||"licht"])}
     ${baardLayers}
+    ${L(A.extra[cosm.extra||"geen"])}
     ${L(A.schild[cosm.schild||"rond"])}
     ${L(A.helm[cosm.helm||"standard"]," sprite-helm hlm-"+(cosm.helm||"standard"))}
   </div>`;
@@ -2606,25 +2671,48 @@ SCREENS.battleAvatarEdit = function(){
 
   function partSection(partId){
     const part=BM_AVATAR_PARTS[partId]; if(!part)return"";
-    if(partId==="capekleur"){
+    // Kleurenkiezers: cape- én haarkleur als ronde swatches (respecteren sloten).
+    const SW = partId==="capekleur"?BM_CAPEKLEUR_SWATCH
+             : partId==="haarkleur"?BM_HAARKLEUR_SWATCH : null;
+    if(SW){
       const sw=part.opts.map(o=>{
-        const col=BM_CAPEKLEUR_SWATCH[o.id]||"#d4af37";
+        const key=partId+":"+o.id;
+        const col=SW[o.id]||"#888";
+        const locked=!bmIsUnlocked(o,BM_IDENT,key);
+        const sel=av[partId]===o.id;
+        if(locked){
+          const req=bmReqText(o);
+          return `<button title="🔒 ${esc(req?req.full:o.nm)}"
+            onclick="bmShowLockInfo('${esc(o.nm)}','${esc(req?req.full:"")}')"
+            style="width:34px;height:34px;border-radius:50%;background:${col};border:3px solid transparent;
+            opacity:.45;cursor:help;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:13px">🔒</button>`;
+        }
         return `<button title="${esc(o.nm)}"
-          onclick="BM_AV_EDIT.capekleur='${o.id}';SCREENS.battleAvatarEdit()"
+          onclick="BM_AV_EDIT['${partId}']='${o.id}';SCREENS.battleAvatarEdit()"
           style="width:34px;height:34px;border-radius:50%;background:${col};
-          border:3px solid ${av.capekleur===o.id?"var(--hi-bright)":"transparent"};
-          cursor:pointer;flex:0 0 auto"></button>`;
+          border:3px solid ${sel?"var(--hi-bright)":"transparent"};cursor:pointer;flex:0 0 auto"></button>`;
       }).join("");
       return`<div class="eyebrow l">${esc(part.nm)}</div>
         <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${sw}</div>`;
     }
     const opts=part.opts.map(o=>{
-      const locked=!bmIsUnlocked(o,BM_IDENT);
+      const key=partId+":"+o.id;
+      const coinReq=o.requires&&o.requires.coins;
+      const purchased=(BM_IDENT.unlocked||[]).includes(key);
+      const locked=!bmIsUnlocked(o,BM_IDENT,key);
       const sel=av[partId]===o.id;
       const preview=bmAvatarSVG({...av,[partId]:o.id},38);
+      // Coin-onderdeel dat nog niet gekocht is: tik = koopdialoog.
+      if(locked&&coinReq&&!purchased){
+        return `<button class="bm-opt locked" title="Koop ${esc(o.nm)} voor ${coinReq} ${esc(bmCoinName())}"
+          onclick="bmBuyPart('${partId}','${o.id}',${coinReq},'${esc(o.nm)}')">
+          ${preview}
+          <div class="onm">${esc(o.nm)}</div>
+          <div class="bm-lockreq">🪙 ${coinReq}</div>
+        </button>`;
+      }
       const req=locked?bmReqText(o):null;
       if(locked&&req){
-        // Vergrendeld: niet kiezen, maar hover (title) en tik (toast) tonen de voorwaarde.
         return `<button class="bm-opt locked" title="🔒 ${esc(req.full)}"
           onclick="bmShowLockInfo('${esc(o.nm)}','${esc(req.full)}')">
           ${preview}
