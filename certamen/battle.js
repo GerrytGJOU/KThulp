@@ -926,7 +926,9 @@ SCREENS.battleHostGame = function(){
       <div class="bm-hp-vs">⚔️</div>
       <div class="bm-hp-side side-b" id="bmArmyB"></div>
     </div>
-    <div id="bmField" class="${bmBgTheme(BM_META?.theme)}" style="${bmArenaBgStyle()}">
+    <div id="bmField" class="${bmBgTheme(BM_META?.theme)}">
+      <div class="bm-back2" id="bmBack2"></div>
+      <div class="bm-back1" id="bmBack1"></div>
       <div id="bmFormA" class="bm-form"></div>
       <div id="bmFormB" class="bm-form"></div>
       <div id="bmBfx"></div>
@@ -1111,11 +1113,22 @@ function bmArenaBgStyle(){
        + `background-size:cover,cover;image-rendering:${render};`;
 }
 // Herbevestig de achtergrond op een bestaand #bmField (na herbouw).
+// RPG Maker MV-methode: twee lagen. bmBack2 = muur/horizon (battleback2, hele
+// veld), bmBack1 = vloer/grond (battleback1, onderste strook, ervoor).
 function bmApplyArenaBg(field){
   if(!field)return;
-  const hasBg=!!(BM_META?.background&&BM_META.background!=="geen"&&BATTLE_BACKGROUNDS[BM_META.background]);
-  field.classList.toggle("bm-has-bg",hasBg);
-  field.style.cssText=bmArenaBgStyle();
+  const b1=field.querySelector("#bmBack1"), b2=field.querySelector("#bmBack2");
+  const key=BM_META&&BM_META.background;
+  const bg=key&&key!=="geen"&&BATTLE_BACKGROUNDS[key];
+  field.classList.toggle("bm-has-bg",!!bg);
+  field.classList.toggle("bm-field-photo",!!(bg&&bg.smooth));
+  field.style.cssText="";               // geen inline bg meer op het veld zelf
+  if(!b1||!b2)return;
+  const v=SPRITE_VER?("?"+SPRITE_VER):"";
+  if(!bg){ b1.style.backgroundImage=""; b2.style.backgroundImage=""; return; }
+  if(bg.single){ b2.style.backgroundImage=`url('${bg.single}${v}')`; b1.style.backgroundImage=""; return; }
+  b2.style.backgroundImage=`url('${bg.wall}${v}')`;   // battleback2 → muur (achter)
+  b1.style.backgroundImage=`url('${bg.floor}${v}')`;  // battleback1 → vloer (voor)
 }
 
 // Confetti-regen bij overwinning
