@@ -338,6 +338,18 @@ body.greek .qcard .word{color:#143a5e}
 /* Slagveld container */
 #bmField{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding-bottom:10px;transition:background-image .4s ease-in-out,background-color .4s ease-in-out}
 
+/* RPG Maker MV-stijl battleback: twee lagen. Muur (battleback2) vult het hele
+   veld als verre achtergrond; vloer (battleback1) ligt als grondvlak vooraan
+   onderaan. Zo staan de sprites (z-index 2) altijd op de grond, ongeacht de
+   beeldverhouding. Beide leeg => het CSS-thema-landschap eronder blijft zichtbaar. */
+.bm-back1,.bm-back2{position:absolute;left:0;right:0;pointer-events:none;background-repeat:no-repeat}
+.bm-back2{top:0;bottom:0;background-position:center 45%;background-size:cover;image-rendering:pixelated;z-index:0}
+.bm-back1{bottom:0;height:62%;background-position:center bottom;background-size:cover;image-rendering:pixelated;z-index:1;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 16%);mask-image:linear-gradient(to bottom,transparent 0,#000 16%)}
+/* Enkellaags foto (bv. Olympus): vloed het hele veld, niet gepixeld schalen */
+#bmField.bm-field-photo .bm-back1{display:none}
+#bmField.bm-field-photo .bm-back2{image-rendering:auto;background-position:center bottom}
+
 /* Formaties — diepte-effect: kolommen staan op de grond, achterste rij hoger */
 .bm-form{flex:1;display:flex;flex-direction:row;gap:0;align-items:flex-end;padding:0 4px;position:relative;z-index:2}
 #bmFormA{justify-content:flex-start}
@@ -703,7 +715,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="net.js?v=20260709"></script>
 <script src="games.js?v=20260629tw"></script>
 <script src="battle-data.js?v=20260630s"></script>
-<script src="battle.js?v=20260702"></script>
+<script src="battle.js?v=20260702b"></script>
 <script src="map/provinces.js?v=20260702m"></script>
 <script src="totalwar.js?v=20260702m3"></script>
 <script>
