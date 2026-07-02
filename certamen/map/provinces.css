@@ -1,0 +1,63 @@
+/* ============================================================================
+   CAMPAGNEKAART — provincie-styling
+   ----------------------------------------------------------------------------
+   Hoort bij de interactieve Romeinse-provinciekaart (Total War-modus).
+   Eigenaarskleuren worden via JavaScript gezet als de CSS-variabele
+   --province-fill (zie provinces.js). De ruwe SVG levert alleen geometrie;
+   alle kleur komt hier of uit JS vandaan.
+
+   LET OP — stroke-width staat in de gebruikerseenheden van deze kaart
+   (viewBox ~175528 × 100252), vandaar de grote getallen. Pas ze aan de
+   uiteindelijke SVG aan.
+   ============================================================================ */
+
+/* Eén neutrale basisstijl voor élke provincie. De originele randen (stroke uit
+   de kaart zelf) blijven staan; alleen de vulling wordt hier gestuurd. */
+.province {
+  /* Neutrale grijstint; JS overschrijft via --province-fill. */
+  fill: var(--province-fill, #c9c4ba);
+  cursor: pointer;
+  transition: fill .2s ease, filter .2s ease, opacity .2s ease;
+}
+
+/* Als een provincie uit meerdere paden bestaat, staan die in een
+   <g class="province">; de kindpaden erven de fill van de groep. */
+.province > * {
+  fill: inherit;
+  stroke: inherit;
+  stroke-width: inherit;
+}
+
+/* Hover: lichte oplichting, niet de kleur veranderen. */
+.province:hover {
+  filter: brightness(1.12) drop-shadow(0 0 120px rgba(255, 215, 120, .35));
+}
+
+/* Geselecteerd (aangeklikt) gebied: gouden gloed + dikkere rand. */
+.province.selected {
+  stroke: #d4af37;
+  stroke-width: 320;
+  filter: brightness(1.15) drop-shadow(0 0 200px rgba(212, 175, 55, .55));
+}
+
+/* Vijandelijk gebied (relatief tot de spelende beschaving). */
+.province.enemy {
+  filter: saturate(1.2) drop-shadow(0 0 140px rgba(200, 50, 40, .5));
+}
+
+/* Bevriend / eigen gebied. */
+.province.ally {
+  filter: saturate(1.15) drop-shadow(0 0 140px rgba(70, 150, 220, .5));
+}
+
+/* Tijdelijke nadruk via highlightProvince(). */
+.province.highlight {
+  filter: brightness(1.3) drop-shadow(0 0 220px rgba(255, 230, 150, .7));
+}
+
+/* Niet-veroverbaar / buiten het spel (bv. barbaarse regio's). */
+.province.locked {
+  fill: #6b6358;
+  opacity: .6;
+  cursor: default;
+}
