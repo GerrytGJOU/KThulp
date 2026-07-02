@@ -187,30 +187,41 @@ async function bmAwardBattle(){
   const isScholar=total>=5&&correct/total>=0.9;
   // Nieuwe XP-formule: +2/goed, +5/deelname, +1/ronde, +15/winst, +8/scholar
   const xpEarned=correct*2+5+total*1+(won?15:0)+(isScholar?8:0);
-  // Muntbeloning: +1/goed, +3/deelname, +10/winst; Odysseus (legendarisch) geeft +% bonus
+  // Muntbeloning: alleen deelname + winst (geen munten per goed antwoord —
+  // dat liep te snel op). Odysseus (legendarisch) geeft +% bonus.
   const legBonus=bmLegendaryOf(BM_IDENT);
-  let coinsEarned=correct*1+3+(won?10:0);
+  let coinsEarned=3+(won?10:0);
   if(legBonus?.incomeMult) coinsEarned=Math.round(coinsEarned*(1+legBonus.incomeMult));
 
-  const snap=await fbDB.ref("identities/"+klas+"/"+lcode).once("value");
-  const data=snap.val()||{};
-  const oldXp=data.xp||0, newXp=oldXp+xpEarned;
-  const newCoins=(data.coins||0)+coinsEarned;
-  const battles=(data.battles||0)+1;
-  const oldLv=bmCalcLevel(oldXp), newLv=bmCalcLevel(newXp);
-
-  // Mastery-rondes bijwerken voor huidige klasse
+  // Lees-wijzig-schrijf via transaction() i.p.v. once()+update(): als hetzelfde
+  // profiel (klascode+leerlingcode) rond hetzelfde moment vanaf een ander
+  // toestel/tabblad wegschrijft, herhaalt Firebase de transactie op de
+  // nieuwste stand i.p.v. die overschrijven — xp/munten kunnen zo nooit
+  // "verdwijnen" en blijven tussen toestellen synchroon.
   const cls=BM_MY_CLASS;
-  const upd={xp:newXp,battles,coins:newCoins};
-  if(cls){
-    const hist=data.classHistory?.[cls]||{};
-    upd["classHistory/"+cls+"/rounds"]=(hist.rounds||0)+Math.max(1,total);
-    upd["classHistory/"+cls+"/damage"]=(hist.damage||0)+(BM_MY_DMG||0);
-    upd["classHistory/"+cls+"/healing"]=(hist.healing||0)+(BM_MY_HEAL||0);
-  }
-
-  await fbDB.ref("identities/"+klas+"/"+lcode).update(upd);
-  const merged={...data,...upd,xp:newXp,battles,achievements:data.achievements||[]};
+  let oldXp=0,newXp=0,newCoins=0,battles=0,mergedData=null;
+  const identRef=fbDB.ref("identities/"+klas+"/"+lcode);
+  await identRef.transaction(cur=>{
+    const data=cur||{};
+    oldXp=data.xp||0; newXp=oldXp+xpEarned;
+    newCoins=(data.coins||0)+coinsEarned;
+    battles=(data.battles||0)+1;
+    const next={...data,xp:newXp,coins:newCoins,battles};
+    if(cls){
+      const hist=(data.classHistory&&data.classHistory[cls])||{};
+      next.classHistory={...(data.classHistory||{}),[cls]:{
+        ...hist,
+        rounds:(hist.rounds||0)+Math.max(1,total),
+        damage:(hist.damage||0)+(BM_MY_DMG||0),
+        healing:(hist.healing||0)+(BM_MY_HEAL||0),
+      }};
+    }
+    mergedData=next;
+    return next;
+  });
+  const data=mergedData||{};
+  const oldLv=bmCalcLevel(oldXp), newLv=bmCalcLevel(newXp);
+  const merged={...data,achievements:data.achievements||[]};
   BM_IDENT={...BM_IDENT,...merged};
   bmIdentSave({...bmIdentLoad(),...BM_IDENT});
 
@@ -659,6 +670,9 @@ async function bmIdentContinue(){
 }
 
 // Haalt de nieuwste Battle Mode-identiteit uit Firebase en ververst de cache + (optioneel) het scherm.
+// Zo tonen twee toestellen (zelfde klascode+leerlingcode) altijd hetzelfde
+// xp/muntsaldo, ook als het ene toestel al een tijdje een oud tabblad open
+// had staan terwijl er elders is bijgeschreven.
 async function bmRefreshIdentCache(rerenderScreen){
   const saved=(typeof bmIdentLoad==="function")?bmIdentLoad():null;
   if(!saved||!saved.klascode||!saved.leerlingcode)return;
@@ -669,7 +683,9 @@ async function bmRefreshIdentCache(rerenderScreen){
       const merged={...saved,...d};
       bmIdentSave(merged);
       if(BM_IDENT)BM_IDENT={...BM_IDENT,...d};
-      if(rerenderScreen&&SCREENS[rerenderScreen])SCREENS[rerenderScreen]();
+      // Alleen herrenderen als de speler nog op datzelfde scherm staat (anders
+      // overschrijf je bv. een avatar-bewerking die intussen is gestart).
+      if(rerenderScreen&&SCREENS[rerenderScreen]&&_screen===rerenderScreen)SCREENS[rerenderScreen]();
     }
   }catch(e){}
 }
@@ -2684,6 +2700,9 @@ SCREENS.battleProfile = function(){
   <div class="eyebrow l">Achievements (${achs.length}/${bmAchDef.length})</div>
   <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">${achHTML}</div>
   ${foot()}`);
+  // Ververs op de achtergrond met de laatste Firebase-stand (bv. na spelen op
+  // een ander toestel) en herrender pas als er echt iets veranderd is.
+  bmRefreshIdentCache("battleProfile");
 };
 
 /* ---- SCHERM: battleAvatarEdit ---- */
@@ -2696,6 +2715,10 @@ SCREENS.battleAvatarEdit = function(){
   }
   if(!BM_AV_EDIT) BM_AV_EDIT={...bmAvatarMerge(BM_IDENT.avatar)};
   const av=BM_AV_EDIT;
+  // Munt-/xp-saldo op de achtergrond verversen (geen herrender, dat zou de
+  // openstaande avatar-bewerking resetten) zodat aankopen altijd tegen het
+  // actuele saldo worden getoetst, ook als dit toestel al even open stond.
+  bmRefreshIdentCache();
 
   function partSection(partId){
     const part=BM_AVATAR_PARTS[partId]; if(!part)return"";
