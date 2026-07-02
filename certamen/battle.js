@@ -1113,6 +1113,8 @@ function bmArenaBgStyle(){
 // Herbevestig de achtergrond op een bestaand #bmField (na herbouw).
 function bmApplyArenaBg(field){
   if(!field)return;
+  const hasBg=!!(BM_META?.background&&BM_META.background!=="geen"&&BATTLE_BACKGROUNDS[BM_META.background]);
+  field.classList.toggle("bm-has-bg",hasBg);
   field.style.cssText=bmArenaBgStyle();
 }
 

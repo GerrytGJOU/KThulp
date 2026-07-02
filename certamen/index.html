@@ -338,14 +338,27 @@ body.greek .qcard .word{color:#143a5e}
 /* Slagveld container */
 #bmField{flex:1;min-height:0;position:relative;overflow:hidden;display:flex;align-items:flex-end;padding-bottom:10px;transition:background-image .4s ease-in-out,background-color .4s ease-in-out}
 
-/* Formaties */
-.bm-form{flex:1;display:flex;flex-direction:row;gap:8px;align-items:flex-end;padding:0 8px;position:relative;z-index:2}
+/* Formaties — diepte-effect: kolommen staan op de grond, achterste rij hoger */
+.bm-form{flex:1;display:flex;flex-direction:row;gap:0;align-items:flex-end;padding:0 4px;position:relative;z-index:2}
 #bmFormA{justify-content:flex-start}
 #bmFormB{justify-content:flex-end}
-.bm-fcol{display:flex;flex-direction:column;gap:8px;align-items:center}
+/* Elke kolom (front/mid/back) staat op de grond; achterste kolom iets omhoog
+   zodat ze zichtbaar boven de voorste rij uitkomen (isometrisch effect). */
+.bm-fcol{display:flex;flex-direction:column;gap:4px;align-items:center;margin:0 -4px}
+/* Team A: eerste kind = back, tweede = mid, derde = front */
+#bmFormA .bm-fcol:nth-child(1){transform:translateY(-20px);z-index:1}
+#bmFormA .bm-fcol:nth-child(2){transform:translateY(-10px);z-index:2}
+#bmFormA .bm-fcol:nth-child(3){transform:translateY(0px);z-index:3}
+/* Team B: eerste kind = front, tweede = mid, derde = back */
+#bmFormB .bm-fcol:nth-child(1){transform:translateY(0px);z-index:3}
+#bmFormB .bm-fcol:nth-child(2){transform:translateY(-10px);z-index:2}
+#bmFormB .bm-fcol:nth-child(3){transform:translateY(-20px);z-index:1}
 #bmBfx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:10}
 
 /* â”€â”€ Landschapsachtergronden â”€â”€ */
+/* bm-has-bg = docent heeft een battleback gekozen; thema-gradiënt en ::before-decoraties uit */
+#bmField.bm-has-bg{background:none!important}
+#bmField.bm-has-bg::before{display:none!important}
 .bm-bg-roman{background:linear-gradient(180deg,#7ab3e0 0%,#a8d4f0 18%,#8bc45a 44%,#6a9040 58%,#4a6028 100%)}
 .bm-bg-roman::before{content:'';position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%201920%20540'%3E%3Cellipse%20cx='400'%20cy='620'%20rx='520'%20ry='260'%20fill='%234a6028'/%3E%3Cellipse%20cx='1200'%20cy='630'%20rx='600'%20ry='290'%20fill='%235a7030'/%3E%3Cellipse%20cx='860'%20cy='570'%20rx='460'%20ry='210'%20fill='%236a8040'/%3E%3Crect%20x='0'%20y='438'%20width='1920'%20height='2'%20fill='%233a5020'%20opacity='.35'/%3E%3Crect%20x='124'%20y='224'%20width='8'%20height='266'%20fill='%23a07828'/%3E%3Ccircle%20cx='128'%20cy='217'%20r='11'%20fill='%23c8a020'/%3E%3Crect%20x='104'%20y='255'%20width='50'%20height='7'%20rx='2'%20fill='%23987020'/%3E%3Crect%20x='108'%20y='262'%20width='42'%20height='57'%20fill='%23c8392a'/%3E%3Crect%20x='108'%20y='319'%20width='42'%20height='6'%20fill='%23c8a020'/%3E%3Cline%20x1='129'%20y1='272'%20x2='129'%20y2='309'%20stroke='%23e8c840'%20stroke-width='1.8'%20opacity='.8'/%3E%3Cline%20x1='114'%20y1='284'%20x2='144'%20y2='284'%20stroke='%23e8c840'%20stroke-width='1.8'%20opacity='.8'/%3E%3Crect%20x='1783'%20y='234'%20width='10'%20height='256'%20fill='%235a2e10'/%3E%3Crect%20x='1766'%20y='272'%20width='44'%20height='8'%20rx='2'%20fill='%234a2008'/%3E%3Crect%20x='1771'%20y='316'%20width='34'%20height='7'%20rx='2'%20fill='%234a2008'/%3E%3Ccircle%20cx='1788'%20cy='226'%20r='10'%20fill='%23c8b080'/%3E%3Cellipse%20cx='1784'%20cy='224'%20rx='2.5'%20ry='3'%20fill='%23333'/%3E%3Cellipse%20cx='1792'%20cy='224'%20rx='2.5'%20ry='3'%20fill='%23333'/%3E%3Cpath%20d='M1784%20231%20Q1788%20235%201792%20231'%20stroke='%23555'%20stroke-width='1.5'%20fill='none'/%3E%3C/svg%3E") center/cover no-repeat;opacity:.75}
 .bm-bg-greek{background:linear-gradient(180deg,#4a8fc8 0%,#87ceeb 22%,#c8d8a0 54%,#d4c870 70%,#b8a850 100%)}
@@ -588,10 +601,10 @@ body.greek .qcard .word{color:#143a5e}
 
 /* â”€â”€ Commander Spectre â”€â”€ */
 .bm-spectre{position:absolute;bottom:0;height:100%;width:50%;background-size:auto 85%;background-repeat:no-repeat;pointer-events:none;opacity:0;z-index:1;filter:drop-shadow(0 0 28px rgba(255,210,80,.5)) drop-shadow(0 0 60px rgba(255,180,40,.2))}
-.bm-spectre-A{left:0;background-position:30% bottom}
-.bm-spectre-B{right:0;background-position:70% bottom;transform:scaleX(-1)}
+.bm-spectre-A{left:0;background-position:center bottom}
+.bm-spectre-B{right:0;background-position:center bottom;transform:scaleX(-1)}
 .bm-spectre-active{animation:bmSpectreFade 2.2s ease forwards}
-@keyframes bmSpectreFade{0%{opacity:0}18%{opacity:.28}62%{opacity:.28}100%{opacity:0}}
+@keyframes bmSpectreFade{0%{opacity:0}18%{opacity:.60}62%{opacity:.60}100%{opacity:0}}
 .bm-noanim .bm-spectre{display:none}
 
 /* â”€â”€ Speler-weergave â”€â”€ */
@@ -689,7 +702,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="net.js?v=20260709"></script>
 <script src="games.js?v=20260629tw"></script>
 <script src="battle-data.js?v=20260630s"></script>
-<script src="battle.js?v=20260701b"></script>
+<script src="battle.js?v=20260702"></script>
 <script src="totalwar.js?v=20260629tw"></script>
 <script>
 /* ---- INIT ---- */
