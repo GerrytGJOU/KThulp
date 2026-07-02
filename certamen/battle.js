@@ -229,7 +229,9 @@ async function bmAwardBattle(){
   P.stats.battlesPlayed++; if(won)P.stats.battlesWon++;
   P.stats.totalCorrect+=correct; P.stats.totalWrong+=wrong;
   P.stats.totalDamage+=(BM_MY_DMG||0); P.stats.totalHealing+=(BM_MY_HEAL||0);
-  addXP(xpEarned);  // addXP roept saveProfile() aan
+  // skipSync=true: de xp-winst staat al in de identities/{klas}/{lcode}-
+  // transactie hierboven; nogmaals syncen zou 'm dubbel optellen.
+  addXP(xpEarned, true);  // addXP roept saveProfile() aan
   checkAch({mode:"battle", won, isScholar});
 
   const earned=await bmCheckAchievements(merged,{won,isScholar});
@@ -628,29 +630,29 @@ SCREENS.battleIdentity = function(){
   `}
   ${foot()}`);
 };
-async function bmIdentLogin(){
+// Kernlogica van het aanmelden/aanmaken van een gedeelde identiteit
+// (klascode+leerlingcode). Herbruikt door zowel het Battle Mode-aanmeldscherm
+// als de "koppel dit toestel"-actie in het algemene profiel (SCREENS.collection),
+// zodat XP (en later munten) via dezelfde /identities/{klas}/{lcode}-node op
+// elk toestel gelijk blijven — niet alleen binnen Battle Mode.
+async function bmIdentDoLogin(klas,lcode,name){
   initFirebase(); // beste-effort; bmIdentGet/Create werken ook offline (lokale fallback)
-  const klas=(el("bmKlas")?.value||"").trim().toUpperCase();
-  const lcode=(el("bmLcode")?.value||"").trim().toLowerCase();
-  const name=(el("bmNaam")?.value||"").trim();
-  const err=el("bmIdentErr");
-  if(!klas||!lcode||!name){if(err){err.textContent="Vul alle velden in.";err.style.display="";}return;}
-  if(err)err.style.display="none";
+  klas=(klas||"").trim().toUpperCase();
+  lcode=(lcode||"").trim().toLowerCase();
+  name=(name||"").trim();
+  if(!klas||!lcode||!name) return{ok:false,error:"Vul alle velden in."};
   try{
     let data=await bmIdentGet(klas,lcode);
     const isNew=!data;
     if(isNew&&fbDB){
       const valid=await fbDB.ref("klascodes/"+klas).once("value");
-      if(!valid.exists()){
-        if(err){err.textContent="Klascode '"+klas+"' is onbekend. Vraag je docent om de juiste code.";err.style.display="";}
-        return;
-      }
+      if(!valid.exists()) return{ok:false,error:"Klascode '"+klas+"' is onbekend. Vraag je docent om de juiste code."};
     }
     if(!data)data=await bmIdentCreate(klas,lcode,name);
     // Eenmalige migratie: lokaal profiel importeren als Firebase-identiteit nieuw is
     if(isNew&&fbDB){
       const localXp=P.xp||0, localCorrect=P.stats?.totalCorrect||0;
-      if((localXp>0||localCorrect>0)&&confirm("Je hebt al Certamen-voortgang ("+localCorrect+" goede antwoorden, "+localXp+" XP). Wil je deze importeren in je Battle Mode-profiel?")){
+      if((localXp>0||localCorrect>0)&&confirm("Je hebt al Certamen-voortgang ("+localCorrect+" goede antwoorden, "+localXp+" XP). Wil je deze importeren in je gekoppelde profiel?")){
         const imp={xp:localXp,coins:P.coins||0,achievements:P.achievements||[]};
         await fbDB.ref("identities/"+klas+"/"+lcode).update(imp);
         data={...data,...imp};
@@ -659,8 +661,16 @@ async function bmIdentLogin(){
     BM_IDENT={klascode:klas,leerlingcode:lcode,...data,name,avatar:bmAvatarMerge(data.avatar)};
     // Volledige identiteit cachen (xp, classHistory, battles, achievements) zodat 'Mijn profiel' offline klopt
     bmIdentSave({klascode:klas,leerlingcode:lcode,...data,name});
-    go("battleJoin");
-  }catch(e){console.error("bmIdentLogin fout:",e);if(err){err.textContent="Aanmelden mislukt: "+(e?.message||e||"onbekende fout");err.style.display="";}}
+    return{ok:true,ident:BM_IDENT};
+  }catch(e){console.error("bmIdentDoLogin fout:",e);return{ok:false,error:"Aanmelden mislukt: "+(e?.message||e||"onbekende fout")};}
+}
+async function bmIdentLogin(){
+  const klas=el("bmKlas")?.value, lcode=el("bmLcode")?.value, name=el("bmNaam")?.value;
+  const err=el("bmIdentErr");
+  if(err)err.style.display="none";
+  const r=await bmIdentDoLogin(klas,lcode,name);
+  if(!r.ok){ if(err){err.textContent=r.error;err.style.display="";} return; }
+  go("battleJoin");
 }
 async function bmIdentContinue(){
   const saved=bmIdentLoad(); if(!saved){SCREENS.battleIdentity();return;}

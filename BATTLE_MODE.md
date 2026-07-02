@@ -14,6 +14,40 @@ Leerlingen loggen in met een **klascode** (van de docent) en een **zelf gekozen 
 - Velden: `name`, `coins`, `xp`, `avatar`, `color`, `classHistory`, `achievements`
 - Lokaal opgeslagen in `localStorage` onder sleutel `certamen_battle_identity`
 
+### Cross-device sync (ook buiten Battle Mode)
+
+**Principe: opgebouwde progressie (xp, en later coins/andere resources) hoort
+online opgeslagen te worden, zodat elk toestel met dezelfde identiteit
+hetzelfde laat zien.** Puur lokale (`localStorage`-only) opslag is alleen
+acceptabel voor spelers zonder gekoppelde identiteit — zodra er een klascode +
+leerlingcode is, is Firebase de bron van waarheid.
+
+Dit is doorgevoerd voor **xp**, ook voor het algemene profiel (`P` in
+`core.js`) dat oorspronkelijk puur lokaal was en dus tussen toestellen kon
+verschillen:
+
+- `certamen/core.js`: `profileIdentity()` / `profileIsLinked()` hergebruiken
+  dezelfde identiteit als Battle Mode (`bmIdentLoad()`) — geen los systeem.
+  `addXP(n, skipSync)` roept `syncXpDelta(n)` aan, die de xp-winst zowel lokaal
+  (`P.xp`) als in `/identities/{klas}/{lcode}/xp` (via een Firebase
+  `transaction()`, dus veilig bij bijna-gelijktijdige schrijfacties vanaf
+  meerdere toestellen) bijwerkt. `skipSync=true` wordt gebruikt door
+  aanroepers die de identiteit al zelf hebben weggeschreven (bv.
+  `bmAwardBattle`), om dubbeltelling te voorkomen.
+  `syncProfileFromCloud(rerenderScreen)` haalt de laatste stand op zodat een
+  toestel dat al even een tabblad open had staan zichzelf bijwerkt.
+- `certamen/games.js`: `SCREENS.collection` ("Mijn profiel", buiten Battle
+  Mode) toont een koppel-status en roept `syncProfileFromCloud("collection")`
+  aan. Nog geen identiteit? Dan verschijnt "Koppel dit toestel" (hergebruikt
+  `bmIdentDoLogin`, dezelfde klascode/leerlingcode-flow als Battle Mode) —
+  koppelen is nooit verplicht; zonder koppeling blijft alles lokaal werken
+  zoals voorheen.
+
+**Volgende stap (nog niet gedaan):** hetzelfde patroon toepassen op `P.coins`
+(en eventuele toekomstige resources) zodra de algemene muntenopbouw dat nodig
+heeft — reken niet op `localStorage` als enige opslag zodra iets als
+"opgebouwde voortgang" bedoeld is.
+
 ---
 
 ## Battle Energy (BE)

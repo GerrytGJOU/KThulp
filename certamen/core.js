@@ -208,7 +208,10 @@ function saveProfile(){ try{ localStorage.setItem(PKEY, JSON.stringify(P)); }cat
 let P = loadProfile();
 
 function addCoins(n){ P.coins += n; if(P.coins<0)P.coins=0; saveProfile(); }
-function addXP(n){
+// skipSync=true: gebruik dit als de aanroeper de gedeelde Firebase-identiteit
+// AL zelf heeft bijgewerkt (bv. bmAwardBattle, dat zijn eigen transaction
+// gebruikt) — anders zou de xp-winst daar dubbel worden opgeteld.
+function addXP(n, skipSync){
   if(!n||n<=0) return;
   P.xp=(P.xp||0)+n;
   const lv=calcLevel(P.xp);
@@ -217,6 +220,60 @@ function addXP(n){
     setTimeout(()=>toast("Niveau omhoog!","Je bent nu "+lv.rank+" (niveau "+lv.level+")",medalSVG("crown",34)),400);
   } else { P.level=lv.level; P.rank=lv.rank; }
   saveProfile();
+  if(!skipSync) syncXpDelta(n);
+}
+
+/* ============================================================================
+   PROFIELSYNC BUITEN BATTLE MODE
+   ----------------------------------------------------------------------------
+   Het algemene profiel (P, dit bestand) is standaard puur lokaal (localStorage)
+   en synct dus NIET vanzelf tussen toestellen — dat gold ook voor XP totdat
+   dit hier werd toegevoegd. In plaats van een tweede identiteitssysteem te
+   bouwen, hergebruiken we de identiteit die Battle Mode al heeft (klascode +
+   zelf gekozen leerlingcode, /identities/{klas}/{lcode} in Firebase RTDB) —
+   zie battle.js: bmIdentLoad/bmIdentSave/bmIdentGet/bmIdentDoLogin. Zodra een
+   leerling die identiteit heeft (via Battle Mode aangemaakt, of hier gekoppeld),
+   loopt P.xp automatisch gelijk met identities/{klas}/{lcode}.xp op elk
+   toestel. Geen identiteit gekoppeld? Dan werkt alles gewoon lokaal, zoals
+   voorheen — koppelen is nooit verplicht.
+   ============================================================================ */
+function profileIdentity(){ return (typeof bmIdentLoad==="function") ? bmIdentLoad() : null; }
+function profileIsLinked(){ const id=profileIdentity(); return !!(id&&id.klascode&&id.leerlingcode); }
+
+// Verhoog xp lokaal én (indien gekoppeld) in de gedeelde Firebase-identiteit
+// via een transaction (voorkomt verloren updates bij bijna-gelijktijdig
+// schrijven vanaf twee toestellen/tabbladen — zie battle.js: bmAwardBattle).
+function syncXpDelta(n){
+  if(!n) return;
+  const id=profileIdentity(); if(!id||!id.klascode||!id.leerlingcode) return;
+  if(typeof hasFirebase==="undefined"||!hasFirebase) return;
+  try{
+    if(typeof initFirebase==="function") initFirebase();
+    if(typeof fbDB==="undefined"||!fbDB) return;
+    fbDB.ref("identities/"+id.klascode+"/"+id.leerlingcode+"/xp").transaction(cur=>(cur||0)+n);
+    if(typeof bmIdentSave==="function") bmIdentSave({...id, xp:(id.xp||0)+n});
+    if(typeof BM_IDENT!=="undefined"&&BM_IDENT) BM_IDENT.xp=(BM_IDENT.xp||0)+n;
+  }catch(e){}
+}
+
+// Haal de nieuwste xp uit Firebase en werk P.xp bij als dit toestel achterloopt
+// (bv. na spelen op een ander toestel terwijl dit toestel/tabblad al open stond).
+// rerenderScreen: alleen herrenderen als de speler nog op dat scherm staat.
+async function syncProfileFromCloud(rerenderScreen){
+  const id=profileIdentity(); if(!id||!id.klascode||!id.leerlingcode) return;
+  if(typeof bmIdentGet!=="function") return;
+  try{
+    if(typeof initFirebase==="function") initFirebase();
+    const d=await bmIdentGet(id.klascode,id.leerlingcode);
+    if(d && typeof d.xp==="number" && d.xp!==P.xp){
+      P.xp=d.xp;
+      const lv=calcLevel(P.xp); P.level=lv.level; P.rank=lv.rank;
+      saveProfile();
+      if(typeof BM_IDENT!=="undefined"&&BM_IDENT) BM_IDENT.xp=d.xp;
+      if(rerenderScreen && typeof _screen!=="undefined" && _screen===rerenderScreen
+         && typeof SCREENS!=="undefined" && SCREENS[rerenderScreen]) SCREENS[rerenderScreen]();
+    }
+  }catch(e){}
 }
 function checkAch(ctx={}){
   const got=[], s=P.stats;
