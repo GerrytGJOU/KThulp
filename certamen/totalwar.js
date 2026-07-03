@@ -90,7 +90,7 @@ const TW_STRUCTURES = {
 // de rest volgt; ontbrekende bestanden vallen terug op militia.png (zie
 // twGarrisonSpriteFor()).
 const TW_GARRISON_SPRITE_BY_CIV = {
-  roma:"roman", athenae:"greek", gallii:"gallic", germani:"german",
+  roma:"roman", athenae:"greek", gallii:"gauls", germani:"germans",
   persae:"persian", carthago:"carthaginian", aegyptii:"egyptian",
 };
 
