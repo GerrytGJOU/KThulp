@@ -160,7 +160,7 @@ aan het bestaande gedeelde profiel (zie §6) zodra de leerling die heeft.
      met een ander wapen-sprite) de verdedigingswerken van de eigen provincie
      op, in stadia die oplopen met `walls` (§4/§5.2): eerst een fort
      (`assets/bosses/fort.png`), dan verschijnt daarvoor een palissade
-     (`assets/bosses/palisade.png`), die bij een hoger `walls`-niveau overgaat
+     (`assets/bosses/Palissade.png`), die bij een hoger `walls`-niveau overgaat
      in een stenen muur (`assets/bosses/wall.png`) — alle drie de sprites zijn
      al aanwezig. Puur visueel, geen eigen
      opslag nodig — de trap wordt afgeleid van de al bestaande `walls`-waarde.

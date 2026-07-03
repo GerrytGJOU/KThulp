@@ -59,6 +59,11 @@ const BM_IDENT_KEY = "certamen_battle_identity";
 let BM_IDENT = null;
 // Scherm waar de avatar-editor naar terugkeert (gezet door de oproepende knop).
 let BM_AV_RETURN = "battleProfile";
+// Scherm waar het aanmeldscherm (SCREENS.battleIdentity) na een geslaagde
+// login naar terugkeert — default blijft Battle Mode se eigen "battleJoin",
+// maar andere aanroepers (bv. Training Mode) zetten dit vooraf om zelf de
+// leerling terug te krijgen na het inloggen. Zelfde patroon als BM_AV_RETURN.
+let BM_IDENT_RETURN = "battleJoin";
 
 function bmIdentLoad(){ try{ const r=localStorage.getItem(BM_IDENT_KEY); return r?JSON.parse(r):null; }catch(e){return null;} }
 function bmIdentSave(o){ try{ localStorage.setItem(BM_IDENT_KEY,JSON.stringify(o)); }catch(e){} }
@@ -723,13 +728,13 @@ async function bmIdentLogin(){
   if(err)err.style.display="none";
   const r=await bmIdentDoLogin(klas,lcode,name);
   if(!r.ok){ if(err){err.textContent=r.error;err.style.display="";} return; }
-  go("battleJoin");
+  go(BM_IDENT_RETURN||"battleJoin");
 }
 async function bmIdentContinue(){
   const saved=bmIdentLoad(); if(!saved){SCREENS.battleIdentity();return;}
   BM_IDENT=saved;
   try{const d=await bmIdentGet(saved.klascode,saved.leerlingcode);if(d){BM_IDENT={...saved,...d};bmIdentSave({...saved,...d});}}catch(e){}
-  go("battleJoin");
+  go(BM_IDENT_RETURN||"battleJoin");
 }
 
 // Haalt de nieuwste Battle Mode-identiteit uit Firebase en ververst de cache + (optioneel) het scherm.

@@ -287,7 +287,7 @@ belegerde provincie in plaats van een mythologische tegenstander. Bewust
 normale Boss Battle-menu — alleen `twStartAttack()` in `totalwar.js` zet
 `BM_META.bossId="garrison"`, en `battleHostSettings` in `battle.js` vervangt
 in dat geval de speltype-/baaskeuze door vaste, niet-aanpasbare tekst. De
-visuele laag (`assets/bosses/fort.png`/`palisade.png`/`wall.png`) is aanwezig;
+visuele laag (`assets/bosses/fort.png`/`Palissade.png`/`wall.png`) is aanwezig;
 zie TOTAL_WAR.md §3.1 voor de bedoelde koppeling met de `walls`-waarde.
 
 ---
