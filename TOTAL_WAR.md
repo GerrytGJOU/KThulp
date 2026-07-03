@@ -1,9 +1,14 @@
-# Persistent Total War — Masterplan (ONTWERPFASE)
+# Persistent Total War — Masterplan (FUNDAMENT GEBOUWD)
 
-> **Status: concept.** Nog niet speelbaar. In het hoofdmenu staat de modus als
-> **"Binnenkort"**. Docenten kunnen een interactief voorbeeld van de
-> veldtochtkaart bekijken (achter de docentenlogin); leerlingen kunnen de
-> modus nog niet binnengaan.
+> **Status: fundament werkend, nog niet vrijgegeven voor leerlingen.** In het
+> hoofdmenu staat de modus nog als **"Binnenkort"** (leerlingen kunnen niet
+> binnen, want Training Mode/§3 bestaat nog niet). Docenten hebben nu wél een
+> **echte, blijvende** veldtochtkaart (Firebase-schema, §4): klas↔beschaving-
+> koppeling in het docentenportaal (§7.1), een live kaart i.p.v. een demo, en
+> een "Val aan"-knop die een echt [Boss Battle](BOSS_BATTLE.md)-gevecht start
+> met de garnizoenssterkte van de verdedigende provincie verrekend (§5.4/
+> BOSS_BATTLE.md "Garnizoensformule"). Zie [§0](#0-wat-is-er-al-gebouwd-nu) voor
+> de volledige, actuele stand.
 >
 > Dit document is de **enige bron van waarheid** voor Total War en vervangt
 > alle eerdere schetsen (inclusief `Total War Plans.docx`, die nu verouderd en
@@ -23,13 +28,17 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | Onderdeel | Bestand | Status |
 |---|---|---|
 | Menutegel "🗺️ Total War — Binnenkort" | `certamen/games.js` (`SCREENS.home`) | ✅ werkend |
-| Publiek uitlegscherm (alleen-lezen kaart) | `certamen/totalwar.js` (`SCREENS.totalWar`) | ✅ werkend |
-| Docent-voorbeeld (interactieve kaart, achter login) | `certamen/totalwar.js` (`SCREENS.totalWarPreview`) | ✅ werkend |
+| Publiek uitlegscherm (alleen-lezen demo-kaart) | `certamen/totalwar.js` (`SCREENS.totalWar`) | ✅ werkend, ongewijzigd (blijft demo, want puur illustratief voor niet-ingelogde bezoekers) |
+| Docent-kaart: **echte, blijvende veldtocht** i.p.v. demo-voorbeeld | `certamen/totalwar.js` (`SCREENS.totalWarPreview`, `twStartLive`, `twApplyLive`) | ✅ werkend — live Firebase-listener op `/totalwar/provinces`, geen hardcoded stand meer |
 | **Echte, geometrisch accurate SVG-kaart van het Romeinse Rijk (Trajanus)** | `certamen/map/provinces.svg` | ✅ werkend — **46 aanklikbare provincies**, elk met stabiele `id` (bv. `italia`, `baetica`, `gallia_belgica`) |
-| Provincieregister (naam, steden, eigenaar, verdediging, bonus) | `certamen/map/provinces.json` | ✅ werkend, nog met placeholder-waarden |
+| Provincieregister (naam, steden, buren, zeeroutes, bonus) | `certamen/map/provinces.json` | ✅ werkend — inclusief `neighbors`/`seaRoutes` per provincie (symmetrisch, zie §5.5/§5.6); stedencatalogus nog beperkt (§3.4 open) |
 | Provincie-CSS (neutraal/hover/selected/enemy/ally) | `certamen/map/provinces.css` | ✅ werkend |
 | JS-helper om provincies te kleuren/muteren | `certamen/map/provinces.js` (`MapAPI`) | ✅ werkend: `setProvinceOwner`, `setProvinceDefense`, `setProvinceBonus`, `highlightProvince`, `resetProvince` |
-| Voorbeeld-eigendom/verdediging (hardcoded, geen opslag) | `certamen/totalwar.js` (`TW_CIVS`, `TW_DEMO_OWN`, `TW_DEMO_DEF`) | ⚠️ demo-only, wordt vervangen door §4 |
+| **Firebase-schema + eenmalige campagne-seed** | `certamen/totalwar.js` (`twEnsureCampaignSeeded`) | ✅ werkend — `/totalwar/provinces/{id}` + `/totalwar/civs/{civId}`, idempotent (zie §4, met de `klasCivs`-omkering uit §9.5) |
+| **Klas↔beschaving-koppeling (docentenportaal)** | `certamen/games.js` (`tpAssignKlasCiv`/`tpLoadKlasCivs`, paneel in `SCREENS.teacherPortal`) | ✅ werkend — schrijft naar `/totalwar/klasCivs/{klascode}`, gevalideerd tegen bestaande Battle Mode-klascodes |
+| **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageslag (`damageTaken`); winst/verlies schrijft terug naar de provincie |
+| 7-facties-tabel + thuislanden (seed-data) | `certamen/totalwar.js` (`TW_CIVS`, `TW_HOME_PROVINCES`) | ✅ werkend, exact §2 |
+| Voorbeeld-eigendom/verdediging voor de **publieke** demo-kaart | `certamen/totalwar.js` (`TW_DEMO_OWN`, `TW_DEMO_DEF`) | ✅ blijft bestaan, uitsluitend voor `SCREENS.totalWar` (niet-docenten) |
 
 **Belangrijk over de kaart:** dit is de **echte** Romeinse-provinciekaart (zie
 de projectgeschiedenis: de originele Wikimedia-SVG is schoongemaakt en elke
@@ -433,23 +442,51 @@ uitgewerkt en gecorrigeerd in [BOSS_BATTLE.md](BOSS_BATTLE.md), dat bovendien
 aanraadt om de bestaande lobby/identiteit/rejoin-infrastructuur van Battle
 Mode te hergebruiken in plaats van een parallel systeem te bouwen.
 
+Inmiddels ook waar: Boss Battle bleek geen los systeem te worden, maar een
+compacte uitbreiding bovenop Battle Mode se **bestaande** Team A/B-engine
+(`certamen/bossbattle.js`, `BM_META.mode==="boss"`) — team B is de baas i.p.v.
+een menselijk team, en dezelfde `bmResolve()`/`bmCalcAbilityEffect()`-pijplijn
+rekent de klassen/combo's/synergie al automatisch af tegen de baas-HP. Geen
+apart room-schema nodig.
+
+### 9.5 `klasCivs`-omkering i.p.v. één `klascode`-string per civ
+
+§4 schreef één `klascode`-veld onder `civs/{civId}`, maar §1 illustreert zelf al
+dat meerdere klassen bij dezelfde beschaving horen ("G3A → Atheners"; een
+tweede Griekse klas zou ook Atheners moeten zijn). Geïmplementeerd is daarom
+`/totalwar/klasCivs/{KLASCODE} = civId` (many-to-one, snelle lookup vanuit een
+specifieke klascode) i.p.v. het omgekeerde. `civs/{civId}` bevat nu alleen nog
+`trainingPoints`/`bonusesUnlocked`.
+
+### 9.6 Garnizoensbonus voorlopig één HP-getal, nog geen apart schild
+
+Boss Battle heeft (nog) geen schild-mechanic (zie `BOSS_PRESETS`-commentaar in
+`bossbattle.js`: bewust nog niet gebouwd). De garnizoensformule uit
+[BOSS_BATTLE.md](BOSS_BATTLE.md#garnizoensformule-voor-total-war-belegeringen)
+is daarom vereenvoudigd geïmplementeerd: `walls*50 + towers*20` telt volledig
+op bij `bossMaxHP` (geen apart `garrisonShield`-veld). Zodra Boss Battle zelf
+een schildlaag krijgt, kan `towers` daaraan gekoppeld worden.
+
 ---
 
 ## 10. Roadmap (volgorde-suggestie voor de implementatiesessie)
 
 1. **Data**: `provinces.json` uitbreiden met de volledige stedenlijst +
    bonusteksten (§3.4) — pure data-invoer, geen risico voor de bestaande kaart.
-2. **Firebase-schema**: `/totalwar/provinces/{id}` en `/totalwar/civs/{id}`
-   opzetten (§4), `MapAPI` koppelen aan een live Firebase-listener i.p.v. de
-   huidige hardcoded `TW_DEMO_OWN`/`TW_DEMO_DEF`.
-3. **Docentenportaal**: klas↔beschaving-koppeling (§7.1).
+   *(nog open — `neighbors`/`seaRoutes` zijn wel al toegevoegd, de
+   1-3-steden-per-provincie-bonuscatalogus nog niet)*
+2. ✅ **Firebase-schema**: `/totalwar/provinces/{id}` en `/totalwar/civs/{id}`
+   opgezet (§4, met de `klasCivs`-omkering uit §9.5), `MapAPI` gekoppeld aan een
+   live Firebase-listener i.p.v. de vroegere hardcoded `TW_DEMO_OWN`/`TW_DEMO_DEF`
+   (die nu uitsluitend nog de publieke, niet-live uitlegkaart voeden).
+3. ✅ **Docentenportaal**: klas↔beschaving-koppeling (§7.1).
 4. **Training Mode**: nieuw scherm + TP-toekenning (§3), hergebruikt
-   `BattleMotion` en de bestaande vocab-poollogica.
-5. **Boss Battle**: bouw het losstaande subsysteem eerst generiek (zie
-   [BOSS_BATTLE.md §11](BOSS_BATTLE.md#11-implementatieplan)), koppel het
-   daarna aan Total War via de garnizoensformule (§5.4).
-6. **Kaart-UI**: contested/gestreepte provincies (§5.3), stad-markers,
-   aanval-knop in het docentendashboard (§7.2).
+   `BattleMotion` en de bestaande vocab-poollogica. *(nog open)*
+5. ✅ **Boss Battle**: bleek al te bestaan als uitbreiding op Battle Mode se
+   Team A/B-engine (zie §9.4-addendum); gekoppeld aan Total War via de
+   garnizoensformule (§5.4/§9.6) in `bmStartBossGame()`/`bmResolve()`.
+6. **Kaart-UI**: contested/gestreepte provincies (§5.3), stad-markers zijn nog
+   open; de "Val aan"-knop in het docentendashboard (§7.2) is wel al gebouwd.
 7. **Balans-pas**: klasgrootte-compensatie (§7.4), TP-kosten (§5.2),
    slijtageslag-drempels (§5.4) — allemaal met echte klasgroottes testen.
 

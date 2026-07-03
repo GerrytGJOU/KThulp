@@ -480,6 +480,11 @@ SCREENS.battleHome = function(){
 };
 function bmStartHost(){
   if(!hasFirebase){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
+  // Een gewone, losstaande hostsessie mag nooit een Total War-belegering
+  // erven van een eerder afgebroken twStartAttack() (certamen/totalwar.js) —
+  // zonder deze reset zou bmCreateRoom() dat garrisonProvince/attackerCivId
+  // per ongeluk meenemen naar een ongerelateerd gevecht.
+  if(BM_META){ BM_META.garrisonProvince=null; BM_META.attackerCivId=null; }
   ROLE="host"; DRAFT.game="battle"; go("hostSource");
 }
 // Directe ingang vanuit het hoofdmenu: start het gevecht-hosten met Boss
@@ -489,6 +494,9 @@ function bmStartBossHost(){
   if(!hasFirebase){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
   if(!BM_META)BM_META={};
   BM_META.mode="boss";
+  // Zie bmStartHost() hierboven: ook deze losstaande ingang mag geen
+  // Total War-belegering erven.
+  BM_META.garrisonProvince=null; BM_META.attackerCivId=null;
   ROLE="host"; DRAFT.game="battle"; go("hostSource");
 }
 
@@ -881,6 +889,12 @@ async function bmCreateRoom(){
     mode:BM_META.mode||"pvp",
     bossId:BM_META.bossId||BOSS_PRESET_ORDER[0],
     bossDifficulty:BM_META.bossDifficulty||"normal",
+    // Total War-belegering (zie twStartAttack() in totalwar.js): deze twee
+    // velden moeten expliciet worden overgenomen, anders gaan ze verloren
+    // zodra BM_META hieronder vervangen wordt door dit meta-object — en dan
+    // ziet bmStartBossGame()/bmResolve() nooit dat dit gevecht een belegering is.
+    garrisonProvince:BM_META.garrisonProvince||null,
+    attackerCivId:BM_META.attackerCivId||null,
     status:"lobby"};
   BM_META=meta;
   try{
@@ -1008,11 +1022,21 @@ async function bmStartBossGame(){
   // de echte BM_CLASSES-abilities liggen op 4-14 schade per hit — 8 is de
   // realistische gemiddelde schaal hier; bijstellen kan door alleen deze
   // ene constante te wijzigen.
-  const bossMaxHP=Math.max(1,Math.round(N*15*8*diffM));
+  let bossMaxHP=Math.max(1,Math.round(N*15*8*diffM));
+  let bossStartHP=bossMaxHP;
+  // Total War-belegering (zie TOTAL_WAR.md §5/BOSS_BATTLE.md "Garnizoensformule"):
+  // muren/torens tellen op bij de baas-HP, en een eerdere, verloren poging
+  // ("slijtageslag") laat de baas al verzwakt beginnen. garrisonProvince wordt
+  // gezet door twStartAttack() in totalwar.js, niet bij losstaande gevechten.
+  const gp=BM_META.garrisonProvince;
+  if(gp){
+    bossMaxHP+=(gp.walls||0)*50+(gp.towers||0)*20;
+    bossStartHP=Math.max(1,bossMaxHP-(gp.damageTaken||0));
+  }
   const teamUp={};
   for(const pid of pids)teamUp[pid+"/team"]="A";
   await fbDB.ref("rooms/"+BM_CODE+"/players").update(teamUp);
-  const teams={A:{health:classMaxHP,maxHealth:classMaxHP},B:{health:bossMaxHP,maxHealth:bossMaxHP}};
+  const teams={A:{health:classMaxHP,maxHealth:classMaxHP},B:{health:bossStartHP,maxHealth:bossMaxHP}};
   await fbDB.ref("rooms/"+BM_CODE+"/teams").set(teams);
   await fbDB.ref("rooms/"+BM_CODE+"/boss").set({phase:1,rage:0,roundsSinceAttack:0});
   BM_TEAMS=teams;
@@ -2113,7 +2137,12 @@ async function bmResolve(roundN){
     bmUpdateMastery(players,pUpd,events);
 
     if(newHA<=0||newHB<=0){
-      await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:newHA<=0?"B":"A"});
+      const winner=newHA<=0?"B":"A";
+      await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner});
+      // Total War-belegering: schrijf het resultaat terug naar de aangevallen
+      // provincie (eigendomswissel bij winst, "slijtageslag"-schade bij verlies).
+      // Alleen relevant als dit gevecht vanuit twStartAttack() gestart is.
+      if(BM_META?.garrisonProvince) twResolveSiege(winner,tB.maxHealth,newHB).catch(()=>{});
       setTimeout(()=>Net.deleteRoom(BM_CODE).catch(()=>{}), 5000);
       return;
     }
