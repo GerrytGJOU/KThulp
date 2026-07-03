@@ -13,6 +13,12 @@ SCREENS.home = function(){
     <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
     <p>Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden.</p>
   </button>
+  <button class="tile" onclick="bmStartBossHost()">
+    <span class="corner">${iconSVG("torch",88,"currentColor")}</span>
+    <span class="ic">${iconSVG("torch",44,"currentColor")}</span>
+    <h3>🐉 Boss Battle <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+    <p>De hele klas vecht samen tegen één mythologische baas. Ook ideaal om in je eentje te trainen.</p>
+  </button>
   <button class="tile" onclick="go('totalWar')">
     <span class="corner">${iconSVG("crown",88,"currentColor")}</span>
     <span class="ic">${iconSVG("crown",44,"currentColor")}</span>

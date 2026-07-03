@@ -416,13 +416,16 @@ function bmClearTheme(){
   }
   BM_THEME_SAVED=[];
 }
-function bmTeamNm(team){ return bmFaction(BM_META?.theme).teams[team]?.nm||(team==="A"?"Team A":"Team B"); }
+function bmTeamNm(team){
+  if(BM_META?.mode==="boss"){ if(team==="B")return bmBossPreset(BM_META.bossId).nm; if(team==="A")return "De Klas"; }
+  return bmFaction(BM_META?.theme).teams[team]?.nm||(team==="A"?"Team A":"Team B");
+}
 function bmTeamIcon(team){ return bmFaction(BM_META?.theme).teams[team]?.icon||(team==="A"?"shield":"helmet"); }
 function bmClsNmThemed(clsId){ return bmFaction(BM_META?.theme).classLabels?.[clsId]||bmClsName(clsId); }
 
 /* ---- BATTLE GAME STATE ---- */
 let BM_CODE=null, BM_PID=null, BM_META=null;
-let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={};
+let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={}, BM_BOSS={};
 let BM_MY_BE=0, BM_MY_Q=null, BM_MY_CLASS=null, BM_MY_TEAM=null;
 let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
 const BM_MISSED={}; // { pid:{ wordLa:count } } host-only, adaptief leren
@@ -430,7 +433,7 @@ const BM_MISSED={}; // { pid:{ wordLa:count } } host-only, adaptief leren
 function bmLeave(){
   _bmFormHash="";
   bmClearTheme();
-  BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};
+  BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};BM_BOSS={};
   BM_MY_BE=0;BM_MY_Q=null;BM_MY_CLASS=null;BM_MY_TEAM=null;
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;
   BM_MY_CORRECT=0;BM_MY_WRONG=0;BM_MY_DMG=0;BM_MY_HEAL=0;
@@ -472,6 +475,15 @@ SCREENS.battleHome = function(){
 };
 function bmStartHost(){
   if(!hasFirebase){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
+  ROLE="host"; DRAFT.game="battle"; go("hostSource");
+}
+// Directe ingang vanuit het hoofdmenu: start het gevecht-hosten met Boss
+// Battle alvast als speltype vooringesteld (docent kan dit in de
+// instellingen alsnog terugzetten naar Team vs Team).
+function bmStartBossHost(){
+  if(!hasFirebase){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
+  if(!BM_META)BM_META={};
+  BM_META.mode="boss";
   ROLE="host"; DRAFT.game="battle"; go("hostSource");
 }
 
@@ -526,6 +538,15 @@ SCREENS.battleFAQ = function(){
   // Synergie — data-gedreven uit BM_SYNERGY
   const synHTML=BM_SYNERGY.map(s=>`<li>${s.minClasses}+ verschillende klassen in je team → <b>+${s.beBonus} BE</b> per speler per ronde</li>`).join("");
 
+  // Boss Battle — data-gedreven uit BOSS_PRESETS/BOSS_DIFFICULTIES
+  const bossPresetsHTML=BOSS_PRESET_ORDER.map(id=>{const p=BOSS_PRESETS[id];return`
+    <div style="border-top:1px solid var(--stone4);padding:8px 0;display:flex;gap:10px;align-items:flex-start">
+      <span style="font-size:26px;line-height:1">${p.emoji}</span>
+      <div><b style="font-size:13px;color:${p.color}">${esc(p.nm)}</b>
+      <div class="note">${esc(p.desc)}</div></div>
+    </div>`;}).join("");
+  const bossDiffHTML=BOSS_DIFF_ORDER.map(id=>`<li>${BOSS_DIFFICULTIES[id].nm} — schaalfactor ×${BOSS_DIFFICULTIES[id].m}</li>`).join("");
+
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Handleiding & FAQ</h2></div>
 
@@ -577,6 +598,25 @@ SCREENS.battleFAQ = function(){
       <li><b>Herrijzen:</b> beantwoord een aantal vragen goed (de docent stelt het aantal in) en je held
         keert terug met volle HP. De gouden meter <b>↻</b> onder je held toont je voortgang.</li>
     </ul>`)}
+
+  ${sec("Boss Battle (co-op)",false,`
+    <div class="note">In <b>Boss Battle</b> vecht de hele klas samen tegen één mythologische baas — er is
+    geen tegenstander-team, dus dit werkt ook prima om <b>alleen te trainen</b>. Je klasse, abilities en
+    combo's werken precies hetzelfde als in Team vs Team: je acties richten zich nu alleen op de baas in
+    plaats van een vijandelijk leger, en XP/munten tellen mee op hetzelfde profiel als een normaal gevecht.</div>
+    <ul style="margin:8px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
+      <li>De klas deelt één gezondheidsbalk die meeschaalt met het aantal spelers.</li>
+      <li>Een fout antwoord doet geen schade, maar vult de <b>rage-balk</b> van de baas — bij 100% volgt
+        een extra tegenaanval.</li>
+      <li>Het gevecht kent 3 fases (100–66%, 66–33%, 33–0% baas-HP): de baas valt in latere fases vaker aan.</li>
+    </ul>
+    <div class="note" style="margin-top:8px;font-weight:700">Bazen</div>
+    ${bossPresetsHTML}
+    <div class="note" style="margin-top:8px;font-weight:700">Moeilijkheidsgraden</div>
+    <ul style="margin:4px 0 0;padding-left:18px;font-size:13px;line-height:1.6">${bossDiffHTML}</ul>
+    <div class="note" style="margin-top:8px">Unieke baas-mechanics (bv. de Hydra die koppen laat groeien, of
+    het Labyrinth-schild van de Minotaurus) zijn nog in ontwikkeling — nu heeft elke baas dezelfde
+    generieke aanval/fase-opbouw.</div>`)}
 
   ${sec("Profiel, rang en eerbewijzen",false,`
     <div class="note">Alles wat je doet telt mee voor één profiel (zie <b>Mijn profiel</b> in het
@@ -707,6 +747,12 @@ SCREENS.battleHostSettings = function(){
   if(!BM_META)BM_META={};
   const th=BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id;
   if(!BM_META.theme)BM_META.theme=th;
+  const mode=BM_META.mode||"pvp";
+  if(!BM_META.mode)BM_META.mode=mode;
+  const bossId=BM_META.bossId||BOSS_PRESET_ORDER[0];
+  if(!BM_META.bossId)BM_META.bossId=bossId;
+  const bossDiff=BM_META.bossDifficulty||"normal";
+  if(!BM_META.bossDifficulty)BM_META.bossDifficulty=bossDiff;
   const at=BM_META.answerTimer||10;
   const ah=BM_META.armyHealth||100;
   const adp=BM_META.adaptive!==false;
@@ -724,12 +770,30 @@ SCREENS.battleHostSettings = function(){
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('hostSource')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle — Instellingen</h2></div>
   <div class="panel">
+    <label class="fld">Speltype</label>
+    <div class="chips">
+      <button class="chip ${mode==="pvp"?"on":""}" onclick="BM_META.mode='pvp';SCREENS.battleHostSettings()">Team vs Team</button>
+      <button class="chip ${mode==="boss"?"on":""}" onclick="BM_META.mode='boss';SCREENS.battleHostSettings()">Boss Battle (co-op)</button>
+    </div>
+    <div class="note" style="margin-top:6px">${mode==="boss"?"De hele klas vecht samen tegen één baas — geen tegenstander-team nodig, ook geschikt om alleen te trainen.":"Twee teams strijden tegen elkaar tot één leger op 0 HP staat."}</div>
+  </div>
+  <div class="panel">
     <label class="fld">Factie / Thema</label>
     <select style="width:100%;padding:10px 12px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:15px;font-family:inherit" onchange="BM_META.theme=this.value;SCREENS.battleHostSettings()">
       ${BM_FACTIONS.map(f=>`<option value="${f.id}"${th===f.id?" selected":""}>${f.nm}</option>`).join("")}
     </select>
-    <div class="note" style="margin-top:6px">${iconSVG(fac.teams.A.icon,13,fac.cssVars["--teamA"]||"var(--teamA)")} ${esc(fac.teams.A.nm)} vs ${iconSVG(fac.teams.B.icon,13,fac.cssVars["--teamB"]||"var(--teamB)")} ${esc(fac.teams.B.nm)}</div>
+    ${mode!=="boss"?`<div class="note" style="margin-top:6px">${iconSVG(fac.teams.A.icon,13,fac.cssVars["--teamA"]||"var(--teamA)")} ${esc(fac.teams.A.nm)} vs ${iconSVG(fac.teams.B.icon,13,fac.cssVars["--teamB"]||"var(--teamB)")} ${esc(fac.teams.B.nm)}</div>`:""}
   </div>
+  ${mode==="boss"?`
+  <div class="panel">
+    <label class="fld">Kies de baas</label>
+    <div class="chips">${BOSS_PRESET_ORDER.map(id=>{const p=BOSS_PRESETS[id];return `<button class="chip ${bossId===id?"on":""}" onclick="BM_META.bossId='${id}';SCREENS.battleHostSettings()">${p.emoji} ${esc(p.nm)}</button>`;}).join("")}</div>
+    <div class="note" style="margin-top:6px">${esc(bmBossPreset(bossId).desc)}</div>
+  </div>
+  <div class="panel">
+    <label class="fld">Moeilijkheidsgraad</label>
+    <div class="chips">${BOSS_DIFF_ORDER.map(id=>`<button class="chip ${bossDiff===id?"on":""}" onclick="BM_META.bossDifficulty='${id}';SCREENS.battleHostSettings()">${BOSS_DIFFICULTIES[id].nm}</button>`).join("")}</div>
+  </div>`:""}
   <div class="panel">
     <label class="fld">Antwoordtijd per ronde</label>
     <div class="chips">${chips("answerTimer",[8,10,12,15],at,v=>v+"s")}</div>
@@ -808,6 +872,9 @@ async function bmCreateRoom(){
     heroMode:BM_META.heroMode===true,
     heroMaxHp:BM_META.heroMaxHp||15,
     respawnRequired:BM_META.respawnRequired||5,
+    mode:BM_META.mode||"pvp",
+    bossId:BM_META.bossId||BOSS_PRESET_ORDER[0],
+    bossDifficulty:BM_META.bossDifficulty||"normal",
     status:"lobby"};
   BM_META=meta;
   try{
@@ -910,9 +977,36 @@ function bmAutoTeams(){
   fbDB.ref("rooms/"+BM_CODE+"/players").update(up);
 }
 async function bmStartGame(){
+  if(BM_META?.mode==="boss"){await bmStartBossGame();return;}
   if(Object.keys(BM_PLAYERS).length<2){toast("Te weinig spelers","Wacht op minstens 2 deelnemers.");return;}
   const unassigned=Object.keys(BM_PLAYERS).filter(pid=>!BM_PLAYERS[pid]?.team);
   if(unassigned.length)bmAutoTeams();
+  await new Promise(r=>setTimeout(r,300));
+  await bmDistributeQs(1);
+  go("battleHostGame");
+}
+// Boss Battle-variant van bmStartGame(): iedereen op team A (de klas, geen
+// tegenstander-team), en klas-/baas-HP geschaald met het daadwerkelijke
+// spelersaantal N (pas nu bekend — spelers joinen ná bmCreateRoom()).
+async function bmStartBossGame(){
+  const pids=Object.keys(BM_PLAYERS);
+  if(pids.length<1){toast("Geen spelers","Wacht op minstens 1 deelnemer.");return;}
+  const N=pids.length;
+  const diffM=bmBossDiff(BM_META.bossDifficulty).m;
+  const classMaxHP=N*100;
+  // bossMaxHP = N * verwachte aantal correcte antwoorden per speler (15) *
+  // gemiddelde schade per hit. De ontwerpdoc ging uit van DMG_base=100, maar
+  // de echte BM_CLASSES-abilities liggen op 4-14 schade per hit — 8 is de
+  // realistische gemiddelde schaal hier; bijstellen kan door alleen deze
+  // ene constante te wijzigen.
+  const bossMaxHP=Math.max(1,Math.round(N*15*8*diffM));
+  const teamUp={};
+  for(const pid of pids)teamUp[pid+"/team"]="A";
+  await fbDB.ref("rooms/"+BM_CODE+"/players").update(teamUp);
+  const teams={A:{health:classMaxHP,maxHealth:classMaxHP},B:{health:bossMaxHP,maxHealth:bossMaxHP}};
+  await fbDB.ref("rooms/"+BM_CODE+"/teams").set(teams);
+  await fbDB.ref("rooms/"+BM_CODE+"/boss").set({phase:1,rage:0,roundsSinceAttack:0});
+  BM_TEAMS=teams;
   await new Promise(r=>setTimeout(r,300));
   await bmDistributeQs(1);
   go("battleHostGame");
@@ -1050,7 +1144,11 @@ SCREENS.battleHostGame = function(){
     BM_TEAMS=s.val()||{};
     bmHostUpdateArmies();
   });
-  BM_UNSUBS.push(()=>rS.off("value",fS),()=>rP.off("value",fP),()=>rT.off("value",fT));
+  const rBoss=fbDB.ref("rooms/"+BM_CODE+"/boss"),fBoss=rBoss.on("value",s=>{
+    BM_BOSS=s.val()||{};
+    if(el("bmFormA"))bmBuildBattlefield();
+  });
+  BM_UNSUBS.push(()=>rS.off("value",fS),()=>rP.off("value",fP),()=>rT.off("value",fT),()=>rBoss.off("value",fBoss));
   bmSubscribeLog(BM_CODE);
   bmBuildBattlefield();
   bmHostStartTimer();
@@ -1743,7 +1841,7 @@ function bmBuildBattlefield(){
   if(hash!==_bmFormHash){
     _bmFormHash=hash;
     if(fA)fA.innerHTML=bmFormationHTML("A");
-    if(fB)fB.innerHTML=bmFormationHTML("B");
+    if(fB)fB.innerHTML=BM_META?.mode==="boss"?"":bmFormationHTML("B");
     // Verse DOM-nodes na een rebuild: elke avatar begint in idle. Een motion
     // die vlak hierna via bmAnimAv wordt getriggerd (bv. binnen dezelfde
     // ronde-resolutie) overschrijft dit meteen weer — zelfde volgorde-
@@ -1754,6 +1852,10 @@ function bmBuildBattlefield(){
         .forEach(heroEl=>BattleMotion.ensureIdle(heroEl));
     }
   }
+  // Boss Battle: team B heeft geen spelers — toon in plaats daarvan de
+  // baas-placeholder (naam/fase/rage). Buiten de hash-gate: fase/rage
+  // wijzigen immers los van de spelersformatie.
+  if(fB&&BM_META?.mode==="boss")fB.innerHTML=bmBossSpriteHTML(BM_BOSS,bmTeamNm("B"));
   const field=el("bmField");
   if(field){
     // Landscape-thema
@@ -1969,12 +2071,33 @@ async function bmResolve(roundN){
         await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update(u);
       }
     }
-    const newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-armyDmgA+for_.A.heal));
+    let newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-armyDmgA+for_.A.heal));
     const newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-armyDmgB+for_.B.heal));
+
+    // Boss Battle: de baas (team B) is scripted i.p.v. speler-gestuurd — na de
+    // normale schade-op-de-baas-berekening hierboven (die al vanzelf via de
+    // bestaande team-A/B-engine loopt) valt de baas zelf de klas (team A) aan.
+    // Zie bossbattle.js: bmBossResolveTick(). Unieke bazen-mechanics (Hydra-
+    // koppen/Cycloop-countdown/Minotaurus-schild) volgen als vervolgstap.
+    let bossEvents=[];
+    if(BM_META?.mode==="boss"){
+      const diffM=bmBossDiff(BM_META.bossDifficulty).m;
+      const phase=bmBossPhaseFor(tB.maxHealth?newHB/tB.maxHealth:0);
+      // Proxy voor "fout antwoord": speler deed mee maar bracht geen schade
+      // toe (geen vergrendelde actie) — zo straffen we niet individueel maar
+      // voedt het wel de rage-balk, conform het ontwerp.
+      const noDamageCount=Object.values(players).filter(p=>p.answeredRound===roundN&&!p.lockedAction).length;
+      const tick=bmBossResolveTick({...BM_BOSS,phase},tA.maxHealth,diffM,noDamageCount);
+      newHA=Math.max(0,newHA-tick.classDamage);
+      bossEvents=tick.events;
+      await fbDB.ref("rooms/"+BM_CODE+"/boss").update(tick.boss);
+      BM_BOSS=tick.boss;
+    }
+
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
     const logWinner=newHA<=0?"B":newHB<=0?"A":null;
     const roundParticipants=Object.values(players).filter(p=>p.answeredRound===roundN).length;
-    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants});
+    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants,bossEvents});
 
     // Mastery bijhouden in identities (fire-and-forget)
     bmUpdateMastery(players,pUpd,events);
@@ -2502,7 +2625,9 @@ SCREENS.battlePlayerGame = function(){
     fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_MY_CLASS=p.class||null;BM_MY_TEAM=p.team||null;BM_ACTION_LOCKED=!!p.lockedAction;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);BM_MY_CORRECT=p.correct||0;BM_MY_WRONG=p.wrong||0;}bmPlayerRender();});
   const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),
     fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
-  BM_UNSUBS=[()=>rP.off("value",fP),()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT)];
+  const rBoss=fbDB.ref("rooms/"+BM_CODE+"/boss"),
+    fBoss=rBoss.on("value",s=>{BM_BOSS=s.val()||{};bmBuildBattlefield();});
+  BM_UNSUBS=[()=>rP.off("value",fP),()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT),()=>rBoss.off("value",fBoss)];
   bmSubscribeLog(BM_CODE);
   bmBuildBattlefield();
 };
