@@ -143,6 +143,11 @@ SCREENS.totalWar = function(){
   </div>
 
   <div class="panel" style="text-align:center">
+    <p class="note" style="margin-bottom:12px">Ben je leerling? Oefen thuis en versterk zo de verdediging van je beschaving.</p>
+    <button class="btn btn-gold" onclick="go('trainingMode')">⚔️ Begin met trainen</button>
+  </div>
+
+  <div class="panel" style="text-align:center">
     <p class="note" style="margin-bottom:12px">Ben je docent? Bekijk het interactieve voorbeeld van de veldtochtkaart.</p>
     <button class="btn btn-gold" onclick="go('totalWarPreview')">${iconSVG("column",18,"currentColor")} Docent-voorbeeld</button>
   </div>
@@ -381,11 +386,12 @@ function twProvinceInfo(id){
   const reg  = _twRegistry && _twRegistry[id];
   const nm   = (reg && reg.displayName) || id;
   const cities = (reg && reg.cities) || [];
-  let civId, def, damageTaken=0;
+  let civId, def, damageTaken=0, walls=0;
   if(_twLiveMode){
     const p = (_twLiveProvinces && _twLiveProvinces[id]) || {};
     civId = p.owner || "neutral";
-    def = (p.walls||0)*20;
+    walls = p.walls||0;
+    def = walls*20;
     damageTaken = p.damageTaken||0;
   } else {
     civId = TW_DEMO_OWN[id] || "neutral";
@@ -401,15 +407,35 @@ function twProvinceInfo(id){
     ? `<div class="note warn" style="margin-top:4px">⚔ Al verzwakt: ${damageTaken} schade opgelopen bij een eerdere belegering (herstelt niet vanzelf).</div>`
     : "";
   return `
-    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <b style="font-size:16px">${esc(nm)}</b>
-      <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">
-        ${owned ? esc(civ.nm) : "neutraal — veroverbaar"}</span>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      ${_twLiveMode ? twGarrisonVisualHTML(walls) : ""}
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <b style="font-size:16px">${esc(nm)}</b>
+          <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">
+            ${owned ? esc(civ.nm) : "neutraal — veroverbaar"}</span>
+        </div>
+        ${_twLiveMode || owned ? `<div class="note" style="margin-top:6px">Verdediging: ${def}/${TW_DEFENSE_CAP}</div>` : ""}
+        ${damageNote}
+      </div>
     </div>
-    ${_twLiveMode || owned ? `<div class="note" style="margin-top:6px">Verdediging: ${def}/${TW_DEFENSE_CAP}</div>` : ""}
-    ${damageNote}
     <div class="note" style="margin-top:4px">Steden: ${cities.length ? cities.map(esc).join(" · ") : "—"}</div>
     ${_twLiveMode ? twAttackButtonHTML(id, civId) : ""}`;
+}
+
+/* ---- Garnizoensvisual (Training Mode-opbouw, zie TOTAL_WAR.md §3.1): stapelt
+   fort/palissade/muur naar analogie van bmBossSpriteHTML()'s koppen-stapeling
+   in bossbattle.js. walls 1-2 = alleen fort, 3-4 = fort+palissade, 5 =
+   fort+muur (palissade vervangen door muur). Gedeeld door twProvinceInfo()
+   hierboven en SCREENS.trainingGarrison (training.js). ---- */
+function twGarrisonVisualHTML(walls){
+  walls = walls||0;
+  const layers = ["assets/bosses/fort.png"];
+  if(walls>=5) layers.push("assets/bosses/wall.png");
+  else if(walls>=3) layers.push("assets/bosses/Palissade.png");
+  return `<div style="position:relative;width:64px;height:64px;flex:0 0 auto">
+    ${layers.map(src=>`<img src="${src}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="">`).join("")}
+  </div>`;
 }
 
 /* ---- Legenda van beschavingen met aantal gebieden ---- */
