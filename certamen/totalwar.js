@@ -52,6 +52,66 @@ const TW_HOME_PROVINCES = {
 /* ---- Maximale verdediging: gebieden blijven altijd veroverbaar ---- */
 const TW_DEFENSE_CAP = 100;
 
+/* ------------------------------------------------------------------
+   GARNIZOENSSPOREN — drie onafhankelijke verdedigingswerken die een
+   provincie via Training Mode kan opbouwen (training.js). Elk spoor is een
+   continue puntenteller (militiaPoints/wallPoints/towerPoints op
+   /totalwar/provinces/{id}) die twee drempels doorloopt:
+     tier 0 → 1 (basis) → 2 (upgrade)
+   Torenspoor heeft als enige ook een zichtbare tier-0-visual (de boerderij
+   — een onverdedigde provincie is nooit "leeg"). Zie TOTAL_WAR.md §5 en het
+   sessieplan voor de volledige onderbouwing. Drempels zijn een richtwaarde,
+   net als de rest van de garnizoensbalans — makkelijk later bij te stellen.
+   ------------------------------------------------------------------ */
+const TW_TIER1_POINTS = 300;
+const TW_TIER2_POINTS = 900;
+
+// Volgorde waarin een belegering de sporen aanvalt (TOTAL_WAR.md-sessieplan:
+// militie/garnizoen staat vooraan, dan de muur, dan pas het fort).
+const TW_STAGE_ORDER = ["militia","walls","towers"];
+
+// Baas-HP per stage, per bereikte tier — richtwaarde, zelfde schaalorde als
+// de generieke N*15*8*Md-basisformule in bmStartBossGame() (battle.js), zodat
+// een klein aanvallend groepje niet kansloos staat. Gebruikt door
+// bmStartBossGame() bij een belegering.
+const TW_STAGE_HP = { 1: 400, 2: 900 };
+
+// Per spoor: welk Firebase-veld, en welke sprite hoort bij welke tier.
+// img:null bij tier 0 van militia/walls = niks getekend (alleen de
+// torenspoor-basislaag eronder); towers heeft altijd een img (boerderij).
+const TW_STRUCTURES = {
+  militia: { field:"militiaPoints", tier0:null, tier1:"assets/bosses/militia.png", tier2:"civ" },
+  walls:   { field:"wallPoints",    tier0:null, tier1:"assets/bosses/Palissade.png", tier2:"assets/bosses/wall.png" },
+  towers:  { field:"towerPoints",   tier0:"assets/bosses/farm.png", tier1:"assets/bosses/watchtower.png", tier2:"assets/bosses/fort.png" },
+};
+
+// Engelse volksnaam per beschaving, voor het civ-specifieke garnizoensplaatje
+// (assets/bosses/garrison_{volk}.png) — Grieken/Romeinen zijn al aangeleverd,
+// de rest volgt; ontbrekende bestanden vallen terug op militia.png (zie
+// twGarrisonSpriteFor()).
+const TW_GARRISON_SPRITE_BY_CIV = {
+  roma:"roman", athenae:"greek", gallii:"gallic", germani:"german",
+  persae:"persian", carthago:"carthaginian", aegyptii:"egyptian",
+};
+
+/* Punten → tier (0/1/2) voor één spoor. */
+function twStructureTier(points){
+  points = points||0;
+  if(points>=TW_TIER2_POINTS) return 2;
+  if(points>=TW_TIER1_POINTS) return 1;
+  return 0;
+}
+
+/* Sprite-pad voor een spoor op een gegeven tier; "civ" (alleen militia-tier2)
+   wordt vertaald naar het civ-specifieke garnizoensplaatje met terugval. */
+function twSpriteFor(structureKey, tier, civId){
+  const def=TW_STRUCTURES[structureKey]; if(!def) return null;
+  const raw = tier>=2?def.tier2:tier>=1?def.tier1:def.tier0;
+  if(raw!=="civ") return raw;
+  const suffix = TW_GARRISON_SPRITE_BY_CIV[civId];
+  return suffix ? "assets/bosses/garrison_"+suffix+".png" : "assets/bosses/militia.png";
+}
+
 /* ---- Demo-stand voor de publieke "Binnenkort"-uitlegkaart (SCREENS.totalWar).
    Puur illustratief, blijft ongewijzigd — de echte veldtocht (docent-voorbeeld,
    SCREENS.totalWarPreview) gebruikt live Firebase-data, zie twLoadLiveState(). */
@@ -250,9 +310,11 @@ function twApplyDemo(){
 
 /* ------------------------------------------------------------------
    LIVE VELDTOCHT (Firebase) — vervangt de demo-stand op de docentenkaart.
-   Schema: /totalwar/provinces/{id} = {owner, walls, towers, militia,
-   damageTaken, lastChanged}, /totalwar/civs/{civId} = {trainingPoints,
-   bonusesUnlocked}. Zie TOTAL_WAR.md §4. Geseed door twEnsureCampaignSeeded().
+   Schema: /totalwar/provinces/{id} = {owner, militiaPoints, wallPoints,
+   towerPoints, siege:{lastStage,stageDamage}, lastChanged} — zie
+   TW_STRUCTURES/twStructureTier() hierboven voor de tier-logica.
+   /totalwar/civs/{civId} = {trainingPoints (legacy, ongebruikt),
+   bonusesUnlocked}. Geseed door twEnsureCampaignSeeded().
    ------------------------------------------------------------------ */
 
 /* Eenmalige seed: schrijft alleen als /totalwar/meta/seeded nog ontbreekt,
@@ -267,8 +329,8 @@ async function twEnsureCampaignSeeded(){
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
     const owner = ownerOf[id] || "neutral";
-    upd["totalwar/provinces/"+id] = { owner, walls: owner==="neutral"?1:2, towers:0, militia:0,
-      damageTaken:0, lastChanged: FBNet.serverTime() };
+    upd["totalwar/provinces/"+id] = { owner, militiaPoints:0, wallPoints:0, towerPoints:0,
+      siege:{ lastStage:0, stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
   });
   Object.keys(TW_CIVS).forEach(civId=>{
     if(civId==="neutral") return;
@@ -307,23 +369,45 @@ function twApplyLive(provinces){
     const civId = p && p.owner;
     const c = civId && civId!=="neutral" ? TW_CIVS[civId] : null;
     MapAPI.setProvinceOwner(id, c ? c.color : null);
-    MapAPI.setProvinceDefense(id, ((p&&p.walls)||0)*20);
+    MapAPI.setProvinceDefense(id, twOverallDefensePct(p));
   });
 }
 
+/* Samenvattend verdedigingsgetal (0-100) voor de kale kaartweergave/
+   data-attribuut — som van de drie spoor-tiers (max 2+2+2=6) herschaald.
+   Puur weergave; de echte belegeringssterkte zit in de losse tiers/punten. */
+function twOverallDefensePct(p){
+  if(!p) return 0;
+  const tiers = twStructureTier(p.militiaPoints) + twStructureTier(p.wallPoints) + twStructureTier(p.towerPoints);
+  return Math.round(tiers/6*TW_DEFENSE_CAP);
+}
+
 /* Schrijft het resultaat van een Boss Battle-belegering terug naar de
-   aangevallen provincie. Aangeroepen door bmResolve() in battle.js zodra
-   winner bekend is en BM_META.garrisonProvince gezet is (dus alleen bij
-   gevechten die via twStartAttack() gestart zijn, niet bij losse Boss Battles). */
-async function twResolveSiege(winner, bossMaxHP, bossFinalHP){
+   aangevallen provincie. Aangeroepen door bmResolve() in battle.js zodra het
+   HELE gevecht eindigt (laatste stage gewonnen = provincie valt, of
+   klas-HP op 0 tijdens om het even welke stage = nederlaag) — niet bij een
+   tussenstage-overgang, die regelt bmResolve() zelf lokaal in de room-state.
+   stageKey = welk werk (militia/walls/towers) op het moment van eindigen
+   werd bevochten. Alleen relevant bij gevechten die via twStartAttack()
+   gestart zijn, niet bij losse Boss Battles. */
+async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP){
   const gp = BM_META && BM_META.garrisonProvince;
   if(!gp || !fbDB) return;
   const ref = fbDB.ref("totalwar/provinces/"+gp.id);
   if(winner==="A"){
-    await ref.update({ owner: BM_META.attackerCivId, damageTaken:0, lastChanged: FBNet.serverTime() });
+    await ref.update({
+      owner: BM_META.attackerCivId,
+      siege: { lastStage:"", stageDamage:{militia:0,walls:0,towers:0} },
+      lastChanged: FBNet.serverTime(),
+    });
   } else {
-    const dealt = Math.max(0, bossMaxHP - Math.max(0, bossFinalHP));
-    await ref.update({ damageTaken: Math.max(gp.damageTaken||0, dealt), lastChanged: FBNet.serverTime() });
+    const dealt = Math.max(0, stageMaxHP - Math.max(0, stageFinalHP));
+    const prevDealt = (gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[stageKey]) || 0;
+    const upd = {};
+    upd["siege/lastStage"] = stageKey;
+    upd["siege/stageDamage/"+stageKey] = Math.max(prevDealt, dealt);
+    upd["lastChanged"] = FBNet.serverTime();
+    await ref.update(upd);
   }
 }
 
@@ -350,14 +434,19 @@ function twOnAttackerChange(){
    BOSS_BATTLE.md §7. bmStartBossGame() in battle.js leest garrisonProvince
    uit om de garnizoensbonus/slijtageslag toe te passen. */
 function twStartAttack(targetId, attackerCiv){
-  const p = (_twLiveProvinces && _twLiveProvinces[targetId]) || {walls:1,towers:0,damageTaken:0};
+  const p = (_twLiveProvinces && _twLiveProvinces[targetId]) || {};
   if(!BM_META) BM_META = {};
   BM_META.mode = "boss";
   // Altijd het verborgen garnizoen (BOSS_PRESETS.garrison in bossbattle.js),
   // nooit een mythologische baas — een belegering is geen kwestie van kiezen.
   BM_META.bossId = "garrison";
-  BM_META.bossDifficulty = ((p.walls||0)>=3 || (p.towers||0)>=2) ? "hard" : "normal";
-  BM_META.garrisonProvince = { id:targetId, walls:p.walls||0, towers:p.towers||0, damageTaken:p.damageTaken||0 };
+  const tiers = twStructureTier(p.militiaPoints)+twStructureTier(p.wallPoints)+twStructureTier(p.towerPoints);
+  BM_META.bossDifficulty = tiers>=4 ? "hard" : "normal";
+  BM_META.garrisonProvince = {
+    id:targetId, defenderCivId:p.owner||"neutral",
+    militiaPoints:p.militiaPoints||0, wallPoints:p.wallPoints||0, towerPoints:p.towerPoints||0,
+    siege: p.siege || {lastStage:"", stageDamage:{militia:0,walls:0,towers:0}},
+  };
   BM_META.attackerCivId = attackerCiv;
   const nm = (_twRegistry?.[targetId]?.displayName) || targetId;
   toast("Aanval voorbereid", nm+" — kies de moeilijkheidsgraad en start het gevecht.");
@@ -386,55 +475,61 @@ function twProvinceInfo(id){
   const reg  = _twRegistry && _twRegistry[id];
   const nm   = (reg && reg.displayName) || id;
   const cities = (reg && reg.cities) || [];
-  let civId, def, damageTaken=0, walls=0;
+  let civId, p={};
   if(_twLiveMode){
-    const p = (_twLiveProvinces && _twLiveProvinces[id]) || {};
+    p = (_twLiveProvinces && _twLiveProvinces[id]) || {};
     civId = p.owner || "neutral";
-    walls = p.walls||0;
-    def = walls*20;
-    damageTaken = p.damageTaken||0;
   } else {
     civId = TW_DEMO_OWN[id] || "neutral";
-    def = TW_DEMO_DEF[id] || 0;
   }
   const civ  = TW_CIVS[civId] || TW_CIVS.neutral;
   const owned= civId !== "neutral";
-  // "Slijtageslag" (TOTAL_WAR.md §5.4): een eerder verloren belegering laat
-  // sporen na (damageTaken) die niet vanzelf herstellen — zonder deze melding
-  // ziet een provincie die al eens is aangevallen er identiek uit als een
-  // verse, wat een docent op het verkeerde been zet bij een volgende aanval.
-  const damageNote = (damageTaken>0)
-    ? `<div class="note warn" style="margin-top:4px">⚔ Al verzwakt: ${damageTaken} schade opgelopen bij een eerdere belegering (herstelt niet vanzelf).</div>`
+  const tierLabel = t=> t===0?"—":t===1?"basis":"volledig";
+  const tracksNote = _twLiveMode
+    ? `<div class="note" style="margin-top:6px">Fort: ${tierLabel(twStructureTier(p.towerPoints))} ·
+        Muur: ${tierLabel(twStructureTier(p.wallPoints))} ·
+        Garnizoen: ${tierLabel(twStructureTier(p.militiaPoints))}</div>`
+    : (owned ? `<div class="note" style="margin-top:6px">Verdediging: ${TW_DEMO_DEF[id]||0}/${TW_DEFENSE_CAP}</div>` : "");
+  // Onderbroken belegering (TOTAL_WAR.md §5.4-equivalent): een eerder
+  // verloren aanval laat sporen na op de stage waar de klas strandde — zonder
+  // deze melding ziet een provincie die al eens is aangevallen er identiek
+  // uit als een verse, wat een docent op het verkeerde been zet.
+  const siege = p.siege;
+  const siegeNote = (siege && siege.lastStage)
+    ? `<div class="note warn" style="margin-top:4px">⚔ Belegering onderbroken bij "${esc(siege.lastStage)}" — een volgende aanval hervat daar (herstelt niet vanzelf).</div>`
     : "";
   return `
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      ${_twLiveMode ? twGarrisonVisualHTML(walls) : ""}
+      ${_twLiveMode ? twGarrisonVisualHTML(p, civId) : ""}
       <div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <b style="font-size:16px">${esc(nm)}</b>
           <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">
             ${owned ? esc(civ.nm) : "neutraal — veroverbaar"}</span>
         </div>
-        ${_twLiveMode || owned ? `<div class="note" style="margin-top:6px">Verdediging: ${def}/${TW_DEFENSE_CAP}</div>` : ""}
-        ${damageNote}
+        ${tracksNote}
+        ${siegeNote}
       </div>
     </div>
     <div class="note" style="margin-top:4px">Steden: ${cities.length ? cities.map(esc).join(" · ") : "—"}</div>
     ${_twLiveMode ? twAttackButtonHTML(id, civId) : ""}`;
 }
 
-/* ---- Garnizoensvisual (Training Mode-opbouw, zie TOTAL_WAR.md §3.1): stapelt
-   fort/palissade/muur naar analogie van bmBossSpriteHTML()'s koppen-stapeling
-   in bossbattle.js. walls 1-2 = alleen fort, 3-4 = fort+palissade, 5 =
-   fort+muur (palissade vervangen door muur). Gedeeld door twProvinceInfo()
-   hierboven en SCREENS.trainingGarrison (training.js). ---- */
-function twGarrisonVisualHTML(walls){
-  walls = walls||0;
-  const layers = ["assets/bosses/fort.png"];
-  if(walls>=5) layers.push("assets/bosses/wall.png");
-  else if(walls>=3) layers.push("assets/bosses/Palissade.png");
+/* ---- Garnizoensvisual (Training Mode-opbouw): stapelt de torenspoor-
+   basislaag (boerderij/wachttoren/fort, altijd aanwezig) met de optionele
+   muur- (palissade/muur) en militie-laag (militia/civ-garnizoen) erboven —
+   analoog aan bmBossSpriteHTML()'s koppen-stapeling in bossbattle.js.
+   Gedeeld door twProvinceInfo() hierboven en SCREENS.trainingGarrison
+   (training.js). Ontbrekende afbeeldingen verdwijnen gracieus (onerror). ---- */
+function twGarrisonVisualHTML(p, civId){
+  p = p||{};
+  const layers = [
+    twSpriteFor("towers", twStructureTier(p.towerPoints), civId),
+    twSpriteFor("walls", twStructureTier(p.wallPoints), civId),
+    twSpriteFor("militia", twStructureTier(p.militiaPoints), civId),
+  ].filter(Boolean);
   return `<div style="position:relative;width:64px;height:64px;flex:0 0 auto">
-    ${layers.map(src=>`<img src="${src}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="">`).join("")}
+    ${layers.map(src=>`<img src="${src}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="" onerror="this.style.display='none'">`).join("")}
   </div>`;
 }
 

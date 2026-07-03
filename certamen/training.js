@@ -2,13 +2,14 @@
    TRAINING MODE — solo thuis-oefenen voor Total War (TOTAL_WAR.md §3)
    ----------------------------------------------------------------------------
    De EERSTE volledig solo modus zonder host/klascode-invoer: een leerling met
-   een bestaand profiel (BM_IDENT, zie battle.js) oefent thuis woordjes.
-   Elk goed antwoord geeft persoonlijke XP (bestaand systeem, addXP()) én vult
-   het collectieve Trainingspunten-budget van de eigen beschaving
-   (/totalwar/civs/{civId}/trainingPoints). Apart daarvan kan de leerling dat
-   budget besteden aan garnizoensupgrades (§5.2) op een provincie van de eigen
-   beschaving — twee bewust gescheiden stappen (verdienen vs. besteden), zie
-   TOTAL_WAR.md §3/§5.2 en het sessieplan.
+   een bestaand profiel (BM_IDENT, zie battle.js) oefent thuis woordjes. Elk
+   goed antwoord geeft persoonlijke XP (bestaand systeem, addXP()) én vult
+   DIRECT de gekozen provincie se gekozen verdedigingswerk (militie/garnizoen,
+   wachttoren/fort, of palissade/muur — TW_STRUCTURES in totalwar.js) — geen
+   tussenmunt, geen losse koopstap. De puntensnelheid schaalt af met de echte
+   klasgrootte (twGetClassSize()) zodat een klas van 5 ongeveer even snel
+   bouwt als een klas van 30. Bij een aanval bevecht de aanvallende klas de
+   werken één voor één (zie bmSiegeStageKeys()/bmStartBossGame() in battle.js).
 
    Hergebruikt bewust bestaande infrastructuur i.p.v. iets nieuws te bouwen:
    - buildPool()/makeQuestion() (core.js) — puur, lokaal, geen room nodig.
@@ -16,26 +17,33 @@
    - _bmPixelLayers()/BattleMotion (battle.js/battle-motion.js) — dezelfde
      geanimeerde avatar als op het slagveld, nu solo.
    - .qcard/.choices/.choice-opmaak (battle.js se speler-vraagscherm).
+   - TW_STRUCTURES/twStructureTier/twSpriteFor/twGarrisonVisualHTML
+     (totalwar.js) — dezelfde tier-/sprite-logica als de docent-kaart.
    ============================================================================ */
 
 /* ---- Lokale oefeninstellingen: BEWUST een eigen object, niet de gedeelde
    DRAFT (die wordt door docent-gehoste spellen gebruikt en zou anders door
    Training Mode overschreven kunnen worden op hetzelfde toestel). ---- */
 let TR_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all" };
-let TR_VARIANT = (function(){ try{ return localStorage.getItem("certamen_training_variant")||"dummy"; }catch(e){ return "dummy"; } })();
-let TR_CIV = null;      // civId van de beschaving van BM_IDENT.klascode
+let TR_TRACK = (function(){ try{ return localStorage.getItem("certamen_training_track")||"militia"; }catch(e){ return "militia"; } })();
+let TR_CIV = null;            // civId van de beschaving van BM_IDENT.klascode
+let TR_OWNED_PROVINCES = [];  // provincies van TR_CIV, met hun huidige puntentellers
+let TR_PROVINCE_ID = null;    // welke provincie deze sessie versterkt wordt
+let TR_CLASS_SIZE = 1;
 let TR_POOL = [];
 let TR_Q = null;
-let TR_STATS = { correct:0, wrong:0, tp:0, xp:0 };
+let TR_STATS = { correct:0, wrong:0, points:0, xp:0 };
 let TR_HERO_EL = null;
 
-/* ---- Upgrade-tabel (TOTAL_WAR.md §5.2 — expliciet "richtwaarde", tunable) ---- */
-const TR_UPGRADE_COST = { walls:100, towers:250, militia:60 };
-const TR_UPGRADE_MAX  = { walls:5, towers:3, militia:null }; // null = geen plafond
-const TR_UPGRADE_LABEL = { walls:"Muur +1", towers:"Toren bouwen", militia:"Militie aanwerven" };
+const TR_TRACK_LABELS = {
+  militia: { nm:"Militie/Garnizoen trainen", icon:"⚔️" },
+  towers:  { nm:"Wachttoren bouwen",         icon:"🗼" },
+  walls:   { nm:"Palissade bouwen",          icon:"🪵" },
+};
 
 /* ------------------------------------------------------------------
-   SCHERM: instapscherm — login-gate, beschaving opzoeken, instellingen
+   SCHERM: instapscherm — login-gate, beschaving + provincies opzoeken,
+   werk-/provinciekeuze, instellingen.
    ------------------------------------------------------------------ */
 SCREENS.trainingMode = function(){
   document.body.classList.remove("greek");
@@ -56,9 +64,32 @@ SCREENS.trainingMode = function(){
   ${foot()}`);
   twLookupCivForKlas(BM_IDENT.klascode).then(civId=>{
     TR_CIV = civId;
-    trRenderModeBody();
+    if(!civId){ trRenderModeBody(); return; }
+    trLoadOwnedProvinces().then(trRenderModeBody);
   });
 };
+
+/* Leest éénmalig alle provincies van TR_CIV en kiest (als er nog geen geldige
+   keuze is) de provincie met de laagste som van de drie tellers — die heeft
+   versterking het hardst nodig. */
+async function trLoadOwnedProvinces(){
+  if(!initFirebase()) return;
+  const snap = await fbDB.ref("totalwar/provinces").once("value");
+  const all = snap.val()||{};
+  TR_OWNED_PROVINCES = Object.entries(all)
+    .filter(([id,p])=>p && p.owner===TR_CIV)
+    .map(([id,p])=>({id,...p}));
+  if(!TR_PROVINCE_ID || !TR_OWNED_PROVINCES.some(p=>p.id===TR_PROVINCE_ID)){
+    const sorted=[...TR_OWNED_PROVINCES].sort((a,b)=>
+      ((a.militiaPoints||0)+(a.wallPoints||0)+(a.towerPoints||0)) -
+      ((b.militiaPoints||0)+(b.wallPoints||0)+(b.towerPoints||0)));
+    TR_PROVINCE_ID = sorted[0]?.id || null;
+  }
+}
+
+function trCurrentProvince(){
+  return TR_OWNED_PROVINCES.find(p=>p.id===TR_PROVINCE_ID) || null;
+}
 
 function trRenderModeBody(){
   const body = el("trBody"); if(!body) return;
@@ -68,12 +99,30 @@ function trRenderModeBody(){
       klas ↔ beschaving).</div></div>`;
     return;
   }
+  if(!TR_OWNED_PROVINCES.length){
+    body.innerHTML = `<div class="panel"><div class="note warn">Jouw beschaving bezit nog geen provincies om te versterken.</div></div>`;
+    return;
+  }
   const civ = TW_CIVS[TR_CIV]||TW_CIVS.neutral;
   const list = baseList(TR_DRAFT.lang).filter(usable);
   const maxN = list.reduce((m,w)=>Math.max(m,w.f||0),0);
   body.innerHTML = `
   <div class="panel" style="text-align:center">
     <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">${esc(civ.nm)}</span>
+  </div>
+  ${TR_OWNED_PROVINCES.length>1?`
+  <div class="panel">
+    <label class="fld">Welke provincie versterk je?</label>
+    <select id="trProvinceSel" style="width:100%;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit" onchange="TR_PROVINCE_ID=this.value;trRenderModeBody()">
+      ${TR_OWNED_PROVINCES.map(p=>`<option value="${p.id}"${p.id===TR_PROVINCE_ID?" selected":""}>${esc((_twRegistry&&_twRegistry[p.id]&&_twRegistry[p.id].displayName)||p.id)}</option>`).join("")}
+    </select>
+  </div>`:""}
+  <div class="panel">
+    <label class="fld">Wat train je?</label>
+    <div class="chips">
+      ${Object.entries(TR_TRACK_LABELS).map(([key,t])=>`<button class="chip ${TR_TRACK===key?'on':''}" onclick="trSetTrack('${key}')">${t.icon} ${esc(t.nm)}</button>`).join("")}
+    </div>
+    ${trTrackProgressHTML()}
   </div>
   <div class="panel">
     <label class="fld">Taal</label>
@@ -99,28 +148,34 @@ function trRenderModeBody(){
       ${CATS.map(c=>`<button class="chip ${TR_DRAFT.cat===c.id?'on':''}" onclick="TR_DRAFT.cat='${c.id}';trRenderModeBody()">${c.nm} <small>${catCount(list,c.id)}</small></button>`).join("")}
     </div>
   </div>
-  <div class="panel">
-    <label class="fld">Hoe wil je oefenen?</label>
-    <div class="chips">
-      <button class="chip ${TR_VARIANT==='dummy'?'on':''}" onclick="trSetVariant('dummy')">⚔️ Gevechtstraining</button>
-      <button class="chip ${TR_VARIANT==='build'?'on':''}" onclick="trSetVariant('build')">🔨 Bouwanimatie</button>
-    </div>
-    <div class="note" style="margin-top:6px">${TR_VARIANT==='dummy'?"Je avatar valt een trainingspop aan.":"Je avatar bouwt aan de verdedigingswerken."}</div>
-  </div>
   <button class="btn btn-gold btn-block lg" onclick="trStart()">Beginnen</button>
-  <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('trainingGarrison')">🏰 Versterk je gebied</button>`;
+  <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('trainingGarrison')">🏰 Bekijk je gebied</button>`;
 }
 
-function trSetVariant(v){
-  TR_VARIANT=v;
-  try{ localStorage.setItem("certamen_training_variant", v); }catch(e){}
+function trSetTrack(key){
+  TR_TRACK=key;
+  try{ localStorage.setItem("certamen_training_track", key); }catch(e){}
   trRenderModeBody();
 }
 
-function trStart(){
+/* Voortgangsbalk van het gekozen werk op de gekozen provincie (instapscherm). */
+function trTrackProgressHTML(){
+  const p = trCurrentProvince(); if(!p) return "";
+  const pts = p[TW_STRUCTURES[TR_TRACK].field]||0;
+  const tier = twStructureTier(pts);
+  const next = tier>=2 ? null : (tier===0?TW_TIER1_POINTS:TW_TIER2_POINTS);
+  const pct = next ? Math.min(100, Math.round(pts/next*100)) : 100;
+  return `<div class="note" style="margin-top:8px">Voortgang: ${Math.round(pts)}${next?"/"+next:""} punten${tier>=2?" — volledig!":""}</div>
+    <div style="height:8px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden;margin-top:4px">
+      <div style="height:100%;width:${pct}%;background:var(--hi);transition:width .3s"></div>
+    </div>`;
+}
+
+async function trStart(){
   TR_POOL = buildPool(TR_DRAFT);
   if(TR_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort."); return; }
-  TR_STATS = { correct:0, wrong:0, tp:0, xp:0 };
+  TR_STATS = { correct:0, wrong:0, points:0, xp:0 };
+  TR_CLASS_SIZE = await twGetClassSize(BM_IDENT.klascode);
   go("trainingPlay");
 }
 
@@ -132,7 +187,7 @@ SCREENS.trainingPlay = function(){
   const av = bmAvatarMerge(BM_IDENT.avatar);
   const heroHTML = _bmPixelLayers(av,"dir-right") || bmAvatarSVG(av,96);
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="go('trainingMode')">${iconSVG("shield",20,"currentColor")}</button><h2>Training Mode</h2></div>
+  <div class="scrhead"><button class="back" onclick="go('trainingMode')">${iconSVG("shield",20,"currentColor")}</button><h2>${esc(TR_TRACK_LABELS[TR_TRACK].nm)}</h2></div>
   <div class="panel" id="trStatsBar" style="display:flex;justify-content:space-around;align-items:center"></div>
   <div class="panel" style="display:flex;justify-content:center;gap:28px;align-items:flex-end">
     <div id="trAvatarHost" style="width:120px">${heroHTML}</div>
@@ -150,21 +205,19 @@ SCREENS.trainingPlay = function(){
 function trUpdateStatsBar(){
   const bar = el("trStatsBar"); if(!bar) return;
   bar.innerHTML = `<span class="note">✅ ${TR_STATS.correct} goed</span>
-    <span style="color:var(--hi-bright)">+${TR_STATS.tp} TP</span>
+    <span style="color:var(--hi-bright)">+${Math.round(TR_STATS.points)} punten</span>
     <span style="color:var(--hi-bright)">+${TR_STATS.xp} XP</span>`;
 }
 
+/* Doelvisual: de seed-waarde van de provincie plus wat deze sessie al
+   verdiend is (live gevoel, ook al is de Firebase-schrijfactie async). */
 function trRenderTarget(){
   const host = el("trTargetHost"); if(!host) return;
-  if(TR_VARIANT==="dummy"){
-    host.innerHTML = `<img src="assets/sprites/training_dummy.png?${SPRITE_VER}" style="width:100%" alt="Trainingspop">`;
-  } else {
-    // Puur sfeerbeeld tijdens het oefenen zelf (niet gekoppeld aan een echte
-    // provincie) — de daadwerkelijke walls-verhoging gebeurt bewust apart,
-    // via "Versterk je gebied" (SCREENS.trainingGarrison), niet automatisch
-    // per goed antwoord.
-    host.innerHTML = twGarrisonVisualHTML(TR_STATS.tp>0?3:1);
-  }
+  const p = trCurrentProvince()||{};
+  const pts = (p[TW_STRUCTURES[TR_TRACK].field]||0) + TR_STATS.points;
+  const tier = twStructureTier(pts);
+  const src = twSpriteFor(TR_TRACK, tier, TR_CIV);
+  host.innerHTML = src ? `<img src="${src}?${SPRITE_VER}" style="width:100%" alt="" onerror="this.style.display='none'">` : "";
 }
 
 function trNextQuestion(){
@@ -194,11 +247,12 @@ function trAnswer(idx){
     c.disabled=true;
   });
   if(ok){
-    // Zelfde vlakke +2 XP-per-goed-antwoord-conventie als andere solo-spellen
-    // (zie de _xp=_c*2+... berekening in games.js) — geen streak-bonus, geen
-    // eindeloze opbouw, conform TOTAL_WAR.md §9.2's les uit Battle Mode.
-    TR_STATS.correct++; TR_STATS.tp+=5; TR_STATS.xp+=2;
-    if(TR_CIV) twAwardTrainingPoint(TR_CIV,5);
+    // Klasgrootte-schaling (TOTAL_WAR.md §7.4): elke leerling draagt minder
+    // per antwoord bij naarmate de klas groter is (1/√N), zodat een klas van
+    // 5 ongeveer even snel bouwt als een klas van 30.
+    const pts = 5/Math.sqrt(TR_CLASS_SIZE||1);
+    TR_STATS.correct++; TR_STATS.points+=pts; TR_STATS.xp+=2;
+    if(TR_PROVINCE_ID) twAwardStructurePoints(TR_PROVINCE_ID, TR_TRACK, pts);
     addXP(2);
     if(TR_HERO_EL) BattleMotion.play(TR_HERO_EL,"swing");
     trRenderTarget();
@@ -210,24 +264,26 @@ function trAnswer(idx){
 }
 
 /* ------------------------------------------------------------------
-   SCHERM: "Versterk je gebied" — TP besteden aan garnizoensupgrades
+   SCHERM: "Bekijk je gebied" — read-only overzicht van alle eigen
+   provincies en hun drie verdedigingswerken (geen koopstap meer: punten
+   komen nu direct uit het trainen zelf, zie trAnswer() hierboven).
    ------------------------------------------------------------------ */
 SCREENS.trainingGarrison = function(){
   document.body.classList.remove("greek");
   if(!BM_IDENT){ go("trainingMode"); return; }
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="go('trainingMode')">${iconSVG("shield",20,"currentColor")}</button><h2>Versterk je gebied</h2></div>
+  <div class="scrhead"><button class="back" onclick="go('trainingMode')">${iconSVG("shield",20,"currentColor")}</button><h2>Bekijk je gebied</h2></div>
   <div class="panel" style="text-align:center"><div class="note">Laden…</div></div>
   <div id="trGarrisonBody"></div>
   ${foot()}`);
   if(!TR_CIV){
-    twLookupCivForKlas(BM_IDENT.klascode).then(civId=>{ TR_CIV=civId; trLoadGarrison(); });
+    twLookupCivForKlas(BM_IDENT.klascode).then(civId=>{ TR_CIV=civId; trLoadGarrisonView(); });
   } else {
-    trLoadGarrison();
+    trLoadGarrisonView();
   }
 };
 
-async function trLoadGarrison(){
+async function trLoadGarrisonView(){
   const body = el("trGarrisonBody"); if(!body) return;
   if(!TR_CIV){
     body.innerHTML = `<div class="panel"><div class="note warn">Je klas is nog niet gekoppeld aan een beschaving. Vraag je docent.</div></div>`;
@@ -237,59 +293,46 @@ async function trLoadGarrison(){
     body.innerHTML = `<div class="panel"><div class="note warn">Firebase niet beschikbaar.</div></div>`;
     return;
   }
-  const [tpSnap, provSnap] = await Promise.all([
-    fbDB.ref("totalwar/civs/"+TR_CIV+"/trainingPoints").once("value"),
-    fbDB.ref("totalwar/provinces").once("value"),
-  ]);
-  const tp = tpSnap.val()||0;
-  const provinces = provSnap.val()||{};
-  const owned = Object.entries(provinces).filter(([id,p])=>p&&p.owner===TR_CIV);
+  await trLoadOwnedProvinces();
   const civ = TW_CIVS[TR_CIV]||TW_CIVS.neutral;
   body.innerHTML = `
   <div class="panel" style="text-align:center">
     <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">${esc(civ.nm)}</span>
-    <div class="note" style="margin-top:8px">Beschikbare Trainingspunten: <b>${tp}</b></div>
   </div>
-  ${owned.length?owned.map(([id,p])=>trProvinceUpgradeHTML(id,p,tp)).join(""):
-    `<div class="panel"><div class="note">Jouw beschaving bezit nog geen provincies om te versterken.</div></div>`}`;
+  ${TR_OWNED_PROVINCES.length ? TR_OWNED_PROVINCES.map(trProvinceOverviewHTML).join("") :
+    `<div class="panel"><div class="note">Jouw beschaving bezit nog geen provincies.</div></div>`}`;
 }
 
-function trProvinceUpgradeHTML(id,p,tp){
-  const nm = (typeof _twRegistry!=="undefined" && _twRegistry?.[id]?.displayName) || id;
-  const walls=p.walls||0, towers=p.towers||0, militia=p.militia||0;
-  const btn=(kind,cur)=>{
-    const max=TR_UPGRADE_MAX[kind], cost=TR_UPGRADE_COST[kind];
-    const maxed = max!=null && cur>=max;
-    const disabled = maxed || tp<cost;
-    return `<button class="btn ${disabled?'btn-ghost':'btn-gold'}" style="margin-top:6px;width:100%" ${disabled?'disabled':''}
-      onclick="trBuyUpgrade('${id}','${kind}')">${TR_UPGRADE_LABEL[kind]} (${cost} TP)${maxed?' — max. bereikt':''}</button>`;
+function trProvinceOverviewHTML(p){
+  const nm = (_twRegistry && _twRegistry[p.id] && _twRegistry[p.id].displayName) || p.id;
+  const track=(key,label)=>{
+    const pts=p[TW_STRUCTURES[key].field]||0;
+    const tier=twStructureTier(pts);
+    const next=tier>=2?null:(tier===0?TW_TIER1_POINTS:TW_TIER2_POINTS);
+    const pct=next?Math.min(100,Math.round(pts/next*100)):100;
+    return `<div style="margin-top:6px">
+      <div class="note">${label}: ${tier===0?"—":tier===1?"basis":"volledig"} (${Math.round(pts)}${next?"/"+next:""})</div>
+      <div style="height:6px;border-radius:3px;background:rgba(0,0,0,.4);overflow:hidden;margin-top:2px">
+        <div style="height:100%;width:${pct}%;background:var(--hi)"></div>
+      </div>
+    </div>`;
   };
   return `<div class="panel">
     <div style="display:flex;align-items:center;gap:12px">
-      ${twGarrisonVisualHTML(walls)}
-      <div>
-        <b>${esc(nm)}</b>
-        <div class="note">Muur ${walls}/5 · Toren ${towers}/3 · Militie ${militia}</div>
-      </div>
+      ${twGarrisonVisualHTML(p, p.owner)}
+      <div style="flex:1"><b>${esc(nm)}</b></div>
     </div>
-    ${btn("walls",walls)}
-    ${btn("towers",towers)}
-    ${btn("militia",militia)}
+    ${track("towers","Fort")}
+    ${track("walls","Muur")}
+    ${track("militia","Garnizoen")}
   </div>`;
-}
-
-async function trBuyUpgrade(provinceId,kind){
-  const r = await twSpendGarrisonUpgrade(TR_CIV,provinceId,kind);
-  if(!r.ok){ toast("Niet gelukt", r.reason||"Onbekende fout."); return; }
-  toast("Versterkt!","");
-  trLoadGarrison();
 }
 
 /* ------------------------------------------------------------------
    FIREBASE-HELPERS — schrijven/lezen op het bestaande /totalwar-schema
    (zie certamen/totalwar.js: twEnsureCampaignSeeded()). Vereist de
    uitgebreide rules die leerling-schrijfacties (geen Firebase Auth) op
-   totalwar/provinces/{id} en totalwar/civs/{civId} toestaan.
+   totalwar/provinces/{id} en totalwar/klasSize/{klas} toestaan.
    ------------------------------------------------------------------ */
 async function twLookupCivForKlas(klascode){
   if(!klascode || !initFirebase()) return null;
@@ -299,31 +342,29 @@ async function twLookupCivForKlas(klascode){
   }catch(e){ return null; }
 }
 
-async function twAwardTrainingPoint(civId, n){
-  if(!civId || !initFirebase()) return;
-  try{ await fbDB.ref("totalwar/civs/"+civId+"/trainingPoints").transaction(cur=>(cur||0)+n); }catch(e){}
+/* Echte klasgrootte: telt de leerlingcodes die ooit onder deze klascode
+   getraind hebben (/totalwar/klasSize/{klascode}/students), en markeert de
+   huidige leerling erbij als dat nog niet zo was. Puur een aanwezigheidsvlag
+   (geen naam/score) — dus geen privacygevoelige data hoeft opengesteld te
+   worden zoals de volledige /identities-node dat wel zou zijn. */
+async function twGetClassSize(klascode){
+  if(!klascode || !initFirebase()) return 1;
+  try{
+    if(BM_IDENT && BM_IDENT.leerlingcode){
+      await fbDB.ref("totalwar/klasSize/"+klascode+"/students/"+BM_IDENT.leerlingcode).set(true);
+    }
+    const snap = await fbDB.ref("totalwar/klasSize/"+klascode+"/students").once("value");
+    const n = snap.exists() ? Object.keys(snap.val()).length : 1;
+    return Math.max(1, n);
+  }catch(e){ return 1; }
 }
 
-// Guarded, tweestaps: eerst het TP-saldo veilig verlagen (transactie met
-// abort bij onvoldoende saldo — zelfde conventie als bmAwardBattle() voor
-// xp/coins), pas als dát lukt de provincie-upgrade toepassen. Geen echte
-// atomaire multi-pad-operatie mogelijk (twee verschillende topniveau-paden
-// in Firebase RTDB) — zelfde pragmatische aanpak als twResolveSiege().
-async function twSpendGarrisonUpgrade(civId, provinceId, kind){
-  const cost = TR_UPGRADE_COST[kind];
-  if(!civId || !provinceId || !cost || !initFirebase()) return {ok:false};
-  try{
-    const spend = await fbDB.ref("totalwar/civs/"+civId+"/trainingPoints").transaction(cur=>{
-      const bal = cur||0;
-      if(bal<cost) return; // undefined = transactie afbreken (onvoldoende saldo)
-      return bal-cost;
-    });
-    if(!spend.committed) return {ok:false, reason:"Onvoldoende Trainingspunten."};
-    const max = TR_UPGRADE_MAX[kind];
-    await fbDB.ref("totalwar/provinces/"+provinceId+"/"+kind).transaction(cur=>{
-      const next=(cur||0)+1;
-      return max!=null ? Math.min(max,next) : next;
-    });
-    return {ok:true};
-  }catch(e){ return {ok:false, reason:e?.message||"Onbekende fout."}; }
+/* Schrijft direct naar het gekozen werk van de gekozen provincie —
+   .transaction() zodat gelijktijdige leerlingen elkaars bijdrage niet
+   overschrijven (zelfde patroon als ropePull() in net.js). */
+async function twAwardStructurePoints(provinceId, trackKey, points){
+  if(!provinceId || !initFirebase()) return;
+  const field = TW_STRUCTURES[trackKey] && TW_STRUCTURES[trackKey].field;
+  if(!field) return;
+  try{ await fbDB.ref("totalwar/provinces/"+provinceId+"/"+field).transaction(cur=>(cur||0)+points); }catch(e){}
 }

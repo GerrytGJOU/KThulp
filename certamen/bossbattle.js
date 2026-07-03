@@ -119,6 +119,20 @@ function bmBossResolveTick(boss, classMaxHP, diffM, noDamageAnswerCount){
   return{boss:b,classDamage,events};
 }
 
+// Total War-belegering (BOSS_PRESETS.garrison): welk werk wordt nu bevochten
+// (stage-index in BM_BOSS.stage, zie bmSiegeStageKeys() in battle.js), met
+// bijpassende naam/sprite. Gedeeld door bmBossSpriteHTML() hieronder en
+// bmTeamNm() in battle.js.
+const TW_STAGE_NAME = { militia:"Het Garnizoen", walls:"De Muur", towers:"Het Fort" };
+function bmGarrisonStageInfo(){
+  const gp=BM_META?.garrisonProvince; if(!gp) return null;
+  const stageKeys=(typeof bmSiegeStageKeys==="function")?bmSiegeStageKeys(gp):[];
+  const idx=BM_BOSS?.stage||0;
+  const key=stageKeys[idx]||"towers";
+  const tier=twStructureTier(gp[TW_STRUCTURES[key].field]);
+  return { key, tier, nm:TW_STAGE_NAME[key]||"Het Garnizoen", img:twSpriteFor(key,tier,gp.defenderCivId) };
+}
+
 /* ---- UI-HELPER: baas-placeholder op het slagveld (team-B-formatie) ---- */
 // Vervangt bmFormationHTML("B") wanneer er geen spelers op team B staan
 // (Boss Battle heeft geen menselijke tegenstander-team).
@@ -129,8 +143,18 @@ function bmBossSpriteHTML(boss,nm){
   const tB=BM_TEAMS?.B||{health:1,maxHealth:1};
   const hpPct=tB.maxHealth?tB.health/tB.maxHealth:1;
 
-  let art;
-  if(preset.img){
+  // Belegering: sprite/naam volgen de huidige stage (Garnizoen/Muur/Fort)
+  // i.p.v. de vaste preset-afbeelding — drie losse gevechten na elkaar.
+  const stageInfo = preset.id==="garrison" ? bmGarrisonStageInfo() : null;
+  let art, displayNm=nm;
+  if(stageInfo){
+    displayNm=stageInfo.nm;
+    art = stageInfo.img
+      ? `<div style="position:relative;width:168px;height:168px;margin:0 auto;filter:drop-shadow(0 0 10px ${preset.color}66)">
+           <img src="${stageInfo.img}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="" onerror="this.style.display='none'">
+         </div>`
+      : `<div style="font-size:64px;line-height:1;filter:drop-shadow(0 0 8px ${preset.color}88)">${preset.emoji}</div>`;
+  } else if(preset.img){
     // Romp (met de kale stompjes al ingetekend) + optioneel losse koppen
     // erbovenop. Elke kop-laag is een even groot canvas als de romp, dus
     // gewoon absoluut stapelen volstaat — geen offsets nodig. Een verslagen
@@ -150,7 +174,7 @@ function bmBossSpriteHTML(boss,nm){
   return `<div class="bm-fcol" style="align-items:center;justify-content:center;flex:1">
     <div class="bm-av" style="text-align:center">
       ${art}
-      <div class="avn">${esc(nm)}</div>
+      <div class="avn">${esc(displayNm)}</div>
       <div class="avncls">Fase ${phase} · Rage ${rage}%</div>
     </div>
   </div>`;

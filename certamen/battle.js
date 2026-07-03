@@ -427,7 +427,18 @@ function bmClearTheme(){
   BM_THEME_SAVED=[];
 }
 function bmTeamNm(team){
-  if(BM_META?.mode==="boss"){ if(team==="B")return bmBossPreset(BM_META.bossId).nm; if(team==="A")return "De Klas"; }
+  if(BM_META?.mode==="boss"){
+    if(team==="B"){
+      // Total War-belegering: naam volgt de huidige stage (Garnizoen/Muur/Fort)
+      // i.p.v. altijd "Het Garnizoen" — zie bmGarrisonStageInfo() in bossbattle.js.
+      if(BM_META.bossId==="garrison"){
+        const info=bmGarrisonStageInfo();
+        if(info) return info.nm;
+      }
+      return bmBossPreset(BM_META.bossId).nm;
+    }
+    if(team==="A")return "De Klas";
+  }
   return bmFaction(BM_META?.theme).teams[team]?.nm||(team==="A"?"Team A":"Team B");
 }
 function bmTeamIcon(team){ return bmFaction(BM_META?.theme).teams[team]?.icon||(team==="A"?"shield":"helmet"); }
@@ -1034,6 +1045,15 @@ async function bmStartGame(){
 // Boss Battle-variant van bmStartGame(): iedereen op team A (de klas, geen
 // tegenstander-team), en klas-/baas-HP geschaald met het daadwerkelijke
 // spelersaantal N (pas nu bekend — spelers joinen ná bmCreateRoom()).
+// Bepaalt, voor een belegering, welke werken (militia/walls/towers) er
+// echt bevochten moeten worden — sporen met tier 0 (nooit getraind) worden
+// overgeslagen — in de vaste TW_STAGE_ORDER-volgorde (militie/garnizoen dan
+// muur dan fort). Gedeeld door bmStartBossGame() en bmResolve() hieronder.
+function bmSiegeStageKeys(gp){
+  if(!gp) return [];
+  return TW_STAGE_ORDER.filter(key=> twStructureTier(gp[TW_STRUCTURES[key].field]) > 0);
+}
+
 async function bmStartBossGame(){
   const pids=Object.keys(BM_PLAYERS);
   if(pids.length<1){toast("Geen spelers","Wacht op minstens 1 deelnemer.");return;}
@@ -1044,24 +1064,36 @@ async function bmStartBossGame(){
   // gemiddelde schade per hit. De ontwerpdoc ging uit van DMG_base=100, maar
   // de echte BM_CLASSES-abilities liggen op 4-14 schade per hit — 8 is de
   // realistische gemiddelde schaal hier; bijstellen kan door alleen deze
-  // ene constante te wijzigen.
+  // ene constante te wijzigen. Bij een belegering (garrisonProvince) wordt
+  // dit vervangen door de eerste te bevechten stage se eigen HP — drie
+  // losse gevechten na elkaar (militie/garnizoen → muur → fort), zie
+  // TOTAL_WAR.md §5 en het sessieplan.
   let bossMaxHP=Math.max(1,Math.round(N*15*8*diffM));
   let bossStartHP=bossMaxHP;
-  // Total War-belegering (zie TOTAL_WAR.md §5/BOSS_BATTLE.md "Garnizoensformule"):
-  // muren/torens tellen op bij de baas-HP, en een eerdere, verloren poging
-  // ("slijtageslag") laat de baas al verzwakt beginnen. garrisonProvince wordt
-  // gezet door twStartAttack() in totalwar.js, niet bij losstaande gevechten.
+  let stageIdx=0;
   const gp=BM_META.garrisonProvince;
   if(gp){
-    bossMaxHP+=(gp.walls||0)*50+(gp.towers||0)*20;
-    bossStartHP=Math.max(1,bossMaxHP-(gp.damageTaken||0));
+    const stageKeys=bmSiegeStageKeys(gp);
+    if(stageKeys.length){
+      const lastStage=gp.siege && gp.siege.lastStage;
+      const resumeIdx=lastStage ? stageKeys.indexOf(lastStage) : 0;
+      stageIdx=resumeIdx>=0 ? resumeIdx : 0;
+      const stageKey=stageKeys[stageIdx];
+      const tier=twStructureTier(gp[TW_STRUCTURES[stageKey].field]);
+      const stageMax=TW_STAGE_HP[tier]||TW_STAGE_HP[1];
+      const dmg=(gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[stageKey])||0;
+      bossMaxHP=stageMax;
+      bossStartHP=Math.max(1, stageMax-dmg);
+    }
+    // stageKeys.length===0: niks ooit getraind — generieke basisformule
+    // hierboven blijft ongewijzigd staan, geen belegeringsfases.
   }
   const teamUp={};
   for(const pid of pids)teamUp[pid+"/team"]="A";
   await fbDB.ref("rooms/"+BM_CODE+"/players").update(teamUp);
   const teams={A:{health:classMaxHP,maxHealth:classMaxHP},B:{health:bossStartHP,maxHealth:bossMaxHP}};
   await fbDB.ref("rooms/"+BM_CODE+"/teams").set(teams);
-  await fbDB.ref("rooms/"+BM_CODE+"/boss").set({phase:1,rage:0,roundsSinceAttack:0});
+  await fbDB.ref("rooms/"+BM_CODE+"/boss").set({phase:1,rage:0,roundsSinceAttack:0,stage:stageIdx});
   BM_TEAMS=teams;
   await new Promise(r=>setTimeout(r,300));
   await bmDistributeQs(1);
@@ -2160,12 +2192,36 @@ async function bmResolve(roundN){
     bmUpdateMastery(players,pUpd,events);
 
     if(newHA<=0||newHB<=0){
+      // Total War-belegering: drie losse gevechten na elkaar. Zodra de
+      // huidige stage (militie/garnizoen → muur → fort) op 0 komt maar er
+      // nog een volgende stage is, is dit GEEN einde van het gevecht — de
+      // klas-HP blijft ongewijzigd staan (geen gratis heal tussen stages),
+      // alleen de baas krijgt de volgende stage se verse HP.
+      const gp=BM_META?.garrisonProvince;
+      const stageKeys=gp?bmSiegeStageKeys(gp):[];
+      const curStageIdx=BM_BOSS?.stage||0;
+      const curStageKey=stageKeys[curStageIdx];
+      if(newHB<=0 && curStageKey && curStageIdx<stageKeys.length-1){
+        const nextIdx=curStageIdx+1;
+        const nextKey=stageKeys[nextIdx];
+        const nextTier=twStructureTier(gp[TW_STRUCTURES[nextKey].field]);
+        const nextMax=TW_STAGE_HP[nextTier]||TW_STAGE_HP[1];
+        const dmg=(gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[nextKey])||0;
+        const nextStart=Math.max(1, nextMax-dmg);
+        await fbDB.ref("rooms/"+BM_CODE+"/teams/B").set({health:nextStart,maxHealth:nextMax});
+        await fbDB.ref("rooms/"+BM_CODE+"/boss").update({stage:nextIdx,phase:1,rage:0,roundsSinceAttack:0});
+        BM_TEAMS={...BM_TEAMS,B:{health:nextStart,maxHealth:nextMax}};
+        await bmDistributeQs(roundN+1);
+        bmHostStartTimer();
+        return;
+      }
       const winner=newHA<=0?"B":"A";
       await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner});
-      // Total War-belegering: schrijf het resultaat terug naar de aangevallen
-      // provincie (eigendomswissel bij winst, "slijtageslag"-schade bij verlies).
-      // Alleen relevant als dit gevecht vanuit twStartAttack() gestart is.
-      if(BM_META?.garrisonProvince) twResolveSiege(winner,tB.maxHealth,newHB).catch(()=>{});
+      // Schrijf het resultaat terug naar de aangevallen provincie
+      // (eigendomswissel bij winst, "slijtageslag"-schade op de huidige stage
+      // bij verlies). Alleen relevant als dit gevecht vanuit twStartAttack()
+      // gestart is.
+      if(gp) twResolveSiege(winner,curStageKey||"towers",tB.maxHealth,newHB).catch(()=>{});
       setTimeout(()=>Net.deleteRoom(BM_CODE).catch(()=>{}), 5000);
       return;
     }
