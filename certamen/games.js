@@ -872,6 +872,7 @@ function buyOrEquip(id){
 let _tpClasses = {};        // geladen klassendata
 let _tpCurrentClass = null; // actief geselecteerde klas-ID
 let _tpKlasCivs = {};        // Total War: klascode → civId (/totalwar/klasCivs)
+let _tpApprovedKlascodes = []; // laatst geladen goedgekeurde Battle Mode-klascodes
 
 // Kies de juiste netwerkimplementatie (Firebase of in-memory demo)
 function teacherNet(){ return hasFirebase ? FBNet : DemoNet; }
@@ -1008,13 +1009,15 @@ function tpUnassignKlasCiv(klas){
 
 function tpLoadClasses(){
   return teacherNet().getClasses()
-    .then(cls=>{ _tpClasses=cls||{}; tpRenderClasses(); })
+    .then(cls=>{ _tpClasses=cls||{}; tpRenderClasses(); tpReconcileClassKlascodes(); })
     .catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"Kon klassen niet laden")));
 }
 
 function tpRenderClasses(){
-  const cont=el("tpClassList"); if(!cont) return;
+  const cont=el("tpClassList");
   const entries=Object.entries(_tpClasses);
+  tpRenderKlasSelect();
+  if(!cont) return;
   if(!entries.length){
     cont.innerHTML=`<div class="note" style="text-align:center;padding:20px">Nog geen klassen. Voeg een klas toe hieronder.</div>`;
     return;
@@ -1034,12 +1037,44 @@ function tpRenderClasses(){
   }).join("");
 }
 
+// Haalt uit een klasnaam (bv. "Latijn 3B") een geldige Battle Mode-klascode
+// (bv. "LATIJN3B") — dezelfde regex als tpCreateKlascode(). null als de naam
+// geen bruikbare code oplevert (te kort/leeg na opschonen, of >12 tekens).
+function tpDeriveKlascode(nm){
+  const code=(nm||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+  return /^[A-Z0-9]{2,12}$/.test(code) ? code : null;
+}
+
+// Zorgt dat een docent-klas ook meteen een geldige, goedgekeurde inlogcode
+// is: leerlingen loggen zo in met precies de klasnaam die de docent hierboven
+// beheert, zonder aparte "Battle Mode — klascodes"-goedkeuringsstap. Faalt
+// stil (geen toast) als de naam geen bruikbare code oplevert of zonder
+// Firebase — de klas zelf is dan al wel aangemaakt.
+function tpEnsureClassKlascode(nm){
+  const code=tpDeriveKlascode(nm);
+  if(!code) return;
+  teacherNet().createKlascode(code).then(()=>tpLoadKlascodes()).catch(()=>{});
+}
+
+// Herstelt achteraf klassen die vóór deze koppeling al bestonden (of waarvan
+// de afgeleide code nog niet was goedgekeurd) — voorkomt dat je bestaande
+// klassen opnieuw moet aanmaken.
+function tpReconcileClassKlascodes(){
+  const approved=new Set(_tpApprovedKlascodes||[]);
+  const missing=[...new Set(Object.values(_tpClasses||{})
+    .map(cls=>tpDeriveKlascode(cls.className))
+    .filter(code=>code && !approved.has(code)))];
+  if(!missing.length) return;
+  Promise.all(missing.map(code=>teacherNet().createKlascode(code).catch(()=>{})))
+    .then(()=>tpLoadKlascodes());
+}
+
 function teacherAddClass(){
   const nm=(prompt("Naam van de nieuwe klas:")||"").trim();
   if(!nm) return;
   const id="class_"+Date.now();
   teacherNet().saveClass(id,nm)
-    .then(()=>{ toast("Klas aangemaakt",nm); return tpLoadClasses(); })
+    .then(()=>{ toast("Klas aangemaakt",nm); tpEnsureClassKlascode(nm); return tpLoadClasses(); })
     .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
 }
 
@@ -1048,7 +1083,7 @@ function tpRenameClass(classId){
   const nm=(prompt("Nieuwe naam voor '"+huidig+"':",huidig)||"").trim();
   if(!nm||nm===huidig) return;
   teacherNet().saveClass(classId,nm)
-    .then(()=>{ toast("Naam gewijzigd",nm); return tpLoadClasses(); })
+    .then(()=>{ toast("Naam gewijzigd",nm); tpEnsureClassKlascode(nm); return tpLoadClasses(); })
     .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
 }
 
@@ -1149,8 +1184,8 @@ function tpRemoveAdmin(klas,lid,nm){
 
 function tpLoadKlascodes(){
   const cont=el("tpKlascodeList"); if(!cont) return;
-  teacherNet().getKlascodes().then(({approved,used})=>{
-    tpRenderKlasSelect(approved);
+  return teacherNet().getKlascodes().then(({approved,used})=>{
+    _tpApprovedKlascodes=approved;
     if(!approved.length&&!used.length){
       cont.innerHTML=`<div class="note">Nog geen klascodes. Maak er een aan hierboven.</div>`;
       return;
@@ -1175,16 +1210,21 @@ function tpLoadKlascodes(){
   }).catch(e=>{ cont.innerHTML=`<div class="note warn">${esc(typeof e==="string"?e:(e?.message||"Fout"))}</div>`; });
 }
 
-// Vult de klas-dropdown van het Total War-koppelpaneel met de goedgekeurde
-// klascodes hierboven — leerlingen kunnen alleen met een goedgekeurde code
-// aanmelden, dus alleen die zijn zinvol om aan een beschaving te koppelen.
-function tpRenderKlasSelect(approved){
+// Vult de klas-dropdown van het Total War-koppelpaneel met de docent-eigen
+// klassen hierboven (_tpClasses) i.p.v. de rauwe Battle Mode-klascodelijst —
+// dat mengt losse/foutief goedgekeurde codes door de echte klassen heen.
+// De waarde is de afgeleide klascode (tpDeriveKlascode), want dat is wat
+// BM_IDENT.klascode straks écht bevat; het label is de leesbare klasnaam.
+function tpRenderKlasSelect(){
   const sel=el("tpTwKlas"); if(!sel) return;
   const cur=sel.value;
-  const codes=[...approved].sort();
+  const entries=Object.values(_tpClasses||{})
+    .map(cls=>({code:tpDeriveKlascode(cls.className), nm:cls.className}))
+    .filter(e=>e.code)
+    .sort((a,b)=>a.nm.localeCompare(b.nm));
   sel.innerHTML=`<option value="">— kies een klas —</option>`+
-    codes.map(code=>`<option value="${esc(code)}">${esc(code)}</option>`).join("");
-  if(cur && codes.includes(cur)) sel.value=cur;
+    entries.map(e=>`<option value="${e.code}">${esc(e.nm)}</option>`).join("");
+  if(cur && entries.some(e=>e.code===cur)) sel.value=cur;
 }
 
 function tpCreateKlascode(){
