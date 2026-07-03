@@ -1520,20 +1520,25 @@ const BM_HAARKLEUR_SWATCH = {
 // extraClass op de buitenste div (bv. "pixel-preview" voor statische weergave).
 function _bmPixelLayers(cosm, dirCls, extraClass="") {
   // Legendarische held: volledige vervanging van de paper doll (één sheet).
+  // Ook een volledig MV SV-Actor-grid (9x6), dus "mv-motion-layer" erbij.
   const legId = cosm.legendary && cosm.legendary!=="geen" ? cosm.legendary : null;
   if (legId && PIXEL_ASSETS.legendary[legId]) {
     const lurl = PIXEL_ASSETS.legendary[legId] + "?"+SPRITE_VER;
     return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
-      <div class="sprite-layer" style="background-image:url('${lurl}')"></div>
+      <div class="sprite-layer mv-motion-layer" style="background-image:url('${lurl}')"></div>
     </div>`;
   }
   const baseSrc = PIXEL_ASSETS.bases[_bmBaseKey(cosm)];
   if (!baseSrc) return null;
-  function L(src, cls="", style="") {
+  // mvGrid=true (default): laag volgt het MV-motion-grid (rij/kolom via
+  // BattleMotion). Alleen het wapen (ander sheet-formaat, eigen animatie)
+  // krijgt mvGrid=false en blijft buiten de motion state machine.
+  function L(src, cls="", style="", mvGrid=true) {
     if (!src) return "";
     const url = src + (src.indexOf("?")<0 ? "?"+SPRITE_VER : "");
     const st = `background-image:url('${url}')${style?";"+style:""}`;
-    return `<div class="sprite-layer${cls}" style="${st}"></div>`;
+    const gridCls = mvGrid ? " mv-motion-layer" : "";
+    return `<div class="sprite-layer${gridCls}${cls}" style="${st}"></div>`;
   }
   const haarFilter = BM_HAARKLEUR_FILTER[cosm.haarkleur||"blond"] || "none";
   const haarStyle = haarFilter !== "none" ? `filter:${haarFilter}` : "";
@@ -1547,7 +1552,7 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     : L(A.baard[baardId],"",haarStyle);
   return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
     ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
-    ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon wpn-"+(cosm.wapen||"zwaard"))}
+    ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon wpn-"+(cosm.wapen||"zwaard"),"",false)}
     ${L(baseSrc)}
     ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
     ${L(A.armor[cosm.armor||"licht"])}
@@ -1608,7 +1613,37 @@ function bmAnimTmp(el,cls,ms){
   el.classList.add(cls);
   setTimeout(()=>el.classList.remove(cls),ms||700);
 }
-function bmAnimAv(pid,cls,ms){bmAnimTmp(el(bmAvId(pid)),cls,ms);}
+// Koppelt bestaande CSS-animatieklassen (translateX-lunge/flits/pulse-VFX,
+// ongewijzigd) aan een MV-motion (echte rij/frame-wissel op de spritesheet
+// via BattleMotion — zie battle-motion.js). anim-ok/anim-bad zijn puur
+// antwoord-feedback, geen slagveld-actie, en krijgen dus geen motion.
+function bmMotionForAnimClass(cls,p){
+  if(cls==="anim-hit")    return "damage";
+  if(cls==="anim-heal")   return "spell";
+  if(cls==="anim-shield") return "guard";
+  if(cls==="anim-combo")  return "skill";
+  if(cls==="anim-win")    return "victory";
+  if(cls==="anim-lose")   return "dead";
+  if(cls==="anim-atk-r"||cls==="anim-atk-l"){
+    const wapen=(p&&p.avatar?bmAvatarMerge(p.avatar):bmAvatarDefaults()).wapen;
+    if(wapen==="boog")  return "missile";
+    if(wapen==="staf")  return "spell";
+    if(wapen==="speer") return "thrust";
+    return "swing"; // zwaard/knuppel/hooivork
+  }
+  if(cls==="anim-chg-r"||cls==="anim-chg-l") return "thrust"; // cavalerie-charge
+  return null;
+}
+function bmAnimAv(pid,cls,ms){
+  bmAnimTmp(el(bmAvId(pid)),cls,ms);
+  if(typeof BattleMotion!=="undefined"){
+    const motion=bmMotionForAnimClass(cls,BM_PLAYERS[pid]);
+    if(motion){
+      const heroEl=el(bmAvId(pid))?.querySelector(".pixel-hero");
+      if(heroEl) BattleMotion.play(heroEl,motion);
+    }
+  }
+}
 function bmAnimTeam(team,cls,ms){
   if(BM_META?.animations===false)return;
   Object.entries(BM_PLAYERS).filter(([,p])=>p.team===team)
@@ -1709,6 +1744,15 @@ function bmBuildBattlefield(){
     _bmFormHash=hash;
     if(fA)fA.innerHTML=bmFormationHTML("A");
     if(fB)fB.innerHTML=bmFormationHTML("B");
+    // Verse DOM-nodes na een rebuild: elke avatar begint in idle. Een motion
+    // die vlak hierna via bmAnimAv wordt getriggerd (bv. binnen dezelfde
+    // ronde-resolutie) overschrijft dit meteen weer — zelfde volgorde-
+    // tolerantie als het bestaande class-gedreven systeem (bmAvId-lookup
+    // gebeurt altijd opnieuw op het moment van triggeren).
+    if(typeof BattleMotion!=="undefined"){
+      document.querySelectorAll("#bmFormA .pixel-hero, #bmFormB .pixel-hero")
+        .forEach(heroEl=>BattleMotion.ensureIdle(heroEl));
+    }
   }
   const field=el("bmField");
   if(field){
