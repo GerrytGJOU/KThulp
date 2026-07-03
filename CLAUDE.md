@@ -34,3 +34,9 @@
 
 ## Hosting
 - GitHub Pages: https://GerrytGJOU.github.io/KThulp/
+
+## Firebase-rules
+- Bij elke wijziging aan Firebase-rules (bv. `firestore.rules`, `database.rules.json`):
+  geef altijd het volledige nieuwe regelsbestand (oude + nieuwe regels samen),
+  zodat het in één keer te kopiëren is. Nooit alleen het toegevoegde fragment
+  losstaand tonen.
