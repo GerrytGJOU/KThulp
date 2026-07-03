@@ -29,19 +29,25 @@ const BOSS_DIFF_ORDER = ["easy","normal","hard","heroic","legendary"];
 // `img` (romp/basisillustratie) en `heads` (Hydra: losse koppen bovenop de
 // romp) zijn optioneel — ontbreekt `img`, dan valt bmBossSpriteHTML() terug
 // op de emoji-placeholder.
+// `hero` = de mythologische held die traditioneel tegen déze baas streed —
+// vervangt in Boss Battle de factie-commandant van team A (de baas zelf
+// heeft geen commandant, zie CommanderSpectre.show() in battle.js).
 const BOSS_PRESETS = {
   hydra:    { id:"hydra",    nm:"De Hydra van Lerna",   emoji:"🐉", color:"#2e7d32",
     desc:"Groeit extra koppen en geneest zichzelf naarmate ze HP verliest.",
     img:"assets/bosses/hydra.png",
     heads:["assets/bosses/hydrahead1.png","assets/bosses/hydrahead2.png","assets/bosses/hydrahead3.png",
            "assets/bosses/hydrahead4.png","assets/bosses/hydrahead5.png","assets/bosses/hydrahead6.png",
-           "assets/bosses/hydrahead7.png"] },
+           "assets/bosses/hydrahead7.png"],
+    hero:{ nm:"Herakles", img:"assets/commanders/heroes/herakles.png" } },
   cyclops:  { id:"cyclops",  nm:"Polyfemus de Cycloop", emoji:"👁️", color:"#ef6c00",
     desc:"Een oogstraal-countdown dwingt de klas tot snel gezamenlijk handelen.",
-    img:"assets/bosses/cyclops.png" },
+    img:"assets/bosses/cyclops.png",
+    hero:{ nm:"Odysseus", img:"assets/commanders/heroes/odysseus.png" } },
   minotaur: { id:"minotaur", nm:"De Minotaurus",        emoji:"🐂", color:"#c62828",
     desc:"Verstopt zich achter een Labyrinth-schild en gaat daarna in Enrage.",
-    img:"assets/bosses/Minotaur.png" },
+    img:"assets/bosses/Minotaur.png",
+    hero:{ nm:"Theseus", img:"assets/commanders/heroes/theseus.png" } },
 };
 const BOSS_PRESET_ORDER = ["hydra","cyclops","minotaur"];
 

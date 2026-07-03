@@ -32,7 +32,12 @@ const CommanderSpectre = (() => {
 
   function show(team) {
     if (BM_META?.animations === false) return;
-    const cfg = BM_COMMANDERS[BM_META?.theme]?.[team];
+    // Boss Battle: geen factie-vs-factie, dus geen commandant voor de baas
+    // (team B) — team A krijgt in plaats daarvan de mythologische held die
+    // traditioneel tegen déze baas streed (zie BOSS_PRESETS[id].hero).
+    const cfg = BM_META?.mode === "boss"
+      ? (team === "A" ? bmBossPreset(BM_META.bossId)?.hero : null)
+      : BM_COMMANDERS[BM_META?.theme]?.[team];
     if (!cfg) return;
     if (!_ensureEls()) return;
     const el = document.getElementById("bm-spectre-" + team);
