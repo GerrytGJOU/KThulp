@@ -871,6 +871,7 @@ function buyOrEquip(id){
 
 let _tpClasses = {};        // geladen klassendata
 let _tpCurrentClass = null; // actief geselecteerde klas-ID
+let _tpKlasCivs = {};        // Total War: klascode → civId (/totalwar/klasCivs)
 
 // Kies de juiste netwerkimplementatie (Firebase of in-memory demo)
 function teacherNet(){ return hasFirebase ? FBNet : DemoNet; }
@@ -917,7 +918,19 @@ SCREENS.teacherPortal = function(){
   </div>
   <div id="tpClassList"><div class="note" style="text-align:center;padding:20px">Klassen laden…</div></div>
   <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
-  <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">🗺️ Total War — voorbeeld <span class="pill" style="background:var(--stone4);color:var(--hi-bright);margin-left:6px">Binnenkort</span></button>
+  <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">🗺️ Total War — veldtochtkaart</button>
+  <div class="panel" style="margin-top:16px">
+    <label class="fld">Total War — klas ↔ beschaving</label>
+    <div id="twKlasCivList" style="margin-top:6px"><div class="note" style="padding:4px 0">Laden…</div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px">
+      <input id="tpTwKlas" placeholder="Klascode (bijv. LATIJN3B)" style="flex:1;min-width:140px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit;text-transform:uppercase"
+        oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')tpAssignKlasCiv()">
+      <select id="tpTwCiv" style="padding:8px 10px;border-radius:8px;border:1px solid var(--stone4);background:var(--stone3);color:var(--cream);font-size:14px;font-family:inherit">
+        ${Object.entries(TW_CIVS).filter(([id])=>id!=="neutral").map(([id,c])=>`<option value="${id}">${esc(c.nm)}</option>`).join("")}
+      </select>
+      <button class="btn btn-gold" style="padding:8px 14px" onclick="tpAssignKlasCiv()">Koppel</button>
+    </div>
+  </div>
   <div class="panel" style="margin-top:16px">
     <label class="fld">Battle Mode — klascodes</label>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
@@ -940,7 +953,57 @@ SCREENS.teacherPortal = function(){
   ${foot()}`);
   tpLoadClasses();
   tpLoadKlascodes();
+  tpLoadKlasCivs();
 };
+
+/* ---- Total War: klas ↔ beschaving-koppeling (/totalwar/klasCivs, zie
+   TOTAL_WAR.md §4/§7.1 — many-to-one t.o.v. de letterlijke docschema, want
+   meerdere klascodes horen vaak bij dezelfde beschaving). ---- */
+function tpLoadKlasCivs(){
+  const cont=el("twKlasCivList"); if(!cont) return;
+  if(!initFirebase()){ cont.innerHTML=`<div class="note">Vereist Firebase.</div>`; return; }
+  fbDB.ref("totalwar/klasCivs").once("value")
+    .then(snap=>{ _tpKlasCivs=snap.val()||{}; tpRenderKlasCivs(); })
+    .catch(()=>{ cont.innerHTML=`<div class="note warn">Kon koppelingen niet laden.</div>`; });
+}
+
+function tpRenderKlasCivs(){
+  const cont=el("twKlasCivList"); if(!cont) return;
+  const entries=Object.entries(_tpKlasCivs||{});
+  if(!entries.length){
+    cont.innerHTML=`<div class="note" style="padding:4px 0">Nog geen klas aan een beschaving gekoppeld.</div>`;
+    return;
+  }
+  const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
+  cont.innerHTML=entries.map(([klas,civId])=>{
+    const civ=TW_CIVS[civId]||TW_CIVS.neutral;
+    return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:0.5px solid var(--stone4)">
+      <span style="flex:1"><b>${esc(klas)}</b> → ${esc(civ.nm)}</span>
+      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpUnassignKlasCiv(${q(klas)})">Ontkoppel</button>
+    </div>`;
+  }).join("");
+}
+
+async function tpAssignKlasCiv(){
+  const klas=(el("tpTwKlas")?.value||"").trim().toUpperCase();
+  const civId=el("tpTwCiv")?.value;
+  if(!klas){ toast("Klascode vereist","Vul een klascode in."); return; }
+  if(!initFirebase()){ toast("Firebase vereist",""); return; }
+  try{
+    const exists=await FBNet.validateKlascode(klas);
+    if(!exists){ toast("Onbekende klascode",klas+" bestaat niet in Battle Mode."); return; }
+    await fbDB.ref("totalwar/klasCivs/"+klas).set(civId);
+    if(el("tpTwKlas")) el("tpTwKlas").value="";
+    toast("Gekoppeld",klas+" → "+(TW_CIVS[civId]?.nm||civId));
+    tpLoadKlasCivs();
+  }catch(e){ toast("Fout",typeof e==="string"?e:(e?.message||"")); }
+}
+
+function tpUnassignKlasCiv(klas){
+  fbDB.ref("totalwar/klasCivs/"+klas).remove()
+    .then(()=>{ toast("Ontkoppeld",klas); tpLoadKlasCivs(); })
+    .catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"")));
+}
 
 function tpLoadClasses(){
   return teacherNet().getClasses()

@@ -1,12 +1,23 @@
-# Boss Battle — coöperatief gevechtssysteem (ONTWERPFASE)
+# Boss Battle — coöperatief gevechtssysteem (GEBOUWD, unieke bazen-mechanics volgen)
 
-> **Status: concept, nog niet gebouwd.** Dit document herstructureert en
-> corrigeert `Boss Battle Plans.docx` zodat het aansluit op de bestaande
-> codebase. De **spelregels/balans** uit het docx-plan zijn overgenomen (goed
-> doordacht, geen wijzigingen nodig); de **technische aannames**
-> (netwerklaag, globale variabelenamen) zijn gecorrigeerd — zie
+> **Status: werkend.** Boss Battle is gebouwd — niet als het losstaande
+> room-schema dat dit document oorspronkelijk voorstelde, maar als een compacte
+> uitbreiding **bovenop Battle Mode se bestaande Team A/B-engine**
+> (`certamen/bossbattle.js` + `BM_META.mode==="boss"` in `certamen/battle.js`):
+> team B is de baas i.p.v. een menselijk team, en de bestaande
+> `bmResolve()`/`bmCalcAbilityEffect()`-pijplijn rekent klassen/combo's/synergie
+> al automatisch tegen de baas-HP af. Geïmplementeerd: moeilijkheidsgraden,
+> bazenkeuze (Hydra/Cycloop/Minotaurus met basisillustratie), fase 1-2-3,
+> rage/tegenaanval, en de [garnizoenskoppeling met Total War](#garnizoensformule-voor-total-war-belegeringen).
+> **Nog niet gebouwd** (bewust, zie `BOSS_PRESETS`-commentaar in
+> `bossbattle.js`): de unieke bazen-mechanics per baas (Hydra-koppen als
+> speelmechaniek i.p.v. alleen visueel, Cycloop-countdown, Minotaurus-schild),
+> de Combo Chain/anti-carry-systemen van §5, minions, en het scorebord van §8.
+> De **spelregels/balans** hieronder zijn wat het docx-plan voorstelde; waar de
+> werkelijke implementatie een lichtere/eenvoudigere versie koos staat dat
+> vermeld bij de betreffende sectie. Zie ook
 > [Technische correcties](#technische-correcties-tov-het-oorspronkelijke-docx-plan)
-> onderaan.
+> onderaan voor de architectuurcorrecties t.o.v. het originele docx-plan.
 >
 > Boss Battle is een **losstaand, herbruikbaar subsysteem** — géén
 > Total-War-specifieke code. Het is bruikbaar als (a) een vrijstaande
@@ -298,6 +309,16 @@ effectiveBossShield  = garrisonShield
 - Bij winst: reset `damageTaken` naar 0 en zet `owner` naar de aanvallende
   factie. Bij verlies boven de slijtagedrempel (TOTAL_WAR.md §5.4): schrijf de
   toegebrachte schade weg naar `damageTaken` in plaats van te resetten.
+
+**Geïmplementeerd** in `bmStartBossGame()` (`battle.js`) en `twResolveSiege()`
+(`totalwar.js`), met twee bewuste vereenvoudigingen t.o.v. de pseudocode hierboven:
+- de generieke basisformule is niet `N×1500×Md` maar de al bestaande, echte
+  Boss Battle-constante `N×15×8×Md` (zie het commentaar bij `bmStartBossGame()`
+  — 1500 was een docx-aanname die niet matchte met de werkelijke 4-14-schade
+  van `BM_CLASSES`-abilities);
+- `garrisonShield` bestaat nog niet als apart veld — `towers×20` telt gewoon op
+  bij `garrisonBonusHP` (zie TOTAL_WAR.md §9.6), omdat Boss Battle zelf nog geen
+  schild-mechanic heeft.
 
 ---
 
