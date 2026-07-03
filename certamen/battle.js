@@ -758,12 +758,19 @@ function bmIdentSwitch(){bmIdentClear();BM_IDENT=null;SCREENS.battleIdentity();}
 let BM_ADV_OPEN=false;
 SCREENS.battleHostSettings = function(){
   if(!BM_META)BM_META={};
+  // Total War-belegering (zie twStartAttack() in totalwar.js): speltype en
+  // baas liggen vast — een belegering is altijd Boss Battle tegen het
+  // verborgen garnizoen, nooit een keuze van de docent.
+  const isSiege=!!BM_META.garrisonProvince;
+  if(isSiege){ BM_META.mode="boss"; BM_META.bossId="garrison"; }
   const th=BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id;
   if(!BM_META.theme)BM_META.theme=th;
   const mode=BM_META.mode||"pvp";
   if(!BM_META.mode)BM_META.mode=mode;
   const bossId=BM_META.bossId||BOSS_PRESET_ORDER[0];
   if(!BM_META.bossId)BM_META.bossId=bossId;
+  const siegeProvinceNm=isSiege?((_twRegistry?.[BM_META.garrisonProvince.id]?.displayName)||BM_META.garrisonProvince.id):"";
+  const siegeCivNm=isSiege?(TW_CIVS[BM_META.attackerCivId]?.nm||BM_META.attackerCivId):"";
   const bossDiff=BM_META.bossDifficulty||"normal";
   if(!BM_META.bossDifficulty)BM_META.bossDifficulty=bossDiff;
   const at=BM_META.answerTimer||10;
@@ -782,6 +789,12 @@ SCREENS.battleHostSettings = function(){
   const fac=bmFaction(th);
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('hostSource')">${iconSVG("shield",20,"currentColor")}</button><h2>Battle — Instellingen</h2></div>
+  ${isSiege?`
+  <div class="panel" style="border-color:var(--hi-dim)">
+    <label class="fld">Total War — belegering</label>
+    <div class="note">⚔ Je bestormt <b>${esc(siegeProvinceNm)}</b> namens ${esc(siegeCivNm)} — dit is altijd een Boss Battle tegen het garnizoen van de provincie, niet te wijzigen.</div>
+  </div>
+  `:`
   <div class="panel">
     <label class="fld">Speltype</label>
     <div class="chips">
@@ -798,11 +811,16 @@ SCREENS.battleHostSettings = function(){
     </select>
     <div class="note" style="margin-top:6px">${iconSVG(fac.teams.A.icon,13,fac.cssVars["--teamA"]||"var(--teamA)")} ${esc(fac.teams.A.nm)} vs ${iconSVG(fac.teams.B.icon,13,fac.cssVars["--teamB"]||"var(--teamB)")} ${esc(fac.teams.B.nm)}</div>
   </div>`}
+  `}
   ${mode==="boss"?`
   <div class="panel">
-    <label class="fld">Kies de baas</label>
+    <label class="fld">${isSiege?"Tegenstander":"Kies de baas"}</label>
+    ${isSiege?`
+    <div class="note">${bmBossPreset("garrison").emoji} <b>${esc(bmBossPreset("garrison").nm)}</b> — ${esc(bmBossPreset("garrison").desc)}</div>
+    `:`
     <div class="chips">${BOSS_PRESET_ORDER.map(id=>{const p=BOSS_PRESETS[id];return `<button class="chip ${bossId===id?"on":""}" onclick="BM_META.bossId='${id}';SCREENS.battleHostSettings()">${p.emoji} ${esc(p.nm)}</button>`;}).join("")}</div>
     <div class="note" style="margin-top:6px">${esc(bmBossPreset(bossId).desc)}</div>
+    `}
   </div>
   <div class="panel">
     <label class="fld">Moeilijkheidsgraad</label>

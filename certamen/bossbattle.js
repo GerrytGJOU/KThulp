@@ -48,6 +48,13 @@ const BOSS_PRESETS = {
     desc:"Verstopt zich achter een Labyrinth-schild en gaat daarna in Enrage.",
     img:"assets/bosses/Minotaur.png",
     hero:{ nm:"Theseus", img:"assets/commanders/heroes/theseus.png" } },
+  // Verborgen baas voor Total War-belegeringen (twStartAttack() in
+  // totalwar.js) — bewust NIET in BOSS_PRESET_ORDER, dus nooit los kiesbaar
+  // in het normale Boss Battle-menu. Geen mythologische held/tegenstander,
+  // maar de muren/torens/garnizoen van de aangevallen provincie zelf; de
+  // garnizoensbonus zit al in de HP (zie bmStartBossGame() in battle.js).
+  garrison: { id:"garrison", nm:"Het Garnizoen",         emoji:"🏰", color:"#6b5d4f",
+    desc:"De muren, torens en het garnizoen van de belegerde provincie." },
 };
 const BOSS_PRESET_ORDER = ["hydra","cyclops","minotaur"];
 

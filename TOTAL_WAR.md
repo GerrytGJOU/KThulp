@@ -157,9 +157,13 @@ aan het bestaande gedeelde profiel (zie §6) zodra de leerling die heeft.
   1. **Gevechtstraining** — avatar slaat een trainingspop (`training_dummy.png`,
      staat al in `certamen/assets/sprites/`).
   2. **Bouwanimatie** — avatar "bouwt" (hamer-motion; kan `"swing"` hergebruiken
-     met een ander wapen-sprite) een palissade/muur die per goed antwoord een
-     stukje hoger wordt getekend (simpele CSS `height`/`clip-path`-groei op een
-     laag-overlay, geen nieuwe asset-pijplijn nodig).
+     met een ander wapen-sprite) de verdedigingswerken van de eigen provincie
+     op, in stadia die oplopen met `walls` (§4/§5.2): eerst een fort
+     (`assets/bosses/fort.png`), dan verschijnt daarvoor een palissade
+     (`assets/bosses/palisade.png`), die bij een hoger `walls`-niveau overgaat
+     in een stenen muur (`assets/bosses/wall.png`) — alle drie de sprites zijn
+     al aanwezig. Puur visueel, geen eigen
+     opslag nodig — de trap wordt afgeleid van de al bestaande `walls`-waarde.
 - Fout antwoord: geen Trainingspunten, gewoon door naar de volgende vraag
   (geen bestraffing, consistent met de rest van de app se toon).
 
