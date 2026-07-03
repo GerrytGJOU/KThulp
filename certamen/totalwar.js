@@ -91,7 +91,7 @@ const TW_STRUCTURES = {
 // twGarrisonSpriteFor()).
 const TW_GARRISON_SPRITE_BY_CIV = {
   roma:"roman", athenae:"greek", gallii:"gauls", germani:"germans",
-  persae:"persian", carthago:"carthaginian", aegyptii:"egyptian",
+  persae:"persians", carthago:"carthaginian", aegyptii:"egyptian",
 };
 
 /* Punten → tier (0/1/2) voor één spoor. */
