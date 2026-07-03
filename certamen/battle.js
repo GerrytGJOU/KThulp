@@ -777,13 +777,14 @@ SCREENS.battleHostSettings = function(){
     </div>
     <div class="note" style="margin-top:6px">${mode==="boss"?"De hele klas vecht samen tegen één baas — geen tegenstander-team nodig, ook geschikt om alleen te trainen.":"Twee teams strijden tegen elkaar tot één leger op 0 HP staat."}</div>
   </div>
+  ${mode==="boss"?"":`
   <div class="panel">
     <label class="fld">Factie / Thema</label>
     <select style="width:100%;padding:10px 12px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:15px;font-family:inherit" onchange="BM_META.theme=this.value;SCREENS.battleHostSettings()">
       ${BM_FACTIONS.map(f=>`<option value="${f.id}"${th===f.id?" selected":""}>${f.nm}</option>`).join("")}
     </select>
-    ${mode!=="boss"?`<div class="note" style="margin-top:6px">${iconSVG(fac.teams.A.icon,13,fac.cssVars["--teamA"]||"var(--teamA)")} ${esc(fac.teams.A.nm)} vs ${iconSVG(fac.teams.B.icon,13,fac.cssVars["--teamB"]||"var(--teamB)")} ${esc(fac.teams.B.nm)}</div>`:""}
-  </div>
+    <div class="note" style="margin-top:6px">${iconSVG(fac.teams.A.icon,13,fac.cssVars["--teamA"]||"var(--teamA)")} ${esc(fac.teams.A.nm)} vs ${iconSVG(fac.teams.B.icon,13,fac.cssVars["--teamB"]||"var(--teamB)")} ${esc(fac.teams.B.nm)}</div>
+  </div>`}
   ${mode==="boss"?`
   <div class="panel">
     <label class="fld">Kies de baas</label>
@@ -897,8 +898,10 @@ async function bmCreateRoom(){
 SCREENS.battleHostLobby = function(){
   bmApplyTheme(BM_META?.theme);
   const fac=bmFaction(BM_META?.theme);
+  const isBoss=BM_META?.mode==="boss";
+  const title=isBoss?bmBossPreset(BM_META.bossId).nm:fac.nm;
   H(brand(false)+`
-  <div class="scrhead"><button class="back" onclick="leaveAll();bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>${esc(fac.nm)} — Lobby</h2></div>
+  <div class="scrhead"><button class="back" onclick="leaveAll();bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>${esc(title)} — Lobby</h2></div>
   <div class="codecard">
     <div class="lbl">Spelcode — geef dit aan de klas</div>
     <div class="code">${BM_CODE}</div>
@@ -906,17 +909,17 @@ SCREENS.battleHostLobby = function(){
   <div class="panel">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <h3 style="margin:0">Spelers <span id="bmLN"></span></h3>
-      <button class="btn btn-ghost" style="padding:9px 14px" onclick="bmAutoTeams()">⚖ Teams</button>
+      ${isBoss?"":`<button class="btn btn-ghost" style="padding:9px 14px" onclick="bmAutoTeams()">⚖ Teams</button>`}
     </div>
     <div class="plist" id="bmPlist"></div>
   </div>
   <div class="panel">
     <label class="fld">AI-teamgenoten toevoegen</label>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <select id="bmBotTeam" style="padding:7px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
+      ${isBoss?"":`<select id="bmBotTeam" style="padding:7px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
         <option value="A">${esc(fac.teams.A.nm)}</option>
         <option value="B">${esc(fac.teams.B.nm)}</option>
-      </select>
+      </select>`}
       <select id="bmBotAcc" style="padding:7px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
         <option value="0.95">Excellent (95%)</option>
         <option value="0.75" selected>Gemiddeld (75%)</option>
@@ -948,15 +951,16 @@ function bmRenderHostLobby(){
   const ln=el("bmLN"); if(ln)ln.textContent="("+Object.keys(BM_PLAYERS).length+")";
   const pl=el("bmPlist"); if(!pl)return;
   const fac=bmFaction(BM_META?.theme);
+  const isBoss=BM_META?.mode==="boss";
   const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
   pl.innerHTML=Object.entries(BM_PLAYERS).map(([pid,p])=>`<div class="ptag" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:5px 0;border-bottom:0.5px solid var(--stone4)">
     <span style="flex:1;display:flex;align-items:center;gap:6px">
       ${p.isBot?`<span style="font-size:16px" title="AI-bot">🤖</span>`:`${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],26)}`}
       <span>${esc(p.name)}</span>
-      ${p.team?`<span class="pill" style="background:${p.team==="A"?"var(--teamA)":"var(--teamB)"};border:none;font-size:11px">${esc(p.team==="A"?fac.teams.A.nm:fac.teams.B.nm)}</span>`:""}
+      ${!isBoss&&p.team?`<span class="pill" style="background:${p.team==="A"?"var(--teamA)":"var(--teamB)"};border:none;font-size:11px">${esc(p.team==="A"?fac.teams.A.nm:fac.teams.B.nm)}</span>`:""}
       ${p.class?`<span class="pill" style="font-size:11px">${esc(bmClsName(p.class))}</span>`:""}
     </span>
-    <button class="chip" style="font-size:11px" title="Wissel van team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>
+    ${isBoss?"":`<button class="chip" style="font-size:11px" title="Wissel van team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>`}
     <button class="chip" style="font-size:11px;color:#e07060;border-color:rgba(90,18,12,.4)" title="Verwijder" onclick="bmKickPlayer(${q(pid)})">✕</button>
   </div>`).join("")||`<div class="note">Wachten op spelers…</div>`;
   const sb=el("bmSB"); if(sb)sb.disabled=Object.keys(BM_PLAYERS).length<1;
@@ -1200,7 +1204,7 @@ function bmHostUpdatePlayers(){
       <div class="bm-pname" style="border-bottom:2px solid ${teamCol}40">${esc(p.name)}</div>
       <div class="bm-pcls" style="color:${col}">${esc(cls?.nm||"")}</div>
       <div style="display:flex;gap:4px;margin-top:4px;justify-content:center">
-        <button class="chip" style="font-size:10px;padding:2px 6px" title="Wissel team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>
+        ${BM_META?.mode==="boss"?"":`<button class="chip" style="font-size:10px;padding:2px 6px" title="Wissel team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>`}
         <button class="chip" style="font-size:10px;padding:2px 6px;color:#e07060;border-color:rgba(90,18,12,.4)" title="Verwijder" onclick="bmKickPlayer(${q(pid)})">✕</button>
       </div>
     </div>`;
@@ -1939,7 +1943,8 @@ function bmPlayAnimations(entry){
 
 function bmShowCommanders(){
   CommanderSpectre.show("A");
-  CommanderSpectre.show("B");
+  // De baas heeft geen commandant (geen tegenstander-team) — alleen team A telt.
+  if(BM_META?.mode!=="boss")CommanderSpectre.show("B");
 }
 
 // Abonneer op log; trigger animaties bij nieuwe entry (beperkt tot laatste 1 om backfill te vermijden)
@@ -2500,11 +2505,15 @@ async function bmDoJoin(){
   const isPlaying=stateSnap?.status==="playing";
   let team=null;
   if(isPlaying){
-    // late join: wijs toe aan kleinste team
-    const ps=await fbDB.ref("rooms/"+code+"/players").once("value");
-    const all=Object.values(ps.val()||{});
-    const cA=all.filter(p=>p.team==="A").length,cB=all.filter(p=>p.team==="B").length;
-    team=cA<=cB?"A":"B";
+    if(meta.mode==="boss"){
+      team="A"; // Boss Battle: geen tegenstander-team, iedereen vecht mee tegen de baas
+    } else {
+      // late join: wijs toe aan kleinste team
+      const ps=await fbDB.ref("rooms/"+code+"/players").once("value");
+      const all=Object.values(ps.val()||{});
+      const cA=all.filter(p=>p.team==="A").length,cB=all.filter(p=>p.team==="B").length;
+      team=cA<=cB?"A":"B";
+    }
   }
   const pd={name:BM_IDENT.name,color:BM_IDENT.color||P.color,avatar:BM_IDENT.avatar||P.avatar,
     team,class:null,be:0,correct:0,wrong:0,damage:0,healing:0,
