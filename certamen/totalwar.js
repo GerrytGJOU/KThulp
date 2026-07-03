@@ -348,12 +348,14 @@ function twStartAttack(targetId, attackerCiv){
   const p = (_twLiveProvinces && _twLiveProvinces[targetId]) || {walls:1,towers:0,damageTaken:0};
   if(!BM_META) BM_META = {};
   BM_META.mode = "boss";
-  BM_META.bossId = BM_META.bossId || BOSS_PRESET_ORDER[0];
+  // Altijd het verborgen garnizoen (BOSS_PRESETS.garrison in bossbattle.js),
+  // nooit een mythologische baas — een belegering is geen kwestie van kiezen.
+  BM_META.bossId = "garrison";
   BM_META.bossDifficulty = ((p.walls||0)>=3 || (p.towers||0)>=2) ? "hard" : "normal";
   BM_META.garrisonProvince = { id:targetId, walls:p.walls||0, towers:p.towers||0, damageTaken:p.damageTaken||0 };
   BM_META.attackerCivId = attackerCiv;
   const nm = (_twRegistry?.[targetId]?.displayName) || targetId;
-  toast("Aanval voorbereid", nm+" — kies de baas en start het gevecht.");
+  toast("Aanval voorbereid", nm+" — kies de moeilijkheidsgraad en start het gevecht.");
   go("battleHostSettings");
 }
 

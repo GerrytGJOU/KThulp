@@ -280,6 +280,16 @@ codebase. Suggesties voor latere uitbreiding (niet nu bouwen): Cerberus
 (3-fase multi-target), Charybdis (omgevings-gevaar i.p.v. directe aanval),
 Chimera (elementaire zwakke plekken per klasse-type).
 
+Van dit principe is inmiddels ook gebruikgemaakt voor een **verborgen** preset:
+`garrison` ("Het Garnizoen") vertegenwoordigt de muren/torens van een
+belegerde provincie in plaats van een mythologische tegenstander. Bewust
+**niet** opgenomen in `BOSS_PRESET_ORDER`, dus nooit los kiesbaar in het
+normale Boss Battle-menu — alleen `twStartAttack()` in `totalwar.js` zet
+`BM_META.bossId="garrison"`, en `battleHostSettings` in `battle.js` vervangt
+in dat geval de speltype-/baaskeuze door vaste, niet-aanpasbare tekst. De
+visuele laag (`assets/bosses/fort.png`/`palisade.png`/`wall.png`) is aanwezig;
+zie TOTAL_WAR.md §3.1 voor de bedoelde koppeling met de `walls`-waarde.
+
 ---
 
 ## Garnizoensformule voor Total War-belegeringen
