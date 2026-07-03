@@ -425,7 +425,14 @@ body.greek .qcard .word{color:#143a5e}
    native). SV-sprites kijken van nature naar LINKS; facing per team via
    scaleX-spiegeling op de lagen. Schaal 1.5Ã— (mobiel 96px) / 2.25Ã— (â‰¥900px). */
 .pixel-hero{position:relative;width:96px;height:96px;overflow:visible;image-rendering:pixelated;image-rendering:crisp-edges;flex-shrink:0}
-.sprite-layer{position:absolute;inset:0;background-size:864px 576px;background-repeat:no-repeat;background-position:0 0;animation:svIdle .6s steps(3) infinite}
+.sprite-layer{position:absolute;inset:0;background-size:864px 576px;background-repeat:no-repeat}
+/* BATTLE MOTION (battle-motion.js): rij/kolom van het MV SV-Actor-grid (9x6)
+   worden als CSS-custom-properties gezet door BattleMotion.play()/_applyFrame.
+   --cell = pixelgrootte van één grid-cel op de HUIDIGE breakpoint-schaal
+   (.pixel-hero is bewust exact --cell groot, zie de 96px/144px hieronder).
+   Default (geen JS actief, bv. statische preview) = idle-rij, frame 0. */
+.mv-motion-layer{--mv-row:1;--mv-col:0;--cell:96px;
+  background-position:calc(var(--mv-col) * -1 * var(--cell)) calc(var(--mv-row) * -1 * var(--cell))}
 @keyframes svIdle{from{background-position-x:0}to{background-position-x:-288px}}
 /* Facing: team A (dir-right) gespiegeld naar rechts; team B (dir-left) natuurlijk links */
 .pixel-hero.dir-right .sprite-layer{transform:scaleX(-1)}
@@ -456,7 +463,8 @@ body.greek .qcard .word{color:#143a5e}
 /* Desktop â‰¥900px: schaal 2.25Ã— â†’ 144Ã—144, bg-size 1296Ã—864 */
 @media(min-width:900px){
   .pixel-hero{width:144px;height:144px}
-  .sprite-layer{background-size:1296px 864px;animation-name:svIdleL}
+  .sprite-layer{background-size:1296px 864px}
+  .mv-motion-layer{--cell:144px}
 }
 @keyframes svIdleL{from{background-position-x:0}to{background-position-x:-432px}}
 /* Stagger idle-cyclus per speler */
@@ -715,7 +723,8 @@ body.greek .qcard .word{color:#143a5e}
 <script src="net.js?v=20260709"></script>
 <script src="games.js?v=20260704a"></script>
 <script src="battle-data.js?v=20260703b"></script>
-<script src="battle.js?v=20260704a"></script>
+<script src="battle-motion.js?v=20260705a"></script>
+<script src="battle.js?v=20260705a"></script>
 <script src="map/provinces.js?v=20260702m"></script>
 <script src="totalwar.js?v=20260702m3"></script>
 <script>
