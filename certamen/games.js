@@ -3,7 +3,7 @@ SCREENS.home = function(){
   document.body.classList.remove("greek");
   H(brand(true)+`
   <div class="eyebrow l">Kies wat je wilt doen</div>
-  <button class="tile" onclick="go('join')">
+  <button class="tile tile-primary" onclick="go('join')">
     <span class="ic">${iconSVG("shield",44,"currentColor")}</span>
     <h3>Meedoen</h3>
     <p>Voor leerlingen. Voer de code in die op het bord staat, of doe mee aan Battle Mode.</p>
@@ -36,7 +36,7 @@ SCREENS.home = function(){
     <h3>Mijn profiel</h3>
     <p>Rang, XP, eerbewijzen, munten en avatars die je hebt verdiend.</p>
   </button>
-  <button class="tile" onclick="go('teacherLogin')">
+  <button class="tile tile-compact" onclick="go('teacherLogin')">
     <span class="ic">${iconSVG("column",44,"currentColor")}</span>
     <h3>Docentenportaal</h3>
     <p>Klassen beheren, leerlingen verplaatsen en resultaten bekijken.</p>
@@ -920,18 +920,6 @@ SCREENS.teacherPortal = function(){
   <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
   <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">🗺️ Total War — veldtochtkaart</button>
   <div class="panel" style="margin-top:16px">
-    <label class="fld">Total War — klas ↔ beschaving</label>
-    <div id="twKlasCivList" style="margin-top:6px"><div class="note" style="padding:4px 0">Laden…</div></div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px">
-      <input id="tpTwKlas" placeholder="Klascode (bijv. LATIJN3B)" style="flex:1;min-width:140px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit;text-transform:uppercase"
-        oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')tpAssignKlasCiv()">
-      <select id="tpTwCiv" style="padding:8px 10px;border-radius:8px;border:1px solid var(--stone4);background:var(--stone3);color:var(--cream);font-size:14px;font-family:inherit">
-        ${Object.entries(TW_CIVS).filter(([id])=>id!=="neutral").map(([id,c])=>`<option value="${id}">${esc(c.nm)}</option>`).join("")}
-      </select>
-      <button class="btn btn-gold" style="padding:8px 14px" onclick="tpAssignKlasCiv()">Koppel</button>
-    </div>
-  </div>
-  <div class="panel" style="margin-top:16px">
     <label class="fld">Battle Mode — klascodes</label>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <input id="tpNewKlas" placeholder="Nieuwe code (bijv. LATIJN3B)" style="flex:1;min-width:140px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit;text-transform:uppercase"
@@ -939,6 +927,19 @@ SCREENS.teacherPortal = function(){
       <button class="btn btn-gold" style="padding:8px 14px" onclick="tpCreateKlascode()">+ Aanmaken</button>
     </div>
     <div id="tpKlascodeList" style="margin-top:10px"><div class="note" style="padding:4px 0">Laden…</div></div>
+  </div>
+  <div class="panel" style="margin-top:16px">
+    <label class="fld">Total War — klas ↔ beschaving</label>
+    <div id="twKlasCivList" style="margin-top:6px"><div class="note" style="padding:4px 0">Laden…</div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px">
+      <select id="tpTwKlas" style="flex:1;min-width:140px;padding:8px 10px;border-radius:8px;border:1px solid var(--stone4);background:var(--stone3);color:var(--cream);font-size:14px;font-family:inherit">
+        <option value="">— kies een klas —</option>
+      </select>
+      <select id="tpTwCiv" style="padding:8px 10px;border-radius:8px;border:1px solid var(--stone4);background:var(--stone3);color:var(--cream);font-size:14px;font-family:inherit">
+        ${Object.entries(TW_CIVS).filter(([id])=>id!=="neutral").map(([id,c])=>`<option value="${id}">${esc(c.nm)}</option>`).join("")}
+      </select>
+      <button class="btn btn-gold" style="padding:8px 14px" onclick="tpAssignKlasCiv()">Koppel</button>
+    </div>
   </div>
   <div class="panel" style="margin-top:16px">
     <label class="fld">Battle Mode — accounts per klascode</label>
@@ -1149,6 +1150,7 @@ function tpRemoveAdmin(klas,lid,nm){
 function tpLoadKlascodes(){
   const cont=el("tpKlascodeList"); if(!cont) return;
   teacherNet().getKlascodes().then(({approved,used})=>{
+    tpRenderKlasSelect(approved);
     if(!approved.length&&!used.length){
       cont.innerHTML=`<div class="note">Nog geen klascodes. Maak er een aan hierboven.</div>`;
       return;
@@ -1171,6 +1173,18 @@ function tpLoadKlascodes(){
       </div>`;
     }).join("");
   }).catch(e=>{ cont.innerHTML=`<div class="note warn">${esc(typeof e==="string"?e:(e?.message||"Fout"))}</div>`; });
+}
+
+// Vult de klas-dropdown van het Total War-koppelpaneel met de goedgekeurde
+// klascodes hierboven — leerlingen kunnen alleen met een goedgekeurde code
+// aanmelden, dus alleen die zijn zinvol om aan een beschaving te koppelen.
+function tpRenderKlasSelect(approved){
+  const sel=el("tpTwKlas"); if(!sel) return;
+  const cur=sel.value;
+  const codes=[...approved].sort();
+  sel.innerHTML=`<option value="">— kies een klas —</option>`+
+    codes.map(code=>`<option value="${esc(code)}">${esc(code)}</option>`).join("");
+  if(cur && codes.includes(cur)) sel.value=cur;
 }
 
 function tpCreateKlascode(){
