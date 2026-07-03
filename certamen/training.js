@@ -158,16 +158,22 @@ function trSetTrack(key){
   trRenderModeBody();
 }
 
-/* Voortgangsbalk van het gekozen werk op de gekozen provincie (instapscherm). */
+/* Voortgangsbalk van het gekozen werk op de gekozen provincie (instapscherm).
+   Toont aan het eind van de balk een mini-sprite van wat je aan het bouwen
+   bent — de eerstvolgende tier, of de voltooide sprite zelf bij tier 2. */
 function trTrackProgressHTML(){
   const p = trCurrentProvince(); if(!p) return "";
   const pts = p[TW_STRUCTURES[TR_TRACK].field]||0;
   const tier = twStructureTier(pts);
   const next = tier>=2 ? null : (tier===0?TW_TIER1_POINTS:TW_TIER2_POINTS);
   const pct = next ? Math.min(100, Math.round(pts/next*100)) : 100;
+  const targetSrc = twSpriteFor(TR_TRACK, tier>=2?2:tier+1, TR_CIV);
   return `<div class="note" style="margin-top:8px">Voortgang: ${Math.round(pts)}${next?"/"+next:""} punten${tier>=2?" — volledig!":""}</div>
-    <div style="height:8px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden;margin-top:4px">
-      <div style="height:100%;width:${pct}%;background:var(--hi);transition:width .3s"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+      <div style="flex:1;height:8px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:var(--hi);transition:width .3s"></div>
+      </div>
+      ${targetSrc?`<img src="${targetSrc}?${SPRITE_VER}" style="width:28px;height:28px;object-fit:contain;flex:0 0 auto" alt="" onerror="this.style.display='none'">`:""}
     </div>`;
 }
 
@@ -310,10 +316,14 @@ function trProvinceOverviewHTML(p){
     const tier=twStructureTier(pts);
     const next=tier>=2?null:(tier===0?TW_TIER1_POINTS:TW_TIER2_POINTS);
     const pct=next?Math.min(100,Math.round(pts/next*100)):100;
+    const targetSrc=twSpriteFor(key, tier>=2?2:tier+1, p.owner);
     return `<div style="margin-top:6px">
       <div class="note">${label}: ${tier===0?"—":tier===1?"basis":"volledig"} (${Math.round(pts)}${next?"/"+next:""})</div>
-      <div style="height:6px;border-radius:3px;background:rgba(0,0,0,.4);overflow:hidden;margin-top:2px">
-        <div style="height:100%;width:${pct}%;background:var(--hi)"></div>
+      <div style="display:flex;align-items:center;gap:6px;margin-top:2px">
+        <div style="flex:1;height:6px;border-radius:3px;background:rgba(0,0,0,.4);overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:var(--hi)"></div>
+        </div>
+        ${targetSrc?`<img src="${targetSrc}?${SPRITE_VER}" style="width:22px;height:22px;object-fit:contain;flex:0 0 auto" alt="" onerror="this.style.display='none'">`:""}
       </div>
     </div>`;
   };
