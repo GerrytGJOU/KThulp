@@ -54,7 +54,8 @@ const BOSS_PRESETS = {
   // maar de muren/torens/garnizoen van de aangevallen provincie zelf; de
   // garnizoensbonus zit al in de HP (zie bmStartBossGame() in battle.js).
   garrison: { id:"garrison", nm:"Het Garnizoen",         emoji:"🏰", color:"#6b5d4f",
-    desc:"De muren, torens en het garnizoen van de belegerde provincie." },
+    desc:"De muren, torens en het garnizoen van de belegerde provincie.",
+    img:"assets/bosses/fort.png" }, // placeholder, wordt later vervangen
 };
 const BOSS_PRESET_ORDER = ["hydra","cyclops","minotaur"];
 
