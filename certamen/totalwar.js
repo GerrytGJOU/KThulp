@@ -84,19 +84,22 @@ const TW_STAGE_HP = { 0: 150, 1: 400, 2: 900 };
 // img:null bij tier 0 van walls = niks getekend (alleen de
 // torenspoor-basislaag eronder); towers/militia hebben altijd een img
 // (boerderij, resp. boeren) — een onverdedigde provincie is nooit "leeg".
+// Militiespoor-sprites zijn allemaal onder de garrison_-naamgeving verzameld
+// (garrison_farmers/garrison_militia/garrison_{volk}) — zelfde reeks als de
+// civ-specifieke garnizoensplaatjes hieronder.
 const TW_STRUCTURES = {
-  militia: { field:"militiaPoints", tier0:"assets/bosses/farmers.png", tier1:"assets/bosses/militia.png", tier2:"civ" },
+  militia: { field:"militiaPoints", tier0:"assets/bosses/garrison_farmers.png", tier1:"assets/bosses/garrison_militia.png", tier2:"civ" },
   walls:   { field:"wallPoints",    tier0:null, tier1:"assets/bosses/Palissade.png", tier2:"assets/bosses/wall.png" },
   towers:  { field:"towerPoints",   tier0:"assets/bosses/farm.png", tier1:"assets/bosses/watchtower.png", tier2:"assets/bosses/fort.png" },
 };
 
-// Engelse volksnaam per beschaving, voor het civ-specifieke garnizoensplaatje
-// (assets/bosses/garrison_{volk}.png) — Grieken/Romeinen zijn al aangeleverd,
-// de rest volgt; ontbrekende bestanden vallen terug op militia.png (zie
-// twGarrisonSpriteFor()).
+// Volksnaam per beschaving, voor het civ-specifieke garnizoensplaatje
+// (assets/bosses/garrison_{volk}.png) — alle 7 beschavingen hebben er
+// inmiddels een; ontbrekende/toekomstige bestanden vallen terug op
+// garrison_militia.png (zie twSpriteFor()).
 const TW_GARRISON_SPRITE_BY_CIV = {
-  roma:"roman", athenae:"greek", gallii:"gauls", germani:"germans",
-  persae:"persians", carthago:"carthaginian", aegyptii:"egyptian",
+  roma:"roman", athenae:"greek", gallii:"gaul", germani:"germania",
+  persae:"persia", carthago:"carthage", aegyptii:"egypt",
 };
 
 /* Punten → tier (0/1/2) voor één spoor. */
@@ -114,7 +117,7 @@ function twSpriteFor(structureKey, tier, civId){
   const raw = tier>=2?def.tier2:tier>=1?def.tier1:def.tier0;
   if(raw!=="civ") return raw;
   const suffix = TW_GARRISON_SPRITE_BY_CIV[civId];
-  return suffix ? "assets/bosses/garrison_"+suffix+".png" : "assets/bosses/militia.png";
+  return suffix ? "assets/bosses/garrison_"+suffix+".png" : "assets/bosses/garrison_militia.png";
 }
 
 /* ---- Demo-stand voor de publieke "Binnenkort"-uitlegkaart (SCREENS.totalWar).
