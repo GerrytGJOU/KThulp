@@ -130,7 +130,9 @@ function bmGarrisonStageInfo(){
   const idx=BM_BOSS?.stage||0;
   const key=stageKeys[idx]||"towers";
   const tier=twStructureTier(gp[TW_STRUCTURES[key].field]);
-  return { key, tier, nm:TW_STAGE_NAME[key]||"Het Garnizoen", img:twSpriteFor(key,tier,gp.defenderCivId) };
+  // Militie op tier 0 is nog geen echt garnizoen — gewoon de boeren.
+  const nm = (key==="militia" && tier===0) ? "De Boeren" : (TW_STAGE_NAME[key]||"Het Garnizoen");
+  return { key, tier, nm, img:twSpriteFor(key,tier,gp.defenderCivId) };
 }
 
 /* ---- UI-HELPER: baas-placeholder op het slagveld (team-B-formatie) ---- */

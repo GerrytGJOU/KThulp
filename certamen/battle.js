@@ -1051,7 +1051,10 @@ async function bmStartGame(){
 // muur dan fort). Gedeeld door bmStartBossGame() en bmResolve() hieronder.
 function bmSiegeStageKeys(gp){
   if(!gp) return [];
-  return TW_STAGE_ORDER.filter(key=> twStructureTier(gp[TW_STRUCTURES[key].field]) > 0);
+  // Militie staat altijd vooraan, ook op tier 0 ("De Boeren") — die stage
+  // wordt nooit overgeslagen. Muur/toren tellen alleen mee als ze echt
+  // getraind zijn (tier 0 = nog niet gebouwd, dus niks om te bevechten).
+  return TW_STAGE_ORDER.filter(key=> key==="militia" || twStructureTier(gp[TW_STRUCTURES[key].field]) > 0);
 }
 
 async function bmStartBossGame(){
