@@ -10,8 +10,8 @@
     {
       "name": "kthulp-verify",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8768"],
-      "port": 8768
+      "runtimeArgs": ["-m", "http.server", "8769"],
+      "port": 8769
     }
   ]
 }
