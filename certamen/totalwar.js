@@ -528,8 +528,8 @@ function twGarrisonVisualHTML(p, civId){
     twSpriteFor("walls", twStructureTier(p.wallPoints), civId),
     twSpriteFor("militia", twStructureTier(p.militiaPoints), civId),
   ].filter(Boolean);
-  return `<div style="position:relative;width:64px;height:64px;flex:0 0 auto">
-    ${layers.map(src=>`<img src="${src}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="" onerror="this.style.display='none'">`).join("")}
+  return `<div style="position:relative;width:128px;height:128px;flex:0 0 auto;background:#fff;border-radius:10px;box-sizing:border-box">
+    ${layers.map(src=>`<img src="${src}?${SPRITE_VER}" style="position:absolute;inset:8px;object-fit:contain" alt="" onerror="this.style.display='none'">`).join("")}
   </div>`;
 }
 

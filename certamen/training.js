@@ -173,7 +173,9 @@ function trTrackProgressHTML(){
       <div style="flex:1;height:8px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
         <div style="height:100%;width:${pct}%;background:var(--hi);transition:width .3s"></div>
       </div>
-      ${targetSrc?`<img src="${targetSrc}?${SPRITE_VER}" style="width:28px;height:28px;object-fit:contain;flex:0 0 auto" alt="" onerror="this.style.display='none'">`:""}
+      ${targetSrc?`<div style="width:56px;height:56px;flex:0 0 auto;background:#fff;border-radius:8px;box-sizing:border-box">
+        <img src="${targetSrc}?${SPRITE_VER}" style="width:100%;height:100%;object-fit:contain;padding:6px;box-sizing:border-box" alt="" onerror="this.parentElement.style.display='none'">
+      </div>`:""}
     </div>`;
 }
 
@@ -323,7 +325,9 @@ function trProvinceOverviewHTML(p){
         <div style="flex:1;height:6px;border-radius:3px;background:rgba(0,0,0,.4);overflow:hidden">
           <div style="height:100%;width:${pct}%;background:var(--hi)"></div>
         </div>
-        ${targetSrc?`<img src="${targetSrc}?${SPRITE_VER}" style="width:22px;height:22px;object-fit:contain;flex:0 0 auto" alt="" onerror="this.style.display='none'">`:""}
+        ${targetSrc?`<div style="width:44px;height:44px;flex:0 0 auto;background:#fff;border-radius:6px;box-sizing:border-box">
+          <img src="${targetSrc}?${SPRITE_VER}" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box" alt="" onerror="this.parentElement.style.display='none'">
+        </div>`:""}
       </div>
     </div>`;
   };
