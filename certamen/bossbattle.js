@@ -132,7 +132,13 @@ function bmGarrisonStageInfo(){
   const tier=twStructureTier(gp[TW_STRUCTURES[key].field]);
   // Militie op tier 0 is nog geen echt garnizoen — gewoon de boeren.
   const nm = (key==="militia" && tier===0) ? "De Boeren" : (TW_STAGE_NAME[key]||"Het Garnizoen");
-  return { key, tier, nm, img:twSpriteFor(key,tier,gp.defenderCivId) };
+  // Achtergrondlaag: het torenspoor (boerderij/wachttoren/fort) is altijd de
+  // "plek" van de belegering, ongeacht welk werk nu bevochten wordt — puur
+  // decor, hoeft zelf niet verslagen te worden (tenzij dat toevallig de
+  // huidige stage zelf is, dan is bgImg gelijk aan img en tonen we 'm niet dubbel).
+  const towerTier=twStructureTier(gp[TW_STRUCTURES.towers.field]);
+  const bgImg=twSpriteFor("towers",towerTier,gp.defenderCivId);
+  return { key, tier, nm, img:twSpriteFor(key,tier,gp.defenderCivId), bgImg };
 }
 
 /* ---- UI-HELPER: baas-placeholder op het slagveld (team-B-formatie) ---- */
@@ -151,8 +157,13 @@ function bmBossSpriteHTML(boss,nm){
   let art, displayNm=nm;
   if(stageInfo){
     displayNm=stageInfo.nm;
+    const showBg = stageInfo.bgImg && stageInfo.bgImg!==stageInfo.img;
+    const bgLayer = showBg
+      ? `<img src="${stageInfo.bgImg}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.6" alt="" onerror="this.style.display='none'">`
+      : "";
     art = stageInfo.img
       ? `<div style="position:relative;width:168px;height:168px;margin:0 auto;filter:drop-shadow(0 0 10px ${preset.color}66)">
+           ${bgLayer}
            <img src="${stageInfo.img}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="" onerror="this.style.display='none'">
          </div>`
       : `<div style="font-size:64px;line-height:1;filter:drop-shadow(0 0 8px ${preset.color}88)">${preset.emoji}</div>`;
