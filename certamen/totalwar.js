@@ -67,20 +67,25 @@ const TW_TIER1_POINTS = 300;
 const TW_TIER2_POINTS = 900;
 
 // Volgorde waarin een belegering de sporen aanvalt (TOTAL_WAR.md-sessieplan:
-// militie/garnizoen staat vooraan, dan de muur, dan pas het fort).
+// militie/garnizoen staat vooraan, dan de muur, dan pas het fort). Militie
+// wordt — anders dan walls/towers — NOOIT overgeslagen, ook niet op tier 0:
+// dan bestaat het garnizoen nog uit gewone boeren, maar die staan er nog
+// altijd als eerste (zie bmSiegeStageKeys() in battle.js).
 const TW_STAGE_ORDER = ["militia","walls","towers"];
 
 // Baas-HP per stage, per bereikte tier — richtwaarde, zelfde schaalorde als
 // de generieke N*15*8*Md-basisformule in bmStartBossGame() (battle.js), zodat
-// een klein aanvallend groepje niet kansloos staat. Gebruikt door
-// bmStartBossGame() bij een belegering.
-const TW_STAGE_HP = { 1: 400, 2: 900 };
+// een klein aanvallend groepje niet kansloos staat. Tier 0 (alleen relevant
+// voor militia/"De Boeren") is bewust laag: nauwelijks weerstand, geen
+// vertraging voor het veroveren van verse neutrale provincies.
+const TW_STAGE_HP = { 0: 150, 1: 400, 2: 900 };
 
 // Per spoor: welk Firebase-veld, en welke sprite hoort bij welke tier.
-// img:null bij tier 0 van militia/walls = niks getekend (alleen de
-// torenspoor-basislaag eronder); towers heeft altijd een img (boerderij).
+// img:null bij tier 0 van walls = niks getekend (alleen de
+// torenspoor-basislaag eronder); towers/militia hebben altijd een img
+// (boerderij, resp. boeren) — een onverdedigde provincie is nooit "leeg".
 const TW_STRUCTURES = {
-  militia: { field:"militiaPoints", tier0:null, tier1:"assets/bosses/militia.png", tier2:"civ" },
+  militia: { field:"militiaPoints", tier0:"assets/bosses/farmers.png", tier1:"assets/bosses/militia.png", tier2:"civ" },
   walls:   { field:"wallPoints",    tier0:null, tier1:"assets/bosses/Palissade.png", tier2:"assets/bosses/wall.png" },
   towers:  { field:"towerPoints",   tier0:"assets/bosses/farm.png", tier1:"assets/bosses/watchtower.png", tier2:"assets/bosses/fort.png" },
 };
