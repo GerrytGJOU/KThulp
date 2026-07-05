@@ -6,64 +6,85 @@
    in battle.js te wijzigen. Wordt vóór battle.js geladen.
    ============================================================================ */
 
-/* ---- CONFIGURATIETABEL: KLASSEN (8 stuks) ---- */
-// Alle balanswaarden staan hier. Pas getallen aan zonder de logica te wijzigen.
+/* ---- CONFIGURATIETABEL: KLASSEN (8 stuks) ----
+   Elke klasse: 2 basis-vaardigheden (goedkoop, kies 1), 2 medium-vaardigheden
+   (kies 1), 1 legendarische (duurst, geen keuze) — alle 5 elke ronde opnieuw
+   beschikbaar. Balans is doorgerekend (waarde per BE, incl. passieven) zodat
+   geen enkele klasse of los onderdeel ver uit de band valt; zie het gesprek
+   d.d. 2026-07 voor de doorrekening. Alle balanswaarden staan hier. Pas
+   getallen aan zonder de logica te wijzigen. */
 const BM_CLASSES = [
   { id:"hopliet",      nm:"Hopliet",     icon:"shield", color:"#c8392a",
     passive:{ desc:"+1 BE bij Verdedigen",                    type:"be_on_defend", val:1 },
     abilities:[
       { id:"schildmuur",    nm:"Schildmuur",    tier:"basic",    cost:2,  desc:"Geeft je team +4 schild",                   type:"team_shield",          shld:4 },
-      { id:"formatie",      nm:"Formatie",      tier:"advanced", cost:5,  desc:"Alle teamgenoten +2 BE",                    type:"team_be",              teamBE:2 },
-      { id:"achilleshiel",  nm:"Achilleshiel",  tier:"ultimate", cost:9,  desc:"Aanval (+6) die tegenschild omzeilt",       type:"attack_bypass",        dmg:6 },
+      { id:"schildslag",    nm:"Schildslag",    tier:"basic",    cost:2,  desc:"Aanval op het vijandelijk leger (+4)",      type:"attack",               dmg:4 },
+      { id:"formatie",      nm:"Formatie",      tier:"medium",   cost:5,  desc:"Alle teamgenoten +2 BE",                    type:"team_be",              teamBE:2 },
+      { id:"linie_sluiten", nm:"Linie Sluiten",  tier:"medium",   cost:5,  desc:"Geeft je team +7 schild",                   type:"team_shield",          shld:7 },
+      { id:"achilleshiel",  nm:"Achilleshiel",  tier:"legendary",cost:9,  desc:"Aanval (+10) die tegenschild omzeilt",      type:"attack_bypass",        dmg:10 },
     ]},
-  { id:"spartaan",     nm:"Spartaan",    icon:"helmet", color:"#8B1A1A",
+  { id:"spartaan",     nm:"Voorvechter", icon:"helmet", color:"#8B1A1A",
     passive:{ desc:"+20% aanvalsschade",                       type:"atk_bonus",   val:0.20 },
     abilities:[
-      { id:"speer",         nm:"Speeraanval",   tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+6)",      type:"attack",               dmg:6 },
-      { id:"berserk",       nm:"Berserk",       tier:"advanced", cost:5,  desc:"Zware aanval op het vijandelijk leger (+9)",type:"attack",               dmg:9 },
-      { id:"leeuwensprong", nm:"Leeuwensprong", tier:"ultimate", cost:10, desc:"Massieve aanval die schild omzeilt (+14)",  type:"attack_bypass",        dmg:14 },
+      { id:"speer",         nm:"Speerstoot",    tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+6)",      type:"attack",               dmg:6 },
+      { id:"genadeslag",    nm:"Genadeslag",    tier:"basic",    cost:3,  desc:"Aanval (+3, of +8 als vijand ≤30% HP)",     type:"attack_weakspot",      dmg:3, bonusDmg:5 },
+      { id:"berserk",       nm:"Berserk",       tier:"medium",   cost:5,  desc:"Zware aanval op het vijandelijk leger (+9)",type:"attack",               dmg:9 },
+      { id:"bloedroof",     nm:"Bloedroof",     tier:"medium",   cost:6,  desc:"Aanval (+6) én eigen leger heelt mee (+5) — levensroof", type:"heal_and_attack", dmg:6, heal:5 },
+      { id:"leeuwensprong", nm:"Leeuwensprong", tier:"legendary",cost:10, desc:"Massieve aanval die schild omzeilt (+14)",  type:"attack_bypass",        dmg:14 },
     ]},
   { id:"boogschutter", nm:"Boogschutter",icon:"eagle",  color:"#2e6fb0",
     passive:{ desc:"+1 schade bij aanval",                     type:"atk_flat",    val:1 },
     abilities:[
       { id:"pijlregen",     nm:"Pijlregen",     tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
-      { id:"zwakpunt",      nm:"Zwak punt",      tier:"advanced", cost:5,  desc:"Aanval (+7, of +17 als vijand ≤30% HP)",  type:"attack_weakspot",      dmg:7, bonusDmg:10 },
-      { id:"dodenarrow",    nm:"Dodenarrow",    tier:"ultimate", cost:9,  desc:"Dodelijke pijl op het vijandelijk leger (+13)", type:"attack",           dmg:13 },
+      { id:"gericht_schot", nm:"Gericht Schot", tier:"basic",    cost:3,  desc:"Aanval (+2) én vijandelijk schild −2",      type:"attack_and_shld_remove", dmg:2, shldRemove:2 },
+      { id:"zwakpunt",      nm:"Zwak Punt",     tier:"medium",   cost:5,  desc:"Aanval (+7, of +17 als vijand ≤30% HP)",    type:"attack_weakspot",      dmg:7, bonusDmg:10 },
+      { id:"doorborend",    nm:"Doorborend Schot", tier:"medium", cost:6,  desc:"Aanval (+7) die tegenschild omzeilt",       type:"attack_bypass",        dmg:7 },
+      { id:"dodenarrow",    nm:"Dodenarrow",    tier:"legendary",cost:9,  desc:"Dodelijke pijl op het vijandelijk leger (+13)", type:"attack",           dmg:13 },
     ]},
   { id:"cavalerie",    nm:"Cavalerie",   icon:"column", color:"#9B6914",
     passive:{ desc:"+2 BE bij snel correct antwoord",          type:"be_on_fast",  val:2 },
     abilities:[
       { id:"charge",        nm:"Charge",        tier:"basic",    cost:3,  desc:"Snelle aanval op het vijandelijk leger (+7)", type:"attack",             dmg:7 },
-      { id:"flankbeweging", nm:"Flankbeweging", tier:"advanced", cost:5,  desc:"Aanval (+5) én schild voor je team (+3)",   type:"attack_and_defend",    dmg:5, shld:3 },
-      { id:"stormloop",     nm:"Stormloop",     tier:"ultimate", cost:9,  desc:"Verwoestende aanval (+13)",                  type:"attack",               dmg:13 },
+      { id:"snelle_uitval", nm:"Snelle Uitval", tier:"basic",    cost:3,  desc:"Aanval (+3) én +2 eigen BE",                type:"attack",               dmg:3, selfBE:2 },
+      { id:"flankbeweging", nm:"Flankbeweging", tier:"medium",   cost:5,  desc:"Aanval (+5) én schild voor je team (+3)",   type:"attack_and_defend",    dmg:5, shld:3 },
+      { id:"stormram",      nm:"Stormram",      tier:"medium",   cost:6,  desc:"Aanval (+8) én vijandelijk schild −4",      type:"attack_and_shld_remove", dmg:8, shldRemove:4 },
+      { id:"stormloop",     nm:"Stormloop",     tier:"legendary",cost:9,  desc:"Verwoestende aanval (+13)",                  type:"attack",               dmg:13 },
     ]},
   { id:"priester",     nm:"Priester",    icon:"torch",  color:"#3f9d52",
     passive:{ desc:"+1 heling bij helen",                      type:"heal_flat",   val:1 },
     abilities:[
-      { id:"gebed",         nm:"Gebed",         tier:"basic",    cost:3,  desc:"Heelt je eigen leger (+9)",                 type:"heal",                 heal:9 },
-      { id:"zegen",         nm:"Zegen",         tier:"advanced", cost:5,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
-      { id:"godenvuur",     nm:"Godenvuur",     tier:"ultimate", cost:9,  desc:"Heelt leger (+12) én schaadt vijand (+4)",  type:"heal_and_attack",      heal:12, dmg:4 },
+      { id:"gebed",         nm:"Gebed",         tier:"basic",    cost:3,  desc:"Heelt je eigen leger (+7)",                 type:"heal",                 heal:7 },
+      { id:"vloek",         nm:"Vloek",         tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
+      { id:"zegen",         nm:"Zegen",         tier:"medium",   cost:5,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
+      { id:"reinigend_licht", nm:"Reinigend Licht", tier:"medium", cost:6, desc:"Heelt leger (+7) én schaadt vijand (+2)",  type:"heal_and_attack",      heal:7, dmg:2 },
+      { id:"godenvuur",     nm:"Godenvuur",     tier:"legendary",cost:9,  desc:"Heelt leger (+12) én schaadt vijand (+4)",  type:"heal_and_attack",      heal:12, dmg:4 },
     ]},
-  { id:"centurio",     nm:"Centurio",    icon:"laurel", color:"#6B2D8B",
+  { id:"centurio",     nm:"Bevelvoerder",icon:"laurel", color:"#6B2D8B",
     passive:{ desc:"+1 BE per ronde (altijd)",                 type:"be_passive",  val:1 },
     abilities:[
       { id:"bevel",         nm:"Bevel",         tier:"basic",    cost:2,  desc:"Geeft je team +3 schild",                   type:"team_shield",          shld:3 },
-      { id:"strijdformatie",nm:"Strijdformatie",tier:"advanced", cost:4,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
-      { id:"testudo",       nm:"Testudo",       tier:"ultimate", cost:8,  desc:"Massiefschild (+7) én team +2 BE",          type:"testudo",              shld:7, teamBE:2 },
+      { id:"aanmoediging",  nm:"Aanmoediging",  tier:"basic",    cost:2,  desc:"Alle teamgenoten +1 BE",                    type:"team_be",              teamBE:1 },
+      { id:"strijdformatie",nm:"Strijdformatie",tier:"medium",   cost:4,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
+      { id:"veldverzorging",nm:"Veldverzorging",tier:"medium",   cost:4,  desc:"Heelt je eigen leger (+9)",                 type:"heal",                 heal:9 },
+      { id:"testudo",       nm:"Testudo",       tier:"legendary",cost:8,  desc:"Massiefschild (+7), team +2 BE, én heelt (+3)", type:"testudo",          shld:7, teamBE:2, heal:3 },
     ]},
   { id:"genie",        nm:"Genie",       icon:"amphora",color:"#C87533",
     passive:{ desc:"Aanvallen verminderen ook vijandelijk schild (−2)", type:"shld_pierce", val:2 },
     abilities:[
       { id:"katapult",      nm:"Katapult",      tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
-      { id:"valgreppel",    nm:"Valgreppel",    tier:"advanced", cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
-      { id:"vuurtoren",     nm:"Vuurtoren",     tier:"ultimate", cost:8,  desc:"Zware aanval (+9) én schild weg (−4)",     type:"attack_siege",         dmg:9, shldRemove:4 },
+      { id:"valstrik",      nm:"Valstrik",      tier:"basic",    cost:3,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
+      { id:"valgreppel",    nm:"Valgreppel",    tier:"medium",   cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
+      { id:"veldreparatie", nm:"Veldreparatie", tier:"medium",   cost:4,  desc:"Schild (+3) én heling (+3) voor je team",   type:"shield_and_heal",      shld:3, heal:3 },
+      { id:"vuurtoren",     nm:"Vuurtoren",     tier:"legendary",cost:8,  desc:"Zware aanval (+9) én schild weg (−4)",     type:"attack_siege",         dmg:9, shldRemove:4 },
     ]},
   { id:"verkenner",    nm:"Verkenner",   icon:"eagle",  color:"#2D8B7A",
     passive:{ desc:"Basis-abilities kosten 1 BE minder",       type:"cost_reduce", val:1 },
     abilities:[
       { id:"verkenning",    nm:"Verkenning",    tier:"basic",    cost:2,  desc:"Aanval (+4) én saboteer vijandelijk schild (−2)", type:"attack_and_shld_remove", dmg:4, shldRemove:2 },
-      { id:"sabotage",      nm:"Sabotage",      tier:"advanced", cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
-      { id:"hinderlaag",    nm:"Hinderlaag",    tier:"ultimate", cost:7,  desc:"Zware aanval (+10) én schild voor team (+3)", type:"attack_and_defend",   dmg:10, shld:3 },
+      { id:"sluipaanval",   nm:"Sluipaanval",   tier:"basic",    cost:2,  desc:"Aanval (+2, of +8 als vijand ≤30% HP)",     type:"attack_weakspot",      dmg:2, bonusDmg:6 },
+      { id:"sabotage",      nm:"Sabotage",      tier:"medium",   cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
+      { id:"ontwapenen",    nm:"Ontwapenen",    tier:"medium",   cost:4,  desc:"Aanval (+4) én vijandelijk schild −4",      type:"attack_and_shld_remove", dmg:4, shldRemove:4 },
+      { id:"hinderlaag",    nm:"Hinderlaag",    tier:"legendary",cost:7,  desc:"Zware aanval (+10) én schild voor team (+3)", type:"attack_and_defend",   dmg:10, shld:3 },
     ]},
 ];
 
@@ -83,6 +104,8 @@ const BM_COMBOS = [
   { id:"vuursalvo",           nm:"Vuursalvo",               classes:["genie","boogschutter"],        cost:4, desc:"Gecombineerde zware aanval (+12)",                               dmg:12 },
   { id:"testudo_formatie",    nm:"Testudo-formatie",         classes:["centurio","hopliet"],          cost:4, desc:"Massief gecombineerd schild voor het hele team (+10)",            shld:10 },
   { id:"hinderlaag_aanval",   nm:"Hinderlaag & Aanval",      classes:["verkenner","cavalerie"],       cost:4, desc:"Gecombineerde aanval (+13) én vijandelijk schild weg (−3)",     dmg:13, shldRemove:3 },
+  { id:"genezende_vesting",   nm:"Genezende Vesting",        classes:["priester","genie"],            cost:4, desc:"Heelt je leger (+10) én saboteert het vijandelijke schild (−4)", heal:10, shldRemove:4 },
+  { id:"verkende_aanval",     nm:"Verkende Aanval",          classes:["verkenner","boogschutter"],    cost:4, desc:"Ontdekt de zwakke plek: aanval (+10) én vijandelijk schild weg (−4)", dmg:10, shldRemove:4 },
 ];
 
 /* ---- CONFIGURATIETABEL: FACTIES / THEMA'S ---- */

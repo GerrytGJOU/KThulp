@@ -86,8 +86,3 @@ const MapAPI = (function () {
     resetProvince,
   };
 })();
-
-/* Ook als ES-module bruikbaar: haal het commentaar hieronder weg indien nodig.
-   export const { setProvinceOwner, setProvinceDefense, setProvinceBonus,
-                  highlightProvince, resetProvince } = MapAPI;
-   export default MapAPI; */

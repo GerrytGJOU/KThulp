@@ -147,7 +147,7 @@ function xpBarInfo(lv){
 
 /* ---- Data-gedreven achievement-definities ---- */
 const _BM_CLS_IDS = ["hopliet","spartaan","boogschutter","cavalerie","priester","centurio","genie","verkenner"];
-const _BM_CLS_NMS = {hopliet:"Hopliet",spartaan:"Spartaan",boogschutter:"Boogschutter",cavalerie:"Cavalerie",priester:"Priester",centurio:"Centurio",genie:"Genie",verkenner:"Verkenner"};
+const _BM_CLS_NMS = {hopliet:"Hopliet",spartaan:"Voorvechter",boogschutter:"Boogschutter",cavalerie:"Cavalerie",priester:"Priester",centurio:"Bevelvoerder",genie:"Genie",verkenner:"Verkenner"};
 const ACHIEVEMENTS_DEF = [
   // Algemeen
   {id:"eerste_stap",    nm:"Eerste stap",      ds:"Speel voor het eerst Certamen",               icon:"helmet", cat:"algemeen"},

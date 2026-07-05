@@ -13,7 +13,7 @@
 const CommanderSpectre = (() => {
   // Automatisch afgeleid uit BM_CLASSES — loopt mee met toekomstige ability-wijzigingen.
   const ULTIMATE_IDS = new Set(
-    BM_CLASSES.flatMap(c => c.abilities.filter(a => a.tier === "ultimate").map(a => a.id))
+    BM_CLASSES.flatMap(c => c.abilities.filter(a => a.tier === "legendary").map(a => a.id))
   );
 
   function _ensureEls() {
@@ -404,19 +404,20 @@ function bmCalcAbilityEffect(p,cls,abl){
     fx.dmg=d; fx.bypass=(t==="attack_bypass");
     if(pasv?.type==="shld_pierce") fx.shldRemove+=pasv.val; // genie passief
   }
-  if(["team_shield","testudo","attack_and_defend"].includes(t)){
+  if(["team_shield","testudo","attack_and_defend","shield_and_heal"].includes(t)){
     let s=abl.shld||0;
     if(leg?.shldMult) s=Math.round(s*(1+leg.shldMult)); // Ajax de Grote
     fx.shld=s;
   }
   if(["team_shield","testudo"].includes(t)&&pasv?.type==="be_on_defend") fx.selfBE+=pasv.val;
-  if(["heal","heal_and_attack"].includes(t)){
+  if(["heal","heal_and_attack","shield_and_heal","testudo"].includes(t)){
     let h=abl.heal||0; if(pasv?.type==="heal_flat") h+=pasv.val;
     if(leg?.healMult) h=Math.round(h*(1+leg.healMult)); // Aeneas
     fx.heal=h;
   }
   if(["team_be","testudo"].includes(t)) fx.teamBE=abl.teamBE||0;
   if(["shield_remove","attack_and_shld_remove","attack_siege"].includes(t)) fx.shldRemove+=(abl.shldRemove||0);
+  if(abl.selfBE) fx.selfBE+=abl.selfBE; // rechtstreekse eigen-BE-vaardigheden (bv. Cavalerie: Snelle Uitval)
   return fx;
 }
 function bmCalcSynergy(players,team){
@@ -507,7 +508,6 @@ let BM_CODE=null, BM_PID=null, BM_META=null;
 let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={}, BM_BOSS={};
 let BM_MY_BE=0, BM_MY_Q=null, BM_MY_CLASS=null, BM_MY_TEAM=null;
 let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
-const BM_MISSED={}; // { pid:{ wordLa:count } } host-only, adaptief leren
 
 function bmLeave(){
   _bmFormHash="";
@@ -582,7 +582,7 @@ function bmStartBossHost(){
    Conventie: bij elke Battle Mode-wijziging deze FAQ controleren/updaten.
    ============================================================================ */
 function bmTierBadge(tier){
-  const m={basic:["Basis","#3f9d52"],advanced:["Gevorderd","#2e6fb0"],ultimate:["Ultiem","#C87533"]};
+  const m={basic:["Basis","#3f9d52"],medium:["Middel","#2e6fb0"],legendary:["Legendarisch","#C87533"]};
   const[lbl,col]=m[tier]||[tier,"var(--muted)"];
   return `<span class="pill" style="background:${col};border:none;font-size:10px">${lbl}</span>`;
 }
@@ -1248,7 +1248,7 @@ async function bmStartBossGame(){
 async function bmDistributeQs(roundN){
   const pids=Object.keys(BM_PLAYERS);if(!pids.length)return;
   const at=BM_META?.answerTimer||10;
-  // Synergiebonus (flat BE per speler) + passief BE voor Centurio
+  // Synergiebonus (flat BE per speler) + passief BE voor Bevelvoerder
   const synA=bmCalcSynergy(BM_PLAYERS,"A"),synB=bmCalcSynergy(BM_PLAYERS,"B");
   const up={};
   for(const pid of pids){
@@ -1309,9 +1309,14 @@ async function bmDistributeQs(roundN){
 }
 function bmPersonalPool(pid,pool){
   if(!BM_META?.adaptive)return pool;
-  const missed=BM_MISSED[pid]||{};
+  // Hergebruik de per-speler "missed"-telling die al naar Firebase geschreven
+  // wordt bij een fout antwoord (zie bmAnswer) — geen apart lokaal register nodig.
+  const missedEntries=Object.values(BM_PLAYERS[pid]?.missed||{});
   const w=[...pool];
-  pool.forEach(word=>{const c=missed[word.la]||0;for(let i=0;i<Math.min(c,3);i++)w.push(word);});
+  pool.forEach(word=>{
+    const c=missedEntries.find(m=>m.p===word.la)?.c||0;
+    for(let i=0;i<Math.min(c,3);i++)w.push(word);
+  });
   return w.length?w:pool;
 }
 
@@ -1465,6 +1470,25 @@ function bmArmyBarHTML(team,nm,d){
     </div>
     <div class="bm-hp-num${isB?" side-b":""}">${d.health}/${d.maxHealth} HP</div>
   </div>`;
+}
+// Toont kort een wit/zilver schild-segment vlak vóór (in de richting van inkomende
+// schade) de echte HP-balk, die op dat moment al de nieuwe waarde toont — en
+// laat het daarna wegkrimpen. Puur visueel: het schild zelf blijft één ronde
+// geldig (zie bmResolve()/blockedA/blockedB), er verandert niets aan de
+// spelregels. Host-only, want alleen daar bestaat #bmArmyA/#bmArmyB.
+function bmShowShieldBlock(team,blocked){
+  const track=document.querySelector(team==="A"?"#bmArmyA .bm-hp-track":"#bmArmyB .bm-hp-track");
+  const t=BM_TEAMS[team];
+  if(!track||!t?.maxHealth||blocked<=0)return;
+  const curPct=Math.max(0,Math.min(1,(t.health||0)/t.maxHealth))*100;
+  const pct=Math.min(100-curPct,blocked/t.maxHealth*100);
+  if(pct<=0)return;
+  const ov=document.createElement("div");
+  ov.className="bm-hp-shield";
+  ov.style.cssText=team==="A"?`left:${curPct}%;width:${pct}%`:`right:${curPct}%;width:${pct}%`;
+  track.appendChild(ov);
+  requestAnimationFrame(()=>{ov.style.width="0"});
+  setTimeout(()=>ov.remove(),650);
 }
 function bmClsName(id){const c=BM_CLASSES.find(x=>x.id===id);return c?c.nm:id;}
 
@@ -2140,13 +2164,16 @@ function bmBuildBattlefield(){
 // Hoofddispatcher: trigger animaties vanuit één log-entry
 function bmPlayAnimations(entry){
   if(!entry||BM_META?.animations===false)return;
-  const{events=[],efA=0,efB=0,healA=0,healB=0,winner}=entry;
+  const{events=[],efA=0,efB=0,blockedA=0,blockedB=0,healA=0,healB=0,winner}=entry;
 
   // Drijvende totaalgetallen
   if(efA>0)setTimeout(()=>bmFloat("-"+efA,"#e05555",0),500);
   if(efB>0)setTimeout(()=>bmFloat("-"+efB,"#e05555",1),550);
   if(healA>0)setTimeout(()=>bmFloat("+"+healA,"var(--green-bright)",2),600);
   if(healB>0)setTimeout(()=>bmFloat("+"+healB,"var(--green-bright)",3),650);
+  // Schild-blok kort tonen vlak vóór de (al bijgewerkte) HP-balk, dan weg laten krimpen
+  if(blockedA>0)setTimeout(()=>bmShowShieldBlock("A",blockedA),480);
+  if(blockedB>0)setTimeout(()=>bmShowShieldBlock("B",blockedB),530);
 
   // Per event met stagger
   let d=0;
@@ -2322,6 +2349,11 @@ async function bmResolve(roundN){
     // Berekening effectieve schade (schild absorbeert, bypass negeert schild)
     const shldA=Math.max(0,for_.A.shld-from.B.shldRemove);
     const shldB=Math.max(0,for_.B.shld-from.A.shldRemove);
+    // Hoeveel van de aanval het schild écht heeft opgevangen (voor de witte
+    // schild-animatie op de HP-balk — zie bmShowShieldBlock()). Bypass-schade
+    // omzeilt het schild per definitie, dus telt hier niet mee.
+    const blockedA=Math.min(shldA,from.B.dmg);
+    const blockedB=Math.min(shldB,from.A.dmg);
     const efA=Math.max(0,from.B.dmg-shldA)+from.B.bypassDmg;
     const efB=Math.max(0,from.A.dmg-shldB)+from.A.bypassDmg;
     const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
@@ -2365,7 +2397,7 @@ async function bmResolve(roundN){
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
     const logWinner=newHA<=0?"B":newHB<=0?"A":null;
     const roundParticipants=Object.values(players).filter(p=>p.answeredRound===roundN).length;
-    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants,bossEvents});
+    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,blockedA,blockedB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants,bossEvents});
 
     // Mastery bijhouden in identities (fire-and-forget)
     bmUpdateMastery(players,pUpd,events);
@@ -2485,7 +2517,39 @@ function bmHostResult(){
   BM_PAUSED=false;
   // Sla spelerdata op vóór BM_PLAYERS wordt gereset
   BM_AWARD_DATA={winner:BM_STATE.winner,all:Object.values(BM_PLAYERS)};
+  bmSyncClassMissedWords(BM_AWARD_DATA.all);
   go("battleHostAwards");
+}
+
+// Telt gemiste woorden van dit gevecht bij de klasbrede, maandelijkse teller op
+// (los van bmComputeAnalytics(), dat alleen déze ene sessie toont) — zie
+// tpRenderClassAnalytics() in games.js voor de docentweergave "moeilijkste
+// woorden deze maand". Fire-and-forget, host-only (net als bmUpdateMastery).
+function bmSyncClassMissedWords(players){
+  if(!fbDB) return;
+  const month=new Date().toISOString().slice(0,7);
+  const byKlas={};
+  players.forEach(p=>{
+    const klas=(p.identityKey||"").split(":")[0];
+    if(!klas||klas==="bot") return;
+    const map=byKlas[klas]||(byKlas[klas]={});
+    Object.values(p.missed||{}).forEach(v=>{
+      if(!v.p) return;
+      const wk=bmWordKey(v.p);
+      if(!map[wk]) map[wk]={p:v.p,a:v.a||"",c:0};
+      map[wk].c+=(v.c||0);
+    });
+  });
+  Object.entries(byKlas).forEach(([klas,map])=>{
+    const upd={};
+    Object.entries(map).forEach(([wk,w])=>{
+      const base="classAnalytics/"+klas+"/"+month+"/"+wk+"/";
+      upd[base+"p"]=w.p;
+      upd[base+"a"]=w.a;
+      upd[base+"c"]=firebase.database.ServerValue.increment(w.c);
+    });
+    fbDB.ref().update(upd).catch(()=>{});
+  });
 }
 
 /* ---- M7: AWARD-BEREKENING ---- */
@@ -2984,7 +3048,7 @@ function bmPlayerRender(){
           combo.classes.includes(BM_MY_CLASS)&&
           combo.classes.some(c=>c!==BM_MY_CLASS&&teamClasses.includes(c))
         );
-        const tierDot=t=>t==="basic"?"●":t==="advanced"?"●●":"●●●";
+        const tierDot=t=>t==="basic"?"●":t==="medium"?"●●":"●●●";
         content=`<div class="panel">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <span style="font-weight:700;color:${cls.color}">${cls.nm}</span>
