@@ -1270,14 +1270,39 @@ SCREENS.teacherClass = function(){
     <button class="back" onclick="go('teacherPortal')">${iconSVG("shield",20,"currentColor")}</button>
     <h2>${esc(cls.className||_tpCurrentClass)}</h2>
   </div>
+  <div id="tpMissedWords"></div>
   <div id="tpStudentList"><div class="note" style="text-align:center;padding:16px">Laden…</div></div>
   ${foot()}`);
   tpRenderStudents();
+  tpRenderClassAnalytics();
 };
 
 function tpOpenClass(classId){
   _tpCurrentClass=classId;
   go("teacherClass");
+}
+
+// Klasbrede "moeilijkste woorden deze maand" — cumulatief over alle Battle
+// Mode-gevechten van deze klas (zie bmSyncClassMissedWords() in battle.js),
+// dus niet gebonden aan één losse sessie zoals het analytics-scherm ná een
+// gevecht. Klascode wordt afgeleid uit de klasnaam, net als tpEnsureClassKlascode().
+function tpRenderClassAnalytics(){
+  const cont=el("tpMissedWords"); if(!cont) return;
+  const cls=_tpClasses[_tpCurrentClass]||{};
+  const klas=tpDeriveKlascode(cls.className);
+  if(!klas || !initFirebase()){ cont.innerHTML=""; return; }
+  const month=new Date().toISOString().slice(0,7);
+  fbDB.ref("classAnalytics/"+klas+"/"+month).once("value").then(snap=>{
+    const words=Object.values(snap.val()||{}).sort((a,b)=>(b.c||0)-(a.c||0)).slice(0,10);
+    if(!words.length){
+      cont.innerHTML=`<div class="panel"><h3>Moeilijkste woorden deze maand</h3><div class="note">Nog geen gegevens — speel een Battle Mode-gevecht met deze klas.</div></div>`;
+      return;
+    }
+    cont.innerHTML=`<div class="panel"><h3>Moeilijkste woorden deze maand</h3>
+      <table class="bm-tbl"><thead><tr><th>Woord</th><th>Antwoord</th><th>Fout</th></tr></thead><tbody>
+      ${words.map(w=>`<tr><td>${esc(w.p)}</td><td>${esc(w.a||"")}</td><td>${w.c||0}×</td></tr>`).join("")}
+      </tbody></table></div>`;
+  }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon klasanalyse niet laden.</div></div>`; });
 }
 
 function tpRenderStudents(){

@@ -317,7 +317,15 @@ body.greek .qcard .word{color:#143a5e}
 .bm-hp-side{flex:1}
 .bm-hp-nm{font-size:20px;font-weight:700;margin-bottom:3px}
 .bm-hp-nm.side-b{text-align:right}
-.bm-hp-track{height:13px;border-radius:7px;background:rgba(0,0,0,.55);border:1px solid var(--stone4);overflow:hidden}
+.bm-hp-track{position:relative;height:13px;border-radius:7px;background:rgba(0,0,0,.55);border:1px solid var(--stone4);overflow:hidden}
+/* Schild-blok: verschijnt vlak na een ronde met schildschade, meteen ná de
+   echte HP-balk (die al op de nieuwe waarde staat) — en krimpt daarna weg,
+   zodat zichtbaar is dat het schild dat stuk heeft opgevangen. Zie
+   bmShowShieldBlock() in battle.js. Bewust wit/zilver i.p.v. blauw: bij
+   meerdere facties (Athene vs Sparta, Grieken vs Perzen/Trojanen) is
+   --teamA zelf al blauw (zie BM_FACTIONS in battle-data.js) — wit steekt
+   altijd af, ongeacht gekozen factie. */
+.bm-hp-shield{position:absolute;top:0;bottom:0;background:#eef4fb;box-shadow:inset 0 0 6px rgba(255,255,255,.9),0 0 5px rgba(238,244,251,.7);transition:width .5s ease-in;z-index:2}
 .bm-hp-fill{height:100%;will-change:transform;transition:transform .5s}
 .bm-hp-num{font-size:11px;color:var(--muted);margin-top:2px}
 .bm-hp-num.side-b{text-align:right}
@@ -714,14 +722,14 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <script src="vocab.js?v=20260630s"></script>
-<script src="core.js?v=20260704a"></script>
+<script src="core.js?v=20260704b"></script>
 <script src="net.js?v=20260709a"></script>
-<script src="games.js?v=20260706d"></script>
-<script src="battle-data.js?v=20260703b"></script>
+<script src="games.js?v=20260706e"></script>
+<script src="battle-data.js?v=20260703d"></script>
 <script src="bossbattle.js?v=20260706e"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20260706f"></script>
-<script src="map/provinces.js?v=20260703a"></script>
+<script src="battle.js?v=20260706i"></script>
+<script src="map/provinces.js?v=20260703b"></script>
 <script src="totalwar.js?v=20260706h"></script>
 <script src="training.js?v=20260706d"></script>
 <script>
