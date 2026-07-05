@@ -1,0 +1,66 @@
+{
+  "rules": {
+    "rooms": {
+      "$code": {
+        ".read": true,
+        ".write": true
+      }
+    },
+    "identities": {
+      ".read": "auth != null",
+      "$klas": {
+        "$lid": {
+          ".read": true,
+          ".write": "!newData.child('admin').exists() || (data.child('admin').exists() && data.child('admin').val() === newData.child('admin').val())",
+          ".validate": "newData.hasChildren(['name'])",
+          "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 60" },
+          "coins": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+          "xp": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+          "level": { ".validate": "newData.isNumber() && newData.val() >= 1" },
+          "battles": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+          "admin": {
+            ".write": "auth != null",
+            ".validate": "newData.isBoolean()"
+          }
+        }
+      }
+    },
+    "klascodes": {
+      ".read": true,
+      ".write": "auth != null",
+      "$code": {
+        ".validate": "newData.hasChild('created') && newData.child('created').isNumber()"
+      }
+    },
+    "teachers": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "totalwar": {
+      ".read": true,
+      ".write": "auth != null",
+      "provinces": {
+        "$id": {
+          ".write": true,
+          ".validate": "newData.hasChildren(['owner','militiaPoints','wallPoints','towerPoints']) && newData.child('militiaPoints').isNumber() && newData.child('wallPoints').isNumber() && newData.child('towerPoints').isNumber()"
+        }
+      },
+      "civs": {
+        "$id": { ".write": true }
+      },
+      "klasSize": {
+        "$klas": {
+          ".read": true,
+          "students": {
+            "$lid": {
+              ".write": true,
+              ".validate": "newData.isBoolean()"
+            }
+          }
+        }
+      }
+    }
+  }
+}
