@@ -165,18 +165,20 @@ FBNet.setAdminFlag = function(klascode, name){
    Google Sign-In. Geen restrictie tot een schooldomein: elk Google-account mag koppelen. */
 const BM_GOOGLE_REDIRECT_KEY = "certamen_google_redirect_intent";
 
+// Gebruikt altijd signInWithRedirect (volledige pagina-doorverwijzing), nooit een popup:
+// signInWithPopup blijkt in de praktijk (o.a. gewone desktop Chrome) stil geblokkeerd te
+// worden zodra de SDK eerst asynchroon config moet ophalen — daarna telt de browser het
+// niet meer als directe reactie op de klik en verschijnt er zonder foutmelding geen venster.
+// Een redirect kan niet stil mislukken, en werkt daardoor ook betrouwbaar op iPad/Chromebook.
 function bmGoogleSignIn(intent){
   if(!initFirebase()) return Promise.reject("Firebase niet beschikbaar");
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({prompt:"select_account"});
-  return firebase.auth().signInWithPopup(provider)
-    .then(cred=>({ok:true, uid:cred.user.uid, email:cred.user.email, displayName:cred.user.displayName}))
+  try{ localStorage.setItem(BM_GOOGLE_REDIRECT_KEY, JSON.stringify(intent)); }catch(e){}
+  return firebase.auth().signInWithRedirect(provider)
+    .then(()=>({ok:false, redirecting:true}))
     .catch(err=>{
-      const fallbackCodes=["auth/popup-blocked","auth/popup-closed-by-user","auth/cancelled-popup-request","auth/operation-not-supported-in-this-environment"];
-      if(intent && fallbackCodes.includes(err.code)){
-        try{ localStorage.setItem(BM_GOOGLE_REDIRECT_KEY, JSON.stringify(intent)); }catch(e){}
-        return firebase.auth().signInWithRedirect(provider).then(()=>({ok:false, redirecting:true}));
-      }
+      try{ localStorage.removeItem(BM_GOOGLE_REDIRECT_KEY); }catch(e){}
       return {ok:false, error:"Google-inloggen mislukt: "+(err?.message||err||"onbekende fout")};
     });
 }
