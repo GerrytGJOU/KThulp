@@ -718,7 +718,11 @@ SCREENS.battleFAQ = function(){
     </ul>
     <div class="note" style="margin-top:8px">Training Mode geeft de eerste ~25 goede antwoorden per dag
     volledige XP en bouwpunten; daarna nog wel halve bouwpunten (het klasdoel groeit door) maar geen XP
-    meer — zo blijft thuis oefenen lonend zonder dat je in één avond naar niveau 10 kunt sprinten.</div>`)}
+    meer — zo blijft thuis oefenen lonend zonder dat je in één avond naar niveau 10 kunt sprinten.</div>
+    <div class="note" style="margin-top:8px">Je kunt je profiel optioneel koppelen aan je Google-account
+    (via <b>Mijn profiel</b>) — handig op een nieuw toestel, want dan hoef je niet elke keer je klascode en
+    leerlingcode opnieuw te typen: "Inloggen met Google" op het aanmeldscherm vindt je profiel dan zelf.
+    Koppelen is nooit verplicht; zonder koppeling blijft de klascode+leerlingcode gewoon werken.</div>`)}
 
   ${sec("Voor docenten",false,`
     <div class="note">Bij het starten van een gevecht stel je in: woordbereik en taal, antwoordtijd, en onder
@@ -757,6 +761,9 @@ SCREENS.battleIdentity = function(){
   </div>
   <div id="bmIdentErr" class="note warn" style="display:none;margin-bottom:10px"></div>
   <button class="btn btn-gold btn-block lg" onclick="bmIdentLogin()">Aanmelden</button>
+  <div class="note" style="text-align:center;margin:14px 0">— of —</div>
+  <button class="btn btn-ghost btn-block lg" onclick="bmGoogleLoginFresh()">Inloggen met Google</button>
+  <div class="note" style="margin-top:8px">Werkt alleen als je je profiel al eerder hebt gekoppeld via "Mijn profiel".</div>
   `}
   ${foot()}`);
 };
@@ -807,6 +814,53 @@ async function bmIdentContinue(){
   BM_IDENT=saved;
   try{const d=await bmIdentGet(saved.klascode,saved.leerlingcode);if(d){BM_IDENT={...saved,...d};bmIdentSave({...saved,...d});}}catch(e){}
   go(BM_IDENT_RETURN||"battleJoin");
+}
+
+// ---- Optionele Google-koppeling: hergebruikt bmIdent* hierboven, voegt alleen een
+// alternatieve inlogweg + koppel/ontkoppel-actie toe. Zie net.js voor bmGoogle*-helpers.
+async function bmGoogleLinkCurrentIdent(identOverride){
+  const ident=identOverride||BM_IDENT||bmIdentLoad();
+  if(!ident||!ident.klascode||!ident.leerlingcode){ toast("Geen profiel","Meld je eerst aan met je klascode en leerlingcode."); return; }
+  const r=await bmGoogleSignIn({action:"link", klas:ident.klascode, lid:ident.leerlingcode, returnScreen:_screen});
+  if(r.redirecting) return; // pagina navigeert weg; wordt afgehandeld na terugkomst
+  if(!r.ok){ toast("Koppelen mislukt", r.error||"Onbekende fout"); return; }
+  const w=await bmGoogleWriteLink(r.uid, ident.klascode, ident.leerlingcode);
+  if(!w.ok){ toast("Koppelen mislukt", w.error); return; }
+  if(BM_IDENT) BM_IDENT.googleUid=r.uid;
+  bmIdentSave({...ident, googleUid:r.uid});
+  toast("Gekoppeld!","Je kunt nu ook met dit Google-account inloggen op een nieuw toestel.");
+}
+// Zoekt de gekoppelde identiteit op voor een zojuist ingelogde Google-uid en laadt hem in
+// BM_IDENT, precies zoals de klascode-flow dat doet. Gedeeld door bmGoogleLoginFresh
+// (popup-pad) en bmGoogleHandleRedirectResult in net.js (redirect-fallback-pad).
+async function bmGoogleFinishLogin(uid){
+  const link=await bmGoogleLookupLink(uid);
+  if(!link) return {ok:false, error:"Dit Google-account is nog niet gekoppeld aan een profiel. Meld je eerst aan met je klascode en koppel daarna via 'Mijn profiel'."};
+  const data=await bmIdentGet(link.klas, link.lid);
+  if(!data) return {ok:false, error:"Gekoppeld profiel niet gevonden."};
+  BM_IDENT={klascode:link.klas, leerlingcode:link.lid, ...data, avatar:bmAvatarMerge(data.avatar)};
+  bmIdentSave({klascode:link.klas, leerlingcode:link.lid, ...data});
+  return {ok:true};
+}
+async function bmGoogleLoginFresh(){
+  const err=el("bmIdentErr");
+  if(err)err.style.display="none";
+  const r=await bmGoogleSignIn({action:"login", returnScreen:"battleIdentity"});
+  if(r.redirecting) return;
+  if(!r.ok){ if(err){err.textContent=r.error;err.style.display="";} return; }
+  const fin=await bmGoogleFinishLogin(r.uid);
+  if(!fin.ok){ if(err){err.textContent=fin.error;err.style.display="";} return; }
+  go(BM_IDENT_RETURN||"battleJoin");
+}
+async function bmGoogleUnlink(){
+  const ident=BM_IDENT||bmIdentLoad();
+  if(!ident||!ident.googleUid) return;
+  const r=await bmGoogleRemoveLink(ident.googleUid, ident.klascode, ident.leerlingcode);
+  if(!r.ok){ toast("Ontkoppelen mislukt", r.error); return; }
+  if(BM_IDENT) delete BM_IDENT.googleUid;
+  const saved=bmIdentLoad();
+  if(saved){ delete saved.googleUid; bmIdentSave(saved); }
+  toast("Ontkoppeld","Je profiel is niet meer gekoppeld aan een Google-account.");
 }
 
 // Haalt de nieuwste Battle Mode-identiteit uit Firebase en ververst de cache + (optioneel) het scherm.
@@ -3094,6 +3148,17 @@ SCREENS.battleProfile = function(){
       </div>
     </div>
   </div>
+  ${BM_IDENT.googleUid?`
+  <div class="panel" style="text-align:center;padding:10px 16px;margin:14px 0">
+    <div class="note">✅ Gekoppeld aan een Google-account</div>
+    <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="bmGoogleUnlink().then(()=>SCREENS.battleProfile())">Ontkoppelen</button>
+  </div>
+  `:`
+  <div class="panel" style="text-align:center;padding:10px 16px;margin:14px 0">
+    <div class="note">Koppel je Google-account om op een nieuw toestel in te loggen zonder codes te typen.</div>
+    <button class="btn btn-gold" style="font-size:13px;margin-top:8px" onclick="bmGoogleLinkCurrentIdent().then(()=>SCREENS.battleProfile())">Koppel Google-account</button>
+  </div>
+  `}
   <button class="btn btn-gold btn-block" onclick="BM_AV_RETURN='battleProfile';go('battleAvatarEdit')" style="margin-bottom:14px">Avatar aanpassen</button>
   <div class="eyebrow l">Class Mastery</div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">${masteryHTML}</div>

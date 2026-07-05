@@ -822,8 +822,18 @@ SCREENS.collection = function(){
 let _gpLinkOpen=false;
 function syncStatusHTML(bmIdent){
   if(bmIdent){
+    const g=bmIdent.googleUid;
     return `<div class="note" style="text-align:center;margin:6px 0 2px">
-      🔗 Gekoppeld aan <b>${esc(bmIdent.klascode)}</b> · <b>${esc(bmIdent.leerlingcode)}</b> — je XP loopt gelijk op al je toestellen.</div>`;
+      🔗 Gekoppeld aan <b>${esc(bmIdent.klascode)}</b> · <b>${esc(bmIdent.leerlingcode)}</b> — je XP loopt gelijk op al je toestellen.</div>
+      <div class="panel" style="text-align:center;padding:10px 16px;margin-top:6px">
+        ${g?`
+        <div class="note">✅ Gekoppeld aan een Google-account.</div>
+        <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="bmGoogleUnlink().then(()=>SCREENS.collection())">Ontkoppelen</button>
+        `:`
+        <div class="note">Koppel je Google-account om op een nieuw toestel in te loggen zonder codes te typen.</div>
+        <button class="btn btn-gold" style="font-size:13px;margin-top:8px" onclick="bmGoogleLinkCurrentIdent(bmIdent).then(()=>SCREENS.collection())">Koppel Google-account</button>
+        `}
+      </div>`;
   }
   if(!_gpLinkOpen){
     return `<div class="panel" style="text-align:center;padding:12px 16px">

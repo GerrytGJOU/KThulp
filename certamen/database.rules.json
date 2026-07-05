@@ -21,6 +21,10 @@
           "admin": {
             ".write": "auth != null",
             ".validate": "newData.isBoolean()"
+          },
+          "googleUid": {
+            ".write": "auth != null && auth.uid === newData.val() && (!data.exists() || data.val() === auth.uid)",
+            ".validate": "newData.isString() && newData.val() === auth.uid"
           }
         }
       }
@@ -36,6 +40,16 @@
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "googleLinks": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['klas','lid'])",
+        "klas": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "lid": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "linkedAt": { ".validate": "newData.isNumber()" }
       }
     },
     "totalwar": {
