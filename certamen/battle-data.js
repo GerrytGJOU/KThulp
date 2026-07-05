@@ -134,8 +134,8 @@ const BM_COMMANDERS = {
     B: { nm:"Xerxes",          img:"assets/commanders/persians/xerxes.png"     },
   },
   rome_carthago: {
-    A: { nm:"Julius Caesar",   img:"assets/commanders/romans/caesar.png"       },
-    B: { nm:"Hannibal",        img:"assets/commanders/carthage/hannibal.png"   },
+    A: { nm:"Scipio Africanus", img:"assets/commanders/romans/scipio.png"      },
+    B: { nm:"Hannibal",         img:"assets/commanders/carthage/hannibal.png"  },
   },
   grieken_trojanen: {
     A: { nm:"Agamemnon",       img:"assets/commanders/greeks/agamemnon.png"    },
@@ -145,6 +145,15 @@ const BM_COMMANDERS = {
     A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.png"           },
     B: { nm:"Kronos",          img:"assets/commanders/titans/kronos.png"       },
   },
+  // ── Boss Battle (toekomstige modus) ──────────────────────────────────────
+  boss_cycloop:     { A: { nm:"Odysseus",  img:"assets/commanders/heroes/odysseus.png"  } },
+  boss_hydra:       { A: { nm:"Herakles",  img:"assets/commanders/heroes/herakles.png"  } },
+  boss_minotaurus:  { A: { nm:"Theseus",   img:"assets/commanders/heroes/theseus.png"   } },
+  // ── Total War (toekomstige modus) ────────────────────────────────────────
+  tw_macedonie:     { A: { nm:"Alexander de Grote", img:"assets/commanders/greeks/alexander the great.png" } },
+  tw_britannia:     { A: { nm:"Boudicca",           img:"assets/commanders/britons/boudica.png"            } },
+  tw_egypte:        { A: { nm:"Cleopatra",           img:"assets/commanders/egyptians/cleopatra.png"       } },
+  tw_germanen:      { A: { nm:"Arminius",            img:"assets/commanders/germans/arminius.png"          } },
 };
 
 /* ---- CONFIGURATIETABELLEN: M6 AVATAR / NIVEAU / MASTERY / ACHIEVEMENTS ---- */
