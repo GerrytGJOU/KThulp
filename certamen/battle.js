@@ -700,6 +700,27 @@ SCREENS.battleFAQ = function(){
     het Labyrinth-schild van de Minotaurus) zijn nog in ontwikkeling — nu heeft elke baas dezelfde
     generieke aanval/fase-opbouw.</div>`)}
 
+  ${sec("Total War & Training Mode",false,`
+    <div class="note">Naast losse gevechten is er <b>Total War</b>: een doorlopende veldtocht op één
+    gedeelde kaart van Europa. Elke klas hoort blijvend bij één <b>beschaving</b> (bv. Romeinen,
+    Grieken, Galliërs) en strijdt samen met andere klassen van diezelfde beschaving om de
+    provincies op de kaart — een campagne die weken of maanden loopt, niet één les.</div>
+    <ul style="margin:8px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
+      <li><b>Verdedigen via Training Mode</b> — thuis, solo en zonder klascode-invoer van een host:
+      elk goed beantwoord woord bouwt direct mee aan één van drie verdedigingswerken van een
+      provincie van jouw beschaving — <b>garnizoen</b>, <b>muur</b> of <b>wachttoren</b> — die elk
+      twee niveaus kennen (basis → volledig). Hoe kleiner je klas, hoe zwaarder elk goed antwoord
+      meetelt, zodat een kleine klas net zo hard kan bouwen als een grote.</li>
+      <li><b>Veroveren via belegering</b> — een neutrale of vijandelijke buurprovincie inpalmen
+      gebeurt via een <b>Boss Battle</b> tegen het garnizoen van die provincie: eerst het garnizoen,
+      dan de muur, dan het fort — elk verdedigingswerk moet apart verslagen worden. Wint de
+      aanvallende klas alle drie, dan kleurt de provincie om in hun beschaving; verlies je
+      halverwege, dan onthoudt de provincie tot waar de belegering kwam voor een volgende poging.</li>
+      <li><b>Status</b> — het docentendeel (veldtochtkaart, klas↔beschaving-koppeling, aanvalsflow)
+      is al echt en blijvend, en Training Mode is nu al speelbaar. Zelf een belegering starten als
+      leerling komt nog (nu bereidt de docent een aanval voor via het docent-voorbeeld).</li>
+    </ul>`)}
+
   ${sec("Profiel, rang en eerbewijzen",false,`
     <div class="note">Alles wat je doet telt mee voor één profiel (zie <b>Mijn profiel</b> in het
     hoofdmenu):</div>
