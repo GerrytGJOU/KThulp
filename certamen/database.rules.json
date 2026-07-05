@@ -75,6 +75,21 @@
           }
         }
       }
+    },
+    "classAnalytics": {
+      "$klas": {
+        ".read": true,
+        "$month": {
+          ".validate": "$month.matches(/^[0-9]{4}-[0-9]{2}$/)",
+          "$wordkey": {
+            ".write": true,
+            ".validate": "newData.hasChildren(['p','c']) && newData.child('c').isNumber() && newData.child('c').val() >= 0",
+            "p": { ".validate": "newData.isString() && newData.val().length <= 80" },
+            "a": { ".validate": "newData.isString() && newData.val().length <= 200" },
+            "c": { ".validate": "newData.isNumber() && newData.val() >= 0" }
+          }
+        }
+      }
     }
   }
 }
