@@ -77,7 +77,7 @@ function bmAvatarDefaults(){
   return{helm:"geen",haar:"kort",baard:"geen",armor:"vodden",
          schild:"geen",wapen:"knuppel",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen",
          huid:"licht",geslacht:"man",haarkleur:"blond",capekleur:"goud",
-         extra:"geen",legendary:"geen"};
+         extra:"geen",legendary:"geen",prestige:"geen"};
 }
 function bmAvatarMerge(saved){
   // backward compat: string-avatar (pre-M6) → object
@@ -129,7 +129,10 @@ function bmAvatarSVG(av,size=60){
     snor:`<path d="M24,30 Q30,33 36,30 Q33,33 30,34 Q27,33 24,30" fill="${bc}"/>`,
   };
   const w=size, h=Math.round(size*80/60);
-  return `<svg viewBox="0 0 60 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" style="display:block">
+  // Prestige-glans (zie _bmPixelLayers/BM_PRESTIGE_FILTER): dezelfde filter,
+  // zodat de kleine onderdeel-swatches in de avatar-editor 'm ook tonen.
+  const prestigeStyle = (a.prestige&&a.prestige!=="geen") ? `filter:${BM_PRESTIGE_FILTER};` : "";
+  return `<svg viewBox="0 0 60 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" style="display:block;${prestigeStyle}">
     ${cape}${shields[a.schild]||shields.rond}
     <rect x="19" y="30" width="22" height="24" rx="3" fill="${armorFill}"/>
     <rect x="19" y="30" width="22" height="5" rx="2" fill="${armorFill}" opacity=".65"/>
@@ -154,11 +157,21 @@ function bmCalcMastery(hist){
 function bmIsUnlocked(opt,ident,key){
   if(!opt.requires)return true;
   if(ident?.admin)return true;
-  const{level:rL,mastery:rM,coins:rC}=opt.requires;
+  const{level:rL,mastery:rM,coins:rC,achCategory:rCat,prestige:rP}=opt.requires;
   // Coin-onderdeel: alleen ontgrendeld ná aankoop (staat in ident.unlocked).
   if(rC) return (ident?.unlocked||[]).includes(key);
   if(rL&&bmCalcLevel(ident?.xp||0).level<rL)return false;
   if(rM&&!Object.values(ident?.classHistory||{}).some(h=>bmCalcMastery(h)>=rM))return false;
+  // prestige:N = pas ontgrendeld ná niveau 10, bij Legioenster N (of hoger) —
+  // de hoogste-status-eis in het spel, zie core.js: calcPrestige().
+  if(rP&&(bmCalcLevel(ident?.xp||0).prestige?.stars||0)<rP)return false;
+  if(rCat){
+    // Eerbewijzen staan verspreid over P.achievements (algemeen/klassiek) en
+    // ident.achievements (Battle Mode/Boss Battle/Total War/mastery) — samen
+    // dekken ze elke categorie, zie core.js: achCategoryComplete().
+    const achieved=[...new Set([...(P.achievements||[]),...(ident?.achievements||[])])];
+    if(!achCategoryComplete(rCat,achieved))return false;
+  }
   return true;
 }
 // Muntnaam volgens thema (Latijn = denarii, Grieks = drachmae).
@@ -175,6 +188,11 @@ function bmReqText(opt){
   if(r.level)   return { short:"Niv. "+r.level, full:"Bereik niveau "+r.level };
   if(r.mastery) return { short:r.mastery+"★",   full:r.mastery+"★ beheersing in één klasse (speel veel rondes met die klasse)" };
   if(r.coins)   return { short:r.coins+" 🪙",   full:"Koop voor "+r.coins+" "+bmCoinName() };
+  if(r.prestige) return { short:"★"+r.prestige+" Legioen", full:"Bereik Legioenster ★"+r.prestige+" (niveau 10 + "+(r.prestige*PRESTIGE_XP_STEP)+" XP extra) — voor de echte legendes" };
+  if(r.achCategory){
+    const nm=ACH_CATEGORIES[r.achCategory]||r.achCategory;
+    return { short:"Alle "+nm, full:"Behaal alle eerbewijzen in de categorie "+nm };
+  }
   return null;
 }
 // Toon de voorwaarde bij het aantikken van een vergrendelde optie (touch-vriendelijk).
@@ -195,6 +213,15 @@ async function bmAwardBattle(){
   const correct=BM_MY_CORRECT||0, wrong=BM_MY_WRONG||0, total=correct+wrong;
   const won=BM_STATE.winner===BM_MY_TEAM;
   const isScholar=total>=5&&correct/total>=0.9;
+  // Boss Battle-context (ook belegeringen, zie totalwar.js: twStartAttack()
+  // zet BM_META.mode="boss" + bossId="garrison") — voor de nieuwe
+  // baas-/belegerings-eerbewijzen hieronder in bmCheckAchievements().
+  const isBoss=BM_META?.mode==="boss";
+  const bossId=BM_META?.bossId;
+  const bossDifficulty=BM_META?.bossDifficulty||"normal";
+  const isSiegeWin=!!(BM_META?.garrisonProvince)&&won;
+  const partySize=Object.values(BM_PLAYERS||{}).filter(p=>p.team==="A").length||1;
+  const rageMaxed=!!(BM_BOSS&&BM_BOSS.rageMaxed);
   // Nieuwe XP-formule: +2/goed, +5/deelname, +1/ronde, +15/winst, +8/scholar
   const xpEarned=correct*2+5+total*1+(won?15:0)+(isScholar?8:0);
   // Muntbeloning: alleen deelname + winst (geen munten per goed antwoord —
@@ -244,7 +271,7 @@ async function bmAwardBattle(){
   addXP(xpEarned, true);  // addXP roept saveProfile() aan
   checkAch({mode:"battle", won, isScholar});
 
-  const earned=await bmCheckAchievements(merged,{won,isScholar});
+  const earned=await bmCheckAchievements(merged,{won,isScholar,isBoss,bossId,bossDifficulty,isSiegeWin,partySize,rageMaxed});
   return{xpEarned,coinsEarned,legendaryBonus:legBonus,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
 }
 async function bmCheckAchievements(ident,result={}){
@@ -265,11 +292,37 @@ async function bmCheckAchievements(ident,result={}){
     check("vet_"+cls.id, stars>=3);
     check("mees_"+cls.id, stars>=5);
   }
+  check("grootmeester", BM_CLASSES.every(cls=>bmCalcMastery(ident.classHistory?.[cls.id])>=5));
+
+  // Boss Battle — bossId/bossDifficulty/partySize/rageMaxed komen uit
+  // bmAwardBattle() (Boss Battle hergebruikt de volledige Team A/B-engine,
+  // zie bossbattle.js). Belegeringen (totalwar.js: twStartAttack()) lopen
+  // via dezelfde weg, met bossId="garrison" — die tellen NIET mee voor
+  // baas_trio (geen mythologische baas) maar wel voor de rest.
+  let bossKills=ident.bossKills||{}, bossKillsChanged=false;
+  if(result.isBoss){
+    check("eerste_baas", result.won);
+    check("baas_heroic", result.won&&["heroic","legendary"].includes(result.bossDifficulty));
+    check("baas_legendary", result.won&&result.bossDifficulty==="legendary");
+    check("eenling", result.won&&(result.partySize||1)<=1);
+    check("geheim_norage", result.won&&!result.rageMaxed);
+    check("belegeraar", result.isSiegeWin);
+    if(result.won&&result.bossId&&result.bossId!=="garrison"&&!bossKills[result.bossId]){
+      bossKills={...bossKills,[result.bossId]:true};
+      bossKillsChanged=true;
+      await fbDB.ref("identities/"+klas+"/"+lcode+"/bossKills").set(bossKills);
+    }
+    check("baas_trio", ["hydra","cyclops","minotaur"].every(id=>bossKills[id]));
+  }
+
   if(newOnes.length){
     const updated=[...new Set([...current,...newOnes])];
     await fbDB.ref("identities/"+klas+"/"+lcode+"/achievements").set(updated);
-    BM_IDENT={...BM_IDENT,achievements:updated};
-    bmIdentSave({...bmIdentLoad(),...BM_IDENT,achievements:updated});
+    BM_IDENT={...BM_IDENT,achievements:updated,bossKills};
+    bmIdentSave({...bmIdentLoad(),...BM_IDENT,achievements:updated,bossKills});
+  } else if(bossKillsChanged){
+    BM_IDENT={...BM_IDENT,bossKills};
+    bmIdentSave({...bmIdentLoad(),...BM_IDENT,bossKills});
   }
   return newOnes;
 }
@@ -485,7 +538,7 @@ SCREENS.battleHome = function(){
   ${BM_IDENT?`
   <button class="tile" onclick="go('battleProfile')">
     <span class="ic" style="position:relative">
-      <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${bmAvatarSVG(bmAvatarMerge(BM_IDENT.avatar),44)}</span>
+      <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)">${renderPixelHeroIcon(BM_IDENT.avatar,44)}</span>
     </span>
     <h3>Mijn profiel</h3>
     <p>${esc(BM_IDENT.name||"")} · Niveau ${bmCalcLevel(BM_IDENT.xp||0).level} · ${esc(bmCalcLevel(BM_IDENT.xp||0).title)}</p>
@@ -651,13 +704,21 @@ SCREENS.battleFAQ = function(){
     <div class="note">Alles wat je doet telt mee voor één profiel (zie <b>Mijn profiel</b> in het
     hoofdmenu):</div>
     <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
-      <li><b>XP &amp; rang</b> — je klimt van Tiro tot Imperator door te spelen en te winnen.</li>
+      <li><b>XP &amp; rang</b> — je klimt van Tiro tot Imperator door te spelen en te winnen. Eenmaal
+      Imperator loop je door met <b>Legioensterren</b> (★1, ★2, …) — er is dus geen harde eindstreep.</li>
       <li><b>Klasbeheersing</b> — speel je vaak dezelfde klasse, dan verdien je sterren (★ tot ★★★★★).</li>
-      <li><b>Eerbewijzen</b> — speciale prestaties, ook geheime. Verschijnen op je profiel.</li>
+      <li><b>Eerbewijzen</b> — speciale prestaties, ook geheime. Verschijnen op je profiel, inclusief eigen
+      reeksen voor Boss Battle (bazen verslaan, solo, hoge moeilijkheidsgraad) en Total War/Training Mode
+      (bijdragen aan garnizoen/muur/toren, belegeringen winnen).</li>
       <li><b>Avatar</b> — pas je held-avatar aan via je profiel. De meeste onderdelen unlock je door te
       levelen; de categorieën <b>Extra's</b> en <b>Legendarisch</b> (onderaan) koop je met munten
-      (denarii/drachmae).</li>
-    </ul>`)}
+      (denarii/drachmae). De laatste categorie, <b>Legioensglans</b>, kleurt je hele avatar goud zodra je
+      álle eerbewijzen in één categorie hebt behaald (bv. alle Boss Battle- of alle Total War-eerbewijzen)
+      — één gouden variant per categorie, dus meerdere te verzamelen.</li>
+    </ul>
+    <div class="note" style="margin-top:8px">Training Mode geeft de eerste ~25 goede antwoorden per dag
+    volledige XP en bouwpunten; daarna nog wel halve bouwpunten (het klasdoel groeit door) maar geen XP
+    meer — zo blijft thuis oefenen lonend zonder dat je in één avond naar niveau 10 kunt sprinten.</div>`)}
 
   ${sec("Voor docenten",false,`
     <div class="note">Bij het starten van een gevecht stel je in: woordbereik en taal, antwoordtijd, en onder
@@ -1285,7 +1346,7 @@ function bmHostUpdatePlayers(){
     const teamCol=p.team==="A"?"var(--teamA)":p.team==="B"?"var(--teamB)":"var(--muted)";
     return `<div class="bm-pcard" style="border-color:${col}44">
       <div style="position:relative">
-        ${p.isBot?`<span style="font-size:24px;line-height:32px;display:block;text-align:center">🤖</span>`:bmAvatarSVG(bmAvatarMerge(p.avatar),32)}
+        ${p.isBot?`<span style="font-size:24px;line-height:32px;display:block;text-align:center">🤖</span>`:renderPixelHeroIcon(p.avatar,32)}
         <span class="bm-pdot ${dotCls}"></span>
       </div>
       <div class="bm-pname" style="border-bottom:2px solid ${teamCol}40">${esc(p.name)}</div>
@@ -1654,7 +1715,10 @@ const PIXEL_ASSETS = {
             "staf":"assets/sprites/wapen_staf.png" },
   cape:   { "geen":"assets/sprites/cape_geen.png",
             "kort":"assets/sprites/cape_kort.png",
-            "lang":"assets/sprites/cape_lang.png" },
+            "lang":"assets/sprites/cape_lang.png",
+            "engelenvleugels":"assets/sprites/cape_engelenvleugels.png",
+            "duivelsvleugels":"assets/sprites/cape_duivelsvleugels.png",
+            "vlindervleugels":"assets/sprites/cape_vlindervleugels.png" },
 };
 
 // Rendert een gelaagde pixel art held (RPG Maker MV paper doll).
@@ -1689,6 +1753,11 @@ const BM_CAPEKLEUR_FILTER = {
   "paars":  "hue-rotate(215deg) brightness(0.65) saturate(1.3)",
   "oranje": "hue-rotate(-25deg) brightness(0.85) saturate(1.5)",
 };
+// Vleugel-capes (zeer hoge status, requires:{prestige:1} — zie
+// BM_AVATAR_PARTS.cape in battle-data.js) negeren capekleur bewust: het zijn
+// eigen illustraties (veren/vlindervleugels), geen gekleurd stofmotief zoals
+// cape_kort/cape_lang, dus een hue-rotate-filter zou ze alleen maar ontkleuren.
+const BM_CAPE_NO_TINT = new Set(["engelenvleugels","duivelsvleugels","vlindervleugels"]);
 // Weergavekleur (swatch) per capekleur, afgestemd op de team-banierkleuren.
 const BM_CAPEKLEUR_SWATCH = {
   "goud":"#d4af37","rood":"#b03a2e","blauw":"#2e6fb0",
@@ -1699,6 +1768,12 @@ const BM_HAARKLEUR_SWATCH = {
   "blond":"#e3c56b","bruin":"#7a4a24","zwart":"#2a2a2a",
   "rood":"#a5442a","blauw":"#3a6ea5","groen":"#3a7d3a",
 };
+// Eén CSS-filter voor ALLE "prestige"-onderdelen (BM_AVATAR_PARTS.prestige,
+// battle-data.js) — ongeacht welke categorie ontgrendeld werd, is het effect
+// dezelfde gouden glans over de HELE sprite (dus over cape/haarkleur-filters
+// heen, die zelf onveranderd blijven — een CSS-filter op de buitenste div
+// werkt op het al-samengestelde resultaat van de laag-filters eronder).
+const BM_PRESTIGE_FILTER = "sepia(0.85) saturate(4.5) hue-rotate(-8deg) brightness(1.08)";
 
 // Bouwt de gelaagde sprite-lagen als HTML-string.
 // Z-index van achter naar voren (RPG Maker MV SV correct):
@@ -1708,12 +1783,16 @@ const BM_HAARKLEUR_SWATCH = {
 // pantser; de helm is de bovenste laag.
 // extraClass op de buitenste div (bv. "pixel-preview" voor statische weergave).
 function _bmPixelLayers(cosm, dirCls, extraClass="") {
+  // Prestige-glans (BM_AVATAR_PARTS.prestige): één filter over de HELE
+  // sprite, ongeacht welke categorie 'm ontgrendelde — zie BM_PRESTIGE_FILTER.
+  const prestigeOn = !!(cosm.prestige && cosm.prestige!=="geen");
+  const wrapStyle = prestigeOn ? ` style="filter:${BM_PRESTIGE_FILTER}"` : "";
   // Legendarische held: volledige vervanging van de paper doll (één sheet).
   // Ook een volledig MV SV-Actor-grid (9x6), dus "mv-motion-layer" erbij.
   const legId = cosm.legendary && cosm.legendary!=="geen" ? cosm.legendary : null;
   if (legId && PIXEL_ASSETS.legendary[legId]) {
     const lurl = PIXEL_ASSETS.legendary[legId] + "?"+SPRITE_VER;
-    return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
+    return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}"${wrapStyle}>
       <div class="sprite-layer mv-motion-layer" style="background-image:url('${lurl}')"></div>
     </div>`;
   }
@@ -1731,7 +1810,7 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
   }
   const haarFilter = BM_HAARKLEUR_FILTER[cosm.haarkleur||"blond"] || "none";
   const haarStyle = haarFilter !== "none" ? `filter:${haarFilter}` : "";
-  const capeFilter = BM_CAPEKLEUR_FILTER[cosm.capekleur||"goud"] || "none";
+  const capeFilter = BM_CAPE_NO_TINT.has(cosm.cape) ? "none" : (BM_CAPEKLEUR_FILTER[cosm.capekleur||"goud"] || "none");
   const capeStyle = capeFilter !== "none" ? `filter:${capeFilter}` : "";
   const A = PIXEL_ASSETS;
   // Gezichtshaar: 'baardsnor' stapelt baard + snor; anders één laag.
@@ -1739,7 +1818,7 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
   const baardLayers = baardId==="baardsnor"
     ? L(A.baard.baard,"",haarStyle)+L(A.baard.snor,"",haarStyle)
     : L(A.baard[baardId],"",haarStyle);
-  return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}">
+  return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}"${wrapStyle}>
     ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
     ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon wpn-"+(cosm.wapen||"zwaard"),"",false)}
     ${L(baseSrc)}
@@ -1767,6 +1846,19 @@ function renderPixelHeroPreview(av, showWeapon) {
   const cosm = bmAvatarMerge(av);
   const cls = "pixel-preview" + (showWeapon ? " pp-weapon" : "");
   return _bmPixelLayers(cosm, "dir-right", cls) || "";
+}
+
+// Kleine, vaste-pixelgrootte weergave van de pixel-hero — vervangt
+// bmAvatarSVG(av,size) op alle plekken waar tot nu toe nog de oude
+// paper-doll-SVG stond (spelerslijst, scoreboard, lobby-kop e.d.).
+// .pixel-hero is normaal 96px (144px vanaf 900px breed, zie index.html) —
+// .pixel-hero-mini dwingt de 96px-basis af zodat de hier berekende
+// schaalfactor overal klopt, en schaalt 'm daarna naar de gevraagde grootte.
+function renderPixelHeroIcon(av, sizePx) {
+  const inner = renderPixelHeroPreview(av);
+  if (!inner) return "";
+  const scale = (sizePx/96).toFixed(4);
+  return `<span class="pixel-hero-mini" style="width:${sizePx}px;height:${sizePx}px"><span style="transform:scale(${scale})">${inner}</span></span>`;
 }
 
 // Klasse → formatiepositie (voor/midden/achter)
@@ -2182,8 +2274,12 @@ async function bmResolve(roundN){
       const tick=bmBossResolveTick({...BM_BOSS,phase},tA.maxHealth,diffM,noDamageCount);
       newHA=Math.max(0,newHA-tick.classDamage);
       bossEvents=tick.events;
-      await fbDB.ref("rooms/"+BM_CODE+"/boss").update(tick.boss);
-      BM_BOSS=tick.boss;
+      // rageMaxed is sticky (voor het "geheim_norage"-eerbewijs): eenmaal waar,
+      // blijft waar voor de rest van het gevecht, ook al reset rage() zelf naar 0.
+      const rageMaxed=!!BM_BOSS.rageMaxed||bossEvents.some(e=>e.type==="boss_rage_attack");
+      const bossUpd={...tick.boss,rageMaxed};
+      await fbDB.ref("rooms/"+BM_CODE+"/boss").update(bossUpd);
+      BM_BOSS=bossUpd;
     }
 
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
@@ -2435,7 +2531,7 @@ function bmNextAward(){
   stage.innerHTML=`<div class="bm-award-card">
     <div style="font-size:36px">${award.emoji}</div>
     <div style="font-size:14px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">${esc(award.nm)}</div>
-    ${bmAvatarSVG(bmAvatarMerge(p.avatar),80)}
+    ${renderPixelHeroIcon(p.avatar,80)}
     <div style="font-size:24px;font-weight:700;margin-top:8px">${esc(p.name)}</div>
     <div style="font-size:20px;color:var(--hi-bright)">${esc(String(award.value))}</div>
   </div>`;
@@ -2525,7 +2621,7 @@ SCREENS.battleHostAnalytics = async function(){
       const pid=Object.keys(BM_PLAYERS).find(k=>BM_PLAYERS[k]===p)||"";
       return`<tr onclick="bmShowPlayerDetail('${pid}')" style="cursor:pointer">
         <td><div style="display:flex;align-items:center;gap:7px">
-          ${bmAvatarSVG(bmAvatarMerge(p.avatar),24)}
+          ${renderPixelHeroIcon(p.avatar,24)}
           <div><div style="font-size:12px;font-weight:700">${esc(p.name)}</div>
           <div style="font-size:10px;color:${cls?.color||"var(--muted)"}">${esc(cls?.nm||"")}</div></div>
         </div></td>
@@ -2560,7 +2656,7 @@ function bmShowPlayerDetail(pid){
   const ov=el("overlay");if(!ov)return;
   ov.innerHTML=`<div class="modal">
     <div style="display:flex;gap:12px;align-items:center;margin-bottom:14px">
-      ${bmAvatarSVG(bmAvatarMerge(p.avatar),60)}
+      ${renderPixelHeroIcon(p.avatar,60)}
       <div><div style="font-size:20px;font-weight:700">${esc(p.name)}</div>
         <div class="pill" style="margin-top:4px;background:${cls?.color||""}22;color:${cls?.color||"var(--muted)"}">${esc(cls?.nm||"")}</div></div>
     </div>
@@ -2673,7 +2769,7 @@ SCREENS.battlePlayerLobby = function(){
   H(brand(false)+`
   <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>${esc(fac.nm)}</h2></div>
   <div class="panel" style="display:flex;gap:14px;align-items:center">
-    ${bmAvatarSVG(bmAvatarMerge(BM_IDENT?.avatar),56)}
+    ${renderPixelHeroIcon(BM_IDENT?.avatar,56)}
     <div style="flex:1">
       <div style="font-size:18px;font-weight:700">${esc(BM_IDENT?.name||"")}</div>
       <div class="pill" style="margin:4px 0">Niveau ${bmCalcLevel(BM_IDENT?.xp||0).level} · ${esc(bmCalcLevel(BM_IDENT?.xp||0).title)}</div>
@@ -2951,10 +3047,9 @@ SCREENS.battleProfile = function(){
   const av=bmAvatarMerge(BM_IDENT.avatar);
   const xp=BM_IDENT.xp||0;
   const lv=bmCalcLevel(xp);
-  const prog=Math.round(lv.progress*100);
+  const xb=xpBarInfo(lv);
   const battles=BM_IDENT.battles||0;
   const achs=BM_IDENT.achievements||[];
-  const xpLeft=lv.next?lv.next.xp-xp:null;
 
   const masteryHTML=BM_CLASSES.map(c=>{
     const ms=bmCalcMastery(BM_IDENT.classHistory?.[c.id]);
@@ -2966,8 +3061,9 @@ SCREENS.battleProfile = function(){
   }).join("");
 
   const bmAchDef=ACHIEVEMENTS_DEF.filter(a=>a.mode==="battle"||["eerste_gevecht","overwinnaar","scholar","onbreekbaar","strateeg","commandant","combokunstenaar","legendarisch"].includes(a.id));
-  const achHTML=bmAchDef.map(a=>{
-    const got=achs.includes(a.id);
+  const bmAchievedIds=[...new Set([...achs,...(P.achievements||[])])];
+  const achHTML=achGroupsHTML(bmAchDef,bmAchievedIds,a=>{
+    const got=bmAchievedIds.includes(a.id);
     if(a.secret&&!got) return `<div class="bm-ach locked"><div class="aic">${iconSVG("star",22,"var(--muted2)")}</div><div class="atx"><div class="anm">🔒 ???</div><div class="ads">Geheim eerbewijs</div></div></div>`;
     return `<div class="bm-ach${got?"":" locked"}">
       <div class="aic">${got?iconSVG(a.icon,24,"var(--hi)"):iconSVG(a.icon,22,"var(--muted2)")}</div>
@@ -2976,7 +3072,7 @@ SCREENS.battleProfile = function(){
         <div class="ads">${esc(a.ds)}</div>
       </div>
     </div>`;
-  }).join("");
+  });
 
   const from=history.state?.from||"battleHome";
   H(brand(false)+`
@@ -2988,21 +3084,21 @@ SCREENS.battleProfile = function(){
     <div style="flex:0 0 auto">${renderPixelHeroPreview(av) || bmAvatarSVG(av,72)}</div>
     <div style="flex:1;min-width:0">
       <div style="font-size:20px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(BM_IDENT.name||"")}</div>
-      <div class="pill" style="margin:4px 0">Niveau ${lv.level} · ${esc(lv.title)}</div>
+      <div class="pill" style="margin:4px 0">Niveau ${lv.level} · ${esc(lv.title)}${xb.starSuffix}</div>
       <div style="font-size:12px;color:var(--muted)">${xp} XP · ${battles} gevecht${battles!==1?"en":""} · ${BM_IDENT.coins||0} 🪙 ${esc(bmCoinName())}</div>
       <div style="margin-top:6px">
         <div style="height:7px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
-          <div style="height:100%;width:${prog}%;background:linear-gradient(90deg,var(--hi-dim),var(--hi-bright));transition:width .5s"></div>
+          <div style="height:100%;width:${xb.pct}%;background:linear-gradient(90deg,var(--hi-dim),var(--hi-bright));transition:width .5s"></div>
         </div>
-        ${xpLeft!==null?`<div style="font-size:10px;color:var(--muted);margin-top:2px">${xpLeft} XP naar ${esc(lv.next.title)}</div>`:`<div style="font-size:10px;color:var(--hi);margin-top:2px">Maximaal niveau bereikt!</div>`}
+        <div style="font-size:10px;color:var(--hi);margin-top:2px">${xb.label}</div>
       </div>
     </div>
   </div>
   <button class="btn btn-gold btn-block" onclick="BM_AV_RETURN='battleProfile';go('battleAvatarEdit')" style="margin-bottom:14px">Avatar aanpassen</button>
   <div class="eyebrow l">Class Mastery</div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">${masteryHTML}</div>
-  <div class="eyebrow l">Achievements (${achs.length}/${bmAchDef.length})</div>
-  <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">${achHTML}</div>
+  <div class="eyebrow l">Achievements (${bmAchievedIds.filter(id=>bmAchDef.some(a=>a.id===id)).length}/${bmAchDef.length})</div>
+  <div style="margin-bottom:16px">${achHTML}</div>
   ${foot()}`);
   // Ververs op de achtergrond met de laatste Firebase-stand (bv. na spelen op
   // een ander toestel) en herrender pas als er echt iets veranderd is.

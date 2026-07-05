@@ -34,6 +34,11 @@ let TR_POOL = [];
 let TR_Q = null;
 let TR_STATS = { correct:0, wrong:0, points:0, xp:0 };
 let TR_HERO_EL = null;
+let TR_CAP_TODAY = 0; // aantal volledige-XP-antwoorden dat vandaag al gegeven is (zie trAnswer())
+// Dagelijkse afroming: na dit aantal per dag nog wel halve bouwpunten (het
+// klasdoel groeit door) maar geen XP meer — remt solo-thuisgrind af zonder de
+// Total War-samenwerking te straffen. Richtwaarde, makkelijk bij te stellen.
+const TR_DAILY_CAP = 25;
 
 const TR_TRACK_LABELS = {
   militia: { nm:"Militie/Garnizoen trainen", icon:"⚔️" },
@@ -184,6 +189,7 @@ async function trStart(){
   if(TR_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort."); return; }
   TR_STATS = { correct:0, wrong:0, points:0, xp:0 };
   TR_CLASS_SIZE = await twGetClassSize(BM_IDENT.klascode);
+  TR_CAP_TODAY = await trLoadDailyCap();
   go("trainingPlay");
 }
 
@@ -258,14 +264,27 @@ function trAnswer(idx){
     // Klasgrootte-schaling (TOTAL_WAR.md §7.4): elke leerling draagt minder
     // per antwoord bij naarmate de klas groter is (1/√N), zodat een klas van
     // 5 ongeveer even snel bouwt als een klas van 30.
-    const pts = 5/Math.sqrt(TR_CLASS_SIZE||1);
-    TR_STATS.correct++; TR_STATS.points+=pts; TR_STATS.xp+=2;
+    // Dagelijkse afroming (TR_DAILY_CAP): boven de grens nog wel halve
+    // bouwpunten (het klasdoel blijft groeien) maar geen XP meer.
+    const fullRate = TR_CAP_TODAY < TR_DAILY_CAP;
+    const basePts = 5/Math.sqrt(TR_CLASS_SIZE||1);
+    const pts = fullRate ? basePts : basePts/2;
+    const xpGain = fullRate ? 2 : 0;
+    TR_STATS.correct++; TR_STATS.points+=pts; TR_STATS.xp+=xpGain;
+    if(fullRate){ TR_CAP_TODAY++; trSaveDailyCap(TR_CAP_TODAY); }
     if(TR_PROVINCE_ID) twAwardStructurePoints(TR_PROVINCE_ID, TR_TRACK, pts);
-    addXP(2);
+    if(xpGain) addXP(xpGain);
+    trTrackContribution(TR_TRACK, pts);
+    // Meetellen voor de algemene eerbewijzen (woordenkenner/taalmeester/snelle
+    // geest) — Training Mode deed dat tot nu toe nergens.
+    P.stats.totalCorrect++; P.stats.currentStreak++;
+    if(P.stats.currentStreak>P.stats.bestStreak) P.stats.bestStreak=P.stats.currentStreak;
+    saveProfile(); checkAch({mode:"training"});
     if(TR_HERO_EL) BattleMotion.play(TR_HERO_EL,"swing");
     trRenderTarget();
   } else {
     TR_STATS.wrong++;
+    P.stats.totalWrong++; P.stats.currentStreak=0; saveProfile();
   }
   trUpdateStatsBar();
   setTimeout(trNextQuestion, ok?900:1400);
@@ -381,4 +400,62 @@ async function twAwardStructurePoints(provinceId, trackKey, points){
   const field = TW_STRUCTURES[trackKey] && TW_STRUCTURES[trackKey].field;
   if(!field) return;
   try{ await fbDB.ref("totalwar/provinces/"+provinceId+"/"+field).transaction(cur=>(cur||0)+points); }catch(e){}
+}
+
+/* ---- Dagelijkse cap (TR_DAILY_CAP): lokaal gecachet bij sessiestart, per
+   antwoord opgehoogd en fire-and-forget gesynct — zelfde pragmatische aanpak
+   als twGetClassSize() hierboven (optimistisch lokaal, geen transaction per
+   antwoord nodig). Staat op de gedeelde identiteit (niet lokaal), zodat
+   wisselen van toestel de cap niet omzeilt. ---- */
+function trToday(){ return new Date().toISOString().slice(0,10); }
+async function trLoadDailyCap(){
+  if(!BM_IDENT || !initFirebase()) return 0;
+  try{
+    const snap = await fbDB.ref("identities/"+BM_IDENT.klascode+"/"+BM_IDENT.leerlingcode+"/trainCap").once("value");
+    const d = snap.val();
+    return (d && d.date===trToday()) ? (d.count||0) : 0;
+  }catch(e){ return 0; }
+}
+function trSaveDailyCap(n){
+  if(!BM_IDENT || !fbDB) return;
+  try{ fbDB.ref("identities/"+BM_IDENT.klascode+"/"+BM_IDENT.leerlingcode+"/trainCap").set({date:trToday(), count:n}); }catch(e){}
+}
+
+/* ---- Individuele Total War-bijdrage — los van de gedeelde provinciepunten
+   in twAwardStructurePoints() hierboven — telt op in
+   identities/{klas}/{lcode}/twContrib, voor de "steenhouwer"/"bouwmeester"/
+   "drie sporen"-eerbewijzen (core.js: ACHIEVEMENTS_DEF). ---- */
+async function trTrackContribution(track, pts){
+  if(!BM_IDENT || !fbDB) return;
+  const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+  if(!klas||!lcode) return;
+  try{
+    const res = await fbDB.ref("identities/"+klas+"/"+lcode+"/twContrib").transaction(cur=>{
+      const d = cur || {total:0, militia:0, walls:0, towers:0};
+      d.total=(d.total||0)+pts; d[track]=(d[track]||0)+pts;
+      return d;
+    });
+    const contrib = res.committed ? (res.snapshot.val()||{}) : null;
+    if(!contrib) return;
+    BM_IDENT = {...BM_IDENT, twContrib: contrib};
+    bmIdentSave({...bmIdentLoad(), twContrib: contrib});
+    trCheckTWAchievements(contrib);
+  }catch(e){}
+}
+async function trCheckTWAchievements(contrib){
+  if(!BM_IDENT || !fbDB) return;
+  const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+  if(!klas||!lcode) return;
+  const current=BM_IDENT.achievements||[], newOnes=[];
+  const check=(id,cond)=>{ if(cond && !current.includes(id)) newOnes.push(id); };
+  check("eerste_training", (contrib.total||0)>0);
+  check("drie_sporen", (contrib.militia||0)>0 && (contrib.walls||0)>0 && (contrib.towers||0)>0);
+  check("steenhouwer", (contrib.total||0)>=100);
+  check("bouwmeester", (contrib.total||0)>=1000);
+  if(!newOnes.length) return;
+  const updated=[...new Set([...current,...newOnes])];
+  try{ await fbDB.ref("identities/"+klas+"/"+lcode+"/achievements").set(updated); }catch(e){ return; }
+  BM_IDENT={...BM_IDENT, achievements:updated};
+  bmIdentSave({...bmIdentLoad(), achievements:updated});
+  newOnes.forEach((id,i)=>setTimeout(()=>{ const a=ACHIEVEMENTS_DEF.find(x=>x.id===id); if(a) toastAch(a); }, i*900));
 }

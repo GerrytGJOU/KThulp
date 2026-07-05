@@ -697,18 +697,16 @@ function backToLobbyPlayer(){
    ============================================================================ */
 SCREENS.collection = function(){
   document.body.classList.remove("greek");
-  const s=P.stats, lv=calcLevel(P.xp), fill=Math.round(lv.progress*100);
+  const s=P.stats, lv=calcLevel(P.xp), xb=xpBarInfo(lv);
   const allP=s.tournamentsPlayed+s.marathonsPlayed+s.snelvuurPlayed+s.battlesPlayed;
   const allW=s.tournamentsWon+s.marathonsWon+s.snelvuurWon+s.battlesWon;
-  const xpNext=lv.next?lv.next.xp:lv.xp;
   function statsRow(l,v){ return `<div style="display:flex;justify-content:space-between;margin-top:4px"><span class="note">${l}</span><b>${v}</b></div>`; }
 
   // ---- Battle Mode sectie (uit lokale cache) ----
   const bmIdent = typeof bmIdentLoad==="function" ? bmIdentLoad() : null;
   let bmSection = "";
   if(bmIdent){
-    const bmXp=bmIdent.xp||0, bmLv=bmCalcLevel(bmXp), bmFill=Math.round(bmLv.progress*100);
-    const bmAv=bmAvatarMerge(bmIdent.avatar);
+    const bmXp=bmIdent.xp||0, bmLv=bmCalcLevel(bmXp), bmXb=xpBarInfo(bmLv);
     const bmAchs=bmIdent.achievements||[];
     const masteryGrid=BM_CLASSES.map(c=>{
       const ms=bmCalcMastery(bmIdent.classHistory?.[c.id]);
@@ -718,34 +716,36 @@ SCREENS.collection = function(){
         <div style="line-height:1;font-size:13px">${bmStars(ms)}</div>
       </div>`;
     }).join("");
-    const bmAchRows=ACHIEVEMENTS_DEF.filter(a=>a.mode==="battle"||["eerste_gevecht","overwinnaar","scholar","onbreekbaar","strateeg","commandant","combokunstenaar","legendarisch"].includes(a.id)).map(a=>{
-      const got=bmAchs.includes(a.id)||P.achievements.includes(a.id);
+    const bmAchItems=ACHIEVEMENTS_DEF.filter(a=>a.mode==="battle"||["eerste_gevecht","overwinnaar","scholar","onbreekbaar","strateeg","commandant","combokunstenaar","legendarisch"].includes(a.id));
+    const bmAchievedIds=[...new Set([...bmAchs,...P.achievements])];
+    const bmAchRows=achGroupsHTML(bmAchItems,bmAchievedIds,a=>{
+      const got=bmAchievedIds.includes(a.id);
       if(a.secret&&!got) return `<div class="ach locked"><span class="m" style="filter:grayscale(1) opacity(.3)">${medalSVG("star",40)}</span><div><div class="nm">???</div><div class="ds">Geheim eerbewijs</div></div></div>`;
       return `<div class="ach ${got?"":"locked"}"><span class="m">${medalSVG(a.icon,40)}</span><div><div class="nm">${a.nm}</div><div class="ds">${a.ds}</div></div></div>`;
-    }).join("");
+    });
     bmSection=`
     <div class="eyebrow l" style="margin-top:20px">⚔️ Battle Mode</div>
     <div class="panel">
       <div style="display:flex;gap:14px;align-items:center;margin-bottom:12px">
-        <div style="flex:0 0 auto">${bmAvatarSVG(bmAv,64)}</div>
+        <div style="flex:0 0 auto">${renderPixelHeroIcon(bmIdent.avatar,64)}</div>
         <div style="flex:1;min-width:0">
           <div style="font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(bmIdent.name||"")}</div>
           <div class="note">${esc(bmIdent.klascode||"")} · ${esc(bmIdent.leerlingcode||"")}</div>
-          <div class="pill" style="margin:4px 0 0">${esc(bmLv.title||bmLv.rank)} · niveau ${bmLv.level}</div>
+          <div class="pill" style="margin:4px 0 0">${esc(bmLv.title||bmLv.rank)} · niveau ${bmLv.level}${bmXb.starSuffix}</div>
         </div>
       </div>
       <div style="height:8px;background:var(--stone3);border-radius:4px;overflow:hidden">
-        <div style="height:100%;width:${bmFill}%;background:var(--ox);border-radius:4px;transition:width .6s"></div></div>
+        <div style="height:100%;width:${bmXb.pct}%;background:var(--ox);border-radius:4px;transition:width .6s"></div></div>
       <div style="display:flex;justify-content:space-between;margin-top:3px">
         <span class="note">${bmXp} XP</span>
-        <span class="note">${bmLv.next?"→ "+bmLv.next.xp+" XP voor "+(bmLv.next.title||bmLv.next.rank):"Max niveau bereikt"}</span></div>
+        <span class="note">${bmXb.label}</span></div>
       ${statsRow("Gevechten gespeeld",bmIdent.battles||0)}
       <button class="btn btn-ghost btn-block" style="margin-top:10px;font-size:13px" onclick="BM_AV_RETURN='collection';go('battleAvatarEdit')">Avatar aanpassen</button>
     </div>
     <div class="eyebrow l">Klasbeheersing</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:4px">${masteryGrid}</div>
-    <div class="eyebrow l" style="margin-top:16px">Battle eerbewijzen</div>
-    <div class="achgrid">${bmAchRows}</div>`;
+    <div class="eyebrow l" style="margin-top:16px">Battle eerbewijzen (${bmAchievedIds.filter(id=>bmAchItems.some(a=>a.id===id)).length}/${bmAchItems.length})</div>
+    ${bmAchRows}`;
   } else {
     bmSection=`<div class="eyebrow l" style="margin-top:20px">⚔️ Battle Mode</div>
     <div class="panel"><div class="note">Je hebt nog geen Battle Mode-profiel. Doe mee via het hoofdmenu om je avatar en klasse-mastery op te bouwen.</div>
@@ -753,25 +753,26 @@ SCREENS.collection = function(){
   }
 
   // ---- Algemene eerbewijzen (niet battle-specifiek) ----
-  const generalAchHTML=ACHIEVEMENTS_DEF.filter(a=>a.mode!=="battle"&&!["eerste_gevecht","overwinnaar","scholar","onbreekbaar","strateeg","commandant","combokunstenaar","legendarisch"].some(id=>id===a.id)).map(a=>{
+  const generalAchItems=ACHIEVEMENTS_DEF.filter(a=>a.mode!=="battle"&&!["eerste_gevecht","overwinnaar","scholar","onbreekbaar","strateeg","commandant","combokunstenaar","legendarisch"].some(id=>id===a.id));
+  const generalAchHTML=achGroupsHTML(generalAchItems,P.achievements,a=>{
     const got=P.achievements.includes(a.id);
     if(a.secret&&!got) return `<div class="ach locked"><span class="m" style="filter:grayscale(1) opacity(.3)">${medalSVG("star",46)}</span><div><div class="nm">???</div><div class="ds">Geheim eerbewijs</div></div></div>`;
     return `<div class="ach ${got?"":"locked"}"><span class="m">${medalSVG(a.icon,46)}</span><div><div class="nm">${a.nm}</div><div class="ds">${a.ds}</div></div></div>`;
-  }).join("");
+  });
 
   H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Mijn profiel</h2></div>
   <div class="panel">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <div><div class="note">Rang</div><div style="font-size:22px;color:var(--hi-bright);font-weight:800">${P.rank}</div>
+      <div><div class="note">Rang</div><div style="font-size:22px;color:var(--hi-bright);font-weight:800">${P.rank}${xb.starSuffix}</div>
         <div class="note">Niveau ${lv.level}</div></div>
       <div style="text-align:right"><div class="note">Munten</div>
         <div style="font-size:22px;color:var(--hi-bright);font-weight:800">${P.coins}</div></div>
     </div>
     <div style="height:10px;background:var(--stone3);border-radius:5px;overflow:hidden">
-      <div style="height:100%;width:${fill}%;background:var(--hi);border-radius:5px;transition:width .6s"></div></div>
+      <div style="height:100%;width:${xb.pct}%;background:var(--hi);border-radius:5px;transition:width .6s"></div></div>
     <div style="display:flex;justify-content:space-between;margin-top:3px">
       <span class="note">${P.xp} XP</span>
-      <span class="note">${lv.next?"→ "+xpNext+" XP voor "+lv.next.rank:"Max niveau bereikt"}</span></div>
+      <span class="note">${xb.label}</span></div>
   </div>
   ${syncStatusHTML(bmIdent)}
   <details style="margin:0 0 4px"><summary class="eyebrow l" style="cursor:pointer">Statistieken per modus</summary>
@@ -800,8 +801,8 @@ SCREENS.collection = function(){
       ${owned?(on?`<div class="pr">in gebruik</div>`:`<div class="pr">kies</div>`):`<div class="pr">${a.cost} munten</div>`}
     </button>`;
   }).join("")}</div>
-  <div class="eyebrow l" style="margin-top:20px">Eerbewijzen</div>
-  <div class="achgrid">${generalAchHTML}</div>
+  <div class="eyebrow l" style="margin-top:20px">Eerbewijzen (${generalAchItems.filter(a=>P.achievements.includes(a.id)).length}/${generalAchItems.length})</div>
+  ${generalAchHTML}
   ${foot()}`);
   // Ververs Battle Mode-gegevens uit Firebase en herrender als er nieuwere data is
   if(typeof bmRefreshIdentCache==="function" && bmIdent){

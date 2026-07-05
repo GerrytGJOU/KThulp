@@ -220,6 +220,13 @@ const BM_AVATAR_PARTS = {
     { id:"geen", nm:"Geen" },
     { id:"kort", nm:"Kort",              requires:{level:5} },
     { id:"lang", nm:"Lang",              requires:{level:7} },
+    // Vleugels: zeer hoge status — pas ontgrendeld ná niveau 10 (Imperator),
+    // bij de eerste Legioenster (zie core.js: calcPrestige()/xpBarInfo()).
+    // Capekleur (BM_CAPEKLEUR_FILTER) heeft bewust geen effect op deze drie —
+    // zie _bmPixelLayers() in battle.js.
+    { id:"engelenvleugels",  nm:"Engelenvleugels",  requires:{prestige:1} },
+    { id:"duivelsvleugels",  nm:"Duivelsvleugels",  requires:{prestige:1} },
+    { id:"vlindervleugels",  nm:"Vlindervleugels",  requires:{prestige:1} },
   ]},
   capekleur:{ nm:"Capekleur",      opts:[
     { id:"goud",   nm:"Goud" },
@@ -251,6 +258,20 @@ const BM_AVATAR_PARTS = {
     { id:"ajax",      nm:"Ajax de Grote",  requires:{coins:500} },
     { id:"odysseus",  nm:"Odysseus",       requires:{coins:600} },
     { id:"aeneas",    nm:"Aeneas",         requires:{coins:600} },
+  ]},
+  // requires:{achCategory:"..."} = ontgrendeld door ALLE eerbewijzen in die
+  // categorie te behalen (core.js: ACHIEVEMENTS_DEF/ACH_CATEGORIES/
+  // achCategoryComplete()) — kleurt de hele pixel-hero goud i.p.v. een los
+  // onderdeel, zie _bmPixelLayers() hieronder in battle.js.
+  prestige: { nm:"Legioensglans",  opts:[
+    { id:"geen",      nm:"Geen" },
+    { id:"klassiek",  nm:"Klassiek Goud",     requires:{achCategory:"klassiek"} },
+    { id:"algemeen",  nm:"Geleerde Goud",     requires:{achCategory:"algemeen"} },
+    { id:"battle",    nm:"Strijder Goud",     requires:{achCategory:"battle"} },
+    { id:"mastery",   nm:"Meester Goud",      requires:{achCategory:"mastery"} },
+    { id:"boss",      nm:"Bedwinger Goud",    requires:{achCategory:"boss"} },
+    { id:"totalwar",  nm:"Bouwmeester Goud",  requires:{achCategory:"totalwar"} },
+    { id:"geheim",    nm:"Legendarisch Goud", requires:{achCategory:"geheim"} },
   ]},
 };
 

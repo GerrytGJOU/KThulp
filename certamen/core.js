@@ -118,7 +118,31 @@ function calcLevel(xp){
   for(const l of XP_LEVELS){if((xp||0)>=l.xp)cur=l;else break;}
   const next=XP_LEVELS.find(l=>l.level===cur.level+1)||null;
   const prog=next?Math.min(1,((xp||0)-cur.xp)/(next.xp-cur.xp)):1;
-  return{...cur,next,progress:prog};
+  return{...cur,next,progress:prog,prestige:next?null:calcPrestige(xp)};
+}
+
+/* ---- Legioensterren: XP-vooruitgang ná niveau 10 (Imperator) ----
+   Voorkomt een harde eindstreep — een gemotiveerde leerling loopt nooit
+   "klaar", maar de stap is bewust iets groter dan niveau 9→10 (1800 XP),
+   zodat het als prestige aanvoelt i.p.v. als een snelle formaliteit. */
+const PRESTIGE_XP_STEP = 3000;
+function calcPrestige(xp){
+  const base = XP_LEVELS[XP_LEVELS.length-1].xp; // 6000
+  const over = Math.max(0,(xp||0)-base);
+  const stars = Math.floor(over/PRESTIGE_XP_STEP);
+  const intoNext = over-stars*PRESTIGE_XP_STEP;
+  return { stars, xpForNext: base+(stars+1)*PRESTIGE_XP_STEP, progress: intoNext/PRESTIGE_XP_STEP };
+}
+// Herbruikbare XP-balkweergave: normale niveauvoortgang, of — op niveau 10 —
+// Legioenster-voortgang i.p.v. een dode "max bereikt"-tekst. Gebruikt door
+// SCREENS.collection (games.js) en SCREENS.battleProfile (battle.js).
+function xpBarInfo(lv){
+  if(lv.next) return { pct:Math.round(lv.progress*100), label:"→ "+lv.next.xp+" XP voor "+(lv.next.title||lv.next.rank), starSuffix:"" };
+  const p=lv.prestige||calcPrestige(0);
+  const label = p.stars>0
+    ? "★"+p.stars+" · → "+p.xpForNext+" XP voor ★"+(p.stars+1)
+    : "→ "+p.xpForNext+" XP voor eerste Legioenster ★";
+  return { pct:Math.round(p.progress*100), label, starSuffix: p.stars>0?" ★"+p.stars:"" };
 }
 
 /* ---- Data-gedreven achievement-definities ---- */
@@ -126,41 +150,94 @@ const _BM_CLS_IDS = ["hopliet","spartaan","boogschutter","cavalerie","priester",
 const _BM_CLS_NMS = {hopliet:"Hopliet",spartaan:"Spartaan",boogschutter:"Boogschutter",cavalerie:"Cavalerie",priester:"Priester",centurio:"Centurio",genie:"Genie",verkenner:"Verkenner"};
 const ACHIEVEMENTS_DEF = [
   // Algemeen
-  {id:"eerste_stap",    nm:"Eerste stap",      ds:"Speel voor het eerst Certamen",               icon:"helmet"},
-  {id:"woordenkenner",  nm:"Woordenkenner",     ds:"100 vragen goed beantwoord",                  icon:"owl"},
-  {id:"taalmeester",    nm:"Taalmeester",       ds:"500 vragen goed beantwoord",                  icon:"crown"},
-  {id:"veelzijdig",     nm:"Veelzijdig",        ds:"Alle vier de modi gespeeld",                  icon:"amphora"},
-  {id:"veteraan_all",   nm:"Veteraan",          ds:"50 spellen gespeeld",                         icon:"eagle"},
-  {id:"snelle_geest",   nm:"Snelle geest",      ds:"10 vragen op rij goed beantwoord",            icon:"torch"},
+  {id:"eerste_stap",    nm:"Eerste stap",      ds:"Speel voor het eerst Certamen",               icon:"helmet", cat:"algemeen"},
+  {id:"woordenkenner",  nm:"Woordenkenner",     ds:"100 vragen goed beantwoord",                  icon:"owl",    cat:"algemeen"},
+  {id:"taalmeester",    nm:"Taalmeester",       ds:"500 vragen goed beantwoord",                  icon:"crown",  cat:"algemeen"},
+  {id:"veelzijdig",     nm:"Veelzijdig",        ds:"Alle vier de modi gespeeld",                  icon:"amphora",cat:"algemeen"},
+  {id:"veteraan_all",   nm:"Veteraan",          ds:"50 spellen gespeeld",                         icon:"eagle",  cat:"algemeen"},
+  {id:"snelle_geest",   nm:"Snelle geest",      ds:"10 vragen op rij goed beantwoord",            icon:"torch",  cat:"algemeen"},
   // Touwtrekken
-  {id:"eerste_bloed",   nm:"Eerste bloed",      ds:"Je eerste Touwtrekken gewonnen",              icon:"shield"},
-  {id:"anker",          nm:"Ankerman/-vrouw",   ds:"5 Touwtrekkens gewonnen",                    icon:"laurel"},
+  {id:"eerste_bloed",   nm:"Eerste bloed",      ds:"Je eerste Touwtrekken gewonnen",              icon:"shield", cat:"klassiek"},
+  {id:"anker",          nm:"Ankerman/-vrouw",   ds:"5 Touwtrekkens gewonnen",                    icon:"laurel", cat:"klassiek"},
   // Marathon
-  {id:"doorzetter",     nm:"Doorzetter",        ds:"Eerste Marathon gespeeld",                    icon:"horse"},
-  {id:"finisher",       nm:"Finisher",          ds:"Eerste Marathon gewonnen",                    icon:"laurel"},
+  {id:"doorzetter",     nm:"Doorzetter",        ds:"Eerste Marathon gespeeld",                    icon:"horse",  cat:"klassiek"},
+  {id:"finisher",       nm:"Finisher",          ds:"Eerste Marathon gewonnen",                    icon:"laurel", cat:"klassiek"},
   // Snelvuur
-  {id:"vonk",           nm:"Vonk",              ds:"Eerste Snelvuur gespeeld",                    icon:"torch"},
-  {id:"bliksem",        nm:"Bliksem",           ds:"Eerste plek in Snelvuur",                     icon:"star"},
-  {id:"ontembaar",      nm:"Ontembaar",         ds:"Drie keer eerste plek in Snelvuur",           icon:"crown"},
+  {id:"vonk",           nm:"Vonk",              ds:"Eerste Snelvuur gespeeld",                    icon:"torch",  cat:"klassiek"},
+  {id:"bliksem",        nm:"Bliksem",           ds:"Eerste plek in Snelvuur",                     icon:"star",   cat:"klassiek"},
+  {id:"ontembaar",      nm:"Ontembaar",         ds:"Drie keer eerste plek in Snelvuur",           icon:"crown",  cat:"klassiek"},
   // Battle Mode — algemeen
-  {id:"eerste_gevecht", nm:"Eerste gevecht",    ds:"Eerste Battle Mode gespeeld",                 icon:"helmet"},
-  {id:"overwinnaar",    nm:"Overwinnaar",        ds:"Eerste Battle Mode gewonnen",                 icon:"laurel"},
-  {id:"scholar",        nm:"Scholar",           ds:"≥90% accuratesse in een gevecht (min. 5 vr.)",icon:"owl"},
-  {id:"onbreekbaar",    nm:"Onbreekbaar",       ds:"Gewonnen zonder health-verlies van je team",  icon:"shield"},
-  {id:"strateeg",       nm:"Strateeg",          ds:"5 verschillende klassen gespeeld",            icon:"column"},
-  {id:"commandant",     nm:"Commandant",        ds:"Alle 8 klassen minstens één keer gespeeld",   icon:"eagle"},
-  {id:"combokunstenaar",nm:"Combokunstenaar",   ds:"10 combo-abilities uitgevoerd",               icon:"trident"},
-  {id:"legendarisch",   nm:"Legendarisch",      ds:"Niveau 10 (Imperator) bereikt",              icon:"crown"},
+  {id:"eerste_gevecht", nm:"Eerste gevecht",    ds:"Eerste Battle Mode gespeeld",                 icon:"helmet", cat:"battle", mode:"battle"},
+  {id:"overwinnaar",    nm:"Overwinnaar",        ds:"Eerste Battle Mode gewonnen",                 icon:"laurel", cat:"battle", mode:"battle"},
+  {id:"scholar",        nm:"Scholar",           ds:"≥90% accuratesse in een gevecht (min. 5 vr.)",icon:"owl",    cat:"battle", mode:"battle"},
+  {id:"onbreekbaar",    nm:"Onbreekbaar",       ds:"Gewonnen zonder health-verlies van je team",  icon:"shield", cat:"battle", mode:"battle"},
+  {id:"strateeg",       nm:"Strateeg",          ds:"5 verschillende klassen gespeeld",            icon:"column", cat:"battle", mode:"battle"},
+  {id:"commandant",     nm:"Commandant",        ds:"Alle 8 klassen minstens één keer gespeeld",   icon:"eagle",  cat:"battle", mode:"battle"},
+  {id:"combokunstenaar",nm:"Combokunstenaar",   ds:"10 combo-abilities uitgevoerd",               icon:"trident",cat:"battle", mode:"battle"},
+  {id:"legendarisch",   nm:"Legendarisch",      ds:"Niveau 10 (Imperator) bereikt",              icon:"crown",  cat:"battle", mode:"battle"},
   // Klasse-mastery (ster 3 en ster 5, voor alle 8 klassen)
   ..._BM_CLS_IDS.flatMap(c=>[
-    {id:"vet_"+c,  nm:"Veteraan "+_BM_CLS_NMS[c],  ds:"Ster 3 bereikt als "+_BM_CLS_NMS[c],  icon:"helmet", mode:"battle"},
-    {id:"mees_"+c, nm:"Meester "+_BM_CLS_NMS[c],   ds:"Ster 5 bereikt als "+_BM_CLS_NMS[c],  icon:"crown",  mode:"battle"},
+    {id:"vet_"+c,  nm:"Veteraan "+_BM_CLS_NMS[c],  ds:"Ster 3 bereikt als "+_BM_CLS_NMS[c],  icon:"helmet", cat:"mastery", mode:"battle"},
+    {id:"mees_"+c, nm:"Meester "+_BM_CLS_NMS[c],   ds:"Ster 5 bereikt als "+_BM_CLS_NMS[c],  icon:"crown",  cat:"mastery", mode:"battle"},
   ]),
+  {id:"grootmeester",   nm:"Grootmeester",       ds:"Alle 8 klassen op 5★ beheersing",              icon:"crown",  cat:"mastery", mode:"battle"},
+  // Boss Battle
+  {id:"eerste_baas",    nm:"Baasoverwinnaar",    ds:"Je eerste baasgevecht gewonnen",              icon:"shield",  cat:"boss", mode:"battle"},
+  {id:"baas_trio",      nm:"Drie Monsters",      ds:"Hydra, Cycloop en Minotaurus elk verslagen",  icon:"trident", cat:"boss", mode:"battle"},
+  {id:"baas_heroic",    nm:"Heroïsch",           ds:"Een baas verslagen op Heroic",                icon:"torch",   cat:"boss", mode:"battle"},
+  {id:"baas_legendary", nm:"Legendarische Jacht",ds:"Een baas verslagen op Legendary",             icon:"crown",   cat:"boss", mode:"battle"},
+  {id:"eenling",        nm:"Eenling",            ds:"Een baas alleen verslagen",                   icon:"star",    cat:"boss", mode:"battle"},
+  // Total War / Training Mode
+  {id:"eerste_training",nm:"Thuisfront",         ds:"Je eerste Training Mode-sessie",              icon:"amphora", cat:"totalwar", mode:"battle"},
+  {id:"drie_sporen",    nm:"Alleskunner",        ds:"Bijgedragen aan garnizoen, muur én toren",    icon:"column",  cat:"totalwar", mode:"battle"},
+  {id:"steenhouwer",    nm:"Steenhouwer",        ds:"100 bouwpunten bijgedragen aan Total War",    icon:"helmet",  cat:"totalwar", mode:"battle"},
+  {id:"bouwmeester",    nm:"Bouwmeester",        ds:"1000 bouwpunten bijgedragen aan Total War",   icon:"eagle",   cat:"totalwar", mode:"battle"},
+  {id:"belegeraar",     nm:"Belegeraar",         ds:"Een belegering gewonnen als aanvaller",       icon:"shield",  cat:"totalwar", mode:"battle"},
+  // Langetermijn (spreiding belonen, niet snelheid)
+  {id:"week_vol",       nm:"Wekelijkse Discipline",ds:"Op 5 verschillende dagen binnen 1 week gespeeld", icon:"torch", cat:"algemeen"},
+  {id:"dertig_dagen",   nm:"Vaste Klant",        ds:"In totaal op 30 verschillende dagen gespeeld", icon:"laurel", cat:"algemeen"},
   // Geheimen
-  {id:"geheim_rij",   nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true},
-  {id:"geheim_groot", nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true},
-  {id:"geheim_heal",  nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true},
+  {id:"geheim_rij",   nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true, cat:"geheim"},
+  {id:"geheim_groot", nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true, cat:"geheim"},
+  {id:"geheim_heal",  nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true, cat:"geheim"},
+  {id:"geheim_norage",nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true, cat:"geheim", mode:"battle"},
 ];
+// Volgorde = ook de weergavevolgorde op het profielscherm en in de
+// avatar-editor (zie battle-data.js: BM_AVATAR_PARTS.goud).
+const ACH_CATEGORIES = {
+  algemeen: "Algemeen",
+  klassiek: "Klassieke Spellen",
+  battle:   "Battle Mode",
+  mastery:  "Klasse-mastery",
+  boss:     "Boss Battle",
+  totalwar: "Total War",
+  geheim:   "Geheimen",
+};
+// Compleet-check voor een eerbewijs-categorie (bv. voor het "gouden"
+// avatar-onderdeel per categorie, zie bmIsUnlocked() in battle.js) —
+// achievedIds moet zowel P.achievements als BM_IDENT.achievements bevatten,
+// want die twee arrays samen dekken alle categorieën.
+function achCategoryComplete(cat, achievedIds){
+  const items = ACHIEVEMENTS_DEF.filter(a=>a.cat===cat);
+  return items.length>0 && items.every(a=>achievedIds.includes(a.id));
+}
+// Groepeert een lijst eerbewijs-items per categorie (ACH_CATEGORIES-volgorde)
+// in ingeklapte <details>-secties — voorkomt dat het profielscherm één lange
+// ononderbroken tegelmuur wordt naarmate er meer eerbewijzen bijkomen.
+// renderItem(a) levert de HTML voor één item; leeg gebleven categorieën
+// worden overgeslagen.
+function achGroupsHTML(items, achievedIds, renderItem){
+  return Object.keys(ACH_CATEGORIES).map(cat=>{
+    const inCat = items.filter(a=>a.cat===cat);
+    if(!inCat.length) return "";
+    const gotN = inCat.filter(a=>achievedIds.includes(a.id)).length;
+    const complete = gotN===inCat.length;
+    return `<details style="margin-bottom:8px">
+      <summary class="eyebrow l" style="cursor:pointer;list-style:revert">${complete?"⭐ ":""}${ACH_CATEGORIES[cat]} (${gotN}/${inCat.length})</summary>
+      <div class="achgrid" style="margin-top:8px">${inCat.map(renderItem).join("")}</div>
+    </details>`;
+  }).join("");
+}
 
 /* ---- Profiel (localStorage) ---- */
 const PKEY = "certamen_profile_v2";
@@ -175,7 +252,8 @@ function loadProfile(){
       marathonsPlayed:0,   marathonsWon:0,
       snelvuurPlayed:0,    snelvuurWon:0,
       battlesPlayed:0,     battlesWon:0,
-      totalDamage:0,       totalHealing:0
+      totalDamage:0,       totalHealing:0,
+      playDates:[] // ISO-datums (YYYY-MM-DD), gededupliceerd — voor week_vol/dertig_dagen
     }
   };
   try{
@@ -213,6 +291,7 @@ function addCoins(n){ P.coins += n; if(P.coins<0)P.coins=0; saveProfile(); }
 // gebruikt) — anders zou de xp-winst daar dubbel worden opgeteld.
 function addXP(n, skipSync){
   if(!n||n<=0) return;
+  recordPlayDay();
   P.xp=(P.xp||0)+n;
   const lv=calcLevel(P.xp);
   if(lv.level>(P.level||1)){
@@ -275,6 +354,24 @@ async function syncProfileFromCloud(rerenderScreen){
     }
   }catch(e){}
 }
+/* ---- Speeldag-tracking (week_vol/dertig_dagen) — bewust op kalenderdagen,
+   niet op sessies of antwoorden, zodat deze eerbewijzen alleen behaald worden
+   door over tijd te spreiden, niet door in één avond te grinden. Aangeroepen
+   vanuit addXP() (elke XP-gevende actie in elke modus telt als "gespeeld"). ---- */
+function recordPlayDay(){
+  const today=new Date().toISOString().slice(0,10);
+  const arr=P.stats.playDates||(P.stats.playDates=[]);
+  if(arr[arr.length-1]!==today){
+    arr.push(today);
+    if(arr.length>60) P.stats.playDates=arr.slice(-60); // cap groei, ruim boven de dertig_dagen-drempel
+    saveProfile();
+  }
+}
+function distinctDaysWithinLast(days){
+  const arr=P.stats.playDates||[]; if(!arr.length) return 0;
+  const cutoff=Date.now()-days*86400000;
+  return arr.filter(d=>{ const t=Date.parse(d+"T00:00:00Z"); return !isNaN(t)&&t>=cutoff; }).length;
+}
 function checkAch(ctx={}){
   const got=[], s=P.stats;
   const add=(id,cond)=>{ if(cond&&!P.achievements.includes(id)){ P.achievements.push(id); got.push(id); } };
@@ -299,6 +396,8 @@ function checkAch(ctx={}){
   add("geheim_rij",    s.bestStreak>=10);
   add("geheim_groot",  ctx.largeGame);
   add("geheim_heal",   ctx.healOnly);
+  add("week_vol",      distinctDaysWithinLast(7)>=5);
+  add("dertig_dagen",  (s.playDates||[]).length>=30);
   if(got.length){
     saveProfile();
     got.forEach((id,i)=>setTimeout(()=>{ const a=ACHIEVEMENTS_DEF.find(x=>x.id===id); if(a)toastAch(a); },i*900));

@@ -496,6 +496,13 @@ body.greek .qcard .word{color:#143a5e}
 @media(min-width:900px){.pixel-preview.pp-weapon .sprite-weapon{background-position-x:-432px!important}}
 /* Sticky preview-paneel: avatar blijft in beeld terwijl je door de opties scrollt */
 .bm-av-sticky{position:sticky;top:6px;z-index:30;background:var(--stone2,#241a12)}
+/* Kleine vaste-grootte pixel-hero-icoon (renderPixelHeroIcon() in battle.js) —
+   vervangt bmAvatarSVG(av,size) in spelerslijst/scoreboard/lobby-koppen.
+   De 96px!important negeert de @media(min-width:900px)-verbreding van
+   .pixel-hero, zodat de in JS berekende schaalfactor overal klopt. */
+.pixel-hero-mini{position:relative;display:inline-block;overflow:hidden;vertical-align:middle;flex-shrink:0}
+.pixel-hero-mini>span{display:block;transform-origin:top left}
+.pixel-hero-mini .pixel-hero{width:96px!important;height:96px!important}
 
 /* â”€â”€ Wapen-laag (288Ã—64 = 3 aanvals-frames van 96Ã—64) â”€â”€ */
 /* Het wapen wordt vastgehouden in de achterste hand: het valt ACHTER het
