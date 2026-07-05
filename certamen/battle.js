@@ -32,12 +32,17 @@ const CommanderSpectre = (() => {
 
   function show(team) {
     if (BM_META?.animations === false) return;
-    // Boss Battle: geen factie-vs-factie, dus geen commandant voor de baas
-    // (team B) — team A krijgt in plaats daarvan de mythologische held die
-    // traditioneel tegen déze baas streed (zie BOSS_PRESETS[id].hero).
-    const cfg = BM_META?.mode === "boss"
-      ? (team === "A" ? bmBossPreset(BM_META.bossId)?.hero : null)
-      : BM_COMMANDERS[BM_META?.theme]?.[team];
+    // Boss Battle: geen factie-vs-factie — team B (baas) heeft nooit een spectre.
+    // Team A krijgt: de mythologische held (boss preset) of, bij een belegering
+    // (garrison), de aanvallende beschavingscommandant uit TW_CIV_COMMANDERS.
+    let cfg;
+    if (BM_META?.mode === "boss") {
+      if (team !== "A") cfg = null;
+      else if (BM_META.bossId === "garrison") cfg = TW_CIV_COMMANDERS[BM_META.attackerCivId] ?? null;
+      else cfg = bmBossPreset(BM_META.bossId)?.hero ?? null;
+    } else {
+      cfg = BM_COMMANDERS[BM_META?.theme]?.[team] ?? null;
+    }
     if (!cfg) return;
     if (!_ensureEls()) return;
     const el = document.getElementById("bm-spectre-" + team);

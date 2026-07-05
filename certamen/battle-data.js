@@ -145,15 +145,22 @@ const BM_COMMANDERS = {
     A: { nm:"Zeus",            img:"assets/commanders/gods/zeus.png"           },
     B: { nm:"Kronos",          img:"assets/commanders/titans/kronos.png"       },
   },
-  // ── Boss Battle (toekomstige modus) ──────────────────────────────────────
-  boss_cycloop:     { A: { nm:"Odysseus",  img:"assets/commanders/heroes/odysseus.png"  } },
-  boss_hydra:       { A: { nm:"Herakles",  img:"assets/commanders/heroes/herakles.png"  } },
-  boss_minotaurus:  { A: { nm:"Theseus",   img:"assets/commanders/heroes/theseus.png"   } },
-  // ── Total War (toekomstige modus) ────────────────────────────────────────
-  tw_macedonie:     { A: { nm:"Alexander de Grote", img:"assets/commanders/greeks/alexander the great.png" } },
-  tw_britannia:     { A: { nm:"Boudicca",           img:"assets/commanders/britons/boudica.png"            } },
-  tw_egypte:        { A: { nm:"Cleopatra",           img:"assets/commanders/egyptians/cleopatra.png"       } },
-  tw_germanen:      { A: { nm:"Arminius",            img:"assets/commanders/germans/arminius.png"          } },
+};
+
+/* ---- CONFIGURATIETABEL: TOTAL WAR SIEGE SPECTRES ---- */
+// Gekoppeld aan TW_CIVS-sleutels (civId). Actief bij belegering (bossId="garrison")
+// als de aanvallende beschaving de commandant bepaalt.
+// Boss Battle-helden staan in BOSS_PRESETS[id].hero (zie bossbattle.js).
+// Nieuwe beschaving: 1) voeg PNG toe, 2) voeg één regel toe — geen code nodig.
+const TW_CIV_COMMANDERS = {
+  roma:     { nm:"Julius Caesar",      img:"assets/commanders/romans/caesar.png"                  },
+  gallii:   { nm:"Vercingetorix",      img:"assets/commanders/gauls/vercingetorix.png"            },
+  germani:  { nm:"Arminius",           img:"assets/commanders/germans/arminius.png"               },
+  athenae:  { nm:"Alexander de Grote", img:"assets/commanders/greeks/alexander the great.png"     },
+  persae:   { nm:"Xerxes",             img:"assets/commanders/persians/xerxes.png"                },
+  carthago: { nm:"Hannibal",           img:"assets/commanders/carthage/hannibal.png"              },
+  aegyptii: { nm:"Cleopatra",          img:"assets/commanders/egyptians/cleopatra.png"            },
+  britanni: { nm:"Boudicca",           img:"assets/commanders/britons/boudica.png"                }, // toekomstige beschaving
 };
 
 /* ---- CONFIGURATIETABELLEN: M6 AVATAR / NIVEAU / MASTERY / ACHIEVEMENTS ---- */
