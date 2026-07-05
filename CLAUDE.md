@@ -10,8 +10,12 @@
 ## Conventies
 - Naamval-volgorde altijd: nominativus, genitivus, dativus, accusativus,
   (ablativus), vocativus.
-- Footer van elke app: "© Gerben de Jong · [jaar]".
-  Footer van portalen: "[Portaalnaam] · Gerben de Jong · [jaar]".
+- Footer van elke app: "[Appnaam] · © Gerben de Jong · [jaar]".
+  Footer van portalen: "[Portaalnaam] · © Gerben de Jong · [jaar]".
+  Gebruik altijd het ©-teken (of `&copy;` als het bestand al `&middot;`-entities
+  gebruikt in plaats van het letterlijke "·" teken — volg de stijl die in dat
+  bestand al gangbaar is). Controleer bij een nieuwe app of aanpassing altijd
+  dat deze regel er staat; ontbreekt hij, voeg 'm toe.
 - Elke app (geen portaal) krijgt linksboven een "Terug naar portaal"-knop:
   `<a class="portal-back" href="../" aria-label="Terug naar portaal">` met
   pijl-SVG, position:fixed top-left, z-index 9999. Zie frequentie/ of certamen/
@@ -36,7 +40,28 @@
 - GitHub Pages: https://GerrytGJOU.github.io/KThulp/
 
 ## Firebase-rules
-- Bij elke wijziging aan Firebase-rules (bv. `firestore.rules`, `database.rules.json`):
-  geef altijd het volledige nieuwe regelsbestand (oude + nieuwe regels samen),
-  zodat het in één keer te kopiëren is. Nooit alleen het toegevoegde fragment
-  losstaand tonen.
+- De canonieke, actuele Realtime Database-regels staan in `certamen/database.rules.json`
+  (het enige Firebase-project is `kthulp-certamen`, gebruikt door certamen/).
+  Dit bestand MOET altijd gelijk zijn aan wat er live staat in Firebase Console
+  → Build → Realtime Database → tabblad "Regels". Na elke wijziging in de
+  Console: het bestand hier bijwerken (en omgekeerd, na elke wijziging hier:
+  de nieuwe inhoud plakken en publiceren in de Console — dit repo deployt niet
+  automatisch naar Firebase).
+- Bij elke wijziging aan Firebase-rules: geef altijd het volledige nieuwe
+  regelsbestand (oude + nieuwe regels samen), zodat het in één keer te
+  kopiëren is. Nooit alleen het toegevoegde fragment losstaand tonen.
+- Leerlingen loggen in Certamen/Battle Mode NOOIT in via Firebase Auth — alleen
+  docenten (e-mail/wachtwoord, tak `teachers/{uid}`). Leerlingdata onder
+  `identities/{klas}/{lid}` is dus per ontwerp benaderbaar zonder auth (de
+  klascode+leerlingcode werkt als gedeeld toegangswoord); rules kunnen dat
+  gegeven niet wegnemen zonder de inlogflow zelf te veranderen. Houd hier
+  rekening mee bij elke wijziging aan rules of aan de klascode/identity-flow.
+- Bekende openstaande punten (bewust nog niet opgelost, zie gesprek d.d.
+  2026-07-04): (1) `identities`-tak heeft nog geen per-docent scheiding —
+  zodra er meerdere docent-accounts zijn kan elke ingelogde docent nu nog de
+  volledige boom lezen (nodig voor `FBNet.getKlascodes()`, die de complete
+  `identities`-tak ophaalt puur om klascode-sleutels te tellen). Bij het
+  bouwen van multi-docent-ondersteuning: vervang dat door een aparte lichte
+  index (bv. `usedKlascodes/{klas}: true`) i.p.v. de volledige leerlingdata
+  te lezen. (2) `klascodes` heeft geen eigenaar-veld (`ownerUid`) — elke
+  docent kan nu nog elkaars klascodes aanmaken/overschrijven/verwijderen.
