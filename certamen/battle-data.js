@@ -183,7 +183,7 @@ const TW_CIV_COMMANDERS = {
   persae:   { nm:"Xerxes",             img:"assets/commanders/persians/xerxes.png"                },
   carthago: { nm:"Hannibal",           img:"assets/commanders/carthage/hannibal.png"              },
   aegyptii: { nm:"Cleopatra",          img:"assets/commanders/egyptians/cleopatra.png"            },
-  britanni: { nm:"Boudicca",           img:"assets/commanders/britons/boudica.png"                }, // toekomstige beschaving
+  britanni: { nm:"Boudicca",           img:"assets/commanders/britons/boudica.png"                },
 };
 
 /* ---- CONFIGURATIETABELLEN: M6 AVATAR / NIVEAU / MASTERY / ACHIEVEMENTS ---- */
