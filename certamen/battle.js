@@ -1891,13 +1891,19 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
   // sprite, ongeacht welke categorie 'm ontgrendelde — zie BM_PRESTIGE_FILTER.
   const prestigeOn = !!(cosm.prestige && cosm.prestige!=="geen");
   const wrapStyle = prestigeOn ? ` style="filter:${BM_PRESTIGE_FILTER}"` : "";
-  // Legendarische held: volledige vervanging van de paper doll (één sheet).
-  // Ook een volledig MV SV-Actor-grid (9x6), dus "mv-motion-layer" erbij.
+  // Legendarische held: vervangt de paper doll (één MV SV-Actor-grid-sheet,
+  // 9x6, vandaar ook "mv-motion-layer") — behalve wapen en schild: die
+  // blijven de eigen keuze van de speler en worden er gewoon overheen
+  // gelegd, net als bij een normale avatar (wapen erachter, schild ervoor).
+  // "L" is hieronder als function-declaration gedefinieerd en dus al
+  // beschikbaar (hoisting) vóór deze regel.
   const legId = cosm.legendary && cosm.legendary!=="geen" ? cosm.legendary : null;
   if (legId && PIXEL_ASSETS.legendary[legId]) {
     const lurl = PIXEL_ASSETS.legendary[legId] + "?"+SPRITE_VER;
     return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}"${wrapStyle}>
+      ${L(PIXEL_ASSETS.wapen[cosm.wapen||"zwaard"]," sprite-weapon wpn-"+(cosm.wapen||"zwaard"),"",false)}
       <div class="sprite-layer mv-motion-layer" style="background-image:url('${lurl}')"></div>
+      ${L(PIXEL_ASSETS.schild[cosm.schild||"rond"])}
     </div>`;
   }
   const baseSrc = PIXEL_ASSETS.bases[_bmBaseKey(cosm)];
