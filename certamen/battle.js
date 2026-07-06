@@ -821,9 +821,13 @@ async function bmIdentDoLogin(klas,lcode,name){
         data={...data,...imp};
       }
     }
-    BM_IDENT={klascode:klas,leerlingcode:lcode,...data,name,avatar:bmAvatarMerge(data.avatar)};
+    // Bestaand profiel: houd de opgeslagen (evt. zelfgekozen) getoonde naam aan;
+    // alleen bij een nieuw profiel geldt de zojuist getypte naam. Zo overschrijft
+    // opnieuw inloggen een via 'Mijn profiel' aangepaste naam niet.
+    const effName = isNew ? name : (data.name || name);
+    BM_IDENT={klascode:klas,leerlingcode:lcode,...data,name:effName,avatar:bmAvatarMerge(data.avatar)};
     // Volledige identiteit cachen (xp, classHistory, battles, achievements) zodat 'Mijn profiel' offline klopt
-    bmIdentSave({klascode:klas,leerlingcode:lcode,...data,name});
+    bmIdentSave({klascode:klas,leerlingcode:lcode,...data,name:effName});
     return{ok:true,ident:BM_IDENT};
   }catch(e){console.error("bmIdentDoLogin fout:",e);return{ok:false,error:"Aanmelden mislukt: "+(e?.message||e||"onbekende fout")};}
 }
@@ -1237,7 +1241,13 @@ async function bmStartBossGame(){
   await fbDB.ref("rooms/"+BM_CODE+"/players").update(teamUp);
   const teams={A:{health:classMaxHP,maxHealth:classMaxHP},B:{health:bossStartHP,maxHealth:bossMaxHP}};
   await fbDB.ref("rooms/"+BM_CODE+"/teams").set(teams);
-  await fbDB.ref("rooms/"+BM_CODE+"/boss").set({phase:1,rage:0,roundsSinceAttack:0,stage:stageIdx});
+  // Minotaurus start met een persistent Labyrinth-schild (30% van zijn
+  // max-HP) — baas-eigen state, zie bmResolve() hieronder voor hoe dat
+  // vóór newHB wordt verrekend, en bmBossResolveTick() (bossbattle.js)
+  // voor de Enrage-omschakeling zodra het doorbroken is.
+  const bossInit={phase:1,rage:0,roundsSinceAttack:0,stage:stageIdx};
+  if(BM_META.bossId==="minotaur") bossInit.labyrinthShield=Math.round(0.30*bossMaxHP);
+  await fbDB.ref("rooms/"+BM_CODE+"/boss").set(bossInit);
   BM_TEAMS=teams;
   await new Promise(r=>setTimeout(r,300));
   await bmDistributeQs(1);
@@ -1465,9 +1475,13 @@ function bmHostUpdateNote(){
   const answered=all.filter(p=>p.answeredRound===round.n).length;
   const locked=all.filter(p=>p.lockedAction).length;
   const total=all.length;
-  if(round.phase==="question")note.textContent="Beantwoord: "+answered+"/"+total;
-  else if(round.phase==="action")note.textContent="Actie vergrendeld: "+locked+"/"+total;
-  else note.textContent="";
+  let txt="";
+  if(round.phase==="question")txt="Beantwoord: "+answered+"/"+total;
+  else if(round.phase==="action")txt="Actie vergrendeld: "+locked+"/"+total;
+  // Boss-mechanics-status: bewust alleen hier (hostscherm), niet op
+  // leerling-toestellen — zie bmBossStatusNote() in bossbattle.js.
+  const bossNote=(typeof bmBossStatusNote==="function")?bmBossStatusNote():"";
+  note.textContent=bossNote?(txt?txt+" · "+bossNote:bossNote):txt;
 }
 function bmArmyBarHTML(team,nm,d){
   const scale=d.maxHealth?Math.max(0,d.health/d.maxHealth):0;
@@ -2385,14 +2399,26 @@ async function bmResolve(roundN){
         await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update(u);
       }
     }
+    // Minotaurus: het Labyrinth-schild is persistente baas-state (i.t.t.
+    // speler-schild, dat maar één ronde geldt) en absorbeert schade aan de
+    // baas VÓÓR newHB berekend wordt. Alleen relevant in Boss Battle tegen
+    // deze ene baas — raakt Team-vs-Team of andere bazen niet aan.
+    let labyrinthShield=BM_BOSS?.labyrinthShield;
+    let labyrinthBroken=false;
+    if(BM_META?.mode==="boss" && BM_META?.bossId==="minotaur" && labyrinthShield>0){
+      const absorbed=Math.min(labyrinthShield,armyDmgB);
+      labyrinthShield-=absorbed;
+      armyDmgB-=absorbed;
+      if(labyrinthShield<=0){ labyrinthShield=0; labyrinthBroken=true; }
+    }
     let newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-armyDmgA+for_.A.heal));
-    const newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-armyDmgB+for_.B.heal));
+    let newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-armyDmgB+for_.B.heal));
 
     // Boss Battle: de baas (team B) is scripted i.p.v. speler-gestuurd — na de
     // normale schade-op-de-baas-berekening hierboven (die al vanzelf via de
     // bestaande team-A/B-engine loopt) valt de baas zelf de klas (team A) aan.
-    // Zie bossbattle.js: bmBossResolveTick(). Unieke bazen-mechanics (Hydra-
-    // koppen/Cycloop-countdown/Minotaurus-schild) volgen als vervolgstap.
+    // Unieke bazen-mechanics (Hydra-regen/Cycloop-metgezellenmaaltijd/
+    // Minotaurus-Enrage) zitten in bmBossResolveTick() (bossbattle.js).
     let bossEvents=[];
     if(BM_META?.mode==="boss"){
       const diffM=bmBossDiff(BM_META.bossDifficulty).m;
@@ -2401,8 +2427,14 @@ async function bmResolve(roundN){
       // toe (geen vergrendelde actie) — zo straffen we niet individueel maar
       // voedt het wel de rage-balk, conform het ontwerp.
       const noDamageCount=Object.values(players).filter(p=>p.answeredRound===roundN&&!p.lockedAction).length;
-      const tick=bmBossResolveTick({...BM_BOSS,phase},tA.maxHealth,diffM,noDamageCount);
+      const bossIn={...BM_BOSS,phase};
+      if(BM_META?.bossId==="minotaur") bossIn.labyrinthShield=labyrinthShield;
+      const tick=bmBossResolveTick(bossIn,{
+        classMaxHP:tA.maxHealth, bossMaxHP:tB.maxHealth, diffM, noDamageAnswerCount:noDamageCount,
+        bossId:BM_META?.bossId, dmgDealtThisRound:efB, shieldThisRound:shldA, labyrinthBroken,
+      });
       newHA=Math.max(0,newHA-tick.classDamage);
+      newHB=Math.min(tB.maxHealth,newHB+(tick.bossHeal||0));
       bossEvents=tick.events;
       // rageMaxed is sticky (voor het "geheim_norage"-eerbewijs): eenmaal waar,
       // blijft waar voor de rest van het gevecht, ook al reset rage() zelf naar 0.
@@ -3204,6 +3236,25 @@ SCREENS.battleResult = function(){
   }).catch(()=>{const b=el("bmXpResult");if(b)b.textContent="";});
 };
 
+// Leerling past zelf de getoonde naam aan (bv. na een grappig-bedoelde naam).
+// De inlog (klascode + leerlingcode) blijft ongewijzigd; alleen identities/.../name
+// verandert. Zo hoeft een leerling geen nieuw account aan te maken.
+async function bmRenameSelf(){
+  if(!BM_IDENT) return;
+  const cur=BM_IDENT.name||"";
+  const nm=(prompt("Kies je nieuwe getoonde naam (je klascode en leerlingcode blijven gelijk):",cur)||"").trim();
+  if(!nm||nm===cur) return;
+  if(nm.length>60){ toast("Te lang","Gebruik maximaal 60 tekens."); return; }
+  BM_IDENT.name=nm;
+  try{ bmIdentSave({...(bmIdentLoad()||{}),...BM_IDENT,name:nm}); }catch(e){}
+  try{
+    if(fbDB && BM_IDENT.klascode && BM_IDENT.leerlingcode)
+      await fbDB.ref("identities/"+BM_IDENT.klascode+"/"+BM_IDENT.leerlingcode+"/name").set(nm);
+  }catch(e){ toast("Niet gesynct","Naam lokaal aangepast, maar kon niet online opslaan."); }
+  toast("Naam gewijzigd",nm);
+  SCREENS.battleProfile();
+}
+
 /* ---- SCHERM: battleProfile ---- */
 SCREENS.battleProfile = function(){
   if(!BM_IDENT){go("battleIdentity");return;}
@@ -3246,7 +3297,10 @@ SCREENS.battleProfile = function(){
   <div class="panel" style="display:flex;gap:14px;align-items:center">
     <div style="flex:0 0 auto">${renderPixelHeroPreview(av) || bmAvatarSVG(av,72)}</div>
     <div style="flex:1;min-width:0">
-      <div style="font-size:20px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(BM_IDENT.name||"")}</div>
+      <div style="display:flex;align-items:center;gap:6px;min-width:0">
+        <div style="font-size:20px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(BM_IDENT.name||"")}</div>
+        <button class="chip" onclick="bmRenameSelf()" title="Getoonde naam wijzigen" aria-label="Getoonde naam wijzigen" style="flex:0 0 auto;padding:3px 7px">${iconSVG("column",13,"currentColor")}</button>
+      </div>
       <div class="pill" style="margin:4px 0">Niveau ${lv.level} · ${esc(lv.title)}${xb.starSuffix}</div>
       <div style="font-size:12px;color:var(--muted)">${xp} XP · ${battles} gevecht${battles!==1?"en":""} · ${BM_IDENT.coins||0} 🪙 ${esc(bmCoinName())}</div>
       <div style="margin-top:6px">
