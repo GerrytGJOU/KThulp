@@ -1929,8 +1929,8 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     ? L(A.baard.baard,"",haarStyle)+L(A.baard.snor,"",haarStyle)
     : L(A.baard[baardId],"",haarStyle);
   return `<div class="pixel-hero ${dirCls}${extraClass?" "+extraClass:""}"${wrapStyle}>
-    ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
     ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon wpn-"+(cosm.wapen||"zwaard"),"",false)}
+    ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
     ${L(baseSrc)}
     ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
     ${L(A.armor[cosm.armor||"licht"])}
