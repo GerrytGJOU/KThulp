@@ -885,8 +885,11 @@ function buyOrEquip(id){
    DOCENTENPORTAAL — login · klasoverzicht · leerlingbeheer
    ============================================================ */
 
-let _tpClasses = {};        // geladen klassendata
-let _tpCurrentClass = null; // actief geselecteerde klas-ID
+let _tpClasses = {};        // rauwe docent-labels (teachers/{uid}/classes), keyed by cid
+let _tpGroups = {};         // genormaliseerd, keyed by KLASCODE: {code, name, cid, count}
+let _tpCurrentClass = null; // actief geselecteerde klas — nu de KLASCODE
+let _tpRoster = {};         // {leerlingcode: identData} van de open klas
+let _tpIdentCounts = {};    // {KLASCODE: aantal leerlingen} uit identities
 let _tpKlasCivs = {};        // Total War: klascode → civId (/totalwar/klasCivs)
 let _tpApprovedKlascodes = []; // laatst geladen goedgekeurde Battle Mode-klascodes
 
@@ -938,6 +941,7 @@ SCREENS.teacherPortal = function(){
   <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">🗺️ Total War — veldtochtkaart</button>
   <div class="panel" style="margin-top:16px">
     <label class="fld">Battle Mode — klascodes</label>
+    <div class="note" style="margin:2px 0 8px">Elke klas hierboven is óók een inlogcode. Leerlingen die de code invoeren komen automatisch in de bijbehorende klas. Hier kun je losse codes goedkeuren of verwijderen.</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <input id="tpNewKlas" placeholder="Nieuwe code (bijv. LATIJN3B)" style="flex:1;min-width:140px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit;text-transform:uppercase"
         oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')tpCreateKlascode()">
@@ -958,19 +962,8 @@ SCREENS.teacherPortal = function(){
       <button class="btn btn-gold" style="padding:8px 14px" onclick="tpAssignKlasCiv()">Koppel</button>
     </div>
   </div>
-  <div class="panel" style="margin-top:16px">
-    <label class="fld">Battle Mode — accounts per klascode</label>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-      <input id="tpBmKlas" placeholder="Klascode (bijv. TEST)" style="flex:1;min-width:120px;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit"
-        onkeydown="if(event.key==='Enter')tpLoadBmAccounts()">
-      <button class="btn btn-gold" style="padding:8px 14px" onclick="tpLoadBmAccounts()">Zoek</button>
-    </div>
-    <div id="tpBmAccounts" style="margin-top:10px"></div>
-    <div id="tpBmUnassigned" style="margin-top:6px"></div>
-  </div>
   ${foot()}`);
   tpLoadClasses();
-  tpLoadKlascodes();
   tpLoadKlasCivs();
 };
 
@@ -1023,32 +1016,81 @@ function tpUnassignKlasCiv(klas){
     .catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"")));
 }
 
+// Laadt alles wat het portaaloverzicht nodig heeft in één keer: de docent-labels
+// (teachers/{uid}/classes), de ledenaantallen per klascode (uit identities) en de
+// lijst goedgekeurde codes. Bouwt daaruit _tpGroups (groep = klascode) en rendert
+// zowel de klassenlijst als de klascodelijst.
 function tpLoadClasses(){
-  return teacherNet().getClasses()
-    .then(cls=>{ _tpClasses=cls||{}; tpRenderClasses(); tpReconcileClassKlascodes(); })
-    .catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"Kon klassen niet laden")));
+  return Promise.all([
+    teacherNet().getClasses(),
+    teacherNet().getKlascodeCounts().catch(()=>({})),
+    teacherNet().getKlascodes().catch(()=>({approved:[],used:[]}))
+  ]).then(([cls, counts, kc])=>{
+    _tpClasses=cls||{};
+    _tpIdentCounts=counts||{};
+    _tpApprovedKlascodes=(kc&&kc.approved)||[];
+    tpBuildGroups((kc&&kc.approved)||[], (kc&&kc.used)||[]);
+    tpPersistLegacyCodes();
+    tpRenderClasses();
+    tpRenderKlascodes();
+    tpReconcileClassKlascodes();
+  }).catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"Kon klassen niet laden")));
+}
+
+// Behouden als losse aanroep na klascode-acties: alles opnieuw laden en renderen.
+function tpLoadKlascodes(){ return tpLoadClasses(); }
+
+// Bouwt _tpGroups: één genormaliseerde groep per KLASCODE. Bron = docent-labels
+// (geven een leesbare naam + cid) plus alle codes die leden hebben, goedgekeurd
+// zijn of in gebruik zijn (die krijgen de code zelf als naam als er geen label is).
+function tpBuildGroups(approved, used){
+  const groups={};
+  const put=(code,name,cid)=>{
+    code=(code||"").toUpperCase(); if(!code) return;
+    if(!groups[code]) groups[code]={code, name:name||code, cid:cid||null, count:_tpIdentCounts[code]||0};
+    else {
+      if(name && groups[code].name===groups[code].code) groups[code].name=name;
+      if(cid && !groups[code].cid) groups[code].cid=cid;
+    }
+  };
+  Object.entries(_tpClasses||{}).forEach(([cid,cls])=>{
+    const code=(cls.code||tpDeriveKlascode(cls.className));
+    if(code) put(code, cls.className||code, cid);
+  });
+  [...new Set([...Object.keys(_tpIdentCounts||{}), ...(approved||[]), ...(used||[])])]
+    .forEach(code=>put(code, null, null));
+  _tpGroups=groups;
+}
+
+// Schrijft voor oudere docent-klassen (zonder expliciet code-veld) de afgeleide
+// code weg, zodat de koppeling met identities/{code} stabiel wordt en een latere
+// hernoeming de code niet meer verandert. Best-effort, stil.
+function tpPersistLegacyCodes(){
+  Object.entries(_tpClasses||{}).forEach(([cid,cls])=>{
+    if(!cls.code){ const code=tpDeriveKlascode(cls.className); if(code) teacherNet().setClassCode(cid,code).catch(()=>{}); }
+  });
 }
 
 function tpRenderClasses(){
   const cont=el("tpClassList");
-  const entries=Object.entries(_tpClasses);
   tpRenderKlasSelect();
   if(!cont) return;
-  if(!entries.length){
+  const groups=Object.values(_tpGroups||{}).sort((a,b)=>a.name.localeCompare(b.name));
+  if(!groups.length){
     cont.innerHTML=`<div class="note" style="text-align:center;padding:20px">Nog geen klassen. Voeg een klas toe hieronder.</div>`;
     return;
   }
   const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
-  cont.innerHTML=entries.map(([cid,cls])=>{
-    const count=Object.keys(cls.students||{}).length;
+  cont.innerHTML=groups.map(g=>{
+    const count=g.count||0;
     return `<div class="panel" style="margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <div style="flex:1;min-width:140px">
-        <div style="font-weight:700;font-size:16px">${esc(cls.className||cid)}</div>
-        <div class="note">${count} leerling${count!==1?"en":""}</div>
+        <div style="font-weight:700;font-size:16px">${esc(g.name)}</div>
+        <div class="note">Code ${esc(g.code)} · ${count} leerling${count!==1?"en":""}</div>
       </div>
-      <button class="chip" onclick="tpOpenClass(${q(cid)})">${iconSVG("helmet",13,"currentColor")} Leerlingen</button>
-      <button class="chip" onclick="tpRenameClass(${q(cid)})">${iconSVG("column",13,"currentColor")} Hernoem</button>
-      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteClass(${q(cid)})">✕</button>
+      <button class="chip" onclick="tpOpenClass(${q(g.code)})">${iconSVG("helmet",13,"currentColor")} Leerlingen</button>
+      <button class="chip" onclick="tpRenameClass(${q(g.code)})">${iconSVG("column",13,"currentColor")} Hernoem</button>
+      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteClass(${q(g.code)})">✕</button>
     </div>`;
   }).join("");
 }
@@ -1061,186 +1103,112 @@ function tpDeriveKlascode(nm){
   return /^[A-Z0-9]{2,12}$/.test(code) ? code : null;
 }
 
-// Zorgt dat een docent-klas ook meteen een geldige, goedgekeurde inlogcode
-// is: leerlingen loggen zo in met precies de klasnaam die de docent hierboven
-// beheert, zonder aparte "Battle Mode — klascodes"-goedkeuringsstap. Faalt
-// stil (geen toast) als de naam geen bruikbare code oplevert of zonder
-// Firebase — de klas zelf is dan al wel aangemaakt.
-function tpEnsureClassKlascode(nm){
-  const code=tpDeriveKlascode(nm);
-  if(!code) return;
-  teacherNet().createKlascode(code).then(()=>tpLoadKlascodes()).catch(()=>{});
-}
-
 // Herstelt achteraf klassen die vóór deze koppeling al bestonden (of waarvan
-// de afgeleide code nog niet was goedgekeurd) — voorkomt dat je bestaande
-// klassen opnieuw moet aanmaken.
+// de code nog niet was goedgekeurd) — zorgt dat elke gelabelde klas ook een
+// goedgekeurde inlogcode is, zonder bestaande klassen opnieuw aan te maken.
 function tpReconcileClassKlascodes(){
   const approved=new Set(_tpApprovedKlascodes||[]);
-  const missing=[...new Set(Object.values(_tpClasses||{})
-    .map(cls=>tpDeriveKlascode(cls.className))
-    .filter(code=>code && !approved.has(code)))];
+  const missing=[...new Set(Object.values(_tpGroups||{})
+    .filter(g=>g.cid && !approved.has(g.code))
+    .map(g=>g.code))];
   if(!missing.length) return;
   Promise.all(missing.map(code=>teacherNet().createKlascode(code).catch(()=>{})))
-    .then(()=>tpLoadKlascodes());
+    .then(()=>tpLoadClasses());
 }
 
 function teacherAddClass(){
   const nm=(prompt("Naam van de nieuwe klas:")||"").trim();
   if(!nm) return;
+  let code=tpDeriveKlascode(nm);
+  if(!code){
+    code=(prompt("Kies een korte inlogcode voor deze klas (2–12 letters/cijfers):","")||"").trim().toUpperCase();
+    if(!/^[A-Z0-9]{2,12}$/.test(code)){ toast("Ongeldige code","Gebruik 2–12 letters of cijfers, geen spaties."); return; }
+  }
   const id="class_"+Date.now();
   teacherNet().saveClass(id,nm)
-    .then(()=>{ toast("Klas aangemaakt",nm); tpEnsureClassKlascode(nm); return tpLoadClasses(); })
+    .then(()=>teacherNet().setClassCode(id,code))
+    .then(()=>teacherNet().createKlascode(code))
+    .then(()=>{ toast("Klas aangemaakt",nm+" ("+code+")"); return tpLoadClasses(); })
     .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
 }
 
-function tpRenameClass(classId){
-  const huidig=_tpClasses[classId]?.className||classId;
-  const nm=(prompt("Nieuwe naam voor '"+huidig+"':",huidig)||"").trim();
+// Hernoemt alleen het leesbare label; de inlogcode blijft ongewijzigd zodat de
+// koppeling met de leerlingprofielen (identities/{code}) intact blijft.
+function tpRenameClass(code){
+  const g=_tpGroups[code]; if(!g) return;
+  const huidig=g.name;
+  const nm=(prompt("Nieuwe naam voor '"+huidig+"' (inlogcode "+code+" blijft gelijk):",huidig)||"").trim();
   if(!nm||nm===huidig) return;
-  teacherNet().saveClass(classId,nm)
-    .then(()=>{ toast("Naam gewijzigd",nm); tpEnsureClassKlascode(nm); return tpLoadClasses(); })
+  const cid=g.cid||("class_"+Date.now());
+  teacherNet().saveClass(cid,nm)
+    .then(()=>teacherNet().setClassCode(cid,code))
+    .then(()=>{ toast("Naam gewijzigd",nm); return tpLoadClasses(); })
     .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
 }
 
-function tpDeleteClass(classId){
-  const nm=_tpClasses[classId]?.className||classId;
-  if(!confirm("Klas '"+nm+"' inclusief alle leerlingen verwijderen?")) return;
-  teacherNet().deleteClass(classId)
-    .then(()=>{ toast("Klas verwijderd",nm); return tpLoadClasses(); })
-    .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
+function tpDeleteClass(code){
+  const g=_tpGroups[code]; if(!g) return;
+  const nm=g.name, count=g.count||0;
+  const msg=count>0
+    ? "Klas '"+nm+"' ("+code+") heeft "+count+" leerling"+(count!==1?"en":"")+". Verwijderen wist de klascode én alle leerlingprofielen met hun voortgang. Doorgaan?"
+    : "Klas '"+nm+"' ("+code+") verwijderen?";
+  if(!confirm(msg)) return;
+  const finish=()=>{
+    const steps=[teacherNet().deleteKlascode(code).catch(()=>{})];
+    if(g.cid) steps.push(teacherNet().deleteClass(g.cid));
+    return Promise.all(steps)
+      .then(()=>{ toast("Klas verwijderd",nm); return tpLoadClasses(); })
+      .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
+  };
+  if(count>0){
+    teacherNet().getIdentities(code)
+      .then(idents=>Promise.all(Object.keys(idents||{}).map(lid=>teacherNet().deleteIdentity(code,lid).catch(()=>{}))))
+      .then(finish, finish);
+  } else finish();
 }
 
 function teacherLogout(){
   teacherNet().logoutTeacher().then(()=>go("teacherLogin"));
 }
 
-function tpLoadBmAccounts(){
-  const klas=(el("tpBmKlas")?.value||"").trim().toUpperCase();
-  const cont=el("tpBmAccounts");
-  const unCont=el("tpBmUnassigned");
-  if(!cont) return;
-  if(!klas){ toast("Vul een klascode in",""); return; }
-  cont.innerHTML=`<div class="note" style="padding:8px 0">Laden…</div>`;
-  if(unCont) unCont.innerHTML="";
-
-  teacherNet().getIdentities(klas).then(idents=>{
-    const entries=Object.entries(idents);
-    if(!entries.length){
-      cont.innerHTML=`<div class="note">Geen accounts gevonden in klas ${esc(klas)}.</div>`;
-      return;
-    }
-
-    // Verzamel alle bmKlas+bmLid combinaties die al in een portaalgroep zitten
-    const assigned=new Set();
-    Object.values(_tpClasses||{}).forEach(cls=>{
-      Object.values(cls.students||{}).forEach(s=>{
-        if(s.bmKlas&&s.bmLid) assigned.add(s.bmKlas+"/"+s.bmLid);
-      });
-    });
-
-    // Klasopties voor toewijzing
-    const classOpts=Object.entries(_tpClasses||{})
-      .map(([cid,c])=>`<option value="${cid}">${esc(c.className||cid)}</option>`).join("");
-
-    // Enkelvoudig-geciteerde JS-string, HTML-veilig voor gebruik in onclick="..."
-    const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
-
-    const rows=entries.map(([lid,id])=>{
-      const isAssigned=assigned.has(klas+"/"+lid);
-      const nm=id.name||lid;
-      const lv=id.level||1;
-      return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:0.5px solid var(--stone4)${isAssigned?"":";background:rgba(180,120,0,.07)"}">
-        <div style="flex:1;min-width:120px">
-          <span style="font-weight:600">${esc(nm)}</span>
-          <span class="note" style="margin-left:8px">Niv. ${lv}</span>
-          ${id.admin?`<span class="pill" style="margin-left:6px;background:var(--hi);color:#000;border:none;font-size:11px">admin</span>`:""}
-          ${isAssigned?`<span class="pill" style="margin-left:6px;font-size:11px">toegewezen</span>`:`<span class="pill" style="margin-left:6px;font-size:11px;background:var(--ox);border:none;color:var(--cream)">niet toegewezen</span>`}
-        </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-          ${classOpts?`<select id="cls_${lid}" style="padding:5px 8px;border-radius:7px;border:1px solid var(--stone4);background:var(--stone2);color:var(--fg);font-size:13px">
-            <option value="">Wijs toe aan…</option>${classOpts}</select>
-          <button class="chip" onclick="tpAssignStudent(${q(klas)},${q(lid)},${q(nm)},${lv})">Toewijzen</button>`:""}
-          ${id.admin
-            ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpRemoveAdmin(${q(klas)},${q(lid)},${q(nm)})">Admin intrekken</button>`
-            :`<button class="chip" onclick="tpGrantAdmin(${q(klas)},${q(lid)},${q(nm)})">Maak admin</button>`}
-        </div>
-      </div>`;
-    });
-
-    const unassignedCount=entries.filter(([lid])=>!assigned.has(klas+"/"+lid)).length;
-    cont.innerHTML=`<div class="note" style="margin-bottom:6px">${entries.length} account${entries.length!==1?"s":""} gevonden · <b>${unassignedCount} niet toegewezen</b></div>`+rows.join("");
-  })
-  .catch(e=>{ cont.innerHTML=`<div class="note warn">${esc(typeof e==="string"?e:(e?.message||"Fout"))}</div>`; });
-}
-
-function tpAssignStudent(klas,lid,nm,level){
-  const sel=el("cls_"+lid);
-  const classId=sel?.value;
-  if(!classId){ toast("Kies een klas","Selecteer een doelklas in het uitklapmenu."); return; }
-  const studentData={ displayName:nm, bmKlas:klas, bmLid:lid, level:level };
-  teacherNet().assignStudent(classId, klas+"_"+lid, studentData)
-    .then(()=>{ toast("Toegewezen",nm+" → "+(_tpClasses[classId]?.className||classId)); return tpLoadClasses(); })
-    .then(()=>tpLoadBmAccounts())
-    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
-}
-
-function tpGrantAdmin(klas,lid,nm){
-  teacherNet().setAdminFlag(klas,nm)
-    .then(()=>{ toast("Admin ingesteld",nm); tpLoadBmAccounts(); })
-    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
-}
-
-function tpRemoveAdmin(klas,lid,nm){
-  if(!confirm("Admin-status intrekken van '"+nm+"'?")) return;
-  teacherNet().removeAdminFlag(klas,lid)
-    .then(()=>{ toast("Admin ingetrokken",nm); tpLoadBmAccounts(); })
-    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
-}
-
-function tpLoadKlascodes(){
+// Rendert de klascodelijst mét ledenaantal per code (uit _tpIdentCounts). "Accounts"
+// opent de klas (leerlingenlijst uit identities); groep = klascode.
+function tpRenderKlascodes(){
   const cont=el("tpKlascodeList"); if(!cont) return;
-  return teacherNet().getKlascodes().then(({approved,used})=>{
-    _tpApprovedKlascodes=approved;
-    if(!approved.length&&!used.length){
-      cont.innerHTML=`<div class="note">Nog geen klascodes. Maak er een aan hierboven.</div>`;
-      return;
-    }
-    const allCodes=[...new Set([...approved,...used])].sort();
-    cont.innerHTML=allCodes.map(code=>{
-      const isApproved=approved.includes(code);
-      const inUse=used.includes(code);
-      return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:0.5px solid var(--stone4)">
-        <div style="flex:1;font-weight:600">${esc(code)}
-          ${isApproved?`<span class="pill" style="font-size:11px;margin-left:6px">goedgekeurd</span>`:`<span class="pill" style="font-size:11px;margin-left:6px;background:var(--ox);border:none;color:var(--cream)">niet goedgekeurd</span>`}
-          ${inUse?`<span class="pill" style="font-size:11px;margin-left:4px;background:var(--stone4);border:none">in gebruik</span>`:""}
-        </div>
-        <div style="display:flex;gap:6px">
-          <button class="chip" onclick="el('tpBmKlas').value='${esc(code)}';tpLoadBmAccounts()">Accounts</button>
-          ${isApproved
-            ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteKlascode('${esc(code)}')">Verwijder</button>`
-            :`<button class="chip" onclick="tpApproveKlascode('${esc(code)}')">Goedkeuren</button>`}
-        </div>
-      </div>`;
-    }).join("");
-  }).catch(e=>{ cont.innerHTML=`<div class="note warn">${esc(typeof e==="string"?e:(e?.message||"Fout"))}</div>`; });
+  const approved=new Set(_tpApprovedKlascodes||[]);
+  const allCodes=[...new Set([...approved, ...Object.keys(_tpIdentCounts||{})])].sort();
+  if(!allCodes.length){
+    cont.innerHTML=`<div class="note">Nog geen klascodes. Maak er een aan hierboven.</div>`;
+    return;
+  }
+  cont.innerHTML=allCodes.map(code=>{
+    const isApproved=approved.has(code);
+    const count=_tpIdentCounts[code]||0;
+    return `<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 0;border-bottom:0.5px solid var(--stone4)">
+      <div style="flex:1;font-weight:600">${esc(code)}
+        <span class="note" style="font-weight:400;margin-left:6px">${count} leerling${count!==1?"en":""}</span>
+        ${isApproved?`<span class="pill" style="font-size:11px;margin-left:6px">goedgekeurd</span>`:`<span class="pill" style="font-size:11px;margin-left:6px;background:var(--ox);border:none;color:var(--cream)">niet goedgekeurd</span>`}
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="chip" onclick="tpOpenClass('${esc(code)}')">${iconSVG("helmet",13,"currentColor")} Leerlingen</button>
+        ${isApproved
+          ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteKlascode('${esc(code)}')">Verwijder</button>`
+          :`<button class="chip" onclick="tpApproveKlascode('${esc(code)}')">Goedkeuren</button>`}
+      </div>
+    </div>`;
+  }).join("");
 }
 
 // Vult de klas-dropdown van het Total War-koppelpaneel met de docent-eigen
-// klassen hierboven (_tpClasses) i.p.v. de rauwe Battle Mode-klascodelijst —
-// dat mengt losse/foutief goedgekeurde codes door de echte klassen heen.
-// De waarde is de afgeleide klascode (tpDeriveKlascode), want dat is wat
-// BM_IDENT.klascode straks écht bevat; het label is de leesbare klasnaam.
+// klassen (_tpGroups). Waarde = de klascode (wat BM_IDENT.klascode écht bevat),
+// label = de leesbare klasnaam.
 function tpRenderKlasSelect(){
   const sel=el("tpTwKlas"); if(!sel) return;
   const cur=sel.value;
-  const entries=Object.values(_tpClasses||{})
-    .map(cls=>({code:tpDeriveKlascode(cls.className), nm:cls.className}))
-    .filter(e=>e.code)
-    .sort((a,b)=>a.nm.localeCompare(b.nm));
+  const entries=Object.values(_tpGroups||{}).sort((a,b)=>a.name.localeCompare(b.name));
   sel.innerHTML=`<option value="">— kies een klas —</option>`+
-    entries.map(e=>`<option value="${e.code}">${esc(e.nm)}</option>`).join("");
-  if(cur && entries.some(e=>e.code===cur)) sel.value=cur;
+    entries.map(g=>`<option value="${g.code}">${esc(g.name)}</option>`).join("");
+  if(cur && entries.some(g=>g.code===cur)) sel.value=cur;
 }
 
 function tpCreateKlascode(){
@@ -1265,36 +1233,37 @@ function tpDeleteKlascode(code){
     .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
 }
 
-/* ---- SCHERM: leerlingen in één klas ---- */
+/* ---- SCHERM: leerlingen in één klas (roster = identities/{code}) ---- */
 SCREENS.teacherClass = function(){
   if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
   if(!_tpCurrentClass){ go("teacherPortal"); return; }
-  const cls=_tpClasses[_tpCurrentClass]||{};
+  const code=_tpCurrentClass;
+  const g=_tpGroups[code]||{code, name:code};
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('teacherPortal')">${iconSVG("shield",20,"currentColor")}</button>
-    <h2>${esc(cls.className||_tpCurrentClass)}</h2>
+    <h2>${esc(g.name)}</h2>
   </div>
+  <div class="note" style="margin:-4px 0 10px">Inlogcode: <b>${esc(code)}</b> — leerlingen die deze code invoeren komen automatisch in deze klas.</div>
   <div id="tpMissedWords"></div>
   <div id="tpStudentList"><div class="note" style="text-align:center;padding:16px">Laden…</div></div>
   ${foot()}`);
-  tpRenderStudents();
+  tpLoadRoster();
   tpRenderClassAnalytics();
 };
 
-function tpOpenClass(classId){
-  _tpCurrentClass=classId;
+function tpOpenClass(code){
+  _tpCurrentClass=(code||"").toUpperCase();
   go("teacherClass");
 }
 
 // Klasbrede "moeilijkste woorden deze maand" — cumulatief over alle Battle
 // Mode-gevechten van deze klas (zie bmSyncClassMissedWords() in battle.js),
 // dus niet gebonden aan één losse sessie zoals het analytics-scherm ná een
-// gevecht. Klascode wordt afgeleid uit de klasnaam, net als tpEnsureClassKlascode().
+// gevecht. _tpCurrentClass IS de klascode.
 function tpRenderClassAnalytics(){
   const cont=el("tpMissedWords"); if(!cont) return;
-  const cls=_tpClasses[_tpCurrentClass]||{};
-  const klas=tpDeriveKlascode(cls.className);
+  const klas=_tpCurrentClass;
   if(!klas || !initFirebase()){ cont.innerHTML=""; return; }
   const month=new Date().toISOString().slice(0,7);
   fbDB.ref("classAnalytics/"+klas+"/"+month).once("value").then(snap=>{
@@ -1310,51 +1279,88 @@ function tpRenderClassAnalytics(){
   }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon klasanalyse niet laden.</div></div>`; });
 }
 
-function tpRenderStudents(){
+// Laadt de echte leerlingprofielen (identities/{code}) van de open klas.
+function tpLoadRoster(){
+  const code=_tpCurrentClass;
+  return teacherNet().getIdentities(code)
+    .then(idents=>{ _tpRoster=idents||{}; tpRenderRoster(); })
+    .catch(()=>{ _tpRoster={}; tpRenderRoster(); }); // "niet gevonden" = nog geen leden
+}
+
+function tpRenderRoster(){
   const cont=el("tpStudentList"); if(!cont) return;
-  const cls=_tpClasses[_tpCurrentClass]||{};
-  const students=Object.entries(cls.students||{});
-  if(!students.length){
-    cont.innerHTML=`<div class="note" style="text-align:center;padding:16px">Geen leerlingen in deze klas.</div>`;
+  const code=_tpCurrentClass;
+  const entries=Object.entries(_tpRoster||{});
+  if(!entries.length){
+    cont.innerHTML=`<div class="note" style="text-align:center;padding:16px">Nog geen leerlingen. Geef de inlogcode <b>${esc(code)}</b> aan je leerlingen — wie hem invoert verschijnt hier automatisch.</div>`;
     return;
   }
-  const otherOptions=Object.entries(_tpClasses)
-    .filter(([cid])=>cid!==_tpCurrentClass)
-    .map(([cid,c])=>`<option value="${cid}">${esc(c.className||cid)}</option>`)
-    .join("");
+  // Andere klassen als verplaats-doel.
+  const others=Object.values(_tpGroups||{}).filter(g=>g.code!==code).sort((a,b)=>a.name.localeCompare(b.name));
+  const moveOpts=others.map(g=>`<option value="${esc(g.code)}">${esc(g.name)}</option>`).join("");
   const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
-  cont.innerHTML=students.map(([sid,s])=>`
-    <div class="panel" style="margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+  cont.innerHTML=entries.map(([lid,s],i)=>{
+    const nm=s.name||lid;
+    const lv=s.level||1;
+    const selId="tpmv_"+i;
+    return `<div class="panel" style="margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <div style="flex:1;min-width:130px">
-        <div style="font-weight:600">${esc(s.displayName||sid)}</div>
-        ${s.level||s.coins?`<div class="note">Level ${s.level||"—"}${s.coins?" · "+s.coins+" munten":""}</div>`:""}
+        <div style="font-weight:600">${esc(nm)}${s.admin?`<span class="pill" style="margin-left:6px;background:var(--hi);color:#000;border:none;font-size:11px">admin</span>`:""}</div>
+        <div class="note">Niveau ${lv}${s.coins?" · "+s.coins+" munten":""} · code ${esc(lid)}</div>
       </div>
-      ${otherOptions?`
-      <select id="mv_${sid}" style="padding:5px 8px;border-radius:7px;border:1px solid var(--stone4);background:var(--stone2);color:var(--fg);font-size:13px">
+      <button class="chip" onclick="tpRenameStudent(${q(code)},${q(lid)},${q(nm)})">${iconSVG("column",13,"currentColor")} Naam</button>
+      ${moveOpts?`
+      <select id="${selId}" style="padding:5px 8px;border-radius:7px;border:1px solid var(--stone4);background:var(--stone2);color:var(--fg);font-size:13px">
         <option value="">Verplaats naar…</option>
-        ${otherOptions}
+        ${moveOpts}
       </select>
-      <button class="chip" onclick="tpMoveStudent(${q(sid)})">Verplaats</button>`:""}
-      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteStudent(${q(sid)},${q(s.displayName||sid)})">✕ Verwijder</button>
-    </div>`).join("");
+      <button class="chip" onclick="tpMoveStudent(${q(code)},${q(lid)},'${selId}')">Verplaats</button>`:""}
+      ${s.admin
+        ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpRemoveAdmin(${q(code)},${q(lid)},${q(nm)})">Admin intrekken</button>`
+        :`<button class="chip" onclick="tpGrantAdmin(${q(code)},${q(lid)})">Maak admin</button>`}
+      <button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteStudent(${q(code)},${q(lid)},${q(nm)})">✕ Verwijder</button>
+    </div>`;
+  }).join("");
 }
 
-function tpDeleteStudent(sid,nm){
-  if(!confirm("Leerling '"+nm+"' verwijderen?")) return;
-  teacherNet().deleteStudent(_tpCurrentClass,sid)
-    .then(()=>{ toast("Verwijderd",nm); return tpLoadClasses(); })
-    .then(()=>tpRenderStudents())
+function tpRenameStudent(code,lid,cur){
+  const nm=(prompt("Nieuwe getoonde naam voor '"+cur+"' (inlogcode blijft gelijk):",cur)||"").trim();
+  if(!nm||nm===cur) return;
+  if(nm.length>60){ toast("Te lang","Gebruik maximaal 60 tekens."); return; }
+  teacherNet().renameIdentity(code,lid,nm)
+    .then(()=>{ toast("Naam gewijzigd",nm); return tpLoadRoster(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
+}
+
+function tpDeleteStudent(code,lid,nm){
+  if(!confirm("Leerling '"+nm+"' verwijderen? Dit wist het profiel en de voortgang.")) return;
+  teacherNet().deleteIdentity(code,lid)
+    .then(()=>{ toast("Verwijderd",nm); return tpLoadRoster(); })
     .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
 }
 
-function tpMoveStudent(sid){
-  const sel=el("mv_"+sid); if(!sel||!sel.value){ toast("Kies een klas","Selecteer een doelklas in het uitklapmenu."); return; }
-  const toClassId=sel.value;
-  const studentData=(_tpClasses[_tpCurrentClass]?.students||{})[sid];
-  if(!studentData){ toast("Fout","Leerling niet gevonden."); return; }
-  teacherNet().moveStudent(_tpCurrentClass,toClassId,sid,studentData)
-    .then(()=>{ toast("Verplaatst",_tpClasses[toClassId]?.className||toClassId); return tpLoadClasses(); })
-    .then(()=>tpRenderStudents())
-    .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
+function tpMoveStudent(code,lid,selId){
+  const sel=el(selId); const toCode=sel?.value;
+  if(!toCode){ toast("Kies een klas","Selecteer een doelklas in het uitklapmenu."); return; }
+  const s=_tpRoster[lid]||{};
+  const doelNaam=_tpGroups[toCode]?.name||toCode;
+  const warn=s.googleUid?"\n\nLet op: deze leerling heeft een Google-koppeling. Die gaat bij het verplaatsen verloren en moet opnieuw gekoppeld worden.":"";
+  if(!confirm("'"+(s.name||lid)+"' verplaatsen naar "+doelNaam+" ("+toCode+")?"+warn)) return;
+  teacherNet().moveIdentity(code,toCode,lid)
+    .then(()=>{ toast("Verplaatst",(s.name||lid)+" → "+doelNaam); return tpLoadRoster(); })
+    .catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"")));
+}
+
+function tpGrantAdmin(code,lid){
+  teacherNet().grantAdmin(code,lid)
+    .then(()=>{ toast("Admin ingesteld",""); return tpLoadRoster(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
+}
+
+function tpRemoveAdmin(code,lid,nm){
+  if(!confirm("Admin-status intrekken van '"+nm+"'?")) return;
+  teacherNet().removeAdminFlag(code,lid)
+    .then(()=>{ toast("Admin ingetrokken",nm); return tpLoadRoster(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
 }
 
