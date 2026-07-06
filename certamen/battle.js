@@ -1320,6 +1320,18 @@ function bmPersonalPool(pid,pool){
   return w.length?w:pool;
 }
 
+// Maakt bmPersonalPool()'s gewicht zichtbaar voor de speler zelf — puur
+// motiverende feedback, geen effect op de spellogica. Toont de (max 5)
+// woorden die deze sessie al eens fout gingen, dus dezelfde woorden die
+// bmPersonalPool() extra laat terugkomen.
+function bmAdaptiveHintHTML(){
+  if(BM_META?.adaptive===false) return "";
+  const missed=Object.values(BM_PLAYERS[BM_PID]?.missed||{}).sort((a,b)=>(b.c||0)-(a.c||0));
+  const words=missed.slice(0,5).map(m=>m.p).filter(Boolean);
+  if(!words.length) return "";
+  return `<div class="note" style="margin-bottom:8px;color:var(--hi)">🎯 Je oefent nu extra op: <b>${words.map(esc).join(", ")}</b></div>`;
+}
+
 /* ---- SCHERM: battleHostGame ---- */
 SCREENS.battleHostGame = function(){
   bmApplyTheme(BM_META?.theme);
@@ -3095,6 +3107,7 @@ function bmPlayerRender(){
     <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE} BE</span>
     <span style="color:var(--muted)">${tl}s</span>
   </div>
+  ${bmAdaptiveHintHTML()}
   ${content}`;
 }
 function bmWordKey(w){ return (w||"").replace(/[.#$\[\]\/]/g,"_").substring(0,80); }
