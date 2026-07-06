@@ -736,6 +736,9 @@ SCREENS.battleFAQ = function(){
       <li><b>Eerbewijzen</b> — speciale prestaties, ook geheime. Verschijnen op je profiel, inclusief eigen
       reeksen voor Boss Battle (bazen verslaan, solo, hoge moeilijkheidsgraad) en Total War/Training Mode
       (bijdragen aan garnizoen/muur/toren, belegeringen winnen).</li>
+      <li><b>Getoonde naam</b> — koos je een naam waar je spijt van hebt? Via <b>Mijn profiel</b> pas je
+      met het potloodje naast je naam je getoonde naam aan. Je klascode en leerlingcode blijven gelijk, dus
+      je hoeft geen nieuw account te maken en je voortgang blijft behouden.</li>
       <li><b>Avatar</b> — pas je held-avatar aan via je profiel. De meeste onderdelen unlock je door te
       levelen; de categorieën <b>Extra's</b> en <b>Legendarisch</b> (onderaan) koop je met munten
       (denarii/drachmae). De laatste categorie, <b>Legioensglans</b>, kleurt je hele avatar goud zodra je

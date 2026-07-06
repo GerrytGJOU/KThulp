@@ -90,6 +90,13 @@ FBNet.saveClass = function(classId, className){
   try{ return this.teacherRef().child("classes/" + classId + "/className").set(className); }
   catch(e){ return Promise.reject(e.message); }
 };
+// Koppelt een docent-klas expliciet aan een vaste inlogcode. Zo blijft de code
+// stabiel ook als de docent de klasnaam later hernoemt (i.p.v. 'm elke keer uit
+// de naam af te leiden, wat de koppeling met identities/{code} zou breken).
+FBNet.setClassCode = function(classId, code){
+  try{ return this.teacherRef().child("classes/" + classId + "/code").set(code.toUpperCase()); }
+  catch(e){ return Promise.reject(e.message); }
+};
 FBNet.deleteClass = function(classId){
   try{ return this.teacherRef().child("classes/" + classId).remove(); }
   catch(e){ return Promise.reject(e.message); }
@@ -112,7 +119,13 @@ FBNet.assignStudent = function(classId, studentId, studentData){
 };
 FBNet.removeAdminFlag = function(klascode, lid){
   if(!fbDB) initFirebase();
-  return fbDB.ref("identities/"+klascode+"/"+lid+"/admin").remove();
+  return fbDB.ref("identities/"+klascode.toUpperCase()+"/"+lid+"/admin").remove();
+};
+// Maakt één specifieke leerling (op leerlingcode) admin — nauwkeuriger dan
+// setAdminFlag(), dat op naam matcht en bij dubbele namen te veel zou raken.
+FBNet.grantAdmin = function(klascode, lid){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("identities/"+klascode.toUpperCase()+"/"+lid+"/admin").set(true);
 };
 FBNet.getIdentities = function(klascode){
   if(!fbDB) initFirebase();
@@ -131,6 +144,46 @@ FBNet.getKlascodes = function(){
       const used=iSnap.exists()?Object.keys(iSnap.val()):[];
       return {approved, used};
     });
+  });
+};
+// Ledenaantal per klascode ({CODE: aantal}) — leest de identities-tak één keer.
+// Gebruikt door het docentenportaal om live tellingen te tonen (groep = klascode).
+FBNet.getKlascodeCounts = function(){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("identities").once("value").then(snap=>{
+    const counts={};
+    if(snap.exists()) snap.forEach(klasNode=>{ counts[klasNode.key]=klasNode.numChildren(); });
+    return counts;
+  });
+};
+// Docent past de getoonde naam van een leerling aan (inlogcode blijft gelijk).
+FBNet.renameIdentity = function(klas, lid, name){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("identities/"+klas.toUpperCase()+"/"+lid+"/name").set(name);
+};
+// Docent verwijdert een leerlingprofiel volledig.
+FBNet.deleteIdentity = function(klas, lid){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("identities/"+klas.toUpperCase()+"/"+lid).remove();
+};
+// Verhuist een leerlingprofiel naar een andere klascode (bv. bij een typefout in
+// de code). admin en googleUid vallen bewust weg: admin is klas-specifiek, en de
+// docent kan googleLinks/{uid} niet herschrijven (rules: alleen de eigenaar), dus
+// een gekoppeld Google-account moet opnieuw gekoppeld worden. Geeft {hadGoogle}
+// terug zodat het portaal daarvoor kan waarschuwen.
+FBNet.moveIdentity = function(fromKlas, toKlas, lid){
+  if(!fbDB) initFirebase();
+  fromKlas=fromKlas.toUpperCase(); toKlas=toKlas.toUpperCase();
+  const fromRef=fbDB.ref("identities/"+fromKlas+"/"+lid);
+  return fromRef.once("value").then(snap=>{
+    if(!snap.exists()) return Promise.reject("Leerling niet gevonden.");
+    const data=snap.val()||{};
+    const hadGoogle=!!data.googleUid;
+    delete data.admin; delete data.googleUid;
+    const updates={};
+    updates["identities/"+toKlas+"/"+lid]=data;
+    updates["identities/"+fromKlas+"/"+lid]=null;
+    return fbDB.ref().update(updates).then(()=>({hadGoogle}));
   });
 };
 FBNet.createKlascode = function(code){
@@ -282,13 +335,61 @@ DemoNet.moveStudent = function(fromClassId, toClassId, studentId, studentData){
   }
   return Promise.resolve();
 };
+DemoNet.setClassCode    = function(classId, code){ if(_demoClasses[classId]) _demoClasses[classId].code=code.toUpperCase(); return Promise.resolve(); };
 DemoNet.setAdminFlag    = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.removeAdminFlag = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.grantAdmin      = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.assignStudent   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.deleteRoom      = function(){ return Promise.resolve(); };
-DemoNet.getIdentities   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
-DemoNet.getKlascodes    = function(){ return Promise.resolve({approved:[],used:[]}); };
 DemoNet.createKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.deleteKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.validateKlascode= function(){ return Promise.resolve(true); };
+
+// In demo-modus bestaat er geen echte identities-tak. We spiegelen "groep = code"
+// op de in-memory _demoClasses: de code is de afgeleide klascode van de klasnaam
+// (zelfde regex als tpDeriveKlascode in games.js).
+function _demoCodeOf(cls){ return (cls.className||"").toUpperCase().replace(/[^A-Z0-9]/g,""); }
+function _demoCidByCode(code){
+  code=(code||"").toUpperCase();
+  for(const cid in _demoClasses){ if(_demoCodeOf(_demoClasses[cid])===code) return cid; }
+  return null;
+}
+DemoNet.getKlascodes = function(){
+  const codes=Object.values(_demoClasses).map(_demoCodeOf).filter(Boolean);
+  return Promise.resolve({approved:codes, used:codes});
+};
+DemoNet.getKlascodeCounts = function(){
+  const counts={};
+  for(const cid in _demoClasses){ const c=_demoCodeOf(_demoClasses[cid]); if(c) counts[c]=Object.keys(_demoClasses[cid].students||{}).length; }
+  return Promise.resolve(counts);
+};
+DemoNet.getIdentities = function(code){
+  const cid=_demoCidByCode(code);
+  if(!cid) return Promise.reject("Klas '"+code+"' niet gevonden.");
+  const out={};
+  Object.entries(_demoClasses[cid].students||{}).forEach(([sid,s])=>{
+    out[sid]={name:s.displayName||sid, level:s.level, coins:s.coins};
+  });
+  return Promise.resolve(out);
+};
+DemoNet.renameIdentity = function(code, lid, name){
+  const cid=_demoCidByCode(code);
+  if(cid && _demoClasses[cid].students?.[lid]) _demoClasses[cid].students[lid].displayName=name;
+  return Promise.resolve();
+};
+DemoNet.deleteIdentity = function(code, lid){
+  const cid=_demoCidByCode(code);
+  if(cid && _demoClasses[cid].students) delete _demoClasses[cid].students[lid];
+  return Promise.resolve();
+};
+DemoNet.moveIdentity = function(fromCode, toCode, lid){
+  const fc=_demoCidByCode(fromCode), tc=_demoCidByCode(toCode);
+  if(fc && tc && _demoClasses[fc].students?.[lid]){
+    const d=_demoClasses[fc].students[lid];
+    delete _demoClasses[fc].students[lid];
+    if(!_demoClasses[tc].students) _demoClasses[tc].students={};
+    _demoClasses[tc].students[lid]=d;
+  }
+  return Promise.resolve({hadGoogle:false});
+};
 

@@ -6,6 +6,9 @@
   Externe CDN's alleen waar nodig: Tone.js, SheetJS, Firebase, Gemini.
 - Latijn- en Grieks-apps zijn parallelle paren: pas je iets aan in de één,
   stel dezelfde wijziging voor in de ander.
+  Uitzondering: certamen/ bedient Latijn én Grieks al binnen één en dezelfde
+  codebase (geen aparte Latijn-/Grieks-versie) — daar is dus geen "andere app"
+  om de wijziging in te dupliceren.
 
 ## Conventies
 - Naamval-volgorde altijd: nominativus, genitivus, dativus, accusativus,
