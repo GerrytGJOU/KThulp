@@ -1108,12 +1108,18 @@ function tpDeriveKlascode(nm){
 // goedgekeurde inlogcode is, zonder bestaande klassen opnieuw aan te maken.
 function tpReconcileClassKlascodes(){
   const approved=new Set(_tpApprovedKlascodes||[]);
-  const missing=[...new Set(Object.values(_tpGroups||{})
-    .filter(g=>g.cid && !approved.has(g.code))
-    .map(g=>g.code))];
-  if(!missing.length) return;
-  Promise.all(missing.map(code=>teacherNet().createKlascode(code).catch(()=>{})))
-    .then(()=>tpLoadClasses());
+  const own=Object.values(_tpGroups||{}).filter(g=>g.cid);
+  const missing=[...new Set(own.filter(g=>!approved.has(g.code)).map(g=>g.code))];
+  if(missing.length){
+    Promise.all(missing.map(code=>teacherNet().createKlascode(code).catch(()=>{})))
+      .then(()=>tpLoadClasses());
+  }
+  // Claimt stilletjes het ownerUid van eigen, al goedgekeurde codes die nog
+  // "legacy" zijn (van vóór de per-docent-scheiding) — self-healing migratie
+  // naar het nieuwe model. Geen tpLoadClasses()-vervolg hier: dat zou bij elke
+  // portaallading een nieuwe reconcile-ronde triggeren (oneindige lus), terwijl
+  // het claimen zelf niets aan de zichtbare tellingen/labels verandert.
+  own.filter(g=>approved.has(g.code)).forEach(g=>{ teacherNet().createKlascode(g.code).catch(()=>{}); });
 }
 
 function teacherAddClass(){
@@ -1124,10 +1130,15 @@ function teacherAddClass(){
     code=(prompt("Kies een korte inlogcode voor deze klas (2–12 letters/cijfers):","")||"").trim().toUpperCase();
     if(!/^[A-Z0-9]{2,12}$/.test(code)){ toast("Ongeldige code","Gebruik 2–12 letters of cijfers, geen spaties."); return; }
   }
-  const id="class_"+Date.now();
-  teacherNet().saveClass(id,nm)
-    .then(()=>teacherNet().setClassCode(id,code))
-    .then(()=>teacherNet().createKlascode(code))
+  // Klascode EERST claimen/aanmaken: sinds het ownerUid-model kan dit mislukken
+  // (code al in gebruik door een andere docent). Pas bij succes de klas-label
+  // aanmaken — anders blijft er een label achter dat naar een code wijst die
+  // deze docent niet beheert.
+  teacherNet().createKlascode(code)
+    .then(()=>{
+      const id="class_"+Date.now();
+      return teacherNet().saveClass(id,nm).then(()=>teacherNet().setClassCode(id,code));
+    })
     .then(()=>{ toast("Klas aangemaakt",nm+" ("+code+")"); return tpLoadClasses(); })
     .catch(e=>toast("Fout",typeof e==="string"?e:e?.message));
 }
