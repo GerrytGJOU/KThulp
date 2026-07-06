@@ -34,6 +34,7 @@ const TW_CIVS = {
   persae:   { nm:"Perzen",       color:"#8a4fb0", soft:"#542f6e" },
   carthago: { nm:"Carthagers",   color:"#550088", soft:"#33004f" },
   aegyptii: { nm:"Egyptenaren",  color:"#e67e22", soft:"#8a4a10" },
+  britanni: { nm:"Britten",      color:"#1f8a8a", soft:"#0f4d4d" },
 };
 
 /* ---- Thuisprovincies per beschaving: uitsluitend seed-data voor een nieuwe
@@ -47,6 +48,7 @@ const TW_HOME_PROVINCES = {
   persae:   ["cappadocia","galatia","syria","armenia","mesopotamia"],
   carthago: ["africa_proconsularis","mauretania_caesariensis","mauretania_tingitana"],
   aegyptii: ["aegyptus","arabia","creta_et_cyrene"],
+  britanni: ["britannia"],
 };
 
 /* ---- Maximale verdediging: gebieden blijven altijd veroverbaar ---- */
@@ -99,7 +101,7 @@ const TW_STRUCTURES = {
 // garrison_militia.png (zie twSpriteFor()).
 const TW_GARRISON_SPRITE_BY_CIV = {
   roma:"roman", athenae:"greek", gallii:"gaul", germani:"germania",
-  persae:"persia", carthago:"carthage", aegyptii:"egypt",
+  persae:"persia", carthago:"carthage", aegyptii:"egypt", britanni:"britons",
 };
 
 /* Punten → tier (0/1/2) voor één spoor. */
@@ -133,6 +135,7 @@ const TW_DEMO_OWN = {
   armenia:"persae", mesopotamia:"persae",
   africa_proconsularis:"carthago", mauretania_caesariensis:"carthago", mauretania_tingitana:"carthago",
   aegyptus:"aegyptii", arabia:"aegyptii", creta_et_cyrene:"aegyptii",
+  britannia:"britanni",
 };
 const TW_DEMO_DEF = {
   italia:95, sicilia:40, sardinia:30, corsica:25, dalmatia:55, gallia_narbonensis:60,
@@ -142,6 +145,7 @@ const TW_DEMO_DEF = {
   cappadocia:50, galatia:35, syria:75, armenia:40, mesopotamia:30,
   africa_proconsularis:65, mauretania_caesariensis:40, mauretania_tingitana:35,
   aegyptus:70, arabia:30, creta_et_cyrene:45,
+  britannia:50,
 };
 
 /* Cache: SVG-tekst en het provincieregister worden één keer opgehaald. */
