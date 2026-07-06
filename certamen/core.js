@@ -68,16 +68,45 @@ function parseCustom(text){
 }
 function ansText(w){ return cleanNL(w.nl); }
 function cleanNL(nl){ return String(nl||"").split(/\s*\|\s*|\s*;\s*/)[0].replace(/^\d+\.\s*/,"").trim(); }
+// Alle losse betekenissen van een woord (op ; | / , en het "…-lemma"-hintdeel na
+// het | of de haakjes weggelaten). Wordt gebruikt om te voorkomen dat een
+// afleider gekozen wordt die zélf ook een juist antwoord op de vraag is.
+function senseSet(nl){
+  return new Set(
+    String(nl||"")
+      .split(/\s*[;|\/,]\s*/)
+      .map(s => norm(s.replace(/^\d+\.\s*/,"")))
+      .filter(Boolean)
+  );
+}
 
 function makeQuestion(pool){
   const w = pick(pool);
   const correct = ansText(w);
+  const qSenses = senseSet(w.nl);
   const opts=[correct];
+  // Een afleider mag niet: (a) tekstueel gelijk zijn aan een reeds gekozen optie,
+  // (b) een van de betekenissen van het vraagwoord zijn, of (c) het juiste
+  // antwoord als een van zíjn eigen betekenissen hebben. Zo verschijnt er nooit
+  // een afleider die óók goed zou zijn (bv. inquio "zeggen" bij dico "zeggen, spreken").
+  const conflicts = (x) => {
+    const a = ansText(x);
+    if(opts.some(o=>norm(o)===norm(a))) return true;
+    if(qSenses.has(norm(a))) return true;
+    if(senseSet(x.nl).has(norm(correct))) return true;
+    return false;
+  };
   const samePos = w.pos ? pool.filter(x=>x.pos===w.pos) : pool;
   const distPool = samePos.length >= 4 ? samePos : pool;
   for(const x of shuffle(distPool)){
-    const a = ansText(x);
-    if(!opts.some(o=>norm(o)===norm(a))){ opts.push(a); if(opts.length>=4) break; }
+    if(!conflicts(x)){ opts.push(ansText(x)); if(opts.length>=4) break; }
+  }
+  // Te weinig bruikbare afleiders binnen dezelfde woordsoort? Verbreed naar de
+  // hele pool, nog steeds zonder óók-juiste afleiders toe te laten.
+  if(opts.length<4 && distPool!==pool){
+    for(const x of shuffle(pool)){
+      if(!conflicts(x)){ opts.push(ansText(x)); if(opts.length>=4) break; }
+    }
   }
   while(opts.length<2) opts.push("…");
   const shuffled = shuffle(opts);
