@@ -7,8 +7,8 @@
       }
     },
     "identities": {
-      ".read": "auth != null",
       "$klas": {
+        ".read": "auth != null && (!root.child('klascodes/'+$klas+'/ownerUid').exists() || auth.uid === root.child('klascodes/'+$klas+'/ownerUid').val())",
         "$lid": {
           ".read": true,
           ".write": "!newData.child('admin').exists() || (data.child('admin').exists() && data.child('admin').val() === newData.child('admin').val())",
@@ -31,9 +31,10 @@
     },
     "klascodes": {
       ".read": true,
-      ".write": "auth != null",
       "$code": {
-        ".validate": "newData.hasChild('created') && newData.child('created').isNumber()"
+        ".write": "auth != null && (!data.exists() || !data.child('ownerUid').exists() || auth.uid === data.child('ownerUid').val())",
+        ".validate": "newData.hasChildren(['created','ownerUid']) && newData.child('created').isNumber()",
+        "ownerUid": { ".validate": "newData.isString() && newData.val() === auth.uid" }
       }
     },
     "teachers": {

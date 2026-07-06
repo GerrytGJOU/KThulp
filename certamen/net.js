@@ -186,13 +186,47 @@ FBNet.moveIdentity = function(fromKlas, toKlas, lid){
     return fbDB.ref().update(updates).then(()=>({hadGoogle}));
   });
 };
+// Vertaalt een rauwe Firebase-foutmelding naar een begrijpelijke tekst voor
+// klascode-acties. Gebruikt voor elke klascodes/-schrijfactie: sinds het
+// ownerUid-model (per-docent scheiding) kan "permission denied" ook gewoon
+// betekenen dat een andere docent deze code al beheert.
+FBNet._friendlyKlascodeError = function(e, fallback){
+  const msg=(e && e.message) || String(e||"");
+  if((e && e.code==="PERMISSION_DENIED") || /permission_denied/i.test(msg))
+    return "Geen toegang tot deze klascode — waarschijnlijk beheert een andere docent 'm.";
+  return msg || fallback || "Onbekende fout.";
+};
+// Maakt een klascode aan óf claimt 'm — via een transactie i.p.v. een blinde
+// .set(), zodat drie situaties correct worden afgehandeld:
+//  - code bestaat nog niet: aanmaken, ownerUid = ingelogde docent;
+//  - code bestaat al maar heeft nog geen ownerUid ("legacy", van vóór de
+//    per-docent-scheiding): claimen, zodat 'm geleidelijk migreert naar het
+//    nieuwe model zonder bestaande klassen te breken (zie CLAUDE.md);
+//  - code is al eigendom van deze docent: no-op (idempotent, elke aanroep
+//    hierboven — bv. tpReconcileClassKlascodes — mag 'm gerust herhalen);
+//  - code is al eigendom van een ANDERE docent: transactie committeert niet,
+//    duidelijke foutmelding i.p.v. de eigenaar-code stilletjes over te nemen.
 FBNet.createKlascode = function(code){
+  code=(code||"").trim().toUpperCase();
   if(!fbDB) initFirebase();
-  return fbDB.ref("klascodes/"+code.toUpperCase()).set({created:Date.now()});
+  const uid=this.getTeacherUid();
+  if(!uid) return Promise.reject("Geen docent ingelogd.");
+  return fbDB.ref("klascodes/"+code).transaction(cur=>{
+    if(cur===null) return {created:Date.now(), ownerUid:uid};
+    if(!cur.ownerUid) return {...cur, ownerUid:uid};
+    if(cur.ownerUid===uid) return cur;
+    return; // undefined => transactie afbreken; code blijft van de ander
+  }).then(({committed, snapshot})=>{
+    if(committed) return;
+    const owner=snapshot && snapshot.exists() ? snapshot.val().ownerUid : null;
+    if(owner && owner!==uid) return Promise.reject("Deze klascode is al in gebruik door een andere docent.");
+    return Promise.reject("Klascode aanmaken mislukt.");
+  }, e=>Promise.reject(FBNet._friendlyKlascodeError(e,"Klascode aanmaken mislukt.")));
 };
 FBNet.deleteKlascode = function(code){
   if(!fbDB) initFirebase();
-  return fbDB.ref("klascodes/"+code.toUpperCase()).remove();
+  return fbDB.ref("klascodes/"+code.toUpperCase()).remove()
+    .catch(e=>Promise.reject(FBNet._friendlyKlascodeError(e,"Verwijderen mislukt.")));
 };
 FBNet.validateKlascode = function(code){
   if(!fbDB) return Promise.resolve(true); // offline: altijd toestaan
