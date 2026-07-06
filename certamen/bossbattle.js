@@ -23,9 +23,13 @@ const BOSS_DIFFICULTIES = {
 const BOSS_DIFF_ORDER = ["easy","normal","hard","heroic","legendary"];
 
 /* ---- CONFIGURATIETABEL: BAZEN ---- */
-// Unieke fase-mechanics (Hydra-koppen, Cycloop-countdown, Minotaurus-schild+
-// enrage) zijn bewust nog niet geïmplementeerd — zie het architectuurplan:
-// eerst de generieke aanval/fase-loop werkend, mechanics volgen als vervolgstap.
+// Unieke fase-mechanics (Hydra-regen, Cycloop-metgezellenmaaltijd, Minotaurus-
+// Labyrinth-schild+Enrage) zitten in bmBossResolveTick() hieronder, per bossId
+// vertakt — gebalanceerd tegen de echte bossMaxHP/classMaxHP-formules uit
+// bmStartBossGame() (battle.js). Percentages die aan bossMaxHP hangen krijgen
+// bewust GEEN aparte moeilijkheids-vermenigvuldiging (bossMaxHP zelf schaalt
+// al met diffM); percentages die aan classMaxHP hangen wel, net als de
+// generieke aanval hieronder.
 // `img` (romp/basisillustratie) en `heads` (Hydra: losse koppen bovenop de
 // romp) zijn optioneel — ontbreekt `img`, dan valt bmBossSpriteHTML() terug
 // op de emoji-placeholder.
@@ -34,14 +38,14 @@ const BOSS_DIFF_ORDER = ["easy","normal","hard","heroic","legendary"];
 // heeft geen commandant, zie CommanderSpectre.show() in battle.js).
 const BOSS_PRESETS = {
   hydra:    { id:"hydra",    nm:"De Hydra van Lerna",   emoji:"🐉", color:"#2e7d32",
-    desc:"Groeit extra koppen en geneest zichzelf naarmate ze HP verliest.",
+    desc:"Geneest zichzelf zodra de klas geen forse klap uitdeelt — koppen groeien terug.",
     img:"assets/bosses/hydra.png",
     heads:["assets/bosses/hydrahead1.png","assets/bosses/hydrahead2.png","assets/bosses/hydrahead3.png",
            "assets/bosses/hydrahead4.png","assets/bosses/hydrahead5.png","assets/bosses/hydrahead6.png",
            "assets/bosses/hydrahead7.png"],
     hero:{ nm:"Herakles", img:"assets/commanders/heroes/herakles.png" } },
   cyclops:  { id:"cyclops",  nm:"Polyfemus de Cycloop", emoji:"👁️", color:"#ef6c00",
-    desc:"Een oogstraal-countdown dwingt de klas tot snel gezamenlijk handelen.",
+    desc:"Elke paar rondes dreigt een metgezellenmaaltijd — alleen gezamenlijk schild kan die nog onderbreken.",
     img:"assets/bosses/cyclops.png",
     hero:{ nm:"Odysseus", img:"assets/commanders/heroes/odysseus.png" } },
   minotaur: { id:"minotaur", nm:"De Minotaurus",        emoji:"🐂", color:"#c62828",
@@ -80,25 +84,74 @@ function bmBossAliveHeads(headCount,hpPct){
 const BOSS_ROUNDS_PER_ATTACK = {1:2, 2:1, 3:1};
 
 /* ----------------------------------------------------------------------------
-   bmBossResolveTick(boss, classMaxHP, diffM, noDamageAnswerCount)
+   bmBossResolveTick(boss, ctx)
    Pure functie (geen Firebase-IO): berekent de baas-kant van één ronde-
    resolutie. Wordt aangeroepen door bmResolve() in battle.js, ná de normale
    schade-op-de-baas-berekening (die al via de bestaande engine loopt).
+   ctx = { classMaxHP, bossMaxHP, diffM, noDamageAnswerCount, bossId,
+           dmgDealtThisRound, shieldThisRound }
 
-   - Basisaanval: elke BOSS_ROUNDS_PER_ATTACK[fase] rondes verliest de klas
-     classMaxHP * 0.05 * Md — percentage-gebaseerd, dus onafhankelijk van N.
-   - Rage: elke speler die deze ronde meedeed zonder schade toe te brengen
-     (proxy voor een gemist/fout antwoord — vermijdt individuele bestraffing)
-     voedt de rage-balk met 5%*Md. Bij 100% volgt een extra tegenaanval van
-     8%*Md los van de normale cadans, en de rage-balk reset naar 0.
+   - Basisaanval (alle bazen): elke BOSS_ROUNDS_PER_ATTACK[fase] rondes
+     verliest de klas classMaxHP * 0.05 * Md — percentage-gebaseerd, dus
+     onafhankelijk van N.
+   - Rage (alle bazen): elke speler die deze ronde meedeed zonder schade toe
+     te brengen (proxy voor een gemist/fout antwoord — vermijdt individuele
+     bestraffing) voedt de rage-balk met 5%*Md. Bij 100% volgt een extra
+     tegenaanval van 8%*Md los van de normale cadans, rage reset naar 0.
+   - Hydra: geneest 2% van bossMaxHP zodra de klas dit ronde ONDER de 3% van
+     bossMaxHP aan schade toebrengt — beloont een paar gebundelde harde
+     klappen (combo/legendarisch) boven constant kleine pokes.
+   - Cycloop: iedere 3 rondes een "metgezellenmaaltijd"-dreiging met een
+     fuse van 2 rondes. Alleen gezamenlijk schild (team_shield-acties samen
+     ≥ 8*Md die ronde) onderbreekt 'm. Loopt de fuse af: 6% van classMaxHP
+     schade aan de klas, én de Cycloop heelt 4% van bossMaxHP (Polyfemus'
+     dagelijkse maaltijd van Odysseus' metgezellen).
+   - Minotaurus: het Labyrinth-schild zelf leeft NIET hier (dat is
+     persistente baas-state en moet vóór newHB al worden verrekend in
+     bmResolve() in battle.js) — hier alleen de Enrage-omschakeling: zodra
+     ctx.labyrinthBroken waar is (of fase 3 bereikt is), valt de baas
+     voortaan elke ronde aan i.p.v. volgens de normale cadans.
    ---------------------------------------------------------------------------- */
-function bmBossResolveTick(boss, classMaxHP, diffM, noDamageAnswerCount){
+function bmBossResolveTick(boss, ctx){
+  const {classMaxHP, bossMaxHP, diffM, noDamageAnswerCount, bossId, dmgDealtThisRound=0, shieldThisRound=0, labyrinthBroken=false} = ctx;
   const b={...boss};
-  let classDamage=0;
+  let classDamage=0, bossHeal=0;
   const events=[];
 
+  // ---- Hydra: regen bij een te zwakke ronde ----
+  if(bossId==="hydra" && bossMaxHP){
+    const threshold=0.03*bossMaxHP, regen=0.02*bossMaxHP;
+    if(dmgDealtThisRound<threshold){
+      bossHeal+=regen;
+      events.push({type:"boss_regen", heal:Math.round(regen)});
+    }
+  }
+
+  // ---- Cycloop: metgezellenmaaltijd-countdown ----
+  if(bossId==="cyclops" && bossMaxHP){
+    b.mealCycle=(b.mealCycle||0)+1;
+    if(!b.charging && b.mealCycle>=3){ b.charging=true; b.chargeLeft=2; b.mealCycle=0; }
+    if(b.charging){
+      if(shieldThisRound>=8*diffM){
+        b.charging=false; b.chargeLeft=0;
+        events.push({type:"boss_meal_interrupted"});
+      } else {
+        b.chargeLeft=(b.chargeLeft||1)-1;
+        if(b.chargeLeft<=0){
+          b.charging=false;
+          const mealDmg=Math.round(classMaxHP*0.06*diffM);
+          const mealHeal=0.04*bossMaxHP;
+          classDamage+=mealDmg; bossHeal+=mealHeal;
+          events.push({type:"boss_meal_attack", dmg:mealDmg, heal:Math.round(mealHeal)});
+        }
+      }
+    }
+  }
+
+  // ---- Basisaanval: Minotaurus valt in Enrage elke ronde aan ----
   b.roundsSinceAttack=(b.roundsSinceAttack||0)+1;
-  const cadence=BOSS_ROUNDS_PER_ATTACK[b.phase||1]||1;
+  const enraged=bossId==="minotaur" && (labyrinthBroken || (b.phase||1)>=3);
+  const cadence=enraged?1:(BOSS_ROUNDS_PER_ATTACK[b.phase||1]||1);
   if(b.roundsSinceAttack>=cadence){
     b.roundsSinceAttack=0;
     const dmg=Math.round(classMaxHP*0.05*diffM);
@@ -116,7 +169,23 @@ function bmBossResolveTick(boss, classMaxHP, diffM, noDamageAnswerCount){
     }
   }
 
-  return{boss:b,classDamage,events};
+  return{boss:b,classDamage,bossHeal,events};
+}
+
+// Host-only statusregel voor boss-mechanics (Cycloop-countdown/Minotaurus-
+// schild) — bewust ALLEEN via bmHostUpdateNote() in battle.js (het
+// hostscherm/projectiescherm), niet op losse leerling-toestellen.
+function bmBossStatusNote(){
+  if(BM_META?.mode!=="boss") return "";
+  const preset=bmBossPreset(BM_META?.bossId);
+  if(preset.id==="cyclops" && BM_BOSS?.charging){
+    const n=BM_BOSS.chargeLeft||0;
+    return "⚠️ Metgezellenmaaltijd over "+n+" ronde"+(n===1?"":"n")+" — onderbreek met gezamenlijk schild!";
+  }
+  if(preset.id==="minotaur" && (BM_BOSS?.labyrinthShield>0)){
+    return "🛡️ Labyrinth-schild: "+Math.round(BM_BOSS.labyrinthShield);
+  }
+  return "";
 }
 
 // Total War-belegering (BOSS_PRESETS.garrison): welk werk wordt nu bevochten
