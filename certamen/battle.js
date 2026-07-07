@@ -721,9 +721,23 @@ SCREENS.battleFAQ = function(){
       dan de muur, dan het fort — elk verdedigingswerk moet apart verslagen worden. Wint de
       aanvallende klas alle drie, dan kleurt de provincie om in hun beschaving; verlies je
       halverwege, dan onthoudt de provincie tot waar de belegering kwam voor een volgende poging.</li>
-      <li><b>Status</b> — het docentendeel (veldtochtkaart, klas↔beschaving-koppeling, aanvalsflow)
-      is al echt en blijvend, en Training Mode is nu al speelbaar. Zelf een belegering starten als
-      leerling komt nog (nu bereidt de docent een aanval voor via het docent-voorbeeld).</li>
+      <li><b>Status</b> — Total War is in Beta: het docentendeel (veldtochtkaart, klas↔beschaving-koppeling,
+      aanvalsflow) en Training Mode zijn allebei speelbaar. Zelf een belegering starten als leerling komt
+      nog (nu bereidt de docent een aanval voor via de docentenweergave).</li>
+      <li><b>De veldtocht bekijken</b> — via "Bekijk de veldtocht" (Total War-scherm) zie je, zonder
+      inloggen, de live kaart, een legenda van welke klas welke beschaving speelt, en seizoensrecords
+      (grootste rijk, meeste veroveringen, bloedigste veldslag, sterkste solo-speler, grootste bouwer).</li>
+      <li><b>Seizoenen</b> — de veldtocht loopt als een genummerd seizoen met een eigen titel (nu
+      Seizoen 1). De docent kan de kaart en records via de docentenweergave resetten voor een nieuw
+      seizoen (bv. na een schooljaar); klas↔beschaving-koppelingen blijven daarbij staan.</li>
+      <li><b>Steden en provinciebonussen</b> — elke provincie heeft nu 1-3 historische steden (met een
+      korte sfeertag, puur informatief) én een echte <b>provinciebonus</b>: bezit je die provincie, dan
+      bouwt Training Mode één specifiek spoor (garnizoen/muur/toren) daar 20-25% sneller, gebaseerd op
+      de historische specialiteit (bv. Aegyptus' graanschuur versnelt torenpunten). Zichtbaar in het
+      provincie-infopaneel én tijdens het trainen zelf.</li>
+      <li><b>Zeeroutes op de kaart</b> — provincies die alleen over zee bereikbaar zijn (bv. Britannia
+      vanuit Gallië) tonen nu een blauwe stippellijn tussen de twee gebieden, zodat die aanvalsroute
+      ook visueel duidelijk is.</li>
     </ul>`)}
 
   ${sec("Profiel, rang en eerbewijzen",false,`
@@ -2485,7 +2499,7 @@ async function bmResolve(roundN){
       // (eigendomswissel bij winst, "slijtageslag"-schade op de huidige stage
       // bij verlies). Alleen relevant als dit gevecht vanuit twStartAttack()
       // gestart is.
-      if(gp) twResolveSiege(winner,curStageKey||"towers",tB.maxHealth,newHB).catch(()=>{});
+      if(gp) twResolveSiege(winner,curStageKey||"towers",tB.maxHealth,newHB,players).catch(()=>{});
       setTimeout(()=>Net.deleteRoom(BM_CODE).catch(()=>{}), 5000);
       return;
     }

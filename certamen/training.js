@@ -67,6 +67,7 @@ SCREENS.trainingMode = function(){
   <div class="panel" style="text-align:center"><div class="note">Beschaving opzoeken…</div></div>
   <div id="trBody"></div>
   ${foot()}`);
+  twEnsureRegistry(); // nodig voor provincienamen én de provinciebonus (trAnswer())
   twLookupCivForKlas(BM_IDENT.klascode).then(civId=>{
     TR_CIV = civId;
     if(!civId){ trRenderModeBody(); return; }
@@ -163,6 +164,16 @@ function trSetTrack(key){
   trRenderModeBody();
 }
 
+/* Provinciebonus (provinces.json: "bonus":{track,pct,label}) — een ECHT
+   mechanisch effect, geen sfeertekst: geldt alleen als de gekozen provincie
+   (TR_PROVINCE_ID) toevallig het spoor bevoordeelt dat je nu traint
+   (TR_TRACK). Retourneert de vermenigvuldigingsfactor (1 = geen bonus). */
+function trProvinceBonusMult(){
+  const reg = _twRegistry && TR_PROVINCE_ID && _twRegistry[TR_PROVINCE_ID];
+  const bonus = reg && reg.bonus;
+  return (bonus && bonus.track===TR_TRACK) ? (1+bonus.pct/100) : 1;
+}
+
 /* Voortgangsbalk van het gekozen werk op de gekozen provincie (instapscherm).
    Toont aan het eind van de balk een mini-sprite van wat je aan het bouwen
    bent — de eerstvolgende tier, of de voltooide sprite zelf bij tier 2. */
@@ -173,6 +184,11 @@ function trTrackProgressHTML(){
   const next = tier>=2 ? null : (tier===0?TW_TIER1_POINTS:TW_TIER2_POINTS);
   const pct = next ? Math.min(100, Math.round(pts/next*100)) : 100;
   const targetSrc = twSpriteFor(TR_TRACK, tier>=2?2:tier+1, TR_CIV);
+  const reg = _twRegistry && _twRegistry[TR_PROVINCE_ID];
+  const bonus = reg && reg.bonus;
+  const bonusNote = (bonus && bonus.track===TR_TRACK)
+    ? `<div class="note" style="margin-top:6px;color:var(--hi-bright)">🎁 Bonus actief: ${esc(bonus.label)} — +${bonus.pct}% punten hier</div>`
+    : "";
   return `<div class="note" style="margin-top:8px">Voortgang: ${Math.round(pts)}${next?"/"+next:""} punten${tier>=2?" — volledig!":""}</div>
     <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
       <div style="flex:1;height:8px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
@@ -181,7 +197,8 @@ function trTrackProgressHTML(){
       ${targetSrc?`<div style="width:56px;height:56px;flex:0 0 auto;background:#fff;border-radius:8px;box-sizing:border-box">
         <img src="${targetSrc}?${SPRITE_VER}" style="width:100%;height:100%;object-fit:contain;padding:6px;box-sizing:border-box" alt="" onerror="this.parentElement.style.display='none'">
       </div>`:""}
-    </div>`;
+    </div>
+    ${bonusNote}`;
 }
 
 async function trStart(){
@@ -268,7 +285,7 @@ function trAnswer(idx){
     // bouwpunten (het klasdoel blijft groeien) maar geen XP meer.
     const fullRate = TR_CAP_TODAY < TR_DAILY_CAP;
     const basePts = 5/Math.sqrt(TR_CLASS_SIZE||1);
-    const pts = fullRate ? basePts : basePts/2;
+    const pts = (fullRate ? basePts : basePts/2) * trProvinceBonusMult();
     const xpGain = fullRate ? 2 : 0;
     TR_STATS.correct++; TR_STATS.points+=pts; TR_STATS.xp+=xpGain;
     if(fullRate){ TR_CAP_TODAY++; trSaveDailyCap(TR_CAP_TODAY); }
@@ -331,7 +348,9 @@ async function trLoadGarrisonView(){
 }
 
 function trProvinceOverviewHTML(p){
-  const nm = (_twRegistry && _twRegistry[p.id] && _twRegistry[p.id].displayName) || p.id;
+  const reg = _twRegistry && _twRegistry[p.id];
+  const nm = (reg && reg.displayName) || p.id;
+  const bonus = reg && reg.bonus;
   const track=(key,label)=>{
     const pts=p[TW_STRUCTURES[key].field]||0;
     const tier=twStructureTier(pts);
@@ -353,7 +372,9 @@ function trProvinceOverviewHTML(p){
   return `<div class="panel">
     <div style="display:flex;align-items:center;gap:12px">
       ${twGarrisonVisualHTML(p, p.owner)}
-      <div style="flex:1"><b>${esc(nm)}</b></div>
+      <div style="flex:1"><b>${esc(nm)}</b>
+        ${bonus?`<div class="note" style="margin-top:2px">🎁 ${esc(bonus.label)} — +${bonus.pct}% ${TW_TRACK_NM[bonus.track]||bonus.track}punten</div>`:""}
+      </div>
     </div>
     ${track("towers","Fort")}
     ${track("walls","Muur")}
@@ -440,6 +461,21 @@ async function trTrackContribution(track, pts){
     BM_IDENT = {...BM_IDENT, twContrib: contrib};
     bmIdentSave({...bmIdentLoad(), twContrib: contrib});
     trCheckTWAchievements(contrib);
+    trMaybeUpdateTopBuilder(contrib.total||0);
+  }catch(e){}
+}
+
+/* Seizoensrecord "grootste bouwer" (totalwar/stats/topBuilder, zie
+   twRenderHighlights() in totalwar.js) — draait op het leerling-apparaat
+   zelf (geen docent-sessie actief tijdens thuis-oefenen), dus dit pad staat
+   in de rules expliciet open (database.rules.json: totalwar/stats/topBuilder). */
+async function trMaybeUpdateTopBuilder(total){
+  if(!fbDB || !BM_IDENT || total<=0) return;
+  try{
+    await fbDB.ref("totalwar/stats/topBuilder").transaction(cur=>{
+      if(cur && (cur.points||0)>=total) return cur;
+      return { name:BM_IDENT.name||"?", klas:BM_IDENT.klascode||"", points:Math.round(total), at:Date.now() };
+    });
   }catch(e){}
 }
 async function trCheckTWAchievements(contrib){

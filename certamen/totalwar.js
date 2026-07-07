@@ -159,12 +159,13 @@ let _twLiveProvinces = null;
 let _twSelectedId = null;
 
 /* ------------------------------------------------------------
-   SCHERM: publieke "Binnenkort"-uitleg
-   Leerlingen zien wel het concept, maar kunnen niets starten.
+   SCHERM: publieke uitleg — Total War is Beta: Training Mode en de live
+   veldtocht zijn allebei speelbaar. Zelf een belegering starten als leerling
+   komt nog (dat bereidt de docent voor, zie SCREENS.totalWarPreview).
    ------------------------------------------------------------ */
 SCREENS.totalWar = function(){
   document.body.classList.remove("greek");
-  _twLiveMode = false; // publieke uitlegkaart toont altijd de statische demo-stand
+  _twLiveMode = false; // deze uitlegkaart toont altijd de statische demo-stand
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
@@ -172,10 +173,10 @@ SCREENS.totalWar = function(){
   </div>
 
   <div class="panel" style="border-color:var(--hi-dim);text-align:center">
-    <span class="pill" style="background:var(--stone4);color:var(--hi-bright)">Binnenkort · in ontwerp</span>
+    <span class="pill" style="background:var(--ox);color:#fff">Beta — nu live</span>
     <p class="note" style="margin-top:10px">
-      Een tweede spelmodus naast Battle Mode. <b>Nog niet speelbaar</b> —
-      docenten kunnen alvast een voorbeeld bekijken.
+      Een tweede spelmodus naast Battle Mode: een doorlopende veldtocht.
+      Oefen thuis via Training Mode, en volg de veldtocht op de gedeelde kaart.
     </p>
   </div>
 
@@ -220,11 +221,60 @@ SCREENS.totalWar = function(){
   </div>
 
   <div class="panel" style="text-align:center">
-    <p class="note" style="margin-bottom:12px">Ben je docent? Bekijk het interactieve voorbeeld van de veldtochtkaart.</p>
-    <button class="btn btn-gold" onclick="go('totalWarPreview')">${iconSVG("column",18,"currentColor")} Docent-voorbeeld</button>
+    <p class="note" style="margin-bottom:12px">Benieuwd hoe de veldtocht er nu echt voor staat? Bekijk de live kaart, wie welke beschaving speelt, en de seizoensrecords.</p>
+    <button class="btn btn-gold" onclick="go('totalWarMap')">🗺️ Bekijk de veldtocht</button>
+  </div>
+
+  <div class="panel" style="text-align:center">
+    <p class="note" style="margin-bottom:12px">Ben je docent? Open de veldtochtkaart om klassen te koppelen en aanvallen te starten.</p>
+    <button class="btn btn-gold" onclick="go('totalWarPreview')">${iconSVG("column",18,"currentColor")} Docentenweergave</button>
   </div>
   ${foot()}`);
   twLoadMap(false);
+};
+
+/* ------------------------------------------------------------
+   SCHERM: leerling-/publieksversie van de live veldtochtkaart —
+   alleen-lezen (geen "Val aan"-knop, geen inlog nodig), met een legenda van
+   welke klas welke beschaving speelt en een paar seizoensrecords. Start NOOIT
+   zelf de campagne (geen twEnsureCampaignSeeded-aanroep, zie
+   twStartLiveReadOnly() hieronder) — alleen de docent kan de veldtocht
+   starten of resetten.
+   ------------------------------------------------------------ */
+SCREENS.totalWarMap = function(){
+  document.body.classList.remove("greek");
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('totalWar')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>🗺️ De veldtocht</h2>
+  </div>
+
+  <div class="panel" id="twSeasonBox" style="text-align:center"><div class="note">Laden…</div></div>
+
+  <div class="panel">
+    <h3>Wie speelt wie?</h3>
+    <div id="twKlasLegend" class="chips"><div class="note">Laden…</div></div>
+  </div>
+
+  <div class="panel">
+    <h3>Veldtochtkaart</h3>
+    <div id="twMapHost" style="background:#9fc7f4;border:1px solid var(--stone4);border-radius:14px;overflow:hidden;min-height:120px">
+      <div class="note" style="padding:22px;text-align:center">Kaart laden…</div>
+    </div>
+    <div id="twInfo" class="panel" style="margin:12px 0 0">
+      <span class="note">Klik op een provincie voor details.</span>
+    </div>
+    <div id="twLegendBox" class="chips" style="margin-top:12px"></div>
+  </div>
+
+  <div class="panel">
+    <h3>Hoogtepunten van dit seizoen</h3>
+    <div id="twHighlights"><div class="note">Laden…</div></div>
+  </div>
+  ${foot()}`);
+  twLoadMap(true, true, false);
+  twLoadSeasonAndStats();
+  twLoadKlasLegend();
 };
 
 /* ------------------------------------------------------------
@@ -243,7 +293,7 @@ SCREENS.totalWarPreview = function(){
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('totalWar')">${iconSVG("shield",20,"currentColor")}</button>
-    <h2>Total War — voorbeeld</h2>
+    <h2>Total War — docentenweergave</h2>
   </div>
 
   <div class="panel" style="border-color:var(--hi-dim)">
@@ -252,6 +302,8 @@ SCREENS.totalWarPreview = function(){
       worden gedeeld tussen alle apparaten — <b>klik op een provincie</b>.
     </div>
   </div>
+
+  <div class="panel" id="twSeasonBox" style="text-align:center"><div class="note">Laden…</div></div>
 
   <div class="panel">
     <label class="fld">Val aan als beschaving</label>
@@ -272,26 +324,51 @@ SCREENS.totalWarPreview = function(){
     </div>
     <div id="twLegendBox" class="chips" style="margin-top:12px"></div>
   </div>
+
+  <div class="panel">
+    <h3>Seizoensbeheer</h3>
+    <div class="note">Start een nieuw seizoen om de hele kaart te resetten (alle
+    gebieden terug naar hun thuisland/neutraal, alle records gewist). Klas↔beschaving-
+    koppelingen blijven staan. Doe dit bijvoorbeeld eens per schooljaar.</div>
+    <button class="btn btn-ghost btn-block" style="margin-top:10px;color:#e07060;border-color:rgba(90,18,12,.4)" onclick="twStartNewSeason()">🔄 Nieuw seizoen starten</button>
+  </div>
   ${foot()}`);
   twLoadMap(true, true);
+  twLoadSeasonAndStats();
 };
 
 /* ---- Kaart laden (fetch + inline SVG) en eigendomsstatus toepassen ----
    interactive=false → alleen-lezen (geen klikselectie); default true.
-   live=true → echte, blijvende Firebase-status (docent-veldtocht) i.p.v. de
-   statische demo-stand (publieke "Binnenkort"-uitlegkaart). */
-async function twLoadMap(interactive, live){
+   live=true → echte, blijvende Firebase-status i.p.v. de statische demo-stand.
+   seed=false → live kaart zonder twEnsureCampaignSeeded() aan te roepen (voor
+   de leerling-/publieksweergave, SCREENS.totalWarMap: alleen de docent mag de
+   campagne starten); default true (docentenweergave). */
+/* Haalt eenmalig het provincieregister op (namen/steden/bonus/buren/zeeroutes)
+   en cachet het in _twRegistry — gedeeld door alle kaartschermen (twLoadMap)
+   én door Training Mode (training.js, voor de provinciebonus), dat zelf geen
+   kaart laadt. */
+async function twEnsureRegistry(){
+  if(_twRegistry) return _twRegistry;
+  try{
+    const reg = await fetch("map/provinces.json?v=20260707a").then(r=> r.ok ? r.json() : {});
+    _twRegistry = reg;
+  }catch(e){ _twRegistry = {}; }
+  return _twRegistry;
+}
+
+async function twLoadMap(interactive, live, seed){
   interactive = interactive !== false;
   live = live === true;
+  seed = seed !== false;
   const host = el("twMapHost"); if(!host) return;
   try{
     if(!_twSvgCache){
       const V = "?v=20260703a";
-      const [svg, reg] = await Promise.all([
+      const [svg] = await Promise.all([
         fetch("map/provinces.svg"+V).then(r=>{ if(!r.ok) throw new Error("SVG "+r.status); return r.text(); }),
-        fetch("map/provinces.json"+V).then(r=> r.ok ? r.json() : {}).catch(()=>({})),
+        twEnsureRegistry(),
       ]);
-      _twSvgCache = svg; _twRegistry = reg;
+      _twSvgCache = svg;
     }
     host.innerHTML = _twSvgCache;
     const svgEl = host.querySelector("svg");
@@ -300,7 +377,8 @@ async function twLoadMap(interactive, live){
       svgEl.removeAttribute("height");
       svgEl.setAttribute("style","width:100%;height:auto;display:block");
     }
-    if(live) await twStartLive(); else twApplyDemo();
+    if(typeof MapAPI!=="undefined" && _twRegistry) MapAPI.drawSeaRoutes(_twRegistry, host);
+    if(live) await (seed ? twStartLive() : twStartLiveReadOnly()); else twApplyDemo();
     if(interactive) twBindMapClicks(host);
     const lg = el("twLegendBox"); if(lg) lg.innerHTML = twLegend();
   }catch(e){
@@ -334,7 +412,15 @@ function twApplyDemo(){
 async function twEnsureCampaignSeeded(){
   if(!initFirebase()) return false;
   const seeded = await fbDB.ref("totalwar/meta/seeded").once("value");
-  if(seeded.val()) return true;
+  if(seeded.val()){
+    // Veldtocht bestond al vóór seizoenen bestonden (deze code) — backfill
+    // alléén het ontbrekende seizoen, de rest van de kaart blijft ongemoeid.
+    const seasonSnap = await fbDB.ref("totalwar/season").once("value");
+    if(!seasonSnap.exists()){
+      await fbDB.ref("totalwar/season").set({ number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() });
+    }
+    return true;
+  }
   const ownerOf = {};
   Object.entries(TW_HOME_PROVINCES).forEach(([civId,ids])=> ids.forEach(id=> ownerOf[id]=civId));
   const upd = {};
@@ -349,8 +435,31 @@ async function twEnsureCampaignSeeded(){
     upd["totalwar/civs/"+civId] = { trainingPoints:0, bonusesUnlocked:[] };
   });
   upd["totalwar/meta/seeded"] = true;
+  upd["totalwar/season"] = { number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() };
   await fbDB.ref().update(upd);
   return true;
+}
+
+/* ---- Seizoenen: elke veldtocht loopt als een genummerd, betiteld "seizoen"
+   (net als bij bekende MOBA's) — puur cosmetisch/motiverend, geen invloed op
+   spelregels. De docent kan via twStartNewSeason() (SCREENS.totalWarPreview)
+   de hele kaart resetten en een nieuw seizoen starten zodra een schooljaar
+   voorbij is; klas↔beschaving-koppelingen blijven daarbij ongewijzigd. ---- */
+const TW_SEASON_TITLES = [
+  "Opkomst der Beschavingen", "IJzeren Grenzen", "Storm over de Middellandse Zee",
+  "De Lange Vrede", "Bloed en Marmer", "Schaduw van de Adelaar", "Goden en Garnizoenen",
+];
+
+/* Leesbare "hoelang loopt dit al"-tekst voor de seizoensbadge. */
+function twFormatDuration(startedAt){
+  if(!startedAt) return "";
+  const days = Math.max(0, Math.floor((Date.now()-startedAt)/86400000));
+  if(days<1) return "vandaag gestart";
+  if(days===1) return "1 dag bezig";
+  if(days<14) return days+" dagen bezig";
+  if(days<60) return Math.floor(days/7)+" weken bezig";
+  const months = Math.floor(days/30);
+  return months+" maand"+(months===1?"":"en")+" bezig";
 }
 
 /* Start (of hervat) de live listener op /totalwar/provinces. Meldt zichzelf
@@ -371,6 +480,33 @@ async function twStartLive(){
     _twLiveProvinces = snap.val() || {};
     twApplyLive(_twLiveProvinces);
     const lg = el("twLegendBox"); if(lg) lg.innerHTML = twLegend();
+    if(_twSelectedId) twSelectProvince(_twSelectedId);
+  });
+}
+
+/* Alleen-lezen variant voor de leerling-/publiekskaart (SCREENS.totalWarMap):
+   luistert mee op /totalwar/provinces, maar roept NOOIT twEnsureCampaignSeeded()
+   aan — alleen de docent mag de campagne (laten) starten. Is de campagne nog
+   niet gestart, dan toont dit een nette melding i.p.v. een lege kaart. */
+async function twStartLiveReadOnly(){
+  if(!initFirebase()){
+    const host = el("twMapHost");
+    if(host) host.insertAdjacentHTML("afterend", `<div class="note warn" style="padding:12px 0">Firebase niet beschikbaar — de veldtocht kan niet geladen worden.</div>`);
+    return;
+  }
+  _twLiveMode = true;
+  const ref = fbDB.ref("totalwar/provinces");
+  ref.on("value", snap=>{
+    const host = el("twMapHost");
+    if(!host){ ref.off("value"); return; }
+    _twLiveProvinces = snap.val() || {};
+    if(!Object.keys(_twLiveProvinces).length){
+      host.innerHTML = `<div class="note" style="padding:22px;text-align:center">De veldtocht is nog niet gestart door je docent.</div>`;
+      return;
+    }
+    twApplyLive(_twLiveProvinces);
+    const lg = el("twLegendBox"); if(lg) lg.innerHTML = twLegend();
+    twRenderHighlights();
     if(_twSelectedId) twSelectProvince(_twSelectedId);
   });
 }
@@ -402,18 +538,20 @@ function twOverallDefensePct(p){
    stageKey = welk werk (militia/walls/towers) op het moment van eindigen
    werd bevochten. Alleen relevant bij gevechten die via twStartAttack()
    gestart zijn, niet bij losse Boss Battles. */
-async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP){
+async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, players){
   const gp = BM_META && BM_META.garrisonProvince;
   if(!gp || !fbDB) return;
   const ref = fbDB.ref("totalwar/provinces/"+gp.id);
+  const dealt = Math.max(0, stageMaxHP - Math.max(0, stageFinalHP));
   if(winner==="A"){
     await ref.update({
       owner: BM_META.attackerCivId,
       siege: { lastStage:"", stageDamage:{militia:0,walls:0,towers:0} },
       lastChanged: FBNet.serverTime(),
     });
+    fbDB.ref("totalwar/stats/conquests/"+BM_META.attackerCivId)
+      .set(firebase.database.ServerValue.increment(1)).catch(()=>{});
   } else {
-    const dealt = Math.max(0, stageMaxHP - Math.max(0, stageFinalHP));
     const prevDealt = (gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[stageKey]) || 0;
     const upd = {};
     upd["siege/lastStage"] = stageKey;
@@ -421,6 +559,140 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP){
     upd["lastChanged"] = FBNet.serverTime();
     await ref.update(upd);
   }
+  twRecordBattleHighlights(gp, dealt, players).catch(()=>{});
+}
+
+/* Twee losse seizoensrecords, puur motiverend (geen invloed op spelregels):
+   de zwaarste belegering (meeste schade in één stage) en de sterkste
+   solo-speler (meeste persoonlijke schade in één Total War-gevecht). Draait
+   altijd op het docent-apparaat (host van de Boss Battle-siege, zie
+   twStartAttack() — alleen bereikbaar via de docentenweergave), dus de
+   standaard totalwar-schrijfregel (auth != null) volstaat. */
+async function twRecordBattleHighlights(gp, dealt, players){
+  if(!fbDB) return;
+  const nm = (_twRegistry && _twRegistry[gp.id] && _twRegistry[gp.id].displayName) || gp.id;
+  if(dealt>0){
+    fbDB.ref("totalwar/stats/bloodiest").transaction(cur=>{
+      if(cur && (cur.dealt||0)>=dealt) return cur;
+      return { dealt, province:nm, attackerCivId:BM_META.attackerCivId,
+        defenderCivId:gp.defenderCivId||"neutral", at:Date.now() };
+    }).catch(()=>{});
+  }
+  const top = Object.values(players||{})
+    .filter(p=>p && p.identityKey && !String(p.identityKey).startsWith("bot:"))
+    .sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
+  if(top && (top.damage||0)>0){
+    fbDB.ref("totalwar/stats/topSolo").transaction(cur=>{
+      if(cur && (cur.damage||0)>=top.damage) return cur;
+      return { name:top.name||"?", klas:(top.identityKey||"").split(":")[0]||"",
+        damage:top.damage, province:nm, at:Date.now() };
+    }).catch(()=>{});
+  }
+}
+
+/* ---- Seizoensbadge + hoogtepunten: gedeeld door SCREENS.totalWarMap
+   (leerlingen/publiek) en SCREENS.totalWarPreview (docent, boven de
+   "Nieuw seizoen"-knop). Beide screens hebben een eigen #twSeasonBox; alleen
+   totalWarMap heeft #twHighlights. ---- */
+let _twSeason = null;
+let _twStats = null;
+
+function twLoadSeasonAndStats(){
+  if(!initFirebase()){
+    const box = el("twSeasonBox"); if(box) box.innerHTML = `<div class="note warn">Firebase niet beschikbaar.</div>`;
+    return;
+  }
+  fbDB.ref("totalwar/season").on("value", snap=>{
+    if(!el("twSeasonBox")){ fbDB.ref("totalwar/season").off("value"); return; }
+    _twSeason = snap.val();
+    twRenderSeasonBox();
+  });
+  fbDB.ref("totalwar/stats").on("value", snap=>{
+    if(!el("twHighlights")){ fbDB.ref("totalwar/stats").off("value"); return; }
+    _twStats = snap.val() || {};
+    twRenderHighlights();
+  });
+}
+
+function twRenderSeasonBox(){
+  const box = el("twSeasonBox"); if(!box) return;
+  const s = _twSeason;
+  if(!s){ box.innerHTML = `<div class="note">Nog geen seizoen gestart — de docent moet de veldtocht eerst openen.</div>`; return; }
+  box.innerHTML = `
+    <span class="pill" style="background:var(--stone4);color:var(--hi-bright)">Seizoen ${s.number||1}</span>
+    <h3 style="margin:8px 0 2px">${esc(s.title||"")}</h3>
+    <div class="note">${esc(twFormatDuration(s.startedAt))}</div>`;
+}
+
+/* Klas↔beschaving-legenda: leest /totalwar/klasCivs (publiek leesbaar), toont
+   per klas de gekoppelde beschaving met kleur-swatch. */
+function twLoadKlasLegend(){
+  const cont = el("twKlasLegend"); if(!cont || !initFirebase()) return;
+  fbDB.ref("totalwar/klasCivs").once("value").then(snap=>{
+    const map = snap.val()||{};
+    const entries = Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0]));
+    if(!entries.length){ cont.innerHTML = `<div class="note">Nog geen klas gekoppeld aan een beschaving.</div>`; return; }
+    cont.innerHTML = entries.map(([klas,civId])=>{
+      const c = TW_CIVS[civId]||TW_CIVS.neutral;
+      return `<span class="chip"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;
+        background:${c.color};margin-right:6px;vertical-align:middle"></span>${esc(klas)} — ${esc(c.nm)}</span>`;
+    }).join("");
+  }).catch(()=>{ cont.innerHTML = `<div class="note warn">Kon koppelingen niet laden.</div>`; });
+}
+
+/* Seizoenshoogtepunten: "grootste rijk" wordt live afgeleid uit de huidige
+   eigendomsstand (geen aparte opslag nodig); de rest komt uit /totalwar/stats,
+   bijgehouden door twRecordBattleHighlights()/trMaybeUpdateTopBuilder() (training.js). */
+function twRenderHighlights(){
+  const box = el("twHighlights"); if(!box) return;
+  const stats = _twStats||{};
+  const counts = {};
+  Object.values(_twLiveProvinces||{}).forEach(p=>{ if(p&&p.owner&&p.owner!=="neutral") counts[p.owner]=(counts[p.owner]||0)+1; });
+  const biggest = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+  const conquests = stats.conquests||{};
+  const topConqueror = Object.entries(conquests).sort((a,b)=>b[1]-a[1])[0];
+  const civNm = id=> (TW_CIVS[id]||TW_CIVS.neutral).nm;
+  const rows = [
+    biggest ? `👑 <b>Grootste rijk:</b> ${esc(civNm(biggest[0]))} (${biggest[1]} gebied${biggest[1]!==1?"en":""})` : null,
+    topConqueror ? `⚔️ <b>Meeste veroveringen:</b> ${esc(civNm(topConqueror[0]))} (${topConqueror[1]}×)` : null,
+    stats.bloodiest ? `🩸 <b>Bloedigste veldslag:</b> ${esc(stats.bloodiest.province)} — ${Math.round(stats.bloodiest.dealt)} schade (${esc(civNm(stats.bloodiest.attackerCivId))} vs. ${esc(civNm(stats.bloodiest.defenderCivId))})` : null,
+    stats.topSolo ? `🌟 <b>Sterkste solo-speler:</b> ${esc(stats.topSolo.name)} (${esc(stats.topSolo.klas)}) — ${Math.round(stats.topSolo.damage)} schade in één gevecht` : null,
+    stats.topBuilder ? `🏗️ <b>Grootste bouwer:</b> ${esc(stats.topBuilder.name)} (${esc(stats.topBuilder.klas)}) — ${Math.round(stats.topBuilder.points)} bouwpunten` : null,
+  ].filter(Boolean);
+  box.innerHTML = rows.length
+    ? rows.map(r=>`<div class="note" style="margin-top:6px">${r}</div>`).join("")
+    : `<div class="note">Nog geen hoogtepunten — begin de veldtocht!</div>`;
+}
+
+/* ---- Nieuw seizoen starten (docent-only, SCREENS.totalWarPreview): reset de
+   hele kaart naar de thuislanden/neutraal en wist de seizoensrecords. Klas↔
+   beschaving-koppelingen (klasCivs) blijven bewust ongewijzigd — dat is een
+   losstaande, permanente toewijzing (zie twEnsureCampaignSeeded()/§7.1).
+   Dubbele bevestiging (typen) omdat dit onomkeerbaar is. ---- */
+async function twStartNewSeason(){
+  if(!initFirebase()) return;
+  const nextNum = ((_twSeason&&_twSeason.number)||1)+1;
+  const typed = prompt(`Nieuw seizoen starten? Dit reset de hele kaart (alle gebieden terug naar hun thuisland/neutraal) en alle records. Klas↔beschaving-koppelingen blijven staan.\n\nTyp NIEUW SEIZOEN om te bevestigen:`);
+  if((typed||"").trim().toUpperCase()!=="NIEUW SEIZOEN"){
+    if(typed!==null) toast("Geannuleerd","Er is niets gereset.");
+    return;
+  }
+  const title = (prompt("Titel voor Seizoen "+nextNum+" (leeg = automatisch):","")||"").trim()
+    || TW_SEASON_TITLES[(nextNum-1)%TW_SEASON_TITLES.length];
+  const ownerOf = {};
+  Object.entries(TW_HOME_PROVINCES).forEach(([civId,ids])=> ids.forEach(id=> ownerOf[id]=civId));
+  const upd = {};
+  Object.keys(_twRegistry||{}).forEach(id=>{
+    if(id==="_meta") return;
+    upd["totalwar/provinces/"+id] = { owner: ownerOf[id]||"neutral", militiaPoints:0, wallPoints:0, towerPoints:0,
+      siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
+  });
+  upd["totalwar/stats"] = null;
+  upd["totalwar/season"] = { number:nextNum, title, startedAt:FBNet.serverTime() };
+  try{
+    await fbDB.ref().update(upd);
+    toast("Nieuw seizoen gestart","Seizoen "+nextNum+": "+title);
+  }catch(e){ toast("Mislukt", (e&&e.message)||""); }
 }
 
 /* ---- Aanvalsflow: knop verschijnt alleen als de gekozen aanvaller de
@@ -483,10 +755,16 @@ function twSelectProvince(id){
   const info = el("twInfo"); if(info) info.innerHTML = twProvinceInfo(id);
 }
 
+/* Dutch weergavenamen voor een spoor — gedeeld door twProvinceInfo() (bonustekst)
+   en de trainingsschermen (training.js: TR_TRACK_LABELS heeft een eigen, iets
+   uitgebreidere variant met icoon; hier alleen de korte naam). */
+const TW_TRACK_NM = { militia:"garnizoen", walls:"muur", towers:"toren" };
+
 function twProvinceInfo(id){
   const reg  = _twRegistry && _twRegistry[id];
   const nm   = (reg && reg.displayName) || id;
   const cities = (reg && reg.cities) || [];
+  const bonus = reg && reg.bonus;
   let civId, p={};
   if(_twLiveMode){
     p = (_twLiveProvinces && _twLiveProvinces[id]) || {};
@@ -523,7 +801,8 @@ function twProvinceInfo(id){
         ${siegeNote}
       </div>
     </div>
-    <div class="note" style="margin-top:4px">Steden: ${cities.length ? cities.map(esc).join(" · ") : "—"}</div>
+    <div class="note" style="margin-top:4px">Steden: ${cities.length ? cities.map(c=>esc(c.name)+(c.tag?` <small>(${esc(c.tag)})</small>`:"")).join(" · ") : "—"}</div>
+    ${bonus ? `<div class="note" style="margin-top:4px">🎁 Bonus: ${esc(bonus.label)} — <b>+${bonus.pct}% ${TW_TRACK_NM[bonus.track]||bonus.track}punten</b> voor de eigenaar</div>` : ""}
     ${_twLiveMode ? twAttackButtonHTML(id, civId) : ""}`;
 }
 
