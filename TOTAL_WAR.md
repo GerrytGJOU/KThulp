@@ -1,14 +1,24 @@
-# Persistent Total War — Masterplan (FUNDAMENT GEBOUWD)
+# Persistent Total War — Masterplan (BETA — live voor leerlingen)
 
-> **Status: fundament werkend, nog niet vrijgegeven voor leerlingen.** In het
-> hoofdmenu staat de modus nog als **"Binnenkort"** (leerlingen kunnen niet
-> binnen, want Training Mode/§3 bestaat nog niet). Docenten hebben nu wél een
-> **echte, blijvende** veldtochtkaart (Firebase-schema, §4): klas↔beschaving-
-> koppeling in het docentenportaal (§7.1), een live kaart i.p.v. een demo, en
-> een "Val aan"-knop die een echt [Boss Battle](BOSS_BATTLE.md)-gevecht start
-> met de garnizoenssterkte van de verdedigende provincie verrekend (§5.4/
-> BOSS_BATTLE.md "Garnizoensformule"). Zie [§0](#0-wat-is-er-al-gebouwd-nu) voor
-> de volledige, actuele stand.
+> **Status: Beta, live in het hoofdmenu.** Training Mode (§3) bestaat en werkt:
+> leerlingen loggen in met hun bestaande profiel, oefenen thuis en bouwen
+> daarmee direct mee aan het garnizoen/muur/toren van een provincie van hun
+> beschaving (`certamen/training.js`). Er is ook een alleen-lezen, publiek
+> toegankelijke veldtochtkaart voor leerlingen (`SCREENS.totalWarMap`,
+> `certamen/totalwar.js`) met een legenda van welke klas welke beschaving
+> speelt en een paar seizoensrecords (grootste rijk, meeste veroveringen,
+> bloedigste veldslag, sterkste solo-speler, grootste bouwer). De veldtocht
+> loopt als een genummerd, betiteld **seizoen** (`/totalwar/season`) dat de
+> docent via de docentenweergave kan resetten voor een nieuw seizoen. Docenten
+> hebben daarnaast een **echte, blijvende** veldtochtkaart (Firebase-schema,
+> §4): klas↔beschaving-koppeling in het docentenportaal (§7.1), een live kaart
+> i.p.v. een demo, en een "Val aan"-knop die een echt
+> [Boss Battle](BOSS_BATTLE.md)-gevecht start met de garnizoenssterkte van de
+> verdedigende provincie verrekend (§5.4/BOSS_BATTLE.md "Garnizoensformule").
+> Zelf een belegering starten als leerling bestaat nog niet — dat bereidt de
+> docent voor via de docentenweergave. Zie [§0](#0-wat-is-er-al-gebouwd-nu) voor
+> de volledige, actuele stand (let op: §0 zelf dateert van vóór Training Mode/
+> de leerling-kaart/seizoenen en is op die punten inmiddels achterhaald).
 >
 > Dit document is de **enige bron van waarheid** voor Total War en vervangt
 > alle eerdere schetsen (inclusief `Total War Plans.docx`, die nu verouderd en
@@ -31,9 +41,11 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | Publiek uitlegscherm (alleen-lezen demo-kaart) | `certamen/totalwar.js` (`SCREENS.totalWar`) | ✅ werkend, ongewijzigd (blijft demo, want puur illustratief voor niet-ingelogde bezoekers) |
 | Docent-kaart: **echte, blijvende veldtocht** i.p.v. demo-voorbeeld | `certamen/totalwar.js` (`SCREENS.totalWarPreview`, `twStartLive`, `twApplyLive`) | ✅ werkend — live Firebase-listener op `/totalwar/provinces`, geen hardcoded stand meer |
 | **Echte, geometrisch accurate SVG-kaart van het Romeinse Rijk (Trajanus)** | `certamen/map/provinces.svg` | ✅ werkend — **46 aanklikbare provincies**, elk met stabiele `id` (bv. `italia`, `baetica`, `gallia_belgica`) |
-| Provincieregister (naam, steden, buren, zeeroutes, bonus) | `certamen/map/provinces.json` | ✅ werkend — inclusief `neighbors`/`seaRoutes` per provincie (symmetrisch, zie §5.5/§5.6); stedencatalogus nog beperkt (§3.4 open) |
+| Provincieregister (naam, steden+tags, buren, zeeroutes, bonus) | `certamen/map/provinces.json` | ✅ werkend — alle 46 provincies hebben 1-3 historische steden (met sfeertag) én een `bonus`-veld (§3.4 afgerond, zie §3.5 hieronder voor het mechanisme) |
+| **Echte mechanische provinciebonus** | `certamen/training.js` (`trProvinceBonusMult`) | ✅ werkend — bezit je een provincie, dan bouwt Training Mode er één specifiek spoor 20-25% sneller (zie §3.5) |
+| **Zeeroutes zichtbaar op de kaart** | `certamen/map/provinces.js` (`MapAPI.drawSeaRoutes`) | ✅ werkend — blauwe stippellijn tussen de zwaartepunten van elk `seaRoutes`-paar, berekend via `getScreenCTM()` (niet `getBBox()`, want meerdere provincie-paths hebben een eigen `transform`-attribuut) |
 | Provincie-CSS (neutraal/hover/selected/enemy/ally) | `certamen/map/provinces.css` | ✅ werkend |
-| JS-helper om provincies te kleuren/muteren | `certamen/map/provinces.js` (`MapAPI`) | ✅ werkend: `setProvinceOwner`, `setProvinceDefense`, `setProvinceBonus`, `highlightProvince`, `resetProvince` |
+| JS-helper om provincies te kleuren/muteren | `certamen/map/provinces.js` (`MapAPI`) | ✅ werkend: `setProvinceOwner`, `setProvinceDefense`, `setProvinceBonus`, `highlightProvince`, `resetProvince`, `drawSeaRoutes` |
 | **Firebase-schema + eenmalige campagne-seed** | `certamen/totalwar.js` (`twEnsureCampaignSeeded`) | ✅ werkend — `/totalwar/provinces/{id}` + `/totalwar/civs/{civId}`, idempotent (zie §4, met de `klasCivs`-omkering uit §9.5) |
 | **Klas↔beschaving-koppeling (docentenportaal)** | `certamen/games.js` (`tpAssignKlasCiv`/`tpLoadKlasCivs`, paneel in `SCREENS.teacherPortal`) | ✅ werkend — schrijft naar `/totalwar/klasCivs/{klascode}`, gevalideerd tegen bestaande Battle Mode-klascodes |
 | **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageslag (`damageTaken`); winst/verlies schrijft terug naar de provincie |
@@ -49,13 +61,14 @@ en Sarmatia bestaan op de kaart als niet-klikbare achtergrond (cream), *niet*
 als eigen provincies. Dit heeft directe gevolgen voor de factie-indeling in §2
 — zie de expliciete beslissing daarover in §9.1.
 
-Drie kleine, technisch bekende beperkingen (uit eerdere sessies, niet blokkerend):
+Twee kleine, technisch bekende bijzonderheden (niet blokkerend):
 - De drie kleinste Alpenprovincies (`alpes_poeninae`, `alpes_cottiae`,
-  `alpes_maritimae`) liggen visueel onder Italia; een klik daar selecteert nu
-  Italia. Oplosbaar met een DOM-herordening, nog niet gedaan.
+  `alpes_maritimae`) liggen visueel onder Italia in de brondata, maar staan
+  ook ná Italia in de SVG-documentvolgorde — getest (2026-07-07) en een klik
+  op elk van de drie selecteert daadwerkelijk zichzelf, niet Italia. Het
+  eerder genoemde probleem is dus niet (meer) reproduceerbaar; geen fix nodig.
 - `cyprus` bestaat uit twee samenvallende SVG-paden (`cyprus`/`cyprus_2`),
   al correct als één provincie behandeld door `MapAPI`.
-- Sommige provincies hebben nog maar 0 of 1 stad geregistreerd (zie §3.4).
 
 ---
 
@@ -194,17 +207,42 @@ volledige motivatie): **TP is géén synoniem voor coins of XP.** TP:
   principe "mastery alleen in de klas" is dus al een bestaande invariant, geen
   nieuw te bouwen regel.
 
-### 3.4 Openstaande data-taak: meer steden per provincie
+### 3.4 Stedencatalogus (afgerond 2026-07-07)
 
-`provinces.json` heeft nu vaak maar 1 stad per provincie (soms 0). Het
-docx-plan beschrijft rijke 1-3-steden-per-provincie-bonussen met historische
-namen die vaak al keurig binnen bestaande provincies vallen (bv. Capua →
-`italia`, Numantia/Carthago Nova → `tarraconensis`, Byzantium →
-`bithynia_et_pontus`, Memphis/Thebe → `aegyptus`, Antiochia/Jerusalem →
-`syria`/`judea`). Dit is **pure data-invoer, geen geometriewerk** — een
-volgende sessie kan `provinces.json` uitbreiden met een `cities: [{naam,
-bonus}]`-array per provincie op basis van de docx-catalogus, gefilterd tot
-provincies die daadwerkelijk op de kaart bestaan.
+`provinces.json` heeft nu voor alle 46 provincies 1-3 historisch onderbouwde
+steden (`cities: [{name, tag}]`), bv. Capua → `italia`, Carthago Nova →
+`tarraconensis`, Byzantium → `thracia` (niet `bithynia_et_pontus` — Byzantium
+lag historisch aan de Europese/Thracische kant van de Bosporus), Memphis/Thebae
+→ `aegyptus`, Antiochia/Palmyra/Damascus → `syria`, Caesarea Maritima/Hierosolyma
+→ `judea`. `tag` is puur sfeer/informatief (geen eigen mechanisch effect — er is
+geen eigendom per stad, zie §5.3), zichtbaar in het provincie-infopaneel
+(`twProvinceInfo()` in `totalwar.js`).
+
+### 3.5 Echte mechanische provinciebonus (nieuw, 2026-07-07)
+
+Elke provincie heeft nu ook een `bonus: {track, pct, label}`-veld — GEEN
+sfeertekst maar een écht spelmechanisch effect: zolang een beschaving deze
+provincie bezit, telt Training Mode punten voor het genoemde spoor
+(`militia`/`walls`/`towers`) met `pct`% extra (standaard 20%, Aegyptus als
+uitzondering 25% — "Graanschuur van het Rijk"), toegepast in `trAnswer()`
+(`training.js`, via `trProvinceBonusMult()`) vóórdat de punten zowel naar
+Firebase (`twAwardStructurePoints`) als naar de persoonlijke bijdrage
+(`trTrackContribution`) geschreven worden — dus wat de leerling op het scherm
+ziet, wat er in de provincie belandt, en wat er aan de leerling wordt
+toegeschreven, zijn altijd hetzelfde (bonus-inclusieve) getal.
+
+Het spoor per provincie is gekozen op basis van de historische specialiteit
+(bv. legioensfortprovincies → `militia`, mijnbouw-/steengroeveprovincies →
+`walls`, handels-/graanprovincies → `towers`) — zie `certamen/map/provinces.json`
+voor de volledige tabel. Dit is bewust **provincie-niveau**, niet stad-niveau:
+er bestaat geen eigendom per stad in het gebouwde systeem (zie §5.3), dus een
+mechanisch effect per stad zou een nieuwe, grotere architectuurwijziging
+vereisen (Firebase-schema voor stad-eigendom, SVG-stadsmarkers, "contested"-
+visualisatie) — expliciet niet gebouwd, zie de open vraag daarover in §5.3.
+
+`twEnsureRegistry()` (`totalwar.js`) haalt het register (incl. bonussen) op en
+cachet het in `_twRegistry` — gedeeld door alle kaartschermen én door Training
+Mode (dat zelf geen kaart laadt, maar de bonus wel moet kennen).
 
 ---
 
@@ -324,6 +362,14 @@ aangrenzende havenprovincie over zee bereikbaar (bv. Britannia is alleen vanuit
 Gallië aan te vallen). Dit is een **eenvoudige aanvulling op de buren-lijst**
 per provincie in `provinces.json` (een `seaRoutes: [...]`-array naast de
 gewone, geometrisch-aangrenzende buren) — geen nieuwe systeemlaag.
+
+Sinds 2026-07-07 ook **zichtbaar** op de kaart: `MapAPI.drawSeaRoutes()`
+(`certamen/map/provinces.js`) tekent een blauwe stippellijn tussen elk
+`seaRoutes`-paar, zodat een zee-verbinding niet langer alleen een onzichtbaar
+databaseveld is. Bij die gelegenheid zijn ook twee ontbrekende, geografisch
+voor de hand liggende routes toegevoegd: `gallia_narbonensis` ↔ `italia`
+(Massilia-Ostia, langs de kust in plaats van over de Alpen) en `judea` ↔
+`aegyptus` (Caesarea Maritima-Alexandria).
 
 ---
 
@@ -475,10 +521,9 @@ een schildlaag krijgt, kan `towers` daaraan gekoppeld worden.
 
 ## 10. Roadmap (volgorde-suggestie voor de implementatiesessie)
 
-1. **Data**: `provinces.json` uitbreiden met de volledige stedenlijst +
-   bonusteksten (§3.4) — pure data-invoer, geen risico voor de bestaande kaart.
-   *(nog open — `neighbors`/`seaRoutes` zijn wel al toegevoegd, de
-   1-3-steden-per-provincie-bonuscatalogus nog niet)*
+1. ✅ **Data**: `provinces.json` uitgebreid met de volledige stedenlijst +
+   een echte, mechanische provinciebonus per provincie (§3.4/§3.5), en
+   zeeroutes zijn nu ook zichtbaar op de kaart als blauwe stippellijn (§5.6).
 2. ✅ **Firebase-schema**: `/totalwar/provinces/{id}` en `/totalwar/civs/{id}`
    opgezet (§4, met de `klasCivs`-omkering uit §9.5), `MapAPI` gekoppeld aan een
    live Firebase-listener i.p.v. de vroegere hardcoded `TW_DEMO_OWN`/`TW_DEMO_DEF`

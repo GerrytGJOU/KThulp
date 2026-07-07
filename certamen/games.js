@@ -22,8 +22,8 @@ SCREENS.home = function(){
   <button class="tile" onclick="go('totalWar')">
     <span class="corner">${iconSVG("crown",88,"currentColor")}</span>
     <span class="ic">${iconSVG("crown",44,"currentColor")}</span>
-    <h3>🗺️ Total War <span style="font-size:11px;background:var(--stone4);color:var(--hi-bright);border:1px solid var(--hi-dim);border-radius:4px;padding:2px 6px;vertical-align:middle;margin-left:4px">BINNENKORT</span></h3>
-    <p>Doorlopende veldtocht: elke klas is een beschaving en verovert samen de kaart van Europa. Nog in ontwerp — docenten kunnen het voorbeeld bekijken.</p>
+    <h3>🗺️ Total War <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+    <p>Doorlopende veldtocht: elke klas is een beschaving en verovert samen de kaart van Europa. Oefen thuis, val aan in de les.</p>
   </button>
   <button class="tile" onclick="go('freePractice')">
     <span class="ic">${iconSVG("owl",44,"currentColor")}</span>
