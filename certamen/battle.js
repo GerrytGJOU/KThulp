@@ -733,8 +733,10 @@ SCREENS.battleFAQ = function(){
       <li><b>Steden en provinciebonussen</b> — elke provincie heeft nu 1-3 historische steden (met een
       korte sfeertag, puur informatief) én een echte <b>provinciebonus</b>: bezit je die provincie, dan
       bouwt Training Mode één specifiek spoor (garnizoen/muur/toren) daar 20-25% sneller, gebaseerd op
-      de historische specialiteit (bv. Aegyptus' graanschuur versnelt torenpunten). Zichtbaar in het
-      provincie-infopaneel én tijdens het trainen zelf.</li>
+      de historische specialiteit (bv. Aegyptus' graanschuur versnelt torenpunten). Diezelfde bonus telt
+      ook mee tíjdens een belegering: dat spoor heeft dan ook 20-25% meer boss-HP, dus een goed gekozen
+      provinciebonus maakt een gebied niet alleen sneller op te bouwen, maar ook echt lastiger te
+      veroveren. Zichtbaar in het provincie-infopaneel én tijdens het trainen zelf.</li>
       <li><b>Zeeroutes op de kaart</b> — provincies die alleen over zee bereikbaar zijn (bv. Britannia
       vanuit Gallië) tonen nu een blauwe stippellijn tussen de twee gebieden, zodat die aanvalsroute
       ook visueel duidelijk is.</li>
@@ -1244,8 +1246,7 @@ async function bmStartBossGame(){
       const resumeIdx=lastStage ? stageKeys.indexOf(lastStage) : 0;
       stageIdx=resumeIdx>=0 ? resumeIdx : 0;
       const stageKey=stageKeys[stageIdx];
-      const tier=twStructureTier(gp[TW_STRUCTURES[stageKey].field]);
-      const stageMax=TW_STAGE_HP[tier]||TW_STAGE_HP[1];
+      const stageMax=twStageMaxHP(gp, stageKey);
       const dmg=(gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[stageKey])||0;
       bossMaxHP=stageMax;
       bossStartHP=Math.max(1, stageMax-dmg);
@@ -2482,8 +2483,7 @@ async function bmResolve(roundN){
       if(newHB<=0 && curStageKey && curStageIdx<stageKeys.length-1){
         const nextIdx=curStageIdx+1;
         const nextKey=stageKeys[nextIdx];
-        const nextTier=twStructureTier(gp[TW_STRUCTURES[nextKey].field]);
-        const nextMax=TW_STAGE_HP[nextTier]||TW_STAGE_HP[1];
+        const nextMax=twStageMaxHP(gp, nextKey);
         const dmg=(gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[nextKey])||0;
         const nextStart=Math.max(1, nextMax-dmg);
         await fbDB.ref("rooms/"+BM_CODE+"/teams/B").set({health:nextStart,maxHealth:nextMax});
