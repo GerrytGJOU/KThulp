@@ -244,6 +244,29 @@ visualisatie) — expliciet niet gebouwd, zie de open vraag daarover in §5.3.
 cachet het in `_twRegistry` — gedeeld door alle kaartschermen én door Training
 Mode (dat zelf geen kaart laadt, maar de bonus wel moet kennen).
 
+### 3.6 Provinciebonus telt ook mee tijdens de belegering zelf (nieuw, 2026-07-07)
+
+Eerste uitbreiding van §3.5 richting "Rome: Total War"-achtige provincie-
+specialisaties (RTS-inspiratie, expliciet gevraagd): de bonus is niet meer
+uitsluitend een Training Mode-effect. `twStageMaxHP(gp, stageKey)`
+(`totalwar.js`) berekent de boss-HP voor één belegeringsstage en verhoogt die
+met hetzelfde `pct` als de bonus toevallig dát spoor betreft — dus een
+provincie met een muur-bonus is niet alleen sneller te versterken, maar heeft
+tijdens een aanval ook een `pct`% dikkere muur om doorheen te breken. Deze
+functie vervangt de eerdere losse `TW_STAGE_HP[tier]||TW_STAGE_HP[1]`-opzoek
+op **beide** plekken waar dat gebeurde: de aanvalsstart
+(`bmStartBossGame()`) én de overgang naar de volgende stage
+(`bmResolve()`) — bewust op één plek gehouden, anders zou een van de twee
+per ongeluk zonder bonus kunnen komen te zitten.
+
+Bewust **niet** gedaan (mogelijke vervolgstap, nog niet besloten): een
+rijksbrede bonus voor het bezitten van een "vlaggenschip"-provincie (bv.
+Aegyptus), analoog aan Crusader Kings se unieke gebouwen — dat zou de bonus
+van één provincie laten uitstralen naar de hele beschaving in plaats van
+alleen die ene provincie, en raakt daarmee de balans van de volledige kaart.
+Groter risico, dus pas oppakken nadat de provincie-eigen bonus (dit §3.6) een
+tijdje in de praktijk is getest.
+
 ---
 
 ## 4. Datamodel (Firebase RTDB) — vervangt `TW_DEMO_OWN`/`TW_DEMO_DEF`

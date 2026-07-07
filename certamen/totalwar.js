@@ -112,6 +112,22 @@ function twStructureTier(points){
   return 0;
 }
 
+/* Effectieve boss-HP voor één belegeringsstage (militia/walls/towers) van een
+   provincie: basis-tier-HP (TW_STAGE_HP) VERMENIGVULDIGD met de provinciebonus
+   als die toevallig dit spoor bevoordeelt — dezelfde bonus als Training Mode
+   (provinces.json: "bonus":{track,pct,label}), nu ook echt voelbaar tijdens
+   het gevecht zelf, niet alleen bij het bouwen (TOTAL_WAR.md §3.6). Gedeeld
+   door bmStartBossGame()/bmResolve() (battle.js) — beide plekken waar een
+   stage-HP wordt bepaald (aanvalsstart, en overgang naar de volgende stage). */
+function twStageMaxHP(gp, stageKey){
+  const tier = twStructureTier(gp[TW_STRUCTURES[stageKey].field]);
+  let hp = TW_STAGE_HP[tier] || TW_STAGE_HP[1];
+  const reg = _twRegistry && _twRegistry[gp.id];
+  const bonus = reg && reg.bonus;
+  if(bonus && bonus.track===stageKey) hp = Math.round(hp*(1+bonus.pct/100));
+  return hp;
+}
+
 /* Sprite-pad voor een spoor op een gegeven tier; "civ" (alleen militia-tier2)
    wordt vertaald naar het civ-specifieke garnizoensplaatje met terugval. */
 function twSpriteFor(structureKey, tier, civId){
@@ -802,7 +818,7 @@ function twProvinceInfo(id){
       </div>
     </div>
     <div class="note" style="margin-top:4px">Steden: ${cities.length ? cities.map(c=>esc(c.name)+(c.tag?` <small>(${esc(c.tag)})</small>`:"")).join(" · ") : "—"}</div>
-    ${bonus ? `<div class="note" style="margin-top:4px">🎁 Bonus: ${esc(bonus.label)} — <b>+${bonus.pct}% ${TW_TRACK_NM[bonus.track]||bonus.track}punten</b> voor de eigenaar</div>` : ""}
+    ${bonus ? `<div class="note" style="margin-top:4px">🎁 Bonus: ${esc(bonus.label)} — <b>+${bonus.pct}% ${TW_TRACK_NM[bonus.track]||bonus.track}punten</b> voor de eigenaar, én <b>+${bonus.pct}% verdedigings-HP</b> op dat spoor bij een belegering</div>` : ""}
     ${_twLiveMode ? twAttackButtonHTML(id, civId) : ""}`;
 }
 
