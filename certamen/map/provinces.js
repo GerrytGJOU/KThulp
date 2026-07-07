@@ -92,28 +92,48 @@ const MapAPI = (function () {
      ook als de SVG ooit wijzigt (geen aparte stadsmarkers nodig). De lijnen
      zitten in een eigen <g> met pointer-events:none, dus ze onderscheppen
      nooit een klik op een provincie eronder. Idempotent: een eerdere
-     <g id="mapSeaRoutes"> wordt vervangen, niet gestapeld. */
+     <g id="mapSeaRoutes"> wordt vervangen, niet gestapeld.
+
+     BELANGRIJKE VALKUIL (opgelost): de provincie-paths zitten geneste in
+     legacy-groepen (bv. g#layer3 met transform="translate(...)", daarbinnen
+     g#Layer_x0020_1 met wéér een eigen translate). getScreenCTM() van de
+     ROOT-<svg> geeft coördinaten in het ROOT-assenstelsel — als je die
+     rechtstreeks als x1/y1/x2/y2 op een <line> zet die je vervolgens IN zo'n
+     geneste groep invoegt, telt de browser de groepstransform(s) er nog een
+     keer overheen, met een grote, systematische verschuiving tot gevolg
+     (precies het "zeeroutes staan op de verkeerde plek"-probleem). Fix: eerst
+     bepalen WAAR de lijnen komen (vlak vóór de eerste provincie, zie onder),
+     en de screenCTM van DIE EXACTE ouder gebruiken — niet van de root-svg —
+     zodat de coördinaten kloppen ongeacht hoeveel geneste transforms ertussen
+     zitten. */
   function drawSeaRoutes(registry, container) {
     if (!container || typeof container.querySelector !== "function") return null;
     const svg = container.querySelector("svg");
     if (!svg || !registry || typeof svg.createSVGPoint !== "function") return null;
     const old = svg.querySelector("#mapSeaRoutes");
     if (old) old.remove();
+
+    // Invoegpunt eerst bepalen (vlak vóór de eerste provincie = onder land,
+    // boven zee) — de CTM van DEZE ouder is de juiste voor de coördinaten.
+    const firstProvince = svg.querySelector(".province");
+    const insertParent = firstProvince ? firstProvince.parentNode : svg;
+    const ctmSource = (insertParent && typeof insertParent.getScreenCTM === "function") ? insertParent : svg;
+    const screenCTM = ctmSource.getScreenCTM();
+
     const ns = "http://www.w3.org/2000/svg";
     const g = document.createElementNS(ns, "g");
     g.setAttribute("id", "mapSeaRoutes");
     g.setAttribute("style", "pointer-events:none");
-    const screenCTM = svg.getScreenCTM();
     const centerOf = (id) => {
       const el = svg.querySelector('[id="' + id + '"], [data-province="' + id + '"]');
       if (!el || !screenCTM) return null;
       try {
         const rect = el.getBoundingClientRect();
-        const pt = svg.createSVGPoint();
+        const pt = svg.createSVGPoint(); // createSVGPoint is generiek; alleen matrixTransform() doet ertoe
         pt.x = rect.left + rect.width / 2;
         pt.y = rect.top + rect.height / 2;
-        const svgPt = pt.matrixTransform(screenCTM.inverse());
-        return { x: svgPt.x, y: svgPt.y };
+        const localPt = pt.matrixTransform(screenCTM.inverse());
+        return { x: localPt.x, y: localPt.y };
       } catch (e) { return null; }
     };
     const drawn = new Set();
@@ -136,15 +156,7 @@ const MapAPI = (function () {
         g.appendChild(line);
       });
     });
-    // Vóór de eerste provincie invoegen (niet appendChild!) zodat de lijnen
-    // ONDER de provincies liggen (land verbergt ze) maar BOVEN de blauwe
-    // zee-achtergrond die al in de brondata zit (dus zichtbaar op open zee).
-    // svg.insertBefore() zou hier stuk lopen: de provincie-paths zitten
-    // genest in een legacy-groep (g#Layer_x0020_1), niet direct onder <svg>,
-    // dus de invoegreferentie moet een ECHT sibling zijn — vandaar dat we op
-    // de eigen parent van de eerste provincie invoegen, niet op svg zelf.
-    const firstProvince = svg.querySelector(".province");
-    if (firstProvince && firstProvince.parentNode) firstProvince.parentNode.insertBefore(g, firstProvince);
+    if (firstProvince) insertParent.insertBefore(g, firstProvince);
     else svg.appendChild(g);
     return g;
   }
