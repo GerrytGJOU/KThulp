@@ -51,8 +51,34 @@ const TW_HOME_PROVINCES = {
   britanni: ["britannia"],
 };
 
+/* Elke beschaving se EIGEN startvlaggenschip (de thuisprovincie die toevallig
+   ook vlaggenschip is, bv. roma → italia). Telt NIET mee voor de vlaggenschip-
+   beloning/-eerbewijzen (§3.7) — anders zou elke beschaving die al vanaf
+   campagnestart hebben zonder ooit iets veroverd te hebben. Alleen een écht
+   VEROVERD vlaggenschip (van een tegenstander, of Dacia/Asia/Judea — die van
+   niemand thuisprovincie zijn) telt. Vereist _twRegistry (twEnsureRegistry()). */
+function twHomeFlagshipOf(civId){
+  const homes = TW_HOME_PROVINCES[civId] || [];
+  return homes.find(id => _twRegistry && _twRegistry[id] && _twRegistry[id].flagship) || null;
+}
+
 /* ---- Maximale verdediging: gebieden blijven altijd veroverbaar ---- */
 const TW_DEFENSE_CAP = 100;
+
+/* ------------------------------------------------------------------
+   VLAGGENSCHIP-PROVINCIES (TOTAL_WAR.md §3.7) — 11 historisch cruciale
+   provincies (8 hoofdsteden + Dacia/Asia/Judea, zie provinces.json "flagship").
+   Bezit van ÉÉN OF MEER vlaggenschepen geeft een niet-stapelende, rijksbrede
+   beloning — bewust GEEN extra bouw-/siegekracht (dat zou grote rijken alleen
+   maar onverslaanbaar maken): een vaste extra-XP-bonus en een hogere dagcap
+   in Training Mode (zie trCivHasFlagship() in training.js). Plus twee
+   eenmalige eerbewijzen per vlaggenschip (verovering + "Legacy" bij lang
+   genoeg vasthouden) — zie ACHIEVEMENTS_DEF (core.js) en
+   trCheckFlagshipAchievements() (training.js). Alle drie constanten zijn
+   richtwaarden, makkelijk bij te stellen. ------------------------------ */
+const TW_FLAGSHIP_XP_BONUS = 1;      // extra XP bovenop de normale 2 per volledige-snelheid-antwoord
+const TW_FLAGSHIP_DAILY_CAP = 35;    // i.p.v. TR_DAILY_CAP (25, training.js)
+const TW_FLAGSHIP_LEGACY_WEEKS = 4;  // ononderbroken bezit nodig voor de Legacy-eerbewijzen
 
 /* ------------------------------------------------------------------
    GARNIZOENSSPOREN — drie onafhankelijke verdedigingswerken die een
@@ -366,7 +392,7 @@ SCREENS.totalWarPreview = function(){
 async function twEnsureRegistry(){
   if(_twRegistry) return _twRegistry;
   try{
-    const reg = await fetch("map/provinces.json?v=20260707a").then(r=> r.ok ? r.json() : {});
+    const reg = await fetch("map/provinces.json?v=20260707b").then(r=> r.ok ? r.json() : {});
     _twRegistry = reg;
   }catch(e){ _twRegistry = {}; }
   return _twRegistry;
@@ -435,6 +461,16 @@ async function twEnsureCampaignSeeded(){
     if(!seasonSnap.exists()){
       await fbDB.ref("totalwar/season").set({ number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() });
     }
+    // Idem voor ownerSince (nodig voor de vlaggenschip-Legacy-eerbewijzen,
+    // §3.7): provincies die al vóór deze code bestonden hebben dat veld nog
+    // niet — backfill met "nu", zodat de Legacy-klok vanaf vandaag loopt
+    // i.p.v. met een onbekend (mogelijk al lang verstreken) verleden te doen alsof.
+    const provSnap = await fbDB.ref("totalwar/provinces").once("value");
+    const backfill = {};
+    Object.entries(provSnap.val()||{}).forEach(([id,p])=>{
+      if(p && !p.ownerSince) backfill["totalwar/provinces/"+id+"/ownerSince"] = FBNet.serverTime();
+    });
+    if(Object.keys(backfill).length) await fbDB.ref().update(backfill);
     return true;
   }
   const ownerOf = {};
@@ -443,7 +479,7 @@ async function twEnsureCampaignSeeded(){
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
     const owner = ownerOf[id] || "neutral";
-    upd["totalwar/provinces/"+id] = { owner, militiaPoints:0, wallPoints:0, towerPoints:0,
+    upd["totalwar/provinces/"+id] = { owner, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
       siege:{ lastStage:0, stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
   });
   Object.keys(TW_CIVS).forEach(civId=>{
@@ -562,6 +598,7 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, player
   if(winner==="A"){
     await ref.update({
       owner: BM_META.attackerCivId,
+      ownerSince: FBNet.serverTime(), // reset de Legacy-klok (§3.7) bij elke eigendomswissel
       siege: { lastStage:"", stageDamage:{militia:0,walls:0,towers:0} },
       lastChanged: FBNet.serverTime(),
     });
@@ -700,7 +737,7 @@ async function twStartNewSeason(){
   const upd = {};
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
-    upd["totalwar/provinces/"+id] = { owner: ownerOf[id]||"neutral", militiaPoints:0, wallPoints:0, towerPoints:0,
+    upd["totalwar/provinces/"+id] = { owner: ownerOf[id]||"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
       siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
   });
   upd["totalwar/stats"] = null;
@@ -781,6 +818,7 @@ function twProvinceInfo(id){
   const nm   = (reg && reg.displayName) || id;
   const cities = (reg && reg.cities) || [];
   const bonus = reg && reg.bonus;
+  const flagship = reg && reg.flagship;
   let civId, p={};
   if(_twLiveMode){
     p = (_twLiveProvinces && _twLiveProvinces[id]) || {};
@@ -810,6 +848,7 @@ function twProvinceInfo(id){
       <div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <b style="font-size:16px">${esc(nm)}</b>
+          ${flagship ? `<span class="pill" style="background:var(--stone4);color:var(--hi-bright);border:1px solid var(--hi-dim)" title="Vlaggenschipprovincie">👑 Vlaggenschip</span>` : ""}
           <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">
             ${owned ? esc(civ.nm) : "neutraal — veroverbaar"}</span>
         </div>
@@ -819,6 +858,9 @@ function twProvinceInfo(id){
     </div>
     <div class="note" style="margin-top:4px">Steden: ${cities.length ? cities.map(c=>esc(c.name)+(c.tag?` <small>(${esc(c.tag)})</small>`:"")).join(" · ") : "—"}</div>
     ${bonus ? `<div class="note" style="margin-top:4px">🎁 Bonus: ${esc(bonus.label)} — <b>+${bonus.pct}% ${TW_TRACK_NM[bonus.track]||bonus.track}punten</b> voor de eigenaar, én <b>+${bonus.pct}% verdedigings-HP</b> op dat spoor bij een belegering</div>` : ""}
+    ${flagship ? `<div class="note" style="margin-top:4px">📜 <i>${esc(flagship.history)}</i></div>
+    <div class="note" style="margin-top:4px">👑 Vlaggenschip: geeft de bezittende beschaving <b>+${TW_FLAGSHIP_XP_BONUS} XP</b> per goed antwoord en een <b>hogere dagcap</b> (${TW_FLAGSHIP_DAILY_CAP} i.p.v. ${TR_DAILY_CAP}) in Training Mode, plus het eerbewijs "${esc(flagship.title)}" bij verovering en nogmaals bij ${TW_FLAGSHIP_LEGACY_WEEKS} weken onafgebroken bezit.
+    ${(typeof twHomeFlagshipOf==="function" && owned && twHomeFlagshipOf(civId)===id) ? `<br><small>Let op: dit is de eigen startprovincie van ${esc(civ.nm)} — die telt niet mee. Alleen een écht veroverd vlaggenschip (van een ander, of Dacia/Asia/Judea) activeert deze beloning.</small>` : ""}</div>` : ""}
     ${_twLiveMode ? twAttackButtonHTML(id, civId) : ""}`;
 }
 
