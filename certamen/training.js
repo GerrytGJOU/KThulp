@@ -91,10 +91,22 @@ async function trLoadOwnedProvinces(){
       ((b.militiaPoints||0)+(b.wallPoints||0)+(b.towerPoints||0)));
     TR_PROVINCE_ID = sorted[0]?.id || null;
   }
+  trCheckFlagshipAchievements(); // fire-and-forget, ververst elke keer TR_OWNED_PROVINCES ververst wordt
 }
 
 function trCurrentProvince(){
   return TR_OWNED_PROVINCES.find(p=>p.id===TR_PROVINCE_ID) || null;
+}
+
+/* Bezit de beschaving van de leerling minstens één vlaggenschipprovincie
+   (provinces.json: "flagship") — geeft een vaste, NIET-stapelende rijksbrede
+   beloning (TW_FLAGSHIP_XP_BONUS/TW_FLAGSHIP_DAILY_CAP, totalwar.js): bewust
+   geen extra bouwkracht, om te voorkomen dat grote rijken alleen maar
+   onverslaanbaar worden. */
+function trCivHasFlagship(){
+  const homeFlagship = typeof twHomeFlagshipOf==="function" ? twHomeFlagshipOf(TR_CIV) : null;
+  return TR_OWNED_PROVINCES.some(p =>
+    p.id!==homeFlagship && _twRegistry && _twRegistry[p.id] && _twRegistry[p.id].flagship);
 }
 
 function trRenderModeBody(){
@@ -112,10 +124,14 @@ function trRenderModeBody(){
   const civ = TW_CIVS[TR_CIV]||TW_CIVS.neutral;
   const list = baseList(TR_DRAFT.lang).filter(usable);
   const maxN = list.reduce((m,w)=>Math.max(m,w.f||0),0);
+  const flagshipNote = trCivHasFlagship()
+    ? `<div class="panel" style="text-align:center"><div class="note" style="color:var(--hi-bright)">👑 Jouw beschaving bezit een vlaggenschipprovincie: <b>+${TW_FLAGSHIP_XP_BONUS} XP</b> extra per goed antwoord en een <b>hogere dagcap</b> (${TW_FLAGSHIP_DAILY_CAP} i.p.v. ${TR_DAILY_CAP}).</div></div>`
+    : "";
   body.innerHTML = `
   <div class="panel" style="text-align:center">
     <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">${esc(civ.nm)}</span>
   </div>
+  ${flagshipNote}
   ${TR_OWNED_PROVINCES.length>1?`
   <div class="panel">
     <label class="fld">Welke provincie versterk je?</label>
@@ -281,12 +297,16 @@ function trAnswer(idx){
     // Klasgrootte-schaling (TOTAL_WAR.md §7.4): elke leerling draagt minder
     // per antwoord bij naarmate de klas groter is (1/√N), zodat een klas van
     // 5 ongeveer even snel bouwt als een klas van 30.
-    // Dagelijkse afroming (TR_DAILY_CAP): boven de grens nog wel halve
-    // bouwpunten (het klasdoel blijft groeien) maar geen XP meer.
-    const fullRate = TR_CAP_TODAY < TR_DAILY_CAP;
+    // Dagelijkse afroming: boven de dagcap nog wel halve bouwpunten (het
+    // klasdoel blijft groeien) maar geen XP meer. De dagcap zelf ligt hoger
+    // als de beschaving een vlaggenschip bezit (TOTAL_WAR.md §3.7) — bewust
+    // een niet-stapelend, rijksbreed voordeel i.p.v. extra bouw-/siegekracht.
+    const hasFlagship = trCivHasFlagship();
+    const dailyCap = hasFlagship ? TW_FLAGSHIP_DAILY_CAP : TR_DAILY_CAP;
+    const fullRate = TR_CAP_TODAY < dailyCap;
     const basePts = 5/Math.sqrt(TR_CLASS_SIZE||1);
     const pts = (fullRate ? basePts : basePts/2) * trProvinceBonusMult();
-    const xpGain = fullRate ? 2 : 0;
+    const xpGain = fullRate ? (2 + (hasFlagship ? TW_FLAGSHIP_XP_BONUS : 0)) : 0;
     TR_STATS.correct++; TR_STATS.points+=pts; TR_STATS.xp+=xpGain;
     if(fullRate){ TR_CAP_TODAY++; trSaveDailyCap(TR_CAP_TODAY); }
     if(TR_PROVINCE_ID) twAwardStructurePoints(TR_PROVINCE_ID, TR_TRACK, pts);
@@ -488,6 +508,40 @@ async function trCheckTWAchievements(contrib){
   check("drie_sporen", (contrib.militia||0)>0 && (contrib.walls||0)>0 && (contrib.towers||0)>0);
   check("steenhouwer", (contrib.total||0)>=100);
   check("bouwmeester", (contrib.total||0)>=1000);
+  if(!newOnes.length) return;
+  const updated=[...new Set([...current,...newOnes])];
+  try{ await fbDB.ref("identities/"+klas+"/"+lcode+"/achievements").set(updated); }catch(e){ return; }
+  BM_IDENT={...BM_IDENT, achievements:updated};
+  bmIdentSave({...bmIdentLoad(), achievements:updated});
+  newOnes.forEach((id,i)=>setTimeout(()=>{ const a=ACHIEVEMENTS_DEF.find(x=>x.id===id); if(a) toastAch(a); }, i*900));
+}
+
+/* Vlaggenschip-eerbewijzen (TOTAL_WAR.md §3.7): "veroverd" zodra de
+   beschaving van de leerling een vlaggenschipprovincie bezit, "Legacy"
+   (vasthouden) zodra dat bezit ononderbroken minstens TW_FLAGSHIP_LEGACY_WEEKS
+   heeft standgehouden (province.ownerSince, gereset bij elke eigendomswissel
+   in twResolveSiege()). Lazy check: draait telkens als TR_OWNED_PROVINCES
+   ververst (trLoadOwnedProvinces()), niet gekoppeld aan een specifieke actie
+   — elke leerling van de beschaving deelt in de eer, net als de andere Total
+   War-eerbewijzen (trCheckTWAchievements hierboven). */
+async function trCheckFlagshipAchievements(){
+  if(!BM_IDENT || !fbDB || !_twRegistry) return;
+  const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+  if(!klas||!lcode) return;
+  const current=BM_IDENT.achievements||[], newOnes=[];
+  const now=Date.now();
+  const homeFlagship = twHomeFlagshipOf(TR_CIV);
+  TR_OWNED_PROVINCES.forEach(p=>{
+    if(p.id===homeFlagship) return; // eigen startvlaggenschip is geen "verovering"
+    const reg=_twRegistry[p.id];
+    if(!reg || !reg.flagship) return;
+    const conquestId="flagship_conquest_"+p.id;
+    if(!current.includes(conquestId)) newOnes.push(conquestId);
+    const legacyId="flagship_legacy_"+p.id;
+    if(!current.includes(legacyId) && p.ownerSince && (now-p.ownerSince)>=TW_FLAGSHIP_LEGACY_WEEKS*7*24*3600*1000){
+      newOnes.push(legacyId);
+    }
+  });
   if(!newOnes.length) return;
   const updated=[...new Set([...current,...newOnes])];
   try{ await fbDB.ref("identities/"+klas+"/"+lcode+"/achievements").set(updated); }catch(e){ return; }

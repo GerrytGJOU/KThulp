@@ -259,13 +259,76 @@ op **beide** plekken waar dat gebeurde: de aanvalsstart
 (`bmResolve()`) — bewust op één plek gehouden, anders zou een van de twee
 per ongeluk zonder bonus kunnen komen te zitten.
 
-Bewust **niet** gedaan (mogelijke vervolgstap, nog niet besloten): een
-rijksbrede bonus voor het bezitten van een "vlaggenschip"-provincie (bv.
-Aegyptus), analoog aan Crusader Kings se unieke gebouwen — dat zou de bonus
-van één provincie laten uitstralen naar de hele beschaving in plaats van
-alleen die ene provincie, en raakt daarmee de balans van de volledige kaart.
-Groter risico, dus pas oppakken nadat de provincie-eigen bonus (dit §3.6) een
-tijdje in de praktijk is getest.
+### 3.7 Vlaggenschipprovincies — rijksbrede, niet-stapelende beloning (nieuw, 2026-07-07)
+
+De Crusader Kings-route uit §3.6 (unieke-gebouw-achtige rijksbrede bonus) is
+alsnog gebouwd, maar bewust **niet** als extra bouw-/siegekracht — dat zou
+grote rijken alleen maar onverslaanbaar maken (expliciet besproken:
+"anders blijven we alleen maar bonussen stacken en kunnen grote rijken nooit
+meer verslagen worden"). In plaats daarvan geven de 11 **vlaggenschip­
+provincies** (`provinces.json`: `"flagship":{title,history}`) — de 8
+hoofdsteden (Italia/Rome, Gallia Lugdunensis/Lugdunum, Germania Inferior/
+Colonia, Achaea/Athene, Syria/Antiochië, Africa Proconsularis/Carthago,
+Aegyptus/Alexandrië, Britannia/Londinium) plus drie extra historisch cruciale
+provincies (Dacia, Asia/Ephesus, Judea/Jeruzalem) — een vaste, **niet-
+stapelende** beloning zodra een beschaving er minstens één **veroverd** (niet:
+zomaar bezit) exemplaar van heeft:
+
+- **+1 XP** per goed antwoord in Training Mode bovenop de normale 2
+  (`TW_FLAGSHIP_XP_BONUS`, `totalwar.js`).
+- Een **hogere dagcap** — 35 i.p.v. 25 volledige-snelheid-antwoorden per dag
+  (`TW_FLAGSHIP_DAILY_CAP`).
+
+Bezit van meerdere vlaggenschepen stapelt dit **niet** verder op (boolean
+"heeft er minstens één", geen optelsom) — precies om het stapel-/snowball-
+risico te vermijden. Geïmplementeerd in `trCivHasFlagship()`/`trAnswer()`
+(`training.js`).
+
+**Belangrijke correctie (2026-07-08, ná eerste implementatie):** de 8
+hoofdstad-vlaggenschepen zijn tegelijk elke beschaving se eigen
+`TW_HOME_PROVINCES`-startprovincie — zonder correctie zou dus élke
+beschaving deze beloning al vanaf campagnestart hebben, zonder ooit iets
+veroverd te hebben. Fix: `twHomeFlagshipOf(civId)` (`totalwar.js`) bepaalt
+welk vlaggenschip een beschaving se EIGEN hoofdstad is, en die ene provincie
+telt bewust **niet mee** — noch voor de XP-/dagcap-beloning
+(`trCivHasFlagship()`), noch voor de twee eerbewijzen hieronder
+(`trCheckFlagshipAchievements()`). Verlies je je eigen hoofdstad en verover
+je die later terug, telt hij nog steeds niet mee (het blijft "je eigen
+plek", geen prestatie). Elk ánder vlaggenschip — van een tegenstander, of een
+van de drie neutrale Dacia/Asia/Judea — telt wél volledig, ook voor de
+beschaving die het origineel bezat als het door iemand anders veroverd wordt
+(bv. Italia telt gewoon mee voor de Galliërs, want dat is niet hún hoofdstad).
+
+Daarnaast twee eenmalige eerbewijzen per (echt veroverd) vlaggenschip,
+gedeeld door alle leerlingen van de beschaving (zelfde patroon als de
+bestaande TW-eerbewijzen):
+1. **Verovering** (`flagship_conquest_{id}`) — zodra de beschaving de
+   provincie bezit (m.u.v. de eigen hoofdstad, zie boven).
+2. **Legacy** (`flagship_legacy_{id}`) — zodra dat bezit `TW_FLAGSHIP_LEGACY_
+   WEEKS` (4) weken **ononderbroken** heeft standgehouden. Gebaseerd op een
+   nieuw Firebase-veld `totalwar/provinces/{id}/ownerSince`, gereset bij elke
+   eigendomswissel (`twResolveSiege()`) en geïnitialiseerd bij het seeden van
+   een (nieuw) seizoen (`twEnsureCampaignSeeded()`/`twStartNewSeason()` —
+   inclusief backfill voor een veldtocht die al vóór dit veld bestond).
+   Lazy check bij elke `trLoadOwnedProvinces()`-ververing
+   (`trCheckFlagshipAchievements()`), zelfde patroon als
+   `trCheckTWAchievements()`.
+
+Elk vlaggenschip heeft ook een korte, echte **geschiedenisanekdote**
+(`flagship.history`, 2-3 zinnen), altijd zichtbaar in het provincie-
+infopaneel (`twProvinceInfo()`) — niet gekoppeld aan verovering, dus ook
+bruikbaar als lesmateriaal bij het gewoon verkennen van de kaart.
+
+`ACHIEVEMENTS_DEF` (core.js) kreeg er 22 items bij (11× verovering, 11×
+Legacy), allemaal `cat:"totalwar"` — dat betekent dat de bestaande
+"Legioensglans"-categoriebonus (§6, `achCategoryComplete()`) voor die
+categorie nu automatisch al deze 22 nieuwe items meetelt, dus veel zwaarder
+is geworden om te voltooien. Geen aparte code nodig, puur een gevolg van het
+generieke, data-gedreven categoriesysteem.
+
+Bewust (nog) **niet** gebouwd: cosmetische items (unieke sieraden/avatar-
+onderdelen) gekoppeld aan vlaggenschipbezit — de gesprekspartner gaf aan dat
+er nog geen geschikte sprites voor bestaan; latere uitbreiding.
 
 ---
 
@@ -275,6 +338,14 @@ Volgt exact de bestaande projectconventie (klein, plat, per-node
 `.transaction()`/`.update()`, geen generieke "patch"-laag — zie
 [BOSS_BATTLE.md §Technische correcties](BOSS_BATTLE.md#technische-correcties-tov-het-oorspronkelijke-docx-plan)
 voor waarom dat afwijkt van het oorspronkelijke docx-voorstel).
+
+> **Let op — dit schema-blok is het oorspronkelijke, aspiratieve ontwerp en
+> deels achterhaald.** De echte, gebouwde velden staan in `twEnsureCampaignSeeded()`
+> (`totalwar.js`): `militiaPoints`/`wallPoints`/`towerPoints` zijn continue
+> puntentellers (geen 0-5/0-3-schaal), `ownerSince` (§3.7, nieuw) staat er ook
+> bij, en er is **geen** `cities/{cityId}`-subboom — steden hebben geen eigen
+> Firebase-eigendom (zie §5.3/§3.4). Dit blok hieronder laten we staan als
+> historisch overzicht van het oorspronkelijke plan.
 
 ```
 /totalwar/

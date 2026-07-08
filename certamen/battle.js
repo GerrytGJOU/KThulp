@@ -740,6 +740,17 @@ SCREENS.battleFAQ = function(){
       <li><b>Zeeroutes op de kaart</b> — provincies die alleen over zee bereikbaar zijn (bv. Britannia
       vanuit Gallië) tonen nu een blauwe stippellijn tussen de twee gebieden, zodat die aanvalsroute
       ook visueel duidelijk is.</li>
+      <li><b>Vlaggenschipprovincies</b> — 11 historisch cruciale provincies (de 8 hoofdsteden van elke
+      beschaving, plus Dacia, Asia en Judea) geven de bezittende beschaving een 👑-badge en een vaste,
+      niet-stapelende rijksbrede beloning: <b>+1 XP</b> per goed antwoord in Training Mode en een
+      <b>hogere dagcap</b> (35 i.p.v. 25). Bewust geen extra bouw- of verdedigingskracht — dat zou grote
+      rijken alleen maar onverslaanbaar maken. <b>Let op:</b> je eigen hoofdstad telt niet mee (die heb
+      je nooit veroverd) — de beloning gaat pas in zodra je een écht ander vlaggenschip inneemt, van een
+      tegenstander of een van de drie neutrale (Dacia/Asia/Judea). Bij verovering én bij 4 weken
+      onafgebroken bezit (Legacy) verdien je bovendien een eigen eerbewijs per vlaggenschip, met een
+      korte, echte geschiedenisanekdote in het provincie-infopaneel (bv. over de bibliotheek van
+      Alexandrië of Trajanus' verovering van Dacië) — ook die gelden alleen voor écht veroverde
+      vlaggenschepen, niet voor je eigen startprovincie.</li>
     </ul>`)}
 
   ${sec("Profiel, rang en eerbewijzen",false,`
