@@ -118,7 +118,14 @@ function trRenderModeBody(){
     return;
   }
   if(!TR_OWNED_PROVINCES.length){
-    body.innerHTML = `<div class="panel"><div class="note warn">Jouw beschaving bezit nog geen provincies om te versterken.</div></div>`;
+    // Elke gekoppelde beschaving krijgt bij het seeden altijd al haar
+    // thuisprovincie(s) — 0 bezit betekent dus niet "nog niet begonnen",
+    // maar "volledig verslagen" (rebellenstatus, TOTAL_WAR.md §5.7).
+    const homeId = typeof twHomeFlagshipOf==="function" ? twHomeFlagshipOf(TR_CIV) : null;
+    const homeName = (homeId && _twRegistry && _twRegistry[homeId] && _twRegistry[homeId].displayName) || "jullie vlaggenschip";
+    body.innerHTML = `<div class="panel"><div class="note warn">💀 Jullie beschaving is volledig verslagen — alle provincies zijn veroverd.
+      Trainen kan pas weer zodra jullie docent een <b>opstand</b> wint op ${esc(homeName)}, jullie eigen vlaggenschip. Lukt dat, dan doen jullie
+      weer gewoon mee.</div></div>`;
     return;
   }
   const civ = TW_CIVS[TR_CIV]||TW_CIVS.neutral;

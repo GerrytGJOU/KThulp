@@ -751,9 +751,29 @@ async function twStartNewSeason(){
 /* ---- Aanvalsflow: knop verschijnt alleen als de gekozen aanvaller de
    provincie nog niet bezit én er via land/zee grenst aan een provincie die
    de aanvaller wél bezit (TOTAL_WAR.md §5.5/§5.6). ---- */
+/* Bezit een beschaving nul provincies (alle veroverd door anderen) — de
+   "rebellen"-toestand (TOTAL_WAR.md §5.7). Puur afgeleid uit de live
+   eigendomsstand, geen apart Firebase-veld nodig: zodra ze ergens weer een
+   provincie bezitten (bv. hun eigen vlaggenschip terugveroverd via de
+   opstand hieronder) is dit vanzelf weer false. */
+function twCivIsWiped(civId){
+  if(!_twLiveProvinces || !civId || civId==="neutral") return false;
+  return !Object.values(_twLiveProvinces).some(p => p && p.owner===civId);
+}
+
 function twAttackButtonHTML(targetId, targetCivId){
   const attackerCiv = el("twAttackerCiv")?.value;
   if(!attackerCiv || attackerCiv===targetCivId) return "";
+  // Uitgeroeide beschaving (0 provincies): geen grens-eis, maar dan kan
+  // ALLEEN het eigen vlaggenschip worden aangevallen — "opstand" i.p.v. een
+  // gewone aanval, ongeacht wie het nu bezet (TOTAL_WAR.md §5.7).
+  if(twCivIsWiped(attackerCiv)){
+    const isOwnFlagship = typeof twHomeFlagshipOf==="function" && twHomeFlagshipOf(attackerCiv)===targetId;
+    if(!isOwnFlagship) return "";
+    return `<button class="btn btn-gold btn-block" style="margin-top:10px" onclick="twStartAttack('${targetId}','${attackerCiv}')">
+      ⚡ Opstand: heroverover het vlaggenschip van ${esc(TW_CIVS[attackerCiv].nm)}</button>
+      <div class="note warn" style="margin-top:6px">${esc(TW_CIVS[attackerCiv].nm)} is volledig verslagen en heeft alleen deze ene kans om terug te komen.</div>`;
+  }
   const reg = _twRegistry && _twRegistry[targetId];
   const borders = [...(reg?.neighbors||[]), ...(reg?.seaRoutes||[])];
   const canReach = borders.some(nid => (_twLiveProvinces?.[nid]||{}).owner===attackerCiv);
@@ -892,8 +912,13 @@ function twLegend(){
   }
   return Object.entries(TW_CIVS).map(([id,c])=>{
     const owned = counts[id] || 0;
+    // Uitgeroeid (0 provincies, alleen relevant in live mode — de demo-kaart
+    // kent geen "rebellen"-toestand): duidelijk zichtbaar in de legenda,
+    // zodat de docent weet welke beschaving een opstand nodig heeft (§5.7).
+    const wiped = _twLiveMode && id!=="neutral" && owned===0;
     return `<span class="chip"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;
       background:${c.color};margin-right:6px;vertical-align:middle"></span>${esc(c.nm)}${
-      id!=="neutral" ? ` <small>${owned} gebied${owned!==1?'en':''}</small>` : ""}</span>`;
+      id!=="neutral" ? ` <small>${owned} gebied${owned!==1?'en':''}</small>` : ""}${
+      wiped ? ` <small style="color:#e07060">💀 verslagen</small>` : ""}</span>`;
   }).join("");
 }
