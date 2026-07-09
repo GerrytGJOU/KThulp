@@ -3071,7 +3071,7 @@ SCREENS.battlePlayerGame = function(){
       }
     });
   const rM=fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID),
-    fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_MY_CLASS=p.class||null;BM_MY_TEAM=p.team||null;BM_ACTION_LOCKED=!!p.lockedAction;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);BM_MY_CORRECT=p.correct||0;BM_MY_WRONG=p.wrong||0;}bmPlayerRender();});
+    fM=rM.on("value",s=>{const p=s.val();if(p){BM_MY_BE=p.be||0;BM_MY_CLASS=p.class||null;BM_MY_TEAM=p.team||null;BM_ACTION_LOCKED=!!p.lockedAction;BM_ANSWERED=p.answeredRound===(BM_STATE.round?.n);BM_MY_CORRECT=p.correct||0;BM_MY_WRONG=p.wrong||0;BM_MY_DMG=p.damage||0;BM_MY_HEAL=p.healing||0;}bmPlayerRender();});
   const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),
     fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
   const rBoss=fbDB.ref("rooms/"+BM_CODE+"/boss"),
