@@ -751,6 +751,12 @@ SCREENS.battleFAQ = function(){
       korte, echte geschiedenisanekdote in het provincie-infopaneel (bv. over de bibliotheek van
       Alexandrië of Trajanus' verovering van Dacië) — ook die gelden alleen voor écht veroverde
       vlaggenschepen, niet voor je eigen startprovincie.</li>
+      <li><b>Rebellen (uitgeroeide beschaving)</b> — verliest een beschaving écht al haar provincies,
+      dan is ze niet meteen uit het spel. Op de docentenkaart verschijnt dan een 💀-label in de legenda,
+      en de enige nog beschikbare actie is een <b>opstand</b> op de eigen vlaggenschipprovincie (haar
+      oude hoofdstad), ongeacht wie die nu bezet en zonder de normale grens-eis. Win je die belegering,
+      dan doet de beschaving weer volledig mee — verlies je, dan blijft de opstand mogelijk zolang er
+      geen andere provincies bij zijn gekomen. Training Mode is niet bruikbaar tot de opstand slaagt.</li>
     </ul>`)}
 
   ${sec("Profiel, rang en eerbewijzen",false,`

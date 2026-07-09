@@ -465,6 +465,41 @@ voor de hand liggende routes toegevoegd: `gallia_narbonensis` ↔ `italia`
 (Massilia-Ostia, langs de kust in plaats van over de Alpen) en `judea` ↔
 `aegyptus` (Caesarea Maritima-Alexandria).
 
+### 5.7 Rebellen: een volledig uitgeroeide beschaving verdwijnt niet (nieuw, 2026-07-08)
+
+Verliest een beschaving écht al haar provincies (elke provincie is door
+anderen veroverd), dan raakt ze niet uit het spel — ze wordt "rebellen" en
+krijgt precies één weg terug: een **opstand** op haar eigen vlaggenschip­
+provincie (haar oude hoofdstad, zie §3.7/`twHomeFlagshipOf()`), ongeacht wie
+die nu bezet.
+
+Bewust **geen nieuw Firebase-veld**: `twCivIsWiped(civId)` (`totalwar.js`)
+leidt "uitgeroeid" puur af uit de live eigendomsstand (`_twLiveProvinces`) —
+nul provincies bezitten = rebellen. Zodra de opstand slaagt en de beschaving
+weer ergens eigenaar van is, is dit vanzelf weer `false`, zonder aparte
+"reviveer"-logica.
+
+Praktisch, in `twAttackButtonHTML()`:
+- Voor een uitgeroeide aanvaller vervalt de normale grens-eis (§5.5) — logisch,
+  want ze bezitten nergens een aangrenzende provincie om vanuit aan te vallen.
+- Maar de "Val aan"-knop verschijnt dan **uitsluitend** op hun eigen
+  vlaggenschip, nergens anders — geen wildgroei-heropstanding via het eerste
+  het beste buurland.
+- De belegering zelf is verder een gewone, ongewijzigde `twStartAttack()` —
+  dezelfde garnizoensformule, dezelfde stages, tegen wie de provincie op dat
+  moment ook bezet.
+
+Docentenkaart: `twLegend()` toont een 💀 "verslagen"-label naast elke
+beschaving met 0 gebieden, zodat direct zichtbaar is wie een opstand nodig
+heeft. Leerlingenkant: `SCREENS.trainingMode` toont voor een uitgeroeide
+beschaving een uitleg i.p.v. de generieke "geen provincies"-melding, met de
+naam van het eigen vlaggenschip erbij — Training Mode is niet bruikbaar
+zolang de rebellenstatus duurt (er is immers geen eigen provincie om punten
+aan toe te kennen).
+
+Bewust (nog) niet gebouwd: een apart eerbewijs voor een geslaagde comeback —
+leuke, kleine vervolgstap, maar niet gevraagd in deze sessie.
+
 ---
 
 ## 6. Progressie & economie — drie gescheiden potjes
