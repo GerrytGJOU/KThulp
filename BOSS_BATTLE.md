@@ -1,4 +1,4 @@
-# Boss Battle — coöperatief gevechtssysteem (GEBOUWD, unieke bazen-mechanics volgen)
+# Boss Battle — coöperatief gevechtssysteem (GEBOUWD, incl. vereenvoudigde unieke bazen-mechanics)
 
 > **Status: werkend.** Boss Battle is gebouwd — niet als het losstaande
 > room-schema dat dit document oorspronkelijk voorstelde, maar als een compacte
@@ -9,13 +9,29 @@
 > al automatisch tegen de baas-HP af. Geïmplementeerd: moeilijkheidsgraden,
 > bazenkeuze (Hydra/Cycloop/Minotaurus met basisillustratie), fase 1-2-3,
 > rage/tegenaanval, en de [garnizoenskoppeling met Total War](#garnizoensformule-voor-total-war-belegeringen).
+> **Ook geïmplementeerd, ANDERS dan §4 hieronder beschrijft**: elke baas heeft
+> inmiddels een écht unieke mechanic — `bmBossResolveTick()` (`certamen/
+> bossbattle.js`) berekent per ronde de Hydra-regeneratie (heelt zichzelf als
+> de klas een te zwakke ronde draait), de Cycloop-"metgezellenmaaltijd"
+> (periodieke dreiging, alleen te onderbreken met gezamenlijk schild) en de
+> Minotaurus-Enrage (na het breken van het Labyrinth-schild valt hij elke
+> ronde aan i.p.v. volgens de normale cadans). Dit is een **lichtere,
+> ronde-gebaseerde versie** van wat het docx-plan voorstelde: geen losse
+> wall-clock-countdown-ticker, geen Labyrinth-woordenpuzzel, en de Hydra-
+> koppen (`bmBossAliveHeads()`) zijn puur visueel — ze verkorten de
+> aanvalstimer niet, zoals §4 nog beweert.
+>
 > **Nog niet gebouwd** (bewust, zie `BOSS_PRESETS`-commentaar in
-> `bossbattle.js`): de unieke bazen-mechanics per baas (Hydra-koppen als
-> speelmechaniek i.p.v. alleen visueel, Cycloop-countdown, Minotaurus-schild),
-> de Combo Chain/anti-carry-systemen van §5, minions, en het scorebord van §8.
+> `bossbattle.js`): de Combo Chain/anti-carry-systemen van §5, minions, en
+> het Boss-Battle-specifieke scorebord van §8 (er is wél een generiek
+> `bmComputeAwards()`-scorebord, zie BATTLE_MODE.md M7 — niet de eigen
+> categorieën die §8 hieronder beschrijft).
 > De **spelregels/balans** hieronder zijn wat het docx-plan voorstelde; waar de
 > werkelijke implementatie een lichtere/eenvoudigere versie koos staat dat
-> vermeld bij de betreffende sectie. Zie ook
+> vermeld bij de betreffende sectie. **§10 (pseudocode) en §11
+> (implementatieplan) zijn historisch/aspiratief en komen NIET overeen met de
+> echte code** — zie de waarschuwingen bovenaan die secties voor de
+> daadwerkelijke functienamen/bestanden. Zie ook
 > [Technische correcties](#technische-correcties-tov-het-oorspronkelijke-docx-plan)
 > onderaan voor de architectuurcorrecties t.o.v. het originele docx-plan.
 >
@@ -100,9 +116,23 @@ Normal): Boss HP = 3.000. Beide voelen relatief even zwaar aan.
 
 ## 4. Baas-mechanics & patronen
 
-Drie startbazen, elk met een uniek patroon (Grieks-Romeinse mythologie):
+> ⚠️ **Tabel = origineel docx-ontwerp, niet de gebouwde versie.** De echte
+> mechanics (`bmBossResolveTick()`, `certamen/bossbattle.js`) zijn
+> ronde-gebaseerd (geen wall-clock-timers) en simpeler: Hydra geneest 2% van
+> zijn max-HP als de klas in een ronde onder de 3% schade blijft (koppen zijn
+> puur visueel, `bmBossAliveHeads()`, geen effect op de aanvalstimer);
+> Cycloop dreigt elke 3 rondes met een 2-ronde-fuse "metgezellenmaaltijd"
+> (6% klas-schade + 4% zelfheling), alleen te onderbreken met ≥8×moeilijkheid
+> gezamenlijk schild in die ronde (geen losse "X correcte antwoorden"-teller,
+> geen Labyrinth-woordenpuzzel); Minotaurus gaat in Enrage (elke ronde
+> aanvallen i.p.v. de normale cadans) zodra zijn Labyrinth-schild breekt of
+> fase 3 bereikt wordt.
 
-| Baas | Kernmechanic | Beschrijving |
+Drie startbazen, elk met een uniek patroon (Grieks-Romeinse mythologie) —
+**origineel docx-ontwerp**, zie de waarschuwing hierboven voor het verschil
+met de gebouwde versie:
+
+| Baas | Kernmechanic (docx-ontwerp) | Beschrijving (docx-ontwerp) |
 |---|---|---|
 | **De Hydra van Lerna** | Regeneratie & koppen | Start met 3 koppen. Elke 25% HP-verlies groeit er een kop bij; elke actieve kop verkort de aanvalstimer met 10%. |
 | **Polyfemus de Cycloop** | Gefocuste countdown | Elke 45s een "oogstraal-countdown" van 12s. De klas moet gezamenlijk `X` correcte antwoorden geven om te verblinden, anders een zware AoE (25% klas-HP). |
@@ -334,9 +364,25 @@ effectiveBossShield  = garrisonShield
 
 ## 10. Pseudocode (gecorrigeerd naar echte projectconventies)
 
+> ⚠️ **Dit is illustratieve pseudocode uit de ontwerpfase, GEEN weergave van
+> de echte code.** De daadwerkelijke implementatie hergebruikt de bestaande
+> Battle Mode-engine (`bmResolve()`/`bmCalcAbilityEffect()` in
+> `certamen/battle.js`) in plaats van losse `initBossBattle`/
+> `bossHandleAnswer`/`bossAttackTicker`-functies, en `BOSS_PRESETS`/
+> `BOSS_DIFFICULTIES` leven in `certamen/bossbattle.js` (niet een apart
+> `boss-data.js`) met een ander velden-schema dan hieronder: echte
+> `BOSS_PRESETS`-entries hebben `emoji`/`color`/`desc`/`img`/`heads`/`hero`
+> (geen `icon`/`mechanics`-object), en de per-baas-logica zit in de echte,
+> pure functie `bmBossResolveTick(boss, ctx)` (`certamen/bossbattle.js`) —
+> zie de code-commentaren daar voor de actuele Hydra/Cycloop/Minotaurus-
+> berekeningen. Bewaard als historisch ontwerpdocument, niet bijgewerkt naar
+> de echte code omdat dat de oorspronkelijke docx-vertaling zou verliezen.
+
 Onderstaande vervangt de docx-versie 1-op-1, maar met de juiste globale namen
 en schrijfpatronen (zie
-[Technische correcties](#technische-correcties-tov-het-oorspronkelijke-docx-plan)).
+[Technische correcties](#technische-correcties-tov-het-oorspronkelijke-docx-plan)) —
+**op het moment van schrijven** (vóór `bossbattle.js` z'n definitieve vorm
+kreeg).
 
 ```js
 // battle-data.js of een nieuw boss-data.js — zelfde plek/patroon als BM_CLASSES
@@ -443,6 +489,16 @@ async function bossHandleAnswer(pid, isCorrect, target){
 
 ## 11. Implementatieplan
 
+> ⚠️ **Historisch — dit stappenplan is NIET gevolgd.** Genummerde stappen
+> 1-8 hieronder zijn het oorspronkelijke, aspiratieve plan (nieuwe bestanden
+> `boss-data.js`/`boss.js`, nieuwe schermen `SCREENS.bossHost`/
+> `SCREENS.bossPlayer`). De echte bouw koos een kortere weg: **alles zit in
+> `certamen/bossbattle.js`** (presets + `bmBossResolveTick()`), en er kwamen
+> **geen nieuwe schermen** — `SCREENS.battleHostGame`/
+> `SCREENS.battlePlayerGame` (`certamen/battle.js`) renderen de baas-UI
+> conditioneel via `BM_META.mode==="boss"`. Zie de "Wat er echt gebeurde"-
+> paragraaf hieronder voor de actuele stand.
+
 1. **Data & config** — `BOSS_DIFFICULTIES`/`BOSS_PRESETS` in een nieuw
    `boss-data.js` (naar het patroon van `battle-data.js`).
 2. **State & engine** — `initBossBattle`/`bossHandleAnswer`/
@@ -462,6 +518,35 @@ async function bossHandleAnswer(pid, isCorrect, target){
 8. **Total War-koppeling** — `garrisonProvince`-parameter (zie
    [Garnizoensformule](#garnizoensformule-voor-total-war-belegeringen)),
    aanroepbaar vanuit het docentendashboard in TOTAL_WAR.md §7.2.
+
+### Wat er echt gebeurde
+
+- **Data & config** ✅ — `BOSS_DIFFICULTIES`/`BOSS_PRESETS`/`BOSS_PRESET_ORDER`,
+  in `certamen/bossbattle.js` (niet een apart `boss-data.js`).
+- **State & engine** ✅, anders — geen nieuwe `boss.js`; de bestaande
+  `bmResolve()`/`bmCalcAbilityEffect()` (`certamen/battle.js`) rekenen al
+  automatisch tegen `BM_TEAMS.B` (de baas) af. `bmBossResolveTick()`
+  (`bossbattle.js`) levert alleen de baas-eigen kant (regen/countdown/rage/
+  tegenaanval) die `bmResolve()` na de normale schadeberekening aanroept.
+- **Host-/Player-UI** ✅, anders — geen `SCREENS.bossHost`/`SCREENS.bossPlayer`;
+  `SCREENS.battleHostGame`/`SCREENS.battlePlayerGame` tonen de baas-UI
+  conditioneel (`BM_META.mode==="boss"`), incl. `bmBossSpriteHTML()` voor de
+  baas-illustratie en `bmBossStatusNote()` voor de Cycloop-/Minotaurus-status.
+- **Resolutie & tickers** ✅, anders — geen losse `bossHandleAnswer`/
+  `bossAttackTicker`; de bestaande ronde-cadans van Battle Mode
+  (`bmDistributeQs()`/`bmHostStartTimer()`) doet dienst als de "klok", zie
+  `BOSS_ROUNDS_PER_ATTACK` (`bossbattle.js`) — bewust géén tweede,
+  onafhankelijke wall-clock-ticker, om race conditions met `bmResolve()` te
+  vermijden.
+- **Special mechanics & events** — deels ✅ (zie de banner bovenaan dit
+  document): Hydra-regen/Cycloop-metgezellenmaaltijd/Minotaurus-Enrage
+  bestaan, in een lichtere vorm. Random events (§6) zijn niet gebouwd.
+- **Scoreboard** — niet Boss-Battle-specifiek gebouwd; hergebruikt het
+  generieke `bmComputeAwards()` (zie BATTLE_MODE.md M7), niet de eigen
+  categorieën uit §8.
+- **Total War-koppeling** ✅ — `garrisonProvince`/`BOSS_PRESETS.garrison`,
+  zie [Garnizoensformule](#garnizoensformule-voor-total-war-belegeringen)
+  en TOTAL_WAR.md §7.2, precies zoals hier gepland.
 
 ---
 

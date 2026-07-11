@@ -59,12 +59,16 @@
   klascode+leerlingcode werkt als gedeeld toegangswoord); rules kunnen dat
   gegeven niet wegnemen zonder de inlogflow zelf te veranderen. Houd hier
   rekening mee bij elke wijziging aan rules of aan de klascode/identity-flow.
-- Bekende openstaande punten (bewust nog niet opgelost, zie gesprek d.d.
-  2026-07-04): (1) `identities`-tak heeft nog geen per-docent scheiding —
-  zodra er meerdere docent-accounts zijn kan elke ingelogde docent nu nog de
-  volledige boom lezen (nodig voor `FBNet.getKlascodes()`, die de complete
-  `identities`-tak ophaalt puur om klascode-sleutels te tellen). Bij het
-  bouwen van multi-docent-ondersteuning: vervang dat door een aparte lichte
-  index (bv. `usedKlascodes/{klas}: true`) i.p.v. de volledige leerlingdata
-  te lezen. (2) `klascodes` heeft geen eigenaar-veld (`ownerUid`) — elke
-  docent kan nu nog elkaars klascodes aanmaken/overschrijven/verwijderen.
+- Per-docent scheiding is inmiddels opgelost (commit `fc16c55`,
+  2026-07-06 — de twee punten hierboven uit het gesprek van 2026-07-04
+  zijn dus niet meer open): `klascodes/{code}` heeft nu een `ownerUid`
+  (`certamen/database.rules.json`), en `identities/{klas}.read` +
+  `klascodes/{code}.write` zijn rules-gescoped op die eigenaar (met een
+  legacy-uitzondering voor codes van vóór deze wijziging). `createKlascode`
+  (`certamen/net.js`) is een transactie geworden i.p.v. een blinde `set()`.
+  Kleine, niet-urgente restpunt: `FBNet.getKlascodes()`/
+  `getKlascodeCounts()` (`certamen/net.js`) lezen nog steeds de volledige
+  `identities`-tak per aanroep (nu veilig — de rules leveren alleen nog de
+  eigen klassen terug — maar bij veel docenten/klassen nodeloos veel data
+  over de lijn); een lichte index zoals `usedKlascodes/{klas}: true` zou dat
+  bandbreedte-technisch verbeteren, is alleen nooit gebouwd.
