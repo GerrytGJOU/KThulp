@@ -323,7 +323,14 @@ function trAnswer(idx){
     // geest) — Training Mode deed dat tot nu toe nergens.
     P.stats.totalCorrect++; P.stats.currentStreak++;
     if(P.stats.currentStreak>P.stats.bestStreak) P.stats.bestStreak=P.stats.currentStreak;
-    saveProfile(); checkAch({mode:"training"});
+    // trait_eenzame_bouwer: Training-specifieke dag-tracking, los van de
+    // algemene P.stats.playDates (die ook door andere modi gevuld wordt).
+    const today=new Date().toISOString().slice(0,10);
+    const tpd=P.stats.trainingPlayDates||(P.stats.trainingPlayDates=[]);
+    if(tpd[tpd.length-1]!==today){ tpd.push(today); if(tpd.length>60) P.stats.trainingPlayDates=tpd.slice(-60); }
+    saveProfile();
+    // trait_zondagsrust: puur een momentopname, geen nieuwe opslag nodig.
+    checkAch({mode:"training", sunday:new Date().getDay()===0});
     if(TR_HERO_EL) BattleMotion.play(TR_HERO_EL,"swing");
     trRenderTarget();
   } else {

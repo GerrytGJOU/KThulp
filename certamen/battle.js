@@ -235,6 +235,24 @@ async function bmAwardBattle(){
   let coinsEarned=3+(won?10:0);
   if(legBonus?.incomeMult) coinsEarned=Math.round(coinsEarned*(1+legBonus.incomeMult));
 
+  // Batch 2 — lokale (device-only) toeval-tracking voor trait_drieling en
+  // trait_marathonzitting. Beide horen bij "wat er toevallig op dit toestel
+  // gebeurde", niet bij het cross-device profiel — vandaar P.stats i.p.v.
+  // Firebase, zelfde afweging als bestStreak/currentStreak.
+  if(won){
+    const margin=Math.max(0,BM_TEAMS[BM_MY_TEAM]?.health||0);
+    P.stats.lastWinMargins=[...(P.stats.lastWinMargins||[]),margin].slice(-3);
+  } else {
+    P.stats.lastWinMargins=[]; // reeks doorbroken bij verlies
+  }
+  const drieling=(P.stats.lastWinMargins||[]).length===3
+    &&P.stats.lastWinMargins.every(v=>v===P.stats.lastWinMargins[0]);
+  const nowTs=Date.now();
+  P.stats.recentBattleTimestamps=[...(P.stats.recentBattleTimestamps||[]),nowTs]
+    .filter(t=>nowTs-t<=3600000);
+  const marathonzitting=P.stats.recentBattleTimestamps.length>=3;
+  saveProfile();
+
   // Lees-wijzig-schrijf via transaction() i.p.v. once()+update(): als hetzelfde
   // profiel (klascode+leerlingcode) rond hetzelfde moment vanaf een ander
   // toestel/tabblad wegschrijft, herhaalt Firebase de transactie op de
@@ -251,12 +269,18 @@ async function bmAwardBattle(){
     const next={...data,xp:newXp,coins:newCoins,battles};
     if(cls){
       const hist=(data.classHistory&&data.classHistory[cls])||{};
+      const firstTime=!hist.rounds; // nog geen classHistory-entry voor deze klasse
       next.classHistory={...(data.classHistory||{}),[cls]:{
         ...hist,
         rounds:(hist.rounds||0)+Math.max(1,total),
         damage:(hist.damage||0)+(BM_MY_DMG||0),
         healing:(hist.healing||0)+(BM_MY_HEAL||0),
       }};
+      // trait_volledige_cirkel: legt vast in welke volgorde elke klasse voor
+      // het eerst gespeeld werd (nooit herschreven zodra een klasse erin staat).
+      if(firstTime&&!(data.classPlayOrder||[]).includes(cls)){
+        next.classPlayOrder=[...(data.classPlayOrder||[]),cls];
+      }
     }
     mergedData=next;
     return next;
@@ -276,7 +300,19 @@ async function bmAwardBattle(){
   addXP(xpEarned, true);  // addXP roept saveProfile() aan
   checkAch({mode:"battle", won, isScholar});
 
-  const earned=await bmCheckAchievements(merged,{won,isScholar,isBoss,bossId,bossDifficulty,isSiegeWin,partySize,rageMaxed});
+  const totalPlayers=Object.keys(BM_PLAYERS||{}).length;
+  const earned=await bmCheckAchievements(merged,{won,isScholar,isBoss,bossId,bossDifficulty,isSiegeWin,partySize,rageMaxed,
+    clutchStreak:BM_MY_CLUTCH_BEST, noAbilitiesUsed:BM_MY_ABILITIES_USED===0, myClass:cls,
+    largeGame:totalPlayers>=12, healedEnough:(BM_MY_HEAL||0)>=40,
+    // Batch 2
+    noBeLeft:won&&(BM_MY_BE||0)===0, drieling, noCorrect:won&&correct===0,
+    isPacifist:won&&cls==="priester"&&!BM_MY_DEALT_DMG_ABILITY,
+    nightWatch:new Date().getHours()<5, marathonzitting,
+    classPicks:BM_MY_CLASS_PICKS||0});
+  // Eenmalige munten-bonus voor nieuw ontgrendelde traits (naast de gewone
+  // deelname/winst-munten hierboven) — zie TRAIT_COIN_BONUS.
+  const coinBonus=earned.reduce((s,id)=>s+(TRAIT_COIN_BONUS[id]||0),0);
+  if(coinBonus>0) identRef.child("coins").transaction(cur=>(cur||0)+coinBonus);
   return{xpEarned,coinsEarned,legendaryBonus:legBonus,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
 }
 async function bmCheckAchievements(ident,result={}){
@@ -289,6 +325,10 @@ async function bmCheckAchievements(ident,result={}){
   check("scholar",result.isScholar);
   check("onbreekbaar",result.won&&result.noHealthLoss);
   check("overwinnaar",result.won);
+  check("trait_ciceronianus",(result.clutchStreak||0)>=5);
+  check("trait_laconisch",result.won&&result.myClass==="spartaan"&&result.noAbilitiesUsed);
+  check("geheim_groot",result.largeGame);
+  check("geheim_heal",result.healedEnough);
   const clsPlayed=Object.keys(ident.classHistory||{});
   check("strateeg",clsPlayed.length>=5);
   check("commandant",clsPlayed.length>=8);
@@ -298,6 +338,22 @@ async function bmCheckAchievements(ident,result={}){
     check("mees_"+cls.id, stars>=5);
   }
   check("grootmeester", BM_CLASSES.every(cls=>bmCalcMastery(ident.classHistory?.[cls.id])>=5));
+
+  // Batch 2 — puur-toeval-traits (trait_balans/trait_stijlvol_verlies zijn
+  // host-granted, zie bmCheckHostTraits() hieronder, niet hier).
+  check("trait_exacte_nul", result.noBeLeft);
+  check("trait_drieling", result.drieling);
+  check("trait_stille_kracht", result.noCorrect);
+  check("trait_middelmatig", clsPlayed.length>=8
+    &&BM_CLASSES.every(cls=>bmCalcMastery(ident.classHistory?.[cls.id])<=1));
+  check("trait_pacifist", result.isPacifist);
+  check("trait_nachtwacht", result.nightWatch);
+  check("trait_marathonzitting", result.marathonzitting);
+  check("trait_draaideur", (result.classPicks||0)>=6);
+  const clsOrder=ident.classPlayOrder||[];
+  const alphaIds=BM_CLASSES.map(c=>c.id).slice().sort();
+  check("trait_volledige_cirkel", clsOrder.length===8
+    &&clsOrder.every((id,i)=>id===alphaIds[i]));
 
   // Boss Battle — bossId/bossDifficulty/partySize/rageMaxed komen uit
   // bmAwardBattle() (Boss Battle hergebruikt de volledige Team A/B-engine,
@@ -387,11 +443,14 @@ function bmGetAbilityCost(cls,abl){
   if(cls?.passive?.type==="cost_reduce"&&abl.tier==="basic") c=Math.max(1,c-cls.passive.val);
   return c;
 }
+// Ability-types die schade toebrengen — canoniek gedeeld met bmChooseAbility()
+// (trait_pacifist: "Pacifistische Priester" checkt of dit type ooit gekozen is).
+const BM_DMG_TYPES=["attack","attack_bypass","attack_weakspot","attack_and_defend","attack_and_shld_remove","attack_siege","heal_and_attack"];
 function bmCalcAbilityEffect(p,cls,abl){
   const fx={dmg:0,heal:0,shld:0,teamBE:0,selfBE:0,shldRemove:0,bypass:false};
   const t=abl.type, pasv=cls?.passive, mt=p.team;
   const leg=bmLegendaryOf(p); // legendarische avatar-bonus (Achilles/Ajax/Aeneas/Odysseus)
-  const isDmg=["attack","attack_bypass","attack_weakspot","attack_and_defend","attack_and_shld_remove","attack_siege","heal_and_attack"].includes(t);
+  const isDmg=BM_DMG_TYPES.includes(t);
   if(isDmg){
     let d=abl.dmg||0;
     if(pasv?.type==="atk_flat")  d+=pasv.val;
@@ -407,12 +466,15 @@ function bmCalcAbilityEffect(p,cls,abl){
   if(["team_shield","testudo","attack_and_defend","shield_and_heal"].includes(t)){
     let s=abl.shld||0;
     if(leg?.shldMult) s=Math.round(s*(1+leg.shldMult)); // Ajax de Grote
+    if(p.traitLaconisch) s+=1; // Laconische Breviteit: vlakke +1 schild
+    if(p.traitPacifist) s+=1; // Pacifistische Priester: vlakke +1 schild
     fx.shld=s;
   }
   if(["team_shield","testudo"].includes(t)&&pasv?.type==="be_on_defend") fx.selfBE+=pasv.val;
   if(["heal","heal_and_attack","shield_and_heal","testudo"].includes(t)){
     let h=abl.heal||0; if(pasv?.type==="heal_flat") h+=pasv.val;
     if(leg?.healMult) h=Math.round(h*(1+leg.healMult)); // Aeneas
+    if(p.traitHeal) h+=1; // Levensbron: vlakke +1 heling
     fx.heal=h;
   }
   if(["team_be","testudo"].includes(t)) fx.teamBE=abl.teamBE||0;
@@ -458,10 +520,11 @@ function bmRouteHeroDamage(team,incoming,players,out){
    ze testbaar is — geeft de te schrijven velden terug of null als er niets verandert. */
 function bmRespawnProgress(p){
   if(!BM_META?.heroMode||!p||p.isAlive!==false)return null;
-  const need=Math.max(1,BM_META.respawnRequired||5);
+  let need=Math.max(1,BM_META.respawnRequired||5);
+  if(p.traitFeniks) need=Math.max(1,need-1); // Feniks: vlak 1 sneller herrijzen
   const meter=(p.respawnMeter||0)+1;
   if(meter>=need){
-    return {revived:true, upd:{isAlive:true, hp:p.maxHp||BM_META.heroMaxHp||15, armor:0, respawnMeter:0}};
+    return {revived:true, upd:{isAlive:true, hp:p.maxHp||BM_META.heroMaxHp||15, armor:0, respawnMeter:0, timesRevived:(p.timesRevived||0)+1}};
   }
   return {revived:false, upd:{respawnMeter:meter}};
 }
@@ -508,6 +571,11 @@ let BM_CODE=null, BM_PID=null, BM_META=null;
 let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={}, BM_BOSS={};
 let BM_MY_BE=0, BM_MY_Q=null, BM_MY_CLASS=null, BM_MY_TEAM=null;
 let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
+// Verborgen-trait-tracking (session-only, zie ACHIEVEMENTS_DEF: trait_ciceronianus/trait_laconisch)
+let BM_MY_CLUTCH_STREAK=0, BM_MY_CLUTCH_BEST=0, BM_MY_ABILITIES_USED=0;
+// Batch 2: klassewissels in de lobby (trait_draaideur) + ooit een schade-
+// type ability gekozen (trait_pacifist, "Pacifistische Priester")
+let BM_MY_CLASS_PICKS=0, BM_MY_DEALT_DMG_ABILITY=false;
 
 function bmLeave(){
   _bmFormHash="";
@@ -516,6 +584,8 @@ function bmLeave(){
   BM_MY_BE=0;BM_MY_Q=null;BM_MY_CLASS=null;BM_MY_TEAM=null;
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;
   BM_MY_CORRECT=0;BM_MY_WRONG=0;BM_MY_DMG=0;BM_MY_HEAL=0;
+  BM_MY_CLUTCH_STREAK=0;BM_MY_CLUTCH_BEST=0;BM_MY_ABILITIES_USED=0;
+  BM_MY_CLASS_PICKS=0;BM_MY_DEALT_DMG_ABILITY=false;
 }
 
 /* ---- SCHERM: battleHome ---- */
@@ -1302,6 +1372,10 @@ async function bmDistributeQs(roundN){
     let beBonus=p.team==="A"?synA:synB;
     if(cls?.passive?.type==="be_passive") beBonus+=cls.passive.val;
     if(BM_META?.masteryBonuses!==false) beBonus+=(p.masteryBonus||0);
+    // Verborgen traits: vlakke +1 BE per ronde, los van de mastery-toggle
+    // (permanent account-brede unlock, geen in-klas-verdiende bonus)
+    if(p.traitGroot) beBonus+=1;
+    if(p.traitNorage) beBonus+=1;
     const pool=bmPersonalPool(pid,POOL);
     up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
     up["players/"+pid+"/answeredRound"]=-1;
@@ -2511,7 +2585,12 @@ async function bmResolve(roundN){
         return;
       }
       const winner=newHA<=0?"B":"A";
-      await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner});
+      // trait_balans ("Perfect in Balans"): een écht gelijktijdige dubbele-KO
+      // — beide legers raken in dezelfde ronde op 0. De ternary hierboven
+      // kiest dan altijd B als winnaar (geen apart tie-break), maar dit veld
+      // legt het zeldzame toeval zelf vast voor bmCheckHostTraits().
+      const exactTie=newHA<=0&&newHB<=0;
+      await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner,exactTie});
       // Schrijf het resultaat terug naar de aangevallen provincie
       // (eigendomswissel bij winst, "slijtageslag"-schade op de huidige stage
       // bij verlies). Alleen relevant als dit gevecht vanuit twStartAttack()
@@ -2600,7 +2679,7 @@ function bmHostResult(){
   cleanup();
   BM_PAUSED=false;
   // Sla spelerdata op vóór BM_PLAYERS wordt gereset
-  BM_AWARD_DATA={winner:BM_STATE.winner,all:Object.values(BM_PLAYERS)};
+  BM_AWARD_DATA={winner:BM_STATE.winner,exactTie:!!BM_STATE.exactTie,all:Object.values(BM_PLAYERS)};
   bmSyncClassMissedWords(BM_AWARD_DATA.all);
   go("battleHostAwards");
 }
@@ -2665,6 +2744,35 @@ function bmComputeAwards(players, log){
     {nm:"Snelste Denker",   emoji:"⚡",  player:bySpd[0]||null,   value:bySpd[0]?Math.round((bySpd[0].totalResponseMs||0)/(bySpd[0].respondCount||1)/100)/10+"s gem.":""},
     {nm:"Beste Teamspeler", emoji:"🤝",  player:p2(cmbTop),       value:cmbTop?cmbTop[1]+" combo's":""},
   ];
+}
+
+// Host-only: kent traits toe die alleen met kennis van BEIDE teams (of van
+// een écht gelijktijdige dubbele-KO) te bepalen zijn — spelers zien elkaars
+// stats nooit live (M2 "scoped listeners"), dus de host legt de link direct
+// na het gevecht en schrijft rechtstreeks naar de identiteit via identityKey.
+function bmGrantHostTrait(player, id){
+  if(!player)return;
+  const[klas,lcode]=(player.identityKey||"").split(":");
+  if(!klas||!lcode)return;
+  const bonus=TRAIT_COIN_BONUS[id]||0;
+  fbDB.ref("identities/"+klas+"/"+lcode+"/achievements").transaction(cur=>{
+    const list=cur||[];
+    if(list.includes(id))return;
+    return[...list,id];
+  }).then(res=>{
+    if(bonus>0&&res.committed) fbDB.ref("identities/"+klas+"/"+lcode+"/coins").transaction(c=>(c||0)+bonus);
+  }).catch(()=>{});
+}
+function bmCheckHostTraits(players, winnerTeam, exactTie){
+  if(!fbDB||!winnerTeam||winnerTeam==="_stopped")return;
+  const mvp=[...players].sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
+  // Feniks: MVP (hoogste schade over beide teams) van het winnende team,
+  // minstens 1x herrezen (Heldenmodus, p.timesRevived — bmRespawnProgress()).
+  if(mvp&&mvp.team===winnerTeam&&(mvp.timesRevived||0)>=1) bmGrantHostTrait(mvp,"trait_feniks");
+  // Verlies met Stijl: diezelfde MVP-berekening, maar op het verliezende team.
+  if(mvp&&mvp.team!==winnerTeam) bmGrantHostTrait(mvp,"trait_stijlvol_verlies");
+  // Perfect in Balans: gedeeld toeval, dus voor alle spelers in de kamer.
+  if(exactTie) players.forEach(p=>bmGrantHostTrait(p,"trait_balans"));
 }
 
 function bmComputeAnalytics(players,log){
@@ -2787,6 +2895,7 @@ SCREENS.battleHostAwards = async function(){
   }catch(e){BM_LOG={};}
   if(!el("bmAwardStage"))return;
   BM_AWARD_DATA.awards=bmComputeAwards(BM_AWARD_DATA.all,BM_LOG);
+  bmCheckHostTraits(BM_AWARD_DATA.all, BM_AWARD_DATA.winner, BM_AWARD_DATA.exactTie);
   bmNextAward();
 };
 
@@ -3034,9 +3143,22 @@ SCREENS.battlePlayerLobby = function(){
 };
 function bmPickClass(cid){
   BM_MY_CLASS=cid;
+  BM_MY_CLASS_PICKS++; // trait_draaideur: telt elke klassewissel in de lobby
   // mastery-bonus: ★★★+ geeft +1 starting BE (minimale spelbonus)
   const ms=bmCalcMastery(BM_IDENT?.classHistory?.[cid]);
-  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({class:cid,masteryBonus:ms>=3?1:0});
+  // Verborgen traits: alleen als vlag op het player-node te lezen voor de
+  // host (bmCalcAbilityEffect/bmRespawnProgress draaien host-side en kennen
+  // BM_IDENT niet) — zelfde reden waarom masteryBonus al zo werkt.
+  const achs=BM_IDENT?.achievements||[];
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
+    class:cid, masteryBonus:ms>=3?1:0,
+    traitLaconisch:achs.includes("trait_laconisch"),
+    traitFeniks:achs.includes("trait_feniks"),
+    traitHeal:achs.includes("geheim_heal"),
+    traitGroot:achs.includes("geheim_groot"),
+    traitNorage:achs.includes("geheim_norage"),
+    traitPacifist:achs.includes("trait_pacifist"),
+  });
   toast("Klasse gekozen",bmClsName(cid)+(ms>=3?" · +1 BE mastery-bonus":""));
   SCREENS.battlePlayerLobby();
 }
@@ -3197,6 +3319,11 @@ function bmAnswer(idx){
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
   let beGain=ok?3:0;
   if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?cls.passive.val:1; }
+  // Ciceronianus: opeenvolgende correcte antwoorden in de laatste 5 sec van de timer
+  const clutch=ok&&timeLeft<=5;
+  if(clutch){ BM_MY_CLUTCH_STREAK++; BM_MY_CLUTCH_BEST=Math.max(BM_MY_CLUTCH_BEST,BM_MY_CLUTCH_STREAK); }
+  else BM_MY_CLUTCH_STREAK=0;
+  if(fast&&(BM_IDENT?.achievements||[]).includes("trait_ciceronianus")) beGain+=1;
   // Responstijd meten (ms verstreken sinds start vraagfase)
   const elapsedMs=Math.max(200,at*1000-Math.max(0,round.deadline?round.deadline-Date.now():0));
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).once("value").then(s=>{
@@ -3228,14 +3355,18 @@ function bmAnswer(idx){
 function bmChooseAbility(abilityId,cost){
   if(BM_ACTION_LOCKED||BM_MY_BE<cost)return;
   BM_ACTION_LOCKED=true;
-  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type:"ability",abilityId,cost}});
+  BM_MY_ABILITIES_USED++;
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
+  const abl=cls?.abilities.find(a=>a.id===abilityId);
+  if(abl&&BM_DMG_TYPES.includes(abl.type)) BM_MY_DEALT_DMG_ABILITY=true; // trait_pacifist
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type:"ability",abilityId,cost}});
   toast("Actie vergrendeld",cls?.abilities.find(a=>a.id===abilityId)?.nm||abilityId);
   bmPlayerRender();
 }
 function bmChooseCombo(comboId,cost){
   if(BM_ACTION_LOCKED||BM_MY_BE<cost)return;
   BM_ACTION_LOCKED=true;
+  BM_MY_ABILITIES_USED++;
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type:"combo",comboId,cost}});
   toast("Combo aangekondigd!",BM_COMBOS.find(c=>c.id===comboId)?.nm||comboId);
   bmPlayerRender();
@@ -3267,6 +3398,7 @@ SCREENS.battleResult = function(){
       </div>
       <div style="font-size:12px;color:var(--muted);margin-top:2px">Totaal: ${BM_IDENT?.xp||r.newLv.xp} XP · ${BM_IDENT?.coins||0} ${esc(bmCoinName())} · Niveau ${r.newLv.level} · ${esc(r.newLv.title)}</div>
       ${lvUp}${achHTML}${legHTML}`;
+    r.earned.forEach(id=>{const a=ACHIEVEMENTS_DEF.find(x=>x.id===id); if(a)toastAch(a);});
   }).catch(()=>{const b=el("bmXpResult");if(b)b.textContent="";});
 };
 

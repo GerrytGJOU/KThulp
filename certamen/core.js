@@ -250,11 +250,38 @@ const ACHIEVEMENTS_DEF = [
   // Langetermijn (spreiding belonen, niet snelheid)
   {id:"week_vol",       nm:"Wekelijkse Discipline",ds:"Op 5 verschillende dagen binnen 1 week gespeeld", icon:"torch", cat:"algemeen"},
   {id:"dertig_dagen",   nm:"Vaste Klant",        ds:"In totaal op 30 verschillende dagen gespeeld", icon:"laurel", cat:"algemeen"},
-  // Geheimen
-  {id:"geheim_rij",   nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true, cat:"geheim"},
-  {id:"geheim_groot", nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true, cat:"geheim"},
-  {id:"geheim_heal",  nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true, cat:"geheim"},
-  {id:"geheim_norage",nm:"???", ds:"Geheim eerbewijs",        icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  // Geheimen — nm/ds tonen "???" tot ontgrendeld (zie a.secret&&!got in de
+  // renderfuncties in battle.js), onthullen daarna hun echte naam/voorwaarde.
+  // geheim_groot/geheim_heal zijn nu mode:"battle" (voorheen ctx.largeGame/
+  // ctx.healOnly, die nooit ergens gezet werden — dus nooit te behalen; fix:
+  // gecontroleerd in bmCheckAchievements(), battle.js, met echte matchdata).
+  {id:"geheim_rij",   nm:"Onfeilbare Reeks", ds:"20 vragen op rij goed beantwoord, in élke spelmodus", icon:"star", secret:true, cat:"geheim"},
+  {id:"geheim_groot", nm:"Massale Slag",     ds:"Meegevochten in een Battle Mode-gevecht met minstens 12 spelers", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"geheim_heal",  nm:"Levensbron",       ds:"Minstens 40 HP genezen in één gevecht", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"geheim_norage",nm:"IJzeren Kalmte",   ds:"Een baasgevecht gewonnen zonder dat de baas ooit in Rage ging", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_ciceronianus",nm:"Ciceronianus",         ds:"5x op rij snel én correct geantwoord (laatste 5 sec.) in één gevecht", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_laconisch",   nm:"Laconische Breviteit", ds:"Een gevecht gewonnen als Voorvechter zonder ooit een vaardigheid te gebruiken", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_feniks",      nm:"Feniks",               ds:"Herrezen in Heldenmodus én MVP geworden van het winnende team", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  // Batch 2 — bewust soms "vreemd/onlogisch": puur-toeval-eerbewijzen naast
+  // de gebruikelijke skill-gebaseerde. trait_balans/trait_stijlvol_verlies
+  // zijn host-granted (bmCheckHostTraits(), battle.js) — niet zelf te
+  // detecteren door de speler. trait_zondagsrust/trait_eenzame_bouwer zijn
+  // bewust NIET mode:"battle": ze ontstaan puur in Training Mode (en
+  // eenzame_bouwer vereist juist dat er nooit Battle Mode gespeeld is), dus
+  // horen in het algemene, lokale checkAch()-systeem, net als geheim_rij.
+  {id:"trait_exacte_nul",       nm:"Exacte Nul",             ds:"Een gevecht gewonnen met precies 0 BE over na de laatste ronde", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_drieling",         nm:"Drieling",               ds:"3 gevechten op rij gewonnen met exact dezelfde hoeveelheid HP over", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_balans",           nm:"Perfect in Balans",      ds:"Een gevecht dat eindigde in een exact gelijkspel — beide legers op hetzelfde moment op 0 HP", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_stijlvol_verlies", nm:"Verlies met Stijl",      ds:"De meeste schade van het hele gevecht toegebracht, maar toch verloren", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_stille_kracht",    nm:"Stille Kracht",          ds:"Een gevecht gewonnen zonder zelf één vraag goed te hebben beantwoord", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_middelmatig",      nm:"Bewust Middelmatig",     ds:"Alle 8 klassen gespeeld zonder ooit boven 1★ mastery te komen", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_pacifist",         nm:"Pacifistische Priester", ds:"Een gevecht gewonnen als Priester zonder ooit een aanvals-vaardigheid te gebruiken", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_nachtwacht",       nm:"Nachtwacht",             ds:"Een gevecht gespeeld tussen middernacht en 5 uur 's ochtends", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_marathonzitting",  nm:"Marathonzitting",        ds:"3 volledige gevechten binnen 1 uur gespeeld", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_draaideur",        nm:"Draaideur",              ds:"6 keer van klasse gewisseld vóórdat het gevecht begon", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_volledige_cirkel", nm:"De Volledige Cirkel",    ds:"Alle 8 klassen voor het eerst gespeeld in exact alfabetische volgorde", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_zondagsrust",      nm:"Zondagsrust Doorbroken", ds:"Trainingspunten verdiend op een zondag", icon:"star", secret:true, cat:"geheim"},
+  {id:"trait_eenzame_bouwer",   nm:"Eenzame Bouwer",         ds:"Op 5 verschillende dagen getraind zonder ooit een gevecht te spelen", icon:"star", secret:true, cat:"geheim"},
 ];
 // Volgorde = ook de weergavevolgorde op het profielscherm en in de
 // avatar-editor (zie battle-data.js: BM_AVATAR_PARTS.goud).
@@ -307,7 +334,10 @@ function loadProfile(){
       snelvuurPlayed:0,    snelvuurWon:0,
       battlesPlayed:0,     battlesWon:0,
       totalDamage:0,       totalHealing:0,
-      playDates:[] // ISO-datums (YYYY-MM-DD), gededupliceerd — voor week_vol/dertig_dagen
+      playDates:[], // ISO-datums (YYYY-MM-DD), gededupliceerd — voor week_vol/dertig_dagen
+      trainingPlayDates:[], // idem, maar uitsluitend Training Mode — voor trait_eenzame_bouwer
+      lastWinMargins:[],       // laatste 3 eigen restant-HP bij winst — voor trait_drieling
+      recentBattleTimestamps:[] // ms-timestamps van recent afgeronde gevechten — voor trait_marathonzitting
     }
   };
   try{
@@ -447,13 +477,18 @@ function checkAch(ctx={}){
   add("combokunstenaar",s.totalCombos>=10);
   add("legendarisch",  (P.level||1)>=10);
   add("bliksem",       ctx.isFirst&&ctx.mode==="snelvuur");
-  add("geheim_rij",    s.bestStreak>=10);
-  add("geheim_groot",  ctx.largeGame);
-  add("geheim_heal",   ctx.healOnly);
+  add("geheim_rij",    s.bestStreak>=20);
+  add("trait_zondagsrust",    !!ctx.sunday);
+  add("trait_eenzame_bouwer", (s.trainingPlayDates||[]).length>=5&&s.battlesPlayed===0);
   add("week_vol",      distinctDaysWithinLast(7)>=5);
   add("dertig_dagen",  (s.playDates||[]).length>=30);
   if(got.length){
     saveProfile();
+    // Eenmalige munten-bonus, geen passief effect buiten Battle Mode (geen
+    // BE-/schild-economie om aan te haken in de klassieke spellen).
+    if(got.includes("geheim_rij")) addCoins(15);
+    if(got.includes("trait_zondagsrust")) addCoins(10);
+    if(got.includes("trait_eenzame_bouwer")) addCoins(15);
     got.forEach((id,i)=>setTimeout(()=>{ const a=ACHIEVEMENTS_DEF.find(x=>x.id===id); if(a)toastAch(a); },i*900));
   }
 }
@@ -522,7 +557,36 @@ function toast(title, msg, medal){
   el("toastT").textContent = title; el("toastN").textContent = msg;
   const t=el("toast"); t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),3200);
 }
-function toastAch(a){ if(!a)return; beep("ach"); toast("Nieuw eerbewijs", a.nm, medalSVG(a.icon,34)); }
+/* ---- Eerbewijs-ontgrendel-popup (groter/duidelijker dan de gewone toast,
+   met een lichtgloed achter het medaillon). Wachtrij zodat meerdere
+   gelijktijdig ontgrendelde eerbewijzen na elkaar getoond worden i.p.v.
+   overlappend. Gebruikt door checkAch() (alle spelmodi) en bmAwardBattle()/
+   bmCheckAchievements() (Battle Mode-specifieke eerbewijzen, incl. traits). ---- */
+let _achPopQueue=[], _achPopBusy=false, _achPopT=null;
+function toastAch(a){
+  if(!a)return;
+  _achPopQueue.push(a);
+  if(!_achPopBusy) _achPopNext();
+}
+function _achPopNext(){
+  const a=_achPopQueue.shift();
+  const bg=el("achpopBg");
+  if(!a||!bg){ _achPopBusy=false; return; }
+  _achPopBusy=true;
+  beep("ach");
+  el("achpopM").innerHTML=medalSVG(a.icon,64);
+  el("achpopN").textContent=a.nm;
+  el("achpopD").textContent=a.ds;
+  bg.classList.add("show");
+  clearTimeout(_achPopT);
+  _achPopT=setTimeout(_achPopDismiss,3200);
+}
+function _achPopDismiss(){
+  const bg=el("achpopBg"); if(!bg||!bg.classList.contains("show"))return;
+  clearTimeout(_achPopT);
+  bg.classList.remove("show");
+  setTimeout(_achPopNext,400);
+}
 function closeOverlay(){ el("overlay").classList.remove("show"); }
 
 

@@ -252,6 +252,26 @@ body.greek .qcard .word{color:#143a5e}
 .toast .m{width:34px;height:34px;flex:0 0 auto}
 .toast .tt{font-family:'Optima',serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--hi)}
 .toast .tn{font-family:'Optima',serif;font-weight:700;font-size:16px;color:var(--cream)}
+
+/* eerbewijs-ontgrendel-popup: groter/duidelijker dan .toast, lichtgloed achter het medaillon */
+.achpop-bg{position:fixed;inset:0;z-index:90;background:rgba(10,7,3,.6);display:flex;align-items:center;justify-content:center;
+  padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
+.achpop-bg.show{opacity:1;pointer-events:auto}
+.achpop{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;
+  padding:26px 30px;border-radius:16px;max-width:300px;
+  background:linear-gradient(160deg,var(--stone3),var(--stone2));border:1px solid var(--hi-dim);
+  box-shadow:0 14px 44px rgba(0,0,0,.55);
+  transform:scale(.85) translateY(14px);opacity:0;transition:transform .4s cubic-bezier(.2,1.4,.4,1),opacity .3s}
+.achpop-bg.show .achpop{transform:scale(1) translateY(0);opacity:1}
+.achpop-glow{position:relative;width:84px;height:84px;display:flex;align-items:center;justify-content:center;margin-bottom:2px}
+.achpop-glow::before{content:"";position:absolute;inset:-34px;border-radius:50%;
+  background:radial-gradient(circle,rgba(var(--glowA),.55),transparent 70%);
+  animation:achGlowPulse 1.6s ease-in-out infinite}
+.achpop-glow .m{position:relative;z-index:1;width:66px;height:66px;filter:drop-shadow(0 0 10px rgba(var(--glowA),.85))}
+.achpop-eyebrow{font-family:'Optima',serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--hi)}
+.achpop-nm{font-family:'Optima',serif;font-weight:700;font-size:19px;color:var(--cream)}
+.achpop-ds{font-size:12.5px;color:var(--muted);line-height:1.4}
+@keyframes achGlowPulse{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:.9;transform:scale(1.15)}}
 .overlay{position:fixed;inset:0;z-index:70;background:rgba(8,5,2,.84);display:flex;align-items:center;justify-content:center;
   padding:20px;opacity:0;pointer-events:none;transition:opacity .3s}
 .overlay.show{opacity:1;pointer-events:auto}
@@ -715,6 +735,12 @@ body.greek .qcard .word{color:#143a5e}
 <a class="portal-back" href="../" onclick="if(_screen!=='home'){event.preventDefault();go('home');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"><span class="m" id="toastM"></span><div><div class="tt" id="toastT"></div><div class="tn" id="toastN"></div></div></div>
+<div class="achpop-bg" id="achpopBg" onclick="_achPopDismiss()"><div class="achpop">
+  <div class="achpop-glow"><span class="m" id="achpopM"></span></div>
+  <div class="achpop-eyebrow">Eerbewijs ontgrendeld!</div>
+  <div class="achpop-nm" id="achpopN"></div>
+  <div class="achpop-ds" id="achpopD"></div>
+</div></div>
 <div class="overlay" id="overlay"></div>
 
 <!-- Firebase (compat) â€” alleen nodig voor echt multiplayer; faalt stil als offline/leeg -->
