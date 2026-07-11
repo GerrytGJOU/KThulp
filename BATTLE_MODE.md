@@ -582,4 +582,87 @@ Alle aansluitpunten staan als gedocumenteerde hooks onderaan `battle.js`. Naamco
 
 ---
 
+## M9 — Verborgen Traits (Crusader Kings-stijl)
+
+Alle `cat:"geheim"`-eerbewijzen (`ACHIEVEMENTS_DEF`, core.js) hebben een
+verborgen, complexe voorwaarde én een kleine **vlakke, niet-stapelende**
+spelbonus zodra ze ontgrendeld zijn (op `geheim_rij` na — algemeen/cross-mode
+en dus zonder gameplay-hook, zie tabel). Bewust géén %-multipliers (past niet
+bij de bestaande anti-snowball-lijn, zie TOTAL_WAR.md §3.7 "vlaggenschipbonus
+is bewust niet-stapelend"): dezelfde schaal als de bestaande `masteryBonus`
+(★★★+ mastery → vlak +1 startBE).
+
+**Onthulling**: `nm`/`ds` in `ACHIEVEMENTS_DEF` bevatten nu de echte naam/
+voorwaarde (niet langer permanent `"???"`) — verborgen blijft alleen wát
+ze zijn vóór ontgrendelen (`a.secret&&!got` in de renderfuncties toont dan
+`🔒 ???`); ná ontgrendelen tonen profielscherm én de nieuwe pop-up (zie
+onderaan) de echte tekst.
+
+| Trait (id) | Voorwaarde | Bonus | Waar |
+|---|---|---|---|
+| `geheim_rij` ("Onfeilbare Reeks") | 20 vragen op rij goed, in élke spelmodus (`s.bestStreak`) | Eenmalig +15 munten (geen passief effect — algemeen, geen Battle Mode-economie om aan te haken) | `checkAch()`, core.js |
+| `geheim_groot` ("Massale Slag") | Meegevochten in een Battle Mode-gevecht met ≥12 spelers (`totalPlayers`) | Vlak +1 BE per ronde | `bmDistributeQs()`, via `p.traitGroot` |
+| `geheim_heal` ("Levensbron") | ≥40 HP genezen in één gevecht (`BM_MY_HEAL`) | Vlak +1 heling bij elke heal-ability | `bmCalcAbilityEffect()`, via `p.traitHeal` |
+| `geheim_norage` ("IJzeren Kalmte") | Boss Battle gewonnen zonder dat de baas se rage-meter ooit vol liep (`rageMaxed`, sticky) | Vlak +1 BE per ronde | `bmDistributeQs()`, via `p.traitNorage` |
+| `trait_ciceronianus` ("Ciceronianus") | 5 opeenvolgende antwoorden correct én binnen de laatste 5 sec. van de timer, in één gevecht (`BM_MY_CLUTCH_STREAK`/`BM_MY_CLUTCH_BEST`) | +1 extra BE bij elk snel-correct antwoord | `bmAnswer()` (client-side; de speler kent zijn eigen `BM_IDENT.achievements` al) |
+| `trait_laconisch` ("Laconische Breviteit") | Gevecht gewonnen als Voorvechter (`spartaan`) zonder ooit een ability/combo te kiezen (`BM_MY_ABILITIES_USED===0`) | Vlak +1 schild bij elke `team_shield`/`testudo`-ability | `bmCalcAbilityEffect()`, via `p.traitLaconisch` |
+| `trait_feniks` ("Feniks") | Minstens 1x herrezen in Heldenmodus (`p.timesRevived`, zie `bmRespawnProgress()`) én die speler eindigt als MVP (hoogste `damage`) van het winnende team | 1 herrijzing eerder nodig (`respawnRequired-1`, min. 1) | Uniek: **host-granted**, niet player-side. `bmCheckHostTraits()` draait direct na `bmComputeAwards()` in `battleHostAwards` en schrijft het eerbewijs rechtstreeks naar `identities/{klas}/{lcode}/achievements` via het player-node se `identityKey` — de speler hoeft dit zelf niet te kunnen detecteren of uitlezen (spelers zien elkaars stats nooit live, zie M2 "scoped listeners") |
+
+Alle Battle Mode-trait-vlaggen (`traitLaconisch`/`traitFeniks`/`traitHeal`/
+`traitGroot`/`traitNorage`/`traitPacifist`) worden op het player-node
+geschreven in `bmPickClass()`, uitgelezen uit `BM_IDENT.achievements` —
+zelfde reden als `masteryBonus`: `bmCalcAbilityEffect()`/`bmDistributeQs()`/
+`bmRespawnProgress()` draaien host-side op het Firebase player-record, dat
+geen `achievements`-array bevat. `geheim_groot`/`geheim_heal` waren vóór deze
+sessie **nooit te behalen** (hun oude voorwaarde, `ctx.largeGame`/
+`ctx.healOnly` in `checkAch()`, werd nergens ooit gezet) — nu verplaatst naar
+`bmCheckAchievements()` met echte matchdata.
+
+### Batch 2 — 13 extra traits (bewust soms "vreemd/onlogisch")
+
+Puur-toeval-eerbewijzen naast de gebruikelijke skill-gebaseerde. Architectuur-
+regel: alles wat uit een Battle Mode-gevecht komt hoort in de Firebase-
+identity-pipeline (`mode:"battle"`, `bmCheckAchievements()`), **niet** in het
+lokale `checkAch()`/`P.achievements` — dat blijft voorbehouden aan traits die
+uitsluitend vanuit Training Mode ontstaan (`trait_zondagsrust`,
+`trait_eenzame_bouwer`, die zelfs vereist dat er *nooit* Battle Mode gespeeld
+is).
+
+| Trait (id) | Voorwaarde | Bonus | Waar |
+|---|---|---|---|
+| `trait_exacte_nul` ("Exacte Nul") | Gevecht gewonnen met precies 0 BE over (`BM_MY_BE`) | Geen (badge) | `bmCheckAchievements()` |
+| `trait_drieling` ("Drieling") | 3 gevechten op rij gewonnen met exact dezelfde eigen restant-HP (`P.stats.lastWinMargins`, lokaal, cap 3, reset bij verlies) | Eenmalig +10 munten | `bmAwardBattle()` |
+| `trait_balans` ("Perfect in Balans") | Echt gelijktijdige dubbele-KO (`newHA<=0&&newHB<=0` in `bmResolve()`, nieuw veld `state.exactTie`) | Eenmalig +10 munten | **Host-granted**, voor alle spelers in de kamer, via `bmCheckHostTraits()` |
+| `trait_stijlvol_verlies` ("Verlies met Stijl") | Hoogste schade van het hele gevecht (beide teams), maar op het verliezende team | Eenmalig +5 munten (troostprijs) | **Host-granted**, via `bmCheckHostTraits()` |
+| `trait_stille_kracht` ("Stille Kracht") | Gevecht gewonnen met 0 eigen correcte antwoorden | Geen | `bmCheckAchievements()` |
+| `trait_middelmatig` ("Bewust Middelmatig") | Alle 8 klassen gespeeld, nooit boven 1★ mastery (spiegelbeeld van `grootmeester`) | Geen | `bmCheckAchievements()` |
+| `trait_pacifist` ("Pacifistische Priester") | Gevecht gewonnen als Priester zonder ooit een ability met een schade-`type` (`BM_DMG_TYPES`) te kiezen | Vlak +1 schild bij `team_shield`/`testudo` (`p.traitPacifist`) | `bmChooseAbility()` (tracking) + `bmCalcAbilityEffect()` (bonus) |
+| `trait_nachtwacht` ("Nachtwacht") | Gevecht afgerond tussen 00:00–05:00 systeemtijd | Eenmalig +10 munten | `bmAwardBattle()` |
+| `trait_marathonzitting` ("Marathonzitting") | 3 afgeronde gevechten binnen 1 uur (`P.stats.recentBattleTimestamps`, lokaal, geprund tot laatste uur) | Eenmalig +15 munten | `bmAwardBattle()` |
+| `trait_draaideur` ("Draaideur") | ≥6 klassewissels in de lobby vóór het gevecht start (`BM_MY_CLASS_PICKS`) | Geen | `bmPickClass()` (tracking) |
+| `trait_volledige_cirkel` ("De Volledige Cirkel") | Alle 8 klassen ooit voor het eerst gespeeld, in exact alfabetische volgorde van hun klasse-id (`ident.classPlayOrder`, Firebase, bijgewerkt in de `identRef.transaction()` van `bmAwardBattle()`) | Eenmalig +30 munten (grootste, want zeldzaamst) | `bmCheckAchievements()` |
+| `trait_zondagsrust` ("Zondagsrust Doorbroken") | Trainingspunten verdiend op een zondag (`new Date().getDay()===0`) | Eenmalig +10 munten | `checkAch()`, vanuit `trAnswer()` (training.js) |
+| `trait_eenzame_bouwer` ("Eenzame Bouwer") | ≥5 verschillende trainingsdagen (`P.stats.trainingPlayDates`, los van de algemene `playDates`) én nog nooit een Battle Mode-gevecht gespeeld (`battlesPlayed===0`) | Eenmalig +15 munten | `checkAch()`, vanuit `trAnswer()` |
+
+Eenmalige munten-bonussen staan in `TRAIT_COIN_BONUS` (battle-data.js, naast
+`BM_LEGENDARY_BONUS`) en worden na `bmCheckAchievements()`/
+`bmCheckHostTraits()` toegepast via een losse `coins`-transaction — dus altijd
+ná de gewone deelname/winst-munten, nooit dubbel bij een reeds ontgrendeld
+trait.
+
+### Eerbewijs-ontgrendel-pop-up
+
+`toastAch(a)` (core.js) toont niet langer alleen de kleine `.toast`-balk
+onderin, maar een prominente, gecentreerde pop-up (`#achpopBg`/`.achpop` in
+index.html): medaillon met een pulserende lichtgloed erachter
+(`.achpop-glow::before`, radial-gradient + `@keyframes achGlowPulse`), naam en
+voorwaarde. Een wachtrij (`_achPopQueue`) toont meerdere gelijktijdig
+ontgrendelde eerbewijzen na elkaar (3,2s zichtbaar, tikken op de pop-up
+dismisst direct). Dit is dezelfde functie die al overal werd aangeroepen
+(`checkAch()` voor alle spelmodi, nu óók `bmAwardBattle()`/
+`bmCheckAchievements()` voor Battle Mode/traits) — geen aparte notificatie-
+route per spelmodus nodig.
+
+---
+
 *© Gerben de Jong · 2026*

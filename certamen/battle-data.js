@@ -324,6 +324,19 @@ const BM_LEGENDARY_BONUS = {
   aeneas:   { nm:"Aeneas",        desc:"+20% genezing",             healMult:0.20 },
 };
 
+// ── Eenmalige munten-bonus bij het ontgrendelen van bepaalde verborgen
+// traits (batch 2, zie ACHIEVEMENTS_DEF in core.js) — toegepast in
+// bmAwardBattle()/bmCheckHostTraits() (battle.js). Traits zonder entry hier
+// geven geen munten (puur badge, of een vlakke gameplay-bonus elders).
+const TRAIT_COIN_BONUS = {
+  trait_drieling: 10,
+  trait_balans: 10,
+  trait_stijlvol_verlies: 5,
+  trait_nachtwacht: 10,
+  trait_marathonzitting: 15,
+  trait_volledige_cirkel: 30,
+};
+
 // XP-drempels en titels per niveau (1–10). Aanpasbaar zonder logica te wijzigen.
 const BM_LEVELS = [
   { level:1,  xp:0,    title:"Tiro",       unlock:null },
