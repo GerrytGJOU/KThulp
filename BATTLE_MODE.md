@@ -63,9 +63,12 @@ BE accumuleert over rondes. Acties kosten BE; als je niet genoeg hebt, kun je di
 
 ---
 
-## Klassen (M3: 8 · M6: 12)
+## Klassen (M3: 8 gebouwd · M6: 4 extra facties-klassen gepland, nog niet gebouwd)
 
-Alle balanswaarden staan in `BM_CLASSES`, `BM_SYNERGY` en `BM_COMBOS` in `certamen/index.html`.
+Alle balanswaarden staan in `BM_CLASSES`, `BM_SYNERGY` en `BM_COMBOS` in
+`certamen/battle-data.js`. Elke klasse heeft 5 abilities (2× basic, 2×
+medium, 1× legendary-tier) — de tabel hieronder toont per klasse één
+representatief voorbeeld per kolom (Basis/Geavanceerd/Ultiem), niet alle 5.
 
 ### Alle 8 klassen
 
@@ -132,8 +135,10 @@ Beide spelers kiezen "Combo" in dezelfde ronde; de host detecteert het bij resol
 | Vuursalvo | Genie + Boogschutter | 4 BE elk | +12 dmg |
 | Testudo-formatie | Centurio + Hopliet | 4 BE elk | +10 schild voor team |
 | Hinderlaag & Aanval | Verkenner + Cavalerie | 4 BE elk | +13 dmg + -3 vijandelijk schild |
+| Genezende Vesting | Priester + Genie | 4 BE elk | +10 heal + -4 vijandelijk schild |
+| Verkende Aanval | Verkenner + Boogschutter | 4 BE elk | +10 dmg + -4 vijandelijk schild |
 
-Waarden in `BM_COMBOS` in de code (aanpasbaar).
+Waarden in `BM_COMBOS` (`certamen/battle-data.js`) in de code (aanpasbaar).
 
 ---
 
@@ -251,18 +256,26 @@ Instelbaar in de host-instellingen vóór het aanmaken van de kamer. Standaard: 
 
 ---
 
-## Facties (M6 — persistent)
+## Facties (M6 — persistent, ONTWERP, nog niet gebouwd)
+
+> **Status: alleen ontwerp.** Niets hieronder bestaat in de code — geen
+> faction-XP-veld, geen van de vier klassen (Farao/Druide/Augur/Pontifex,
+> zie ["M6-klassen (gepland)"](#m6-klassen-gepland) hierboven, waarmee deze
+> tabel nu consistent is gehouden). Niet te verwarren met `BM_FACTIONS`
+> (`certamen/battle-data.js`) — dat is een **volledig ander, wél gebouwd**
+> systeem: puur cosmetische thema's/kleuren voor één los gevecht (zie
+> "Facties/Thema's (M4)" hierboven), geen persistente leerlinggroep.
 
 Langdurige groepen waartoe leerlingen behoren, ongeacht het actuele gevecht. Elke factie heeft een eigen identiteit en faction-klasse:
 
 | Factie | Sfeer | Exclusieve klasse |
 |---|---|---|
-| Legio Romani | Orde, discipline | Centurio |
-| Agora Athenai | Kennis, list | Redenaar |
-| Sparta Kryptos | Kracht, geheimhouding | Spartaan |
-| Memphis Papyri | Magie, herstel | Farao |
+| Legio Romani | Orde, discipline | Centurio (bestaande klasse) |
+| Agora Athenai | Kennis, list | Augur (uit "M6-klassen (gepland)") |
+| Sparta Kryptos | Kracht, geheimhouding | Spartaan (bestaande klasse) |
+| Memphis Papyri | Magie, herstel | Farao (uit "M6-klassen (gepland)") |
 
-Faction-XP en -rang zijn persistent (blijven over gevechtssessies heen).
+Faction-XP en -rang zouden persistent moeten zijn (blijven over gevechtssessies heen) — ook dat is nog niet gebouwd.
 
 ---
 
@@ -305,7 +318,7 @@ Faction-XP en -rang zijn persistent (blijven over gevechtssessies heen).
 
 ## Balansgetallen — overzicht voor de docent
 
-Dit zijn alle getallen die je kunt bijstellen zonder in de logica te hoeven zitten. Alles staat in de drie configuratietabellen bovenaan het `<script>`-blok in `certamen/index.html`.
+Dit zijn alle getallen die je kunt bijstellen zonder in de logica te hoeven zitten. Alles staat in de configuratietabellen in `certamen/battle-data.js` (zie [Overzicht configuratietabellen](#overzicht-configuratietabellen-battle-datajs)).
 
 ### BE-economie (antwoordfase)
 | Situatie | BE |
@@ -373,10 +386,11 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 | **M3** | 8 klassen · data-gedreven abilities · synergie · combo's · class mastery | ✅ Gebouwd |
 | **M4** | Factie/thema-systeem · 6 startfacties · CSS-variabelen theming · docentkeuze via dropdown | ✅ Gebouwd |
 | **M5** | Slagveld-animaties · formatie-layout · log-gestuurde client-side animaties · `meta.animations` schakelaar | ✅ Gebouwd |
-| **M6** | Avatar-aanpassing · XP/niveau 1–20 · class mastery ★–★★★★★ · achievements | ✅ Gebouwd |
+| **M6** | Avatar-aanpassing (15 onderdelen) · XP/niveau 1–10 + Legioenster-prestige · class mastery ★–★★★★★ · achievements | ✅ Gebouwd — **behalve** de persistente facties-laag (Legio Romani/Agora Athenai/e.a., §"Facties (M6 — persistent)" hierboven): die bestaat alleen als ontwerp, geen code |
 | **M7** | Snel setup-scherm · Live dashboard (avatar-kaarten, participatiebalk, pauze/sla over/herstart) · Award-ceremony · Analytics (HP-chart, top 5 gemiste woorden, leerlingentabel) · CSV-export | ✅ Gebouwd |
-| **M8** | Modularisering (core.js / net.js / games.js / battle.js) · War Mode-hooks gedocumenteerd · Analytics BATTLE_MODE.md bijgewerkt | ✅ Gebouwd |
-| M8 | Campaign builder voor docenten | — |
+| **M8** | Modularisering (inmiddels 8 bestanden, zie [Definitieve bestandsstructuur](#definitieve-bestandsstructuur)) · War Mode-hooks gedocumenteerd | ✅ Gebouwd |
+| **M9** | Verborgen traits (92 eerbewijzen totaal, 20 `cat:"geheim"`) · eerbewijs-ontgrendel-pop-up met lichtgloed | ✅ Gebouwd |
+| *(toekomstig)* | Campaign builder voor docenten | — |
 
 ---
 
@@ -412,36 +426,50 @@ Elke browsertab telt als één verbinding. Bij 50 leerlingen + 1 host = 51 verbi
 
 ### Avatar
 
-Elke leerling heeft een vectoravatar opgebouwd uit 9 onderdelen:
+Elke leerling heeft een vectoravatar opgebouwd uit **15 onderdelen**
+(`BM_AVATAR_PARTS`, `certamen/battle-data.js`) — vier ontgrendel-types door
+elkaar (niveau, mastery, Legioenster-prestige, munten):
 
-| Onderdeel | Standaard opties | Vereist ontgrendeling |
+| Onderdeel | Basisopties (geen ontgrendeling) | Vereist ontgrendeling |
 |---|---|---|
-| Helm | Standaard, Open | Federhelm (Niv. 5), Kroon (Mastery ★★★+) |
-| Haar | Kort, Lang, Kaal | Vlecht (Niv. 3) |
-| Gezichtshaar | Geen, Baard, Snor | — |
-| Wapenrusting | Licht, Middel | Zwaar (Niv. 5), Ceremonieel (Mastery ★★★★★) |
-| Schild | Rond, Ovaal, Vierkant | Toren (Niv. 7) |
-| Wapen | Zwaard, Speer, Boog | Staf (Niv. 4) |
-| Cape | Geen, Kort | Lang (Niv. 6) |
-| Banierkleur | 12 kleuren | — |
-| Overwinningsanimatie | Juichen | Zwaard heffen (Niv. 5) |
+| `geslacht` | Man, Vrouw | — |
+| `huid` | Licht, Donker | — |
+| `armor` (Wapenrusting) | Vodden, Mantel | Licht (Niv. 2), Middel (Niv. 5), Hopliet (Niv. 7), Zwaar (Niv. 9), Ceremonieel (Mastery ★★★★★) |
+| `helm` | Geen, Bandana | Standaard (Niv. 2), Open (Niv. 4), Hopliet (Niv. 8), Kroon (Niv. 10) |
+| `schild` | Geen | Rond (Niv. 3), Puntig (Niv. 3), Metaal Rond (Niv. 6), Metaal Puntig (Niv. 6) |
+| `wapen` | Knuppel, Hooivork | Zwaard (Niv. 2), Speer (Niv. 2), Boog (Niv. 4), Staf (Niv. 4) |
+| `haar` | Kort, Lang, Kaal | Wild (Niv. 5), Vlecht/Middel (Niv. 6), Knot/Hanekam (Niv. 7) |
+| `haarkleur` | Blond, Bruin, Zwart, Rood | Blauw, Groen (beide Niv. 8) |
+| `baard` (Gezichtshaar) | Geen, Snor, Baard, Baard en snor | Sik en snor (Niv. 7) |
+| `cape` | Geen | Kort (Niv. 5), Lang (Niv. 7), Engelen-/Duivels-/Vlindervleugels (elk Legioenster ★1) |
+| `capekleur` | 6 kleuren | — |
+| `victoryAnim` (Overwinningsanimatie) | Juichen | Zwaard heffen (Niv. 5) |
+| `extra` | Geen | 7 cosmetische opties, elk met munten (60–200) |
+| `legendary` (Legendarische strijder) | Geen | Achilles/Ajax (500 munten), Odysseus/Aeneas (600 munten) — zie [M8: Legendarische bonussen](#overzicht-configuratietabellen-battle-datajs) |
+| `prestige` (Legioensglans) | Geen | 7 gouden herkleuringen, elk bij het voltooien van één volledige eerbewijs-categorie (`achCategory`) |
 
 De avatar wordt gerenderd als inline SVG via `bmAvatarSVG(av, size)`. Backward-compat: pre-M6 string-avatars worden via `bmAvatarMerge()` omgezet naar het nieuwe objectformaat.
 
 Opgeslagen in `/identities/{klas}/{code}/avatar` (object).
 
-### XP en niveaus (1–20)
+### XP en niveaus (1–10)
 
-XP-winst per gevecht:
+XP-winst per gevecht (`bmAwardBattle()`, `certamen/battle.js`):
 
 | Situatie | XP |
 |---|---|
-| Per correct antwoord | +10 |
-| Per ronde actief meegedaan | +5 |
-| Gewonnen als team | +25 |
-| Scholar (≥90% correct, min. 3 vragen) | +10 |
+| Per correct antwoord | +2 |
+| Deelname (vast, ongeacht resultaat) | +5 |
+| Per beantwoorde ronde | +1 |
+| Gewonnen als team | +15 |
+| Scholar (≥90% correct, min. 5 vragen) | +8 |
 
-Niveaus en titels staan in `BM_LEVELS` (aanpasbaar). Bij niveau-omhoog worden cosmetics ontgrendeld; alle ontgrendeling-checks via `bmIsUnlocked(opt, ident)`.
+Niveaus en titels staan in `BM_LEVELS` (`certamen/battle-data.js`) — **10
+niveaus** (Tiro → Imperator), niet 20. Bij niveau-omhoog worden cosmetics
+ontgrendeld; alle ontgrendeling-checks via `bmIsUnlocked(opt, ident)`. Voorbij
+niveau 10 loopt XP door als Legioenster-prestige (★, zie `calcPrestige()`/
+`xpBarInfo()` in `certamen/core.js`) — dat systeem ontgrendelt onder meer de
+drie vleugel-capes hierboven.
 
 ### Class Mastery (0–5 sterren)
 
@@ -452,11 +480,20 @@ Score per klasse = `rounds * 5 + damage + healing`. Drempelwaarden in `BM_MASTER
 
 Mastery-voortgang staat in `/identities/{klas}/{code}/classHistory/{cls}`.
 
-### Achievements (13 stuks)
+### Achievements (92 stuks, 74 daarvan Battle Mode-specifiek)
 
-Gecontroleerd na elk gevecht in `bmCheckAchievements()`. Opgeslagen als array van id-strings in `/identities/{klas}/{code}/achievements`.
-
-Categorieën: `first_blood`, `scholar`, `unbreakable`, `versatile`, `veteran` + één per klasse voor mastery ★★★★★.
+Alle eerbewijzen staan in één gedeelde `ACHIEVEMENTS_DEF` (`certamen/core.js`)
+voor de hele app, niet alleen Battle Mode — verdeeld over de categorieën
+(`cat:`) `algemeen` (8), `klassiek` (7), `battle` (8), `mastery` (17,
+klasse-mastery ★3/★5 × 8 klassen + grootmeester), `boss` (5), `totalwar` (27,
+inclusief de 22 vlaggenschip-eerbewijzen, zie TOTAL_WAR.md §3.7) en `geheim`
+(20 verborgen traits, zie [M9](#m9--verborgen-traits-crusader-kings-stijl)).
+Battle Mode-specifieke items (`mode:"battle"` — dus zichtbaar op
+`battleProfile`) worden gecontroleerd na elk gevecht in
+`bmCheckAchievements()`; de rest via het algemene `checkAch()` (core.js),
+vanuit elke spelmodus. Opgeslagen als array van id-strings, ofwel
+`/identities/{klas}/{code}/achievements` (Battle Mode, cross-device) ofwel
+lokaal in `P.achievements` (overige modi, zie M9's architectuurregel).
 
 ### Nieuwe schermen
 
@@ -532,31 +569,43 @@ Nieuw per log-entry:
 
 ### Definitieve bestandsstructuur
 
+Sindsdien verder gesplitst — dit is de actuele structuur (regelaantallen zijn
+momentopnames, groeien mee; `certamen/vocab.js` en de Total War-bestanden
+staan hier niet in, zie het bestandsoverzicht in [CLAUDE.md](CLAUDE.md) resp.
+TOTAL_WAR.md voor die):
+
 ```
 certamen/
-  index.html    HTML-skelet, CSS, Firebase-config, CDN-tags, init-script (486 regels)
-  core.js       Vocab, helpers, CATS, profiel, iconen, geluid, toast, router  (250 regels)
-  net.js        Firebase-init, FBNet, DemoNet, Net=null                        (53 regels)
-  games.js      Touwtrekken, Marathon, Snelvuur — alle host- en speler-schermen (611 regels)
-  battle.js     Battle Mode volledig — config, logic, schermen, War Mode-hooks  (2020+ regels)
+  index.html      HTML-skelet, CSS (incl. eerbewijs-pop-up), Firebase-config, CDN-tags, init-script (774 regels)
+  core.js         Helpers, ACHIEVEMENTS_DEF, profiel (P), iconen, geluid, toast/eerbewijs-pop-up, router (637 regels)
+  net.js          Firebase-init, FBNet, DemoNet, Net=null                                              (429 regels)
+  games.js        Touwtrekken, Marathon, Snelvuur, docentenportaal — host- en speler-schermen           (1377 regels)
+  battle-data.js  Battle Mode-configuratietabellen (zie hieronder) — puur data, geen logica              (365 regels)
+  bossbattle.js   Boss Battle-presets + scripted baas-resolutie (bmBossResolveTick, zie BOSS_BATTLE.md) (263 regels)
+  battle-motion.js BattleMotion state machine (avatar-aanvalsanimaties, hergebruikt door Training Mode)  (201 regels)
+  battle.js       Battle Mode/Boss Battle-logica + alle schermen, War Mode-hooks                        (3634 regels)
 ```
 
-Laadvolgorde in index.html: `Firebase CDN → core.js → net.js → games.js → battle.js → init`.
+Laadvolgorde in index.html: `Firebase CDN → core.js → net.js → games.js → battle-data.js → bossbattle.js → battle-motion.js → battle.js → map/provinces.js → totalwar.js → training.js → freepractice.js → init`.
 
 Alle globale variabelen zijn gedefinieerd in core.js (SCREENS, go, cleanup, DRAFT, P, etc.) en zijn beschikbaar in alle modules die daarna laden.
 
-### Overzicht configuratietabellen (battle.js)
+### Overzicht configuratietabellen (battle-data.js)
 
 | Tabel | Variabele | Inhoud |
 |---|---|---|
-| Klassen | `BM_CLASSES` | 8 klassen, elk met passive + 3 abilities |
+| Klassen | `BM_CLASSES` | 8 klassen, elk met passive + 5 abilities |
 | Synergieën | `BM_SYNERGY` | Teambonus bij specifieke klassencombinatie |
-| Combo-abilities | `BM_COMBOS` | 3 combo's: vereisen 2 klassen + teamgenoot |
-| Facties/Thema's | `BM_FACTIONS` | 3 facties: Romein, Grieks, Vikingen + CSS-vars |
-| Avatar-onderdelen | `BM_AVATAR_PARTS` | 7 secties, ontgrendelbaar via niveau/mastery |
-| Niveaudrempels | `BM_LEVELS` | 20 niveaus, XP-drempel + titel per niveau |
+| Combo-abilities | `BM_COMBOS` | 7 combo's: vereisen 2 klassen + teamgenoot |
+| Facties/Thema's | `BM_FACTIONS` | 6 facties (zie §Facties hierboven) + CSS-vars |
+| Avatar-onderdelen | `BM_AVATAR_PARTS` | 15 secties, ontgrendelbaar via niveau/mastery/prestige/munten (zie M6) |
+| Legendarische bonussen | `BM_LEGENDARY_BONUS` | 4 legendarische strijders, elk met een vaste %-gevechtsbonus |
+| Eenmalige trait-munten | `TRAIT_COIN_BONUS` | Munten-bonus bij het ontgrendelen van bepaalde M9-traits |
+| Niveaudrempels | `BM_LEVELS` | 10 niveaus (Tiro–Imperator), XP-drempel + titel per niveau |
 | Mastery-tiers | `BM_MASTERY_TIERS` | 6 tiers (score → 0–5 sterren) |
-| Achievements | `BM_ACHIEVEMENTS` | 13 achievements (id, naam, omschrijving) |
+
+Eerbewijzen (`ACHIEVEMENTS_DEF`, 92 stuks) staan **niet** in battle-data.js
+maar in `certamen/core.js` — gedeeld met alle spelmodi, zie M6/M9 hierboven.
 
 ### War Mode — toekomstige systemen
 

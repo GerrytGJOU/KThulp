@@ -17,8 +17,17 @@
 > verdedigende provincie verrekend (§5.4/BOSS_BATTLE.md "Garnizoensformule").
 > Zelf een belegering starten als leerling bestaat nog niet — dat bereidt de
 > docent voor via de docentenweergave. Zie [§0](#0-wat-is-er-al-gebouwd-nu) voor
-> de volledige, actuele stand (let op: §0 zelf dateert van vóór Training Mode/
-> de leerling-kaart/seizoenen en is op die punten inmiddels achterhaald).
+> de volledige, actuele stand.
+>
+> **Wat NIET gebouwd is, ondanks dat §3/§5/§6/§9.2 hieronder het als een
+> werkend systeem beschrijven**: Trainingspunten (TP) als een **besteedbare**
+> valuta voor garnizoensupgrades. In werkelijkheid schrijft elk goed antwoord
+> in Training Mode rechtstreeks (via `twAwardStructurePoints()`,
+> `certamen/training.js`) naar `militiaPoints`/`wallPoints`/`towerPoints` op de
+> provincie — geen los `trainingPoints`-saldo om te "kopen" mee, geen
+> aankoopscherm, geen kostentabel. Garnizoenstiers volgen automatisch uit die
+> puntentotalen (`twStructureTier()`, `certamen/totalwar.js`). Zie §3.2/§5.2
+> voor het (nooit gebouwde) oorspronkelijke ontwerp.
 >
 > Dit document is de **enige bron van waarheid** voor Total War en vervangt
 > alle eerdere schetsen (inclusief `Total War Plans.docx`, die nu verouderd en
@@ -37,7 +46,10 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 
 | Onderdeel | Bestand | Status |
 |---|---|---|
-| Menutegel "🗺️ Total War — Binnenkort" | `certamen/games.js` (`SCREENS.home`) | ✅ werkend |
+| Menutegel "🗺️ Total War" (BETA-badge) | `certamen/games.js` (`SCREENS.home`) | ✅ werkend — niet langer "Binnenkort" |
+| **Training Mode** (thuis oefenen, §3) | `certamen/training.js` (`SCREENS.trainingMode`) | ✅ werkend — leerlingen oefenen woordjes, bouwen automatisch mee aan het garnizoen (zie de TP-waarschuwing hierboven voor het verschil met het oorspronkelijke §3.2-ontwerp) |
+| **Publieke leerling-veldtochtkaart** (alleen-lezen) | `certamen/totalwar.js` (`SCREENS.totalWarMap`, `twStartLiveReadOnly`) | ✅ werkend — legenda klas↔beschaving + seizoensrecords |
+| **Seizoenen** | `certamen/totalwar.js` (`/totalwar/season`, `TW_SEASON_TITLES`, `twStartNewSeason`) | ✅ werkend — docent kan een nieuw seizoen starten via de docentenweergave |
 | Publiek uitlegscherm (alleen-lezen demo-kaart) | `certamen/totalwar.js` (`SCREENS.totalWar`) | ✅ werkend, ongewijzigd (blijft demo, want puur illustratief voor niet-ingelogde bezoekers) |
 | Docent-kaart: **echte, blijvende veldtocht** i.p.v. demo-voorbeeld | `certamen/totalwar.js` (`SCREENS.totalWarPreview`, `twStartLive`, `twApplyLive`) | ✅ werkend — live Firebase-listener op `/totalwar/provinces`, geen hardcoded stand meer |
 | **Echte, geometrisch accurate SVG-kaart van het Romeinse Rijk (Trajanus)** | `certamen/map/provinces.svg` | ✅ werkend — **46 aanklikbare provincies**, elk met stabiele `id` (bv. `italia`, `baetica`, `gallia_belgica`) |
@@ -48,8 +60,8 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | JS-helper om provincies te kleuren/muteren | `certamen/map/provinces.js` (`MapAPI`) | ✅ werkend: `setProvinceOwner`, `setProvinceDefense`, `setProvinceBonus`, `highlightProvince`, `resetProvince`, `drawSeaRoutes` |
 | **Firebase-schema + eenmalige campagne-seed** | `certamen/totalwar.js` (`twEnsureCampaignSeeded`) | ✅ werkend — `/totalwar/provinces/{id}` + `/totalwar/civs/{civId}`, idempotent (zie §4, met de `klasCivs`-omkering uit §9.5) |
 | **Klas↔beschaving-koppeling (docentenportaal)** | `certamen/games.js` (`tpAssignKlasCiv`/`tpLoadKlasCivs`, paneel in `SCREENS.teacherPortal`) | ✅ werkend — schrijft naar `/totalwar/klasCivs/{klascode}`, gevalideerd tegen bestaande Battle Mode-klascodes |
-| **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageslag (`damageTaken`); winst/verlies schrijft terug naar de provincie |
-| 7-facties-tabel + thuislanden (seed-data) | `certamen/totalwar.js` (`TW_CIVS`, `TW_HOME_PROVINCES`) | ✅ werkend, exact §2 |
+| **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageschade per spoor (`siege.stageDamage.{militia,walls,towers}`, zie §5.4 — **niet** het platte `damageTaken`-veld dat §4/§5.4 hieronder nog beschrijven, en zonder reparatiemechanisme); winst/verlies schrijft terug naar de provincie |
+| **8**-facties-tabel + thuislanden (seed-data) | `certamen/totalwar.js` (`TW_CIVS`, `TW_HOME_PROVINCES`) | ✅ werkend — **niet** 7: naast de 7 uit §2 bestaat ook `britanni` (Britten, thuisprovincie `britannia`) al in de seed-data, zie de correctie bij §2 hieronder |
 | Voorbeeld-eigendom/verdediging voor de **publieke** demo-kaart | `certamen/totalwar.js` (`TW_DEMO_OWN`, `TW_DEMO_DEF`) | ✅ blijft bestaan, uitsluitend voor `SCREENS.totalWar` (niet-docenten) |
 
 **Belangrijk over de kaart:** dit is de **echte** Romeinse-provinciekaart (zie
@@ -112,9 +124,12 @@ oefenspellen. Total War is een **doorlopende veldtocht** over weken/maanden:
 
 ## 2. Facties & thuislanden
 
-**7 facties**, elk met een thuisland dat **volledig binnen de bestaande
-46-provinciekaart** ligt (zie §9.1 voor waarom dit een bewuste, afgedwongen
-keuze is t.o.v. het originele docx-plan):
+**8 facties** (dit document begon als een 7-facties-plan, zie §9.1 — `britanni`
+is er ná dat plan alsnog bijgekomen en staat al in de echte seed-data,
+`TW_CIVS`/`TW_HOME_PROVINCES` in `certamen/totalwar.js`), elk met een
+thuisland dat **volledig binnen de bestaande 46-provinciekaart** ligt (zie
+§9.1 voor waarom dat een bewuste, afgedwongen keuze is t.o.v. het originele
+docx-plan):
 
 | Factie (`civId`) | Kleur | Thuisprovincie(s) op de echte kaart |
 |---|---|---|
@@ -125,6 +140,7 @@ keuze is t.o.v. het originele docx-plan):
 | `persae` (Perzen) | `#8a4fb0` | `cappadocia`, `galatia`, `syria`, `armenia`, `mesopotamia` |
 | `carthago` (Carthagers) *(nieuw)* | `#550088` | `africa_proconsularis`, `mauretania_caesariensis`, `mauretania_tingitana` |
 | `aegyptii` (Egyptenaren) *(nieuw)* | `#e67e22` | `aegyptus`, `arabia`, `creta_et_cyrene` |
+| `britanni` (Britten) | `#1f8a8a` | `britannia` |
 | `neutral` | `#dfd5c6` (perkament) | de rest — zie §2.1 |
 
 Let op: `gallii` verliest in dit plan `germania_superior`/`germania_inferior`
@@ -135,10 +151,11 @@ de bestaande SVG te hoeven wijzigen. Zie §9.1.
 
 ### 2.1 Neutrale bufferprovincies (bij campagnestart)
 
-Alle overige 27 provincies starten **neutraal** (AI-bezet, zwak) en zijn de
-eerste veroveringsdoelen:
+Alle overige 26 provincies starten **neutraal** (AI-bezet, zwak) en zijn de
+eerste veroveringsdoelen (`britannia` is **geen** neutrale provincie meer —
+zie de correctie bij §2 hierboven, dat is `britanni` se eigen thuisland):
 
-`britannia`, `tarraconensis`, `lusitania`, `baetica`, `baleares`, `raetia`,
+`tarraconensis`, `lusitania`, `baetica`, `baleares`, `raetia`,
 `noricum`, `alpes_poeninae`, `alpes_cottiae`, `alpes_maritimae`,
 `pannonia_superior`, `pannonia_inferior`, `moesia_superior`, `moesia_inferior`,
 `dacia`, `asia`, `bithynia_et_pontus`, `lycia_et_pamphylia`, `cilicia`,
@@ -181,6 +198,19 @@ aan het bestaande gedeelde profiel (zie §6) zodra de leerling die heeft.
   (geen bestraffing, consistent met de rest van de app se toon).
 
 ### 3.2 Beloning: Trainingspunten (TP) — een NIEUW, apart, collectief veld
+
+> ⚠️ **Ontwerp, niet (zo) gebouwd.** De echte implementatie heeft geen los
+> `trainingPoints`-saldo dat je apart "verdient" en later "besteedt" — elk
+> goed antwoord schrijft direct door naar `militiaPoints`/`wallPoints`/
+> `towerPoints` op de provincie (`twAwardStructurePoints()`, `certamen/
+> training.js`), en de garnizoenstier volgt automatisch uit dat lopende
+> totaal (`twStructureTier()`, `certamen/totalwar.js`) — geen aankoopstap,
+> geen §5.2-kostentabel. Het `civs/{civId}.trainingPoints`-veld uit §4/§9.5
+> bestaat nog wel in het schema maar staat er als `// legacy, ongebruikt`
+> (zie code-commentaar in `twEnsureCampaignSeeded()`). De rest van deze
+> sectie (het **collectief**-principe, geen streak-multipliers, gescheiden
+> van coins/XP) klopt nog wel als *bedoeling* — alleen het
+> "besteedbaar-aan-upgrades"-deel is niet gebouwd.
 
 Dit is een bewuste, expliciete architectuurbeslissing (zie §9.2 voor de
 volledige motivatie): **TP is géén synoniem voor coins of XP.** TP:
@@ -388,6 +418,11 @@ Winst → provincie kleurt in de beschaving van de klas.
 
 ### 5.2 Garnizoen upgraden (met TP)
 
+> ⚠️ **Ontwerp, niet gebouwd** — zie de waarschuwing bij §3.2. Er is geen
+> aankoopscherm en geen kostentabel; `militiaPoints`/`wallPoints`/
+> `towerPoints` lopen automatisch op met elk Training Mode-antwoord, zonder
+> tussenstap. Onderstaande tabel was het oorspronkelijke ontwerp.
+
 In het docent-/klas-dashboard van een eigen provincie kan het collectieve
 TP-budget besteed worden aan, bijvoorbeeld:
 
@@ -423,6 +458,16 @@ gemengd stedenbezit is **"contested"**:
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 
+> ⚠️ **Ten dele gebouwd — geen reparatie.** Het echte veld is
+> `siege:{lastStage, stageDamage:{militia,walls,towers}}` (per spoor, niet
+> één plat `damageTaken`-getal), geschreven met `Math.max(vorigeSchade,
+> nieuweSchade)` in `twResolveSiege()` (`certamen/totalwar.js`) — schade
+> stapelt dus wél op tussen pogingen (de eerste helft van "de twist"
+> hieronder klopt), maar er is **geen enkel reparatiepad**: geen TP-besteding
+> die `stageDamage` verlaagt. Dat maakt een zwaar belegerde provincie op dit
+> moment blijvend verzwakt richting de volgende poging, zonder dat de
+> verdedigende klas daar iets tegen kan doen.
+
 Een zwaar versterkte provincie (hoog `walls`/`towers`) mag nooit praktisch
 onneembaar worden. Daarom:
 
@@ -432,10 +477,11 @@ onneembaar worden. Daarom:
   naar `damageTaken` op de provincie, ook bij niet-winnen.
 - **Poging 2** (een volgende les) start met een boss-HP die al verlaagd is met
   `damageTaken` — nu wél te verslaan.
-- **De twist:** tussen de twee pogingen door kan de verdedigende klas via
-  Training Mode `damageTaken` weer gedeeltelijk repareren (bv. elke N TP
-  besteed aan reparatie verlaagt `damageTaken` met een vast bedrag). Dit is
-  precies de spanningsboog die het oorspronkelijke plan beoogde.
+- **De twist (NIET gebouwd, zie waarschuwing hierboven):** tussen de twee
+  pogingen door kan de verdedigende klas via Training Mode `damageTaken` weer
+  gedeeltelijk repareren (bv. elke N TP besteed aan reparatie verlaagt
+  `damageTaken` met een vast bedrag). Dit was de bedoelde spanningsboog uit
+  het oorspronkelijke plan.
 
 De exacte boss-HP-formule die dit alles combineert met de bestaande
 Boss Battle-schaling staat in
@@ -509,7 +555,7 @@ leuke, kleine vervolgstap, maar niet gevraagd in deze sessie.
 | **XP** | persoonlijk (leerling) | account-niveau/rang (`calcLevel`) | alle spelmodi, inclusief Training Mode | ✅ bestaand, cross-device gesynchroniseerd (`core.js`) |
 | **Coins** (denarii/drachmae) | persoonlijk (leerling) | avatar-cosmetica (Battle Mode) | Battle Mode deelname+winst | ✅ bestaand, ongewijzigd |
 | **Mastery** | persoonlijk (leerling), per klasse | ontgrendelt niks nieuws, is een prestatie-indicator | **uitsluitend** live Battle Mode-gevechten | ✅ bestaand, ongewijzigd — Training Mode raakt dit expliciet niet aan |
-| **Trainingspunten (TP)** | **collectief** (de beschaving/klas) | garnizoensupgrades (§5.2) | Training Mode | 🆕 nieuw, zie §3.2 en §9.2 |
+| **Trainingspunten (TP)** | **collectief** (de beschaving/klas) | Bouwt automatisch mee aan `militiaPoints`/`wallPoints`/`towerPoints` | Training Mode | ⚠️ **anders dan gepland** — geen los, besteedbaar TP-saldo, zie de waarschuwing bij §3.2 |
 
 Deze scheiding is een **harde regel**, letterlijk overgenomen uit het
 docx-plan: "Ervaring (XP) krijg je door te trainen, maar echte Mastery verdien
@@ -543,12 +589,12 @@ beschaving heeft ontgrendeld.
 
 ### 7.4 Klasgrootte-compensatie
 
-Een klas van 30 mag niet automatisch meer TP/voortgang genereren dan een klas
-van 6. Voorstel: TP-winst per leerling schaalt met `1 / sqrt(klasgrootte)` of
-een vergelijkbare afvlakkende functie (exacte formule: balansvraag voor de
-implementatiesessie, net als de Boss Battle-moeilijkheidsschaling waar
-hetzelfde principe al wél is uitgewerkt — zie
-[BOSS_BATTLE.md §2](BOSS_BATTLE.md#2-moeilijkheidsgraden--het-schalingsmodel)).
+✅ **Gebouwd, exact zoals hier voorgesteld.** Een klas van 30 mag niet
+automatisch meer bouwpunten genereren dan een klas van 6: `certamen/
+training.js` schaalt `basePts` per leerling met `5/Math.sqrt(TR_CLASS_SIZE||1)`
+— precies de voorgestelde `1/√klasgrootte`-afvlakking, hetzelfde principe als
+de Boss Battle-moeilijkheidsschaling
+([BOSS_BATTLE.md §2](BOSS_BATTLE.md#2-moeilijkheidsgraden--het-schalingsmodel)).
 
 ---
 
@@ -658,15 +704,20 @@ een schildlaag krijgt, kan `towers` daaraan gekoppeld worden.
    live Firebase-listener i.p.v. de vroegere hardcoded `TW_DEMO_OWN`/`TW_DEMO_DEF`
    (die nu uitsluitend nog de publieke, niet-live uitlegkaart voeden).
 3. ✅ **Docentenportaal**: klas↔beschaving-koppeling (§7.1).
-4. **Training Mode**: nieuw scherm + TP-toekenning (§3), hergebruikt
-   `BattleMotion` en de bestaande vocab-poollogica. *(nog open)*
+4. ✅ **Training Mode**: scherm + puntentoekenning gebouwd
+   (`SCREENS.trainingMode`, `certamen/training.js`), hergebruikt
+   `BattleMotion` en de bestaande vocab-poollogica — **anders dan hier
+   gepland**: geen los TP-saldo, punten gaan direct in `militiaPoints`/
+   `wallPoints`/`towerPoints` (zie de waarschuwing bij §3.2).
 5. ✅ **Boss Battle**: bleek al te bestaan als uitbreiding op Battle Mode se
    Team A/B-engine (zie §9.4-addendum); gekoppeld aan Total War via de
    garnizoensformule (§5.4/§9.6) in `bmStartBossGame()`/`bmResolve()`.
 6. **Kaart-UI**: contested/gestreepte provincies (§5.3), stad-markers zijn nog
    open; de "Val aan"-knop in het docentendashboard (§7.2) is wel al gebouwd.
-7. **Balans-pas**: klasgrootte-compensatie (§7.4), TP-kosten (§5.2),
-   slijtageslag-drempels (§5.4) — allemaal met echte klasgroottes testen.
+7. **Balans-pas**: klasgrootte-compensatie is ✅ al gebouwd (§7.4). Nog open:
+   slijtageslag-reparatie bestaat helemaal niet (§5.4) en TP-kosten (§5.2)
+   zijn moot geworden — er is geen aankoopmechanisme om te beprijzen, zie de
+   waarschuwing bij §3.2.
 
 ---
 
