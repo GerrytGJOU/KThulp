@@ -1559,11 +1559,13 @@
    clauses: array van clausule-objecten voor zinsstructuurweergave
      elk clausule-object: { label, type ('HS'/'BS'/'BS2' etc.),
        words: indices, connector: index of null, subtype }
-   82 zinnen: 30 niveau 1, 32 niveau 2, 20 niveau 3 — elk type
-   minstens één keer, niveau 2/3 met combinaties (betr.+bijw.,
-   +AcI, +GenAbs, bijzin-in-bijzin). Bevat ook vreeszin (μή +
-   conj., ondergebracht bij "Finale bijzin") en objectzin met
-   ὅτι (ondergebracht bij "Causale bijzin").
+   122 zinnen: elk type minstens één keer, niveau 2/3 met
+   combinaties (betr.+bijw., +AcI, +GenAbs, bijzin-in-bijzin).
+   Bevat ook vreeszin (μή + conj., onder "Finale bijzin") en
+   objectzin met ὅτι (onder "Causale bijzin"). Zinnen 83-122
+   zijn aangeleverd door de docent; deels authentiek (2x Homerus
+   exact geverifieerd, 1x Xenophon verkort), deels stijlgetrouw
+   (zie het "bron"-veld per zin).
 ═══════════════════════════════════════════════════════ */
 const SENTENCES = [
   {
@@ -3109,6 +3111,775 @@ const SENTENCES = [
       { label: "BS3 (ind.vr.)", words: [10,11,12], connector: 10 }
     ],
     explanation: "<span class='vw'>ἐπειδή</span> → <span class='bs'>temporele bijzin</span>, waarin genest een <span class='vw'>ὅς</span>-<span class='bs'>betrekkelijke bijzin</span>. <span class='hs'>πάντες ἠρώτων</span> = hoofdzin. <span class='vw'>εἰ</span> → <span class='bs'>indirecte vraagzin</span> (optativus)."
+  },
+  // ── AANGELEVERDE ZINNEN (deels authentiek, gecontroleerd) ──
+  {
+    id: 83,
+    niveau: 1,
+    greek: "Ἐπεὶ δὲ ἐτελεύτησε Δαρεῖος, Τισσαφέρνης διαβάλλει τὸν Κῦρον.",
+    words: ["Ἐπεὶ", "δὲ", "ἐτελεύτησε", "Δαρεῖος,", "Τισσαφέρνης", "διαβάλλει", "τὸν", "Κῦρον."],
+    structure: ["connect","sub","sub","sub","main","main","main","main"],
+    connector: "Ἐπεὶ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Toen Darius gestorven was, belasterde Tissaphernes Cyrus.",
+    vocab: { "δὲ": "nu (partikel)", "ἐτελεύτησε": "stierf", "Δαρεῖος": "Darius", "Τισσαφέρνης": "Tissaphernes", "διαβάλλει": "belastert", "Κῦρον": "Cyrus" },
+    bron: "Xenophon, Anabasis 1.1.3 (verkort)",
+    missing: ["Ἐπεὶ"],
+    clauses: [
+      { label: "BS (temp.)", words: [0,1,2,3], connector: 0 },
+      { label: "HS", words: [4,5,6,7], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐπεί</span> + indicativus (historisch praesens in de hoofdzin) → <span class='bs'>temporele bijzin</span>. <span class='hs'>Τισσαφέρνης διαβάλλει τὸν Κῦρον</span> = hoofdzin."
+  },
+  {
+    id: 84,
+    niveau: 2,
+    greek: "Κῦρος ἔχων οὓς εἶπε στρατιώτας παρεγένετο.",
+    words: ["Κῦρος", "ἔχων", "οὓς", "εἶπε", "στρατιώτας", "παρεγένετο."],
+    structure: ["main","main","connect","sub","main","main"],
+    connector: "οὓς",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin",
+    translation: "Cyrus kwam aan met de soldaten die hij genoemd had.",
+    vocab: { "Κῦρος": "Cyrus", "ἔχων": "hebbende (met)", "εἶπε": "had genoemd", "στρατιώτας": "soldaten", "παρεγένετο": "kwam aan" },
+    bron: "Xenophon, Anabasis (stijl)",
+    missing: ["οὓς"],
+    clauses: [
+      { label: "HS", words: [0,1,4,5], connector: null },
+      { label: "BS (betr.)", words: [2,3], connector: 2 }
+    ],
+    explanation: "<span class='hs'>Κῦρος ἔχων ... στρατιώτας παρεγένετο</span> = hoofdzin (met een bijgevoegd participium <em>ἔχων</em>, 'hebbende', geen bijzin). <span class='vw'>ὅς</span> (hier: <em>οὕς</em>) → <span class='bs'>betrekkelijke bijzin</span> bij <em>στρατιώτας</em>."
+  },
+  {
+    id: 85,
+    niveau: 1,
+    greek: "Ἐπειδὴ δὲ ὁ πατὴρ ἀπέθανεν, ἐγὼ ἔμενον.",
+    words: ["Ἐπειδὴ", "δὲ", "ὁ", "πατὴρ", "ἀπέθανεν,", "ἐγὼ", "ἔμενον."],
+    structure: ["connect","sub","sub","sub","sub","main","main"],
+    connector: "Ἐπειδὴ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Toen mijn vader stierf, bleef ik.",
+    vocab: { "δὲ": "nu (partikel)", "πατὴρ": "vader", "ἀπέθανεν": "stierf", "ἐγὼ": "ik", "ἔμενον": "bleef" },
+    bron: "Lysias (stijl)",
+    missing: ["Ἐπειδὴ"],
+    clauses: [
+      { label: "BS (temp.)", words: [0,1,2,3,4], connector: 0 },
+      { label: "HS", words: [5,6], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐπειδή</span> → <span class='bs'>temporele bijzin</span>. <span class='hs'>ἐγὼ ἔμενον</span> = hoofdzin."
+  },
+  {
+    id: 86,
+    niveau: 1,
+    greek: "Λέγει ὅτι Σωκράτης σοφός ἐστιν.",
+    words: ["Λέγει", "ὅτι", "Σωκράτης", "σοφός", "ἐστιν."],
+    structure: ["main","connect","sub","sub","sub"],
+    connector: "ὅτι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin",
+    translation: "Hij zegt dat Socrates wijs is.",
+    vocab: { "Σωκράτης": "Socrates", "σοφός": "wijs", "ἐστιν": "is" },
+    missing: ["ὅτι"],
+    clauses: [
+      { label: "HS", words: [0], connector: null },
+      { label: "BS (obj.)", words: [1,2,3,4], connector: 1 }
+    ],
+    explanation: "<span class='hs'>Λέγει</span> = hoofdzin. <span class='vw'>ὅτι</span> leidt hier een lijdend-voorwerpzin (indirecte rede) in ('dat'), met indicativus omdat de hoofdzin in de tegenwoordige tijd staat."
+  },
+  {
+    id: 87,
+    niveau: 1,
+    greek: "Εἰ τοῦτο λέγεις, ἁμαρτάνεις.",
+    words: ["Εἰ", "τοῦτο", "λέγεις,", "ἁμαρτάνεις."],
+    structure: ["connect","sub","sub","main"],
+    connector: "Εἰ",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin",
+    translation: "Als je dit zegt, vergis je je.",
+    vocab: { "τοῦτο": "dit", "λέγεις": "zegt", "ἁμαρτάνεις": "vergis je je" },
+    missing: ["Εἰ"],
+    clauses: [
+      { label: "BS (cond.)", words: [0,1,2], connector: 0 },
+      { label: "HS", words: [3], connector: null }
+    ],
+    explanation: "<span class='vw'>εἰ</span> + indicativus → <span class='bs'>conditionele bijzin</span>. <span class='hs'>ἁμαρτάνεις</span> = hoofdzin."
+  },
+  {
+    id: 88,
+    niveau: 1,
+    greek: "Χαλεπὸν ἦν, διότι οὐκ εἶχον σῖτον.",
+    words: ["Χαλεπὸν", "ἦν,", "διότι", "οὐκ", "εἶχον", "σῖτον."],
+    structure: ["main","main","connect","sub","sub","sub"],
+    connector: "διότι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin",
+    translation: "Het was moeilijk, omdat ze geen graan hadden.",
+    vocab: { "Χαλεπὸν": "moeilijk", "εἶχον": "hadden", "σῖτον": "graan" },
+    bron: "Xenophon (stijl)",
+    missing: ["διότι"],
+    clauses: [
+      { label: "HS", words: [0,1], connector: null },
+      { label: "BS (caus.)", words: [2,3,4,5], connector: 2 }
+    ],
+    explanation: "<span class='hs'>Χαλεπὸν ἦν</span> = hoofdzin. <span class='vw'>διότι</span> → <span class='bs'>causale bijzin</span>."
+  },
+  {
+    id: 89,
+    niveau: 1,
+    greek: "Ὡς δὲ εἶδε τὴν πόλιν, ἐθαύμασε.",
+    words: ["Ὡς", "δὲ", "εἶδε", "τὴν", "πόλιν,", "ἐθαύμασε."],
+    structure: ["connect","sub","sub","sub","sub","main"],
+    connector: "Ὡς",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Toen hij de stad zag, verwonderde hij zich.",
+    vocab: { "δὲ": "nu (partikel)", "εἶδε": "zag", "πόλιν": "stad", "ἐθαύμασε": "verwonderde zich" },
+    bron: "Herodotus (stijl)",
+    missing: ["Ὡς"],
+    clauses: [
+      { label: "BS (temp.)", words: [0,1,2,3,4], connector: 0 },
+      { label: "HS", words: [5], connector: null }
+    ],
+    explanation: "<span class='vw'>ὡς</span> + indicativus → <span class='bs'>temporele bijzin</span> ('toen'). <span class='hs'>ἐθαύμασε</span> = hoofdzin."
+  },
+  {
+    id: 90,
+    niveau: 2,
+    greek: "Κάλχας μάντις ἦν, ὃς ᾔδη τά τ' ἐόντα τά τ' ἐσσόμενα πρό τ' ἐόντα.",
+    words: ["Κάλχας", "μάντις", "ἦν,", "ὃς", "ᾔδη", "τά", "τ'", "ἐόντα", "τά", "τ'", "ἐσσόμενα", "πρό", "τ'", "ἐόντα."],
+    structure: ["main","main","main","connect","sub","sub","sub","sub","sub","sub","sub","sub","sub","sub"],
+    connector: "ὃς",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin",
+    translation: "Calchas was een ziener, die wist wat is, wat zal zijn en wat voorheen is geweest.",
+    vocab: { "Κάλχας": "Calchas", "μάντις": "ziener", "ᾔδη": "wist", "ἐόντα": "wat is / wat was", "ἐσσόμενα": "wat zal zijn", "πρό": "voorheen" },
+    bron: "Homerus, Ilias 1.70 (hoofdzin toegevoegd voor de context; het betrekkelijke deel is de letterlijke tekst)",
+    missing: ["ὃς"],
+    clauses: [
+      { label: "HS", words: [0,1,2], connector: null },
+      { label: "BS (betr.)", words: [3,4,5,6,7,8,9,10,11,12,13], connector: 3 }
+    ],
+    explanation: "<span class='hs'>Κάλχας μάντις ἦν</span> = hoofdzin (toegevoegd voor de context). <span class='vw'>ὅς</span> → <span class='bs'>betrekkelijke bijzin</span> — letterlijke tekst uit de Ilias, over de ziener Kalchas."
+  },
+  {
+    id: 91,
+    niveau: 1,
+    greek: "Ἔπεμψε τὸν ἄγγελον ἵνα τοῦτο ἀγγείλειεν.",
+    words: ["Ἔπεμψε", "τὸν", "ἄγγελον", "ἵνα", "τοῦτο", "ἀγγείλειεν."],
+    structure: ["main","main","main","connect","sub","sub"],
+    connector: "ἵνα",
+    subtype: "finaal",
+    subtype_label: "Finale bijzin",
+    translation: "Hij stuurde de bode om dit te melden.",
+    vocab: { "Ἔπεμψε": "stuurde", "ἄγγελον": "bode", "τοῦτο": "dit", "ἀγγείλειεν": "zou melden" },
+    bron: "Lysias (stijl)",
+    missing: ["ἵνα"],
+    clauses: [
+      { label: "HS", words: [0,1,2], connector: null },
+      { label: "BS (fin.)", words: [3,4,5], connector: 3 }
+    ],
+    explanation: "<span class='hs'>Ἔπεμψε τὸν ἄγγελον</span> = hoofdzin. <span class='vw'>ἵνα</span> + optativus (verleden tijd hoofdzin) → <span class='bs'>finale bijzin</span>."
+  },
+  {
+    id: 92,
+    niveau: 1,
+    greek: "Οἶδα ὅτι οὐδὲν οἶδα.",
+    words: ["Οἶδα", "ὅτι", "οὐδὲν", "οἶδα."],
+    structure: ["main","connect","sub","sub"],
+    connector: "ὅτι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin",
+    translation: "Ik weet dat ik niets weet.",
+    vocab: { "οὐδὲν": "niets" },
+    bron: "Populair toegeschreven aan Socrates/Plato — staat niet letterlijk zo in Plato's tekst (bekende misattributie; de gedachte staat wel, anders geformuleerd, in de Apologie)",
+    missing: ["ὅτι"],
+    clauses: [
+      { label: "HS", words: [0], connector: null },
+      { label: "BS (obj.)", words: [1,2,3], connector: 1 }
+    ],
+    explanation: "<span class='hs'>Οἶδα</span> = hoofdzin. <span class='vw'>ὅτι</span> leidt een lijdend-voorwerpzin in. Let op: deze populaire uitspraak is een latere parafrase, geen letterlijk citaat uit Plato."
+  },
+  {
+    id: 93,
+    niveau: 1,
+    greek: "Οὕτως ἐθαύμαζον αὐτόν, ὥστε πάντες ἐπείθοντο.",
+    words: ["Οὕτως", "ἐθαύμαζον", "αὐτόν,", "ὥστε", "πάντες", "ἐπείθοντο."],
+    structure: ["main","main","main","connect","sub","sub"],
+    connector: "ὥστε",
+    subtype: "consecutief",
+    subtype_label: "Consecutieve bijzin",
+    translation: "Ze bewonderden hem zozeer, dat iedereen gehoorzaamde.",
+    vocab: { "Οὕτως": "zozeer", "ἐθαύμαζον": "bewonderden", "αὐτόν": "hem", "πάντες": "iedereen", "ἐπείθοντο": "gehoorzaamden" },
+    bron: "Xenophon (stijl)",
+    missing: ["ὥστε"],
+    clauses: [
+      { label: "HS", words: [0,1,2], connector: null },
+      { label: "BS (gev.)", words: [3,4,5], connector: 3 }
+    ],
+    explanation: "<span class='hs'>Οὕτως ἐθαύμαζον αὐτόν</span> = hoofdzin. <span class='vw'>ὥστε</span> → <span class='bs'>consecutieve bijzin</span>."
+  },
+  {
+    id: 94,
+    niveau: 1,
+    greek: "Κροῖσος, ἐπείτε εἶδε τὴν πόλιν, ἐδάκρυσε.",
+    words: ["Κροῖσος,", "ἐπείτε", "εἶδε", "τὴν", "πόλιν,", "ἐδάκρυσε."],
+    structure: ["main","connect","sub","sub","sub","main"],
+    connector: "ἐπείτε",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Croesus, toen hij de stad zag, huilde.",
+    vocab: { "Κροῖσος": "Croesus", "εἶδε": "zag", "πόλιν": "stad", "ἐδάκρυσε": "huilde" },
+    bron: "Herodotus (stijl) — ἐπείτε is de Ionische (Herodoteïsche) vorm van ἐπεί",
+    missing: ["ἐπείτε"],
+    clauses: [
+      { label: "HS", words: [0,5], connector: null },
+      { label: "BS (temp.)", words: [1,2,3,4], connector: 1 }
+    ],
+    explanation: "<span class='hs'>Κροῖσος ... ἐδάκρυσε</span> = hoofdzin, onderbroken door de bijzin. <span class='vw'>ἐπείτε</span> (Ionisch voor ἐπεί) → <span class='bs'>temporele bijzin</span>."
+  },
+  {
+    id: 95,
+    niveau: 2,
+    greek: "Ἀλλ' ἴθι, μή μ' ἐρέθιζε, σαώτερος ὥς κε νέηαι.",
+    words: ["Ἀλλ'", "ἴθι,", "μή", "μ'", "ἐρέθιζε,", "σαώτερος", "ὥς", "κε", "νέηαι."],
+    structure: ["main","main","main","main","main","sub","connect","sub","sub"],
+    connector: "ὥς",
+    subtype: "finaal",
+    subtype_label: "Finale bijzin",
+    translation: "Maar ga, tart me niet, opdat je behoudener terugkeert.",
+    vocab: { "Ἀλλ'": "maar", "ἴθι": "ga", "μή": "niet (bij imperatief)", "μ'": "mij", "ἐρέθιζε": "tart", "σαώτερος": "behoudener", "νέηαι": "terugkeert" },
+    bron: "Homerus, Ilias 1.32",
+    missing: ["ὥς"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS (fin.)", words: [5,6,7,8], connector: 6 }
+    ],
+    explanation: "<span class='hs'>Ἀλλ' ἴθι, μή μ' ἐρέθιζε</span> = hoofdzin (bevel + verbod). <span class='vw'>ὡς</span> + κε + conjunctivus (Homerische vorm van een finale bijzin) → <span class='bs'>finale bijzin</span>."
+  },
+  {
+    id: 96,
+    niveau: 1,
+    greek: "Εἰ ἐγὼ ἀδίκως ἀπέκτεινα αὐτόν, δίκαιός εἰμι ἀποθανεῖν.",
+    words: ["Εἰ", "ἐγὼ", "ἀδίκως", "ἀπέκτεινα", "αὐτόν,", "δίκαιός", "εἰμι", "ἀποθανεῖν."],
+    structure: ["connect","sub","sub","sub","sub","main","main","main"],
+    connector: "Εἰ",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin",
+    translation: "Als ik hem onrechtvaardig heb gedood, verdien ik het te sterven.",
+    vocab: { "ἐγὼ": "ik", "ἀδίκως": "onrechtvaardig", "ἀπέκτεινα": "heb gedood", "αὐτόν": "hem", "δίκαιός": "verdiend, rechtvaardig", "ἀποθανεῖν": "te sterven" },
+    bron: "Lysias (stijl, vgl. Lysias 1, Over de moord op Eratosthenes)",
+    missing: ["Εἰ"],
+    clauses: [
+      { label: "BS (cond.)", words: [0,1,2,3,4], connector: 0 },
+      { label: "HS", words: [5,6,7], connector: null }
+    ],
+    explanation: "<span class='vw'>εἰ</span> + indicativus → <span class='bs'>conditionele bijzin</span>. <span class='hs'>δίκαιός εἰμι ἀποθανεῖν</span> = hoofdzin."
+  },
+  {
+    id: 97,
+    niveau: 1,
+    greek: "Ἐὰν τοῦτο ποιήσῃς, πάντες σε ἐπαινέσουσιν.",
+    words: ["Ἐὰν", "τοῦτο", "ποιήσῃς,", "πάντες", "σε", "ἐπαινέσουσιν."],
+    structure: ["connect","sub","sub","main","main","main"],
+    connector: "Ἐὰν",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin",
+    translation: "Als je dit doet, zal iedereen je prijzen.",
+    vocab: { "τοῦτο": "dit", "ποιήσῃς": "doet", "πάντες": "iedereen", "σε": "je", "ἐπαινέσουσιν": "zullen prijzen" },
+    missing: ["Ἐὰν"],
+    clauses: [
+      { label: "BS (cond.)", words: [0,1,2], connector: 0 },
+      { label: "HS", words: [3,4,5], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐάν</span> + conjunctivus → <span class='bs'>conditionele bijzin</span>. <span class='hs'>πάντες σε ἐπαινέσουσιν</span> = hoofdzin."
+  },
+  {
+    id: 98,
+    niveau: 1,
+    greek: "Ὁ ἀνήρ, ὃν εἴδετε ἐν τῇ ὁδῷ, ἀπέθανεν.",
+    words: ["Ὁ", "ἀνήρ,", "ὃν", "εἴδετε", "ἐν", "τῇ", "ὁδῷ,", "ἀπέθανεν."],
+    structure: ["main","main","connect","sub","sub","sub","sub","main"],
+    connector: "ὃν",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin",
+    translation: "De man die jullie op de weg zagen, is gestorven.",
+    vocab: { "ἀνήρ": "man", "εἴδετε": "zagen", "ὁδῷ": "weg", "ἀπέθανεν": "is gestorven" },
+    missing: ["ὃν"],
+    clauses: [
+      { label: "HS", words: [0,1,7], connector: null },
+      { label: "BS (betr.)", words: [2,3,4,5,6], connector: 2 }
+    ],
+    explanation: "<span class='hs'>Ὁ ἀνήρ ... ἀπέθανεν</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>ὅν</em>) → <span class='bs'>betrekkelijke bijzin</span>."
+  },
+  {
+    id: 99,
+    niveau: 1,
+    greek: "Οὐκ οἶδα ὅστις ἐστὶν ὁ ἀνήρ.",
+    words: ["Οὐκ", "οἶδα", "ὅστις", "ἐστὶν", "ὁ", "ἀνήρ."],
+    structure: ["main","main","connect","sub","sub","sub"],
+    connector: "ὅστις",
+    subtype: "indirecte vraag",
+    subtype_label: "Indirecte vraagzin",
+    translation: "Ik weet niet wie die man is.",
+    vocab: { "ἐστὶν": "is", "ἀνήρ": "man" },
+    missing: ["ὅστις"],
+    clauses: [
+      { label: "HS", words: [0,1], connector: null },
+      { label: "BS (ind.vr.)", words: [2,3,4,5], connector: 2 }
+    ],
+    explanation: "<span class='hs'>Οὐκ οἶδα</span> = hoofdzin. <span class='vw'>ὅστις</span> → <span class='bs'>indirecte vraagzin</span>."
+  },
+  {
+    id: 100,
+    niveau: 1,
+    greek: "Οἱ στρατιῶται ἐπορεύοντο, ἕως ἐπέλασαν τῇ πόλει.",
+    words: ["Οἱ", "στρατιῶται", "ἐπορεύοντο,", "ἕως", "ἐπέλασαν", "τῇ", "πόλει."],
+    structure: ["main","main","main","connect","sub","sub","sub"],
+    connector: "ἕως",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "De soldaten marcheerden voort, tot ze de stad naderden.",
+    vocab: { "στρατιῶται": "soldaten", "ἐπορεύοντο": "marcheerden", "ἐπέλασαν": "naderden", "πόλει": "stad" },
+    bron: "Xenophon (stijl)",
+    missing: ["ἕως"],
+    clauses: [
+      { label: "HS", words: [0,1,2], connector: null },
+      { label: "BS (temp.)", words: [3,4,5,6], connector: 3 }
+    ],
+    explanation: "<span class='hs'>Οἱ στρατιῶται ἐπορεύοντο</span> = hoofdzin. <span class='vw'>ἕως</span> → <span class='bs'>temporele bijzin</span> ('totdat')."
+  },
+  {
+    id: 101,
+    niveau: 1,
+    greek: "Ἐπεὶ δὲ ἐκεῖνος οὐκ ἤθελεν, ἀπήλθομεν.",
+    words: ["Ἐπεὶ", "δὲ", "ἐκεῖνος", "οὐκ", "ἤθελεν,", "ἀπήλθομεν."],
+    structure: ["connect","sub","sub","sub","sub","main"],
+    connector: "Ἐπεὶ",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin",
+    translation: "Omdat die man niet wilde, gingen we weg.",
+    vocab: { "δὲ": "nu (partikel)", "ἐκεῖνος": "die (man)", "ἤθελεν": "wilde", "ἀπήλθομεν": "gingen we weg" },
+    bron: "Lysias (stijl)",
+    missing: ["Ἐπεὶ"],
+    clauses: [
+      { label: "BS (caus.)", words: [0,1,2,3,4], connector: 0 },
+      { label: "HS", words: [5], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐπεί</span> is hier causaal ('omdat') → <span class='bs'>causale bijzin</span>. <span class='hs'>ἀπήλθομεν</span> = hoofdzin."
+  },
+  {
+    id: 102,
+    niveau: 1,
+    greek: "Οἱ δὲ Πέρσαι, ὡς ἐπύθοντο ταῦτα, ἐβοήθεον.",
+    words: ["Οἱ", "δὲ", "Πέρσαι,", "ὡς", "ἐπύθοντο", "ταῦτα,", "ἐβοήθεον."],
+    structure: ["main","main","main","connect","sub","sub","main"],
+    connector: "ὡς",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Toen de Perzen dit vernamen, snelden ze te hulp.",
+    vocab: { "Πέρσαι": "Perzen", "ἐπύθοντο": "vernamen", "ταῦτα": "dit", "ἐβοήθεον": "snelden te hulp" },
+    bron: "Herodotus (stijl, Ionisch: ἐβοήθεον i.p.v. Attisch ἐβοήθουν)",
+    missing: ["ὡς"],
+    clauses: [
+      { label: "HS", words: [0,1,2,6], connector: null },
+      { label: "BS (temp.)", words: [3,4,5], connector: 3 }
+    ],
+    explanation: "<span class='hs'>Οἱ δὲ Πέρσαι ... ἐβοήθεον</span> = hoofdzin, onderbroken door de bijzin. <span class='vw'>ὡς</span> → <span class='bs'>temporele bijzin</span>."
+  },
+  {
+    id: 103,
+    niveau: 2,
+    greek: "Δῆλον ὅτι οὐκ ἂν ἔφησθα τοῦτο, εἰ μὴ ἠδικοῦ.",
+    words: ["Δῆλον", "ὅτι", "οὐκ", "ἂν", "ἔφησθα", "τοῦτο,", "εἰ", "μὴ", "ἠδικοῦ."],
+    structure: ["main","connect","sub","sub","sub","sub","connect2","sub2","sub2"],
+    connector: "ὅτι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin + conditionele bijzin",
+    translation: "Het is duidelijk dat je dit niet gezegd zou hebben, als je geen onrecht was aangedaan.",
+    vocab: { "Δῆλον": "duidelijk", "ἔφησθα": "zou gezegd hebben", "τοῦτο": "dit", "ἠδικοῦ": "werd onrecht aangedaan" },
+    bron: "Plato (stijl)",
+    missing: ["ὅτι", "εἰ"],
+    clauses: [
+      { label: "HS", words: [0], connector: null },
+      { label: "BS1 (obj.)", words: [1,2,3,4,5], connector: 1 },
+      { label: "BS2 (cond.)", words: [6,7,8], connector: 6 }
+    ],
+    explanation: "<span class='hs'>Δῆλον</span> = hoofdzin. <span class='vw'>ὅτι</span> → <span class='bs'>causale/voorwerpzin</span> met irrealis (ἄν + indicativus). <span class='vw'>εἰ</span> → <span class='bs'>conditionele bijzin</span> (irrealis)."
+  },
+  {
+    id: 104,
+    niveau: 2,
+    greek: "Κῦρος δὲ συγκαλέσας τοὺς στρατηγοὺς εἶπεν ὅτι ἡ ὁδὸς ἔσοιτο πρὸς βασιλέα.",
+    words: ["Κῦρος", "δὲ", "συγκαλέσας", "τοὺς", "στρατηγοὺς", "εἶπεν", "ὅτι", "ἡ", "ὁδὸς", "ἔσοιτο", "πρὸς", "βασιλέα."],
+    structure: ["main","main","main","main","main","main","connect","sub","sub","sub","sub","sub"],
+    connector: "ὅτι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin",
+    translation: "Cyrus riep de veldheren bijeen en zei dat de tocht naar de koning zou zijn.",
+    vocab: { "Κῦρος": "Cyrus", "συγκαλέσας": "bijeengeroepen hebbend", "στρατηγοὺς": "veldheren", "εἶπεν": "zei", "ὁδὸς": "tocht", "ἔσοιτο": "zou zijn", "βασιλέα": "koning" },
+    bron: "Xenophon, Anabasis (stijl)",
+    missing: ["ὅτι"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4,5], connector: null },
+      { label: "BS (obj.)", words: [6,7,8,9,10,11], connector: 6 }
+    ],
+    explanation: "<span class='hs'>Κῦρος ... συγκαλέσας τοὺς στρατηγοὺς εἶπεν</span> = hoofdzin (met participium <em>συγκαλέσας</em>, geen bijzin). <span class='vw'>ὅτι</span> + optativus → <span class='bs'>lijdend-voorwerpzin</span>."
+  },
+  {
+    id: 105,
+    niveau: 2,
+    greek: "Ἐπειδὴ δὲ ἡ δημοκρατία κατέστη, πολλοὶ τῶν πολιτῶν ἐπανῆλθον.",
+    words: ["Ἐπειδὴ", "δὲ", "ἡ", "δημοκρατία", "κατέστη,", "πολλοὶ", "τῶν", "πολιτῶν", "ἐπανῆλθον."],
+    structure: ["connect","sub","sub","sub","sub","main","main","main","main"],
+    connector: "Ἐπειδὴ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Toen de democratie hersteld was, keerden veel burgers terug.",
+    vocab: { "δὲ": "nu (partikel)", "δημοκρατία": "democratie", "κατέστη": "werd hersteld", "πολλοὶ": "velen", "πολιτῶν": "van de burgers", "ἐπανῆλθον": "keerden terug" },
+    bron: "Lysias (stijl)",
+    missing: ["Ἐπειδὴ"],
+    clauses: [
+      { label: "BS (temp.)", words: [0,1,2,3,4], connector: 0 },
+      { label: "HS", words: [5,6,7,8], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐπειδή</span> → <span class='bs'>temporele bijzin</span>. <span class='hs'>πολλοὶ τῶν πολιτῶν ἐπανῆλθον</span> = hoofdzin."
+  },
+  {
+    id: 106,
+    niveau: 2,
+    greek: "Ὡς δὲ ὥρα τὴν θυγατέρα, ἀνέκλαγε.",
+    words: ["Ὡς", "δὲ", "ὥρα", "τὴν", "θυγατέρα,", "ἀνέκλαγε."],
+    structure: ["connect","sub","sub","sub","sub","main"],
+    connector: "Ὡς",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Toen hij zijn dochter zag, barstte hij in tranen uit.",
+    vocab: { "ὥρα": "zag", "θυγατέρα": "dochter", "ἀνέκλαγε": "barstte in tranen uit" },
+    bron: "Herodotus (stijl)",
+    missing: ["Ὡς"],
+    clauses: [
+      { label: "BS (temp.)", words: [0,1,2,3,4], connector: 0 },
+      { label: "HS", words: [5], connector: null }
+    ],
+    explanation: "<span class='vw'>ὡς</span> → <span class='bs'>temporele bijzin</span>. <span class='hs'>ἀνέκλαγε</span> = hoofdzin."
+  },
+  {
+    id: 107,
+    niveau: 2,
+    greek: "Ἔνθα δὲ οἵ γ' εὔχοντο θεοῖς, οἳ Ὄλυμπον ἔχουσιν.",
+    words: ["Ἔνθα", "δὲ", "οἵ", "γ'", "εὔχοντο", "θεοῖς,", "οἳ", "Ὄλυμπον", "ἔχουσιν."],
+    structure: ["main","main","main","main","main","main","connect","sub","sub"],
+    connector: "οἳ",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin",
+    translation: "En daar baden zij tot de goden, die de Olympus bezitten.",
+    vocab: { "Ἔνθα": "daar", "οἵ": "zij", "εὔχοντο": "baden", "θεοῖς": "tot de goden", "Ὄλυμπον": "Olympus", "ἔχουσιν": "bezitten" },
+    bron: "Homerus (formulaire wending, vgl. 'θεοῖς οἳ Ὄλυμπον ἔχουσιν' in Ilias/Odyssee)",
+    missing: ["οἳ"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4,5], connector: null },
+      { label: "BS (betr.)", words: [6,7,8], connector: 6 }
+    ],
+    explanation: "<span class='hs'>Ἔνθα ... εὔχοντο θεοῖς</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>οἵ</em>) → <span class='bs'>betrekkelijke bijzin</span>."
+  },
+  {
+    id: 108,
+    niveau: 2,
+    greek: "Ἀκούσατε δή, ἵνα εἰδῆτε οἷον ἐστι τὸ πρᾶγμα.",
+    words: ["Ἀκούσατε", "δή,", "ἵνα", "εἰδῆτε", "οἷον", "ἐστι", "τὸ", "πρᾶγμα."],
+    structure: ["main","main","connect","sub","connect2","sub2","sub2","sub2"],
+    connector: "ἵνα",
+    subtype: "finaal",
+    subtype_label: "Finale bijzin + indirecte vraagzin",
+    translation: "Luister dan, opdat jullie weten hoe de zaak in elkaar steekt.",
+    vocab: { "Ἀκούσατε": "luister", "δή": "dan, toch (partikel)", "πρᾶγμα": "zaak", "ἐστι": "is" },
+    bron: "Plato (stijl)",
+    missing: ["ἵνα", "οἷον"],
+    clauses: [
+      { label: "HS", words: [0,1], connector: null },
+      { label: "BS1 (fin.)", words: [2,3], connector: 2 },
+      { label: "BS2 (ind.vr.)", words: [4,5,6,7], connector: 4 }
+    ],
+    explanation: "<span class='hs'>Ἀκούσατε</span> = hoofdzin. <span class='vw'>ἵνα</span> → <span class='bs'>finale bijzin</span>. <span class='vw'>οἷον</span> → <span class='bs'>indirecte vraagzin</span> ('hoedanig')."
+  },
+  {
+    id: 109,
+    niveau: 2,
+    greek: "Εἰ μὴ ὑμεῖς ἤλθετε, ἐπορευόμεθα ἂν ἐπὶ βασιλέα.",
+    words: ["Εἰ", "μὴ", "ὑμεῖς", "ἤλθετε,", "ἐπορευόμεθα", "ἂν", "ἐπὶ", "βασιλέα."],
+    structure: ["connect","sub","sub","sub","main","main","main","main"],
+    connector: "Εἰ",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin",
+    translation: "Als jullie niet waren gekomen, zouden wij tegen de koning zijn opgetrokken.",
+    vocab: { "ὑμεῖς": "jullie", "ἤλθετε": "waren gekomen", "ἐπορευόμεθα": "zouden optrekken", "βασιλέα": "koning" },
+    bron: "Xenophon, Anabasis (stijl)",
+    missing: ["Εἰ"],
+    clauses: [
+      { label: "BS (cond.)", words: [0,1,2,3], connector: 0 },
+      { label: "HS", words: [4,5,6,7], connector: null }
+    ],
+    explanation: "<span class='vw'>εἰ</span> + indicativus (imperfectum) → <span class='bs'>conditionele bijzin</span> (irrealis). <span class='hs'>ἐπορευόμεθα ἄν ἐπὶ βασιλέα</span> = hoofdzin met <em>ἄν</em>."
+  },
+  {
+    id: 110,
+    niveau: 2,
+    greek: "Δέομαι οὖν ὑμῶν ἀκροάσασθαί μου, ὅπως μάθητε τὴν ἀλήθειαν.",
+    words: ["Δέομαι", "οὖν", "ὑμῶν", "ἀκροάσασθαί", "μου,", "ὅπως", "μάθητε", "τὴν", "ἀλήθειαν."],
+    structure: ["main","main","main","main","main","connect","sub","sub","sub"],
+    connector: "ὅπως",
+    subtype: "finaal",
+    subtype_label: "Finale bijzin",
+    translation: "Ik vraag u dus naar mij te luisteren, opdat u de waarheid leert kennen.",
+    vocab: { "Δέομαι": "ik vraag", "οὖν": "dus (partikel)", "ὑμῶν": "u", "ἀκροάσασθαί": "te luisteren", "μου": "naar mij", "μάθητε": "leert kennen", "ἀλήθειαν": "waarheid" },
+    bron: "Lysias (stijl)",
+    missing: ["ὅπως"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS (fin.)", words: [5,6,7,8], connector: 5 }
+    ],
+    explanation: "<span class='hs'>Δέομαι οὖν ὑμῶν ἀκροάσασθαί μου</span> = hoofdzin. <span class='vw'>ὅπως</span> → <span class='bs'>finale bijzin</span>."
+  },
+  {
+    id: 111,
+    niveau: 2,
+    greek: "Οὐδεὶς γὰρ οὕτω ἀνόητός ἐστι ὅστις πόλεμον πρὸ εἰρήνης αἱρεῖται.",
+    words: ["Οὐδεὶς", "γὰρ", "οὕτω", "ἀνόητός", "ἐστι", "ὅστις", "πόλεμον", "πρὸ", "εἰρήνης", "αἱρεῖται."],
+    structure: ["main","main","main","main","main","connect","sub","sub","sub","sub"],
+    connector: "ὅστις",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin",
+    translation: "Want niemand is zo onverstandig dat hij oorlog verkiest boven vrede.",
+    vocab: { "Οὐδεὶς": "niemand", "γὰρ": "want (partikel)", "οὕτω": "zo", "ἀνόητός": "onverstandig", "πόλεμον": "oorlog", "εἰρήνης": "vrede", "αἱρεῖται": "verkiest" },
+    bron: "Herodotus (stijl)",
+    missing: ["ὅστις"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS (betr.)", words: [5,6,7,8,9], connector: 5 }
+    ],
+    explanation: "<span class='hs'>Οὐδεὶς ... οὕτω ἀνόητός ἐστι</span> = hoofdzin. <span class='vw'>ὅστις</span> → <span class='bs'>betrekkelijke bijzin</span> met een gevolg-nuance ('zo... dat')."
+  },
+  {
+    id: 112,
+    niveau: 2,
+    greek: "Αὐτὰρ ἐπεὶ πόσιος καὶ ἐδητύος ἐξ ἔρον ἕντο, μνησάμενοι κλαῖον.",
+    words: ["Αὐτὰρ", "ἐπεὶ", "πόσιος", "καὶ", "ἐδητύος", "ἐξ", "ἔρον", "ἕντο,", "μνησάμενοι", "κλαῖον."],
+    structure: ["sub","connect","sub","sub","sub","sub","sub","sub","main","main"],
+    connector: "ἐπεὶ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Maar toen zij het verlangen naar eten en drinken hadden verdreven, weenden zij in herinnering.",
+    vocab: { "Αὐτὰρ": "maar", "πόσιος": "drank", "ἐδητύος": "eten", "ἐξ ἔρον ἕντο": "verdreven het verlangen", "μνησάμενοι": "zich herinnerend", "κλαῖον": "weenden" },
+    bron: "Homerus, formulaire versregel (o.a. Ilias 1.469, Odyssee 1.150 e.a.)",
+    missing: ["ἐπεὶ"],
+    clauses: [
+      { label: "BS (temp.)", words: [0,1,2,3,4,5,6,7], connector: 1 },
+      { label: "HS", words: [8,9], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐπεί</span> → <span class='bs'>temporele bijzin</span> (zeer bekende Homerische formulewending). <span class='hs'>μνησάμενοι κλαῖον</span> = hoofdzin (met participium <em>μνησάμενοι</em>)."
+  },
+  {
+    id: 113,
+    niveau: 3,
+    greek: "Οἱ δὲ πολέμιοι, ὡς εἶδον τοὺς Ἕλληνας προσκειμένους, ἔγνωσαν ὅτι οὐ δύναιντο μένειν.",
+    words: ["Οἱ", "δὲ", "πολέμιοι,", "ὡς", "εἶδον", "τοὺς", "Ἕλληνας", "προσκειμένους,", "ἔγνωσαν", "ὅτι", "οὐ", "δύναιντο", "μένειν."],
+    structure: ["main","main","main","connect","sub","sub","sub","sub","main","connect2","sub2","sub2","sub2"],
+    connector: "ὡς",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + causale bijzin",
+    translation: "Toen de vijanden zagen dat de Grieken aanvielen, begrepen ze dat ze niet konden blijven.",
+    vocab: { "πολέμιοι": "vijanden", "εἶδον": "zagen", "Ἕλληνας": "Grieken", "προσκειμένους": "aanvallend", "ἔγνωσαν": "begrepen", "δύναιντο": "konden", "μένειν": "blijven" },
+    bron: "Xenophon, Anabasis (stijl)",
+    missing: ["ὡς", "ὅτι"],
+    clauses: [
+      { label: "HS", words: [0,1,2,8], connector: null },
+      { label: "BS1 (temp.)", words: [3,4,5,6,7], connector: 3 },
+      { label: "BS2 (caus.)", words: [9,10,11,12], connector: 9 }
+    ],
+    explanation: "<span class='vw'>ὡς</span> → <span class='bs'>temporele bijzin</span> (met een participiumconstructie na een werkwoord van waarnemen: <em>τοὺς Ἕλληνας προσκειμένους</em>). <span class='hs'>ἔγνωσαν</span> = hoofdzin. <span class='vw'>ὅτι</span> + optativus → tweede <span class='bs'>bijzin</span>."
+  },
+  {
+    id: 114,
+    niveau: 3,
+    greek: "Εἰ μὲν οὖν ἕτερόν τινα ἑώρων οὕτως ἀγωνιζόμενον, οἶδα ὅτι ἡσυχίαν ἂν εἶχον.",
+    words: ["Εἰ", "μὲν", "οὖν", "ἕτερόν", "τινα", "ἑώρων", "οὕτως", "ἀγωνιζόμενον,", "οἶδα", "ὅτι", "ἡσυχίαν", "ἂν", "εἶχον."],
+    structure: ["connect","sub","sub","sub","sub","sub","sub","sub","main","connect2","sub2","sub2","sub2"],
+    connector: "Εἰ",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin + causale bijzin",
+    translation: "Als ik een ander zo zag strijden, weet ik dat ik me stilgehouden zou hebben.",
+    vocab: { "μὲν": "nu (partikel)", "οὖν": "dus (partikel)", "ἕτερόν τινα": "een ander", "ἑώρων": "zag", "οὕτως": "zo", "ἀγωνιζόμενον": "strijdend", "ἡσυχίαν": "rust", "εἶχον": "zou hebben gehad" },
+    bron: "Lysias (stijl)",
+    missing: ["Εἰ", "ὅτι"],
+    clauses: [
+      { label: "BS1 (cond.)", words: [0,1,2,3,4,5,6,7], connector: 0 },
+      { label: "HS", words: [8], connector: null },
+      { label: "BS2 (obj.)", words: [9,10,11,12], connector: 9 }
+    ],
+    explanation: "<span class='vw'>εἰ</span> → <span class='bs'>conditionele bijzin</span> (met participium <em>ἀγωνιζόμενον</em> na een werkwoord van waarneming). <span class='hs'>οἶδα</span> = hoofdzin. <span class='vw'>ὅτι</span> → tweede <span class='bs'>bijzin</span> (irrealis met ἄν)."
+  },
+  {
+    id: 115,
+    niveau: 3,
+    greek: "Εἰ δὲ βούλει, σκέψαι ἐὰν τόδε σοι μᾶλλον ἀρέσκῃ.",
+    words: ["Εἰ", "δὲ", "βούλει,", "σκέψαι", "ἐὰν", "τόδε", "σοι", "μᾶλλον", "ἀρέσκῃ."],
+    structure: ["connect","sub","sub","main","connect2","sub2","sub2","sub2","sub2"],
+    connector: "Εἰ",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin + indirecte vraagzin",
+    translation: "Als je wilt, overweeg dan of dit jou meer aanstaat.",
+    vocab: { "δὲ": "nu (partikel)", "βούλει": "wil je", "σκέψαι": "overweeg", "τόδε": "dit", "σοι": "jou", "μᾶλλον": "meer", "ἀρέσκῃ": "aanstaat" },
+    bron: "Plato (stijl)",
+    missing: ["Εἰ", "ἐὰν"],
+    clauses: [
+      { label: "BS1 (cond.)", words: [0,1,2], connector: 0 },
+      { label: "HS", words: [3], connector: null },
+      { label: "BS2 (ind.vr.)", words: [4,5,6,7,8], connector: 4 }
+    ],
+    explanation: "<span class='vw'>εἰ</span> → <span class='bs'>conditionele bijzin</span>. <span class='hs'>σκέψαι</span> = hoofdzin (imperativus). <span class='vw'>ἐάν</span> leidt hier een <span class='bs'>indirecte vraagzin</span> in ('of')."
+  },
+  {
+    id: 116,
+    niveau: 3,
+    greek: "Ἐπειδὴ δὲ Ξέρξης ἐξήλαυνε ἐκ τῶν Σάρδισεων, ἐπορεύετο πρὸς τὰς νῆας αἳ ἦσαν ἐν τῇ θαλάσσῃ.",
+    words: ["Ἐπειδὴ", "δὲ", "Ξέρξης", "ἐξήλαυνε", "ἐκ", "τῶν", "Σάρδισεων,", "ἐπορεύετο", "πρὸς", "τὰς", "νῆας", "αἳ", "ἦσαν", "ἐν", "τῇ", "θαλάσσῃ."],
+    structure: ["connect","sub","sub","sub","sub","sub","sub","main","main","main","main","connect2","sub2","sub2","sub2","sub2"],
+    connector: "Ἐπειδὴ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + betrekkelijke bijzin",
+    translation: "Toen Xerxes wegtrok uit Sardis, marcheerde hij naar de schepen die in de zee lagen.",
+    vocab: { "Ξέρξης": "Xerxes", "ἐξήλαυνε": "trok weg", "Σάρδισεων": "Sardis", "ἐπορεύετο": "marcheerde", "νῆας": "schepen", "ἦσαν": "lagen", "θαλάσσῃ": "zee" },
+    bron: "Herodotus (stijl)",
+    missing: ["Ἐπειδὴ", "αἳ"],
+    clauses: [
+      { label: "BS1 (temp.)", words: [0,1,2,3,4,5,6], connector: 0 },
+      { label: "HS", words: [7,8,9,10], connector: null },
+      { label: "BS2 (betr.)", words: [11,12,13,14,15], connector: 11 }
+    ],
+    explanation: "<span class='vw'>ἐπειδή</span> → <span class='bs'>temporele bijzin</span>. <span class='hs'>ἐπορεύετο πρὸς τὰς νῆας</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>αἵ</em>) → <span class='bs'>betrekkelijke bijzin</span>."
+  },
+  {
+    id: 117,
+    niveau: 3,
+    greek: "Ὡς ἔφατ', ἔδεισεν δ' ὁ γέρων καὶ ἐπείθετο μύθῳ, ὃν βασιλεὺς εἶπεν.",
+    words: ["Ὡς", "ἔφατ',", "ἔδεισεν", "δ'", "ὁ", "γέρων", "καὶ", "ἐπείθετο", "μύθῳ,", "ὃν", "βασιλεὺς", "εἶπεν."],
+    structure: ["connect","sub","main","main","main","main","main","main","main","connect2","sub2","sub2"],
+    connector: "Ὡς",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + betrekkelijke bijzin",
+    translation: "Zo sprak hij, en de oude man werd bang en gehoorzaamde het woord dat de koning gesproken had.",
+    vocab: { "ἔφατ'": "sprak", "ἔδεισεν": "werd bang", "γέρων": "oude man", "ἐπείθετο": "gehoorzaamde", "μύθῳ": "woord", "βασιλεὺς": "koning", "εἶπεν": "had gesproken" },
+    bron: "Homerus, Ilias 1.33 (hoofdregel letterlijk; de betrekkelijke bijzin 'ὃν βασιλεὺς εἶπεν' is toegevoegd voor de oefening — het origineel gaat verder met 'βῆ δ' ἀκέων παρὰ θῖνα...')",
+    missing: ["Ὡς", "ὃν"],
+    clauses: [
+      { label: "BS1 (temp.)", words: [0,1], connector: 0 },
+      { label: "HS", words: [2,3,4,5,6,7,8], connector: null },
+      { label: "BS2 (betr.)", words: [9,10,11], connector: 9 }
+    ],
+    explanation: "<span class='vw'>ὡς</span> → korte <span class='bs'>temporele bijzin</span> ('zo sprak hij'). <span class='hs'>ἔδεισεν ... ἐπείθετο μύθῳ</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>ὅν</em>) → toegevoegde <span class='bs'>betrekkelijke bijzin</span>."
+  },
+  {
+    id: 118,
+    niveau: 3,
+    greek: "Φοβοῦμαι μὴ ὁ λόγος ἡμῖν ὁμολογήσῃ τοῦτο ὃ οὐκ ἐβουλόμεθα.",
+    words: ["Φοβοῦμαι", "μὴ", "ὁ", "λόγος", "ἡμῖν", "ὁμολογήσῃ", "τοῦτο", "ὃ", "οὐκ", "ἐβουλόμεθα."],
+    structure: ["main","connect","sub","sub","sub","sub","sub","connect2","sub2","sub2"],
+    connector: "μὴ",
+    subtype: "finaal",
+    subtype_label: "Finale bijzin + betrekkelijke bijzin",
+    translation: "Ik ben bang dat het argument ons iets doet toegeven wat we niet wilden.",
+    vocab: { "λόγος": "argument, redenering", "ἡμῖν": "ons", "ὁμολογήσῃ": "doet toegeven", "τοῦτο": "iets, dit", "ἐβουλόμεθα": "wilden" },
+    bron: "Plato (stijl)",
+    missing: ["μὴ", "ὃ"],
+    clauses: [
+      { label: "HS", words: [0], connector: null },
+      { label: "BS1 (vreesz.)", words: [1,2,3,4,5,6], connector: 1 },
+      { label: "BS2 (betr.)", words: [7,8,9], connector: 7 }
+    ],
+    explanation: "<span class='hs'>Φοβοῦμαι</span> = hoofdzin. <span class='vw'>μή</span> → <span class='bs'>vreeszin</span>. <span class='vw'>ὅς</span> (hier: <em>ὅ</em>) → <span class='bs'>betrekkelijke bijzin</span> bij <em>τοῦτο</em>."
+  },
+  {
+    id: 119,
+    niveau: 3,
+    greek: "Ὥστε οὐκ αἰσχύνομαι λέγων ὅτι πολὺ κρείττους ἐσμέν, εἰ δεῖ μάχεσθαι.",
+    words: ["Ὥστε", "οὐκ", "αἰσχύνομαι", "λέγων", "ὅτι", "πολὺ", "κρείττους", "ἐσμέν,", "εἰ", "δεῖ", "μάχεσθαι."],
+    structure: ["main","main","main","main","connect","sub","sub","sub","connect2","sub2","sub2"],
+    connector: "ὅτι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin + conditionele bijzin",
+    translation: "Zodat ik me niet schaam te zeggen dat wij veel sterker zijn, als er gevochten moet worden.",
+    vocab: { "αἰσχύνομαι": "schaam ik me", "λέγων": "te zeggen", "πολὺ": "veel", "κρείττους": "sterker", "ἐσμέν": "zijn", "δεῖ": "moet", "μάχεσθαι": "gevochten worden" },
+    bron: "Xenophon, Anabasis (stijl)",
+    missing: ["ὅτι", "εἰ"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3], connector: null },
+      { label: "BS1 (obj.)", words: [4,5,6,7], connector: 4 },
+      { label: "BS2 (cond.)", words: [8,9,10], connector: 8 }
+    ],
+    explanation: "<span class='hs'>Ὥστε οὐκ αἰσχύνομαι λέγων</span> = hoofdzin (het gevolg van een eerdere, hier weggelaten context). <span class='vw'>ὅτι</span> → <span class='bs'>causale/voorwerpzin</span>. <span class='vw'>εἰ</span> → <span class='bs'>conditionele bijzin</span>."
+  },
+  {
+    id: 120,
+    niveau: 3,
+    greek: "Ἐπίστασθε γὰρ ὅτι, εἰ ἐκεῖνοι ἐκρατήσαν, οὐδὲν ἂν ὑμῖν ἐμέλησεν τῶν νόμων.",
+    words: ["Ἐπίστασθε", "γὰρ", "ὅτι,", "εἰ", "ἐκεῖνοι", "ἐκρατήσαν,", "οὐδὲν", "ἂν", "ὑμῖν", "ἐμέλησεν", "τῶν", "νόμων."],
+    structure: ["main","main","connect","connect2","sub2","sub2","sub","sub","sub","sub","sub","sub"],
+    connector: "ὅτι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin + conditionele bijzin",
+    translation: "Want u weet dat, als zij hadden gewonnen, zij zich niets van uw wetten hadden aangetrokken.",
+    vocab: { "Ἐπίστασθε": "u weet", "γὰρ": "want (partikel)", "ἐκεῖνοι": "zij", "ἐκρατήσαν": "hadden gewonnen", "οὐδὲν": "niets", "ὑμῖν": "uw", "ἐμέλησεν": "had aangetrokken", "νόμων": "wetten" },
+    bron: "Lysias (stijl)",
+    missing: ["ὅτι", "εἰ"],
+    clauses: [
+      { label: "HS", words: [0,1], connector: null },
+      { label: "BS1 (obj.)", words: [2,6,7,8,9,10,11], connector: 2 },
+      { label: "BS2 (cond.)", words: [3,4,5], connector: 3 }
+    ],
+    explanation: "<span class='hs'>Ἐπίστασθε</span> = hoofdzin. <span class='vw'>ὅτι</span> → <span class='bs'>voorwerpzin</span>, waarin genest: <span class='vw'>εἰ</span> → <span class='bs'>conditionele bijzin</span> (irrealis)."
+  },
+  {
+    id: 121,
+    niveau: 3,
+    greek: "Σκεπτέον οὖν πρῶτον μὲν τοῦτο, εἴτε χρὴ ἐμὲ ἐνθένδε ἀπιέναι εἴτε μή, ὡς οἱ φίλοι κελεύουσιν.",
+    words: ["Σκεπτέον", "οὖν", "πρῶτον", "μὲν", "τοῦτο,", "εἴτε", "χρὴ", "ἐμὲ", "ἐνθένδε", "ἀπιέναι", "εἴτε", "μή,", "ὡς", "οἱ", "φίλοι", "κελεύουσιν."],
+    structure: ["main","main","main","main","main","connect","sub","sub","sub","sub","sub","sub","connect2","sub2","sub2","sub2"],
+    connector: "εἴτε",
+    subtype: "indirecte vraag",
+    subtype_label: "Indirecte vraagzin",
+    translation: "We moeten dus eerst dit overwegen, of het nodig is dat ik hiervandaan wegga of niet, zoals mijn vrienden bevelen.",
+    vocab: { "Σκεπτέον": "men moet overwegen", "οὖν": "dus (partikel)", "πρῶτον": "eerst", "μὲν": "nu (partikel)", "τοῦτο": "dit", "χρὴ": "het is nodig", "ἐμὲ": "ik", "ἐνθένδε": "hiervandaan", "ἀπιέναι": "weg te gaan", "φίλοι": "vrienden", "κελεύουσιν": "bevelen" },
+    bron: "Plato (stijl, vgl. Crito)",
+    missing: ["εἴτε", "ὡς"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS1 (ind.vr.)", words: [5,6,7,8,9,10,11], connector: 5 },
+      { label: "BS2 (vergel.)", words: [12,13,14,15], connector: 12 }
+    ],
+    explanation: "<span class='hs'>Σκεπτέον οὖν ... τοῦτο</span> = hoofdzin. <span class='vw'>εἴτε ... εἴτε</span> → <span class='bs'>indirecte keuzevraagzin</span>. <span class='vw'>ὡς</span> → <span class='bs'>vergelijkende bijzin</span> ('zoals')."
+  },
+  {
+    id: 122,
+    niveau: 3,
+    greek: "Σωκράτης ἔφη, ἐπειδὰν ἀποθάνῃ, οὐχὶ ἐνθάδε μενεῖν, ἀλλ' ἀπιέναι ἵνα τοῖς θεοῖς συνῇ.",
+    words: ["Σωκράτης", "ἔφη,", "ἐπειδὰν", "ἀποθάνῃ,", "οὐχὶ", "ἐνθάδε", "μενεῖν,", "ἀλλ'", "ἀπιέναι", "ἵνα", "τοῖς", "θεοῖς", "συνῇ."],
+    structure: ["main","main","connect","sub","sub","sub","sub","sub","sub","connect2","sub2","sub2","sub2"],
+    connector: "ἐπειδὰν",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + finale bijzin",
+    translation: "Socrates zei dat hij, wanneer hij gestorven was, niet hier zou blijven, maar zou weggaan opdat hij bij de goden zou zijn.",
+    vocab: { "Σωκράτης": "Socrates", "ἔφη": "zei", "ἀποθάνῃ": "gestorven zou zijn", "οὐχὶ": "niet", "ἐνθάδε": "hier", "μενεῖν": "zou blijven", "ἀπιέναι": "zou weggaan", "θεοῖς": "goden", "συνῇ": "zou samenzijn (met)" },
+    bron: "Plato (stijl, vgl. Phaedo)",
+    missing: ["ἐπειδὰν", "ἵνα"],
+    clauses: [
+      { label: "HS", words: [0,1], connector: null },
+      { label: "AcI", words: [4,5,6,7,8], connector: null },
+      { label: "BS1 (temp.)", words: [2,3], connector: 2 },
+      { label: "BS2 (fin.)", words: [9,10,11,12], connector: 9 }
+    ],
+    explanation: "<span class='hs'>Σωκράτης ἔφη</span> = hoofdzin. <span class='bs'>οὐχὶ ἐνθάδε μενεῖν, ἀλλ' ἀπιέναι</span> = AcI. <span class='vw'>ἐπειδάν</span> → <span class='bs'>temporele bijzin</span> (algemeen, met conjunctivus). <span class='vw'>ἵνα</span> → <span class='bs'>finale bijzin</span>."
   }
 ];
 
