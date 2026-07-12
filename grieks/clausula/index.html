@@ -1,0 +1,3399 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clausula – Hoofd- en bijzinnen Grieks</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap');
+
+  :root {
+    --stone:    #1a1714;
+    --stone2:   #252118;
+    --stone3:   #2e2820;
+    --gold:     #c9a84c;
+    --gold-dim: #8a6e2f;
+    --terracotta:  #c0472a;
+    --terra2:      #a33820;
+    --cream:    #f0e6cc;
+    --cream2:   #d4c49a;
+    --muted:    #8a7f6e;
+    --green:    #4a7c59;
+    --green-bg: #1e3328;
+    --red:      #a03030;
+    --red-bg:   #3a1515;
+    --blue:     #4a7aa0;
+    --blue-bg:  #1a2e40;
+    --purple:   #7a4a9a;
+    --purple-bg:#2a1a3a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--stone);
+    color: var(--cream);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--stone2);
+    border-bottom: 2px solid var(--gold-dim);
+    padding: 18px 24px 14px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    color: var(--gold);
+    letter-spacing: .06em;
+    flex-shrink: 0;
+  }
+  header .subtitle {
+    color: var(--cream2);
+    font-style: italic;
+    font-size: 1rem;
+  }
+
+  /* ── NAV TABS ── */
+  nav {
+    background: var(--stone2);
+    border-bottom: 1px solid var(--gold-dim);
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  nav button {
+    font-family: 'Cinzel', serif;
+    font-size: .78rem;
+    letter-spacing: .07em;
+    color: var(--cream2);
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    padding: 14px 20px 11px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .2s, border-color .2s;
+  }
+  nav button:hover { color: var(--gold); }
+  nav button.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+
+  .module { display: none; }
+  .module.active { display: block; }
+
+  .module-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold-dim);
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    letter-spacing: .05em;
+  }
+
+  .intro-text {
+    color: var(--cream2);
+    font-style: italic;
+    margin-bottom: 22px;
+    font-size: 1rem;
+  }
+
+  /* ── CARDS / PANELS ── */
+  .panel {
+    background: var(--stone2);
+    border: 1px solid var(--gold-dim);
+    border-radius: 6px;
+    padding: 20px 22px;
+    margin-bottom: 18px;
+  }
+  .panel h3 {
+    font-family: 'Cinzel', serif;
+    font-size: .9rem;
+    color: var(--gold);
+    margin-bottom: 10px;
+    letter-spacing: .05em;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    font-family: 'Cinzel', serif;
+    font-size: .82rem;
+    letter-spacing: .06em;
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: opacity .2s, transform .1s;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--stone);
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    color: var(--cream2);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-sm { font-size: .75rem; padding: 7px 14px; }
+
+  /* ── FEEDBACK BADGES ── */
+  .badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: .7rem;
+    letter-spacing: .06em;
+    padding: 3px 10px;
+    border-radius: 3px;
+    vertical-align: middle;
+  }
+  .badge-correct { background: var(--green-bg); color: #7ec89a; border: 1px solid var(--green); }
+  .badge-wrong   { background: var(--red-bg);   color: #e08080; border: 1px solid var(--red); }
+  .badge-info    { background: var(--blue-bg);   color: #8abcde; border: 1px solid var(--blue); }
+
+  /* ═══════════════════════════════════════════
+     MODULE 1 – WOORDENSORTEEROEFENING
+  ═══════════════════════════════════════════ */
+
+  .word-types-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .type-chip {
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .05em;
+    padding: 5px 12px;
+    border-radius: 3px;
+    border: 1px solid;
+  }
+  .type-nevensch  { background: #1a2e1a; color: #7ec87e; border-color: #4a7c4a; }
+  .type-ondersch  { background: var(--blue-bg); color: #8abcde; border-color: var(--blue); }
+  .type-betr-vnw  { background: var(--purple-bg); color: #c09ade; border-color: var(--purple); }
+  .type-vragend   { background: #2e2010; color: #deaa7e; border-color: #7a5020; }
+  .type-onbep     { background: #1e2e2e; color: #7ecece; border-color: #3a7070; }
+
+  .sort-area {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 600px) { .sort-area { grid-template-columns: 1fr; } }
+
+  .sort-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    min-height: 50px;
+    padding: 12px;
+    background: var(--stone3);
+    border: 1px dashed var(--gold-dim);
+    border-radius: 6px;
+  }
+
+  .word-token {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    padding: 7px 16px;
+    background: var(--stone3);
+    border: 1px solid var(--gold-dim);
+    border-radius: 4px;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color .15s, background .15s;
+    position: relative;
+  }
+  .word-token:hover { border-color: var(--gold); background: #33291e; }
+  .word-token.selected { border-color: var(--gold); background: #3a3020; }
+
+  .drop-zone {
+    min-height: 80px;
+    padding: 10px;
+    background: var(--stone3);
+    border: 1px dashed var(--gold-dim);
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-content: flex-start;
+    transition: border-color .2s;
+  }
+  .drop-zone.highlight { border-color: var(--gold); }
+  .drop-zone-label {
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .05em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .sort-result {
+    margin-top: 14px;
+    font-size: .95rem;
+  }
+
+  /* ═══════════════════════════════════════════
+     MODULE 2 – ZINSONTLEDER
+  ═══════════════════════════════════════════ */
+
+  .sentence-display {
+    font-style: italic;
+    font-size: 1.2rem;
+    line-height: 2.2;
+    margin: 16px 0;
+    padding: 16px;
+    background: var(--stone3);
+    border-radius: 5px;
+    border-left: 3px solid var(--gold-dim);
+  }
+  .sentence-display .word-span {
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 3px;
+    margin: 0 1px;
+    transition: background .15s;
+    display: inline-block;
+  }
+  .sentence-display .word-span:hover { background: #3a3020; }
+  .word-span.marked-main    { background: #2a1a1a; color: #e08080; border-bottom: 2px solid #e08080; }
+  .word-span.marked-sub     { background: #1a2a2a; color: #8abcde; border-bottom: 2px solid var(--blue); }
+  .word-span.marked-connect { background: var(--purple-bg); color: #c09ade; border-bottom: 2px solid var(--purple); }
+
+  .mark-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 14px 0;
+    align-items: center;
+  }
+  .mark-btn {
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .05em;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 2px solid;
+    cursor: pointer;
+    background: transparent;
+    transition: opacity .2s;
+  }
+  .mark-btn.active { opacity: 1; }
+  .mark-btn:not(.active) { opacity: .45; }
+  .mark-main    { border-color: #e08080; color: #e08080; }
+  .mark-sub     { border-color: var(--blue); color: #8abcde; }
+  .mark-connect { border-color: var(--purple); color: #c09ade; }
+
+  .sub-type-select {
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    background: var(--stone3);
+    color: var(--cream);
+    border: 1px solid var(--gold-dim);
+    border-radius: 4px;
+    padding: 6px 12px;
+    margin-right: 8px;
+  }
+
+  .clause-answer-box {
+    margin-top: 14px;
+    padding: 14px 16px;
+    background: var(--stone3);
+    border-radius: 5px;
+    font-size: .95rem;
+    line-height: 1.8;
+  }
+  .clause-answer-box span.hs { color: #e08080; font-weight: 500; }
+  .clause-answer-box span.bs { color: #8abcde; }
+  .clause-answer-box span.vw { color: #c09ade; font-style: italic; }
+
+  .analysis-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .legend-item {
+    font-size: .85rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ═══════════════════════════════════════════
+     MODULE 3 – VERTAALOEFENING
+  ═══════════════════════════════════════════ */
+
+  .translation-sentence {
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 2;
+    margin: 14px 0;
+    padding: 14px 16px;
+    background: var(--stone3);
+    border-radius: 5px;
+    border-left: 3px solid var(--gold-dim);
+  }
+  .translation-sentence .blank {
+    display: inline-block;
+    min-width: 80px;
+    border-bottom: 2px solid var(--gold);
+    color: var(--gold);
+    font-style: normal;
+    font-family: 'Cinzel', serif;
+    font-size: .85rem;
+    letter-spacing: .05em;
+    text-align: center;
+    padding: 0 6px;
+    vertical-align: bottom;
+    background: #2a2210;
+    border-radius: 2px;
+  }
+
+  .word-bank-trans {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+    padding: 12px;
+    background: var(--stone3);
+    border: 1px dashed var(--gold-dim);
+    border-radius: 5px;
+  }
+
+  textarea.translation-input {
+    width: 100%;
+    min-height: 90px;
+    background: var(--stone3);
+    border: 1px solid var(--gold-dim);
+    border-radius: 5px;
+    color: var(--cream);
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    padding: 12px 14px;
+    resize: vertical;
+    line-height: 1.6;
+  }
+  textarea.translation-input:focus {
+    outline: none;
+    border-color: var(--gold);
+  }
+
+  .ai-feedback-box {
+    margin-top: 14px;
+    padding: 16px;
+    background: var(--blue-bg);
+    border: 1px solid var(--blue);
+    border-radius: 5px;
+    font-size: .95rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
+  .ai-feedback-box .loading {
+    color: var(--muted);
+    font-style: italic;
+    font-size: .9rem;
+  }
+
+  .model-translation {
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: var(--green-bg);
+    border: 1px solid var(--green);
+    border-radius: 5px;
+    font-size: .95rem;
+    line-height: 1.7;
+  }
+  .model-translation strong {
+    font-family: 'Cinzel', serif;
+    font-size: .78rem;
+    letter-spacing: .05em;
+    color: #7ec89a;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  /* ═══════════════════════════════════════════
+     MODULE 4 – THEORIE
+  ═══════════════════════════════════════════ */
+
+  .theory-section {
+    margin-bottom: 28px;
+  }
+  .theory-section h3 {
+    font-family: 'Cinzel', serif;
+    font-size: .95rem;
+    color: var(--gold);
+    letter-spacing: .05em;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--stone3);
+  }
+  .theory-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .95rem;
+  }
+  .theory-table th {
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .05em;
+    color: var(--gold);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--gold-dim);
+  }
+  .theory-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--stone3);
+    vertical-align: top;
+  }
+  .theory-table tr:hover td { background: var(--stone3); }
+  .theory-table td:first-child { font-style: italic; color: var(--cream); }
+  .theory-table td.meaning { color: var(--cream2); }
+  .theory-table td.type { font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .04em; }
+  .theory-table td .ambig {
+    font-size: .8rem;
+    color: var(--gold);
+    font-style: normal;
+    margin-top: 3px;
+    display: block;
+    font-family: 'Cinzel', serif;
+    letter-spacing: .03em;
+  }
+
+  .warning-box {
+    background: #2e1e10;
+    border: 1px solid #7a5020;
+    border-radius: 5px;
+    padding: 14px 16px;
+    font-size: .92rem;
+    color: #deaa7e;
+    margin-top: 14px;
+  }
+  .warning-box strong {
+    font-family: 'Cinzel', serif;
+    font-size: .78rem;
+    letter-spacing: .05em;
+    display: block;
+    margin-bottom: 6px;
+    color: #e8c070;
+  }
+
+  /* ── SENTENCE NAV ── */
+  .sentence-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .sentence-nav span {
+    font-family: 'Cinzel', serif;
+    font-size: .78rem;
+    color: var(--muted);
+    letter-spacing: .05em;
+  }
+  .sentence-counter {
+    font-family: 'Cinzel', serif;
+    font-size: .85rem;
+    color: var(--cream2);
+    letter-spacing: .05em;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    height: 3px;
+    background: var(--stone3);
+    border-radius: 2px;
+    margin-bottom: 22px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    border-radius: 2px;
+    transition: width .4s ease;
+  }
+
+  /* ── API KEY ── */
+  .api-key-section {
+    background: var(--stone2);
+    border: 1px solid var(--gold-dim);
+    border-radius: 5px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+  }
+  .api-key-section label {
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .05em;
+    color: var(--cream2);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .api-key-section input {
+    width: 100%;
+    font-family: 'EB Garamond', serif;
+    font-size: .9rem;
+    background: var(--stone3);
+    color: var(--cream);
+    border: 1px solid var(--gold-dim);
+    border-radius: 4px;
+    padding: 8px 12px;
+  }
+  .api-key-section input:focus { outline: none; border-color: var(--gold); }
+
+  /* ── INLEIDENDE WOORDEN TABS ── */
+  .iw-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .iw-tab {
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .06em;
+    padding: 8px 16px;
+    border-radius: 4px 4px 0 0;
+    border: 1px solid var(--gold-dim);
+    border-bottom: none;
+    background: var(--stone3);
+    color: var(--cream2);
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .iw-tab:hover { color: var(--gold); background: #2a2418; }
+  .iw-tab.active {
+    background: var(--stone2);
+    color: var(--gold);
+    border-color: var(--gold);
+    border-bottom: 1px solid var(--stone2);
+    margin-bottom: -1px;
+    position: relative;
+    z-index: 1;
+  }
+  .iw-panel {
+    border: 1px solid var(--gold-dim);
+    border-radius: 0 4px 4px 4px;
+    padding: 16px 18px;
+    background: var(--stone2);
+  }
+
+  /* ── NIVEAU FILTER ── */
+  .niveau-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 18px;
+    padding: 12px 14px;
+    background: var(--stone2);
+    border: 1px solid var(--gold-dim);
+    border-radius: 5px;
+  }
+  .niveau-label {
+    font-family: 'Cinzel', serif;
+    font-size: .75rem;
+    letter-spacing: .06em;
+    color: var(--cream2);
+    margin-right: 4px;
+  }
+  .niveau-filter .btn.active {
+    background: var(--gold);
+    color: var(--stone);
+    border-color: var(--gold);
+  }
+
+  /* ── STRUCTUUROEFENING ── */
+  .struct-step-panel {
+    background: var(--stone2);
+    border: 1px solid var(--gold-dim);
+    border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .struct-step-title {
+    font-family: 'Cinzel', serif;
+    font-size: .88rem;
+    letter-spacing: .05em;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .step-num {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--stone);
+    font-size: .72rem;
+    padding: 2px 9px;
+    border-radius: 3px;
+    margin-right: 8px;
+    font-weight: 700;
+  }
+
+  /* Kleurknopjes */
+  .color-picker-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .color-pick-btn {
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .05em;
+    padding: 7px 14px;
+    border-radius: 4px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    font-weight: 600;
+    opacity: .55;
+    transition: opacity .15s, transform .1s;
+  }
+  .color-pick-btn.active { opacity: 1; transform: scale(1.05); border-color: white; }
+  .color-pick-btn:active { transform: scale(.97); }
+  .cpick-pv      { background: #e8d800; color: #1a1a00; }
+  .cpick-ondersch{ background: #2ea84a; color: #fff; }
+  .cpick-betr    { background: #c0392b; color: #fff; }
+  .cpick-nevensch{ background: #2980b9; color: #fff; }
+  .cpick-none    { background: var(--stone3); color: var(--cream2); border: 1px solid var(--gold-dim) !important; }
+
+  /* Woord-tokens in stap 1 */
+  .struct-token-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+    background: var(--stone3);
+    border-radius: 5px;
+    border: 1px dashed var(--gold-dim);
+    min-height: 54px;
+  }
+  .struct-token {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    padding: 5px 14px;
+    border-radius: 4px;
+    background: var(--stone3);
+    border: 1px solid var(--gold-dim);
+    cursor: pointer;
+    user-select: none;
+    transition: border-color .12s;
+    position: relative;
+  }
+  .struct-token:hover { border-color: var(--gold); }
+  .struct-token.colored-pv       { background: #e8d800; color: #1a1a00; border-color: #c8b800; }
+  .struct-token.colored-ondersch { background: #2ea84a; color: #fff;    border-color: #1e7832; }
+  .struct-token.colored-betr     { background: #c0392b; color: #fff;    border-color: #8a1f1a; }
+  .struct-token.colored-nevensch { background: #2980b9; color: #fff;    border-color: #1a5a8a; }
+
+  /* Drag bank in stap 2 */
+  .struct-dragbank-label {
+    font-family: 'Cinzel', serif;
+    font-size: .72rem;
+    letter-spacing: .05em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .struct-dragbank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+    background: var(--stone3);
+    border: 1px dashed var(--gold-dim);
+    border-radius: 5px;
+    min-height: 50px;
+    margin-bottom: 16px;
+  }
+
+  /* Drag tokens */
+  .drag-token {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 1rem;
+    padding: 4px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--gold-dim);
+    background: var(--stone3);
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+  }
+  .drag-token:active { cursor: grabbing; }
+  .drag-token.dt-pv       { background: #e8d800; color: #1a1a00; border-color: #c8b800; }
+  .drag-token.dt-ondersch { background: #2ea84a; color: #fff;    border-color: #1e7832; }
+  .drag-token.dt-betr     { background: #c0392b; color: #fff;    border-color: #8a1f1a; }
+  .drag-token.dt-nevensch { background: #2980b9; color: #fff;    border-color: #1a5a8a; }
+  .drag-token.dragging    { opacity: .4; }
+
+  /* Segment-tokens: meerdere gekleurde woorden samen één sleepbaar deel */
+  .seg-token {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    background: var(--stone2);
+    border: 1px solid var(--gold-dim);
+    border-radius: 5px;
+    padding: 4px 8px;
+  }
+  .seg-token:hover { border-color: var(--gold); }
+  .seg-word {
+    font-style: italic;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .seg-word.dt-pv       { background: #e8d800; color: #1a1a00; }
+  .seg-word.dt-ondersch { background: #2ea84a; color: #fff; }
+  .seg-word.dt-betr     { background: #c0392b; color: #fff; }
+  .seg-word.dt-nevensch { background: #2980b9; color: #fff; }
+
+  /* Structuurrijen */
+  .struct-rows-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .struct-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .struct-row-indent {
+    padding-left: 40px;
+  }
+  /* Diepere niveaus: elk niveau 40px extra inspringing */
+  .struct-row[data-depth="1"] { padding-left: 40px; }
+  .struct-row[data-depth="2"] { padding-left: 80px; }
+  .struct-row[data-depth="3"] { padding-left: 120px; }
+  /* Kleurmarkering linkerkant per diepte */
+  .struct-row[data-depth="1"] .struct-row-drop { border-left: 3px solid #8abcde; }
+  .struct-row[data-depth="2"] .struct-row-drop { border-left: 3px solid #c09ade; }
+  .struct-row[data-depth="3"] .struct-row-drop { border-left: 3px solid #7ec89a; }
+  .struct-row-label {
+    font-family: 'Cinzel', serif;
+    font-size: .68rem;
+    letter-spacing: .05em;
+    min-width: 70px;
+    flex-shrink: 0;
+    padding-top: 10px;
+  }
+  .struct-row-label.lbl-hs { color: #e08080; }
+  .struct-row-label.lbl-bs { color: #8abcde; }
+  .struct-row-drop {
+    flex: 1;
+    min-height: 46px;
+    padding: 8px 10px;
+    background: var(--stone3);
+    border: 1px dashed var(--gold-dim);
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-content: flex-start;
+    transition: border-color .15s, background .15s;
+  }
+  .struct-row-drop.drag-over {
+    border-color: var(--gold);
+    background: #2a2418;
+  }
+  .struct-row-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 6px;
+  }
+  .row-ctrl-btn {
+    font-size: .75rem;
+    padding: 3px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--gold-dim);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    line-height: 1.2;
+  }
+  .row-ctrl-btn:hover { color: var(--cream); border-color: var(--gold); }
+
+  /* ── STRUCTUURWEERGAVE ── */
+  .struct-view {
+    margin-top: 16px;
+    padding: 14px 16px;
+    background: var(--stone3);
+    border-radius: 5px;
+    border: 1px solid var(--gold-dim);
+  }
+  .struct-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--stone2);
+  }
+  .struct-key {
+    font-family: 'Cinzel', serif;
+    font-size: .68rem;
+    letter-spacing: .05em;
+    padding: 3px 10px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  /* ── AI-ANALYSE MODULE ── */
+  .ai-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 18px 0 10px;
+    padding: 12px 14px;
+    background: var(--stone3);
+    border-radius: 5px;
+    border: 1px solid var(--gold-dim);
+  }
+  .ai-struct-view {
+    background: var(--stone3);
+    border: 1px solid var(--gold-dim);
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-top: 6px;
+  }
+  .ai-clause-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+    line-height: 2;
+  }
+  .ai-clause-label {
+    font-family: 'Cinzel', serif;
+    font-size: .68rem;
+    letter-spacing: .05em;
+    min-width: 96px;
+    flex-shrink: 0;
+  }
+  .ai-clause-label.lbl-hs { color: #e08080; }
+  .ai-clause-label.lbl-bs { color: #8abcde; }
+  .ai-clause-text { font-style: italic; font-size: 1.08rem; }
+  .ai-word {
+    padding: 1px 5px;
+    border-radius: 3px;
+    margin: 0 1px;
+    display: inline-block;
+  }
+  .ai-word.w-pv       { background: #e8d800; color: #1a1a00; font-weight: 600; }
+  .ai-word.w-ondersch { background: #2ea84a; color: #fff; font-weight: 600; }
+  .ai-word.w-betr     { background: #c0392b; color: #fff; font-weight: 600; }
+  .ai-word.w-nevensch { background: #2980b9; color: #fff; font-weight: 600; }
+  .ai-word.w-special  { background: #8a6e2f; color: #fff; font-weight: 600; }
+  .ai-conn-translation {
+    font-style: normal;
+    font-size: .82rem;
+    color: var(--cream2);
+    background: var(--stone2);
+    border-radius: 3px;
+    padding: 1px 6px;
+    margin-left: 4px;
+  }
+  .ai-clause-note {
+    font-size: .82rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-left: 108px;
+    margin-bottom: 10px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: .8rem;
+    border-top: 1px solid var(--stone3);
+    margin-top: 40px;
+    letter-spacing: .03em;
+  }
+
+  /* ── UTIL ── */
+  .flex-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .mt-12 { margin-top: 12px; }
+  .mt-18 { margin-top: 18px; }
+  .hidden { display: none !important; }
+</style>
+<style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+</head>
+<body>
+<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+
+<header>
+  <h1>Clausula</h1>
+  <span class="subtitle">Hoofd- en bijzinnen · Grieks</span>
+</header>
+
+<nav>
+  <button class="active" onclick="showModule('theory')">① Theorie</button>
+  <button onclick="showModule('sort')">② Woordsoorten</button>
+  <button onclick="showModule('analysis')">③ Zinsontleding</button>
+  <button onclick="showModule('structuur')">④ Zinsstructuur</button>
+  <button onclick="showModule('translation')">⑤ Vertalen</button>
+  <button onclick="showModule('ai')">⑥ AI-analyse</button>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════
+     MODULE: THEORIE
+══════════════════════════════════════ -->
+<section id="module-theory" class="module active">
+  <h2 class="module-title">Theorie: Hoofd- en bijzinnen</h2>
+  <p class="intro-text">Lees deze uitleg door voordat je aan de oefeningen begint.</p>
+
+  <div class="theory-section">
+    <h3>Wat is een hoofdzin?</h3>
+    <div class="panel">
+      Een <strong>hoofdzin</strong> (HS) kan op zichzelf staan. Hij heeft een persoonsvorm en geeft de kernboodschap van de zin. In het Grieks herken je een hoofdzin vaak doordat er <em>geen</em> ondergeschikt voegwoord aan voorafgaat.
+      <br><br>
+      <em>Οἱ στρατιῶται εἰς τὸ στρατόπεδον ἐπανέρχονται.</em> — De soldaten keren terug naar het kamp.
+    </div>
+  </div>
+
+  <div class="theory-section">
+    <h3>Wat is een bijzin?</h3>
+    <div class="panel">
+      Een <strong>bijzin</strong> (BS) is afhankelijk van de hoofdzin en begint altijd met een <em>inleidend woord</em>. Er zijn drie grote groepen:
+
+      <div style="margin-top: 16px;">
+        <div style="margin-bottom: 14px; padding: 12px 14px; background: var(--blue-bg); border-left: 3px solid var(--blue); border-radius: 4px;">
+          <strong style="font-family:'Cinzel',serif; font-size:.8rem; letter-spacing:.05em; color:#8abcde; display:block; margin-bottom:6px;">BIJWOORDELIJKE BIJZINNEN — beginnen met een onderschikkend voegwoord</strong>
+          Deze bijzinnen functioneren als een bijwoordelijke bepaling (van tijd, oorzaak, doel, enz.) bij de hoofdzin.
+          <ul style="margin: 8px 0 0 20px; line-height: 1.6;">
+            <li style="margin-bottom:10px;">
+              <strong>Causale bijzin</strong> (oorzaak) — <em>ὅτι, διότι, ἐπεί, ἐπειδή</em><br>
+              <span style="font-size:.88rem; color:var(--cream2);">
+                <em>Ὁ παῖς εἰς τὸν ἀγρὸν ἔδραμεν, <u>ὅτι</u> τὸν διδάσκαλον ἐφοβεῖτο.</em><br>
+                De jongen rende het veld in <u>omdat</u> hij de leraar vreesde.
+              </span>
+            </li>
+            <li style="margin-bottom:10px;">
+              <strong>Temporele bijzin</strong> (tijd) — <em>ἐπεί, ἐπειδή, ὅτε, ἕως, πρίν</em><br>
+              <span style="font-size:.88rem; color:var(--cream2);">
+                <em><u>Ἐπεὶ</u> οἱ πολέμιοι προσῆλθον, οἱ πολῖται τὰς πύλας ἔκλεισαν.</em><br>
+                <u>Toen</u> de vijanden naderden, sloten de burgers de poorten.
+              </span>
+            </li>
+            <li style="margin-bottom:10px;">
+              <strong>Finale bijzin</strong> (doel) — <em>ἵνα, ὅπως</em> + conjunctivus<br>
+              <span style="font-size:.88rem; color:var(--cream2);">
+                <em>Ὁ στρατηγὸς στρατιώτας ἔπεμψεν, <u>ἵνα</u> τὴν γέφυραν φυλάττωσιν.</em><br>
+                De generaal stuurde soldaten <u>opdat</u> zij de brug zouden bewaken.
+              </span>
+            </li>
+            <li style="margin-bottom:10px;">
+              <strong>Consecutieve bijzin</strong> (gevolg) — <em>ὥστε</em> + indicativus/infinitivus<br>
+              <span style="font-size:.88rem; color:var(--cream2);">
+                <em>Ὁ στρατηγὸς οὕτως ἀνδρεῖος ἦν, <u>ὥστε</u> πάντες αὐτὸν ἐθαύμαζον.</em><br>
+                De generaal was zo dapper <u>dat</u> iedereen hem bewonderde.
+              </span>
+            </li>
+            <li style="margin-bottom:10px;">
+              <strong>Concessieve bijzin</strong> (toegeving) — <em>καίτοι, εἰ καί</em><br>
+              <span style="font-size:.88rem; color:var(--cream2);">
+                <em><u>Καίτοι</u> ὁ δεσπότης ὠργίζετο, ὁ δοῦλος οὐκ ἐφοβεῖτο.</em><br>
+                <u>Hoewel</u> de heer boos was, was de slaaf niet bang.
+              </span>
+            </li>
+            <li style="margin-bottom:4px;">
+              <strong>Conditionele bijzin</strong> (voorwaarde) — <em>εἰ, ἐάν</em><br>
+              <span style="font-size:.88rem; color:var(--cream2);">
+                <em><u>Ἐὰν</u> οἱ πολέμιοι ἔλθωσιν, πάντες φεύξονται.</em><br>
+                <u>Als</u> de vijanden komen, zullen allen vluchten.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div style="margin-bottom: 14px; padding: 12px 14px; background: var(--purple-bg); border-left: 3px solid var(--purple); border-radius: 4px;">
+          <strong style="font-family:'Cinzel',serif; font-size:.8rem; letter-spacing:.05em; color:#c09ade; display:block; margin-bottom:6px;">BETREKKELIJKE BIJZINNEN (bijvoeglijke bijzinnen) — beginnen met een betrekkelijk voornaamwoord</strong>
+          Deze bijzinnen beschrijven een zelfstandig naamwoord in de hoofdzin, net als een bijvoeglijk naamwoord.
+          <ul style="margin: 8px 0 0 20px; line-height: 1.6;">
+            <li style="margin-bottom:4px;">
+              <strong>Betrekkelijke bijzin</strong> — <em>ὅς, ἥ, ὅ</em> (die, dat, welke)<br>
+              <span style="font-size:.88rem; color:var(--cream2);">
+                <em>Οἱ στρατιῶται, <u>οἳ</u> ἀνδρείως ἐμάχοντο, ὑπὸ τοῦ στρατηγοῦ ἐπῃνέθησαν.</em><br>
+                De soldaten, <u>die</u> dapper vochten, werden door de generaal geprezen.
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div style="padding: 12px 14px; background: #2e2010; border-left: 3px solid #7a5020; border-radius: 4px;">
+          <strong style="font-family:'Cinzel',serif; font-size:.8rem; letter-spacing:.05em; color:#deaa7e; display:block; margin-bottom:6px;">INDIRECTE VRAAGZINNEN — beginnen met een vraagwoord of vraagpartikel</strong>
+          Deze bijzinnen geven een onrechtstreekse vraag weer. <strong>Let op: ze hebben geen vraagteken!</strong>
+          <ul style="margin: 8px 0 0 20px; line-height: 1.6;">
+            <li style="margin-bottom:4px;">
+              <strong>Indirecte vraagzin</strong> — <em>εἰ, τίς, τί, ὅστις, ποῦ, πῶς, πότε...</em><br>
+              <span style="font-size:.88rem; color:var(--cream2);">
+                <em>Οὐκ οἶδα <u>εἰ</u> ὁ πατὴρ οἴκαδε ἐπανῆλθεν.</em><br>
+                Ik weet niet <u>of</u> mijn vader naar huis is teruggekeerd.
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-section">
+    <h3>Geen bijzinnen, maar wél als bijzin te vertalen: AcI en Genitivus absolutus</h3>
+    <div class="panel">
+      De <strong>AcI</strong> en de <strong>genitivus absolutus</strong> zijn in het Grieks géén echte bijzinnen: ze hebben geen persoonsvorm en worden niet ingeleid door een voegwoord. Toch worden ze in het Nederlands vaak met een <em>bijzin</em> vertaald. Daarom behandelen we ze in de zinsstructuur als een apart "deel".
+
+      <div style="margin-top:16px;">
+        <div style="margin-bottom: 14px; padding: 12px 14px; background: #2a2438; border-left: 3px solid #9a7ac0; border-radius: 4px;">
+          <strong style="font-family:'Cinzel',serif; font-size:.8rem; letter-spacing:.05em; color:#c4a8e0; display:block; margin-bottom:6px;">AcI — accusativus cum infinitivo</strong>
+          Een naamwoord in de <em>accusativus</em> + een <em>infinitivus</em>, afhankelijk van een werkwoord van zeggen, denken, weten of geloven (<em>φημί, νομίζω, οἴομαι, δοκεῖ, ἐλπίζω...</em>). De accusativus wordt het onderwerp van de Nederlandse bijzin, de infinitivus de persoonsvorm.
+          <div style="font-size:.88rem; color:var(--cream2); margin-top:8px;">
+            <em>Νομίζω <u>τὸν παῖδα</u> ἁμαρτάνειν.</em><br>
+            Ik denk <u>dat de jongen</u> dwaalt. <span style="color:var(--muted);">(letterlijk: "ik denk de jongen te dwalen")</span>
+          </div>
+        </div>
+
+        <div style="padding: 12px 14px; background: #1e3330; border-left: 3px solid #5aa890; border-radius: 4px;">
+          <strong style="font-family:'Cinzel',serif; font-size:.8rem; letter-spacing:.05em; color:#8ad0b8; display:block; margin-bottom:6px;">GenAbs — genitivus absolutus</strong>
+          Een naamwoord + een participium, beide in de <em>genitivus</em>, die los ("absoluut") staan van de rest van de zin. Te vertalen met een bijwoordelijke bijzin van tijd, oorzaak, voorwaarde of toegeving.
+          <div style="font-size:.88rem; color:var(--cream2); margin-top:8px;">
+            <em><u>Τῆς πόλεως ἁλούσης</u>, οἱ πολέμιοι τὰ ἱερὰ κατέκαυσαν.</em><br>
+            <u>Nadat de stad veroverd was</u>, staken de vijanden de tempels in brand. <span style="color:var(--muted);">(letterlijk: "de stad zijnde veroverd")</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="theory-section">
+    <h3>Inleidende woorden</h3>
+
+    <!-- Tab buttons -->
+    <div class="iw-tabs" role="tablist">
+      <button class="iw-tab active" onclick="switchIwTab('nevensch', this)">Nevenschikkend</button>
+      <button class="iw-tab" onclick="switchIwTab('ondersch', this)">Onderschikkend</button>
+      <button class="iw-tab" onclick="switchIwTab('betr', this)">Betrekkelijk vnw.</button>
+      <button class="iw-tab" onclick="switchIwTab('vraag', this)">Vraagwoorden</button>
+    </div>
+
+    <!-- TAB: NEVENSCHIKKEND -->
+    <div class="iw-panel" id="iwtab-nevensch">
+      <p style="font-size:.88rem;color:var(--cream2);font-style:italic;margin-bottom:12px;">Nevenschikkende voegwoorden verbinden twee <strong>gelijkwaardige</strong> hoofd- of bijzinnen. Ze leiden <em>geen</em> bijzin in.</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Soort</th><th>Betekenis</th></tr></thead>
+        <tbody>
+          <tr><td>καί</td><td>aanknopend</td><td class="meaning">en</td></tr>
+          <tr><td>δέ</td><td>aanknopend/tegenstellend</td><td class="meaning">en, maar <span class="ambig">⚠ postpositief: nooit eerste woord</span></td></tr>
+          <tr><td>ἀλλά</td><td>tegenstellend</td><td class="meaning">maar</td></tr>
+          <tr><td>γάρ</td><td>verklarend</td><td class="meaning">want, immers <span class="ambig">⚠ postpositief: nooit eerste woord</span></td></tr>
+          <tr><td>οὖν</td><td>gevolgtrekkend</td><td class="meaning">dus, dan <span class="ambig">⚠ postpositief</span></td></tr>
+          <tr><td>μέν</td><td>aanknopend</td><td class="meaning">aan de ene kant... (vormt paar met δέ) <span class="ambig">⚠ postpositief</span></td></tr>
+          <tr><td>ἤ</td><td>scheidend</td><td class="meaning">of</td></tr>
+          <tr><td>οὔτε</td><td>ontkennend aanknopend</td><td class="meaning">en niet, noch (vaak in paar οὔτε...οὔτε)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TAB: ONDERSCHIKKEND -->
+    <div class="iw-panel hidden" id="iwtab-ondersch">
+      <p style="font-size:.88rem;color:var(--cream2);font-style:italic;margin-bottom:12px;">Onderschikkende voegwoorden leiden een <strong>bijwoordelijke bijzin</strong> in. De bijzin is afhankelijk van de hoofdzin.</p>
+
+      <p style="font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.05em;color:var(--gold);margin:10px 0 6px;">Causaal (oorzaak)</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Modus</th><th>Betekenis</th></tr></thead>
+        <tbody>
+          <tr><td>ὅτι</td><td>indicativus</td><td class="meaning">omdat <span class="ambig">⚠ ook: 'dat' bij indirecte rede</span></td></tr>
+          <tr><td>διότι</td><td>indicativus</td><td class="meaning">omdat</td></tr>
+          <tr><td>ἐπεί</td><td>indicativus</td><td class="meaning">omdat, aangezien <span class="ambig">⚠ ook temporeel</span></td></tr>
+          <tr><td>ἐπειδή</td><td>indicativus</td><td class="meaning">aangezien, nadat <span class="ambig">⚠ ook temporeel</span></td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.05em;color:var(--gold);margin:14px 0 6px;">Temporeel (tijd)</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Modus</th><th>Betekenis</th></tr></thead>
+        <tbody>
+          <tr><td>ἐπεί</td><td>indicativus</td><td class="meaning">toen, nadat <span class="ambig">⚠ ook causaal</span></td></tr>
+          <tr><td>ἐπειδή</td><td>indicativus</td><td class="meaning">nadat, toen <span class="ambig">⚠ ook causaal</span></td></tr>
+          <tr><td>ὅτε</td><td>indicativus</td><td class="meaning">toen</td></tr>
+          <tr><td>ἕως</td><td>indicativus</td><td class="meaning">totdat, zolang als</td></tr>
+          <tr><td>πρίν</td><td>ind./infinitivus</td><td class="meaning">voordat</td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.05em;color:var(--gold);margin:14px 0 6px;">Finaal (doel)</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Modus</th><th>Betekenis</th></tr></thead>
+        <tbody>
+          <tr><td>ἵνα</td><td>conj./optativus</td><td class="meaning">opdat, zodat</td></tr>
+          <tr><td>ὅπως</td><td>conj./optativus</td><td class="meaning">opdat, zodat <span class="ambig">⚠ ook vraagwoord 'hoe'</span></td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.05em;color:var(--gold);margin:14px 0 6px;">Consecutief (gevolg)</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Modus</th><th>Betekenis</th></tr></thead>
+        <tbody>
+          <tr><td>ὥστε</td><td>ind./infinitivus</td><td class="meaning">zodat, dat (gevolg) — vaak na οὕτως, τοσοῦτος...</td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.05em;color:var(--gold);margin:14px 0 6px;">Concessief (toegeving)</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Modus</th><th>Betekenis</th></tr></thead>
+        <tbody>
+          <tr><td>καίτοι</td><td>indicativus</td><td class="meaning">hoewel, en toch</td></tr>
+          <tr><td>εἰ καί / καὶ εἰ</td><td>indicativus</td><td class="meaning">ook al, zelfs als</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:.85rem;color:var(--muted);margin-top:8px;font-style:italic;">Let op: het Grieks drukt toegeving vaak liever uit met <em>καίπερ</em> + participium ('hoewel zijnde...') dan met een echte bijzin — vergelijkbaar met de ablativus absolutus bij toegeving in het Latijn.</p>
+
+      <p style="font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.05em;color:var(--gold);margin:14px 0 6px;">Conditioneel (voorwaarde)</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Modus</th><th>Betekenis</th></tr></thead>
+        <tbody>
+          <tr><td>εἰ</td><td>indicativus</td><td class="meaning">als, indien (reële voorwaarde) <span class="ambig">⚠ ook 'of' bij indirecte vraag</span></td></tr>
+          <tr><td>ἐάν (= εἰ + ἄν)</td><td>conjunctivus</td><td class="meaning">als, indien (algemene/toekomstige voorwaarde)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TAB: BETREKKELIJK VNW -->
+    <div class="iw-panel hidden" id="iwtab-betr">
+      <p style="font-size:.88rem;color:var(--cream2);font-style:italic;margin-bottom:12px;">Betrekkelijke voornaamwoorden verwijzen terug naar een antecedent (een zelfstandig naamwoord of voornaamwoord) in de hoofdzin en leiden een <strong>betrekkelijke bijzin</strong> in.</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Geslacht / naamval</th><th>Betekenis / opmerking</th></tr></thead>
+        <tbody>
+          <tr><td>ὅς</td><td>m. nom. sg.</td><td class="meaning">die</td></tr>
+          <tr><td>ἥ</td><td>f. nom. sg.</td><td class="meaning">die</td></tr>
+          <tr><td>ὅ</td><td>n. nom./acc. sg.</td><td class="meaning">dat <span class="ambig">⚠ het lidwoord ὁ/ἡ/τό heeft géén accent, het betr. vnw. altijd wél</span></td></tr>
+          <tr><td>οἵ / αἵ / ἅ</td><td>nom. pl. (m./f./n.)</td><td class="meaning">die</td></tr>
+          <tr><td>ὅν</td><td>m. acc. sg.</td><td class="meaning">die (lijdend voorwerp)</td></tr>
+          <tr><td>ἥν</td><td>f. acc. sg.</td><td class="meaning">die (lijdend voorwerp)</td></tr>
+          <tr><td>οὗ</td><td>gen. sg. (m./n.)</td><td class="meaning">wiens, waarvan</td></tr>
+          <tr><td>ἧς</td><td>gen. sg. (f.)</td><td class="meaning">wier, waarvan</td></tr>
+          <tr><td>ᾧ</td><td>dat. sg. (m./n.)</td><td class="meaning">aan wie, waarmee</td></tr>
+          <tr><td>ᾗ</td><td>dat. sg. (f.)</td><td class="meaning">aan wie, waarmee</td></tr>
+        </tbody>
+      </table>
+      <div class="warning-box" style="margin-top:14px;">
+        <strong>⚠ Naamval van het betrekkelijk vnw.</strong>
+        Het betrekkelijk voornaamwoord heeft <em>geslacht en getal</em> van zijn antecedent, maar zijn eigen <em>naamval</em> wordt bepaald door de functie in de bijzin. Bijv.: <em>Ὁ στρατιώτης τῷ φίλῳ τὸ ξίφος ἔδωκεν, ᾧ μάλιστα ἐπίστευεν.</em> — <em>ᾧ</em> is m. sg. (antecedent: <em>φίλῳ</em>), dativus (object van <em>ἐπίστευεν</em>, dat 'vertrouwen op' + dativus betekent, in de bijzin).
+      </div>
+    </div>
+
+    <!-- TAB: VRAAGWOORDEN -->
+    <div class="iw-panel hidden" id="iwtab-vraag">
+      <p style="font-size:.88rem;color:var(--cream2);font-style:italic;margin-bottom:12px;">Vraagwoorden en -partikels leiden <strong>indirecte vraagzinnen</strong> in. <strong>Let op: geen vraagteken!</strong></p>
+
+      <p style="font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.05em;color:var(--gold);margin:10px 0 6px;">Ja/nee-vragen (partikel)</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Betekenis</th></tr></thead>
+        <tbody>
+          <tr><td>εἰ</td><td class="meaning">of (in een indirecte vraag) <span class="ambig">⚠ ook conditioneel voegwoord 'als'</span></td></tr>
+        </tbody>
+      </table>
+
+      <p style="font-family:'Cinzel',serif;font-size:.75rem;letter-spacing:.05em;color:var(--gold);margin:14px 0 6px;">Aanvullende vragen (inhoudsvragen)</p>
+      <table class="theory-table">
+        <thead><tr><th>Woord</th><th>Vraagt naar</th><th>Betekenis</th></tr></thead>
+        <tbody>
+          <tr><td>τίς / τί</td><td>persoon / zaak</td><td class="meaning">wie, wat</td></tr>
+          <tr><td>ὅστις / ἥτις / ὅ τι</td><td>persoon / zaak</td><td class="meaning">wie dan ook, wie (algemener) <span class="ambig">⚠ ook onbepaald betr. vnw.</span></td></tr>
+          <tr><td>ποῦ</td><td>plaats</td><td class="meaning">waar</td></tr>
+          <tr><td>πῶς</td><td>wijze</td><td class="meaning">hoe</td></tr>
+          <tr><td>πότε</td><td>tijd</td><td class="meaning">wanneer</td></tr>
+          <tr><td>διὰ τί</td><td>oorzaak</td><td class="meaning">waarom</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="warning-box" style="margin-top:16px;">
+      <strong>⚠ Let op: de lastigste woorden</strong>
+      <em>ὡς</em> en <em>εἰ</em> zijn de gevaarlijkste woorden in de Griekse zinsontleding.
+      <em>ὡς</em> kan temporeel ('toen, terwijl'), causaal ('omdat'), vergelijkend ('zoals') én finaal ('opdat') zijn — kijk altijd naar de context en de modus.
+      <em>εἰ</em> is conditioneel ('als') vóór een hoofdzin, maar 'of' na een werkwoord van (niet-)weten in een indirecte vraag.
+      Let ook op het verschil tussen het <strong>lidwoord</strong> ὁ, ἡ, οἱ, αἱ (géén accent) en het <strong>betrekkelijk voornaamwoord</strong> ὅς, ἥ, οἵ, αἵ (altijd een accent) — ze lijken sterk op elkaar!
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MODULE: WOORDSOORTEN SORTEREN
+══════════════════════════════════════ -->
+<section id="module-sort" class="module">
+  <h2 class="module-title">② Woordsoorten sorteren</h2>
+  <p class="intro-text">Klik op een woord en dan op de juiste categorie om het te sorteren. Of sleep het woord naar de categorie.</p>
+
+  <div class="word-types-legend">
+    <span class="type-chip type-nevensch">Nevenschikkend vw.</span>
+    <span class="type-chip type-ondersch">Onderschikkend vw.</span>
+    <span class="type-chip type-betr-vnw">Betrekkelijk vnw.</span>
+    <span class="type-chip type-vragend">Vragende/indirecte deeltjes</span>
+  </div>
+
+  <div id="sort-bank" class="sort-bank"></div>
+
+  <div class="sort-area" id="sort-area">
+    <div>
+      <span class="drop-zone-label">Nevenschikkend voegwoord</span>
+      <div class="drop-zone type-nevensch" id="zone-nevensch" onclick="dropToZone('nevensch')"></div>
+    </div>
+    <div>
+      <span class="drop-zone-label">Onderschikkend voegwoord</span>
+      <div class="drop-zone type-ondersch" id="zone-ondersch" onclick="dropToZone('ondersch')"></div>
+    </div>
+    <div>
+      <span class="drop-zone-label">Betrekkelijk voornaamwoord</span>
+      <div class="drop-zone type-betr-vnw" id="zone-betr-vnw" onclick="dropToZone('betr-vnw')"></div>
+    </div>
+    <div>
+      <span class="drop-zone-label">Vragend / indirect deeltje</span>
+      <div class="drop-zone type-vragend" id="zone-vragend" onclick="dropToZone('vragend')"></div>
+    </div>
+  </div>
+
+  <div class="flex-row">
+    <button class="btn btn-gold" onclick="checkSort()">Controleer</button>
+    <button class="btn btn-outline" onclick="resetSort()">Opnieuw</button>
+    <button class="btn btn-outline btn-sm" onclick="shuffleSort()">Nieuwe woorden</button>
+  </div>
+  <div id="sort-result" class="sort-result mt-12"></div>
+
+  <div class="panel mt-18" id="sort-feedback" style="display:none">
+    <h3>Uitleg</h3>
+    <div id="sort-feedback-text"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MODULE: ZINSONTLEDING
+══════════════════════════════════════ -->
+<section id="module-analysis" class="module">
+  <h2 class="module-title">③ Zinsontleding</h2>
+  <p class="intro-text">Markeer de woorden die bij de <span style="color:#e08080">hoofdzin</span>, de <span style="color:#8abcde">bijzin</span> of het <span style="color:#c09ade">inleidende woord</span> horen. Geef daarna aan wat voor soort bijzin het is.</p>
+
+  <div class="niveau-filter">
+    <span class="niveau-label">Niveau:</span>
+    <button class="btn btn-outline btn-sm niveau-btn-analysis active" onclick="setNiveau(0,'analysis')">Alle</button>
+    <button class="btn btn-outline btn-sm niveau-btn-analysis" onclick="setNiveau(1,'analysis')">★☆☆ Makkelijk</button>
+    <button class="btn btn-outline btn-sm niveau-btn-analysis" onclick="setNiveau(2,'analysis')">★★☆ Gemiddeld</button>
+    <button class="btn btn-outline btn-sm niveau-btn-analysis" onclick="setNiveau(3,'analysis')">★★★ Moeilijk</button>
+  </div>
+
+  <div class="analysis-legend">
+    <span class="legend-item"><span class="legend-dot" style="background:#e08080"></span> Hoofdzin</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#8abcde"></span> Bijzin</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#c09ade"></span> Inleidend woord</span>
+  </div>
+
+  <div class="sentence-nav">
+    <button class="btn btn-outline btn-sm" onclick="prevSentence('analysis')">← Vorige</button>
+    <span class="sentence-counter" id="analysis-counter">Zin 1 van 20</span>
+    <button class="btn btn-outline btn-sm" onclick="nextSentence('analysis')">Volgende →</button>
+    <span id="analysis-niveau" style="font-family:'Cinzel',serif;font-size:.85rem;color:var(--gold);margin-left:8px;"></span>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="analysis-progress" style="width:4%"></div>
+  </div>
+
+  <div id="analysis-sentence" class="sentence-display"></div>
+
+  <div class="mark-controls">
+    <span style="font-family:'Cinzel',serif;font-size:.78rem;color:var(--muted);letter-spacing:.05em">Markeer als:</span>
+    <button class="mark-btn mark-main active" id="btn-mark-main" onclick="setMarkMode('main')">Hoofdzin</button>
+    <button class="mark-btn mark-sub" id="btn-mark-sub" onclick="setMarkMode('sub')">Bijzin</button>
+    <button class="mark-btn mark-connect" id="btn-mark-connect" onclick="setMarkMode('connect')">Inleidend woord</button>
+    <button class="btn btn-outline btn-sm" onclick="clearMarks()">Wis markeringen</button>
+  </div>
+
+  <div class="flex-row mt-12">
+    <label style="font-family:'Cinzel',serif;font-size:.78rem;color:var(--cream2);letter-spacing:.05em">Soort bijzin:</label>
+    <select class="sub-type-select" id="sub-type-select">
+      <option value="">— kies —</option>
+      <option value="bijwoordelijk">Bijwoordelijke bijzin</option>
+      <option value="betrekkelijk">Betrekkelijke bijzin</option>
+      <option value="indvraag">Indirecte vraagzin</option>
+      <option value="aci">AcI (accusativus cum infinitivo)</option>
+      <option value="genabs">Genitivus absolutus (GenAbs)</option>
+    </select>
+    <button class="btn btn-gold" onclick="checkAnalysis()">Controleer</button>
+  </div>
+
+  <div id="analysis-result" class="mt-12"></div>
+
+  <div class="panel mt-18 hidden" id="analysis-answer">
+    <h3>Uitleg & zinsstructuur</h3>
+    <div class="clause-answer-box" id="analysis-answer-text"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MODULE: ZINSSTRUCTUUR
+══════════════════════════════════════ -->
+<section id="module-structuur" class="module">
+  <h2 class="module-title">④ Zinsstructuur</h2>
+  <p class="intro-text">Geef per woord aan welke kleur het heeft en bouw daarna de zinsstructuur na door zinsdelen naar de juiste rij te slepen.</p>
+
+  <div class="niveau-filter">
+    <span class="niveau-label">Niveau:</span>
+    <button class="btn btn-outline btn-sm niveau-btn-structuur active" onclick="setNiveauStruct(0)">Alle</button>
+    <button class="btn btn-outline btn-sm niveau-btn-structuur" onclick="setNiveauStruct(1)">★☆☆ Makkelijk</button>
+    <button class="btn btn-outline btn-sm niveau-btn-structuur" onclick="setNiveauStruct(2)">★★☆ Gemiddeld</button>
+    <button class="btn btn-outline btn-sm niveau-btn-structuur" onclick="setNiveauStruct(3)">★★★ Moeilijk</button>
+  </div>
+
+  <div class="sentence-nav">
+    <button class="btn btn-outline btn-sm" onclick="prevSentenceStruct()">← Vorige</button>
+    <span class="sentence-counter" id="struct-counter">Zin 1 van 20</span>
+    <button class="btn btn-outline btn-sm" onclick="nextSentenceStruct()">Volgende →</button>
+    <span id="struct-niveau" style="font-family:'Cinzel',serif;font-size:.85rem;color:var(--gold);margin-left:8px;"></span>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="struct-progress" style="width:4%"></div>
+  </div>
+
+  <!-- De volledige Griekse zin bovenaan -->
+  <div id="struct-greek" class="sentence-display" style="margin-bottom:18px;font-size:1.1rem;"></div>
+
+  <!-- STAP 1: kleur toekennen -->
+  <div class="struct-step-panel" id="struct-step1">
+    <div class="struct-step-title">
+      <span class="step-num">Stap 1</span> Geef elk woord de juiste kleur
+    </div>
+    <p style="font-size:.9rem;color:var(--cream2);margin-bottom:14px;">
+      Klik op een kleur, dan op de woorden.
+      <span class="struct-key" style="background:#e8d800;color:#1a1a00;">PV</span> = persoonsvorm &nbsp;
+      <span class="struct-key" style="background:#2ea84a;color:#fff;">ondersch. vw.</span> &nbsp;
+      <span class="struct-key" style="background:#c0392b;color:#fff;">betr. vnw.</span> &nbsp;
+      <span class="struct-key" style="background:#2980b9;color:#fff;">nevensch. vw.</span>
+    </p>
+
+    <div class="color-picker-row">
+      <button class="color-pick-btn cpick-pv active" id="cpick-pv" onclick="setColorMode('pv')">PV</button>
+      <button class="color-pick-btn cpick-ondersch" id="cpick-ondersch" onclick="setColorMode('ondersch')">Ondersch. vw.</button>
+      <button class="color-pick-btn cpick-betr" id="cpick-betr" onclick="setColorMode('betr')">Betr. vnw.</button>
+      <button class="color-pick-btn cpick-nevensch" id="cpick-nevensch" onclick="setColorMode('nevensch')">Nevensch. vw.</button>
+      <button class="color-pick-btn cpick-none" id="cpick-none" onclick="setColorMode('none')">Wis kleur</button>
+    </div>
+
+    <div id="struct-word-tokens" class="struct-token-row"></div>
+
+    <div class="flex-row mt-12">
+      <button class="btn btn-gold" onclick="checkColors()">Controleer kleuren</button>
+      <button class="btn btn-outline btn-sm" onclick="resetColors()">Opnieuw</button>
+    </div>
+    <div id="color-result" class="mt-12"></div>
+  </div>
+
+  <!-- STAP 2: zinsdelen indelen in rijen -->
+  <div class="struct-step-panel" id="struct-step2" style="margin-top:18px;">
+    <div class="struct-step-title">
+      <span class="step-num">Stap 2</span> Bouw de zinsstructuur — sleep de zinsdelen naar de juiste rij
+    </div>
+    <p style="font-size:.9rem;color:var(--cream2);margin-bottom:14px;">
+      De zin is nu opgedeeld in zinsdelen. Maak rijen aan voor hoofd- en bijzinnen (en eventueel AcI of GenAbs) en sleep elk deel naar de juiste rij. Bijzinnen en dergelijke zijn ingesprongen.
+      <br><span style="color:var(--muted);font-size:.85rem;">Let op: voltooi eerst stap 1 (kleuren) — daarna verschijnen de zinsdelen hieronder.</span>
+    </p>
+
+    <!-- Zinsdelen om uit te slepen -->
+    <div class="struct-dragbank-label">Zinsdelen</div>
+    <div id="struct-dragbank" class="struct-dragbank"></div>
+
+    <!-- Rijen bouwen -->
+    <div id="struct-rows-container" class="struct-rows-container"></div>
+
+    <div class="flex-row" style="margin-top:14px;flex-wrap:wrap;gap:10px;">
+      <button class="btn btn-outline btn-sm" onclick="addStructRow('HS',0)">+ Hoofdzin-rij</button>
+      <button class="btn btn-outline btn-sm" onclick="addStructRow('BS',1)">+ Bijzin-rij (niveau 1)</button>
+      <button class="btn btn-outline btn-sm" onclick="addStructRow('BS',2)">+ Bijzin in bijzin (niveau 2)</button>
+      <button class="btn btn-outline btn-sm" onclick="addStructRow('BS',3)">+ Bijzin in bijzin in bijzin (niveau 3)</button>
+      <button class="btn btn-outline btn-sm" onclick="addStructRow('AcI',1)">+ AcI-rij</button>
+      <button class="btn btn-outline btn-sm" onclick="addStructRow('GenAbs',1)">+ GenAbs-rij</button>
+      <button class="btn btn-gold" onclick="checkStructure()">Controleer structuur</button>
+      <button class="btn btn-outline btn-sm" onclick="resetStructure()">Opnieuw</button>
+    </div>
+    <div id="struct-result" class="mt-12"></div>
+  </div>
+
+  <!-- Antwoord / modelstructuur -->
+  <div class="panel mt-18 hidden" id="struct-answer">
+    <h3>Modelstructuur</h3>
+    <div id="struct-answer-text"></div>
+  </div>
+
+</section>
+
+
+<section id="module-translation" class="module">
+  <h2 class="module-title">④ Vertaaloefening</h2>
+  <p class="intro-text">Hieronder zie je de Griekse zin met de verbindingswoorden weggelaten. Vul de zin aan en maak een vertaling. Gebruik zo nodig de woordenbank. Daarna kun je AI-feedback vragen of de modelvertaling bekijken.</p>
+
+  <div class="api-key-section">
+    <label>Gemini API-sleutel (voor AI-feedback)</label>
+    <input type="password" id="api-key-input" placeholder="Plak hier je Gemini API-sleutel...">
+  </div>
+
+  <div class="niveau-filter">
+    <span class="niveau-label">Niveau:</span>
+    <button class="btn btn-outline btn-sm niveau-btn-translation active" onclick="setNiveau(0,'translation')">Alle</button>
+    <button class="btn btn-outline btn-sm niveau-btn-translation" onclick="setNiveau(1,'translation')">★☆☆ Makkelijk</button>
+    <button class="btn btn-outline btn-sm niveau-btn-translation" onclick="setNiveau(2,'translation')">★★☆ Gemiddeld</button>
+    <button class="btn btn-outline btn-sm niveau-btn-translation" onclick="setNiveau(3,'translation')">★★★ Moeilijk</button>
+  </div>
+
+  <div class="sentence-nav">
+    <button class="btn btn-outline btn-sm" onclick="prevSentence('translation')">← Vorige</button>
+    <span class="sentence-counter" id="translation-counter">Zin 1 van 20</span>
+    <button class="btn btn-outline btn-sm" onclick="nextSentence('translation')">Volgende →</button>
+    <span id="translation-niveau" style="font-family:'Cinzel',serif;font-size:.85rem;color:var(--gold);margin-left:8px;"></span>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="translation-progress" style="width:4%"></div>
+  </div>
+
+  <div id="translation-sentence" class="translation-sentence"></div>
+
+  <div class="panel">
+    <h3>Woordenbank (alle woorden behalve voegwoorden)</h3>
+    <div id="translation-wordbank" class="word-bank-trans"></div>
+  </div>
+
+  <label style="font-family:'Cinzel',serif;font-size:.78rem;color:var(--cream2);letter-spacing:.05em;display:block;margin:14px 0 8px">Jouw vertaling:</label>
+  <textarea class="translation-input" id="translation-input" placeholder="Schrijf hier je vertaling..."></textarea>
+
+  <div class="flex-row mt-12">
+    <button class="btn btn-gold" onclick="getAiFeedback()">AI-feedback</button>
+    <button class="btn btn-outline" onclick="showModelTranslation()">Toon modelvertaling</button>
+    <button class="btn btn-outline btn-sm" onclick="resetTranslation()">Wis</button>
+  </div>
+
+  <div id="translation-feedback" class="mt-12"></div>
+  <div id="model-translation" class="mt-12 hidden"></div>
+</section>
+
+<!-- ══════════════════════════════════════
+     MODULE: AI-ANALYSE
+══════════════════════════════════════ -->
+<section id="module-ai" class="module">
+  <h2 class="module-title">⑥ AI-analyse van je eigen zin</h2>
+  <p class="intro-text">Voer een samengestelde Griekse zin in. De AI bepaalt de hoofd- en bijzinnen, markeert de persoonsvormen en inleidende woorden, en toont de zin in een ingesprongen structuur. Zo zie je hoe de zin in elkaar zit — maar je vertaalt zelf!</p>
+
+  <div class="api-key-section">
+    <label>Gemini API-sleutel</label>
+    <input type="password" id="ai-api-key-input" placeholder="Plak hier je Gemini API-sleutel...">
+    <div style="font-size:.8rem;color:var(--muted);margin-top:8px;">Je sleutel wordt alleen in je eigen browser gebruikt en niet opgeslagen of gedeeld.</div>
+  </div>
+
+  <label style="font-family:'Cinzel',serif;font-size:.78rem;color:var(--cream2);letter-spacing:.05em;display:block;margin:6px 0 8px">Griekse zin:</label>
+  <textarea class="translation-input" id="ai-sentence-input" placeholder="Bijv.: Ἐπεὶ ὁ στρατηγὸς τοὺς πολεμίους ἐνίκησεν, οἱ πολῖται, οἳ ἐν τῇ πόλει ἔμενον, ἔχαιρον." style="min-height:70px;"></textarea>
+
+  <div class="flex-row mt-12">
+    <button class="btn btn-gold" onclick="analyzeWithAI()">Analyseer zinsstructuur</button>
+    <button class="btn btn-outline btn-sm" onclick="resetAiAnalysis()">Wis</button>
+  </div>
+
+  <div class="ai-legend" id="ai-legend" style="display:none;">
+    <span class="struct-key" style="background:#e8d800;color:#1a1a00;">PV</span>
+    <span class="struct-key" style="background:#2ea84a;color:#fff;">ondersch. vw.</span>
+    <span class="struct-key" style="background:#c0392b;color:#fff;">betr. vnw.</span>
+    <span class="struct-key" style="background:#2980b9;color:#fff;">nevensch. vw.</span>
+    <span class="struct-key" style="background:#8a6e2f;color:#fff;">AcI / GenAbs</span>
+  </div>
+
+  <div id="ai-result" class="mt-12"></div>
+
+  <div class="warning-box" id="ai-disclaimer" style="display:none;margin-top:16px;">
+    <strong>⚠ Let op</strong>
+    De AI helpt je de structuur te zien, maar kan fouten maken bij heel complexe of dubbelzinnige zinnen. Controleer de analyse altijd zelf met de theorie en je woordenboek. De vertaling maak je zelf — alleen de voegwoorden zijn al ingevuld als steun.
+  </div>
+</section>
+
+</main>
+
+<footer>Clausula · © Gerben de Jong · 2026</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════
+   DATA – zinnen database
+   niveau: 1 = makkelijk, 2 = gemiddeld, 3 = moeilijk
+   clauses: array van clausule-objecten voor zinsstructuurweergave
+     elk clausule-object: { label, type ('HS'/'BS'/'BS2' etc.),
+       words: indices, connector: index of null, subtype }
+   52 zinnen: 20 niveau 1, 20 niveau 2, 12 niveau 3 — elk type
+   minstens één keer, niveau 2/3 met combinaties (betr.+bijw.,
+   +AcI, +GenAbs, bijzin-in-bijzin).
+═══════════════════════════════════════════════════════ */
+const SENTENCES = [
+  {
+    id: 1,
+    niveau: 1,
+    greek: "Οἱ στρατιῶται, οἳ ἀνδρείως ἐμάχοντο, ὑπὸ τοῦ στρατηγοῦ ἐπῃνέθησαν.",
+    words: ["Οἱ", "στρατιῶται,", "οἳ", "ἀνδρείως", "ἐμάχοντο,", "ὑπὸ", "τοῦ", "στρατηγοῦ", "ἐπῃνέθησαν."],
+    structure: ["main","main","connect","sub","sub","main","main","main","main"],
+    connector: "οἳ",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin",
+    translation: "De soldaten, die dapper vochten, werden door de generaal geprezen.",
+    vocab: { "στρατιῶται": "soldaten", "ἀνδρείως": "dapper", "ἐμάχοντο": "vochten", "στρατηγοῦ": "generaal", "ἐπῃνέθησαν": "werden geprezen" },
+    missing: ["οἳ"],
+    clauses: [
+      { label: "HS", words: [0,1,5,6,7,8], connector: null },
+      { label: "BS (betr.)", words: [2,3,4], connector: 2 }
+    ],
+    explanation: "<span class='hs'>Οἱ στρατιῶται ... ὑπὸ τοῦ στρατηγοῦ ἐπῃνέθησαν</span> = hoofdzin. <span class='vw'>ὅς ἥ ὅ</span> (hier: <em>οἵ</em>) = betrekkelijk voornaamwoord → <span class='bs'>betrekkelijke bijzin</span>."
+  },
+  {
+    id: 2,
+    niveau: 1,
+    greek: "Ὁ παῖς εἰς τὸν ἀγρὸν ἔδραμεν, ὅτι τὸν διδάσκαλον ἐφοβεῖτο.",
+    words: ["Ὁ", "παῖς", "εἰς", "τὸν", "ἀγρὸν", "ἔδραμεν,", "ὅτι", "τὸν", "διδάσκαλον", "ἐφοβεῖτο."],
+    structure: ["main","main","main","main","main","main","connect","sub","sub","sub"],
+    connector: "ὅτι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin",
+    translation: "De jongen rende het veld in, omdat hij de leraar vreesde.",
+    vocab: { "παῖς": "jongen", "ἀγρὸν": "veld", "ἔδραμεν": "rende", "διδάσκαλον": "leraar", "ἐφοβεῖτο": "vreesde" },
+    missing: ["ὅτι"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4,5], connector: null },
+      { label: "BS (caus.)", words: [6,7,8,9], connector: 6 }
+    ],
+    explanation: "<span class='hs'>Ὁ παῖς εἰς τὸν ἀγρὸν ἔδραμεν</span> = hoofdzin. <span class='vw'>ὅτι</span> = onderschikkend voegwoord → <span class='bs'>causale bijzin</span>."
+  },
+  {
+    id: 3,
+    niveau: 1,
+    greek: "Ἐπεὶ οἱ πολέμιοι προσῆλθον, οἱ πολῖται τὰς πύλας ἔκλεισαν.",
+    words: ["Ἐπεὶ", "οἱ", "πολέμιοι", "προσῆλθον,", "οἱ", "πολῖται", "τὰς", "πύλας", "ἔκλεισαν."],
+    structure: ["connect","sub","sub","sub","main","main","main","main","main"],
+    connector: "Ἐπεὶ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Toen de vijanden naderden, sloten de burgers de poorten.",
+    vocab: { "πολέμιοι": "vijanden", "προσῆλθον": "naderden", "πολῖται": "burgers", "πύλας": "poorten", "ἔκλεισαν": "sloten" },
+    missing: ["Ἐπεὶ"],
+    clauses: [
+      { label: "BS (temp.)", words: [0,1,2,3], connector: 0 },
+      { label: "HS", words: [4,5,6,7,8], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐπεί</span> + indicativus → <span class='bs'>temporele bijzin</span>. <span class='hs'>οἱ πολῖται τὰς πύλας ἔκλεισαν</span> = hoofdzin."
+  },
+  {
+    id: 4,
+    niveau: 1,
+    greek: "Ὁ στρατηγὸς στρατιώτας ἔπεμψεν, ἵνα τὴν γέφυραν φυλάττωσιν.",
+    words: ["Ὁ", "στρατηγὸς", "στρατιώτας", "ἔπεμψεν,", "ἵνα", "τὴν", "γέφυραν", "φυλάττωσιν."],
+    structure: ["main","main","main","main","connect","sub","sub","sub"],
+    connector: "ἵνα",
+    subtype: "finaal",
+    subtype_label: "Finale bijzin",
+    translation: "De generaal stuurde soldaten, opdat zij de brug zouden bewaken.",
+    vocab: { "στρατηγὸς": "generaal", "στρατιώτας": "soldaten", "ἔπεμψεν": "stuurde", "γέφυραν": "brug", "φυλάττωσιν": "zouden bewaken" },
+    missing: ["ἵνα"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3], connector: null },
+      { label: "BS (fin.)", words: [4,5,6,7], connector: 4 }
+    ],
+    explanation: "<span class='hs'>Ὁ στρατηγὸς στρατιώτας ἔπεμψεν</span> = hoofdzin. <span class='vw'>ἵνα</span> + conjunctivus → <span class='bs'>finale bijzin</span> (doel)."
+  },
+  {
+    id: 5,
+    niveau: 1,
+    greek: "Ὁ στρατηγὸς οὕτως ἀνδρεῖος ἦν, ὥστε πάντες αὐτὸν ἐθαύμαζον.",
+    words: ["Ὁ", "στρατηγὸς", "οὕτως", "ἀνδρεῖος", "ἦν,", "ὥστε", "πάντες", "αὐτὸν", "ἐθαύμαζον."],
+    structure: ["main","main","main","main","main","connect","sub","sub","sub"],
+    connector: "ὥστε",
+    subtype: "consecutief",
+    subtype_label: "Consecutieve bijzin",
+    translation: "De generaal was zo dapper, dat iedereen hem bewonderde.",
+    vocab: { "στρατηγὸς": "generaal", "οὕτως": "zo", "ἀνδρεῖος": "dapper", "πάντες": "iedereen", "αὐτὸν": "hem", "ἐθαύμαζον": "bewonderde(n)" },
+    missing: ["ὥστε"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS (gev.)", words: [5,6,7,8], connector: 5 }
+    ],
+    explanation: "<span class='hs'>Ὁ στρατηγὸς οὕτως ἀνδρεῖος ἦν</span> = hoofdzin met <em>οὕτως</em> ('zo'). <span class='vw'>ὥστε</span> + indicativus → <span class='bs'>consecutieve bijzin</span> (gevolg)."
+  },
+  {
+    id: 6,
+    niveau: 1,
+    greek: "Καίτοι ὁ δεσπότης ὠργίζετο, ὁ δοῦλος οὐκ ἐφοβεῖτο.",
+    words: ["Καίτοι", "ὁ", "δεσπότης", "ὠργίζετο,", "ὁ", "δοῦλος", "οὐκ", "ἐφοβεῖτο."],
+    structure: ["connect","sub","sub","sub","main","main","main","main"],
+    connector: "Καίτοι",
+    subtype: "concessief",
+    subtype_label: "Concessieve bijzin",
+    translation: "Hoewel de heer boos was, was de slaaf niet bang.",
+    vocab: { "δεσπότης": "heer", "ὠργίζετο": "was boos", "δοῦλος": "slaaf", "ἐφοβεῖτο": "was bang" },
+    missing: ["Καίτοι"],
+    clauses: [
+      { label: "BS (conc.)", words: [0,1,2,3], connector: 0 },
+      { label: "HS", words: [4,5,6,7], connector: null }
+    ],
+    explanation: "<span class='vw'>καίτοι</span> + indicativus → <span class='bs'>concessieve bijzin</span> ('hoewel'). <span class='hs'>ὁ δοῦλος οὐκ ἐφοβεῖτο</span> = hoofdzin."
+  },
+  {
+    id: 7,
+    niveau: 1,
+    greek: "Ἐὰν οἱ πολέμιοι ἔλθωσιν, πάντες φεύξονται.",
+    words: ["Ἐὰν", "οἱ", "πολέμιοι", "ἔλθωσιν,", "πάντες", "φεύξονται."],
+    structure: ["connect","sub","sub","sub","main","main"],
+    connector: "Ἐὰν",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin",
+    translation: "Als de vijanden komen, zullen allen vluchten.",
+    vocab: { "πολέμιοι": "vijanden", "ἔλθωσιν": "komen", "πάντες": "allen", "φεύξονται": "zullen vluchten" },
+    missing: ["Ἐὰν"],
+    clauses: [
+      { label: "BS (cond.)", words: [0,1,2,3], connector: 0 },
+      { label: "HS", words: [4,5], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐάν</span> + conjunctivus → <span class='bs'>conditionele bijzin</span> (algemene/toekomstige voorwaarde). <span class='hs'>πάντες φεύξονται</span> = hoofdzin."
+  },
+  {
+    id: 8,
+    niveau: 1,
+    greek: "Οὐκ οἶδα εἰ ὁ πατὴρ οἴκαδε ἐπανῆλθεν.",
+    words: ["Οὐκ", "οἶδα", "εἰ", "ὁ", "πατὴρ", "οἴκαδε", "ἐπανῆλθεν."],
+    structure: ["main","main","connect","sub","sub","sub","sub"],
+    connector: "εἰ",
+    subtype: "indirecte vraag",
+    subtype_label: "Indirecte vraagzin",
+    translation: "Ik weet niet of mijn vader naar huis is teruggekeerd.",
+    vocab: { "πατὴρ": "vader", "οἴκαδε": "naar huis", "ἐπανῆλθεν": "is teruggekeerd" },
+    missing: ["εἰ"],
+    clauses: [
+      { label: "HS", words: [0,1], connector: null },
+      { label: "BS (ind.vr.)", words: [2,3,4,5,6], connector: 2 }
+    ],
+    explanation: "<span class='hs'>Οὐκ οἶδα</span> = hoofdzin. <span class='vw'>εἰ</span> = vraagpartikel → <span class='bs'>indirecte vraagzin</span> ('of'). Let op: geen vraagteken!"
+  },
+  {
+    id: 9,
+    niveau: 1,
+    greek: "Νομίζω τὸν παῖδα ἁμαρτάνειν.",
+    words: ["Νομίζω", "τὸν", "παῖδα", "ἁμαρτάνειν."],
+    structure: ["main","sub","sub","sub"],
+    connector: null,
+    subtype: "aci",
+    subtype_label: "AcI",
+    translation: "Ik denk dat de jongen een fout maakt.",
+    vocab: { "Νομίζω": "ik denk", "παῖδα": "jongen", "ἁμαρτάνειν": "dwaalt, vergist zich" },
+    missing: [],
+    clauses: [
+      { label: "HS", words: [0], connector: null },
+      { label: "AcI", words: [1,2,3], connector: null }
+    ],
+    explanation: "<span class='hs'>Νομίζω</span> = hoofdzin (werkwoord van denken). <span class='bs'>τὸν παῖδα ἁμαρτάνειν</span> = AcI (accusativus cum infinitivo): <em>παῖδα</em> wordt het onderwerp van de Nederlandse bijzin, <em>ἁμαρτάνειν</em> de persoonsvorm — 'dat de jongen dwaalt'."
+  },
+  {
+    id: 10,
+    niveau: 1,
+    greek: "Τῆς πόλεως ἁλούσης, οἱ πολέμιοι τὰ ἱερὰ κατέκαυσαν.",
+    words: ["Τῆς", "πόλεως", "ἁλούσης,", "οἱ", "πολέμιοι", "τὰ", "ἱερὰ", "κατέκαυσαν."],
+    structure: ["sub","sub","sub","main","main","main","main","main"],
+    connector: null,
+    subtype: "genabs",
+    subtype_label: "Genitivus absolutus",
+    translation: "Nadat de stad veroverd was, staken de vijanden de tempels in brand.",
+    vocab: { "πόλεως": "stad", "ἁλούσης": "veroverd (was)", "πολέμιοι": "vijanden", "ἱερὰ": "tempels", "κατέκαυσαν": "staken in brand" },
+    missing: [],
+    clauses: [
+      { label: "GenAbs", words: [0,1,2], connector: null },
+      { label: "HS", words: [3,4,5,6,7], connector: null }
+    ],
+    explanation: "<span class='bs'>Τῆς πόλεως ἁλούσης</span> = genitivus absolutus (geen echte bijzin: naamwoord + participium in de genitivus), hier temporeel te vertalen: 'nadat de stad veroverd was'. <span class='hs'>οἱ πολέμιοι τὰ ἱερὰ κατέκαυσαν</span> = hoofdzin."
+  },
+  {
+    id: 11,
+    niveau: 1,
+    greek: "Ὁ διδάσκαλος τὸν παῖδα ἐπαίδευσεν, ὃν πάντες ἐφίλουν.",
+    words: ["Ὁ", "διδάσκαλος", "τὸν", "παῖδα", "ἐπαίδευσεν,", "ὃν", "πάντες", "ἐφίλουν."],
+    structure: ["main","main","main","main","main","connect","sub","sub"],
+    connector: "ὃν",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin",
+    translation: "De leraar onderwees de jongen, die iedereen liefhad.",
+    vocab: { "διδάσκαλος": "leraar", "παῖδα": "jongen", "ἐπαίδευσεν": "onderwees", "πάντες": "iedereen", "ἐφίλουν": "had(den) lief" },
+    missing: ["ὃν"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS (betr.)", words: [5,6,7], connector: 5 }
+    ],
+    explanation: "<span class='hs'>Ὁ διδάσκαλος τὸν παῖδα ἐπαίδευσεν</span> = hoofdzin. <span class='vw'>ὅς ἥ ὅ</span> (hier: <em>ὅν</em>, accusativus) → <span class='bs'>betrekkelijke bijzin</span> bij <em>παῖδα</em>."
+  },
+  {
+    id: 12,
+    niveau: 1,
+    greek: "Ὁ δεσπότης τὸν δοῦλον ἐκόλασεν, οὗ ὁ πατὴρ ἐλεύθερος ἦν.",
+    words: ["Ὁ", "δεσπότης", "τὸν", "δοῦλον", "ἐκόλασεν,", "οὗ", "ὁ", "πατὴρ", "ἐλεύθερος", "ἦν."],
+    structure: ["main","main","main","main","main","connect","sub","sub","sub","sub"],
+    connector: "οὗ",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin",
+    translation: "De heer strafte de slaaf, wiens vader vrij was.",
+    vocab: { "δεσπότης": "heer", "δοῦλον": "slaaf", "ἐκόλασεν": "strafte", "πατὴρ": "vader", "ἐλεύθερος": "vrij", "ἦν": "was" },
+    missing: ["οὗ"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS (betr.)", words: [5,6,7,8,9], connector: 5 }
+    ],
+    explanation: "<span class='hs'>Ὁ δεσπότης τὸν δοῦλον ἐκόλασεν</span> = hoofdzin. <span class='vw'>ὅς ἥ ὅ</span> (hier: <em>οὗ</em>, genitivus) → <span class='bs'>betrekkelijke bijzin</span>: 'wiens vader'."
+  },
+  {
+    id: 13,
+    niveau: 1,
+    greek: "Ὁ δεσπότης τὸν δοῦλον ἐπῄνει, ἕως καλῶς ἠργάζετο.",
+    words: ["Ὁ", "δεσπότης", "τὸν", "δοῦλον", "ἐπῄνει,", "ἕως", "καλῶς", "ἠργάζετο."],
+    structure: ["main","main","main","main","main","connect","sub","sub"],
+    connector: "ἕως",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "De heer prees de slaaf, zolang hij goed werkte.",
+    vocab: { "δεσπότης": "heer", "δοῦλον": "slaaf", "ἐπῄνει": "prees", "καλῶς": "goed", "ἠργάζετο": "werkte" },
+    missing: ["ἕως"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS (temp.)", words: [5,6,7], connector: 5 }
+    ],
+    explanation: "<span class='hs'>Ὁ δεσπότης τὸν δοῦλον ἐπῄνει</span> = hoofdzin. <span class='vw'>ἕως</span> + indicativus → <span class='bs'>temporele bijzin</span> ('zolang als')."
+  },
+  {
+    id: 14,
+    niveau: 1,
+    greek: "Χαίρω, ἐπειδὴ ὁ δοῦλος τοῦ ἔργου ἐπαύσατο.",
+    words: ["Χαίρω,", "ἐπειδὴ", "ὁ", "δοῦλος", "τοῦ", "ἔργου", "ἐπαύσατο."],
+    structure: ["main","connect","sub","sub","sub","sub","sub"],
+    connector: "ἐπειδὴ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin",
+    translation: "Ik ben blij, omdat/nadat de slaaf gestopt is met werken.",
+    vocab: { "δοῦλος": "slaaf", "ἔργου": "werk", "ἐπαύσατο": "stopte (met)" },
+    missing: ["ἐπειδὴ"],
+    clauses: [
+      { label: "HS", words: [0], connector: null },
+      { label: "BS (temp.)", words: [1,2,3,4,5,6], connector: 1 }
+    ],
+    explanation: "<span class='hs'>Χαίρω</span> = hoofdzin. <span class='vw'>ἐπειδή</span> + indicativus → <span class='bs'>temporele bijzin</span> (kan ook causaal zijn: 'omdat')."
+  },
+  {
+    id: 15,
+    niveau: 1,
+    greek: "Οἱ πολῖται ἄγγελον ἔπεμψαν, ὅπως τῷ βασιλεῖ τὴν ἀγγελίαν φέρῃ.",
+    words: ["Οἱ", "πολῖται", "ἄγγελον", "ἔπεμψαν,", "ὅπως", "τῷ", "βασιλεῖ", "τὴν", "ἀγγελίαν", "φέρῃ."],
+    structure: ["main","main","main","main","connect","sub","sub","sub","sub","sub"],
+    connector: "ὅπως",
+    subtype: "finaal",
+    subtype_label: "Finale bijzin",
+    translation: "De burgers stuurden een boodschapper, opdat hij de boodschap naar de koning zou brengen.",
+    vocab: { "πολῖται": "burgers", "ἄγγελον": "boodschapper", "ἔπεμψαν": "stuurden", "βασιλεῖ": "koning", "ἀγγελίαν": "boodschap", "φέρῃ": "zou brengen" },
+    missing: ["ὅπως"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3], connector: null },
+      { label: "BS (fin.)", words: [4,5,6,7,8,9], connector: 4 }
+    ],
+    explanation: "<span class='hs'>Οἱ πολῖται ἄγγελον ἔπεμψαν</span> = hoofdzin. <span class='vw'>ὅπως</span> + conjunctivus → <span class='bs'>finale bijzin</span> (net als <em>ἵνα</em>)."
+  },
+  {
+    id: 16,
+    niveau: 1,
+    greek: "Εἰ ὁ διδάσκαλος πάρεστιν, οἱ παῖδες σιωπῶσιν.",
+    words: ["Εἰ", "ὁ", "διδάσκαλος", "πάρεστιν,", "οἱ", "παῖδες", "σιωπῶσιν."],
+    structure: ["connect","sub","sub","sub","main","main","main"],
+    connector: "Εἰ",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin",
+    translation: "Als de leraar aanwezig is, zwijgen de kinderen.",
+    vocab: { "διδάσκαλος": "leraar", "πάρεστιν": "is aanwezig", "παῖδες": "kinderen", "σιωπῶσιν": "zwijgen" },
+    missing: ["Εἰ"],
+    clauses: [
+      { label: "BS (cond.)", words: [0,1,2,3], connector: 0 },
+      { label: "HS", words: [4,5,6], connector: null }
+    ],
+    explanation: "<span class='vw'>εἰ</span> + indicativus → <span class='bs'>conditionele bijzin</span> (reële voorwaarde). <span class='hs'>οἱ παῖδες σιωπῶσιν</span> = hoofdzin."
+  },
+  {
+    id: 17,
+    niveau: 1,
+    greek: "Ὁ στρατιώτης, ὃς τὸ τεῖχος ἐφύλαττεν, ὑπὸ πάντων ἐτιμήθη, ὅτι ἀνδρεῖος ἦν.",
+    words: ["Ὁ", "στρατιώτης,", "ὃς", "τὸ", "τεῖχος", "ἐφύλαττεν,", "ὑπὸ", "πάντων", "ἐτιμήθη,", "ὅτι", "ἀνδρεῖος", "ἦν."],
+    structure: ["main","main","connect","sub","sub","sub","main","main","main","connect2","sub2","sub2"],
+    connector: "ὃς",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + causale bijzin",
+    translation: "De soldaat, die de muur bewaakte, werd door iedereen geëerd, omdat hij dapper was.",
+    vocab: { "στρατιώτης": "soldaat", "τεῖχος": "muur", "ἐφύλαττεν": "bewaakte", "πάντων": "iedereen", "ἐτιμήθη": "werd geëerd", "ἀνδρεῖος": "dapper", "ἦν": "was" },
+    missing: ["ὃς", "ὅτι"],
+    clauses: [
+      { label: "HS", words: [0,1,6,7,8], connector: null },
+      { label: "BS1 (betr.)", words: [2,3,4,5], connector: 2 },
+      { label: "BS2 (caus.)", words: [9,10,11], connector: 9 }
+    ],
+    explanation: "<span class='hs'>Ὁ στρατιώτης ... ὑπὸ πάντων ἐτιμήθη</span> = hoofdzin. <span class='vw'>ὅς</span> → <span class='bs'>betrekkelijke bijzin</span> bij <em>στρατιώτης</em>. <span class='vw'>ὅτι</span> → tweede <span class='bs'>causale bijzin</span>. Let op: twee bijzinnen bij één hoofdzin!"
+  },
+  {
+    id: 18,
+    niveau: 1,
+    greek: "Ὁ ἄγγελος ἔφη τοὺς πολεμίους προσιέναι.",
+    words: ["Ὁ", "ἄγγελος", "ἔφη", "τοὺς", "πολεμίους", "προσιέναι."],
+    structure: ["main","main","main","sub","sub","sub"],
+    connector: null,
+    subtype: "aci",
+    subtype_label: "AcI",
+    translation: "De boodschapper zei dat de vijanden naderden.",
+    vocab: { "ἄγγελος": "boodschapper", "ἔφη": "zei", "πολεμίους": "vijanden", "προσιέναι": "naderen" },
+    missing: [],
+    clauses: [
+      { label: "HS", words: [0,1,2], connector: null },
+      { label: "AcI", words: [3,4,5], connector: null }
+    ],
+    explanation: "<span class='hs'>Ὁ ἄγγελος ἔφη</span> = hoofdzin (werkwoord van zeggen). <span class='bs'>τοὺς πολεμίους προσιέναι</span> = AcI: <em>πολεμίους</em> wordt onderwerp van de Nederlandse bijzin, <em>προσιέναι</em> de persoonsvorm — 'dat de vijanden naderden'."
+  },
+  {
+    id: 19,
+    niveau: 1,
+    greek: "Ὁ στρατηγὸς ἠρώτησε τίνες τὴν γέφυραν φυλάττουσιν.",
+    words: ["Ὁ", "στρατηγὸς", "ἠρώτησε", "τίνες", "τὴν", "γέφυραν", "φυλάττουσιν."],
+    structure: ["main","main","main","connect","sub","sub","sub"],
+    connector: "τίνες",
+    subtype: "indirecte vraag",
+    subtype_label: "Indirecte vraagzin",
+    translation: "De generaal vroeg wie de brug bewaakten.",
+    vocab: { "στρατηγὸς": "generaal", "ἠρώτησε": "vroeg", "γέφυραν": "brug", "φυλάττουσιν": "bewaken" },
+    missing: ["τίνες"],
+    clauses: [
+      { label: "HS", words: [0,1,2], connector: null },
+      { label: "BS (ind.vr.)", words: [3,4,5,6], connector: 3 }
+    ],
+    explanation: "<span class='hs'>Ὁ στρατηγὸς ἠρώτησε</span> = hoofdzin. <span class='vw'>τίνες</span> = vraagwoord ('wie', mv.) → <span class='bs'>indirecte vraagzin</span>. Let op: geen vraagteken!"
+  },
+  {
+    id: 20,
+    niveau: 1,
+    greek: "Ὁ στρατιώτης τῷ φίλῳ τὸ ξίφος ἔδωκεν, ᾧ μάλιστα ἐπίστευεν.",
+    words: ["Ὁ", "στρατιώτης", "τῷ", "φίλῳ", "τὸ", "ξίφος", "ἔδωκεν,", "ᾧ", "μάλιστα", "ἐπίστευεν."],
+    structure: ["main","main","main","main","main","main","main","connect","sub","sub"],
+    connector: "ᾧ",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin",
+    translation: "De soldaat gaf het zwaard aan de vriend, die hij het meest vertrouwde.",
+    vocab: { "στρατιώτης": "soldaat", "φίλῳ": "vriend", "ξίφος": "zwaard", "ἔδωκεν": "gaf", "μάλιστα": "het meest", "ἐπίστευεν": "vertrouwde" },
+    missing: ["ᾧ"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4,5,6], connector: null },
+      { label: "BS (betr.)", words: [7,8,9], connector: 7 }
+    ],
+    explanation: "<span class='hs'>Ὁ στρατιώτης τῷ φίλῳ τὸ ξίφος ἔδωκεν</span> = hoofdzin. <span class='vw'>ὅς ἥ ὅ</span> (hier: <em>ᾧ</em>, dativus) → <span class='bs'>betrekkelijke bijzin</span>: 'aan wie'."
+  },
+  // ── NIVEAU 2 ──────────────────────────────────────────
+  {
+    id: 21,
+    niveau: 2,
+    greek: "Ὁ φιλόσοφος, ὃν οἱ νέοι ἐθαύμαζον, ἐδίδασκεν, ὅτι τὴν ἀλήθειαν ἐζήτει.",
+    words: ["Ὁ", "φιλόσοφος,", "ὃν", "οἱ", "νέοι", "ἐθαύμαζον,", "ἐδίδασκεν,", "ὅτι", "τὴν", "ἀλήθειαν", "ἐζήτει."],
+    structure: ["main","main","connect","sub","sub","sub","main","connect2","sub2","sub2","sub2"],
+    connector: "ὃν",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + causale bijzin",
+    translation: "De filosoof, die de jongeren bewonderden, gaf les, omdat hij de waarheid zocht.",
+    vocab: { "φιλόσοφος": "filosoof", "νέοι": "jongeren", "ἐθαύμαζον": "bewonderden", "ἐδίδασκεν": "gaf les", "ἀλήθειαν": "waarheid", "ἐζήτει": "zocht" },
+    missing: ["ὃν", "ὅτι"],
+    clauses: [
+      { label: "HS", words: [0,1,6], connector: null },
+      { label: "BS1 (betr.)", words: [2,3,4,5], connector: 2 },
+      { label: "BS2 (caus.)", words: [7,8,9,10], connector: 7 }
+    ],
+    explanation: "<span class='hs'>Ὁ φιλόσοφος ... ἐδίδασκεν</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>ὅν</em>) → <span class='bs'>betrekkelijke bijzin</span>. <span class='vw'>ὅτι</span> → tweede <span class='bs'>causale bijzin</span>."
+  },
+  {
+    id: 22,
+    niveau: 2,
+    greek: "Ὁ στρατηγός, ὃς τὴν πόλιν ἔσωσεν, ἐπειδὴ οἱ πολέμιοι ἀπῆλθον, εἰς οἶκον ἐπανῆλθεν.",
+    words: ["Ὁ", "στρατηγός,", "ὃς", "τὴν", "πόλιν", "ἔσωσεν,", "ἐπειδὴ", "οἱ", "πολέμιοι", "ἀπῆλθον,", "εἰς", "οἶκον", "ἐπανῆλθεν."],
+    structure: ["main","main","connect","sub","sub","sub","connect2","sub2","sub2","sub2","main","main","main"],
+    connector: "ὃς",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + temporele bijzin",
+    translation: "De generaal, die de stad had gered, keerde naar huis terug, nadat de vijanden waren vertrokken.",
+    vocab: { "στρατηγός": "generaal", "πόλιν": "stad", "ἔσωσεν": "had gered", "πολέμιοι": "vijanden", "ἀπῆλθον": "waren vertrokken", "οἶκον": "huis", "ἐπανῆλθεν": "keerde terug" },
+    missing: ["ὃς", "ἐπειδὴ"],
+    clauses: [
+      { label: "HS", words: [0,1,10,11,12], connector: null },
+      { label: "BS1 (betr.)", words: [2,3,4,5], connector: 2 },
+      { label: "BS2 (temp.)", words: [6,7,8,9], connector: 6 }
+    ],
+    explanation: "<span class='hs'>Ὁ στρατηγός ... εἰς οἶκον ἐπανῆλθεν</span> = hoofdzin. <span class='vw'>ὅς</span> → <span class='bs'>betrekkelijke bijzin</span>. <span class='vw'>ἐπειδή</span> → tweede <span class='bs'>temporele bijzin</span>."
+  },
+  {
+    id: 23,
+    niveau: 2,
+    greek: "Νομίζω τὸν στρατηγόν, ὃς τὴν πόλιν ἔσωσεν, ἄξιον εἶναι τιμῆς.",
+    words: ["Νομίζω", "τὸν", "στρατηγόν,", "ὃς", "τὴν", "πόλιν", "ἔσωσεν,", "ἄξιον", "εἶναι", "τιμῆς."],
+    structure: ["main","sub","sub","connect","sub","sub","sub","sub","sub","sub"],
+    connector: "ὃς",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + AcI",
+    translation: "Ik denk dat de generaal, die de stad heeft gered, het waard is geëerd te worden.",
+    vocab: { "Νομίζω": "ik denk", "στρατηγόν": "generaal", "πόλιν": "stad", "ἔσωσεν": "heeft gered", "ἄξιον": "waardig", "τιμῆς": "van eer" },
+    missing: ["ὃς"],
+    clauses: [
+      { label: "HS", words: [0], connector: null },
+      { label: "AcI", words: [1,2,7,8,9], connector: null },
+      { label: "BS (betr.)", words: [3,4,5,6], connector: 3 }
+    ],
+    explanation: "<span class='hs'>Νομίζω</span> = hoofdzin. <span class='bs'>τὸν στρατηγόν ... ἄξιον εἶναι τιμῆς</span> = AcI. Daarbinnen: <span class='vw'>ὅς</span> → genest <span class='bs'>betrekkelijke bijzin</span> bij <em>στρατηγόν</em>."
+  },
+  {
+    id: 24,
+    niveau: 2,
+    greek: "Ἐπεὶ ὁ ἄγγελος ἀφίκετο, οἱ πολῖται ἐνόμιζον τὴν πόλιν σῴζεσθαι.",
+    words: ["Ἐπεὶ", "ὁ", "ἄγγελος", "ἀφίκετο,", "οἱ", "πολῖται", "ἐνόμιζον", "τὴν", "πόλιν", "σῴζεσθαι."],
+    structure: ["connect","sub","sub","sub","main","main","main","sub","sub","sub"],
+    connector: "Ἐπεὶ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + AcI",
+    translation: "Toen de boodschapper aankwam, dachten de burgers dat de stad gered werd.",
+    vocab: { "ἄγγελος": "boodschapper", "ἀφίκετο": "kwam aan", "πολῖται": "burgers", "ἐνόμιζον": "dachten", "πόλιν": "stad", "σῴζεσθαι": "gered werd" },
+    missing: ["Ἐπεὶ"],
+    clauses: [
+      { label: "BS (temp.)", words: [0,1,2,3], connector: 0 },
+      { label: "HS", words: [4,5,6], connector: null },
+      { label: "AcI", words: [7,8,9], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐπεί</span> → <span class='bs'>temporele bijzin</span>. <span class='hs'>οἱ πολῖται ἐνόμιζον</span> = hoofdzin met <span class='bs'>AcI</span> (τὴν πόλιν σῴζεσθαι)."
+  },
+  {
+    id: 25,
+    niveau: 2,
+    greek: "Ὅτι ὁ διδάσκαλος ἄδικος ἦν, οἱ μαθηταὶ αὐτὸν ἐνόμιζον κακὸν εἶναι.",
+    words: ["Ὅτι", "ὁ", "διδάσκαλος", "ἄδικος", "ἦν,", "οἱ", "μαθηταὶ", "αὐτὸν", "ἐνόμιζον", "κακὸν", "εἶναι."],
+    structure: ["connect","sub","sub","sub","sub","main","main","sub","main","sub","sub"],
+    connector: "Ὅτι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin + AcI",
+    translation: "Omdat de leraar onrechtvaardig was, dachten de leerlingen dat hij slecht was.",
+    vocab: { "διδάσκαλος": "leraar", "ἄδικος": "onrechtvaardig", "μαθηταὶ": "leerlingen", "ἐνόμιζον": "dachten", "κακὸν": "slecht" },
+    missing: ["Ὅτι"],
+    clauses: [
+      { label: "BS (caus.)", words: [0,1,2,3,4], connector: 0 },
+      { label: "HS", words: [5,6,8], connector: null },
+      { label: "AcI", words: [7,9,10], connector: null }
+    ],
+    explanation: "<span class='vw'>ὅτι</span> → <span class='bs'>causale bijzin</span>. <span class='hs'>οἱ μαθηταὶ ... ἐνόμιζον</span> = hoofdzin met <span class='bs'>AcI</span> (αὐτὸν κακὸν εἶναι)."
+  },
+  {
+    id: 26,
+    niveau: 2,
+    greek: "Ὁ βασιλεὺς νόμον ἔγραψεν, ἵνα οἱ πολῖται, οἳ ἄδικοι ἦσαν, κολάζοιντο.",
+    words: ["Ὁ", "βασιλεὺς", "νόμον", "ἔγραψεν,", "ἵνα", "οἱ", "πολῖται,", "οἳ", "ἄδικοι", "ἦσαν,", "κολάζοιντο."],
+    structure: ["main","main","main","main","connect","sub","sub","connect2","sub2","sub2","sub"],
+    connector: "ἵνα",
+    subtype: "finaal",
+    subtype_label: "Finale bijzin + betrekkelijke bijzin",
+    translation: "De koning schreef een wet, opdat de burgers, die onrechtvaardig waren, gestraft zouden worden.",
+    vocab: { "βασιλεὺς": "koning", "νόμον": "wet", "ἔγραψεν": "schreef", "πολῖται": "burgers", "ἄδικοι": "onrechtvaardig", "ἦσαν": "waren", "κολάζοιντο": "zouden gestraft worden" },
+    missing: ["ἵνα", "οἳ"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3], connector: null },
+      { label: "BS1 (fin.)", words: [4,5,6,10], connector: 4 },
+      { label: "BS2 (betr.)", words: [7,8,9], connector: 7 }
+    ],
+    explanation: "<span class='hs'>Ὁ βασιλεὺς νόμον ἔγραψεν</span> = hoofdzin. <span class='vw'>ἵνα</span> → <span class='bs'>finale bijzin</span>, waarin genest: <span class='vw'>ὅς</span> (hier: <em>οἵ</em>) → <span class='bs'>betrekkelijke bijzin</span> bij <em>πολῖται</em>."
+  },
+  {
+    id: 27,
+    niveau: 2,
+    greek: "Τοῦ στρατηγοῦ ἀποθανόντος, οἱ στρατιῶται οὕτως ἐφοβοῦντο, ὥστε ἔφυγον.",
+    words: ["Τοῦ", "στρατηγοῦ", "ἀποθανόντος,", "οἱ", "στρατιῶται", "οὕτως", "ἐφοβοῦντο,", "ὥστε", "ἔφυγον."],
+    structure: ["sub","sub","sub","main","main","main","main","connect","sub"],
+    connector: "ὥστε",
+    subtype: "consecutief",
+    subtype_label: "Genitivus absolutus + consecutieve bijzin",
+    translation: "Nadat de generaal gestorven was, waren de soldaten zo bang, dat ze vluchtten.",
+    vocab: { "στρατηγοῦ": "generaal", "ἀποθανόντος": "gestorven (was)", "στρατιῶται": "soldaten", "οὕτως": "zo", "ἐφοβοῦντο": "waren bang", "ἔφυγον": "vluchtten" },
+    missing: ["ὥστε"],
+    clauses: [
+      { label: "GenAbs", words: [0,1,2], connector: null },
+      { label: "HS", words: [3,4,5,6], connector: null },
+      { label: "BS (gev.)", words: [7,8], connector: 7 }
+    ],
+    explanation: "<span class='bs'>Τοῦ στρατηγοῦ ἀποθανόντος</span> = genitivus absolutus ('nadat de generaal gestorven was'). <span class='hs'>οἱ στρατιῶται οὕτως ἐφοβοῦντο</span> = hoofdzin. <span class='vw'>ὥστε</span> → <span class='bs'>consecutieve bijzin</span>."
+  },
+  {
+    id: 28,
+    niveau: 2,
+    greek: "Εἰ ὁ δικαστής, ὃν πάντες ἐτίμων, ψεύδεται, οὐδεὶς ἀληθεύσει.",
+    words: ["Εἰ", "ὁ", "δικαστής,", "ὃν", "πάντες", "ἐτίμων,", "ψεύδεται,", "οὐδεὶς", "ἀληθεύσει."],
+    structure: ["connect","sub","sub","connect2","sub2","sub2","sub","main","main"],
+    connector: "Εἰ",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin + betrekkelijke bijzin",
+    translation: "Als de rechter, die iedereen eerde, liegt, zal niemand de waarheid spreken.",
+    vocab: { "δικαστής": "rechter", "πάντες": "iedereen", "ἐτίμων": "eerde(n)", "ψεύδεται": "liegt", "οὐδεὶς": "niemand", "ἀληθεύσει": "zal de waarheid spreken" },
+    missing: ["Εἰ", "ὃν"],
+    clauses: [
+      { label: "BS1 (cond.)", words: [0,1,2,6], connector: 0 },
+      { label: "BS2 (betr.)", words: [3,4,5], connector: 3 },
+      { label: "HS", words: [7,8], connector: null }
+    ],
+    explanation: "<span class='vw'>εἰ</span> → <span class='bs'>conditionele bijzin</span>, waarin genest: <span class='vw'>ὅς</span> (hier: <em>ὅν</em>) → <span class='bs'>betrekkelijke bijzin</span>. <span class='hs'>οὐδεὶς ἀληθεύσει</span> = hoofdzin."
+  },
+  {
+    id: 29,
+    niveau: 2,
+    greek: "Ἐπειδὴ ὁ ἄγγελος ἀφίκετο, ὁ βασιλεὺς αὐτὸν ἠρώτησε πόθεν ἔλθοι.",
+    words: ["Ἐπειδὴ", "ὁ", "ἄγγελος", "ἀφίκετο,", "ὁ", "βασιλεὺς", "αὐτὸν", "ἠρώτησε", "πόθεν", "ἔλθοι."],
+    structure: ["connect","sub","sub","sub","main","main","main","main","connect2","sub2"],
+    connector: "Ἐπειδὴ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + indirecte vraagzin",
+    translation: "Nadat de boodschapper was aangekomen, vroeg de koning hem waar hij vandaan was gekomen.",
+    vocab: { "ἄγγελος": "boodschapper", "ἀφίκετο": "was aangekomen", "βασιλεὺς": "koning", "αὐτὸν": "hem", "ἠρώτησε": "vroeg", "ἔλθοι": "gekomen was" },
+    missing: ["Ἐπειδὴ", "πόθεν"],
+    clauses: [
+      { label: "BS1 (temp.)", words: [0,1,2,3], connector: 0 },
+      { label: "HS", words: [4,5,6,7], connector: null },
+      { label: "BS2 (ind.vr.)", words: [8,9], connector: 8 }
+    ],
+    explanation: "<span class='vw'>ἐπειδή</span> → <span class='bs'>temporele bijzin</span>. <span class='hs'>ὁ βασιλεὺς αὐτὸν ἠρώτησε</span> = hoofdzin. <span class='vw'>πόθεν</span> → <span class='bs'>indirecte vraagzin</span> (optativus, want de hoofdzin staat in een verleden tijd)."
+  },
+  {
+    id: 30,
+    niveau: 2,
+    greek: "Τοῦ ἡλίου δύνοντος, οἱ ναῦται ἐνόμιζον τὸν χειμῶνα προσιέναι.",
+    words: ["Τοῦ", "ἡλίου", "δύνοντος,", "οἱ", "ναῦται", "ἐνόμιζον", "τὸν", "χειμῶνα", "προσιέναι."],
+    structure: ["sub","sub","sub","main","main","main","sub","sub","sub"],
+    connector: null,
+    subtype: "genabs",
+    subtype_label: "Genitivus absolutus + AcI",
+    translation: "Toen/terwijl de zon onderging, dachten de zeelui dat er een storm naderde.",
+    vocab: { "ἡλίου": "zon", "δύνοντος": "ondergaand", "ναῦται": "zeelui", "ἐνόμιζον": "dachten", "χειμῶνα": "storm", "προσιέναι": "naderde" },
+    missing: [],
+    clauses: [
+      { label: "GenAbs", words: [0,1,2], connector: null },
+      { label: "HS", words: [3,4,5], connector: null },
+      { label: "AcI", words: [6,7,8], connector: null }
+    ],
+    explanation: "<span class='bs'>Τοῦ ἡλίου δύνοντος</span> = genitivus absolutus ('terwijl de zon onderging'). <span class='hs'>οἱ ναῦται ἐνόμιζον</span> = hoofdzin met <span class='bs'>AcI</span> (τὸν χειμῶνα προσιέναι)."
+  },
+  {
+    id: 31,
+    niveau: 2,
+    greek: "Ἐπεὶ νὺξ ἐγένετο, οἱ στρατιῶται ἀνεπαύοντο, διότι ὅλην τὴν ἡμέραν ἐπόνουν.",
+    words: ["Ἐπεὶ", "νὺξ", "ἐγένετο,", "οἱ", "στρατιῶται", "ἀνεπαύοντο,", "διότι", "ὅλην", "τὴν", "ἡμέραν", "ἐπόνουν."],
+    structure: ["connect","sub","sub","main","main","main","connect2","sub2","sub2","sub2","sub2"],
+    connector: "Ἐπεὶ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + causale bijzin",
+    translation: "Toen het nacht werd, rustten de soldaten uit, omdat ze de hele dag hadden gezwoegd.",
+    vocab: { "νὺξ": "nacht", "ἐγένετο": "werd", "στρατιῶται": "soldaten", "ἀνεπαύοντο": "rustten uit", "ὅλην τὴν ἡμέραν": "de hele dag", "ἐπόνουν": "hadden gezwoegd" },
+    missing: ["Ἐπεὶ", "διότι"],
+    clauses: [
+      { label: "BS1 (temp.)", words: [0,1,2], connector: 0 },
+      { label: "HS", words: [3,4,5], connector: null },
+      { label: "BS2 (caus.)", words: [6,7,8,9,10], connector: 6 }
+    ],
+    explanation: "<span class='vw'>ἐπεί</span> → <span class='bs'>temporele bijzin</span>. <span class='hs'>οἱ στρατιῶται ἀνεπαύοντο</span> = hoofdzin. <span class='vw'>διότι</span> → tweede <span class='bs'>causale bijzin</span>."
+  },
+  {
+    id: 32,
+    niveau: 2,
+    greek: "Ὁ διδάσκαλος τοῖς μαθηταῖς ἔλεγεν τὴν παιδείαν ἀγαθὸν εἶναι, ἵνα σπουδάζοιεν.",
+    words: ["Ὁ", "διδάσκαλος", "τοῖς", "μαθηταῖς", "ἔλεγεν", "τὴν", "παιδείαν", "ἀγαθὸν", "εἶναι,", "ἵνα", "σπουδάζοιεν."],
+    structure: ["main","main","main","main","main","sub","sub","sub","sub","connect","sub"],
+    connector: "ἵνα",
+    subtype: "finaal",
+    subtype_label: "AcI + finale bijzin",
+    translation: "De leraar zei tegen de leerlingen dat opvoeding goed is, opdat zij ijverig zouden zijn.",
+    vocab: { "διδάσκαλος": "leraar", "μαθηταῖς": "leerlingen", "ἔλεγεν": "zei", "παιδείαν": "opvoeding", "ἀγαθὸν": "goed", "σπουδάζοιεν": "ijverig zouden zijn" },
+    missing: ["ἵνα"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "AcI", words: [5,6,7,8], connector: null },
+      { label: "BS (fin.)", words: [9,10], connector: 9 }
+    ],
+    explanation: "<span class='hs'>Ὁ διδάσκαλος τοῖς μαθηταῖς ἔλεγεν</span> = hoofdzin met <span class='bs'>AcI</span> (τὴν παιδείαν ἀγαθὸν εἶναι). <span class='vw'>ἵνα</span> → <span class='bs'>finale bijzin</span>."
+  },
+  {
+    id: 33,
+    niveau: 2,
+    greek: "Ὁ νόμος, ὃν ὁ δῆμος ἔγραψεν, ἰσχυρός ἐστιν, ἐὰν πάντες αὐτῷ πείθωνται.",
+    words: ["Ὁ", "νόμος,", "ὃν", "ὁ", "δῆμος", "ἔγραψεν,", "ἰσχυρός", "ἐστιν,", "ἐὰν", "πάντες", "αὐτῷ", "πείθωνται."],
+    structure: ["main","main","connect","sub","sub","sub","main","main","connect2","sub2","sub2","sub2"],
+    connector: "ὃν",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + conditionele bijzin",
+    translation: "De wet, die het volk heeft geschreven, is sterk, als iedereen haar gehoorzaamt.",
+    vocab: { "νόμος": "wet", "δῆμος": "volk", "ἔγραψεν": "heeft geschreven", "ἰσχυρός": "sterk", "πάντες": "iedereen", "αὐτῷ": "haar", "πείθωνται": "gehoorzaamt" },
+    missing: ["ὃν", "ἐὰν"],
+    clauses: [
+      { label: "HS", words: [0,1,6,7], connector: null },
+      { label: "BS1 (betr.)", words: [2,3,4,5], connector: 2 },
+      { label: "BS2 (cond.)", words: [8,9,10,11], connector: 8 }
+    ],
+    explanation: "<span class='hs'>Ὁ νόμος ... ἰσχυρός ἐστιν</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>ὅν</em>) → <span class='bs'>betrekkelijke bijzin</span>. <span class='vw'>ἐάν</span> → <span class='bs'>conditionele bijzin</span>."
+  },
+  {
+    id: 34,
+    niveau: 2,
+    greek: "Ὁ ἀνήρ, ὃν εἶδον, καὶ ἡ γυνή, ἣν ἤκουσα, φίλοι ἦσαν.",
+    words: ["Ὁ", "ἀνήρ,", "ὃν", "εἶδον,", "καὶ", "ἡ", "γυνή,", "ἣν", "ἤκουσα,", "φίλοι", "ἦσαν."],
+    structure: ["main","main","connect","sub","main","main","main","connect2","sub2","main","main"],
+    connector: "ὃν",
+    subtype: "betrekkelijk",
+    subtype_label: "Twee betrekkelijke bijzinnen",
+    translation: "De man, die ik zag, en de vrouw, die ik hoorde, waren vrienden.",
+    vocab: { "ἀνήρ": "man", "εἶδον": "zag", "γυνή": "vrouw", "ἤκουσα": "hoorde", "φίλοι": "vrienden", "ἦσαν": "waren" },
+    missing: ["ὃν", "ἣν"],
+    clauses: [
+      { label: "HS", words: [0,1,4,5,6,9,10], connector: null },
+      { label: "BS1 (betr.)", words: [2,3], connector: 2 },
+      { label: "BS2 (betr.)", words: [7,8], connector: 7 }
+    ],
+    explanation: "<span class='hs'>Ὁ ἀνήρ ... καὶ ἡ γυνή ... φίλοι ἦσαν</span> = hoofdzin. Twee <span class='bs'>betrekkelijke bijzinnen</span>: <span class='vw'>ὅν</span> bij <em>ἀνήρ</em> en <span class='vw'>ἥν</span> bij <em>γυνή</em>."
+  },
+  {
+    id: 35,
+    niveau: 2,
+    greek: "Οὐκ οἶδα τίς ἐστιν ὁ ἀνήρ, ὃς τῇ θύρᾳ ἕστηκεν.",
+    words: ["Οὐκ", "οἶδα", "τίς", "ἐστιν", "ὁ", "ἀνήρ,", "ὃς", "τῇ", "θύρᾳ", "ἕστηκεν."],
+    structure: ["main","main","connect","sub","sub","sub","connect2","sub2","sub2","sub2"],
+    connector: "τίς",
+    subtype: "indirecte vraag",
+    subtype_label: "Indirecte vraagzin + betrekkelijke bijzin",
+    translation: "Ik weet niet wie de man is, die bij de deur staat.",
+    vocab: { "θύρᾳ": "deur", "ἕστηκεν": "staat", "ἀνήρ": "man" },
+    missing: ["τίς", "ὃς"],
+    clauses: [
+      { label: "HS", words: [0,1], connector: null },
+      { label: "BS1 (ind.vr.)", words: [2,3,4,5], connector: 2 },
+      { label: "BS2 (betr.)", words: [6,7,8,9], connector: 6 }
+    ],
+    explanation: "<span class='hs'>Οὐκ οἶδα</span> = hoofdzin. <span class='vw'>τίς</span> → <span class='bs'>indirecte vraagzin</span>. <span class='vw'>ὅς</span> → tweede <span class='bs'>betrekkelijke bijzin</span> bij <em>ἀνήρ</em>."
+  },
+  {
+    id: 36,
+    niveau: 2,
+    greek: "Ὁ δῆμος τὸν ῥήτορα ἐτίμησεν, διότι λόγους ἔλεγεν, οὓς πάντες ἐθαύμαζον.",
+    words: ["Ὁ", "δῆμος", "τὸν", "ῥήτορα", "ἐτίμησεν,", "διότι", "λόγους", "ἔλεγεν,", "οὓς", "πάντες", "ἐθαύμαζον."],
+    structure: ["main","main","main","main","main","connect","sub","sub","connect2","sub2","sub2"],
+    connector: "διότι",
+    subtype: "causaal",
+    subtype_label: "Causale bijzin + betrekkelijke bijzin",
+    translation: "Het volk eerde de redenaar, omdat hij toespraken hield, die iedereen bewonderde.",
+    vocab: { "δῆμος": "volk", "ῥήτορα": "redenaar", "ἐτίμησεν": "eerde", "λόγους": "toespraken", "ἔλεγεν": "hield", "πάντες": "iedereen", "ἐθαύμαζον": "bewonderde" },
+    missing: ["διότι", "οὓς"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS1 (caus.)", words: [5,6,7], connector: 5 },
+      { label: "BS2 (betr.)", words: [8,9,10], connector: 8 }
+    ],
+    explanation: "<span class='hs'>Ὁ δῆμος τὸν ῥήτορα ἐτίμησεν</span> = hoofdzin. <span class='vw'>διότι</span> → <span class='bs'>causale bijzin</span>. <span class='vw'>ὅς</span> (hier: <em>οὕς</em>) → <span class='bs'>betrekkelijke bijzin</span> bij <em>λόγους</em>."
+  },
+  {
+    id: 37,
+    niveau: 2,
+    greek: "Τῶν πολεμίων φευγόντων, οἱ στρατιῶται, οἳ νικηταὶ ἦσαν, ἐπανῆλθον.",
+    words: ["Τῶν", "πολεμίων", "φευγόντων,", "οἱ", "στρατιῶται,", "οἳ", "νικηταὶ", "ἦσαν,", "ἐπανῆλθον."],
+    structure: ["sub","sub","sub","main","main","connect","sub","sub","main"],
+    connector: "οἳ",
+    subtype: "betrekkelijk",
+    subtype_label: "Genitivus absolutus + betrekkelijke bijzin",
+    translation: "Terwijl/omdat de vijanden vluchtten, keerden de soldaten, die overwinnaars waren, terug.",
+    vocab: { "πολεμίων": "vijanden", "φευγόντων": "vluchtend", "στρατιῶται": "soldaten", "νικηταὶ": "overwinnaars", "ἦσαν": "waren", "ἐπανῆλθον": "keerden terug" },
+    missing: ["οἳ"],
+    clauses: [
+      { label: "GenAbs", words: [0,1,2], connector: null },
+      { label: "HS", words: [3,4,8], connector: null },
+      { label: "BS (betr.)", words: [5,6,7], connector: 5 }
+    ],
+    explanation: "<span class='bs'>Τῶν πολεμίων φευγόντων</span> = genitivus absolutus. <span class='hs'>οἱ στρατιῶται ... ἐπανῆλθον</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>οἵ</em>) → <span class='bs'>betrekkelijke bijzin</span>."
+  },
+  {
+    id: 38,
+    niveau: 2,
+    greek: "Ἐπειδὴ ὁ ἥλιος ἀνέτειλεν, οἱ γεωργοὶ εἰς τοὺς ἀγροὺς ἐπορεύοντο, ἵνα ἐργάζοιντο.",
+    words: ["Ἐπειδὴ", "ὁ", "ἥλιος", "ἀνέτειλεν,", "οἱ", "γεωργοὶ", "εἰς", "τοὺς", "ἀγροὺς", "ἐπορεύοντο,", "ἵνα", "ἐργάζοιντο."],
+    structure: ["connect","sub","sub","sub","main","main","main","main","main","main","connect2","sub2"],
+    connector: "Ἐπειδὴ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + finale bijzin",
+    translation: "Nadat de zon was opgekomen, gingen de boeren naar de velden, om te werken.",
+    vocab: { "ἥλιος": "zon", "ἀνέτειλεν": "was opgekomen", "γεωργοὶ": "boeren", "ἀγροὺς": "velden", "ἐπορεύοντο": "gingen", "ἐργάζοιντο": "zouden werken" },
+    missing: ["Ἐπειδὴ", "ἵνα"],
+    clauses: [
+      { label: "BS1 (temp.)", words: [0,1,2,3], connector: 0 },
+      { label: "HS", words: [4,5,6,7,8,9], connector: null },
+      { label: "BS2 (fin.)", words: [10,11], connector: 10 }
+    ],
+    explanation: "<span class='vw'>ἐπειδή</span> → <span class='bs'>temporele bijzin</span>. <span class='hs'>οἱ γεωργοὶ εἰς τοὺς ἀγροὺς ἐπορεύοντο</span> = hoofdzin. <span class='vw'>ἵνα</span> → <span class='bs'>finale bijzin</span>."
+  },
+  {
+    id: 39,
+    niveau: 2,
+    greek: "Οἱ πολῖται τὸν στρατηγόν, ὃν ἐτίμων, ἤλπιζον τὴν πόλιν σώσειν.",
+    words: ["Οἱ", "πολῖται", "τὸν", "στρατηγόν,", "ὃν", "ἐτίμων,", "ἤλπιζον", "τὴν", "πόλιν", "σώσειν."],
+    structure: ["main","main","sub","sub","connect","sub","main","sub","sub","sub"],
+    connector: "ὃν",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + AcI",
+    translation: "De burgers hoopten dat de generaal, die zij eerden, de stad zou redden.",
+    vocab: { "πολῖται": "burgers", "στρατηγόν": "generaal", "ἐτίμων": "eerden", "ἤλπιζον": "hoopten", "πόλιν": "stad", "σώσειν": "zou redden" },
+    missing: ["ὃν"],
+    clauses: [
+      { label: "HS", words: [0,1,6], connector: null },
+      { label: "AcI", words: [2,3,7,8,9], connector: null },
+      { label: "BS (betr.)", words: [4,5], connector: 4 }
+    ],
+    explanation: "<span class='hs'>Οἱ πολῖται ... ἤλπιζον</span> = hoofdzin met <span class='bs'>AcI</span> (τὸν στρατηγόν ... σώσειν). Daarbinnen genest: <span class='vw'>ὅς</span> (hier: <em>ὅν</em>) → <span class='bs'>betrekkelijke bijzin</span>."
+  },
+  {
+    id: 40,
+    niveau: 2,
+    greek: "Καίτοι ὁ παῖς νέος ἦν, οἱ πρεσβύτεροι, οἳ αὐτὸν ἐγίγνωσκον, αὐτῷ ἐπίστευον.",
+    words: ["Καίτοι", "ὁ", "παῖς", "νέος", "ἦν,", "οἱ", "πρεσβύτεροι,", "οἳ", "αὐτὸν", "ἐγίγνωσκον,", "αὐτῷ", "ἐπίστευον."],
+    structure: ["connect","sub","sub","sub","sub","main","main","connect2","sub2","sub2","main","main"],
+    connector: "Καίτοι",
+    subtype: "concessief",
+    subtype_label: "Concessieve bijzin + betrekkelijke bijzin",
+    translation: "Hoewel de jongen jong was, vertrouwden de ouderen, die hem kenden, hem.",
+    vocab: { "παῖς": "jongen", "νέος": "jong", "πρεσβύτεροι": "ouderen", "ἐγίγνωσκον": "kenden", "ἐπίστευον": "vertrouwden" },
+    missing: ["Καίτοι", "οἳ"],
+    clauses: [
+      { label: "BS1 (conc.)", words: [0,1,2,3,4], connector: 0 },
+      { label: "HS", words: [5,6,10,11], connector: null },
+      { label: "BS2 (betr.)", words: [7,8,9], connector: 7 }
+    ],
+    explanation: "<span class='vw'>καίτοι</span> → <span class='bs'>concessieve bijzin</span>. <span class='hs'>οἱ πρεσβύτεροι ... αὐτῷ ἐπίστευον</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>οἵ</em>) → <span class='bs'>betrekkelijke bijzin</span>."
+  },
+  // ── NIVEAU 3 ──────────────────────────────────────────
+  {
+    id: 41,
+    niveau: 3,
+    greek: "Ὁ παῖς τὸν κύνα εἶδεν, ὃς, ἐπειδὴ τὸν λύκον ἐφοβεῖτο, ἔτρεχεν.",
+    words: ["Ὁ", "παῖς", "τὸν", "κύνα", "εἶδεν,", "ὃς,", "ἐπειδὴ", "τὸν", "λύκον", "ἐφοβεῖτο,", "ἔτρεχεν."],
+    structure: ["main","main","main","main","main","connect","connect2","sub2","sub2","sub2","sub"],
+    connector: "ὃς",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + causale bijzin",
+    translation: "De jongen zag de hond, die wegrende omdat hij bang was voor de wolf.",
+    vocab: { "παῖς": "jongen", "κύνα": "hond", "εἶδεν": "zag", "λύκον": "wolf", "ἐφοβεῖτο": "was bang (voor)", "ἔτρεχεν": "rende weg" },
+    missing: ["ὃς", "ἐπειδὴ"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4], connector: null },
+      { label: "BS1 (betr.)", words: [5,10], connector: 5 },
+      { label: "BS2 (caus.)", words: [6,7,8,9], connector: 6 }
+    ],
+    explanation: "<span class='hs'>Ὁ παῖς τὸν κύνα εἶδεν</span> = hoofdzin, onderbroken door de bijzin. <span class='vw'>ὅς</span> → <span class='bs'>betrekkelijke bijzin</span> (ὃς ... ἔτρεχεν), die zelf een <span class='vw'>ἐπειδή</span>-<span class='bs'>causale bijzin</span> bevat: bijzin in de bijzin (niveau 3)."
+  },
+  {
+    id: 42,
+    niveau: 3,
+    greek: "Ἐπεὶ ὁ στρατηγός, ὃν οἱ στρατιῶται ἐφίλουν, ἀπέθανεν, πάντες ἐλυπήθησαν.",
+    words: ["Ἐπεὶ", "ὁ", "στρατηγός,", "ὃν", "οἱ", "στρατιῶται", "ἐφίλουν,", "ἀπέθανεν,", "πάντες", "ἐλυπήθησαν."],
+    structure: ["connect","sub","sub","connect2","sub2","sub2","sub2","sub","main","main"],
+    connector: "Ἐπεὶ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + betrekkelijke bijzin",
+    translation: "Toen de generaal, die de soldaten liefhadden, stierf, treurde iedereen.",
+    vocab: { "στρατηγός": "generaal", "στρατιῶται": "soldaten", "ἐφίλουν": "hielden lief", "ἀπέθανεν": "stierf", "πάντες": "iedereen", "ἐλυπήθησαν": "treurden" },
+    missing: ["Ἐπεὶ", "ὃν"],
+    clauses: [
+      { label: "BS1 (temp.)", words: [0,1,2,7], connector: 0 },
+      { label: "BS2 (betr.)", words: [3,4,5,6], connector: 3 },
+      { label: "HS", words: [8,9], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐπεί</span> → <span class='bs'>temporele bijzin</span> (Ἐπεὶ ... ἀπέθανεν), die zelf een genest <span class='vw'>ὅς</span>-<span class='bs'>betrekkelijke bijzin</span> bevat. <span class='hs'>πάντες ἐλυπήθησαν</span> = hoofdzin."
+  },
+  {
+    id: 43,
+    niveau: 3,
+    greek: "Οἱ πολῖται τὸν στρατιώτην, ὃς τὸ τεῖχος ἐφύλαττεν, ἐνόμιζον ἄριστον εἶναι, ὅτι ἀνδρεῖος ἦν.",
+    words: ["Οἱ", "πολῖται", "τὸν", "στρατιώτην,", "ὃς", "τὸ", "τεῖχος", "ἐφύλαττεν,", "ἐνόμιζον", "ἄριστον", "εἶναι,", "ὅτι", "ἀνδρεῖος", "ἦν."],
+    structure: ["main","main","sub","sub","connect","sub","sub","sub","main","sub","sub","connect2","sub2","sub2"],
+    connector: "ὃς",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + AcI + causale bijzin",
+    translation: "De burgers dachten dat de soldaat, die de muur bewaakte, de beste was, omdat hij dapper was.",
+    vocab: { "πολῖται": "burgers", "στρατιώτην": "soldaat", "τεῖχος": "muur", "ἐφύλαττεν": "bewaakte", "ἐνόμιζον": "dachten", "ἄριστον": "de beste", "ἀνδρεῖος": "dapper", "ἦν": "was" },
+    missing: ["ὃς", "ὅτι"],
+    clauses: [
+      { label: "HS", words: [0,1,8], connector: null },
+      { label: "AcI", words: [2,3,9,10], connector: null },
+      { label: "BS1 (betr.)", words: [4,5,6,7], connector: 4 },
+      { label: "BS2 (caus.)", words: [11,12,13], connector: 11 }
+    ],
+    explanation: "<span class='hs'>Οἱ πολῖται ... ἐνόμιζον</span> = hoofdzin met <span class='bs'>AcI</span> (τὸν στρατιώτην ... ἄριστον εἶναι), waarin genest een <span class='vw'>ὅς</span>-<span class='bs'>betrekkelijke bijzin</span>. Daarnaast een losse <span class='vw'>ὅτι</span>-<span class='bs'>causale bijzin</span>."
+  },
+  {
+    id: 44,
+    niveau: 3,
+    greek: "Ὁ βασιλεύς, ὃς δίκαιος ἦν, τὸν στρατηγὸν ἐτίμησεν, ἐπεὶ τὴν πόλιν ἔσωσεν, ὅτι ἀνδρεῖος καὶ σοφὸς ἦν.",
+    words: ["Ὁ", "βασιλεύς,", "ὃς", "δίκαιος", "ἦν,", "τὸν", "στρατηγὸν", "ἐτίμησεν,", "ἐπεὶ", "τὴν", "πόλιν", "ἔσωσεν,", "ὅτι", "ἀνδρεῖος", "καὶ", "σοφὸς", "ἦν."],
+    structure: ["main","main","connect","sub","sub","main","main","main","connect2","sub2","sub2","sub2","connect3","sub3","sub3","sub3","sub3"],
+    connector: "ὃς",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + temporele bijzin + causale bijzin",
+    translation: "De koning, die rechtvaardig was, eerde de generaal, nadat hij de stad had gered, omdat hij dapper en wijs was.",
+    vocab: { "βασιλεύς": "koning", "δίκαιος": "rechtvaardig", "στρατηγὸν": "generaal", "ἐτίμησεν": "eerde", "πόλιν": "stad", "ἔσωσεν": "had gered", "ἀνδρεῖος": "dapper", "σοφὸς": "wijs" },
+    missing: ["ὃς", "ἐπεὶ", "ὅτι"],
+    clauses: [
+      { label: "HS", words: [0,1,5,6,7], connector: null },
+      { label: "BS1 (betr.)", words: [2,3,4], connector: 2 },
+      { label: "BS2 (temp.)", words: [8,9,10,11], connector: 8 },
+      { label: "BS3 (caus.)", words: [12,13,14,15,16], connector: 12 }
+    ],
+    explanation: "<span class='hs'>Ὁ βασιλεύς ... τὸν στρατηγὸν ἐτίμησεν</span> = hoofdzin. Drie bijzinnen: <span class='vw'>ὅς</span> → <span class='bs'>betrekkelijk</span>, <span class='vw'>ἐπεί</span> → <span class='bs'>temporeel</span>, <span class='vw'>ὅτι</span> → <span class='bs'>causaal</span>."
+  },
+  {
+    id: 45,
+    niveau: 3,
+    greek: "Ἐὰν οἱ θεοὶ δικαίως τοὺς ἀνθρώπους κρίνωσιν, οἱ ἄνθρωποι νομίζουσι τὴν ἀρετὴν τιμᾶσθαι.",
+    words: ["Ἐὰν", "οἱ", "θεοὶ", "δικαίως", "τοὺς", "ἀνθρώπους", "κρίνωσιν,", "οἱ", "ἄνθρωποι", "νομίζουσι", "τὴν", "ἀρετὴν", "τιμᾶσθαι."],
+    structure: ["connect","sub","sub","sub","sub","sub","sub","main","main","main","sub","sub","sub"],
+    connector: "Ἐὰν",
+    subtype: "conditioneel",
+    subtype_label: "Conditionele bijzin + AcI",
+    translation: "Als de goden de mensen rechtvaardig oordelen, denken de mensen dat deugd geëerd wordt.",
+    vocab: { "θεοὶ": "goden", "δικαίως": "rechtvaardig", "ἀνθρώπους": "mensen", "κρίνωσιν": "oordelen", "ἄνθρωποι": "mensen", "νομίζουσι": "denken", "ἀρετὴν": "deugd", "τιμᾶσθαι": "geëerd wordt" },
+    missing: ["Ἐὰν"],
+    clauses: [
+      { label: "BS (cond.)", words: [0,1,2,3,4,5,6], connector: 0 },
+      { label: "HS", words: [7,8,9], connector: null },
+      { label: "AcI", words: [10,11,12], connector: null }
+    ],
+    explanation: "<span class='vw'>ἐάν</span> → <span class='bs'>conditionele bijzin</span>. <span class='hs'>οἱ ἄνθρωποι νομίζουσι</span> = hoofdzin met <span class='bs'>AcI</span> (τὴν ἀρετὴν τιμᾶσθαι)."
+  },
+  {
+    id: 46,
+    niveau: 3,
+    greek: "Ἡ πόλις οὕτω μεγάλη καὶ καλὴ ἦν, ὥστε πάντες οἱ ξένοι, οἳ αὐτὴν ἑώρων, ἐθαύμαζον.",
+    words: ["Ἡ", "πόλις", "οὕτω", "μεγάλη", "καὶ", "καλὴ", "ἦν,", "ὥστε", "πάντες", "οἱ", "ξένοι,", "οἳ", "αὐτὴν", "ἑώρων,", "ἐθαύμαζον."],
+    structure: ["main","main","main","main","main","main","main","connect","sub","sub","sub","connect2","sub2","sub2","sub"],
+    connector: "ὥστε",
+    subtype: "consecutief",
+    subtype_label: "Consecutieve bijzin + betrekkelijke bijzin",
+    translation: "De stad was zo groot en mooi, dat alle vreemdelingen, die haar zagen, haar bewonderden.",
+    vocab: { "πόλις": "stad", "οὕτω": "zo", "μεγάλη": "groot", "καλὴ": "mooi", "πάντες": "alle", "ξένοι": "vreemdelingen", "ἑώρων": "zagen", "ἐθαύμαζον": "bewonderden" },
+    missing: ["ὥστε", "οἳ"],
+    clauses: [
+      { label: "HS", words: [0,1,2,3,4,5,6], connector: null },
+      { label: "BS1 (gev.)", words: [7,8,9,10,14], connector: 7 },
+      { label: "BS2 (betr.)", words: [11,12,13], connector: 11 }
+    ],
+    explanation: "<span class='hs'>Ἡ πόλις οὕτω μεγάλη καὶ καλὴ ἦν</span> = hoofdzin. <span class='vw'>ὥστε</span> → <span class='bs'>consecutieve bijzin</span>, waarin genest een <span class='vw'>ὅς</span>-<span class='bs'>betrekkelijke bijzin</span>."
+  },
+  {
+    id: 47,
+    niveau: 3,
+    greek: "Τῆς νυκτὸς γενομένης, οἱ φύλακες ἐνόμιζον τοὺς πολεμίους οὐ προσιέναι.",
+    words: ["Τῆς", "νυκτὸς", "γενομένης,", "οἱ", "φύλακες", "ἐνόμιζον", "τοὺς", "πολεμίους", "οὐ", "προσιέναι."],
+    structure: ["sub","sub","sub","main","main","main","sub","sub","sub","sub"],
+    connector: null,
+    subtype: "genabs",
+    subtype_label: "Genitivus absolutus + AcI",
+    translation: "Nadat de nacht was gevallen, dachten de wachters dat de vijanden niet naderden.",
+    vocab: { "νυκτὸς": "nacht", "γενομένης": "gevallen (was)", "φύλακες": "wachters", "ἐνόμιζον": "dachten", "πολεμίους": "vijanden", "προσιέναι": "naderden" },
+    missing: [],
+    clauses: [
+      { label: "GenAbs", words: [0,1,2], connector: null },
+      { label: "HS", words: [3,4,5], connector: null },
+      { label: "AcI", words: [6,7,8,9], connector: null }
+    ],
+    explanation: "<span class='bs'>Τῆς νυκτὸς γενομένης</span> = genitivus absolutus. <span class='hs'>οἱ φύλακες ἐνόμιζον</span> = hoofdzin met <span class='bs'>AcI</span> (τοὺς πολεμίους οὐ προσιέναι)."
+  },
+  {
+    id: 48,
+    niveau: 3,
+    greek: "Ἐπειδὴ οἱ Πέρσαι ἐπὶ τὴν Ἑλλάδα ἐστράτευσαν, οἱ Ἕλληνες συνῆλθον, ἵνα κοινῇ βουλεύσαιντο περὶ τοῦ πολέμου.",
+    words: ["Ἐπειδὴ", "οἱ", "Πέρσαι", "ἐπὶ", "τὴν", "Ἑλλάδα", "ἐστράτευσαν,", "οἱ", "Ἕλληνες", "συνῆλθον,", "ἵνα", "κοινῇ", "βουλεύσαιντο", "περὶ", "τοῦ", "πολέμου."],
+    structure: ["connect","sub","sub","sub","sub","sub","sub","main","main","main","connect2","sub2","sub2","sub2","sub2","sub2"],
+    connector: "Ἐπειδὴ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + finale bijzin",
+    translation: "Nadat de Perzen tegen Griekenland waren opgetrokken, kwamen de Grieken bijeen, om samen te beraadslagen over de oorlog.",
+    vocab: { "Πέρσαι": "Perzen", "Ἑλλάδα": "Griekenland", "ἐστράτευσαν": "trokken op", "Ἕλληνες": "Grieken", "συνῆλθον": "kwamen bijeen", "κοινῇ": "samen", "βουλεύσαιντο": "zouden beraadslagen", "πολέμου": "oorlog" },
+    missing: ["Ἐπειδὴ", "ἵνα"],
+    clauses: [
+      { label: "BS1 (temp.)", words: [0,1,2,3,4,5,6], connector: 0 },
+      { label: "HS", words: [7,8,9], connector: null },
+      { label: "BS2 (fin.)", words: [10,11,12,13,14,15], connector: 10 }
+    ],
+    explanation: "<span class='vw'>ἐπειδή</span> → <span class='bs'>temporele bijzin</span>. <span class='hs'>οἱ Ἕλληνες συνῆλθον</span> = hoofdzin. <span class='vw'>ἵνα</span> → <span class='bs'>finale bijzin</span> (optativus, want de hoofdzin staat in een verleden tijd)."
+  },
+  {
+    id: 49,
+    niveau: 3,
+    greek: "Τῷ στρατηγῷ, ᾧ οἱ στρατιῶται ἐπίστευον, πάντες ἐπείθοντο, ἐὰν κελεύῃ μάχεσθαι.",
+    words: ["Τῷ", "στρατηγῷ,", "ᾧ", "οἱ", "στρατιῶται", "ἐπίστευον,", "πάντες", "ἐπείθοντο,", "ἐὰν", "κελεύῃ", "μάχεσθαι."],
+    structure: ["main","main","connect","sub","sub","sub","main","main","connect2","sub2","sub2"],
+    connector: "ᾧ",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + conditionele bijzin",
+    translation: "De soldaten gehoorzaamden allemaal de generaal, die zij vertrouwden, als hij beval te vechten.",
+    vocab: { "στρατηγῷ": "generaal", "στρατιῶται": "soldaten", "ἐπίστευον": "vertrouwden", "πάντες": "allen", "ἐπείθοντο": "gehoorzaamden", "κελεύῃ": "beveelt", "μάχεσθαι": "te vechten" },
+    missing: ["ᾧ", "ἐὰν"],
+    clauses: [
+      { label: "HS", words: [0,1,6,7], connector: null },
+      { label: "BS1 (betr.)", words: [2,3,4,5], connector: 2 },
+      { label: "BS2 (cond.)", words: [8,9,10], connector: 8 }
+    ],
+    explanation: "<span class='hs'>Τῷ στρατηγῷ ... πάντες ἐπείθοντο</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>ᾧ</em>) → <span class='bs'>betrekkelijke bijzin</span>. <span class='vw'>ἐάν</span> → <span class='bs'>conditionele bijzin</span>."
+  },
+  {
+    id: 50,
+    niveau: 3,
+    greek: "Τοῦ χειμῶνος παυσαμένου, οἱ ναῦται ἔπλευσαν, διότι τὸν λιμένα ταχέως καταλαβεῖν ἐβούλοντο.",
+    words: ["Τοῦ", "χειμῶνος", "παυσαμένου,", "οἱ", "ναῦται", "ἔπλευσαν,", "διότι", "τὸν", "λιμένα", "ταχέως", "καταλαβεῖν", "ἐβούλοντο."],
+    structure: ["sub","sub","sub","main","main","main","connect","sub","sub","sub","sub","sub"],
+    connector: "διότι",
+    subtype: "causaal",
+    subtype_label: "Genitivus absolutus + causale bijzin",
+    translation: "Nadat de storm was gaan liggen, voeren de zeelui uit, omdat ze de haven snel wilden bereiken.",
+    vocab: { "χειμῶνος": "storm", "παυσαμένου": "gaan liggen (was)", "ναῦται": "zeelui", "ἔπλευσαν": "voeren uit", "λιμένα": "haven", "ταχέως": "snel", "καταλαβεῖν": "te bereiken", "ἐβούλοντο": "wilden" },
+    missing: ["διότι"],
+    clauses: [
+      { label: "GenAbs", words: [0,1,2], connector: null },
+      { label: "HS", words: [3,4,5], connector: null },
+      { label: "BS (caus.)", words: [6,7,8,9,10,11], connector: 6 }
+    ],
+    explanation: "<span class='bs'>Τοῦ χειμῶνος παυσαμένου</span> = genitivus absolutus. <span class='hs'>οἱ ναῦται ἔπλευσαν</span> = hoofdzin. <span class='vw'>διότι</span> → <span class='bs'>causale bijzin</span>."
+  },
+  {
+    id: 51,
+    niveau: 3,
+    greek: "Ὁ ποιητής, ὃν οἱ Ἀθηναῖοι ἐτίμων, ἔλεγε τὴν σοφίαν κρείττω εἶναι τοῦ πλούτου.",
+    words: ["Ὁ", "ποιητής,", "ὃν", "οἱ", "Ἀθηναῖοι", "ἐτίμων,", "ἔλεγε", "τὴν", "σοφίαν", "κρείττω", "εἶναι", "τοῦ", "πλούτου."],
+    structure: ["main","main","connect","sub","sub","sub","main","sub","sub","sub","sub","sub","sub"],
+    connector: "ὃν",
+    subtype: "betrekkelijk",
+    subtype_label: "Betrekkelijke bijzin + AcI",
+    translation: "De dichter, die de Atheners eerden, zei dat wijsheid beter is dan rijkdom.",
+    vocab: { "ποιητής": "dichter", "Ἀθηναῖοι": "Atheners", "ἐτίμων": "eerden", "ἔλεγε": "zei", "σοφίαν": "wijsheid", "κρείττω": "beter", "πλούτου": "rijkdom" },
+    missing: ["ὃν"],
+    clauses: [
+      { label: "HS", words: [0,1,6], connector: null },
+      { label: "BS (betr.)", words: [2,3,4,5], connector: 2 },
+      { label: "AcI", words: [7,8,9,10,11,12], connector: null }
+    ],
+    explanation: "<span class='hs'>Ὁ ποιητής ... ἔλεγε</span> = hoofdzin. <span class='vw'>ὅς</span> (hier: <em>ὅν</em>) → <span class='bs'>betrekkelijke bijzin</span>. <span class='bs'>τὴν σοφίαν κρείττω εἶναι τοῦ πλούτου</span> = AcI."
+  },
+  {
+    id: 52,
+    niveau: 3,
+    greek: "Ἐπεὶ ὁ ἰατρός, ὃν ὁ βασιλεὺς ἐκάλεσεν, ἀφίκετο, πάντες ἐθάρρησαν, ὅτι σοφὸς καὶ ἐπιστήμων ἦν.",
+    words: ["Ἐπεὶ", "ὁ", "ἰατρός,", "ὃν", "ὁ", "βασιλεὺς", "ἐκάλεσεν,", "ἀφίκετο,", "πάντες", "ἐθάρρησαν,", "ὅτι", "σοφὸς", "καὶ", "ἐπιστήμων", "ἦν."],
+    structure: ["connect","sub","sub","connect2","sub2","sub2","sub2","sub","main","main","connect3","sub3","sub3","sub3","sub3"],
+    connector: "Ἐπεὶ",
+    subtype: "temporeel",
+    subtype_label: "Temporele bijzin + betrekkelijke bijzin + causale bijzin",
+    translation: "Toen de dokter, die de koning had geroepen, aankwam, kregen allen moed, omdat hij wijs en kundig was.",
+    vocab: { "ἰατρός": "dokter", "βασιλεὺς": "koning", "ἐκάλεσεν": "had geroepen", "ἀφίκετο": "kwam aan", "πάντες": "allen", "ἐθάρρησαν": "kregen moed", "σοφὸς": "wijs", "ἐπιστήμων": "kundig" },
+    missing: ["Ἐπεὶ", "ὃν", "ὅτι"],
+    clauses: [
+      { label: "BS1 (temp.)", words: [0,1,2,7], connector: 0 },
+      { label: "BS2 (betr.)", words: [3,4,5,6], connector: 3 },
+      { label: "HS", words: [8,9], connector: null },
+      { label: "BS3 (caus.)", words: [10,11,12,13,14], connector: 10 }
+    ],
+    explanation: "<span class='vw'>ἐπεί</span> → <span class='bs'>temporele bijzin</span>, waarin genest een <span class='vw'>ὅς</span>-<span class='bs'>betrekkelijke bijzin</span>. <span class='hs'>πάντες ἐθάρρησαν</span> = hoofdzin. <span class='vw'>ὅτι</span> → losse <span class='bs'>causale bijzin</span>."
+  }
+];
+
+const ALL_SORT_WORDS = [
+  { word: "καί",     type: "nevensch",  explanation: "<em>καί</em> = nevenschikkend voegwoord: 'en'." },
+  { word: "δέ",      type: "nevensch",  explanation: "<em>δέ</em> = nevenschikkend voegwoord: 'en, maar'. Postpositief: staat nooit als eerste woord." },
+  { word: "ἀλλά",    type: "nevensch",  explanation: "<em>ἀλλά</em> = nevenschikkend voegwoord: 'maar'. Tegenstelling." },
+  { word: "γάρ",     type: "nevensch",  explanation: "<em>γάρ</em> = nevenschikkend voegwoord: 'want, immers'. Postpositief." },
+  { word: "οὖν",     type: "nevensch",  explanation: "<em>οὖν</em> = nevenschikkend voegwoord: 'dus, dan'. Postpositief." },
+  { word: "μέν",     type: "nevensch",  explanation: "<em>μέν</em> = nevenschikkend voegwoord: 'aan de ene kant...', vormt een paar met <em>δέ</em>. Postpositief." },
+  { word: "ἤ",       type: "nevensch",  explanation: "<em>ἤ</em> = nevenschikkend voegwoord: 'of'." },
+  { word: "οὔτε",    type: "nevensch",  explanation: "<em>οὔτε</em> = nevenschikkend voegwoord: 'en niet, noch' (vaak οὔτε...οὔτε)." },
+  { word: "ὅτι",     type: "ondersch",  explanation: "<em>ὅτι</em> = onderschikkend voegwoord: 'omdat' (causaal). <strong>Let op:</strong> leidt ook indirecte rede in ('dat')." },
+  { word: "διότι",   type: "ondersch",  explanation: "<em>διότι</em> = onderschikkend voegwoord: 'omdat' (causaal)." },
+  { word: "ἐπεί",    type: "ondersch",  explanation: "<em>ἐπεί</em> = onderschikkend voegwoord: 'toen, nadat' (temporeel) of 'omdat' (causaal). Kijk naar de context!" },
+  { word: "ἐπειδή",  type: "ondersch",  explanation: "<em>ἐπειδή</em> = onderschikkend voegwoord: 'nadat, aangezien' (temporeel/causaal)." },
+  { word: "ὅτε",     type: "ondersch",  explanation: "<em>ὅτε</em> = onderschikkend voegwoord: 'toen' (temporeel)." },
+  { word: "ἕως",     type: "ondersch",  explanation: "<em>ἕως</em> = onderschikkend voegwoord: 'totdat, zolang als' (temporeel)." },
+  { word: "ἵνα",     type: "ondersch",  explanation: "<em>ἵνα</em> = onderschikkend voegwoord: 'opdat' (doel) + conjunctivus/optativus." },
+  { word: "ὅπως",    type: "ondersch",  explanation: "<em>ὅπως</em> = onderschikkend voegwoord: 'opdat, zodat' (doel). <strong>Let op:</strong> ook vraagwoord 'hoe'." },
+  { word: "ὥστε",    type: "ondersch",  explanation: "<em>ὥστε</em> = onderschikkend voegwoord: 'zodat, dat' (gevolg), vaak na <em>οὕτως</em>." },
+  { word: "καίτοι",  type: "ondersch",  explanation: "<em>καίτοι</em> = onderschikkend voegwoord: 'hoewel, en toch' (toegeving)." },
+  { word: "ἐάν",     type: "ondersch",  explanation: "<em>ἐάν</em> = onderschikkend voegwoord: 'als, indien' (algemene/toekomstige voorwaarde) + conjunctivus. Samentrekking van <em>εἰ + ἄν</em>." },
+  { word: "εἰ",      type: "ondersch",  explanation: "<em>εἰ</em> = onderschikkend voegwoord: 'als, indien' (reële voorwaarde). <strong>Let op:</strong> ook 'of' bij een indirecte vraag." },
+  { word: "ὅς",      type: "betr-vnw", explanation: "<em>ὅς</em> = betrekkelijk voornaamwoord (m. nom. sg.): 'die'." },
+  { word: "ἥ",       type: "betr-vnw", explanation: "<em>ἥ</em> = betrekkelijk voornaamwoord (f. nom. sg.): 'die'." },
+  { word: "ὅ",       type: "betr-vnw", explanation: "<em>ὅ</em> = betrekkelijk voornaamwoord (n. nom./acc. sg.): 'dat'. <strong>Let op:</strong> heeft altijd een accent, in tegenstelling tot het lidwoord." },
+  { word: "οὗ",      type: "betr-vnw", explanation: "<em>οὗ</em> = betrekkelijk voornaamwoord (gen. sg. m./n.): 'wiens, waarvan'." },
+  { word: "ᾧ",       type: "betr-vnw", explanation: "<em>ᾧ</em> = betrekkelijk voornaamwoord (dat. sg. m./n.): 'aan wie, waarmee'." },
+  { word: "ὅστις",   type: "betr-vnw", explanation: "<em>ὅστις</em> = onbepaald betrekkelijk voornaamwoord: 'wie dan ook, al wie'. <strong>Let op:</strong> ook gebruikt in indirecte vragen ('wie')." },
+  { word: "τίς",     type: "vragend",   explanation: "<em>τίς</em> = vragend voornaamwoord: 'wie'. Leidt een indirecte vraagzin in." },
+  { word: "τί",      type: "vragend",   explanation: "<em>τί</em> = vragend voornaamwoord: 'wat'." },
+  { word: "ποῦ",     type: "vragend",   explanation: "<em>ποῦ</em> = vraagwoord: 'waar' (plaats)." },
+  { word: "πῶς",     type: "vragend",   explanation: "<em>πῶς</em> = vraagwoord: 'hoe' (wijze)." },
+  { word: "πότε",    type: "vragend",   explanation: "<em>πότε</em> = vraagwoord: 'wanneer' (tijd)." },
+];
+
+/* ═══════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════ */
+let currentSort = [];
+let selectedToken = null;
+let markMode = 'main';
+let wordMarks = {};
+let analysisIdx = 0;
+let translationIdx = 0;
+let filterNiveau = 0; // 0 = alle niveaus
+let filteredSentences = [];
+
+function getFiltered() {
+  return filterNiveau === 0
+    ? SENTENCES
+    : SENTENCES.filter(s => s.niveau === filterNiveau);
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODULE NAVIGATION
+═══════════════════════════════════════════════════════ */
+function showModule(name) {
+  document.querySelectorAll('.module').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('module-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (name === 'sort') initSort();
+  if (name === 'analysis') { analysisIdx = 0; renderAnalysisSentence(); }
+  if (name === 'translation') { translationIdx = 0; renderTranslationSentence(); }
+}
+
+function setNiveau(n, mod) {
+  filterNiveau = n;
+  document.querySelectorAll(`.niveau-btn-${mod}`).forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  if (mod === 'analysis') { analysisIdx = 0; renderAnalysisSentence(); }
+  if (mod === 'translation') { translationIdx = 0; renderTranslationSentence(); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODULE 1: WOORDSOORTEN SORTEREN
+═══════════════════════════════════════════════════════ */
+function pickSortWords() {
+  const shuffled = [...ALL_SORT_WORDS].sort(() => Math.random() - .5);
+  return shuffled.slice(0, 10);
+}
+
+function initSort() {
+  currentSort = pickSortWords();
+  selectedToken = null;
+  renderSortBank();
+  clearZones();
+  document.getElementById('sort-result').innerHTML = '';
+  document.getElementById('sort-feedback').style.display = 'none';
+}
+
+function shuffleSort() { initSort(); }
+function resetSort() { initSort(); }
+
+function renderSortBank() {
+  const bank = document.getElementById('sort-bank');
+  bank.innerHTML = '';
+  currentSort.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'word-token';
+    el.textContent = item.word;
+    el.dataset.idx = i;
+    el.onclick = () => selectToken(el, i);
+    bank.appendChild(el);
+  });
+}
+
+function clearZones() {
+  ['nevensch','ondersch','betr-vnw','vragend'].forEach(z => {
+    const el = document.getElementById('zone-' + z);
+    el.querySelectorAll('.word-token').forEach(t => t.remove());
+  });
+}
+
+function selectToken(el, idx) {
+  document.querySelectorAll('.word-token.selected').forEach(t => t.classList.remove('selected'));
+  if (selectedToken && selectedToken.idx === idx) { selectedToken = null; return; }
+  el.classList.add('selected');
+  selectedToken = { el, idx };
+}
+
+function dropToZone(zone) {
+  if (!selectedToken) return;
+  const item = currentSort[selectedToken.idx];
+  if (!item) return;
+  selectedToken.el.classList.remove('selected');
+  selectedToken.el.dataset.zone = zone;
+  selectedToken.el.onclick = () => returnToBank(selectedToken.el, selectedToken.idx);
+  document.getElementById('zone-' + zone).appendChild(selectedToken.el);
+  selectedToken = null;
+}
+
+function returnToBank(el, idx) {
+  document.getElementById('sort-bank').appendChild(el);
+  el.dataset.zone = '';
+  el.onclick = () => selectToken(el, idx);
+}
+
+function checkSort() {
+  let correct = 0; let total = 0;
+  const feedback = [];
+  currentSort.forEach((item, i) => {
+    const el = document.querySelector(`.word-token[data-idx="${i}"]`);
+    if (!el) return;
+    const zone = el.dataset.zone;
+    if (!zone) return;
+    total++;
+    const isAmbig = item.word === 'ὅστις' || item.word === 'εἰ';
+    const correct_types = isAmbig ? ['betr-vnw','ondersch','vragend'] : [item.type];
+    const ok = correct_types.includes(zone);
+    if (ok) { correct++; el.style.border = '2px solid #4a7c59'; }
+    else { el.style.border = '2px solid #a03030'; }
+    feedback.push(`<strong><em>${item.word}</em></strong>: ${item.explanation}`);
+  });
+  const resultEl = document.getElementById('sort-result');
+  if (total === 0) { resultEl.innerHTML = '<span class="badge badge-info">Sorteer eerst de woorden.</span>'; return; }
+  resultEl.innerHTML = `<span class="badge ${correct===total?'badge-correct':'badge-wrong'}">${correct} van ${total} correct</span>`;
+  const fbEl = document.getElementById('sort-feedback');
+  fbEl.style.display = 'block';
+  document.getElementById('sort-feedback-text').innerHTML = feedback.join('<br><br>');
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODULE 2: ZINSONTLEDING
+═══════════════════════════════════════════════════════ */
+
+// Kleurschema voor zinsstructuurweergave (conform screenshot)
+// PV = geel, onderschikkend vw = groen, betr.vnw = rood, nevensch vw = blauw
+const STRUCT_COLORS = {
+  pv:      { bg: '#e8d800', text: '#1a1a00' },
+  ondersch:{ bg: '#2ea84a', text: '#fff' },
+  betr:    { bg: '#c0392b', text: '#fff' },
+  nevensch:{ bg: '#2980b9', text: '#fff' },
+};
+
+// persoonsvorm-woorden (eenvoudige heuristiek: laatste woord van de clausule dat geen connector is)
+function renderStructureView(s) {
+  if (!s.clauses) return '';
+
+  const wordArr = s.words;
+  const connectorIndices = {};
+  s.clauses.forEach(cl => {
+    if (cl.connector !== null && cl.connector !== undefined) {
+      connectorIndices[cl.connector] = true;
+    }
+  });
+
+  const clauseHtml = s.clauses.map(cl => {
+    const isMain = cl.label.startsWith('HS') || cl.label.startsWith('AcI');
+    const indent = !isMain ? '2rem' : '0';
+    const labelColor = isMain ? '#e08080' : '#8abcde';
+
+    const wordsHtml = cl.words.map(wi => {
+      const w = wordArr[wi];
+      const clean = w.replace(/[,\.\?!:]/g, '');
+      const punct = w.slice(clean.length);
+      const isConn = cl.connector === wi;
+
+      let connStyle = '';
+      if (isConn) {
+        const subtypeKey = s.subtypes ? s.subtypes[cl.label] : s.subtype;
+        if (cl.label.includes('betr') || s.subtype === 'betrekkelijk' && cl === s.clauses.find(c=>c.connector===wi)) {
+          connStyle = `background:${STRUCT_COLORS.betr.bg};color:${STRUCT_COLORS.betr.text};`;
+        } else if (['nevensch','καί','ἀλλά','γάρ','δέ'].includes(clean.toLowerCase())) {
+          connStyle = `background:${STRUCT_COLORS.nevensch.bg};color:${STRUCT_COLORS.nevensch.text};`;
+        } else {
+          connStyle = `background:${STRUCT_COLORS.ondersch.bg};color:${STRUCT_COLORS.ondersch.text};`;
+        }
+      }
+
+      const isPv = !isConn && wi === cl.words[cl.words.length - 1] && !cl.label.includes('AcI');
+
+      const style = isConn
+        ? `padding:1px 5px;border-radius:3px;font-weight:600;${connStyle}`
+        : isPv
+        ? `padding:1px 5px;border-radius:3px;background:${STRUCT_COLORS.pv.bg};color:${STRUCT_COLORS.pv.text};font-weight:600;`
+        : '';
+
+      return `<span style="${style}">${clean}</span>${punct} `;
+    }).join('');
+
+    return `<div style="margin-bottom:6px;padding-left:${indent};display:flex;align-items:baseline;gap:10px;">
+      <span style="font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.05em;color:${labelColor};min-width:90px;flex-shrink:0;">${cl.label}</span>
+      <span style="font-style:italic;font-size:1rem;line-height:1.8;">${wordsHtml}</span>
+    </div>`;
+  }).join('');
+
+  return `<div class="struct-view">
+    <div class="struct-legend">
+      <span class="struct-key" style="background:${STRUCT_COLORS.pv.bg};color:${STRUCT_COLORS.pv.text};">PV</span>
+      <span class="struct-key" style="background:${STRUCT_COLORS.ondersch.bg};color:${STRUCT_COLORS.ondersch.text};">ondersch. vw.</span>
+      <span class="struct-key" style="background:${STRUCT_COLORS.betr.bg};color:${STRUCT_COLORS.betr.text};">betr. vnw.</span>
+      <span class="struct-key" style="background:${STRUCT_COLORS.nevensch.bg};color:${STRUCT_COLORS.nevensch.text};">nevensch. vw.</span>
+    </div>
+    ${clauseHtml}
+  </div>`;
+}
+
+function renderAnalysisSentence() {
+  const pool = getFiltered();
+  if (pool.length === 0) { document.getElementById('analysis-sentence').innerHTML = '<em style="color:var(--muted)">Geen zinnen beschikbaar voor dit niveau.</em>'; return; }
+  if (analysisIdx >= pool.length) analysisIdx = 0;
+  const s = pool[analysisIdx];
+  wordMarks = {};
+  document.getElementById('analysis-result').innerHTML = '';
+  document.getElementById('analysis-answer').classList.add('hidden');
+  document.getElementById('sub-type-select').value = '';
+
+  const nBadge = ['','★☆☆','★★☆','★★★'][s.niveau] || '';
+  document.getElementById('analysis-niveau').textContent = nBadge;
+
+  const disp = document.getElementById('analysis-sentence');
+  disp.innerHTML = s.words.map((w, i) => {
+    const clean = w.replace(/[,\.\?!:]/g, '');
+    const punct = w.slice(clean.length);
+    return `<span class="word-span" id="ws-${i}" onclick="markWord(${i})">${clean}${punct}</span>`;
+  }).join(' ');
+
+  updateCounter('analysis', pool.length);
+}
+
+function setMarkMode(mode) {
+  markMode = mode;
+  ['main','sub','connect'].forEach(m => {
+    document.getElementById('btn-mark-' + m).classList.toggle('active', m === mode);
+  });
+}
+
+function markWord(i) {
+  const el = document.getElementById('ws-' + i);
+  const prev = wordMarks[i];
+  if (prev === markMode) { delete wordMarks[i]; el.className = 'word-span'; }
+  else { wordMarks[i] = markMode; el.className = 'word-span marked-' + markMode; }
+}
+
+function clearMarks() {
+  wordMarks = {};
+  document.querySelectorAll('.word-span').forEach(el => el.className = 'word-span');
+}
+
+function checkAnalysis() {
+  const pool = getFiltered();
+  const s = pool[analysisIdx];
+  let correct = 0;
+  let total = s.words.length;
+
+  s.words.forEach((w, i) => {
+    const expected = s.structure[i].replace(/[0-9]+$/, '');
+    const got = wordMarks[i] || null;
+    const el = document.getElementById('ws-' + i);
+    if (got === expected) { correct++; el.style.outline = '2px solid #4a7c59'; }
+    else if (got !== null) { el.style.outline = '2px solid #a03030'; }
+    else { el.style.outline = '2px dashed #5c5040'; }
+  });
+
+  const subtype = document.getElementById('sub-type-select').value;
+
+  const BIJWOORDELIJK_STEMS = ['causale','temporele','finale','consecutieve','concessieve','conditionele'];
+  const isBijwoordelijkZin = BIJWOORDELIJK_STEMS.some(st => s.subtype_label.toLowerCase().includes(st));
+
+  function subtypeAccepted(keuze) {
+    if (!keuze) return false;
+    const label = s.subtype_label.toLowerCase();
+    if (keuze === 'bijwoordelijk') return isBijwoordelijkZin;
+    if (keuze === 'betrekkelijk')  return label.includes('betrekkelijke');
+    if (keuze === 'indvraag')      return label.includes('indirecte vraagzin');
+    if (keuze === 'aci')           return label.includes('aci');
+    if (keuze === 'genabs')        return label.includes('genitivus absolutus');
+    return false;
+  }
+  const subtypeOk = subtypeAccepted(subtype);
+
+  function verwachtAntwoord() {
+    const label = s.subtype_label.toLowerCase();
+    const parts = [];
+    if (label.includes('betrekkelijke')) parts.push('Betrekkelijke bijzin');
+    if (BIJWOORDELIJK_STEMS.some(st => label.includes(st))) parts.push('Bijwoordelijke bijzin');
+    if (label.includes('indirecte vraagzin')) parts.push('Indirecte vraagzin');
+    if (label.includes('aci')) parts.push('AcI');
+    if (label.includes('genitivus absolutus')) parts.push('Genitivus absolutus');
+    return parts.join(' of ');
+  }
+
+  const resultEl = document.getElementById('analysis-result');
+  resultEl.innerHTML = `
+    <span class="badge ${correct===total?'badge-correct':'badge-wrong'}">${correct}/${total} woorden correct</span>
+    &nbsp;
+    <span class="badge ${subtypeOk?'badge-correct':'badge-wrong'}">Soort bijzin: ${subtypeOk?'✓ correct':'✗ — juist is: '+verwachtAntwoord()}</span>
+  `;
+
+  const answerEl = document.getElementById('analysis-answer');
+  answerEl.classList.remove('hidden');
+  const bronHtml = s.bron ? `<div style="font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.05em;color:var(--muted);margin-bottom:10px;">Bron: ${s.bron}</div>` : '';
+  document.getElementById('analysis-answer-text').innerHTML =
+    bronHtml + s.explanation + renderStructureView(s);
+}
+
+function prevSentence(mod) {
+  const pool = getFiltered();
+  if (mod === 'analysis') { analysisIdx = (analysisIdx - 1 + pool.length) % pool.length; renderAnalysisSentence(); }
+  else { translationIdx = (translationIdx - 1 + pool.length) % pool.length; renderTranslationSentence(); }
+}
+
+function nextSentence(mod) {
+  const pool = getFiltered();
+  if (mod === 'analysis') { analysisIdx = (analysisIdx + 1) % pool.length; renderAnalysisSentence(); }
+  else { translationIdx = (translationIdx + 1) % pool.length; renderTranslationSentence(); }
+}
+
+function updateCounter(mod, total) {
+  const idx = mod === 'analysis' ? analysisIdx : translationIdx;
+  const n = total !== undefined ? total : getFiltered().length;
+  document.getElementById(mod + '-counter').textContent = `Zin ${idx+1} van ${n}`;
+  const pct = ((idx+1)/n*100).toFixed(1);
+  document.getElementById(mod + '-progress').style.width = pct + '%';
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODULE 3: VERTAALOEFENING
+═══════════════════════════════════════════════════════ */
+function renderTranslationSentence() {
+  const pool = getFiltered();
+  if (pool.length === 0) { document.getElementById('translation-sentence').innerHTML = '<em style="color:var(--muted)">Geen zinnen beschikbaar voor dit niveau.</em>'; return; }
+  if (translationIdx >= pool.length) translationIdx = 0;
+  const s = pool[translationIdx];
+
+  document.getElementById('translation-input').value = '';
+  document.getElementById('translation-feedback').innerHTML = '';
+  document.getElementById('model-translation').classList.add('hidden');
+  document.getElementById('model-translation').innerHTML = '';
+
+  const nBadge = ['','★☆☆','★★☆','★★★'][s.niveau] || '';
+  document.getElementById('translation-niveau').textContent = nBadge;
+
+  const disp = document.getElementById('translation-sentence');
+  const missing = s.missing.map(w => w.toLowerCase());
+  disp.innerHTML = s.words.map(w => {
+    const clean = w.replace(/[,\.\?!:]/g,'').toLowerCase();
+    const punct = w.slice(w.replace(/[,\.\?!:]/g,'').length);
+    if (missing.includes(clean)) return `<span class="blank">[???]</span>${punct} `;
+    return w + ' ';
+  }).join('');
+
+  const bank = document.getElementById('translation-wordbank');
+  bank.innerHTML = '';
+  const vocab = s.vocab;
+  Object.entries(vocab).forEach(([gr, nl]) => {
+    const chip = document.createElement('span');
+    chip.style.cssText = 'display:inline-block;padding:4px 12px;background:var(--stone3);border:1px solid var(--gold-dim);border-radius:3px;font-style:italic;font-size:.9rem;cursor:default;margin:3px;';
+    chip.innerHTML = `<em>${gr}</em> <span style="color:var(--cream2);font-style:normal;font-size:.82rem">= ${nl}</span>`;
+    bank.appendChild(chip);
+  });
+  s.missing.forEach(w => {
+    const chip = document.createElement('span');
+    chip.style.cssText = 'display:inline-block;padding:4px 12px;background:#2a1a3a;border:1px solid var(--purple);border-radius:3px;font-style:italic;font-size:.9rem;cursor:default;margin:3px;';
+    chip.innerHTML = `<em style="color:#c09ade">${w}</em> <span style="color:var(--muted);font-size:.82rem">= ???</span>`;
+    bank.appendChild(chip);
+  });
+
+  updateCounter('translation', pool.length);
+}
+
+function showModelTranslation() {
+  const pool = getFiltered();
+  const s = pool[translationIdx];
+  const el = document.getElementById('model-translation');
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <div class="model-translation">
+      <strong>Modelvertaling</strong>
+      ${s.translation || '<em style="color:var(--muted)">Nog geen vertaling beschikbaar voor deze zin.</em>'}
+      <div style="margin-top:10px;color:var(--cream2);font-size:.9rem;font-style:italic">${s.greek}</div>
+      ${s.bron ? `<div style="margin-top:6px;font-family:'Cinzel',serif;font-size:.7rem;letter-spacing:.05em;color:var(--muted)">Bron: ${s.bron}</div>` : ''}
+      <div style="margin-top:12px;">${renderStructureView(s)}</div>
+    </div>`;
+}
+
+function resetTranslation() {
+  document.getElementById('translation-input').value = '';
+  document.getElementById('translation-feedback').innerHTML = '';
+  document.getElementById('model-translation').classList.add('hidden');
+}
+
+async function getAiFeedback() {
+  const pool = getFiltered();
+  const s = pool[translationIdx];
+  const userTranslation = document.getElementById('translation-input').value.trim();
+  const apiKey = document.getElementById('api-key-input').value.trim();
+
+  if (!userTranslation) {
+    document.getElementById('translation-feedback').innerHTML =
+      '<span class="badge badge-info">Schrijf eerst je vertaling.</span>';
+    return;
+  }
+
+  const fbEl = document.getElementById('translation-feedback');
+  fbEl.innerHTML = '<div class="ai-feedback-box"><span class="loading">AI geeft feedback... even geduld.</span></div>';
+
+  const prompt = `Je bent een ervaren leraar Grieks op een Nederlandse middelbare school (gymnasium).
+Een leerling heeft de volgende Griekse zin vertaald:
+
+Griekse zin: "${s.greek}"
+Modelvertaling: "${s.translation}"
+Vertaling van de leerling: "${userTranslation}"
+
+Geef in maximaal 4 zinnen, in het Nederlands, opbouwende feedback op de vertaling.
+Wees vriendelijk en specifiek. Benoem wat goed gaat en wat beter kan.
+Focus op de zinsbouw (hoofd-/bijzin) en de rol van het verbindingswoord "${s.connector}".`;
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.4, maxOutputTokens: 1024, thinkingConfig: { thinkingBudget: 0 } }
+        })
+      }
+    );
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Geen antwoord ontvangen.';
+    fbEl.innerHTML = `<div class="ai-feedback-box">${text.replace(/\n/g,'<br>')}</div>`;
+  } catch (err) {
+    fbEl.innerHTML = `<div class="ai-feedback-box" style="border-color:var(--red)">
+      <strong style="color:#e08080">Fout:</strong> ${err.message}<br>
+      <span style="color:var(--muted);font-size:.85rem">Controleer je API-sleutel of probeer later opnieuw.</span>
+    </div>`;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   MODULE 4: ZINSSTRUCTUUR
+═══════════════════════════════════════════════════════ */
+let structIdx=0,structNiveau=0,colorMode='pv',wordColors={},structRows=[],colorsComplete=false;
+let draggedToken2=null,dragFromZone2=null,touchToken2=null,touchGhost2=null,touchFromZone2=null;
+
+function getStructFiltered(){return structNiveau===0?SENTENCES:SENTENCES.filter(s=>s.niveau===structNiveau);}
+function setNiveauStruct(n){structNiveau=n;document.querySelectorAll('.niveau-btn-structuur').forEach(b=>b.classList.remove('active'));event.currentTarget.classList.add('active');structIdx=0;renderStructModule();}
+function prevSentenceStruct(){const p=getStructFiltered();structIdx=(structIdx-1+p.length)%p.length;renderStructModule();}
+function nextSentenceStruct(){const p=getStructFiltered();structIdx=(structIdx+1)%p.length;renderStructModule();}
+
+function renderStructModule(){
+  const pool=getStructFiltered();if(!pool.length)return;if(structIdx>=pool.length)structIdx=0;const s=pool[structIdx];
+  document.getElementById('struct-counter').textContent=`Zin ${structIdx+1} van ${pool.length}`;
+  document.getElementById('struct-niveau').textContent=['','★☆☆','★★☆','★★★'][s.niveau]||'';
+  document.getElementById('struct-progress').style.width=((structIdx+1)/pool.length*100).toFixed(1)+'%';
+  document.getElementById('struct-greek').textContent=s.greek;
+  wordColors={};colorMode='pv';structRows=[];colorsComplete=false;
+  document.getElementById('color-result').innerHTML='';document.getElementById('struct-result').innerHTML='';
+  document.getElementById('struct-answer').classList.add('hidden');
+  setColorMode('pv');renderColorTokens(s);renderDragBank(s);renderStructRows();
+}
+function setColorMode(mode){colorMode=mode;['pv','ondersch','betr','nevensch','none'].forEach(m=>document.getElementById('cpick-'+m)?.classList.toggle('active',m===mode));}
+function renderColorTokens(s){
+  const c=document.getElementById('struct-word-tokens');c.innerHTML='';
+  s.words.forEach((w,i)=>{const btn=document.createElement('span');btn.className='struct-token';btn.textContent=w;btn.dataset.idx=i;
+    btn.onclick=()=>{wordColors[i]=colorMode==='none'?null:colorMode;applyTokenColor(btn,wordColors[i]||null);};
+    applyTokenColor(btn,wordColors[i]||null);c.appendChild(btn);});
+}
+function applyTokenColor(el,col){el.className='struct-token'+(col?` colored-${col}`:'');}
+function getExpectedColor(s,wi){
+  if(!s.clauses)return null;
+  const betr=['ὅς','ὃς','ἥ','ἣ','ὅ','ὃ','οἵ','οἳ','αἵ','αἳ','ἅ','ἃ','ὅν','ὃν','ἥν','ἣν','οὕς','οὓς','ἅς','ἃς','οὗ','ἧς','ὧν','ᾧ','ᾗ','οἷς','αἷς'];
+  const nev=['καί','καὶ','δέ','δὲ','ἀλλά','ἀλλὰ','γάρ','γὰρ','οὖν','μέν','μὲν','ἤ','ἢ','οὔτε','τε'];
+  for(const cl of s.clauses){if(cl.connector===wi){const w=s.words[wi].replace(/[,\.\?!:]/g,'').toLowerCase();if(betr.includes(w))return'betr';if(nev.includes(w))return'nevensch';return'ondersch';}}
+  for(const cl of s.clauses){
+    if(cl.label.includes('AcI')||cl.label.includes('GenAbs'))continue; // geen finiete PV
+    if(cl.words.includes(wi)&&cl.connector!==wi){const cw=cl.words.filter(x=>x!==cl.connector);if(cw.length&&cw[cw.length-1]===wi)return'pv';}
+  }
+  return null;
+}
+function checkColors(){
+  const s=getStructFiltered()[structIdx];let correct=0,total=0,errors=[];
+  const names={pv:'geel (PV)',ondersch:'groen (ondersch. vw.)',betr:'rood (betr. vnw.)',nevensch:'blauw (nevensch. vw.)'};
+  let allOk=true;
+  s.words.forEach((w,i)=>{const exp=getExpectedColor(s,i),got=wordColors[i]||null,btn=document.querySelector(`.struct-token[data-idx="${i}"]`);
+    if(exp!==null){total++;if(got===exp){correct++;if(btn)btn.style.outline='2px solid #4a7c59';}else{allOk=false;errors.push(`<em>${w}</em>: verwacht <strong>${names[exp]}</strong>, jij koos <strong>${names[got]||'geen kleur'}</strong>`);if(btn)btn.style.outline='2px solid #a03030';}}
+    else{ if(got!==null){allOk=false;errors.push(`<em>${w}</em>: dit woord hoeft geen kleur (jij koos ${names[got]})`);if(btn)btn.style.outline='2px solid #a03030';} }
+  });
+  const r=document.getElementById('color-result');
+  r.innerHTML=`<span class="badge ${allOk?'badge-correct':'badge-wrong'}">${correct} van ${total} markeringen correct</span>`;
+  if(errors.length)r.innerHTML+=`<div style="margin-top:10px;font-size:.88rem;color:var(--cream2);line-height:1.9;">${errors.join('<br>')}</div>`;
+  colorsComplete=allOk;
+  if(allOk){
+    r.innerHTML+=`<div style="margin-top:8px;font-size:.88rem;color:#7ec89a;">✓ Goed! De zinsdelen staan nu klaar in stap 2 hieronder.</div>`;
+  }
+  renderDragBank(s);
+}
+function resetColors(){wordColors={};colorsComplete=false;document.getElementById('color-result').innerHTML='';renderColorTokens(getStructFiltered()[structIdx]);renderDragBank(getStructFiltered()[structIdx]);}
+
+/* ── SEGMENTEN: groepeer aaneengesloten woorden van één clausule ── */
+function buildSegments(s){
+  const owner={};
+  s.clauses.forEach((cl,ci)=>cl.words.forEach(w=>{owner[w]=ci;}));
+  const segs=[];
+  let cur=null;
+  for(let i=0;i<s.words.length;i++){
+    const ci=owner[i];
+    if(ci===undefined){
+      if(cur){segs.push(cur);cur=null;}
+      segs.push({id:segs.length,clauseIdx:null,widxs:[i]});
+      continue;
+    }
+    if(cur && cur.clauseIdx===ci){ cur.widxs.push(i); }
+    else { if(cur)segs.push(cur); cur={id:0,clauseIdx:ci,widxs:[i]}; }
+  }
+  if(cur)segs.push(cur);
+  segs.forEach((sg,k)=>{sg.id=k;sg.text=sg.widxs.map(w=>s.words[w]).join(' ');});
+  return segs;
+}
+
+function renderDragBank(s){
+  const bank=document.getElementById('struct-dragbank');bank.innerHTML='';
+  if(!colorsComplete){
+    bank.innerHTML='<span style="color:var(--muted);font-style:italic;font-size:.9rem;">Voltooi eerst stap 1 (controleer de kleuren) om de zinsdelen te zien.</span>';
+    return;
+  }
+  const segs=buildSegments(s);
+  const placed=new Set();structRows.forEach(r=>r.segIds.forEach(id=>placed.add(id)));
+  segs.forEach(sg=>{ if(!placed.has(sg.id)) bank.appendChild(makeSegToken(s,sg)); });
+  setupDropZone2(bank,'bank');
+}
+function makeSegToken(s,sg){
+  const tok=document.createElement('span');tok.className='drag-token seg-token';tok.dataset.segid=sg.id;tok.draggable=true;
+  sg.widxs.forEach((w,k)=>{
+    const col=getExpectedColor(s,w);
+    const sp=document.createElement('span');
+    sp.textContent=s.words[w];
+    if(col)sp.className='seg-word dt-'+col; else sp.className='seg-word';
+    tok.appendChild(sp);
+    if(k<sg.widxs.length-1)tok.appendChild(document.createTextNode(' '));
+  });
+  tok.addEventListener('dragstart',onDragStart2);tok.addEventListener('dragend',onDragEnd2);tok.addEventListener('touchstart',onTouchStart2,{passive:false});
+  return tok;
+}
+function renderStructRows(){
+  const c=document.getElementById('struct-rows-container');c.innerHTML='';
+  const s=getStructFiltered()[structIdx];
+  const segs=colorsComplete?buildSegments(s):[];
+  const segById={};segs.forEach(sg=>segById[sg.id]=sg);
+  structRows.forEach((row,ri)=>{
+    const rowEl=document.createElement('div');
+    const indent=(row.type!=='HS');
+    rowEl.className='struct-row'+(indent?' struct-row-indent':'');
+    const lbl=document.createElement('span');
+    lbl.className='struct-row-label '+(row.type==='HS'?'lbl-hs':'lbl-bs');
+    lbl.textContent=row.type;
+    const drop=document.createElement('div');drop.className='struct-row-drop';drop.dataset.rowIdx=ri;setupDropZone2(drop,ri);
+    row.segIds.forEach(id=>{ if(segById[id])drop.appendChild(makeSegToken(s,segById[id])); });
+    const ctrls=document.createElement('div');ctrls.className='struct-row-controls';
+    [['↑',()=>moveRow(ri,-1)],['↓',()=>moveRow(ri,1)],['✕',()=>removeStructRow(ri)]].forEach(([t,fn])=>{const b=document.createElement('button');b.className='row-ctrl-btn';b.textContent=t;b.onclick=fn;ctrls.appendChild(b);});
+    rowEl.appendChild(lbl);rowEl.appendChild(drop);rowEl.appendChild(ctrls);c.appendChild(rowEl);
+  });
+}
+function addStructRow(type,depth){structRows.push({type,depth:depth||0,segIds:[]});renderStructRows();}
+function removeStructRow(ri){structRows.splice(ri,1);renderStructRows();renderDragBank(getStructFiltered()[structIdx]);}
+function moveRow(ri,dir){const t=ri+dir;if(t<0||t>=structRows.length)return;[structRows[ri],structRows[t]]=[structRows[t],structRows[ri]];renderStructRows();}
+function onDragStart2(e){draggedToken2=e.currentTarget;const rd=draggedToken2.closest('.struct-row-drop');dragFromZone2=rd?parseInt(rd.dataset.rowIdx):'bank';draggedToken2.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+function onDragEnd2(){if(draggedToken2)draggedToken2.classList.remove('dragging');draggedToken2=null;dragFromZone2=null;document.querySelectorAll('.struct-row-drop').forEach(z=>z.classList.remove('drag-over'));}
+function setupDropZone2(el,zoneId){el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag-over');});el.addEventListener('dragleave',()=>el.classList.remove('drag-over'));el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('drag-over');if(draggedToken2)dropSegInto(draggedToken2,zoneId,el);});}
+function dropSegInto(tok,targetZone,targetEl){
+  const segId=parseInt(tok.dataset.segid);
+  const src=dragFromZone2!==null?dragFromZone2:touchFromZone2;
+  if(typeof src==='number'){structRows[src].segIds=structRows[src].segIds.filter(id=>id!==segId);}
+  if(targetZone!=='bank'){
+    const ri=typeof targetZone==='number'?targetZone:parseInt(targetEl?.dataset?.rowIdx);
+    if(!isNaN(ri)&&structRows[ri]&&!structRows[ri].segIds.includes(segId))structRows[ri].segIds.push(segId);
+  }
+  renderStructRows();renderDragBank(getStructFiltered()[structIdx]);
+}
+function onTouchStart2(e){
+  e.preventDefault();touchToken2=e.currentTarget;const rd=touchToken2.closest('.struct-row-drop');touchFromZone2=rd?parseInt(rd.dataset.rowIdx):'bank';
+  touchGhost2=touchToken2.cloneNode(true);touchGhost2.style.cssText='position:fixed;pointer-events:none;opacity:.8;z-index:9999;font-size:1rem;padding:4px 10px;border-radius:4px;background:var(--stone3);border:1px solid var(--gold);';
+  document.body.appendChild(touchGhost2);const t=e.touches[0];touchGhost2.style.left=(t.clientX-30)+'px';touchGhost2.style.top=(t.clientY-20)+'px';
+  document.addEventListener('touchmove',onTouchMove2,{passive:false});document.addEventListener('touchend',onTouchEnd2);
+}
+function onTouchMove2(e){
+  e.preventDefault();const t=e.touches[0];if(touchGhost2){touchGhost2.style.left=(t.clientX-30)+'px';touchGhost2.style.top=(t.clientY-20)+'px';}
+  document.querySelectorAll('.struct-row-drop,#struct-dragbank').forEach(z=>z.classList.remove('drag-over'));
+  const el=document.elementFromPoint(t.clientX,t.clientY);const zone=el?.closest('.struct-row-drop')||el?.closest('#struct-dragbank');if(zone)zone.classList.add('drag-over');
+}
+function onTouchEnd2(e){
+  document.removeEventListener('touchmove',onTouchMove2);document.removeEventListener('touchend',onTouchEnd2);
+  document.querySelectorAll('.struct-row-drop,#struct-dragbank').forEach(z=>z.classList.remove('drag-over'));
+  if(touchGhost2){touchGhost2.remove();touchGhost2=null;}if(!touchToken2)return;
+  const t=e.changedTouches[0];const el=document.elementFromPoint(t.clientX,t.clientY);const rowDrop=el?.closest('.struct-row-drop');
+  dragFromZone2=null;dropSegInto(touchToken2,rowDrop?parseInt(rowDrop.dataset.rowIdx):'bank',rowDrop);touchToken2=null;touchFromZone2=null;
+}
+function clauseExpectedType(label){
+  if(label.startsWith('HS'))return'HS';
+  if(label.startsWith('AcI'))return'AcI';
+  if(label.startsWith('GenAbs'))return'GenAbs';
+  return'BS';
+}
+function clauseExpectedDepth(s,cl){
+  // HS en GenAbs op diepte 0; BS standaard op diepte 1
+  if(cl.label.startsWith('HS')||cl.label.startsWith('GenAbs'))return 0;
+  if(cl.label.startsWith('AcI'))return 1;
+  if(cl.connector===null||cl.connector===undefined)return 1;
+  const thisMin=Math.min(...cl.words);const thisMax=Math.max(...cl.words);
+  let depth=1;
+  s.clauses.forEach(other=>{
+    if(other===cl)return;
+    if(other.label.startsWith('HS')||other.label.startsWith('GenAbs'))return;
+    if(other.connector===null||other.connector===undefined)return;
+    const otherMin=Math.min(...other.words);const otherMax=Math.max(...other.words);
+    if(thisMin>otherMin&&thisMax<otherMax)depth=Math.max(depth,2);
+  });
+  return depth;
+}
+function checkStructure(){
+  const s=getStructFiltered()[structIdx];
+  if(!s.clauses){document.getElementById('struct-result').innerHTML='<span class="badge badge-info">Geen structuurdata.</span>';return;}
+  if(!colorsComplete){document.getElementById('struct-result').innerHTML='<span class="badge badge-info">Voltooi eerst stap 1 (kleuren).</span>';return;}
+  const segs=buildSegments(s);const segById={};segs.forEach(sg=>segById[sg.id]=sg);
+  const n=s.clauses.length;let score=0,feedback=[];
+  const hsWordSet=new Set();
+  structRows.filter(r=>r.type==='HS'&&(r.depth||0)===0).forEach(r=>{
+    r.segIds.forEach(id=>{if(segById[id])segById[id].widxs.forEach(w=>hsWordSet.add(w));});
+  });
+  const rowWordSets=structRows.map(row=>{
+    const ws=new Set();row.segIds.forEach(id=>{if(segById[id])segById[id].widxs.forEach(w=>ws.add(w));});
+    return {type:row.type,depth:row.depth||0,ws};
+  });
+  s.clauses.forEach(cl=>{
+    const expType=clauseExpectedType(cl.label);
+    let best=null,bestOverlap=0,bestWs=null;
+    if(expType==='HS'){
+      const ov=cl.words.filter(w=>hsWordSet.has(w)).length;
+      if(ov>0){best={type:'HS',depth:0};bestOverlap=ov;bestWs=hsWordSet;}
+    } else {
+      rowWordSets.forEach(rw=>{
+        const ov=cl.words.filter(w=>rw.ws.has(w)).length;
+        if(ov>bestOverlap){bestOverlap=ov;best=rw;bestWs=rw.ws;}
+      });
+    }
+    if(!best||bestOverlap===0){feedback.push(`<strong>${cl.label}</strong>: nog niet geplaatst.`);return;}
+    const typeOk=best.type===expType;
+    const depthOk=expType==='HS'?true:(best.depth||0)>=1;
+    const exact=cl.words.every(w=>bestWs.has(w));
+    if(typeOk&&depthOk&&exact){
+      score++;
+    } else {
+      if(!typeOk)feedback.push(`<strong>${cl.label}</strong>: staat in een <em>${best.type}</em>-rij, maar moet een <em>${expType}</em>-rij zijn.`);
+      if(!depthOk)feedback.push(`<strong>${cl.label}</strong>: bijzinnen horen ingesprongen te staan (niet in een HS-rij).`);
+      if(!exact){
+        const miss=cl.words.filter(w=>!bestWs.has(w)).map(w=>`<em>${s.words[w]}</em>`);
+        if(miss.length)feedback.push(`${cl.label}: ontbrekende woorden: ${miss.join(' ')}`);
+      }
+    }
+  });
+  const r=document.getElementById('struct-result');
+  r.innerHTML=`<span class="badge ${score===n?'badge-correct':'badge-wrong'}">${score} van ${n} zinsdelen correct geplaatst</span>`;
+  if(feedback.length)r.innerHTML+=`<div style="margin-top:10px;font-size:.88rem;color:var(--cream2);line-height:2;">${feedback.join('<br>')}</div>`;
+  document.getElementById('struct-answer').classList.remove('hidden');
+  document.getElementById('struct-answer-text').innerHTML=renderStructureView(s)+`<div style="margin-top:10px;font-size:.88rem;color:var(--cream2);font-style:italic">${s.explanation}</div>`;
+}
+function resetStructure(){structRows=[];document.getElementById('struct-result').innerHTML='';document.getElementById('struct-answer').classList.add('hidden');renderDragBank(getStructFiltered()[structIdx]);renderStructRows();}
+
+/* ═══════════════════════════════════════════════════════
+   MODULE 6: AI-ANALYSE
+═══════════════════════════════════════════════════════ */
+function resetAiAnalysis(){
+  document.getElementById('ai-sentence-input').value='';
+  document.getElementById('ai-result').innerHTML='';
+  document.getElementById('ai-legend').style.display='none';
+  document.getElementById('ai-disclaimer').style.display='none';
+}
+
+function aiWordClass(role){
+  switch(role){
+    case 'pv': return 'w-pv';
+    case 'ondersch': return 'w-ondersch';
+    case 'betr': return 'w-betr';
+    case 'nevensch': return 'w-nevensch';
+    case 'special': return 'w-special';
+    default: return '';
+  }
+}
+
+function renderAiAnalysis(data){
+  // data.clauses = [{type:'HS'|'BS'|'AcI'|'GenAbs', depth:int, soort:string, words:[{text, role, vertaling}], note}]
+  if(!data || !Array.isArray(data.clauses)) {
+    return '<div class="ai-feedback-box" style="border-color:var(--red)"><strong style="color:#e08080">Fout:</strong> de AI gaf geen geldige structuur terug. Probeer het opnieuw.</div>';
+  }
+  let html='<div class="ai-struct-view">';
+  data.clauses.forEach(cl=>{
+    const depth = cl.depth || (cl.type==='HS'||cl.type==='GenAbs' ? 0 : 1);
+    const indent = depth * 36;
+    const isMain = cl.type==='HS';
+    const lblClass = isMain ? 'lbl-hs' : 'lbl-bs';
+    let lblText = cl.type;
+    if(cl.soort && cl.type!=='HS') lblText += ' ('+cl.soort+')';
+    const wordsHtml = (cl.words||[]).map(w=>{
+      const cls = aiWordClass(w.role);
+      const transl = (w.role==='ondersch'||w.role==='betr'||w.role==='nevensch') && w.vertaling
+        ? `<span class="ai-conn-translation">= ${escapeHtml(w.vertaling)}</span>` : '';
+      return `<span class="ai-word ${cls}">${escapeHtml(w.text)}</span>${transl}`;
+    }).join(' ');
+    html += `<div class="ai-clause-row" style="padding-left:${indent}px;">
+      <span class="ai-clause-label ${lblClass}">${escapeHtml(lblText)}</span>
+      <span class="ai-clause-text">${wordsHtml}</span>
+    </div>`;
+    if(cl.note){
+      html += `<div class="ai-clause-note" style="margin-left:${indent+108}px;">${escapeHtml(cl.note)}</div>`;
+    }
+  });
+  html += '</div>';
+  if(data.toelichting){
+    html += `<div style="margin-top:12px;font-size:.9rem;color:var(--cream2);line-height:1.7;">${escapeHtml(data.toelichting)}</div>`;
+  }
+  return html;
+}
+
+function escapeHtml(str){
+  if(str===undefined||str===null) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+async function analyzeWithAI(){
+  const sentence = document.getElementById('ai-sentence-input').value.trim();
+  const apiKey = document.getElementById('ai-api-key-input').value.trim();
+  const resultEl = document.getElementById('ai-result');
+
+  if(!sentence){
+    resultEl.innerHTML = '<span class="badge badge-info">Voer eerst een Griekse zin in.</span>';
+    return;
+  }
+  if(!apiKey){
+    resultEl.innerHTML = '<span class="badge badge-info">Vul eerst je Gemini API-sleutel in.</span>';
+    return;
+  }
+
+  resultEl.innerHTML = '<div class="ai-feedback-box"><span class="loading">De AI analyseert de zinsstructuur... even geduld.</span></div>';
+
+  const prompt = `Je bent een classicus en ervaren docent Grieks op een Nederlands gymnasium. Analyseer de zinsbouw van de onderstaande Griekse zin volgens de traditionele schoolgrammatica (vergelijk Smyth en Rijksbaron).
+
+Griekse zin: "${sentence}"
+
+Verdeel de zin in zinsdelen (clausules): hoofdzinnen (HS), bijzinnen (BS), en daarnaast AcI (accusativus cum infinitivo) en genitivus absolutus (GenAbs), die in het Nederlands als bijzin vertaald worden maar geen echte bijzin zijn.
+
+Regels voor de analyse:
+- Bepaal voor elk WOORD een rol: "pv" (persoonsvorm / finiete werkwoordsvorm), "ondersch" (onderschikkend voegwoord), "betr" (betrekkelijk voornaamwoord), "nevensch" (nevenschikkend voegwoord), of "geen" (geen bijzondere rol).
+- Een infinitivus in een AcI is GEEN pv. Een participium in een genitivus absolutus is GEEN pv.
+- Geef bij ondersch/betr/nevensch een Nederlandse vertaling van DAT woord (bijv. "omdat", "die", "en"). Geef GEEN vertaling bij andere woorden — de leerling vertaalt de rest zelf.
+- Bepaal het inspringniveau (depth): HS en GenAbs = 0, een bijzin direct onder de hoofdzin = 1, een bijzin binnen een bijzin = 2, enzovoort.
+- Geef per bijzin de "soort": betrekkelijk, causaal, temporeel, finaal, consecutief, concessief, conditioneel, indirecte vraag, of vergelijkend. Bij HS, AcI en GenAbs mag soort leeg zijn.
+- Behoud de woordvolgorde van de originele zin per clausule. Als een hoofdzin onderbroken wordt door een bijzin, mag je de hoofdzin in twee HS-delen splitsen.
+
+Antwoord UITSLUITEND met geldige JSON, zonder enige extra tekst of markdown, in exact dit formaat:
+{
+  "clauses": [
+    {
+      "type": "HS",
+      "depth": 0,
+      "soort": "",
+      "words": [
+        {"text": "woord", "role": "pv", "vertaling": ""}
+      ],
+      "note": ""
+    }
+  ],
+  "toelichting": "Korte uitleg in het Nederlands over de structuur (max 2 zinnen). Vertaal hierin GEEN inhoudswoorden."
+}`;
+
+  try {
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.2, maxOutputTokens: 2048, thinkingConfig: { thinkingBudget: 0 } }
+        })
+      }
+    );
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+    let text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    if(!text) throw new Error('Geen antwoord ontvangen van de AI.');
+    text = text.replace(/```json/gi,'').replace(/```/g,'').trim();
+    const first = text.indexOf('{');
+    const last = text.lastIndexOf('}');
+    if(first===-1||last===-1) throw new Error('De AI gaf geen geldige JSON terug.');
+    const parsed = JSON.parse(text.slice(first, last+1));
+    resultEl.innerHTML = renderAiAnalysis(parsed);
+    document.getElementById('ai-legend').style.display = 'flex';
+    document.getElementById('ai-disclaimer').style.display = 'block';
+  } catch (err) {
+    resultEl.innerHTML = `<div class="ai-feedback-box" style="border-color:var(--red)">
+      <strong style="color:#e08080">Fout:</strong> ${escapeHtml(err.message)}<br>
+      <span style="color:var(--muted);font-size:.85rem">Controleer je API-sleutel of probeer het opnieuw. Heel lange of ongebruikelijke zinnen kunnen lastig zijn voor de AI.</span>
+    </div>`;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   INLEIDENDE WOORDEN TABS
+═══════════════════════════════════════════════════════ */
+function switchIwTab(tab, btn) {
+  document.querySelectorAll('.iw-panel').forEach(p => p.classList.add('hidden'));
+  document.querySelectorAll('.iw-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('iwtab-' + tab).classList.remove('hidden');
+  btn.classList.add('active');
+}
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+initSort();
+renderStructModule();
+</script>
+</body>
+</html>
