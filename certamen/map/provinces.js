@@ -211,6 +211,53 @@ const MapAPI = (function () {
     return g;
   }
 
+  /* Stadsmarkers: kleine stipjes op elke stad uit het provincieregister
+     (registry[id].cities[].x/y — voorberekende coördinaten in hetzelfde
+     assenstelsel als de invoegouder hieronder, zie de toelichting bij
+     drawSeaRoutes() over geneste transforms/de CTM-valkuil; deze coördinaten
+     zijn al in dat assenstelsel opgeslagen, geen runtime CTM-berekening
+     nodig zoals bij de zeeroutes). Idempotent, net als drawSeaRoutes(): een
+     eerdere <g id="mapCityMarkers"> wordt vervangen, niet gestapeld. Elke
+     marker krijgt een <title> voor een naam-tooltip bij hover. */
+  function drawCityMarkers(registry, container) {
+    if (!container || typeof container.querySelector !== "function") return null;
+    const svg = container.querySelector("svg");
+    if (!svg || !registry) return null;
+    const old = svg.querySelector("#mapCityMarkers");
+    if (old) old.remove();
+
+    const firstProvince = svg.querySelector(".province");
+    const insertParent = firstProvince ? firstProvince.parentNode : svg;
+
+    const ns = "http://www.w3.org/2000/svg";
+    const g = document.createElementNS(ns, "g");
+    g.setAttribute("id", "mapCityMarkers");
+    g.setAttribute("style", "pointer-events:none");
+    Object.keys(registry).forEach((id) => {
+      if (id === "_meta") return;
+      (registry[id].cities || []).forEach((city) => {
+        if (city.x == null || city.y == null) return;
+        const dot = document.createElementNS(ns, "circle");
+        dot.setAttribute("cx", city.x);
+        dot.setAttribute("cy", city.y);
+        dot.setAttribute("r", "220");
+        dot.setAttribute("fill", "#f3e9d2");
+        dot.setAttribute("stroke", "#3a2f22");
+        dot.setAttribute("stroke-width", "60");
+        dot.setAttribute("opacity", "0.85");
+        const title = document.createElementNS(ns, "title");
+        title.textContent = city.name + (city.tag ? " — " + city.tag : "");
+        dot.appendChild(title);
+        g.appendChild(dot);
+      });
+    });
+    // Bovenop de provincies (en de zeeroutes, die vóór de eerste provincie
+    // zitten), zodat markers nooit onder de kaartvulling verdwijnen —
+    // appendChild i.p.v. insertBefore, bewust anders dan drawSeaRoutes().
+    insertParent.appendChild(g);
+    return g;
+  }
+
   return {
     setProvinceOwner,
     setProvinceContested,
@@ -219,5 +266,6 @@ const MapAPI = (function () {
     highlightProvince,
     resetProvince,
     drawSeaRoutes,
+    drawCityMarkers,
   };
 })();

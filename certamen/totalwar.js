@@ -398,7 +398,7 @@ SCREENS.totalWarPreview = function(){
 async function twEnsureRegistry(){
   if(_twRegistry) return _twRegistry;
   try{
-    const reg = await fetch("map/provinces.json?v=20260707b").then(r=> r.ok ? r.json() : {});
+    const reg = await fetch("map/provinces.json?v=20260712a").then(r=> r.ok ? r.json() : {});
     _twRegistry = reg;
   }catch(e){ _twRegistry = {}; }
   return _twRegistry;
@@ -425,7 +425,10 @@ async function twLoadMap(interactive, live, seed){
       svgEl.removeAttribute("height");
       svgEl.setAttribute("style","width:100%;height:auto;display:block");
     }
-    if(typeof MapAPI!=="undefined" && _twRegistry) MapAPI.drawSeaRoutes(_twRegistry, host);
+    if(typeof MapAPI!=="undefined" && _twRegistry){
+      MapAPI.drawSeaRoutes(_twRegistry, host);
+      MapAPI.drawCityMarkers(_twRegistry, host);
+    }
     if(live) await (seed ? twStartLive() : twStartLiveReadOnly()); else twApplyDemo();
     if(interactive) twBindMapClicks(host);
     const lg = el("twLegendBox"); if(lg) lg.innerHTML = twLegend();
