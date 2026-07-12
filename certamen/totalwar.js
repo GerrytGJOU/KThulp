@@ -570,7 +570,19 @@ function twApplyLive(provinces){
   Object.entries(provinces||{}).forEach(([id,p])=>{
     const civId = p && p.owner;
     const c = civId && civId!=="neutral" ? TW_CIVS[civId] : null;
-    MapAPI.setProvinceOwner(id, c ? c.color : null);
+    // "Betwist" (§5.3, herdefinitie): een onderbroken belegering met nog
+    // resterende schade — geen aparte stad-eigendom nodig, hergebruikt de
+    // al bestaande siege/stageDamage-data (zie de slijtageslag-reparatie).
+    // Volledig gerepareerd (stageDamage terug op 0) → niet meer betwist.
+    const siege = p && p.siege;
+    const dmg = siege && siege.lastStage ? (siege.stageDamage && siege.stageDamage[siege.lastStage] || 0) : 0;
+    const contested = dmg>0 && siege.attackerCivId && siege.attackerCivId!==civId;
+    if(contested){
+      const atkC = TW_CIVS[siege.attackerCivId] || TW_CIVS.neutral;
+      MapAPI.setProvinceContested(id, c ? c.color : TW_CIVS.neutral.color, atkC.color);
+    } else {
+      MapAPI.setProvinceOwner(id, c ? c.color : null);
+    }
     MapAPI.setProvinceDefense(id, twOverallDefensePct(p));
   });
 }
@@ -611,6 +623,9 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, player
     const upd = {};
     upd["siege/lastStage"] = stageKey;
     upd["siege/stageDamage/"+stageKey] = Math.max(prevDealt, dealt);
+    // "Betwist"-visualisatie (§5.3, herdefinitie): wie de laatste (nog niet
+    // succesvolle) aanval deed, voor de gestreepte kaartweergave in twApplyLive().
+    upd["siege/attackerCivId"] = BM_META.attackerCivId;
     upd["lastChanged"] = FBNet.serverTime();
     await ref.update(upd);
   }
@@ -881,9 +896,13 @@ function twProvinceInfo(id){
   // deze melding ziet een provincie die al eens is aangevallen er identiek
   // uit als een verse, wat een docent op het verkeerde been zet.
   const siege = p.siege;
-  const siegeNote = (siege && siege.lastStage)
-    ? `<div class="note warn" style="margin-top:4px">⚔ Belegering onderbroken bij "${esc(siege.lastStage)}" — een volgende aanval hervat daar (herstelt niet vanzelf).</div>`
-    : "";
+  const siegeDmg = siege && siege.lastStage ? (siege.stageDamage && siege.stageDamage[siege.lastStage] || 0) : 0;
+  const attackerNm = siege && siege.attackerCivId ? (TW_CIVS[siege.attackerCivId]||TW_CIVS.neutral).nm : "";
+  const siegeNote = (siege && siege.lastStage && siegeDmg>0)
+    ? `<div class="note warn" style="margin-top:4px">⚔ Betwist — ${esc(attackerNm)} brak bij "${esc(siege.lastStage)}" door (${Math.round(siegeDmg)} schade), maar veroverde de provincie niet. Training Mode op dit spoor repareert de schade; een volgende aanval hervat waar deze strandde.</div>`
+    : (siege && siege.lastStage
+      ? `<div class="note" style="margin-top:4px">⚔ Belegering bij "${esc(siege.lastStage)}" volledig gerepareerd.</div>`
+      : "");
   return `
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       ${_twLiveMode ? twGarrisonVisualHTML(p, civId) : ""}
@@ -927,12 +946,18 @@ function twGarrisonVisualHTML(p, civId){
 /* ---- Legenda van beschavingen met aantal gebieden ---- */
 function twLegend(){
   const counts = {};
+  let contestedCount = 0;
   if(_twLiveMode){
-    Object.values(_twLiveProvinces||{}).forEach(p=>{ if(p&&p.owner) counts[p.owner]=(counts[p.owner]||0)+1; });
+    Object.values(_twLiveProvinces||{}).forEach(p=>{
+      if(p&&p.owner) counts[p.owner]=(counts[p.owner]||0)+1;
+      const s=p&&p.siege;
+      const dmg=s&&s.lastStage?(s.stageDamage&&s.stageDamage[s.lastStage]||0):0;
+      if(dmg>0 && s.attackerCivId && s.attackerCivId!==p.owner) contestedCount++;
+    });
   } else {
     Object.values(TW_DEMO_OWN).forEach(c=> counts[c]=(counts[c]||0)+1);
   }
-  return Object.entries(TW_CIVS).map(([id,c])=>{
+  const civChips = Object.entries(TW_CIVS).map(([id,c])=>{
     const owned = counts[id] || 0;
     // Uitgeroeid (0 provincies, alleen relevant in live mode — de demo-kaart
     // kent geen "rebellen"-toestand): duidelijk zichtbaar in de legenda,
@@ -943,4 +968,8 @@ function twLegend(){
       id!=="neutral" ? ` <small>${owned} gebied${owned!==1?'en':''}</small>` : ""}${
       wiped ? ` <small style="color:#e07060">💀 verslagen</small>` : ""}</span>`;
   }).join("");
+  const contestedChip = contestedCount
+    ? `<span class="chip"><small style="color:#e8b923">⚔ ${contestedCount} betwist gebied${contestedCount!==1?'en':''}</small></span>`
+    : "";
+  return civChips + contestedChip;
 }
