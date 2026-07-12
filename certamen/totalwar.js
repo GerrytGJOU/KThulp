@@ -398,7 +398,7 @@ SCREENS.totalWarPreview = function(){
 async function twEnsureRegistry(){
   if(_twRegistry) return _twRegistry;
   try{
-    const reg = await fetch("map/provinces.json?v=20260712a").then(r=> r.ok ? r.json() : {});
+    const reg = await fetch("map/provinces.json?v=20260712b").then(r=> r.ok ? r.json() : {});
     _twRegistry = reg;
   }catch(e){ _twRegistry = {}; }
   return _twRegistry;
