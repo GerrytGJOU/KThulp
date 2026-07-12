@@ -439,23 +439,45 @@ wel vast, overgenomen uit het docx-garnizoensplan.
 
 ### 5.3 Provincie vs. stad-eigendom
 
-Een provincie is pas **volledig** veroverd (en geeft de volle
-provinciebonus) als **alle steden erin** zijn ingenomen. Een provincie met
-gemengd stedenbezit is **"contested"**:
+> ⚠️ **"Contested" is inmiddels ANDERS gedefinieerd en gebouwd dan hieronder
+> beschreven.** Het oorspronkelijke docx-plan bedoelde met "contested" een
+> provincie met **gemengd stedenbezit** (steden verdeeld over ≥2 facties) —
+> dat vereist stad-niveau-eigendom en is nog steeds **niet gebouwd** (zie
+> onder). In de praktijk bleek een andere, simpelere definitie nuttiger en
+> sloot bovendien al aan op bestaande data: **een provincie is "betwist"
+> zodra een belegering er schade heeft achtergelaten zonder de provincie te
+> veroveren** (`siege.lastStage`/`siege.stageDamage`, zie §5.4) — verzwakt,
+> maar niet (meer) van de verdediger afgepakt. Volledig gerepareerd
+> (`stageDamage` terug op 0, zie de slijtageslag-reparatie in §5.4) betekent
+> niet meer betwist.
+>
+> **✅ Gebouwd** (deze herdefinitie): `twResolveSiege()` (`certamen/
+> totalwar.js`) schrijft er `siege/attackerCivId` bij zodra een aanval faalt.
+> `twApplyLive()` kiest per provincie tussen `MapAPI.setProvinceOwner()`
+> (effen kleur) en het nieuwe `MapAPI.setProvinceContested(id, ownerColor,
+> attackerColor)` (`certamen/map/provinces.js`) — een diagonaal gestreept SVG
+> `<pattern>` in de kleuren van eigenaar én aanvaller, gezet via dezelfde
+> `--province-fill`-CSS-variabele als een normale eigenaarskleur (een losse
+> `.contested`-klasse geeft er bovendien een goudkleurige randnadruk aan,
+> `certamen/map/provinces.css`). **Correctie op het origineel-voorgestelde
+> "CSS `repeating-linear-gradient` als `background`"**: dat werkt niet op een
+> SVG-`<path>`'s `fill` — een `<pattern>`-element in `<defs>` met
+> `fill="url(#...)"` is de juiste SVG-techniek. `twProvinceInfo()` en
+> `twLegend()` tonen de betwiste status ook in tekst (wie doorbrak, hoeveel
+> schade, en een teller "⚔ N betwist gebieden").
 
-- **Kaartvisualisatie:** volledig bezit → effen kleur van de eigenaar. Betwist
-  (steden verdeeld over ≥2 facties) → diagonaal gestreept in de kleuren van de
-  betrokken facties, via CSS `repeating-linear-gradient` als `background`
-  op het provincie-`<path>` (dit werkt prima naast de bestaande
-  `--province-fill`-mechaniek in `provinces.css` — voor "contested" gebruik je
-  een losse CSS-klasse i.p.v. de custom property, zie de code-aanzet in het
-  oorspronkelijke docx-plan, sectie "Visuele Logica").
+Een provincie is pas **volledig** veroverd (en geeft de volle
+provinciebonus) als **alle steden erin** zijn ingenomen — **dit deel is nog
+steeds niet gebouwd**, zie hieronder:
+
 - Individuele steden blijven **los aanklikbaar/kleurbaar** — dit vraagt een
   uitbreiding van `provinces.svg`/`MapAPI`: steden bestaan nu conceptueel
   (namen in `provinces.json`) maar zijn geen eigen SVG-elementen. Toevoegen
   van `<circle>`-stadsmarkers per provincie (op basis van elk stad se
   historische positie) is nieuw werk, geometrisch onafhankelijk van de
   bestaande provincie-`<path>`s dus **zonder risico** voor de bestaande kaart.
+  Dit blijft een openstaand vervolgpunt, los van de nu gebouwde
+  belegerings-"betwist"-status hierboven.
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 
@@ -732,8 +754,10 @@ een schildlaag krijgt, kan `towers` daaraan gekoppeld worden.
 5. ✅ **Boss Battle**: bleek al te bestaan als uitbreiding op Battle Mode se
    Team A/B-engine (zie §9.4-addendum); gekoppeld aan Total War via de
    garnizoensformule (§5.4/§9.6) in `bmStartBossGame()`/`bmResolve()`.
-6. **Kaart-UI**: contested/gestreepte provincies (§5.3), stad-markers zijn nog
-   open; de "Val aan"-knop in het docentendashboard (§7.2) is wel al gebouwd.
+6. **Kaart-UI**: gestreepte "betwist"-provincies (§5.3, herdefinitie op
+   belegeringsschade i.p.v. stad-eigendom) is ✅ gebouwd; stad-markers voor
+   het oorspronkelijke stad-eigendomsconcept blijven open; de "Val aan"-knop
+   in het docentendashboard (§7.2) is wel al gebouwd.
 7. **Balans-pas**: klasgrootte-compensatie is ✅ al gebouwd (§7.4). Slijtageslag-
    reparatie is inmiddels ✅ ook gebouwd (§5.4, automatisch via Training Mode
    op het doorbroken spoor). TP-kosten (§5.2) blijven moot — er is geen

@@ -30,6 +30,8 @@ const MapAPI = (function () {
   function setProvinceOwner(id, factionColor, r) {
     const el = province(id, r);
     if (!el) return false;
+    el.classList.remove("contested"); // kan een eerdere setProvinceContested() overschrijven
+    delete el.dataset.attacker;
     if (factionColor) {
       el.style.setProperty("--province-fill", factionColor);
       el.dataset.owner = factionColor; // door de aanroeper te vervangen door faction-id indien gewenst
@@ -37,6 +39,53 @@ const MapAPI = (function () {
       el.style.removeProperty("--province-fill");
       el.dataset.owner = "neutral";
     }
+    return true;
+  }
+
+  /* Betwiste provincie (TOTAL_WAR.md §5.3, herdefinitie): een provincie met
+     een onderbroken belegering (siege.lastStage gezet, nog niet veroverd) —
+     diagonaal gestreept in de kleur van de huidige eigenaar én de aanvaller,
+     via een SVG <pattern> (CSS "background" werkt niet op SVG-fill; dat was
+     een onnauwkeurigheid in het oorspronkelijke docx-afgeleide plan). Zet
+     --province-fill op url(#patroon-id), zodat dit naadloos hergebruikt
+     wordt door dezelfde CSS-regel als setProvinceOwner(). Eén pattern-element
+     per provincie-id, hergebruikt/bijgewerkt bij een volgende aanroep i.p.v.
+     gestapeld. */
+  const SVGNS = "http://www.w3.org/2000/svg";
+  function setProvinceContested(id, ownerColor, attackerColor, r) {
+    const el = province(id, r);
+    if (!el) return false;
+    const svg = el.closest("svg");
+    if (!svg) return false;
+    let defs = svg.querySelector("defs");
+    if (!defs) {
+      defs = document.createElementNS(SVGNS, "defs");
+      svg.insertBefore(defs, svg.firstChild);
+    }
+    const patId = "contested-" + id;
+    let pattern = defs.querySelector("#" + patId);
+    if (!pattern) {
+      pattern = document.createElementNS(SVGNS, "pattern");
+      pattern.setAttribute("id", patId);
+      pattern.setAttribute("patternUnits", "userSpaceOnUse");
+      pattern.setAttribute("width", "2400");
+      pattern.setAttribute("height", "2400");
+      pattern.setAttribute("patternTransform", "rotate(45)");
+      const bg = document.createElementNS(SVGNS, "rect");
+      bg.setAttribute("width", "2400"); bg.setAttribute("height", "2400");
+      const stripe = document.createElementNS(SVGNS, "rect");
+      stripe.setAttribute("width", "1200"); stripe.setAttribute("height", "2400");
+      pattern.appendChild(bg);
+      pattern.appendChild(stripe);
+      defs.appendChild(pattern);
+    }
+    const rects = pattern.querySelectorAll("rect");
+    rects[0].setAttribute("fill", ownerColor || "#dfd5c6");
+    rects[1].setAttribute("fill", attackerColor || "#8a4fb0");
+    el.style.setProperty("--province-fill", "url(#" + patId + ")");
+    el.classList.add("contested");
+    el.dataset.owner = ownerColor || "neutral";
+    el.dataset.attacker = attackerColor || "";
     return true;
   }
 
@@ -70,11 +119,12 @@ const MapAPI = (function () {
     const el = province(id, r);
     if (!el) return false;
     el.style.removeProperty("--province-fill");
-    el.classList.remove("selected", "enemy", "ally", "highlight");
+    el.classList.remove("selected", "enemy", "ally", "highlight", "contested");
     el.dataset.owner = "neutral";
     el.dataset.defense = "0";
     el.dataset.forts = "0";
     el.dataset.bonus = "";
+    delete el.dataset.attacker;
     return true;
   }
 
@@ -163,6 +213,7 @@ const MapAPI = (function () {
 
   return {
     setProvinceOwner,
+    setProvinceContested,
     setProvinceDefense,
     setProvinceBonus,
     highlightProvince,
