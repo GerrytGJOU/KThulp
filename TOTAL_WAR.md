@@ -499,13 +499,32 @@ daarvoor:
   eerste verificatiepoging hield daar geen rekening mee en faalde daardoor
   systematisch; opgelost door bij `isPointInFill()` eerst de inverse van de
   eigen transform van het path toe te passen.
-  **Kanttekening:** dit is een geometrisch geverifieerde, maar niet
-  visueel-op-een-screenshot-gecontroleerde plaatsing (de browserpreview se
-  screenshot-tool werkte niet in de sessie waarin dit gebouwd is) — de exacte
-  positie *binnen* een stad se marge-van-onzekerheid is een educated guess,
-  niet gemeten. Zie het gewoon zelf op de kaart en meld afwijkingen; de
-  coördinaten staan gewoon als `x`/`y` per stad in `provinces.json` en zijn
-  vrij aan te passen.
+  **Update — 36 steden gecorrigeerd tegen de originele cartografie.**
+  `provinces.svg` bleek zelf al 41 stadslabels te bevatten (de bronkaart,
+  "Wikimedia Roman provinces Trajan", had per provincie al de hoofdstad
+  gelabeld) — dat was bij het bouwen niet opgemerkt. Voor 36 daarvan kon een
+  eenduidige naam-match gevonden worden met `provinces.json` (5 hadden een
+  afwijkende spelling in de bronkaart, bv. "Mogantiacum" i.p.v.
+  "Mogontiacum" — opgevangen met een alias-tabel; "Caesarea"/"Carthago" waren
+  dubbelzinnig — 2 provincies delen die naam — en bewust overgeslagen).
+  Vergelijking met mijn eigen schattingen gaf een gemiddelde afwijking van
+  ~6.500 eenheden (op een provincie-breedte van 10.000–30.000), met
+  uitschieters tot 17.000 (Thessalonica) — allemaal nog wel binnen de juiste
+  provincie (dat werd al geverifieerd), maar duidelijk niet altijd op de
+  juiste plek daarbinnen. De bronkaart-positie is overgenomen als de
+  betrouwbaardere bron. **Kanttekening bij de tekstlabel-positie zelf**: een
+  cartografisch label staat vaak verschoven naast het eigenlijke punt (voor
+  leesbaarheid) — rechtstreeks overnemen zette 23 van de 36 juist weer
+  *buiten* de provincievorm. Eindoplossing: de labelpositie als richting
+  gebruikt, gesnapt naar het dichtstbijzijnde punt binnen de echte vorm
+  (dezelfde rastertechniek als bij de eerste plaatsingsronde). Na deze
+  correctieronde: alle 110 opnieuw volledig geverifieerd met
+  `isPointInFill()`.
+  **Overgebleven kanttekening**: voor de andere 74 steden (geen label in de
+  bronkaart) blijft de plaatsing een geometrisch geverifieerde, maar niet
+  op-een-screenshot-gecontroleerde schatting — zie het gewoon zelf op de
+  kaart en meld afwijkingen; de coördinaten staan gewoon als `x`/`y` per stad
+  in `provinces.json` en zijn vrij aan te passen.
 - **✅ Historisch lesje per stad, ontgrendeld bij verovering.** Elke stad
   heeft nu ook een `history`-veld (2 zinnen, Nederlands) in `provinces.json`.
   Zichtbaar in **"Bekijk je gebied"** (`SCREENS.trainingGarrison`,
