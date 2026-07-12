@@ -240,15 +240,17 @@ const MapAPI = (function () {
         const dot = document.createElementNS(ns, "circle");
         dot.setAttribute("cx", city.x);
         dot.setAttribute("cy", city.y);
-        // r=220 was op deze viewBox (~175528 breed) nog geen 5px op scherm —
-        // vrijwel onzichtbaar. Groter + eigen pointer-events:auto (de groep
-        // eromheen staat op none, dus zonder dit zou ook de hover-tooltip
-        // nooit triggeren).
-        dot.setAttribute("r", "550");
-        dot.setAttribute("fill", "#f3e9d2");
+        // r=220, en later r=550, bleken op deze viewBox (~175528 breed, kaart
+        // wordt in de app op zo'n 750px CSS-breedte getoond) nog altijd maar
+        // 2-5px op scherm — te klein om in een screenshot te herkennen.
+        // Fors vergroot naar een duidelijk zichtbare stip (~15px op scherm).
+        // Eigen pointer-events:auto (de groep eromheen staat op none, dus
+        // zonder dit zou ook de hover-tooltip nooit triggeren).
+        dot.setAttribute("r", "1600");
+        dot.setAttribute("fill", "#ffd76a");
         dot.setAttribute("stroke", "#3a2f22");
-        dot.setAttribute("stroke-width", "160");
-        dot.setAttribute("opacity", "0.92");
+        dot.setAttribute("stroke-width", "380");
+        dot.setAttribute("opacity", "0.95");
         dot.setAttribute("style", "pointer-events:auto");
         const title = document.createElementNS(ns, "title");
         title.textContent = city.name + (city.tag ? " — " + city.tag : "");
