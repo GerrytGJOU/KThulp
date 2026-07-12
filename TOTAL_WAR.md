@@ -65,6 +65,7 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | **8**-facties-tabel + thuislanden (seed-data) | `certamen/totalwar.js` (`TW_CIVS`, `TW_HOME_PROVINCES`) | ✅ werkend — **niet** 7: naast de 7 uit §2 bestaat ook `britanni` (Britten, thuisprovincie `britannia`) al in de seed-data, zie de correctie bij §2 hieronder |
 | Voorbeeld-eigendom/verdediging voor de **publieke** demo-kaart | `certamen/totalwar.js` (`TW_DEMO_OWN`, `TW_DEMO_DEF`) | ✅ blijft bestaan, uitsluitend voor `SCREENS.totalWar` (niet-docenten) — inclusief één "betwist"-voorbeeld (`TW_DEMO_CONTESTED`, Raetia) |
 | **Stadsmarkers** (110 steden, geometrisch geverifieerd) | `certamen/map/provinces.js` (`MapAPI.drawCityMarkers`) + `provinces.json` (`cities[].x`/`y`) | ✅ werkend — zie §5.3 voor hoe de coördinaten tot stand kwamen; nog geen eigendom per stad |
+| **Historisch lesje per stad**, ontgrendeld bij verovering | `certamen/training.js` (`trProvinceOverviewHTML`, "Bekijk je gebied") + `provinces.json` (`cities[].history`) | ✅ werkend — alle 110 steden, alleen zichtbaar voor provincies die de eigen beschaving bezit |
 
 **Belangrijk over de kaart:** dit is de **echte** Romeinse-provinciekaart (zie
 de projectgeschiedenis: de originele Wikimedia-SVG is schoongemaakt en elke
@@ -505,10 +506,22 @@ daarvoor:
   niet gemeten. Zie het gewoon zelf op de kaart en meld afwijkingen; de
   coördinaten staan gewoon als `x`/`y` per stad in `provinces.json` en zijn
   vrij aan te passen.
+- **✅ Historisch lesje per stad, ontgrendeld bij verovering.** Elke stad
+  heeft nu ook een `history`-veld (2 zinnen, Nederlands) in `provinces.json`.
+  Zichtbaar in **"Bekijk je gebied"** (`SCREENS.trainingGarrison`,
+  `trProvinceOverviewHTML()` in `certamen/training.js`) — een inklapbaar
+  "📜 Geschiedenis"-blok per provinciekaart, met naam/sfeertag/lesje per stad.
+  Bewust **niet** op de publieke kaart (`twProvinceInfo()`, waar iedereen elke
+  provincie kan bekijken): "Bekijk je gebied" toont uitsluitend
+  `TR_OWNED_PROVINCES` (provincies van de eigen beschaving), dus de
+  geschiedenis is impliciet — zonder extra ontgrendel-logica — pas leesbaar
+  zodra de klas de provincie daadwerkelijk bezit. Geen aparte eigendomsstatus
+  per stad nodig: de bestaande provincie-eigendom is de ontgrendel-voorwaarde.
 - Individuele steden **los aanklikbaar/kleurbaar maken met eigen eigendom**
-  (het oorspronkelijke stad-eigendomsconcept) is het overgebleven, nog
-  openstaande werk — de markers hierboven zijn er de geometrische basis voor,
-  maar er is nog geen Firebase-veld/UI voor eigendom per stad.
+  (het oorspronkelijke stad-eigendomsconcept, of eventuele toekomstige
+  stadsbonussen) is het overgebleven, nog openstaande werk — de markers en
+  geschiedenislesjes hierboven zijn er de basis voor, maar er is nog geen
+  Firebase-veld/UI voor eigendom of mechanische bonussen per stad.
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 

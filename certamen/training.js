@@ -393,6 +393,7 @@ async function trLoadGarrisonView(){
     body.innerHTML = `<div class="panel"><div class="note warn">Firebase niet beschikbaar.</div></div>`;
     return;
   }
+  await twEnsureRegistry(); // nodig voor provincienamen, bonustekst én de geschiedenislesjes per stad
   await trLoadOwnedProvinces();
   const civ = TW_CIVS[TR_CIV]||TW_CIVS.neutral;
   body.innerHTML = `
@@ -437,6 +438,13 @@ function trProvinceOverviewHTML(p){
     ${track("towers","Fort")}
     ${track("walls","Muur")}
     ${track("militia","Garnizoen")}
+    ${(reg&&reg.cities&&reg.cities.length)?`<details style="margin-top:10px">
+      <summary style="cursor:pointer;color:var(--hi);font-size:13px">📜 Geschiedenis van ${reg.cities.length>1?"de steden":"de stad"}</summary>
+      ${reg.cities.map(c=>`<div style="margin-top:8px">
+        <div class="note" style="font-weight:700;color:var(--cream)">${esc(c.name)}${c.tag?` <span style="font-weight:400;color:var(--muted)">— ${esc(c.tag)}</span>`:""}</div>
+        ${c.history?`<div class="note" style="margin-top:2px">${esc(c.history)}</div>`:""}
+      </div>`).join("")}
+    </details>`:""}
   </div>`;
 }
 
