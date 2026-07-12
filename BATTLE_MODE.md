@@ -365,23 +365,16 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 
 ---
 
-## Architectuurhaken (leeg gelaten in M1, uitbreidpunten in code)
-
-```javascript
-// function bmCalcMorale(team){}      // M3: moreel geeft BE-bonus bij overwinning
-// function bmCalcMomentum(round){}   // M3: correcte reeks geeft multiplicator
-// function bmCalcSupply(round){}     // M4: voorraden beperken acties per ronde
-// function bmCalcFortifications(){}  // M4: kasteelmuren als HP-buffer
-// function bmHeroHealth(pid){}       // M5: eigen HP naast legersterkte
-// function bmTargetSelection(){}     // M5: speler kiest doelwit
-// function bmRespawn(pid){}          // M5: terugkomen na uitschakeling
-// function bmCastleSiege(){}         // M4: burchtstorm als einddoel
-// function bmObjectives(){}          // M5: neutrale doelpunten op de kaart
-// function bmFogOfWar(pid){}         // M6: beperkt zichtveld per factie
-// function bmCampaign(){}            // M6: meerdere gevechten, één campagne
-// function bmGuilds(){}              // M6: permanente gilden / facties
-// function bmRanked(){}              // toekomstig: competitief seizoensysteem
-```
+> **Verwijderd (was hier): "Architectuurhaken"/"War Mode — toekomstige
+> systemen"** — een lijst lege hook-stubs voor moreel/momentum/voorraden/
+> fortificaties/doelwitkeuze/respawn/burchtstorm/mist-van-oorlog/campagne/
+> gilden. Overbodig geworden: Total War (TOTAL_WAR.md) is inmiddels het
+> daadwerkelijke "meerdere gevechten, één campagne · permanente
+> facties · burchtstorm als einddoel"-systeem geworden, en losse stukjes zijn
+> al elders concreet gebouwd — doelwitkeuze (Minion Summon, zie
+> BOSS_BATTLE.md §4) en respawn (Heldenmodus, `bmRespawnProgress()`). Geen van
+> de overige hooks (moreel/momentum/voorraden/mist-van-oorlog/gilden) is
+> alsnog gepland.
 
 ---
 
@@ -396,7 +389,7 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 | **M5** | Slagveld-animaties · formatie-layout · log-gestuurde client-side animaties · `meta.animations` schakelaar | ✅ Gebouwd |
 | **M6** | Avatar-aanpassing (15 onderdelen) · XP/niveau 1–10 + Legioenster-prestige · class mastery ★–★★★★★ · achievements | ✅ Gebouwd — **behalve** de persistente facties-laag (Legio Romani/Agora Athenai/e.a., §"Facties (M6 — persistent)" hierboven): die bestaat alleen als ontwerp, geen code |
 | **M7** | Snel setup-scherm · Live dashboard (avatar-kaarten, participatiebalk, pauze/sla over/herstart) · Award-ceremony · Analytics (HP-chart, top 5 gemiste woorden, leerlingentabel) · CSV-export | ✅ Gebouwd |
-| **M8** | Modularisering (inmiddels 8 bestanden, zie [Definitieve bestandsstructuur](#definitieve-bestandsstructuur)) · War Mode-hooks gedocumenteerd | ✅ Gebouwd |
+| **M8** | Modularisering (inmiddels 8 bestanden, zie [Definitieve bestandsstructuur](#definitieve-bestandsstructuur)) | ✅ Gebouwd — de destijds gedocumenteerde "War Mode-hooks" zijn verwijderd (overbodig geworden door Total War, zie de noot bij §Balansgetallen) |
 | **M9** | Verborgen traits (92 eerbewijzen totaal, 20 `cat:"geheim"`) · eerbewijs-ontgrendel-pop-up met lichtgloed | ✅ Gebouwd |
 | **M10** | P.coins cross-device sync (samengevoegd met BM_IDENT.coins) · Boss Battle anti-carry (Inspiratie-buff · brede-deelname-bonus) · Minion Summon · AoE-vaardigheden (Pijlregen/Vuurtoren) · Boss-Battle-eigen scorebord · Total War-slijtageslag-reparatie · comeback-eerbewijs "Wederopstanding" · `usedKlascodes`-bandbreedte-index | ✅ Gebouwd — zie BOSS_BATTLE.md/TOTAL_WAR.md voor detail per feature |
 | *(toekomstig)* | Campaign builder voor docenten | — |
@@ -615,20 +608,6 @@ Alle globale variabelen zijn gedefinieerd in core.js (SCREENS, go, cleanup, DRAF
 
 Eerbewijzen (`ACHIEVEMENTS_DEF`, 92 stuks) staan **niet** in battle-data.js
 maar in `certamen/core.js` — gedeeld met alle spelmodi, zie M6/M9 hierboven.
-
-### War Mode — toekomstige systemen
-
-Alle aansluitpunten staan als gedocumenteerde hooks onderaan `battle.js`. Naamconventie: `// WAR MODE HOOK: naam(params)` gevolgd door een `//`-beschrijving en het aansluitpunt in bestaande code.
-
-| Hook | Signatuur | Omschrijving | Aansluitpunt |
-|---|---|---|---|
-| morale | `morale(teamId, delta)` | Moreel beïnvloedt BE-winst per ronde | `bmResolve()` — na correcte antwoorden-reeks |
-| momentum | `momentum(teamId, delta)` | Hoog momentum → tijdelijke schade-bonus | `bmResolve()` — na streak |
-| supplyCheck | `supplyCheck(teamId)` | Geeft false als acties beperkt zijn door gebrek aan voorraden | `bmDistributeQs()` — vóór ability-uitdeling |
-| fortificationApply | `fortificationApply(teamId, type)` | Voeg versterking toe als HP-buffer | `bmResolve()` — action-fase, Fortify-ability |
-| heroHealthUpdate | `heroHealthUpdate(pid, delta)` | Eigen HP per speler; bij 0 → respawn | `bmResolve()` — na teamHP-update |
-| objectiveCaptured | `objectiveCaptured(objId, teamId)` | Registreer verovering van doelpunt | `bmResolve()` — als capture-conditie voldaan |
-| fogOfWarUpdate | `fogOfWarUpdate(state)` | Herbereken zichtbaarheid per speler | `bmHostUpdatePlayers()` + `bmPlayerRender()` |
 
 ### Bekende beperkingen
 
