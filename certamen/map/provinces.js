@@ -240,11 +240,16 @@ const MapAPI = (function () {
         const dot = document.createElementNS(ns, "circle");
         dot.setAttribute("cx", city.x);
         dot.setAttribute("cy", city.y);
-        dot.setAttribute("r", "220");
+        // r=220 was op deze viewBox (~175528 breed) nog geen 5px op scherm —
+        // vrijwel onzichtbaar. Groter + eigen pointer-events:auto (de groep
+        // eromheen staat op none, dus zonder dit zou ook de hover-tooltip
+        // nooit triggeren).
+        dot.setAttribute("r", "550");
         dot.setAttribute("fill", "#f3e9d2");
         dot.setAttribute("stroke", "#3a2f22");
-        dot.setAttribute("stroke-width", "60");
-        dot.setAttribute("opacity", "0.85");
+        dot.setAttribute("stroke-width", "160");
+        dot.setAttribute("opacity", "0.92");
+        dot.setAttribute("style", "pointer-events:auto");
         const title = document.createElementNS(ns, "title");
         title.textContent = city.name + (city.tag ? " — " + city.tag : "");
         dot.appendChild(title);

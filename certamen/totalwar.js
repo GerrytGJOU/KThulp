@@ -976,12 +976,17 @@ function twProvinceInfo(id){
 function twGarrisonVisualHTML(p, civId){
   p = p||{};
   const layers = [
-    twSpriteFor("towers", twStructureTier(p.towerPoints), civId),
-    twSpriteFor("walls", twStructureTier(p.wallPoints), civId),
-    twSpriteFor("militia", twStructureTier(p.militiaPoints), civId),
-  ].filter(Boolean);
-  return `<div style="position:relative;width:128px;height:128px;flex:0 0 auto;background:#fff;border-radius:10px;box-sizing:border-box">
-    ${layers.map(src=>`<img src="${src}?${SPRITE_VER}" style="position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);object-fit:contain" alt="" onerror="this.style.display='none'">`).join("")}
+    {type:"towers",  src:twSpriteFor("towers", twStructureTier(p.towerPoints), civId)},
+    {type:"walls",   src:twSpriteFor("walls", twStructureTier(p.wallPoints), civId)},
+    {type:"militia", src:twSpriteFor("militia", twStructureTier(p.militiaPoints), civId)},
+  ].filter(l=>l.src);
+  // De militie/boeren-laag (voorgrond, altijd bovenop) krijgt een extra
+  // top-inset t.o.v. de gebouwlaag eronder, zodat de figuren er iets vóór
+  // en ietsje lager lijken te staan i.p.v. precies over elkaar geplakt —
+  // een subtiel 3D/diepte-effect zonder nieuwe sprites nodig te hebben.
+  const insetFor = type => type==="militia" ? "top:22px;right:8px;bottom:4px;left:8px" : "inset:8px";
+  return `<div style="position:relative;width:128px;height:128px;flex:0 0 auto;background:#fff;border-radius:10px;box-sizing:border-box;overflow:hidden">
+    ${layers.map(l=>`<img src="${l.src}?${SPRITE_VER}" style="position:absolute;${insetFor(l.type)};width:calc(100% - 16px);height:auto;max-height:calc(100% - 8px);object-fit:contain" alt="" onerror="this.style.display='none'">`).join("")}
   </div>`;
 }
 
