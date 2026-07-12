@@ -74,7 +74,18 @@ function bmIdentLoad(){ try{ const r=localStorage.getItem(BM_IDENT_KEY); return 
 function bmIdentSave(o){ try{ localStorage.setItem(BM_IDENT_KEY,JSON.stringify(o)); }catch(e){} }
 function bmIdentClear(){ try{ localStorage.removeItem(BM_IDENT_KEY); }catch(e){} }
 async function bmIdentGet(klas,lcode){ if(!fbDB)return null; const s=await fbDB.ref("identities/"+klas+"/"+lcode).once("value"); return s.exists()?s.val():null; }
-async function bmIdentCreate(klas,lcode,name){ const d={name,coins:0,xp:0,battles:0,level:1,avatar:bmAvatarDefaults(),color:P.color,classHistory:{},achievements:[]}; if(fbDB)await fbDB.ref("identities/"+klas+"/"+lcode).set(d); return d; }
+async function bmIdentCreate(klas,lcode,name){
+  const d={name,coins:0,xp:0,battles:0,level:1,avatar:bmAvatarDefaults(),color:P.color,classHistory:{},achievements:[]};
+  if(fbDB){
+    await fbDB.ref("identities/"+klas+"/"+lcode).set(d);
+    // Lichte klascode-index (usedKlascodes/{klas}, zie net.js:
+    // FBNet.getKlascodes()/getKlascodeCounts()) meegroeien bij elke nieuwe
+    // leerling — voorkomt dat het docentenportaal ooit weer de volledige
+    // identities-boom hoeft te lezen.
+    fbDB.ref("usedKlascodes/"+klas).transaction(cur=>(cur||0)+1).catch(()=>{});
+  }
+  return d;
+}
 
 /* ---- M6: AVATAR / NIVEAU / MASTERY HELPERS ---- */
 
@@ -295,9 +306,11 @@ async function bmAwardBattle(){
   P.stats.battlesPlayed++; if(won)P.stats.battlesWon++;
   P.stats.totalCorrect+=correct; P.stats.totalWrong+=wrong;
   P.stats.totalDamage+=(BM_MY_DMG||0); P.stats.totalHealing+=(BM_MY_HEAL||0);
-  // skipSync=true: de xp-winst staat al in de identities/{klas}/{lcode}-
-  // transactie hierboven; nogmaals syncen zou 'm dubbel optellen.
+  // skipSync=true: de xp-/muntenwinst staat al in de identities/{klas}/{lcode}-
+  // transactie hierboven; nogmaals syncen zou 'm dubbel optellen. P.coins en
+  // BM_IDENT.coins zijn dezelfde portemonnee (zie core.js: addCoins/syncCoinsDelta).
   addXP(xpEarned, true);  // addXP roept saveProfile() aan
+  addCoins(coinsEarned, true);
   checkAch({mode:"battle", won, isScholar});
 
   const totalPlayers=Object.keys(BM_PLAYERS||{}).length;
@@ -312,7 +325,7 @@ async function bmAwardBattle(){
   // Eenmalige munten-bonus voor nieuw ontgrendelde traits (naast de gewone
   // deelname/winst-munten hierboven) — zie TRAIT_COIN_BONUS.
   const coinBonus=earned.reduce((s,id)=>s+(TRAIT_COIN_BONUS[id]||0),0);
-  if(coinBonus>0) identRef.child("coins").transaction(cur=>(cur||0)+coinBonus);
+  if(coinBonus>0){ identRef.child("coins").transaction(cur=>(cur||0)+coinBonus); addCoins(coinBonus, true); }
   return{xpEarned,coinsEarned,legendaryBonus:legBonus,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
 }
 async function bmCheckAchievements(ident,result={}){
@@ -424,6 +437,10 @@ function bmBuyPart(partId, optId, price, optNm){
   BM_IDENT.unlocked=[...(BM_IDENT.unlocked||[]), key];
   BM_AV_EDIT[partId]=optId;
   bmPersistIdentity();
+  // skipSync=true: bmPersistIdentity() schreef de nieuwe stand al naar
+  // Firebase; dit spiegelt alleen het algemene profiel (P.coins), dat
+  // dezelfde portemonnee is als BM_IDENT.coins (zie core.js).
+  addCoins(-price, true);
   toast("Ontgrendeld!", optNm+" is nu van jou.");
   SCREENS.battleAvatarEdit();
 }
@@ -447,7 +464,7 @@ function bmGetAbilityCost(cls,abl){
 // (trait_pacifist: "Pacifistische Priester" checkt of dit type ooit gekozen is).
 const BM_DMG_TYPES=["attack","attack_bypass","attack_weakspot","attack_and_defend","attack_and_shld_remove","attack_siege","heal_and_attack"];
 function bmCalcAbilityEffect(p,cls,abl){
-  const fx={dmg:0,heal:0,shld:0,teamBE:0,selfBE:0,shldRemove:0,bypass:false};
+  const fx={dmg:0,heal:0,shld:0,teamBE:0,selfBE:0,shldRemove:0,bypass:false,aoe:!!abl.aoe};
   const t=abl.type, pasv=cls?.passive, mt=p.team;
   const leg=bmLegendaryOf(p); // legendarische avatar-bonus (Achilles/Ajax/Aeneas/Odysseus)
   const isDmg=BM_DMG_TYPES.includes(t);
@@ -571,6 +588,7 @@ let BM_CODE=null, BM_PID=null, BM_META=null;
 let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={}, BM_BOSS={};
 let BM_MY_BE=0, BM_MY_Q=null, BM_MY_CLASS=null, BM_MY_TEAM=null;
 let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
+let BM_MY_TARGET="boss", BM_TARGET_ROUND=-1; // Minion Summon (BOSS_BATTLE.md §4): gekozen doelwit voor de volgende ability
 // Verborgen-trait-tracking (session-only, zie ACHIEVEMENTS_DEF: trait_ciceronianus/trait_laconisch)
 let BM_MY_CLUTCH_STREAK=0, BM_MY_CLUTCH_BEST=0, BM_MY_ABILITIES_USED=0;
 // Batch 2: klassewissels in de lobby (trait_draaideur) + ooit een schade-
@@ -582,7 +600,7 @@ function bmLeave(){
   bmClearTheme();
   BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};BM_BOSS={};
   BM_MY_BE=0;BM_MY_Q=null;BM_MY_CLASS=null;BM_MY_TEAM=null;
-  BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;
+  BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;BM_MY_TARGET="boss";
   BM_MY_CORRECT=0;BM_MY_WRONG=0;BM_MY_DMG=0;BM_MY_HEAL=0;
   BM_MY_CLUTCH_STREAK=0;BM_MY_CLUTCH_BEST=0;BM_MY_ABILITIES_USED=0;
   BM_MY_CLASS_PICKS=0;BM_MY_DEALT_DMG_ABILITY=false;
@@ -2433,6 +2451,13 @@ async function bmResolve(roundN){
     const pUpd={}; // pid → {be, damage, healing, lockedAction:null}
 
     // Pas 1: individuele abilities
+    const isBossFight=BM_META?.mode==="boss";
+    const chainContributors=new Set(); // Boss Battle: unieke spelers die schade toebrachten (baas of handlanger)
+    // Minions (BOSS_BATTLE.md §4): lokale, muteerbare kopie van de handlangers
+    // zoals ze vóór deze ronde bestonden — schade tijdens pas 1 wordt hierop
+    // toegepast, de opgeschoonde stand wordt later teruggeschreven naar
+    // rooms/{code}/boss (zie het boss-blok verderop in deze functie).
+    const minions=(isBossFight?(BM_BOSS.minions||[]):[]).map(m=>({...m}));
     for(const[pid,p]of Object.entries(players)){
       const action=p.lockedAction;
       if(!action||action.type==="combo")continue;
@@ -2441,16 +2466,69 @@ async function bmResolve(roundN){
       if(!abl)continue;
       const mt=p.team,et=mt==="A"?"B":"A";
       const fx=bmCalcAbilityEffect(p,cls,abl);
+      // Inspiratie van Athena (Boss Battle, BOSS_BATTLE.md §5.3): verbruikt
+      // bij de eerstvolgende ability-keuze, ongeacht schade, zodat de buff
+      // nooit blijft hangen.
+      const usedInspiration=isBossFight&&p.inspired;
+      if(usedInspiration&&fx.dmg>0) fx.dmg+=BM_INSPIRE_BONUS_DMG;
+      // Minion-doelwit (BOSS_BATTLE.md §4): een schade-ability kan op een
+      // levende handlanger gericht worden i.p.v. de baas — dan gaat de volle
+      // schade naar die handlanger. Blijven er handlangers over (ongeacht
+      // doelwit), dan vangen zij de helft van de resterende baas-schade op.
+      // AoE-abilities (Pijlregen/Vuurtoren, aoe:true) slaan doelwitkeuze en
+      // halvering over: ze raken de baas ÓÓk elke levende handlanger, elk
+      // voor het volle schadegetal.
+      let minionDmg=0;
+      if(isBossFight&&mt==="A"&&fx.dmg>0&&fx.aoe){
+        minions.filter(m=>m.hp>0).forEach(m=>{
+          minionDmg+=Math.min(fx.dmg,m.hp);
+          m.hp=Math.max(0,m.hp-fx.dmg);
+        });
+        // fx.dmg blijft staan — telt hieronder ook nog naar de baas
+      } else {
+        const targetMinion=(isBossFight&&mt==="A"&&fx.dmg>0&&action.target&&action.target!=="boss")
+          ? minions.find(m=>m.id===action.target&&m.hp>0) : null;
+        if(targetMinion){
+          minionDmg=Math.min(fx.dmg,targetMinion.hp);
+          targetMinion.hp=Math.max(0,targetMinion.hp-fx.dmg);
+          fx.dmg=0;
+        } else if(isBossFight&&mt==="A"&&fx.dmg>0&&minions.some(m=>m.hp>0)){
+          fx.dmg=Math.round(fx.dmg/2);
+        }
+      }
       if(fx.bypass)  from[mt].bypassDmg+=fx.dmg;
       else           from[mt].dmg+=fx.dmg;
       from[mt].shldRemove+=fx.shldRemove;
       for_[mt].shld+=fx.shld;
       for_[mt].heal+=fx.heal;
       for_[mt].teamBE+=fx.teamBE;
+      if(isBossFight&&mt==="A"&&(fx.dmg>0||minionDmg>0)) chainContributors.add(pid);
       pUpd[pid]={be:Math.max(0,(p.be||0)-(action.cost||0)+(fx.selfBE||0)),
-                 damage:(p.damage||0)+fx.dmg, healing:(p.healing||0)+fx.heal, lockedAction:null};
+                 damage:(p.damage||0)+fx.dmg, healing:(p.healing||0)+fx.heal, lockedAction:null,
+                 ...(usedInspiration?{inspired:false}:{}),
+                 ...(minionDmg>0?{minionDamage:(p.minionDamage||0)+minionDmg}:{})};
       events.push({pid,abilityId:abl.id,team:mt,dmg:fx.dmg,heal:fx.heal,shld:fx.shld,
-                   cls:p.class,anim:bmAblAnim(abl.type)});
+                   cls:p.class,anim:bmAblAnim(abl.type),
+                   ...(minionDmg>0?{minionDmg,target:targetMinion.id}:{})});
+    }
+    // Brede-deelname-bonus (Boss Battle, herinterpretatie van BOSS_BATTLE.md
+    // §5.1 "Combo Chain" voor de ronde-gebaseerde architectuur): ≥3
+    // verschillende spelers die deze ronde schade toebrachten geeft het team
+    // een vlakke bonus, zodat één speler het gevecht niet alleen kan dragen.
+    if(isBossFight){
+      const tier=BM_CHAIN_BONUS.find(t=>chainContributors.size>=t.min);
+      if(tier){
+        from.A.dmg+=tier.bonus;
+        events.push({type:"chain_bonus",n:chainContributors.size,bonus:tier.bonus});
+        // "Combo Koning" (Boss-Battle-scorebord, BOSS_BATTLE.md §8):
+        // herinterpretatie als "vaakst bijdrager aan een ronde die de
+        // brede-deelname-bonus haalde" — alleen geteld als de bonus ook echt
+        // toegepast werd.
+        for(const pid of chainContributors){
+          const prev=pUpd[pid]||{be:players[pid].be||0,damage:players[pid].damage||0,healing:players[pid].healing||0,lockedAction:null};
+          pUpd[pid]={...prev,chainCount:(players[pid].chainCount||0)+1};
+        }
+      }
     }
 
     // Pas 2: combo's — zoek overeenkomende paren binnen hetzelfde team
@@ -2548,7 +2626,17 @@ async function bmResolve(roundN){
       // rageMaxed is sticky (voor het "geheim_norage"-eerbewijs): eenmaal waar,
       // blijft waar voor de rest van het gevecht, ook al reset rage() zelf naar 0.
       const rageMaxed=!!BM_BOSS.rageMaxed||bossEvents.some(e=>e.type==="boss_rage_attack");
-      const bossUpd={...tick.boss,rageMaxed};
+      // Minion Summon (BOSS_BATTLE.md §4): bij de overgang van fase 1 naar
+      // fase 2, en alleen als er nog geen (levende) handlangers zijn, roept de
+      // baas er 2-4 op. Niet voor het verborgen garrison-preset (Total War-
+      // belegeringen) — dat zou de garnizoensbalans ongevraagd raken.
+      let liveMinions=minions.filter(m=>m.hp>0);
+      if(BM_META?.bossId!=="garrison" && (BM_BOSS.phase||1)===1 && tick.boss.phase===2 && !liveMinions.length){
+        const n=BM_MINION_COUNT_MIN+Math.floor(Math.random()*(BM_MINION_COUNT_MAX-BM_MINION_COUNT_MIN+1));
+        const mHp=Math.max(1,Math.round(tB.maxHealth*BM_MINION_HP_PCT));
+        liveMinions=Array.from({length:n},(_,i)=>({id:"m"+i,hp:mHp,maxHp:mHp}));
+      }
+      const bossUpd={...tick.boss,rageMaxed,minions:liveMinions};
       await fbDB.ref("rooms/"+BM_CODE+"/boss").update(bossUpd);
       BM_BOSS=bossUpd;
     }
@@ -2556,7 +2644,13 @@ async function bmResolve(roundN){
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
     const logWinner=newHA<=0?"B":newHB<=0?"A":null;
     const roundParticipants=Object.values(players).filter(p=>p.answeredRound===roundN).length;
-    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,blockedA,blockedB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants,bossEvents});
+    // "Geluksbrenger" (Boss-Battle-scorebord, BOSS_BATTLE.md §8): benadering
+    // van de genadeklap — de speler met de hoogste schade in de ronde die de
+    // baas op 0 bracht (de architectuur kent geen exacte volgorde binnen een
+    // ronde, zelfde beperking als bij de brede-deelname-bonus).
+    const finishingBlowPid=(isBossFight&&newHB<=0)
+      ? (events.filter(e=>e.team==="A"&&e.dmg>0).sort((a,b)=>b.dmg-a.dmg)[0]?.pid||null) : null;
+    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,blockedA,blockedB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants,bossEvents,finishingBlowPid});
 
     // Mastery bijhouden in identities (fire-and-forget)
     bmUpdateMastery(players,pUpd,events);
@@ -2746,6 +2840,37 @@ function bmComputeAwards(players, log){
   ];
 }
 
+// Boss-Battle-eigen scorebord (BOSS_BATTLE.md §8) — Boss Battle hergebruikte
+// tot nu toe 100% bmComputeAwards() hierboven, met categorieën die in een
+// coöperatief gevecht niet kloppen ("Beste Verdediger" tegen je eigen team?).
+// Zelfde vorm/patroon (pidMap/p2/sort), andere databronnen.
+function bmComputeBossAwards(players, log){
+  const entries=Object.values(log||{}).sort((a,b)=>(a.round||0)-(b.round||0));
+  const pidMap={};
+  Object.entries(BM_PLAYERS).forEach(([pid,p])=>pidMap[pid]=p);
+  const sort=(arr,fn)=>[...arr].sort(fn);
+  const byDmg=sort(players,(a,b)=>(b.damage||0)-(a.damage||0));
+  const byHeal=sort(players,(a,b)=>(b.healing||0)-(a.healing||0));
+  const byMinionDmg=players.filter(p=>(p.minionDamage||0)>0).sort((a,b)=>(b.minionDamage||0)-(a.minionDamage||0));
+  const byStreak=players.filter(p=>(p.bestCorrectStreak||0)>0).sort((a,b)=>(b.bestCorrectStreak||0)-(a.bestCorrectStreak||0));
+  const byChain=players.filter(p=>(p.chainCount||0)>0).sort((a,b)=>(b.chainCount||0)-(a.chainCount||0));
+  const finishEntry=entries.find(e=>e.finishingBlowPid);
+  const finisher=finishEntry?pidMap[finishEntry.finishingBlowPid]:null;
+  const awards=[
+    {nm:"De Sloper",             emoji:"⚔️", player:byDmg[0]||null,    value:byDmg[0]?(byDmg[0].damage||0)+" schade aan de baas":""},
+    {nm:"Medic van het Legioen", emoji:"💚", player:byHeal[0]||null,   value:byHeal[0]?(byHeal[0].healing||0)+" healing":""},
+    {nm:"De Onsterfelijke",      emoji:"🔥", player:byStreak[0]||null, value:byStreak[0]?byStreak[0].bestCorrectStreak+" op rij goed":""},
+    {nm:"Combo Koning",          emoji:"🤝", player:byChain[0]||null,  value:byChain[0]?byChain[0].chainCount+"x brede aanval":""},
+    {nm:"Geluksbrenger",         emoji:"💀", player:finisher||null,    value:finisher?"gaf de genadeklap":""},
+  ];
+  // Minion Opruimer alleen tonen als er in dit gevecht daadwerkelijk
+  // handlangers waren om op te ruimen.
+  if(byMinionDmg.length) awards.push(
+    {nm:"Minion Opruimer", emoji:"🎯", player:byMinionDmg[0], value:(byMinionDmg[0].minionDamage||0)+" schade aan handlangers"}
+  );
+  return awards;
+}
+
 // Host-only: kent traits toe die alleen met kennis van BEIDE teams (of van
 // een écht gelijktijdige dubbele-KO) te bepalen zijn — spelers zien elkaars
 // stats nooit live (M2 "scoped listeners"), dus de host legt de link direct
@@ -2760,7 +2885,13 @@ function bmGrantHostTrait(player, id){
     if(list.includes(id))return;
     return[...list,id];
   }).then(res=>{
-    if(bonus>0&&res.committed) fbDB.ref("identities/"+klas+"/"+lcode+"/coins").transaction(c=>(c||0)+bonus);
+    if(bonus>0&&res.committed){
+      fbDB.ref("identities/"+klas+"/"+lcode+"/coins").transaction(c=>(c||0)+bonus);
+      // Alleen lokaal spiegelen als de host zichzelf bekroont — voor een
+      // andere leerling in de kamer haalt diens eigen toestel de nieuwe
+      // stand later op via syncProfileFromCloud()/opnieuw inloggen.
+      if(BM_IDENT&&BM_IDENT.klascode===klas&&BM_IDENT.leerlingcode===lcode) addCoins(bonus, true);
+    }
   }).catch(()=>{});
 }
 function bmCheckHostTraits(players, winnerTeam, exactTie){
@@ -2894,7 +3025,9 @@ SCREENS.battleHostAwards = async function(){
     if(fbDB&&BM_CODE){const snap=await fbDB.ref("rooms/"+BM_CODE+"/log").once("value");BM_LOG=snap.val()||{};}
   }catch(e){BM_LOG={};}
   if(!el("bmAwardStage"))return;
-  BM_AWARD_DATA.awards=bmComputeAwards(BM_AWARD_DATA.all,BM_LOG);
+  BM_AWARD_DATA.awards=BM_META?.mode==="boss"
+    ? bmComputeBossAwards(BM_AWARD_DATA.all,BM_LOG)
+    : bmComputeAwards(BM_AWARD_DATA.all,BM_LOG);
   bmCheckHostTraits(BM_AWARD_DATA.all, BM_AWARD_DATA.winner, BM_AWARD_DATA.exactTie);
   bmNextAward();
 };
@@ -3205,6 +3338,9 @@ SCREENS.battlePlayerGame = function(){
 function bmPlayerRender(){
   const root=el("bmPR"); if(!root)return;
   const round=BM_STATE.round||{};
+  // Nieuwe ronde → doelwit terug naar de baas (handlangers kunnen intussen
+  // gewisseld/gestorven zijn, zie Minion Summon BOSS_BATTLE.md §4).
+  if(round.n!==BM_TARGET_ROUND){ BM_TARGET_ROUND=round.n; BM_MY_TARGET="boss"; }
   const tl=round.deadline?Math.max(0,Math.round((round.deadline-Date.now())/1000)):0;
   const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
   function miniBar(nm,team,d){
@@ -3255,17 +3391,31 @@ function bmPlayerRender(){
           combo.classes.some(c=>c!==BM_MY_CLASS&&teamClasses.includes(c))
         );
         const tierDot=t=>t==="basic"?"●":t==="medium"?"●●":"●●●";
+        const inspired=BM_META?.mode==="boss"&&BM_PLAYERS[BM_PID]?.inspired;
+        // Minion Summon (BOSS_BATTLE.md §4): doelwit-chips alleen tonen als
+        // er nog levende handlangers zijn — daarbuiten heeft "kiezen" geen zin.
+        const liveMinions=(BM_META?.mode==="boss"&&(BM_BOSS.minions||[]).filter(m=>m.hp>0))||[];
+        const targetPicker=liveMinions.length?`<div style="margin-bottom:8px">
+          <div class="note" style="margin-bottom:4px">🎯 Doelwit</div>
+          <div class="chips">
+            <button class="chip ${BM_MY_TARGET==="boss"?"on":""}" onclick="bmSetTarget('boss')">Baas</button>
+            ${liveMinions.map((m,i)=>`<button class="chip ${BM_MY_TARGET===m.id?"on":""}" onclick="bmSetTarget('${m.id}')">Handlanger ${i+1} (${m.hp} HP)</button>`).join("")}
+          </div>
+        </div>`:"";
         content=`<div class="panel">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <span style="font-weight:700;color:${cls.color}">${cls.nm}</span>
             <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE} BE — ${tl}s</span>
           </div>
+          ${inspired?`<div class="note" style="color:var(--hi-bright);margin-bottom:6px">⚡ Geïnspireerd! Je volgende aanval doet extra schade.</div>`:""}
+          ${targetPicker}
           ${cls.abilities.map(a=>{
             const cost=bmGetAbilityCost(cls,a);
             const ok=BM_MY_BE>=cost;
             return `<button class="tile" style="margin-bottom:6px;padding:11px 13px${ok?"":";opacity:.4;pointer-events:none"}" onclick="bmChooseAbility('${a.id}',${cost})">
               <div style="font-size:13px;font-weight:700">${a.nm} <span class="pill">${cost}&nbsp;BE</span> <span style="opacity:.6;font-size:10px">${tierDot(a.tier)}</span></div>
               <div class="note" style="margin-top:2px">${a.desc}</div>
+              ${a.aoe?`<div class="note" style="color:var(--hi);margin-top:2px">🌪️ Raakt alle doelen — doelwitkeuze maakt hier niet uit</div>`:""}
             </button>`;
           }).join("")}
           ${availCombos.map(combo=>{
@@ -3336,6 +3486,23 @@ function bmAnswer(idx){
       totalResponseMs:(p.totalResponseMs||0)+elapsedMs,
       respondCount:(p.respondCount||0)+1,
     };
+    // Inspiratie van Athena (Boss Battle, BOSS_BATTLE.md §5.3): na 3
+    // opeenvolgende foute antwoorden geeft het eerstvolgende goede antwoord
+    // een gemarkeerde bonus op de eerstvolgende gebruikte ability (bmResolve()).
+    if(BM_META?.mode==="boss"){
+      const prevWrongStreak=p.wrongStreak||0;
+      if(ok){
+        upd.wrongStreak=0;
+        if(prevWrongStreak>=3) upd.inspired=true;
+      } else {
+        upd.wrongStreak=prevWrongStreak+1;
+      }
+      // "De Onsterfelijke" (Boss-Battle-scorebord, BOSS_BATTLE.md §8):
+      // langste foutloze reeks. Symmetrisch aan wrongStreak hierboven.
+      const prevCorrectStreak=p.correctStreak||0;
+      upd.correctStreak=ok?prevCorrectStreak+1:0;
+      upd.bestCorrectStreak=Math.max(p.bestCorrectStreak||0, upd.correctStreak);
+    }
     if(!ok&&BM_MY_Q){
       // Gemist woord bijhouden voor analytics (host leest na afloop)
       const wk=bmWordKey(BM_MY_Q.la);
@@ -3352,6 +3519,7 @@ function bmAnswer(idx){
     fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update(upd);
   });
 }
+function bmSetTarget(id){ BM_MY_TARGET=id; bmPlayerRender(); }
 function bmChooseAbility(abilityId,cost){
   if(BM_ACTION_LOCKED||BM_MY_BE<cost)return;
   BM_ACTION_LOCKED=true;
@@ -3359,7 +3527,9 @@ function bmChooseAbility(abilityId,cost){
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
   const abl=cls?.abilities.find(a=>a.id===abilityId);
   if(abl&&BM_DMG_TYPES.includes(abl.type)) BM_MY_DEALT_DMG_ABILITY=true; // trait_pacifist
-  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type:"ability",abilityId,cost}});
+  // Minion Summon (BOSS_BATTLE.md §4): doelwit meegeven zolang er handlangers
+  // leven; buiten Boss Battle of zonder handlangers is "boss" het enige zinnige.
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type:"ability",abilityId,cost,target:BM_MY_TARGET}});
   toast("Actie vergrendeld",cls?.abilities.find(a=>a.id===abilityId)?.nm||abilityId);
   bmPlayerRender();
 }

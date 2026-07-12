@@ -43,10 +43,18 @@ verschillen:
   koppelen is nooit verplicht; zonder koppeling blijft alles lokaal werken
   zoals voorheen.
 
-**Volgende stap (nog niet gedaan):** hetzelfde patroon toepassen op `P.coins`
-(en eventuele toekomstige resources) zodra de algemene muntenopbouw dat nodig
-heeft — reken niet op `localStorage` als enige opslag zodra iets als
-"opgebouwde voortgang" bedoeld is.
+**✅ Gebouwd:** hetzelfde patroon is toegepast op `P.coins` — `addCoins(n,
+skipSync)`/`syncCoinsDelta(n)`/`syncProfileFromCloud()` (`certamen/core.js`)
+spiegelen exact `addXP`/`syncXpDelta`. Daarbij is `P.coins` bewust
+samengevoegd met Battle Mode se eigen, al bestaande gesynced muntensysteem
+(`BM_IDENT.coins`, gebruikt in de avatar-shop) — beide lazen/schreven al
+hetzelfde Firebase-veld `identities/{klas}/{lcode}/coins`, dus vanaf nu is er
+één rijksbrede munteenheid i.p.v. twee gescheiden lokale potjes: muntjes uit
+Snelvuur/Marathon/Touwtrekken/Training Mode zijn ook besteedbaar aan Battle
+Mode-avataronderdelen en omgekeerd. Elke bestaande schrijfplek
+(`bmAwardBattle()`, `bmBuyPart()`, `bmGrantHostTrait()` in `certamen/
+battle.js`; `buyOrEquip()` in `certamen/games.js`) spiegelt nu ook lokaal naar
+`P.coins`, met dezelfde `skipSync`-guard tegen dubbeltelling als bij xp.
 
 ---
 
@@ -390,6 +398,7 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 | **M7** | Snel setup-scherm · Live dashboard (avatar-kaarten, participatiebalk, pauze/sla over/herstart) · Award-ceremony · Analytics (HP-chart, top 5 gemiste woorden, leerlingentabel) · CSV-export | ✅ Gebouwd |
 | **M8** | Modularisering (inmiddels 8 bestanden, zie [Definitieve bestandsstructuur](#definitieve-bestandsstructuur)) · War Mode-hooks gedocumenteerd | ✅ Gebouwd |
 | **M9** | Verborgen traits (92 eerbewijzen totaal, 20 `cat:"geheim"`) · eerbewijs-ontgrendel-pop-up met lichtgloed | ✅ Gebouwd |
+| **M10** | P.coins cross-device sync (samengevoegd met BM_IDENT.coins) · Boss Battle anti-carry (Inspiratie-buff · brede-deelname-bonus) · Minion Summon · AoE-vaardigheden (Pijlregen/Vuurtoren) · Boss-Battle-eigen scorebord · Total War-slijtageslag-reparatie · comeback-eerbewijs "Wederopstanding" · `usedKlascodes`-bandbreedte-index | ✅ Gebouwd — zie BOSS_BATTLE.md/TOTAL_WAR.md voor detail per feature |
 | *(toekomstig)* | Campaign builder voor docenten | — |
 
 ---

@@ -876,7 +876,7 @@ function buyOrEquip(id){
   const a=AVATARS.find(x=>x.id===id); if(!a)return;
   if(P.owned.includes(id)){ P.avatar=id; saveProfile(); SCREENS.collection(); return; }
   if(P.coins< a.cost){ toast("Niet genoeg munten","Win wedstrijden om munten te verdienen."); return; }
-  P.coins-=a.cost; P.owned.push(id); P.avatar=id; saveProfile(); checkAch(); beep("ach");
+  addCoins(-a.cost); P.owned.push(id); P.avatar=id; saveProfile(); checkAch(); beep("ach");
   toast("Gekocht!", a.nm); SCREENS.collection();
 }
 

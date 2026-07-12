@@ -247,6 +247,8 @@ const ACHIEVEMENTS_DEF = [
   {id:"flagship_legacy_asia",                   nm:"Heerser van Ephesus",    ds:"4 weken onafgebroken heerser van Ephesus",             icon:"torch",  cat:"totalwar", mode:"battle"},
   {id:"flagship_conquest_judea",                nm:"Verovering: Jeruzalem",  ds:"Jeruzalem, heilige stad, veroverd",                    icon:"eagle",  cat:"totalwar", mode:"battle"},
   {id:"flagship_legacy_judea",                  nm:"Heerser van Jeruzalem",  ds:"4 weken onafgebroken heerser van Jeruzalem",           icon:"eagle",  cat:"totalwar", mode:"battle"},
+  // Comeback-eerbewijs (TOTAL_WAR.md §5.7): een volledig uitgeroeide beschaving die zich hersteld heeft
+  {id:"tw_wederopstanding",                     nm:"Wederopstanding",        ds:"Je beschaving werd volledig verslagen en heeft zich hersteld", icon:"torch", cat:"totalwar", mode:"battle"},
   // Langetermijn (spreiding belonen, niet snelheid)
   {id:"week_vol",       nm:"Wekelijkse Discipline",ds:"Op 5 verschillende dagen binnen 1 week gespeeld", icon:"torch", cat:"algemeen"},
   {id:"dertig_dagen",   nm:"Vaste Klant",        ds:"In totaal op 30 verschillende dagen gespeeld", icon:"laurel", cat:"algemeen"},
@@ -369,7 +371,15 @@ function loadProfile(){
 function saveProfile(){ try{ localStorage.setItem(PKEY, JSON.stringify(P)); }catch(e){} }
 let P = loadProfile();
 
-function addCoins(n){ P.coins += n; if(P.coins<0)P.coins=0; saveProfile(); }
+// skipSync=true: gebruik dit als de aanroeper de gedeelde Firebase-identiteit
+// AL zelf heeft bijgewerkt (bv. bmAwardBattle/bmBuyPart, die hun eigen
+// transaction/update gebruiken) — anders zou de winst/uitgave daar dubbel
+// worden verwerkt. n mag negatief zijn (spenden) i.t.t. addXP.
+function addCoins(n, skipSync){
+  if(!n) return;
+  P.coins=(P.coins||0)+n; if(P.coins<0)P.coins=0; saveProfile();
+  if(!skipSync) syncCoinsDelta(n);
+}
 // skipSync=true: gebruik dit als de aanroeper de gedeelde Firebase-identiteit
 // AL zelf heeft bijgewerkt (bv. bmAwardBattle, dat zijn eigen transaction
 // gebruikt) — anders zou de xp-winst daar dubbel worden opgeteld.
@@ -419,6 +429,24 @@ function syncXpDelta(n){
   }catch(e){}
 }
 
+// Zelfde patroon als syncXpDelta, maar voor munten — en P.coins/BM_IDENT.coins
+// zijn sinds deze wijziging dezelfde portemonnee (identities/{klas}/{lcode}/coins):
+// muntjes uit Snelvuur/Marathon/Touwtrekken/Training Mode zijn dus ook
+// besteedbaar in de Battle Mode-avatarshop en omgekeerd. n mag negatief zijn
+// (spenden); nooit onder 0 in Firebase.
+function syncCoinsDelta(n){
+  if(!n) return;
+  const id=profileIdentity(); if(!id||!id.klascode||!id.leerlingcode) return;
+  if(typeof hasFirebase==="undefined"||!hasFirebase) return;
+  try{
+    if(typeof initFirebase==="function") initFirebase();
+    if(typeof fbDB==="undefined"||!fbDB) return;
+    fbDB.ref("identities/"+id.klascode+"/"+id.leerlingcode+"/coins").transaction(cur=>Math.max(0,(cur||0)+n));
+    if(typeof bmIdentSave==="function") bmIdentSave({...id, coins:Math.max(0,(id.coins||0)+n)});
+    if(typeof BM_IDENT!=="undefined"&&BM_IDENT) BM_IDENT.coins=Math.max(0,(BM_IDENT.coins||0)+n);
+  }catch(e){}
+}
+
 // Haal de nieuwste xp uit Firebase en werk P.xp bij als dit toestel achterloopt
 // (bv. na spelen op een ander toestel terwijl dit toestel/tabblad al open stond).
 // rerenderScreen: alleen herrenderen als de speler nog op dat scherm staat.
@@ -428,11 +456,20 @@ async function syncProfileFromCloud(rerenderScreen){
   try{
     if(typeof initFirebase==="function") initFirebase();
     const d=await bmIdentGet(id.klascode,id.leerlingcode);
+    let changed=false;
     if(d && typeof d.xp==="number" && d.xp!==P.xp){
       P.xp=d.xp;
       const lv=calcLevel(P.xp); P.level=lv.level; P.rank=lv.rank;
-      saveProfile();
       if(typeof BM_IDENT!=="undefined"&&BM_IDENT) BM_IDENT.xp=d.xp;
+      changed=true;
+    }
+    if(d && typeof d.coins==="number" && d.coins!==P.coins){
+      P.coins=d.coins;
+      if(typeof BM_IDENT!=="undefined"&&BM_IDENT) BM_IDENT.coins=d.coins;
+      changed=true;
+    }
+    if(changed){
+      saveProfile();
       if(rerenderScreen && typeof _screen!=="undefined" && _screen===rerenderScreen
          && typeof SCREENS!=="undefined" && SCREENS[rerenderScreen]) SCREENS[rerenderScreen]();
     }

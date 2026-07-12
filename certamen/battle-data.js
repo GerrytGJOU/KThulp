@@ -35,7 +35,7 @@ const BM_CLASSES = [
   { id:"boogschutter", nm:"Boogschutter",icon:"eagle",  color:"#2e6fb0",
     passive:{ desc:"+1 schade bij aanval",                     type:"atk_flat",    val:1 },
     abilities:[
-      { id:"pijlregen",     nm:"Pijlregen",     tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
+      { id:"pijlregen",     nm:"Pijlregen",     tier:"basic",    cost:3,  desc:"AoE-aanval op alle doelen (+5 elk)",        type:"attack",               dmg:5, aoe:true },
       { id:"gericht_schot", nm:"Gericht Schot", tier:"basic",    cost:3,  desc:"Aanval (+2) én vijandelijk schild −2",      type:"attack_and_shld_remove", dmg:2, shldRemove:2 },
       { id:"zwakpunt",      nm:"Zwak Punt",     tier:"medium",   cost:5,  desc:"Aanval (+7, of +17 als vijand ≤30% HP)",    type:"attack_weakspot",      dmg:7, bonusDmg:10 },
       { id:"doorborend",    nm:"Doorborend Schot", tier:"medium", cost:6,  desc:"Aanval (+7) die tegenschild omzeilt",       type:"attack_bypass",        dmg:7 },
@@ -75,7 +75,7 @@ const BM_CLASSES = [
       { id:"valstrik",      nm:"Valstrik",      tier:"basic",    cost:3,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
       { id:"valgreppel",    nm:"Valgreppel",    tier:"medium",   cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
       { id:"veldreparatie", nm:"Veldreparatie", tier:"medium",   cost:4,  desc:"Schild (+3) én heling (+3) voor je team",   type:"shield_and_heal",      shld:3, heal:3 },
-      { id:"vuurtoren",     nm:"Vuurtoren",     tier:"legendary",cost:8,  desc:"Zware aanval (+9) én schild weg (−4)",     type:"attack_siege",         dmg:9, shldRemove:4 },
+      { id:"vuurtoren",     nm:"Vuurtoren",     tier:"legendary",cost:8,  desc:"Zware AoE-aanval op alle doelen (+9 elk) én schild weg (−4)", type:"attack_siege", dmg:9, shldRemove:4, aoe:true },
     ]},
   { id:"verkenner",    nm:"Verkenner",   icon:"eagle",  color:"#2D8B7A",
     passive:{ desc:"Basis-abilities kosten 1 BE minder",       type:"cost_reduce", val:1 },
@@ -95,6 +95,28 @@ const BM_SYNERGY = [
   { minClasses:5, beBonus:4 },  // ≥5 unieke klassen → +4 BE per speler
   { minClasses:7, beBonus:6 },  // ≥7 unieke klassen → +6 BE per speler
 ];
+
+/* ---- CONFIGURATIETABEL: BOSS BATTLE ANTI-CARRY (BOSS_BATTLE.md §5) ---- */
+// Inspiratie-buff: na 3 opeenvolgende foute antwoorden geeft de eerstvolgende
+// gebruikte ability bonusschade (vlak, zelfde schaal als een basis-ability).
+const BM_INSPIRE_BONUS_DMG = 4;
+// Brede-deelname-bonus (herinterpretatie van "Combo Chain" voor Boss Battle se
+// ronde-gebaseerde architectuur, geen live per-antwoord-tijdstip): ≥N
+// verschillende spelers die in dezelfde ronde schade aan de baas toebrachten
+// geeft het team een vlakke bonus op de totale ronde-schade. Aflopend gecheckt.
+const BM_CHAIN_BONUS = [
+  { min:5, bonus:6 },
+  { min:3, bonus:3 },
+];
+
+/* ---- CONFIGURATIETABEL: MINION SUMMON (BOSS_BATTLE.md §4) ---- */
+// Generieke "alle bazen"-mechanic: bij de overgang van fase 1 naar fase 2
+// roept de baas 2-4 handlangers op. Elke handlanger heeft een vast percentage
+// van de baas se max-HP. Niet van toepassing op BM_META.bossId==="garrison"
+// (Total War-belegeringen) — dat zou de garnizoensbalans ongevraagd raken.
+const BM_MINION_HP_PCT = 0.12;
+const BM_MINION_COUNT_MIN = 2;
+const BM_MINION_COUNT_MAX = 4;
 
 /* ---- CONFIGURATIETABEL: COMBO-ABILITIES ---- */
 // Beide spelers moeten in dezelfde ronde "Combo" kiezen; host detecteert het bij resolutie.

@@ -136,25 +136,50 @@ FBNet.getIdentities = function(klascode){
     return out;
   });
 };
+// Lichte index (usedKlascodes/{klas}: aantal leerlingen) i.p.v. de volledige
+// identities-boom lezen bij elke docentenportaal-load (CLAUDE.md-restpunt).
+// Eenmalige, idempotente self-healing migratie: zolang usedKlascodes/_seeded
+// nog niet bestaat, doet dit precies ÉÉN keer ooit de oude volledige
+// identities-read om de index te vullen — daarna bouwt bmIdentCreate()
+// (battle.js) 'm vanzelf verder op bij elke nieuwe leerling, nooit meer een
+// volledige read nodig. Zelfde idempotente-seed-patroon als
+// twEnsureCampaignSeeded() (totalwar.js).
+FBNet._ensureUsedKlascodesIndex = function(){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("usedKlascodes/_seeded").once("value").then(seeded=>{
+    if(seeded.val()) return;
+    return fbDB.ref("identities").once("value").then(iSnap=>{
+      const upd={};
+      if(iSnap.exists()) iSnap.forEach(klasNode=>{ upd["usedKlascodes/"+klasNode.key]=klasNode.numChildren(); });
+      upd["usedKlascodes/_seeded"]=true;
+      return fbDB.ref().update(upd);
+    });
+  });
+};
 FBNet.getKlascodes = function(){
   if(!fbDB) initFirebase();
   return fbDB.ref("klascodes").once("value").then(snap=>{
     const approved=snap.exists()?Object.keys(snap.val()):[];
-    return fbDB.ref("identities").once("value").then(iSnap=>{
-      const used=iSnap.exists()?Object.keys(iSnap.val()):[];
-      return {approved, used};
-    });
+    return FBNet._ensureUsedKlascodesIndex().then(()=>
+      fbDB.ref("usedKlascodes").once("value").then(iSnap=>{
+        const used=iSnap.exists()?Object.keys(iSnap.val()).filter(k=>k!=="_seeded"):[];
+        return {approved, used};
+      })
+    );
   });
 };
-// Ledenaantal per klascode ({CODE: aantal}) — leest de identities-tak één keer.
-// Gebruikt door het docentenportaal om live tellingen te tonen (groep = klascode).
+// Ledenaantal per klascode ({CODE: aantal}) — leest nu de lichte usedKlascodes-
+// index i.p.v. de volledige identities-tak. Gebruikt door het docentenportaal
+// om live tellingen te tonen (groep = klascode).
 FBNet.getKlascodeCounts = function(){
   if(!fbDB) initFirebase();
-  return fbDB.ref("identities").once("value").then(snap=>{
-    const counts={};
-    if(snap.exists()) snap.forEach(klasNode=>{ counts[klasNode.key]=klasNode.numChildren(); });
-    return counts;
-  });
+  return FBNet._ensureUsedKlascodesIndex().then(()=>
+    fbDB.ref("usedKlascodes").once("value").then(snap=>{
+      const counts=snap.val()||{};
+      delete counts._seeded;
+      return counts;
+    })
+  );
 };
 // Docent past de getoonde naam van een leerling aan (inlogcode blijft gelijk).
 FBNet.renameIdentity = function(klas, lid, name){

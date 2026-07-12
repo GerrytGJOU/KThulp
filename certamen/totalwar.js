@@ -531,6 +531,7 @@ async function twStartLive(){
     if(!host){ ref.off("value"); return; }
     _twLiveProvinces = snap.val() || {};
     twApplyLive(_twLiveProvinces);
+    twDetectWipedCivs(_twLiveProvinces);
     const lg = el("twLegendBox"); if(lg) lg.innerHTML = twLegend();
     if(_twSelectedId) twSelectProvince(_twSelectedId);
   });
@@ -557,6 +558,7 @@ async function twStartLiveReadOnly(){
       return;
     }
     twApplyLive(_twLiveProvinces);
+    twDetectWipedCivs(_twLiveProvinces);
     const lg = el("twLegendBox"); if(lg) lg.innerHTML = twLegend();
     twRenderHighlights();
     if(_twSelectedId) twSelectProvince(_twSelectedId);
@@ -759,6 +761,26 @@ async function twStartNewSeason(){
 function twCivIsWiped(civId){
   if(!_twLiveProvinces || !civId || civId==="neutral") return false;
   return !Object.values(_twLiveProvinces).some(p => p && p.owner===civId);
+}
+
+/* Comeback-eerbewijs (TOTAL_WAR.md §5.7): schrijft totalwar/civs/{civId}/wasWiped
+   zodra een beschaving 0 provincies bezit — puur als bijwerking van de live-
+   listeners hieronder (twStartLive/twStartLiveReadOnly), op wélk toestel dan
+   ook (docent- of leerlingkaart). trCheckComebackAchievement() (training.js)
+   leest dit veld lazy en kent het eerbewijs toe zodra dezelfde beschaving
+   weer ≥1 provincie bezit. Geen rules-wijziging nodig: totalwar/civs/{id}
+   heeft al .write:true. Schrijft alleen bij een ECHTE overgang (nog niet
+   true) om onnodige writes bij elke snapshot te vermijden. */
+function twDetectWipedCivs(provinces){
+  if(!fbDB || !provinces) return;
+  Object.keys(TW_CIVS).forEach(civId=>{
+    if(civId==="neutral") return;
+    const wiped=!Object.values(provinces).some(p=>p&&p.owner===civId);
+    if(!wiped) return;
+    fbDB.ref("totalwar/civs/"+civId+"/wasWiped").once("value").then(snap=>{
+      if(!snap.val()) fbDB.ref("totalwar/civs/"+civId+"/wasWiped").set(true);
+    }).catch(()=>{});
+  });
 }
 
 function twAttackButtonHTML(targetId, targetCivId){

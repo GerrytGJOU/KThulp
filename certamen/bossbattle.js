@@ -178,6 +178,13 @@ function bmBossResolveTick(boss, ctx){
 function bmBossStatusNote(){
   if(BM_META?.mode!=="boss") return "";
   const preset=bmBossPreset(BM_META?.bossId);
+  // Minion Summon (BOSS_BATTLE.md §4): generieke "alle bazen"-mechanic, dus
+  // vóór de per-baas-specifieke statusregels gecheckt.
+  const liveMinions=(BM_BOSS?.minions||[]).filter(m=>m.hp>0);
+  if(liveMinions.length){
+    const totalHp=liveMinions.reduce((s,m)=>s+m.hp,0);
+    return "👹 "+liveMinions.length+" handlanger"+(liveMinions.length===1?"":"s")+" in leven ("+totalHp+" HP totaal)";
+  }
   if(preset.id==="cyclops" && BM_BOSS?.charging){
     const n=BM_BOSS.chargeLeft||0;
     return "⚠️ Metgezellenmaaltijd over "+n+" ronde"+(n===1?"":"n")+" — onderbreek met gezamenlijk schild!";

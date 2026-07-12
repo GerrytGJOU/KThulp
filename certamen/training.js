@@ -92,6 +92,7 @@ async function trLoadOwnedProvinces(){
     TR_PROVINCE_ID = sorted[0]?.id || null;
   }
   trCheckFlagshipAchievements(); // fire-and-forget, ververst elke keer TR_OWNED_PROVINCES ververst wordt
+  trCheckComebackAchievement(); // fire-and-forget, zelfde lazy-patroon (TOTAL_WAR.md §5.7)
 }
 
 function trCurrentProvince(){
@@ -134,11 +135,21 @@ function trRenderModeBody(){
   const flagshipNote = trCivHasFlagship()
     ? `<div class="panel" style="text-align:center"><div class="note" style="color:var(--hi-bright)">👑 Jouw beschaving bezit een vlaggenschipprovincie: <b>+${TW_FLAGSHIP_XP_BONUS} XP</b> extra per goed antwoord en een <b>hogere dagcap</b> (${TW_FLAGSHIP_DAILY_CAP} i.p.v. ${TR_DAILY_CAP}).</div></div>`
     : "";
+  // Slijtageslag-reparatie (TOTAL_WAR.md §5.4): wijs actief op een doorbroken
+  // spoor van de gekozen provincie, met een knop die TR_TRACK er meteen op zet.
+  const curProvForRepair = trCurrentProvince();
+  const repairDmg = curProvForRepair && curProvForRepair.siege && curProvForRepair.siege.lastStage
+    && (curProvForRepair.siege.stageDamage && curProvForRepair.siege.stageDamage[curProvForRepair.siege.lastStage] || 0);
+  const repairNote = repairDmg ? `<div class="panel" style="text-align:center">
+    <div class="note warn">⚔ Deze provincie is doorbroken bij <b>${TW_TRACK_NM[curProvForRepair.siege.lastStage]||curProvForRepair.siege.lastStage}</b>
+    (${Math.round(repairDmg)} schade). <button class="chip ${TR_TRACK===curProvForRepair.siege.lastStage?'on':''}" onclick="trSetTrack('${curProvForRepair.siege.lastStage}')">Train hierop om te herstellen</button></div>
+  </div>` : "";
   body.innerHTML = `
   <div class="panel" style="text-align:center">
     <span class="pill" style="background:${civ.soft};color:#f3e9d2;border:none">${esc(civ.nm)}</span>
   </div>
   ${flagshipNote}
+  ${repairNote}
   ${TR_OWNED_PROVINCES.length>1?`
   <div class="panel">
     <label class="fld">Welke provincie versterk je?</label>
@@ -317,6 +328,17 @@ function trAnswer(idx){
     TR_STATS.correct++; TR_STATS.points+=pts; TR_STATS.xp+=xpGain;
     if(fullRate){ TR_CAP_TODAY++; trSaveDailyCap(TR_CAP_TODAY); }
     if(TR_PROVINCE_ID) twAwardStructurePoints(TR_PROVINCE_ID, TR_TRACK, pts);
+    // Slijtageslag-reparatie (TOTAL_WAR.md §5.4): trainen op precies het spoor
+    // dat momenteel doorbroken is, herstelt het tegelijk met bouwen — geen
+    // apart scherm/keuzemoment nodig, zelfde automatische flow als de rest
+    // van Training Mode. Lokale snapshot meteen bijwerken zodat "Bekijk je
+    // gebied" binnen de sessie klopt zonder herladen.
+    const curProv = trCurrentProvince();
+    if(curProv && curProv.siege && curProv.siege.lastStage===TR_TRACK
+       && (curProv.siege.stageDamage && curProv.siege.stageDamage[TR_TRACK] || 0) > 0){
+      twRepairStageDamage(TR_PROVINCE_ID, TR_TRACK, pts);
+      curProv.siege.stageDamage[TR_TRACK] = Math.max(0, curProv.siege.stageDamage[TR_TRACK]-pts);
+    }
     if(xpGain) addXP(xpGain);
     trTrackContribution(TR_TRACK, pts);
     // Meetellen voor de algemene eerbewijzen (woordenkenner/taalmeester/snelle
@@ -403,11 +425,13 @@ function trProvinceOverviewHTML(p){
       </div>
     </div>`;
   };
+  const dmg = p.siege && p.siege.lastStage && (p.siege.stageDamage && p.siege.stageDamage[p.siege.lastStage] || 0);
   return `<div class="panel">
     <div style="display:flex;align-items:center;gap:12px">
       ${twGarrisonVisualHTML(p, p.owner)}
       <div style="flex:1"><b>${esc(nm)}</b>
         ${bonus?`<div class="note" style="margin-top:2px">🎁 ${esc(bonus.label)} — +${bonus.pct}% ${TW_TRACK_NM[bonus.track]||bonus.track}punten</div>`:""}
+        ${dmg?`<div class="note warn" style="margin-top:2px">⚔ Doorbroken bij ${TW_TRACK_NM[p.siege.lastStage]||p.siege.lastStage} (${Math.round(dmg)} schade) — train op dit spoor om te herstellen.</div>`:""}
       </div>
     </div>
     ${track("towers","Fort")}
@@ -455,6 +479,16 @@ async function twAwardStructurePoints(provinceId, trackKey, points){
   const field = TW_STRUCTURES[trackKey] && TW_STRUCTURES[trackKey].field;
   if(!field) return;
   try{ await fbDB.ref("totalwar/provinces/"+provinceId+"/"+field).transaction(cur=>(cur||0)+points); }catch(e){}
+}
+
+/* Slijtageslag-reparatie (TOTAL_WAR.md §5.4): verlaagt de opgestapelde
+   belegeringsschade op één spoor van een provincie. Zelfde transaction-
+   patroon als twAwardStructurePoints() hierboven, maar aftrekkend en nooit
+   onder 0 — aangeroepen vanuit trAnswer() zodra een leerling traint op
+   precies het spoor dat momenteel doorbroken is (siege.lastStage). */
+async function twRepairStageDamage(provinceId, stageKey, points){
+  if(!provinceId || !initFirebase()) return;
+  try{ await fbDB.ref("totalwar/provinces/"+provinceId+"/siege/stageDamage/"+stageKey).transaction(cur=>Math.max(0,(cur||0)-points)); }catch(e){}
 }
 
 /* ---- Dagelijkse cap (TR_DAILY_CAP): lokaal gecachet bij sessiestart, per
@@ -528,6 +562,28 @@ async function trCheckTWAchievements(contrib){
   BM_IDENT={...BM_IDENT, achievements:updated};
   bmIdentSave({...bmIdentLoad(), achievements:updated});
   newOnes.forEach((id,i)=>setTimeout(()=>{ const a=ACHIEVEMENTS_DEF.find(x=>x.id===id); if(a) toastAch(a); }, i*900));
+}
+
+/* Comeback-eerbewijs (TOTAL_WAR.md §5.7): een beschaving die volledig
+   uitgeroeid was (0 provincies, gedetecteerd door twDetectWipedCivs() in
+   totalwar.js) en nu weer minstens 1 provincie bezit, krijgt "Wederopstanding"
+   — gedeeld door alle leerlingen van die beschaving, zelfde lazy-per-leerling-
+   patroon als trCheckFlagshipAchievements() hierboven. */
+async function trCheckComebackAchievement(){
+  if(!BM_IDENT || !fbDB || !TR_CIV || !TR_OWNED_PROVINCES.length) return;
+  const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+  if(!klas||!lcode) return;
+  if((BM_IDENT.achievements||[]).includes("tw_wederopstanding")) return;
+  try{
+    const snap=await fbDB.ref("totalwar/civs/"+TR_CIV+"/wasWiped").once("value");
+    if(!snap.val()) return;
+    await fbDB.ref("totalwar/civs/"+TR_CIV+"/wasWiped").set(false); // voorkomt herhaalde toekenning
+    const updated=[...new Set([...(BM_IDENT.achievements||[]),"tw_wederopstanding"])];
+    await fbDB.ref("identities/"+klas+"/"+lcode+"/achievements").set(updated);
+    BM_IDENT={...BM_IDENT, achievements:updated};
+    bmIdentSave({...bmIdentLoad(), achievements:updated});
+    const a=ACHIEVEMENTS_DEF.find(x=>x.id==="tw_wederopstanding"); if(a) toastAch(a);
+  }catch(e){}
 }
 
 /* Vlaggenschip-eerbewijzen (TOTAL_WAR.md §3.7): "veroverd" zodra de

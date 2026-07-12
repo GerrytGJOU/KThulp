@@ -21,11 +21,18 @@
 > koppen (`bmBossAliveHeads()`) zijn puur visueel — ze verkorten de
 > aanvalstimer niet, zoals §4 nog beweert.
 >
+> **✅ Gebouwd, anders dan §5 hieronder beschrijft**: de twee anti-carry-
+> mechanics uit §5 zijn er, in een aan de ronde-gebaseerde architectuur
+> aangepaste vorm — zie de waarschuwing bij §5 zelf voor het verschil met het
+> origineel-ontworpen "Combo Chain".
+>
+> **✅ Ook gebouwd, ondertussen**: Minion Summon (§4, concreet gemaakt t.o.v.
+> de wat vage doc-tekst) en het Boss-Battle-eigen scorebord (§8,
+> `bmComputeBossAwards()` i.p.v. het generieke `bmComputeAwards()` uit
+> BATTLE_MODE.md M7).
+>
 > **Nog niet gebouwd** (bewust, zie `BOSS_PRESETS`-commentaar in
-> `bossbattle.js`): de Combo Chain/anti-carry-systemen van §5, minions, en
-> het Boss-Battle-specifieke scorebord van §8 (er is wél een generiek
-> `bmComputeAwards()`-scorebord, zie BATTLE_MODE.md M7 — niet de eigen
-> categorieën die §8 hieronder beschrijft).
+> `bossbattle.js`): random events (§6).
 > De **spelregels/balans** hieronder zijn wat het docx-plan voorstelde; waar de
 > werkelijke implementatie een lichtere/eenvoudigere versie koos staat dat
 > vermeld bij de betreffende sectie. **§10 (pseudocode) en §11
@@ -144,9 +151,41 @@ met de gebouwde versie:
   al gedefinieerd in `BM_CLASSES` in `battle-data.js`) omzeilen schilden — dat
   gedrag kan **rechtstreeks hergebruikt** worden, zie
   [Hergebruik van bestaande systemen](#hergebruik-van-bestaande-systemen).
-- **Minion Summon** — de baas roept 2-4 handlangers op die 50% van
-  binnenkomende schade opvangen zolang ze leven; spelers moeten hun doelwit
-  actief wisselen naar de minions.
+- **Minion Summon** — **✅ gebouwd, concreet gemaakt.** De baas roept 2-4
+  handlangers op zodra hij van fase 1 naar fase 2 overgaat (niet voor het
+  verborgen `garrison`-preset, om de Total War-garnizoensbalans niet
+  ongevraagd te raken). Elke handlanger heeft `BM_MINION_HP_PCT` (12%) van de
+  baas se max-HP (`battle-data.js`). Spelers kiezen bij elke ability een
+  doelwit — "Baas" (standaard) of een levende handlanger — via een
+  chip-rij die alleen verschijnt zolang er handlangers leven
+  (`SCREENS.battlePlayerGame`, actiefase, `certamen/battle.js`). Schade
+  gericht op een handlanger gaat volledig naar diens HP; schade gericht op de
+  baas wordt gehalveerd zolang er nog levende handlangers zijn — zo is
+  "doelwit wisselen" een echte keuze, niet optioneel. Geïmplementeerd in
+  `bmResolve()` pas 1 (`certamen/battle.js`): spawn/opschonen gebeurt in het
+  boss-blok, schaderouting in de per-speler ability-loop. Host ziet
+  aantal/HP van de handlangers via `bmBossStatusNote()` (`certamen/
+  bossbattle.js`). Per-speler `minionDamage` gebruikt door de "Minion
+  Opruimer"-categorie van het Boss-Battle-scorebord (zie §8 hieronder).
+- **AoE-vaardigheden (nieuw, niet in het oorspronkelijke docx-plan)** —
+  **✅ gebouwd.** Boogschutter's Pijlregen (basic) en Genie's Vuurtoren
+  (legendary) zijn `aoe:true` (`BM_CLASSES`, `certamen/battle-data.js`):
+  ze raken de baas ÉN elke levende handlanger, elk voor het volle
+  schadegetal — slaan de doelwitkeuze/halvering van Minion Summon hierboven
+  bewust over. Vooral bedoeld tegen meerdere handlangers tegelijk; tegen één
+  doelwit (geen handlangers, of normale PvP Battle Mode) gedragen ze zich
+  identiek aan een gewone aanval — vandaar de keuze om de bestaande
+  vaardigheid AoE te maken i.p.v. een nieuwe 6e vaardigheid toe te voegen.
+  Geïmplementeerd in `bmCalcAbilityEffect()`/`bmResolve()` pas 1 (`certamen/
+  battle.js`), zelfde plek als de Minion Summon-routing.
+  **Nog niet gebouwd**: speciale AoE-routing in Heldenmodus (elke
+  vijandelijke held individueel raken i.p.v. de bestaande vaste-volgorde-
+  cascade in `bmRouteHeroDamage()`) — dat vraagt de AoE-schade van een ronde
+  gescheiden te houden van de rest t/m de schildberekening (`efA`/`efB`),
+  een grotere wijziging dan twee vaardigheden een vlag geven. Tot die
+  uitbreiding gebeurt doen deze twee vaardigheden in Heldenmodus gewoon mee
+  als normale schade (correct, niet kapot — alleen nog zonder de
+  AoE-nuance).
 
 ---
 
@@ -157,10 +196,28 @@ toekijkt.
 
 ### 5.1 De Combo Chain
 
-Geven 3 verschillende spelers achter elkaar (binnen 4s) een correct antwoord,
-dan activeert een Class Combo: het 3e/4e/5e antwoord in de keten krijgt een
-schademultiplier (max ×2.5, `1.0 + count×0.2`). Blijft één speler spammen, dan
-breekt de keten — dit dwingt spreiding over de klas af.
+> ⚠️ **Herinterpretatie t.o.v. het origineel-ontworpen "binnen 4s"-model.**
+> Boss Battle verwerkt alle antwoorden van een ronde gebundeld (geen live
+> per-antwoord-tijdstip dat bij de host binnenkomt — zie §9.4/BOSS_BATTLE.md's
+> eigen ronde-cadans, `bmDistributeQs()`/`bmResolve()`), dus een "3
+> verschillende spelers binnen 4 seconden"-venster past niet op de
+> architectuur. **Gebouwd** (na overleg, ronde-gebaseerd herinterpreteerd):
+> een **Brede-deelname-bonus** — ≥3 verschillende spelers die in dezelfde
+> ronde daadwerkelijk schade aan de baas toebrachten geven het team een
+> vlakke bonus op de ronde-schade (`BM_CHAIN_BONUS` in `battle-data.js`: ≥3 →
+> +3, ≥5 → +6 schade — vlak, niet-stapelend, zelfde anti-snowball-lijn als de
+> M9-traits in BATTLE_MODE.md). Geïmplementeerd in `bmResolve()` pas 1
+> (`certamen/battle.js`): telt unieke schade-toebrengende pid's op team A,
+> past de bonus toe op `from.A.dmg`, en logt een `{type:"chain_bonus",...}`
+> event. Geen apart keten-over-meerdere-rondes-systeem (dat was optie 2 uit
+> het overleg, bewust niet gekozen — arbitrair "wie telt als schakel"-gedrag
+> en meer nieuwe state voor hetzelfde doel).
+
+Origineel ontwerp (niet gebouwd): geven 3 verschillende spelers achter elkaar
+(binnen 4s) een correct antwoord, dan activeert een Class Combo: het 3e/4e/5e
+antwoord in de keten krijgt een schademultiplier (max ×2.5,
+`1.0 + count×0.2`). Blijft één speler spammen, dan breekt de keten — dit
+dwingt spreiding over de klas af.
 
 ### 5.2 Klasse-specifieke rollen (aansluiting op `BM_CLASSES`)
 
@@ -173,9 +230,20 @@ van een nieuw rollensysteem te verzinnen:
 
 ### 5.3 Inspiratie-buff (catch-up)
 
-Na 3 opeenvolgende foute antwoorden krijgt een leerling "Inspiratie van
-Athena": het volgende correcte antwoord doet verhoogde schade. Geeft
-leerlingen die moeite hebben een groot succesmoment.
+**✅ Gebouwd, zoals hier ontworpen.** Na 3 opeenvolgende foute antwoorden
+krijgt een leerling "Inspiratie van Athena": het volgende correcte antwoord
+doet verhoogde schade. Geeft leerlingen die moeite hebben een groot
+succesmoment.
+
+Geïmplementeerd als een per-speler `wrongStreak`/`inspired`-veld op
+`/rooms/{code}/players/{pid}`, bijgehouden in `bmAnswer()` (`certamen/
+battle.js`): bij 3 opeenvolgende foute antwoorden gevolgd door een goed
+antwoord wordt `inspired:true` gezet. `bmResolve()` pas 1 telt bij de
+eerstvolgende gebruikte ability `BM_INSPIRE_BONUS_DMG` (`battle-data.js`, vlak
++4) bij de schade op, en verbruikt de buff (`inspired:false`) ongeacht of die
+ability schade deed — voorkomt dat de bonus blijft hangen. Zichtbaar voor de
+leerling als een "⚡ Geïnspireerd!"-melding op het actiescherm
+(`SCREENS.battlePlayerGame`).
 
 ---
 
@@ -218,15 +286,32 @@ docent kan dit overrulen.
 
 ## 8. Beloningen & post-game statistieken
 
+**✅ Gebouwd, met twee herinterpretaties t.o.v. het origineel-ontworpen "3e/4e
+schakel in een Class Combo".** Boss Battle hergebruikte tot deze wijziging
+100% het generieke PvP-scorebord (`bmComputeAwards()`, zie BATTLE_MODE.md
+M7), met categorieën die in een coöperatief gevecht niet klopten ("Beste
+Verdediger" tegen je eigen team?). Nieuwe `bmComputeBossAwards(players, log)`
+(`certamen/battle.js`, direct na `bmComputeAwards()`), aangeroepen i.p.v. de
+generieke functie zodra `BM_META?.mode==="boss"` (`SCREENS.battleHostAwards`):
+
 Na afloop (winst of verlies) een motiverend scorebord, geen negatieve
 schaming:
 
-- **De Sloper (MVP)** — meeste schade aan de baas.
-- **De Onsterfelijke** — langste foutloze streak.
-- **Minion Opruimer** — meeste schade aan handlangers.
-- **Medic van het Legioen** — meeste healing/klas-HP gered.
-- **Combo Koning** — vaakst de 3e/4e schakel in een Class Combo.
-- **Geluksbrenger** — de genadeklap uitgedeeld.
+- **De Sloper (MVP)** — meeste schade aan de baas (`p.damage`, al bestaand).
+- **De Onsterfelijke** — langste foutloze streak. Nieuw per-speler veld
+  `bestCorrectStreak`, symmetrisch bijgehouden aan `wrongStreak` in
+  `bmAnswer()`.
+- **Minion Opruimer** — meeste schade aan handlangers (`p.minionDamage`, zie
+  §4). Categorie wordt weggelaten als niemand een handlanger heeft geraakt
+  (bv. een gevecht dat in fase 1 eindigde).
+- **Medic van het Legioen** — meeste healing (`p.healing`, al bestaand).
+- **Combo Koning** — **herinterpretatie**: vaakst bijdrager aan een ronde die
+  de brede-deelname-bonus haalde (zie §5.1), i.p.v. de nooit gebouwde
+  Class-Combo-keten-telling. Nieuw per-speler veld `chainCount`.
+- **Geluksbrenger** — de genadeklap. Benadering: de speler met de hoogste
+  schade in de ronde die de baas op 0 bracht (`finishingBlowPid`, meegegeven
+  in het round-log-item) — de architectuur kent geen exacte volgorde binnen
+  een ronde, zelfde beperking als bij de brede-deelname-bonus.
 
 Iedereen verdient munten op basis van individuele score (deelname + bijdrage,
 **niet** per losse vraag — zie de balanswaarschuwing in §3), besteedbaar in
