@@ -473,38 +473,60 @@ async function twEnsureCampaignSeeded(){
   if(seeded.val()){
     // Veldtocht bestond al vóór seizoenen bestonden (deze code) — backfill
     // alléén het ontbrekende seizoen, de rest van de kaart blijft ongemoeid.
-    const seasonSnap = await fbDB.ref("totalwar/season").once("value");
-    if(!seasonSnap.exists()){
-      await fbDB.ref("totalwar/season").set({ number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() });
-    }
-    // Idem voor ownerSince (nodig voor de vlaggenschip-Legacy-eerbewijzen,
-    // §3.7): provincies die al vóór deze code bestonden hebben dat veld nog
-    // niet — backfill met "nu", zodat de Legacy-klok vanaf vandaag loopt
-    // i.p.v. met een onbekend (mogelijk al lang verstreken) verleden te doen alsof.
-    const provSnap = await fbDB.ref("totalwar/provinces").once("value");
-    const backfill = {};
-    Object.entries(provSnap.val()||{}).forEach(([id,p])=>{
-      if(p && !p.ownerSince) backfill["totalwar/provinces/"+id+"/ownerSince"] = FBNet.serverTime();
-    });
-    if(Object.keys(backfill).length) await fbDB.ref().update(backfill);
+    // Best-effort: dit is een cosmetische inhaalslag, geen kritiek pad — een
+    // mislukte backfill mag de kaart zelf nooit blokkeren (vandaar try/catch
+    // per stap i.p.v. de fout te laten doorborrelen naar twLoadMap()).
+    try{
+      const seasonSnap = await fbDB.ref("totalwar/season").once("value");
+      if(!seasonSnap.exists()){
+        await fbDB.ref("totalwar/season").set({ number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() });
+      }
+    }catch(e){ console.warn("twEnsureCampaignSeeded: seizoen-backfill mislukt", e); }
+    try{
+      // Idem voor ownerSince (nodig voor de vlaggenschip-Legacy-eerbewijzen,
+      // §3.7): provincies die al vóór deze code bestonden hebben dat veld nog
+      // niet — backfill met "nu", zodat de Legacy-klok vanaf vandaag loopt
+      // i.p.v. met een onbekend (mogelijk al lang verstreken) verleden te doen
+      // alsof. Elke provincie krijgt haar EIGEN .update()-aanroep i.p.v. één
+      // gecombineerde root-update("/"): een root-brede multi-path-update wordt
+      // door Firebase atomisch geweigerd zodra ook maar één geraakt pad niet
+      // aan de validatieregels voldoet, met een nietszeggende "update at /"-
+      // foutmelding tot gevolg (zie CLAUDE.md-gesprek n.a.v. deze bugfix) —
+      // los-per-provincie schrijven voorkomt zowel die onduidelijkheid als het
+      // "één rotte appel verpest de hele batch"-risico.
+      const provSnap = await fbDB.ref("totalwar/provinces").once("value");
+      const writes = [];
+      Object.entries(provSnap.val()||{}).forEach(([id,p])=>{
+        if(p && !p.ownerSince) writes.push(
+          fbDB.ref("totalwar/provinces/"+id).update({ownerSince: FBNet.serverTime()}).catch(e=>{
+            console.warn("twEnsureCampaignSeeded: ownerSince-backfill mislukt voor", id, e);
+          })
+        );
+      });
+      if(writes.length) await Promise.all(writes);
+    }catch(e){ console.warn("twEnsureCampaignSeeded: ownerSince-backfill mislukt", e); }
     return true;
   }
   const ownerOf = {};
   Object.entries(TW_HOME_PROVINCES).forEach(([civId,ids])=> ids.forEach(id=> ownerOf[id]=civId));
-  const upd = {};
+  // Eerste keer seeden: nog steeds per-knooppunt geschreven (i.p.v. één
+  // root-update) om dezelfde reden als de backfill hierboven.
+  const writes = [];
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
     const owner = ownerOf[id] || "neutral";
-    upd["totalwar/provinces/"+id] = { owner, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
-      siege:{ lastStage:0, stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
+    writes.push(fbDB.ref("totalwar/provinces/"+id).set({ owner, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+      siege:{ lastStage:0, stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() }));
   });
   Object.keys(TW_CIVS).forEach(civId=>{
     if(civId==="neutral") return;
-    upd["totalwar/civs/"+civId] = { trainingPoints:0, bonusesUnlocked:[] };
+    writes.push(fbDB.ref("totalwar/civs/"+civId).set({ trainingPoints:0, bonusesUnlocked:[] }));
   });
-  upd["totalwar/meta/seeded"] = true;
-  upd["totalwar/season"] = { number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() };
-  await fbDB.ref().update(upd);
+  writes.push(fbDB.ref("totalwar/season").set({ number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() }));
+  await Promise.all(writes);
+  // meta/seeded pas ná alle andere writes zetten, zodat een gedeeltelijk
+  // mislukte eerste seed niet als "voltooid" wordt gemarkeerd.
+  await fbDB.ref("totalwar/meta/seeded").set(true);
   return true;
 }
 
