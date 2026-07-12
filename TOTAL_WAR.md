@@ -63,7 +63,8 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageschade per spoor (`siege.stageDamage.{militia,walls,towers}`, zie §5.4 — **niet** het platte `damageTaken`-veld dat §4/§5.4 hieronder nog beschrijven); winst/verlies schrijft terug naar de provincie |
 | **Slijtageslag-reparatie** | `certamen/training.js` (`twRepairStageDamage`, aangeroepen vanuit `trAnswer()`) | ✅ werkend — trainen op het doorbroken spoor verlaagt `siege.stageDamage` automatisch mee, zie §5.4 |
 | **8**-facties-tabel + thuislanden (seed-data) | `certamen/totalwar.js` (`TW_CIVS`, `TW_HOME_PROVINCES`) | ✅ werkend — **niet** 7: naast de 7 uit §2 bestaat ook `britanni` (Britten, thuisprovincie `britannia`) al in de seed-data, zie de correctie bij §2 hieronder |
-| Voorbeeld-eigendom/verdediging voor de **publieke** demo-kaart | `certamen/totalwar.js` (`TW_DEMO_OWN`, `TW_DEMO_DEF`) | ✅ blijft bestaan, uitsluitend voor `SCREENS.totalWar` (niet-docenten) |
+| Voorbeeld-eigendom/verdediging voor de **publieke** demo-kaart | `certamen/totalwar.js` (`TW_DEMO_OWN`, `TW_DEMO_DEF`) | ✅ blijft bestaan, uitsluitend voor `SCREENS.totalWar` (niet-docenten) — inclusief één "betwist"-voorbeeld (`TW_DEMO_CONTESTED`, Raetia) |
+| **Stadsmarkers** (110 steden, geometrisch geverifieerd) | `certamen/map/provinces.js` (`MapAPI.drawCityMarkers`) + `provinces.json` (`cities[].x`/`y`) | ✅ werkend — zie §5.3 voor hoe de coördinaten tot stand kwamen; nog geen eigendom per stad |
 
 **Belangrijk over de kaart:** dit is de **echte** Romeinse-provinciekaart (zie
 de projectgeschiedenis: de originele Wikimedia-SVG is schoongemaakt en elke
@@ -467,17 +468,47 @@ wel vast, overgenomen uit het docx-garnizoensplan.
 > schade, en een teller "⚔ N betwist gebieden").
 
 Een provincie is pas **volledig** veroverd (en geeft de volle
-provinciebonus) als **alle steden erin** zijn ingenomen — **dit deel is nog
-steeds niet gebouwd**, zie hieronder:
+provinciebonus) als **alle steden erin** zijn ingenomen — **stad-niveau-
+eigendom zelf is nog steeds niet gebouwd** (geen los aanklikbare/kleurbare
+steden, geen "gemengd bezit"-logica). Wel gebouwd, als eerste bouwsteen
+daarvoor:
 
-- Individuele steden blijven **los aanklikbaar/kleurbaar** — dit vraagt een
-  uitbreiding van `provinces.svg`/`MapAPI`: steden bestaan nu conceptueel
-  (namen in `provinces.json`) maar zijn geen eigen SVG-elementen. Toevoegen
-  van `<circle>`-stadsmarkers per provincie (op basis van elk stad se
-  historische positie) is nieuw werk, geometrisch onafhankelijk van de
-  bestaande provincie-`<path>`s dus **zonder risico** voor de bestaande kaart.
-  Dit blijft een openstaand vervolgpunt, los van de nu gebouwde
-  belegerings-"betwist"-status hierboven.
+- **✅ Stadsmarkers (visueel, zonder eigendom).** Alle 110 steden uit
+  `provinces.json` (`cities[].name`/`tag`) hebben nu een `x`/`y`-coördinaat
+  gekregen en worden getoond als kleine stipjes op de kaart, met de stadsnaam
+  als hover-tooltip. Nieuwe `MapAPI.drawCityMarkers(registry, container)`
+  (`certamen/map/provinces.js`), aangeroepen vanuit `twLoadMap()` (`certamen/
+  totalwar.js`) op precies dezelfde plek als de bestaande
+  `MapAPI.drawSeaRoutes()` — dus automatisch op alle drie de kaartschermen
+  (docentkaart, publieke leerlingkaart, uitlegdemo).
+  **Hoe de coördinaten tot stand kwamen** (belangrijk voor toekomstig
+  onderhoud, bv. bij nieuwe steden): eerst een schatting per stad op basis van
+  historische/geografische kennis (kust vs. binnenland, noord/zuid/oost/west
+  binnen de provincie) t.o.v. elke provincie se gerenderde bounding box —
+  daarna **objectief geverifieerd** met `SVGGeometryElement.isPointInFill()`
+  tegen de echte, onregelmatige provincievorm (niet alleen de rechthoekige
+  bounding box). Bij de eerste doorloop viel 43% van de steden (47/110)
+  buiten de werkelijke kustlijn/grens — vooral kuststeden, want een
+  rechthoekige bounding box dekt een grillige kustlijn slecht. Elk gemist
+  punt is daarna automatisch verschoven naar het dichtstbijzijnde punt dat wél
+  binnen de echte vorm valt (rasterzoektocht), met een tweede volledige
+  verificatieronde erna: alle 110 steden liggen nu bevestigd binnen hun
+  provincie. Een paar provincies (`germania_superior`, `raetia`, `dacia`, e.a.)
+  bleken een eigen SVG-`transform`-matrix te hebben (brondata-artefact) — de
+  eerste verificatiepoging hield daar geen rekening mee en faalde daardoor
+  systematisch; opgelost door bij `isPointInFill()` eerst de inverse van de
+  eigen transform van het path toe te passen.
+  **Kanttekening:** dit is een geometrisch geverifieerde, maar niet
+  visueel-op-een-screenshot-gecontroleerde plaatsing (de browserpreview se
+  screenshot-tool werkte niet in de sessie waarin dit gebouwd is) — de exacte
+  positie *binnen* een stad se marge-van-onzekerheid is een educated guess,
+  niet gemeten. Zie het gewoon zelf op de kaart en meld afwijkingen; de
+  coördinaten staan gewoon als `x`/`y` per stad in `provinces.json` en zijn
+  vrij aan te passen.
+- Individuele steden **los aanklikbaar/kleurbaar maken met eigen eigendom**
+  (het oorspronkelijke stad-eigendomsconcept) is het overgebleven, nog
+  openstaande werk — de markers hierboven zijn er de geometrische basis voor,
+  maar er is nog geen Firebase-veld/UI voor eigendom per stad.
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 
@@ -755,9 +786,10 @@ een schildlaag krijgt, kan `towers` daaraan gekoppeld worden.
    Team A/B-engine (zie §9.4-addendum); gekoppeld aan Total War via de
    garnizoensformule (§5.4/§9.6) in `bmStartBossGame()`/`bmResolve()`.
 6. **Kaart-UI**: gestreepte "betwist"-provincies (§5.3, herdefinitie op
-   belegeringsschade i.p.v. stad-eigendom) is ✅ gebouwd; stad-markers voor
-   het oorspronkelijke stad-eigendomsconcept blijven open; de "Val aan"-knop
-   in het docentendashboard (§7.2) is wel al gebouwd.
+   belegeringsschade i.p.v. stad-eigendom) is ✅ gebouwd, net als de
+   geometrisch geverifieerde stadsmarkers (110 steden, zie §5.3); eigendom
+   per stad zelf (het oorspronkelijke stad-eigendomsconcept) blijft open; de
+   "Val aan"-knop in het docentendashboard (§7.2) is wel al gebouwd.
 7. **Balans-pas**: klasgrootte-compensatie is ✅ al gebouwd (§7.4). Slijtageslag-
    reparatie is inmiddels ✅ ook gebouwd (§5.4, automatisch via Training Mode
    op het doorbroken spoor). TP-kosten (§5.2) blijven moot — er is geen
