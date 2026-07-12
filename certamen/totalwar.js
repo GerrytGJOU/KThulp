@@ -179,6 +179,12 @@ const TW_DEMO_OWN = {
   aegyptus:"aegyptii", arabia:"aegyptii", creta_et_cyrene:"aegyptii",
   britannia:"britanni",
 };
+/* Eén voorbeeld van een "betwiste" provincie (§5.3-herdefinitie) op de
+   publieke uitlegkaart, puur illustratief — Raetia (neutraal, grenst aan
+   Germani se thuisprovincies) is een keer aangevallen door de Germanen maar
+   nog niet veroverd, zodat leerlingen meteen zien hoe de gestreepte
+   kaartweergave eruitziet zonder dat er een echte veldtocht voor nodig is. */
+const TW_DEMO_CONTESTED = { id:"raetia", attackerCivId:"germani" };
 const TW_DEMO_DEF = {
   italia:95, sicilia:40, sardinia:30, corsica:25, dalmatia:55, gallia_narbonensis:60,
   gallia_belgica:70, gallia_lugdunensis:65, gallia_aquitania:45,
@@ -438,6 +444,13 @@ function twApplyDemo(){
     if(c && civId!=="neutral") MapAPI.setProvinceOwner(id, c.color);
   });
   Object.entries(TW_DEMO_DEF).forEach(([id,v])=> MapAPI.setProvinceDefense(id, v));
+  // Betwist-voorbeeld (zie TW_DEMO_CONTESTED hierboven), nadat de gewone
+  // eigenaarskleuren al gezet zijn — setProvinceContested() overschrijft de
+  // fill van deze ene provincie met de gestreepte weergave.
+  const dc = TW_DEMO_CONTESTED;
+  const ownerC = TW_DEMO_OWN[dc.id] ? TW_CIVS[TW_DEMO_OWN[dc.id]] : TW_CIVS.neutral;
+  const atkC = TW_CIVS[dc.attackerCivId] || TW_CIVS.neutral;
+  MapAPI.setProvinceContested(dc.id, ownerC.color, atkC.color);
 }
 
 /* ------------------------------------------------------------------
@@ -882,6 +895,10 @@ function twProvinceInfo(id){
     civId = p.owner || "neutral";
   } else {
     civId = TW_DEMO_OWN[id] || "neutral";
+    // Betwist-voorbeeld (zie TW_DEMO_CONTESTED/twApplyDemo()): synthetische
+    // siege-data zodat het infopaneel dezelfde uitleg toont als de gestreepte
+    // kaartweergave, puur voor de publieke uitlegkaart.
+    if(id===TW_DEMO_CONTESTED.id) p={siege:{lastStage:"walls",stageDamage:{walls:180},attackerCivId:TW_DEMO_CONTESTED.attackerCivId}};
   }
   const civ  = TW_CIVS[civId] || TW_CIVS.neutral;
   const owned= civId !== "neutral";
