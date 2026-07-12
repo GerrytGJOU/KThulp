@@ -60,7 +60,8 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | JS-helper om provincies te kleuren/muteren | `certamen/map/provinces.js` (`MapAPI`) | ✅ werkend: `setProvinceOwner`, `setProvinceDefense`, `setProvinceBonus`, `highlightProvince`, `resetProvince`, `drawSeaRoutes` |
 | **Firebase-schema + eenmalige campagne-seed** | `certamen/totalwar.js` (`twEnsureCampaignSeeded`) | ✅ werkend — `/totalwar/provinces/{id}` + `/totalwar/civs/{civId}`, idempotent (zie §4, met de `klasCivs`-omkering uit §9.5) |
 | **Klas↔beschaving-koppeling (docentenportaal)** | `certamen/games.js` (`tpAssignKlasCiv`/`tpLoadKlasCivs`, paneel in `SCREENS.teacherPortal`) | ✅ werkend — schrijft naar `/totalwar/klasCivs/{klascode}`, gevalideerd tegen bestaande Battle Mode-klascodes |
-| **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageschade per spoor (`siege.stageDamage.{militia,walls,towers}`, zie §5.4 — **niet** het platte `damageTaken`-veld dat §4/§5.4 hieronder nog beschrijven, en zonder reparatiemechanisme); winst/verlies schrijft terug naar de provincie |
+| **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageschade per spoor (`siege.stageDamage.{militia,walls,towers}`, zie §5.4 — **niet** het platte `damageTaken`-veld dat §4/§5.4 hieronder nog beschrijven); winst/verlies schrijft terug naar de provincie |
+| **Slijtageslag-reparatie** | `certamen/training.js` (`twRepairStageDamage`, aangeroepen vanuit `trAnswer()`) | ✅ werkend — trainen op het doorbroken spoor verlaagt `siege.stageDamage` automatisch mee, zie §5.4 |
 | **8**-facties-tabel + thuislanden (seed-data) | `certamen/totalwar.js` (`TW_CIVS`, `TW_HOME_PROVINCES`) | ✅ werkend — **niet** 7: naast de 7 uit §2 bestaat ook `britanni` (Britten, thuisprovincie `britannia`) al in de seed-data, zie de correctie bij §2 hieronder |
 | Voorbeeld-eigendom/verdediging voor de **publieke** demo-kaart | `certamen/totalwar.js` (`TW_DEMO_OWN`, `TW_DEMO_DEF`) | ✅ blijft bestaan, uitsluitend voor `SCREENS.totalWar` (niet-docenten) |
 
@@ -458,15 +459,22 @@ gemengd stedenbezit is **"contested"**:
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 
-> ⚠️ **Ten dele gebouwd — geen reparatie.** Het echte veld is
-> `siege:{lastStage, stageDamage:{militia,walls,towers}}` (per spoor, niet
-> één plat `damageTaken`-getal), geschreven met `Math.max(vorigeSchade,
-> nieuweSchade)` in `twResolveSiege()` (`certamen/totalwar.js`) — schade
-> stapelt dus wél op tussen pogingen (de eerste helft van "de twist"
-> hieronder klopt), maar er is **geen enkel reparatiepad**: geen TP-besteding
-> die `stageDamage` verlaagt. Dat maakt een zwaar belegerde provincie op dit
-> moment blijvend verzwakt richting de volgende poging, zonder dat de
-> verdedigende klas daar iets tegen kan doen.
+> ⚠️ **Gebouwd, incl. reparatie — op één punt anders dan hieronder beschreven.**
+> Het echte veld is `siege:{lastStage, stageDamage:{militia,walls,towers}}`
+> (per spoor, niet één plat `damageTaken`-getal), geschreven met
+> `Math.max(vorigeSchade, nieuweSchade)` in `twResolveSiege()` (`certamen/
+> totalwar.js`) — schade stapelt dus op tussen pogingen (de eerste helft van
+> "de twist" hieronder klopt). **Reparatie is inmiddels gebouwd**, maar
+> automatisch i.p.v. via een aparte TP-besteding (consistent met de
+> TP-filosofie hierboven — geen aankoopstap, zie §3.2/§9.2): `twRepairStageDamage()`
+> (`certamen/training.js`) verlaagt `stageDamage[track]` met precies dezelfde
+> puntenhoeveelheid als een goed antwoord normaal aan bouwpunten zou geven,
+> zodra een leerling in Training Mode traint op exact het spoor dat
+> `siege.lastStage` is — aangeroepen vanuit `trAnswer()`, direct naast de
+> bestaande `twAwardStructurePoints()`-aanroep. Zichtbaar voor leerlingen via
+> een melding in "Bekijk je gebied" (`trProvinceOverviewHTML()`) en op het
+> trainingsscherm zelf (`trRenderModeBody()`, met een knop die direct naar het
+> juiste spoor schakelt).
 
 Een zwaar versterkte provincie (hoog `walls`/`towers`) mag nooit praktisch
 onneembaar worden. Daarom:
@@ -477,11 +485,13 @@ onneembaar worden. Daarom:
   naar `damageTaken` op de provincie, ook bij niet-winnen.
 - **Poging 2** (een volgende les) start met een boss-HP die al verlaagd is met
   `damageTaken` — nu wél te verslaan.
-- **De twist (NIET gebouwd, zie waarschuwing hierboven):** tussen de twee
-  pogingen door kan de verdedigende klas via Training Mode `damageTaken` weer
-  gedeeltelijk repareren (bv. elke N TP besteed aan reparatie verlaagt
-  `damageTaken` met een vast bedrag). Dit was de bedoelde spanningsboog uit
-  het oorspronkelijke plan.
+- **De twist (✅ gebouwd, zie waarschuwing hierboven voor het verschil met dit
+  origineel-ontworpen mechanisme):** tussen de twee pogingen door kan de
+  verdedigende klas via Training Mode `stageDamage` weer gedeeltelijk
+  repareren — niet via een aparte TP-besteding met een vast bedrag per N TP,
+  maar automatisch: elk goed antwoord op het doorbroken spoor repareert met
+  dezelfde puntenhoeveelheid als het normaal aan bouwpunten zou opleveren.
+  Dit is de bedoelde spanningsboog uit het oorspronkelijke plan, nu werkend.
 
 De exacte boss-HP-formule die dit alles combineert met de bestaande
 Boss Battle-schaling staat in
@@ -543,8 +553,18 @@ naam van het eigen vlaggenschip erbij — Training Mode is niet bruikbaar
 zolang de rebellenstatus duurt (er is immers geen eigen provincie om punten
 aan toe te kennen).
 
-Bewust (nog) niet gebouwd: een apart eerbewijs voor een geslaagde comeback —
-leuke, kleine vervolgstap, maar niet gevraagd in deze sessie.
+**✅ Gebouwd**: het comeback-eerbewijs "Wederopstanding" (`tw_wederopstanding`,
+`ACHIEVEMENTS_DEF` in `certamen/core.js`). Detectie op beschavingsniveau, niet
+per leerling: `twDetectWipedCivs()` (`certamen/totalwar.js`) schrijft
+`totalwar/civs/{civId}/wasWiped:true` als bijwerking van de bestaande
+live-listeners (`twStartLive()`/`twStartLiveReadOnly()`) zodra een beschaving
+0 provincies bezit. `trCheckComebackAchievement()` (`certamen/training.js`,
+aangeroepen vanuit `trLoadOwnedProvinces()`) is een lazy per-leerling-check
+naar het patroon van `trCheckFlagshipAchievements()`: zodra een leerling van
+die beschaving weer ≥1 provincie ziet én `wasWiped` nog `true` staat, krijgt
+die (en elke andere leerling die het daarna ook tegenkomt) het eerbewijs, en
+wordt de vlag teruggezet. Geen Firebase-rules-wijziging nodig (`totalwar/civs`
+had al `.write:true`).
 
 ---
 
@@ -714,10 +734,13 @@ een schildlaag krijgt, kan `towers` daaraan gekoppeld worden.
    garnizoensformule (§5.4/§9.6) in `bmStartBossGame()`/`bmResolve()`.
 6. **Kaart-UI**: contested/gestreepte provincies (§5.3), stad-markers zijn nog
    open; de "Val aan"-knop in het docentendashboard (§7.2) is wel al gebouwd.
-7. **Balans-pas**: klasgrootte-compensatie is ✅ al gebouwd (§7.4). Nog open:
-   slijtageslag-reparatie bestaat helemaal niet (§5.4) en TP-kosten (§5.2)
-   zijn moot geworden — er is geen aankoopmechanisme om te beprijzen, zie de
-   waarschuwing bij §3.2.
+7. **Balans-pas**: klasgrootte-compensatie is ✅ al gebouwd (§7.4). Slijtageslag-
+   reparatie is inmiddels ✅ ook gebouwd (§5.4, automatisch via Training Mode
+   op het doorbroken spoor). TP-kosten (§5.2) blijven moot — er is geen
+   aankoopmechanisme om te beprijzen, zie de waarschuwing bij §3.2.
+8. ✅ **Comeback-eerbewijs "Wederopstanding"** (§5.7): beschavingsniveau-
+   detectie (`twDetectWipedCivs()`) + lazy per-leerling-toekenning
+   (`trCheckComebackAchievement()`).
 
 ---
 

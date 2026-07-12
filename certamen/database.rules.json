@@ -83,6 +83,11 @@
         }
       }
     },
+    "usedKlascodes": {
+      ".read": "auth != null",
+      "_seeded": { ".write": "auth != null", ".validate": "newData.isBoolean()" },
+      "$klas": { ".write": true, ".validate": "newData.isNumber() && newData.val() >= 0" }
+    },
     "classAnalytics": {
       "$klas": {
         ".read": true,

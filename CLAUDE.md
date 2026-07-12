@@ -66,9 +66,11 @@
   `klascodes/{code}.write` zijn rules-gescoped op die eigenaar (met een
   legacy-uitzondering voor codes van vóór deze wijziging). `createKlascode`
   (`certamen/net.js`) is een transactie geworden i.p.v. een blinde `set()`.
-  Kleine, niet-urgente restpunt: `FBNet.getKlascodes()`/
-  `getKlascodeCounts()` (`certamen/net.js`) lezen nog steeds de volledige
-  `identities`-tak per aanroep (nu veilig — de rules leveren alleen nog de
-  eigen klassen terug — maar bij veel docenten/klassen nodeloos veel data
-  over de lijn); een lichte index zoals `usedKlascodes/{klas}: true` zou dat
-  bandbreedte-technisch verbeteren, is alleen nooit gebouwd.
+  Restpunt inmiddels opgelost: `FBNet.getKlascodes()`/`getKlascodeCounts()`
+  (`certamen/net.js`) lezen niet langer de volledige `identities`-tak, maar
+  een lichte index `usedKlascodes/{klas}: <aantal>` (`certamen/
+  database.rules.json` heeft er een eigen regelsblok voor gekregen). Eenmalig
+  self-healing gevuld door `FBNet._ensureUsedKlascodesIndex()` (leest de oude
+  volledige boom precies één keer ooit, via `usedKlascodes/_seeded`), daarna
+  groeit de index vanzelf mee via een `.transaction()` in `bmIdentCreate()`
+  (`certamen/battle.js`) bij elke nieuwe leerling.
