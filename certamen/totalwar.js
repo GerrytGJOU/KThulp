@@ -980,21 +980,18 @@ function twGarrisonVisualHTML(p, civId){
     {type:"walls",   src:twSpriteFor("walls", twStructureTier(p.wallPoints), civId)},
     {type:"militia", src:twSpriteFor("militia", twStructureTier(p.militiaPoints), civId)},
   ].filter(l=>l.src);
-  // De militie/boeren-laag (voorgrond, altijd bovenop) krijgt een extra
-  // top-inset én een iets kleinere hoogte t.o.v. de gebouwlaag eronder, zodat
-  // de figuren er iets vóór en ietsje lager lijken te staan i.p.v. precies
-  // over elkaar geplakt — een subtiel 3D/diepte-effect zonder nieuwe sprites
-  // nodig te hebben. Gebouw-/muurlaag blijft EXACT de oorspronkelijke,
-  // volledig-vullende stijl (bewust geen height:auto — dat liet bij een
-  // eerdere versie per ongeluk ALLE lagen krimpen/omhoog schuiven i.p.v.
-  // alleen de militielaag, want auto-hoogte bij een absoluut gepositioneerd
-  // <img> met top+bottom beide gezet negeert 'bottom' en gebruikt de
-  // intrinsieke beeldverhouding — vandaar nu overal een expliciete hoogte).
-  const styleFor = type => type==="militia"
-    ? "top:20px;left:8px;right:8px;height:calc(100% - 28px)"
-    : "top:8px;left:8px;right:8px;height:calc(100% - 16px)";
+  // Diepte-effect: de gebouw-/muurlagen blijven exact zoals origineel
+  // (gecentreerd in het vak), maar de militie/boeren-laag wordt via
+  // object-position naar de ONDERKANT van het vak geankerd. Eerdere pogingen
+  // verschoven het vak zelf (top-inset/height), maar object-fit:contain
+  // centreert de afbeelding BINNEN het vak — het vak verschuiven deed dus
+  // vrijwel niets zolang de afbeelding kleiner was dan het vak.
+  // object-position verplaatst de afbeelding-in-het-vak wél echt: boeren
+  // zakken naar beneden, gebouw blijft gecentreerd → figuren staan er iets
+  // onder/vóór i.p.v. er precies overheen geplakt.
+  const posFor = type => type==="militia" ? ";object-position:center bottom" : "";
   return `<div style="position:relative;width:128px;height:128px;flex:0 0 auto;background:#fff;border-radius:10px;box-sizing:border-box;overflow:hidden">
-    ${layers.map(l=>`<img src="${l.src}?${SPRITE_VER}" style="position:absolute;${styleFor(l.type)};width:calc(100% - 16px);object-fit:contain" alt="" onerror="this.style.display='none'">`).join("")}
+    ${layers.map(l=>`<img src="${l.src}?${SPRITE_VER}" style="position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);object-fit:contain${posFor(l.type)}" alt="" onerror="this.style.display='none'">`).join("")}
   </div>`;
 }
 
