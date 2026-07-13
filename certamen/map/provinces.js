@@ -227,12 +227,26 @@ const MapAPI = (function () {
     if (old) old.remove();
 
     const firstProvince = svg.querySelector(".province");
-    const insertParent = firstProvince ? firstProvince.parentNode : svg;
+    const coordParent = firstProvince ? firstProvince.parentNode : svg;
 
     const ns = "http://www.w3.org/2000/svg";
     const g = document.createElementNS(ns, "g");
     g.setAttribute("id", "mapCityMarkers");
     g.setAttribute("style", "pointer-events:none");
+    // De cx/cy-coördinaten zijn destijds gemeten in het assenstelsel van de
+    // provincie-OUDER (geneste legacy-groep met eigen translate, zie
+    // drawSeaRoutes()). De groep zelf hangt nu echter aan de ROOT-svg (zie
+    // onderaan), zodat de stippen boven álles renderen — een eerdere versie
+    // hing 'm in de ouder-groep, waardoor latere sibling-groepen van de
+    // bronkaart (labels/randen/achtergrondlagen) er nog overheen tekenden.
+    // Het coördinaatverschil tussen beide assenstelsels wordt overbrugd met
+    // één transform op de groep: M = rootCTM⁻¹ · ouderCTM.
+    try {
+      if (coordParent !== svg && typeof coordParent.getScreenCTM === "function") {
+        const m = svg.getScreenCTM().inverse().multiply(coordParent.getScreenCTM());
+        g.setAttribute("transform", "matrix(" + [m.a, m.b, m.c, m.d, m.e, m.f].join(",") + ")");
+      }
+    } catch (e) { /* geen CTM beschikbaar (niet gerenderd) → identiteit, zelfde als voorheen */ }
     Object.keys(registry).forEach((id) => {
       if (id === "_meta") return;
       (registry[id].cities || []).forEach((city) => {
@@ -240,16 +254,16 @@ const MapAPI = (function () {
         const dot = document.createElementNS(ns, "circle");
         dot.setAttribute("cx", city.x);
         dot.setAttribute("cy", city.y);
-        // r=220, en later r=550, bleken op deze viewBox (~175528 breed, kaart
-        // wordt in de app op zo'n 750px CSS-breedte getoond) nog altijd maar
-        // 2-5px op scherm — te klein om in een screenshot te herkennen.
-        // Fors vergroot naar een duidelijk zichtbare stip (~15px op scherm).
-        // Eigen pointer-events:auto (de groep eromheen staat op none, dus
-        // zonder dit zou ook de hover-tooltip nooit triggeren).
-        dot.setAttribute("r", "1600");
+        // Maatvoering: r=220/550 was op deze viewBox (~175528 breed, kaart
+        // rendert op ~750px CSS) maar 2-5px — onzichtbaar; r=1600 (~14px)
+        // overwoekerde juist de kleinste provincies (Corsica is maar ~2600
+        // eenheden breed). r=900 ≈ 8px is de middenweg: duidelijk zichtbaar,
+        // past nog op een eiland. Eigen pointer-events:auto (de groep staat
+        // op none, anders zou de hover-tooltip nooit triggeren).
+        dot.setAttribute("r", "900");
         dot.setAttribute("fill", "#ffd76a");
         dot.setAttribute("stroke", "#3a2f22");
-        dot.setAttribute("stroke-width", "380");
+        dot.setAttribute("stroke-width", "240");
         dot.setAttribute("opacity", "0.95");
         dot.setAttribute("style", "pointer-events:auto");
         const title = document.createElementNS(ns, "title");
@@ -258,10 +272,7 @@ const MapAPI = (function () {
         g.appendChild(dot);
       });
     });
-    // Bovenop de provincies (en de zeeroutes, die vóór de eerste provincie
-    // zitten), zodat markers nooit onder de kaartvulling verdwijnen —
-    // appendChild i.p.v. insertBefore, bewust anders dan drawSeaRoutes().
-    insertParent.appendChild(g);
+    svg.appendChild(g);
     return g;
   }
 
