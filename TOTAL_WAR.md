@@ -536,11 +536,14 @@ daarvoor:
   geschiedenis is impliciet — zonder extra ontgrendel-logica — pas leesbaar
   zodra de klas de provincie daadwerkelijk bezit. Geen aparte eigendomsstatus
   per stad nodig: de bestaande provincie-eigendom is de ontgrendel-voorwaarde.
-- Individuele steden **los aanklikbaar/kleurbaar maken met eigen eigendom**
-  (het oorspronkelijke stad-eigendomsconcept, of eventuele toekomstige
-  stadsbonussen) is het overgebleven, nog openstaande werk — de markers en
-  geschiedenislesjes hierboven zijn er de basis voor, maar er is nog geen
-  Firebase-veld/UI voor eigendom of mechanische bonussen per stad.
+- **Bewust beslist (2026-07-12, niet gebouwd): geen eigendom of mechanische
+  bonussen per stad.** Individuele steden los aanklikbaar/kleurbaar maken met
+  eigen eigendom (het oorspronkelijke stad-eigendomsconcept) én stadsbonussen
+  bovenop de bestaande provinciebonus zijn overwogen en afgewezen — de
+  historische lesjes per stad (hierboven) zijn genoeg, de mechanische bonus
+  blijft op provincieniveau (§3.5). Dit is dus geen openstaand vervolgpunt
+  meer maar een gesloten beslissing; alleen heropenen bij een expliciete
+  nieuwe vraag daarover.
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 
@@ -819,9 +822,11 @@ een schildlaag krijgt, kan `towers` daaraan gekoppeld worden.
    garnizoensformule (§5.4/§9.6) in `bmStartBossGame()`/`bmResolve()`.
 6. **Kaart-UI**: gestreepte "betwist"-provincies (§5.3, herdefinitie op
    belegeringsschade i.p.v. stad-eigendom) is ✅ gebouwd, net als de
-   geometrisch geverifieerde stadsmarkers (110 steden, zie §5.3); eigendom
-   per stad zelf (het oorspronkelijke stad-eigendomsconcept) blijft open; de
-   "Val aan"-knop in het docentendashboard (§7.2) is wel al gebouwd.
+   geometrisch geverifieerde stadsmarkers en de historische lesjes per stad
+   (110 steden, zie §5.3). Eigendom/mechanische bonussen per stad zelf (het
+   oorspronkelijke stad-eigendomsconcept) is **bewust afgesloten, niet
+   gebouwd** (zie de beslissing bij §5.3) — geen openstaand punt meer. De
+   "Val aan"-knop in het docentendashboard (§7.2) is al gebouwd.
 7. **Balans-pas**: klasgrootte-compensatie is ✅ al gebouwd (§7.4). Slijtageslag-
    reparatie is inmiddels ✅ ook gebouwd (§5.4, automatisch via Training Mode
    op het doorbroken spoor). TP-kosten (§5.2) blijven moot — er is geen
