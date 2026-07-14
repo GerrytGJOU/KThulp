@@ -25,6 +25,12 @@ SCREENS.home = function(){
     <h3>🗺️ Total War <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
     <p>Doorlopende veldtocht: elke klas is een beschaving en verovert samen de kaart van Europa. Oefen thuis, val aan in de les.</p>
   </button>
+  <button class="tile" onclick="go('singlePlayer')">
+    <span class="corner">${iconSVG("star",88,"currentColor")}</span>
+    <span class="ic">${iconSVG("star",44,"currentColor")}</span>
+    <h3>📜 Chronica Classica <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+    <p>Reis als een eenvoudige boer door de klassieke mythologie en herstel de vergeten herinnering — solo, op je eigen tempo.</p>
+  </button>
   <button class="tile" onclick="go('freePractice')">
     <span class="ic">${iconSVG("owl",44,"currentColor")}</span>
     <h3>Vrij oefenen</h3>

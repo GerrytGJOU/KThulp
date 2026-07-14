@@ -10,6 +10,20 @@
   codebase (geen aparte Latijn-/Grieks-versie) — daar is dus geen "andere app"
   om de wijziging in te dupliceren.
 
+## Modus-documentatie (certamen/)
+De vier grote spelmodi binnen `certamen/` hebben elk een eigen masterplan in de
+repo-root. Dat masterplan is telkens de **enige bron van waarheid** voor die
+modus en vervangt eerdere schetsen/`.docx`-bestanden. Raadpleeg het bijbehorende
+document vóór je aan een modus werkt, en werk het bij na elke wijziging die de
+spelregels, features of het datamodel raakt:
+- `BATTLE_MODE.md` — klas-vs-klas woordkennis-arena (twee teams, Battle Energy).
+- `BOSS_BATTLE.md` — coöperatief PvE: de hele klas tegen één mythologische baas.
+- `TOTAL_WAR.md` — doorlopende veldtocht: elke klas is een beschaving en
+  verovert samen de kaart van Europa.
+- `Chronica.md` — Single Player Mode "Chronica Classica": narratieve,
+  offline-first RPG (proloog speelbaar). Gebruikt Battle Mode's klasse-, avatar-
+  en profielsysteem; klassekeuze en eretitels werken door in de andere modi.
+
 ## Conventies
 - Naamval-volgorde altijd: nominativus, genitivus, dativus, accusativus,
   (ablativus), vocativus.

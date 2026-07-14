@@ -1279,6 +1279,7 @@ function bmRenderHostLobby(){
     <span style="flex:1;display:flex;align-items:center;gap:6px">
       ${p.isBot?`<span style="font-size:16px" title="AI-bot">🤖</span>`:`${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],26)}`}
       <span>${esc(p.name)}</span>
+      ${p.title?`<span class="pill" style="font-size:10px;background:var(--hi-dim)">⭐ ${esc(p.title)}</span>`:""}
       ${!isBoss&&p.team?`<span class="pill" style="background:${p.team==="A"?"var(--teamA)":"var(--teamB)"};border:none;font-size:11px">${esc(p.team==="A"?fac.teams.A.nm:fac.teams.B.nm)}</span>`:""}
       ${p.class?`<span class="pill" style="font-size:11px">${esc(bmClsName(p.class))}</span>`:""}
     </span>
@@ -3201,6 +3202,9 @@ async function bmDoJoin(){
     team,class:null,be:0,correct:0,wrong:0,damage:0,healing:0,
     answeredRound:isPlaying?(stateSnap.round?.n||0):- 1, // sla huidige ronde over bij late join
     lockedAction:null,online:true,
+    // Chronica Classica-eretitel (indien gekozen): puur presentatie in de
+    // lobby, zie SP_TITLES/spEquippedTitleDisplayName (singleplayer.js).
+    title:spEquippedTitleDisplayName(),
     identityKey:BM_IDENT.klascode+":"+BM_IDENT.leerlingcode};
   const ref=fbDB.ref("rooms/"+code+"/players").push();
   ref.onDisconnect().update({online:false});
@@ -3659,6 +3663,15 @@ SCREENS.battleProfile = function(){
   </div>
   `}
   <button class="btn btn-gold btn-block" onclick="BM_AV_RETURN='battleProfile';go('battleAvatarEdit')" style="margin-bottom:14px">Avatar aanpassen</button>
+  <div class="panel" style="display:flex;gap:14px;align-items:center;margin-bottom:14px">
+    <div style="flex:0 0 auto">${bmAvatarSVG(spAvatarMerge(spAvatarLoadLocal()),64)}</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:700">Combat Avatar — Chronica Classica</div>
+      <div class="note" style="margin-top:2px">Je verschijning in Chronica Classica-gevechten, los van je Battle Mode-avatar.</div>
+      <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="SP_AV_RETURN='battleProfile';go('spAvatarEdit')">Combat Avatar aanpassen</button>
+    </div>
+  </div>
+  ${spTitlesSectionHTML(spTitlesLoadLocal(), spEquippedTitleLoadLocal())}
   <div class="eyebrow l">Class Mastery</div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">${masteryHTML}</div>
   <div class="eyebrow l">Achievements (${bmAchievedIds.filter(id=>bmAchDef.some(a=>a.id===id)).length}/${bmAchDef.length})</div>
