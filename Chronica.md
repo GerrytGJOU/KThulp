@@ -229,26 +229,52 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
 
 ## 7. Campagnestructuur (`SP_CAMPAIGN`)
 
-Proloog + Hoofdstuk 1 t/m 11 + Finale, gesynchroniseerd met Pallas en Minerva
-(klas 2 t/m 6 gymnasium). Elk hoofdstuk legt vast: periode, verhaal, de
-bijbehorende Pallas/Minerva-les, de **grammatica die de puzzels voedt**,
-gameplay, hoofdpersonages en de (stripstijl-)illustratie.
+Proloog + 19 hoofdstukken in 5 "Boeken", gesynchroniseerd met Pallas en
+Minerva (klas 2 t/m 6 gymnasium). Elk hoofdstuk legt vast: periode, verhaal,
+de bijbehorende Pallas/Minerva-les, de **grammatica die de puzzels voedt**,
+gameplay, hoofdpersonages, de (stripstijl-)illustratie en (waar toepasselijk)
+`zijverhalen` — suggesties uit `SP_MYTH_CANON` (zie hieronder) die goed bij
+dat hoofdstuk passen.
 
-| # | Hoofdstuk | Grammatica (basis voor puzzels) |
-|---|---|---|
-| Proloog | Het Orakel van Chronos | Alfabet, taalbewustzijn, eerste woorden |
-| 1 | De Namen van de Wereld | Zn/bn/lidwoord, nom./acc./voc. |
-| 2 | De Werken van de Helden | Praesens, werkwoordstammen, imperativus, esse/posse |
-| 3 | Beloften van Goden en Mensen | Genitivus, dativus, bijstelling |
-| 4 | De Doolhof van Keuzes | Inf., voc., imperfectum, perfectum, ablativus |
-| 5 | De Val van Troje | Imperf., aoristus, participia, A.C.I., betr. bijzinnen — **vertakking Trojaans/Grieks/Neutraal** |
-| 6 | De Stichting van Rome | A.C.I., passief, ppp, deponentia |
-| 7 | Mensen Achter de Mythen | Medium, passief, participium, voornaamwoorden |
-| 8 | Athene en Rome | Futurum, conjunctivus, vraagzinnen, vergelijkingen |
-| 9 | Oorlog en Macht | Perf., fut., fut. exactum, ablativus absolutus |
-| 10 | Caesar en de Geschreven Geschiedenis | Inf., gerundium, gerundivum |
-| 11 | De Keizers en de Waarheid | N.C.I., complexe naamvallen, literair lezen |
-| Finale | De Laatste Herinnering | Alle opgedane taalvaardigheid samen |
+> **Samensmelting (2026-07):** deze structuur combineert twee bronnen — de
+> eerdere, compactere "11 hoofdstukken + Finale"-indeling (rijker aan
+> gameplay/personages/thema, uit een eerder gesprek) en de latere,
+> gedetailleerdere "Certamen – Chronica Classica Campaign Map"-docx (5 Boeken,
+> 19 hoofdstukken, exacte Pallas/Minerva-lesnummers, plus een S/A/B-tier
+> mythencanon). De docx-indeling is leidend voor de structuur; de rijkere
+> velden van de oudere bron zijn overgenomen waar hoofdstukken overeenkomen.
+> Beide brondocumenten zijn hiermee vervangen — dit is de enige, actuele
+> campagnekaart.
+
+| # | Boek | Hoofdstuk | Grammatica (basis voor puzzels) |
+|---|---|---|---|
+| Proloog | — | Het Orakel van Chronos | Grieks alfabet, taalbewustzijn, eerste Latijnse woorden |
+| 1 | I | De Namen van de Wereld | Zn, bn (alleen groep 1/2), lidwoord, nom./acc./voc. |
+| 2 | I | De Werken van de Helden | Praesens, werkwoordstammen, imperativus, esse/posse |
+| 3 | I | Beloften van Goden en Mensen | Genitivus, dativus, bijstelling |
+| 4 | I | Het Labyrint van Herinneringen | Inf., voc., imperfectum, perfectum, ablativus |
+| 5 | I | Ilion in Vlammen | Imperf., aoristus, participia, A.C.I., betr. bijzinnen — **vertakking Trojaans/Grieks/Neutraal** |
+| 6 | II | De Zoon van Troje | Passief, ppp, deponentia |
+| 7 | II | Mensen Achter de Mythen | Medium, passief, participium, voornaamwoorden |
+| 8 | II | De Stad van Athena | Futurum, conjunctivus, comparativus, vraagzinnen |
+| 9 | II | Oorlog en Overwinning | Perf., fut., fut. exactum, ablativus absolutus |
+| 10 | III | De Vader van de Geschiedenis | Historische taal, bronanalyse |
+| 11 | III | De Stem van de Filosofen | Complexe zinsbouw, argumentatie |
+| 12 | III | Alexander en de Grenzen van de Wereld | Complexe werkwoorden, participia |
+| 13 | IV | De Eeuwige Stad | Conjunctivus, N.C.I., semi-deponentia |
+| 14 | IV | Caesar Schrijft Geschiedenis | Gerundium, gerundivum |
+| 15 | IV | Augustus en de Pax Romana | Literair Latijn |
+| 16 | IV | Keizers en Dichters | Verdieping naamvallen |
+| 17 | V | De Bibliotheek van Mnemosyne | Herhaling van alle grammatica |
+| 18 | V | De Rivier Lethe | Integratie Grieks & Latijn |
+| 19 (Finale) | V | Chronica Classica | Eindtoets van alle grammatica en taalvaardigheid |
+
+**`SP_MYTH_CANON`** — de S/A/B-tier-mythenlijst + de ontbrekende Romeinse
+verhalen uit de docx, bewaard als los naslagwerk (niet uitputtend toegewezen).
+Elk hoofdstuk hierboven met een `zijverhalen`-veld heeft er al een paar aan
+gekoppeld (bv. Hoofdstuk 1: Prometheus + Pandora, al in gebruik als de
+plotlijnen B/C hieronder; Hoofdstuk 4: Daidalos & Ikaros; Hoofdstuk 6: Romulus
+& Remus). De rest blijft vrij te plaatsen naarmate hoofdstukken worden gebouwd.
 
 De **wereldkaart** opent mee met de voortgang (nieuwe locaties verschijnen pas
 na bezoek); dezelfde locatie kan in verschillende tijdlagen terugkomen. Keuzes
@@ -258,8 +284,15 @@ systeem — **nog te bouwen** (§8).
 ### 7.1 Vertakking binnen een hoofdstuk (vastgelegd bij Hoofdstuk 1)
 
 Een hoofdstuk kan uit **meerdere parallelle plotlijnen** bestaan die *niet*
-convergeren (Hoofdstuk 1: drie lijnen — "Het Goud van Midas", "De Naamloze
-Stoet", "De Aanroeping der Goden"). De regels:
+convergeren. Hoofdstuk 1, drie lijnen (elk leert de volledige hoofdstuk-1-
+grammatica, in een ander mythisch jasje — zie ook `zijverhalen` bij Hoofdstuk 1
+in §7):
+- **A — "Het Goud van Midas"** (Minerva H2), Latijn-zwaartepunt.
+- **B — "De Geboorte van Athena"** (Grieks-zwaartepunt).
+- **C — "Prometheus en Pandora"** (S-tier mythen uit `SP_MYTH_CANON`), begin
+  van de mensheid.
+
+De regels:
 
 - **Educatieve gate boven alles:** je komt een volgend hoofdstuk pas in wanneer
   je álle grammatica van het huidige hoofdstuk hebt verwerkt. Geen progressie
