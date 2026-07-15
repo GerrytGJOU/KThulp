@@ -797,6 +797,23 @@ Lydia staat, zelfs hier, aan de rand van de wereld die je kent, al bekend als ee
 
 CHOICES:
 
+* Ga direct de stad Sardis binnen -> CH1_A02
+* Vraag eerst een langsreizende koopman naar het laatste nieuws -> CH1_A01B
+
+END
+
+=== SCENE: CH1_A01B ===
+
+TITLE:
+Geruchten op de Weg
+
+TEXT:
+De koopman, die net zijn ezel bijstuurt langs een steile bocht, is maar al te bereid zijn last even te laten staan voor een goed verhaal. Hij vertelt over een dronken oude sater die dagenlang zoek was in de rozentuinen van het paleis — Silenus, zegt hij, alsof de naam alles verklaart, de trouwe metgezel en leermeester van Bacchus zelf, altijd op wijn en altijd op het randje van een wijsheid die niemand anders lijkt te bezitten.
+
+Wat de koning met hem heeft gedaan, weet de koopman niet precies, maar het gerucht dat al door Sardis waart is duidelijk genoeg: Midas heeft iets gedaan waarvoor een god nu een gunst schuldig is — en gunsten van goden, voegt de koopman er met een veelbetekenende blik aan toe, brengen zelden alleen maar geluk.
+
+CHOICES:
+
 * Ga de stad Sardis binnen -> CH1_A02
 
 END
@@ -922,6 +939,23 @@ Voor het eerst sinds je hem zag, ziet hij eruit als een gewone man — geen koni
 
 CHOICES:
 
+* Wijs hem meteen op Bacchus, die alles zag gebeuren -> CH1_A09
+* Blijf eerst naast hem zitten, zodat hij niet alleen is met wat hij heeft gedaan -> CH1_A08B
+
+END
+
+=== SCENE: CH1_A08B ===
+
+TITLE:
+Een Ogenblik van Stilte
+
+TEXT:
+Je knielt naast hem neer zonder iets te zeggen — er is toch geen woord dat recht doet aan wat er zojuist is gebeurd. Midas' handen trillen nog altijd boven het gouden gezicht van zijn dochter, alsof aanraken en niet-aanraken tegelijk ondraaglijk zijn geworden.
+
+Pas na een lange stilte, wanneer zijn ademhaling eindelijk iets rustiger wordt, durf je hem eraan te herinneren dat er misschien nog een uitweg is — een god die een gunst gaf, kan een gunst ook terugnemen.
+
+CHOICES:
+
 * Wijs hem op Bacchus, die alles zag gebeuren -> CH1_A09
 
 END
@@ -982,6 +1016,23 @@ Voordat je de top van de Olympos bereikt, hoor je het verhaal al van een herder 
 Een oude profetie, afkomstig van Gaia en Ouranos zelf, waarschuwde Zeus voor wat komen zou: Metis zou eerst een dochter baren, even wijs en dapper als haar vader — en daarna een zoon die hem zou onttronen, precies zoals Zeus ooit zijn eigen vader Kronos onttroonde, en Kronos vóór hem Ouranos. Een patroon dat zich, zo leek het, eindeloos zou herhalen.
 
 Zeus, vastberaden dat patroon te breken, deed het enige wat hem logisch leek: hij slikte Metis in het geheel in, zwanger nog van hun dochter. Sindsdien, zo vertelt de herder terwijl hij zich haastig uit de voeten maakt, draagt hij iets in zich mee dat niet stil wil blijven liggen.
+
+CHOICES:
+
+* Beklim direct de laatste helling naar de top -> CH1_B02
+* Vraag de herder waarom hij zo angstig wegvlucht -> CH1_B01B
+
+END
+
+=== SCENE: CH1_B01B ===
+
+TITLE:
+Een Patroon dat Zich Herhaalt
+
+TEXT:
+De herder aarzelt, alsof hij al spijt heeft van wat hij heeft losgelaten, maar antwoordt toch. "Ik was er zelf niet bij toen hij zijn eigen vader onttroonde, jongen, maar mijn vader wel. Kronos verslond zijn kinderen uit angst voor een profetie — en Zeus ontsnapte alleen omdat zijn moeder hem verborg en Kronos een steen liet inslikken in zijn plaats."
+
+Hij wijst naar de donderwolken die zich al om de top samenpakken. "Als de zoon zo bang was voor zijn eigen kinderen dat hij naar dít soort maatregelen greep, wil ik niet weten wat er vandaag gebeurt." Met die woorden verdwijnt hij tussen de rotsen, en jij blijft achter met een onbehaaglijk gevoel dat groeit met elke stap die je verder omhoog zet.
 
 CHOICES:
 
@@ -1075,6 +1126,23 @@ puzzle_ch1b_vocativus
 
 CHOICES:
 
+* Kijk hoe Zeus als eerste zijn stem hervindt -> CH1_B07
+* Kijk naar de andere goden, die zich stilletjes terugtrekken -> CH1_B06B
+
+END
+
+=== SCENE: CH1_B06B ===
+
+TITLE:
+Niet Iedereen Kijkt met Bewondering
+
+TEXT:
+Niet iedereen op de Olympos kijkt met dezelfde verwondering toe. Ares, god van de oorlog, staart naar haar speer met iets dat verdacht veel op jaloezie lijkt — een nieuwe godin, amper geboren, die instinctief beter met een wapen lijkt om te gaan dan hij na eeuwen strijd. Hera, Zeus' eigen vrouw, kijkt toe met een uitdrukking die het midden houdt tussen argwaan en berekening, alsof ze zich nu al afvraagt wat deze onverwachte dochter voor haar eigen positie zal betekenen.
+
+Alleen Hermes glimlacht oprecht, alsof hij nu al verheugd is op alle verhalen die deze geboorte ongetwijfeld zal opleveren. Terwijl de goden zo, ieder op hun eigen manier, op haar komst reageren, is het Zeus die als eerste zijn stem hervindt.
+
+CHOICES:
+
 * Wacht af hoe zij antwoordt -> CH1_B07
 
 END
@@ -1146,6 +1214,23 @@ TEXT:
 Beneden, in een vallei zonder enig vuur, klappertanden de eerste mensen tegen de nacht. Ze hebben geen manier om zich te warmen wanneer de zon ondergaat, geen licht tegen het duister waarin roofdieren wél goed kunnen zien, geen manier om hun voedsel te veranderen in iets meer dan rauwe, ongenietbare kou.
 
 Prometheus, die vanaf de rand van de Olympos naar beneden kijkt, ziet elke avond dezelfde ellende zich herhalen. Zijn eigen schepping, hulpeloos gelaten door zijn broers vergeetachtigheid, overleeft nauwelijks de nachten. Hij kan niet langer toekijken zonder in te grijpen — ook al weet hij precies wat voor risico dat met zich meebrengt.
+
+CHOICES:
+
+* Volg hem meteen, vastbesloten als hij is -> CH1_C03
+* Wacht tot het donker is, zodat hij ongezien de Olympos op kan -> CH1_C02B
+
+END
+
+=== SCENE: CH1_C02B ===
+
+TITLE:
+Wachten op het Duister
+
+TEXT:
+Prometheus wacht tot de laatste gloed van de zonsondergang is weggezakt, wetend dat zelfs een titaan die ooit aan Zeus' zijde streed geen enkele garantie heeft wanneer hij zich aan diefstal van de goden waagt. In het duister, tussen de rotsen die de weg naar de top markeren, oefent hij zijn tocht in gedachten nog een laatste keer.
+
+Je ziet de twijfel over zijn gezicht trekken — niet over wat hij gaat doen, dat staat allang vast, maar over de prijs die hij er ooit voor zal moeten betalen. Toch, wanneer de sterren eindelijk helder genoeg staan, zet hij de eerste stap naar boven.
 
 CHOICES:
 
@@ -1234,6 +1319,23 @@ Pandora zelf voelt de doos als een gewicht dat ze overal met zich meedraagt, een
 
 PUZZLE:
 puzzle_ch1c_naamval
+
+CHOICES:
+
+* Kijk toe op het moment dat ze het deksel licht -> CH1_C08
+* Kijk hoe Epimetheus probeert haar aandacht af te leiden -> CH1_C07B
+
+END
+
+=== SCENE: CH1_C07B ===
+
+TITLE:
+Een Poging tot Afleiding
+
+TEXT:
+Epimetheus, die de onrust in haar ogen allang heeft opgemerkt, doet wat hij kan om haar gedachten af te leiden — een wandeling door de boomgaard, een nieuw geweven kleed, elk cadeau dat hij kan bedenken om die ene, verzegelde doos uit haar gedachten te verdrijven. Een tijdlang lijkt het zelfs te werken.
+
+Maar 's avonds, wanneer het huis stil is geworden en Epimetheus allang slaapt, vindt Pandora zichzelf toch weer terug bij de doos, haar vingers al op het deksel voordat ze zich ook maar bewust wordt van wat ze doet.
 
 CHOICES:
 

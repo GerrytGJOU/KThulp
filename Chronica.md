@@ -368,6 +368,18 @@ De regels:
   1 zet al `ch1_lijn`/`ch1_voltooid`); latere hoofdstukken/NPC's kunnen erop
   reageren zodra hoofdstuk 2+ bestaat. NPC's die er conditioneel op reageren
   vragen daarnaast een `CONDITION`-mechanisme — een volgende stap, zie §8.
+- **Vertakkingen binnen een lijn (voor het gevoel van keuzevrijheid).** Naast
+  de grote lijnkeuze op de hub-node mag elke lijn zelf ook kleinere,
+  reconvergerende zijpaadjes hebben: een keuze die naar een extra node met
+  eigen sfeertekst leidt en daarna simpelweg weer aansluit op het hoofdpad. Dit
+  is puur voor het spelgevoel (geen aparte grammatica/eindpunt) en dus geen
+  uitzondering op de "één plotlijn = alle stof" regel. Hoofdstuk 1 heeft dit al:
+  lijn A/Midas 1 vertakking (`CH1_A01B` markt-geruchten, `CH1_A08B` troost
+  bieden voor je Bacchus aanroept), lijn B/Athena 2 vertakkingen (`CH1_B01B`
+  herder over Kronos/Zeus, `CH1_B06B` reacties van Ares/Hera/Hermes op de
+  geboorte), lijn C/Prometheus 2 vertakkingen (`CH1_C02B` wachten op het
+  duister voor de vuurdiefstal, `CH1_C07B` Epimetheus' afleidingspoging voor
+  Pandora de doos opent).
 - Dit is de bewuste keuze i.p.v. "alle drie de lijnen verplicht": het houdt
   echte branching + een korte kritische route voor casual spelers, zonder de
   educatieve gate los te laten.
