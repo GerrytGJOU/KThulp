@@ -318,6 +318,43 @@ const SP_MYTH_CANON = {
             "Cincinnatus","Coriolanus","Camillus","Regulus","Cato","Spartacus","Cicero"],
 };
 
+/* ---- WERELDKAART — geïllustreerde panelen (Gemini, stripstijl "antieke
+   atlas") met onthullende locatie-pins. De volledige wereld (Britannia tot
+   India, zie Chronica.md) is verdeeld in panelen zodat elk leesbaar blijft;
+   nu alleen paneel "aegean" getekend (dekt Proloog + Hoofdstuk 1). Referentie
+   voor de kustlijnen/liggingen: twee CC-gelicenseerde kaarten (Aeneas- en
+   Odysseus-reis) zijn als geografisch naslagwerk gebruikt, niet overgenomen
+   — geen attributieplicht, want geen bewerking van hun bestand.
+
+   Een locatie verschijnt pas als `unlockCodex` al in SP_STATE.codex zit —
+   hergebruikt bewust de bestaande codex-hook (geen nieuw trackingsysteem).
+   `x`/`y` zijn percentages t.o.v. de paneelafbeelding (linksboven = 0,0).
+   BOUWSTATUS: x/y zijn een eerste schatting op het oog — nog te verfijnen
+   zodra `panel1_aegean.png` op schijf staat en pixel-precies afgelezen kan
+   worden. ---- */
+const SP_MAP_PANELS = {
+  aegean: { nm:"Latium, Egeïsche Zee & West-Klein-Azië", img:"panel1_aegean.png" },
+  // western: N-Afrika/Sicilië/Gades/Gallië — nog te tekenen (Hoofdstuk 2, 6, 7, 9, 13-16).
+  // eastern: Kaukasus/Perzië/Egypte/India — nog te tekenen (Hoofdstuk 1C, 3, 12).
+};
+const SP_MAP_LOCATIONS = [
+  // x/y afgelezen op het echte panel1_aegean.png (1376×768px): temple-icoon
+  // op het Latium-schiereiland, de gloeiende tempel in de wolken boven de
+  // Olympos, en het rode gebouwencomplex in de oostelijke heuvels (Sardis).
+  { id:"latium", nm:"Latium", panel:"aegean", x:12.7, y:20.2,
+    unlockCodex:"codex_orakel_van_chronos",
+    desc:"Waar alles begon: het veld waar je het Orakel van Chronos vond." },
+  { id:"olympos", nm:"Olympos", panel:"aegean", x:41.1, y:13.0,
+    unlockCodex:"codex_geboorte_athena",
+    desc:"De woonplaats van de goden, waar Athena voltallig gewapend uit Zeus' hoofd sprong." },
+  { id:"sardis", nm:"Sardis, Lydië", panel:"aegean", x:74.1, y:47.5,
+    unlockCodex:"codex_gouden_aanraking",
+    desc:"Waar koning Midas alles wat hij aanraakte in goud veranderde." },
+];
+function spLocationUnlocked(loc, codexArr){
+  return !loc.unlockCodex || (codexArr||[]).includes(loc.unlockCodex);
+}
+
 /* ---- VOORNAAMWOORDEN — uitbreidbaar, nieuw gender toevoegen = 1 regel ---- */
 const SP_PRONOUNS = {
   man:       { subj:"hij", obj:"hem",  poss:"zijn" },
