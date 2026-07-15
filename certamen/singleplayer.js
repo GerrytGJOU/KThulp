@@ -115,8 +115,34 @@ SCREENS.spAvatarEdit = function(){
   }
   const av = SP_AV_EDIT;
   const earnedTitles = SP_AV_EARNED_TITLES||[];
+  // Chronica speelt altijd als jezelf: geen overwinningsanimatie, geen
+  // legendarische strijders, geen Battle Mode-legioensglans.
+  const SP_AVATAR_HIDDEN_PARTS = ["victoryAnim","legendary","prestige"];
   function partSection(partId){
     const part = BM_AVATAR_PARTS[partId]; if(!part) return "";
+    // Kleurenkiezers: haarkleur/capekleur als ronde swatches, net als in
+    // SCREENS.battleAvatarEdit (battle.js) — zelfde look, eigen ontgrendellogica.
+    const SW = partId==="capekleur"?BM_CAPEKLEUR_SWATCH
+             : partId==="haarkleur"?BM_HAARKLEUR_SWATCH : null;
+    if(SW){
+      const sw=part.opts.map(o=>{
+        const col=SW[o.id]||"#888";
+        const locked=!spAvatarIsUnlocked(partId,o.id,earnedTitles);
+        const sel=av[partId]===o.id;
+        if(locked){
+          const req=spAvatarReqText(partId,o.id);
+          return `<button title="🔒 ${esc(req)}" onclick="toast('Nog op slot','${esc(req)}')"
+            style="width:34px;height:34px;border-radius:50%;background:${col};border:3px solid transparent;
+            opacity:.45;cursor:help;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:13px">🔒</button>`;
+        }
+        return `<button title="${esc(o.nm)}"
+          onclick="SP_AV_EDIT['${partId}']='${o.id}';SCREENS.spAvatarEdit()"
+          style="width:34px;height:34px;border-radius:50%;background:${col};
+          border:3px solid ${sel?"var(--hi-bright)":"transparent"};cursor:pointer;flex:0 0 auto"></button>`;
+      }).join("");
+      return `<div class="eyebrow l">${esc(part.nm)}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">${sw}</div>`;
+    }
     const opts = part.opts.map(o=>{
       const locked = !spAvatarIsUnlocked(partId, o.id, earnedTitles);
       const sel = av[partId]===o.id;
@@ -137,7 +163,7 @@ SCREENS.spAvatarEdit = function(){
   <div class="scrhead"><button class="back" onclick="SP_AV_EDIT=null;go(SP_AV_RETURN||'battleProfile')">${iconSVG("shield",20,"currentColor")}</button><h2>Chronica Classica Avatar</h2></div>
   <div class="panel" style="text-align:center;padding:14px 16px;display:flex;justify-content:center">${renderPixelHeroPreview(av,true) || bmAvatarSVG(av,96)}</div>
   <div class="panel"><p class="note">Uiterlijk kies je vrij. Uitrusting (wapen, harnas, helm, schild, …) ontgrendel je door verder te spelen in het verhaal.</p></div>
-  ${Object.keys(BM_AVATAR_PARTS).map(partSection).join("")}
+  ${Object.keys(BM_AVATAR_PARTS).filter(k=>!SP_AVATAR_HIDDEN_PARTS.includes(k)).map(partSection).join("")}
   <button class="btn btn-gold btn-block lg" onclick="spSaveAvatarEdit()" style="margin-bottom:16px">Opslaan</button>
   ${foot()}`);
 };
