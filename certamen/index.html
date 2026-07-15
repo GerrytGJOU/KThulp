@@ -513,6 +513,16 @@ body.greek .qcard .word{color:#143a5e}
 .pixel-hero-mini>span{display:block;transform-origin:top left}
 .pixel-hero-mini .pixel-hero{width:96px!important;height:96px!important}
 
+/* ── Chronica Classica wereldkaart (SCREENS.spWorldMap, singleplayer.js) ──
+   Pins zijn absoluut gepositioneerd (%) t.o.v. het paneel-plaatje. */
+.sp-map-pin{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;
+  align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:4px}
+.sp-map-pin-dot{width:14px;height:14px;border-radius:50%;background:var(--hi-bright,#e8c77e);
+  border:2px solid #2a1c0c;box-shadow:0 0 6px rgba(0,0,0,.6);transition:transform .15s}
+.sp-map-pin:hover .sp-map-pin-dot{transform:scale(1.25)}
+.sp-map-pin-label{font-family:'Cinzel',Optima,serif;font-size:11px;color:#fff;
+  background:rgba(20,14,6,.75);padding:1px 6px;border-radius:4px;white-space:nowrap}
+
 /* â”€â”€ Wapen-laag (288Ã—64 = 3 aanvals-frames van 96Ã—64) â”€â”€ */
 /* Het wapen wordt vastgehouden in de achterste hand: het valt ACHTER zowel
    de cape als het lichaam (DOM-volgorde, geen z-index) — anders lijkt het
@@ -761,8 +771,8 @@ body.greek .qcard .word{color:#143a5e}
 <script src="totalwar.js?v=20260712g"></script>
 <script src="training.js?v=20260712a"></script>
 <script src="freepractice.js?v=20260706a"></script>
-<script src="singleplayer-data.js?v=20260715e"></script>
-<script src="singleplayer.js?v=20260715d"></script>
+<script src="singleplayer-data.js?v=20260715g"></script>
+<script src="singleplayer.js?v=20260715e"></script>
 <script>
 /* ---- INIT ---- */
 (async function(){

@@ -512,7 +512,38 @@ function spRenderLanding(){
     <p class="note">${esc(chapter.verhaal)}</p>
     <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="spGoCns('${SP_STATE.node||[...SP_SCENES.keys()][0]}')">${resuming?"Verdergaan":"Beginnen"}</button>
   </div>
+  ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:14px" onclick="go('spWorldMap')">🗺️ Wereldkaart</button>`:""}
   ${foot()}`);
+}
+
+/* ---- WERELDKAART: geïllustreerd paneel + onthullende locatie-pins.
+   Codex is PER SAVESLOT (net als de rest van SP_STATE), dus de kaart toont
+   de ontdekkingen van de actieve slot — logisch, want elke slot is een eigen
+   doorspeling met een eigen route door het verhaal. ---- */
+SCREENS.spWorldMap = function(){
+  document.body.classList.remove("greek");
+  if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
+  const panelId = "aegean"; // enige getekende paneel tot nu toe
+  const panel = SP_MAP_PANELS[panelId];
+  const codex = SP_STATE.codex||[];
+  const pins = SP_MAP_LOCATIONS
+    .filter(loc=>loc.panel===panelId && spLocationUnlocked(loc, codex))
+    .map(loc=>`<button class="sp-map-pin" style="left:${loc.x}%;top:${loc.y}%" title="${esc(loc.nm)}" onclick="spShowLocationInfo('${loc.id}')">
+      <span class="sp-map-pin-dot"></span><span class="sp-map-pin-label">${esc(loc.nm)}</span>
+    </button>`).join("");
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Wereldkaart</h2></div>
+  <div class="panel"><p class="note">${esc(panel.nm)} — nieuwe plekken verschijnen zodra je ze in het verhaal hebt bezocht.</p></div>
+  <div class="panel" style="padding:0;overflow:hidden;position:relative">
+    <img src="assets/chronica/maps/${esc(panel.img)}" alt="" style="width:100%;display:block" onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
+    <div class="sp-map-missing note" style="display:none;padding:40px 16px;text-align:center">Kaart nog niet beschikbaar.</div>
+    <div style="position:absolute;inset:0">${pins}</div>
+  </div>
+  ${foot()}`);
+};
+function spShowLocationInfo(id){
+  const loc = SP_MAP_LOCATIONS.find(l=>l.id===id);
+  if(loc) toast(loc.nm, loc.desc);
 }
 
 /* ---- NAVIGATIE ---- */

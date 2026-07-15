@@ -58,6 +58,7 @@ browser):
 | Campagnekaart-metadata (Proloog + 19 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 2+ nog niet geschreven |
 | **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen hebben er een (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) |
 | Gemini-huisstijl-Gem (stripstijl) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
+| **Wereldkaart** — geïllustreerd paneel + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — paneel "aegean" (Latium/Olympos/Sardis), pin-posities nog te verfijnen op het echte plaatje |
 | Audio-assetmappen | `certamen/assets/chronica/music/`, `certamen/assets/chronica/sfx/` | ✅ mappen bestaan (music met 1e Suno-track) |
 
 ---
@@ -317,10 +318,24 @@ gekoppeld (bv. Hoofdstuk 1: Prometheus + Pandora, al in gebruik als de
 plotlijnen B/C hieronder; Hoofdstuk 4: Daidalos & Ikaros; Hoofdstuk 6: Romulus
 & Remus). De rest blijft vrij te plaatsen naarmate hoofdstukken worden gebouwd.
 
-De **wereldkaart** opent mee met de voortgang (nieuwe locaties verschijnen pas
-na bezoek); dezelfde locatie kan in verschillende tijdlagen terugkomen. Keuzes
-uit vroege hoofdstukken mogen later terugkomen via een `flags`-systeem
-(`spHookFlag`, **gebouwd** — zie §7.1); de kaart zelf en NPC-reacties op flags
+De **wereldkaart** (`SCREENS.spWorldMap`, **gebouwd**) opent mee met de
+voortgang: een locatie-pin verschijnt zodra de bijbehorende codex-entry al in
+`SP_STATE.codex` zit (hergebruikt de bestaande codex-hook, geen nieuw
+trackingsysteem) — dus pas na bezoek, per saveslot (elke slot speelt zijn
+eigen route). De kaart bestaat uit **geïllustreerde panelen** (Gemini,
+stripstijl "antieke atlas", `SP_MAP_PANELS`/`SP_MAP_LOCATIONS` in
+singleplayer-data.js) — de volledige wereld (Britannia tot India) is
+verdeeld in panelen zodat elk leesbaar blijft. Nu alleen paneel "aegean"
+getekend (`panel1_aegean.png`, dekt Proloog + Hoofdstuk 1: Latium, Olympos,
+Sardis); de twee andere panelen ("western": Sicilië/Carthago/Gades/Gallië,
+"eastern": Kaukasus/Perzië/Egypte/India) volgen zodra die hoofdstukken
+gebouwd worden. Twee CC-gelicenseerde referentiekaarten (Aeneas- en
+Odysseus-reis, resp. CC BY 3.0/Rcsprinter123 en CC BY-SA 4.0/Giulia
+Zoccarato) zijn als geografisch naslagwerk gebruikt bij het ontwerpen — niet
+overgenomen, dus geen attributieplicht.
+
+Keuzes uit vroege hoofdstukken mogen later terugkomen via een `flags`-systeem
+(`spHookFlag`, **gebouwd** — zie §7.1); NPC-reacties op flags
 (`CONDITION`-mechanisme) staan nog open, zie §8.
 
 ### 7.1 Vertakking binnen een hoofdstuk (vastgelegd bij Hoofdstuk 1)
@@ -364,10 +379,12 @@ In afgesproken bouwvolgorde:
    zodra de speler zijn keuze heeft gemaakt (het is singleplayer). Gekoppeld via
    de `COMBAT:`-sectie. Dit is óók het moment om de eretitel-`bonus` (§6) écht in
    de berekening te verwerken.
-2. **Wereldkaart + `CONDITION`-mechanisme** — kaart die meegroeit met de
-   voortgang, en NPC's/scènes die conditioneel reageren op de al-gebouwde
-   `flags` (bv. een personage dat later verwijst naar welke Hoofdstuk-1-lijn
-   je koos).
+2. **Overige kaartpanelen + `CONDITION`-mechanisme** — de kaart zelf is
+   gebouwd (§7, `SCREENS.spWorldMap`); alleen paneel "aegean" is al getekend.
+   De panelen "western" en "eastern" volgen zodra die hoofdstukken gebouwd
+   worden. Daarnaast: NPC's/scènes die conditioneel reageren op de
+   al-gebouwde `flags` (bv. een personage dat later verwijst naar welke
+   Hoofdstuk-1-lijn je koos).
 3. **Audio-hook** — `MUSIC:`/`SFX:` daadwerkelijk afspelen (mp3, uit Suno) met de
    iPad-eis dat geluid pas ná een gebruikersactie mag starten. Mappen staan
    klaar in `certamen/assets/chronica/`.
