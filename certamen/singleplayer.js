@@ -18,7 +18,8 @@
    voornaamwoorden) maar GEEN naam — de Game Bible wil een naamloze speler
    ("juist daardoor kan iedere leerling zichzelf in hem herkennen").
 
-   BOUWSTATUS: Boek I (proloog) is speelbaar. CODEX/QUEST worden al bijgehouden
+   BOUWSTATUS: proloog + Hoofdstuk 1 (drie parallelle lijnen, zie SP_CH1_CNS)
+   zijn speelbaar. CODEX/QUEST worden al bijgehouden
    in de save maar hebben nog geen eigen overzichtsscherm — dat volgt zodra
    er meer dan één scène/hoofdstuk is om te tonen. IMAGE is actief: een
    `IMAGE:`-sectie toont de bijbehorende illustratie (stripstijl, Gemini) uit
@@ -332,7 +333,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = CNSParser.parse(SP_PROLOOG_CNS);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{} });
 
 /* ---- SPELERSTATE ---- */
@@ -477,14 +478,25 @@ async function spPickGender(id){
   spRenderLanding();
 }
 
+// Welk campagnehoofdstuk hoort bij een node-id (PRO_ = proloog, CH<n>_ =
+// hoofdstuk n) — gebruikt door de landingspagina zodat "Verdergaan" het juiste
+// hoofdstuk toont, ook als de speler al voorbij de proloog is.
+function spCurrentCampaignChapter(node){
+  if(node && node.indexOf("PRO_")!==0){
+    const m = node.match(/^CH(\d+)_/);
+    if(m){ const ch = SP_CAMPAIGN.find(c=>c.nr===+m[1]); if(ch) return ch; }
+  }
+  return SP_CAMPAIGN[0];
+}
 function spRenderLanding(){
   const resuming = !!(SP_STATE.node && SP_STATE.node!==SP_SCENES.keys().next().value);
-  const chapter = SP_CAMPAIGN[0]; // proloog — enige hoofdstuk dat al speelbaar is
+  const chapter = spCurrentCampaignChapter(SP_STATE.node);
+  const eyebrowLbl = chapter.type==="proloog" ? "Proloog" : "Hoofdstuk "+chapter.nr;
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Chronica Classica</h2></div>
   <div class="panel" style="text-align:center">
     <span class="ic">${iconSVG("star",44,"currentColor")}</span>
-    <div class="eyebrow l">Proloog</div>
+    <div class="eyebrow l">${esc(eyebrowLbl)}</div>
     <h3 style="margin-top:4px">${esc(chapter.nm)}</h3>
     <p class="note">${esc(chapter.verhaal)}</p>
     <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="spGoCns('${SP_STATE.node||[...SP_SCENES.keys()][0]}')">${resuming?"Verdergaan":"Beginnen"}</button>

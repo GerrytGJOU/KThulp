@@ -1,13 +1,17 @@
-# Chronica Classica — Masterplan (BETA — proloog speelbaar)
+# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1 speelbaar)
 
 > **Status: Beta, live in het hoofdmenu.** De **proloog** ("De Boer van
 > Latium" / "Het Orakel van Chronos") is volledig speelbaar: intro →
 > gender-keuze → verhaal met keuzes → Grieks-alfabet-puzzel → klassekeuze →
-> eerste eretitel. Er zijn 3 saveslots per leerling, een aanpasbare Combat
-> Avatar (de boer), en een eretitel-systeem dat doorwerkt in de Battle
-> Mode/Boss Battle-lobby. De rest van de campagne (Hoofdstuk 1 t/m 11 + Finale)
-> staat als metadata-skelet klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet
-> geschreven.
+> eerste eretitel. **Hoofdstuk 1** ("De Namen van de Wereld") is ook
+> speelbaar: een hub-scène waarna de speler kiest tussen **drie parallelle,
+> niet-convergerende plotlijnen** — A "Het Goud van Midas", B "De Geboorte
+> van Athena", C "Prometheus en Pandora" — die elk de volledige hoofdstuk-1-
+> grammatica behandelen (zie §7.1). Er zijn 3 saveslots per leerling, een
+> aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
+> een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
+> rest van de campagne (Hoofdstuk 2 t/m 19 + Finale) staat als metadata-skelet
+> klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet geschreven.
 >
 > **Dit document is de enige bron van waarheid voor Chronica Classica** en
 > vervangt alle eerdere schetsen: `Single Player Mode.docx` (de oorspronkelijke
@@ -33,7 +37,10 @@ browser):
 |---|---|---|
 | Menutegel "📜 Chronica Classica" (BETA-badge) | `certamen/games.js` (`SCREENS.home`) | ✅ werkend |
 | CNS-parser + tekst/voornaamwoord-resolver | `certamen/singleplayer.js` (`CNSParser`, `SpTextResolver`) | ✅ werkend |
-| Proloog-content in CNS-formaat | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 14 scènes) | ✅ werkend |
+| Proloog-content in CNS-formaat | `certamen/singleplayer-data.js` (`SP_PROLOOG_CNS`, 14 scènes) | ✅ werkend |
+| **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 27 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
+| Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
+| **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
 | Scène-renderer (tekst/dialoog/keuzes) | `certamen/singleplayer.js` (`SCREENS.spPlay`) | ✅ werkend |
 | Grieks-alfabet-transcriptiepuzzel (blokkeert voortgang) | `certamen/singleplayer.js` (`spRenderPuzzle`/`spCheckPuzzle`), `SP_PUZZLES`/`SP_GREEK_ALPHABET` | ✅ werkend |
 | Klassekeuze → Battle Mode-klasse (REWARD-hook) | `certamen/singleplayer.js` (`spHookReward`), `SP_CLASS_REWARD_MAP` | ✅ werkend |
@@ -47,8 +54,8 @@ browser):
 | Eretitels als eigen categorie tussen de eerbewijzen | `certamen/core.js` (`ACH_CATEGORIES.chronica`), `certamen/games.js` (`SCREENS.collection`) | ✅ werkend — meegerenderd door `achGroupsHTML`, net als Algemeen/Klassieke Spellen |
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
-| Campagnekaart-metadata (Proloog + 11 hfdst + Finale) | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`) | ✅ data — scènes van hfdst 1+ nog niet geschreven |
-| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — 1e beeld op PRO_005 (`assets/chronica/images/prologue.png`) |
+| Campagnekaart-metadata (Proloog + 19 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 2+ nog niet geschreven |
+| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen hebben er een (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) |
 | Gemini-huisstijl-Gem (stripstijl) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | Audio-assetmappen | `certamen/assets/chronica/music/`, `certamen/assets/chronica/sfx/` | ✅ mappen bestaan (music met 1e Suno-track) |
 
@@ -233,10 +240,14 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
   als "Chronica Classica (X/Y)" — een eigen categorie naast "Algemeen" en
   "Klassieke Spellen" (`ACH_CATEGORIES.chronica`, core.js), niet een los,
   afwijkend paneel.
-- **`SP_TITLES`** (nu 4): `boogschutter_orakel`, `hopliet_orakel`,
-  `cavalerist_orakel` (klassekeuze in de proloog), en `bewaarder_herinnering`
-  (proloog voltooid). De laatste heeft een `bonus`-veld
-  (+1 BE bij snel antwoord, scope battle/boss/totalwar).
+- **`SP_TITLES`** (nu 7): `boogschutter_orakel`, `hopliet_orakel`,
+  `cavalerist_orakel` (klassekeuze in de proloog), `bewaarder_herinnering`
+  (proloog voltooid, met een `bonus`-veld: +1 BE bij snel antwoord, scope
+  battle/boss/totalwar), en `ch1_a_midas`/`ch1_b_athena`/`ch1_c_prometheus`
+  (welke lijn van Hoofdstuk 1 je voltooide — bewust zonder bonus, bonussen
+  blijven voorbehouden aan grotere mijlpalen). Alle titels hebben
+  `secret:true`: niet-behaalde titels tonen "???"/"Geheim eerbewijs" op het
+  profiel, om geen verhaalspoilers weg te geven.
 - **Belangrijke beperking:** de `bonus` is nu **puur informatief** — getoond,
   maar nog **niet verrekend** in het gevecht. De passieve-bonus-logica van
   Battle Mode zit verspreid over meerdere plekken in `battle.js`; het
@@ -295,8 +306,9 @@ plotlijnen B/C hieronder; Hoofdstuk 4: Daidalos & Ikaros; Hoofdstuk 6: Romulus
 
 De **wereldkaart** opent mee met de voortgang (nieuwe locaties verschijnen pas
 na bezoek); dezelfde locatie kan in verschillende tijdlagen terugkomen. Keuzes
-uit vroege hoofdstukken mogen later terugkomen via een `flags`/`reputatie`-
-systeem — **nog te bouwen** (§8).
+uit vroege hoofdstukken mogen later terugkomen via een `flags`-systeem
+(`spHookFlag`, **gebouwd** — zie §7.1); de kaart zelf en NPC-reacties op flags
+(`CONDITION`-mechanisme) staan nog open, zie §8.
 
 ### 7.1 Vertakking binnen een hoofdstuk (vastgelegd bij Hoofdstuk 1)
 
@@ -320,9 +332,10 @@ De regels:
   hoofdstuk**. De andere lijnen zijn optioneel (rijkere wereld + replay met de
   3 saveslots; ideaal om ook de andere klassen te spelen).
 - **Keuzes werken door.** De gemaakte keuzes én wélke plotlijn je koos worden
-  als **flags** bewaard; latere hoofdstukken/NPC's kunnen erop reageren. (Het
-  flag-systeem zelf is de eerste bouwsteen, zie §8; NPC's die er conditioneel
-  op reageren vragen daarnaast een `CONDITION`-mechanisme — een volgende stap.)
+  als **flags** bewaard (`FLAG:`-sectie, `spHookFlag`, **gebouwd** — Hoofdstuk
+  1 zet al `ch1_lijn`/`ch1_voltooid`); latere hoofdstukken/NPC's kunnen erop
+  reageren zodra hoofdstuk 2+ bestaat. NPC's die er conditioneel op reageren
+  vragen daarnaast een `CONDITION`-mechanisme — een volgende stap, zie §8.
 - Dit is de bewuste keuze i.p.v. "alle drie de lijnen verplicht": het houdt
   echte branching + een korte kritische route voor casual spelers, zonder de
   educatieve gate los te laten.
@@ -338,17 +351,19 @@ In afgesproken bouwvolgorde:
    zodra de speler zijn keuze heeft gemaakt (het is singleplayer). Gekoppeld via
    de `COMBAT:`-sectie. Dit is óók het moment om de eretitel-`bonus` (§6) écht in
    de berekening te verwerken.
-2. **Wereldkaart + blijvende keuzes** — kaart die meegroeit met de voortgang, en
-   een `flags`/`reputatie`-systeem zodat keuzes terugkomen in latere
-   hoofdstukken/boeken.
+2. **Wereldkaart + `CONDITION`-mechanisme** — kaart die meegroeit met de
+   voortgang, en NPC's/scènes die conditioneel reageren op de al-gebouwde
+   `flags` (bv. een personage dat later verwijst naar welke Hoofdstuk-1-lijn
+   je koos).
 3. **Audio-hook** — `MUSIC:`/`SFX:` daadwerkelijk afspelen (mp3, uit Suno) met de
    iPad-eis dat geluid pas ná een gebruikersactie mag starten. Mappen staan
    klaar in `certamen/assets/chronica/`.
 4. **Codex/Quest-overzichtsschermen** — data wordt al bewaard; een eigen
-   ontdekkingsboek-scherm volgt zodra er meer dan de proloog is.
-5. **Hoofdstuk 1 t/m 11 + Finale-content** — scène voor scène in CNS, met
-   ChatGPT-proza (via prompts) en Gemini-illustraties in stripstijl (via
-   prompts). `SP_CAMPAIGN` bepaalt per hoofdstuk de grammatica en personages.
+   ontdekkingsboek-scherm volgt zodra er meer inhoud is dan proloog + hoofdstuk 1.
+5. **Hoofdstuk 2 t/m 19 + Finale-content** — scène voor scène in CNS.
+   `SP_CAMPAIGN` bepaalt per hoofdstuk de grammatica/personages, `SP_MYTH_CANON`
+   levert het zijverhaal-materiaal. Nu drie onafhankelijke lijnen per hoofdstuk
+   (§7.1); "meer kruisen" (lijnen die van elkaar weten) is een latere stap.
 6. **Illustraties** — `IMAGE:` is **actief** (rendert het bestand uit
    `assets/chronica/images/`). De eerste illustratie hangt aan PRO_005 ("De
    Bronzen Schijf": de ontdekking van het Orakel, `prologue.png`). Resterend

@@ -76,6 +76,16 @@ const SP_TITLES = [
     ds:"Ontcijferde het Orakel van Chronos en voltooide de proloog.",
     bonus:{ scope:["battle","boss","totalwar"], type:"be_on_fast", val:1,
             desc:"+1 BE bij een snel juist antwoord" } },
+  // Hoofdstuk 1 — drie parallelle lijnen (A/B/C, zie SP_CH1_CNS). Elke lijn
+  // leert de volledige hoofdstuk-1-grammatica; welke titel je krijgt hangt af
+  // van welke lijn je speelde. Alle drie zonder bonus (bewust) — bonussen
+  // blijven voorbehouden aan de grotere mijlpalen (zoals de proloog-titel).
+  { id:"ch1_a_midas", nm:"Bevrijder van Midas", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Hielp koning Midas van zijn gouden vloek te verlossen.", bonus:null },
+  { id:"ch1_b_athena", nm:"Getuige van Athena's Geboorte", icon:"owl", cat:"chronica", secret:true,
+    ds:"Was aanwezig toen Athena voltallig gewapend uit Zeus' hoofd sprong.", bonus:null },
+  { id:"ch1_c_prometheus", nm:"Vriend van de Mensheid", icon:"torch", cat:"chronica", secret:true,
+    ds:"Stond de mensheid bij toen het vuur — en de hoop — hun deel werden.", bonus:null },
 ];
 
 /* ---- CAMPAGNEKAART — Proloog + 19 hoofdstukken (5 "Boeken"), gesynchroniseerd
@@ -348,12 +358,62 @@ const SP_GREEK_ALPHABET = [
   { letter:"Ω ω", nm:"omega",   translit:"oo" },
 ];
 
-/* ---- PUZZELS — opgezocht door PUZZLE-hook o.b.v. de id in de CNS-tekst ---- */
+/* ---- PUZZELS — opgezocht door PUZZLE-hook o.b.v. de id in de CNS-tekst ----
+   Hoofdstuk 1 (drie lijnen, elk dezelfde grammatica in een ander mythisch
+   jasje — zie SP_CAMPAIGN ch1.grammatica): Grieks lidwoord+zn, Latijnse
+   nominativus/accusativus (met een groep-1/2-bijvoeglijk-naamwoord toegelicht
+   in de scène-tekst zelf, niet als aparte vraag — Regel 5: geen losse
+   quizvragen), en Latijnse vocativus. Bewust drie verschillende vocativus-
+   patronen over de lijnen verspreid: Bacche (regelmatig -us→-e), Pallas
+   (blijft ongewijzigd), Prometheu (Grieks-afkomstige naam op -eus→-eu) —
+   laat zien dat niet elk woord in de vocativus verandert. ---- */
 const SP_PUZZLES = {
   puzzle_orakel_symbolen_01: {
     type:"greek-transliteration",
     woord:{ grieks:"ΧΡΟΝΟΣ", antwoord:"chronos" },
   },
+
+  // ---- Lijn A: Het Goud van Midas ----
+  puzzle_ch1a_lidwoord: { type:"multiple-choice",
+    vraag:"Boven de poort van het paleis staat een woord gebeiteld: δεσπότης (heer, meester). Welk lidwoord hoort erbij?",
+    opties:["ὁ","ἡ","τό"], antwoord:"ὁ",
+    hint:"δεσπότης is mannelijk — welk lidwoord past daarbij?" },
+  puzzle_ch1a_naamval: { type:"multiple-choice",
+    vraag:"“Rex aurum tangit” — de koning raakt het goud aan. Welk woord is de accusativus, het lijdend voorwerp?",
+    opties:["Rex","aurum","tangit"], antwoord:"aurum",
+    hint:"De accusativus ondergaat de handeling — wat wordt er aangeraakt?" },
+  puzzle_ch1a_vocativus: { type:"multiple-choice",
+    vraag:"Midas valt op zijn knieën en roept om Bacchus' aandacht. Wat roept hij?",
+    opties:["Bacchus!","Bacche!","Bacchum!","Bacchi!"], antwoord:"Bacche!",
+    hint:"De vocativus van een woord op -us eindigt vaak op -e." },
+
+  // ---- Lijn B: De Geboorte van Athena ----
+  puzzle_ch1b_lidwoord: { type:"multiple-choice",
+    vraag:"Onder de goden gaat gefluister rond over θεά (een godin) die eraan komt. Welk lidwoord hoort bij θεά?",
+    opties:["ὁ","ἡ","τό"], antwoord:"ἡ",
+    hint:"θεά is vrouwelijk — welk lidwoord past daarbij?" },
+  puzzle_ch1b_naamval: { type:"multiple-choice",
+    vraag:"“Vulcanus caput aperit” — Vulcanus opent het hoofd. Welk woord is de accusativus?",
+    opties:["Vulcanus","caput","aperit"], antwoord:"caput",
+    hint:"De accusativus ondergaat de handeling — wat wordt er geopend?" },
+  puzzle_ch1b_vocativus: { type:"multiple-choice",
+    vraag:"Zeus, stomverbaasd, spreekt zijn nieuwe dochter aan. Hoe noemt hij haar?",
+    opties:["Palladem!","Pallade!","Pallas!","Palladis!"], antwoord:"Pallas!",
+    hint:"Niet elk woord verandert in de vocativus — sommige blijven gelijk aan de nominativus." },
+
+  // ---- Lijn C: Prometheus en Pandora ----
+  puzzle_ch1c_lidwoord: { type:"multiple-choice",
+    vraag:"Prometheus reikt naar πῦρ (vuur) op de Olympos. Welk lidwoord hoort bij πῦρ?",
+    opties:["ὁ","ἡ","τό"], antwoord:"τό",
+    hint:"πῦρ is onzijdig — welk lidwoord past daarbij?" },
+  puzzle_ch1c_naamval: { type:"multiple-choice",
+    vraag:"“Pandora pyxidem aperit” — Pandora opent de doos. Welk woord is de accusativus?",
+    opties:["Pandora","pyxidem","aperit"], antwoord:"pyxidem",
+    hint:"De accusativus ondergaat de handeling — wat wordt er geopend?" },
+  puzzle_ch1c_vocativus: { type:"multiple-choice",
+    vraag:"De mensheid roept wanhopig om Prometheus. Wat roepen ze?",
+    opties:["Prometheus!","Prometheu!","Prometheum!","Promethei!"], antwoord:"Prometheu!",
+    hint:"Griekse namen op -eus krijgen in de vocativus vaak de uitgang -eu." },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -629,6 +689,397 @@ De wereld vergeet. En jij bent de eerste sinds lange tijd die het merkt.
 
 EERETITEL:
 bewaarder_herinnering
+
+CHOICES:
+
+* Stap door de poort -> CH1_000
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 1: "DE NAMEN VAN DE WERELD" (scène-ID's CH1_###) ----
+   Drie parallelle plotlijnen die NIET convergeren (vastgelegd besluit,
+   Chronica.md §7.1): A "Het Goud van Midas" (Latijn-zwaartepunt, Bacchus),
+   B "De Geboorte van Athena" (Grieks-zwaartepunt), C "Prometheus en Pandora"
+   (S-tier mythen uit SP_MYTH_CANON). Elke lijn leert de VOLLEDIGE hoofdstuk-
+   1-grammatica (zn/bn groep 1-2/lidwoord/nom/acc/voc — zie SP_CAMPAIGN ch1),
+   in een ander mythisch jasje; één lijn voltooien volstaat om door te gaan
+   naar hoofdstuk 2 (nog te bouwen). De andere twee lijnen zijn optioneel —
+   ideaal om met de 2 overige saveslots te spelen.
+
+   FLAG "ch1_lijn" (A/B/C) en "ch1_voltooid" dragen de gemaakte keuze door
+   naar latere hoofdstukken (bv. voor NPC's die op je pad reageren) — het
+   "meer kruisen"-idee (vertakkingen die van elkaar weten) is uitdrukkelijk
+   voor een latere bouwstap, nu bewust drie onafhankelijke lijnen naast
+   elkaar. */
+const SP_CH1_CNS = `
+=== SCENE: CH1_000 ===
+
+TITLE:
+De Namen van de Wereld
+
+TEXT:
+De boodschapper wijst met een hand die niet helemaal vast lijkt in deze wereld. Achter haar scheurt de poort verder open, tot je niets meer ziet dan licht — en daarachter, vaag, de contouren van bergen die je nooit eerder hebt gezien. "Ga," zegt ze. "Daar wachten namen die dreigen te verdwijnen. Vind ze terug, voor het te laat is." Je stapt door. Wanneer het licht wegtrekt, sta je niet langer in Latium. De lucht ruikt naar tijm en zilte wind. Je staat aan de rand van een land dat mensen ooit Hellas noemden — en ergens hierin wacht een verhaal dat jou nodig heeft.
+
+CHOICES:
+
+* Naar Sardis, waar een koning alles tot goud maakt -> CH1_A01
+* Naar de top van de Olympos, waar iets op het punt staat te barsten -> CH1_B01
+* Naar een kille vallei, waar het eerste vuur nog gestolen moet worden -> CH1_C01
+
+END
+
+=== SCENE: CH1_A01 ===
+
+TITLE:
+Het Paleis van Sardis
+
+TEXT:
+Het paleis van Sardis torent boven de stad uit, elke zuil bedekt met een dunne glans van welvaart. Bedienden fluisteren een naam telkens opnieuw, half ontzag, half angst: koning Midas. Hij zou zojuist een gunst hebben terugbetaald aan Bacchus zelf — en gunsten aan goden worden altijd beantwoord. Boven de poort staat, diep in de steen gebeiteld, een enkel Grieks woord.
+
+PUZZLE:
+puzzle_ch1a_lidwoord
+
+CHOICES:
+
+* Ontcijfer het woord boven de poort -> CH1_A02
+
+END
+
+=== SCENE: CH1_A02 ===
+
+TITLE:
+Een Gevaarlijke Wens
+
+TEXT:
+Binnen tref je Midas aan, buigend voor een gestalte omringd door wijnranken en een geur van rijpe druiven — Bacchus zelf. "Vraag wat je wilt," zegt de god, geamuseerd. Midas' ogen glinsteren. Hij denkt aan zijn schatkamers, aan hoe klein ze hem altijd hebben doen voelen. "Laat alles wat ik aanraak in goud veranderen," zegt hij. Bacchus glimlacht — een glimlach die je niet vertrouwt — en knikt.
+
+IMAGE:
+midas.png
+
+CHOICES:
+
+* Blijf kijken wat er gebeurt -> CH1_A03
+
+END
+
+=== SCENE: CH1_A03 ===
+
+TITLE:
+De Gouden Aanraking
+
+TEXT:
+Midas raakt een tak aan: goud. Een appel: goud. Hij lacht, wild, euforisch, rent door de zaal en verandert alles wat hij aanraakt — het brood op zijn bord, de beker in zijn hand, de drempel van zijn eigen deur.
+
+PUZZLE:
+puzzle_ch1a_naamval
+
+CHOICES:
+
+* Kijk toe hoe hij verder gaat -> CH1_A04
+
+END
+
+=== SCENE: CH1_A04 ===
+
+TITLE:
+Wat Goud Niet Kan Voeden
+
+TEXT:
+Precies zoals in de zin die je net ontrafelde raakt Rex — de koning — aurum aan: het goud. Let op hoe flavum, "geel", er in de zin bij zou passen: rex aurum flavum tangit, de koning raakt het gele goud aan — flavum buigt mee met aurum, allebei in de accusativus. Maar het gouden brood breekt niet onder Midas' tanden. De gouden wijn stroomt niet. En dan, in zijn vreugde, omarmt hij zijn dochter, die naar hem toe rent — en zij verstart, koud en glanzend, voor altijd stil.
+
+CHOICES:
+
+* Grijp Midas bij zijn schouders -> CH1_A05
+
+END
+
+=== SCENE: CH1_A05 ===
+
+TITLE:
+Een Vloek Erkend
+
+TEXT:
+Midas zakt op zijn knieën naast het gouden standbeeld dat zijn dochter was. Zijn handen trillen boven haar gezicht, bang haar nogmaals aan te raken. Voor het eerst sinds je hem zag, ziet hij eruit als een gewone man — een vader, geen koning.
+
+CHOICES:
+
+* Wijs hem op Bacchus, die alles zag gebeuren -> CH1_A06
+
+END
+
+=== SCENE: CH1_A06 ===
+
+TITLE:
+De Aanroeping
+
+TEXT:
+Midas heft zijn gezicht naar de wijnranken die nog altijd om de zuilen hangen — Bacchus is nooit echt weggegaan.
+
+PUZZLE:
+puzzle_ch1a_vocativus
+
+CHOICES:
+
+* Wacht op het antwoord van de god -> CH1_A07
+
+END
+
+=== SCENE: CH1_A07 ===
+
+TITLE:
+De Rivier de Pactolus
+
+TEXT:
+Bacchus, niet wreed maar ook niet haastig, wijst naar de horizon. "Was jezelf in de rivier de Pactolus," zegt hij, "en de vloek stroomt met het water mee." Midas rent, struikelt, dompelt zich onder — en wanneer hij weer opstaat, is het goud uit zijn handen verdwenen. Achter hem glinstert de rivierbedding, voorgoed doorspekt met gouden zand. Zijn dochter, zo vertelt men je later, keerde terug zodra de laatste gouden druppel zijn huid verliet.
+
+CODEX:
+codex_gouden_aanraking
+
+EERETITEL:
+ch1_a_midas
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 1 voltooid (lijn: Midas)
+
+FLAG:
+ch1_lijn=A; ch1_voltooid=true
+
+END
+
+=== SCENE: CH1_B01 ===
+
+TITLE:
+Onweer op de Olympos
+
+TEXT:
+De top van de Olympos ligt onder een lucht die niet wil beslissen tussen stilte en storm. Zeus zit ineengedoken op zijn troon, beide handen tegen zijn slapen gedrukt, alsof zijn eigen schedel te klein is geworden voor wat erin zit. Een oude profetie doet de ronde onder de goden, gefluisterd meer dan gezegd: het kind van Metis zou ooit machtiger worden dan zijn vader. Zeus, uit angst, slikte haar in — en draagt sindsdien iets in zich mee dat niet stil wil blijven liggen.
+
+CHOICES:
+
+* Luister naar het gefluister onder de goden -> CH1_B02
+
+END
+
+=== SCENE: CH1_B02 ===
+
+TITLE:
+Een Naam voor het Ongeborene
+
+TEXT:
+Twee nimfen fluisteren een woord tussen de zuilen door, telkens weer, bijna een bezwering: θεά. Een godin. Iets — iemand — is onderweg, en zelfs de goden weten nog niet goed hoe ze het moeten noemen.
+
+PUZZLE:
+puzzle_ch1b_lidwoord
+
+CHOICES:
+
+* Volg het gefluister naar Zeus' troon -> CH1_B03
+
+END
+
+=== SCENE: CH1_B03 ===
+
+TITLE:
+De Bijl van Vulcanus
+
+TEXT:
+Vulcanus wordt erbij gehaald — de enige die ruw genoeg is voor wat nu moet gebeuren. Hij weegt zijn bijl in zijn handen, aarzelt één ademtocht lang, en heft hem dan boven Zeus' gebogen hoofd.
+
+PUZZLE:
+puzzle_ch1b_naamval
+
+CHOICES:
+
+* Kijk niet weg -> CH1_B04
+
+END
+
+=== SCENE: CH1_B04 ===
+
+TITLE:
+Wat uit het Hoofd Breekt
+
+TEXT:
+Vulcanus caput aperit — Vulcanus opent het hoofd, en durum, "hard", past feilloos bij caput: vulcanus caput durum aperit, Vulcanus opent het harde hoofd, allebei in de accusativus. De klap valt. De hemel zelf lijkt even zijn adem in te houden. En dan, uit de opening, niet met bloed maar met licht: een gestalte, al volwassen, al gewapend, een speer in haar hand en een helm die vanzelf op haar plek valt.
+
+IMAGE:
+birth_of_athena.png
+
+CHOICES:
+
+* Kijk hoe ze voor het eerst ademhaalt -> CH1_B05
+
+END
+
+=== SCENE: CH1_B05 ===
+
+TITLE:
+Pallas Athena
+
+TEXT:
+Ze richt zich op tot haar volle lengte, ogen grijs als een naderend onweer dat net is gaan liggen. Geen enkele god zegt iets. Zeus, nog altijd duizelig, is de eerste die zijn stem hervindt.
+
+PUZZLE:
+puzzle_ch1b_vocativus
+
+CHOICES:
+
+* Wacht af hoe zij antwoordt -> CH1_B06
+
+END
+
+=== SCENE: CH1_B06 ===
+
+TITLE:
+Wijsheid Neemt Haar Plaats In
+
+TEXT:
+Ze buigt haar hoofd, niet onderdanig maar erkennend — een dochter die haar vader ziet, geen onderdaan die een koning ziet. Vanaf die dag zal ze naast hem staan, niet als wapen, maar als raad: de eerste die vraagt voordat ze oordeelt. De andere goden zwijgen nog, maar jij voelt het al: er is zojuist iets in de wereld gekomen dat niet meer zal verdwijnen.
+
+CODEX:
+codex_geboorte_athena
+
+EERETITEL:
+ch1_b_athena
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 1 voltooid (lijn: Athena)
+
+FLAG:
+ch1_lijn=B; ch1_voltooid=true
+
+END
+
+=== SCENE: CH1_C01 ===
+
+TITLE:
+De Kille Vallei
+
+TEXT:
+Beneden, in een vallei zonder vuur, klappertanden de eerste mensen tegen de nacht. Ze hebben geen manier om zich te warmen, geen licht tegen het duister, geen manier om hun voedsel te veranderen in iets meer dan rauwe kou. Prometheus, een titaan met meer mededogen dan macht, kijkt van de Olympos naar beneden en kan niet langer toekijken.
+
+CHOICES:
+
+* Volg hem terwijl hij zich naar het vuur van de goden waagt -> CH1_C02
+
+END
+
+=== SCENE: CH1_C02 ===
+
+TITLE:
+Het Woord voor Vuur
+
+TEXT:
+Bij de haard van de goden zelf brandt het, ongetemd en helder. Op de rand van de haardsteen staat, half door rook verweerd, een enkel woord gekrast.
+
+PUZZLE:
+puzzle_ch1c_lidwoord
+
+CHOICES:
+
+* Kijk hoe Prometheus een vonk verbergt -> CH1_C03
+
+END
+
+=== SCENE: CH1_C03 ===
+
+TITLE:
+De Diefstal
+
+TEXT:
+Prometheus verbergt een enkele gloeiende vonk in de holte van een vijgentakstengel en glipt terug naar de aarde, sneller dan een god hem zou toevertrouwen. Beneden, in de vallei, geeft hij het vuur aan de mensen. Voor het eerst zie je licht op hun gezichten dat niet van de maan komt — verwondering, en iets wat op hoop begint te lijken.
+
+CHOICES:
+
+* Kijk toe hoe de hemel dit opmerkt -> CH1_C04
+
+END
+
+=== SCENE: CH1_C04 ===
+
+TITLE:
+Zeus' Antwoord
+
+TEXT:
+Zeus ziet de vuren beneden oplichten als een belediging die hij niet ongestraft kan laten. Zijn straf voor Prometheus is beroemd en wreed — maar voor de mensheid bedenkt hij iets subtielers: een geschenk dat een vloek blijkt te zijn. Hij laat Pandora maken, mooi en nieuwsgierig, en geeft haar een verzegelde doos mee die ze, zo weet iedereen, ooit zal openen.
+
+PUZZLE:
+puzzle_ch1c_naamval
+
+CHOICES:
+
+* Kijk toe op het moment dat ze het deksel licht -> CH1_C05
+
+END
+
+=== SCENE: CH1_C05 ===
+
+TITLE:
+Wat uit de Doos Ontsnapt
+
+TEXT:
+Pandora pyxidem aperit — Pandora opent de doos, en novam, "nieuw", buigt keurig mee met pyxidem: pandora pyxidem novam aperit, Pandora opent de nieuwe doos, allebei in de accusativus. Het deksel klikt open. Er stroomt geen licht naar buiten, maar schaduwen — ziekte, verdriet, oorlog, honger — die zich in de lucht oplossen en de wereld in trekken voor ze te grijpen zijn.
+
+IMAGE:
+pandora.png
+
+CHOICES:
+
+* Kijk of er nog iets in de doos achterblijft -> CH1_C06
+
+END
+
+=== SCENE: CH1_C06 ===
+
+TITLE:
+Wat Achterblijft
+
+TEXT:
+Op de bodem, half verscholen tussen de schaduwen die net zijn ontsnapt, blijft iets kleins achter: een zacht, warm licht dat niet wegvliegt. Elpis. Hoop. Pandora sluit het deksel voordat ook zij verdwijnt — en zo blijft, te midden van alle kwaad dat nu over de wereld waart, iets achter waar de mensen zich aan vast kunnen houden.
+
+CHOICES:
+
+* Ga naar Prometheus, geketend om wat hij deed -> CH1_C07
+
+END
+
+=== SCENE: CH1_C07 ===
+
+TITLE:
+Geketend, Niet Gebroken
+
+TEXT:
+Hoog tegen een rots vind je Prometheus, vastgeketend door Zeus' bevel, zijn straf net begonnen aan wat een eeuwigheid dreigt te worden. Beneden hem, onzichtbaar vanaf de rots maar voelbaar tot in zijn botten, branden duizend kleine vuren in de valleien. Mensen die klappertandden, warmen zich nu. Mensen die niets hadden, hebben licht. Ergens tussen hen in draagt iemand, zonder het te weten, nog altijd Elpis met zich mee.
+
+PUZZLE:
+puzzle_ch1c_vocativus
+
+CHOICES:
+
+* Beantwoord hun roep -> CH1_C08
+
+END
+
+=== SCENE: CH1_C08 ===
+
+TITLE:
+Vuur en Hoop
+
+TEXT:
+Prometheus glimlacht, ondanks de ketenen, ondanks de rots, ondanks alles. "Het was het waard," zegt hij zacht — niet tegen jou, niet tegen de goden, maar tegen niemand in het bijzonder, alsof hij het al heel lang tegen zichzelf zegt. Vuur en hoop: twee dingen die de mensheid nooit meer zal kwijtraken, wat de goden ook nog bedenken.
+
+CODEX:
+codex_doos_van_pandora
+
+EERETITEL:
+ch1_c_prometheus
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 1 voltooid (lijn: Prometheus)
+
+FLAG:
+ch1_lijn=C; ch1_voltooid=true
 
 END
 `.trim();
