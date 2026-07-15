@@ -334,8 +334,8 @@ const SP_MYTH_CANON = {
    worden. ---- */
 const SP_MAP_PANELS = {
   aegean: { nm:"Latium, Egeïsche Zee & West-Klein-Azië", img:"panel1_aegean.png" },
-  // western: N-Afrika/Sicilië/Gades/Gallië — nog te tekenen (Hoofdstuk 2, 6, 7, 9, 13-16).
-  // eastern: Kaukasus/Perzië/Egypte/India — nog te tekenen (Hoofdstuk 1C, 3, 12).
+  western: { nm:"Sicilië, Carthago, Gades & de Alpen", img:"panel2_western.png" },
+  eastern: { nm:"Kaukasus, Perzië, Egypte & de rand van India", img:"panel3_eastern.png" },
 };
 const SP_MAP_LOCATIONS = [
   // x/y afgelezen op het echte panel1_aegean.png (1376×768px): temple-icoon
@@ -350,6 +350,14 @@ const SP_MAP_LOCATIONS = [
   { id:"sardis", nm:"Sardis, Lydië", panel:"aegean", x:74.1, y:47.5,
     unlockCodex:"codex_gouden_aanraking",
     desc:"Waar koning Midas alles wat hij aanraakte in goud veranderde." },
+  // x/y afgelezen op het echte panel3_eastern.png (1376×768px): de geketende
+  // gedaante tegen de besneeuwde Kaukasus-bergketen, linksboven in beeld.
+  // Overige plekken op western/eastern (Carthago, Sicilië, Gades, Hesperiden,
+  // Alpen, Gallië, Perzië, Egypte, India) horen bij hoofdstukken die nog niet
+  // geschreven zijn — hun pins volgen zodra die codex-entries echt bestaan.
+  { id:"kaukasus", nm:"De Kaukasus", panel:"eastern", x:44.9, y:22.4,
+    unlockCodex:"codex_doos_van_pandora",
+    desc:"De rots waar Prometheus geketend ligt, gestraft omdat hij het vuur aan de mensheid gaf." },
 ];
 function spLocationUnlocked(loc, codexArr){
   return !loc.unlockCodex || (codexArr||[]).includes(loc.unlockCodex);
