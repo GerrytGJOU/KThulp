@@ -251,6 +251,17 @@ async function spToggleEquipTitle(id){
 /* ---- VOORNAAMWOORDEN-RESOLVER ---- */
 function spCapitalize(str){ return str ? str.charAt(0).toUpperCase()+str.slice(1) : str; }
 
+/* Scène-tekst mag (en vanaf Hoofdstuk 1 vaak: móét) uit meerdere alinea's
+   bestaan, gescheiden door een lege regel in de CNS-bron. HTML negeert
+   dubbele newlines binnen één <p>, dus splitsen we hier zelf in aparte
+   <p>-elementen — anders smelt alles visueel samen tot één lange alinea. */
+function spParagraphsHTML(text, state){
+  if(!text) return "";
+  return text.split(/\n\s*\n/)
+    .map(para => `<p>${esc(SpTextResolver.resolve(para.trim(), state))}</p>`)
+    .join("");
+}
+
 const SpTextResolver = {
   resolve(text, state){
     if(!text) return "";
@@ -522,7 +533,7 @@ SCREENS.spPlay = function(){
   if(scene.meta.PUZZLE) return spRenderPuzzle(scene);
 
   const titleHTML = scene.title ? `<h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>` : "";
-  const textHTML = scene.text ? `<p>${esc(SpTextResolver.resolve(scene.text, SP_STATE))}</p>` : "";
+  const textHTML = spParagraphsHTML(scene.text, SP_STATE);
   const dialogueHTML = scene.dialogue ? `
     <div class="panel">
       <div class="eyebrow l">${esc(SpTextResolver.resolve(scene.dialogue.speaker, SP_STATE))}</div>
@@ -644,7 +655,7 @@ function spPuzzleHeaderHTML(scene){
   return `<div class="panel">
     ${spSceneImageHTML(scene)}${spChapterEyebrowHTML()}
     <h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>
-    <p>${esc(SpTextResolver.resolve(scene.text, SP_STATE))}</p>
+    ${spParagraphsHTML(scene.text, SP_STATE)}
   </div>`;
 }
 

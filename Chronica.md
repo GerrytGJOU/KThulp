@@ -38,7 +38,8 @@ browser):
 | Menutegel "📜 Chronica Classica" (BETA-badge) | `certamen/games.js` (`SCREENS.home`) | ✅ werkend |
 | CNS-parser + tekst/voornaamwoord-resolver | `certamen/singleplayer.js` (`CNSParser`, `SpTextResolver`) | ✅ werkend |
 | Proloog-content in CNS-formaat | `certamen/singleplayer-data.js` (`SP_PROLOOG_CNS`, 14 scènes) | ✅ werkend |
-| **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 27 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
+| **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 30 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
+| Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
 | **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
 | Scène-renderer (tekst/dialoog/keuzes) | `certamen/singleplayer.js` (`SCREENS.spPlay`) | ✅ werkend |
@@ -97,7 +98,9 @@ TITLE:
 <titel>
 
 TEXT:
-<verteltekst, mag {voornaamwoorden} bevatten>
+<alinea 1>
+
+<alinea 2 — een lege regel scheidt alinea's, elk wordt een eigen <p>>
 
 CHOICES:
 * <keuzetekst> -> <ID van volgende scene>
@@ -105,9 +108,19 @@ CHOICES:
 END
 ```
 
+**Lengte-conventie (vastgelegd 2026-07, geldt vanaf Hoofdstuk 1):** elke
+scène vóór een `CHOICES`-vertakking krijgt **minimaal 2-3 alinea's**
+beschrijvende/verhalende tekst — niet één summiere zin. Dat geeft ruimte voor
+historische/mythologische diepgang én voor de grammatica/vocabulaire om
+ergens natuurlijk te landen. Dit betekent ook vaker **meer, kleinere nodes**
+per lijn (één beat per node) in plaats van meerdere beats samengeperst in één
+node. Uitzondering: scènes die direct een `PUZZLE` inleiden mogen korter
+(1 alinea volstaat als opzet naar de puzzel). De proloog zelf blijft bewust
+korter — een introductie, geen vol hoofdstuk.
+
 **Ondersteunde secties** (`CNSParser.KNOWN_SECTIONS`): `TITLE`, `TEXT`,
 `DIALOGUE`, `CHOICES`, `IMAGE`, `MUSIC`, `SFX`, `CODEX`, `QUEST`, `COMBAT`,
-`REWARD`, `INVENTORY`, `PUZZLE`, `EERETITEL`.
+`REWARD`, `INVENTORY`, `PUZZLE`, `EERETITEL`, `FLAG`.
 
 - `TITLE`/`TEXT`/`DIALOGUE`/`CHOICES` worden direct gerenderd.
 - `REWARD`/`CODEX`/`QUEST`/`EERETITEL` vuren stil een hook af bij binnenkomst
