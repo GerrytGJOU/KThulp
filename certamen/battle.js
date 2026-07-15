@@ -3664,11 +3664,11 @@ SCREENS.battleProfile = function(){
   `}
   <button class="btn btn-gold btn-block" onclick="BM_AV_RETURN='battleProfile';go('battleAvatarEdit')" style="margin-bottom:14px">Avatar aanpassen</button>
   <div class="panel" style="display:flex;gap:14px;align-items:center;margin-bottom:14px">
-    <div style="flex:0 0 auto">${bmAvatarSVG(spAvatarMerge(spAvatarLoadLocal()),64)}</div>
+    <div style="flex:0 0 auto">${(function(){const sav=spAvatarMerge(spAvatarLoadLocal());return renderPixelHeroPreview(sav)||bmAvatarSVG(sav,64);})()}</div>
     <div style="flex:1;min-width:0">
-      <div style="font-weight:700">Combat Avatar — Chronica Classica</div>
-      <div class="note" style="margin-top:2px">Je verschijning in Chronica Classica-gevechten, los van je Battle Mode-avatar.</div>
-      <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="SP_AV_RETURN='battleProfile';go('spAvatarEdit')">Combat Avatar aanpassen</button>
+      <div style="font-weight:700">Chronica Classica Avatar</div>
+      <div class="note" style="margin-top:2px">Je verschijning in Chronica Classica-gevechten, los van je Battle Mode-avatar. Uitrusting ontgrendel je door het verhaal te spelen.</div>
+      <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="SP_AV_RETURN='battleProfile';go('spAvatarEdit')">Chronica Classica Avatar aanpassen</button>
     </div>
   </div>
   ${spTitlesSectionHTML(spTitlesLoadLocal(), spEquippedTitleLoadLocal())}

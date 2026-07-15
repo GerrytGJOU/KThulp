@@ -38,17 +38,21 @@
      { node, gender, classId, traits:[], codex:[], quests:{}, updatedAt }.
    ============================================================================ */
 
-/* ---- COMBAT AVATAR — hergebruikt Battle Mode se avatar-systeem 1-op-1
-   (BM_AVATAR_PARTS/bmAvatarSVG/bmIsUnlocked/bmReqText/bmShowLockInfo uit
-   battle.js/battle-data.js: zelfde onderdelen, zelfde ontgrendel-regels op
-   basis van BM_IDENT-niveau/mastery), maar als EIGEN, los avatar-object —
-   niet hetzelfde als BM_IDENT.avatar. Start als "de boer": vodden + hooivork
-   (bmAvatarDefaults() geeft zelf al vodden+knuppel; hier wapen overschreven
-   naar hooivork). Offline-first, zelfde patroon als de saveslots: localStorage
-   is de bron van waarheid, Firebase is best-effort spiegeling zodra ingelogd.
-   Coin-gated onderdelen zijn hier alleen te BEKIJKEN (niet te kopen) — kopen
-   blijft in Battle Mode se eigen editor, ontgrendelt via BM_IDENT.unlocked
-   sowieso ook hier. ---- */
+/* ---- COMBAT AVATAR ----
+   Hergebruikt Battle Mode se ECHTE avatar-rendering: de gelaagde pixel-sprite
+   (PNG's uit assets/sprites/, samengesteld door _bmPixelLayers()/
+   renderPixelHeroPreview()/renderPixelHeroIcon() in battle.js) — NIET de
+   procedurele bmAvatarSVG()-paperdoll (die is elders in Battle Mode al
+   vervangen, zie de toelichting bij renderPixelHeroIcon()). BM_AVATAR_PARTS
+   (labels/iconen/sprite-keys) wordt hergebruikt, maar de ONTGRENDELLOGICA is
+   volledig anders dan in Battle Mode: geen niveau/beheersing/munten, maar
+   VERHAAL (zie SP_AVATAR_FREE_PARTS/SP_AVATAR_STORY_UNLOCKS in
+   singleplayer-data.js). Eigen, los avatar-object — niet hetzelfde als
+   BM_IDENT.avatar. Start als "de boer": vodden + hooivork. Offline-first,
+   zelfde patroon als de saveslots: localStorage is de bron van waarheid,
+   Firebase is best-effort spiegeling zodra ingelogd. Alleen zichtbaar tijdens
+   Chronica-gevechten en op het profiel (niet op het slotscherm — dat is geen
+   combat-context). ---- */
 const SP_AVATAR_KEY = "certamen_chronica_avatar";
 function spAvatarDefaults(){ return {...bmAvatarDefaults(), wapen:"hooivork"}; }
 function spAvatarMerge(saved){
@@ -77,27 +81,50 @@ async function spAvatarSave(av){
   }
 }
 
+/* Verhaal-ontgrendeling: partId/optId altijd vrij (uiterlijk), altijd
+   beschikbare startuitrusting (vodden/hooivork), of moet voorkomen in
+   SP_AVATAR_STORY_UNLOCKS én al verdiend zijn (eretitel). Ontbreekt het daar,
+   dan is het simpelweg nog niet door het verhaal vrijgegeven. */
+function spAvatarIsUnlocked(partId, optId, earnedTitles){
+  if(SP_AVATAR_FREE_PARTS.includes(partId)) return true;
+  if((partId==="armor"&&optId==="vodden") || (partId==="wapen"&&optId==="hooivork")) return true;
+  const req = SP_AVATAR_STORY_UNLOCKS[partId+":"+optId];
+  if(!req) return false;
+  if(req.title) return (earnedTitles||[]).includes(req.title);
+  if(req.flag)  return !!(SP_STATE.flags||{})[req.flag];
+  return false;
+}
+function spAvatarReqText(partId, optId){
+  const req = SP_AVATAR_STORY_UNLOCKS[partId+":"+optId];
+  if(req && req.title){
+    const t = SP_TITLES.find(x=>x.id===req.title);
+    return "Ontgrendel de eretitel \""+(t?t.nm:req.title)+"\" (verder spelen in Chronica Classica)";
+  }
+  return "Ontgrendelt later in het verhaal";
+}
+
 let SP_AV_EDIT = null;
-let SP_AV_RETURN = "spSlots";
+let SP_AV_RETURN = "battleProfile";
+let SP_AV_EARNED_TITLES = [];
 SCREENS.spAvatarEdit = function(){
   document.body.classList.remove("greek");
   if(!SP_AV_EDIT){
-    H(brand(true)+`<div class="scrhead"><span></span><h2>Combat Avatar</h2></div><div class="panel" style="text-align:center"><div class="note">Avatar laden…</div></div>${foot()}`);
-    spAvatarLoad().then(av=>{ SP_AV_EDIT=av; SCREENS.spAvatarEdit(); });
+    H(brand(true)+`<div class="scrhead"><span></span><h2>Chronica Classica Avatar</h2></div><div class="panel" style="text-align:center"><div class="note">Avatar laden…</div></div>${foot()}`);
+    Promise.all([spAvatarLoad(), spLoadTitles()]).then(([av,titles])=>{ SP_AV_EDIT=av; SP_AV_EARNED_TITLES=titles; SCREENS.spAvatarEdit(); });
     return;
   }
   const av = SP_AV_EDIT;
+  const earnedTitles = SP_AV_EARNED_TITLES||[];
   function partSection(partId){
     const part = BM_AVATAR_PARTS[partId]; if(!part) return "";
     const opts = part.opts.map(o=>{
-      const key = partId+":"+o.id;
-      const locked = !bmIsUnlocked(o, BM_IDENT, key);
+      const locked = !spAvatarIsUnlocked(partId, o.id, earnedTitles);
       const sel = av[partId]===o.id;
       const preview = bmAvatarSVG({...av,[partId]:o.id}, 38);
       if(locked){
-        const req = bmReqText(o);
-        return `<button class="bm-opt locked" title="🔒 ${esc(req?req.full:o.nm)}" onclick="bmShowLockInfo('${esc(o.nm)}','${esc(req?req.full:"")}')">
-          ${preview}<div class="onm">${esc(o.nm)}</div><div class="bm-lockreq">🔒 ${esc(req?req.short:"")}</div>
+        const req = spAvatarReqText(partId, o.id);
+        return `<button class="bm-opt locked" title="🔒 ${esc(req)}" onclick="toast('Nog op slot','${esc(req)}')">
+          ${preview}<div class="onm">${esc(o.nm)}</div><div class="bm-lockreq">🔒</div>
         </button>`;
       }
       return `<button class="bm-opt${sel?" on":""}" onclick="SP_AV_EDIT['${partId}']='${o.id}';SCREENS.spAvatarEdit()">
@@ -107,9 +134,9 @@ SCREENS.spAvatarEdit = function(){
     return `<div class="eyebrow l">${esc(part.nm)}</div><div class="bm-opts">${opts}</div>`;
   }
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="SP_AV_EDIT=null;go(SP_AV_RETURN||'spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Combat Avatar</h2></div>
-  <div class="panel" style="text-align:center;padding:14px 16px;display:flex;justify-content:center">${bmAvatarSVG(av,96)}</div>
-  ${!BM_IDENT?`<div class="panel"><p class="note">Sommige onderdelen ontgrendel je via Battle Mode (niveau/beheersing) — log in om te zien wat je daar al hebt verdiend.</p></div>`:""}
+  <div class="scrhead"><button class="back" onclick="SP_AV_EDIT=null;go(SP_AV_RETURN||'battleProfile')">${iconSVG("shield",20,"currentColor")}</button><h2>Chronica Classica Avatar</h2></div>
+  <div class="panel" style="text-align:center;padding:14px 16px;display:flex;justify-content:center">${renderPixelHeroPreview(av,true) || bmAvatarSVG(av,96)}</div>
+  <div class="panel"><p class="note">Uiterlijk kies je vrij. Uitrusting (wapen, harnas, helm, schild, …) ontgrendel je door verder te spelen in het verhaal.</p></div>
   ${Object.keys(BM_AVATAR_PARTS).map(partSection).join("")}
   <button class="btn btn-gold btn-block lg" onclick="spSaveAvatarEdit()" style="margin-bottom:16px">Opslaan</button>
   ${foot()}`);
@@ -117,7 +144,7 @@ SCREENS.spAvatarEdit = function(){
 function spSaveAvatarEdit(){
   spAvatarSave(SP_AV_EDIT);
   SP_AV_EDIT=null;
-  go(SP_AV_RETURN||"spSlots");
+  go(SP_AV_RETURN||"battleProfile");
 }
 
 /* ---- EERETITELS — ACCOUNT-breed (niet per saveslot), offline-first net als
@@ -222,7 +249,7 @@ const SpTextResolver = {
 /* ---- CNS PARSER — zet ruwe .cns-tekst om in een Map<sceneId, sceneObject> ---- */
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
-                  "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL"],
+                  "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -280,7 +307,7 @@ const CNSParser = {
 };
 
 const SP_SCENES = CNSParser.parse(SP_PROLOOG_CNS);
-const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{} });
+const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{} });
 
 /* ---- SPELERSTATE ---- */
 let SP_STATE = SP_EMPTY_STATE();
@@ -349,13 +376,8 @@ SCREENS.spSlots = function(){
       <p class="note">Je speelt nu offline — je voortgang wordt op dit toestel bewaard. Log in met je klascode om ook op andere toestellen verder te spelen en om je klassekeuze te laten meetellen in Battle Mode.</p>
       <button class="btn btn-ghost" style="margin-top:6px" onclick="BM_IDENT_RETURN='spSlots';go('battleIdentity')">Aanmelden</button>
     </div>`;
-    const av = spAvatarMerge(spAvatarLoadLocal());
     H(brand(true)+`
     <div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Chronica Classica</h2></div>
-    <div class="panel" style="text-align:center">
-      <div>${bmAvatarSVG(av,72)}</div>
-      <button class="btn btn-ghost" style="margin-top:8px" onclick="SP_AV_RETURN='spSlots';go('spAvatarEdit')">Combat Avatar aanpassen</button>
-    </div>
     <div class="panel"><p class="note">Kies een opslagplek. Je hebt ${SP_MAX_SLOTS} plekken — genoeg om alle drie de klassen te spelen voor je er eentje hoeft te wissen.</p></div>
     ${tiles}
     ${loginNote}
@@ -474,7 +496,7 @@ SCREENS.spPlay = function(){
 
   H(brand(true)+`
   <div class="scrhead"><span></span><h2>Chronica Classica</h2></div>
-  <div class="panel">${spSceneImageHTML(scene)}${titleHTML}${textHTML}</div>
+  <div class="panel">${spSceneImageHTML(scene)}${spChapterEyebrowHTML()}${titleHTML}${textHTML}</div>
   ${dialogueHTML}
   ${choicesHTML}
   ${foot()}`);
@@ -488,8 +510,24 @@ function spRunMetaHooks(meta){
   if(meta.CODEX)     spHookCodex(meta.CODEX);
   if(meta.QUEST)     spHookQuest(meta.QUEST);
   if(meta.EERETITEL) spAwardTitle(meta.EERETITEL.trim());
+  if(meta.FLAG)      spHookFlag(meta.FLAG);
   // IMAGE is pure weergave (geen side effect) — gerenderd in de view via
   // spSceneImageHTML(), niet hier.
+}
+/* FLAG: zet één of meer vlaggen bij het binnenkomen van een scène. Zo dragen
+   keuzes (en wélke plotlijn je koos) door naar latere hoofdstukken: elke
+   branch-specifieke scène zet zijn eigen vlag. Regels/`;`-gescheiden;
+   "naam" → true, "naam=waarde" → die waarde. NPC's die er conditioneel op
+   reageren vragen nog een CONDITION-mechanisme (volgende bouwstap). */
+function spHookFlag(text){
+  const flags = {...(SP_STATE.flags||{})};
+  text.split(/[\n;]/).forEach(part=>{
+    part = part.trim(); if(!part) return;
+    const eq = part.indexOf("=");
+    if(eq===-1) flags[part] = true;
+    else flags[part.slice(0,eq).trim()] = part.slice(eq+1).trim();
+  });
+  spSaveProgress({ flags });
 }
 
 /* Illustratie bij een scène: de IMAGE-sectie is een bestandsnaam relatief aan
@@ -500,6 +538,23 @@ function spSceneImageHTML(scene){
   if(!scene.meta || !scene.meta.IMAGE) return "";
   const src = "assets/chronica/images/"+scene.meta.IMAGE.trim();
   return `<img src="${esc(src)}" alt="" style="width:100%;border-radius:10px;display:block;margin-bottom:12px" onerror="this.style.display='none'">`;
+}
+
+/* Oriëntatie-label voor de scène-koptekst, afgeleid van het node-prefix:
+   PRO_ = Proloog, CH<n>_ = het bijbehorende hoofdstuk uit SP_CAMPAIGN. */
+function spChapterLabel(node){
+  if(!node) return "";
+  if(node.indexOf("PRO_")===0) return "Proloog — "+(SP_CAMPAIGN[0]?.nm||"");
+  const m = node.match(/^CH(\d+)_/);
+  if(m){
+    const ch = SP_CAMPAIGN.find(c=>c.nr===+m[1]);
+    return ch ? ("Hoofdstuk "+m[1]+" — "+ch.nm) : ("Hoofdstuk "+m[1]);
+  }
+  return "";
+}
+function spChapterEyebrowHTML(){
+  const lbl = spChapterLabel(SP_STATE.node);
+  return lbl ? `<div class="eyebrow l">${esc(lbl)}</div>` : "";
 }
 function spHookReward(text){
   const fields={};
@@ -528,13 +583,34 @@ function spHookQuest(text){
   spSaveProgress({ quests:{...(SP_STATE.quests||{}), [questId]:status} });
 }
 
-/* ---- PUZZEL: Grieks alfabet/tekens transcriberen (§ Educatieve Poortwachters) ----
-   Blokkeert de scène tot de puzzel is opgelost; slaagt de speler, dan gaat de
-   engine naar het doel van de (enige) keuze in deze scène. ---- */
+/* ---- PUZZELS (§ Educatieve Poortwachters) ------------------------------------
+   Een PUZZLE-scène blokkeert tot de puzzel is opgelost; daarna gaat de engine
+   naar het doel van de (enige) keuze in die scène. spRenderPuzzle dispatcht op
+   puzzle.type, zodat elk hoofdstuk zijn eigen puzzelsoort kan hebben:
+   - "greek-transliteration" : Grieks woord → transcriptie (proloog).
+   - "multiple-choice"       : grammaticavraag met keuzeknoppen (bv. naamval
+                               herkennen — welk woord is nominativus/accusativus/
+                               vocativus; welk lidwoord hoort erbij). ------------ */
 function spRenderPuzzle(scene){
   const puzzleId = scene.meta.PUZZLE.trim();
   const puzzle = SP_PUZZLES[puzzleId];
   const target = scene.choices[0]?.target;
+  if(!puzzle){ console.error("Onbekende puzzel:", puzzleId); return spGoCns(target); }
+  if((puzzle.type||"greek-transliteration")==="multiple-choice")
+    return spRenderMCPuzzle(scene, puzzleId, puzzle, target);
+  return spRenderGreekPuzzle(scene, puzzleId, puzzle, target);
+}
+
+// Gedeelde bovenkant van een puzzelscherm (illustratie + hoofdstuklabel + tekst).
+function spPuzzleHeaderHTML(scene){
+  return `<div class="panel">
+    ${spSceneImageHTML(scene)}${spChapterEyebrowHTML()}
+    <h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>
+    <p>${esc(SpTextResolver.resolve(scene.text, SP_STATE))}</p>
+  </div>`;
+}
+
+function spRenderGreekPuzzle(scene, puzzleId, puzzle, target){
   const rows = SP_GREEK_ALPHABET.map(l=>
     `<div style="display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px solid rgba(255,255,255,.08)">
       <span>${esc(l.letter)}</span><span class="note">${esc(l.nm)} = ${esc(l.translit)}</span>
@@ -542,31 +618,47 @@ function spRenderPuzzle(scene){
   ).join("");
   H(brand(true)+`
   <div class="scrhead"><span></span><h2>Chronica Classica</h2></div>
-  <div class="panel">
-    ${spSceneImageHTML(scene)}
-    <h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>
-    <p>${esc(SpTextResolver.resolve(scene.text, SP_STATE))}</p>
-    <div style="font-size:32px;letter-spacing:4px;text-align:center;margin:14px 0">${esc(puzzle.woord.grieks)}</div>
-  </div>
+  ${spPuzzleHeaderHTML(scene)}
+  <div class="panel" style="text-align:center"><div style="font-size:32px;letter-spacing:4px;margin:4px 0">${esc(puzzle.woord.grieks)}</div></div>
   <div class="panel">
     <details><summary class="note" style="cursor:pointer">Griekse alfabet (transcriptietabel)</summary>${rows}</details>
   </div>
   <div class="panel">
     <label class="fld">Jouw transcriptie</label>
-    <input id="spPuzzleInput" type="text" placeholder="typ hier…" onkeydown="if(event.key==='Enter')spCheckPuzzle('${puzzleId}','${target}')">
+    <input id="spPuzzleInput" type="text" placeholder="typ hier…" onkeydown="if(event.key==='Enter')spCheckGreekPuzzle('${puzzleId}','${target}')">
     <div id="spPuzzleErr" class="note warn" style="display:none;margin-top:8px"></div>
   </div>
-  <button class="btn btn-gold btn-block lg" onclick="spCheckPuzzle('${puzzleId}','${target}')">Controleren</button>
+  <button class="btn btn-gold btn-block lg" onclick="spCheckGreekPuzzle('${puzzleId}','${target}')">Controleren</button>
   ${foot()}`);
 }
-function spCheckPuzzle(puzzleId, target){
+function spCheckGreekPuzzle(puzzleId, target){
   const puzzle = SP_PUZZLES[puzzleId];
   const input = (el("spPuzzleInput")?.value||"").trim().toLowerCase();
   const err = el("spPuzzleErr");
-  if(input === puzzle.woord.antwoord.toLowerCase()){
-    spGoCns(target);
-  }else if(err){
-    err.textContent = "Nog niet helemaal juist — kijk in de transcriptietabel en probeer opnieuw.";
-    err.style.display = "";
-  }
+  if(input === puzzle.woord.antwoord.toLowerCase()) spGoCns(target);
+  else if(err){ err.textContent = "Nog niet helemaal juist — kijk in de transcriptietabel en probeer opnieuw."; err.style.display = ""; }
+}
+
+/* Meerkeuze-grammaticapuzzel. puzzle = { type:"multiple-choice", vraag, opties:[],
+   antwoord:"<juiste optietekst>", hint? }. Fout antwoord = hint + blijf staan;
+   goed = door naar target. Knoppen zijn ≥44px hoog (iPad-veilig). */
+function spRenderMCPuzzle(scene, puzzleId, puzzle, target){
+  const optsHTML = puzzle.opties.map((o,i)=>
+    `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spCheckMCPuzzle('${puzzleId}','${target}',${i})">${esc(o)}</button>`
+  ).join("");
+  H(brand(true)+`
+  <div class="scrhead"><span></span><h2>Chronica Classica</h2></div>
+  ${spPuzzleHeaderHTML(scene)}
+  <div class="panel">
+    <p style="font-weight:700;margin-bottom:4px">${esc(puzzle.vraag)}</p>
+    ${optsHTML}
+    <div id="spPuzzleErr" class="note warn" style="display:none;margin-top:10px"></div>
+  </div>
+  ${foot()}`);
+}
+function spCheckMCPuzzle(puzzleId, target, idx){
+  const puzzle = SP_PUZZLES[puzzleId];
+  const err = el("spPuzzleErr");
+  if(puzzle.opties[idx] === puzzle.antwoord) spGoCns(target);
+  else if(err){ err.textContent = puzzle.hint || "Nog niet juist — lees de zin nog eens en probeer opnieuw."; err.style.display = ""; }
 }
