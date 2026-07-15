@@ -69,6 +69,10 @@ let BM_AV_RETURN = "battleProfile";
 // maar andere aanroepers (bv. Training Mode) zetten dit vooraf om zelf de
 // leerling terug te krijgen na het inloggen. Zelfde patroon als BM_AV_RETURN.
 let BM_IDENT_RETURN = "battleJoin";
+// Kamercode die de unified "Meedoen"-stap (games.js: joinDetectGame) al heeft
+// opgezocht — vult #bmJC hieronder alvast in zodat de leerling 'm niet
+// nogmaals hoeft te typen. Wordt bij het renderen meteen weer leeggemaakt.
+let BM_JOIN_PREFILL_CODE = null;
 
 function bmIdentLoad(){ try{ const r=localStorage.getItem(BM_IDENT_KEY); return r?JSON.parse(r):null; }catch(e){return null;} }
 function bmIdentSave(o){ try{ localStorage.setItem(BM_IDENT_KEY,JSON.stringify(o)); }catch(e){} }
@@ -3148,6 +3152,7 @@ function bmShowPlayerDetail(pid){
 SCREENS.battleJoin = function(){
   if(!BM_IDENT){go("battleIdentity");return;}
   const savedSess=(()=>{try{const s=sessionStorage.getItem("bm_session");return s?JSON.parse(s):null;}catch(e){return null;}})();
+  const prefillCode=BM_JOIN_PREFILL_CODE||""; BM_JOIN_PREFILL_CODE=null;
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Meedoen — Battle Mode</h2></div>
   ${savedSess?`<div class="panel"><div class="note">Je was al actief in gevecht <b>${esc(savedSess.code)}</b>.</div>
@@ -3161,7 +3166,7 @@ SCREENS.battleJoin = function(){
         <div class="note">${esc(BM_IDENT.klascode)} · ${esc(BM_IDENT.leerlingcode)}</div></div>
     </div>
     <label class="fld">Spelcode van het bord</label>
-    <input id="bmJC" type="text" placeholder="ABCD" style="text-transform:uppercase;font-size:26px;text-align:center;letter-spacing:.2em" maxlength="4" oninput="this.value=this.value.toUpperCase()">
+    <input id="bmJC" type="text" placeholder="ABCD" value="${esc(prefillCode)}" style="text-transform:uppercase;font-size:26px;text-align:center;letter-spacing:.2em" maxlength="4" oninput="this.value=this.value.toUpperCase()">
     <div id="bmJE" class="note warn" style="display:none;margin-top:8px"></div>
   </div>
   <button class="btn btn-gold btn-block lg" onclick="bmDoJoin()">Doe mee</button>

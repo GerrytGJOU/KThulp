@@ -8,29 +8,31 @@ SCREENS.home = function(){
     <h3>Meedoen</h3>
     <p>Voor leerlingen. Voer de code in die op het bord staat, of doe mee aan Battle Mode.</p>
   </button>
-  <button class="tile" onclick="go('battleHome')">
-    <span class="ic">${iconSVG("eagle",44,"currentColor")}</span>
-    <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
-    <p>Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden.</p>
-  </button>
-  <button class="tile" onclick="bmStartBossHost()">
-    <span class="corner">${iconSVG("torch",88,"currentColor")}</span>
-    <span class="ic">${iconSVG("torch",44,"currentColor")}</span>
-    <h3>🐉 Boss Battle <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
-    <p>De hele klas vecht samen tegen één mythologische baas. Ook ideaal om in je eentje te trainen.</p>
-  </button>
-  <button class="tile" onclick="go('totalWar')">
-    <span class="corner">${iconSVG("crown",88,"currentColor")}</span>
-    <span class="ic">${iconSVG("crown",44,"currentColor")}</span>
-    <h3>🗺️ Total War <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
-    <p>Doorlopende veldtocht: elke klas is een beschaving en verovert samen de kaart van Europa. Oefen thuis, val aan in de les.</p>
-  </button>
-  <button class="tile" onclick="go('singlePlayer')">
-    <span class="corner">${iconSVG("star",88,"currentColor")}</span>
-    <span class="ic">${iconSVG("star",44,"currentColor")}</span>
-    <h3>📜 Chronica Classica <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
-    <p>Reis als een eenvoudige boer door de klassieke mythologie en herstel de vergeten herinnering — solo, op je eigen tempo.</p>
-  </button>
+  <div class="two">
+    <button class="tile" onclick="go('battleHome')">
+      <span class="ic">${iconSVG("eagle",44,"currentColor")}</span>
+      <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+      <p>Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden.</p>
+    </button>
+    <button class="tile" onclick="bmStartBossHost()">
+      <span class="corner">${iconSVG("torch",88,"currentColor")}</span>
+      <span class="ic">${iconSVG("torch",44,"currentColor")}</span>
+      <h3>🐉 Boss Battle <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+      <p>De hele klas vecht samen tegen één mythologische baas. Ook ideaal om in je eentje te trainen.</p>
+    </button>
+    <button class="tile" onclick="go('totalWar')">
+      <span class="corner">${iconSVG("crown",88,"currentColor")}</span>
+      <span class="ic">${iconSVG("crown",44,"currentColor")}</span>
+      <h3>🗺️ Total War <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+      <p>Doorlopende veldtocht: elke klas is een beschaving en verovert samen de kaart van Europa. Oefen thuis, val aan in de les.</p>
+    </button>
+    <button class="tile" onclick="go('singlePlayer')">
+      <span class="corner">${iconSVG("star",88,"currentColor")}</span>
+      <span class="ic">${iconSVG("star",44,"currentColor")}</span>
+      <h3>📜 Chronica Classica <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+      <p>Reis als een eenvoudige boer door de klassieke mythologie en herstel de vergeten herinnering — solo, op je eigen tempo.</p>
+    </button>
+  </div>
   <button class="tile" onclick="go('freePractice')">
     <span class="ic">${iconSVG("owl",44,"currentColor")}</span>
     <h3>Vrij oefenen</h3>
@@ -85,7 +87,12 @@ function pickGame(g){ DRAFT.game=g; DRAFT.target = g==="touwtrekken"?15:g==="sne
 /* ---- HOST: woordbron ---- */
 SCREENS.hostSource = function(){
   const baseLA = VOCAB_LA.filter(usable).length, baseEL = VOCAB_EL.filter(usable).length;
-  H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('hostGamePick')">${iconSVG("shield",20,"currentColor")}</button><h2>Welke woorden?</h2></div>
+  // Dit scherm wordt gedeeld door de klassieke spellen (via hostGamePick) én
+  // Battle Mode/Boss Battle (bmStartHost/bmStartBossHost slaan hostGamePick
+  // over en zetten DRAFT.game="battle" direct) — de terugknop moet dus naar
+  // de bijpassende vorige stap, niet altijd naar "Kies een spel".
+  const backTarget = DRAFT.game==="battle" ? "battleHome" : "hostGamePick";
+  H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('${backTarget}')">${iconSVG("shield",20,"currentColor")}</button><h2>Welke woorden?</h2></div>
   <div class="panel">
     <label class="fld">Bron</label>
     <div class="chips" id="srcChips">
@@ -495,14 +502,56 @@ function rematch(){ _ending=false; Net.setState(CODE,{status:"lobby",ropePos:0,w
 /* ============================================================================
    LEERLING-KANT
    ============================================================================ */
+// Eerste stap: alleen de code. Battle Mode/Boss Battle en de klassieke
+// spellen (touwtrekken/marathon/snelvuur) delen hetzelfde rooms/{code}-schema
+// (net.js: FBNet.roomRef) en verschillen alleen in meta.game — dus één
+// opzoeking volstaat om de leerling automatisch naar de juiste vervolgstap te
+// sturen. Geen "kies je modus"-keuze meer vooraf.
+let JOIN_CODE = null; // opgezochte kamercode, bekend voor de vervolgstap
 SCREENS.join = function(){
   document.body.classList.remove("greek");
   const pre = new URLSearchParams(location.search).get("room")||"";
   H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Meedoen</h2></div>
   <div class="panel">
     <label class="fld">Speelcode (van het bord)</label>
-    <input type="text" id="joinCode" maxlength="4" placeholder="ABCD" value="${esc(pre)}" style="text-transform:uppercase;letter-spacing:.25em;font-size:24px;text-align:center" oninput="this.value=this.value.toUpperCase()">
-    <label class="fld" style="margin-top:14px">Jouw naam</label>
+    <input type="text" id="joinCode" maxlength="4" placeholder="ABCD" value="${esc(pre)}" style="text-transform:uppercase;letter-spacing:.25em;font-size:24px;text-align:center" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')joinDetectGame()">
+    <div id="joinCodeErr" class="note warn" style="display:none;margin-top:8px"></div>
+  </div>
+  <button class="btn btn-gold btn-block lg" onclick="joinDetectGame()">Verder</button>
+  ${foot()}`);
+};
+async function joinDetectGame(){
+  const c=(el("joinCode").value||"").trim().toUpperCase();
+  const err=el("joinCodeErr");
+  if(err)err.style.display="none";
+  if(c.length!==4){ if(err){err.textContent="Voer de 4-letter code van het bord in.";err.style.display="";} return; }
+  chooseNet();
+  if(Net===DemoNet){ toast("Geen verbinding","Deze code werkt alleen met Firebase. Vraag je docent of dit is ingesteld."); return; }
+  let meta;
+  try{ meta=await Net.getMeta(c); }catch(e){ meta=null; }
+  if(!meta){ if(err){err.textContent="Geen wedstrijd met code "+c+". Controleer de code.";err.style.display="";} return; }
+  JOIN_CODE=c;
+  if(meta.game==="battle"){
+    // Battle Mode/Boss Battle: vereist een klascode+leerlingcode-identiteit;
+    // bmDoJoin() leest de code uit #bmJC, dus geven 'm mee als prefill i.p.v.
+    // de leerling 'm nogmaals te laten intypen.
+    BM_JOIN_PREFILL_CODE=c;
+    BM_IDENT_RETURN="battleJoin";
+    go(BM_IDENT?"battleJoin":"battleIdentity");
+  } else {
+    go("joinDetails");
+  }
+}
+
+/* Vervolgscherm voor klassieke spellen (touwtrekken/marathon/snelvuur) — de
+   code is al bekend (JOIN_CODE), hier alleen nog naam/kleur/avatar. */
+SCREENS.joinDetails = function(){
+  document.body.classList.remove("greek");
+  if(!JOIN_CODE){ go("join"); return; }
+  H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('join')">${iconSVG("shield",20,"currentColor")}</button><h2>Meedoen</h2></div>
+  <div class="panel">
+    <div class="note">Code: <b>${esc(JOIN_CODE)}</b></div>
+    <label class="fld" style="margin-top:10px">Jouw naam</label>
     <input type="text" id="joinName" maxlength="16" placeholder="bv. ${esc(P.name||"Sofia")}" value="${esc(P.name)}">
   </div>
   <div class="panel">
@@ -511,28 +560,22 @@ SCREENS.join = function(){
     <label class="fld" style="margin-top:14px">Avatar <small style="text-transform:none">(meer in je verzameling)</small></label>
     <div class="chips" id="avPick">${P.owned.map(id=>{const a=AVATARS.find(x=>x.id===id);return a?`<button class="chip ${P.avatar===id?'on':''}" onclick="setAvatar('${id}')">${avatarHTML(id,P.color,26)}</button>`:""}).join("")}</div>
   </div>
-  <button class="btn btn-gold btn-block lg" onclick="doJoin()">Doe mee aan klassiek spel</button>
-  <div style="display:flex;align-items:center;gap:10px;margin:14px 0 4px">
-    <hr style="flex:1;border:none;border-top:1px solid var(--stone3)">
-    <span class="note">of</span>
-    <hr style="flex:1;border:none;border-top:1px solid var(--stone3)">
-  </div>
-  <button class="btn btn-block" style="border:1px solid var(--ox);color:var(--ox)" onclick="go('battleJoin')">⚔️ Doe mee aan Battle Mode</button>
+  <button class="btn btn-gold btn-block lg" onclick="doJoin()">Doe mee</button>
   ${foot()}`);
 };
-function setColor(c){ P.color=c; saveProfile(); SCREENS.join(); }
-function setAvatar(id){ P.avatar=id; saveProfile(); SCREENS.join(); }
+function setColor(c){ P.color=c; saveProfile(); SCREENS.joinDetails(); }
+function setAvatar(id){ P.avatar=id; saveProfile(); SCREENS.joinDetails(); }
 
 async function doJoin(){
-  const c=(el("joinCode").value||"").trim().toUpperCase();
+  const c=JOIN_CODE;
   const nm=(el("joinName").value||"").trim();
-  if(c.length!==4){ toast("Code klopt niet","Voer de 4-letter code van het bord in."); return; }
+  if(!c){ go("join"); return; }
   if(!nm){ toast("Naam ontbreekt","Vul je naam in."); return; }
   P.name=nm; saveProfile();
   chooseNet();
   if(Net===DemoNet){ toast("Geen verbinding","Deze code werkt alleen met Firebase. Vraag je docent of dit is ingesteld."); return; }
   const ex=await Net.exists(c);
-  if(!ex){ toast("Niet gevonden","Geen wedstrijd met code "+c+". Controleer de code."); return; }
+  if(!ex){ toast("Niet gevonden","Geen wedstrijd met code "+c+". Controleer de code."); go("join"); return; }
   CODE=c; ROLE="player";
   META = await Net.getMeta(CODE);
   POOL = await Net.getPool(CODE);
