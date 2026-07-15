@@ -31,7 +31,7 @@
      rechtstreeks aangesproken en is zo letterlijk de hoofdpersoon. De
      gender-keuze (hij/zij/die) blijft bestaan, maar dient alleen voor later —
      wanneer personages in dialoog in de derde persoon óver de speler praten.
-     Zie de uitgebreide toelichting bij SP_CH1_CNS.
+     Zie de uitgebreide toelichting bij SP_PROLOOG_CNS.
    ============================================================================ */
 
 /* ---- SAVESLOTS — leerlingen krijgen 3 losse opslagplekken, zodat ze het
@@ -242,7 +242,9 @@ const SP_CLASS_REWARD_MAP = {
   "Cavalerist":   "cavalerie",
 };
 
-/* ---- BOEK I — PROLOOG: "DE BOER VAN LATIUM" ----
+/* ---- PROLOOG: "DE BOER VAN LATIUM" (scène-ID's PRO_###) ----
+   De proloog gebruikt het prefix PRO_; hoofdstuk 1 e.v. krijgen CH1_/CH2_ enz.
+   (was eerder ook CH1_, wat botste met het echte hoofdstuk 1 — hernoemd).
    VERTELPERSPECTIEF = TWEEDE PERSOON. De verteltekst spreekt de speler
    rechtstreeks aan met "je"/"jij" — dat maakt de speler letterlijk de
    hoofdpersoon en is immersiever dan een hij/zij-verteller. Er staan dus
@@ -252,8 +254,8 @@ const SP_CLASS_REWARD_MAP = {
    ("ik zie dat {subject} moe is" → hij/zij/die). In de proloog komt dat nog
    niet voor, dus de gender-keuze heeft hier nog geen zichtbaar effect.
    Geen {player.name}: de speler is naamloos (Game Bible). */
-const SP_CH1_CNS = `
-=== SCENE: CH1_001 ===
+const SP_PROLOOG_CNS = `
+=== SCENE: PRO_001 ===
 
 TITLE:
 Het Veld bij Latium
@@ -263,12 +265,12 @@ De zon is net over de heuvels van Latium gekropen, en jij bent al uren aan het w
 
 CHOICES:
 
-* Graaf meteen verder -> CH1_002
-* Veeg eerst voorzichtig het zand weg -> CH1_001B
+* Graaf meteen verder -> PRO_002
+* Veeg eerst voorzichtig het zand weg -> PRO_001B
 
 END
 
-=== SCENE: CH1_001B ===
+=== SCENE: PRO_001B ===
 
 TITLE:
 Voorzichtig
@@ -278,11 +280,11 @@ Je knielt en veegt het losse zand weg, handvol na handvol, tot je vingertoppen i
 
 CHOICES:
 
-* Graaf de kist op -> CH1_002
+* Graaf de kist op -> PRO_002
 
 END
 
-=== SCENE: CH1_002 ===
+=== SCENE: PRO_002 ===
 
 TITLE:
 De Kist
@@ -292,12 +294,12 @@ Na lang graven ligt ze eindelijk voor je: een oude houten kist, zwart geworden v
 
 CHOICES:
 
-* Open de kist -> CH1_003
-* Laat de kist gesloten en keer terug naar het dorp -> CH1_002B
+* Open de kist -> PRO_003
+* Laat de kist gesloten en keer terug naar het dorp -> PRO_002B
 
 END
 
-=== SCENE: CH1_002B ===
+=== SCENE: PRO_002B ===
 
 TITLE:
 Twijfel
@@ -307,7 +309,7 @@ Je laat de kist waar ze is en loopt terug naar het dorp, de ploeg achter je aan.
 
 END
 
-=== SCENE: CH1_003 ===
+=== SCENE: PRO_003 ===
 
 TITLE:
 Drie Voorwerpen
@@ -317,13 +319,13 @@ Het slot geeft toe met een droge knak. Onder een laag vergeeld linnen liggen dri
 
 CHOICES:
 
-* Neem de jachtboog -> CH1_004A
-* Neem de speer -> CH1_004B
-* Neem de ruitersporen -> CH1_004C
+* Neem de jachtboog -> PRO_004A
+* Neem de speer -> PRO_004B
+* Neem de ruitersporen -> PRO_004C
 
 END
 
-=== SCENE: CH1_004A ===
+=== SCENE: PRO_004A ===
 
 TITLE:
 De Boogschutter
@@ -339,11 +341,11 @@ boogschutter_orakel
 
 CHOICES:
 
-* Verder zoeken in de kist -> CH1_005
+* Verder zoeken in de kist -> PRO_005
 
 END
 
-=== SCENE: CH1_004B ===
+=== SCENE: PRO_004B ===
 
 TITLE:
 De Hopliet
@@ -359,11 +361,11 @@ hopliet_orakel
 
 CHOICES:
 
-* Verder zoeken in de kist -> CH1_005
+* Verder zoeken in de kist -> PRO_005
 
 END
 
-=== SCENE: CH1_004C ===
+=== SCENE: PRO_004C ===
 
 TITLE:
 De Cavalerist
@@ -379,11 +381,11 @@ cavalerist_orakel
 
 CHOICES:
 
-* Verder zoeken in de kist -> CH1_005
+* Verder zoeken in de kist -> PRO_005
 
 END
 
-=== SCENE: CH1_005 ===
+=== SCENE: PRO_005 ===
 
 TITLE:
 De Bronzen Schijf
@@ -399,12 +401,12 @@ codex_orakel_van_chronos
 
 CHOICES:
 
-* Raak de schijf aan -> CH1_006
-* Trek je hand terug -> CH1_005B
+* Raak de schijf aan -> PRO_006
+* Trek je hand terug -> PRO_005B
 
 END
 
-=== SCENE: CH1_005B ===
+=== SCENE: PRO_005B ===
 
 TITLE:
 Aarzeling
@@ -414,11 +416,11 @@ Je aarzelt, je hand zweeft boven het brons. Maar de schijf lijkt naar je te reik
 
 CHOICES:
 
-* Raak de schijf alsnog aan -> CH1_006
+* Raak de schijf alsnog aan -> PRO_006
 
 END
 
-=== SCENE: CH1_006 ===
+=== SCENE: PRO_006 ===
 
 TITLE:
 Vervorming
@@ -431,11 +433,11 @@ tijdvervorming_veld.jpg
 
 CHOICES:
 
-* Laat het gebeuren -> CH1_007
+* Laat het gebeuren -> PRO_007
 
 END
 
-=== SCENE: CH1_007 ===
+=== SCENE: PRO_007 ===
 
 TITLE:
 Het Orakel van Chronos
@@ -448,11 +450,11 @@ puzzle_orakel_symbolen_01
 
 CHOICES:
 
-* Ontcijfer het patroon -> CH1_008
+* Ontcijfer het patroon -> PRO_008
 
 END
 
-=== SCENE: CH1_008 ===
+=== SCENE: PRO_008 ===
 
 TITLE:
 De Poort
@@ -465,11 +467,11 @@ quest_boodschapper_van_kronos: gestart
 
 CHOICES:
 
-* Spreek de gestalte aan -> CH1_009
+* Spreek de gestalte aan -> PRO_009
 
 END
 
-=== SCENE: CH1_009 ===
+=== SCENE: PRO_009 ===
 
 TITLE:
 De Boodschapper
