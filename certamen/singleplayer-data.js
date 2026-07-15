@@ -707,6 +707,15 @@ END
    naar hoofdstuk 2 (nog te bouwen). De andere twee lijnen zijn optioneel —
    ideaal om met de 2 overige saveslots te spelen.
 
+   VASTGELEGDE REGEL (2026-07): elk scène-blok vóór een keuze krijgt 2-3
+   alinea's beschrijvende/verhalende tekst, niet één summiere zin — dat geeft
+   ruimte voor historische/mythologische diepgang (bv. de Silenus-episode bij
+   Midas, Metis' zwangerschap bij Zeus, Prometheus als mensenschepper,
+   Pandora's naam) en voor de grammatica/vocabulaire om ergens in te landen.
+   Dat betekent ook MEER nodes per lijn dan in de allereerste versie — een
+   beat per node, niet meerdere beats samengeperst. Geldt voor Hoofdstuk 2+;
+   de proloog blijft bewust korter (een introductie, geen vol hoofdstuk).
+
    FLAG "ch1_lijn" (A/B/C) en "ch1_voltooid" dragen de gemaakte keuze door
    naar latere hoofdstukken (bv. voor NPC's die op je pad reageren) — het
    "meer kruisen"-idee (vertakkingen die van elkaar weten) is uitdrukkelijk
@@ -719,7 +728,9 @@ TITLE:
 De Namen van de Wereld
 
 TEXT:
-De boodschapper wijst met een hand die niet helemaal vast lijkt in deze wereld. Achter haar scheurt de poort verder open, tot je niets meer ziet dan licht — en daarachter, vaag, de contouren van bergen die je nooit eerder hebt gezien. "Ga," zegt ze. "Daar wachten namen die dreigen te verdwijnen. Vind ze terug, voor het te laat is." Je stapt door. Wanneer het licht wegtrekt, sta je niet langer in Latium. De lucht ruikt naar tijm en zilte wind. Je staat aan de rand van een land dat mensen ooit Hellas noemden — en ergens hierin wacht een verhaal dat jou nodig heeft.
+De boodschapper wijst met een hand die niet helemaal vast lijkt in deze wereld. Achter haar scheurt de poort verder open, tot je niets meer ziet dan licht — en daarachter, vaag, de contouren van bergen die je nooit eerder hebt gezien. "Ga," zegt ze. "Daar wachten namen die dreigen te verdwijnen. Vind ze terug, voor het te laat is."
+
+Je stapt door. Wanneer het licht wegtrekt, sta je niet langer in Latium. De lucht ruikt naar tijm en zilte wind, en de grond onder je voeten is steniger, droger, ouder aanvoelend dan de akkers die je kende. Je staat aan de rand van een land dat mensen ooit Hellas noemden — bergen die recht uit zee lijken te groeien, olijfbomen die zich krommen naar een fellere zon, en ergens hierin, verspreid over drie zeer verschillende plekken, wachten verhalen die jou nodig hebben.
 
 CHOICES:
 
@@ -732,106 +743,174 @@ END
 === SCENE: CH1_A01 ===
 
 TITLE:
-Het Paleis van Sardis
+De Weg naar Sardis
 
 TEXT:
-Het paleis van Sardis torent boven de stad uit, elke zuil bedekt met een dunne glans van welvaart. Bedienden fluisteren een naam telkens opnieuw, half ontzag, half angst: koning Midas. Hij zou zojuist een gunst hebben terugbetaald aan Bacchus zelf — en gunsten aan goden worden altijd beantwoord. Boven de poort staat, diep in de steen gebeiteld, een enkel Grieks woord.
+De weg naar Sardis voert je oostwaarts, weg van de kust, het land van Hellas uit en een ander landschap in: dat van Lydia, waar de heuvels geleidelijk plaatsmaken voor brede, gouden korenvelden. In de verte rijst de berg Tmolus op, en aan zijn voet kronkelt een rivier die de zon vangt op een manier die geen gewoon water zou moeten doen — de Pactolus, zo hoor je een reiziger onderweg zeggen, alsof die naam op zichzelf al een verhaal is dat hij liever niet hardop vertelt.
 
-PUZZLE:
-puzzle_ch1a_lidwoord
+Lydia staat, zelfs hier, aan de rand van de wereld die je kent, al bekend als een land van ongelofelijke rijkdom. Handelaars met karavanen vol textiel en zilverwerk trekken dezelfde weg als jij, en meer dan een van hen noemt, half spottend, half jaloers, de naam van hun koning: Midas. Er gaat een gerucht dat hij zojuist een gunst heeft terugbetaald aan een god — en gunsten aan goden, zo weet iedereen, worden altijd op de een of andere manier beantwoord.
 
 CHOICES:
 
-* Ontcijfer het woord boven de poort -> CH1_A02
+* Ga de stad Sardis binnen -> CH1_A02
 
 END
 
 === SCENE: CH1_A02 ===
 
 TITLE:
-Een Gevaarlijke Wens
+Het Paleis van Sardis
 
 TEXT:
-Binnen tref je Midas aan, buigend voor een gestalte omringd door wijnranken en een geur van rijpe druiven — Bacchus zelf. "Vraag wat je wilt," zegt de god, geamuseerd. Midas' ogen glinsteren. Hij denkt aan zijn schatkamers, aan hoe klein ze hem altijd hebben doen voelen. "Laat alles wat ik aanraak in goud veranderen," zegt hij. Bacchus glimlacht — een glimlach die je niet vertrouwt — en knikt.
+Het paleis van Sardis torent boven de rest van de stad uit als een aankondiging van welvaart: elke zuil is bedekt met een dunne glans, elk kozijn afgezet met een rand die te helder oogt om zomaar verf te zijn. Binnen de poorten lopen bedienden met neergeslagen ogen en snelle passen, en telkens wanneer twee van hen elkaar passeren, valt er een naam — half fluisterend, half angstig — koning Midas.
 
-IMAGE:
-midas.png
+Je vangt flarden op van wat er is gebeurd: een oude, dronken metgezel van de wijngod zelf zou verdwaald zijn in de rozentuinen van het paleis, en de koning zou hem, in plaats van hem weg te sturen, tien dagen lang als eregast hebben onthaald voordat hij hem eigenhandig terugbracht naar zijn god. Zulke gastvrijheid, zeggen de bedienden tegen elkaar, wordt zelden onbeloond gelaten.
+
+Boven de hoofdpoort naar de troonzaal staat, diep in de steen gebeiteld, een enkel Grieks woord — een titel, geen naam, alsof de steenhouwer wilde vastleggen wat deze plek regeert.
+
+PUZZLE:
+puzzle_ch1a_lidwoord
 
 CHOICES:
 
-* Blijf kijken wat er gebeurt -> CH1_A03
+* Ontcijfer het woord boven de poort -> CH1_A03
 
 END
 
 === SCENE: CH1_A03 ===
 
 TITLE:
-De Gouden Aanraking
+Silenus, de Dronken Wijze
 
 TEXT:
-Midas raakt een tak aan: goud. Een appel: goud. Hij lacht, wild, euforisch, rent door de zaal en verandert alles wat hij aanraakt — het brood op zijn bord, de beker in zijn hand, de drempel van zijn eigen deur.
+Binnen de troonzaal hoor je het verhaal in meer detail, verteld door een hoveling die duidelijk geniet van het navertellen. Silenus — oud, dik, altijd op de rand van dronkenschap, en toch, naar men zegt, doordrenkt van een wijsheid die zelfs goden soms komen raadplegen — was op een nacht zijn eigen feest ontgroeid en simpelweg weggewaggeld, het bos in, tot niemand meer wist waar hij was.
 
-PUZZLE:
-puzzle_ch1a_naamval
+Het waren Midas' eigen schaapherders die hem vonden, verstrikt in rozenstruiken, snurkend en glimlachend in zijn slaap. In plaats van hem als een indringer te behandelen, herkende Midas onmiddellijk wie voor hem lag — een metgezel en leermeester van Bacchus zelf — en beval een feestmaal dat tien dagen en tien nachten duurde. Pas daarna bracht hij Silenus eigenhandig terug naar zijn god.
+
+Nu, zo vertelt de hoveling, staat Bacchus zelf op het punt zijn opwachting te maken in de troonzaal — en een god die een gunst moet terugbetalen, is nooit een god die met lege handen komt.
 
 CHOICES:
 
-* Kijk toe hoe hij verder gaat -> CH1_A04
+* Wacht af wat Bacchus te bieden heeft -> CH1_A04
 
 END
 
 === SCENE: CH1_A04 ===
 
 TITLE:
-Wat Goud Niet Kan Voeden
+Een Gevaarlijke Wens
 
 TEXT:
-Precies zoals in de zin die je net ontrafelde raakt Rex — de koning — aurum aan: het goud. Let op hoe flavum, "geel", er in de zin bij zou passen: rex aurum flavum tangit, de koning raakt het gele goud aan — flavum buigt mee met aurum, allebei in de accusativus. Maar het gouden brood breekt niet onder Midas' tanden. De gouden wijn stroomt niet. En dan, in zijn vreugde, omarmt hij zijn dochter, die naar hem toe rent — en zij verstart, koud en glanzend, voor altijd stil.
+Bacchus verschijnt niet zozeer als dat hij binnenkomt — de lucht in de zaal verandert eerst, wordt zwaarder van de geur van rijpe druiven en omgewoelde aarde, en dan is hij er gewoon, omringd door wijnranken die zich als slingers om de zuilen lijken te vlechten. Een luipaard beweegt loom naast hem, ogen half dicht, alsof zelfs roofdieren in zijn nabijheid hun scherpte verliezen.
+
+"Vraag wat je wilt," zegt de god, en er klinkt oprechte, geamuseerde genegenheid in zijn stem — dit is geen verplichting die hem zwaar valt. Midas, koning van een van de rijkste steden die je ooit hebt gezien, met schatkamers die al overlopen van zilver en fijn bewerkt textiel, aarzelt geen moment. Zijn ogen glinsteren op een manier die je onrustig maakt.
+
+"Laat alles wat ik aanraak in goud veranderen," zegt hij. Er valt een korte stilte. Bacchus glimlacht — een glimlach die je niet helemaal vertrouwt, alsof hij iets weet wat Midas nog moet leren — en knikt.
+
+IMAGE:
+midas.png
 
 CHOICES:
 
-* Grijp Midas bij zijn schouders -> CH1_A05
+* Blijf kijken wat er gebeurt -> CH1_A05
 
 END
 
 === SCENE: CH1_A05 ===
 
 TITLE:
-Een Vloek Erkend
+De Gouden Aanraking
 
 TEXT:
-Midas zakt op zijn knieën naast het gouden standbeeld dat zijn dochter was. Zijn handen trillen boven haar gezicht, bang haar nogmaals aan te raken. Voor het eerst sinds je hem zag, ziet hij eruit als een gewone man — een vader, geen koning.
+Midas test zijn nieuwe gave voorzichtig eerst, dan steeds roekelozer. Een eikentakje in zijn hand: goud, tot in de kleinste nerf. Een steen van de vloer: goud, zwaarder dan een steen zou moeten zijn. Hij lacht, een lach die luider wordt met elke aanraking, en rent door de zaal als een kind — de drempel van zijn eigen deur, een zuil, een appel die hij van een schaal grist, allemaal veranderen ze onder zijn vingers.
+
+PUZZLE:
+puzzle_ch1a_naamval
 
 CHOICES:
 
-* Wijs hem op Bacchus, die alles zag gebeuren -> CH1_A06
+* Kijk toe hoe hij verder gaat -> CH1_A06
 
 END
 
 === SCENE: CH1_A06 ===
 
 TITLE:
-De Aanroeping
+Het Gouden Feestmaal
 
 TEXT:
-Midas heft zijn gezicht naar de wijnranken die nog altijd om de zuilen hangen — Bacchus is nooit echt weggegaan.
+Precies zoals in de zin die je net ontrafelde raakt Rex — de koning — aurum aan: het goud. Let op hoe flavum, "geel", er in de zin bij zou passen: rex aurum flavum tangit, de koning raakt het gele goud aan — flavum buigt mee met aurum, allebei in de accusativus. Midas laat een feestmaal aanrichten om zijn nieuwe gave te vieren, trots gezeten aan het hoofd van een tafel beladen met alles wat Sardis te bieden heeft.
 
-PUZZLE:
-puzzle_ch1a_vocativus
+Hij grijpt naar brood — en het verstart tussen zijn vingers voordat het zijn lippen bereikt, hard en koud en onmogelijk te breken. Hij grijpt naar zijn beker wijn, wanhopig nu, en de vloeistof zelf verandert zodra ze zijn mond raakt, een gouden druppel die tegen zijn tanden tikt in plaats van te lessen. Voor het eerst sinds de wens is uitgesproken, verschijnt er iets anders dan verrukking op zijn gezicht: paniek.
 
 CHOICES:
 
-* Wacht op het antwoord van de god -> CH1_A07
+* Kijk hoe hij zich naar zijn dochter wendt -> CH1_A07
 
 END
 
 === SCENE: CH1_A07 ===
 
 TITLE:
+Wat Goud Niet Kan Voeden
+
+TEXT:
+Zijn dochter, die het feestmaal binnenkomt en niets vermoedt van wat er zojuist is gebeurd, rent op hem af zoals ze elke avond doet — bezorgd om het geluid dat ze net hoorde, maar blij hem te zien. Midas, in een reflex die sneller is dan zijn eigen doodsangst, steekt zijn handen niet op tijd weg.
+
+Hij omarmt haar voordat hij zich kan inhouden, en zij verstart in zijn armen — koud, glanzend, voor altijd stil, een standbeeld waar zojuist nog een levend kind stond. Het geluid dat uit Midas komt, is niet menselijk meer te noemen.
+
+CHOICES:
+
+* Grijp Midas bij zijn schouders -> CH1_A08
+
+END
+
+=== SCENE: CH1_A08 ===
+
+TITLE:
+Een Vloek Erkend
+
+TEXT:
+Midas zakt op zijn knieën naast het gouden standbeeld dat zijn dochter was, zijn handen trillend boven haar gezicht, bang haar nogmaals aan te raken en toch niet in staat haar los te laten. De schatkamers die hij ooit te klein vond, de wens die hem eindeloos toescheen, liggen nu als een aanklacht om hem heen.
+
+Voor het eerst sinds je hem zag, ziet hij eruit als een gewone man — geen koning, geen bezitter van ongekende rijkdom, maar een vader die zojuist alles heeft verloren wat werkelijk telde. "Neem het terug," fluistert hij, tegen niemand in het bijzonder. "Neem het alsjeblieft terug."
+
+CHOICES:
+
+* Wijs hem op Bacchus, die alles zag gebeuren -> CH1_A09
+
+END
+
+=== SCENE: CH1_A09 ===
+
+TITLE:
+De Aanroeping
+
+TEXT:
+Midas heft zijn gezicht naar de wijnranken die nog altijd om de zuilen hangen — Bacchus is nooit echt weggegaan, dat voel je, ook al is de god zelf niet meer zichtbaar. Er is een moment waarop Midas alleen maar naar de ranken staart, zijn lippen bewegend zonder geluid, alsof hij bang is dat de woorden hem zullen verraden zoals zijn wens dat deed.
+
+Dan, met een stem die breekt op elke lettergreep, roept hij.
+
+PUZZLE:
+puzzle_ch1a_vocativus
+
+CHOICES:
+
+* Wacht op het antwoord van de god -> CH1_A10
+
+END
+
+=== SCENE: CH1_A10 ===
+
+TITLE:
 De Rivier de Pactolus
 
 TEXT:
-Bacchus, niet wreed maar ook niet haastig, wijst naar de horizon. "Was jezelf in de rivier de Pactolus," zegt hij, "en de vloek stroomt met het water mee." Midas rent, struikelt, dompelt zich onder — en wanneer hij weer opstaat, is het goud uit zijn handen verdwenen. Achter hem glinstert de rivierbedding, voorgoed doorspekt met gouden zand. Zijn dochter, zo vertelt men je later, keerde terug zodra de laatste gouden druppel zijn huid verliet.
+Bacchus verschijnt opnieuw, niet wreed maar ook niet haastig — bijna alsof hij dit al had voorzien. "Je wens was nooit het probleem," zegt hij, "je onvermogen om tevreden te zijn wel. Maar ik ben geen god die geniet van andermans verdriet. Was jezelf in de rivier de Pactolus, en de vloek stroomt met het water mee."
+
+Midas rent zoals hij nog nooit heeft gerend, struikelt over zijn eigen gouden drempel, en dompelt zich onder in de rivier die je onderweg al zag glinsteren. Wanneer hij weer opstaat, druipend en buiten adem, is het goud uit zijn handen verdwenen — en achter hem, waar het water over zijn huid stroomde, glinstert de rivierbedding voortaan doorspekt met fijne, gouden korrels. Reizigers zullen deze rivier eeuwenlang de Pactolus blijven noemen, en handelaars uit deze streek zullen nog generaties later spreken over het goud dat letterlijk uit haar water wordt gezeefd.
+
+Zijn dochter, zo vertelt men je later, terwijl Midas nog druipend aan de oever zit, keerde terug tot leven zodra de laatste gouden druppel zijn huid verliet — springlevend, ongedeerd, zonder enige herinnering aan het standbeeld dat ze even was.
 
 CODEX:
 codex_gouden_aanraking
@@ -850,92 +929,136 @@ END
 === SCENE: CH1_B01 ===
 
 TITLE:
-Onweer op de Olympos
+Metis, de Eerste Vrouw van Zeus
 
 TEXT:
-De top van de Olympos ligt onder een lucht die niet wil beslissen tussen stilte en storm. Zeus zit ineengedoken op zijn troon, beide handen tegen zijn slapen gedrukt, alsof zijn eigen schedel te klein is geworden voor wat erin zit. Een oude profetie doet de ronde onder de goden, gefluisterd meer dan gezegd: het kind van Metis zou ooit machtiger worden dan zijn vader. Zeus, uit angst, slikte haar in — en draagt sindsdien iets in zich mee dat niet stil wil blijven liggen.
+Voordat je de top van de Olympos bereikt, hoor je het verhaal al van een herder die de berg met angstige blikken observeert: over Metis, een Titanide zo doordrenkt van sluw inzicht dat zelfs Zeus haar ooit als raadgeefster nodig had — en haar uiteindelijk tot zijn eerste vrouw maakte. Ze was, toen dit allemaal begon, zwanger van hun eerste kind.
+
+Een oude profetie, afkomstig van Gaia en Ouranos zelf, waarschuwde Zeus voor wat komen zou: Metis zou eerst een dochter baren, even wijs en dapper als haar vader — en daarna een zoon die hem zou onttronen, precies zoals Zeus ooit zijn eigen vader Kronos onttroonde, en Kronos vóór hem Ouranos. Een patroon dat zich, zo leek het, eindeloos zou herhalen.
+
+Zeus, vastberaden dat patroon te breken, deed het enige wat hem logisch leek: hij slikte Metis in het geheel in, zwanger nog van hun dochter. Sindsdien, zo vertelt de herder terwijl hij zich haastig uit de voeten maakt, draagt hij iets in zich mee dat niet stil wil blijven liggen.
 
 CHOICES:
 
-* Luister naar het gefluister onder de goden -> CH1_B02
+* Beklim de laatste helling naar de top -> CH1_B02
 
 END
 
 === SCENE: CH1_B02 ===
 
 TITLE:
-Een Naam voor het Ongeborene
+Onweer op de Olympos
 
 TEXT:
-Twee nimfen fluisteren een woord tussen de zuilen door, telkens weer, bijna een bezwering: θεά. Een godin. Iets — iemand — is onderweg, en zelfs de goden weten nog niet goed hoe ze het moeten noemen.
+De top van de Olympos ligt onder een lucht die niet wil beslissen tussen doodse stilte en een naderende storm. Zeus zit ineengedoken op zijn troon, beide handen tegen zijn slapen gedrukt, alsof zijn eigen schedel te klein is geworden voor wat erin groeit. Zijn gewoonlijk donderende stem is niet meer dan een schor gekreun.
 
-PUZZLE:
-puzzle_ch1b_lidwoord
+De andere goden houden zich op afstand, fluisterend onder elkaar, niemand goed wetend wat te doen. Er is iets aan het gebeuren waar zelfs zij, onsterfelijk en machtig, geen grip op hebben — een geboorte die zich niet aan de gewone regels houdt.
 
 CHOICES:
 
-* Volg het gefluister naar Zeus' troon -> CH1_B03
+* Luister naar het gefluister onder de goden -> CH1_B03
 
 END
 
 === SCENE: CH1_B03 ===
 
 TITLE:
-De Bijl van Vulcanus
+Een Naam voor het Ongeborene
 
 TEXT:
-Vulcanus wordt erbij gehaald — de enige die ruw genoeg is voor wat nu moet gebeuren. Hij weegt zijn bijl in zijn handen, aarzelt één ademtocht lang, en heft hem dan boven Zeus' gebogen hoofd.
+Twee nimfen fluisteren een woord tussen de zuilen door, telkens weer, bijna als een bezwering die ze zelf nog niet helemaal geloven: θεά. Een godin. Iets — iemand — is onderweg, en zelfs de goden weten nog niet goed hoe ze haar moeten noemen, laat staan wat haar komst zal betekenen voor de orde die ze allemaal kennen.
 
 PUZZLE:
-puzzle_ch1b_naamval
+puzzle_ch1b_lidwoord
 
 CHOICES:
 
-* Kijk niet weg -> CH1_B04
+* Volg het gefluister naar Zeus' troon -> CH1_B04
 
 END
 
 === SCENE: CH1_B04 ===
 
 TITLE:
-Wat uit het Hoofd Breekt
+De Bijl van Vulcanus
 
 TEXT:
-Vulcanus caput aperit — Vulcanus opent het hoofd, en durum, "hard", past feilloos bij caput: vulcanus caput durum aperit, Vulcanus opent het harde hoofd, allebei in de accusativus. De klap valt. De hemel zelf lijkt even zijn adem in te houden. En dan, uit de opening, niet met bloed maar met licht: een gestalte, al volwassen, al gewapend, een speer in haar hand en een helm die vanzelf op haar plek valt.
+Vulcanus wordt erbij gehaald — de enige onder de goden die ruw genoeg is, en tegelijk precies genoeg, voor wat nu moet gebeuren. Je herkent hem aan zijn manke gang: als kind door zijn eigen moeder Hera van de Olympos gegooid vanwege die onvolkomenheid, opgevangen en grootgebracht door de zeenimf Thetis, tot hij uitgroeide tot de meest begaafde smid die de goden ooit hebben gekend.
 
-IMAGE:
-birth_of_athena.png
+Hij weegt zijn bijl in zijn handen, kijkt naar Zeus' gebogen hoofd, en aarzelt — een ademtocht lang, niet meer. Dan heft hij het wapen.
+
+PUZZLE:
+puzzle_ch1b_naamval
 
 CHOICES:
 
-* Kijk hoe ze voor het eerst ademhaalt -> CH1_B05
+* Kijk niet weg -> CH1_B05
 
 END
 
 === SCENE: CH1_B05 ===
 
 TITLE:
-Pallas Athena
+Wat uit het Hoofd Breekt
 
 TEXT:
-Ze richt zich op tot haar volle lengte, ogen grijs als een naderend onweer dat net is gaan liggen. Geen enkele god zegt iets. Zeus, nog altijd duizelig, is de eerste die zijn stem hervindt.
+Vulcanus caput aperit — Vulcanus opent het hoofd, en durum, "hard", past feilloos bij caput: vulcanus caput durum aperit, Vulcanus opent het harde hoofd, allebei in de accusativus. De klap valt, zwaarder en voller van gevolg dan enige andere klap die ooit op de Olympos is uitgedeeld. De hemel zelf lijkt even zijn adem in te houden.
 
-PUZZLE:
-puzzle_ch1b_vocativus
+En dan, uit de opening, niet met bloed maar met een licht dat je ogen doet knipperen: een gestalte, al volwassen, al volledig gewapend — een speer stevig in haar hand, een helm die zonder enige hulp precies op haar plek valt, alsof ze nooit anders bedoeld was dan om zo geboren te worden.
+
+IMAGE:
+birth_of_athena.png
 
 CHOICES:
 
-* Wacht af hoe zij antwoordt -> CH1_B06
+* Kijk hoe ze voor het eerst ademhaalt -> CH1_B06
 
 END
 
 === SCENE: CH1_B06 ===
 
 TITLE:
+Pallas Athena
+
+TEXT:
+Ze richt zich op tot haar volle lengte, ogen grijs als een naderend onweer dat net is gaan liggen. Wanneer ze haar strijdkreet slaakt, huivert de hemel zelf, en beneden op aarde, zo zul je later horen, deinden de zeeën even hoog op alsof ook zij haar wilden begroeten.
+
+Geen enkele andere god zegt iets. Ze staan als bevroren, kijkend naar deze dochter die in enkele ogenblikken is verschenen met een wijsheid en gestrengheid die ouder lijkt dan haar eigen geboorte. Zeus, nog altijd duizelig van de klap, is de eerste die zijn stem hervindt.
+
+PUZZLE:
+puzzle_ch1b_vocativus
+
+CHOICES:
+
+* Wacht af hoe zij antwoordt -> CH1_B07
+
+END
+
+=== SCENE: CH1_B07 ===
+
+TITLE:
+De Aanroeping van Zeus
+
+TEXT:
+Ze buigt haar hoofd naar hem, niet onderdanig maar erkennend — een dochter die haar vader ziet, geen onderdaan die een koning ziet. Er is iets in de manier waarop ze hem aankijkt dat verraadt dat ze al precies weet wie ze is, en wat haar plaats zal zijn tussen deze goden die haar zojuist pas hebben ontmoet.
+
+Zeus, met een mengeling van opluchting en ontzag die je zelden op zijn gezicht ziet, strekt zijn hand naar haar uit.
+
+CHOICES:
+
+* Kijk toe hoe ze haar plaats inneemt -> CH1_B08
+
+END
+
+=== SCENE: CH1_B08 ===
+
+TITLE:
 Wijsheid Neemt Haar Plaats In
 
 TEXT:
-Ze buigt haar hoofd, niet onderdanig maar erkennend — een dochter die haar vader ziet, geen onderdaan die een koning ziet. Vanaf die dag zal ze naast hem staan, niet als wapen, maar als raad: de eerste die vraagt voordat ze oordeelt. De andere goden zwijgen nog, maar jij voelt het al: er is zojuist iets in de wereld gekomen dat niet meer zal verdwijnen.
+Vanaf die dag zal ze naast Zeus staan, niet als een wapen dat hij inzet, maar als een raadgeefster die hij raadpleegt — de eerste onder de goden die vraagt voordat ze oordeelt, die nadenkt voordat ze toeslaat. Waar oorlog voor anderen enkel kracht en woede betekent, zal voor haar altijd ook strategie en overleg gelden.
+
+De andere goden zwijgen nog, onwennig met deze nieuwe aanwezigheid, maar jij voelt het al aan: er is zojuist iets in de wereld gekomen dat niet meer zal verdwijnen. Wijsheid heeft een gezicht gekregen, een speer, en een naam die weldra door heel Hellas zal worden uitgesproken — Pallas Athena.
 
 CODEX:
 codex_geboorte_athena
@@ -954,120 +1077,188 @@ END
 === SCENE: CH1_C01 ===
 
 TITLE:
-De Kille Vallei
+De Titaan die Mensen Vormde
 
 TEXT:
-Beneden, in een vallei zonder vuur, klappertanden de eerste mensen tegen de nacht. Ze hebben geen manier om zich te warmen, geen licht tegen het duister, geen manier om hun voedsel te veranderen in iets meer dan rauwe kou. Prometheus, een titaan met meer mededogen dan macht, kijkt van de Olympos naar beneden en kan niet langer toekijken.
+Onderweg naar de kille vallei hoor je, van een oude vrouw die stokoude verhalen nog kent, hoe de mensheid ooit is ontstaan. Prometheus, een titaan, koos tijdens de grote oorlog tussen goden en titanen de kant van Zeus — een verraad aan zijn eigen familie dat hem, anders dan de meeste titanen, een geprivilegieerde plek onder de nieuwe orde opleverde. Hij zag de afloop van die oorlog aankomen voordat iemand anders dat deed, zegt de vrouw, en koos dienovereenkomstig.
+
+Het was Prometheus die, samen met Athena, de eerste mensen vormde uit klei en water, en hun een sprankje van het goddelijke inblies dat andere dieren nooit hebben gekregen. Zijn broer Epimetheus kreeg de taak om aan elk levend wezen een gave te schenken — snelheid, kracht, vacht, vleugels, scherpe tanden — maar verdeelde zijn voorraad zo onbezonnen dat er, tegen de tijd dat hij bij de mensen aankwam, niets meer over was.
+
+Naakt, langzaam, zonder klauwen of vacht of vleugels, stonden de eerste mensen daar hulpelozer dan enig ander schepsel onder de zon. Prometheus, zo besluit de oude vrouw haar verhaal, heeft zich dat nooit kunnen vergeven — en dat is precies waarom hij deed wat hij deed.
 
 CHOICES:
 
-* Volg hem terwijl hij zich naar het vuur van de goden waagt -> CH1_C02
+* Ga verder naar de vallei waar de mensen nu leven -> CH1_C02
 
 END
 
 === SCENE: CH1_C02 ===
 
 TITLE:
-Het Woord voor Vuur
+De Kille Vallei
 
 TEXT:
-Bij de haard van de goden zelf brandt het, ongetemd en helder. Op de rand van de haardsteen staat, half door rook verweerd, een enkel woord gekrast.
+Beneden, in een vallei zonder enig vuur, klappertanden de eerste mensen tegen de nacht. Ze hebben geen manier om zich te warmen wanneer de zon ondergaat, geen licht tegen het duister waarin roofdieren wél goed kunnen zien, geen manier om hun voedsel te veranderen in iets meer dan rauwe, ongenietbare kou.
 
-PUZZLE:
-puzzle_ch1c_lidwoord
+Prometheus, die vanaf de rand van de Olympos naar beneden kijkt, ziet elke avond dezelfde ellende zich herhalen. Zijn eigen schepping, hulpeloos gelaten door zijn broers vergeetachtigheid, overleeft nauwelijks de nachten. Hij kan niet langer toekijken zonder in te grijpen — ook al weet hij precies wat voor risico dat met zich meebrengt.
 
 CHOICES:
 
-* Kijk hoe Prometheus een vonk verbergt -> CH1_C03
+* Volg hem terwijl hij zich naar het vuur van de goden waagt -> CH1_C03
 
 END
 
 === SCENE: CH1_C03 ===
 
 TITLE:
-De Diefstal
+Het Woord voor Vuur
 
 TEXT:
-Prometheus verbergt een enkele gloeiende vonk in de holte van een vijgentakstengel en glipt terug naar de aarde, sneller dan een god hem zou toevertrouwen. Beneden, in de vallei, geeft hij het vuur aan de mensen. Voor het eerst zie je licht op hun gezichten dat niet van de maan komt — verwondering, en iets wat op hoop begint te lijken.
+Bij de haard van de goden zelf, hoog op de Olympos, brandt het vuur ongetemd en helder, gevoed dag en nacht zonder dat iemand het ooit hoeft aan te wakkeren. Op de rand van de haardsteen staat, half door rook verweerd, een enkel woord gekrast — alsof zelfs de goden ooit de behoefte voelden om te benoemen wat hen zo warm houdt.
+
+Prometheus sluipt dichterbij, zijn hart bonzend op een manier die niet bij een onsterfelijke titaan lijkt te passen.
+
+PUZZLE:
+puzzle_ch1c_lidwoord
 
 CHOICES:
 
-* Kijk toe hoe de hemel dit opmerkt -> CH1_C04
+* Kijk hoe Prometheus een vonk verbergt -> CH1_C04
 
 END
 
 === SCENE: CH1_C04 ===
 
 TITLE:
-Zeus' Antwoord
+De Diefstal
 
 TEXT:
-Zeus ziet de vuren beneden oplichten als een belediging die hij niet ongestraft kan laten. Zijn straf voor Prometheus is beroemd en wreed — maar voor de mensheid bedenkt hij iets subtielers: een geschenk dat een vloek blijkt te zijn. Hij laat Pandora maken, mooi en nieuwsgierig, en geeft haar een verzegelde doos mee die ze, zo weet iedereen, ooit zal openen.
+Prometheus verbergt een enkele gloeiende vonk in de holte van een vijgentakstengel — een plant waarvan het merg smeult zonder de vlam zelf te voeden, precies genoeg om een vonk levend te houden tijdens een lange tocht. Hij glipt terug naar de aarde, sneller en stiller dan een god hem ooit zou toevertrouwen.
 
-PUZZLE:
-puzzle_ch1c_naamval
+Beneden, in de vallei, geeft hij het vuur aan de mensen die er het hardst naar smachtten. Voor het eerst zie je licht op hun gezichten dat niet van de maan komt: verwondering eerst, dan iets wat verdacht veel op hoop begint te lijken. Ze leren binnen een enkele nacht hoe ze hout moeten stoken, hoe ze vlees moeten roosteren, hoe ze een cirkel om de vlam moeten vormen tegen de kou.
 
 CHOICES:
 
-* Kijk toe op het moment dat ze het deksel licht -> CH1_C05
+* Kijk toe hoe de hemel dit opmerkt -> CH1_C05
 
 END
 
 === SCENE: CH1_C05 ===
 
 TITLE:
-Wat uit de Doos Ontsnapt
+Zeus' Woede en Twee Straffen
 
 TEXT:
-Pandora pyxidem aperit — Pandora opent de doos, en novam, "nieuw", buigt keurig mee met pyxidem: pandora pyxidem novam aperit, Pandora opent de nieuwe doos, allebei in de accusativus. Het deksel klikt open. Er stroomt geen licht naar buiten, maar schaduwen — ziekte, verdriet, oorlog, honger — die zich in de lucht oplossen en de wereld in trekken voor ze te grijpen zijn.
+Zeus ziet, vanaf zijn troon, de vuren beneden oplichten als stipjes die er niet hadden mogen zijn — een belediging, een overtreding van de grens tussen goden en mensen die hij niet ongestraft kan laten. Zijn woede, wanneer hij begrijpt wat er is gebeurd en wie erachter zit, is zo groot dat de bergen zelf ervan trillen.
 
-IMAGE:
-pandora.png
+Voor Prometheus bedenkt hij een straf die eeuwig zal duren: vastgeketend aan een rots, zijn lever elke dag opnieuw opgegeten door een adelaar, en elke nacht weer aangroeiend zodat de kwelling nooit eindigt. Maar voor de mensheid, die hij evenzeer wil straffen voor het ontvangen van wat niet voor hen bedoeld was, bedenkt hij iets subtielers — een geschenk dat zich pas later als een vloek zal ontpoppen.
 
 CHOICES:
 
-* Kijk of er nog iets in de doos achterblijft -> CH1_C06
+* Kijk hoe dat geschenk vorm krijgt -> CH1_C06
 
 END
 
 === SCENE: CH1_C06 ===
 
 TITLE:
-Wat Achterblijft
+Pandora, het Alomgeschonken Geschenk
 
 TEXT:
-Op de bodem, half verscholen tussen de schaduwen die net zijn ontsnapt, blijft iets kleins achter: een zacht, warm licht dat niet wegvliegt. Elpis. Hoop. Pandora sluit het deksel voordat ook zij verdwijnt — en zo blijft, te midden van alle kwaad dat nu over de wereld waart, iets achter waar de mensen zich aan vast kunnen houden.
+Zeus beveelt Vulcanus haar te maken zoals ooit de eerste mensen werden gemaakt: uit klei en water, gevormd tot een vrouw van verbluffende schoonheid. Maar waar Prometheus zijn schepselen enkel een vonk van het goddelijke meegaf, geeft elke god en godin op de Olympos haar nu iets van zichzelf — Aphrodite schenkt haar onweerstaanbare gratie, Hermes een gladde tong en de gave om te misleiden, Athena vaardigheid in het weven van de fijnste stof.
+
+Zo krijgt ze een naam die simpelweg beschrijft wat ze is: Pandora, "zij die alles geschonken kreeg" — pan, alles, en dooron, geschenk. Een naam die klinkt als een zegen, en die evengoed als een waarschuwing gelezen kan worden.
+
+Zeus geeft haar een verzegelde doos mee wanneer hij haar naar de aarde stuurt, met een uitdrukkelijke instructie: nooit, onder geen enkele omstandigheid, mag ze hem openen.
 
 CHOICES:
 
-* Ga naar Prometheus, geketend om wat hij deed -> CH1_C07
+* Volg Pandora naar de mensenwereld -> CH1_C07
 
 END
 
 === SCENE: CH1_C07 ===
 
 TITLE:
-Geketend, Niet Gebroken
+De Doos die Ze Meekreeg
 
 TEXT:
-Hoog tegen een rots vind je Prometheus, vastgeketend door Zeus' bevel, zijn straf net begonnen aan wat een eeuwigheid dreigt te worden. Beneden hem, onzichtbaar vanaf de rots maar voelbaar tot in zijn botten, branden duizend kleine vuren in de valleien. Mensen die klappertandden, warmen zich nu. Mensen die niets hadden, hebben licht. Ergens tussen hen in draagt iemand, zonder het te weten, nog altijd Elpis met zich mee.
+Pandora wordt naar Epimetheus gestuurd — de broer die de mensheid ooit vergat te bedelen, en die nu, stralend van geluk over dit onverwachte geschenk, haar met open armen ontvangt. Prometheus had hem uitdrukkelijk gewaarschuwd: aanvaard nooit een geschenk van Zeus, wat het ook is. Maar Epimetheus, betoverd door haar schoonheid, vergeet die waarschuwing zodra hij haar ziet.
+
+Pandora zelf voelt de doos als een gewicht dat ze overal met zich meedraagt, een nieuwsgierigheid die met elke dag groeit. Ze weet niet precies wat erin zit — alleen dat het haar op een dag te veel zal worden om niet te kijken.
 
 PUZZLE:
-puzzle_ch1c_vocativus
+puzzle_ch1c_naamval
 
 CHOICES:
 
-* Beantwoord hun roep -> CH1_C08
+* Kijk toe op het moment dat ze het deksel licht -> CH1_C08
 
 END
 
 === SCENE: CH1_C08 ===
 
 TITLE:
+Wat uit de Doos Ontsnapt
+
+TEXT:
+Pandora pyxidem aperit — Pandora opent de doos, en novam, "nieuw", buigt keurig mee met pyxidem: pandora pyxidem novam aperit, Pandora opent de nieuwe doos, allebei in de accusativus. Het deksel klikt open na weken van weerstand, en op hetzelfde moment beseft ze wat ze heeft gedaan — maar te laat.
+
+Er stroomt geen licht naar buiten, maar schaduwen: ziekte, verdriet, oorlog, honger, en ontelbare andere kwalen die zich in de lucht oplossen en de wereld in trekken voordat ook maar iemand ze kan grijpen of tegenhouden. Pandora deinst achteruit, haar handen tegen haar mond, terwijl de eerste ellende die de mensheid ooit zal kennen zich over de aarde verspreidt.
+
+IMAGE:
+pandora.png
+
+CHOICES:
+
+* Kijk of er nog iets in de doos achterblijft -> CH1_C09
+
+END
+
+=== SCENE: CH1_C09 ===
+
+TITLE:
+Wat Achterblijft
+
+TEXT:
+Op de bodem, half verscholen tussen de laatste schaduwen die nog naar buiten kringelen, blijft iets kleins achter: een zacht, warm licht dat niet weg wil vliegen zoals de rest. Elpis. Hoop. Het enige wat Zeus, om redenen die niemand ooit helemaal heeft doorgrond, in de doos achterliet toen hij haar verzegelde.
+
+Pandora, nog trillend van wat ze heeft aangericht, sluit het deksel voordat ook dit laatste beetje licht kan ontsnappen — en zo blijft, te midden van alle kwaad dat nu over de wereld waart, tenminste iets achter waar de mensen zich aan vast kunnen houden, wat er ook gebeurt.
+
+CHOICES:
+
+* Ga naar Prometheus, geketend om wat hij deed -> CH1_C10
+
+END
+
+=== SCENE: CH1_C10 ===
+
+TITLE:
+Geketend, Niet Gebroken
+
+TEXT:
+Hoog tegen een rots, ver van de vallei waar alles begon, vind je Prometheus — vastgeketend door Zeus' eigen bevel, zijn straf nog maar net begonnen aan wat een eeuwigheid dreigt te worden. Een adelaar cirkelt al boven hem, wachtend tot de avond valt om zijn dagelijkse, gruwelijke maaltijd te beginnen.
+
+Beneden hem, onzichtbaar vanaf de rots maar voelbaar tot in zijn eigen botten, branden inmiddels duizend kleine vuren verspreid over de valleien. Mensen die ooit klappertandden, warmen zich nu. Mensen die niets hadden dan duisternis, hebben licht om bij te koken, te werken, samen te komen. Ergens tussen hen in draagt iemand, zonder het ooit te beseffen, nog altijd Elpis met zich mee.
+
+PUZZLE:
+puzzle_ch1c_vocativus
+
+CHOICES:
+
+* Beantwoord zijn blik -> CH1_C11
+
+END
+
+=== SCENE: CH1_C11 ===
+
+TITLE:
 Vuur en Hoop
 
 TEXT:
-Prometheus glimlacht, ondanks de ketenen, ondanks de rots, ondanks alles. "Het was het waard," zegt hij zacht — niet tegen jou, niet tegen de goden, maar tegen niemand in het bijzonder, alsof hij het al heel lang tegen zichzelf zegt. Vuur en hoop: twee dingen die de mensheid nooit meer zal kwijtraken, wat de goden ook nog bedenken.
+Prometheus glimlacht, ondanks de ketenen, ondanks de rots, ondanks de adelaar die hij elke avond opnieuw zal moeten doorstaan. "Het was het waard," zegt hij zacht — niet tegen jou, niet tegen de goden, maar tegen niemand in het bijzonder, alsof hij deze woorden al heel lang tegen zichzelf herhaalt om vol te kunnen houden.
+
+Vuur en hoop: twee dingen die de mensheid, wat de goden ook nog mogen bedenken om haar te straffen of te beproeven, nooit meer zal kwijtraken. Je daalt af van de rots met dat besef stevig in je meegedragen, terug naar een wereld die voorgoed is veranderd door wat één titaan bereid was te riskeren.
 
 CODEX:
 codex_doos_van_pandora
