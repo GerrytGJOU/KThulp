@@ -290,6 +290,7 @@ const ACHIEVEMENTS_DEF = [
 const ACH_CATEGORIES = {
   algemeen: "Algemeen",
   klassiek: "Klassieke Spellen",
+  chronica: "Chronica Classica",
   battle:   "Battle Mode",
   mastery:  "Klasse-mastery",
   boss:     "Boss Battle",

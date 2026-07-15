@@ -207,7 +207,7 @@ function spTitlesSectionHTML(earnedIds, equippedId){
         <span style="font-size:20px">${on?"✅":"⭐"}</span>
         <div style="flex:1">
           <div style="font-weight:700">${esc(t.nm)}</div>
-          <div class="note" style="margin:2px 0">${esc(t.desc)}</div>
+          <div class="note" style="margin:2px 0">${esc(t.ds)}</div>
           ${t.bonus?`<div class="note" style="color:var(--hi)">⚡ ${esc(t.bonus.desc)}</div>`:""}
         </div>
       </div>
