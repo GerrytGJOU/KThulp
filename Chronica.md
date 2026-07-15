@@ -58,7 +58,7 @@ browser):
 | Campagnekaart-metadata (Proloog + 19 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 2+ nog niet geschreven |
 | **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen hebben er een (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) |
 | Gemini-huisstijl-Gem (stripstijl) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
-| **Wereldkaart** — geïllustreerd paneel + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — paneel "aegean" (Latium/Olympos/Sardis), pin-posities nog te verfijnen op het echte plaatje |
+| **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen getekend en schakelbaar via tabblad-rij (aegean: Latium/Olympos/Sardis; western: nog geen pins, hoofdstukken nog te bouwen; eastern: Kaukasus) |
 | Audio-assetmappen | `certamen/assets/chronica/music/`, `certamen/assets/chronica/sfx/` | ✅ mappen bestaan (music met 1e Suno-track) |
 
 ---
@@ -325,11 +325,15 @@ trackingsysteem) — dus pas na bezoek, per saveslot (elke slot speelt zijn
 eigen route). De kaart bestaat uit **geïllustreerde panelen** (Gemini,
 stripstijl "antieke atlas", `SP_MAP_PANELS`/`SP_MAP_LOCATIONS` in
 singleplayer-data.js) — de volledige wereld (Britannia tot India) is
-verdeeld in panelen zodat elk leesbaar blijft. Nu alleen paneel "aegean"
-getekend (`panel1_aegean.png`, dekt Proloog + Hoofdstuk 1: Latium, Olympos,
-Sardis); de twee andere panelen ("western": Sicilië/Carthago/Gades/Gallië,
-"eastern": Kaukasus/Perzië/Egypte/India) volgen zodra die hoofdstukken
-gebouwd worden. Twee CC-gelicenseerde referentiekaarten (Aeneas- en
+verdeeld in panelen zodat elk leesbaar blijft. Alle drie panelen zijn nu
+getekend en met een tabblad-rij (boven de kaart in `SCREENS.spWorldMap`)
+schakelbaar: "aegean" (`panel1_aegean.png`, dekt Proloog + Hoofdstuk 1: Latium,
+Olympos, Sardis), "western" (`panel2_western.png`, Sicilië/Carthago/Gades/
+Hesperiden/Alpen/Gallië — hoofdstukken nog te bouwen) en "eastern"
+(`panel3_eastern.png`, Kaukasus/Perzië/Egypte/India). Op "eastern" staat al
+één pin (Kaukasus, ontgrendeld door `codex_doos_van_pandora` uit Hoofdstuk 1
+lijn C); de overige plekken op western/eastern volgen zodra hun hoofdstukken
+en codex-entries bestaan. Twee CC-gelicenseerde referentiekaarten (Aeneas- en
 Odysseus-reis, resp. CC BY 3.0/Rcsprinter123 en CC BY-SA 4.0/Giulia
 Zoccarato) zijn als geografisch naslagwerk gebruikt bij het ontwerpen — niet
 overgenomen, dus geen attributieplicht.
@@ -379,12 +383,10 @@ In afgesproken bouwvolgorde:
    zodra de speler zijn keuze heeft gemaakt (het is singleplayer). Gekoppeld via
    de `COMBAT:`-sectie. Dit is óók het moment om de eretitel-`bonus` (§6) écht in
    de berekening te verwerken.
-2. **Overige kaartpanelen + `CONDITION`-mechanisme** — de kaart zelf is
-   gebouwd (§7, `SCREENS.spWorldMap`); alleen paneel "aegean" is al getekend.
-   De panelen "western" en "eastern" volgen zodra die hoofdstukken gebouwd
-   worden. Daarnaast: NPC's/scènes die conditioneel reageren op de
-   al-gebouwde `flags` (bv. een personage dat later verwijst naar welke
-   Hoofdstuk-1-lijn je koos).
+2. **`CONDITION`-mechanisme** — de kaart zelf is gebouwd (§7,
+   `SCREENS.spWorldMap`), alle drie panelen zijn getekend en schakelbaar; nog
+   open: NPC's/scènes die conditioneel reageren op de al-gebouwde `flags`
+   (bv. een personage dat later verwijst naar welke Hoofdstuk-1-lijn je koos).
 3. **Audio-hook** — `MUSIC:`/`SFX:` daadwerkelijk afspelen (mp3, uit Suno) met de
    iPad-eis dat geluid pas ná een gebruikersactie mag starten. Mappen staan
    klaar in `certamen/assets/chronica/`.

@@ -520,10 +520,12 @@ function spRenderLanding(){
    Codex is PER SAVESLOT (net als de rest van SP_STATE), dus de kaart toont
    de ontdekkingen van de actieve slot — logisch, want elke slot is een eigen
    doorspeling met een eigen route door het verhaal. ---- */
+let SP_MAP_CURRENT_PANEL = "aegean";
 SCREENS.spWorldMap = function(){
   document.body.classList.remove("greek");
   if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
-  const panelId = "aegean"; // enige getekende paneel tot nu toe
+  if(!SP_MAP_PANELS[SP_MAP_CURRENT_PANEL]) SP_MAP_CURRENT_PANEL = Object.keys(SP_MAP_PANELS)[0];
+  const panelId = SP_MAP_CURRENT_PANEL;
   const panel = SP_MAP_PANELS[panelId];
   const codex = SP_STATE.codex||[];
   const pins = SP_MAP_LOCATIONS
@@ -531,8 +533,12 @@ SCREENS.spWorldMap = function(){
     .map(loc=>`<button class="sp-map-pin" style="left:${loc.x}%;top:${loc.y}%" title="${esc(loc.nm)}" onclick="spShowLocationInfo('${loc.id}')">
       <span class="sp-map-pin-dot"></span><span class="sp-map-pin-label">${esc(loc.nm)}</span>
     </button>`).join("");
+  const tabs = Object.keys(SP_MAP_PANELS).map(pid=>
+    `<button class="btn ${pid===panelId?"btn-primary":"btn-ghost"}" style="flex:1" onclick="spSwitchMapPanel('${pid}')">${esc(SP_MAP_PANELS[pid].nm.split(",")[0])}</button>`
+  ).join("");
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Wereldkaart</h2></div>
+  <div class="panel" style="display:flex;gap:8px">${tabs}</div>
   <div class="panel"><p class="note">${esc(panel.nm)} — nieuwe plekken verschijnen zodra je ze in het verhaal hebt bezocht.</p></div>
   <div class="panel" style="padding:0;overflow:hidden;position:relative">
     <img src="assets/chronica/maps/${esc(panel.img)}" alt="" style="width:100%;display:block" onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
@@ -541,6 +547,10 @@ SCREENS.spWorldMap = function(){
   </div>
   ${foot()}`);
 };
+function spSwitchMapPanel(pid){
+  SP_MAP_CURRENT_PANEL = pid;
+  go("spWorldMap");
+}
 function spShowLocationInfo(id){
   const loc = SP_MAP_LOCATIONS.find(l=>l.id===id);
   if(loc) toast(loc.nm, loc.desc);
