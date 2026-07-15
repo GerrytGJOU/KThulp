@@ -1,7 +1,7 @@
 /* ============================================================================
    CHRONICA CLASSICA — SINGLE PLAYER MODE (engine)
    ----------------------------------------------------------------------------
-   Parseert en speelt de CNS-scènes uit singleplayer-data.js (SP_CH1_CNS).
+   Parseert en speelt de CNS-scènes uit singleplayer-data.js (SP_PROLOOG_CNS).
    Het CNS-tekstformaat en de parser/resolver hieronder zijn overgenomen uit
    het meegeleverde werkende prototype ("chronica-narrative-engine.html"),
    aangepast om te draaien BINNEN de bestaande certamen-app in plaats van als
@@ -279,7 +279,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = CNSParser.parse(SP_CH1_CNS);
+const SP_SCENES = CNSParser.parse(SP_PROLOOG_CNS);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{} });
 
 /* ---- SPELERSTATE ---- */
@@ -392,6 +392,10 @@ async function spResumeSlot(n){
   SP_ACTIVE_SLOT = n;
   const slots = await spLoadAllSlots();
   SP_STATE = Object.assign(SP_EMPTY_STATE(), slots[n]||{});
+  // Vangnet: verwijst een oude save naar een scène-id die niet meer bestaat
+  // (bv. na het hernoemen van CH1_ → PRO_), begin dan netjes bij het begin
+  // i.p.v. door te sturen naar een dode node.
+  if(SP_STATE.node && !SP_SCENES.has(SP_STATE.node)) SP_STATE.node = [...SP_SCENES.keys()][0];
   if(!SP_STATE.gender){ spRenderGenderPick(); return; }
   spRenderLanding();
 }
