@@ -242,6 +242,27 @@ const SP_CLASS_REWARD_MAP = {
   "Cavalerist":   "cavalerie",
 };
 
+/* ---- COMBAT AVATAR — ontgrendelingen ----
+   Chronica Classica hergebruikt Battle Mode se pixel-sprite-avatar (dezelfde
+   PNG-lagen uit assets/sprites/, BM_AVATAR_PARTS voor labels/iconen), maar
+   met een EIGEN ontgrendellogica: geen level/mastery/munten, maar VERHAAL.
+   - SP_AVATAR_FREE_PARTS: categorieën die je vanaf het begin vrij kiest
+     (uiterlijk, geen gevechtsuitrusting) — alle opties, ongeacht wat
+     BM_AVATAR_PARTS voor Battle Mode als level-gated aanmerkt.
+   - Startuitrusting: armor "vodden" + wapen "hooivork" (de boer uit de
+     proloog) — altijd beschikbaar, geen aparte entry nodig.
+   - SP_AVATAR_STORY_UNLOCKS: elke andere uitrustingsoptie moet hier expliciet
+     aan een verdiende eretitel (of later: flag) gekoppeld zijn, anders blijft
+     hij op slot ("ontgrendelt later in het verhaal"). Nu alleen de drie
+     wapens die je letterlijk in de proloog oppakt; nieuwe hoofdstukken breiden
+     dit uit naarmate het verhaal nieuwe uitrusting oplevert. ---- */
+const SP_AVATAR_FREE_PARTS = ["geslacht","huid","haar","haarkleur","baard"];
+const SP_AVATAR_STORY_UNLOCKS = {
+  "wapen:boog":   { title:"boogschutter_orakel" },
+  "wapen:speer":  { title:"hopliet_orakel" },
+  "wapen:zwaard": { title:"cavalerist_orakel" }, // cavalerist: dichtstbijzijnde sprite (geen ruitersporen-wapen)
+};
+
 /* ---- PROLOOG: "DE BOER VAN LATIUM" (scène-ID's PRO_###) ----
    De proloog gebruikt het prefix PRO_; hoofdstuk 1 e.v. krijgen CH1_/CH2_ enz.
    (was eerder ook CH1_, wat botste met het echte hoofdstuk 1 — hernoemd).

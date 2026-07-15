@@ -41,7 +41,7 @@ browser):
 | Eenmalige gender-keuze (voornaamwoorden, géén naam) | `certamen/singleplayer.js` (`spRenderGenderPick`), `SP_PRONOUNS`/`SP_GENDER_OPTIONS` | ✅ werkend |
 | **3 saveslots** per leerling | `certamen/singleplayer.js` (`SCREENS.spSlots`), `SP_MAX_SLOTS` | ✅ werkend — beginnen/verdergaan/verwijderen (met bevestiging) |
 | **Offline-first opslag** (localStorage primair, Firebase spiegel) | `certamen/singleplayer.js` (`spSaveProgress`/`spLoadAllSlots`) | ✅ werkend — speelbaar zonder inloggen/internet |
-| **Combat Avatar** (de boer: vodden + hooivork) + editor | `certamen/singleplayer.js` (`SCREENS.spAvatarEdit`, `spAvatar*`) | ✅ werkend — hergebruikt `BM_AVATAR_PARTS`/`bmAvatarSVG`/`bmIsUnlocked` |
+| **Chronica Classica Avatar** (de boer: vodden + hooivork), pixel-sprite, verhaal-ontgrendeling | `certamen/singleplayer.js` (`SCREENS.spAvatarEdit`, `spAvatar*`, `spAvatarIsUnlocked`) | ✅ werkend — rendert met `renderPixelHeroPreview`/`_bmPixelLayers` (battle.js), niet `bmAvatarSVG` |
 | Beide avatars naast elkaar op profiel | `certamen/battle.js` (`SCREENS.battleProfile`) | ✅ werkend |
 | **Eretitels** (verdiend via keuzes/voortgang) | `certamen/singleplayer.js` (`spAwardTitle`/`SP_TITLES`), CNS-sectie `EERETITEL:` | ✅ werkend — account-breed, offline-first |
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
@@ -145,7 +145,7 @@ enkele NPC verwijst er nog in de derde persoon naar de speler). **Géén
 inlog-verplichting**.
 
 - **localStorage is de bron van waarheid.** Keys: `certamen_chronica_slots`
-  (de 3 saveslots), `certamen_chronica_avatar` (Combat Avatar),
+  (de 3 saveslots), `certamen_chronica_avatar` (Chronica Classica Avatar),
   `certamen_chronica_titles` (behaalde eretitels),
   `certamen_chronica_equipped_title` (gekozen eretitel).
 - **Firebase is alleen een best-effort spiegel**, en alleen als er is ingelogd
@@ -173,18 +173,39 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
 
 ---
 
-## 5. Combat Avatar & profiel
+## 5. Chronica Classica Avatar & profiel
 
-- De Combat Avatar is een **apart** avatar-object, los van `BM_IDENT.avatar`,
-  maar hergebruikt het volledige Battle Mode-avatarsysteem
-  (`BM_AVATAR_PARTS`/`bmAvatarSVG`/`bmIsUnlocked`/`bmReqText`) mét dezelfde
-  ontgrendel-regels (niveau/mastery/munten uit Battle Mode).
-- **Startpunt = de boer:** `spAvatarDefaults()` = `bmAvatarDefaults()` met
-  `wapen:"hooivork"` (vodden komt al uit de default).
-- Editor `SCREENS.spAvatarEdit` werkt offline; coin-onderdelen zijn hier alleen
-  te **bekijken** (kopen blijft in Battle Mode).
+- De Chronica Classica Avatar is een **apart** avatar-object, los van
+  `BM_IDENT.avatar`, maar rendert met Battle Mode se ECHTE combat-weergave:
+  de gelaagde **pixel-sprite** (PNG-lagen uit `assets/sprites/`, samengesteld
+  door `_bmPixelLayers()`/`renderPixelHeroPreview()`/`renderPixelHeroIcon()` in
+  `battle.js`) — niet de oudere procedurele `bmAvatarSVG()`-paperdoll (die is
+  in Battle Mode zelf al vervangen; zie de toelichting bij
+  `renderPixelHeroIcon()`). `BM_AVATAR_PARTS` (labels/iconen/sprite-keys) wordt
+  hergebruikt, maar de **ontgrendellogica is volledig anders**: geen
+  niveau/mastery/munten, maar **verhaal**.
+- **Altijd vrij te kiezen** (`SP_AVATAR_FREE_PARTS`): geslacht, huidskleur,
+  haar, haarkleur, gezichtshaar — puur uiterlijk, geen gevechtsuitrusting.
+- **Startuitrusting = de boer:** `spAvatarDefaults()` = `bmAvatarDefaults()`
+  met `wapen:"hooivork"` (armor `"vodden"` komt al uit de default) — deze twee
+  zijn altijd beschikbaar, ongeacht voortgang.
+- **Overige uitrusting (harnas, helm, schild, wapen, cape, …) ontgrendelt via
+  het verhaal**, niet via Battle Mode-niveau/munten: `SP_AVATAR_STORY_UNLOCKS`
+  koppelt elke ontgrendelbare optie aan een verdiende eretitel (later ook:
+  flags). Nu alleen de drie wapens die de proloog's klassekeuze letterlijk
+  oplevert (`wapen:boog`↔`boogschutter_orakel`, `wapen:speer`↔
+  `hopliet_orakel`, `wapen:zwaard`↔`cavalerist_orakel` — cavalerist heeft geen
+  eigen ruitersporen-sprite, vandaar het zwaard). Alles zonder eigen entry
+  blijft op slot ("ontgrendelt later in het verhaal") tot een volgend
+  hoofdstuk het narratief oplevert.
+- Editor `SCREENS.spAvatarEdit` werkt offline; de hoofdvoorbeeld-render is de
+  pixel-sprite (`renderPixelHeroPreview(av,true)`), per-optie-thumbnails zijn
+  de kleine SVG-preview (zelfde patroon als `SCREENS.battleAvatarEdit`).
+- **Alleen zichtbaar tijdens Chronica-gevechten en op het profiel** — bewust
+  NIET op het slotscherm (`SCREENS.spSlots`), dat is geen combat-context.
 - **Beide avatars staan naast elkaar op het profiel** (`SCREENS.battleProfile`),
-  elk met een eigen "aanpassen"-knop.
+  elk onder zijn eigen kop ("Avatar" / "Chronica Classica Avatar") met een
+  eigen "aanpassen"-knop.
 
 ---
 
@@ -233,6 +254,28 @@ De **wereldkaart** opent mee met de voortgang (nieuwe locaties verschijnen pas
 na bezoek); dezelfde locatie kan in verschillende tijdlagen terugkomen. Keuzes
 uit vroege hoofdstukken mogen later terugkomen via een `flags`/`reputatie`-
 systeem — **nog te bouwen** (§8).
+
+### 7.1 Vertakking binnen een hoofdstuk (vastgelegd bij Hoofdstuk 1)
+
+Een hoofdstuk kan uit **meerdere parallelle plotlijnen** bestaan die *niet*
+convergeren (Hoofdstuk 1: drie lijnen — "Het Goud van Midas", "De Naamloze
+Stoet", "De Aanroeping der Goden"). De regels:
+
+- **Educatieve gate boven alles:** je komt een volgend hoofdstuk pas in wanneer
+  je álle grammatica van het huidige hoofdstuk hebt verwerkt. Geen progressie
+  zonder de lesstof.
+- **Daarom leert elke plotlijn de vólledige grammatica van het hoofdstuk** (in
+  Hoofdstuk 1: zn/bn/lidwoord + nom./acc./voc.), telkens in een ander mythisch
+  jasje. Eén plotlijn voltooien = alle stof gehad = **door naar het volgende
+  hoofdstuk**. De andere lijnen zijn optioneel (rijkere wereld + replay met de
+  3 saveslots; ideaal om ook de andere klassen te spelen).
+- **Keuzes werken door.** De gemaakte keuzes én wélke plotlijn je koos worden
+  als **flags** bewaard; latere hoofdstukken/NPC's kunnen erop reageren. (Het
+  flag-systeem zelf is de eerste bouwsteen, zie §8; NPC's die er conditioneel
+  op reageren vragen daarnaast een `CONDITION`-mechanisme — een volgende stap.)
+- Dit is de bewuste keuze i.p.v. "alle drie de lijnen verplicht": het houdt
+  echte branching + een korte kritische route voor casual spelers, zonder de
+  educatieve gate los te laten.
 
 ---
 
