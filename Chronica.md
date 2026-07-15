@@ -111,10 +111,19 @@ END
 > YAML-dialect uit `chronica-classica-architectuur.md`. Het geteste prototype
 > (`chronica-narrative-engine.html`) gebruikte dit formaat; dat is leidend.
 
+**Vertelperspectief = tweede persoon.** De verteltekst spreekt de speler
+rechtstreeks aan met **"je"/"jij"** — de speler is letterlijk de hoofdpersoon,
+wat immersiever is dan een hij/zij-verteller. In narration staan dus **geen**
+voornaamwoord-templates.
+
 **Voornaamwoord-templates** (`SpTextResolver`): `{subject}`/`{object}`/
-`{possessive}` en de hoofdletter-varianten `{subject_cap}` enz., opgelost via
-`SP_PRONOUNS` op basis van de gekozen gender. **Géén `{player.name}`** — de
-speler is naamloos (Game Bible).
+`{possessive}` + de hoofdletter-varianten `{subject_cap}` enz., opgelost via
+`SP_PRONOUNS` op basis van de gekozen gender. Deze zijn er **alleen voor
+dialoog**: wanneer een personage in de derde persoon óver de speler praat
+("ik zie dat {subject} moe is" → hij/zij/die). De speler kiest die gender één
+keer vóór het verhaal; in de proloog heeft het nog geen zichtbaar effect (geen
+enkele NPC verwijst er nog in de derde persoon naar de speler). **Géén
+`{player.name}`** — de speler is naamloos (Game Bible).
 
 ---
 
@@ -245,11 +254,14 @@ In afgesproken bouwvolgorde:
 Bewuste keuzes, met de reden erbij, zodat ze niet per ongeluk worden
 teruggedraaid:
 
-- **Naamloze speler, wél gender.** De Game Bible wil een naamloze boer ("juist
-  daardoor kan iedere leerling zichzelf in hem herkennen"). Gender wordt wél één
-  keer gekozen, uitsluitend voor correcte voornaamwoorden (hij/zij/die). Dit
-  wijkt bewust af van het aangeleverde testscenario, dat `{player.name}` + een
-  naaminvoer gebruikte.
+- **Naamloze speler, tweede persoon, wél gender-voor-dialoog.** De Game Bible
+  wil een naamloze boer ("juist daardoor kan iedere leerling zichzelf in hem
+  herkennen"). De **verteltekst spreekt de speler direct aan met "je"/"jij"**
+  (immersiever — de speler ís de hoofdpersoon). De gender-keuze (hij/zij/die)
+  blijft bestaan maar dient **alleen voor dialoog**, wanneer personages in de
+  derde persoon óver de speler praten. Dit wijkt bewust af van het aangeleverde
+  testscenario, dat `{player.name}` + een naaminvoer + een hij/zij-verteller
+  gebruikte.
 - **Geïntegreerd in de bestaande app, geen losse sub-app.** Chronica draait in
   `certamen/index.html` naast Battle Mode/Total War, gebruikt hetzelfde
   `BM_IDENT`-profiel en dezelfde core-helpers. Dit wijkt bewust af van de
@@ -271,14 +283,25 @@ teruggedraaid:
 
 ## 10. Rolverdeling bij contentbouw
 
-- **Claude (Code):** architectuur, engine, puzzelmechanieken, combat-koppeling,
-  kaart/codex/profiel, en het schrijven van de prompts voor ChatGPT en Gemini.
-- **ChatGPT:** proza (scène-teksten, NPC-dialoog) — per scène een prompt met
-  karakterstem (Character Bible), pijler-eis en verhaalritme.
+- **Claude (Code) = primaire schrijver.** Naast architectuur, engine,
+  puzzelmechanieken, combat-koppeling en kaart/codex/profiel schrijft Claude óók
+  de scèneteksten en NPC-dialoog **rechtstreeks in de CNS-bestanden**. Reden:
+  goede scènes moeten tegelijk de Game Bible-regels, de karakterstemmen, de
+  grammaticaprogressie (Pallas/Minerva), de branching/flags én het CNS-formaat
+  respecteren — en consistent blijven met alle eerdere scènes. Die volledige
+  context zit in de bouwsessie; direct-naar-CNS schrijven voorkomt
+  overschrijf-rondes en drift tussen scènes.
+- **ChatGPT:** optionele **tweede pas** — een scène een andere flavour geven of
+  als second opinion. Niet langer de primaire schrijver (bewuste wijziging
+  t.o.v. de oorspronkelijke werkafspraak).
 - **Gemini:** illustraties in **stripstijl**, spaarzaam ingezet, alleen op
-  emotioneel/narratief belangrijke momenten — per illustratie een prompt met
-  stijl-consistentie (personages moeten er scène-op-scène hetzelfde uitzien).
+  emotioneel/narratief belangrijke momenten. De vaste huisstijl staat als
+  herbruikbaar Gem-instructiebestand in
+  `certamen/assets/chronica/gemini-comic-style.md`; per illustratie levert
+  Claude een concrete prompt die daarop voortbouwt (personages moeten er
+  scène-op-scène hetzelfde uitzien; de naamloze speler blijft androgyn / van
+  achteren in beeld zodat de art voor elke gender werkt).
 - **Suno:** achtergrondmuziek (mp3), in `certamen/assets/chronica/music/`.
 
-Contentcadans: **scène voor scène** — Claude levert per scène de ChatGPT-prompt,
-Gerben plakt het antwoord terug, Claude verwerkt het en bouwt door.
+Contentcadans: **scène voor scène** — Claude schrijft de scène direct in CNS,
+Gerben leest mee/stuurt bij, Claude bouwt door.

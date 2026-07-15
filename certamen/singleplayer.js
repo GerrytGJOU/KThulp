@@ -412,7 +412,7 @@ function spRenderGenderPick(){
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Chronica Classica</h2></div>
   <div class="panel">
-    <p>Voor je het verhaal begint: hoe wil je aangesproken worden? Dit bepaalt alleen de voornaamwoorden in de tekst.</p>
+    <p>Nog één ding voordat je begint. In het verhaal spreken we jóú aan — jij bent de hoofdpersoon. Maar hoe moeten anderen over je práten wanneer ze het later over jou hebben?</p>
   </div>
   ${opts}
   ${foot()}`);

@@ -24,11 +24,14 @@
    daadwerkelijk geteste engine gebruikt dit eenvoudiger tekstformaat; dat is
    leidend. Zie CNSParser in singleplayer.js voor het exacte formaat.
 
-   Belangrijke afwijking t.o.v. het aangeleverde testscenario: de Game Bible
-   is expliciet dat de speler GEEN naam heeft ("juist daardoor kan iedere
-   leerling zichzelf in hem herkennen") — {player.name} is dus overal uit de
-   tekst gehaald. Gender (en dus voornaamwoorden: hij/zij/die) kiest de speler
-   wél, één keer, vóór de proloog begint.
+   Belangrijke afwijkingen t.o.v. het aangeleverde testscenario:
+   - De speler heeft GEEN naam (Game Bible: "juist daardoor kan iedere leerling
+     zichzelf in hem herkennen") — {player.name} is overal uit de tekst gehaald.
+   - De VERTELTEKST staat in de TWEEDE PERSOON ("je"/"jij"): de speler wordt
+     rechtstreeks aangesproken en is zo letterlijk de hoofdpersoon. De
+     gender-keuze (hij/zij/die) blijft bestaan, maar dient alleen voor later —
+     wanneer personages in dialoog in de derde persoon óver de speler praten.
+     Zie de uitgebreide toelichting bij SP_CH1_CNS.
    ============================================================================ */
 
 /* ---- SAVESLOTS — leerlingen krijgen 3 losse opslagplekken, zodat ze het
@@ -240,11 +243,15 @@ const SP_CLASS_REWARD_MAP = {
 };
 
 /* ---- BOEK I — PROLOOG: "DE BOER VAN LATIUM" ----
-   Herschreven t.o.v. het aangeleverde testscenario: geen {player.name} (de
-   Game Bible wil een naamloze speler), voornaamwoorden via gender-keuze.
-   CH1_009 had in de brontekst een foutief hergebruikt {subject} voor de
-   Boodschapper i.p.v. de speler — hier vervangen door een vaste aanduiding
-   ("ze") zodat het niet met de spelerspronomen meeloopt. */
+   VERTELPERSPECTIEF = TWEEDE PERSOON. De verteltekst spreekt de speler
+   rechtstreeks aan met "je"/"jij" — dat maakt de speler letterlijk de
+   hoofdpersoon en is immersiever dan een hij/zij-verteller. Er staan dus
+   BEWUST geen {subject}/{object}/{possessive}-templates in de narration.
+   De gender-keuze (SP_PRONOUNS) blijft wél bestaan: die is er voor later,
+   wanneer PERSONAGES in DIALOGUE in de derde persoon óver de speler praten
+   ("ik zie dat {subject} moe is" → hij/zij/die). In de proloog komt dat nog
+   niet voor, dus de gender-keuze heeft hier nog geen zichtbaar effect.
+   Geen {player.name}: de speler is naamloos (Game Bible). */
 const SP_CH1_CNS = `
 === SCENE: CH1_001 ===
 
@@ -252,7 +259,7 @@ TITLE:
 Het Veld bij Latium
 
 TEXT:
-Al sinds zonsopgang werkt {subject} op het veld aan de rand van Latium. De aarde is droog en zwaar onder de ploeg. Wanneer {subject} hem weer naar voren duwt, klinkt er een doffe klap. De ploeg zit vast.
+De zon is net over de heuvels van Latium gekropen, en jij bent al uren aan het werk. Het zweet prikt in je ogen; de aarde is hier droog en koppig, zwaar als steen onder de ploeg. Je zet je schrap en duwt — en dan, met een doffe klap die je tot in je polsen voelt, staat de ploeg stil. Iets onder de grond geeft niet mee.
 
 CHOICES:
 
@@ -267,7 +274,7 @@ TITLE:
 Voorzichtig
 
 TEXT:
-{subject_cap} veegt het losse zand weg met {possessive} handen. Onder een dunne laag aarde tekent zich hout af — bewerkt hout, geen steen.
+Je knielt en veegt het losse zand weg, handvol na handvol, tot je vingertoppen iets hards raken. Geen steen. Hout — donker, bewerkt hout, met de rechte lijn van een rand die ooit door mensenhanden is gemaakt.
 
 CHOICES:
 
@@ -281,7 +288,7 @@ TITLE:
 De Kist
 
 TEXT:
-Na enig graven ligt een oude, verweerde houten kist voor {object}. Het hout is donker geworden door de jaren in de grond, maar het slot is nog intact.
+Na lang graven ligt ze eindelijk voor je: een oude houten kist, zwart geworden van de jaren onder de grond. Het deksel is gebarsten en het beslag is verroest, maar het slot houdt nog altijd stand. Iemand heeft deze kist ooit met zorg begraven. De vraag is alleen: om haar te bewaren, of om haar te verbergen?
 
 CHOICES:
 
@@ -296,7 +303,7 @@ TITLE:
 Twijfel
 
 TEXT:
-{subject_cap} besluit de kist ongemoeid te laten en loopt terug naar het dorp. De rest van de dag blijft de gedachte aan de kist {object} niet loslaten.
+Je laat de kist waar ze is en loopt terug naar het dorp, de ploeg achter je aan. Maar de hele dag, bij elke voor die je trekt, dwaalt je gedachte terug naar dat donkere hout in de aarde — en naar wat je daar misschien hebt laten liggen.
 
 END
 
@@ -306,7 +313,7 @@ TITLE:
 Drie Voorwerpen
 
 TEXT:
-Het deksel kraakt open. Binnenin liggen drie voorwerpen, elk gewikkeld in verweerd linnen: een jachtboog met een gespannen pees, een oude bronzen speerpunt aan een verweerde schacht, en een paar bronzen ruitersporen.
+Het slot geeft toe met een droge knak. Onder een laag vergeeld linnen liggen drie voorwerpen, zorgvuldig naast elkaar gelegd: een jachtboog, de pees na al die jaren nog strak gespannen; een bronzen speerpunt op een verweerde schacht; en een paar zware ruitersporen, groen uitgeslagen. Het is alsof ze op jou hebben liggen wachten. Je mag er één meenemen.
 
 CHOICES:
 
@@ -322,7 +329,7 @@ TITLE:
 De Boogschutter
 
 TEXT:
-{subject_cap} pakt de jachtboog op. Het gewicht voelt vertrouwd aan, alsof {possessive} handen deze vorm al kenden. Observatie, snelheid en precisie — dit worden vanaf nu {possessive} eerste instincten.
+Je sluit je hand om de boog. Het hout ligt warm en vertrouwd in je greep, alsof je vingers deze vorm al kenden voordat je hem ooit zag. Afstand. Geduld. Het juiste moment, geen tel te vroeg. Vanaf nu zijn dat jouw instincten.
 
 REWARD:
 class=Boogschutter; traits=observatie,snelheid,precisie
@@ -342,7 +349,7 @@ TITLE:
 De Hopliet
 
 TEXT:
-{subject_cap} grijpt de speer. Het brons is koud, maar het gewicht geeft een vreemde rust. Kracht, moed en verdediging voelen vanaf nu als {possessive} tweede natuur.
+Je grijpt de speer. Het brons is koud, maar het gewicht ervan geeft je een vreemde kalmte, alsof de grond onder je voeten steviger wordt. Standhouden. Je linie niet verlaten, wat er ook op je afkomt. Vanaf nu voelt dat als je tweede natuur.
 
 REWARD:
 class=Hopliet; traits=kracht,moed,verdediging
@@ -362,7 +369,7 @@ TITLE:
 De Cavalerist
 
 TEXT:
-{subject_cap} tilt de bronzen ruitersporen op. Ze zijn lichter dan verwacht. Mobiliteit, tactiek en snelheid — {subject} voelt meteen waarvoor ze bedoeld zijn.
+Je tilt de ruitersporen op; ze zijn lichter dan je had verwacht. In je handen voel je meteen waarvoor ze gemaakt zijn — voor snelheid, voor de aanval die begint voordat de vijand hem ziet aankomen. Beweging. Overzicht. Als eerste zijn. Vanaf nu draagt je lichaam die belofte met zich mee.
 
 REWARD:
 class=Cavalerist; traits=mobiliteit,tactiek,snelheid
@@ -382,7 +389,7 @@ TITLE:
 De Bronzen Schijf
 
 TEXT:
-Onder het linnen, dieper in de kist, ligt nog iets: een ronde bronzen schijf, bedekt met tekens die {subject} niet herkent. Ze voelt warm aan, alsof ze nooit echt in de grond heeft gelegen.
+Dieper in de kist, onder een laatste laag linnen, ligt nog iets. Een ronde schijf van brons, niet groter dan je handpalm, bedekt met tekens die je nooit eerder zag — geen letters die je kent, en toch lijken ze iets te willen zeggen. De schijf is warm. Warm alsof iemand haar zojuist heeft vastgehouden, hier, diep onder de koude grond.
 
 CODEX:
 codex_orakel_van_chronos
@@ -390,7 +397,7 @@ codex_orakel_van_chronos
 CHOICES:
 
 * Raak de schijf aan -> CH1_006
-* Trek {possessive} hand terug -> CH1_005B
+* Trek je hand terug -> CH1_005B
 
 END
 
@@ -400,7 +407,7 @@ TITLE:
 Aarzeling
 
 TEXT:
-{subject_cap} aarzelt. Maar de schijf lijkt {object} te roepen, zacht en aanhoudend, alsof ze wacht.
+Je aarzelt, je hand zweeft boven het brons. Maar de schijf lijkt naar je te reiken — geen geluid, geen beweging, en toch een roep, zacht en aanhoudend, alsof ze al die tijd precies op jou heeft gewacht.
 
 CHOICES:
 
@@ -414,7 +421,7 @@ TITLE:
 Vervorming
 
 TEXT:
-Zodra {possessive} vingers de schijf raken, begint de lucht te trillen. De kleuren van het veld vervagen. Latium zelf lijkt zich om {object} heen te herschikken.
+Op het moment dat je vingertoppen het brons raken, begint de lucht te trillen als water waarin een steen valt. De kleuren van het veld lopen uit, de heuvels vervagen, het geluid van de wind valt weg. Latium zelf lijkt zich om je heen te herschikken — of misschien is het de tijd die dat doet.
 
 IMAGE:
 tijdvervorming_veld.jpg
@@ -431,7 +438,7 @@ TITLE:
 Het Orakel van Chronos
 
 TEXT:
-Uit de schijf rijzen tekens op die in de lucht blijven hangen — een patroon, wachtend om ontcijferd te worden voordat de poort zich verder opent.
+Uit de schijf rijzen de tekens omhoog en blijven in de lucht hangen, gloeiend en geduldig. Samen vormen ze een patroon — een woord, vermoed je, in een taal die ouder is dan de jouwe. Het wacht. Alsof de poort zich pas verder opent wanneer jij het weet te lezen.
 
 PUZZLE:
 puzzle_orakel_symbolen_01
@@ -448,7 +455,7 @@ TITLE:
 De Poort
 
 TEXT:
-Het patroon valt op zijn plaats. Voor {object} scheurt de lucht open tot een poort van licht zonder kleur. Aan de andere kant staat een gestalte, nauwelijks zichtbaar.
+De tekens vallen op hun plaats, en er gaat een siddering door de lucht. Vlak voor je scheurt de wereld open tot een poort van licht — licht zonder kleur, zonder warmte. Aan de andere kant, half zichtbaar, staat een gestalte roerloos te wachten. Op jou.
 
 QUEST:
 quest_boodschapper_van_kronos: gestart
@@ -465,11 +472,11 @@ TITLE:
 De Boodschapper
 
 TEXT:
-De gestalte spreekt niet meteen. Wanneer {subject} eindelijk een stem hoort, klinkt die kalm en van ver weg — alsof ze van buiten de tijd zelf komt.
+De gestalte beweegt niet en spreekt niet. Pas wanneer je dichterbij komt, hoor je een stem — kalm, helder en van onmetelijk ver weg, alsof ze niet uit deze plaats komt maar van buiten de tijd zelf.
 
 DIALOGUE:
 De Boodschapper van Kronos
-De wereld vergeet.
+De wereld vergeet. En jij bent de eerste sinds lange tijd die het merkt.
 
 EERETITEL:
 bewaarder_herinnering
