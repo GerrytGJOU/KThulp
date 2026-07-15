@@ -391,6 +391,9 @@ De Bronzen Schijf
 TEXT:
 Dieper in de kist, onder een laatste laag linnen, ligt nog iets. Een ronde schijf van brons, niet groter dan je handpalm, bedekt met tekens die je nooit eerder zag — geen letters die je kent, en toch lijken ze iets te willen zeggen. De schijf is warm. Warm alsof iemand haar zojuist heeft vastgehouden, hier, diep onder de koude grond.
 
+IMAGE:
+prologue.png
+
 CODEX:
 codex_orakel_van_chronos
 

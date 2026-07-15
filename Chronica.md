@@ -47,7 +47,9 @@ browser):
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
 | Campagnekaart-metadata (Proloog + 11 hfdst + Finale) | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`) | ✅ data — scènes van hfdst 1+ nog niet geschreven |
-| Audio-assetmappen | `certamen/assets/chronica/music/`, `certamen/assets/chronica/sfx/` | ✅ mappen bestaan (leeg, met `.gitkeep`) |
+| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — 1e beeld op CH1_005 (`assets/chronica/images/prologue.png`) |
+| Gemini-huisstijl-Gem (stripstijl) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
+| Audio-assetmappen | `certamen/assets/chronica/music/`, `certamen/assets/chronica/sfx/` | ✅ mappen bestaan (music met 1e Suno-track) |
 
 ---
 
@@ -104,7 +106,11 @@ END
   (`spRunMetaHooks`).
 - `PUZZLE` **blokkeert** de scène tot de puzzel is opgelost, en gaat dan naar
   het doel van de (enige) keuze.
-- `IMAGE`/`MUSIC`/`SFX`/`COMBAT`/`INVENTORY` worden herkend en opgeslagen in
+- `IMAGE` **is actief**: toont de illustratie (bestandsnaam relatief aan
+  `assets/chronica/images/`) boven de verteltekst; ontbreekt het bestand, dan
+  verbergt de `<img>` zich stil (`onerror`), zodat je alvast naar nog-te-maken
+  illustraties kunt verwijzen.
+- `MUSIC`/`SFX`/`COMBAT`/`INVENTORY` worden herkend en opgeslagen in
   `scene.meta`, maar zijn **nog niet actief** (no-op) — zie §8.
 
 > **Bewuste keuze:** CNS is dit eenvoudige tekstformaat, **niet** het
@@ -244,8 +250,11 @@ In afgesproken bouwvolgorde:
 5. **Hoofdstuk 1 t/m 11 + Finale-content** — scène voor scène in CNS, met
    ChatGPT-proza (via prompts) en Gemini-illustraties in stripstijl (via
    prompts). `SP_CAMPAIGN` bepaalt per hoofdstuk de grammatica en personages.
-6. **Illustraties** — `IMAGE:` is nu no-op; Gemini-promptlijst per illustratie-
-   moment volgt bij de contentbouw.
+6. **Illustraties** — `IMAGE:` is **actief** (rendert het bestand uit
+   `assets/chronica/images/`). De eerste illustratie hangt aan CH1_005 ("De
+   Bronzen Schijf": de ontdekking van het Orakel, `prologue.png`). Resterend
+   werk is puur content: per illustratie-moment een Gemini-prompt (op basis van
+   `assets/chronica/gemini-comic-style.md`) en het beeld in de map zetten.
 
 ---
 

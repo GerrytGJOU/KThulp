@@ -20,8 +20,11 @@
 
    BOUWSTATUS: Boek I (proloog) is speelbaar. CODEX/QUEST worden al bijgehouden
    in de save maar hebben nog geen eigen overzichtsscherm — dat volgt zodra
-   er meer dan één scène/hoofdstuk is om te tonen. IMAGE-hook is een no-op
-   (Gemini-illustraties volgen later); COMBAT-hook bestaat nog niet, want er
+   er meer dan één scène/hoofdstuk is om te tonen. IMAGE is actief: een
+   `IMAGE:`-sectie toont de bijbehorende illustratie (stripstijl, Gemini) uit
+   assets/chronica/images/ boven de verteltekst; ontbreekt het bestand, dan
+   verbergt de <img> zich stil (onerror), zodat auteurs alvast naar nog-te-
+   maken illustraties kunnen verwijzen. COMBAT-hook bestaat nog niet, want er
    is in de proloog nog geen gevecht.
 
    SAVESLOTS: elke leerling krijgt SP_MAX_SLOTS (3) losse opslagplekken, zodat
@@ -467,7 +470,7 @@ SCREENS.spPlay = function(){
 
   H(brand(true)+`
   <div class="scrhead"><span></span><h2>Chronica Classica</h2></div>
-  <div class="panel">${titleHTML}${textHTML}</div>
+  <div class="panel">${spSceneImageHTML(scene)}${titleHTML}${textHTML}</div>
   ${dialogueHTML}
   ${choicesHTML}
   ${foot()}`);
@@ -481,7 +484,18 @@ function spRunMetaHooks(meta){
   if(meta.CODEX)     spHookCodex(meta.CODEX);
   if(meta.QUEST)     spHookQuest(meta.QUEST);
   if(meta.EERETITEL) spAwardTitle(meta.EERETITEL.trim());
-  if(meta.IMAGE)      console.log("[hook] onImage nog niet geïmplementeerd:", meta.IMAGE);
+  // IMAGE is pure weergave (geen side effect) — gerenderd in de view via
+  // spSceneImageHTML(), niet hier.
+}
+
+/* Illustratie bij een scène: de IMAGE-sectie is een bestandsnaam relatief aan
+   assets/chronica/images/. Ontbreekt het bestand, dan verbergt de <img> zich
+   stil (onerror) — zo kunnen auteurs alvast naar nog-te-maken illustraties
+   verwijzen zonder een gebroken-plaatje-icoon. */
+function spSceneImageHTML(scene){
+  if(!scene.meta || !scene.meta.IMAGE) return "";
+  const src = "assets/chronica/images/"+scene.meta.IMAGE.trim();
+  return `<img src="${esc(src)}" alt="" style="width:100%;border-radius:10px;display:block;margin-bottom:12px" onerror="this.style.display='none'">`;
 }
 function spHookReward(text){
   const fields={};
@@ -525,6 +539,7 @@ function spRenderPuzzle(scene){
   H(brand(true)+`
   <div class="scrhead"><span></span><h2>Chronica Classica</h2></div>
   <div class="panel">
+    ${spSceneImageHTML(scene)}
     <h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>
     <p>${esc(SpTextResolver.resolve(scene.text, SP_STATE))}</p>
     <div style="font-size:32px;letter-spacing:4px;text-align:center;margin:14px 0">${esc(puzzle.woord.grieks)}</div>
