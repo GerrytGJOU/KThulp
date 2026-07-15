@@ -58,15 +58,21 @@ const SP_MAX_SLOTS = 3;
    algemene eerbewijzen door dezelfde achGroupsHTML()-groepering gerenderd
    (cat:"chronica", zie ACH_CATEGORIES in core.js), zodat "Chronica Classica"
    als eigen categorie naast "Algemeen"/"Klassieke Spellen" verschijnt i.p.v.
-   een apart, afwijkend paneel. */
+   een apart, afwijkend paneel.
+
+   `secret:true` op ALLE titels: nog niet behaalde eretitels tonen daardoor
+   "???"/"Geheim eerbewijs" op het profiel (dezelfde achGroupsHTML-renderItem-
+   afhandeling als geheime Battle Mode-eerbewijzen) i.p.v. de naam/omschrijving
+   te verklappen — voorkomt verhaalspoilers. Eenmaal behaald tonen ze gewoon
+   normaal (secret geldt alleen zolang !got). */
 const SP_TITLES = [
-  { id:"boogschutter_orakel", nm:"Boogschutter van het Orakel", icon:"eagle", cat:"chronica",
+  { id:"boogschutter_orakel", nm:"Boogschutter van het Orakel", icon:"eagle", cat:"chronica", secret:true,
     ds:"Koos de boog toen het Orakel van Chronos ontwaakte.", bonus:null },
-  { id:"hopliet_orakel", nm:"Hopliet van het Orakel", icon:"shield", cat:"chronica",
+  { id:"hopliet_orakel", nm:"Hopliet van het Orakel", icon:"shield", cat:"chronica", secret:true,
     ds:"Koos het schild toen het Orakel van Chronos ontwaakte.", bonus:null },
-  { id:"cavalerist_orakel", nm:"Cavalerist van het Orakel", icon:"column", cat:"chronica",
+  { id:"cavalerist_orakel", nm:"Cavalerist van het Orakel", icon:"column", cat:"chronica", secret:true,
     ds:"Koos de teugels toen het Orakel van Chronos ontwaakte.", bonus:null },
-  { id:"bewaarder_herinnering", nm:"Bewaarder van de Herinnering", icon:"star", cat:"chronica",
+  { id:"bewaarder_herinnering", nm:"Bewaarder van de Herinnering", icon:"star", cat:"chronica", secret:true,
     ds:"Ontcijferde het Orakel van Chronos en voltooide de proloog.",
     bonus:{ scope:["battle","boss","totalwar"], type:"be_on_fast", val:1,
             desc:"+1 BE bij een snel juist antwoord" } },
