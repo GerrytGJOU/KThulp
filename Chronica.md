@@ -42,8 +42,9 @@ browser):
 | **3 saveslots** per leerling | `certamen/singleplayer.js` (`SCREENS.spSlots`), `SP_MAX_SLOTS` | ✅ werkend — beginnen/verdergaan/verwijderen (met bevestiging) |
 | **Offline-first opslag** (localStorage primair, Firebase spiegel) | `certamen/singleplayer.js` (`spSaveProgress`/`spLoadAllSlots`) | ✅ werkend — speelbaar zonder inloggen/internet |
 | **Chronica Classica Avatar** (de boer: vodden + hooivork), pixel-sprite, verhaal-ontgrendeling | `certamen/singleplayer.js` (`SCREENS.spAvatarEdit`, `spAvatar*`, `spAvatarIsUnlocked`) | ✅ werkend — rendert met `renderPixelHeroPreview`/`_bmPixelLayers` (battle.js), niet `bmAvatarSVG` |
-| Beide avatars naast elkaar op profiel | `certamen/battle.js` (`SCREENS.battleProfile`) | ✅ werkend |
+| Chronica-sectie op het masterprofiel ("Mijn profiel"), tegenhanger van Battle Mode | `certamen/games.js` (`SCREENS.collection`) | ✅ werkend — avatar + passieve bonussen, direct na de Battle Mode-sectie |
 | **Eretitels** (verdiend via keuzes/voortgang) | `certamen/singleplayer.js` (`spAwardTitle`/`SP_TITLES`), CNS-sectie `EERETITEL:` | ✅ werkend — account-breed, offline-first |
+| Eretitels als eigen categorie tussen de eerbewijzen | `certamen/core.js` (`ACH_CATEGORIES.chronica`), `certamen/games.js` (`SCREENS.collection`) | ✅ werkend — meegerenderd door `achGroupsHTML`, net als Algemeen/Klassieke Spellen |
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
 | Campagnekaart-metadata (Proloog + 11 hfdst + Finale) | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`) | ✅ data — scènes van hfdst 1+ nog niet geschreven |
@@ -201,11 +202,19 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
 - Editor `SCREENS.spAvatarEdit` werkt offline; de hoofdvoorbeeld-render is de
   pixel-sprite (`renderPixelHeroPreview(av,true)`), per-optie-thumbnails zijn
   de kleine SVG-preview (zelfde patroon als `SCREENS.battleAvatarEdit`).
-- **Alleen zichtbaar tijdens Chronica-gevechten en op het profiel** — bewust
-  NIET op het slotscherm (`SCREENS.spSlots`), dat is geen combat-context.
-- **Beide avatars staan naast elkaar op het profiel** (`SCREENS.battleProfile`),
-  elk onder zijn eigen kop ("Avatar" / "Chronica Classica Avatar") met een
-  eigen "aanpassen"-knop.
+- **Alleen zichtbaar tijdens Chronica-gevechten en op het masterprofiel** —
+  bewust NIET op het slotscherm (`SCREENS.spSlots`), dat is geen combat-context.
+- **Het masterprofiel is `SCREENS.collection`** (`games.js`, de "Mijn
+  profiel"-tegel vanuit het hoofdmenu) — NIET `SCREENS.battleProfile`
+  (`battle.js`), dat is een apart, Battle-Mode-intern scherm. De Chronica-
+  sectie ("📜 Chronica Classica": avatar + passieve bonussen + "Avatar
+  aanpassen") staat daar direct ná de "⚔️ Battle Mode"-sectie — zo zie je in
+  één oogopslag hoe je in Battle Mode/Boss Battle/Total War verschijnt én hoe
+  je Chronica-avatar nog moet groeien.
+- **Passieve bonussen** van verdiende eretitels worden in die Chronica-sectie
+  samengevat (⚡-regel per titel met een `bonus`); de volledige eretitel-lijst
+  (óók de nog niet verdiende) staat verderop, meegerenderd in de eerbewijzen
+  (zie §6).
 
 ---
 
@@ -214,8 +223,16 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
 - **Account-breed** (niet per saveslot): een titel die je in slot 2 behaalt,
   zie je ook als je in slot 1 speelt.
 - Toegekend via een `EERETITEL: <id>`-sectie in een CNS-scène (`spAwardTitle`).
-- Zichtbaar op profiel én slotscherm; **één** titel is kiesbaar ("equipped") en
+- Zichtbaar op het slotscherm (`spTitlesSectionHTML`, tikbaar om te
+  equippen) én op het masterprofiel; **één** titel is kiesbaar ("equipped") en
   verschijnt als pill in de **Battle Mode/Boss Battle-lobby**.
+- **Op het masterprofiel (`SCREENS.collection`) lopen SP_TITLES gewoon mee in
+  het bestaande eerbewijzen-systeem**: elk item heeft dezelfde vorm als een
+  `ACHIEVEMENTS_DEF`-entry (`ds`/`icon`/`cat:"chronica"`, zie
+  singleplayer-data.js) en wordt door dezelfde `achGroupsHTML()` gegroepeerd
+  als "Chronica Classica (X/Y)" — een eigen categorie naast "Algemeen" en
+  "Klassieke Spellen" (`ACH_CATEGORIES.chronica`, core.js), niet een los,
+  afwijkend paneel.
 - **`SP_TITLES`** (nu 4): `boogschutter_orakel`, `hopliet_orakel`,
   `cavalerist_orakel` (klassekeuze in de proloog), en `bewaarder_herinnering`
   (proloog voltooid). De laatste heeft een `bonus`-veld

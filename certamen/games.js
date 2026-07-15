@@ -763,12 +763,45 @@ SCREENS.collection = function(){
     <button class="btn btn-ghost btn-block" style="margin-top:8px;font-size:13px" onclick="go('battleJoin')">Doe mee aan Battle Mode</button></div>`;
   }
 
-  // ---- Algemene eerbewijzen (niet battle-specifiek) ----
-  const generalAchItems=ACHIEVEMENTS_DEF.filter(a=>a.mode!=="battle"&&!["eerste_gevecht","overwinnaar","scholar","onbreekbaar","strateeg","commandant","combokunstenaar","legendarisch"].some(id=>id===a.id));
-  const generalAchHTML=achGroupsHTML(generalAchItems,P.achievements,a=>{
-    const got=P.achievements.includes(a.id);
+  // ---- Chronica Classica sectie — tegenhanger van de Battle Mode-sectie
+  // hierboven: zelfde kaartopmaak (avatar/koptekst/knop), direct erna, zodat
+  // je in één oogopslag ziet hoe je in Battle Mode/Boss Battle/Total War
+  // verschijnt én hoe je Chronica-avatar nog moet groeien. Eretitels zelf
+  // (met hun eventuele passieve bonus) staan verderop tussen de eerbewijzen. ----
+  const spAv = spAvatarMerge(spAvatarLoadLocal());
+  const spTitlesEarned = spTitlesLoadLocal();
+  const spBonusTitles = SP_TITLES.filter(t=>t.bonus && spTitlesEarned.includes(t.id));
+  const spBonusHTML = spBonusTitles.length
+    ? spBonusTitles.map(t=>`<div class="note" style="color:var(--hi);margin-top:2px">⚡ ${esc(t.bonus.desc)} <span style="opacity:.7">— ${esc(t.nm)}</span></div>`).join("")
+    : `<div class="note" style="margin-top:2px">Nog geen passieve bonussen verdiend — speel verder in Chronica Classica.</div>`;
+  const spSection = `
+  <div class="eyebrow l" style="margin-top:20px">📜 Chronica Classica</div>
+  <div class="panel">
+    <div style="display:flex;gap:14px;align-items:center;margin-bottom:12px">
+      <div style="flex:0 0 auto">${renderPixelHeroPreview(spAv) || bmAvatarSVG(spAv,64)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:18px;font-weight:700">Chronica Classica Avatar</div>
+        <div class="note" style="margin-top:2px">Uitrusting ontgrendel je door het verhaal te spelen, los van je Battle Mode-avatar.</div>
+      </div>
+    </div>
+    <div class="note" style="font-weight:700;margin-bottom:2px">Passieve bonussen</div>
+    ${spBonusHTML}
+    <button class="btn btn-ghost btn-block" style="margin-top:10px;font-size:13px" onclick="SP_AV_RETURN='collection';go('spAvatarEdit')">Avatar aanpassen</button>
+  </div>`;
+
+  // ---- Algemene eerbewijzen (niet battle-specifiek) + Chronica-eretitels ----
+  // SP_TITLES heeft dezelfde vorm als ACHIEVEMENTS_DEF-items (ds/icon/cat:
+  // "chronica", zie singleplayer-data.js) en loopt daarom gewoon mee in
+  // dezelfde achGroupsHTML()-groepering als "Algemeen"/"Klassieke Spellen".
+  const generalAchItems=[
+    ...ACHIEVEMENTS_DEF.filter(a=>a.mode!=="battle"&&!["eerste_gevecht","overwinnaar","scholar","onbreekbaar","strateeg","commandant","combokunstenaar","legendarisch"].some(id=>id===a.id)),
+    ...SP_TITLES,
+  ];
+  const generalAchievedIds=[...P.achievements, ...spTitlesEarned];
+  const generalAchHTML=achGroupsHTML(generalAchItems,generalAchievedIds,a=>{
+    const got=generalAchievedIds.includes(a.id);
     if(a.secret&&!got) return `<div class="ach locked"><span class="m" style="filter:grayscale(1) opacity(.3)">${medalSVG("star",46)}</span><div><div class="nm">???</div><div class="ds">Geheim eerbewijs</div></div></div>`;
-    return `<div class="ach ${got?"":"locked"}"><span class="m">${medalSVG(a.icon,46)}</span><div><div class="nm">${a.nm}</div><div class="ds">${a.ds}</div></div></div>`;
+    return `<div class="ach ${got?"":"locked"}"><span class="m">${medalSVG(a.icon,46)}</span><div><div class="nm">${a.nm}</div><div class="ds">${a.ds}</div>${a.bonus&&got?`<div class="ds" style="color:var(--hi)">⚡ ${esc(a.bonus.desc)}</div>`:""}</div></div>`;
   });
 
   H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Mijn profiel</h2></div>
@@ -804,6 +837,7 @@ SCREENS.collection = function(){
     ${statsRow("Schade gegeven",s.totalDamage)} ${statsRow("Genezen",s.totalHealing)}
   </div></details>
   ${bmSection}
+  ${spSection}
   <div class="eyebrow l" style="margin-top:20px">Avatars (klassieke spellen)</div>
   <div class="collgrid">${AVATARS.map(a=>{
     const owned=P.owned.includes(a.id), on=P.avatar===a.id;
@@ -812,7 +846,7 @@ SCREENS.collection = function(){
       ${owned?(on?`<div class="pr">in gebruik</div>`:`<div class="pr">kies</div>`):`<div class="pr">${a.cost} munten</div>`}
     </button>`;
   }).join("")}</div>
-  <div class="eyebrow l" style="margin-top:20px">Eerbewijzen (${generalAchItems.filter(a=>P.achievements.includes(a.id)).length}/${generalAchItems.length})</div>
+  <div class="eyebrow l" style="margin-top:20px">Eerbewijzen (${generalAchItems.filter(a=>generalAchievedIds.includes(a.id)).length}/${generalAchItems.length})</div>
   ${generalAchHTML}
   ${foot()}`);
   // Ververs Battle Mode-gegevens uit Firebase en herrender als er nieuwere data is

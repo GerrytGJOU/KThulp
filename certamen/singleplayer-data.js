@@ -51,16 +51,23 @@ const SP_MAX_SLOTS = 3;
    zelf nog NIET verrekend in de gevechtsberekening (battle.js se
    bmCalcAbilityEffect/BE-gain zitten op meerdere plekken verspreid — dat
    hoort bij de Combat-bridge-bouwstap, niet bij Titles zelf). Tot die tijd is
-   een title.bonus puur informatief (getoond, niet toegepast). */
+   een title.bonus puur informatief (getoond, niet toegepast).
+
+   Velden `ds`/`icon`/`cat` zijn met opzet gelijk aan ACHIEVEMENTS_DEF-items
+   (core.js): SP_TITLES wordt in SCREENS.collection (games.js) samen met de
+   algemene eerbewijzen door dezelfde achGroupsHTML()-groepering gerenderd
+   (cat:"chronica", zie ACH_CATEGORIES in core.js), zodat "Chronica Classica"
+   als eigen categorie naast "Algemeen"/"Klassieke Spellen" verschijnt i.p.v.
+   een apart, afwijkend paneel. */
 const SP_TITLES = [
-  { id:"boogschutter_orakel", nm:"Boogschutter van het Orakel",
-    desc:"Koos de boog toen het Orakel van Chronos ontwaakte.", bonus:null },
-  { id:"hopliet_orakel", nm:"Hopliet van het Orakel",
-    desc:"Koos het schild toen het Orakel van Chronos ontwaakte.", bonus:null },
-  { id:"cavalerist_orakel", nm:"Cavalerist van het Orakel",
-    desc:"Koos de teugels toen het Orakel van Chronos ontwaakte.", bonus:null },
-  { id:"bewaarder_herinnering", nm:"Bewaarder van de Herinnering",
-    desc:"Ontcijferde het Orakel van Chronos en voltooide de proloog.",
+  { id:"boogschutter_orakel", nm:"Boogschutter van het Orakel", icon:"eagle", cat:"chronica",
+    ds:"Koos de boog toen het Orakel van Chronos ontwaakte.", bonus:null },
+  { id:"hopliet_orakel", nm:"Hopliet van het Orakel", icon:"shield", cat:"chronica",
+    ds:"Koos het schild toen het Orakel van Chronos ontwaakte.", bonus:null },
+  { id:"cavalerist_orakel", nm:"Cavalerist van het Orakel", icon:"column", cat:"chronica",
+    ds:"Koos de teugels toen het Orakel van Chronos ontwaakte.", bonus:null },
+  { id:"bewaarder_herinnering", nm:"Bewaarder van de Herinnering", icon:"star", cat:"chronica",
+    ds:"Ontcijferde het Orakel van Chronos en voltooide de proloog.",
     bonus:{ scope:["battle","boss","totalwar"], type:"be_on_fast", val:1,
             desc:"+1 BE bij een snel juist antwoord" } },
 ];
