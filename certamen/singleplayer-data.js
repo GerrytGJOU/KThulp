@@ -626,6 +626,25 @@ const SP_FRAGMENTS = {
   herakles: { nm:"Moed",       icon:"🦁" },
 };
 
+/* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
+   vanaf Hoofdstuk 2 geïntroduceerd). Werkt in dezelfde geest als Battle Mode
+   (vraag → EP → actie), maar is een VOLLEDIG NIEUWE, lokale implementatie —
+   Battle Mode's eigen lus (bmAnswer/bmTick/bmResolve, battle.js) is te sterk
+   gekoppeld aan Firebase-multiplayer-state (BM_STATE/BM_TEAMS/...) om
+   rechtstreeks te hergebruiken. Chronica-gevechten zijn altijd 1 speler tegen
+   1 tegenstander, en hebben — omdat het singleplayer is — geen kunstmatige
+   wachttijd tussen vraag en actie nodig (geen andere spelers om op te
+   wachten): zodra je genoeg EP hebt, kun je meteen aanvallen.
+   COMBAT:-sectie in een CNS-scène bevat de bare id van een entry hieronder;
+   spStartCombatFromScene (singleplayer.js) start het gevecht, en bij winst
+   gaat het verder naar de (enige) keuze van die scène. ---- */
+const SP_COMBAT_ENEMIES = {
+  nemeische_leeuw: { nm:"De Nemeïsche Leeuw", icon:"🦁", hp:40,
+    intro:"Een leeuw met een huid die geen enkel wapen kan doorboren — Herakles zal hem uiteindelijk met blote handen moeten wurgen." },
+  hydra: { nm:"De Hydra van Lerna", icon:"🐍", hp:60,
+    intro:"Een veelkoppig moeras-monster dat voor elke afgehakte kop er twee nieuwe laat aangroeien — alleen vuur kan de wonden dichtschroeien voor ze weer aangroeien." },
+};
+
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
    aangevuld via VOCAB:-secties (spHookVocab, singleplayer.js). Bewust
    compacter dan de frequentielijst uit de andere Certamen-modi (die blijft

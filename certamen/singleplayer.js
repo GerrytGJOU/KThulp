@@ -729,6 +729,7 @@ SCREENS.spPlay = function(){
   spHookSeenImage(scene);
 
   if(scene.meta.PUZZLE) return spRenderPuzzle(scene);
+  if(scene.meta.COMBAT) return spStartCombatFromScene(scene);
 
   const titleHTML = scene.title ? `<h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>` : "";
   const textHTML = spParagraphsHTML(scene.text, SP_STATE);
@@ -979,18 +980,33 @@ function spHookQuest(text){
 /* ---- PUZZELS (§ Educatieve Poortwachters) ------------------------------------
    Een PUZZLE-scène blokkeert tot de puzzel is opgelost; daarna gaat de engine
    naar het doel van de (enige) keuze in die scène. spRenderPuzzle dispatcht op
-   puzzle.type, zodat elk hoofdstuk zijn eigen puzzelsoort kan hebben:
-   - "greek-transliteration" : Grieks woord → transcriptie (proloog).
+   puzzle.type, zodat elk hoofdstuk zijn eigen puzzelsoort kan hebben. VASTE
+   MOEILIJKHEIDSOPBOUW (vastgelegd 2026-07): puzzels mogen per hoofdstuk
+   geleidelijk zwaarder worden — van meerkeuze naar zelf typen — dus nieuwe
+   hoofdstukken hoeven niet bij "multiple-choice" te blijven hangen.
+   - "greek-transliteration" : Grieks woord → Latijnse transcriptie, meerkeuze
+                               (proloog).
    - "multiple-choice"       : grammaticavraag met keuzeknoppen (bv. naamval
                                herkennen — welk woord is nominativus/accusativus/
-                               vocativus; welk lidwoord hoort erbij). ------------ */
+                               vocativus; welk lidwoord hoort erbij).
+   - "typed-latin"           : de speler typt zelf het Latijnse antwoord, met
+                               het normale (Latijnse) toetsenbord van het
+                               toestel — geen speciale behandeling nodig.
+   - "typed-greek"           : de speler typt zelf Grieks, via een eigen
+                               schermtoetsenbord (spGreekKeyboardHTML) i.p.v.
+                               het systeemtoetsenbord — zie §7.7 in
+                               Chronica.md voor de motivatie en de
+                               normalisatieregels bij het nakijken
+                               (spNormalizeGreek). ------------ */
 function spRenderPuzzle(scene){
   const puzzleId = scene.meta.PUZZLE.trim();
   const puzzle = SP_PUZZLES[puzzleId];
   const target = scene.choices[0]?.target;
   if(!puzzle){ console.error("Onbekende puzzel:", puzzleId); return spGoCns(target); }
-  if((puzzle.type||"greek-transliteration")==="multiple-choice")
-    return spRenderMCPuzzle(scene, puzzleId, puzzle, target);
+  const type = puzzle.type||"greek-transliteration";
+  if(type==="multiple-choice") return spRenderMCPuzzle(scene, puzzleId, puzzle, target);
+  if(type==="typed-latin")     return spRenderTypedLatinPuzzle(scene, puzzleId, puzzle, target);
+  if(type==="typed-greek")     return spRenderTypedGreekPuzzle(scene, puzzleId, puzzle, target);
   return spRenderGreekPuzzle(scene, puzzleId, puzzle, target);
 }
 
@@ -1054,4 +1070,199 @@ function spCheckMCPuzzle(puzzleId, target, idx){
   const err = el("spPuzzleErr");
   if(puzzle.opties[idx] === puzzle.antwoord) spGoCns(target);
   else if(err){ err.textContent = puzzle.hint || "Nog niet juist — lees de zin nog eens en probeer opnieuw."; err.style.display = ""; }
+}
+
+/* Getypte Latijnse puzzel. puzzle = { type:"typed-latin", vraag, antwoord,
+   hint? }. Gewoon systeemtoetsenbord — Latijn gebruikt hier geen tekens die
+   niet al op een normaal (Nederlands/Engels) toetsenbord staan. Hoofdletter-
+   en spatiëring-ongevoelig vergeleken. */
+function spRenderTypedLatinPuzzle(scene, puzzleId, puzzle, target){
+  H(brand(true)+`
+  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  ${spPuzzleHeaderHTML(scene)}
+  <div class="panel">
+    <p style="font-weight:700;margin-bottom:4px">${esc(puzzle.vraag)}</p>
+    <label class="fld">Jouw antwoord</label>
+    <input id="spPuzzleInput" type="text" placeholder="typ hier…" onkeydown="if(event.key==='Enter')spCheckTypedLatinPuzzle('${puzzleId}','${target}')">
+    <div id="spPuzzleErr" class="note warn" style="display:none;margin-top:8px"></div>
+  </div>
+  <button class="btn btn-gold btn-block lg" onclick="spCheckTypedLatinPuzzle('${puzzleId}','${target}')">Controleren</button>
+  ${foot()}`);
+}
+function spCheckTypedLatinPuzzle(puzzleId, target){
+  const puzzle = SP_PUZZLES[puzzleId];
+  const input = (el("spPuzzleInput")?.value||"").trim().toLowerCase();
+  const err = el("spPuzzleErr");
+  if(input === puzzle.antwoord.trim().toLowerCase()) spGoCns(target);
+  else if(err){ err.textContent = puzzle.hint || "Nog niet juist — probeer opnieuw."; err.style.display = ""; }
+}
+
+/* ---- GRIEKS SCHERMTOETSENBORD — puzzle.type "typed-greek".
+   Het antwoordveld staat op readonly + inputmode="none": dat onderdrukt op
+   iPad/iOS het systeemtoetsenbord (net als in andere apps met een eigen
+   invoermechanisme), zodat alleen dit schermtoetsenbord tekens toevoegt.
+   Spiritus asper/lenis en iota subscriptum zijn hier eigen toetsen (geen
+   losse accenttekens) omdat ze grammaticaal als letters tellen, niet als
+   versiering — vandaar dat spNormalizeGreek() ze bewust NIET wegfiltert bij
+   het nakijken, in tegenstelling tot de echte accenten (acuut/gravis/
+   circumflex), die voor het antwoord niet relevant zijn. ---- */
+const SP_GREEK_KB_ROWS = [
+  ["α","β","γ","δ","ε","ζ","η","θ","ι","κ","λ","μ"],
+  ["ν","ξ","ο","π","ρ","σ","ς","τ","υ","φ","χ","ψ","ω"],
+];
+// Voor het toepassen van een modifier-toets op de laatst getypte letter.
+const SP_GREEK_SMOOTH   = {"α":"ἀ","ε":"ἐ","η":"ἠ","ι":"ἰ","ο":"ὀ","υ":"ὐ","ω":"ὠ"};
+const SP_GREEK_ROUGH    = {"α":"ἁ","ε":"ἑ","η":"ἡ","ι":"ἱ","ο":"ὁ","υ":"ὑ","ω":"ὡ","ρ":"ῥ"};
+const SP_GREEK_IOTA_SUB = {"α":"ᾳ","η":"ῃ","ω":"ῳ"};
+function spGreekKeyboardHTML(){
+  const letterRows = SP_GREEK_KB_ROWS.map(row=>
+    `<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:4px">
+      ${row.map(ch=>`<button class="btn" style="min-width:34px;padding:8px 0;font-size:18px" onclick="spGreekKeyPress('${ch}')">${ch}</button>`).join("")}
+    </div>`
+  ).join("");
+  return `<div class="panel">
+    ${letterRows}
+    <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:6px">
+      <button class="btn btn-ghost" title="Spiritus lenis (op de laatste klinker)" onclick="spGreekApplyModifier('smooth')">᾿</button>
+      <button class="btn btn-ghost" title="Spiritus asper (op de laatste klinker)" onclick="spGreekApplyModifier('rough')">῾</button>
+      <button class="btn btn-ghost" title="Iota subscriptum (op α/η/ω)" onclick="spGreekApplyModifier('iota')">ι&#x0345;</button>
+      <button class="btn btn-ghost" onclick="spGreekKeyPress(' ')">␣ spatie</button>
+      <button class="btn btn-ghost" onclick="spGreekBackspace()">⌫</button>
+    </div>
+  </div>`;
+}
+function spGreekKeyPress(ch){
+  const inp = el("spPuzzleInput");
+  if(inp) inp.value += ch;
+}
+function spGreekBackspace(){
+  const inp = el("spPuzzleInput");
+  if(inp) inp.value = inp.value.slice(0,-1);
+}
+function spGreekApplyModifier(type){
+  const inp = el("spPuzzleInput"); if(!inp || !inp.value) return;
+  const map = type==="smooth" ? SP_GREEK_SMOOTH : type==="rough" ? SP_GREEK_ROUGH : SP_GREEK_IOTA_SUB;
+  const last = inp.value.slice(-1);
+  if(map[last]) inp.value = inp.value.slice(0,-1) + map[last];
+}
+// Genormaliseerde vergelijking voor getypt Grieks: NFD-decompose en
+// verwijder ALLEEN de echte accenttekens (acuut/gravis/circumflex/macron/
+// brevis — U+0301/0300/0342/0304/0306), niet spiritus (U+0313/0314) of iota
+// subscriptum (U+0345), die als letters blijven meetellen. Eind-sigma (ς)
+// en gewone sigma (σ) tellen als hetzelfde teken. Hoofdletter- en
+// spatiëring-ongevoelig.
+const SP_GREEK_ACCENT_MARKS_RE = /[́̀͂̄̆]/g;
+function spNormalizeGreek(str){
+  return (str||"").normalize("NFD")
+    .replace(SP_GREEK_ACCENT_MARKS_RE, "")
+    .normalize("NFC")
+    .toLowerCase()
+    .replace(/ς/g, "σ")
+    .replace(/\s+/g, "");
+}
+function spRenderTypedGreekPuzzle(scene, puzzleId, puzzle, target){
+  H(brand(true)+`
+  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  ${spPuzzleHeaderHTML(scene)}
+  <div class="panel">
+    <p style="font-weight:700;margin-bottom:4px">${esc(puzzle.vraag)}</p>
+    <input id="spPuzzleInput" type="text" inputmode="none" readonly value=""
+      style="font-size:22px;text-align:center;letter-spacing:2px;cursor:default"
+      placeholder="gebruik het Griekse toetsenbord hieronder…">
+    <div id="spPuzzleErr" class="note warn" style="display:none;margin-top:8px"></div>
+  </div>
+  ${spGreekKeyboardHTML()}
+  <button class="btn btn-gold btn-block lg" onclick="spCheckTypedGreekPuzzle('${puzzleId}','${target}')">Controleren</button>
+  ${foot()}`);
+}
+function spCheckTypedGreekPuzzle(puzzleId, target){
+  const puzzle = SP_PUZZLES[puzzleId];
+  const raw = el("spPuzzleInput")?.value||"";
+  const err = el("spPuzzleErr");
+  if(spNormalizeGreek(raw) === spNormalizeGreek(puzzle.antwoord)) spGoCns(target);
+  else if(err){ err.textContent = puzzle.hint || "Nog niet juist — let op de spiritus (᾿/῾) en probeer opnieuw."; err.style.display = ""; }
+}
+
+/* ---- COMBAT-BRIDGE — zie de toelichting bij SP_COMBAT_ENEMIES
+   (singleplayer-data.js) voor de "waarom eigen implementatie". SP_COMBAT is
+   bewust NIET onderdeel van SP_STATE/localStorage: een gevecht is kort en
+   ademt niet over sessies heen — verlaat je de app halverwege, dan begin je
+   het gevecht opnieuw bij terugkeer (net als bij de meeste boss-fights). ---- */
+const SP_COMBAT_EP_PER_CORRECT = 10;
+const SP_COMBAT_ACTION_COST = 20;
+const SP_COMBAT_DAMAGE_PER_ATTACK = 15;
+let SP_COMBAT = null;
+function spStartCombatFromScene(scene){
+  const enemyId = scene.meta.COMBAT.trim();
+  const target = scene.choices[0]?.target;
+  const enemy = SP_COMBAT_ENEMIES[enemyId];
+  if(!enemy){ console.error("Onbekende vijand:", enemyId); return spGoCns(target); }
+  SP_COMBAT = { enemyId, hp:enemy.hp, maxHp:enemy.hp, ep:0, target, question:null, sceneTitle:scene.title };
+  spCombatNextQuestion();
+  SCREENS.spCombat();
+}
+// Genereert een meerkeuzevraag uit de al geleerde vocabulaire (SP_STATE.vocab)
+// — is die nog leeg (zou niet moeten gebeuren na Hoofdstuk 1, maar toch een
+// vangnet), val terug op de volledige SP_VOCAB_ENTRIES-lijst.
+function spCombatNextQuestion(){
+  const ids = (SP_STATE.vocab&&SP_STATE.vocab.length) ? SP_STATE.vocab : Object.keys(SP_VOCAB_ENTRIES);
+  const entries = ids.map(id=>SP_VOCAB_ENTRIES[id]).filter(Boolean);
+  const w = pick(entries);
+  const correct = w.betekenis;
+  const distractors = shuffle(entries.filter(x=>x!==w).map(x=>x.betekenis))
+    .filter((v,i,a)=>v!==correct && a.indexOf(v)===i).slice(0,3);
+  SP_COMBAT.question = { woord:w.woord, correct, options:shuffle([correct, ...distractors]) };
+}
+SCREENS.spCombat = function(){
+  if(!SP_COMBAT){ go("spSlots"); return; }
+  const enemy = SP_COMBAT_ENEMIES[SP_COMBAT.enemyId];
+  const q = SP_COMBAT.question;
+  const hpPct = Math.max(0, Math.round(SP_COMBAT.hp/SP_COMBAT.maxHp*100));
+  const canAttack = SP_COMBAT.ep >= SP_COMBAT_ACTION_COST;
+  const optsHTML = q.options.map((o,i)=>
+    `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spCombatAnswer(${i})">${esc(o)}</button>`
+  ).join("");
+  H(brand(true)+`
+  <div class="scrhead"><span></span><h2>Gevecht</h2>${spAudioToggleHTML()}</div>
+  <div class="panel" style="text-align:center">
+    <span style="font-size:40px">${enemy.icon}</span>
+    <div class="eyebrow l" style="margin-top:6px">${esc(enemy.nm)}</div>
+    <div style="height:10px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin:6px 0">
+      <div style="height:100%;width:${hpPct}%;background:var(--hi-bright,#e8c77e)"></div>
+    </div>
+    <p class="note">${SP_COMBAT.hp} / ${SP_COMBAT.maxHp} levenspunten van de vijand — jouw EP: ${SP_COMBAT.ep}</p>
+  </div>
+  <div class="panel">
+    <p style="font-weight:700;margin-bottom:4px">Wat betekent <em>${esc(q.woord)}</em>?</p>
+    ${optsHTML}
+    <div id="spCombatErr" class="note warn" style="display:none;margin-top:10px"></div>
+  </div>
+  ${canAttack?`<button class="btn btn-gold btn-block lg" onclick="spCombatAttack()">⚔️ Aanval (kost ${SP_COMBAT_ACTION_COST} EP)</button>`:""}
+  ${foot()}`);
+};
+function spCombatAnswer(idx){
+  const q = SP_COMBAT.question;
+  const correct = q.options[idx]===q.correct;
+  const err = el("spCombatErr");
+  if(correct){
+    SP_COMBAT.ep += SP_COMBAT_EP_PER_CORRECT;
+    toast("Juist!", "+"+SP_COMBAT_EP_PER_CORRECT+" EP");
+  } else if(err){
+    err.textContent = "Niet juist — het juiste antwoord was \""+q.correct+"\". Geen EP deze beurt.";
+    err.style.display = "";
+  }
+  spCombatNextQuestion();
+  SCREENS.spCombat();
+}
+function spCombatAttack(){
+  if(!SP_COMBAT || SP_COMBAT.ep < SP_COMBAT_ACTION_COST) return;
+  SP_COMBAT.ep -= SP_COMBAT_ACTION_COST;
+  SP_COMBAT.hp -= SP_COMBAT_DAMAGE_PER_ATTACK;
+  if(SP_COMBAT.hp <= 0){
+    const target = SP_COMBAT.target;
+    SP_COMBAT = null;
+    spGoCns(target);
+    return;
+  }
+  SCREENS.spCombat();
 }
