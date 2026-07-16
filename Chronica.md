@@ -58,7 +58,8 @@ browser):
 | Campagnekaart-metadata (Proloog + 19 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 2+ nog niet geschreven |
 | **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen hebben er een (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) |
 | Gemini-huisstijl-Gem (stripstijl) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
-| **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen getekend en schakelbaar via tabblad-rij (aegean: Latium/Olympos/Sardis; western: nog geen pins, hoofdstukken nog te bouwen; eastern: Kaukasus) |
+| **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
+| **Audio** — `MUSIC:` speelt af, met mute-knop | `certamen/singleplayer.js` (`spPlayMusic`/`spAudioToggleHTML`), `SCREENS.spIntro` (titelscherm met Main Theme) | ✅ werkend — Orakel-epiloog (§7.2) en het titelscherm hebben muziek; overige scènes nog stil |
 | Audio-assetmappen | `certamen/assets/chronica/music/`, `certamen/assets/chronica/sfx/` | ✅ mappen bestaan (music met 1e Suno-track) |
 
 ---
@@ -327,13 +328,24 @@ stripstijl "antieke atlas", `SP_MAP_PANELS`/`SP_MAP_LOCATIONS` in
 singleplayer-data.js) — de volledige wereld (Britannia tot India) is
 verdeeld in panelen zodat elk leesbaar blijft. Alle drie panelen zijn nu
 getekend en met een tabblad-rij (boven de kaart in `SCREENS.spWorldMap`)
-schakelbaar: "aegean" (`panel1_aegean.png`, dekt Proloog + Hoofdstuk 1: Latium,
-Olympos, Sardis), "western" (`panel2_western.png`, Sicilië/Carthago/Gades/
-Hesperiden/Alpen/Gallië — hoofdstukken nog te bouwen) en "eastern"
-(`panel3_eastern.png`, Kaukasus/Perzië/Egypte/India). Op "eastern" staat al
-één pin (Kaukasus, ontgrendeld door `codex_doos_van_pandora` uit Hoofdstuk 1
-lijn C); de overige plekken op western/eastern volgen zodra hun hoofdstukken
-en codex-entries bestaan. Twee CC-gelicenseerde referentiekaarten (Aeneas- en
+schakelbaar, in deze volgorde — **west, midden, oost** — zodat het middelste
+paneel het vertrouwde "thuis"-paneel is waar de speler op landt
+(`SP_MAP_CURRENT_PANEL` staat standaard op `"aegean"`):
+- **"western"** (links) — knoplabel "Het Westen" (`panel2_western.png`,
+  Sicilië/Carthago/Gades/Hesperiden/Alpen/Gallië — hoofdstukken nog te
+  bouwen, dus nog geen pins).
+- **"aegean"** (midden, standaard) — knoplabel "Italië en Griekenland"
+  (`panel1_aegean.png`, dekt Proloog + Hoofdstuk 1: Latium, Olympos, Sardis).
+- **"eastern"** (rechts) — knoplabel "Het Oosten" (`panel3_eastern.png`,
+  Kaukasus/Perzië/Egypte/India). Heeft al één pin (Kaukasus, ontgrendeld door
+  `codex_doos_van_pandora` uit Hoofdstuk 1 lijn C).
+
+De interne panel-id's (`aegean`/`western`/`eastern`, gebruikt door
+`SP_MAP_LOCATIONS[].panel`) zijn ongewijzigd gebleven — alleen de
+`nm`-weergavenaam en de volgorde van de object-keys in `SP_MAP_PANELS`
+veranderden. Het knoplabel is het stuk vóór " — " in `nm` (bv. "Het Westen —
+Sicilië, Carthago, Gades & de Alpen"); de rest van `nm` blijft zichtbaar als
+beschrijving onder de tabbladen. Twee CC-gelicenseerde referentiekaarten (Aeneas- en
 Odysseus-reis, resp. CC BY 3.0/Rcsprinter123 en CC BY-SA 4.0/Giulia
 Zoccarato) zijn als geografisch naslagwerk gebruikt bij het ontwerpen — niet
 overgenomen, dus geen attributieplicht.
@@ -456,6 +468,56 @@ ik" in plaats van "welk getal moet ik maximaliseren".
   hetzelfde principe: tag waar de keuze een karakterkant laat zien, sla over
   waar het puur een leesknop is.
 
+### 7.4 Titelscherm + audio (**gebouwd**)
+
+`SCREENS.spIntro` (singleplayer.js) is het nieuwe instappunt van Chronica
+Classica (`SCREENS.singlePlayer` stuurt er nu naartoe, i.p.v. rechtstreeks
+naar `spSlots`): een korte, sfeervolle "startpagina" met de Main Theme
+(`main_theme.mp3`) die meteen begint te spelen zodra het scherm opent — dit
+is een bewust lichtgewicht **substituut voor een echte openingscinematic**
+(zie de aanbeveling aan de auteur hieronder). Verschijnt elke keer opnieuw
+bij het openen vanuit het portaal, niet eenmalig — het is een titelscherm,
+geen tutorial.
+
+**Audio-mechaniek** (herbruikbaar voor elke toekomstige scène):
+- `spPlayMusic(bestandsnaam)` speelt een mp3 uit `assets/chronica/music/` af
+  via één gedeeld, lussend `<audio>`-element; vraagt hetzelfde bestand
+  opnieuw aan (bv. drie opeenvolgende scènes met dezelfde `MUSIC:`-regel),
+  dan herstart het NIET — cruciaal voor de Orakel-epiloog (§7.2), die over
+  drie scènes hetzelfde nummer laat doorlopen.
+- Start altijd binnen dezelfde synchrone klik-afhandeling (via
+  `spRunMetaHooks`, die alleen binnen `SCREENS.spPlay()` draait, of
+  rechtstreeks in `SCREENS.spIntro()` na een klik op de portaal-tegel) —
+  voldoet zo aan de iPad-eis dat geluid pas ná een gebruikersactie mag
+  starten. Een geblokkeerde autoplay (bv. bij het automatisch hervatten van
+  een save) wordt stil genegeerd; de mute-knop laat het geluid dan alsnog
+  handmatig aanzetten.
+- **Mute-knop** (`spAudioToggleHTML()`) rechtsboven op elk Chronica-scherm
+  (titelscherm, verhaal, puzzels) — schrijft naar `localStorage`
+  (`certamen_chronica_muted`), dus blijft de voorkeur van de speler over
+  sessies heen bewaard. Geen aparte instelling nodig; het is gewoon altijd
+  zichtbaar en direct bruikbaar.
+- `spStopMusic()` wordt aangeroepen bij het verlaten van Chronica Classica
+  terug naar het hoofdportaal (de "terug"-knop op het slotoverzicht) — zo
+  blijft er geen muziek doorspelen op schermen buiten Chronica.
+
+**Aanbeveling voor een echte openingscinematic** (nog niet gebouwd — aan de
+auteur om buiten deze codebase te maken en als los videobestand te leveren):
+een kort (~20-30s) filmpje dat de setting introduceert en eindigt met een
+landing in Latium is het makkelijkst te maken als **Ken Burns-stijl diavoorstelling**
+van een paar Gemini-stills (dezelfde huisstijl, zie
+`gemini-comic-style.md`) — pan/zoom over 3-4 beelden, tekst-overlays, eigen
+`main_theme.mp3` eronder — via een gratis, laagdrempelig tool als **Canva**
+(gratis videoeditor, drag-and-drop, eigen audio toevoegen) of **CapCut**
+(gratis, ook makkelijk). Voor een tool die de stills zelf tot bewegend beeld
+animeert (i.p.v. alleen pannen/zoomen), zijn **Luma Dream Machine** en
+**Kling AI** de meest toegankelijke gratis image-to-video-opties op dit
+moment — beide hebben een gratis daglimiet en werken direct vanuit een
+geüploade Gemini-still, zonder account-gedoe. Echte tekst-naar-video-AI
+(Veo, Sora) is minder betrouwbaar voor verhalende continuïteit en vaak niet
+gratis — daarom niet de eerste aanbeveling. Zolang er geen video is, blijft
+`SCREENS.spIntro` de facto de "opening" van het spel.
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
@@ -473,9 +535,15 @@ In afgesproken bouwvolgorde:
    een personage dat later verwijst naar welke Hoofdstuk-1-lijn je koos) én op
    `spApproachTendency()` (§7.3, Pietas/Virtus) — de teller zelf werkt en
    bouwt al op, alleen het *reageren* erop in latere hoofdstukken ontbreekt nog.
-3. **Audio-hook** — `MUSIC:`/`SFX:` daadwerkelijk afspelen (mp3, uit Suno) met de
-   iPad-eis dat geluid pas ná een gebruikersactie mag starten. Mappen staan
-   klaar in `certamen/assets/chronica/`.
+3. **Audio-hook (deels gebouwd)** — `MUSIC:` speelt nu echt af via
+   `spPlayMusic()` (singleplayer.js), met een mute-knop (`spAudioToggleHTML`,
+   rechtsboven op elk Chronica-scherm) die de speler zelf kan bedienen —
+   voldoet aan de iPad-eis omdat het altijd binnen dezelfde gebruikersactie
+   (een klik) start. Tot nu toe alleen gekoppeld aan de Orakel-epiloog (§7.2,
+   `the_oracle_awakens.mp3`) en het nieuwe titelscherm (`SCREENS.spIntro`,
+   `main_theme.mp3` — zie §7.4). Nieuwe scènes met eigen sfeermuziek hoeven
+   alleen een `MUSIC:`-sectie toe te voegen; `SFX:` (korte geluidseffecten)
+   bestaat nog niet.
 4. **Quest-overzichtsscherm** — data wordt al bewaard (`spHookQuest`); de
    Codex heeft inmiddels wél een eigen scherm (§7.2, `SCREENS.spCodex`), een
    vergelijkbaar overzicht voor quests ontbreekt nog.

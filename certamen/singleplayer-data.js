@@ -332,10 +332,15 @@ const SP_MYTH_CANON = {
    BOUWSTATUS: x/y zijn een eerste schatting op het oog — nog te verfijnen
    zodra `panel1_aegean.png` op schijf staat en pixel-precies afgelezen kan
    worden. ---- */
+// Volgorde = knopvolgorde in SCREENS.spWorldMap (singleplayer.js): western
+// links, aegean in het midden (én de standaardkaart waar de speler op
+// landt — zie SP_MAP_CURRENT_PANEL), eastern rechts. Zo kan de speler vanuit
+// het vertrouwde middelste "thuis"-paneel naar links (het Westen) of rechts
+// (het Oosten) navigeren.
 const SP_MAP_PANELS = {
-  aegean: { nm:"Latium, Egeïsche Zee & West-Klein-Azië", img:"panel1_aegean.png" },
-  western: { nm:"Sicilië, Carthago, Gades & de Alpen", img:"panel2_western.png" },
-  eastern: { nm:"Kaukasus, Perzië, Egypte & de rand van India", img:"panel3_eastern.png" },
+  western: { nm:"Het Westen — Sicilië, Carthago, Gades & de Alpen", img:"panel2_western.png" },
+  aegean: { nm:"Italië en Griekenland — Egeïsche Zee & West-Klein-Azië", img:"panel1_aegean.png" },
+  eastern: { nm:"Het Oosten — Kaukasus, Perzië, Egypte & de rand van India", img:"panel3_eastern.png" },
 };
 const SP_MAP_LOCATIONS = [
   // x/y afgelezen op het echte panel1_aegean.png (1376×768px): temple-icoon
@@ -1049,6 +1054,12 @@ Terwijl je van de rivieroever wegloopt, met Midas' dochter weer levend en de vlo
 
 "Je hebt de naam van Midas teruggegeven aan de herinnering," zegt de stem, "en met hem het gevaar van een wens die niet doordacht is. Sardis, Bacchus, de Pactolus — ze bestaan weer, precies zoals ze altijd hadden moeten bestaan."
 
+IMAGE:
+orakel_verschijnt.png
+
+MUSIC:
+the_oracle_awakens.mp3
+
 CHOICES:
 
 * Luister verder -> CH1_ROBE
@@ -1254,6 +1265,12 @@ TEXT:
 Terwijl Pallas Athena naast Zeus haar plaats inneemt en de Olympos langzaam tot rust komt, trilt de lucht om je heen — net als toen je de bronzen schijf in Latium voor het eerst aanraakte. Het orakel gloeit weer op, en de stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt.
 
 "Je hebt de geboorte van Pallas Athena teruggegeven aan de herinnering," zegt de stem. "Wijsheid heeft weer een gezicht, een speer, en een naam die door heel Hellas wordt uitgesproken. Zonder jou was ook zij vervaagd, net als al het andere dat deze wereld dreigde te verliezen."
+
+IMAGE:
+orakel_verschijnt.png
+
+MUSIC:
+the_oracle_awakens.mp3
 
 CHOICES:
 
@@ -1512,6 +1529,12 @@ TEXT:
 Terwijl je van Prometheus' rots wegloopt, met vuur en hoop nu onlosmakelijk verbonden aan de mensheid, trilt de lucht om je heen — net als toen je de bronzen schijf in Latium voor het eerst aanraakte. Het orakel gloeit weer op, en de stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt.
 
 "Je hebt het vuur van Prometheus, de doos van Pandora en de hoop die erin achterbleef teruggegeven aan de herinnering," zegt de stem. "Een titaan die alles riskeerde voor een schepping die niet eens de zijne was — zonder jou was ook dat verhaal voorgoed verdwenen."
+
+IMAGE:
+orakel_verschijnt.png
+
+MUSIC:
+the_oracle_awakens.mp3
 
 CHOICES:
 
