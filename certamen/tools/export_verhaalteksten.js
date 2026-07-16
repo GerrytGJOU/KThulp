@@ -18,7 +18,7 @@ function extract(name){
   return src.slice(start, end).trim();
 }
 
-const APPROACH_TAG_RE = /\s*\[(PIETAS|VIRTUS)\]\s*$/i;
+const APPROACH_TAG_RE = /\s*\[(CLEMENTIA|SEVERITAS)\]\s*$/i;
 const REQUIRE_TAG_RE = /\s*\[REQUIRE:(\w+)=(\d+)\]\s*$/i;
 
 function parseScenes(cns){
@@ -131,7 +131,7 @@ WAT MOET JE MET RUST LATEN (anders breekt de doorverwijzing)
 --------------------------------------------------------------
 - De scene-koppen, bv. "=== SCENE: CH1_A02 ===" - dit is de technische ID.
 - Het stuk NA de "->" pijl in een keuze (bv. "-> CH1_A02") en eventuele
-  tags erachter tussen [vierkante haken], zoals [PIETAS]/[VIRTUS]/
+  tags erachter tussen [vierkante haken], zoals [CLEMENTIA]/[SEVERITAS]/
   [REQUIRE:fragments=4] - deze zijn onzichtbaar voor de speler maar sturen
   de game-logica aan.
 - Alle regels met een ANDER label dan TITLE/TEXT/DIALOGUE/CHOICES (dus
