@@ -331,11 +331,11 @@ const CNSParser = {
     if(lines.length===0) return null;
     return { speaker:lines[0].trim(), text:lines.slice(1).join("\n").trim() };
   },
-  // Optioneel: een keuzeregel mag eindigen op [PIETAS] of [VIRTUS] vóór de
-  // "->" — een onzichtbare marker voor het Pietas/Virtus-systeem (zie
+  // Optioneel: een keuzeregel mag eindigen op [CLEMENTIA] of [SEVERITAS] vóór de
+  // "->" — een onzichtbare marker voor het Clementia/Severitas-systeem (zie
   // spChoosePath/spHookApproach). De marker wordt uit het zichtbare label
   // gesloopt; de speler ziet nooit dat een keuze getagd is.
-  APPROACH_TAG_RE: /\s*\[(PIETAS|VIRTUS)\]\s*$/i,
+  APPROACH_TAG_RE: /\s*\[(CLEMENTIA|SEVERITAS)\]\s*$/i,
   // Optioneel: een keuzeregel mag ook eindigen op [REQUIRE:sleutel=getal] —
   // verbergt die keuze tenzij aan de voorwaarde is voldaan (zie
   // spChoiceVisible in singleplayer.js). Nu alleen "fragments" gebruikt
@@ -364,7 +364,7 @@ const CNSParser = {
 };
 
 const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS)]);
-const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{pietas:0,virtus:0}, persons:{}, vocab:[], seenImages:[], fragments:[] });
+const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[] });
 
 /* ---- SPELERSTATE ---- */
 let SP_STATE = SP_EMPTY_STATE();
@@ -701,7 +701,7 @@ function spGoCns(nodeId){
   spSaveProgress({ node:nodeId });
   go("spPlay");
 }
-/* Klik op een keuzeknop: registreert eerst stil de Pietas/Virtus-tag (indien
+/* Klik op een keuzeknop: registreert eerst stil de Clementia/Severitas-tag (indien
    aanwezig — zie CNSParser.APPROACH_TAG_RE) en navigeert dan pas door. Zo
    blijft spGoCns bruikbaar voor alle andere navigatie (puzzels, kaart-pins,
    "Verdergaan"-knop) die geen approach-tag kennen. */
@@ -894,8 +894,8 @@ function spHookSeenImage(scene){
   spSaveProgress({ seenImages:[...existing, entry] });
 }
 
-/* ---- PIETAS/VIRTUS — het stille "Paragon/Renegade"-systeem.
-   Een keuzeregel in CHOICES mag eindigen op [PIETAS] of [VIRTUS] (zie
+/* ---- CLEMENTIA/SEVERITAS — het stille "Paragon/Renegade"-systeem.
+   Een keuzeregel in CHOICES mag eindigen op [CLEMENTIA] of [SEVERITAS] (zie
    CNSParser.APPROACH_TAG_RE); die tag wordt NOOIT getoond aan de speler en
    heeft ook geen eigen scherm/HUD — het is puur een stilzwijgende teller die
    meetelt hoe de speler zich door het verhaal gedraagt (mild/invoelend versus
@@ -904,19 +904,19 @@ function spHookSeenImage(scene){
    NPC laten reageren op de OPGEBOUWDE houding (via een CONDITION-mechanisme,
    zie Chronica.md §8) — dat is bewust losgekoppeld van deze telfunctie zelf. */
 function spHookApproach(tag){
-  const key = tag==="PIETAS" ? "pietas" : tag==="VIRTUS" ? "virtus" : null;
+  const key = tag==="CLEMENTIA" ? "clementia" : tag==="SEVERITAS" ? "severitas" : null;
   if(!key) return;
-  const approach = {...(SP_STATE.approach||{pietas:0,virtus:0})};
+  const approach = {...(SP_STATE.approach||{clementia:0,severitas:0})};
   approach[key] = (approach[key]||0) + 1;
   spSaveProgress({ approach });
 }
-// Overwicht van de opgebouwde houding — "pietas"/"virtus" bij een duidelijk
+// Overwicht van de opgebouwde houding — "clementia"/"severitas" bij een duidelijk
 // overwicht, anders "neutraal" (gelijke stand of nog geen enkele keuze
 // gemaakt). Bedoeld voor later gebruik door NPC-dialoog/CONDITION-checks.
 function spApproachTendency(){
-  const a = SP_STATE.approach||{pietas:0,virtus:0};
-  if(a.pietas===a.virtus) return "neutraal";
-  return a.pietas>a.virtus ? "pietas" : "virtus";
+  const a = SP_STATE.approach||{clementia:0,severitas:0};
+  if(a.clementia===a.severitas) return "neutraal";
+  return a.clementia>a.severitas ? "clementia" : "severitas";
 }
 
 /* Illustratie bij een scène: de IMAGE-sectie is een bestandsnaam relatief aan

@@ -1057,8 +1057,8 @@ Wat de koning met hem heeft gedaan, weet de koopman niet precies, maar het geruc
 
 CHOICES:
 
-* Bedank de koopman voor zijn verhaal voor je verdergaat [PIETAS] -> CH1_A02
-* Knik kort en loop meteen door, je aandacht al bij het paleis [VIRTUS] -> CH1_A02
+* Bedank de koopman voor zijn verhaal voor je verdergaat [CLEMENTIA] -> CH1_A02
+* Knik kort en loop meteen door, je aandacht al bij het paleis [SEVERITAS] -> CH1_A02
 
 END
 
@@ -1154,8 +1154,8 @@ Hij grijpt naar brood — en het verstart tussen zijn vingers voordat het zijn l
 
 CHOICES:
 
-* Kijk met groeiend medeleven hoe zijn paniek toeneemt [PIETAS] -> CH1_A07
-* Kijk onbewogen toe — hij wist waar hij om vroeg [VIRTUS] -> CH1_A07
+* Kijk met groeiend medeleven hoe zijn paniek toeneemt [CLEMENTIA] -> CH1_A07
+* Kijk onbewogen toe — hij wist waar hij om vroeg [SEVERITAS] -> CH1_A07
 
 END
 
@@ -1171,8 +1171,8 @@ Hij omarmt haar voordat hij zich kan inhouden, en zij verstart in zijn armen —
 
 CHOICES:
 
-* Grijp hem voorzichtig bij zijn schouders, om hem te troosten [PIETAS] -> CH1_A08
-* Grijp hem stevig bij zijn schouders, om hem tot bezinning te schudden [VIRTUS] -> CH1_A08
+* Grijp hem voorzichtig bij zijn schouders, om hem te troosten [CLEMENTIA] -> CH1_A08
+* Grijp hem stevig bij zijn schouders, om hem tot bezinning te schudden [SEVERITAS] -> CH1_A08
 
 END
 
@@ -1188,8 +1188,8 @@ Voor het eerst sinds je hem zag, ziet hij eruit als een gewone man — geen koni
 
 CHOICES:
 
-* Wijs hem meteen op Bacchus, die alles zag gebeuren [VIRTUS] -> CH1_A09
-* Blijf eerst naast hem zitten, zodat hij niet alleen is met wat hij heeft gedaan [PIETAS] -> CH1_A08B
+* Wijs hem meteen op Bacchus, die alles zag gebeuren [SEVERITAS] -> CH1_A09
+* Blijf eerst naast hem zitten, zodat hij niet alleen is met wat hij heeft gedaan [CLEMENTIA] -> CH1_A08B
 
 END
 
@@ -1257,8 +1257,8 @@ ch1_lijn=A; ch1_voltooid=true
 
 CHOICES:
 
-* Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [PIETAS] -> CH1_A11
-* Loop meteen door — er wacht nog werk aan de naam die je moet redden [VIRTUS] -> CH1_A11
+* Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [CLEMENTIA] -> CH1_A11
+* Loop meteen door — er wacht nog werk aan de naam die je moet redden [SEVERITAS] -> CH1_A11
 
 END
 
@@ -1318,8 +1318,8 @@ Hij wijst naar de donderwolken die zich al om de top samenpakken. "Als de zoon z
 
 CHOICES:
 
-* Bedank de herder voor zijn waarschuwing voor je verdergaat [PIETAS] -> CH1_B02
-* Je hebt geen tijd voor meer vragen en klimt meteen door [VIRTUS] -> CH1_B02
+* Bedank de herder voor zijn waarschuwing voor je verdergaat [CLEMENTIA] -> CH1_B02
+* Je hebt geen tijd voor meer vragen en klimt meteen door [SEVERITAS] -> CH1_B02
 
 END
 
@@ -1335,8 +1335,8 @@ De andere goden houden zich op afstand, fluisterend onder elkaar, niemand goed w
 
 CHOICES:
 
-* Voel medelijden met Zeus, ondanks alles wat hij heeft gedaan [PIETAS] -> CH1_B03
-* Blijf nuchter — een pijnlijke geboorte is nog geen excuus voor wat hij Metis aandeed [VIRTUS] -> CH1_B03
+* Voel medelijden met Zeus, ondanks alles wat hij heeft gedaan [CLEMENTIA] -> CH1_B03
+* Blijf nuchter — een pijnlijke geboorte is nog geen excuus voor wat hij Metis aandeed [SEVERITAS] -> CH1_B03
 
 END
 
@@ -1449,8 +1449,8 @@ Zeus, met een mengeling van opluchting en ontzag die je zelden op zijn gezicht z
 
 CHOICES:
 
-* Kijk toe, ontroerd door het moment tussen vader en dochter [PIETAS] -> CH1_B08
-* Kijk toe, vooral benieuwd wat haar aanwezigheid voor de Olympos gaat betekenen [VIRTUS] -> CH1_B08
+* Kijk toe, ontroerd door het moment tussen vader en dochter [CLEMENTIA] -> CH1_B08
+* Kijk toe, vooral benieuwd wat haar aanwezigheid voor de Olympos gaat betekenen [SEVERITAS] -> CH1_B08
 
 END
 
@@ -1481,8 +1481,8 @@ ch1_lijn=B; ch1_voltooid=true
 
 CHOICES:
 
-* Daal af, dankbaar dat je bij zo'n geboorte mocht zijn [PIETAS] -> CH1_B09
-* Daal meteen af — er is nog werk te doen [VIRTUS] -> CH1_B09
+* Daal af, dankbaar dat je bij zo'n geboorte mocht zijn [CLEMENTIA] -> CH1_B09
+* Daal meteen af — er is nog werk te doen [SEVERITAS] -> CH1_B09
 
 END
 
@@ -1525,8 +1525,8 @@ prometheus:intro
 
 CHOICES:
 
-* Haast je naar de vallei, bewogen door het verhaal van de oude vrouw [PIETAS] -> CH1_C02
-* Loop resoluut door — verhalen zijn mooi, maar je wilt het zelf zien [VIRTUS] -> CH1_C02
+* Haast je naar de vallei, bewogen door het verhaal van de oude vrouw [CLEMENTIA] -> CH1_C02
+* Loop resoluut door — verhalen zijn mooi, maar je wilt het zelf zien [SEVERITAS] -> CH1_C02
 
 END
 
@@ -1610,8 +1610,8 @@ Voor Prometheus bedenkt hij een straf die eeuwig zal duren: vastgeketend aan een
 
 CHOICES:
 
-* Vrees voor wat dit gaat opleveren, met medelijden voor wie straks de gevolgen zal dragen [PIETAS] -> CH1_C06
-* Kijk toe zonder oordeel — de goden doen wat goden doen [VIRTUS] -> CH1_C06
+* Vrees voor wat dit gaat opleveren, met medelijden voor wie straks de gevolgen zal dragen [CLEMENTIA] -> CH1_C06
+* Kijk toe zonder oordeel — de goden doen wat goden doen [SEVERITAS] -> CH1_C06
 
 END
 
@@ -1690,8 +1690,8 @@ pandora.png
 
 CHOICES:
 
-* Kniel bij Pandora neer, die verstijfd is van schrik en schuldgevoel [PIETAS] -> CH1_C09
-* Richt je blik meteen op de doos — is dit werkelijk alles wat erin zat? [VIRTUS] -> CH1_C09
+* Kniel bij Pandora neer, die verstijfd is van schrik en schuldgevoel [CLEMENTIA] -> CH1_C09
+* Richt je blik meteen op de doos — is dit werkelijk alles wat erin zat? [SEVERITAS] -> CH1_C09
 
 END
 
@@ -1710,8 +1710,8 @@ pandora:full
 
 CHOICES:
 
-* Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [PIETAS] -> CH1_C10
-* Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [VIRTUS] -> CH1_C10
+* Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA] -> CH1_C10
+* Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [SEVERITAS] -> CH1_C10
 
 END
 
@@ -1925,8 +1925,8 @@ Op een avond, uitgeput en wanhopig, bereikt ze een klein dorp aan de rand van ee
 
 CHOICES:
 
-* Schuil dankbaar in het riet, ontroerd door zijn stille moed [PIETAS] -> CH2_L02B
-* Trek meteen verder — je vertrouwt niemand meer die zo snel weer verdwijnt [VIRTUS] -> CH2_L03
+* Schuil dankbaar in het riet, ontroerd door zijn stille moed [CLEMENTIA] -> CH2_L02B
+* Trek meteen verder — je vertrouwt niemand meer die zo snel weer verdwijnt [SEVERITAS] -> CH2_L03
 
 END
 
@@ -2026,8 +2026,8 @@ athena:intro
 
 CHOICES:
 
-* Beloof het eiland eeuwige verering als het haar redt [PIETAS] -> CH2_L08
-* Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [VIRTUS] -> CH2_L08
+* Beloof het eiland eeuwige verering als het haar redt [CLEMENTIA] -> CH2_L08
+* Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [SEVERITAS] -> CH2_L08
 
 END
 

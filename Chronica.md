@@ -496,12 +496,12 @@ id hoort een entry te krijgen in de bijbehorende databron
 (`SP_CODEX_ENTRIES`/`SP_CODEX_PERSONS`/`SP_VOCAB_ENTRIES`, allemaal
 singleplayer-data.js) — anders toont de Codex alleen een kale id of niets.
 
-### 7.3 Pietas/Virtus — stil "Paragon/Renegade"-systeem (**gebouwd**)
+### 7.3 Clementia/Severitas — stil "Paragon/Renegade"-systeem (**gebouwd**)
 
 Losjes geïnspireerd op Mass Effects Paragon/Renegade: bij (bijna) elke keuze
 met interpersoonlijke lading krijgt de speler twee smaken van dezelfde
-reactie — een meelevende/geduldige ("Pietas") en een nuchtere/daadkrachtige
-("Virtus") — **ook wanneer beide naar exact dezelfde volgende scène leiden**.
+reactie — een meelevende/geduldige ("Clementia") en een nuchtere/daadkrachtige
+("Severitas") — **ook wanneer beide naar exact dezelfde volgende scène leiden**.
 Het punt is niet vertakking maar **het gevoel van karakterkeuze**, stil
 bijgehouden en NERGENS aan de speler getoond (geen HUD, geen scherm, geen
 melding) — precies zoals de Mass Effect-balkjes zelf ondubbelzinnig zichtbaar
@@ -509,19 +509,19 @@ zijn, maar hier bewust omgekeerd: onzichtbaar, zodat het voelt als "wie ben
 ik" in plaats van "welk getal moet ik maximaliseren".
 
 **Mechaniek:**
-- Een keuzeregel in `CHOICES:` mag eindigen op `[PIETAS]` of `[VIRTUS]` vóór
-  de `->`, bv. `* Blijf eerst naast hem zitten [PIETAS] -> CH1_A08B`. De tag
+- Een keuzeregel in `CHOICES:` mag eindigen op `[CLEMENTIA]` of `[SEVERITAS]` vóór
+  de `->`, bv. `* Blijf eerst naast hem zitten [CLEMENTIA] -> CH1_A08B`. De tag
   wordt door `CNSParser.parseChoices` (singleplayer.js) uit het zichtbare
-  label gesloopt — de speler ziet nooit `[PIETAS]`/`[VIRTUS]` op een knop.
+  label gesloopt — de speler ziet nooit `[CLEMENTIA]`/`[SEVERITAS]` op een knop.
 - Bij een klik roept de knop `spChoosePath(target, approach)` aan (i.p.v.
   rechtstreeks `spGoCns`); die telt eerst stil op via `spHookApproach()` en
-  navigeert dan pas door. `SP_STATE.approach = {pietas, virtus}` (per
+  navigeert dan pas door. `SP_STATE.approach = {clementia, severitas}` (per
   saveslot, net als codex/flags).
 - **Puzzel-scènes zijn uitgesloten**: `spRenderPuzzle()` gebruikt
   `scene.choices[0].target` rechtstreeks en roept `spGoCns` aan, niet
   `spChoosePath` — een `[TAG]` op een puzzelscène-keuze zou dus nooit vuren.
   Tag daarom alleen keuzes op scènes ZONDER `PUZZLE:`-sectie.
-- `spApproachTendency()` levert `"pietas"`/`"virtus"`/`"neutraal"` (bij een
+- `spApproachTendency()` levert `"clementia"`/`"severitas"`/`"neutraal"` (bij een
   gelijke stand of nog geen enkele getagde keuze) — bedoeld voor NPC's/scènes
   die later conditioneel reageren op de opgebouwde houding. Dat vereist wel
   eerst het `CONDITION`-mechanisme (§8) — de teller zelf werkt al, het
@@ -667,7 +667,7 @@ spelen. Zodra `SP_STATE.fragments` alle vier bevat, verschijnt op de hub een
 extra keuze ("Spreek het Orakel aan…") die naar `CH2_ATHENA` leidt. Dat werkt
 via een nieuwe, generieke keuze-tag: een regel in `CHOICES:` mag eindigen op
 `[REQUIRE:sleutel=getal]` (`CNSParser.REQUIRE_TAG_RE`, geparst net als
-`[PIETAS]`/`[VIRTUS]`); `spChoiceVisible()` verbergt de keuze tenzij aan de
+`[CLEMENTIA]`/`[SEVERITAS]`); `spChoiceVisible()` verbergt de keuze tenzij aan de
 voorwaarde is voldaan. Nu alleen `fragments=4` in gebruik, maar generiek
 genoeg voor latere vergelijkbare gates.
 
@@ -773,7 +773,7 @@ In afgesproken bouwvolgorde:
    `SCREENS.spWorldMap`), alle drie panelen zijn getekend en schakelbaar; nog
    open: NPC's/scènes die conditioneel reageren op de al-gebouwde `flags` (bv.
    een personage dat later verwijst naar welke Hoofdstuk-1-lijn je koos) én op
-   `spApproachTendency()` (§7.3, Pietas/Virtus) — de teller zelf werkt en
+   `spApproachTendency()` (§7.3, Clementia/Severitas) — de teller zelf werkt en
    bouwt al op, alleen het *reageren* erop in latere hoofdstukken ontbreekt nog.
 3. **Audio-hook (deels gebouwd)** — `MUSIC:` speelt nu echt af via
    `spPlayMusic()` (singleplayer.js), met een mute-knop (`spAudioToggleHTML`,
@@ -867,7 +867,7 @@ aanpassen zonder steeds de volledige tekst heen-en-weer te hoeven sturen.
   hoofdstuk.
 - **Formaat: platte tekst (.txt), bewust geen .docx.** Het CNS-formaat is al
   leesbare platte tekst met structurele merktekens (scène-ID's, `->`-pijlen,
-  `[PIETAS]`/`[VIRTUS]`/`[REQUIRE:...]`-tags) die exact intact moeten
+  `[CLEMENTIA]`/`[SEVERITAS]`/`[REQUIRE:...]`-tags) die exact intact moeten
   blijven. Een .docx-omweg riskeert dat Word's autocorrect die merktekens
   ongemerkt corrumpeert (rechte aanhalingstekens → krultekens, `->` → een
   en-dash) — bij .txt is er geen vertaalslag, wat Gerben bewerkt IS het
