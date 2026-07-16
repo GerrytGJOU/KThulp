@@ -5,6 +5,10 @@ Het is een WERKKOPIE, geen bron van waarheid — na het bewerken stuur je
 (een deel van) dit bestand terug, en verwerk ik de wijzigingen in de echte
 game-data.
 
+VASTE REGEL (zie Chronica.md §10): dit bestand wordt vanaf nu bij elke
+wijziging aan verhaaltekst opnieuw gegenereerd en meegecommit, zodat je
+altijd een actueel overzicht hebt.
+
 WAT MAG JE AANPASSEN
 ---------------------
 - Alle tekst na TITLE:, TEXT: en DIALOGUE: (de verhalende proza-tekst).
@@ -26,6 +30,14 @@ WAT MOET JE MET RUST LATEN (anders breekt de doorverwijzing)
   of -antwoord wilt aanpassen, kan dat wel, maar meld dat er apart bij, want
   die staan in een ander deel van het bestand (SP_PUZZLES), niet hieronder.
 
+STROOMSCHEMA'S — hoe te lezen
+------------------------------
+Elk hoofdstuk begint met een ingesprongen boomstructuur: scène-ID + titel,
+daaronder de keuzes die uit die scène leiden (label + eventuele onzichtbare
+tag + doel-scène). "(zie hierboven)" betekent dat die scène al eerder in de
+boom voorkwam — dat is een vertakking die weer samenkomt (convergentie),
+geen fout.
+
 WERKWIJZE
 ---------
 1. Bewerk dit bestand (of een kopie ervan) in een gewone teksteditor.
@@ -38,8 +50,51 @@ WERKWIJZE
 
 
 ################################################################
-# PROLOOG - Het Orakel van Chronos
+# PROLOOG - Het Veld bij Latium
 ################################################################
+
+-- STROOMSCHEMA --
+
+PRO_001 — Het Veld bij Latium
+  * Graaf meteen verder
+    PRO_002 — De Kist
+      * Open de kist
+        PRO_003 — Drie Voorwerpen
+          * Neem de jachtboog
+            PRO_004A — De Boogschutter
+              * Verder zoeken in de kist
+            PRO_005 — De Bronzen Schijf
+              * Raak de schijf aan
+                PRO_006 — Vervorming
+                  * Laat het gebeuren
+                PRO_007 — Het Orakel van Chronos
+                  * Ontcijfer het patroon
+                PRO_008 — De Poort
+                  * Spreek de gestalte aan
+                PRO_009 — De Boodschapper
+                  * Stap door de poort
+                → CH1_000  (volgend hoofdstuk)
+              * Trek je hand terug
+                PRO_005B — Aarzeling
+                  * Raak de schijf alsnog aan
+                → PRO_006  (zie hierboven)
+          * Neem de speer
+            PRO_004B — De Hopliet
+              * Verder zoeken in de kist
+            → PRO_005  (zie hierboven)
+          * Neem de ruitersporen
+            PRO_004C — De Cavalerist
+              * Verder zoeken in de kist
+            → PRO_005  (zie hierboven)
+      * Laat de kist gesloten en keer terug naar het dorp
+        PRO_002B — Twijfel
+          (einde — geen vervolgkeuze)
+  * Veeg eerst voorzichtig het zand weg
+    PRO_001B — Voorzichtig
+      * Graaf de kist op
+    → PRO_002  (zie hierboven)
+
+-- VOLLEDIGE TEKST --
 
 === SCENE: PRO_001 ===
 
@@ -1428,6 +1483,136 @@ END
 # HOOFDSTUK 1 - De Namen van de Wereld
 ################################################################
 
+-- STROOMSCHEMA --
+
+CH1_000 — De Namen van de Wereld
+  * Naar Sardis, waar een koning alles tot goud maakt
+    CH1_A01 — De Weg naar Sardis
+      * Ga direct de stad Sardis binnen
+        CH1_A02 — Het Paleis van Sardis
+          * Ontcijfer het woord boven de poort
+        CH1_A03 — Silenus, de Dronken Wijze
+          * Wacht af wat Bacchus te bieden heeft
+        CH1_A04 — Een Gevaarlijke Wens
+          * Blijf kijken wat er gebeurt
+        CH1_A05 — De Gouden Aanraking
+          * Kijk toe hoe hij verder gaat
+        CH1_A06 — Het Gouden Feestmaal
+          * Kijk met groeiend medeleven hoe zijn paniek toeneemt [PIETAS]
+            CH1_A07 — Wat Goud Niet Kan Voeden
+              * Grijp hem voorzichtig bij zijn schouders, om hem te troosten [PIETAS]
+                CH1_A08 — Een Vloek Erkend
+                  * Wijs hem meteen op Bacchus, die alles zag gebeuren [VIRTUS]
+                    CH1_A09 — De Aanroeping
+                      * Wacht op het antwoord van de god
+                    CH1_A10 — De Rivier de Pactolus
+                      * Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [PIETAS]
+                        CH1_A11 — Het Orakel Verschijnt
+                          * Luister verder
+                        CH1_ROBE — De Mantel
+                          * Trek de mantel aan
+                        CH1_CODEX_UITLEG — De Codex Memoriae
+                          * Doorgaan
+                        CH1_EINDE — Het Einde van Hoofdstuk 1
+                          * Stap door de poort
+                        → CH2_000  (volgend hoofdstuk)
+                      * Loop meteen door — er wacht nog werk aan de naam die je moet redden [VIRTUS]
+                        → CH1_A11  (zie hierboven)
+                  * Blijf eerst naast hem zitten, zodat hij niet alleen is met wat hij heeft gedaan [PIETAS]
+                    CH1_A08B — Een Ogenblik van Stilte
+                      * Wijs hem op Bacchus, die alles zag gebeuren
+                    → CH1_A09  (zie hierboven)
+              * Grijp hem stevig bij zijn schouders, om hem tot bezinning te schudden [VIRTUS]
+                → CH1_A08  (zie hierboven)
+          * Kijk onbewogen toe — hij wist waar hij om vroeg [VIRTUS]
+            → CH1_A07  (zie hierboven)
+      * Vraag eerst een langsreizende koopman naar het laatste nieuws
+        CH1_A01B — Geruchten op de Weg
+          * Bedank de koopman voor zijn verhaal voor je verdergaat [PIETAS]
+            → CH1_A02  (zie hierboven)
+          * Knik kort en loop meteen door, je aandacht al bij het paleis [VIRTUS]
+            → CH1_A02  (zie hierboven)
+  * Naar de top van de Olympos, waar iets op het punt staat te barsten
+    CH1_B01 — Metis, de Eerste Vrouw van Zeus
+      * Beklim direct de laatste helling naar de top
+        CH1_B02 — Onweer op de Olympos
+          * Voel medelijden met Zeus, ondanks alles wat hij heeft gedaan [PIETAS]
+            CH1_B03 — Een Naam voor het Ongeborene
+              * Volg het gefluister naar Zeus' troon
+            CH1_B04 — De Bijl van Hephaistos
+              * Kijk niet weg
+            CH1_B05 — Wat uit het Hoofd Breekt
+              * Kijk hoe ze voor het eerst ademhaalt
+            CH1_B06 — Pallas Athena
+              * Kijk hoe Zeus als eerste zijn stem hervindt
+                CH1_B07 — De Aanroeping van Zeus
+                  * Kijk toe, ontroerd door het moment tussen vader en dochter [PIETAS]
+                    CH1_B08 — Wijsheid Neemt Haar Plaats In
+                      * Daal af, dankbaar dat je bij zo'n geboorte mocht zijn [PIETAS]
+                        CH1_B09 — Het Orakel Verschijnt
+                          * Luister verder
+                        → CH1_ROBE  (zie hierboven)
+                      * Daal meteen af — er is nog werk te doen [VIRTUS]
+                        → CH1_B09  (zie hierboven)
+                  * Kijk toe, vooral benieuwd wat haar aanwezigheid voor de Olympos gaat betekenen [VIRTUS]
+                    → CH1_B08  (zie hierboven)
+              * Kijk naar de andere goden, die zich stilletjes terugtrekken
+                CH1_B06B — Niet Iedereen Kijkt met Bewondering
+                  * Wacht af hoe zij antwoordt
+                → CH1_B07  (zie hierboven)
+          * Blijf nuchter — een pijnlijke geboorte is nog geen excuus voor wat hij Metis aandeed [VIRTUS]
+            → CH1_B03  (zie hierboven)
+      * Vraag de herder waarom hij zo angstig wegvlucht
+        CH1_B01B — Een Patroon dat Zich Herhaalt
+          * Bedank de herder voor zijn waarschuwing voor je verdergaat [PIETAS]
+            → CH1_B02  (zie hierboven)
+          * Je hebt geen tijd voor meer vragen en klimt meteen door [VIRTUS]
+            → CH1_B02  (zie hierboven)
+  * Naar een kille vallei, waar het eerste vuur nog gestolen moet worden
+    CH1_C01 — De Titaan die Mensen Vormde
+      * Haast je naar de vallei, bewogen door het verhaal van de oude vrouw [PIETAS]
+        CH1_C02 — De Kille Vallei
+          * Volg hem meteen, vastbesloten als hij is
+            CH1_C03 — Het Woord voor Vuur
+              * Kijk hoe Prometheus een vonk verbergt
+            CH1_C04 — De Diefstal
+              * Kijk toe hoe de hemel dit opmerkt
+            CH1_C05 — Zeus' Woede en Twee Straffen
+              * Vrees voor wat dit gaat opleveren, met medelijden voor wie straks de gevolgen zal dragen [PIETAS]
+                CH1_C06 — Pandora, het Alomgeschonken Geschenk
+                  * Volg Pandora naar de mensenwereld
+                CH1_C07 — De Doos die Ze Meekreeg
+                  * Kijk toe op het moment dat ze het deksel licht
+                    CH1_C08 — Wat uit de Doos Ontsnapt
+                      * Kniel bij Pandora neer, die verstijfd is van schrik en schuldgevoel [PIETAS]
+                        CH1_C09 — Wat Achterblijft
+                          * Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [PIETAS]
+                            CH1_C10 — Geketend, Niet Gebroken
+                              * Beantwoord zijn blik
+                            CH1_C11 — Vuur en Hoop
+                              * Loop verder, terug naar de bewoonde wereld
+                            CH1_C12 — Het Orakel Verschijnt
+                              * Luister verder
+                            → CH1_ROBE  (zie hierboven)
+                          * Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [VIRTUS]
+                            → CH1_C10  (zie hierboven)
+                      * Richt je blik meteen op de doos — is dit werkelijk alles wat erin zat? [VIRTUS]
+                        → CH1_C09  (zie hierboven)
+                  * Kijk hoe Epimetheus probeert haar aandacht af te leiden
+                    CH1_C07B — Een Poging tot Afleiding
+                      * Kijk toe op het moment dat ze het deksel licht
+                    → CH1_C08  (zie hierboven)
+              * Kijk toe zonder oordeel — de goden doen wat goden doen [VIRTUS]
+                → CH1_C06  (zie hierboven)
+          * Wacht tot het donker is, zodat hij ongezien de Olympos op kan
+            CH1_C02B — Wachten op het Duister
+              * Volg hem terwijl hij zich naar het vuur van de goden waagt
+            → CH1_C03  (zie hierboven)
+      * Loop resoluut door — verhalen zijn mooi, maar je wilt het zelf zien [VIRTUS]
+        → CH1_C02  (zie hierboven)
+
+-- VOLLEDIGE TEKST --
+
 === SCENE: CH1_000 ===
 
 TITLE:
@@ -2549,8 +2734,45 @@ END
 
 
 ################################################################
-# HOOFDSTUK 2 - De Werken van de Helden (tot nu toe)
+# HOOFDSTUK 2 - Wanneer Goden Beminnen
 ################################################################
+
+-- STROOMSCHEMA --
+
+CH2_000 — Wanneer Goden Beminnen
+  * Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is
+    CH2_L01 — Latona, Titanide en Minnares van Jupiter
+      * Volg Latona op haar zoektocht
+    CH2_L02 — Overal Geweigerd
+      * Schuil dankbaar in het riet, ontroerd door zijn stille moed [PIETAS]
+        CH2_L02B — Een Stil Gebaar
+          * Ga met haar mee, verder op zoek naar een echte schuilplaats
+        CH2_L03 — Eindeloos Dwalen
+          * Blijf haar volgen, ondanks alles
+        CH2_L04 — De Python van Juno
+          * Wacht af wat ze doen
+        CH2_L05 — "Fuge!"
+          * Ren met haar mee
+        CH2_L06 — Niemand Die Helpen Kan
+          * Kijk uit naar een laatste toevlucht
+        CH2_L07 — Delos, het Drijvende Eiland
+          * Beloof het eiland eeuwige verering als het haar redt [PIETAS]
+            CH2_L08 — De Geboorte van Apollo en Diana
+              * Keer terug — er wachten nog meer verhalen
+            → CH2_000  (zie hierboven)
+          * Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [VIRTUS]
+            → CH2_L08  (zie hierboven)
+      * Trek meteen verder — je vertrouwt niemand meer die zo snel weer verdwijnt [VIRTUS]
+        → CH2_L03  (zie hierboven)
+  * Spreek het Orakel aan, nu alle vier de verhalen zijn gehoord [REQUIRE:fragments=4]
+    CH2_ATHENA — De Godin Spreekt
+      * Laat haar woorden bezinken
+    CH2_ORAKEL — Het Orakel Keert Terug
+      * Luister verder
+    CH2_EINDE — Het Einde van Hoofdstuk 2
+      (einde — geen vervolgkeuze)
+
+-- VOLLEDIGE TEKST --
 
 === SCENE: CH2_000 ===
 
