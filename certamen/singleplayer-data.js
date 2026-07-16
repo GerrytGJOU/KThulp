@@ -137,13 +137,13 @@ const SP_CAMPAIGN = [
     zijverhalen:"Prometheus (S-tier); Pandora (S-tier) — al in gebruik als plotlijnen B/C naast Midas (A)" },
   { id:"ch2", nr:2, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Werken van de Helden",
     periode:"Heroïsche tijd",
-    verhaal:"De speler helpt Herakles en ontdekt dat heldendom wordt verdiend door daden.",
+    verhaal:"Hera's jaloezie jaagt op iedereen die Zeus ooit heeft liefgehad. Vier parallelle lijnen: Latona (afgerond), Semele (grijpt terug naar Bacchus/H1), Kallisto (introduceert Artemis) en Herakles (intro + eerste werken — afgerond in Hoofdstuk 3).",
     pallas:"Les 3-4: Herakles en zijn werken", minerva:"Hoofdstuk 3: Latona, Apollo en Artemis",
     grammatica:"Praesens, werkwoordstammen, imperativus, esse, posse",
     gameplay:"Acties uitvoeren via werkwoorden",
-    personages:"Herakles, Latona, Apollo, Artemis",
-    thema:"Taal beschrijft wat mensen doen",
-    illustratie:"Herakles tijdens één van zijn opdrachten",
+    personages:"Herakles, Latona, Semele, Kallisto, Zeus/Jupiter, Hera/Juno, Apollo, Diana/Artemis, Bacchus",
+    thema:"Taal beschrijft wat mensen doen — en jaloezie beschrijft wat goden doen",
+    illustratie:"De geboorte van Apollo en Diana op Delos",
     zijverhalen:"Bellerophon & Chimaira (A-tier, ideale RPG-boss); Atalanta + Calydonische ever (A-tier, boss fight)" },
   { id:"ch3", nr:3, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Beloften van Goden en Mensen",
     periode:"Mythische wereld",
@@ -464,6 +464,20 @@ const SP_PUZZLES = {
     vraag:"De mensheid roept wanhopig om Prometheus. Wat roepen ze?",
     opties:["Prometheus!","Prometheu!","Prometheum!","Promethei!"], antwoord:"Prometheu!",
     hint:"Griekse namen op -eus krijgen in de vocativus vaak de uitgang -eu." },
+
+  // ---- Hoofdstuk 2, Lijn L: Latona ----
+  puzzle_ch2l_praesens: { type:"multiple-choice",
+    vraag:"Latona doolt eindeloos rond, op zoek naar een schuilplaats. “Latona per terras ___” — welke vorm van errare (dwalen) past hier, praesens 3e persoon enkelvoud?",
+    opties:["errat","errant","erras","erratis"], antwoord:"errat",
+    hint:"Praesens 3e persoon enkelvoud van een eerste-conjugatiewerkwoord (op -are) eindigt op -at." },
+  puzzle_ch2l_imperativus: { type:"multiple-choice",
+    vraag:"Een doodsbange reiziger ziet de python naderen en schreeuwt naar Latona. Wat roept hij?",
+    opties:["Fuge!","Fugit!","Fugere!","Fugis!"], antwoord:"Fuge!",
+    hint:"De imperativus enkelvoud van een derde-conjugatiewerkwoord (fugere) eindigt op een korte -e." },
+  puzzle_ch2l_posse: { type:"multiple-choice",
+    vraag:"Niemand durft Latona te helpen, uit angst voor Juno's wraak. “Nemo eam adiuvare ___” — welke vorm van posse (kunnen) past hier?",
+    opties:["potest","possunt","potes","possum"], antwoord:"potest",
+    hint:"Derde persoon enkelvoud van posse is 'potest' — net als bij esse buigt dit werkwoord onregelmatig." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -516,6 +530,38 @@ const SP_CODEX_ENTRIES = {
             ["Vocativus","aanspreekvorm: tot wie je spreekt","Bacche! (uitgang -e i.p.v. -us)","Pallas! (blijft gelijk aan de nominativus)","Prometheu! (namen op -eus krijgen -eu)"]] } },
   codex_grammatica_ch1_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 1 samengevat",
     tekst:"Je hebt nu alle drie de verhalen van dit hoofdstuk gehoord, en met ze de volledige basisgrammatica: het Griekse lidwoord (ὁ/ἡ/τό, gestuurd door geslacht, niet door betekenis) en de Latijnse naamvallen nominativus/accusativus/vocativus (wie handelt, wie ondergaat, tot wie je spreekt). Onthoud vooral dat niet elk woord in de vocativus verandert — Griekse eigennamen als Pallas blijven vaak gelijk aan de nominativus, terwijl gewone Latijnse woorden op -us vaak overgaan naar -e." },
+
+  codex_geboorte_apollo_diana: { cat:"mythologie", titel:"De Geboorte van Apollo en Diana",
+    tekst:"Latona, een titanide en minnares van Jupiter, werd door de jaloerse Juno vervloekt: geen enkel stuk vaste grond mocht haar ooit een plek geven om te bevallen. Achtervolgd door de python Juno op haar afstuurde, vond ze uiteindelijk toevlucht op Delos — een rondzwervend eiland dat, omdat het aan geen enkel koninkrijk verankerd lag, strikt genomen buiten de vloek viel. Daar bracht ze de tweeling Apollo en Diana ter wereld, en verankerde Delos zichzelf voorgoed in de golven." },
+
+  // LET OP: dezelfde "vroeg ontgrendelen"-regel als Hoofdstuk 1 (§7.2.1 in
+  // Chronica.md) — deze drie entries worden al bij CH2_000 gezet, vóór de
+  // eerste puzzel, zodat een leerling die vastloopt meteen kan terugbladeren.
+  codex_grammatica_ch2_praesens: { cat:"grammatica", titel:"Grammatica: de praesens",
+    tekst:"De praesens beschrijft wat er nu gebeurt — 'hij doolt', 'zij vlucht'. Elk werkwoord heeft een eigen stam (het deel vóór de persoonsuitgang) die afhangt van de conjugatie (werkwoordgroep). De persoonsuitgangen zelf zijn voor de meeste werkwoorden gelijk: -o, -s, -t, -mus, -tis, -nt.",
+    table:{ headers:["Persoon","Uitgang","errare (1e conj., dwalen)","fugere (3e conj., vluchten)"],
+      rows:[["ik","-o","erro","fugio"],
+            ["jij","-s","erras","fugis"],
+            ["hij/zij/het","-t","errat","fugit"],
+            ["wij","-mus","erramus","fugimus"],
+            ["jullie","-tis","erratis","fugitis"],
+            ["zij","-nt","errant","fugiunt"]] } },
+  codex_grammatica_ch2_imperativus: { cat:"grammatica", titel:"Grammatica: de imperativus",
+    tekst:"De imperativus is de gebiedende wijs: een bevel of dringende oproep, zonder onderwerp ('Vlucht!', 'Ga!'). Je vormt hem door de persoonsuitgangen weg te laten van de werkwoordstam — enkelvoud is meestal gewoon de kale stam (of stam + korte -e bij de 3e conjugatie), meervoud krijgt -te erbij.",
+    table:{ headers:["Vorm","errare (dwalen)","fugere (vluchten)","esse (zijn)"],
+      rows:[["jij (enkelvoud)","erra!","fuge!","es!"],
+            ["jullie (meervoud)","errate!","fugite!","este!"]] } },
+  codex_grammatica_ch2_esse_posse: { cat:"grammatica", titel:"Grammatica: esse en posse",
+    tekst:"Esse ('zijn') en posse ('kunnen') zijn twee van de belangrijkste onregelmatige werkwoorden in het Latijn — ze volgen geen enkele vaste conjugatie en moet je gewoon uit het hoofd kennen. Posse is eigenlijk 'pot-' (van potis, in staat) + esse samengevoegd, wat verklaart waarom de vormen zo op elkaar lijken.",
+    table:{ headers:["Persoon","esse (zijn)","posse (kunnen)"],
+      rows:[["ik","sum","possum"],
+            ["jij","es","potes"],
+            ["hij/zij/het","est","potest"],
+            ["wij","sumus","possumus"],
+            ["jullie","estis","potestis"],
+            ["zij","sunt","possunt"]] } },
+  codex_grammatica_ch2_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 2 samengevat",
+    tekst:"Dit hoofdstuk draaide om wat mensen en goden dóen: de praesens (nu-tijd, met persoonsuitgangen -o/-s/-t/-mus/-tis/-nt op een werkwoordstam), de imperativus (bevelsvorm, kale stam of stam+e, meervoud +te), en de twee onmisbare onregelmatige werkwoorden esse (zijn) en posse (kunnen) — die zo vaak voorkomen dat je ze simpelweg uit het hoofd moet kennen." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -553,6 +599,16 @@ const SP_CODEX_PERSONS = {
     full:"Pandora's nieuwsgierigheid liet alle ellende van de wereld — ziekte, oorlog, verdriet — ontsnappen uit haar doos, tot ze het deksel net op tijd sloot om tenminste Elpis, de Hoop, binnen te houden. Ze bracht geen kwaad met opzet — ze was, zoals haar naam al zei, gewoon nooit anders dan een geschenk bedoeld." },
   epimetheus: { nm:"Epimetheus", epithet:"Titaan, broer van Prometheus",
     intro:"De broer die vergat de mensheid een gave te schenken toen hij ze verdeelde onder alle levende wezens — en die, jaren later, ondanks Prometheus' waarschuwing, verliefd wordt op een geschenk van Zeus." },
+
+  hera: { nm:"Hera (Juno)", epithet:"Koningin van de goden, bewaakster van het huwelijk",
+    intro:"Zeus' vrouw, en degene die elke ontrouw van haar man — hoe klein of groot ook — nooit onbestraft laat. Bij de Romeinen heet ze Juno; onder die naam is ze net zo vindingrijk en net zo onverbiddelijk." },
+  latona: { nm:"Latona (Leto)", epithet:"Titanide, minnares van Jupiter",
+    intro:"Een titanide die, sinds Jupiter zijn oog op haar liet vallen, niets anders dan Juno's woede heeft gekend.",
+    full:"Verstoten door elk stuk vaste grond en achtervolgd door de python Python, vond Latona uiteindelijk toevlucht op het rondzwervende eiland Delos — dat, omdat het aan geen enkel koninkrijk verankerd lag, buiten Juno's vloek viel. Daar bracht ze de tweeling Apollo en Diana ter wereld, en gaf ze de wereld twee nieuwe goden die voorgoed met haar naam verbonden blijven." },
+  apollo: { nm:"Apollo", epithet:"God van licht, muziek en profetie",
+    intro:"De zoon van Latona en Jupiter, amper geboren en al omgeven door een licht dat zijn naam voorgoed zal dragen." },
+  diana: { nm:"Diana (Artemis)", epithet:"Godin van de jacht en de wildernis",
+    intro:"Latona's dochter, geboren vlak vóór haar tweelingbroer Apollo — en volgens sommige verhalen was zij het die haar moeder meteen daarna bijstond bij zijn geboorte." },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -574,6 +630,12 @@ const SP_VOCAB_ENTRIES = {
   latijn_aperit:    { taal:"latijn", woord:"aperit",    betekenis:"hij/zij opent" },
   latijn_pyxis:     { taal:"latijn", woord:"pyxis, pyxidem", betekenis:"doos" },
   latijn_novus:     { taal:"latijn", woord:"novus, nova, novum", betekenis:"nieuw" },
+  latijn_errare:    { taal:"latijn", woord:"errare (errat)", betekenis:"dwalen" },
+  latijn_fugere:    { taal:"latijn", woord:"fugere (fugit, fuge!)", betekenis:"vluchten" },
+  latijn_posse:     { taal:"latijn", woord:"posse (potest)", betekenis:"kunnen" },
+  latijn_adiuvare:  { taal:"latijn", woord:"adiuvare", betekenis:"helpen" },
+  latijn_terra:     { taal:"latijn", woord:"terra, terrae", betekenis:"aarde, land" },
+  latijn_nemo:      { taal:"latijn", woord:"nemo", betekenis:"niemand" },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -1714,9 +1776,260 @@ TITLE:
 Het Einde van Hoofdstuk 1
 
 TEXT:
-De Boodschapper knikt, en de poort achter je opent zich weer — ditmaal niet naar een vergeten hoofdstuk, maar naar iets wat nog geschreven moet worden. "Hoofdstuk 2 wacht nog ergens verderop in de tijd," zegt de stem. "Kom terug zodra ook die naam zich aan mij heeft laten kennen."
+De Boodschapper knikt, en de poort achter je opent zich weer — ditmaal niet naar een vergeten hoofdstuk, maar naar iets wat nog geschreven moet worden. "Hoofdstuk 2 wacht al ergens verderop," zegt de stem. "Kom mee."
 
-Voor nu keert de poort in stilte terug tot een dunne streep licht, en blijft alleen de herinnering aan wat je vandaag hebt teruggevonden.
+CHOICES:
+
+* Stap door de poort -> CH2_000
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 2: "DE WERKEN VAN DE HELDEN" (scène-ID's CH2_###) ----
+   Thema: Hera (Juno) als jaloerse vrouw. Vier parallelle lijnen i.p.v.
+   Hoofdstuk 1's drie — NIET allemaal even lang of even "compleet":
+   - L (Latona): Grieks mythe Leto, maar VERTELD met Romeinse namen (Latona,
+     Jupiter, Juno, Apollo, Diana) — wordt in dit hoofdstuk volledig afgerond.
+   - S (Semele): ook Romeins verteld (Jupiter, Juno, Bacchus) — grijpt terug
+     naar Bacchus uit Hoofdstuk 1 lijn A. NOG TE BOUWEN.
+   - K (Kallisto): Grieks verteld (Zeus, Hera, Artemis) — introduceert
+     Artemis. NOG TE BOUWEN.
+   - H (Herakles): Grieks verteld (Herakles, niet Hercules) — BEWUST
+     ONVOLLEDIG: dekt alleen zijn geboorte + de eerste taken, de rest volgt
+     in Hoofdstuk 3 (zie SP_CAMPAIGN ch3). Rondt daarom NIET het hoofdstuk af
+     (geen ch2_voltooid-FLAG) en leidt terug naar de hub in plaats van naar
+     het gedeelde Orakel-epiloog. NOG TE BOUWEN.
+
+   NAAMGEVINGSREGEL (zie ook Chronica.md): L/S gebruiken overal Romeinse
+   namen, K/H overal Griekse — dezelfde regel als Hoofdstuk 1 (A=Romeins,
+   B/C=Grieks). Elke god/godin heeft ondertussen maar ÉÉN Codex-persoon-id
+   (bv. "hera", niet ook nog een aparte "juno") met nm "Primaire naam
+   (secundaire naam)" — ongeacht welke naam de verteltekst van een
+   specifieke lijn gebruikt.
+
+   L en S CONVERGEREN zodra beide hun geboorte-climax hebben gehad (Apollo/
+   Diana resp. Bacchus) — via een gedeelde CH2_BIRTHS-scène, analoog aan hoe
+   Hoofdstuk 1's drie lijnen elkaars mythen al kenden zonder dat de speler ze
+   zelf hoefde te spelen. Tot lijn S bestaat, leidt L direct naar het
+   gedeelde Orakel-epiloog (CH2_ORAKEL); zodra S gebouwd is, wordt CH2_BIRTHS
+   ertussen gevoegd.
+
+   BOUWSTATUS (2026-07): alleen lijn L (Latona) staat hieronder volledig
+   uitgeschreven, plus de hub (CH2_000, nu met maar één klikbare keuze) en
+   het gedeelde Orakel-epiloog. Lijnen S/K/H volgen in een latere bouwstap —
+   zelfde aanpak als Hoofdstuk 1, dat ook in meerdere stappen is gegroeid. */
+const SP_CH2_CNS = `
+=== SCENE: CH2_000 ===
+
+TITLE:
+Wanneer Goden Beminnen
+
+TEXT:
+De boodschapper wijst opnieuw naar een nieuwe scheur in de werkelijkheid. "Een nieuw hoofdstuk van de vergeten wereld wacht," zegt ze. "Deze keer gaat het niet om een enkele naam, maar om de gevolgen van goddelijke liefde — en om de jaloezie die daarop volgt."
+
+Je stapt door de poort een wereld in die zindert van spanning: overal waar Zeus zijn oog laat vallen op een sterveling of titanide, wacht in de schaduw zijn vrouw Hera — furieus, vindingrijk, en vastberaden dat niemand ongestraft van haar man mag houden.
+
+CODEX:
+codex_grammatica_ch2_praesens, codex_grammatica_ch2_imperativus, codex_grammatica_ch2_esse_posse
+
+CHOICES:
+
+* Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is -> CH2_L01
+
+END
+
+=== SCENE: CH2_L01 ===
+
+TITLE:
+Latona, Titanide en Minnares van Jupiter
+
+TEXT:
+Latona, een titanide net als haar zuster Asteria, was voor Juno nooit meer dan een naam om te wantrouwen — tot Jupiter zijn blik op haar liet vallen, en zij zwanger raakte van zijn kind. Voor Juno, koningin van de goden en bewaakster van elk huwelijksbelofte die haar man breekt, was dat een belediging die niet onbestraft kon blijven.
+
+Ze sprak een vloek uit die eenvoudig was in haar wreedheid: geen enkel stuk vaste grond, nergens ter wereld, mocht Latona ooit een plek geven om te bevallen. Latona, hoogzwanger en doodsbang, moet nu een toevlucht vinden op een aarde die haar overal weigert.
+
+PERSON:
+latona:intro, hera:intro
+
+CHOICES:
+
+* Volg Latona op haar zoektocht -> CH2_L02
+
+END
+
+=== SCENE: CH2_L02 ===
+
+TITLE:
+Overal Geweigerd
+
+TEXT:
+Latona trekt van stad naar stad, van kust naar kust, en overal is het antwoord hetzelfde: geen enkele koning, geen enkel dorp durft het aan om Juno's woede over zich af te roepen. Deuren sluiten voor ze de kans krijgt uit te leggen wie ze is; velden die er verlaten uitzagen, blijken plots "al bezet" zodra ze te dichtbij komt.
+
+Op een avond, uitgeput en wanhopig, bereikt ze een klein dorp aan de rand van een moeras. De inwoners zien haar zwangere buik en wenden zich meteen af — allemaal, op één oude herder na, die haar met een snelle blik naar een schuilplaats in het riet wijst voor hij zelf haastig wegloopt.
+
+CHOICES:
+
+* Schuil dankbaar in het riet, ontroerd door zijn stille moed [PIETAS] -> CH2_L02B
+* Trek meteen verder — je vertrouwt niemand meer die zo snel weer verdwijnt [VIRTUS] -> CH2_L03
+
+END
+
+=== SCENE: CH2_L02B ===
+
+TITLE:
+Een Stil Gebaar
+
+TEXT:
+Je blijft een nacht in het riet, beschut tegen de kou, en beseft dat zelfs in een wereld die doodsbang is voor Juno, er mensen zijn die het risico nemen om toch iets van vriendelijkheid te tonen — al is het maar door een blik, een gebaar, nooit een woord hardop. Bij zonsopgang is de herder allang verdwenen, maar Latona trekt versterkt verder.
+
+CHOICES:
+
+* Ga met haar mee, verder op zoek naar een echte schuilplaats -> CH2_L03
+
+END
+
+=== SCENE: CH2_L03 ===
+
+TITLE:
+Eindeloos Dwalen
+
+TEXT:
+Latona doolt weken lang rond, van het ene geweigerde land naar het andere, haar voeten open en haar hoop klein. Elke stad die ze nadert, elke rivier die ze oversteekt, brengt haar geen stap dichter bij rust — enkel verder van de plek waar ze ooit vandaan kwam.
+
+PUZZLE:
+puzzle_ch2l_praesens
+
+CHOICES:
+
+* Blijf haar volgen, ondanks alles -> CH2_L04
+
+END
+
+=== SCENE: CH2_L04 ===
+
+TITLE:
+De Python van Juno
+
+TEXT:
+Juno, ongeduldig geworden met de traagheid van haar eigen vloek, stuurt iets rechtstreekser: Python, een monsterlijke slang geboren uit de modder die achterbleef na de grote vloed, met de opdracht Latona op te sporen en te vernietigen voor haar kind ooit geboren kan worden.
+
+Het beest kronkelt met een snelheid die niet bij zijn omvang past; de aarde zelf lijkt te sidderen onder zijn gewicht. Een groepje reizigers dat haar pad kruist, ziet het monster het eerst naderen.
+
+CHOICES:
+
+* Wacht af wat ze doen -> CH2_L05
+
+END
+
+=== SCENE: CH2_L05 ===
+
+TITLE:
+"Fuge!"
+
+TEXT:
+Een van de reizigers, doodsbleek, grijpt Latona bij haar arm en schreeuwt het enige woord dat er nog toe doet.
+
+PUZZLE:
+puzzle_ch2l_imperativus
+
+CHOICES:
+
+* Ren met haar mee -> CH2_L06
+
+END
+
+=== SCENE: CH2_L06 ===
+
+TITLE:
+Niemand Die Helpen Kan
+
+TEXT:
+Latona rent zo hard haar zwangere lichaam het toelaat, de python akelig dichtbij, en overal om haar heen wijken mensen simpelweg opzij — niemand die het aandurft zich tussen haar en Juno's wraak te plaatsen.
+
+PUZZLE:
+puzzle_ch2l_posse
+
+CHOICES:
+
+* Kijk uit naar een laatste toevlucht -> CH2_L07
+
+END
+
+=== SCENE: CH2_L07 ===
+
+TITLE:
+Delos, het Drijvende Eiland
+
+TEXT:
+Ver op zee, drijvend en zonder wortels, ligt een eiland dat aan geen enkel koninkrijk trouw is verschuldigd: Delos, ooit zelf een verstoten nimf die door Neptunus aan de golven werd toevertrouwd. Omdat het nergens "vast" aan de aarde verankerd ligt, valt het strikt genomen buiten Juno's vloek — geen vaste grond mag Latona ontvangen, en Delos is, letterlijk, geen vaste grond.
+
+Latona smeekt het eiland om toevlucht, haar stem schor van uitputting en angst.
+
+CHOICES:
+
+* Beloof het eiland eeuwige verering als het haar redt [PIETAS] -> CH2_L08
+* Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [VIRTUS] -> CH2_L08
+
+END
+
+=== SCENE: CH2_L08 ===
+
+TITLE:
+De Geboorte van Apollo en Diana
+
+TEXT:
+Delos, ontroerd — of overtuigd, het maakt weinig uit — staat stil in de golven en biedt voor het eerst in zijn bestaan een vaste plek onder Latona's voeten. Daar, tussen de rotsen van een eiland dat zelf ooit nergens bij hoorde, brengt ze twee kinderen ter wereld: eerst een dochter, Diana, die haar moeder onmiddellijk bijstaat bij de geboorte van haar broer; dan een zoon, Apollo, stralend als het licht dat zijn naam voortaan zal dragen.
+
+Delos, dat eeuwenlang rondzwierf zonder doel, verankert zichzelf vanaf die dag voorgoed in de golven — de eerste vaste plek op aarde die vrijwillig een risico nam voor iemand die niemand anders durfde te helpen.
+
+CODEX:
+codex_geboorte_apollo_diana
+
+PERSON:
+latona:full, apollo:intro, diana:intro
+
+EERETITEL:
+ch2_latona
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 2 voltooid (lijn: Latona)
+
+FLAG:
+ch2_lijn=Latona; ch2_voltooid=true
+
+CHOICES:
+
+* Loop verder, de wereld voelt al anders aan -> CH2_ORAKEL
+
+END
+
+=== SCENE: CH2_ORAKEL ===
+
+TITLE:
+Het Orakel Keert Terug
+
+TEXT:
+De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warmer dan ooit. "Latona en haar kinderen zijn weer stevig verankerd in de herinnering," zegt de stem. "Apollo en Diana bestaan weer zoals ze altijd hadden moeten bestaan — en met hen, het hele verhaal van een liefde die een godin niet kon vergeven."
+
+CODEX:
+codex_grammatica_ch2_overzicht
+
+VOCAB:
+latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo
+
+CHOICES:
+
+* Luister verder -> CH2_EINDE
+
+END
+
+=== SCENE: CH2_EINDE ===
+
+TITLE:
+Het Einde van Hoofdstuk 2
+
+TEXT:
+"Hoofdstuk 3 wacht al ergens verderop," zegt de stem, "en met hem de rest van Herakles' beproevingen — en misschien ook de verhalen die je deze keer nog links liet liggen." De poort keert terug tot een dunne streep licht, en je neemt de herinnering aan Latona met je mee.
 
 END
 `.trim();
