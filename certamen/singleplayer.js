@@ -1225,7 +1225,11 @@ SCREENS.spCombat = function(){
   H(brand(true)+`
   <div class="scrhead"><span></span><h2>Gevecht</h2>${spAudioToggleHTML()}</div>
   <div class="panel" style="text-align:center">
-    <span style="font-size:40px">${enemy.icon}</span>
+    ${enemy.img
+      ? `<img src="${esc(enemy.img)}" alt="" style="max-width:140px;max-height:140px;object-fit:contain;display:inline-block"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+         <span style="font-size:40px;display:none">${enemy.icon}</span>`
+      : `<span style="font-size:40px">${enemy.icon}</span>`}
     <div class="eyebrow l" style="margin-top:6px">${esc(enemy.nm)}</div>
     <div style="height:10px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin:6px 0">
       <div style="height:100%;width:${hpPct}%;background:var(--hi-bright,#e8c77e)"></div>

@@ -638,10 +638,20 @@ const SP_FRAGMENTS = {
    COMBAT:-sectie in een CNS-scène bevat de bare id van een entry hieronder;
    spStartCombatFromScene (singleplayer.js) start het gevecht, en bij winst
    gaat het verder naar de (enige) keuze van die scène. ---- */
+// `img` is optioneel (pad relatief aan certamen/) — ontbreekt het, dan valt
+// SCREENS.spCombat terug op het `icon`-emoji, exact dezelfde regel als
+// Boss Battle se bmBossSpriteHTML() (bossbattle.js): een baas is een
+// ENKELVOUDIGE statische illustratie, geen motion-sheet, en object-fit:contain
+// verdraagt elk brondimensieformaat. De Hydra hergebruikt bewust het
+// bestaande Boss Battle-bestand (dezelfde mythologische Hydra, geen nieuwe
+// tekening nodig); de Leeuw van Nemea heeft nog geen bestand — het `img`-pad
+// hieronder is alvast ingevuld zodat het meteen oppikt zodra het bestand er
+// staat (net als de bestaande Cerberus/Chimera/Lamia/Succubus-bestanden in
+// assets/bosses/, die ook al klaarliggen voor toekomstige bazen).
 const SP_COMBAT_ENEMIES = {
-  nemeische_leeuw: { nm:"De Nemeïsche Leeuw", icon:"🦁", hp:40,
+  nemeische_leeuw: { nm:"De Nemeïsche Leeuw", icon:"🦁", img:"assets/bosses/nemeische_leeuw.png", hp:40,
     intro:"Een leeuw met een huid die geen enkel wapen kan doorboren — Herakles zal hem uiteindelijk met blote handen moeten wurgen." },
-  hydra: { nm:"De Hydra van Lerna", icon:"🐍", hp:60,
+  hydra: { nm:"De Hydra van Lerna", icon:"🐍", img:"assets/bosses/hydra.png", hp:60,
     intro:"Een veelkoppig moeras-monster dat voor elke afgehakte kop er twee nieuwe laat aangroeien — alleen vuur kan de wonden dichtschroeien voor ze weer aangroeien." },
 };
 
