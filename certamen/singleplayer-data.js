@@ -648,10 +648,21 @@ const SP_FRAGMENTS = {
 // hieronder is alvast ingevuld zodat het meteen oppikt zodra het bestand er
 // staat (net als de bestaande Cerberus/Chimera/Lamia/Succubus-bestanden in
 // assets/bosses/, die ook al klaarliggen voor toekomstige bazen).
+// `heads` (alleen Hydra): de romp-afbeelding heeft de kale nekstompjes al
+// ingetekend, en elke los kop-bestand is een even groot canvas dat er
+// precies overheen past (geen offsets nodig, gewoon absoluut stapelen) —
+// exact dezelfde 8-bestanden-opzet als Boss Battle se BOSS_PRESETS.hydra
+// (bossbattle.js). Zonder deze laag zou je alleen de romp met stompjes zien,
+// nooit de koppen. Aantal nog "levende" koppen = spCombatAliveHeads(),
+// dezelfde ceil((hp/maxHp)*7)-formule als bmBossAliveHeads() daar.
 const SP_COMBAT_ENEMIES = {
   nemeische_leeuw: { nm:"De Nemeïsche Leeuw", icon:"🦁", img:"assets/bosses/nemeische_leeuw.png", hp:40,
     intro:"Een leeuw met een huid die geen enkel wapen kan doorboren — Herakles zal hem uiteindelijk met blote handen moeten wurgen." },
-  hydra: { nm:"De Hydra van Lerna", icon:"🐍", img:"assets/bosses/hydra.png", hp:60,
+  hydra: { nm:"De Hydra van Lerna", icon:"🐍", img:"assets/bosses/hydra.png",
+    heads:["assets/bosses/hydrahead1.png","assets/bosses/hydrahead2.png","assets/bosses/hydrahead3.png",
+           "assets/bosses/hydrahead4.png","assets/bosses/hydrahead5.png","assets/bosses/hydrahead6.png",
+           "assets/bosses/hydrahead7.png"],
+    hp:60,
     intro:"Een veelkoppig moeras-monster dat voor elke afgehakte kop er twee nieuwe laat aangroeien — alleen vuur kan de wonden dichtschroeien voor ze weer aangroeien." },
 };
 

@@ -761,8 +761,14 @@ In afgesproken bouwvolgorde:
    (`spStartCombatFromScene`/`SCREENS.spCombat`); vragen komen uit de al
    geleerde vocabulaire (`SP_STATE.vocab`). Twee vijanden staan al klaar
    (`nemeische_leeuw`, `hydra`) voor wanneer Herakles' Hoofdstuk-2-lijn wordt
-   geschreven — nog geen scène gebruikt ze. De eretitel-`bonus` (§6) écht in
-   de berekening verwerken staat nog open.
+   geschreven — nog geen scène gebruikt ze. Vijand-sprite via
+   `spCombatSpriteHTML()`: romp (`img`) + bij de Hydra ook de losse
+   `heads`-laag erbovenop, exact dezelfde absolute-stapel-truc en
+   `ceil((hp/maxHp)*7)`-formule als Boss Battle se `bmBossSpriteHTML`/
+   `bmBossAliveHeads` (bossbattle.js) — zonder die laag zou je alleen de romp
+   met kale nekstompjes zien, nooit de koppen. Getest: 7/4/1/0 koppen bij
+   100/50/~2/0% HP. De eretitel-`bonus` (§6) écht in de berekening verwerken
+   staat nog open.
 2. **`CONDITION`-mechanisme** — de kaart zelf is gebouwd (§7,
    `SCREENS.spWorldMap`), alle drie panelen zijn getekend en schakelbaar; nog
    open: NPC's/scènes die conditioneel reageren op de al-gebouwde `flags` (bv.
