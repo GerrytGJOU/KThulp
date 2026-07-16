@@ -749,6 +749,9 @@ Het Veld bij Latium
 TEXT:
 De zon is net over de heuvels van Latium gekropen, en jij bent al uren aan het werk. Het zweet prikt in je ogen; de aarde is hier droog en koppig, zwaar als steen onder de ploeg. Je zet je schrap en duwt — en dan, met een doffe klap die je tot in je polsen voelt, staat de ploeg stil. Iets onder de grond geeft niet mee.
 
+IMAGE:
+prologue_ploegen.png
+
 CHOICES:
 
 * Graaf meteen verder -> PRO_002
