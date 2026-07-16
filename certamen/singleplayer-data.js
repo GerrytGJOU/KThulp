@@ -611,6 +611,21 @@ const SP_CODEX_PERSONS = {
     intro:"Latona's dochter, geboren vlak vóór haar tweelingbroer Apollo — en volgens sommige verhalen was zij het die haar moeder meteen daarna bijstond bij zijn geboorte." },
 };
 
+/* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
+   een ander soort hoofdstuk-gate dan Hoofdstuk 1: i.p.v. "één lijn voltooien
+   = door naar het volgende hoofdstuk" moet de speler hier ALLE vier de
+   lijnen afronden. Elke lijn geeft aan het eind een eigen fragment i.p.v.
+   een klassieke "beloning" (FRAGMENT:-sectie, spHookFragment in
+   singleplayer.js); zodra alle vier binnen zijn, ontgrendelt een
+   [REQUIRE:fragments=4]-keuze op de hub (CH2_000) de weg naar Athena en het
+   Orakel. Zie Chronica.md §7.6. ---- */
+const SP_FRAGMENTS = {
+  latona:   { nm:"Volharding", icon:"🍃" },
+  kallisto: { nm:"Onschuld",   icon:"🐻" },
+  semele:   { nm:"Waarheid",   icon:"⚡" },
+  herakles: { nm:"Moed",       icon:"🦁" },
+};
+
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
    aangevuld via VOCAB:-secties (spHookVocab, singleplayer.js). Bewust
    compacter dan de frequentielijst uit de andere Certamen-modi (die blijft
@@ -1825,9 +1840,9 @@ TITLE:
 Wanneer Goden Beminnen
 
 TEXT:
-De boodschapper wijst opnieuw naar een nieuwe scheur in de werkelijkheid. "Een nieuw hoofdstuk van de vergeten wereld wacht," zegt ze. "Deze keer gaat het niet om een enkele naam, maar om de gevolgen van goddelijke liefde — en om de jaloezie die daarop volgt."
+De boodschapper wijst opnieuw naar een nieuwe scheur in de werkelijkheid. "Hera," zegt ze, "kent vele gezichten. Vier stervelingen, vier verhalen, één godin die zich telkens anders toont — als achtervolger, als vervloeker, als manipulator, als onverzoenlijke vijand. Volg ze alle vier, en je zult begrijpen waarom heldendom nooit gaat over geluk hebben."
 
-Je stapt door de poort een wereld in die zindert van spanning: overal waar Zeus zijn oog laat vallen op een sterveling of titanide, wacht in de schaduw zijn vrouw Hera — furieus, vindingrijk, en vastberaden dat niemand ongestraft van haar man mag houden.
+Ergens op de achtergrond, zoals wel vaker wanneer sterfelijke zaken zich ontvouwen, zie je Athena zwijgend toekijken — armen over elkaar, haar gezicht onleesbaar. Ze grijpt niet in. Nog niet.
 
 CODEX:
 codex_grammatica_ch2_praesens, codex_grammatica_ch2_imperativus, codex_grammatica_ch2_esse_posse
@@ -1835,6 +1850,7 @@ codex_grammatica_ch2_praesens, codex_grammatica_ch2_imperativus, codex_grammatic
 CHOICES:
 
 * Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is -> CH2_L01
+* Spreek het Orakel aan, nu alle vier de verhalen zijn gehoord [REQUIRE:fragments=4] -> CH2_ATHENA
 
 END
 
@@ -1963,7 +1979,10 @@ Delos, het Drijvende Eiland
 TEXT:
 Ver op zee, drijvend en zonder wortels, ligt een eiland dat aan geen enkel koninkrijk trouw is verschuldigd: Delos, ooit zelf een verstoten nimf die door Neptunus aan de golven werd toevertrouwd. Omdat het nergens "vast" aan de aarde verankerd ligt, valt het strikt genomen buiten Juno's vloek — geen vaste grond mag Latona ontvangen, en Delos is, letterlijk, geen vaste grond.
 
-Latona smeekt het eiland om toevlucht, haar stem schor van uitputting en angst.
+Latona smeekt het eiland om toevlucht, haar stem schor van uitputting en angst. Vanaf een verre rots, onzichtbaar voor iedereen behalve jou, kijkt Athena toe — haar gezicht gespannen, haar handen tot vuisten gebald, en toch grijpt ze niet in. Wat er ook gebeurt, dit is niet haar verhaal om te veranderen.
+
+PERSON:
+athena:intro
 
 CHOICES:
 
@@ -1992,14 +2011,41 @@ EERETITEL:
 ch2_latona
 
 QUEST:
-quest_boodschapper_van_kronos: hoofdstuk 2 voltooid (lijn: Latona)
+quest_boodschapper_van_kronos: lijn Latona afgerond (Hoofdstuk 2)
 
 FLAG:
-ch2_lijn=Latona; ch2_voltooid=true
+ch2_lijn_latona=true
+
+FRAGMENT:
+latona
 
 CHOICES:
 
-* Loop verder, de wereld voelt al anders aan -> CH2_ORAKEL
+* Keer terug — er wachten nog meer verhalen -> CH2_000
+
+END
+
+=== SCENE: CH2_ATHENA ===
+
+TITLE:
+De Godin Spreekt
+
+TEXT:
+Athena stapt voor het eerst dit hoofdstuk naar voren, niet langer een zwijgende getuige aan de rand van het beeld. Haar blik is grijs en kalm, als een onweer dat net is gaan liggen — en toch voel je dat wat ze nu gaat zeggen, ze al die tijd heeft zitten vormen terwijl ze toekeek.
+
+"Je hebt vier verhalen gezien," zegt ze. "Vier keer greep Hera in. Vier keer reageerden stervelingen anders. Sommigen bezweken. Sommigen verloren alles. Eén bleef opstaan." Ze zwijgt even, alsof ze de stilte zelf laat meewegen. "Heldendom ontstaat niet wanneer het lot je gunstig gezind is, maar wanneer je weigert eraan ten onder te gaan."
+
+Vanaf dit moment, voel je, is ze niet langer enkel een toeschouwer.
+
+PERSON:
+athena:full
+
+EERETITEL:
+ch2_athena_mentor
+
+CHOICES:
+
+* Laat haar woorden bezinken -> CH2_ORAKEL
 
 END
 
@@ -2009,13 +2055,16 @@ TITLE:
 Het Orakel Keert Terug
 
 TEXT:
-De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warmer dan ooit. "Latona en haar kinderen zijn weer stevig verankerd in de herinnering," zegt de stem. "Apollo en Diana bestaan weer zoals ze altijd hadden moeten bestaan — en met hen, het hele verhaal van een liefde die een godin niet kon vergeven."
+De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warmer dan ooit. "Vier herinneringsfragmenten, vier gezichten van dezelfde jaloezie," zegt de stem. "Latona, Kallisto, Semele, Herakles — stuk voor stuk weer stevig verankerd in de herinnering, en met hen het hele verhaal van een liefde die een godin niet kon vergeven."
 
 CODEX:
 codex_grammatica_ch2_overzicht
 
 VOCAB:
 latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 2 volledig voltooid
 
 CHOICES:
 
@@ -2029,7 +2078,7 @@ TITLE:
 Het Einde van Hoofdstuk 2
 
 TEXT:
-"Hoofdstuk 3 wacht al ergens verderop," zegt de stem, "en met hem de rest van Herakles' beproevingen — en misschien ook de verhalen die je deze keer nog links liet liggen." De poort keert terug tot een dunne streep licht, en je neemt de herinnering aan Latona met je mee.
+"Hoofdstuk 3 wacht al ergens verderop," zegt de stem, "en met hem de rest van Herakles' beproevingen — zijn eerste werken heb je al gezien, maar er wachten er nog velen." De poort keert terug tot een dunne streep licht, en je neemt vier herinneringen met je mee: volharding, onschuld, waarheid, moed.
 
 END
 `.trim();

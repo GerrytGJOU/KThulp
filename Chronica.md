@@ -627,11 +627,13 @@ passen/aan te vullen):
 Zolang de video er niet is, blijft `SCREENS.spIntro` de facto de "opening"
 van het spel.
 
-### 7.6 Hoofdstuk 2: "De Werken van de Helden" — Hera als jaloerse vrouw (**deels gebouwd**)
+### 7.6 Hoofdstuk 2: "De Werken van de Helden" — Hera's vier gezichten (**deels gebouwd**)
 
-Thema: Hera's (Juno's) jaloezie jaagt op iedereen die Zeus ooit heeft
-liefgehad. Vier parallelle lijnen (`SP_CH2_CNS`, singleplayer-data.js) i.p.v.
-Hoofdstuk 1's drie — bewust NIET allemaal even lang of even "compleet":
+Thema: Hera (Juno) toont zich in dit hoofdstuk achtereenvolgens als
+**achtervolger** (Latona), **vervloeker** (Kallisto), **manipulator**
+(Semele) en **onverzoenlijke vijand** (Herakles) — vier verschillende
+gedaanten van dezelfde jaloezie. Vier parallelle lijnen (`SP_CH2_CNS`,
+singleplayer-data.js) i.p.v. Hoofdstuk 1's drie:
 
 - **L — Latona** (`CH2_L01`-`L08`): rondt in dit hoofdstuk volledig af. **Enige
   lijn die al geschreven is.**
@@ -640,18 +642,55 @@ Hoofdstuk 1's drie — bewust NIET allemaal even lang of even "compleet":
 - **K — Kallisto**: introduceert Artemis. **Nog te bouwen.**
 - **H — Herakles**: **bewust onvolledig** — dekt in dit hoofdstuk alleen zijn
   geboorte + de eerste van zijn twaalf werken; de rest volgt in Hoofdstuk 3
-  (`SP_CAMPAIGN` ch3: "Apotheose van Herakles"). Rondt daarom NIET het
-  hoofdstuk af (geen `ch2_voltooid`-FLAG) en leidt terug naar de hub
-  (`CH2_000`) in plaats van naar het gedeelde Orakel-epiloog — zo kan een
-  speler die Herakles koos in dezelfde saveslot alsnog een van de andere drie
-  lijnen spelen om het hoofdstuk te voltooien. **Nog te bouwen.**
+  (`SP_CAMPAIGN` ch3: "Apotheose van Herakles"). Zijn Hoofdstuk-2-segment
+  levert wél al zijn eigen fragment op (zie hieronder) — alleen zijn volledige
+  verhaal is nog niet af. **Nog te bouwen.**
 
-**Convergentie**: L en S komen samen zodra beide hun geboorte-climax hebben
-gehad (Apollo/Diana resp. Bacchus), via een gedeelde `CH2_BIRTHS`-scène —
-zelfde truc als Hoofdstuk 1, waar alle drie lijnen elkaars mythen al kenden
-zonder dat de speler ze zelf hoefde te spelen. Tot lijn S bestaat, leidt L
-direct naar het gedeelde epiloog (`CH2_ORAKEL`); zodra S gebouwd is, wordt
-`CH2_BIRTHS` ertussen gevoegd. K en H doen niet mee aan deze convergentie.
+#### Herinneringsfragmenten (Fragmentum Memoriae) — het nieuwe hoofdstukgate
+
+Anders dan Hoofdstuk 1 ("één lijn voltooien = door") moet de speler hier
+**alle vier de lijnen afronden**. Elke lijn geeft bij afsluiting geen
+klassieke beloning maar een **Herinneringsfragment** (`FRAGMENT:`-sectie,
+bare id, `spHookFragment` in singleplayer.js — zelfde patroon als `CODEX:`),
+met naam + icoon uit `SP_FRAGMENTS` (singleplayer-data.js):
+
+| Lijn | Fragment | Icoon |
+|---|---|---|
+| Latona | Volharding | 🍃 |
+| Kallisto | Onschuld | 🐻 |
+| Semele | Waarheid | ⚡ |
+| Herakles | Moed | 🦁 |
+
+Elke lijn eindigt terug op de hub (`CH2_000`) in plaats van rechtstreeks naar
+een epiloog — zo kan de speler in dezelfde saveslot alle vier na elkaar
+spelen. Zodra `SP_STATE.fragments` alle vier bevat, verschijnt op de hub een
+extra keuze ("Spreek het Orakel aan…") die naar `CH2_ATHENA` leidt. Dat werkt
+via een nieuwe, generieke keuze-tag: een regel in `CHOICES:` mag eindigen op
+`[REQUIRE:sleutel=getal]` (`CNSParser.REQUIRE_TAG_RE`, geparst net als
+`[PIETAS]`/`[VIRTUS]`); `spChoiceVisible()` verbergt de keuze tenzij aan de
+voorwaarde is voldaan. Nu alleen `fragments=4` in gebruik, maar generiek
+genoeg voor latere vergelijkbare gates.
+
+#### Athena: zwijgende getuige, dan mentor
+
+Athena kijkt tijdens alle vier de verhalen alleen toe — een korte cameo in
+lijn L (`CH2_L07`, `PERSON: athena:intro`) legt dit al vast, en dezelfde
+regie geldt voor S/K/H zodra die geschreven zijn: ze grijpt nooit in, ze
+observeert. Pas in `CH2_ATHENA` (bereikt nadat alle 4 fragmenten binnen zijn)
+treedt ze voor het eerst naar voren als actieve mentor, met de vaste
+kernboodschap: *"Heldendom ontstaat niet wanneer het lot je gunstig gezind
+is, maar wanneer je weigert eraan ten onder te gaan."* Dit zet `PERSON:
+athena:full` en de eretitel `ch2_athena_mentor`, en leidt door naar
+`CH2_ORAKEL` (generieke afsluiting, noemt alle vier lijnen) → `CH2_EINDE`.
+
+**L/S-kruisverwijzing (nog te bouwen zodra S bestaat)**: het idee dat Latona
+en Semele elkaars geboorte-climax terloops vermelden (Apollo/Diana resp.
+Bacchus) blijft overeind, maar past nu NIET meer als aparte tussenscène
+(`CH2_BIRTHS`) — elke lijn eindigt immers terug op de hub, niet naar een
+gedeeld epiloog. In plaats daarvan hoort dit als een korte alinea IN elke
+lijns eigen slotscène (bv. L08 vermeldt kort dat "elders, in Thebe, een ander
+verhaal zich ontvouwt" — zonder details die op S vooruitlopen). Nog toe te
+voegen aan `CH2_L08` zodra S geschreven is.
 
 **Naamgevingsregel** (uitbreiding van Hoofdstuk 1's Latijn/Grieks-regel, §7.1):
 L en S gebruiken overal **Romeinse** namen (Latona, Jupiter, Juno, Apollo,
