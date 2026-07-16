@@ -1,4 +1,4 @@
-# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1 speelbaar)
+# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1 speelbaar, Hoofdstuk 2 in aanbouw)
 
 > **Status: Beta, live in het hoofdmenu.** De **proloog** ("De Boer van
 > Latium" / "Het Orakel van Chronos") is volledig speelbaar: intro →
@@ -7,10 +7,13 @@
 > speelbaar: een hub-scène waarna de speler kiest tussen **drie parallelle,
 > niet-convergerende plotlijnen** — A "Het Goud van Midas", B "De Geboorte
 > van Athena", C "Prometheus en Pandora" — die elk de volledige hoofdstuk-1-
-> grammatica behandelen (zie §7.1). Er zijn 3 saveslots per leerling, een
+> grammatica behandelen (zie §7.1). **Hoofdstuk 2** ("De Werken van de
+> Helden") is **deels speelbaar**: de hub + lijn L "Latona" (volledig
+> afgerond) staan er, lijnen S "Semele"/K "Kallisto"/H "Herakles" volgen in
+> een latere bouwstap (zie §7.6). Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
-> rest van de campagne (Hoofdstuk 2 t/m 19 + Finale) staat als metadata-skelet
+> rest van de campagne (Hoofdstuk 3 t/m 19 + Finale) staat als metadata-skelet
 > klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet geschreven.
 >
 > **Dit document is de enige bron van waarheid voor Chronica Classica** en
@@ -39,6 +42,7 @@ browser):
 | CNS-parser + tekst/voornaamwoord-resolver | `certamen/singleplayer.js` (`CNSParser`, `SpTextResolver`) | ✅ werkend |
 | Proloog-content in CNS-formaat | `certamen/singleplayer-data.js` (`SP_PROLOOG_CNS`, 14 scènes) | ✅ werkend |
 | **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 30 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
+| **Hoofdstuk 2**: hub + lijn L "Latona" (afgerond) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | 🚧 deels — lijn L getest en volledig doorgespeeld; lijnen S/K/H nog te schrijven (zie §7.6) |
 | Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
 | **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
@@ -622,6 +626,49 @@ passen/aan te vullen):
 
 Zolang de video er niet is, blijft `SCREENS.spIntro` de facto de "opening"
 van het spel.
+
+### 7.6 Hoofdstuk 2: "De Werken van de Helden" — Hera als jaloerse vrouw (**deels gebouwd**)
+
+Thema: Hera's (Juno's) jaloezie jaagt op iedereen die Zeus ooit heeft
+liefgehad. Vier parallelle lijnen (`SP_CH2_CNS`, singleplayer-data.js) i.p.v.
+Hoofdstuk 1's drie — bewust NIET allemaal even lang of even "compleet":
+
+- **L — Latona** (`CH2_L01`-`L08`): rondt in dit hoofdstuk volledig af. **Enige
+  lijn die al geschreven is.**
+- **S — Semele**: grijpt terug naar Bacchus uit Hoofdstuk 1 lijn A. **Nog te
+  bouwen.**
+- **K — Kallisto**: introduceert Artemis. **Nog te bouwen.**
+- **H — Herakles**: **bewust onvolledig** — dekt in dit hoofdstuk alleen zijn
+  geboorte + de eerste van zijn twaalf werken; de rest volgt in Hoofdstuk 3
+  (`SP_CAMPAIGN` ch3: "Apotheose van Herakles"). Rondt daarom NIET het
+  hoofdstuk af (geen `ch2_voltooid`-FLAG) en leidt terug naar de hub
+  (`CH2_000`) in plaats van naar het gedeelde Orakel-epiloog — zo kan een
+  speler die Herakles koos in dezelfde saveslot alsnog een van de andere drie
+  lijnen spelen om het hoofdstuk te voltooien. **Nog te bouwen.**
+
+**Convergentie**: L en S komen samen zodra beide hun geboorte-climax hebben
+gehad (Apollo/Diana resp. Bacchus), via een gedeelde `CH2_BIRTHS`-scène —
+zelfde truc als Hoofdstuk 1, waar alle drie lijnen elkaars mythen al kenden
+zonder dat de speler ze zelf hoefde te spelen. Tot lijn S bestaat, leidt L
+direct naar het gedeelde epiloog (`CH2_ORAKEL`); zodra S gebouwd is, wordt
+`CH2_BIRTHS` ertussen gevoegd. K en H doen niet mee aan deze convergentie.
+
+**Naamgevingsregel** (uitbreiding van Hoofdstuk 1's Latijn/Grieks-regel, §7.1):
+L en S gebruiken overal **Romeinse** namen (Latona, Jupiter, Juno, Apollo,
+Diana, Bacchus, Neptunus); K en H gebruiken overal **Griekse** namen (Zeus,
+Hera, Artemis, Herakles). Elke god/godin heeft nog steeds maar één Codex-
+persoon-id (bv. `hera`, niet ook een aparte `juno`) met `nm`: "Primaire naam
+(secundaire naam)" — ongeacht welke naam de verteltekst van een specifieke
+lijn gebruikt. Latijnse grammatica-oefenzinnen (in puzzels/grammatica-tabellen)
+blijven altijd Latijn, ook binnen een Grieks-verteld personage (zie de
+Vulcanus/Hephaistos-precedent uit Hoofdstuk 1).
+
+**Grammatica**: praesens (persoonsuitgangen -o/-s/-t/-mus/-tis/-nt op een
+werkwoordstam), imperativus (kale stam/stam+e, meervoud +te), en de
+onregelmatige esse/posse — drie nieuwe Codex-grammatica-entries
+(`codex_grammatica_ch2_*`), elk met een paradigma-tabel, **vroeg ontgrendeld**
+bij `CH2_000` (zelfde les als Hoofdstuk 1: een leerling moet een mislukte
+puzzel meteen kunnen opzoeken, niet pas na afloop).
 
 ---
 
