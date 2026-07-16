@@ -478,6 +478,20 @@ const SP_PUZZLES = {
     vraag:"Niemand durft Latona te helpen, uit angst voor Juno's wraak. “Nemo eam adiuvare ___” — welke vorm van posse (kunnen) past hier?",
     opties:["potest","possunt","potes","possum"], antwoord:"potest",
     hint:"Derde persoon enkelvoud van posse is 'potest' — net als bij esse buigt dit werkwoord onregelmatig." },
+
+  // ---- Hoofdstuk 2, Lijn S: Semele ----
+  puzzle_ch2s_praesens: { type:"multiple-choice",
+    vraag:"Semele mint Jupiter in het diepste geheim. “Semele Iovem ___” — welke vorm van amare (liefhebben) past hier, praesens 3e persoon enkelvoud?",
+    opties:["amat","amant","amas","amatis"], antwoord:"amat",
+    hint:"Praesens 3e persoon enkelvoud van een eerste-conjugatiewerkwoord (op -are) eindigt op -at." },
+  puzzle_ch2s_imperativus: { type:"multiple-choice",
+    vraag:"Nu Jupiter aan zijn eed gebonden is, spreekt Semele haar eis uit. Wat eist ze?",
+    opties:["Ostende te!","Ostendis te!","Ostendere te!","Ostendit te!"], antwoord:"Ostende te!",
+    hint:"De imperativus enkelvoud van een derde-conjugatiewerkwoord (ostendere) eindigt op een korte -e." },
+  puzzle_ch2s_esse: { type:"multiple-choice",
+    vraag:"Het licht van Jupiters ware gedaante is dodelijk voor een sterveling. “Ignis nimium potens ___” — welke vorm van esse (zijn) past hier?",
+    opties:["est","sunt","es","sum"], antwoord:"est",
+    hint:"Derde persoon enkelvoud van esse is 'est'." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -533,6 +547,8 @@ const SP_CODEX_ENTRIES = {
 
   codex_geboorte_apollo_diana: { cat:"mythologie", titel:"De Geboorte van Apollo en Diana",
     tekst:"Latona, een titanide en minnares van Jupiter, werd door de jaloerse Juno vervloekt: geen enkel stuk vaste grond mocht haar ooit een plek geven om te bevallen. Achtervolgd door de python Juno op haar afstuurde, vond ze uiteindelijk toevlucht op Delos — een rondzwervend eiland dat, omdat het aan geen enkel koninkrijk verankerd lag, strikt genomen buiten de vloek viel. Daar bracht ze de tweeling Apollo en Diana ter wereld, en verankerde Delos zichzelf voorgoed in de golven." },
+  codex_geboorte_bacchus: { cat:"mythologie", titel:"De Geboorte van Bacchus (uit Jupiters Dij)",
+    tekst:"Semele, prinses van Thebe en minnares van Jupiter, werd door de jaloerse Juno — vermomd als haar eigen oude voedster — overgehaald om haar minnaar te vragen zich in zijn ware goddelijke gedaante te tonen. Gebonden aan een onherroepelijke eed bij de Styx kon Jupiter niet weigeren: zijn verzengende glorie doodde de sterfelijke Semele op slag. Uit de as redde hij hun ongeboren kind en naaide het in zijn eigen dij, waar het de resterende maanden voldragen werd — zo werd Bacchus de enige god die tweemaal geboren werd." },
 
   // LET OP: dezelfde "vroeg ontgrendelen"-regel als Hoofdstuk 1 (§7.2.1 in
   // Chronica.md) — deze drie entries worden al bij CH2_000 gezet, vóór de
@@ -582,7 +598,7 @@ const SP_CODEX_PERSONS = {
     full:"Midas' gastvrijheid jegens Silenus werd beloond met een wens die hij niet had doordacht: alles wat hij aanraakte veranderde in goud, ook zijn eigen dochter. Pas toen hij zichzelf waste in de rivier de Pactolus, hief Bacchus de vloek op — en liet de rivier voorgoed doorspekt achter met gouden korrels." },
   bacchus: { nm:"Bacchus (Dionysus)", epithet:"God van de wijn, extase en het onverwachte",
     intro:"Een god die zelden zonder wijnranken en een loom meelopende luipaard verschijnt — geamuseerd, gul, maar met een glimlach die je niet helemaal vertrouwt.",
-    full:"Bacchus beloonde Midas' gastvrijheid tegenover Silenus met een wens naar keuze — en liet hem vervolgens zelf ontdekken dat een wens zonder nadenken zelden een zegen blijft. Zijn straf was geen wraak, eerder een les: hij hief de vloek net zo gemakkelijk op als hij hem had geschonken." },
+    full:"Bacchus beloonde Midas' gastvrijheid tegenover Silenus met een wens naar keuze — en liet hem vervolgens zelf ontdekken dat een wens zonder nadenken zelden een zegen blijft. Zijn straf was geen wraak, eerder een les: hij hief de vloek net zo gemakkelijk op als hij hem had geschonken. Zijn eigen geboorte was al even ongewoon: zijn sterfelijke moeder Semele stierf voordat hij voldragen was, en Jupiter naaide het ongeboren kind in zijn eigen dij om de zwangerschap af te maken — Bacchus is daarmee de enige god die tweemaal geboren werd." },
   athena: { nm:"Pallas Athena (Minerva)", introNm:"???", epithet:"Godin van de wijsheid en doordachte oorlogvoering",
     introEpithet:"Nog onbekend",
     intro:"Op de Olympos gaat een gefluisterd woord rond — θεά, een godin — over iemand die nog niet eens geboren is, maar wier komst de goden nu al onrustig maakt.",
@@ -609,6 +625,9 @@ const SP_CODEX_PERSONS = {
     intro:"De zoon van Latona en Jupiter, amper geboren en al omgeven door een licht dat zijn naam voorgoed zal dragen." },
   diana: { nm:"Diana (Artemis)", epithet:"Godin van de jacht en de wildernis",
     intro:"Latona's dochter, geboren vlak vóór haar tweelingbroer Apollo — en volgens sommige verhalen was zij het die haar moeder meteen daarna bijstond bij zijn geboorte." },
+  semele: { nm:"Semele", epithet:"Prinses van Thebe, minnares van Jupiter",
+    intro:"Een sterfelijke prinses, dochter van koning Cadmus van Thebe, die 's nachts bezocht wordt door een minnaar die zijn ware aard voor haar verborgen houdt.",
+    full:"Semele, opgehitst door de als voedster vermomde Juno, eiste dat Jupiter zich in zijn ware goddelijke gedaante zou tonen — gebonden aan een eed bij de Styx kon hij niet weigeren, en zijn verzengende glorie doodde haar op slag. Uit de as redde Jupiter hun ongeboren kind, dat hij in zijn eigen dij naaide om de zwangerschap te voltooien: zo werd Bacchus geboren." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -691,6 +710,10 @@ const SP_VOCAB_ENTRIES = {
   latijn_adiuvare:  { taal:"latijn", woord:"adiuvare", betekenis:"helpen" },
   latijn_terra:     { taal:"latijn", woord:"terra, terrae", betekenis:"aarde, land" },
   latijn_nemo:      { taal:"latijn", woord:"nemo", betekenis:"niemand" },
+  latijn_amare:     { taal:"latijn", woord:"amare (amat)", betekenis:"liefhebben" },
+  latijn_ostendere: { taal:"latijn", woord:"ostendere (ostende!)", betekenis:"tonen, laten zien" },
+  latijn_ignis:     { taal:"latijn", woord:"ignis, ignis", betekenis:"vuur" },
+  latijn_potens:    { taal:"latijn", woord:"potens, potens, potens", betekenis:"machtig" },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -1893,6 +1916,7 @@ codex_grammatica_ch2_praesens, codex_grammatica_ch2_imperativus, codex_grammatic
 CHOICES:
 
 * Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is -> CH2_L01
+* Volg het lot van Semele, een prinses van Thebe die niet weet wie haar minnaar werkelijk is -> CH2_S01
 * Spreek het Orakel aan, nu alle vier de verhalen zijn gehoord [REQUIRE:fragments=4] -> CH2_ATHENA
 
 END
@@ -2044,6 +2068,8 @@ Delos, ontroerd — of overtuigd, het maakt weinig uit — staat stil in de golv
 
 Delos, dat eeuwenlang rondzwierf zonder doel, verankert zichzelf vanaf die dag voorgoed in de golven — de eerste vaste plek op aarde die vrijwillig een risico nam voor iemand die niemand anders durfde te helpen.
 
+Terwijl Diana en Apollo hun eerste ademteugen nemen, voel je — zonder het te kunnen verklaren — dat elders, in Thebe, een ander verhaal zich op datzelfde moment ontvouwt: een ander slachtoffer van dezelfde jaloezie, een ander kind dat nog geboren moet worden.
+
 CODEX:
 codex_geboorte_apollo_diana
 
@@ -2061,6 +2087,177 @@ ch2_lijn_latona=true
 
 FRAGMENT:
 latona
+
+CHOICES:
+
+* Keer terug — er wachten nog meer verhalen -> CH2_000
+
+END
+
+=== SCENE: CH2_S01 ===
+
+TITLE:
+Semele, Prinses van Thebe
+
+TEXT:
+Semele, dochter van koning Cadmus van Thebe en diens vrouw Harmonia, is al wekenlang 's nachts bezoek gewend van een minnaar die zijn gezicht nooit helemaal in het licht laat komen. Hij komt na zonsondergang, vertrekt voor de dageraad, en spreekt nooit over waar hij overdag is — en Semele, verliefd en nieuwsgierig tegelijk, heeft tot nu toe geen vragen gesteld die hij niet wilde beantwoorden.
+
+Wat ze niet weet: haar mysterieuze minnaar is Jupiter zelf, opnieuw stiekem afgedwaald van zijn eigen troon en zijn eigen vrouw.
+
+PERSON:
+semele:intro
+
+CHOICES:
+
+* Volg Semele door de volgende nacht -> CH2_S02
+
+END
+
+=== SCENE: CH2_S02 ===
+
+TITLE:
+De Oude Voedster
+
+TEXT:
+Juno, zodra ze van de zwangerschap verneemt, kookt van een woede die ze deze keer met geduld in plaats van een vloek uit — ze vermomt zich als Beroë, Semele's aloude, vertrouwde voedster, en wint moeiteloos haar vertrouwen terug. Dagenlang luistert ze mee, knikt bezorgd, en laat dan, langzaam en met schijnbare tegenzin, haar twijfel vallen: "Hoe weet je eigenlijk zeker dat je minnaar is wie hij zegt te zijn, kind? Een sterveling kan net zo makkelijk liegen over goddelijkheid als een god de waarheid kan verzwijgen."
+
+Semele, die nooit eerder aan hem getwijfeld had, voelt de vraag als een steen die niet meer weg wil.
+
+CHOICES:
+
+* Luister aandachtig — haar wantrouwen groeit met elk woord [SEVERITAS] -> CH2_S03
+* Wuif de twijfel eerst weg, uit vertrouwen in haar minnaar [CLEMENTIA] -> CH2_S02B
+
+END
+
+=== SCENE: CH2_S02B ===
+
+TITLE:
+Toch Twijfel
+
+TEXT:
+Ondanks haar vertrouwen blijft de vraag aan haar knagen, als een steentje in een schoen dat je jezelf wijsmaakt te kunnen negeren. Tegen middernacht, wanneer haar minnaar weer door het raam naar binnen glipt, merkt ze dat ze de woorden van haar voedster toch niet kan laten liggen.
+
+CHOICES:
+
+* Stel hem de vraag die ze niet meer kan inslikken -> CH2_S03
+
+END
+
+=== SCENE: CH2_S03 ===
+
+TITLE:
+Een Onmogelijke Eed
+
+TEXT:
+Wanneer Jupiter die nacht weer verschijnt, eist Semele — voordat ze hem vertelt wat ze werkelijk wil — dat hij zweert haar elke wens te vervullen, wat die ook is. Jupiter, verliefd en op dat moment onvoorzichtiger dan een god zou moeten zijn, zweert bij de rivier de Styx: de meest bindende eed die er bestaat, een eed die zelfs hijzelf onder geen enkele omstandigheid kan breken zonder verschrikkelijke gevolgen.
+
+PUZZLE:
+puzzle_ch2s_praesens
+
+CHOICES:
+
+* Wacht af wat Semele nu van hem vraagt -> CH2_S04
+
+END
+
+=== SCENE: CH2_S04 ===
+
+TITLE:
+De Wens
+
+TEXT:
+Nu hij onherroepelijk gebonden is, spreekt Semele eindelijk haar wens uit: ze wil hem zien zoals hij werkelijk is, in zijn volle goddelijke glorie — precies zoals hij zich aan Juno toont, zijn eigen vrouw. Geen vermomming meer, geen nachtelijke schaduw. De ware Jupiter, in het volle licht.
+
+PUZZLE:
+puzzle_ch2s_imperativus
+
+CHOICES:
+
+* Kijk hoe Jupiter reageert op haar eis -> CH2_S05
+
+END
+
+=== SCENE: CH2_S05 ===
+
+TITLE:
+Jupiters Wanhoop
+
+TEXT:
+Jupiter verbleekt — voor zover een god kan verbleken — want hij weet precies wat er zal gebeuren als hij toegeeft. Geen sterveling heeft ooit zijn ware gedaante overleefd; zelfs zijn nabijheid in volle glorie is al meer dan een mens kan verdragen. Maar de eed bij de Styx laat geen enkele ruimte voor terugtrekken, ook niet voor de koning van de goden zelf.
+
+Vanaf een verre wolkenbank, onzichtbaar voor iedereen behalve jou, kijkt Athena toe — haar gezicht een en al gespannen stilte. Ook hier grijpt ze niet in.
+
+PERSON:
+athena:intro
+
+CHOICES:
+
+* Voel meelij met Jupiter, gevangen door zijn eigen onbezonnen woord [CLEMENTIA] -> CH2_S06
+* Denk streng — hij had zo'n eed nooit lichtzinnig mogen zweren [SEVERITAS] -> CH2_S06
+
+END
+
+=== SCENE: CH2_S06 ===
+
+TITLE:
+Verschroeid door Glorie
+
+TEXT:
+Jupiter verschijnt in zijn volle staat: bliksem die de lucht openrijt, donder die de fundamenten van het paleis doet schudden, een licht zo verzengend dat het geen onderscheid maakt tussen liefde en vernietiging. Semele's sterfelijke lichaam kan het niet verdragen — ze wordt op slag verteerd door het vuur van zijn ware gedaante, nog voor ze heeft kunnen beseffen wat ze eigenlijk had gevraagd.
+
+PUZZLE:
+puzzle_ch2s_esse
+
+CHOICES:
+
+* Kijk of er nog iets van haar te redden valt -> CH2_S07
+
+END
+
+=== SCENE: CH2_S07 ===
+
+TITLE:
+Gered uit de As
+
+TEXT:
+Te midden van de rokende as vindt Jupiter, met een haast die niets meer met koninklijke waardigheid te maken heeft, hun ongeboren kind — nog veel te vroeg om zelfstandig te overleven. Hij snijdt een opening in zijn eigen dij en naait het kind erin, waar het de resterende maanden zal voldragen worden, verborgen voor Juno's alziende jaloezie.
+
+Geen enkele andere geboorte in de hele mythologie zal ooit zo verlopen als deze.
+
+CHOICES:
+
+* Wacht de laatste maanden af -> CH2_S08
+
+END
+
+=== SCENE: CH2_S08 ===
+
+TITLE:
+De Geboorte van Bacchus
+
+TEXT:
+Wanneer de tijd eindelijk daar is, opent Jupiter zijn eigen dij, en wordt Bacchus geboren — de enige god die ooit tweemaal geboren werd, eerst uit een sterfelijke moeder en dan uit zijn eigen goddelijke vader. Waar Semele's nieuwsgierigheid haar het leven kostte, overleeft haar zoon dankzij de wanhopige vindingrijkheid van een vader die haar niet op tijd kon redden, maar hun kind wel.
+
+Ergens, ver van hier, weet je dat dit dezelfde god is die je ooit — in een ander leven, op een ander moment — hebt zien helpen bij het opheffen van een vloek over gouden vingers.
+
+CODEX:
+codex_geboorte_bacchus
+
+PERSON:
+semele:full, bacchus:full
+
+EERETITEL:
+ch2_semele
+
+QUEST:
+quest_boodschapper_van_kronos: lijn Semele afgerond (Hoofdstuk 2)
+
+FLAG:
+ch2_lijn_semele=true
+
+FRAGMENT:
+semele
 
 CHOICES:
 
@@ -2104,7 +2301,7 @@ CODEX:
 codex_grammatica_ch2_overzicht
 
 VOCAB:
-latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo
+latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 2 volledig voltooid
