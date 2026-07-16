@@ -288,7 +288,7 @@ const SpTextResolver = {
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
                   "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-                  "PERSON","VOCAB"],
+                  "PERSON","VOCAB","FRAGMENT"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -336,6 +336,12 @@ const CNSParser = {
   // spChoosePath/spHookApproach). De marker wordt uit het zichtbare label
   // gesloopt; de speler ziet nooit dat een keuze getagd is.
   APPROACH_TAG_RE: /\s*\[(PIETAS|VIRTUS)\]\s*$/i,
+  // Optioneel: een keuzeregel mag ook eindigen op [REQUIRE:sleutel=getal] —
+  // verbergt die keuze tenzij aan de voorwaarde is voldaan (zie
+  // spChoiceVisible in singleplayer.js). Nu alleen "fragments" gebruikt
+  // (Hoofdstuk 2: pas naar het Orakel zodra alle 4 Herinneringsfragmenten
+  // binnen zijn), maar generiek genoeg voor latere vergelijkbare gates.
+  REQUIRE_TAG_RE: /\s*\[REQUIRE:(\w+)=(\d+)\]\s*$/i,
   parseChoices(text){
     const choices=[];
     for(const raw of text.split(/\r?\n/)){
@@ -346,17 +352,19 @@ const CNSParser = {
       if(arrowIndex===-1) continue;
       let label = withoutBullet.slice(0,arrowIndex).trim();
       const target = withoutBullet.slice(arrowIndex+2).trim();
-      let approach = null;
+      let approach = null, require = null;
+      const reqM = label.match(this.REQUIRE_TAG_RE);
+      if(reqM){ require = { key:reqM[1].toLowerCase(), value:+reqM[2] }; label = label.slice(0,reqM.index).trim(); }
       const tagM = label.match(this.APPROACH_TAG_RE);
       if(tagM){ approach = tagM[1].toUpperCase(); label = label.slice(0,tagM.index).trim(); }
-      choices.push({ label, target, approach });
+      choices.push({ label, target, approach, require });
     }
     return choices;
   },
 };
 
 const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS)]);
-const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{pietas:0,virtus:0}, persons:{}, vocab:[], seenImages:[] });
+const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{pietas:0,virtus:0}, persons:{}, vocab:[], seenImages:[], fragments:[] });
 
 /* ---- SPELERSTATE ---- */
 let SP_STATE = SP_EMPTY_STATE();
@@ -701,6 +709,14 @@ function spChoosePath(target, approach){
   if(approach) spHookApproach(approach);
   spGoCns(target);
 }
+// Bepaalt of een keuze met een [REQUIRE:sleutel=getal]-tag getoond mag
+// worden (CNSParser.REQUIRE_TAG_RE). Nu alleen "fragments" (Hoofdstuk 2: de
+// weg naar het Orakel opent pas met alle 4 Herinneringsfragmenten binnen).
+function spChoiceVisible(c){
+  if(!c.require) return true;
+  if(c.require.key==="fragments") return (SP_STATE.fragments||[]).length >= c.require.value;
+  return true;
+}
 
 /* ---- SCÈNE-RENDERER ---- */
 SCREENS.spPlay = function(){
@@ -721,8 +737,9 @@ SCREENS.spPlay = function(){
       <div class="eyebrow l">${esc(SpTextResolver.resolve(scene.dialogue.speaker, SP_STATE))}</div>
       <p>“${esc(SpTextResolver.resolve(scene.dialogue.text, SP_STATE))}”</p>
     </div>` : "";
-  const choicesHTML = scene.choices.length
-    ? scene.choices.map(c=>`<button class="btn btn-gold btn-block lg" style="margin-top:8px" onclick="spChoosePath('${c.target}','${c.approach||""}')">${esc(SpTextResolver.resolve(c.label, SP_STATE))}</button>`).join("")
+  const visibleChoices = scene.choices.filter(spChoiceVisible);
+  const choicesHTML = visibleChoices.length
+    ? visibleChoices.map(c=>`<button class="btn btn-gold btn-block lg" style="margin-top:8px" onclick="spChoosePath('${c.target}','${c.approach||""}')">${esc(SpTextResolver.resolve(c.label, SP_STATE))}</button>`).join("")
     : `<button class="btn btn-ghost btn-block lg" onclick="go('spSlots')">Terug naar de opslagplekken</button>`;
 
   H(brand(true)+`
@@ -745,6 +762,7 @@ function spRunMetaHooks(meta){
   if(meta.MUSIC)     spPlayMusic(meta.MUSIC.trim());
   if(meta.PERSON)    spHookPerson(meta.PERSON);
   if(meta.VOCAB)     spHookVocab(meta.VOCAB);
+  if(meta.FRAGMENT)  spHookFragment(meta.FRAGMENT);
   // IMAGE wordt door spHookSeenImage(scene) verwerkt (aparte aanroep in
   // SCREENS.spPlay, want die heeft het hele scene-object nodig, niet alleen
   // de meta) — hier verder pure weergave via spSceneImageHTML(). SFX bestaat
@@ -846,6 +864,23 @@ function spHookVocab(text){
   if(!fresh.length) return;
   spSaveProgress({ vocab:[...existing, ...fresh] });
   toast("Nieuwe woorden!", fresh.length+" woord"+(fresh.length===1?"":"en")+" toegevoegd aan de Codex.");
+}
+/* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2's
+   hoofdstuk-brede voltooiingsgate: i.p.v. "één lijn = hoofdstuk klaar"
+   (Hoofdstuk 1) moet de speler hier ALLE lijnen afronden. Elke lijn geeft bij
+   zijn afsluiting een eigen fragment (FRAGMENT:-sectie, bare id, net als
+   CODEX:); SP_FRAGMENTS (singleplayer-data.js) levert naam/icoon. Zodra
+   SP_STATE.fragments alle vier bevat, wordt een [REQUIRE:fragments=4]-keuze
+   op de hub zichtbaar (spChoiceVisible) die naar de Athena/Orakel-afsluiting
+   leidt. Geen apart scherm — het fragment-aantal is puur een stille teller,
+   zichtbaar gemaakt via de toast bij het verdienen ervan. ---- */
+function spHookFragment(text){
+  const id = text.trim();
+  const existing = SP_STATE.fragments||[];
+  if(existing.includes(id)) return;
+  spSaveProgress({ fragments:[...existing, id] });
+  const def = SP_FRAGMENTS[id];
+  toast("Herinneringsfragment!", def ? `${def.icon} ${def.nm}` : id);
 }
 /* ---- AFBEELDINGEN-TAB: elke scène met een IMAGE:-sectie wordt automatisch
    bijgehouden (geen aparte auteurs-actie nodig) zodra de speler haar voor het
