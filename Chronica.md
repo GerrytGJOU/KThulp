@@ -417,6 +417,45 @@ Wereldkaart) zodra je verder bent dan het allereerste scherm. Nieuwe
 hoofdstukken moeten voortaan **bij elke nieuwe `CODEX:`-id** ook een entry in
 `SP_CODEX_ENTRIES` toevoegen — anders toont het scherm alleen de kale id.
 
+### 7.3 Pietas/Virtus — stil "Paragon/Renegade"-systeem (**gebouwd**)
+
+Losjes geïnspireerd op Mass Effects Paragon/Renegade: bij (bijna) elke keuze
+met interpersoonlijke lading krijgt de speler twee smaken van dezelfde
+reactie — een meelevende/geduldige ("Pietas") en een nuchtere/daadkrachtige
+("Virtus") — **ook wanneer beide naar exact dezelfde volgende scène leiden**.
+Het punt is niet vertakking maar **het gevoel van karakterkeuze**, stil
+bijgehouden en NERGENS aan de speler getoond (geen HUD, geen scherm, geen
+melding) — precies zoals de Mass Effect-balkjes zelf ondubbelzinnig zichtbaar
+zijn, maar hier bewust omgekeerd: onzichtbaar, zodat het voelt als "wie ben
+ik" in plaats van "welk getal moet ik maximaliseren".
+
+**Mechaniek:**
+- Een keuzeregel in `CHOICES:` mag eindigen op `[PIETAS]` of `[VIRTUS]` vóór
+  de `->`, bv. `* Blijf eerst naast hem zitten [PIETAS] -> CH1_A08B`. De tag
+  wordt door `CNSParser.parseChoices` (singleplayer.js) uit het zichtbare
+  label gesloopt — de speler ziet nooit `[PIETAS]`/`[VIRTUS]` op een knop.
+- Bij een klik roept de knop `spChoosePath(target, approach)` aan (i.p.v.
+  rechtstreeks `spGoCns`); die telt eerst stil op via `spHookApproach()` en
+  navigeert dan pas door. `SP_STATE.approach = {pietas, virtus}` (per
+  saveslot, net als codex/flags).
+- **Puzzel-scènes zijn uitgesloten**: `spRenderPuzzle()` gebruikt
+  `scene.choices[0].target` rechtstreeks en roept `spGoCns` aan, niet
+  `spChoosePath` — een `[TAG]` op een puzzelscène-keuze zou dus nooit vuren.
+  Tag daarom alleen keuzes op scènes ZONDER `PUZZLE:`-sectie.
+- `spApproachTendency()` levert `"pietas"`/`"virtus"`/`"neutraal"` (bij een
+  gelijke stand of nog geen enkele getagde keuze) — bedoeld voor NPC's/scènes
+  die later conditioneel reageren op de opgebouwde houding. Dat vereist wel
+  eerst het `CONDITION`-mechanisme (§8) — de teller zelf werkt al, het
+  *gebruik ervan* in dialoog is de volgende stap.
+- Hoofdstuk 1 heeft 13 getagde keuzeparen verspreid over de drie lijnen (zie
+  `SP_CH1_CNS`) op momenten met echte emotionele lading (bv. troosten vs.
+  doorpakken bij Midas' ineenstorting, medelijden vs. nuchterheid bij Zeus'
+  zwangerschap, meeleven vs. nieuwsgierigheid bij de geketende Prometheus) —
+  niet letterlijk op elke overgang, want een gedwongen dilemma bij bv. "trek
+  de mantel aan -> ga verder" voegt niets toe. Nieuwe hoofdstukken volgen
+  hetzelfde principe: tag waar de keuze een karakterkant laat zien, sla over
+  waar het puur een leesknop is.
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
@@ -430,8 +469,10 @@ In afgesproken bouwvolgorde:
    de berekening te verwerken.
 2. **`CONDITION`-mechanisme** — de kaart zelf is gebouwd (§7,
    `SCREENS.spWorldMap`), alle drie panelen zijn getekend en schakelbaar; nog
-   open: NPC's/scènes die conditioneel reageren op de al-gebouwde `flags`
-   (bv. een personage dat later verwijst naar welke Hoofdstuk-1-lijn je koos).
+   open: NPC's/scènes die conditioneel reageren op de al-gebouwde `flags` (bv.
+   een personage dat later verwijst naar welke Hoofdstuk-1-lijn je koos) én op
+   `spApproachTendency()` (§7.3, Pietas/Virtus) — de teller zelf werkt en
+   bouwt al op, alleen het *reageren* erop in latere hoofdstukken ontbreekt nog.
 3. **Audio-hook** — `MUSIC:`/`SFX:` daadwerkelijk afspelen (mp3, uit Suno) met de
    iPad-eis dat geluid pas ná een gebruikersactie mag starten. Mappen staan
    klaar in `certamen/assets/chronica/`.

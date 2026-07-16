@@ -330,6 +330,11 @@ const CNSParser = {
     if(lines.length===0) return null;
     return { speaker:lines[0].trim(), text:lines.slice(1).join("\n").trim() };
   },
+  // Optioneel: een keuzeregel mag eindigen op [PIETAS] of [VIRTUS] vóór de
+  // "->" — een onzichtbare marker voor het Pietas/Virtus-systeem (zie
+  // spChoosePath/spHookApproach). De marker wordt uit het zichtbare label
+  // gesloopt; de speler ziet nooit dat een keuze getagd is.
+  APPROACH_TAG_RE: /\s*\[(PIETAS|VIRTUS)\]\s*$/i,
   parseChoices(text){
     const choices=[];
     for(const raw of text.split(/\r?\n/)){
@@ -338,14 +343,19 @@ const CNSParser = {
       const withoutBullet = line.replace(/^\*\s*/,"");
       const arrowIndex = withoutBullet.lastIndexOf("->");
       if(arrowIndex===-1) continue;
-      choices.push({ label:withoutBullet.slice(0,arrowIndex).trim(), target:withoutBullet.slice(arrowIndex+2).trim() });
+      let label = withoutBullet.slice(0,arrowIndex).trim();
+      const target = withoutBullet.slice(arrowIndex+2).trim();
+      let approach = null;
+      const tagM = label.match(this.APPROACH_TAG_RE);
+      if(tagM){ approach = tagM[1].toUpperCase(); label = label.slice(0,tagM.index).trim(); }
+      choices.push({ label, target, approach });
     }
     return choices;
   },
 };
 
 const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS)]);
-const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{} });
+const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{pietas:0,virtus:0} });
 
 /* ---- SPELERSTATE ---- */
 let SP_STATE = SP_EMPTY_STATE();
@@ -596,6 +606,14 @@ function spGoCns(nodeId){
   spSaveProgress({ node:nodeId });
   go("spPlay");
 }
+/* Klik op een keuzeknop: registreert eerst stil de Pietas/Virtus-tag (indien
+   aanwezig — zie CNSParser.APPROACH_TAG_RE) en navigeert dan pas door. Zo
+   blijft spGoCns bruikbaar voor alle andere navigatie (puzzels, kaart-pins,
+   "Verdergaan"-knop) die geen approach-tag kennen. */
+function spChoosePath(target, approach){
+  if(approach) spHookApproach(approach);
+  spGoCns(target);
+}
 
 /* ---- SCÈNE-RENDERER ---- */
 SCREENS.spPlay = function(){
@@ -616,7 +634,7 @@ SCREENS.spPlay = function(){
       <p>“${esc(SpTextResolver.resolve(scene.dialogue.text, SP_STATE))}”</p>
     </div>` : "";
   const choicesHTML = scene.choices.length
-    ? scene.choices.map(c=>`<button class="btn btn-gold btn-block lg" style="margin-top:8px" onclick="spGoCns('${c.target}')">${esc(SpTextResolver.resolve(c.label, SP_STATE))}</button>`).join("")
+    ? scene.choices.map(c=>`<button class="btn btn-gold btn-block lg" style="margin-top:8px" onclick="spChoosePath('${c.target}','${c.approach||""}')">${esc(SpTextResolver.resolve(c.label, SP_STATE))}</button>`).join("")
     : `<button class="btn btn-ghost btn-block lg" onclick="go('spSlots')">Terug naar de opslagplekken</button>`;
 
   H(brand(true)+`
@@ -653,6 +671,31 @@ function spHookFlag(text){
     else flags[part.slice(0,eq).trim()] = part.slice(eq+1).trim();
   });
   spSaveProgress({ flags });
+}
+
+/* ---- PIETAS/VIRTUS — het stille "Paragon/Renegade"-systeem.
+   Een keuzeregel in CHOICES mag eindigen op [PIETAS] of [VIRTUS] (zie
+   CNSParser.APPROACH_TAG_RE); die tag wordt NOOIT getoond aan de speler en
+   heeft ook geen eigen scherm/HUD — het is puur een stilzwijgende teller die
+   meetelt hoe de speler zich door het verhaal gedraagt (mild/invoelend versus
+   nuchter/daadkrachtig), ook wanneer beide keuzes naar dezelfde volgende
+   scène leiden. Toekomstige hoofdstukken kunnen met spApproachTendency() een
+   NPC laten reageren op de OPGEBOUWDE houding (via een CONDITION-mechanisme,
+   zie Chronica.md §8) — dat is bewust losgekoppeld van deze telfunctie zelf. */
+function spHookApproach(tag){
+  const key = tag==="PIETAS" ? "pietas" : tag==="VIRTUS" ? "virtus" : null;
+  if(!key) return;
+  const approach = {...(SP_STATE.approach||{pietas:0,virtus:0})};
+  approach[key] = (approach[key]||0) + 1;
+  spSaveProgress({ approach });
+}
+// Overwicht van de opgebouwde houding — "pietas"/"virtus" bij een duidelijk
+// overwicht, anders "neutraal" (gelijke stand of nog geen enkele keuze
+// gemaakt). Bedoeld voor later gebruik door NPC-dialoog/CONDITION-checks.
+function spApproachTendency(){
+  const a = SP_STATE.approach||{pietas:0,virtus:0};
+  if(a.pietas===a.virtus) return "neutraal";
+  return a.pietas>a.virtus ? "pietas" : "virtus";
 }
 
 /* Illustratie bij een scène: de IMAGE-sectie is een bestandsnaam relatief aan
