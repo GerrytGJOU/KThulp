@@ -1213,6 +1213,33 @@ function spCombatNextQuestion(){
     .filter((v,i,a)=>v!==correct && a.indexOf(v)===i).slice(0,3);
   SP_COMBAT.question = { woord:w.woord, correct, options:shuffle([correct, ...distractors]) };
 }
+// Zelfde formule als bmBossAliveHeads() (bossbattle.js): koppen gelijk
+// verdeeld over de HP-balk, ceil() zodat een kop pas verdwijnt zodra zijn
+// 1/7e-aandeel HELEMAAL weg is (niet al bij het eerste beetje schade).
+function spCombatAliveHeads(headCount, hpPct){
+  return Math.max(0, Math.min(headCount, Math.ceil((hpPct||0)*headCount)));
+}
+// Vijand-sprite: romp (met kale nekstompjes al ingetekend bij de Hydra) +
+// eventuele losse kop-lagen erbovenop, exact dezelfde absolute-stapel-truc
+// als Boss Battle se bmBossSpriteHTML() (bossbattle.js) — geen offsets
+// nodig, elke laag is hetzelfde canvasformaat. Ontbreekt enemy.img, dan
+// valt het terug op het icon-emoji.
+function spCombatSpriteHTML(enemy){
+  if(!enemy.img) return `<span style="font-size:40px">${enemy.icon}</span>`;
+  let headsHTML = "";
+  if(enemy.heads?.length){
+    const hpPct = SP_COMBAT.maxHp ? SP_COMBAT.hp/SP_COMBAT.maxHp : 1;
+    const alive = spCombatAliveHeads(enemy.heads.length, hpPct);
+    headsHTML = enemy.heads.slice(0, alive).map(h=>
+      `<img src="${esc(h)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain">`
+    ).join("");
+  }
+  return `<div style="position:relative;width:140px;height:140px;margin:0 auto">
+    <img src="${esc(enemy.img)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain"
+      onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${esc(enemy.icon)}</span>'">
+    ${headsHTML}
+  </div>`;
+}
 SCREENS.spCombat = function(){
   if(!SP_COMBAT){ go("spSlots"); return; }
   const enemy = SP_COMBAT_ENEMIES[SP_COMBAT.enemyId];
@@ -1225,11 +1252,7 @@ SCREENS.spCombat = function(){
   H(brand(true)+`
   <div class="scrhead"><span></span><h2>Gevecht</h2>${spAudioToggleHTML()}</div>
   <div class="panel" style="text-align:center">
-    ${enemy.img
-      ? `<img src="${esc(enemy.img)}" alt="" style="max-width:140px;max-height:140px;object-fit:contain;display:inline-block"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
-         <span style="font-size:40px;display:none">${enemy.icon}</span>`
-      : `<span style="font-size:40px">${enemy.icon}</span>`}
+    ${spCombatSpriteHTML(enemy)}
     <div class="eyebrow l" style="margin-top:6px">${esc(enemy.nm)}</div>
     <div style="height:10px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin:6px 0">
       <div style="height:100%;width:${hpPct}%;background:var(--hi-bright,#e8c77e)"></div>
