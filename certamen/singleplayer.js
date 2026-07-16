@@ -287,7 +287,8 @@ const SpTextResolver = {
 /* ---- CNS PARSER — zet ruwe .cns-tekst om in een Map<sceneId, sceneObject> ---- */
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
-                  "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG"],
+                  "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
+                  "PERSON","VOCAB"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -355,7 +356,7 @@ const CNSParser = {
 };
 
 const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS)]);
-const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{pietas:0,virtus:0} });
+const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{pietas:0,virtus:0}, persons:{}, vocab:[], seenImages:[] });
 
 /* ---- SPELERSTATE ---- */
 let SP_STATE = SP_EMPTY_STATE();
@@ -546,39 +547,106 @@ function spRenderLanding(){
   ${foot()}`);
 }
 
-/* ---- CODEX MEMORIAE: overzichtsscherm van alle ontgrendelde codex-entries
-   (SP_CODEX_ENTRIES in singleplayer-data.js). Codex is PER SAVESLOT, net als
-   de wereldkaart — elke slot toont dus alleen wat DIE doorspeling al heeft
-   ontdekt. Entries die nog niet in SP_STATE.codex zitten, worden simpelweg
-   niet getoond (geen "??"-placeholder — dat is bewust, spoilt anders welke
-   ids er nog aankomen). ---- */
+/* ---- CODEX MEMORIAE: een oud perkamenten boek met zes tabbladen. Codex is
+   PER SAVESLOT, net als de wereldkaart — elke slot toont dus alleen wat DIE
+   doorspeling al heeft ontdekt. Niets wordt vooruit getoond (geen
+   "??"-placeholder voor wat nog moet komen — dat zou spoilen).
+   - Mythologie/Geschiedenis/Grammatica: SP_CODEX_ENTRIES, ontgrendeld via de
+     bestaande CODEX:-sectie (spHookCodex). Grammatica-entries mogen een
+     `table` hebben (rijtjes/naamvallen), gerenderd als een echte <table>.
+   - Personen: SP_CODEX_PERSONS, tweetraps (intro/full) via PERSON:.
+   - Vocabulaire: SP_VOCAB_ENTRIES, via VOCAB:.
+   - Afbeeldingen: SP_STATE.seenImages, automatisch bijgehouden door
+     spHookSeenImage() zodra een scène met een IMAGE: wordt bezocht. ---- */
+let SP_CODEX_TAB = "mythologie";
+const SP_CODEX_TABS = [
+  { id:"mythologie",   nm:"Mythologie",   icon:"⚡" },
+  { id:"geschiedenis", nm:"Geschiedenis", icon:"🏺" },
+  { id:"personen",     nm:"Personen",     icon:"👤" },
+  { id:"grammatica",   nm:"Grammatica",   icon:"📜" },
+  { id:"vocabulaire",  nm:"Vocabulaire",  icon:"🔤" },
+  { id:"afbeeldingen", nm:"Afbeeldingen", icon:"🖼️" },
+];
+function spSwitchCodexTab(tab){ SP_CODEX_TAB = tab; go("spCodex"); }
 SCREENS.spCodex = function(){
   document.body.classList.remove("greek");
   if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
-  const codex = SP_STATE.codex||[];
-  const CAT_LABELS = { mythologie:"Mythologie", geschiedenis:"Geschiedenis", grammatica:"Grammatica", vocabulaire:"Vocabulaire" };
-  const entries = codex.map(id=>({ id, ...(SP_CODEX_ENTRIES[id]||{cat:"mythologie", titel:id, tekst:""}) }));
-  let body;
-  if(!entries.length){
-    body = `<div class="panel"><p class="note">Nog niets vastgelegd — de Codex vult zich vanzelf terwijl je door het verhaal speelt.</p></div>`;
-  } else {
-    const byCat = {};
-    entries.forEach(e=>{ (byCat[e.cat]=byCat[e.cat]||[]).push(e); });
-    body = Object.keys(CAT_LABELS).filter(c=>byCat[c]).map(cat=>{
-      const rows = byCat[cat].map(e=>`
-        <div class="tile" style="cursor:default;margin-bottom:8px;padding:12px 14px">
-          <div style="font-weight:700">${esc(e.titel)}</div>
-          ${e.tekst?`<p class="note" style="margin-top:4px">${esc(e.tekst)}</p>`:""}
-        </div>`).join("");
-      return `<div class="panel"><div class="eyebrow l">${esc(CAT_LABELS[cat])}</div>${rows}</div>`;
-    }).join("");
-  }
+  const tabsHTML = SP_CODEX_TABS.map(t=>
+    `<button class="codex-tab${t.id===SP_CODEX_TAB?" on":""}" onclick="spSwitchCodexTab('${t.id}')">${t.icon} ${esc(t.nm)}</button>`
+  ).join("");
+  const bodies = {
+    mythologie: ()=>spCodexEntriesHTML("mythologie", "Nog niets vastgelegd — mythen verschijnen hier zodra je ze beleeft."),
+    geschiedenis: ()=>spCodexEntriesHTML("geschiedenis", "Nog niets vastgelegd — Hoofdstuk 1 is nog puur mythologie; historische bladzijden volgen bij latere hoofdstukken."),
+    grammatica: ()=>spCodexEntriesHTML("grammatica", "Nog niets vastgelegd — grammatica verschijnt hier zodra een hoofdstuk erom vraagt."),
+    personen: spCodexPersonsHTML,
+    vocabulaire: spCodexVocabHTML,
+    afbeeldingen: spCodexImagesHTML,
+  };
+  const body = (bodies[SP_CODEX_TAB]||bodies.mythologie)();
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Codex Memoriae</h2></div>
-  <div class="panel"><p class="note">Alles wat je in dit verhaal hebt herontdekt — automatisch bijgehouden, niets gaat verloren.</p></div>
-  ${body}
+  <div class="codex-book">
+    <div class="codex-tabs">${tabsHTML}</div>
+    <div class="codex-page">${body}</div>
+  </div>
   ${foot()}`);
 };
+function spCodexEntriesHTML(cat, emptyMsg){
+  const codex = SP_STATE.codex||[];
+  const entries = codex.map(id=>SP_CODEX_ENTRIES[id]).filter(e=>e && e.cat===cat);
+  if(!entries.length) return `<p class="codex-empty">${esc(emptyMsg)}</p>`;
+  return entries.map(e=>`
+    <div class="codex-entry">
+      <h4>${esc(e.titel)}</h4>
+      <p>${esc(e.tekst)}</p>
+      ${e.table?spCodexTableHTML(e.table):""}
+    </div>`).join("");
+}
+function spCodexTableHTML(table){
+  const head = table.headers.map(h=>`<th>${esc(h)}</th>`).join("");
+  const rows = table.rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("");
+  return `<table class="codex-table"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+function spCodexPersonsHTML(){
+  const persons = SP_STATE.persons||{};
+  const ids = Object.keys(persons);
+  if(!ids.length) return `<p class="codex-empty">Nog niemand vastgelegd — ontmoet personages in het verhaal om ze hier terug te vinden.</p>`;
+  return ids.map(id=>{
+    const def = SP_CODEX_PERSONS[id]; if(!def) return "";
+    const level = persons[id];
+    const nm = level==="intro" && def.introNm ? def.introNm : def.nm;
+    const epithet = level==="intro" && def.introEpithet ? def.introEpithet : def.epithet;
+    return `<div class="codex-entry">
+      <h4>${esc(nm)}</h4>
+      ${epithet?`<div class="codex-epithet">${esc(epithet)}</div>`:""}
+      <p>${esc(def.intro)}</p>
+      ${level==="full" && def.full ? `<div class="codex-fold"></div><p>${esc(def.full)}</p>` : ""}
+    </div>`;
+  }).join("");
+}
+function spCodexVocabHTML(){
+  const vocab = SP_STATE.vocab||[];
+  if(!vocab.length) return `<p class="codex-empty">Nog geen woorden geleerd — ze verschijnen hier zodra je een hoofdstuk voltooit.</p>`;
+  const grieks = vocab.filter(id=>SP_VOCAB_ENTRIES[id]?.taal==="grieks");
+  const latijn = vocab.filter(id=>SP_VOCAB_ENTRIES[id]?.taal==="latijn");
+  const row = id=>{ const w=SP_VOCAB_ENTRIES[id]; if(!w) return "";
+    return `<div class="codex-vocab-row"><span class="codex-vocab-word">${esc(w.woord)}${w.transcript?` <em>(${esc(w.transcript)})</em>`:""}</span><span class="codex-vocab-def">${esc(w.betekenis)}</span></div>`; };
+  return `
+    <h4>Grieks</h4>
+    ${grieks.length?grieks.map(row).join(""):'<p class="codex-empty">Nog geen Griekse woorden.</p>'}
+    <h4 style="margin-top:14px">Latijn</h4>
+    ${latijn.length?latijn.map(row).join(""):'<p class="codex-empty">Nog geen Latijnse woorden.</p>'}
+  `;
+}
+function spCodexImagesHTML(){
+  const imgs = SP_STATE.seenImages||[];
+  if(!imgs.length) return `<p class="codex-empty">Nog geen scènes met een illustratie bezocht.</p>`;
+  return `<div class="codex-gallery">${imgs.map(i=>`
+    <div class="codex-gallery-item">
+      <img src="assets/chronica/images/${esc(i.img)}" alt="" onerror="this.parentElement.style.display='none'">
+      <div class="codex-gallery-caption">${esc(i.titel)}</div>
+    </div>`).join("")}</div>`;
+}
 
 /* ---- WERELDKAART: geïllustreerd paneel + onthullende locatie-pins.
    Codex is PER SAVESLOT (net als de rest van SP_STATE), dus de kaart toont
@@ -642,6 +710,7 @@ SCREENS.spPlay = function(){
   if(!scene){ go("singlePlayer"); return; }
 
   spRunMetaHooks(scene.meta);
+  spHookSeenImage(scene);
 
   if(scene.meta.PUZZLE) return spRenderPuzzle(scene);
 
@@ -674,9 +743,12 @@ function spRunMetaHooks(meta){
   if(meta.EERETITEL) spAwardTitle(meta.EERETITEL.trim());
   if(meta.FLAG)      spHookFlag(meta.FLAG);
   if(meta.MUSIC)     spPlayMusic(meta.MUSIC.trim());
-  // IMAGE is pure weergave (geen side effect) — gerenderd in de view via
-  // spSceneImageHTML(), niet hier. SFX bestaat nog niet (geen scène gebruikt
-  // het momenteel) — volgt zodra er een concreet moment voor is.
+  if(meta.PERSON)    spHookPerson(meta.PERSON);
+  if(meta.VOCAB)     spHookVocab(meta.VOCAB);
+  // IMAGE wordt door spHookSeenImage(scene) verwerkt (aparte aanroep in
+  // SCREENS.spPlay, want die heeft het hele scene-object nodig, niet alleen
+  // de meta) — hier verder pure weergave via spSceneImageHTML(). SFX bestaat
+  // nog niet (geen scène gebruikt het momenteel).
 }
 
 /* ---- AUDIO: MUSIC:-sectie speelt nu écht af (mp3 uit assets/chronica/music/),
@@ -737,6 +809,53 @@ function spHookFlag(text){
     else flags[part.slice(0,eq).trim()] = part.slice(eq+1).trim();
   });
   spSaveProgress({ flags });
+}
+
+/* ---- PERSONEN-TAB: PERSON:-sectie zet één of meer "id:niveau"-paren
+   (`,`/`;`/regel-gescheiden), niveau is "intro" of "full". Alleen een
+   upgrade telt (intro → full); een tweede "intro" of een lager niveau na
+   "full" doet niets. SP_CODEX_PERSONS (singleplayer-data.js) levert de
+   werkelijke tekst per niveau. ---- */
+function spHookPerson(text){
+  const RANK = { intro:1, full:2 };
+  const persons = {...(SP_STATE.persons||{})};
+  let changed = false;
+  text.split(/[\n,;]/).forEach(part=>{
+    part = part.trim(); if(!part) return;
+    const [id, level] = part.split(":").map(s=>s&&s.trim());
+    if(!id || !RANK[level]) return;
+    if(!persons[id] || RANK[level] > RANK[persons[id]]){
+      const wasKnown = !!persons[id];
+      persons[id] = level;
+      changed = true;
+      const def = SP_CODEX_PERSONS[id];
+      const shownNm = def && level==="intro" && def.introNm ? def.introNm : (def?def.nm:id);
+      if(def) toast(wasKnown?"Codex bijgewerkt!":"Nieuwe persoon in de Codex!", shownNm);
+    }
+  });
+  if(changed) spSaveProgress({ persons });
+}
+/* ---- VOCABULAIRE-TAB: VOCAB:-sectie voegt één of meer woord-id's toe aan
+   SP_STATE.vocab (dedup) — SP_VOCAB_ENTRIES (singleplayer-data.js) levert de
+   werkelijke woorden. Eén toast per batch (niet per woord) om spam te
+   voorkomen wanneer een hoofdstuk in één keer een hele lijst toevoegt. ---- */
+function spHookVocab(text){
+  const ids = text.split(/[\n,;]/).map(s=>s.trim()).filter(Boolean);
+  const existing = SP_STATE.vocab||[];
+  const fresh = ids.filter(id=>!existing.includes(id));
+  if(!fresh.length) return;
+  spSaveProgress({ vocab:[...existing, ...fresh] });
+  toast("Nieuwe woorden!", fresh.length+" woord"+(fresh.length===1?"":"en")+" toegevoegd aan de Codex.");
+}
+/* ---- AFBEELDINGEN-TAB: elke scène met een IMAGE:-sectie wordt automatisch
+   bijgehouden (geen aparte auteurs-actie nodig) zodra de speler haar voor het
+   eerst ziet — dedup op scène-id, zodat herhaald bezoek niets dubbel opslaat. ---- */
+function spHookSeenImage(scene){
+  if(!scene.meta || !scene.meta.IMAGE) return;
+  const existing = SP_STATE.seenImages||[];
+  if(existing.some(e=>e.id===scene.id)) return;
+  const entry = { id:scene.id, img:scene.meta.IMAGE.trim(), titel:scene.title||"" };
+  spSaveProgress({ seenImages:[...existing, entry] });
 }
 
 /* ---- PIETAS/VIRTUS — het stille "Paragon/Renegade"-systeem.
@@ -804,10 +923,15 @@ function spHookReward(text){
     ? "Je pad is bepaald — dit werkt ook door in Battle Mode."
     : "Je pad is bepaald. Log in met je klascode om dit ook in Battle Mode te laten meetellen.");
 }
+// Eén of meerdere codex-id's (`,`/`;`/regel-gescheiden) in één CODEX:-sectie —
+// bv. CH1_000 ontgrendelt in één keer de twee grammatica-entries van
+// Hoofdstuk 1, zodat ze al vóór de eerste puzzel beschikbaar zijn.
 function spHookCodex(text){
-  const id=text.trim();
-  if((SP_STATE.codex||[]).includes(id)) return;
-  spSaveProgress({ codex:[...(SP_STATE.codex||[]),id] });
+  const ids = text.split(/[\n,;]/).map(s=>s.trim()).filter(Boolean);
+  const existing = SP_STATE.codex||[];
+  const fresh = ids.filter(id=>!existing.includes(id));
+  if(!fresh.length) return;
+  spSaveProgress({ codex:[...existing, ...fresh] });
   toast("Codex-item ontgrendeld!","Er is een nieuwe bladzijde toegevoegd aan de Codex Memoriae.");
 }
 function spHookQuest(text){
