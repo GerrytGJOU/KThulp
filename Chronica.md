@@ -45,7 +45,7 @@ browser):
 | Scène-renderer (tekst/dialoog/keuzes) | `certamen/singleplayer.js` (`SCREENS.spPlay`) | ✅ werkend |
 | Grieks-alfabet-transcriptiepuzzel (blokkeert voortgang) | `certamen/singleplayer.js` (`spRenderPuzzle`/`spCheckPuzzle`), `SP_PUZZLES`/`SP_GREEK_ALPHABET` | ✅ werkend |
 | Klassekeuze → Battle Mode-klasse (REWARD-hook) | `certamen/singleplayer.js` (`spHookReward`), `SP_CLASS_REWARD_MAP` | ✅ werkend |
-| Codex Memoriae — registratie + overzichtsscherm | `certamen/singleplayer.js` (`spHookCodex`, `SCREENS.spCodex`), `certamen/singleplayer-data.js` (`SP_CODEX_ENTRIES`) | ✅ werkend, gegroepeerd per categorie — quests hebben nog geen eigen scherm |
+| Codex Memoriae — 6 tabbladen, oud-perkament-uiterlijk | `certamen/singleplayer.js` (`SCREENS.spCodex` + hooks), `certamen/singleplayer-data.js` (`SP_CODEX_ENTRIES`/`SP_CODEX_PERSONS`/`SP_VOCAB_ENTRIES`) | ✅ werkend — Mythologie/Geschiedenis/Personen/Grammatica/Vocabulaire/Afbeeldingen (§7.2.1); quests hebben nog geen eigen scherm |
 | Eenmalige gender-keuze (voornaamwoorden, géén naam) | `certamen/singleplayer.js` (`spRenderGenderPick`), `SP_PRONOUNS`/`SP_GENDER_OPTIONS` | ✅ werkend |
 | **3 saveslots** per leerling | `certamen/singleplayer.js` (`SCREENS.spSlots`), `SP_MAX_SLOTS` | ✅ werkend — beginnen/verdergaan/verwijderen (met bevestiging) |
 | **Offline-first opslag** (localStorage primair, Firebase spiegel) | `certamen/singleplayer.js` (`spSaveProgress`/`spLoadAllSlots`) | ✅ werkend — speelbaar zonder inloggen/internet |
@@ -411,7 +411,9 @@ loopt door naar een gedeelde afsluitreeks:
    "ch1_voltooid" }` (singleplayer-data.js) — de flag staat al sinds de
    laatste verhaalscène van elke lijn, dus dit is puur een narratieve
    bevestiging, geen nieuw ontgrendelmechanisme. Zet ook meteen
-   `CODEX: codex_grammatica_ch1`.
+   `CODEX: codex_grammatica_ch1_overzicht` (een samenvattende afsluiter — de
+   twee losse grammatica-entries staan er dan al lang, zie §7.2.1) en
+   `VOCAB:` met de volledige Hoofdstuk-1-woordenlijst.
 3. **`CH1_CODEX_UITLEG`** (gedeeld): een korte, in-fictie uitleg van het
    Codex-mechanisme zelf (de Boodschapper legt uit dat namen/grammatica die je
    tegenkomt automatisch worden vastgelegd).
@@ -419,15 +421,66 @@ loopt door naar een gedeelde afsluitreeks:
    Hoofdstuk 2 nog moet worden geschreven — voorkomt een "Terug naar de
    opslagplekken"-doodlopend eind zonder verhaalkader.
 
-**Codex Memoriae** is nu een volwaardig scherm (`SCREENS.spCodex`,
-singleplayer.js) i.p.v. alleen bijgehouden data: `SP_CODEX_ENTRIES`
-(singleplayer-data.js) koppelt elke `CODEX:`-id aan een titel/tekst/categorie
-("mythologie"/"geschiedenis"/"grammatica"/"vocabulaire"); het scherm toont
-alleen wat in `SP_STATE.codex` van de actieve saveslot zit, gegroepeerd per
-categorie. Bereikbaar via een knop op de landingspagina (naast 🗺️
-Wereldkaart) zodra je verder bent dan het allereerste scherm. Nieuwe
-hoofdstukken moeten voortaan **bij elke nieuwe `CODEX:`-id** ook een entry in
-`SP_CODEX_ENTRIES` toevoegen — anders toont het scherm alleen de kale id.
+### 7.2.1 Codex Memoriae — zes tabbladen, oud-perkament-uiterlijk (**gebouwd**)
+
+`SCREENS.spCodex` (singleplayer.js) is een volwaardig scherm met zes
+tabbladen, elk met een eigen kleine databron en ontgrendel-hook — allemaal
+volgens hetzelfde patroon (CNS-meta-sectie → hook zet stil iets in
+`SP_STATE` → scherm toont alleen wat al verdiend is, per saveslot):
+
+- **Mythologie** / **Geschiedenis** — `SP_CODEX_ENTRIES` (`cat:"mythologie"`/
+  `"geschiedenis"`), ontgrendeld via de bestaande `CODEX:`-sectie
+  (`spHookCodex`, ondersteunt nu meerdere id's per sectie,
+  `,`/`;`/regel-gescheiden). Geschiedenis is in Hoofdstuk 1 bewust leeg —
+  dat hoofdstuk is puur mythologie; het tabblad is er alvast klaar voor
+  latere, historische hoofdstukken.
+- **Personen** — `SP_CODEX_PERSONS`, **tweetraps onthuld** via een nieuwe
+  `PERSON:`-sectie (`spHookPerson`, id:niveau-paren, niveau is `intro` of
+  `full`, alleen upgrades tellen). Een personage krijgt een spoilervrije
+  `intro`-tekst zodra je hem/haar voor het eerst ontmoet, en wordt pas
+  aangevuld met de rijkere `full`-tekst zodra zíjn/haar verhaal is afgerond
+  (bv. Athena heet in de Codex letterlijk "???" met epithet "Nog onbekend"
+  tot haar geboorteverhaal is voltooid — dan verschijnt haar echte naam en
+  epithet, met een "✦ later bijgewerkt"-vouwlijn in de UI). Niet elk
+  personage krijgt een `full` — bijfiguren zonder eigen afgerond verhaal in
+  dit hoofdstuk (Zeus, Vulcanus, Epimetheus) blijven op `intro` staan.
+  Sommige bio's zijn gebaseerd op de "Certamen Character Bible" (Single
+  Player Mode.docx) — niet meer de bron van waarheid sinds Chronica.md
+  bestaat, maar de personagebeschrijvingen daarin waren te goed om te laten
+  liggen.
+- **Grammatica** — ook `SP_CODEX_ENTRIES` (`cat:"grammatica"`), maar met een
+  optioneel `table`-veld (headers + rows) dat `SCREENS.spCodex` als een
+  echte `<table>` rendert — de Griekse-lidwoordtabel en de
+  nominativus/accusativus/vocativus-tabel met de exacte woorden uit de
+  Hoofdstuk-1-puzzels. **Bewust vroeg ontgrendeld**: `CH1_000` (de hub, vóór
+  de keuze tussen de drie lijnen) zet beide entries al, zodat een leerling
+  die een puzzel verkeerd beantwoordt meteen naar de Codex kan om het
+  antwoord + de uitleg terug te vinden — niet pas na afloop van het
+  hoofdstuk. `CH1_ROBE` voegt daarna nog een samenvattend "overzicht" toe.
+- **Vocabulaire** — `SP_VOCAB_ENTRIES` (Grieks + Latijn, per woord
+  taal/getranscribeerd-vorm/betekenis), via een nieuwe `VOCAB:`-sectie
+  (`spHookVocab`, comma/regel-gescheiden id's, één toast per batch i.p.v.
+  per woord). Bewust compacter dan de frequentielijst van de andere
+  Certamen-modi (die blijft relevanter voor Training/Vrij Oefenen) — dit is
+  de pool waaruit een toekomstig Chronica-gevecht (Combat-bridge, §8, nog te
+  bouwen) zijn vragen kan putten. Groeit per hoofdstuk.
+- **Afbeeldingen** — `SP_STATE.seenImages`, automatisch bijgehouden door
+  `spHookSeenImage()` zodra een scène met een `IMAGE:`-sectie wordt bezocht
+  (geen aparte auteurs-actie nodig, dedup op scène-id). Toont een
+  thumbnail-grid van alle illustraties die de speler al heeft gezien.
+
+**Uiterlijk**: perkament-look (sepia-gradient, sepia tekstkleur) met een
+CSS-ezelsoor rechtsonder (`::after`, clip via border-triangle-truc — geen
+afbeelding nodig) en "sierlijk maar leesbaar" via cursief/letter-spacing op
+de bestaande Palatino-stack (index.html, `.codex-*`-klassen) — **bewust geen
+extra lettertype-CDN**, dat zou de offline-first-eis van de app breken.
+Bereikbaar via een knop op de landingspagina (naast 🗺️ Wereldkaart) zodra je
+verder bent dan het allereerste scherm.
+
+Nieuwe hoofdstukken breiden dit uit: elke nieuwe `CODEX:`/`PERSON:`/`VOCAB:`-
+id hoort een entry te krijgen in de bijbehorende databron
+(`SP_CODEX_ENTRIES`/`SP_CODEX_PERSONS`/`SP_VOCAB_ENTRIES`, allemaal
+singleplayer-data.js) — anders toont de Codex alleen een kale id of niets.
 
 ### 7.3 Pietas/Virtus — stil "Paragon/Renegade"-systeem (**gebouwd**)
 

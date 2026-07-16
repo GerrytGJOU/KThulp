@@ -523,6 +523,45 @@ body.greek .qcard .word{color:#143a5e}
 .sp-map-pin-label{font-family:'Cinzel',Optima,serif;font-size:11px;color:#fff;
   background:rgba(20,14,6,.75);padding:1px 6px;border-radius:4px;white-space:nowrap}
 
+/* ── Codex Memoriae (SCREENS.spCodex, singleplayer.js) ──
+   Oogt als een oud perkamenten boek: sepia-tint + een ezelsoor in de hoek
+   (CSS clip-path, geen afbeelding nodig). "Sierlijk maar leesbaar" via
+   cursief/letter-spacing op de bestaande Palatino-stack — bewust GEEN extra
+   lettertype-CDN, dat zou de offline-first-eis van de app breken. */
+.codex-tabs{display:flex;flex-wrap:wrap;gap:2px;margin-bottom:0}
+.codex-tab{flex:1 1 auto;min-width:88px;padding:8px 6px;font-size:12px;
+  font-family:'Palatino Linotype',Palatino,serif;background:rgba(60,44,26,.55);
+  color:var(--hi-bright,#e8c77e);border:1px solid rgba(232,199,126,.25);border-bottom:none;
+  border-radius:8px 8px 0 0;cursor:pointer;opacity:.7}
+.codex-tab.on{opacity:1;background:#f1e2bf;color:#3c2c1a;font-weight:700}
+.codex-page{background:linear-gradient(160deg,#f1e2bf,#e6d3a8 60%,#dcc596);color:#3c2c1a;
+  border-radius:0 8px 8px 8px;padding:20px 22px;position:relative;overflow:hidden;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);font-family:'Palatino Linotype',Palatino,serif}
+.codex-page::after{content:"";position:absolute;right:0;bottom:0;width:0;height:0;
+  border-style:solid;border-width:0 0 26px 26px;
+  border-color:transparent transparent rgba(120,92,54,.55) transparent;
+  filter:drop-shadow(-1px -1px 1px rgba(0,0,0,.25))}
+.codex-entry{margin-bottom:18px;padding-bottom:14px;border-bottom:1px dashed rgba(120,92,54,.4)}
+.codex-entry:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.codex-entry h4{margin:0 0 4px;font-style:italic;font-size:19px;letter-spacing:.3px;color:#5a3a1a}
+.codex-entry p{margin:6px 0;line-height:1.5}
+.codex-epithet{font-size:12px;font-style:italic;color:#7a5a30;margin-bottom:4px}
+.codex-fold{margin:10px 0;border-top:1px solid rgba(120,92,54,.35);position:relative}
+.codex-fold::before{content:"✦ later bijgewerkt";position:absolute;top:-9px;left:50%;
+  transform:translateX(-50%);background:#e6d3a8;padding:0 8px;font-size:10px;color:#7a5a30;
+  letter-spacing:.5px;white-space:nowrap}
+.codex-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+.codex-table th,.codex-table td{border:1px solid rgba(120,92,54,.4);padding:6px 8px;text-align:left}
+.codex-table th{background:rgba(120,92,54,.15);font-style:italic}
+.codex-vocab-row{display:flex;justify-content:space-between;gap:12px;padding:4px 0;
+  border-bottom:1px dotted rgba(120,92,54,.3)}
+.codex-vocab-word{font-style:italic;font-weight:700}
+.codex-vocab-def{color:#5a3a1a}
+.codex-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.codex-gallery-item img{width:100%;border-radius:6px;display:block;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.codex-gallery-caption{font-size:11px;text-align:center;margin-top:3px;font-style:italic;color:#5a3a1a}
+.codex-empty{font-style:italic;color:#7a5a30}
+
 /* â”€â”€ Wapen-laag (288Ã—64 = 3 aanvals-frames van 96Ã—64) â”€â”€ */
 /* Het wapen wordt vastgehouden in de achterste hand: het valt ACHTER zowel
    de cape als het lichaam (DOM-volgorde, geen z-index) — anders lijkt het
@@ -771,8 +810,8 @@ body.greek .qcard .word{color:#143a5e}
 <script src="totalwar.js?v=20260712g"></script>
 <script src="training.js?v=20260712a"></script>
 <script src="freepractice.js?v=20260706a"></script>
-<script src="singleplayer-data.js?v=20260716c"></script>
-<script src="singleplayer.js?v=20260716c"></script>
+<script src="singleplayer-data.js?v=20260716d"></script>
+<script src="singleplayer.js?v=20260716d"></script>
 <script>
 /* ---- INIT ---- */
 (async function(){

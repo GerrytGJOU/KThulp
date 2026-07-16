@@ -466,14 +466,25 @@ const SP_PUZZLES = {
     hint:"Griekse namen op -eus krijgen in de vocativus vaak de uitgang -eu." },
 };
 
-/* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler.
-   CODEX:-secties in CNS-scènes (spHookCodex, singleplayer.js) zetten alleen
-   een id in SP_STATE.codex; SP_CODEX_ENTRIES hieronder levert de ECHTE inhoud
-   (titel/tekst/categorie) die SCREENS.spCodex opzoekt en toont. Nieuwe
-   hoofdstukken breiden dit uit: elke CODEX:-id die ergens in een scène wordt
-   uitgedeeld, hoort hier een entry te krijgen, anders toont de Codex alleen
-   een kale id. Categorieën: "mythologie", "geschiedenis", "grammatica",
-   "vocabulaire" — bepalen alleen de groepering in SCREENS.spCodex. ---- */
+/* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
+   tabbladen in SCREENS.spCodex (singleplayer.js): Mythologie, Geschiedenis,
+   Personen, Grammatica, Vocabulaire, Afbeeldingen. Elk tabblad heeft zijn
+   eigen kleine databron + eigen ontgrendel-hook, maar hergebruikt allemaal
+   hetzelfde idee: een CNS-scène zet een meta-sectie, een hook in
+   singleplayer.js verwerkt 'm stil, en het scherm toont alleen wat al
+   verdiend is. ----
+
+   MYTHOLOGIE/GESCHIEDENIS/GRAMMATICA — via de bestaande CODEX:-sectie
+   (spHookCodex) en SP_CODEX_ENTRIES hieronder (titel/tekst/categorie, en bij
+   grammatica optioneel een `table` voor rijtjes). Nieuwe hoofdstukken breiden
+   dit uit: elke CODEX:-id die ergens wordt uitgedeeld, hoort hier een entry
+   te krijgen, anders toont de Codex alleen een kale id.
+
+   BELANGRIJK — grammatica ontgrendelt VROEG, niet pas aan het eind: de
+   leerling moet een mislukte puzzel meteen kunnen opzoeken. Daarom zet
+   CH1_000 (de hub, vóór de keuze tussen de drie lijnen) meteen de twee
+   hoofdstuk-1-grammatica-entries; CH1_ROBE voegt daarna nog een
+   samenvattend "overzicht" toe als afsluitend beloningsmoment. ---- */
 const SP_CODEX_ENTRIES = {
   codex_orakel_van_chronos: { cat:"mythologie", titel:"Het Orakel van Chronos",
     tekst:"Chronos — de belichaming van de tijd zelf, niet te verwarren met de titaan Kronos, vader van Zeus — wordt in latere, orfische overleveringen beschreven als een kracht die ouder is dan de goden van de Olympos zelf. Het bronzen orakel dat jij in een Latijns korenveld vond, is doordrenkt van die kracht: het scheurt de sluier tussen de wereld waarin de klassieke mythen langzaam vervagen, en de wereld waarin jij leeft." },
@@ -483,8 +494,79 @@ const SP_CODEX_ENTRIES = {
     tekst:"Zeus verzwolg zijn zwangere eerste vrouw Metis uit angst voor een profetie: hun zoon zou hem onttronen, zoals hij ooit zijn eigen vader Kronos onttroonde. Toen het kind — een dochter — niettemin geboren wilde worden, spleet Vulcanus Zeus' schedel open met een bijl, en Pallas Athena sprong eruit, al volwassen en volledig gewapend: godin van wijsheid en doordachte oorlogvoering." },
   codex_doos_van_pandora: { cat:"mythologie", titel:"Prometheus, Pandora en de Doos",
     tekst:"Prometheus, een titaan die tijdens de Titanomachie voor Zeus koos, vormde samen met Athena de eerste mensen en stal later het vuur van de goden om hen te redden van de kou. Zeus strafte hem met eeuwige ketenen op de Kaukasus, en strafte de mensheid met Pandora — het eerste geschenk van alle goden samen — wier nieuwsgierigheid alle kwaad ter wereld losliet uit een verzegelde doos. Alleen Elpis, de Hoop, bleef achter." },
-  codex_grammatica_ch1: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 1 — De Namen van de Wereld",
-    tekst:"Het Griekse lidwoord (ὁ/ἡ/τό) volgt het geslacht van het zelfstandig naamwoord waarbij het hoort — mannelijk, vrouwelijk of onzijdig. In het Latijn buigen zelfstandig én bijvoeglijk naamwoord (groep 1/2) mee in dezelfde naamval: de nominativus voor wie handelt, de accusativus voor wie of wat de handeling ondergaat, en de vocativus om iemand rechtstreeks aan te spreken — vaak met een eigen uitgang (zoals Bacche! in plaats van Bacchus, of Prometheu! in plaats van Prometheus)." },
+
+  codex_grammatica_ch1_lidwoord: { cat:"grammatica", titel:"Grammatica: het Griekse lidwoord",
+    tekst:"Het Griekse lidwoord verandert mee met het grammaticale geslacht van het zelfstandig naamwoord waar het bij hoort — niet met wat het woord in het echt betekent, maar met de vorm van het woord zelf. Er zijn drie geslachten: mannelijk, vrouwelijk en onzijdig, elk met hun eigen lidwoord in de nominativus.",
+    table:{ headers:["Geslacht","Lidwoord","Voorbeeld uit het verhaal"],
+      rows:[["Mannelijk","ὁ","ὁ δεσπότης — de heer/meester (boven de poort van Sardis)"],
+            ["Vrouwelijk","ἡ","ἡ θεά — de godin (het gefluister op de Olympos)"],
+            ["Onzijdig","τό","τό πῦρ — het vuur (bij de haard van de goden)"]] } },
+  codex_grammatica_ch1_naamvallen: { cat:"grammatica", titel:"Grammatica: nominativus, accusativus, vocativus",
+    tekst:"Een naamval laat zien welke rol een woord in de zin speelt. De nominativus is de vorm van het onderwerp: wie handelt. De accusativus is de vorm van het lijdend voorwerp: wie of wat de handeling ondergaat. De vocativus, ten slotte, is de vorm waarmee je iemand rechtstreeks aanspreekt — en die vorm wijkt bij sommige woorden af van de nominativus, bij andere weer niet.",
+    table:{ headers:["Naamval","Functie","Midas","Athena","Prometheus/Pandora"],
+      rows:[["Nominativus","onderwerp: wie handelt","rex (de koning)","Vulcanus","Pandora"],
+            ["Accusativus","lijdend voorwerp: wie/wat ondergaat","aurum flavum (het gele goud)","caput durum (het harde hoofd)","pyxidem novam (de nieuwe doos)"],
+            ["Vocativus","aanspreekvorm: tot wie je spreekt","Bacche! (uitgang -e i.p.v. -us)","Pallas! (blijft gelijk aan de nominativus)","Prometheu! (namen op -eus krijgen -eu)"]] } },
+  codex_grammatica_ch1_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 1 samengevat",
+    tekst:"Je hebt nu alle drie de verhalen van dit hoofdstuk gehoord, en met ze de volledige basisgrammatica: het Griekse lidwoord (ὁ/ἡ/τό, gestuurd door geslacht, niet door betekenis) en de Latijnse naamvallen nominativus/accusativus/vocativus (wie handelt, wie ondergaat, tot wie je spreekt). Onthoud vooral dat niet elk woord in de vocativus verandert — Griekse eigennamen als Pallas blijven vaak gelijk aan de nominativus, terwijl gewone Latijnse woorden op -us vaak overgaan naar -e." },
+};
+
+/* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
+   verschijnt zodra de speler iemand voor het eerst ontmoet (via een
+   PERSON:-sectie met "id:intro" in de CNS-scène, spHookPerson), en wordt pas
+   AANGEVULD met de rijkere `full`-tekst zodra het bijbehorende verhaal ook
+   echt is afgerond ("id:full" op de scène die dat verhaal afsluit). Niet elk
+   personage heeft per se een `full`: bijfiguren zonder eigen afgerond verhaal
+   (bv. Zeus, Vulcanus, Epimetheus in Hoofdstuk 1) blijven op het intro-niveau
+   staan totdat een later hoofdstuk hun eigen verhaal vertelt.
+   Kronos/Athena/Hermes-bio's zijn geïnspireerd op de "Certamen Character
+   Bible" (Single Player Mode.docx) — dat document is met de komst van
+   Chronica.md niet meer de bron van waarheid, maar de personagebeschrijvingen
+   daarin waren te goed om te laten liggen. ---- */
+const SP_CODEX_PERSONS = {
+  midas: { nm:"Midas", epithet:"Koning van Sardis, Lydië",
+    intro:"Een rijke koning wiens naam onder handelaars en reizigers wordt gefluisterd — half spottend, half jaloers — sinds hij een god een gunst bewees.",
+    full:"Midas' gastvrijheid jegens Silenus werd beloond met een wens die hij niet had doordacht: alles wat hij aanraakte veranderde in goud, ook zijn eigen dochter. Pas toen hij zichzelf waste in de rivier de Pactolus, hief Bacchus de vloek op — en liet de rivier voorgoed doorspekt achter met gouden korrels." },
+  bacchus: { nm:"Bacchus (Dionysus)", epithet:"God van de wijn, extase en het onverwachte",
+    intro:"Een god die zelden zonder wijnranken en een loom meelopende luipaard verschijnt — geamuseerd, gul, maar met een glimlach die je niet helemaal vertrouwt.",
+    full:"Bacchus beloonde Midas' gastvrijheid tegenover Silenus met een wens naar keuze — en liet hem vervolgens zelf ontdekken dat een wens zonder nadenken zelden een zegen blijft. Zijn straf was geen wraak, eerder een les: hij hief de vloek net zo gemakkelijk op als hij hem had geschonken." },
+  athena: { nm:"Pallas Athena", introNm:"???", epithet:"Godin van de wijsheid en doordachte oorlogvoering",
+    introEpithet:"Nog onbekend",
+    intro:"Op de Olympos gaat een gefluisterd woord rond — θεά, een godin — over iemand die nog niet eens geboren is, maar wier komst de goden nu al onrustig maakt.",
+    full:"Pallas Athena sprong volwassen en volledig gewapend uit het hoofd van Zeus, na een geboorte die de hele Olympos deed sidderen. Ze werd de eerste onder de goden die vraagt voordat ze oordeelt — godin van wijsheid en doordachte oorlogvoering, met een naam die weldra door heel Hellas zal worden uitgesproken." },
+  zeus: { nm:"Zeus", epithet:"Koning van de Olympische goden",
+    intro:"Heerser van de Olympos, die zijn eigen vader Kronos onttroonde uit angst voor een profetie — en nu, naar verluidt, bang is dat de geschiedenis zich gaat herhalen." },
+  vulcanus: { nm:"Vulcanus (Hephaistos)", epithet:"Goddelijke smid",
+    intro:"Als kind door zijn eigen moeder Hera van de Olympos gegooid, opgevangen door de zeenimf Thetis, en uitgegroeid tot de meest begaafde smid onder de goden — de enige die ruw genoeg is voor het werk dat nu op zijn schouders rust." },
+  prometheus: { nm:"Prometheus", epithet:"Titaan, medeschepper van de mensheid",
+    intro:"Een titaan die tijdens de oorlog tussen goden en titanen de kant van Zeus koos — en die, samen met Athena, de eerste mensen uit klei en water vormde.",
+    full:"Uit medelijden met de naakte, hulpeloze mensheid stal Prometheus het vuur van de goden — en betaalde daarvoor eeuwig met ketenen op de Kaukasus en een adelaar die dagelijks zijn lever komt opeten. Vuur en hoop, zegt hij zelf, waren het risico waard." },
+  pandora: { nm:"Pandora", epithet:"\"Zij die alles geschonken kreeg\"",
+    intro:"Een vrouw van verbluffende schoonheid, door alle goden en godinnen samen gemaakt en met gaven overladen — en met een verzegelde doos die ze nooit had mogen openen.",
+    full:"Pandora's nieuwsgierigheid liet alle ellende van de wereld — ziekte, oorlog, verdriet — ontsnappen uit haar doos, tot ze het deksel net op tijd sloot om tenminste Elpis, de Hoop, binnen te houden. Ze bracht geen kwaad met opzet — ze was, zoals haar naam al zei, gewoon nooit anders dan een geschenk bedoeld." },
+  epimetheus: { nm:"Epimetheus", epithet:"Titaan, broer van Prometheus",
+    intro:"De broer die vergat de mensheid een gave te schenken toen hij ze verdeelde onder alle levende wezens — en die, jaren later, ondanks Prometheus' waarschuwing, verliefd wordt op een geschenk van Zeus." },
+};
+
+/* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
+   aangevuld via VOCAB:-secties (spHookVocab, singleplayer.js). Bewust
+   compacter dan de frequentielijst uit de andere Certamen-modi (die blijft
+   relevanter voor Training/Vrij Oefenen) — dit is de pool waaruit een
+   toekomstig Chronica-gevecht (Combat-bridge, nog te bouwen) zijn vragen kan
+   putten, dus voorlopig alleen woorden die ook echt in het verhaal vielen. ---- */
+const SP_VOCAB_ENTRIES = {
+  grieks_despotes:  { taal:"grieks", woord:"δεσπότης", transcript:"despotēs", betekenis:"heer, meester" },
+  grieks_thea:      { taal:"grieks", woord:"θεά",       transcript:"theá",     betekenis:"godin" },
+  grieks_pyr:       { taal:"grieks", woord:"πῦρ",       transcript:"pŷr",      betekenis:"vuur" },
+  latijn_rex:       { taal:"latijn", woord:"rex",       betekenis:"koning" },
+  latijn_aurum:     { taal:"latijn", woord:"aurum",     betekenis:"goud" },
+  latijn_flavus:    { taal:"latijn", woord:"flavus, flava, flavum", betekenis:"geel" },
+  latijn_tangit:    { taal:"latijn", woord:"tangit",    betekenis:"hij/zij raakt aan" },
+  latijn_caput:     { taal:"latijn", woord:"caput",     betekenis:"hoofd" },
+  latijn_durus:     { taal:"latijn", woord:"durus, dura, durum", betekenis:"hard" },
+  latijn_aperit:    { taal:"latijn", woord:"aperit",    betekenis:"hij/zij opent" },
+  latijn_pyxis:     { taal:"latijn", woord:"pyxis, pyxidem", betekenis:"doos" },
+  latijn_novus:     { taal:"latijn", woord:"novus, nova, novum", betekenis:"nieuw" },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -808,6 +890,9 @@ De boodschapper wijst met een hand die niet helemaal vast lijkt in deze wereld. 
 
 Je stapt door. Wanneer het licht wegtrekt, sta je niet langer in Latium. De lucht ruikt naar tijm en zilte wind, en de grond onder je voeten is steniger, droger, ouder aanvoelend dan de akkers die je kende. Je staat aan de rand van een land dat mensen ooit Hellas noemden — bergen die recht uit zee lijken te groeien, olijfbomen die zich krommen naar een fellere zon, en ergens hierin, verspreid over drie zeer verschillende plekken, wachten verhalen die jou nodig hebben.
 
+CODEX:
+codex_grammatica_ch1_lidwoord, codex_grammatica_ch1_naamvallen
+
 CHOICES:
 
 * Naar Sardis, waar een koning alles tot goud maakt -> CH1_A01
@@ -825,6 +910,9 @@ TEXT:
 De weg naar Sardis voert je oostwaarts, weg van de kust, het land van Hellas uit en een ander landschap in: dat van Lydia, waar de heuvels geleidelijk plaatsmaken voor brede, gouden korenvelden. In de verte rijst de berg Tmolus op, en aan zijn voet kronkelt een rivier die de zon vangt op een manier die geen gewoon water zou moeten doen — de Pactolus, zo hoor je een reiziger onderweg zeggen, alsof die naam op zichzelf al een verhaal is dat hij liever niet hardop vertelt.
 
 Lydia staat, zelfs hier, aan de rand van de wereld die je kent, al bekend als een land van ongelofelijke rijkdom. Handelaars met karavanen vol textiel en zilverwerk trekken dezelfde weg als jij, en meer dan een van hen noemt, half spottend, half jaloers, de naam van hun koning: Midas. Er gaat een gerucht dat hij zojuist een gunst heeft terugbetaald aan een god — en gunsten aan goden, zo weet iedereen, worden altijd op de een of andere manier beantwoord.
+
+PERSON:
+midas:intro
 
 CHOICES:
 
@@ -903,6 +991,9 @@ Bacchus verschijnt niet zozeer als dat hij binnenkomt — de lucht in de zaal ve
 
 IMAGE:
 midas.png
+
+PERSON:
+bacchus:intro
 
 CHOICES:
 
@@ -1028,6 +1119,9 @@ Zijn dochter, zo vertelt men je later, terwijl Midas nog druipend aan de oever z
 CODEX:
 codex_gouden_aanraking
 
+PERSON:
+midas:full, bacchus:full
+
 EERETITEL:
 ch1_a_midas
 
@@ -1077,6 +1171,9 @@ Voordat je de top van de Olympos bereikt, hoor je het verhaal al van een herder 
 Een oude profetie, afkomstig van Gaia en Ouranos zelf, waarschuwde Zeus voor wat komen zou: Metis zou eerst een dochter baren, even wijs en dapper als haar vader — en daarna een zoon die hem zou onttronen, precies zoals Zeus ooit zijn eigen vader Kronos onttroonde, en Kronos vóór hem Ouranos. Een patroon dat zich, zo leek het, eindeloos zou herhalen.
 
 Zeus, vastberaden dat patroon te breken, deed het enige wat hem logisch leek: hij slikte Metis in het geheel in, zwanger nog van hun dochter. Sindsdien, zo vertelt de herder terwijl hij zich haastig uit de voeten maakt, draagt hij iets in zich mee dat niet stil wil blijven liggen.
+
+PERSON:
+zeus:intro
 
 CHOICES:
 
@@ -1130,6 +1227,9 @@ Twee nimfen fluisteren een woord tussen de zuilen door, telkens weer, bijna als 
 PUZZLE:
 puzzle_ch1b_lidwoord
 
+PERSON:
+athena:intro
+
 CHOICES:
 
 * Volg het gefluister naar Zeus' troon -> CH1_B04
@@ -1148,6 +1248,9 @@ Hij weegt zijn bijl in zijn handen, kijkt naar Zeus' gebogen hoofd, en aarzelt �
 
 PUZZLE:
 puzzle_ch1b_naamval
+
+PERSON:
+vulcanus:intro
 
 CHOICES:
 
@@ -1240,6 +1343,9 @@ De andere goden zwijgen nog, onwennig met deze nieuwe aanwezigheid, maar jij voe
 CODEX:
 codex_geboorte_athena
 
+PERSON:
+athena:full
+
 EERETITEL:
 ch1_b_athena
 
@@ -1289,6 +1395,9 @@ Onderweg naar de kille vallei hoor je, van een oude vrouw die stokoude verhalen 
 Het was Prometheus die, samen met Athena, de eerste mensen vormde uit klei en water, en hun een sprankje van het goddelijke inblies dat andere dieren nooit hebben gekregen. Zijn broer Epimetheus kreeg de taak om aan elk levend wezen een gave te schenken — snelheid, kracht, vacht, vleugels, scherpe tanden — maar verdeelde zijn voorraad zo onbezonnen dat er, tegen de tijd dat hij bij de mensen aankwam, niets meer over was.
 
 Naakt, langzaam, zonder klauwen of vacht of vleugels, stonden de eerste mensen daar hulpelozer dan enig ander schepsel onder de zon. Prometheus, zo besluit de oude vrouw haar verhaal, heeft zich dat nooit kunnen vergeven — en dat is precies waarom hij deed wat hij deed.
+
+PERSON:
+prometheus:intro
 
 CHOICES:
 
@@ -1394,6 +1503,9 @@ Zo krijgt ze een naam die simpelweg beschrijft wat ze is: Pandora, "zij die alle
 
 Zeus geeft haar een verzegelde doos mee wanneer hij haar naar de aarde stuurt, met een uitdrukkelijke instructie: nooit, onder geen enkele omstandigheid, mag ze hem openen.
 
+PERSON:
+pandora:intro
+
 CHOICES:
 
 * Volg Pandora naar de mensenwereld -> CH1_C07
@@ -1412,6 +1524,9 @@ Pandora zelf voelt de doos als een gewicht dat ze overal met zich meedraagt, een
 
 PUZZLE:
 puzzle_ch1c_naamval
+
+PERSON:
+epimetheus:intro
 
 CHOICES:
 
@@ -1466,6 +1581,9 @@ Op de bodem, half verscholen tussen de laatste schaduwen die nog naar buiten kri
 
 Pandora, nog trillend van wat ze heeft aangericht, sluit het deksel voordat ook dit laatste beetje licht kan ontsnappen — en zo blijft, te midden van alle kwaad dat nu over de wereld waart, tenminste iets achter waar de mensen zich aan vast kunnen houden, wat er ook gebeurt.
 
+PERSON:
+pandora:full
+
 CHOICES:
 
 * Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [PIETAS] -> CH1_C10
@@ -1504,6 +1622,9 @@ Vuur en hoop: twee dingen die de mensheid, wat de goden ook nog mogen bedenken o
 
 CODEX:
 codex_doos_van_pandora
+
+PERSON:
+prometheus:full
 
 EERETITEL:
 ch1_c_prometheus
@@ -1553,7 +1674,10 @@ De stem zwijgt even, en dan — bijna geamuseerd — klinkt er iets nieuws. "Maa
 "Een boodschapper die de herinnering van hele beschavingen bewaart, verdient beter dan vodden," zegt de stem. Uit het licht van het orakel vouwt zich iets stofachtigs, dat neerdaalt om je schouders — een eenvoudige, goed gesneden mantel, zwaar genoeg om je te beschermen tegen de kou van elke tijd en elke plaats waar je nog terecht zult komen.
 
 CODEX:
-codex_grammatica_ch1
+codex_grammatica_ch1_overzicht
+
+VOCAB:
+grieks_despotes, grieks_thea, grieks_pyr, latijn_rex, latijn_aurum, latijn_flavus, latijn_tangit, latijn_caput, latijn_durus, latijn_aperit, latijn_pyxis, latijn_novus
 
 CHOICES:
 
