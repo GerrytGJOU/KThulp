@@ -443,7 +443,7 @@ const SP_PUZZLES = {
     opties:["ὁ","ἡ","τό"], antwoord:"ἡ",
     hint:"θεά is vrouwelijk — welk lidwoord past daarbij?" },
   puzzle_ch1b_naamval: { type:"multiple-choice",
-    vraag:"“Vulcanus caput aperit” — Vulcanus opent het hoofd. Welk woord is de accusativus?",
+    vraag:"“Vulcanus caput aperit” — Hephaistos opent het hoofd. Welk woord is de accusativus?",
     opties:["Vulcanus","caput","aperit"], antwoord:"caput",
     hint:"De accusativus ondergaat de handeling — wat wordt er geopend?" },
   puzzle_ch1b_vocativus: { type:"multiple-choice",
@@ -491,7 +491,7 @@ const SP_CODEX_ENTRIES = {
   codex_gouden_aanraking: { cat:"mythologie", titel:"De Gouden Aanraking van Midas",
     tekst:"Koning Midas van Sardis, in Lydië, verdiende de dankbaarheid van Bacchus door diens dronken metgezel Silenus tien dagen lang gastvrij te onthalen. Zijn wens — dat alles wat hij aanraakt in goud verandert — bleek een vloek zodra ze ook zijn voedsel, zijn wijn en uiteindelijk zijn eigen dochter trof. Bacchus hief de vloek op door hem te laten baden in de rivier de Pactolus, die sindsdien met gouden korrels doorspekt zou zijn." },
   codex_geboorte_athena: { cat:"mythologie", titel:"De Geboorte van Athena",
-    tekst:"Zeus verzwolg zijn zwangere eerste vrouw Metis uit angst voor een profetie: hun zoon zou hem onttronen, zoals hij ooit zijn eigen vader Kronos onttroonde. Toen het kind — een dochter — niettemin geboren wilde worden, spleet Vulcanus Zeus' schedel open met een bijl, en Pallas Athena sprong eruit, al volwassen en volledig gewapend: godin van wijsheid en doordachte oorlogvoering." },
+    tekst:"Zeus verzwolg zijn zwangere eerste vrouw Metis uit angst voor een profetie: hun zoon zou hem onttronen, zoals hij ooit zijn eigen vader Kronos onttroonde. Toen het kind — een dochter — niettemin geboren wilde worden, spleet Hephaistos Zeus' schedel open met een bijl, en Pallas Athena sprong eruit, al volwassen en volledig gewapend: godin van wijsheid en doordachte oorlogvoering." },
   codex_doos_van_pandora: { cat:"mythologie", titel:"Prometheus, Pandora en de Doos",
     tekst:"Prometheus, een titaan die tijdens de Titanomachie voor Zeus koos, vormde samen met Athena de eerste mensen en stal later het vuur van de goden om hen te redden van de kou. Zeus strafte hem met eeuwige ketenen op de Kaukasus, en strafte de mensheid met Pandora — het eerste geschenk van alle goden samen — wier nieuwsgierigheid alle kwaad ter wereld losliet uit een verzegelde doos. Alleen Elpis, de Hoop, bleef achter." },
 
@@ -501,6 +501,13 @@ const SP_CODEX_ENTRIES = {
       rows:[["Mannelijk","ὁ","ὁ δεσπότης — de heer/meester (boven de poort van Sardis)"],
             ["Vrouwelijk","ἡ","ἡ θεά — de godin (het gefluister op de Olympos)"],
             ["Onzijdig","τό","τό πῦρ — het vuur (bij de haard van de goden)"]] } },
+  // LET OP: de "Athena"-kolom toont "Vulcanus", niet "Hephaistos" — dit is
+  // bewust géén inconsistentie. De verteltekst in lijn B gebruikt overal de
+  // Griekse naam Hephaistos (zie SP_CODEX_PERSONS.hephaistos), maar déze
+  // tabel demonstreert de Latijnse naamvallen aan de hand van de exacte
+  // Latijnse oefenzin uit puzzle_ch1b_naamval ("Vulcanus caput aperit") —
+  // die zin MOET de Latijnse vorm gebruiken, anders klopt de tabel niet meer
+  // met het juiste antwoord van de puzzel.
   codex_grammatica_ch1_naamvallen: { cat:"grammatica", titel:"Grammatica: nominativus, accusativus, vocativus",
     tekst:"Een naamval laat zien welke rol een woord in de zin speelt. De nominativus is de vorm van het onderwerp: wie handelt. De accusativus is de vorm van het lijdend voorwerp: wie of wat de handeling ondergaat. De vocativus, ten slotte, is de vorm waarmee je iemand rechtstreeks aanspreekt — en die vorm wijkt bij sommige woorden af van de nominativus, bij andere weer niet.",
     table:{ headers:["Naamval","Functie","Midas","Athena","Prometheus/Pandora"],
@@ -517,7 +524,7 @@ const SP_CODEX_ENTRIES = {
    AANGEVULD met de rijkere `full`-tekst zodra het bijbehorende verhaal ook
    echt is afgerond ("id:full" op de scène die dat verhaal afsluit). Niet elk
    personage heeft per se een `full`: bijfiguren zonder eigen afgerond verhaal
-   (bv. Zeus, Vulcanus, Epimetheus in Hoofdstuk 1) blijven op het intro-niveau
+   (bv. Zeus, Hephaistos, Epimetheus in Hoofdstuk 1) blijven op het intro-niveau
    staan totdat een later hoofdstuk hun eigen verhaal vertelt.
    Kronos/Athena/Hermes-bio's zijn geïnspireerd op de "Certamen Character
    Bible" (Single Player Mode.docx) — dat document is met de komst van
@@ -530,14 +537,14 @@ const SP_CODEX_PERSONS = {
   bacchus: { nm:"Bacchus (Dionysus)", epithet:"God van de wijn, extase en het onverwachte",
     intro:"Een god die zelden zonder wijnranken en een loom meelopende luipaard verschijnt — geamuseerd, gul, maar met een glimlach die je niet helemaal vertrouwt.",
     full:"Bacchus beloonde Midas' gastvrijheid tegenover Silenus met een wens naar keuze — en liet hem vervolgens zelf ontdekken dat een wens zonder nadenken zelden een zegen blijft. Zijn straf was geen wraak, eerder een les: hij hief de vloek net zo gemakkelijk op als hij hem had geschonken." },
-  athena: { nm:"Pallas Athena", introNm:"???", epithet:"Godin van de wijsheid en doordachte oorlogvoering",
+  athena: { nm:"Pallas Athena (Minerva)", introNm:"???", epithet:"Godin van de wijsheid en doordachte oorlogvoering",
     introEpithet:"Nog onbekend",
     intro:"Op de Olympos gaat een gefluisterd woord rond — θεά, een godin — over iemand die nog niet eens geboren is, maar wier komst de goden nu al onrustig maakt.",
-    full:"Pallas Athena sprong volwassen en volledig gewapend uit het hoofd van Zeus, na een geboorte die de hele Olympos deed sidderen. Ze werd de eerste onder de goden die vraagt voordat ze oordeelt — godin van wijsheid en doordachte oorlogvoering, met een naam die weldra door heel Hellas zal worden uitgesproken." },
-  zeus: { nm:"Zeus", epithet:"Koning van de Olympische goden",
-    intro:"Heerser van de Olympos, die zijn eigen vader Kronos onttroonde uit angst voor een profetie — en nu, naar verluidt, bang is dat de geschiedenis zich gaat herhalen." },
-  vulcanus: { nm:"Vulcanus (Hephaistos)", epithet:"Goddelijke smid",
-    intro:"Als kind door zijn eigen moeder Hera van de Olympos gegooid, opgevangen door de zeenimf Thetis, en uitgegroeid tot de meest begaafde smid onder de goden — de enige die ruw genoeg is voor het werk dat nu op zijn schouders rust." },
+    full:"Pallas Athena sprong volwassen en volledig gewapend uit het hoofd van Zeus, na een geboorte die de hele Olympos deed sidderen. Ze werd de eerste onder de goden die vraagt voordat ze oordeelt — godin van wijsheid en doordachte oorlogvoering, met een naam die weldra door heel Hellas zal worden uitgesproken. Bij de Romeinen kreeg ze een andere naam voor dezelfde godin: Minerva." },
+  zeus: { nm:"Zeus (Jupiter)", epithet:"Koning van de Olympische goden",
+    intro:"Heerser van de Olympos, die zijn eigen vader Kronos onttroonde uit angst voor een profetie — en nu, naar verluidt, bang is dat de geschiedenis zich gaat herhalen. Bij de Romeinen heet hij Jupiter." },
+  hephaistos: { nm:"Hephaistos (Vulcanus)", epithet:"Goddelijke smid",
+    intro:"Als kind door zijn eigen moeder Hera van de Olympos gegooid, opgevangen door de zeenimf Thetis, en uitgegroeid tot de meest begaafde smid onder de goden — de enige die ruw genoeg is voor het werk dat nu op zijn schouders rust. Bij de Romeinen heet hij Vulcanus." },
   prometheus: { nm:"Prometheus", epithet:"Titaan, medeschepper van de mensheid",
     intro:"Een titaan die tijdens de oorlog tussen goden en titanen de kant van Zeus koos — en die, samen met Athena, de eerste mensen uit klei en water vormde.",
     full:"Uit medelijden met de naakte, hulpeloze mensheid stal Prometheus het vuur van de goden — en betaalde daarvoor eeuwig met ketenen op de Kaukasus en een adelaar die dagelijks zijn lever komt opeten. Vuur en hoop, zegt hij zelf, waren het risico waard." },
@@ -1239,10 +1246,10 @@ END
 === SCENE: CH1_B04 ===
 
 TITLE:
-De Bijl van Vulcanus
+De Bijl van Hephaistos
 
 TEXT:
-Vulcanus wordt erbij gehaald — de enige onder de goden die ruw genoeg is, en tegelijk precies genoeg, voor wat nu moet gebeuren. Je herkent hem aan zijn manke gang: als kind door zijn eigen moeder Hera van de Olympos gegooid vanwege die onvolkomenheid, opgevangen en grootgebracht door de zeenimf Thetis, tot hij uitgroeide tot de meest begaafde smid die de goden ooit hebben gekend.
+Hephaistos wordt erbij gehaald — de enige onder de goden die ruw genoeg is, en tegelijk precies genoeg, voor wat nu moet gebeuren. Je herkent hem aan zijn manke gang: als kind door zijn eigen moeder Hera van de Olympos gegooid vanwege die onvolkomenheid, opgevangen en grootgebracht door de zeenimf Thetis, tot hij uitgroeide tot de meest begaafde smid die de goden ooit hebben gekend.
 
 Hij weegt zijn bijl in zijn handen, kijkt naar Zeus' gebogen hoofd, en aarzelt — een ademtocht lang, niet meer. Dan heft hij het wapen.
 
@@ -1250,7 +1257,7 @@ PUZZLE:
 puzzle_ch1b_naamval
 
 PERSON:
-vulcanus:intro
+hephaistos:intro
 
 CHOICES:
 
@@ -1264,7 +1271,7 @@ TITLE:
 Wat uit het Hoofd Breekt
 
 TEXT:
-Vulcanus caput aperit — Vulcanus opent het hoofd, en durum, "hard", past feilloos bij caput: vulcanus caput durum aperit, Vulcanus opent het harde hoofd, allebei in de accusativus. De klap valt, zwaarder en voller van gevolg dan enige andere klap die ooit op de Olympos is uitgedeeld. De hemel zelf lijkt even zijn adem in te houden.
+Vulcanus caput aperit — Hephaistos opent het hoofd, en durum, "hard", past feilloos bij caput: vulcanus caput durum aperit, Hephaistos opent het harde hoofd, allebei in de accusativus. De klap valt, zwaarder en voller van gevolg dan enige andere klap die ooit op de Olympos is uitgedeeld. De hemel zelf lijkt even zijn adem in te houden.
 
 En dan, uit de opening, niet met bloed maar met een licht dat je ogen doet knipperen: een gestalte, al volwassen, al volledig gewapend — een speer stevig in haar hand, een helm die zonder enige hulp precies op haar plek valt, alsof ze nooit anders bedoeld was dan om zo geboren te worden.
 
@@ -1497,7 +1504,7 @@ TITLE:
 Pandora, het Alomgeschonken Geschenk
 
 TEXT:
-Zeus beveelt Vulcanus haar te maken zoals ooit de eerste mensen werden gemaakt: uit klei en water, gevormd tot een vrouw van verbluffende schoonheid. Maar waar Prometheus zijn schepselen enkel een vonk van het goddelijke meegaf, geeft elke god en godin op de Olympos haar nu iets van zichzelf — Aphrodite schenkt haar onweerstaanbare gratie, Hermes een gladde tong en de gave om te misleiden, Athena vaardigheid in het weven van de fijnste stof.
+Zeus beveelt Hephaistos haar te maken zoals ooit de eerste mensen werden gemaakt: uit klei en water, gevormd tot een vrouw van verbluffende schoonheid. Maar waar Prometheus zijn schepselen enkel een vonk van het goddelijke meegaf, geeft elke god en godin op de Olympos haar nu iets van zichzelf — Aphrodite schenkt haar onweerstaanbare gratie, Hermes een gladde tong en de gave om te misleiden, Athena vaardigheid in het weven van de fijnste stof.
 
 Zo krijgt ze een naam die simpelweg beschrijft wat ze is: Pandora, "zij die alles geschonken kreeg" — pan, alles, en dooron, geschenk. Een naam die klinkt als een zegen, en die evengoed als een waarschuwing gelezen kan worden.
 

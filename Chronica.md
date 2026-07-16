@@ -443,7 +443,17 @@ volgens hetzelfde patroon (CNS-meta-sectie → hook zet stil iets in
   tot haar geboorteverhaal is voltooid — dan verschijnt haar echte naam en
   epithet, met een "✦ later bijgewerkt"-vouwlijn in de UI). Niet elk
   personage krijgt een `full` — bijfiguren zonder eigen afgerond verhaal in
-  dit hoofdstuk (Zeus, Vulcanus, Epimetheus) blijven op `intro` staan.
+  dit hoofdstuk (Zeus, Hephaistos, Epimetheus) blijven op `intro` staan.
+  **Naamgevingsregel**: lijn A (Latijn-zwaartepunt) gebruikt Romeinse namen
+  (Bacchus, niet Dionysus); lijn B/C (Grieks-zwaartepunt) gebruiken overal
+  Griekse namen (Zeus, Athena, Hephaistos — niet Jupiter/Minerva/Vulcanus) in
+  de VERTELTEKST. De Latijnse naamval-puzzels (bv. "Vulcanus caput aperit")
+  blijven wél Latijn, want dat is een Latijnse grammatica-oefenzin, geen
+  personagenaam — de Codex-grammaticatabel (§7.2.1) toont daarom bewust
+  "Vulcanus" naast "Hephaistos" in `SP_CODEX_PERSONS`. Elke persoon-entry mag
+  zijn Latijnse/Griekse tegenhanger noemen (Zeus (Jupiter), Pallas Athena
+  (Minerva), Hephaistos (Vulcanus)) — puur informatief, wijzigt de
+  verteltekst niet.
   Sommige bio's zijn gebaseerd op de "Certamen Character Bible" (Single
   Player Mode.docx) — niet meer de bron van waarheid sinds Chronica.md
   bestaat, maar de personagebeschrijvingen daarin waren te goed om te laten
@@ -554,22 +564,64 @@ geen tutorial.
   terug naar het hoofdportaal (de "terug"-knop op het slotoverzicht) — zo
   blijft er geen muziek doorspelen op schermen buiten Chronica.
 
-**Aanbeveling voor een echte openingscinematic** (nog niet gebouwd — aan de
-auteur om buiten deze codebase te maken en als los videobestand te leveren):
-een kort (~20-30s) filmpje dat de setting introduceert en eindigt met een
-landing in Latium is het makkelijkst te maken als **Ken Burns-stijl diavoorstelling**
-van een paar Gemini-stills (dezelfde huisstijl, zie
-`gemini-comic-style.md`) — pan/zoom over 3-4 beelden, tekst-overlays, eigen
-`main_theme.mp3` eronder — via een gratis, laagdrempelig tool als **Canva**
-(gratis videoeditor, drag-and-drop, eigen audio toevoegen) of **CapCut**
-(gratis, ook makkelijk). Voor een tool die de stills zelf tot bewegend beeld
-animeert (i.p.v. alleen pannen/zoomen), zijn **Luma Dream Machine** en
-**Kling AI** de meest toegankelijke gratis image-to-video-opties op dit
-moment — beide hebben een gratis daglimiet en werken direct vanuit een
-geüploade Gemini-still, zonder account-gedoe. Echte tekst-naar-video-AI
-(Veo, Sora) is minder betrouwbaar voor verhalende continuïteit en vaak niet
-gratis — daarom niet de eerste aanbeveling. Zolang er geen video is, blijft
-`SCREENS.spIntro` de facto de "opening" van het spel.
+**Echte openingscinematic** (nog niet gebouwd — de auteur monteert dit zelf
+in Sony Vegas Movie Studio Platinum en levert het als los videobestand,
+buiten deze codebase om). Gekozen aanpak: de Main Theme op de achtergrond,
+Ken Burns-stijl pan/zoom over Gemini-stills (huisstijl, zie
+`gemini-comic-style.md`), met regel-voor-regel verschijnende profetie-tekst
+("Een reiziger verschijnt", "Wanneer herinnering verdwijnt", …), eindigend op
+een zoom-in naar Latium waar Hoofdstuk 1 begint.
+
+**Exportspecificaties** (zodat het bestand overal soepel afspeelt, ook op
+iPad, zonder plugins):
+- **Container/codec**: MP4, video H.264, audio AAC — universeel ondersteund
+  door alle browsers en iPads, en het standaard exportprofiel in zowat elke
+  editor inclusief Vegas Movie Studio.
+- **Beeldverhouding**: 16:9 (zelfde als alle Gemini-illustraties in de app).
+- **Resolutie**: 1920×1080 als het bestand niet te zwaar wordt; anders
+  1280×720 — dit is een schoolapp op vaak beperkte wifi, dus liever een
+  kleiner bestand dan de hoogste resolutie.
+- **Framerate**: 30 fps (veilige standaard, geen hokkerigheid); 24 fps kan
+  ook voor een filmisch gevoel, dan render Vegas dat probleemloos.
+- **Bitrate/bestandsgrootte**: richt op ~4-6 Mbps bij 1080p (of ~2-3 Mbps bij
+  720p) — een clip van 30-45s blijft dan ruim onder de 20 MB.
+- **Duur**: 30-45 seconden totaal is de soete plek — genoeg regels voor de
+  profetie plus de zoom-in naar Latium, niet zo lang dat het spelen vertraagt
+  bij elke herstart.
+- **Audio**: bak de Main Theme (`main_theme.mp3`, al in
+  `assets/chronica/music/`) direct in de video's audiospoor — dan hoeft de
+  app geen aparte muziek te starten/synchroniseren naast de video.
+- **Bestandslocatie**: `certamen/assets/chronica/video/opening.mp4` (nieuwe
+  map, naast `images/`/`music/`/`maps/`). Zodra het bestand er staat, is de
+  code-kant simpel: een `<video>`-tag i.p.v. de huidige tekst in
+  `SCREENS.spIntro`, met de bestaande mute-knop (`spAudioToggleHTML`) ook
+  toepasbaar op het videogeluid.
+
+**Profetie-strofen** (voorstel, regel-voor-regel te onthullen — vrij aan te
+passen/aan te vullen):
+
+> Er was een wereld, groots en fel,
+> vol goden, helden, eeuwenoud.
+> Nu vervaagt zij, naam voor naam,
+> in stilte die haar langzaam rooft.
+>
+> Wanneer herinnering verdwijnt,
+> verschijnt een reiziger, ongezien —
+> geen koning, held of god gezant,
+> slechts iemand die nog weten wil.
+>
+> Het Orakel wacht al eeuwen stil
+> op wie de namen redden kan,
+> niet met kracht, maar met geduld,
+> met elke naam die hij nog vangt.
+>
+> Ver van hier, in een korenveld,
+> ligt het begin van wat vergat.
+> Daar wacht een ploeg. Een stille grond.
+> Daar begint het — in Latium.
+
+Zolang de video er niet is, blijft `SCREENS.spIntro` de facto de "opening"
+van het spel.
 
 ---
 
