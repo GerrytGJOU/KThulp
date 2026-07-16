@@ -461,6 +461,27 @@ const SP_PUZZLES = {
     hint:"Griekse namen op -eus krijgen in de vocativus vaak de uitgang -eu." },
 };
 
+/* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler.
+   CODEX:-secties in CNS-scènes (spHookCodex, singleplayer.js) zetten alleen
+   een id in SP_STATE.codex; SP_CODEX_ENTRIES hieronder levert de ECHTE inhoud
+   (titel/tekst/categorie) die SCREENS.spCodex opzoekt en toont. Nieuwe
+   hoofdstukken breiden dit uit: elke CODEX:-id die ergens in een scène wordt
+   uitgedeeld, hoort hier een entry te krijgen, anders toont de Codex alleen
+   een kale id. Categorieën: "mythologie", "geschiedenis", "grammatica",
+   "vocabulaire" — bepalen alleen de groepering in SCREENS.spCodex. ---- */
+const SP_CODEX_ENTRIES = {
+  codex_orakel_van_chronos: { cat:"mythologie", titel:"Het Orakel van Chronos",
+    tekst:"Chronos — de belichaming van de tijd zelf, niet te verwarren met de titaan Kronos, vader van Zeus — wordt in latere, orfische overleveringen beschreven als een kracht die ouder is dan de goden van de Olympos zelf. Het bronzen orakel dat jij in een Latijns korenveld vond, is doordrenkt van die kracht: het scheurt de sluier tussen de wereld waarin de klassieke mythen langzaam vervagen, en de wereld waarin jij leeft." },
+  codex_gouden_aanraking: { cat:"mythologie", titel:"De Gouden Aanraking van Midas",
+    tekst:"Koning Midas van Sardis, in Lydië, verdiende de dankbaarheid van Bacchus door diens dronken metgezel Silenus tien dagen lang gastvrij te onthalen. Zijn wens — dat alles wat hij aanraakt in goud verandert — bleek een vloek zodra ze ook zijn voedsel, zijn wijn en uiteindelijk zijn eigen dochter trof. Bacchus hief de vloek op door hem te laten baden in de rivier de Pactolus, die sindsdien met gouden korrels doorspekt zou zijn." },
+  codex_geboorte_athena: { cat:"mythologie", titel:"De Geboorte van Athena",
+    tekst:"Zeus verzwolg zijn zwangere eerste vrouw Metis uit angst voor een profetie: hun zoon zou hem onttronen, zoals hij ooit zijn eigen vader Kronos onttroonde. Toen het kind — een dochter — niettemin geboren wilde worden, spleet Vulcanus Zeus' schedel open met een bijl, en Pallas Athena sprong eruit, al volwassen en volledig gewapend: godin van wijsheid en doordachte oorlogvoering." },
+  codex_doos_van_pandora: { cat:"mythologie", titel:"Prometheus, Pandora en de Doos",
+    tekst:"Prometheus, een titaan die tijdens de Titanomachie voor Zeus koos, vormde samen met Athena de eerste mensen en stal later het vuur van de goden om hen te redden van de kou. Zeus strafte hem met eeuwige ketenen op de Kaukasus, en strafte de mensheid met Pandora — het eerste geschenk van alle goden samen — wier nieuwsgierigheid alle kwaad ter wereld losliet uit een verzegelde doos. Alleen Elpis, de Hoop, bleef achter." },
+  codex_grammatica_ch1: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 1 — De Namen van de Wereld",
+    tekst:"Het Griekse lidwoord (ὁ/ἡ/τό) volgt het geslacht van het zelfstandig naamwoord waarbij het hoort — mannelijk, vrouwelijk of onzijdig. In het Latijn buigen zelfstandig én bijvoeglijk naamwoord (groep 1/2) mee in dezelfde naamval: de nominativus voor wie handelt, de accusativus voor wie of wat de handeling ondergaat, en de vocativus om iemand rechtstreeks aan te spreken — vaak met een eigen uitgang (zoals Bacche! in plaats van Bacchus, of Prometheu! in plaats van Prometheus)." },
+};
+
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
    de bestaande Battle Mode-klasse-id (battle-data.js: BM_CLASSES), zodat
    stat-bonussen/unlocks automatisch doorwerken. ---- */
@@ -489,6 +510,11 @@ const SP_AVATAR_STORY_UNLOCKS = {
   "wapen:boog":   { title:"boogschutter_orakel" },
   "wapen:speer":  { title:"hopliet_orakel" },
   "wapen:zwaard": { title:"cavalerist_orakel" }, // cavalerist: dichtstbijzijnde sprite (geen ruitersporen-wapen)
+  // "ch1_voltooid" wordt door ALLE DRIE de Hoofdstuk-1-lijnen op dezelfde
+  // manier gezet (FLAG: ch1_lijn=X; ch1_voltooid=true) — één flag, geen 3
+  // aparte eretitel-checks nodig. Het Orakel overhandigt de mantel narratief
+  // in CH1_ROBE zodra je een willekeurige lijn hebt afgerond.
+  "armor:robe":   { flag:"ch1_voltooid" },
 };
 
 /* ---- PROLOOG: "DE BOER VAN LATIUM" (scène-ID's PRO_###) ----
@@ -1003,6 +1029,26 @@ quest_boodschapper_van_kronos: hoofdstuk 1 voltooid (lijn: Midas)
 FLAG:
 ch1_lijn=A; ch1_voltooid=true
 
+CHOICES:
+
+* Loop verder van de rivier vandaan -> CH1_A11
+
+END
+
+=== SCENE: CH1_A11 ===
+
+TITLE:
+Het Orakel Verschijnt
+
+TEXT:
+Terwijl je van de rivieroever wegloopt, met Midas' dochter weer levend en de vloek verdwenen, begint de lucht om je heen opnieuw te trillen — precies zoals toen je de bronzen schijf in Latium voor het eerst aanraakte. Uit het niets gloeit het orakel weer op, en de vertrouwde stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt.
+
+"Je hebt de naam van Midas teruggegeven aan de herinnering," zegt de stem, "en met hem het gevaar van een wens die niet doordacht is. Sardis, Bacchus, de Pactolus — ze bestaan weer, precies zoals ze altijd hadden moeten bestaan."
+
+CHOICES:
+
+* Luister verder -> CH1_ROBE
+
 END
 
 === SCENE: CH1_B01 ===
@@ -1184,6 +1230,26 @@ quest_boodschapper_van_kronos: hoofdstuk 1 voltooid (lijn: Athena)
 
 FLAG:
 ch1_lijn=B; ch1_voltooid=true
+
+CHOICES:
+
+* Daal af van de Olympos -> CH1_B09
+
+END
+
+=== SCENE: CH1_B09 ===
+
+TITLE:
+Het Orakel Verschijnt
+
+TEXT:
+Terwijl Pallas Athena naast Zeus haar plaats inneemt en de Olympos langzaam tot rust komt, trilt de lucht om je heen — net als toen je de bronzen schijf in Latium voor het eerst aanraakte. Het orakel gloeit weer op, en de stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt.
+
+"Je hebt de geboorte van Pallas Athena teruggegeven aan de herinnering," zegt de stem. "Wijsheid heeft weer een gezicht, een speer, en een naam die door heel Hellas wordt uitgesproken. Zonder jou was ook zij vervaagd, net als al het andere dat deze wereld dreigde te verliezen."
+
+CHOICES:
+
+* Luister verder -> CH1_ROBE
 
 END
 
@@ -1418,6 +1484,73 @@ quest_boodschapper_van_kronos: hoofdstuk 1 voltooid (lijn: Prometheus)
 
 FLAG:
 ch1_lijn=C; ch1_voltooid=true
+
+CHOICES:
+
+* Loop verder, terug naar de bewoonde wereld -> CH1_C12
+
+END
+
+=== SCENE: CH1_C12 ===
+
+TITLE:
+Het Orakel Verschijnt
+
+TEXT:
+Terwijl je van Prometheus' rots wegloopt, met vuur en hoop nu onlosmakelijk verbonden aan de mensheid, trilt de lucht om je heen — net als toen je de bronzen schijf in Latium voor het eerst aanraakte. Het orakel gloeit weer op, en de stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt.
+
+"Je hebt het vuur van Prometheus, de doos van Pandora en de hoop die erin achterbleef teruggegeven aan de herinnering," zegt de stem. "Een titaan die alles riskeerde voor een schepping die niet eens de zijne was — zonder jou was ook dat verhaal voorgoed verdwenen."
+
+CHOICES:
+
+* Luister verder -> CH1_ROBE
+
+END
+
+=== SCENE: CH1_ROBE ===
+
+TITLE:
+De Mantel
+
+TEXT:
+De stem zwijgt even, en dan — bijna geamuseerd — klinkt er iets nieuws. "Maar voordat je verdergaat: kijk eens naar jezelf." Je kijkt omlaag naar je eigen kleren: de vodden van een boer uit Latium, gescheurd en met aarde besmeurd, nog altijd dezelfde kleren waarin je van je eigen akker vertrok.
+
+"Een boodschapper die de herinnering van hele beschavingen bewaart, verdient beter dan vodden," zegt de stem. Uit het licht van het orakel vouwt zich iets stofachtigs, dat neerdaalt om je schouders — een eenvoudige, goed gesneden mantel, zwaar genoeg om je te beschermen tegen de kou van elke tijd en elke plaats waar je nog terecht zult komen.
+
+CODEX:
+codex_grammatica_ch1
+
+CHOICES:
+
+* Trek de mantel aan -> CH1_CODEX_UITLEG
+
+END
+
+=== SCENE: CH1_CODEX_UITLEG ===
+
+TITLE:
+De Codex Memoriae
+
+TEXT:
+De Boodschapper spreekt nog één keer, dit keer met iets dat op een instructie lijkt. "Alles wat je hier leert — de namen, de verhalen, de vormen van hun eigen taal — verdwijnt te makkelijk als niemand het vastlegt. Daarom houd ik voor jou de Codex Memoriae bij: een levend register van alles wat je hebt herontdekt."
+
+"Elke naam die je terugvindt en elk stukje taal dat je ontcijfert, wordt automatisch aan de Codex toegevoegd — grammatica net zo goed als mythologie. Raadpleeg haar wanneer je maar wilt, vanaf het opslagscherm: niets wat eenmaal is vastgelegd, kan opnieuw verdwijnen."
+
+CHOICES:
+
+* Doorgaan -> CH1_EINDE
+
+END
+
+=== SCENE: CH1_EINDE ===
+
+TITLE:
+Het Einde van Hoofdstuk 1
+
+TEXT:
+De Boodschapper knikt, en de poort achter je opent zich weer — ditmaal niet naar een vergeten hoofdstuk, maar naar iets wat nog geschreven moet worden. "Hoofdstuk 2 wacht nog ergens verderop in de tijd," zegt de stem. "Kom terug zodra ook die naam zich aan mij heeft laten kennen."
+
+Voor nu keert de poort in stilte terug tot een dunne streep licht, en blijft alleen de herinnering aan wat je vandaag hebt teruggevonden.
 
 END
 `.trim();

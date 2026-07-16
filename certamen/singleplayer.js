@@ -512,9 +512,44 @@ function spRenderLanding(){
     <p class="note">${esc(chapter.verhaal)}</p>
     <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="spGoCns('${SP_STATE.node||[...SP_SCENES.keys()][0]}')">${resuming?"Verdergaan":"Beginnen"}</button>
   </div>
-  ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:14px" onclick="go('spWorldMap')">🗺️ Wereldkaart</button>`:""}
+  ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spWorldMap')">🗺️ Wereldkaart</button>`:""}
+  ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:14px" onclick="go('spCodex')">📖 Codex Memoriae</button>`:""}
   ${foot()}`);
 }
+
+/* ---- CODEX MEMORIAE: overzichtsscherm van alle ontgrendelde codex-entries
+   (SP_CODEX_ENTRIES in singleplayer-data.js). Codex is PER SAVESLOT, net als
+   de wereldkaart — elke slot toont dus alleen wat DIE doorspeling al heeft
+   ontdekt. Entries die nog niet in SP_STATE.codex zitten, worden simpelweg
+   niet getoond (geen "??"-placeholder — dat is bewust, spoilt anders welke
+   ids er nog aankomen). ---- */
+SCREENS.spCodex = function(){
+  document.body.classList.remove("greek");
+  if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
+  const codex = SP_STATE.codex||[];
+  const CAT_LABELS = { mythologie:"Mythologie", geschiedenis:"Geschiedenis", grammatica:"Grammatica", vocabulaire:"Vocabulaire" };
+  const entries = codex.map(id=>({ id, ...(SP_CODEX_ENTRIES[id]||{cat:"mythologie", titel:id, tekst:""}) }));
+  let body;
+  if(!entries.length){
+    body = `<div class="panel"><p class="note">Nog niets vastgelegd — de Codex vult zich vanzelf terwijl je door het verhaal speelt.</p></div>`;
+  } else {
+    const byCat = {};
+    entries.forEach(e=>{ (byCat[e.cat]=byCat[e.cat]||[]).push(e); });
+    body = Object.keys(CAT_LABELS).filter(c=>byCat[c]).map(cat=>{
+      const rows = byCat[cat].map(e=>`
+        <div class="tile" style="cursor:default;margin-bottom:8px;padding:12px 14px">
+          <div style="font-weight:700">${esc(e.titel)}</div>
+          ${e.tekst?`<p class="note" style="margin-top:4px">${esc(e.tekst)}</p>`:""}
+        </div>`).join("");
+      return `<div class="panel"><div class="eyebrow l">${esc(CAT_LABELS[cat])}</div>${rows}</div>`;
+    }).join("");
+  }
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Codex Memoriae</h2></div>
+  <div class="panel"><p class="note">Alles wat je in dit verhaal hebt herontdekt — automatisch bijgehouden, niets gaat verloren.</p></div>
+  ${body}
+  ${foot()}`);
+};
 
 /* ---- WERELDKAART: geïllustreerd paneel + onthullende locatie-pins.
    Codex is PER SAVESLOT (net als de rest van SP_STATE), dus de kaart toont
