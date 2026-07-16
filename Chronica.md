@@ -45,7 +45,7 @@ browser):
 | Scène-renderer (tekst/dialoog/keuzes) | `certamen/singleplayer.js` (`SCREENS.spPlay`) | ✅ werkend |
 | Grieks-alfabet-transcriptiepuzzel (blokkeert voortgang) | `certamen/singleplayer.js` (`spRenderPuzzle`/`spCheckPuzzle`), `SP_PUZZLES`/`SP_GREEK_ALPHABET` | ✅ werkend |
 | Klassekeuze → Battle Mode-klasse (REWARD-hook) | `certamen/singleplayer.js` (`spHookReward`), `SP_CLASS_REWARD_MAP` | ✅ werkend |
-| Codex-/quest-registratie (nog zonder eigen scherm) | `certamen/singleplayer.js` (`spHookCodex`/`spHookQuest`) | ✅ data wordt bewaard, geen overzichtsscherm |
+| Codex Memoriae — registratie + overzichtsscherm | `certamen/singleplayer.js` (`spHookCodex`, `SCREENS.spCodex`), `certamen/singleplayer-data.js` (`SP_CODEX_ENTRIES`) | ✅ werkend, gegroepeerd per categorie — quests hebben nog geen eigen scherm |
 | Eenmalige gender-keuze (voornaamwoorden, géén naam) | `certamen/singleplayer.js` (`spRenderGenderPick`), `SP_PRONOUNS`/`SP_GENDER_OPTIONS` | ✅ werkend |
 | **3 saveslots** per leerling | `certamen/singleplayer.js` (`SCREENS.spSlots`), `SP_MAX_SLOTS` | ✅ werkend — beginnen/verdergaan/verwijderen (met bevestiging) |
 | **Offline-first opslag** (localStorage primair, Firebase spiegel) | `certamen/singleplayer.js` (`spSaveProgress`/`spLoadAllSlots`) | ✅ werkend — speelbaar zonder inloggen/internet |
@@ -384,6 +384,39 @@ De regels:
   echte branching + een korte kritische route voor casual spelers, zonder de
   educatieve gate los te laten.
 
+### 7.2 Hoofdstuk-afsluiting: het Orakel, de mantel en de Codex Memoriae (**gebouwd**)
+
+Elke lijn (A/B/C) sluit **niet** direct af met de laatste verhaalscène, maar
+loopt door naar een gedeelde afsluitreeks:
+
+1. **Een lijn-specifieke Orakel-scène** (`CH1_A11`/`CH1_B09`/`CH1_C12`): de
+   bronzen schijf gloeit weer op, en de Boodschapper van Kronos (dezelfde stem
+   als in de proloog) feliciteert je — met tekst die verwijst naar wát je
+   precies hebt teruggevonden, dus per lijn anders.
+2. **`CH1_ROBE`** (gedeeld knooppunt): de Boodschapper merkt op dat je nog
+   altijd de vodden van de proloog draagt en overhandigt je een mantel.
+   Mechanisch simpel: `SP_AVATAR_STORY_UNLOCKS["armor:robe"] = { flag:
+   "ch1_voltooid" }` (singleplayer-data.js) — de flag staat al sinds de
+   laatste verhaalscène van elke lijn, dus dit is puur een narratieve
+   bevestiging, geen nieuw ontgrendelmechanisme. Zet ook meteen
+   `CODEX: codex_grammatica_ch1`.
+3. **`CH1_CODEX_UITLEG`** (gedeeld): een korte, in-fictie uitleg van het
+   Codex-mechanisme zelf (de Boodschapper legt uit dat namen/grammatica die je
+   tegenkomt automatisch worden vastgelegd).
+4. **`CH1_EINDE`** (gedeeld): nette afsluiting die expliciet benoemt dat
+   Hoofdstuk 2 nog moet worden geschreven — voorkomt een "Terug naar de
+   opslagplekken"-doodlopend eind zonder verhaalkader.
+
+**Codex Memoriae** is nu een volwaardig scherm (`SCREENS.spCodex`,
+singleplayer.js) i.p.v. alleen bijgehouden data: `SP_CODEX_ENTRIES`
+(singleplayer-data.js) koppelt elke `CODEX:`-id aan een titel/tekst/categorie
+("mythologie"/"geschiedenis"/"grammatica"/"vocabulaire"); het scherm toont
+alleen wat in `SP_STATE.codex` van de actieve saveslot zit, gegroepeerd per
+categorie. Bereikbaar via een knop op de landingspagina (naast 🗺️
+Wereldkaart) zodra je verder bent dan het allereerste scherm. Nieuwe
+hoofdstukken moeten voortaan **bij elke nieuwe `CODEX:`-id** ook een entry in
+`SP_CODEX_ENTRIES` toevoegen — anders toont het scherm alleen de kale id.
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
@@ -402,8 +435,9 @@ In afgesproken bouwvolgorde:
 3. **Audio-hook** — `MUSIC:`/`SFX:` daadwerkelijk afspelen (mp3, uit Suno) met de
    iPad-eis dat geluid pas ná een gebruikersactie mag starten. Mappen staan
    klaar in `certamen/assets/chronica/`.
-4. **Codex/Quest-overzichtsschermen** — data wordt al bewaard; een eigen
-   ontdekkingsboek-scherm volgt zodra er meer inhoud is dan proloog + hoofdstuk 1.
+4. **Quest-overzichtsscherm** — data wordt al bewaard (`spHookQuest`); de
+   Codex heeft inmiddels wél een eigen scherm (§7.2, `SCREENS.spCodex`), een
+   vergelijkbaar overzicht voor quests ontbreekt nog.
 5. **Hoofdstuk 2 t/m 19 + Finale-content** — scène voor scène in CNS.
    `SP_CAMPAIGN` bepaalt per hoofdstuk de grammatica/personages, `SP_MYTH_CANON`
    levert het zijverhaal-materiaal. Nu drie onafhankelijke lijnen per hoofdstuk
