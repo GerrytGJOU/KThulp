@@ -849,3 +849,27 @@ teruggedraaid:
 
 Contentcadans: **scène voor scène** — Claude schrijft de scène direct in CNS,
 Gerben leest mee/stuurt bij, Claude bouwt door.
+
+**Vaste regel (vastgelegd 2026-07): `Chronica_Verhaalteksten.txt` (repo-root)
+wordt bij elke wijziging aan verhaaltekst opnieuw gegenereerd en meegecommit.**
+Reden: Gerben is zelf ook schrijver en wil zelf woorden/zinnen kunnen
+aanpassen zonder steeds de volledige tekst heen-en-weer te hoeven sturen.
+- **Genereren**: `node certamen/tools/export_verhaalteksten.js` (leest
+  rechtstreeks uit `singleplayer-data.js`, dus altijd in sync — geen los
+  bijgehouden kopie die kan verouderen). Ontdekt automatisch elk
+  `SP_..._CNS`-blok, geen handmatige lijst om bij te werken bij een nieuw
+  hoofdstuk.
+- **Formaat: platte tekst (.txt), bewust geen .docx.** Het CNS-formaat is al
+  leesbare platte tekst met structurele merktekens (scène-ID's, `->`-pijlen,
+  `[PIETAS]`/`[VIRTUS]`/`[REQUIRE:...]`-tags) die exact intact moeten
+  blijven. Een .docx-omweg riskeert dat Word's autocorrect die merktekens
+  ongemerkt corrumpeert (rechte aanhalingstekens → krultekens, `->` → een
+  en-dash) — bij .txt is er geen vertaalslag, wat Gerben bewerkt IS het
+  bronformaat.
+- **Inhoud per hoofdstuk**: een STROOMSCHEMA (ingesprongen boomstructuur van
+  scènes + keuzes, alleen inspringend bij een echt vertakkingspunt, met
+  "(zie hierboven)" bij convergentie en "(volgend hoofdstuk)" bij de grens
+  naar het volgende hoofdstuk) gevolgd door de VOLLEDIGE ruwe CNS-tekst.
+- **Workflow**: Gerben bewerkt (een kopie van) het bestand en stuurt het (of
+  de aangepaste alinea's) terug; Claude verwerkt de wijzigingen in
+  `singleplayer-data.js`, regenereert het bestand, commit + pusht beide.
