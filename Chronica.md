@@ -709,17 +709,60 @@ onregelmatige esse/posse — drie nieuwe Codex-grammatica-entries
 bij `CH2_000` (zelfde les als Hoofdstuk 1: een leerling moet een mislukte
 puzzel meteen kunnen opzoeken, niet pas na afloop).
 
+### 7.7 Puzzel-moeilijkheidsopbouw: meerkeuze → zelf typen (**gebouwd**)
+
+Vastgelegde regel: puzzels mogen per hoofdstuk geleidelijk moeilijker worden
+— van meerkeuze naar zelf typen. Twee nieuwe `puzzle.type`-waarden naast de
+bestaande `"multiple-choice"`/`"greek-transliteration"` (`SP_PUZZLES`,
+singleplayer-data.js; renderers in singleplayer.js):
+
+- **`"typed-latin"`** — de speler typt het Latijnse antwoord zelf, met het
+  gewone systeemtoetsenbord (`spRenderTypedLatinPuzzle`/
+  `spCheckTypedLatinPuzzle`) — hoofdletter-/spatiëring-ongevoelig vergeleken.
+  Latijn gebruikt hier geen tekens buiten een normaal toetsenbord, dus geen
+  bijzondere behandeling nodig.
+- **`"typed-greek"`** — de speler typt zelf Grieks, via een **eigen
+  schermtoetsenbord** (`spGreekKeyboardHTML`) i.p.v. het systeemtoetsenbord.
+  Het antwoordveld (`#spPuzzleInput`) staat op `readonly` + `inputmode="none"`
+  — dezelfde truc die andere apps met een eigen invoermechanisme gebruiken om
+  te voorkomen dat het systeemtoetsenbord van iPad/iOS vanzelf verschijnt.
+  Het schermtoetsenbord heeft naast de 24 kleine letters ook drie
+  modifier-toetsen die op de LAATST getypte letter inwerken
+  (`spGreekApplyModifier`): spiritus lenis (᾿), spiritus asper (῾), en iota
+  subscriptum (op α/η/ω). Deze drie tellen bewust als LETTERS, niet als
+  versiering, en worden dus nooit weggefilterd bij het nakijken.
+  **Nakijken** (`spNormalizeGreek`): NFD-decompose, verwijder alleen de echte
+  accenttekens (acuut/gravis/circumflex/macron/brevis — niet relevant voor
+  het antwoord), laat spiritus en iota subscriptum staan, normaliseer
+  eind-sigma (ς) naar gewone sigma (σ), hoofdletter- en
+  spatiëring-ongevoelig. Nog niet op echte iPad-hardware getest of
+  `readonly`/`inputmode="none"` het systeemtoetsenbord in alle iOS-versies
+  betrouwbaar onderdrukt — waarschijnlijk wel (staand patroon), maar een
+  praktijktest is aan te raden zodra er een device beschikbaar is.
+
+Nog geen bestaande puzzel is retroactief omgezet naar een getypte variant —
+de nieuwe types zijn er klaar voor zodra een hoofdstuk ze nodig heeft (bv.
+vanaf Hoofdstuk 3, of later in Hoofdstuk 2 bij Semele/Kallisto/Herakles).
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
 
 In afgesproken bouwvolgorde:
 
-1. **Combat-bridge** — een gevecht dat exact werkt als Battle Mode (vraag → EP →
-   actie), met één verschil: de 10-seconden-wachttijd mag worden **onderbroken**
-   zodra de speler zijn keuze heeft gemaakt (het is singleplayer). Gekoppeld via
-   de `COMBAT:`-sectie. Dit is óók het moment om de eretitel-`bonus` (§6) écht in
-   de berekening te verwerken.
+1. **Combat-bridge (gebouwd, sinds Hoofdstuk 2)** — een EIGEN, lokale
+   implementatie (vraag → EP → aanval), NIET Battle Mode's eigen lus
+   hergebruikt (die is te sterk gekoppeld aan Firebase-multiplayer-state
+   — zie `bmAnswer`/`bmTick`/`bmResolve` in battle.js). Verschil met Battle
+   Mode: geen kunstmatige wachttijd tussen vraag en actie, want singleplayer
+   heeft geen andere spelers om op te wachten — zodra je genoeg EP hebt, kun
+   je meteen aanvallen. `COMBAT:`-sectie (bare vijand-id uit
+   `SP_COMBAT_ENEMIES`, singleplayer-data.js) start het gevecht
+   (`spStartCombatFromScene`/`SCREENS.spCombat`); vragen komen uit de al
+   geleerde vocabulaire (`SP_STATE.vocab`). Twee vijanden staan al klaar
+   (`nemeische_leeuw`, `hydra`) voor wanneer Herakles' Hoofdstuk-2-lijn wordt
+   geschreven — nog geen scène gebruikt ze. De eretitel-`bonus` (§6) écht in
+   de berekening verwerken staat nog open.
 2. **`CONDITION`-mechanisme** — de kaart zelf is gebouwd (§7,
    `SCREENS.spWorldMap`), alle drie panelen zijn getekend en schakelbaar; nog
    open: NPC's/scènes die conditioneel reageren op de al-gebouwde `flags` (bv.
