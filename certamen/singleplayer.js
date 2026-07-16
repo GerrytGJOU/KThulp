@@ -407,13 +407,32 @@ async function spLoadAllSlots(){
 
 /* ---- INSTAPSCHERM: geen login-gate — Chronica Classica moet offline speelbaar
    zijn. Doorstuur naar het slotoverzicht; inloggen is daar een aanbod, geen eis. ---- */
-SCREENS.singlePlayer = function(){ go("spSlots"); };
+SCREENS.singlePlayer = function(){ go("spIntro"); };
+
+/* ---- INTRO/TITELSCHERM: eenvoudige "startpagina" met de Main Theme, als
+   licht substituut voor een echte openingscinematic (zie Chronica.md §8 voor
+   de video-aanbeveling aan de auteur). Verschijnt elke keer bij het openen
+   van Chronica Classica vanuit het portaal — geen eenmalige eerste-keer-only
+   flag, want het is bedoeld als sfeervol titelscherm, niet als tutorial. ---- */
+SCREENS.spIntro = function(){
+  document.body.classList.remove("greek");
+  spPlayMusic("main_theme.mp3");
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="spStopMusic();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  <div class="panel" style="text-align:center">
+    <span class="ic">${iconSVG("star",56,"currentColor")}</span>
+    <h3 style="margin-top:10px">Chronica Classica</h3>
+    <p class="note" style="margin-top:8px">Ooit kende iedereen hun namen. Nu vervagen de goden en helden van de klassieke oudheid uit de herinnering — en jij bent de enige die dat nog kan tegenhouden.</p>
+    <button class="btn btn-gold btn-block lg" style="margin-top:16px" onclick="go('spSlots')">Beginnen</button>
+  </div>
+  ${foot()}`);
+};
 
 /* ---- SLOTOVERZICHT: kiezen/beginnen/verwijderen per opslagplek ---- */
 SCREENS.spSlots = function(){
   document.body.classList.remove("greek");
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Chronica Classica</h2></div>
+  <div class="scrhead"><button class="back" onclick="spStopMusic();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Chronica Classica</h2></div>
   <div class="panel" style="text-align:center"><div class="note">Savegames laden…</div></div>
   ${foot()}`);
   Promise.all([spLoadAllSlots(), spLoadTitles()]).then(([slots, titles])=>{
@@ -579,7 +598,7 @@ SCREENS.spWorldMap = function(){
       <span class="sp-map-pin-dot"></span><span class="sp-map-pin-label">${esc(loc.nm)}</span>
     </button>`).join("");
   const tabs = Object.keys(SP_MAP_PANELS).map(pid=>
-    `<button class="btn ${pid===panelId?"btn-primary":"btn-ghost"}" style="flex:1" onclick="spSwitchMapPanel('${pid}')">${esc(SP_MAP_PANELS[pid].nm.split(",")[0])}</button>`
+    `<button class="btn ${pid===panelId?"btn-primary":"btn-ghost"}" style="flex:1" onclick="spSwitchMapPanel('${pid}')">${esc(SP_MAP_PANELS[pid].nm.split(" — ")[0])}</button>`
   ).join("");
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Wereldkaart</h2></div>
@@ -638,7 +657,7 @@ SCREENS.spPlay = function(){
     : `<button class="btn btn-ghost btn-block lg" onclick="go('spSlots')">Terug naar de opslagplekken</button>`;
 
   H(brand(true)+`
-  <div class="scrhead"><span></span><h2>Chronica Classica</h2></div>
+  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   <div class="panel">${spSceneImageHTML(scene)}${spChapterEyebrowHTML()}${titleHTML}${textHTML}</div>
   ${dialogueHTML}
   ${choicesHTML}
@@ -654,8 +673,55 @@ function spRunMetaHooks(meta){
   if(meta.QUEST)     spHookQuest(meta.QUEST);
   if(meta.EERETITEL) spAwardTitle(meta.EERETITEL.trim());
   if(meta.FLAG)      spHookFlag(meta.FLAG);
+  if(meta.MUSIC)     spPlayMusic(meta.MUSIC.trim());
   // IMAGE is pure weergave (geen side effect) — gerenderd in de view via
-  // spSceneImageHTML(), niet hier.
+  // spSceneImageHTML(), niet hier. SFX bestaat nog niet (geen scène gebruikt
+  // het momenteel) — volgt zodra er een concreet moment voor is.
+}
+
+/* ---- AUDIO: MUSIC:-sectie speelt nu écht af (mp3 uit assets/chronica/music/),
+   via één gedeeld <audio>-element dat blijft doorlopen (loop) zolang er geen
+   nieuw nummer wordt aangevraagd — zo hoeft een reeks scènes met hetzelfde
+   MUSIC:-nummer (bv. de hele Orakel-epiloog) niet steeds opnieuw te starten.
+   spPlayMusic() wordt aangeroepen vanuit spRunMetaHooks(), die op zijn beurt
+   alleen binnen SCREENS.spPlay() draait — d.w.z. altijd als resultaat van een
+   klik (spChoosePath/spGoCns), dus binnen dezelfde gebruikersactie als de
+   iPad-eis vereist. Een blokkade door het autoplay-beleid (bv. bij het
+   automatisch hervatten van een save) wordt stil genegeerd; de mute-knop
+   (spAudioToggleHTML) laat de speler het geluid dan alsnog zelf aanzetten. */
+const SP_AUDIO_MUTED_KEY = "certamen_chronica_muted";
+let SP_MUSIC_EL = null;
+let SP_MUSIC_CURRENT = null;
+function spAudioMuted(){ try{ return localStorage.getItem(SP_AUDIO_MUTED_KEY)==="1"; }catch(e){ return false; } }
+function spSetAudioMuted(muted){
+  try{ localStorage.setItem(SP_AUDIO_MUTED_KEY, muted?"1":"0"); }catch(e){}
+  if(SP_MUSIC_EL) SP_MUSIC_EL.muted = muted;
+}
+function spToggleAudioMuted(){
+  const nowMuted = !spAudioMuted();
+  spSetAudioMuted(nowMuted);
+  if(!nowMuted && SP_MUSIC_EL) SP_MUSIC_EL.play().catch(()=>{});
+  if(_screen && SCREENS[_screen]) SCREENS[_screen]();
+}
+function spAudioToggleHTML(){
+  const muted = spAudioMuted();
+  return `<button title="${muted?"Geluid aanzetten":"Geluid uitzetten"}" aria-label="${muted?"Geluid aanzetten":"Geluid uitzetten"}"
+    style="flex:0 0 auto;padding:6px 10px;font-size:20px;line-height:1;background:none;border:none;cursor:pointer;color:var(--hi-bright)"
+    onclick="spToggleAudioMuted()">${muted?"🔇":"🔊"}</button>`;
+}
+function spPlayMusic(filename){
+  if(!filename) return;
+  if(!SP_MUSIC_EL){ SP_MUSIC_EL = new Audio(); SP_MUSIC_EL.loop = true; }
+  if(SP_MUSIC_CURRENT === filename) return; // al aan het spelen — niet herstarten
+  SP_MUSIC_CURRENT = filename;
+  SP_MUSIC_EL.src = "assets/chronica/music/"+filename;
+  SP_MUSIC_EL.volume = 0.5;
+  SP_MUSIC_EL.muted = spAudioMuted();
+  SP_MUSIC_EL.play().catch(()=>{});
+}
+function spStopMusic(){
+  SP_MUSIC_CURRENT = null;
+  if(SP_MUSIC_EL){ SP_MUSIC_EL.pause(); SP_MUSIC_EL.src = ""; }
 }
 /* FLAG: zet één of meer vlaggen bij het binnenkomen van een scène. Zo dragen
    keuzes (en wélke plotlijn je koos) door naar latere hoofdstukken: elke
@@ -785,7 +851,7 @@ function spRenderGreekPuzzle(scene, puzzleId, puzzle, target){
     </div>`
   ).join("");
   H(brand(true)+`
-  <div class="scrhead"><span></span><h2>Chronica Classica</h2></div>
+  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   ${spPuzzleHeaderHTML(scene)}
   <div class="panel" style="text-align:center"><div style="font-size:32px;letter-spacing:4px;margin:4px 0">${esc(puzzle.woord.grieks)}</div></div>
   <div class="panel">
@@ -815,7 +881,7 @@ function spRenderMCPuzzle(scene, puzzleId, puzzle, target){
     `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spCheckMCPuzzle('${puzzleId}','${target}',${i})">${esc(o)}</button>`
   ).join("");
   H(brand(true)+`
-  <div class="scrhead"><span></span><h2>Chronica Classica</h2></div>
+  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   ${spPuzzleHeaderHTML(scene)}
   <div class="panel">
     <p style="font-weight:700;margin-bottom:4px">${esc(puzzle.vraag)}</p>
