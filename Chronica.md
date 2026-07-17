@@ -8,9 +8,12 @@
 > niet-convergerende plotlijnen** — A "Het Goud van Midas", B "De Geboorte
 > van Athena", C "Prometheus en Pandora" — die elk de volledige hoofdstuk-1-
 > grammatica behandelen (zie §7.1). **Hoofdstuk 2** ("De Werken van de
-> Helden") is **deels speelbaar**: de hub + lijnen L "Latona", S "Semele" en
-> K "Kallisto" (alle drie volledig afgerond) staan er, lijn H "Herakles"
-> volgt in een latere bouwstap (zie §7.6). Er zijn 3 saveslots per leerling, een
+> Helden") is **volledig speelbaar**: alle vier lijnen staan er — L "Latona",
+> S "Semele", K "Kallisto" (alle drie volledig afgerond) en H "Herakles"
+> (bewust gedeeltelijk — zijn eerste twee werken, de rest volgt in Hoofdstuk
+> 3, zie §7.6). Dit hoofdstuk introduceert ook de Combat-bridge (§8), voor
+> het eerst gebruikt in H's gevechten tegen de Nemeïsche Leeuw en de Hydra.
+> Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
 > rest van de campagne (Hoofdstuk 3 t/m 19 + Finale) staat als metadata-skelet
@@ -42,7 +45,7 @@ browser):
 | CNS-parser + tekst/voornaamwoord-resolver | `certamen/singleplayer.js` (`CNSParser`, `SpTextResolver`) | ✅ werkend |
 | Proloog-content in CNS-formaat | `certamen/singleplayer-data.js` (`SP_PROLOOG_CNS`, 14 scènes) | ✅ werkend |
 | **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 30 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
-| **Hoofdstuk 2**: hub + lijnen L "Latona" + S "Semele" + K "Kallisto" (alle drie afgerond) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | 🚧 deels — L/S/K getest en volledig doorgespeeld; lijn H nog te schrijven (zie §7.6) |
+| **Hoofdstuk 2**: hub + alle vier lijnen (L/S/K afgerond, H gedeeltelijk) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | ✅ werkend — alle vier lijnen + fragmenten-gate + Athena-mentor + Combat-bridge getest, incl. beide gevechten (Leeuw/Hydra) volledig uitgespeeld (zie §7.6) |
 | Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
 | **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
@@ -627,7 +630,7 @@ passen/aan te vullen):
 Zolang de video er niet is, blijft `SCREENS.spIntro` de facto de "opening"
 van het spel.
 
-### 7.6 Hoofdstuk 2: "De Werken van de Helden" — Hera's vier gezichten (**deels gebouwd**)
+### 7.6 Hoofdstuk 2: "De Werken van de Helden" — Hera's vier gezichten (**gebouwd**)
 
 Thema: Hera (Juno) toont zich in dit hoofdstuk achtereenvolgens als
 **achtervolger** (Latona), **vervloeker** (Kallisto), **manipulator**
@@ -643,11 +646,29 @@ singleplayer-data.js) i.p.v. Hoofdstuk 1's drie:
   net als Latona's lijn — één persoon-id per godheid ongeacht welke naam een
   lijn gebruikt, nu met een `full`-tekst over haar jachtband). Rondt volledig
   af. **Geschreven.**
-- **H — Herakles**: **bewust onvolledig** — dekt in dit hoofdstuk alleen zijn
-  geboorte + de eerste van zijn twaalf werken; de rest volgt in Hoofdstuk 3
-  (`SP_CAMPAIGN` ch3: "Apotheose van Herakles"). Zijn Hoofdstuk-2-segment
-  levert wél al zijn eigen fragment op (zie hieronder) — alleen zijn volledige
-  verhaal is nog niet af. **Nog te bouwen.**
+- **H — Herakles** (`CH2_H01`-`H12`): **bewust onvolledig, en de langste lijn van
+  de vier** — dekt zijn geboorte (inclusief de slangen-in-de-wieg-episode),
+  zijn huwelijk met Megara, de grote plottwist (Hera's waanzin drijft hem
+  ertoe zijn eigen vrouw en kinderen te doden — bewust NOOIT expliciet in
+  beeld gebracht, zie hieronder), zijn boetedoening bij het orakel van
+  Delphi, en de eerste twee van zijn twaalf werken (Nemeïsche Leeuw + Hydra
+  van Lerna, **Chronica's eerste gebruik van de Combat-bridge**, §8). De rest
+  van de twaalf werken volgt in Hoofdstuk 3 (`SP_CAMPAIGN` ch3: "Apotheose
+  van Herakles"). Zijn Hoofdstuk-2-segment levert wél al zijn eigen fragment
+  op (zie hieronder), en een eigen eretitel (`ch2_herakles_eerste_taken`) —
+  alleen zijn volledige verhaal is nog niet af. **Geschreven.**
+
+  **Behandeling van de plottwist** (`CH2_H06`, "De Daad die Niet Ongedaan Kan
+  Worden"): de kindermoord zelf staat NERGENS op de pagina — de scène knipt
+  van het moment waarop de waanzin hem overweldigt naar de stilte erna, en
+  legt alle nadruk op zijn ontzetting en verdriet bij het besef, niet op de
+  daad zelf. Dat is bewust dezelfde aanpak als de klassieke bronnen zelf
+  (Euripides' `Herakles` toont de moord ook niet op het toneel, enkel het
+  resultaat) — én de enige manier om zo'n zwaar thema serieus te nemen zonder
+  in strijd te komen met de "nooit grimmig of horror-achtig, ook niet bij
+  oorlog of gevaar"-regel uit `gemini-comic-style.md` (die geldt voor
+  illustraties, maar de onderliggende toon-eis geldt hier net zo goed voor
+  de verteltekst zelf).
 
 #### Herinneringsfragmenten (Fragmentum Memoriae) — het nieuwe hoofdstukgate
 
@@ -763,9 +784,11 @@ In afgesproken bouwvolgorde:
    je meteen aanvallen. `COMBAT:`-sectie (bare vijand-id uit
    `SP_COMBAT_ENEMIES`, singleplayer-data.js) start het gevecht
    (`spStartCombatFromScene`/`SCREENS.spCombat`); vragen komen uit de al
-   geleerde vocabulaire (`SP_STATE.vocab`). Twee vijanden staan al klaar
-   (`nemeische_leeuw`, `hydra`) voor wanneer Herakles' Hoofdstuk-2-lijn wordt
-   geschreven — nog geen scène gebruikt ze. Vijand-sprite via
+   geleerde vocabulaire (`SP_STATE.vocab`). Beide voorbereide vijanden
+   (`nemeische_leeuw`, `hydra`) worden inmiddels ook echt gebruikt: Herakles'
+   Hoofdstuk-2-lijn (`CH2_H08`/`CH2_H10`-`H11`) is Chronica's eerste scène die
+   de Combat-bridge daadwerkelijk inzet, met beide gevechten volledig
+   uitgespeeld getest. Vijand-sprite via
    `spCombatSpriteHTML()`: romp (`img`) + bij de Hydra ook de losse
    `heads`-laag erbovenop, exact dezelfde absolute-stapel-truc en
    `ceil((hp/maxHp)*7)`-formule als Boss Battle se `bmBossSpriteHTML`/

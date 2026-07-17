@@ -147,7 +147,7 @@ const SP_CAMPAIGN = [
     zijverhalen:"Bellerophon & Chimaira (A-tier, ideale RPG-boss); Atalanta + Calydonische ever (A-tier, boss fight)" },
   { id:"ch3", nr:3, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Beloften van Goden en Mensen",
     periode:"Mythische wereld",
-    verhaal:"De speler ontdekt relaties tussen goden en mensen. Bezit, afkomst en geschenken worden belangrijk.",
+    verhaal:"De speler ontdekt relaties tussen goden en mensen. Bezit, afkomst en geschenken worden belangrijk. Herakles' lijn gaat verder waar Hoofdstuk 2 ophield (Leeuw + Hydra volbracht, 2/12 werken) en rondt zijn overige taken af.",
     pallas:"Les 5: Apotheose van Herakles", minerva:"Hoofdstuk 4: Jupiter en Io",
     grammatica:"Genitivus, dativus, bijstelling",
     gameplay:"Relaties begrijpen, voorwerpen koppelen aan eigenaars",
@@ -506,6 +506,20 @@ const SP_PUZZLES = {
     vraag:"Hera's vloek verandert Kallisto voorgoed. “Callisto ursa ___” — welke vorm van esse (zijn) past hier?",
     opties:["est","sunt","es","sum"], antwoord:"est",
     hint:"Derde persoon enkelvoud van esse is 'est'." },
+
+  // ---- Hoofdstuk 2, Lijn H: Herakles (loopt door in Hoofdstuk 3) ----
+  puzzle_ch2h_praesens: { type:"multiple-choice",
+    vraag:"Als baby wurgt Herakles moeiteloos de slangen die Hera naar zijn wieg stuurde. “Infans serpentem ___” — welke vorm van necare (doden) past hier, praesens 3e persoon enkelvoud?",
+    opties:["necat","necant","necas","necatis"], antwoord:"necat",
+    hint:"Praesens 3e persoon enkelvoud van een eerste-conjugatiewerkwoord (op -are) eindigt op -at." },
+  puzzle_ch2h_imperativus: { type:"multiple-choice",
+    vraag:"Het orakel van Delphi spreekt Herakles' boetedoening uit. Wat draagt het hem op?",
+    opties:["Servi Eurystheo!","Servis Eurystheo!","Servire Eurystheo!","Servit Eurystheo!"], antwoord:"Servi Eurystheo!",
+    hint:"Servire is een vierde-conjugatiewerkwoord — de imperativus enkelvoud laat gewoon de -re van de infinitief vallen: servi!" },
+  puzzle_ch2h_posse: { type:"multiple-choice",
+    vraag:"Zonder vuur om de wonden dicht te schroeien, blijft de Hydra onoverwinnelijk. “Nemo eam sine igne vincere ___” — welke vorm van posse (kunnen) past hier?",
+    opties:["potest","possunt","potes","possum"], antwoord:"potest",
+    hint:"Derde persoon enkelvoud van posse is 'potest'." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -565,6 +579,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Semele, prinses van Thebe en minnares van Jupiter, werd door de jaloerse Juno — vermomd als haar eigen oude voedster — overgehaald om haar minnaar te vragen zich in zijn ware goddelijke gedaante te tonen. Gebonden aan een onherroepelijke eed bij de Styx kon Jupiter niet weigeren: zijn verzengende glorie doodde de sterfelijke Semele op slag. Uit de as redde hij hun ongeboren kind en naaide het in zijn eigen dij, waar het de resterende maanden voldragen werd — zo werd Bacchus de enige god die tweemaal geboren werd." },
   codex_metamorfose_kallisto: { cat:"mythologie", titel:"De Metamorfose van Kallisto",
     tekst:"Kallisto, een jachtgezellin van Artemis gebonden aan dezelfde eed van kuisheid als haar godin, werd verleid door Zeus, die zich vermomde als Artemis zelf om haar wantrouwen te omzeilen. Toen haar zwangerschap aan het licht kwam, verbande Artemis haar uit de band — zonder de ware toedracht te kennen — en veranderde de jaloerse Hera haar in een berin. Jaren later, toen haar eigen zoon Arcas haar bijna doodde tijdens de jacht, greep Zeus alsnog in en plaatste beiden onder de sterren: Kallisto als de Grote Beer, Arcas als de Kleine Beer." },
+  codex_herakles_beproevingen: { cat:"mythologie", titel:"Herakles: Waanzin en de Eerste Beproevingen",
+    tekst:"Herakles, zoon van Zeus en de sterfelijke Alcmene, werd al vóór zijn geboorte door Hera gehaat — ze vertraagde zijn geboorte zodat zijn neef Eurystheus eerder ter wereld kwam en het geboorterecht op de troon van Mycene kreeg. Als baby wurgde Herakles moeiteloos twee slangen die Hera naar zijn wieg had gestuurd, een eerste teken van de kracht die hem zou definiëren. Als volwassen man, getrouwd met Megara en vader van hun kinderen, werd hij door Hera getroffen met een waanzin die hem zijn eigen gezin deed doden. Uit wroeging raadpleegde hij het orakel van Delphi, dat hem opdroeg tien jaar in dienst van Eurystheus beproevingen te volbrengen als boetedoening — een getal dat later op twaalf zou uitkomen, nadat Eurystheus twee ervan afkeurde. De eerste twee: de onkwetsbare Nemeïsche Leeuw, gewurgd met blote handen, en de veelkoppige Hydra van Lerna, alleen verslagen met de hulp van vuur." },
 
   // LET OP: dezelfde "vroeg ontgrendelen"-regel als Hoofdstuk 1 (§7.2.1 in
   // Chronica.md) — deze drie entries worden al bij CH2_000 gezet, vóór de
@@ -648,6 +664,11 @@ const SP_CODEX_PERSONS = {
   kallisto: { nm:"Kallisto", epithet:"Nimf, jachtgezellin van Artemis",
     intro:"Een toegewijde jachtgezellin van Artemis, gebonden aan dezelfde eed van kuisheid als haar godin — tot Zeus haar op een dag alleen aantreft.",
     full:"Verleid door Zeus, die zich vermomde als Artemis zelf, verbannen uit de jachtband zodra haar zwangerschap aan het licht kwam, en door de jaloerse Hera veranderd in een berin — Kallisto's verhaal eindigt uiteindelijk aan de hemel, waar Zeus haar en haar zoon Arcas onder de sterren plaatste als de Grote en de Kleine Beer." },
+  herakles: { nm:"Herakles (Hercules)", epithet:"Zoon van Zeus, sterkste sterveling ooit",
+    intro:"Een kind dat als baby al twee slangen wurgde die Hera naar zijn wieg had gestuurd — een eerste teken van een kracht die de hele klassieke wereld zal kennen, en van een godin die hem al haatte voor hij kon spreken.",
+    full:"Getroffen door een door Hera opgelegde waanzin doodde Herakles zijn eigen vrouw Megara en hun kinderen — een daad die hem, eenmaal weer bij zinnen, verwoestte. Op advies van het orakel van Delphi diende hij zijn neef Eurystheus als boetedoening en volbracht de eerste van wat uiteindelijk twaalf beproevingen zouden worden: de Nemeïsche Leeuw gewurgd met blote handen, de Hydra van Lerna verslagen met vuur. Zijn verhaal — en zijn straf — is nog lang niet voorbij." },
+  megara: { nm:"Megara", epithet:"Prinses van Thebe, vrouw van Herakles",
+    intro:"De vrouw van Herakles en moeder van zijn kinderen, hem gegeven als beloning nadat hij Thebe had verdedigd tegen een belegerend leger — tot Hera's wraak alles wat ze samen hadden opbouwde in één ogenblik verwoestte." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -738,6 +759,9 @@ const SP_VOCAB_ENTRIES = {
   latijn_abire:     { taal:"latijn", woord:"abire (abi!)", betekenis:"weggaan, vertrekken" },
   latijn_ursa:      { taal:"latijn", woord:"ursa, ursae", betekenis:"berin" },
   latijn_silva:     { taal:"latijn", woord:"silva, silvae", betekenis:"bos, woud" },
+  latijn_necare:    { taal:"latijn", woord:"necare (necat)", betekenis:"doden" },
+  latijn_servire:   { taal:"latijn", woord:"servire (servi!)", betekenis:"dienen" },
+  latijn_vincere:   { taal:"latijn", woord:"vincere (vincit)", betekenis:"overwinnen" },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -1942,6 +1966,7 @@ CHOICES:
 * Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is -> CH2_L01
 * Volg het lot van Semele, een prinses van Thebe die niet weet wie haar minnaar werkelijk is -> CH2_S01
 * Volg Kallisto, een jachtgezellin van Artemis die niemand kan vertrouwen wat ze ziet -> CH2_K01
+* Volg Herakles, Zeus' sterfelijke zoon die Hera al haat sinds voor zijn geboorte -> CH2_H01
 * Spreek het Orakel aan, nu alle vier de verhalen zijn gehoord [REQUIRE:fragments=4] -> CH2_ATHENA
 
 END
@@ -2461,6 +2486,230 @@ CHOICES:
 
 END
 
+=== SCENE: CH2_H01 ===
+
+TITLE:
+Herakles, Zoon van Zeus
+
+TEXT:
+Herakles is de zoon van Zeus en de sterfelijke Alcmene — en Hera haatte hem al voor hij geboren werd. Toen zijn geboorte naderde, liet Zeus zich ontvallen dat een kind dat die nacht ter wereld zou komen ooit over heel Mycene zou heersen. Hera, ziedend, vertraagde Herakles' geboorte en versnelde die van zijn neef Eurystheus, zodat het geboorterecht naar hem ging in plaats van naar haar mans onwettige zoon.
+
+Vanaf dat eerste moment staat de rest van Herakles' leven al vast: een man met de kracht van een god, gedwongen te dienen onder een neef die hij met gemak zou kunnen verpletteren — puur omdat een uur het verschil maakte.
+
+PERSON:
+herakles:intro, zeus:intro, hera:intro
+
+CHOICES:
+
+* Kijk naar zijn eerste dagen als baby -> CH2_H02
+
+END
+
+=== SCENE: CH2_H02 ===
+
+TITLE:
+De Slangen in de Wieg
+
+TEXT:
+Niet tevreden met enkel het geboorterecht te hebben afgepakt, stuurt Hera twee giftige slangen naar Herakles' wieg terwijl hij nog maar enkele maanden oud is. Zijn tweelingbroer Iphikles, gewoon sterfelijk verwekt, gilt van doodsangst zodra de slangen zich om de spijlen kronkelen.
+
+Herakles daarentegen grijpt, zonder enig teken van angst, een slang in elke hand — en wurgt ze allebei voor iemand kan ingrijpen, lachend alsof het een spelletje betreft.
+
+PUZZLE:
+puzzle_ch2h_praesens
+
+CHOICES:
+
+* Kijk hoe de familie op dit voorteken reageert -> CH2_H03
+
+END
+
+=== SCENE: CH2_H03 ===
+
+TITLE:
+Een Voorteken
+
+TEXT:
+Het nieuws verspreidt zich snel: een baby die slangen wurgt alsof het niets is, kan onmogelijk een gewoon kind zijn. Sommigen in Thebe fluisteren vol ontzag over wat deze jongen ooit zal kunnen volbrengen; anderen worden juist stil van een angst die ze niet meteen kunnen verklaren.
+
+CHOICES:
+
+* Voel bewondering voor wat dit kind ooit zal worden [CLEMENTIA] -> CH2_H04
+* Voel onbehagen — een kracht als deze trekt altijd rampspoed aan [SEVERITAS] -> CH2_H04
+
+END
+
+=== SCENE: CH2_H04 ===
+
+TITLE:
+Een Vrouw en Kinderen
+
+TEXT:
+Herakles groeit op tot een man wiens kracht geen weerga kent, en wanneer Thebe wordt belegerd, is hij het die de stad verdedigt en de aanvallers verjaagt. Als dank geeft koning Kreon hem zijn dochter Megara tot vrouw. Jaren van eenvoudig, oprecht geluk volgen: een gezin, kinderen die opgroeien, een vader die — ondanks zijn goddelijke afkomst — precies het leven leidt dat hij zich nooit had durven wensen.
+
+Voor het eerst in zijn leven lijkt Hera's schaduw ver weg.
+
+CHOICES:
+
+* Blijf nog even bij dit geluk stilstaan, voor het te laat is -> CH2_H05
+
+END
+
+=== SCENE: CH2_H05 ===
+
+TITLE:
+Hera's Waanzin
+
+TEXT:
+Hera, die nooit vergeet en nooit vergeeft, kan dit geluk niet langer verdragen. Ze stuurt Lyssa, de geest van de razernij zelf, om Herakles' geest te grijpen — niet met een zwaard, niet met een monster, maar met iets veel wreders: zijn eigen verstand, dat plotseling niet meer te vertrouwen is.
+
+Je voelt het onheil aankomen, onontkoombaar, lang voor Herakles zelf ook maar iets in de gaten heeft.
+
+CHOICES:
+
+* Wil wanhopig ingrijpen, wetend wat er komen gaat [CLEMENTIA] -> CH2_H06
+* Weet dat dit een noodlot is dat niemand had kunnen afwenden [SEVERITAS] -> CH2_H06
+
+END
+
+=== SCENE: CH2_H06 ===
+
+TITLE:
+De Daad die Niet Ongedaan Kan Worden
+
+TEXT:
+De waanzin grijpt Herakles zo volledig dat de wereld om hem heen vervormt tot iets wat niet meer herkenbaar is — vijanden waar geen vijanden zijn, gevaar waar alleen zijn eigen gezin staat. Wat er in die verduisterde ogenblikken precies gebeurt, zal hij zich later nooit meer helder kunnen herinneren, en jij ziet het evenmin — enkel de stilte die erop volgt.
+
+Wanneer het licht in zijn ogen terugkeert, staat Herakles alleen in een huis dat niet langer een thuis is. Megara. De kinderen. Allemaal weg, door zijn eigen hand, in een waanzin die niet de zijne was maar wel zijn daad. Het geluid dat uit hem komt wanneer het besef doordringt, is niet het geluid van een held.
+
+CHOICES:
+
+* Blijf bij hem, ook al is er niets meer te zeggen -> CH2_H07
+
+END
+
+=== SCENE: CH2_H07 ===
+
+TITLE:
+Het Orakel van Delphi
+
+TEXT:
+Verwoest door wat hij heeft aangericht, en niet in staat zichzelf te vergeven, reist Herakles naar het orakel van Delphi om te vragen hoe — of ooit — hij zich van deze schuld kan reinigen. Het antwoord dat hij krijgt is even eenvoudig als zwaar: hij moet zich onderwerpen aan zijn neef Eurystheus, koning van Mycene, en tien jaar lang volbrengen wat die hem opdraagt.
+
+Eurystheus, die Herakles altijd al vreesde en benijdde tegelijk, aanvaardt de opdracht met nauwelijks verholen genoegen — eindelijk een excuus om de sterkste man ter wereld het onmogelijke te laten proberen.
+
+PUZZLE:
+puzzle_ch2h_imperativus
+
+CHOICES:
+
+* Wacht af welke eerste beproeving hem te wachten staat -> CH2_H08
+
+END
+
+=== SCENE: CH2_H08 ===
+
+TITLE:
+De Eerste Taak: de Nemeïsche Leeuw
+
+TEXT:
+De eerste beproeving voert Herakles naar de vallei van Nemea, waar een leeuw huist wiens huid door geen enkel wapen — geen zwaard, geen speer, geen pijl — kan worden doorboord. Jarenlang heeft het beest de omliggende dorpen geterroriseerd, en generaties jagers zijn met hun wapens tevergeefs tegen die onverwoestbare vacht gebotst.
+
+Herakles, die inmiddels heeft geleerd dat niet elke vijand met staal te verslaan is, stapt de grot van het beest in gewapend met niet veel meer dan zijn eigen twee handen.
+
+COMBAT:
+nemeische_leeuw
+
+CHOICES:
+
+* Kijk hoe hij zich herstelt van het gevecht -> CH2_H09
+
+END
+
+=== SCENE: CH2_H09 ===
+
+TITLE:
+Ontsnapt aan de Klauwen
+
+TEXT:
+Waar geen wapen doorheen kwam, bleek Herakles' eigen kracht wél genoeg: hij wurgt de leeuw met blote handen, precies zoals hij ooit als baby twee slangen wurgde. Vanaf die dag draagt hij de onkwetsbare huid van het beest als mantel — het enige harnas dat hem ooit nodig zal zijn, en een teken voor iedereen die hem ziet aankomen dat de Nemeïsche Leeuw niet langer bestaat.
+
+Eurystheus, die eigenlijk had verwacht dat deze eerste taak Herakles' laatste zou zijn, is zo geschokt door zijn terugkeer dat hij voortaan een grote bronzen pot laat klaarzetten om zich in te verstoppen wanneer Herakles nadert.
+
+CHOICES:
+
+* Vraag je af wat de volgende beproeving zal zijn -> CH2_H10
+
+END
+
+=== SCENE: CH2_H10 ===
+
+TITLE:
+De Tweede Taak: de Hydra van Lerna
+
+TEXT:
+De tweede beproeving is nog wreder: de Hydra van Lerna, een veelkoppig moerasmonster dat voor elke afgehakte kop er meteen twee nieuwe laat aangroeien. Een gewoon zwaard maakt het beest dus alleen maar gevaarlijker, nooit zwakker. Herakles neemt zijn neef Iolaos mee als wagenmenner en helper — en samen bedenken ze de enige oplossing die werkt: bij elke kop die Herakles afhakt, schroeit Iolaos de wond onmiddellijk dicht met een fakkel, voor er nieuwe koppen kunnen aangroeien.
+
+PUZZLE:
+puzzle_ch2h_posse
+
+CHOICES:
+
+* Volg hen het moeras in -> CH2_H11
+
+END
+
+=== SCENE: CH2_H11 ===
+
+TITLE:
+In het Moeras
+
+TEXT:
+Kop na kop valt, geschroeid voor er iets nieuws kan aangroeien, tot alleen de laatste, onsterfelijke kop overblijft — die Herakles onder een rotsblok begraaft in plaats van hem te doden, want onsterfelijk laat zich nu eenmaal niet vernietigen.
+
+COMBAT:
+hydra
+
+CHOICES:
+
+* Kijk hoe het gevecht wordt beoordeeld -> CH2_H12
+
+END
+
+=== SCENE: CH2_H12 ===
+
+TITLE:
+Tien Wordt Twaalf
+
+TEXT:
+Eurystheus, bij het horen van dit verslag, weigert de Hydra als volwaardige beproeving te erkennen — Herakles kreeg immers hulp van Iolaos, en dat was, vindt de koning, niet eerlijk gespeeld. Wat als tien beproevingen begon, dreigt daardoor uiteindelijk op twaalf uit te komen, naarmate Eurystheus ook andere taken om vergelijkbare technische redenen zal afkeuren.
+
+Twee beproevingen liggen achter je: de leeuw, gewurgd; de Hydra, verslagen met vuur. Herakles' schuld is nog lang niet ingelost, en de rest van zijn beproevingen wachten nog ergens verderop in de tijd — maar voor het eerst sinds die verschrikkelijke dag voelt hij iets wat op vooruitgang lijkt.
+
+CODEX:
+codex_herakles_beproevingen
+
+PERSON:
+herakles:full, megara:intro
+
+EERETITEL:
+ch2_herakles_eerste_taken
+
+QUEST:
+quest_boodschapper_van_kronos: lijn Herakles — eerste twee beproevingen volbracht (Hoofdstuk 2)
+
+FLAG:
+ch2_lijn_herakles=true; herakles_taken_voltooid=2
+
+FRAGMENT:
+herakles
+
+CHOICES:
+
+* Keer terug — er wachten nog meer verhalen -> CH2_000
+
+END
+
 === SCENE: CH2_ATHENA ===
 
 TITLE:
@@ -2497,7 +2746,7 @@ CODEX:
 codex_grammatica_ch2_overzicht
 
 VOCAB:
-latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens, latijn_currere, latijn_abire, latijn_ursa, latijn_silva
+latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens, latijn_currere, latijn_abire, latijn_ursa, latijn_silva, latijn_necare, latijn_servire, latijn_vincere
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 2 volledig voltooid
