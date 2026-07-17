@@ -492,6 +492,20 @@ const SP_PUZZLES = {
     vraag:"Het licht van Jupiters ware gedaante is dodelijk voor een sterveling. “Ignis nimium potens ___” — welke vorm van esse (zijn) past hier?",
     opties:["est","sunt","es","sum"], antwoord:"est",
     hint:"Derde persoon enkelvoud van esse is 'est'." },
+
+  // ---- Hoofdstuk 2, Lijn K: Kallisto ----
+  puzzle_ch2k_imperativus: { type:"multiple-choice",
+    vraag:"Artemis, ontzet door wat ze ontdekt, verstoot Kallisto uit haar gezelschap. Wat roept ze?",
+    opties:["Abi!","Abit!","Abire!","Abis!"], antwoord:"Abi!",
+    hint:"Abire is een samengesteld werkwoord van ire (gaan) — de imperativus enkelvoud is net zo kort als bij ire zelf: 'i!'." },
+  puzzle_ch2k_praesens: { type:"multiple-choice",
+    vraag:"Kallisto vlucht, alleen en verstoten, het woud in. “Callisto per silvas ___” — welke vorm van currere (rennen) past hier, praesens 3e persoon enkelvoud?",
+    opties:["currit","currunt","curris","curritis"], antwoord:"currit",
+    hint:"Praesens 3e persoon enkelvoud van een derde-conjugatiewerkwoord (op -ere) eindigt op -it." },
+  puzzle_ch2k_esse: { type:"multiple-choice",
+    vraag:"Hera's vloek verandert Kallisto voorgoed. “Callisto ursa ___” — welke vorm van esse (zijn) past hier?",
+    opties:["est","sunt","es","sum"], antwoord:"est",
+    hint:"Derde persoon enkelvoud van esse is 'est'." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -549,6 +563,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Latona, een titanide en minnares van Jupiter, werd door de jaloerse Juno vervloekt: geen enkel stuk vaste grond mocht haar ooit een plek geven om te bevallen. Achtervolgd door de python Juno op haar afstuurde, vond ze uiteindelijk toevlucht op Delos — een rondzwervend eiland dat, omdat het aan geen enkel koninkrijk verankerd lag, strikt genomen buiten de vloek viel. Daar bracht ze de tweeling Apollo en Diana ter wereld, en verankerde Delos zichzelf voorgoed in de golven." },
   codex_geboorte_bacchus: { cat:"mythologie", titel:"De Geboorte van Bacchus (uit Jupiters Dij)",
     tekst:"Semele, prinses van Thebe en minnares van Jupiter, werd door de jaloerse Juno — vermomd als haar eigen oude voedster — overgehaald om haar minnaar te vragen zich in zijn ware goddelijke gedaante te tonen. Gebonden aan een onherroepelijke eed bij de Styx kon Jupiter niet weigeren: zijn verzengende glorie doodde de sterfelijke Semele op slag. Uit de as redde hij hun ongeboren kind en naaide het in zijn eigen dij, waar het de resterende maanden voldragen werd — zo werd Bacchus de enige god die tweemaal geboren werd." },
+  codex_metamorfose_kallisto: { cat:"mythologie", titel:"De Metamorfose van Kallisto",
+    tekst:"Kallisto, een jachtgezellin van Artemis gebonden aan dezelfde eed van kuisheid als haar godin, werd verleid door Zeus, die zich vermomde als Artemis zelf om haar wantrouwen te omzeilen. Toen haar zwangerschap aan het licht kwam, verbande Artemis haar uit de band — zonder de ware toedracht te kennen — en veranderde de jaloerse Hera haar in een berin. Jaren later, toen haar eigen zoon Arcas haar bijna doodde tijdens de jacht, greep Zeus alsnog in en plaatste beiden onder de sterren: Kallisto als de Grote Beer, Arcas als de Kleine Beer." },
 
   // LET OP: dezelfde "vroeg ontgrendelen"-regel als Hoofdstuk 1 (§7.2.1 in
   // Chronica.md) — deze drie entries worden al bij CH2_000 gezet, vóór de
@@ -624,10 +640,14 @@ const SP_CODEX_PERSONS = {
   apollo: { nm:"Apollo", epithet:"God van licht, muziek en profetie",
     intro:"De zoon van Latona en Jupiter, amper geboren en al omgeven door een licht dat zijn naam voorgoed zal dragen." },
   diana: { nm:"Diana (Artemis)", epithet:"Godin van de jacht en de wildernis",
-    intro:"Latona's dochter, geboren vlak vóór haar tweelingbroer Apollo — en volgens sommige verhalen was zij het die haar moeder meteen daarna bijstond bij zijn geboorte." },
+    intro:"Latona's dochter, geboren vlak vóór haar tweelingbroer Apollo — en volgens sommige verhalen was zij het die haar moeder meteen daarna bijstond bij zijn geboorte.",
+    full:"Diana leidt een groep jachtgezellinnen die, net als zijzelf, een eed van kuisheid hebben afgelegd — een eed die ze onverbiddelijk handhaaft, zelfs wanneer een van hen (zoals Kallisto) buiten haar eigen schuld wordt misleid. Bij de Grieken heet ze Artemis." },
   semele: { nm:"Semele", epithet:"Prinses van Thebe, minnares van Jupiter",
     intro:"Een sterfelijke prinses, dochter van koning Cadmus van Thebe, die 's nachts bezocht wordt door een minnaar die zijn ware aard voor haar verborgen houdt.",
     full:"Semele, opgehitst door de als voedster vermomde Juno, eiste dat Jupiter zich in zijn ware goddelijke gedaante zou tonen — gebonden aan een eed bij de Styx kon hij niet weigeren, en zijn verzengende glorie doodde haar op slag. Uit de as redde Jupiter hun ongeboren kind, dat hij in zijn eigen dij naaide om de zwangerschap te voltooien: zo werd Bacchus geboren." },
+  kallisto: { nm:"Kallisto", epithet:"Nimf, jachtgezellin van Artemis",
+    intro:"Een toegewijde jachtgezellin van Artemis, gebonden aan dezelfde eed van kuisheid als haar godin — tot Zeus haar op een dag alleen aantreft.",
+    full:"Verleid door Zeus, die zich vermomde als Artemis zelf, verbannen uit de jachtband zodra haar zwangerschap aan het licht kwam, en door de jaloerse Hera veranderd in een berin — Kallisto's verhaal eindigt uiteindelijk aan de hemel, waar Zeus haar en haar zoon Arcas onder de sterren plaatste als de Grote en de Kleine Beer." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -714,6 +734,10 @@ const SP_VOCAB_ENTRIES = {
   latijn_ostendere: { taal:"latijn", woord:"ostendere (ostende!)", betekenis:"tonen, laten zien" },
   latijn_ignis:     { taal:"latijn", woord:"ignis, ignis", betekenis:"vuur" },
   latijn_potens:    { taal:"latijn", woord:"potens, potens, potens", betekenis:"machtig" },
+  latijn_currere:   { taal:"latijn", woord:"currere (currit)", betekenis:"rennen" },
+  latijn_abire:     { taal:"latijn", woord:"abire (abi!)", betekenis:"weggaan, vertrekken" },
+  latijn_ursa:      { taal:"latijn", woord:"ursa, ursae", betekenis:"berin" },
+  latijn_silva:     { taal:"latijn", woord:"silva, silvae", betekenis:"bos, woud" },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -1917,6 +1941,7 @@ CHOICES:
 
 * Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is -> CH2_L01
 * Volg het lot van Semele, een prinses van Thebe die niet weet wie haar minnaar werkelijk is -> CH2_S01
+* Volg Kallisto, een jachtgezellin van Artemis die niemand kan vertrouwen wat ze ziet -> CH2_K01
 * Spreek het Orakel aan, nu alle vier de verhalen zijn gehoord [REQUIRE:fragments=4] -> CH2_ATHENA
 
 END
@@ -2265,6 +2290,177 @@ CHOICES:
 
 END
 
+=== SCENE: CH2_K01 ===
+
+TITLE:
+Kallisto, Nimf van Artemis
+
+TEXT:
+Kallisto is een van Artemis' meest toegewijde jachtgezellinnen — een groep nimfen die, net als hun godin, een plechtige eed van kuisheid heeft afgelegd. Samen jagen ze door de bergen van Arcadië, vrij en ongebonden, zonder ooit een man toe te laten in hun kring.
+
+Op een middag, ver van de rest van de groep, treft Zeus haar alleen aan terwijl ze uitrust bij een bron — en ziet meteen een kans die hij niet wil laten liggen.
+
+PERSON:
+kallisto:intro, diana:intro
+
+CHOICES:
+
+* Kijk toe wat Zeus van plan is -> CH2_K02
+
+END
+
+=== SCENE: CH2_K02 ===
+
+TITLE:
+Vermomd als Artemis
+
+TEXT:
+Zeus, die weet dat Kallisto nooit een vreemde man zou vertrouwen, neemt de gedaante aan van Artemis zelf — de enige gestalte waarvoor Kallisto haar waakzaamheid volledig laat zakken. Onder die vermomming misleidt hij haar, en pas wanneer hij weer verdwijnt, beseft ze dat er iets grondig mis is met wat ze zojuist heeft meegemaakt.
+
+Ze vertelt het aan niemand. Wie zou haar geloven dat "Artemis" haar bedrogen heeft?
+
+CHOICES:
+
+* Voel woede namens Kallisto, die niets van dit alles kon vermoeden [CLEMENTIA] -> CH2_K03
+* Blijf nuchter — dit is hoe goden nu eenmaal met stervelingen omgaan [SEVERITAS] -> CH2_K03
+
+END
+
+=== SCENE: CH2_K03 ===
+
+TITLE:
+Een Zoon, Arcas
+
+TEXT:
+Maanden gaan voorbij, en Kallisto verbergt haar zwangerschap zo lang ze kan — tot ze in het geheim bevalt van een zoon, Arcas, ergens diep in het woud, ver van de rest van de band. Even is er alleen opluchting: het kind is gezond, en niemand heeft nog iets gemerkt.
+
+CHOICES:
+
+* Volg haar terug naar de groep -> CH2_K04
+
+END
+
+=== SCENE: CH2_K04 ===
+
+TITLE:
+Ontdekt door de Band
+
+TEXT:
+Bij de volgende rituele badplaats, waar de hele groep zich ontkleedt om zich te wassen, valt het haar collega-nimfen eindelijk op wat Kallisto al maanden verbergt. Artemis, die haar eigen eed van kuisheid onverbiddelijk handhaaft — zonder de ware toedracht ooit te kennen — kijkt haar aan met een mengeling van verraden vertrouwen en koude woede.
+
+PUZZLE:
+puzzle_ch2k_imperativus
+
+CHOICES:
+
+* Kijk toe hoe Kallisto de groep verlaat -> CH2_K05
+
+END
+
+=== SCENE: CH2_K05 ===
+
+TITLE:
+Op de Vlucht
+
+TEXT:
+Alleen, verstoten uit de enige gemeenschap die ze ooit heeft gekend, en met een pasgeboren zoon om voor te zorgen, vlucht Kallisto de bergen in — weg van iedereen die haar ooit vertrouwde, weg van de plek die ooit haar thuis was.
+
+PUZZLE:
+puzzle_ch2k_praesens
+
+CHOICES:
+
+* Blijf haar volgen, ondanks alles -> CH2_K06
+
+END
+
+=== SCENE: CH2_K06 ===
+
+TITLE:
+Hera's Ontdekking
+
+TEXT:
+Hera, die van meet af aan had vermoed dat haar man weer iets had uitgespookt, spoort uiteindelijk de volledige waarheid op — en richt haar woede, zoals zo vaak, niet op Zeus, maar op de vrouw die hij misleidde en gebruikte.
+
+CHOICES:
+
+* Hoop in stilte dat Hera deze ene keer genade toont [CLEMENTIA] -> CH2_K07
+* Weet allang dat genade nooit Hera's stijl is geweest [SEVERITAS] -> CH2_K07
+
+END
+
+=== SCENE: CH2_K07 ===
+
+TITLE:
+Veranderd in een Berin
+
+TEXT:
+Hera verandert Kallisto in een berin — haar menselijke stem, haar gezicht, haar handen verdwijnen onder ruige vacht en klauwen, terwijl haar geest, gevangen in het lichaam van een dier dat ze nooit had willen zijn, volledig intact blijft. Ze kan niet meer spreken, niet meer huilen op een manier die iemand zou herkennen — enkel nog grommen, in een lichaam dat niet langer het hare voelt.
+
+Vanaf een verre bergkam, onzichtbaar voor iedereen behalve jou, kijkt Athena toe. Ook nu grijpt ze niet in.
+
+PUZZLE:
+puzzle_ch2k_esse
+
+PERSON:
+athena:intro
+
+CHOICES:
+
+* Volg haar spoor de jaren door -> CH2_K08
+
+END
+
+=== SCENE: CH2_K08 ===
+
+TITLE:
+Arcas, de Jager
+
+TEXT:
+Jaren gaan voorbij. Arcas groeit op, niet wetend wie zijn moeder werkelijk was, en wordt een bekwame jager in dezelfde bergen waar zij ooit rondzwierf. Op een dag kruist zijn pad dat van een grote, oude berin — zijn eigen moeder, die hem na al die jaren nog altijd herkent, ook al kan hij haar onmogelijk herkennen.
+
+Arcas, die enkel een gevaarlijk dier ziet, heft zijn speer.
+
+CHOICES:
+
+* Wacht af wat er gebeurt -> CH2_K09
+
+END
+
+=== SCENE: CH2_K09 ===
+
+TITLE:
+Onder de Sterren
+
+TEXT:
+Vlak voordat de speer haar kan doorboren, grijpt Zeus in — de enige keer in dit hele hoofdstuk dat hij zelf probeert recht te zetten wat zijn eigen onbezonnenheid heeft aangericht. Hij tilt moeder en zoon samen op naar de hemel en verandert hen in sterrenbeelden: Kallisto wordt de Grote Beer, Arcas de Kleine Beer, voor altijd naast elkaar aan het firmament, ver buiten Hera's bereik.
+
+Daar, aan de nachtelijke hemel, blijft hun verhaal zichtbaar voor iedereen die ooit omhoog kijkt en de sterren leert lezen.
+
+CODEX:
+codex_metamorfose_kallisto
+
+PERSON:
+kallisto:full, diana:full
+
+EERETITEL:
+ch2_kallisto
+
+QUEST:
+quest_boodschapper_van_kronos: lijn Kallisto afgerond (Hoofdstuk 2)
+
+FLAG:
+ch2_lijn_kallisto=true
+
+FRAGMENT:
+kallisto
+
+CHOICES:
+
+* Keer terug — er wachten nog meer verhalen -> CH2_000
+
+END
+
 === SCENE: CH2_ATHENA ===
 
 TITLE:
@@ -2301,7 +2497,7 @@ CODEX:
 codex_grammatica_ch2_overzicht
 
 VOCAB:
-latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens
+latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens, latijn_currere, latijn_abire, latijn_ursa, latijn_silva
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 2 volledig voltooid
