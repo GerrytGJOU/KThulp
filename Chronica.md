@@ -8,9 +8,9 @@
 > niet-convergerende plotlijnen** — A "Het Goud van Midas", B "De Geboorte
 > van Athena", C "Prometheus en Pandora" — die elk de volledige hoofdstuk-1-
 > grammatica behandelen (zie §7.1). **Hoofdstuk 2** ("De Werken van de
-> Helden") is **deels speelbaar**: de hub + lijnen L "Latona" en S "Semele"
-> (beide volledig afgerond) staan er, lijnen K "Kallisto"/H "Herakles" volgen
-> in een latere bouwstap (zie §7.6). Er zijn 3 saveslots per leerling, een
+> Helden") is **deels speelbaar**: de hub + lijnen L "Latona", S "Semele" en
+> K "Kallisto" (alle drie volledig afgerond) staan er, lijn H "Herakles"
+> volgt in een latere bouwstap (zie §7.6). Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
 > rest van de campagne (Hoofdstuk 3 t/m 19 + Finale) staat als metadata-skelet
@@ -42,7 +42,7 @@ browser):
 | CNS-parser + tekst/voornaamwoord-resolver | `certamen/singleplayer.js` (`CNSParser`, `SpTextResolver`) | ✅ werkend |
 | Proloog-content in CNS-formaat | `certamen/singleplayer-data.js` (`SP_PROLOOG_CNS`, 14 scènes) | ✅ werkend |
 | **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 30 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
-| **Hoofdstuk 2**: hub + lijnen L "Latona" + S "Semele" (beide afgerond) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | 🚧 deels — L/S getest en volledig doorgespeeld; lijnen K/H nog te schrijven (zie §7.6) |
+| **Hoofdstuk 2**: hub + lijnen L "Latona" + S "Semele" + K "Kallisto" (alle drie afgerond) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | 🚧 deels — L/S/K getest en volledig doorgespeeld; lijn H nog te schrijven (zie §7.6) |
 | Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
 | **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
@@ -639,7 +639,10 @@ singleplayer-data.js) i.p.v. Hoofdstuk 1's drie:
 - **S — Semele** (`CH2_S01`-`S08`): grijpt terug naar Bacchus uit Hoofdstuk 1
   lijn A (zijn eigen bio in `SP_CODEX_PERSONS.bacchus` is bijgewerkt met deze
   geboorte). Rondt volledig af. **Geschreven.**
-- **K — Kallisto**: introduceert Artemis. **Nog te bouwen.**
+- **K — Kallisto** (`CH2_K01`-`K09`): introduceert Artemis (Codex-id blijft `diana`,
+  net als Latona's lijn — één persoon-id per godheid ongeacht welke naam een
+  lijn gebruikt, nu met een `full`-tekst over haar jachtband). Rondt volledig
+  af. **Geschreven.**
 - **H — Herakles**: **bewust onvolledig** — dekt in dit hoofdstuk alleen zijn
   geboorte + de eerste van zijn twaalf werken; de rest volgt in Hoofdstuk 3
   (`SP_CAMPAIGN` ch3: "Apotheose van Herakles"). Zijn Hoofdstuk-2-segment
