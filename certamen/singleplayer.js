@@ -331,11 +331,14 @@ const CNSParser = {
     if(lines.length===0) return null;
     return { speaker:lines[0].trim(), text:lines.slice(1).join("\n").trim() };
   },
-  // Optioneel: een keuzeregel mag eindigen op [CLEMENTIA] of [SEVERITAS] vóór de
-  // "->" — een onzichtbare marker voor het Clementia/Severitas-systeem (zie
-  // spChoosePath/spHookApproach). De marker wordt uit het zichtbare label
-  // gesloopt; de speler ziet nooit dat een keuze getagd is.
-  APPROACH_TAG_RE: /\s*\[(CLEMENTIA|SEVERITAS)\]\s*$/i,
+  // Optioneel: een keuzeregel mag eindigen op [CLEMENTIA], [SEVERITAS] of
+  // [NEUTRAL] vóór de "->" — een onzichtbare marker voor het Clementia/
+  // Severitas-systeem (zie spChoosePath/spHookApproach). [NEUTRAL] markeert
+  // een derde, twijfelende optie die WEL bij dezelfde keuzeset hoort (en dus
+  // meeschudt in de weergavevolgorde, zie spPlay) maar geen punt op de
+  // Clementia/Severitas-schaal oplevert. De marker wordt uit het zichtbare
+  // label gesloopt; de speler ziet nooit dat een keuze getagd is.
+  APPROACH_TAG_RE: /\s*\[(CLEMENTIA|SEVERITAS|NEUTRAL)\]\s*$/i,
   // Optioneel: een keuzeregel mag ook eindigen op [REQUIRE:sleutel=getal] —
   // verbergt die keuze tenzij aan de voorwaarde is voldaan (zie
   // spChoiceVisible in singleplayer.js). Nu alleen "fragments" gebruikt
@@ -738,7 +741,11 @@ SCREENS.spPlay = function(){
       <div class="eyebrow l">${esc(SpTextResolver.resolve(scene.dialogue.speaker, SP_STATE))}</div>
       <p>“${esc(SpTextResolver.resolve(scene.dialogue.text, SP_STATE))}”</p>
     </div>` : "";
-  const visibleChoices = scene.choices.filter(spChoiceVisible);
+  // Bij een Clementia/Severitas/Neutraal-keuzeset wordt de volgorde bij elk
+  // bezoek opnieuw geschud (shuffle, core.js) — anders zou de vaste volgorde
+  // in de CNS-brontekst zelf al verklappen welke knop welke kant op telt.
+  let visibleChoices = scene.choices.filter(spChoiceVisible);
+  if(visibleChoices.some(c=>c.approach)) visibleChoices = shuffle(visibleChoices);
   const choicesHTML = visibleChoices.length
     ? visibleChoices.map(c=>`<button class="btn btn-gold btn-block lg" style="margin-top:8px" onclick="spChoosePath('${c.target}','${c.approach||""}')">${esc(SpTextResolver.resolve(c.label, SP_STATE))}</button>`).join("")
     : `<button class="btn btn-ghost btn-block lg" onclick="go('spSlots')">Terug naar de opslagplekken</button>`;

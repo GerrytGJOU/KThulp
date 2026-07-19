@@ -502,24 +502,35 @@ singleplayer-data.js) — anders toont de Codex alleen een kale id of niets.
 ### 7.3 Clementia/Severitas — stil "Paragon/Renegade"-systeem (**gebouwd**)
 
 Losjes geïnspireerd op Mass Effects Paragon/Renegade: bij (bijna) elke keuze
-met interpersoonlijke lading krijgt de speler twee smaken van dezelfde
-reactie — een meelevende/geduldige ("Clementia") en een nuchtere/daadkrachtige
-("Severitas") — **ook wanneer beide naar exact dezelfde volgende scène leiden**.
-Het punt is niet vertakking maar **het gevoel van karakterkeuze**, stil
-bijgehouden en NERGENS aan de speler getoond (geen HUD, geen scherm, geen
-melding) — precies zoals de Mass Effect-balkjes zelf ondubbelzinnig zichtbaar
-zijn, maar hier bewust omgekeerd: onzichtbaar, zodat het voelt als "wie ben
-ik" in plaats van "welk getal moet ik maximaliseren".
+met interpersoonlijke lading krijgt de speler drie smaken van dezelfde
+reactie — een meelevende/geduldige ("Clementia"), een nuchtere/daadkrachtige
+("Severitas") en een twijfelende, neutrale derde optie — **ook wanneer alle
+drie naar exact dezelfde volgende scène leiden**. Het punt is niet vertakking
+maar **het gevoel van karakterkeuze**, stil bijgehouden en NERGENS aan de
+speler getoond (geen HUD, geen scherm, geen melding) — precies zoals de Mass
+Effect-balkjes zelf ondubbelzinnig zichtbaar zijn, maar hier bewust
+omgekeerd: onzichtbaar, zodat het voelt als "wie ben ik" in plaats van "welk
+getal moet ik maximaliseren". De neutrale optie bestaat specifiek voor
+twijfelende spelers die zich niet in een van beide uitersten herkennen.
 
 **Mechaniek:**
-- Een keuzeregel in `CHOICES:` mag eindigen op `[CLEMENTIA]` of `[SEVERITAS]` vóór
-  de `->`, bv. `* Blijf eerst naast hem zitten [CLEMENTIA] -> CH1_A08B`. De tag
-  wordt door `CNSParser.parseChoices` (singleplayer.js) uit het zichtbare
-  label gesloopt — de speler ziet nooit `[CLEMENTIA]`/`[SEVERITAS]` op een knop.
+- Een keuzeregel in `CHOICES:` mag eindigen op `[CLEMENTIA]`, `[SEVERITAS]`
+  of `[NEUTRAL]` vóór de `->`, bv. `* Blijf eerst naast hem zitten
+  [CLEMENTIA] -> CH1_A08B`. De tag wordt door `CNSParser.parseChoices`
+  (singleplayer.js) uit het zichtbare label gesloopt — de speler ziet nooit
+  `[CLEMENTIA]`/`[SEVERITAS]`/`[NEUTRAL]` op een knop.
 - Bij een klik roept de knop `spChoosePath(target, approach)` aan (i.p.v.
   rechtstreeks `spGoCns`); die telt eerst stil op via `spHookApproach()` en
-  navigeert dan pas door. `SP_STATE.approach = {clementia, severitas}` (per
-  saveslot, net als codex/flags).
+  navigeert dan pas door. `spHookApproach()` telt alleen `CLEMENTIA`/
+  `SEVERITAS` mee — `NEUTRAL` levert bewust GEEN verschuiving op de schaal
+  op (de functie herkent het label niet en doet dan simpelweg niets).
+  `SP_STATE.approach = {clementia, severitas}` (per saveslot, net als
+  codex/flags).
+- **Volgorde wordt geschud**: `SCREENS.spPlay` (singleplayer.js) shuffelt de
+  zichtbare keuzes bij elk bezoek opnieuw (`shuffle()`, core.js) zodra minstens
+  één keuze een `approach`-tag draagt — dus Clementia/Neutraal/Severitas staan
+  nooit in een vaste, raadbare volgorde, en de brontekst zelf verraadt niet
+  welke knop welke kant op telt.
 - **Puzzel-scènes zijn uitgesloten**: `spRenderPuzzle()` gebruikt
   `scene.choices[0].target` rechtstreeks en roept `spGoCns` aan, niet
   `spChoosePath` — een `[TAG]` op een puzzelscène-keuze zou dus nooit vuren.
@@ -529,14 +540,20 @@ ik" in plaats van "welk getal moet ik maximaliseren".
   die later conditioneel reageren op de opgebouwde houding. Dat vereist wel
   eerst het `CONDITION`-mechanisme (§8) — de teller zelf werkt al, het
   *gebruik ervan* in dialoog is de volgende stap.
-- Hoofdstuk 1 heeft 13 getagde keuzeparen verspreid over de drie lijnen (zie
-  `SP_CH1_CNS`) op momenten met echte emotionele lading (bv. troosten vs.
-  doorpakken bij Midas' ineenstorting, medelijden vs. nuchterheid bij Zeus'
-  zwangerschap, meeleven vs. nieuwsgierigheid bij de geketende Prometheus) —
-  niet letterlijk op elke overgang, want een gedwongen dilemma bij bv. "trek
-  de mantel aan -> ga verder" voegt niets toe. Nieuwe hoofdstukken volgen
-  hetzelfde principe: tag waar de keuze een karakterkant laat zien, sla over
-  waar het puur een leesknop is.
+- Hoofdstuk 1 heeft 13 getagde keuzedrietallen verspreid over de drie lijnen
+  (zie `SP_CH1_CNS`) en Hoofdstuk 2 nog eens 8 (zie `SP_CH2_CNS`) — steeds op
+  momenten met echte emotionele lading (bv. troosten vs. doorpakken bij Midas'
+  ineenstorting, medelijden vs. nuchterheid bij Zeus' zwangerschap, meeleven
+  vs. nieuwsgierigheid bij de geketende Prometheus) — niet letterlijk op elke
+  overgang, want een gedwongen dilemma bij bv. "trek de mantel aan -> ga
+  verder" voegt niets toe. Nieuwe hoofdstukken volgen hetzelfde principe: tag
+  waar de keuze een karakterkant laat zien (altijd met een neutrale derde
+  optie erbij), sla over waar het puur een leesknop is.
+- Bij een enkel getagd paar dat structureel UITEENLOOPT (bv. `CH1_A08`:
+  Clementia -> `CH1_A08B` een extra tussenscène, Severitas -> direct
+  `CH1_A09`) kiest de neutrale optie altijd één van beide bestaande paden —
+  nooit een nieuw, vierde vervolg — en wordt de tekst zo geschreven dat dat
+  natuurlijk aanvoelt (zie bv. `CH2_L02`/`CH2_S02` in `SP_CH2_CNS`).
 
 ### 7.4 Titelscherm + audio (**gebouwd**)
 
@@ -894,7 +911,7 @@ aanpassen zonder steeds de volledige tekst heen-en-weer te hoeven sturen.
   hoofdstuk.
 - **Formaat: platte tekst (.txt), bewust geen .docx.** Het CNS-formaat is al
   leesbare platte tekst met structurele merktekens (scène-ID's, `->`-pijlen,
-  `[CLEMENTIA]`/`[SEVERITAS]`/`[REQUIRE:...]`-tags) die exact intact moeten
+  `[CLEMENTIA]`/`[SEVERITAS]`/`[NEUTRAL]`/`[REQUIRE:...]`-tags) die exact intact moeten
   blijven. Een .docx-omweg riskeert dat Word's autocorrect die merktekens
   ongemerkt corrumpeert (rechte aanhalingstekens → krultekens, `->` → een
   en-dash) — bij .txt is er geen vertaalslag, wat Gerben bewerkt IS het
