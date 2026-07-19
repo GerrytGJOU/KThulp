@@ -53,7 +53,7 @@ browser):
 | Proloog-content in CNS-formaat | `certamen/singleplayer-data.js` (`SP_PROLOOG_CNS`, 14 scènes) | ✅ werkend |
 | **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 30 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
 | **Hoofdstuk 2**: hub + alle vier lijnen (L/S/K afgerond, H gedeeltelijk) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | ✅ werkend — alle vier lijnen + fragmenten-gate + Athena-mentor + Combat-bridge getest, incl. beide gevechten (Leeuw/Hydra) volledig uitgespeeld (zie §7.6) |
-| **Hoofdstuk 3**: hub + twee lijnen (Io incl. Argus/Mercurius/Europa-coda, Herakles' laatste tien werken) | `certamen/singleplayer-data.js` (`SP_CH3_CNS`, 43 scènes) | ✅ werkend — beide lijnen + 8 nieuwe Combat-bridge-gevechten + fragmenten-gate (fragments=6) + `{tendency_address}` NPC-reacties volledig getest (zie §7.8) |
+| **Hoofdstuk 3**: hub + twee lijnen (Io incl. Argus/Mercurius/Europa-coda, Herakles' laatste tien werken) | `certamen/singleplayer-data.js` (`SP_CH3_CNS`, 43 scènes) | ✅ werkend — beide lijnen + 6 Combat-bridge-gevechten + 9 puzzels (bewuste combat/puzzel-balans, zie §7.8) + fragmenten-gate (fragments=6) + `{tendency_address}` NPC-reacties volledig getest |
 | Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
 | **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
@@ -229,13 +229,20 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
   zijn altijd beschikbaar, ongeacht voortgang.
 - **Overige uitrusting (harnas, helm, schild, wapen, cape, …) ontgrendelt via
   het verhaal**, niet via Battle Mode-niveau/munten: `SP_AVATAR_STORY_UNLOCKS`
-  koppelt elke ontgrendelbare optie aan een verdiende eretitel (later ook:
-  flags). Nu alleen de drie wapens die de proloog's klassekeuze letterlijk
-  oplevert (`wapen:boog`↔`boogschutter_orakel`, `wapen:speer`↔
-  `hopliet_orakel`, `wapen:zwaard`↔`cavalerist_orakel` — cavalerist heeft geen
-  eigen ruitersporen-sprite, vandaar het zwaard). Alles zonder eigen entry
-  blijft op slot ("ontgrendelt later in het verhaal") tot een volgend
-  hoofdstuk het narratief oplevert.
+  koppelt elke ontgrendelbare optie aan een verdiende eretitel of flag. De
+  drie wapens die de proloog's klassekeuze letterlijk oplevert
+  (`wapen:boog`↔`boogschutter_orakel`, `wapen:speer`↔`hopliet_orakel`,
+  `wapen:zwaard`↔`cavalerist_orakel` — cavalerist heeft geen eigen
+  ruitersporen-sprite, vandaar het zwaard), de mantel uit Hoofdstuk 1
+  (`armor:robe`↔flag `ch1_voltooid`, zie §7.2), en sinds Hoofdstuk 2 ook
+  `armor:licht`↔flag `herakles_harnas`: zodra Herakles bij `CH2_H09` de huid
+  van de Nemeïsche Leeuw als eigen mantel gaat dragen, heeft hij zijn oude
+  harnas niet meer nodig en geeft het — met een korte vierde-wand-doorbrekende
+  blik naar de speler, hetzelfde soort moment als Athena's "onzichtbaar voor
+  iedereen behalve jou" — rechtstreeks aan de (voor de rest van het verhaal
+  onzichtbare) boodschapper. Alles zonder eigen entry blijft op slot
+  ("ontgrendelt later in het verhaal") tot een volgend hoofdstuk het
+  narratief oplevert.
 - Editor `SCREENS.spAvatarEdit` werkt offline; de hoofdvoorbeeld-render is de
   pixel-sprite (`renderPixelHeroPreview(av,true)`), per-optie-thumbnails zijn
   de kleine SVG-preview (zelfde patroon als `SCREENS.battleAvatarEdit`).
@@ -685,11 +692,15 @@ singleplayer-data.js) i.p.v. Hoofdstuk 1's drie:
   ertoe zijn eigen vrouw en kinderen te doden — bewust NOOIT expliciet in
   beeld gebracht, zie hieronder), zijn boetedoening bij het orakel van
   Delphi, en de eerste twee van zijn twaalf werken (Nemeïsche Leeuw + Hydra
-  van Lerna, **Chronica's eerste gebruik van de Combat-bridge**, §8). De rest
-  van de twaalf werken volgt in Hoofdstuk 3 (`SP_CAMPAIGN` ch3: "Apotheose
-  van Herakles"). Zijn Hoofdstuk-2-segment levert wél al zijn eigen fragment
-  op (zie hieronder), en een eigen eretitel (`ch2_herakles_eerste_taken`) —
-  alleen zijn volledige verhaal is nog niet af. **Geschreven.**
+  van Lerna, **Chronica's eerste gebruik van de Combat-bridge**, §8). Vlak na
+  de Leeuw (`CH2_H09`) geeft Herakles, die voortaan de leeuwenhuid zelf als
+  mantel draagt, zijn nu overbodige harnas rechtstreeks aan de speler —
+  Chronica's eerste equip-ontgrendeling na de proloog (`armor:licht`, zie §5).
+  De rest van de twaalf werken volgt in Hoofdstuk 3 (`SP_CAMPAIGN` ch3:
+  "Apotheose van Herakles"). Zijn Hoofdstuk-2-segment levert wél al zijn eigen
+  fragment op (zie hieronder), en een eigen eretitel
+  (`ch2_herakles_eerste_taken`) — alleen zijn volledige verhaal is nog niet
+  af. **Geschreven.**
 
   **Behandeling van de plottwist** (`CH2_H06`, "De Daad die Niet Ongedaan Kan
   Worden"): de kindermoord zelf staat NERGENS op de pagina — de scène knipt
@@ -842,23 +853,35 @@ NPC-commentaar (zie hieronder) — precies zoals in het gesprek vastgelegd.
   afstaan), de Augiasstal (rivieren omgeleid, door Eurystheus afgekeurd op
   een technisch punt — een bewuste echo van de Hydra-episode uit Hoofdstuk 2),
   de Stymfalische Vogels (met Minerva's bronzen ratel — Athena's eerste
-  actieve hulp als mentor), de Kretenzische Stier (losgelaten bij Marathon,
-  een vooruitwijzing naar een latere held), de Merries van Diomedes (poëtische
-  gerechtigheid: de koning gevoerd aan zijn eigen mensenetende paarden), de
-  Gordel van Hippolyte (Juno's laatste, dodelijke list — weer een onschuldig
-  slachtoffer van haar wraak, net als in Hoofdstuk 2), het vee van Geryon
-  (met de Zuilen van Herakles als etiologische bijvangst), de Appels van de
-  Hesperiden (een list tegen Atlas i.p.v. kracht) en tot slot Cerberus, met
+  actieve hulp als mentor, **opgelost met een puzzel, niet met combat**: eens
+  uit het riet gejaagd is verder geen gevecht meer nodig), de Kretenzische
+  Stier (losgelaten bij Marathon, een vooruitwijzing naar een latere held), de
+  Merries van Diomedes (poëtische gerechtigheid: de koning gevoerd aan zijn
+  eigen mensenetende paarden), de Gordel van Hippolyte (Juno's laatste,
+  dodelijke list — weer een onschuldig slachtoffer van haar wraak, net als in
+  Hoofdstuk 2), het vee van Geryon (met de Zuilen van Herakles als
+  etiologische bijvangst), de Appels van de Hesperiden (**eveneens een
+  puzzel i.p.v. combat**: Herakles herkent het Argus-patroon in Ladons nooit
+  volledig slapende koppen en past dezelfde geduld-aanpak toe als bij de
+  Cerynitische Hinde, in plaats van te vechten) en tot slot Cerberus, met
   blote handen overmeesterd. Levert het fragment "Volbrenging" ⚔️ op en de
   eretitel `ch3_herakles_labores`. **Geschreven.**
 
-  **Combat-bridge**: acht nieuwe `SP_COMBAT_ENEMIES` (centauren,
-  stymfalische_vogels, kretenzische_stier, merries_van_diomedes, amazones,
-  geryon, ladon, cerberus) — nog zonder eigen tekeningen (net als de
-  Nemeïsche Leeuw vóór Hoofdstuk 2), `img`-pad alvast ingevuld, valt terug op
-  `icon`-emoji. Cerberus hergebruikt bewust het bestaande Boss Battle-bestand
-  (`assets/bosses/Cerberus.png`) als enkelvoudige illustratie — geen losse
-  koppen-bestanden beschikbaar, dus geen Hydra-achtige koppenstapeling.
+  **Combat/puzzel-balans (bewuste keuze, na gebruikersfeedback)**: van de tien
+  werken zijn er drie al puur narratief/puzzel-opgelost qua aard van de mythe
+  zelf (Hind, Augiasstal, Atlas-list) — de Stymfalische Vogels en Ladon zijn
+  DAARBOVENOP bewust van combat naar puzzel omgezet, zodat de lijn niet
+  overwegend uit gevechten bestaat. Overgebleven combat: centauren (Chiron-
+  aanloop), Kretenzische Stier, Merries van Diomedes, Amazones, Geryon,
+  Cerberus — zes stuks, tegenover negen puzzels in de hele lijn.
+
+  **Combat-bridge**: zes nieuwe `SP_COMBAT_ENEMIES` (centauren,
+  kretenzische_stier, merries_van_diomedes, amazones, geryon, cerberus) — nog
+  zonder eigen tekeningen (net als de Nemeïsche Leeuw vóór Hoofdstuk 2),
+  `img`-pad alvast ingevuld, valt terug op `icon`-emoji. Cerberus hergebruikt
+  bewust het bestaande Boss Battle-bestand (`assets/bosses/Cerberus.png`) als
+  enkelvoudige illustratie — geen losse koppen-bestanden beschikbaar, dus geen
+  Hydra-achtige koppenstapeling.
 
 **Fragmenten-gate**: zelfde patroon als Hoofdstuk 2, maar met NIEUWE fragment-
 ids ("io", "labores" — bewust ANDERS dan Hoofdstuk 2's "herakles", want
