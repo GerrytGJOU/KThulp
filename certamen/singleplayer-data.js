@@ -99,6 +99,15 @@ const SP_TITLES = [
     ds:"Stond Herakles bij tijdens zijn eerste twee beproevingen voor Eurystheus.", bonus:null },
   { id:"ch2_athena_mentor", nm:"Athena's Vertrouweling", icon:"owl", cat:"chronica", secret:true,
     ds:"Zag Athena, na vier stille getuigenissen, eindelijk spreken als mentor.", bonus:null },
+  // Hoofdstuk 3 — twee hoofdlijnen (Io, met Argus/Mercurius en een
+  // Europa-coda erin verweven, en Herakles' laatste tien werken) plus een
+  // afsluitend gesprek met Athena.
+  { id:"ch3_io", nm:"Bevrijder van Io", icon:"eagle", cat:"chronica", secret:true,
+    ds:"Stond Io bij van vervloekte vaars tot herwonnen vrijheid in Egypte.", bonus:null },
+  { id:"ch3_herakles_labores", nm:"Voltooier van de Twaalf Werken", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Herakles al zijn twaalf beproevingen tot een einde brengen.", bonus:null },
+  { id:"ch3_athena_gesprek", nm:"Leerling van Athena", icon:"column", cat:"chronica", secret:true,
+    ds:"Hoorde Athena's afsluitende woorden over de twee vormen van vrijheid.", bonus:null },
 ];
 
 /* ---- CAMPAGNEKAART — Proloog + 19 hoofdstukken (5 "Boeken"), gesynchroniseerd
@@ -160,11 +169,11 @@ const SP_CAMPAIGN = [
     zijverhalen:"Bellerophon & Chimaira (A-tier, ideale RPG-boss); Atalanta + Calydonische ever (A-tier, boss fight)" },
   { id:"ch3", nr:3, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Beloften van Goden en Mensen",
     periode:"Mythische wereld",
-    verhaal:"De speler ontdekt relaties tussen goden en mensen. Bezit, afkomst en geschenken worden belangrijk. Herakles' lijn gaat verder waar Hoofdstuk 2 ophield (Leeuw + Hydra volbracht, 2/12 werken) en rondt zijn overige taken af.",
+    verhaal:"De speler ontdekt relaties tussen goden en mensen. Bezit, afkomst en geschenken worden belangrijk. Twee lijnen: Io (vervloekt tot vaars, bewaakt door Argus Panoptes, bevrijd door Mercurius — met een Europa-coda die dezelfde ontrouw omgekeerd laat zien) en Herakles, die vanaf Hoofdstuk 2's 2/12 werken (Leeuw + Hydra) al zijn resterende tien beproevingen afrondt.",
     pallas:"Les 5: Apotheose van Herakles", minerva:"Hoofdstuk 4: Jupiter en Io",
     grammatica:"Genitivus, dativus, bijstelling",
     gameplay:"Relaties begrijpen, voorwerpen koppelen aan eigenaars",
-    personages:"Herakles, Zeus/Jupiter, Io",
+    personages:"Herakles, Zeus/Jupiter, Hera/Juno, Io, Argus Panoptes, Hermes/Mercurius, Europa",
     thema:"Taal laat zien hoe mensen verbonden zijn",
     illustratie:"Zeus en Io onder goddelijke bescherming",
     zijverhalen:"Europa (A-tier, begin van Kreta); Ganymedes (B-tier); Danaïden (B-tier)" },
@@ -393,6 +402,35 @@ const SP_GENDER_OPTIONS = [
   { id:"nonbinair", label:"die / hen / hun" },
 ];
 
+/* ---- CLEMENTIA/SEVERITAS-AANSPREKING — vanaf Hoofdstuk 3 mogen NPC's de
+   speler aanspreken naar aanleiding van de stil opgebouwde Clementia/
+   Severitas-houding (zie spApproachTendency, singleplayer.js). %NOUN% wordt
+   vervangen door het gender-passende zelfstandig naamwoord (SP_TENDENCY_NOUN)
+   voor gebruik via {tendency_address}/{tendency_address_cap} in TEXT/DIALOGUE
+   (SpTextResolver). Bewust meerdere varianten per houding — en géén "wiens"/
+   "wier" in de neutrale zinnen, want die zijn niet gender-neutraal genoeg. */
+const SP_TENDENCY_NOUN = { man:"man", vrouw:"vrouw", nonbinair:"persoon" };
+const SP_TENDENCY_PHRASES = {
+  clementia: [
+    "%NOUN% met een vriendelijke reputatie",
+    "zachtmoedige %NOUN%",
+    "%NOUN% bekend om een zachte hand",
+    "%NOUN% die eerder troost dan straft, naar men zegt",
+  ],
+  severitas: [
+    "strenge %NOUN%",
+    "%NOUN% met een onverbiddelijke reputatie",
+    "%NOUN% die geen moment aarzelt, naar men zegt",
+    "%NOUN% bekend om een harde hand",
+  ],
+  neutraal: [
+    "%NOUN% van wie de reputatie nog alle kanten op kan",
+    "%NOUN% die zich nog niet heeft laten kennen",
+    "onvoorspelbare %NOUN%",
+    "%NOUN% van wie de daden tot nu toe geen duidelijke kant hebben gekozen",
+  ],
+};
+
 /* ---- GRIEKS ALFABET — transcriptietabel, getoond tijdens puzzels ---- */
 const SP_GREEK_ALPHABET = [
   { letter:"Α α", nm:"alfa",    translit:"a"  },
@@ -533,6 +571,38 @@ const SP_PUZZLES = {
     vraag:"Zonder vuur om de wonden dicht te schroeien, blijft de Hydra onoverwinnelijk. “Nemo eam sine igne vincere ___” — welke vorm van posse (kunnen) past hier?",
     opties:["potest","possunt","potes","possum"], antwoord:"potest",
     hint:"Derde persoon enkelvoud van posse is 'potest'." },
+
+  // ---- Hoofdstuk 3, Lijn Io (met Argus/Mercurius) ----
+  puzzle_ch3io_genitivus: { type:"multiple-choice",
+    vraag:"Io is voortaan serva ___ — welke vorm van Iuno (koningin der goden) past hier, genitivus enkelvoud?",
+    opties:["Iunonis","Iunoni","Iunonem","Iuno"], antwoord:"Iunonis",
+    hint:"Genitivus enkelvoud van een derde-declinatie naam als Iuno, Iunonis eindigt op -is." },
+  puzzle_ch3io_dativus: { type:"multiple-choice",
+    vraag:"“Iuppiter ___ nubem dat” — Jupiter geeft Io een wolk. Welke vorm van Io past hier, dativus enkelvoud?",
+    opties:["Io","Ionis","Ioni","Ionem"], antwoord:"Ioni",
+    hint:"De dativus (meewerkend voorwerp — 'aan wie?') van dit soort namen eindigt vaak op -i." },
+  puzzle_ch3io_bijstelling: { type:"multiple-choice",
+    vraag:"“Mercurius, ___ deorum, Argum in somnum canit” — Mercurius, bode der goden, zingt Argus in slaap. Welke vorm van nuntius past hier?",
+    opties:["nuntius","nuntii","nuntio","nuntium"], antwoord:"nuntius",
+    hint:"Een bijstelling staat in dezelfde naamval als het woord waar hij bij hoort — Mercurius staat in de nominativus, dus ook nuntius." },
+
+  // ---- Hoofdstuk 3, Lijn Herakles (resterende tien werken) ----
+  puzzle_ch3h_genitivus: { type:"multiple-choice",
+    vraag:"De Cerynitische Hinde is cerva ___ — welke vorm van Diana past hier, genitivus enkelvoud?",
+    opties:["Dianae","Dianam","Diana","Dianas"], antwoord:"Dianae",
+    hint:"Genitivus enkelvoud van een eerste-declinatie naam op -a eindigt op -ae." },
+  puzzle_ch3h_dativus: { type:"multiple-choice",
+    vraag:"“Hercules ___ partem promittit” — Hercules belooft de koning een deel. Welke vorm van rex past hier, dativus enkelvoud?",
+    opties:["regi","regis","regem","rex"], antwoord:"regi",
+    hint:"Dativus enkelvoud van rex, regis (derde declinatie) is regi." },
+  puzzle_ch3h_bijstelling: { type:"multiple-choice",
+    vraag:"“Minerva, ___ sapientiae, Herculi crotala dat” — Minerva, godin van de wijsheid, geeft Hercules een ratel. Welke vorm van dea past hier?",
+    opties:["dea","deae","deam","dearum"], antwoord:"dea",
+    hint:"De bijstelling staat in dezelfde naamval als Minerva — nominativus, dus ook dea." },
+  puzzle_ch3h_bijstelling2: { type:"multiple-choice",
+    vraag:"“Atlas, ___ caelifer, caelum umeris tenet” — Atlas, de hemeldragende titaan, draagt de hemel op zijn schouders. Welke vorm van titan past hier?",
+    opties:["titan","titanis","titani","titanem"], antwoord:"titan",
+    hint:"Ook hier staat de bijstelling in dezelfde naamval als Atlas — nominativus." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -623,6 +693,41 @@ const SP_CODEX_ENTRIES = {
             ["zij","sunt","possunt"]] } },
   codex_grammatica_ch2_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 2 samengevat",
     tekst:"Dit hoofdstuk draaide om wat mensen en goden dóen: de praesens (nu-tijd, met persoonsuitgangen -o/-s/-t/-mus/-tis/-nt op een werkwoordstam), de imperativus (bevelsvorm, kale stam of stam+e, meervoud +te), en de twee onmisbare onregelmatige werkwoorden esse (zijn) en posse (kunnen) — die zo vaak voorkomen dat je ze simpelweg uit het hoofd moet kennen." },
+
+  // LET OP: dezelfde "vroeg ontgrendelen"-regel als Hoofdstuk 1/2 — deze drie
+  // entries worden al bij CH3_000 gezet, vóór de eerste puzzel.
+  codex_grammatica_ch3_genitivus: { cat:"grammatica", titel:"Grammatica: de genitivus",
+    tekst:"De genitivus laat bezit of een 'van'-relatie zien: 'Iunonis' is 'van Juno', 'van wie Juno de eigenaar is'. Elk zelfstandig naamwoord heeft een eigen genitivus-uitgang, afhankelijk van de declinatie (naamvalgroep) — je herkent de declinatie van een woord juist aan zijn genitivus enkelvoud, wat in een woordenboek dan ook altijd meteen naast de nominativus staat vermeld.",
+    table:{ headers:["Declinatie","Voorbeeld","Nominativus","Genitivus enkelvoud"],
+      rows:[["1e (op -a)","Diana","Diana","Dianae"],
+            ["3e (medeklinker)","Iuno","Iuno","Iunonis"],
+            ["3e (medeklinker)","rex","rex","regis"]] } },
+  codex_grammatica_ch3_dativus: { cat:"grammatica", titel:"Grammatica: de dativus",
+    tekst:"De dativus is de naamval van het meewerkend voorwerp: aan wie of voor wie iets gebeurt. 'Iuppiter Ioni nubem dat' — Jupiter geeft AAN Io een wolk: Ioni staat in de dativus. Net als bij de genitivus hangt de exacte uitgang af van de declinatie van het woord.",
+    table:{ headers:["Declinatie","Voorbeeld","Nominativus","Dativus enkelvoud"],
+      rows:[["2e (op -us)","Io (als -o-stam behandeld)","Io","Ioni"],
+            ["3e (medeklinker)","rex","rex","regi"]] } },
+  codex_grammatica_ch3_bijstelling: { cat:"grammatica", titel:"Grammatica: de bijstelling",
+    tekst:"Een bijstelling (appositie) is een extra woord of woordgroep die een zelfstandig naamwoord nader omschrijft, zonder er grammaticaal een aparte zin van te maken — bijvoorbeeld 'Mercurius, nuntius deorum' ('Mercurius, bode der goden'). De gouden regel: een bijstelling staat ALTIJD in dezelfde naamval als het woord waar hij bij hoort. Staat Mercurius in de nominativus, dan staat nuntius ook in de nominativus, ook al verandert de rest van de zin.",
+    table:{ headers:["Zin","Naamwoord","Bijstelling","Naamval (allebei)"],
+      rows:[["Mercurius, nuntius deorum, canit.","Mercurius","nuntius","Nominativus"],
+            ["Minerva, dea sapientiae, dat.","Minerva","dea","Nominativus"],
+            ["Atlas, titan caelifer, tenet.","Atlas","titan","Nominativus"]] } },
+  codex_grammatica_ch3_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 3 samengevat",
+    tekst:"Dit hoofdstuk draaide om relaties tussen woorden: de genitivus (bezit, een 'van'-relatie, bv. Iunonis — van Juno), de dativus (het meewerkend voorwerp, aan/voor wie iets gebeurt, bv. Ioni — aan Io), en de bijstelling (een omschrijving die altijd in dezelfde naamval staat als het woord dat ze nader verklaart, bv. Mercurius, nuntius deorum). Samen laten ze zien hoe het Latijn niet alleen wie handelt en wie ondergaat kan uitdrukken, maar ook hoe woorden onderling met elkaar verbonden zijn." },
+
+  codex_io_argus: { cat:"mythologie", titel:"Io, Argus Panoptes en de Ogen van de Pauw",
+    tekst:"Io, priesteres van Juno, werd door Jupiter in een witte vaars veranderd om een affaire te verbergen — een list die averechts werkte toen Juno haar alsnog opeiste en de honderdogige Argus Panoptes als wachter aanstelde. Mercurius, op Jupiters bevel, suste Argus met verhalen en fluitspel in slaap en doodde hem. Juno, in rouw, plaatste Argus' honderd ogen voorgoed op de staart van de pauw. Daarna joeg ze Io met een steekvlieg de wereld rond, tot Jupiter in Egypte eindelijk zijn ontrouw goedmaakte — waar Io haar menselijke gedaante terugkreeg en later als godin vereerd werd, vereenzelvigd met Isis." },
+  codex_europa: { cat:"mythologie", titel:"Europa en de Witte Stier",
+    tekst:"Waar Jupiter Io in een dier veranderde om zijn affaire te verbergen, veranderde hij zichzelf in een dier — een tamme, witte stier — om zijn affaire met de Fenicische prinses Europa te beginnen. Argeloos beklom ze zijn rug op het strand; de stier zwom vervolgens met haar de zee over, helemaal naar Kreta. Daar baarde Europa hem drie zonen, onder wie de latere koning Minos. Haar naam bleef achter op een heel werelddeel." },
+  codex_chiron: { cat:"mythologie", titel:"Chiron, de Wijze Centaur",
+    tekst:"Tijdens de jacht op de Erymanthische Ever raakte een van Herakles' met Hydra-gif vergiftigde pijlen per ongeluk zijn eigen oude leermeester Chiron — de wijze, onsterfelijke centaur die hem ooit onderwees. Omdat Chiron onsterfelijk is, kon het gif hem niet doden, enkel eindeloos kwellen. Jaren later zou Chiron zijn eigen onsterfelijkheid vrijwillig afstaan aan de geketende Prometheus, om zo zelf eindelijk verlost te worden van de pijn." },
+  codex_augiasstal: { cat:"mythologie", titel:"De Augiasstal",
+    tekst:"Voor zijn vijfde beproeving moest Herakles de nooit-uitgemeste stallen van koning Augias in één enkele dag schoonmaken — een vernedering, geen gevecht. In plaats van te scheppen leidde hij de rivieren Alpheus en Peneus dwars door de stallen, die het vuil in enkele uren wegspoelden. Omdat Herakles in het geheim een beloning had afgesproken met Augias, keurde Eurystheus deze beproeving — net als de Hydra — af als niet volwaardig." },
+  codex_atlas: { cat:"mythologie", titel:"Atlas en de Appels van de Hesperiden",
+    tekst:"Voor de gouden appels van de Hesperiden, bewaakt door de draak Ladon, bood Herakles aan tijdelijk de hemel over te nemen van de titaan Atlas, zodat die zelf de appels kon plukken. Atlas, eenmaal bevrijd, overwoog Herakles voorgoed met de last achter te laten — tot Herakles hem, met een list in plaats van kracht, overhaalde de hemel nog één keer over te nemen zodat hij zijn mantel kon opvouwen. Zodra Atlas de last weer droeg, liep Herakles gewoon weg met de appels." },
+  codex_herakles_twaalf_werken: { cat:"mythologie", titel:"Herakles: de Twaalf Werken Voltooid",
+    tekst:"Na de Nemeïsche Leeuw en de Hydra van Lerna (Hoofdstuk 2) volbracht Herakles nog tien beproevingen: de Cerynitische Hinde gevangen zonder een wond, de Erymanthische Ever bedwongen (ten koste van zijn leermeester Chiron), de Augiasstal in één dag schoongespoeld, de Stymfalische Vogels verjaagd met Minerva's bronzen ratel, de Kretenzische Stier gevangen, de mensenetende Merries van Diomedes getemd met hun eigen meester als voer, de Gordel van Hippolyte behaald ten koste van haar leven door Juno's list, het vee van Geryon veroverd aan de rand van de wereld, de gouden Appels van de Hesperiden buitgemaakt met een list tegen Atlas, en tot slot Cerberus zelf, de driekoppige hond van de onderwereld, met blote handen overmeesterd. Tien jaar dienstbaarheid — opgelegd na de ergste daad van zijn leven — eindigen met deze twaalfde taak." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -682,6 +787,21 @@ const SP_CODEX_PERSONS = {
     full:"Getroffen door een door Hera opgelegde waanzin doodde Herakles zijn eigen vrouw Megara en hun kinderen — een daad die hem, eenmaal weer bij zinnen, verwoestte. Op advies van het orakel van Delphi diende hij zijn neef Eurystheus als boetedoening en volbracht de eerste van wat uiteindelijk twaalf beproevingen zouden worden: de Nemeïsche Leeuw gewurgd met blote handen, de Hydra van Lerna verslagen met vuur. Zijn verhaal — en zijn straf — is nog lang niet voorbij." },
   megara: { nm:"Megara", epithet:"Prinses van Thebe, vrouw van Herakles",
     intro:"De vrouw van Herakles en moeder van zijn kinderen, hem gegeven als beloning nadat hij Thebe had verdedigd tegen een belegerend leger — tot Hera's wraak alles wat ze samen hadden opbouwde in één ogenblik verwoestte." },
+
+  io: { nm:"Io", epithet:"Priesteres van Juno, minnares van Jupiter",
+    intro:"Een priesteres van Juno zelf in Argos — een wrede ironie, want het is uitgerekend haar eigen godin die straks haar ergste vijand wordt, zodra Jupiter zijn oog op haar laat vallen.",
+    full:"Om haar te beschermen tegen Juno's argwaan veranderde Jupiter Io in een witte vaars — een vermomming die haar lot alleen maar erger maakte toen Juno haar alsnog opeiste en de honderdogige Argus Panoptes als bewaker aanstelde. Na Argus' dood joeg Juno haar met een steekvlieg de hele wereld rond, tot Jupiter eindelijk voor haar pleitte in Egypte, waar ze haar menselijke gedaante terugkreeg en de moeder werd van Epaphus." },
+  argus: { nm:"Argus Panoptes", epithet:"Honderdogige reus, wachter van Juno",
+    intro:"Een reus met honderd ogen verspreid over zijn hele lichaam — altijd waakzaam, want terwijl een deel van zijn ogen slaapt, blijven de andere onophoudelijk open.",
+    full:"Aangesteld door Juno om de betoverde Io te bewaken, werd Argus uiteindelijk in slaap gesust door Mercurius' verhalen en fluitspel, en gedood terwijl al zijn honderd ogen eindelijk tegelijk gesloten waren. Juno, ontroostbaar, plaatste zijn ogen voorgoed op de staart van de pauw — haar heilige vogel." },
+  hermes: { nm:"Hermes (Mercurius)", epithet:"Boodschapper der goden",
+    intro:"De vleugelvoetige boodschapper van de goden, net zo bedreven in welbespraaktheid en list als in snelheid — Jupiter stuurt hem wanneer een probleem meer geduld dan geweld vraagt.",
+    full:"Op Jupiters bevel verkleedde Mercurius zich als eenvoudige herder en suste Argus Panoptes met verhalen en fluitspel in slaap, voordat hij de honderdogige wachter doodde en Io bevrijdde. Jaren later begeleidde hij Herakles ook tot aan de poort van de onderwereld, voor diens twaalfde en laatste beproeving. Bij de Grieken heet hij Hermes." },
+  europa: { nm:"Europa", epithet:"Prinses van Tyrus, naamgeefster van een werelddeel",
+    intro:"Een Fenicische prinses die met haar dienaressen op het strand speelt, zonder te vermoeden dat de opvallend tamme, witte stier die zich bij de kudde voegt geen gewoon dier is.",
+    full:"Jupiter, ditmaal vermomd als een tamme witte stier in plaats van een wolk, liet Europa argeloos op zijn rug klimmen — en zwom vervolgens met haar de zee op, helemaal naar Kreta. Daar baarde ze hem drie zonen, onder wie Minos, de latere koning van Kreta wiens naam voorgoed verbonden zal blijven met een labyrint dat nog gebouwd moet worden. Haar naam bleef achter op een heel werelddeel: Europa." },
+  pholus: { nm:"Pholus", epithet:"Wijze centaur, gastheer van Herakles",
+    intro:"Een centaur die, anders dan de meeste van zijn soort, bekendstaat om zijn gastvrijheid — tot een gedeelde wijnkruik zijn hele kudde in een dodelijke chaos stort." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -697,6 +817,11 @@ const SP_FRAGMENTS = {
   kallisto: { nm:"Onschuld",   icon:"🐻" },
   semele:   { nm:"Waarheid",   icon:"⚡" },
   herakles: { nm:"Moed",       icon:"🦁" },
+  // Hoofdstuk 3 — bewust ANDERE ids dan "herakles" hierboven (Hoofdstuk 2),
+  // want SP_STATE.fragments is één doorlopende array over alle hoofdstukken;
+  // hergebruik van dezelfde id zou geen nieuw fragment toevoegen.
+  io:       { nm:"Vrijheid",   icon:"🕊️" },
+  labores:  { nm:"Volbrenging",icon:"⚔️" },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -737,6 +862,29 @@ const SP_COMBAT_ENEMIES = {
            "assets/bosses/hydrahead7.png"],
     hp:60,
     intro:"Een veelkoppig moeras-monster dat voor elke afgehakte kop er twee nieuwe laat aangroeien — alleen vuur kan de wonden dichtschroeien voor ze weer aangroeien." },
+
+  // ---- Hoofdstuk 3, Lijn Herakles — nog geen eigen tekeningen (net als de
+  // Leeuw van Nemea vóór Hoofdstuk 2 klaarstond); `img` wijst alvast naar het
+  // toekomstige bestand en valt tot dan terug op `icon` (spCombatSpriteHTML).
+  // Cerberus hergebruikt bewust het bestaande Boss Battle-bestand
+  // (assets/bosses/Cerberus.png) — geen losse koppen-bestanden beschikbaar,
+  // dus één enkele statische illustratie i.p.v. de Hydra-koppenstapeling.
+  centauren: { nm:"De Dronken Centaurenkudde", icon:"🐴", img:"assets/bosses/centauren.png", hp:50,
+    intro:"Een woeste kudde centauren, dronken van Pholus' gedeelde wijnkruik en meteen vijandig tegenover elke indringer." },
+  stymfalische_vogels: { nm:"De Stymfalische Vogels", icon:"🦅", img:"assets/bosses/stymfalische_vogels.png", hp:45,
+    intro:"Een zwerm vleesetende vogels met bronzen snavels en veren scherp als pijlen — te talrijk om met kracht alleen te bestrijden." },
+  kretenzische_stier: { nm:"De Kretenzische Stier", icon:"🐂", img:"assets/bosses/kretenzische_stier.png", hp:55,
+    intro:"Een reusachtige, door Neptunus razend gemaakte stier die al jaren de akkers van Kreta verwoest." },
+  merries_van_diomedes: { nm:"De Merries van Diomedes", icon:"🐎", img:"assets/bosses/merries_van_diomedes.png", hp:55,
+    intro:"Vier merries, afgericht op mensenvlees door hun eigen meester — enkel honger drijft hun waanzin aan." },
+  amazones: { nm:"De Amazones", icon:"🏹", img:"assets/bosses/amazones.png", hp:60,
+    intro:"Hippolytes trouwe strijdsters, opgehitst door een gerucht dat Juno zelf verspreidde — een gevecht dat nooit had moeten plaatsvinden." },
+  geryon: { nm:"Geryon", icon:"👹", img:"assets/bosses/geryon.png", hp:70,
+    intro:"Een reus met drie gekoppelde lichamen op één paar benen, die zijn kudde rood vee met drievoudige kracht verdedigt." },
+  ladon: { nm:"Ladon", icon:"🐉", img:"assets/bosses/ladon.png", hp:65,
+    intro:"Een nooit-slapende draak, gewikkeld om de boom van de Hesperiden, wachter over Juno's gouden appels." },
+  cerberus: { nm:"Cerberus", icon:"🐕", img:"assets/bosses/Cerberus.png", hp:80,
+    intro:"De driekoppige hond die de poort van de onderwereld bewaakt — de zwaarste van alle twaalf beproevingen, en de enige die met blote handen gewonnen moet worden." },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -775,6 +923,15 @@ const SP_VOCAB_ENTRIES = {
   latijn_necare:    { taal:"latijn", woord:"necare (necat)", betekenis:"doden" },
   latijn_servire:   { taal:"latijn", woord:"servire (servi!)", betekenis:"dienen" },
   latijn_vincere:   { taal:"latijn", woord:"vincere (vincit)", betekenis:"overwinnen" },
+  latijn_iuno:      { taal:"latijn", woord:"Iuno, Iunonis", betekenis:"Juno (godin)" },
+  latijn_nuntius:   { taal:"latijn", woord:"nuntius, nuntii", betekenis:"bode, boodschapper" },
+  latijn_dea:       { taal:"latijn", woord:"dea, deae", betekenis:"godin" },
+  latijn_sapientia: { taal:"latijn", woord:"sapientia, sapientiae", betekenis:"wijsheid" },
+  latijn_crotala:   { taal:"latijn", woord:"crotala", betekenis:"(bronzen) ratel" },
+  latijn_cerva:     { taal:"latijn", woord:"cerva, cervae", betekenis:"hinde" },
+  latijn_pars:      { taal:"latijn", woord:"pars, partis", betekenis:"deel" },
+  latijn_promittit: { taal:"latijn", woord:"promittere (promittit)", betekenis:"beloven" },
+  latijn_titan:     { taal:"latijn", woord:"Titan, Titanis", betekenis:"titaan" },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -2798,6 +2955,844 @@ Het Einde van Hoofdstuk 2
 
 TEXT:
 "Hoofdstuk 3 wacht al ergens verderop," zegt de stem, "en met hem de rest van Herakles' beproevingen — zijn eerste werken heb je al gezien, maar er wachten er nog velen." De poort keert terug tot een dunne streep licht, en je neemt vier herinneringen met je mee: volharding, onschuld, waarheid, moed.
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 3 — "Beloften van Goden en Mensen" (SP_CAMPAIGN ch3).
+   Twee kiesbare hoofdlijnen i.p.v. Hoofdstuk 2's vier: IO (met Argus Panoptes
+   en Mercurius als climax van diezelfde lijn, en een Europa-coda erin
+   verweven als NPC-commentaar, niet als eigen lijn) en HERAKLES (de
+   resterende tien van zijn twaalf werken, na de eerste twee uit Hoofdstuk 2).
+   Elke lijn levert een eigen Herinneringsfragment ("io", "labores" — bewust
+   ANDERE ids dan Hoofdstuk 2's "herakles", want SP_STATE.fragments is één
+   doorlopende, hoofdstuk-overschrijdende array); de hub-gate naar het Orakel
+   staat daarom op [REQUIRE:fragments=6] (Hoofdstuk 2's vier + deze twee).
+   Grammatica dit hoofdstuk: genitivus, dativus, bijstelling — zie
+   codex_grammatica_ch3_*. Athena is sinds CH2_ATHENA actieve mentor, dus
+   spreekt vanaf hier gewoon mee in scènes i.p.v. zwijgend toe te kijken.
+   Vanaf dit hoofdstuk reageren NPC's ook voor het eerst op de stil
+   opgebouwde Clementia/Severitas-houding via {tendency_address}/
+   {tendency_address_cap} (SpTextResolver, singleplayer.js). ---- */
+const SP_CH3_CNS = `
+=== SCENE: CH3_000 ===
+
+TITLE:
+Beloften van Goden en Mensen
+
+TEXT:
+De boodschapper wijst naar twee nieuwe scheuren in de werkelijkheid, dicht naast elkaar. "Ditmaal geen vier lijnen," zegt ze, "maar twee — al blijkt de ene, zodra je erin stapt, meer dan één verhaal in zich te dragen. Volg Io, en je zult ontdekken hoe ver een god gaat om zijn eigen ontrouw te verbergen. Volg Herakles, en je ziet hoe ver een sterveling gaat om een schuld in te lossen die niet eens helemaal de zijne was."
+
+Athena staat er dit keer niet zwijgend bij — ze knikt je toe, kort maar oprecht, zoals een mentor doet die weet dat je de rest zelf aankunt.
+
+CODEX:
+codex_grammatica_ch3_genitivus, codex_grammatica_ch3_dativus, codex_grammatica_ch3_bijstelling
+
+CHOICES:
+
+* Volg Io, priesteres van Juno en Jupiters volgende geheime liefde -> CH3_IO01
+* Volg Herakles, die tien beproevingen te gaan heeft -> CH3_H01
+* Spreek het Orakel aan, nu beide verhalen zijn gehoord [REQUIRE:fragments=6] -> CH3_ATHENA
+
+END
+
+=== SCENE: CH3_IO01 ===
+
+TITLE:
+Io, Priesteres van Juno
+
+TEXT:
+Io dient als priesteres in de tempel van Juno te Argos — een leven van rust en toewijding aan een godin die, dat weet ze nog niet, straks haar felste vijand zal worden. Ze is de dochter van de riviergod Inachus, en niemand in Argos twijfelt aan haar vroomheid.
+
+Jupiter, die haar op een dag bij de rivier ziet, vergeet moeiteloos dat ze uitgerekend aan zijn eigen vrouw is toegewijd. Voor hem is dat geen reden tot terughoudendheid — eerder een uitdaging.
+
+PERSON:
+io:intro, hera:intro
+
+CHOICES:
+
+* Kijk hoe Jupiter zijn kans grijpt -> CH3_IO02
+
+END
+
+=== SCENE: CH3_IO02 ===
+
+TITLE:
+Een Wolk op een Heldere Dag
+
+TEXT:
+Jupiter, die weet dat zijn vrouw elke onverklaarbare afwezigheid van hem wantrouwt, bedenkt ditmaal geen list met een vermomming maar met verhulling: hij trekt een dichte, donkere wolk over de vallei van Argos, zodat niemand — sterveling noch god — kan zien wat daarbinnen gebeurt.
+
+Io, die de wolk ziet naderen op een verder onbewolkte dag, voelt eerder onbehagen dan nieuwsgierigheid. Tegen de tijd dat ze begrijpt wie er werkelijk voor haar staat, is er allang geen weg meer terug.
+
+PUZZLE:
+puzzle_ch3io_genitivus
+
+CHOICES:
+
+* Kijk wat er gebeurt wanneer de wolk optrekt -> CH3_IO03
+
+END
+
+=== SCENE: CH3_IO03 ===
+
+TITLE:
+Een Vaars in Plaats van een Vrouw
+
+TEXT:
+Juno, hoog op de Olympos, ziet de vreemde wolk hangen op een verder kraakheldere dag — en herkent onmiddellijk het patroon van haar mans vindingrijkheid. Ze daalt af om poolshoogte te nemen, sneller dan Jupiter had verwacht.
+
+In doodsangst grijpt hij naar de enige list die hem nog rest: hij verandert Io ter plekke in een sneeuwwitte vaars, ogenblikken voordat Juno de wolk binnenstapt. Io, gevangen in een lichaam dat niet het hare is, kan niet eens meer roepen wat er zojuist met haar is gebeurd.
+
+CHOICES:
+
+* Voel medelijden met Io, die niets van dit alles heeft gekozen [CLEMENTIA] -> CH3_IO04
+* Voel vooral verachting voor Jupiters lafheid — hij redt zichzelf, niet haar [SEVERITAS] -> CH3_IO04
+* Kijk toe, niet goed wetend wie hier meer medelijden verdient [NEUTRAL] -> CH3_IO04
+
+END
+
+=== SCENE: CH3_IO04 ===
+
+TITLE:
+Een Ongemakkelijk Cadeau
+
+TEXT:
+Juno, die de vaars met een half oog bekijkt en meteen doorheeft dat er iets niet klopt aan een dier van zo'n opvallende schoonheid, prijst hem overdreven hardop — en vraagt Jupiter dan, met een glimlach die geen weigering toestaat, of ze de vaars als geschenk mag krijgen.
+
+Jupiter, die weet dat weigeren zijn schuld zou bevestigen, heeft geen enkele uitweg meer. Met tegenzin geeft hij Io — nog altijd gevangen in haar eigen, sprakeloze lichaam — aan de vrouw die haar het felst zal blijven haten.
+
+PUZZLE:
+puzzle_ch3io_dativus
+
+CHOICES:
+
+* Kijk wat Juno met haar nieuwe bezit van plan is -> CH3_IO05
+
+END
+
+=== SCENE: CH3_IO05 ===
+
+TITLE:
+Argus Panoptes, de Honderdogige Wachter
+
+TEXT:
+Juno vertrouwt haar nieuwe vaars toe aan Argus Panoptes, een reus met honderd ogen verspreid over zijn hele lichaam — nooit voluit slapend, want terwijl een deel van zijn ogen rust, blijven de andere onophoudelijk open. Geen betere wachter bestaat er op aarde of Olympos.
+
+Io wordt vastgebonden aan een olijfboom in een weiland, dag en nacht bekeken door een wezen dat nooit werkelijk wegkijkt.
+
+PERSON:
+argus:intro
+
+CHOICES:
+
+* Kijk hoe Io haar nieuwe gevangenschap doorstaat -> CH3_IO06
+
+END
+
+=== SCENE: CH3_IO06 ===
+
+TITLE:
+Een Naam in het Zand
+
+TEXT:
+Io, die geen menselijk woord meer kan uitbrengen, ontdekt op een dag dat haar eigen vader Inachus — de riviergod naar wie ze vernoemd is — langs de oever van zijn rivier loopt, zoekend naar de dochter die spoorloos is verdwenen. Wanhopig schrijft ze met haar hoef de enige letters die ze nog kan vormen in het zachte zand aan de rivieroever: haar eigen naam.
+
+Inachus, die het schrift herkent en dan pas beseft welk dier voor hem staat, breekt bijna van verdriet — een vader die zijn dochter eindelijk terugvindt, enkel om te ontdekken dat hij haar niet meer kan redden.
+
+CHOICES:
+
+* Blijf bij dit moment stilstaan, geraakt door zoveel onmacht [CLEMENTIA] -> CH3_IO07
+* Concludeer nuchter dat medelijden hier niets zal veranderen [SEVERITAS] -> CH3_IO07
+* Kijk toe, zonder goed te weten wat je met dit verdriet aan moet [NEUTRAL] -> CH3_IO07
+
+END
+
+=== SCENE: CH3_IO07 ===
+
+TITLE:
+Jupiter Stuurt Hulp
+
+TEXT:
+Jupiter, die Io's lijden vanaf de Olympos gadeslaat en het niet langer kan verdragen — deels uit schuldgevoel, deels omdat hij nog altijd niet van haar af wil — roept Mercurius bij zich, zijn vleugelvoetige boodschapper, net zo bedreven in list en welbespraaktheid als in snelheid.
+
+"Argus moet slapen," zegt Jupiter simpelweg, "en jij bent de enige die daarin kan slagen."
+
+PERSON:
+hermes:intro
+
+CHOICES:
+
+* Volg Mercurius op zijn missie -> CH3_IO08
+
+END
+
+=== SCENE: CH3_IO08 ===
+
+TITLE:
+De Herder met de Fluit
+
+TEXT:
+Mercurius verkleedt zich als een eenvoudige herder en gaat naast Argus zitten, zijn vleugelsandalen en staf zorgvuldig verborgen. Hij speelt op een rietfluit, de syrinx, en vertelt daarna verhaal na verhaal — traag, meanderend, doelbewust saai op de plekken waar Argus' aandacht het meest dreigt te verslappen.
+
+Oog na oog sluit zich, tot zelfs de laatste paar — die altijd als laatste wakker blijven — eindelijk toegeven aan de slaap.
+
+PUZZLE:
+puzzle_ch3io_bijstelling
+
+CHOICES:
+
+* Kijk wat Mercurius doet zodra Argus eindelijk volledig slaapt -> CH3_IO09
+
+END
+
+=== SCENE: CH3_IO09 ===
+
+TITLE:
+Honderd Ogen, voor het Laatst Gesloten
+
+TEXT:
+Zodra ook het laatste oog is gesloten, aarzelt Mercurius geen moment langer — hij doodt de slapende wachter met een enkele, geoefende slag, en bevrijdt Io van haar ketting aan de olijfboom. Ze rent weg, nog altijd een vaars, maar voor het eerst in weken zonder honderd ogen die haar volgen.
+
+Juno, die het nieuws van Argus' dood ontvangt, rouwt oprecht — hij diende haar trouw tot het einde.
+
+CODEX:
+codex_io_argus
+
+CHOICES:
+
+* Kijk hoe Juno haar trouwe wachter eert -> CH3_IO10
+
+END
+
+=== SCENE: CH3_IO10 ===
+
+TITLE:
+Honderd Ogen op een Pauwenstaart
+
+TEXT:
+Juno neemt Argus' honderd ogen, één voor één, en plaatst ze voor eeuwig op de staart van haar heilige vogel — de pauw. Sindsdien draagt elke pauw ter wereld het waakzame erfgoed van een wachter die zijn plicht met zijn leven bekocht, zichtbaar voor iedereen die ooit een pauwenstaart open ziet vallen.
+
+Maar Argus' dood lost niets op voor Io zelf — Juno, nu pas echt woedend, zoekt onmiddellijk naar een nieuwe manier om haar te kwellen.
+
+CHOICES:
+
+* Wacht af wat Juno nu bedenkt -> CH3_IO11
+
+END
+
+=== SCENE: CH3_IO11 ===
+
+TITLE:
+De Steekvlieg
+
+TEXT:
+Juno stuurt een steekvlieg — oestrus — die Io onophoudelijk achtervolgt en steekt, dag na dag, nacht na nacht, zonder ooit rust te gunnen. Krankzinnig van de pijn rent Io de wereld rond, over zeeën die naar haar vernoemd zullen worden en langs een zeestraat die later de "Runnenoversteek" — Bosporus — zal heten, precies vanwege haar wanhopige tocht als vaars.
+
+Je volgt haar over land en zee, door berg na vallei na kust, terwijl ze wegrent van een pijn die haar overal blijft vinden.
+
+CHOICES:
+
+* Blijf haar volgen, hoe uitputtend het ook wordt -> CH3_IO12
+
+END
+
+=== SCENE: CH3_IO12 ===
+
+TITLE:
+Aangespoeld in Egypte
+
+TEXT:
+Na weken van doelloze, door pijn gedreven vlucht bereikt Io uiteindelijk de oever van de Nijl in Egypte, uitgeput tot op het bot, haar krachten voorgoed verbruikt. Daar, aan de rand van een rivier die niets met haar eigen vader gemeen heeft, zakt ze eindelijk neer — te moe zelfs om nog te vluchten.
+
+Jupiter, die haar lijden al die tijd is blijven volgen, beseft dat dit de laatste kans is om het goed te maken, tegenover Io en tegenover zichzelf.
+
+CHOICES:
+
+* Kijk wat Jupiter nu onderneemt -> CH3_IO13
+
+END
+
+=== SCENE: CH3_IO13 ===
+
+TITLE:
+Terug in Menselijke Gedaante
+
+TEXT:
+Jupiter zweert Juno plechtig dat hij Io nooit meer zal aanraken als minnares — een belofte die, voor deze ene keer, oprecht genoeg klinkt om Juno te doen toegeven. Ze laat de vloek los, en Io krijgt haar menselijke gedaante terug, huilend van opluchting op de oever van de Nijl.
+
+In Egypte baart ze Jupiters zoon Epaphus, en wordt ze door de Egyptenaren vereerd als een godin op zichzelf — vereenzelvigd met Isis, wier verering zich van daaruit over de hele Middellandse Zee zal verspreiden. Wat begon als vervolging eindigt, tegen alle verwachting in, als een nieuw soort goddelijkheid.
+
+CODEX:
+codex_io_argus
+
+PERSON:
+io:full, argus:full, hermes:full
+
+EERETITEL:
+ch3_io
+
+QUEST:
+quest_boodschapper_van_kronos: lijn Io afgerond (Hoofdstuk 3)
+
+FLAG:
+ch3_lijn_io=true
+
+FRAGMENT:
+io
+
+CHOICES:
+
+* Wacht op wat Athena hierover te zeggen heeft -> CH3_IO14
+
+END
+
+=== SCENE: CH3_IO14 ===
+
+TITLE:
+Athena over Europa
+
+TEXT:
+Athena, die het hele verhaal zwijgend heeft gadegeslagen zoals ze dat sinds Hoofdstuk 2 wel vaker doet voor ze uiteindelijk toch iets zegt, kijkt je nu recht aan. "Je hebt Io gezien worden veranderd in een dier om Jupiters ontrouw te verbergen," zegt ze. "Onthoud die vorm goed — want ergens anders, op ditzelfde moment, speelt hetzelfde patroon zich af met de rollen omgekeerd."
+
+Ze vertelt, kort maar met duidelijke afkeuring in haar stem, over Europa: een Fenicische prinses die met haar dienaressen op het strand speelt, tot een opvallend tamme, sneeuwwitte stier zich bij de kudde voegt. Europa, argeloos, klimt op zijn rug — en de stier, die Jupiter zelf is, zwemt met haar de zee op, helemaal naar Kreta. Daar zal ze drie zonen baren, onder wie Minos — een naam die je, zegt Athena met een blik die meer weet dan ze nu al prijsgeeft, nog wel eens terug zult horen.
+
+"Bij Io wordt de vrouw een dier om de affaire te verbergen," besluit Athena. "Bij Europa wordt de god zelf een dier om de affaire te beginnen. Twee kanten van dezelfde ontrouw — en jij, {tendency_address}, hebt inmiddels wel gemerkt dat Jupiter zelden de prijs betaalt die anderen voor hem betalen."
+
+CODEX:
+codex_europa
+
+PERSON:
+europa:intro
+
+CHOICES:
+
+* Keer terug naar de Boodschapper — Herakles' beproevingen wachten nog -> CH3_000
+
+END
+
+=== SCENE: CH3_H01 ===
+
+TITLE:
+Acht Beproevingen te Gaan
+
+TEXT:
+Twee van Herakles' twaalf werken liggen achter hem — de Nemeïsche Leeuw gewurgd, de Hydra van Lerna verslagen met vuur, al telt Eurystheus die laatste vanwege Iolaos' hulp niet volwaardig mee. Tien beproevingen resten er nog, en Eurystheus, veilig verscholen achter de rand van zijn bronzen pot, kondigt de derde alvast aan met zichtbaar plezier in de moeilijkheidsgraad die hij ditmaal heeft bedacht.
+
+"Geen monster deze keer," zegt hij. "Een hert. Hoe moeilijk kan dat nu helemaal zijn?"
+
+CHOICES:
+
+* Wacht af wat er zo lastig kan zijn aan een hert -> CH3_H02
+
+END
+
+=== SCENE: CH3_H02 ===
+
+TITLE:
+De Cerynitische Hinde
+
+TEXT:
+Het "hert" blijkt de Cerynitische Hinde te zijn — een dier met gouden gewei en bronzen hoeven, heilig aan Diana zelf, zo snel dat geen enkele jager het ooit heeft kunnen vangen. Het doden ervan zou Diana's woede over Herakles afroepen; het simpelweg laten lopen zou de opdracht onvervuld laten.
+
+Herakles kiest voor geduld in plaats van kracht: hij volgt het spoor van de hinde, zonder ooit dichtbij genoeg te komen om te jagen, een vol jaar lang, door bergen en valleien tot ver buiten Griekenland.
+
+PUZZLE:
+puzzle_ch3h_genitivus
+
+CHOICES:
+
+* Kijk hoe die lange achtervolging eindigt -> CH3_H03
+
+END
+
+=== SCENE: CH3_H03 ===
+
+TITLE:
+Gevangen zonder een Wond
+
+TEXT:
+Uiteindelijk, uitgeput en zonder enige list meer over, ziet Herakles zijn kans wanneer de hinde probeert een rivier over te steken — hij grijpt haar vast zonder haar te verwonden, precies op het moment dat Diana zelf verschijnt, woedend over wie haar heilige dier durft aan te raken.
+
+Herakles legt uit wat Eurystheus van hem eist, en belooft de hinde ongedeerd vrij te laten zodra hij haar heeft getoond. Diana, die zijn oprechtheid herkent, staat het toe — op voorwaarde dat hij zijn belofte ook werkelijk nakomt.
+
+CHOICES:
+
+* Kijk of Herakles zijn woord houdt -> CH3_H04
+
+END
+
+=== SCENE: CH3_H04 ===
+
+TITLE:
+De Erymanthische Ever
+
+TEXT:
+De vierde beproeving voert Herakles naar de besneeuwde hellingen van de berg Erymanthos, waar een reusachtige ever huishoudt. Onderweg zoekt hij onderdak bij de wijze centaur Pholus, die hem gastvrij ontvangt en, tegen beter weten in, een kruik wijn opent die aan alle centauren gezamenlijk toebehoort.
+
+De geur van de wijn trekt al snel de rest van de centaurenkudde aan — dronken, wild, en meteen agressief bij het zien van een indringer aan hun gezamenlijke voorraad.
+
+PERSON:
+pholus:intro
+
+CHOICES:
+
+* Kijk hoe Herakles zich verdedigt tegen de woedende kudde -> CH3_H05
+
+END
+
+=== SCENE: CH3_H05 ===
+
+TITLE:
+De Centaurenstrijd
+
+TEXT:
+Herakles grijpt naar zijn pijlen — dezelfde die hij ooit doopte in het onuitwisbare gif van de Hydra van Lerna — en verdedigt zichzelf tegen de aanstormende centauren, die in hun dronken woede geen onderscheid meer maken tussen indringer en oude vriendschap.
+
+COMBAT:
+centauren
+
+CHOICES:
+
+* Kijk wat de vergiftigde pijlen hebben aangericht -> CH3_H06
+
+END
+
+=== SCENE: CH3_H06 ===
+
+TITLE:
+Chiron
+
+TEXT:
+Te midden van de chaos raakt een van Herakles' pijlen, afgeketst of simpelweg verdwaald, zijn eigen oude leermeester Chiron — de wijze, onsterfelijke centaur die hem ooit, jaren geleden, onderwees in geneeskunde, muziek en rechtvaardigheid. Chiron, anders dan de andere centauren, was nooit vijandig — hij stond enkel toevallig te dichtbij.
+
+Het gif van de Hydra, dat geen enkele wond ooit laat helen, brengt Chiron ondraaglijke pijn — en omdat hij onsterfelijk is, kan hij niet eens sterven om er een einde aan te maken. Herakles, ontzet over wat hij zijn eigen leermeester heeft aangedaan, kan niets anders doen dan toekijken.
+
+CHOICES:
+
+* Voel intens medelijden met Chiron, gestraft voor andermans dronkenschap [CLEMENTIA] -> CH3_H07
+* Erken de wrede ironie zonder je erin te laten meeslepen — Herakles moet door [SEVERITAS] -> CH3_H07
+* Weet niet goed hoe je dit noodlot moet plaatsen [NEUTRAL] -> CH3_H07
+
+END
+
+=== SCENE: CH3_H07 ===
+
+TITLE:
+Een Onsterfelijkheid Weggegeven
+
+TEXT:
+Chiron zal, jaren later, zijn eigen onsterfelijkheid vrijwillig afstaan aan Prometheus — nog altijd geketend aan zijn rots, nog altijd dagelijks gekweld door een adelaar — om zo eindelijk zelf verlost te worden van een pijn die nooit meer zal helen. Het is een verhaal dat nog moet gebeuren, maar dat Herakles, terwijl hij nu wegloopt van het bloedbad dat hij per ongeluk heeft aangericht, al met zich meedraagt als een schuld naast al zijn andere schulden.
+
+De ever zelf blijkt, na dit alles, het makkelijkste deel van de beproeving: Herakles drijft hem een diepe sneeuwbank in, waar het uitgeputte dier vastraakt en levend gevangen kan worden. Eurystheus, bij het zien van de ever, duikt voor de zoveelste keer zijn bronzen pot in.
+
+CODEX:
+codex_chiron
+
+CHOICES:
+
+* Ga door naar de volgende, heel andere soort beproeving -> CH3_H08
+
+END
+
+=== SCENE: CH3_H08 ===
+
+TITLE:
+De Augiasstal
+
+TEXT:
+De vijfde taak is geen gevecht maar een vernedering, bewust zo gekozen door Eurystheus: de stallen van koning Augias, die duizenden runderen huisvesten en al jaren niet zijn uitgemest, in slechts één enkele dag volledig schoonmaken. Geen sterveling, laat staan een held, heeft ooit zoiets geprobeerd.
+
+Herakles, die zijn kracht ditmaal niet kan gebruiken, sluit in het geheim een overeenkomst met Augias: een tiende van zijn kudde in ruil voor het karwei — zonder te vermelden dat hij dit sowieso al van Eurystheus moet doen.
+
+PUZZLE:
+puzzle_ch3h_dativus
+
+CHOICES:
+
+* Kijk hoe Herakles het onmogelijke voor elkaar krijgt -> CH3_H09
+
+END
+
+=== SCENE: CH3_H09 ===
+
+TITLE:
+Twee Rivieren Omgeleid
+
+TEXT:
+In plaats van te scheppen en te vegen, breekt Herakles simpelweg de muren aan beide kanten van de stallen open en leidt de rivieren Alpheus en Peneus er dwars doorheen — het water spoelt in enkele uren weg wat generaties vee hebben achtergelaten, en laat de stallen schoner achter dan ze ooit zijn geweest.
+
+Augias, die achteraf spijt krijgt van zijn belofte, weigert de afgesproken kudde te betalen. En Eurystheus, die hoort dat Herakles voor deze taak (bijna) betaald zou zijn geweest, verklaart — net als bij de Hydra — dat ook deze beproeving niet meetelt, puur op een technisch punt.
+
+CODEX:
+codex_augiasstal
+
+CHOICES:
+
+* Ga door naar de zesde beproeving, ondanks de onrechtvaardige afwijzing -> CH3_H10
+
+END
+
+=== SCENE: CH3_H10 ===
+
+TITLE:
+De Stymfalische Vogels
+
+TEXT:
+Een zwerm vleesetende vogels met bronzen snavels, klauwen en veren scherp genoeg om als pijlen te dienen, teistert het moerasgebied bij het meer Stymfalos — te talrijk en te goed verscholen in het dichte riet om met kracht alleen te bestrijden.
+
+Athena, die sinds Hoofdstuk 2 niet langer zwijgend toekijkt maar actief helpt waar ze kan, verschijnt met een geschenk van Hephaistos: een bronzen ratel, krotala genoemd, luid genoeg om zelfs de sluwste vogels uit hun schuilplaats te jagen.
+
+PUZZLE:
+puzzle_ch3h_bijstelling
+
+PERSON:
+athena:full
+
+CHOICES:
+
+* Kijk wat er gebeurt zodra de vogels opvliegen -> CH3_H11
+
+END
+
+=== SCENE: CH3_H11 ===
+
+TITLE:
+Vogels uit het Riet
+
+TEXT:
+Herakles schudt de ratel met een lawaai dat over het hele moeras schalt — duizenden vogels stijgen tegelijk op, verrast en ontregeld, en worden een makkelijk doelwit zodra ze boven het open water vliegen.
+
+COMBAT:
+stymfalische_vogels
+
+CHOICES:
+
+* Kijk hoe deze beproeving wordt afgesloten -> CH3_H12
+
+END
+
+=== SCENE: CH3_H12 ===
+
+TITLE:
+De Kretenzische Stier
+
+TEXT:
+Op Kreta huishoudt een reusachtige stier die Neptunus ooit aan koning Minos schonk — en die Minos, in plaats van hem te offeren zoals afgesproken, voor zichzelf hield. Neptunus, beledigd, maakte het dier razend, en het verwoest sindsdien akker na akker over het hele eiland.
+
+Minos, allang blij om van het beest af te zijn, staat Herakles zonder aarzeling toe om het mee te nemen — al weet niemand op Kreta nog wat er met de stier moet gebeuren zodra hij eenmaal gevangen is.
+
+COMBAT:
+kretenzische_stier
+
+CHOICES:
+
+* Kijk waar Herakles de gevangen stier naartoe brengt -> CH3_H13
+
+END
+
+=== SCENE: CH3_H13 ===
+
+TITLE:
+Losgelaten bij Marathon
+
+TEXT:
+Herakles brengt de bedwongen stier helemaal naar Eurystheus, die — zoals inmiddels een vast patroon is geworden — meteen zijn bronzen pot induikt bij het zien van het woeste dier. Zonder verder nut voor de koning wordt de stier losgelaten in de vlakte bij Marathon, waar hij jarenlang zal blijven rondzwerven.
+
+Je voelt, zonder precies te weten waarom, dat dit dier zijn verhaal nog niet af heeft — ergens in de toekomst zal een andere held de "Marathonische Stier" nog moeten temmen.
+
+CHOICES:
+
+* Ga door naar de zevende beproeving -> CH3_H14
+
+END
+
+=== SCENE: CH3_H14 ===
+
+TITLE:
+De Merries van Diomedes
+
+TEXT:
+Koning Diomedes van Thracië bezit vier merries die niet op hooi maar op mensenvlees zijn afgericht — nietsvermoedende reizigers die zijn koninkrijk binnenkomen, worden hem regelmatig voorgeworpen als voer. Eurystheus draagt Herakles op de merries levend naar Mycene te brengen.
+
+Herakles, die het paleis binnendringt en de stallen probeert te bereiken, ontdekt al snel dat Diomedes zijn wachters niet zomaar zal laten passeren.
+
+COMBAT:
+merries_van_diomedes
+
+CHOICES:
+
+* Kijk hoe Herakles de merries uiteindelijk kalmeert -> CH3_H15
+
+END
+
+=== SCENE: CH3_H15 ===
+
+TITLE:
+Poëtische Gerechtigheid
+
+TEXT:
+Herakles overmeestert Diomedes zelf en, in een wraak die niemand hem kwalijk neemt, voert de koning aan zijn eigen mensenetende merries — die, eenmaal verzadigd, plotsklaps kalm en handelbaar worden, alsof enkel honger hun waanzin had gevoed. Wat begon als een verschrikking eindigt met een vreemd soort rechtvaardigheid.
+
+Hij leidt de nu rustige dieren naar Mycene, waar Eurystheus ze, na de gebruikelijke vlucht in zijn pot, laat vrijlaten op de berg Olympos zelf.
+
+CHOICES:
+
+* Ga door naar de achtste beproeving -> CH3_H16
+
+END
+
+=== SCENE: CH3_H16 ===
+
+TITLE:
+De Gordel van Hippolyte
+
+TEXT:
+Eurystheus' dochter begeert de gordel van Hippolyte, koningin van de Amazones — een geschenk ooit van Mars zelf, symbool van haar gezag over haar volk. Herakles reist naar hun land, verwachtend een gevecht, maar Hippolyte, onder de indruk van zijn reputatie, biedt de gordel spontaan en vreedzaam aan.
+
+Voor één keer lijkt een beproeving zonder bloedvergieten te kunnen eindigen.
+
+CHOICES:
+
+* Vertrouw op deze vreedzame afloop, opgelucht dat het geweld hier uitblijft [CLEMENTIA] -> CH3_H17
+* Blijf op je hoede — na alles wat je hebt gezien, wantrouw je een te gemakkelijke afloop [SEVERITAS] -> CH3_H17
+* Wacht simpelweg af of het inderdaad zo eenvoudig blijft [NEUTRAL] -> CH3_H17
+
+END
+
+=== SCENE: CH3_H17 ===
+
+TITLE:
+Juno's Laatste List
+
+TEXT:
+Juno, die Herakles al sinds zijn geboorte haat en dit ongewoon vreedzame verloop niet kan verdragen, vermomt zich als een Amazone en verspreidt onder de kudde het gerucht dat de vreemdeling van plan is hun koningin te ontvoeren. Paniek en verwarring breken uit voor iemand de leugen kan ontkrachten.
+
+In de chaos die volgt, vallen de Amazones Herakles' schip aan — en Hippolyte zelf komt om, niet door zijn hand met opzet, maar in een gevecht dat nooit had moeten plaatsvinden als Juno zich er niet mee had bemoeid.
+
+COMBAT:
+amazones
+
+CHOICES:
+
+* Draag de gordel mee, zwaarder dan hij had moeten zijn -> CH3_H18
+
+END
+
+=== SCENE: CH3_H18 ===
+
+TITLE:
+Het Vee van Geryon
+
+TEXT:
+De tiende beproeving voert Herakles naar het uiterste westen van de bekende wereld, naar Geryon — een reus met drie gekoppelde lichamen op één paar benen, eigenaar van een kudde rood vee bewaakt door een tweekoppige hond. Onderweg splijt Herakles een berg in tweeën om een doorgang naar de oceaan te scheppen: de rotsen die aan weerszijden achterblijven, zullen eeuwenlang bekendstaan als de Zuilen van Herakles.
+
+De doorgang die hij zo schept, markeert voortaan de rand van de wereld die de Ouden kennen — en de poort naar alles wat daarbuiten ligt.
+
+CHOICES:
+
+* Kijk hoe Herakles de kudde probeert te bemachtigen -> CH3_H19
+
+END
+
+=== SCENE: CH3_H19 ===
+
+TITLE:
+Drie Lichamen, Eén Val
+
+TEXT:
+Geryon, gewaarschuwd door het geblaf van zijn tweekoppige waakhond, komt zelf met al drie zijn lichamen tegelijk aanstormen om zijn kudde te verdedigen — een tegenstander die, in tegenstelling tot de meeste andere beproevingen, drie keer zoveel klappen kan uitdelen als een gewone man.
+
+COMBAT:
+geryon
+
+CHOICES:
+
+* Drijf de veroverde kudde helemaal terug naar Mycene -> CH3_H20
+
+END
+
+=== SCENE: CH3_H20 ===
+
+TITLE:
+De Appels van de Hesperiden
+
+TEXT:
+De elfde taak voert Herakles naar de tuin van de Hesperiden, aan de rand van de wereld, waar een boom met gouden appels groeit — een huwelijksgeschenk van Gaia aan Juno zelf, bewaakt door de nooit-slapende draak Ladon, wiens honderd koppen (zo vertelt men, al is niemand het helemaal eens over het exacte aantal) zich eindeloos om de stam winden.
+
+Herakles, die weet dat kracht alleen hier niet genoeg zal zijn, bereidt zich voor op een gevecht dat hij liever had vermeden.
+
+COMBAT:
+ladon
+
+CHOICES:
+
+* Kijk hoe Herakles daarna de appels zelf probeert te bemachtigen -> CH3_H21
+
+END
+
+=== SCENE: CH3_H21 ===
+
+TITLE:
+De Last van Atlas
+
+TEXT:
+Met Ladon verslagen weet Herakles nog altijd niet hoe hij zelf de appels mag plukken — enkel de titaan Atlas, die de hemel op zijn schouders draagt vlakbij de tuin, kent de weg naar de boom zonder het lot van de wachter te delen. Herakles biedt aan tijdelijk de hemel over te nemen, zodat Atlas de appels voor hem kan halen.
+
+Atlas, eindelijk bevrijd van een last die hij al eeuwen torst, plukt de appels — en overweegt dan hardop om nooit meer terug te komen, Herakles voorgoed achterlatend onder het gewicht van de hemel.
+
+PUZZLE:
+puzzle_ch3h_bijstelling2
+
+CHOICES:
+
+* Kijk hoe Herakles zich uit deze list weet te redden -> CH3_H22
+
+END
+
+=== SCENE: CH3_H22 ===
+
+TITLE:
+De Hemel Teruggegeven
+
+TEXT:
+Herakles, die doorziet wat Atlas van plan is, speelt het spel mee: hij vraagt slechts om een kort moment om zijn mantel op te vouwen als kussen onder de last. Atlas, zonder enig wantrouwen, neemt de hemel nog één keer over — en Herakles grijpt op datzelfde ogenblik de appels en loopt weg, de titaan voorgoed achterlatend met zijn oorspronkelijke last.
+
+Met de appels veilig bij Eurystheus (die ze, zodra hij zeker weet dat Herakles echt weg is, teruggeeft aan Athena, want een sterveling mag zulke goddelijke vruchten niet permanent bezitten) rest er nog maar één beproeving — de zwaarste van allemaal.
+
+CODEX:
+codex_atlas
+
+CHOICES:
+
+* Wacht af wat Eurystheus voor de twaalfde en laatste taak heeft bedacht -> CH3_H23
+
+END
+
+=== SCENE: CH3_H23 ===
+
+TITLE:
+De Twaalfde Taak
+
+TEXT:
+Eurystheus, die na elf beproevingen wanhopig op zoek is naar iets wat Herakles onmogelijk kan volbrengen, bedenkt uiteindelijk de zwaarste opdracht van allemaal: Cerberus, de driekoppige hond die de poort van de onderwereld bewaakt, levend naar Mycene brengen — zonder wapens, met enkel blote handen.
+
+Hades zelf, wanneer Herakles via een grot bij Tainaron afdaalt naar zijn rijk, staat de beproeving toe — op voorwaarde dat Herakles Cerberus zonder geweld overmeestert. Athena en Mercurius, beiden inmiddels vertrouwde bondgenoten, begeleiden hem tot aan de rand van de onderwereld.
+
+PERSON:
+hermes:full
+
+CHOICES:
+
+* Daal af naar de poort van de onderwereld -> CH3_H24
+
+END
+
+=== SCENE: CH3_H24 ===
+
+TITLE:
+Cerberus, aan de Poort van de Onderwereld
+
+TEXT:
+Cerberus, drie koppen op één enkel, reusachtig lichaam, elk met een gegrom dat zelfs schaduwen doet terugdeinzen, bewaakt de poort zoals hij dat al eeuwen doet — niemand levend naar binnen, niemand dood weer naar buiten.
+
+Herakles, die zijn wapens heeft achtergelaten zoals beloofd, stapt op het beest af met enkel zijn blote handen en een leeuwenhuid als enige bescherming.
+
+COMBAT:
+cerberus
+
+CHOICES:
+
+* Kijk hoe Herakles het driekoppige beest weet te overmeesteren -> CH3_H25
+
+END
+
+=== SCENE: CH3_H25 ===
+
+TITLE:
+Twaalf Werken Volbracht
+
+TEXT:
+Herakles bedwingt Cerberus met blote handen, precies zoals afgesproken, en draagt hem — grommend, maar ongedeerd — helemaal naar Mycene. Eurystheus, bij het zien van het driekoppige monster op zijn eigen binnenplaats, duikt voor de allerlaatste keer zijn bronzen pot in en smeekt Herakles het beest onmiddellijk terug te brengen naar waar het vandaan kwam.
+
+Herakles brengt Cerberus, zoals beloofd, ongedeerd terug naar de onderwereld — en met die laatste daad zijn alle twaalf werken volbracht. Tien jaar dienstbaarheid, opgelegd door een orakel na de ergste daad van zijn leven, eindigen hier. De schuld die hij droeg sinds die vreselijke dag met Megara en hun kinderen is, voor zover een orakel dat kan bepalen, ingelost.
+
+CODEX:
+codex_herakles_twaalf_werken
+
+PERSON:
+herakles:full
+
+EERETITEL:
+ch3_herakles_labores
+
+QUEST:
+quest_boodschapper_van_kronos: lijn Herakles — alle twaalf werken volbracht (Hoofdstuk 3)
+
+FLAG:
+ch3_lijn_herakles=true; herakles_taken_voltooid=12
+
+FRAGMENT:
+labores
+
+CHOICES:
+
+* Keer terug naar de Boodschapper -> CH3_000
+
+END
+
+=== SCENE: CH3_ATHENA ===
+
+TITLE:
+Wat Vrijheid Werkelijk Betekent
+
+TEXT:
+Athena wacht je op bij de Boodschapper, ditmaal niet als toeschouwer maar als iemand die duidelijk al een tijd op dit gesprek heeft zitten wachten. "Io kreeg haar vrijheid terug nadat een god eindelijk verantwoordelijkheid nam voor wat hij had aangericht," zegt ze. "Herakles kreeg de zijne terug door tien jaar lang, beproeving na beproeving, een schuld in te lossen die hem was opgelegd voor iets wat niet volledig zijn eigen keuze was."
+
+"Twee soorten vrijheid," vervolgt ze, "en jij, {tendency_address_cap}, hebt inmiddels gezien dat geen van beide vanzelf komt — niet voor een god, en al helemaal niet voor een sterveling."
+
+PERSON:
+athena:full
+
+EERETITEL:
+ch3_athena_gesprek
+
+CHOICES:
+
+* Laat haar woorden bezinken -> CH3_ORAKEL
+
+END
+
+=== SCENE: CH3_ORAKEL ===
+
+TITLE:
+Het Orakel Keert Terug
+
+TEXT:
+De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warm en tevreden. "Io, bevrijd van Argus en van haarzelf. Herakles, bevrijd van een schuld die tien jaar heeft geduurd," zegt de stem. "Twee verhalen over wat het kost om vrij te zijn — en wat het waard is zodra je het eindelijk bent."
+
+CODEX:
+codex_grammatica_ch3_overzicht
+
+VOCAB:
+latijn_iuno, latijn_nuntius, latijn_dea, latijn_sapientia, latijn_crotala, latijn_cerva, latijn_pars, latijn_promittit, latijn_titan
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 3 volledig voltooid
+
+CHOICES:
+
+* Luister verder -> CH3_EINDE
+
+END
+
+=== SCENE: CH3_EINDE ===
+
+TITLE:
+Het Einde van Hoofdstuk 3
+
+TEXT:
+"Hoofdstuk 4 wacht al ergens verderop," zegt de stem, "waar een ander soort labyrint op je wacht — niet van steen deze keer, maar van herinnering zelf." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: vrijheid, en volbrenging.
 
 END
 `.trim();
