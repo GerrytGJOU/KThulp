@@ -86,6 +86,19 @@ const SP_TITLES = [
     ds:"Was aanwezig toen Athena voltallig gewapend uit Zeus' hoofd sprong.", bonus:null },
   { id:"ch1_c_prometheus", nm:"Vriend van de Mensheid", icon:"torch", cat:"chronica", secret:true,
     ds:"Stond de mensheid bij toen het vuur — en de hoop — hun deel werden.", bonus:null },
+  // Hoofdstuk 2 — vier parallelle lijnen (L/S/K/H, zie SP_CH2_CNS) rond Hera's
+  // jaloezie, plus een mijlpaal voor Athena's overgang van zwijgend getuige
+  // naar actieve mentor zodra alle vier Herinneringsfragmenten binnen zijn.
+  { id:"ch2_latona", nm:"Toevlucht op Delos", icon:"trident", cat:"chronica", secret:true,
+    ds:"Bleef Latona trouw tot ze op het drijvende eiland Delos een plek vond om te bevallen.", bonus:null },
+  { id:"ch2_semele", nm:"Getuige van Semeles Val", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Semele's wens om Jupiters ware gedaante te aanschouwen fataal aflopen — en Bacchus geboren worden uit zijn as.", bonus:null },
+  { id:"ch2_kallisto", nm:"Onder de Sterren Herenigd", icon:"star", cat:"chronica", secret:true,
+    ds:"Volgde Kallisto's lot van nimf tot berin tot sterrenbeeld aan het firmament.", bonus:null },
+  { id:"ch2_herakles_eerste_taken", nm:"Overwinnaar van Leeuw en Hydra", icon:"shield", cat:"chronica", secret:true,
+    ds:"Stond Herakles bij tijdens zijn eerste twee beproevingen voor Eurystheus.", bonus:null },
+  { id:"ch2_athena_mentor", nm:"Athena's Vertrouweling", icon:"owl", cat:"chronica", secret:true,
+    ds:"Zag Athena, na vier stille getuigenissen, eindelijk spreken als mentor.", bonus:null },
 ];
 
 /* ---- CAMPAGNEKAART — Proloog + 19 hoofdstukken (5 "Boeken"), gesynchroniseerd
@@ -1131,8 +1144,9 @@ Wat de koning met hem heeft gedaan, weet de koopman niet precies, maar het geruc
 
 CHOICES:
 
-* Bedank de koopman voor zijn verhaal voor je verdergaat [CLEMENTIA] -> CH1_A02
 * Knik kort en loop meteen door, je aandacht al bij het paleis [SEVERITAS] -> CH1_A02
+* Luister beleefd, maar zonder een duidelijk oordeel over wat je net hoorde [NEUTRAL] -> CH1_A02
+* Bedank de koopman voor zijn verhaal voor je verdergaat [CLEMENTIA] -> CH1_A02
 
 END
 
@@ -1228,8 +1242,9 @@ Hij grijpt naar brood — en het verstart tussen zijn vingers voordat het zijn l
 
 CHOICES:
 
-* Kijk met groeiend medeleven hoe zijn paniek toeneemt [CLEMENTIA] -> CH1_A07
 * Kijk onbewogen toe — hij wist waar hij om vroeg [SEVERITAS] -> CH1_A07
+* Kijk toe, nog niet goed wetend wat je van dit alles moet denken [NEUTRAL] -> CH1_A07
+* Kijk met groeiend medeleven hoe zijn paniek toeneemt [CLEMENTIA] -> CH1_A07
 
 END
 
@@ -1245,8 +1260,9 @@ Hij omarmt haar voordat hij zich kan inhouden, en zij verstart in zijn armen —
 
 CHOICES:
 
-* Grijp hem voorzichtig bij zijn schouders, om hem te troosten [CLEMENTIA] -> CH1_A08
 * Grijp hem stevig bij zijn schouders, om hem tot bezinning te schudden [SEVERITAS] -> CH1_A08
+* Grijp hem bij zijn schouders, zelf niet zeker of dit troost of een schok moet zijn [NEUTRAL] -> CH1_A08
+* Grijp hem voorzichtig bij zijn schouders, om hem te troosten [CLEMENTIA] -> CH1_A08
 
 END
 
@@ -1262,8 +1278,9 @@ Voor het eerst sinds je hem zag, ziet hij eruit als een gewone man — geen koni
 
 CHOICES:
 
-* Wijs hem meteen op Bacchus, die alles zag gebeuren [SEVERITAS] -> CH1_A09
 * Blijf eerst naast hem zitten, zodat hij niet alleen is met wat hij heeft gedaan [CLEMENTIA] -> CH1_A08B
+* Blijf besluiteloos naast hem zitten, niet zeker wat je nu moet zeggen [NEUTRAL] -> CH1_A08B
+* Wijs hem meteen op Bacchus, die alles zag gebeuren [SEVERITAS] -> CH1_A09
 
 END
 
@@ -1331,8 +1348,9 @@ ch1_lijn=A; ch1_voltooid=true
 
 CHOICES:
 
-* Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [CLEMENTIA] -> CH1_A11
 * Loop meteen door — er wacht nog werk aan de naam die je moet redden [SEVERITAS] -> CH1_A11
+* Werp een laatste blik terug, zonder er verder bij stil te staan [NEUTRAL] -> CH1_A11
+* Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [CLEMENTIA] -> CH1_A11
 
 END
 
@@ -1392,8 +1410,9 @@ Hij wijst naar de donderwolken die zich al om de top samenpakken. "Als de zoon z
 
 CHOICES:
 
-* Bedank de herder voor zijn waarschuwing voor je verdergaat [CLEMENTIA] -> CH1_B02
 * Je hebt geen tijd voor meer vragen en klimt meteen door [SEVERITAS] -> CH1_B02
+* Overweeg zijn woorden een moment, en klim dan verder [NEUTRAL] -> CH1_B02
+* Bedank de herder voor zijn waarschuwing voor je verdergaat [CLEMENTIA] -> CH1_B02
 
 END
 
@@ -1409,8 +1428,9 @@ De andere goden houden zich op afstand, fluisterend onder elkaar, niemand goed w
 
 CHOICES:
 
-* Voel medelijden met Zeus, ondanks alles wat hij heeft gedaan [CLEMENTIA] -> CH1_B03
 * Blijf nuchter — een pijnlijke geboorte is nog geen excuus voor wat hij Metis aandeed [SEVERITAS] -> CH1_B03
+* Kijk toe zonder een duidelijke mening te vormen over wat je ziet [NEUTRAL] -> CH1_B03
+* Voel medelijden met Zeus, ondanks alles wat hij heeft gedaan [CLEMENTIA] -> CH1_B03
 
 END
 
@@ -1523,8 +1543,9 @@ Zeus, met een mengeling van opluchting en ontzag die je zelden op zijn gezicht z
 
 CHOICES:
 
-* Kijk toe, ontroerd door het moment tussen vader en dochter [CLEMENTIA] -> CH1_B08
 * Kijk toe, vooral benieuwd wat haar aanwezigheid voor de Olympos gaat betekenen [SEVERITAS] -> CH1_B08
+* Kijk toe, vooral afwachtend wat er nu gaat gebeuren [NEUTRAL] -> CH1_B08
+* Kijk toe, ontroerd door het moment tussen vader en dochter [CLEMENTIA] -> CH1_B08
 
 END
 
@@ -1555,8 +1576,9 @@ ch1_lijn=B; ch1_voltooid=true
 
 CHOICES:
 
-* Daal af, dankbaar dat je bij zo'n geboorte mocht zijn [CLEMENTIA] -> CH1_B09
 * Daal meteen af — er is nog werk te doen [SEVERITAS] -> CH1_B09
+* Daal af, nog steeds nadenkend over wat je zojuist hebt gezien [NEUTRAL] -> CH1_B09
+* Daal af, dankbaar dat je bij zo'n geboorte mocht zijn [CLEMENTIA] -> CH1_B09
 
 END
 
@@ -1599,8 +1621,9 @@ prometheus:intro
 
 CHOICES:
 
-* Haast je naar de vallei, bewogen door het verhaal van de oude vrouw [CLEMENTIA] -> CH1_C02
 * Loop resoluut door — verhalen zijn mooi, maar je wilt het zelf zien [SEVERITAS] -> CH1_C02
+* Loop verder in gedachten, niet meteen overtuigd van het hele verhaal [NEUTRAL] -> CH1_C02
+* Haast je naar de vallei, bewogen door het verhaal van de oude vrouw [CLEMENTIA] -> CH1_C02
 
 END
 
@@ -1684,8 +1707,9 @@ Voor Prometheus bedenkt hij een straf die eeuwig zal duren: vastgeketend aan een
 
 CHOICES:
 
-* Vrees voor wat dit gaat opleveren, met medelijden voor wie straks de gevolgen zal dragen [CLEMENTIA] -> CH1_C06
 * Kijk toe zonder oordeel — de goden doen wat goden doen [SEVERITAS] -> CH1_C06
+* Wacht simpelweg af wat Zeus heeft bedacht [NEUTRAL] -> CH1_C06
+* Vrees voor wat dit gaat opleveren, met medelijden voor wie straks de gevolgen zal dragen [CLEMENTIA] -> CH1_C06
 
 END
 
@@ -1764,8 +1788,9 @@ pandora.png
 
 CHOICES:
 
-* Kniel bij Pandora neer, die verstijfd is van schrik en schuldgevoel [CLEMENTIA] -> CH1_C09
 * Richt je blik meteen op de doos — is dit werkelijk alles wat erin zat? [SEVERITAS] -> CH1_C09
+* Kijk toe, niet goed wetend wie of wat hier het meest je aandacht verdient [NEUTRAL] -> CH1_C09
+* Kniel bij Pandora neer, die verstijfd is van schrik en schuldgevoel [CLEMENTIA] -> CH1_C09
 
 END
 
@@ -1784,8 +1809,9 @@ pandora:full
 
 CHOICES:
 
-* Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA] -> CH1_C10
 * Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [SEVERITAS] -> CH1_C10
+* Ga naar hem toe, zonder meteen te weten wat je tegen hem wilt zeggen [NEUTRAL] -> CH1_C10
+* Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA] -> CH1_C10
 
 END
 
@@ -2002,6 +2028,7 @@ Op een avond, uitgeput en wanhopig, bereikt ze een klein dorp aan de rand van ee
 
 CHOICES:
 
+* Trek weifelend verder — je weet niet goed wat je van de herder moet denken [NEUTRAL] -> CH2_L03
 * Schuil dankbaar in het riet, ontroerd door zijn stille moed [CLEMENTIA] -> CH2_L02B
 * Trek meteen verder — je vertrouwt niemand meer die zo snel weer verdwijnt [SEVERITAS] -> CH2_L03
 
@@ -2103,8 +2130,9 @@ athena:intro
 
 CHOICES:
 
-* Beloof het eiland eeuwige verering als het haar redt [CLEMENTIA] -> CH2_L08
 * Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [SEVERITAS] -> CH2_L08
+* Smeek het eiland gewoon om hulp, zonder overtuigingskracht te zoeken [NEUTRAL] -> CH2_L08
+* Beloof het eiland eeuwige verering als het haar redt [CLEMENTIA] -> CH2_L08
 
 END
 
@@ -2176,6 +2204,7 @@ Semele, die nooit eerder aan hem getwijfeld had, voelt de vraag als een steen di
 CHOICES:
 
 * Luister aandachtig — haar wantrouwen groeit met elk woord [SEVERITAS] -> CH2_S03
+* Weet zelf niet goed wat je van haar woorden moet denken [NEUTRAL] -> CH2_S02B
 * Wuif de twijfel eerst weg, uit vertrouwen in haar minnaar [CLEMENTIA] -> CH2_S02B
 
 END
@@ -2243,8 +2272,9 @@ athena:intro
 
 CHOICES:
 
-* Voel meelij met Jupiter, gevangen door zijn eigen onbezonnen woord [CLEMENTIA] -> CH2_S06
 * Denk streng — hij had zo'n eed nooit lichtzinnig mogen zweren [SEVERITAS] -> CH2_S06
+* Kijk toe, niet goed wetend wie hier eigenlijk het meeste medelijden verdient [NEUTRAL] -> CH2_S06
+* Voel meelij met Jupiter, gevangen door zijn eigen onbezonnen woord [CLEMENTIA] -> CH2_S06
 
 END
 
@@ -2346,8 +2376,9 @@ Ze vertelt het aan niemand. Wie zou haar geloven dat "Artemis" haar bedrogen hee
 
 CHOICES:
 
-* Voel woede namens Kallisto, die niets van dit alles kon vermoeden [CLEMENTIA] -> CH2_K03
 * Blijf nuchter — dit is hoe goden nu eenmaal met stervelingen omgaan [SEVERITAS] -> CH2_K03
+* Weet niet goed wat je van Zeus' gedrag moet vinden [NEUTRAL] -> CH2_K03
+* Voel woede namens Kallisto, die niets van dit alles kon vermoeden [CLEMENTIA] -> CH2_K03
 
 END
 
@@ -2409,8 +2440,9 @@ Hera, die van meet af aan had vermoed dat haar man weer iets had uitgespookt, sp
 
 CHOICES:
 
-* Hoop in stilte dat Hera deze ene keer genade toont [CLEMENTIA] -> CH2_K07
 * Weet allang dat genade nooit Hera's stijl is geweest [SEVERITAS] -> CH2_K07
+* Wacht simpelweg af wat Hera gaat doen [NEUTRAL] -> CH2_K07
+* Hoop in stilte dat Hera deze ene keer genade toont [CLEMENTIA] -> CH2_K07
 
 END
 
@@ -2534,8 +2566,9 @@ Het nieuws verspreidt zich snel: een baby die slangen wurgt alsof het niets is, 
 
 CHOICES:
 
-* Voel bewondering voor wat dit kind ooit zal worden [CLEMENTIA] -> CH2_H04
 * Voel onbehagen — een kracht als deze trekt altijd rampspoed aan [SEVERITAS] -> CH2_H04
+* Weet niet goed wat je van dit voorteken moet denken [NEUTRAL] -> CH2_H04
+* Voel bewondering voor wat dit kind ooit zal worden [CLEMENTIA] -> CH2_H04
 
 END
 
@@ -2567,8 +2600,9 @@ Je voelt het onheil aankomen, onontkoombaar, lang voor Herakles zelf ook maar ie
 
 CHOICES:
 
-* Wil wanhopig ingrijpen, wetend wat er komen gaat [CLEMENTIA] -> CH2_H06
 * Weet dat dit een noodlot is dat niemand had kunnen afwenden [SEVERITAS] -> CH2_H06
+* Kijk toe, verlamd door een onheil dat je niet kunt plaatsen [NEUTRAL] -> CH2_H06
+* Wil wanhopig ingrijpen, wetend wat er komen gaat [CLEMENTIA] -> CH2_H06
 
 END
 
