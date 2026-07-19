@@ -603,6 +603,14 @@ const SP_PUZZLES = {
     vraag:"“Atlas, ___ caelifer, caelum umeris tenet” — Atlas, de hemeldragende titaan, draagt de hemel op zijn schouders. Welke vorm van titan past hier?",
     opties:["titan","titanis","titani","titanem"], antwoord:"titan",
     hint:"Ook hier staat de bijstelling in dezelfde naamval als Atlas — nominativus." },
+  puzzle_ch3h_dativus2: { type:"multiple-choice",
+    vraag:"Boven het open water, waar de vogels zich nergens meer kunnen verschuilen, schiet Hercules zijn pijlen af. “Hercules ___ sagittas mittit” — welke vorm van avis (vogel) past hier, dativus meervoud?",
+    opties:["avibus","avium","aves","avis"], antwoord:"avibus",
+    hint:"Dativus meervoud van een derde-declinatie woord als avis, avis eindigt op -ibus." },
+  puzzle_ch3h_genitivus2: { type:"multiple-choice",
+    vraag:"Ladon bewaakt de boom met de gouden appels van de Hesperiden dag en nacht. “Ladon arborem ___ custodit” — welke vorm van aurum (goud) past hier, genitivus enkelvoud?",
+    opties:["auri","auro","aurum","aure"], antwoord:"auri",
+    hint:"Genitivus enkelvoud van een tweede-declinatie onzijdig woord als aurum, auri eindigt op -i." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -871,8 +879,6 @@ const SP_COMBAT_ENEMIES = {
   // dus één enkele statische illustratie i.p.v. de Hydra-koppenstapeling.
   centauren: { nm:"De Dronken Centaurenkudde", icon:"🐴", img:"assets/bosses/centauren.png", hp:50,
     intro:"Een woeste kudde centauren, dronken van Pholus' gedeelde wijnkruik en meteen vijandig tegenover elke indringer." },
-  stymfalische_vogels: { nm:"De Stymfalische Vogels", icon:"🦅", img:"assets/bosses/stymfalische_vogels.png", hp:45,
-    intro:"Een zwerm vleesetende vogels met bronzen snavels en veren scherp als pijlen — te talrijk om met kracht alleen te bestrijden." },
   kretenzische_stier: { nm:"De Kretenzische Stier", icon:"🐂", img:"assets/bosses/kretenzische_stier.png", hp:55,
     intro:"Een reusachtige, door Neptunus razend gemaakte stier die al jaren de akkers van Kreta verwoest." },
   merries_van_diomedes: { nm:"De Merries van Diomedes", icon:"🐎", img:"assets/bosses/merries_van_diomedes.png", hp:55,
@@ -881,8 +887,6 @@ const SP_COMBAT_ENEMIES = {
     intro:"Hippolytes trouwe strijdsters, opgehitst door een gerucht dat Juno zelf verspreidde — een gevecht dat nooit had moeten plaatsvinden." },
   geryon: { nm:"Geryon", icon:"👹", img:"assets/bosses/geryon.png", hp:70,
     intro:"Een reus met drie gekoppelde lichamen op één paar benen, die zijn kudde rood vee met drievoudige kracht verdedigt." },
-  ladon: { nm:"Ladon", icon:"🐉", img:"assets/bosses/ladon.png", hp:65,
-    intro:"Een nooit-slapende draak, gewikkeld om de boom van de Hesperiden, wachter over Juno's gouden appels." },
   cerberus: { nm:"Cerberus", icon:"🐕", img:"assets/bosses/Cerberus.png", hp:80,
     intro:"De driekoppige hond die de poort van de onderwereld bewaakt — de zwaarste van alle twaalf beproevingen, en de enige die met blote handen gewonnen moet worden." },
 };
@@ -932,6 +936,7 @@ const SP_VOCAB_ENTRIES = {
   latijn_pars:      { taal:"latijn", woord:"pars, partis", betekenis:"deel" },
   latijn_promittit: { taal:"latijn", woord:"promittere (promittit)", betekenis:"beloven" },
   latijn_titan:     { taal:"latijn", woord:"Titan, Titanis", betekenis:"titaan" },
+  latijn_avis:      { taal:"latijn", woord:"avis, avis", betekenis:"vogel" },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -967,6 +972,10 @@ const SP_AVATAR_STORY_UNLOCKS = {
   // aparte eretitel-checks nodig. Het Orakel overhandigt de mantel narratief
   // in CH1_ROBE zodra je een willekeurige lijn hebt afgerond.
   "armor:robe":   { flag:"ch1_voltooid" },
+  // Herakles draagt vanaf CH2_H09 de huid van de Nemeïsche Leeuw als eigen
+  // mantel en heeft zijn oude harnas niet meer nodig — hij geeft het aan de
+  // (voor de rest van het verhaal onzichtbare) speler.
+  "armor:licht":  { flag:"herakles_harnas" },
 };
 
 /* ---- PROLOOG: "DE BOER VAN LATIUM" (scène-ID's PRO_###) ----
@@ -2827,6 +2836,11 @@ Waar geen wapen doorheen kwam, bleek Herakles' eigen kracht wél genoeg: hij wur
 
 Eurystheus, die eigenlijk had verwacht dat deze eerste taak Herakles' laatste zou zijn, is zo geschokt door zijn terugkeer dat hij voortaan een grote bronzen pot laat klaarzetten om zich in te verstoppen wanneer Herakles nadert.
 
+Voor hij verdergaat, houdt Herakles even stil en kijkt, met een blik die net iets te gericht is voor toeval, recht in jouw richting — alsof hij, net als Athena eerder dit hoofdstuk, iets aanvoelt van een aanwezigheid die niemand anders opmerkt. "Een boodschapper die dit allemaal ziet gebeuren, verdient beter dan vodden onder een geleende mantel," zegt hij, en gooit zijn eigen, nu overbodige harnas in jouw richting — het brons dat hij droeg voor de leeuwenhuid het overbodig maakte. "Ik heb het toch niet meer nodig." Het landt zwaarder in je handen dan je had verwacht, nog warm en ruikend naar ijzer en Nemeïsch stof.
+
+FLAG:
+herakles_harnas=true
+
 CHOICES:
 
 * Vraag je af wat de volgende beproeving zal zijn -> CH2_H10
@@ -3461,10 +3475,10 @@ TITLE:
 Vogels uit het Riet
 
 TEXT:
-Herakles schudt de ratel met een lawaai dat over het hele moeras schalt — duizenden vogels stijgen tegelijk op, verrast en ontregeld, en worden een makkelijk doelwit zodra ze boven het open water vliegen.
+Herakles schudt de ratel met een lawaai dat over het hele moeras schalt — duizenden vogels stijgen tegelijk op, verrast en ontregeld, weg uit het riet waarin geen enkel wapen ze ooit had kunnen bereiken. Boven het open water, waar ze zich nergens meer kunnen verschuilen, is geen kracht meer nodig — enkel een rustige hand en een oog dat weet waar te mikken.
 
-COMBAT:
-stymfalische_vogels
+PUZZLE:
+puzzle_ch3h_dativus2
 
 CHOICES:
 
@@ -3620,10 +3634,10 @@ De Appels van de Hesperiden
 TEXT:
 De elfde taak voert Herakles naar de tuin van de Hesperiden, aan de rand van de wereld, waar een boom met gouden appels groeit — een huwelijksgeschenk van Gaia aan Juno zelf, bewaakt door de nooit-slapende draak Ladon, wiens honderd koppen (zo vertelt men, al is niemand het helemaal eens over het exacte aantal) zich eindeloos om de stam winden.
 
-Herakles, die weet dat kracht alleen hier niet genoeg zal zijn, bereidt zich voor op een gevecht dat hij liever had vermeden.
+Herakles, die weet dat kracht alleen hier niet genoeg zal zijn — geen zwaard doorboort honderd koppen tegelijk — herkent het patroon meteen: hetzelfde probleem als Argus Panoptes, alleen dan met een dier dat zich nooit láát afleiden door verhalen of fluitspel. In plaats daarvan valt hij terug op wat hij bij de Cerynitische Hinde al leerde: geduld. Nacht na nacht bestudeert hij hoe de koppen bewegen, tot hij het ene ogenblik ontdekt waarop ze allemaal, even, dezelfde kant op kijken.
 
-COMBAT:
-ladon
+PUZZLE:
+puzzle_ch3h_genitivus2
 
 CHOICES:
 
@@ -3775,7 +3789,7 @@ CODEX:
 codex_grammatica_ch3_overzicht
 
 VOCAB:
-latijn_iuno, latijn_nuntius, latijn_dea, latijn_sapientia, latijn_crotala, latijn_cerva, latijn_pars, latijn_promittit, latijn_titan
+latijn_iuno, latijn_nuntius, latijn_dea, latijn_sapientia, latijn_crotala, latijn_cerva, latijn_pars, latijn_promittit, latijn_titan, latijn_avis
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 3 volledig voltooid
