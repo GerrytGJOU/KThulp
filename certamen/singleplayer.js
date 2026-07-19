@@ -279,10 +279,21 @@ const SpTextResolver = {
       case "subject_cap":    return spCapitalize(p.subj);
       case "object_cap":     return spCapitalize(p.obj);
       case "possessive_cap": return spCapitalize(p.poss);
+      case "tendency_address":     return spTendencyAddressPhrase(state);
+      case "tendency_address_cap": return spCapitalize(spTendencyAddressPhrase(state));
     }
     return undefined;
   },
 };
+// Kiest een willekeurige, gender-passende aanspreekvorm bij de opgebouwde
+// Clementia/Severitas-houding (spApproachTendency) — zie SP_TENDENCY_PHRASES
+// (singleplayer-data.js). Vanaf Hoofdstuk 3 gebruikt in NPC-DIALOGUE/TEXT via
+// {tendency_address}/{tendency_address_cap}.
+function spTendencyAddressPhrase(state){
+  const tendency = spApproachTendency(state);
+  const noun = SP_TENDENCY_NOUN[state.gender] || SP_TENDENCY_NOUN.nonbinair;
+  return pick(SP_TENDENCY_PHRASES[tendency]).replace("%NOUN%", noun);
+}
 
 /* ---- CNS PARSER — zet ruwe .cns-tekst om in een Map<sceneId, sceneObject> ---- */
 const CNSParser = {
@@ -366,7 +377,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS)]);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[] });
 
 /* ---- SPELERSTATE ---- */
@@ -919,9 +930,10 @@ function spHookApproach(tag){
 }
 // Overwicht van de opgebouwde houding — "clementia"/"severitas" bij een duidelijk
 // overwicht, anders "neutraal" (gelijke stand of nog geen enkele keuze
-// gemaakt). Bedoeld voor later gebruik door NPC-dialoog/CONDITION-checks.
-function spApproachTendency(){
-  const a = SP_STATE.approach||{clementia:0,severitas:0};
+// gemaakt). state is optioneel (default SP_STATE) zodat spTendencyAddressPhrase
+// hem kan aanroepen met de state die SpTextResolver toevallig meekreeg.
+function spApproachTendency(state){
+  const a = (state||SP_STATE).approach||{clementia:0,severitas:0};
   if(a.clementia===a.severitas) return "neutraal";
   return a.clementia>a.severitas ? "clementia" : "severitas";
 }

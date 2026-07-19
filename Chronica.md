@@ -1,4 +1,4 @@
-# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1 speelbaar, Hoofdstuk 2 in aanbouw)
+# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1-3 speelbaar)
 
 > **Status: Beta, live in het hoofdmenu.** De **proloog** ("De Boer van
 > Latium" / "Het Orakel van Chronos") is volledig speelbaar: intro →
@@ -13,10 +13,17 @@
 > (bewust gedeeltelijk — zijn eerste twee werken, de rest volgt in Hoofdstuk
 > 3, zie §7.6). Dit hoofdstuk introduceert ook de Combat-bridge (§8), voor
 > het eerst gebruikt in H's gevechten tegen de Nemeïsche Leeuw en de Hydra.
+> **Hoofdstuk 3** ("Beloften van Goden en Mensen") is eveneens **volledig
+> speelbaar**: twee hoofdlijnen — Io (met Argus Panoptes en Mercurius als
+> climax van diezelfde lijn, en een Europa-coda erin verweven als
+> NPC-commentaar) en Herakles, die hier al zijn resterende tien werken
+> afrondt (zie §7.8). Vanaf dit hoofdstuk reageren NPC's ook voor het eerst
+> op de stil opgebouwde Clementia/Severitas-houding van de speler, via
+> `{tendency_address}` (zie §7.3).
 > Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
-> rest van de campagne (Hoofdstuk 3 t/m 19 + Finale) staat als metadata-skelet
+> rest van de campagne (Hoofdstuk 4 t/m 19 + Finale) staat als metadata-skelet
 > klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet geschreven.
 >
 > **Dit document is de enige bron van waarheid voor Chronica Classica** en
@@ -46,6 +53,7 @@ browser):
 | Proloog-content in CNS-formaat | `certamen/singleplayer-data.js` (`SP_PROLOOG_CNS`, 14 scènes) | ✅ werkend |
 | **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 30 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
 | **Hoofdstuk 2**: hub + alle vier lijnen (L/S/K afgerond, H gedeeltelijk) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | ✅ werkend — alle vier lijnen + fragmenten-gate + Athena-mentor + Combat-bridge getest, incl. beide gevechten (Leeuw/Hydra) volledig uitgespeeld (zie §7.6) |
+| **Hoofdstuk 3**: hub + twee lijnen (Io incl. Argus/Mercurius/Europa-coda, Herakles' laatste tien werken) | `certamen/singleplayer-data.js` (`SP_CH3_CNS`, 43 scènes) | ✅ werkend — beide lijnen + 8 nieuwe Combat-bridge-gevechten + fragmenten-gate (fragments=6) + `{tendency_address}` NPC-reacties volledig getest (zie §7.8) |
 | Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
 | **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
@@ -535,13 +543,21 @@ twijfelende spelers die zich niet in een van beide uitersten herkennen.
   `scene.choices[0].target` rechtstreeks en roept `spGoCns` aan, niet
   `spChoosePath` — een `[TAG]` op een puzzelscène-keuze zou dus nooit vuren.
   Tag daarom alleen keuzes op scènes ZONDER `PUZZLE:`-sectie.
-- `spApproachTendency()` levert `"clementia"`/`"severitas"`/`"neutraal"` (bij een
-  gelijke stand of nog geen enkele getagde keuze) — bedoeld voor NPC's/scènes
-  die later conditioneel reageren op de opgebouwde houding. Dat vereist wel
-  eerst het `CONDITION`-mechanisme (§8) — de teller zelf werkt al, het
-  *gebruik ervan* in dialoog is de volgende stap.
+- `spApproachTendency(state)` levert `"clementia"`/`"severitas"`/`"neutraal"`
+  (bij een gelijke stand of nog geen enkele getagde keuze) op. Sinds
+  Hoofdstuk 3 gebruiken NPC's dit ook echt: `{tendency_address}`/
+  `{tendency_address_cap}` (`SpTextResolver`, singleplayer.js) resolven naar
+  een willekeurige, gender-passende aanspreekvorm uit `SP_TENDENCY_PHRASES`
+  (singleplayer-data.js — 4 varianten per houding, met %NOUN% vervangen door
+  `SP_TENDENCY_NOUN[state.gender]`), zomaar in te voegen middenin een TEXT/
+  DIALOGUE-zin (bv. "en jij, {tendency_address}, hebt inmiddels gemerkt..." —
+  zie `CH3_IO14`/`CH3_ATHENA` in `SP_CH3_CNS`). Dit is bewust een lichtgewicht
+  oplossing: het varieert alleen HOE een NPC je aanspreekt, niet WAT er
+  gebeurt. Een echt vertakkend `CONDITION`-mechanisme (andere scène-inhoud of
+  -keuzes afhankelijk van de houding) staat nog open, zie §8.
 - Hoofdstuk 1 heeft 13 getagde keuzedrietallen verspreid over de drie lijnen
-  (zie `SP_CH1_CNS`) en Hoofdstuk 2 nog eens 8 (zie `SP_CH2_CNS`) — steeds op
+  (zie `SP_CH1_CNS`), Hoofdstuk 2 nog eens 8 (zie `SP_CH2_CNS`) en Hoofdstuk 3
+  nog eens 4 (zie `SP_CH3_CNS`) — steeds op
   momenten met echte emotionele lading (bv. troosten vs. doorpakken bij Midas'
   ineenstorting, medelijden vs. nuchterheid bij Zeus' zwangerschap, meeleven
   vs. nieuwsgierigheid bij de geketende Prometheus) — niet letterlijk op elke
@@ -785,6 +801,84 @@ singleplayer-data.js; renderers in singleplayer.js):
 Nog geen bestaande puzzel is retroactief omgezet naar een getypte variant —
 de nieuwe types zijn er klaar voor zodra een hoofdstuk ze nodig heeft (bv.
 vanaf Hoofdstuk 3, of later in Hoofdstuk 2 bij Semele/Kallisto/Herakles).
+Hoofdstuk 3 zelf gebruikt uiteindelijk nog `"multiple-choice"`, net als
+Hoofdstuk 1/2 — de eerste getypte puzzel blijft dus open voor een later
+hoofdstuk.
+
+### 7.8 Hoofdstuk 3: "Beloften van Goden en Mensen" — twee vormen van vrijheid (**gebouwd**)
+
+Anders dan Hoofdstuk 2's vier parallelle lijnen: twee hoofdlijnen
+(`SP_CH3_CNS`, singleplayer-data.js, 43 scènes), gekozen omdat Argus Panoptes
+en Mercurius geen zelfstandig verhaal zijn maar de climax van Io's eigen lijn,
+en Europa's verhaal bewust GEEN eigen lijn kreeg maar een kort, ingeweven
+NPC-commentaar (zie hieronder) — precies zoals in het gesprek vastgelegd.
+
+- **Io** (`CH3_IO01`-`IO14`): Jupiter verhult zijn affaire eerst met een wolk,
+  dan door Io in een witte vaars te veranderen zodra Juno argwaan krijgt.
+  Juno eist de vaars op en stelt de honderdogige Argus Panoptes aan als
+  wachter (`PERSON: argus`) — de climax van dezelfde lijn, niet een aparte
+  keuze op de hub. Mercurius (`PERSON: hermes`) sust Argus met verhalen en
+  fluitspel in slaap en doodt hem; Juno plaatst zijn honderd ogen op de
+  pauwenstaart (`codex_io_argus`). Een steekvlieg jaagt Io vervolgens de
+  wereld rond tot ze in Egypte haar menselijke gedaante terugkrijgt.
+  Levert het fragment "Vrijheid" 🕊️ op en de eretitel `ch3_io`. **Geschreven.**
+
+  **Europa-coda** (`CH3_IO14`, direct ná het fragment, vóór terugkeer naar de
+  hub): Athena — sinds Hoofdstuk 2 actieve mentor, dus geen zwijgende
+  toeschouwer meer — trekt zelf de vergelijking met Europa: bij Io wordt de
+  vrouw een dier om de affaire te verbergen, bij Europa wordt Jupiter zelf
+  een dier (een tamme witte stier) om de affaire te beginnen. Dit is de
+  letterlijke "NPC-commentaar op de andere kant van Jupiter/Io" die is
+  gevraagd, en meteen de eerste plek waar `{tendency_address}` wordt gebruikt
+  (zie §7.3). Europa krijgt een eigen `PERSON:intro`/`codex_europa`-entry,
+  maar bewust geen eigen scène-lijn of fragment — haar functie is
+  contrastief, niet narratief zelfstandig.
+
+- **Herakles** (`CH3_H01`-`H25`): rondt alle tien resterende werken af (na de
+  Nemeïsche Leeuw + Hydra uit Hoofdstuk 2): de Cerynitische Hinde (gevangen
+  zonder een wond, na een jaar achtervolging), de Erymanthische Ever (met een
+  tragisch neveneffect — een vergiftigde pijl treft zijn eigen leermeester
+  Chiron, `codex_chiron`, die zijn onsterfelijkheid ooit aan Prometheus zal
+  afstaan), de Augiasstal (rivieren omgeleid, door Eurystheus afgekeurd op
+  een technisch punt — een bewuste echo van de Hydra-episode uit Hoofdstuk 2),
+  de Stymfalische Vogels (met Minerva's bronzen ratel — Athena's eerste
+  actieve hulp als mentor), de Kretenzische Stier (losgelaten bij Marathon,
+  een vooruitwijzing naar een latere held), de Merries van Diomedes (poëtische
+  gerechtigheid: de koning gevoerd aan zijn eigen mensenetende paarden), de
+  Gordel van Hippolyte (Juno's laatste, dodelijke list — weer een onschuldig
+  slachtoffer van haar wraak, net als in Hoofdstuk 2), het vee van Geryon
+  (met de Zuilen van Herakles als etiologische bijvangst), de Appels van de
+  Hesperiden (een list tegen Atlas i.p.v. kracht) en tot slot Cerberus, met
+  blote handen overmeesterd. Levert het fragment "Volbrenging" ⚔️ op en de
+  eretitel `ch3_herakles_labores`. **Geschreven.**
+
+  **Combat-bridge**: acht nieuwe `SP_COMBAT_ENEMIES` (centauren,
+  stymfalische_vogels, kretenzische_stier, merries_van_diomedes, amazones,
+  geryon, ladon, cerberus) — nog zonder eigen tekeningen (net als de
+  Nemeïsche Leeuw vóór Hoofdstuk 2), `img`-pad alvast ingevuld, valt terug op
+  `icon`-emoji. Cerberus hergebruikt bewust het bestaande Boss Battle-bestand
+  (`assets/bosses/Cerberus.png`) als enkelvoudige illustratie — geen losse
+  koppen-bestanden beschikbaar, dus geen Hydra-achtige koppenstapeling.
+
+**Fragmenten-gate**: zelfde patroon als Hoofdstuk 2, maar met NIEUWE fragment-
+ids ("io", "labores" — bewust ANDERS dan Hoofdstuk 2's "herakles", want
+`SP_STATE.fragments` is één doorlopende array over alle hoofdstukken heen).
+De hub-keuze naar `CH3_ATHENA` staat daarom op `[REQUIRE:fragments=6]`
+(Hoofdstuk 2's vier + deze twee) i.p.v. `fragments=2`. Beide lijnen eindigen
+terug op `CH3_000`, precies als in Hoofdstuk 2.
+
+**Grammatica**: genitivus, dativus, bijstelling (appositie) — drie nieuwe
+Codex-grammatica-entries (`codex_grammatica_ch3_*`), **vroeg ontgrendeld** bij
+`CH3_000`, zelfde regel als Hoofdstuk 1/2.
+
+**Getest** (browser, gescripte volledige doorloop): beide lijnen volledig
+uitgespeeld inclusief alle 7 puzzels en alle 8 gevechten (elke `spCombatAnswer`
+gevolgd door `spCombatAttack()` zodra er genoeg EP is — de Combat-bridge-lus
+vereist expliciet BEIDE stappen, niet alleen juist antwoorden), fragmenten/
+flags/quests/eretitels kloppen, `fragments=6`-gate opent pas na alle zes
+fragmenten, en `{tendency_address}`/`{tendency_address_cap}` resolven correct
+naar een gender- en houding-passende aanspreekvorm in zowel de Europa-coda
+als `CH3_ATHENA`.
 
 ---
 
@@ -814,11 +908,16 @@ In afgesproken bouwvolgorde:
    100/50/~2/0% HP. De eretitel-`bonus` (§6) écht in de berekening verwerken
    staat nog open.
 2. **`CONDITION`-mechanisme** — de kaart zelf is gebouwd (§7,
-   `SCREENS.spWorldMap`), alle drie panelen zijn getekend en schakelbaar; nog
-   open: NPC's/scènes die conditioneel reageren op de al-gebouwde `flags` (bv.
-   een personage dat later verwijst naar welke Hoofdstuk-1-lijn je koos) én op
-   `spApproachTendency()` (§7.3, Clementia/Severitas) — de teller zelf werkt en
-   bouwt al op, alleen het *reageren* erop in latere hoofdstukken ontbreekt nog.
+   `SCREENS.spWorldMap`), alle drie panelen zijn getekend en schakelbaar. Sinds
+   Hoofdstuk 3 bestaat er al een LICHTGEWICHT vorm van reageren op
+   `spApproachTendency()`: `{tendency_address}`/`{tendency_address_cap}` (§7.3)
+   laat NPC's je aanspreken naar aanleiding van je Clementia/Severitas-houding,
+   rechtstreeks ingebouwd in TEXT/DIALOGUE via `SpTextResolver` — geen nieuwe
+   CNS-sectie nodig. Wat daar nog niet mee kan: een NPC of scène die
+   afhankelijk van `flags`/`spApproachTendency()` andere KEUZES aanbiedt of
+   een compleet ANDERE tekstvariant toont (bv. een personage dat expliciet
+   verwijst naar welke Hoofdstuk-1-lijn je koos) — dat vereist een echt
+   vertakkend `CONDITION`-mechanisme, dat nog niet bestaat.
 3. **Audio-hook (deels gebouwd)** — `MUSIC:` speelt nu echt af via
    `spPlayMusic()` (singleplayer.js), met een mute-knop (`spAudioToggleHTML`,
    rechtsboven op elk Chronica-scherm) die de speler zelf kan bedienen —
