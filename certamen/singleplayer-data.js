@@ -161,7 +161,7 @@ const SP_TITLES = [
 const SP_CAMPAIGN = [
   { id:"proloog", nr:0, boek:null, type:"proloog", nm:"Het Orakel van Chronos",
     periode:"Tijdloos / overgang tussen heden en oudheid",
-    verhaal:"De speler ontdekt het Orakel van Chronos en wordt de klassieke wereld ingezogen.",
+    verhaal:"Tussen heden en oudheid staat een orakel van brons, ouder dan wie het zich herinnert. Wie het aanraakt, wordt meegezogen in de tijd.",
     pallas:"Les 1: De Grieken en wij", minerva:"Hoofdstuk 1: Het Latijn en de Romeinen",
     grammatica:"Grieks alfabet, taalbewustzijn, eerste Latijnse woorden",
     gameplay:"Codex Memoriae, inscripties lezen, eerste keuzes",
@@ -171,7 +171,7 @@ const SP_CAMPAIGN = [
   // ---- BOEK I — DE ONTWAAKTE HERINNERING (hoofdstuk 1-9) ----
   { id:"ch1", nr:1, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Namen van de Wereld",
     periode:"Mythisch Griekenland",
-    verhaal:"De speler ontdekt dat namen macht hebben. Zonder namen verdwijnen goden en helden uit de herinnering.",
+    verhaal:"Een koning wenst dat alles wat hij aanraakt in goud verandert — en ontdekt dat namen macht hebben, en dat wie ze vergeet, alles kan verliezen.",
     pallas:"Les 2: De Griekse goden", minerva:"Hoofdstuk 2: Midas",
     grammatica:"Zelfstandig naamwoord, bijvoeglijk naamwoord (alleen groep 1/2 — dezelfde uitgangen als zn groep 1/2), lidwoord, nominativus, accusativus, vocativus",
     gameplay:"Wie handelt? Wie ondergaat? Wie wordt aangesproken?",
@@ -181,7 +181,7 @@ const SP_CAMPAIGN = [
     zijverhalen:"Prometheus (S-tier); Pandora (S-tier) — al in gebruik als plotlijnen B/C naast Midas (A)" },
   { id:"ch2", nr:2, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Werken van de Helden",
     periode:"Heroïsche tijd",
-    verhaal:"Hera's jaloezie jaagt op iedereen die Zeus ooit heeft liefgehad. Vier parallelle lijnen: Latona (afgerond), Semele (grijpt terug naar Bacchus/H1), Kallisto (introduceert Artemis) en Herakles (intro + eerste werken — afgerond in Hoofdstuk 3).",
+    verhaal:"Hera's jaloezie jaagt op iedereen die Zeus ooit heeft liefgehad. Een moeder vlucht met haar kinderen, een geliefde ontdekt te laat wie er tegenover haar staat, een jaagster verandert in haar eigen prooi — en ergens tussen hen in groeit een kind op dat ooit twaalf onmogelijke beproevingen zal moeten doorstaan.",
     pallas:"Les 3-4: Herakles en zijn werken", minerva:"Hoofdstuk 3: Latona, Apollo en Artemis",
     grammatica:"Praesens, werkwoordstammen, imperativus, esse, posse",
     gameplay:"Acties uitvoeren via werkwoorden",
@@ -191,7 +191,7 @@ const SP_CAMPAIGN = [
     zijverhalen:"Bellerophon & Chimaira (A-tier, ideale RPG-boss); Atalanta + Calydonische ever (A-tier, boss fight)" },
   { id:"ch3", nr:3, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Beloften van Goden en Mensen",
     periode:"Mythische wereld",
-    verhaal:"De speler ontdekt relaties tussen goden en mensen. Bezit, afkomst en geschenken worden belangrijk. Twee lijnen: Io (vervloekt tot vaars, bewaakt door Argus Panoptes, bevrijd door Mercurius — met een Europa-coda die dezelfde ontrouw omgekeerd laat zien) en Herakles, die vanaf Hoofdstuk 2's 2/12 werken (Leeuw + Hydra) al zijn resterende tien beproevingen afrondt.",
+    verhaal:"Jupiter probeert een geheime liefde te verbergen voor Juno's argwanende blik — met gevolgen die niemand had zien aankomen. Ondertussen zet een bekende held zijn beproevingen onverstoorbaar voort.",
     pallas:"Les 5: Apotheose van Herakles", minerva:"Hoofdstuk 4: Jupiter en Io",
     grammatica:"Genitivus, dativus, bijstelling",
     gameplay:"Relaties begrijpen, voorwerpen koppelen aan eigenaars",
@@ -201,7 +201,7 @@ const SP_CAMPAIGN = [
     zijverhalen:"Europa (A-tier, begin van Kreta); Ganymedes (B-tier); Danaïden (B-tier)" },
   { id:"ch4", nr:4, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Het Labyrint van Herinneringen",
     periode:"Kreta / het Paleis van de Zon",
-    verhaal:"Twee lijnen, elk om een belofte die niemand meer kon intrekken. Theseus belooft zijn vader Aegeus witte zeilen te hijsen als hij de Minotaurus overleeft — en vergeet het, met dodelijke gevolgen. Daidalos en Ikaros ontsnappen op zelfgemaakte vleugels uit hetzelfde labyrint, met een even fataal gevolg. Phaëthon dwingt zijn vader Sol tot een onherroepelijke eed bij de Styx, en betaalt de prijs van een wens die hij niet had moeten uitspreken.",
+    verhaal:"In het donkere labyrint van Kreta wacht een monster op de held die het aandurft. Een vader belooft zijn zoon veilig thuis te komen; een uitvinder en zijn zoon ontsnappen op vleugels van was en veren; en elders dwingt een andere zoon zijn vader tot een eed waarvan geen weg terug is.",
     pallas:"Les 6-7: Theseus, Ariadne, Minotauros, terugreis", minerva:"Hoofdstuk 5: Phaëthon · Hoofdstuk 6: De Familia",
     grammatica:"Infinitivus, vocativus, imperfectum, perfectum, ablativus",
     gameplay:"Twee parallelle lijnen (Theseus/Ariadne/Minotaurus/Daidalos & Ikaros, en Phaëthon), zelfde principe als Hoofdstuk 3's Io/Herakles; Combat-bridge tegen de Minotaurus",
@@ -211,7 +211,7 @@ const SP_CAMPAIGN = [
     zijverhalen:"Daidalos & Ikaros (S-tier, onmisbaar — direct verbonden aan het Labyrint zelf, en verweven in de Theseus-lijn i.p.v. een aparte lijn)" },
   { id:"ch5", nr:5, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Het Gulden Vlies",
     periode:"Vóór de Trojaanse Oorlog — de vorige generatie",
-    verhaal:"Jason vaart met een bemanning van helden naar Kolchis voor het Gulden Vlies — onder wie Peleus, Telamon en Laertes, die later de vaders van Achilles, Ajax en Odysseus worden, met een jonge Herakles en Orpheus aan boord. Sluit af met Medea's wraak in Korinthe, nadat Jason haar verstoot.",
+    verhaal:"Jason verzamelt de dapperste helden van Griekenland aan boord van de Argo, op zoek naar het legendarische Gulden Vlies. Aan het einde van de tocht wacht een tovenares wier hulp een prijs heeft.",
     pallas:"— (herhaling, valt buiten de lesnummering)", minerva:"— (herhaling, valt buiten de lesnummering)",
     grammatica:"Herhaling nominativus t/m ablativus — geen nieuwe grammatica",
     gameplay:"Tochtenlogboek met vaste bemanningsleden; combat/puzzel-afwisseling zoals bij Herakles' werken",
@@ -220,7 +220,7 @@ const SP_CAMPAIGN = [
     illustratie:"De Argo verlaat de haven, bemanning aan boord" },
   { id:"ch6", nr:6, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Vloek van Thebe",
     periode:"Mythisch Thebe, meerdere generaties",
-    verhaal:"Kadmos sticht Thebe door drakentanden te zaaien — hetzelfde patroon als Jason bij Aeëtes. Generaties later lost Oedipus het raadsel van de Sfinx op en vervult zonder het te weten een vloek; zijn zonen strijden om de troon (Zeven tegen Thebe) en Antigone verzet zich tegen Creon. Opent met Niobe's verlies, sluit af met Pentheus — samen met Medea (Hoofdstuk 5) een duister drieluik van moeder/kind-tragedies.",
+    verhaal:"Kadmos sticht een stad door drakentanden in de aarde te zaaien. Generaties later worstelt zijn nageslacht met een raadsel, een vloek en een erfenis die niemand vrijwillig zou kiezen.",
     pallas:"— (herhaling, valt buiten de lesnummering)", minerva:"— (herhaling, valt buiten de lesnummering)",
     grammatica:"Herhaling praesens t/m perfectum — geen nieuwe grammatica",
     gameplay:"Generatiesprongen binnen één hoofdstuk; het raadsel van de Sfinx als taalpuzzel",
@@ -228,7 +228,7 @@ const SP_CAMPAIGN = [
     illustratie:"De Sfinx voor de poorten van Thebe" },
   { id:"ch7", nr:7, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Appel der Tweedracht",
     periode:"Aanloop naar de Trojaanse Oorlog",
-    verhaal:"Peleus en Thetis trouwen; Eris werpt de appel 'voor de mooiste'. Paris moet oordelen tussen Hera, Athena en Aphrodite en kiest Helena als beloning. Leda en de Zwaan (Helena's geboorte) en Tyndareos' eed van de vrijers lopen ernaartoe.",
+    verhaal:"Op de bruiloft van Peleus en Thetis werpt de godin van de tweedracht een gouden appel tussen de gasten — 'voor de mooiste'. Drie godinnen eisen hem op, en een sterveling moet oordelen wie gelijk heeft. Die keuze zal de wereld in vuur en vlam zetten.",
     pallas:"— (herhaling, bewust grammatica-arm)", minerva:"— (herhaling, bewust grammatica-arm)",
     grammatica:"Herhaling — bewust grammatica-arm, een adempauze (zoals Pallas Les 2/14 en Minerva H1/H13)",
     gameplay:"Geen puzzel-gate, puur verhalend hoofdstuk",
@@ -236,7 +236,7 @@ const SP_CAMPAIGN = [
     illustratie:"Paris met de gouden appel, drie godinnen ervoor" },
   { id:"ch8", nr:8, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Wrok van Achilles",
     periode:"Trojaanse Oorlog, tiende jaar",
-    verhaal:"Achilles, opgevoed door Chiron, breekt met Agamemnon om Briseïs. Patroklos sterft in Achilles' wapenrusting; Achilles doodt Hector uit wraak en geeft het lichaam pas terug aan de smekende Priamus.",
+    verhaal:"Voor Troje ligt het beleg al tien jaar te sudderen wanneer Achilles, de sterkste held van Griekenland, breekt met zijn eigen legeraanvoerder. Wat volgt is een wrok die het lot van de hele oorlog zal bepalen.",
     pallas:"Les 8-11: expeditie naar Troje, de wrok van Achilles, Patroklos, wraak en medelijden", minerva:"Hoofdstuk 8: Onderwijs",
     grammatica:"Imperfectum, sigmatische/thematische aoristus, znw medeklinkergroep, aanwijzende/persoonlijke voornaamwoorden",
     gameplay:"Combat-bridge (Hector); Clementia/Severitas-keuzes bij Priamus' smeekbede",
@@ -244,7 +244,7 @@ const SP_CAMPAIGN = [
     illustratie:"Achilles treurt over Patroklos" },
   { id:"ch9", nr:9, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Ilion in Vlammen",
     periode:"Val van Troje",
-    verhaal:"Ajax verliest de wedstrijd om Achilles' wapenrusting en pleegt zelfmoord. Het Houten Paard, de val van de stad — de speler kiest Trojaans, Grieks of neutraal. De gevangen Trojaanse vrouwen dragen de menselijke prijs van de overwinning.",
+    verhaal:"De strijd om Troje nadert een breekpunt. Terwijl helden onderling ruziën over eer en erfenis, bedenkt Odysseus een list die de geschiedenis zal veranderen — en jij kiest zelf aan welke kant je staat.",
     pallas:"Les 12-14: de held Ajax, de ondergang van Troje, goden en mythen in de kunst", minerva:"Hoofdstuk 7: Slavernij",
     grammatica:"Comparativus/superlativus, A.C.I., znw groep 3, congruentie",
     gameplay:"Historische keuzes, factiesysteem",
@@ -256,7 +256,7 @@ const SP_CAMPAIGN = [
   // ---- BOEK II — HELDEN EN KONINGEN (hoofdstuk 10-15) ----
   { id:"ch10", nr:10, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Vluchten uit Troje",
     periode:"Direct na de val van Troje",
-    verhaal:"Niet iedereen komt behouden thuis: de Kleine Ajax verongelukt, gestraft door Poseidon en Athena voor zijn heiligschennis tegen Cassandra. Odysseus en Aeneas vluchten daarna parallel — Odysseus bij de Kykloop, Aeneas langs de Harpijen en Sicilië tot de dood van Anchises. Baucis & Philemon en Arachne als onderweg-vignetten.",
+    verhaal:"Na de val van Troje verspreiden de overlevenden zich over zee, ieder op zoek naar een nieuw thuis. Niet iedereen zal dezelfde weg nemen — en niet iedereen komt ongeschonden aan.",
     pallas:"Les 15-16: Odysseus bij de Faiaken, de Kykloop Polyfemos", minerva:"Hoofdstuk 9: Ontstaan van de mens (Deucalion & Pyrrha, niet Prometheus — die is al gebruikt in Hoofdstuk 1)",
     grammatica:"Medium, passief, aoristus passief op -θην; Minerva: plusquamperfectum, conjunctivus in de bijzin",
     gameplay:"Twee parallelle lijnen (Odysseus/Aeneas), zelfde principe als Hoofdstuk 3's Io/Herakles",
@@ -265,7 +265,7 @@ const SP_CAMPAIGN = [
     illustratie:"Twee schepen op woeste zee" },
   { id:"ch11", nr:11, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Tussen Liefde en Lot",
     periode:"Vervolg van de omzwervingen",
-    verhaal:"Kirke stuurt Odysseus naar de onderwereld, waar hij Tiresias raadpleegt en de onderwereld-zondaars Tantalos, Sisyphos, Ixion en de Danaïden treft. Dido probeert Aeneas van zijn missie af te houden, tot zijn vertrek en haar dood; Aeneas raadpleegt daarna zijn vader Anchises in de onderwereld. Beide lijnen eindigen met aankomst.",
+    verhaal:"Twee zwervers moeten afdalen naar de onderwereld zelf om hun weg te vinden — de een op zoek naar antwoorden, de ander op zoek naar zijn vader. Onderweg wacht verleiding die niet zonder gevolgen blijft.",
     pallas:"Les 17-18: de tovenares Kirke, het huis van Hades", minerva:"Hoofdstuk 10: Aeneas",
     grammatica:"Participium, genitivus absolutus; Minerva: Accusativus cum Infinitivo (A.c.I.)",
     gameplay:"Vervolg van de twee parallelle lijnen; katabasis als gedeeld motief",
@@ -274,7 +274,7 @@ const SP_CAMPAIGN = [
     illustratie:"De poort van de onderwereld, twee figuren die naar binnen lopen" },
   { id:"ch12", nr:12, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Odysseus' Wraak",
     periode:"Ithaka",
-    verhaal:"Odysseus keert terug, verkleed als bedelaar, en doodt de vrijers. Ter contrast: Agamemnons eigen thuiskomst eindigt in moord, met Hippodameia's vloek op het Huis van Atreus als achtergrond.",
+    verhaal:"Na twintig jaar bereikt een zwerver eindelijk zijn eigen kust — maar zijn huis is niet meer wat hij achterliet. Niet elke thuiskomst verloopt hetzelfde.",
     pallas:"Les 19-21: op Ithaka, de wraak van Odysseus, de dood van Agamemnon", minerva:"— (Odysseus-lijn, geen Minerva-koppeling)",
     grammatica:"Betrekkelijk voornaamwoord, conjunctivus, alpha-werkwoorden",
     gameplay:"Combat-bridge (de vrijers)",
@@ -282,7 +282,7 @@ const SP_CAMPAIGN = [
     illustratie:"Odysseus spant de boog" },
   { id:"ch13", nr:13, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Het Begin van Rome",
     periode:"Stichting van Rome",
-    verhaal:"Romulus en Remus, opgevoed door een wolvin, stichten Rome; de Sabijnse maagdenroof geeft de jonge stad vrouwen. Tirannen en vrienden wijst vooruit naar de latere koningen.",
+    verhaal:"Twee broers, als baby's achtergelaten en opgevoed door een wolvin, stichten samen een nieuwe stad aan de oevers van de Tiber.",
     pallas:"— (Aeneas-lijn, geen Pallas-koppeling)", minerva:"Hoofdstuk 11: Het begin van Rome · H12: Tirannen en vrienden",
     grammatica:"Passief, participium perfectum passief (ppp), deponentia, betrekkelijk voornaamwoord",
     gameplay:"Stad-bouw-keuzes",
@@ -290,7 +290,7 @@ const SP_CAMPAIGN = [
     illustratie:"Romulus trekt de eerste voren van de stadsmuur" },
   { id:"ch14", nr:14, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"De Stad van Athena",
     periode:"Klassiek Athene",
-    verhaal:"Athena treedt op als mentor en vertelt (via anderen) over Perseus & Medusa en Bellerophon & Chimaira, aan wie ze eerder haar hulp gaf. Democratie, de positie van de vrouw, onderwijs en sport, Atalanta bij de Olympische Spelen.",
+    verhaal:"In de stad die haar naam draagt, draait alles om overtuigen: met woorden, met wetten, met wedstrijden. Athena zelf is er nooit ver weg — en herinnert zich de helden die ze ooit een handje hielp.",
     pallas:"Les 22-27: Athena en haar stad, de Atheense democratie, de vrouw, de slavernij, onderwijs en sport, de Olympische Spelen", minerva:"Hoofdstuk 16: Dieren in het dagelijks leven",
     grammatica:"Futurum, optativus, mi-werkwoorden, stamaoristus, Nominativus cum Infinitivo (N.C.I.)",
     gameplay:"Retorica/debat; Atalanta's hardloopwedstrijd als minigame",
@@ -300,7 +300,7 @@ const SP_CAMPAIGN = [
     zijverhalen:"Calydonische ever & Meleager (A-tier) — samen met Atalanta één vault-vignet" },
   { id:"ch15", nr:15, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Oorlog en Overwinning",
     periode:"Perzische Oorlogen / Romeinse expansie",
-    verhaal:"De speler ziet hoe oorlog de geschiedenis vormt.",
+    verhaal:"Een handjevol Grieken houdt stand tegen een overmacht bij een nauwe bergpas, terwijl in het westen een generaal met olifanten een onmogelijke tocht over de Alpen waagt.",
     pallas:"Les 28: De Perzische Oorlogen", minerva:"Hoofdstuk 17: Hannibal over de Alpen · H18: Hannibal verslagen",
     grammatica:"Perfectum, futurum, futurum exactum, ablativus absolutus",
     gameplay:"Strategie en militaire keuzes",
@@ -311,7 +311,7 @@ const SP_CAMPAIGN = [
   // ---- BOEK III — DE WERELD VAN MENSEN (hoofdstuk 16-18) ----
   { id:"ch16", nr:16, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"De Vader van de Geschiedenis",
     periode:"5e eeuw v.Chr.",
-    verhaal:"De speler ontmoet Herodotos en leert kritisch naar bronnen kijken.",
+    verhaal:"Niet elk verhaal dat verteld wordt is waar, en niet elke bron is te vertrouwen. Herodotos trekt de wereld rond om getuigenissen te verzamelen — en vraagt zich bij elke af: wie heeft er eigenlijk gelijk?",
     pallas:"Overgang naar historiografie (Herodotos)", minerva:"Hoofdstuk 21: De Romeinen en de dood",
     grammatica:"Historische taal, bronanalyse; Minerva: conjunctivus praesens en perfectum",
     gameplay:"Bronnen vergelijken, verschillende versies van hetzelfde verhaal ontdekken (Herodotos se rol uit de Character Bible)",
@@ -320,7 +320,7 @@ const SP_CAMPAIGN = [
     illustratie:"Herodotos die getuigenissen verzamelt op de agora" },
   { id:"ch17", nr:17, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"De Stem van de Filosofen",
     periode:"Klassiek Athene",
-    verhaal:"Socrates, Plato en Aristoteles: filosofie en kritisch denken vormen de kern.",
+    verhaal:"Op de Agora van Athene stelt een man voortdurend vragen — nooit antwoorden. Zijn manier van denken zal de wereld voor altijd veranderen.",
     pallas:"Filosofen: Socrates, Plato, Aristoteles", minerva:"Hoofdstuk 22: Caesars carrière",
     grammatica:"Complexe zinsbouw, argumentatie; Minerva: gerundium, genitivus subjectivus/objectivus",
     gameplay:"Socratische dialoog — vragen stellen i.p.v. antwoorden geven (Athena se rol uit de Character Bible)",
@@ -328,7 +328,7 @@ const SP_CAMPAIGN = [
     illustratie:"Socrates in gesprek op de Agora, omringd door leerlingen" },
   { id:"ch18", nr:18, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Alexander en de Grenzen van de Wereld",
     periode:"Hellenistische Tijd",
-    verhaal:"De Griekse taal verspreidt zich over de wereld met Alexander de Grote.",
+    verhaal:"Een jonge koning trekt met zijn leger verder dan wie ook vóór hem — en neemt zijn taal en cultuur mee tot in de verste uithoeken van de bekende wereld.",
     pallas:"Alexander de Grote", minerva:"Hoofdstuk 23: Caesar in België en Nederland",
     grammatica:"Complexe werkwoorden, participia; Minerva: gerundivum",
     gameplay:"Taalverspreiding volgen over een groeiende kaart",
@@ -338,7 +338,7 @@ const SP_CAMPAIGN = [
   // ---- BOEK IV — ROME VERRIJST (hoofdstuk 19-25) ----
   { id:"ch19", nr:19, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Onder de Koningen",
     periode:"Koninkrijk Rome, latere koningen",
-    verhaal:"De Horatii vechten voor Rome tegen de Curiatii van Alba Longa; Lucretia's dood door toedoen van Tarquinius' zoon leidt tot de opstand die het koningschap beëindigt.",
+    verhaal:"Rome staat nog onder koningen, en niet allemaal regeren ze even rechtvaardig. Een tweekamp tussen naburige steden en een daad van onrecht binnen de eigen muren zetten iets in beweging dat niemand meer kan stoppen.",
     pallas:"—", minerva:"Hoofdstuk 24: Augustus en Nero (conjunctivus-gedeelte)",
     grammatica:"Verdieping naamvallen; Minerva: conjunctivus",
     gameplay:"Legendes van vroege Romeinse deugd/moed naspelen",
@@ -346,7 +346,7 @@ const SP_CAMPAIGN = [
     illustratie:"Lucretia en Brutus voor het volk van Rome" },
   { id:"ch20", nr:20, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Verdedigers van de Republiek",
     periode:"Vroege Republiek",
-    verhaal:"Horatius Cocles houdt de brug alleen, Mucius Scaevola brandt zijn eigen hand, Cloelia ontsnapt zwemmend — allen tegen Lars Porsena, die de verjaagde koning terug wil brengen. Later: Cincinnatus, Coriolanus en Camillus als voorbeelden van vroeg-Republikeinse deugd/gevaar.",
+    verhaal:"Een verjaagde koning wil zijn troon terug en brengt een vreemd leger naar de poorten van Rome. Wat er dan gebeurt, wordt eeuwenlang naverteld als het toonbeeld van Romeinse moed.",
     pallas:"—", minerva:"Hoofdstuk 24: Augustus en Nero (N.C.I./semi-deponentia-gedeelte)",
     grammatica:"Verdieping naamvallen; Minerva: N.C.I., semi-deponentia",
     gameplay:"Legendes van vroege Romeinse deugd/moed naspelen",
@@ -354,7 +354,7 @@ const SP_CAMPAIGN = [
     illustratie:"Horatius Cocles alleen op de brug" },
   { id:"ch21", nr:21, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"De Gracchen",
     periode:"Late Republiek, 133-121 v.Chr.",
-    verhaal:"Tiberius Gracchus probeert landhervorming door te voeren voor arme boeren en wordt vermoord door senatoren; zijn broer Gaius zet zijn werk voort en wordt tien jaar later ook vermoord. Het begin van het politieke geweld dat de Republiek zal verscheuren.",
+    verhaal:"Een jonge volkstribuun wil het land eerlijker verdelen tussen arm en rijk — en ontdekt hoe gevaarlijk het is om de macht van de senaat uit te dagen.",
     pallas:"—", minerva:"— (herhaling, valt buiten de lesnummering)",
     grammatica:"Herhaling — bewust grammatica-arm",
     gameplay:"Politieke keuzes: hervormen versus de status quo bewaren",
@@ -362,7 +362,7 @@ const SP_CAMPAIGN = [
     illustratie:"Tiberius Gracchus voor de senaat" },
   { id:"ch22", nr:22, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Marius en Sulla",
     periode:"Late Republiek, ca. 107-78 v.Chr.",
-    verhaal:"Marius hervormt het leger en wordt zeven keer consul; zijn rivaliteit met Sulla escaleert tot Sulla tweemaal met zijn eigen leger Rome binnenmarcheert — voor het eerst in de Romeinse geschiedenis. Sulla's proscripties en dictatuur zijn het sinistere precedent waar Caesar straks tegen afsteekt.",
+    verhaal:"Twee machtige generaals, ooit bondgenoten, raken verwikkeld in een rivaliteit die de Republiek tot in haar fundamenten zal schudden.",
     pallas:"—", minerva:"— (herhaling, valt buiten de lesnummering)",
     grammatica:"Herhaling — bewust grammatica-arm",
     gameplay:"Militaire/politieke strategie-keuzes",
@@ -370,7 +370,7 @@ const SP_CAMPAIGN = [
     illustratie:"Sulla's legioenen bij de poorten van Rome" },
   { id:"ch23", nr:23, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Caesar Schrijft Geschiedenis",
     periode:"Late Republiek",
-    verhaal:"Caesar leert dat schrijvers de geschiedenis mede vormgeven.",
+    verhaal:"Caesar schrijft zijn eigen verslag van zijn veldtochten — en ontdekt dat wie de pen vasthoudt, ook de geschiedenis vormgeeft.",
     pallas:"Verdieping", minerva:"Hoofdstuk 22-23: Caesar",
     grammatica:"Gerundium, gerundivum (herhaling)",
     gameplay:"Bronnen analyseren",
@@ -379,7 +379,7 @@ const SP_CAMPAIGN = [
     zijverhalen:"Spartacus (⭐⭐⭐⭐⭐); Cicero (⭐⭐⭐⭐)" },
   { id:"ch24", nr:24, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Augustus en de Pax Romana",
     periode:"Vroege Keizertijd",
-    verhaal:"Vergilius verbindt Troje en Rome.",
+    verhaal:"Onder Augustus keert de vrede terug naar Rome — en een dichter genaamd Vergilius begint aan een episch gedicht dat Rome's oorsprong voor altijd zal verbinden met de val van Troje.",
     pallas:"Verdieping", minerva:"Hoofdstuk 24: Augustus",
     grammatica:"Literair Latijn",
     personages:"Augustus, Vergilius",
@@ -387,7 +387,7 @@ const SP_CAMPAIGN = [
     zijverhalen:"Eros & Psyche, Pygmalion (A-tier) — verteld als verhaal-in-een-verhaal door een dichter" },
   { id:"ch25", nr:25, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Keizers en Dichters",
     periode:"Romeinse Keizertijd",
-    verhaal:"Macht, propaganda en literatuur bepalen het beeld van de geschiedenis.",
+    verhaal:"Een keizer, berucht om zijn wreedheid, en een dichter, berucht om zijn gedurfde verzen — hun woorden en daden bepalen hoe het nageslacht naar Rome zal kijken.",
     pallas:"Verdieping", minerva:"Hoofdstuk 25: Latijnse literatuur",
     grammatica:"Verdieping naamvallen",
     personages:"Nero, Ovidius",
@@ -396,14 +396,14 @@ const SP_CAMPAIGN = [
   // ---- BOEK V — DE LAATSTE HERINNERING (hoofdstuk 26-28, finale) ----
   { id:"ch26", nr:26, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Bibliotheek van Mnemosyne",
     periode:"Buiten Tijd en Ruimte",
-    verhaal:"Alle opgedane kennis komt samen — inclusief mythen die nergens anders pasten, teruggevonden als losse herinneringsfragmenten.",
+    verhaal:"In een bibliotheek buiten tijd en ruimte bewaart de godin van het geheugen elk verhaal dat ooit verteld is — ook de fragmenten die nergens anders een plek vonden.",
     pallas:"Eigen content", minerva:"Eigen content",
     grammatica:"Herhaling van alle grammatica",
     personages:"Mnemosyne",
     zijverhalen:"Narcissus & Echo (A-tier) als spiegel-/geluidspuzzel; eerste hints van De Titanenstrijd (S-tier), die in de Finale terugkeert" },
   { id:"ch27", nr:27, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
     periode:"Mythologische Eindwereld",
-    verhaal:"De speler ontdekt de ware aard van Lethe en de kracht van vergetelheid.",
+    verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren.",
     pallas:"Eigen content", minerva:"Eigen content",
     grammatica:"Integratie Grieks & Latijn",
     personages:"Lethe",
@@ -411,7 +411,7 @@ const SP_CAMPAIGN = [
   { id:"finale", nr:28, boek:"V — De Laatste Herinnering", type:"finale", nm:"Chronica Classica",
     periode:"Tijdloos",
     thema:"De strijd tegen de Vergetelheid",
-    verhaal:"Kronos, Athena, Mnemosyne, Kleio, Homeros, Herodotos, Livius en Vergilius komen samen. De speler gebruikt alles wat hij, zij of die heeft geleerd om de herinnering aan de klassieke wereld veilig te stellen — en ontdekt dat Chronos zelf een verslagen Titaan is, verbannen na de Titanenstrijd (S-tier).",
+    verhaal:"Alles wat je onderweg hebt geleerd komt hier samen. Aan het einde van de reis wacht het orakel zelf — en een waarheid die alles in een ander licht zet.",
     grammatica:"Eindtoets van alle grammatica en taalvaardigheid",
     gameplay:"Alle Codex-kennis wordt gebruikt",
     eindboodschap:"Wie de taal bewaart, bewaart de geschiedenis" },
@@ -440,13 +440,21 @@ const SP_MYTH_CANON = {
 /* ---- WERELDKAART — geïllustreerde panelen (Gemini, stripstijl "antieke
    atlas") met onthullende locatie-pins. De volledige wereld (Britannia tot
    India, zie Chronica.md) is verdeeld in panelen zodat elk leesbaar blijft;
-   nu alleen paneel "aegean" getekend (dekt Proloog + Hoofdstuk 1). Referentie
-   voor de kustlijnen/liggingen: twee CC-gelicenseerde kaarten (Aeneas- en
-   Odysseus-reis) zijn als geografisch naslagwerk gebruikt, niet overgenomen
-   — geen attributieplicht, want geen bewerking van hun bestand.
+   alle drie panelen zijn getekend. Referentie voor de kustlijnen/liggingen:
+   twee CC-gelicenseerde kaarten (Aeneas- en Odysseus-reis) zijn als
+   geografisch naslagwerk gebruikt, niet overgenomen — geen attributieplicht,
+   want geen bewerking van hun bestand.
 
    Een locatie verschijnt pas als `unlockCodex` al in SP_STATE.codex zit —
    hergebruikt bewust de bestaande codex-hook (geen nieuw trackingsysteem).
+   BELANGRIJK: dit is PER SAVEGAME, niet per hoofdstuk-metadata. De
+   canon-uitbreiding (2026-07, zie Chronica.md §7) voegde 9 nieuwe hoofdstukken
+   toe (Het Gulden Vlies t/m Marius en Sulla e.a.), maar geen daarvan heeft al
+   geschreven scènes — dus ook nog geen `CODEX:`-secties om een pin aan te
+   koppelen. Nieuwe `SP_MAP_LOCATIONS`-entries (Troje, Kolchis, Thebe, Sparta,
+   Korinthe, Ithaka, Carthago, ...) horen er pas bij zodra het bijbehorende
+   hoofdstuk daadwerkelijk geschreven is en een echte codex-id oplevert —
+   anders is de pin dode data die nooit oplicht.
    `x`/`y` zijn percentages t.o.v. de paneelafbeelding (linksboven = 0,0).
    BOUWSTATUS: x/y zijn een eerste schatting op het oog — nog te verfijnen
    zodra `panel1_aegean.png` op schijf staat en pixel-precies afgelezen kan
@@ -458,8 +466,8 @@ const SP_MYTH_CANON = {
 // (het Oosten) navigeren.
 const SP_MAP_PANELS = {
   western: { nm:"Het Westen — Sicilië, Carthago, Gades & de Alpen", img:"panel2_western.png" },
-  aegean: { nm:"Italië en Griekenland — Egeïsche Zee & West-Klein-Azië", img:"panel1_aegean.png" },
-  eastern: { nm:"Het Oosten — Kaukasus, Perzië, Egypte & de rand van India", img:"panel3_eastern.png" },
+  aegean: { nm:"Italië en Griekenland — Egeïsche Zee, Troje & West-Klein-Azië", img:"panel1_aegean.png" },
+  eastern: { nm:"Het Oosten — Kaukasus, Kolchis, Perzië, Egypte & de rand van India", img:"panel3_eastern.png" },
 };
 const SP_MAP_LOCATIONS = [
   // x/y afgelezen op het echte panel1_aegean.png (1376×768px): temple-icoon
