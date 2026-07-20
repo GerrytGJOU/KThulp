@@ -110,7 +110,7 @@ const SP_TITLES = [
     ds:"Hoorde Athena's afsluitende woorden over de twee vormen van vrijheid.", bonus:null },
 ];
 
-/* ---- CAMPAGNEKAART — Proloog + 26 hoofdstukken (5 "Boeken"), gesynchroniseerd
+/* ---- CAMPAGNEKAART — Proloog + 28 hoofdstukken (5 "Boeken"), gesynchroniseerd
    met Pallas (Grieks) en Minerva (Latijn), klas 2 t/m 6 gymnasium.
 
    SAMENSMELTING van twee bronnen (2026-07): de vroegere, compactere "11
@@ -122,10 +122,11 @@ const SP_TITLES = [
    personages/thema/illustratie) uit de oudere bron zijn overgenomen waar de
    hoofdstukken overeenkomen.
 
-   CANON-UITBREIDING (2026-07-20, zie Chronica.md §7 voor de volledige
-   redenering): de 19 hoofdstukken zijn uitgebreid naar 26, telkens omdat een
+   CANON-UITBREIDING (2026-07-20 e.v., zie Chronica.md §7 voor de volledige
+   redenering): de 19 hoofdstukken zijn uitgebreid naar 28, telkens omdat een
    hoofdstuk te veel Pallas-lessen of Minerva-hoofdstukken droeg voor zijn
-   eigen verhaal. Ilion in Vlammen (7 Pallas-lessen) splitste in "De Appel der
+   eigen verhaal, of omdat er een historisch gat zat tussen twee bestaande
+   hoofdstukken. Ilion in Vlammen (7 Pallas-lessen) splitste in "De Appel der
    Tweedracht" / "De Wrok van Achilles" / "Ilion in Vlammen", met "Het Gulden
    Vlies" en "De Vloek van Thebe" ervoor als nieuwe hoofdstukken over de
    generatie vóór Troje. De Zoon van Troje en Mensen Achter de Mythen zijn
@@ -133,8 +134,10 @@ const SP_TITLES = [
    parallelle lijnen ("Vluchten uit Troje" / "Tussen Liefde en Lot"), gevolgd
    door hun eigen aparte vervolghoofdstukken ("Odysseus' Wraak" / "Het Begin
    van Rome"). De Stad van Athena (9 Pallas-lessen) en De Eeuwige Stad zijn
-   ieder in tweeën gesplitst. `Chronica.md` is de bron van waarheid; deze
-   array volgt daar 1-op-1 uit.
+   ieder in tweeën gesplitst. Tussen de vroege Republiek en Caesar ontbrak de
+   aanloop naar de burgeroorlogen — "De Gracchen" en "Marius en Sulla" vullen
+   dat gat. `Chronica.md` is de bron van waarheid; deze array volgt daar
+   1-op-1 uit.
 
    `zijverhalen`: 1-3 suggesties uit SP_MYTH_CANON die goed bij dit hoofdstuk
    passen (thematisch/periode) — geen verplichting, wel een vertrekpunt voor
@@ -303,7 +306,7 @@ const SP_CAMPAIGN = [
     pallas:"Overgang naar historiografie (Herodotos)", minerva:"Hoofdstuk 21: De Romeinen en de dood",
     grammatica:"Historische taal, bronanalyse; Minerva: conjunctivus praesens en perfectum",
     gameplay:"Bronnen vergelijken, verschillende versies van hetzelfde verhaal ontdekken (Herodotos se rol uit de Character Bible)",
-    personages:"Herodotos",
+    personages:"Herodotos, Xenofon",
     thema:"Niet alles wat verteld wordt is automatisch waar",
     illustratie:"Herodotos die getuigenissen verzamelt op de agora" },
   { id:"ch17", nr:17, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"De Stem van de Filosofen",
@@ -323,7 +326,7 @@ const SP_CAMPAIGN = [
     personages:"Alexander de Grote, Philippus II",
     illustratie:"Alexander bij de Gordiaanse Knoop" },
 
-  // ---- BOEK IV — ROME VERRIJST (hoofdstuk 19-23) ----
+  // ---- BOEK IV — ROME VERRIJST (hoofdstuk 19-25) ----
   { id:"ch19", nr:19, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Onder de Koningen",
     periode:"Koninkrijk Rome, latere koningen",
     verhaal:"De Horatii vechten voor Rome tegen de Curiatii van Alba Longa; Lucretia's dood door toedoen van Tarquinius' zoon leidt tot de opstand die het koningschap beëindigt.",
@@ -340,7 +343,23 @@ const SP_CAMPAIGN = [
     gameplay:"Legendes van vroege Romeinse deugd/moed naspelen",
     personages:"Horatius Cocles, Mucius Scaevola, Cloelia, Cincinnatus, Coriolanus, Camillus",
     illustratie:"Horatius Cocles alleen op de brug" },
-  { id:"ch21", nr:21, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Caesar Schrijft Geschiedenis",
+  { id:"ch21", nr:21, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"De Gracchen",
+    periode:"Late Republiek, 133-121 v.Chr.",
+    verhaal:"Tiberius Gracchus probeert landhervorming door te voeren voor arme boeren en wordt vermoord door senatoren; zijn broer Gaius zet zijn werk voort en wordt tien jaar later ook vermoord. Het begin van het politieke geweld dat de Republiek zal verscheuren.",
+    pallas:"—", minerva:"— (herhaling, valt buiten de lesnummering)",
+    grammatica:"Herhaling — bewust grammatica-arm",
+    gameplay:"Politieke keuzes: hervormen versus de status quo bewaren",
+    personages:"Tiberius Gracchus, Gaius Gracchus, Cornelia",
+    illustratie:"Tiberius Gracchus voor de senaat" },
+  { id:"ch22", nr:22, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Marius en Sulla",
+    periode:"Late Republiek, ca. 107-78 v.Chr.",
+    verhaal:"Marius hervormt het leger en wordt zeven keer consul; zijn rivaliteit met Sulla escaleert tot Sulla tweemaal met zijn eigen leger Rome binnenmarcheert — voor het eerst in de Romeinse geschiedenis. Sulla's proscripties en dictatuur zijn het sinistere precedent waar Caesar straks tegen afsteekt.",
+    pallas:"—", minerva:"— (herhaling, valt buiten de lesnummering)",
+    grammatica:"Herhaling — bewust grammatica-arm",
+    gameplay:"Militaire/politieke strategie-keuzes",
+    personages:"Gaius Marius, Lucius Cornelius Sulla",
+    illustratie:"Sulla's legioenen bij de poorten van Rome" },
+  { id:"ch23", nr:23, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Caesar Schrijft Geschiedenis",
     periode:"Late Republiek",
     verhaal:"Caesar leert dat schrijvers de geschiedenis mede vormgeven.",
     pallas:"Verdieping", minerva:"Hoofdstuk 22-23: Caesar",
@@ -349,7 +368,7 @@ const SP_CAMPAIGN = [
     personages:"Caesar",
     illustratie:"Caesar schrijft zijn Commentarii",
     zijverhalen:"Spartacus (⭐⭐⭐⭐⭐); Cicero (⭐⭐⭐⭐)" },
-  { id:"ch22", nr:22, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Augustus en de Pax Romana",
+  { id:"ch24", nr:24, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Augustus en de Pax Romana",
     periode:"Vroege Keizertijd",
     verhaal:"Vergilius verbindt Troje en Rome.",
     pallas:"Verdieping", minerva:"Hoofdstuk 24: Augustus",
@@ -357,7 +376,7 @@ const SP_CAMPAIGN = [
     personages:"Augustus, Vergilius",
     illustratie:"Augustus bij de Ara Pacis",
     zijverhalen:"Eros & Psyche, Pygmalion (A-tier) — verteld als verhaal-in-een-verhaal door een dichter" },
-  { id:"ch23", nr:23, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Keizers en Dichters",
+  { id:"ch25", nr:25, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Keizers en Dichters",
     periode:"Romeinse Keizertijd",
     verhaal:"Macht, propaganda en literatuur bepalen het beeld van de geschiedenis.",
     pallas:"Verdieping", minerva:"Hoofdstuk 25: Latijnse literatuur",
@@ -365,22 +384,22 @@ const SP_CAMPAIGN = [
     personages:"Nero, Ovidius",
     illustratie:"Nero en het Colosseum" },
 
-  // ---- BOEK V — DE LAATSTE HERINNERING (hoofdstuk 24-26, finale) ----
-  { id:"ch24", nr:24, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Bibliotheek van Mnemosyne",
+  // ---- BOEK V — DE LAATSTE HERINNERING (hoofdstuk 26-28, finale) ----
+  { id:"ch26", nr:26, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Bibliotheek van Mnemosyne",
     periode:"Buiten Tijd en Ruimte",
     verhaal:"Alle opgedane kennis komt samen — inclusief mythen die nergens anders pasten, teruggevonden als losse herinneringsfragmenten.",
     pallas:"Eigen content", minerva:"Eigen content",
     grammatica:"Herhaling van alle grammatica",
     personages:"Mnemosyne",
     zijverhalen:"Narcissus & Echo (A-tier) als spiegel-/geluidspuzzel; eerste hints van De Titanenstrijd (S-tier), die in de Finale terugkeert" },
-  { id:"ch25", nr:25, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
+  { id:"ch27", nr:27, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
     periode:"Mythologische Eindwereld",
     verhaal:"De speler ontdekt de ware aard van Lethe en de kracht van vergetelheid.",
     pallas:"Eigen content", minerva:"Eigen content",
     grammatica:"Integratie Grieks & Latijn",
     personages:"Lethe",
     zijverhalen:"Orpheus & Eurydice (S-tier — Orpheus verschijnt zo twee keer, jong in Hoofdstuk 5, gebroken hier) & Persephone/Demeter (A-tier) — beide onderwereld-terugkeerverhalen" },
-  { id:"finale", nr:26, boek:"V — De Laatste Herinnering", type:"finale", nm:"Chronica Classica",
+  { id:"finale", nr:28, boek:"V — De Laatste Herinnering", type:"finale", nm:"Chronica Classica",
     periode:"Tijdloos",
     thema:"De strijd tegen de Vergetelheid",
     verhaal:"Kronos, Athena, Mnemosyne, Kleio, Homeros, Herodotos, Livius en Vergilius komen samen. De speler gebruikt alles wat hij, zij of die heeft geleerd om de herinnering aan de klassieke wereld veilig te stellen — en ontdekt dat Chronos zelf een verslagen Titaan is, verbannen na de Titanenstrijd (S-tier).",

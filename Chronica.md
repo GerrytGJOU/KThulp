@@ -23,7 +23,7 @@
 > Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
-> rest van de campagne (Hoofdstuk 4 t/m 26 + Finale) staat als metadata-skelet
+> rest van de campagne (Hoofdstuk 4 t/m 28 + Finale) staat als metadata-skelet
 > klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet geschreven.
 >
 > **Dit document is de enige bron van waarheid voor Chronica Classica** en
@@ -70,7 +70,7 @@ browser):
 | Eretitels als eigen categorie tussen de eerbewijzen | `certamen/core.js` (`ACH_CATEGORIES.chronica`), `certamen/games.js` (`SCREENS.collection`) | ✅ werkend — meegerenderd door `achGroupsHTML`, net als Algemeen/Klassieke Spellen |
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
-| Campagnekaart-metadata (Proloog + 26 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 4+ nog niet geschreven |
+| Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 4+ nog niet geschreven |
 | **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen hebben er een (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) |
 | Gemini-huisstijl-Gem (stripstijl) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
@@ -294,7 +294,7 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
 
 ## 7. Campagnestructuur (`SP_CAMPAIGN`)
 
-Proloog + 26 hoofdstukken in 5 "Boeken", gesynchroniseerd met Pallas en
+Proloog + 28 hoofdstukken in 5 "Boeken", gesynchroniseerd met Pallas en
 Minerva (klas 2 t/m 6 gymnasium). Elk hoofdstuk legt vast: periode, verhaal,
 de bijbehorende Pallas/Minerva-les, de **grammatica die de puzzels voedt**,
 gameplay, hoofdpersonages, de (stripstijl-)illustratie en (waar toepasselijk)
@@ -314,9 +314,11 @@ kent (Les 2, Les 14) en Minerva (H1, H13).
 > Beide brondocumenten zijn hiermee vervangen — dit is de enige, actuele
 > campagnekaart.
 
-> **Canon-uitbreiding (2026-07-20):** de oorspronkelijke 19 hoofdstukken zijn
-> uitgebreid naar 26, in twee rondes — telkens omdat een hoofdstuk te veel
-> Pallas-lessen of Minerva-hoofdstukken droeg voor zijn eigen verhaal.
+> **Canon-uitbreiding (2026-07-20 e.v.):** de oorspronkelijke 19 hoofdstukken
+> zijn uitgebreid naar 28, in drie rondes — de eerste twee omdat een
+> hoofdstuk te veel Pallas-lessen of Minerva-hoofdstukken droeg voor zijn
+> eigen verhaal, de derde omdat er een historisch gat zat tussen twee al
+> bestaande hoofdstukken.
 >
 > **Ronde 1 — de aanloop naar en de val van Troje.** Het oude Hoofdstuk 5
 > ("Ilion in Vlammen", zeven Pallas-lessen + vier Minerva-hoofdstukken) is
@@ -368,21 +370,44 @@ kent (Les 2, Les 14) en Minerva (H1, H13).
 > **Overige `SP_MYTH_CANON`-plaatsing:** de onderwereld-zondaars (Tantalos,
 > Sisyphos, Ixion, Danaïden) horen bij Odysseus' Hades-bezoek in Hoofdstuk 11,
 > samen met Kirke/Dido; Orpheus & Eurydice en Persephone & Demeter horen bij
-> Hoofdstuk 25 "De Rivier Lethe" (Orpheus verschijnt zo twee keer — jong in
-> Hoofdstuk 5, gebroken in Hoofdstuk 25); Narcissus & Echo wordt een spiegel-/
-> geluidspuzzel in Hoofdstuk 24 "De Bibliotheek van Mnemosyne", samen met de
+> Hoofdstuk 27 "De Rivier Lethe" (Orpheus verschijnt zo twee keer — jong in
+> Hoofdstuk 5, gebroken in Hoofdstuk 27); Narcissus & Echo wordt een spiegel-/
+> geluidspuzzel in Hoofdstuk 26 "De Bibliotheek van Mnemosyne", samen met de
 > Titanenstrijd, die in de Finale terugkeert als onthulling dat Chronos zelf
 > een verslagen Titaan is. Eros & Psyche en Pygmalion horen bij de Latijnse
-> literatuur (Hoofdstuk 22-23). Atalanta, de Calydonische ever en Meleager
+> literatuur (Hoofdstuk 24-25). Atalanta, de Calydonische ever en Meleager
 > vormen samen één vault-vignet; Actaeon (bij Artemis/Diana) en Ganymedes (bij
 > het Trojaanse koningshuis) worden korte codex-asides. De Romeinse lijst:
 > Sabijnse maagdenroof (Hoofdstuk 13), Horatii & Curiatii en Lucretia
 > (Hoofdstuk 19 "Onder de Koningen"), Horatius Cocles/Mucius Scaevola/Cloelia/
 > Cincinnatus/Coriolanus/Camillus (Hoofdstuk 20 "Verdedigers van de
 > Republiek"), Regulus en Cato (Hoofdstuk 15), Spartacus en Cicero (Hoofdstuk
-> 21). Resterende B-tier-restjes (Arion, Hippolytos, Endymion & Selene,
+> 23). Resterende B-tier-restjes (Arion, Hippolytos, Endymion & Selene,
 > Midas-uitbreiding) en Neoptolemos blijven vrij inzetbaar vault-materiaal,
 > geen vaste plek nodig.
+>
+> **Ronde 3 — de val van de Republiek.** Tussen de vroege Republiek
+> (Hoofdstuk 20) en Caesar ontbrak de aanloop naar de burgeroorlogen die de
+> Republiek uiteindelijk breken. Twee nieuwe hoofdstukken vullen dat gat:
+> Hoofdstuk 21 **"De Gracchen"** (Tiberius en Gaius Gracchus, landhervorming
+> voor arme boeren, allebei vermoord door de senaatspartij — het eerste
+> politieke geweld van de late Republiek, met hun moeder Cornelia) en
+> Hoofdstuk 22 **"Marius en Sulla"** (Marius' legerhervorming en zeven
+> consulschappen, Sulla's mars op Rome — de eerste Romeinse generaal die met
+> zijn eigen leger tegen zijn eigen stad optrok — en zijn proscripties en
+> dictatuur, het sinistere precedent waar Caesar straks tegen afsteekt). Beide
+> hoofdstukken zijn, net als de mythologische bonushoofdstukken uit Ronde 1,
+> bewust grammatica-arm (herhaling) — Minerva behandelt deze periode niet
+> apart, dus er is geen les om aan te haken. Caesar Schrijft Geschiedenis
+> t/m de Finale schuiven hierdoor twee plekken op (was 21-26, is nu 23-28).
+>
+> **Schrijvers als personages:** waar mogelijk krijgen de klassieke auteurs
+> zelf een gezicht in de hoofdstukken die toch al over hun tijd gaan, in
+> plaats van een apart hoofdstuk — Plato en Socrates staan al in Hoofdstuk 17,
+> Livius in Hoofdstuk 19-20, Ovidius in Hoofdstuk 25. Xenofon (leerling van
+> Socrates én geschiedschrijver in Herodotos' voetspoor) sluit aan bij
+> Hoofdstuk 16. Verdere auteurs volgen op dezelfde manier zodra hun hoofdstuk
+> wordt uitgebouwd.
 
 | # | Boek | Hoofdstuk | Grammatica (basis voor puzzels) |
 |---|---|---|---|
@@ -407,12 +432,14 @@ kent (Les 2, Les 14) en Minerva (H1, H13).
 | 18 | III | Alexander en de Grenzen van de Wereld | Complexe werkwoorden, participia; gerundivum |
 | 19 | IV | Onder de Koningen | Verdieping naamvallen; conjunctivus |
 | 20 | IV | Verdedigers van de Republiek | Verdieping naamvallen; N.C.I., semi-deponentia |
-| 21 | IV | Caesar Schrijft Geschiedenis | Gerundium, gerundivum (herhaling) |
-| 22 | IV | Augustus en de Pax Romana | Literair Latijn |
-| 23 | IV | Keizers en Dichters | Verdieping naamvallen |
-| 24 | V | De Bibliotheek van Mnemosyne | Herhaling van alle grammatica |
-| 25 | V | De Rivier Lethe | Integratie Grieks & Latijn |
-| 26 (Finale) | V | Chronica Classica | Eindtoets van alle grammatica en taalvaardigheid |
+| 21 | IV | De Gracchen | *Herhaling* — bewust grammatica-arm |
+| 22 | IV | Marius en Sulla | *Herhaling* — bewust grammatica-arm |
+| 23 | IV | Caesar Schrijft Geschiedenis | Gerundium, gerundivum (herhaling) |
+| 24 | IV | Augustus en de Pax Romana | Literair Latijn |
+| 25 | IV | Keizers en Dichters | Verdieping naamvallen |
+| 26 | V | De Bibliotheek van Mnemosyne | Herhaling van alle grammatica |
+| 27 | V | De Rivier Lethe | Integratie Grieks & Latijn |
+| 28 (Finale) | V | Chronica Classica | Eindtoets van alle grammatica en taalvaardigheid |
 
 **`SP_MYTH_CANON`** — de S/A/B-tier-mythenlijst + de Romeinse verhalen uit de
 docx, bewaard als los naslagwerk. Het grootste deel is inmiddels toegewezen —
