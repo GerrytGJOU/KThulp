@@ -108,6 +108,15 @@ const SP_TITLES = [
     ds:"Zag Herakles al zijn twaalf beproevingen tot een einde brengen.", bonus:null },
   { id:"ch3_athena_gesprek", nm:"Leerling van Athena", icon:"column", cat:"chronica", secret:true,
     ds:"Hoorde Athena's afsluitende woorden over de twee vormen van vrijheid.", bonus:null },
+  // Hoofdstuk 4 — twee hoofdlijnen (Theseus in het Labyrint van Kreta, met
+  // Ariadne en Daidalos/Ikaros erin verweven; en Phaëthon, die zijn afkomst
+  // bewijst bij het Paleis van de Zon) plus een afsluitend gesprek met Athena.
+  { id:"ch4_theseus_labyrint", nm:"Overwinnaar van het Labyrint", icon:"shield", cat:"chronica", secret:true,
+    ds:"Versloeg de Minotaurus in het hart van het Labyrint van Kreta — en droeg de prijs van een vergeten belofte.", bonus:null },
+  { id:"ch4_phaethon", nm:"Getuige van Phaëthons Val", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Phaëthon de zonnewagen mennen, en de aarde ternauwernood gered worden van zijn val.", bonus:null },
+  { id:"ch4_athena_gesprek", nm:"Kenner van het Labyrint", icon:"column", cat:"chronica", secret:true,
+    ds:"Hoorde Athena's afsluitende woorden over twee beloften die niemand meer ongedaan kon maken.", bonus:null },
 ];
 
 /* ---- CAMPAGNEKAART — Proloog + 28 hoofdstukken (5 "Boeken"), gesynchroniseerd
@@ -191,15 +200,15 @@ const SP_CAMPAIGN = [
     illustratie:"Zeus en Io onder goddelijke bescherming",
     zijverhalen:"Europa (A-tier, begin van Kreta); Ganymedes (B-tier); Danaïden (B-tier)" },
   { id:"ch4", nr:4, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Het Labyrint van Herinneringen",
-    periode:"Kreta",
-    verhaal:"Theseus verdwaalt in een labyrint waarin herinneringen verdwijnen. De speler ontdekt dat tijd en herinnering meerdere lagen hebben.",
+    periode:"Kreta / het Paleis van de Zon",
+    verhaal:"Twee lijnen, elk om een belofte die niemand meer kon intrekken. Theseus belooft zijn vader Aegeus witte zeilen te hijsen als hij de Minotaurus overleeft — en vergeet het, met dodelijke gevolgen. Daidalos en Ikaros ontsnappen op zelfgemaakte vleugels uit hetzelfde labyrint, met een even fataal gevolg. Phaëthon dwingt zijn vader Sol tot een onherroepelijke eed bij de Styx, en betaalt de prijs van een wens die hij niet had moeten uitspreken.",
     pallas:"Les 6-7: Theseus, Ariadne, Minotauros, terugreis", minerva:"Hoofdstuk 5: Phaëthon · Hoofdstuk 6: De Familia",
     grammatica:"Infinitivus, vocativus, imperfectum, perfectum, ablativus",
-    gameplay:"Eerste grote keuzes, tijdsherkenning",
-    personages:"Theseus, Ariadne, Minotauros, Phaëthon",
-    thema:"Gebeurtenissen hebben een verleden en gevolg",
+    gameplay:"Twee parallelle lijnen (Theseus/Ariadne/Minotaurus/Daidalos & Ikaros, en Phaëthon), zelfde principe als Hoofdstuk 3's Io/Herakles; Combat-bridge tegen de Minotaurus",
+    personages:"Theseus, Ariadne, Minos, Daidalos, Ikaros, Aegeus, Phaëthon, Sol/Helios, Epaphus",
+    thema:"Gebeurtenissen hebben een verleden en gevolg — een belofte weegt niet minder omdat ze lichtvaardig werd gegeven",
     illustratie:"Theseus in het donkere Labyrint",
-    zijverhalen:"Daidalos & Ikaros (S-tier, onmisbaar — direct verbonden aan het Labyrint zelf)" },
+    zijverhalen:"Daidalos & Ikaros (S-tier, onmisbaar — direct verbonden aan het Labyrint zelf, en verweven in de Theseus-lijn i.p.v. een aparte lijn)" },
   { id:"ch5", nr:5, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Het Gulden Vlies",
     periode:"Vóór de Trojaanse Oorlog — de vorige generatie",
     verhaal:"Jason vaart met een bemanning van helden naar Kolchis voor het Gulden Vlies — onder wie Peleus, Telamon en Laertes, die later de vaders van Achilles, Ajax en Odysseus worden, met een jonge Herakles en Orpheus aan boord. Sluit af met Medea's wraak in Korinthe, nadat Jason haar verstoot.",
@@ -699,6 +708,30 @@ const SP_PUZZLES = {
     vraag:"Ladon bewaakt de boom met de gouden appels van de Hesperiden dag en nacht. “Ladon arborem ___ custodit” — welke vorm van aurum (goud) past hier, genitivus enkelvoud?",
     opties:["auri","auro","aurum","aure"], antwoord:"auri",
     hint:"Genitivus enkelvoud van een tweede-declinatie onzijdig woord als aurum, auri eindigt op -i." },
+
+  // ---- Hoofdstuk 4, Lijn Theseus (Ariadne, Minotaurus, Daidalos & Ikaros) ----
+  puzzle_ch4t_infinitivus: { type:"multiple-choice",
+    vraag:"“Aegeus Theseum vela mutare iubet” — Aegeus draagt Theseus op de zeilen te verwisselen. Welk woord is de infinitivus?",
+    opties:["Aegeus","Theseum","vela","mutare"], antwoord:"mutare",
+    hint:"De infinitivus is de 'woordenboekvorm' van een werkwoord, hier 'mutare' — (te) veranderen." },
+  puzzle_ch4t_vocativus: { type:"multiple-choice",
+    vraag:"Daidalos ziet zijn zoon te hoog vliegen en roept wanhopig zijn naam. Wat roept hij?",
+    opties:["Icarus!","Icare!","Icarum!","Icari!"], antwoord:"Icare!",
+    hint:"Net als Bacchus -> Bacche wordt Icarus in de vocativus Icare." },
+  puzzle_ch4t_ablativus: { type:"multiple-choice",
+    vraag:"“Theseus ___ labyrinthum relinquit” — Theseus verlaat het labyrint met behulp van de draad. Welke vorm van filum (draad) past hier, ablativus enkelvoud?",
+    opties:["filum","fili","filo","filis"], antwoord:"filo",
+    hint:"De ablativus van middel ('waarmee?') van een tweede-declinatie onzijdig woord als filum, fili eindigt op -o." },
+
+  // ---- Hoofdstuk 4, Lijn Phaëthon ----
+  puzzle_ch4p_imperfectum: { type:"multiple-choice",
+    vraag:"“Sol filium diu ___” — Sol bleef zijn zoon lange tijd waarschuwen. Welke vorm van monere (waarschuwen) past hier, imperfectum 3e persoon enkelvoud?",
+    opties:["monet","monebat","monuit","monebit"], antwoord:"monebat",
+    hint:"De imperfectum beschrijft een handeling die duurde of zich herhaalde — 'hij bleef waarschuwen', niet 'hij waarschuwde één keer'." },
+  puzzle_ch4p_perfectum: { type:"multiple-choice",
+    vraag:"“Iuppiter fulmen ___” — Jupiter wierp de bliksem. Welke vorm van mittere (sturen, werpen) past hier, perfectum 3e persoon enkelvoud?",
+    opties:["mittit","mittebat","misit","mittet"], antwoord:"misit",
+    hint:"De perfectum beschrijft een voltooide, eenmalige handeling in het verleden — 'hij wierp', één keer, klaar." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -824,6 +857,50 @@ const SP_CODEX_ENTRIES = {
     tekst:"Voor de gouden appels van de Hesperiden, bewaakt door de draak Ladon, bood Herakles aan tijdelijk de hemel over te nemen van de titaan Atlas, zodat die zelf de appels kon plukken. Atlas, eenmaal bevrijd, overwoog Herakles voorgoed met de last achter te laten — tot Herakles hem, met een list in plaats van kracht, overhaalde de hemel nog één keer over te nemen zodat hij zijn mantel kon opvouwen. Zodra Atlas de last weer droeg, liep Herakles gewoon weg met de appels." },
   codex_herakles_twaalf_werken: { cat:"mythologie", titel:"Herakles: de Twaalf Werken Voltooid",
     tekst:"Na de Nemeïsche Leeuw en de Hydra van Lerna (Hoofdstuk 2) volbracht Herakles nog tien beproevingen: de Cerynitische Hinde gevangen zonder een wond, de Erymanthische Ever bedwongen (ten koste van zijn leermeester Chiron), de Augiasstal in één dag schoongespoeld, de Stymfalische Vogels verjaagd met Minerva's bronzen ratel, de Kretenzische Stier gevangen, de mensenetende Merries van Diomedes getemd met hun eigen meester als voer, de Gordel van Hippolyte behaald ten koste van haar leven door Juno's list, het vee van Geryon veroverd aan de rand van de wereld, de gouden Appels van de Hesperiden buitgemaakt met een list tegen Atlas, en tot slot Cerberus zelf, de driekoppige hond van de onderwereld, met blote handen overmeesterd. Tien jaar dienstbaarheid — opgelegd na de ergste daad van zijn leven — eindigen met deze twaalfde taak." },
+
+  // LET OP: dezelfde "vroeg ontgrendelen"-regel als Hoofdstuk 1/2/3 — deze
+  // vijf entries worden al bij CH4_000 gezet, vóór de eerste puzzel.
+  codex_grammatica_ch4_infinitivus: { cat:"grammatica", titel:"Grammatica: de infinitivus",
+    tekst:"De infinitivus is de 'woordenboekvorm' van een werkwoord — geen persoon, geen tijd, gewoon de handeling zelf ('veranderen', 'waarschuwen'). Je gebruikt hem vaak na een ander werkwoord, zoals iubere (bevelen) of posse (kunnen): 'Aegeus Theseum vela mutare iubet' — Aegeus draagt Theseus op de zeilen te veranderen.",
+    table:{ headers:["Conjugatie","Uitgang","Voorbeeld uit dit hoofdstuk","Betekenis"],
+      rows:[["1e","-are","mutare","veranderen"],
+            ["2e","-ēre","monere","waarschuwen"],
+            ["3e","-ere","relinquere","achterlaten, verlaten"],
+            ["4e","-ire","servire (Hoofdstuk 2)","dienen"]] } },
+  codex_grammatica_ch4_vocativus: { cat:"grammatica", titel:"Grammatica: de vocativus (vervolg)",
+    tekst:"Je kende de vocativus al uit Hoofdstuk 1 (Bacche!, Pallas!, Prometheu!) — dit hoofdstuk voegt er nieuwe voorbeelden aan toe. Nog altijd geldt: niet elk woord verandert, en Griekse namen op -eus volgen hun eigen patroon.",
+    table:{ headers:["Type","Voorbeeld (nominativus)","Vocativus"],
+      rows:[["Regelmatig op -us (2e declinatie)","Icarus","Icare!"],
+            ["Grieks op -eus","Theseus","Theseu!"],
+            ["Blijft gelijk aan de nominativus","Minos","Minos!"]] } },
+  codex_grammatica_ch4_imperfectum: { cat:"grammatica", titel:"Grammatica: de imperfectum",
+    tekst:"De imperfectum beschrijft een handeling die in het verleden duurde of zich herhaalde — 'hij was aan het waarschuwen', 'hij bleef waarschuwen' — in tegenstelling tot de perfectum, die een handeling als afgerond en eenmalig weergeeft. Je herkent de imperfectum aan het tussenvoegsel -ba- vóór de persoonsuitgang.",
+    table:{ headers:["Persoon","monere (waarschuwen) — imperfectum"],
+      rows:[["ik","monebam"],["jij","monebas"],["hij/zij/het","monebat"],
+            ["wij","monebamus"],["jullie","monebatis"],["zij","monebant"]] } },
+  codex_grammatica_ch4_perfectum: { cat:"grammatica", titel:"Grammatica: de perfectum",
+    tekst:"De perfectum beschrijft een voltooide, eenmalige handeling in het verleden — 'hij wierp', één keer, klaar. Anders dan de imperfectum heeft de perfectum geen vast, voorspelbaar tussenvoegsel: elk werkwoord heeft zijn eigen perfectumstam, die je apart moet leren (net als esse/posse in Hoofdstuk 2 al onregelmatig waren).",
+    table:{ headers:["Werkwoord (infinitivus)","Perfectum (hij/zij-vorm)","Betekenis"],
+      rows:[["mittere","misit","hij/zij stuurde, wierp"],
+            ["monere","monuit","hij/zij waarschuwde"],
+            ["cadere","cecidit","hij/zij viel"]] } },
+  codex_grammatica_ch4_ablativus: { cat:"grammatica", titel:"Grammatica: de ablativus (van middel)",
+    tekst:"Een ablativus van middel laat zien WAARMEE iets gebeurt, zonder voorzetsel: 'Theseus filo labyrinthum relinquit' — Theseus verlaat het labyrint MET (behulp van) de draad. Net als bij de genitivus/dativus (Hoofdstuk 3) hangt de exacte uitgang af van de declinatie van het woord.",
+    table:{ headers:["Declinatie","Voorbeeld","Ablativus enkelvoud","Betekenis"],
+      rows:[["2e (onzijdig, op -um)","filum, fili","filo","met/door de draad"],
+            ["1e (op -a)","cera, cerae","cera","met/door was"],
+            ["3e (medeklinker)","fulmen, fulminis","fulmine","met/door de bliksem"]] } },
+  codex_grammatica_ch4_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 4 samengevat",
+    tekst:"Dit hoofdstuk draaide om beloften en hun gevolgen, verteld in de juiste tijden: de infinitivus (de 'kale' werkwoordsvorm, bv. mutare — veranderen), de vocativus (aanspreekvorm, met nieuwe voorbeelden naast Hoofdstuk 1), de imperfectum (een handeling die duurde: monebat — hij bleef waarschuwen) tegenover de perfectum (een handeling die voltooid was: misit — hij wierp), en de ablativus van middel (waarmee iets gebeurt: filo — met de draad, fulmine — met de bliksem). Samen laten ze zien hoe het Latijn niet alleen WIE iets doet kan uitdrukken, maar ook WANNEER en WAARMEE." },
+
+  codex_labyrint_minotaurus: { cat:"mythologie", titel:"Het Labyrint en de Minotaurus",
+    tekst:"Koning Minos van Kreta beloofde ooit de zeegod Neptunus een verblindend witte stier te offeren als teken van zijn koningschap — en brak die belofte toen hij het dier te mooi vond om te doden. Neptunus strafte hem door zijn vrouw Pasiphaë een onnatuurlijk verlangen naar de stier te geven; wat daaruit geboren werd, de Minotaurus, half mens en half stier, kon nergens anders wonen dan in een bouwwerk dat zijn eigen weg naar buiten verbergt. Minos' hofbouwmeester Daidalos ontwierp dat labyrint — zo listig dat zelfs zijn eigen maker de weg er nauwelijks in kon vinden. Elk jaar voedde het offer uit Athene het monster, en hield het tegelijk Minos' oude, gebroken belofte verborgen achter zijn eigen stenen muren." },
+  codex_daidalos_ikaros: { cat:"mythologie", titel:"Daidalos en Ikaros",
+    tekst:"Toen Minos ontdekte dat het labyrint zijn geheim niet had bewaard, sloot hij Daidalos en diens zoon Ikaros zelf op in het bouwwerk — de enige plek op Kreta waaruit zelfs de bouwmeester niet zomaar kon ontsnappen. Daidalos verzamelde veren, bond ze samen met draad en verzegelde ze met was tot twee paar vleugels, met de dringende waarschuwing aan zijn zoon om de middenweg te vliegen: niet te laag, niet te hoog. Ikaros, dronken van de vreugde van het vliegen zelf, steeg hoger dan zijn vader had bevolen — tot de zon de was deed smelten en hij in de zee viel die sindsdien zijn naam draagt: de Icarische Zee." },
+  codex_ariadne_bacchus: { cat:"mythologie", titel:"Ariadne op Naxos",
+    tekst:"Nadat ze Theseus met haar garen door het labyrint had geholpen, kon Ariadne nooit meer veilig terugkeren naar haar vaders paleis — en toch liet Theseus haar, slapend, achter op het eiland Naxos. Daar vond Bacchus haar, de god die je al kent van koning Midas' vloek (Hoofdstuk 1): hij trouwde met haar, maakte haar onsterfelijk, en plaatste haar bruidskroon voorgoed tussen de sterren. Van alle gebroken beloften in dit hoofdstuk is het de enige die alsnog met iets goeds eindigt." },
+  codex_phaethon: { cat:"mythologie", titel:"Phaëthon en de Zonnewagen",
+    tekst:"Phaëthon, die aan zijn eigen goddelijke afkomst twijfelde, reisde naar het Paleis van de Zon om zijn vader Sol om bewijs te vragen. Sol, die per ongeluk al een onherroepelijke eed bij de Styx had gezworen elke wens in te willigen, kon zijn zoon niet meer weigeren toen die vroeg de zonnewagen te mogen mennen. Phaëthon verloor de wagen bijna meteen uit controle — de aarde bevroor, verschroeide, en dreigde te vergaan — tot Jupiter hem met een bliksemschicht neerhaalde om de wereld te redden. Zijn zusters, de Heliaden, weenden zo lang aan zijn graf dat ze veranderden in populieren, hun tranen verhard tot amber." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -898,6 +975,35 @@ const SP_CODEX_PERSONS = {
     full:"Jupiter, ditmaal vermomd als een tamme witte stier in plaats van een wolk, liet Europa argeloos op zijn rug klimmen — en zwom vervolgens met haar de zee op, helemaal naar Kreta. Daar baarde ze hem drie zonen, onder wie Minos, de latere koning van Kreta wiens naam voorgoed verbonden zal blijven met een labyrint dat nog gebouwd moet worden. Haar naam bleef achter op een heel werelddeel: Europa." },
   pholus: { nm:"Pholus", epithet:"Wijze centaur, gastheer van Herakles",
     intro:"Een centaur die, anders dan de meeste van zijn soort, bekendstaat om zijn gastvrijheid — tot een gedeelde wijnkruik zijn hele kudde in een dodelijke chaos stort." },
+
+  theseus: { nm:"Theseus", epithet:"Prins van Athene, doder van de Minotaurus",
+    intro:"De pas erkende zoon van koning Aegeus, die zich vrijwillig aanmeldt voor het bloedigste offer dat Athene ooit aan Kreta heeft moeten betalen.",
+    full:"Theseus versloeg de Minotaurus in het hart van het Labyrint, dankzij Ariadnes garen — en liet haarzelf achter op Naxos voordat hij thuisvoer. Zijn grootste overwinning en zijn grootste fout vallen in hetzelfde verhaal samen: hij vergat de belofte aan zijn vader over de kleur van zijn zeilen, en werd koning van Athene op dezelfde dag dat die vergetelheid zijn vader het leven kostte." },
+  aegeus: { nm:"Aegeus", epithet:"Koning van Athene",
+    intro:"Een vader die zijn net teruggevonden zoon dreigt te verliezen aan een tol die zijn eigen stad al negen jaar aan Kreta betaalt.",
+    full:"Aegeus liet zijn zoon beloven witte zeilen te hijsen als teken dat hij de Minotaurus had overleefd. Toen het schip terugkeerde onder het gewone zwarte rouwzeil — vergeten, niet verwisseld — wierp hij zich zonder aarzelen van de klippen in de zee. Die zee draagt sindsdien zijn naam: de Egeïsche Zee." },
+  ariadne: { nm:"Ariadne", epithet:"Prinses van Kreta, dochter van Minos",
+    intro:"Minos' dochter, die in de veertien ten dode opgeschreven Atheners voor het eerst iemand ziet voor wie ze meer voelt dan medelijden met zichzelf.",
+    full:"Ariadne verried haar eigen vader door Theseus Daidalos' plan — een kluwen garen — in handen te spelen, in ruil voor de belofte dat hij haar zou meenemen. Theseus liet haar niettemin slapend achter op Naxos. Daar vond Bacchus haar, trouwde met haar en maakte haar onsterfelijk — het enige verhaal in dit hoofdstuk waar een gebroken belofte alsnog goed afloopt." },
+  minos: { nm:"Minos", epithet:"Koning van Kreta, zoon van Europa en Jupiter",
+    intro:"De machtige koning van Kreta — dezelfde naam die Athena in Hoofdstuk 3 al noemde toen ze over Europa vertelde — wiens jaarlijkse eis aan Athene een oude, verzwegen schuld verbergt.",
+    full:"Minos' eigen gebroken belofte aan Neptunus — een witte stier die hij weigerde te offeren — kostte hem uiteindelijk zijn eer: zijn vrouw Pasiphaë baarde de Minotaurus, en zijn dochter Ariadne koos voor een vreemdeling boven haar eigen vader. Zijn woede om dat verraad trof uiteindelijk niet Theseus, maar Daidalos, de man die het allemaal mogelijk had gemaakt." },
+  daidalos: { nm:"Daidalos (Daedalus)", epithet:"Beroemdste bouwmeester van zijn tijd",
+    intro:"De hofbouwmeester van Minos, wiens vindingrijkheid net zo gevaarlijk als nuttig blijkt te zijn — hij ontwierp zowel het labyrint als, in het geheim, de manier om het te verslaan.",
+    full:"Voor zijn hulp aan Ariadne en Theseus werd Daidalos samen met zijn zoon Ikaros zelf in zijn eigen labyrint opgesloten. Hij ontsnapte op zelfgemaakte vleugels van veren en was — en vloog vervolgens, alleen, met zijn zoon niet langer naast zich, verder dan hij ooit had willen vliegen." },
+  ikaros: { nm:"Ikaros (Icarus)", epithet:"Zoon van Daidalos",
+    intro:"Een jongen die voor het eerst van zijn leven vliegt, aan de zijde van zijn vader, met maar één regel om zich aan te houden: blijf de middenweg volgen.",
+    full:"Ikaros vloog, dronken van vreugde, hoger dan zijn vader had bevolen — tot de zon de was tussen zijn veren deed smelten. Hij viel in de zee die sindsdien zijn naam draagt: de Icarische Zee. Zijn vader riep zijn naam keer op keer, zonder ooit nog antwoord te krijgen." },
+  phaethon: { nm:"Phaëthon", epithet:"Zoon van Sol, twijfelaar aan zijn eigen afkomst",
+    intro:"Een jongen die alleen het woord van zijn moeder heeft dat zijn vader de zonnegod is — tot spot van een vriend hem naar het Paleis van de Zon drijft om het zelf te bewijzen.",
+    full:"Phaëthon dwong zijn vader Sol, gebonden aan een onherroepelijke eed bij de Styx, om hem de zonnewagen te laten mennen. Hij verloor de controle bijna onmiddellijk, bracht de aarde op de rand van de ondergang, en werd door Jupiters bliksem uit de lucht gehaald om erger te voorkomen. Zijn zusters, de Heliaden, treuren nog altijd — nu als populieren aan de oever van de Eridanus." },
+  sol: { nm:"Sol (Helios)", epithet:"God van de Zon",
+    intro:"De god die dagelijks de zon over de hemel voert, in een paleis van goud en brons aan de rand van de wereld — en die een zoon verwelkomt van wie hij het bestaan nooit heeft ontkend.",
+    full:"Sol zwoer, voor hij goed en wel wist wat zijn zoon zou vragen, een eed bij de Styx die zelfs goden nooit breken. Toen Phaëthon de zonnewagen opeiste, kon Sol niet meer terug — en moest toezien hoe zijn eigen belofte zijn zoon het leven kostte." },
+  epaphus: { nm:"Epaphus", epithet:"Zoon van Jupiter en Io",
+    intro:"De zoon die Io (Hoofdstuk 3) in Egypte baarde, inmiddels oud genoeg om zijn vriend Phaëthon te tarten diens eigen goddelijke afkomst te bewijzen." },
+  tellus: { nm:"Tellus", epithet:"Belichaming van de Aarde",
+    intro:"De aarde zelf, die haar stem verheft tot aan de Olympos wanneer Phaëthons wilde rit haar dreigt te verschroeien." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -918,6 +1024,50 @@ const SP_FRAGMENTS = {
   // hergebruik van dezelfde id zou geen nieuw fragment toevoegen.
   io:       { nm:"Vrijheid",   icon:"🕊️" },
   labores:  { nm:"Volbrenging",icon:"⚔️" },
+  // Hoofdstuk 4 — bewust ANDERE ids dan alle voorgaande fragmenten, want
+  // SP_STATE.fragments is één doorlopende array; de hub-gate naar Athena
+  // staat daarom op [REQUIRE:fragments=8] (de zes hierboven + deze twee).
+  theseus:  { nm:"Uitweg",     icon:"🧵" },
+  phaethon: { nm:"Overmoed",   icon:"☀️" },
+};
+
+/* ---- HERINNERINGEN/SOUVENIRS — het "museum van Mnemosyne"-mechanisme
+   (Chronica.md §7.2.1a): uit elk afgerond verhaal neemt de speler één
+   tastbaar voorwerp mee, opgehaald via een SOUVENIR:-sectie
+   (spHookSouvenir, singleplayer.js) en zichtbaar in de nieuwe eerste
+   Codex-tab "Herinneringen" (spCodexSouvenirsHTML). Losstaand van
+   SP_FRAGMENTS hierboven — fragmenten zijn een ONZICHTBARE hoofdstukgate,
+   souvenirs zijn juist bedoeld om gezien te worden. Bewust ambigu wie of wat
+   deze voorwerpen precies verzamelt/bewaart (het Orakel van Chronos, in de
+   verteltekst) — dat wordt pas een echt "museum" zodra Hoofdstuk 26 "De
+   Bibliotheek van Mnemosyne" (SP_CAMPAIGN) gebouwd wordt.
+   `img` optioneel (relatief aan assets/chronica/souvenirs/, nog geen
+   bestanden op schijf); ontbreekt het of faalt het laden, dan valt
+   spCodexSouvenirsHTML terug op `icon` — zelfde patroon als
+   SP_COMBAT_ENEMIES. ---- */
+const SP_SOUVENIRS = {
+  souvenir_midas: { nm:"Een Gouden Roos", icon:"🌹", img:"souvenir_midas.png",
+    caption:"Een gouden roos uit het paleis van Midas." },
+  souvenir_athena_geboorte: { nm:"Een Bronzen Splinter", icon:"🪓", img:"souvenir_athena_geboorte.png",
+    caption:"Een splinter brons van de bijl waarmee Athena ter wereld kwam." },
+  souvenir_prometheus: { nm:"Een Nooit Dovend Kooltje", icon:"🔥", img:"souvenir_prometheus.png",
+    caption:"Een kooltje van het vuur dat Prometheus voor de mensheid stal." },
+  souvenir_latona: { nm:"Een Waterlelie", icon:"🌸", img:"souvenir_latona.png",
+    caption:"Een waterlelie uit de vijver waar boeren Latona het water misgunden." },
+  souvenir_semele: { nm:"Een Wijnrank die Nooit Verwelkt", icon:"🍇", img:"souvenir_semele.png",
+    caption:"Een wijnrank uit de as waaruit Bacchus werd geboren." },
+  souvenir_kallisto: { nm:"Een Zilverglanzende Haarlok", icon:"🐻", img:"souvenir_kallisto.png",
+    caption:"Een haarlok berenvacht die in het donker zwak lijkt te glanzen, als sterrenlicht." },
+  souvenir_herakles_leeuw: { nm:"Een Klauw van de Nemeïsche Leeuw", icon:"🦁", img:"souvenir_herakles_leeuw.png",
+    caption:"Een klauw, losgeraakt uit de leeuwenhuid die Herakles nu als mantel draagt." },
+  souvenir_io: { nm:"Een Pauwenveer met een Oog", icon:"🦚", img:"souvenir_io.png",
+    caption:"Een pauwenveer met een van Argus' honderd ogen erin geweven." },
+  souvenir_herakles_labores: { nm:"Een Gouden Appel van de Hesperiden", icon:"🍎", img:"souvenir_herakles_labores.png",
+    caption:"Een gouden appel die Herakles je toevertrouwt nu al zijn twaalf werken volbracht zijn." },
+  souvenir_theseus: { nm:"Een Restje van Ariadne's Garen", icon:"🧵", img:"souvenir_theseus.png",
+    caption:"Het laatste stukje van de draad waarmee Theseus het Labyrint van Kreta weer uit vond." },
+  souvenir_phaethon: { nm:"Een Druppel Amber", icon:"🟠", img:"souvenir_phaethon.png",
+    caption:"Een druppel amber, ooit een traan van een van de Heliaden om Phaëthon." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -977,6 +1127,10 @@ const SP_COMBAT_ENEMIES = {
     intro:"Een reus met drie gekoppelde lichamen op één paar benen, die zijn kudde rood vee met drievoudige kracht verdedigt." },
   cerberus: { nm:"Cerberus", icon:"🐕", img:"assets/bosses/Cerberus.png", hp:80,
     intro:"De driekoppige hond die de poort van de onderwereld bewaakt — de zwaarste van alle twaalf beproevingen, en de enige die met blote handen gewonnen moet worden." },
+
+  // ---- Hoofdstuk 4, Lijn Theseus ----
+  minotaurus: { nm:"De Minotaurus", icon:"🐃", img:"assets/bosses/minotaurus.png", hp:65,
+    intro:"Half mens, half stier — het gevolg van een oude, gebroken belofte van koning Minos — al negen jaar gevoed met Atheens offervlees, en vandaag voor het eerst tegenover iemand die niet van plan is zich te laten offeren." },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -1025,6 +1179,24 @@ const SP_VOCAB_ENTRIES = {
   latijn_promittit: { taal:"latijn", woord:"promittere (promittit)", betekenis:"beloven" },
   latijn_titan:     { taal:"latijn", woord:"Titan, Titanis", betekenis:"titaan" },
   latijn_avis:      { taal:"latijn", woord:"avis, avis", betekenis:"vogel" },
+
+  // ---- Hoofdstuk 4 ----
+  latijn_vela:        { taal:"latijn", woord:"velum, veli (mv. vela)", betekenis:"zeil" },
+  latijn_mutare:      { taal:"latijn", woord:"mutare (mutat)", betekenis:"veranderen" },
+  latijn_iubet:       { taal:"latijn", woord:"iubere (iubet)", betekenis:"bevelen, opdragen" },
+  latijn_filum:       { taal:"latijn", woord:"filum, fili", betekenis:"draad" },
+  latijn_labyrinthus: { taal:"latijn", woord:"labyrinthus, labyrinthi", betekenis:"doolhof, labyrint" },
+  latijn_relinquit:   { taal:"latijn", woord:"relinquere (relinquit)", betekenis:"achterlaten, verlaten" },
+  latijn_volare:      { taal:"latijn", woord:"volare (volat)", betekenis:"vliegen" },
+  latijn_ala:         { taal:"latijn", woord:"ala, alae", betekenis:"vleugel" },
+  latijn_cera:        { taal:"latijn", woord:"cera, cerae", betekenis:"was" },
+  latijn_monebat:     { taal:"latijn", woord:"monere (monebat)", betekenis:"waarschuwen" },
+  latijn_currus:      { taal:"latijn", woord:"currus, currus", betekenis:"wagen, strijdwagen" },
+  latijn_fulmen:      { taal:"latijn", woord:"fulmen, fulminis", betekenis:"bliksem(schicht)" },
+  latijn_misit:       { taal:"latijn", woord:"mittere (misit)", betekenis:"sturen, werpen" },
+  latijn_soror:       { taal:"latijn", woord:"soror, sororis", betekenis:"zuster" },
+  latijn_lacrima:     { taal:"latijn", woord:"lacrima, lacrimae", betekenis:"traan" },
+  latijn_cadere:      { taal:"latijn", woord:"cadere (cadit)", betekenis:"vallen" },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -1585,11 +1757,16 @@ Midas rent zoals hij nog nooit heeft gerend, struikelt over zijn eigen gouden dr
 
 Zijn dochter, zo vertelt men je later, terwijl Midas nog druipend aan de oever zit, keerde terug tot leven zodra de laatste gouden druppel zijn huid verliet — springlevend, ongedeerd, zonder enige herinnering aan het standbeeld dat ze even was.
 
+Terwijl Midas zijn dochter omhelst, valt je oog op iets tussen de rozenstruiken bij het pad: één enkele roos, nog altijd star en goudkleurig, die de vloek blijkbaar net had gemist voordat die werd opgeheven. Je raapt hem op — het voelt alsof het Orakel wil dat je dat doet.
+
 CODEX:
 codex_gouden_aanraking
 
 PERSON:
 midas:full, bacchus:full
+
+SOUVENIR:
+souvenir_midas
 
 EERETITEL:
 ch1_a_midas
@@ -1813,11 +1990,16 @@ Vanaf die dag zal ze naast Zeus staan, niet als een wapen dat hij inzet, maar al
 
 De andere goden zwijgen nog, onwennig met deze nieuwe aanwezigheid, maar jij voelt het al aan: er is zojuist iets in de wereld gekomen dat niet meer zal verdwijnen. Wijsheid heeft een gezicht gekregen, een speer, en een naam die weldra door heel Hellas zal worden uitgesproken — Pallas Athena.
 
+Op de vloer, tussen de scherven van het moment dat Zeus' schedel weer sloot, ligt nog een klein splintertje brons — afkomstig van Hephaistos' bijl. Niemand lijkt het te missen. Je steekt het bij je, met het onbestemde gevoel dat het Orakel dit zo heeft gewild.
+
 CODEX:
 codex_geboorte_athena
 
 PERSON:
 athena:full
+
+SOUVENIR:
+souvenir_athena_geboorte
 
 EERETITEL:
 ch1_b_athena
@@ -2098,11 +2280,16 @@ Prometheus glimlacht, ondanks de ketenen, ondanks de rots, ondanks de adelaar di
 
 Vuur en hoop: twee dingen die de mensheid, wat de goden ook nog mogen bedenken om haar te straffen of te beproeven, nooit meer zal kwijtraken. Je daalt af van de rots met dat besef stevig in je meegedragen, terug naar een wereld die voorgoed is veranderd door wat één titaan bereid was te riskeren.
 
+Onderaan de rots gloeit nog een enkel kooltje in de as van een vuur dat allang gedoofd had moeten zijn. Je sluit het in je handen, en het brandt door — alsof het weet dat het Orakel het wil bewaren.
+
 CODEX:
 codex_doos_van_pandora
 
 PERSON:
 prometheus:full
+
+SOUVENIR:
+souvenir_prometheus
 
 EERETITEL:
 ch1_c_prometheus
@@ -2243,10 +2430,10 @@ codex_grammatica_ch2_praesens, codex_grammatica_ch2_imperativus, codex_grammatic
 
 CHOICES:
 
-* Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is -> CH2_L01
-* Volg het lot van Semele, een prinses van Thebe die niet weet wie haar minnaar werkelijk is -> CH2_S01
-* Volg Kallisto, een jachtgezellin van Artemis die niemand kan vertrouwen wat ze ziet -> CH2_K01
-* Volg Herakles, Zeus' sterfelijke zoon die Hera al haat sinds voor zijn geboorte -> CH2_H01
+* Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is [DONE:ch2_lijn_latona] -> CH2_L01
+* Volg het lot van Semele, een prinses van Thebe die niet weet wie haar minnaar werkelijk is [DONE:ch2_lijn_semele] -> CH2_S01
+* Volg Kallisto, een jachtgezellin van Artemis die niemand kan vertrouwen wat ze ziet [DONE:ch2_lijn_kallisto] -> CH2_K01
+* Volg Herakles, Zeus' sterfelijke zoon die Hera al haat sinds voor zijn geboorte [DONE:ch2_lijn_herakles] -> CH2_H01
 * Spreek het Orakel aan, nu alle vier de verhalen zijn gehoord [REQUIRE:fragments=4] -> CH2_ATHENA
 
 END
@@ -2402,6 +2589,9 @@ Delos, dat eeuwenlang rondzwierf zonder doel, verankert zichzelf vanaf die dag v
 
 Terwijl Diana en Apollo hun eerste ademteugen nemen, voel je — zonder het te kunnen verklaren — dat elders, in Thebe, een ander verhaal zich op datzelfde moment ontvouwt: een ander slachtoffer van dezelfde jaloezie, een ander kind dat nog geboren moet worden.
 
+IMAGE:
+geboorte_apollo_diana.png
+
 CODEX:
 codex_geboorte_apollo_diana
 
@@ -2419,6 +2609,25 @@ ch2_lijn_latona=true
 
 FRAGMENT:
 latona
+
+CHOICES:
+
+* Kijk wat er nog met Latona gebeurt, nu haar tweeling geboren is -> CH2_L08B
+
+END
+
+=== SCENE: CH2_L08B ===
+
+TITLE:
+De Vijver van de Boeren
+
+TEXT:
+Nog uitgeput van de bevalling trekt Latona met haar pasgeboren tweeling verder, op zoek naar water om haar dorst te lessen. Ze vindt een heldere vijver, omringd door boeren die net hun kudden hebben laten drinken — maar wanneer ze vraagt of ze mag drinken, weigeren ze haar zelfs dat kleine gebaar, en roeren ze met opzet de bodem om tot het water te troebel is om te drinken.
+
+Latona, die al zoveel wreedheid heeft doorstaan zonder zich ooit te wreken, verliest voor het eerst haar geduld: ze vervloekt de boeren om voorgoed in hun eigen vijver te blijven leven — als kikkers, kwakend in het water dat ze haar weigerden. Waar hun voeten ooit stonden, groeit nu een enkele witte waterlelie. Je plukt hem voorzichtig — het lijkt bijna of het Orakel al wist dat hij daar zou staan.
+
+SOUVENIR:
+souvenir_latona
 
 CHOICES:
 
@@ -2540,6 +2749,9 @@ Verschroeid door Glorie
 TEXT:
 Jupiter verschijnt in zijn volle staat: bliksem die de lucht openrijt, donder die de fundamenten van het paleis doet schudden, een licht zo verzengend dat het geen onderscheid maakt tussen liefde en vernietiging. Semele's sterfelijke lichaam kan het niet verdragen — ze wordt op slag verteerd door het vuur van zijn ware gedaante, nog voor ze heeft kunnen beseffen wat ze eigenlijk had gevraagd.
 
+IMAGE:
+semele_verteerd.png
+
 PUZZLE:
 puzzle_ch2s_esse
 
@@ -2575,11 +2787,19 @@ Wanneer de tijd eindelijk daar is, opent Jupiter zijn eigen dij, en wordt Bacchu
 
 Ergens, ver van hier, weet je dat dit dezelfde god is die je ooit — in een ander leven, op een ander moment — hebt zien helpen bij het opheffen van een vloek over gouden vingers.
 
+Tussen de as, ongedeerd, ligt een enkele wijnrank — nog groen, nog levend, alsof het vuur haar bewust had overgeslagen. Je windt hem om je pols; hij verwelkt niet, en zal dat, voor zover je kunt zien, ook nooit doen.
+
+IMAGE:
+geboorte_bacchus.png
+
 CODEX:
 codex_geboorte_bacchus
 
 PERSON:
 semele:full, bacchus:full
+
+SOUVENIR:
+souvenir_semele
 
 EERETITEL:
 ch2_semele
@@ -2710,6 +2930,9 @@ Hera verandert Kallisto in een berin — haar menselijke stem, haar gezicht, haa
 
 Vanaf een verre bergkam, onzichtbaar voor iedereen behalve jou, kijkt Athena toe. Ook nu grijpt ze niet in.
 
+IMAGE:
+kallisto_berin.png
+
 PUZZLE:
 puzzle_ch2k_esse
 
@@ -2748,11 +2971,19 @@ Vlak voordat de speer haar kan doorboren, grijpt Zeus in — de enige keer in di
 
 Daar, aan de nachtelijke hemel, blijft hun verhaal zichtbaar voor iedereen die ooit omhoog kijkt en de sterren leert lezen.
 
+Op de plek waar Kallisto zojuist nog stond, vind je een enkele haarlok berenvacht, achtergebleven in het gras. In het donker lijkt hij zwak te glanzen — bijna alsof er nog een beetje sterrenlicht in is blijven hangen. Je stopt hem weg, met het vage gevoel dat het Orakel dat wil.
+
+IMAGE:
+kallisto_sterrenbeeld.png
+
 CODEX:
 codex_metamorfose_kallisto
 
 PERSON:
 kallisto:full, diana:full
+
+SOUVENIR:
+souvenir_kallisto
 
 EERETITEL:
 ch2_kallisto
@@ -2870,6 +3101,9 @@ De waanzin grijpt Herakles zo volledig dat de wereld om hem heen vervormt tot ie
 
 Wanneer het licht in zijn ogen terugkeert, staat Herakles alleen in een huis dat niet langer een thuis is. Megara. De kinderen. Allemaal weg, door zijn eigen hand, in een waanzin die niet de zijne was maar wel zijn daad. Het geluid dat uit hem komt wanneer het besef doordringt, is niet het geluid van een held.
 
+IMAGE:
+herakles_nasleep.png
+
 CHOICES:
 
 * Blijf bij hem, ook al is er niets meer te zeggen -> CH2_H07
@@ -2979,11 +3213,16 @@ Eurystheus, bij het horen van dit verslag, weigert de Hydra als volwaardige bepr
 
 Twee beproevingen liggen achter je: de leeuw, gewurgd; de Hydra, verslagen met vuur. Herakles' schuld is nog lang niet ingelost, en de rest van zijn beproevingen wachten nog ergens verderop in de tijd — maar voor het eerst sinds die verschrikkelijke dag voelt hij iets wat op vooruitgang lijkt.
 
+Bij het aantrekken van zijn nieuwe leeuwenhuid-mantel raakt er één klauw los, te klein om te missen tussen zoveel meer. Herakles merkt het niet eens; jij raapt hem op, met het vertrouwde gevoel dat het Orakel dit soort dingen graag bewaard ziet.
+
 CODEX:
 codex_herakles_beproevingen
 
 PERSON:
 herakles:full, megara:intro
+
+SOUVENIR:
+souvenir_herakles_leeuw
 
 EERETITEL:
 ch2_herakles_eerste_taken
@@ -3014,6 +3253,9 @@ Athena stapt voor het eerst dit hoofdstuk naar voren, niet langer een zwijgende 
 "Je hebt vier verhalen gezien," zegt ze. "Vier keer greep Hera in. Vier keer reageerden stervelingen anders. Sommigen bezweken. Sommigen verloren alles. Eén bleef opstaan." Ze zwijgt even, alsof ze de stilte zelf laat meewegen. "Heldendom ontstaat niet wanneer het lot je gunstig gezind is, maar wanneer je weigert eraan ten onder te gaan."
 
 Vanaf dit moment, voel je, is ze niet langer enkel een toeschouwer.
+
+IMAGE:
+athena_mentor_ch2.png
 
 PERSON:
 athena:full
@@ -3058,6 +3300,10 @@ Het Einde van Hoofdstuk 2
 TEXT:
 "Hoofdstuk 3 wacht al ergens verderop," zegt de stem, "en met hem de rest van Herakles' beproevingen — zijn eerste werken heb je al gezien, maar er wachten er nog velen." De poort keert terug tot een dunne streep licht, en je neemt vier herinneringen met je mee: volharding, onschuld, waarheid, moed.
 
+CHOICES:
+
+* Stap door de poort -> CH3_000
+
 END
 `.trim();
 
@@ -3092,8 +3338,8 @@ codex_grammatica_ch3_genitivus, codex_grammatica_ch3_dativus, codex_grammatica_c
 
 CHOICES:
 
-* Volg Io, priesteres van Juno en Jupiters volgende geheime liefde -> CH3_IO01
-* Volg Herakles, die tien beproevingen te gaan heeft -> CH3_H01
+* Volg Io, priesteres van Juno en Jupiters volgende geheime liefde [DONE:ch3_lijn_io] -> CH3_IO01
+* Volg Herakles, die tien beproevingen te gaan heeft [DONE:ch3_lijn_herakles] -> CH3_H01
 * Spreek het Orakel aan, nu beide verhalen zijn gehoord [REQUIRE:fragments=6] -> CH3_ATHENA
 
 END
@@ -3182,6 +3428,9 @@ TEXT:
 Juno vertrouwt haar nieuwe vaars toe aan Argus Panoptes, een reus met honderd ogen verspreid over zijn hele lichaam — nooit voluit slapend, want terwijl een deel van zijn ogen rust, blijven de andere onophoudelijk open. Geen betere wachter bestaat er op aarde of Olympos.
 
 Io wordt vastgebonden aan een olijfboom in een weiland, dag en nacht bekeken door een wezen dat nooit werkelijk wegkijkt.
+
+IMAGE:
+argus_bewaakt_io.png
 
 PERSON:
 argus:intro
@@ -3277,6 +3526,9 @@ Juno neemt Argus' honderd ogen, één voor één, en plaatst ze voor eeuwig op d
 
 Maar Argus' dood lost niets op voor Io zelf — Juno, nu pas echt woedend, zoekt onmiddellijk naar een nieuwe manier om haar te kwellen.
 
+IMAGE:
+pauw_ogen_argus.png
+
 CHOICES:
 
 * Wacht af wat Juno nu bedenkt -> CH3_IO11
@@ -3325,11 +3577,16 @@ Jupiter zweert Juno plechtig dat hij Io nooit meer zal aanraken als minnares —
 
 In Egypte baart ze Jupiters zoon Epaphus, en wordt ze door de Egyptenaren vereerd als een godin op zichzelf — vereenzelvigd met Isis, wier verering zich van daaruit over de hele Middellandse Zee zal verspreiden. Wat begon als vervolging eindigt, tegen alle verwachting in, als een nieuw soort goddelijkheid.
 
+Op de oever, half tussen het riet, ligt een enkele pauwenveer — met, midden in het patroon, iets dat verdacht veel op een oog lijkt. Je herkent het meteen: een van Argus' honderd ogen, ver van de rest van de staart geraakt. Je bewaart hem, zoals het Orakel dat wil.
+
 CODEX:
 codex_io_argus
 
 PERSON:
 io:full, argus:full, hermes:full
+
+SOUVENIR:
+souvenir_io
 
 EERETITEL:
 ch3_io
@@ -3360,6 +3617,9 @@ Athena, die het hele verhaal zwijgend heeft gadegeslagen zoals ze dat sinds Hoof
 Ze vertelt, kort maar met duidelijke afkeuring in haar stem, over Europa: een Fenicische prinses die met haar dienaressen op het strand speelt, tot een opvallend tamme, sneeuwwitte stier zich bij de kudde voegt. Europa, argeloos, klimt op zijn rug — en de stier, die Jupiter zelf is, zwemt met haar de zee op, helemaal naar Kreta. Daar zal ze drie zonen baren, onder wie Minos — een naam die je, zegt Athena met een blik die meer weet dan ze nu al prijsgeeft, nog wel eens terug zult horen.
 
 "Bij Io wordt de vrouw een dier om de affaire te verbergen," besluit Athena. "Bij Europa wordt de god zelf een dier om de affaire te beginnen. Twee kanten van dezelfde ontrouw — en jij, {tendency_address}, hebt inmiddels wel gemerkt dat Jupiter zelden de prijs betaalt die anderen voor hem betalen."
+
+IMAGE:
+europa_stier.png
 
 CODEX:
 codex_europa
@@ -3525,6 +3785,9 @@ TEXT:
 In plaats van te scheppen en te vegen, breekt Herakles simpelweg de muren aan beide kanten van de stallen open en leidt de rivieren Alpheus en Peneus er dwars doorheen — het water spoelt in enkele uren weg wat generaties vee hebben achtergelaten, en laat de stallen schoner achter dan ze ooit zijn geweest.
 
 Augias, die achteraf spijt krijgt van zijn belofte, weigert de afgesproken kudde te betalen. En Eurystheus, die hoort dat Herakles voor deze taak (bijna) betaald zou zijn geweest, verklaart — net als bij de Hydra — dat ook deze beproeving niet meetelt, puur op een technisch punt.
+
+IMAGE:
+augiasstal.png
 
 CODEX:
 codex_augiasstal
@@ -3739,9 +4002,12 @@ TITLE:
 De Last van Atlas
 
 TEXT:
-Met Ladon verslagen weet Herakles nog altijd niet hoe hij zelf de appels mag plukken — enkel de titaan Atlas, die de hemel op zijn schouders draagt vlakbij de tuin, kent de weg naar de boom zonder het lot van de wachter te delen. Herakles biedt aan tijdelijk de hemel over te nemen, zodat Atlas de appels voor hem kan halen.
+Met Ladon omzeild weet Herakles nog altijd niet hoe hij zelf de appels mag plukken — enkel de titaan Atlas, die de hemel op zijn schouders draagt vlakbij de tuin, kent de weg naar de boom zonder het lot van de wachter te delen. Herakles biedt aan tijdelijk de hemel over te nemen, zodat Atlas de appels voor hem kan halen.
 
 Atlas, eindelijk bevrijd van een last die hij al eeuwen torst, plukt de appels — en overweegt dan hardop om nooit meer terug te komen, Herakles voorgoed achterlatend onder het gewicht van de hemel.
+
+IMAGE:
+atlas_hemel.png
 
 PUZZLE:
 puzzle_ch3h_bijstelling2
@@ -3819,11 +4085,19 @@ Herakles bedwingt Cerberus met blote handen, precies zoals afgesproken, en draag
 
 Herakles brengt Cerberus, zoals beloofd, ongedeerd terug naar de onderwereld — en met die laatste daad zijn alle twaalf werken volbracht. Tien jaar dienstbaarheid, opgelegd door een orakel na de ergste daad van zijn leven, eindigen hier. De schuld die hij droeg sinds die vreselijke dag met Megara en hun kinderen is, voor zover een orakel dat kan bepalen, ingelost.
 
+Voor je afscheid neemt, drukt Herakles je zelf iets in handen: een van de gouden appels van de Hesperiden, die hij nooit heeft opgegeten. "Bewaar die," zegt hij. "Ik heb aan het bewijs dat ik ze heb gehaald genoeg — een verhaal onthoud je toch beter met iets dat je kunt vasthouden."
+
+IMAGE:
+cerberus_voltooid.png
+
 CODEX:
 codex_herakles_twaalf_werken
 
 PERSON:
 herakles:full
+
+SOUVENIR:
+souvenir_herakles_labores
 
 EERETITEL:
 ch3_herakles_labores
@@ -3852,6 +4126,9 @@ TEXT:
 Athena wacht je op bij de Boodschapper, ditmaal niet als toeschouwer maar als iemand die duidelijk al een tijd op dit gesprek heeft zitten wachten. "Io kreeg haar vrijheid terug nadat een god eindelijk verantwoordelijkheid nam voor wat hij had aangericht," zegt ze. "Herakles kreeg de zijne terug door tien jaar lang, beproeving na beproeving, een schuld in te lossen die hem was opgelegd voor iets wat niet volledig zijn eigen keuze was."
 
 "Twee soorten vrijheid," vervolgt ze, "en jij, {tendency_address_cap}, hebt inmiddels gezien dat geen van beide vanzelf komt — niet voor een god, en al helemaal niet voor een sterveling."
+
+IMAGE:
+athena_mentor_ch3.png
 
 PERSON:
 athena:full
@@ -3895,6 +4172,614 @@ Het Einde van Hoofdstuk 3
 
 TEXT:
 "Hoofdstuk 4 wacht al ergens verderop," zegt de stem, "waar een ander soort labyrint op je wacht — niet van steen deze keer, maar van herinnering zelf." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: vrijheid, en volbrenging.
+
+CHOICES:
+
+* Stap door de poort -> CH4_000
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 4 — "Het Labyrint van Herinneringen" (SP_CAMPAIGN ch4).
+   Twee hoofdlijnen, net als Hoofdstuk 3: THESEUS (Ariadne, de Minotaurus, en
+   Daidalos & Ikaros erin verweven i.p.v. een aparte lijn — zie Chronica.md
+   §7 "zijverhalen") en PHAETHON (het Paleis van de Zon, de zonnewagen). Beide
+   lijnen draaien om dezelfde kern: een belofte, licht gedaan, die niemand
+   meer ongedaan kan maken — Aegeus' zeilen-afspraak met Theseus, en Sol se
+   eed bij de Styx aan Phaëthon. Elke lijn levert een eigen Herinneringsfragment
+   ("theseus", "phaethon" — bewust ANDERE ids dan alle voorgaande hoofdstukken,
+   want SP_STATE.fragments is één doorlopende array); de hub-gate naar het
+   Orakel staat daarom op [REQUIRE:fragments=8] (de zes van Hoofdstuk 2/3 +
+   deze twee). Grammatica dit hoofdstuk: infinitivus, vocativus (vervolg op
+   Hoofdstuk 1), imperfectum, perfectum, ablativus (van middel) — zie
+   codex_grammatica_ch4_*. Lijn Theseus (Pallas Les 6-7) draagt drie van de
+   vijf grammaticapunten (infinitivus/vocativus/ablativus), lijn Phaëthon
+   (Minerva H5) de resterende twee (imperfectum/perfectum) — bewust niet
+   symmetrisch verdeeld, zelfde flexibiliteit als Hoofdstuk 2. Athena is sinds
+   Hoofdstuk 2 actieve mentor en gebruikt hier ook weer {tendency_address}
+   (sinds Hoofdstuk 3). ---- */
+const SP_CH4_CNS = `
+=== SCENE: CH4_000 ===
+
+TITLE:
+Het Labyrint van Herinneringen
+
+TEXT:
+De Boodschapper wijst je ditmaal naar twee scheuren die verder uit elkaar liggen dan ooit — niet naast elkaar zoals bij Io en Herakles, maar aan de twee uiteinden van eenzelfde waarheid. "Twee verhalen," zegt ze, "en in allebei staat één belofte centraal — een belofte die niemand meer ongedaan kan maken zodra ze eenmaal is uitgesproken. Volg Theseus naar Kreta, en zie wat er gebeurt wanneer een sterveling zo'n belofte vergeet. Volg Phaëthon naar het Paleis van de Zon, en zie wat er gebeurt wanneer een sterveling er juist te veel van eist."
+
+Athena, die sinds Hoofdstuk 2 niet langer zwijgt, voegt er zacht aan toe: "Onthoud dit hoofdstuk goed. Van alle herinneringen die je nog zult verzamelen, zijn deze twee misschien wel de zwaarste — niet omdat de monsters groter zijn, maar omdat de fout menselijker is."
+
+CODEX:
+codex_grammatica_ch4_infinitivus, codex_grammatica_ch4_vocativus, codex_grammatica_ch4_imperfectum, codex_grammatica_ch4_perfectum, codex_grammatica_ch4_ablativus
+
+CHOICES:
+
+* Volg Theseus naar Kreta, waar een labyrint en een monster op hem wachten [DONE:ch4_lijn_theseus] -> CH4_T01
+* Volg Phaëthon, die aan zijn eigen afkomst twijfelt [DONE:ch4_lijn_phaethon] -> CH4_P01
+* Spreek het Orakel aan, nu beide verhalen zijn gehoord [REQUIRE:fragments=8] -> CH4_ATHENA
+
+END
+
+=== SCENE: CH4_T01 ===
+
+TITLE:
+Een Belofte in Athene
+
+TEXT:
+Al negen jaar betaalt Athene een prijs die geen enkele stad zou moeten betalen: zeven jongens en zeven meisjes, in de bloei van hun leven, verscheept naar Kreta om te worden opgeofferd aan een wezen dat koning Minos gevangen houdt in een bouwwerk zonder uitgang. De tol is de straf voor een oude schuld — Minos' eigen zoon Androgeos stierf ooit op Atheense bodem, en niets minder dan mensenlevens kon zijn woede sindsdien sussen.
+
+Theseus, zoon van koning Aegeus, is nog maar net in Athene aangekomen — erkend als troonopvolger na een jeugd ver van het paleis — wanneer de derde lichting van het offer wordt samengesteld. Tegen elke smeekbede van zijn vader in meldt hij zichzelf vrijwillig aan als een van de veertien.
+
+PERSON:
+theseus:intro, aegeus:intro
+
+CHOICES:
+
+* Voel vooral medelijden met Aegeus, die zijn net teruggevonden zoon dreigt te verliezen [CLEMENTIA] -> CH4_T02
+* Erken nuchter dat iemand dit moet doen, en dat vrijwilligers zeldzaam zijn [SEVERITAS] -> CH4_T02
+* Voel de spanning tussen trots en angst, zonder een duidelijke kant te kiezen [NEUTRAL] -> CH4_T02
+
+END
+
+=== SCENE: CH4_T02 ===
+
+TITLE:
+De Belofte van de Zeilen
+
+TEXT:
+Vlak voor het schip vertrekt, roept Aegeus zijn zoon nog één keer bij zich, aan de rand van de kade. Het schip vaart altijd onder zwarte zeilen — het rouwzeil van een offer dat vermoedelijk niet terugkeert — en die aanblik, weet Aegeus, zal hem elke dag opnieuw naar de klippen drijven om uit te kijken.
+
+"Beloof me één ding," zegt hij, zijn stem nauwelijks vast. "Als je overleeft — als je dat monster verslaat en teruggevaren wordt — hijs dan witte zeilen in plaats van zwarte, zodra de kust in zicht komt. Dan weet ik het al voor het schip de haven bereikt. Beloof het me, Theseus." Theseus belooft het zonder aarzelen — een belofte die op dit moment vederlicht aanvoelt, een kleinigheid vergeleken met het monster dat voor hem ligt.
+
+PUZZLE:
+puzzle_ch4t_infinitivus
+
+CHOICES:
+
+* Vaar mee naar Kreta -> CH4_T03
+
+END
+
+=== SCENE: CH4_T03 ===
+
+TITLE:
+Aankomst op Kreta
+
+TEXT:
+Het schip meert aan in Knossos, de machtige hoofdstad van Kreta, waar koning Minos de veertien Atheners met weinig meer dan een koele blik in ontvangst neemt. Naast hem staat zijn dochter Ariadne — en waar haar vader enkel de jaarlijkse routine ziet, ziet zij, voor het eerst in negen jaar, iemand voor wie ze meer voelt dan medelijden met zichzelf.
+
+Theseus, die niets van dit alles weet, ziet enkel een paleis groter dan hij ooit heeft gezien, en ergens daaronder — hij voelt het bijna door de vloer heen — het labyrint waar Daidalos, de beroemdste bouwmeester van zijn tijd, ooit een bouwwerk optrok dat zelfs zijn eigen maker bijna niet meer kon verlaten.
+
+PERSON:
+ariadne:intro, minos:intro, daidalos:intro
+
+CHOICES:
+
+* Kijk wat Ariadne besluit te doen -> CH4_T04
+
+END
+
+=== SCENE: CH4_T04 ===
+
+TITLE:
+Het Monster in het Labyrint
+
+TEXT:
+Het wezen waarvoor Athene al negen jaar boet, is de Minotaurus — half mens, half stier — en zijn bestaan is zelf al het gevolg van een oude, gebroken belofte. Jaren geleden vroeg Minos de zeegod Neptunus om een teken dat de goden zijn koningschap goedkeurden; Neptunus liet een verblindend witte stier uit de golven oprijzen, op voorwaarde dat het dier meteen aan hem geofferd zou worden. Minos, die het dier te mooi vond om te doden, offerde een ander dier in zijn plaats — en Neptunus, beledigd, zorgde ervoor dat Minos' eigen vrouw Pasiphaë een onnatuurlijk verlangen naar de stier ontwikkelde. Wat daaruit werd geboren, kon nergens anders wonen dan in een bouwwerk dat zijn eigen weg naar buiten verbergt.
+
+Daidalos bouwde dat bouwwerk in opdracht van Minos: een labyrint met zoveel kronkelende gangen dat niemand die er eenmaal in verdwaalt, ooit vanzelf de uitgang terugvindt. Elk jaar voedt het offer uit Athene het monster — en houdt het tegelijk Minos' eigen, decennia oude schuld verborgen achter stenen muren.
+
+CODEX:
+codex_labyrint_minotaurus
+
+CHOICES:
+
+* Kijk wat Ariadne voor Theseus overheeft -> CH4_T05
+
+END
+
+=== SCENE: CH4_T05 ===
+
+TITLE:
+Ariadne's Keuze
+
+TEXT:
+Ariadne, die weet dat niemand het labyrint ooit levend heeft verlaten, zoekt Daidalos in het geheim op — de enige die de gangen ooit heeft doorgrond, omdat hij ze zelf ontwierp. Wat ze hem vraagt, is verraad aan haar eigen vader; wat hij haar geeft, is doodeenvoudig: een kluwen garen, groot genoeg om van de ingang tot in het diepste hart van het labyrint te reiken en weer terug.
+
+Ze weet wat ontdekking zou betekenen — voor Daidalos, voor haarzelf. Toch zoekt ze Theseus diezelfde nacht in het geheim op, en drukt hem het garen in handen, samen met een zwaard dat scherp genoeg is voor wat hem te wachten staat. In ruil vraagt ze maar één ding: dat hij haar meeneemt wanneer hij vertrekt, want na dit verraad kan ze nooit meer veilig in haar vaders paleis blijven. Theseus zweert het haar, net zo snel als hij eerder zijn vader iets zwoer aan de kade van Athene.
+
+CHOICES:
+
+* Bewonder vooral haar moed om tegen haar eigen vader in te gaan [CLEMENTIA] -> CH4_T06
+* Erken vooral hoe berekenend haar hulp is — ze vraagt er tenslotte iets voor terug [SEVERITAS] -> CH4_T06
+* Twijfel of dit nu liefde is, wanhoop, of iets van beide [NEUTRAL] -> CH4_T06
+
+END
+
+=== SCENE: CH4_T06 ===
+
+TITLE:
+De Ingang van het Labyrint
+
+TEXT:
+Bij de ingang bindt Theseus het uiteinde van het garen vast aan een steunbalk en loopt de duisternis in, de draad ontrollend achter zich terwijl de gangen zich vertakken, kronkelen en in elkaar overlopen tot geen enkele richting nog vanzelfsprekend is.
+
+Diep in het labyrint, waar zelfs het geluid van zijn eigen voetstappen vervormd terugkaatst, hoort hij voor het eerst iets ademen dat geen mens is.
+
+PUZZLE:
+puzzle_ch4t_ablativus
+
+CHOICES:
+
+* Ga het duister in, op het geluid af -> CH4_T07
+
+END
+
+=== SCENE: CH4_T07 ===
+
+TITLE:
+De Minotaurus
+
+TEXT:
+De Minotaurus komt op hem af — reusachtig, met de kop van een stier op het lichaam van een man, meer honger dan wraak in zijn ogen. Negen jaar lang heeft hij alleen maar gekregen wat men hem verplicht bracht; vandaag, voor het eerst, staat er iemand tegenover hem die niet van plan is zich zomaar te laten offeren.
+
+COMBAT:
+minotaurus
+
+CHOICES:
+
+* Kijk wat er van het monster overblijft -> CH4_T08
+
+END
+
+=== SCENE: CH4_T08 ===
+
+TITLE:
+Terug langs de Draad
+
+TEXT:
+Met het monster verslagen volgt Theseus het garen terug — elke bocht die hij eerder blindelings nam, wijst nu feilloos de weg naar buiten. Bij de ingang wacht Ariadne, en samen met de dertien andere Atheners die niet langer geofferd hoeven te worden, vluchten ze diezelfde nacht nog naar het schip, voor Minos ook maar vermoedt wat er is gebeurd.
+
+CHOICES:
+
+* Vaar weg van Kreta -> CH4_T09
+
+END
+
+=== SCENE: CH4_T09 ===
+
+TITLE:
+Naxos
+
+TEXT:
+Onderweg meert het schip aan op het eiland Naxos om te rusten. Terwijl Ariadne slaapt, uitgeput van een nacht zonder slaap en een vlucht zonder pauze, vaart Theseus — om redenen die de latere verhalen zelf niet eens eensluidend kunnen navertellen: vergeetachtigheid, een goddelijke influistering, gewoon menselijke lafheid — zonder haar verder.
+
+Wat de reden ook was, het is dezelfde soort vergissing die dit hele hoofdstuk verbindt: een belofte, licht gedaan, zwaar gebroken.
+
+CHOICES:
+
+* Voel vooral woede namens Ariadne, die dit niet verdiende [SEVERITAS] -> CH4_T10
+* Zoek naar begrip voor Theseus, die net een monster heeft overleefd en amper meer helder kan denken [CLEMENTIA] -> CH4_T10
+* Laat het oordeel voorlopig in het midden [NEUTRAL] -> CH4_T10
+
+END
+
+=== SCENE: CH4_T10 ===
+
+TITLE:
+Bacchus Vindt Ariadne
+
+TEXT:
+Ariadne ontwaakt alleen op een onbekend strand — tot Bacchus, de god die je al kent van koning Midas' vloek (Hoofdstuk 1), haar daar vindt, huilend en verraden. Waar Theseus haar in de steek liet, blijft Bacchus: hij trouwt met haar, maakt haar onsterfelijk, en plaatst haar bruidskroon voorgoed tussen de sterren.
+
+Het is geen volledig gelukkig einde — geen enkel verhaal in dit hoofdstuk krijgt dat — maar het is het enige moment waarop een gebroken belofte alsnog met iets goeds eindigt.
+
+CODEX:
+codex_ariadne_bacchus
+
+PERSON:
+ariadne:full
+
+CHOICES:
+
+* Keer terug naar Theseus, die niet weet wat hij heeft achtergelaten -> CH4_T11
+
+END
+
+=== SCENE: CH4_T11 ===
+
+TITLE:
+Minos' Wraak
+
+TEXT:
+Op Kreta ontdekt Minos al snel dat het labyrint zijn geheim niet heeft weten te bewaren — en er is maar één man die het garen-trucje had kunnen bedenken. In blinde woede laat hij Daidalos en diens jonge zoon Ikaros zelf opsluiten in het labyrint, de enige plek op het eiland waaruit zelfs de bouwmeester zelf niet zomaar weg kan komen.
+
+PERSON:
+ikaros:intro
+
+CHOICES:
+
+* Kijk hoe Daidalos zijn eigen gevangenschap probeert te ontlopen -> CH4_T12
+
+END
+
+=== SCENE: CH4_T12 ===
+
+TITLE:
+Vleugels van Veren en Was
+
+TEXT:
+Minos beheerst elke uitweg over land en zee, maar niet de lucht — en dat is precies waar Daidalos zijn toevlucht zoekt. Geduldig verzamelt hij veren die door het labyrint dwarrelen, bindt ze samen met draad en verzegelt ze met gesmolten was tot twee paar vleugels, één voor hemzelf, één voor zijn zoon.
+
+Voor ze opstijgen, drukt hij Ikaros op het hart wat hem het meest zorgen baart: "Vlieg de middenweg. Niet te laag, want de zeenevel maakt de veren zwaar en nat. Niet te hoog, want de zon smelt de was. Blijf dicht bij mij, en volg precies waar ik vlieg."
+
+CHOICES:
+
+* Kijk hoe de vlucht begint -> CH4_T13
+
+END
+
+=== SCENE: CH4_T13 ===
+
+TITLE:
+De Val van Ikaros
+
+TEXT:
+Aanvankelijk houdt Ikaros zich keurig aan zijn vaders route, vlak achter hem, zijn ogen groot van verwondering over een wereld die hij nog nooit van bovenaf heeft gezien. Maar de vreugde van het vliegen zelf wordt hem te machtig — hij stijgt hoger, en hoger, dronken van een vrijheid die hij nog nooit heeft gevoeld, ver voorbij zijn vaders geroep om voorzichtigheid.
+
+De zon doet precies wat Daidalos vreesde: de was tussen de veren smelt, eerst onmerkbaar, dan in een oogwenk. Veer na veer laat los, en Ikaros valt — zijn armen nog wapperend in de vorm van vleugels die niet langer bestaan — de zee in die sindsdien zijn naam draagt.
+
+"Icare!" roept Daidalos, keer op keer, terwijl hij cirkelt boven het water — maar er komt geen antwoord meer, enkel verspreide veren die langzaam op de golven neerdalen.
+
+PUZZLE:
+puzzle_ch4t_vocativus
+
+CHOICES:
+
+* Voel vooral verdriet om een vader die zijn zoon niet kon redden [CLEMENTIA] -> CH4_T14
+* Erken nuchter dat een gewaarschuwde zoon ook zelf verantwoordelijkheid draagt [SEVERITAS] -> CH4_T14
+* Weet niet goed bij wie het verdriet of de schuld het zwaarst hoort te wegen [NEUTRAL] -> CH4_T14
+
+END
+
+=== SCENE: CH4_T14 ===
+
+TITLE:
+Daidalos in Sicilië
+
+TEXT:
+Daidalos vliegt door, alleen nu, tot hij landt op Sicilië — te ver van huis om nog ergens anders naartoe te vluchten, te gebroken om nog trots te zijn op vleugels die hem wel maar zijn zoon niet konden redden. Hij begraaft wat de zee van Ikaros teruggeeft aan de kust van een eiland dat later Icaria zal heten, naar de jongen die er nooit levend aankwam.
+
+CODEX:
+codex_daidalos_ikaros
+
+PERSON:
+daidalos:full, ikaros:full
+
+CHOICES:
+
+* Keer terug naar het schip van Theseus, dat inmiddels Athene nadert -> CH4_T15
+
+END
+
+=== SCENE: CH4_T15 ===
+
+TITLE:
+Het Zwarte Zeil
+
+TEXT:
+Op het schip naar Athene is Theseus met zijn gedachten bij alles behalve zijn vaders belofte — het monster, Ariadne die hij ergens onderweg is kwijtgeraakt, de veertien levens die hij heeft gered. Tussen dat alles verdwijnt één simpele afspraak volledig uit zijn hoofd: hij vergeet de zeilen te verwisselen.
+
+Op de klippen bij Athene staat Aegeus al dagenlang uit te kijken, precies zoals hij zijn zoon had beloofd te zullen doen. Wanneer het schip eindelijk in zicht komt — nog altijd onder zwart zeil — twijfelt hij geen moment aan wat dat betekent.
+
+CHOICES:
+
+* Kijk wat Aegeus doet -> CH4_T16
+
+END
+
+=== SCENE: CH4_T16 ===
+
+TITLE:
+De Zee van Aegeus
+
+TEXT:
+Zonder een moment te wachten op bevestiging, zonder het schip de haven te laten bereiken, werpt Aegeus zich van de klip in de zee eronder — overtuigd dat de zoon voor wie hij zoveel vreesde, alsnog is omgekomen. De zee die zijn val opvangt, draagt sindsdien zijn naam: de Egeïsche Zee.
+
+Theseus, die pas aan land beseft wat er is gebeurd, staat oog in oog met het gewicht van een belofte die hem, uren eerder, nog vederlicht had geleken. Hij wordt koning van Athene op dezelfde dag dat hij zijn vader verliest — een troon gewonnen met een vergetelheid die hij zichzelf nooit helemaal zal vergeven.
+
+In je zak, waar je het niet had verwacht, vind je nog een laatste stukje van Ariadne's garen — te kort om ooit nog een labyrint mee terug te vinden, lang genoeg om je eraan te herinneren dat iemand je ooit een weg naar buiten gaf.
+
+CODEX:
+codex_labyrint_minotaurus
+
+PERSON:
+theseus:full, aegeus:full, minos:full
+
+SOUVENIR:
+souvenir_theseus
+
+EERETITEL:
+ch4_theseus_labyrint
+
+QUEST:
+quest_boodschapper_van_kronos: lijn Theseus afgerond (Hoofdstuk 4)
+
+FLAG:
+ch4_lijn_theseus=true
+
+FRAGMENT:
+theseus
+
+CHOICES:
+
+* Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog -> CH4_000
+
+END
+
+=== SCENE: CH4_P01 ===
+
+TITLE:
+Twijfel aan een Vader
+
+TEXT:
+Phaëthon, een jongen die opgroeit met niets dan zijn moeders woord dat zijn vader Sol is — de god die dagelijks de zon over de hemel voert — wordt op een dag hardop uitgelachen door zijn vriend Epaphus, zelf de zoon van Jupiter en de ooit vervloekte Io. "Iedereen kan beweren dat zijn vader een god is," zegt Epaphus. "Bewijs het maar."
+
+De spot blijft aan Phaëthon kleven, dagenlang, tot hij besluit zelf naar het Paleis van de Zon te reizen — helemaal aan de rand van de wereld — om zijn vader eindelijk rechtstreeks om bewijs te vragen.
+
+PERSON:
+phaethon:intro, epaphus:intro
+
+CHOICES:
+
+* Volg Phaëthon op zijn tocht naar het oosten -> CH4_P02
+
+END
+
+=== SCENE: CH4_P02 ===
+
+TITLE:
+Het Paleis van de Zon
+
+TEXT:
+Het paleis van Sol overtreft alles wat Phaëthon zich had voorgesteld: zuilen van goud en brons, deuren bewerkt met beelden van de hele wereld, en middenin, op een troon die zelf licht lijkt uit te stralen, zijn vader — stralender dan Phaëthon zich in zijn stoutste dromen had durven wensen.
+
+Sol herkent zijn zoon meteen, verwelkomt hem hartelijk, en zweert — voor Phaëthon zelfs zijn vraag heeft kunnen stellen — een eed bij de rivier de Styx: elke wens die zijn zoon uitspreekt, zal hij inwilligen, wat het ook is. Het is de zwaarst mogelijke eed die een god kan afleggen — zelfs Jupiter zelf durft een eed bij de Styx nooit te breken.
+
+PERSON:
+sol:intro
+
+CHOICES:
+
+* Kijk welke wens Phaëthon uitspreekt -> CH4_P03
+
+END
+
+=== SCENE: CH4_P03 ===
+
+TITLE:
+Een Onmogelijke Wens
+
+TEXT:
+Phaëthon, die eigenlijk alleen bevestiging kwam zoeken, laat zich meeslepen door de eed die hem plotseling alles belooft. "Laat mij, voor één dag, de zonnewagen mennen," zegt hij. "Laat heel de wereld zien dat ik werkelijk jouw zoon ben."
+
+Sol verbleekt — zijn eigen belofte, nog geen moment oud, wordt nu zijn grootste angst. Hij smeekte, probeerde alles wat hij verder nog te bieden had als vervanging aan te dragen, maar een eed bij de Styx laat geen ruimte voor spijt.
+
+PUZZLE:
+puzzle_ch4p_imperfectum
+
+CHOICES:
+
+* Voel vooral medelijden met Sol, die zichzelf in de val heeft gepraat [CLEMENTIA] -> CH4_P04
+* Erken nuchter dat een eed nu eenmaal een eed is, hoe onverstandig ook [SEVERITAS] -> CH4_P04
+* Twijfel of Sol dit wel had mogen beloven voor hij de vraag zelfs kende [NEUTRAL] -> CH4_P04
+
+END
+
+=== SCENE: CH4_P04 ===
+
+TITLE:
+De Zonnewagen
+
+TEXT:
+Bij zonsopgang mag Phaëthon plaatsnemen in de wagen die zijn vader dagelijks over de hemel voert — vier vurige paarden ervoor gespannen, elk krachtiger dan enig sterfelijk dier ooit zou kunnen temmen. Sol geeft hem in allerijl nog instructies: houd de teugels stevig, volg het gebaande spoor, niet te hoog, niet te laag.
+
+Zodra de paarden voelen dat een minder ervaren hand de teugels vasthoudt dan gewoonlijk, breken ze uit hun vaste baan — en Phaëthon, die nooit eerder iets bestuurd heeft groter dan een gewone kar, verliest de wagen bijna onmiddellijk uit controle.
+
+CHOICES:
+
+* Kijk waar de wagen naartoe raast -> CH4_P05
+
+END
+
+=== SCENE: CH4_P05 ===
+
+TITLE:
+De Aarde in Vlammen
+
+TEXT:
+De zonnewagen zwenkt eerst te hoog, waardoor de aarde in ijzige duisternis verzinkt, en dan, in een poging het recht te trekken, veel te laag — zo laag dat de hitte akkers verschroeit, rivieren laat opdrogen, en een streep van de aarde voorgoed in verzengd, dor land verandert: het gebied dat later de Sahara zal heten.
+
+Steden vatten vlam, bossen verkolen tot as, en overal op aarde roepen mensen om hulp tegen een zon die niet langer haar vaste baan volgt.
+
+CHOICES:
+
+* Kijk wie deze ramp uiteindelijk moet stoppen -> CH4_P06
+
+END
+
+=== SCENE: CH4_P06 ===
+
+TITLE:
+Tellus Smeekt om Hulp
+
+TEXT:
+Tellus, de aarde zelf, verheft haar stem tot aan de Olympos — verzengd, half verstikt door haar eigen rook — en smeekt Jupiter in te grijpen voor er niets meer over is om te redden. Zelfs de goden, zegt ze, hebben straks geen wereld meer om over te heersen als dit nog één moment langer doorgaat.
+
+PERSON:
+tellus:intro
+
+CHOICES:
+
+* Kijk hoe Jupiter reageert -> CH4_P07
+
+END
+
+=== SCENE: CH4_P07 ===
+
+TITLE:
+Jupiters Bliksem
+
+TEXT:
+Jupiter, die geen andere keus meer ziet, grijpt naar zijn bliksem — niet uit woede jegens de jongen zelf, maar omdat één enkel leven, hoe onschuldig zijn fout ook begon, niet opweegt tegen de hele wereld. Met één worp treft hij de wagen en slingert Phaëthon, brandend, uit de lucht.
+
+PUZZLE:
+puzzle_ch4p_perfectum
+
+CHOICES:
+
+* Vind Jupiters daad gerechtvaardigd, hoe hard ook [SEVERITAS] -> CH4_P08
+* Blijf medelijden voelen met Phaëthon, ondanks alles [CLEMENTIA] -> CH4_P08
+* Erken dat er hier geen echt goede uitkomst meer mogelijk was [NEUTRAL] -> CH4_P08
+
+END
+
+=== SCENE: CH4_P08 ===
+
+TITLE:
+De Rivier Eridanus
+
+TEXT:
+Phaëthon valt, nog nasmeulend, in de verre rivier de Eridanus — ver van huis, ver van het paleis waar hij ooit alleen maar bevestiging kwam zoeken dat zijn vader echt zijn vader was. De rivier koelt wat er van hem over is, en begraaft de rest van het verhaal in zijn stroom.
+
+CHOICES:
+
+* Kijk wie er rouwt om zijn dood -> CH4_P09
+
+END
+
+=== SCENE: CH4_P09 ===
+
+TITLE:
+De Heliaden
+
+TEXT:
+Phaëthons zusters, de Heliaden, vinden zijn graf aan de oever van de Eridanus en blijven er wenen, dag na dag, tot hun voeten wortel schieten in de grond en hun armen uitgroeien tot takken. Ze veranderen, traan voor traan, in populieren — en de tranen die ze al die tijd blijven huilen, verharden in het water tot amber.
+
+Amber wordt sindsdien gevonden langs precies dat soort rivieroevers — bevroren verdriet, zeggen sommigen, van een rouw die nooit is opgehouden.
+
+CODEX:
+codex_phaethon
+
+PERSON:
+phaethon:full, sol:full
+
+CHOICES:
+
+* Kijk wie er nog meer treurt -> CH4_P10
+
+END
+
+=== SCENE: CH4_P10 ===
+
+TITLE:
+Cycnus wordt een Zwaan
+
+TEXT:
+Ook Cycnus, een verre verwant en dierbare vriend van Phaëthon, treurt zo diep dat de goden hem uit medelijden veranderen in een zwaan — een vogel die sindsdien liever op meren en rivieren zwemt dan de lucht in vliegt, uit angst voor een hemel die zijn vriend het leven kostte.
+
+Tussen de populieren aan de oever vind je één druppel amber, nog warm alsof hij zojuist pas gevallen is — een traan van een van de Heliaden, voorgoed gestold. Je sluit hem in je vuist, zoals het Orakel dat blijkbaar wil.
+
+SOUVENIR:
+souvenir_phaethon
+
+EERETITEL:
+ch4_phaethon
+
+QUEST:
+quest_boodschapper_van_kronos: lijn Phaëthon afgerond (Hoofdstuk 4)
+
+FLAG:
+ch4_lijn_phaethon=true
+
+FRAGMENT:
+phaethon
+
+CHOICES:
+
+* Keer terug naar de Boodschapper — Theseus' verhaal wacht nog -> CH4_000
+
+END
+
+=== SCENE: CH4_ATHENA ===
+
+TITLE:
+Athena over Twee Beloften
+
+TEXT:
+Athena wacht je ditmaal niet zwijgend op, maar spreekt zodra je bij haar aankomt — vanzelfsprekend inmiddels, als mentor. "Twee vaders," zegt ze, "twee beloften, twee soorten verlies. Aegeus verloor zijn zoon aan een belofte die vergeten werd. Sol verloor zijn zoon aan een belofte die hij nooit had mogen doen — en toch, eenmaal uitgesproken, niet meer kon intrekken."
+
+"Dat is de kern van dit hele hoofdstuk, {tendency_address}: een belofte weegt niet minder omdat ze lichtvaardig werd gegeven. Onthoud dat goed — het labyrint dat je dit hoofdstuk doorkruiste, was uiteindelijk niet van steen, maar van gevolgen die niemand meer ongedaan kon maken."
+
+EERETITEL:
+ch4_athena_gesprek
+
+CHOICES:
+
+* Laat haar woorden bezinken -> CH4_ORAKEL
+
+END
+
+=== SCENE: CH4_ORAKEL ===
+
+TITLE:
+Het Orakel Keert Terug
+
+TEXT:
+De vertrouwde stem van de Boodschapper van Kronos klinkt weer, warm en enigszins plechtig. "Theseus, bevrijd van een monster maar niet van zijn eigen vergetelheid. Phaëthon, die zijn afkomst bewees met een vraag die hem het leven kostte. Twee beloften die de wereld voorgoed veranderden — de een een zee, de ander een streep amberkleurige rivieroever."
+
+CODEX:
+codex_grammatica_ch4_overzicht
+
+VOCAB:
+latijn_vela, latijn_mutare, latijn_iubet, latijn_filum, latijn_labyrinthus, latijn_relinquit, latijn_volare, latijn_ala, latijn_cera, latijn_monebat, latijn_currus, latijn_fulmen, latijn_misit, latijn_soror, latijn_lacrima, latijn_cadere
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 4 volledig voltooid
+
+CHOICES:
+
+* Luister verder -> CH4_EINDE
+
+END
+
+=== SCENE: CH4_EINDE ===
+
+TITLE:
+Het Einde van Hoofdstuk 4
+
+TEXT:
+"Hoofdstuk 5 wacht al ergens verderop," zegt de stem, "waar geen labyrint meer op je wacht, maar een schip vol helden — en het begin van een tocht naar het Gulden Vlies." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: uitweg, en overmoed.
 
 END
 `.trim();

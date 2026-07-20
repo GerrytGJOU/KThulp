@@ -14,12 +14,18 @@ const src = fs.readFileSync(dataPath, "utf8");
 function extract(name){
   const marker = "const " + name + " = `";
   const start = src.indexOf(marker) + marker.length;
-  const end = src.indexOf("`;", start);
+  // Elk CNS-blok sluit af met "`.trim();" (nooit een kale "`;") — zoek daarom
+  // specifiek naar dat sluitpatroon. Een kale "`;"-zoekopdracht overschiet
+  // stilzwijgend tot het volgende hoofdstuk (of verder), want die twee tekens
+  // komen nergens los na elkaar voor: dit gaf tot Hoofdstuk 4 toe een export
+  // waarin elk hoofdstuk vanaf CH2 de rest van het bestand meesleepte.
+  const end = src.indexOf("`.trim();", start);
   return src.slice(start, end).trim();
 }
 
 const APPROACH_TAG_RE = /\s*\[(CLEMENTIA|SEVERITAS|NEUTRAL)\]\s*$/i;
 const REQUIRE_TAG_RE = /\s*\[REQUIRE:(\w+)=(\d+)\]\s*$/i;
+const DONE_TAG_RE = /\s*\[DONE:(\w+)\]\s*$/i;
 
 function parseScenes(cns){
   const scenes = new Map();
@@ -55,6 +61,8 @@ function parseScenes(cns){
           let tag = "";
           const reqM = label.match(REQUIRE_TAG_RE);
           if(reqM){ tag = ` [REQUIRE:${reqM[1]}=${reqM[2]}]`; label = label.slice(0,reqM.index).trim(); }
+          const doneM = label.match(DONE_TAG_RE);
+          if(doneM){ tag += ` [DONE:${doneM[1]}]`; label = label.slice(0,doneM.index).trim(); }
           const appM = label.match(APPROACH_TAG_RE);
           if(appM){ tag += ` [${appM[1].toUpperCase()}]`; label = label.slice(0,appM.index).trim(); }
           choices.push({ label, target, tag });
@@ -132,8 +140,8 @@ WAT MOET JE MET RUST LATEN (anders breekt de doorverwijzing)
 - De scene-koppen, bv. "=== SCENE: CH1_A02 ===" - dit is de technische ID.
 - Het stuk NA de "->" pijl in een keuze (bv. "-> CH1_A02") en eventuele
   tags erachter tussen [vierkante haken], zoals [CLEMENTIA]/[SEVERITAS]/
-  [NEUTRAL]/[REQUIRE:fragments=4] - deze zijn onzichtbaar voor de speler maar sturen
-  de game-logica aan.
+  [NEUTRAL]/[REQUIRE:fragments=4]/[DONE:ch2_lijn_latona] - deze zijn
+  onzichtbaar voor de speler maar sturen de game-logica aan.
 - Alle regels met een ANDER label dan TITLE/TEXT/DIALOGUE/CHOICES (dus
   PUZZLE:/CODEX:/PERSON:/VOCAB:/FLAG:/EERETITEL:/QUEST:/FRAGMENT:/IMAGE:/
   MUSIC:/COMBAT: en de tekst die daarna volgt) - dit zijn technische

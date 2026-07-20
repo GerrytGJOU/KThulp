@@ -1,4 +1,4 @@
-# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1-3 speelbaar)
+# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1-4 speelbaar)
 
 > **Status: Beta, live in het hoofdmenu.** De **proloog** ("De Boer van
 > Latium" / "Het Orakel van Chronos") is volledig speelbaar: intro →
@@ -19,11 +19,16 @@
 > NPC-commentaar) en Herakles, die hier al zijn resterende tien werken
 > afrondt (zie §7.8). Vanaf dit hoofdstuk reageren NPC's ook voor het eerst
 > op de stil opgebouwde Clementia/Severitas-houding van de speler, via
-> `{tendency_address}` (zie §7.3).
+> `{tendency_address}` (zie §7.3). **Hoofdstuk 4** ("Het Labyrint van
+> Herinneringen") is eveneens **volledig speelbaar**: twee hoofdlijnen —
+> Theseus (Ariadne, de Minotaurus, met Daidalos & Ikaros erin verweven i.p.v.
+> een aparte lijn) en Phaëthon (het Paleis van de Zon, de zonnewagen) — zie
+> §7.9. Beide lijnen draaien om dezelfde kern: een belofte die niemand meer
+> ongedaan kon maken.
 > Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
-> rest van de campagne (Hoofdstuk 4 t/m 28 + Finale) staat als metadata-skelet
+> rest van de campagne (Hoofdstuk 5 t/m 28 + Finale) staat als metadata-skelet
 > klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet geschreven.
 >
 > **Dit document is de enige bron van waarheid voor Chronica Classica** en
@@ -54,13 +59,16 @@ browser):
 | **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 30 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
 | **Hoofdstuk 2**: hub + alle vier lijnen (L/S/K afgerond, H gedeeltelijk) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | ✅ werkend — alle vier lijnen + fragmenten-gate + Athena-mentor + Combat-bridge getest, incl. beide gevechten (Leeuw/Hydra) volledig uitgespeeld (zie §7.6) |
 | **Hoofdstuk 3**: hub + twee lijnen (Io incl. Argus/Mercurius/Europa-coda, Herakles' laatste tien werken) | `certamen/singleplayer-data.js` (`SP_CH3_CNS`, 43 scènes) | ✅ werkend — beide lijnen + 6 Combat-bridge-gevechten + 9 puzzels (bewuste combat/puzzel-balans, zie §7.8) + fragmenten-gate (fragments=6) + `{tendency_address}` NPC-reacties volledig getest |
+| **Hoofdstuk 4**: hub + twee lijnen (Theseus/Ariadne/Minotaurus met Daidalos & Ikaros erin verweven, en Phaëthon) | `certamen/singleplayer-data.js` (`SP_CH4_CNS`, 30 scènes) | ✅ werkend — beide lijnen + 1 Combat-bridge-gevecht (Minotaurus) + 5 puzzels (infinitivus/vocativus/ablativus bij Theseus, imperfectum/perfectum bij Phaëthon) + fragmenten-gate (fragments=8) + `{tendency_address}` + alle 5 grammatica-tabellen getest (Node-reachability + echte browser-render via `spGoCns()`, zie §7.9) |
 | Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
 | **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
 | Scène-renderer (tekst/dialoog/keuzes) | `certamen/singleplayer.js` (`SCREENS.spPlay`) | ✅ werkend |
+| **"Terug naar menu"-knop** op elk verhaalscherm (gewone scènes, alle 4 puzzeltypes, gevecht) | `certamen/singleplayer.js` (`spBackToMenuButtonHTML`, navigeert naar `spRenderLanding()`) | ✅ werkend — vóór 2026-07 kon je een verhaal alleen verlaten door het hoofdstuk af te ronden of de app te sluiten |
+| **Voorkomt onbeperkt herhalen van een afgeronde hub-lijn** (en het Clementia/Severitas-punten-stapelen dat daarbij hoorde) | `certamen/singleplayer.js` (`CNSParser.DONE_TAG_RE`, `spChoiceAlreadyDone`) | ✅ werkend — `[DONE:vlagnaam]`-tag op `CH2_000`/`CH3_000`/`CH4_000`, zie §7.6 |
 | Grieks-alfabet-transcriptiepuzzel (blokkeert voortgang) | `certamen/singleplayer.js` (`spRenderPuzzle`/`spCheckPuzzle`), `SP_PUZZLES`/`SP_GREEK_ALPHABET` | ✅ werkend |
 | Klassekeuze → Battle Mode-klasse (REWARD-hook) | `certamen/singleplayer.js` (`spHookReward`), `SP_CLASS_REWARD_MAP` | ✅ werkend |
-| Codex Memoriae — 6 tabbladen, oud-perkament-uiterlijk | `certamen/singleplayer.js` (`SCREENS.spCodex` + hooks), `certamen/singleplayer-data.js` (`SP_CODEX_ENTRIES`/`SP_CODEX_PERSONS`/`SP_VOCAB_ENTRIES`) | ✅ werkend — Mythologie/Geschiedenis/Personen/Grammatica/Vocabulaire/Afbeeldingen (§7.2.1); quests hebben nog geen eigen scherm |
+| Codex Memoriae — 7 tabbladen, oud-perkament-uiterlijk | `certamen/singleplayer.js` (`SCREENS.spCodex` + hooks), `certamen/singleplayer-data.js` (`SP_CODEX_ENTRIES`/`SP_CODEX_PERSONS`/`SP_VOCAB_ENTRIES`/`SP_SOUVENIRS`) | ✅ werkend — Herinneringen/Mythologie/Geschiedenis/Personen/Grammatica/Vocabulaire/Afbeeldingen (§7.2.1); quests hebben nog geen eigen scherm |
 | Eenmalige gender-keuze (voornaamwoorden, géén naam) | `certamen/singleplayer.js` (`spRenderGenderPick`), `SP_PRONOUNS`/`SP_GENDER_OPTIONS` | ✅ werkend |
 | **3 saveslots** per leerling | `certamen/singleplayer.js` (`SCREENS.spSlots`), `SP_MAX_SLOTS` | ✅ werkend — beginnen/verdergaan/verwijderen (met bevestiging) |
 | **Offline-first opslag** (localStorage primair, Firebase spiegel) | `certamen/singleplayer.js` (`spSaveProgress`/`spLoadAllSlots`) | ✅ werkend — speelbaar zonder inloggen/internet |
@@ -71,8 +79,9 @@ browser):
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
 | Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 4+ nog niet geschreven |
-| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen hebben er een (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) |
-| Gemini-huisstijl-Gem (stripstijl) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
+| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8 |
+| Gemini-huisstijl-Gem (stripstijl, scène-illustraties) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
+| Gemini-huisstijl-Gem (museumstukken, Herinneringen-tab) | `certamen/assets/chronica/gemini-souvenir-style.md` | ✅ herbruikbare Gem-instructie — vaste sokkel/stolp/kussentje-opstelling, zie §7.2.1 |
 | **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
 | **Audio** — `MUSIC:` speelt af, met mute-knop | `certamen/singleplayer.js` (`spPlayMusic`/`spAudioToggleHTML`), `SCREENS.spIntro` (titelscherm met Main Theme) | ✅ werkend — Orakel-epiloog (§7.2) en het titelscherm hebben muziek; overige scènes nog stil |
 | Audio-assetmappen | `certamen/assets/chronica/music/`, `certamen/assets/chronica/sfx/` | ✅ mappen bestaan (music met 1e Suno-track) |
@@ -137,7 +146,8 @@ korter — een introductie, geen vol hoofdstuk.
 
 **Ondersteunde secties** (`CNSParser.KNOWN_SECTIONS`): `TITLE`, `TEXT`,
 `DIALOGUE`, `CHOICES`, `IMAGE`, `MUSIC`, `SFX`, `CODEX`, `QUEST`, `COMBAT`,
-`REWARD`, `INVENTORY`, `PUZZLE`, `EERETITEL`, `FLAG`.
+`REWARD`, `INVENTORY`, `PUZZLE`, `EERETITEL`, `FLAG`, `PERSON`, `VOCAB`,
+`FRAGMENT`, `SOUVENIR`.
 
 - `TITLE`/`TEXT`/`DIALOGUE`/`CHOICES` worden direct gerenderd.
 - `REWARD`/`CODEX`/`QUEST`/`EERETITEL` vuren stil een hook af bij binnenkomst
@@ -548,13 +558,54 @@ loopt door naar een gedeelde afsluitreeks:
    Hoofdstuk 2 nog moet worden geschreven — voorkomt een "Terug naar de
    opslagplekken"-doodlopend eind zonder verhaalkader.
 
-### 7.2.1 Codex Memoriae — zes tabbladen, oud-perkament-uiterlijk (**gebouwd**)
+### 7.2.1 Codex Memoriae — zeven tabbladen, oud-perkament-uiterlijk (**gebouwd**)
 
-`SCREENS.spCodex` (singleplayer.js) is een volwaardig scherm met zes
+`SCREENS.spCodex` (singleplayer.js) is een volwaardig scherm met zeven
 tabbladen, elk met een eigen kleine databron en ontgrendel-hook — allemaal
 volgens hetzelfde patroon (CNS-meta-sectie → hook zet stil iets in
 `SP_STATE` → scherm toont alleen wat al verdiend is, per saveslot):
 
+- **Herinneringen** (eerste tabblad, standaard-tabblad bij het openen van de
+  Codex) — het "museum van Mnemosyne"-mechanisme (vastgelegd 2026-07, na
+  Hoofdstuk 4): uit elk afgerond verhaal/lijn neemt de speler één tastbaar
+  voorwerp mee, opgehaald via een nieuwe `SOUVENIR:`-sectie
+  (`spHookSouvenir`, zelfde comma/puntkomma/regel-parsing als `CODEX:`) en
+  vastgelegd in `SP_STATE.souvenirs` (array van ids, losstaand van
+  `SP_STATE.fragments` — Herinneringsfragmenten zijn een ONZICHTBARE
+  hoofdstukgate, souvenirs zijn juist bedoeld om gezien te worden).
+  `SP_SOUVENIRS` (singleplayer-data.js) koppelt elke id aan een naam, een
+  kort onderschrift en een `icon`-emoji + optioneel `img`
+  (`assets/chronica/souvenirs/`, nog geen bestanden op schijf — zelfde
+  "pad alvast invullen, terugval op icon bij ontbreken/foutmelding"-patroon
+  als `SP_COMBAT_ENEMIES`, via dezelfde `onerror`-truc als
+  `spCombatSpriteHTML`). `spCodexSouvenirsHTML()` rendert ze als een grid,
+  visueel dezelfde `.codex-gallery`-stijl als het Afbeeldingen-tabblad.
+  **Bewust ambigu wie/wat deze voorwerpen verzamelt** — de verteltekst
+  schrijft het losjes toe aan "het Orakel", zonder verder uit te leggen wat
+  daarmee gebeurt. Die vraag wordt pas een echt "museum" zodra Hoofdstuk 26
+  "De Bibliotheek van Mnemosyne" (`SP_CAMPAIGN`) gebouwd wordt — dit
+  tabblad is dus een bewuste, vroege setup voor een onthulling die nog ver
+  weg ligt. Nu 11 voorwerpen, één per afgeronde lijn t/m Hoofdstuk 4 (proloog
+  telt niet mee — dat is het inleidende kader, geen "bezochte mythe"): de
+  proloog/Hoofdstuk-1-t/m-4-lijnen kregen elk een kort, nieuw stukje
+  verteltekst dat het oppakken/vinden van het voorwerp beschrijft, meestal
+  ingevoegd vlak vóór de bestaande `EERETITEL:`-sectie van die lijn. Eén
+  uitzondering: Latona's lijn (Hoofdstuk 2) kreeg er een hele nieuwe,
+  korte coda-scène bij (`CH2_L08B`, "De Vijver van de Boeren" — het
+  klassieke Ovidius-verhaal van Latona en de Lycische boeren die in kikkers
+  veranderen) omdat de gekozen souvenir (een waterlelie) niet natuurlijk uit
+  de al bestaande scènes voortkwam.
+  **Illustraties** (vastgelegd 2026-07, nog geen bestanden op schijf): eigen
+  Gemini-Gem, los van de scène-illustraties, in
+  `certamen/assets/chronica/gemini-souvenir-style.md` — vaste opstelling
+  (stenen sokkel, glazen stolp, klein rood fluwelen kussentje onder kleine/
+  fijne voorwerpen), **vierkant (1:1)** i.p.v. de liggende 16:9 van gewone
+  scènes (past bij de rastertegels van `spCodexSouvenirsHTML`), met een
+  Aegeïsch-blauwe of oxblood-gloed op het glas afhankelijk van de taallijn
+  (Grieks/Latijn) waar het voorwerp bij hoort. Bewust een aparte Gem in
+  plaats van een uitbreiding op `gemini-comic-style.md`, omdat de compositie
+  hier strikt VAST staat (bijna een productfoto) i.p.v. per scène te
+  variëren.
 - **Mythologie** / **Geschiedenis** — `SP_CODEX_ENTRIES` (`cat:"mythologie"`/
   `"geschiedenis"`), ontgrendeld via de bestaande `CODEX:`-sectie
   (`spHookCodex`, ondersteunt nu meerdere id's per sectie,
@@ -614,10 +665,14 @@ extra lettertype-CDN**, dat zou de offline-first-eis van de app breken.
 Bereikbaar via een knop op de landingspagina (naast 🗺️ Wereldkaart) zodra je
 verder bent dan het allereerste scherm.
 
-Nieuwe hoofdstukken breiden dit uit: elke nieuwe `CODEX:`/`PERSON:`/`VOCAB:`-
-id hoort een entry te krijgen in de bijbehorende databron
-(`SP_CODEX_ENTRIES`/`SP_CODEX_PERSONS`/`SP_VOCAB_ENTRIES`, allemaal
-singleplayer-data.js) — anders toont de Codex alleen een kale id of niets.
+Nieuwe hoofdstukken breiden dit uit: elke nieuwe
+`CODEX:`/`PERSON:`/`VOCAB:`/`SOUVENIR:`-id hoort een entry te krijgen in de
+bijbehorende databron (`SP_CODEX_ENTRIES`/`SP_CODEX_PERSONS`/
+`SP_VOCAB_ENTRIES`/`SP_SOUVENIRS`, allemaal singleplayer-data.js) — anders
+toont de Codex alleen een kale id of niets. Voor `SOUVENIR:` specifiek: elke
+hoofdlijn/plotlijn die met een `EERETITEL:` afsluit, hoort ook een eigen
+`SOUVENIR:` te krijgen (meestal vlak ervoor), zodat de Herinneringen-tab
+gelijke tred houdt met de rest van de campagne.
 
 ### 7.3 Clementia/Severitas — stil "Paragon/Renegade"-systeem (**gebouwd**)
 
@@ -844,6 +899,23 @@ via een nieuwe, generieke keuze-tag: een regel in `CHOICES:` mag eindigen op
 voorwaarde is voldaan. Nu alleen `fragments=4` in gebruik, maar generiek
 genoeg voor latere vergelijkbare gates.
 
+**Een afgeronde lijn opnieuw spelen vanaf de hub (vastgelegd 2026-07, na
+gebruikersfeedback):** vóór deze wijziging kon een speler op de hub
+onbeperkt dezelfde lijn herstarten (bv. Latona opnieuw en opnieuw kiezen) —
+inclusief alle Clementia/Severitas-keuzes daarin, dus ook onbeperkt op één
+kant van die schaal blijven stapelen. Een tweede nieuwe keuze-tag lost dit
+op: `[DONE:vlagnaam]` (`CNSParser.DONE_TAG_RE`), verwijzend naar dezelfde
+`FLAG:` die elke lijn toch al bij afronding zet (bv. `ch2_lijn_latona=true`)
+— geen aparte databron nodig. Staat de vlag al op waar, dan toont
+`SCREENS.spPlay` de knop met een ✓ en gedimd, en navigeert een klik niet
+meer naar de lijn (`spChoiceAlreadyDone()`, singleplayer.js): enkel een
+korte, Orakel-achtige herinnering hoeveel lijnen in dit hoofdstuk nog open
+staan, berekend uit de andere `[DONE:...]`-keuzes op diezelfde hub-scène.
+Toegepast op alle drie de multi-lijn-hubs die terugkeren naar zichzelf
+(`CH2_000`, `CH3_000`, `CH4_000`) — `CH1_000` heeft dit niet nodig, want
+daar leidt het voltooien van een lijn rechtstreeks door naar de
+hoofdstukafsluiting, niet terug naar de hub.
+
 #### Athena: zwijgende getuige, dan mentor
 
 Athena kijkt tijdens alle vier de verhalen alleen toe — een korte cameo in
@@ -882,6 +954,14 @@ onregelmatige esse/posse — drie nieuwe Codex-grammatica-entries
 (`codex_grammatica_ch2_*`), elk met een paradigma-tabel, **vroeg ontgrendeld**
 bij `CH2_000` (zelfde les als Hoofdstuk 1: een leerling moet een mislukte
 puzzel meteen kunnen opzoeken, niet pas na afloop).
+
+**Illustraties** (7, Gemini-huisstijl-Gem, `assets/chronica/images/`): één
+per emotioneel hoogtepunt per lijn, plus de mentor-overgang —
+`geboorte_apollo_diana.png` (`CH2_L08`), `semele_verteerd.png` (`CH2_S06`),
+`geboorte_bacchus.png` (`CH2_S08`), `kallisto_berin.png` (`CH2_K07`),
+`kallisto_sterrenbeeld.png` (`CH2_K09`), `herakles_nasleep.png` (`CH2_H06`,
+bewust de NASLEEP van de plottwist, nooit de daad zelf — zelfde toon-regel
+als hierboven) en `athena_mentor_ch2.png` (`CH2_ATHENA`).
 
 ### 7.7 Puzzel-moeilijkheidsopbouw: meerkeuze → zelf typen (**gebouwd**)
 
@@ -999,14 +1079,115 @@ terug op `CH3_000`, precies als in Hoofdstuk 2.
 Codex-grammatica-entries (`codex_grammatica_ch3_*`), **vroeg ontgrendeld** bij
 `CH3_000`, zelfde regel als Hoofdstuk 1/2.
 
+**Illustraties** (7, Gemini-huisstijl-Gem, `assets/chronica/images/`) — de
+Io-lijn krijgt drie beelden omdat die drie los herkenbare mythologische
+momenten bevat: `argus_bewaakt_io.png` (`CH3_IO05`), `pauw_ogen_argus.png`
+(`CH3_IO10`) en `europa_stier.png` bij de Europa-coda (`CH3_IO14`); de
+Herakles-lijn krijgt er drie, bewust gekozen bij de taken ZONDER eigen
+Combat-bridge-sprite zodat geen enkel beeld dubbelop staat met een
+combat-icoon: `augiasstal.png` (`CH3_H09`), `atlas_hemel.png` (`CH3_H21`) en
+`cerberus_voltooid.png` als sluitstuk (`CH3_H25`); plus `athena_mentor_ch3.png`
+(`CH3_ATHENA`) als bookend met `athena_mentor_ch2.png`.
+
 **Getest** (browser, gescripte volledige doorloop): beide lijnen volledig
-uitgespeeld inclusief alle 7 puzzels en alle 8 gevechten (elke `spCombatAnswer`
-gevolgd door `spCombatAttack()` zodra er genoeg EP is — de Combat-bridge-lus
-vereist expliciet BEIDE stappen, niet alleen juist antwoorden), fragmenten/
-flags/quests/eretitels kloppen, `fragments=6`-gate opent pas na alle zes
-fragmenten, en `{tendency_address}`/`{tendency_address_cap}` resolven correct
-naar een gender- en houding-passende aanspreekvorm in zowel de Europa-coda
+uitgespeeld inclusief alle 9 puzzels en alle 6 gevechten (elke
+`spCombatAnswer` gevolgd door `spCombatAttack()` zodra er genoeg EP is — de
+Combat-bridge-lus vereist expliciet BEIDE stappen, niet alleen juist
+antwoorden), fragmenten/flags/quests/eretitels kloppen, `fragments=6`-gate
+opent pas na alle zes fragmenten, en `{tendency_address}`/
+`{tendency_address_cap}` resolven correct naar een gender- en
+houding-passende aanspreekvorm in zowel de Europa-coda
 als `CH3_ATHENA`.
+
+### 7.9 Hoofdstuk 4: "Het Labyrint van Herinneringen" — twee onbreekbare beloften (**gebouwd**)
+
+Twee hoofdlijnen (`SP_CH4_CNS`, singleplayer-data.js, 30 scènes), net als
+Hoofdstuk 3 — beide draaien om dezelfde kern: een belofte die, eenmaal
+uitgesproken, niemand meer ongedaan kon maken.
+
+- **Theseus** (`CH4_T01`-`T16`): Athene betaalt al negen jaar een tol van
+  veertien jonge levens aan koning Minos van Kreta — boete voor de dood van
+  diens zoon Androgeos. Theseus meldt zich vrijwillig aan, en belooft zijn
+  vader Aegeus witte zeilen te hijsen als hij de Minotaurus overleeft. Op
+  Kreta valt Ariadne voor hem, verraadt haar vader met Daidalos' garenplan
+  (`PUZZLE` ablativus) en helpt Theseus het labyrint in en uit — in ruil voor
+  de belofte dat hij haar meeneemt. Na de Combat-bridge-overwinning op de
+  Minotaurus (`CH4_T07`, één nieuwe `SP_COMBAT_ENEMIES`-entry) laat Theseus
+  Ariadne echter slapend achter op Naxos, waar Bacchus (bekend van Hoofdstuk
+  1) haar vindt en onsterfelijk maakt — het enige verhaal in dit hoofdstuk
+  dat alsnog goed afloopt (`codex_ariadne_bacchus`). **Daidalos & Ikaros**
+  (S-tier, `SP_MYTH_CANON`) zijn bewust IN deze lijn verweven i.p.v. een
+  aparte lijn, precies zoals `SP_CAMPAIGN` ch4.zijverhalen al aangaf: Minos
+  sluit Daidalos en Ikaros na het verraad zelf in het labyrint op, ze
+  ontsnappen op zelfgemaakte vleugels, en Ikaros valt — ondanks zijn vaders
+  waarschuwing — als hij te dicht bij de zon vliegt (`PUZZLE` vocativus,
+  "Icare!"). Onderwijl vergeet Theseus, met zijn gedachten elders, zijn eigen
+  belofte aan zijn vader: het schip keert terug onder het zwarte zeil, Aegeus
+  werpt zich van de klip — en de zee draagt sindsdien zijn naam. Levert het
+  fragment "Uitweg" 🧵 op en de eretitel `ch4_theseus_labyrint`.
+- **Phaëthon** (`CH4_P01`-`P10`): getergd door zijn vriend Epaphus (zoon van
+  Jupiter en de uit Hoofdstuk 3 bekende Io) om zijn goddelijke afkomst te
+  bewijzen, reist Phaëthon naar het Paleis van de Zon. Zijn vader Sol zweert
+  hem onbezonnen een onherroepelijke eed bij de Styx (`PUZZLE` imperfectum,
+  Sol se aanhoudende — vergeefse — waarschuwingen) vóór hij de vraag kent, en
+  moet hem daarna de zonnewagen laten mennen. Phaëthon verliest de wagen
+  bijna onmiddellijk uit controle, verzengt de aarde, en wordt door Jupiters
+  bliksem neergehaald om erger te voorkomen (`PUZZLE` perfectum, "misit" —
+  één voltooide worp). Zijn zusters, de Heliaden, treuren zich aan zijn graf
+  in populieren met amberkleurige tranen; zijn vriend Cycnus wordt een zwaan.
+  Levert het fragment "Overmoed" ☀️ op en de eretitel `ch4_phaethon`.
+
+**Naamgevingsregel**: lijn Theseus (Pallas Les 6-7) gebruikt Griekse/
+gangbare namen (Theseus, Ariadne, Minos, Daidalos, Ikaros, Aegeus — spelling
+consistent met `SP_MYTH_CANON`s "Daidalos & Ikaros"); lijn Phaëthon (Minerva
+H5, een Ovidiaans verhaal) gebruikt Latijnse namen (Sol, niet Helios;
+Iuppiter in de Latijnse puzzelzinnen, "Jupiter" in de Nederlandse
+verteltekst — zelfde conventie als alle eerdere hoofdstukken).
+
+**Combat/grammatica-balans (bewuste keuze)**: lijn Theseus draagt drie van de
+vijf grammaticapunten (infinitivus/vocativus/ablativus), lijn Phaëthon de
+resterende twee (imperfectum/perfectum) — niet symmetrisch verdeeld, zelfde
+flexibiliteit als Hoofdstuk 2 (niet elke lijn hoeft elk grammaticapunt te
+dragen). Eén Combat-bridge-gevecht dit hoofdstuk (de Minotaurus) — minder dan
+Hoofdstuk 2/3, omdat beide lijnen hier primair op een gebroken belofte draaien
+in plaats van op een reeks beproevingen.
+
+**Fragmenten-gate**: zelfde patroon als Hoofdstuk 2/3, met NIEUWE fragment-ids
+("theseus", "phaethon"). De hub-keuze naar `CH4_ATHENA` staat op
+`[REQUIRE:fragments=8]` (de zes van Hoofdstuk 2/3 + deze twee). Beide lijnen
+eindigen terug op `CH4_000`.
+
+**Grammatica**: infinitivus, vocativus (vervolg op Hoofdstuk 1 se
+Bacche/Pallas/Prometheu-tabel, nu met Icare/Theseu/Minos), imperfectum,
+perfectum, ablativus (van middel) — vijf nieuwe Codex-grammatica-entries
+(`codex_grammatica_ch4_*`), **vroeg ontgrendeld** bij `CH4_000`, zelfde regel
+als alle eerdere hoofdstukken.
+
+**Bugfix bij het bouwen van dit hoofdstuk**: `CH2_EINDE` en `CH3_EINDE`
+bleken, bij het optekenen van dit hoofdstuk, allebei nog een echte
+`CHOICES`-loze doodlopende scène te zijn — de vorige hoofdstukken waren wel
+geschreven, maar de sluitscène van het hoofdstuk ERVOOR verwees er nooit naar
+door (alleen `CH1_EINDE` had destijds al een `-> CH2_000`-keuze gekregen).
+Beide missen nu alsnog een `CHOICES: * Stap door de poort -> CH‹volgend›_000`,
+zodat de hele campagne van `CH1_000` tot en met `CH4_EINDE` aantoonbaar
+(scriptmatig, reachability-check) doorloopt zonder onderbreking.
+
+**Getest**: (1) Node-scriptvalidatie — alle 30 scènes van `SP_CH4_CNS`
+bereikbaar vanaf `CH4_000`, elke `CHOICES`-target bestaat, elke `PUZZLE`/
+`CODEX`/`PERSON`/`FRAGMENT`/`EERETITEL`/`COMBAT`/`VOCAB`-id heeft een
+bijbehorende data-entry, elke `PERSON: id:full` heeft een eerdere `id:intro`
+in hetzelfde hoofdstuk, en de volledige keten `CH1_000` → `CH2_000` →
+`CH3_000` → `CH4_000` → `CH4_EINDE` is bereikbaar (deze bevestigde ook een
+bug in `CH2_EINDE`/`CH3_EINDE`, zie hieronder). (2) Browserdoorloop via
+`spGoCns()` in de devtools-console (geen volledige klik-voor-klik sessie,
+maar wel echte DOM-render): hub met `[REQUIRE:fragments=8]`-gate (verborgen
+bij 6, zichtbaar bij 8), de infinitivus-puzzel inclusief correct/fout-
+afhandeling, de Minotaurus-Combat-bridge (65/65 EP, vraag uit de
+vocabulairepool), de imperfectum-puzzel, `{tendency_address}` dat oplost naar
+een gender-passende aanspreekvorm in `CH4_ATHENA`, en alle vijf nieuwe
+grammatica-tabellen die correct renderen in `SCREENS.spCodex`. Nog niet
+end-to-end doorgeklikt vanuit de UI zelf (alle 30 scènes na elkaar met de
+muis) — dat staat nog open als eventuele vervolgstap.
 
 ---
 
@@ -1058,10 +1239,11 @@ In afgesproken bouwvolgorde:
 4. **Quest-overzichtsscherm** — data wordt al bewaard (`spHookQuest`); de
    Codex heeft inmiddels wél een eigen scherm (§7.2, `SCREENS.spCodex`), een
    vergelijkbaar overzicht voor quests ontbreekt nog.
-5. **Hoofdstuk 2 t/m 19 + Finale-content** — scène voor scène in CNS.
+5. **Hoofdstuk 5 t/m 28 + Finale-content** — scène voor scène in CNS.
    `SP_CAMPAIGN` bepaalt per hoofdstuk de grammatica/personages, `SP_MYTH_CANON`
-   levert het zijverhaal-materiaal. Nu drie onafhankelijke lijnen per hoofdstuk
-   (§7.1); "meer kruisen" (lijnen die van elkaar weten) is een latere stap.
+   levert het zijverhaal-materiaal. Nu meestal twee tot vier onafhankelijke
+   lijnen per hoofdstuk (§7.1); "meer kruisen" (lijnen die van elkaar weten) is
+   een latere stap.
 6. **Illustraties** — `IMAGE:` is **actief** (rendert het bestand uit
    `assets/chronica/images/`). De eerste illustratie hangt aan PRO_005 ("De
    Bronzen Schijf": de ontdekking van het Orakel, `prologue.png`). Resterend
@@ -1138,8 +1320,8 @@ aanpassen zonder steeds de volledige tekst heen-en-weer te hoeven sturen.
   hoofdstuk.
 - **Formaat: platte tekst (.txt), bewust geen .docx.** Het CNS-formaat is al
   leesbare platte tekst met structurele merktekens (scène-ID's, `->`-pijlen,
-  `[CLEMENTIA]`/`[SEVERITAS]`/`[NEUTRAL]`/`[REQUIRE:...]`-tags) die exact intact moeten
-  blijven. Een .docx-omweg riskeert dat Word's autocorrect die merktekens
+  `[CLEMENTIA]`/`[SEVERITAS]`/`[NEUTRAL]`/`[REQUIRE:...]`/`[DONE:...]`-tags)
+  die exact intact moeten blijven. Een .docx-omweg riskeert dat Word's autocorrect die merktekens
   ongemerkt corrumpeert (rechte aanhalingstekens → krultekens, `->` → een
   en-dash) — bij .txt is er geen vertaalslag, wat Gerben bewerkt IS het
   bronformaat.
