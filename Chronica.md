@@ -270,6 +270,49 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
   (óók de nog niet verdiende) staat verderop, meegerenderd in de eerbewijzen
   (zie §6).
 
+### 5.1 Equip-ontgrendelingen — routekaart voor de resterende hoofdstukken (**vastgelegd, nog te bouwen**)
+
+`BM_AVATAR_PARTS` (battle-data.js) kent meer categorieën/opties dan Chronica
+op dit moment kan ontgrendelen. Buiten beschouwing blijven, zoals altijd:
+`SP_AVATAR_FREE_PARTS` (geslacht/huid/haar/haarkleur/baard — uiterlijk, geen
+gevechtsuitrusting) en de drie in Chronica **verborgen** categorieën
+(`SP_AVATAR_HIDDEN_PARTS`: `victoryAnim`/`legendary`/`prestige` — die horen
+puur bij Battle Mode se eigen niveau/mastery/coins-progressie, niet bij het
+verhaal). Wat overblijft — `armor`/`helm`/`schild`/`wapen`/`cape` — moet,
+net als de drie proloog-wapens en de mantel/leeuwenhuid-harnas uit Hoofdstuk
+1/2, een eigen verhaalmoment krijgen via `SP_AVATAR_STORY_UNLOCKS`. Onderstaande
+routekaart legt vast WELK hoofdstuk WELKE optie oplevert en HOE de held het
+in de fictie krijgt — zodat dit niet vergeten wordt zodra die hoofdstukken
+daadwerkelijk geschreven worden. Nog niets hiervan is gebouwd behalve de
+rijen die al ✅ zijn.
+
+| Hoofdstuk | Equip-optie | Hoe de speler het krijgt (fictie) | Status |
+|---|---|---|---|
+| Proloog | `wapen:boog`/`speer`/`zwaard` | Klassekeuze bij het Orakel (Boogschutter/Hopliet/Cavalerist) | ✅ gebouwd |
+| Hoofdstuk 1 (elke lijn) | `armor:robe` | Het Orakel zelf hult de speler in een mantel, na de eerste lijn | ✅ gebouwd |
+| Hoofdstuk 2 (`CH2_H09`) | `armor:licht` | Herakles draagt voortaan de huid van de Nemeïsche Leeuw als mantel en geeft zijn oude harnas aan de speler | ✅ gebouwd |
+| **Hoofdstuk 4** (Theseus/Labyrint) | `helm:standard` | Koning Aegeus geeft de speler een eenvoudige bronzen helm mee voor de afdaling in het Labyrint |  |
+| **Hoofdstuk 4** (Theseus/Labyrint) | `schild:rond` | Een rond schild, gevonden in het wapenarsenaal van het paleis van Knossos |  |
+| **Hoofdstuk 5** (Argonauten) | `armor:middel` | Standaard reisharnas, uitgedeeld aan de hele bemanning van de Argo bij vertrek |  |
+| **Hoofdstuk 5** (Argonauten) | `helm:bandana` | Een eenvoudige hoofddoek tegen zon en zeewind tijdens de lange tocht |  |
+| **Hoofdstuk 8** (Wrok van Achilles) | `armor:zwaar` | Hephaistos smeedt nieuw, goddelijk harnas voor Achilles nadat Hector Patroklos' (Achilles') oude wapenrusting buitmaakte — de speler krijgt een eigen exemplaar | |
+| **Hoofdstuk 8** (Wrok van Achilles) | `schild:ovaal` | Het beroemde Schild van Achilles, in hetzelfde smeedmoment door Hephaistos gemaakt |  |
+| **Hoofdstuk 9** (Ilion in Vlammen) | `helm:open` | Een open vechthelm, opgeraapt tijdens de chaos van Troje's val |  |
+| **Hoofdstuk 14** (De Stad van Athena) | `cape:kort` | Athena, als mentor, schenkt de speler een korte chlamys als teken van haar bescherming |  |
+| **Hoofdstuk 15** (Oorlog en Overwinning — Thermopylae) | `armor:hopliet`, `helm:hopliet`, `schild:vierkant` | Volledige hoplietuitrusting, gedragen aan de zijde van Leonidas' driehonderd |  |
+| **Hoofdstuk 17** (De Stem van de Filosofen) | `wapen:staf` | Een filosofenstaf, meegekregen uit Socrates/Aristoteles' school |  |
+| **Hoofdstuk 18** (Alexander) | `helm:kroon` | Een eervolle kopie van Alexanders eigen diadeem |  |
+| **Hoofdstuk 20** (Verdedigers van de Republiek) | `schild:tower` | Een groot verdedigingsschild, vernoemd naar Horatius Cocles die in zijn eentje de brug verdedigde |  |
+| **Hoofdstuk 24** (Augustus en de Pax Romana) | `cape:lang` | Augustus' keizerlijke mantel (paludamentum), bij de vestiging van de Pax Romana |  |
+| **Finale** | `armor:ceremonieel` | Ceremonieel harnas, geschonken door Kronos/Athena/Mnemosyne bij het voltooien van heel Chronica Classica |  |
+
+**Kleine bijkomende fix (los van de routekaart hierboven):** `capekleur` heeft
+in `BM_AVATAR_PARTS` geen enkele `requires` (alle zes kleuren zijn in Battle
+Mode al vanaf het begin vrij) maar staat nog niet in `SP_AVATAR_FREE_PARTS`
+— zodra `cape:kort` bij Hoofdstuk 14 wordt gebouwd, moet `capekleur` ook aan
+`SP_AVATAR_FREE_PARTS` worden toegevoegd (net als `haarkleur`), anders is er
+straks wel een cape maar geen enkele kleur ervoor beschikbaar.
+
 ---
 
 ## 6. Eretitels (Titles)
@@ -299,6 +342,41 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
   maar nog **niet verrekend** in het gevecht. De passieve-bonus-logica van
   Battle Mode zit verspreid over meerdere plekken in `battle.js`; het
   daadwerkelijk toepassen hoort bij de Combat-bridge-bouwstap (§8).
+
+### 6.1 Bonus-eretitels — routekaart (**vastgelegd, nog te bouwen**)
+
+Doel: het moet voor een ervaren multiplayer-speler (Battle Mode/Boss Battle/
+Total War) ook echt lonen om Chronica te spelen, zonder dat de bonussen
+diezelfde speler in multiplayer **overpowered** maken. Daarom NIET elk
+hoofdstuk een eigen bonus (28 hoofdstukken + finale zou een enorme stapel
+kleine voordelen worden, oncontroleerbaar voor balans) maar **één bonus per
+Boek** (5 boeken) plus de al bestaande proloog-bonus — zes bonus-momenten
+over de HELE campagne, elk bescheiden en met een plafond, zelfde
+`bonus:{scope,type,val,desc}`-vorm als `bewaarder_herinnering`. Net als de
+bestaande titel geldt de scope altijd `["battle","boss","totalwar"]` — NOOIT
+Chronica zelf, want het punt is juist dat multiplayer-vaardigheid niet nodig
+is om deze te verdienen, maar wel profiteert.
+
+| Titel (id, te maken) | Ontgrendeld bij | Bonus (voorstel) | Waarom dit thematisch past |
+|---|---|---|---|
+| `bewaarder_herinnering` | Proloog voltooid | +1 BE bij een snel juist antwoord | Al **gebouwd** — het bestaande precedent |
+| `kroniekschrijver_boek_1` | Boek I compleet (Hoofdstuk 1 t/m 9, "De Ontwaakte Herinnering") | `streak_shield` — één fout antwoord per wedstrijd breekt je combo niet | Letterlijk Hoofdstuk 2's kernboodschap: "heldendom ontstaat niet wanneer het lot je gunstig gezind is, maar wanneer je weigert eraan ten onder te gaan" |
+| `kroniekschrijver_boek_2` | Boek II compleet (Hoofdstuk 10 t/m 15, "Helden en Koningen") | `be_head_start` — elke wedstrijd start met +5 BE | Een vliegende start na een lange thuisreis (Odysseus/Aeneas — dit hele boek gaat over thuiskomen) |
+| `kroniekschrijver_boek_3` | Boek III compleet (Hoofdstuk 16 t/m 18, "De Wereld van Mensen") | `coin_bonus_pct` (waarde 5) — +5% munten na afloop van een wedstrijd | Kritisch denken en wijsheid (Herodotos/Socrates/Aristoteles) vertaald naar beter beheer van middelen — een economische, geen gevechts-bonus, dus geen effect op win/verlies |
+| `kroniekschrijver_boek_4` | Boek IV compleet (Hoofdstuk 19 t/m 25, "Rome Verrijst") | `first_answer_free` — de eerste vraag van elke wedstrijd telt automatisch als goed beantwoord | Rome's fundament leggen — een gegarandeerd sterk begin, eenmalig per wedstrijd |
+| `meester_der_herinnering` | Boek V + Finale compleet (Hoofdstuk 26 t/m 28 + Finale — de VOLLEDIGE campagne) | `be_on_correct` (waarde 1) — +1 BE op ELK juist antwoord, niet alleen snelle | De sterkste bonus, bewust gereserveerd voor 100% van Chronica Classica — vereist het voltooien van alle 28 hoofdstukken + finale, dus vanzelf zeldzaam genoeg om niet overpowered te worden op schaal |
+
+**Balansprincipe:** hoe dichter bij het einde van de campagne, hoe sterker de
+bonus mag zijn — maar elke bonus blijft een KLEINE, eenmalige of
+percentage-gebonden aanpassing (nooit een vermenigvuldiger op alle schade of
+een permanente flat-BE-verhoging zonder voorwaarde), en de duurste/sterkste
+titel is expres gekoppeld aan de zwaarste eis (de hele campagne, niet één
+hoofdstuk). Nieuwe `bonus.type`-waarden (`streak_shield`/`be_head_start`/
+`coin_bonus_pct`/`first_answer_free`/`be_on_correct`) bestaan nog nergens in
+`battle.js`/`bossbattle.js`/`core.js` — ze moeten, samen met
+`bewaarder_herinnering`'s eigen `be_on_fast`, alsnog echt worden ingebouwd in
+de Combat-bridge-bouwstap (§8) voor ze iets doen; tot die tijd blijven ze
+puur informatief, zoals de bestaande titel dat nu ook al is.
 
 ---
 
@@ -1216,6 +1294,43 @@ In afgesproken bouwvolgorde:
    met kale nekstompjes zien, nooit de koppen. Getest: 7/4/1/0 koppen bij
    100/50/~2/0% HP. De eretitel-`bonus` (§6) écht in de berekening verwerken
    staat nog open.
+
+   **Equip-bonussen in de Combat-bridge (ontwerp vastgelegd, nog te bouwen)**:
+   de speler vroeg zich terecht af of het uitgeruste wapen/harnas ook echt
+   iets doet in gevechten, in plaats van puur cosmetisch te zijn. Belangrijke
+   constatering vooraf: `SP_COMBAT` heeft op dit moment GEEN speler-HP of
+   inkomende schade — het is een pure "vraag → EP → aanval op de vijand"-lus
+   (zie hierboven), dus een harnas kan niet letterlijk "schade absorberen"
+   zonder eerst een heel nieuw schade-aan-de-speler-mechanisme te bouwen, en
+   dat botst met de "nooit grimmig, geen game-over-scherm midden in het
+   verhaal"-toon van Chronica (§7.6/gemini-comic-style.md). Daarom **hergebruikt
+   het ontwerp bewust de bestaande EP-economie** in plaats van een nieuwe
+   HP-laag toe te voegen:
+   - **Wapen → schade per aanval** (`SP_COMBAT_DAMAGE_PER_ATTACK`, nu een vaste
+     15 voor iedereen): wordt een tabel naar wapen-tier i.p.v. één vaste
+     waarde. Tier 1 (`knuppel`/`hooivork`, startwapens): 15 schade
+     (ongewijzigd — nulmeting). Tier 2 (`zwaard`/`speer`/`boog`, proloog-
+     klassekeuze): 18 schade (+20%). Tier 3 (`staf`, Hoofdstuk 17 — het
+     laatst ontgrendelde wapen): 22 schade (+~45%).
+   - **Harnas → EP-verlies bij een fout antwoord**: momenteel kost een fout
+     antwoord niets (geen EP-winst, geen straf) — dat blijft zo voor wie nog
+     op `vodden`/`robe` zit. Vanaf `armor:licht` geldt een nieuwe, bescheiden
+     EP-boete bij een fout antwoord die per harnas-tier KLEINER wordt: geen
+     harnas-tier verliest ooit meer dan de bestaande situatie (nooit
+     "erger" dan nu), maar een beter harnas beschermt je opgebouwde
+     voortgang beter bij een misser. Voorgestelde tabel: `vodden`/`robe` = 0
+     EP-boete (ongewijzigd), `licht` = -3 EP, `middel` = -2 EP, `hopliet` =
+     -1 EP, `zwaar`/`ceremonieel` = 0 EP-boete (volledige bescherming — een
+     compleet uitgeruste held maakt zich geen zorgen meer over een
+     misstap). Dit maakt fout antwoorden voor het eerst een echt (maar
+     nooit hard afstraffend) risico, en geeft harnas een leesbare, eerlijke
+     rol: "bescherm je voortgang", niet "voorkom een game over" — er is nog
+     steeds geen manier om een Chronica-gevecht te verliezen.
+   - Bewust GEEN bonussen op `helm`/`schild`/`cape` — die blijven puur
+     cosmetisch, om de balans overzichtelijk te houden (twee bonus-assen,
+     wapen en harnas, is genoeg voor een verhaal-RPG die niet primair om
+     combat-optimalisatie draait).
+
 2. **`CONDITION`-mechanisme** — de kaart zelf is gebouwd (§7,
    `SCREENS.spWorldMap`), alle drie panelen zijn getekend en schakelbaar. Sinds
    Hoofdstuk 3 bestaat er al een LICHTGEWICHT vorm van reageren op
