@@ -23,7 +23,7 @@
 > Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
-> rest van de campagne (Hoofdstuk 4 t/m 19 + Finale) staat als metadata-skelet
+> rest van de campagne (Hoofdstuk 4 t/m 26 + Finale) staat als metadata-skelet
 > klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet geschreven.
 >
 > **Dit document is de enige bron van waarheid voor Chronica Classica** en
@@ -70,7 +70,7 @@ browser):
 | Eretitels als eigen categorie tussen de eerbewijzen | `certamen/core.js` (`ACH_CATEGORIES.chronica`), `certamen/games.js` (`SCREENS.collection`) | ✅ werkend — meegerenderd door `achGroupsHTML`, net als Algemeen/Klassieke Spellen |
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
-| Campagnekaart-metadata (Proloog + 19 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 2+ nog niet geschreven |
+| Campagnekaart-metadata (Proloog + 26 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 4+ nog niet geschreven |
 | **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen hebben er een (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) |
 | Gemini-huisstijl-Gem (stripstijl) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
@@ -294,12 +294,15 @@ actieve slot; `spSaveProgress` schrijft alleen daarnaartoe.
 
 ## 7. Campagnestructuur (`SP_CAMPAIGN`)
 
-Proloog + 19 hoofdstukken in 5 "Boeken", gesynchroniseerd met Pallas en
+Proloog + 26 hoofdstukken in 5 "Boeken", gesynchroniseerd met Pallas en
 Minerva (klas 2 t/m 6 gymnasium). Elk hoofdstuk legt vast: periode, verhaal,
 de bijbehorende Pallas/Minerva-les, de **grammatica die de puzzels voedt**,
 gameplay, hoofdpersonages, de (stripstijl-)illustratie en (waar toepasselijk)
 `zijverhalen` — suggesties uit `SP_MYTH_CANON` (zie hieronder) die goed bij
-dat hoofdstuk passen.
+dat hoofdstuk passen. Niet elk hoofdstuk hoeft nieuwe grammatica te
+introduceren: een aantal is bewust een herhalings-/verrijkingshoofdstuk (zie
+de canon-uitbreiding hieronder), net zoals Pallas zelf grammatica-loze lessen
+kent (Les 2, Les 14) en Minerva (H1, H13).
 
 > **Samensmelting (2026-07):** deze structuur combineert twee bronnen — de
 > eerdere, compactere "11 hoofdstukken + Finale"-indeling (rijker aan
@@ -311,6 +314,76 @@ dat hoofdstuk passen.
 > Beide brondocumenten zijn hiermee vervangen — dit is de enige, actuele
 > campagnekaart.
 
+> **Canon-uitbreiding (2026-07-20):** de oorspronkelijke 19 hoofdstukken zijn
+> uitgebreid naar 26, in twee rondes — telkens omdat een hoofdstuk te veel
+> Pallas-lessen of Minerva-hoofdstukken droeg voor zijn eigen verhaal.
+>
+> **Ronde 1 — de aanloop naar en de val van Troje.** Het oude Hoofdstuk 5
+> ("Ilion in Vlammen", zeven Pallas-lessen + vier Minerva-hoofdstukken) is
+> gesplitst op de eigen breekpunten van het verhaal: Hoofdstuk 7 **"De Appel
+> der Tweedracht"** (Peleus & Thetis, het Oordeel van Paris, Leda en de Zwaan,
+> Tyndareos' eed — bewust grammatica-arm, een adempauze), Hoofdstuk 8 **"De
+> Wrok van Achilles"** (Pallas Les 8-11; Chiron als Achilles' leermeester,
+> Minerva H8 "Onderwijs") en Hoofdstuk 9 **"Ilion in Vlammen"** (Pallas Les
+> 12-14, incl. de vertakking Trojaans/Grieks/Neutraal; de gevangen Trojaanse
+> vrouwen als menselijke prijs van de overwinning, Minerva H7 "Slavernij").
+> Ervoor zijn twee nieuwe hoofdstukken ingevoegd die de generatie vóór Troje
+> introduceren — bewust vóór de Appel der Tweedracht, zodat personages als
+> Peleus al bestaan wanneer ze daar trouwen: Hoofdstuk 5 **"Het Gulden Vlies"**
+> (Jason & de Argonauten, met Peleus/Telamon/Laertes als latere vaders van
+> Achilles/Ajax/Odysseus, een cameo van Herakles en Orpheus; sluit af met
+> Medea's wraak in Korinthe) en Hoofdstuk 6 **"De Vloek van Thebe"** (Kadmos,
+> Oedipus & de Sfinx, De Zeven tegen Thebe, Antigone; opent met Niobe en sluit
+> af met Pentheus — samen met Medea een duister drieluik van
+> moeder/kind-tragedies, telkens net apart genoeg om niet op elkaar te
+> stapelen). Beide nieuwe hoofdstukken zijn bewust grammatica-arm (herhaling)
+> — ze vallen buiten Pallas' eigen lesnummering, dus Pallas Les 8 begint nog
+> steeds precies in Hoofdstuk 8.
+>
+> **Ronde 2 — Odysseus en Aeneas als parallelle vluchtelingen.** Beide helden
+> ontvluchten dezelfde brandende stad, en de Aeneis is voor het eerste deel
+> bewust als Odyssee-echo gebouwd, tot en met een eigen onderwereldbezoek.
+> Daarom lopen ze niet na elkaar maar **naast elkaar**, als twee lijnen binnen
+> twee gedeelde hoofdstukken (zelfde principe als Hoofdstuk 3's Io/Herakles):
+> Hoofdstuk 10 **"Vluchten uit Troje"** — geopend met het lot van de andere
+> thuiskerende strijders (de Kleine Ajax, die Poseidon en Athena straffen voor
+> zijn heiligschennis tegen Cassandra, en anderen), waarna Odysseus bij de
+> Kykloop belandt en Aeneas' vroege omzwervingen volgen (de Harpijen, Sicilië,
+> de dood van Anchises), met Baucis & Philemon en Arachne als onderweg-
+> vignetten — en Hoofdstuk 11 **"Tussen Liefde en Lot"** (Kirke, die Odysseus
+> naar de onderwereld stuurt, tegenover Dido, die Aeneas van zijn missie
+> probeert af te houden — gevolgd door beider onderwereldbezoek en aankomst).
+> De Trojaanse vrouwen zijn al verwerkt in Hoofdstuk 9; de dood van Agamemnon
+> keert terug in Hoofdstuk 12; het lot van Neoptolemos blijft vooralsnog open.
+> Na aankomst splitsen de lijnen zich weer: Hoofdstuk 12 **"Odysseus' Wraak"**
+> (Ithaka, de vrijers, de dood van Agamemnon als contrasterende thuiskomst,
+> met Hippodameia/Pelops' vloek als achtergrond) en Hoofdstuk 13 **"Het Begin
+> van Rome"** (Romulus & Remus, de Sabijnse maagdenroof als direct vervolg,
+> Tirannen en vrienden). Hoofdstuk 14 "De Stad van Athena" blijft daarnaast
+> apart gesplitst — negen Pallas-lessen (19-27) waren te veel voor één
+> hoofdstuk: Perseus & Medusa en Bellerophon & Chimaira als
+> door-anderen-verteld bewijs van Athena's mentorschap, democratie, Atalanta
+> bij de Spelen.
+>
+> **Overige `SP_MYTH_CANON`-plaatsing:** de onderwereld-zondaars (Tantalos,
+> Sisyphos, Ixion, Danaïden) horen bij Odysseus' Hades-bezoek in Hoofdstuk 11,
+> samen met Kirke/Dido; Orpheus & Eurydice en Persephone & Demeter horen bij
+> Hoofdstuk 25 "De Rivier Lethe" (Orpheus verschijnt zo twee keer — jong in
+> Hoofdstuk 5, gebroken in Hoofdstuk 25); Narcissus & Echo wordt een spiegel-/
+> geluidspuzzel in Hoofdstuk 24 "De Bibliotheek van Mnemosyne", samen met de
+> Titanenstrijd, die in de Finale terugkeert als onthulling dat Chronos zelf
+> een verslagen Titaan is. Eros & Psyche en Pygmalion horen bij de Latijnse
+> literatuur (Hoofdstuk 22-23). Atalanta, de Calydonische ever en Meleager
+> vormen samen één vault-vignet; Actaeon (bij Artemis/Diana) en Ganymedes (bij
+> het Trojaanse koningshuis) worden korte codex-asides. De Romeinse lijst:
+> Sabijnse maagdenroof (Hoofdstuk 13), Horatii & Curiatii en Lucretia
+> (Hoofdstuk 19 "Onder de Koningen"), Horatius Cocles/Mucius Scaevola/Cloelia/
+> Cincinnatus/Coriolanus/Camillus (Hoofdstuk 20 "Verdedigers van de
+> Republiek"), Regulus en Cato (Hoofdstuk 15), Spartacus en Cicero (Hoofdstuk
+> 21). Resterende B-tier-restjes (Arion, Hippolytos, Endymion & Selene,
+> Midas-uitbreiding) en Neoptolemos blijven vrij inzetbaar vault-materiaal,
+> geen vaste plek nodig.
+
 | # | Boek | Hoofdstuk | Grammatica (basis voor puzzels) |
 |---|---|---|---|
 | Proloog | — | Het Orakel van Chronos | Grieks alfabet, taalbewustzijn, eerste Latijnse woorden |
@@ -318,28 +391,33 @@ dat hoofdstuk passen.
 | 2 | I | De Werken van de Helden | Praesens, werkwoordstammen, imperativus, esse/posse |
 | 3 | I | Beloften van Goden en Mensen | Genitivus, dativus, bijstelling |
 | 4 | I | Het Labyrint van Herinneringen | Inf., voc., imperfectum, perfectum, ablativus |
-| 5 | I | Ilion in Vlammen | Imperf., aoristus, participia, A.C.I., betr. bijzinnen — **vertakking Trojaans/Grieks/Neutraal** |
-| 6 | II | De Zoon van Troje | Passief, ppp, deponentia |
-| 7 | II | Mensen Achter de Mythen | Medium, passief, participium, voornaamwoorden |
-| 8 | II | De Stad van Athena | Futurum, conjunctivus, comparativus, vraagzinnen |
-| 9 | II | Oorlog en Overwinning | Perf., fut., fut. exactum, ablativus absolutus |
-| 10 | III | De Vader van de Geschiedenis | Historische taal, bronanalyse |
-| 11 | III | De Stem van de Filosofen | Complexe zinsbouw, argumentatie |
-| 12 | III | Alexander en de Grenzen van de Wereld | Complexe werkwoorden, participia |
-| 13 | IV | De Eeuwige Stad | Conjunctivus, N.C.I., semi-deponentia |
-| 14 | IV | Caesar Schrijft Geschiedenis | Gerundium, gerundivum |
-| 15 | IV | Augustus en de Pax Romana | Literair Latijn |
-| 16 | IV | Keizers en Dichters | Verdieping naamvallen |
-| 17 | V | De Bibliotheek van Mnemosyne | Herhaling van alle grammatica |
-| 18 | V | De Rivier Lethe | Integratie Grieks & Latijn |
-| 19 (Finale) | V | Chronica Classica | Eindtoets van alle grammatica en taalvaardigheid |
+| 5 | I | Het Gulden Vlies | *Herhaling* (nom. t/m ablativus) — geen nieuwe grammatica |
+| 6 | I | De Vloek van Thebe | *Herhaling* (praesens t/m perfectum) — geen nieuwe grammatica |
+| 7 | I | De Appel der Tweedracht | *Herhaling* — bewust grammatica-arm |
+| 8 | I | De Wrok van Achilles | Imperf., sigmatische/thematische aoristus, znw medeklinkergroep, aanwijzende/pers. vnw |
+| 9 | I | Ilion in Vlammen | Comparativus/superlativus, A.C.I., znw groep 3, congruentie — **vertakking Trojaans/Grieks/Neutraal** |
+| 10 | II | Vluchten uit Troje | Medium, passief, aoristus passief; *Minerva H9:* plusquamperfectum, conjunctivus in bijzin |
+| 11 | II | Tussen Liefde en Lot | Participium, genitivus absolutus; *Minerva H10:* A.c.I. |
+| 12 | II | Odysseus' Wraak | Betrekkelijk vnw, conjunctivus, alpha-werkwoorden |
+| 13 | II | Het Begin van Rome | Passief, ppp, deponentia, betrekkelijk voornaamwoord |
+| 14 | II | De Stad van Athena | Futurum, optativus, mi-werkwoorden, stamaoristus, N.C.I. |
+| 15 | II | Oorlog en Overwinning | Perf., fut., fut. exactum, ablativus absolutus |
+| 16 | III | De Vader van de Geschiedenis | Historische taal, bronanalyse; conjunctivus praesens/perfectum |
+| 17 | III | De Stem van de Filosofen | Complexe zinsbouw, argumentatie; gerundium, genitivus subj./obj. |
+| 18 | III | Alexander en de Grenzen van de Wereld | Complexe werkwoorden, participia; gerundivum |
+| 19 | IV | Onder de Koningen | Verdieping naamvallen; conjunctivus |
+| 20 | IV | Verdedigers van de Republiek | Verdieping naamvallen; N.C.I., semi-deponentia |
+| 21 | IV | Caesar Schrijft Geschiedenis | Gerundium, gerundivum (herhaling) |
+| 22 | IV | Augustus en de Pax Romana | Literair Latijn |
+| 23 | IV | Keizers en Dichters | Verdieping naamvallen |
+| 24 | V | De Bibliotheek van Mnemosyne | Herhaling van alle grammatica |
+| 25 | V | De Rivier Lethe | Integratie Grieks & Latijn |
+| 26 (Finale) | V | Chronica Classica | Eindtoets van alle grammatica en taalvaardigheid |
 
-**`SP_MYTH_CANON`** — de S/A/B-tier-mythenlijst + de ontbrekende Romeinse
-verhalen uit de docx, bewaard als los naslagwerk (niet uitputtend toegewezen).
-Elk hoofdstuk hierboven met een `zijverhalen`-veld heeft er al een paar aan
-gekoppeld (bv. Hoofdstuk 1: Prometheus + Pandora, al in gebruik als de
-plotlijnen B/C hieronder; Hoofdstuk 4: Daidalos & Ikaros; Hoofdstuk 6: Romulus
-& Remus). De rest blijft vrij te plaatsen naarmate hoofdstukken worden gebouwd.
+**`SP_MYTH_CANON`** — de S/A/B-tier-mythenlijst + de Romeinse verhalen uit de
+docx, bewaard als los naslagwerk. Het grootste deel is inmiddels toegewezen —
+zie de canon-uitbreiding hierboven voor de volledige verdeling; wat daar niet
+genoemd is, blijft vrij inzetbaar naarmate hoofdstukken worden gebouwd.
 
 De **wereldkaart** (`SCREENS.spWorldMap`, **gebouwd**) opent mee met de
 voortgang: een locatie-pin verschijnt zodra de bijbehorende codex-entry al in
