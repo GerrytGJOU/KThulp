@@ -299,7 +299,7 @@ function spTendencyAddressPhrase(state){
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
                   "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-                  "PERSON","VOCAB","FRAGMENT"],
+                  "PERSON","VOCAB","FRAGMENT","SOUVENIR"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -356,6 +356,16 @@ const CNSParser = {
   // (Hoofdstuk 2: pas naar het Orakel zodra alle 4 Herinneringsfragmenten
   // binnen zijn), maar generiek genoeg voor latere vergelijkbare gates.
   REQUIRE_TAG_RE: /\s*\[REQUIRE:(\w+)=(\d+)\]\s*$/i,
+  // Optioneel: een keuzeregel mag ook eindigen op [DONE:vlagnaam] — markeert
+  // een keuze als "hoort bij een lijn die je kunt afronden" (zie
+  // spChoiceVisible/spChoosePath in singleplayer.js). Zodra SP_STATE.flags
+  // die vlag al op true heeft staan, toont spPlay de knop met een ✓ en
+  // navigeert een klik niet meer naar de lijn zelf (die zou anders opnieuw
+  // beginnen — het gat dat vóór 2026-07 onbeperkt herhalen van bv. Latona's
+  // lijn toeliet, met bijbehorende Clementia/Severitas-punten). Gebruikt
+  // dezelfde vlaggen die elke lijn toch al zet bij afronding (bv.
+  // "ch2_lijn_latona"), dus geen nieuwe databron nodig.
+  DONE_TAG_RE: /\s*\[DONE:(\w+)\]\s*$/i,
   parseChoices(text){
     const choices=[];
     for(const raw of text.split(/\r?\n/)){
@@ -366,19 +376,21 @@ const CNSParser = {
       if(arrowIndex===-1) continue;
       let label = withoutBullet.slice(0,arrowIndex).trim();
       const target = withoutBullet.slice(arrowIndex+2).trim();
-      let approach = null, require = null;
+      let approach = null, require = null, done = null;
       const reqM = label.match(this.REQUIRE_TAG_RE);
       if(reqM){ require = { key:reqM[1].toLowerCase(), value:+reqM[2] }; label = label.slice(0,reqM.index).trim(); }
+      const doneM = label.match(this.DONE_TAG_RE);
+      if(doneM){ done = doneM[1]; label = label.slice(0,doneM.index).trim(); }
       const tagM = label.match(this.APPROACH_TAG_RE);
       if(tagM){ approach = tagM[1].toUpperCase(); label = label.slice(0,tagM.index).trim(); }
-      choices.push({ label, target, approach, require });
+      choices.push({ label, target, approach, require, done });
     }
     return choices;
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS)]);
-const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[] });
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS)]);
+const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[] });
 
 /* ---- SPELERSTATE ---- */
 let SP_STATE = SP_EMPTY_STATE();
@@ -569,10 +581,13 @@ function spRenderLanding(){
   ${foot()}`);
 }
 
-/* ---- CODEX MEMORIAE: een oud perkamenten boek met zes tabbladen. Codex is
+/* ---- CODEX MEMORIAE: een oud perkamenten boek met zeven tabbladen. Codex is
    PER SAVESLOT, net als de wereldkaart — elke slot toont dus alleen wat DIE
    doorspeling al heeft ontdekt. Niets wordt vooruit getoond (geen
    "??"-placeholder voor wat nog moet komen — dat zou spoilen).
+   - Herinneringen (eerste/standaard-tabblad): SP_SOUVENIRS, via SOUVENIR: —
+     één tastbaar voorwerp per afgeronde verhaallijn, zie spHookSouvenir en
+     Chronica.md §7.2.1.
    - Mythologie/Geschiedenis/Grammatica: SP_CODEX_ENTRIES, ontgrendeld via de
      bestaande CODEX:-sectie (spHookCodex). Grammatica-entries mogen een
      `table` hebben (rijtjes/naamvallen), gerenderd als een echte <table>.
@@ -580,8 +595,9 @@ function spRenderLanding(){
    - Vocabulaire: SP_VOCAB_ENTRIES, via VOCAB:.
    - Afbeeldingen: SP_STATE.seenImages, automatisch bijgehouden door
      spHookSeenImage() zodra een scène met een IMAGE: wordt bezocht. ---- */
-let SP_CODEX_TAB = "mythologie";
+let SP_CODEX_TAB = "herinneringen";
 const SP_CODEX_TABS = [
+  { id:"herinneringen", nm:"Herinneringen", icon:"🏛️" },
   { id:"mythologie",   nm:"Mythologie",   icon:"⚡" },
   { id:"geschiedenis", nm:"Geschiedenis", icon:"🏺" },
   { id:"personen",     nm:"Personen",     icon:"👤" },
@@ -597,6 +613,7 @@ SCREENS.spCodex = function(){
     `<button class="codex-tab${t.id===SP_CODEX_TAB?" on":""}" onclick="spSwitchCodexTab('${t.id}')">${t.icon} ${esc(t.nm)}</button>`
   ).join("");
   const bodies = {
+    herinneringen: spCodexSouvenirsHTML,
     mythologie: ()=>spCodexEntriesHTML("mythologie", "Nog niets vastgelegd — mythen verschijnen hier zodra je ze beleeft."),
     geschiedenis: ()=>spCodexEntriesHTML("geschiedenis", "Nog niets vastgelegd — Hoofdstuk 1 is nog puur mythologie; historische bladzijden volgen bij latere hoofdstukken."),
     grammatica: ()=>spCodexEntriesHTML("grammatica", "Nog niets vastgelegd — grammatica verschijnt hier zodra een hoofdstuk erom vraagt."),
@@ -669,6 +686,27 @@ function spCodexImagesHTML(){
       <div class="codex-gallery-caption">${esc(i.titel)}</div>
     </div>`).join("")}</div>`;
 }
+/* ---- HERINNERINGEN-TAB (museum van Mnemosyne — nog ambigu voor de speler,
+   zie Chronica.md §7.2.1a): één klein voorwerp per afgeronde lijn/verhaal,
+   verzameld via de SOUVENIR:-sectie (spHookSouvenir). Zelfde
+   onerror-terugval-truc als spCombatSpriteHTML (battle-loze bazen): ontbreekt
+   het beeld, dan vervangt de <img> zichzelf door het icon-emoji i.p.v. de
+   hele tegel te verbergen (zoals spCodexImagesHTML doet) — een voorwerp
+   zonder eigen tekening moet toch zichtbaar én herkenbaar blijven. ---- */
+function spCodexSouvenirsHTML(){
+  const ids = SP_STATE.souvenirs||[];
+  if(!ids.length) return `<p class="codex-empty">Nog niets verzameld — onderweg laat het Orakel je soms een voorwerp uit het verhaal meenemen.</p>`;
+  return `<div class="codex-gallery">${ids.map(id=>{
+    const def = SP_SOUVENIRS[id]; if(!def) return "";
+    return `<div class="codex-gallery-item">
+      <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(90,58,26,.12);border-radius:6px;overflow:hidden">
+        <img src="assets/chronica/souvenirs/${esc(def.img||'')}" alt="" style="width:100%;height:100%;object-fit:contain"
+          onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${esc(def.icon)}</span>'">
+      </div>
+      <div class="codex-gallery-caption">${esc(def.caption)}</div>
+    </div>`;
+  }).join("")}</div>`;
+}
 
 /* ---- WERELDKAART: geïllustreerd paneel + onthullende locatie-pins.
    Codex is PER SAVESLOT (net als de rest van SP_STATE), dus de kaart toont
@@ -723,6 +761,15 @@ function spChoosePath(target, approach){
   if(approach) spHookApproach(approach);
   spGoCns(target);
 }
+// Klik op een reeds voltooide [DONE]-keuze (zie spPlay/CNSParser): navigeert
+// bewust NIET — enkel een korte, Orakel-achtige herinnering hoeveel lijnen
+// in dit hoofdstuk nog open staan.
+function spChoiceAlreadyDone(openCount){
+  toast("Deze herinnering ken je al",
+    openCount>0
+      ? `Er ${openCount===1?"wacht":"wachten"} nog ${openCount} ${openCount===1?"verhaal":"verhalen"} op je hulp.`
+      : "Alle verhalen van dit hoofdstuk zijn al voltooid.");
+}
 // Bepaalt of een keuze met een [REQUIRE:sleutel=getal]-tag getoond mag
 // worden (CNSParser.REQUIRE_TAG_RE). Nu alleen "fragments" (Hoofdstuk 2: de
 // weg naar het Orakel opent pas met alle 4 Herinneringsfragmenten binnen).
@@ -757,12 +804,25 @@ SCREENS.spPlay = function(){
   // in de CNS-brontekst zelf al verklappen welke knop welke kant op telt.
   let visibleChoices = scene.choices.filter(spChoiceVisible);
   if(visibleChoices.some(c=>c.approach)) visibleChoices = shuffle(visibleChoices);
+  // [DONE:vlag]-keuzes (zie CNSParser) tonen een ✓ zodra die lijn al is
+  // afgerond, en een klik erop navigeert niet meer naar de lijn zelf — dat
+  // zou hem gewoon opnieuw starten, met alle Clementia/Severitas-punten van
+  // dien. In plaats daarvan alleen een korte herinnering hoeveel lijnen nog
+  // open staan (spChoiceAlreadyDone), berekend uit dezelfde [DONE]-keuzes op
+  // dit scherm — geen aparte telling ergens anders bijhouden.
+  const doneChoices = visibleChoices.filter(c=>c.done);
+  const openCount = doneChoices.filter(c=>!SP_STATE.flags[c.done]).length;
   const choicesHTML = visibleChoices.length
-    ? visibleChoices.map(c=>`<button class="btn btn-gold btn-block lg" style="margin-top:8px" onclick="spChoosePath('${c.target}','${c.approach||""}')">${esc(SpTextResolver.resolve(c.label, SP_STATE))}</button>`).join("")
+    ? visibleChoices.map(c=>{
+        const isDone = c.done && SP_STATE.flags[c.done];
+        const label = esc(SpTextResolver.resolve(c.label, SP_STATE)) + (isDone?" ✓":"");
+        const onclick = isDone ? `spChoiceAlreadyDone(${openCount})` : `spChoosePath('${c.target}','${c.approach||""}')`;
+        return `<button class="btn ${isDone?"":"btn-gold "}btn-block lg" style="margin-top:8px${isDone?";opacity:.6":""}" onclick="${onclick}">${label}</button>`;
+      }).join("")
     : `<button class="btn btn-ghost btn-block lg" onclick="go('spSlots')">Terug naar de opslagplekken</button>`;
 
   H(brand(true)+`
-  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   <div class="panel">${spSceneImageHTML(scene)}${spChapterEyebrowHTML()}${titleHTML}${textHTML}</div>
   ${dialogueHTML}
   ${choicesHTML}
@@ -782,6 +842,7 @@ function spRunMetaHooks(meta){
   if(meta.PERSON)    spHookPerson(meta.PERSON);
   if(meta.VOCAB)     spHookVocab(meta.VOCAB);
   if(meta.FRAGMENT)  spHookFragment(meta.FRAGMENT);
+  if(meta.SOUVENIR)  spHookSouvenir(meta.SOUVENIR);
   // IMAGE wordt door spHookSeenImage(scene) verwerkt (aparte aanroep in
   // SCREENS.spPlay, want die heeft het hele scene-object nodig, niet alleen
   // de meta) — hier verder pure weergave via spSceneImageHTML(). SFX bestaat
@@ -817,6 +878,22 @@ function spAudioToggleHTML(){
   return `<button title="${muted?"Geluid aanzetten":"Geluid uitzetten"}" aria-label="${muted?"Geluid aanzetten":"Geluid uitzetten"}"
     style="flex:0 0 auto;padding:6px 10px;font-size:20px;line-height:1;background:none;border:none;cursor:pointer;color:var(--hi-bright)"
     onclick="spToggleAudioMuted()">${muted?"🔇":"🔊"}</button>`;
+}
+/* ---- "TERUG NAAR MENU" — vastgelegd 2026-07: vóór deze knop kon een speler
+   een verhaal alleen verlaten door het hoofdstuk af te ronden of Chronica
+   Classica helemaal af te sluiten. Staat nu op ELK scherm tijdens het
+   verhaal (gewone scènes, alle vier de puzzeltypes, het gevecht) en
+   navigeert naar spRenderLanding() — het per-slot tussenscherm met
+   Verdergaan/Wereldkaart/Codex Memoriae, van waaruit de opslagplekken-lijst
+   (spSlots) ook meteen weer één klik terug is. Voortgang zelf gaat nooit
+   verloren: spSaveProgress() heeft SP_STATE.node al bijgewerkt zodra de
+   speler de huidige scène binnenkwam, dus "Verdergaan" hervat precies waar
+   je was. Een lopend gevecht (SP_COMBAT) is bewust NIET session-persistent
+   (zie de toelichting bij SP_COMBAT_ENEMIES) — verlaat je een gevecht via
+   deze knop, dan begin je het bij terugkeer gewoon opnieuw, net als wanneer
+   je de app halverwege zou sluiten. ---- */
+function spBackToMenuButtonHTML(){
+  return `<button class="back" title="Terug naar menu" aria-label="Terug naar menu" onclick="spRenderLanding()">${iconSVG("shield",20,"currentColor")}</button>`;
 }
 function spPlayMusic(filename){
   if(!filename) return;
@@ -900,6 +977,23 @@ function spHookFragment(text){
   spSaveProgress({ fragments:[...existing, id] });
   const def = SP_FRAGMENTS[id];
   toast("Herinneringsfragment!", def ? `${def.icon} ${def.nm}` : id);
+}
+/* ---- HERINNERINGEN/SOUVENIRS — los van de Herinneringsfragmenten hierboven
+   (die zijn onzichtbare hoofdstuk-gates): dit zijn de TASTBARE voorwerpen die
+   de speler uit elk afgerond verhaal meeneemt, zichtbaar in de nieuwe
+   "Herinneringen"-tab van de Codex (spCodexSouvenirsHTML). Zelfde
+   comma/puntkomma/regel-gescheiden parsing als spHookCodex, al draagt in de
+   praktijk elke scène er maar één op. ---- */
+function spHookSouvenir(text){
+  const ids = text.split(/[\n,;]/).map(s=>s.trim()).filter(Boolean);
+  const existing = SP_STATE.souvenirs||[];
+  const fresh = ids.filter(id=>!existing.includes(id));
+  if(!fresh.length) return;
+  spSaveProgress({ souvenirs:[...existing, ...fresh] });
+  fresh.forEach(id=>{
+    const def = SP_SOUVENIRS[id];
+    toast("Herinnering verzameld!", def ? `${def.icon||"🏛️"} ${def.nm}` : id);
+  });
 }
 /* ---- AFBEELDINGEN-TAB: elke scène met een IMAGE:-sectie wordt automatisch
    bijgehouden (geen aparte auteurs-actie nodig) zodra de speler haar voor het
@@ -1045,7 +1139,7 @@ function spRenderGreekPuzzle(scene, puzzleId, puzzle, target){
     </div>`
   ).join("");
   H(brand(true)+`
-  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   ${spPuzzleHeaderHTML(scene)}
   <div class="panel" style="text-align:center"><div style="font-size:32px;letter-spacing:4px;margin:4px 0">${esc(puzzle.woord.grieks)}</div></div>
   <div class="panel">
@@ -1075,7 +1169,7 @@ function spRenderMCPuzzle(scene, puzzleId, puzzle, target){
     `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spCheckMCPuzzle('${puzzleId}','${target}',${i})">${esc(o)}</button>`
   ).join("");
   H(brand(true)+`
-  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   ${spPuzzleHeaderHTML(scene)}
   <div class="panel">
     <p style="font-weight:700;margin-bottom:4px">${esc(puzzle.vraag)}</p>
@@ -1097,7 +1191,7 @@ function spCheckMCPuzzle(puzzleId, target, idx){
    en spatiëring-ongevoelig vergeleken. */
 function spRenderTypedLatinPuzzle(scene, puzzleId, puzzle, target){
   H(brand(true)+`
-  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   ${spPuzzleHeaderHTML(scene)}
   <div class="panel">
     <p style="font-weight:700;margin-bottom:4px">${esc(puzzle.vraag)}</p>
@@ -1181,7 +1275,7 @@ function spNormalizeGreek(str){
 }
 function spRenderTypedGreekPuzzle(scene, puzzleId, puzzle, target){
   H(brand(true)+`
-  <div class="scrhead"><span></span><h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   ${spPuzzleHeaderHTML(scene)}
   <div class="panel">
     <p style="font-weight:700;margin-bottom:4px">${esc(puzzle.vraag)}</p>
@@ -1269,7 +1363,7 @@ SCREENS.spCombat = function(){
     `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spCombatAnswer(${i})">${esc(o)}</button>`
   ).join("");
   H(brand(true)+`
-  <div class="scrhead"><span></span><h2>Gevecht</h2>${spAudioToggleHTML()}</div>
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Gevecht</h2>${spAudioToggleHTML()}</div>
   <div class="panel" style="text-align:center">
     ${spCombatSpriteHTML(enemy)}
     <div class="eyebrow l" style="margin-top:6px">${esc(enemy.nm)}</div>
