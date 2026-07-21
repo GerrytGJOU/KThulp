@@ -389,7 +389,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS)]);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[] });
 
 /* ---- SPELERSTATE ---- */
@@ -882,7 +882,7 @@ function spAudioToggleHTML(){
 /* ---- "TERUG NAAR MENU" — vastgelegd 2026-07: vóór deze knop kon een speler
    een verhaal alleen verlaten door het hoofdstuk af te ronden of Chronica
    Classica helemaal af te sluiten. Staat nu op ELK scherm tijdens het
-   verhaal (gewone scènes, alle vier de puzzeltypes, het gevecht) en
+   verhaal (gewone scènes, alle zes de puzzeltypes, het gevecht) en
    navigeert naar spRenderLanding() — het per-slot tussenscherm met
    Verdergaan/Wereldkaart/Codex Memoriae, van waaruit de opslagplekken-lijst
    (spSlots) ook meteen weer één klik terug is. Voortgang zelf gaat nooit
@@ -1110,7 +1110,47 @@ function spHookQuest(text){
                                het systeemtoetsenbord — zie §7.7 in
                                Chronica.md voor de motivatie en de
                                normalisatieregels bij het nakijken
-                               (spNormalizeGreek). ------------ */
+                               (spNormalizeGreek).
+   - "tile-swap"             : SCHUIFPUZZEL, sinds Hoofdstuk 5 (zie Chronica.md
+                               §7.10). GEEN klassieke 15-puzzel met blanco
+                               vakje en slepen — dat is op een iPad onbetrouwbaar
+                               (drag-detectie, per ongeluk scrollen) en de
+                               bestaande regel "zichtbare labels, nooit
+                               display:none+click()" vraagt om iets even
+                               betrouwbaars als de andere knop-gebaseerde
+                               puzzels. In plaats daarvan: tik een tegel om 'm
+                               te selecteren, tik een tweede tegel om ze te
+                               verwisselen — net zo'n simpel, groot (≥44px)
+                               knop-gebaar als de rest van de puzzels. puzzle =
+                               { type:"tile-swap", vraag, tiles:[...juiste
+                               volgorde...], hint? }. De tegels worden geschud
+                               bij de eerste render van deze puzzel-poging (zie
+                               SP_TILESWAP) en blijven daarna in dezelfde volgorde
+                               staan tot de speler de puzzel oplost of naar een
+                               ANDERE puzzel navigeert — verlaat de speler de
+                               scène halverwege, dan staat de puzzel bij
+                               terugkeer nog precies zo als hij hem achterliet
+                               (geen frustrerende her-schudding, in
+                               tegenstelling tot een gevecht dat wél altijd
+                               opnieuw begint — zie de toelichting bij
+                               SP_COMBAT_ENEMIES).
+   - "matching"              : KOPPELPUZZEL, sinds Hoofdstuk 6 (zie Chronica.md
+                               §7.11). Twee kolommen knoppen; tik een knop
+                               links, tik daarna een knop rechts. Juist paar
+                               vergrendelt beide knoppen (uitgegrijsd,
+                               disabled); fout paar toont een hint en reset de
+                               selectie. puzzle = { type:"matching", vraag,
+                               pairs:[{left,right},...], hint? }. Zodra alle
+                               paren gevonden zijn, navigeert de puzzel meteen
+                               door — geen aparte "Controleren"-knop nodig,
+                               het laatste paar IS de bevestiging. SP_MATCH
+                               matcht puzzle.pairs op INDEX, niet op tekst:
+                               links en rechts worden onafhankelijk geschud
+                               voor de weergave, maar "linkerknop met
+                               pair-index i hoort bij rechterknop met
+                               pair-index i" ligt al vast in de puzzeldata,
+                               dus nakijken is simpelweg "zijn de twee getikte
+                               indices gelijk?". ------------ */
 function spRenderPuzzle(scene){
   const puzzleId = scene.meta.PUZZLE.trim();
   const puzzle = SP_PUZZLES[puzzleId];
@@ -1120,6 +1160,8 @@ function spRenderPuzzle(scene){
   if(type==="multiple-choice") return spRenderMCPuzzle(scene, puzzleId, puzzle, target);
   if(type==="typed-latin")     return spRenderTypedLatinPuzzle(scene, puzzleId, puzzle, target);
   if(type==="typed-greek")     return spRenderTypedGreekPuzzle(scene, puzzleId, puzzle, target);
+  if(type==="tile-swap")       return spRenderTileSwapPuzzle(scene, puzzleId, puzzle, target);
+  if(type==="matching")        return spRenderMatchingPuzzle(scene, puzzleId, puzzle, target);
   return spRenderGreekPuzzle(scene, puzzleId, puzzle, target);
 }
 
@@ -1294,6 +1336,114 @@ function spCheckTypedGreekPuzzle(puzzleId, target){
   const err = el("spPuzzleErr");
   if(spNormalizeGreek(raw) === spNormalizeGreek(puzzle.antwoord)) spGoCns(target);
   else if(err){ err.textContent = puzzle.hint || "Nog niet juist — let op de spiritus (᾿/῾) en probeer opnieuw."; err.style.display = ""; }
+}
+
+/* ---- SCHUIFPUZZEL — puzzle.type "tile-swap" (zie de toelichting bij
+   spRenderPuzzle hierboven). SP_TILESWAP is bewust GEEN onderdeel van
+   SP_STATE/localStorage, net als SP_COMBAT: puur voortgang binnen één
+   puzzel-poging, niet iets dat over sessies heen hoeft te overleven. */
+let SP_TILESWAP = null;
+function spRenderTileSwapPuzzle(scene, puzzleId, puzzle, target){
+  if(!SP_TILESWAP || SP_TILESWAP.puzzleId!==puzzleId){
+    SP_TILESWAP = { puzzleId, target, order: shuffle(puzzle.tiles.map((_,i)=>i)), selected:null };
+  }
+  const tilesHTML = SP_TILESWAP.order.map((tileIdx,pos)=>{
+    const sel = SP_TILESWAP.selected===pos;
+    return `<button class="btn${sel?" btn-gold":""}" style="min-width:44px;min-height:44px;padding:8px 12px;margin:3px;font-size:20px" onclick="spTileSwapTap(${pos})">${esc(puzzle.tiles[tileIdx])}</button>`;
+  }).join("");
+  H(brand(true)+`
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  ${spPuzzleHeaderHTML(scene)}
+  <div class="panel">
+    <p style="font-weight:700;margin-bottom:4px">${esc(puzzle.vraag)}</p>
+    <p class="note">Tik een tegel, tik een tweede tegel om ze te verwisselen — tot het antwoord klopt.</p>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;margin-top:8px">${tilesHTML}</div>
+    <div id="spPuzzleErr" class="note warn" style="display:none;margin-top:10px"></div>
+  </div>
+  <button class="btn btn-gold btn-block lg" onclick="spCheckTileSwapPuzzle('${puzzleId}','${target}')">Controleren</button>
+  ${foot()}`);
+}
+function spTileSwapTap(pos){
+  if(!SP_TILESWAP) return;
+  if(SP_TILESWAP.selected===null) SP_TILESWAP.selected = pos;
+  else if(SP_TILESWAP.selected===pos) SP_TILESWAP.selected = null;
+  else{
+    const o = SP_TILESWAP.order;
+    [o[SP_TILESWAP.selected], o[pos]] = [o[pos], o[SP_TILESWAP.selected]];
+    SP_TILESWAP.selected = null;
+  }
+  const scene = SP_SCENES.get(SP_STATE.node);
+  const puzzle = SP_PUZZLES[SP_TILESWAP.puzzleId];
+  spRenderTileSwapPuzzle(scene, SP_TILESWAP.puzzleId, puzzle, SP_TILESWAP.target);
+}
+function spCheckTileSwapPuzzle(puzzleId, target){
+  const puzzle = SP_PUZZLES[puzzleId];
+  const err = el("spPuzzleErr");
+  const current = SP_TILESWAP.order.map(i=>puzzle.tiles[i]).join("");
+  if(current === puzzle.tiles.join("")){ SP_TILESWAP = null; spGoCns(target); }
+  else if(err){ err.textContent = puzzle.hint || "Nog niet in de juiste volgorde — probeer opnieuw."; err.style.display = ""; }
+}
+
+/* ---- KOPPELPUZZEL — puzzle.type "matching" (zie de toelichting bij
+   spRenderPuzzle hierboven). SP_MATCH is, net als SP_TILESWAP/SP_COMBAT,
+   bewust GEEN onderdeel van SP_STATE/localStorage. */
+let SP_MATCH = null;
+function spRenderMatchingPuzzle(scene, puzzleId, puzzle, target){
+  if(!SP_MATCH || SP_MATCH.puzzleId!==puzzleId){
+    const idxs = puzzle.pairs.map((_,i)=>i);
+    SP_MATCH = { puzzleId, target, leftOrder: shuffle([...idxs]), rightOrder: shuffle([...idxs]), matched:new Set(), selected:null, error:null };
+  }
+  const colHTML = (order, side) => order.map(i=>{
+    const done = SP_MATCH.matched.has(i);
+    const sel = side==="left" && SP_MATCH.selected===i;
+    const label = side==="left" ? puzzle.pairs[i].left : puzzle.pairs[i].right;
+    return `<button class="btn${sel?" btn-gold":""}" style="display:block;width:100%;margin-bottom:6px;text-align:left${done?";opacity:.4":""}" ${done?"disabled":""} onclick="spMatchTap${side==="left"?"Left":"Right"}(${i})">${esc(label)}</button>`;
+  }).join("");
+  // Foutmelding is single-shot: spMatchTapRight zet 'm op SP_MATCH.error vlak
+  // vóór deze render (want een volledige her-render, zoals hier, zou een
+  // rechtstreeks op het DOM-element gezette tekst — het patroon van de
+  // andere vier puzzeltypes — meteen weer overschrijven). Ná het tonen wist
+  // deze render 'm meteen weer, zodat hij niet blijft hangen na de volgende
+  // (foutloze) tik.
+  const errHTML = SP_MATCH.error
+    ? `<div class="note warn" style="margin-top:10px">${esc(SP_MATCH.error)}</div>`
+    : `<div id="spPuzzleErr" class="note warn" style="display:none;margin-top:10px"></div>`;
+  SP_MATCH.error = null;
+  H(brand(true)+`
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  ${spPuzzleHeaderHTML(scene)}
+  <div class="panel">
+    <p style="font-weight:700;margin-bottom:8px">${esc(puzzle.vraag)}</p>
+    <div style="display:flex;gap:12px">
+      <div style="flex:1">${colHTML(SP_MATCH.leftOrder,"left")}</div>
+      <div style="flex:1">${colHTML(SP_MATCH.rightOrder,"right")}</div>
+    </div>
+    ${errHTML}
+  </div>
+  ${foot()}`);
+}
+function spMatchTapLeft(i){
+  if(!SP_MATCH || SP_MATCH.matched.has(i)) return;
+  SP_MATCH.selected = i;
+  spRerenderMatch();
+}
+function spMatchTapRight(i){
+  if(!SP_MATCH || SP_MATCH.matched.has(i) || SP_MATCH.selected===null) return;
+  const puzzle = SP_PUZZLES[SP_MATCH.puzzleId];
+  if(SP_MATCH.selected===i){
+    SP_MATCH.matched.add(i);
+    SP_MATCH.selected = null;
+    if(SP_MATCH.matched.size===puzzle.pairs.length){ const target=SP_MATCH.target; SP_MATCH=null; spGoCns(target); return; }
+  } else {
+    SP_MATCH.selected = null;
+    SP_MATCH.error = puzzle.hint || "Dat is niet het juiste paar — probeer opnieuw.";
+  }
+  spRerenderMatch();
+}
+function spRerenderMatch(){
+  const scene = SP_SCENES.get(SP_STATE.node);
+  const puzzle = SP_PUZZLES[SP_MATCH.puzzleId];
+  spRenderMatchingPuzzle(scene, SP_MATCH.puzzleId, puzzle, SP_MATCH.target);
 }
 
 /* ---- COMBAT-BRIDGE — zie de toelichting bij SP_COMBAT_ENEMIES

@@ -117,6 +117,21 @@ const SP_TITLES = [
     ds:"Zag Phaëthon de zonnewagen mennen, en de aarde ternauwernood gered worden van zijn val.", bonus:null },
   { id:"ch4_athena_gesprek", nm:"Kenner van het Labyrint", icon:"column", cat:"chronica", secret:true,
     ds:"Hoorde Athena's afsluitende woorden over twee beloften die niemand meer ongedaan kon maken.", bonus:null },
+  // Hoofdstuk 5 — één doorlopende tochtenlogboek-lijn i.p.v. parallelle lijnen
+  // (zie Chronica.md §7.10), dus twee titels i.p.v. drie: één voor de tocht
+  // zelf, één voor de duistere coda in Korinthe.
+  { id:"ch5_argonauten", nm:"Gezel van de Argonauten", icon:"trident", cat:"chronica", secret:true,
+    ds:"Voer mee met de Argo, van Iolcus tot Colchis, en bracht het Gulden Vlies veilig aan boord.", bonus:null },
+  { id:"ch5_medea_korinthe", nm:"Getuige van Medea's Wraak", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag jaren later, in Korinthe, hoe ver een verbroken belofte een mens kan drijven.", bonus:null },
+  // Hoofdstuk 6 — net als Hoofdstuk 5 geen hub/lijnen maar één doorlopend
+  // verhaal, ditmaal met generatiesprongen; twee titels rond de twee
+  // climaxen (de Epigonen-overwinning en Pentheus' ondergang) i.p.v. een
+  // titel per naam — dit hoofdstuk heeft simpelweg te veel namen voor dat.
+  { id:"ch6_epigonen", nm:"Getuige van de Wraak der Epigonen", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag Diomedes, tien jaar na zijn vaders dood, Thebe alsnog laten vallen.", bonus:null },
+  { id:"ch6_pentheus", nm:"Getuige van Pentheus' Ondergang", icon:"owl", cat:"chronica", secret:true,
+    ds:"Zag wat er gebeurt wanneer een sterveling weigert een nieuwe god te erkennen.", bonus:null },
 ];
 
 /* ---- CAMPAGNEKAART — Proloog + 28 hoofdstukken (5 "Boeken"), gesynchroniseerd
@@ -215,16 +230,18 @@ const SP_CAMPAIGN = [
     pallas:"— (herhaling, valt buiten de lesnummering)", minerva:"— (herhaling, valt buiten de lesnummering)",
     grammatica:"Herhaling nominativus t/m ablativus — geen nieuwe grammatica",
     gameplay:"Tochtenlogboek met vaste bemanningsleden; combat/puzzel-afwisseling zoals bij Herakles' werken",
-    personages:"Jason, Medea, Peleus, Telamon, Laertes, Herakles (cameo), Orpheus (cameo)",
+    personages:"Jason, Medea, Peleus, Telamon, Laertes, Herakles (cameo), Orpheus (cameo), Argos (cameo, scheepsbouwer), Atalanta (cameo), Kastor & Polydeukes (cameo), Meleager (cameo), Nestor (cameo), Philoktetes (cameo), Theseus (cameo), Tydeus (cameo)",
     thema:"De generatie vóór de helden die de speler al kent",
-    illustratie:"De Argo verlaat de haven, bemanning aan boord" },
+    illustratie:"De Argo verlaat de haven, bemanning aan boord",
+    zijverhalen:"Uitgebreide cameo-cast van Argonauten die later terugkeren, korte momenten i.p.v. uitgewerkte lijnen (zelfde principe als Hoofdstuk 2/3's zijpersonages): Argos (scheepsbouwer van de Argo — bewust zo gespeld i.p.v. 'Argus', om verwarring met de honderdogige bewaker Argus Panoptes uit Hoofdstuk 3 te vermijden), Atalanta (in sommige versies Argonaut, elders althans gevraagd — komt terug bij de Spelen in Hoofdstuk 14 en in het latere Calydonische-ever-vignet met Meleager), Kastor & Polydeukes (broers van Helena, relevant vanaf Hoofdstuk 7), Meleager (Argonaut — zelfde latere Calydonische-ever-vignet als Atalanta), Nestor (hier nog jong, later de stem van ervaring vóór Troje), Philoktetes (draagt hier al Herakles' boog, cruciaal voor de latere val van Troje), Theseus (de speler kent hem al uit Hoofdstuk 4 — deze tocht speelt zich af vóór zijn eigen Labyrint-avontuur, dus bewuste dramatische ironie i.p.v. foreshadowing) en Tydeus (vader van Diomedes)." },
   { id:"ch6", nr:6, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Vloek van Thebe",
     periode:"Mythisch Thebe, meerdere generaties",
     verhaal:"Kadmos sticht een stad door drakentanden in de aarde te zaaien. Generaties later worstelt zijn nageslacht met een raadsel, een vloek en een erfenis die niemand vrijwillig zou kiezen.",
     pallas:"— (herhaling, valt buiten de lesnummering)", minerva:"— (herhaling, valt buiten de lesnummering)",
     grammatica:"Herhaling praesens t/m perfectum — geen nieuwe grammatica",
-    gameplay:"Generatiesprongen binnen één hoofdstuk; het raadsel van de Sfinx als taalpuzzel",
-    personages:"Kadmos, Niobe, Oedipus, Iokaste, Eteokles, Polyneikes, Antigone, Creon, Pentheus",
+    gameplay:"Generatiesprongen binnen één hoofdstuk; het raadsel van de Sfinx als taalpuzzel; De Zeven tegen Thebe krijgt bewust TWEE golven, tien jaar uit elkaar — de vaders (Polyneikes/Eteokles' oorlog, waarin ook Tydeus sneuvelt) en daarna hun zonen, de Epigonen, die Thebe alsnog innemen — dezelfde generatiesprong-structuur als de rest van het hoofdstuk, nu ook binnen dit ene subverhaal",
+    personages:"Kadmos, Niobe, Oedipus, Iokaste, Eteokles, Polyneikes, Antigone, Creon, Pentheus, Tydeus (cameo, terugkerend uit Hoofdstuk 5 — sneuvelt hier), Diomedes (cameo)",
+    zijverhalen:"Diomedes (cameo) — zoon van Tydeus (Hoofdstuk 5), vecht tien jaar later mee bij de Epigonen om zijn vader te wreken; komt zelf later terug in de Trojaanse Oorlog-hoofdstukken",
     illustratie:"De Sfinx voor de poorten van Thebe" },
   { id:"ch7", nr:7, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Appel der Tweedracht",
     periode:"Aanloop naar de Trojaanse Oorlog",
@@ -740,6 +757,67 @@ const SP_PUZZLES = {
     vraag:"“Iuppiter fulmen ___” — Jupiter wierp de bliksem. Welke vorm van mittere (sturen, werpen) past hier, perfectum 3e persoon enkelvoud?",
     opties:["mittit","mittebat","misit","mittet"], antwoord:"misit",
     hint:"De perfectum beschrijft een voltooide, eenmalige handeling in het verleden — 'hij wierp', één keer, klaar." },
+
+  // ---- Hoofdstuk 5 — Het Gulden Vlies (herhaling nom. t/m abl., geen
+  // nieuwe grammatica — zie SP_CAMPAIGN ch5.grammatica). Vijf puzzels, één
+  // per naamval, bewust verspreid over vier verschillende puzzeltypes
+  // (inclusief het nieuwe "tile-swap") in plaats van oplopende moeilijkheid,
+  // want dit hoofdstuk bouwt geen nieuwe stof op — zie Chronica.md §7.10.
+  puzzle_ch5_nominativus: { type:"multiple-choice",
+    vraag:"Bij het afvaren wijst de stuurman iedereen zijn plaats. “Iason navem regit” — Jason stuurt het schip. Welk woord is de nominativus, het onderwerp?",
+    opties:["Iason","navem","regit"], antwoord:"Iason",
+    hint:"De nominativus voert de handeling uit — wie stuurt hier?" },
+  puzzle_ch5_accusativus: { type:"typed-latin",
+    vraag:"“Atalanta aprum prima vulnerat” — Atalanta verwondt als eerste het everzwijn. Typ het Latijnse woord dat de accusativus is, het lijdend voorwerp.",
+    antwoord:"aprum",
+    hint:"De accusativus ondergaat de handeling — wat wordt er verwond?" },
+  puzzle_ch5_genitivus: { type:"multiple-choice",
+    vraag:"“Amycus, rex ___, omnes peregrinos ad pugnam vocat” — Amycus, koning van het volk, daagt elke vreemdeling uit tot een gevecht. Welke vorm van populus (volk) past hier, genitivus enkelvoud?",
+    opties:["populi","populo","populum","populus"], antwoord:"populi",
+    hint:"Genitivus enkelvoud van een tweede-declinatie woord als populus, populi eindigt op -i." },
+  puzzle_ch5_dativus: { type:"typed-greek",
+    vraag:"Philoktetes wijdt zijn pijl toe aan de godin van de jacht. Typ met het Griekse toetsenbord de dativus enkelvoud van θεά (godin) — 'aan de godin'.",
+    antwoord:"θεᾳ",
+    hint:"De dativus enkelvoud van een eerste-declinatie woord als θεά krijgt een iota subscriptum: θεᾳ." },
+  puzzle_ch5_ablativus: { type:"tile-swap",
+    vraag:"Argos verstevigt de romp vlak voor de doorvaart. “Argus navem ___ firmat” — Argos verstevigt het schip met de hamer. Zet de tegels in de juiste volgorde voor de ablativus (het middel) van malleus (hamer).",
+    tiles:["m","a","l","l","e","o"],
+    hint:"De ablativus van middel ('waarmee?') van een tweede-declinatie woord als malleus, mallei eindigt op -o." },
+
+  // ---- Hoofdstuk 6 — De Vloek van Thebe (herhaling praesens t/m perfectum,
+  // geen nieuwe grammatica — zie SP_CAMPAIGN ch6.grammatica). Zes puzzels,
+  // verdeeld over vier types incl. het nieuwe "matching" — zie Chronica.md
+  // §7.11. Bewust GEEN naamval-puzzels dit hoofdstuk (dat was Hoofdstuk 5) —
+  // dit hoofdstuk herhaalt werkwoordstijden, geen naamvallen.
+  puzzle_ch6_praesens: { type:"multiple-choice",
+    vraag:"“Niobe multos liberos ___” — Niobe heeft veel kinderen, meer dan Latona zelf, schept ze op. Welke vorm van habere (hebben) past hier, praesens 3e persoon enkelvoud?",
+    opties:["habet","habent","habes","habetis"], antwoord:"habet",
+    hint:"Praesens 3e persoon enkelvoud van een tweede-conjugatiewerkwoord (op -ēre) eindigt op -et." },
+  puzzle_ch6_sfinx: { type:"multiple-choice",
+    vraag:"De Sfinx stelt haar raadsel: wat loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie? “___ mane quadrupes, meridie bipes, vespere tripes ambulat” — welk woord vult de zin aan?",
+    opties:["homo","canis","avis","deus"], antwoord:"homo",
+    hint:"Het antwoord op het raadsel is de mens zelf — als baby kruipt hij (vier), als volwassene loopt hij (twee), op zijn oude dag steunt hij op een stok (de 'derde poot')." },
+  puzzle_ch6_imperfectum: { type:"multiple-choice",
+    vraag:"Elk jaar zou de troon wisselen — maar toen het zover was, weigerde Eteokles telkens weer. “Eteocles regnum fratri tradere ___” — Eteokles bleef weigeren de troon aan zijn broer over te dragen. Welke vorm van recusare (weigeren) past hier, imperfectum 3e persoon enkelvoud?",
+    opties:["recusabat","recusavit","recusat","recusabit"], antwoord:"recusabat",
+    hint:"De imperfectum beschrijft een handeling die duurde of zich herhaalde — 'hij bleef weigeren', niet 'hij weigerde één keer'." },
+  puzzle_ch6_matching_tempora: { type:"matching",
+    vraag:"Koppel elke praesensvorm aan zijn perfectumvorm — dezelfde werkwoorden die je al kent uit eerdere hoofdstukken.",
+    pairs:[
+      { left:"vincit",  right:"vicit"    },
+      { left:"mittit",  right:"misit"    },
+      { left:"cadit",   right:"cecidit"  },
+      { left:"regit",   right:"rexit"    },
+    ],
+    hint:"Kijk goed — niet elke perfectumstam lijkt op de praesensstam." },
+  puzzle_ch6_perfectum: { type:"typed-latin",
+    vraag:"“Antigone fratrem contra Creontis edictum ___” — Antigone begroef haar broer, tegen Creons bevel in. Typ de perfectumvorm van sepelire (begraven), 3e persoon enkelvoud.",
+    antwoord:"sepelivit",
+    hint:"Perfectum van een vierde-conjugatiewerkwoord als sepelire krijgt vaak de uitgang -ivit." },
+  puzzle_ch6_vocativus_grieks: { type:"typed-greek",
+    vraag:"Pentheus roept, vol ongeloof, de naam van de vreemde god die zijn stad in extase heeft gebracht. Typ met het Griekse toetsenbord de vocativus van Βάκχος (Bacchus).",
+    antwoord:"Βάκχε",
+    hint:"Net als Bacchus → Bacche in het Latijn (Hoofdstuk 1), wordt Βάκχος in de vocativus Βάκχε." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -909,6 +987,39 @@ const SP_CODEX_ENTRIES = {
     tekst:"Nadat ze Theseus met haar garen door het labyrint had geholpen, kon Ariadne nooit meer veilig terugkeren naar haar vaders paleis — en toch liet Theseus haar, slapend, achter op het eiland Naxos. Daar vond Bacchus haar, de god die je al kent van koning Midas' vloek (Hoofdstuk 1): hij trouwde met haar, maakte haar onsterfelijk, en plaatste haar bruidskroon voorgoed tussen de sterren. Van alle gebroken beloften in dit hoofdstuk is het de enige die alsnog met iets goeds eindigt." },
   codex_phaethon: { cat:"mythologie", titel:"Phaëthon en de Zonnewagen",
     tekst:"Phaëthon, die aan zijn eigen goddelijke afkomst twijfelde, reisde naar het Paleis van de Zon om zijn vader Sol om bewijs te vragen. Sol, die per ongeluk al een onherroepelijke eed bij de Styx had gezworen elke wens in te willigen, kon zijn zoon niet meer weigeren toen die vroeg de zonnewagen te mogen mennen. Phaëthon verloor de wagen bijna meteen uit controle — de aarde bevroor, verschroeide, en dreigde te vergaan — tot Jupiter hem met een bliksemschicht neerhaalde om de wereld te redden. Zijn zusters, de Heliaden, weenden zo lang aan zijn graf dat ze veranderden in populieren, hun tranen verhard tot amber." },
+
+  // ---- Hoofdstuk 5 — Het Gulden Vlies (geen nieuwe grammatica-entries dit
+  // hoofdstuk, zie SP_CAMPAIGN ch5.grammatica: bewust herhaling) ----
+  codex_gulden_vlies: { cat:"mythologie", titel:"Het Gulden Vlies",
+    tekst:"Lang voor Jason geboren werd, redde een gouden ram met sprekende stem de kinderen Phrixus en Helle van een dodelijke stiefmoeder door hen door de lucht weg te dragen. Helle viel onderweg in de zee die sindsdien haar naam draagt (de Hellespont); Phrixus bereikte veilig Colchis, offerde de ram uit dankbaarheid aan Jupiter, en hing zijn gouden vacht — het Gulden Vlies — op in een heilig woud, waar koning Aeëtes het sindsdien laat bewaken door een nooit slapende draak." },
+  codex_argonauten_bemanning: { cat:"mythologie", titel:"De Bemanning van de Argo",
+    tekst:"Op Jasons oproep meldt zich een bonte verzameling helden aan boord van de Argo — sommigen al beroemd, de meesten nog jong genoeg om hun grootste verhalen nog vóór zich te hebben. Onder hen Peleus en Telamon (ooit de vaders van Achilles en Ajax), Laertes (ooit de vader van Odysseus), de sterke Herakles, de begaafde muzikant Orpheus, de scheepsbouwer Argos die de Argo zelf ontwierp, en nog veel meer — een bemanning die de latere geschiedenis van heel Griekenland in zich draagt, lang voordat iemand van hen dat kan weten." },
+  codex_atalanta_meleager: { cat:"mythologie", titel:"Atalanta en Meleager",
+    tekst:"Atalanta, opgevoed door een berin nadat haar vader haar als baby te vondeling had gelegd, is de enige vrouw aan boord van de Argo — in sommige verhalen als volwaardige Argonaut, in andere op zijn minst uitgenodigd. Meleager, prins van Calydon, vaart mee als een van de jongste helden. Hun namen zullen niet voor het laatst samen genoemd worden: ooit zullen ze ook naast elkaar tegenover een reusachtig everzwijn staan, met een veel bitterder einde dan deze tocht." },
+  codex_dioscuren: { cat:"mythologie", titel:"Kastor en Polydeukes, de Dioscuren",
+    tekst:"De tweelingbroers Kastor en Polydeukes — samen 'de Dioscuren' genoemd, 'zonen van Zeus' — vullen elkaar precies aan: Kastor is de beroemdste ruiter van Griekenland, Polydeukes de onverslaanbare bokser. Hun zuster is nog te jong om te weten hoe beroemd haar eigen naam ooit zal worden: Helena." },
+  codex_argos_schip: { cat:"mythologie", titel:"Argos en de Bouw van de Argo",
+    tekst:"Argos, zoon van Arestor, bouwde de Argo op aanwijzing van Athena zelf — het snelste en sterkste schip dat Griekenland ooit had gezien, met in de boeg zelfs een balk uit het orakelbos van Dodona verwerkt, die naar verluidt af en toe met een eigen stem kan waarschuwen. Niet te verwarren met de honderdogige Argus Panoptes uit Hoofdstuk 3 — twee heel verschillende figuren die toevallig bijna dezelfde naam droegen." },
+  codex_nestor_philoktetes: { cat:"mythologie", titel:"Nestor en Philoktetes",
+    tekst:"Nestor, hier nog een van de jongere Argonauten, is nu al bekend om een geduld en wijsheid die zijn leeftijdgenoten missen — een reputatie die hem decennia later, als oudste raadsman voor Troje, nog verder vooruit zal snellen. Philoktetes, een ongeëvenaard boogschutter, is dan allang de man die niemand kan missen: het orakel zal zeggen dat Troje nooit zal vallen zonder hem en de boog die hij ooit van Herakles zelf zal erven." },
+  codex_medea_wraak: { cat:"mythologie", titel:"Medea's Wraak in Korinthe",
+    tekst:"Jaren na de terugkeer van de Argo verlaat Jason Medea voor een politiek huwelijk met de dochter van de koning van Korinthe — ondanks alles wat Medea voor hem opgaf en verried. Medea's wraak wordt een van de duisterste verhalen uit de hele mythologie: een vergiftigd bruidsgeschenk voor de nieuwe bruid, en een verlies dat Jason voor de rest van zijn leven zal achtervolgen. Geen enkel verhaal in Chronica Classica vertelt dit lichtvaardig — het is de prijs die blijkt te horen bij een belofte die uiteindelijk toch verbroken werd, net als bij Theseus en Aegeus in Hoofdstuk 4, maar dan zonder enige verzachting." },
+
+  // ---- Hoofdstuk 6 — De Vloek van Thebe ----
+  codex_kadmos_thebe: { cat:"mythologie", titel:"Kadmos en de Stichting van Thebe",
+    tekst:"Op zoek naar zijn geschaakte zuster Europa (Hoofdstuk 3) raadpleegde Kadmos het orakel van Delphi, dat hem opdroeg de zoektocht te staken en in plaats daarvan een koe te volgen tot ze uitgeput neerviel — daar moest hij een stad stichten. Om een offer te brengen doodde hij een draak die de plaatselijke bron bewaakte, en zaaide op Athena's advies de tanden van het beest in de aarde. Uit de grond rezen gewapende krijgers op die elkaar bijna allemaal doodden; de vijf overlevenden werden de eerste Thebanen. Diezelfde tanden — de andere helft van hetzelfde monster — zouden generaties later ook koning Aeëtes van Colchis van pas komen (Hoofdstuk 5)." },
+  codex_niobe: { cat:"mythologie", titel:"Niobe's Hoogmoed",
+    tekst:"Niobe, koningin van Thebe en moeder van veertien kinderen, schepte op dat ze méér reden had om vereerd te worden dan de titanide Latona (Hoofdstuk 2), die er slechts twee had. Apollo en Diana namen wraak voor hun moeder door al Niobe's kinderen te doden, de een na de ander. Niobe, verlamd van verdriet, veranderde in steen — een rots op de berg Sipylos die, zegt de overlevering, tot op de dag van vandaag water blijft laten druppelen, als tranen die nooit ophouden." },
+  codex_oedipus: { cat:"mythologie", titel:"Oedipus en het Raadsel van de Sfinx",
+    tekst:"Een orakel voorspelde koning Laius van Thebe dat zijn eigen zoon hem ooit zou doden; uit angst liet hij de pasgeboren Oedipus te vondeling leggen, maar het kind overleefde en groeide ver van Thebe op, zonder zijn ware afkomst te kennen. Toen een orakel Oedipus zelf dezelfde voorspelling deed, vluchtte hij weg van wie hij dacht dat zijn ouders waren — en doodde onderweg, zonder het te beseffen, zijn werkelijke vader bij een geschil op de weg. Bij Thebe versloeg hij de Sfinx, een monster dat de stad gijzelde met een raadsel, en werd tot koning gekroond — waarna hij trouwde met de weduwe van de vorige koning, zijn eigen moeder Iokaste. Jaren later kwam de waarheid alsnog aan het licht; geen van beiden kon ermee verder leven." },
+  codex_zeven_tegen_thebe: { cat:"mythologie", titel:"De Zeven tegen Thebe",
+    tekst:"Oedipus' zonen Eteokles en Polyneikes spraken af de troon van Thebe jaarlijks te delen — een afspraak die Eteokles, eenmaal koning, niet nakwam. Polyneikes verzamelde zes andere champions, onder wie de Argonaut Tydeus (Hoofdstuk 5), om de stad met geweld in te nemen. De aanval mislukte: bijna alle zeven champions sneuvelden, en de broers doodden elkaar in een laatste tweegevecht. Tydeus zelf stierf op het slagveld — op het punt dat Athena hem onsterfelijkheid wilde schenken voor zijn moed, deed hij iets zo wreeds tegenover een gevallen vijand dat ze zich vol afschuw afwendde en de gave introk." },
+  codex_epigonen: { cat:"mythologie", titel:"De Epigonen",
+    tekst:"Tien jaar na de nederlaag van hun vaders trokken de zonen van de Zeven — de Epigonen, 'de nakomelingen' — opnieuw tegen Thebe op, dit keer met succes. Onder hen Diomedes, de zoon van Tydeus, die zijn vader nooit goed heeft kunnen kennen maar hem hier alsnog wreekt. Thebe viel definitief, en Diomedes' naam zou nog veel groter worden: jaren later zou hij een van de dapperste Griekse helden voor Troje worden." },
+  codex_antigone: { cat:"mythologie", titel:"Antigone's Verzet",
+    tekst:"Na de oorlog verklaarde regent Creon dat Polyneikes — die zijn eigen stad had aangevallen — als verrader nooit begraven mocht worden, een verschrikkelijke straf volgens Griekse religieuze overtuiging. Antigone, Polyneikes' zuster, trotseerde het bevel en begroef hem alsnog met de juiste rituelen, overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning. Creon liet haar levend inmetselen in een graftombe; Antigone koos zelf het moment van haar dood, in plaats van te wachten tot de tombe dat voor haar deed." },
+  codex_pentheus_bacchus: { cat:"mythologie", titel:"Pentheus en de Bacchanten",
+    tekst:"Pentheus, kleinzoon van Kadmos en koning van Thebe, weigerde de nieuwe god Bacchus te erkennen — ook al was die god, de zoon van Semele (Hoofdstuk 2), zijn eigen neef. Toen hij vermomd de extatische riten van Bacchus' vrouwelijke volgelingen probeerde te bespieden, werd hij ontdekt door de Bacchanten zelf, onder wie — in hun door de god opgewekte waanzin — zijn eigen moeder Agave. Wat er die middag op de berg gebeurde, is het duisterste verhaal dat dit hoofdstuk te vertellen heeft: toen Agave weer bij zinnen kwam, besefte ze pas wat haar handen hadden gedaan." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -1012,6 +1123,69 @@ const SP_CODEX_PERSONS = {
     intro:"De zoon die Io (Hoofdstuk 3) in Egypte baarde, inmiddels oud genoeg om zijn vriend Phaëthon te tarten diens eigen goddelijke afkomst te bewijzen." },
   tellus: { nm:"Tellus", epithet:"Belichaming van de Aarde",
     intro:"De aarde zelf, die haar stem verheft tot aan de Olympos wanneer Phaëthons wilde rit haar dreigt te verschroeien." },
+
+  // ---- Hoofdstuk 5 — Het Gulden Vlies ----
+  jason: { nm:"Jason", epithet:"Aanvoerder van de Argonauten",
+    intro:"De rechtmatige troonopvolger van Iolcus, weggehouden van de troon door zijn oom Pelias — die hem, in de hoop dat hij nooit terugkeert, op een schijnbaar onmogelijke queeste stuurt: het Gulden Vlies uit Colchis halen.",
+    full:"Jason verzamelde de dapperste helden van Griekenland, voer met hen dwars over zee naar Colchis, en kreeg het Vlies uiteindelijk alleen dankzij Medea's hulp — een schuld die hij haar, jaren later in Korinthe, met verraad zou terugbetalen." },
+  medea: { nm:"Medea", epithet:"Prinses van Colchis, tovenares",
+    intro:"De dochter van koning Aeëtes van Colchis, en een begaafde tovenares — die, tot haar eigen verrassing, op slag verliefd wordt op de vreemdeling die haar vaders Vlies komt opeisen.",
+    full:"Medea verraadde haar eigen vader om Jason te helpen: ze temperde de vuurspuwende stieren, hielp de aardgeboren krijgers tegen elkaar opzetten, en suste de nooit slapende draak in slaap. Jaren later, in Korinthe, verliet Jason haar voor een politiek huwelijk — en Medea's wraak daarop is een van de duisterste verhalen die de mythologie kent." },
+  aeetes: { nm:"Aeëtes", epithet:"Koning van Colchis",
+    intro:"De koning van het verre Colchis, aan de rand van de bekende wereld, die het Gulden Vlies al jaren bewaakt met een nooit slapende draak — en niet van plan is het zomaar aan een vreemdeling af te staan." },
+  peleus: { nm:"Peleus", epithet:"Argonaut, later koning van Phthia",
+    intro:"Een van de sterkste helden aan boord van de Argo — de latere geschiedenis kent hem vooral als de vader van een zoon die nog geboren moet worden: Achilles." },
+  telamon: { nm:"Telamon", epithet:"Argonaut, later koning van Salamis",
+    intro:"Peleus' trouwe metgezel aan boord van de Argo, en de latere vader van een andere naam die de speler nog zal leren kennen: Ajax." },
+  laertes: { nm:"Laërtes", epithet:"Argonaut, later koning van Ithaka",
+    intro:"Een kalme, betrouwbare aanwezigheid aan boord — en de latere vader van de sluwste held die Griekenland ooit zal voortbrengen: Odysseus." },
+  argos: { nm:"Argos", epithet:"Scheepsbouwer van de Argo",
+    intro:"De bouwmeester die de Argo zelf ontwierp, op aanwijzing van Athena — niet te verwarren met de honderdogige bewaker Argus Panoptes uit Hoofdstuk 3.",
+    full:"Argos kent elke plank en elke naad van zijn eigen schip zo goed dat hij het, waar nodig, ook onderweg weer weet te repareren — inclusief de balk uit het orakelbos van Dodona die hij bewust in de boeg liet verwerken." },
+  atalanta: { nm:"Atalanta", epithet:"Jaagster, snelste sterveling van Griekenland",
+    intro:"Een jaagster, opgevoed door een berin nadat haar vader haar als baby te vondeling legde omdat hij een zoon wilde — inmiddels de snelste en scherpste boogschutter aan boord van de Argo." },
+  meleager: { nm:"Meleager", epithet:"Prins van Calydon",
+    intro:"De jonge prins van Calydon, een van de gretigste helden aan boord — zijn naam zal, samen met die van Atalanta, ooit nog veel bekender worden bij een heel ander everzwijn dan dit." },
+  kastor_polydeukes: { nm:"Kastor en Polydeukes", introNm:"De Dioscuren", epithet:"De Dioscuren, tweelingzonen van Zeus/Leda",
+    intro:"Een onafscheidelijk tweetal aan boord: Kastor de beste ruiter van Griekenland, Polydeukes de onverslaanbare bokser — hun zuster is nog te jong om te weten hoe beroemd haar naam ooit zal worden.",
+    full:"Kastor en Polydeukes vullen elkaar precies aan zoals ze dat hun hele leven zullen blijven doen — de een te paard, de ander met de vuisten. Hun zuster, nu nog een kind in Sparta, heet Helena." },
+  nestor: { nm:"Nestor", epithet:"Jonge Argonaut, later raadsman voor Troje",
+    intro:"Een van de jongere helden aan boord, nu al opvallend geduldig en verstandig voor zijn leeftijd — een reputatie die hem decennia later, als oudste raadsman voor Troje, nog veel verder vooruit zal snellen." },
+  philoktetes: { nm:"Philoktetes", epithet:"Ongeëvenaard boogschutter",
+    intro:"Een jonge boogschutter met een precisie die zelfs op deze tocht al opvalt — pas veel later zal blijken hoe onmisbaar die precisie ooit wordt, met een boog die hij dan van Herakles zelf zal hebben geërfd." },
+  tydeus: { nm:"Tydeus", epithet:"Argonaut, vader van Diomedes",
+    intro:"Een korte lont en een nog kortere twijfel — Tydeus is de eerste die zijn zwaard trekt en de laatste die er spijt van heeft. Zijn zoon Diomedes zal ooit net zo onstuimig blijken." },
+  orpheus: { nm:"Orpheus", epithet:"Muzikant, zoon van een Muze",
+    intro:"Een muzikant wiens lier en stem, naar men zegt, zelfs bomen en rotsen tot bewegen kunnen brengen — aan boord van de Argo houdt zijn spel de riemslag gelijk en de gemoederen kalm." },
+
+  // ---- Hoofdstuk 6 — De Vloek van Thebe ----
+  kadmos: { nm:"Kadmos", epithet:"Stichter van Thebe",
+    intro:"Een Fenicische prins, op zoek naar zijn geschaakte zuster Europa (je kent haar al uit Hoofdstuk 3), die de zoektocht opgeeft op advies van het orakel van Delphi en in plaats daarvan een eigen stad sticht: Thebe.",
+    full:"Kadmos doodde een draak die een heilige bron bewaakte en zaaide, op Athena's advies, de tanden van het beest in de aarde — daaruit rezen gewapende krijgers op die elkaar bijna allemaal doodden, op vijf na, die met hem de eerste inwoners van Thebe werden. Dezelfde soort tanden die, generaties later, ver naar het oosten in Colchis, ook koning Aeëtes zou gebruiken." },
+  niobe: { nm:"Niobe", epithet:"Koningin van Thebe",
+    intro:"De trotse koningin van Thebe, moeder van veertien kinderen, die geen enkele reden ziet om zich klein te houden voor wie dan ook — zelfs niet voor een godin.",
+    full:"Niobe schepte op dat ze, met veertien kinderen tegenover Latona's twee, de betere moeder was — en eiste dat de Thebanen hun offers aan Latona staakten. Apollo en Diana (Hoofdstuk 2) doodden uit wraak al haar kinderen, één voor één. Niobe, verstard van verdriet, veranderde in steen — een rots die, zegt men, tot op de dag van vandaag nog water laat druppelen, als tranen die nooit ophouden." },
+  laius: { nm:"Laius", epithet:"Koning van Thebe, vader van Oedipus",
+    intro:"Een koning die een orakel raadpleegt over zijn ongeboren zoon, en een antwoord krijgt dat hem voorgoed zal achtervolgen: die zoon zal hem ooit doden." },
+  oedipus: { nm:"Oedipus", epithet:"Koning van Thebe, oplosser van het raadsel van de Sfinx",
+    intro:"Een vondeling, opgevoed ver van Thebe zonder te weten wie zijn werkelijke ouders zijn — tot een orakel ook hem een verschrikkelijke voorspelling doet, en hij alles op alles zet om die te ontlopen.",
+    full:"Op de vlucht voor een profetie die hij niet kon navolgen zonder haar te vervullen, doodde Oedipus zonder het te weten zijn eigen vader Laius bij een geschil op de weg, loste hij het raadsel van de Sfinx op en werd koning van Thebe — en trouwde met de weduwe van de vorige koning, zonder te beseffen dat het zijn eigen moeder was. Toen de waarheid jaren later aan het licht kwam, kon geen van beiden ermee verder leven." },
+  iokaste: { nm:"Iokaste", epithet:"Koningin van Thebe",
+    intro:"De weduwe van koning Laius, die haar stad na de Sfinx eindelijk weer bevrijd ziet — en hertrouwt met de vreemdeling die dat voor elkaar kreeg, zonder enig vermoeden wie hij werkelijk is." },
+  eteokles: { nm:"Eteokles", epithet:"Koning van Thebe, zoon van Oedipus",
+    intro:"De oudste zoon van Oedipus, die met zijn broer Polyneikes afspreekt de troon van Thebe jaarlijks te delen — een afspraak die hij, eenmaal koning, niet van plan is na te komen." },
+  polyneikes: { nm:"Polyneikes", epithet:"Verbannen prins van Thebe",
+    intro:"Oedipus' andere zoon, verbannen uit zijn eigen stad zodra zijn broer weigert de troon na een jaar weer af te staan — en vastbesloten die met geweld terug te eisen." },
+  antigone: { nm:"Antigone", epithet:"Prinses van Thebe, dochter van Oedipus",
+    intro:"Oedipus' dochter, die weigert te aanvaarden dat haar eigen broer onbegraven mag blijven liggen — zelfs als dat weigeren haar het leven kan kosten.",
+    full:"Tegen het uitdrukkelijke bevel van koning Creon in begroef Antigone haar broer Polyneikes met de juiste rituelen, uit overtuiging dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning. Ze werd ervoor levend ingemetseld — en koos zelf het moment van haar dood, in plaats van te wachten tot de tombe dat voor haar deed." },
+  creon: { nm:"Creon", epithet:"Regent van Thebe",
+    intro:"Iokaste's broer, die na de wederzijdse ondergang van Eteokles en Polyneikes de troon van Thebe overneemt — en meteen een bevel uitvaardigt dat het hele koninkrijk zal verscheuren." },
+  diomedes: { nm:"Diomedes", epithet:"Zoon van Tydeus, latere held van Troje",
+    intro:"De zoon van Tydeus (Hoofdstuk 5), die tien jaar na zijn vaders dood zelf oud genoeg is om mee te trekken tegen Thebe — en net zo onstuimig blijkt als de vader die hij amper heeft gekend." },
+  pentheus: { nm:"Pentheus", epithet:"Koning van Thebe, kleinzoon van Kadmos",
+    intro:"Kadmos' kleinzoon en de huidige koning van Thebe, die weigert een vreemde nieuwe god te erkennen — ook al is die god, zoals hij niet weet te verhinderen, zijn eigen neef.",
+    full:"Pentheus verzette zich fel tegen de verering van Bacchus (de zoon van Semele, Hoofdstuk 2) en probeerde de extatische riten van diens vrouwelijke volgelingen, de Bacchanten, met geweld te onderdrukken. Vermomd bespiedde hij hun rituelen op de berg — en werd ontdekt door de vrouwen zelf, onder wie, in hun goddelijk opgewekte waanzin, zijn eigen moeder Agave." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -1076,6 +1250,10 @@ const SP_SOUVENIRS = {
     caption:"Het laatste stukje van de draad waarmee Theseus het Labyrint van Kreta weer uit vond." },
   souvenir_phaethon: { nm:"Een Druppel Amber", icon:"🟠", img:"souvenir_phaethon.png",
     caption:"Een druppel amber, ooit een traan van een van de Heliaden om Phaëthon." },
+  souvenir_argonauten: { nm:"Een Schilfer van het Gulden Vlies", icon:"🐑", img:"souvenir_argonauten.png",
+    caption:"Een klein, gouden schilfertje van het Vlies dat de Argo helemaal naar Colchis en terug voerde." },
+  souvenir_thebe: { nm:"Een Verstenen Traan", icon:"🪨", img:"souvenir_thebe.png",
+    caption:"Een druppel water, hard geworden tot steen, van de rots waarin Niobe voor altijd blijft wenen." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -1139,6 +1317,16 @@ const SP_COMBAT_ENEMIES = {
   // ---- Hoofdstuk 4, Lijn Theseus ----
   minotaurus: { nm:"De Minotaurus", icon:"🐃", img:"assets/bosses/minotaurus.png", hp:65,
     intro:"Half mens, half stier — het gevolg van een oude, gebroken belofte van koning Minos — al negen jaar gevoed met Atheens offervlees, en vandaag voor het eerst tegenover iemand die niet van plan is zich te laten offeren." },
+
+  // ---- Hoofdstuk 5 — Het Gulden Vlies ----
+  amycus: { nm:"Amycus", icon:"🥊", img:"assets/bosses/amycus.png", hp:55,
+    intro:"De reusachtige koning van de Bebryciërs, die elke vreemdeling die aan land komt verplicht tot een bokswedstrijd daagt — een uitdaging die tot nu toe niemand heeft overleefd." },
+  drakon_vlies: { nm:"De Draak van Colchis", icon:"🐉", img:"assets/bosses/drakon_vlies.png", hp:75,
+    intro:"Een nooit slapende draak, al jaren opgerold rond de boom waar het Gulden Vlies hangt — koning Aeëtes' laatste en zwaarste verdediging." },
+
+  // ---- Hoofdstuk 6 — De Vloek van Thebe ----
+  laodamas: { nm:"Laodamas", icon:"🛡️", img:"assets/bosses/laodamas.png", hp:60,
+    intro:"De zoon van Eteokles en de laatste verdediger van Thebe's poorten — vastbesloten zijn vaders stad niet te verliezen aan de zonen van de mannen die zijn vader ooit versloeg." },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -1205,6 +1393,27 @@ const SP_VOCAB_ENTRIES = {
   latijn_soror:       { taal:"latijn", woord:"soror, sororis", betekenis:"zuster" },
   latijn_lacrima:     { taal:"latijn", woord:"lacrima, lacrimae", betekenis:"traan" },
   latijn_cadere:      { taal:"latijn", woord:"cadere (cadit)", betekenis:"vallen" },
+
+  // ---- Hoofdstuk 5 — Het Gulden Vlies ----
+  latijn_navis:     { taal:"latijn", woord:"navis, navis", betekenis:"schip" },
+  latijn_mare:      { taal:"latijn", woord:"mare, maris", betekenis:"zee" },
+  latijn_vellus:    { taal:"latijn", woord:"vellus, velleris", betekenis:"vacht, vlies" },
+  latijn_draco:     { taal:"latijn", woord:"draco, draconis", betekenis:"draak" },
+  latijn_populus:   { taal:"latijn", woord:"populus, populi", betekenis:"volk" },
+  latijn_malleus:   { taal:"latijn", woord:"malleus, mallei", betekenis:"hamer" },
+  latijn_aper:      { taal:"latijn", woord:"aper, apri", betekenis:"everzwijn" },
+  latijn_regit:     { taal:"latijn", woord:"regere (regit)", betekenis:"sturen, besturen, regeren" },
+  latijn_vulnerat:  { taal:"latijn", woord:"vulnerare (vulnerat)", betekenis:"verwonden" },
+  grieks_toxon:     { taal:"grieks", woord:"τόξον", transcript:"tóxon", betekenis:"boog" },
+
+  // ---- Hoofdstuk 6 — De Vloek van Thebe ----
+  latijn_habere:    { taal:"latijn", woord:"habere (habet)", betekenis:"hebben" },
+  latijn_recusare:  { taal:"latijn", woord:"recusare (recusat)", betekenis:"weigeren" },
+  latijn_sepelire:  { taal:"latijn", woord:"sepelire (sepelivit)", betekenis:"begraven" },
+  latijn_regnum:    { taal:"latijn", woord:"regnum, regni", betekenis:"koninkrijk" },
+  latijn_frater:    { taal:"latijn", woord:"frater, fratris", betekenis:"broer" },
+  latijn_quadrupes: { taal:"latijn", woord:"quadrupes, quadrupedis", betekenis:"viervoetig" },
+  grieks_bakchos:   { taal:"grieks", woord:"Βάκχος", transcript:"Bákchos", betekenis:"Bacchus (bijnaam van Dionysos)" },
 };
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -1244,6 +1453,12 @@ const SP_AVATAR_STORY_UNLOCKS = {
   // mantel en heeft zijn oude harnas niet meer nodig — hij geeft het aan de
   // (voor de rest van het verhaal onzichtbare) speler.
   "armor:licht":  { flag:"herakles_harnas" },
+  // Hoofdstuk 5: bij vertrek uit Iolcus krijgt de hele bemanning van de Argo
+  // (dus ook de speler) een standaard reisharnas én een bandana tegen zon en
+  // zeewind — één FLAG voor beide, want het is letterlijk hetzelfde moment
+  // (zie Chronica.md §5.1 equip-routekaart).
+  "armor:middel": { flag:"ch5_bemanning_uitrusting" },
+  "helm:bandana": { flag:"ch5_bemanning_uitrusting" },
 };
 
 /* ---- PROLOOG: "DE BOER VAN LATIUM" (scène-ID's PRO_###) ----
@@ -1312,7 +1527,11 @@ TITLE:
 Twijfel
 
 TEXT:
-Je laat de kist waar ze is en loopt terug naar het dorp, de ploeg achter je aan. Maar de hele dag, bij elke voor die je trekt, dwaalt je gedachte terug naar dat donkere hout in de aarde — en naar wat je daar misschien hebt laten liggen.
+Je laat de kist waar ze is en loopt terug naar het dorp, de ploeg achter je aan. Maar de hele dag, bij elke voor die je trekt, dwaalt je gedachte terug naar dat donkere hout in de aarde — en naar wat je daar misschien hebt laten liggen. Tegen de avond geef je het op: je kunt het niet laten rusten.
+
+CHOICES:
+
+* Keer terug naar het veld en graaf de kist alsnog open -> PRO_003
 
 END
 
@@ -4789,5 +5008,1193 @@ Het Einde van Hoofdstuk 4
 TEXT:
 "Hoofdstuk 5 wacht al ergens verderop," zegt de stem, "waar geen labyrint meer op je wacht, maar een schip vol helden — en het begin van een tocht naar het Gulden Vlies." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: uitweg, en overmoed.
 
+CHOICES:
+
+* Stap door de poort -> CH5_000
+
 END
 `.trim();
+
+/* ---- HOOFDSTUK 5 — "Het Gulden Vlies" (SP_CAMPAIGN ch5). Bewust ANDERE
+   structuur dan Hoofdstuk 2/3/4: geen hub met parallelle, zelf te kiezen
+   lijnen, maar één doorlopend TOCHTENLOGBOEK (zie SP_CAMPAIGN
+   ch5.gameplay) — de speler volgt de Argo van stop tot stop. Geen
+   Herinneringsfragment-gate dan ook (geen lijnen om te "voltooien"), en
+   geen nieuwe grammatica (herhaling nom. t/m abl., zie SP_CAMPAIGN
+   ch5.grammatica) — dus ook geen nieuwe codex_grammatica_ch5_*-entries.
+
+   NEGEN CAMEO-CLUSTERS langs de route (zie Chronica.md §7.10 voor de
+   volledige redenering): Theseus (herkenning, dramatische ironie — de
+   speler kent zijn Labyrint-verhaal al uit Hoofdstuk 4), Tydeus (temperament),
+   Atalanta & Meleager samen bij een zwijnenjacht op Cyzicus (voorecho van
+   hun latere, veel duisterdere Calydonische ever), Kastor & Polydeukes samen
+   bij de bokswedstrijd tegen Amycus, Herakles & Hylas op Mysië (bestaand
+   canoniek moment), Argos bij de Symplegades, Orpheus & Tydeus samen bij een
+   sussend muziekmoment, en Nestor & Philoktetes samen vlak voor Colchis.
+
+   "ANDER PERSPECTIEF, ZELFDE INHOUD" (2026-07, vastgelegd na gesprek met de
+   auteur): bij Cyzicus mag de speler kiezen MET WIE ze meekijkt tijdens de
+   jacht (Atalanta of Meleager) — dat verandert alleen de vertelde invalshoek
+   (CH5_008A/CH5_008B), niet de uitkomst: beide keuzes voeren terug naar
+   dezelfde volgende scène (CH5_009) en de speler ontmoet linksom of rechtsom
+   sowieso beide personages. Bewust GEEN blijvend gemiste content (zoals bij
+   Hoofdstuk 1-4's lijnen, waar je een lijn ook daadwerkelijk kunt missen in
+   één playthrough) — dat zou het bestaande "je ziet alles binnen één
+   playthrough"-model van dit spel doorbreken, en de auteur koos daar bewust
+   niet voor.
+
+   NIEUW PUZZELTYPE "tile-swap" (schuifpuzzel, zie spRenderTileSwapPuzzle in
+   singleplayer.js) gebruikt bij CH5_017 (ablativus, bij Argos/de Symplegades)
+   — verder een mix van alle vijf puzzeltypes over de vijf naamvallen heen.
+
+   TWEE Combat-bridge-gevechten: Amycus (CH5_013) en de Draak van Colchis
+   (CH5_026) — de klassieke "Medea sust de draak in slaap"-versie van het
+   verhaal bestaat naast oudere afbeeldingen waarin Jason wél met het beest
+   vecht (sommige antieke vaasschilderingen tonen hem zelfs uit de bek van de
+   draak tevoorschijn komend); CH5_026 combineert beide: Medea's gezang
+   kalmeert het beest genoeg om dichterbij te komen, maar het schrikt alsnog
+   wakker voor Jason het Vlies kan losmaken.
+
+   MEDEA'S WRAAK IN KORINTHE (CH5_029/CH5_EINDE): een van de duisterste
+   verhalen uit de klassieke mythologie (Medea doodt, in haar wraak op Jason,
+   uiteindelijk ook hun eigen kinderen). Chronica.md noemt dit bewust een
+   "duister drieluik" samen met Niobe en Pentheus (Hoofdstuk 6) — hier verteld
+   met dezelfde terughoudendheid als Aegeus' zelfmoord in Hoofdstuk 4: het
+   gebeuren wordt nooit ontkend of vergoelijkt, maar ook nooit grafisch
+   uitgesponnen. Geen COMBAT/PUZZLE op dit moment — dit hoofdstuk eindigt,
+   net als Hoofdstuk 4, op stilte in plaats van een beproeving.
+
+   EQUIP: CH5_006 (vertrek uit Iolcus) zet de FLAG "ch5_bemanning_uitrusting",
+   die zowel armor:middel als helm:bandana ontgrendelt (zie
+   SP_AVATAR_STORY_UNLOCKS) — Chronica.md §5.1 equip-routekaart, "uitgedeeld
+   aan de hele bemanning bij vertrek". ---- */
+const SP_CH5_CNS = `
+=== SCENE: CH5_000 ===
+
+TITLE:
+Het Gulden Vlies
+
+TEXT:
+"Dit hoofdstuk," zegt de Boodschapper, "is geen labyrint en geen paleis — het is een schip." Ze wijst naar een scheur in het licht die groter is dan alle voorgaande, alsof hij een hele zee moet doorlaten in plaats van één verhaal. "Volg Jason en zijn bemanning op hun tocht naar Colchis, aan de rand van de bekende wereld, waar een Vlies van goud hangt dat niemand ooit eerder heeft weten te bemachtigen."
+
+Athena voegt eraan toe, zachter dan anders: "Let deze keer goed op wie er nog meer aan boord staat. Sommige namen ken je al. De meeste ken je nog niet — maar dat komt nog."
+
+VOCAB:
+latijn_navis, latijn_mare, latijn_vellus, latijn_draco, latijn_populus, latijn_malleus, latijn_aper, latijn_regit, latijn_vulnerat, grieks_toxon
+
+CODEX:
+codex_gulden_vlies
+
+CHOICES:
+
+* Volg Jason naar de haven van Iolcus -> CH5_001
+
+END
+
+=== SCENE: CH5_001 ===
+
+TITLE:
+De Uitdaging van Pelias
+
+TEXT:
+Iolcus, aan de voet van de Pelionberg, is de stad die Jason rechtens toebehoort — zijn oom Pelias hield de troon vast nadat hij Jasons vader had verdreven, en verwachtte niet dat de rechtmatige erfgenaam ooit zou terugkeren om hem op te eisen. Toen Jason dat toch deed, verzon Pelias meteen een uitweg die op een gunst leek en een doodvonnis was: haal het Gulden Vlies terug uit Colchis, en de troon is voor jou.
+
+Niemand is ooit teruggekeerd uit Colchis met het Vlies. Jason, jong en onverschrokken genoeg om dat geen reden te vinden om te weigeren, laat de oproep alvast door heel Griekenland gaan: wie durft mee te varen?
+
+PERSON:
+jason:intro
+
+CHOICES:
+
+* Kijk wie er allemaal op die oproep afkomen -> CH5_002
+
+END
+
+=== SCENE: CH5_002 ===
+
+TITLE:
+De Bemanning van de Argo
+
+TEXT:
+Binnen een paar weken ligt de haven van Iolcus vol met de beroemdste namen van Griekenland — allemaal aangetrokken door hetzelfde onmogelijke verhaal. Peleus en Telamon, twee onafscheidelijke strijdmakkers, zijn er als eersten, breed grijnzend om niets anders dan het vooruitzicht van een nieuw avontuur. Laertes, rustiger dan de rest, monstert het schip van boeg tot achtersteven voor hij ook maar één voet aan boord zet — alsof hij precies wil weten waar hij aan begint.
+
+Bij het schip zelf staat de man die het heeft gebouwd: Argos, zoon van Arestor, die — op aanwijzing van Athena zelf, zegt men — een balk uit het orakelbos van Dodona in de boeg heeft verwerkt. "Ze waarschuwt weleens," zegt hij droog, als iemand ernaar vraagt, "maar nooit op tijd om nog iets te kunnen doen met de waarschuwing."
+
+CODEX:
+codex_argonauten_bemanning
+
+PERSON:
+peleus:intro, telamon:intro, laertes:intro, argos:intro
+
+CHOICES:
+
+* Kijk wie er nog meer aan boord stapt -> CH5_003
+
+END
+
+=== SCENE: CH5_003 ===
+
+TITLE:
+Een Bekend Gezicht
+
+TEXT:
+Tussen de nieuwkomers valt één gezicht je meteen op — niet omdat hij opvalt tussen al die andere helden, maar omdat je hem al kent. Theseus, inmiddels weer terug in Athene na Kreta, meldt zich aan voor nóg een tocht voor hij zelf koning wordt. Hij loopt met dezelfde vastberadenheid het schip op die je je nog herinnert uit het Labyrint — maar jij weet iets wat hij hier, op dit moment, nog niet weet: wat die vastberadenheid hem straks, met zijn vader, zal kosten.
+
+Hij groet je kort, zonder enig vermoeden dat je zijn hele verhaal al hebt gezien — het verhaal dat voor hem, hier op de kade van Iolcus, nog moet beginnen.
+
+CHOICES:
+
+* Zoek in zijn ogen naar een spoor van wat hij nog gaat vergeten [CLEMENTIA] -> CH5_004
+* Bekijk hem nuchter als gewoon nog een bemanningslid, niets meer [SEVERITAS] -> CH5_004
+* Laat het vreemde gevoel van iets-weten-wat-hij-niet-weet gewoon op je inwerken [NEUTRAL] -> CH5_004
+
+END
+
+=== SCENE: CH5_004 ===
+
+TITLE:
+Een Korte Lont
+
+TEXT:
+Niet iedereen aan boord is even geduldig. Tydeus, een gedrongen krijger met een stem die harder klinkt dan nodig, is nog geen uur aan boord of hij heeft al ruzie met een roeier over wie welke plaats krijgt — zijn hand ligt al op zijn zwaardgreep voor de ander goed en wel iets heeft kunnen terugzeggen.
+
+Jason sust het meningsverschil met een paar korte woorden, maar de blik die Tydeus achterlaat, maakt duidelijk dat dit niet de laatste keer zal zijn. "Die man," mompelt iemand naast je, "trekt sneller zijn zwaard dan zijn adem."
+
+PERSON:
+tydeus:intro
+
+CHOICES:
+
+* Kijk hoe de tocht wordt voorbereid -> CH5_005
+
+END
+
+=== SCENE: CH5_005 ===
+
+TITLE:
+De Stuurman Wijst de Plaatsen
+
+TEXT:
+Vlak voor het vertrek loopt de stuurman langs elke bank om te bepalen wie waar roeit — een kwestie van kracht, gewicht en geduld, niet van eer. Boven het geroezemoes van tachtig stemmen probeert Jason zelf orde te scheppen, in het Latijn dat hij van zijn leermeester Chiron heeft geleerd.
+
+PUZZLE:
+puzzle_ch5_nominativus
+
+CHOICES:
+
+* Vaar uit Iolcus weg -> CH5_006
+
+END
+
+=== SCENE: CH5_006 ===
+
+TITLE:
+Het Vertrek
+
+TEXT:
+Vlak voor de Argo de haven uit vaart, deelt Argos uit wat er nog in het ruim lag opgeslagen: voor de hele bemanning — ook voor jou — een eenvoudig reisharnas en een hoofddoek tegen de zon en de zoute wind die de komende weken niet zullen ophouden. "Niets moois," zegt hij, "maar het houdt je droog en het houdt je koel. Meer heb je op deze tocht niet nodig."
+
+Achter de Argo verdwijnt Iolcus langzaam in de nevel, en voor haar strekt zich een zee uit die verder gaat dan de meesten aan boord ooit hebben gevaren.
+
+FLAG:
+ch5_bemanning_uitrusting=true
+
+CHOICES:
+
+* Vaar de open zee op -> CH5_007
+
+END
+
+=== SCENE: CH5_007 ===
+
+TITLE:
+Cyzicus
+
+TEXT:
+Na de eerste dagen op zee meert de Argo aan bij het eiland Cyzicus, waar de plaatselijke koning de bemanning hartelijk ontvangt — op voorwaarde dat ze eerst een probleem voor hem oplossen. Een reusachtig everzwijn huist op de berghelling boven de stad en verscheurt al weken alles wat de jagers erop afsturen.
+
+Twee van de jongste helden aan boord melden zich meteen: Atalanta, opgevoed door een berin en de scherpste jaagster van heel Griekenland, en Meleager, de jonge prins van Calydon, net zo gretig als zij. Ze kennen elkaar amper, maar de blik die ze wisselen is er meteen een van wedijver — en van iets dat verdacht veel op vriendschap lijkt.
+
+PERSON:
+atalanta:intro, meleager:intro
+
+CHOICES:
+
+* Kijk wie het everzwijn het eerst weet te vinden -> CH5_008
+
+END
+
+=== SCENE: CH5_008 ===
+
+TITLE:
+Met Wie Kijk Je Mee?
+
+TEXT:
+De jacht splitst zich al snel in twee groepen die elk hun eigen kant van de berghelling nemen — Atalanta stil en geduldig door het kreupelhout, Meleager luidruchtiger, met een groep andere Argonauten in zijn kielzog. Je kunt niet allebei tegelijk volgen.
+
+CHOICES:
+
+* Volg Atalanta, die op haar eigen spoor jaagt -> CH5_008A
+* Volg Meleager, die met de groep meejaagt -> CH5_008B
+
+END
+
+=== SCENE: CH5_008A ===
+
+TITLE:
+Atalanta's Spoor
+
+TEXT:
+Atalanta beweegt zich bijna geluidloos tussen de struiken, haar boog al gespannen voor je het dier zelf ziet. Ze leest de grond zoals anderen een geschreven tekst lezen — een omgewoelde wortel hier, een afgebroken tak daar — en is het everzwijn al drie keer voorbij zijn eigen spoor te slim af voor de rest van de jacht haar bijbenen.
+
+Vlak voordat het beest tussen de rotsen opduikt, fluistert ze, meer tegen zichzelf dan tegen jou: "Wie het eerst raakt, telt vandaag niet. Wie het eerst ziet, wel."
+
+CHOICES:
+
+* Kijk hoe de jacht samenkomt -> CH5_009
+
+END
+
+=== SCENE: CH5_008B ===
+
+TITLE:
+Meleagers Groep
+
+TEXT:
+Meleager jaagt luider, met meer mensen om zich heen, meer geroep en meer risico — maar ook met een aanstekelijk soort moed die de rest van de groep meesleept. Waar Atalanta het spoor leest, leest hij vooral de stemming: wie moe wordt, wie te dichtbij komt, wie een aanmoediging nodig heeft.
+
+"Het gaat niet om wie het dier velt," roept hij naar de anderen, half lachend, half serieus, terwijl ze de laatste helling op klauteren. "Het gaat om wie het overleeft om het verhaal te vertellen."
+
+CHOICES:
+
+* Kijk hoe de jacht samenkomt -> CH5_009
+
+END
+
+=== SCENE: CH5_009 ===
+
+TITLE:
+Het Everzwijn
+
+TEXT:
+Beide groepen drijven het everzwijn uiteindelijk naar dezelfde kloof, waar het geen kant meer op kan. Atalanta is de eerste die raak schiet — een pijl diep in de flank van het dier, genoeg om het te vertragen zonder het meteen te doden. Meleager, die als laatste toehapt, velt het definitief.
+
+Geen van beiden claimt de eer alleen. "Zonder jouw pijl had ik hem nooit ingehaald," zegt Meleager, en Atalanta knikt, voor het eerst die dag zonder een spoor van wedijver in haar blik.
+
+PUZZLE:
+puzzle_ch5_accusativus
+
+CHOICES:
+
+* Kijk hoe de koning van Cyzicus reageert -> CH5_010
+
+END
+
+=== SCENE: CH5_010 ===
+
+TITLE:
+Twee Namen om te Onthouden
+
+TEXT:
+De koning houdt zijn woord en bevoorraadt de Argo rijkelijk voor het vervolg van de tocht. Terwijl de bemanning het ruim vult, blijf je nog even staan bij Atalanta en Meleager, die zij aan zij tegen de reling geleund het dier napraten alsof ze al jaren samen jagen in plaats van amper één middag.
+
+Iets aan hoe moeiteloos ze samenwerken, blijft je bij — een gevoel dat dit niet de laatste keer zal zijn dat hun namen in één adem genoemd worden.
+
+CODEX:
+codex_atalanta_meleager
+
+CHOICES:
+
+* Vaar verder, naar het land van de Bebryciërs -> CH5_011
+
+END
+
+=== SCENE: CH5_011 ===
+
+TITLE:
+De Uitdaging van Amycus
+
+TEXT:
+Bij het land van de Bebryciërs verwelkomt niemand de Argo — koning Amycus, een reus van een man, staat de bemanning al op te wachten met een eis in plaats van een groet: elke vreemdeling die hier aan land komt, moet hem uitdagen tot een bokswedstrijd. Wie weigert, vertrekt niet levend.
+
+Twee broers stappen meteen naar voren: Kastor, de beste ruiter van Griekenland, en Polydeukes, zijn tweelingbroer — onverslaanbaar met de vuisten, zegt men, al sinds hij nog een jongen was. "Dit," zegt Polydeukes rustig, terwijl hij zijn handen inzwachtelt, "is precies waar ik goed in ben."
+
+PERSON:
+kastor_polydeukes:intro
+
+CHOICES:
+
+* Kijk wat Amycus over zijn eigen rijk te zeggen heeft voor het gevecht begint -> CH5_012
+
+END
+
+=== SCENE: CH5_012 ===
+
+TITLE:
+Het Rijk van Amycus
+
+TEXT:
+Amycus buldert zijn eigen faam nog eens rond voor hij zijn vuisten heft — hoeveel vreemdelingen hij al heeft verslagen, hoe lang zijn volk hem al onbevochten kent. Polydeukes luistert er nauwelijks naar, zijn blik al gericht op de eerste opening die hij straks zal vinden.
+
+PUZZLE:
+puzzle_ch5_genitivus
+
+CHOICES:
+
+* Kijk hoe het gevecht verloopt -> CH5_013
+
+END
+
+=== SCENE: CH5_013 ===
+
+TITLE:
+Polydeukes tegen Amycus
+
+TEXT:
+Amycus is groter, zwaarder en gewend te winnen — maar Polydeukes is sneller, en heeft, anders dan elke tegenstander die Amycus ooit versloeg, geen enkele angst in zijn ogen. Waar de reus met volle kracht uithaalt, ontwijkt Polydeukes en antwoordt met precisie in plaats van gewicht.
+
+COMBAT:
+amycus
+
+CHOICES:
+
+* Kijk wat er van Amycus' rijk wordt na zijn nederlaag -> CH5_014
+
+END
+
+=== SCENE: CH5_014 ===
+
+TITLE:
+Een Reus Geveld
+
+TEXT:
+Amycus valt, voor het eerst in zijn leven verslagen, en zijn volk — dat hem eerder uit angst dan uit liefde volgde — verwelkomt de Argonauten meteen als bevrijders in plaats van indringers. Kastor slaat zijn broer trots op de schouder; het is duidelijk dat dit niet de laatste keer is dat deze twee samen iets overwinnen dat groter is dan zijzelf.
+
+CODEX:
+codex_dioscuren
+
+CHOICES:
+
+* Vaar verder, naar de kust van Mysië [CLEMENTIA] -> CH5_015
+* Vaar verder — een tiran minder op de kaart, verder geen traan aan verspild [SEVERITAS] -> CH5_015
+* Vaar verder, zonder er verder nog bij stil te staan [NEUTRAL] -> CH5_015
+
+END
+
+=== SCENE: CH5_015 ===
+
+TITLE:
+Herakles Blijft Achter
+
+TEXT:
+Bij Mysië gaat Herakles aan land om een nieuwe roeiriem te snijden, met zijn jonge metgezel Hylas mee om water te halen. Hylas keert nooit terug — de waternimfen van de bron waar hij put, betoveren hem en trekken hem mee de diepte in, verliefd op zijn schoonheid.
+
+Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke aanmaning om terug aan boord te komen. Tegen de ochtend besluit de bemanning, met tegenzin, zonder hem verder te varen — Herakles, wanneer hij eindelijk het strand terugvindt en het schip al weg ziet, blijft alleen achter, zijn zoektocht naar Hylas nog altijd niet opgegeven.
+
+CHOICES:
+
+* Vaar verder zonder Herakles -> CH5_016
+
+END
+
+=== SCENE: CH5_016 ===
+
+TITLE:
+De Symplegades
+
+TEXT:
+Verderop wacht een gevaar dat geen zwaard en geen boog kan verslaan: de Symplegades, twee rotswanden die bij elke doorvaart als een kaak op elkaar klappen en alles ertussen verpletteren. Geen enkel schip heeft de doortocht ooit overleefd.
+
+Argos, die zijn eigen schip kent tot in de laatste plank, bestudeert het ritme van de botsende rotsen langer dan wie ook geduld voor heeft. "Elke kaak heeft een moment dat hij weer opengaat," zegt hij uiteindelijk. "Wij hebben er maar één nodig."
+
+CHOICES:
+
+* Kijk hoe Argos de doortocht voorbereidt -> CH5_017
+
+END
+
+=== SCENE: CH5_017 ===
+
+TITLE:
+Argos Verstevigt het Schip
+
+TEXT:
+Voor de doorvaart zelf versterkt Argos in allerijl de romp van de Argo, precies op de plekken waar hij weet dat het schip het meest te lijden zal krijgen.
+
+PUZZLE:
+puzzle_ch5_ablativus
+
+CHOICES:
+
+* Vaar op het juiste moment de Symplegades in -> CH5_018
+
+END
+
+=== SCENE: CH5_018 ===
+
+TITLE:
+Tussen de Rotsen Door
+
+TEXT:
+Op Argos' teken roeit de hele bemanning met alles wat ze in zich hebben, precies op het moment dat de rotsen weer uiteen wijken. De Argo schiet erdoorheen en is nog maar net voorbij wanneer de wanden achter haar met een oorverdovende klap weer op elkaar slaan — op een haar na alleen het uiterste puntje van de achtersteven rakend.
+
+Sinds die dag, zegt men, bewegen de Symplegades niet meer: een schip dat de doortocht overleeft, bevriest de rotsen voorgoed op hun plaats. Wat er ook van waar is, geen enkel schip na de Argo heeft ze ooit nog zien bewegen.
+
+CODEX:
+codex_argos_schip
+
+CHOICES:
+
+* Vaar verder, langs de kust van de Zwarte Zee -> CH5_019
+
+END
+
+=== SCENE: CH5_019 ===
+
+TITLE:
+Gespannen Riemen
+
+TEXT:
+Weken op zee slijten aan iedereens geduld, ook aan dat van Tydeus, die op een avond een roeier bijna naar zijn keel vliegt om niet meer dan een verkeerd geplaatste opmerking. Voor iemand kan ingrijpen, klinkt er muziek over het dek — Orpheus, die zijn lier pakt en speelt zoals hij weet dat alleen hij kan spelen.
+
+De ruzie sterft vanzelf weg, niet omdat iemand gelijk kreeg, maar omdat niemand meer de puf heeft om boos te blijven terwijl die muziek klinkt. Zelfs Tydeus, met zijn vuisten nog half gebald, laat zich zonder het zelf te merken terugzakken op zijn bank.
+
+PERSON:
+orpheus:intro
+
+CHOICES:
+
+* Laat de avond verder in stilte voorbijgaan -> CH5_020
+
+END
+
+=== SCENE: CH5_020 ===
+
+TITLE:
+Raad en Richting
+
+TEXT:
+Vlak voor de laatste etappe naar Colchis brengt de stuurman de koers in kaart, en het is Nestor — nog een van de jongste aan boord, maar nu al opvallend kalm en verstandig voor zijn leeftijd — wiens advies de doorslag geeft over welke route het veiligst is.
+
+Philoktetes, intussen, oefent zijn boogschot op een stuk drijfhout achter het schip — raak, en raak, en nog eens raak, met een precisie die zelfs de meest doorgewinterde Argonauten aan boord stil doet worden.
+
+PERSON:
+nestor:intro, philoktetes:intro
+
+CHOICES:
+
+* Vraag Philoktetes om zijn precisie nog eens te bewijzen -> CH5_021
+
+END
+
+=== SCENE: CH5_021 ===
+
+TITLE:
+Een Pijl voor de Godin
+
+TEXT:
+Voor zijn laatste schot wijdt Philoktetes zijn pijl hardop toe aan de godin van de jacht — een klein gebaar van respect dat hij, zegt hij, van zijn eigen leermeester heeft overgenomen.
+
+PUZZLE:
+puzzle_ch5_dativus
+
+CHOICES:
+
+* Vaar de laatste etappe naar Colchis -> CH5_022
+
+END
+
+=== SCENE: CH5_022 ===
+
+TITLE:
+Twee Namen voor Later
+
+TEXT:
+Terwijl de kust van Colchis al vaag aan de horizon verschijnt, bedenk je dat Nestor en Philoktetes — allebei nu nog jong, allebei nu nog maar twee van de tachtig namen aan boord — ooit nog een keer samen genoemd zullen worden. Niet hier. Niet op deze tocht. Maar het gevoel dat dit geen toeval is, laat je niet meer los.
+
+CODEX:
+codex_nestor_philoktetes
+
+CHOICES:
+
+* Vaar de haven van Colchis binnen -> CH5_023
+
+END
+
+=== SCENE: CH5_023 ===
+
+TITLE:
+Colchis
+
+TEXT:
+Colchis ligt aan de rand van de bekende wereld, verder naar het oosten dan de meeste Grieken ooit zijn gevaren. Koning Aeëtes ontvangt de Argonauten koeltjes — hij bewaakt het Gulden Vlies al jaren met een nooit slapende draak, en is niet van plan het zomaar aan een groep vreemdelingen af te staan.
+
+Naast hem staat zijn dochter Medea, een begaafde tovenares — en de eerste die haar vaders koelte niet deelt zodra ze Jason ziet. Wat ze voor hem voelt, overvalt haarzelf net zo hard als het jou overvalt: het lijkt in niets op wat ze had verwacht.
+
+PERSON:
+medea:intro, aeetes:intro
+
+CHOICES:
+
+* Kijk welke voorwaarde Aeëtes aan het Vlies verbindt -> CH5_024
+
+END
+
+=== SCENE: CH5_024 ===
+
+TITLE:
+De Beproevingen van Aeëtes
+
+TEXT:
+Aeëtes stelt een voorwaarde waarvan hij zeker weet dat ze onmogelijk is: eerst twee vuurspuwende stieren voor de ploeg spannen, dan een veld ermee omploegen, en ten slotte drakentanden erin zaaien — dezelfde soort tanden waaruit ooit, ver hiervandaan in Thebe, een heel volk van gewapende mannen uit de aarde opstond. Uit elke tand die Jason zaait, groeit binnen een oogwenk een gewapende krijger, klaar om hem te doden.
+
+Zonder hulp zou geen sterveling dit overleven — en Medea, die haar vader al in het geheim heeft verraden voor de vreemdeling die haar hart heeft gestolen, geeft Jason een zalf tegen het vuur en één cruciale raad: gooi een steen tussen de opgerezen krijgers, en laat ze elkaar aanzien voor de vijand in plaats van jou.
+
+CHOICES:
+
+* Kijk hoe Medea haar keuze rechtvaardigt -> CH5_025
+
+END
+
+=== SCENE: CH5_025 ===
+
+TITLE:
+Medea's Keuze
+
+TEXT:
+Wat Medea doet, is geen kleinigheid: ze verraadt haar eigen vader, haar eigen koninkrijk, voor een vreemdeling die ze amper een paar dagen kent. Het is, beseft je, precies wat Ariadne op Kreta ook deed voor Theseus — dezelfde soort keuze, dezelfde soort risico, misschien wel hetzelfde soort liefde.
+
+"Ik weet wat dit betekent," zegt Medea zacht, meer tegen zichzelf dan tegen jou. "Ik kan nooit meer terug. Maar ik kan hem ook niet laten sterven."
+
+CHOICES:
+
+* Bewonder vooral haar moed om alles op te geven voor wat ze voelt [CLEMENTIA] -> CH5_026
+* Erken vooral hoe roekeloos het is om je eigen vader zo te verraden [SEVERITAS] -> CH5_026
+* Herken vooral het patroon — weer een vrouw die alles waagt voor een man die haar dat misschien nooit teruggeeft [NEUTRAL] -> CH5_026
+
+END
+
+=== SCENE: CH5_026 ===
+
+TITLE:
+De Nooit Slapende Draak
+
+TEXT:
+Het Gulden Vlies hangt diep in een heilig woud, bewaakt door een draak die naar verluidt nog nooit heeft geslapen. Medea neuriet een zacht, oud gezang dat het beest langzaam kalmeert — genoeg om Jason dichterbij te laten komen, maar niet genoeg om het volledig in slaap te sussen. Vlak voor hij het Vlies kan losmaken, schrikt de draak alsnog wakker.
+
+COMBAT:
+drakon_vlies
+
+CHOICES:
+
+* Kijk wat er van het Gulden Vlies wordt -> CH5_027
+
+END
+
+=== SCENE: CH5_027 ===
+
+TITLE:
+Het Gulden Vlies
+
+TEXT:
+Met de draak verslagen snijdt Jason het Vlies eindelijk los — zwaarder en warmer in zijn handen dan hij had verwacht, alsof het al die jaren wachten zelf ook gewicht heeft gekregen. Medea, haar eigen vader en koninkrijk nu voorgoed achter zich latend, vaart met de Argo mee terug naar Griekenland.
+
+In je vuist voel je een klein, gouden schilfertje dat losraakte van het Vlies tijdens het gevecht — koud eerst, dan langzaam warm, alsof het net zo lang op jou heeft liggen wachten als het Vlies zelf op Jason wachtte.
+
+SOUVENIR:
+souvenir_argonauten
+
+EERETITEL:
+ch5_argonauten
+
+CHOICES:
+
+* Volg de terugreis naar Griekenland -> CH5_028
+
+END
+
+=== SCENE: CH5_028 ===
+
+TITLE:
+De Terugreis
+
+TEXT:
+De terugtocht duurt bijna net zo lang als de heentocht, over andere zeeën en langs andere kusten, tot de Argo eindelijk weer thuis aanlegt in Iolcus — te laat om Pelias nog op zijn woord te houden, en te laat om te voorkomen dat de troon inmiddels alweer stevig in zijn handen ligt.
+
+Jason en Medea trekken verder, uiteindelijk naar Korinthe, waar ze jarenlang samen leven en kinderen krijgen — een rustige tijd die, achteraf gezien, nooit bedoeld was om te blijven duren.
+
+CHOICES:
+
+* Kijk wat er jaren later, in Korinthe, gebeurt -> CH5_029
+
+END
+
+=== SCENE: CH5_029 ===
+
+TITLE:
+Korinthe, Jaren Later
+
+TEXT:
+In Korinthe verlaat Jason Medea uiteindelijk voor een politiek huwelijk met de dochter van de plaatselijke koning — een verstandige zet voor zijn eigen toekomst, zegt hij, alsof verstandig genoeg reden is om te vergeten wat Medea voor hem heeft opgegeven: haar vader, haar vaderland, alles.
+
+Medea's wraak is er een die de latere verhalen zelf nauwelijks durven navertellen. Ze stuurt de nieuwe bruid een huwelijksgeschenk dat er op het eerste gezicht prachtig uitziet, maar vergiftigd blijkt te zijn. En daar houdt haar wraak niet op — in haar woede en verdriet neemt ze van Jason ook het enige wat hij nooit meer terug zou kunnen krijgen. Geen enkel lied vertelt dat deel graag in detail, en dit verhaal ook niet.
+
+CODEX:
+codex_medea_wraak
+
+PERSON:
+medea:full
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 5 volledig voltooid
+
+CHOICES:
+
+* Luister verder -> CH5_EINDE
+
+END
+
+=== SCENE: CH5_EINDE ===
+
+TITLE:
+Het Einde van Hoofdstuk 5
+
+TEXT:
+"Niet elke belofte breekt met een klip en een zwart zeil," zegt de stem, stiller dan anders. "Sommige breken langzaam, over jaren — en de prijs daarvan kan verschrikkelijker zijn dan wie dan ook had kunnen voorzien, aan het begin van een tocht die met zoveel hoop van wal stak." De poort keert terug tot een dunne streep licht, en je neemt een nieuwe herinnering met je mee, zwaarder dan de vorige: een schilfer goud, en alles wat het je heeft geleerd over wat een belofte werkelijk kan kosten.
+
+EERETITEL:
+ch5_medea_korinthe
+
+CHOICES:
+
+* Stap door de poort -> CH6_000
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 6 — "De Vloek van Thebe" (SP_CAMPAIGN ch6). Bewust NIET
+   chronologisch verteld — zie de toelichting in CH6_000 en Chronica.md
+   §7.11 — maar in de volgorde die het patroon van het hoofdstuk het
+   duidelijkst maakt: hoogmoed, gevolgd door een straf die het hardst op
+   kinderen neerkomt. Opent met Niobe (Kadmos' stad, nog jong), gaat via
+   Oedipus/de Sfinx/de Zeven tegen Thebe/de Epigonen (met Diomedes, zoon van
+   Tydeus uit Hoofdstuk 5) naar Antigone, en sluit af — bewust ACHTERUIT in
+   de tijd, Pentheus regeerde Thebe eigenlijk al vóór Oedipus — met Pentheus
+   en de Bacchanten, samen met Niobe en Medea (Hoofdstuk 5) het "duistere
+   drieluik" van moeder/kind-tragedies (zie Chronica.md §7).
+
+   Geen hub, geen lijnen, geen Herinneringsfragment-gate (zelfde afwijking
+   als Hoofdstuk 5, zie SP_CAMPAIGN ch6.gameplay) en geen nieuwe grammatica:
+   herhaling praesens t/m perfectum (werkwoordstijden, GEEN naamvallen —
+   dat was Hoofdstuk 5). Zes puzzels over vier types, incl. het nieuwe
+   "matching" (koppelpuzzel, zie singleplayer.js). Eén Combat-bridge-gevecht
+   (Laodamas, de laatste verdediger van Thebe tegen de Epigonen) — de rest
+   van dit hoofdstuk drijft op noodlot en menselijke fouten, niet op
+   monsters, met uitzondering van de Sfinx (die met een raadsel wordt
+   verslagen, niet met een zwaard — vandaar een PUZZLE, geen COMBAT, zelfde
+   principe als Ladon bij Herakles' werken). ---- */
+const SP_CH6_CNS = `
+=== SCENE: CH6_000 ===
+
+TITLE:
+De Vloek van Thebe
+
+TEXT:
+"Dit hoofdstuk vertel ik je niet in de volgorde waarin het gebeurde," zegt de Boodschapper, ongewoon voorzichtig. "Thebe's geschiedenis springt heen en weer door generaties, en als ik je alles op volgorde van jaartal zou vertellen, zou je het patroon nooit zien. Dus vertel ik het je op de volgorde die het patroon wél laat zien: hoogmoed, telkens weer — en een straf die daarna bijna nooit bij de hoogmoedige zelf terechtkomt, maar bij de kinderen."
+
+Athena knikt, zwijgender dan anders. "Sommige vloeken slaan in bij de stichting van een stad, en wachten dan gewoon — generatie na generatie — tot er weer iemand geboren wordt om ze te laten uitkomen."
+
+VOCAB:
+latijn_habere, latijn_recusare, latijn_sepelire, latijn_regnum, latijn_frater, latijn_quadrupes, grieks_bakchos
+
+CODEX:
+codex_kadmos_thebe
+
+CHOICES:
+
+* Begin bij het begin — de stichting van Thebe -> CH6_001
+
+END
+
+=== SCENE: CH6_001 ===
+
+TITLE:
+De Stichting van Thebe
+
+TEXT:
+Kadmos, een Fenicische prins op zoek naar zijn geschaakte zuster Europa — je kent haar verhaal al uit Hoofdstuk 3 — geeft die zoektocht op advies van het orakel van Delphi uiteindelijk op. Volg een koe, zegt het orakel, en sticht een stad waar ze uitgeput neervalt. Kadmos doet wat hem gezegd wordt.
+
+Om een offer te brengen doodt hij een draak die de bron ter plekke bewaakt — en zaait, op advies van Athena zelf, de tanden van het beest in de aarde. Gewapende krijgers rijzen op uit de grond en doden elkaar bijna allemaal; de vijf die overblijven worden de eerste inwoners van de stad die Kadmos Thebe noemt.
+
+PERSON:
+kadmos:intro
+
+CHOICES:
+
+* Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef -> CH6_002
+
+END
+
+=== SCENE: CH6_002 ===
+
+TITLE:
+Dezelfde Tanden, een Andere Koning
+
+TEXT:
+Het valt je meteen op: dezelfde soort drakentanden hoorde je Aeëtes al noemen, ver naar het oosten in Colchis, toen Jason zijn beproevingen moest doorstaan. Eén draak, twee koningen, generaties en een hele wereld uit elkaar — allebei met precies dezelfde gewapende-mannen-uit-de-aarde-truc.
+
+"Zo werkt een vloek soms," zegt Athena. "Hij plant zichzelf, letterlijk, en wacht dan gewoon af wie hem opgraaft."
+
+CHOICES:
+
+* Kijk naar de eerste koningin van deze jonge stad -> CH6_003
+
+END
+
+=== SCENE: CH6_003 ===
+
+TITLE:
+Niobe's Hoogmoed
+
+TEXT:
+Enkele generaties later regeert Niobe als koningin over Thebe — trots, geliefd, en moeder van veertien kinderen. Op een feest ter ere van Latona (je kent haar inmiddels goed uit Hoofdstuk 2) kan Niobe haar mond niet houden: waarom zou een godin met slechts twee kinderen meer offers verdienen dan een koningin met veertien?
+
+PUZZLE:
+puzzle_ch6_praesens
+
+CHOICES:
+
+* Kijk hoe Latona's kinderen op deze belediging reageren -> CH6_004
+
+END
+
+=== SCENE: CH6_004 ===
+
+TITLE:
+Apollo en Diana's Wraak
+
+TEXT:
+Apollo en Diana laten de belediging aan hun moeder niet ongestraft. Met hun pijl en boog doden ze, de een na de ander, al Niobe's veertien kinderen — tot er niemand meer overblijft om nog trots op te zijn.
+
+Niobe, verstard van verdriet, verandert ter plekke in steen. Nog altijd, zegt men, laat de rots op de berg Sipylos water druppelen — tranen die na al die generaties nog altijd niet zijn opgehouden.
+
+CODEX:
+codex_niobe
+
+SOUVENIR:
+souvenir_thebe
+
+CHOICES:
+
+* Vind veertien levens een verschrikkelijk zware prijs voor één opschepperige zin [CLEMENTIA] -> CH6_005
+* Erken dat een belediging aan een godin nu eenmaal nooit zonder gevolgen blijft [SEVERITAS] -> CH6_005
+* Laat het gewoon op je inwerken, zonder meteen een kant te kiezen [NEUTRAL] -> CH6_005
+
+END
+
+=== SCENE: CH6_005 ===
+
+TITLE:
+Een Voorspelling voor Laius
+
+TEXT:
+Generaties na Niobe regeert Laius over Thebe. Een orakel voorspelt hem iets verschrikkelijks: zijn eigen, nog ongeboren zoon zal hem ooit doden. Uit angst laat Laius het kind, zodra het geboren is, te vondeling leggen op een berghelling — zijn voeten doorboord en aan elkaar gebonden, zodat niemand ooit zou vermoeden dat het om een prins gaat.
+
+Het kind overleeft. Een herder vindt de baby, en uiteindelijk groeit hij op aan het hof van Corinthe, geadopteerd door een koning en koningin die hem nooit vertellen dat hij niet echt hun zoon is. Zijn naam: Oedipus — "gezwollen voet", naar de wond die hij als baby overhield.
+
+PERSON:
+laius:intro, oedipus:intro
+
+CHOICES:
+
+* Kijk wat Oedipus doet zodra hij zelf volwassen is -> CH6_006
+
+END
+
+=== SCENE: CH6_006 ===
+
+TITLE:
+De Weg naar Thebe
+
+TEXT:
+Als jongvolwassene krijgt Oedipus zijn eigen, verschrikkelijke voorspelling: hij zal ooit zijn vader doden en met zijn moeder trouwen. In de overtuiging dat zijn Corinthische ouders zijn ware ouders zijn, vlucht hij weg van Corinthe om het lot te ontlopen — recht op Thebe af, zonder dat hij het weet.
+
+Onderweg, bij een smal kruispunt, weigert een oudere man met zijn wagen opzij te gaan. Het geschil escaleert, en Oedipus doodt de man — zonder ook maar te vermoeden dat het zijn eigen vader Laius is, op weg naar hetzelfde orakel dat hem ooit al zoveel verdriet bracht.
+
+CHOICES:
+
+* Volg Oedipus verder naar de poorten van Thebe -> CH6_007
+
+END
+
+=== SCENE: CH6_007 ===
+
+TITLE:
+De Sfinx
+
+TEXT:
+Bij de poorten van Thebe houdt een monster de hele stad al maandenlang gegijzeld: de Sfinx, met het lichaam van een leeuw, de vleugels van een adelaar en het gezicht van een vrouw. Iedereen die de stad in of uit wil, moet haar raadsel oplossen — en wie faalt, wordt ter plekke verslonden.
+
+Oedipus, die toch al niets meer te verliezen heeft, biedt aan het te proberen.
+
+CODEX:
+codex_oedipus
+
+CHOICES:
+
+* Luister naar het raadsel van de Sfinx -> CH6_008
+
+END
+
+=== SCENE: CH6_008 ===
+
+TITLE:
+Het Raadsel
+
+TEXT:
+"Welk wezen," vraagt de Sfinx, "loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie — en is het zwakst naarmate het er meer heeft?"
+
+PUZZLE:
+puzzle_ch6_sfinx
+
+CHOICES:
+
+* Geef het antwoord -> CH6_009
+
+END
+
+=== SCENE: CH6_009 ===
+
+TITLE:
+Koning van Thebe
+
+TEXT:
+"De mens," antwoordt Oedipus — als baby kruipt hij op handen en voeten, als volwassene loopt hij rechtop, en op zijn oude dag steunt hij op een stok, de "derde poot". De Sfinx, voor het eerst ooit verslagen, werpt zich in wanhoop van de rotsen.
+
+Thebe, bevrijd, kroont Oedipus tot nieuwe koning — en geeft hem, zoals gebruikelijk, ook de hand van de weduwe van de vorige koning: Iokaste. Jaren gaan voorbij. Ze krijgen samen vier kinderen: Eteokles, Polyneikes, Antigone, en een dochter die verder in dit verhaal geen grote rol speelt. Niemand in Thebe vermoedt wie Iokaste werkelijk is voor haar nieuwe man.
+
+PERSON:
+iokaste:intro, eteokles:intro, polyneikes:intro, antigone:intro
+
+CHOICES:
+
+* Spring jaren vooruit, naar het moment dat de waarheid aan het licht komt -> CH6_010
+
+END
+
+=== SCENE: CH6_010 ===
+
+TITLE:
+De Waarheid
+
+TEXT:
+Jaren later teistert een verschrikkelijke plaag Thebe, en een orakel wijst de oorzaak aan: de moordenaar van de vorige koning loopt nog vrij rond, onbestraft, in de stad zelf. Oedipus, vastbesloten de dader te vinden, ontrafelt stukje bij beetje zijn eigen verleden — tot de waarheid onontkoombaar wordt: hij doodde zijn eigen vader op die weg naar Thebe, en trouwde daarna, zonder het te weten, met zijn eigen moeder.
+
+Iokaste kan niet leven met wat ze ontdekt. Oedipus, die het niet langer kan verdragen te zien wat zijn eigen ogen hem hebben laten aanrichten, verblindt zichzelf en verlaat Thebe voorgoed, een ballingschap in die hem de rest van zijn leven zal achtervolgen.
+
+PERSON:
+oedipus:full, iokaste:full
+
+CHOICES:
+
+* Voel vooral medelijden — geen van beiden koos er ooit voor om dit te worden [CLEMENTIA] -> CH6_011
+* Erken nuchter dat onwetendheid de gevolgen niet ongedaan maakt, hoe oneerlijk dat ook voelt [SEVERITAS] -> CH6_011
+* Laat het oordeel maar aan iemand anders — dit voelt te groot om zomaar een kant te kiezen [NEUTRAL] -> CH6_011
+
+END
+
+=== SCENE: CH6_011 ===
+
+TITLE:
+Een Troon, Twee Broers
+
+TEXT:
+Eteokles en Polyneikes spreken af de troon van Thebe om het jaar te delen — eerst de een, dan de ander. Het eerste jaar is aan Eteokles. Maar wanneer het jaar om is en Polyneikes zijn beurt komt opeisen, weigert Eteokles.
+
+PUZZLE:
+puzzle_ch6_imperfectum
+
+CHOICES:
+
+* Kijk wat Polyneikes onderneemt -> CH6_012
+
+END
+
+=== SCENE: CH6_012 ===
+
+TITLE:
+De Zeven tegen Thebe
+
+TEXT:
+Verbannen uit zijn eigen stad, verzamelt Polyneikes zes andere champions om Thebe met geweld terug te veroveren — samen bekend als de Zeven tegen Thebe. Onder hen een gezicht dat je al kent: Tydeus, de kortlontige Argonaut van de Argo (Hoofdstuk 5), even onstuimig als altijd.
+
+"Als er íémand een stadspoort met kracht in plaats van geduld openkrijgt," zegt Tydeus grimmig, terwijl hij zijn wapenrusting aantrekt, "dan ben ik dat wel."
+
+CHOICES:
+
+* Kijk hoe de aanval op Thebe verloopt -> CH6_013
+
+END
+
+=== SCENE: CH6_013 ===
+
+TITLE:
+De Zeven Poorten
+
+TEXT:
+Elk van de zeven champions valt een andere poort van Thebe aan — en bijna allemaal sneuvelen ze, poort na poort, tegen Thebe's verdedigers. Voor de laatste, wanhopige aanval moet iedereen die nog vecht zijn Latijn haarscherp houden.
+
+PUZZLE:
+puzzle_ch6_matching_tempora
+
+CHOICES:
+
+* Kijk hoe het tussen de twee broers zelf afloopt -> CH6_014
+
+END
+
+=== SCENE: CH6_014 ===
+
+TITLE:
+Broedermoord
+
+TEXT:
+Eteokles en Polyneikes, vastbesloten dit voor eens en altijd zelf uit te vechten, treffen elkaar in een laatste tweegevecht — en doden elkaar tegelijkertijd, geen van beiden lang genoeg in leven om nog te weten wie er "gewonnen" heeft.
+
+Tydeus zelf ligt intussen dodelijk gewond op het slagveld, precies op het moment dat Athena naar hem toe komt om hem — voor zijn moed — onsterfelijkheid te schenken. Wat ze daar aantreft, doet haar zich vol afschuw afwenden en de gave intrekken. Tydeus sterft alsnog, sterfelijk na alles, ver van de zoon die hij amper heeft leren kennen.
+
+CODEX:
+codex_zeven_tegen_thebe
+
+CHOICES:
+
+* Kijk wie er na deze slachting de troon van Thebe overneemt -> CH6_015
+
+END
+
+=== SCENE: CH6_015 ===
+
+TITLE:
+Creons Bevel
+
+TEXT:
+Met beide broers dood en Oedipus allang verbannen, neemt Iokaste's broer Creon de troon over. Zijn eerste daad als regent is een bevel dat heel Thebe zal verscheuren: Eteokles krijgt een eervolle begrafenis, als verdediger van de stad — maar Polyneikes, die zijn eigen stad aanviel, mag van Creon nooit begraven worden. Zijn lichaam moet buiten de muren blijven liggen, prooi voor de vogels.
+
+Voor de Grieken is dit een verschrikkelijke straf — zonder de juiste rituelen kan een ziel nooit rust vinden. Antigone, Polyneikes' zuster, is niet van plan zich daarbij neer te leggen.
+
+PERSON:
+creon:intro
+
+CHOICES:
+
+* Kijk wat Antigone besluit te doen -> CH6_016
+
+END
+
+=== SCENE: CH6_016 ===
+
+TITLE:
+Antigone's Verzet
+
+TEXT:
+Tegen Creons uitdrukkelijke bevel in begraaft Antigone haar broer in het geheim, met de juiste rituelen — overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning.
+
+PUZZLE:
+puzzle_ch6_perfectum
+
+CHOICES:
+
+* Kijk hoe Creon reageert zodra hij ontdekt wat ze heeft gedaan -> CH6_017
+
+END
+
+=== SCENE: CH6_017 ===
+
+TITLE:
+Levend Ingemetseld
+
+TEXT:
+Creon laat Antigone, zodra hij ontdekt wat ze heeft gedaan, levend inmetselen in een graftombe — geen executie in naam, maar wel een ter dood veroordeling. Antigone wacht niet af tot de tombe haar langzaam laat sterven: ze kiest zelf het moment.
+
+PERSON:
+antigone:full
+
+CODEX:
+codex_antigone
+
+CHOICES:
+
+* Bewonder haar moed om voor haar overtuiging te sterven [CLEMENTIA] -> CH6_018
+* Erken dat Creon, hoe hard ook, zijn bevel niet zomaar kon laten passeren zonder gezichtsverlies [SEVERITAS] -> CH6_018
+* Zie vooral twee mensen die geen van beiden meer terug konden zonder alles te verliezen [NEUTRAL] -> CH6_018
+
+END
+
+=== SCENE: CH6_018 ===
+
+TITLE:
+De Epigonen
+
+TEXT:
+Tien jaar na de nederlaag van de Zeven tegen Thebe zijn hun zonen oud genoeg om zelf te vechten — de Epigonen, "de nakomelingen", vastbesloten hun vaders alsnog te wreken. Onder hen Diomedes, Tydeus' zoon, die zijn vader nauwelijks heeft gekend maar wiens naam hij zijn hele jeugd heeft horen fluisteren.
+
+"Ik weet niet veel over mijn vader," zegt Diomedes, terwijl hij zijn wapenrusting aantrekt, net zoals Tydeus dat tien jaar eerder deed. "Maar ik weet wel hoe hij stierf. Dat is genoeg om vandaag mee te beginnen."
+
+PERSON:
+diomedes:intro
+
+CHOICES:
+
+* Kijk hoe de tweede aanval op Thebe verloopt -> CH6_019
+
+END
+
+=== SCENE: CH6_019 ===
+
+TITLE:
+Laodamas Verdedigt de Poorten
+
+TEXT:
+Waar Thebe de eerste aanval overleefde, staat er dit keer een verdediger klaar die vastbesloten is de stad opnieuw te redden: Laodamas, zoon van Eteokles, die de poorten met dezelfde koppigheid verdedigt als zijn vader ooit deed.
+
+COMBAT:
+laodamas
+
+CHOICES:
+
+* Kijk wat er van Thebe wordt na Laodamas' nederlaag -> CH6_020
+
+END
+
+=== SCENE: CH6_020 ===
+
+TITLE:
+De Val van Thebe
+
+TEXT:
+Met Laodamas verslagen valt Thebe eindelijk, tien jaar nadat de vaders van de Epigonen er zelf faalden. Diomedes staat tussen de puinhopen van een stad die zijn eigen vader het leven kostte — niet met vreugde, merk je, maar met iets stillers. Wraak, ontdekt hij, voelt anders dan hij zich had voorgesteld.
+
+Zijn naam zal hier niet ophouden. Jaren later, ver van Thebe, zal Diomedes een van de dapperste helden voor de poorten van een heel andere belegerde stad worden.
+
+CODEX:
+codex_epigonen
+
+FLAG:
+ch6_diomedes_epigonen=true
+
+EERETITEL:
+ch6_epigonen
+
+CHOICES:
+
+* Spring nu terug in de tijd — naar een koning die vóór Oedipus over Thebe regeerde -> CH6_021
+
+END
+
+=== SCENE: CH6_021 ===
+
+TITLE:
+Terug in de Tijd
+
+TEXT:
+"Eén verhaal resteert nog," zegt de Boodschapper, "en het speelt zich eigenlijk af vóór alles wat je tot nu toe hebt gezien — nog vóór Oedipus, nog vóór Laius. Ik bewaarde het voor het laatst, niet omdat het het laatste was, maar omdat het het duidelijkst laat zien waar deze hele vloek ooit begon. Jij, als {tendency_address}, herkent dat patroon inmiddels vast al voor ik het uitleg."
+
+Terug in de tijd dus, naar Pentheus — kleinzoon van Kadmos zelf, en de op twee na eerste koning van Thebe na de stichter.
+
+CHOICES:
+
+* Kijk wat voor koning Pentheus is -> CH6_022
+
+END
+
+=== SCENE: CH6_022 ===
+
+TITLE:
+Een Nieuwe God
+
+TEXT:
+Een vreemde nieuwe verering verspreidt zich door Thebe: de cultus van Bacchus, god van wijn en extase — en, zoals niemand in de stad hardop durft te zeggen, de zoon van Semele, Kadmos' eigen dochter. Pentheus, Semele's neef en de huidige koning, weigert te geloven dat zijn eigen nicht een god heeft gebaard. Hij verbiedt de verering en probeert de vrouwen van Thebe, die massaal de bergen in trekken om Bacchus te aanbidden, met geweld terug te dwingen.
+
+PERSON:
+pentheus:intro
+
+CHOICES:
+
+* Kijk wat Pentheus onderneemt om de Bacchanten te stoppen -> CH6_023
+
+END
+
+=== SCENE: CH6_023 ===
+
+TITLE:
+Vermomd de Berg Op
+
+TEXT:
+Wanneer dreigementen niets uithalen, vermomt Pentheus zich en sluipt in het geheim de berg op om de riten van de Bacchanten met eigen ogen te bespieden — in de hoop bewijs te vinden om de verering voorgoed te verbieden.
+
+Hij wordt ontdekt. In de door Bacchus opgewekte, goddelijke waanzin herkennen de vrouwen hem niet meer als de koning van Thebe — en niet eens meer als mens.
+
+CHOICES:
+
+* Roep de naam van de god die dit alles heeft losgemaakt -> CH6_024
+
+END
+
+=== SCENE: CH6_024 ===
+
+TITLE:
+Een Naam Zonder Antwoord
+
+TEXT:
+Pentheus, eindelijk beseffend hoe verkeerd hij dit heeft ingeschat, roept vol ongeloof de naam van de god die hij zo lang heeft geweigerd te erkennen.
+
+PUZZLE:
+puzzle_ch6_vocativus_grieks
+
+CHOICES:
+
+* Kijk wat er met Pentheus gebeurt -> CH6_025
+
+END
+
+=== SCENE: CH6_025 ===
+
+TITLE:
+Agave
+
+TEXT:
+Wat er die middag op de berg gebeurt, is het duisterste dat dit hoofdstuk te vertellen heeft. Onder de vrouwen die Pentheus omsingelen bevindt zich, in haar eigen door de god opgewekte waanzin, zijn moeder Agave — die in hem geen zoon meer ziet, maar een wild dier.
+
+Pas uren later, weer bij zinnen, beseft Agave ten volle wat haar eigen handen hebben aangericht. Van alle vloeken die dit hoofdstuk over Thebe uitspreekt, is dit de wreedste: niet een vreemde straf van een verre god, maar een moeder tegen haar eigen kind, zonder dat ze ooit had willen kiezen.
+
+CODEX:
+codex_pentheus_bacchus
+
+PERSON:
+pentheus:full
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 6 volledig voltooid
+
+EERETITEL:
+ch6_pentheus
+
+CHOICES:
+
+* Luister verder -> CH6_EINDE
+
+END
+
+=== SCENE: CH6_EINDE ===
+
+TITLE:
+Het Einde van Hoofdstuk 6
+
+TEXT:
+"Je hebt nu een hele stad gezien," zegt de Boodschapper zacht, "over generaties heen, altijd hetzelfde patroon: hoogmoed, en dan een straf die zelden bij de hoogmoedige zelf terechtkomt. Niet elke vloek wordt in één leven uitgesproken. Sommige wachten gewoon op de volgende generatie om hem alsnog te laten uitkomen."
+
+De poort keert terug tot een dunne streep licht. Je neemt geen tastbare herinnering mee dit keer — alleen het besef dat een vloek niet altijd hardop wordt uitgesproken. Soms wordt hij gewoon, generatie na generatie, doorgegeven.
+
+END
+`.trim();
+
