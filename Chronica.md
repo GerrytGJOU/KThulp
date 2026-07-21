@@ -1,4 +1,4 @@
-# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1-4 speelbaar)
+# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1-6 speelbaar)
 
 > **Status: Beta, live in het hoofdmenu.** De **proloog** ("De Boer van
 > Latium" / "Het Orakel van Chronos") is volledig speelbaar: intro →
@@ -24,11 +24,26 @@
 > Theseus (Ariadne, de Minotaurus, met Daidalos & Ikaros erin verweven i.p.v.
 > een aparte lijn) en Phaëthon (het Paleis van de Zon, de zonnewagen) — zie
 > §7.9. Beide lijnen draaien om dezelfde kern: een belofte die niemand meer
-> ongedaan kon maken.
+> ongedaan kon maken. **Hoofdstuk 5** ("Het Gulden Vlies") is eveneens
+> **volledig speelbaar**, maar met een bewust ANDERE structuur dan Hoofdstuk
+> 1-4: geen hub met parallelle lijnen, maar één doorlopend tochtenlogboek
+> langs de tocht van de Argo, met negen cameo-clusters van latere helden
+> (Theseus, Tydeus, Atalanta & Meleager, Kastor & Polydeukes, Herakles &
+> Hylas, Argos, Orpheus, Nestor & Philoktetes) en een nieuw puzzeltype
+> (schuifpuzzel/tile-swap) — zie §7.10. **Hoofdstuk 6** ("De Vloek van
+> Thebe") is eveneens **volledig speelbaar**: net als Hoofdstuk 5 geen hub
+> met lijnen, maar ditmaal bewust NIET-chronologisch verteld —
+> "generatiesprongen" volgens het patroon van de vloek zelf (hoogmoed, straf
+> die de kinderen treft) in plaats van jaartal. Van Kadmos' stichting van
+> Thebe via Niobe, Oedipus & de Sfinx, de Zeven tegen Thebe (met Tydeus,
+> bekend uit Hoofdstuk 5) en de Epigonen tien jaar later (met Tydeus' zoon
+> Diomedes) naar Antigone, en sluit — bewust terug in de tijd — af met
+> Pentheus en de Bacchanten. Nog een nieuw puzzeltype erbij: de koppelpuzzel
+> ("matching") — zie §7.11.
 > Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
-> rest van de campagne (Hoofdstuk 5 t/m 28 + Finale) staat als metadata-skelet
+> rest van de campagne (Hoofdstuk 7 t/m 28 + Finale) staat als metadata-skelet
 > klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet geschreven.
 >
 > **Dit document is de enige bron van waarheid voor Chronica Classica** en
@@ -60,11 +75,15 @@ browser):
 | **Hoofdstuk 2**: hub + alle vier lijnen (L/S/K afgerond, H gedeeltelijk) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | ✅ werkend — alle vier lijnen + fragmenten-gate + Athena-mentor + Combat-bridge getest, incl. beide gevechten (Leeuw/Hydra) volledig uitgespeeld (zie §7.6) |
 | **Hoofdstuk 3**: hub + twee lijnen (Io incl. Argus/Mercurius/Europa-coda, Herakles' laatste tien werken) | `certamen/singleplayer-data.js` (`SP_CH3_CNS`, 43 scènes) | ✅ werkend — beide lijnen + 6 Combat-bridge-gevechten + 9 puzzels (bewuste combat/puzzel-balans, zie §7.8) + fragmenten-gate (fragments=6) + `{tendency_address}` NPC-reacties volledig getest |
 | **Hoofdstuk 4**: hub + twee lijnen (Theseus/Ariadne/Minotaurus met Daidalos & Ikaros erin verweven, en Phaëthon) | `certamen/singleplayer-data.js` (`SP_CH4_CNS`, 30 scènes) | ✅ werkend — beide lijnen + 1 Combat-bridge-gevecht (Minotaurus) + 5 puzzels (infinitivus/vocativus/ablativus bij Theseus, imperfectum/perfectum bij Phaëthon) + fragmenten-gate (fragments=8) + `{tendency_address}` + alle 5 grammatica-tabellen getest (Node-reachability + echte browser-render via `spGoCns()`, zie §7.9) |
+| **Hoofdstuk 5**: één doorlopend tochtenlogboek (geen hub/lijnen) — de tocht van de Argo, met negen cameo-clusters van latere helden | `certamen/singleplayer-data.js` (`SP_CH5_CNS`, 33 scènes) | ✅ werkend — herhaling nom. t/m abl. (geen nieuwe grammatica) + 5 puzzels (1 per naamval, over 4 puzzeltypes incl. het nieuwe "tile-swap") + 2 Combat-bridge-gevechten (Amycus, de Draak van Colchis) + één perspectiefkeuze (Atalanta/Meleager, zelfde inhoud vanuit twee invalshoeken) + Medea's wraak in Korinthe als terughoudend verteld slot — Node-reachability + volledige browser-doorloop van alle nieuwe mechanieken via `spGoCns()`, zie §7.10 |
 | Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
+| **Hoofdstuk 6**: geen hub/lijnen, bewust NIET-chronologisch — "generatiesprongen" volgens het patroon van de vloek | `certamen/singleplayer-data.js` (`SP_CH6_CNS`, 27 scènes) | ✅ werkend — Kadmos/Niobe/Oedipus & de Sfinx/Zeven-tegen-Thebe+Epigonen (Tydeus & Diomedes)/Antigone/Pentheus & Bacchanten + 6 puzzels (praesens/imperfectum/perfectum-herhaling over 4 types, incl. het nieuwe "matching") + 1 Combat-bridge-gevecht (Laodamas) + 3 Clementia/Severitas-keuzemomenten — Node-reachability + volledige browser-doorloop (incl. een bug in de koppelpuzzel-foutmelding, gevonden én gefixt tijdens het testen) via `spGoCns()`, zie §7.11 |
+| **Schuifpuzzel** (tegels tikken-om-te-wisselen, iPad-veilig — geen drag) | `certamen/singleplayer.js` (`spRenderTileSwapPuzzle`/`spCheckTileSwapPuzzle`), `SP_PUZZLES` (`type:"tile-swap"`) | ✅ werkend — sinds Hoofdstuk 5 (`puzzle_ch5_ablativus`), zie §7.10 |
+| **Koppelpuzzel** (twee kolommen, tik-om-te-koppelen) | `certamen/singleplayer.js` (`spRenderMatchingPuzzle`/`spMatchTapLeft`/`spMatchTapRight`), `SP_PUZZLES` (`type:"matching"`) | ✅ werkend — sinds Hoofdstuk 6 (`puzzle_ch6_matching_tempora`), zie §7.11 |
 | **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
 | Scène-renderer (tekst/dialoog/keuzes) | `certamen/singleplayer.js` (`SCREENS.spPlay`) | ✅ werkend |
-| **"Terug naar menu"-knop** op elk verhaalscherm (gewone scènes, alle 4 puzzeltypes, gevecht) | `certamen/singleplayer.js` (`spBackToMenuButtonHTML`, navigeert naar `spRenderLanding()`) | ✅ werkend — vóór 2026-07 kon je een verhaal alleen verlaten door het hoofdstuk af te ronden of de app te sluiten |
+| **"Terug naar menu"-knop** op elk verhaalscherm (gewone scènes, alle 6 puzzeltypes, gevecht) | `certamen/singleplayer.js` (`spBackToMenuButtonHTML`, navigeert naar `spRenderLanding()`) | ✅ werkend — vóór 2026-07 kon je een verhaal alleen verlaten door het hoofdstuk af te ronden of de app te sluiten |
 | **Voorkomt onbeperkt herhalen van een afgeronde hub-lijn** (en het Clementia/Severitas-punten-stapelen dat daarbij hoorde) | `certamen/singleplayer.js` (`CNSParser.DONE_TAG_RE`, `spChoiceAlreadyDone`) | ✅ werkend — `[DONE:vlagnaam]`-tag op `CH2_000`/`CH3_000`/`CH4_000`, zie §7.6 |
 | Grieks-alfabet-transcriptiepuzzel (blokkeert voortgang) | `certamen/singleplayer.js` (`spRenderPuzzle`/`spCheckPuzzle`), `SP_PUZZLES`/`SP_GREEK_ALPHABET` | ✅ werkend |
 | Klassekeuze → Battle Mode-klasse (REWARD-hook) | `certamen/singleplayer.js` (`spHookReward`), `SP_CLASS_REWARD_MAP` | ✅ werkend |
@@ -78,7 +97,7 @@ browser):
 | Eretitels als eigen categorie tussen de eerbewijzen | `certamen/core.js` (`ACH_CATEGORIES.chronica`), `certamen/games.js` (`SCREENS.collection`) | ✅ werkend — meegerenderd door `achGroupsHTML`, net als Algemeen/Klassieke Spellen |
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
-| Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 4+ nog niet geschreven |
+| Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 7+ nog niet geschreven |
 | **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8 |
 | Gemini-huisstijl-Gem (stripstijl, scène-illustraties) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | Gemini-huisstijl-Gem (museumstukken, Herinneringen-tab) | `certamen/assets/chronica/gemini-souvenir-style.md` | ✅ herbruikbare Gem-instructie — vaste sokkel/stolp/kussentje-opstelling, zie §7.2.1 |
@@ -293,8 +312,8 @@ rijen die al ✅ zijn.
 | Hoofdstuk 2 (`CH2_H09`) | `armor:licht` | Herakles draagt voortaan de huid van de Nemeïsche Leeuw als mantel en geeft zijn oude harnas aan de speler | ✅ gebouwd |
 | **Hoofdstuk 4** (Theseus/Labyrint) | `helm:standard` | Koning Aegeus geeft de speler een eenvoudige bronzen helm mee voor de afdaling in het Labyrint |  |
 | **Hoofdstuk 4** (Theseus/Labyrint) | `schild:rond` | Een rond schild, gevonden in het wapenarsenaal van het paleis van Knossos |  |
-| **Hoofdstuk 5** (Argonauten) | `armor:middel` | Standaard reisharnas, uitgedeeld aan de hele bemanning van de Argo bij vertrek |  |
-| **Hoofdstuk 5** (Argonauten) | `helm:bandana` | Een eenvoudige hoofddoek tegen zon en zeewind tijdens de lange tocht |  |
+| Hoofdstuk 5 (Argonauten, `CH5_006`) | `armor:middel` | Standaard reisharnas, uitgedeeld aan de hele bemanning van de Argo bij vertrek | ✅ gebouwd |
+| Hoofdstuk 5 (Argonauten, `CH5_006`) | `helm:bandana` | Een eenvoudige hoofddoek tegen zon en zeewind tijdens de lange tocht | ✅ gebouwd |
 | **Hoofdstuk 8** (Wrok van Achilles) | `armor:zwaar` | Hephaistos smeedt nieuw, goddelijk harnas voor Achilles nadat Hector Patroklos' (Achilles') oude wapenrusting buitmaakte — de speler krijgt een eigen exemplaar | |
 | **Hoofdstuk 8** (Wrok van Achilles) | `schild:ovaal` | Het beroemde Schild van Achilles, in hetzelfde smeedmoment door Hephaistos gemaakt |  |
 | **Hoofdstuk 9** (Ilion in Vlammen) | `helm:open` | Een open vechthelm, opgeraapt tijdens de chaos van Troje's val |  |
@@ -610,6 +629,30 @@ De regels:
 - Dit is de bewuste keuze i.p.v. "alle drie de lijnen verplicht": het houdt
   echte branching + een korte kritische route voor casual spelers, zonder de
   educatieve gate los te laten.
+- **Leesvalstrik** (vastgelegd 2026-07 na een gesprek met de auteur, nog niet
+  gebouwd — eerste kandidaat: een toekomstig story-heavy hoofdstuk). Een
+  KEUZE-gebaseerde manier om leesaandacht te toetsen, nadrukkelijk GEEN nieuw
+  `puzzle.type`: een personage geeft een instructie in de verteltekst (bv.
+  "houd in het labyrint altijd links aan"), en de daaropvolgende `CHOICES`
+  laat de speler die instructie zelf toepassen. Kiest de speler fout, dan
+  volgen 2-3 scènes die de foute afslag steeds onheilspellender laten voelen
+  — geen meteen-dood-gotcha, de speler krijgt de kans het zelf te merken —
+  tot een doodlopende scène met precies 1 keuze: opnieuw beginnen.
+  - **Geen nieuwe engine-code nodig.** Puur `CHOICES`/`FLAG`, geen
+    `PUZZLE:`-sectie. De doodlopende scène is niets meer dan
+    `* Begin het labyrint opnieuw -> CH#_[checkpoint]`.
+  - **Herstartpunt = lokaal checkpoint, NIET het hele hoofdstuk.** De speler
+    gaat terug naar het begin van de specifieke reeks (bv. de ingang van het
+    labyrint), niet naar `CH#_000`. Bewuste keuze boven "het hele hoofdstuk
+    opnieuw" (het oorspronkelijke voorstel): bij een lang hoofdstuk zou dat
+    oneerlijk zwaar aanvoelen voor één gemiste zin. Al opgeloste
+    puzzels/gevechten/CODEX-items eerder in het hoofdstuk blijven gewoon
+    staan — de bestaande dedup-hooks (spHookCodex/spHookVocab/spHookPerson/
+    enz.) maken een scène opnieuw bezoeken sowieso al kosteloos.
+  - **Auteursregel:** de foute tak mag geen `EERETITEL`/`REWARD` bevatten
+    (niet ongedaan te maken bij een herstart). Extra `CODEX`/`PERSON`/`VOCAB`
+    op de foute tak is wel onschuldig — bonuslore zonder exploit, dankzij
+    dezelfde dedup.
 
 ### 7.2 Hoofdstuk-afsluiting: het Orakel, de mantel en de Codex Memoriae (**gebouwd**)
 
@@ -1079,6 +1122,52 @@ Hoofdstuk 3 zelf gebruikt uiteindelijk nog `"multiple-choice"`, net als
 Hoofdstuk 1/2 — de eerste getypte puzzel blijft dus open voor een later
 hoofdstuk.
 
+### 7.7.1 Puzzeltypes — routekaart voor toekomstige uitbreidingen (**vastgelegd, deels gebouwd**)
+
+Sinds Hoofdstuk 5/6 zijn er twee nieuwe `puzzle.type`-waarden bij gekomen:
+`"tile-swap"` (schuifpuzzel — tik twee tegels om ze te wisselen, zie §7.10)
+en `"matching"` (koppelpuzzel — tik een woord links, tik daarna zijn paar
+rechts, zie §7.11). Naar aanleiding van een brainstorm met de auteur
+(2026-07) over verdere puzzelvariatie liggen de volgende types vast als
+vervolgstappen. Elk is vooraf beoordeeld op BLOKKEREND (hoort als
+`PUZZLE:`-gate, want test echt grammatica) of OPTIONEEL (test vooral
+herkenning/logica, hoort dus als niet-voortgangs-blokkerende vault-content) —
+zodat die afweging niet opnieuw gemaakt hoeft te worden zodra een hoofdstuk
+er daadwerkelijk gebruik van maakt.
+
+**Blokkerend — zelfde knop-tik-paradigma als de bestaande 6 types (geen
+per-cel toetsenbord, geen slepen), goedkoop te bouwen, test echte
+grammatica:**
+- **Sorteerpuzzel** — tik woorden naar het juiste bakje (bv. "welke
+  naamval hoort hierbij?").
+- **Zin met meerdere hiaten** — rechtstreekse uitbreiding van de bestaande
+  `"multiple-choice"`-puzzel: 2-3 losse keuzes in één zin i.p.v. één.
+- **"Welke hoort er niet bij"** — 4-5 woorden, tik de uitzondering (verkeerde
+  naamval/geslacht/vervoeging). Eén tik, triviaal te bouwen.
+- **Volgorde-puzzel** — hergebruikt de tile-swap-mechaniek voor woordvolgorde
+  in een zin, bv. voor een latere ablativus-absolutus- of A.c.I.-constructie.
+
+**Optioneel — vault-content, GEEN voortgangsgate. Reserveer voor Hoofdstuk 26
+"De Bibliotheek van Mnemosyne", dat al gepland staat als thuisbasis voor
+nieuwe mechaniek (de spiegel-/geluidspuzzel bij Narcissus & Echo, zie de
+canon-uitbreiding in §7):**
+- **Woordzoeker** — geen kruisingsprobleem (i.t.t. een kruiswoordraadsel),
+  dus goedkoper om te bouwen. Geschikt voor bv. een lijst bemanningsnamen —
+  eigennamen kunnen niet natuurlijk kruisen in een kruiswoordrooster, maar
+  passen prima los in een letterraster.
+- **Kruiswoordraadsel (vereenvoudigd)** — klein vast rooster (5-7 woorden),
+  GEEN per-cel getypte letters (onbetrouwbaar op iPad — popup-toetsenbord per
+  vakje), maar een woordenbank waaruit je een woord in het gemarkeerde vak
+  tikt. Roosterontwerp blijft per puzzel handwerk (woorden moeten letterlijk
+  op de juiste plek overlappen) — duurder dan alle andere types, dus
+  spaarzaam inzetten.
+- **Sudoku-achtig met Griekse letters** — puur logica, geen grammatica-toets;
+  alleen zinvol als losse denk-puzzel naast de taalgerichte content, niet als
+  vervanging van een echte grammaticapuzzel.
+
+Geen van deze zes is al gebouwd — dit is een vastgelegde intentie uit een
+brainstormgesprek, geen toegewezen hoofdstuk.
+
 ### 7.8 Hoofdstuk 3: "Beloften van Goden en Mensen" — twee vormen van vrijheid (**gebouwd**)
 
 Anders dan Hoofdstuk 2's vier parallelle lijnen: twee hoofdlijnen
@@ -1267,6 +1356,292 @@ grammatica-tabellen die correct renderen in `SCREENS.spCodex`. Nog niet
 end-to-end doorgeklikt vanuit de UI zelf (alle 30 scènes na elkaar met de
 muis) — dat staat nog open als eventuele vervolgstap.
 
+### 7.10 Hoofdstuk 5: "Het Gulden Vlies" — een tochtenlogboek i.p.v. een hub (**gebouwd**)
+
+Bewust ANDERE structuur dan Hoofdstuk 1-4: geen hub met zelf te kiezen,
+parallelle lijnen, maar één doorlopend tochtenlogboek (`SP_CH5_CNS`,
+singleplayer-data.js, 33 scènes) dat de Argo van stop tot stop volgt — zie
+`SP_CAMPAIGN` ch5.gameplay. Geen Herinneringsfragment-gate (er zijn geen
+lijnen om te "voltooien") en geen nieuwe grammatica-entries: dit hoofdstuk is
+bewust herhaling (nominativus t/m ablativus).
+
+**Negen cameo-clusters** langs de route, elk met een eigen moment maar
+geclusterd waar dat mythologisch al samenkwam (op verzoek van de auteur, i.p.v.
+elke naam een volledig aparte scène te geven):
+- **Theseus** (`CH5_003`) — een korte herkenning bij vertrek uit Iolcus, bewust
+  dramatische ironie i.p.v. foreshadowing: de speler kent zijn Labyrint-verhaal
+  al uit Hoofdstuk 4, Theseus zelf nog niet.
+- **Tydeus** (`CH5_004`, later opnieuw `CH5_019`) — een kort lont-vignet bij
+  vertrek, en een tweede moment samen met **Orpheus** (`CH5_019`) wanneer
+  diens muziek een ruzie sust.
+- **Atalanta & Meleager** (`CH5_007`-`CH5_010`) — samen bij een zwijnenjacht op
+  Cyzicus, met de **eerste "ander perspectief"-keuze** van dit spel (zie
+  hieronder): voorecho van hun latere, veel duisterdere Calydonische
+  ever-vignet (`SP_MYTH_CANON` A-tier).
+- **Kastor & Polydeukes** (`CH5_011`-`CH5_014`) — samen bij de bokswedstrijd
+  tegen Amycus (Polydeukes vecht, Kastor staat ernaast), met het tweede
+  Combat-bridge-gevecht van dit hoofdstuk.
+- **Herakles & Hylas** (`CH5_015`) — het bestaande, canonieke
+  Mysië-vertrekmoment (geen nieuwe `PERSON`-entry nodig, Herakles is al
+  "full" sinds Hoofdstuk 3).
+- **Argos** (`CH5_016`-`CH5_018`) — de Symplegades, met de nieuwe
+  schuifpuzzel. Bewust **"Argos" gespeld** (i.p.v. "Argus") op verzoek van de
+  auteur, om verwarring met de honderdogige bewaker Argus Panoptes (Hoofdstuk
+  3) te vermijden.
+- **Nestor & Philoktetes** (`CH5_020`-`CH5_022`) — samen vlak voor Colchis,
+  voorecho van hun latere hereniging bij Troje.
+
+**"Ander perspectief, zelfde inhoud"** (`CH5_008`/`CH5_008A`/`CH5_008B`):
+bij Cyzicus kiest de speler MET WIE ze meekijken tijdens de jacht (Atalanta of
+Meleager) — dit verandert alleen de vertelde invalshoek, niet de uitkomst:
+beide keuzes voeren terug naar dezelfde `CH5_009` en de speler ontmoet
+linksom of rechtsom sowieso beide personages. Bewust gekozen boven een echte
+vertakking (waarbij de speler blijvend content zou missen, met de 3 saveslots
+als aanmoediging tot herspelen) — de auteur koos daar expliciet niet voor,
+omdat dat het bestaande "je ziet alles binnen één playthrough"-model van
+Hoofdstuk 1-4 zou doorbreken. Het hergebruikt gewoon de bestaande
+`CHOICES`/tekst-resolver-machinerie, geen nieuwe engine nodig.
+
+**Nieuw puzzeltype "tile-swap"** (schuifpuzzel, `spRenderTileSwapPuzzle`/
+`spCheckTileSwapPuzzle` in singleplayer.js, gebruikt bij `puzzle_ch5_ablativus`,
+`CH5_017`): GEEN klassieke 15-puzzel met blanco vakje en slepen — dat is op
+een iPad onbetrouwbaar (drag-detectie, per ongeluk scrollen) en botst met de
+regel "zichtbare labels, nooit display:none+click()". In plaats daarvan: tik
+een tegel om 'm te selecteren, tik een tweede tegel om ze te verwisselen —
+zelfde soort groot (≥44px), knop-gebaseerd gebaar als de andere vier
+puzzeltypes. De vijf puzzels dit hoofdstuk zijn bewust over vier verschillende
+types verdeeld (multiple-choice/nominativus, typed-latin/accusativus,
+multiple-choice/genitivus, typed-greek/dativus, tile-swap/ablativus) i.p.v.
+oplopende moeilijkheid — dit hoofdstuk bouwt geen nieuwe stof op, dus is er
+geen "moeilijkheidsladder" om te beklimmen. Overige nieuwe puzzelsoorten
+waar de auteur naar vroeg (woordzoeker/kruiswoord/sudoku) zijn bewust NIET
+hier toegevoegd: die testen eerder herkenning/logica dan grammatica, en horen
+dus beter als optionele, niet-blokkerende vault-content (net als de
+Atalanta/Meleager-Calydon-vignet-aanpak) — Hoofdstuk 26 "De Bibliotheek van
+Mnemosyne" (al gepland als thuisbasis voor de spiegel-/geluidspuzzel bij
+Narcissus & Echo) is daar een logischer thuis voor.
+
+**Twee Combat-bridge-gevechten**: Amycus (`CH5_013`, 55 EP) en de Draak van
+Colchis (`CH5_026`, 75 EP, het zwaarste gevecht van het spel tot nu toe). De
+draak combineert bewust twee tradities: Medea's gezang sust het beest genoeg
+om Jason dichterbij te laten komen (de bekendste versie), maar het schrikt
+alsnog wakker voor hij het Vlies kan losmaken — sommige antieke
+vaasschilderingen tonen Jason wél in gevecht met de draak, dus dit is geen
+verzonnen afwijking.
+
+**Medea's wraak in Korinthe** (`CH5_029`/`CH5_EINDE`): een van de duisterste
+verhalen uit de klassieke mythologie (Medea doodt in haar wraak op Jason
+uiteindelijk ook hun eigen kinderen). Verteld met dezelfde terughoudendheid
+als Aegeus' zelfmoord in Hoofdstuk 4 — het gebeuren wordt nooit ontkend of
+vergoelijkt, maar ook nooit grafisch uitgesponnen (zelfde aanpak als het
+geplande "duistere drieluik" Niobe/Medea/Pentheus, zie de canon-uitbreiding
+hierboven). Geen `PUZZLE`/`COMBAT` op dit moment; het hoofdstuk eindigt, net
+als Hoofdstuk 4, op stilte.
+
+**Equip**: `CH5_006` (vertrek uit Iolcus) zet de FLAG
+`ch5_bemanning_uitrusting`, die zowel `armor:middel` als `helm:bandana`
+ontgrendelt via `SP_AVATAR_STORY_UNLOCKS` — zie de equip-routekaart (§5.1),
+nu voor het eerst ook echt gebouwd i.p.v. alleen gepland.
+
+**`CH4_EINDE` → `CH5_000` bugfix**: `CH4_EINDE` miste, net als `CH2_EINDE`/
+`CH3_EINDE` destijds (§7.9), een `CHOICES`-sectie naar het volgende hoofdstuk
+— logisch zolang Hoofdstuk 5 nog niet bestond, maar nu bij het bouwen van dit
+hoofdstuk rechtgezet met `* Stap door de poort -> CH5_000`. (`CH5_EINDE` zelf
+kreeg dezelfde behandeling bij het bouwen van Hoofdstuk 6, zie §7.11 —
+zolang Hoofdstuk 6 nog niet bestond was het bewust een terechte rand van het
+geschreven verhaal, geen bug.)
+
+**Getest**: (1) Node-reachability-script (zie
+`validate_ch5.js`-aanpak): alle 33 scènes bereikbaar vanaf `CH5_000` incl.
+`CH5_EINDE`, elke `CHOICES`-target bestaat, elke `PUZZLE`-scène en
+`COMBAT`-scène heeft precies 1 keuze, en elke `PUZZLE`/`COMBAT`/`CODEX`/
+`PERSON`/`EERETITEL`/`SOUVENIR`/`VOCAB`-id heeft een bijbehorende data-entry
+(incl. de regel dat een `PERSON:id:full` een eerdere `:intro` heeft, in dit
+hoofdstuk of een eerder hoofdstuk). (2) Echte browser-render via `spGoCns()`:
+de perspectiefkeuze (`CH5_008`), de schuifpuzzel volledig opgelost via zowel
+directe tegel-tap-simulatie als echte muisklikken (tegel selecteren →
+highlight → tweede tegel → wissel bevestigd in de DOM), beide
+Combat-bridge-gevechten volledig uitgespeeld tot winst, de typed-greek
+dativuspuzzel via het Griekse schermtoetsenbord inclusief de
+iota-subscriptum-toets, de Codex Personen/Mythologie-tabbladen met de nieuwe
+entries, en het `CH5_EINDE`-slot dat correct terugvalt op "Terug naar de
+opslagplekken" (geen `CHOICES`, zoals bedoeld). Geen consolefouten
+gedurende de hele sessie. Nog niet end-to-end doorgeklikt vanuit de UI zelf
+met de muis door alle 33 scènes na elkaar — zelfde openstaande vervolgstap
+als bij Hoofdstuk 4.
+
+### 7.11 Hoofdstuk 6: "De Vloek van Thebe" — generatiesprongen i.p.v. chronologie (**gebouwd**)
+
+Net als Hoofdstuk 5 geen hub met lijnen, maar dit keer ook bewust GEEN
+chronologische vertelling — het openingsscherm (`CH6_000`) legt dat expliciet
+uit aan de speler: het hoofdstuk volgt niet de jaartallen, maar het patroon
+van de vloek zelf (hoogmoed, gevolgd door een straf die bijna nooit de
+hoogmoedige zelf treft, maar de kinderen). Daardoor kan het hoofdstuk openen
+met Niobe (relatief vroeg in Thebe's geschiedenis) en afsluiten met Pentheus
+(die chronologisch al vóór Oedipus regeerde) zonder dat dat als een fout
+aanvoelt — `CH6_021` benoemt de tijdsprong terug expliciet in de fictie zelf.
+
+**Twee golven "De Zeven tegen Thebe"**, op verzoek van de auteur: de eerste
+golf (Eteokles/Polyneikes' broederoorlog, `CH6_012`-`CH6_014`) neemt ook
+Tydeus mee — de kortlontige Argonaut uit Hoofdstuk 5, die hier sneuvelt op
+een manier die Athena's geplande onsterfelijkheidsgunst doet intrekken
+(verteld terughoudend, zie hieronder). Tien jaar later, de Epigonen
+("de nakomelingen", `CH6_018`-`CH6_020`), wreken de zonen van de Zeven hun
+vaders alsnog — waaronder Diomedes, Tydeus' zoon, die hier voor het eerst in
+beeld komt vóór zijn latere rol in de Trojaanse Oorlog. Dezelfde
+generatiesprong-structuur als de rest van het hoofdstuk, nu ook binnen dit
+ene subverhaal (zie `SP_CAMPAIGN` ch6.gameplay).
+
+**Terugkerende continuïteit met eerdere hoofdstukken**: Kadmos' drakentanden
+(`CH6_001`-`CH6_002`) zijn expliciet dezelfde soort tanden als die koning
+Aeëtes in Hoofdstuk 5 gebruikte — de speler wordt daar zelf op gewezen.
+Niobe's belediging treft Latona (Hoofdstuk 2), gewroken door Apollo en Diana
+(ook Hoofdstuk 2). Pentheus is de neef van Bacchus, zoon van Semele
+(Hoofdstuk 2). Geen van deze personages kreeg een nieuwe `PERSON:`-tag waar
+ze al "full" bekend waren — ze verschijnen puur in de verteltekst, zelfde
+conventie als Theseus' cameo in Hoofdstuk 5.
+
+**Nieuw puzzeltype "matching"** (koppelpuzzel, `spRenderMatchingPuzzle`/
+`spMatchTapLeft`/`spMatchTapRight` in singleplayer.js, gebruikt bij
+`puzzle_ch6_matching_tempora`, `CH6_013`): twee kolommen knoppen, tik links
+dan rechts. Matcht op `puzzle.pairs`-INDEX, niet op tekst — links en rechts
+worden onafhankelijk geschud voor de weergave, maar de onderliggende
+koppeling ligt al vast in de puzzeldata. Bewust NIET het complete Hoofdstuk
+5/6-repertoire vervangen door naamval-herhaling: dit hoofdstuk herhaalt
+werkwoordstijden (praesens t/m perfectum, zie `SP_CAMPAIGN` ch6.grammatica),
+Hoofdstuk 5 herhaalde naamvallen — bewust verschillende invalshoek per
+herhalingshoofdstuk.
+
+**Bugfix tijdens het bouwen**: de eerste versie van de koppelpuzzel toonde
+een foutmelding bij een fout paar, maar de daaropvolgende volledige
+her-render (nodig om de geselecteerde/vergrendelde tegels bij te werken)
+overschreef die foutmelding meteen weer met een lege, verborgen versie — de
+speler zag dus nooit een hint bij een fout paar. Gevonden tijdens het
+browsertesten (de foutmelding kwam leeg terug), opgelost door de
+foutmelding als "single-shot" state (`SP_MATCH.error`) door de render heen
+te dragen in plaats van rechtstreeks op het DOM-element te zetten (dat
+patroon werkt wél bij de andere vier puzzeltypes, omdat die na een fout
+antwoord NIET opnieuw het hele scherm renderen).
+
+**Eén Combat-bridge-gevecht** (Laodamas, zoon van Eteokles, de verdediger van
+Thebe tegen de Epigonen, `CH6_019`, 60 EP) — de rest van het hoofdstuk drijft
+op noodlot en menselijke fouten, geen monsters. De Sfinx (`CH6_007`-`CH6_009`)
+wordt bewust met een `PUZZLE`, niet een `COMBAT`, verslagen — ze wordt
+verslagen met een raadsel, niet met een zwaard, zelfde principe als Ladon bij
+Herakles' werken (Hoofdstuk 3).
+
+**Duister materiaal, terughoudend verteld** — dit hoofdstuk bevat het
+zwaarste materiaal van Chronica Classica tot nu toe: kindermoord (Niobe),
+vadermoord/incest (Oedipus/Iokaste), broedermoord (Eteokles/Polyneikes),
+een wraakzuchtige daad die Athena's gunst doet intrekken (Tydeus), een
+gedwongen zelfmoord (Antigone), en een moeder die in goddelijke waanzin haar
+eigen zoon doodt (Pentheus/Agave) — samen met Medea (Hoofdstuk 5) en Niobe
+zelf het geplande "duistere drieluik" van moeder/kind-tragedies (zie de
+canon-uitbreiding in §7). Elk van deze momenten is verteld met dezelfde
+terughoudendheid als Aegeus' zelfmoord (Hoofdstuk 4) en Medea's wraak
+(Hoofdstuk 5): het gebeuren wordt nooit ontkend of vergoelijkt, maar ook
+nooit grafisch uitgesponnen (bv. Tydeus' precieze daad tegenover Melanippos
+blijft bewust ongenoemd — alleen Athena's afschuw wordt getoond, niet de
+daad zelf). Dit is standaard leerstof binnen het klassieke curriculum
+(Sophocles' Oedipus Rex/Antigone, Euripides' Bacchae) en dus passend bij de
+doelgroep.
+
+**Drie Clementia/Severitas-keuzemomenten** (`CH6_004`, `CH6_010`, `CH6_017`)
+— minder dan sommige eerdere hoofdstukken, bewust: niet elk zwaar moment in
+dit hoofdstuk leent zich voor een oordeel van de speler (bv. bij Pentheus'
+dood is elke "kies een kant"-vraag misplaatst). Ook één nieuw gebruik van
+`{tendency_address}` (`CH6_021`, de Boodschapper spreekt de speler direct
+aan bij de tijdsprong).
+
+**`CH5_EINDE` → `CH6_000` bugfix**: zelfde patroon als `CH4_EINDE` → `CH5_000`
+bij Hoofdstuk 5 (zie §7.10) — `CH5_EINDE` rechtgezet met
+`* Stap door de poort -> CH6_000`. `CH6_EINDE` zelf heeft bewust nog GEEN
+`CHOICES` naar Hoofdstuk 7 — dat bestaat nog niet, en dat is de rand van het
+geschreven verhaal, geen bug.
+
+**Getest**: (1) Node-reachability-script (`validate_ch6.js`, zelfde aanpak
+als Hoofdstuk 5): alle 27 scènes bereikbaar vanaf `CH6_000` incl.
+`CH6_EINDE`, elke `CHOICES`-target bestaat, elke `PUZZLE`/`COMBAT`-scène
+heeft precies 1 keuze, en elke `PUZZLE`/`COMBAT`/`CODEX`/`PERSON`/
+`EERETITEL`/`SOUVENIR`/`VOCAB`-id heeft een bijbehorende data-entry. (2)
+Echte browser-render via `spGoCns()`: de koppelpuzzel volledig opgelost via
+zowel directe tik-simulatie als echte muisklikken (inclusief het
+vergrendelen/uitgrijzen van gematchte tegels), het Combat-bridge-gevecht
+tegen Laodamas volledig uitgespeeld tot winst, de typed-greek
+vocativuspuzzel (Βάκχε) via het Griekse schermtoetsenbord, `{tendency_address}`
+dat correct oplost in `CH6_021`, beide eretitels toegekend, en `CH6_EINDE`
+dat correct terugvalt op "Terug naar de opslagplekken". Eén bug gevonden
+en gefixt tijdens dit testen (zie hierboven, de koppelpuzzel-foutmelding).
+Geen consolefouten gedurende de hele sessie. Nog niet end-to-end
+doorgeklikt vanuit de UI zelf met de muis door alle 27 scènes na elkaar —
+zelfde openstaande vervolgstap als bij Hoofdstuk 4/5.
+
+### 7.12 "Bewakers van de Herinnering" — karakterbank voor de laatste hoofdstukken (vastgelegd, nog te bouwen)
+
+Uit de oorspronkelijke Character Bible (`Single Player Mode.docx`, zie de
+openingsnoot van dit document) resteerden een paar personages die pas in de
+laatste hoofdstukken (26-28) een rol krijgen en daarom nog nergens in de
+campagne zijn uitgewerkt. Bij een audit (2026-07) van beide brondocumenten —
+`Single Player Mode.docx` en `Certamen - Chronica Classica Campaign Map.docx`
+— bleek de rest van hun inhoud (Master Timeline v1.0, de volledige
+Campaign Map-tabel, de S/A/B-tier mythencanon, de Romeinse-verhalenlijst,
+de Gouden Regels/pijlers/schrijfstijl) al 1-op-1 verwerkt te zijn in dit
+document (`SP_CAMPAIGN`/`SP_MYTH_CANON`/de canon-uitbreiding hierboven) —
+vandaar dat die brondocumenten nu opgeruimd kunnen worden. Onderstaande
+personages waren de enige nog niet overgenomen informatie:
+
+- **Lethe** — de eigenlijke hoofdtegenstander van heel Chronica Classica: de
+  personificatie van de rivier Lethe (Λήθη) in de onderwereld, en de bron
+  van de "vergetelheid" die het spel al vanaf de proloog impliciet drijft
+  ("Ooit kende iedereen hun namen. Nu vervagen de goden en helden...",
+  `SCREENS.spIntro`). BEWUST GEEN klassieke schurk: Lethe vernietigt niet,
+  ze wist uit, en ze gelooft oprecht dat vergeten noodzakelijk is — "alles
+  bewaren betekent dat niets meer betekenis heeft." Karakter: stil,
+  melancholisch, mysterieus, overtuigend. Centrale vraag die ze de speler
+  voorlegt: "Heeft de mens herinneringen nodig om te bestaan?" Hoort bij
+  Hoofdstuk 27 "De Rivier Lethe" (`SP_CAMPAIGN`), waar de speler "de ware
+  aard van Lethe" ontdekt — tot nu toe staat ze daar alleen als kale
+  hoofdstuktitel, nog niet als personage.
+- **Mnemosyne** — de tegenhanger van Lethe: Titanide van het geheugen,
+  moeder van de negen Muzen, bron van alle verhalen (niet alleen de grote
+  gebeurtenissen, ook een lied, een naam, een inscriptie, een
+  familietraditie). Karakter: warm, rustig, zorgzaam, wijs. Ziet de speler
+  niet als iemand die alleen oude kennis verzamelt, maar als iemand die
+  haar opnieuw betekenis geeft. Hoort bij Hoofdstuk 26 "De Bibliotheek van
+  Mnemosyne" (`SP_CAMPAIGN`) — nu alleen als locatienaam aanwezig.
+- **Kleio** — Muze van de Geschiedenis, geeft vorm aan wat Mnemosyne
+  bewaart. Stelt de speler steeds: "Wat vertellen mensen door? Wie wordt
+  herinnerd? Waarom?" Karakter: enthousiast, nieuwsgierig, dramatisch, soms
+  kritisch. Geplande gameplay-rol: historische context ontsluiten,
+  alternatieve bronnen vertellen, verschillen tussen mythen uitleggen —
+  natuurlijke gids voor het bestaande Geschiedenis-tabblad van de Codex
+  Memoriae (§7.2.1).
+- **Hephaistos (Vulcanus) als maker van het Orakel** — nog niet verwerkt in
+  `codex_orakel_van_chronos`: Hephaistos smeedde het Orakel van Chronos
+  zelf. Karakter in die rol: rustig, creatief, praktisch. Kleine toevoeging
+  voor wanneer die codex-entry wordt uitgebreid, of wanneer Hephaistos (al
+  bekend uit Hoofdstuk 1, lijn B) een latere scène krijgt.
+- **Stemkarakterisering voor de al-geplaatste geschiedschrijvers** (Homeros,
+  Herodotos, Livius, Vergilius — al gekoppeld aan hoofdstukken, zie de
+  canon-uitbreiding hierboven, maar nog zonder eigen "stem" vastgelegd):
+  - **Homeros** (rond de Trojaanse-Oorlog-hoofdstukken): rustig, oud,
+    poëtisch, observerend — ziet de speler als een nieuwe zanger die de
+    verhalen verder moet dragen.
+  - **Herodotos** (Hoofdstuk 16, "De Vader van de Geschiedenis"):
+    nieuwsgierig, vriendelijk, geïnteresseerd in vreemde culturen — leert de
+    speler bronnen te vergelijken in plaats van alles klakkeloos te geloven.
+  - **Livius** (Hoofdstuk 19-20): serieus, trots, moreel gericht — toont hoe
+    Rome zichzelf wilde herinneren.
+  - **Vergilius** (rond de Aeneas-hoofdstukken): gevoelig, intelligent,
+    filosofisch — verbindt Troje met Rome's toekomst.
+
+**Finale-personagelijst** (Hoofdstuk 28 "Chronica Classica"): de Master
+Timeline noemde expliciet dat Kronos, Athena, Mnemosyne, Kleio, Homeros,
+Herodotos, Livius én Vergilius in de Finale samenkomen — de speler gebruikt
+dan alles wat hij, zij of die geleerd heeft om de herinnering aan de
+klassieke wereld veilig te stellen. Nog geen uitgewerkte `SP_CAMPAIGN`-entry
+voor de Finale met dit detail; hier vastgelegd zodat het niet verloren gaat.
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
@@ -1354,11 +1729,13 @@ In afgesproken bouwvolgorde:
 4. **Quest-overzichtsscherm** — data wordt al bewaard (`spHookQuest`); de
    Codex heeft inmiddels wél een eigen scherm (§7.2, `SCREENS.spCodex`), een
    vergelijkbaar overzicht voor quests ontbreekt nog.
-5. **Hoofdstuk 5 t/m 28 + Finale-content** — scène voor scène in CNS.
+5. **Hoofdstuk 7 t/m 28 + Finale-content** — scène voor scène in CNS.
    `SP_CAMPAIGN` bepaalt per hoofdstuk de grammatica/personages, `SP_MYTH_CANON`
-   levert het zijverhaal-materiaal. Nu meestal twee tot vier onafhankelijke
-   lijnen per hoofdstuk (§7.1); "meer kruisen" (lijnen die van elkaar weten) is
-   een latere stap.
+   levert het zijverhaal-materiaal. Meestal twee tot vier onafhankelijke lijnen
+   per hoofdstuk (§7.1); Hoofdstuk 5 doorbrak dat bewust met één doorlopend
+   tochtenlogboek i.p.v. een hub (§7.10) — een precedent voor toekomstige
+   hoofdstukken die zich ook beter lenen voor één lijn dan voor parallelle
+   keuzes. "Meer kruisen" (lijnen die van elkaar weten) is een latere stap.
 6. **Illustraties** — `IMAGE:` is **actief** (rendert het bestand uit
    `assets/chronica/images/`). De eerste illustratie hangt aan PRO_005 ("De
    Bronzen Schijf": de ontdekking van het Orakel, `prologue.png`). Resterend
