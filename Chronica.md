@@ -74,7 +74,7 @@ browser):
 | **Hoofdstuk 1**: hub + 3 parallelle lijnen (Midas/Athena/Prometheus &amp; Pandora) | `certamen/singleplayer-data.js` (`SP_CH1_CNS`, 30 scènes) | ✅ werkend — getest: alle 3 lijnen volledig doorgespeeld, flags/codex/quest/eretitel kloppen per lijn |
 | **Hoofdstuk 2**: hub + alle vier lijnen (L/S/K afgerond, H gedeeltelijk) | `certamen/singleplayer-data.js` (`SP_CH2_CNS`) | ✅ werkend — alle vier lijnen + fragmenten-gate + Athena-mentor + Combat-bridge getest, incl. beide gevechten (Leeuw/Hydra) volledig uitgespeeld (zie §7.6) |
 | **Hoofdstuk 3**: hub + twee lijnen (Io incl. Argus/Mercurius/Europa-coda, Herakles' laatste tien werken) | `certamen/singleplayer-data.js` (`SP_CH3_CNS`, 43 scènes) | ✅ werkend — beide lijnen + 6 Combat-bridge-gevechten + 9 puzzels (bewuste combat/puzzel-balans, zie §7.8) + fragmenten-gate (fragments=6) + `{tendency_address}` NPC-reacties volledig getest |
-| **Hoofdstuk 4**: hub + twee lijnen (Theseus/Ariadne/Minotaurus met Daidalos & Ikaros erin verweven, en Phaëthon) | `certamen/singleplayer-data.js` (`SP_CH4_CNS`, 30 scènes) | ✅ werkend — beide lijnen + 1 Combat-bridge-gevecht (Minotaurus) + 5 puzzels (infinitivus/vocativus/ablativus bij Theseus, imperfectum/perfectum bij Phaëthon) + fragmenten-gate (fragments=8) + `{tendency_address}` + alle 5 grammatica-tabellen getest (Node-reachability + echte browser-render via `spGoCns()`, zie §7.9) |
+| **Hoofdstuk 4**: hub + twee lijnen (Theseus/Ariadne/Minotaurus met Daidalos & Ikaros erin verweven, en Phaëthon) | `certamen/singleplayer-data.js` (`SP_CH4_CNS`, 34 scènes) | ✅ werkend — beide lijnen + 1 Combat-bridge-gevecht (Minotaurus) + 5 puzzels (infinitivus/vocativus/ablativus bij Theseus, imperfectum/perfectum bij Phaëthon) + fragmenten-gate (fragments=8) + `{tendency_address}` + alle 5 grammatica-tabellen + een leesvalstrik in het labyrint (`CH4_T06B`, zie §7.1/§7.9) getest (Node-reachability + echte browser-render via `spGoCns()`, zie §7.9) |
 | **Hoofdstuk 5**: één doorlopend tochtenlogboek (geen hub/lijnen) — de tocht van de Argo, met negen cameo-clusters van latere helden | `certamen/singleplayer-data.js` (`SP_CH5_CNS`, 33 scènes) | ✅ werkend — herhaling nom. t/m abl. (geen nieuwe grammatica) + 5 puzzels (1 per naamval, over 4 puzzeltypes incl. het nieuwe "tile-swap") + 2 Combat-bridge-gevechten (Amycus, de Draak van Colchis) + één perspectiefkeuze (Atalanta/Meleager, zelfde inhoud vanuit twee invalshoeken) + Medea's wraak in Korinthe als terughoudend verteld slot — Node-reachability + volledige browser-doorloop van alle nieuwe mechanieken via `spGoCns()`, zie §7.10 |
 | Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
@@ -629,8 +629,8 @@ De regels:
 - Dit is de bewuste keuze i.p.v. "alle drie de lijnen verplicht": het houdt
   echte branching + een korte kritische route voor casual spelers, zonder de
   educatieve gate los te laten.
-- **Leesvalstrik** (vastgelegd 2026-07 na een gesprek met de auteur, nog niet
-  gebouwd — eerste kandidaat: een toekomstig story-heavy hoofdstuk). Een
+- **Leesvalstrik** (vastgelegd 2026-07 na een gesprek met de auteur;
+  **eerste voorbeeld gebouwd** in Hoofdstuk 4, zie hieronder). Een
   KEUZE-gebaseerde manier om leesaandacht te toetsen, nadrukkelijk GEEN nieuw
   `puzzle.type`: een personage geeft een instructie in de verteltekst (bv.
   "houd in het labyrint altijd links aan"), en de daaropvolgende `CHOICES`
@@ -653,6 +653,17 @@ De regels:
     (niet ongedaan te maken bij een herstart). Extra `CODEX`/`PERSON`/`VOCAB`
     op de foute tak is wel onschuldig — bonuslore zonder exploit, dankzij
     dezelfde dedup.
+  - **Voorbeeld (Hoofdstuk 4, retrofit 2026-07 in de al gebouwde/geteste
+    Theseus-lijn):** `CH4_T06` (het labyrint in, na de ablativus-puzzel)
+    wijst nu naar `CH4_T06B` "De Eerste Splitsing" — Ariadne fluistert
+    Daidalos' geheim door ("bij elke splitsing, houd links aan"). Links
+    (`CH4_T07`) is de originele, ongewijzigde voortzetting naar de
+    Minotaurus. Rechts leidt via `CH4_T06R1`→`CH4_T06R2`→`CH4_T06R3` (de
+    draad raakt op, de Minotaurus komt dichterbij, geen ontsnapping meer)
+    terug naar `CH4_T06B` zelf — het lokale checkpoint. Minimaal invasief
+    voor een al live hoofdstuk: alleen het keuze-doel van `CH4_T06` is
+    aangepast, de rest van de al geteste Theseus-lijn (puzzel, `CH4_T07`
+    e.v.) is ongewijzigd.
 
 ### 7.2 Hoofdstuk-afsluiting: het Orakel, de mantel en de Codex Memoriae (**gebouwd**)
 
@@ -1268,9 +1279,10 @@ als `CH3_ATHENA`.
 
 ### 7.9 Hoofdstuk 4: "Het Labyrint van Herinneringen" — twee onbreekbare beloften (**gebouwd**)
 
-Twee hoofdlijnen (`SP_CH4_CNS`, singleplayer-data.js, 30 scènes), net als
-Hoofdstuk 3 — beide draaien om dezelfde kern: een belofte die, eenmaal
-uitgesproken, niemand meer ongedaan kon maken.
+Twee hoofdlijnen (`SP_CH4_CNS`, singleplayer-data.js, 34 scènes — 30 origineel
++ 4 uit de leesvalstrik-retrofit, zie §7.1), net als Hoofdstuk 3 — beide
+draaien om dezelfde kern: een belofte die, eenmaal uitgesproken, niemand meer
+ongedaan kon maken.
 
 - **Theseus** (`CH4_T01`-`T16`): Athene betaalt al negen jaar een tol van
   veertien jonge levens aan koning Minos van Kreta — boete voor de dood van
@@ -1278,7 +1290,11 @@ uitgesproken, niemand meer ongedaan kon maken.
   vader Aegeus witte zeilen te hijsen als hij de Minotaurus overleeft. Op
   Kreta valt Ariadne voor hem, verraadt haar vader met Daidalos' garenplan
   (`PUZZLE` ablativus) en helpt Theseus het labyrint in en uit — in ruil voor
-  de belofte dat hij haar meeneemt. Na de Combat-bridge-overwinning op de
+  de belofte dat hij haar meeneemt. Bij de eerste splitsing in het labyrint
+  (`CH4_T06B`) fluistert Ariadne Daidalos' geheim door — een leesvalstrik
+  (§7.1): kiest de speler tegen die instructie in, dan volgt een doodlopende
+  route (`CH4_T06R1`-`R3`, de draad raakt op, de Minotaurus komt dichterbij)
+  terug naar hetzelfde lokale checkpoint. Na de Combat-bridge-overwinning op de
   Minotaurus (`CH4_T07`, één nieuwe `SP_COMBAT_ENEMIES`-entry) laat Theseus
   Ariadne echter slapend achter op Naxos, waar Bacchus (bekend van Hoofdstuk
   1) haar vindt en onsterfelijk maakt — het enige verhaal in dit hoofdstuk
@@ -1355,6 +1371,18 @@ een gender-passende aanspreekvorm in `CH4_ATHENA`, en alle vijf nieuwe
 grammatica-tabellen die correct renderen in `SCREENS.spCodex`. Nog niet
 end-to-end doorgeklikt vanuit de UI zelf (alle 30 scènes na elkaar met de
 muis) — dat staat nog open als eventuele vervolgstap.
+
+**Getest (leesvalstrik-retrofit, 2026-07)**: (1) Node-reachability-script
+bevestigt alle 34 scènes van `SP_CH4_CNS` nog bereikbaar (incl. de 4 nieuwe)
+en de hele keten `PRO_001` → ... → `CH6_EINDE` (237 scènes over alle
+hoofdstukken) intact. (2) Browserdoorloop via `spGoCns()`/`spChoosePath()`:
+de foute afslag (`CH4_T06B` → `CH4_T06R1` → `CH4_T06R2` → `CH4_T06R3`)
+loopt correct terug naar het lokale checkpoint `CH4_T06B`, en de juiste
+afslag ("Houd links aan") komt nog steeds ongewijzigd uit bij `CH4_T07`.
+Onderweg bleek de browserpreview een stale, gecachete versie van
+`singleplayer-data.js`/`singleplayer.js` te tonen — de cache-busting
+versiestring in `index.html` was nog `?v=20260720a` terwijl beide bestanden
+alweer bijgewerkt waren; bijgewerkt naar `?v=20260722a`. Geen consolefouten.
 
 ### 7.10 Hoofdstuk 5: "Het Gulden Vlies" — een tochtenlogboek i.p.v. een hub (**gebouwd**)
 
@@ -1824,3 +1852,364 @@ aanpassen zonder steeds de volledige tekst heen-en-weer te hoeven sturen.
 - **Workflow**: Gerben bewerkt (een kopie van) het bestand en stuurt het (of
   de aangepaste alinea's) terug; Claude verwerkt de wijzigingen in
   `singleplayer-data.js`, regenereert het bestand, commit + pusht beide.
+
+---
+
+## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
+
+Tweede laag bovenop de bestaande delayed-consequences/Latijn-als-skill-check-
+opzet (§7.3): waar het bestaande waardensysteem (Pietas/Virtus/Astutia/
+Eloquentia, hier "Clementia/Severitas/Neutral" genoemd) bepaalt **hoe** de
+wereld op de speler reageert (reputatie, toon), bepalen zes nieuwe stats
+**wat de speler kan doen** (capaciteit, toegang). De twee systemen blijven
+strikt gescheiden in code en beleving — ze mogen elkaar beïnvloeden, maar
+meten nooit hetzelfde. Bij het labelen van bestaande/nieuwe keuzes geldt
+daarom: een keuze die puur moreel/karakter is (eerlijkheid, mededogen,
+loyaliteit) krijgt NOOIT een stat, ook niet als hij "zwaar" aanvoelt.
+
+### 11.1 De zes stats
+
+| Stat | D&D-equivalent | Domein |
+|---|---|---|
+| **Vis** | Strength | brute kracht, dragen, forceren, worstelen, wapengeweld van dichtbij |
+| **Agilitas** | Dexterity | snelheid, evenwicht, sluipen, boogschieten, vluchten, precisie |
+| **Robur** | Constitution | uithoudingsvermogen, honger, kou, gif, wonden, lange marsen |
+| **Ingenium** | Intelligence | kennis, talen, tekst en inscripties, strategie, raadsels |
+| **Prudentia** | Wisdom | opmerkingsgave, mensenkennis, voortekenen lezen, zelfbeheersing |
+| **Gratia** | Charisma | overtuigen, gezag, gastvrijheid winnen, liegen, bezingen |
+
+- Bereik **3 t/m 20**, startwaarden tussen 8 en 15. Rauwe waarden, geen
+  modifiers — een drempel is gewoon "Vis 13 of hoger", direct leesbaar.
+- 19-20 alleen narratief verdiend (godengeschenk, doorstane beproeving),
+  gereserveerd voor het laatste derde deel van het spel.
+- Stats kunnen dalen: een verwonding verlaagt Vis, een verraad Gratia,
+  uitputting Robur. Tijdelijke verlagingen krijgen een duur (aantal scènes,
+  of "tot rust genomen"); permanente verlagingen zijn zeldzaam en altijd
+  gevolg van een expliciete keuze.
+- Twee afgeleide waarden, bewust minimaal: **Vigor** (uithouding, afgeleid
+  van Robur — loopt terug bij fysieke tegenslag, op nul volgt geen game
+  over maar een afgedwongen scène) en **Fatum** (kleine voorraad
+  herkansingen per hoofdstuk om een gefaalde worp over te doen).
+
+### 11.2 Klassen via de eerste keuze
+
+In de proloog kiest de speler diëgetisch één voorwerp ("wat neem je mee?",
+niet "kies je klasse") — dat bepaalt de klasse, startstats en een unieke
+vaardigheid; de klassenaam volgt pas ná de keuze, als bevestiging. Elke
+klasse claimt precies twee van de zes stats, zodat de zes stats in drie
+banen uiteenvallen — elk obstakel kan dan drie routes krijgen, één per
+klassepaar.
+
+- **Hoplites** (speer/hasta) — **Vis+Robur**. Houdt stand, draagt, forceert,
+  verduurt. Vaardigheid *Stare firmiter*: 1×/hoofdstuk een fysieke check
+  automatisch laten slagen door schade aan Vigor te accepteren.
+- **Sagittarius** (boog/arcus) — **Agilitas+Prudentia**. Verkenner: ziet
+  eerder, beweegt sneller, leest voortekenen en mensen. Vaardigheid
+  *Ex longinquo*: 1×/scène van veraf verkennen, krijgt info die andere
+  klassen pas achteraf krijgen — sluit aan op het payoff-systeem (vage
+  aanwijzing over gevolgen op lange termijn).
+- **Eques** (paard/equus et habenae) — **Ingenium+Gratia**. Aristocratische
+  leider: bevel, verbonden, strategie, tekst. Vaardigheid *Auctoritas*:
+  1×/hoofdstuk een NPC-relatie met 1 verhogen, of een sociale check
+  automatisch tot "deels geslaagd" tillen. Sterkste klasse voor
+  Latijn-checks (Ingenium verlaagt drempel, Gratia verhoogt opbrengst) —
+  bewust gecompenseerd doordat Hoplites/Sagittarius eigen, niet-talige
+  manieren krijgen om om een gesloten inscriptie-deur heen te werken.
+
+Alle drie starten met hetzelfde patroon 15/15/12/10/8/8 over de zes stats,
+alleen de volgorde verschilt (Hoplites: Vis15/Robur15/Agilitas12/Prudentia10
+/Ingenium8/Gratia8; Sagittarius: Agilitas15/Prudentia15/Ingenium12/Robur10/
+Vis8/Gratia8; Eques: Ingenium15/Gratia15/Agilitas12/Vis10/Robur8/Prudentia8)
+— zelfde totaal (68), geen klasse objectief sterker. Drempelgevoel:
+11-12 haalbaar voor twee van de drie bij start, 13-14 alleen na investering
+of klasse-sterk, 15+ bij start uitsluitend klasse-exclusief en spaarzaam in
+vroege hoofdstukken, 8-stats optrekbaar maar nooit uitblinkend.
+
+Klasse ligt na de proloog vast, maar stats groeien door gedrag — een Eques
+die consequent vooropgaat in gevechten kan een hogere Vis krijgen dan een
+Hoplites die steeds onderhandelde. Gedrag verslaat afkomst op de lange
+termijn.
+
+**Stap 2 — gebouwd (2026-07-24).** De proloog had in `PRO_003` al precies dit
+keuzemoment (jachtboog/speer/ruitersporen), inclusief een
+`REWARD: class=Boogschutter/Hopliet/Cavalerist; traits=...`-veld en een
+eigen eretitel per keuze — geen nieuwe scène nodig geweest. `spHookReward()`
+(singleplayer.js) initialiseert nu bij de EERSTE klassekeuze ook
+`SP_STATE.stats` uit `SP_CLASS_STATS[classId]` (singleplayer-data.js, keys
+`hopliet`/`boogschutter`/`cavalerie` — dezelfde id's als
+`SP_CLASS_REWARD_MAP`/`BM_CLASSES`, geen aparte Latijnse klasse-id-ruimte).
+Een latere REWARD (komt nu niet voor) overschrijft een al gegroeid statblok
+niet. Getest via de browserconsole: Hopliet-keuze → exact
+Vis15/Robur15/Agilitas12/Prudentia10/Ingenium8/Gratia8.
+
+### 11.3 Groei via skillpoints
+
+Aan het eind van elk hoofdstuk (niet de proloog) **3 basispunten** plus max.
+**2 bonuspunten** uit het hoofdstuk zelf, in-fictie gepresenteerd (nacht bij
+het vuur, offer, mentorgesprek) — nooit een levelscherm midden in het
+verhaal. Over acht hoofdstukken ~24-40 punten.
+
+Kosten schalen met de huidige waarde: t/m 11 → 1 punt, 12-14 → 2 punten,
+15-17 → 3 punten, 18+ → 4 punten. Max. **+2 in dezelfde stat per
+hoofdstuk**; harde grens 20, zachte grens 16 t/m hoofdstuk 3 en 18 t/m
+hoofdstuk 6. Punten mogen opgespaard worden.
+
+Twee lichte, verhaal-gekoppelde bonusmechanismen: **oefenpunten** (een stat
+3+ keer ingezet in een hoofdstuk → 1 bonuspunt, max. 2, niet benoemd welke
+stat — "je armen weten nu wat het schild weegt") en **korting op wat je
+geoefend hebt** (eerste verhoging in een dat hoofdstuk gebruikte stat kost
+1 punt minder, min. 1). Geen automatisch verval — wie niet investeert
+blijft vanzelf achter.
+
+Investeringsscherm toont per stat: huidige waarde, kosten van +1, een vage
+hint welke drempels in het volgende hoofdstuk in de buurt liggen ("er ligt
+zwaar werk voor je"), en het aantal gemiste gated choices per stat zonder
+te verklappen wat het was. Elke investering wordt in de Kroniek
+opgeslagen.
+
+**Stap 3 (basis) — gebouwd (2026-07-24), bonuspunten nog niet.** Nieuwe
+CNS-sectie `STATPOINTS:` (CNSParser/`spHookStatpoints`, singleplayer.js) kent
+een vast aantal skillpoints toe en reset tegelijk de per-hoofdstuk
+`+2`-teller (`statSpentSinceAward`) — elke `CHx_EINDE`-scène (Hoofdstuk 1
+t/m 6) heeft nu `STATPOINTS:` met de basis **3** punten. `SCREENS.spStats`
+(singleplayer.js) is het investeringsscherm: toont per stat waarde/kosten/
+blokkeerreden, en `spInvestStat()` handhaaft alle drie de caps tegelijk —
+harde grens 20, de meeschalende zachte grens (`spStatSoftCap`: 16 t/m
+Hoofdstuk 3, 18 t/m Hoofdstuk 6), en max. 2 verhogingen per stat per
+hoofdstuk. Elke investering komt in `SP_STATE.statLog` (van/naar/hoofdstuk/
+tijdstip) — de Kroniek-weergave daarvan volgt nog. **Nog niet gebouwd**: de
+oefenpunten/korting-bonusmechanismen uit 11.3 hierboven — die vereisen dat
+er ergens stat-gebruik te tellen valt, en dat bestaat pas zodra Stap 5
+gated choices oplevert (zie §11.5). Getest via de browserconsole: award →
+investeren → alle drie caps triggeren de juiste blokkeertekst.
+
+### 11.4 Checks en gated choices
+
+Drie soorten: **gated choice** (hoofdmechanisme — drempel, geen dobbelsteen:
+je kunt het of niet, altijd zichtbaar getoond, grijs, mét de eis — bv.
+*"Zet je schouder tegen de steen. (Vis 14 — jij hebt 11)"* — dat gevoel
+("de wereld is groter dan mijn personage") is het belangrijkste
+ontwerpprincipe van het hele systeem; uitzondering: klassenvaardigheden en
+zeldzame opties mogen wél verborgen blijven), **rolled check** (1-20 + stat
+tegen een DC, spaarzaam — 2-3×/hoofdstuk op dramatische hoogtepunten, met
+de vierdelige uitkomstenladder volledig/deels/gefaald/kritiek gefaald), en
+de bestaande **Latijn-check** (Ingenium verlaagt moeilijkheid, Gratia
+verhoogt opbrengst — taalinhoud zelf verandert nooit door stats).
+
+Ontwerpregels: nooit een doodlopende weg (altijd één altijd-beschikbare,
+niet-bestrafte optie — vaak de duurdere/ruwere weg); drie routes per
+obstakel waar mogelijk, één per klassepaar; vaste drempelniveaus 11/13/15/17
+(licht/gemiddeld/zwaar/uitzonderlijk), meeschalend per hoofdstuk; per
+hoofdstuk minstens **twee exclusieve momenten per klasse** (auteurscontrole
+die gated choices telt per stat/klassepaar).
+
+**Harde regel (2026-07-24): een gated choice toetst ALTIJD de rauwe
+statwaarde, nooit `classId`.** "Één per klassepaar" in de vorige alinea is
+een schrijfheuristiek (welk stel stats hoort thematisch bij dit obstakel),
+geen mechanische klasse-poort — een Sagittarius die zijn Vis heeft
+opgetrokken tot 13 moet exact dezelfde zijdeur-route krijgen als een
+Hoplites die daar al bij start zit. Klasse bepaalt uitsluitend de
+startwaarden (§11.2), nooit de toegang zelf; anders klopt "gedrag verslaat
+afkomst op de lange termijn" (§11.2) niet meer. `spStatReqMet()`
+(singleplayer.js) toetst dan ook uitsluitend `SP_STATE.stats[key]` — nergens
+in de keuzelogica staat een `classId`-vergelijking, en dat moet zo blijven
+bij alle toekomstige gated choices. **Beslissing (2026-07-24): de klassenvaardigheden zijn de bewuste
+uitzondering.** *Stare firmiter*/*Ex longinquo*/*Auctoritas* (§11.2/item 8
+hieronder) blijven wél echt `classId`-exclusief, in tegenstelling tot elke
+gated choice. Reden: de vaardigheid is het rechtstreekse gevolg van de
+proloog-keuze zelf ("jij koos de speer, dus jij kunt Stare firmiter"), en is
+daarmee de enige plek in het systeem waar die keuze permanent voelbaar
+blijft, los van hoe de stats zich nadien ontwikkelen — zonder die
+uitzondering zou de proloog-keuze op termijn mechanisch betekenisloos
+worden. Nog niet gebouwd; wanneer item 8 aan de beurt is, mag de
+implementatie dus gerust `classId` toetsen (in tegenstelling tot alle
+STAT-tag-gated choices hierboven, die dat nooit mogen doen).
+
+Koppeling met het payoff-systeem: een geslaagde check schrijft een flag weg
+die later kan terugkomen (blessure, reputatie); payoffs mogen omgekeerd
+stats tijdelijk aanpassen (wie in hoofdstuk 2 een NPC redde, krijgt in
+hoofdstuk 5 hulp = tijdelijke bonus).
+
+**Belangrijke afbakening (2026-07, na Stap 1-audit): een gated choice die
+puur test of de speler een eerder gegeven aanwijzing goed gelezen/onthouden
+heeft, is GEEN stat-check** — dat is een leesbegrip-mechanisme, geen
+personagevermogen. Zie de correctie bij CH4_T06B in §11.5.
+
+### 11.5 Retrofit van Proloog t/m Hoofdstuk 6 — Stap 1 (audit) afgerond
+
+**Stap 1 (audit) is uitgevoerd** (2026-07-24): elke bestaande `CHOICES:`-regel
+in Proloog t/m Hoofdstuk 6 (`certamen/singleplayer-data.js`, regels
+1476-6263, 335 keuze-regels in totaal) is gelabeld met de stat die er
+impliciet bij hoort. Volledige tabel per hoofdstuk: zie de audit-agents'
+rapportage in de bouwsessie van 2026-07-24 (niet apart gecommit — dit is de
+samenvatting die telt).
+
+**Hoofdbevinding**: van de 335 keuze-regels impliceren er slechts **3**
+al een stat (plus het klassekeuzemoment zelf, `PRO_003`, dat geen
+losse stat maar de klassekeuze ís). De rest is ofwel het bestaande
+Clementia/Severitas/Neutral-waardensysteem (~90+ triades, bewust buiten
+scope), ofwel een enkelvoudige "kijk verder"-schakel zonder alternatief —
+en dat laatste is geen omissie: zuiver narratieve keuzes zonder stat-lading
+(links/rechts zonder aanwijzing, wel/niet aanraken) horen te blijven
+bestaan naast de gated choices, niet elke keuze hoeft gated te zijn.
+
+Concreet:
+- **`PRO_003`** (boog/speer/ruitersporen) — al het klassekeuzemoment zelf,
+  zie §11.2.
+- **`CH2_L07`** (overtuiging bij het eiland Delos, Latona-lijn) — thematisch
+  zuiver **Gratia** ("gastvrijheid winnen"), maar momenteel een
+  Clementia/Severitas/Neutral-toonkeuze: alle drie de opties leiden naar
+  hetzelfde vervolg, dus nog geen echte mechanische fork. **Besluit
+  (2026-07-24): dit wordt de eerste echte Gratia-drempel/-check** — vereist
+  een nieuwe extra lijn/uitkomst (bv. een tak die alleen opengaat bij
+  voldoende Gratia, of een merkbaar beter resultaat op het eiland),
+  uitwerken bij Stap 5.
+- **`CH4_T06B`** (links/rechts in het Labyrint van Kreta, Theseus-lijn) —
+  **AUDIT-FOUT, GECORRIGEERD (2026-07-24): dit is GEEN Ingenium-drempel.**
+  Ariadne geeft de speler eerder de aanwijzing "houd links aan"; deze keuze
+  test alleen of de speler die aanwijzing goed gelezen en onthouden heeft.
+  Dat is een leesbegrip-mechanisme (zie de afbakening in §11.4), geen
+  personagevermogen — blijft dus stat=geen, rol=geen. De bestaande fail-lus
+  (`CH4_T06R1`-`R3`, terug naar `CH4_T06B` bij een fout antwoord) is wél
+  bruikbaar als structuursjabloon voor hoe een latere, échte gated choice
+  met gevolg moet aanvoelen — alleen niet als stat-drempel zelf.
+
+**Praktische consequentie voor Stap 3-5**: Stap 3 (groei aanhaken op
+bestaande keuzes) en Stap 4 (drempels toevoegen aan bestaande keuzes)
+hebben in Hoofdstuk 1-6 vrijwel niets om op te hangen — na de correctie
+van `CH4_T06B` blijft alleen `CH2_L07` over als bruikbare aanknoping, en
+die vereist al nieuwe content om een echte fork te worden. Het zwaartepunt
+van de retrofit ligt dus zwaarder bij **Stap 5** (nieuwe klasse-exclusieve
+content per hoofdstuk) dan de oorspronkelijke spec impliciet aannam: elk
+hoofdstuk zal grotendeels nieuwe gated choices nodig hebben, niet slechts
+gelabelde bestaande.
+
+### 11.6 Bouwvolgorde
+
+1. **Gebouwd (2026-07-24).** Stats, klassen en statverdeling in de
+   wereldstaat; opslaan/laden. `SP_CLASS_STATS`/`SP_STAT_KEYS`/
+   `SP_STAT_DEFS`/`spStatpointCost` (singleplayer-data.js);
+   `SP_EMPTY_STATE` uitgebreid met `stats`/`skillpoints`/
+   `statSpentSinceAward`/`statLog` (singleplayer.js) — loopt gratis mee in
+   de bestaande per-saveslot opslag (`spSaveProgress`/`spLoadAllSlots`),
+   geen apart opslagmechanisme nodig geweest.
+2. **Gebouwd (2026-07-24).** Proloog-voorwerpkeuze mechanisch gekoppeld —
+   zie §11.2/§11.5.
+3. **Gebouwd (2026-07-24).** Gated choices met zichtbare, grijze
+   vergrendeling + getoonde eis. Nieuwe CNS-tag `[STAT:sleutel:getal]` op
+   een keuzeregel (`CNSParser.STAT_TAG_RE`, singleplayer.js) — in
+   tegenstelling tot `[REQUIRE:...]` wordt deze keuze NOOIT verborgen
+   (`spChoiceVisible` raakt hem niet): `SCREENS.spPlay` toont hem altijd,
+   en rendert 'm grijs/`disabled` met de eis erbij zodra
+   `spStatReqMet()` faalt — exact het `"Vis 14 — jij hebt 11"`-format uit
+   Deel 4.2 van de spec. Voldoet de speler eraan, dan wordt de knop gewoon
+   goud en klikbaar.
+
+   **Bewijsscène (2026-07-24):** `CH1_A02` (de poort naar Midas' troonzaal,
+   Hoofdstuk 1 lijn A) omgezet van één verplichte taalpuzzel naar een echt
+   obstakel met drie routes, zoals Deel 4.3 voorschrijft. De taalpuzzel zelf
+   verhuisde naar een nieuwe subscène `CH1_A02_PUZZLE` (blijft altijd open,
+   Eques' natuurlijke weg — dit MOEST, want een scène met een `PUZZLE:`-
+   sectie toont zijn `CHOICES:` nooit, dus de drempel-keuzes konden niet
+   naast de puzzel op dezelfde scène staan). Twee nieuwe gated takken erbij,
+   beide drempel 13 (Deel 4.3: "gemiddeld"), converging op dezelfde
+   `CH1_A03`: `CH1_A02_VIS` (zijdeur forceren, Hoplites) en
+   `CH1_A02_SLUIP` (wisseling van de wacht afwachten, Sagittarius — letterlijk
+   het voorbeeld uit Deel 4.3 van de spec). Getest met alle drie de
+   startklassen: Cavalerist (Vis10/Prudentia8) ziet beide gated takken
+   correct grijs/vergrendeld, Hopliet (Vis15) ontgrendelt alleen de
+   zijdeur, Boogschutter (Prudentia15) alleen de wachtwisseling; alle drie
+   routes navigeren correct door naar `CH1_A03`.
+
+   **Tweede batch (2026-07-24), 10 stuks, na goedkeuring per stuk door
+   Gerben (voorstel B2 — het lidwoord-taalpuzzel in Hoofdstuk 1 lijn B —
+   bewust NIET aangepast, blijft puur een taalpuzzel):**
+   - `CH1_A10` (Pactolus-vlucht): Vis 13 (zijdeur forceren) / Gratia 11
+     (poortwacht overtuigen) / altijd open (naast Midas blijven).
+   - `CH1_B01C` (laatste helling naar de Olympos): Vis 13 (rotswand) /
+     Agilitas 11 (richel) / altijd open (pelgrimspad).
+   - `CH1_C03B` (dichter bij de haard van de goden): Agilitas 11
+     (meeschaduwen) / Vis 13 (rotsrand) / altijd open (schaduw) — de
+     bestaande taalpuzzel (`puzzle_ch1c_lidwoord`) blijft ervóór staan,
+     ongewijzigd, als eigen verhaalbeat.
+   - `CH1_C09B` (tocht naar Prometheus' rots): Vis 13 (rotswand) /
+     Prudentia 11 (vluchtpatroon adelaar lezen) / altijd open (karrenspoor).
+   - `CH2_L07` (Delos): **Gratia 13**, extra route náást de drie bestaande
+     Clementia/Severitas/Neutral-toonkeuzes (niet vervangen) — geeft een
+     merkbaar warmer resultaat (Athena's houding breekt even open). Eerste
+     stat-check die een kwalitatief ander resultaat geeft, niet alleen
+     andere aankomsttekst.
+   - `CH2_L06B` (python-achtervolging): Agilitas 11 (zigzaggen) / Robur 13
+     (doorbijten) / altijd open (blindelings rennen).
+   - `CH2_S06B` (zoeken in de as na Semele): Vis 13 (door puin breken) /
+     Prudentia 11 (sporen lezen) / altijd open (rand van de as) — uitkomst
+     blijft identiek (Jupiter vindt het kind sowieso), alleen de zoektocht
+     zelf krijgt gewicht.
+   - `CH2_K05B` (Kallisto's spoor volgen): Robur 13 (tempo volhouden) /
+     Prudentia 11 (kortere route lezen) / altijd open (op afstand volgen).
+   - `CH2_H07B` (Nemeïsche leeuw, vóór de bestaande `COMBAT`-scène): Vis 11
+     (rotsblok rollen) / Agilitas 13 (stenen stapelen) / altijd open
+     (Herakles regelt het zelf) — nieuwe hub-scène vóór `CH2_H08`, het
+     `COMBAT`-blok zelf ongewijzigd.
+   - `CH2_H10B` (Hera's krab, vóór de Hydra-`COMBAT`-scène): Robur 11
+     (beest vertrappen) / Agilitas 13 (krab wegsmijten) / altijd open
+     (Iolaos waarschuwen) — nieuwe hub-scène vóór `CH2_H11`, het
+     `COMBAT`-blok zelf ongewijzigd.
+
+   **Patroon vastgesteld voor alle nieuwe scènes**: waar een obstakel al
+   een `PUZZLE:`- of `COMBAT:`-sectie had (die tonen hun `CHOICES:` pas ná
+   afloop, dus konden geen gated routes ernaast hebben), verhuist de nieuwe
+   hub naar VÓÓR die sectie (`CH2_H07B`/`CH2_H10B`) of wordt de bestaande
+   puzzel de eerste stap gevolgd door de hub (`CH1_C03B` e.a.) — nooit
+   ernaast. Elke nieuwe route krijgt een eigen `FLAG: chX_Y_route=<stat>`
+   (of `=open`) voor een toekomstige payoff-echo (antwoord op Gerbens vraag
+   "krijgt een andere route ook een ander vervolg?": nee, de meeste
+   obstakels geven bewust hetzelfde vervolg — Chronica Classica's speler is
+   in Hoofdstuk 1-2 getuige/boodschapper, geen actor die de mythe zelf
+   ombuigt, dus alleen de weg ernaartoe varieert, niet de uitkomst; de flag
+   is het haakje voor een latere, optionele callback). Structurele
+   validatie: alle 275 scènes geparsed, geen dubbele scène-ID's, geen
+   losse eindjes (`->`-targets die niet bestaan) — geverifieerd met een
+   Node-script over het ruwe bestand. Gating zelf getest in de browser met
+   een Hopliet-save (Vis15/Robur15/Agilitas12/Prudentia10/Ingenium8/
+   Gratia8): elke van de 10 hubs toont exact de verwachte grijze/goud-
+   status per route.
+
+   **Balanscontrole (§4.3-norm: minstens 2 exclusieve momenten per klasse
+   per hoofdstuk)**: Vis komt in Hoofdstuk 1 vier keer voor als gate, Robur
+   geen enkele keer — Hoplites leunt er dus zwaar op zijn Vis-helft, niet
+   op Robur. Gratia komt in Hoofdstuk 1 en 2 samen maar twee keer voor als
+   gate (A10, L07) — mager voor Eques, al krijgt die klasse elders al een
+   structureel voordeel via de altijd-open taalpuzzels (Ingenium-kant) en
+   via de nog te bouwen Latijn-check-koppeling (item 9). Ingenium komt in
+   geen van de 10 nieuwe gates voor. Geen van deze scheeftrekkingen is
+   dwingend genoeg om nu al bij te sturen, maar bij een volgende
+   uitbreidingsronde (Hoofdstuk 3+) verdient Robur/Ingenium/Gratia extra
+   aandacht t.o.v. Vis/Agilitas/Prudentia.
+4. **Gebouwd, basisversie (2026-07-24).** Skillpoint-scherm aan het eind
+   van elk hoofdstuk — zie §11.3. Bonuspunten (oefenpunten/korting) nog
+   niet, wachten op Stap 3 hierboven.
+5. **Gebouwd (2026-07-24).** Audit-tabel (Stap 1, zie §11.5) — inclusief de
+   auteurscontrole-achtige telling per stat/hoofdstuk die de agents
+   opleverden.
+6. Retrofit Proloog t/m Hoofdstuk 6 — audit ✅, proloog-klassekeuze ✅,
+   basis-skillpoints ✅; groei-aanhaken op *bestaande* keuzes en
+   drempels-toevoegen leveren weinig op (grootste deel is nieuwe content
+   uit Stap 5 van het oorspronkelijke retrofit-plan, nog te doen).
+7. Rolled checks en Vigor/Fatum — nog te bouwen.
+8. Klassenvaardigheden (*Stare firmiter*/*Ex longinquo*/*Auctoritas*) —
+   nog te bouwen.
+9. Koppeling met de Latijn-checks (Ingenium verlaagt drempel, Gratia
+   verhoogt opbrengst) — nog te bouwen.
+10. **Gebouwd (2026-07-24).** Statoverzicht voor de speler, **op twee
+    plekken**: `SCREENS.spStats` (singleplayer.js), bereikbaar via een
+    "📊 Statistieken"-knop naast Kaart/Codex op de Chronica-landingspagina
+    (`spRenderLanding`), én via een nieuwe kaart op het Certamen-profiel
+    (`SCREENS.battleProfile`, battle.js) die de meest recent bijgewerkte
+    saveslot-met-klasse toont (`spBestStatsSlot`) met een knop
+    (`spResumeSlotToStats`) die rechtstreeks naar hetzelfde scherm springt.
+    De Kroniek-stijl-weergave van `statLog` (§11.3) staat nog open.
+
+Proloog + één bestaand hoofdstuk volledig ombouwen voordat de rest volgt;
+pas als één hoofdstuk met alle drie de klassen goed speelt, is het systeem
+bewezen.

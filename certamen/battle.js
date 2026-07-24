@@ -3676,6 +3676,20 @@ SCREENS.battleProfile = function(){
       <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="SP_AV_RETURN='battleProfile';go('spAvatarEdit')">Chronica Classica Avatar aanpassen</button>
     </div>
   </div>
+  ${(function(){
+    const best = spBestStatsSlot();
+    if(!best) return "";
+    const cls = BM_CLASSES.find(c=>c.id===best.slot.classId);
+    const pts = best.slot.skillpoints||0;
+    return `<div class="panel" style="display:flex;gap:14px;align-items:center;margin-bottom:14px">
+      <div style="flex:0 0 auto">${cls?iconSVG(cls.icon,36,"currentColor"):""}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700">Statistieken — ${esc(cls?cls.nm:"")}</div>
+        <div class="note" style="margin-top:2px">${pts?`${pts} statpunt${pts===1?"":"en"} te besteden.`:"Vis, Agilitas, Robur, Ingenium, Prudentia, Gratia."}</div>
+        <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="spResumeSlotToStats(${best.n})">Statistieken bekijken</button>
+      </div>
+    </div>`;
+  })()}
   ${spTitlesSectionHTML(spTitlesLoadLocal(), spEquippedTitleLoadLocal())}
   <div class="eyebrow l">Class Mastery</div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">${masteryHTML}</div>

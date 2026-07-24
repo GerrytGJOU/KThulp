@@ -299,7 +299,7 @@ function spTendencyAddressPhrase(state){
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
                   "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-                  "PERSON","VOCAB","FRAGMENT","SOUVENIR"],
+                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -366,6 +366,15 @@ const CNSParser = {
   // dezelfde vlaggen die elke lijn toch al zet bij afronding (bv.
   // "ch2_lijn_latona"), dus geen nieuwe databron nodig.
   DONE_TAG_RE: /\s*\[DONE:(\w+)\]\s*$/i,
+  // Optioneel: een keuzeregel mag ook eindigen op [STAT:sleutel:getal] — de
+  // "gated choice" uit Chronica.md §11.4/Deel 4.1a. In tegenstelling tot
+  // [REQUIRE:...] wordt deze keuze NOOIT verborgen: spPlay toont hem altijd,
+  // grijs en met de eis erbij ("Vis 14 — jij hebt 11") zodra
+  // SP_STATE.stats[sleutel] eronder zit, en pas klikbaar/goud zodra de
+  // speler eraan voldoet. Dat zichtbaar-maar-vergrendeld-zijn IS het
+  // ontwerpprincipe (§4.2 van de spec: "de wereld is groter dan mijn
+  // personage"), dus bewust een aparte tag i.p.v. REQUIRE_TAG_RE hergebruikt.
+  STAT_TAG_RE: /\s*\[STAT:(\w+):(\d+)\]\s*$/i,
   parseChoices(text){
     const choices=[];
     for(const raw of text.split(/\r?\n/)){
@@ -376,21 +385,24 @@ const CNSParser = {
       if(arrowIndex===-1) continue;
       let label = withoutBullet.slice(0,arrowIndex).trim();
       const target = withoutBullet.slice(arrowIndex+2).trim();
-      let approach = null, require = null, done = null;
+      let approach = null, require = null, done = null, statReq = null;
       const reqM = label.match(this.REQUIRE_TAG_RE);
       if(reqM){ require = { key:reqM[1].toLowerCase(), value:+reqM[2] }; label = label.slice(0,reqM.index).trim(); }
       const doneM = label.match(this.DONE_TAG_RE);
       if(doneM){ done = doneM[1]; label = label.slice(0,doneM.index).trim(); }
+      const statM = label.match(this.STAT_TAG_RE);
+      if(statM){ statReq = { key:statM[1].toLowerCase(), value:+statM[2] }; label = label.slice(0,statM.index).trim(); }
       const tagM = label.match(this.APPROACH_TAG_RE);
       if(tagM){ approach = tagM[1].toUpperCase(); label = label.slice(0,tagM.index).trim(); }
-      choices.push({ label, target, approach, require, done });
+      choices.push({ label, target, approach, require, done, statReq });
     }
     return choices;
   },
 };
 
 const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS)]);
-const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[] });
+const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
+  stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[] });
 
 /* ---- SPELERSTATE ---- */
 let SP_STATE = SP_EMPTY_STATE();
@@ -577,7 +589,8 @@ function spRenderLanding(){
     <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="spGoCns('${SP_STATE.node||[...SP_SCENES.keys()][0]}')">${resuming?"Verdergaan":"Beginnen"}</button>
   </div>
   ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spWorldMap')">🗺️ Wereldkaart</button>`:""}
-  ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:14px" onclick="go('spCodex')">📖 Codex Memoriae</button>`:""}
+  ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spCodex')">📖 Codex Memoriae</button>`:""}
+  ${resuming&&SP_STATE.stats?`<button class="btn btn-ghost btn-block" style="margin-bottom:14px" onclick="go('spStats')">📊 Statistieken${SP_STATE.skillpoints?` (${SP_STATE.skillpoints})`:""}</button>`:""}
   ${foot()}`);
 }
 
@@ -748,6 +761,105 @@ function spShowLocationInfo(id){
   if(loc) toast(loc.nm, loc.desc);
 }
 
+/* ---- STATISTIEKEN: investeringsscherm voor skillpoints (Chronica.md §11.3).
+   Per saveslot, net als kaart/codex — elke doorspeling heeft een eigen
+   klasse en eigen groei. Drie caps tegelijk gehandhaafd: harde grens 20,
+   zachte grens die meeschaalt met het bereikte hoofdstuk (16 t/m Hoofdstuk 3,
+   18 t/m Hoofdstuk 6), en max. 2 verhogingen per stat per hoofdstuk
+   (statSpentSinceAward, gereset door spHookStatpoints bij elke nieuwe
+   toekenning). Bereikbaar vanuit het Chronica-menu (spRenderLanding) en
+   vanuit het Certamen-profiel (battle.js, via spResumeSlotToStats). ---- */
+function spStatSoftCap(chapterNr){
+  return chapterNr<=3 ? 16 : chapterNr<=6 ? 18 : 20;
+}
+SCREENS.spStats = function(){
+  document.body.classList.remove("greek");
+  if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
+  if(!SP_STATE.stats){
+    H(brand(true)+`
+    <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Statistieken</h2></div>
+    <div class="panel" style="text-align:center"><p class="note">Je hebt nog geen klasse gekozen — dat gebeurt vroeg in de proloog.</p></div>
+    ${foot()}`);
+    return;
+  }
+  const cls = BM_CLASSES.find(c=>c.id===SP_STATE.classId);
+  const chapter = spCurrentCampaignChapter(SP_STATE.node);
+  const chapterNr = chapter.type==="proloog" ? 0 : (chapter.nr||0);
+  const softCap = spStatSoftCap(chapterNr);
+  const points = SP_STATE.skillpoints||0;
+  const spent = SP_STATE.statSpentSinceAward||{};
+  const rows = SP_STAT_KEYS.map(key=>{
+    const def = SP_STAT_DEFS[key];
+    const val = SP_STATE.stats[key]||0;
+    const cost = spStatpointCost(val);
+    let reason = null;
+    if(val>=20) reason = "maximum bereikt";
+    else if(val>=softCap) reason = `nog niet hoger dan ${softCap} in dit deel van het verhaal`;
+    else if((spent[key]||0)>=2) reason = "al 2× verhoogd dit hoofdstuk";
+    else if(points<cost) reason = `kost ${cost} punt${cost===1?"":"en"} — te weinig`;
+    const blocked = !!reason;
+    return `<div class="panel" style="padding:12px 14px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <div><strong>${esc(def.nm)}</strong> <span class="note" style="font-size:11px">(${esc(def.dnd)})</span></div>
+        <div style="font-variant-numeric:tabular-nums;font-size:18px;font-weight:700">${val}</div>
+      </div>
+      <div class="note" style="font-size:12px;margin:4px 0 8px">${esc(def.domein)}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+        <span class="note" style="font-size:11px">${blocked?esc(reason):`kost ${cost} punt${cost===1?"":"en"}`}</span>
+        <button class="btn ${blocked?"btn-ghost":"btn-gold"}" style="padding:6px 14px" ${blocked?"disabled":""} onclick="spInvestStat('${key}')">+1</button>
+      </div>
+    </div>`;
+  }).join("");
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Statistieken</h2></div>
+  <div class="panel" style="text-align:center">
+    ${cls?iconSVG(cls.icon,32,"currentColor"):""}
+    <div class="eyebrow l" style="margin-top:6px">${cls?esc(cls.nm):""}</div>
+    <div style="font-size:22px;font-weight:700;margin-top:4px">${points} statpunt${points===1?"":"en"} beschikbaar</div>
+    <p class="note" style="margin-top:6px">Verdiend aan het eind van elk hoofdstuk. Max. 2 verhogingen per stat per hoofdstuk.</p>
+  </div>
+  ${rows}
+  ${foot()}`);
+};
+function spInvestStat(key){
+  if(!SP_STATE.stats) return;
+  const val = SP_STATE.stats[key]||0;
+  const cost = spStatpointCost(val);
+  const points = SP_STATE.skillpoints||0;
+  const chapter = spCurrentCampaignChapter(SP_STATE.node);
+  const chapterNr = chapter.type==="proloog" ? 0 : (chapter.nr||0);
+  const softCap = spStatSoftCap(chapterNr);
+  const spent = SP_STATE.statSpentSinceAward||{};
+  if(points<cost || val>=20 || val>=softCap || (spent[key]||0)>=2) return;
+  const stats = {...SP_STATE.stats, [key]:val+1};
+  const statSpentSinceAward = {...spent, [key]:(spent[key]||0)+1};
+  const statLog = [...(SP_STATE.statLog||[]), { key, van:val, naar:val+1, hoofdstuk:chapterNr, t:Date.now() }];
+  spSaveProgress({ stats, skillpoints:points-cost, statSpentSinceAward, statLog });
+  go("spStats");
+}
+// Welke saveslot toont het Certamen-profiel (battle.js) als statistieken-
+// samenvatting? De meest recent bijgewerkte slot die al een klasse heeft —
+// alleen lokaal geraadpleegd (geen Firebase-rondje) zodat het profielscherm
+// niet op netwerk hoeft te wachten; Firebase is toch alleen een spiegel.
+function spBestStatsSlot(){
+  const slots = spSlotsLoadLocal();
+  let best=null, bestN=null;
+  for(let n=1;n<=SP_MAX_SLOTS;n++){
+    const s = slots[n];
+    if(s && s.classId && s.stats && (!best || (s.updatedAt||0)>(best.updatedAt||0))){ best=s; bestN=n; }
+  }
+  return best ? {n:bestN, slot:best} : null;
+}
+// Vanuit het Certamen-profiel (battle.js) een slot laden puur om de
+// statistieken te bekijken/investeren, zonder de speler mee te trekken naar
+// het verhaal zelf (spResumeSlot zou naar spRenderLanding gaan).
+async function spResumeSlotToStats(n){
+  SP_ACTIVE_SLOT = n;
+  const slots = await spLoadAllSlots();
+  SP_STATE = Object.assign(SP_EMPTY_STATE(), slots[n]||{});
+  go("spStats");
+}
+
 /* ---- NAVIGATIE ---- */
 function spGoCns(nodeId){
   spSaveProgress({ node:nodeId });
@@ -777,6 +889,15 @@ function spChoiceVisible(c){
   if(!c.require) return true;
   if(c.require.key==="fragments") return (SP_STATE.fragments||[]).length >= c.require.value;
   return true;
+}
+// Gated choice (Chronica.md §11.4, CNSParser.STAT_TAG_RE): WEL altijd
+// zichtbaar (dus geen rol voor spChoiceVisible hierboven), alleen klikbaar
+// zodra de stat hoog genoeg is. spChoiceVisible blijft dus puur voor
+// REQUIRE (verbergen); statReq-gating gebeurt in de renderer zelf.
+function spStatReqMet(statReq){
+  if(!statReq) return true;
+  const val = (SP_STATE.stats && SP_STATE.stats[statReq.key]) || 0;
+  return val >= statReq.value;
 }
 
 /* ---- SCÈNE-RENDERER ---- */
@@ -815,7 +936,18 @@ SCREENS.spPlay = function(){
   const choicesHTML = visibleChoices.length
     ? visibleChoices.map(c=>{
         const isDone = c.done && SP_STATE.flags[c.done];
-        const label = esc(SpTextResolver.resolve(c.label, SP_STATE)) + (isDone?" ✓":"");
+        let label = esc(SpTextResolver.resolve(c.label, SP_STATE)) + (isDone?" ✓":"");
+        if(c.statReq){
+          const def = SP_STAT_DEFS[c.statReq.key];
+          const have = (SP_STATE.stats && SP_STATE.stats[c.statReq.key]) || 0;
+          label += ` <span style="opacity:.75;font-size:12px">(${esc(def?def.nm:c.statReq.key)} ${c.statReq.value} — jij hebt ${have})</span>`;
+        }
+        // Gated choice die (nog) niet gehaald wordt: WEL tonen (zie
+        // spStatReqMet hierboven), grijs en onklikbaar — nooit verbergen,
+        // dat is precies het punt van deze mechaniek (§11.4).
+        if(c.statReq && !spStatReqMet(c.statReq)){
+          return `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;opacity:.5;cursor:not-allowed" disabled>${label}</button>`;
+        }
         const onclick = isDone ? `spChoiceAlreadyDone(${openCount})` : `spChoosePath('${c.target}','${c.approach||""}')`;
         return `<button class="btn ${isDone?"":"btn-gold "}btn-block lg" style="margin-top:8px${isDone?";opacity:.6":""}" onclick="${onclick}">${label}</button>`;
       }).join("")
@@ -834,6 +966,7 @@ SCREENS.spPlay = function(){
    spRenderPuzzle() omdat die de voortgang moet blokkeren i.p.v. alleen te loggen. ---- */
 function spRunMetaHooks(meta){
   if(meta.REWARD)    spHookReward(meta.REWARD);
+  if(meta.STATPOINTS) spHookStatpoints(meta.STATPOINTS);
   if(meta.CODEX)     spHookCodex(meta.CODEX);
   if(meta.QUEST)     spHookQuest(meta.QUEST);
   if(meta.EERETITEL) spAwardTitle(meta.EERETITEL.trim());
@@ -1067,7 +1200,11 @@ function spHookReward(text){
   const isNew = !SP_STATE.classId && fields.class;
   const classId = SP_CLASS_REWARD_MAP[fields.class] || SP_STATE.classId;
   const traits = fields.traits ? fields.traits.split(",").map(s=>s.trim()) : SP_STATE.traits;
-  spSaveProgress({ classId, traits });
+  // Stats (Chronica.md §11.2) horen bij dezelfde klassekeuze als traits/classId
+  // hierboven, maar worden alleen bij de EERSTE keuze gezet — een latere
+  // REWARD (zou nu niet voorkomen) mag een al gegroeid statblok niet overschrijven.
+  const stats = (isNew && SP_CLASS_STATS[classId]) ? {...SP_CLASS_STATS[classId]} : SP_STATE.stats;
+  spSaveProgress({ classId, traits, stats });
   if(isNew) toast("Wapen gekozen!", BM_IDENT
     ? "Je pad is bepaald — dit werkt ook door in Battle Mode."
     : "Je pad is bepaald. Log in met je klascode om dit ook in Battle Mode te laten meetellen.");
@@ -1082,6 +1219,18 @@ function spHookCodex(text){
   if(!fresh.length) return;
   spSaveProgress({ codex:[...existing, ...fresh] });
   toast("Codex-item ontgrendeld!","Er is een nieuwe bladzijde toegevoegd aan de Codex Memoriae.");
+}
+// Skillpoints (Chronica.md §11.3): een STATPOINTS:-sectie op de EINDE-scène
+// van een hoofdstuk kent basispunten toe (nu een vaste 3 — de bonuspunten
+// uit gedrag volgen pas zodra Stap 5 echte gated choices oplevert om te
+// tellen). Reset ook de per-hoofdstuk +2-cap (statSpentSinceAward), want een
+// nieuw hoofdstuk is een nieuw investeringsmoment.
+function spHookStatpoints(text){
+  const n = parseInt(text.trim(),10);
+  if(!n) return;
+  const total = (SP_STATE.skillpoints||0) + n;
+  spSaveProgress({ skillpoints: total, statSpentSinceAward:{} });
+  toast("Je bent gegroeid", `Je hebt ${n} statpunt${n===1?"":"en"} verdiend — investeer ze bij je Statistieken.`);
 }
 function spHookQuest(text){
   const idx=text.indexOf(":");
