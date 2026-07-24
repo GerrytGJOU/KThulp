@@ -1425,6 +1425,37 @@ const SP_CLASS_REWARD_MAP = {
   "Cavalerist":   "cavalerie",
 };
 
+/* ---- STATS (D&D-model, zie Chronica.md §11) — zes stats, drie klassen,
+   elke klasse claimt precies twee stats. STAT_KEYS bepaalt de vaste
+   weergavevolgorde overal (investeringsscherm, profiel); SP_STAT_DEFS geeft
+   naam/domein voor de UI; SP_CLASS_STATS geeft de startwaarden per
+   classId (dezelfde id's als SP_CLASS_REWARD_MAP/BM_CLASSES hierboven —
+   geen aparte Latijnse klasse-id-ruimte nodig). Alle drie zelfde totaal
+   (68), patroon 15/15/12/10/8/8 met alleen een andere volgorde. ---- */
+const SP_STAT_KEYS = ["vis","agilitas","robur","ingenium","prudentia","gratia"];
+const SP_STAT_DEFS = {
+  vis:       { nm:"Vis",       dnd:"Strength",     domein:"Brute kracht, dragen, forceren, wapengeweld van dichtbij" },
+  agilitas:  { nm:"Agilitas",  dnd:"Dexterity",    domein:"Snelheid, evenwicht, sluipen, boogschieten, precisie" },
+  robur:     { nm:"Robur",     dnd:"Constitution", domein:"Uithoudingsvermogen, honger, kou, gif, wonden" },
+  ingenium:  { nm:"Ingenium",  dnd:"Intelligence", domein:"Kennis, talen, tekst en inscripties, strategie, raadsels" },
+  prudentia: { nm:"Prudentia", dnd:"Wisdom",       domein:"Opmerkingsgave, mensenkennis, voortekenen lezen" },
+  gratia:    { nm:"Gratia",    dnd:"Charisma",     domein:"Overtuigen, gezag, gastvrijheid winnen, bezingen" },
+};
+const SP_CLASS_STATS = {
+  hopliet:    { vis:15, robur:15, agilitas:12, prudentia:10, ingenium:8,  gratia:8  },
+  boogschutter: { agilitas:15, prudentia:15, ingenium:12, robur:10, vis:8, gratia:8 },
+  cavalerie:  { ingenium:15, gratia:15, agilitas:12, vis:10, robur:8, prudentia:8 },
+};
+/* Kosten voor +1, afhankelijk van de HUIDIGE waarde vóór de verhoging
+   (Chronica.md §11.3). Max. +2 in dezelfde stat per hoofdstuk (elders
+   gehandhaafd, niet hier) en een harde bovengrens van 20. */
+function spStatpointCost(currentValue){
+  if(currentValue>=18) return 4;
+  if(currentValue>=15) return 3;
+  if(currentValue>=12) return 2;
+  return 1;
+}
+
 /* ---- COMBAT AVATAR — ontgrendelingen ----
    Chronica Classica hergebruikt Battle Mode se pixel-sprite-avatar (dezelfde
    PNG-lagen uit assets/sprites/, BM_AVATAR_PARTS voor labels/iconen), maar
@@ -1813,14 +1844,58 @@ Het paleis van Sardis torent boven de rest van de stad uit als een aankondiging 
 
 Je vangt flarden op van wat er is gebeurd: een oude, dronken metgezel van de wijngod zelf zou verdwaald zijn in de rozentuinen van het paleis, en de koning zou hem, in plaats van hem weg te sturen, tien dagen lang als eregast hebben onthaald voordat hij hem eigenhandig terugbracht naar zijn god. Zulke gastvrijheid, zeggen de bedienden tegen elkaar, wordt zelden onbeloond gelaten.
 
-Boven de hoofdpoort naar de troonzaal staat, diep in de steen gebeiteld, een enkel Grieks woord — een titel, geen naam, alsof de steenhouwer wilde vastleggen wat deze plek regeert.
+Bij de deur naar de troonzaal zelf sta je voor een tweede probleem: twee wachters met gekruiste speren, en daarboven, diep in de steen gebeiteld, een enkel Grieks woord — een titel, geen naam, alsof de steenhouwer wilde vastleggen wat deze plek regeert. Wie het woord leest, wordt zonder vragen doorgelaten. Voor wie dat niet kan, blijven er maar twee andere manieren naar binnen.
+
+CHOICES:
+
+* Ontcijfer het woord boven de poort -> CH1_A02_PUZZLE
+* Zet je schouder tegen de zijdeur van de wachtpost en forceer hem open [STAT:vis:13] -> CH1_A02_VIS
+* Wacht de wisseling van de wacht af en glip dan, ongezien, tussen hen door [STAT:prudentia:13] -> CH1_A02_SLUIP
+
+END
+
+=== SCENE: CH1_A02_PUZZLE ===
+
+TITLE:
+Het Woord boven de Poort
+
+TEXT:
+De wachters zien je naar het opschrift staren en zeggen niets — wie het woord kan lezen, hoort hier, is kennelijk de ongeschreven regel. Je concentreert je op de letters.
 
 PUZZLE:
 puzzle_ch1a_lidwoord
 
 CHOICES:
 
-* Ontcijfer het woord boven de poort -> CH1_A03
+* Ontcijfer het woord -> CH1_A03
+
+END
+
+=== SCENE: CH1_A02_VIS ===
+
+TITLE:
+De Zijdeur
+
+TEXT:
+Je laat het opschrift voor wat het is en loopt door naar de zijdeur van de wachtpost — houten planken, een simpele grendel aan de binnenkant. Eén schouder ertegenaan, één keer goed doorduwen, en het hout geeft mee met een kraak die de wachters bij de hoofdpoort niet eens lijken te horen. Binnen enkele passen sta je alweer in de gang naar de troonzaal, alsof er nooit een deur in de weg had gestaan.
+
+CHOICES:
+
+* Loop door naar de troonzaal -> CH1_A03
+
+END
+
+=== SCENE: CH1_A02_SLUIP ===
+
+TITLE:
+De Wisseling van de Wacht
+
+TEXT:
+Je blijft in de schaduw van een zuil staan en kijkt. Wachters houden zelden hun aandacht vast, merk je al snel — en inderdaad, na een tijdje komt er een tweede paar aflossen, met het korte moment van verwarring dat daar altijd bij hoort: wie stond waar, wie neemt wat over. In dat ene ogenblik glip je tussen hen door, zo vanzelfsprekend dat niemand er zelfs naar omkijkt.
+
+CHOICES:
+
+* Loop door naar de troonzaal -> CH1_A03
 
 END
 
@@ -1980,7 +2055,74 @@ De Rivier de Pactolus
 TEXT:
 Bacchus verschijnt opnieuw, niet wreed maar ook niet haastig — bijna alsof hij dit al had voorzien. "Je wens was nooit het probleem," zegt hij, "je onvermogen om tevreden te zijn wel. Maar ik ben geen god die geniet van andermans verdriet. Was jezelf in de rivier de Pactolus, en de vloek stroomt met het water mee."
 
-Midas rent zoals hij nog nooit heeft gerend, struikelt over zijn eigen gouden drempel, en dompelt zich onder in de rivier die je onderweg al zag glinsteren. Wanneer hij weer opstaat, druipend en buiten adem, is het goud uit zijn handen verdwenen — en achter hem, waar het water over zijn huid stroomde, glinstert de rivierbedding voortaan doorspekt met fijne, gouden korrels. Reizigers zullen deze rivier eeuwenlang de Pactolus blijven noemen, en handelaars uit deze streek zullen nog generaties later spreken over het goud dat letterlijk uit haar water wordt gezeefd.
+Het nieuws van het gouden standbeeld heeft zich intussen al door het hele paleis verspreid. Bedienden rennen schreeuwend heen en weer, een poortwacht probeert uit pure paniek de buitenpoort te grendelen "voor de veiligheid", en Midas zelf, radeloos en niet meer helder denkend, struikelt al bij zijn eerste stap naar de rivier die je onderweg zag glinsteren.
+
+CHOICES:
+
+* Blijf vlak naast Midas, klaar om hem overeind te houden wanneer hij weer struikelt -> CH1_A10_OPEN
+* Duw de dichtklappende poort met kracht open zodat jullie er meteen doorheen kunnen [STAT:vis:13] -> CH1_A10_VIS
+* Praat de paniekerige poortwacht om vóór hij het slot dichtgooit [STAT:gratia:11] -> CH1_A10_GRATIA
+
+END
+
+=== SCENE: CH1_A10_OPEN ===
+
+TITLE:
+Aan Zijn Zijde
+
+TEXT:
+Je blijft vlak naast Midas, en het is maar goed ook: twee keer struikelt hij, blind van paniek, over zijn eigen voeten, en twee keer ben jij het die hem overeind trekt voor hij valt. Samen bereiken jullie, buiten adem, de oever van de Pactolus.
+
+FLAG:
+ch1_a10_route=open
+
+CHOICES:
+
+* Kijk toe hoe Midas zich in het water werpt -> CH1_A10B
+
+END
+
+=== SCENE: CH1_A10_VIS ===
+
+TITLE:
+De Dichtklappende Poort
+
+TEXT:
+Je laat Midas geen moment wachten. De poort naar de tuinen valt al dicht onder de handen van een paniekerige wacht; je zet je schouder ertegen en duwt, één keer, tot het hout kraakt en de grendel het begeeft. Midas rent je voorbij, jij vlak achter hem, de rivier al in zicht.
+
+FLAG:
+ch1_a10_route=vis
+
+CHOICES:
+
+* Kijk toe hoe Midas zich in het water werpt -> CH1_A10B
+
+END
+
+=== SCENE: CH1_A10_GRATIA ===
+
+TITLE:
+Eén Enkel Woord
+
+TEXT:
+De poortwacht heeft zijn hand al op de grendel wanneer je hem aanspreekt — geen bevel, geen dreiging, alleen een paar woorden over wat er gebeurt als de koning zelf hier straks vastzit. Hij aarzelt, en dat is genoeg: de poort blijft open, en jullie glippen er samen met Midas doorheen, recht op de rivier af.
+
+FLAG:
+ch1_a10_route=gratia
+
+CHOICES:
+
+* Kijk toe hoe Midas zich in het water werpt -> CH1_A10B
+
+END
+
+=== SCENE: CH1_A10B ===
+
+TITLE:
+Het Water Neemt het Goud
+
+TEXT:
+Midas rent zoals hij nog nooit heeft gerend en dompelt zich onder in de rivier. Wanneer hij weer opstaat, druipend en buiten adem, is het goud uit zijn handen verdwenen — en achter hem, waar het water over zijn huid stroomde, glinstert de rivierbedding voortaan doorspekt met fijne, gouden korrels. Reizigers zullen deze rivier eeuwenlang de Pactolus blijven noemen, en handelaars uit deze streek zullen nog generaties later spreken over het goud dat letterlijk uit haar water wordt gezeefd.
 
 Zijn dochter, zo vertelt men je later, terwijl Midas nog druipend aan de oever zit, keerde terug tot leven zodra de laatste gouden druppel zijn huid verliet — springlevend, ongedeerd, zonder enige herinnering aan het standbeeld dat ze even was.
 
@@ -2051,7 +2193,7 @@ zeus:intro
 
 CHOICES:
 
-* Beklim direct de laatste helling naar de top -> CH1_B02
+* Beklim direct de laatste helling naar de top -> CH1_B01C
 * Vraag de herder waarom hij zo angstig wegvlucht -> CH1_B01B
 
 END
@@ -2068,9 +2210,76 @@ Hij wijst naar de donderwolken die zich al om de top samenpakken. "Als de zoon z
 
 CHOICES:
 
-* Je hebt geen tijd voor meer vragen en klimt meteen door [SEVERITAS] -> CH1_B02
-* Overweeg zijn woorden een moment, en klim dan verder [NEUTRAL] -> CH1_B02
-* Bedank de herder voor zijn waarschuwing voor je verdergaat [CLEMENTIA] -> CH1_B02
+* Je hebt geen tijd voor meer vragen en klimt meteen door [SEVERITAS] -> CH1_B01C
+* Overweeg zijn woorden een moment, en klim dan verder [NEUTRAL] -> CH1_B01C
+* Bedank de herder voor zijn waarschuwing voor je verdergaat [CLEMENTIA] -> CH1_B01C
+
+END
+
+=== SCENE: CH1_B01C ===
+
+TITLE:
+De Laatste Helling
+
+TEXT:
+Boven je pakken de wolken zich al samen, sneller dan een gewone storm zou moeten — geen twijfel meer mogelijk over wat de herder bedoelde. De top van de Olympos ligt nog een laatste, steile helling boven je, en de wind wakkert aan met elke stap die je zet.
+
+CHOICES:
+
+* Volg het kronkelende pelgrimspad, langzamer maar voor iedereen begaanbaar -> CH1_B01_PAD
+* Klim recht tegen de rotswand op, rechtstreeks de aanzwellende wind in [STAT:vis:13] -> CH1_B01_VIS
+* Spring behendig van steen naar steen over een smalle, afbrokkelende richel [STAT:agilitas:11] -> CH1_B01_AGI
+
+END
+
+=== SCENE: CH1_B01_PAD ===
+
+TITLE:
+Het Pelgrimspad
+
+TEXT:
+Je houdt je aan het pad dat al generaties pelgrims naar boven heeft gebracht — trager dan de kortere routes, maar veilig, zelfs nu de wind aan je mantel rukt. Buiten adem, maar ongedeerd, bereik je de top.
+
+FLAG:
+ch1_b01_route=pad
+
+CHOICES:
+
+* Loop de top van de Olympos op -> CH1_B02
+
+END
+
+=== SCENE: CH1_B01_VIS ===
+
+TITLE:
+Recht Tegen de Wind In
+
+TEXT:
+Je kiest de kortste weg: recht tegen de rotswand op, elke handgreep bevochten tegen een wind die je bijna van de berg af probeert te blazen. Waar een ander zou zijn teruggedeinsd, duw je door — en bereikt de top ruim voor de storm losbarst.
+
+FLAG:
+ch1_b01_route=vis
+
+CHOICES:
+
+* Loop de top van de Olympos op -> CH1_B02
+
+END
+
+=== SCENE: CH1_B01_AGI ===
+
+TITLE:
+Van Steen naar Steen
+
+TEXT:
+Je kiest de richel die de meeste pelgrims mijden — te smal, te afbrokkelend, maar een stuk sneller. Met precieze sprongen van steen naar steen sta je alweer boven voor de wind goed en wel is gaan gieren.
+
+FLAG:
+ch1_b01_route=agilitas
+
+CHOICES:
+
+* Loop de top van de Olympos op -> CH1_B02
 
 END
 
@@ -2338,6 +2547,73 @@ puzzle_ch1c_lidwoord
 
 CHOICES:
 
+* Kom dichterbij -> CH1_C03B
+
+END
+
+=== SCENE: CH1_C03B ===
+
+TITLE:
+Dichter bij het Vuur
+
+TEXT:
+Prometheus is al onderweg naar de haard zelf — maar jij moet ook dichtbij genoeg komen om te zien wat er gebeurt, zonder dat een van de sluimerende goden wakker schrikt van jouw voetstappen in plaats van de zijne.
+
+CHOICES:
+
+* Blijf op veilige afstand, in de schaduw die er toch al ligt -> CH1_C03_OPEN
+* Sluip mee tussen de zuilen, exact in de pas van Prometheus [STAT:agilitas:11] -> CH1_C03_AGI
+* Klim in plaats daarvan recht langs de rotsrand omhoog — zwaarder, maar sneller bij de haard [STAT:vis:13] -> CH1_C03_VIS
+
+END
+
+=== SCENE: CH1_C03_OPEN ===
+
+TITLE:
+In de Schaduw
+
+TEXT:
+Je blijft waar de schaduw al het diepst is en wacht af. Van hieruit zie je minder scherp dan je zou willen, maar niemand ziet jou — en dat is, voor nu, genoeg.
+
+FLAG:
+ch1_c03_route=open
+
+CHOICES:
+
+* Kijk hoe Prometheus een vonk verbergt -> CH1_C04
+
+END
+
+=== SCENE: CH1_C03_AGI ===
+
+TITLE:
+In Zijn Pas
+
+TEXT:
+Je sluipt mee tussen de zuilen, je voetstappen zo dicht op die van Prometheus dat ze in het geluid van de zijne verdwijnen. Tegen de tijd dat hij bij de haard staat, sta jij vlak achter hem — dichterbij dan wie ook zou moeten wagen.
+
+FLAG:
+ch1_c03_route=agilitas
+
+CHOICES:
+
+* Kijk hoe Prometheus een vonk verbergt -> CH1_C04
+
+END
+
+=== SCENE: CH1_C03_VIS ===
+
+TITLE:
+Langs de Rotsrand
+
+TEXT:
+Je kiest niet de weg van de zuilen maar die van de rotsen zelf, hand over hand langs de rand omhoog tot je precies boven de haard uitkomt — zwaarder werk, maar je bent er eerder dan Prometheus zelf.
+
+FLAG:
+ch1_c03_route=vis
+
+CHOICES:
+
 * Kijk hoe Prometheus een vonk verbergt -> CH1_C04
 
 END
@@ -2472,9 +2748,76 @@ pandora:full
 
 CHOICES:
 
-* Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [SEVERITAS] -> CH1_C10
-* Ga naar hem toe, zonder meteen te weten wat je tegen hem wilt zeggen [NEUTRAL] -> CH1_C10
-* Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA] -> CH1_C10
+* Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [SEVERITAS] -> CH1_C09B
+* Ga naar hem toe, zonder meteen te weten wat je tegen hem wilt zeggen [NEUTRAL] -> CH1_C09B
+* Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA] -> CH1_C09B
+
+END
+
+=== SCENE: CH1_C09B ===
+
+TITLE:
+Naar de Rots
+
+TEXT:
+Prometheus is niet in de vallei te vinden, en al snel wordt duidelijk waarom: Zeus heeft hem ver weggevoerd, naar een rots voorbij waar stervelingen ooit zijn geweest. Het kost moeite om hem te vinden — en nog meer om er te komen.
+
+CHOICES:
+
+* Volg het karrenspoor dat om de berg heen naar de pas voert -> CH1_C09_PAD
+* Beklim de rotswand rechtstreeks, hand over hand tegen het zwaartepunt in [STAT:vis:13] -> CH1_C09_VIS
+* Lees het vluchtpatroon van de adelaar — zijn dagelijkse route verraadt de kortste weg naar de rots [STAT:prudentia:11] -> CH1_C09_PRU
+
+END
+
+=== SCENE: CH1_C09_PAD ===
+
+TITLE:
+Het Karrenspoor
+
+TEXT:
+Je volgt het lange karrenspoor dat om de berg heen slingert — een omweg, maar begaanbaar, en na een tocht van uren sta je eindelijk aan de voet van de juiste rots.
+
+FLAG:
+ch1_c09_route=open
+
+CHOICES:
+
+* Kijk omhoog naar waar Prometheus geketend hangt -> CH1_C10
+
+END
+
+=== SCENE: CH1_C09_VIS ===
+
+TITLE:
+Tegen het Zwaartepunt In
+
+TEXT:
+Je slaat de omweg af en klimt in plaats daarvan recht tegen de rotswand op, hand over hand, elke greep bevochten op een berg die niet voor stervelingen bedoeld lijkt. Je bent er in een fractie van de tijd die het karrenspoor zou hebben gekost.
+
+FLAG:
+ch1_c09_route=vis
+
+CHOICES:
+
+* Kijk omhoog naar waar Prometheus geketend hangt -> CH1_C10
+
+END
+
+=== SCENE: CH1_C09_PRU ===
+
+TITLE:
+Het Spoor van de Adelaar
+
+TEXT:
+Je kijkt niet naar de grond maar naar de lucht: een adelaar cirkelt daar al, dag na dag dezelfde route vliegend naar dezelfde rots. Je hoeft alleen zijn vlucht te volgen om te weten waar je moet zijn — de kortste weg ernaartoe blijkt vanzelf te liggen.
+
+FLAG:
+ch1_c09_route=prudentia
+
+CHOICES:
+
+* Kijk omhoog naar waar Prometheus geketend hangt -> CH1_C10
 
 END
 
@@ -2600,6 +2943,9 @@ Het Einde van Hoofdstuk 1
 
 TEXT:
 De Boodschapper knikt, en de poort achter je opent zich weer — ditmaal niet naar een vergeten hoofdstuk, maar naar iets wat nog geschreven moet worden. "Hoofdstuk 2 wacht al ergens verderop," zegt de stem. "Kom mee."
+
+STATPOINTS:
+3
 
 CHOICES:
 
@@ -2779,6 +3125,73 @@ puzzle_ch2l_posse
 
 CHOICES:
 
+* Blijf naast haar -> CH2_L06B
+
+END
+
+=== SCENE: CH2_L06B ===
+
+TITLE:
+De Python op de Hielen
+
+TEXT:
+De python wint langzaam terrein; Latona's gewicht en uitputting maken elke stap zwaarder dan de vorige. Ergens voor jullie, nog niet zichtbaar, moet een laatste toevlucht liggen — de vraag is alleen of je haar daar op tijd krijgt.
+
+CHOICES:
+
+* Ren blindelings verder naast haar, op adrenaline alleen -> CH2_L06_OPEN
+* Leid haar zigzaggend tussen de rotsen door, te snel en te lenig voor het logge beest [STAT:agilitas:11] -> CH2_L06_AGI
+* Bijt door je eigen pijn heen en houd het tempo naast haar vol tot de kustlijn [STAT:robur:13] -> CH2_L06_ROB
+
+END
+
+=== SCENE: CH2_L06_OPEN ===
+
+TITLE:
+Op Adrenaline Alleen
+
+TEXT:
+Je rent naast haar zonder na te denken, elke gedachte gericht op niets anders dan de volgende stap. Ergens tussen de rotsen, hijgend en uitgeput, komt de kust eindelijk in zicht.
+
+FLAG:
+ch2_l06_route=open
+
+CHOICES:
+
+* Kijk uit naar een laatste toevlucht -> CH2_L07
+
+END
+
+=== SCENE: CH2_L06_AGI ===
+
+TITLE:
+Zigzaggend Tussen de Rotsen
+
+TEXT:
+Je leidt Latona niet in een rechte lijn maar in korte, scherpe bochten tussen de rotsblokken door — precies het soort terrein waar een logge python zijn snelheid verliest. De afstand tussen jullie en het beest groeit met elke wending.
+
+FLAG:
+ch2_l06_route=agilitas
+
+CHOICES:
+
+* Kijk uit naar een laatste toevlucht -> CH2_L07
+
+END
+
+=== SCENE: CH2_L06_ROB ===
+
+TITLE:
+Door de Pijn Heen
+
+TEXT:
+Je longen branden, je benen schreeuwen om te stoppen, maar je houdt het tempo naast haar vol, mijl na mijl, tot de kustlijn eindelijk opdoemt aan de horizon.
+
+FLAG:
+ch2_l06_route=robur
+
+CHOICES:
+
 * Kijk uit naar een laatste toevlucht -> CH2_L07
 
 END
@@ -2801,6 +3214,26 @@ CHOICES:
 * Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [SEVERITAS] -> CH2_L08
 * Smeek het eiland gewoon om hulp, zonder overtuigingskracht te zoeken [NEUTRAL] -> CH2_L08
 * Beloof het eiland eeuwige verering als het haar redt [CLEMENTIA] -> CH2_L08
+* Spreek Delos aan als gelijke, niet als smekeling — twee verstotenen die elkaar herkennen [STAT:gratia:13] -> CH2_L07B
+
+END
+
+=== SCENE: CH2_L07B ===
+
+TITLE:
+Twee Verstotenen
+
+TEXT:
+Je richt je niet tot het eiland als een vreemde die om genade smeekt, maar als iemand die zijn eigen verhaal kent: ooit was Delos zelf niets — een verstoten nimf, aan de golven overgelaten, nergens welkom. "Jij weet wat het is om nergens bij te horen," zeg je. "Zij ook."
+
+Delos reageert niet aarzelend, zoals bij een smeekbede gebruikelijk is, maar onmiddellijk — alsof het al die tijd op precies deze woorden had gewacht. Vanaf de verre rots zie je Athena's gespannen gezicht, heel even, iets minder gesloten dan daarvoor.
+
+FLAG:
+ch2_l07_route=gratia
+
+CHOICES:
+
+* Kijk toe hoe Delos zich verankert -> CH2_L08
 
 END
 
@@ -2984,6 +3417,73 @@ puzzle_ch2s_esse
 
 CHOICES:
 
+* Doorzoek de as -> CH2_S06B
+
+END
+
+=== SCENE: CH2_S06B ===
+
+TITLE:
+Zoeken in de As
+
+TEXT:
+Terwijl de rook nog optrekt, doorzoek je zelf de nasmeulende as — ergens hierin moet iets van het ongeboren kind te vinden zijn, als er al iets te redden valt.
+
+CHOICES:
+
+* Zoek voorzichtig langs de rand van de as, op veilige afstand van de gloed -> CH2_S06_OPEN
+* Breek met kracht door omgevallen, nog gloeiende balken heen om dieper te kunnen zoeken [STAT:vis:13] -> CH2_S06_VIS
+* Lees de sporen in de as — een verstoord plekje, de richting waarin iets net is verdwenen [STAT:prudentia:11] -> CH2_S06_PRU
+
+END
+
+=== SCENE: CH2_S06_OPEN ===
+
+TITLE:
+Langs de Rand
+
+TEXT:
+Je blijft aan de rand van de as, waar de hitte nog te verdragen is, en zoekt zo grondig als je durft. Voor je iets vindt, is Jupiter je al voor.
+
+FLAG:
+ch2_s06_route=open
+
+CHOICES:
+
+* Kijk of er nog iets van haar te redden valt -> CH2_S07
+
+END
+
+=== SCENE: CH2_S06_VIS ===
+
+TITLE:
+Door het Puin
+
+TEXT:
+Je breekt door omgevallen, nog gloeiende balken heen, dieper de as in dan wie ook zou wagen. Het kost je geschroeide handen — maar voor je iets vindt, is Jupiter je al voor.
+
+FLAG:
+ch2_s06_route=vis
+
+CHOICES:
+
+* Kijk of er nog iets van haar te redden valt -> CH2_S07
+
+END
+
+=== SCENE: CH2_S06_PRU ===
+
+TITLE:
+Sporen in de As
+
+TEXT:
+Je zoekt niet blindelings maar kijkt: een verstoord plekje as, een richting die net iets anders ligt dan de rest. Je volgt het spoor tot vlak bij de plek — waar Jupiter je al voor is.
+
+FLAG:
+ch2_s06_route=prudentia
+
+CHOICES:
+
 * Kijk of er nog iets van haar te redden valt -> CH2_S07
 
 END
@@ -3124,6 +3624,73 @@ Alleen, verstoten uit de enige gemeenschap die ze ooit heeft gekend, en met een 
 
 PUZZLE:
 puzzle_ch2k_praesens
+
+CHOICES:
+
+* Volg haar het gebergte in -> CH2_K05B
+
+END
+
+=== SCENE: CH2_K05B ===
+
+TITLE:
+Kallisto's Spoor
+
+TEXT:
+Kallisto zet een tempo aan dat niemand met een pasgeboren kind zou moeten kunnen volhouden — wanhoop drijft haar sneller dan haar lichaam eigenlijk toelaat, het onherbergzame gebergte in.
+
+CHOICES:
+
+* Blijf op veilige afstand en volg haar spoor rustiger, ook al raak je haar soms bijna kwijt -> CH2_K05_OPEN
+* Zet door in haar moordende tempo, uren aan een stuk, zonder de rust te vragen die zij zichzelf ook niet gunt [STAT:robur:13] -> CH2_K05_ROB
+* Lees afgebroken takjes en verstoorde steentjes en neem een kortere route die je vóór haar op het volgende punt brengt [STAT:prudentia:11] -> CH2_K05_PRU
+
+END
+
+=== SCENE: CH2_K05_OPEN ===
+
+TITLE:
+Op Veilige Afstand
+
+TEXT:
+Je houdt een voorzichtiger tempo aan, haar spoor volgend zonder jezelf uit te putten. Een paar keer raak je haar bijna kwijt tussen de rotsen, maar je vindt het spoor telkens terug.
+
+FLAG:
+ch2_k05_route=open
+
+CHOICES:
+
+* Blijf haar volgen, ondanks alles -> CH2_K06
+
+END
+
+=== SCENE: CH2_K05_ROB ===
+
+TITLE:
+In Haar Tempo
+
+TEXT:
+Je zet door, uur na uur, in het moordende tempo dat Kallisto zichzelf oplegt — geen rust, geen adempauze, alleen de volgende stap en de volgende. Wanneer ze eindelijk stilhoudt, sta jij nog altijd naast haar.
+
+FLAG:
+ch2_k05_route=robur
+
+CHOICES:
+
+* Blijf haar volgen, ondanks alles -> CH2_K06
+
+END
+
+=== SCENE: CH2_K05_PRU ===
+
+TITLE:
+Het Kortere Pad
+
+TEXT:
+In plaats van haar simpelweg te achtervolgen, lees je haar spoor: afgebroken takjes, verstoorde steentjes, een richting die zich al aftekent voor zij die zelf kiest. Via een kortere route sta je alweer op haar te wachten voor ze er is.
+
+FLAG:
+ch2_k05_route=prudentia
 
 CHOICES:
 
@@ -3352,7 +3919,57 @@ puzzle_ch2h_imperativus
 
 CHOICES:
 
-* Wacht af welke eerste beproeving hem te wachten staat -> CH2_H08
+* Wacht af welke eerste beproeving hem te wachten staat -> CH2_H07B
+
+END
+
+=== SCENE: CH2_H07B ===
+
+TITLE:
+De Tweede Uitgang
+
+TEXT:
+Bij de grot van de Nemeïsche leeuw aangekomen, valt je oog op iets waar Herakles zelf nog geen aandacht aan heeft besteed: een tweede, kleinere opening aan de achterzijde van het hol. Gevaarlijk, want zo kan de leeuw zijn belager ontglippen — of erger, jullie allebei in de rug besluipen.
+
+CHOICES:
+
+* Wijs Herakles op de tweede opening — hij regelt het zelf -> CH2_H08
+* Rol een zwaar rotsblok voor de tweede opening, schouder aan schouder met Herakles' eigen kracht [STAT:vis:11] -> CH2_H07_VIS
+* Sluip om de grot heen en stapel snel losse stenen en takken op, voor het beest iets in de gaten heeft [STAT:agilitas:13] -> CH2_H07_AGI
+
+END
+
+=== SCENE: CH2_H07_VIS ===
+
+TITLE:
+Het Rotsblok
+
+TEXT:
+Je zet je schouder tegen een zwaar rotsblok en rolt het voor de tweede opening, grommend van inspanning tot het met een doffe dreun op zijn plek valt. Nu is er nog maar één weg naar binnen — en maar één weg naar buiten.
+
+FLAG:
+ch2_h07_route=vis
+
+CHOICES:
+
+* Kijk hoe Herakles de grot binnengaat -> CH2_H08
+
+END
+
+=== SCENE: CH2_H07_AGI ===
+
+TITLE:
+Stenen en Takken
+
+TEXT:
+Je sluipt om de grot heen en stapelt, sneller dan je zelf had verwacht, losse stenen en dode takken tegen de tweede opening — niet onneembaar, maar genoeg om een vluchtende leeuw op te houden tot het te laat is.
+
+FLAG:
+ch2_h07_route=agilitas
+
+CHOICES:
+
+* Kijk hoe Herakles de grot binnengaat -> CH2_H08
 
 END
 
@@ -3406,6 +4023,56 @@ De tweede beproeving is nog wreder: de Hydra van Lerna, een veelkoppig moerasmon
 
 PUZZLE:
 puzzle_ch2h_posse
+
+CHOICES:
+
+* Volg hen het moeras in -> CH2_H10B
+
+END
+
+=== SCENE: CH2_H10B ===
+
+TITLE:
+Hera's Krab
+
+TEXT:
+Terwijl jullie het moeras in trekken, merk je een beweging tussen het riet die niets met de Hydra te maken heeft: Hera, die Herakles nooit met rust laat, heeft in stilte een reuzenkrab gestuurd om hem in zijn hiel te bijten zodra hij zich niet kan verdedigen.
+
+CHOICES:
+
+* Roep waarschuwend naar Iolaos, die al bijspringt -> CH2_H11
+* Stamp het beest zelf onder je hiel, ondanks de pijnlijke klauwen die zich vastklemmen [STAT:robur:11] -> CH2_H10_ROB
+* Grijp de krab bij zijn schaar en smijt hem terug het moeras in voor hij kan toebijten [STAT:agilitas:13] -> CH2_H10_AGI
+
+END
+
+=== SCENE: CH2_H10_ROB ===
+
+TITLE:
+Onder je Hiel
+
+TEXT:
+Je voelt de klauwen zich vastklemmen voor je de kans krijgt om na te denken, en stampt door de pijn heen tot het beest verbrijzeld in het slijk zakt. Herakles merkt er, druk met de Hydra, niets van.
+
+FLAG:
+ch2_h10_route=robur
+
+CHOICES:
+
+* Volg hen het moeras in -> CH2_H11
+
+END
+
+=== SCENE: CH2_H10_AGI ===
+
+TITLE:
+Weggesmeten
+
+TEXT:
+Je grijpt de krab bij zijn schaar net op het moment dat hij toe wil happen, en smijt hem met een boog terug het moeras in — ver genoeg weg om geen tweede poging te wagen.
+
+FLAG:
+ch2_h10_route=agilitas
 
 CHOICES:
 
@@ -3526,6 +4193,9 @@ Het Einde van Hoofdstuk 2
 
 TEXT:
 "Hoofdstuk 3 wacht al ergens verderop," zegt de stem, "en met hem de rest van Herakles' beproevingen — zijn eerste werken heb je al gezien, maar er wachten er nog velen." De poort keert terug tot een dunne streep licht, en je neemt vier herinneringen met je mee: volharding, onschuld, waarheid, moed.
+
+STATPOINTS:
+3
 
 CHOICES:
 
@@ -4400,6 +5070,9 @@ Het Einde van Hoofdstuk 3
 TEXT:
 "Hoofdstuk 4 wacht al ergens verderop," zegt de stem, "waar een ander soort labyrint op je wacht — niet van steen deze keer, maar van herinnering zelf." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: vrijheid, en volbrenging.
 
+STATPOINTS:
+3
+
 CHOICES:
 
 * Stap door de poort -> CH4_000
@@ -4558,7 +5231,70 @@ puzzle_ch4t_ablativus
 
 CHOICES:
 
-* Ga het duister in, op het geluid af -> CH4_T07
+* Ga het duister in, op het geluid af -> CH4_T06B
+
+END
+
+=== SCENE: CH4_T06B ===
+
+TITLE:
+De Eerste Splitsing
+
+TEXT:
+Nog geen tien passen verder splitst de gang zich in tweeën, en het geluid dat je eerder hoorde kan nu net zo goed van links als van rechts komen. Terwijl je aarzelt, herinner je je iets dat Ariadne je toefluisterde vlak voor je naar binnen ging — het enige wat Daidalos haar ooit over de opbouw van het labyrint heeft durven vertellen: "Bij elke splitsing, houd links aan. Dat brengt je regelrecht naar het hart."
+
+CHOICES:
+
+* Houd links aan -> CH4_T07
+* Ga naar rechts -> CH4_T06R1
+
+END
+
+=== SCENE: CH4_T06R1 ===
+
+TITLE:
+De Verkeerde Afslag
+
+TEXT:
+Naar rechts versmalt de gang al snel, en de bochten volgen elkaar sneller op dan daarvoor — twee keer rechts, dan links, dan weer rechts, tot je amper nog weet uit welke richting je kwam. Het garen achter je blijft dunner worden op de kluwen in je hand, sneller dan je had verwacht voor zo'n kort stuk weg.
+
+Het geluid van ademhaling, dat eerst ergens ver weg leek, klinkt nu duidelijk dichterbij — al kun je niet meer met zekerheid zeggen uit welke gang.
+
+CHOICES:
+
+* Loop door, er is toch geen weg terug zonder het monster onder ogen te komen -> CH4_T06R2
+
+END
+
+=== SCENE: CH4_T06R2 ===
+
+TITLE:
+Het Garen Raakt Op
+
+TEXT:
+De kluwen in je hand wordt met elke stap lichter, tot je vingers plotseling niets meer voelen dan de lege binnenkant — het garen is op, lang voordat je enig teken van het hart van het labyrint hebt gezien. Zonder de draad is er geen weg terug meer, alleen nog gangen die er allemaal exact hetzelfde uitzien.
+
+De ademhaling komt nu van meer dan één kant tegelijk, of misschien kaatst hij gewoon terug van muren die je niet meer kunt onderscheiden. Voor het eerst besef je dat Ariadne's waarschuwing geen loze woorden waren.
+
+CHOICES:
+
+* Zoek wanhopig verder naar een uitweg -> CH4_T06R3
+
+END
+
+=== SCENE: CH4_T06R3 ===
+
+TITLE:
+In het Duister Gevangen
+
+TEXT:
+Zonder draad om op te vertrouwen en zonder enig idee meer welke gang naar buiten leidt, hoor je de Minotaurus dichterbij komen vanuit een duisternis die van alle kanten tegelijk lijkt te komen — geen zwaard, geen plan, en geen weg terug maakt dit een gevecht dat je onmogelijk kunt winnen.
+
+Het labyrint doet vandaag weer waarvoor het gebouwd is: iemand die de verkeerde afslag nam, nooit meer laten uitkomen.
+
+CHOICES:
+
+* Begin de tocht door het labyrint opnieuw -> CH4_T06B
 
 END
 
@@ -5007,6 +5743,9 @@ Het Einde van Hoofdstuk 4
 
 TEXT:
 "Hoofdstuk 5 wacht al ergens verderop," zegt de stem, "waar geen labyrint meer op je wacht, maar een schip vol helden — en het begin van een tocht naar het Gulden Vlies." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: uitweg, en overmoed.
+
+STATPOINTS:
+3
 
 CHOICES:
 
@@ -5665,6 +6404,9 @@ TEXT:
 EERETITEL:
 ch5_medea_korinthe
 
+STATPOINTS:
+3
+
 CHOICES:
 
 * Stap door de poort -> CH6_000
@@ -6194,6 +6936,9 @@ TEXT:
 "Je hebt nu een hele stad gezien," zegt de Boodschapper zacht, "over generaties heen, altijd hetzelfde patroon: hoogmoed, en dan een straf die zelden bij de hoogmoedige zelf terechtkomt. Niet elke vloek wordt in één leven uitgesproken. Sommige wachten gewoon op de volgende generatie om hem alsnog te laten uitkomen."
 
 De poort keert terug tot een dunne streep licht. Je neemt geen tastbare herinnering mee dit keer — alleen het besef dat een vloek niet altijd hardop wordt uitgesproken. Soms wordt hij gewoon, generatie na generatie, doorgegeven.
+
+STATPOINTS:
+3
 
 END
 `.trim();

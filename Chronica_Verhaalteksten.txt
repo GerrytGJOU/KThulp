@@ -88,7 +88,8 @@ PRO_001 — Het Veld bij Latium
             → PRO_005  (zie hierboven)
       * Laat de kist gesloten en keer terug naar het dorp
         PRO_002B — Twijfel
-          (einde — geen vervolgkeuze)
+          * Keer terug naar het veld en graaf de kist alsnog open
+        → PRO_003  (zie hierboven)
   * Veeg eerst voorzichtig het zand weg
     PRO_001B — Voorzichtig
       * Graaf de kist op
@@ -149,7 +150,11 @@ TITLE:
 Twijfel
 
 TEXT:
-Je laat de kist waar ze is en loopt terug naar het dorp, de ploeg achter je aan. Maar de hele dag, bij elke voor die je trekt, dwaalt je gedachte terug naar dat donkere hout in de aarde — en naar wat je daar misschien hebt laten liggen.
+Je laat de kist waar ze is en loopt terug naar het dorp, de ploeg achter je aan. Maar de hele dag, bij elke voor die je trekt, dwaalt je gedachte terug naar dat donkere hout in de aarde — en naar wat je daar misschien hebt laten liggen. Tegen de avond geef je het op: je kunt het niet laten rusten.
+
+CHOICES:
+
+* Keer terug naar het veld en graaf de kist alsnog open -> PRO_003
 
 END
 
@@ -349,49 +354,71 @@ CH1_000 — De Namen van de Wereld
       * Ga direct de stad Sardis binnen
         CH1_A02 — Het Paleis van Sardis
           * Ontcijfer het woord boven de poort
-        CH1_A03 — Silenus, de Dronken Wijze
-          * Wacht af wat Bacchus te bieden heeft
-        CH1_A04 — Een Gevaarlijke Wens
-          * Blijf kijken wat er gebeurt
-        CH1_A05 — De Gouden Aanraking
-          * Kijk toe hoe hij verder gaat
-        CH1_A06 — Het Gouden Feestmaal
-          * Kijk onbewogen toe — hij wist waar hij om vroeg [SEVERITAS]
-            CH1_A07 — Wat Goud Niet Kan Voeden
-              * Grijp hem stevig bij zijn schouders, om hem tot bezinning te schudden [SEVERITAS]
-                CH1_A08 — Een Vloek Erkend
-                  * Blijf eerst naast hem zitten, zodat hij niet alleen is met wat hij heeft gedaan [CLEMENTIA]
-                    CH1_A08B — Een Ogenblik van Stilte
-                      * Wijs hem op Bacchus, die alles zag gebeuren
-                    CH1_A09 — De Aanroeping
-                      * Wacht op het antwoord van de god
-                    CH1_A10 — De Rivier de Pactolus
-                      * Loop meteen door — er wacht nog werk aan de naam die je moet redden [SEVERITAS]
-                        CH1_A11 — Het Orakel Verschijnt
-                          * Luister verder
-                        CH1_ROBE — De Mantel
-                          * Trek de mantel aan
-                        CH1_CODEX_UITLEG — De Codex Memoriae
-                          * Doorgaan
-                        CH1_EINDE — Het Einde van Hoofdstuk 1
-                          * Stap door de poort
-                        → CH2_000  (volgend hoofdstuk)
-                      * Werp een laatste blik terug, zonder er verder bij stil te staan [NEUTRAL]
-                        → CH1_A11  (zie hierboven)
-                      * Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [CLEMENTIA]
-                        → CH1_A11  (zie hierboven)
-                  * Blijf besluiteloos naast hem zitten, niet zeker wat je nu moet zeggen [NEUTRAL]
-                    → CH1_A08B  (zie hierboven)
-                  * Wijs hem meteen op Bacchus, die alles zag gebeuren [SEVERITAS]
-                    → CH1_A09  (zie hierboven)
-              * Grijp hem bij zijn schouders, zelf niet zeker of dit troost of een schok moet zijn [NEUTRAL]
-                → CH1_A08  (zie hierboven)
-              * Grijp hem voorzichtig bij zijn schouders, om hem te troosten [CLEMENTIA]
-                → CH1_A08  (zie hierboven)
-          * Kijk toe, nog niet goed wetend wat je van dit alles moet denken [NEUTRAL]
-            → CH1_A07  (zie hierboven)
-          * Kijk met groeiend medeleven hoe zijn paniek toeneemt [CLEMENTIA]
-            → CH1_A07  (zie hierboven)
+            CH1_A02_PUZZLE — Het Woord boven de Poort
+              * Ontcijfer het woord
+            CH1_A03 — Silenus, de Dronken Wijze
+              * Wacht af wat Bacchus te bieden heeft
+            CH1_A04 — Een Gevaarlijke Wens
+              * Blijf kijken wat er gebeurt
+            CH1_A05 — De Gouden Aanraking
+              * Kijk toe hoe hij verder gaat
+            CH1_A06 — Het Gouden Feestmaal
+              * Kijk onbewogen toe — hij wist waar hij om vroeg [SEVERITAS]
+                CH1_A07 — Wat Goud Niet Kan Voeden
+                  * Grijp hem stevig bij zijn schouders, om hem tot bezinning te schudden [SEVERITAS]
+                    CH1_A08 — Een Vloek Erkend
+                      * Blijf eerst naast hem zitten, zodat hij niet alleen is met wat hij heeft gedaan [CLEMENTIA]
+                        CH1_A08B — Een Ogenblik van Stilte
+                          * Wijs hem op Bacchus, die alles zag gebeuren
+                        CH1_A09 — De Aanroeping
+                          * Wacht op het antwoord van de god
+                        CH1_A10 — De Rivier de Pactolus
+                          * Blijf vlak naast Midas, klaar om hem overeind te houden wanneer hij weer struikelt
+                            CH1_A10_OPEN — Aan Zijn Zijde
+                              * Kijk toe hoe Midas zich in het water werpt
+                            CH1_A10B — Het Water Neemt het Goud
+                              * Loop meteen door — er wacht nog werk aan de naam die je moet redden [SEVERITAS]
+                                CH1_A11 — Het Orakel Verschijnt
+                                  * Luister verder
+                                CH1_ROBE — De Mantel
+                                  * Trek de mantel aan
+                                CH1_CODEX_UITLEG — De Codex Memoriae
+                                  * Doorgaan
+                                CH1_EINDE — Het Einde van Hoofdstuk 1
+                                  * Stap door de poort
+                                → CH2_000  (volgend hoofdstuk)
+                              * Werp een laatste blik terug, zonder er verder bij stil te staan [NEUTRAL]
+                                → CH1_A11  (zie hierboven)
+                              * Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [CLEMENTIA]
+                                → CH1_A11  (zie hierboven)
+                          * Duw de dichtklappende poort met kracht open zodat jullie er meteen doorheen kunnen [STAT:vis:13]
+                            CH1_A10_VIS — De Dichtklappende Poort
+                              * Kijk toe hoe Midas zich in het water werpt
+                            → CH1_A10B  (zie hierboven)
+                          * Praat de paniekerige poortwacht om vóór hij het slot dichtgooit [STAT:gratia:11]
+                            CH1_A10_GRATIA — Eén Enkel Woord
+                              * Kijk toe hoe Midas zich in het water werpt
+                            → CH1_A10B  (zie hierboven)
+                      * Blijf besluiteloos naast hem zitten, niet zeker wat je nu moet zeggen [NEUTRAL]
+                        → CH1_A08B  (zie hierboven)
+                      * Wijs hem meteen op Bacchus, die alles zag gebeuren [SEVERITAS]
+                        → CH1_A09  (zie hierboven)
+                  * Grijp hem bij zijn schouders, zelf niet zeker of dit troost of een schok moet zijn [NEUTRAL]
+                    → CH1_A08  (zie hierboven)
+                  * Grijp hem voorzichtig bij zijn schouders, om hem te troosten [CLEMENTIA]
+                    → CH1_A08  (zie hierboven)
+              * Kijk toe, nog niet goed wetend wat je van dit alles moet denken [NEUTRAL]
+                → CH1_A07  (zie hierboven)
+              * Kijk met groeiend medeleven hoe zijn paniek toeneemt [CLEMENTIA]
+                → CH1_A07  (zie hierboven)
+          * Zet je schouder tegen de zijdeur van de wachtpost en forceer hem open [STAT:vis:13]
+            CH1_A02_VIS — De Zijdeur
+              * Loop door naar de troonzaal
+            → CH1_A03  (zie hierboven)
+          * Wacht de wisseling van de wacht af en glip dan, ongezien, tussen hen door [STAT:prudentia:13]
+            CH1_A02_SLUIP — De Wisseling van de Wacht
+              * Loop door naar de troonzaal
+            → CH1_A03  (zie hierboven)
       * Vraag eerst een langsreizende koopman naar het laatste nieuws
         CH1_A01B — Geruchten op de Weg
           * Knik kort en loop meteen door, je aandacht al bij het paleis [SEVERITAS]
@@ -403,89 +430,125 @@ CH1_000 — De Namen van de Wereld
   * Naar de top van de Olympos, waar iets op het punt staat te barsten
     CH1_B01 — Metis, de Eerste Vrouw van Zeus
       * Beklim direct de laatste helling naar de top
-        CH1_B02 — Onweer op de Olympos
-          * Blijf nuchter — een pijnlijke geboorte is nog geen excuus voor wat hij Metis aandeed [SEVERITAS]
-            CH1_B03 — Een Naam voor het Ongeborene
-              * Volg het gefluister naar Zeus' troon
-            CH1_B04 — De Bijl van Hephaistos
-              * Kijk niet weg
-            CH1_B05 — Wat uit het Hoofd Breekt
-              * Kijk hoe ze voor het eerst ademhaalt
-            CH1_B06 — Pallas Athena
-              * Kijk hoe Zeus als eerste zijn stem hervindt
-                CH1_B07 — De Aanroeping van Zeus
-                  * Kijk toe, vooral benieuwd wat haar aanwezigheid voor de Olympos gaat betekenen [SEVERITAS]
-                    CH1_B08 — Wijsheid Neemt Haar Plaats In
-                      * Daal meteen af — er is nog werk te doen [SEVERITAS]
-                        CH1_B09 — Het Orakel Verschijnt
-                          * Luister verder
-                        → CH1_ROBE  (zie hierboven)
-                      * Daal af, nog steeds nadenkend over wat je zojuist hebt gezien [NEUTRAL]
-                        → CH1_B09  (zie hierboven)
-                      * Daal af, dankbaar dat je bij zo'n geboorte mocht zijn [CLEMENTIA]
-                        → CH1_B09  (zie hierboven)
-                  * Kijk toe, vooral afwachtend wat er nu gaat gebeuren [NEUTRAL]
-                    → CH1_B08  (zie hierboven)
-                  * Kijk toe, ontroerd door het moment tussen vader en dochter [CLEMENTIA]
-                    → CH1_B08  (zie hierboven)
-              * Kijk naar de andere goden, die zich stilletjes terugtrekken
-                CH1_B06B — Niet Iedereen Kijkt met Bewondering
-                  * Wacht af hoe zij antwoordt
-                → CH1_B07  (zie hierboven)
-          * Kijk toe zonder een duidelijke mening te vormen over wat je ziet [NEUTRAL]
-            → CH1_B03  (zie hierboven)
-          * Voel medelijden met Zeus, ondanks alles wat hij heeft gedaan [CLEMENTIA]
-            → CH1_B03  (zie hierboven)
+        CH1_B01C — De Laatste Helling
+          * Volg het kronkelende pelgrimspad, langzamer maar voor iedereen begaanbaar
+            CH1_B01_PAD — Het Pelgrimspad
+              * Loop de top van de Olympos op
+            CH1_B02 — Onweer op de Olympos
+              * Blijf nuchter — een pijnlijke geboorte is nog geen excuus voor wat hij Metis aandeed [SEVERITAS]
+                CH1_B03 — Een Naam voor het Ongeborene
+                  * Volg het gefluister naar Zeus' troon
+                CH1_B04 — De Bijl van Hephaistos
+                  * Kijk niet weg
+                CH1_B05 — Wat uit het Hoofd Breekt
+                  * Kijk hoe ze voor het eerst ademhaalt
+                CH1_B06 — Pallas Athena
+                  * Kijk hoe Zeus als eerste zijn stem hervindt
+                    CH1_B07 — De Aanroeping van Zeus
+                      * Kijk toe, vooral benieuwd wat haar aanwezigheid voor de Olympos gaat betekenen [SEVERITAS]
+                        CH1_B08 — Wijsheid Neemt Haar Plaats In
+                          * Daal meteen af — er is nog werk te doen [SEVERITAS]
+                            CH1_B09 — Het Orakel Verschijnt
+                              * Luister verder
+                            → CH1_ROBE  (zie hierboven)
+                          * Daal af, nog steeds nadenkend over wat je zojuist hebt gezien [NEUTRAL]
+                            → CH1_B09  (zie hierboven)
+                          * Daal af, dankbaar dat je bij zo'n geboorte mocht zijn [CLEMENTIA]
+                            → CH1_B09  (zie hierboven)
+                      * Kijk toe, vooral afwachtend wat er nu gaat gebeuren [NEUTRAL]
+                        → CH1_B08  (zie hierboven)
+                      * Kijk toe, ontroerd door het moment tussen vader en dochter [CLEMENTIA]
+                        → CH1_B08  (zie hierboven)
+                  * Kijk naar de andere goden, die zich stilletjes terugtrekken
+                    CH1_B06B — Niet Iedereen Kijkt met Bewondering
+                      * Wacht af hoe zij antwoordt
+                    → CH1_B07  (zie hierboven)
+              * Kijk toe zonder een duidelijke mening te vormen over wat je ziet [NEUTRAL]
+                → CH1_B03  (zie hierboven)
+              * Voel medelijden met Zeus, ondanks alles wat hij heeft gedaan [CLEMENTIA]
+                → CH1_B03  (zie hierboven)
+          * Klim recht tegen de rotswand op, rechtstreeks de aanzwellende wind in [STAT:vis:13]
+            CH1_B01_VIS — Recht Tegen de Wind In
+              * Loop de top van de Olympos op
+            → CH1_B02  (zie hierboven)
+          * Spring behendig van steen naar steen over een smalle, afbrokkelende richel [STAT:agilitas:11]
+            CH1_B01_AGI — Van Steen naar Steen
+              * Loop de top van de Olympos op
+            → CH1_B02  (zie hierboven)
       * Vraag de herder waarom hij zo angstig wegvlucht
         CH1_B01B — Een Patroon dat Zich Herhaalt
           * Je hebt geen tijd voor meer vragen en klimt meteen door [SEVERITAS]
-            → CH1_B02  (zie hierboven)
+            → CH1_B01C  (zie hierboven)
           * Overweeg zijn woorden een moment, en klim dan verder [NEUTRAL]
-            → CH1_B02  (zie hierboven)
+            → CH1_B01C  (zie hierboven)
           * Bedank de herder voor zijn waarschuwing voor je verdergaat [CLEMENTIA]
-            → CH1_B02  (zie hierboven)
+            → CH1_B01C  (zie hierboven)
   * Naar een kille vallei, waar het eerste vuur nog gestolen moet worden
     CH1_C01 — De Titaan die Mensen Vormde
       * Loop resoluut door — verhalen zijn mooi, maar je wilt het zelf zien [SEVERITAS]
         CH1_C02 — De Kille Vallei
           * Volg hem meteen, vastbesloten als hij is
             CH1_C03 — Het Woord voor Vuur
-              * Kijk hoe Prometheus een vonk verbergt
-            CH1_C04 — De Diefstal
-              * Kijk toe hoe de hemel dit opmerkt
-            CH1_C05 — Zeus' Woede en Twee Straffen
-              * Kijk toe zonder oordeel — de goden doen wat goden doen [SEVERITAS]
-                CH1_C06 — Pandora, het Alomgeschonken Geschenk
-                  * Volg Pandora naar de mensenwereld
-                CH1_C07 — De Doos die Ze Meekreeg
-                  * Kijk toe op het moment dat ze het deksel licht
-                    CH1_C08 — Wat uit de Doos Ontsnapt
-                      * Richt je blik meteen op de doos — is dit werkelijk alles wat erin zat? [SEVERITAS]
-                        CH1_C09 — Wat Achterblijft
-                          * Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [SEVERITAS]
-                            CH1_C10 — Geketend, Niet Gebroken
-                              * Beantwoord zijn blik
-                            CH1_C11 — Vuur en Hoop
-                              * Loop verder, terug naar de bewoonde wereld
-                            CH1_C12 — Het Orakel Verschijnt
-                              * Luister verder
-                            → CH1_ROBE  (zie hierboven)
-                          * Ga naar hem toe, zonder meteen te weten wat je tegen hem wilt zeggen [NEUTRAL]
-                            → CH1_C10  (zie hierboven)
-                          * Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA]
-                            → CH1_C10  (zie hierboven)
-                      * Kijk toe, niet goed wetend wie of wat hier het meest je aandacht verdient [NEUTRAL]
-                        → CH1_C09  (zie hierboven)
-                      * Kniel bij Pandora neer, die verstijfd is van schrik en schuldgevoel [CLEMENTIA]
-                        → CH1_C09  (zie hierboven)
-                  * Kijk hoe Epimetheus probeert haar aandacht af te leiden
-                    CH1_C07B — Een Poging tot Afleiding
+              * Kom dichterbij
+            CH1_C03B — Dichter bij het Vuur
+              * Blijf op veilige afstand, in de schaduw die er toch al ligt
+                CH1_C03_OPEN — In de Schaduw
+                  * Kijk hoe Prometheus een vonk verbergt
+                CH1_C04 — De Diefstal
+                  * Kijk toe hoe de hemel dit opmerkt
+                CH1_C05 — Zeus' Woede en Twee Straffen
+                  * Kijk toe zonder oordeel — de goden doen wat goden doen [SEVERITAS]
+                    CH1_C06 — Pandora, het Alomgeschonken Geschenk
+                      * Volg Pandora naar de mensenwereld
+                    CH1_C07 — De Doos die Ze Meekreeg
                       * Kijk toe op het moment dat ze het deksel licht
-                    → CH1_C08  (zie hierboven)
-              * Wacht simpelweg af wat Zeus heeft bedacht [NEUTRAL]
-                → CH1_C06  (zie hierboven)
-              * Vrees voor wat dit gaat opleveren, met medelijden voor wie straks de gevolgen zal dragen [CLEMENTIA]
-                → CH1_C06  (zie hierboven)
+                        CH1_C08 — Wat uit de Doos Ontsnapt
+                          * Richt je blik meteen op de doos — is dit werkelijk alles wat erin zat? [SEVERITAS]
+                            CH1_C09 — Wat Achterblijft
+                              * Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [SEVERITAS]
+                                CH1_C09B — Naar de Rots
+                                  * Volg het karrenspoor dat om de berg heen naar de pas voert
+                                    CH1_C09_PAD — Het Karrenspoor
+                                      * Kijk omhoog naar waar Prometheus geketend hangt
+                                    CH1_C10 — Geketend, Niet Gebroken
+                                      * Beantwoord zijn blik
+                                    CH1_C11 — Vuur en Hoop
+                                      * Loop verder, terug naar de bewoonde wereld
+                                    CH1_C12 — Het Orakel Verschijnt
+                                      * Luister verder
+                                    → CH1_ROBE  (zie hierboven)
+                                  * Beklim de rotswand rechtstreeks, hand over hand tegen het zwaartepunt in [STAT:vis:13]
+                                    CH1_C09_VIS — Tegen het Zwaartepunt In
+                                      * Kijk omhoog naar waar Prometheus geketend hangt
+                                    → CH1_C10  (zie hierboven)
+                                  * Lees het vluchtpatroon van de adelaar — zijn dagelijkse route verraadt de kortste weg naar de rots [STAT:prudentia:11]
+                                    CH1_C09_PRU — Het Spoor van de Adelaar
+                                      * Kijk omhoog naar waar Prometheus geketend hangt
+                                    → CH1_C10  (zie hierboven)
+                              * Ga naar hem toe, zonder meteen te weten wat je tegen hem wilt zeggen [NEUTRAL]
+                                → CH1_C09B  (zie hierboven)
+                              * Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA]
+                                → CH1_C09B  (zie hierboven)
+                          * Kijk toe, niet goed wetend wie of wat hier het meest je aandacht verdient [NEUTRAL]
+                            → CH1_C09  (zie hierboven)
+                          * Kniel bij Pandora neer, die verstijfd is van schrik en schuldgevoel [CLEMENTIA]
+                            → CH1_C09  (zie hierboven)
+                      * Kijk hoe Epimetheus probeert haar aandacht af te leiden
+                        CH1_C07B — Een Poging tot Afleiding
+                          * Kijk toe op het moment dat ze het deksel licht
+                        → CH1_C08  (zie hierboven)
+                  * Wacht simpelweg af wat Zeus heeft bedacht [NEUTRAL]
+                    → CH1_C06  (zie hierboven)
+                  * Vrees voor wat dit gaat opleveren, met medelijden voor wie straks de gevolgen zal dragen [CLEMENTIA]
+                    → CH1_C06  (zie hierboven)
+              * Sluip mee tussen de zuilen, exact in de pas van Prometheus [STAT:agilitas:11]
+                CH1_C03_AGI — In Zijn Pas
+                  * Kijk hoe Prometheus een vonk verbergt
+                → CH1_C04  (zie hierboven)
+              * Klim in plaats daarvan recht langs de rotsrand omhoog — zwaarder, maar sneller bij de haard [STAT:vis:13]
+                CH1_C03_VIS — Langs de Rotsrand
+                  * Kijk hoe Prometheus een vonk verbergt
+                → CH1_C04  (zie hierboven)
           * Wacht tot het donker is, zodat hij ongezien de Olympos op kan
             CH1_C02B — Wachten op het Duister
               * Volg hem terwijl hij zich naar het vuur van de goden waagt
@@ -566,14 +629,58 @@ Het paleis van Sardis torent boven de rest van de stad uit als een aankondiging 
 
 Je vangt flarden op van wat er is gebeurd: een oude, dronken metgezel van de wijngod zelf zou verdwaald zijn in de rozentuinen van het paleis, en de koning zou hem, in plaats van hem weg te sturen, tien dagen lang als eregast hebben onthaald voordat hij hem eigenhandig terugbracht naar zijn god. Zulke gastvrijheid, zeggen de bedienden tegen elkaar, wordt zelden onbeloond gelaten.
 
-Boven de hoofdpoort naar de troonzaal staat, diep in de steen gebeiteld, een enkel Grieks woord — een titel, geen naam, alsof de steenhouwer wilde vastleggen wat deze plek regeert.
+Bij de deur naar de troonzaal zelf sta je voor een tweede probleem: twee wachters met gekruiste speren, en daarboven, diep in de steen gebeiteld, een enkel Grieks woord — een titel, geen naam, alsof de steenhouwer wilde vastleggen wat deze plek regeert. Wie het woord leest, wordt zonder vragen doorgelaten. Voor wie dat niet kan, blijven er maar twee andere manieren naar binnen.
+
+CHOICES:
+
+* Ontcijfer het woord boven de poort -> CH1_A02_PUZZLE
+* Zet je schouder tegen de zijdeur van de wachtpost en forceer hem open [STAT:vis:13] -> CH1_A02_VIS
+* Wacht de wisseling van de wacht af en glip dan, ongezien, tussen hen door [STAT:prudentia:13] -> CH1_A02_SLUIP
+
+END
+
+=== SCENE: CH1_A02_PUZZLE ===
+
+TITLE:
+Het Woord boven de Poort
+
+TEXT:
+De wachters zien je naar het opschrift staren en zeggen niets — wie het woord kan lezen, hoort hier, is kennelijk de ongeschreven regel. Je concentreert je op de letters.
 
 PUZZLE:
 puzzle_ch1a_lidwoord
 
 CHOICES:
 
-* Ontcijfer het woord boven de poort -> CH1_A03
+* Ontcijfer het woord -> CH1_A03
+
+END
+
+=== SCENE: CH1_A02_VIS ===
+
+TITLE:
+De Zijdeur
+
+TEXT:
+Je laat het opschrift voor wat het is en loopt door naar de zijdeur van de wachtpost — houten planken, een simpele grendel aan de binnenkant. Eén schouder ertegenaan, één keer goed doorduwen, en het hout geeft mee met een kraak die de wachters bij de hoofdpoort niet eens lijken te horen. Binnen enkele passen sta je alweer in de gang naar de troonzaal, alsof er nooit een deur in de weg had gestaan.
+
+CHOICES:
+
+* Loop door naar de troonzaal -> CH1_A03
+
+END
+
+=== SCENE: CH1_A02_SLUIP ===
+
+TITLE:
+De Wisseling van de Wacht
+
+TEXT:
+Je blijft in de schaduw van een zuil staan en kijkt. Wachters houden zelden hun aandacht vast, merk je al snel — en inderdaad, na een tijdje komt er een tweede paar aflossen, met het korte moment van verwarring dat daar altijd bij hoort: wie stond waar, wie neemt wat over. In dat ene ogenblik glip je tussen hen door, zo vanzelfsprekend dat niemand er zelfs naar omkijkt.
+
+CHOICES:
+
+* Loop door naar de troonzaal -> CH1_A03
 
 END
 
@@ -733,7 +840,74 @@ De Rivier de Pactolus
 TEXT:
 Bacchus verschijnt opnieuw, niet wreed maar ook niet haastig — bijna alsof hij dit al had voorzien. "Je wens was nooit het probleem," zegt hij, "je onvermogen om tevreden te zijn wel. Maar ik ben geen god die geniet van andermans verdriet. Was jezelf in de rivier de Pactolus, en de vloek stroomt met het water mee."
 
-Midas rent zoals hij nog nooit heeft gerend, struikelt over zijn eigen gouden drempel, en dompelt zich onder in de rivier die je onderweg al zag glinsteren. Wanneer hij weer opstaat, druipend en buiten adem, is het goud uit zijn handen verdwenen — en achter hem, waar het water over zijn huid stroomde, glinstert de rivierbedding voortaan doorspekt met fijne, gouden korrels. Reizigers zullen deze rivier eeuwenlang de Pactolus blijven noemen, en handelaars uit deze streek zullen nog generaties later spreken over het goud dat letterlijk uit haar water wordt gezeefd.
+Het nieuws van het gouden standbeeld heeft zich intussen al door het hele paleis verspreid. Bedienden rennen schreeuwend heen en weer, een poortwacht probeert uit pure paniek de buitenpoort te grendelen "voor de veiligheid", en Midas zelf, radeloos en niet meer helder denkend, struikelt al bij zijn eerste stap naar de rivier die je onderweg zag glinsteren.
+
+CHOICES:
+
+* Blijf vlak naast Midas, klaar om hem overeind te houden wanneer hij weer struikelt -> CH1_A10_OPEN
+* Duw de dichtklappende poort met kracht open zodat jullie er meteen doorheen kunnen [STAT:vis:13] -> CH1_A10_VIS
+* Praat de paniekerige poortwacht om vóór hij het slot dichtgooit [STAT:gratia:11] -> CH1_A10_GRATIA
+
+END
+
+=== SCENE: CH1_A10_OPEN ===
+
+TITLE:
+Aan Zijn Zijde
+
+TEXT:
+Je blijft vlak naast Midas, en het is maar goed ook: twee keer struikelt hij, blind van paniek, over zijn eigen voeten, en twee keer ben jij het die hem overeind trekt voor hij valt. Samen bereiken jullie, buiten adem, de oever van de Pactolus.
+
+FLAG:
+ch1_a10_route=open
+
+CHOICES:
+
+* Kijk toe hoe Midas zich in het water werpt -> CH1_A10B
+
+END
+
+=== SCENE: CH1_A10_VIS ===
+
+TITLE:
+De Dichtklappende Poort
+
+TEXT:
+Je laat Midas geen moment wachten. De poort naar de tuinen valt al dicht onder de handen van een paniekerige wacht; je zet je schouder ertegen en duwt, één keer, tot het hout kraakt en de grendel het begeeft. Midas rent je voorbij, jij vlak achter hem, de rivier al in zicht.
+
+FLAG:
+ch1_a10_route=vis
+
+CHOICES:
+
+* Kijk toe hoe Midas zich in het water werpt -> CH1_A10B
+
+END
+
+=== SCENE: CH1_A10_GRATIA ===
+
+TITLE:
+Eén Enkel Woord
+
+TEXT:
+De poortwacht heeft zijn hand al op de grendel wanneer je hem aanspreekt — geen bevel, geen dreiging, alleen een paar woorden over wat er gebeurt als de koning zelf hier straks vastzit. Hij aarzelt, en dat is genoeg: de poort blijft open, en jullie glippen er samen met Midas doorheen, recht op de rivier af.
+
+FLAG:
+ch1_a10_route=gratia
+
+CHOICES:
+
+* Kijk toe hoe Midas zich in het water werpt -> CH1_A10B
+
+END
+
+=== SCENE: CH1_A10B ===
+
+TITLE:
+Het Water Neemt het Goud
+
+TEXT:
+Midas rent zoals hij nog nooit heeft gerend en dompelt zich onder in de rivier. Wanneer hij weer opstaat, druipend en buiten adem, is het goud uit zijn handen verdwenen — en achter hem, waar het water over zijn huid stroomde, glinstert de rivierbedding voortaan doorspekt met fijne, gouden korrels. Reizigers zullen deze rivier eeuwenlang de Pactolus blijven noemen, en handelaars uit deze streek zullen nog generaties later spreken over het goud dat letterlijk uit haar water wordt gezeefd.
 
 Zijn dochter, zo vertelt men je later, terwijl Midas nog druipend aan de oever zit, keerde terug tot leven zodra de laatste gouden druppel zijn huid verliet — springlevend, ongedeerd, zonder enige herinnering aan het standbeeld dat ze even was.
 
@@ -804,7 +978,7 @@ zeus:intro
 
 CHOICES:
 
-* Beklim direct de laatste helling naar de top -> CH1_B02
+* Beklim direct de laatste helling naar de top -> CH1_B01C
 * Vraag de herder waarom hij zo angstig wegvlucht -> CH1_B01B
 
 END
@@ -821,9 +995,76 @@ Hij wijst naar de donderwolken die zich al om de top samenpakken. "Als de zoon z
 
 CHOICES:
 
-* Je hebt geen tijd voor meer vragen en klimt meteen door [SEVERITAS] -> CH1_B02
-* Overweeg zijn woorden een moment, en klim dan verder [NEUTRAL] -> CH1_B02
-* Bedank de herder voor zijn waarschuwing voor je verdergaat [CLEMENTIA] -> CH1_B02
+* Je hebt geen tijd voor meer vragen en klimt meteen door [SEVERITAS] -> CH1_B01C
+* Overweeg zijn woorden een moment, en klim dan verder [NEUTRAL] -> CH1_B01C
+* Bedank de herder voor zijn waarschuwing voor je verdergaat [CLEMENTIA] -> CH1_B01C
+
+END
+
+=== SCENE: CH1_B01C ===
+
+TITLE:
+De Laatste Helling
+
+TEXT:
+Boven je pakken de wolken zich al samen, sneller dan een gewone storm zou moeten — geen twijfel meer mogelijk over wat de herder bedoelde. De top van de Olympos ligt nog een laatste, steile helling boven je, en de wind wakkert aan met elke stap die je zet.
+
+CHOICES:
+
+* Volg het kronkelende pelgrimspad, langzamer maar voor iedereen begaanbaar -> CH1_B01_PAD
+* Klim recht tegen de rotswand op, rechtstreeks de aanzwellende wind in [STAT:vis:13] -> CH1_B01_VIS
+* Spring behendig van steen naar steen over een smalle, afbrokkelende richel [STAT:agilitas:11] -> CH1_B01_AGI
+
+END
+
+=== SCENE: CH1_B01_PAD ===
+
+TITLE:
+Het Pelgrimspad
+
+TEXT:
+Je houdt je aan het pad dat al generaties pelgrims naar boven heeft gebracht — trager dan de kortere routes, maar veilig, zelfs nu de wind aan je mantel rukt. Buiten adem, maar ongedeerd, bereik je de top.
+
+FLAG:
+ch1_b01_route=pad
+
+CHOICES:
+
+* Loop de top van de Olympos op -> CH1_B02
+
+END
+
+=== SCENE: CH1_B01_VIS ===
+
+TITLE:
+Recht Tegen de Wind In
+
+TEXT:
+Je kiest de kortste weg: recht tegen de rotswand op, elke handgreep bevochten tegen een wind die je bijna van de berg af probeert te blazen. Waar een ander zou zijn teruggedeinsd, duw je door — en bereikt de top ruim voor de storm losbarst.
+
+FLAG:
+ch1_b01_route=vis
+
+CHOICES:
+
+* Loop de top van de Olympos op -> CH1_B02
+
+END
+
+=== SCENE: CH1_B01_AGI ===
+
+TITLE:
+Van Steen naar Steen
+
+TEXT:
+Je kiest de richel die de meeste pelgrims mijden — te smal, te afbrokkelend, maar een stuk sneller. Met precieze sprongen van steen naar steen sta je alweer boven voor de wind goed en wel is gaan gieren.
+
+FLAG:
+ch1_b01_route=agilitas
+
+CHOICES:
+
+* Loop de top van de Olympos op -> CH1_B02
 
 END
 
@@ -1091,6 +1332,73 @@ puzzle_ch1c_lidwoord
 
 CHOICES:
 
+* Kom dichterbij -> CH1_C03B
+
+END
+
+=== SCENE: CH1_C03B ===
+
+TITLE:
+Dichter bij het Vuur
+
+TEXT:
+Prometheus is al onderweg naar de haard zelf — maar jij moet ook dichtbij genoeg komen om te zien wat er gebeurt, zonder dat een van de sluimerende goden wakker schrikt van jouw voetstappen in plaats van de zijne.
+
+CHOICES:
+
+* Blijf op veilige afstand, in de schaduw die er toch al ligt -> CH1_C03_OPEN
+* Sluip mee tussen de zuilen, exact in de pas van Prometheus [STAT:agilitas:11] -> CH1_C03_AGI
+* Klim in plaats daarvan recht langs de rotsrand omhoog — zwaarder, maar sneller bij de haard [STAT:vis:13] -> CH1_C03_VIS
+
+END
+
+=== SCENE: CH1_C03_OPEN ===
+
+TITLE:
+In de Schaduw
+
+TEXT:
+Je blijft waar de schaduw al het diepst is en wacht af. Van hieruit zie je minder scherp dan je zou willen, maar niemand ziet jou — en dat is, voor nu, genoeg.
+
+FLAG:
+ch1_c03_route=open
+
+CHOICES:
+
+* Kijk hoe Prometheus een vonk verbergt -> CH1_C04
+
+END
+
+=== SCENE: CH1_C03_AGI ===
+
+TITLE:
+In Zijn Pas
+
+TEXT:
+Je sluipt mee tussen de zuilen, je voetstappen zo dicht op die van Prometheus dat ze in het geluid van de zijne verdwijnen. Tegen de tijd dat hij bij de haard staat, sta jij vlak achter hem — dichterbij dan wie ook zou moeten wagen.
+
+FLAG:
+ch1_c03_route=agilitas
+
+CHOICES:
+
+* Kijk hoe Prometheus een vonk verbergt -> CH1_C04
+
+END
+
+=== SCENE: CH1_C03_VIS ===
+
+TITLE:
+Langs de Rotsrand
+
+TEXT:
+Je kiest niet de weg van de zuilen maar die van de rotsen zelf, hand over hand langs de rand omhoog tot je precies boven de haard uitkomt — zwaarder werk, maar je bent er eerder dan Prometheus zelf.
+
+FLAG:
+ch1_c03_route=vis
+
+CHOICES:
+
 * Kijk hoe Prometheus een vonk verbergt -> CH1_C04
 
 END
@@ -1225,9 +1533,76 @@ pandora:full
 
 CHOICES:
 
-* Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [SEVERITAS] -> CH1_C10
-* Ga naar hem toe, zonder meteen te weten wat je tegen hem wilt zeggen [NEUTRAL] -> CH1_C10
-* Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA] -> CH1_C10
+* Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [SEVERITAS] -> CH1_C09B
+* Ga naar hem toe, zonder meteen te weten wat je tegen hem wilt zeggen [NEUTRAL] -> CH1_C09B
+* Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA] -> CH1_C09B
+
+END
+
+=== SCENE: CH1_C09B ===
+
+TITLE:
+Naar de Rots
+
+TEXT:
+Prometheus is niet in de vallei te vinden, en al snel wordt duidelijk waarom: Zeus heeft hem ver weggevoerd, naar een rots voorbij waar stervelingen ooit zijn geweest. Het kost moeite om hem te vinden — en nog meer om er te komen.
+
+CHOICES:
+
+* Volg het karrenspoor dat om de berg heen naar de pas voert -> CH1_C09_PAD
+* Beklim de rotswand rechtstreeks, hand over hand tegen het zwaartepunt in [STAT:vis:13] -> CH1_C09_VIS
+* Lees het vluchtpatroon van de adelaar — zijn dagelijkse route verraadt de kortste weg naar de rots [STAT:prudentia:11] -> CH1_C09_PRU
+
+END
+
+=== SCENE: CH1_C09_PAD ===
+
+TITLE:
+Het Karrenspoor
+
+TEXT:
+Je volgt het lange karrenspoor dat om de berg heen slingert — een omweg, maar begaanbaar, en na een tocht van uren sta je eindelijk aan de voet van de juiste rots.
+
+FLAG:
+ch1_c09_route=open
+
+CHOICES:
+
+* Kijk omhoog naar waar Prometheus geketend hangt -> CH1_C10
+
+END
+
+=== SCENE: CH1_C09_VIS ===
+
+TITLE:
+Tegen het Zwaartepunt In
+
+TEXT:
+Je slaat de omweg af en klimt in plaats daarvan recht tegen de rotswand op, hand over hand, elke greep bevochten op een berg die niet voor stervelingen bedoeld lijkt. Je bent er in een fractie van de tijd die het karrenspoor zou hebben gekost.
+
+FLAG:
+ch1_c09_route=vis
+
+CHOICES:
+
+* Kijk omhoog naar waar Prometheus geketend hangt -> CH1_C10
+
+END
+
+=== SCENE: CH1_C09_PRU ===
+
+TITLE:
+Het Spoor van de Adelaar
+
+TEXT:
+Je kijkt niet naar de grond maar naar de lucht: een adelaar cirkelt daar al, dag na dag dezelfde route vliegend naar dezelfde rots. Je hoeft alleen zijn vlucht te volgen om te weten waar je moet zijn — de kortste weg ernaartoe blijkt vanzelf te liggen.
+
+FLAG:
+ch1_c09_route=prudentia
+
+CHOICES:
+
+* Kijk omhoog naar waar Prometheus geketend hangt -> CH1_C10
 
 END
 
@@ -1354,6 +1729,9 @@ Het Einde van Hoofdstuk 1
 TEXT:
 De Boodschapper knikt, en de poort achter je opent zich weer — ditmaal niet naar een vergeten hoofdstuk, maar naar iets wat nog geschreven moet worden. "Hoofdstuk 2 wacht al ergens verderop," zegt de stem. "Kom mee."
 
+STATPOINTS:
+3
+
 CHOICES:
 
 * Stap door de poort -> CH2_000
@@ -1380,18 +1758,34 @@ CH2_000 — Wanneer Goden Beminnen
         CH2_L05 — "Fuge!"
           * Ren met haar mee
         CH2_L06 — Niemand Die Helpen Kan
-          * Kijk uit naar een laatste toevlucht
-        CH2_L07 — Delos, het Drijvende Eiland
-          * Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [SEVERITAS]
-            CH2_L08 — De Geboorte van Apollo en Diana
-              * Kijk wat er nog met Latona gebeurt, nu haar tweeling geboren is
-            CH2_L08B — De Vijver van de Boeren
-              * Keer terug — er wachten nog meer verhalen
-            → CH2_000  (zie hierboven)
-          * Smeek het eiland gewoon om hulp, zonder overtuigingskracht te zoeken [NEUTRAL]
-            → CH2_L08  (zie hierboven)
-          * Beloof het eiland eeuwige verering als het haar redt [CLEMENTIA]
-            → CH2_L08  (zie hierboven)
+          * Blijf naast haar
+        CH2_L06B — De Python op de Hielen
+          * Ren blindelings verder naast haar, op adrenaline alleen
+            CH2_L06_OPEN — Op Adrenaline Alleen
+              * Kijk uit naar een laatste toevlucht
+            CH2_L07 — Delos, het Drijvende Eiland
+              * Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [SEVERITAS]
+                CH2_L08 — De Geboorte van Apollo en Diana
+                  * Kijk wat er nog met Latona gebeurt, nu haar tweeling geboren is
+                CH2_L08B — De Vijver van de Boeren
+                  * Keer terug — er wachten nog meer verhalen
+                → CH2_000  (zie hierboven)
+              * Smeek het eiland gewoon om hulp, zonder overtuigingskracht te zoeken [NEUTRAL]
+                → CH2_L08  (zie hierboven)
+              * Beloof het eiland eeuwige verering als het haar redt [CLEMENTIA]
+                → CH2_L08  (zie hierboven)
+              * Spreek Delos aan als gelijke, niet als smekeling — twee verstotenen die elkaar herkennen [STAT:gratia:13]
+                CH2_L07B — Twee Verstotenen
+                  * Kijk toe hoe Delos zich verankert
+                → CH2_L08  (zie hierboven)
+          * Leid haar zigzaggend tussen de rotsen door, te snel en te lenig voor het logge beest [STAT:agilitas:11]
+            CH2_L06_AGI — Zigzaggend Tussen de Rotsen
+              * Kijk uit naar een laatste toevlucht
+            → CH2_L07  (zie hierboven)
+          * Bijt door je eigen pijn heen en houd het tempo naast haar vol tot de kustlijn [STAT:robur:13]
+            CH2_L06_ROB — Door de Pijn Heen
+              * Kijk uit naar een laatste toevlucht
+            → CH2_L07  (zie hierboven)
       * Schuil dankbaar in het riet, ontroerd door zijn stille moed [CLEMENTIA]
         CH2_L02B — Een Stil Gebaar
           * Ga met haar mee, verder op zoek naar een echte schuilplaats
@@ -1410,12 +1804,24 @@ CH2_000 — Wanneer Goden Beminnen
         CH2_S05 — Jupiters Wanhoop
           * Denk streng — hij had zo'n eed nooit lichtzinnig mogen zweren [SEVERITAS]
             CH2_S06 — Verschroeid door Glorie
-              * Kijk of er nog iets van haar te redden valt
-            CH2_S07 — Gered uit de As
-              * Wacht de laatste maanden af
-            CH2_S08 — De Geboorte van Bacchus
-              * Keer terug — er wachten nog meer verhalen
-            → CH2_000  (zie hierboven)
+              * Doorzoek de as
+            CH2_S06B — Zoeken in de As
+              * Zoek voorzichtig langs de rand van de as, op veilige afstand van de gloed
+                CH2_S06_OPEN — Langs de Rand
+                  * Kijk of er nog iets van haar te redden valt
+                CH2_S07 — Gered uit de As
+                  * Wacht de laatste maanden af
+                CH2_S08 — De Geboorte van Bacchus
+                  * Keer terug — er wachten nog meer verhalen
+                → CH2_000  (zie hierboven)
+              * Breek met kracht door omgevallen, nog gloeiende balken heen om dieper te kunnen zoeken [STAT:vis:13]
+                CH2_S06_VIS — Door het Puin
+                  * Kijk of er nog iets van haar te redden valt
+                → CH2_S07  (zie hierboven)
+              * Lees de sporen in de as — een verstoord plekje, de richting waarin iets net is verdwenen [STAT:prudentia:11]
+                CH2_S06_PRU — Sporen in de As
+                  * Kijk of er nog iets van haar te redden valt
+                → CH2_S07  (zie hierboven)
           * Kijk toe, niet goed wetend wie hier eigenlijk het meeste medelijden verdient [NEUTRAL]
             → CH2_S06  (zie hierboven)
           * Voel meelij met Jupiter, gevangen door zijn eigen onbezonnen woord [CLEMENTIA]
@@ -1436,20 +1842,32 @@ CH2_000 — Wanneer Goden Beminnen
         CH2_K04 — Ontdekt door de Band
           * Kijk toe hoe Kallisto de groep verlaat
         CH2_K05 — Op de Vlucht
-          * Blijf haar volgen, ondanks alles
-        CH2_K06 — Hera's Ontdekking
-          * Weet allang dat genade nooit Hera's stijl is geweest [SEVERITAS]
-            CH2_K07 — Veranderd in een Berin
-              * Volg haar spoor de jaren door
-            CH2_K08 — Arcas, de Jager
-              * Wacht af wat er gebeurt
-            CH2_K09 — Onder de Sterren
-              * Keer terug — er wachten nog meer verhalen
-            → CH2_000  (zie hierboven)
-          * Wacht simpelweg af wat Hera gaat doen [NEUTRAL]
-            → CH2_K07  (zie hierboven)
-          * Hoop in stilte dat Hera deze ene keer genade toont [CLEMENTIA]
-            → CH2_K07  (zie hierboven)
+          * Volg haar het gebergte in
+        CH2_K05B — Kallisto's Spoor
+          * Blijf op veilige afstand en volg haar spoor rustiger, ook al raak je haar soms bijna kwijt
+            CH2_K05_OPEN — Op Veilige Afstand
+              * Blijf haar volgen, ondanks alles
+            CH2_K06 — Hera's Ontdekking
+              * Weet allang dat genade nooit Hera's stijl is geweest [SEVERITAS]
+                CH2_K07 — Veranderd in een Berin
+                  * Volg haar spoor de jaren door
+                CH2_K08 — Arcas, de Jager
+                  * Wacht af wat er gebeurt
+                CH2_K09 — Onder de Sterren
+                  * Keer terug — er wachten nog meer verhalen
+                → CH2_000  (zie hierboven)
+              * Wacht simpelweg af wat Hera gaat doen [NEUTRAL]
+                → CH2_K07  (zie hierboven)
+              * Hoop in stilte dat Hera deze ene keer genade toont [CLEMENTIA]
+                → CH2_K07  (zie hierboven)
+          * Zet door in haar moordende tempo, uren aan een stuk, zonder de rust te vragen die zij zichzelf ook niet gunt [STAT:robur:13]
+            CH2_K05_ROB — In Haar Tempo
+              * Blijf haar volgen, ondanks alles
+            → CH2_K06  (zie hierboven)
+          * Lees afgebroken takjes en verstoorde steentjes en neem een kortere route die je vóór haar op het volgende punt brengt [STAT:prudentia:11]
+            CH2_K05_PRU — Het Kortere Pad
+              * Blijf haar volgen, ondanks alles
+            → CH2_K06  (zie hierboven)
       * Weet niet goed wat je van Zeus' gedrag moet vinden [NEUTRAL]
         → CH2_K03  (zie hierboven)
       * Voel woede namens Kallisto, die niets van dit alles kon vermoeden [CLEMENTIA]
@@ -1469,17 +1887,37 @@ CH2_000 — Wanneer Goden Beminnen
               * Blijf bij hem, ook al is er niets meer te zeggen
             CH2_H07 — Het Orakel van Delphi
               * Wacht af welke eerste beproeving hem te wachten staat
-            CH2_H08 — De Eerste Taak: de Nemeïsche Leeuw
-              * Kijk hoe hij zich herstelt van het gevecht
-            CH2_H09 — Ontsnapt aan de Klauwen
-              * Vraag je af wat de volgende beproeving zal zijn
-            CH2_H10 — De Tweede Taak: de Hydra van Lerna
-              * Volg hen het moeras in
-            CH2_H11 — In het Moeras
-              * Kijk hoe het gevecht wordt beoordeeld
-            CH2_H12 — Tien Wordt Twaalf
-              * Keer terug — er wachten nog meer verhalen
-            → CH2_000  (zie hierboven)
+            CH2_H07B — De Tweede Uitgang
+              * Wijs Herakles op de tweede opening — hij regelt het zelf
+                CH2_H08 — De Eerste Taak: de Nemeïsche Leeuw
+                  * Kijk hoe hij zich herstelt van het gevecht
+                CH2_H09 — Ontsnapt aan de Klauwen
+                  * Vraag je af wat de volgende beproeving zal zijn
+                CH2_H10 — De Tweede Taak: de Hydra van Lerna
+                  * Volg hen het moeras in
+                CH2_H10B — Hera's Krab
+                  * Roep waarschuwend naar Iolaos, die al bijspringt
+                    CH2_H11 — In het Moeras
+                      * Kijk hoe het gevecht wordt beoordeeld
+                    CH2_H12 — Tien Wordt Twaalf
+                      * Keer terug — er wachten nog meer verhalen
+                    → CH2_000  (zie hierboven)
+                  * Stamp het beest zelf onder je hiel, ondanks de pijnlijke klauwen die zich vastklemmen [STAT:robur:11]
+                    CH2_H10_ROB — Onder je Hiel
+                      * Volg hen het moeras in
+                    → CH2_H11  (zie hierboven)
+                  * Grijp de krab bij zijn schaar en smijt hem terug het moeras in voor hij kan toebijten [STAT:agilitas:13]
+                    CH2_H10_AGI — Weggesmeten
+                      * Volg hen het moeras in
+                    → CH2_H11  (zie hierboven)
+              * Rol een zwaar rotsblok voor de tweede opening, schouder aan schouder met Herakles' eigen kracht [STAT:vis:11]
+                CH2_H07_VIS — Het Rotsblok
+                  * Kijk hoe Herakles de grot binnengaat
+                → CH2_H08  (zie hierboven)
+              * Sluip om de grot heen en stapel snel losse stenen en takken op, voor het beest iets in de gaten heeft [STAT:agilitas:13]
+                CH2_H07_AGI — Stenen en Takken
+                  * Kijk hoe Herakles de grot binnengaat
+                → CH2_H08  (zie hierboven)
           * Kijk toe, verlamd door een onheil dat je niet kunt plaatsen [NEUTRAL]
             → CH2_H06  (zie hierboven)
           * Wil wanhopig ingrijpen, wetend wat er komen gaat [CLEMENTIA]
@@ -1636,6 +2074,73 @@ puzzle_ch2l_posse
 
 CHOICES:
 
+* Blijf naast haar -> CH2_L06B
+
+END
+
+=== SCENE: CH2_L06B ===
+
+TITLE:
+De Python op de Hielen
+
+TEXT:
+De python wint langzaam terrein; Latona's gewicht en uitputting maken elke stap zwaarder dan de vorige. Ergens voor jullie, nog niet zichtbaar, moet een laatste toevlucht liggen — de vraag is alleen of je haar daar op tijd krijgt.
+
+CHOICES:
+
+* Ren blindelings verder naast haar, op adrenaline alleen -> CH2_L06_OPEN
+* Leid haar zigzaggend tussen de rotsen door, te snel en te lenig voor het logge beest [STAT:agilitas:11] -> CH2_L06_AGI
+* Bijt door je eigen pijn heen en houd het tempo naast haar vol tot de kustlijn [STAT:robur:13] -> CH2_L06_ROB
+
+END
+
+=== SCENE: CH2_L06_OPEN ===
+
+TITLE:
+Op Adrenaline Alleen
+
+TEXT:
+Je rent naast haar zonder na te denken, elke gedachte gericht op niets anders dan de volgende stap. Ergens tussen de rotsen, hijgend en uitgeput, komt de kust eindelijk in zicht.
+
+FLAG:
+ch2_l06_route=open
+
+CHOICES:
+
+* Kijk uit naar een laatste toevlucht -> CH2_L07
+
+END
+
+=== SCENE: CH2_L06_AGI ===
+
+TITLE:
+Zigzaggend Tussen de Rotsen
+
+TEXT:
+Je leidt Latona niet in een rechte lijn maar in korte, scherpe bochten tussen de rotsblokken door — precies het soort terrein waar een logge python zijn snelheid verliest. De afstand tussen jullie en het beest groeit met elke wending.
+
+FLAG:
+ch2_l06_route=agilitas
+
+CHOICES:
+
+* Kijk uit naar een laatste toevlucht -> CH2_L07
+
+END
+
+=== SCENE: CH2_L06_ROB ===
+
+TITLE:
+Door de Pijn Heen
+
+TEXT:
+Je longen branden, je benen schreeuwen om te stoppen, maar je houdt het tempo naast haar vol, mijl na mijl, tot de kustlijn eindelijk opdoemt aan de horizon.
+
+FLAG:
+ch2_l06_route=robur
+
+CHOICES:
+
 * Kijk uit naar een laatste toevlucht -> CH2_L07
 
 END
@@ -1658,6 +2163,26 @@ CHOICES:
 * Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [SEVERITAS] -> CH2_L08
 * Smeek het eiland gewoon om hulp, zonder overtuigingskracht te zoeken [NEUTRAL] -> CH2_L08
 * Beloof het eiland eeuwige verering als het haar redt [CLEMENTIA] -> CH2_L08
+* Spreek Delos aan als gelijke, niet als smekeling — twee verstotenen die elkaar herkennen [STAT:gratia:13] -> CH2_L07B
+
+END
+
+=== SCENE: CH2_L07B ===
+
+TITLE:
+Twee Verstotenen
+
+TEXT:
+Je richt je niet tot het eiland als een vreemde die om genade smeekt, maar als iemand die zijn eigen verhaal kent: ooit was Delos zelf niets — een verstoten nimf, aan de golven overgelaten, nergens welkom. "Jij weet wat het is om nergens bij te horen," zeg je. "Zij ook."
+
+Delos reageert niet aarzelend, zoals bij een smeekbede gebruikelijk is, maar onmiddellijk — alsof het al die tijd op precies deze woorden had gewacht. Vanaf de verre rots zie je Athena's gespannen gezicht, heel even, iets minder gesloten dan daarvoor.
+
+FLAG:
+ch2_l07_route=gratia
+
+CHOICES:
+
+* Kijk toe hoe Delos zich verankert -> CH2_L08
 
 END
 
@@ -1841,6 +2366,73 @@ puzzle_ch2s_esse
 
 CHOICES:
 
+* Doorzoek de as -> CH2_S06B
+
+END
+
+=== SCENE: CH2_S06B ===
+
+TITLE:
+Zoeken in de As
+
+TEXT:
+Terwijl de rook nog optrekt, doorzoek je zelf de nasmeulende as — ergens hierin moet iets van het ongeboren kind te vinden zijn, als er al iets te redden valt.
+
+CHOICES:
+
+* Zoek voorzichtig langs de rand van de as, op veilige afstand van de gloed -> CH2_S06_OPEN
+* Breek met kracht door omgevallen, nog gloeiende balken heen om dieper te kunnen zoeken [STAT:vis:13] -> CH2_S06_VIS
+* Lees de sporen in de as — een verstoord plekje, de richting waarin iets net is verdwenen [STAT:prudentia:11] -> CH2_S06_PRU
+
+END
+
+=== SCENE: CH2_S06_OPEN ===
+
+TITLE:
+Langs de Rand
+
+TEXT:
+Je blijft aan de rand van de as, waar de hitte nog te verdragen is, en zoekt zo grondig als je durft. Voor je iets vindt, is Jupiter je al voor.
+
+FLAG:
+ch2_s06_route=open
+
+CHOICES:
+
+* Kijk of er nog iets van haar te redden valt -> CH2_S07
+
+END
+
+=== SCENE: CH2_S06_VIS ===
+
+TITLE:
+Door het Puin
+
+TEXT:
+Je breekt door omgevallen, nog gloeiende balken heen, dieper de as in dan wie ook zou wagen. Het kost je geschroeide handen — maar voor je iets vindt, is Jupiter je al voor.
+
+FLAG:
+ch2_s06_route=vis
+
+CHOICES:
+
+* Kijk of er nog iets van haar te redden valt -> CH2_S07
+
+END
+
+=== SCENE: CH2_S06_PRU ===
+
+TITLE:
+Sporen in de As
+
+TEXT:
+Je zoekt niet blindelings maar kijkt: een verstoord plekje as, een richting die net iets anders ligt dan de rest. Je volgt het spoor tot vlak bij de plek — waar Jupiter je al voor is.
+
+FLAG:
+ch2_s06_route=prudentia
+
+CHOICES:
+
 * Kijk of er nog iets van haar te redden valt -> CH2_S07
 
 END
@@ -1981,6 +2573,73 @@ Alleen, verstoten uit de enige gemeenschap die ze ooit heeft gekend, en met een 
 
 PUZZLE:
 puzzle_ch2k_praesens
+
+CHOICES:
+
+* Volg haar het gebergte in -> CH2_K05B
+
+END
+
+=== SCENE: CH2_K05B ===
+
+TITLE:
+Kallisto's Spoor
+
+TEXT:
+Kallisto zet een tempo aan dat niemand met een pasgeboren kind zou moeten kunnen volhouden — wanhoop drijft haar sneller dan haar lichaam eigenlijk toelaat, het onherbergzame gebergte in.
+
+CHOICES:
+
+* Blijf op veilige afstand en volg haar spoor rustiger, ook al raak je haar soms bijna kwijt -> CH2_K05_OPEN
+* Zet door in haar moordende tempo, uren aan een stuk, zonder de rust te vragen die zij zichzelf ook niet gunt [STAT:robur:13] -> CH2_K05_ROB
+* Lees afgebroken takjes en verstoorde steentjes en neem een kortere route die je vóór haar op het volgende punt brengt [STAT:prudentia:11] -> CH2_K05_PRU
+
+END
+
+=== SCENE: CH2_K05_OPEN ===
+
+TITLE:
+Op Veilige Afstand
+
+TEXT:
+Je houdt een voorzichtiger tempo aan, haar spoor volgend zonder jezelf uit te putten. Een paar keer raak je haar bijna kwijt tussen de rotsen, maar je vindt het spoor telkens terug.
+
+FLAG:
+ch2_k05_route=open
+
+CHOICES:
+
+* Blijf haar volgen, ondanks alles -> CH2_K06
+
+END
+
+=== SCENE: CH2_K05_ROB ===
+
+TITLE:
+In Haar Tempo
+
+TEXT:
+Je zet door, uur na uur, in het moordende tempo dat Kallisto zichzelf oplegt — geen rust, geen adempauze, alleen de volgende stap en de volgende. Wanneer ze eindelijk stilhoudt, sta jij nog altijd naast haar.
+
+FLAG:
+ch2_k05_route=robur
+
+CHOICES:
+
+* Blijf haar volgen, ondanks alles -> CH2_K06
+
+END
+
+=== SCENE: CH2_K05_PRU ===
+
+TITLE:
+Het Kortere Pad
+
+TEXT:
+In plaats van haar simpelweg te achtervolgen, lees je haar spoor: afgebroken takjes, verstoorde steentjes, een richting die zich al aftekent voor zij die zelf kiest. Via een kortere route sta je alweer op haar te wachten voor ze er is.
+
+FLAG:
+ch2_k05_route=prudentia
 
 CHOICES:
 
@@ -2209,7 +2868,57 @@ puzzle_ch2h_imperativus
 
 CHOICES:
 
-* Wacht af welke eerste beproeving hem te wachten staat -> CH2_H08
+* Wacht af welke eerste beproeving hem te wachten staat -> CH2_H07B
+
+END
+
+=== SCENE: CH2_H07B ===
+
+TITLE:
+De Tweede Uitgang
+
+TEXT:
+Bij de grot van de Nemeïsche leeuw aangekomen, valt je oog op iets waar Herakles zelf nog geen aandacht aan heeft besteed: een tweede, kleinere opening aan de achterzijde van het hol. Gevaarlijk, want zo kan de leeuw zijn belager ontglippen — of erger, jullie allebei in de rug besluipen.
+
+CHOICES:
+
+* Wijs Herakles op de tweede opening — hij regelt het zelf -> CH2_H08
+* Rol een zwaar rotsblok voor de tweede opening, schouder aan schouder met Herakles' eigen kracht [STAT:vis:11] -> CH2_H07_VIS
+* Sluip om de grot heen en stapel snel losse stenen en takken op, voor het beest iets in de gaten heeft [STAT:agilitas:13] -> CH2_H07_AGI
+
+END
+
+=== SCENE: CH2_H07_VIS ===
+
+TITLE:
+Het Rotsblok
+
+TEXT:
+Je zet je schouder tegen een zwaar rotsblok en rolt het voor de tweede opening, grommend van inspanning tot het met een doffe dreun op zijn plek valt. Nu is er nog maar één weg naar binnen — en maar één weg naar buiten.
+
+FLAG:
+ch2_h07_route=vis
+
+CHOICES:
+
+* Kijk hoe Herakles de grot binnengaat -> CH2_H08
+
+END
+
+=== SCENE: CH2_H07_AGI ===
+
+TITLE:
+Stenen en Takken
+
+TEXT:
+Je sluipt om de grot heen en stapelt, sneller dan je zelf had verwacht, losse stenen en dode takken tegen de tweede opening — niet onneembaar, maar genoeg om een vluchtende leeuw op te houden tot het te laat is.
+
+FLAG:
+ch2_h07_route=agilitas
+
+CHOICES:
+
+* Kijk hoe Herakles de grot binnengaat -> CH2_H08
 
 END
 
@@ -2263,6 +2972,56 @@ De tweede beproeving is nog wreder: de Hydra van Lerna, een veelkoppig moerasmon
 
 PUZZLE:
 puzzle_ch2h_posse
+
+CHOICES:
+
+* Volg hen het moeras in -> CH2_H10B
+
+END
+
+=== SCENE: CH2_H10B ===
+
+TITLE:
+Hera's Krab
+
+TEXT:
+Terwijl jullie het moeras in trekken, merk je een beweging tussen het riet die niets met de Hydra te maken heeft: Hera, die Herakles nooit met rust laat, heeft in stilte een reuzenkrab gestuurd om hem in zijn hiel te bijten zodra hij zich niet kan verdedigen.
+
+CHOICES:
+
+* Roep waarschuwend naar Iolaos, die al bijspringt -> CH2_H11
+* Stamp het beest zelf onder je hiel, ondanks de pijnlijke klauwen die zich vastklemmen [STAT:robur:11] -> CH2_H10_ROB
+* Grijp de krab bij zijn schaar en smijt hem terug het moeras in voor hij kan toebijten [STAT:agilitas:13] -> CH2_H10_AGI
+
+END
+
+=== SCENE: CH2_H10_ROB ===
+
+TITLE:
+Onder je Hiel
+
+TEXT:
+Je voelt de klauwen zich vastklemmen voor je de kans krijgt om na te denken, en stampt door de pijn heen tot het beest verbrijzeld in het slijk zakt. Herakles merkt er, druk met de Hydra, niets van.
+
+FLAG:
+ch2_h10_route=robur
+
+CHOICES:
+
+* Volg hen het moeras in -> CH2_H11
+
+END
+
+=== SCENE: CH2_H10_AGI ===
+
+TITLE:
+Weggesmeten
+
+TEXT:
+Je grijpt de krab bij zijn schaar net op het moment dat hij toe wil happen, en smijt hem met een boog terug het moeras in — ver genoeg weg om geen tweede poging te wagen.
+
+FLAG:
+ch2_h10_route=agilitas
 
 CHOICES:
 
@@ -2383,6 +3142,9 @@ Het Einde van Hoofdstuk 2
 
 TEXT:
 "Hoofdstuk 3 wacht al ergens verderop," zegt de stem, "en met hem de rest van Herakles' beproevingen — zijn eerste werken heb je al gezien, maar er wachten er nog velen." De poort keert terug tot een dunne streep licht, en je neemt vier herinneringen met je mee: volharding, onschuld, waarheid, moed.
+
+STATPOINTS:
+3
 
 CHOICES:
 
@@ -3357,6 +4119,9 @@ Het Einde van Hoofdstuk 3
 TEXT:
 "Hoofdstuk 4 wacht al ergens verderop," zegt de stem, "waar een ander soort labyrint op je wacht — niet van steen deze keer, maar van herinnering zelf." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: vrijheid, en volbrenging.
 
+STATPOINTS:
+3
+
 CHOICES:
 
 * Stap door de poort -> CH4_000
@@ -3384,35 +4149,45 @@ CH4_000 — Het Labyrint van Herinneringen
           * Bewonder vooral haar moed om tegen haar eigen vader in te gaan [CLEMENTIA]
             CH4_T06 — De Ingang van het Labyrint
               * Ga het duister in, op het geluid af
-            CH4_T07 — De Minotaurus
-              * Kijk wat er van het monster overblijft
-            CH4_T08 — Terug langs de Draad
-              * Vaar weg van Kreta
-            CH4_T09 — Naxos
-              * Voel vooral woede namens Ariadne, die dit niet verdiende [SEVERITAS]
-                CH4_T10 — Bacchus Vindt Ariadne
-                  * Keer terug naar Theseus, die niet weet wat hij heeft achtergelaten
-                CH4_T11 — Minos' Wraak
-                  * Kijk hoe Daidalos zijn eigen gevangenschap probeert te ontlopen
-                CH4_T12 — Vleugels van Veren en Was
-                  * Kijk hoe de vlucht begint
-                CH4_T13 — De Val van Ikaros
-                  * Voel vooral verdriet om een vader die zijn zoon niet kon redden [CLEMENTIA]
-                    CH4_T14 — Daidalos in Sicilië
-                      * Keer terug naar het schip van Theseus, dat inmiddels Athene nadert
-                    CH4_T15 — Het Zwarte Zeil
-                      * Kijk wat Aegeus doet
-                    CH4_T16 — De Zee van Aegeus
-                      * Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog
-                    → CH4_000  (zie hierboven)
-                  * Erken nuchter dat een gewaarschuwde zoon ook zelf verantwoordelijkheid draagt [SEVERITAS]
-                    → CH4_T14  (zie hierboven)
-                  * Weet niet goed bij wie het verdriet of de schuld het zwaarst hoort te wegen [NEUTRAL]
-                    → CH4_T14  (zie hierboven)
-              * Zoek naar begrip voor Theseus, die net een monster heeft overleefd en amper meer helder kan denken [CLEMENTIA]
-                → CH4_T10  (zie hierboven)
-              * Laat het oordeel voorlopig in het midden [NEUTRAL]
-                → CH4_T10  (zie hierboven)
+            CH4_T06B — De Eerste Splitsing
+              * Houd links aan
+                CH4_T07 — De Minotaurus
+                  * Kijk wat er van het monster overblijft
+                CH4_T08 — Terug langs de Draad
+                  * Vaar weg van Kreta
+                CH4_T09 — Naxos
+                  * Voel vooral woede namens Ariadne, die dit niet verdiende [SEVERITAS]
+                    CH4_T10 — Bacchus Vindt Ariadne
+                      * Keer terug naar Theseus, die niet weet wat hij heeft achtergelaten
+                    CH4_T11 — Minos' Wraak
+                      * Kijk hoe Daidalos zijn eigen gevangenschap probeert te ontlopen
+                    CH4_T12 — Vleugels van Veren en Was
+                      * Kijk hoe de vlucht begint
+                    CH4_T13 — De Val van Ikaros
+                      * Voel vooral verdriet om een vader die zijn zoon niet kon redden [CLEMENTIA]
+                        CH4_T14 — Daidalos in Sicilië
+                          * Keer terug naar het schip van Theseus, dat inmiddels Athene nadert
+                        CH4_T15 — Het Zwarte Zeil
+                          * Kijk wat Aegeus doet
+                        CH4_T16 — De Zee van Aegeus
+                          * Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog
+                        → CH4_000  (zie hierboven)
+                      * Erken nuchter dat een gewaarschuwde zoon ook zelf verantwoordelijkheid draagt [SEVERITAS]
+                        → CH4_T14  (zie hierboven)
+                      * Weet niet goed bij wie het verdriet of de schuld het zwaarst hoort te wegen [NEUTRAL]
+                        → CH4_T14  (zie hierboven)
+                  * Zoek naar begrip voor Theseus, die net een monster heeft overleefd en amper meer helder kan denken [CLEMENTIA]
+                    → CH4_T10  (zie hierboven)
+                  * Laat het oordeel voorlopig in het midden [NEUTRAL]
+                    → CH4_T10  (zie hierboven)
+              * Ga naar rechts
+                CH4_T06R1 — De Verkeerde Afslag
+                  * Loop door, er is toch geen weg terug zonder het monster onder ogen te komen
+                CH4_T06R2 — Het Garen Raakt Op
+                  * Zoek wanhopig verder naar een uitweg
+                CH4_T06R3 — In het Duister Gevangen
+                  * Begin de tocht door het labyrint opnieuw
+                → CH4_T06B  (zie hierboven)
           * Erken vooral hoe berekenend haar hulp is — ze vraagt er tenslotte iets voor terug [SEVERITAS]
             → CH4_T06  (zie hierboven)
           * Twijfel of dit nu liefde is, wanhoop, of iets van beide [NEUTRAL]
@@ -3457,7 +4232,8 @@ CH4_000 — Het Labyrint van Herinneringen
     CH4_ORAKEL — Het Orakel Keert Terug
       * Luister verder
     CH4_EINDE — Het Einde van Hoofdstuk 4
-      (einde — geen vervolgkeuze)
+      * Stap door de poort
+    → CH5_000  (volgend hoofdstuk)
 
 -- VOLLEDIGE TEKST --
 
@@ -3593,7 +4369,70 @@ puzzle_ch4t_ablativus
 
 CHOICES:
 
-* Ga het duister in, op het geluid af -> CH4_T07
+* Ga het duister in, op het geluid af -> CH4_T06B
+
+END
+
+=== SCENE: CH4_T06B ===
+
+TITLE:
+De Eerste Splitsing
+
+TEXT:
+Nog geen tien passen verder splitst de gang zich in tweeën, en het geluid dat je eerder hoorde kan nu net zo goed van links als van rechts komen. Terwijl je aarzelt, herinner je je iets dat Ariadne je toefluisterde vlak voor je naar binnen ging — het enige wat Daidalos haar ooit over de opbouw van het labyrint heeft durven vertellen: "Bij elke splitsing, houd links aan. Dat brengt je regelrecht naar het hart."
+
+CHOICES:
+
+* Houd links aan -> CH4_T07
+* Ga naar rechts -> CH4_T06R1
+
+END
+
+=== SCENE: CH4_T06R1 ===
+
+TITLE:
+De Verkeerde Afslag
+
+TEXT:
+Naar rechts versmalt de gang al snel, en de bochten volgen elkaar sneller op dan daarvoor — twee keer rechts, dan links, dan weer rechts, tot je amper nog weet uit welke richting je kwam. Het garen achter je blijft dunner worden op de kluwen in je hand, sneller dan je had verwacht voor zo'n kort stuk weg.
+
+Het geluid van ademhaling, dat eerst ergens ver weg leek, klinkt nu duidelijk dichterbij — al kun je niet meer met zekerheid zeggen uit welke gang.
+
+CHOICES:
+
+* Loop door, er is toch geen weg terug zonder het monster onder ogen te komen -> CH4_T06R2
+
+END
+
+=== SCENE: CH4_T06R2 ===
+
+TITLE:
+Het Garen Raakt Op
+
+TEXT:
+De kluwen in je hand wordt met elke stap lichter, tot je vingers plotseling niets meer voelen dan de lege binnenkant — het garen is op, lang voordat je enig teken van het hart van het labyrint hebt gezien. Zonder de draad is er geen weg terug meer, alleen nog gangen die er allemaal exact hetzelfde uitzien.
+
+De ademhaling komt nu van meer dan één kant tegelijk, of misschien kaatst hij gewoon terug van muren die je niet meer kunt onderscheiden. Voor het eerst besef je dat Ariadne's waarschuwing geen loze woorden waren.
+
+CHOICES:
+
+* Zoek wanhopig verder naar een uitweg -> CH4_T06R3
+
+END
+
+=== SCENE: CH4_T06R3 ===
+
+TITLE:
+In het Duister Gevangen
+
+TEXT:
+Zonder draad om op te vertrouwen en zonder enig idee meer welke gang naar buiten leidt, hoor je de Minotaurus dichterbij komen vanuit een duisternis die van alle kanten tegelijk lijkt te komen — geen zwaard, geen plan, en geen weg terug maakt dit een gevecht dat je onmogelijk kunt winnen.
+
+Het labyrint doet vandaag weer waarvoor het gebouwd is: iemand die de verkeerde afslag nam, nooit meer laten uitkomen.
+
+CHOICES:
+
+* Begin de tocht door het labyrint opnieuw -> CH4_T06B
 
 END
 
@@ -4042,5 +4881,1290 @@ Het Einde van Hoofdstuk 4
 
 TEXT:
 "Hoofdstuk 5 wacht al ergens verderop," zegt de stem, "waar geen labyrint meer op je wacht, maar een schip vol helden — en het begin van een tocht naar het Gulden Vlies." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: uitweg, en overmoed.
+
+STATPOINTS:
+3
+
+CHOICES:
+
+* Stap door de poort -> CH5_000
+
+END
+
+
+################################################################
+# HOOFDSTUK 5 - Het Gulden Vlies
+################################################################
+
+-- STROOMSCHEMA --
+
+CH5_000 — Het Gulden Vlies
+  * Volg Jason naar de haven van Iolcus
+CH5_001 — De Uitdaging van Pelias
+  * Kijk wie er allemaal op die oproep afkomen
+CH5_002 — De Bemanning van de Argo
+  * Kijk wie er nog meer aan boord stapt
+CH5_003 — Een Bekend Gezicht
+  * Zoek in zijn ogen naar een spoor van wat hij nog gaat vergeten [CLEMENTIA]
+    CH5_004 — Een Korte Lont
+      * Kijk hoe de tocht wordt voorbereid
+    CH5_005 — De Stuurman Wijst de Plaatsen
+      * Vaar uit Iolcus weg
+    CH5_006 — Het Vertrek
+      * Vaar de open zee op
+    CH5_007 — Cyzicus
+      * Kijk wie het everzwijn het eerst weet te vinden
+    CH5_008 — Met Wie Kijk Je Mee?
+      * Volg Atalanta, die op haar eigen spoor jaagt
+        CH5_008A — Atalanta's Spoor
+          * Kijk hoe de jacht samenkomt
+        CH5_009 — Het Everzwijn
+          * Kijk hoe de koning van Cyzicus reageert
+        CH5_010 — Twee Namen om te Onthouden
+          * Vaar verder, naar het land van de Bebryciërs
+        CH5_011 — De Uitdaging van Amycus
+          * Kijk wat Amycus over zijn eigen rijk te zeggen heeft voor het gevecht begint
+        CH5_012 — Het Rijk van Amycus
+          * Kijk hoe het gevecht verloopt
+        CH5_013 — Polydeukes tegen Amycus
+          * Kijk wat er van Amycus' rijk wordt na zijn nederlaag
+        CH5_014 — Een Reus Geveld
+          * Vaar verder, naar de kust van Mysië [CLEMENTIA]
+            CH5_015 — Herakles Blijft Achter
+              * Vaar verder zonder Herakles
+            CH5_016 — De Symplegades
+              * Kijk hoe Argos de doortocht voorbereidt
+            CH5_017 — Argos Verstevigt het Schip
+              * Vaar op het juiste moment de Symplegades in
+            CH5_018 — Tussen de Rotsen Door
+              * Vaar verder, langs de kust van de Zwarte Zee
+            CH5_019 — Gespannen Riemen
+              * Laat de avond verder in stilte voorbijgaan
+            CH5_020 — Raad en Richting
+              * Vraag Philoktetes om zijn precisie nog eens te bewijzen
+            CH5_021 — Een Pijl voor de Godin
+              * Vaar de laatste etappe naar Colchis
+            CH5_022 — Twee Namen voor Later
+              * Vaar de haven van Colchis binnen
+            CH5_023 — Colchis
+              * Kijk welke voorwaarde Aeëtes aan het Vlies verbindt
+            CH5_024 — De Beproevingen van Aeëtes
+              * Kijk hoe Medea haar keuze rechtvaardigt
+            CH5_025 — Medea's Keuze
+              * Bewonder vooral haar moed om alles op te geven voor wat ze voelt [CLEMENTIA]
+                CH5_026 — De Nooit Slapende Draak
+                  * Kijk wat er van het Gulden Vlies wordt
+                CH5_027 — Het Gulden Vlies
+                  * Volg de terugreis naar Griekenland
+                CH5_028 — De Terugreis
+                  * Kijk wat er jaren later, in Korinthe, gebeurt
+                CH5_029 — Korinthe, Jaren Later
+                  * Luister verder
+                CH5_EINDE — Het Einde van Hoofdstuk 5
+                  * Stap door de poort
+                → CH6_000  (volgend hoofdstuk)
+              * Erken vooral hoe roekeloos het is om je eigen vader zo te verraden [SEVERITAS]
+                → CH5_026  (zie hierboven)
+              * Herken vooral het patroon — weer een vrouw die alles waagt voor een man die haar dat misschien nooit teruggeeft [NEUTRAL]
+                → CH5_026  (zie hierboven)
+          * Vaar verder — een tiran minder op de kaart, verder geen traan aan verspild [SEVERITAS]
+            → CH5_015  (zie hierboven)
+          * Vaar verder, zonder er verder nog bij stil te staan [NEUTRAL]
+            → CH5_015  (zie hierboven)
+      * Volg Meleager, die met de groep meejaagt
+        CH5_008B — Meleagers Groep
+          * Kijk hoe de jacht samenkomt
+        → CH5_009  (zie hierboven)
+  * Bekijk hem nuchter als gewoon nog een bemanningslid, niets meer [SEVERITAS]
+    → CH5_004  (zie hierboven)
+  * Laat het vreemde gevoel van iets-weten-wat-hij-niet-weet gewoon op je inwerken [NEUTRAL]
+    → CH5_004  (zie hierboven)
+
+-- VOLLEDIGE TEKST --
+
+=== SCENE: CH5_000 ===
+
+TITLE:
+Het Gulden Vlies
+
+TEXT:
+"Dit hoofdstuk," zegt de Boodschapper, "is geen labyrint en geen paleis — het is een schip." Ze wijst naar een scheur in het licht die groter is dan alle voorgaande, alsof hij een hele zee moet doorlaten in plaats van één verhaal. "Volg Jason en zijn bemanning op hun tocht naar Colchis, aan de rand van de bekende wereld, waar een Vlies van goud hangt dat niemand ooit eerder heeft weten te bemachtigen."
+
+Athena voegt eraan toe, zachter dan anders: "Let deze keer goed op wie er nog meer aan boord staat. Sommige namen ken je al. De meeste ken je nog niet — maar dat komt nog."
+
+VOCAB:
+latijn_navis, latijn_mare, latijn_vellus, latijn_draco, latijn_populus, latijn_malleus, latijn_aper, latijn_regit, latijn_vulnerat, grieks_toxon
+
+CODEX:
+codex_gulden_vlies
+
+CHOICES:
+
+* Volg Jason naar de haven van Iolcus -> CH5_001
+
+END
+
+=== SCENE: CH5_001 ===
+
+TITLE:
+De Uitdaging van Pelias
+
+TEXT:
+Iolcus, aan de voet van de Pelionberg, is de stad die Jason rechtens toebehoort — zijn oom Pelias hield de troon vast nadat hij Jasons vader had verdreven, en verwachtte niet dat de rechtmatige erfgenaam ooit zou terugkeren om hem op te eisen. Toen Jason dat toch deed, verzon Pelias meteen een uitweg die op een gunst leek en een doodvonnis was: haal het Gulden Vlies terug uit Colchis, en de troon is voor jou.
+
+Niemand is ooit teruggekeerd uit Colchis met het Vlies. Jason, jong en onverschrokken genoeg om dat geen reden te vinden om te weigeren, laat de oproep alvast door heel Griekenland gaan: wie durft mee te varen?
+
+PERSON:
+jason:intro
+
+CHOICES:
+
+* Kijk wie er allemaal op die oproep afkomen -> CH5_002
+
+END
+
+=== SCENE: CH5_002 ===
+
+TITLE:
+De Bemanning van de Argo
+
+TEXT:
+Binnen een paar weken ligt de haven van Iolcus vol met de beroemdste namen van Griekenland — allemaal aangetrokken door hetzelfde onmogelijke verhaal. Peleus en Telamon, twee onafscheidelijke strijdmakkers, zijn er als eersten, breed grijnzend om niets anders dan het vooruitzicht van een nieuw avontuur. Laertes, rustiger dan de rest, monstert het schip van boeg tot achtersteven voor hij ook maar één voet aan boord zet — alsof hij precies wil weten waar hij aan begint.
+
+Bij het schip zelf staat de man die het heeft gebouwd: Argos, zoon van Arestor, die — op aanwijzing van Athena zelf, zegt men — een balk uit het orakelbos van Dodona in de boeg heeft verwerkt. "Ze waarschuwt weleens," zegt hij droog, als iemand ernaar vraagt, "maar nooit op tijd om nog iets te kunnen doen met de waarschuwing."
+
+CODEX:
+codex_argonauten_bemanning
+
+PERSON:
+peleus:intro, telamon:intro, laertes:intro, argos:intro
+
+CHOICES:
+
+* Kijk wie er nog meer aan boord stapt -> CH5_003
+
+END
+
+=== SCENE: CH5_003 ===
+
+TITLE:
+Een Bekend Gezicht
+
+TEXT:
+Tussen de nieuwkomers valt één gezicht je meteen op — niet omdat hij opvalt tussen al die andere helden, maar omdat je hem al kent. Theseus, inmiddels weer terug in Athene na Kreta, meldt zich aan voor nóg een tocht voor hij zelf koning wordt. Hij loopt met dezelfde vastberadenheid het schip op die je je nog herinnert uit het Labyrint — maar jij weet iets wat hij hier, op dit moment, nog niet weet: wat die vastberadenheid hem straks, met zijn vader, zal kosten.
+
+Hij groet je kort, zonder enig vermoeden dat je zijn hele verhaal al hebt gezien — het verhaal dat voor hem, hier op de kade van Iolcus, nog moet beginnen.
+
+CHOICES:
+
+* Zoek in zijn ogen naar een spoor van wat hij nog gaat vergeten [CLEMENTIA] -> CH5_004
+* Bekijk hem nuchter als gewoon nog een bemanningslid, niets meer [SEVERITAS] -> CH5_004
+* Laat het vreemde gevoel van iets-weten-wat-hij-niet-weet gewoon op je inwerken [NEUTRAL] -> CH5_004
+
+END
+
+=== SCENE: CH5_004 ===
+
+TITLE:
+Een Korte Lont
+
+TEXT:
+Niet iedereen aan boord is even geduldig. Tydeus, een gedrongen krijger met een stem die harder klinkt dan nodig, is nog geen uur aan boord of hij heeft al ruzie met een roeier over wie welke plaats krijgt — zijn hand ligt al op zijn zwaardgreep voor de ander goed en wel iets heeft kunnen terugzeggen.
+
+Jason sust het meningsverschil met een paar korte woorden, maar de blik die Tydeus achterlaat, maakt duidelijk dat dit niet de laatste keer zal zijn. "Die man," mompelt iemand naast je, "trekt sneller zijn zwaard dan zijn adem."
+
+PERSON:
+tydeus:intro
+
+CHOICES:
+
+* Kijk hoe de tocht wordt voorbereid -> CH5_005
+
+END
+
+=== SCENE: CH5_005 ===
+
+TITLE:
+De Stuurman Wijst de Plaatsen
+
+TEXT:
+Vlak voor het vertrek loopt de stuurman langs elke bank om te bepalen wie waar roeit — een kwestie van kracht, gewicht en geduld, niet van eer. Boven het geroezemoes van tachtig stemmen probeert Jason zelf orde te scheppen, in het Latijn dat hij van zijn leermeester Chiron heeft geleerd.
+
+PUZZLE:
+puzzle_ch5_nominativus
+
+CHOICES:
+
+* Vaar uit Iolcus weg -> CH5_006
+
+END
+
+=== SCENE: CH5_006 ===
+
+TITLE:
+Het Vertrek
+
+TEXT:
+Vlak voor de Argo de haven uit vaart, deelt Argos uit wat er nog in het ruim lag opgeslagen: voor de hele bemanning — ook voor jou — een eenvoudig reisharnas en een hoofddoek tegen de zon en de zoute wind die de komende weken niet zullen ophouden. "Niets moois," zegt hij, "maar het houdt je droog en het houdt je koel. Meer heb je op deze tocht niet nodig."
+
+Achter de Argo verdwijnt Iolcus langzaam in de nevel, en voor haar strekt zich een zee uit die verder gaat dan de meesten aan boord ooit hebben gevaren.
+
+FLAG:
+ch5_bemanning_uitrusting=true
+
+CHOICES:
+
+* Vaar de open zee op -> CH5_007
+
+END
+
+=== SCENE: CH5_007 ===
+
+TITLE:
+Cyzicus
+
+TEXT:
+Na de eerste dagen op zee meert de Argo aan bij het eiland Cyzicus, waar de plaatselijke koning de bemanning hartelijk ontvangt — op voorwaarde dat ze eerst een probleem voor hem oplossen. Een reusachtig everzwijn huist op de berghelling boven de stad en verscheurt al weken alles wat de jagers erop afsturen.
+
+Twee van de jongste helden aan boord melden zich meteen: Atalanta, opgevoed door een berin en de scherpste jaagster van heel Griekenland, en Meleager, de jonge prins van Calydon, net zo gretig als zij. Ze kennen elkaar amper, maar de blik die ze wisselen is er meteen een van wedijver — en van iets dat verdacht veel op vriendschap lijkt.
+
+PERSON:
+atalanta:intro, meleager:intro
+
+CHOICES:
+
+* Kijk wie het everzwijn het eerst weet te vinden -> CH5_008
+
+END
+
+=== SCENE: CH5_008 ===
+
+TITLE:
+Met Wie Kijk Je Mee?
+
+TEXT:
+De jacht splitst zich al snel in twee groepen die elk hun eigen kant van de berghelling nemen — Atalanta stil en geduldig door het kreupelhout, Meleager luidruchtiger, met een groep andere Argonauten in zijn kielzog. Je kunt niet allebei tegelijk volgen.
+
+CHOICES:
+
+* Volg Atalanta, die op haar eigen spoor jaagt -> CH5_008A
+* Volg Meleager, die met de groep meejaagt -> CH5_008B
+
+END
+
+=== SCENE: CH5_008A ===
+
+TITLE:
+Atalanta's Spoor
+
+TEXT:
+Atalanta beweegt zich bijna geluidloos tussen de struiken, haar boog al gespannen voor je het dier zelf ziet. Ze leest de grond zoals anderen een geschreven tekst lezen — een omgewoelde wortel hier, een afgebroken tak daar — en is het everzwijn al drie keer voorbij zijn eigen spoor te slim af voor de rest van de jacht haar bijbenen.
+
+Vlak voordat het beest tussen de rotsen opduikt, fluistert ze, meer tegen zichzelf dan tegen jou: "Wie het eerst raakt, telt vandaag niet. Wie het eerst ziet, wel."
+
+CHOICES:
+
+* Kijk hoe de jacht samenkomt -> CH5_009
+
+END
+
+=== SCENE: CH5_008B ===
+
+TITLE:
+Meleagers Groep
+
+TEXT:
+Meleager jaagt luider, met meer mensen om zich heen, meer geroep en meer risico — maar ook met een aanstekelijk soort moed die de rest van de groep meesleept. Waar Atalanta het spoor leest, leest hij vooral de stemming: wie moe wordt, wie te dichtbij komt, wie een aanmoediging nodig heeft.
+
+"Het gaat niet om wie het dier velt," roept hij naar de anderen, half lachend, half serieus, terwijl ze de laatste helling op klauteren. "Het gaat om wie het overleeft om het verhaal te vertellen."
+
+CHOICES:
+
+* Kijk hoe de jacht samenkomt -> CH5_009
+
+END
+
+=== SCENE: CH5_009 ===
+
+TITLE:
+Het Everzwijn
+
+TEXT:
+Beide groepen drijven het everzwijn uiteindelijk naar dezelfde kloof, waar het geen kant meer op kan. Atalanta is de eerste die raak schiet — een pijl diep in de flank van het dier, genoeg om het te vertragen zonder het meteen te doden. Meleager, die als laatste toehapt, velt het definitief.
+
+Geen van beiden claimt de eer alleen. "Zonder jouw pijl had ik hem nooit ingehaald," zegt Meleager, en Atalanta knikt, voor het eerst die dag zonder een spoor van wedijver in haar blik.
+
+PUZZLE:
+puzzle_ch5_accusativus
+
+CHOICES:
+
+* Kijk hoe de koning van Cyzicus reageert -> CH5_010
+
+END
+
+=== SCENE: CH5_010 ===
+
+TITLE:
+Twee Namen om te Onthouden
+
+TEXT:
+De koning houdt zijn woord en bevoorraadt de Argo rijkelijk voor het vervolg van de tocht. Terwijl de bemanning het ruim vult, blijf je nog even staan bij Atalanta en Meleager, die zij aan zij tegen de reling geleund het dier napraten alsof ze al jaren samen jagen in plaats van amper één middag.
+
+Iets aan hoe moeiteloos ze samenwerken, blijft je bij — een gevoel dat dit niet de laatste keer zal zijn dat hun namen in één adem genoemd worden.
+
+CODEX:
+codex_atalanta_meleager
+
+CHOICES:
+
+* Vaar verder, naar het land van de Bebryciërs -> CH5_011
+
+END
+
+=== SCENE: CH5_011 ===
+
+TITLE:
+De Uitdaging van Amycus
+
+TEXT:
+Bij het land van de Bebryciërs verwelkomt niemand de Argo — koning Amycus, een reus van een man, staat de bemanning al op te wachten met een eis in plaats van een groet: elke vreemdeling die hier aan land komt, moet hem uitdagen tot een bokswedstrijd. Wie weigert, vertrekt niet levend.
+
+Twee broers stappen meteen naar voren: Kastor, de beste ruiter van Griekenland, en Polydeukes, zijn tweelingbroer — onverslaanbaar met de vuisten, zegt men, al sinds hij nog een jongen was. "Dit," zegt Polydeukes rustig, terwijl hij zijn handen inzwachtelt, "is precies waar ik goed in ben."
+
+PERSON:
+kastor_polydeukes:intro
+
+CHOICES:
+
+* Kijk wat Amycus over zijn eigen rijk te zeggen heeft voor het gevecht begint -> CH5_012
+
+END
+
+=== SCENE: CH5_012 ===
+
+TITLE:
+Het Rijk van Amycus
+
+TEXT:
+Amycus buldert zijn eigen faam nog eens rond voor hij zijn vuisten heft — hoeveel vreemdelingen hij al heeft verslagen, hoe lang zijn volk hem al onbevochten kent. Polydeukes luistert er nauwelijks naar, zijn blik al gericht op de eerste opening die hij straks zal vinden.
+
+PUZZLE:
+puzzle_ch5_genitivus
+
+CHOICES:
+
+* Kijk hoe het gevecht verloopt -> CH5_013
+
+END
+
+=== SCENE: CH5_013 ===
+
+TITLE:
+Polydeukes tegen Amycus
+
+TEXT:
+Amycus is groter, zwaarder en gewend te winnen — maar Polydeukes is sneller, en heeft, anders dan elke tegenstander die Amycus ooit versloeg, geen enkele angst in zijn ogen. Waar de reus met volle kracht uithaalt, ontwijkt Polydeukes en antwoordt met precisie in plaats van gewicht.
+
+COMBAT:
+amycus
+
+CHOICES:
+
+* Kijk wat er van Amycus' rijk wordt na zijn nederlaag -> CH5_014
+
+END
+
+=== SCENE: CH5_014 ===
+
+TITLE:
+Een Reus Geveld
+
+TEXT:
+Amycus valt, voor het eerst in zijn leven verslagen, en zijn volk — dat hem eerder uit angst dan uit liefde volgde — verwelkomt de Argonauten meteen als bevrijders in plaats van indringers. Kastor slaat zijn broer trots op de schouder; het is duidelijk dat dit niet de laatste keer is dat deze twee samen iets overwinnen dat groter is dan zijzelf.
+
+CODEX:
+codex_dioscuren
+
+CHOICES:
+
+* Vaar verder, naar de kust van Mysië [CLEMENTIA] -> CH5_015
+* Vaar verder — een tiran minder op de kaart, verder geen traan aan verspild [SEVERITAS] -> CH5_015
+* Vaar verder, zonder er verder nog bij stil te staan [NEUTRAL] -> CH5_015
+
+END
+
+=== SCENE: CH5_015 ===
+
+TITLE:
+Herakles Blijft Achter
+
+TEXT:
+Bij Mysië gaat Herakles aan land om een nieuwe roeiriem te snijden, met zijn jonge metgezel Hylas mee om water te halen. Hylas keert nooit terug — de waternimfen van de bron waar hij put, betoveren hem en trekken hem mee de diepte in, verliefd op zijn schoonheid.
+
+Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke aanmaning om terug aan boord te komen. Tegen de ochtend besluit de bemanning, met tegenzin, zonder hem verder te varen — Herakles, wanneer hij eindelijk het strand terugvindt en het schip al weg ziet, blijft alleen achter, zijn zoektocht naar Hylas nog altijd niet opgegeven.
+
+CHOICES:
+
+* Vaar verder zonder Herakles -> CH5_016
+
+END
+
+=== SCENE: CH5_016 ===
+
+TITLE:
+De Symplegades
+
+TEXT:
+Verderop wacht een gevaar dat geen zwaard en geen boog kan verslaan: de Symplegades, twee rotswanden die bij elke doorvaart als een kaak op elkaar klappen en alles ertussen verpletteren. Geen enkel schip heeft de doortocht ooit overleefd.
+
+Argos, die zijn eigen schip kent tot in de laatste plank, bestudeert het ritme van de botsende rotsen langer dan wie ook geduld voor heeft. "Elke kaak heeft een moment dat hij weer opengaat," zegt hij uiteindelijk. "Wij hebben er maar één nodig."
+
+CHOICES:
+
+* Kijk hoe Argos de doortocht voorbereidt -> CH5_017
+
+END
+
+=== SCENE: CH5_017 ===
+
+TITLE:
+Argos Verstevigt het Schip
+
+TEXT:
+Voor de doorvaart zelf versterkt Argos in allerijl de romp van de Argo, precies op de plekken waar hij weet dat het schip het meest te lijden zal krijgen.
+
+PUZZLE:
+puzzle_ch5_ablativus
+
+CHOICES:
+
+* Vaar op het juiste moment de Symplegades in -> CH5_018
+
+END
+
+=== SCENE: CH5_018 ===
+
+TITLE:
+Tussen de Rotsen Door
+
+TEXT:
+Op Argos' teken roeit de hele bemanning met alles wat ze in zich hebben, precies op het moment dat de rotsen weer uiteen wijken. De Argo schiet erdoorheen en is nog maar net voorbij wanneer de wanden achter haar met een oorverdovende klap weer op elkaar slaan — op een haar na alleen het uiterste puntje van de achtersteven rakend.
+
+Sinds die dag, zegt men, bewegen de Symplegades niet meer: een schip dat de doortocht overleeft, bevriest de rotsen voorgoed op hun plaats. Wat er ook van waar is, geen enkel schip na de Argo heeft ze ooit nog zien bewegen.
+
+CODEX:
+codex_argos_schip
+
+CHOICES:
+
+* Vaar verder, langs de kust van de Zwarte Zee -> CH5_019
+
+END
+
+=== SCENE: CH5_019 ===
+
+TITLE:
+Gespannen Riemen
+
+TEXT:
+Weken op zee slijten aan iedereens geduld, ook aan dat van Tydeus, die op een avond een roeier bijna naar zijn keel vliegt om niet meer dan een verkeerd geplaatste opmerking. Voor iemand kan ingrijpen, klinkt er muziek over het dek — Orpheus, die zijn lier pakt en speelt zoals hij weet dat alleen hij kan spelen.
+
+De ruzie sterft vanzelf weg, niet omdat iemand gelijk kreeg, maar omdat niemand meer de puf heeft om boos te blijven terwijl die muziek klinkt. Zelfs Tydeus, met zijn vuisten nog half gebald, laat zich zonder het zelf te merken terugzakken op zijn bank.
+
+PERSON:
+orpheus:intro
+
+CHOICES:
+
+* Laat de avond verder in stilte voorbijgaan -> CH5_020
+
+END
+
+=== SCENE: CH5_020 ===
+
+TITLE:
+Raad en Richting
+
+TEXT:
+Vlak voor de laatste etappe naar Colchis brengt de stuurman de koers in kaart, en het is Nestor — nog een van de jongste aan boord, maar nu al opvallend kalm en verstandig voor zijn leeftijd — wiens advies de doorslag geeft over welke route het veiligst is.
+
+Philoktetes, intussen, oefent zijn boogschot op een stuk drijfhout achter het schip — raak, en raak, en nog eens raak, met een precisie die zelfs de meest doorgewinterde Argonauten aan boord stil doet worden.
+
+PERSON:
+nestor:intro, philoktetes:intro
+
+CHOICES:
+
+* Vraag Philoktetes om zijn precisie nog eens te bewijzen -> CH5_021
+
+END
+
+=== SCENE: CH5_021 ===
+
+TITLE:
+Een Pijl voor de Godin
+
+TEXT:
+Voor zijn laatste schot wijdt Philoktetes zijn pijl hardop toe aan de godin van de jacht — een klein gebaar van respect dat hij, zegt hij, van zijn eigen leermeester heeft overgenomen.
+
+PUZZLE:
+puzzle_ch5_dativus
+
+CHOICES:
+
+* Vaar de laatste etappe naar Colchis -> CH5_022
+
+END
+
+=== SCENE: CH5_022 ===
+
+TITLE:
+Twee Namen voor Later
+
+TEXT:
+Terwijl de kust van Colchis al vaag aan de horizon verschijnt, bedenk je dat Nestor en Philoktetes — allebei nu nog jong, allebei nu nog maar twee van de tachtig namen aan boord — ooit nog een keer samen genoemd zullen worden. Niet hier. Niet op deze tocht. Maar het gevoel dat dit geen toeval is, laat je niet meer los.
+
+CODEX:
+codex_nestor_philoktetes
+
+CHOICES:
+
+* Vaar de haven van Colchis binnen -> CH5_023
+
+END
+
+=== SCENE: CH5_023 ===
+
+TITLE:
+Colchis
+
+TEXT:
+Colchis ligt aan de rand van de bekende wereld, verder naar het oosten dan de meeste Grieken ooit zijn gevaren. Koning Aeëtes ontvangt de Argonauten koeltjes — hij bewaakt het Gulden Vlies al jaren met een nooit slapende draak, en is niet van plan het zomaar aan een groep vreemdelingen af te staan.
+
+Naast hem staat zijn dochter Medea, een begaafde tovenares — en de eerste die haar vaders koelte niet deelt zodra ze Jason ziet. Wat ze voor hem voelt, overvalt haarzelf net zo hard als het jou overvalt: het lijkt in niets op wat ze had verwacht.
+
+PERSON:
+medea:intro, aeetes:intro
+
+CHOICES:
+
+* Kijk welke voorwaarde Aeëtes aan het Vlies verbindt -> CH5_024
+
+END
+
+=== SCENE: CH5_024 ===
+
+TITLE:
+De Beproevingen van Aeëtes
+
+TEXT:
+Aeëtes stelt een voorwaarde waarvan hij zeker weet dat ze onmogelijk is: eerst twee vuurspuwende stieren voor de ploeg spannen, dan een veld ermee omploegen, en ten slotte drakentanden erin zaaien — dezelfde soort tanden waaruit ooit, ver hiervandaan in Thebe, een heel volk van gewapende mannen uit de aarde opstond. Uit elke tand die Jason zaait, groeit binnen een oogwenk een gewapende krijger, klaar om hem te doden.
+
+Zonder hulp zou geen sterveling dit overleven — en Medea, die haar vader al in het geheim heeft verraden voor de vreemdeling die haar hart heeft gestolen, geeft Jason een zalf tegen het vuur en één cruciale raad: gooi een steen tussen de opgerezen krijgers, en laat ze elkaar aanzien voor de vijand in plaats van jou.
+
+CHOICES:
+
+* Kijk hoe Medea haar keuze rechtvaardigt -> CH5_025
+
+END
+
+=== SCENE: CH5_025 ===
+
+TITLE:
+Medea's Keuze
+
+TEXT:
+Wat Medea doet, is geen kleinigheid: ze verraadt haar eigen vader, haar eigen koninkrijk, voor een vreemdeling die ze amper een paar dagen kent. Het is, beseft je, precies wat Ariadne op Kreta ook deed voor Theseus — dezelfde soort keuze, dezelfde soort risico, misschien wel hetzelfde soort liefde.
+
+"Ik weet wat dit betekent," zegt Medea zacht, meer tegen zichzelf dan tegen jou. "Ik kan nooit meer terug. Maar ik kan hem ook niet laten sterven."
+
+CHOICES:
+
+* Bewonder vooral haar moed om alles op te geven voor wat ze voelt [CLEMENTIA] -> CH5_026
+* Erken vooral hoe roekeloos het is om je eigen vader zo te verraden [SEVERITAS] -> CH5_026
+* Herken vooral het patroon — weer een vrouw die alles waagt voor een man die haar dat misschien nooit teruggeeft [NEUTRAL] -> CH5_026
+
+END
+
+=== SCENE: CH5_026 ===
+
+TITLE:
+De Nooit Slapende Draak
+
+TEXT:
+Het Gulden Vlies hangt diep in een heilig woud, bewaakt door een draak die naar verluidt nog nooit heeft geslapen. Medea neuriet een zacht, oud gezang dat het beest langzaam kalmeert — genoeg om Jason dichterbij te laten komen, maar niet genoeg om het volledig in slaap te sussen. Vlak voor hij het Vlies kan losmaken, schrikt de draak alsnog wakker.
+
+COMBAT:
+drakon_vlies
+
+CHOICES:
+
+* Kijk wat er van het Gulden Vlies wordt -> CH5_027
+
+END
+
+=== SCENE: CH5_027 ===
+
+TITLE:
+Het Gulden Vlies
+
+TEXT:
+Met de draak verslagen snijdt Jason het Vlies eindelijk los — zwaarder en warmer in zijn handen dan hij had verwacht, alsof het al die jaren wachten zelf ook gewicht heeft gekregen. Medea, haar eigen vader en koninkrijk nu voorgoed achter zich latend, vaart met de Argo mee terug naar Griekenland.
+
+In je vuist voel je een klein, gouden schilfertje dat losraakte van het Vlies tijdens het gevecht — koud eerst, dan langzaam warm, alsof het net zo lang op jou heeft liggen wachten als het Vlies zelf op Jason wachtte.
+
+SOUVENIR:
+souvenir_argonauten
+
+EERETITEL:
+ch5_argonauten
+
+CHOICES:
+
+* Volg de terugreis naar Griekenland -> CH5_028
+
+END
+
+=== SCENE: CH5_028 ===
+
+TITLE:
+De Terugreis
+
+TEXT:
+De terugtocht duurt bijna net zo lang als de heentocht, over andere zeeën en langs andere kusten, tot de Argo eindelijk weer thuis aanlegt in Iolcus — te laat om Pelias nog op zijn woord te houden, en te laat om te voorkomen dat de troon inmiddels alweer stevig in zijn handen ligt.
+
+Jason en Medea trekken verder, uiteindelijk naar Korinthe, waar ze jarenlang samen leven en kinderen krijgen — een rustige tijd die, achteraf gezien, nooit bedoeld was om te blijven duren.
+
+CHOICES:
+
+* Kijk wat er jaren later, in Korinthe, gebeurt -> CH5_029
+
+END
+
+=== SCENE: CH5_029 ===
+
+TITLE:
+Korinthe, Jaren Later
+
+TEXT:
+In Korinthe verlaat Jason Medea uiteindelijk voor een politiek huwelijk met de dochter van de plaatselijke koning — een verstandige zet voor zijn eigen toekomst, zegt hij, alsof verstandig genoeg reden is om te vergeten wat Medea voor hem heeft opgegeven: haar vader, haar vaderland, alles.
+
+Medea's wraak is er een die de latere verhalen zelf nauwelijks durven navertellen. Ze stuurt de nieuwe bruid een huwelijksgeschenk dat er op het eerste gezicht prachtig uitziet, maar vergiftigd blijkt te zijn. En daar houdt haar wraak niet op — in haar woede en verdriet neemt ze van Jason ook het enige wat hij nooit meer terug zou kunnen krijgen. Geen enkel lied vertelt dat deel graag in detail, en dit verhaal ook niet.
+
+CODEX:
+codex_medea_wraak
+
+PERSON:
+medea:full
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 5 volledig voltooid
+
+CHOICES:
+
+* Luister verder -> CH5_EINDE
+
+END
+
+=== SCENE: CH5_EINDE ===
+
+TITLE:
+Het Einde van Hoofdstuk 5
+
+TEXT:
+"Niet elke belofte breekt met een klip en een zwart zeil," zegt de stem, stiller dan anders. "Sommige breken langzaam, over jaren — en de prijs daarvan kan verschrikkelijker zijn dan wie dan ook had kunnen voorzien, aan het begin van een tocht die met zoveel hoop van wal stak." De poort keert terug tot een dunne streep licht, en je neemt een nieuwe herinnering met je mee, zwaarder dan de vorige: een schilfer goud, en alles wat het je heeft geleerd over wat een belofte werkelijk kan kosten.
+
+EERETITEL:
+ch5_medea_korinthe
+
+STATPOINTS:
+3
+
+CHOICES:
+
+* Stap door de poort -> CH6_000
+
+END
+
+
+################################################################
+# HOOFDSTUK 6 - De Vloek van Thebe
+################################################################
+
+-- STROOMSCHEMA --
+
+CH6_000 — De Vloek van Thebe
+  * Begin bij het begin — de stichting van Thebe
+CH6_001 — De Stichting van Thebe
+  * Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef
+CH6_002 — Dezelfde Tanden, een Andere Koning
+  * Kijk naar de eerste koningin van deze jonge stad
+CH6_003 — Niobe's Hoogmoed
+  * Kijk hoe Latona's kinderen op deze belediging reageren
+CH6_004 — Apollo en Diana's Wraak
+  * Vind veertien levens een verschrikkelijk zware prijs voor één opschepperige zin [CLEMENTIA]
+    CH6_005 — Een Voorspelling voor Laius
+      * Kijk wat Oedipus doet zodra hij zelf volwassen is
+    CH6_006 — De Weg naar Thebe
+      * Volg Oedipus verder naar de poorten van Thebe
+    CH6_007 — De Sfinx
+      * Luister naar het raadsel van de Sfinx
+    CH6_008 — Het Raadsel
+      * Geef het antwoord
+    CH6_009 — Koning van Thebe
+      * Spring jaren vooruit, naar het moment dat de waarheid aan het licht komt
+    CH6_010 — De Waarheid
+      * Voel vooral medelijden — geen van beiden koos er ooit voor om dit te worden [CLEMENTIA]
+        CH6_011 — Een Troon, Twee Broers
+          * Kijk wat Polyneikes onderneemt
+        CH6_012 — De Zeven tegen Thebe
+          * Kijk hoe de aanval op Thebe verloopt
+        CH6_013 — De Zeven Poorten
+          * Kijk hoe het tussen de twee broers zelf afloopt
+        CH6_014 — Broedermoord
+          * Kijk wie er na deze slachting de troon van Thebe overneemt
+        CH6_015 — Creons Bevel
+          * Kijk wat Antigone besluit te doen
+        CH6_016 — Antigone's Verzet
+          * Kijk hoe Creon reageert zodra hij ontdekt wat ze heeft gedaan
+        CH6_017 — Levend Ingemetseld
+          * Bewonder haar moed om voor haar overtuiging te sterven [CLEMENTIA]
+            CH6_018 — De Epigonen
+              * Kijk hoe de tweede aanval op Thebe verloopt
+            CH6_019 — Laodamas Verdedigt de Poorten
+              * Kijk wat er van Thebe wordt na Laodamas' nederlaag
+            CH6_020 — De Val van Thebe
+              * Spring nu terug in de tijd — naar een koning die vóór Oedipus over Thebe regeerde
+            CH6_021 — Terug in de Tijd
+              * Kijk wat voor koning Pentheus is
+            CH6_022 — Een Nieuwe God
+              * Kijk wat Pentheus onderneemt om de Bacchanten te stoppen
+            CH6_023 — Vermomd de Berg Op
+              * Roep de naam van de god die dit alles heeft losgemaakt
+            CH6_024 — Een Naam Zonder Antwoord
+              * Kijk wat er met Pentheus gebeurt
+            CH6_025 — Agave
+              * Luister verder
+            CH6_EINDE — Het Einde van Hoofdstuk 6
+              (einde — geen vervolgkeuze)
+          * Erken dat Creon, hoe hard ook, zijn bevel niet zomaar kon laten passeren zonder gezichtsverlies [SEVERITAS]
+            → CH6_018  (zie hierboven)
+          * Zie vooral twee mensen die geen van beiden meer terug konden zonder alles te verliezen [NEUTRAL]
+            → CH6_018  (zie hierboven)
+      * Erken nuchter dat onwetendheid de gevolgen niet ongedaan maakt, hoe oneerlijk dat ook voelt [SEVERITAS]
+        → CH6_011  (zie hierboven)
+      * Laat het oordeel maar aan iemand anders — dit voelt te groot om zomaar een kant te kiezen [NEUTRAL]
+        → CH6_011  (zie hierboven)
+  * Erken dat een belediging aan een godin nu eenmaal nooit zonder gevolgen blijft [SEVERITAS]
+    → CH6_005  (zie hierboven)
+  * Laat het gewoon op je inwerken, zonder meteen een kant te kiezen [NEUTRAL]
+    → CH6_005  (zie hierboven)
+
+-- VOLLEDIGE TEKST --
+
+=== SCENE: CH6_000 ===
+
+TITLE:
+De Vloek van Thebe
+
+TEXT:
+"Dit hoofdstuk vertel ik je niet in de volgorde waarin het gebeurde," zegt de Boodschapper, ongewoon voorzichtig. "Thebe's geschiedenis springt heen en weer door generaties, en als ik je alles op volgorde van jaartal zou vertellen, zou je het patroon nooit zien. Dus vertel ik het je op de volgorde die het patroon wél laat zien: hoogmoed, telkens weer — en een straf die daarna bijna nooit bij de hoogmoedige zelf terechtkomt, maar bij de kinderen."
+
+Athena knikt, zwijgender dan anders. "Sommige vloeken slaan in bij de stichting van een stad, en wachten dan gewoon — generatie na generatie — tot er weer iemand geboren wordt om ze te laten uitkomen."
+
+VOCAB:
+latijn_habere, latijn_recusare, latijn_sepelire, latijn_regnum, latijn_frater, latijn_quadrupes, grieks_bakchos
+
+CODEX:
+codex_kadmos_thebe
+
+CHOICES:
+
+* Begin bij het begin — de stichting van Thebe -> CH6_001
+
+END
+
+=== SCENE: CH6_001 ===
+
+TITLE:
+De Stichting van Thebe
+
+TEXT:
+Kadmos, een Fenicische prins op zoek naar zijn geschaakte zuster Europa — je kent haar verhaal al uit Hoofdstuk 3 — geeft die zoektocht op advies van het orakel van Delphi uiteindelijk op. Volg een koe, zegt het orakel, en sticht een stad waar ze uitgeput neervalt. Kadmos doet wat hem gezegd wordt.
+
+Om een offer te brengen doodt hij een draak die de bron ter plekke bewaakt — en zaait, op advies van Athena zelf, de tanden van het beest in de aarde. Gewapende krijgers rijzen op uit de grond en doden elkaar bijna allemaal; de vijf die overblijven worden de eerste inwoners van de stad die Kadmos Thebe noemt.
+
+PERSON:
+kadmos:intro
+
+CHOICES:
+
+* Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef -> CH6_002
+
+END
+
+=== SCENE: CH6_002 ===
+
+TITLE:
+Dezelfde Tanden, een Andere Koning
+
+TEXT:
+Het valt je meteen op: dezelfde soort drakentanden hoorde je Aeëtes al noemen, ver naar het oosten in Colchis, toen Jason zijn beproevingen moest doorstaan. Eén draak, twee koningen, generaties en een hele wereld uit elkaar — allebei met precies dezelfde gewapende-mannen-uit-de-aarde-truc.
+
+"Zo werkt een vloek soms," zegt Athena. "Hij plant zichzelf, letterlijk, en wacht dan gewoon af wie hem opgraaft."
+
+CHOICES:
+
+* Kijk naar de eerste koningin van deze jonge stad -> CH6_003
+
+END
+
+=== SCENE: CH6_003 ===
+
+TITLE:
+Niobe's Hoogmoed
+
+TEXT:
+Enkele generaties later regeert Niobe als koningin over Thebe — trots, geliefd, en moeder van veertien kinderen. Op een feest ter ere van Latona (je kent haar inmiddels goed uit Hoofdstuk 2) kan Niobe haar mond niet houden: waarom zou een godin met slechts twee kinderen meer offers verdienen dan een koningin met veertien?
+
+PUZZLE:
+puzzle_ch6_praesens
+
+CHOICES:
+
+* Kijk hoe Latona's kinderen op deze belediging reageren -> CH6_004
+
+END
+
+=== SCENE: CH6_004 ===
+
+TITLE:
+Apollo en Diana's Wraak
+
+TEXT:
+Apollo en Diana laten de belediging aan hun moeder niet ongestraft. Met hun pijl en boog doden ze, de een na de ander, al Niobe's veertien kinderen — tot er niemand meer overblijft om nog trots op te zijn.
+
+Niobe, verstard van verdriet, verandert ter plekke in steen. Nog altijd, zegt men, laat de rots op de berg Sipylos water druppelen — tranen die na al die generaties nog altijd niet zijn opgehouden.
+
+CODEX:
+codex_niobe
+
+SOUVENIR:
+souvenir_thebe
+
+CHOICES:
+
+* Vind veertien levens een verschrikkelijk zware prijs voor één opschepperige zin [CLEMENTIA] -> CH6_005
+* Erken dat een belediging aan een godin nu eenmaal nooit zonder gevolgen blijft [SEVERITAS] -> CH6_005
+* Laat het gewoon op je inwerken, zonder meteen een kant te kiezen [NEUTRAL] -> CH6_005
+
+END
+
+=== SCENE: CH6_005 ===
+
+TITLE:
+Een Voorspelling voor Laius
+
+TEXT:
+Generaties na Niobe regeert Laius over Thebe. Een orakel voorspelt hem iets verschrikkelijks: zijn eigen, nog ongeboren zoon zal hem ooit doden. Uit angst laat Laius het kind, zodra het geboren is, te vondeling leggen op een berghelling — zijn voeten doorboord en aan elkaar gebonden, zodat niemand ooit zou vermoeden dat het om een prins gaat.
+
+Het kind overleeft. Een herder vindt de baby, en uiteindelijk groeit hij op aan het hof van Corinthe, geadopteerd door een koning en koningin die hem nooit vertellen dat hij niet echt hun zoon is. Zijn naam: Oedipus — "gezwollen voet", naar de wond die hij als baby overhield.
+
+PERSON:
+laius:intro, oedipus:intro
+
+CHOICES:
+
+* Kijk wat Oedipus doet zodra hij zelf volwassen is -> CH6_006
+
+END
+
+=== SCENE: CH6_006 ===
+
+TITLE:
+De Weg naar Thebe
+
+TEXT:
+Als jongvolwassene krijgt Oedipus zijn eigen, verschrikkelijke voorspelling: hij zal ooit zijn vader doden en met zijn moeder trouwen. In de overtuiging dat zijn Corinthische ouders zijn ware ouders zijn, vlucht hij weg van Corinthe om het lot te ontlopen — recht op Thebe af, zonder dat hij het weet.
+
+Onderweg, bij een smal kruispunt, weigert een oudere man met zijn wagen opzij te gaan. Het geschil escaleert, en Oedipus doodt de man — zonder ook maar te vermoeden dat het zijn eigen vader Laius is, op weg naar hetzelfde orakel dat hem ooit al zoveel verdriet bracht.
+
+CHOICES:
+
+* Volg Oedipus verder naar de poorten van Thebe -> CH6_007
+
+END
+
+=== SCENE: CH6_007 ===
+
+TITLE:
+De Sfinx
+
+TEXT:
+Bij de poorten van Thebe houdt een monster de hele stad al maandenlang gegijzeld: de Sfinx, met het lichaam van een leeuw, de vleugels van een adelaar en het gezicht van een vrouw. Iedereen die de stad in of uit wil, moet haar raadsel oplossen — en wie faalt, wordt ter plekke verslonden.
+
+Oedipus, die toch al niets meer te verliezen heeft, biedt aan het te proberen.
+
+CODEX:
+codex_oedipus
+
+CHOICES:
+
+* Luister naar het raadsel van de Sfinx -> CH6_008
+
+END
+
+=== SCENE: CH6_008 ===
+
+TITLE:
+Het Raadsel
+
+TEXT:
+"Welk wezen," vraagt de Sfinx, "loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie — en is het zwakst naarmate het er meer heeft?"
+
+PUZZLE:
+puzzle_ch6_sfinx
+
+CHOICES:
+
+* Geef het antwoord -> CH6_009
+
+END
+
+=== SCENE: CH6_009 ===
+
+TITLE:
+Koning van Thebe
+
+TEXT:
+"De mens," antwoordt Oedipus — als baby kruipt hij op handen en voeten, als volwassene loopt hij rechtop, en op zijn oude dag steunt hij op een stok, de "derde poot". De Sfinx, voor het eerst ooit verslagen, werpt zich in wanhoop van de rotsen.
+
+Thebe, bevrijd, kroont Oedipus tot nieuwe koning — en geeft hem, zoals gebruikelijk, ook de hand van de weduwe van de vorige koning: Iokaste. Jaren gaan voorbij. Ze krijgen samen vier kinderen: Eteokles, Polyneikes, Antigone, en een dochter die verder in dit verhaal geen grote rol speelt. Niemand in Thebe vermoedt wie Iokaste werkelijk is voor haar nieuwe man.
+
+PERSON:
+iokaste:intro, eteokles:intro, polyneikes:intro, antigone:intro
+
+CHOICES:
+
+* Spring jaren vooruit, naar het moment dat de waarheid aan het licht komt -> CH6_010
+
+END
+
+=== SCENE: CH6_010 ===
+
+TITLE:
+De Waarheid
+
+TEXT:
+Jaren later teistert een verschrikkelijke plaag Thebe, en een orakel wijst de oorzaak aan: de moordenaar van de vorige koning loopt nog vrij rond, onbestraft, in de stad zelf. Oedipus, vastbesloten de dader te vinden, ontrafelt stukje bij beetje zijn eigen verleden — tot de waarheid onontkoombaar wordt: hij doodde zijn eigen vader op die weg naar Thebe, en trouwde daarna, zonder het te weten, met zijn eigen moeder.
+
+Iokaste kan niet leven met wat ze ontdekt. Oedipus, die het niet langer kan verdragen te zien wat zijn eigen ogen hem hebben laten aanrichten, verblindt zichzelf en verlaat Thebe voorgoed, een ballingschap in die hem de rest van zijn leven zal achtervolgen.
+
+PERSON:
+oedipus:full, iokaste:full
+
+CHOICES:
+
+* Voel vooral medelijden — geen van beiden koos er ooit voor om dit te worden [CLEMENTIA] -> CH6_011
+* Erken nuchter dat onwetendheid de gevolgen niet ongedaan maakt, hoe oneerlijk dat ook voelt [SEVERITAS] -> CH6_011
+* Laat het oordeel maar aan iemand anders — dit voelt te groot om zomaar een kant te kiezen [NEUTRAL] -> CH6_011
+
+END
+
+=== SCENE: CH6_011 ===
+
+TITLE:
+Een Troon, Twee Broers
+
+TEXT:
+Eteokles en Polyneikes spreken af de troon van Thebe om het jaar te delen — eerst de een, dan de ander. Het eerste jaar is aan Eteokles. Maar wanneer het jaar om is en Polyneikes zijn beurt komt opeisen, weigert Eteokles.
+
+PUZZLE:
+puzzle_ch6_imperfectum
+
+CHOICES:
+
+* Kijk wat Polyneikes onderneemt -> CH6_012
+
+END
+
+=== SCENE: CH6_012 ===
+
+TITLE:
+De Zeven tegen Thebe
+
+TEXT:
+Verbannen uit zijn eigen stad, verzamelt Polyneikes zes andere champions om Thebe met geweld terug te veroveren — samen bekend als de Zeven tegen Thebe. Onder hen een gezicht dat je al kent: Tydeus, de kortlontige Argonaut van de Argo (Hoofdstuk 5), even onstuimig als altijd.
+
+"Als er íémand een stadspoort met kracht in plaats van geduld openkrijgt," zegt Tydeus grimmig, terwijl hij zijn wapenrusting aantrekt, "dan ben ik dat wel."
+
+CHOICES:
+
+* Kijk hoe de aanval op Thebe verloopt -> CH6_013
+
+END
+
+=== SCENE: CH6_013 ===
+
+TITLE:
+De Zeven Poorten
+
+TEXT:
+Elk van de zeven champions valt een andere poort van Thebe aan — en bijna allemaal sneuvelen ze, poort na poort, tegen Thebe's verdedigers. Voor de laatste, wanhopige aanval moet iedereen die nog vecht zijn Latijn haarscherp houden.
+
+PUZZLE:
+puzzle_ch6_matching_tempora
+
+CHOICES:
+
+* Kijk hoe het tussen de twee broers zelf afloopt -> CH6_014
+
+END
+
+=== SCENE: CH6_014 ===
+
+TITLE:
+Broedermoord
+
+TEXT:
+Eteokles en Polyneikes, vastbesloten dit voor eens en altijd zelf uit te vechten, treffen elkaar in een laatste tweegevecht — en doden elkaar tegelijkertijd, geen van beiden lang genoeg in leven om nog te weten wie er "gewonnen" heeft.
+
+Tydeus zelf ligt intussen dodelijk gewond op het slagveld, precies op het moment dat Athena naar hem toe komt om hem — voor zijn moed — onsterfelijkheid te schenken. Wat ze daar aantreft, doet haar zich vol afschuw afwenden en de gave intrekken. Tydeus sterft alsnog, sterfelijk na alles, ver van de zoon die hij amper heeft leren kennen.
+
+CODEX:
+codex_zeven_tegen_thebe
+
+CHOICES:
+
+* Kijk wie er na deze slachting de troon van Thebe overneemt -> CH6_015
+
+END
+
+=== SCENE: CH6_015 ===
+
+TITLE:
+Creons Bevel
+
+TEXT:
+Met beide broers dood en Oedipus allang verbannen, neemt Iokaste's broer Creon de troon over. Zijn eerste daad als regent is een bevel dat heel Thebe zal verscheuren: Eteokles krijgt een eervolle begrafenis, als verdediger van de stad — maar Polyneikes, die zijn eigen stad aanviel, mag van Creon nooit begraven worden. Zijn lichaam moet buiten de muren blijven liggen, prooi voor de vogels.
+
+Voor de Grieken is dit een verschrikkelijke straf — zonder de juiste rituelen kan een ziel nooit rust vinden. Antigone, Polyneikes' zuster, is niet van plan zich daarbij neer te leggen.
+
+PERSON:
+creon:intro
+
+CHOICES:
+
+* Kijk wat Antigone besluit te doen -> CH6_016
+
+END
+
+=== SCENE: CH6_016 ===
+
+TITLE:
+Antigone's Verzet
+
+TEXT:
+Tegen Creons uitdrukkelijke bevel in begraaft Antigone haar broer in het geheim, met de juiste rituelen — overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning.
+
+PUZZLE:
+puzzle_ch6_perfectum
+
+CHOICES:
+
+* Kijk hoe Creon reageert zodra hij ontdekt wat ze heeft gedaan -> CH6_017
+
+END
+
+=== SCENE: CH6_017 ===
+
+TITLE:
+Levend Ingemetseld
+
+TEXT:
+Creon laat Antigone, zodra hij ontdekt wat ze heeft gedaan, levend inmetselen in een graftombe — geen executie in naam, maar wel een ter dood veroordeling. Antigone wacht niet af tot de tombe haar langzaam laat sterven: ze kiest zelf het moment.
+
+PERSON:
+antigone:full
+
+CODEX:
+codex_antigone
+
+CHOICES:
+
+* Bewonder haar moed om voor haar overtuiging te sterven [CLEMENTIA] -> CH6_018
+* Erken dat Creon, hoe hard ook, zijn bevel niet zomaar kon laten passeren zonder gezichtsverlies [SEVERITAS] -> CH6_018
+* Zie vooral twee mensen die geen van beiden meer terug konden zonder alles te verliezen [NEUTRAL] -> CH6_018
+
+END
+
+=== SCENE: CH6_018 ===
+
+TITLE:
+De Epigonen
+
+TEXT:
+Tien jaar na de nederlaag van de Zeven tegen Thebe zijn hun zonen oud genoeg om zelf te vechten — de Epigonen, "de nakomelingen", vastbesloten hun vaders alsnog te wreken. Onder hen Diomedes, Tydeus' zoon, die zijn vader nauwelijks heeft gekend maar wiens naam hij zijn hele jeugd heeft horen fluisteren.
+
+"Ik weet niet veel over mijn vader," zegt Diomedes, terwijl hij zijn wapenrusting aantrekt, net zoals Tydeus dat tien jaar eerder deed. "Maar ik weet wel hoe hij stierf. Dat is genoeg om vandaag mee te beginnen."
+
+PERSON:
+diomedes:intro
+
+CHOICES:
+
+* Kijk hoe de tweede aanval op Thebe verloopt -> CH6_019
+
+END
+
+=== SCENE: CH6_019 ===
+
+TITLE:
+Laodamas Verdedigt de Poorten
+
+TEXT:
+Waar Thebe de eerste aanval overleefde, staat er dit keer een verdediger klaar die vastbesloten is de stad opnieuw te redden: Laodamas, zoon van Eteokles, die de poorten met dezelfde koppigheid verdedigt als zijn vader ooit deed.
+
+COMBAT:
+laodamas
+
+CHOICES:
+
+* Kijk wat er van Thebe wordt na Laodamas' nederlaag -> CH6_020
+
+END
+
+=== SCENE: CH6_020 ===
+
+TITLE:
+De Val van Thebe
+
+TEXT:
+Met Laodamas verslagen valt Thebe eindelijk, tien jaar nadat de vaders van de Epigonen er zelf faalden. Diomedes staat tussen de puinhopen van een stad die zijn eigen vader het leven kostte — niet met vreugde, merk je, maar met iets stillers. Wraak, ontdekt hij, voelt anders dan hij zich had voorgesteld.
+
+Zijn naam zal hier niet ophouden. Jaren later, ver van Thebe, zal Diomedes een van de dapperste helden voor de poorten van een heel andere belegerde stad worden.
+
+CODEX:
+codex_epigonen
+
+FLAG:
+ch6_diomedes_epigonen=true
+
+EERETITEL:
+ch6_epigonen
+
+CHOICES:
+
+* Spring nu terug in de tijd — naar een koning die vóór Oedipus over Thebe regeerde -> CH6_021
+
+END
+
+=== SCENE: CH6_021 ===
+
+TITLE:
+Terug in de Tijd
+
+TEXT:
+"Eén verhaal resteert nog," zegt de Boodschapper, "en het speelt zich eigenlijk af vóór alles wat je tot nu toe hebt gezien — nog vóór Oedipus, nog vóór Laius. Ik bewaarde het voor het laatst, niet omdat het het laatste was, maar omdat het het duidelijkst laat zien waar deze hele vloek ooit begon. Jij, als {tendency_address}, herkent dat patroon inmiddels vast al voor ik het uitleg."
+
+Terug in de tijd dus, naar Pentheus — kleinzoon van Kadmos zelf, en de op twee na eerste koning van Thebe na de stichter.
+
+CHOICES:
+
+* Kijk wat voor koning Pentheus is -> CH6_022
+
+END
+
+=== SCENE: CH6_022 ===
+
+TITLE:
+Een Nieuwe God
+
+TEXT:
+Een vreemde nieuwe verering verspreidt zich door Thebe: de cultus van Bacchus, god van wijn en extase — en, zoals niemand in de stad hardop durft te zeggen, de zoon van Semele, Kadmos' eigen dochter. Pentheus, Semele's neef en de huidige koning, weigert te geloven dat zijn eigen nicht een god heeft gebaard. Hij verbiedt de verering en probeert de vrouwen van Thebe, die massaal de bergen in trekken om Bacchus te aanbidden, met geweld terug te dwingen.
+
+PERSON:
+pentheus:intro
+
+CHOICES:
+
+* Kijk wat Pentheus onderneemt om de Bacchanten te stoppen -> CH6_023
+
+END
+
+=== SCENE: CH6_023 ===
+
+TITLE:
+Vermomd de Berg Op
+
+TEXT:
+Wanneer dreigementen niets uithalen, vermomt Pentheus zich en sluipt in het geheim de berg op om de riten van de Bacchanten met eigen ogen te bespieden — in de hoop bewijs te vinden om de verering voorgoed te verbieden.
+
+Hij wordt ontdekt. In de door Bacchus opgewekte, goddelijke waanzin herkennen de vrouwen hem niet meer als de koning van Thebe — en niet eens meer als mens.
+
+CHOICES:
+
+* Roep de naam van de god die dit alles heeft losgemaakt -> CH6_024
+
+END
+
+=== SCENE: CH6_024 ===
+
+TITLE:
+Een Naam Zonder Antwoord
+
+TEXT:
+Pentheus, eindelijk beseffend hoe verkeerd hij dit heeft ingeschat, roept vol ongeloof de naam van de god die hij zo lang heeft geweigerd te erkennen.
+
+PUZZLE:
+puzzle_ch6_vocativus_grieks
+
+CHOICES:
+
+* Kijk wat er met Pentheus gebeurt -> CH6_025
+
+END
+
+=== SCENE: CH6_025 ===
+
+TITLE:
+Agave
+
+TEXT:
+Wat er die middag op de berg gebeurt, is het duisterste dat dit hoofdstuk te vertellen heeft. Onder de vrouwen die Pentheus omsingelen bevindt zich, in haar eigen door de god opgewekte waanzin, zijn moeder Agave — die in hem geen zoon meer ziet, maar een wild dier.
+
+Pas uren later, weer bij zinnen, beseft Agave ten volle wat haar eigen handen hebben aangericht. Van alle vloeken die dit hoofdstuk over Thebe uitspreekt, is dit de wreedste: niet een vreemde straf van een verre god, maar een moeder tegen haar eigen kind, zonder dat ze ooit had willen kiezen.
+
+CODEX:
+codex_pentheus_bacchus
+
+PERSON:
+pentheus:full
+
+QUEST:
+quest_boodschapper_van_kronos: hoofdstuk 6 volledig voltooid
+
+EERETITEL:
+ch6_pentheus
+
+CHOICES:
+
+* Luister verder -> CH6_EINDE
+
+END
+
+=== SCENE: CH6_EINDE ===
+
+TITLE:
+Het Einde van Hoofdstuk 6
+
+TEXT:
+"Je hebt nu een hele stad gezien," zegt de Boodschapper zacht, "over generaties heen, altijd hetzelfde patroon: hoogmoed, en dan een straf die zelden bij de hoogmoedige zelf terechtkomt. Niet elke vloek wordt in één leven uitgesproken. Sommige wachten gewoon op de volgende generatie om hem alsnog te laten uitkomen."
+
+De poort keert terug tot een dunne streep licht. Je neemt geen tastbare herinnering mee dit keer — alleen het besef dat een vloek niet altijd hardop wordt uitgesproken. Soms wordt hij gewoon, generatie na generatie, doorgegeven.
+
+STATPOINTS:
+3
 
 END
