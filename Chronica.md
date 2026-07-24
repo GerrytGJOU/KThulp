@@ -2035,6 +2035,43 @@ puur test of de speler een eerder gegeven aanwijzing goed gelezen/onthouden
 heeft, is GEEN stat-check** — dat is een leesbegrip-mechanisme, geen
 personagevermogen. Zie de correctie bij CH4_T06B in §11.5.
 
+### 11.4a Toekomstig idee (2026-07-24, Gerben): leestests IN het Latijn/Grieks zelf — latere hoofdstukken
+
+**Nog niet bouwen — dit is een vastgelegd idee voor zodra de leerlingen
+genoeg opgebouwde grammatica/vocab hebben, dus pas relevant voorbij
+Hoofdstuk 6.** Zodra dat punt bereikt is: eraan herinneren en dan pas
+uitwerken.
+
+**Het idee**: in plaats van dat een NPC-hint altijd in het Nederlands staat
+(zoals Ariadnes "houd links aan" bij `CH4_T06B`), spreekt een NPC op
+gezette momenten in het Latijn of Grieks zelf — ONGEVERTAALD, direct in de
+TEXT/DIALOGUE — en moet de speler die tekst zelf begrijpen om de juiste
+keuze te herkennen. Geen aparte puzzel-widget ervoor (zoals de bestaande
+`PUZZLE:`-typen), maar de doeltaal rechtstreeks in de verhaaltekst, als
+een leesbegrip-gate in de trant van `CH4_T06B` (zie de afbakening
+hierboven) — alleen dan in het Latijn/Grieks in plaats van het Nederlands.
+
+**Onderscheid met de bestaande, nog te bouwen Latijn-check-koppeling**
+(§11.4 hierboven, bouwvolgorde-item 9: Ingenium verlaagt drempel, Gratia
+verhoogt opbrengst): dat is een STAT-gemedieerde moeilijkheidsgraad op een
+apart puzzelscherm. Dit nieuwe idee is iets anders — een directe
+leestest in de lopende verhaaltekst zelf, zonder tussenscherm en zonder
+stat-modifier: je begrijpt het Latijn/Grieks, of je begrijpt het niet.
+
+**Waarom dit belangrijker is dan gewone leestest-puzzels (Gerbens eigen
+woorden)**: dit dient de taalverwerving directer — authentieke, contextuele
+blootstelling aan de doeltaal binnen het verhaal zelf, in plaats van
+geïsoleerde oefening in een puzzelscherm. Op termijn wil Gerben dit
+uitgebreider inzetten dan losse leestests.
+
+**Wanneer relevant/op te pakken**: pas vanaf het punt in de campagne waar
+`SP_CAMPAIGN`'s grammatica-progressie en de opgebouwde `SP_STATE.vocab`
+(Codex Memoriae) genoeg dekking geven voor een NPC om een zin te kunnen
+zeggen die de speler ook echt kan ontcijferen — dus niet in Hoofdstuk 1-6
+(nog te vroeg), wél te overwegen zodra er aan Hoofdstuk 7+ gebouwd wordt,
+of zodra bouwvolgorde-item 9 (Latijn-check-koppeling) aan de beurt is —
+dat is het natuurlijke moment om dit er meteen bij te pakken.
+
 ### 11.5 Retrofit van Proloog t/m Hoofdstuk 6 — Stap 1 (audit) afgerond
 
 **Stap 1 (audit) is uitgevoerd** (2026-07-24): elke bestaande `CHOICES:`-regel
@@ -2186,6 +2223,53 @@ gelabelde bestaande.
    dwingend genoeg om nu al bij te sturen, maar bij een volgende
    uitbreidingsronde (Hoofdstuk 3+) verdient Robur/Ingenium/Gratia extra
    aandacht t.o.v. Vis/Agilitas/Prudentia.
+
+   **Derde batch (2026-07-24), 8 stuks in Hoofdstuk 3-4, met opzet
+   Robur/Gratia-zwaar na de balanscontrole hierboven:**
+   - `CH3_IO07B` (Mercurius sust Argus in slaap, tussen IO07 en IO08):
+     Robur 13 (urenlang waakzaam blijven) / Gratia 11 (een nieuwsgierige
+     voorbijganger wegpraten) / altijd open.
+   - `CH3_IO11` (vlucht naar Egypte, herschreven i.p.v. losse hub): Robur 13
+     (moordend tempo volhouden) / Gratia 11 (herders/boeren voor je
+     winnen) / altijd open.
+   - `CH3_H07B` (Erymanthische ever, sneeuwjacht — `CH3_H07` gesplitst in
+     `H07`/`H07B`/`H07C` om de Chiron-beat en de jacht te scheiden): Robur 11
+     (door de sneeuw) / Vis 13 (dier een kloof in dwingen) / altijd open.
+   - `CH3_H13B` (Merries van Diomedes, wachters vóór `COMBAT:
+     merries_van_diomedes`): Gratia 13 (als gezant naar binnen praten) /
+     Robur 11 (nachtwake volhouden tot de aflossing suf is) / altijd open.
+   - `CH3_H23B` (Cerberus, tocht door de onderwereld vóór `COMBAT:
+     cerberus`): Robur 15 (alleen door het duister, zwaarste drempel tot nu
+     toe — bewust, want laatste/zwaarste taak) / altijd open (Athena en
+     Mercurius begeleiden je) — hier bewust maar twee routes, een derde
+     voelde geforceerd op een scène die al climactisch genoeg is.
+   - `CH4_T08` (vlucht uit Knossos, herschreven): Robur 13 (een uitgeputte
+     offerling dragen) / Gratia 11 (een wachter bij de kade wegpraten) /
+     altijd open.
+   - `CH4_T11B` (was en veren verzamelen, `CH4_T11`/`T12` gesplitst zodat de
+     speler nu zelf het materiaal verzamelt i.p.v. Daidalos alleen):
+     Robur 13 (urenlang sorteren/smelten) / **Gratia 15** (een bewaker
+     omkopen — hoogste drempel tot nu toe buiten Cerberus, want dit is
+     stiekem tegen de eigen cipiers ingaan) / altijd open.
+   - `CH4_P06` (Tellus' smeekbede): Gratia 13 (doorzien hóe ze Jupiter
+     overtuigt) / Robur 11 (zien wát het volhouden haar kostte) / altijd
+     open — **belangrijke correctie t.o.v. het oorspronkelijke voorstel**:
+     dat had bewust geen ongated route ("beide routes zijn puur
+     flavor/inzicht"), maar dat bleek bij het bouwen een echt soft-lock-
+     risico: een startende Boogschutter (Robur10/Gratia8) zou dan BEIDE
+     routes grijs zien en nergens kunnen klikken. Alsnog een neutrale open
+     route toegevoegd — bevestigt waarom de "nooit een doodlopende weg"-
+     regel (§11.4) geen stijlkeuze is maar een harde vereiste, ook als een
+     voorstel het zelf niet voorstelt.
+
+   Balans na deze batch: Robur nu 7×, Gratia 6×, Vis 2×, Agilitas 0×,
+   Prudentia 0×, Ingenium 0× (blijft bij de taalpuzzels) — ruim gecompenseerd
+   t.o.v. de eerste twee batches. Structurele validatie herhaald (304
+   scènes totaal, geen dubbele ID's, geen losse eindjes) en gating getest
+   in de browser met zowel een Boogschutter (Robur10/Gratia8 — bevestigt
+   dat overal alleen de open route beschikbaar is, geen soft-locks) als
+   een Hopliet (Vis15/Robur15 — ontgrendelt overal de Vis/Robur-routes,
+   Gratia blijft correct op slot).
 4. **Gebouwd, basisversie (2026-07-24).** Skillpoint-scherm aan het eind
    van elk hoofdstuk — zie §11.3. Bonuspunten (oefenpunten/korting) nog
    niet, wachten op Stap 3 hierboven.
@@ -2201,14 +2285,23 @@ gelabelde bestaande.
    nog te bouwen.
 9. Koppeling met de Latijn-checks (Ingenium verlaagt drempel, Gratia
    verhoogt opbrengst) — nog te bouwen.
-10. **Gebouwd (2026-07-24).** Statoverzicht voor de speler, **op twee
-    plekken**: `SCREENS.spStats` (singleplayer.js), bereikbaar via een
-    "📊 Statistieken"-knop naast Kaart/Codex op de Chronica-landingspagina
-    (`spRenderLanding`), én via een nieuwe kaart op het Certamen-profiel
+10. **Gebouwd (2026-07-24), hernoemd + uitgebreid (2026-07-24).**
+    Statoverzicht voor de speler, **op twee plekken**: `SCREENS.spStats`
+    (singleplayer.js, intern nog steeds "spStats" — alleen de
+    zichtbare titel is anders), bereikbaar via een "📊 Karakter
+    Informatie"-knop naast Kaart/Codex op de Chronica-landingspagina
+    (`spRenderLanding`), én via een kaart op het Certamen-profiel
     (`SCREENS.battleProfile`, battle.js) die de meest recent bijgewerkte
     saveslot-met-klasse toont (`spBestStatsSlot`) met een knop
     (`spResumeSlotToStats`) die rechtstreeks naar hetzelfde scherm springt.
-    De Kroniek-stijl-weergave van `statLog` (§11.3) staat nog open.
+    Op Gerbens verzoek heet het scherm nu **"Karakter Informatie"** i.p.v.
+    "Statistieken", en toont het bovenaan ook de Chronica Classica Avatar
+    (`spAvatarMerge(spAvatarLoadLocal())` + `renderPixelHeroPreview`/
+    `bmAvatarSVG`, dezelfde weergave als op het Certamen-profiel) en een
+    paneel "Huidige uitrusting" (wapen/wapenrusting/helm/schild/cape, via
+    `BM_AVATAR_PARTS`) met een knop rechtstreeks naar
+    `SCREENS.spAvatarEdit`. De Kroniek-stijl-weergave van `statLog`
+    (§11.3) staat nog open.
 
 Proloog + één bestaand hoofdstuk volledig ombouwen voordat de rest volgt;
 pas als één hoofdstuk met alle drie de klassen goed speelt, is het systeem
