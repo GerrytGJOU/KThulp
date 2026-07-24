@@ -5468,6 +5468,9 @@ Vlak voor het schip vertrekt, roept Aegeus zijn zoon nog één keer bij zich, aa
 
 "Beloof me één ding," zegt hij, zijn stem nauwelijks vast. "Als je overleeft — als je dat monster verslaat en teruggevaren wordt — hijs dan witte zeilen in plaats van zwarte, zodra de kust in zicht komt. Dan weet ik het al voor het schip de haven bereikt. Beloof het me, Theseus." Theseus belooft het zonder aarzelen — een belofte die op dit moment vederlicht aanvoelt, een kleinigheid vergeleken met het monster dat voor hem ligt.
 
+IMAGE:
+aegeus_belofte_zeilen.png
+
 PUZZLE:
 puzzle_ch4t_infinitivus
 
@@ -5640,6 +5643,9 @@ Terug langs de Draad
 TEXT:
 Met het monster verslagen volgt Theseus het garen terug — elke bocht die hij eerder blindelings nam, wijst nu feilloos de weg naar buiten. Bij de ingang wacht Ariadne al, opgelucht en gespannen tegelijk: veertien mensen, van wie de meesten amper op de been kunnen blijven van uitputting en angst, moeten nu nog ongezien van het paleis naar de haven, voor Minos' wachters ook maar vermoeden wat er is gebeurd.
 
+IMAGE:
+theseus_garen_terug.png
+
 CHOICES:
 
 * Sluip via achterstraatjes en olijfgaarden — trager, maar veilig -> CH4_T08_OPEN
@@ -5726,6 +5732,9 @@ TEXT:
 Ariadne ontwaakt alleen op een onbekend strand — tot Bacchus, de god die je al kent van koning Midas' vloek (Hoofdstuk 1), haar daar vindt, huilend en verraden. Waar Theseus haar in de steek liet, blijft Bacchus: hij trouwt met haar, maakt haar onsterfelijk, en plaatst haar bruidskroon voorgoed tussen de sterren.
 
 Het is geen volledig gelukkig einde — geen enkel verhaal in dit hoofdstuk krijgt dat — maar het is het enige moment waarop een gebroken belofte alsnog met iets goeds eindigt.
+
+IMAGE:
+bacchus_ariadne_naxos.png
 
 CODEX:
 codex_ariadne_bacchus
@@ -5851,6 +5860,9 @@ De zon doet precies wat Daidalos vreesde: de was tussen de veren smelt, eerst on
 
 "Icare!" roept Daidalos, keer op keer, terwijl hij cirkelt boven het water — maar er komt geen antwoord meer, enkel verspreide veren die langzaam op de golven neerdalen.
 
+IMAGE:
+val_van_ikaros.png
+
 PUZZLE:
 puzzle_ch4t_vocativus
 
@@ -5909,6 +5921,9 @@ Zonder een moment te wachten op bevestiging, zonder het schip de haven te laten 
 Theseus, die pas aan land beseft wat er is gebeurd, staat oog in oog met het gewicht van een belofte die hem, uren eerder, nog vederlicht had geleken. Hij wordt koning van Athene op dezelfde dag dat hij zijn vader verliest — een troon gewonnen met een vergetelheid die hij zichzelf nooit helemaal zal vergeven.
 
 In je zak, waar je het niet had verwacht, vind je nog een laatste stukje van Ariadne's garen — te kort om ooit nog een labyrint mee terug te vinden, lang genoeg om je eraan te herinneren dat iemand je ooit een weg naar buiten gaf.
+
+IMAGE:
+aegeus_sprong_zee.png
 
 CODEX:
 codex_labyrint_minotaurus
@@ -6106,6 +6121,9 @@ Jupiters Bliksem
 TEXT:
 Jupiter, die geen andere keus meer ziet, grijpt naar zijn bliksem — niet uit woede jegens de jongen zelf, maar omdat één enkel leven, hoe onschuldig zijn fout ook begon, niet opweegt tegen de hele wereld. Met één worp treft hij de wagen en slingert Phaëthon, brandend, uit de lucht.
 
+IMAGE:
+phaethon_bliksem.png
+
 PUZZLE:
 puzzle_ch4p_perfectum
 
@@ -6140,6 +6158,9 @@ TEXT:
 Phaëthons zusters, de Heliaden, vinden zijn graf aan de oever van de Eridanus en blijven er wenen, dag na dag, tot hun voeten wortel schieten in de grond en hun armen uitgroeien tot takken. Ze veranderen, traan voor traan, in populieren — en de tranen die ze al die tijd blijven huilen, verharden in het water tot amber.
 
 Amber wordt sindsdien gevonden langs precies dat soort rivieroevers — bevroren verdriet, zeggen sommigen, van een rouw die nooit is opgehouden.
+
+IMAGE:
+heliaden_populieren.png
 
 CODEX:
 codex_phaethon
@@ -6394,6 +6415,73 @@ tydeus:intro
 
 CHOICES:
 
+* Kijk hoe de tocht wordt voorbereid -> CH5_004B
+
+END
+
+=== SCENE: CH5_004B ===
+
+TITLE:
+Een Plek Aan Boord
+
+TEXT:
+Terwijl Tydeus' ruzie wegebt, komt de stuurman ook bij jou langs — een boodschapper, geen geboren zeeman, maar iedereen aan boord moet ergens zitten voordat de Argo kan vertrekken.
+
+CHOICES:
+
+* Neem gewoon de eerstvolgende vrije bank -> CH5_004_OPEN
+* Zet je rug tegen een testroeispaan en overtuig de stuurman met pure kracht dat je een voorste bank verdient [STAT:vis:11] -> CH5_004_VIS
+* Wijs de stuurman op een slimmere indeling — wie qua humeur en gewicht beter naast wie past [STAT:prudentia:13] -> CH5_004_PRU
+
+END
+
+=== SCENE: CH5_004_OPEN ===
+
+TITLE:
+Een Vrije Bank
+
+TEXT:
+Je neemt de eerstvolgende vrije bank, niets bijzonders — een van tachtig roeiers, niet meer en niet minder.
+
+FLAG:
+ch5_004_route=open
+
+CHOICES:
+
+* Kijk hoe de tocht wordt voorbereid -> CH5_005
+
+END
+
+=== SCENE: CH5_004_VIS ===
+
+TITLE:
+Bewezen Kracht
+
+TEXT:
+Je zet je rug tegen een van de testroeispanen en haalt, tot de stuurman goedkeurend knikt — genoeg om je, tot je eigen verbazing, een plek op een van de voorste banken te geven, waar de zwaarste slagen vandaan moeten komen.
+
+FLAG:
+ch5_004_route=vis
+
+CHOICES:
+
+* Kijk hoe de tocht wordt voorbereid -> CH5_005
+
+END
+
+=== SCENE: CH5_004_PRU ===
+
+TITLE:
+Een Slimmere Indeling
+
+TEXT:
+Je kijkt niet naar spierkracht maar naar mensen: wie er gespannen bijstaat, wie juist kalm, wie een ander zou kunnen afleiden of juist geruststellen. Je wijst de stuurman op een indeling die hij zelf nog niet had gezien — hij verschuift twee banken, zonder vragen te stellen.
+
+FLAG:
+ch5_004_route=prudentia
+
+CHOICES:
+
 * Kijk hoe de tocht wordt voorbereid -> CH5_005
 
 END
@@ -6480,7 +6568,7 @@ Vlak voordat het beest tussen de rotsen opduikt, fluistert ze, meer tegen zichze
 
 CHOICES:
 
-* Kijk hoe de jacht samenkomt -> CH5_009
+* Kijk hoe de jacht samenkomt -> CH5_008C
 
 END
 
@@ -6493,6 +6581,73 @@ TEXT:
 Meleager jaagt luider, met meer mensen om zich heen, meer geroep en meer risico — maar ook met een aanstekelijk soort moed die de rest van de groep meesleept. Waar Atalanta het spoor leest, leest hij vooral de stemming: wie moe wordt, wie te dichtbij komt, wie een aanmoediging nodig heeft.
 
 "Het gaat niet om wie het dier velt," roept hij naar de anderen, half lachend, half serieus, terwijl ze de laatste helling op klauteren. "Het gaat om wie het overleeft om het verhaal te vertellen."
+
+CHOICES:
+
+* Kijk hoe de jacht samenkomt -> CH5_008C
+
+END
+
+=== SCENE: CH5_008C ===
+
+TITLE:
+Het Zwijn Snijdt Af
+
+TEXT:
+Beide jachtgroepen drijven het beest langzaam naar dezelfde kloof — maar op het laatste moment dreigt het everzwijn een zijpad te vinden waar niemand op rekende. Jij bent, van beide groepen, het dichtst bij die uitweg.
+
+CHOICES:
+
+* Blijf dicht bij de groep en help mee waar nodig -> CH5_008_OPEN
+* Glip snel door een nauwe rotsspleet om de kortste ontsnappingsroute af te snijden [STAT:agilitas:11] -> CH5_008_AGI
+* Duw een losse rotsblok of omgevallen boomstam om, om het dier fysiek terug de kloof in te dwingen [STAT:vis:13] -> CH5_008_VIS
+
+END
+
+=== SCENE: CH5_008_OPEN ===
+
+TITLE:
+Bij de Groep
+
+TEXT:
+Je blijft dicht bij de groep en helpt mee waar nodig — het beest vindt zijn zijpad niet, gewoon omdat er, uiteindelijk, genoeg mensen zijn om elke uitweg dicht te houden.
+
+FLAG:
+ch5_008_route=open
+
+CHOICES:
+
+* Kijk hoe de jacht samenkomt -> CH5_009
+
+END
+
+=== SCENE: CH5_008_AGI ===
+
+TITLE:
+Door de Rotsspleet
+
+TEXT:
+Je glipt door een nauwe rotsspleet nog voor iemand anders het zijpad zelfs heeft opgemerkt, en staat al klaar wanneer het everzwijn ernaartoe rent — de uitweg is dicht voor het beest er is.
+
+FLAG:
+ch5_008_route=agilitas
+
+CHOICES:
+
+* Kijk hoe de jacht samenkomt -> CH5_009
+
+END
+
+=== SCENE: CH5_008_VIS ===
+
+TITLE:
+De Rotsblok
+
+TEXT:
+Je zet je schouder tegen een losse rotsblok en duwt, op precies het goede moment, tot hij met een doffe dreun het zijpad blokkeert — het everzwijn heeft geen andere keus meer dan terug de kloof in.
+
+FLAG:
+ch5_008_route=vis
 
 CHOICES:
 
@@ -6638,6 +6793,73 @@ Argos, die zijn eigen schip kent tot in de laatste plank, bestudeert het ritme v
 
 CHOICES:
 
+* Kijk hoe Argos de doortocht voorbereidt -> CH5_016B
+
+END
+
+=== SCENE: CH5_016B ===
+
+TITLE:
+Vlak Voor de Doortocht
+
+TEXT:
+Terwijl Argos het ritme van de rotsen bestudeert, is er nog werk te doen voor het schip de doortocht kan wagen — en niet alleen aan boord.
+
+CHOICES:
+
+* Laat Argos alleen bepalen -> CH5_016_OPEN
+* Klim zelf op de boeg om van dichtbij het ritme van de rotsen te lezen en Argos' inschatting scherper te maken [STAT:agilitas:13] -> CH5_016_AGI
+* Help de riemen en touwen alvast op kracht voorspannen, zodat de bemanning bij het teken meteen voluit kan trekken [STAT:vis:11] -> CH5_016_VIS
+
+END
+
+=== SCENE: CH5_016_OPEN ===
+
+TITLE:
+Argos' Woord
+
+TEXT:
+Je laat het oordeel volledig aan Argos — hij kent zijn schip beter dan wie ook, en jij hebt weinig toe te voegen aan een vak dat niet het jouwe is.
+
+FLAG:
+ch5_016_route=open
+
+CHOICES:
+
+* Kijk hoe Argos de doortocht voorbereidt -> CH5_017
+
+END
+
+=== SCENE: CH5_016_AGI ===
+
+TITLE:
+Op de Boeg
+
+TEXT:
+Je klimt zelf op de boeg, zo dicht mogelijk bij de rotsen, en telt mee: de adem van de kaken, het korte moment van stilte voor ze weer opengaan. Wat je ziet, deel je met Argos — en zijn inschatting wordt er zichtbaar scherper van.
+
+FLAG:
+ch5_016_route=agilitas
+
+CHOICES:
+
+* Kijk hoe Argos de doortocht voorbereidt -> CH5_017
+
+END
+
+=== SCENE: CH5_016_VIS ===
+
+TITLE:
+Voorgespannen
+
+TEXT:
+Je helpt de riemen en touwen alvast strak voorspannen, elke arm al in positie voor het teken valt — zodat er geen fractie van een seconde verloren gaat wanneer de kaak straks eindelijk opengaat.
+
+FLAG:
+ch5_016_route=vis
+
+CHOICES:
+
 * Kijk hoe Argos de doortocht voorbereidt -> CH5_017
 
 END
@@ -6684,12 +6906,63 @@ TITLE:
 Gespannen Riemen
 
 TEXT:
-Weken op zee slijten aan iedereens geduld, ook aan dat van Tydeus, die op een avond een roeier bijna naar zijn keel vliegt om niet meer dan een verkeerd geplaatste opmerking. Voor iemand kan ingrijpen, klinkt er muziek over het dek — Orpheus, die zijn lier pakt en speelt zoals hij weet dat alleen hij kan spelen.
-
-De ruzie sterft vanzelf weg, niet omdat iemand gelijk kreeg, maar omdat niemand meer de puf heeft om boos te blijven terwijl die muziek klinkt. Zelfs Tydeus, met zijn vuisten nog half gebald, laat zich zonder het zelf te merken terugzakken op zijn bank.
+Weken op zee slijten aan iedereens geduld, ook aan dat van Tydeus, die op een avond een roeier bijna naar zijn keel vliegt om niet meer dan een verkeerd geplaatste opmerking. Zijn vuisten zijn al gebald voor iemand kan reageren.
 
 PERSON:
 orpheus:intro
+
+CHOICES:
+
+* Kijk toe hoe de situatie zich ontwikkelt -> CH5_019_OPEN
+* Grijp Tydeus' arm vast voordat de vuist valt [STAT:vis:13] -> CH5_019_VIS
+* Merk de oplopende spanning eerder op en sus de roeier met het juiste woord voordat het escaleert [STAT:prudentia:11] -> CH5_019_PRU
+
+END
+
+=== SCENE: CH5_019_OPEN ===
+
+TITLE:
+Orpheus Grijpt In
+
+TEXT:
+Voor iemand kan ingrijpen, klinkt er muziek over het dek — Orpheus, die zijn lier pakt en speelt zoals hij weet dat alleen hij kan spelen. De ruzie sterft vanzelf weg, niet omdat iemand gelijk kreeg, maar omdat niemand meer de puf heeft om boos te blijven terwijl die muziek klinkt. Zelfs Tydeus, met zijn vuisten nog half gebald, laat zich zonder het zelf te merken terugzakken op zijn bank.
+
+FLAG:
+ch5_019_route=open
+
+CHOICES:
+
+* Laat de avond verder in stilte voorbijgaan -> CH5_020
+
+END
+
+=== SCENE: CH5_019_VIS ===
+
+TITLE:
+Voordat de Vuist Valt
+
+TEXT:
+Je grijpt Tydeus' arm vast op precies het moment dat hij wil uithalen — geen woord, alleen een greep die hem hard genoeg verrast om te aarzelen. Orpheus, die de spanning ook voelt, pakt intussen zijn lier erbij en speelt de rest van de avond rustig, zodat niemand zich nog hoeft af te vragen of het weer zal escaleren.
+
+FLAG:
+ch5_019_route=vis
+
+CHOICES:
+
+* Laat de avond verder in stilte voorbijgaan -> CH5_020
+
+END
+
+=== SCENE: CH5_019_PRU ===
+
+TITLE:
+Vóór het Escaleert
+
+TEXT:
+Je merkt de spanning al minuten eerder dan wie ook — de manier waarop de roeier zijn schouders spant, de manier waarop Tydeus' stem net iets te scherp wordt. Een paar rustige woorden aan de roeier, ruim voor het misgaat, zijn genoeg om de vonk nooit te laten overslaan.
+
+FLAG:
+ch5_019_route=prudentia
 
 CHOICES:
 
@@ -6781,6 +7054,59 @@ Zonder hulp zou geen sterveling dit overleven — en Medea, die haar vader al in
 
 CHOICES:
 
+* Kijk toe hoe Jason zich staande houdt -> CH5_024_OPEN
+* Zet je eigen kracht in om de vuurspuwende stier mee in bedwang te houden terwijl Jason het juk vastmaakt [STAT:vis:13] -> CH5_024_VIS
+* Manoeuvreer snel tussen de opschietende aardgeboren krijgers door om Jason op tijd te waarschuwen [STAT:agilitas:13] -> CH5_024_AGI
+
+END
+
+=== SCENE: CH5_024_OPEN ===
+
+TITLE:
+Vanaf de Zijlijn
+
+TEXT:
+Je kijkt toe, machteloos maar niet nutteloos — soms is getuige zijn het enige wat een boodschapper kan doen. Jason, met Medea's zalf en raad, redt zichzelf zoals het altijd al bedoeld was.
+
+FLAG:
+ch5_024_route=open
+
+CHOICES:
+
+* Kijk hoe Medea haar keuze rechtvaardigt -> CH5_025
+
+END
+
+=== SCENE: CH5_024_VIS ===
+
+TITLE:
+Schouder aan Schouder
+
+TEXT:
+Je grijpt mee, je handen brandend ondanks de zalf die ook jij hebt gekregen, en houdt de vuurspuwende stier met pure kracht in bedwang terwijl Jason het juk vastmaakt — een fractie van een seconde die het verschil maakt tussen een geslaagde en een mislukte poging.
+
+FLAG:
+ch5_024_route=vis
+
+CHOICES:
+
+* Kijk hoe Medea haar keuze rechtvaardigt -> CH5_025
+
+END
+
+=== SCENE: CH5_024_AGI ===
+
+TITLE:
+Tussen de Krijgers Door
+
+TEXT:
+Terwijl de aardgeboren krijgers uit de grond omhoog schieten, manoeuvreer je razendsnel tussen hen door, dicht genoeg bij Jason om hem te waarschuwen vlak voor het eerste zwaard valt — genoeg voorsprong om Medea's steentruc op tijd uit te voeren.
+
+FLAG:
+ch5_024_route=agilitas
+
+CHOICES:
+
 * Kijk hoe Medea haar keuze rechtvaardigt -> CH5_025
 
 END
@@ -6797,9 +7123,76 @@ Wat Medea doet, is geen kleinigheid: ze verraadt haar eigen vader, haar eigen ko
 
 CHOICES:
 
-* Bewonder vooral haar moed om alles op te geven voor wat ze voelt [CLEMENTIA] -> CH5_026
-* Erken vooral hoe roekeloos het is om je eigen vader zo te verraden [SEVERITAS] -> CH5_026
-* Herken vooral het patroon — weer een vrouw die alles waagt voor een man die haar dat misschien nooit teruggeeft [NEUTRAL] -> CH5_026
+* Bewonder vooral haar moed om alles op te geven voor wat ze voelt [CLEMENTIA] -> CH5_025B
+* Erken vooral hoe roekeloos het is om je eigen vader zo te verraden [SEVERITAS] -> CH5_025B
+* Herken vooral het patroon — weer een vrouw die alles waagt voor een man die haar dat misschien nooit teruggeeft [NEUTRAL] -> CH5_025B
+
+END
+
+=== SCENE: CH5_025B ===
+
+TITLE:
+Het Heilige Woud
+
+TEXT:
+Voor Medea's gezang de draak kan kalmeren, moet de groep eerst het heilige woud in — ongezien, zonder het beest vroegtijdig te alarmeren.
+
+CHOICES:
+
+* Volg gewoon stilzwijgend achter Medea aan -> CH5_025_OPEN
+* Glip geruisloos tussen de takken en heilige stenen door, geen twijgje dat kraakt [STAT:agilitas:13] -> CH5_025_AGI
+* Lees de ademhaling en kronkelpatronen van de sluimerende draak en weet precies wanneer je veilig dichterbij kunt komen [STAT:prudentia:11] -> CH5_025_PRU
+
+END
+
+=== SCENE: CH5_025_OPEN ===
+
+TITLE:
+Stilzwijgend Mee
+
+TEXT:
+Je volgt stilzwijgend achter Medea aan, je pas zo goed mogelijk aanpassend aan de hare — niet feilloos stil, maar stil genoeg.
+
+FLAG:
+ch5_025_route=open
+
+CHOICES:
+
+* Kijk hoe het woud dichterbij komt -> CH5_026
+
+END
+
+=== SCENE: CH5_025_AGI ===
+
+TITLE:
+Geen Twijgje
+
+TEXT:
+Je beweegt geruisloos tussen de takken en heilige stenen door, elke stap zorgvuldig getest voor hij je gewicht draagt — geen twijgje dat kraakt, geen blad dat ritselt.
+
+FLAG:
+ch5_025_route=agilitas
+
+CHOICES:
+
+* Kijk hoe het woud dichterbij komt -> CH5_026
+
+END
+
+=== SCENE: CH5_025_PRU ===
+
+TITLE:
+De Ademhaling van de Draak
+
+TEXT:
+Je let niet op je eigen voetstappen maar op die van het beest verderop: het ritme van zijn ademhaling, de trage kronkeling van zijn lijf. Je weet, beter dan wie ook in de groep, precies wanneer het veilig is om dichterbij te komen.
+
+FLAG:
+ch5_025_route=prudentia
+
+CHOICES:
+
+* Kijk hoe het woud dichterbij komt -> CH5_026
 
 END
 
@@ -6956,10 +7349,63 @@ De Stichting van Thebe
 TEXT:
 Kadmos, een Fenicische prins op zoek naar zijn geschaakte zuster Europa — je kent haar verhaal al uit Hoofdstuk 3 — geeft die zoektocht op advies van het orakel van Delphi uiteindelijk op. Volg een koe, zegt het orakel, en sticht een stad waar ze uitgeput neervalt. Kadmos doet wat hem gezegd wordt.
 
-Om een offer te brengen doodt hij een draak die de bron ter plekke bewaakt — en zaait, op advies van Athena zelf, de tanden van het beest in de aarde. Gewapende krijgers rijzen op uit de grond en doden elkaar bijna allemaal; de vijf die overblijven worden de eerste inwoners van de stad die Kadmos Thebe noemt.
+Om een offer te brengen doodt hij een draak die de bron ter plekke bewaakt — en zaait, op advies van Athena zelf, de tanden van het beest in de aarde. Uit de grond rijzen gewapende krijgers op, meer dan Kadmos in zijn eentje het hoofd kan bieden.
 
 PERSON:
 kadmos:intro
+
+CHOICES:
+
+* Kijk toe hoe de krijgers zich tegen elkaar keren -> CH6_001_OPEN
+* Grijp een afgebroken speer en houd een laatste dolende Spartoot af zodat Kadmos' rug vrij blijft [STAT:vis:13] -> CH6_001_VIS
+* Duik en weef tussen de neervallende lichamen door om niet zelf geraakt te worden [STAT:agilitas:11] -> CH6_001_AGI
+
+END
+
+=== SCENE: CH6_001_OPEN ===
+
+TITLE:
+Op Veilige Afstand
+
+TEXT:
+Je blijft op veilige afstand en ziet het bloedbad zich voltrekken: de krijgers keren zich, precies zoals Athena voorzag, tegen elkaar — tot er nog maar vijf overeind staan.
+
+FLAG:
+ch6_001_route=open
+
+CHOICES:
+
+* Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef -> CH6_002
+
+END
+
+=== SCENE: CH6_001_VIS ===
+
+TITLE:
+Kadmos' Rug Vrij
+
+TEXT:
+Je grijpt een afgebroken speer van de grond en houdt een laatste, dolende Spartoot af die recht op Kadmos' rug afstormt — genoeg om hem de tijd te geven zich om te draaien voor het te laat is.
+
+FLAG:
+ch6_001_route=vis
+
+CHOICES:
+
+* Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef -> CH6_002
+
+END
+
+=== SCENE: CH6_001_AGI ===
+
+TITLE:
+Tussen de Lichamen
+
+TEXT:
+Je duikt en weeft tussen de neervallende lichamen door, telkens net op tijd weg bij een zwaaiend zwaard of een vallend lichaam — dicht genoeg bij het geweld om alles te zien, zonder er zelf in verstrikt te raken.
+
+FLAG:
+ch6_001_route=agilitas
 
 CHOICES:
 
@@ -7074,6 +7520,73 @@ codex_oedipus
 
 CHOICES:
 
+* Kom dichterbij -> CH6_007B
+
+END
+
+=== SCENE: CH6_007B ===
+
+TITLE:
+De Nadering
+
+TEXT:
+Terwijl Oedipus naar voren stapt, blijf jij dichterbij dan verstandig is — dicht genoeg om te zien wat er van eerdere uitdagers is overgebleven, en om zelf iets op te pikken voor het raadsel valt.
+
+CHOICES:
+
+* Sta gewoon naast Oedipus en vat moed -> CH6_007_OPEN
+* Lees de overblijfselen van eerdere slachtoffers en de houding van de Sfinx voor een teken van vermoeidheid of patroon [STAT:prudentia:13] -> CH6_007_PRU
+* Blijf licht op je voeten en behoedzaam tussen de resten door, zonder onnodig dichtbij te komen [STAT:agilitas:11] -> CH6_007_AGI
+
+END
+
+=== SCENE: CH6_007_OPEN ===
+
+TITLE:
+Naast Hem
+
+TEXT:
+Je blijft gewoon naast Oedipus staan en vat moed — meer kun je op dit moment niet doen dan hem laten voelen dat hij er niet alleen voor staat.
+
+FLAG:
+ch6_007_route=open
+
+CHOICES:
+
+* Luister naar het raadsel van de Sfinx -> CH6_008
+
+END
+
+=== SCENE: CH6_007_PRU ===
+
+TITLE:
+Wat Er Achterbleef
+
+TEXT:
+Je bekijkt wat er van eerdere uitdagers is overgebleven, en de houding van de Sfinx zelf — een vermoeidheid, misschien, onder al die zelfverzekerdheid, alsof zelfs een monster moe kan worden van hetzelfde raadsel telkens opnieuw stellen.
+
+FLAG:
+ch6_007_route=prudentia
+
+CHOICES:
+
+* Luister naar het raadsel van de Sfinx -> CH6_008
+
+END
+
+=== SCENE: CH6_007_AGI ===
+
+TITLE:
+Behoedzaam Tussen de Resten
+
+TEXT:
+Je blijft licht op je voeten, behoedzaam tussen de resten van eerdere uitdagers door, dicht genoeg om alles te zien maar nooit dichtbij genoeg om zelf een doelwit te worden.
+
+FLAG:
+ch6_007_route=agilitas
+
+CHOICES:
+
 * Luister naar het raadsel van de Sfinx -> CH6_008
 
 END
@@ -7164,6 +7677,73 @@ Verbannen uit zijn eigen stad, verzamelt Polyneikes zes andere champions om Theb
 
 CHOICES:
 
+* Kijk hoe de aanval op Thebe verloopt -> CH6_012B
+
+END
+
+=== SCENE: CH6_012B ===
+
+TITLE:
+De Zeven Poorten
+
+TEXT:
+De aanval begint op alle zeven poorten tegelijk — te veel om overal bij te zijn, dus moet je kiezen waar je blik naartoe gaat.
+
+CHOICES:
+
+* Volg het algemene overzicht van de bestorming -> CH6_012_OPEN
+* Blijf hangen bij Tydeus' eigen poort, waar hij zijn belofte waarmaakt en de poort met kale kracht probeert te breken [STAT:vis:13] -> CH6_012_VIS
+* Kijk naar een andere poort, waar een champion het niet op kracht maar op snelheid gooit [STAT:agilitas:11] -> CH6_012_AGI
+
+END
+
+=== SCENE: CH6_012_OPEN ===
+
+TITLE:
+Het Overzicht
+
+TEXT:
+Je volgt het geheel: zeven poorten, zeven champions, en een verdediging die er, poort na poort, in slaagt de meesten van hen tegen te houden.
+
+FLAG:
+ch6_012_route=open
+
+CHOICES:
+
+* Kijk hoe de aanval op Thebe verloopt -> CH6_013
+
+END
+
+=== SCENE: CH6_012_VIS ===
+
+TITLE:
+Tydeus' Poort
+
+TEXT:
+Je blijft kijken naar Tydeus, die zijn belofte waarmaakt: schouder tegen de balken, schreeuwend van inspanning, de poort langzaam versplinterend onder zijn kracht — precies het soort roekeloze moed dat je van hem had verwacht.
+
+FLAG:
+ch6_012_route=vis
+
+CHOICES:
+
+* Kijk hoe de aanval op Thebe verloopt -> CH6_013
+
+END
+
+=== SCENE: CH6_012_AGI ===
+
+TITLE:
+De Snelle Weg
+
+TEXT:
+Je richt je blik op een andere poort, waar een champion het niet op kracht maar op snelheid gooit — rennend over open terrein, rakelings langs projectielen, bijna over de muur voor de verdedigers goed en wel kunnen reageren.
+
+FLAG:
+ch6_012_route=agilitas
+
+CHOICES:
+
 * Kijk hoe de aanval op Thebe verloopt -> CH6_013
 
 END
@@ -7219,7 +7799,74 @@ creon:intro
 
 CHOICES:
 
-* Kijk wat Antigone besluit te doen -> CH6_016
+* Kijk wat Antigone besluit te doen -> CH6_015B
+
+END
+
+=== SCENE: CH6_015B ===
+
+TITLE:
+De Geheime Begrafenis
+
+TEXT:
+Antigone wacht niet op toestemming. Onder de dekking van de nacht sluipt ze naar het lichaam van haar broer, vast van plan hem de rituelen te geven die hij verdient — vóór Creons wachters haar kunnen tegenhouden.
+
+CHOICES:
+
+* Volg het algemene beeld van haar vastberadenheid -> CH6_015_OPEN
+* Zie hoe ze de wisseling van de wacht al dagen heeft geobserveerd en precies het gat in hun routine kiest [STAT:prudentia:11] -> CH6_015_PRU
+* Zie haar geruisloos tussen schaduwen bewegen, exact op het moment dat een wachter zich omdraait [STAT:agilitas:13] -> CH6_015_AGI
+
+END
+
+=== SCENE: CH6_015_OPEN ===
+
+TITLE:
+Vastberaden
+
+TEXT:
+Je ziet vooral haar vastberadenheid: de rustige, geconcentreerde bewegingen van iemand die weet wat haar te doen staat en zich door niets laat afleiden — de geheime rituelen zelf blijven grotendeels aan het zicht onttrokken.
+
+FLAG:
+ch6_015_route=open
+
+CHOICES:
+
+* Kijk wat Creon ontdekt -> CH6_016
+
+END
+
+=== SCENE: CH6_015_PRU ===
+
+TITLE:
+Het Gat in de Routine
+
+TEXT:
+Je ziet wat de wachters zelf niet zien: dat Antigone hun wisseling van de wacht al dagenlang heeft geobserveerd, en precies het korte gat in hun routine kiest waarin niemand kijkt.
+
+FLAG:
+ch6_015_route=prudentia
+
+CHOICES:
+
+* Kijk wat Creon ontdekt -> CH6_016
+
+END
+
+=== SCENE: CH6_015_AGI ===
+
+TITLE:
+Tussen de Schaduwen
+
+TEXT:
+Je ziet haar bewegen alsof de schaduwen zelf haar helpen — geruisloos, exact op het moment dat een wachter zich omdraait, nooit een fractie te vroeg of te laat.
+
+FLAG:
+ch6_015_route=agilitas
+
+CHOICES:
+
+* Kijk wat Creon ontdekt -> CH6_016
 
 END
 
@@ -7364,6 +8011,71 @@ Vermomd de Berg Op
 TEXT:
 Wanneer dreigementen niets uithalen, vermomt Pentheus zich en sluipt in het geheim de berg op om de riten van de Bacchanten met eigen ogen te bespieden — in de hoop bewijs te vinden om de verering voorgoed te verbieden.
 
+CHOICES:
+
+* Blijf op veilige afstand meesluipen -> CH6_023_OPEN
+* Waag je dichterbij dan verstandig is, lenig en geruisloos tussen rotsen en struikgewas [STAT:agilitas:13] -> CH6_023_AGI
+* Lees de rituele patronen en voortekenen van de Bacchanten vóór het misgaat [STAT:prudentia:11] -> CH6_023_PRU
+
+END
+
+=== SCENE: CH6_023_OPEN ===
+
+TITLE:
+Op Veilige Afstand
+
+TEXT:
+Je blijft op veilige afstand meesluipen, dicht genoeg om te zien wat er gebeurt, ver genoeg om zelf niet opgemerkt te worden — al verandert dat niets aan wat Pentheus straks te wachten staat.
+
+FLAG:
+ch6_023_route=open
+
+CHOICES:
+
+* Kijk wat er van Pentheus wordt -> CH6_023B
+
+END
+
+=== SCENE: CH6_023_AGI ===
+
+TITLE:
+Dichterbij Dan Verstandig
+
+TEXT:
+Je waagt je dichterbij dan verstandig is, lenig en geruisloos tussen rotsen en struikgewas — dicht genoeg om te zien wat geen sterveling eigenlijk zou moeten zien, en toch niet dicht genoeg om zelf herkend te worden.
+
+FLAG:
+ch6_023_route=agilitas
+
+CHOICES:
+
+* Kijk wat er van Pentheus wordt -> CH6_023B
+
+END
+
+=== SCENE: CH6_023_PRU ===
+
+TITLE:
+De Voortekenen
+
+TEXT:
+Je leest de rituele patronen van de Bacchanten, de manier waarop hun waanzin golft en aanzwelt — een voorgevoel van wat komen gaat, lang voor Pentheus zelf beseft hoe dicht hij bij de rand staat.
+
+FLAG:
+ch6_023_route=prudentia
+
+CHOICES:
+
+* Kijk wat er van Pentheus wordt -> CH6_023B
+
+END
+
+=== SCENE: CH6_023B ===
+
+TITLE:
+Ontdekt
+
+TEXT:
 Hij wordt ontdekt. In de door Bacchus opgewekte, goddelijke waanzin herkennen de vrouwen hem niet meer als de koning van Thebe — en niet eens meer als mens.
 
 CHOICES:

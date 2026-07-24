@@ -98,7 +98,7 @@ browser):
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
 | Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 7+ nog niet geschreven |
-| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8 |
+| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png` — Gemini-prompts klaar, bestanden nog niet gegenereerd. Hoofdstuk 5 en 6 nog volledig open |
 | Gemini-huisstijl-Gem (stripstijl, scène-illustraties) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | Gemini-huisstijl-Gem (museumstukken, Herinneringen-tab) | `certamen/assets/chronica/gemini-souvenir-style.md` | ✅ herbruikbare Gem-instructie — vaste sokkel/stolp/kussentje-opstelling, zie §7.2.1 |
 | **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
@@ -2270,6 +2270,74 @@ gelabelde bestaande.
    dat overal alleen de open route beschikbaar is, geen soft-locks) als
    een Hopliet (Vis15/Robur15 — ontgrendelt overal de Vis/Robur-routes,
    Gratia blijft correct op slot).
+
+   **Vierde batch (2026-07-24), 11 stuks in Hoofdstuk 5-6, met opzet
+   Vis/Agilitas/Prudentia-zwaar na de balans hierboven (Robur/Gratia waren
+   inmiddels ruim vertegenwoordigd):**
+   - `CH5_004B` (roeibank aan boord, tussen CH5_004 en de nominativus-
+     puzzel in CH5_005): Vis 11 (bank verdienen met kracht) / Prudentia 13
+     (slimmere bank-indeling voorstellen) / altijd open.
+   - `CH5_008C` (het everzwijn afsnijden, na CH5_008A/B vóór de accusativus-
+     puzzel in CH5_009 — beide jachttakken monden nu uit in deze
+     gedeelde hub): Agilitas 11 (rotsspleet) / Vis 13 (rotsblok omduwen) /
+     altijd open.
+   - `CH5_016B` (voorbereiding Symplegades, vóór de ablativus-puzzel in
+     CH5_017): Agilitas 13 (ritme van de rotsen zelf lezen) / Vis 11
+     (riemen/touwen voorspannen) / altijd open.
+   - `CH5_019` (ruzie Tydeus/roeier, herschreven — Tydeus' kortlontigheid
+     hier voor het eerst geplant, komt in W3 terug): Vis 13 (arm
+     vastgrijpen) / Prudentia 11 (spanning eerder opmerken) / altijd open
+     (Orpheus grijpt in, zoals nu al).
+   - `CH5_024` (Beproevingen van Aeëtes, herschreven): Vis 13 (stier mee in
+     bedwang houden) / Agilitas 13 (tussen aardgeboren krijgers door
+     Jason waarschuwen) / altijd open — uitkomst blijft ongewijzigd canon
+     (Medea's hulp is en blijft doorslaggevend).
+   - `CH5_025B` (tocht naar het heilige woud, nieuwe scène tussen CH5_025
+     en `COMBAT: drakon_vlies` in CH5_026): Agilitas 13 (geruisloos tussen
+     takken) / Prudentia 11 (ademhaling van de draak lezen) / altijd open.
+   - `CH6_001` (Spartoi-veldslag, CH6_001 herschreven): Vis 13 (Kadmos' rug
+     vrijhouden) / Agilitas 11 (tussen de lichamen weven) / altijd open —
+     de "dit soort tanden ken je al" callback-zin verplaatst mee naar alle
+     drie de convergerende routes.
+   - `CH6_007B` (nadering van de Sfinx, tussen CH6_007 en het raadsel-
+     PUZZLE in CH6_008): Prudentia 13 (overblijfselen/patroon lezen) /
+     Agilitas 11 (behoedzaam tussen de resten) / altijd open.
+   - `CH6_012B` (de Zeven Poorten, tussen CH6_012 en de tempora-matching-
+     puzzel in CH6_013 — haakt aan op Tydeus' eigen boast uit CH6_012,
+     dezelfde Tydeus als in Hoofdstuk 5): Vis 13 (blijven kijken naar
+     Tydeus' poort) / Agilitas 11 (blik naar de snelle poort) / altijd
+     open.
+   - `CH6_015B` (Antigone's geheime begrafenis, tussen CH6_015 en de
+     perfectum-puzzel in CH6_016 — raakt bewust niet aan haar motief of de
+     tonekeuze in CH6_017): Prudentia 11 (wachtwisseling geobserveerd) /
+     Agilitas 13 (geruisloos tussen schaduwen) / altijd open.
+   - `CH6_023` (vermomd de berg op, CH6_023 herschreven — nieuwe
+     tussenscène `CH6_023B` vangt de ontdekking op vóór de vocativus-
+     puzzel in CH6_024): Agilitas 13 (dichterbij wagen dan verstandig) /
+     Prudentia 11 (rituele patronen/voortekenen lezen) / altijd open.
+
+   Bij drie van deze elf (`CH5_008C`, `CH6_012B`) bleek een bestaande
+   scène met **twee** binnenkomende paden (CH5_008A én CH5_008B, beide
+   convergerend) — de hub moest dus vanuit beide takken bereikbaar zijn;
+   opgelost door beide originele CHOICES-regels naar dezelfde nieuwe
+   hub-scène te laten wijzen in plaats van er twee te bouwen.
+
+   Balans na deze batch (11 hoofdstukken totaal, Proloog t/m 6): Vis 4×,
+   Agilitas 7×, Prudentia 5× in deze ronde alleen al — Ingenium blijft
+   structureel op 0 (bewust, zie §11.5/item 9). Structurele validatie
+   herhaald (345 scènes totaal, geen dubbele ID's, geen losse eindjes) en
+   gating getest in de browser met een Boogschutter
+   (Agilitas15/Prudentia15/Vis8/Robur10/Gratia8): alle Agilitas/
+   Prudentia-routes correct ontgrendeld, alle Vis-routes correct op slot.
+
+   **Hiermee is de retrofit van Proloog t/m Hoofdstuk 6 met gated choices
+   (Deel 5/Stap 5, Deel 6/bouwvolgorde-item 3) inhoudelijk compleet**: elk
+   van de zes hoofdstukken heeft nu meerdere stat-gated obstakels naast de
+   proloog-klassekeuze zelf. Openstaand voor een volgende ronde: rolled
+   checks/Vigor/Fatum (item 7), klassenvaardigheden (item 8), de
+   Latijn-check-koppeling (item 9, ook de aanknoping voor het
+   Latijn/Grieks-leestest-idee uit §11.4a), en — zodra Hoofdstuk 7+
+   gebouwd wordt — hetzelfde patroon daar voortzetten.
 4. **Gebouwd, basisversie (2026-07-24).** Skillpoint-scherm aan het eind
    van elk hoofdstuk — zie §11.3. Bonuspunten (oefenpunten/korting) nog
    niet, wachten op Stap 3 hierboven.
