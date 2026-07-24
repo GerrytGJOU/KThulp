@@ -4371,7 +4371,74 @@ hermes:intro
 
 CHOICES:
 
-* Volg Mercurius op zijn missie -> CH3_IO08
+* Volg Mercurius op zijn missie -> CH3_IO07B
+
+END
+
+=== SCENE: CH3_IO07B ===
+
+TITLE:
+Terwijl Mercurius Speelt
+
+TEXT:
+Terwijl Mercurius zich naast Argus neervlijt en zijn lange, trage verhaal begint, blijf jij op een boogscheut afstand — met een taak die minstens zo belangrijk is: zorgen dat niemand anders, geen andere spion van Juno, hen in de tussentijd stoort.
+
+CHOICES:
+
+* Blijf gewoon zitten kijken, alert genoeg -> CH3_IO07_OPEN
+* Houd urenlang, zonder ooit je aandacht te verliezen, de omgeving in de gaten [STAT:robur:13] -> CH3_IO07_ROB
+* Praat een nieuwsgierige voorbijganger die te dichtbij komt behendig een andere kant op [STAT:gratia:11] -> CH3_IO07_GRA
+
+END
+
+=== SCENE: CH3_IO07_OPEN ===
+
+TITLE:
+Op Wacht
+
+TEXT:
+Je blijft zitten en kijkt, alert genoeg om iets te merken als het misgaat — al gebeurt er, gelukkig, niets dat je aandacht echt op de proef stelt.
+
+FLAG:
+ch3_io07_route=open
+
+CHOICES:
+
+* Kijk hoe Mercurius zijn verhaal voortzet -> CH3_IO08
+
+END
+
+=== SCENE: CH3_IO07_ROB ===
+
+TITLE:
+Urenlang Waakzaam
+
+TEXT:
+Uren gaan voorbij, en waar een ander allang zou zijn weggedommeld, blijf jij scherp — elk geluid, elke beweging in de verte, meteen opgemerkt en meteen weer losgelaten zodra het onschuldig blijkt.
+
+FLAG:
+ch3_io07_route=robur
+
+CHOICES:
+
+* Kijk hoe Mercurius zijn verhaal voortzet -> CH3_IO08
+
+END
+
+=== SCENE: CH3_IO07_GRA ===
+
+TITLE:
+Een Vriendelijk Woord
+
+TEXT:
+Wanneer een herder uit de buurt nieuwsgierig deze kant op dwaalt, spreek je hem aan voor hij te dichtbij komt — een praatje over niets, een paar vriendelijke woorden, genoeg om hem zonder argwaan een andere richting op te sturen.
+
+FLAG:
+ch3_io07_route=gratia
+
+CHOICES:
+
+* Kijk hoe Mercurius zijn verhaal voortzet -> CH3_IO08
 
 END
 
@@ -4444,7 +4511,60 @@ Je volgt haar over land en zee, door berg na vallei na kust, terwijl ze wegrent 
 
 CHOICES:
 
-* Blijf haar volgen, hoe uitputtend het ook wordt -> CH3_IO12
+* Blijf haar volgen, zo goed en kwaad als het gaat -> CH3_IO11_OPEN
+* Houd het moordende tempo urenlang vol, dwars over bergen en kusten, zonder ooit te pauzeren [STAT:robur:13] -> CH3_IO11_ROB
+* Win onderweg herders en boeren voor je — hun gastvrijheid en aanwijzingen leggen haar spoor sneller bloot [STAT:gratia:11] -> CH3_IO11_GRA
+
+END
+
+=== SCENE: CH3_IO11_OPEN ===
+
+TITLE:
+Bijgebleven
+
+TEXT:
+Je blijft haar volgen zo goed en kwaad als het gaat, soms achterop rakend, soms weer inhalend — uitgeput, maar je laat haar spoor niet los.
+
+FLAG:
+ch3_io11_route=open
+
+CHOICES:
+
+* Kijk hoe de tocht eindigt -> CH3_IO12
+
+END
+
+=== SCENE: CH3_IO11_ROB ===
+
+TITLE:
+Het Moordende Tempo
+
+TEXT:
+Je houdt het tempo dat Io zichzelf oplegt urenlang vol, dwars over bergen en langs kusten, zonder ooit een pauze te vragen die zij zichzelf ook niet gunt.
+
+FLAG:
+ch3_io11_route=robur
+
+CHOICES:
+
+* Kijk hoe de tocht eindigt -> CH3_IO12
+
+END
+
+=== SCENE: CH3_IO11_GRA ===
+
+TITLE:
+Vreemde Vriendelijkheid
+
+TEXT:
+Onderweg win je herders en boeren voor je met een paar goedgekozen woorden — hun gastvrijheid en hun aanwijzingen over "een krankzinnige, rennende koe" leggen haar spoor sneller bloot dan je op eigen kracht ooit zou vinden.
+
+FLAG:
+ch3_io11_route=gratia
+
+CHOICES:
+
+* Kijk hoe de tocht eindigt -> CH3_IO12
 
 END
 
@@ -4643,10 +4763,91 @@ Een Onsterfelijkheid Weggegeven
 TEXT:
 Chiron zal, jaren later, zijn eigen onsterfelijkheid vrijwillig afstaan aan Prometheus — nog altijd geketend aan zijn rots, nog altijd dagelijks gekweld door een adelaar — om zo eindelijk zelf verlost te worden van een pijn die nooit meer zal helen. Het is een verhaal dat nog moet gebeuren, maar dat Herakles, terwijl hij nu wegloopt van het bloedbad dat hij per ongeluk heeft aangericht, al met zich meedraagt als een schuld naast al zijn andere schulden.
 
-De ever zelf blijkt, na dit alles, het makkelijkste deel van de beproeving: Herakles drijft hem een diepe sneeuwbank in, waar het uitgeputte dier vastraakt en levend gevangen kan worden. Eurystheus, bij het zien van de ever, duikt voor de zoveelste keer zijn bronzen pot in.
+Terwijl Herakles zich weer naar zijn eigenlijke doel keert, wacht de beproeving zelf nog: de Erymanthische ever, ergens verderop in het dichte bos, nog altijd op vrije voeten.
 
 CODEX:
 codex_chiron
+
+CHOICES:
+
+* Ga de ever achterna -> CH3_H07B
+
+END
+
+=== SCENE: CH3_H07B ===
+
+TITLE:
+De Sneeuwjacht
+
+TEXT:
+De ever is te snel en te wendbaar om zomaar in het nauw te drijven — hij moet eerst uitgeput raken voor hij ergens vast kan komen te zitten.
+
+CHOICES:
+
+* Blijf gewoon volhouden met achtervolgen tot het dier vanzelf vastloopt -> CH3_H07_OPEN
+* Ren urenlang mee door de diepe sneeuw, de kou en uitputting doorstaand tot de ever eerder instort dan jij [STAT:robur:11] -> CH3_H07_ROB
+* Dwing het dier met kracht een nauwe bergkloof in waar het geen kant meer op kan [STAT:vis:13] -> CH3_H07_VIS
+
+END
+
+=== SCENE: CH3_H07_OPEN ===
+
+TITLE:
+Volhouden
+
+TEXT:
+Je blijft de ever gewoon achtervolgen, stap voor stap, tot het dier vanzelf vermoeid raakt en in een diepe sneeuwbank vastloopt.
+
+FLAG:
+ch3_h07_route=open
+
+CHOICES:
+
+* Kijk hoe Herakles het dier gevangen neemt -> CH3_H07C
+
+END
+
+=== SCENE: CH3_H07_ROB ===
+
+TITLE:
+Door de Sneeuw
+
+TEXT:
+Je rent mee, uur na uur, door sneeuw die tot je knieën reikt, de kou een pijn die dieper gaat dan je had verwacht — tot de ever, uitgeput, eerder instort dan jij.
+
+FLAG:
+ch3_h07_route=robur
+
+CHOICES:
+
+* Kijk hoe Herakles het dier gevangen neemt -> CH3_H07C
+
+END
+
+=== SCENE: CH3_H07_VIS ===
+
+TITLE:
+De Kloof
+
+TEXT:
+Je kiest niet de weg van geduld maar die van kracht: je dwingt het dier, schreeuwend en met uitgestoken armen, een nauwe bergkloof in waar het zich niet meer kan omdraaien.
+
+FLAG:
+ch3_h07_route=vis
+
+CHOICES:
+
+* Kijk hoe Herakles het dier gevangen neemt -> CH3_H07C
+
+END
+
+=== SCENE: CH3_H07C ===
+
+TITLE:
+Gevangen
+
+TEXT:
+Herakles drijft de uitgeputte ever de laatste meters, waar het dier vastraakt en levend gevangen kan worden. Eurystheus, bij het zien van de ever, duikt voor de zoveelste keer zijn bronzen pot in.
 
 CHOICES:
 
@@ -4765,7 +4966,74 @@ Je voelt, zonder precies te weten waarom, dat dit dier zijn verhaal nog niet af 
 
 CHOICES:
 
-* Ga door naar de zevende beproeving -> CH3_H14
+* Ga door naar de zevende beproeving -> CH3_H13B
+
+END
+
+=== SCENE: CH3_H13B ===
+
+TITLE:
+De Wachters van het Paleis
+
+TEXT:
+Bij het paleis van Diomedes aangekomen, wordt al snel duidelijk dat de merries zelf niet het eerste probleem zijn — de wachters die de stallen bewaken laten niemand ongezien voorbij.
+
+CHOICES:
+
+* Ga recht op de poort af, er in het open doorheen -> CH3_H13_OPEN
+* Doe je voor als gezant met een boodschap voor de koning, en praat je met gezag langs de eerste wachtpost [STAT:gratia:13] -> CH3_H13_GRA
+* Houd een uitputtende nachtwake vol tot de aflossende wacht slaperig en onoplettend is [STAT:robur:11] -> CH3_H13_ROB
+
+END
+
+=== SCENE: CH3_H13_OPEN ===
+
+TITLE:
+Recht Erop Af
+
+TEXT:
+Je kiest de directe weg: recht op de poort af, de eerste onvermijdelijke schermutseling met de wachters incluis. Het kost meer moeite dan een sluipweg zou hebben gedaan, maar je bent er wel doorheen.
+
+FLAG:
+ch3_h13_route=open
+
+CHOICES:
+
+* Kijk hoe Herakles de stallen bereikt -> CH3_H14
+
+END
+
+=== SCENE: CH3_H13_GRA ===
+
+TITLE:
+De Gezant
+
+TEXT:
+Je doet je voor als een gezant met dringend nieuws voor de koning, en spreekt de eerste wachtpost met zoveel overtuiging toe dat niemand eraan denkt je tegen te houden. Tegen de tijd dat iemand twijfelt, sta je al binnen.
+
+FLAG:
+ch3_h13_route=gratia
+
+CHOICES:
+
+* Kijk hoe Herakles de stallen bereikt -> CH3_H14
+
+END
+
+=== SCENE: CH3_H13_ROB ===
+
+TITLE:
+De Nachtwake
+
+TEXT:
+Je houdt vol, uur na uur, tot diep in de nacht, wachtend op het moment dat de vermoeidheid groter wordt dan de waakzaamheid. Wanneer de aflossing eindelijk komt, slaperig en onoplettend, glip je ongezien naar binnen.
+
+FLAG:
+ch3_h13_route=robur
+
+CHOICES:
+
+* Kijk hoe Herakles de stallen bereikt -> CH3_H14
 
 END
 
@@ -4949,7 +5217,56 @@ hermes:full
 
 CHOICES:
 
-* Daal af naar de poort van de onderwereld -> CH3_H24
+* Daal af naar de poort van de onderwereld -> CH3_H23B
+
+END
+
+=== SCENE: CH3_H23B ===
+
+TITLE:
+De Tocht Door het Duister
+
+TEXT:
+De weg naar Cerberus zelf voert door een duisternis die drukt op de borst, verstikkend zwaar op een manier die niets met gewone nacht te maken heeft — de onderwereld laat niemand ongemerkt passeren, zelfs een boodschapper niet.
+
+CHOICES:
+
+* Laat Athena en Mercurius je stap voor stap veilig door het duister begeleiden -> CH3_H23_OPEN
+* Leg de tocht alleen af, op eigen doorzettingsvermogen, en verdraag de verstikkende zwaarte zonder te wankelen [STAT:robur:15] -> CH3_H23_ROB
+
+END
+
+=== SCENE: CH3_H23_OPEN ===
+
+TITLE:
+Begeleid Door Bondgenoten
+
+TEXT:
+Je blijft dicht bij Athena en Mercurius, die je stap voor stap door het ergste van het duister loodsen. Het is geen schande om hier hulp te aanvaarden — zelfs Herakles doet dat.
+
+FLAG:
+ch3_h23_route=open
+
+CHOICES:
+
+* Kijk hoe Herakles tegenover Cerberus komt te staan -> CH3_H24
+
+END
+
+=== SCENE: CH3_H23_ROB ===
+
+TITLE:
+Alleen Door de Duisternis
+
+TEXT:
+Je laat je bondgenoten voorgaan en legt het laatste stuk alleen af, de verstikkende zwaarte van de onderwereld op je schouders zonder ooit te wankelen — een beproeving die, op haar eigen manier, bijna net zo zwaar is als die van Herakles zelf.
+
+FLAG:
+ch3_h23_route=robur
+
+CHOICES:
+
+* Kijk hoe Herakles tegenover Cerberus komt te staan -> CH3_H24
 
 END
 
@@ -5321,7 +5638,60 @@ TITLE:
 Terug langs de Draad
 
 TEXT:
-Met het monster verslagen volgt Theseus het garen terug — elke bocht die hij eerder blindelings nam, wijst nu feilloos de weg naar buiten. Bij de ingang wacht Ariadne, en samen met de dertien andere Atheners die niet langer geofferd hoeven te worden, vluchten ze diezelfde nacht nog naar het schip, voor Minos ook maar vermoedt wat er is gebeurd.
+Met het monster verslagen volgt Theseus het garen terug — elke bocht die hij eerder blindelings nam, wijst nu feilloos de weg naar buiten. Bij de ingang wacht Ariadne al, opgelucht en gespannen tegelijk: veertien mensen, van wie de meesten amper op de been kunnen blijven van uitputting en angst, moeten nu nog ongezien van het paleis naar de haven, voor Minos' wachters ook maar vermoeden wat er is gebeurd.
+
+CHOICES:
+
+* Sluip via achterstraatjes en olijfgaarden — trager, maar veilig -> CH4_T08_OPEN
+* Draag een van de uitgeputte offerlingen, die het tempo niet meer bijhoudt, het laatste stuk zelf [STAT:robur:13] -> CH4_T08_ROB
+* Praat een achterdochtige wachter bij de kade om met een overtuigend verhaal [STAT:gratia:11] -> CH4_T08_GRA
+
+END
+
+=== SCENE: CH4_T08_OPEN ===
+
+TITLE:
+Achterstraatjes en Olijfgaarden
+
+TEXT:
+Je kiest de trage, veilige weg: achterstraatjes, olijfgaarden, een omweg om elk plein waar een wachter zou kunnen staan. Het duurt langer, maar niemand ziet jullie gaan.
+
+FLAG:
+ch4_t08_route=open
+
+CHOICES:
+
+* Vaar weg van Kreta -> CH4_T09
+
+END
+
+=== SCENE: CH4_T08_ROB ===
+
+TITLE:
+De Laatste Meters
+
+TEXT:
+Een van de offerlingen, amper nog bij bewustzijn van uitputting, kan het tempo niet meer bijhouden. Je tilt hem op je schouders en draagt hem het laatste stuk zelf, je eigen benen brandend van de inspanning, tot het schip eindelijk in zicht is.
+
+FLAG:
+ch4_t08_route=robur
+
+CHOICES:
+
+* Vaar weg van Kreta -> CH4_T09
+
+END
+
+=== SCENE: CH4_T08_GRA ===
+
+TITLE:
+Een Overtuigend Verhaal
+
+TEXT:
+Bij de kade houdt een achterdochtige wachter jullie groep tegen met vragen. Je verzint ter plekke een verhaal — een nachtelijke offerplechtigheid, een bevel van de koningin zelf — met zoveel overtuiging dat hij jullie, met tegenzin, laat passeren.
+
+FLAG:
+ch4_t08_route=gratia
 
 CHOICES:
 
@@ -5382,7 +5752,74 @@ ikaros:intro
 
 CHOICES:
 
-* Kijk hoe Daidalos zijn eigen gevangenschap probeert te ontlopen -> CH4_T12
+* Kijk hoe Daidalos zijn eigen gevangenschap probeert te ontlopen -> CH4_T11B
+
+END
+
+=== SCENE: CH4_T11B ===
+
+TITLE:
+Was en Veren
+
+TEXT:
+Minos beheerst elke uitweg over land en zee, maar niet de lucht — en dat is precies waar Daidalos zijn toevlucht zoekt. Vleugels bouwen kost meer dan vindingrijkheid alleen: er is was nodig om te smelten, linnen om te binden, en veren, veel meer dan het labyrint vanzelf laat dwarrelen. Dat alles verzamelen, zonder dat een bewaker argwaan krijgt, is aan jou.
+
+CHOICES:
+
+* Verzamel geduldig, dag na dag, wat toevallig aanwaait -> CH4_T11_OPEN
+* Doorsta het meedogenloze, urenlange werk van veren sorteren en was smelten zonder rust [STAT:robur:13] -> CH4_T11_ROB
+* Overtuig een bewaker om stiekem extra was en linnen naar binnen te smokkelen [STAT:gratia:15] -> CH4_T11_GRA
+
+END
+
+=== SCENE: CH4_T11_OPEN ===
+
+TITLE:
+Wat Toevallig Aanwaait
+
+TEXT:
+Je verzamelt geduldig, dag na dag, wat de wind toevallig door het labyrint blaast — traag, maar niemand merkt iets, en na verloop van tijd is er genoeg.
+
+FLAG:
+ch4_t11_route=open
+
+CHOICES:
+
+* Kijk hoe Daidalos de vleugels vlecht -> CH4_T12
+
+END
+
+=== SCENE: CH4_T11_ROB ===
+
+TITLE:
+Zonder Rust
+
+TEXT:
+Je zet door, uur na uur, veren sorteren en was smelten zonder pauze, je handen stijf en verbrand tegen de tijd dat er genoeg materiaal ligt voor twee paar vleugels.
+
+FLAG:
+ch4_t11_route=robur
+
+CHOICES:
+
+* Kijk hoe Daidalos de vleugels vlecht -> CH4_T12
+
+END
+
+=== SCENE: CH4_T11_GRA ===
+
+TITLE:
+Stiekem Gesmokkeld
+
+TEXT:
+Je weet een van de bewakers, die minder trouw aan Minos blijkt dan zijn uniform doet vermoeden, over te halen om stiekem extra was en linnen naar binnen te smokkelen — genoeg in één nacht voor wat weken zou hebben gekost.
+
+FLAG:
+ch4_t11_route=gratia
+
+CHOICES:
+
+* Kijk hoe Daidalos de vleugels vlecht -> CH4_T12
 
 END
 
@@ -5392,7 +5829,7 @@ TITLE:
 Vleugels van Veren en Was
 
 TEXT:
-Minos beheerst elke uitweg over land en zee, maar niet de lucht — en dat is precies waar Daidalos zijn toevlucht zoekt. Geduldig verzamelt hij veren die door het labyrint dwarrelen, bindt ze samen met draad en verzegelt ze met gesmolten was tot twee paar vleugels, één voor hemzelf, één voor zijn zoon.
+Met het materiaal eindelijk compleet, bindt Daidalos veer na veer samen met draad en verzegelt ze met gesmolten was tot twee paar vleugels, één voor hemzelf, één voor zijn zoon.
 
 Voor ze opstijgen, drukt hij Ikaros op het hart wat hem het meest zorgen baart: "Vlieg de middenweg. Niet te laag, want de zeenevel maakt de veren zwaar en nat. Niet te hoog, want de zon smelt de was. Blijf dicht bij mij, en volg precies waar ik vlieg."
 
@@ -5601,6 +6038,59 @@ Tellus, de aarde zelf, verheft haar stem tot aan de Olympos — verzengd, half v
 
 PERSON:
 tellus:intro
+
+CHOICES:
+
+* Kijk hoe Tellus haar smeekbede uit, en hoe Jupiter luistert -> CH4_P06_OPEN
+* Merk op hóe Tellus Jupiter overtuigt, niet alleen wát ze zegt [STAT:gratia:13] -> CH4_P06_GRA
+* Merk op wát het volhouden haar al gekost heeft voor ze sprak [STAT:robur:11] -> CH4_P06_ROB
+
+END
+
+=== SCENE: CH4_P06_OPEN ===
+
+TITLE:
+Een Smeekbede Gehoord
+
+TEXT:
+Je hoort haar woorden zoals ze bedoeld zijn: een wanhopige moeder die vecht voor wat er nog over is. Jupiter luistert, zwijgend, terwijl de rook om hen beiden opstijgt.
+
+FLAG:
+ch4_p06_route=open
+
+CHOICES:
+
+* Kijk hoe Jupiter reageert -> CH4_P07
+
+END
+
+=== SCENE: CH4_P06_GRA ===
+
+TITLE:
+Een Gedeeld Belang
+
+TEXT:
+Je merkt dat Tellus niet zomaar smeekt, maar redeneert: ze wijst Jupiter erop dat een verschroeide aarde ook de goden zelf niets meer te heersen laat. Van angst voor haar eigen lot maakt ze, in een paar zinnen, een angst die Jupiter opeens met haar deelt.
+
+FLAG:
+ch4_p06_route=gratia
+
+CHOICES:
+
+* Kijk hoe Jupiter reageert -> CH4_P07
+
+END
+
+=== SCENE: CH4_P06_ROB ===
+
+TITLE:
+Wat het Haar Kostte
+
+TEXT:
+Je ziet wat het spreken haar kost: een stem die breekt door rook-verzengde longen, na een hitte die ze kennelijk al veel langer in stilte heeft verdragen dan ze nu, eindelijk, toegeeft.
+
+FLAG:
+ch4_p06_route=robur
 
 CHOICES:
 

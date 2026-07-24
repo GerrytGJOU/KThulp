@@ -3684,9 +3684,9 @@ SCREENS.battleProfile = function(){
     return `<div class="panel" style="display:flex;gap:14px;align-items:center;margin-bottom:14px">
       <div style="flex:0 0 auto">${cls?iconSVG(cls.icon,36,"currentColor"):""}</div>
       <div style="flex:1;min-width:0">
-        <div style="font-weight:700">Statistieken — ${esc(cls?cls.nm:"")}</div>
+        <div style="font-weight:700">Karakter Informatie — ${esc(cls?cls.nm:"")}</div>
         <div class="note" style="margin-top:2px">${pts?`${pts} statpunt${pts===1?"":"en"} te besteden.`:"Vis, Agilitas, Robur, Ingenium, Prudentia, Gratia."}</div>
-        <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="spResumeSlotToStats(${best.n})">Statistieken bekijken</button>
+        <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="spResumeSlotToStats(${best.n})">Karakter Informatie bekijken</button>
       </div>
     </div>`;
   })()}

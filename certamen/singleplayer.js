@@ -590,7 +590,7 @@ function spRenderLanding(){
   </div>
   ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spWorldMap')">🗺️ Wereldkaart</button>`:""}
   ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spCodex')">📖 Codex Memoriae</button>`:""}
-  ${resuming&&SP_STATE.stats?`<button class="btn btn-ghost btn-block" style="margin-bottom:14px" onclick="go('spStats')">📊 Statistieken${SP_STATE.skillpoints?` (${SP_STATE.skillpoints})`:""}</button>`:""}
+  ${resuming&&SP_STATE.stats?`<button class="btn btn-ghost btn-block" style="margin-bottom:14px" onclick="go('spStats')">📊 Karakter Informatie${SP_STATE.skillpoints?` (${SP_STATE.skillpoints})`:""}</button>`:""}
   ${foot()}`);
 }
 
@@ -777,12 +777,21 @@ SCREENS.spStats = function(){
   if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
   if(!SP_STATE.stats){
     H(brand(true)+`
-    <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Statistieken</h2></div>
+    <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Karakter Informatie</h2></div>
     <div class="panel" style="text-align:center"><p class="note">Je hebt nog geen klasse gekozen — dat gebeurt vroeg in de proloog.</p></div>
     ${foot()}`);
     return;
   }
   const cls = BM_CLASSES.find(c=>c.id===SP_STATE.classId);
+  const av = spAvatarMerge(spAvatarLoadLocal());
+  const avatarHTML = renderPixelHeroPreview(av) || bmAvatarSVG(av,72);
+  const equipHTML = ["wapen","armor","helm","schild","cape"].map(partId=>{
+    const part = BM_AVATAR_PARTS[partId];
+    const opt = part?.opts.find(o=>o.id===av[partId]);
+    return `<div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06)">
+      <span class="note">${esc(part?part.nm:partId)}</span><span>${esc(opt?opt.nm:(av[partId]||"—"))}</span>
+    </div>`;
+  }).join("");
   const chapter = spCurrentCampaignChapter(SP_STATE.node);
   const chapterNr = chapter.type==="proloog" ? 0 : (chapter.nr||0);
   const softCap = spStatSoftCap(chapterNr);
@@ -811,12 +820,17 @@ SCREENS.spStats = function(){
     </div>`;
   }).join("");
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Statistieken</h2></div>
+  <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Karakter Informatie</h2></div>
   <div class="panel" style="text-align:center">
-    ${cls?iconSVG(cls.icon,32,"currentColor"):""}
-    <div class="eyebrow l" style="margin-top:6px">${cls?esc(cls.nm):""}</div>
+    <div style="display:flex;justify-content:center;margin-bottom:6px">${avatarHTML}</div>
+    <div class="eyebrow l">${cls?esc(cls.nm):""}</div>
     <div style="font-size:22px;font-weight:700;margin-top:4px">${points} statpunt${points===1?"":"en"} beschikbaar</div>
     <p class="note" style="margin-top:6px">Verdiend aan het eind van elk hoofdstuk. Max. 2 verhogingen per stat per hoofdstuk.</p>
+  </div>
+  <div class="panel">
+    <div class="eyebrow l">Huidige uitrusting</div>
+    ${equipHTML}
+    <button class="btn btn-ghost" style="font-size:13px;margin-top:10px" onclick="SP_AV_RETURN='spStats';go('spAvatarEdit')">Chronica Classica Avatar aanpassen</button>
   </div>
   ${rows}
   ${foot()}`);
@@ -1230,7 +1244,7 @@ function spHookStatpoints(text){
   if(!n) return;
   const total = (SP_STATE.skillpoints||0) + n;
   spSaveProgress({ skillpoints: total, statSpentSinceAward:{} });
-  toast("Je bent gegroeid", `Je hebt ${n} statpunt${n===1?"":"en"} verdiend — investeer ze bij je Statistieken.`);
+  toast("Je bent gegroeid", `Je hebt ${n} statpunt${n===1?"":"en"} verdiend — investeer ze bij je Karakter Informatie.`);
 }
 function spHookQuest(text){
   const idx=text.indexOf(":");
