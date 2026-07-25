@@ -259,3 +259,32 @@ zet elk resultaat onder die naam in `certamen/assets/chronica/souvenirs/`.
 > glints faintly on the glass. No text, no speech bubbles, no watermark, no
 > modern objects, no people, no hands, no faces. 1:1 square format, fills
 > the entire frame.
+
+### 12. `souvenir_argonauten.png` — Een Schilfer van het Gulden Vlies (Hoofdstuk 5 — Aegean blue)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> small flat scale/flake of gleaming golden fleece — a tiny tuft of curled
+> wool rendered as solid gold, glinting — resting on a small dark-red velvet
+> cushion atop a small weathered stone pedestal, entirely covered by an old
+> glass bell jar/dome, faintly and softly gold-lit from within as if quietly
+> magical. Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette), the object in sharp focus. A
+> thin Aegean-blue glow glints faintly on the glass. No text, no speech
+> bubbles, no watermark, no modern objects, no people, no hands, no faces.
+> 1:1 square format, fills the entire frame.
+
+### 13. `souvenir_thebe.png` — Een Verstenen Traan (Hoofdstuk 6 — Aegean blue)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> single small teardrop-shaped droplet of pale grey stone/rock, its surface
+> glistening faintly as if still wet despite being solid stone, resting on a
+> small dark-red velvet cushion atop a small weathered stone pedestal,
+> entirely covered by an old glass bell jar/dome, faintly and softly
+> gold-lit from within as if quietly magical. Camera at eye level with the
+> pedestal, three-quarter lighting, background dark and blurred (heavy
+> vignette), the object in sharp focus. A thin Aegean-blue glow glints
+> faintly on the glass. No text, no speech bubbles, no watermark, no modern
+> objects, no people, no hands, no faces. 1:1 square format, fills the
+> entire frame.
