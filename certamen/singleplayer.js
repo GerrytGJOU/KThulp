@@ -610,21 +610,25 @@ function spRenderLanding(){
    - Afbeeldingen: SP_STATE.seenImages, automatisch bijgehouden door
      spHookSeenImage() zodra een scène met een IMAGE: wordt bezocht. ---- */
 let SP_CODEX_TAB = "kroniek";
+// Twee lagen (Gerbens indeling, 2026-07-25): laag 1 = de "verhaal"-tabbladen
+// (Kroniek eerst), laag 2 = de taal-tabbladen (Grammatica/Vocabulaire) —
+// bewust twee vaste rijen i.p.v. laten wrappen op breedte, zodat de
+// groepering altijd hetzelfde oogt ongeacht schermgrootte.
 const SP_CODEX_TABS = [
-  { id:"kroniek",       nm:"Kroniek",       icon:"📖" },
-  { id:"herinneringen", nm:"Herinneringen", icon:"🏛️" },
-  { id:"mythologie",   nm:"Mythologie",   icon:"⚡" },
-  { id:"geschiedenis", nm:"Geschiedenis", icon:"🏺" },
-  { id:"personen",     nm:"Personen",     icon:"👤" },
-  { id:"grammatica",   nm:"Grammatica",   icon:"📜" },
-  { id:"vocabulaire",  nm:"Vocabulaire",  icon:"🔤" },
-  { id:"afbeeldingen", nm:"Afbeeldingen", icon:"🖼️" },
+  { id:"kroniek",       nm:"Kroniek",       icon:"📖", row:1 },
+  { id:"herinneringen", nm:"Herinneringen", icon:"🏛️", row:1 },
+  { id:"mythologie",    nm:"Mythologie",    icon:"⚡", row:1 },
+  { id:"geschiedenis",  nm:"Geschiedenis",  icon:"🏺", row:1 },
+  { id:"personen",      nm:"Personen",      icon:"👤", row:1 },
+  { id:"afbeeldingen",  nm:"Afbeeldingen",  icon:"🖼️", row:1 },
+  { id:"grammatica",    nm:"Grammatica",    icon:"📜", row:2 },
+  { id:"vocabulaire",   nm:"Vocabulaire",   icon:"🔤", row:2 },
 ];
 function spSwitchCodexTab(tab){ SP_CODEX_TAB = tab; go("spCodex"); }
 SCREENS.spCodex = function(){
   document.body.classList.remove("greek");
   if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
-  const tabsHTML = SP_CODEX_TABS.map(t=>
+  const tabRowHTML = row => SP_CODEX_TABS.filter(t=>t.row===row).map(t=>
     `<button class="codex-tab${t.id===SP_CODEX_TAB?" on":""}" onclick="spSwitchCodexTab('${t.id}')">${t.icon} ${esc(t.nm)}</button>`
   ).join("");
   const bodies = {
@@ -632,7 +636,7 @@ SCREENS.spCodex = function(){
     herinneringen: spCodexSouvenirsHTML,
     mythologie: ()=>spCodexEntriesHTML("mythologie", "Nog niets vastgelegd — mythen verschijnen hier zodra je ze beleeft."),
     geschiedenis: ()=>spCodexEntriesHTML("geschiedenis", "Nog niets vastgelegd — Hoofdstuk 1 is nog puur mythologie; historische bladzijden volgen bij latere hoofdstukken."),
-    grammatica: ()=>spCodexEntriesHTML("grammatica", "Nog niets vastgelegd — grammatica verschijnt hier zodra een hoofdstuk erom vraagt."),
+    grammatica: spCodexGrammaticaHTML,
     personen: spCodexPersonsHTML,
     vocabulaire: spCodexVocabHTML,
     afbeeldingen: spCodexImagesHTML,
@@ -641,7 +645,8 @@ SCREENS.spCodex = function(){
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Codex Memoriae</h2></div>
   <div class="codex-book">
-    <div class="codex-tabs">${tabsHTML}</div>
+    <div class="codex-tabs">${tabRowHTML(1)}</div>
+    <div class="codex-tabs codex-tabs-2">${tabRowHTML(2)}</div>
     <div class="codex-page">${body}</div>
   </div>
   ${foot()}`);
@@ -661,6 +666,36 @@ function spCodexTableHTML(table){
   const head = table.headers.map(h=>`<th>${esc(h)}</th>`).join("");
   const rows = table.rows.map(r=>`<tr>${r.map(c=>`<td>${esc(c)}</td>`).join("")}</tr>`).join("");
   return `<table class="codex-table"><thead><tr>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+/* ---- GRAMMATICA-TAB: eigen renderer i.p.v. de generieke spCodexEntriesHTML,
+   want dit tabblad groeit het snelst (nu al 17 entries over Hoofdstuk 1-4)
+   en moet daarom een eigen inhoudsopgave krijgen (Gerben, 2026-07-25) —
+   groepeert op hoofdstuk via de bestaande id-conventie
+   `codex_grammatica_ch<N>_...`, geen nieuw datamodel nodig. "Alles" blijft
+   de standaardweergave; de pillen tonen alleen hoofdstukken die de speler
+   al heeft ontgrendeld (geen spoilers van nog niet bereikte hoofdstukken). */
+let SP_CODEX_GRAMMAR_SUB = "all";
+function spSwitchCodexGrammarSub(sub){ SP_CODEX_GRAMMAR_SUB = sub; go("spCodex"); }
+function spCodexGrammaticaHTML(){
+  const ids = (SP_STATE.codex||[]).filter(id => SP_CODEX_ENTRIES[id]?.cat==="grammatica");
+  if(!ids.length) return `<p class="codex-empty">Nog niets vastgelegd — grammatica verschijnt hier zodra een hoofdstuk erom vraagt.</p>`;
+  const chapters = [...new Set(ids.map(id => (id.match(/^codex_grammatica_ch(\d+)_/)||[])[1]).filter(Boolean))]
+    .sort((a,b)=>+a-+b);
+  const sub = (SP_CODEX_GRAMMAR_SUB==="all" || chapters.includes(SP_CODEX_GRAMMAR_SUB)) ? SP_CODEX_GRAMMAR_SUB : "all";
+  const tocHTML = chapters.length>1 ? `<div class="codex-grammar-toc">
+    <button class="${sub==="all"?"on":""}" onclick="spSwitchCodexGrammarSub('all')">Alles</button>
+    ${chapters.map(c=>`<button class="${sub===c?"on":""}" onclick="spSwitchCodexGrammarSub('${c}')">Hoofdstuk ${c}</button>`).join("")}
+  </div>` : "";
+  const shownIds = sub==="all" ? ids : ids.filter(id=>id.startsWith(`codex_grammatica_ch${sub}_`));
+  const entriesHTML = shownIds.map(id=>{
+    const e = SP_CODEX_ENTRIES[id];
+    return `<div class="codex-entry">
+      <h4>${esc(e.titel)}</h4>
+      <p>${esc(e.tekst)}</p>
+      ${e.table?spCodexTableHTML(e.table):""}
+    </div>`;
+  }).join("");
+  return tocHTML + entriesHTML;
 }
 function spCodexPersonsHTML(){
   const persons = SP_STATE.persons||{};
