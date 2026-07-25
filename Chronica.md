@@ -98,7 +98,7 @@ browser):
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
 | Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 7+ nog niet geschreven |
-| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png` — Gemini-prompts klaar, bestanden nog niet gegenereerd. Hoofdstuk 5 en 6 nog volledig open |
+| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png`. Hoofdstuk 5 heeft nu ook 7 `IMAGE:`-tags (doorlopend logboek, geen lijnen, allemaal Aegean blue): `argo_bemanning.png`, `everzwijn_cyzicus.png`, `polydeukes_amycus.png`, `hylas_nimfen.png`, `symplegades_doortocht.png`, `medea_aeetes_colchis.png`, `gulden_vlies_gevonden.png` — Gemini-prompts klaar, bestanden nog niet gegenereerd. Hoofdstuk 6 nog volledig open |
 | Gemini-huisstijl-Gem (stripstijl, scène-illustraties) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | Gemini-huisstijl-Gem (museumstukken, Herinneringen-tab) | `certamen/assets/chronica/gemini-souvenir-style.md` | ✅ herbruikbare Gem-instructie — vaste sokkel/stolp/kussentje-opstelling, zie §7.2.1 |
 | **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
@@ -2374,3 +2374,209 @@ gelabelde bestaande.
 Proloog + één bestaand hoofdstuk volledig ombouwen voordat de rest volgt;
 pas als één hoofdstuk met alle drie de klassen goed speelt, is het systeem
 bewezen.
+
+---
+
+## 12. Delayed Consequences & Latijn-skill-checks (payoff-laag) — Stap 1-3 (payoff-engine, relaties, Kroniek) gebouwd
+
+Aanvulling op §7.3 (Clementia/Severitas) en §11.4 (checks). Bron: de
+ontwerpspec "Delayed Consequences & Latijn als Skill Check", door Gerben
+aangeleverd (2026-07-24) als het document waar Chronica.md al impliciet
+naar verwees ("het payoff-systeem", "de Kroniek") zonder dat het ooit
+gebouwd was.
+
+### 12.1 Audit-bevindingen (2026-07-24)
+
+Volledige audit (drie deelonderzoeken) staat als artifact vastgelegd
+(chronica_payoff_audit, alleen in de sessie beschikbaar — de conclusies
+hieronder zijn wat telt). Kernpunten:
+
+- **Payoff-laag bestaat niet, ook niet onder een andere naam.**
+  `spHookFlag()` (singleplayer.js) zet alleen — er is geen enkele
+  generieke conditie→trigger→type→inhoud→prioriteit-leesroutine. De
+  code-comment erboven erkent dit zelf: "vraagt nog een
+  CONDITION-mechanisme (volgende bouwstap)". Van de ~100
+  verhaalinhoudelijke `FLAG:`-secties in Hoofdstuk 1-6 wordt er dus
+  letterlijk geen enkele als "echo", "deur" of "kantelpunt" elders
+  uitgelezen — puur write-only. De enige twee bestaande generieke
+  leesroutines zijn smal en lokaal: avatar-uitrustingsontgrendeling
+  (`SP_AVATAR_STORY_UNLOCKS`, niets met verhaal te maken) en het
+  `[DONE:vlag]`-vinkje (CNSParser), dat altijd op precies dezelfde
+  hub-scène leest als waar de vlag gezet werd, nooit ergens anders of
+  later.
+- **Waarden-assen: Clementia/Severitas is de bewuste, al gedocumenteerde
+  vereenvoudiging** van de 4-assige Pietas/Virtus/Astutia/Eloquentia uit
+  de spec — één bipolaire as i.p.v. vier onafhankelijke assen op
+  -10..+10. Niet drop-in uit te breiden (nieuwe tagsyntax, nieuw
+  datamodel, ~90+ bestaande triades in Hoofdstuk 1-6 zouden herlabeld
+  moeten worden).
+- **Relaties (NPC-score -5..+5 + eigen flags) bestaan niet.**
+  `SP_STATE.persons` houdt alleen een Codex-intro/full-niveau bij, geen
+  relatiescore.
+- **Kroniek en epiloog bestaan niet** — logisch, zonder payoff-laag is er
+  nog niets om te tonen.
+- **De vier-uitkomsten-ladder (Deel 2.4) bestaat niet als generiek
+  mechanisme.** Alle zes bestaande `PUZZLE:`-varianten zijn een harde
+  poort: fout antwoord → foutmelding + hint, scène blijft staan, opnieuw
+  proberen. Geen "deels geslaagd", geen faalpad, geen "kritiek gefaald".
+  **Dit is geen verrassing**: precies deze ladder staat al in §11.4
+  toegewezen aan de nog ongebouwde *rolled check* (bouwvolgorde-item 7),
+  en de Ingenium/Gratia-moeilijkheidsmodifier uit Deel 2.5 staat al
+  vastgelegd als de nog ongebouwde *Latijn-check-koppeling*
+  (bouwvolgorde-item 9). Deze spec is de uitwerking van twee items die al
+  op de lijst stonden, geen nieuw idee.
+- **Opt-in hulpmiddelen + docentrapportage bestaan niet.** `puzzle.hint`
+  is uitsluitend een reactieve foutmelding, nooit vooraf inschakelbaar,
+  nooit gelogd. Geen docent-instelbaar niveauplafond — Chronica
+  singleplayer heeft momenteel geen enkel docentscherm. Battle Mode heeft
+  wel een bruikbaar precedent (docent-ingestelde numerieke drempels via
+  klascode-sessie) dat als patroon herbruikbaar is, maar moet vanaf nul
+  vertaald worden naar `SP_STATE`.
+
+### 12.2 Beslissingen (2026-07-24)
+
+- **Waardensysteem blijft Clementia/Severitas (1 as).** Geen retrofit van
+  de ~90+ bestaande toonkeuzes in Hoofdstuk 1-6. Astutia/Eloquentia
+  krijgen geen eigen as — voor zover die dimensies al iets dekken, loopt
+  dat via de nieuwe D&D-stats (Agilitas/Prudentia resp. Gratia/Ingenium,
+  §11), die bewust een ander soort ding meten (capaciteit, niet
+  reputatie) en dus niet hetzelfde systeem worden.
+- **De vier-uitkomsten-ladder wordt een NIEUW, apart checktype naast
+  `PUZZLE:`**, niet een vervanging. Bestaande `PUZZLE:`-scènes blijven
+  pure oefening/herhaling (grammatica leren, geen verhaalgevolg bij een
+  foute poging). Het nieuwe checktype (werktitel: `CHECK:`, invult de
+  *rolled check* uit §11.4/item 7) is voorbehouden aan spaarzame,
+  dramatische momenten — zoals het Cicero-voorbeeld in Deel 2.6 van de
+  spec.
+
+### 12.3 Bouwvolgorde (aangepast op basis van 12.1/12.2)
+
+Deel 3 van de spec geeft een eigen volgorde; hieronder de versie die
+rekening houdt met wat al bestaat.
+
+1. **Payoff-laag — GEBOUWD (2026-07-25).** Conditie/trigger/type/inhoud/
+   prioriteit-engine in `singleplayer.js`: `spPayoffConditionMet()` toetst
+   een declaratieve conditie (`{flags:{sleutel:waarde}, flagsSet:[...],
+   flagsNotSet:[...]}` — bewust geen losse JS-functies in de data, zodat
+   een toekomstige auteurscontrole, Deel 1.6 van de spec, de lijst
+   statisch kan doorlopen); `spResolvePayoffs(sceneId)` wordt vanuit
+   `SCREENS.spPlay` aangeroepen ná `spRunMetaHooks` (een payoff mag dus
+   reageren op een `FLAG:` die dezelfde scène net zelf zette), filtert
+   `SP_PAYOFFS` (singleplayer-data.js) op triggerscène + conditie +
+   nog-niet-gezien, sorteert op `priority`, en markeert alles wat matcht
+   meteen als gezien in `SP_STATE.payoffsSeen` — ook als de speler de
+   inhoud niet expliciet aanklikt. Drie content-velden, per `type`: `text`
+   (echo — extra cursieve alinea ná de scène-tekst), `choice` (deur —
+   extra goud geknopte keuze, gerenderd los van `scene.choices` zodat geen
+   CNS-wijziging nodig is om hem te tonen) en `setFlags` (kantelpunt —
+   stille wereldstaatwijziging, mag samen met `text` gebruikt worden).
+   `SP_EMPTY_STATE` kreeg er `payoffsSeen:{}` bij.
+
+   **Proof-of-concept (4 payoffs, getest):** drie onderling exclusieve
+   echo's op `CH2_000` die tonen welke Hoofdstuk-1-lijn (`ch1_lijn=A/B/C`)
+   de speler koos, en één deur op `CH3_H01` (`herakles_harnas`-flag uit
+   Hoofdstuk 2) die een extra keuze ontsluit naar een nieuwe subscène
+   `CH3_H01_HARNAS` — Herakles herkent het harnas dat hij zelf ooit
+   weggaf. Getest in de browser met drie losse saveslots: elke
+   `ch1_lijn`-waarde toont precies zijn eigen echo en geen van de andere
+   twee; zonder de flag verschijnt niets; de deur verschijnt alleen met
+   `herakles_harnas` gezet, converged terug naar `CH3_H02`, en is bij een
+   derde bezoek weer verdwenen (`payoffsSeen` correct bijgewerkt).
+
+   **Bewust nog geen kantelpunt-voorbeeld met echte dramatische inzet**
+   (personage/bondgenoot/einde) — de Tydeus-lijn (al terugkerend tussen
+   Hoofdstuk 5 en 6, zie §11 batch 4) is de logische eerste kandidaat
+   zodra dat wordt opgepakt.
+2. **Relaties — GEBOUWD (2026-07-25).** Nieuwe CNS-sectie `RELATION:`
+   (naar het `FLAG:`-patroon: `npc=+1`/`npc=-2`, meerdere gescheiden door
+   `;`/regel) verschuift `SP_STATE.relations[npc].score` met een DELTA,
+   nooit een directe toekenning ("een enkele keuze verschuift meestal 1 of
+   2 punten"), geklemd op -5..+5 door `spHookRelation()`
+   (singleplayer.js). Bewust GEEN apart mechanisme voor "wat een NPC van
+   de speler weet" (Deel 1.2c, tweede helft) — dat zijn gewoon gewone
+   `FLAG:`s met een naamgevingsafspraak (bv. `dido_zag_vertrek`); de
+   bestaande payoff-condities (`flags`/`flagsSet`/`flagsNotSet`) lezen die
+   al, geen aparte infrastructuur nodig. `spPayoffConditionMet()`
+   (§12.3-stap-1 hierboven) uitgebreid met `relationMin`/`relationMax` per
+   npc, zodat een payoff-regel nu ook op een relatiescore kan filteren.
+   `SP_EMPTY_STATE` kreeg er `relations:{}` bij.
+
+   **Proof-of-concept (getest):** de bestaande Gratia-route bij Delos
+   (`CH2_L07B`, al vanaf de eerste gated-choice-batch aanwezig — de tekst
+   beschreef al "Athena's gespannen gezicht, heel even, iets minder
+   gesloten") kreeg er `RELATION: athena=+1` bij — geen nieuwe scène
+   nodig, puur een mechanische bevestiging van wat er al stond. Een
+   nieuwe echo-payoff op `CH2_ATHENA` (`relationMin:{athena:1}`) laat
+   Athena, op het moment dat ze voor het eerst als mentor naar voren
+   stapt, heel even iets persoonlijkers tonen. Getest in de browser: de
+   Gratia-route zet de score correct op 1 en de echo verschijnt; een
+   andere route bij Delos laat de score op 0 en de echo blijft weg;
+   `spHookRelation()` klemt correct bij herhaald aanroepen (10× `+2` →
+   blijft op 5, 10× `-2` daarna → blijft op -5).
+
+   **Inhoudelijke referentie klaar (2026-07-25)**:
+   `certamen/assets/chronica/cross_narratieve_figuren.md` — een lijst van
+   sterfelijke helden/personages die in meerdere Griekse/Romeinse
+   verhaalcycli voorkomen (Argonauten, Thebe, Heracles, Theseus, Kreta,
+   Troje, Atriden, Rome), getagd per cyclus, elk met een payoff-notitie.
+   Bevat ook een aparte laag "vloeken en erfstukken" (het halssnoer van
+   Harmonia, de boog van Heracles, het Gulden Vlies, het Palladium) die
+   als reizende objecten met eigen flags gemodelleerd moeten worden, los
+   van personen — dit zijn de payoffs die het langst (meerdere
+   hoofdstukken) blijven hangen. Dit document bepaalt welke NPC's/
+   objecten een eigen relatie-object verdienen bij een volgende, grotere
+   uitbreiding (nu alleen Athena, als bewijs dat de engine werkt).
+3. **Kroniek — GEBOUWD (2026-07-25), epiloog nog niet.** Nieuw Codex-
+   tabblad, op Gerbens verzoek als EERSTE tabblad (vóór Herinneringen) —
+   `SP_CODEX_TABS`/`SP_CODEX_TAB` in singleplayer.js. Geen datatabel: puur
+   een oplopende `SP_STATE.kroniek`-lijst (`{hoofdstuk, tekst, t}`),
+   gevuld door `spKroniekLog()` en in `spCodexKroniekHTML()` gegroepeerd
+   per hoofdstuk weergegeven als lopende tekst (dezelfde
+   `.codex-entry`/`<h4>`-opmaak als de andere tabbladen) — "geschreven als
+   annalen, niet als menu", precies Deel 1.5 van de spec.
+
+   **Wat wordt gelogd** (op Gerbens vraag: "alle keuzes die relevant zijn
+   voor het verhaal; of in elk geval wat en hoe de held bepaalde scenes
+   doorgespeeld heeft"):
+   - de klassekeuze in de proloog (`spHookReward`, bij de eerste keuze);
+   - elke STAT-gated keuze die de speler daadwerkelijk neemt — via een
+     nieuwe `spChooseTrackedPath()` die, vóór te navigeren, de gekozen
+     `choice` terugzoekt in de BRONscène (op `target`, niet op het label
+     zelf door de HTML te sturen — labels bevatten regelmatig een
+     apostrof) en het scène-`title` + keuze-`label` + statnaam logt;
+   - elke `[DONE:...]`-hub-keuze (welke verhaallijn gekozen werd — Latona/
+     Semele/Kallisto/Herakles in Hoofdstuk 2, enz.) via diezelfde
+     `spChooseTrackedPath()`, want die keuzes zijn óók `c.done`-getagd;
+   - elke skillpunt-investering (`spInvestStat`, tekst + van→naar-waarde);
+   - elke payoff die vuurt (`spResolvePayoffs`) — echo/kantelpunt-tekst
+     rechtstreeks, een deur als "een eerdere keuze opende een nieuwe weg:
+     [keuzelabel]".
+
+   Bewust NIET gelogd: gewone (niet-gated, niet-DONE) verhaalkeuzes en de
+   Clementia/Severitas-toonkeuzes — dat zou de Kroniek een ruwe klikgeschiedenis
+   maken in plaats van een selectie van wat er werkelijk toe deed, en
+   botst met Deel 1.5's "nooit een spreadsheet".
+
+   Getest in de browser: klassekeuze, een STAT-gated route, een
+   `[DONE]`-lijnkeuze, een payoff-echo en een skillpunt-investering
+   verschijnen allemaal, correct gegroepeerd per hoofdstuk, in de
+   volgorde waarin ze plaatsvonden; een niet-gated "altijd open"-route
+   (de taalpuzzel bij `CH1_A02`) logt terecht NIETS. Kroniek staat als
+   eerste tab en is ook de standaard geopende tab.
+
+   **Epiloog nog niet gebouwd** — logische volgende stap zodra er een
+   "einde" van de campagne is om hem aan op te hangen (nu bestaat alleen
+   t/m Hoofdstuk 6).
+4. **Nieuw checktype `CHECK:`** met de vier-uitkomsten-ladder +
+   Ingenium/Gratia-koppeling, naast `PUZZLE:` — vult §11.4/item 7 (rolled
+   check) en item 9 (Latijn-check-koppeling) tegelijk in.
+5. **Proof-of-concept**: één bestaand hoofdstuk (of een samenhangende
+   scènereeks) van begin tot eind uitrusten met alle vier bovenstaande
+   systemen, per het eigen advies van de spec ("bouw één hoofdstuk
+   volledig voordat je aan het volgende begint").
+6. **Later**: docent-instelbaar niveauplafond + hint-registratie voor
+   docentrapportage, constructie-/herkenning-/onder-druk-checktypen
+   (Deel 2.2b-d).
+
+Nog niet gestart met bouwen — audit en scope-beslissingen zijn hiermee
+vastgelegd; implementatie volgt na goedkeuring van deze bouwvolgorde.

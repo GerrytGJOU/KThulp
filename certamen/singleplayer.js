@@ -299,7 +299,7 @@ function spTendencyAddressPhrase(state){
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
                   "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS"],
+                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -402,7 +402,8 @@ const CNSParser = {
 
 const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
-  stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[] });
+  stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[],
+  payoffsSeen:{}, relations:{}, kroniek:[] });
 
 /* ---- SPELERSTATE ---- */
 let SP_STATE = SP_EMPTY_STATE();
@@ -608,8 +609,9 @@ function spRenderLanding(){
    - Vocabulaire: SP_VOCAB_ENTRIES, via VOCAB:.
    - Afbeeldingen: SP_STATE.seenImages, automatisch bijgehouden door
      spHookSeenImage() zodra een scène met een IMAGE: wordt bezocht. ---- */
-let SP_CODEX_TAB = "herinneringen";
+let SP_CODEX_TAB = "kroniek";
 const SP_CODEX_TABS = [
+  { id:"kroniek",       nm:"Kroniek",       icon:"📖" },
   { id:"herinneringen", nm:"Herinneringen", icon:"🏛️" },
   { id:"mythologie",   nm:"Mythologie",   icon:"⚡" },
   { id:"geschiedenis", nm:"Geschiedenis", icon:"🏺" },
@@ -626,6 +628,7 @@ SCREENS.spCodex = function(){
     `<button class="codex-tab${t.id===SP_CODEX_TAB?" on":""}" onclick="spSwitchCodexTab('${t.id}')">${t.icon} ${esc(t.nm)}</button>`
   ).join("");
   const bodies = {
+    kroniek: spCodexKroniekHTML,
     herinneringen: spCodexSouvenirsHTML,
     mythologie: ()=>spCodexEntriesHTML("mythologie", "Nog niets vastgelegd — mythen verschijnen hier zodra je ze beleeft."),
     geschiedenis: ()=>spCodexEntriesHTML("geschiedenis", "Nog niets vastgelegd — Hoofdstuk 1 is nog puur mythologie; historische bladzijden volgen bij latere hoofdstukken."),
@@ -698,6 +701,31 @@ function spCodexImagesHTML(){
       <img src="assets/chronica/images/${esc(i.img)}" alt="" onerror="this.parentElement.style.display='none'">
       <div class="codex-gallery-caption">${esc(i.titel)}</div>
     </div>`).join("")}</div>`;
+}
+/* ---- KRONIEK-TAB (Chronica.md §12, Deel 1.5 van de spec: "een doorlopend,
+   in-fictie logboek van beslissingen... geschreven als annalen, niet als
+   menu"). Bewust géén datatabel — SP_STATE.kroniek is een platte, in
+   volgorde opgebouwde lijst van {hoofdstuk, tekst, t}-regels (gevuld door
+   spKroniekLog, aangeroepen vanuit de klassekeuze, gated-choice-routes,
+   skillpoint-investeringen en de payoff-laag), hier alleen gegroepeerd per
+   hoofdstuk en als lopende tekst weergegeven — zelfde `.codex-entry`/`<h4>`
+   opmaak als de andere tabbladen, geen nieuwe CSS nodig. Eerste tabblad,
+   vóór Herinneringen: dit IS het overzicht waar de speler z'n eigen verhaal
+   in herkent. ---- */
+function spCodexKroniekHTML(){
+  const entries = SP_STATE.kroniek||[];
+  if(!entries.length) return `<p class="codex-empty">Nog niets vastgelegd — je Kroniek vult zich naarmate je keuzes maakt.</p>`;
+  const groups = [];
+  entries.forEach(e=>{
+    const last = groups[groups.length-1];
+    if(!last || last.hoofdstuk!==e.hoofdstuk) groups.push({ hoofdstuk:e.hoofdstuk, items:[e] });
+    else last.items.push(e);
+  });
+  return groups.map(g=>`
+    <div class="codex-entry">
+      <h4>${esc(g.hoofdstuk||"—")}</h4>
+      ${g.items.map(e=>`<p>${esc(e.tekst)}</p>`).join("")}
+    </div>`).join("");
 }
 /* ---- HERINNERINGEN-TAB (museum van Mnemosyne — nog ambigu voor de speler,
    zie Chronica.md §7.2.1a): één klein voorwerp per afgeronde lijn/verhaal,
@@ -849,6 +877,7 @@ function spInvestStat(key){
   const statSpentSinceAward = {...spent, [key]:(spent[key]||0)+1};
   const statLog = [...(SP_STATE.statLog||[]), { key, van:val, naar:val+1, hoofdstuk:chapterNr, t:Date.now() }];
   spSaveProgress({ stats, skillpoints:points-cost, statSpentSinceAward, statLog });
+  spKroniekLog(`Je investeerde een statpunt in ${SP_STAT_DEFS[key]?.nm||key} (${val} → ${val+1}).`);
   go("spStats");
 }
 // Welke saveslot toont het Certamen-profiel (battle.js) als statistieken-
@@ -887,6 +916,31 @@ function spChoosePath(target, approach){
   if(approach) spHookApproach(approach);
   spGoCns(target);
 }
+// Kroniek (Chronica.md §12, Deel 1.5 van de spec): "een doorlopend,
+// in-fictie logboek van beslissingen... geschreven als annalen, niet als
+// menu". Eén regel tekst per noemenswaardige gebeurtenis, gegroepeerd per
+// hoofdstuk in de weergave (SCREENS.spCodex). Bewust GEEN los datamodel
+// per brontype — alles is gewoon een {hoofdstuk, tekst, t}-regel.
+function spKroniekLog(tekst){
+  const kroniek = [...(SP_STATE.kroniek||[]), { hoofdstuk: spChapterLabel(SP_STATE.node), tekst, t: Date.now() }];
+  spSaveProgress({ kroniek });
+}
+// Voor keuzes die de Kroniek moet vastleggen: gated (STAT:) routes en
+// [DONE]-hub-keuzes (welke lijn je koos) — "wat en hoe de held bepaalde
+// scènes doorgespeeld heeft". Zoekt de aangeklikte keuze terug op in de
+// BRONSCENE (nog SP_STATE.node, vóór spChoosePath navigeert) via het
+// target — veiliger dan het label zelf door de onclick-HTML te sturen
+// (labels bevatten regelmatig een apostrof).
+function spChooseTrackedPath(target, approach){
+  const scene = SP_SCENES.get(SP_STATE.node);
+  const choice = scene?.choices.find(c=>c.target===target && (c.statReq||c.done));
+  if(choice){
+    const label = SpTextResolver.resolve(choice.label, SP_STATE);
+    const suffix = choice.statReq ? ` (${SP_STAT_DEFS[choice.statReq.key]?.nm||choice.statReq.key})` : "";
+    spKroniekLog(`Bij "${SpTextResolver.resolve(scene.title, SP_STATE)}": ${label}${suffix}.`);
+  }
+  spChoosePath(target, approach);
+}
 // Klik op een reeds voltooide [DONE]-keuze (zie spPlay/CNSParser): navigeert
 // bewust NIET — enkel een korte, Orakel-achtige herinnering hoeveel lijnen
 // in dit hoofdstuk nog open staan.
@@ -914,6 +968,74 @@ function spStatReqMet(statReq){
   return val >= statReq.value;
 }
 
+/* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — het losse
+   `FLAG:`-geheugen van het spel (~100+ write-only vlaggen tot nu toe) krijgt
+   hiermee een generieke manier om zichzelf hoofdstukken later terug te laten
+   komen, zonder dat de scène die het toont ook maar iets van de geschiedenis
+   hoeft te weten. SP_PAYOFFS (singleplayer-data.js) is een platte lijst van
+   regels; deze functies evalueren en passen ze toe.
+
+   Drie types (zie spec): "echo" (extra tekstalinea, sfeer), "deur" (extra
+   keuzeknop die alleen verschijnt als de conditie klopt) en "kantelpunt"
+   (stille wereldstaat-wijziging via content.setFlags, met optioneel ook
+   eigen tekst). Elke payoff-regel vuurt hooguit ÉÉN keer per saveslot,
+   bijgehouden in SP_STATE.payoffsSeen — ook als de triggerscène later
+   opnieuw wordt bezocht (bv. via een hub-terugkeer).
+
+   Condities zijn bewust declaratief (geen losse JS-functies in de data),
+   zodat een toekomstige auteurscontrole (Deel 1.6 van de spec: "flags die
+   nergens uitgelezen worden, payoffs met een onbereikbare conditie") de
+   lijst statisch kan doorlopen: { flags:{sleutel:waarde}, flagsSet:[...],
+   flagsNotSet:[...] } — alle drie optioneel, alle drie moeten kloppen. */
+function spPayoffConditionMet(cond){
+  if(!cond) return true;
+  const flags = SP_STATE.flags||{};
+  if(cond.flags) for(const k in cond.flags) if(flags[k]!==cond.flags[k]) return false;
+  if(cond.flagsSet) for(const k of cond.flagsSet) if(!flags[k]) return false;
+  if(cond.flagsNotSet) for(const k of cond.flagsNotSet) if(flags[k]) return false;
+  const relations = SP_STATE.relations||{};
+  if(cond.relationMin) for(const npc in cond.relationMin) if((relations[npc]?.score||0) < cond.relationMin[npc]) return false;
+  if(cond.relationMax) for(const npc in cond.relationMax) if((relations[npc]?.score||0) > cond.relationMax[npc]) return false;
+  return true;
+}
+// Wordt exact één keer per scènebezoek aangeroepen, ná spRunMetaHooks (dus
+// een payoff mag reageren op een FLAG: die dezelfde scène net zelf zette).
+// Markeert alle geactiveerde payoffs meteen als gezien en past kantelpunt-
+// wereldstaatwijzigingen toe — dat gebeurt dus ook als de speler de
+// echo-tekst/deur-knop nooit echt bekijkt, consistent met "elke payoff vuurt
+// hooguit één keer".
+function spResolvePayoffs(sceneId){
+  const seen = SP_STATE.payoffsSeen||{};
+  const active = SP_PAYOFFS
+    .filter(p => p.trigger.scene===sceneId && !seen[p.id] && spPayoffConditionMet(p.condition))
+    .sort((a,b) => (b.priority||0)-(a.priority||0));
+  if(!active.length) return { echoHTML:"", doorChoices:[] };
+  const newSeen = {...seen};
+  let flags = SP_STATE.flags;
+  let flagsChanged = false;
+  const echoParts = [];
+  const doorChoices = [];
+  const kroniek = [...(SP_STATE.kroniek||[])];
+  const hoofdstuk = spChapterLabel(sceneId);
+  active.forEach(p=>{
+    newSeen[p.id] = true;
+    if(p.content.setFlags){ flags = {...flags, ...p.content.setFlags}; flagsChanged = true; }
+    if(p.content.text){
+      const resolved = SpTextResolver.resolve(p.content.text, SP_STATE);
+      echoParts.push(`<p style="font-style:italic">${esc(resolved)}</p>`);
+      kroniek.push({ hoofdstuk, tekst:resolved, t:Date.now() });
+    }
+    if(p.type==="deur" && p.content.choice){
+      doorChoices.push(p.content.choice);
+      kroniek.push({ hoofdstuk, tekst:`Een eerdere keuze opende een nieuwe weg: ${SpTextResolver.resolve(p.content.choice.label, SP_STATE)}.`, t:Date.now() });
+    }
+  });
+  const patch = { payoffsSeen: newSeen, kroniek };
+  if(flagsChanged) patch.flags = flags;
+  spSaveProgress(patch);
+  return { echoHTML: echoParts.join(""), doorChoices };
+}
+
 /* ---- SCÈNE-RENDERER ---- */
 SCREENS.spPlay = function(){
   document.body.classList.remove("greek");
@@ -927,8 +1049,9 @@ SCREENS.spPlay = function(){
   if(scene.meta.PUZZLE) return spRenderPuzzle(scene);
   if(scene.meta.COMBAT) return spStartCombatFromScene(scene);
 
+  const payoffs = spResolvePayoffs(SP_STATE.node);
   const titleHTML = scene.title ? `<h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>` : "";
-  const textHTML = spParagraphsHTML(scene.text, SP_STATE);
+  const textHTML = spParagraphsHTML(scene.text, SP_STATE) + payoffs.echoHTML;
   const dialogueHTML = scene.dialogue ? `
     <div class="panel">
       <div class="eyebrow l">${esc(SpTextResolver.resolve(scene.dialogue.speaker, SP_STATE))}</div>
@@ -962,16 +1085,25 @@ SCREENS.spPlay = function(){
         if(c.statReq && !spStatReqMet(c.statReq)){
           return `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;opacity:.5;cursor:not-allowed" disabled>${label}</button>`;
         }
-        const onclick = isDone ? `spChoiceAlreadyDone(${openCount})` : `spChoosePath('${c.target}','${c.approach||""}')`;
+        const onclick = isDone ? `spChoiceAlreadyDone(${openCount})`
+          : (c.statReq||c.done) ? `spChooseTrackedPath('${c.target}','${c.approach||""}')`
+          : `spChoosePath('${c.target}','${c.approach||""}')`;
         return `<button class="btn ${isDone?"":"btn-gold "}btn-block lg" style="margin-top:8px${isDone?";opacity:.6":""}" onclick="${onclick}">${label}</button>`;
       }).join("")
     : `<button class="btn btn-ghost btn-block lg" onclick="go('spSlots')">Terug naar de opslagplekken</button>`;
+  // "Deur"-payoffs (Chronica.md §12): een extra keuze die alleen verschijnt
+  // omdat een eerdere, hoofdstukken geleden gemaakte keuze dat nu toelaat —
+  // los van scene.choices zelf, dus geen CNS-wijziging nodig om dit te tonen.
+  const doorChoicesHTML = payoffs.doorChoices.map(c=>
+    `<button class="btn btn-gold btn-block lg" style="margin-top:8px" onclick="spGoCns('${c.target}')">${esc(SpTextResolver.resolve(c.label, SP_STATE))} ✦</button>`
+  ).join("");
 
   H(brand(true)+`
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   <div class="panel">${spSceneImageHTML(scene)}${spChapterEyebrowHTML()}${titleHTML}${textHTML}</div>
   ${dialogueHTML}
   ${choicesHTML}
+  ${doorChoicesHTML}
   ${foot()}`);
 };
 
@@ -985,6 +1117,7 @@ function spRunMetaHooks(meta){
   if(meta.QUEST)     spHookQuest(meta.QUEST);
   if(meta.EERETITEL) spAwardTitle(meta.EERETITEL.trim());
   if(meta.FLAG)      spHookFlag(meta.FLAG);
+  if(meta.RELATION)  spHookRelation(meta.RELATION);
   if(meta.MUSIC)     spPlayMusic(meta.MUSIC.trim());
   if(meta.PERSON)    spHookPerson(meta.PERSON);
   if(meta.VOCAB)     spHookVocab(meta.VOCAB);
@@ -1070,6 +1203,28 @@ function spHookFlag(text){
     else flags[part.slice(0,eq).trim()] = part.slice(eq+1).trim();
   });
   spSaveProgress({ flags });
+}
+// Relaties (Chronica.md §12, Deel 1.2c van de spec): een `RELATION:`-sectie
+// verschuift de score van een NPC met een DELTA (nooit een directe
+// toekenning — "een enkele keuze verschuift meestal 1 of 2 punten"),
+// geklemd op -5..+5. Formaat: `npc=+1` of meerdere gescheiden door `;`/regel,
+// zelfde stijl als FLAG:. Wat een NPC "weet" (Deel 1.2c's tweede helft) is
+// bewust GEEN apart mechanisme — dat zijn gewoon gewone `FLAG:`s met een
+// naamgevingsafspraak (bv. `dido_zag_vertrek`), de bestaande payoff-conditie
+// (`flags`/`flagsSet`) kan die al lezen.
+function spHookRelation(text){
+  const relations = {...(SP_STATE.relations||{})};
+  text.split(/[\n;]/).forEach(part=>{
+    part = part.trim(); if(!part) return;
+    const eq = part.indexOf("=");
+    if(eq===-1) return;
+    const npc = part.slice(0,eq).trim();
+    const delta = parseInt(part.slice(eq+1).trim(), 10);
+    if(!npc || !delta) return;
+    const current = relations[npc]?.score || 0;
+    relations[npc] = { ...(relations[npc]||{}), score: Math.max(-5, Math.min(5, current+delta)) };
+  });
+  spSaveProgress({ relations });
 }
 
 /* ---- PERSONEN-TAB: PERSON:-sectie zet één of meer "id:niveau"-paren
@@ -1219,9 +1374,12 @@ function spHookReward(text){
   // REWARD (zou nu niet voorkomen) mag een al gegroeid statblok niet overschrijven.
   const stats = (isNew && SP_CLASS_STATS[classId]) ? {...SP_CLASS_STATS[classId]} : SP_STATE.stats;
   spSaveProgress({ classId, traits, stats });
-  if(isNew) toast("Wapen gekozen!", BM_IDENT
-    ? "Je pad is bepaald — dit werkt ook door in Battle Mode."
-    : "Je pad is bepaald. Log in met je klascode om dit ook in Battle Mode te laten meetellen.");
+  if(isNew){
+    toast("Wapen gekozen!", BM_IDENT
+      ? "Je pad is bepaald — dit werkt ook door in Battle Mode."
+      : "Je pad is bepaald. Log in met je klascode om dit ook in Battle Mode te laten meetellen.");
+    spKroniekLog(`Bij het Orakel van Chronos koos je je pad: ${fields.class}.`);
+  }
 }
 // Eén of meerdere codex-id's (`,`/`;`/regel-gescheiden) in één CODEX:-sectie —
 // bv. CH1_000 ontgrendelt in één keer de twee grammatica-entries van
