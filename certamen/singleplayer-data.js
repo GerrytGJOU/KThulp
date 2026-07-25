@@ -1416,6 +1416,47 @@ const SP_VOCAB_ENTRIES = {
   grieks_bakchos:   { taal:"grieks", woord:"Βάκχος", transcript:"Bákchos", betekenis:"Bacchus (bijnaam van Dionysos)" },
 };
 
+/* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
+   van regels die spResolvePayoffs() (singleplayer.js) per scènebezoek
+   evalueert. Elke regel:
+   - id: uniek, wordt gebruikt in SP_STATE.payoffsSeen zodat hij maar één
+     keer vuurt.
+   - type: "echo" (extra alinea), "deur" (extra keuzeknop) of "kantelpunt"
+     (stille wereldstaatwijziging, met optioneel ook eigen tekst).
+   - trigger.scene: op welke scène-ID de regel wordt getoetst.
+   - condition: declaratief — { flags:{sleutel:waarde}, flagsSet:[...],
+     flagsNotSet:[...] }, alle drie optioneel, moeten allemaal kloppen.
+   - priority: hoger vuurt eerst als er meerdere op dezelfde scène matchen
+     (nu nog niet nodig — alle onderstaande regels zijn onderling exclusief
+     per triggerscène — maar wel alvast ondersteund).
+   - content: { text, choice:{label,target}, setFlags:{...} } — welke velden
+     gebruikt worden hangt af van het type.
+
+   BOUWSTATUS: eerste, kleine proof-of-concept (2026-07-24) — 3 echo's die
+   laten zien welke Hoofdstuk-1-lijn de speler koos, plus 1 deur die de
+   ontvangen Herakles-wapenrusting terug laat komen. Een "kantelpunt"-
+   voorbeeld met echte dramatische inzet (personage/bondgenoot/einde)
+   ontbreekt nog bewust — de Tydeus-lijn (al terugkerend tussen Hoofdstuk 5
+   en 6, zie §11 batch 4) is de logische eerste kandidaat zodra dat wordt
+   opgepakt. ---- */
+const SP_PAYOFFS = [
+  { id:"ch2_000_echo_ch1_lijn_a", type:"echo", trigger:{scene:"CH2_000"},
+    condition:{flags:{ch1_lijn:"A"}}, priority:0,
+    content:{text:`De boodschapper werpt je een blik toe die net iets langer duurt dan nodig. "Midas leerde dat een wens zonder grenzen een vloek is," zegt ze zacht. "Onthoud dat, terwijl je Hera's jaloezie volgt."`} },
+  { id:"ch2_000_echo_ch1_lijn_b", type:"echo", trigger:{scene:"CH2_000"},
+    condition:{flags:{ch1_lijn:"B"}}, priority:0,
+    content:{text:`De boodschapper knikt kort naar je, alsof ze zich iets herinnert. "Jij was erbij toen Athena geboren werd — gewapend, voltallig, uit niets dan Zeus' eigen hoofd. Onthoud die kracht, terwijl je Hera's jaloezie volgt."`} },
+  { id:"ch2_000_echo_ch1_lijn_c", type:"echo", trigger:{scene:"CH2_000"},
+    condition:{flags:{ch1_lijn:"C"}}, priority:0,
+    content:{text:`De boodschapper kijkt je even aan, bijna warm. "Jij zag Prometheus zijn vuur stelen voor de mensheid — en de prijs die hij daarvoor betaalde. Onthoud die prijs, terwijl je Hera's jaloezie volgt."`} },
+  { id:"ch3_h01_deur_herakles_harnas", type:"deur", trigger:{scene:"CH3_H01"},
+    condition:{flagsSet:["herakles_harnas"]}, priority:0,
+    content:{choice:{label:"Wijs hem op het harnas dat hij je ooit gaf, nog altijd om je schouders", target:"CH3_H01_HARNAS"}} },
+  { id:"ch2_athena_echo_relatie", type:"echo", trigger:{scene:"CH2_ATHENA"},
+    condition:{relationMin:{athena:1}}, priority:0,
+    content:{text:`Voor ze verdergaat, laat haar blik heel even op je rusten — niet de onleesbare blik van een toeschouwer, maar die van iemand die zich iets herinnert. Delos, denk je. Ze was erbij. Ze heeft niets vergeten.`} },
+];
+
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
    de bestaande Battle Mode-klasse-id (battle-data.js: BM_CLASSES), zodat
    stat-bonussen/unlocks automatisch doorwerken. ---- */
@@ -3231,6 +3272,9 @@ Delos reageert niet aarzelend, zoals bij een smeekbede gebruikelijk is, maar onm
 FLAG:
 ch2_l07_route=gratia
 
+RELATION:
+athena=+1
+
 CHOICES:
 
 * Kijk toe hoe Delos zich verankert -> CH2_L08
@@ -4659,6 +4703,20 @@ TEXT:
 Twee van Herakles' twaalf werken liggen achter hem — de Nemeïsche Leeuw gewurgd, de Hydra van Lerna verslagen met vuur, al telt Eurystheus die laatste vanwege Iolaos' hulp niet volwaardig mee. Tien beproevingen resten er nog, en Eurystheus, veilig verscholen achter de rand van zijn bronzen pot, kondigt de derde alvast aan met zichtbaar plezier in de moeilijkheidsgraad die hij ditmaal heeft bedacht.
 
 "Geen monster deze keer," zegt hij. "Een hert. Hoe moeilijk kan dat nu helemaal zijn?"
+
+CHOICES:
+
+* Wacht af wat er zo lastig kan zijn aan een hert -> CH3_H02
+
+END
+
+=== SCENE: CH3_H01_HARNAS ===
+
+TITLE:
+Een Herinnering in Brons
+
+TEXT:
+Herakles' blik valt op het harnas dat je draagt — zijn eigen, ooit overbodig geworden brons — en er verschijnt een glimlach die niets met de aankomende beproeving te maken heeft. "Nog steeds van pas, zie ik," zegt hij. "Mooi. Dan heeft het tenminste een nieuw leven gevonden." Hij knikt je toe, iets warmer dan zijn gebruikelijke strijdlust, voor hij zich weer tot Eurystheus' aankondiging keert.
 
 CHOICES:
 
@@ -6370,6 +6428,9 @@ Binnen een paar weken ligt de haven van Iolcus vol met de beroemdste namen van G
 
 Bij het schip zelf staat de man die het heeft gebouwd: Argos, zoon van Arestor, die — op aanwijzing van Athena zelf, zegt men — een balk uit het orakelbos van Dodona in de boeg heeft verwerkt. "Ze waarschuwt weleens," zegt hij droog, als iemand ernaar vraagt, "maar nooit op tijd om nog iets te kunnen doen met de waarschuwing."
 
+IMAGE:
+argo_bemanning.png
+
 CODEX:
 codex_argonauten_bemanning
 
@@ -6665,6 +6726,9 @@ Beide groepen drijven het everzwijn uiteindelijk naar dezelfde kloof, waar het g
 
 Geen van beiden claimt de eer alleen. "Zonder jouw pijl had ik hem nooit ingehaald," zegt Meleager, en Atalanta knikt, voor het eerst die dag zonder een spoor van wedijver in haar blik.
 
+IMAGE:
+everzwijn_cyzicus.png
+
 PUZZLE:
 puzzle_ch5_accusativus
 
@@ -6754,6 +6818,9 @@ Een Reus Geveld
 TEXT:
 Amycus valt, voor het eerst in zijn leven verslagen, en zijn volk — dat hem eerder uit angst dan uit liefde volgde — verwelkomt de Argonauten meteen als bevrijders in plaats van indringers. Kastor slaat zijn broer trots op de schouder; het is duidelijk dat dit niet de laatste keer is dat deze twee samen iets overwinnen dat groter is dan zijzelf.
 
+IMAGE:
+polydeukes_amycus.png
+
 CODEX:
 codex_dioscuren
 
@@ -6774,6 +6841,9 @@ TEXT:
 Bij Mysië gaat Herakles aan land om een nieuwe roeiriem te snijden, met zijn jonge metgezel Hylas mee om water te halen. Hylas keert nooit terug — de waternimfen van de bron waar hij put, betoveren hem en trekken hem mee de diepte in, verliefd op zijn schoonheid.
 
 Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke aanmaning om terug aan boord te komen. Tegen de ochtend besluit de bemanning, met tegenzin, zonder hem verder te varen — Herakles, wanneer hij eindelijk het strand terugvindt en het schip al weg ziet, blijft alleen achter, zijn zoektocht naar Hylas nog altijd niet opgegeven.
+
+IMAGE:
+hylas_nimfen.png
 
 CHOICES:
 
@@ -6890,6 +6960,9 @@ TEXT:
 Op Argos' teken roeit de hele bemanning met alles wat ze in zich hebben, precies op het moment dat de rotsen weer uiteen wijken. De Argo schiet erdoorheen en is nog maar net voorbij wanneer de wanden achter haar met een oorverdovende klap weer op elkaar slaan — op een haar na alleen het uiterste puntje van de achtersteven rakend.
 
 Sinds die dag, zegt men, bewegen de Symplegades niet meer: een schip dat de doortocht overleeft, bevriest de rotsen voorgoed op hun plaats. Wat er ook van waar is, geen enkel schip na de Argo heeft ze ooit nog zien bewegen.
+
+IMAGE:
+symplegades_doortocht.png
 
 CODEX:
 codex_argos_schip
@@ -7032,6 +7105,9 @@ TEXT:
 Colchis ligt aan de rand van de bekende wereld, verder naar het oosten dan de meeste Grieken ooit zijn gevaren. Koning Aeëtes ontvangt de Argonauten koeltjes — hij bewaakt het Gulden Vlies al jaren met een nooit slapende draak, en is niet van plan het zomaar aan een groep vreemdelingen af te staan.
 
 Naast hem staat zijn dochter Medea, een begaafde tovenares — en de eerste die haar vaders koelte niet deelt zodra ze Jason ziet. Wat ze voor hem voelt, overvalt haarzelf net zo hard als het jou overvalt: het lijkt in niets op wat ze had verwacht.
+
+IMAGE:
+medea_aeetes_colchis.png
 
 PERSON:
 medea:intro, aeetes:intro
@@ -7222,6 +7298,9 @@ TEXT:
 Met de draak verslagen snijdt Jason het Vlies eindelijk los — zwaarder en warmer in zijn handen dan hij had verwacht, alsof het al die jaren wachten zelf ook gewicht heeft gekregen. Medea, haar eigen vader en koninkrijk nu voorgoed achter zich latend, vaart met de Argo mee terug naar Griekenland.
 
 In je vuist voel je een klein, gouden schilfertje dat losraakte van het Vlies tijdens het gevecht — koud eerst, dan langzaam warm, alsof het net zo lang op jou heeft liggen wachten als het Vlies zelf op Jason wachtte.
+
+IMAGE:
+gulden_vlies_gevonden.png
 
 SOUVENIR:
 souvenir_argonauten
