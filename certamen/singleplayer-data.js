@@ -7430,6 +7430,9 @@ Kadmos, een Fenicische prins op zoek naar zijn geschaakte zuster Europa — je k
 
 Om een offer te brengen doodt hij een draak die de bron ter plekke bewaakt — en zaait, op advies van Athena zelf, de tanden van het beest in de aarde. Uit de grond rijzen gewapende krijgers op, meer dan Kadmos in zijn eentje het hoofd kan bieden.
 
+IMAGE:
+spartoi_thebe.png
+
 PERSON:
 kadmos:intro
 
@@ -7534,6 +7537,9 @@ TEXT:
 Apollo en Diana laten de belediging aan hun moeder niet ongestraft. Met hun pijl en boog doden ze, de een na de ander, al Niobe's veertien kinderen — tot er niemand meer overblijft om nog trots op te zijn.
 
 Niobe, verstard van verdriet, verandert ter plekke in steen. Nog altijd, zegt men, laat de rots op de berg Sipylos water druppelen — tranen die na al die generaties nog altijd niet zijn opgehouden.
+
+IMAGE:
+niobe_versteend.png
 
 CODEX:
 codex_niobe
@@ -7678,6 +7684,9 @@ Het Raadsel
 TEXT:
 "Welk wezen," vraagt de Sfinx, "loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie — en is het zwakst naarmate het er meer heeft?"
 
+IMAGE:
+sfinx_raadsel.png
+
 PUZZLE:
 puzzle_ch6_sfinx
 
@@ -7753,6 +7762,9 @@ TEXT:
 Verbannen uit zijn eigen stad, verzamelt Polyneikes zes andere champions om Thebe met geweld terug te veroveren — samen bekend als de Zeven tegen Thebe. Onder hen een gezicht dat je al kent: Tydeus, de kortlontige Argonaut van de Argo (Hoofdstuk 5), even onstuimig als altijd.
 
 "Als er íémand een stadspoort met kracht in plaats van geduld openkrijgt," zegt Tydeus grimmig, terwijl hij zijn wapenrusting aantrekt, "dan ben ik dat wel."
+
+IMAGE:
+zeven_tegen_thebe.png
 
 CHOICES:
 
@@ -7957,6 +7969,9 @@ Antigone's Verzet
 TEXT:
 Tegen Creons uitdrukkelijke bevel in begraaft Antigone haar broer in het geheim, met de juiste rituelen — overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning.
 
+IMAGE:
+antigone_begrafenis.png
+
 PUZZLE:
 puzzle_ch6_perfectum
 
@@ -8034,6 +8049,9 @@ Met Laodamas verslagen valt Thebe eindelijk, tien jaar nadat de vaders van de Ep
 
 Zijn naam zal hier niet ophouden. Jaren later, ver van Thebe, zal Diomedes een van de dapperste helden voor de poorten van een heel andere belegerde stad worden.
 
+IMAGE:
+diomedes_val_thebe.png
+
 CODEX:
 codex_epigonen
 
@@ -8072,6 +8090,9 @@ Een Nieuwe God
 
 TEXT:
 Een vreemde nieuwe verering verspreidt zich door Thebe: de cultus van Bacchus, god van wijn en extase — en, zoals niemand in de stad hardop durft te zeggen, de zoon van Semele, Kadmos' eigen dochter. Pentheus, Semele's neef en de huidige koning, weigert te geloven dat zijn eigen nicht een god heeft gebaard. Hij verbiedt de verering en probeert de vrouwen van Thebe, die massaal de bergen in trekken om Bacchus te aanbidden, met geweld terug te dwingen.
+
+IMAGE:
+bacchanten_berg.png
 
 PERSON:
 pentheus:intro
