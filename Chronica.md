@@ -98,7 +98,7 @@ browser):
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
 | Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 7+ nog niet geschreven |
-| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png`. Hoofdstuk 5 heeft nu ook 7 `IMAGE:`-tags (doorlopend logboek, geen lijnen, allemaal Aegean blue): `argo_bemanning.png`, `everzwijn_cyzicus.png`, `polydeukes_amycus.png`, `hylas_nimfen.png`, `symplegades_doortocht.png`, `medea_aeetes_colchis.png`, `gulden_vlies_gevonden.png` — Gemini-prompts klaar, bestanden nog niet gegenereerd. Hoofdstuk 6 nog volledig open |
+| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png`. Hoofdstuk 5 heeft nu ook 7 `IMAGE:`-tags (doorlopend logboek, geen lijnen, allemaal Aegean blue): `argo_bemanning.png`, `everzwijn_cyzicus.png`, `polydeukes_amycus.png`, `hylas_nimfen.png`, `symplegades_doortocht.png`, `medea_aeetes_colchis.png`, `gulden_vlies_gevonden.png`. Hoofdstuk 6 heeft nu ook 7 `IMAGE:`-tags (generatieverhaal, geen lijnen, allemaal Aegean blue): `spartoi_thebe.png`, `niobe_versteend.png`, `sfinx_raadsel.png`, `zeven_tegen_thebe.png`, `antigone_begrafenis.png`, `diomedes_val_thebe.png`, `bacchanten_berg.png` — Gemini-prompts klaar, bestanden nog niet gegenereerd. Alle 6 hoofdstukken hebben nu illustratie-tags |
 | Gemini-huisstijl-Gem (stripstijl, scène-illustraties) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | Gemini-huisstijl-Gem (museumstukken, Herinneringen-tab) | `certamen/assets/chronica/gemini-souvenir-style.md` | ✅ herbruikbare Gem-instructie — vaste sokkel/stolp/kussentje-opstelling, zie §7.2.1 |
 | **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
@@ -690,15 +690,27 @@ loopt door naar een gedeelde afsluitreeks:
    Hoofdstuk 2 nog moet worden geschreven — voorkomt een "Terug naar de
    opslagplekken"-doodlopend eind zonder verhaalkader.
 
-### 7.2.1 Codex Memoriae — zeven tabbladen, oud-perkament-uiterlijk (**gebouwd**)
+### 7.2.1 Codex Memoriae — acht tabbladen in twee lagen, oud-perkament-uiterlijk (**gebouwd**)
 
-`SCREENS.spCodex` (singleplayer.js) is een volwaardig scherm met zeven
+`SCREENS.spCodex` (singleplayer.js) is een volwaardig scherm met acht
 tabbladen, elk met een eigen kleine databron en ontgrendel-hook — allemaal
 volgens hetzelfde patroon (CNS-meta-sectie → hook zet stil iets in
-`SP_STATE` → scherm toont alleen wat al verdiend is, per saveslot):
+`SP_STATE` → scherm toont alleen wat al verdiend is, per saveslot).
 
-- **Herinneringen** (eerste tabblad, standaard-tabblad bij het openen van de
-  Codex) — het "museum van Mnemosyne"-mechanisme (vastgelegd 2026-07, na
+**Twee lagen (Gerben, 2026-07-25)**: `SP_CODEX_TABS`-items hebben een
+`row`-veld, `SCREENS.spCodex` rendert twee vaste `.codex-tabs`-rijen i.p.v.
+alles te laten wrappen op breedte — laag 1 (de "verhaal"-tabbladen):
+Kroniek, Herinneringen, Mythologie, Geschiedenis, Personen, Afbeeldingen;
+laag 2 (de taal-tabbladen): Grammatica, Vocabulaire. Zo blijft de
+groepering hetzelfde ongeacht schermgrootte, i.p.v. een toevallige
+wrap-breuk.
+
+- **Kroniek** (eerste tabblad, standaard-tabblad bij het openen van de
+  Codex — zie §12.3 voor de volledige beschrijving) — in-fictie annalen
+  van wat de speler daadwerkelijk deed: klassekeuze, stat-gated routes,
+  gekozen verhaallijnen, skillpunt-investeringen en gevuurde payoffs,
+  gegroepeerd per hoofdstuk via `spCodexKroniekHTML()`.
+- **Herinneringen** (tweede tabblad) — het "museum van Mnemosyne"-mechanisme (vastgelegd 2026-07, na
   Hoofdstuk 4): uit elk afgerond verhaal/lijn neemt de speler één tastbaar
   voorwerp mee, opgehaald via een nieuwe `SOUVENIR:`-sectie
   (`spHookSouvenir`, zelfde comma/puntkomma/regel-parsing als `CODEX:`) en
@@ -777,6 +789,14 @@ volgens hetzelfde patroon (CNS-meta-sectie → hook zet stil iets in
   die een puzzel verkeerd beantwoordt meteen naar de Codex kan om het
   antwoord + de uitleg terug te vinden — niet pas na afloop van het
   hoofdstuk. `CH1_ROBE` voegt daarna nog een samenvattend "overzicht" toe.
+  **Eigen inhoudsopgave (Gerben, 2026-07-25)**: dit tabblad groeit het
+  snelst (17 entries alleen al over Hoofdstuk 1-4), dus `SCREENS.spCodex`
+  gebruikt hiervoor een eigen `spCodexGrammaticaHTML()` i.p.v. de generieke
+  `spCodexEntriesHTML()`. Groepeert op hoofdstuk via de bestaande
+  id-conventie `codex_grammatica_ch<N>_...` (geen nieuw datamodel nodig) en
+  toont een pillenbalk (`Alles` + één pil per hoofdstuk dat de speler al
+  heeft ontgrendeld — geen spoilers van niet-bereikte hoofdstukken) om
+  snel naar één hoofdstuk te filteren.
 - **Vocabulaire** — `SP_VOCAB_ENTRIES` (Grieks + Latijn, per woord
   taal/getranscribeerd-vorm/betekenis), via een nieuwe `VOCAB:`-sectie
   (`spHookVocab`, comma/regel-gescheiden id's, één toast per batch i.p.v.
