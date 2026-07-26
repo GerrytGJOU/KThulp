@@ -400,7 +400,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS)]);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
   stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[],
   payoffsSeen:{}, relations:{}, kroniek:[] });
@@ -771,8 +771,12 @@ function spCodexKroniekHTML(){
    zonder eigen tekening moet toch zichtbaar én herkenbaar blijven. ---- */
 function spCodexSouvenirsHTML(){
   const ids = SP_STATE.souvenirs||[];
-  if(!ids.length) return `<p class="codex-empty">Nog niets verzameld — onderweg laat het Orakel je soms een voorwerp uit het verhaal meenemen.</p>`;
-  return `<div class="codex-gallery">${ids.map(id=>{
+  const inMuseum = !!(SP_STATE.flags||{}).museum_mnemosyne_ontgrendeld;
+  const intro = inMuseum
+    ? `<p class="codex-empty" style="margin-bottom:14px">Je hebt het Museum van Mnemosyne nu zelf betreden: een hal vol sokkels en glazen stolpen, waarvan de meeste nog leeg staan of al zijn aangetast door de tijd. Wat hieronder staat, is enkel wat jij al hebt gevuld.</p>`
+    : "";
+  if(!ids.length) return intro || `<p class="codex-empty">Nog niets verzameld — onderweg laat het Orakel je soms een voorwerp uit het verhaal meenemen.</p>`;
+  return intro + `<div class="codex-gallery">${ids.map(id=>{
     const def = SP_SOUVENIRS[id]; if(!def) return "";
     return `<div class="codex-gallery-item">
       <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(90,58,26,.12);border-radius:6px;overflow:hidden">

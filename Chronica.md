@@ -1,4 +1,4 @@
-# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1-6 speelbaar)
+# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1-8 speelbaar)
 
 > **Status: Beta, live in het hoofdmenu.** De **proloog** ("De Boer van
 > Latium" / "Het Orakel van Chronos") is volledig speelbaar: intro →
@@ -39,11 +39,32 @@
 > bekend uit Hoofdstuk 5) en de Epigonen tien jaar later (met Tydeus' zoon
 > Diomedes) naar Antigone, en sluit — bewust terug in de tijd — af met
 > Pentheus en de Bacchanten. Nog een nieuw puzzeltype erbij: de koppelpuzzel
-> ("matching") — zie §7.11.
+> ("matching") — zie §7.11. Vanaf het einde van Hoofdstuk 6 keert de speler
+> na elk hoofdstuk terug naar het **Museum van Mnemosyne**, de nieuwe
+> inter-hoofdstuk-hub (nog niet de volledige onthulling — dat blijft
+> Hoofdstuk 26). **Hoofdstuk 7** ("De Appel der Tweedracht") is eveneens
+> **volledig speelbaar** en fors groter dan oorspronkelijk gepland: de hele
+> aanloop naar de Trojaanse Oorlog, van Leda en de Zwaan via de Eed van
+> Tyndareos, de Bruiloft van Peleus en Thetis (een payoff — Peleus is bekend
+> uit Hoofdstuk 5), de Gouden Appel, het Parisoordeel, de Spelen van Troje,
+> de Schaking van Helena, het verzamelen van de Griekse helden (Odysseus,
+> Achilles), Aulis & Iphigenia, Philoktetes op Lemnos (ook een payoff) tot
+> aan het begin van het beleg en de gevangenneming van Chryseis en Briseis —
+> precies waar Hoofdstuk 8 begint. Zie §7.13. **Hoofdstuk 8** ("De Wrok van
+> Achilles") is eveneens **volledig speelbaar**, en de EERSTE ECHTE
+> VERTAKKING sinds Hoofdstuk 1-4 — met als nieuwigheid dat hij ook weer
+> SAMENKOMT: tijdens de ruzie tussen Achilles en Agamemnon kiest de speler
+> een kant (blijf bij Achilles in zijn tent, of trek mee met het leger onder
+> Agamemnon), ziet daardoor een echt andere kant van hetzelfde verhaal (twee
+> gelijkwaardige lijnen van elk 14 scènes/4 puzzels), en komt bij Patroklos'
+> dood weer samen voor een gedeelde epiloog tot en met Hectors dood en
+> begrafenis. De keuze zelf wordt onthouden (`FLAG`/`RELATION` op
+> Achilles/Agamemnon/Ajax) als payoff-materiaal voor latere hoofdstukken. Zie
+> §7.14.
 > Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
-> rest van de campagne (Hoofdstuk 7 t/m 28 + Finale) staat als metadata-skelet
+> rest van de campagne (Hoofdstuk 9 t/m 28 + Finale) staat als metadata-skelet
 > klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet geschreven.
 >
 > **Dit document is de enige bron van waarheid voor Chronica Classica** en
@@ -78,7 +99,8 @@ browser):
 | **Hoofdstuk 5**: één doorlopend tochtenlogboek (geen hub/lijnen) — de tocht van de Argo, met negen cameo-clusters van latere helden | `certamen/singleplayer-data.js` (`SP_CH5_CNS`, 33 scènes) | ✅ werkend — herhaling nom. t/m abl. (geen nieuwe grammatica) + 5 puzzels (1 per naamval, over 4 puzzeltypes incl. het nieuwe "tile-swap") + 2 Combat-bridge-gevechten (Amycus, de Draak van Colchis) + één perspectiefkeuze (Atalanta/Meleager, zelfde inhoud vanuit twee invalshoeken) + Medea's wraak in Korinthe als terughoudend verteld slot — Node-reachability + volledige browser-doorloop van alle nieuwe mechanieken via `spGoCns()`, zie §7.10 |
 | Meerdere alinea's per scène (`spParagraphsHTML`) | `certamen/singleplayer.js` | ✅ werkend — CNS-tekst splitst op lege regels in aparte `<p>`-elementen (bugfix: smolt eerst visueel samen tot één alinea) |
 | Meerkeuze-grammaticapuzzel (naast de Griekse transliteratie-puzzel) | `certamen/singleplayer.js` (`spRenderMCPuzzle`/`spCheckMCPuzzle`), `SP_PUZZLES` (`type:"multiple-choice"`) | ✅ werkend — 9 puzzels (lidwoord/naamval/vocativus × 3 lijnen) |
-| **Hoofdstuk 6**: geen hub/lijnen, bewust NIET-chronologisch — "generatiesprongen" volgens het patroon van de vloek | `certamen/singleplayer-data.js` (`SP_CH6_CNS`, 27 scènes) | ✅ werkend — Kadmos/Niobe/Oedipus & de Sfinx/Zeven-tegen-Thebe+Epigonen (Tydeus & Diomedes)/Antigone/Pentheus & Bacchanten + 6 puzzels (praesens/imperfectum/perfectum-herhaling over 4 types, incl. het nieuwe "matching") + 1 Combat-bridge-gevecht (Laodamas) + 3 Clementia/Severitas-keuzemomenten — Node-reachability + volledige browser-doorloop (incl. een bug in de koppelpuzzel-foutmelding, gevonden én gefixt tijdens het testen) via `spGoCns()`, zie §7.11 |
+| **Hoofdstuk 6**: geen hub/lijnen, bewust NIET-chronologisch — "generatiesprongen" volgens het patroon van de vloek | `certamen/singleplayer-data.js` (`SP_CH6_CNS`, 30 scènes) | ✅ werkend — Kadmos/Niobe/Oedipus & de Sfinx/Zeven-tegen-Thebe+Epigonen (Tydeus & Diomedes)/Antigone/Pentheus & Bacchanten + 6 puzzels (praesens/imperfectum/perfectum-herhaling over 4 types, incl. het nieuwe "matching") + 1 Combat-bridge-gevecht (Laodamas) + 3 Clementia/Severitas-keuzemomenten — Node-reachability + volledige browser-doorloop (incl. een bug in de koppelpuzzel-foutmelding, gevonden én gefixt tijdens het testen) via `spGoCns()`, zie §7.11. De 3 nieuwe Museum-van-Mnemosyne-scènes aan het eind (`CH6_MUSEUM_00`/`_01`/`_EINDE`, zie §7.11) zijn los getest via `spGoCns('CH6_EINDE')` in de browserconsole (geen volledige doorloop vanaf `CH6_001` opnieuw): tekst, knoppen, `FLAG:`/`CODEX:`-hooks en de Herinneringen-tab-introalinea renderen correct, terminale `CH6_MUSEUM_EINDE` valt correct terug op "Terug naar de opslagplekken", geen consolefouten |
+| **Hoofdstuk 7**: geen hub/lijnen — de volledige aanloop naar de Trojaanse Oorlog, van Leda tot Chryseis/Briseis | `certamen/singleplayer-data.js` (`SP_CH7_CNS`, 27 scènes) | ✅ werkend — Leda/Eed van Tyndareos/Bruiloft van Peleus en Thetis/Gouden Appel/Parisoordeel/Spelen van Troje/Schaking van Helena/verzamelen der helden (Odysseus, Achilles)/Aulis & Iphigenia/Philoktetes op Lemnos/begin van het beleg + 6 puzzels (naamvallen + werkwoordstijden cumulatief herhaald, over 5 types) + 1 STAT-gated flavormoment + 4 Clementia/Severitas-momenten + 2 payoffs op de payoff-engine (Peleus, Philoktetes — beide onvoorwaardelijk, zie §12) + 4 eretitels + 1 souvenir — reachability-script + volledige browser-doorloop via `spGoCns()`/`spChoosePath()` (alle 6 puzzels correct opgelost, beide payoffs gevuurd, alle titels toegekend), geen consolefouten, zie §7.13 |
 | **Schuifpuzzel** (tegels tikken-om-te-wisselen, iPad-veilig — geen drag) | `certamen/singleplayer.js` (`spRenderTileSwapPuzzle`/`spCheckTileSwapPuzzle`), `SP_PUZZLES` (`type:"tile-swap"`) | ✅ werkend — sinds Hoofdstuk 5 (`puzzle_ch5_ablativus`), zie §7.10 |
 | **Koppelpuzzel** (twee kolommen, tik-om-te-koppelen) | `certamen/singleplayer.js` (`spRenderMatchingPuzzle`/`spMatchTapLeft`/`spMatchTapRight`), `SP_PUZZLES` (`type:"matching"`) | ✅ werkend — sinds Hoofdstuk 6 (`puzzle_ch6_matching_tempora`), zie §7.11 |
 | **FLAG-hook**: keuzes/lijnkeuze dragen door in `SP_STATE.flags` | `certamen/singleplayer.js` (`spHookFlag`) | ✅ werkend (bv. `ch1_lijn`, `ch1_voltooid`) — conditionele NPC-reacties op flags volgen later |
@@ -97,8 +119,9 @@ browser):
 | Eretitels als eigen categorie tussen de eerbewijzen | `certamen/core.js` (`ACH_CATEGORIES.chronica`), `certamen/games.js` (`SCREENS.collection`) | ✅ werkend — meegerenderd door `achGroupsHTML`, net als Algemeen/Klassieke Spellen |
 | Eretitel zichtbaar/kiesbaar op profiel + slotscherm | `certamen/singleplayer.js` (`spTitlesSectionHTML`/`spToggleEquipTitle`) | ✅ werkend |
 | Gekozen eretitel als pill in Battle Mode/Boss Battle-lobby | `certamen/battle.js` (`bmDoJoin` schrijft `player.title`, `bmRenderHostLobby` toont het) | ✅ werkend |
-| Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 7+ nog niet geschreven |
-| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png`. Hoofdstuk 5 heeft nu ook 7 `IMAGE:`-tags (doorlopend logboek, geen lijnen, allemaal Aegean blue): `argo_bemanning.png`, `everzwijn_cyzicus.png`, `polydeukes_amycus.png`, `hylas_nimfen.png`, `symplegades_doortocht.png`, `medea_aeetes_colchis.png`, `gulden_vlies_gevonden.png`. Hoofdstuk 6 heeft nu ook 7 `IMAGE:`-tags (generatieverhaal, geen lijnen, allemaal Aegean blue): `spartoi_thebe.png`, `niobe_versteend.png`, `sfinx_raadsel.png`, `zeven_tegen_thebe.png`, `antigone_begrafenis.png`, `diomedes_val_thebe.png`, `bacchanten_berg.png` — Gemini-prompts klaar, bestanden nog niet gegenereerd. Alle 6 hoofdstukken hebben nu illustratie-tags |
+| Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 9+ nog niet geschreven |
+| **Hoofdstuk 8**: EERSTE echte vertakking (Achilles/Agamemnon) die ook weer samenkomt | `certamen/singleplayer-data.js` (`SP_CH8_CNS`, 48 scènes) | ✅ werkend — gedeelde proloog (Plaag van Apollo, de Ruzie, Thetis' verzoek) → keuze → twee gelijkwaardige lijnen van elk 14 scènes/4 puzzels (nieuwe grammatica: aoristus, 3e-declinatie medeklinkerstam, aanwijzend/persoonlijk voornaamwoord) + 1 STAT-gated moment + 1 RELATION-moment + 1 Clementia/Severitas-moment elk, Agamemnon-lijn krijgt bovendien een Combat-bridge → reconvergentie bij Patroklos' dood → gedeelde epiloog met een tweede Combat-bridge (Hector) en Priamus' smeekbede, tot en met Hectors begrafenis — twee volledige browser-doorlopen (één per kant) + Node-reachability/pariteitsscript, zie §7.14 |
+| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png`. Hoofdstuk 5 heeft nu ook 7 `IMAGE:`-tags (doorlopend logboek, geen lijnen, allemaal Aegean blue): `argo_bemanning.png`, `everzwijn_cyzicus.png`, `polydeukes_amycus.png`, `hylas_nimfen.png`, `symplegades_doortocht.png`, `medea_aeetes_colchis.png`, `gulden_vlies_gevonden.png`. Hoofdstuk 6 heeft nu ook 7 `IMAGE:`-tags (generatieverhaal, geen lijnen, allemaal Aegean blue): `spartoi_thebe.png`, `niobe_versteend.png`, `sfinx_raadsel.png`, `zeven_tegen_thebe.png`, `antigone_begrafenis.png`, `diomedes_val_thebe.png`, `bacchanten_berg.png`. Hoofdstuk 7 heeft vooralsnog 2 `IMAGE:`-tags op de twee zwaarste momenten (bewust minder dan de 7 van eerdere hoofdstukken, gezien de omvang van dit hoofdstuk): `appel_der_tweedracht.png`, `philoktetes_lemnos.png` — Gemini-prompts klaar, bestanden nog niet gegenereerd. Alle 7 hoofdstukken hebben nu illustratie-tags |
 | Gemini-huisstijl-Gem (stripstijl, scène-illustraties) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | Gemini-huisstijl-Gem (museumstukken, Herinneringen-tab) | `certamen/assets/chronica/gemini-souvenir-style.md` | ✅ herbruikbare Gem-instructie — vaste sokkel/stolp/kussentje-opstelling, zie §7.2.1 |
 | **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
@@ -726,10 +749,12 @@ wrap-breuk.
   visueel dezelfde `.codex-gallery`-stijl als het Afbeeldingen-tabblad.
   **Bewust ambigu wie/wat deze voorwerpen verzamelt** — de verteltekst
   schrijft het losjes toe aan "het Orakel", zonder verder uit te leggen wat
-  daarmee gebeurt. Die vraag wordt pas een echt "museum" zodra Hoofdstuk 26
-  "De Bibliotheek van Mnemosyne" (`SP_CAMPAIGN`) gebouwd wordt — dit
-  tabblad is dus een bewuste, vroege setup voor een onthulling die nog ver
-  weg ligt. Nu 11 voorwerpen, één per afgeronde lijn t/m Hoofdstuk 4 (proloog
+  daarmee gebeurt. **Update (2026-07-25, na Hoofdstuk 6):** de speler heeft
+  het Museum inmiddels wél zelf bezocht en bij naam leren kennen
+  (`CH6_MUSEUM_00`/`_01`, zie §7.11) — maar wie het bouwde en waarom, blijft
+  bewust onbeantwoord tot Hoofdstuk 26 "De Bibliotheek van Mnemosyne"
+  (`SP_CAMPAIGN`), dat nog steeds de echte onthulling is. Dit tabblad is dus
+  een bewuste, vroege setup voor een onthulling die nog ver weg ligt. Nu 11 voorwerpen, één per afgeronde lijn t/m Hoofdstuk 4 (proloog
   telt niet mee — dat is het inleidende kader, geen "bezochte mythe"): de
   proloog/Hoofdstuk-1-t/m-4-lijnen kregen elk een kort, nieuw stukje
   verteltekst dat het oppakken/vinden van het voorwerp beschrijft, meestal
@@ -1603,9 +1628,48 @@ aan bij de tijdsprong).
 
 **`CH5_EINDE` → `CH6_000` bugfix**: zelfde patroon als `CH4_EINDE` → `CH5_000`
 bij Hoofdstuk 5 (zie §7.10) — `CH5_EINDE` rechtgezet met
-`* Stap door de poort -> CH6_000`. `CH6_EINDE` zelf heeft bewust nog GEEN
-`CHOICES` naar Hoofdstuk 7 — dat bestaat nog niet, en dat is de rand van het
-geschreven verhaal, geen bug.
+`* Stap door de poort -> CH6_000`.
+
+**Museum van Mnemosyne — eerste bezoek, wordt de nieuwe inter-hoofdstuk-hub
+(Gerben, 2026-07-25, gebouwd):** `CH6_EINDE` heeft ALSNOG een `CHOICES`
+gekregen (dit weerspreekt de vorige versie van deze paragraaf) — niet naar
+Hoofdstuk 7 (dat bestaat nog niet), maar naar drie nieuwe scènes
+(`CH6_MUSEUM_00`/`_01`/`_EINDE`): de Boodschapper feliciteert de speler met
+zes voltooide hoofdstukken en nodigt hem voor het eerst het Museum van
+Mnemosyne zelf binnen. Directe aanleiding: callback-check op Kadmos/Europa
+(die al bleek te bestaan, `CH6_001`/`singleplayer-data.js:1163`, sinds
+Hoofdstuk 3 verplicht is dus zonder flag-check) plus een nieuw idee van
+Gerben voor een terugkerende "hub"-locatie.
+
+- **Bewust NIET de volledige Ch26-onthulling** (zie §7.2.1 en §7.12):
+  Gerbens beslissing was expliciet "eerste kennismaking, mysterie blijft" —
+  de Boodschapper noemt de naam en laat de hal zien, maar zegt niet wie hem
+  bouwde of waarom. Hoofdstuk 26 "De Bibliotheek van Mnemosyne" blijft de
+  plek waar dat wordt opgelost; dit is puur een vervroegde, gedeeltelijke
+  kennismaking.
+- **Geen datagedreven "rafels"-tracker.** Overwogen (hergebruik van de
+  payoff-engine of van `cross_narratieve_figuren.md`), maar Gerben koos
+  expliciet voor een ZUIVER NARRATIEVE oplossing: `CH6_MUSEUM_01` beschrijft
+  gewoon een hal met veel meer sokkels/stolpen dan er souvenirs bestaan,
+  waarvan de meeste leeg of "aangetast door de tijd" zijn — geen nieuw
+  datamodel, geen per-item resolved/unresolved-state. De enige nieuwe state
+  is één vlag, `museum_mnemosyne_ontgrendeld` (`FLAG:` op `CH6_MUSEUM_00`).
+- **Herinneringen-tab (Codex) reflecteert dit licht**: zodra de vlag staat,
+  toont `spCodexSouvenirsHTML()` (singleplayer.js) een korte introalinea
+  boven de bestaande souvenir-gallery die de hal in woorden herhaalt — geen
+  nieuwe CSS, geen telling van "hoeveel nog leeg is", puur sfeer.
+- **Nieuwe Codex-entry** `codex_museum_mnemosyne` (mythologie), gezet op
+  `CH6_MUSEUM_01`, bewust net zo onthullingsarm als de scènetekst zelf.
+- **Precedent voor Hoofdstuk 7+**: dit is de EERSTE keer dat een hoofdstuk
+  niet in het luchtledige eindigt, maar in een gedeelde hub die van hoofdstuk
+  tot hoofdstuk meegaat. **Bijgewerkt (2026-07-25, zelfde dag):**
+  `CH6_MUSEUM_EINDE` kreeg alsnog een `CHOICES` naar `CH7_000` zodra
+  Hoofdstuk 7 gebouwd werd (zie §7.13) — de belofte "je keert hier terug na
+  elk verhaal" is dus binnen dezelfde sessie al ingelost, niet pas
+  theoretisch. Hoofdstuk 7 eindigt op zijn beurt weer met een eigen
+  `CH7_MUSEUM_00`, dat NU wél de rand van het geschreven verhaal is (zonder
+  `CHOICES`, want Hoofdstuk 8 bestaat nog niet) — het patroon herhaalt zich
+  dus vanaf hier bij elk volgend hoofdstuk.
 
 **Getest**: (1) Node-reachability-script (`validate_ch6.js`, zelfde aanpak
 als Hoofdstuk 5): alle 27 scènes bereikbaar vanaf `CH6_000` incl.
@@ -1689,6 +1753,295 @@ Herodotos, Livius én Vergilius in de Finale samenkomen — de speler gebruikt
 dan alles wat hij, zij of die geleerd heeft om de herinnering aan de
 klassieke wereld veilig te stellen. Nog geen uitgewerkte `SP_CAMPAIGN`-entry
 voor de Finale met dit detail; hier vastgelegd zodat het niet verloren gaat.
+
+### 7.13 Hoofdstuk 7: "De Appel der Tweedracht" — de volledige aanloop naar Troje (**gebouwd**)
+
+Op Gerbens verzoek (2026-07-25) fors uitgebreid ten opzichte van het
+oorspronkelijke `SP_CAMPAIGN`-skelet (dat alleen de bruiloft/het
+Parisoordeel schetste als "grammatica-arme adempauze, geen puzzel-gate," zie
+de oude tekst hierboven vóór deze wijziging): dit hoofdstuk vertelt nu de
+HELE Cypria-voorgeschiedenis van de Trojaanse Oorlog, van Leda tot aan de
+gevangenneming van Chryseis en Briseis — exact de rand waar Hoofdstuk 8 "De
+Wrok van Achilles" al gepland stond te beginnen (de pest van Apollo, de
+ruzie Agamemnon/Achilles), dus geen overlap. Net als Hoofdstuk 5/6 bewust
+GEEN hub/lijnen — één lange, causale ketting van 27 scènes (`CH7_000` t/m
+`CH7_MUSEUM_00`, `SP_CH7_CNS` in `singleplayer-data.js`).
+
+**Opening in het Museum, niet in het duister**: `CH6_MUSEUM_EINDE` kreeg een
+`CHOICES` naar `CH7_000`, waar de Boodschapper expliciet het register
+optrekt — "de kleine verhalen zijn voorbij... het echte werk begint nu" —
+en het Museum benoemt als de uitvalsbasis voor "misschien wel het
+belangrijkste verhaal dat de klassieke oudheid heeft voortgebracht." Directe
+uitvoering van Gerbens instructie, geen eigen interpretatie.
+
+**Cumulatieve grammatica-herhaling, geen nieuwe stof**: zes puzzels over vijf
+types (`puzzle_ch7_genitivus` multiple-choice, `puzzle_ch7_dativus_grieks`
+typed-greek — authentiek detail: de inscriptie op de appel was overgeleverd
+als τῇ καλλίστῃ, "aan de mooiste", dativus van καλλίστη — `puzzle_ch7_
+accusativus` typed-latin, `puzzle_ch7_ablativus` tile-swap, `puzzle_ch7_
+perfectum` typed-latin, `puzzle_ch7_matching_tempora` matching), verdeeld
+over de naamvallen (Hoofdstuk 5) én de werkwoordstijden (Hoofdstuk 6) — bewust
+geen nieuwe grammatica, die begint pas in Hoofdstuk 8.
+
+**Twee payoffs op de bestaande engine (Chronica.md §12), allebei
+ONVOORWAARDELIJK** (geen `condition`-veld op de `SP_PAYOFFS`-regel, dus
+`spPayoffConditionMet` geeft altijd `true`): `ch7_peleus_bruiloft_echo`
+(trigger `CH7_004`, de bruiloft van Peleus en Thetis) en
+`ch7_philoktetes_lemnos_echo` (trigger `CH7_018`, Philoktetes op Lemnos) —
+beide verwijzen terug naar Hoofdstuk 5, waar de speler Peleus en Philoktetes
+al als Argonauten-cameo's ontmoette. Geen conditie nodig omdat Hoofdstuk 5
+verplichte, lineaire hoofdlijn is zonder vertakking — elke speler die hier
+komt, heeft beide personages gegarandeerd al ontmoet, zelfde redenering als
+de Kadmos/Europa-callback in Hoofdstuk 6 (zie de toevoeging bij §7.11). Dit
+zijn de eerste ECHTE payoffs op de engine sinds de proof-of-concept van
+2026-07-25 zelf.
+
+**PUZZLE-scènes en Clementia/Severitas-keuzes NIET combineren**: eerste
+bouwversie van `CH7_012` (Helena's schaking) en `CH7_017` (het offer in
+Aulis) zette een PUZZLE én een drieledige Clementia/Severitas-keuze op
+dezelfde scène — een reachability-script (zie hieronder) legde bloot dat dit
+niet werkt: `spRenderPuzzle()` (singleplayer.js) gebruikt altijd
+`scene.choices[0].target` als vervolg, dus de twee andere keuzeknoppen zouden
+in de praktijk nooit zichtbaar of klikbaar zijn geweest. Opgelost door de
+puzzel en de keuze over twee scènes te verdelen (`CH7_012`→`CH7_012B`→
+`CH7_013`, `CH7_017`→`CH7_017B`→`CH7_018`) — bevestigt de bestaande regel
+"elke PUZZLE/COMBAT-scène heeft precies 1 keuze" (zie de Hoofdstuk 5/6-
+testnotities) nog een keer, nu met een concrete technische reden erbij i.p.v.
+alleen een auteursconventie.
+
+**Eén STAT-gated flavormoment** (`CH7_008`, Paris en de Stier: kudde
+opzijhouden `[STAT:vis:14]` of kalmeren `[STAT:prudentia:14]`, naast de
+standaardkeuze) — de uitkomst van Paris' eigen oordeel verandert niet, zelfde
+principe als de Spartoi-vis/agilitas-keuze in Hoofdstuk 6. **Vier
+Clementia/Severitas-momenten** (`CH7_006` blootstelling van Paris, `CH7_012B`
+Helena's schaking, `CH7_017B` het offer van Iphigenia, `CH7_020` Chryseis/
+Briseis) en **vier eretitels** (`ch7_parisoordeel`, `ch7_helena_geschaakt`,
+`ch7_aulis_offer`, `ch7_trojaanse_kust`).
+
+**Eén souvenir** (`souvenir_appel_tweedracht`, "De Appel der Tweedracht",
+gezet op `CH7_005`) — bewust een ANDER icoon (🍏) dan de al bestaande
+`souvenir_herakles_labores` (🍎, de gouden appel van de Hesperiden,
+Hoofdstuk 3), om verwarring tussen twee verschillende gouden appels in de
+Herinneringen-tab te vermijden.
+
+**Zestien nieuwe `PERSON`-entries** (Leda, Tyndareos, Helena, Menelaos,
+Thetis, Hecuba, Priamus, Paris, Agamemnon, Palamedes, Achilles, Odysseus,
+Calchas, Iphigenia, Chryseis, Briseis) — Peleus en Philoktetes zelf kregen
+BEWUST geen nieuwe `PERSON`-tag (al bekend uit Hoofdstuk 5, zelfde
+cameo-conventie als Tydeus/Theseus in Hoofdstuk 6). Paris krijgt als enige
+al een `full`-upgrade binnen dit hoofdstuk (zijn "wie ben ik"-boog sluit af
+bij de herkenning op de Spelen van Troje, `CH7_010`) — de andere personages
+blijven bewust op `intro`, hun eigen verhaal is pas net begonnen.
+
+**Naamgevingsconventie**: net als Hoofdstuk 6 (Apollo/Diana/Bacchus) gebruikt
+dit hoofdstuk Romeinse namen voor de goden uit het verhaal zelf (Jupiter,
+Juno, Venus, Mercurius, Mars, Neptunus) — BEHALVE Athena, die haar Griekse
+naam behoudt omdat ze de doorlopende mentorfiguur van de hele game is, ook
+wanneer ze zelf als personage in het Parisoordeel meespeelt.
+
+**Eindigt terug in het Museum** (`CH7_EINDE` → `CH7_MUSEUM_00`, zie de
+toevoeging bij §7.11): de Boodschapper wijst op de nieuw gevulde stolp (de
+appel) en benoemt expliciet het patroon "hoe klein een vonk kan zijn, en hoe
+groot de brand die erna komt" — het eerste harde bewijs dat de
+"je-keert-hier-terug"-belofte uit Hoofdstuk 6 ook echt werkt. `CH7_MUSEUM_00`
+zelf heeft bewust nog GEEN `CHOICES` — Hoofdstuk 8 bestaat nog niet, dat is
+dus de nieuwe rand van het geschreven verhaal.
+
+**Getest**: (1) Een eigen Node-reachability-script (zelfde aanpak als
+Hoofdstuk 5/6, herbouwd inline i.p.v. een losstaand bestand op schijf): alle
+27 scènes bereikbaar vanaf `CH6_MUSEUM_EINDE`, elke `CHOICES`-target bestaat,
+elke `PUZZLE`-scène heeft precies 1 keuze (na de fix hierboven), en elke
+`PUZZLE`/`CODEX`/`SOUVENIR`/`PERSON`/`EERETITEL`-id heeft een bijbehorende
+data-entry (incl. de regel dat een `PERSON:id:full` een gedefinieerde `full`-
+bio vereist). (2) Echte browser-render via `spGoCns()`/`spChoosePath()`: de
+volledige keten van Museum-uitgang tot Museum-terugkeer doorlopen, inclusief
+alle zes puzzels met het juiste antwoord (multiple-choice, typed-latin,
+typed-greek, tile-swap, matching), het STAT-gated Vis-zijpad, en drie van de
+vier Clementia/Severitas-keuzes — beide payoffs vuurden correct (zichtbaar in
+de Kroniek, gegroepeerd onder Hoofdstuk 7), het souvenir en alle vier
+eretitels werden correct toegekend, en de Personen-tab toont alle zestien
+nieuwe bio's inclusief Paris' `full`-upgrade. Geen consolefouten gedurende de
+hele sessie. Nog niet end-to-end doorgeklikt vanuit de UI zelf met de muis
+door alle scènes na elkaar (zelfde openstaande vervolgstap als bij eerdere
+hoofdstukken) — wel is elke scène en elk keuzepad minstens één keer
+daadwerkelijk bezocht via de echte render-functies.
+
+### 7.14 Hoofdstuk 8: "De Wrok van Achilles" — de eerste echte vertakking (**gebouwd**)
+
+Op Gerbens verzoek (2026-07-25) de eerste ECHTE vertakking sinds Hoofdstuk
+1-4 (die alle drie/vier gelijkwaardige, NIET-convergerende lijnen hadden) —
+en de allereerste die na de splitsing ook weer SAMENKOMT. Tijdens de ruzie
+tussen Achilles en Agamemnon kiest de speler een kant: blijft hij bij
+Achilles (mist het duel Menelaus/Paris en alles daarna, tot Patroklos
+Achilles' wapenrusting aantrekt — de speler weet dus al vroeg wat Agamemnons
+kant pas na de dood van "Achilles" ontdekt), of trekt hij mee met het leger
+onder Agamemnon (zit bij het gezantschap, vecht mee, en is oprecht verrast
+als "Achilles" sneuvelt en blijkt Patroklos te zijn)? Zodra Achilles hoort
+van Patroklos' dood en een nieuwe wapenrusting krijgt, komen beide lijnen
+weer samen. Loopt tot en met Hectors dood en begrafenis.
+
+**Structuur**: gedeelde proloog (`CH8_000`-`CH8_005`, de Plaag van Apollo tot
+en met de ruzie en Thetis' verzoek aan Jupiter) → splitsing op `CH8_005` →
+`CH8_ACH_001`-`CH8_ACH_012` (Achilles-lijn) of `CH8_AGA_001`-`CH8_AGA_012`
+(Agamemnon-lijn) → beide reconvergeren op `CH8_EPI_001` (Antilochos brengt
+het nieuws) → gedeelde epiloog `CH8_EPI_001`-`CH8_EPI_012` → `CH8_EINDE` →
+`CH8_MUSEUM_00` (net als Hoofdstuk 6/7 een terugkeer naar het Museum van
+Mnemosyne, hier bewust met een korte reflectie op wat vertakken betekent).
+48 scènes in totaal (`SP_CH8_CNS`, singleplayer-data.js).
+
+**Gelijkwaardige lijnen, opzettelijk gemeten**: Gerbens eis dat beide lijnen
+"ongeveer even lang" zijn met "hetzelfde aantal puzzels e.d." is letterlijk
+afgedwongen, niet alleen beloofd — een reachability-script telt scènes en
+puzzels per lijn: **14 scènes, 4 puzzels** aan beide kanten, exact gelijk.
+De vier puzzelonderwerpen (sigmatische aoristus, thematische aoristus,
+3e-declinatie medeklinkerstam, aanwijzend/persoonlijk voornaamwoord) zijn
+IDENTIEK tussen de lijnen — bewust, want dit is de eerste keer sinds
+Hoofdstuk 4/5 dat er NIEUWE grammatica wordt geïntroduceerd (sigmatische/
+thematische aoristus, znw. medeklinkergroep, aanwijzende/persoonlijke
+voornaamwoorden, zie `SP_CAMPAIGN` ch8.grammatica), en een leerling moet
+elk onderwerp minstens één keer oefenen ongeacht welke kant hij kiest. Alleen
+de zinnen/woorden verschillen (bv. Achilles-lijn: πέμπω/ἔπεμψε bij een
+boodschapper naar de tent; Agamemnon-lijn: λύω/ἔλυσε bij Pandaros' verbroken
+wapenstilstand) — zelfde grammatica, andere verhaalcontext. Een gedeelde
+epiloog-puzzel (`puzzle_ch8_epi_matching`) herhaalt na de reconvergentie
+alle vier de werkwoorden uit BEIDE lijnen door elkaar, ongeacht welke kant
+de speler koos — een expliciete "welkom terug samen"-oefening.
+
+**Bewuste asymmetrie: Combat-bridge.** De Agamemnon-lijn krijgt een eigen
+Combat-bridge (`trojaanse_voorhoede`, bij de verdediging van de schepen) —
+de Achilles-lijn niet, en dat is geen slordigheid maar het hele punt van
+zijn verhaallijn: hij vecht juist NIET mee. In plaats daarvan krijgt de
+Achilles-lijn een even zwaar dramatisch middelpunt zonder gevechtsmechaniek:
+het volledige Gezantschap-tafereel (Odysseus/Phoenix/Ajax smeken hem, hij
+weigert) rechtstreeks van binnenuit meegemaakt, terwijl de Agamemnon-lijn
+datzelfde moment alleen van buiten de tent meemaakt (het wachten, de
+mislukking, geen woordelijke herhaling van Achilles' weigering zelf — dat
+zou dezelfde scène tweemaal vertellen). Scène- en puzzeltelling zijn gelijk;
+het GEWICHT van elke lijn zit op een andere plek, wat exact is wat Gerben
+vroeg ("wel echt een andere kant belichten").
+
+**Payoff-materiaal voor het vervolg (Gerben, tijdens het bouwen zelf
+toegevoegd, daarna op eigen verzoek uitgebreid van alleen Ajax naar een
+vollediger overzicht van de Griekse kampementen):** de keuze moet niet
+alleen NU verschil maken, maar personages moeten hem onthouden en er in
+latere hoofdstukken op terugkomen. Vier bouwstenen, allemaal al binnen dit
+hoofdstuk werkend:
+
+1. **`FLAG: ch8_zijde=achilles`/`=agamemnon`**, gezet zodra de speler een
+   lijn betreedt (`CH8_ACH_001`/`CH8_AGA_001`) — inclusief een eigen
+   `EERETITEL` per kant (`ch8_zijde_achilles`/`ch8_zijde_agamemnon`).
+2. **Zes personages met een `RELATION:`-verschuiving**, verdeeld in twee
+   soorten (Gerbens eigen onderscheid): **volle partijgangers**, die de
+   volle plus/min-uitslag krijgen op beide kanten, en **gematigde figuren**,
+   die alleen een plus krijgen voor hun eigen kant en geen straf voor de
+   andere keuze:
+   - **Agamemnon** en **Menelaos** (partijganger) tegenover **Achilles** en
+     **Ajax** (partijganger) — Menelaos zet `menelaos=∓1` al bij de
+     splitsing zelf (`CH8_ACH_001`/`CH8_AGA_001`), naast de al bestaande
+     Agamemnon/Ajax-verschuiving bij het Gezantschap-moment
+     (`CH8_ACH_008`: `achilles=+1; aias=+1`; `CH8_AGA_008`:
+     `agamemnon=+1; aias=-1`).
+   - **Diomedes** (Agamemnon-kant, `CH8_AGA_001`: `diomedes=+1`) — in de
+     Ilias zelf (boek 9) zegt hij tegen Agamemnon dat het leger het zonder
+     Achilles ook wel redt; bovendien al bekend uit Hoofdstuk 5/6 (Tydeus'
+     zoon), een doorlopende band.
+   - **Odysseus** (Agamemnon-kant, `CH8_AGA_008`: toegevoegd aan de
+     bestaande regel, nu `agamemnon=+1; aias=-1; odysseus=+1`) — leidt het
+     gezantschap namens Agamemnon.
+   - **Phoenix** (Achilles-kant, `CH8_ACH_008`: toegevoegd aan de bestaande
+     regel, nu `achilles=+1; aias=+1; phoenix=+1`) — blijft in de Ilias
+     zelf zelfs bij Achilles slapen nadat het gezantschap mislukt is.
+   - **Bewust buiten de lijst gehouden**: Patroklos (sterft dit hoofdstuk
+     zelf, dus geen nut voor toekomstige payoffs) en Thetis (verschijnt in
+     de gedeelde epiloog identiek voor beide kanten, dus een kant-
+     afhankelijke relatie zou nergens natuurlijk aan vast te knopen zijn).
+3. **Twee nieuwe ECHTE payoffs** (niet proof-of-concept) op de bestaande
+   engine, getriggerd op het gedeelde verzoeningsmoment `CH8_EPI_005`,
+   elk geconditioneerd op `flags.ch8_zijde`: bij Agamemnon zoekt hij
+   zelf de blik van de speler op ("Jij bent gebleven... dat vergeet ik
+   niet") — een letterlijke beloning in woorden; bij Achilles rust zijn
+   blik heel even op de speler zonder veel te zeggen — subtieler, passend
+   bij zijn karakter. Getest in de browser: beide varianten vuren correct
+   en exclusief, zichtbaar in de Kroniek onder Hoofdstuk 8.
+
+   **Nog niet gebouwd, bewust vooruitgeschoven**: de daadwerkelijke
+   payoff-scènes in Hoofdstuk 9+ zelf (Ajax staat al gepland als personage
+   in Hoofdstuk 9 "Ilion in Vlammen", `SP_CAMPAIGN`) — `ch8_zijde` en de
+   `relations`-waarden op alle zes personages liggen nu vast als leesbare
+   state, klaar om door een toekomstige payoff-regel (`SP_PAYOFFS`, conditie
+   op `flags`/`relationMin`/`relationMax`) opgepikt te worden zodra dat
+   hoofdstuk wordt geschreven.
+
+**Nieuwe personages**: Patroklos, Hector, Andromache, Phoenix, Ajax (Aias —
+zoon van Telamon, bekend uit Hoofdstuk 5, vandaar geen "Ajax (Aias)"-
+verwarring maar een bewuste tweetalige naam net als de Dioscuren), Antilochos
+(zoon van Nestor, ook bekend uit Hoofdstuk 5). Vier bestaande personen
+kregen een `full`-upgrade: Thetis, Priamus, Agamemnon, Achilles — plus
+Hephaistos (al aanwezig sinds Hoofdstuk 1 lijn B), wiens `full`-tekst de
+schuld aan Thetis afbetaalt die zijn eigen `intro`-bio al sinds Hoofdstuk 1
+aankondigde ("opgevangen door de zeenimf Thetis").
+
+**Eén souvenir** (`souvenir_schild_achilles`, een schilfer van het schild dat
+Vulcanus smeedt, `CH8_EPI_004`) en **zes eretitels** (`ch8_zijde_achilles`,
+`ch8_zijde_agamemnon`, `ch8_dood_patroklos` — alleen Agamemnon-lijn, want
+alleen die kant is er letterlijk getuige van — `ch8_dood_hektor`,
+`ch8_priamus_smeekbede`, `ch8_wrok_verzoend`).
+
+**Bugfix tijdens het bouwen (comment-parsing)**: de grote toelichtingscomment
+boven `SP_CH8_CNS` bevatte de tekst `CH8_ACH_*/CH8_AGA_*` — de `*/`
+daarbinnen sloot het `/* ... */`-blokcommentaar zelf voortijdig af en brak
+de hele file (`node --check` faalde meteen). Opgelost door de asterisk en
+schuine streep te scheiden. Les: vermijd `*/` als toevallige tekencombinatie
+in bloktekst-commentaar, ook binnen scène-ID-patronen.
+
+**Bugfix tijdens het testen (browser-cache)**: na het schrijven van
+Hoofdstuk 8 bleven alle `CH8_*`-scènes onvindbaar in de browser
+(`SP_SCENES.get('CH8_000')` gaf `undefined`, terwijl het Node-
+reachability-script prima 48 scènes vond) — de browser bleek een
+gecachete versie van `singleplayer-data.js`/`singleplayer.js` te blijven
+serveren via de vaste `?v=20260722a`-querystring in `index.html`, ook na
+een volledige page-navigate. Zelfde patroon als bij eerdere sessies (de
+repo bumpt deze datum-versiestring consequent bij elke wijziging aan die
+twee bestanden, zie `git log` op `index.html`) — alleen was dat deze sessie
+nog niet gebeurd voor de Hoofdstuk 6/7/8-wijzigingen. Rechtgezet naar
+`?v=20260725b`. **Vervolgstap voor toekomstige hoofdstukken**: bump deze
+versiestring meteen zodra `singleplayer.js`/`singleplayer-data.js` wijzigen,
+niet pas achteraf bij het testen.
+
+**Getest**: (1) Node-reachability/pariteitsscript (inline herbouwd, zelfde
+aanpak als Hoofdstuk 5-7): alle 48 scènes bereikbaar vanaf `CH7_MUSEUM_00`,
+beide lijnen monden uit op exact `CH8_EPI_001`, 14 scènes/4 puzzels aan
+beide kanten, elke `PUZZLE`/`COMBAT`-scène heeft precies 1 keuze, elke
+`PUZZLE`/`COMBAT`/`CODEX`/`SOUVENIR`/`PERSON`/`EERETITEL`-id bestaat (incl.
+de regel dat `PERSON:id:full` een gedefinieerde `full`-bio vereist — dit
+ving één vergeten `EERETITEL`-koppeling op: `ch8_zijde_achilles`/
+`ch8_zijde_agamemnon` stonden wel in `SP_TITLES` maar werden aanvankelijk
+nergens toegekend, alsnog toegevoegd op `CH8_ACH_001`/`CH8_AGA_001`). (2)
+Twee volledige browser-doorlopen (aparte saveslots) via `spGoCns()`/
+`spChoosePath()`: één die bewust de Achilles-lijn koos (incl. het
+STAT-gated Prudentia-zijpad, de Clementia-keuze, en de Hector-Combat-bridge
+in de gedeelde epiloog) en één die bewust de Agamemnon-lijn koos (incl. het
+STAT-gated Agilitas-zijpad, de Severitas-keuze, én beide Combat-bridges).
+Beide liepen volledig door tot en met `CH8_MUSEUM_00`, met de juiste
+`FLAG`/`RELATION`-waarden, de juiste (elkaar uitsluitende) payoff-echo in de
+Kroniek, de juiste eretitels (incl. dat alleen de Agamemnon-doorloop
+`ch8_dood_patroklos` kreeg), en de juiste souvenir/Codex/Personen-hooks.
+Geen consolefouten in beide doorlopen. **Aanvullend getest (2026-07-25, na
+uitbreiding van Ajax naar zes personages)**: `SP_STATE.relations` na de
+splitsing en na het Gezantschap-moment, in beide lijnen apart — Achilles-lijn
+gaf `menelaos:-1` bij de splitsing en `achilles:+1, aias:+1, phoenix:+1` bij
+het gezantschap; Agamemnon-lijn gaf `menelaos:+1, diomedes:+1` bij de
+splitsing en `agamemnon:+1, aias:-1, odysseus:+1` bij het gezantschap —
+exact de asymmetrie tussen volle partijgangers en gematigde figuren die
+bedoeld was. Geen consolefouten.
+
+**Bugfix tijdens dit testen (browser-cache, herhaling van eerder)**: opnieuw
+bleek de vaste `?v=`-versiestring in `index.html` niet bijgewerkt na de
+`RELATION:`-toevoegingen, met dezelfde stale-`SP_SCENES`-symptomen als eerder
+in dit hoofdstuk. Ditmaal META bumped naar `?v=20260725c` VOORDAT er
+uitgebreid getest werd, in plaats van pas nadat de stale cache voor
+verwarring zorgde — de "bump direct bij elke wijziging"-vervolgstap uit de
+vorige paragraaf is dus vanaf nu ook echt de gevolgde gewoonte.
 
 ---
 
@@ -1777,7 +2130,7 @@ In afgesproken bouwvolgorde:
 4. **Quest-overzichtsscherm** — data wordt al bewaard (`spHookQuest`); de
    Codex heeft inmiddels wél een eigen scherm (§7.2, `SCREENS.spCodex`), een
    vergelijkbaar overzicht voor quests ontbreekt nog.
-5. **Hoofdstuk 7 t/m 28 + Finale-content** — scène voor scène in CNS.
+5. **Hoofdstuk 9 t/m 28 + Finale-content** — scène voor scène in CNS.
    `SP_CAMPAIGN` bepaalt per hoofdstuk de grammatica/personages, `SP_MYTH_CANON`
    levert het zijverhaal-materiaal. Meestal twee tot vier onafhankelijke lijnen
    per hoofdstuk (§7.1); Hoofdstuk 5 doorbrak dat bewust met één doorlopend
@@ -2507,6 +2860,17 @@ rekening houdt met wat al bestaat.
    (personage/bondgenoot/einde) — de Tydeus-lijn (al terugkerend tussen
    Hoofdstuk 5 en 6, zie §11 batch 4) is de logische eerste kandidaat
    zodra dat wordt opgepakt.
+
+   **Eerste ECHTE echo's, niet meer alleen proof-of-concept (Hoofdstuk 7,
+   2026-07-25, zie §7.13):** `ch7_peleus_bruiloft_echo` (`CH7_004`) en
+   `ch7_philoktetes_lemnos_echo` (`CH7_018`) verwijzen terug naar Peleus en
+   Philoktetes uit Hoofdstuk 5. Beide bewust ZONDER `condition`-veld —
+   `spPayoffConditionMet(undefined)` geeft altijd `true` — omdat Hoofdstuk 5
+   verplichte, lineaire hoofdlijn is: elke speler die Hoofdstuk 7 bereikt,
+   heeft beide personages al gegarandeerd ontmoet, dus is een flag-check
+   overbodig. Bewijst dat de payoff-engine ook bruikbaar is voor
+   gegarandeerde continuïteitsmomenten, niet alleen voor branch-afhankelijke
+   echo's zoals de Hoofdstuk-1-lijn-echo's hierboven.
 2. **Relaties — GEBOUWD (2026-07-25).** Nieuwe CNS-sectie `RELATION:`
    (naar het `FLAG:`-patroon: `npc=+1`/`npc=-2`, meerdere gescheiden door
    `;`/regel) verschuift `SP_STATE.relations[npc].score` met een DELTA,
