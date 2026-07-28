@@ -1,0 +1,46 @@
+flag;dode_flag;wees_payoff;geschreven_in;aantal_schrijfplekken;gelezen_in;aantal_lezingen;schrijf_hoofdstuk;eerste_lees_hoofdstuk;afstand_hoofdstukken;afstand_scenes
+ch1_a10_route;true;false;CH1/CH1_A10_OPEN=open | CH1/CH1_A10_VIS=vis | CH1/CH1_A10_GRATIA=gratia;3;;0;1;;;
+ch1_b01_route;true;false;CH1/CH1_B01_PAD=pad | CH1/CH1_B01_VIS=vis | CH1/CH1_B01_AGI=agilitas;3;;0;1;;;
+ch1_c03_route;true;false;CH1/CH1_C03_OPEN=open | CH1/CH1_C03_AGI=agilitas | CH1/CH1_C03_VIS=vis;3;;0;1;;;
+ch1_c09_route;true;false;CH1/CH1_C09_PAD=open | CH1/CH1_C09_VIS=vis | CH1/CH1_C09_PRU=prudentia;3;;0;1;;;
+ch1_lijn;false;false;CH1/CH1_A10B=A | CH1/CH1_B08=B | CH1/CH1_C11=C;3;payoff:CH2_000 | payoff:CH2_000 | payoff:CH2_000;3;1;2;1;42
+ch1_voltooid;false;false;CH1/CH1_A10B=true | CH1/CH1_B08=true | CH1/CH1_C11=true;3;avatar-unlock:ontgrendelt armor:robe;1;1;;;
+ch2_h07_route;true;false;CH2/CH2_H07_VIS=vis | CH2/CH2_H07_AGI=agilitas;2;;0;2;;;
+ch2_h10_route;true;false;CH2/CH2_H10_ROB=robur | CH2/CH2_H10_AGI=agilitas;2;;0;2;;;
+ch2_k05_route;true;false;CH2/CH2_K05_OPEN=open | CH2/CH2_K05_ROB=robur | CH2/CH2_K05_PRU=prudentia;3;;0;2;;;
+ch2_l06_route;true;false;CH2/CH2_L06_OPEN=open | CH2/CH2_L06_AGI=agilitas | CH2/CH2_L06_ROB=robur;3;;0;2;;;
+ch2_l07_route;true;false;CH2/CH2_L07B=gratia;1;;0;2;;;
+ch2_lijn_herakles;false;false;CH2/CH2_H12=true;1;DONE-tag:CH2_000;1;2;2;0;-59
+ch2_lijn_kallisto;false;false;CH2/CH2_K09=true;1;DONE-tag:CH2_000;1;2;2;0;-41
+ch2_lijn_latona;false;false;CH2/CH2_L08=true;1;DONE-tag:CH2_000;1;2;2;0;-14
+ch2_lijn_semele;false;false;CH2/CH2_S08=true;1;DONE-tag:CH2_000;1;2;2;0;-28
+ch2_s06_route;true;false;CH2/CH2_S06_OPEN=open | CH2/CH2_S06_VIS=vis | CH2/CH2_S06_PRU=prudentia;3;;0;2;;;
+ch3_h07_route;true;false;CH3/CH3_H07_OPEN=open | CH3/CH3_H07_ROB=robur | CH3/CH3_H07_VIS=vis;3;;0;3;;;
+ch3_h13_route;true;false;CH3/CH3_H13_OPEN=open | CH3/CH3_H13_GRA=gratia | CH3/CH3_H13_ROB=robur;3;;0;3;;;
+ch3_h23_route;true;false;CH3/CH3_H23_OPEN=open | CH3/CH3_H23_ROB=robur;2;;0;3;;;
+ch3_io07_route;true;false;CH3/CH3_IO07_OPEN=open | CH3/CH3_IO07_ROB=robur | CH3/CH3_IO07_GRA=gratia;3;;0;3;;;
+ch3_io11_route;true;false;CH3/CH3_IO11_OPEN=open | CH3/CH3_IO11_ROB=robur | CH3/CH3_IO11_GRA=gratia;3;;0;3;;;
+ch3_lijn_herakles;false;false;CH3/CH3_H25=true;1;DONE-tag:CH3_000;1;3;3;0;-59
+ch3_lijn_io;false;false;CH3/CH3_IO13=true;1;DONE-tag:CH3_000;1;3;3;0;-20
+ch4_lijn_phaethon;false;false;CH4/CH4_P10=true;1;DONE-tag:CH4_000;1;4;4;0;-40
+ch4_lijn_theseus;false;false;CH4/CH4_T16=true;1;DONE-tag:CH4_000;1;4;4;0;-27
+ch4_p06_route;true;false;CH4/CH4_P06_OPEN=open | CH4/CH4_P06_GRA=gratia | CH4/CH4_P06_ROB=robur;3;;0;4;;;
+ch4_t08_route;true;false;CH4/CH4_T08_OPEN=open | CH4/CH4_T08_ROB=robur | CH4/CH4_T08_GRA=gratia;3;;0;4;;;
+ch4_t11_route;true;false;CH4/CH4_T11_OPEN=open | CH4/CH4_T11_ROB=robur | CH4/CH4_T11_GRA=gratia;3;;0;4;;;
+ch5_004_route;true;false;CH5/CH5_004_OPEN=open | CH5/CH5_004_VIS=vis | CH5/CH5_004_PRU=prudentia;3;;0;5;;;
+ch5_008_route;true;false;CH5/CH5_008_OPEN=open | CH5/CH5_008_AGI=agilitas | CH5/CH5_008_VIS=vis;3;;0;5;;;
+ch5_016_route;true;false;CH5/CH5_016_OPEN=open | CH5/CH5_016_AGI=agilitas | CH5/CH5_016_VIS=vis;3;;0;5;;;
+ch5_019_route;true;false;CH5/CH5_019_OPEN=open | CH5/CH5_019_VIS=vis | CH5/CH5_019_PRU=prudentia;3;;0;5;;;
+ch5_024_route;true;false;CH5/CH5_024_OPEN=open | CH5/CH5_024_VIS=vis | CH5/CH5_024_AGI=agilitas;3;;0;5;;;
+ch5_025_route;true;false;CH5/CH5_025_OPEN=open | CH5/CH5_025_AGI=agilitas | CH5/CH5_025_PRU=prudentia;3;;0;5;;;
+ch5_bemanning_uitrusting;false;false;CH5/CH5_006=true;1;avatar-unlock:ontgrendelt armor:middel | avatar-unlock:ontgrendelt helm:bandana;2;5;;;
+ch6_001_route;true;false;CH6/CH6_001_OPEN=open | CH6/CH6_001_VIS=vis | CH6/CH6_001_AGI=agilitas;3;;0;6;;;
+ch6_007_route;true;false;CH6/CH6_007_OPEN=open | CH6/CH6_007_PRU=prudentia | CH6/CH6_007_AGI=agilitas;3;;0;6;;;
+ch6_012_route;true;false;CH6/CH6_012_OPEN=open | CH6/CH6_012_VIS=vis | CH6/CH6_012_AGI=agilitas;3;;0;6;;;
+ch6_015_route;true;false;CH6/CH6_015_OPEN=open | CH6/CH6_015_PRU=prudentia | CH6/CH6_015_AGI=agilitas;3;;0;6;;;
+ch6_023_route;true;false;CH6/CH6_023_OPEN=open | CH6/CH6_023_AGI=agilitas | CH6/CH6_023_PRU=prudentia;3;;0;6;;;
+ch6_diomedes_epigonen;true;false;CH6/CH6_020=true;1;;0;6;;;
+ch8_zijde;false;false;CH8/CH8_ACH_001=achilles | CH8/CH8_AGA_001=agamemnon;2;payoff:CH8_EPI_005 | payoff:CH8_EPI_005;2;8;8;0;32
+herakles_harnas;false;false;CH2/CH2_H09=true;1;payoff:CH3_H01 | payoff:CH9_002 | avatar-unlock:ontgrendelt armor:licht;3;2;3;1;32
+herakles_taken_voltooid;true;false;CH2/CH2_H12=2 | CH3/CH3_H25=12;2;;0;2;;;
+museum_mnemosyne_ontgrendeld;false;false;CH6/CH6_MUSEUM_00=true;1;"code:singleplayer.js:781  const inMuseum = !!(SP_STATE.flags||{}).museum_mnemosyne_ontgrendeld;";1;6;;;

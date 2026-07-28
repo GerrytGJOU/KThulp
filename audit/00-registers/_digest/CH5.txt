@@ -1,0 +1,278 @@
+### CH5_000  (r.6832)  — Het Gulden Vlies
+"Dit hoofdstuk," zegt de Boodschapper, "is geen labyrint en geen paleis — het is een schip." Ze wijst naar een scheur in het licht die groter is dan alle voorgaande, alsof hij een hele zee moet doorlaten in plaats van één verhaal. "Volg Jason en zijn bemanning op hun tocht naar Colchis, aan de rand van de bekende wereld, waar een Vlies van goud hangt dat niemand ooit eerder heeft weten te bemachtigen." Athena voegt eraan toe, zachter dan anders: "Let deze keer goed op wie er nog meer aan boord staat. Sommige namen ken je al. De meeste ken je nog niet — maar dat komt nog."
+  > Volg Jason naar de haven van Iolcus  -> CH5_001
+
+### CH5_001  (r.6854)  — De Uitdaging van Pelias
+[PERSON=jason:intro]
+Iolcus, aan de voet van de Pelionberg, is de stad die Jason rechtens toebehoort — zijn oom Pelias hield de troon vast nadat hij Jasons vader had verdreven, en verwachtte niet dat de rechtmatige erfgenaam ooit zou terugkeren om hem op te eisen. Toen Jason dat toch deed, verzon Pelias meteen een uitweg die op een gunst leek en een doodvonnis was: haal het Gulden Vlies terug uit Colchis, en de troon is voor jou. Niemand is ooit teruggekeerd uit Colchis met het Vlies. Jason, jong en onverschrokken genoeg om dat geen reden te vinden om te weigeren, laat de oproep alvast door heel Griekenland gaan: wie durft mee te varen?
+  > Kijk wie er allemaal op die oproep afkomen  -> CH5_002
+
+### CH5_002  (r.6873)  — De Bemanning van de Argo
+[PERSON=peleus:intro, telamon:intro, laertes:intro, argos:intro | IMG=argo_bemanning.png]
+Binnen een paar weken ligt de haven van Iolcus vol met de beroemdste namen van Griekenland — allemaal aangetrokken door hetzelfde onmogelijke verhaal. Peleus en Telamon, twee onafscheidelijke strijdmakkers, zijn er als eersten, breed grijnzend om niets anders dan het vooruitzicht van een nieuw avontuur. Laertes, rustiger dan de rest, monstert het schip van boeg tot achtersteven voor hij ook maar één voet aan boord zet — alsof hij precies wil weten waar hij aan begint. Bij het schip zelf staat de man die het heeft gebouwd: Argos, zoon van Arestor, die — op aanwijzing van Athena zelf, zegt men — een balk uit het orakelbos van Dodona in de boeg heeft verwerkt. "Ze waarschuwt weleens," zegt hij droog, als iemand ernaar vraagt, "maar nooit op tijd om nog iets te kunnen doen met de waarschuwing."
+  > Kijk wie er nog meer aan boord stapt  -> CH5_003
+
+### CH5_003  (r.6898)  — Een Bekend Gezicht
+Tussen de nieuwkomers valt één gezicht je meteen op — niet omdat hij opvalt tussen al die andere helden, maar omdat je hem al kent. Theseus, inmiddels weer terug in Athene na Kreta, meldt zich aan voor nóg een tocht voor hij zelf koning wordt. Hij loopt met dezelfde vastberadenheid het schip op die je je nog herinnert uit het Labyrint — maar jij weet iets wat hij hier, op dit moment, nog niet weet: wat die vastberadenheid hem straks, met zijn vader, zal kosten. Hij groet je kort, zonder enig vermoeden dat je zijn hele verhaal al hebt gezien — het verhaal dat voor hem, hier op de kade van Iolcus, nog moet beginnen.
+  > Zoek in zijn ogen naar een spoor van wat hij nog gaat vergeten [CLEMENTIA] -> CH5_004
+  > Bekijk hem nuchter als gewoon nog een bemanningslid, niets meer [SEVERITAS] -> CH5_004
+  > Laat het vreemde gevoel van iets-weten-wat-hij-niet-weet gewoon op je inwerken [NEUTRAL] -> CH5_004
+
+### CH5_004  (r.6916)  — Een Korte Lont
+[PERSON=tydeus:intro]
+Niet iedereen aan boord is even geduldig. Tydeus, een gedrongen krijger met een stem die harder klinkt dan nodig, is nog geen uur aan boord of hij heeft al ruzie met een roeier over wie welke plaats krijgt — zijn hand ligt al op zijn zwaardgreep voor de ander goed en wel iets heeft kunnen terugzeggen. Jason sust het meningsverschil met een paar korte woorden, maar de blik die Tydeus achterlaat, maakt duidelijk dat dit niet de laatste keer zal zijn. "Die man," mompelt iemand naast je, "trekt sneller zijn zwaard dan zijn adem."
+  > Kijk hoe de tocht wordt voorbereid  -> CH5_004B
+
+### CH5_004B  (r.6935)  — Een Plek Aan Boord
+Terwijl Tydeus' ruzie wegebt, komt de stuurman ook bij jou langs — een boodschapper, geen geboren zeeman, maar iedereen aan boord moet ergens zitten voordat de Argo kan vertrekken.
+  > Neem gewoon de eerstvolgende vrije bank  -> CH5_004_OPEN
+  > Zet je rug tegen een testroeispaan en overtuig de stuurman met pure kracht dat je een voorste bank verdient [STAT:vis:11] -> CH5_004_VIS
+  > Wijs de stuurman op een slimmere indeling — wie qua humeur en gewicht beter naast wie past [STAT:prudentia:13] -> CH5_004_PRU
+
+### CH5_004_OPEN  (r.6951)  — Een Vrije Bank
+[FLAG=ch5_004_route=open]
+Je neemt de eerstvolgende vrije bank, niets bijzonders — een van tachtig roeiers, niet meer en niet minder.
+  > Kijk hoe de tocht wordt voorbereid  -> CH5_005
+
+### CH5_004_VIS  (r.6968)  — Bewezen Kracht
+[FLAG=ch5_004_route=vis]
+Je zet je rug tegen een van de testroeispanen en haalt, tot de stuurman goedkeurend knikt — genoeg om je, tot je eigen verbazing, een plek op een van de voorste banken te geven, waar de zwaarste slagen vandaan moeten komen.
+  > Kijk hoe de tocht wordt voorbereid  -> CH5_005
+
+### CH5_004_PRU  (r.6985)  — Een Slimmere Indeling
+[FLAG=ch5_004_route=prudentia]
+Je kijkt niet naar spierkracht maar naar mensen: wie er gespannen bijstaat, wie juist kalm, wie een ander zou kunnen afleiden of juist geruststellen. Je wijst de stuurman op een indeling die hij zelf nog niet had gezien — hij verschuift twee banken, zonder vragen te stellen.
+  > Kijk hoe de tocht wordt voorbereid  -> CH5_005
+
+### CH5_005  (r.7002)  — De Stuurman Wijst de Plaatsen
+[PUZZLE=puzzle_ch5_nominativus]
+Vlak voor het vertrek loopt de stuurman langs elke bank om te bepalen wie waar roeit — een kwestie van kracht, gewicht en geduld, niet van eer. Boven het geroezemoes van tachtig stemmen probeert Jason zelf orde te scheppen, in het Latijn dat hij van zijn leermeester Chiron heeft geleerd.
+  > Vaar uit Iolcus weg  -> CH5_006
+
+### CH5_006  (r.7019)  — Het Vertrek
+[FLAG=ch5_bemanning_uitrusting=true]
+Vlak voor de Argo de haven uit vaart, deelt Argos uit wat er nog in het ruim lag opgeslagen: voor de hele bemanning — ook voor jou — een eenvoudig reisharnas en een hoofddoek tegen de zon en de zoute wind die de komende weken niet zullen ophouden. "Niets moois," zegt hij, "maar het houdt je droog en het houdt je koel. Meer heb je op deze tocht niet nodig." Achter de Argo verdwijnt Iolcus langzaam in de nevel, en voor haar strekt zich een zee uit die verder gaat dan de meesten aan boord ooit hebben gevaren.
+  > Vaar de open zee op  -> CH5_007
+
+### CH5_007  (r.7038)  — Cyzicus
+[PERSON=atalanta:intro, meleager:intro]
+Na de eerste dagen op zee meert de Argo aan bij het eiland Cyzicus, waar de plaatselijke koning de bemanning hartelijk ontvangt — op voorwaarde dat ze eerst een probleem voor hem oplossen. Een reusachtig everzwijn huist op de berghelling boven de stad en verscheurt al weken alles wat de jagers erop afsturen. Twee van de jongste helden aan boord melden zich meteen: Atalanta, opgevoed door een berin en de scherpste jaagster van heel Griekenland, en Meleager, de jonge prins van Calydon, net zo gretig als zij. Ze kennen elkaar amper, maar de blik die ze wisselen is er meteen een van wedijver — en van iets dat verdacht veel op vriendschap lijkt.
+  > Kijk wie het everzwijn het eerst weet te vinden  -> CH5_008
+
+### CH5_008  (r.7057)  — Met Wie Kijk Je Mee?
+De jacht splitst zich al snel in twee groepen die elk hun eigen kant van de berghelling nemen — Atalanta stil en geduldig door het kreupelhout, Meleager luidruchtiger, met een groep andere Argonauten in zijn kielzog. Je kunt niet allebei tegelijk volgen.
+  > Volg Atalanta, die op haar eigen spoor jaagt  -> CH5_008A
+  > Volg Meleager, die met de groep meejaagt  -> CH5_008B
+
+### CH5_008A  (r.7072)  — Atalanta's Spoor
+Atalanta beweegt zich bijna geluidloos tussen de struiken, haar boog al gespannen voor je het dier zelf ziet. Ze leest de grond zoals anderen een geschreven tekst lezen — een omgewoelde wortel hier, een afgebroken tak daar — en is het everzwijn al drie keer voorbij zijn eigen spoor te slim af voor de rest van de jacht haar bijbenen. Vlak voordat het beest tussen de rotsen opduikt, fluistert ze, meer tegen zichzelf dan tegen jou: "Wie het eerst raakt, telt vandaag niet. Wie het eerst ziet, wel."
+  > Kijk hoe de jacht samenkomt  -> CH5_008C
+
+### CH5_008B  (r.7088)  — Meleagers Groep
+Meleager jaagt luider, met meer mensen om zich heen, meer geroep en meer risico — maar ook met een aanstekelijk soort moed die de rest van de groep meesleept. Waar Atalanta het spoor leest, leest hij vooral de stemming: wie moe wordt, wie te dichtbij komt, wie een aanmoediging nodig heeft. "Het gaat niet om wie het dier velt," roept hij naar de anderen, half lachend, half serieus, terwijl ze de laatste helling op klauteren. "Het gaat om wie het overleeft om het verhaal te vertellen."
+  > Kijk hoe de jacht samenkomt  -> CH5_008C
+
+### CH5_008C  (r.7104)  — Het Zwijn Snijdt Af
+Beide jachtgroepen drijven het beest langzaam naar dezelfde kloof — maar op het laatste moment dreigt het everzwijn een zijpad te vinden waar niemand op rekende. Jij bent, van beide groepen, het dichtst bij die uitweg.
+  > Blijf dicht bij de groep en help mee waar nodig  -> CH5_008_OPEN
+  > Glip snel door een nauwe rotsspleet om de kortste ontsnappingsroute af te snijden [STAT:agilitas:11] -> CH5_008_AGI
+  > Duw een losse rotsblok of omgevallen boomstam om, om het dier fysiek terug de kloof in te dwingen [STAT:vis:13] -> CH5_008_VIS
+
+### CH5_008_OPEN  (r.7120)  — Bij de Groep
+[FLAG=ch5_008_route=open]
+Je blijft dicht bij de groep en helpt mee waar nodig — het beest vindt zijn zijpad niet, gewoon omdat er, uiteindelijk, genoeg mensen zijn om elke uitweg dicht te houden.
+  > Kijk hoe de jacht samenkomt  -> CH5_009
+
+### CH5_008_AGI  (r.7137)  — Door de Rotsspleet
+[FLAG=ch5_008_route=agilitas]
+Je glipt door een nauwe rotsspleet nog voor iemand anders het zijpad zelfs heeft opgemerkt, en staat al klaar wanneer het everzwijn ernaartoe rent — de uitweg is dicht voor het beest er is.
+  > Kijk hoe de jacht samenkomt  -> CH5_009
+
+### CH5_008_VIS  (r.7154)  — De Rotsblok
+[FLAG=ch5_008_route=vis]
+Je zet je schouder tegen een losse rotsblok en duwt, op precies het goede moment, tot hij met een doffe dreun het zijpad blokkeert — het everzwijn heeft geen andere keus meer dan terug de kloof in.
+  > Kijk hoe de jacht samenkomt  -> CH5_009
+
+### CH5_009  (r.7171)  — Het Everzwijn
+[PUZZLE=puzzle_ch5_accusativus | IMG=everzwijn_cyzicus.png]
+Beide groepen drijven het everzwijn uiteindelijk naar dezelfde kloof, waar het geen kant meer op kan. Atalanta is de eerste die raak schiet — een pijl diep in de flank van het dier, genoeg om het te vertragen zonder het meteen te doden. Meleager, die als laatste toehapt, velt het definitief. Geen van beiden claimt de eer alleen. "Zonder jouw pijl had ik hem nooit ingehaald," zegt Meleager, en Atalanta knikt, voor het eerst die dag zonder een spoor van wedijver in haar blik.
+  > Kijk hoe de koning van Cyzicus reageert  -> CH5_010
+
+### CH5_010  (r.7193)  — Twee Namen om te Onthouden
+De koning houdt zijn woord en bevoorraadt de Argo rijkelijk voor het vervolg van de tocht. Terwijl de bemanning het ruim vult, blijf je nog even staan bij Atalanta en Meleager, die zij aan zij tegen de reling geleund het dier napraten alsof ze al jaren samen jagen in plaats van amper één middag. Iets aan hoe moeiteloos ze samenwerken, blijft je bij — een gevoel dat dit niet de laatste keer zal zijn dat hun namen in één adem genoemd worden.
+  > Vaar verder, naar het land van de Bebryciërs  -> CH5_011
+
+### CH5_011  (r.7212)  — De Uitdaging van Amycus
+[PERSON=kastor_polydeukes:intro]
+Bij het land van de Bebryciërs verwelkomt niemand de Argo — koning Amycus, een reus van een man, staat de bemanning al op te wachten met een eis in plaats van een groet: elke vreemdeling die hier aan land komt, moet hem uitdagen tot een bokswedstrijd. Wie weigert, vertrekt niet levend. Twee broers stappen meteen naar voren: Kastor, de beste ruiter van Griekenland, en Polydeukes, zijn tweelingbroer — onverslaanbaar met de vuisten, zegt men, al sinds hij nog een jongen was. "Dit," zegt Polydeukes rustig, terwijl hij zijn handen inzwachtelt, "is precies waar ik goed in ben."
+  > Kijk wat Amycus over zijn eigen rijk te zeggen heeft voor het gevecht begint  -> CH5_012
+
+### CH5_012  (r.7231)  — Het Rijk van Amycus
+[PUZZLE=puzzle_ch5_genitivus]
+Amycus buldert zijn eigen faam nog eens rond voor hij zijn vuisten heft — hoeveel vreemdelingen hij al heeft verslagen, hoe lang zijn volk hem al onbevochten kent. Polydeukes luistert er nauwelijks naar, zijn blik al gericht op de eerste opening die hij straks zal vinden.
+  > Kijk hoe het gevecht verloopt  -> CH5_013
+
+### CH5_013  (r.7248)  — Polydeukes tegen Amycus
+[COMBAT=amycus]
+Amycus is groter, zwaarder en gewend te winnen — maar Polydeukes is sneller, en heeft, anders dan elke tegenstander die Amycus ooit versloeg, geen enkele angst in zijn ogen. Waar de reus met volle kracht uithaalt, ontwijkt Polydeukes en antwoordt met precisie in plaats van gewicht.
+  > Kijk wat er van Amycus' rijk wordt na zijn nederlaag  -> CH5_014
+
+### CH5_014  (r.7265)  — Een Reus Geveld
+[IMG=polydeukes_amycus.png]
+Amycus valt, voor het eerst in zijn leven verslagen, en zijn volk — dat hem eerder uit angst dan uit liefde volgde — verwelkomt de Argonauten meteen als bevrijders in plaats van indringers. Kastor slaat zijn broer trots op de schouder; het is duidelijk dat dit niet de laatste keer is dat deze twee samen iets overwinnen dat groter is dan zijzelf.
+  > Vaar verder, naar de kust van Mysië [CLEMENTIA] -> CH5_015
+  > Vaar verder — een tiran minder op de kaart, verder geen traan aan verspild [SEVERITAS] -> CH5_015
+  > Vaar verder, zonder er verder nog bij stil te staan [NEUTRAL] -> CH5_015
+
+### CH5_015  (r.7287)  — Herakles Blijft Achter
+[IMG=hylas_nimfen.png]
+Bij Mysië gaat Herakles aan land om een nieuwe roeiriem te snijden, met zijn jonge metgezel Hylas mee om water te halen. Hylas keert nooit terug — de waternimfen van de bron waar hij put, betoveren hem en trekken hem mee de diepte in, verliefd op zijn schoonheid. Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke aanmaning om terug aan boord te komen. Tegen de ochtend besluit de bemanning, met tegenzin, zonder hem verder te varen — Herakles, wanneer hij eindelijk het strand terugvindt en het schip al weg ziet, blijft alleen achter, zijn zoektocht naar Hylas nog altijd niet opgegeven.
+  > Vaar verder zonder Herakles  -> CH5_016
+
+### CH5_016  (r.7306)  — De Symplegades
+Verderop wacht een gevaar dat geen zwaard en geen boog kan verslaan: de Symplegades, twee rotswanden die bij elke doorvaart als een kaak op elkaar klappen en alles ertussen verpletteren. Geen enkel schip heeft de doortocht ooit overleefd. Argos, die zijn eigen schip kent tot in de laatste plank, bestudeert het ritme van de botsende rotsen langer dan wie ook geduld voor heeft. "Elke kaak heeft een moment dat hij weer opengaat," zegt hij uiteindelijk. "Wij hebben er maar één nodig."
+  > Kijk hoe Argos de doortocht voorbereidt  -> CH5_016B
+
+### CH5_016B  (r.7322)  — Vlak Voor de Doortocht
+Terwijl Argos het ritme van de rotsen bestudeert, is er nog werk te doen voor het schip de doortocht kan wagen — en niet alleen aan boord.
+  > Laat Argos alleen bepalen  -> CH5_016_OPEN
+  > Klim zelf op de boeg om van dichtbij het ritme van de rotsen te lezen en Argos' inschatting scherper te maken [STAT:agilitas:13] -> CH5_016_AGI
+  > Help de riemen en touwen alvast op kracht voorspannen, zodat de bemanning bij het teken meteen voluit kan trekken [STAT:vis:11] -> CH5_016_VIS
+
+### CH5_016_OPEN  (r.7338)  — Argos' Woord
+[FLAG=ch5_016_route=open]
+Je laat het oordeel volledig aan Argos — hij kent zijn schip beter dan wie ook, en jij hebt weinig toe te voegen aan een vak dat niet het jouwe is.
+  > Kijk hoe Argos de doortocht voorbereidt  -> CH5_017
+
+### CH5_016_AGI  (r.7355)  — Op de Boeg
+[FLAG=ch5_016_route=agilitas]
+Je klimt zelf op de boeg, zo dicht mogelijk bij de rotsen, en telt mee: de adem van de kaken, het korte moment van stilte voor ze weer opengaan. Wat je ziet, deel je met Argos — en zijn inschatting wordt er zichtbaar scherper van.
+  > Kijk hoe Argos de doortocht voorbereidt  -> CH5_017
+
+### CH5_016_VIS  (r.7372)  — Voorgespannen
+[FLAG=ch5_016_route=vis]
+Je helpt de riemen en touwen alvast strak voorspannen, elke arm al in positie voor het teken valt — zodat er geen fractie van een seconde verloren gaat wanneer de kaak straks eindelijk opengaat.
+  > Kijk hoe Argos de doortocht voorbereidt  -> CH5_017
+
+### CH5_017  (r.7389)  — Argos Verstevigt het Schip
+[PUZZLE=puzzle_ch5_ablativus]
+Voor de doorvaart zelf versterkt Argos in allerijl de romp van de Argo, precies op de plekken waar hij weet dat het schip het meest te lijden zal krijgen.
+  > Vaar op het juiste moment de Symplegades in  -> CH5_018
+
+### CH5_018  (r.7406)  — Tussen de Rotsen Door
+[IMG=symplegades_doortocht.png]
+Op Argos' teken roeit de hele bemanning met alles wat ze in zich hebben, precies op het moment dat de rotsen weer uiteen wijken. De Argo schiet erdoorheen en is nog maar net voorbij wanneer de wanden achter haar met een oorverdovende klap weer op elkaar slaan — op een haar na alleen het uiterste puntje van de achtersteven rakend. Sinds die dag, zegt men, bewegen de Symplegades niet meer: een schip dat de doortocht overleeft, bevriest de rotsen voorgoed op hun plaats. Wat er ook van waar is, geen enkel schip na de Argo heeft ze ooit nog zien bewegen.
+  > Vaar verder, langs de kust van de Zwarte Zee  -> CH5_019
+
+### CH5_019  (r.7428)  — Gespannen Riemen
+[PERSON=orpheus:intro]
+Weken op zee slijten aan iedereens geduld, ook aan dat van Tydeus, die op een avond een roeier bijna naar zijn keel vliegt om niet meer dan een verkeerd geplaatste opmerking. Zijn vuisten zijn al gebald voor iemand kan reageren.
+  > Kijk toe hoe de situatie zich ontwikkelt  -> CH5_019_OPEN
+  > Grijp Tydeus' arm vast voordat de vuist valt [STAT:vis:13] -> CH5_019_VIS
+  > Merk de oplopende spanning eerder op en sus de roeier met het juiste woord voordat het escaleert [STAT:prudentia:11] -> CH5_019_PRU
+
+### CH5_019_OPEN  (r.7447)  — Orpheus Grijpt In
+[FLAG=ch5_019_route=open]
+Voor iemand kan ingrijpen, klinkt er muziek over het dek — Orpheus, die zijn lier pakt en speelt zoals hij weet dat alleen hij kan spelen. De ruzie sterft vanzelf weg, niet omdat iemand gelijk kreeg, maar omdat niemand meer de puf heeft om boos te blijven terwijl die muziek klinkt. Zelfs Tydeus, met zijn vuisten nog half gebald, laat zich zonder het zelf te merken terugzakken op zijn bank.
+  > Laat de avond verder in stilte voorbijgaan  -> CH5_020
+
+### CH5_019_VIS  (r.7464)  — Voordat de Vuist Valt
+[FLAG=ch5_019_route=vis]
+Je grijpt Tydeus' arm vast op precies het moment dat hij wil uithalen — geen woord, alleen een greep die hem hard genoeg verrast om te aarzelen. Orpheus, die de spanning ook voelt, pakt intussen zijn lier erbij en speelt de rest van de avond rustig, zodat niemand zich nog hoeft af te vragen of het weer zal escaleren.
+  > Laat de avond verder in stilte voorbijgaan  -> CH5_020
+
+### CH5_019_PRU  (r.7481)  — Vóór het Escaleert
+[FLAG=ch5_019_route=prudentia]
+Je merkt de spanning al minuten eerder dan wie ook — de manier waarop de roeier zijn schouders spant, de manier waarop Tydeus' stem net iets te scherp wordt. Een paar rustige woorden aan de roeier, ruim voor het misgaat, zijn genoeg om de vonk nooit te laten overslaan.
+  > Laat de avond verder in stilte voorbijgaan  -> CH5_020
+
+### CH5_020  (r.7498)  — Raad en Richting
+[PERSON=nestor:intro, philoktetes:intro]
+Vlak voor de laatste etappe naar Colchis brengt de stuurman de koers in kaart, en het is Nestor — nog een van de jongste aan boord, maar nu al opvallend kalm en verstandig voor zijn leeftijd — wiens advies de doorslag geeft over welke route het veiligst is. Philoktetes, intussen, oefent zijn boogschot op een stuk drijfhout achter het schip — raak, en raak, en nog eens raak, met een precisie die zelfs de meest doorgewinterde Argonauten aan boord stil doet worden.
+  > Vraag Philoktetes om zijn precisie nog eens te bewijzen  -> CH5_021
+
+### CH5_021  (r.7517)  — Een Pijl voor de Godin
+[PUZZLE=puzzle_ch5_dativus]
+Voor zijn laatste schot wijdt Philoktetes zijn pijl hardop toe aan de godin van de jacht — een klein gebaar van respect dat hij, zegt hij, van zijn eigen leermeester heeft overgenomen.
+  > Vaar de laatste etappe naar Colchis  -> CH5_022
+
+### CH5_022  (r.7534)  — Twee Namen voor Later
+Terwijl de kust van Colchis al vaag aan de horizon verschijnt, bedenk je dat Nestor en Philoktetes — allebei nu nog jong, allebei nu nog maar twee van de tachtig namen aan boord — ooit nog een keer samen genoemd zullen worden. Niet hier. Niet op deze tocht. Maar het gevoel dat dit geen toeval is, laat je niet meer los.
+  > Vaar de haven van Colchis binnen  -> CH5_023
+
+### CH5_023  (r.7551)  — Colchis
+[PERSON=medea:intro, aeetes:intro | IMG=medea_aeetes_colchis.png]
+Colchis ligt aan de rand van de bekende wereld, verder naar het oosten dan de meeste Grieken ooit zijn gevaren. Koning Aeëtes ontvangt de Argonauten koeltjes — hij bewaakt het Gulden Vlies al jaren met een nooit slapende draak, en is niet van plan het zomaar aan een groep vreemdelingen af te staan. Naast hem staat zijn dochter Medea, een begaafde tovenares — en de eerste die haar vaders koelte niet deelt zodra ze Jason ziet. Wat ze voor hem voelt, overvalt haarzelf net zo hard als het jou overvalt: het lijkt in niets op wat ze had verwacht.
+  > Kijk welke voorwaarde Aeëtes aan het Vlies verbindt  -> CH5_024
+
+### CH5_024  (r.7573)  — De Beproevingen van Aeëtes
+Aeëtes stelt een voorwaarde waarvan hij zeker weet dat ze onmogelijk is: eerst twee vuurspuwende stieren voor de ploeg spannen, dan een veld ermee omploegen, en ten slotte drakentanden erin zaaien — dezelfde soort tanden waaruit ooit, ver hiervandaan in Thebe, een heel volk van gewapende mannen uit de aarde opstond. Uit elke tand die Jason zaait, groeit binnen een oogwenk een gewapende krijger, klaar om hem te doden. Zonder hulp zou geen sterveling dit overleven — en Medea, die haar vader al in het geheim heeft verraden voor de vreemdeling die haar hart heeft gestolen, geeft Jason een zalf tegen het vuur en één cruciale raad: gooi een steen tussen de opgerezen krijgers, en laat ze elkaar aanzien voor de vijand in plaats van jou.
+  > Kijk toe hoe Jason zich staande houdt  -> CH5_024_OPEN
+  > Zet je eigen kracht in om de vuurspuwende stier mee in bedwang te houden terwijl Jason het juk vastmaakt [STAT:vis:13] -> CH5_024_VIS
+  > Manoeuvreer snel tussen de opschietende aardgeboren krijgers door om Jason op tijd te waarschuwen [STAT:agilitas:13] -> CH5_024_AGI
+
+### CH5_024_OPEN  (r.7591)  — Vanaf de Zijlijn
+[FLAG=ch5_024_route=open]
+Je kijkt toe, machteloos maar niet nutteloos — soms is getuige zijn het enige wat een boodschapper kan doen. Jason, met Medea's zalf en raad, redt zichzelf zoals het altijd al bedoeld was.
+  > Kijk hoe Medea haar keuze rechtvaardigt  -> CH5_025
+
+### CH5_024_VIS  (r.7608)  — Schouder aan Schouder
+[FLAG=ch5_024_route=vis]
+Je grijpt mee, je handen brandend ondanks de zalf die ook jij hebt gekregen, en houdt de vuurspuwende stier met pure kracht in bedwang terwijl Jason het juk vastmaakt — een fractie van een seconde die het verschil maakt tussen een geslaagde en een mislukte poging.
+  > Kijk hoe Medea haar keuze rechtvaardigt  -> CH5_025
+
+### CH5_024_AGI  (r.7625)  — Tussen de Krijgers Door
+[FLAG=ch5_024_route=agilitas]
+Terwijl de aardgeboren krijgers uit de grond omhoog schieten, manoeuvreer je razendsnel tussen hen door, dicht genoeg bij Jason om hem te waarschuwen vlak voor het eerste zwaard valt — genoeg voorsprong om Medea's steentruc op tijd uit te voeren.
+  > Kijk hoe Medea haar keuze rechtvaardigt  -> CH5_025
+
+### CH5_025  (r.7642)  — Medea's Keuze
+Wat Medea doet, is geen kleinigheid: ze verraadt haar eigen vader, haar eigen koninkrijk, voor een vreemdeling die ze amper een paar dagen kent. Het is, beseft je, precies wat Ariadne op Kreta ook deed voor Theseus — dezelfde soort keuze, dezelfde soort risico, misschien wel hetzelfde soort liefde. "Ik weet wat dit betekent," zegt Medea zacht, meer tegen zichzelf dan tegen jou. "Ik kan nooit meer terug. Maar ik kan hem ook niet laten sterven."
+  > Bewonder vooral haar moed om alles op te geven voor wat ze voelt [CLEMENTIA] -> CH5_025B
+  > Erken vooral hoe roekeloos het is om je eigen vader zo te verraden [SEVERITAS] -> CH5_025B
+  > Herken vooral het patroon — weer een vrouw die alles waagt voor een man die haar dat misschien nooit teruggeeft [NEUTRAL] -> CH5_025B
+
+### CH5_025B  (r.7660)  — Het Heilige Woud
+Voor Medea's gezang de draak kan kalmeren, moet de groep eerst het heilige woud in — ongezien, zonder het beest vroegtijdig te alarmeren.
+  > Volg gewoon stilzwijgend achter Medea aan  -> CH5_025_OPEN
+  > Glip geruisloos tussen de takken en heilige stenen door, geen twijgje dat kraakt [STAT:agilitas:13] -> CH5_025_AGI
+  > Lees de ademhaling en kronkelpatronen van de sluimerende draak en weet precies wanneer je veilig dichterbij kunt komen [STAT:prudentia:11] -> CH5_025_PRU
+
+### CH5_025_OPEN  (r.7676)  — Stilzwijgend Mee
+[FLAG=ch5_025_route=open]
+Je volgt stilzwijgend achter Medea aan, je pas zo goed mogelijk aanpassend aan de hare — niet feilloos stil, maar stil genoeg.
+  > Kijk hoe het woud dichterbij komt  -> CH5_026
+
+### CH5_025_AGI  (r.7693)  — Geen Twijgje
+[FLAG=ch5_025_route=agilitas]
+Je beweegt geruisloos tussen de takken en heilige stenen door, elke stap zorgvuldig getest voor hij je gewicht draagt — geen twijgje dat kraakt, geen blad dat ritselt.
+  > Kijk hoe het woud dichterbij komt  -> CH5_026
+
+### CH5_025_PRU  (r.7710)  — De Ademhaling van de Draak
+[FLAG=ch5_025_route=prudentia]
+Je let niet op je eigen voetstappen maar op die van het beest verderop: het ritme van zijn ademhaling, de trage kronkeling van zijn lijf. Je weet, beter dan wie ook in de groep, precies wanneer het veilig is om dichterbij te komen.
+  > Kijk hoe het woud dichterbij komt  -> CH5_026
+
+### CH5_026  (r.7727)  — De Nooit Slapende Draak
+[COMBAT=drakon_vlies]
+Het Gulden Vlies hangt diep in een heilig woud, bewaakt door een draak die naar verluidt nog nooit heeft geslapen. Medea neuriet een zacht, oud gezang dat het beest langzaam kalmeert — genoeg om Jason dichterbij te laten komen, maar niet genoeg om het volledig in slaap te sussen. Vlak voor hij het Vlies kan losmaken, schrikt de draak alsnog wakker.
+  > Kijk wat er van het Gulden Vlies wordt  -> CH5_027
+
+### CH5_027  (r.7744)  — Het Gulden Vlies
+[SOUVENIR=souvenir_argonauten | TITEL=ch5_argonauten | IMG=gulden_vlies_gevonden.png]
+Met de draak verslagen snijdt Jason het Vlies eindelijk los — zwaarder en warmer in zijn handen dan hij had verwacht, alsof het al die jaren wachten zelf ook gewicht heeft gekregen. Medea, haar eigen vader en koninkrijk nu voorgoed achter zich latend, vaart met de Argo mee terug naar Griekenland. In je vuist voel je een klein, gouden schilfertje dat losraakte van het Vlies tijdens het gevecht — koud eerst, dan langzaam warm, alsof het net zo lang op jou heeft liggen wachten als het Vlies zelf op Jason wachtte.
+  > Volg de terugreis naar Griekenland  -> CH5_028
+
+### CH5_028  (r.7769)  — De Terugreis
+De terugtocht duurt bijna net zo lang als de heentocht, over andere zeeën en langs andere kusten, tot de Argo eindelijk weer thuis aanlegt in Iolcus — te laat om Pelias nog op zijn woord te houden, en te laat om te voorkomen dat de troon inmiddels alweer stevig in zijn handen ligt. Jason en Medea trekken verder, uiteindelijk naar Korinthe, waar ze jarenlang samen leven en kinderen krijgen — een rustige tijd die, achteraf gezien, nooit bedoeld was om te blijven duren.
+  > Kijk wat er jaren later, in Korinthe, gebeurt  -> CH5_029
+
+### CH5_029  (r.7785)  — Korinthe, Jaren Later
+[PERSON=medea:full]
+In Korinthe verlaat Jason Medea uiteindelijk voor een politiek huwelijk met de dochter van de plaatselijke koning — een verstandige zet voor zijn eigen toekomst, zegt hij, alsof verstandig genoeg reden is om te vergeten wat Medea voor hem heeft opgegeven: haar vader, haar vaderland, alles. Medea's wraak is er een die de latere verhalen zelf nauwelijks durven navertellen. Ze stuurt de nieuwe bruid een huwelijksgeschenk dat er op het eerste gezicht prachtig uitziet, maar vergiftigd blijkt te zijn. En daar houdt haar wraak niet op — in haar woede en verdriet neemt ze van Jason ook het enige wat hij nooit meer terug zou kunnen krijgen. Geen enkel lied vertelt dat deel graag in detail, en dit verhaal ook niet.
+  > Luister verder  -> CH5_EINDE
+
+### CH5_EINDE  (r.7810)  — Het Einde van Hoofdstuk 5
+[TITEL=ch5_medea_korinthe]
+"Niet elke belofte breekt met een klip en een zwart zeil," zegt de stem, stiller dan anders. "Sommige breken langzaam, over jaren — en de prijs daarvan kan verschrikkelijker zijn dan wie dan ook had kunnen voorzien, aan het begin van een tocht die met zoveel hoop van wal stak." De poort keert terug tot een dunne streep licht, en je neemt een nieuwe herinnering met je mee, zwaarder dan de vorige: een schilfer goud, en alles wat het je heeft geleerd over wat een belofte werkelijk kan kosten.
+  > Stap door de poort  -> CH6_000

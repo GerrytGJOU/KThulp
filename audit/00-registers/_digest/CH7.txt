@@ -1,0 +1,134 @@
+### CH7_000  (r.8800)  — Het Echte Werk
+De Boodschapper laat een korte stilte vallen voor ze verdergaat — de soort stilte die een aankondiging voorafgaat. "De kleine verhalen zijn voorbij," zegt ze. "Kadmos' stad, Thebe's vloek, Niobe's trots — dat waren allemaal voorbereidingen. Je hebt zonet zes hoofdstukken lang bewezen dat je een verhaal kunt dragen zonder erdoor verpletterd te worden." "Wat nu komt, is anders. Groter. Het is misschien wel het belangrijkste verhaal dat de klassieke oudheid heeft voortgebracht — het verhaal waar bijna elk ander verhaal die je al kent, uiteindelijk naar terugwijst of vandaan komt." Ze gebaart naar de hal om je heen, de sokkels, de stolpen. "Dit Museum is voortaan je uitvalsbasis. Wat er ook gebeurt in de jaren die komen, je hebt hier altijd een plek om op adem te komen voor je er weer in duikt." "Het echte werk begint nu," zegt de Boodschapper. "De Trojaanse Oorlog."
+  > Stap de herinnering in  -> CH7_001
+
+### CH7_001  (r.8818)  — Leda en de Zwaan
+[PERSON=leda:intro | IMG=leda_zwaan.png]
+Ver voor Troje ook maar bestaat in iemands gedachten, bezoekt Jupiter de Spartaanse koningin Leda — niet als wolk, zoals bij Io, en niet als stier, zoals bij Europa (Hoofdstuk 3), maar in de gedaante van een zwaan. Diezelfde nacht deelt ook Leda's sterfelijke man Tyndareos haar bed. Wat daaruit voortkomt, vertellen de dichters verschillend: een ei, zeggen sommigen, waaruit kinderen breken die half goddelijk en half sterfelijk zijn. Onder hen: de tweeling Castor en Pollux, die de speler al kent als onafscheidelijke Argonauten (Hoofdstuk 5) — en een dochter wier naam nog niemand in Griekenland kent, maar die dat, over niet al te lange tijd, allemaal zal veranderen. Helena.
+  > Zie hoe Helena opgroeit  -> CH7_002
+
+### CH7_002  (r.8843)  — De Vrijers van Helena
+[PUZZLE=puzzle_ch7_genitivus | PERSON=tyndareos:intro, helena:intro, odysseus:intro]
+Helena groeit op tot de mooiste vrouw die Griekenland ooit heeft gezien — zo mooi dat elke koning met enig aanzien naar Sparta afreist om haar hand te vragen. Koning Tyndareos verwelkomt ze allemaal, en vreest ze allemaal evenzeer: wie hij ook kiest, de rest zal zich vernederd voelen, en een vernederde koning is een koning die naar zijn wapens grijpt. Onder de vrijers bevindt zich ook Odysseus, koning van het kleine Ithaka — te arm en te onbeduidend om zelf een kans te maken, maar niet te onbeduidend om een oplossing te bedenken. "Laat elke vrijer zweren," stelt hij voor, "dat wie Helena ook trouwt, de rest hem zal verdedigen tegen elk onrecht dat hem via haar wordt aangedaan. Dan verliest niemand echt — en iedereen wint een bondgenootschap." In ruil vraagt hij zelf maar één ding: de hand van Tyndareos' nicht, de verstandige Penelope.
+  > Zie de eed die daarop volgt  -> CH7_003
+
+### CH7_003  (r.8865)  — De Eed van Tyndareos
+[PERSON=menelaos:intro]
+Elke vrijer zweert de eed, de hand op een offerdier dat daarna in stukken wordt gesneden en begraven — een eed die niemand van hen ooit lichtvaardig zal breken. Tyndareos kiest uiteindelijk Menelaus, een koning met macht maar zonder de uitstraling van zijn eigen machtigere broer, Agamemnon van Mycene. De bruiloft wordt gevierd zonder dat iemand vermoedt hoe zwaar die eed ooit zal gaan wegen. Voorlopig is er alleen een nieuwe koningin van Sparta — en, ergens anders, een heel andere bruiloft die op het punt staat alles in gang te zetten.
+  > Reis mee naar die andere bruiloft  -> CH7_004
+
+### CH7_004  (r.8887)  — De Bruiloft van Peleus en Thetis
+[PERSON=thetis:intro | PAYOFF=ch7_peleus_bruiloft_echo]
+De zeenimf Thetis was ooit zo begeerd dat zelfs Jupiter en Neptunus zelf om haar dongen — tot een profetie waarschuwde dat haar zoon zijn vader ooit zou overtreffen. Geen enkele god durfde dat risico te nemen. In plaats daarvan werd ze uitgehuwelijkt aan een sterveling: Peleus, een van de helden die de speler al kent van de tocht van de Argo (Hoofdstuk 5). Bijna elke god en godin is uitgenodigd voor de bruiloft — een eer die zelden een sterveling ten deel valt. Muziek, wijn, geschenken zonder eind. Niemand let op de ene godin die niet op de gastenlijst stond, tot ze zelf besluit dat ook zij aanwezig zal zijn.
+  > Zie wie er ongenood binnenkomt  -> CH7_005
+
+### CH7_005  (r.8909)  — De Appel der Tweedracht
+[PUZZLE=puzzle_ch7_dativus_grieks | SOUVENIR=souvenir_appel_tweedracht | IMG=appel_der_tweedracht.png]
+Eris, godin van de tweedracht, was de enige die geen uitnodiging kreeg — uit angst voor precies dit. Zonder een woord te zeggen werpt ze een gouden appel tussen de gasten en verdwijnt weer, net zo geruisloos als ze gekomen is. Op de appel staat één enkel woord gegraveerd. Juno, Athena en Venus buigen zich er alle drie tegelijk overheen — en beseffen alle drie tegelijk voor wie dat woord bedoeld zou kunnen zijn. Geen van de andere goden waagt het een oordeel te vellen tussen drie zo machtige godinnen. Het feest eindigt in een gespannen stilte die niemand hardop durft te benoemen. In je vuist voel je opeens het gewicht van diezelfde appel — zwaarder dan goud hoort te zijn, alsof het gewicht van de hele oorlog die nog moet komen er al in verborgen zit.
+  > Volg de appel naar wie hem uiteindelijk moet beoordelen  -> CH7_006
+
+### CH7_006  (r.8939)  — Hecuba's Visioen
+[PERSON=hecuba:intro, priamus:intro]
+Voor we bij het oordeel zelf aankomen, moet er eerst een rechter geboren worden. In Troje droomt koningin Hecuba, vlak voor de bevalling van haar zoveelste kind, van een brandende fakkel die uit haar eigen lichaam voortkomt en heel Troje in vlammen zet. Een ziener legt de droom uit zonder omwegen: dit kind zal ooit de ondergang van de stad worden. Koning Priamus staat voor een verschrikkelijke keuze. Het kind, Paris, wordt naar de berg Ida gebracht om daar te sterven van de elementen — een lot dat, zoals wel vaker in dit soort profetieën, niet helemaal uitkomt zoals gepland.
+  > Vind het onvergeeflijk om een eigen kind zomaar op te geven, profetie of niet [SEVERITAS] -> CH7_007
+  > Erken dat een koning soms een vreselijke prijs moet betalen voor de veiligheid van een hele stad [CLEMENTIA] -> CH7_007
+  > Onthoud je van een oordeel — je kent deze ouders nog niet goed genoeg [NEUTRAL] -> CH7_007
+
+### CH7_007  (r.8963)  — De Herder van de Berg Ida
+Herders vinden het kind voor de elementen hun werk kunnen doen, en brengen het groot als een van de hunnen — zonder te weten, of zich erom te bekommeren, wiens zoon hij werkelijk is. Paris groeit op tussen de kuddes, sterk en eerlijk, met niets aan hem dat verraadt dat er koninklijk bloed door zijn aderen stroomt. Op een dag, ver van elk paleis, zal precies die eerlijkheid voor het eerst op de proef gesteld worden.
+  > Zie hoe die proef verloopt  -> CH7_008
+
+### CH7_008  (r.8979)  — Paris en de Stier
+Paris' lievelingsstier wint elke kracht- en behendigheidswedstrijd die de herders op de berg organiseren — tot op een dag een vreemde stier meedoet en, tot ieders verbazing, wint. De vreemdeling is Mars zelf, vermomd, die de goden stiekem wil testen hoe eerlijk deze onbekende herdersjongen werkelijk is. Zonder een moment van aarzeling kent Paris de overwinning toe aan de vreemde stier — zijn eigen dier, zijn eigen trots, opzij gezet voor een eerlijkheid die niemand van hem eiste.
+  > Kijk toe hoe Paris oordeelt, zonder zelf in te grijpen  -> CH7_009
+  > Help ondertussen een paar kuddedieren uit de weg te houden van de opgewonden menigte [STAT:vis:14] -> CH7_008_VIS
+  > Houd de rest van de kudde stil en kalm terwijl iedereen naar de wedstrijd kijkt [STAT:prudentia:14] -> CH7_008_PRU
+
+### CH7_008_VIS  (r.8997)  — Ruimte Maken
+Terwijl iedereen naar de wedstrijd staart, duw je de opgewonden kuddedieren met kracht uit de weg — niemand merkt het, en niemand zal het zich later herinneren, maar voor heel even is het jouw kracht die voorkomt dat er een dier of een kind onder de voet wordt gelopen.
+  > Zie hoe het oordeel valt  -> CH7_009
+
+### CH7_008_PRU  (r.9011)  — Een Kalme Kudde
+Je beweegt rustig tussen de overige dieren, met de zachte vastberadenheid van iemand die weet dat een nerveuze kudde net zo gevaarlijk kan zijn als een woedende. Tegen de tijd dat het oordeel valt, staat de rest van de kudde stiller dan hij in geen dagen heeft gestaan.
+  > Zie hoe het oordeel valt  -> CH7_009
+
+### CH7_009  (r.9025)  — Het Parisoordeel
+[TITEL=ch7_parisoordeel | IMG=parisoordeel.png]
+Die eerlijkheid is precies waarom Mercurius, enkele tijd later, drie godinnen meebrengt naar diezelfde berghelling. Juno, Athena en Venus — nog altijd verwikkeld in hun geschil over de gouden appel — hebben besloten dat geen god onpartijdig genoeg is om te oordelen. Een sterveling die zojuist bewees dat hij zelfs zijn eigen belangen opzij zet voor eerlijkheid, leek de goden wel geknipt voor de taak. Elke godin probeert Paris om te kopen voor hij ook maar iets heeft gezegd. Juno biedt macht over heel Azië. Athena biedt wijsheid en onoverwinnelijkheid in de oorlog. Venus biedt iets anders: de liefde van de mooiste sterfelijke vrouw ter wereld. Paris, herder, geen koning, geen strateeg, kiest Venus — en met haar, zonder het ook maar te vermoeden, de vrouw die al getrouwd is met de koning van Sparta.
+  > Volg Paris terug naar de stad waar hij, zonder het te weten, geboren is  -> CH7_010
+
+### CH7_010  (r.9052)  — De Spelen van Troje
+[PERSON=paris:full]
+Jaren later daalt Paris van zijn berg af voor de jaarlijkse spelen van Troje, en wint ze stuk voor stuk — tot woede van de aanwezige prinsen, die geen enkele onbekende herder zo veel eer gunnen. Ze staan op het punt hem te doden voor de belediging, wanneer iemand in de menigte iets herkent dat niemand anders had opgemerkt: een litteken, een gebaar, een gelaatstrek die te veel op een oude, verdrongen droom lijkt. Priamus en Hecuba herkennen in de zegevierende vreemdeling hun eigen, lang geleden prijsgegeven zoon. De profetie die ze ooit probeerden te ontlopen door hem weg te geven, keert nu, jaren later, gewoon terug het paleis in — onder een nieuwe naam, Alexander, prins van Troje.
+  > Zie wat Paris met zijn nieuwe status doet  -> CH7_011
+
+### CH7_011  (r.9074)  — De Missie naar Sparta
+Niet lang na zijn terugkeer wordt Paris naar Griekenland gestuurd, officieel voor staatszaken. Koning Menelaus van Sparta ontvangt hem met alle gastvrijheid die een vreemde prins toekomt — eten, onderdak, geschenken, dagenlang gastheerschap zonder één moment van wantrouwen. Wat Menelaus niet weet, is dat Venus haar belofte aan Paris nog moet inlossen — en dat ze niet van plan is die belofte te vergeten, ongeacht wiens gastvrijheid ervoor moet wijken.
+  > Zie hoe die belofte wordt ingelost  -> CH7_012
+
+### CH7_012  (r.9090)  — De Schaking van Helena
+[PUZZLE=puzzle_ch7_accusativus | IMG=schaking_helena.png]
+Wanneer zakelijke verplichtingen Menelaus voor een tijd van huis roepen, verlaat Helena het paleis samen met Paris — naar zijn schip, en van daar naar Troje. Of ze gelokt werd, verliefd werd, of eenvoudigweg geen keuze had, vertellen de bronnen niet eensluidend. Wat wel vaststaat: een gastheer die zijn gast met open armen ontving, wordt beroofd van zijn eigen vrouw onder zijn eigen dak.
+  > Zie wat dit voor Menelaus betekent  -> CH7_012B
+
+### CH7_012B  (r.9110)  — Een Gastheer Beroofd
+Wanneer Menelaus thuiskomt en ontdekt wat er is gebeurd, is er maar één ding dat hij hoeft te doen: zijn broer Agamemnon waarschuwen, en wachten tot heel Griekenland zich zijn eigen eed weer herinnert.
+  > Vind een schending van gastvrijheid onder je eigen dak onvergeeflijk [SEVERITAS] -> CH7_013
+  > Erken dat liefde — of een belofte van een godin — zich zelden aan de regels van gastvrijheid houdt [CLEMENTIA] -> CH7_013
+  > Wacht af wat dit Griekenland gaat kosten, voor je een kant kiest [NEUTRAL] -> CH7_013
+
+### CH7_013  (r.9126)  — De Eed Wordt Wakker
+[PERSON=agamemnon:intro | TITEL=ch7_helena_geschaakt]
+Het nieuws van Helena's schaking bereikt Sparta, en van Sparta de rest van Griekenland, sneller dan wie dan ook had verwacht. Agamemnon, koning van het machtige Mycene en Menelaus' eigen broer, neemt het opperbevel op zich — en roept, met de oude eed van Tyndareos in de hand, elke koning op die ooit voor Helena's hand streed. Niet elke koning is even enthousiast om zijn belofte na te komen.
+  > Zie wie zich het felst tegen zijn eigen eed verzet  -> CH7_014
+
+### CH7_014  (r.9151)  — Odysseus op het Strand
+[PERSON=odysseus:intro, palamedes:intro]
+Odysseus, koning van het kleine Ithaka en kersvers vader van een zoontje, heeft geen enkele zin om zijn jonge gezin te verlaten voor een oorlog om andermans vrouw. Wanneer de gezanten aankomen, treffen ze hem ploegend op het strand — met een os en een ezel voor dezelfde ploeg gespannen, en zout in plaats van graan in de voren. Palamedes, een van de gezanten, gelooft er niets van. Zonder een woord te zeggen legt hij Odysseus' eigen zoontje Telemachus voor de ploeg. Odysseus zwenkt opzij om hem niet te verwonden — en verraadt daarmee, in één enkele beweging, dat zijn waanzin geveinsd was.
+  > Zie wie Odysseus, als eerste taak, zelf moet gaan opsporen  -> CH7_015
+
+### CH7_015  (r.9173)  — Achilles tussen de Vrouwen
+[PUZZLE=puzzle_ch7_perfectum | PERSON=achilles:intro | IMG=achilles_skyros.png]
+Thetis weet iets dat verder niemand weet: als haar zoon Achilles meevaart naar Troje, zal hij daar sterven. Om dat te voorkomen verbergt ze hem, vermomd als meisje, tussen de dochters van koning Lycomedes op het eiland Skyros. Odysseus, net zo sluw als altijd, doorziet de list. Vermomd als koopman spreidt hij sieraden en stoffen uit voor de meisjes — en tussen de spullen ook een zwaard en een schild. Wanneer plotseling een strijdhoorn schalt, vluchten de meisjes gillend weg van het denkbeeldige gevaar. Eén van hen grijpt in plaats daarvan naar het wapentuig.
+  > Volg de verzamelde vloot naar haar eerste, onverwachte halte  -> CH7_016
+
+### CH7_016  (r.9201)  — Windstilte in Aulis
+[PERSON=calchas:intro]
+De verzamelde Griekse vloot — duizend schepen, zegt men, al is niemand het er precies over eens hoeveel — ligt weken achtereen roerloos in de haven van Aulis. Geen zuchtje wind, geen enkele verklaring, tot de ziener Calchas eindelijk durft uit te spreken wat niemand wil horen: Agamemnon heeft, tijdens de jacht, de godin Diana beledigd. Alleen een offer kan haar gunstige wind afdwingen. Het offer dat ze eist, is niet een dier.
+  > Zie hoe Agamemnon met dat nieuws omgaat  -> CH7_017
+
+### CH7_017  (r.9220)  — Het Offer in Aulis
+[PUZZLE=puzzle_ch7_ablativus | PERSON=iphigenia:intro | TITEL=ch7_aulis_offer | IMG=iphigenia_hinde.png]
+Agamemnon laat zijn eigen dochter Iphigenia naar Aulis lokken, onder het mom van een huwelijk met de jonge Achilles zelf. Pas als ze aankomt, ontdekt ze het werkelijke doel van haar reis. Wat er precies gebeurt op dat altaar, vertellen de bronnen verschillend: sommigen zeggen dat Diana zelf op het laatste moment ingrijpt, haar wegvoert naar het verre Tauris en een hinde in haar plaats achterlaat op het offerblok. Anderen zwijgen liever over wat een vader werkelijk met eigen handen heeft gedaan voor duizend schepen wind. Wat elke versie gemeen heeft: de wind steekt op. De vloot kan eindelijk vertrekken.
+  > Zie hoe de vloot verdergaat  -> CH7_017B
+
+### CH7_017B  (r.9251)  — Windvaart
+De schepen varen eindelijk uit, met een wind die niemand meer in twijfel trekt — al zal niemand aan boord ooit hardop willen navertellen wat die wind heeft gekost.
+  > Vind geen enkele oorlog het offer van een eigen kind waard [SEVERITAS] -> CH7_018
+  > Erken dat een veldheer soms moet kiezen tussen zijn familie en de duizenden die van hem afhankelijk zijn [CLEMENTIA] -> CH7_018
+  > Twijfel of dit werkelijk zo is gegaan als de meesten navertellen [NEUTRAL] -> CH7_018
+
+### CH7_018  (r.9267)  — Philoktetes op Lemnos
+[IMG=philoktetes_lemnos.png | PAYOFF=ch7_philoktetes_lemnos_echo]
+Onderweg naar Troje wordt de vloot gedwongen te pauzeren voor een offer — en tijdens dat oponthoud wordt Philoktetes, dezelfde ongeëvenaarde boogschutter die inmiddels Herakles' eigen boog draagt, in zijn voet gebeten door een verborgen slang. De wond etterst binnen dagen zo erg, en zijn kreten van pijn worden zo ondraaglijk, dat ze de rituelen van de hele vloot verstoren. De Grieken nemen een harde beslissing: ze laten Philoktetes achter op het verlaten eiland Lemnos, met niets dan zijn wond en de boog van Herakles om te overleven — in de stellige hoop dat ze hem nooit meer nodig zullen hebben.
+  > Volg de vloot die zonder hem verdergaat  -> CH7_019
+
+### CH7_019  (r.9289)  — De Eerste die Voet aan Land Zet
+[PUZZLE=puzzle_ch7_matching_tempora]
+Een orakel had lang geleden al voorspeld dat de eerste Griek die voet op Trojaanse bodem zet, daar ook zal sterven. Odysseus, die dat orakel niet vergeten is, werpt bij aankomst zijn eigen schild op het zand en springt daarop neer in plaats van rechtstreeks op de grond — een list om de profetie net iets te slim af te zijn. Protesilaus, onbevreesder of gewoon minder behoedzaam, springt als allereerste daadwerkelijk aan land. Binnen een paar tellen ligt hij dood in het zand, de eerste Griekse gesneuvelde van een oorlog die, zo zal blijken, tien jaar zal duren.
+  > Zie wat er van de eerste jaren van het beleg wordt  -> CH7_020
+
+### CH7_020  (r.9311)  — Chryseis en Briseis
+[PERSON=chryseis:intro, briseis:intro | TITEL=ch7_trojaanse_kust]
+Terwijl het beleg van Troje zelf muurvast blijft zitten, trekt Achilles jaar na jaar rond om omliggende, bondgenootschappelijke steden te plunderen — proviand, buit, en soms gevangenen. Uit twee van die plundertochten komen twee vrouwen mee: Chryseis, dochter van een priester van Apollo, toegewezen aan Agamemnon zelf, en Briseis, toegewezen aan Achilles. Geen van beide mannen ziet op dat moment enige reden tot zorg. Een verdeelde oorlogsbuit, niets meer. Maar wat met een simpele verdeling begint, zal niet lang daarna uitgroeien tot een wrok die het lot van de hele oorlog gaat bepalen — en dat is precies waar dit verhaal, voorlopig, moet pauzeren.
+  > Vind het verontrustend hoe achteloos er over deze twee vrouwen wordt beschikt [SEVERITAS] -> CH7_EINDE
+  > Erken dat oorlogsbuit, hoe ongemakkelijk ook, de norm was in deze wereld [CLEMENTIA] -> CH7_EINDE
+  > Onthoud gewoon beide namen — je vermoedt dat je ze nog terug zult horen [NEUTRAL] -> CH7_EINDE
+
+### CH7_EINDE  (r.9341)  — Het Einde van Hoofdstuk 7
+"Tien jaar," zegt de Boodschapper, en voor het eerst sinds je haar kent, klinkt er iets als vermoeidheid in haar stem mee. "Tien jaar zal dit beleg gaan duren — en alles wat je nu hebt gezien, was pas de aanloop. De echte wrok, de wrok die er werkelijk toe doet, moet nog beginnen." De poort keert terug tot een dunne streep licht. Je neemt een gouden appel met je mee, zwaarder dan een appel hoort te zijn — het gewicht, denk je, van elke keuze die nog moet volgen.
+  > Keer terug naar het Museum  -> CH7_MUSEUM_00
+
+### CH7_MUSEUM_00  (r.9360)  — Terug in het Museum
+De hal van het Museum van Mnemosyne ontvangt je zoals beloofd — dezelfde zuilen, dezelfde eindeloze rijen sokkels, maar niet helemaal hetzelfde als de vorige keer. Eén stolp, die eerder leeg en dof van stof stond, is nu gevuld: een gouden appel, rustend op zijn kussentje alsof hij daar altijd al had gehoord. "Dit was geen klein verhaal," zegt de Boodschapper, terwijl ze naast je naar de nieuwe stolp kijkt. "Je hebt zonet gezien hoe een enkele belediging, één ongenode gast op een bruiloft, uiteindelijk duizend schepen in beweging zet. Onthoud dat gevoel — het is precies wat je de komende hoofdstukken nog vaker zult zien: hoe klein een vonk kan zijn, en hoe groot de brand die erna komt." Ze zwijgt even, kijkend naar de nog altijd overweldigende hoeveelheid lege sokkels om jullie heen. "Tien jaar beleg wacht. Rust hier zo lang als je nodig hebt."
+  > De streep licht wordt weer breder  -> CH8_000

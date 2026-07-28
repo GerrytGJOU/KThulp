@@ -1,0 +1,224 @@
+### CH4_000  (r.5929)  — Het Labyrint van Herinneringen
+De Boodschapper wijst je ditmaal naar twee scheuren die verder uit elkaar liggen dan ooit — niet naast elkaar zoals bij Io en Herakles, maar aan de twee uiteinden van eenzelfde waarheid. "Twee verhalen," zegt ze, "en in allebei staat één belofte centraal — een belofte die niemand meer ongedaan kan maken zodra ze eenmaal is uitgesproken. Volg Theseus naar Kreta, en zie wat er gebeurt wanneer een sterveling zo'n belofte vergeet. Volg Phaëthon naar het Paleis van de Zon, en zie wat er gebeurt wanneer een sterveling er juist te veel van eist." Athena, die sinds Hoofdstuk 2 niet langer zwijgt, voegt er zacht aan toe: "Onthoud dit hoofdstuk goed. Van alle herinneringen die je nog zult verzamelen, zijn deze twee misschien wel de zwaarste — niet omdat de monsters groter zijn, maar omdat de fout menselijker is."
+  > Volg Theseus naar Kreta, waar een labyrint en een monster op hem wachten [DONE:ch4_lijn_theseus] -> CH4_T01
+  > Volg Phaëthon, die aan zijn eigen afkomst twijfelt [DONE:ch4_lijn_phaethon] -> CH4_P01
+  > Spreek het Orakel aan, nu beide verhalen zijn gehoord [REQ:fragments=8] -> CH4_ATHENA
+
+### CH4_T01  (r.5950)  — Een Belofte in Athene
+[PERSON=theseus:intro, aegeus:intro]
+Al negen jaar betaalt Athene een prijs die geen enkele stad zou moeten betalen: zeven jongens en zeven meisjes, in de bloei van hun leven, verscheept naar Kreta om te worden opgeofferd aan een wezen dat koning Minos gevangen houdt in een bouwwerk zonder uitgang. De tol is de straf voor een oude schuld — Minos' eigen zoon Androgeos stierf ooit op Atheense bodem, en niets minder dan mensenlevens kon zijn woede sindsdien sussen. Theseus, zoon van koning Aegeus, is nog maar net in Athene aangekomen — erkend als troonopvolger na een jeugd ver van het paleis — wanneer de derde lichting van het offer wordt samengesteld. Tegen elke smeekbede van zijn vader in meldt hij zichzelf vrijwillig aan als een van de veertien.
+  > Voel vooral medelijden met Aegeus, die zijn net teruggevonden zoon dreigt te verliezen [CLEMENTIA] -> CH4_T02
+  > Erken nuchter dat iemand dit moet doen, en dat vrijwilligers zeldzaam zijn [SEVERITAS] -> CH4_T02
+  > Voel de spanning tussen trots en angst, zonder een duidelijke kant te kiezen [NEUTRAL] -> CH4_T02
+
+### CH4_T02  (r.5971)  — De Belofte van de Zeilen
+[PUZZLE=puzzle_ch4t_infinitivus | IMG=aegeus_belofte_zeilen.png]
+Vlak voor het schip vertrekt, roept Aegeus zijn zoon nog één keer bij zich, aan de rand van de kade. Het schip vaart altijd onder zwarte zeilen — het rouwzeil van een offer dat vermoedelijk niet terugkeert — en die aanblik, weet Aegeus, zal hem elke dag opnieuw naar de klippen drijven om uit te kijken. "Beloof me één ding," zegt hij, zijn stem nauwelijks vast. "Als je overleeft — als je dat monster verslaat en teruggevaren wordt — hijs dan witte zeilen in plaats van zwarte, zodra de kust in zicht komt. Dan weet ik het al voor het schip de haven bereikt. Beloof het me, Theseus." Theseus belooft het zonder aarzelen — een belofte die op dit moment vederlicht aanvoelt, een kleinigheid vergeleken met het monster dat voor hem ligt.
+  > Vaar mee naar Kreta  -> CH4_T03
+
+### CH4_T03  (r.5993)  — Aankomst op Kreta
+[PERSON=ariadne:intro, minos:intro, daidalos:intro]
+Het schip meert aan in Knossos, de machtige hoofdstad van Kreta, waar koning Minos de veertien Atheners met weinig meer dan een koele blik in ontvangst neemt. Naast hem staat zijn dochter Ariadne — en waar haar vader enkel de jaarlijkse routine ziet, ziet zij, voor het eerst in negen jaar, iemand voor wie ze meer voelt dan medelijden met zichzelf. Theseus, die niets van dit alles weet, ziet enkel een paleis groter dan hij ooit heeft gezien, en ergens daaronder — hij voelt het bijna door de vloer heen — het labyrint waar Daidalos, de beroemdste bouwmeester van zijn tijd, ooit een bouwwerk optrok dat zelfs zijn eigen maker bijna niet meer kon verlaten.
+  > Kijk wat Ariadne besluit te doen  -> CH4_T04
+
+### CH4_T04  (r.6012)  — Het Monster in het Labyrint
+Het wezen waarvoor Athene al negen jaar boet, is de Minotaurus — half mens, half stier — en zijn bestaan is zelf al het gevolg van een oude, gebroken belofte. Jaren geleden vroeg Minos de zeegod Neptunus om een teken dat de goden zijn koningschap goedkeurden; Neptunus liet een verblindend witte stier uit de golven oprijzen, op voorwaarde dat het dier meteen aan hem geofferd zou worden. Minos, die het dier te mooi vond om te doden, offerde een ander dier in zijn plaats — en Neptunus, beledigd, zorgde ervoor dat Minos' eigen vrouw Pasiphaë een onnatuurlijk verlangen naar de stier ontwikkelde. Wat daaruit werd geboren, kon nergens anders wonen dan in een bouwwerk dat zijn eigen weg naar buiten verbergt. Daidalos bouwde dat bouwwerk in opdracht van Minos: een labyrint met zoveel kronkelende gangen dat niemand die er eenmaal in verdwaalt, ooit vanzelf de uitgang terugvindt. Elk jaar voedt het
+  > Kijk wat Ariadne voor Theseus overheeft  -> CH4_T05
+
+### CH4_T05  (r.6031)  — Ariadne's Keuze
+Ariadne, die weet dat niemand het labyrint ooit levend heeft verlaten, zoekt Daidalos in het geheim op — de enige die de gangen ooit heeft doorgrond, omdat hij ze zelf ontwierp. Wat ze hem vraagt, is verraad aan haar eigen vader; wat hij haar geeft, is doodeenvoudig: een kluwen garen, groot genoeg om van de ingang tot in het diepste hart van het labyrint te reiken en weer terug. Ze weet wat ontdekking zou betekenen — voor Daidalos, voor haarzelf. Toch zoekt ze Theseus diezelfde nacht in het geheim op, en drukt hem het garen in handen, samen met een zwaard dat scherp genoeg is voor wat hem te wachten staat. In ruil vraagt ze maar één ding: dat hij haar meeneemt wanneer hij vertrekt, want na dit verraad kan ze nooit meer veilig in haar vaders paleis blijven. Theseus zweert het haar, net zo snel als hij eerder zijn vader iets zwoer aan de kade van Athene.
+  > Bewonder vooral haar moed om tegen haar eigen vader in te gaan [CLEMENTIA] -> CH4_T06
+  > Erken vooral hoe berekenend haar hulp is — ze vraagt er tenslotte iets voor terug [SEVERITAS] -> CH4_T06
+  > Twijfel of dit nu liefde is, wanhoop, of iets van beide [NEUTRAL] -> CH4_T06
+
+### CH4_T06  (r.6049)  — De Ingang van het Labyrint
+[PUZZLE=puzzle_ch4t_ablativus]
+Bij de ingang bindt Theseus het uiteinde van het garen vast aan een steunbalk en loopt de duisternis in, de draad ontrollend achter zich terwijl de gangen zich vertakken, kronkelen en in elkaar overlopen tot geen enkele richting nog vanzelfsprekend is. Diep in het labyrint, waar zelfs het geluid van zijn eigen voetstappen vervormd terugkaatst, hoort hij voor het eerst iets ademen dat geen mens is.
+  > Ga het duister in, op het geluid af  -> CH4_T06B
+
+### CH4_T06B  (r.6068)  — De Eerste Splitsing
+Nog geen tien passen verder splitst de gang zich in tweeën, en het geluid dat je eerder hoorde kan nu net zo goed van links als van rechts komen. Terwijl je aarzelt, herinner je je iets dat Ariadne je toefluisterde vlak voor je naar binnen ging — het enige wat Daidalos haar ooit over de opbouw van het labyrint heeft durven vertellen: "Bij elke splitsing, houd links aan. Dat brengt je regelrecht naar het hart."
+  > Houd links aan  -> CH4_T07
+  > Ga naar rechts  -> CH4_T06R1
+
+### CH4_T06R1  (r.6083)  — De Verkeerde Afslag
+Naar rechts versmalt de gang al snel, en de bochten volgen elkaar sneller op dan daarvoor — twee keer rechts, dan links, dan weer rechts, tot je amper nog weet uit welke richting je kwam. Het garen achter je blijft dunner worden op de kluwen in je hand, sneller dan je had verwacht voor zo'n kort stuk weg. Het geluid van ademhaling, dat eerst ergens ver weg leek, klinkt nu duidelijk dichterbij — al kun je niet meer met zekerheid zeggen uit welke gang.
+  > Loop door, er is toch geen weg terug zonder het monster onder ogen te komen  -> CH4_T06R2
+
+### CH4_T06R2  (r.6099)  — Het Garen Raakt Op
+De kluwen in je hand wordt met elke stap lichter, tot je vingers plotseling niets meer voelen dan de lege binnenkant — het garen is op, lang voordat je enig teken van het hart van het labyrint hebt gezien. Zonder de draad is er geen weg terug meer, alleen nog gangen die er allemaal exact hetzelfde uitzien. De ademhaling komt nu van meer dan één kant tegelijk, of misschien kaatst hij gewoon terug van muren die je niet meer kunt onderscheiden. Voor het eerst besef je dat Ariadne's waarschuwing geen loze woorden waren.
+  > Zoek wanhopig verder naar een uitweg  -> CH4_T06R3
+
+### CH4_T06R3  (r.6115)  — In het Duister Gevangen
+Zonder draad om op te vertrouwen en zonder enig idee meer welke gang naar buiten leidt, hoor je de Minotaurus dichterbij komen vanuit een duisternis die van alle kanten tegelijk lijkt te komen — geen zwaard, geen plan, en geen weg terug maakt dit een gevecht dat je onmogelijk kunt winnen. Het labyrint doet vandaag weer waarvoor het gebouwd is: iemand die de verkeerde afslag nam, nooit meer laten uitkomen.
+  > Begin de tocht door het labyrint opnieuw  -> CH4_T06B
+
+### CH4_T07  (r.6131)  — De Minotaurus
+[COMBAT=minotaurus]
+De Minotaurus komt op hem af — reusachtig, met de kop van een stier op het lichaam van een man, meer honger dan wraak in zijn ogen. Negen jaar lang heeft hij alleen maar gekregen wat men hem verplicht bracht; vandaag, voor het eerst, staat er iemand tegenover hem die niet van plan is zich zomaar te laten offeren.
+  > Kijk wat er van het monster overblijft  -> CH4_T08
+
+### CH4_T08  (r.6148)  — Terug langs de Draad
+[IMG=theseus_garen_terug.png]
+Met het monster verslagen volgt Theseus het garen terug — elke bocht die hij eerder blindelings nam, wijst nu feilloos de weg naar buiten. Bij de ingang wacht Ariadne al, opgelucht en gespannen tegelijk: veertien mensen, van wie de meesten amper op de been kunnen blijven van uitputting en angst, moeten nu nog ongezien van het paleis naar de haven, voor Minos' wachters ook maar vermoeden wat er is gebeurd.
+  > Sluip via achterstraatjes en olijfgaarden — trager, maar veilig  -> CH4_T08_OPEN
+  > Draag een van de uitgeputte offerlingen, die het tempo niet meer bijhoudt, het laatste stuk zelf [STAT:robur:13] -> CH4_T08_ROB
+  > Praat een achterdochtige wachter bij de kade om met een overtuigend verhaal [STAT:gratia:11] -> CH4_T08_GRA
+
+### CH4_T08_OPEN  (r.6167)  — Achterstraatjes en Olijfgaarden
+[FLAG=ch4_t08_route=open]
+Je kiest de trage, veilige weg: achterstraatjes, olijfgaarden, een omweg om elk plein waar een wachter zou kunnen staan. Het duurt langer, maar niemand ziet jullie gaan.
+  > Vaar weg van Kreta  -> CH4_T09
+
+### CH4_T08_ROB  (r.6184)  — De Laatste Meters
+[FLAG=ch4_t08_route=robur]
+Een van de offerlingen, amper nog bij bewustzijn van uitputting, kan het tempo niet meer bijhouden. Je tilt hem op je schouders en draagt hem het laatste stuk zelf, je eigen benen brandend van de inspanning, tot het schip eindelijk in zicht is.
+  > Vaar weg van Kreta  -> CH4_T09
+
+### CH4_T08_GRA  (r.6201)  — Een Overtuigend Verhaal
+[FLAG=ch4_t08_route=gratia]
+Bij de kade houdt een achterdochtige wachter jullie groep tegen met vragen. Je verzint ter plekke een verhaal — een nachtelijke offerplechtigheid, een bevel van de koningin zelf — met zoveel overtuiging dat hij jullie, met tegenzin, laat passeren.
+  > Vaar weg van Kreta  -> CH4_T09
+
+### CH4_T09  (r.6218)  — Naxos
+Onderweg meert het schip aan op het eiland Naxos om te rusten. Terwijl Ariadne slaapt, uitgeput van een nacht zonder slaap en een vlucht zonder pauze, vaart Theseus — om redenen die de latere verhalen zelf niet eens eensluidend kunnen navertellen: vergeetachtigheid, een goddelijke influistering, gewoon menselijke lafheid — zonder haar verder. Wat de reden ook was, het is dezelfde soort vergissing die dit hele hoofdstuk verbindt: een belofte, licht gedaan, zwaar gebroken.
+  > Voel vooral woede namens Ariadne, die dit niet verdiende [SEVERITAS] -> CH4_T10
+  > Zoek naar begrip voor Theseus, die net een monster heeft overleefd en amper meer helder kan denken [CLEMENTIA] -> CH4_T10
+  > Laat het oordeel voorlopig in het midden [NEUTRAL] -> CH4_T10
+
+### CH4_T10  (r.6236)  — Bacchus Vindt Ariadne
+[PERSON=ariadne:full | IMG=bacchus_ariadne_naxos.png]
+Ariadne ontwaakt alleen op een onbekend strand — tot Bacchus, de god die je al kent van koning Midas' vloek (Hoofdstuk 1), haar daar vindt, huilend en verraden. Waar Theseus haar in de steek liet, blijft Bacchus: hij trouwt met haar, maakt haar onsterfelijk, en plaatst haar bruidskroon voorgoed tussen de sterren. Het is geen volledig gelukkig einde — geen enkel verhaal in dit hoofdstuk krijgt dat — maar het is het enige moment waarop een gebroken belofte alsnog met iets goeds eindigt.
+  > Keer terug naar Theseus, die niet weet wat hij heeft achtergelaten  -> CH4_T11
+
+### CH4_T11  (r.6261)  — Minos' Wraak
+[PERSON=ikaros:intro]
+Op Kreta ontdekt Minos al snel dat het labyrint zijn geheim niet heeft weten te bewaren — en er is maar één man die het garen-trucje had kunnen bedenken. In blinde woede laat hij Daidalos en diens jonge zoon Ikaros zelf opsluiten in het labyrint, de enige plek op het eiland waaruit zelfs de bouwmeester zelf niet zomaar weg kan komen.
+  > Kijk hoe Daidalos zijn eigen gevangenschap probeert te ontlopen  -> CH4_T11B
+
+### CH4_T11B  (r.6278)  — Was en Veren
+Minos beheerst elke uitweg over land en zee, maar niet de lucht — en dat is precies waar Daidalos zijn toevlucht zoekt. Vleugels bouwen kost meer dan vindingrijkheid alleen: er is was nodig om te smelten, linnen om te binden, en veren, veel meer dan het labyrint vanzelf laat dwarrelen. Dat alles verzamelen, zonder dat een bewaker argwaan krijgt, is aan jou.
+  > Verzamel geduldig, dag na dag, wat toevallig aanwaait  -> CH4_T11_OPEN
+  > Doorsta het meedogenloze, urenlange werk van veren sorteren en was smelten zonder rust [STAT:robur:13] -> CH4_T11_ROB
+  > Overtuig een bewaker om stiekem extra was en linnen naar binnen te smokkelen [STAT:gratia:15] -> CH4_T11_GRA
+
+### CH4_T11_OPEN  (r.6294)  — Wat Toevallig Aanwaait
+[FLAG=ch4_t11_route=open]
+Je verzamelt geduldig, dag na dag, wat de wind toevallig door het labyrint blaast — traag, maar niemand merkt iets, en na verloop van tijd is er genoeg.
+  > Kijk hoe Daidalos de vleugels vlecht  -> CH4_T12
+
+### CH4_T11_ROB  (r.6311)  — Zonder Rust
+[FLAG=ch4_t11_route=robur]
+Je zet door, uur na uur, veren sorteren en was smelten zonder pauze, je handen stijf en verbrand tegen de tijd dat er genoeg materiaal ligt voor twee paar vleugels.
+  > Kijk hoe Daidalos de vleugels vlecht  -> CH4_T12
+
+### CH4_T11_GRA  (r.6328)  — Stiekem Gesmokkeld
+[FLAG=ch4_t11_route=gratia]
+Je weet een van de bewakers, die minder trouw aan Minos blijkt dan zijn uniform doet vermoeden, over te halen om stiekem extra was en linnen naar binnen te smokkelen — genoeg in één nacht voor wat weken zou hebben gekost.
+  > Kijk hoe Daidalos de vleugels vlecht  -> CH4_T12
+
+### CH4_T12  (r.6345)  — Vleugels van Veren en Was
+Met het materiaal eindelijk compleet, bindt Daidalos veer na veer samen met draad en verzegelt ze met gesmolten was tot twee paar vleugels, één voor hemzelf, één voor zijn zoon. Voor ze opstijgen, drukt hij Ikaros op het hart wat hem het meest zorgen baart: "Vlieg de middenweg. Niet te laag, want de zeenevel maakt de veren zwaar en nat. Niet te hoog, want de zon smelt de was. Blijf dicht bij mij, en volg precies waar ik vlieg."
+  > Kijk hoe de vlucht begint  -> CH4_T13
+
+### CH4_T13  (r.6361)  — De Val van Ikaros
+[PUZZLE=puzzle_ch4t_vocativus | IMG=val_van_ikaros.png]
+Aanvankelijk houdt Ikaros zich keurig aan zijn vaders route, vlak achter hem, zijn ogen groot van verwondering over een wereld die hij nog nooit van bovenaf heeft gezien. Maar de vreugde van het vliegen zelf wordt hem te machtig — hij stijgt hoger, en hoger, dronken van een vrijheid die hij nog nooit heeft gevoeld, ver voorbij zijn vaders geroep om voorzichtigheid. De zon doet precies wat Daidalos vreesde: de was tussen de veren smelt, eerst onmerkbaar, dan in een oogwenk. Veer na veer laat los, en Ikaros valt — zijn armen nog wapperend in de vorm van vleugels die niet langer bestaan — de zee in die sindsdien zijn naam draagt. "Icare!" roept Daidalos, keer op keer, terwijl hij cirkelt boven het water — maar er komt geen antwoord meer, enkel verspreide veren die langzaam op de golven neerdalen.
+  > Voel vooral verdriet om een vader die zijn zoon niet kon redden [CLEMENTIA] -> CH4_T14
+  > Erken nuchter dat een gewaarschuwde zoon ook zelf verantwoordelijkheid draagt [SEVERITAS] -> CH4_T14
+  > Weet niet goed bij wie het verdriet of de schuld het zwaarst hoort te wegen [NEUTRAL] -> CH4_T14
+
+### CH4_T14  (r.6387)  — Daidalos in Sicilië
+[PERSON=daidalos:full, ikaros:full]
+Daidalos vliegt door, alleen nu, tot hij landt op Sicilië — te ver van huis om nog ergens anders naartoe te vluchten, te gebroken om nog trots te zijn op vleugels die hem wel maar zijn zoon niet konden redden. Hij begraaft wat de zee van Ikaros teruggeeft aan de kust van een eiland dat later Icaria zal heten, naar de jongen die er nooit levend aankwam.
+  > Keer terug naar het schip van Theseus, dat inmiddels Athene nadert  -> CH4_T15
+
+### CH4_T15  (r.6407)  — Het Zwarte Zeil
+Op het schip naar Athene is Theseus met zijn gedachten bij alles behalve zijn vaders belofte — het monster, Ariadne die hij ergens onderweg is kwijtgeraakt, de veertien levens die hij heeft gered. Tussen dat alles verdwijnt één simpele afspraak volledig uit zijn hoofd: hij vergeet de zeilen te verwisselen. Op de klippen bij Athene staat Aegeus al dagenlang uit te kijken, precies zoals hij zijn zoon had beloofd te zullen doen. Wanneer het schip eindelijk in zicht komt — nog altijd onder zwart zeil — twijfelt hij geen moment aan wat dat betekent.
+  > Kijk wat Aegeus doet  -> CH4_T16
+
+### CH4_T16  (r.6423)  — De Zee van Aegeus
+[FLAG=ch4_lijn_theseus=true | PERSON=theseus:full, aegeus:full, minos:full | SOUVENIR=souvenir_theseus | TITEL=ch4_theseus_labyrint | IMG=aegeus_sprong_zee.png]
+Zonder een moment te wachten op bevestiging, zonder het schip de haven te laten bereiken, werpt Aegeus zich van de klip in de zee eronder — overtuigd dat de zoon voor wie hij zoveel vreesde, alsnog is omgekomen. De zee die zijn val opvangt, draagt sindsdien zijn naam: de Egeïsche Zee. Theseus, die pas aan land beseft wat er is gebeurd, staat oog in oog met het gewicht van een belofte die hem, uren eerder, nog vederlicht had geleken. Hij wordt koning van Athene op dezelfde dag dat hij zijn vader verliest — een troon gewonnen met een vergetelheid die hij zichzelf nooit helemaal zal vergeven. In je zak, waar je het niet had verwacht, vind je nog een laatste stukje van Ariadne's garen — te kort om ooit nog een labyrint mee terug te vinden, lang genoeg om je eraan te herinneren dat iemand je ooit een weg naar buiten gaf.
+  > Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog  -> CH4_000
+
+### CH4_P01  (r.6465)  — Twijfel aan een Vader
+[PERSON=phaethon:intro, epaphus:intro]
+Phaëthon, een jongen die opgroeit met niets dan zijn moeders woord dat zijn vader Sol is — de god die dagelijks de zon over de hemel voert — wordt op een dag hardop uitgelachen door zijn vriend Epaphus, zelf de zoon van Jupiter en de ooit vervloekte Io. "Iedereen kan beweren dat zijn vader een god is," zegt Epaphus. "Bewijs het maar." De spot blijft aan Phaëthon kleven, dagenlang, tot hij besluit zelf naar het Paleis van de Zon te reizen — helemaal aan de rand van de wereld — om zijn vader eindelijk rechtstreeks om bewijs te vragen.
+  > Volg Phaëthon op zijn tocht naar het oosten  -> CH4_P02
+
+### CH4_P02  (r.6484)  — Het Paleis van de Zon
+[PERSON=sol:intro]
+Het paleis van Sol overtreft alles wat Phaëthon zich had voorgesteld: zuilen van goud en brons, deuren bewerkt met beelden van de hele wereld, en middenin, op een troon die zelf licht lijkt uit te stralen, zijn vader — stralender dan Phaëthon zich in zijn stoutste dromen had durven wensen. Sol herkent zijn zoon meteen, verwelkomt hem hartelijk, en zweert — voor Phaëthon zelfs zijn vraag heeft kunnen stellen — een eed bij de rivier de Styx: elke wens die zijn zoon uitspreekt, zal hij inwilligen, wat het ook is. Het is de zwaarst mogelijke eed die een god kan afleggen — zelfs Jupiter zelf durft een eed bij de Styx nooit te breken.
+  > Kijk welke wens Phaëthon uitspreekt  -> CH4_P03
+
+### CH4_P03  (r.6503)  — Een Onmogelijke Wens
+[PUZZLE=puzzle_ch4p_imperfectum]
+Phaëthon, die eigenlijk alleen bevestiging kwam zoeken, laat zich meeslepen door de eed die hem plotseling alles belooft. "Laat mij, voor één dag, de zonnewagen mennen," zegt hij. "Laat heel de wereld zien dat ik werkelijk jouw zoon ben." Sol verbleekt — zijn eigen belofte, nog geen moment oud, wordt nu zijn grootste angst. Hij smeekte, probeerde alles wat hij verder nog te bieden had als vervanging aan te dragen, maar een eed bij de Styx laat geen ruimte voor spijt.
+  > Voel vooral medelijden met Sol, die zichzelf in de val heeft gepraat [CLEMENTIA] -> CH4_P04
+  > Erken nuchter dat een eed nu eenmaal een eed is, hoe onverstandig ook [SEVERITAS] -> CH4_P04
+  > Twijfel of Sol dit wel had mogen beloven voor hij de vraag zelfs kende [NEUTRAL] -> CH4_P04
+
+### CH4_P04  (r.6524)  — De Zonnewagen
+Bij zonsopgang mag Phaëthon plaatsnemen in de wagen die zijn vader dagelijks over de hemel voert — vier vurige paarden ervoor gespannen, elk krachtiger dan enig sterfelijk dier ooit zou kunnen temmen. Sol geeft hem in allerijl nog instructies: houd de teugels stevig, volg het gebaande spoor, niet te hoog, niet te laag. Zodra de paarden voelen dat een minder ervaren hand de teugels vasthoudt dan gewoonlijk, breken ze uit hun vaste baan — en Phaëthon, die nooit eerder iets bestuurd heeft groter dan een gewone kar, verliest de wagen bijna onmiddellijk uit controle.
+  > Kijk waar de wagen naartoe raast  -> CH4_P05
+
+### CH4_P05  (r.6540)  — De Aarde in Vlammen
+De zonnewagen zwenkt eerst te hoog, waardoor de aarde in ijzige duisternis verzinkt, en dan, in een poging het recht te trekken, veel te laag — zo laag dat de hitte akkers verschroeit, rivieren laat opdrogen, en een streep van de aarde voorgoed in verzengd, dor land verandert: het gebied dat later de Sahara zal heten. Steden vatten vlam, bossen verkolen tot as, en overal op aarde roepen mensen om hulp tegen een zon die niet langer haar vaste baan volgt.
+  > Kijk wie deze ramp uiteindelijk moet stoppen  -> CH4_P06
+
+### CH4_P06  (r.6556)  — Tellus Smeekt om Hulp
+[PERSON=tellus:intro]
+Tellus, de aarde zelf, verheft haar stem tot aan de Olympos — verzengd, half verstikt door haar eigen rook — en smeekt Jupiter in te grijpen voor er niets meer over is om te redden. Zelfs de goden, zegt ze, hebben straks geen wereld meer om over te heersen als dit nog één moment langer doorgaat.
+  > Kijk hoe Tellus haar smeekbede uit, en hoe Jupiter luistert  -> CH4_P06_OPEN
+  > Merk op hóe Tellus Jupiter overtuigt, niet alleen wát ze zegt [STAT:gratia:13] -> CH4_P06_GRA
+  > Merk op wát het volhouden haar al gekost heeft voor ze sprak [STAT:robur:11] -> CH4_P06_ROB
+
+### CH4_P06_OPEN  (r.6575)  — Een Smeekbede Gehoord
+[FLAG=ch4_p06_route=open]
+Je hoort haar woorden zoals ze bedoeld zijn: een wanhopige moeder die vecht voor wat er nog over is. Jupiter luistert, zwijgend, terwijl de rook om hen beiden opstijgt.
+  > Kijk hoe Jupiter reageert  -> CH4_P07
+
+### CH4_P06_GRA  (r.6592)  — Een Gedeeld Belang
+[FLAG=ch4_p06_route=gratia]
+Je merkt dat Tellus niet zomaar smeekt, maar redeneert: ze wijst Jupiter erop dat een verschroeide aarde ook de goden zelf niets meer te heersen laat. Van angst voor haar eigen lot maakt ze, in een paar zinnen, een angst die Jupiter opeens met haar deelt.
+  > Kijk hoe Jupiter reageert  -> CH4_P07
+
+### CH4_P06_ROB  (r.6609)  — Wat het Haar Kostte
+[FLAG=ch4_p06_route=robur]
+Je ziet wat het spreken haar kost: een stem die breekt door rook-verzengde longen, na een hitte die ze kennelijk al veel langer in stilte heeft verdragen dan ze nu, eindelijk, toegeeft.
+  > Kijk hoe Jupiter reageert  -> CH4_P07
+
+### CH4_P07  (r.6626)  — Jupiters Bliksem
+[PUZZLE=puzzle_ch4p_perfectum | IMG=phaethon_bliksem.png]
+Jupiter, die geen andere keus meer ziet, grijpt naar zijn bliksem — niet uit woede jegens de jongen zelf, maar omdat één enkel leven, hoe onschuldig zijn fout ook begon, niet opweegt tegen de hele wereld. Met één worp treft hij de wagen en slingert Phaëthon, brandend, uit de lucht.
+  > Vind Jupiters daad gerechtvaardigd, hoe hard ook [SEVERITAS] -> CH4_P08
+  > Blijf medelijden voelen met Phaëthon, ondanks alles [CLEMENTIA] -> CH4_P08
+  > Erken dat er hier geen echt goede uitkomst meer mogelijk was [NEUTRAL] -> CH4_P08
+
+### CH4_P08  (r.6648)  — De Rivier Eridanus
+Phaëthon valt, nog nasmeulend, in de verre rivier de Eridanus — ver van huis, ver van het paleis waar hij ooit alleen maar bevestiging kwam zoeken dat zijn vader echt zijn vader was. De rivier koelt wat er van hem over is, en begraaft de rest van het verhaal in zijn stroom.
+  > Kijk wie er rouwt om zijn dood  -> CH4_P09
+
+### CH4_P09  (r.6662)  — De Heliaden
+[PERSON=phaethon:full, sol:full | IMG=heliaden_populieren.png]
+Phaëthons zusters, de Heliaden, vinden zijn graf aan de oever van de Eridanus en blijven er wenen, dag na dag, tot hun voeten wortel schieten in de grond en hun armen uitgroeien tot takken. Ze veranderen, traan voor traan, in populieren — en de tranen die ze al die tijd blijven huilen, verharden in het water tot amber. Amber wordt sindsdien gevonden langs precies dat soort rivieroevers — bevroren verdriet, zeggen sommigen, van een rouw die nooit is opgehouden.
+  > Kijk wie er nog meer treurt  -> CH4_P10
+
+### CH4_P10  (r.6687)  — Cycnus wordt een Zwaan
+[FLAG=ch4_lijn_phaethon=true | SOUVENIR=souvenir_phaethon | TITEL=ch4_phaethon]
+Ook Cycnus, een verre verwant en dierbare vriend van Phaëthon, treurt zo diep dat de goden hem uit medelijden veranderen in een zwaan — een vogel die sindsdien liever op meren en rivieren zwemt dan de lucht in vliegt, uit angst voor een hemel die zijn vriend het leven kostte. Tussen de populieren aan de oever vind je één druppel amber, nog warm alsof hij zojuist pas gevallen is — een traan van een van de Heliaden, voorgoed gestold. Je sluit hem in je vuist, zoals het Orakel dat blijkbaar wil.
+  > Keer terug naar de Boodschapper — Theseus' verhaal wacht nog  -> CH4_000
+
+### CH4_ATHENA  (r.6718)  — Athena over Twee Beloften
+[TITEL=ch4_athena_gesprek]
+Athena wacht je ditmaal niet zwijgend op, maar spreekt zodra je bij haar aankomt — vanzelfsprekend inmiddels, als mentor. "Twee vaders," zegt ze, "twee beloften, twee soorten verlies. Aegeus verloor zijn zoon aan een belofte die vergeten werd. Sol verloor zijn zoon aan een belofte die hij nooit had mogen doen — en toch, eenmaal uitgesproken, niet meer kon intrekken." "Dat is de kern van dit hele hoofdstuk, {tendency_address}: een belofte weegt niet minder omdat ze lichtvaardig werd gegeven. Onthoud dat goed — het labyrint dat je dit hoofdstuk doorkruiste, was uiteindelijk niet van steen, maar van gevolgen die niemand meer ongedaan kon maken."
+  > Laat haar woorden bezinken  -> CH4_ORAKEL
+
+### CH4_ORAKEL  (r.6737)  — Het Orakel Keert Terug
+De vertrouwde stem van de Boodschapper van Kronos klinkt weer, warm en enigszins plechtig. "Theseus, bevrijd van een monster maar niet van zijn eigen vergetelheid. Phaëthon, die zijn afkomst bewees met een vraag die hem het leven kostte. Twee beloften die de wereld voorgoed veranderden — de een een zee, de ander een streep amberkleurige rivieroever."
+  > Luister verder  -> CH4_EINDE
+
+### CH4_EINDE  (r.6760)  — Het Einde van Hoofdstuk 4
+"Hoofdstuk 5 wacht al ergens verderop," zegt de stem, "waar geen labyrint meer op je wacht, maar een schip vol helden — en het begin van een tocht naar het Gulden Vlies." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: uitweg, en overmoed.
+  > Stap door de poort  -> CH5_000

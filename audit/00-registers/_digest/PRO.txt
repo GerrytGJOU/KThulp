@@ -1,0 +1,69 @@
+### PRO_001  (r.2001)  — Het Veld bij Latium
+[IMG=prologue_ploegen.png]
+De zon is net over de heuvels van Latium gekropen, en jij bent al uren aan het werk. Het zweet prikt in je ogen; de aarde is hier droog en koppig, zwaar als steen onder de ploeg. Je zet je schrap en duwt — en dan, met een doffe klap die je tot in je polsen voelt, staat de ploeg stil. Iets onder de grond geeft niet mee.
+  > Graaf meteen verder  -> PRO_002
+  > Veeg eerst voorzichtig het zand weg  -> PRO_001B
+
+### PRO_001B  (r.2019)  — Voorzichtig
+Je knielt en veegt het losse zand weg, handvol na handvol, tot je vingertoppen iets hards raken. Geen steen. Hout — donker, bewerkt hout, met de rechte lijn van een rand die ooit door mensenhanden is gemaakt.
+  > Graaf de kist op  -> PRO_002
+
+### PRO_002  (r.2033)  — De Kist
+Na lang graven ligt ze eindelijk voor je: een oude houten kist, zwart geworden van de jaren onder de grond. Het deksel is gebarsten en het beslag is verroest, maar het slot houdt nog altijd stand. Iemand heeft deze kist ooit met zorg begraven. De vraag is alleen: om haar te bewaren, of om haar te verbergen?
+  > Open de kist  -> PRO_003
+  > Laat de kist gesloten en keer terug naar het dorp  -> PRO_002B
+
+### PRO_002B  (r.2048)  — Twijfel
+Je laat de kist waar ze is en loopt terug naar het dorp, de ploeg achter je aan. Maar de hele dag, bij elke voor die je trekt, dwaalt je gedachte terug naar dat donkere hout in de aarde — en naar wat je daar misschien hebt laten liggen. Tegen de avond geef je het op: je kunt het niet laten rusten.
+  > Keer terug naar het veld en graaf de kist alsnog open  -> PRO_003
+
+### PRO_003  (r.2062)  — Drie Voorwerpen
+Het slot geeft toe met een droge knak. Onder een laag vergeeld linnen liggen drie voorwerpen, zorgvuldig naast elkaar gelegd: een jachtboog, de pees na al die jaren nog strak gespannen; een bronzen speerpunt op een verweerde schacht; en een paar zware ruitersporen, groen uitgeslagen. Het is alsof ze op jou hebben liggen wachten. Je mag er één meenemen.
+  > Neem de jachtboog  -> PRO_004A
+  > Neem de speer  -> PRO_004B
+  > Neem de ruitersporen  -> PRO_004C
+
+### PRO_004A  (r.2078)  — De Boogschutter
+[TITEL=boogschutter_orakel | REWARD=class=Boogschutter; traits=observatie,snelheid,precisie]
+Je sluit je hand om de boog. Het hout ligt warm en vertrouwd in je greep, alsof je vingers deze vorm al kenden voordat je hem ooit zag. Afstand. Geduld. Het juiste moment, geen tel te vroeg. Vanaf nu zijn dat jouw instincten.
+  > Verder zoeken in de kist  -> PRO_005
+
+### PRO_004B  (r.2098)  — De Hopliet
+[TITEL=hopliet_orakel | REWARD=class=Hopliet; traits=kracht,moed,verdediging]
+Je grijpt de speer. Het brons is koud, maar het gewicht ervan geeft je een vreemde kalmte, alsof de grond onder je voeten steviger wordt. Standhouden. Je linie niet verlaten, wat er ook op je afkomt. Vanaf nu voelt dat als je tweede natuur.
+  > Verder zoeken in de kist  -> PRO_005
+
+### PRO_004C  (r.2118)  — De Cavalerist
+[TITEL=cavalerist_orakel | REWARD=class=Cavalerist; traits=mobiliteit,tactiek,snelheid]
+Je tilt de ruitersporen op; ze zijn lichter dan je had verwacht. In je handen voel je meteen waarvoor ze gemaakt zijn — voor snelheid, voor de aanval die begint voordat de vijand hem ziet aankomen. Beweging. Overzicht. Als eerste zijn. Vanaf nu draagt je lichaam die belofte met zich mee.
+  > Verder zoeken in de kist  -> PRO_005
+
+### PRO_005  (r.2138)  — De Bronzen Schijf
+[IMG=prologue.png]
+Dieper in de kist, onder een laatste laag linnen, ligt nog iets. Een ronde schijf van brons, niet groter dan je handpalm, bedekt met tekens die je nooit eerder zag — geen letters die je kent, en toch lijken ze iets te willen zeggen. De schijf is warm. Warm alsof iemand haar zojuist heeft vastgehouden, hier, diep onder de koude grond.
+  > Raak de schijf aan  -> PRO_006
+  > Trek je hand terug  -> PRO_005B
+
+### PRO_005B  (r.2159)  — Aarzeling
+Je aarzelt, je hand zweeft boven het brons. Maar de schijf lijkt naar je te reiken — geen geluid, geen beweging, en toch een roep, zacht en aanhoudend, alsof ze al die tijd precies op jou heeft gewacht.
+  > Raak de schijf alsnog aan  -> PRO_006
+
+### PRO_006  (r.2173)  — Vervorming
+[IMG=tijdvervorming_veld.jpg]
+Op het moment dat je vingertoppen het brons raken, begint de lucht te trillen als water waarin een steen valt. De kleuren van het veld lopen uit, de heuvels vervagen, het geluid van de wind valt weg. Latium zelf lijkt zich om je heen te herschikken — of misschien is het de tijd die dat doet.
+  > Laat het gebeuren  -> PRO_007
+
+### PRO_007  (r.2190)  — Het Orakel van Chronos
+[PUZZLE=puzzle_orakel_symbolen_01]
+Uit de schijf rijzen de tekens omhoog en blijven in de lucht hangen, gloeiend en geduldig. Samen vormen ze een patroon — een woord, vermoed je, in een taal die ouder is dan de jouwe. Het wacht. Alsof de poort zich pas verder opent wanneer jij het weet te lezen.
+  > Ontcijfer het patroon  -> PRO_008
+
+### PRO_008  (r.2207)  — De Poort
+De tekens vallen op hun plaats, en er gaat een siddering door de lucht. Vlak voor je scheurt de wereld open tot een poort van licht — licht zonder kleur, zonder warmte. Aan de andere kant, half zichtbaar, staat een gestalte roerloos te wachten. Op jou.
+  > Spreek de gestalte aan  -> PRO_009
+
+### PRO_009  (r.2224)  — De Boodschapper
+[TITEL=bewaarder_herinnering]
+De gestalte beweegt niet en spreekt niet. Pas wanneer je dichterbij komt, hoor je een stem — kalm, helder en van onmetelijk ver weg, alsof ze niet uit deze plaats komt maar van buiten de tijd zelf.
+«De Boodschapper van Kronos» De wereld vergeet. En jij bent de eerste sinds lange tijd die het merkt.
+  > Stap door de poort  -> CH1_000

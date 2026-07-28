@@ -1,0 +1,1400 @@
+[
+ {
+  "flag": "ch1_a10_route",
+  "geschreven_in": [
+   {
+    "scene": "CH1_A10_OPEN",
+    "hoofdstuk": "CH1",
+    "waarde": "open",
+    "regel": 2561
+   },
+   {
+    "scene": "CH1_A10_VIS",
+    "hoofdstuk": "CH1",
+    "waarde": "vis",
+    "regel": 2578
+   },
+   {
+    "scene": "CH1_A10_GRATIA",
+    "hoofdstuk": "CH1",
+    "waarde": "gratia",
+    "regel": 2595
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 1,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch1_b01_route",
+  "geschreven_in": [
+   {
+    "scene": "CH1_B01_PAD",
+    "hoofdstuk": "CH1",
+    "waarde": "pad",
+    "regel": 2728
+   },
+   {
+    "scene": "CH1_B01_VIS",
+    "hoofdstuk": "CH1",
+    "waarde": "vis",
+    "regel": 2745
+   },
+   {
+    "scene": "CH1_B01_AGI",
+    "hoofdstuk": "CH1",
+    "waarde": "agilitas",
+    "regel": 2762
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 1,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch1_c03_route",
+  "geschreven_in": [
+   {
+    "scene": "CH1_C03_OPEN",
+    "hoofdstuk": "CH1",
+    "waarde": "open",
+    "regel": 3063
+   },
+   {
+    "scene": "CH1_C03_AGI",
+    "hoofdstuk": "CH1",
+    "waarde": "agilitas",
+    "regel": 3080
+   },
+   {
+    "scene": "CH1_C03_VIS",
+    "hoofdstuk": "CH1",
+    "waarde": "vis",
+    "regel": 3097
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 1,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch1_c09_route",
+  "geschreven_in": [
+   {
+    "scene": "CH1_C09_PAD",
+    "hoofdstuk": "CH1",
+    "waarde": "open",
+    "regel": 3266
+   },
+   {
+    "scene": "CH1_C09_VIS",
+    "hoofdstuk": "CH1",
+    "waarde": "vis",
+    "regel": 3283
+   },
+   {
+    "scene": "CH1_C09_PRU",
+    "hoofdstuk": "CH1",
+    "waarde": "prudentia",
+    "regel": 3300
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 1,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch1_lijn",
+  "geschreven_in": [
+   {
+    "scene": "CH1_A10B",
+    "hoofdstuk": "CH1",
+    "waarde": "A",
+    "regel": 2612
+   },
+   {
+    "scene": "CH1_B08",
+    "hoofdstuk": "CH1",
+    "waarde": "B",
+    "regel": 2912
+   },
+   {
+    "scene": "CH1_C11",
+    "hoofdstuk": "CH1",
+    "waarde": "C",
+    "regel": 3336
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [
+   {
+    "bron": "payoff",
+    "payoff": "ch2_000_echo_ch1_lijn_a",
+    "scene": "CH2_000",
+    "hoofdstuk": "CH2",
+    "detail": "flags.ch1_lijn===\"A\""
+   },
+   {
+    "bron": "payoff",
+    "payoff": "ch2_000_echo_ch1_lijn_b",
+    "scene": "CH2_000",
+    "hoofdstuk": "CH2",
+    "detail": "flags.ch1_lijn===\"B\""
+   },
+   {
+    "bron": "payoff",
+    "payoff": "ch2_000_echo_ch1_lijn_c",
+    "scene": "CH2_000",
+    "hoofdstuk": "CH2",
+    "detail": "flags.ch1_lijn===\"C\""
+   }
+  ],
+  "aantal_lezingen": 3,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 1,
+  "eerste_lees_hoofdstuk": 2,
+  "afstand_hoofdstukken": 1,
+  "afstand_scenes": 42
+ },
+ {
+  "flag": "ch1_voltooid",
+  "geschreven_in": [
+   {
+    "scene": "CH1_A10B",
+    "hoofdstuk": "CH1",
+    "waarde": "true",
+    "regel": 2612
+   },
+   {
+    "scene": "CH1_B08",
+    "hoofdstuk": "CH1",
+    "waarde": "true",
+    "regel": 2912
+   },
+   {
+    "scene": "CH1_C11",
+    "hoofdstuk": "CH1",
+    "waarde": "true",
+    "regel": 3336
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [
+   {
+    "bron": "avatar-unlock",
+    "detail": "ontgrendelt armor:robe",
+    "hoofdstuk": null
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 1,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch2_h07_route",
+  "geschreven_in": [
+   {
+    "scene": "CH2_H07_VIS",
+    "hoofdstuk": "CH2",
+    "waarde": "vis",
+    "regel": 4438
+   },
+   {
+    "scene": "CH2_H07_AGI",
+    "hoofdstuk": "CH2",
+    "waarde": "agilitas",
+    "regel": 4455
+   }
+  ],
+  "aantal_schrijfplekken": 2,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch2_h10_route",
+  "geschreven_in": [
+   {
+    "scene": "CH2_H10_ROB",
+    "hoofdstuk": "CH2",
+    "waarde": "robur",
+    "regel": 4545
+   },
+   {
+    "scene": "CH2_H10_AGI",
+    "hoofdstuk": "CH2",
+    "waarde": "agilitas",
+    "regel": 4562
+   }
+  ],
+  "aantal_schrijfplekken": 2,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch2_k05_route",
+  "geschreven_in": [
+   {
+    "scene": "CH2_K05_OPEN",
+    "hoofdstuk": "CH2",
+    "waarde": "open",
+    "regel": 4146
+   },
+   {
+    "scene": "CH2_K05_ROB",
+    "hoofdstuk": "CH2",
+    "waarde": "robur",
+    "regel": 4163
+   },
+   {
+    "scene": "CH2_K05_PRU",
+    "hoofdstuk": "CH2",
+    "waarde": "prudentia",
+    "regel": 4180
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch2_l06_route",
+  "geschreven_in": [
+   {
+    "scene": "CH2_L06_OPEN",
+    "hoofdstuk": "CH2",
+    "waarde": "open",
+    "regel": 3641
+   },
+   {
+    "scene": "CH2_L06_AGI",
+    "hoofdstuk": "CH2",
+    "waarde": "agilitas",
+    "regel": 3658
+   },
+   {
+    "scene": "CH2_L06_ROB",
+    "hoofdstuk": "CH2",
+    "waarde": "robur",
+    "regel": 3675
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch2_l07_route",
+  "geschreven_in": [
+   {
+    "scene": "CH2_L07B",
+    "hoofdstuk": "CH2",
+    "waarde": "gratia",
+    "regel": 3714
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch2_lijn_herakles",
+  "geschreven_in": [
+   {
+    "scene": "CH2_H12",
+    "hoofdstuk": "CH2",
+    "waarde": "true",
+    "regel": 4596
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "DONE-tag",
+    "scene": "CH2_000",
+    "hoofdstuk": "CH2",
+    "regel": 3484,
+    "detail": "keuze \"Volg Herakles, Zeus' sterfelijke zoon die Hera al haat sinds voor zijn geboorte\""
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": 2,
+  "afstand_hoofdstukken": 0,
+  "afstand_scenes": -59
+ },
+ {
+  "flag": "ch2_lijn_kallisto",
+  "geschreven_in": [
+   {
+    "scene": "CH2_K09",
+    "hoofdstuk": "CH2",
+    "waarde": "true",
+    "regel": 4254
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "DONE-tag",
+    "scene": "CH2_000",
+    "hoofdstuk": "CH2",
+    "regel": 3484,
+    "detail": "keuze \"Volg Kallisto, een jachtgezellin van Artemis die niemand kan vertrouwen wat ze ziet\""
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": 2,
+  "afstand_hoofdstukken": 0,
+  "afstand_scenes": -41
+ },
+ {
+  "flag": "ch2_lijn_latona",
+  "geschreven_in": [
+   {
+    "scene": "CH2_L08",
+    "hoofdstuk": "CH2",
+    "waarde": "true",
+    "regel": 3736
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "DONE-tag",
+    "scene": "CH2_000",
+    "hoofdstuk": "CH2",
+    "regel": 3484,
+    "detail": "keuze \"Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is\""
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": 2,
+  "afstand_hoofdstukken": 0,
+  "afstand_scenes": -14
+ },
+ {
+  "flag": "ch2_lijn_semele",
+  "geschreven_in": [
+   {
+    "scene": "CH2_S08",
+    "hoofdstuk": "CH2",
+    "waarde": "true",
+    "regel": 4003
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "DONE-tag",
+    "scene": "CH2_000",
+    "hoofdstuk": "CH2",
+    "regel": 3484,
+    "detail": "keuze \"Volg het lot van Semele, een prinses van Thebe die niet weet wie haar minnaar werkelijk is\""
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": 2,
+  "afstand_hoofdstukken": 0,
+  "afstand_scenes": -28
+ },
+ {
+  "flag": "ch2_s06_route",
+  "geschreven_in": [
+   {
+    "scene": "CH2_S06_OPEN",
+    "hoofdstuk": "CH2",
+    "waarde": "open",
+    "regel": 3936
+   },
+   {
+    "scene": "CH2_S06_VIS",
+    "hoofdstuk": "CH2",
+    "waarde": "vis",
+    "regel": 3953
+   },
+   {
+    "scene": "CH2_S06_PRU",
+    "hoofdstuk": "CH2",
+    "waarde": "prudentia",
+    "regel": 3970
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch3_h07_route",
+  "geschreven_in": [
+   {
+    "scene": "CH3_H07_OPEN",
+    "hoofdstuk": "CH3",
+    "waarde": "open",
+    "regel": 5303
+   },
+   {
+    "scene": "CH3_H07_ROB",
+    "hoofdstuk": "CH3",
+    "waarde": "robur",
+    "regel": 5320
+   },
+   {
+    "scene": "CH3_H07_VIS",
+    "hoofdstuk": "CH3",
+    "waarde": "vis",
+    "regel": 5337
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 3,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch3_h13_route",
+  "geschreven_in": [
+   {
+    "scene": "CH3_H13_OPEN",
+    "hoofdstuk": "CH3",
+    "waarde": "open",
+    "regel": 5499
+   },
+   {
+    "scene": "CH3_H13_GRA",
+    "hoofdstuk": "CH3",
+    "waarde": "gratia",
+    "regel": 5516
+   },
+   {
+    "scene": "CH3_H13_ROB",
+    "hoofdstuk": "CH3",
+    "waarde": "robur",
+    "regel": 5533
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 3,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch3_h23_route",
+  "geschreven_in": [
+   {
+    "scene": "CH3_H23_OPEN",
+    "hoofdstuk": "CH3",
+    "waarde": "open",
+    "regel": 5749
+   },
+   {
+    "scene": "CH3_H23_ROB",
+    "hoofdstuk": "CH3",
+    "waarde": "robur",
+    "regel": 5766
+   }
+  ],
+  "aantal_schrijfplekken": 2,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 3,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch3_io07_route",
+  "geschreven_in": [
+   {
+    "scene": "CH3_IO07_OPEN",
+    "hoofdstuk": "CH3",
+    "waarde": "open",
+    "regel": 4890
+   },
+   {
+    "scene": "CH3_IO07_ROB",
+    "hoofdstuk": "CH3",
+    "waarde": "robur",
+    "regel": 4907
+   },
+   {
+    "scene": "CH3_IO07_GRA",
+    "hoofdstuk": "CH3",
+    "waarde": "gratia",
+    "regel": 4924
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 3,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch3_io11_route",
+  "geschreven_in": [
+   {
+    "scene": "CH3_IO11_OPEN",
+    "hoofdstuk": "CH3",
+    "waarde": "open",
+    "regel": 5016
+   },
+   {
+    "scene": "CH3_IO11_ROB",
+    "hoofdstuk": "CH3",
+    "waarde": "robur",
+    "regel": 5033
+   },
+   {
+    "scene": "CH3_IO11_GRA",
+    "hoofdstuk": "CH3",
+    "waarde": "gratia",
+    "regel": 5050
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 3,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch3_lijn_herakles",
+  "geschreven_in": [
+   {
+    "scene": "CH3_H25",
+    "hoofdstuk": "CH3",
+    "waarde": "true",
+    "regel": 5802
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "DONE-tag",
+    "scene": "CH3_000",
+    "hoofdstuk": "CH3",
+    "regel": 4719,
+    "detail": "keuze \"Volg Herakles, die tien beproevingen te gaan heeft\""
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 3,
+  "eerste_lees_hoofdstuk": 3,
+  "afstand_hoofdstukken": 0,
+  "afstand_scenes": -59
+ },
+ {
+  "flag": "ch3_lijn_io",
+  "geschreven_in": [
+   {
+    "scene": "CH3_IO13",
+    "hoofdstuk": "CH3",
+    "waarde": "true",
+    "regel": 5083
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "DONE-tag",
+    "scene": "CH3_000",
+    "hoofdstuk": "CH3",
+    "regel": 4719,
+    "detail": "keuze \"Volg Io, priesteres van Juno en Jupiters volgende geheime liefde\""
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 3,
+  "eerste_lees_hoofdstuk": 3,
+  "afstand_hoofdstukken": 0,
+  "afstand_scenes": -20
+ },
+ {
+  "flag": "ch4_lijn_phaethon",
+  "geschreven_in": [
+   {
+    "scene": "CH4_P10",
+    "hoofdstuk": "CH4",
+    "waarde": "true",
+    "regel": 6687
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "DONE-tag",
+    "scene": "CH4_000",
+    "hoofdstuk": "CH4",
+    "regel": 5929,
+    "detail": "keuze \"Volg Phaëthon, die aan zijn eigen afkomst twijfelt\""
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 4,
+  "eerste_lees_hoofdstuk": 4,
+  "afstand_hoofdstukken": 0,
+  "afstand_scenes": -40
+ },
+ {
+  "flag": "ch4_lijn_theseus",
+  "geschreven_in": [
+   {
+    "scene": "CH4_T16",
+    "hoofdstuk": "CH4",
+    "waarde": "true",
+    "regel": 6423
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "DONE-tag",
+    "scene": "CH4_000",
+    "hoofdstuk": "CH4",
+    "regel": 5929,
+    "detail": "keuze \"Volg Theseus naar Kreta, waar een labyrint en een monster op hem wachten\""
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 4,
+  "eerste_lees_hoofdstuk": 4,
+  "afstand_hoofdstukken": 0,
+  "afstand_scenes": -27
+ },
+ {
+  "flag": "ch4_p06_route",
+  "geschreven_in": [
+   {
+    "scene": "CH4_P06_OPEN",
+    "hoofdstuk": "CH4",
+    "waarde": "open",
+    "regel": 6575
+   },
+   {
+    "scene": "CH4_P06_GRA",
+    "hoofdstuk": "CH4",
+    "waarde": "gratia",
+    "regel": 6592
+   },
+   {
+    "scene": "CH4_P06_ROB",
+    "hoofdstuk": "CH4",
+    "waarde": "robur",
+    "regel": 6609
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 4,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch4_t08_route",
+  "geschreven_in": [
+   {
+    "scene": "CH4_T08_OPEN",
+    "hoofdstuk": "CH4",
+    "waarde": "open",
+    "regel": 6167
+   },
+   {
+    "scene": "CH4_T08_ROB",
+    "hoofdstuk": "CH4",
+    "waarde": "robur",
+    "regel": 6184
+   },
+   {
+    "scene": "CH4_T08_GRA",
+    "hoofdstuk": "CH4",
+    "waarde": "gratia",
+    "regel": 6201
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 4,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch4_t11_route",
+  "geschreven_in": [
+   {
+    "scene": "CH4_T11_OPEN",
+    "hoofdstuk": "CH4",
+    "waarde": "open",
+    "regel": 6294
+   },
+   {
+    "scene": "CH4_T11_ROB",
+    "hoofdstuk": "CH4",
+    "waarde": "robur",
+    "regel": 6311
+   },
+   {
+    "scene": "CH4_T11_GRA",
+    "hoofdstuk": "CH4",
+    "waarde": "gratia",
+    "regel": 6328
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 4,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch5_004_route",
+  "geschreven_in": [
+   {
+    "scene": "CH5_004_OPEN",
+    "hoofdstuk": "CH5",
+    "waarde": "open",
+    "regel": 6951
+   },
+   {
+    "scene": "CH5_004_VIS",
+    "hoofdstuk": "CH5",
+    "waarde": "vis",
+    "regel": 6968
+   },
+   {
+    "scene": "CH5_004_PRU",
+    "hoofdstuk": "CH5",
+    "waarde": "prudentia",
+    "regel": 6985
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 5,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch5_008_route",
+  "geschreven_in": [
+   {
+    "scene": "CH5_008_OPEN",
+    "hoofdstuk": "CH5",
+    "waarde": "open",
+    "regel": 7120
+   },
+   {
+    "scene": "CH5_008_AGI",
+    "hoofdstuk": "CH5",
+    "waarde": "agilitas",
+    "regel": 7137
+   },
+   {
+    "scene": "CH5_008_VIS",
+    "hoofdstuk": "CH5",
+    "waarde": "vis",
+    "regel": 7154
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 5,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch5_016_route",
+  "geschreven_in": [
+   {
+    "scene": "CH5_016_OPEN",
+    "hoofdstuk": "CH5",
+    "waarde": "open",
+    "regel": 7338
+   },
+   {
+    "scene": "CH5_016_AGI",
+    "hoofdstuk": "CH5",
+    "waarde": "agilitas",
+    "regel": 7355
+   },
+   {
+    "scene": "CH5_016_VIS",
+    "hoofdstuk": "CH5",
+    "waarde": "vis",
+    "regel": 7372
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 5,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch5_019_route",
+  "geschreven_in": [
+   {
+    "scene": "CH5_019_OPEN",
+    "hoofdstuk": "CH5",
+    "waarde": "open",
+    "regel": 7447
+   },
+   {
+    "scene": "CH5_019_VIS",
+    "hoofdstuk": "CH5",
+    "waarde": "vis",
+    "regel": 7464
+   },
+   {
+    "scene": "CH5_019_PRU",
+    "hoofdstuk": "CH5",
+    "waarde": "prudentia",
+    "regel": 7481
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 5,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch5_024_route",
+  "geschreven_in": [
+   {
+    "scene": "CH5_024_OPEN",
+    "hoofdstuk": "CH5",
+    "waarde": "open",
+    "regel": 7591
+   },
+   {
+    "scene": "CH5_024_VIS",
+    "hoofdstuk": "CH5",
+    "waarde": "vis",
+    "regel": 7608
+   },
+   {
+    "scene": "CH5_024_AGI",
+    "hoofdstuk": "CH5",
+    "waarde": "agilitas",
+    "regel": 7625
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 5,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch5_025_route",
+  "geschreven_in": [
+   {
+    "scene": "CH5_025_OPEN",
+    "hoofdstuk": "CH5",
+    "waarde": "open",
+    "regel": 7676
+   },
+   {
+    "scene": "CH5_025_AGI",
+    "hoofdstuk": "CH5",
+    "waarde": "agilitas",
+    "regel": 7693
+   },
+   {
+    "scene": "CH5_025_PRU",
+    "hoofdstuk": "CH5",
+    "waarde": "prudentia",
+    "regel": 7710
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 5,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch5_bemanning_uitrusting",
+  "geschreven_in": [
+   {
+    "scene": "CH5_006",
+    "hoofdstuk": "CH5",
+    "waarde": "true",
+    "regel": 7019
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "avatar-unlock",
+    "detail": "ontgrendelt armor:middel",
+    "hoofdstuk": null
+   },
+   {
+    "bron": "avatar-unlock",
+    "detail": "ontgrendelt helm:bandana",
+    "hoofdstuk": null
+   }
+  ],
+  "aantal_lezingen": 2,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 5,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch6_001_route",
+  "geschreven_in": [
+   {
+    "scene": "CH6_001_OPEN",
+    "hoofdstuk": "CH6",
+    "waarde": "open",
+    "regel": 7899
+   },
+   {
+    "scene": "CH6_001_VIS",
+    "hoofdstuk": "CH6",
+    "waarde": "vis",
+    "regel": 7916
+   },
+   {
+    "scene": "CH6_001_AGI",
+    "hoofdstuk": "CH6",
+    "waarde": "agilitas",
+    "regel": 7933
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 6,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch6_007_route",
+  "geschreven_in": [
+   {
+    "scene": "CH6_007_OPEN",
+    "hoofdstuk": "CH6",
+    "waarde": "open",
+    "regel": 8080
+   },
+   {
+    "scene": "CH6_007_PRU",
+    "hoofdstuk": "CH6",
+    "waarde": "prudentia",
+    "regel": 8097
+   },
+   {
+    "scene": "CH6_007_AGI",
+    "hoofdstuk": "CH6",
+    "waarde": "agilitas",
+    "regel": 8114
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 6,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch6_012_route",
+  "geschreven_in": [
+   {
+    "scene": "CH6_012_OPEN",
+    "hoofdstuk": "CH6",
+    "waarde": "open",
+    "regel": 8243
+   },
+   {
+    "scene": "CH6_012_VIS",
+    "hoofdstuk": "CH6",
+    "waarde": "vis",
+    "regel": 8260
+   },
+   {
+    "scene": "CH6_012_AGI",
+    "hoofdstuk": "CH6",
+    "waarde": "agilitas",
+    "regel": 8277
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 6,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch6_015_route",
+  "geschreven_in": [
+   {
+    "scene": "CH6_015_OPEN",
+    "hoofdstuk": "CH6",
+    "waarde": "open",
+    "regel": 8365
+   },
+   {
+    "scene": "CH6_015_PRU",
+    "hoofdstuk": "CH6",
+    "waarde": "prudentia",
+    "regel": 8382
+   },
+   {
+    "scene": "CH6_015_AGI",
+    "hoofdstuk": "CH6",
+    "waarde": "agilitas",
+    "regel": 8399
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 6,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch6_023_route",
+  "geschreven_in": [
+   {
+    "scene": "CH6_023_OPEN",
+    "hoofdstuk": "CH6",
+    "waarde": "open",
+    "regel": 8592
+   },
+   {
+    "scene": "CH6_023_AGI",
+    "hoofdstuk": "CH6",
+    "waarde": "agilitas",
+    "regel": 8609
+   },
+   {
+    "scene": "CH6_023_PRU",
+    "hoofdstuk": "CH6",
+    "waarde": "prudentia",
+    "regel": 8626
+   }
+  ],
+  "aantal_schrijfplekken": 3,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 6,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch6_diomedes_epigonen",
+  "geschreven_in": [
+   {
+    "scene": "CH6_020",
+    "hoofdstuk": "CH6",
+    "waarde": "true",
+    "regel": 8512
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 6,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "ch8_zijde",
+  "geschreven_in": [
+   {
+    "scene": "CH8_ACH_001",
+    "hoofdstuk": "CH8",
+    "waarde": "achilles",
+    "regel": 9512
+   },
+   {
+    "scene": "CH8_AGA_001",
+    "hoofdstuk": "CH8",
+    "waarde": "agamemnon",
+    "regel": 9781
+   }
+  ],
+  "aantal_schrijfplekken": 2,
+  "gelezen_in": [
+   {
+    "bron": "payoff",
+    "payoff": "ch8_epi005_echo_zijde_agamemnon",
+    "scene": "CH8_EPI_005",
+    "hoofdstuk": "CH8",
+    "detail": "flags.ch8_zijde===\"agamemnon\""
+   },
+   {
+    "bron": "payoff",
+    "payoff": "ch8_epi005_echo_zijde_achilles",
+    "scene": "CH8_EPI_005",
+    "hoofdstuk": "CH8",
+    "detail": "flags.ch8_zijde===\"achilles\""
+   }
+  ],
+  "aantal_lezingen": 2,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 8,
+  "eerste_lees_hoofdstuk": 8,
+  "afstand_hoofdstukken": 0,
+  "afstand_scenes": 32
+ },
+ {
+  "flag": "herakles_harnas",
+  "geschreven_in": [
+   {
+    "scene": "CH2_H09",
+    "hoofdstuk": "CH2",
+    "waarde": "true",
+    "regel": 4491
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "payoff",
+    "payoff": "ch3_h01_deur_herakles_harnas",
+    "scene": "CH3_H01",
+    "hoofdstuk": "CH3",
+    "detail": "flagsSet herakles_harnas"
+   },
+   {
+    "bron": "payoff",
+    "payoff": "ch9_002_echo_herakles_harnas",
+    "scene": "CH9_002",
+    "hoofdstuk": "CH9",
+    "detail": "flagsSet herakles_harnas"
+   },
+   {
+    "bron": "avatar-unlock",
+    "detail": "ontgrendelt armor:licht",
+    "hoofdstuk": null
+   }
+  ],
+  "aantal_lezingen": 3,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": 3,
+  "afstand_hoofdstukken": 1,
+  "afstand_scenes": 32
+ },
+ {
+  "flag": "herakles_taken_voltooid",
+  "geschreven_in": [
+   {
+    "scene": "CH2_H12",
+    "hoofdstuk": "CH2",
+    "waarde": "2",
+    "regel": 4596
+   },
+   {
+    "scene": "CH3_H25",
+    "hoofdstuk": "CH3",
+    "waarde": "12",
+    "regel": 5802
+   }
+  ],
+  "aantal_schrijfplekken": 2,
+  "gelezen_in": [],
+  "aantal_lezingen": 0,
+  "dode_flag": true,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 2,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ },
+ {
+  "flag": "museum_mnemosyne_ontgrendeld",
+  "geschreven_in": [
+   {
+    "scene": "CH6_MUSEUM_00",
+    "hoofdstuk": "CH6",
+    "waarde": true,
+    "regel": 8721
+   }
+  ],
+  "aantal_schrijfplekken": 1,
+  "gelezen_in": [
+   {
+    "bron": "code",
+    "detail": "singleplayer.js:781  const inMuseum = !!(SP_STATE.flags||{}).museum_mnemosyne_ontgrendeld;",
+    "hoofdstuk": null
+   }
+  ],
+  "aantal_lezingen": 1,
+  "dode_flag": false,
+  "wees_payoff": false,
+  "schrijf_hoofdstuk": 6,
+  "eerste_lees_hoofdstuk": null,
+  "afstand_hoofdstukken": null,
+  "afstand_scenes": null
+ }
+]

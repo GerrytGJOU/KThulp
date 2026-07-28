@@ -1,0 +1,252 @@
+### CH6_000  (r.7853)  — De Vloek van Thebe
+"Dit hoofdstuk vertel ik je niet in de volgorde waarin het gebeurde," zegt de Boodschapper, ongewoon voorzichtig. "Thebe's geschiedenis springt heen en weer door generaties, en als ik je alles op volgorde van jaartal zou vertellen, zou je het patroon nooit zien. Dus vertel ik het je op de volgorde die het patroon wél laat zien: hoogmoed, telkens weer — en een straf die daarna bijna nooit bij de hoogmoedige zelf terechtkomt, maar bij de kinderen." Athena knikt, zwijgender dan anders. "Sommige vloeken slaan in bij de stichting van een stad, en wachten dan gewoon — generatie na generatie — tot er weer iemand geboren wordt om ze te laten uitkomen."
+  > Begin bij het begin — de stichting van Thebe  -> CH6_001
+
+### CH6_001  (r.7875)  — De Stichting van Thebe
+[PERSON=kadmos:intro | IMG=spartoi_thebe.png]
+Kadmos, een Fenicische prins op zoek naar zijn geschaakte zuster Europa — je kent haar verhaal al uit Hoofdstuk 3 — geeft die zoektocht op advies van het orakel van Delphi uiteindelijk op. Volg een koe, zegt het orakel, en sticht een stad waar ze uitgeput neervalt. Kadmos doet wat hem gezegd wordt. Om een offer te brengen doodt hij een draak die de bron ter plekke bewaakt — en zaait, op advies van Athena zelf, de tanden van het beest in de aarde. Uit de grond rijzen gewapende krijgers op, meer dan Kadmos in zijn eentje het hoofd kan bieden.
+  > Kijk toe hoe de krijgers zich tegen elkaar keren  -> CH6_001_OPEN
+  > Grijp een afgebroken speer en houd een laatste dolende Spartoot af zodat Kadmos' rug vrij blijft [STAT:vis:13] -> CH6_001_VIS
+  > Duik en weef tussen de neervallende lichamen door om niet zelf geraakt te worden [STAT:agilitas:11] -> CH6_001_AGI
+
+### CH6_001_OPEN  (r.7899)  — Op Veilige Afstand
+[FLAG=ch6_001_route=open]
+Je blijft op veilige afstand en ziet het bloedbad zich voltrekken: de krijgers keren zich, precies zoals Athena voorzag, tegen elkaar — tot er nog maar vijf overeind staan.
+  > Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef  -> CH6_002
+
+### CH6_001_VIS  (r.7916)  — Kadmos' Rug Vrij
+[FLAG=ch6_001_route=vis]
+Je grijpt een afgebroken speer van de grond en houdt een laatste, dolende Spartoot af die recht op Kadmos' rug afstormt — genoeg om hem de tijd te geven zich om te draaien voor het te laat is.
+  > Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef  -> CH6_002
+
+### CH6_001_AGI  (r.7933)  — Tussen de Lichamen
+[FLAG=ch6_001_route=agilitas]
+Je duikt en weeft tussen de neervallende lichamen door, telkens net op tijd weg bij een zwaaiend zwaard of een vallend lichaam — dicht genoeg bij het geweld om alles te zien, zonder er zelf in verstrikt te raken.
+  > Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef  -> CH6_002
+
+### CH6_002  (r.7950)  — Dezelfde Tanden, een Andere Koning
+Het valt je meteen op: dezelfde soort drakentanden hoorde je Aeëtes al noemen, ver naar het oosten in Colchis, toen Jason zijn beproevingen moest doorstaan. Eén draak, twee koningen, generaties en een hele wereld uit elkaar — allebei met precies dezelfde gewapende-mannen-uit-de-aarde-truc. "Zo werkt een vloek soms," zegt Athena. "Hij plant zichzelf, letterlijk, en wacht dan gewoon af wie hem opgraaft."
+  > Kijk naar de eerste koningin van deze jonge stad  -> CH6_003
+
+### CH6_003  (r.7966)  — Niobe's Hoogmoed
+[PUZZLE=puzzle_ch6_praesens]
+Enkele generaties later regeert Niobe als koningin over Thebe — trots, geliefd, en moeder van veertien kinderen. Op een feest ter ere van Latona (je kent haar inmiddels goed uit Hoofdstuk 2) kan Niobe haar mond niet houden: waarom zou een godin met slechts twee kinderen meer offers verdienen dan een koningin met veertien?
+  > Kijk hoe Latona's kinderen op deze belediging reageren  -> CH6_004
+
+### CH6_004  (r.7983)  — Apollo en Diana's Wraak
+[SOUVENIR=souvenir_thebe | IMG=niobe_versteend.png]
+Apollo en Diana laten de belediging aan hun moeder niet ongestraft. Met hun pijl en boog doden ze, de een na de ander, al Niobe's veertien kinderen — tot er niemand meer overblijft om nog trots op te zijn. Niobe, verstard van verdriet, verandert ter plekke in steen. Nog altijd, zegt men, laat de rots op de berg Sipylos water druppelen — tranen die na al die generaties nog altijd niet zijn opgehouden.
+  > Vind veertien levens een verschrikkelijk zware prijs voor één opschepperige zin [CLEMENTIA] -> CH6_005
+  > Erken dat een belediging aan een godin nu eenmaal nooit zonder gevolgen blijft [SEVERITAS] -> CH6_005
+  > Laat het gewoon op je inwerken, zonder meteen een kant te kiezen [NEUTRAL] -> CH6_005
+
+### CH6_005  (r.8010)  — Een Voorspelling voor Laius
+[PERSON=laius:intro, oedipus:intro]
+Generaties na Niobe regeert Laius over Thebe. Een orakel voorspelt hem iets verschrikkelijks: zijn eigen, nog ongeboren zoon zal hem ooit doden. Uit angst laat Laius het kind, zodra het geboren is, te vondeling leggen op een berghelling — zijn voeten doorboord en aan elkaar gebonden, zodat niemand ooit zou vermoeden dat het om een prins gaat. Het kind overleeft. Een herder vindt de baby, en uiteindelijk groeit hij op aan het hof van Corinthe, geadopteerd door een koning en koningin die hem nooit vertellen dat hij niet echt hun zoon is. Zijn naam: Oedipus — "gezwollen voet", naar de wond die hij als baby overhield.
+  > Kijk wat Oedipus doet zodra hij zelf volwassen is  -> CH6_006
+
+### CH6_006  (r.8029)  — De Weg naar Thebe
+Als jongvolwassene krijgt Oedipus zijn eigen, verschrikkelijke voorspelling: hij zal ooit zijn vader doden en met zijn moeder trouwen. In de overtuiging dat zijn Corinthische ouders zijn ware ouders zijn, vlucht hij weg van Corinthe om het lot te ontlopen — recht op Thebe af, zonder dat hij het weet. Onderweg, bij een smal kruispunt, weigert een oudere man met zijn wagen opzij te gaan. Het geschil escaleert, en Oedipus doodt de man — zonder ook maar te vermoeden dat het zijn eigen vader Laius is, op weg naar hetzelfde orakel dat hem ooit al zoveel verdriet bracht.
+  > Volg Oedipus verder naar de poorten van Thebe  -> CH6_007
+
+### CH6_007  (r.8045)  — De Sfinx
+Bij de poorten van Thebe houdt een monster de hele stad al maandenlang gegijzeld: de Sfinx, met het lichaam van een leeuw, de vleugels van een adelaar en het gezicht van een vrouw. Iedereen die de stad in of uit wil, moet haar raadsel oplossen — en wie faalt, wordt ter plekke verslonden. Oedipus, die toch al niets meer te verliezen heeft, biedt aan het te proberen.
+  > Kom dichterbij  -> CH6_007B
+
+### CH6_007B  (r.8064)  — De Nadering
+Terwijl Oedipus naar voren stapt, blijf jij dichterbij dan verstandig is — dicht genoeg om te zien wat er van eerdere uitdagers is overgebleven, en om zelf iets op te pikken voor het raadsel valt.
+  > Sta gewoon naast Oedipus en vat moed  -> CH6_007_OPEN
+  > Lees de overblijfselen van eerdere slachtoffers en de houding van de Sfinx voor een teken van vermoeidheid of patroon [STAT:prudentia:13] -> CH6_007_PRU
+  > Blijf licht op je voeten en behoedzaam tussen de resten door, zonder onnodig dichtbij te komen [STAT:agilitas:11] -> CH6_007_AGI
+
+### CH6_007_OPEN  (r.8080)  — Naast Hem
+[FLAG=ch6_007_route=open]
+Je blijft gewoon naast Oedipus staan en vat moed — meer kun je op dit moment niet doen dan hem laten voelen dat hij er niet alleen voor staat.
+  > Luister naar het raadsel van de Sfinx  -> CH6_008
+
+### CH6_007_PRU  (r.8097)  — Wat Er Achterbleef
+[FLAG=ch6_007_route=prudentia]
+Je bekijkt wat er van eerdere uitdagers is overgebleven, en de houding van de Sfinx zelf — een vermoeidheid, misschien, onder al die zelfverzekerdheid, alsof zelfs een monster moe kan worden van hetzelfde raadsel telkens opnieuw stellen.
+  > Luister naar het raadsel van de Sfinx  -> CH6_008
+
+### CH6_007_AGI  (r.8114)  — Behoedzaam Tussen de Resten
+[FLAG=ch6_007_route=agilitas]
+Je blijft licht op je voeten, behoedzaam tussen de resten van eerdere uitdagers door, dicht genoeg om alles te zien maar nooit dichtbij genoeg om zelf een doelwit te worden.
+  > Luister naar het raadsel van de Sfinx  -> CH6_008
+
+### CH6_008  (r.8131)  — Het Raadsel
+[PUZZLE=puzzle_ch6_sfinx | IMG=sfinx_raadsel.png]
+"Welk wezen," vraagt de Sfinx, "loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie — en is het zwakst naarmate het er meer heeft?"
+  > Geef het antwoord  -> CH6_009
+
+### CH6_009  (r.8151)  — Koning van Thebe
+[PERSON=iokaste:intro, eteokles:intro, polyneikes:intro, antigone:intro]
+"De mens," antwoordt Oedipus — als baby kruipt hij op handen en voeten, als volwassene loopt hij rechtop, en op zijn oude dag steunt hij op een stok, de "derde poot". De Sfinx, voor het eerst ooit verslagen, werpt zich in wanhoop van de rotsen. Thebe, bevrijd, kroont Oedipus tot nieuwe koning — en geeft hem, zoals gebruikelijk, ook de hand van de weduwe van de vorige koning: Iokaste. Jaren gaan voorbij. Ze krijgen samen vier kinderen: Eteokles, Polyneikes, Antigone, en een dochter die verder in dit verhaal geen grote rol speelt. Niemand in Thebe vermoedt wie Iokaste werkelijk is voor haar nieuwe man.
+  > Spring jaren vooruit, naar het moment dat de waarheid aan het licht komt  -> CH6_010
+
+### CH6_010  (r.8170)  — De Waarheid
+[PERSON=oedipus:full, iokaste:full]
+Jaren later teistert een verschrikkelijke plaag Thebe, en een orakel wijst de oorzaak aan: de moordenaar van de vorige koning loopt nog vrij rond, onbestraft, in de stad zelf. Oedipus, vastbesloten de dader te vinden, ontrafelt stukje bij beetje zijn eigen verleden — tot de waarheid onontkoombaar wordt: hij doodde zijn eigen vader op die weg naar Thebe, en trouwde daarna, zonder het te weten, met zijn eigen moeder. Iokaste kan niet leven met wat ze ontdekt. Oedipus, die het niet langer kan verdragen te zien wat zijn eigen ogen hem hebben laten aanrichten, verblindt zichzelf en verlaat Thebe voorgoed, een ballingschap in die hem de rest van zijn leven zal achtervolgen.
+  > Voel vooral medelijden — geen van beiden koos er ooit voor om dit te worden [CLEMENTIA] -> CH6_011
+  > Erken nuchter dat onwetendheid de gevolgen niet ongedaan maakt, hoe oneerlijk dat ook voelt [SEVERITAS] -> CH6_011
+  > Laat het oordeel maar aan iemand anders — dit voelt te groot om zomaar een kant te kiezen [NEUTRAL] -> CH6_011
+
+### CH6_011  (r.8191)  — Een Troon, Twee Broers
+[PUZZLE=puzzle_ch6_imperfectum]
+Eteokles en Polyneikes spreken af de troon van Thebe om het jaar te delen — eerst de een, dan de ander. Het eerste jaar is aan Eteokles. Maar wanneer het jaar om is en Polyneikes zijn beurt komt opeisen, weigert Eteokles.
+  > Kijk wat Polyneikes onderneemt  -> CH6_012
+
+### CH6_012  (r.8208)  — De Zeven tegen Thebe
+[IMG=zeven_tegen_thebe.png]
+Verbannen uit zijn eigen stad, verzamelt Polyneikes zes andere champions om Thebe met geweld terug te veroveren — samen bekend als de Zeven tegen Thebe. Onder hen een gezicht dat je al kent: Tydeus, de kortlontige Argonaut van de Argo (Hoofdstuk 5), even onstuimig als altijd. "Als er íémand een stadspoort met kracht in plaats van geduld openkrijgt," zegt Tydeus grimmig, terwijl hij zijn wapenrusting aantrekt, "dan ben ik dat wel."
+  > Kijk hoe de aanval op Thebe verloopt  -> CH6_012B
+
+### CH6_012B  (r.8227)  — De Zeven Poorten
+De aanval begint op alle zeven poorten tegelijk — te veel om overal bij te zijn, dus moet je kiezen waar je blik naartoe gaat.
+  > Volg het algemene overzicht van de bestorming  -> CH6_012_OPEN
+  > Blijf hangen bij Tydeus' eigen poort, waar hij zijn belofte waarmaakt en de poort met kale kracht probeert te breken [STAT:vis:13] -> CH6_012_VIS
+  > Kijk naar een andere poort, waar een champion het niet op kracht maar op snelheid gooit [STAT:agilitas:11] -> CH6_012_AGI
+
+### CH6_012_OPEN  (r.8243)  — Het Overzicht
+[FLAG=ch6_012_route=open]
+Je volgt het geheel: zeven poorten, zeven champions, en een verdediging die er, poort na poort, in slaagt de meesten van hen tegen te houden.
+  > Kijk hoe de aanval op Thebe verloopt  -> CH6_013
+
+### CH6_012_VIS  (r.8260)  — Tydeus' Poort
+[FLAG=ch6_012_route=vis]
+Je blijft kijken naar Tydeus, die zijn belofte waarmaakt: schouder tegen de balken, schreeuwend van inspanning, de poort langzaam versplinterend onder zijn kracht — precies het soort roekeloze moed dat je van hem had verwacht.
+  > Kijk hoe de aanval op Thebe verloopt  -> CH6_013
+
+### CH6_012_AGI  (r.8277)  — De Snelle Weg
+[FLAG=ch6_012_route=agilitas]
+Je richt je blik op een andere poort, waar een champion het niet op kracht maar op snelheid gooit — rennend over open terrein, rakelings langs projectielen, bijna over de muur voor de verdedigers goed en wel kunnen reageren.
+  > Kijk hoe de aanval op Thebe verloopt  -> CH6_013
+
+### CH6_013  (r.8294)  — De Zeven Poorten
+[PUZZLE=puzzle_ch6_matching_tempora]
+Elk van de zeven champions valt een andere poort van Thebe aan — en bijna allemaal sneuvelen ze, poort na poort, tegen Thebe's verdedigers. Voor de laatste, wanhopige aanval moet iedereen die nog vecht zijn Latijn haarscherp houden.
+  > Kijk hoe het tussen de twee broers zelf afloopt  -> CH6_014
+
+### CH6_014  (r.8311)  — Broedermoord
+Eteokles en Polyneikes, vastbesloten dit voor eens en altijd zelf uit te vechten, treffen elkaar in een laatste tweegevecht — en doden elkaar tegelijkertijd, geen van beiden lang genoeg in leven om nog te weten wie er "gewonnen" heeft. Tydeus zelf ligt intussen dodelijk gewond op het slagveld, precies op het moment dat Athena naar hem toe komt om hem — voor zijn moed — onsterfelijkheid te schenken. Wat ze daar aantreft, doet haar zich vol afschuw afwenden en de gave intrekken. Tydeus sterft alsnog, sterfelijk na alles, ver van de zoon die hij amper heeft leren kennen.
+  > Kijk wie er na deze slachting de troon van Thebe overneemt  -> CH6_015
+
+### CH6_015  (r.8330)  — Creons Bevel
+[PERSON=creon:intro]
+Met beide broers dood en Oedipus allang verbannen, neemt Iokaste's broer Creon de troon over. Zijn eerste daad als regent is een bevel dat heel Thebe zal verscheuren: Eteokles krijgt een eervolle begrafenis, als verdediger van de stad — maar Polyneikes, die zijn eigen stad aanviel, mag van Creon nooit begraven worden. Zijn lichaam moet buiten de muren blijven liggen, prooi voor de vogels. Voor de Grieken is dit een verschrikkelijke straf — zonder de juiste rituelen kan een ziel nooit rust vinden. Antigone, Polyneikes' zuster, is niet van plan zich daarbij neer te leggen.
+  > Kijk wat Antigone besluit te doen  -> CH6_015B
+
+### CH6_015B  (r.8349)  — De Geheime Begrafenis
+Antigone wacht niet op toestemming. Onder de dekking van de nacht sluipt ze naar het lichaam van haar broer, vast van plan hem de rituelen te geven die hij verdient — vóór Creons wachters haar kunnen tegenhouden.
+  > Volg het algemene beeld van haar vastberadenheid  -> CH6_015_OPEN
+  > Zie hoe ze de wisseling van de wacht al dagen heeft geobserveerd en precies het gat in hun routine kiest [STAT:prudentia:11] -> CH6_015_PRU
+  > Zie haar geruisloos tussen schaduwen bewegen, exact op het moment dat een wachter zich omdraait [STAT:agilitas:13] -> CH6_015_AGI
+
+### CH6_015_OPEN  (r.8365)  — Vastberaden
+[FLAG=ch6_015_route=open]
+Je ziet vooral haar vastberadenheid: de rustige, geconcentreerde bewegingen van iemand die weet wat haar te doen staat en zich door niets laat afleiden — de geheime rituelen zelf blijven grotendeels aan het zicht onttrokken.
+  > Kijk wat Creon ontdekt  -> CH6_016
+
+### CH6_015_PRU  (r.8382)  — Het Gat in de Routine
+[FLAG=ch6_015_route=prudentia]
+Je ziet wat de wachters zelf niet zien: dat Antigone hun wisseling van de wacht al dagenlang heeft geobserveerd, en precies het korte gat in hun routine kiest waarin niemand kijkt.
+  > Kijk wat Creon ontdekt  -> CH6_016
+
+### CH6_015_AGI  (r.8399)  — Tussen de Schaduwen
+[FLAG=ch6_015_route=agilitas]
+Je ziet haar bewegen alsof de schaduwen zelf haar helpen — geruisloos, exact op het moment dat een wachter zich omdraait, nooit een fractie te vroeg of te laat.
+  > Kijk wat Creon ontdekt  -> CH6_016
+
+### CH6_016  (r.8416)  — Antigone's Verzet
+[PUZZLE=puzzle_ch6_perfectum | IMG=antigone_begrafenis.png]
+Tegen Creons uitdrukkelijke bevel in begraaft Antigone haar broer in het geheim, met de juiste rituelen — overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning.
+  > Kijk hoe Creon reageert zodra hij ontdekt wat ze heeft gedaan  -> CH6_017
+
+### CH6_017  (r.8436)  — Levend Ingemetseld
+[PERSON=antigone:full]
+Creon laat Antigone, zodra hij ontdekt wat ze heeft gedaan, levend inmetselen in een graftombe — geen executie in naam, maar wel een ter dood veroordeling. Antigone wacht niet af tot de tombe haar langzaam laat sterven: ze kiest zelf het moment.
+  > Bewonder haar moed om voor haar overtuiging te sterven [CLEMENTIA] -> CH6_018
+  > Erken dat Creon, hoe hard ook, zijn bevel niet zomaar kon laten passeren zonder gezichtsverlies [SEVERITAS] -> CH6_018
+  > Zie vooral twee mensen die geen van beiden meer terug konden zonder alles te verliezen [NEUTRAL] -> CH6_018
+
+### CH6_018  (r.8458)  — De Epigonen
+[PERSON=diomedes:intro]
+Tien jaar na de nederlaag van de Zeven tegen Thebe zijn hun zonen oud genoeg om zelf te vechten — de Epigonen, "de nakomelingen", vastbesloten hun vaders alsnog te wreken. Onder hen Diomedes, Tydeus' zoon, die zijn vader nauwelijks heeft gekend maar wiens naam hij zijn hele jeugd heeft horen fluisteren. "Ik weet niet veel over mijn vader," zegt Diomedes, terwijl hij zijn wapenrusting aantrekt, net zoals Tydeus dat tien jaar eerder deed. "Maar ik weet wel hoe hij stierf. Dat is genoeg om vandaag mee te beginnen."
+  > Kijk hoe de tweede aanval op Thebe verloopt  -> CH6_019
+  > Help hem zijn vaders wapenrusting eerbiedig klaarleggen, in stilte [STAT:prudentia:12] -> CH6_018_PRU
+
+### CH6_018_PRU  (r.8478)  — Een Stil Gebaar
+[REL=diomedes=+1]
+Je helpt Diomedes zwijgend met de laatste riemen van zijn wapenrusting — geen woorden nodig, enkel de erkenning dat sommige momenten geen toespraak verdragen. Hij knikt kort, dankbaarder dan hij laat blijken.
+  > Kijk hoe de tweede aanval op Thebe verloopt  -> CH6_019
+
+### CH6_019  (r.8495)  — Laodamas Verdedigt de Poorten
+[COMBAT=laodamas]
+Waar Thebe de eerste aanval overleefde, staat er dit keer een verdediger klaar die vastbesloten is de stad opnieuw te redden: Laodamas, zoon van Eteokles, die de poorten met dezelfde koppigheid verdedigt als zijn vader ooit deed.
+  > Kijk wat er van Thebe wordt na Laodamas' nederlaag  -> CH6_020
+
+### CH6_020  (r.8512)  — De Val van Thebe
+[FLAG=ch6_diomedes_epigonen=true | TITEL=ch6_epigonen | IMG=diomedes_val_thebe.png]
+Met Laodamas verslagen valt Thebe eindelijk, tien jaar nadat de vaders van de Epigonen er zelf faalden. Diomedes staat tussen de puinhopen van een stad die zijn eigen vader het leven kostte — niet met vreugde, merk je, maar met iets stillers. Wraak, ontdekt hij, voelt anders dan hij zich had voorgesteld. Zijn naam zal hier niet ophouden. Jaren later, ver van Thebe, zal Diomedes een van de dapperste helden voor de poorten van een heel andere belegerde stad worden.
+  > Spring nu terug in de tijd — naar een koning die vóór Oedipus over Thebe regeerde  -> CH6_021
+
+### CH6_021  (r.8540)  — Terug in de Tijd
+"Eén verhaal resteert nog," zegt de Boodschapper, "en het speelt zich eigenlijk af vóór alles wat je tot nu toe hebt gezien — nog vóór Oedipus, nog vóór Laius. Ik bewaarde het voor het laatst, niet omdat het het laatste was, maar omdat het het duidelijkst laat zien waar deze hele vloek ooit begon. Jij, als {tendency_address}, herkent dat patroon inmiddels vast al voor ik het uitleg." Terug in de tijd dus, naar Pentheus — kleinzoon van Kadmos zelf, en de op twee na eerste koning van Thebe na de stichter.
+  > Kijk wat voor koning Pentheus is  -> CH6_022
+
+### CH6_022  (r.8556)  — Een Nieuwe God
+[PERSON=pentheus:intro | IMG=bacchanten_berg.png]
+Een vreemde nieuwe verering verspreidt zich door Thebe: de cultus van Bacchus, god van wijn en extase — en, zoals niemand in de stad hardop durft te zeggen, de zoon van Semele, Kadmos' eigen dochter. Pentheus, Semele's neef en de huidige koning, weigert te geloven dat zijn eigen nicht een god heeft gebaard. Hij verbiedt de verering en probeert de vrouwen van Thebe, die massaal de bergen in trekken om Bacchus te aanbidden, met geweld terug te dwingen.
+  > Kijk wat Pentheus onderneemt om de Bacchanten te stoppen  -> CH6_023
+
+### CH6_023  (r.8576)  — Vermomd de Berg Op
+Wanneer dreigementen niets uithalen, vermomt Pentheus zich en sluipt in het geheim de berg op om de riten van de Bacchanten met eigen ogen te bespieden — in de hoop bewijs te vinden om de verering voorgoed te verbieden.
+  > Blijf op veilige afstand meesluipen  -> CH6_023_OPEN
+  > Waag je dichterbij dan verstandig is, lenig en geruisloos tussen rotsen en struikgewas [STAT:agilitas:13] -> CH6_023_AGI
+  > Lees de rituele patronen en voortekenen van de Bacchanten vóór het misgaat [STAT:prudentia:11] -> CH6_023_PRU
+
+### CH6_023_OPEN  (r.8592)  — Op Veilige Afstand
+[FLAG=ch6_023_route=open]
+Je blijft op veilige afstand meesluipen, dicht genoeg om te zien wat er gebeurt, ver genoeg om zelf niet opgemerkt te worden — al verandert dat niets aan wat Pentheus straks te wachten staat.
+  > Kijk wat er van Pentheus wordt  -> CH6_023B
+
+### CH6_023_AGI  (r.8609)  — Dichterbij Dan Verstandig
+[FLAG=ch6_023_route=agilitas]
+Je waagt je dichterbij dan verstandig is, lenig en geruisloos tussen rotsen en struikgewas — dicht genoeg om te zien wat geen sterveling eigenlijk zou moeten zien, en toch niet dicht genoeg om zelf herkend te worden.
+  > Kijk wat er van Pentheus wordt  -> CH6_023B
+
+### CH6_023_PRU  (r.8626)  — De Voortekenen
+[FLAG=ch6_023_route=prudentia]
+Je leest de rituele patronen van de Bacchanten, de manier waarop hun waanzin golft en aanzwelt — een voorgevoel van wat komen gaat, lang voor Pentheus zelf beseft hoe dicht hij bij de rand staat.
+  > Kijk wat er van Pentheus wordt  -> CH6_023B
+
+### CH6_023B  (r.8643)  — Ontdekt
+Hij wordt ontdekt. In de door Bacchus opgewekte, goddelijke waanzin herkennen de vrouwen hem niet meer als de koning van Thebe — en niet eens meer als mens.
+  > Roep de naam van de god die dit alles heeft losgemaakt  -> CH6_024
+
+### CH6_024  (r.8657)  — Een Naam Zonder Antwoord
+[PUZZLE=puzzle_ch6_vocativus_grieks]
+Pentheus, eindelijk beseffend hoe verkeerd hij dit heeft ingeschat, roept vol ongeloof de naam van de god die hij zo lang heeft geweigerd te erkennen.
+  > Kijk wat er met Pentheus gebeurt  -> CH6_025
+
+### CH6_025  (r.8674)  — Agave
+[PERSON=pentheus:full | TITEL=ch6_pentheus]
+Wat er die middag op de berg gebeurt, is het duisterste dat dit hoofdstuk te vertellen heeft. Onder de vrouwen die Pentheus omsingelen bevindt zich, in haar eigen door de god opgewekte waanzin, zijn moeder Agave — die in hem geen zoon meer ziet, maar een wild dier. Pas uren later, weer bij zinnen, beseft Agave ten volle wat haar eigen handen hebben aangericht. Van alle vloeken die dit hoofdstuk over Thebe uitspreekt, is dit de wreedste: niet een vreemde straf van een verre god, maar een moeder tegen haar eigen kind, zonder dat ze ooit had willen kiezen.
+  > Luister verder  -> CH6_EINDE
+
+### CH6_EINDE  (r.8702)  — Het Einde van Hoofdstuk 6
+"Je hebt nu een hele stad gezien," zegt de Boodschapper zacht, "over generaties heen, altijd hetzelfde patroon: hoogmoed, en dan een straf die zelden bij de hoogmoedige zelf terechtkomt. Niet elke vloek wordt in één leven uitgesproken. Sommige wachten gewoon op de volgende generatie om hem alsnog te laten uitkomen." De poort keert terug tot een dunne streep licht. Je neemt geen tastbare herinnering mee dit keer — alleen het besef dat een vloek niet altijd hardop wordt uitgesproken. Soms wordt hij gewoon, generatie na generatie, doorgegeven.
+  > Wacht — de streep licht sluit deze keer niet  -> CH6_MUSEUM_00
+
+### CH6_MUSEUM_00  (r.8721)  — Een Andere Stem
+[FLAG=museum_mnemosyne_ontgrendeld]
+De streep licht sluit zich niet, zoals de vorige vijf keer. In plaats daarvan wordt hij breder — geen kier meer, maar een poort zo groot als een deur. "Zes hoofdstukken," zegt de Boodschapper, en voor het eerst klinkt er iets in die stem dat niet alleen instructie is. Iets dat op trots lijkt. "Zes steden, zes families, zes vloeken en gaven — allemaal door jou gezien, gedragen, soms zelfs verzacht. Het Orakel van Chronos heeft je nu goed genoeg leren kennen om je iets te laten zien wat niemand vóór jou te zien kreeg." "Kom," zegt de stem. "Het is tijd dat je het Museum van Mnemosyne binnentreedt."
+  > Stap door de brede poort  -> CH6_MUSEUM_01
+
+### CH6_MUSEUM_01  (r.8742)  — Het Museum van Mnemosyne
+Je stapt niet in een kamer, maar in een hal die zich naar alle kanten uitstrekt tot in het duister — zuilen van gepolijst steen, en tussen de zuilen rijen glazen stolpen op sokkels, zover het oog reikt. Sommige stolpen ken je al: de gouden roos, de bronzen splinter, het kooltje dat nooit dooft — elk voorwerp dat je onderweg hebt meegenomen, hier tentoongesteld precies zoals je het achterliet. Maar het zijn er maar een handvol, verspreid over een hal die duizenden sokkels telt. De rest staat leeg — sommige stolpen dof van stof, hier en daar een barst in het glas, een enkele sokkel al half ingestort — alsof ze al eeuwenlang wachten op iets dat nooit is gekomen. "Niet elk verhaal wordt verteld," zegt de Boodschapper, zacht genoeg dat het bijna in de stilte van de hal verdwijnt, "en niet elk verhaal dat verteld wordt, wordt goed afgesloten. Deze lege sokkels zijn geen fouten — het zijn wacht
+  > Loop verder de hal in  -> CH6_MUSEUM_EINDE
+
+### CH6_MUSEUM_EINDE  (r.8767)  — Wachtend op het Volgende Verhaal
+"Hoofdstuk 7 wacht al ergens verderop," zegt de Boodschapper — dezelfde woorden waarmee tot nu toe elke poort zich weer sloot. "Maar dit keer wacht je niet in het duister tot hij opengaat. Je wacht hier, in het Museum, tussen alles wat je al hebt meegebracht en alles wat nog leeg staat." De hal om je heen vervaagt niet. Hij blijft, geduldig, precies zoals hij is — tot het volgende verhaal je hier weer terugbrengt.
+  > De streep licht wordt weer breder  -> CH7_000

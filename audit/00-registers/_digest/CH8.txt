@@ -1,0 +1,228 @@
+### CH8_000  (r.9400)  — Tien Jaar Later
+De poort opent zich ditmaal midden in een oorlog die al tien jaar oud is. "We slaan de eerste negen jaar over," zegt de Boodschapper. "Negen jaar van plundertochten, van muren die overeind blijven staan, van helden die komen en gaan — je hebt daar al een glimp van gezien. Wat nu komt, is anders: dit is het jaar waarin alles breekt." "En dit keer," vervolgt ze, met iets in haar stem dat je niet eerder hebt gehoord, "ga jij zelf kiezen aan welke kant van dit verhaal je staat. Niet alles wat er gebeurt, zul je met eigen ogen zien — maar wat je wél ziet, zul je van dichterbij zien dan ooit."
+  > Stap door de poort  -> CH8_001
+
+### CH8_001  (r.9416)  — De Plaag van Apollo
+Chryses, priester van Apollo, komt naar het Griekse kamp om zijn gevangen dochter Chryseis vrij te kopen — met een koninklijk losgeld en een gebed om genade. Agamemnon wijst hem honend af en dreigt hem zelfs, ondanks de heilige staf en de lauwerkrans van de god die de priester bij zich draagt. Chryses keert zich naar de zee en bidt tot Apollo. Negen dagen lang regent het pijlen van pest op het Griekse kamp — eerst op de dieren, dan op de mensen — tot de brandstapels van de doden dag en nacht blijven branden.
+  > Zie hoe het leger de oorzaak ontdekt  -> CH8_002
+
+### CH8_002  (r.9435)  — Calchas Durft te Spreken
+Achilles roept een vergadering bijeen en dringt aan dat de ziener Calchas zegt wat hij weet — met de expliciete belofte dat niemand, hoe machtig ook, hem iets zal aandoen voor wat hij onthult. Calchas, nog altijd aarzelend, spreekt uiteindelijk de waarheid uit: Agamemnons weigering heeft Apollo's woede over het hele leger afgeroepen. Alle ogen wenden zich naar de opperbevelhebber.
+  > Zie hoe Agamemnon reageert  -> CH8_003
+
+### CH8_003  (r.9451)  — De Ruzie
+[PERSON=patroklos:intro | IMG=achilles_woede.png]
+Woedend, maar gedwongen, stemt Agamemnon toe Chryseis terug te geven — op één voorwaarde: hij eist Achilles' eigen oorlogsbuit, Briseis, als vervanging op. Voor Achilles, wiens eer al zijn hele leven het enige is dat hij werkelijk bezit, is dat de druppel. Zijn hand vliegt naar zijn zwaard. Op dat exacte moment grijpt een onzichtbare hand hem bij zijn haar — Athena zelf, zichtbaar voor niemand behalve hem. Hij bedwingt zijn woede, maar niet zijn tong: voor het verzamelde leger zweert hij dat hij geen vinger meer zal uitsteken voor een aanvoerder die hem zo weinig eert. Naast hem staat, zoals altijd, zijn oudste vriend Patroklos — zwijgend, maar met een blik die alles zegt.
+  > Zie hoe Achilles zijn woede verwerkt  -> CH8_004
+
+### CH8_004  (r.9476)  — Thetis' Belofte
+Alleen in zijn tent, tussen woede en tranen, roept Achilles zijn moeder aan. Thetis rijst op uit de zee en luistert naar zijn vernedering met een verdriet dat ouder is dan zijn eigen leven. Ze belooft hem genoegdoening: ze zal Jupiter zelf vragen om de Trojanen te laten winnen, net zo lang tot de Grieken beseffen wat ze zonder Achilles werkelijk zijn. Jupiter stemt toe — tegen de uitdrukkelijke zin van Juno, die de Griekse zaak steunt. Het is een gunst die de rest van dit hoofdstuk in beweging zal zetten.
+  > Kies je plek in wat komen gaat  -> CH8_005
+
+### CH8_005  (r.9495)  — Waar Sta Jij?
+"Twee kanten van dezelfde oorlog," zegt de Boodschapper, "tegelijk verteld — en jij ziet er maar één van met eigen ogen. Wat er aan de andere kant gebeurt, zul je moeten vertrouwen op wie het je vertelt." "Blijf je bij Achilles — in zijn tent, aan de zijde van de gekwetste grootste held van Griekenland? Of trek je met het leger mee, onder het bevel van de man die hem zojuist vernederde?"
+  > Blijf bij Achilles, in zijn tent  -> CH8_ACH_001
+  > Trek met het leger mee, aan Agamemnons zijde  -> CH8_AGA_001
+
+### CH8_ACH_001  (r.9512)  — In de Tent
+[FLAG=ch8_zijde=achilles | REL=menelaos=-1 | TITEL=ch8_zijde_achilles]
+Je blijft bij Achilles. Buiten de tentflap gaat het leven van het kamp gewoon door — wapens die geslepen worden, stemmen die bevelen roepen — maar binnen hangt een stilte die zwaarder is dan geschreeuw. Achilles zit met zijn rug naar de ingang, starend naar de zee waarover zijn moeder ooit verdween. Patroklos houdt zich dicht in de buurt, zonder iets te zeggen. Je weet, ook al zegt niemand het hardop: wat er nu ook gebeurt op het slagveld, jij zult het niet met eigen ogen zien.
+  > Wacht op nieuws van het front  -> CH8_ACH_002
+
+### CH8_ACH_002  (r.9537)  — Bericht van het Duel
+[PUZZLE=puzzle_ch8_ach_aoristus_sigma]
+Een boodschapper komt met nieuws: om jaren van bloedvergieten te vermijden, hebben beide legers ingestemd met een enkel duel — Menelaus tegen Paris, met Helena zelf als inzet. Menelaus had de overhand, zegt de man, tot Paris zomaar verdween in een mist, midden op het slagveld. Sommigen fluisteren dat Venus zelf haar hand erin had. Het duel is voorbij zonder een winnaar. De oorlog gaat door — en jij hebt er niets van gezien, enkel het verhaal ervan, twee keer oververteld voor het jouw tent bereikte.
+  > Wacht op nieuws van de rest van de dag  -> CH8_ACH_003
+
+### CH8_ACH_003  (r.9559)  — Het Bestand Breekt
+[PUZZLE=puzzle_ch8_ach_aoristus_thema]
+Meer nieuws bereikt de tent: terwijl beide legers nog naar het onbesliste duel staarden, schoot een Trojaanse boogschutter een pijl op Menelaus af — de wapenstilstand verbroken, expres of niet, niemand die het precies weet. De strijd is feller losgebarsten dan ooit. En er doet een naam de ronde die je nog niet eerder hoorde: Diomedes, die zich vandaag heeft opgeworpen tot de gevaarlijkste man op het slagveld — sommigen beweren zelfs dat hij een god heeft verwond. Je hoort het allemaal van een afstand, via stemmen die zelf ook maar half begrijpen wat ze navertellen.
+  > Luister naar wat de Boodschapper je ondertussen laat zien  -> CH8_ACH_004
+
+### CH8_ACH_004  (r.9581)  — Hector en Andromache
+[PERSON=hektor:intro, andromache:intro | IMG=hektor_andromache.png]
+"Zelfs hier, in deze tent, ver van de muren van Troje," zegt de Boodschapper zacht, "laat ik je zien wat zich daar afspeelt — anders zou je nooit weten wat de andere kant van deze oorlog werkelijk voelt." Midden in de strijd keert Hector, Troje's beste verdediger, kort terug voor offers, en treft zijn vrouw Andromache met hun zoontje Astyanax op de stadsmuur. Ze smeekt hem te blijven. Hij weet, en zegt het haar bijna teder, dat Troje ooit zal vallen — maar dat hij zichzelf nooit meer zou kunnen aanzien als hij nu wegbleef. Het jongetje schrikt van zijn vaders glimmende helm, tot Hector hem lachend afzet en optilt.
+  > Wacht verder in de tent  -> CH8_ACH_005
+
+### CH8_ACH_005  (r.9606)  — De Wal Wankelt
+Dag na dag verslechtert het nieuws. De Trojanen duwen de Grieken steeds verder terug, tot aan hun eigen versterkte wal rond de schepen. Namen van gesneuvelden bereiken de tent sneller dan iemand kan bijhouden. De oude Nestor, zegt men, dringt er bij Agamemnon op aan het conflict met Achilles eindelijk bij te leggen — voor het te laat is. Achilles luistert naar elk bericht met een gezicht dat niets verraadt. Patroklos, naast hem, verraadt juist steeds meer.
+  > Wacht verder in het kamp  -> CH8_ACH_006
+
+### CH8_ACH_006  (r.9622)  — Wachten in het Kamp
+De dagen in de tent rekken zich uit. Er is weinig te doen behalve wachten — en ieder vult die tijd op zijn eigen manier.
+  > Wacht in stilte met de rest van de Myrmidonen  -> CH8_ACH_007
+  > Help Patroklos de gewonden uit eerdere schermutselingen verzorgen [STAT:prudentia:15] -> CH8_ACH_006_PRU
+  > Houd je wapens en je lichaam scherp met oefeningen [STAT:vis:15] -> CH8_ACH_006_VIS
+
+### CH8_ACH_006_PRU  (r.9638)  — De Gewonden
+Je helpt Patroklos bij het verzorgen van de gewonden die al binnen zijn — een taak die hem, merk je, meer oplucht dan wapenoefeningen dat ooit zouden doen. Voor het eerst sinds de ruzie glimlacht hij even, al is het maar kort.
+  > Zie wie er aankomt bij de tent  -> CH8_ACH_007
+
+### CH8_ACH_006_VIS  (r.9652)  — Scherp Blijven
+Je houdt je lichaam en je wapens scherp met oefeningen — iets om je handen bezig te houden terwijl de rest van je wacht op nieuws. De Myrmidonen om je heen doen hetzelfde, in een stilte die meer zegt dan woorden zouden kunnen.
+  > Zie wie er aankomt bij de tent  -> CH8_ACH_007
+
+### CH8_ACH_007  (r.9666)  — Het Gezantschap
+[PERSON=phoenix:intro, aias:intro]
+Drie mannen naderen de tent, in de schemering: Odysseus, welbespraakt als altijd; de oude Phoenix, Achilles' eigen leermeester van kinds af aan; en de reusachtige, botte Ajax, zoon van Telamon — dezelfde Telamon die de speler al kent van de tocht van de Argo. Ondanks alles ontvangt Achilles hen met wijn en gastvrijheid, zoals het hoort — voor hij naar hun boodschap luistert.
+  > Luister naar wat ze te zeggen hebben  -> CH8_ACH_008
+
+### CH8_ACH_008  (r.9683)  — De Weigering
+[REL=achilles=+1; aias=+1; phoenix=+1 | PUZZLE=puzzle_ch8_ach_3decl]
+Odysseus somt welbespraakt Agamemnons rijke geschenken op. Phoenix probeert het persoonlijker, herinnert Achilles aan de jongen die hij zelf grootbracht. Maar het is Ajax, zonder mooie woorden, die het dichtst bij een antwoord komt: "Wij zijn hier als je vrienden, Achilles. Niet als Agamemnons boodschappers." Voor het eerst zie je iets breken in Achilles' blik. Toch weigert hij, alle drie. Zijn eer is hem meer waard dan geschenken — maar aan Ajax alleen geeft hij, zonder het compromis zelf toe te geven, een antwoord dat bijna een verontschuldiging is.
+  > Zie hoe het gezantschap onverrichter zake vertrekt  -> CH8_ACH_009
+
+### CH8_ACH_009  (r.9708)  — Een Trots Weerlegd
+Het gezantschap vertrekt, met lege handen en een boodschap die niemand graag aan Agamemnon zal overbrengen. Achilles blijft achter, onaangetast in zijn woord — en misschien, heel diep vanbinnen, ook een beetje eenzamer dan daarvoor.
+  > Vind Achilles' trots onvergeeflijk, met zoveel levens op het spel [SEVERITAS] -> CH8_ACH_010
+  > Erken dat eer voor een held als Achilles net zo reëel is als een wond [CLEMENTIA] -> CH8_ACH_010
+  > Onthoud je van een oordeel — je hebt Agamemnons kant nog niet gezien [NEUTRAL] -> CH8_ACH_010
+
+### CH8_ACH_010  (r.9724)  — De Schepen Branden Bijna
+Nieuw nieuws, dringender dan alle voorgaande: de Trojanen hebben de wal doorbroken en staan met fakkels bij de Griekse schepen. Als die schepen verbranden, kan geen enkele Griek ooit nog naar huis terugkeren. Patroklos, die het langer dan wie dan ook heeft uitgehouden, kan het niet langer aanzien. Hij komt naar Achilles toe met een verzoek dat je meteen voelt aankomen.
+  > Zie wat Patroklos vraagt  -> CH8_ACH_011
+
+### CH8_ACH_011  (r.9740)  — Patroklos' Verzoek
+[PUZZLE=puzzle_ch8_ach_pronomen | IMG=patroklos_wapenrusting.png]
+"Laat mij je wapenrusting dragen," smeekt Patroklos. "Alleen om de Trojanen af te schrikken — ze zullen denken dat jij weer meevecht, en zullen vluchten voor ze het beter weten. Ik zal alleen de schepen redden, niets meer." Achilles worstelt zichtbaar, maar stemt uiteindelijk toe — met één uitdrukkelijke waarschuwing: verdrijf de Trojanen van de schepen, en keer meteen terug. Val Troje zelf niet aan. Terwijl Patroklos zich in Achilles' eigen wapenrusting hijst, denkt Achilles heel even terug aan zijn eigen jeugd bij de wijze centaur Chiron — dezelfde leermeester die hem ooit dit alles voorbereidde, zonder ooit te kunnen voorbereiden op dit moment.
+  > Zie Patroklos vertrekken  -> CH8_ACH_012
+
+### CH8_ACH_012  (r.9765)  — Het Vertrek
+Patroklos rijdt uit met de Myrmidonen, in wapenrusting die niet de zijne is, en de Trojanen deinzen meteen terug — precies zoals gehoopt. Jij blijft achter in de tent, met Achilles, wachtend. Iets in jou weet — al zegt niemand het hardop, al weet Achilles zelf het nog niet — dat een belofte die zo makkelijk wordt afgelegd, in de hitte van de strijd zelden standhoudt. De stilte in de tent is nu anders dan alle stilte ervoor.
+  > Wacht op wat komen gaat  -> CH8_EPI_001
+
+### CH8_AGA_001  (r.9781)  — Met het Leger
+[FLAG=ch8_zijde=agamemnon | REL=menelaos=+1; diomedes=+1 | TITEL=ch8_zijde_agamemnon]
+Je trekt met het leger mee. Het kamp gonst van gespannen energie: beide zijden hebben ingestemd met iets ongehoords — één enkel duel om de hele oorlog te beslechten, Menelaus tegen Paris, met Helena zelf als inzet. Duizenden mannen aan weerszijden leggen hun wapens neer om toe te kijken. Ergens ver achter je, weet je, zit Achilles nog altijd in zijn tent. Maar hier, tussen de rijen soldaten, is er geen tijd om daarbij stil te staan.
+  > Zie het duel zelf  -> CH8_AGA_002
+
+### CH8_AGA_002  (r.9806)  — Het Duel van Menelaus en Paris
+[PUZZLE=puzzle_ch8_aga_aoristus_sigma]
+Je ziet het met eigen ogen: Menelaus, woedend en vastberaden, krijgt al snel de overhand — Paris' helm vliegt af, zijn zwaard breekt, hij wordt aan zijn eigen helmriem over het slagveld gesleept. Het duel lijkt beslist. Dan, plotseling, een mist die uit het niets opsteekt. Wanneer die optrekt, is Paris verdwenen — niemand ziet hoe, al fluisteren sommigen de naam van Venus. Het duel eindigt in verwarring, zonder winnaar. De oorlog gaat door.
+  > Zie wat er van de wapenstilstand wordt  -> CH8_AGA_003
+
+### CH8_AGA_003  (r.9828)  — Pandaros' Pijl
+Terwijl beide legers nog naar het onbesliste duel staren, zie je een Trojaanse boogschutter — Pandarus, hoor je later — zijn boog spannen en op Menelaus richten. Wat hem ertoe aanzet, weet niemand met zekerheid; sommigen beweren dat je heel even een vreemde gedaante naast hem zag staan, die er even later niet meer was. De pijl vliegt. De wond is niet dodelijk — maar het kwaad is geschied. Binnen ogenblikken laait de strijd feller op dan ooit.
+  > Zie wie zich vandaag onderscheidt in de chaos  -> CH8_AGA_004
+
+### CH8_AGA_004  (r.9847)  — Diomedes' Huzarenstuk
+[PUZZLE=puzzle_ch8_aga_aoristus_thema | IMG=diomedes_tegen_mars.png]
+Midden in het gevecht zie je een jonge Griekse held, Diomedes, die vandaag lijkt te vechten met een kracht die niet helemaal van hemzelf is. Hij doorboort Trojaanse linies alsof ze van stro zijn — en wanneer Venus zelf haar eigen zoon Aeneas van het slagveld probeert te redden, verwondt Diomedes zelfs háár, zonder aarzeling. Wat je daarna ziet, geloof je bijna niet: Diomedes die het opneemt tegen Mars zelf, de oorlogsgod, en hem met zijn speer treft. Mars' gil van pijn is tot ver buiten het slagveld te horen.
+  > Luister naar wat de Boodschapper je ondertussen laat zien  -> CH8_AGA_005
+
+### CH8_AGA_005  (r.9872)  — Hector en Andromache
+[PERSON=hektor:intro, andromache:intro | IMG=hektor_andromache.png]
+"Zelfs hier, midden op het slagveld," zegt de Boodschapper zacht, "laat ik je zien wat zich ondertussen binnen de muren van Troje afspeelt." Hector, Troje's beste verdediger, keert kort terug voor offers, en treft zijn vrouw Andromache met hun zoontje Astyanax op de stadsmuur. Ze smeekt hem te blijven. Hij weet, en zegt het haar bijna teder, dat Troje ooit zal vallen — maar dat hij zichzelf nooit meer zou kunnen aanzien als hij nu wegbleef. Het jongetje schrikt van zijn vaders glimmende helm, tot Hector hem lachend afzet en optilt.
+  > Terug naar het slagveld  -> CH8_AGA_006
+
+### CH8_AGA_006  (r.9897)  — Bij de Wal
+De Trojanen duwen onverbiddelijk op, dag na dag, tot vlak bij de Griekse verschansing rond de schepen. Iedereen die kan vechten, wordt ingezet.
+  > Kijk toe hoe de linies zich hergroeperen  -> CH8_AGA_007
+  > Help mee de wal met eigen handen te verstevigen [STAT:vis:15] -> CH8_AGA_006_VIS
+  > Breng als snelste boodschapper berichten tussen de linies over [STAT:agilitas:14] -> CH8_AGA_006_AGI
+
+### CH8_AGA_006_VIS  (r.9913)  — De Wal Verstevigen
+Je zet je schouder tegen de palissade, samen met soldaten die al dagen niet goed hebben geslapen. Het is uitputtend, ondankbaar werk — maar elke balk die overeind blijft, is een balk die de Trojanen morgen weer moeten doorbreken.
+  > Kijk hoe de linies zich hergroeperen  -> CH8_AGA_007
+
+### CH8_AGA_006_AGI  (r.9927)  — Berichten Overbrengen
+Je rent van linie naar linie, berichten en bevelen overbrengend sneller dan wie dan ook — een taak die geen roem oplevert, maar zonder welke geen enkel leger ooit georganiseerd zou blijven.
+  > Kijk hoe de linies zich hergroeperen  -> CH8_AGA_007
+
+### CH8_AGA_007  (r.9941)  — Het Gezantschap
+[PERSON=phoenix:intro, aias:intro]
+Agamemnon, eindelijk overtuigd door Nestor, stelt een gezantschap samen: Odysseus, de oude Phoenix — Achilles' eigen leermeester — en de reusachtige Ajax, zoon van Telamon, dezelfde Telamon die de speler al kent van de tocht van de Argo. Jij loopt met hen mee, in een stilte die zwaarder weegt dan het hele kamp achter jullie. Niemand zegt hardop wat iedereen denkt: als dit mislukt, is er geen andere hoop meer over.
+  > Wacht terwijl het gezantschap zijn zaak bepleit  -> CH8_AGA_008
+
+### CH8_AGA_008  (r.9960)  — Het Wachten
+[REL=agamemnon=+1; aias=-1; odysseus=+1 | PUZZLE=puzzle_ch8_aga_3decl]
+Je wacht buiten Achilles' tent, terwijl Odysseus, Phoenix en Ajax hun zaak bepleiten. De tijd rekt zich eindeloos. Uiteindelijk komen ze naar buiten — met lege handen en gezichten die alles al verraden voor er een woord wordt gezegd. Achilles blijft bij zijn woord. Ajax, langslopend, mompelt iets bitters over trots die levens kost — en zijn blik rust, heel even, op de manschappen die met hem zijn meegekomen. Op jou. Zijn gezicht laat weinig los, maar zijn stilte spreekt boekdelen.
+  > Keer terug naar de linies  -> CH8_AGA_009
+
+### CH8_AGA_009  (r.9985)  — Twee Soorten Koppigheid
+Het gezantschap keert onverrichter zake terug naar het kamp. Ergens tussen Agamemnons trots en Achilles' trots ligt een leger dat de prijs betaalt voor allebei.
+  > Vind Agamemnons koppigheid de grotere zonde — hij begon de ruzie [SEVERITAS] -> CH8_AGA_010
+  > Erken dat Achilles het net zo makkelijk had kunnen laten gaan, voor het leger [CLEMENTIA] -> CH8_AGA_010
+  > Onthoud je van een oordeel — je hebt Achilles' kant nog niet gezien [NEUTRAL] -> CH8_AGA_010
+
+### CH8_AGA_010  (r.10001)  — De Schepen in Gevaar
+[COMBAT=trojaanse_voorhoede]
+Het ergste komt uit: Hector doorbreekt de wal, en Trojaanse strijders bereiken de Griekse schepen zelf, fakkels in de hand. Als de schepen verbranden, kan geen enkele Griek ooit nog naar huis terugkeren. Jij grijpt mee naar een wapen, samen met iedereen die nog kan staan.
+  > Zie hoe de strijd om de schepen afloopt  -> CH8_AGA_011
+
+### CH8_AGA_011  (r.10018)  — Achilles is Terug?
+[PUZZLE=puzzle_ch8_aga_pronomen]
+Vlak voor de eerste vlammen de schepen bereiken, klinkt er ineens een geroep van opluchting door de Griekse linies: "Achilles! Achilles is terug!" Een gestalte in zijn onmiskenbare wapenrusting stormt de Trojanen tegemoet en drijft ze in paniek terug van de schepen. Om je heen mompelen soldaten opgelucht dat ze hem eindelijk weer aan hun zijde hebben.
+  > Volg de strijd verder, tot aan de muren van Troje  -> CH8_AGA_012
+
+### CH8_AGA_012  (r.10037)  — De Onthulling
+[TITEL=ch8_dood_patroklos]
+Meegesleept door zijn eigen succes jaagt "Achilles" door tot aan de muren van Troje zelf — verder dan de opdracht ooit was. Daar ontneemt Apollo hem, ongezien, zijn goddelijke bescherming; de Trojaan Euphorbus verwondt hem in de rug; en Hector zelf levert de genadeklap. Pas wanneer Hector zich vooroverbuigt om de beroemde wapenrusting te claimen, zie je — samen met hem — wiens gezicht er werkelijk onder de helm vandaan komt. Niet Achilles. Patroklos.
+  > Zie hoe het nieuws Achilles bereikt  -> CH8_EPI_001
+
+### CH8_EPI_001  (r.10059)  — Het Nieuws
+[PERSON=antilochos:intro]
+Antilochos, Nestors jonge zoon, komt aanrennen naar het kamp, zijn gezicht asgrauw. Hij kan de woorden bijna niet over zijn lippen krijgen, maar uiteindelijk zegt hij het toch: Patroklos is dood, gevallen door Hectors hand, in Achilles' eigen wapenrusting. Wat er daarna over Achilles' gezicht trekt, is niets wat een van jullie ooit eerder heeft gezien.
+  > Zie hoe Achilles reageert  -> CH8_EPI_002
+
+### CH8_EPI_002  (r.10078)  — De Rouwkreet
+[IMG=achilles_rouwkreet.png]
+Achilles laat een kreet los die niemand ooit zal vergeten — geen woorden, enkel verdriet, zo verscheurend dat hij tot ver over het slagveld te horen is. Zijn moeder hoort hem vanuit de diepten van de zee. De Trojaanse linies, die de kreet ook horen, deinzen instinctief terug, zonder precies te begrijpen waarom. Achilles smeert as door zijn haar en scheurt zijn kleren — niet uit gewoonte, maar omdat er niets anders is dat het verdriet ook maar enigszins kan bevatten.
+  > Zie wie er uit zee opstijgt  -> CH8_EPI_003
+
+### CH8_EPI_003  (r.10097)  — Thetis uit de Zee
+Thetis rijst op uit de golven, omringd door haar zusters, en treurt samen met haar zoon. Ze weet iets dat hij nog niet weet: als hij nu Hector doodt om Patroklos te wreken, zal hijzelf niet lang daarna sterven. Ze zegt het hem toch — eerlijk, zoals altijd — en belooft hem in plaats van tegenhouden alleen dit: een nieuwe wapenrusting, gesmeed door de beste handen die er bestaan. Ze verdwijnt richting de Olympos, naar Vulcanus.
+  > Zie wat Vulcanus smeedt  -> CH8_EPI_004
+
+### CH8_EPI_004  (r.10113)  — Het Schild van Achilles
+[PUZZLE=puzzle_ch8_epi_imperfectum | PERSON=hephaistos:full | SOUVENIR=souvenir_schild_achilles]
+Vulcanus, dezelfde god die Thetis ooit als kind opving toen zijn eigen moeder hem van de Olympos gooide, vergeet die schuld niet. Hij smeedt in één nacht een nieuwe wapenrusting — en op het schild zelf beeldt hij niet de oorlog af, maar de hele wereld: steden in vrede en in oorlog, een bruiloft met fakkellicht en dans, een rechtszaak op het marktplein, ploegende ossen, een oogstfeest, jonge mensen die dansen onder een avondhemel. Terwijl je ernaar kijkt, denk je onwillekeurig terug aan Chiron, de wijze centaur die Achilles ooit als kind onderwees — dezelfde training die hem tot de sterkste van Griekenland maakte, lang voor hij ooit had kunnen bevroeden waar dat toe zou leiden.
+  > Zie hoe Achilles zijn nieuwe wapenrusting ontvangt  -> CH8_EPI_005
+
+### CH8_EPI_005  (r.10141)  — De Verzoening
+[PERSON=agamemnon:full, achilles:full | PAYOFF=ch8_epi005_echo_zijde_agamemnon,ch8_epi005_echo_zijde_achilles]
+Voor het eerst sinds de ruzie staat Achilles weer voor het verzamelde leger — niet om zijn recht op te eisen, maar om de wrok eindelijk los te laten. Agamemnon erkent, ruiterlijk en in het openbaar, dat hij verkeerd handelde, en geeft Briseis met rijke geschenken terug. Achilles kijkt er nauwelijks nog naar om. Er is nog maar één ding dat hem interesseert.
+  > Zie Achilles terugkeren naar de strijd  -> CH8_EPI_006
+
+### CH8_EPI_006  (r.10161)  — Terug in de Slag
+[PUZZLE=puzzle_ch8_epi_matching]
+In zijn nieuwe, angstaanjagende wapenrusting keert Achilles terug naar het slagveld, en de Trojanen breken in paniek voor hem uiteen. Zelfs de rivier Scamander, zegt men, raakt vervuld van woede over het aantal doden dat Achilles in zijn wateren gooit, en probeert hem bijna te verzwelgen — tot Vulcanus zelf de oevers in vuur zet om hem te redden. Niets en niemand houdt hem nog tegen. Er is maar één man die hij zoekt.
+  > Zie het laatste gevecht  -> CH8_EPI_007
+
+### CH8_EPI_007  (r.10180)  — Het Duel met Hector
+[COMBAT=hektor | IMG=achilles_achtervolgt_hektor.png]
+Priamus en Hecuba roepen wanhopig vanaf de muren dat Hector naar binnen moet komen — maar hij blijft alleen buiten staan, wetend dat de hele stad op hem rekent. Wanneer Achilles nadert, verliest Hector toch de moed en vlucht, drie keer rond de muren van Troje achtervolgd. Pas wanneer Athena, vermomd als zijn eigen broer Deiphobus, hem overtuigt zich om te draaien, blijft hij eindelijk staan.
+  > Zie hoe het duel eindigt  -> CH8_EPI_008
+
+### CH8_EPI_008  (r.10200)  — De Dood van Hector
+[TITEL=ch8_dood_hektor]
+Hector vecht met alle waardigheid die hem rest, maar tegen Achilles' woede en Vulcanus' wapenrusting heeft hij geen kans. Stervend smeekt hij Achilles om zijn lichaam aan zijn familie terug te geven, voor een behoorlijke begrafenis. Achilles, nog altijd niet gekalmeerd, weigert — en bindt Hectors lichaam achter zijn eigen strijdwagen.
+  > Zie wat er met het lichaam gebeurt  -> CH8_EPI_009
+
+### CH8_EPI_009  (r.10220)  — Rond de Muren
+Achilles sleept Hectors lichaam driemaal rond de muren van Troje, in het volle zicht van Priamus, Hecuba en Andromache, die van de muren toekijken. Priamus moet fysiek worden tegengehouden om niet naar buiten te rennen. Wat er die dag op de muren van Troje wordt gehoord, is een verdriet waar geen woorden echt bij passen. Dag na dag herhaalt Achilles het — tot zelfs de goden op de Olympos zich beginnen af te vragen of dit niet te ver is gegaan.
+  > Zie wat Priamus daarna besluit  -> CH8_EPI_010
+
+### CH8_EPI_010  (r.10236)  — De Nachtelijke Tocht
+Oude koning Priamus, tegen elk advies in, waagt zich alleen en ongewapend het Griekse kamp in — met Mercurius, vermomd als gids, die hem ongezien langs elke wachtpost leidt. Hij bereikt, tegen alle logica in, Achilles' eigen tent, midden in de nacht.
+  > Zie wat er in de tent gebeurt  -> CH8_EPI_011
+
+### CH8_EPI_011  (r.10250)  — Priamus' Smeekbede
+[PERSON=priamus:full | TITEL=ch8_priamus_smeekbede | IMG=priamus_smeekbede.png]
+Priamus kust de handen die zoveel van zijn zonen doodden, en smeekt Achilles zich zijn eigen vader te herinneren — een oude man, ergens ver weg, die ook ooit zijn zoon zal moeten missen. Iets in Achilles breekt. Voor het eerst sinds Patroklos' dood huilt hij weer — niet van woede, maar van een verdriet dat hij ineens met zijn eigen vijand deelt. Hij geeft Hectors lichaam ongeschonden terug, en de twee mannen — koning en moordenaar van zijn zoon — delen voor die ene nacht zelfs een maaltijd.
+  > Vind dit een van de weinige echt menselijke momenten in een verder meedogenloze oorlog [CLEMENTIA] -> CH8_EPI_012
+  > Merk op dat één nacht van medelijden niets verandert aan wat er nog allemaal komen gaat [SEVERITAS] -> CH8_EPI_012
+  > Laat het op je inwerken zonder meteen een kant te kiezen [NEUTRAL] -> CH8_EPI_012
+
+### CH8_EPI_012  (r.10280)  — De Begrafenis van Hector
+[TITEL=ch8_wrok_verzoend]
+Negen dagen rouwt Troje, met een korte wapenstilstand die Achilles zelf heeft toegestaan. Andromache, Hecuba en zelfs Helena spreken ieder hun eigen klaagzang uit boven Hectors lichaam, voor het op de brandstapel wordt gelegd. "Zo eindigt de Ilias zelf, weet je," zegt de Boodschapper zacht, "niet met de val van Troje — die komt nog — maar hier, met de begrafenis van haar dapperste verdediger. Homerus zelf koos dit als zijn laatste bladzijde. Het gewicht van wat oorlog werkelijk kost, woog voor hem zwaarder dan nog een overwinning."
+  > Keer terug naar het Museum  -> CH8_EINDE
+
+### CH8_EINDE  (r.10308)  — Het Einde van Hoofdstuk 8
+"Je hebt maar de helft van dit verhaal met eigen ogen gezien," zegt de Boodschapper, "en toch heb je het hele verhaal meegemaakt — via nieuws, via mensen die het je vertelden, via mij. Dat is misschien wel de oudste waarheid van oorlog: niemand ziet hem ooit helemaal. Iedereen draagt zijn eigen stuk ervan." De poort keert terug tot een dunne streep licht.
+  > Keer terug naar het Museum  -> CH8_MUSEUM_00
+
+### CH8_MUSEUM_00  (r.10324)  — Terug in het Museum
+De hal ontvangt je opnieuw. Naast de gouden appel staat nu een tweede stolp, niet langer leeg: een klein, verbrande schilfer brons, met daarop nog net een fragment van een dansende figuur te herkennen. "Dit hoofdstuk was anders dan alle vorige," zegt de Boodschapper, "en dat was expres. Je hebt zelf gekozen aan welke kant je stond — en de mensen die je onderweg tegenkwam, onthouden dat. Sommigen zullen je erom vertrouwen. Anderen zullen zich er iets anders bij voorstellen dan jij misschien bedoelde. Dat is nog niet voorbij." Ze kijkt naar de nog altijd overweldigende rijen lege sokkels om jullie heen. "Rust hier zo lang als je nodig hebt. Troje is nog niet gevallen."
+  > De streep licht wordt weer breder  -> CH9_000

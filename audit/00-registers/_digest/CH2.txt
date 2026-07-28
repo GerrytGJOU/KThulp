@@ -1,0 +1,325 @@
+### CH2_000  (r.3484)  — Wanneer Goden Beminnen
+[PAYOFF=ch2_000_echo_ch1_lijn_a,ch2_000_echo_ch1_lijn_b,ch2_000_echo_ch1_lijn_c]
+De boodschapper wijst opnieuw naar een nieuwe scheur in de werkelijkheid. "Hera," zegt ze, "kent vele gezichten. Vier stervelingen, vier verhalen, één godin die zich telkens anders toont — als achtervolger, als vervloeker, als manipulator, als onverzoenlijke vijand. Volg ze alle vier, en je zult begrijpen waarom heldendom nooit gaat over geluk hebben." Ergens op de achtergrond, zoals wel vaker wanneer sterfelijke zaken zich ontvouwen, zie je Athena zwijgend toekijken — armen over elkaar, haar gezicht onleesbaar. Ze grijpt niet in. Nog niet.
+  > Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is [DONE:ch2_lijn_latona] -> CH2_L01
+  > Volg het lot van Semele, een prinses van Thebe die niet weet wie haar minnaar werkelijk is [DONE:ch2_lijn_semele] -> CH2_S01
+  > Volg Kallisto, een jachtgezellin van Artemis die niemand kan vertrouwen wat ze ziet [DONE:ch2_lijn_kallisto] -> CH2_K01
+  > Volg Herakles, Zeus' sterfelijke zoon die Hera al haat sinds voor zijn geboorte [DONE:ch2_lijn_herakles] -> CH2_H01
+  > Spreek het Orakel aan, nu alle vier de verhalen zijn gehoord [REQ:fragments=4] -> CH2_ATHENA
+
+### CH2_L01  (r.3507)  — Latona, Titanide en Minnares van Jupiter
+[PERSON=latona:intro, hera:intro]
+Latona, een titanide net als haar zuster Asteria, was voor Juno nooit meer dan een naam om te wantrouwen — tot Jupiter zijn blik op haar liet vallen, en zij zwanger raakte van zijn kind. Voor Juno, koningin van de goden en bewaakster van elk huwelijksbelofte die haar man breekt, was dat een belediging die niet onbestraft kon blijven. Ze sprak een vloek uit die eenvoudig was in haar wreedheid: geen enkel stuk vaste grond, nergens ter wereld, mocht Latona ooit een plek geven om te bevallen. Latona, hoogzwanger en doodsbang, moet nu een toevlucht vinden op een aarde die haar overal weigert.
+  > Volg Latona op haar zoektocht  -> CH2_L02
+
+### CH2_L02  (r.3526)  — Overal Geweigerd
+Latona trekt van stad naar stad, van kust naar kust, en overal is het antwoord hetzelfde: geen enkele koning, geen enkel dorp durft het aan om Juno's woede over zich af te roepen. Deuren sluiten voor ze de kans krijgt uit te leggen wie ze is; velden die er verlaten uitzagen, blijken plots "al bezet" zodra ze te dichtbij komt. Op een avond, uitgeput en wanhopig, bereikt ze een klein dorp aan de rand van een moeras. De inwoners zien haar zwangere buik en wenden zich meteen af — allemaal, op één oude herder na, die haar met een snelle blik naar een schuilplaats in het riet wijst voor hij zelf haastig wegloopt.
+  > Trek weifelend verder — je weet niet goed wat je van de herder moet denken [NEUTRAL] -> CH2_L03
+  > Schuil dankbaar in het riet, ontroerd door zijn stille moed [CLEMENTIA] -> CH2_L02B
+  > Trek meteen verder — je vertrouwt niemand meer die zo snel weer verdwijnt [SEVERITAS] -> CH2_L03
+
+### CH2_L02B  (r.3544)  — Een Stil Gebaar
+Je blijft een nacht in het riet, beschut tegen de kou, en beseft dat zelfs in een wereld die doodsbang is voor Juno, er mensen zijn die het risico nemen om toch iets van vriendelijkheid te tonen — al is het maar door een blik, een gebaar, nooit een woord hardop. Bij zonsopgang is de herder allang verdwenen, maar Latona trekt versterkt verder.
+  > Ga met haar mee, verder op zoek naar een echte schuilplaats  -> CH2_L03
+
+### CH2_L03  (r.3558)  — Eindeloos Dwalen
+[PUZZLE=puzzle_ch2l_praesens]
+Latona doolt weken lang rond, van het ene geweigerde land naar het andere, haar voeten open en haar hoop klein. Elke stad die ze nadert, elke rivier die ze oversteekt, brengt haar geen stap dichter bij rust — enkel verder van de plek waar ze ooit vandaan kwam.
+  > Blijf haar volgen, ondanks alles  -> CH2_L04
+
+### CH2_L04  (r.3575)  — De Python van Juno
+Juno, ongeduldig geworden met de traagheid van haar eigen vloek, stuurt iets rechtstreekser: Python, een monsterlijke slang geboren uit de modder die achterbleef na de grote vloed, met de opdracht Latona op te sporen en te vernietigen voor haar kind ooit geboren kan worden. Het beest kronkelt met een snelheid die niet bij zijn omvang past; de aarde zelf lijkt te sidderen onder zijn gewicht. Een groepje reizigers dat haar pad kruist, ziet het monster het eerst naderen.
+  > Wacht af wat ze doen  -> CH2_L05
+
+### CH2_L05  (r.3591)  — "Fuge!"
+[PUZZLE=puzzle_ch2l_imperativus]
+Een van de reizigers, doodsbleek, grijpt Latona bij haar arm en schreeuwt het enige woord dat er nog toe doet.
+  > Ren met haar mee  -> CH2_L06
+
+### CH2_L06  (r.3608)  — Niemand Die Helpen Kan
+[PUZZLE=puzzle_ch2l_posse]
+Latona rent zo hard haar zwangere lichaam het toelaat, de python akelig dichtbij, en overal om haar heen wijken mensen simpelweg opzij — niemand die het aandurft zich tussen haar en Juno's wraak te plaatsen.
+  > Blijf naast haar  -> CH2_L06B
+
+### CH2_L06B  (r.3625)  — De Python op de Hielen
+De python wint langzaam terrein; Latona's gewicht en uitputting maken elke stap zwaarder dan de vorige. Ergens voor jullie, nog niet zichtbaar, moet een laatste toevlucht liggen — de vraag is alleen of je haar daar op tijd krijgt.
+  > Ren blindelings verder naast haar, op adrenaline alleen  -> CH2_L06_OPEN
+  > Leid haar zigzaggend tussen de rotsen door, te snel en te lenig voor het logge beest [STAT:agilitas:11] -> CH2_L06_AGI
+  > Bijt door je eigen pijn heen en houd het tempo naast haar vol tot de kustlijn [STAT:robur:13] -> CH2_L06_ROB
+
+### CH2_L06_OPEN  (r.3641)  — Op Adrenaline Alleen
+[FLAG=ch2_l06_route=open]
+Je rent naast haar zonder na te denken, elke gedachte gericht op niets anders dan de volgende stap. Ergens tussen de rotsen, hijgend en uitgeput, komt de kust eindelijk in zicht.
+  > Kijk uit naar een laatste toevlucht  -> CH2_L07
+
+### CH2_L06_AGI  (r.3658)  — Zigzaggend Tussen de Rotsen
+[FLAG=ch2_l06_route=agilitas]
+Je leidt Latona niet in een rechte lijn maar in korte, scherpe bochten tussen de rotsblokken door — precies het soort terrein waar een logge python zijn snelheid verliest. De afstand tussen jullie en het beest groeit met elke wending.
+  > Kijk uit naar een laatste toevlucht  -> CH2_L07
+
+### CH2_L06_ROB  (r.3675)  — Door de Pijn Heen
+[FLAG=ch2_l06_route=robur]
+Je longen branden, je benen schreeuwen om te stoppen, maar je houdt het tempo naast haar vol, mijl na mijl, tot de kustlijn eindelijk opdoemt aan de horizon.
+  > Kijk uit naar een laatste toevlucht  -> CH2_L07
+
+### CH2_L07  (r.3692)  — Delos, het Drijvende Eiland
+[PERSON=athena:intro]
+Ver op zee, drijvend en zonder wortels, ligt een eiland dat aan geen enkel koninkrijk trouw is verschuldigd: Delos, ooit zelf een verstoten nimf die door Neptunus aan de golven werd toevertrouwd. Omdat het nergens "vast" aan de aarde verankerd ligt, valt het strikt genomen buiten Juno's vloek — geen vaste grond mag Latona ontvangen, en Delos is, letterlijk, geen vaste grond. Latona smeekt het eiland om toevlucht, haar stem schor van uitputting en angst. Vanaf een verre rots, onzichtbaar voor iedereen behalve jou, kijkt Athena toe — haar gezicht gespannen, haar handen tot vuisten gebald, en toch grijpt ze niet in. Wat er ook gebeurt, dit is niet haar verhaal om te veranderen.
+  > Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is [SEVERITAS] -> CH2_L08
+  > Smeek het eiland gewoon om hulp, zonder overtuigingskracht te zoeken [NEUTRAL] -> CH2_L08
+  > Beloof het eiland eeuwige verering als het haar redt [CLEMENTIA] -> CH2_L08
+  > Spreek Delos aan als gelijke, niet als smekeling — twee verstotenen die elkaar herkennen [STAT:gratia:13] -> CH2_L07B
+
+### CH2_L07B  (r.3714)  — Twee Verstotenen
+[FLAG=ch2_l07_route=gratia | REL=athena=+1]
+Je richt je niet tot het eiland als een vreemde die om genade smeekt, maar als iemand die zijn eigen verhaal kent: ooit was Delos zelf niets — een verstoten nimf, aan de golven overgelaten, nergens welkom. "Jij weet wat het is om nergens bij te horen," zeg je. "Zij ook." Delos reageert niet aarzelend, zoals bij een smeekbede gebruikelijk is, maar onmiddellijk — alsof het al die tijd op precies deze woorden had gewacht. Vanaf de verre rots zie je Athena's gespannen gezicht, heel even, iets minder gesloten dan daarvoor.
+  > Kijk toe hoe Delos zich verankert  -> CH2_L08
+
+### CH2_L08  (r.3736)  — De Geboorte van Apollo en Diana
+[FLAG=ch2_lijn_latona=true | PERSON=latona:full, apollo:intro, diana:intro | TITEL=ch2_latona | IMG=geboorte_apollo_diana.png]
+Delos, ontroerd — of overtuigd, het maakt weinig uit — staat stil in de golven en biedt voor het eerst in zijn bestaan een vaste plek onder Latona's voeten. Daar, tussen de rotsen van een eiland dat zelf ooit nergens bij hoorde, brengt ze twee kinderen ter wereld: eerst een dochter, Diana, die haar moeder onmiddellijk bijstaat bij de geboorte van haar broer; dan een zoon, Apollo, stralend als het licht dat zijn naam voortaan zal dragen. Delos, dat eeuwenlang rondzwierf zonder doel, verankert zichzelf vanaf die dag voorgoed in de golven — de eerste vaste plek op aarde die vrijwillig een risico nam voor iemand die niemand anders durfde te helpen. Terwijl Diana en Apollo hun eerste ademteugen nemen, voel je — zonder het te kunnen verklaren — dat elders, in Thebe, een ander verhaal zich op datzelfde moment ontvouwt: een ander slachtoffer van dezelfde jaloezie, een ander kind dat nog geboren 
+  > Kijk wat er nog met Latona gebeurt, nu haar tweeling geboren is  -> CH2_L08B
+
+### CH2_L08B  (r.3775)  — De Vijver van de Boeren
+[SOUVENIR=souvenir_latona]
+Nog uitgeput van de bevalling trekt Latona met haar pasgeboren tweeling verder, op zoek naar water om haar dorst te lessen. Ze vindt een heldere vijver, omringd door boeren die net hun kudden hebben laten drinken — maar wanneer ze vraagt of ze mag drinken, weigeren ze haar zelfs dat kleine gebaar, en roeren ze met opzet de bodem om tot het water te troebel is om te drinken. Latona, die al zoveel wreedheid heeft doorstaan zonder zich ooit te wreken, verliest voor het eerst haar geduld: ze vervloekt de boeren om voorgoed in hun eigen vijver te blijven leven — als kikkers, kwakend in het water dat ze haar weigerden. Waar hun voeten ooit stonden, groeit nu een enkele witte waterlelie. Je plukt hem voorzichtig — het lijkt bijna of het Orakel al wist dat hij daar zou staan.
+  > Keer terug — er wachten nog meer verhalen  -> CH2_000
+
+### CH2_S01  (r.3794)  — Semele, Prinses van Thebe
+[PERSON=semele:intro]
+Semele, dochter van koning Cadmus van Thebe en diens vrouw Harmonia, is al wekenlang 's nachts bezoek gewend van een minnaar die zijn gezicht nooit helemaal in het licht laat komen. Hij komt na zonsondergang, vertrekt voor de dageraad, en spreekt nooit over waar hij overdag is — en Semele, verliefd en nieuwsgierig tegelijk, heeft tot nu toe geen vragen gesteld die hij niet wilde beantwoorden. Wat ze niet weet: haar mysterieuze minnaar is Jupiter zelf, opnieuw stiekem afgedwaald van zijn eigen troon en zijn eigen vrouw.
+  > Volg Semele door de volgende nacht  -> CH2_S02
+
+### CH2_S02  (r.3813)  — De Oude Voedster
+Juno, zodra ze van de zwangerschap verneemt, kookt van een woede die ze deze keer met geduld in plaats van een vloek uit — ze vermomt zich als Beroë, Semele's aloude, vertrouwde voedster, en wint moeiteloos haar vertrouwen terug. Dagenlang luistert ze mee, knikt bezorgd, en laat dan, langzaam en met schijnbare tegenzin, haar twijfel vallen: "Hoe weet je eigenlijk zeker dat je minnaar is wie hij zegt te zijn, kind? Een sterveling kan net zo makkelijk liegen over goddelijkheid als een god de waarheid kan verzwijgen." Semele, die nooit eerder aan hem getwijfeld had, voelt de vraag als een steen die niet meer weg wil.
+  > Luister aandachtig — haar wantrouwen groeit met elk woord [SEVERITAS] -> CH2_S03
+  > Weet zelf niet goed wat je van haar woorden moet denken [NEUTRAL] -> CH2_S02B
+  > Wuif de twijfel eerst weg, uit vertrouwen in haar minnaar [CLEMENTIA] -> CH2_S02B
+
+### CH2_S02B  (r.3831)  — Toch Twijfel
+Ondanks haar vertrouwen blijft de vraag aan haar knagen, als een steentje in een schoen dat je jezelf wijsmaakt te kunnen negeren. Tegen middernacht, wanneer haar minnaar weer door het raam naar binnen glipt, merkt ze dat ze de woorden van haar voedster toch niet kan laten liggen.
+  > Stel hem de vraag die ze niet meer kan inslikken  -> CH2_S03
+
+### CH2_S03  (r.3845)  — Een Onmogelijke Eed
+[PUZZLE=puzzle_ch2s_praesens]
+Wanneer Jupiter die nacht weer verschijnt, eist Semele — voordat ze hem vertelt wat ze werkelijk wil — dat hij zweert haar elke wens te vervullen, wat die ook is. Jupiter, verliefd en op dat moment onvoorzichtiger dan een god zou moeten zijn, zweert bij de rivier de Styx: de meest bindende eed die er bestaat, een eed die zelfs hijzelf onder geen enkele omstandigheid kan breken zonder verschrikkelijke gevolgen.
+  > Wacht af wat Semele nu van hem vraagt  -> CH2_S04
+
+### CH2_S04  (r.3862)  — De Wens
+[PUZZLE=puzzle_ch2s_imperativus]
+Nu hij onherroepelijk gebonden is, spreekt Semele eindelijk haar wens uit: ze wil hem zien zoals hij werkelijk is, in zijn volle goddelijke glorie — precies zoals hij zich aan Juno toont, zijn eigen vrouw. Geen vermomming meer, geen nachtelijke schaduw. De ware Jupiter, in het volle licht.
+  > Kijk hoe Jupiter reageert op haar eis  -> CH2_S05
+
+### CH2_S05  (r.3879)  — Jupiters Wanhoop
+[PERSON=athena:intro]
+Jupiter verbleekt — voor zover een god kan verbleken — want hij weet precies wat er zal gebeuren als hij toegeeft. Geen sterveling heeft ooit zijn ware gedaante overleefd; zelfs zijn nabijheid in volle glorie is al meer dan een mens kan verdragen. Maar de eed bij de Styx laat geen enkele ruimte voor terugtrekken, ook niet voor de koning van de goden zelf. Vanaf een verre wolkenbank, onzichtbaar voor iedereen behalve jou, kijkt Athena toe — haar gezicht een en al gespannen stilte. Ook hier grijpt ze niet in.
+  > Denk streng — hij had zo'n eed nooit lichtzinnig mogen zweren [SEVERITAS] -> CH2_S06
+  > Kijk toe, niet goed wetend wie hier eigenlijk het meeste medelijden verdient [NEUTRAL] -> CH2_S06
+  > Voel meelij met Jupiter, gevangen door zijn eigen onbezonnen woord [CLEMENTIA] -> CH2_S06
+
+### CH2_S06  (r.3900)  — Verschroeid door Glorie
+[PUZZLE=puzzle_ch2s_esse | IMG=semele_verteerd.png]
+Jupiter verschijnt in zijn volle staat: bliksem die de lucht openrijt, donder die de fundamenten van het paleis doet schudden, een licht zo verzengend dat het geen onderscheid maakt tussen liefde en vernietiging. Semele's sterfelijke lichaam kan het niet verdragen — ze wordt op slag verteerd door het vuur van zijn ware gedaante, nog voor ze heeft kunnen beseffen wat ze eigenlijk had gevraagd.
+  > Doorzoek de as  -> CH2_S06B
+
+### CH2_S06B  (r.3920)  — Zoeken in de As
+Terwijl de rook nog optrekt, doorzoek je zelf de nasmeulende as — ergens hierin moet iets van het ongeboren kind te vinden zijn, als er al iets te redden valt.
+  > Zoek voorzichtig langs de rand van de as, op veilige afstand van de gloed  -> CH2_S06_OPEN
+  > Breek met kracht door omgevallen, nog gloeiende balken heen om dieper te kunnen zoeken [STAT:vis:13] -> CH2_S06_VIS
+  > Lees de sporen in de as — een verstoord plekje, de richting waarin iets net is verdwenen [STAT:prudentia:11] -> CH2_S06_PRU
+
+### CH2_S06_OPEN  (r.3936)  — Langs de Rand
+[FLAG=ch2_s06_route=open]
+Je blijft aan de rand van de as, waar de hitte nog te verdragen is, en zoekt zo grondig als je durft. Voor je iets vindt, is Jupiter je al voor.
+  > Kijk of er nog iets van haar te redden valt  -> CH2_S07
+
+### CH2_S06_VIS  (r.3953)  — Door het Puin
+[FLAG=ch2_s06_route=vis]
+Je breekt door omgevallen, nog gloeiende balken heen, dieper de as in dan wie ook zou wagen. Het kost je geschroeide handen — maar voor je iets vindt, is Jupiter je al voor.
+  > Kijk of er nog iets van haar te redden valt  -> CH2_S07
+
+### CH2_S06_PRU  (r.3970)  — Sporen in de As
+[FLAG=ch2_s06_route=prudentia]
+Je zoekt niet blindelings maar kijkt: een verstoord plekje as, een richting die net iets anders ligt dan de rest. Je volgt het spoor tot vlak bij de plek — waar Jupiter je al voor is.
+  > Kijk of er nog iets van haar te redden valt  -> CH2_S07
+
+### CH2_S07  (r.3987)  — Gered uit de As
+Te midden van de rokende as vindt Jupiter, met een haast die niets meer met koninklijke waardigheid te maken heeft, hun ongeboren kind — nog veel te vroeg om zelfstandig te overleven. Hij snijdt een opening in zijn eigen dij en naait het kind erin, waar het de resterende maanden zal voldragen worden, verborgen voor Juno's alziende jaloezie. Geen enkele andere geboorte in de hele mythologie zal ooit zo verlopen als deze.
+  > Wacht de laatste maanden af  -> CH2_S08
+
+### CH2_S08  (r.4003)  — De Geboorte van Bacchus
+[FLAG=ch2_lijn_semele=true | PERSON=semele:full, bacchus:full | SOUVENIR=souvenir_semele | TITEL=ch2_semele | IMG=geboorte_bacchus.png]
+Wanneer de tijd eindelijk daar is, opent Jupiter zijn eigen dij, en wordt Bacchus geboren — de enige god die ooit tweemaal geboren werd, eerst uit een sterfelijke moeder en dan uit zijn eigen goddelijke vader. Waar Semele's nieuwsgierigheid haar het leven kostte, overleeft haar zoon dankzij de wanhopige vindingrijkheid van een vader die haar niet op tijd kon redden, maar hun kind wel. Ergens, ver van hier, weet je dat dit dezelfde god is die je ooit — in een ander leven, op een ander moment — hebt zien helpen bij het opheffen van een vloek over gouden vingers. Tussen de as, ongedeerd, ligt een enkele wijnrank — nog groen, nog levend, alsof het vuur haar bewust had overgeslagen. Je windt hem om je pols; hij verwelkt niet, en zal dat, voor zover je kunt zien, ook nooit doen.
+  > Keer terug — er wachten nog meer verhalen  -> CH2_000
+
+### CH2_K01  (r.4045)  — Kallisto, Nimf van Artemis
+[PERSON=kallisto:intro, diana:intro]
+Kallisto is een van Artemis' meest toegewijde jachtgezellinnen — een groep nimfen die, net als hun godin, een plechtige eed van kuisheid heeft afgelegd. Samen jagen ze door de bergen van Arcadië, vrij en ongebonden, zonder ooit een man toe te laten in hun kring. Op een middag, ver van de rest van de groep, treft Zeus haar alleen aan terwijl ze uitrust bij een bron — en ziet meteen een kans die hij niet wil laten liggen.
+  > Kijk toe wat Zeus van plan is  -> CH2_K02
+
+### CH2_K02  (r.4064)  — Vermomd als Artemis
+Zeus, die weet dat Kallisto nooit een vreemde man zou vertrouwen, neemt de gedaante aan van Artemis zelf — de enige gestalte waarvoor Kallisto haar waakzaamheid volledig laat zakken. Onder die vermomming misleidt hij haar, en pas wanneer hij weer verdwijnt, beseft ze dat er iets grondig mis is met wat ze zojuist heeft meegemaakt. Ze vertelt het aan niemand. Wie zou haar geloven dat "Artemis" haar bedrogen heeft?
+  > Blijf nuchter — dit is hoe goden nu eenmaal met stervelingen omgaan [SEVERITAS] -> CH2_K03
+  > Weet niet goed wat je van Zeus' gedrag moet vinden [NEUTRAL] -> CH2_K03
+  > Voel woede namens Kallisto, die niets van dit alles kon vermoeden [CLEMENTIA] -> CH2_K03
+
+### CH2_K03  (r.4082)  — Een Zoon, Arcas
+Maanden gaan voorbij, en Kallisto verbergt haar zwangerschap zo lang ze kan — tot ze in het geheim bevalt van een zoon, Arcas, ergens diep in het woud, ver van de rest van de band. Even is er alleen opluchting: het kind is gezond, en niemand heeft nog iets gemerkt.
+  > Volg haar terug naar de groep  -> CH2_K04
+
+### CH2_K04  (r.4096)  — Ontdekt door de Band
+[PUZZLE=puzzle_ch2k_imperativus]
+Bij de volgende rituele badplaats, waar de hele groep zich ontkleedt om zich te wassen, valt het haar collega-nimfen eindelijk op wat Kallisto al maanden verbergt. Artemis, die haar eigen eed van kuisheid onverbiddelijk handhaaft — zonder de ware toedracht ooit te kennen — kijkt haar aan met een mengeling van verraden vertrouwen en koude woede.
+  > Kijk toe hoe Kallisto de groep verlaat  -> CH2_K05
+
+### CH2_K05  (r.4113)  — Op de Vlucht
+[PUZZLE=puzzle_ch2k_praesens]
+Alleen, verstoten uit de enige gemeenschap die ze ooit heeft gekend, en met een pasgeboren zoon om voor te zorgen, vlucht Kallisto de bergen in — weg van iedereen die haar ooit vertrouwde, weg van de plek die ooit haar thuis was.
+  > Volg haar het gebergte in  -> CH2_K05B
+
+### CH2_K05B  (r.4130)  — Kallisto's Spoor
+Kallisto zet een tempo aan dat niemand met een pasgeboren kind zou moeten kunnen volhouden — wanhoop drijft haar sneller dan haar lichaam eigenlijk toelaat, het onherbergzame gebergte in.
+  > Blijf op veilige afstand en volg haar spoor rustiger, ook al raak je haar soms bijna kwijt  -> CH2_K05_OPEN
+  > Zet door in haar moordende tempo, uren aan een stuk, zonder de rust te vragen die zij zichzelf ook niet gunt [STAT:robur:13] -> CH2_K05_ROB
+  > Lees afgebroken takjes en verstoorde steentjes en neem een kortere route die je vóór haar op het volgende punt brengt [STAT:prudentia:11] -> CH2_K05_PRU
+
+### CH2_K05_OPEN  (r.4146)  — Op Veilige Afstand
+[FLAG=ch2_k05_route=open]
+Je houdt een voorzichtiger tempo aan, haar spoor volgend zonder jezelf uit te putten. Een paar keer raak je haar bijna kwijt tussen de rotsen, maar je vindt het spoor telkens terug.
+  > Blijf haar volgen, ondanks alles  -> CH2_K06
+
+### CH2_K05_ROB  (r.4163)  — In Haar Tempo
+[FLAG=ch2_k05_route=robur]
+Je zet door, uur na uur, in het moordende tempo dat Kallisto zichzelf oplegt — geen rust, geen adempauze, alleen de volgende stap en de volgende. Wanneer ze eindelijk stilhoudt, sta jij nog altijd naast haar.
+  > Blijf haar volgen, ondanks alles  -> CH2_K06
+
+### CH2_K05_PRU  (r.4180)  — Het Kortere Pad
+[FLAG=ch2_k05_route=prudentia]
+In plaats van haar simpelweg te achtervolgen, lees je haar spoor: afgebroken takjes, verstoorde steentjes, een richting die zich al aftekent voor zij die zelf kiest. Via een kortere route sta je alweer op haar te wachten voor ze er is.
+  > Blijf haar volgen, ondanks alles  -> CH2_K06
+
+### CH2_K06  (r.4197)  — Hera's Ontdekking
+Hera, die van meet af aan had vermoed dat haar man weer iets had uitgespookt, spoort uiteindelijk de volledige waarheid op — en richt haar woede, zoals zo vaak, niet op Zeus, maar op de vrouw die hij misleidde en gebruikte.
+  > Weet allang dat genade nooit Hera's stijl is geweest [SEVERITAS] -> CH2_K07
+  > Wacht simpelweg af wat Hera gaat doen [NEUTRAL] -> CH2_K07
+  > Hoop in stilte dat Hera deze ene keer genade toont [CLEMENTIA] -> CH2_K07
+
+### CH2_K07  (r.4213)  — Veranderd in een Berin
+[PUZZLE=puzzle_ch2k_esse | PERSON=athena:intro | IMG=kallisto_berin.png]
+Hera verandert Kallisto in een berin — haar menselijke stem, haar gezicht, haar handen verdwijnen onder ruige vacht en klauwen, terwijl haar geest, gevangen in het lichaam van een dier dat ze nooit had willen zijn, volledig intact blijft. Ze kan niet meer spreken, niet meer huilen op een manier die iemand zou herkennen — enkel nog grommen, in een lichaam dat niet langer het hare voelt. Vanaf een verre bergkam, onzichtbaar voor iedereen behalve jou, kijkt Athena toe. Ook nu grijpt ze niet in.
+  > Volg haar spoor de jaren door  -> CH2_K08
+
+### CH2_K08  (r.4238)  — Arcas, de Jager
+Jaren gaan voorbij. Arcas groeit op, niet wetend wie zijn moeder werkelijk was, en wordt een bekwame jager in dezelfde bergen waar zij ooit rondzwierf. Op een dag kruist zijn pad dat van een grote, oude berin — zijn eigen moeder, die hem na al die jaren nog altijd herkent, ook al kan hij haar onmogelijk herkennen. Arcas, die enkel een gevaarlijk dier ziet, heft zijn speer.
+  > Wacht af wat er gebeurt  -> CH2_K09
+
+### CH2_K09  (r.4254)  — Onder de Sterren
+[FLAG=ch2_lijn_kallisto=true | PERSON=kallisto:full, diana:full | SOUVENIR=souvenir_kallisto | TITEL=ch2_kallisto | IMG=kallisto_sterrenbeeld.png]
+Vlak voordat de speer haar kan doorboren, grijpt Zeus in — de enige keer in dit hele hoofdstuk dat hij zelf probeert recht te zetten wat zijn eigen onbezonnenheid heeft aangericht. Hij tilt moeder en zoon samen op naar de hemel en verandert hen in sterrenbeelden: Kallisto wordt de Grote Beer, Arcas de Kleine Beer, voor altijd naast elkaar aan het firmament, ver buiten Hera's bereik. Daar, aan de nachtelijke hemel, blijft hun verhaal zichtbaar voor iedereen die ooit omhoog kijkt en de sterren leert lezen. Op de plek waar Kallisto zojuist nog stond, vind je een enkele haarlok berenvacht, achtergebleven in het gras. In het donker lijkt hij zwak te glanzen — bijna alsof er nog een beetje sterrenlicht in is blijven hangen. Je stopt hem weg, met het vage gevoel dat het Orakel dat wil.
+  > Keer terug — er wachten nog meer verhalen  -> CH2_000
+
+### CH2_H01  (r.4296)  — Herakles, Zoon van Zeus
+[PERSON=herakles:intro, zeus:intro, hera:intro]
+Herakles is de zoon van Zeus en de sterfelijke Alcmene — en Hera haatte hem al voor hij geboren werd. Toen zijn geboorte naderde, liet Zeus zich ontvallen dat een kind dat die nacht ter wereld zou komen ooit over heel Mycene zou heersen. Hera, ziedend, vertraagde Herakles' geboorte en versnelde die van zijn neef Eurystheus, zodat het geboorterecht naar hem ging in plaats van naar haar mans onwettige zoon. Vanaf dat eerste moment staat de rest van Herakles' leven al vast: een man met de kracht van een god, gedwongen te dienen onder een neef die hij met gemak zou kunnen verpletteren — puur omdat een uur het verschil maakte.
+  > Kijk naar zijn eerste dagen als baby  -> CH2_H02
+
+### CH2_H02  (r.4315)  — De Slangen in de Wieg
+[PUZZLE=puzzle_ch2h_praesens]
+Niet tevreden met enkel het geboorterecht te hebben afgepakt, stuurt Hera twee giftige slangen naar Herakles' wieg terwijl hij nog maar enkele maanden oud is. Zijn tweelingbroer Iphikles, gewoon sterfelijk verwekt, gilt van doodsangst zodra de slangen zich om de spijlen kronkelen. Herakles daarentegen grijpt, zonder enig teken van angst, een slang in elke hand — en wurgt ze allebei voor iemand kan ingrijpen, lachend alsof het een spelletje betreft.
+  > Kijk hoe de familie op dit voorteken reageert  -> CH2_H03
+
+### CH2_H03  (r.4334)  — Een Voorteken
+Het nieuws verspreidt zich snel: een baby die slangen wurgt alsof het niets is, kan onmogelijk een gewoon kind zijn. Sommigen in Thebe fluisteren vol ontzag over wat deze jongen ooit zal kunnen volbrengen; anderen worden juist stil van een angst die ze niet meteen kunnen verklaren.
+  > Voel onbehagen — een kracht als deze trekt altijd rampspoed aan [SEVERITAS] -> CH2_H04
+  > Weet niet goed wat je van dit voorteken moet denken [NEUTRAL] -> CH2_H04
+  > Voel bewondering voor wat dit kind ooit zal worden [CLEMENTIA] -> CH2_H04
+
+### CH2_H04  (r.4350)  — Een Vrouw en Kinderen
+Herakles groeit op tot een man wiens kracht geen weerga kent, en wanneer Thebe wordt belegerd, is hij het die de stad verdedigt en de aanvallers verjaagt. Als dank geeft koning Kreon hem zijn dochter Megara tot vrouw. Jaren van eenvoudig, oprecht geluk volgen: een gezin, kinderen die opgroeien, een vader die — ondanks zijn goddelijke afkomst — precies het leven leidt dat hij zich nooit had durven wensen. Voor het eerst in zijn leven lijkt Hera's schaduw ver weg.
+  > Blijf nog even bij dit geluk stilstaan, voor het te laat is  -> CH2_H05
+
+### CH2_H05  (r.4366)  — Hera's Waanzin
+Hera, die nooit vergeet en nooit vergeeft, kan dit geluk niet langer verdragen. Ze stuurt Lyssa, de geest van de razernij zelf, om Herakles' geest te grijpen — niet met een zwaard, niet met een monster, maar met iets veel wreders: zijn eigen verstand, dat plotseling niet meer te vertrouwen is. Je voelt het onheil aankomen, onontkoombaar, lang voor Herakles zelf ook maar iets in de gaten heeft.
+  > Weet dat dit een noodlot is dat niemand had kunnen afwenden [SEVERITAS] -> CH2_H06
+  > Kijk toe, verlamd door een onheil dat je niet kunt plaatsen [NEUTRAL] -> CH2_H06
+  > Wil wanhopig ingrijpen, wetend wat er komen gaat [CLEMENTIA] -> CH2_H06
+
+### CH2_H06  (r.4384)  — De Daad die Niet Ongedaan Kan Worden
+[IMG=herakles_nasleep.png]
+De waanzin grijpt Herakles zo volledig dat de wereld om hem heen vervormt tot iets wat niet meer herkenbaar is — vijanden waar geen vijanden zijn, gevaar waar alleen zijn eigen gezin staat. Wat er in die verduisterde ogenblikken precies gebeurt, zal hij zich later nooit meer helder kunnen herinneren, en jij ziet het evenmin — enkel de stilte die erop volgt. Wanneer het licht in zijn ogen terugkeert, staat Herakles alleen in een huis dat niet langer een thuis is. Megara. De kinderen. Allemaal weg, door zijn eigen hand, in een waanzin die niet de zijne was maar wel zijn daad. Het geluid dat uit hem komt wanneer het besef doordringt, is niet het geluid van een held.
+  > Blijf bij hem, ook al is er niets meer te zeggen  -> CH2_H07
+
+### CH2_H07  (r.4403)  — Het Orakel van Delphi
+[PUZZLE=puzzle_ch2h_imperativus]
+Verwoest door wat hij heeft aangericht, en niet in staat zichzelf te vergeven, reist Herakles naar het orakel van Delphi om te vragen hoe — of ooit — hij zich van deze schuld kan reinigen. Het antwoord dat hij krijgt is even eenvoudig als zwaar: hij moet zich onderwerpen aan zijn neef Eurystheus, koning van Mycene, en tien jaar lang volbrengen wat die hem opdraagt. Eurystheus, die Herakles altijd al vreesde en benijdde tegelijk, aanvaardt de opdracht met nauwelijks verholen genoegen — eindelijk een excuus om de sterkste man ter wereld het onmogelijke te laten proberen.
+  > Wacht af welke eerste beproeving hem te wachten staat  -> CH2_H07B
+
+### CH2_H07B  (r.4422)  — De Tweede Uitgang
+Bij de grot van de Nemeïsche leeuw aangekomen, valt je oog op iets waar Herakles zelf nog geen aandacht aan heeft besteed: een tweede, kleinere opening aan de achterzijde van het hol. Gevaarlijk, want zo kan de leeuw zijn belager ontglippen — of erger, jullie allebei in de rug besluipen.
+  > Wijs Herakles op de tweede opening — hij regelt het zelf  -> CH2_H08
+  > Rol een zwaar rotsblok voor de tweede opening, schouder aan schouder met Herakles' eigen kracht [STAT:vis:11] -> CH2_H07_VIS
+  > Sluip om de grot heen en stapel snel losse stenen en takken op, voor het beest iets in de gaten heeft [STAT:agilitas:13] -> CH2_H07_AGI
+
+### CH2_H07_VIS  (r.4438)  — Het Rotsblok
+[FLAG=ch2_h07_route=vis]
+Je zet je schouder tegen een zwaar rotsblok en rolt het voor de tweede opening, grommend van inspanning tot het met een doffe dreun op zijn plek valt. Nu is er nog maar één weg naar binnen — en maar één weg naar buiten.
+  > Kijk hoe Herakles de grot binnengaat  -> CH2_H08
+
+### CH2_H07_AGI  (r.4455)  — Stenen en Takken
+[FLAG=ch2_h07_route=agilitas]
+Je sluipt om de grot heen en stapelt, sneller dan je zelf had verwacht, losse stenen en dode takken tegen de tweede opening — niet onneembaar, maar genoeg om een vluchtende leeuw op te houden tot het te laat is.
+  > Kijk hoe Herakles de grot binnengaat  -> CH2_H08
+
+### CH2_H08  (r.4472)  — De Eerste Taak: de Nemeïsche Leeuw
+[COMBAT=nemeische_leeuw]
+De eerste beproeving voert Herakles naar de vallei van Nemea, waar een leeuw huist wiens huid door geen enkel wapen — geen zwaard, geen speer, geen pijl — kan worden doorboord. Jarenlang heeft het beest de omliggende dorpen geterroriseerd, en generaties jagers zijn met hun wapens tevergeefs tegen die onverwoestbare vacht gebotst. Herakles, die inmiddels heeft geleerd dat niet elke vijand met staal te verslaan is, stapt de grot van het beest in gewapend met niet veel meer dan zijn eigen twee handen.
+  > Kijk hoe hij zich herstelt van het gevecht  -> CH2_H09
+
+### CH2_H09  (r.4491)  — Ontsnapt aan de Klauwen
+[FLAG=herakles_harnas=true]
+Waar geen wapen doorheen kwam, bleek Herakles' eigen kracht wél genoeg: hij wurgt de leeuw met blote handen, precies zoals hij ooit als baby twee slangen wurgde. Vanaf die dag draagt hij de onkwetsbare huid van het beest als mantel — het enige harnas dat hem ooit nodig zal zijn, en een teken voor iedereen die hem ziet aankomen dat de Nemeïsche Leeuw niet langer bestaat. Eurystheus, die eigenlijk had verwacht dat deze eerste taak Herakles' laatste zou zijn, is zo geschokt door zijn terugkeer dat hij voortaan een grote bronzen pot laat klaarzetten om zich in te verstoppen wanneer Herakles nadert. Voor hij verdergaat, houdt Herakles even stil en kijkt, met een blik die net iets te gericht is voor toeval, recht in jouw richting — alsof hij, net als Athena eerder dit hoofdstuk, iets aanvoelt van een aanwezigheid die niemand anders opmerkt. "Een boodschapper die dit allemaal ziet gebeuren, ver
+  > Vraag je af wat de volgende beproeving zal zijn  -> CH2_H10
+
+### CH2_H10  (r.4512)  — De Tweede Taak: de Hydra van Lerna
+[PUZZLE=puzzle_ch2h_posse]
+De tweede beproeving is nog wreder: de Hydra van Lerna, een veelkoppig moerasmonster dat voor elke afgehakte kop er meteen twee nieuwe laat aangroeien. Een gewoon zwaard maakt het beest dus alleen maar gevaarlijker, nooit zwakker. Herakles neemt zijn neef Iolaos mee als wagenmenner en helper — en samen bedenken ze de enige oplossing die werkt: bij elke kop die Herakles afhakt, schroeit Iolaos de wond onmiddellijk dicht met een fakkel, voor er nieuwe koppen kunnen aangroeien.
+  > Volg hen het moeras in  -> CH2_H10B
+
+### CH2_H10B  (r.4529)  — Hera's Krab
+Terwijl jullie het moeras in trekken, merk je een beweging tussen het riet die niets met de Hydra te maken heeft: Hera, die Herakles nooit met rust laat, heeft in stilte een reuzenkrab gestuurd om hem in zijn hiel te bijten zodra hij zich niet kan verdedigen.
+  > Roep waarschuwend naar Iolaos, die al bijspringt  -> CH2_H11
+  > Stamp het beest zelf onder je hiel, ondanks de pijnlijke klauwen die zich vastklemmen [STAT:robur:11] -> CH2_H10_ROB
+  > Grijp de krab bij zijn schaar en smijt hem terug het moeras in voor hij kan toebijten [STAT:agilitas:13] -> CH2_H10_AGI
+
+### CH2_H10_ROB  (r.4545)  — Onder je Hiel
+[FLAG=ch2_h10_route=robur]
+Je voelt de klauwen zich vastklemmen voor je de kans krijgt om na te denken, en stampt door de pijn heen tot het beest verbrijzeld in het slijk zakt. Herakles merkt er, druk met de Hydra, niets van.
+  > Volg hen het moeras in  -> CH2_H11
+
+### CH2_H10_AGI  (r.4562)  — Weggesmeten
+[FLAG=ch2_h10_route=agilitas]
+Je grijpt de krab bij zijn schaar net op het moment dat hij toe wil happen, en smijt hem met een boog terug het moeras in — ver genoeg weg om geen tweede poging te wagen.
+  > Volg hen het moeras in  -> CH2_H11
+
+### CH2_H11  (r.4579)  — In het Moeras
+[COMBAT=hydra]
+Kop na kop valt, geschroeid voor er iets nieuws kan aangroeien, tot alleen de laatste, onsterfelijke kop overblijft — die Herakles onder een rotsblok begraaft in plaats van hem te doden, want onsterfelijk laat zich nu eenmaal niet vernietigen.
+  > Kijk hoe het gevecht wordt beoordeeld  -> CH2_H12
+
+### CH2_H12  (r.4596)  — Tien Wordt Twaalf
+[FLAG=ch2_lijn_herakles=true; herakles_taken_voltooid=2 | PERSON=herakles:full, megara:intro | SOUVENIR=souvenir_herakles_leeuw | TITEL=ch2_herakles_eerste_taken]
+Eurystheus, bij het horen van dit verslag, weigert de Hydra als volwaardige beproeving te erkennen — Herakles kreeg immers hulp van Iolaos, en dat was, vindt de koning, niet eerlijk gespeeld. Wat als tien beproevingen begon, dreigt daardoor uiteindelijk op twaalf uit te komen, naarmate Eurystheus ook andere taken om vergelijkbare technische redenen zal afkeuren. Twee beproevingen liggen achter je: de leeuw, gewurgd; de Hydra, verslagen met vuur. Herakles' schuld is nog lang niet ingelost, en de rest van zijn beproevingen wachten nog ergens verderop in de tijd — maar voor het eerst sinds die verschrikkelijke dag voelt hij iets wat op vooruitgang lijkt. Bij het aantrekken van zijn nieuwe leeuwenhuid-mantel raakt er één klauw los, te klein om te missen tussen zoveel meer. Herakles merkt het niet eens; jij raapt hem op, met het vertrouwde gevoel dat het Orakel dit soort dingen graag bewaard 
+  > Keer terug — er wachten nog meer verhalen  -> CH2_000
+
+### CH2_ATHENA  (r.4635)  — De Godin Spreekt
+[PERSON=athena:full | TITEL=ch2_athena_mentor | IMG=athena_mentor_ch2.png | PAYOFF=ch2_athena_echo_relatie]
+Athena stapt voor het eerst dit hoofdstuk naar voren, niet langer een zwijgende getuige aan de rand van het beeld. Haar blik is grijs en kalm, als een onweer dat net is gaan liggen — en toch voel je dat wat ze nu gaat zeggen, ze al die tijd heeft zitten vormen terwijl ze toekeek. "Je hebt vier verhalen gezien," zegt ze. "Vier keer greep Hera in. Vier keer reageerden stervelingen anders. Sommigen bezweken. Sommigen verloren alles. Eén bleef opstaan." Ze zwijgt even, alsof ze de stilte zelf laat meewegen. "Heldendom ontstaat niet wanneer het lot je gunstig gezind is, maar wanneer je weigert eraan ten onder te gaan." Vanaf dit moment, voel je, is ze niet langer enkel een toeschouwer.
+  > Laat haar woorden bezinken  -> CH2_ORAKEL
+
+### CH2_ORAKEL  (r.4662)  — Het Orakel Keert Terug
+De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warmer dan ooit. "Vier herinneringsfragmenten, vier gezichten van dezelfde jaloezie," zegt de stem. "Latona, Kallisto, Semele, Herakles — stuk voor stuk weer stevig verankerd in de herinnering, en met hen het hele verhaal van een liefde die een godin niet kon vergeven."
+  > Luister verder  -> CH2_EINDE
+
+### CH2_EINDE  (r.4685)  — Het Einde van Hoofdstuk 2
+"Hoofdstuk 3 wacht al ergens verderop," zegt de stem, "en met hem de rest van Herakles' beproevingen — zijn eerste werken heb je al gezien, maar er wachten er nog velen." De poort keert terug tot een dunne streep licht, en je neemt vier herinneringen met je mee: volharding, onschuld, waarheid, moed.
+  > Stap door de poort  -> CH3_000

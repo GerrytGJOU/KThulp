@@ -1,0 +1,311 @@
+### CH3_000  (r.4719)  — Beloften van Goden en Mensen
+De boodschapper wijst naar twee nieuwe scheuren in de werkelijkheid, dicht naast elkaar. "Ditmaal geen vier lijnen," zegt ze, "maar twee — al blijkt de ene, zodra je erin stapt, meer dan één verhaal in zich te dragen. Volg Io, en je zult ontdekken hoe ver een god gaat om zijn eigen ontrouw te verbergen. Volg Herakles, en je ziet hoe ver een sterveling gaat om een schuld in te lossen die niet eens helemaal de zijne was." Athena staat er dit keer niet zwijgend bij — ze knikt je toe, kort maar oprecht, zoals een mentor doet die weet dat je de rest zelf aankunt.
+  > Volg Io, priesteres van Juno en Jupiters volgende geheime liefde [DONE:ch3_lijn_io] -> CH3_IO01
+  > Volg Herakles, die tien beproevingen te gaan heeft [DONE:ch3_lijn_herakles] -> CH3_H01
+  > Spreek het Orakel aan, nu beide verhalen zijn gehoord [REQ:fragments=6] -> CH3_ATHENA
+
+### CH3_IO01  (r.4740)  — Io, Priesteres van Juno
+[PERSON=io:intro, hera:intro]
+Io dient als priesteres in de tempel van Juno te Argos — een leven van rust en toewijding aan een godin die, dat weet ze nog niet, straks haar felste vijand zal worden. Ze is de dochter van de riviergod Inachus, en niemand in Argos twijfelt aan haar vroomheid. Jupiter, die haar op een dag bij de rivier ziet, vergeet moeiteloos dat ze uitgerekend aan zijn eigen vrouw is toegewijd. Voor hem is dat geen reden tot terughoudendheid — eerder een uitdaging.
+  > Kijk hoe Jupiter zijn kans grijpt  -> CH3_IO02
+
+### CH3_IO02  (r.4759)  — Een Wolk op een Heldere Dag
+[PUZZLE=puzzle_ch3io_genitivus]
+Jupiter, die weet dat zijn vrouw elke onverklaarbare afwezigheid van hem wantrouwt, bedenkt ditmaal geen list met een vermomming maar met verhulling: hij trekt een dichte, donkere wolk over de vallei van Argos, zodat niemand — sterveling noch god — kan zien wat daarbinnen gebeurt. Io, die de wolk ziet naderen op een verder onbewolkte dag, voelt eerder onbehagen dan nieuwsgierigheid. Tegen de tijd dat ze begrijpt wie er werkelijk voor haar staat, is er allang geen weg meer terug.
+  > Kijk wat er gebeurt wanneer de wolk optrekt  -> CH3_IO03
+
+### CH3_IO03  (r.4778)  — Een Vaars in Plaats van een Vrouw
+Juno, hoog op de Olympos, ziet de vreemde wolk hangen op een verder kraakheldere dag — en herkent onmiddellijk het patroon van haar mans vindingrijkheid. Ze daalt af om poolshoogte te nemen, sneller dan Jupiter had verwacht. In doodsangst grijpt hij naar de enige list die hem nog rest: hij verandert Io ter plekke in een sneeuwwitte vaars, ogenblikken voordat Juno de wolk binnenstapt. Io, gevangen in een lichaam dat niet het hare is, kan niet eens meer roepen wat er zojuist met haar is gebeurd.
+  > Voel medelijden met Io, die niets van dit alles heeft gekozen [CLEMENTIA] -> CH3_IO04
+  > Voel vooral verachting voor Jupiters lafheid — hij redt zichzelf, niet haar [SEVERITAS] -> CH3_IO04
+  > Kijk toe, niet goed wetend wie hier meer medelijden verdient [NEUTRAL] -> CH3_IO04
+
+### CH3_IO04  (r.4796)  — Een Ongemakkelijk Cadeau
+[PUZZLE=puzzle_ch3io_dativus]
+Juno, die de vaars met een half oog bekijkt en meteen doorheeft dat er iets niet klopt aan een dier van zo'n opvallende schoonheid, prijst hem overdreven hardop — en vraagt Jupiter dan, met een glimlach die geen weigering toestaat, of ze de vaars als geschenk mag krijgen. Jupiter, die weet dat weigeren zijn schuld zou bevestigen, heeft geen enkele uitweg meer. Met tegenzin geeft hij Io — nog altijd gevangen in haar eigen, sprakeloze lichaam — aan de vrouw die haar het felst zal blijven haten.
+  > Kijk wat Juno met haar nieuwe bezit van plan is  -> CH3_IO05
+
+### CH3_IO05  (r.4815)  — Argus Panoptes, de Honderdogige Wachter
+[PERSON=argus:intro | IMG=argus_bewaakt_io.png]
+Juno vertrouwt haar nieuwe vaars toe aan Argus Panoptes, een reus met honderd ogen verspreid over zijn hele lichaam — nooit voluit slapend, want terwijl een deel van zijn ogen rust, blijven de andere onophoudelijk open. Geen betere wachter bestaat er op aarde of Olympos. Io wordt vastgebonden aan een olijfboom in een weiland, dag en nacht bekeken door een wezen dat nooit werkelijk wegkijkt.
+  > Kijk hoe Io haar nieuwe gevangenschap doorstaat  -> CH3_IO06
+
+### CH3_IO06  (r.4837)  — Een Naam in het Zand
+Io, die geen menselijk woord meer kan uitbrengen, ontdekt op een dag dat haar eigen vader Inachus — de riviergod naar wie ze vernoemd is — langs de oever van zijn rivier loopt, zoekend naar de dochter die spoorloos is verdwenen. Wanhopig schrijft ze met haar hoef de enige letters die ze nog kan vormen in het zachte zand aan de rivieroever: haar eigen naam. Inachus, die het schrift herkent en dan pas beseft welk dier voor hem staat, breekt bijna van verdriet — een vader die zijn dochter eindelijk terugvindt, enkel om te ontdekken dat hij haar niet meer kan redden.
+  > Blijf bij dit moment stilstaan, geraakt door zoveel onmacht [CLEMENTIA] -> CH3_IO07
+  > Concludeer nuchter dat medelijden hier niets zal veranderen [SEVERITAS] -> CH3_IO07
+  > Kijk toe, zonder goed te weten wat je met dit verdriet aan moet [NEUTRAL] -> CH3_IO07
+
+### CH3_IO07  (r.4855)  — Jupiter Stuurt Hulp
+[PERSON=hermes:intro]
+Jupiter, die Io's lijden vanaf de Olympos gadeslaat en het niet langer kan verdragen — deels uit schuldgevoel, deels omdat hij nog altijd niet van haar af wil — roept Mercurius bij zich, zijn vleugelvoetige boodschapper, net zo bedreven in list en welbespraaktheid als in snelheid. "Argus moet slapen," zegt Jupiter simpelweg, "en jij bent de enige die daarin kan slagen."
+  > Volg Mercurius op zijn missie  -> CH3_IO07B
+
+### CH3_IO07B  (r.4874)  — Terwijl Mercurius Speelt
+Terwijl Mercurius zich naast Argus neervlijt en zijn lange, trage verhaal begint, blijf jij op een boogscheut afstand — met een taak die minstens zo belangrijk is: zorgen dat niemand anders, geen andere spion van Juno, hen in de tussentijd stoort.
+  > Blijf gewoon zitten kijken, alert genoeg  -> CH3_IO07_OPEN
+  > Houd urenlang, zonder ooit je aandacht te verliezen, de omgeving in de gaten [STAT:robur:13] -> CH3_IO07_ROB
+  > Praat een nieuwsgierige voorbijganger die te dichtbij komt behendig een andere kant op [STAT:gratia:11] -> CH3_IO07_GRA
+
+### CH3_IO07_OPEN  (r.4890)  — Op Wacht
+[FLAG=ch3_io07_route=open]
+Je blijft zitten en kijkt, alert genoeg om iets te merken als het misgaat — al gebeurt er, gelukkig, niets dat je aandacht echt op de proef stelt.
+  > Kijk hoe Mercurius zijn verhaal voortzet  -> CH3_IO08
+
+### CH3_IO07_ROB  (r.4907)  — Urenlang Waakzaam
+[FLAG=ch3_io07_route=robur]
+Uren gaan voorbij, en waar een ander allang zou zijn weggedommeld, blijf jij scherp — elk geluid, elke beweging in de verte, meteen opgemerkt en meteen weer losgelaten zodra het onschuldig blijkt.
+  > Kijk hoe Mercurius zijn verhaal voortzet  -> CH3_IO08
+
+### CH3_IO07_GRA  (r.4924)  — Een Vriendelijk Woord
+[FLAG=ch3_io07_route=gratia]
+Wanneer een herder uit de buurt nieuwsgierig deze kant op dwaalt, spreek je hem aan voor hij te dichtbij komt — een praatje over niets, een paar vriendelijke woorden, genoeg om hem zonder argwaan een andere richting op te sturen.
+  > Kijk hoe Mercurius zijn verhaal voortzet  -> CH3_IO08
+
+### CH3_IO08  (r.4941)  — De Herder met de Fluit
+[PUZZLE=puzzle_ch3io_bijstelling]
+Mercurius verkleedt zich als een eenvoudige herder en gaat naast Argus zitten, zijn vleugelsandalen en staf zorgvuldig verborgen. Hij speelt op een rietfluit, de syrinx, en vertelt daarna verhaal na verhaal — traag, meanderend, doelbewust saai op de plekken waar Argus' aandacht het meest dreigt te verslappen. Oog na oog sluit zich, tot zelfs de laatste paar — die altijd als laatste wakker blijven — eindelijk toegeven aan de slaap.
+  > Kijk wat Mercurius doet zodra Argus eindelijk volledig slaapt  -> CH3_IO09
+
+### CH3_IO09  (r.4960)  — Honderd Ogen, voor het Laatst Gesloten
+Zodra ook het laatste oog is gesloten, aarzelt Mercurius geen moment langer — hij doodt de slapende wachter met een enkele, geoefende slag, en bevrijdt Io van haar ketting aan de olijfboom. Ze rent weg, nog altijd een vaars, maar voor het eerst in weken zonder honderd ogen die haar volgen. Juno, die het nieuws van Argus' dood ontvangt, rouwt oprecht — hij diende haar trouw tot het einde.
+  > Kijk hoe Juno haar trouwe wachter eert  -> CH3_IO10
+
+### CH3_IO10  (r.4979)  — Honderd Ogen op een Pauwenstaart
+[IMG=pauw_ogen_argus.png]
+Juno neemt Argus' honderd ogen, één voor één, en plaatst ze voor eeuwig op de staart van haar heilige vogel — de pauw. Sindsdien draagt elke pauw ter wereld het waakzame erfgoed van een wachter die zijn plicht met zijn leven bekocht, zichtbaar voor iedereen die ooit een pauwenstaart open ziet vallen. Maar Argus' dood lost niets op voor Io zelf — Juno, nu pas echt woedend, zoekt onmiddellijk naar een nieuwe manier om haar te kwellen.
+  > Wacht af wat Juno nu bedenkt  -> CH3_IO11
+
+### CH3_IO11  (r.4998)  — De Steekvlieg
+Juno stuurt een steekvlieg — oestrus — die Io onophoudelijk achtervolgt en steekt, dag na dag, nacht na nacht, zonder ooit rust te gunnen. Krankzinnig van de pijn rent Io de wereld rond, over zeeën die naar haar vernoemd zullen worden en langs een zeestraat die later de "Runnenoversteek" — Bosporus — zal heten, precies vanwege haar wanhopige tocht als vaars. Je volgt haar over land en zee, door berg na vallei na kust, terwijl ze wegrent van een pijn die haar overal blijft vinden.
+  > Blijf haar volgen, zo goed en kwaad als het gaat  -> CH3_IO11_OPEN
+  > Houd het moordende tempo urenlang vol, dwars over bergen en kusten, zonder ooit te pauzeren [STAT:robur:13] -> CH3_IO11_ROB
+  > Win onderweg herders en boeren voor je — hun gastvrijheid en aanwijzingen leggen haar spoor sneller bloot [STAT:gratia:11] -> CH3_IO11_GRA
+
+### CH3_IO11_OPEN  (r.5016)  — Bijgebleven
+[FLAG=ch3_io11_route=open]
+Je blijft haar volgen zo goed en kwaad als het gaat, soms achterop rakend, soms weer inhalend — uitgeput, maar je laat haar spoor niet los.
+  > Kijk hoe de tocht eindigt  -> CH3_IO12
+
+### CH3_IO11_ROB  (r.5033)  — Het Moordende Tempo
+[FLAG=ch3_io11_route=robur]
+Je houdt het tempo dat Io zichzelf oplegt urenlang vol, dwars over bergen en langs kusten, zonder ooit een pauze te vragen die zij zichzelf ook niet gunt.
+  > Kijk hoe de tocht eindigt  -> CH3_IO12
+
+### CH3_IO11_GRA  (r.5050)  — Vreemde Vriendelijkheid
+[FLAG=ch3_io11_route=gratia]
+Onderweg win je herders en boeren voor je met een paar goedgekozen woorden — hun gastvrijheid en hun aanwijzingen over "een krankzinnige, rennende koe" leggen haar spoor sneller bloot dan je op eigen kracht ooit zou vinden.
+  > Kijk hoe de tocht eindigt  -> CH3_IO12
+
+### CH3_IO12  (r.5067)  — Aangespoeld in Egypte
+Na weken van doelloze, door pijn gedreven vlucht bereikt Io uiteindelijk de oever van de Nijl in Egypte, uitgeput tot op het bot, haar krachten voorgoed verbruikt. Daar, aan de rand van een rivier die niets met haar eigen vader gemeen heeft, zakt ze eindelijk neer — te moe zelfs om nog te vluchten. Jupiter, die haar lijden al die tijd is blijven volgen, beseft dat dit de laatste kans is om het goed te maken, tegenover Io en tegenover zichzelf.
+  > Kijk wat Jupiter nu onderneemt  -> CH3_IO13
+
+### CH3_IO13  (r.5083)  — Terug in Menselijke Gedaante
+[FLAG=ch3_lijn_io=true | PERSON=io:full, argus:full, hermes:full | SOUVENIR=souvenir_io | TITEL=ch3_io]
+Jupiter zweert Juno plechtig dat hij Io nooit meer zal aanraken als minnares — een belofte die, voor deze ene keer, oprecht genoeg klinkt om Juno te doen toegeven. Ze laat de vloek los, en Io krijgt haar menselijke gedaante terug, huilend van opluchting op de oever van de Nijl. In Egypte baart ze Jupiters zoon Epaphus, en wordt ze door de Egyptenaren vereerd als een godin op zichzelf — vereenzelvigd met Isis, wier verering zich van daaruit over de hele Middellandse Zee zal verspreiden. Wat begon als vervolging eindigt, tegen alle verwachting in, als een nieuw soort goddelijkheid. Op de oever, half tussen het riet, ligt een enkele pauwenveer — met, midden in het patroon, iets dat verdacht veel op een oog lijkt. Je herkent het meteen: een van Argus' honderd ogen, ver van de rest van de staart geraakt. Je bewaart hem, zoals het Orakel dat wil.
+  > Wacht op wat Athena hierover te zeggen heeft  -> CH3_IO14
+
+### CH3_IO14  (r.5122)  — Athena over Europa
+[PERSON=europa:intro | IMG=europa_stier.png]
+Athena, die het hele verhaal zwijgend heeft gadegeslagen zoals ze dat sinds Hoofdstuk 2 wel vaker doet voor ze uiteindelijk toch iets zegt, kijkt je nu recht aan. "Je hebt Io gezien worden veranderd in een dier om Jupiters ontrouw te verbergen," zegt ze. "Onthoud die vorm goed — want ergens anders, op ditzelfde moment, speelt hetzelfde patroon zich af met de rollen omgekeerd." Ze vertelt, kort maar met duidelijke afkeuring in haar stem, over Europa: een Fenicische prinses die met haar dienaressen op het strand speelt, tot een opvallend tamme, sneeuwwitte stier zich bij de kudde voegt. Europa, argeloos, klimt op zijn rug — en de stier, die Jupiter zelf is, zwemt met haar de zee op, helemaal naar Kreta. Daar zal ze drie zonen baren, onder wie Minos — een naam die je, zegt Athena met een blik die meer weet dan ze nu al prijsgeeft, nog wel eens terug zult horen. "Bij Io wordt de vrouw een di
+  > Keer terug naar de Boodschapper — Herakles' beproevingen wachten nog  -> CH3_000
+
+### CH3_H01  (r.5149)  — Acht Beproevingen te Gaan
+[PAYOFF=ch3_h01_deur_herakles_harnas]
+Twee van Herakles' twaalf werken liggen achter hem — de Nemeïsche Leeuw gewurgd, de Hydra van Lerna verslagen met vuur, al telt Eurystheus die laatste vanwege Iolaos' hulp niet volwaardig mee. Tien beproevingen resten er nog, en Eurystheus, veilig verscholen achter de rand van zijn bronzen pot, kondigt de derde alvast aan met zichtbaar plezier in de moeilijkheidsgraad die hij ditmaal heeft bedacht. "Geen monster deze keer," zegt hij. "Een hert. Hoe moeilijk kan dat nu helemaal zijn?"
+  > Wacht af wat er zo lastig kan zijn aan een hert  -> CH3_H02
+
+### CH3_H01_HARNAS  (r.5165)  — Een Herinnering in Brons
+Herakles' blik valt op het harnas dat je draagt — zijn eigen, ooit overbodig geworden brons — en er verschijnt een glimlach die niets met de aankomende beproeving te maken heeft. "Nog steeds van pas, zie ik," zegt hij. "Mooi. Dan heeft het tenminste een nieuw leven gevonden." Hij knikt je toe, iets warmer dan zijn gebruikelijke strijdlust, voor hij zich weer tot Eurystheus' aankondiging keert.
+  > Wacht af wat er zo lastig kan zijn aan een hert  -> CH3_H02
+
+### CH3_H02  (r.5179)  — De Cerynitische Hinde
+[PUZZLE=puzzle_ch3h_genitivus]
+Het "hert" blijkt de Cerynitische Hinde te zijn — een dier met gouden gewei en bronzen hoeven, heilig aan Diana zelf, zo snel dat geen enkele jager het ooit heeft kunnen vangen. Het doden ervan zou Diana's woede over Herakles afroepen; het simpelweg laten lopen zou de opdracht onvervuld laten. Herakles kiest voor geduld in plaats van kracht: hij volgt het spoor van de hinde, zonder ooit dichtbij genoeg te komen om te jagen, een vol jaar lang, door bergen en valleien tot ver buiten Griekenland.
+  > Kijk hoe die lange achtervolging eindigt  -> CH3_H03
+
+### CH3_H03  (r.5198)  — Gevangen zonder een Wond
+Uiteindelijk, uitgeput en zonder enige list meer over, ziet Herakles zijn kans wanneer de hinde probeert een rivier over te steken — hij grijpt haar vast zonder haar te verwonden, precies op het moment dat Diana zelf verschijnt, woedend over wie haar heilige dier durft aan te raken. Herakles legt uit wat Eurystheus van hem eist, en belooft de hinde ongedeerd vrij te laten zodra hij haar heeft getoond. Diana, die zijn oprechtheid herkent, staat het toe — op voorwaarde dat hij zijn belofte ook werkelijk nakomt.
+  > Kijk of Herakles zijn woord houdt  -> CH3_H04
+
+### CH3_H04  (r.5214)  — De Erymanthische Ever
+[PERSON=pholus:intro]
+De vierde beproeving voert Herakles naar de besneeuwde hellingen van de berg Erymanthos, waar een reusachtige ever huishoudt. Onderweg zoekt hij onderdak bij de wijze centaur Pholus, die hem gastvrij ontvangt en, tegen beter weten in, een kruik wijn opent die aan alle centauren gezamenlijk toebehoort. De geur van de wijn trekt al snel de rest van de centaurenkudde aan — dronken, wild, en meteen agressief bij het zien van een indringer aan hun gezamenlijke voorraad.
+  > Kijk hoe Herakles zich verdedigt tegen de woedende kudde  -> CH3_H05
+
+### CH3_H05  (r.5233)  — De Centaurenstrijd
+[COMBAT=centauren]
+Herakles grijpt naar zijn pijlen — dezelfde die hij ooit doopte in het onuitwisbare gif van de Hydra van Lerna — en verdedigt zichzelf tegen de aanstormende centauren, die in hun dronken woede geen onderscheid meer maken tussen indringer en oude vriendschap.
+  > Kijk wat de vergiftigde pijlen hebben aangericht  -> CH3_H06
+
+### CH3_H06  (r.5250)  — Chiron
+Te midden van de chaos raakt een van Herakles' pijlen, afgeketst of simpelweg verdwaald, zijn eigen oude leermeester Chiron — de wijze, onsterfelijke centaur die hem ooit, jaren geleden, onderwees in geneeskunde, muziek en rechtvaardigheid. Chiron, anders dan de andere centauren, was nooit vijandig — hij stond enkel toevallig te dichtbij. Het gif van de Hydra, dat geen enkele wond ooit laat helen, brengt Chiron ondraaglijke pijn — en omdat hij onsterfelijk is, kan hij niet eens sterven om er een einde aan te maken. Herakles, ontzet over wat hij zijn eigen leermeester heeft aangedaan, kan niets anders doen dan toekijken.
+  > Voel intens medelijden met Chiron, gestraft voor andermans dronkenschap [CLEMENTIA] -> CH3_H07
+  > Erken de wrede ironie zonder je erin te laten meeslepen — Herakles moet door [SEVERITAS] -> CH3_H07
+  > Weet niet goed hoe je dit noodlot moet plaatsen [NEUTRAL] -> CH3_H07
+
+### CH3_H07  (r.5268)  — Een Onsterfelijkheid Weggegeven
+Chiron zal, jaren later, zijn eigen onsterfelijkheid vrijwillig afstaan aan Prometheus — nog altijd geketend aan zijn rots, nog altijd dagelijks gekweld door een adelaar — om zo eindelijk zelf verlost te worden van een pijn die nooit meer zal helen. Het is een verhaal dat nog moet gebeuren, maar dat Herakles, terwijl hij nu wegloopt van het bloedbad dat hij per ongeluk heeft aangericht, al met zich meedraagt als een schuld naast al zijn andere schulden. Terwijl Herakles zich weer naar zijn eigenlijke doel keert, wacht de beproeving zelf nog: de Erymanthische ever, ergens verderop in het dichte bos, nog altijd op vrije voeten.
+  > Ga de ever achterna  -> CH3_H07B
+
+### CH3_H07B  (r.5287)  — De Sneeuwjacht
+De ever is te snel en te wendbaar om zomaar in het nauw te drijven — hij moet eerst uitgeput raken voor hij ergens vast kan komen te zitten.
+  > Blijf gewoon volhouden met achtervolgen tot het dier vanzelf vastloopt  -> CH3_H07_OPEN
+  > Ren urenlang mee door de diepe sneeuw, de kou en uitputting doorstaand tot de ever eerder instort dan jij [STAT:robur:11] -> CH3_H07_ROB
+  > Dwing het dier met kracht een nauwe bergkloof in waar het geen kant meer op kan [STAT:vis:13] -> CH3_H07_VIS
+
+### CH3_H07_OPEN  (r.5303)  — Volhouden
+[FLAG=ch3_h07_route=open]
+Je blijft de ever gewoon achtervolgen, stap voor stap, tot het dier vanzelf vermoeid raakt en in een diepe sneeuwbank vastloopt.
+  > Kijk hoe Herakles het dier gevangen neemt  -> CH3_H07C
+
+### CH3_H07_ROB  (r.5320)  — Door de Sneeuw
+[FLAG=ch3_h07_route=robur]
+Je rent mee, uur na uur, door sneeuw die tot je knieën reikt, de kou een pijn die dieper gaat dan je had verwacht — tot de ever, uitgeput, eerder instort dan jij.
+  > Kijk hoe Herakles het dier gevangen neemt  -> CH3_H07C
+
+### CH3_H07_VIS  (r.5337)  — De Kloof
+[FLAG=ch3_h07_route=vis]
+Je kiest niet de weg van geduld maar die van kracht: je dwingt het dier, schreeuwend en met uitgestoken armen, een nauwe bergkloof in waar het zich niet meer kan omdraaien.
+  > Kijk hoe Herakles het dier gevangen neemt  -> CH3_H07C
+
+### CH3_H07C  (r.5354)  — Gevangen
+Herakles drijft de uitgeputte ever de laatste meters, waar het dier vastraakt en levend gevangen kan worden. Eurystheus, bij het zien van de ever, duikt voor de zoveelste keer zijn bronzen pot in.
+  > Ga door naar de volgende, heel andere soort beproeving  -> CH3_H08
+
+### CH3_H08  (r.5368)  — De Augiasstal
+[PUZZLE=puzzle_ch3h_dativus]
+De vijfde taak is geen gevecht maar een vernedering, bewust zo gekozen door Eurystheus: de stallen van koning Augias, die duizenden runderen huisvesten en al jaren niet zijn uitgemest, in slechts één enkele dag volledig schoonmaken. Geen sterveling, laat staan een held, heeft ooit zoiets geprobeerd. Herakles, die zijn kracht ditmaal niet kan gebruiken, sluit in het geheim een overeenkomst met Augias: een tiende van zijn kudde in ruil voor het karwei — zonder te vermelden dat hij dit sowieso al van Eurystheus moet doen.
+  > Kijk hoe Herakles het onmogelijke voor elkaar krijgt  -> CH3_H09
+
+### CH3_H09  (r.5387)  — Twee Rivieren Omgeleid
+[IMG=augiasstal.png]
+In plaats van te scheppen en te vegen, breekt Herakles simpelweg de muren aan beide kanten van de stallen open en leidt de rivieren Alpheus en Peneus er dwars doorheen — het water spoelt in enkele uren weg wat generaties vee hebben achtergelaten, en laat de stallen schoner achter dan ze ooit zijn geweest. Augias, die achteraf spijt krijgt van zijn belofte, weigert de afgesproken kudde te betalen. En Eurystheus, die hoort dat Herakles voor deze taak (bijna) betaald zou zijn geweest, verklaart — net als bij de Hydra — dat ook deze beproeving niet meetelt, puur op een technisch punt.
+  > Ga door naar de zesde beproeving, ondanks de onrechtvaardige afwijzing  -> CH3_H10
+
+### CH3_H10  (r.5409)  — De Stymfalische Vogels
+[PUZZLE=puzzle_ch3h_bijstelling | PERSON=athena:full]
+Een zwerm vleesetende vogels met bronzen snavels, klauwen en veren scherp genoeg om als pijlen te dienen, teistert het moerasgebied bij het meer Stymfalos — te talrijk en te goed verscholen in het dichte riet om met kracht alleen te bestrijden. Athena, die sinds Hoofdstuk 2 niet langer zwijgend toekijkt maar actief helpt waar ze kan, verschijnt met een geschenk van Hephaistos: een bronzen ratel, krotala genoemd, luid genoeg om zelfs de sluwste vogels uit hun schuilplaats te jagen.
+  > Kijk wat er gebeurt zodra de vogels opvliegen  -> CH3_H11
+
+### CH3_H11  (r.5431)  — Vogels uit het Riet
+[PUZZLE=puzzle_ch3h_dativus2]
+Herakles schudt de ratel met een lawaai dat over het hele moeras schalt — duizenden vogels stijgen tegelijk op, verrast en ontregeld, weg uit het riet waarin geen enkel wapen ze ooit had kunnen bereiken. Boven het open water, waar ze zich nergens meer kunnen verschuilen, is geen kracht meer nodig — enkel een rustige hand en een oog dat weet waar te mikken.
+  > Kijk hoe deze beproeving wordt afgesloten  -> CH3_H12
+
+### CH3_H12  (r.5448)  — De Kretenzische Stier
+[COMBAT=kretenzische_stier]
+Op Kreta huishoudt een reusachtige stier die Neptunus ooit aan koning Minos schonk — en die Minos, in plaats van hem te offeren zoals afgesproken, voor zichzelf hield. Neptunus, beledigd, maakte het dier razend, en het verwoest sindsdien akker na akker over het hele eiland. Minos, allang blij om van het beest af te zijn, staat Herakles zonder aarzeling toe om het mee te nemen — al weet niemand op Kreta nog wat er met de stier moet gebeuren zodra hij eenmaal gevangen is.
+  > Kijk waar Herakles de gevangen stier naartoe brengt  -> CH3_H13
+
+### CH3_H13  (r.5467)  — Losgelaten bij Marathon
+Herakles brengt de bedwongen stier helemaal naar Eurystheus, die — zoals inmiddels een vast patroon is geworden — meteen zijn bronzen pot induikt bij het zien van het woeste dier. Zonder verder nut voor de koning wordt de stier losgelaten in de vlakte bij Marathon, waar hij jarenlang zal blijven rondzwerven. Je voelt, zonder precies te weten waarom, dat dit dier zijn verhaal nog niet af heeft — ergens in de toekomst zal een andere held de "Marathonische Stier" nog moeten temmen.
+  > Ga door naar de zevende beproeving  -> CH3_H13B
+
+### CH3_H13B  (r.5483)  — De Wachters van het Paleis
+Bij het paleis van Diomedes aangekomen, wordt al snel duidelijk dat de merries zelf niet het eerste probleem zijn — de wachters die de stallen bewaken laten niemand ongezien voorbij.
+  > Ga recht op de poort af, er in het open doorheen  -> CH3_H13_OPEN
+  > Doe je voor als gezant met een boodschap voor de koning, en praat je met gezag langs de eerste wachtpost [STAT:gratia:13] -> CH3_H13_GRA
+  > Houd een uitputtende nachtwake vol tot de aflossende wacht slaperig en onoplettend is [STAT:robur:11] -> CH3_H13_ROB
+
+### CH3_H13_OPEN  (r.5499)  — Recht Erop Af
+[FLAG=ch3_h13_route=open]
+Je kiest de directe weg: recht op de poort af, de eerste onvermijdelijke schermutseling met de wachters incluis. Het kost meer moeite dan een sluipweg zou hebben gedaan, maar je bent er wel doorheen.
+  > Kijk hoe Herakles de stallen bereikt  -> CH3_H14
+
+### CH3_H13_GRA  (r.5516)  — De Gezant
+[FLAG=ch3_h13_route=gratia]
+Je doet je voor als een gezant met dringend nieuws voor de koning, en spreekt de eerste wachtpost met zoveel overtuiging toe dat niemand eraan denkt je tegen te houden. Tegen de tijd dat iemand twijfelt, sta je al binnen.
+  > Kijk hoe Herakles de stallen bereikt  -> CH3_H14
+
+### CH3_H13_ROB  (r.5533)  — De Nachtwake
+[FLAG=ch3_h13_route=robur]
+Je houdt vol, uur na uur, tot diep in de nacht, wachtend op het moment dat de vermoeidheid groter wordt dan de waakzaamheid. Wanneer de aflossing eindelijk komt, slaperig en onoplettend, glip je ongezien naar binnen.
+  > Kijk hoe Herakles de stallen bereikt  -> CH3_H14
+
+### CH3_H14  (r.5550)  — De Merries van Diomedes
+[COMBAT=merries_van_diomedes]
+Koning Diomedes van Thracië bezit vier merries die niet op hooi maar op mensenvlees zijn afgericht — nietsvermoedende reizigers die zijn koninkrijk binnenkomen, worden hem regelmatig voorgeworpen als voer. Eurystheus draagt Herakles op de merries levend naar Mycene te brengen. Herakles, die het paleis binnendringt en de stallen probeert te bereiken, ontdekt al snel dat Diomedes zijn wachters niet zomaar zal laten passeren.
+  > Kijk hoe Herakles de merries uiteindelijk kalmeert  -> CH3_H15
+
+### CH3_H15  (r.5569)  — Poëtische Gerechtigheid
+Herakles overmeestert Diomedes zelf en, in een wraak die niemand hem kwalijk neemt, voert de koning aan zijn eigen mensenetende merries — die, eenmaal verzadigd, plotsklaps kalm en handelbaar worden, alsof enkel honger hun waanzin had gevoed. Wat begon als een verschrikking eindigt met een vreemd soort rechtvaardigheid. Hij leidt de nu rustige dieren naar Mycene, waar Eurystheus ze, na de gebruikelijke vlucht in zijn pot, laat vrijlaten op de berg Olympos zelf.
+  > Ga door naar de achtste beproeving  -> CH3_H16
+
+### CH3_H16  (r.5585)  — De Gordel van Hippolyte
+Eurystheus' dochter begeert de gordel van Hippolyte, koningin van de Amazones — een geschenk ooit van Mars zelf, symbool van haar gezag over haar volk. Herakles reist naar hun land, verwachtend een gevecht, maar Hippolyte, onder de indruk van zijn reputatie, biedt de gordel spontaan en vreedzaam aan. Voor één keer lijkt een beproeving zonder bloedvergieten te kunnen eindigen.
+  > Vertrouw op deze vreedzame afloop, opgelucht dat het geweld hier uitblijft [CLEMENTIA] -> CH3_H17
+  > Blijf op je hoede — na alles wat je hebt gezien, wantrouw je een te gemakkelijke afloop [SEVERITAS] -> CH3_H17
+  > Wacht simpelweg af of het inderdaad zo eenvoudig blijft [NEUTRAL] -> CH3_H17
+
+### CH3_H17  (r.5603)  — Juno's Laatste List
+[COMBAT=amazones]
+Juno, die Herakles al sinds zijn geboorte haat en dit ongewoon vreedzame verloop niet kan verdragen, vermomt zich als een Amazone en verspreidt onder de kudde het gerucht dat de vreemdeling van plan is hun koningin te ontvoeren. Paniek en verwarring breken uit voor iemand de leugen kan ontkrachten. In de chaos die volgt, vallen de Amazones Herakles' schip aan — en Hippolyte zelf komt om, niet door zijn hand met opzet, maar in een gevecht dat nooit had moeten plaatsvinden als Juno zich er niet mee had bemoeid.
+  > Draag de gordel mee, zwaarder dan hij had moeten zijn  -> CH3_H18
+
+### CH3_H18  (r.5622)  — Het Vee van Geryon
+De tiende beproeving voert Herakles naar het uiterste westen van de bekende wereld, naar Geryon — een reus met drie gekoppelde lichamen op één paar benen, eigenaar van een kudde rood vee bewaakt door een tweekoppige hond. Onderweg splijt Herakles een berg in tweeën om een doorgang naar de oceaan te scheppen: de rotsen die aan weerszijden achterblijven, zullen eeuwenlang bekendstaan als de Zuilen van Herakles. De doorgang die hij zo schept, markeert voortaan de rand van de wereld die de Ouden kennen — en de poort naar alles wat daarbuiten ligt.
+  > Kijk hoe Herakles de kudde probeert te bemachtigen  -> CH3_H19
+
+### CH3_H19  (r.5638)  — Drie Lichamen, Eén Val
+[COMBAT=geryon]
+Geryon, gewaarschuwd door het geblaf van zijn tweekoppige waakhond, komt zelf met al drie zijn lichamen tegelijk aanstormen om zijn kudde te verdedigen — een tegenstander die, in tegenstelling tot de meeste andere beproevingen, drie keer zoveel klappen kan uitdelen als een gewone man.
+  > Drijf de veroverde kudde helemaal terug naar Mycene  -> CH3_H20
+
+### CH3_H20  (r.5655)  — De Appels van de Hesperiden
+[PUZZLE=puzzle_ch3h_genitivus2]
+De elfde taak voert Herakles naar de tuin van de Hesperiden, aan de rand van de wereld, waar een boom met gouden appels groeit — een huwelijksgeschenk van Gaia aan Juno zelf, bewaakt door de nooit-slapende draak Ladon, wiens honderd koppen (zo vertelt men, al is niemand het helemaal eens over het exacte aantal) zich eindeloos om de stam winden. Herakles, die weet dat kracht alleen hier niet genoeg zal zijn — geen zwaard doorboort honderd koppen tegelijk — herkent het patroon meteen: hetzelfde probleem als Argus Panoptes, alleen dan met een dier dat zich nooit láát afleiden door verhalen of fluitspel. In plaats daarvan valt hij terug op wat hij bij de Cerynitische Hinde al leerde: geduld. Nacht na nacht bestudeert hij hoe de koppen bewegen, tot hij het ene ogenblik ontdekt waarop ze allemaal, even, dezelfde kant op kijken.
+  > Kijk hoe Herakles daarna de appels zelf probeert te bemachtigen  -> CH3_H21
+
+### CH3_H21  (r.5674)  — De Last van Atlas
+[PUZZLE=puzzle_ch3h_bijstelling2 | IMG=atlas_hemel.png]
+Met Ladon omzeild weet Herakles nog altijd niet hoe hij zelf de appels mag plukken — enkel de titaan Atlas, die de hemel op zijn schouders draagt vlakbij de tuin, kent de weg naar de boom zonder het lot van de wachter te delen. Herakles biedt aan tijdelijk de hemel over te nemen, zodat Atlas de appels voor hem kan halen. Atlas, eindelijk bevrijd van een last die hij al eeuwen torst, plukt de appels — en overweegt dan hardop om nooit meer terug te komen, Herakles voorgoed achterlatend onder het gewicht van de hemel.
+  > Kijk hoe Herakles zich uit deze list weet te redden  -> CH3_H22
+
+### CH3_H22  (r.5696)  — De Hemel Teruggegeven
+Herakles, die doorziet wat Atlas van plan is, speelt het spel mee: hij vraagt slechts om een kort moment om zijn mantel op te vouwen als kussen onder de last. Atlas, zonder enig wantrouwen, neemt de hemel nog één keer over — en Herakles grijpt op datzelfde ogenblik de appels en loopt weg, de titaan voorgoed achterlatend met zijn oorspronkelijke last. Met de appels veilig bij Eurystheus (die ze, zodra hij zeker weet dat Herakles echt weg is, teruggeeft aan Athena, want een sterveling mag zulke goddelijke vruchten niet permanent bezitten) rest er nog maar één beproeving — de zwaarste van allemaal.
+  > Wacht af wat Eurystheus voor de twaalfde en laatste taak heeft bedacht  -> CH3_H23
+
+### CH3_H23  (r.5715)  — De Twaalfde Taak
+[PERSON=hermes:full]
+Eurystheus, die na elf beproevingen wanhopig op zoek is naar iets wat Herakles onmogelijk kan volbrengen, bedenkt uiteindelijk de zwaarste opdracht van allemaal: Cerberus, de driekoppige hond die de poort van de onderwereld bewaakt, levend naar Mycene brengen — zonder wapens, met enkel blote handen. Hades zelf, wanneer Herakles via een grot bij Tainaron afdaalt naar zijn rijk, staat de beproeving toe — op voorwaarde dat Herakles Cerberus zonder geweld overmeestert. Athena en Mercurius, beiden inmiddels vertrouwde bondgenoten, begeleiden hem tot aan de rand van de onderwereld.
+  > Daal af naar de poort van de onderwereld  -> CH3_H23B
+
+### CH3_H23B  (r.5734)  — De Tocht Door het Duister
+De weg naar Cerberus zelf voert door een duisternis die drukt op de borst, verstikkend zwaar op een manier die niets met gewone nacht te maken heeft — de onderwereld laat niemand ongemerkt passeren, zelfs een boodschapper niet.
+  > Laat Athena en Mercurius je stap voor stap veilig door het duister begeleiden  -> CH3_H23_OPEN
+  > Leg de tocht alleen af, op eigen doorzettingsvermogen, en verdraag de verstikkende zwaarte zonder te wankelen [STAT:robur:15] -> CH3_H23_ROB
+
+### CH3_H23_OPEN  (r.5749)  — Begeleid Door Bondgenoten
+[FLAG=ch3_h23_route=open]
+Je blijft dicht bij Athena en Mercurius, die je stap voor stap door het ergste van het duister loodsen. Het is geen schande om hier hulp te aanvaarden — zelfs Herakles doet dat.
+  > Kijk hoe Herakles tegenover Cerberus komt te staan  -> CH3_H24
+
+### CH3_H23_ROB  (r.5766)  — Alleen Door de Duisternis
+[FLAG=ch3_h23_route=robur]
+Je laat je bondgenoten voorgaan en legt het laatste stuk alleen af, de verstikkende zwaarte van de onderwereld op je schouders zonder ooit te wankelen — een beproeving die, op haar eigen manier, bijna net zo zwaar is als die van Herakles zelf.
+  > Kijk hoe Herakles tegenover Cerberus komt te staan  -> CH3_H24
+
+### CH3_H24  (r.5783)  — Cerberus, aan de Poort van de Onderwereld
+[COMBAT=cerberus]
+Cerberus, drie koppen op één enkel, reusachtig lichaam, elk met een gegrom dat zelfs schaduwen doet terugdeinzen, bewaakt de poort zoals hij dat al eeuwen doet — niemand levend naar binnen, niemand dood weer naar buiten. Herakles, die zijn wapens heeft achtergelaten zoals beloofd, stapt op het beest af met enkel zijn blote handen en een leeuwenhuid als enige bescherming.
+  > Kijk hoe Herakles het driekoppige beest weet te overmeesteren  -> CH3_H25
+
+### CH3_H25  (r.5802)  — Twaalf Werken Volbracht
+[FLAG=ch3_lijn_herakles=true; herakles_taken_voltooid=12 | PERSON=herakles:full | SOUVENIR=souvenir_herakles_labores | TITEL=ch3_herakles_labores | IMG=cerberus_voltooid.png]
+Herakles bedwingt Cerberus met blote handen, precies zoals afgesproken, en draagt hem — grommend, maar ongedeerd — helemaal naar Mycene. Eurystheus, bij het zien van het driekoppige monster op zijn eigen binnenplaats, duikt voor de allerlaatste keer zijn bronzen pot in en smeekt Herakles het beest onmiddellijk terug te brengen naar waar het vandaan kwam. Herakles brengt Cerberus, zoals beloofd, ongedeerd terug naar de onderwereld — en met die laatste daad zijn alle twaalf werken volbracht. Tien jaar dienstbaarheid, opgelegd door een orakel na de ergste daad van zijn leven, eindigen hier. De schuld die hij droeg sinds die vreselijke dag met Megara en hun kinderen is, voor zover een orakel dat kan bepalen, ingelost. Voor je afscheid neemt, drukt Herakles je zelf iets in handen: een van de gouden appels van de Hesperiden, die hij nooit heeft opgegeten. "Bewaar die," zegt hij. "Ik heb aan he
+  > Keer terug naar de Boodschapper  -> CH3_000
+
+### CH3_ATHENA  (r.5844)  — Wat Vrijheid Werkelijk Betekent
+[PERSON=athena:full | TITEL=ch3_athena_gesprek | IMG=athena_mentor_ch3.png]
+Athena wacht je op bij de Boodschapper, ditmaal niet als toeschouwer maar als iemand die duidelijk al een tijd op dit gesprek heeft zitten wachten. "Io kreeg haar vrijheid terug nadat een god eindelijk verantwoordelijkheid nam voor wat hij had aangericht," zegt ze. "Herakles kreeg de zijne terug door tien jaar lang, beproeving na beproeving, een schuld in te lossen die hem was opgelegd voor iets wat niet volledig zijn eigen keuze was." "Twee soorten vrijheid," vervolgt ze, "en jij, {tendency_address_cap}, hebt inmiddels gezien dat geen van beide vanzelf komt — niet voor een god, en al helemaal niet voor een sterveling."
+  > Laat haar woorden bezinken  -> CH3_ORAKEL
+
+### CH3_ORAKEL  (r.5869)  — Het Orakel Keert Terug
+De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warm en tevreden. "Io, bevrijd van Argus en van haarzelf. Herakles, bevrijd van een schuld die tien jaar heeft geduurd," zegt de stem. "Twee verhalen over wat het kost om vrij te zijn — en wat het waard is zodra je het eindelijk bent."
+  > Luister verder  -> CH3_EINDE
+
+### CH3_EINDE  (r.5892)  — Het Einde van Hoofdstuk 3
+"Hoofdstuk 4 wacht al ergens verderop," zegt de stem, "waar een ander soort labyrint op je wacht — niet van steen deze keer, maar van herinnering zelf." De poort keert terug tot een dunne streep licht, en je neemt twee nieuwe herinneringen met je mee: vrijheid, en volbrenging.
+  > Stap door de poort  -> CH4_000
