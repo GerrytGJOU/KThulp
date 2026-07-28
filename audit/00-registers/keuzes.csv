@@ -1,0 +1,670 @@
+id;scene;hoofdstuk;regel;tekst;doel;echte_keuze;keuzes_in_scene;unieke_doelen;voorwaarde;approach;effect_flags;effect_relaties;gevolg
+K0001;PRO_001;PRO;2001;Graaf meteen verder;PRO_002;true;2;2;;;;;lokaal
+K0002;PRO_001;PRO;2001;Veeg eerst voorzichtig het zand weg;PRO_001B;true;2;2;;;;;lokaal
+K0003;PRO_001B;PRO;2019;Graaf de kist op;PRO_002;false;1;1;;;;;doorklik
+K0004;PRO_002;PRO;2033;Open de kist;PRO_003;true;2;2;;;;;lokaal
+K0005;PRO_002;PRO;2033;Laat de kist gesloten en keer terug naar het dorp;PRO_002B;true;2;2;;;;;lokaal
+K0006;PRO_002B;PRO;2048;Keer terug naar het veld en graaf de kist alsnog open;PRO_003;false;1;1;;;;;doorklik
+K0007;PRO_003;PRO;2062;Neem de jachtboog;PRO_004A;true;3;3;;;;;lokaal
+K0008;PRO_003;PRO;2062;Neem de speer;PRO_004B;true;3;3;;;;;lokaal
+K0009;PRO_003;PRO;2062;Neem de ruitersporen;PRO_004C;true;3;3;;;;;lokaal
+K0010;PRO_004A;PRO;2078;Verder zoeken in de kist;PRO_005;false;1;1;;;;;doorklik
+K0011;PRO_004B;PRO;2098;Verder zoeken in de kist;PRO_005;false;1;1;;;;;doorklik
+K0012;PRO_004C;PRO;2118;Verder zoeken in de kist;PRO_005;false;1;1;;;;;doorklik
+K0013;PRO_005;PRO;2138;Raak de schijf aan;PRO_006;true;2;2;;;;;lokaal
+K0014;PRO_005;PRO;2138;Trek je hand terug;PRO_005B;true;2;2;;;;;lokaal
+K0015;PRO_005B;PRO;2159;Raak de schijf alsnog aan;PRO_006;false;1;1;;;;;doorklik
+K0016;PRO_006;PRO;2173;Laat het gebeuren;PRO_007;false;1;1;;;;;doorklik
+K0017;PRO_007;PRO;2190;Ontcijfer het patroon;PRO_008;false;1;1;;;;;doorklik
+K0018;PRO_008;PRO;2207;Spreek de gestalte aan;PRO_009;false;1;1;;;;;doorklik
+K0019;PRO_009;PRO;2224;Stap door de poort;CH1_000;false;1;1;;;;;doorklik
+K0020;CH1_000;CH1;2271;"Naar Sardis, waar een koning alles tot goud maakt";CH1_A01;true;3;3;;;;;lokaal
+K0021;CH1_000;CH1;2271;"Naar de top van de Olympos, waar iets op het punt staat te barsten";CH1_B01;true;3;3;;;;;lokaal
+K0022;CH1_000;CH1;2271;"Naar een kille vallei, waar het eerste vuur nog gestolen moet worden";CH1_C01;true;3;3;;;;;lokaal
+K0023;CH1_A01;CH1;2292;Ga direct de stad Sardis binnen;CH1_A02;true;2;2;;;;;lokaal
+K0024;CH1_A01;CH1;2292;Vraag eerst een langsreizende koopman naar het laatste nieuws;CH1_A01B;true;2;2;;;;;lokaal
+K0025;CH1_A01B;CH1;2312;"Knik kort en loop meteen door, je aandacht al bij het paleis";CH1_A02;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0026;CH1_A01B;CH1;2312;"Luister beleefd, maar zonder een duidelijk oordeel over wat je net hoorde";CH1_A02;true;3;1;;NEUTRAL;;;schijnkeuze
+K0027;CH1_A01B;CH1;2312;Bedank de koopman voor zijn verhaal voor je verdergaat;CH1_A02;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0028;CH1_A02;CH1;2330;Ontcijfer het woord boven de poort;CH1_A02_PUZZLE;true;3;3;;;;;lokaal
+K0029;CH1_A02;CH1;2330;Zet je schouder tegen de zijdeur van de wachtpost en forceer hem open;CH1_A02_VIS;true;3;3;STAT vis 13;;;;lokaal
+K0030;CH1_A02;CH1;2330;"Wacht de wisseling van de wacht af en glip dan, ongezien, tussen hen door";CH1_A02_SLUIP;true;3;3;STAT prudentia 13;;;;lokaal
+K0031;CH1_A02_PUZZLE;CH1;2350;Ontcijfer het woord;CH1_A03;false;1;1;;;;;doorklik
+K0032;CH1_A02_VIS;CH1;2367;Loop door naar de troonzaal;CH1_A03;false;1;1;;;;;doorklik
+K0033;CH1_A02_SLUIP;CH1;2381;Loop door naar de troonzaal;CH1_A03;false;1;1;;;;;doorklik
+K0034;CH1_A03;CH1;2395;Wacht af wat Bacchus te bieden heeft;CH1_A04;false;1;1;;;;;doorklik
+K0035;CH1_A04;CH1;2413;Blijf kijken wat er gebeurt;CH1_A05;false;1;1;;;;;doorklik
+K0036;CH1_A05;CH1;2437;Kijk toe hoe hij verder gaat;CH1_A06;false;1;1;;;;;doorklik
+K0037;CH1_A06;CH1;2454;Kijk onbewogen toe — hij wist waar hij om vroeg;CH1_A07;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0038;CH1_A06;CH1;2454;"Kijk toe, nog niet goed wetend wat je van dit alles moet denken";CH1_A07;true;3;1;;NEUTRAL;;;schijnkeuze
+K0039;CH1_A06;CH1;2454;Kijk met groeiend medeleven hoe zijn paniek toeneemt;CH1_A07;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0040;CH1_A07;CH1;2472;"Grijp hem stevig bij zijn schouders, om hem tot bezinning te schudden";CH1_A08;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0041;CH1_A07;CH1;2472;"Grijp hem bij zijn schouders, zelf niet zeker of dit troost of een schok moet zijn";CH1_A08;true;3;1;;NEUTRAL;;;schijnkeuze
+K0042;CH1_A07;CH1;2472;"Grijp hem voorzichtig bij zijn schouders, om hem te troosten";CH1_A08;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0043;CH1_A08;CH1;2490;"Blijf eerst naast hem zitten, zodat hij niet alleen is met wat hij heeft gedaan";CH1_A08B;true;3;2;;CLEMENTIA;;;duurzaam-houding
+K0044;CH1_A08;CH1;2490;"Blijf besluiteloos naast hem zitten, niet zeker wat je nu moet zeggen";CH1_A08B;true;3;2;;NEUTRAL;;;lokaal
+K0045;CH1_A08;CH1;2490;"Wijs hem meteen op Bacchus, die alles zag gebeuren";CH1_A09;true;3;2;;SEVERITAS;;;duurzaam-houding
+K0046;CH1_A08B;CH1;2508;"Wijs hem op Bacchus, die alles zag gebeuren";CH1_A09;false;1;1;;;;;doorklik
+K0047;CH1_A09;CH1;2524;Wacht op het antwoord van de god;CH1_A10;false;1;1;;;;;doorklik
+K0048;CH1_A10;CH1;2543;"Blijf vlak naast Midas, klaar om hem overeind te houden wanneer hij weer struikelt";CH1_A10_OPEN;true;3;3;;;ch1_a10_route=open;;lokaal
+K0049;CH1_A10;CH1;2543;Duw de dichtklappende poort met kracht open zodat jullie er meteen doorheen kunnen;CH1_A10_VIS;true;3;3;STAT vis 13;;ch1_a10_route=vis;;lokaal
+K0050;CH1_A10;CH1;2543;Praat de paniekerige poortwacht om vóór hij het slot dichtgooit;CH1_A10_GRATIA;true;3;3;STAT gratia 11;;ch1_a10_route=gratia;;lokaal
+K0051;CH1_A10_OPEN;CH1;2561;Kijk toe hoe Midas zich in het water werpt;CH1_A10B;false;1;1;;;ch1_lijn=A | ch1_voltooid=true;;doorklik
+K0052;CH1_A10_VIS;CH1;2578;Kijk toe hoe Midas zich in het water werpt;CH1_A10B;false;1;1;;;ch1_lijn=A | ch1_voltooid=true;;doorklik
+K0053;CH1_A10_GRATIA;CH1;2595;Kijk toe hoe Midas zich in het water werpt;CH1_A10B;false;1;1;;;ch1_lijn=A | ch1_voltooid=true;;doorklik
+K0054;CH1_A10B;CH1;2612;Loop meteen door — er wacht nog werk aan de naam die je moet redden;CH1_A11;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0055;CH1_A10B;CH1;2612;"Werp een laatste blik terug, zonder er verder bij stil te staan";CH1_A11;true;3;1;;NEUTRAL;;;schijnkeuze
+K0056;CH1_A10B;CH1;2612;"Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg";CH1_A11;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0057;CH1_A11;CH1;2650;Luister verder;CH1_ROBE;false;1;1;;;;;doorklik
+K0058;CH1_B01;CH1;2672;Beklim direct de laatste helling naar de top;CH1_B01C;true;2;2;;;;;lokaal
+K0059;CH1_B01;CH1;2672;Vraag de herder waarom hij zo angstig wegvlucht;CH1_B01B;true;2;2;;;;;lokaal
+K0060;CH1_B01B;CH1;2694;Je hebt geen tijd voor meer vragen en klimt meteen door;CH1_B01C;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0061;CH1_B01B;CH1;2694;"Overweeg zijn woorden een moment, en klim dan verder";CH1_B01C;true;3;1;;NEUTRAL;;;schijnkeuze
+K0062;CH1_B01B;CH1;2694;Bedank de herder voor zijn waarschuwing voor je verdergaat;CH1_B01C;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0063;CH1_B01C;CH1;2712;"Volg het kronkelende pelgrimspad, langzamer maar voor iedereen begaanbaar";CH1_B01_PAD;true;3;3;;;ch1_b01_route=pad;;lokaal
+K0064;CH1_B01C;CH1;2712;"Klim recht tegen de rotswand op, rechtstreeks de aanzwellende wind in";CH1_B01_VIS;true;3;3;STAT vis 13;;ch1_b01_route=vis;;lokaal
+K0065;CH1_B01C;CH1;2712;"Spring behendig van steen naar steen over een smalle, afbrokkelende richel";CH1_B01_AGI;true;3;3;STAT agilitas 11;;ch1_b01_route=agilitas;;lokaal
+K0066;CH1_B01_PAD;CH1;2728;Loop de top van de Olympos op;CH1_B02;false;1;1;;;;;doorklik
+K0067;CH1_B01_VIS;CH1;2745;Loop de top van de Olympos op;CH1_B02;false;1;1;;;;;doorklik
+K0068;CH1_B01_AGI;CH1;2762;Loop de top van de Olympos op;CH1_B02;false;1;1;;;;;doorklik
+K0069;CH1_B02;CH1;2779;Blijf nuchter — een pijnlijke geboorte is nog geen excuus voor wat hij Metis aandeed;CH1_B03;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0070;CH1_B02;CH1;2779;Kijk toe zonder een duidelijke mening te vormen over wat je ziet;CH1_B03;true;3;1;;NEUTRAL;;;schijnkeuze
+K0071;CH1_B02;CH1;2779;"Voel medelijden met Zeus, ondanks alles wat hij heeft gedaan";CH1_B03;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0072;CH1_B03;CH1;2797;Volg het gefluister naar Zeus' troon;CH1_B04;false;1;1;;;;;doorklik
+K0073;CH1_B04;CH1;2817;Kijk niet weg;CH1_B05;false;1;1;;;;;doorklik
+K0074;CH1_B05;CH1;2839;Kijk hoe ze voor het eerst ademhaalt;CH1_B06;false;1;1;;;;;doorklik
+K0075;CH1_B06;CH1;2858;Kijk hoe Zeus als eerste zijn stem hervindt;CH1_B07;true;2;2;;;;;lokaal
+K0076;CH1_B06;CH1;2858;"Kijk naar de andere goden, die zich stilletjes terugtrekken";CH1_B06B;true;2;2;;;;;lokaal
+K0077;CH1_B06B;CH1;2878;Wacht af hoe zij antwoordt;CH1_B07;false;1;1;;;;;doorklik
+K0078;CH1_B07;CH1;2894;"Kijk toe, vooral benieuwd wat haar aanwezigheid voor de Olympos gaat betekenen";CH1_B08;true;3;1;;SEVERITAS;ch1_lijn=B | ch1_voltooid=true;;duurzaam
+K0079;CH1_B07;CH1;2894;"Kijk toe, vooral afwachtend wat er nu gaat gebeuren";CH1_B08;true;3;1;;NEUTRAL;ch1_lijn=B | ch1_voltooid=true;;duurzaam
+K0080;CH1_B07;CH1;2894;"Kijk toe, ontroerd door het moment tussen vader en dochter";CH1_B08;true;3;1;;CLEMENTIA;ch1_lijn=B | ch1_voltooid=true;;duurzaam
+K0081;CH1_B08;CH1;2912;Daal meteen af — er is nog werk te doen;CH1_B09;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0082;CH1_B08;CH1;2912;"Daal af, nog steeds nadenkend over wat je zojuist hebt gezien";CH1_B09;true;3;1;;NEUTRAL;;;schijnkeuze
+K0083;CH1_B08;CH1;2912;"Daal af, dankbaar dat je bij zo'n geboorte mocht zijn";CH1_B09;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0084;CH1_B09;CH1;2950;Luister verder;CH1_ROBE;false;1;1;;;;;doorklik
+K0085;CH1_C01;CH1;2972;"Loop resoluut door — verhalen zijn mooi, maar je wilt het zelf zien";CH1_C02;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0086;CH1_C01;CH1;2972;"Loop verder in gedachten, niet meteen overtuigd van het hele verhaal";CH1_C02;true;3;1;;NEUTRAL;;;schijnkeuze
+K0087;CH1_C01;CH1;2972;"Haast je naar de vallei, bewogen door het verhaal van de oude vrouw";CH1_C02;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0088;CH1_C02;CH1;2995;"Volg hem meteen, vastbesloten als hij is";CH1_C03;true;2;2;;;;;lokaal
+K0089;CH1_C02;CH1;2995;"Wacht tot het donker is, zodat hij ongezien de Olympos op kan";CH1_C02B;true;2;2;;;;;lokaal
+K0090;CH1_C02B;CH1;3012;Volg hem terwijl hij zich naar het vuur van de goden waagt;CH1_C03;false;1;1;;;;;doorklik
+K0091;CH1_C03;CH1;3028;Kom dichterbij;CH1_C03B;false;1;1;;;;;doorklik
+K0092;CH1_C03B;CH1;3047;"Blijf op veilige afstand, in de schaduw die er toch al ligt";CH1_C03_OPEN;true;3;3;;;ch1_c03_route=open;;lokaal
+K0093;CH1_C03B;CH1;3047;"Sluip mee tussen de zuilen, exact in de pas van Prometheus";CH1_C03_AGI;true;3;3;STAT agilitas 11;;ch1_c03_route=agilitas;;lokaal
+K0094;CH1_C03B;CH1;3047;"Klim in plaats daarvan recht langs de rotsrand omhoog — zwaarder, maar sneller bij de haard";CH1_C03_VIS;true;3;3;STAT vis 13;;ch1_c03_route=vis;;lokaal
+K0095;CH1_C03_OPEN;CH1;3063;Kijk hoe Prometheus een vonk verbergt;CH1_C04;false;1;1;;;;;doorklik
+K0096;CH1_C03_AGI;CH1;3080;Kijk hoe Prometheus een vonk verbergt;CH1_C04;false;1;1;;;;;doorklik
+K0097;CH1_C03_VIS;CH1;3097;Kijk hoe Prometheus een vonk verbergt;CH1_C04;false;1;1;;;;;doorklik
+K0098;CH1_C04;CH1;3114;Kijk toe hoe de hemel dit opmerkt;CH1_C05;false;1;1;;;;;doorklik
+K0099;CH1_C05;CH1;3130;Kijk toe zonder oordeel — de goden doen wat goden doen;CH1_C06;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0100;CH1_C05;CH1;3130;Wacht simpelweg af wat Zeus heeft bedacht;CH1_C06;true;3;1;;NEUTRAL;;;schijnkeuze
+K0101;CH1_C05;CH1;3130;"Vrees voor wat dit gaat opleveren, met medelijden voor wie straks de gevolgen zal dragen";CH1_C06;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0102;CH1_C06;CH1;3148;Volg Pandora naar de mensenwereld;CH1_C07;false;1;1;;;;;doorklik
+K0103;CH1_C07;CH1;3169;Kijk toe op het moment dat ze het deksel licht;CH1_C08;true;2;2;;;;;lokaal
+K0104;CH1_C07;CH1;3169;Kijk hoe Epimetheus probeert haar aandacht af te leiden;CH1_C07B;true;2;2;;;;;lokaal
+K0105;CH1_C07B;CH1;3192;Kijk toe op het moment dat ze het deksel licht;CH1_C08;false;1;1;;;;;doorklik
+K0106;CH1_C08;CH1;3208;Richt je blik meteen op de doos — is dit werkelijk alles wat erin zat?;CH1_C09;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0107;CH1_C08;CH1;3208;"Kijk toe, niet goed wetend wie of wat hier het meest je aandacht verdient";CH1_C09;true;3;1;;NEUTRAL;;;schijnkeuze
+K0108;CH1_C08;CH1;3208;"Kniel bij Pandora neer, die verstijfd is van schrik en schuldgevoel";CH1_C09;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0109;CH1_C09;CH1;3229;"Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer";CH1_C09B;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0110;CH1_C09;CH1;3229;"Ga naar hem toe, zonder meteen te weten wat je tegen hem wilt zeggen";CH1_C09B;true;3;1;;NEUTRAL;;;schijnkeuze
+K0111;CH1_C09;CH1;3229;"Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd";CH1_C09B;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0112;CH1_C09B;CH1;3250;Volg het karrenspoor dat om de berg heen naar de pas voert;CH1_C09_PAD;true;3;3;;;ch1_c09_route=open;;lokaal
+K0113;CH1_C09B;CH1;3250;"Beklim de rotswand rechtstreeks, hand over hand tegen het zwaartepunt in";CH1_C09_VIS;true;3;3;STAT vis 13;;ch1_c09_route=vis;;lokaal
+K0114;CH1_C09B;CH1;3250;Lees het vluchtpatroon van de adelaar — zijn dagelijkse route verraadt de kortste weg naar de rots;CH1_C09_PRU;true;3;3;STAT prudentia 11;;ch1_c09_route=prudentia;;lokaal
+K0115;CH1_C09_PAD;CH1;3266;Kijk omhoog naar waar Prometheus geketend hangt;CH1_C10;false;1;1;;;;;doorklik
+K0116;CH1_C09_VIS;CH1;3283;Kijk omhoog naar waar Prometheus geketend hangt;CH1_C10;false;1;1;;;;;doorklik
+K0117;CH1_C09_PRU;CH1;3300;Kijk omhoog naar waar Prometheus geketend hangt;CH1_C10;false;1;1;;;;;doorklik
+K0118;CH1_C10;CH1;3317;Beantwoord zijn blik;CH1_C11;false;1;1;;;ch1_lijn=C | ch1_voltooid=true;;doorklik
+K0119;CH1_C11;CH1;3336;"Loop verder, terug naar de bewoonde wereld";CH1_C12;false;1;1;;;;;doorklik
+K0120;CH1_C12;CH1;3372;Luister verder;CH1_ROBE;false;1;1;;;;;doorklik
+K0121;CH1_ROBE;CH1;3394;Trek de mantel aan;CH1_CODEX_UITLEG;false;1;1;;;;;doorklik
+K0122;CH1_CODEX_UITLEG;CH1;3416;Doorgaan;CH1_EINDE;false;1;1;;;;;doorklik
+K0123;CH1_EINDE;CH1;3432;Stap door de poort;CH2_000;false;1;1;;;;;doorklik
+K0124;CH2_000;CH2;3484;"Volg het spoor van Latona, een titanide die Jupiters kind draagt en nergens welkom is";CH2_L01;true;5;5;DONE ch2_lijn_latona;;;;lokaal
+K0125;CH2_000;CH2;3484;"Volg het lot van Semele, een prinses van Thebe die niet weet wie haar minnaar werkelijk is";CH2_S01;true;5;5;DONE ch2_lijn_semele;;;;lokaal
+K0126;CH2_000;CH2;3484;"Volg Kallisto, een jachtgezellin van Artemis die niemand kan vertrouwen wat ze ziet";CH2_K01;true;5;5;DONE ch2_lijn_kallisto;;;;lokaal
+K0127;CH2_000;CH2;3484;"Volg Herakles, Zeus' sterfelijke zoon die Hera al haat sinds voor zijn geboorte";CH2_H01;true;5;5;DONE ch2_lijn_herakles;;;;lokaal
+K0128;CH2_000;CH2;3484;"Spreek het Orakel aan, nu alle vier de verhalen zijn gehoord";CH2_ATHENA;true;5;5;REQUIRE fragments=4;;;;lokaal
+K0129;CH2_L01;CH2;3507;Volg Latona op haar zoektocht;CH2_L02;false;1;1;;;;;doorklik
+K0130;CH2_L02;CH2;3526;Trek weifelend verder — je weet niet goed wat je van de herder moet denken;CH2_L03;true;3;2;;NEUTRAL;;;lokaal
+K0131;CH2_L02;CH2;3526;"Schuil dankbaar in het riet, ontroerd door zijn stille moed";CH2_L02B;true;3;2;;CLEMENTIA;;;duurzaam-houding
+K0132;CH2_L02;CH2;3526;Trek meteen verder — je vertrouwt niemand meer die zo snel weer verdwijnt;CH2_L03;true;3;2;;SEVERITAS;;;duurzaam-houding
+K0133;CH2_L02B;CH2;3544;"Ga met haar mee, verder op zoek naar een echte schuilplaats";CH2_L03;false;1;1;;;;;doorklik
+K0134;CH2_L03;CH2;3558;"Blijf haar volgen, ondanks alles";CH2_L04;false;1;1;;;;;doorklik
+K0135;CH2_L04;CH2;3575;Wacht af wat ze doen;CH2_L05;false;1;1;;;;;doorklik
+K0136;CH2_L05;CH2;3591;Ren met haar mee;CH2_L06;false;1;1;;;;;doorklik
+K0137;CH2_L06;CH2;3608;Blijf naast haar;CH2_L06B;false;1;1;;;;;doorklik
+K0138;CH2_L06B;CH2;3625;"Ren blindelings verder naast haar, op adrenaline alleen";CH2_L06_OPEN;true;3;3;;;ch2_l06_route=open;;lokaal
+K0139;CH2_L06B;CH2;3625;"Leid haar zigzaggend tussen de rotsen door, te snel en te lenig voor het logge beest";CH2_L06_AGI;true;3;3;STAT agilitas 11;;ch2_l06_route=agilitas;;lokaal
+K0140;CH2_L06B;CH2;3625;Bijt door je eigen pijn heen en houd het tempo naast haar vol tot de kustlijn;CH2_L06_ROB;true;3;3;STAT robur 13;;ch2_l06_route=robur;;lokaal
+K0141;CH2_L06_OPEN;CH2;3641;Kijk uit naar een laatste toevlucht;CH2_L07;false;1;1;;;;;doorklik
+K0142;CH2_L06_AGI;CH2;3658;Kijk uit naar een laatste toevlucht;CH2_L07;false;1;1;;;;;doorklik
+K0143;CH2_L06_ROB;CH2;3675;Kijk uit naar een laatste toevlucht;CH2_L07;false;1;1;;;;;doorklik
+K0144;CH2_L07;CH2;3692;"Wijs het eiland erop dat het toch al niets te verliezen heeft, rondzwervend als het is";CH2_L08;true;4;2;;SEVERITAS;ch2_lijn_latona=true;;duurzaam
+K0145;CH2_L07;CH2;3692;"Smeek het eiland gewoon om hulp, zonder overtuigingskracht te zoeken";CH2_L08;true;4;2;;NEUTRAL;ch2_lijn_latona=true;;duurzaam
+K0146;CH2_L07;CH2;3692;Beloof het eiland eeuwige verering als het haar redt;CH2_L08;true;4;2;;CLEMENTIA;ch2_lijn_latona=true;;duurzaam
+K0147;CH2_L07;CH2;3692;"Spreek Delos aan als gelijke, niet als smekeling — twee verstotenen die elkaar herkennen";CH2_L07B;true;4;2;STAT gratia 13;;ch2_l07_route=gratia;athena +1;duurzaam
+K0148;CH2_L07B;CH2;3714;Kijk toe hoe Delos zich verankert;CH2_L08;false;1;1;;;ch2_lijn_latona=true;;doorklik
+K0149;CH2_L08;CH2;3736;"Kijk wat er nog met Latona gebeurt, nu haar tweeling geboren is";CH2_L08B;false;1;1;;;;;doorklik
+K0150;CH2_L08B;CH2;3775;Keer terug — er wachten nog meer verhalen;CH2_000;false;1;1;;;;;doorklik
+K0151;CH2_S01;CH2;3794;Volg Semele door de volgende nacht;CH2_S02;false;1;1;;;;;doorklik
+K0152;CH2_S02;CH2;3813;Luister aandachtig — haar wantrouwen groeit met elk woord;CH2_S03;true;3;2;;SEVERITAS;;;duurzaam-houding
+K0153;CH2_S02;CH2;3813;Weet zelf niet goed wat je van haar woorden moet denken;CH2_S02B;true;3;2;;NEUTRAL;;;lokaal
+K0154;CH2_S02;CH2;3813;"Wuif de twijfel eerst weg, uit vertrouwen in haar minnaar";CH2_S02B;true;3;2;;CLEMENTIA;;;duurzaam-houding
+K0155;CH2_S02B;CH2;3831;Stel hem de vraag die ze niet meer kan inslikken;CH2_S03;false;1;1;;;;;doorklik
+K0156;CH2_S03;CH2;3845;Wacht af wat Semele nu van hem vraagt;CH2_S04;false;1;1;;;;;doorklik
+K0157;CH2_S04;CH2;3862;Kijk hoe Jupiter reageert op haar eis;CH2_S05;false;1;1;;;;;doorklik
+K0158;CH2_S05;CH2;3879;Denk streng — hij had zo'n eed nooit lichtzinnig mogen zweren;CH2_S06;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0159;CH2_S05;CH2;3879;"Kijk toe, niet goed wetend wie hier eigenlijk het meeste medelijden verdient";CH2_S06;true;3;1;;NEUTRAL;;;schijnkeuze
+K0160;CH2_S05;CH2;3879;"Voel meelij met Jupiter, gevangen door zijn eigen onbezonnen woord";CH2_S06;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0161;CH2_S06;CH2;3900;Doorzoek de as;CH2_S06B;false;1;1;;;;;doorklik
+K0162;CH2_S06B;CH2;3920;"Zoek voorzichtig langs de rand van de as, op veilige afstand van de gloed";CH2_S06_OPEN;true;3;3;;;ch2_s06_route=open;;lokaal
+K0163;CH2_S06B;CH2;3920;"Breek met kracht door omgevallen, nog gloeiende balken heen om dieper te kunnen zoeken";CH2_S06_VIS;true;3;3;STAT vis 13;;ch2_s06_route=vis;;lokaal
+K0164;CH2_S06B;CH2;3920;"Lees de sporen in de as — een verstoord plekje, de richting waarin iets net is verdwenen";CH2_S06_PRU;true;3;3;STAT prudentia 11;;ch2_s06_route=prudentia;;lokaal
+K0165;CH2_S06_OPEN;CH2;3936;Kijk of er nog iets van haar te redden valt;CH2_S07;false;1;1;;;;;doorklik
+K0166;CH2_S06_VIS;CH2;3953;Kijk of er nog iets van haar te redden valt;CH2_S07;false;1;1;;;;;doorklik
+K0167;CH2_S06_PRU;CH2;3970;Kijk of er nog iets van haar te redden valt;CH2_S07;false;1;1;;;;;doorklik
+K0168;CH2_S07;CH2;3987;Wacht de laatste maanden af;CH2_S08;false;1;1;;;ch2_lijn_semele=true;;doorklik
+K0169;CH2_S08;CH2;4003;Keer terug — er wachten nog meer verhalen;CH2_000;false;1;1;;;;;doorklik
+K0170;CH2_K01;CH2;4045;Kijk toe wat Zeus van plan is;CH2_K02;false;1;1;;;;;doorklik
+K0171;CH2_K02;CH2;4064;Blijf nuchter — dit is hoe goden nu eenmaal met stervelingen omgaan;CH2_K03;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0172;CH2_K02;CH2;4064;Weet niet goed wat je van Zeus' gedrag moet vinden;CH2_K03;true;3;1;;NEUTRAL;;;schijnkeuze
+K0173;CH2_K02;CH2;4064;"Voel woede namens Kallisto, die niets van dit alles kon vermoeden";CH2_K03;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0174;CH2_K03;CH2;4082;Volg haar terug naar de groep;CH2_K04;false;1;1;;;;;doorklik
+K0175;CH2_K04;CH2;4096;Kijk toe hoe Kallisto de groep verlaat;CH2_K05;false;1;1;;;;;doorklik
+K0176;CH2_K05;CH2;4113;Volg haar het gebergte in;CH2_K05B;false;1;1;;;;;doorklik
+K0177;CH2_K05B;CH2;4130;"Blijf op veilige afstand en volg haar spoor rustiger, ook al raak je haar soms bijna kwijt";CH2_K05_OPEN;true;3;3;;;ch2_k05_route=open;;lokaal
+K0178;CH2_K05B;CH2;4130;"Zet door in haar moordende tempo, uren aan een stuk, zonder de rust te vragen die zij zichzelf ook niet gunt";CH2_K05_ROB;true;3;3;STAT robur 13;;ch2_k05_route=robur;;lokaal
+K0179;CH2_K05B;CH2;4130;Lees afgebroken takjes en verstoorde steentjes en neem een kortere route die je vóór haar op het volgende punt brengt;CH2_K05_PRU;true;3;3;STAT prudentia 11;;ch2_k05_route=prudentia;;lokaal
+K0180;CH2_K05_OPEN;CH2;4146;"Blijf haar volgen, ondanks alles";CH2_K06;false;1;1;;;;;doorklik
+K0181;CH2_K05_ROB;CH2;4163;"Blijf haar volgen, ondanks alles";CH2_K06;false;1;1;;;;;doorklik
+K0182;CH2_K05_PRU;CH2;4180;"Blijf haar volgen, ondanks alles";CH2_K06;false;1;1;;;;;doorklik
+K0183;CH2_K06;CH2;4197;Weet allang dat genade nooit Hera's stijl is geweest;CH2_K07;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0184;CH2_K06;CH2;4197;Wacht simpelweg af wat Hera gaat doen;CH2_K07;true;3;1;;NEUTRAL;;;schijnkeuze
+K0185;CH2_K06;CH2;4197;Hoop in stilte dat Hera deze ene keer genade toont;CH2_K07;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0186;CH2_K07;CH2;4213;Volg haar spoor de jaren door;CH2_K08;false;1;1;;;;;doorklik
+K0187;CH2_K08;CH2;4238;Wacht af wat er gebeurt;CH2_K09;false;1;1;;;ch2_lijn_kallisto=true;;doorklik
+K0188;CH2_K09;CH2;4254;Keer terug — er wachten nog meer verhalen;CH2_000;false;1;1;;;;;doorklik
+K0189;CH2_H01;CH2;4296;Kijk naar zijn eerste dagen als baby;CH2_H02;false;1;1;;;;;doorklik
+K0190;CH2_H02;CH2;4315;Kijk hoe de familie op dit voorteken reageert;CH2_H03;false;1;1;;;;;doorklik
+K0191;CH2_H03;CH2;4334;Voel onbehagen — een kracht als deze trekt altijd rampspoed aan;CH2_H04;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0192;CH2_H03;CH2;4334;Weet niet goed wat je van dit voorteken moet denken;CH2_H04;true;3;1;;NEUTRAL;;;schijnkeuze
+K0193;CH2_H03;CH2;4334;Voel bewondering voor wat dit kind ooit zal worden;CH2_H04;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0194;CH2_H04;CH2;4350;"Blijf nog even bij dit geluk stilstaan, voor het te laat is";CH2_H05;false;1;1;;;;;doorklik
+K0195;CH2_H05;CH2;4366;Weet dat dit een noodlot is dat niemand had kunnen afwenden;CH2_H06;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0196;CH2_H05;CH2;4366;"Kijk toe, verlamd door een onheil dat je niet kunt plaatsen";CH2_H06;true;3;1;;NEUTRAL;;;schijnkeuze
+K0197;CH2_H05;CH2;4366;"Wil wanhopig ingrijpen, wetend wat er komen gaat";CH2_H06;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0198;CH2_H06;CH2;4384;"Blijf bij hem, ook al is er niets meer te zeggen";CH2_H07;false;1;1;;;;;doorklik
+K0199;CH2_H07;CH2;4403;Wacht af welke eerste beproeving hem te wachten staat;CH2_H07B;false;1;1;;;;;doorklik
+K0200;CH2_H07B;CH2;4422;Wijs Herakles op de tweede opening — hij regelt het zelf;CH2_H08;true;3;3;;;;;lokaal
+K0201;CH2_H07B;CH2;4422;"Rol een zwaar rotsblok voor de tweede opening, schouder aan schouder met Herakles' eigen kracht";CH2_H07_VIS;true;3;3;STAT vis 11;;ch2_h07_route=vis;;lokaal
+K0202;CH2_H07B;CH2;4422;"Sluip om de grot heen en stapel snel losse stenen en takken op, voor het beest iets in de gaten heeft";CH2_H07_AGI;true;3;3;STAT agilitas 13;;ch2_h07_route=agilitas;;lokaal
+K0203;CH2_H07_VIS;CH2;4438;Kijk hoe Herakles de grot binnengaat;CH2_H08;false;1;1;;;;;doorklik
+K0204;CH2_H07_AGI;CH2;4455;Kijk hoe Herakles de grot binnengaat;CH2_H08;false;1;1;;;;;doorklik
+K0205;CH2_H08;CH2;4472;Kijk hoe hij zich herstelt van het gevecht;CH2_H09;false;1;1;;;herakles_harnas=true;;doorklik
+K0206;CH2_H09;CH2;4491;Vraag je af wat de volgende beproeving zal zijn;CH2_H10;false;1;1;;;;;doorklik
+K0207;CH2_H10;CH2;4512;Volg hen het moeras in;CH2_H10B;false;1;1;;;;;doorklik
+K0208;CH2_H10B;CH2;4529;"Roep waarschuwend naar Iolaos, die al bijspringt";CH2_H11;true;3;3;;;;;lokaal
+K0209;CH2_H10B;CH2;4529;"Stamp het beest zelf onder je hiel, ondanks de pijnlijke klauwen die zich vastklemmen";CH2_H10_ROB;true;3;3;STAT robur 11;;ch2_h10_route=robur;;lokaal
+K0210;CH2_H10B;CH2;4529;Grijp de krab bij zijn schaar en smijt hem terug het moeras in voor hij kan toebijten;CH2_H10_AGI;true;3;3;STAT agilitas 13;;ch2_h10_route=agilitas;;lokaal
+K0211;CH2_H10_ROB;CH2;4545;Volg hen het moeras in;CH2_H11;false;1;1;;;;;doorklik
+K0212;CH2_H10_AGI;CH2;4562;Volg hen het moeras in;CH2_H11;false;1;1;;;;;doorklik
+K0213;CH2_H11;CH2;4579;Kijk hoe het gevecht wordt beoordeeld;CH2_H12;false;1;1;;;ch2_lijn_herakles=true | herakles_taken_voltooid=2;;doorklik
+K0214;CH2_H12;CH2;4596;Keer terug — er wachten nog meer verhalen;CH2_000;false;1;1;;;;;doorklik
+K0215;CH2_ATHENA;CH2;4635;Laat haar woorden bezinken;CH2_ORAKEL;false;1;1;;;;;doorklik
+K0216;CH2_ORAKEL;CH2;4662;Luister verder;CH2_EINDE;false;1;1;;;;;doorklik
+K0217;CH2_EINDE;CH2;4685;Stap door de poort;CH3_000;false;1;1;;;;;doorklik
+K0218;CH3_000;CH3;4719;"Volg Io, priesteres van Juno en Jupiters volgende geheime liefde";CH3_IO01;true;3;3;DONE ch3_lijn_io;;;;lokaal
+K0219;CH3_000;CH3;4719;"Volg Herakles, die tien beproevingen te gaan heeft";CH3_H01;true;3;3;DONE ch3_lijn_herakles;;;;lokaal
+K0220;CH3_000;CH3;4719;"Spreek het Orakel aan, nu beide verhalen zijn gehoord";CH3_ATHENA;true;3;3;REQUIRE fragments=6;;;;lokaal
+K0221;CH3_IO01;CH3;4740;Kijk hoe Jupiter zijn kans grijpt;CH3_IO02;false;1;1;;;;;doorklik
+K0222;CH3_IO02;CH3;4759;Kijk wat er gebeurt wanneer de wolk optrekt;CH3_IO03;false;1;1;;;;;doorklik
+K0223;CH3_IO03;CH3;4778;"Voel medelijden met Io, die niets van dit alles heeft gekozen";CH3_IO04;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0224;CH3_IO03;CH3;4778;"Voel vooral verachting voor Jupiters lafheid — hij redt zichzelf, niet haar";CH3_IO04;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0225;CH3_IO03;CH3;4778;"Kijk toe, niet goed wetend wie hier meer medelijden verdient";CH3_IO04;true;3;1;;NEUTRAL;;;schijnkeuze
+K0226;CH3_IO04;CH3;4796;Kijk wat Juno met haar nieuwe bezit van plan is;CH3_IO05;false;1;1;;;;;doorklik
+K0227;CH3_IO05;CH3;4815;Kijk hoe Io haar nieuwe gevangenschap doorstaat;CH3_IO06;false;1;1;;;;;doorklik
+K0228;CH3_IO06;CH3;4837;"Blijf bij dit moment stilstaan, geraakt door zoveel onmacht";CH3_IO07;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0229;CH3_IO06;CH3;4837;Concludeer nuchter dat medelijden hier niets zal veranderen;CH3_IO07;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0230;CH3_IO06;CH3;4837;"Kijk toe, zonder goed te weten wat je met dit verdriet aan moet";CH3_IO07;true;3;1;;NEUTRAL;;;schijnkeuze
+K0231;CH3_IO07;CH3;4855;Volg Mercurius op zijn missie;CH3_IO07B;false;1;1;;;;;doorklik
+K0232;CH3_IO07B;CH3;4874;"Blijf gewoon zitten kijken, alert genoeg";CH3_IO07_OPEN;true;3;3;;;ch3_io07_route=open;;lokaal
+K0233;CH3_IO07B;CH3;4874;"Houd urenlang, zonder ooit je aandacht te verliezen, de omgeving in de gaten";CH3_IO07_ROB;true;3;3;STAT robur 13;;ch3_io07_route=robur;;lokaal
+K0234;CH3_IO07B;CH3;4874;Praat een nieuwsgierige voorbijganger die te dichtbij komt behendig een andere kant op;CH3_IO07_GRA;true;3;3;STAT gratia 11;;ch3_io07_route=gratia;;lokaal
+K0235;CH3_IO07_OPEN;CH3;4890;Kijk hoe Mercurius zijn verhaal voortzet;CH3_IO08;false;1;1;;;;;doorklik
+K0236;CH3_IO07_ROB;CH3;4907;Kijk hoe Mercurius zijn verhaal voortzet;CH3_IO08;false;1;1;;;;;doorklik
+K0237;CH3_IO07_GRA;CH3;4924;Kijk hoe Mercurius zijn verhaal voortzet;CH3_IO08;false;1;1;;;;;doorklik
+K0238;CH3_IO08;CH3;4941;Kijk wat Mercurius doet zodra Argus eindelijk volledig slaapt;CH3_IO09;false;1;1;;;;;doorklik
+K0239;CH3_IO09;CH3;4960;Kijk hoe Juno haar trouwe wachter eert;CH3_IO10;false;1;1;;;;;doorklik
+K0240;CH3_IO10;CH3;4979;Wacht af wat Juno nu bedenkt;CH3_IO11;false;1;1;;;;;doorklik
+K0241;CH3_IO11;CH3;4998;"Blijf haar volgen, zo goed en kwaad als het gaat";CH3_IO11_OPEN;true;3;3;;;ch3_io11_route=open;;lokaal
+K0242;CH3_IO11;CH3;4998;"Houd het moordende tempo urenlang vol, dwars over bergen en kusten, zonder ooit te pauzeren";CH3_IO11_ROB;true;3;3;STAT robur 13;;ch3_io11_route=robur;;lokaal
+K0243;CH3_IO11;CH3;4998;Win onderweg herders en boeren voor je — hun gastvrijheid en aanwijzingen leggen haar spoor sneller bloot;CH3_IO11_GRA;true;3;3;STAT gratia 11;;ch3_io11_route=gratia;;lokaal
+K0244;CH3_IO11_OPEN;CH3;5016;Kijk hoe de tocht eindigt;CH3_IO12;false;1;1;;;;;doorklik
+K0245;CH3_IO11_ROB;CH3;5033;Kijk hoe de tocht eindigt;CH3_IO12;false;1;1;;;;;doorklik
+K0246;CH3_IO11_GRA;CH3;5050;Kijk hoe de tocht eindigt;CH3_IO12;false;1;1;;;;;doorklik
+K0247;CH3_IO12;CH3;5067;Kijk wat Jupiter nu onderneemt;CH3_IO13;false;1;1;;;ch3_lijn_io=true;;doorklik
+K0248;CH3_IO13;CH3;5083;Wacht op wat Athena hierover te zeggen heeft;CH3_IO14;false;1;1;;;;;doorklik
+K0249;CH3_IO14;CH3;5122;Keer terug naar de Boodschapper — Herakles' beproevingen wachten nog;CH3_000;false;1;1;;;;;doorklik
+K0250;CH3_H01;CH3;5149;Wacht af wat er zo lastig kan zijn aan een hert;CH3_H02;false;1;1;;;;;doorklik
+K0251;CH3_H01_HARNAS;CH3;5165;Wacht af wat er zo lastig kan zijn aan een hert;CH3_H02;false;1;1;;;;;doorklik
+K0252;CH3_H02;CH3;5179;Kijk hoe die lange achtervolging eindigt;CH3_H03;false;1;1;;;;;doorklik
+K0253;CH3_H03;CH3;5198;Kijk of Herakles zijn woord houdt;CH3_H04;false;1;1;;;;;doorklik
+K0254;CH3_H04;CH3;5214;Kijk hoe Herakles zich verdedigt tegen de woedende kudde;CH3_H05;false;1;1;;;;;doorklik
+K0255;CH3_H05;CH3;5233;Kijk wat de vergiftigde pijlen hebben aangericht;CH3_H06;false;1;1;;;;;doorklik
+K0256;CH3_H06;CH3;5250;"Voel intens medelijden met Chiron, gestraft voor andermans dronkenschap";CH3_H07;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0257;CH3_H06;CH3;5250;Erken de wrede ironie zonder je erin te laten meeslepen — Herakles moet door;CH3_H07;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0258;CH3_H06;CH3;5250;Weet niet goed hoe je dit noodlot moet plaatsen;CH3_H07;true;3;1;;NEUTRAL;;;schijnkeuze
+K0259;CH3_H07;CH3;5268;Ga de ever achterna;CH3_H07B;false;1;1;;;;;doorklik
+K0260;CH3_H07B;CH3;5287;Blijf gewoon volhouden met achtervolgen tot het dier vanzelf vastloopt;CH3_H07_OPEN;true;3;3;;;ch3_h07_route=open;;lokaal
+K0261;CH3_H07B;CH3;5287;"Ren urenlang mee door de diepe sneeuw, de kou en uitputting doorstaand tot de ever eerder instort dan jij";CH3_H07_ROB;true;3;3;STAT robur 11;;ch3_h07_route=robur;;lokaal
+K0262;CH3_H07B;CH3;5287;Dwing het dier met kracht een nauwe bergkloof in waar het geen kant meer op kan;CH3_H07_VIS;true;3;3;STAT vis 13;;ch3_h07_route=vis;;lokaal
+K0263;CH3_H07_OPEN;CH3;5303;Kijk hoe Herakles het dier gevangen neemt;CH3_H07C;false;1;1;;;;;doorklik
+K0264;CH3_H07_ROB;CH3;5320;Kijk hoe Herakles het dier gevangen neemt;CH3_H07C;false;1;1;;;;;doorklik
+K0265;CH3_H07_VIS;CH3;5337;Kijk hoe Herakles het dier gevangen neemt;CH3_H07C;false;1;1;;;;;doorklik
+K0266;CH3_H07C;CH3;5354;"Ga door naar de volgende, heel andere soort beproeving";CH3_H08;false;1;1;;;;;doorklik
+K0267;CH3_H08;CH3;5368;Kijk hoe Herakles het onmogelijke voor elkaar krijgt;CH3_H09;false;1;1;;;;;doorklik
+K0268;CH3_H09;CH3;5387;"Ga door naar de zesde beproeving, ondanks de onrechtvaardige afwijzing";CH3_H10;false;1;1;;;;;doorklik
+K0269;CH3_H10;CH3;5409;Kijk wat er gebeurt zodra de vogels opvliegen;CH3_H11;false;1;1;;;;;doorklik
+K0270;CH3_H11;CH3;5431;Kijk hoe deze beproeving wordt afgesloten;CH3_H12;false;1;1;;;;;doorklik
+K0271;CH3_H12;CH3;5448;Kijk waar Herakles de gevangen stier naartoe brengt;CH3_H13;false;1;1;;;;;doorklik
+K0272;CH3_H13;CH3;5467;Ga door naar de zevende beproeving;CH3_H13B;false;1;1;;;;;doorklik
+K0273;CH3_H13B;CH3;5483;"Ga recht op de poort af, er in het open doorheen";CH3_H13_OPEN;true;3;3;;;ch3_h13_route=open;;lokaal
+K0274;CH3_H13B;CH3;5483;"Doe je voor als gezant met een boodschap voor de koning, en praat je met gezag langs de eerste wachtpost";CH3_H13_GRA;true;3;3;STAT gratia 13;;ch3_h13_route=gratia;;lokaal
+K0275;CH3_H13B;CH3;5483;Houd een uitputtende nachtwake vol tot de aflossende wacht slaperig en onoplettend is;CH3_H13_ROB;true;3;3;STAT robur 11;;ch3_h13_route=robur;;lokaal
+K0276;CH3_H13_OPEN;CH3;5499;Kijk hoe Herakles de stallen bereikt;CH3_H14;false;1;1;;;;;doorklik
+K0277;CH3_H13_GRA;CH3;5516;Kijk hoe Herakles de stallen bereikt;CH3_H14;false;1;1;;;;;doorklik
+K0278;CH3_H13_ROB;CH3;5533;Kijk hoe Herakles de stallen bereikt;CH3_H14;false;1;1;;;;;doorklik
+K0279;CH3_H14;CH3;5550;Kijk hoe Herakles de merries uiteindelijk kalmeert;CH3_H15;false;1;1;;;;;doorklik
+K0280;CH3_H15;CH3;5569;Ga door naar de achtste beproeving;CH3_H16;false;1;1;;;;;doorklik
+K0281;CH3_H16;CH3;5585;"Vertrouw op deze vreedzame afloop, opgelucht dat het geweld hier uitblijft";CH3_H17;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0282;CH3_H16;CH3;5585;"Blijf op je hoede — na alles wat je hebt gezien, wantrouw je een te gemakkelijke afloop";CH3_H17;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0283;CH3_H16;CH3;5585;Wacht simpelweg af of het inderdaad zo eenvoudig blijft;CH3_H17;true;3;1;;NEUTRAL;;;schijnkeuze
+K0284;CH3_H17;CH3;5603;"Draag de gordel mee, zwaarder dan hij had moeten zijn";CH3_H18;false;1;1;;;;;doorklik
+K0285;CH3_H18;CH3;5622;Kijk hoe Herakles de kudde probeert te bemachtigen;CH3_H19;false;1;1;;;;;doorklik
+K0286;CH3_H19;CH3;5638;Drijf de veroverde kudde helemaal terug naar Mycene;CH3_H20;false;1;1;;;;;doorklik
+K0287;CH3_H20;CH3;5655;Kijk hoe Herakles daarna de appels zelf probeert te bemachtigen;CH3_H21;false;1;1;;;;;doorklik
+K0288;CH3_H21;CH3;5674;Kijk hoe Herakles zich uit deze list weet te redden;CH3_H22;false;1;1;;;;;doorklik
+K0289;CH3_H22;CH3;5696;Wacht af wat Eurystheus voor de twaalfde en laatste taak heeft bedacht;CH3_H23;false;1;1;;;;;doorklik
+K0290;CH3_H23;CH3;5715;Daal af naar de poort van de onderwereld;CH3_H23B;false;1;1;;;;;doorklik
+K0291;CH3_H23B;CH3;5734;Laat Athena en Mercurius je stap voor stap veilig door het duister begeleiden;CH3_H23_OPEN;true;2;2;;;ch3_h23_route=open;;lokaal
+K0292;CH3_H23B;CH3;5734;"Leg de tocht alleen af, op eigen doorzettingsvermogen, en verdraag de verstikkende zwaarte zonder te wankelen";CH3_H23_ROB;true;2;2;STAT robur 15;;ch3_h23_route=robur;;lokaal
+K0293;CH3_H23_OPEN;CH3;5749;Kijk hoe Herakles tegenover Cerberus komt te staan;CH3_H24;false;1;1;;;;;doorklik
+K0294;CH3_H23_ROB;CH3;5766;Kijk hoe Herakles tegenover Cerberus komt te staan;CH3_H24;false;1;1;;;;;doorklik
+K0295;CH3_H24;CH3;5783;Kijk hoe Herakles het driekoppige beest weet te overmeesteren;CH3_H25;false;1;1;;;ch3_lijn_herakles=true | herakles_taken_voltooid=12;;doorklik
+K0296;CH3_H25;CH3;5802;Keer terug naar de Boodschapper;CH3_000;false;1;1;;;;;doorklik
+K0297;CH3_ATHENA;CH3;5844;Laat haar woorden bezinken;CH3_ORAKEL;false;1;1;;;;;doorklik
+K0298;CH3_ORAKEL;CH3;5869;Luister verder;CH3_EINDE;false;1;1;;;;;doorklik
+K0299;CH3_EINDE;CH3;5892;Stap door de poort;CH4_000;false;1;1;;;;;doorklik
+K0300;CH4_000;CH4;5929;"Volg Theseus naar Kreta, waar een labyrint en een monster op hem wachten";CH4_T01;true;3;3;DONE ch4_lijn_theseus;;;;lokaal
+K0301;CH4_000;CH4;5929;"Volg Phaëthon, die aan zijn eigen afkomst twijfelt";CH4_P01;true;3;3;DONE ch4_lijn_phaethon;;;;lokaal
+K0302;CH4_000;CH4;5929;"Spreek het Orakel aan, nu beide verhalen zijn gehoord";CH4_ATHENA;true;3;3;REQUIRE fragments=8;;;;lokaal
+K0303;CH4_T01;CH4;5950;"Voel vooral medelijden met Aegeus, die zijn net teruggevonden zoon dreigt te verliezen";CH4_T02;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0304;CH4_T01;CH4;5950;"Erken nuchter dat iemand dit moet doen, en dat vrijwilligers zeldzaam zijn";CH4_T02;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0305;CH4_T01;CH4;5950;"Voel de spanning tussen trots en angst, zonder een duidelijke kant te kiezen";CH4_T02;true;3;1;;NEUTRAL;;;schijnkeuze
+K0306;CH4_T02;CH4;5971;Vaar mee naar Kreta;CH4_T03;false;1;1;;;;;doorklik
+K0307;CH4_T03;CH4;5993;Kijk wat Ariadne besluit te doen;CH4_T04;false;1;1;;;;;doorklik
+K0308;CH4_T04;CH4;6012;Kijk wat Ariadne voor Theseus overheeft;CH4_T05;false;1;1;;;;;doorklik
+K0309;CH4_T05;CH4;6031;Bewonder vooral haar moed om tegen haar eigen vader in te gaan;CH4_T06;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0310;CH4_T05;CH4;6031;Erken vooral hoe berekenend haar hulp is — ze vraagt er tenslotte iets voor terug;CH4_T06;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0311;CH4_T05;CH4;6031;"Twijfel of dit nu liefde is, wanhoop, of iets van beide";CH4_T06;true;3;1;;NEUTRAL;;;schijnkeuze
+K0312;CH4_T06;CH4;6049;"Ga het duister in, op het geluid af";CH4_T06B;false;1;1;;;;;doorklik
+K0313;CH4_T06B;CH4;6068;Houd links aan;CH4_T07;true;2;2;;;;;lokaal
+K0314;CH4_T06B;CH4;6068;Ga naar rechts;CH4_T06R1;true;2;2;;;;;lokaal
+K0315;CH4_T06R1;CH4;6083;"Loop door, er is toch geen weg terug zonder het monster onder ogen te komen";CH4_T06R2;false;1;1;;;;;doorklik
+K0316;CH4_T06R2;CH4;6099;Zoek wanhopig verder naar een uitweg;CH4_T06R3;false;1;1;;;;;doorklik
+K0317;CH4_T06R3;CH4;6115;Begin de tocht door het labyrint opnieuw;CH4_T06B;false;1;1;;;;;doorklik
+K0318;CH4_T07;CH4;6131;Kijk wat er van het monster overblijft;CH4_T08;false;1;1;;;;;doorklik
+K0319;CH4_T08;CH4;6148;"Sluip via achterstraatjes en olijfgaarden — trager, maar veilig";CH4_T08_OPEN;true;3;3;;;ch4_t08_route=open;;lokaal
+K0320;CH4_T08;CH4;6148;"Draag een van de uitgeputte offerlingen, die het tempo niet meer bijhoudt, het laatste stuk zelf";CH4_T08_ROB;true;3;3;STAT robur 13;;ch4_t08_route=robur;;lokaal
+K0321;CH4_T08;CH4;6148;Praat een achterdochtige wachter bij de kade om met een overtuigend verhaal;CH4_T08_GRA;true;3;3;STAT gratia 11;;ch4_t08_route=gratia;;lokaal
+K0322;CH4_T08_OPEN;CH4;6167;Vaar weg van Kreta;CH4_T09;false;1;1;;;;;doorklik
+K0323;CH4_T08_ROB;CH4;6184;Vaar weg van Kreta;CH4_T09;false;1;1;;;;;doorklik
+K0324;CH4_T08_GRA;CH4;6201;Vaar weg van Kreta;CH4_T09;false;1;1;;;;;doorklik
+K0325;CH4_T09;CH4;6218;"Voel vooral woede namens Ariadne, die dit niet verdiende";CH4_T10;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0326;CH4_T09;CH4;6218;"Zoek naar begrip voor Theseus, die net een monster heeft overleefd en amper meer helder kan denken";CH4_T10;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0327;CH4_T09;CH4;6218;Laat het oordeel voorlopig in het midden;CH4_T10;true;3;1;;NEUTRAL;;;schijnkeuze
+K0328;CH4_T10;CH4;6236;"Keer terug naar Theseus, die niet weet wat hij heeft achtergelaten";CH4_T11;false;1;1;;;;;doorklik
+K0329;CH4_T11;CH4;6261;Kijk hoe Daidalos zijn eigen gevangenschap probeert te ontlopen;CH4_T11B;false;1;1;;;;;doorklik
+K0330;CH4_T11B;CH4;6278;"Verzamel geduldig, dag na dag, wat toevallig aanwaait";CH4_T11_OPEN;true;3;3;;;ch4_t11_route=open;;lokaal
+K0331;CH4_T11B;CH4;6278;"Doorsta het meedogenloze, urenlange werk van veren sorteren en was smelten zonder rust";CH4_T11_ROB;true;3;3;STAT robur 13;;ch4_t11_route=robur;;lokaal
+K0332;CH4_T11B;CH4;6278;Overtuig een bewaker om stiekem extra was en linnen naar binnen te smokkelen;CH4_T11_GRA;true;3;3;STAT gratia 15;;ch4_t11_route=gratia;;lokaal
+K0333;CH4_T11_OPEN;CH4;6294;Kijk hoe Daidalos de vleugels vlecht;CH4_T12;false;1;1;;;;;doorklik
+K0334;CH4_T11_ROB;CH4;6311;Kijk hoe Daidalos de vleugels vlecht;CH4_T12;false;1;1;;;;;doorklik
+K0335;CH4_T11_GRA;CH4;6328;Kijk hoe Daidalos de vleugels vlecht;CH4_T12;false;1;1;;;;;doorklik
+K0336;CH4_T12;CH4;6345;Kijk hoe de vlucht begint;CH4_T13;false;1;1;;;;;doorklik
+K0337;CH4_T13;CH4;6361;Voel vooral verdriet om een vader die zijn zoon niet kon redden;CH4_T14;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0338;CH4_T13;CH4;6361;Erken nuchter dat een gewaarschuwde zoon ook zelf verantwoordelijkheid draagt;CH4_T14;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0339;CH4_T13;CH4;6361;Weet niet goed bij wie het verdriet of de schuld het zwaarst hoort te wegen;CH4_T14;true;3;1;;NEUTRAL;;;schijnkeuze
+K0340;CH4_T14;CH4;6387;"Keer terug naar het schip van Theseus, dat inmiddels Athene nadert";CH4_T15;false;1;1;;;;;doorklik
+K0341;CH4_T15;CH4;6407;Kijk wat Aegeus doet;CH4_T16;false;1;1;;;ch4_lijn_theseus=true;;doorklik
+K0342;CH4_T16;CH4;6423;Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog;CH4_000;false;1;1;;;;;doorklik
+K0343;CH4_P01;CH4;6465;Volg Phaëthon op zijn tocht naar het oosten;CH4_P02;false;1;1;;;;;doorklik
+K0344;CH4_P02;CH4;6484;Kijk welke wens Phaëthon uitspreekt;CH4_P03;false;1;1;;;;;doorklik
+K0345;CH4_P03;CH4;6503;"Voel vooral medelijden met Sol, die zichzelf in de val heeft gepraat";CH4_P04;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0346;CH4_P03;CH4;6503;"Erken nuchter dat een eed nu eenmaal een eed is, hoe onverstandig ook";CH4_P04;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0347;CH4_P03;CH4;6503;Twijfel of Sol dit wel had mogen beloven voor hij de vraag zelfs kende;CH4_P04;true;3;1;;NEUTRAL;;;schijnkeuze
+K0348;CH4_P04;CH4;6524;Kijk waar de wagen naartoe raast;CH4_P05;false;1;1;;;;;doorklik
+K0349;CH4_P05;CH4;6540;Kijk wie deze ramp uiteindelijk moet stoppen;CH4_P06;false;1;1;;;;;doorklik
+K0350;CH4_P06;CH4;6556;"Kijk hoe Tellus haar smeekbede uit, en hoe Jupiter luistert";CH4_P06_OPEN;true;3;3;;;ch4_p06_route=open;;lokaal
+K0351;CH4_P06;CH4;6556;"Merk op hóe Tellus Jupiter overtuigt, niet alleen wát ze zegt";CH4_P06_GRA;true;3;3;STAT gratia 13;;ch4_p06_route=gratia;;lokaal
+K0352;CH4_P06;CH4;6556;Merk op wát het volhouden haar al gekost heeft voor ze sprak;CH4_P06_ROB;true;3;3;STAT robur 11;;ch4_p06_route=robur;;lokaal
+K0353;CH4_P06_OPEN;CH4;6575;Kijk hoe Jupiter reageert;CH4_P07;false;1;1;;;;;doorklik
+K0354;CH4_P06_GRA;CH4;6592;Kijk hoe Jupiter reageert;CH4_P07;false;1;1;;;;;doorklik
+K0355;CH4_P06_ROB;CH4;6609;Kijk hoe Jupiter reageert;CH4_P07;false;1;1;;;;;doorklik
+K0356;CH4_P07;CH4;6626;"Vind Jupiters daad gerechtvaardigd, hoe hard ook";CH4_P08;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0357;CH4_P07;CH4;6626;"Blijf medelijden voelen met Phaëthon, ondanks alles";CH4_P08;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0358;CH4_P07;CH4;6626;Erken dat er hier geen echt goede uitkomst meer mogelijk was;CH4_P08;true;3;1;;NEUTRAL;;;schijnkeuze
+K0359;CH4_P08;CH4;6648;Kijk wie er rouwt om zijn dood;CH4_P09;false;1;1;;;;;doorklik
+K0360;CH4_P09;CH4;6662;Kijk wie er nog meer treurt;CH4_P10;false;1;1;;;ch4_lijn_phaethon=true;;doorklik
+K0361;CH4_P10;CH4;6687;Keer terug naar de Boodschapper — Theseus' verhaal wacht nog;CH4_000;false;1;1;;;;;doorklik
+K0362;CH4_ATHENA;CH4;6718;Laat haar woorden bezinken;CH4_ORAKEL;false;1;1;;;;;doorklik
+K0363;CH4_ORAKEL;CH4;6737;Luister verder;CH4_EINDE;false;1;1;;;;;doorklik
+K0364;CH4_EINDE;CH4;6760;Stap door de poort;CH5_000;false;1;1;;;;;doorklik
+K0365;CH5_000;CH5;6832;Volg Jason naar de haven van Iolcus;CH5_001;false;1;1;;;;;doorklik
+K0366;CH5_001;CH5;6854;Kijk wie er allemaal op die oproep afkomen;CH5_002;false;1;1;;;;;doorklik
+K0367;CH5_002;CH5;6873;Kijk wie er nog meer aan boord stapt;CH5_003;false;1;1;;;;;doorklik
+K0368;CH5_003;CH5;6898;Zoek in zijn ogen naar een spoor van wat hij nog gaat vergeten;CH5_004;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0369;CH5_003;CH5;6898;"Bekijk hem nuchter als gewoon nog een bemanningslid, niets meer";CH5_004;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0370;CH5_003;CH5;6898;Laat het vreemde gevoel van iets-weten-wat-hij-niet-weet gewoon op je inwerken;CH5_004;true;3;1;;NEUTRAL;;;schijnkeuze
+K0371;CH5_004;CH5;6916;Kijk hoe de tocht wordt voorbereid;CH5_004B;false;1;1;;;;;doorklik
+K0372;CH5_004B;CH5;6935;Neem gewoon de eerstvolgende vrije bank;CH5_004_OPEN;true;3;3;;;ch5_004_route=open;;lokaal
+K0373;CH5_004B;CH5;6935;Zet je rug tegen een testroeispaan en overtuig de stuurman met pure kracht dat je een voorste bank verdient;CH5_004_VIS;true;3;3;STAT vis 11;;ch5_004_route=vis;;lokaal
+K0374;CH5_004B;CH5;6935;Wijs de stuurman op een slimmere indeling — wie qua humeur en gewicht beter naast wie past;CH5_004_PRU;true;3;3;STAT prudentia 13;;ch5_004_route=prudentia;;lokaal
+K0375;CH5_004_OPEN;CH5;6951;Kijk hoe de tocht wordt voorbereid;CH5_005;false;1;1;;;;;doorklik
+K0376;CH5_004_VIS;CH5;6968;Kijk hoe de tocht wordt voorbereid;CH5_005;false;1;1;;;;;doorklik
+K0377;CH5_004_PRU;CH5;6985;Kijk hoe de tocht wordt voorbereid;CH5_005;false;1;1;;;;;doorklik
+K0378;CH5_005;CH5;7002;Vaar uit Iolcus weg;CH5_006;false;1;1;;;ch5_bemanning_uitrusting=true;;doorklik
+K0379;CH5_006;CH5;7019;Vaar de open zee op;CH5_007;false;1;1;;;;;doorklik
+K0380;CH5_007;CH5;7038;Kijk wie het everzwijn het eerst weet te vinden;CH5_008;false;1;1;;;;;doorklik
+K0381;CH5_008;CH5;7057;"Volg Atalanta, die op haar eigen spoor jaagt";CH5_008A;true;2;2;;;;;lokaal
+K0382;CH5_008;CH5;7057;"Volg Meleager, die met de groep meejaagt";CH5_008B;true;2;2;;;;;lokaal
+K0383;CH5_008A;CH5;7072;Kijk hoe de jacht samenkomt;CH5_008C;false;1;1;;;;;doorklik
+K0384;CH5_008B;CH5;7088;Kijk hoe de jacht samenkomt;CH5_008C;false;1;1;;;;;doorklik
+K0385;CH5_008C;CH5;7104;Blijf dicht bij de groep en help mee waar nodig;CH5_008_OPEN;true;3;3;;;ch5_008_route=open;;lokaal
+K0386;CH5_008C;CH5;7104;Glip snel door een nauwe rotsspleet om de kortste ontsnappingsroute af te snijden;CH5_008_AGI;true;3;3;STAT agilitas 11;;ch5_008_route=agilitas;;lokaal
+K0387;CH5_008C;CH5;7104;"Duw een losse rotsblok of omgevallen boomstam om, om het dier fysiek terug de kloof in te dwingen";CH5_008_VIS;true;3;3;STAT vis 13;;ch5_008_route=vis;;lokaal
+K0388;CH5_008_OPEN;CH5;7120;Kijk hoe de jacht samenkomt;CH5_009;false;1;1;;;;;doorklik
+K0389;CH5_008_AGI;CH5;7137;Kijk hoe de jacht samenkomt;CH5_009;false;1;1;;;;;doorklik
+K0390;CH5_008_VIS;CH5;7154;Kijk hoe de jacht samenkomt;CH5_009;false;1;1;;;;;doorklik
+K0391;CH5_009;CH5;7171;Kijk hoe de koning van Cyzicus reageert;CH5_010;false;1;1;;;;;doorklik
+K0392;CH5_010;CH5;7193;"Vaar verder, naar het land van de Bebryciërs";CH5_011;false;1;1;;;;;doorklik
+K0393;CH5_011;CH5;7212;Kijk wat Amycus over zijn eigen rijk te zeggen heeft voor het gevecht begint;CH5_012;false;1;1;;;;;doorklik
+K0394;CH5_012;CH5;7231;Kijk hoe het gevecht verloopt;CH5_013;false;1;1;;;;;doorklik
+K0395;CH5_013;CH5;7248;Kijk wat er van Amycus' rijk wordt na zijn nederlaag;CH5_014;false;1;1;;;;;doorklik
+K0396;CH5_014;CH5;7265;"Vaar verder, naar de kust van Mysië";CH5_015;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0397;CH5_014;CH5;7265;"Vaar verder — een tiran minder op de kaart, verder geen traan aan verspild";CH5_015;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0398;CH5_014;CH5;7265;"Vaar verder, zonder er verder nog bij stil te staan";CH5_015;true;3;1;;NEUTRAL;;;schijnkeuze
+K0399;CH5_015;CH5;7287;Vaar verder zonder Herakles;CH5_016;false;1;1;;;;;doorklik
+K0400;CH5_016;CH5;7306;Kijk hoe Argos de doortocht voorbereidt;CH5_016B;false;1;1;;;;;doorklik
+K0401;CH5_016B;CH5;7322;Laat Argos alleen bepalen;CH5_016_OPEN;true;3;3;;;ch5_016_route=open;;lokaal
+K0402;CH5_016B;CH5;7322;Klim zelf op de boeg om van dichtbij het ritme van de rotsen te lezen en Argos' inschatting scherper te maken;CH5_016_AGI;true;3;3;STAT agilitas 13;;ch5_016_route=agilitas;;lokaal
+K0403;CH5_016B;CH5;7322;"Help de riemen en touwen alvast op kracht voorspannen, zodat de bemanning bij het teken meteen voluit kan trekken";CH5_016_VIS;true;3;3;STAT vis 11;;ch5_016_route=vis;;lokaal
+K0404;CH5_016_OPEN;CH5;7338;Kijk hoe Argos de doortocht voorbereidt;CH5_017;false;1;1;;;;;doorklik
+K0405;CH5_016_AGI;CH5;7355;Kijk hoe Argos de doortocht voorbereidt;CH5_017;false;1;1;;;;;doorklik
+K0406;CH5_016_VIS;CH5;7372;Kijk hoe Argos de doortocht voorbereidt;CH5_017;false;1;1;;;;;doorklik
+K0407;CH5_017;CH5;7389;Vaar op het juiste moment de Symplegades in;CH5_018;false;1;1;;;;;doorklik
+K0408;CH5_018;CH5;7406;"Vaar verder, langs de kust van de Zwarte Zee";CH5_019;false;1;1;;;;;doorklik
+K0409;CH5_019;CH5;7428;Kijk toe hoe de situatie zich ontwikkelt;CH5_019_OPEN;true;3;3;;;ch5_019_route=open;;lokaal
+K0410;CH5_019;CH5;7428;Grijp Tydeus' arm vast voordat de vuist valt;CH5_019_VIS;true;3;3;STAT vis 13;;ch5_019_route=vis;;lokaal
+K0411;CH5_019;CH5;7428;Merk de oplopende spanning eerder op en sus de roeier met het juiste woord voordat het escaleert;CH5_019_PRU;true;3;3;STAT prudentia 11;;ch5_019_route=prudentia;;lokaal
+K0412;CH5_019_OPEN;CH5;7447;Laat de avond verder in stilte voorbijgaan;CH5_020;false;1;1;;;;;doorklik
+K0413;CH5_019_VIS;CH5;7464;Laat de avond verder in stilte voorbijgaan;CH5_020;false;1;1;;;;;doorklik
+K0414;CH5_019_PRU;CH5;7481;Laat de avond verder in stilte voorbijgaan;CH5_020;false;1;1;;;;;doorklik
+K0415;CH5_020;CH5;7498;Vraag Philoktetes om zijn precisie nog eens te bewijzen;CH5_021;false;1;1;;;;;doorklik
+K0416;CH5_021;CH5;7517;Vaar de laatste etappe naar Colchis;CH5_022;false;1;1;;;;;doorklik
+K0417;CH5_022;CH5;7534;Vaar de haven van Colchis binnen;CH5_023;false;1;1;;;;;doorklik
+K0418;CH5_023;CH5;7551;Kijk welke voorwaarde Aeëtes aan het Vlies verbindt;CH5_024;false;1;1;;;;;doorklik
+K0419;CH5_024;CH5;7573;Kijk toe hoe Jason zich staande houdt;CH5_024_OPEN;true;3;3;;;ch5_024_route=open;;lokaal
+K0420;CH5_024;CH5;7573;Zet je eigen kracht in om de vuurspuwende stier mee in bedwang te houden terwijl Jason het juk vastmaakt;CH5_024_VIS;true;3;3;STAT vis 13;;ch5_024_route=vis;;lokaal
+K0421;CH5_024;CH5;7573;Manoeuvreer snel tussen de opschietende aardgeboren krijgers door om Jason op tijd te waarschuwen;CH5_024_AGI;true;3;3;STAT agilitas 13;;ch5_024_route=agilitas;;lokaal
+K0422;CH5_024_OPEN;CH5;7591;Kijk hoe Medea haar keuze rechtvaardigt;CH5_025;false;1;1;;;;;doorklik
+K0423;CH5_024_VIS;CH5;7608;Kijk hoe Medea haar keuze rechtvaardigt;CH5_025;false;1;1;;;;;doorklik
+K0424;CH5_024_AGI;CH5;7625;Kijk hoe Medea haar keuze rechtvaardigt;CH5_025;false;1;1;;;;;doorklik
+K0425;CH5_025;CH5;7642;Bewonder vooral haar moed om alles op te geven voor wat ze voelt;CH5_025B;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0426;CH5_025;CH5;7642;Erken vooral hoe roekeloos het is om je eigen vader zo te verraden;CH5_025B;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0427;CH5_025;CH5;7642;Herken vooral het patroon — weer een vrouw die alles waagt voor een man die haar dat misschien nooit teruggeeft;CH5_025B;true;3;1;;NEUTRAL;;;schijnkeuze
+K0428;CH5_025B;CH5;7660;Volg gewoon stilzwijgend achter Medea aan;CH5_025_OPEN;true;3;3;;;ch5_025_route=open;;lokaal
+K0429;CH5_025B;CH5;7660;"Glip geruisloos tussen de takken en heilige stenen door, geen twijgje dat kraakt";CH5_025_AGI;true;3;3;STAT agilitas 13;;ch5_025_route=agilitas;;lokaal
+K0430;CH5_025B;CH5;7660;Lees de ademhaling en kronkelpatronen van de sluimerende draak en weet precies wanneer je veilig dichterbij kunt komen;CH5_025_PRU;true;3;3;STAT prudentia 11;;ch5_025_route=prudentia;;lokaal
+K0431;CH5_025_OPEN;CH5;7676;Kijk hoe het woud dichterbij komt;CH5_026;false;1;1;;;;;doorklik
+K0432;CH5_025_AGI;CH5;7693;Kijk hoe het woud dichterbij komt;CH5_026;false;1;1;;;;;doorklik
+K0433;CH5_025_PRU;CH5;7710;Kijk hoe het woud dichterbij komt;CH5_026;false;1;1;;;;;doorklik
+K0434;CH5_026;CH5;7727;Kijk wat er van het Gulden Vlies wordt;CH5_027;false;1;1;;;;;doorklik
+K0435;CH5_027;CH5;7744;Volg de terugreis naar Griekenland;CH5_028;false;1;1;;;;;doorklik
+K0436;CH5_028;CH5;7769;"Kijk wat er jaren later, in Korinthe, gebeurt";CH5_029;false;1;1;;;;;doorklik
+K0437;CH5_029;CH5;7785;Luister verder;CH5_EINDE;false;1;1;;;;;doorklik
+K0438;CH5_EINDE;CH5;7810;Stap door de poort;CH6_000;false;1;1;;;;;doorklik
+K0439;CH6_000;CH6;7853;Begin bij het begin — de stichting van Thebe;CH6_001;false;1;1;;;;;doorklik
+K0440;CH6_001;CH6;7875;Kijk toe hoe de krijgers zich tegen elkaar keren;CH6_001_OPEN;true;3;3;;;ch6_001_route=open;;lokaal
+K0441;CH6_001;CH6;7875;Grijp een afgebroken speer en houd een laatste dolende Spartoot af zodat Kadmos' rug vrij blijft;CH6_001_VIS;true;3;3;STAT vis 13;;ch6_001_route=vis;;lokaal
+K0442;CH6_001;CH6;7875;Duik en weef tussen de neervallende lichamen door om niet zelf geraakt te worden;CH6_001_AGI;true;3;3;STAT agilitas 11;;ch6_001_route=agilitas;;lokaal
+K0443;CH6_001_OPEN;CH6;7899;Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef;CH6_002;false;1;1;;;;;doorklik
+K0444;CH6_001_VIS;CH6;7916;Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef;CH6_002;false;1;1;;;;;doorklik
+K0445;CH6_001_AGI;CH6;7933;Jij hebt dit soort tanden al eerder gehoord — kijk waar de rest van de draak bleef;CH6_002;false;1;1;;;;;doorklik
+K0446;CH6_002;CH6;7950;Kijk naar de eerste koningin van deze jonge stad;CH6_003;false;1;1;;;;;doorklik
+K0447;CH6_003;CH6;7966;Kijk hoe Latona's kinderen op deze belediging reageren;CH6_004;false;1;1;;;;;doorklik
+K0448;CH6_004;CH6;7983;Vind veertien levens een verschrikkelijk zware prijs voor één opschepperige zin;CH6_005;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0449;CH6_004;CH6;7983;Erken dat een belediging aan een godin nu eenmaal nooit zonder gevolgen blijft;CH6_005;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0450;CH6_004;CH6;7983;"Laat het gewoon op je inwerken, zonder meteen een kant te kiezen";CH6_005;true;3;1;;NEUTRAL;;;schijnkeuze
+K0451;CH6_005;CH6;8010;Kijk wat Oedipus doet zodra hij zelf volwassen is;CH6_006;false;1;1;;;;;doorklik
+K0452;CH6_006;CH6;8029;Volg Oedipus verder naar de poorten van Thebe;CH6_007;false;1;1;;;;;doorklik
+K0453;CH6_007;CH6;8045;Kom dichterbij;CH6_007B;false;1;1;;;;;doorklik
+K0454;CH6_007B;CH6;8064;Sta gewoon naast Oedipus en vat moed;CH6_007_OPEN;true;3;3;;;ch6_007_route=open;;lokaal
+K0455;CH6_007B;CH6;8064;Lees de overblijfselen van eerdere slachtoffers en de houding van de Sfinx voor een teken van vermoeidheid of patroon;CH6_007_PRU;true;3;3;STAT prudentia 13;;ch6_007_route=prudentia;;lokaal
+K0456;CH6_007B;CH6;8064;"Blijf licht op je voeten en behoedzaam tussen de resten door, zonder onnodig dichtbij te komen";CH6_007_AGI;true;3;3;STAT agilitas 11;;ch6_007_route=agilitas;;lokaal
+K0457;CH6_007_OPEN;CH6;8080;Luister naar het raadsel van de Sfinx;CH6_008;false;1;1;;;;;doorklik
+K0458;CH6_007_PRU;CH6;8097;Luister naar het raadsel van de Sfinx;CH6_008;false;1;1;;;;;doorklik
+K0459;CH6_007_AGI;CH6;8114;Luister naar het raadsel van de Sfinx;CH6_008;false;1;1;;;;;doorklik
+K0460;CH6_008;CH6;8131;Geef het antwoord;CH6_009;false;1;1;;;;;doorklik
+K0461;CH6_009;CH6;8151;"Spring jaren vooruit, naar het moment dat de waarheid aan het licht komt";CH6_010;false;1;1;;;;;doorklik
+K0462;CH6_010;CH6;8170;Voel vooral medelijden — geen van beiden koos er ooit voor om dit te worden;CH6_011;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0463;CH6_010;CH6;8170;"Erken nuchter dat onwetendheid de gevolgen niet ongedaan maakt, hoe oneerlijk dat ook voelt";CH6_011;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0464;CH6_010;CH6;8170;Laat het oordeel maar aan iemand anders — dit voelt te groot om zomaar een kant te kiezen;CH6_011;true;3;1;;NEUTRAL;;;schijnkeuze
+K0465;CH6_011;CH6;8191;Kijk wat Polyneikes onderneemt;CH6_012;false;1;1;;;;;doorklik
+K0466;CH6_012;CH6;8208;Kijk hoe de aanval op Thebe verloopt;CH6_012B;false;1;1;;;;;doorklik
+K0467;CH6_012B;CH6;8227;Volg het algemene overzicht van de bestorming;CH6_012_OPEN;true;3;3;;;ch6_012_route=open;;lokaal
+K0468;CH6_012B;CH6;8227;"Blijf hangen bij Tydeus' eigen poort, waar hij zijn belofte waarmaakt en de poort met kale kracht probeert te breken";CH6_012_VIS;true;3;3;STAT vis 13;;ch6_012_route=vis;;lokaal
+K0469;CH6_012B;CH6;8227;"Kijk naar een andere poort, waar een champion het niet op kracht maar op snelheid gooit";CH6_012_AGI;true;3;3;STAT agilitas 11;;ch6_012_route=agilitas;;lokaal
+K0470;CH6_012_OPEN;CH6;8243;Kijk hoe de aanval op Thebe verloopt;CH6_013;false;1;1;;;;;doorklik
+K0471;CH6_012_VIS;CH6;8260;Kijk hoe de aanval op Thebe verloopt;CH6_013;false;1;1;;;;;doorklik
+K0472;CH6_012_AGI;CH6;8277;Kijk hoe de aanval op Thebe verloopt;CH6_013;false;1;1;;;;;doorklik
+K0473;CH6_013;CH6;8294;Kijk hoe het tussen de twee broers zelf afloopt;CH6_014;false;1;1;;;;;doorklik
+K0474;CH6_014;CH6;8311;Kijk wie er na deze slachting de troon van Thebe overneemt;CH6_015;false;1;1;;;;;doorklik
+K0475;CH6_015;CH6;8330;Kijk wat Antigone besluit te doen;CH6_015B;false;1;1;;;;;doorklik
+K0476;CH6_015B;CH6;8349;Volg het algemene beeld van haar vastberadenheid;CH6_015_OPEN;true;3;3;;;ch6_015_route=open;;lokaal
+K0477;CH6_015B;CH6;8349;Zie hoe ze de wisseling van de wacht al dagen heeft geobserveerd en precies het gat in hun routine kiest;CH6_015_PRU;true;3;3;STAT prudentia 11;;ch6_015_route=prudentia;;lokaal
+K0478;CH6_015B;CH6;8349;"Zie haar geruisloos tussen schaduwen bewegen, exact op het moment dat een wachter zich omdraait";CH6_015_AGI;true;3;3;STAT agilitas 13;;ch6_015_route=agilitas;;lokaal
+K0479;CH6_015_OPEN;CH6;8365;Kijk wat Creon ontdekt;CH6_016;false;1;1;;;;;doorklik
+K0480;CH6_015_PRU;CH6;8382;Kijk wat Creon ontdekt;CH6_016;false;1;1;;;;;doorklik
+K0481;CH6_015_AGI;CH6;8399;Kijk wat Creon ontdekt;CH6_016;false;1;1;;;;;doorklik
+K0482;CH6_016;CH6;8416;Kijk hoe Creon reageert zodra hij ontdekt wat ze heeft gedaan;CH6_017;false;1;1;;;;;doorklik
+K0483;CH6_017;CH6;8436;Bewonder haar moed om voor haar overtuiging te sterven;CH6_018;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0484;CH6_017;CH6;8436;"Erken dat Creon, hoe hard ook, zijn bevel niet zomaar kon laten passeren zonder gezichtsverlies";CH6_018;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0485;CH6_017;CH6;8436;Zie vooral twee mensen die geen van beiden meer terug konden zonder alles te verliezen;CH6_018;true;3;1;;NEUTRAL;;;schijnkeuze
+K0486;CH6_018;CH6;8458;Kijk hoe de tweede aanval op Thebe verloopt;CH6_019;true;2;2;;;;;lokaal
+K0487;CH6_018;CH6;8458;"Help hem zijn vaders wapenrusting eerbiedig klaarleggen, in stilte";CH6_018_PRU;true;2;2;STAT prudentia 12;;;diomedes +1;duurzaam
+K0488;CH6_018_PRU;CH6;8478;Kijk hoe de tweede aanval op Thebe verloopt;CH6_019;false;1;1;;;;;doorklik
+K0489;CH6_019;CH6;8495;Kijk wat er van Thebe wordt na Laodamas' nederlaag;CH6_020;false;1;1;;;ch6_diomedes_epigonen=true;;doorklik
+K0490;CH6_020;CH6;8512;Spring nu terug in de tijd — naar een koning die vóór Oedipus over Thebe regeerde;CH6_021;false;1;1;;;;;doorklik
+K0491;CH6_021;CH6;8540;Kijk wat voor koning Pentheus is;CH6_022;false;1;1;;;;;doorklik
+K0492;CH6_022;CH6;8556;Kijk wat Pentheus onderneemt om de Bacchanten te stoppen;CH6_023;false;1;1;;;;;doorklik
+K0493;CH6_023;CH6;8576;Blijf op veilige afstand meesluipen;CH6_023_OPEN;true;3;3;;;ch6_023_route=open;;lokaal
+K0494;CH6_023;CH6;8576;"Waag je dichterbij dan verstandig is, lenig en geruisloos tussen rotsen en struikgewas";CH6_023_AGI;true;3;3;STAT agilitas 13;;ch6_023_route=agilitas;;lokaal
+K0495;CH6_023;CH6;8576;Lees de rituele patronen en voortekenen van de Bacchanten vóór het misgaat;CH6_023_PRU;true;3;3;STAT prudentia 11;;ch6_023_route=prudentia;;lokaal
+K0496;CH6_023_OPEN;CH6;8592;Kijk wat er van Pentheus wordt;CH6_023B;false;1;1;;;;;doorklik
+K0497;CH6_023_AGI;CH6;8609;Kijk wat er van Pentheus wordt;CH6_023B;false;1;1;;;;;doorklik
+K0498;CH6_023_PRU;CH6;8626;Kijk wat er van Pentheus wordt;CH6_023B;false;1;1;;;;;doorklik
+K0499;CH6_023B;CH6;8643;Roep de naam van de god die dit alles heeft losgemaakt;CH6_024;false;1;1;;;;;doorklik
+K0500;CH6_024;CH6;8657;Kijk wat er met Pentheus gebeurt;CH6_025;false;1;1;;;;;doorklik
+K0501;CH6_025;CH6;8674;Luister verder;CH6_EINDE;false;1;1;;;;;doorklik
+K0502;CH6_EINDE;CH6;8702;Wacht — de streep licht sluit deze keer niet;CH6_MUSEUM_00;false;1;1;;;museum_mnemosyne_ontgrendeld=true;;doorklik
+K0503;CH6_MUSEUM_00;CH6;8721;Stap door de brede poort;CH6_MUSEUM_01;false;1;1;;;;;doorklik
+K0504;CH6_MUSEUM_01;CH6;8742;Loop verder de hal in;CH6_MUSEUM_EINDE;false;1;1;;;;;doorklik
+K0505;CH6_MUSEUM_EINDE;CH6;8767;De streep licht wordt weer breder;CH7_000;false;1;1;;;;;doorklik
+K0506;CH7_000;CH7;8800;Stap de herinnering in;CH7_001;false;1;1;;;;;doorklik
+K0507;CH7_001;CH7;8818;Zie hoe Helena opgroeit;CH7_002;false;1;1;;;;;doorklik
+K0508;CH7_002;CH7;8843;Zie de eed die daarop volgt;CH7_003;false;1;1;;;;;doorklik
+K0509;CH7_003;CH7;8865;Reis mee naar die andere bruiloft;CH7_004;false;1;1;;;;;doorklik
+K0510;CH7_004;CH7;8887;Zie wie er ongenood binnenkomt;CH7_005;false;1;1;;;;;doorklik
+K0511;CH7_005;CH7;8909;Volg de appel naar wie hem uiteindelijk moet beoordelen;CH7_006;false;1;1;;;;;doorklik
+K0512;CH7_006;CH7;8939;"Vind het onvergeeflijk om een eigen kind zomaar op te geven, profetie of niet";CH7_007;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0513;CH7_006;CH7;8939;Erken dat een koning soms een vreselijke prijs moet betalen voor de veiligheid van een hele stad;CH7_007;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0514;CH7_006;CH7;8939;Onthoud je van een oordeel — je kent deze ouders nog niet goed genoeg;CH7_007;true;3;1;;NEUTRAL;;;schijnkeuze
+K0515;CH7_007;CH7;8963;Zie hoe die proef verloopt;CH7_008;false;1;1;;;;;doorklik
+K0516;CH7_008;CH7;8979;"Kijk toe hoe Paris oordeelt, zonder zelf in te grijpen";CH7_009;true;3;3;;;;;lokaal
+K0517;CH7_008;CH7;8979;Help ondertussen een paar kuddedieren uit de weg te houden van de opgewonden menigte;CH7_008_VIS;true;3;3;STAT vis 14;;;;lokaal
+K0518;CH7_008;CH7;8979;Houd de rest van de kudde stil en kalm terwijl iedereen naar de wedstrijd kijkt;CH7_008_PRU;true;3;3;STAT prudentia 14;;;;lokaal
+K0519;CH7_008_VIS;CH7;8997;Zie hoe het oordeel valt;CH7_009;false;1;1;;;;;doorklik
+K0520;CH7_008_PRU;CH7;9011;Zie hoe het oordeel valt;CH7_009;false;1;1;;;;;doorklik
+K0521;CH7_009;CH7;9025;"Volg Paris terug naar de stad waar hij, zonder het te weten, geboren is";CH7_010;false;1;1;;;;;doorklik
+K0522;CH7_010;CH7;9052;Zie wat Paris met zijn nieuwe status doet;CH7_011;false;1;1;;;;;doorklik
+K0523;CH7_011;CH7;9074;Zie hoe die belofte wordt ingelost;CH7_012;false;1;1;;;;;doorklik
+K0524;CH7_012;CH7;9090;Zie wat dit voor Menelaus betekent;CH7_012B;false;1;1;;;;;doorklik
+K0525;CH7_012B;CH7;9110;Vind een schending van gastvrijheid onder je eigen dak onvergeeflijk;CH7_013;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0526;CH7_012B;CH7;9110;Erken dat liefde — of een belofte van een godin — zich zelden aan de regels van gastvrijheid houdt;CH7_013;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0527;CH7_012B;CH7;9110;"Wacht af wat dit Griekenland gaat kosten, voor je een kant kiest";CH7_013;true;3;1;;NEUTRAL;;;schijnkeuze
+K0528;CH7_013;CH7;9126;Zie wie zich het felst tegen zijn eigen eed verzet;CH7_014;false;1;1;;;;;doorklik
+K0529;CH7_014;CH7;9151;"Zie wie Odysseus, als eerste taak, zelf moet gaan opsporen";CH7_015;false;1;1;;;;;doorklik
+K0530;CH7_015;CH7;9173;"Volg de verzamelde vloot naar haar eerste, onverwachte halte";CH7_016;false;1;1;;;;;doorklik
+K0531;CH7_016;CH7;9201;Zie hoe Agamemnon met dat nieuws omgaat;CH7_017;false;1;1;;;;;doorklik
+K0532;CH7_017;CH7;9220;Zie hoe de vloot verdergaat;CH7_017B;false;1;1;;;;;doorklik
+K0533;CH7_017B;CH7;9251;Vind geen enkele oorlog het offer van een eigen kind waard;CH7_018;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0534;CH7_017B;CH7;9251;Erken dat een veldheer soms moet kiezen tussen zijn familie en de duizenden die van hem afhankelijk zijn;CH7_018;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0535;CH7_017B;CH7;9251;Twijfel of dit werkelijk zo is gegaan als de meesten navertellen;CH7_018;true;3;1;;NEUTRAL;;;schijnkeuze
+K0536;CH7_018;CH7;9267;Volg de vloot die zonder hem verdergaat;CH7_019;false;1;1;;;;;doorklik
+K0537;CH7_019;CH7;9289;Zie wat er van de eerste jaren van het beleg wordt;CH7_020;false;1;1;;;;;doorklik
+K0538;CH7_020;CH7;9311;Vind het verontrustend hoe achteloos er over deze twee vrouwen wordt beschikt;CH7_EINDE;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0539;CH7_020;CH7;9311;"Erken dat oorlogsbuit, hoe ongemakkelijk ook, de norm was in deze wereld";CH7_EINDE;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0540;CH7_020;CH7;9311;Onthoud gewoon beide namen — je vermoedt dat je ze nog terug zult horen;CH7_EINDE;true;3;1;;NEUTRAL;;;schijnkeuze
+K0541;CH7_EINDE;CH7;9341;Keer terug naar het Museum;CH7_MUSEUM_00;false;1;1;;;;;doorklik
+K0542;CH7_MUSEUM_00;CH7;9360;De streep licht wordt weer breder;CH8_000;false;1;1;;;;;doorklik
+K0543;CH8_000;CH8;9400;Stap door de poort;CH8_001;false;1;1;;;;;doorklik
+K0544;CH8_001;CH8;9416;Zie hoe het leger de oorzaak ontdekt;CH8_002;false;1;1;;;;;doorklik
+K0545;CH8_002;CH8;9435;Zie hoe Agamemnon reageert;CH8_003;false;1;1;;;;;doorklik
+K0546;CH8_003;CH8;9451;Zie hoe Achilles zijn woede verwerkt;CH8_004;false;1;1;;;;;doorklik
+K0547;CH8_004;CH8;9476;Kies je plek in wat komen gaat;CH8_005;false;1;1;;;;;doorklik
+K0548;CH8_005;CH8;9495;"Blijf bij Achilles, in zijn tent";CH8_ACH_001;true;2;2;;;ch8_zijde=achilles;menelaos -1;duurzaam
+K0549;CH8_005;CH8;9495;"Trek met het leger mee, aan Agamemnons zijde";CH8_AGA_001;true;2;2;;;ch8_zijde=agamemnon;menelaos +1 | diomedes +1;duurzaam
+K0550;CH8_ACH_001;CH8;9512;Wacht op nieuws van het front;CH8_ACH_002;false;1;1;;;;;doorklik
+K0551;CH8_ACH_002;CH8;9537;Wacht op nieuws van de rest van de dag;CH8_ACH_003;false;1;1;;;;;doorklik
+K0552;CH8_ACH_003;CH8;9559;Luister naar wat de Boodschapper je ondertussen laat zien;CH8_ACH_004;false;1;1;;;;;doorklik
+K0553;CH8_ACH_004;CH8;9581;Wacht verder in de tent;CH8_ACH_005;false;1;1;;;;;doorklik
+K0554;CH8_ACH_005;CH8;9606;Wacht verder in het kamp;CH8_ACH_006;false;1;1;;;;;doorklik
+K0555;CH8_ACH_006;CH8;9622;Wacht in stilte met de rest van de Myrmidonen;CH8_ACH_007;true;3;3;;;;;lokaal
+K0556;CH8_ACH_006;CH8;9622;Help Patroklos de gewonden uit eerdere schermutselingen verzorgen;CH8_ACH_006_PRU;true;3;3;STAT prudentia 15;;;;lokaal
+K0557;CH8_ACH_006;CH8;9622;Houd je wapens en je lichaam scherp met oefeningen;CH8_ACH_006_VIS;true;3;3;STAT vis 15;;;;lokaal
+K0558;CH8_ACH_006_PRU;CH8;9638;Zie wie er aankomt bij de tent;CH8_ACH_007;false;1;1;;;;;doorklik
+K0559;CH8_ACH_006_VIS;CH8;9652;Zie wie er aankomt bij de tent;CH8_ACH_007;false;1;1;;;;;doorklik
+K0560;CH8_ACH_007;CH8;9666;Luister naar wat ze te zeggen hebben;CH8_ACH_008;false;1;1;;;;achilles +1 | aias +1 | phoenix +1;doorklik
+K0561;CH8_ACH_008;CH8;9683;Zie hoe het gezantschap onverrichter zake vertrekt;CH8_ACH_009;false;1;1;;;;;doorklik
+K0562;CH8_ACH_009;CH8;9708;"Vind Achilles' trots onvergeeflijk, met zoveel levens op het spel";CH8_ACH_010;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0563;CH8_ACH_009;CH8;9708;Erken dat eer voor een held als Achilles net zo reëel is als een wond;CH8_ACH_010;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0564;CH8_ACH_009;CH8;9708;Onthoud je van een oordeel — je hebt Agamemnons kant nog niet gezien;CH8_ACH_010;true;3;1;;NEUTRAL;;;schijnkeuze
+K0565;CH8_ACH_010;CH8;9724;Zie wat Patroklos vraagt;CH8_ACH_011;false;1;1;;;;;doorklik
+K0566;CH8_ACH_011;CH8;9740;Zie Patroklos vertrekken;CH8_ACH_012;false;1;1;;;;;doorklik
+K0567;CH8_ACH_012;CH8;9765;Wacht op wat komen gaat;CH8_EPI_001;false;1;1;;;;;doorklik
+K0568;CH8_AGA_001;CH8;9781;Zie het duel zelf;CH8_AGA_002;false;1;1;;;;;doorklik
+K0569;CH8_AGA_002;CH8;9806;Zie wat er van de wapenstilstand wordt;CH8_AGA_003;false;1;1;;;;;doorklik
+K0570;CH8_AGA_003;CH8;9828;Zie wie zich vandaag onderscheidt in de chaos;CH8_AGA_004;false;1;1;;;;;doorklik
+K0571;CH8_AGA_004;CH8;9847;Luister naar wat de Boodschapper je ondertussen laat zien;CH8_AGA_005;false;1;1;;;;;doorklik
+K0572;CH8_AGA_005;CH8;9872;Terug naar het slagveld;CH8_AGA_006;false;1;1;;;;;doorklik
+K0573;CH8_AGA_006;CH8;9897;Kijk toe hoe de linies zich hergroeperen;CH8_AGA_007;true;3;3;;;;;lokaal
+K0574;CH8_AGA_006;CH8;9897;Help mee de wal met eigen handen te verstevigen;CH8_AGA_006_VIS;true;3;3;STAT vis 15;;;;lokaal
+K0575;CH8_AGA_006;CH8;9897;Breng als snelste boodschapper berichten tussen de linies over;CH8_AGA_006_AGI;true;3;3;STAT agilitas 14;;;;lokaal
+K0576;CH8_AGA_006_VIS;CH8;9913;Kijk hoe de linies zich hergroeperen;CH8_AGA_007;false;1;1;;;;;doorklik
+K0577;CH8_AGA_006_AGI;CH8;9927;Kijk hoe de linies zich hergroeperen;CH8_AGA_007;false;1;1;;;;;doorklik
+K0578;CH8_AGA_007;CH8;9941;Wacht terwijl het gezantschap zijn zaak bepleit;CH8_AGA_008;false;1;1;;;;agamemnon +1 | aias -1 | odysseus +1;doorklik
+K0579;CH8_AGA_008;CH8;9960;Keer terug naar de linies;CH8_AGA_009;false;1;1;;;;;doorklik
+K0580;CH8_AGA_009;CH8;9985;Vind Agamemnons koppigheid de grotere zonde — hij begon de ruzie;CH8_AGA_010;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0581;CH8_AGA_009;CH8;9985;"Erken dat Achilles het net zo makkelijk had kunnen laten gaan, voor het leger";CH8_AGA_010;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0582;CH8_AGA_009;CH8;9985;Onthoud je van een oordeel — je hebt Achilles' kant nog niet gezien;CH8_AGA_010;true;3;1;;NEUTRAL;;;schijnkeuze
+K0583;CH8_AGA_010;CH8;10001;Zie hoe de strijd om de schepen afloopt;CH8_AGA_011;false;1;1;;;;;doorklik
+K0584;CH8_AGA_011;CH8;10018;"Volg de strijd verder, tot aan de muren van Troje";CH8_AGA_012;false;1;1;;;;;doorklik
+K0585;CH8_AGA_012;CH8;10037;Zie hoe het nieuws Achilles bereikt;CH8_EPI_001;false;1;1;;;;;doorklik
+K0586;CH8_EPI_001;CH8;10059;Zie hoe Achilles reageert;CH8_EPI_002;false;1;1;;;;;doorklik
+K0587;CH8_EPI_002;CH8;10078;Zie wie er uit zee opstijgt;CH8_EPI_003;false;1;1;;;;;doorklik
+K0588;CH8_EPI_003;CH8;10097;Zie wat Vulcanus smeedt;CH8_EPI_004;false;1;1;;;;;doorklik
+K0589;CH8_EPI_004;CH8;10113;Zie hoe Achilles zijn nieuwe wapenrusting ontvangt;CH8_EPI_005;false;1;1;;;;;doorklik
+K0590;CH8_EPI_005;CH8;10141;Zie Achilles terugkeren naar de strijd;CH8_EPI_006;false;1;1;;;;;doorklik
+K0591;CH8_EPI_006;CH8;10161;Zie het laatste gevecht;CH8_EPI_007;false;1;1;;;;;doorklik
+K0592;CH8_EPI_007;CH8;10180;Zie hoe het duel eindigt;CH8_EPI_008;false;1;1;;;;;doorklik
+K0593;CH8_EPI_008;CH8;10200;Zie wat er met het lichaam gebeurt;CH8_EPI_009;false;1;1;;;;;doorklik
+K0594;CH8_EPI_009;CH8;10220;Zie wat Priamus daarna besluit;CH8_EPI_010;false;1;1;;;;;doorklik
+K0595;CH8_EPI_010;CH8;10236;Zie wat er in de tent gebeurt;CH8_EPI_011;false;1;1;;;;;doorklik
+K0596;CH8_EPI_011;CH8;10250;Vind dit een van de weinige echt menselijke momenten in een verder meedogenloze oorlog;CH8_EPI_012;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0597;CH8_EPI_011;CH8;10250;Merk op dat één nacht van medelijden niets verandert aan wat er nog allemaal komen gaat;CH8_EPI_012;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0598;CH8_EPI_011;CH8;10250;Laat het op je inwerken zonder meteen een kant te kiezen;CH8_EPI_012;true;3;1;;NEUTRAL;;;schijnkeuze
+K0599;CH8_EPI_012;CH8;10280;Keer terug naar het Museum;CH8_EINDE;false;1;1;;;;;doorklik
+K0600;CH8_EINDE;CH8;10308;Keer terug naar het Museum;CH8_MUSEUM_00;false;1;1;;;;;doorklik
+K0601;CH8_MUSEUM_00;CH8;10324;De streep licht wordt weer breder;CH9_000;false;1;1;;;;;doorklik
+K0602;CH9_000;CH9;10353;Volg Mercurius de muren van Troje in;CH9_001;false;1;1;;;;;doorklik
+K0603;CH9_001;CH9;10371;Volg Hector naar de poort;CH9_002;false;1;1;;;;;doorklik
+K0604;CH9_002;CH9;10390;Zie hoe Troje hierop reageert;CH9_003;false;1;1;;;;;doorklik
+K0605;CH9_003;CH9;10411;Zie de begrafenis in Troje zelf;CH9_004;false;1;1;;;;;doorklik
+K0606;CH9_004;CH9;10430;Luister naar wat de Boodschapper je nu vraagt;CH9_005;false;1;1;;;;;doorklik
+K0607;CH9_005;CH9;10449;"Kijk mee vanaf de muren, binnen Troje";CH9_TRO_001;true;2;2;;;;;lokaal
+K0608;CH9_005;CH9;10449;"Kijk mee vanaf het strand, bij het Griekse leger";CH9_GRI_001;true;2;2;;;;;lokaal
+K0609;CH9_TRO_001;CH9;10466;Zie welke bondgenoot hierna arriveert;CH9_TRO_002;false;1;1;;;;;doorklik
+K0610;CH9_TRO_002;CH9;10485;Zie wie Troje nu nog tegenover zich heeft;CH9_TRO_003;false;1;1;;;;;doorklik
+K0611;CH9_TRO_003;CH9;10507;Zie hoe Troje dit nieuws viert;CH9_TRO_003B;false;1;1;;;;;doorklik
+K0612;CH9_TRO_003B;CH9;10532;"Vind het moeilijk om vreugde te voelen om de dood van wie dan ook, zelfs een vijand";CH9_TRO_004;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0613;CH9_TRO_003B;CH9;10532;Erken dat Troje na tien jaar wel recht heeft op dit ene moment van opluchting;CH9_TRO_004;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0614;CH9_TRO_003B;CH9;10532;Laat het gejuich om je heen op je inwerken zonder zelf een kant te kiezen;CH9_TRO_004;true;3;1;;NEUTRAL;;;schijnkeuze
+K0615;CH9_TRO_004;CH9;10548;Zie welke prins van Troje als volgende valt;CH9_TRO_005;false;1;1;;;;;doorklik
+K0616;CH9_TRO_005;CH9;10562;"Zie wat er van Helena wordt, nu ze weer weduwe is";CH9_TRO_005B;false;1;1;;;;;doorklik
+K0617;CH9_TRO_005B;CH9;10581;Vind dit een even wrede voortzetting van wat Helena al die jaren is aangedaan;CH9_TRO_005C;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0618;CH9_TRO_005B;CH9;10581;Erken dat een weduwe zonder bescherming in een belegerde stad weinig andere opties heeft;CH9_TRO_005C;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0619;CH9_TRO_005B;CH9;10581;"Kijk zwijgend toe, net als de rest van het hof";CH9_TRO_005C;true;3;1;;NEUTRAL;;;schijnkeuze
+K0620;CH9_TRO_005C;CH9;10600;"Zie wat er ondertussen, ongezien, binnen de muren gebeurt";CH9_TRO_006;false;1;1;;;;;doorklik
+K0621;CH9_TRO_006;CH9;10614;Kijk toe zonder verder iets te zeggen;CH9_TRO_007;true;2;2;;;;;lokaal
+K0622;CH9_TRO_006;CH9;10614;"Merk iets vertrouwds op in de ogen van de bedelaar, maar zwijg net als Helena";CH9_TRO_006_PRU;true;2;2;STAT prudentia 15;;;;lokaal
+K0623;CH9_TRO_006_PRU;CH9;10629;Zie wat er verder gebeurt;CH9_TRO_007;false;1;1;;;;;doorklik
+K0624;CH9_TRO_007;CH9;10643;Zie wat er op het strand verschijnt;CH9_TRO_008;false;1;1;;;;;doorklik
+K0625;CH9_TRO_008;CH9;10663;Luister naar wat de man te vertellen heeft;CH9_TRO_009;false;1;1;;;;;doorklik
+K0626;CH9_TRO_009;CH9;10680;Vind het verstandig om Sinon het voordeel van de twijfel te geven na alles wat Troje heeft doorstaan;CH9_TRO_010;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0627;CH9_TRO_009;CH9;10680;"Wantrouw elk Grieks geschenk, na tien jaar oorlog helemaal";CH9_TRO_010;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0628;CH9_TRO_009;CH9;10680;"Twijfel, net als een deel van de menigte om je heen";CH9_TRO_010;true;3;1;;NEUTRAL;;;schijnkeuze
+K0629;CH9_TRO_010;CH9;10701;Zie of nog iemand durft te twijfelen;CH9_TRO_011;false;1;1;;;;;doorklik
+K0630;CH9_TRO_011;CH9;10723;Zie hoe Troje die avond viert;CH9_TRO_012;false;1;1;;;;;doorklik
+K0631;CH9_TRO_012;CH9;10745;Zie wat er gebeurt zodra de stad eindelijk slaapt;CH9_TRO_013;false;1;1;;;;;doorklik
+K0632;CH9_TRO_013;CH9;10761;Zie wat er met het koningshuis gebeurt;CH9_TRO_014;false;1;1;;;;;doorklik
+K0633;CH9_TRO_014;CH9;10783;Zie wat er met Hectors zoontje gebeurt;CH9_TRO_015;false;1;1;;;;;doorklik
+K0634;CH9_TRO_015;CH9;10802;"Vind dit de wreedste daad van de hele oorlog, zonder enig excuus";CH9_TRO_016;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0635;CH9_TRO_015;CH9;10802;"Erken, met tegenzin, de logica van mannen die een nieuwe wraakoorlog over generaties willen voorkomen";CH9_TRO_016;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0636;CH9_TRO_015;CH9;10802;"Kun je hier geen woorden voor vinden, aan geen van beide kanten";CH9_TRO_016;true;3;1;;NEUTRAL;;;schijnkeuze
+K0637;CH9_TRO_016;CH9;10818;"Zie wie er, tegen alle verwachting in, toch weet te ontsnappen";CH9_TRO_017;false;1;1;;;;;doorklik
+K0638;CH9_TRO_017;CH9;10841;Zie Troje voor de laatste keer;CH9_TRO_018;false;1;1;;;;;doorklik
+K0639;CH9_TRO_018;CH9;10864;Keer terug naar het Museum;CH9_EINDE;false;1;1;;;;;doorklik
+K0640;CH9_GRI_001;CH9;10886;Vind Achilles' woede tegenover Thersites even begrijpelijk als verontrustend;CH9_GRI_002;true;3;1;;NEUTRAL;;;schijnkeuze
+K0641;CH9_GRI_001;CH9;10886;Vind dat een spotter zijn verdiende loon kreeg;CH9_GRI_002;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0642;CH9_GRI_001;CH9;10886;Vind het onvergeeflijk om een ongewapende man te doden om een belediging;CH9_GRI_002;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0643;CH9_GRI_002;CH9;10907;Zie wat er met Achilles zelf gebeurt;CH9_GRI_003;false;1;1;;;;;doorklik
+K0644;CH9_GRI_003;CH9;10929;Zie wat er van zijn wapenrusting wordt;CH9_GRI_004;false;1;1;;;;;doorklik
+K0645;CH9_GRI_004;CH9;10954;Zie wat Aias die nacht doet;CH9_GRI_005;false;1;1;;;;;doorklik
+K0646;CH9_GRI_005;CH9;10973;Vind dit onnodig — zijn kracht en trouw wogen zwaarder dan wat hem is aangedaan;CH9_GRI_006;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0647;CH9_GRI_005;CH9;10973;"Erken dat schaamte, voor een man als Aias, net zo dodelijk kan zijn als een wond";CH9_GRI_006;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0648;CH9_GRI_005;CH9;10973;"Weet niet goed wat je hiervan moet vinden, en laat het zo";CH9_GRI_006;true;3;1;;NEUTRAL;;;schijnkeuze
+K0649;CH9_GRI_006;CH9;10997;Zie wat Philoktetes doet zodra hij weer bij het leger is;CH9_GRI_007;false;1;1;;;;;doorklik
+K0650;CH9_GRI_007;CH9;11016;Hoor wat er in Troje gebeurt nu Helena weer weduwe is;CH9_GRI_007B;false;1;1;;;;;doorklik
+K0651;CH9_GRI_007B;CH9;11033;Zie wat er van de verdwenen prins wordt;CH9_GRI_007C;false;1;1;;;;;doorklik
+K0652;CH9_GRI_007C;CH9;11049;Zie wie als eerste wordt gehaald;CH9_GRI_008;false;1;1;;;;;doorklik
+K0653;CH9_GRI_008;CH9;11066;Hoor het nieuws over een geheime missie in Troje zelf;CH9_GRI_009;false;1;1;;;;;doorklik
+K0654;CH9_GRI_009;CH9;11088;Zie hoe zorgvuldig de sporen worden gewist;CH9_GRI_009B;false;1;1;;;;;doorklik
+K0655;CH9_GRI_009B;CH9;11108;Zie welk plan hierna wordt bedacht;CH9_GRI_010;false;1;1;;;;;doorklik
+K0656;CH9_GRI_010;CH9;11125;Klim het paard in;CH9_GRI_011;false;1;1;;;;;doorklik
+K0657;CH9_GRI_011;CH9;11147;Blijf doodstil zitten en wacht het signaal af;CH9_GRI_012;true;3;3;;;;;lokaal
+K0658;CH9_GRI_011;CH9;11147;"Beheers je ademhaling tot een fluistering, ook al doet elke spier pijn";CH9_GRI_011_PRU;true;3;3;STAT prudentia 15;;;;lokaal
+K0659;CH9_GRI_011;CH9;11147;"Houd je lichaam volledig roerloos, ondanks de kramp in je benen";CH9_GRI_011_AGI;true;3;3;STAT agilitas 14;;;;lokaal
+K0660;CH9_GRI_011_PRU;CH9;11163;Wacht verder op het signaal;CH9_GRI_012;false;1;1;;;;;doorklik
+K0661;CH9_GRI_011_AGI;CH9;11177;Wacht verder op het signaal;CH9_GRI_012;false;1;1;;;;;doorklik
+K0662;CH9_GRI_012;CH9;11191;Zie het paard eindelijk zijn geheim prijsgeven;CH9_GRI_013;false;1;1;;;;;doorklik
+K0663;CH9_GRI_013;CH9;11205;Zie de vloot terugkeren en de stad binnenstromen;CH9_GRI_014;false;1;1;;;;;doorklik
+K0664;CH9_GRI_014;CH9;11222;"Vind deze wraak, na tien jaar oorlog, volledig gerechtvaardigd";CH9_GRI_015;true;3;1;;SEVERITAS;;;duurzaam-houding
+K0665;CH9_GRI_014;CH9;11222;Vind het moeilijk om trots te zijn op wat je eigen kant deze nacht aanricht;CH9_GRI_015;true;3;1;;CLEMENTIA;;;duurzaam-houding
+K0666;CH9_GRI_014;CH9;11222;Kijk toe zonder een van beide kanten te kiezen;CH9_GRI_015;true;3;1;;NEUTRAL;;;schijnkeuze
+K0667;CH9_GRI_015;CH9;11241;Zie wat er 's ochtends op het strand gebeurt;CH9_GRI_016;false;1;1;;;;;doorklik
+K0668;CH9_GRI_016;CH9;11260;Keer terug naar het Museum;CH9_EINDE;false;1;1;;;;;doorklik
+K0669;CH9_EINDE;CH9;11285;Keer terug naar het Museum;CH9_MUSEUM_00;false;1;1;;;;;doorklik

@@ -1,0 +1,1566 @@
+[
+ {
+  "naam": "athena",
+  "hoofdstukken": [
+   "CH1",
+   "CH2",
+   "CH3"
+  ],
+  "aantal_hoofdstukken": 3,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH1_B03",
+   "CH1_B08",
+   "CH2_L07",
+   "CH2_S05",
+   "CH2_K07",
+   "CH2_ATHENA",
+   "CH3_H10",
+   "CH3_ATHENA"
+  ],
+  "codex_persoon": "athena",
+  "relatiescore": {
+   "sleutel": "athena",
+   "momenten": [
+    {
+     "scene": "CH2_L07B",
+     "hoofdstuk": "CH2",
+     "delta": 1,
+     "regel": 3714
+    }
+   ],
+   "gelezen": [
+    {
+     "payoff": "ch2_athena_echo_relatie",
+     "scene": "CH2_ATHENA",
+     "hoofdstuk": "CH2",
+     "detail": "relationMin 1"
+    }
+   ]
+  },
+  "heeft_relatiescore": true,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "diomedes",
+  "hoofdstukken": [
+   "CH6",
+   "CH8",
+   "CH9"
+  ],
+  "aantal_hoofdstukken": 3,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_018",
+   "CH9_TRO_007",
+   "CH9_GRI_009"
+  ],
+  "codex_persoon": "diomedes",
+  "relatiescore": {
+   "sleutel": "diomedes",
+   "momenten": [
+    {
+     "scene": "CH6_018_PRU",
+     "hoofdstuk": "CH6",
+     "delta": 1,
+     "regel": 8478
+    },
+    {
+     "scene": "CH8_AGA_001",
+     "hoofdstuk": "CH8",
+     "delta": 1,
+     "regel": 9781
+    }
+   ],
+   "gelezen": [
+    {
+     "payoff": "ch9_gri009_echo_diomedes_geschiedenis",
+     "scene": "CH9_GRI_009",
+     "hoofdstuk": "CH9",
+     "detail": "relationMin 2"
+    }
+   ]
+  },
+  "heeft_relatiescore": true,
+  "flags_over_hem": [
+   "ch6_diomedes_epigonen"
+  ],
+  "keert_terug": true
+ },
+ {
+  "naam": "priamus",
+  "hoofdstukken": [
+   "CH7",
+   "CH8",
+   "CH9"
+  ],
+  "aantal_hoofdstukken": 3,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_006",
+   "CH8_EPI_011",
+   "CH9_003"
+  ],
+  "codex_persoon": "priamus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "achilles",
+  "hoofdstukken": [
+   "CH7",
+   "CH8"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_015",
+   "CH8_EPI_005"
+  ],
+  "codex_persoon": "achilles",
+  "relatiescore": {
+   "sleutel": "achilles",
+   "momenten": [
+    {
+     "scene": "CH8_ACH_008",
+     "hoofdstuk": "CH8",
+     "delta": 1,
+     "regel": 9683
+    }
+   ],
+   "gelezen": []
+  },
+  "heeft_relatiescore": true,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "agamemnon",
+  "hoofdstukken": [
+   "CH7",
+   "CH8"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_013",
+   "CH8_EPI_005"
+  ],
+  "codex_persoon": "agamemnon",
+  "relatiescore": {
+   "sleutel": "agamemnon",
+   "momenten": [
+    {
+     "scene": "CH8_AGA_008",
+     "hoofdstuk": "CH8",
+     "delta": 1,
+     "regel": 9960
+    }
+   ],
+   "gelezen": []
+  },
+  "heeft_relatiescore": true,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "andromache",
+  "hoofdstukken": [
+   "CH8",
+   "CH9"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH8_ACH_004",
+   "CH8_AGA_005",
+   "CH9_001"
+  ],
+  "codex_persoon": "andromache",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "bacchus",
+  "hoofdstukken": [
+   "CH1",
+   "CH2"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH1_A04",
+   "CH1_A10B",
+   "CH2_S08"
+  ],
+  "codex_persoon": "bacchus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "hektor",
+  "hoofdstukken": [
+   "CH8",
+   "CH9"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH8_ACH_004",
+   "CH8_AGA_005",
+   "CH9_001"
+  ],
+  "codex_persoon": "hektor",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "hephaistos",
+  "hoofdstukken": [
+   "CH1",
+   "CH8"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH1_B04",
+   "CH8_EPI_004"
+  ],
+  "codex_persoon": "hephaistos",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "hera",
+  "hoofdstukken": [
+   "CH2",
+   "CH3"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH2_L01",
+   "CH2_H01",
+   "CH3_IO01"
+  ],
+  "codex_persoon": "hera",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [
+   "herakles_harnas",
+   "ch2_lijn_herakles",
+   "herakles_taken_voltooid",
+   "ch3_lijn_herakles"
+  ],
+  "keert_terug": true
+ },
+ {
+  "naam": "herakles",
+  "hoofdstukken": [
+   "CH2",
+   "CH3"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH2_H01",
+   "CH2_H12",
+   "CH3_H25"
+  ],
+  "codex_persoon": "herakles",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [
+   "herakles_harnas",
+   "ch2_lijn_herakles",
+   "herakles_taken_voltooid",
+   "ch3_lijn_herakles"
+  ],
+  "keert_terug": true
+ },
+ {
+  "naam": "menelaos",
+  "hoofdstukken": [
+   "CH7",
+   "CH8"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_003"
+  ],
+  "codex_persoon": "menelaos",
+  "relatiescore": {
+   "sleutel": "menelaos",
+   "momenten": [
+    {
+     "scene": "CH8_ACH_001",
+     "hoofdstuk": "CH8",
+     "delta": -1,
+     "regel": 9512
+    },
+    {
+     "scene": "CH8_AGA_001",
+     "hoofdstuk": "CH8",
+     "delta": 1,
+     "regel": 9781
+    }
+   ],
+   "gelezen": []
+  },
+  "heeft_relatiescore": true,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "odysseus",
+  "hoofdstukken": [
+   "CH7",
+   "CH8"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_002",
+   "CH7_014"
+  ],
+  "codex_persoon": "odysseus",
+  "relatiescore": {
+   "sleutel": "odysseus",
+   "momenten": [
+    {
+     "scene": "CH8_AGA_008",
+     "hoofdstuk": "CH8",
+     "delta": 1,
+     "regel": 9960
+    }
+   ],
+   "gelezen": []
+  },
+  "heeft_relatiescore": true,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "zeus",
+  "hoofdstukken": [
+   "CH1",
+   "CH2"
+  ],
+  "aantal_hoofdstukken": 2,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH1_B01",
+   "CH2_H01"
+  ],
+  "codex_persoon": "zeus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": true
+ },
+ {
+  "naam": "aeetes",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_023"
+  ],
+  "codex_persoon": "aeetes",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "aegeus",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_T01",
+   "CH4_T16"
+  ],
+  "codex_persoon": "aegeus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "aeneas",
+  "hoofdstukken": [
+   "CH9"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH9_TRO_017"
+  ],
+  "codex_persoon": "aeneas",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "aias",
+  "hoofdstukken": [
+   "CH8"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH8_ACH_007",
+   "CH8_AGA_007"
+  ],
+  "codex_persoon": "aias",
+  "relatiescore": {
+   "sleutel": "aias",
+   "momenten": [
+    {
+     "scene": "CH8_ACH_008",
+     "hoofdstuk": "CH8",
+     "delta": 1,
+     "regel": 9683
+    },
+    {
+     "scene": "CH8_AGA_008",
+     "hoofdstuk": "CH8",
+     "delta": -1,
+     "regel": 9960
+    }
+   ],
+   "gelezen": [
+    {
+     "payoff": "ch9_gri005_echo_aias_sympathiek",
+     "scene": "CH9_GRI_005",
+     "hoofdstuk": "CH9",
+     "detail": "relationMin 1"
+    },
+    {
+     "payoff": "ch9_gri005_echo_aias_afstandelijk",
+     "scene": "CH9_GRI_005",
+     "hoofdstuk": "CH9",
+     "detail": "relationMax -1"
+    }
+   ]
+  },
+  "heeft_relatiescore": true,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "aias_oileus",
+  "hoofdstukken": [
+   "CH9"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH9_TRO_016"
+  ],
+  "codex_persoon": "aias_oileus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "antigone",
+  "hoofdstukken": [
+   "CH6"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_009",
+   "CH6_017"
+  ],
+  "codex_persoon": "antigone",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "antilochos",
+  "hoofdstukken": [
+   "CH8"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH8_EPI_001"
+  ],
+  "codex_persoon": "antilochos",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "apollo",
+  "hoofdstukken": [
+   "CH2"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH2_L08"
+  ],
+  "codex_persoon": "apollo",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "argos",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_002"
+  ],
+  "codex_persoon": "argos",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "argus",
+  "hoofdstukken": [
+   "CH3"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH3_IO05",
+   "CH3_IO13"
+  ],
+  "codex_persoon": "argus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "ariadne",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_T03",
+   "CH4_T10"
+  ],
+  "codex_persoon": "ariadne",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "atalanta",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_007"
+  ],
+  "codex_persoon": "atalanta",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "briseis",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_020"
+  ],
+  "codex_persoon": "briseis",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "calchas",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_016"
+  ],
+  "codex_persoon": "calchas",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "cassandra",
+  "hoofdstukken": [
+   "CH9"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH9_TRO_011",
+   "CH9_TRO_016"
+  ],
+  "codex_persoon": "cassandra",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "chryseis",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_020"
+  ],
+  "codex_persoon": "chryseis",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "creon",
+  "hoofdstukken": [
+   "CH6"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_015"
+  ],
+  "codex_persoon": "creon",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "daidalos",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_T03",
+   "CH4_T14"
+  ],
+  "codex_persoon": "daidalos",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "De Boodschapper van Kronos",
+  "hoofdstukken": [
+   "PRO"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [
+   "PRO_009"
+  ],
+  "person_hook_in": [],
+  "codex_persoon": null,
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [
+   "ch6_diomedes_epigonen",
+   "museum_mnemosyne_ontgrendeld",
+   "ch8_zijde"
+  ],
+  "keert_terug": false
+ },
+ {
+  "naam": "diana",
+  "hoofdstukken": [
+   "CH2"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH2_L08",
+   "CH2_K01",
+   "CH2_K09"
+  ],
+  "codex_persoon": "diana",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "epaphus",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_P01"
+  ],
+  "codex_persoon": "epaphus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "epimetheus",
+  "hoofdstukken": [
+   "CH1"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH1_C07"
+  ],
+  "codex_persoon": "epimetheus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "eteokles",
+  "hoofdstukken": [
+   "CH6"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_009"
+  ],
+  "codex_persoon": "eteokles",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "europa",
+  "hoofdstukken": [
+   "CH3"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH3_IO14"
+  ],
+  "codex_persoon": "europa",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "hecuba",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_006"
+  ],
+  "codex_persoon": "hecuba",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "helena",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_002"
+  ],
+  "codex_persoon": "helena",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "helenus",
+  "hoofdstukken": [
+   "CH9"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH9_TRO_005B",
+   "CH9_GRI_007C"
+  ],
+  "codex_persoon": "helenus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "hermes",
+  "hoofdstukken": [
+   "CH3"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH3_IO07",
+   "CH3_IO13",
+   "CH3_H23"
+  ],
+  "codex_persoon": "hermes",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "ikaros",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_T11",
+   "CH4_T14"
+  ],
+  "codex_persoon": "ikaros",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "io",
+  "hoofdstukken": [
+   "CH3"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH3_IO01",
+   "CH3_IO13"
+  ],
+  "codex_persoon": "io",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [
+   "ch3_io07_route",
+   "ch3_io11_route",
+   "ch3_lijn_io",
+   "ch6_diomedes_epigonen"
+  ],
+  "keert_terug": false
+ },
+ {
+  "naam": "iokaste",
+  "hoofdstukken": [
+   "CH6"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_009",
+   "CH6_010"
+  ],
+  "codex_persoon": "iokaste",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "iphigenia",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_017"
+  ],
+  "codex_persoon": "iphigenia",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "jason",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_001"
+  ],
+  "codex_persoon": "jason",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "kadmos",
+  "hoofdstukken": [
+   "CH6"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_001"
+  ],
+  "codex_persoon": "kadmos",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "kallisto",
+  "hoofdstukken": [
+   "CH2"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH2_K01",
+   "CH2_K09"
+  ],
+  "codex_persoon": "kallisto",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [
+   "ch2_lijn_kallisto"
+  ],
+  "keert_terug": false
+ },
+ {
+  "naam": "kastor_polydeukes",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_011"
+  ],
+  "codex_persoon": "kastor_polydeukes",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "laertes",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_002"
+  ],
+  "codex_persoon": "laertes",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "laius",
+  "hoofdstukken": [
+   "CH6"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_005"
+  ],
+  "codex_persoon": "laius",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "latona",
+  "hoofdstukken": [
+   "CH2"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH2_L01",
+   "CH2_L08"
+  ],
+  "codex_persoon": "latona",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [
+   "ch2_lijn_latona"
+  ],
+  "keert_terug": false
+ },
+ {
+  "naam": "leda",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_001"
+  ],
+  "codex_persoon": "leda",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "medea",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_023",
+   "CH5_029"
+  ],
+  "codex_persoon": "medea",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "megara",
+  "hoofdstukken": [
+   "CH2"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH2_H12"
+  ],
+  "codex_persoon": "megara",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "meleager",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_007"
+  ],
+  "codex_persoon": "meleager",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "midas",
+  "hoofdstukken": [
+   "CH1"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH1_A01",
+   "CH1_A10B"
+  ],
+  "codex_persoon": "midas",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "minos",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_T03",
+   "CH4_T16"
+  ],
+  "codex_persoon": "minos",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "neoptolemus",
+  "hoofdstukken": [
+   "CH9"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH9_GRI_008"
+  ],
+  "codex_persoon": "neoptolemus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "nestor",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_020"
+  ],
+  "codex_persoon": "nestor",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "oedipus",
+  "hoofdstukken": [
+   "CH6"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_005",
+   "CH6_010"
+  ],
+  "codex_persoon": "oedipus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "orpheus",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_019"
+  ],
+  "codex_persoon": "orpheus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "palamedes",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_014"
+  ],
+  "codex_persoon": "palamedes",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "pandora",
+  "hoofdstukken": [
+   "CH1"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH1_C06",
+   "CH1_C09"
+  ],
+  "codex_persoon": "pandora",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "paris",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_010"
+  ],
+  "codex_persoon": "paris",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "patroklos",
+  "hoofdstukken": [
+   "CH8"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH8_003"
+  ],
+  "codex_persoon": "patroklos",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "peleus",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_002"
+  ],
+  "codex_persoon": "peleus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "pentheus",
+  "hoofdstukken": [
+   "CH6"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_022",
+   "CH6_025"
+  ],
+  "codex_persoon": "pentheus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "phaethon",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_P01",
+   "CH4_P09"
+  ],
+  "codex_persoon": "phaethon",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [
+   "ch4_lijn_phaethon"
+  ],
+  "keert_terug": false
+ },
+ {
+  "naam": "philoktetes",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_020"
+  ],
+  "codex_persoon": "philoktetes",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "phoenix",
+  "hoofdstukken": [
+   "CH8"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH8_ACH_007",
+   "CH8_AGA_007"
+  ],
+  "codex_persoon": "phoenix",
+  "relatiescore": {
+   "sleutel": "phoenix",
+   "momenten": [
+    {
+     "scene": "CH8_ACH_008",
+     "hoofdstuk": "CH8",
+     "delta": 1,
+     "regel": 9683
+    }
+   ],
+   "gelezen": []
+  },
+  "heeft_relatiescore": true,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "pholus",
+  "hoofdstukken": [
+   "CH3"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH3_H04"
+  ],
+  "codex_persoon": "pholus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "polyneikes",
+  "hoofdstukken": [
+   "CH6"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH6_009"
+  ],
+  "codex_persoon": "polyneikes",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "prometheus",
+  "hoofdstukken": [
+   "CH1"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH1_C01",
+   "CH1_C11"
+  ],
+  "codex_persoon": "prometheus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "semele",
+  "hoofdstukken": [
+   "CH2"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH2_S01",
+   "CH2_S08"
+  ],
+  "codex_persoon": "semele",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [
+   "ch2_lijn_semele"
+  ],
+  "keert_terug": false
+ },
+ {
+  "naam": "sol",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_P02",
+   "CH4_P09"
+  ],
+  "codex_persoon": "sol",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "telamon",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_002"
+  ],
+  "codex_persoon": "telamon",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "tellus",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_P06"
+  ],
+  "codex_persoon": "tellus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "theseus",
+  "hoofdstukken": [
+   "CH4"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH4_T01",
+   "CH4_T16"
+  ],
+  "codex_persoon": "theseus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [
+   "ch4_lijn_theseus"
+  ],
+  "keert_terug": false
+ },
+ {
+  "naam": "thetis",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_004"
+  ],
+  "codex_persoon": "thetis",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "tydeus",
+  "hoofdstukken": [
+   "CH5"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH5_004"
+  ],
+  "codex_persoon": "tydeus",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ },
+ {
+  "naam": "tyndareos",
+  "hoofdstukken": [
+   "CH7"
+  ],
+  "aantal_hoofdstukken": 1,
+  "spreekt_in": [],
+  "person_hook_in": [
+   "CH7_002"
+  ],
+  "codex_persoon": "tyndareos",
+  "relatiescore": null,
+  "heeft_relatiescore": false,
+  "flags_over_hem": [],
+  "keert_terug": false
+ }
+]

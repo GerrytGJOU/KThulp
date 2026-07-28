@@ -1,0 +1,321 @@
+### CH1_000  (r.2271)  — De Namen van de Wereld
+De boodschapper wijst met een hand die niet helemaal vast lijkt in deze wereld. Achter haar scheurt de poort verder open, tot je niets meer ziet dan licht — en daarachter, vaag, de contouren van bergen die je nooit eerder hebt gezien. "Ga," zegt ze. "Daar wachten namen die dreigen te verdwijnen. Vind ze terug, voor het te laat is." Je stapt door. Wanneer het licht wegtrekt, sta je niet langer in Latium. De lucht ruikt naar tijm en zilte wind, en de grond onder je voeten is steniger, droger, ouder aanvoelend dan de akkers die je kende. Je staat aan de rand van een land dat mensen ooit Hellas noemden — bergen die recht uit zee lijken te groeien, olijfbomen die zich krommen naar een fellere zon, en ergens hierin, verspreid over drie zeer verschillende plekken, wachten verhalen die jou nodig hebben.
+  > Naar Sardis, waar een koning alles tot goud maakt  -> CH1_A01
+  > Naar de top van de Olympos, waar iets op het punt staat te barsten  -> CH1_B01
+  > Naar een kille vallei, waar het eerste vuur nog gestolen moet worden  -> CH1_C01
+
+### CH1_A01  (r.2292)  — De Weg naar Sardis
+[PERSON=midas:intro]
+De weg naar Sardis voert je oostwaarts, weg van de kust, het land van Hellas uit en een ander landschap in: dat van Lydia, waar de heuvels geleidelijk plaatsmaken voor brede, gouden korenvelden. In de verte rijst de berg Tmolus op, en aan zijn voet kronkelt een rivier die de zon vangt op een manier die geen gewoon water zou moeten doen — de Pactolus, zo hoor je een reiziger onderweg zeggen, alsof die naam op zichzelf al een verhaal is dat hij liever niet hardop vertelt. Lydia staat, zelfs hier, aan de rand van de wereld die je kent, al bekend als een land van ongelofelijke rijkdom. Handelaars met karavanen vol textiel en zilverwerk trekken dezelfde weg als jij, en meer dan een van hen noemt, half spottend, half jaloers, de naam van hun koning: Midas. Er gaat een gerucht dat hij zojuist een gunst heeft terugbetaald aan een god — en gunsten aan goden, zo weet iedereen, worden altijd op de 
+  > Ga direct de stad Sardis binnen  -> CH1_A02
+  > Vraag eerst een langsreizende koopman naar het laatste nieuws  -> CH1_A01B
+
+### CH1_A01B  (r.2312)  — Geruchten op de Weg
+De koopman, die net zijn ezel bijstuurt langs een steile bocht, is maar al te bereid zijn last even te laten staan voor een goed verhaal. Hij vertelt over een dronken oude sater die dagenlang zoek was in de rozentuinen van het paleis — Silenus, zegt hij, alsof de naam alles verklaart, de trouwe metgezel en leermeester van Bacchus zelf, altijd op wijn en altijd op het randje van een wijsheid die niemand anders lijkt te bezitten. Wat de koning met hem heeft gedaan, weet de koopman niet precies, maar het gerucht dat al door Sardis waart is duidelijk genoeg: Midas heeft iets gedaan waarvoor een god nu een gunst schuldig is — en gunsten van goden, voegt de koopman er met een veelbetekenende blik aan toe, brengen zelden alleen maar geluk.
+  > Knik kort en loop meteen door, je aandacht al bij het paleis [SEVERITAS] -> CH1_A02
+  > Luister beleefd, maar zonder een duidelijk oordeel over wat je net hoorde [NEUTRAL] -> CH1_A02
+  > Bedank de koopman voor zijn verhaal voor je verdergaat [CLEMENTIA] -> CH1_A02
+
+### CH1_A02  (r.2330)  — Het Paleis van Sardis
+Het paleis van Sardis torent boven de rest van de stad uit als een aankondiging van welvaart: elke zuil is bedekt met een dunne glans, elk kozijn afgezet met een rand die te helder oogt om zomaar verf te zijn. Binnen de poorten lopen bedienden met neergeslagen ogen en snelle passen, en telkens wanneer twee van hen elkaar passeren, valt er een naam — half fluisterend, half angstig — koning Midas. Je vangt flarden op van wat er is gebeurd: een oude, dronken metgezel van de wijngod zelf zou verdwaald zijn in de rozentuinen van het paleis, en de koning zou hem, in plaats van hem weg te sturen, tien dagen lang als eregast hebben onthaald voordat hij hem eigenhandig terugbracht naar zijn god. Zulke gastvrijheid, zeggen de bedienden tegen elkaar, wordt zelden onbeloond gelaten. Bij de deur naar de troonzaal zelf sta je voor een tweede probleem: twee wachters met gekruiste speren, en daarboven, 
+  > Ontcijfer het woord boven de poort  -> CH1_A02_PUZZLE
+  > Zet je schouder tegen de zijdeur van de wachtpost en forceer hem open [STAT:vis:13] -> CH1_A02_VIS
+  > Wacht de wisseling van de wacht af en glip dan, ongezien, tussen hen door [STAT:prudentia:13] -> CH1_A02_SLUIP
+
+### CH1_A02_PUZZLE  (r.2350)  — Het Woord boven de Poort
+[PUZZLE=puzzle_ch1a_lidwoord]
+De wachters zien je naar het opschrift staren en zeggen niets — wie het woord kan lezen, hoort hier, is kennelijk de ongeschreven regel. Je concentreert je op de letters.
+  > Ontcijfer het woord  -> CH1_A03
+
+### CH1_A02_VIS  (r.2367)  — De Zijdeur
+Je laat het opschrift voor wat het is en loopt door naar de zijdeur van de wachtpost — houten planken, een simpele grendel aan de binnenkant. Eén schouder ertegenaan, één keer goed doorduwen, en het hout geeft mee met een kraak die de wachters bij de hoofdpoort niet eens lijken te horen. Binnen enkele passen sta je alweer in de gang naar de troonzaal, alsof er nooit een deur in de weg had gestaan.
+  > Loop door naar de troonzaal  -> CH1_A03
+
+### CH1_A02_SLUIP  (r.2381)  — De Wisseling van de Wacht
+Je blijft in de schaduw van een zuil staan en kijkt. Wachters houden zelden hun aandacht vast, merk je al snel — en inderdaad, na een tijdje komt er een tweede paar aflossen, met het korte moment van verwarring dat daar altijd bij hoort: wie stond waar, wie neemt wat over. In dat ene ogenblik glip je tussen hen door, zo vanzelfsprekend dat niemand er zelfs naar omkijkt.
+  > Loop door naar de troonzaal  -> CH1_A03
+
+### CH1_A03  (r.2395)  — Silenus, de Dronken Wijze
+Binnen de troonzaal hoor je het verhaal in meer detail, verteld door een hoveling die duidelijk geniet van het navertellen. Silenus — oud, dik, altijd op de rand van dronkenschap, en toch, naar men zegt, doordrenkt van een wijsheid die zelfs goden soms komen raadplegen — was op een nacht zijn eigen feest ontgroeid en simpelweg weggewaggeld, het bos in, tot niemand meer wist waar hij was. Het waren Midas' eigen schaapherders die hem vonden, verstrikt in rozenstruiken, snurkend en glimlachend in zijn slaap. In plaats van hem als een indringer te behandelen, herkende Midas onmiddellijk wie voor hem lag — een metgezel en leermeester van Bacchus zelf — en beval een feestmaal dat tien dagen en tien nachten duurde. Pas daarna bracht hij Silenus eigenhandig terug naar zijn god. Nu, zo vertelt de hoveling, staat Bacchus zelf op het punt zijn opwachting te maken in de troonzaal — en een god die ee
+  > Wacht af wat Bacchus te bieden heeft  -> CH1_A04
+
+### CH1_A04  (r.2413)  — Een Gevaarlijke Wens
+[PERSON=bacchus:intro | IMG=midas.png]
+Bacchus verschijnt niet zozeer als dat hij binnenkomt — de lucht in de zaal verandert eerst, wordt zwaarder van de geur van rijpe druiven en omgewoelde aarde, en dan is hij er gewoon, omringd door wijnranken die zich als slingers om de zuilen lijken te vlechten. Een luipaard beweegt loom naast hem, ogen half dicht, alsof zelfs roofdieren in zijn nabijheid hun scherpte verliezen. "Vraag wat je wilt," zegt de god, en er klinkt oprechte, geamuseerde genegenheid in zijn stem — dit is geen verplichting die hem zwaar valt. Midas, koning van een van de rijkste steden die je ooit hebt gezien, met schatkamers die al overlopen van zilver en fijn bewerkt textiel, aarzelt geen moment. Zijn ogen glinsteren op een manier die je onrustig maakt. "Laat alles wat ik aanraak in goud veranderen," zegt hij. Er valt een korte stilte. Bacchus glimlacht — een glimlach die je niet helemaal vertrouwt, alsof hij i
+  > Blijf kijken wat er gebeurt  -> CH1_A05
+
+### CH1_A05  (r.2437)  — De Gouden Aanraking
+[PUZZLE=puzzle_ch1a_naamval]
+Midas test zijn nieuwe gave voorzichtig eerst, dan steeds roekelozer. Een eikentakje in zijn hand: goud, tot in de kleinste nerf. Een steen van de vloer: goud, zwaarder dan een steen zou moeten zijn. Hij lacht, een lach die luider wordt met elke aanraking, en rent door de zaal als een kind — de drempel van zijn eigen deur, een zuil, een appel die hij van een schaal grist, allemaal veranderen ze onder zijn vingers.
+  > Kijk toe hoe hij verder gaat  -> CH1_A06
+
+### CH1_A06  (r.2454)  — Het Gouden Feestmaal
+Precies zoals in de zin die je net ontrafelde raakt Rex — de koning — aurum aan: het goud. Let op hoe flavum, "geel", er in de zin bij zou passen: rex aurum flavum tangit, de koning raakt het gele goud aan — flavum buigt mee met aurum, allebei in de accusativus. Midas laat een feestmaal aanrichten om zijn nieuwe gave te vieren, trots gezeten aan het hoofd van een tafel beladen met alles wat Sardis te bieden heeft. Hij grijpt naar brood — en het verstart tussen zijn vingers voordat het zijn lippen bereikt, hard en koud en onmogelijk te breken. Hij grijpt naar zijn beker wijn, wanhopig nu, en de vloeistof zelf verandert zodra ze zijn mond raakt, een gouden druppel die tegen zijn tanden tikt in plaats van te lessen. Voor het eerst sinds de wens is uitgesproken, verschijnt er iets anders dan verrukking op zijn gezicht: paniek.
+  > Kijk onbewogen toe — hij wist waar hij om vroeg [SEVERITAS] -> CH1_A07
+  > Kijk toe, nog niet goed wetend wat je van dit alles moet denken [NEUTRAL] -> CH1_A07
+  > Kijk met groeiend medeleven hoe zijn paniek toeneemt [CLEMENTIA] -> CH1_A07
+
+### CH1_A07  (r.2472)  — Wat Goud Niet Kan Voeden
+Zijn dochter, die het feestmaal binnenkomt en niets vermoedt van wat er zojuist is gebeurd, rent op hem af zoals ze elke avond doet — bezorgd om het geluid dat ze net hoorde, maar blij hem te zien. Midas, in een reflex die sneller is dan zijn eigen doodsangst, steekt zijn handen niet op tijd weg. Hij omarmt haar voordat hij zich kan inhouden, en zij verstart in zijn armen — koud, glanzend, voor altijd stil, een standbeeld waar zojuist nog een levend kind stond. Het geluid dat uit Midas komt, is niet menselijk meer te noemen.
+  > Grijp hem stevig bij zijn schouders, om hem tot bezinning te schudden [SEVERITAS] -> CH1_A08
+  > Grijp hem bij zijn schouders, zelf niet zeker of dit troost of een schok moet zijn [NEUTRAL] -> CH1_A08
+  > Grijp hem voorzichtig bij zijn schouders, om hem te troosten [CLEMENTIA] -> CH1_A08
+
+### CH1_A08  (r.2490)  — Een Vloek Erkend
+Midas zakt op zijn knieën naast het gouden standbeeld dat zijn dochter was, zijn handen trillend boven haar gezicht, bang haar nogmaals aan te raken en toch niet in staat haar los te laten. De schatkamers die hij ooit te klein vond, de wens die hem eindeloos toescheen, liggen nu als een aanklacht om hem heen. Voor het eerst sinds je hem zag, ziet hij eruit als een gewone man — geen koning, geen bezitter van ongekende rijkdom, maar een vader die zojuist alles heeft verloren wat werkelijk telde. "Neem het terug," fluistert hij, tegen niemand in het bijzonder. "Neem het alsjeblieft terug."
+  > Blijf eerst naast hem zitten, zodat hij niet alleen is met wat hij heeft gedaan [CLEMENTIA] -> CH1_A08B
+  > Blijf besluiteloos naast hem zitten, niet zeker wat je nu moet zeggen [NEUTRAL] -> CH1_A08B
+  > Wijs hem meteen op Bacchus, die alles zag gebeuren [SEVERITAS] -> CH1_A09
+
+### CH1_A08B  (r.2508)  — Een Ogenblik van Stilte
+Je knielt naast hem neer zonder iets te zeggen — er is toch geen woord dat recht doet aan wat er zojuist is gebeurd. Midas' handen trillen nog altijd boven het gouden gezicht van zijn dochter, alsof aanraken en niet-aanraken tegelijk ondraaglijk zijn geworden. Pas na een lange stilte, wanneer zijn ademhaling eindelijk iets rustiger wordt, durf je hem eraan te herinneren dat er misschien nog een uitweg is — een god die een gunst gaf, kan een gunst ook terugnemen.
+  > Wijs hem op Bacchus, die alles zag gebeuren  -> CH1_A09
+
+### CH1_A09  (r.2524)  — De Aanroeping
+[PUZZLE=puzzle_ch1a_vocativus]
+Midas heft zijn gezicht naar de wijnranken die nog altijd om de zuilen hangen — Bacchus is nooit echt weggegaan, dat voel je, ook al is de god zelf niet meer zichtbaar. Er is een moment waarop Midas alleen maar naar de ranken staart, zijn lippen bewegend zonder geluid, alsof hij bang is dat de woorden hem zullen verraden zoals zijn wens dat deed. Dan, met een stem die breekt op elke lettergreep, roept hij.
+  > Wacht op het antwoord van de god  -> CH1_A10
+
+### CH1_A10  (r.2543)  — De Rivier de Pactolus
+Bacchus verschijnt opnieuw, niet wreed maar ook niet haastig — bijna alsof hij dit al had voorzien. "Je wens was nooit het probleem," zegt hij, "je onvermogen om tevreden te zijn wel. Maar ik ben geen god die geniet van andermans verdriet. Was jezelf in de rivier de Pactolus, en de vloek stroomt met het water mee." Het nieuws van het gouden standbeeld heeft zich intussen al door het hele paleis verspreid. Bedienden rennen schreeuwend heen en weer, een poortwacht probeert uit pure paniek de buitenpoort te grendelen "voor de veiligheid", en Midas zelf, radeloos en niet meer helder denkend, struikelt al bij zijn eerste stap naar de rivier die je onderweg zag glinsteren.
+  > Blijf vlak naast Midas, klaar om hem overeind te houden wanneer hij weer struikelt  -> CH1_A10_OPEN
+  > Duw de dichtklappende poort met kracht open zodat jullie er meteen doorheen kunnen [STAT:vis:13] -> CH1_A10_VIS
+  > Praat de paniekerige poortwacht om vóór hij het slot dichtgooit [STAT:gratia:11] -> CH1_A10_GRATIA
+
+### CH1_A10_OPEN  (r.2561)  — Aan Zijn Zijde
+[FLAG=ch1_a10_route=open]
+Je blijft vlak naast Midas, en het is maar goed ook: twee keer struikelt hij, blind van paniek, over zijn eigen voeten, en twee keer ben jij het die hem overeind trekt voor hij valt. Samen bereiken jullie, buiten adem, de oever van de Pactolus.
+  > Kijk toe hoe Midas zich in het water werpt  -> CH1_A10B
+
+### CH1_A10_VIS  (r.2578)  — De Dichtklappende Poort
+[FLAG=ch1_a10_route=vis]
+Je laat Midas geen moment wachten. De poort naar de tuinen valt al dicht onder de handen van een paniekerige wacht; je zet je schouder ertegen en duwt, één keer, tot het hout kraakt en de grendel het begeeft. Midas rent je voorbij, jij vlak achter hem, de rivier al in zicht.
+  > Kijk toe hoe Midas zich in het water werpt  -> CH1_A10B
+
+### CH1_A10_GRATIA  (r.2595)  — Eén Enkel Woord
+[FLAG=ch1_a10_route=gratia]
+De poortwacht heeft zijn hand al op de grendel wanneer je hem aanspreekt — geen bevel, geen dreiging, alleen een paar woorden over wat er gebeurt als de koning zelf hier straks vastzit. Hij aarzelt, en dat is genoeg: de poort blijft open, en jullie glippen er samen met Midas doorheen, recht op de rivier af.
+  > Kijk toe hoe Midas zich in het water werpt  -> CH1_A10B
+
+### CH1_A10B  (r.2612)  — Het Water Neemt het Goud
+[FLAG=ch1_lijn=A; ch1_voltooid=true | PERSON=midas:full, bacchus:full | SOUVENIR=souvenir_midas | TITEL=ch1_a_midas]
+Midas rent zoals hij nog nooit heeft gerend en dompelt zich onder in de rivier. Wanneer hij weer opstaat, druipend en buiten adem, is het goud uit zijn handen verdwenen — en achter hem, waar het water over zijn huid stroomde, glinstert de rivierbedding voortaan doorspekt met fijne, gouden korrels. Reizigers zullen deze rivier eeuwenlang de Pactolus blijven noemen, en handelaars uit deze streek zullen nog generaties later spreken over het goud dat letterlijk uit haar water wordt gezeefd. Zijn dochter, zo vertelt men je later, terwijl Midas nog druipend aan de oever zit, keerde terug tot leven zodra de laatste gouden druppel zijn huid verliet — springlevend, ongedeerd, zonder enige herinnering aan het standbeeld dat ze even was. Terwijl Midas zijn dochter omhelst, valt je oog op iets tussen de rozenstruiken bij het pad: één enkele roos, nog altijd star en goudkleurig, die de vloek blijkbaa
+  > Loop meteen door — er wacht nog werk aan de naam die je moet redden [SEVERITAS] -> CH1_A11
+  > Werp een laatste blik terug, zonder er verder bij stil te staan [NEUTRAL] -> CH1_A11
+  > Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [CLEMENTIA] -> CH1_A11
+
+### CH1_A11  (r.2650)  — Het Orakel Verschijnt
+[IMG=orakel_verschijnt.png]
+Terwijl je van de rivieroever wegloopt, met Midas' dochter weer levend en de vloek verdwenen, begint de lucht om je heen opnieuw te trillen — precies zoals toen je de bronzen schijf in Latium voor het eerst aanraakte. Uit het niets gloeit het orakel weer op, en de vertrouwde stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt. "Je hebt de naam van Midas teruggegeven aan de herinnering," zegt de stem, "en met hem het gevaar van een wens die niet doordacht is. Sardis, Bacchus, de Pactolus — ze bestaan weer, precies zoals ze altijd hadden moeten bestaan."
+  > Luister verder  -> CH1_ROBE
+
+### CH1_B01  (r.2672)  — Metis, de Eerste Vrouw van Zeus
+[PERSON=zeus:intro]
+Voordat je de top van de Olympos bereikt, hoor je het verhaal al van een herder die de berg met angstige blikken observeert: over Metis, een Titanide zo doordrenkt van sluw inzicht dat zelfs Zeus haar ooit als raadgeefster nodig had — en haar uiteindelijk tot zijn eerste vrouw maakte. Ze was, toen dit allemaal begon, zwanger van hun eerste kind. Een oude profetie, afkomstig van Gaia en Ouranos zelf, waarschuwde Zeus voor wat komen zou: Metis zou eerst een dochter baren, even wijs en dapper als haar vader — en daarna een zoon die hem zou onttronen, precies zoals Zeus ooit zijn eigen vader Kronos onttroonde, en Kronos vóór hem Ouranos. Een patroon dat zich, zo leek het, eindeloos zou herhalen. Zeus, vastberaden dat patroon te breken, deed het enige wat hem logisch leek: hij slikte Metis in het geheel in, zwanger nog van hun dochter. Sindsdien, zo vertelt de herder terwijl hij zich haastig 
+  > Beklim direct de laatste helling naar de top  -> CH1_B01C
+  > Vraag de herder waarom hij zo angstig wegvlucht  -> CH1_B01B
+
+### CH1_B01B  (r.2694)  — Een Patroon dat Zich Herhaalt
+De herder aarzelt, alsof hij al spijt heeft van wat hij heeft losgelaten, maar antwoordt toch. "Ik was er zelf niet bij toen hij zijn eigen vader onttroonde, jongen, maar mijn vader wel. Kronos verslond zijn kinderen uit angst voor een profetie — en Zeus ontsnapte alleen omdat zijn moeder hem verborg en Kronos een steen liet inslikken in zijn plaats." Hij wijst naar de donderwolken die zich al om de top samenpakken. "Als de zoon zo bang was voor zijn eigen kinderen dat hij naar dít soort maatregelen greep, wil ik niet weten wat er vandaag gebeurt." Met die woorden verdwijnt hij tussen de rotsen, en jij blijft achter met een onbehaaglijk gevoel dat groeit met elke stap die je verder omhoog zet.
+  > Je hebt geen tijd voor meer vragen en klimt meteen door [SEVERITAS] -> CH1_B01C
+  > Overweeg zijn woorden een moment, en klim dan verder [NEUTRAL] -> CH1_B01C
+  > Bedank de herder voor zijn waarschuwing voor je verdergaat [CLEMENTIA] -> CH1_B01C
+
+### CH1_B01C  (r.2712)  — De Laatste Helling
+Boven je pakken de wolken zich al samen, sneller dan een gewone storm zou moeten — geen twijfel meer mogelijk over wat de herder bedoelde. De top van de Olympos ligt nog een laatste, steile helling boven je, en de wind wakkert aan met elke stap die je zet.
+  > Volg het kronkelende pelgrimspad, langzamer maar voor iedereen begaanbaar  -> CH1_B01_PAD
+  > Klim recht tegen de rotswand op, rechtstreeks de aanzwellende wind in [STAT:vis:13] -> CH1_B01_VIS
+  > Spring behendig van steen naar steen over een smalle, afbrokkelende richel [STAT:agilitas:11] -> CH1_B01_AGI
+
+### CH1_B01_PAD  (r.2728)  — Het Pelgrimspad
+[FLAG=ch1_b01_route=pad]
+Je houdt je aan het pad dat al generaties pelgrims naar boven heeft gebracht — trager dan de kortere routes, maar veilig, zelfs nu de wind aan je mantel rukt. Buiten adem, maar ongedeerd, bereik je de top.
+  > Loop de top van de Olympos op  -> CH1_B02
+
+### CH1_B01_VIS  (r.2745)  — Recht Tegen de Wind In
+[FLAG=ch1_b01_route=vis]
+Je kiest de kortste weg: recht tegen de rotswand op, elke handgreep bevochten tegen een wind die je bijna van de berg af probeert te blazen. Waar een ander zou zijn teruggedeinsd, duw je door — en bereikt de top ruim voor de storm losbarst.
+  > Loop de top van de Olympos op  -> CH1_B02
+
+### CH1_B01_AGI  (r.2762)  — Van Steen naar Steen
+[FLAG=ch1_b01_route=agilitas]
+Je kiest de richel die de meeste pelgrims mijden — te smal, te afbrokkelend, maar een stuk sneller. Met precieze sprongen van steen naar steen sta je alweer boven voor de wind goed en wel is gaan gieren.
+  > Loop de top van de Olympos op  -> CH1_B02
+
+### CH1_B02  (r.2779)  — Onweer op de Olympos
+De top van de Olympos ligt onder een lucht die niet wil beslissen tussen doodse stilte en een naderende storm. Zeus zit ineengedoken op zijn troon, beide handen tegen zijn slapen gedrukt, alsof zijn eigen schedel te klein is geworden voor wat erin groeit. Zijn gewoonlijk donderende stem is niet meer dan een schor gekreun. De andere goden houden zich op afstand, fluisterend onder elkaar, niemand goed wetend wat te doen. Er is iets aan het gebeuren waar zelfs zij, onsterfelijk en machtig, geen grip op hebben — een geboorte die zich niet aan de gewone regels houdt.
+  > Blijf nuchter — een pijnlijke geboorte is nog geen excuus voor wat hij Metis aandeed [SEVERITAS] -> CH1_B03
+  > Kijk toe zonder een duidelijke mening te vormen over wat je ziet [NEUTRAL] -> CH1_B03
+  > Voel medelijden met Zeus, ondanks alles wat hij heeft gedaan [CLEMENTIA] -> CH1_B03
+
+### CH1_B03  (r.2797)  — Een Naam voor het Ongeborene
+[PUZZLE=puzzle_ch1b_lidwoord | PERSON=athena:intro]
+Twee nimfen fluisteren een woord tussen de zuilen door, telkens weer, bijna als een bezwering die ze zelf nog niet helemaal geloven: θεά. Een godin. Iets — iemand — is onderweg, en zelfs de goden weten nog niet goed hoe ze haar moeten noemen, laat staan wat haar komst zal betekenen voor de orde die ze allemaal kennen.
+  > Volg het gefluister naar Zeus' troon  -> CH1_B04
+
+### CH1_B04  (r.2817)  — De Bijl van Hephaistos
+[PUZZLE=puzzle_ch1b_naamval | PERSON=hephaistos:intro]
+Hephaistos wordt erbij gehaald — de enige onder de goden die ruw genoeg is, en tegelijk precies genoeg, voor wat nu moet gebeuren. Je herkent hem aan zijn manke gang: als kind door zijn eigen moeder Hera van de Olympos gegooid vanwege die onvolkomenheid, opgevangen en grootgebracht door de zeenimf Thetis, tot hij uitgroeide tot de meest begaafde smid die de goden ooit hebben gekend. Hij weegt zijn bijl in zijn handen, kijkt naar Zeus' gebogen hoofd, en aarzelt — een ademtocht lang, niet meer. Dan heft hij het wapen.
+  > Kijk niet weg  -> CH1_B05
+
+### CH1_B05  (r.2839)  — Wat uit het Hoofd Breekt
+[IMG=birth_of_athena.png]
+Vulcanus caput aperit — Hephaistos opent het hoofd, en durum, "hard", past feilloos bij caput: vulcanus caput durum aperit, Hephaistos opent het harde hoofd, allebei in de accusativus. De klap valt, zwaarder en voller van gevolg dan enige andere klap die ooit op de Olympos is uitgedeeld. De hemel zelf lijkt even zijn adem in te houden. En dan, uit de opening, niet met bloed maar met een licht dat je ogen doet knipperen: een gestalte, al volwassen, al volledig gewapend — een speer stevig in haar hand, een helm die zonder enige hulp precies op haar plek valt, alsof ze nooit anders bedoeld was dan om zo geboren te worden.
+  > Kijk hoe ze voor het eerst ademhaalt  -> CH1_B06
+
+### CH1_B06  (r.2858)  — Pallas Athena
+[PUZZLE=puzzle_ch1b_vocativus]
+Ze richt zich op tot haar volle lengte, ogen grijs als een naderend onweer dat net is gaan liggen. Wanneer ze haar strijdkreet slaakt, huivert de hemel zelf, en beneden op aarde, zo zul je later horen, deinden de zeeën even hoog op alsof ook zij haar wilden begroeten. Geen enkele andere god zegt iets. Ze staan als bevroren, kijkend naar deze dochter die in enkele ogenblikken is verschenen met een wijsheid en gestrengheid die ouder lijkt dan haar eigen geboorte. Zeus, nog altijd duizelig van de klap, is de eerste die zijn stem hervindt.
+  > Kijk hoe Zeus als eerste zijn stem hervindt  -> CH1_B07
+  > Kijk naar de andere goden, die zich stilletjes terugtrekken  -> CH1_B06B
+
+### CH1_B06B  (r.2878)  — Niet Iedereen Kijkt met Bewondering
+Niet iedereen op de Olympos kijkt met dezelfde verwondering toe. Ares, god van de oorlog, staart naar haar speer met iets dat verdacht veel op jaloezie lijkt — een nieuwe godin, amper geboren, die instinctief beter met een wapen lijkt om te gaan dan hij na eeuwen strijd. Hera, Zeus' eigen vrouw, kijkt toe met een uitdrukking die het midden houdt tussen argwaan en berekening, alsof ze zich nu al afvraagt wat deze onverwachte dochter voor haar eigen positie zal betekenen. Alleen Hermes glimlacht oprecht, alsof hij nu al verheugd is op alle verhalen die deze geboorte ongetwijfeld zal opleveren. Terwijl de goden zo, ieder op hun eigen manier, op haar komst reageren, is het Zeus die als eerste zijn stem hervindt.
+  > Wacht af hoe zij antwoordt  -> CH1_B07
+
+### CH1_B07  (r.2894)  — De Aanroeping van Zeus
+Ze buigt haar hoofd naar hem, niet onderdanig maar erkennend — een dochter die haar vader ziet, geen onderdaan die een koning ziet. Er is iets in de manier waarop ze hem aankijkt dat verraadt dat ze al precies weet wie ze is, en wat haar plaats zal zijn tussen deze goden die haar zojuist pas hebben ontmoet. Zeus, met een mengeling van opluchting en ontzag die je zelden op zijn gezicht ziet, strekt zijn hand naar haar uit.
+  > Kijk toe, vooral benieuwd wat haar aanwezigheid voor de Olympos gaat betekenen [SEVERITAS] -> CH1_B08
+  > Kijk toe, vooral afwachtend wat er nu gaat gebeuren [NEUTRAL] -> CH1_B08
+  > Kijk toe, ontroerd door het moment tussen vader en dochter [CLEMENTIA] -> CH1_B08
+
+### CH1_B08  (r.2912)  — Wijsheid Neemt Haar Plaats In
+[FLAG=ch1_lijn=B; ch1_voltooid=true | PERSON=athena:full | SOUVENIR=souvenir_athena_geboorte | TITEL=ch1_b_athena]
+Vanaf die dag zal ze naast Zeus staan, niet als een wapen dat hij inzet, maar als een raadgeefster die hij raadpleegt — de eerste onder de goden die vraagt voordat ze oordeelt, die nadenkt voordat ze toeslaat. Waar oorlog voor anderen enkel kracht en woede betekent, zal voor haar altijd ook strategie en overleg gelden. De andere goden zwijgen nog, onwennig met deze nieuwe aanwezigheid, maar jij voelt het al aan: er is zojuist iets in de wereld gekomen dat niet meer zal verdwijnen. Wijsheid heeft een gezicht gekregen, een speer, en een naam die weldra door heel Hellas zal worden uitgesproken — Pallas Athena. Op de vloer, tussen de scherven van het moment dat Zeus' schedel weer sloot, ligt nog een klein splintertje brons — afkomstig van Hephaistos' bijl. Niemand lijkt het te missen. Je steekt het bij je, met het onbestemde gevoel dat het Orakel dit zo heeft gewild.
+  > Daal meteen af — er is nog werk te doen [SEVERITAS] -> CH1_B09
+  > Daal af, nog steeds nadenkend over wat je zojuist hebt gezien [NEUTRAL] -> CH1_B09
+  > Daal af, dankbaar dat je bij zo'n geboorte mocht zijn [CLEMENTIA] -> CH1_B09
+
+### CH1_B09  (r.2950)  — Het Orakel Verschijnt
+[IMG=orakel_verschijnt.png]
+Terwijl Pallas Athena naast Zeus haar plaats inneemt en de Olympos langzaam tot rust komt, trilt de lucht om je heen — net als toen je de bronzen schijf in Latium voor het eerst aanraakte. Het orakel gloeit weer op, en de stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt. "Je hebt de geboorte van Pallas Athena teruggegeven aan de herinnering," zegt de stem. "Wijsheid heeft weer een gezicht, een speer, en een naam die door heel Hellas wordt uitgesproken. Zonder jou was ook zij vervaagd, net als al het andere dat deze wereld dreigde te verliezen."
+  > Luister verder  -> CH1_ROBE
+
+### CH1_C01  (r.2972)  — De Titaan die Mensen Vormde
+[PERSON=prometheus:intro]
+Onderweg naar de kille vallei hoor je, van een oude vrouw die stokoude verhalen nog kent, hoe de mensheid ooit is ontstaan. Prometheus, een titaan, koos tijdens de grote oorlog tussen goden en titanen de kant van Zeus — een verraad aan zijn eigen familie dat hem, anders dan de meeste titanen, een geprivilegieerde plek onder de nieuwe orde opleverde. Hij zag de afloop van die oorlog aankomen voordat iemand anders dat deed, zegt de vrouw, en koos dienovereenkomstig. Het was Prometheus die, samen met Athena, de eerste mensen vormde uit klei en water, en hun een sprankje van het goddelijke inblies dat andere dieren nooit hebben gekregen. Zijn broer Epimetheus kreeg de taak om aan elk levend wezen een gave te schenken — snelheid, kracht, vacht, vleugels, scherpe tanden — maar verdeelde zijn voorraad zo onbezonnen dat er, tegen de tijd dat hij bij de mensen aankwam, niets meer over was. Naakt,
+  > Loop resoluut door — verhalen zijn mooi, maar je wilt het zelf zien [SEVERITAS] -> CH1_C02
+  > Loop verder in gedachten, niet meteen overtuigd van het hele verhaal [NEUTRAL] -> CH1_C02
+  > Haast je naar de vallei, bewogen door het verhaal van de oude vrouw [CLEMENTIA] -> CH1_C02
+
+### CH1_C02  (r.2995)  — De Kille Vallei
+Beneden, in een vallei zonder enig vuur, klappertanden de eerste mensen tegen de nacht. Ze hebben geen manier om zich te warmen wanneer de zon ondergaat, geen licht tegen het duister waarin roofdieren wél goed kunnen zien, geen manier om hun voedsel te veranderen in iets meer dan rauwe, ongenietbare kou. Prometheus, die vanaf de rand van de Olympos naar beneden kijkt, ziet elke avond dezelfde ellende zich herhalen. Zijn eigen schepping, hulpeloos gelaten door zijn broers vergeetachtigheid, overleeft nauwelijks de nachten. Hij kan niet langer toekijken zonder in te grijpen — ook al weet hij precies wat voor risico dat met zich meebrengt.
+  > Volg hem meteen, vastbesloten als hij is  -> CH1_C03
+  > Wacht tot het donker is, zodat hij ongezien de Olympos op kan  -> CH1_C02B
+
+### CH1_C02B  (r.3012)  — Wachten op het Duister
+Prometheus wacht tot de laatste gloed van de zonsondergang is weggezakt, wetend dat zelfs een titaan die ooit aan Zeus' zijde streed geen enkele garantie heeft wanneer hij zich aan diefstal van de goden waagt. In het duister, tussen de rotsen die de weg naar de top markeren, oefent hij zijn tocht in gedachten nog een laatste keer. Je ziet de twijfel over zijn gezicht trekken — niet over wat hij gaat doen, dat staat allang vast, maar over de prijs die hij er ooit voor zal moeten betalen. Toch, wanneer de sterren eindelijk helder genoeg staan, zet hij de eerste stap naar boven.
+  > Volg hem terwijl hij zich naar het vuur van de goden waagt  -> CH1_C03
+
+### CH1_C03  (r.3028)  — Het Woord voor Vuur
+[PUZZLE=puzzle_ch1c_lidwoord]
+Bij de haard van de goden zelf, hoog op de Olympos, brandt het vuur ongetemd en helder, gevoed dag en nacht zonder dat iemand het ooit hoeft aan te wakkeren. Op de rand van de haardsteen staat, half door rook verweerd, een enkel woord gekrast — alsof zelfs de goden ooit de behoefte voelden om te benoemen wat hen zo warm houdt. Prometheus sluipt dichterbij, zijn hart bonzend op een manier die niet bij een onsterfelijke titaan lijkt te passen.
+  > Kom dichterbij  -> CH1_C03B
+
+### CH1_C03B  (r.3047)  — Dichter bij het Vuur
+Prometheus is al onderweg naar de haard zelf — maar jij moet ook dichtbij genoeg komen om te zien wat er gebeurt, zonder dat een van de sluimerende goden wakker schrikt van jouw voetstappen in plaats van de zijne.
+  > Blijf op veilige afstand, in de schaduw die er toch al ligt  -> CH1_C03_OPEN
+  > Sluip mee tussen de zuilen, exact in de pas van Prometheus [STAT:agilitas:11] -> CH1_C03_AGI
+  > Klim in plaats daarvan recht langs de rotsrand omhoog — zwaarder, maar sneller bij de haard [STAT:vis:13] -> CH1_C03_VIS
+
+### CH1_C03_OPEN  (r.3063)  — In de Schaduw
+[FLAG=ch1_c03_route=open]
+Je blijft waar de schaduw al het diepst is en wacht af. Van hieruit zie je minder scherp dan je zou willen, maar niemand ziet jou — en dat is, voor nu, genoeg.
+  > Kijk hoe Prometheus een vonk verbergt  -> CH1_C04
+
+### CH1_C03_AGI  (r.3080)  — In Zijn Pas
+[FLAG=ch1_c03_route=agilitas]
+Je sluipt mee tussen de zuilen, je voetstappen zo dicht op die van Prometheus dat ze in het geluid van de zijne verdwijnen. Tegen de tijd dat hij bij de haard staat, sta jij vlak achter hem — dichterbij dan wie ook zou moeten wagen.
+  > Kijk hoe Prometheus een vonk verbergt  -> CH1_C04
+
+### CH1_C03_VIS  (r.3097)  — Langs de Rotsrand
+[FLAG=ch1_c03_route=vis]
+Je kiest niet de weg van de zuilen maar die van de rotsen zelf, hand over hand langs de rand omhoog tot je precies boven de haard uitkomt — zwaarder werk, maar je bent er eerder dan Prometheus zelf.
+  > Kijk hoe Prometheus een vonk verbergt  -> CH1_C04
+
+### CH1_C04  (r.3114)  — De Diefstal
+Prometheus verbergt een enkele gloeiende vonk in de holte van een vijgentakstengel — een plant waarvan het merg smeult zonder de vlam zelf te voeden, precies genoeg om een vonk levend te houden tijdens een lange tocht. Hij glipt terug naar de aarde, sneller en stiller dan een god hem ooit zou toevertrouwen. Beneden, in de vallei, geeft hij het vuur aan de mensen die er het hardst naar smachtten. Voor het eerst zie je licht op hun gezichten dat niet van de maan komt: verwondering eerst, dan iets wat verdacht veel op hoop begint te lijken. Ze leren binnen een enkele nacht hoe ze hout moeten stoken, hoe ze vlees moeten roosteren, hoe ze een cirkel om de vlam moeten vormen tegen de kou.
+  > Kijk toe hoe de hemel dit opmerkt  -> CH1_C05
+
+### CH1_C05  (r.3130)  — Zeus' Woede en Twee Straffen
+Zeus ziet, vanaf zijn troon, de vuren beneden oplichten als stipjes die er niet hadden mogen zijn — een belediging, een overtreding van de grens tussen goden en mensen die hij niet ongestraft kan laten. Zijn woede, wanneer hij begrijpt wat er is gebeurd en wie erachter zit, is zo groot dat de bergen zelf ervan trillen. Voor Prometheus bedenkt hij een straf die eeuwig zal duren: vastgeketend aan een rots, zijn lever elke dag opnieuw opgegeten door een adelaar, en elke nacht weer aangroeiend zodat de kwelling nooit eindigt. Maar voor de mensheid, die hij evenzeer wil straffen voor het ontvangen van wat niet voor hen bedoeld was, bedenkt hij iets subtielers — een geschenk dat zich pas later als een vloek zal ontpoppen.
+  > Kijk toe zonder oordeel — de goden doen wat goden doen [SEVERITAS] -> CH1_C06
+  > Wacht simpelweg af wat Zeus heeft bedacht [NEUTRAL] -> CH1_C06
+  > Vrees voor wat dit gaat opleveren, met medelijden voor wie straks de gevolgen zal dragen [CLEMENTIA] -> CH1_C06
+
+### CH1_C06  (r.3148)  — Pandora, het Alomgeschonken Geschenk
+[PERSON=pandora:intro]
+Zeus beveelt Hephaistos haar te maken zoals ooit de eerste mensen werden gemaakt: uit klei en water, gevormd tot een vrouw van verbluffende schoonheid. Maar waar Prometheus zijn schepselen enkel een vonk van het goddelijke meegaf, geeft elke god en godin op de Olympos haar nu iets van zichzelf — Aphrodite schenkt haar onweerstaanbare gratie, Hermes een gladde tong en de gave om te misleiden, Athena vaardigheid in het weven van de fijnste stof. Zo krijgt ze een naam die simpelweg beschrijft wat ze is: Pandora, "zij die alles geschonken kreeg" — pan, alles, en dooron, geschenk. Een naam die klinkt als een zegen, en die evengoed als een waarschuwing gelezen kan worden. Zeus geeft haar een verzegelde doos mee wanneer hij haar naar de aarde stuurt, met een uitdrukkelijke instructie: nooit, onder geen enkele omstandigheid, mag ze hem openen.
+  > Volg Pandora naar de mensenwereld  -> CH1_C07
+
+### CH1_C07  (r.3169)  — De Doos die Ze Meekreeg
+[PUZZLE=puzzle_ch1c_naamval | PERSON=epimetheus:intro]
+Pandora wordt naar Epimetheus gestuurd — de broer die de mensheid ooit vergat te bedelen, en die nu, stralend van geluk over dit onverwachte geschenk, haar met open armen ontvangt. Prometheus had hem uitdrukkelijk gewaarschuwd: aanvaard nooit een geschenk van Zeus, wat het ook is. Maar Epimetheus, betoverd door haar schoonheid, vergeet die waarschuwing zodra hij haar ziet. Pandora zelf voelt de doos als een gewicht dat ze overal met zich meedraagt, een nieuwsgierigheid die met elke dag groeit. Ze weet niet precies wat erin zit — alleen dat het haar op een dag te veel zal worden om niet te kijken.
+  > Kijk toe op het moment dat ze het deksel licht  -> CH1_C08
+  > Kijk hoe Epimetheus probeert haar aandacht af te leiden  -> CH1_C07B
+
+### CH1_C07B  (r.3192)  — Een Poging tot Afleiding
+Epimetheus, die de onrust in haar ogen allang heeft opgemerkt, doet wat hij kan om haar gedachten af te leiden — een wandeling door de boomgaard, een nieuw geweven kleed, elk cadeau dat hij kan bedenken om die ene, verzegelde doos uit haar gedachten te verdrijven. Een tijdlang lijkt het zelfs te werken. Maar 's avonds, wanneer het huis stil is geworden en Epimetheus allang slaapt, vindt Pandora zichzelf toch weer terug bij de doos, haar vingers al op het deksel voordat ze zich ook maar bewust wordt van wat ze doet.
+  > Kijk toe op het moment dat ze het deksel licht  -> CH1_C08
+
+### CH1_C08  (r.3208)  — Wat uit de Doos Ontsnapt
+[IMG=pandora.png]
+Pandora pyxidem aperit — Pandora opent de doos, en novam, "nieuw", buigt keurig mee met pyxidem: pandora pyxidem novam aperit, Pandora opent de nieuwe doos, allebei in de accusativus. Het deksel klikt open na weken van weerstand, en op hetzelfde moment beseft ze wat ze heeft gedaan — maar te laat. Er stroomt geen licht naar buiten, maar schaduwen: ziekte, verdriet, oorlog, honger, en ontelbare andere kwalen die zich in de lucht oplossen en de wereld in trekken voordat ook maar iemand ze kan grijpen of tegenhouden. Pandora deinst achteruit, haar handen tegen haar mond, terwijl de eerste ellende die de mensheid ooit zal kennen zich over de aarde verspreidt.
+  > Richt je blik meteen op de doos — is dit werkelijk alles wat erin zat? [SEVERITAS] -> CH1_C09
+  > Kijk toe, niet goed wetend wie of wat hier het meest je aandacht verdient [NEUTRAL] -> CH1_C09
+  > Kniel bij Pandora neer, die verstijfd is van schrik en schuldgevoel [CLEMENTIA] -> CH1_C09
+
+### CH1_C09  (r.3229)  — Wat Achterblijft
+[PERSON=pandora:full]
+Op de bodem, half verscholen tussen de laatste schaduwen die nog naar buiten kringelen, blijft iets kleins achter: een zacht, warm licht dat niet weg wil vliegen zoals de rest. Elpis. Hoop. Het enige wat Zeus, om redenen die niemand ooit helemaal heeft doorgrond, in de doos achterliet toen hij haar verzegelde. Pandora, nog trillend van wat ze heeft aangericht, sluit het deksel voordat ook dit laatste beetje licht kan ontsnappen — en zo blijft, te midden van alle kwaad dat nu over de wereld waart, tenminste iets achter waar de mensen zich aan vast kunnen houden, wat er ook gebeurt.
+  > Ga naar hem toe, vooral nieuwsgierig naar wat een titaan drijft tot zo'n offer [SEVERITAS] -> CH1_C09B
+  > Ga naar hem toe, zonder meteen te weten wat je tegen hem wilt zeggen [NEUTRAL] -> CH1_C09B
+  > Ga naar hem toe, vervuld van medelijden voor wat hij voor de mensheid heeft opgeofferd [CLEMENTIA] -> CH1_C09B
+
+### CH1_C09B  (r.3250)  — Naar de Rots
+Prometheus is niet in de vallei te vinden, en al snel wordt duidelijk waarom: Zeus heeft hem ver weggevoerd, naar een rots voorbij waar stervelingen ooit zijn geweest. Het kost moeite om hem te vinden — en nog meer om er te komen.
+  > Volg het karrenspoor dat om de berg heen naar de pas voert  -> CH1_C09_PAD
+  > Beklim de rotswand rechtstreeks, hand over hand tegen het zwaartepunt in [STAT:vis:13] -> CH1_C09_VIS
+  > Lees het vluchtpatroon van de adelaar — zijn dagelijkse route verraadt de kortste weg naar de rots [STAT:prudentia:11] -> CH1_C09_PRU
+
+### CH1_C09_PAD  (r.3266)  — Het Karrenspoor
+[FLAG=ch1_c09_route=open]
+Je volgt het lange karrenspoor dat om de berg heen slingert — een omweg, maar begaanbaar, en na een tocht van uren sta je eindelijk aan de voet van de juiste rots.
+  > Kijk omhoog naar waar Prometheus geketend hangt  -> CH1_C10
+
+### CH1_C09_VIS  (r.3283)  — Tegen het Zwaartepunt In
+[FLAG=ch1_c09_route=vis]
+Je slaat de omweg af en klimt in plaats daarvan recht tegen de rotswand op, hand over hand, elke greep bevochten op een berg die niet voor stervelingen bedoeld lijkt. Je bent er in een fractie van de tijd die het karrenspoor zou hebben gekost.
+  > Kijk omhoog naar waar Prometheus geketend hangt  -> CH1_C10
+
+### CH1_C09_PRU  (r.3300)  — Het Spoor van de Adelaar
+[FLAG=ch1_c09_route=prudentia]
+Je kijkt niet naar de grond maar naar de lucht: een adelaar cirkelt daar al, dag na dag dezelfde route vliegend naar dezelfde rots. Je hoeft alleen zijn vlucht te volgen om te weten waar je moet zijn — de kortste weg ernaartoe blijkt vanzelf te liggen.
+  > Kijk omhoog naar waar Prometheus geketend hangt  -> CH1_C10
+
+### CH1_C10  (r.3317)  — Geketend, Niet Gebroken
+[PUZZLE=puzzle_ch1c_vocativus]
+Hoog tegen een rots, ver van de vallei waar alles begon, vind je Prometheus — vastgeketend door Zeus' eigen bevel, zijn straf nog maar net begonnen aan wat een eeuwigheid dreigt te worden. Een adelaar cirkelt al boven hem, wachtend tot de avond valt om zijn dagelijkse, gruwelijke maaltijd te beginnen. Beneden hem, onzichtbaar vanaf de rots maar voelbaar tot in zijn eigen botten, branden inmiddels duizend kleine vuren verspreid over de valleien. Mensen die ooit klappertandden, warmen zich nu. Mensen die niets hadden dan duisternis, hebben licht om bij te koken, te werken, samen te komen. Ergens tussen hen in draagt iemand, zonder het ooit te beseffen, nog altijd Elpis met zich mee.
+  > Beantwoord zijn blik  -> CH1_C11
+
+### CH1_C11  (r.3336)  — Vuur en Hoop
+[FLAG=ch1_lijn=C; ch1_voltooid=true | PERSON=prometheus:full | SOUVENIR=souvenir_prometheus | TITEL=ch1_c_prometheus]
+Prometheus glimlacht, ondanks de ketenen, ondanks de rots, ondanks de adelaar die hij elke avond opnieuw zal moeten doorstaan. "Het was het waard," zegt hij zacht — niet tegen jou, niet tegen de goden, maar tegen niemand in het bijzonder, alsof hij deze woorden al heel lang tegen zichzelf herhaalt om vol te kunnen houden. Vuur en hoop: twee dingen die de mensheid, wat de goden ook nog mogen bedenken om haar te straffen of te beproeven, nooit meer zal kwijtraken. Je daalt af van de rots met dat besef stevig in je meegedragen, terug naar een wereld die voorgoed is veranderd door wat één titaan bereid was te riskeren. Onderaan de rots gloeit nog een enkel kooltje in de as van een vuur dat allang gedoofd had moeten zijn. Je sluit het in je handen, en het brandt door — alsof het weet dat het Orakel het wil bewaren.
+  > Loop verder, terug naar de bewoonde wereld  -> CH1_C12
+
+### CH1_C12  (r.3372)  — Het Orakel Verschijnt
+[IMG=orakel_verschijnt.png]
+Terwijl je van Prometheus' rots wegloopt, met vuur en hoop nu onlosmakelijk verbonden aan de mensheid, trilt de lucht om je heen — net als toen je de bronzen schijf in Latium voor het eerst aanraakte. Het orakel gloeit weer op, en de stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt. "Je hebt het vuur van Prometheus, de doos van Pandora en de hoop die erin achterbleef teruggegeven aan de herinnering," zegt de stem. "Een titaan die alles riskeerde voor een schepping die niet eens de zijne was — zonder jou was ook dat verhaal voorgoed verdwenen."
+  > Luister verder  -> CH1_ROBE
+
+### CH1_ROBE  (r.3394)  — De Mantel
+De stem zwijgt even, en dan — bijna geamuseerd — klinkt er iets nieuws. "Maar voordat je verdergaat: kijk eens naar jezelf." Je kijkt omlaag naar je eigen kleren: de vodden van een boer uit Latium, gescheurd en met aarde besmeurd, nog altijd dezelfde kleren waarin je van je eigen akker vertrok. "Een boodschapper die de herinnering van hele beschavingen bewaart, verdient beter dan vodden," zegt de stem. Uit het licht van het orakel vouwt zich iets stofachtigs, dat neerdaalt om je schouders — een eenvoudige, goed gesneden mantel, zwaar genoeg om je te beschermen tegen de kou van elke tijd en elke plaats waar je nog terecht zult komen.
+  > Trek de mantel aan  -> CH1_CODEX_UITLEG
+
+### CH1_CODEX_UITLEG  (r.3416)  — De Codex Memoriae
+De Boodschapper spreekt nog één keer, dit keer met iets dat op een instructie lijkt. "Alles wat je hier leert — de namen, de verhalen, de vormen van hun eigen taal — verdwijnt te makkelijk als niemand het vastlegt. Daarom houd ik voor jou de Codex Memoriae bij: een levend register van alles wat je hebt herontdekt." "Elke naam die je terugvindt en elk stukje taal dat je ontcijfert, wordt automatisch aan de Codex toegevoegd — grammatica net zo goed als mythologie. Raadpleeg haar wanneer je maar wilt, vanaf het opslagscherm: niets wat eenmaal is vastgelegd, kan opnieuw verdwijnen."
+  > Doorgaan  -> CH1_EINDE
+
+### CH1_EINDE  (r.3432)  — Het Einde van Hoofdstuk 1
+De Boodschapper knikt, en de poort achter je opent zich weer — ditmaal niet naar een vergeten hoofdstuk, maar naar iets wat nog geschreven moet worden. "Hoofdstuk 2 wacht al ergens verderop," zegt de stem. "Kom mee."
+  > Stap door de poort  -> CH2_000

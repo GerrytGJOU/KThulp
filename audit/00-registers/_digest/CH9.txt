@@ -1,0 +1,244 @@
+### CH9_000  (r.10353)  — Mercurius
+"Deze keer," zegt de Boodschapper, "volstaat een gewone poort niet. Wat je nu gaat zien, speelt zich af binnen muren waar je nog nooit bent geweest — en de enige die daar ongezien doorheen weet te bewegen, is niet iemand van mij." Ze roept iemand anders erbij: Mercurius zelf, dezelfde god die Priamus ooit door het Griekse kamp gidste, op de nacht dat hij Hectors lichaam kwam terugvragen. "Ken je hem nog?" vraagt de Boodschapper. "Deze keer gidst hij jou. Ontelbare keren heeft hij stervelingen tussen werelden geleid — waarom niet één keer terug in de tijd?" Mercurius glimlacht, vleugels aan zijn sandalen al trillend van ongeduld. "Kom," zegt hij. "Ditmaal ga je niet naar het Griekse kamp. Je gaat naar binnen — Troje in."
+  > Volg Mercurius de muren van Troje in  -> CH9_001
+
+### CH9_001  (r.10371)  — Hector en Andromache, van Binnenuit
+[PERSON=hektor:intro, andromache:intro]
+Je kent dit moment al — je zag het eerder, van een afstand, via de Boodschapper terwijl je in het Griekse kamp wachtte. Nu sta je er middenin: in Hectors eigen huis, waar Andromache hem met tranen in haar ogen smeekt binnen te blijven, hun zoontje Astyanax op haar heup. Van dichtbij voelt het anders. Je hoort hoe Hectors stem breekt wanneer hij zegt dat hij weet dat Troje zal vallen — niet als iets wat hij gelooft, maar als iets wat hij al heeft geaccepteerd. Je ziet Astyanax schrikken van zijn vaders glimmende helm, en lachen zodra Hector hem afzet. Je ziet Andromache's gezicht op het moment dat ze beseft dat smeken niets zal veranderen.
+  > Volg Hector naar de poort  -> CH9_002
+
+### CH9_002  (r.10390)  — Hectors Dood, van de Muren
+[PAYOFF=ch9_002_echo_herakles_harnas]
+Vanaf de muren zie je wat je in het Griekse kamp alleen van een afstand kon vermoeden: Achilles die Hector driemaal om de stad achtervolgt, tot Athena — vermomd als Hectors eigen broer Deiphobus — hem overhaalt zich om te draaien. Priamus en Hecuba roepen wanhopig van de muren, maar Hector staat al stil, alleen, tegenover een woede die niemand kan afwenden. Ergens tussen de wachtende Griekse gelederen, ver beneden je, valt je oog op een gestalte die je met een schok herkent: {subject_cap} zelf, met een {eigen_wapen} in de hand, ergens tussen de Myrmidonen — dezelfde reis die je zelf hebt afgelegd, nu gezien van de andere kant van de muur. Het is een vreemde duizeling: jezelf zien staan aan de kant die je zonet nog was. Hector sterft. Zijn lichaam wordt achter een strijdwagen gebonden en weggesleept. Op de muren barst een gejammer los dat je nooit meer zult vergeten.
+  > Zie hoe Troje hierop reageert  -> CH9_003
+
+### CH9_003  (r.10411)  — De Tocht met Priamus
+[PERSON=priamus:full]
+Dagenlang sleept Achilles Hectors lichaam rond de muren, tot koning Priamus een besluit neemt dat niemand in zijn paleis hem probeert uit te praten: hij zal zelf, ongewapend, naar de vijand gaan om zijn zoon terug te vragen. Mercurius, vermomd als een eenvoudige jongeman, leidt hem — en jou — ongezien langs elke Griekse wachtpost, tot in Achilles' eigen tent. Je ziet Priamus Achilles' handen kussen — dezelfde handen die zoveel van zijn zonen doodden — en hem smeken zich zijn eigen vader te herinneren. Je ziet iets breken in Achilles. Hectors lichaam keert mee terug naar Troje.
+  > Zie de begrafenis in Troje zelf  -> CH9_004
+
+### CH9_004  (r.10430)  — Hectors Begrafenis, in Troje
+Deze keer sta je er middenin, niet als een verre stem die je het vertelt. Negen dagen rouwt de stad. Andromache, Hecuba en Helena spreken ieder hun eigen klaagzang uit boven Hectors lichaam — Andromache om de man die ze verliest, Hecuba om haar dapperste zoon, Helena, verrassend genoeg, om de enige in Troje die haar nooit met minachting heeft behandeld. De brandstapel wordt ontstoken. Troje's grootste verdediger is niet meer. En met hem verdwijnt, voelt iedereen op de muren aan, ook de laatste illusie dat de stad dit kan overleven.
+  > Luister naar wat de Boodschapper je nu vraagt  -> CH9_005
+
+### CH9_005  (r.10449)  — Muren of Strand?
+"Je weet hoe dit gaat aflopen," zegt de Boodschapper zacht. "Troje is gedoemd te vallen, binnen niet al te lange tijd. Dat verandert niets aan wat je nog gaat zien — alleen aan vanaf waar je het ziet." "Wil je de muren zien vallen vanaf het strand — bij het Griekse leger, bij de list die aan deze oorlog een einde gaat maken? Of vanaf de muren zelf — binnen Troje, bij de mensen die niet weten dat ze hun laatste dagen beleven?"
+  > Kijk mee vanaf de muren, binnen Troje  -> CH9_TRO_001
+  > Kijk mee vanaf het strand, bij het Griekse leger  -> CH9_GRI_001
+
+### CH9_TRO_001  (r.10466)  — Penthesileia
+Na Hectors dood lijkt alle hoop uit Troje verdwenen — tot de Amazonekoningin Penthesileia met haar eigen leger krijgshaftige vrouwen arriveert, vastbesloten de stad te redden waar de mannen tekortschoten. Voor het eerst in weken juicht Troje weer. De vreugde duurt kort. Achilles doodt haar in een tweegevecht — en wanneer hij haar helm afzet om zijn overwinning te bevestigen, ziet zelfs hij, vanaf de muren amper zichtbaar, iets waarvan gefluisterd wordt dat het hem nooit meer helemaal loslaat.
+  > Zie welke bondgenoot hierna arriveert  -> CH9_TRO_002
+
+### CH9_TRO_002  (r.10485)  — Memnon uit het Oosten
+[PUZZLE=puzzle_ch9_tro_comparativus]
+Weer een bondgenoot, weer nieuwe hoop: Memnon, zoon van de dageraadgodin Eos, arriveert met een leger uit het verre oosten. Boodschappers fluisteren dat hij een jonge Griekse held heeft gedood — de zoon, naar men zegt, van een oude raadsman die de Grieken al sinds hun aankomst vergezelt. Achilles' wraak is meedogenloos. Memnon valt net zo snel als hij kwam. Sommigen op de muren zeggen dat de dauw sindsdien elke ochtend anders ruikt — Eos' tranen om haar zoon.
+  > Zie wie Troje nu nog tegenover zich heeft  -> CH9_TRO_003
+
+### CH9_TRO_003  (r.10507)  — Achilles' Dood
+[PUZZLE=puzzle_ch9_tro_aci | TITEL=ch9_dood_achilles]
+Bij de Scaeïsche Poort gebeurt wat niemand in Troje nog had durven hopen: Paris, met Apollo's hand op zijn boog, treft Achilles precies in zijn hiel — de enige plek waar Thetis hem ooit niet in de Styx doopte. De sterkste held van Griekenland valt in het zand, binnen het zicht van de stad die hij bijna alleen al tien jaar had weten te belegeren. Om de muren barst gejuich los. Beneden, bij de Griekse linies, zie je een felle strijd om zijn lichaam losbarsten — Aias die het probeert te redden, Odysseus die de aanvallers afhoudt.
+  > Zie hoe Troje dit nieuws viert  -> CH9_TRO_003B
+
+### CH9_TRO_003B  (r.10532)  — Gejuich op de Muren
+Rond je barst het gejuich los — tien jaar wrok, eindelijk gericht op de man die er het meest voor verantwoordelijk leek. Niet iedereen juicht even hard; sommigen op de muren staren zwijgend naar het slagveld, alsof zelfs zij niet goed weten wat ze hierbij moeten voelen.
+  > Vind het moeilijk om vreugde te voelen om de dood van wie dan ook, zelfs een vijand [CLEMENTIA] -> CH9_TRO_004
+  > Erken dat Troje na tien jaar wel recht heeft op dit ene moment van opluchting [SEVERITAS] -> CH9_TRO_004
+  > Laat het gejuich om je heen op je inwerken zonder zelf een kant te kiezen [NEUTRAL] -> CH9_TRO_004
+
+### CH9_TRO_004  (r.10548)  — Onrust in het Griekse Kamp
+Vreemd nieuws bereikt Troje via spionnen en overlopers: in het Griekse kamp heerst verdeeldheid. Twee van hun grootste helden schijnen te twisten over wie Achilles' wapenrusting verdient — meer dan dat weet niemand binnen de muren met zekerheid te zeggen. Wat er precies gebeurt, blijft voorlopig verborgen aan de andere kant van de linies.
+  > Zie welke prins van Troje als volgende valt  -> CH9_TRO_005
+
+### CH9_TRO_005  (r.10562)  — De Dood van Paris
+Een Griekse boogschutter met een oude, herkenbare boog — Herakles' eigen wapen, zeggen sommigen — doodt Paris met een enkele pijl. De prins wiens oordeel over een gouden appel deze hele oorlog ooit in gang zette (je herinnert je het zelf nog, van lang geleden), sterft zoals hij leefde: van een afstand, buiten bereik van een eerlijk gevecht. Troje verliest zijn tweede prins in evenveel weken.
+  > Zie wat er van Helena wordt, nu ze weer weduwe is  -> CH9_TRO_005B
+
+### CH9_TRO_005B  (r.10581)  — Het Huwelijk van Helena en Deiphobos
+[PERSON=helenus:intro]
+Binnen dagen na Paris' dood eisen zijn broers Deiphobos en Helenus allebei Helena's hand op. Priamus, uitgeput door twee dode zonen in evenveel weken, wijst haar toe aan Deiphobos. Je ziet de bruiloft met eigen ogen — geen vreugde nergens te bekennen, behalve misschien bij Deiphobos zelf. Helena's gezicht verraadt precies hoeveel keuze ze hierin werkelijk had.
+  > Vind dit een even wrede voortzetting van wat Helena al die jaren is aangedaan [CLEMENTIA] -> CH9_TRO_005C
+  > Erken dat een weduwe zonder bescherming in een belegerde stad weinig andere opties heeft [SEVERITAS] -> CH9_TRO_005C
+  > Kijk zwijgend toe, net als de rest van het hof [NEUTRAL] -> CH9_TRO_005C
+
+### CH9_TRO_005C  (r.10600)  — Helenus Verdwijnt
+Helenus, vernederd door het verlies van Helena aan zijn eigen broer, verlaat kort na de bruiloft de stad — niemand weet goed waarheen, of durft er hardop naar te vragen. Sommigen fluisteren dat hij, als ziener, allang wist hoe dit verhaal afloopt, en er niet langer deel van wilde uitmaken.
+  > Zie wat er ondertussen, ongezien, binnen de muren gebeurt  -> CH9_TRO_006
+
+### CH9_TRO_006  (r.10614)  — De Bedelaar in de Stad
+Een havenloze bedelaar, met striemen op zijn rug en een verhaal over Griekse wreedheid, weet Troje binnen te komen — niemand let echt op hem, behalve Helena, die hem één keer recht aankijkt en dan zwijgt. Wat niemand anders beseft: onder de vodden schuilt Odysseus zelf.
+  > Kijk toe zonder verder iets te zeggen  -> CH9_TRO_007
+  > Merk iets vertrouwds op in de ogen van de bedelaar, maar zwijg net als Helena [STAT:prudentia:15] -> CH9_TRO_006_PRU
+
+### CH9_TRO_006_PRU  (r.10629)  — Een Vermoeden
+Iets in de manier waarop de bedelaar zich beweegt — te beheerst voor een man die net zoveel beweert te hebben geleden — wekt je argwaan. Je zegt er niets van. Wie zou je geloven, en wat zou het uithalen?
+  > Zie wat er verder gebeurt  -> CH9_TRO_007
+
+### CH9_TRO_007  (r.10643)  — Het Palladium Verdwijnt
+[PERSON=diomedes:full]
+Pas dagen later wordt duidelijk wat er is gebeurd: het Palladium, het heilige beeld van Athena dat Troje al generaties beschermt, is uit zijn tempel gestolen. Niemand heeft de dief gezien vertrekken. Voor het eerst sinds het begin van het beleg voelt de stad zich werkelijk onbeschermd.
+  > Zie wat er op het strand verschijnt  -> CH9_TRO_008
+
+### CH9_TRO_008  (r.10663)  — Het Paard op het Strand
+Op een ochtend is het Griekse kamp verlaten. De schepen zijn verdwenen, de tenten afgebroken — na tien jaar lijkt de vloot eindelijk vertrokken. Op het verlaten strand staat maar één ding: een reusachtig houten paard, en ernaast een enkele Griekse man, kennelijk door zijn eigen mensen achtergelaten.
+  > Luister naar wat de man te vertellen heeft  -> CH9_TRO_009
+
+### CH9_TRO_009  (r.10680)  — Sinons Verhaal
+De man — Sinon, zegt hij te heten — vertelt een zorgvuldig verhaal: zijn eigen mensen wilden hem offeren, hij ontsnapte, en het paard is een verzoeningsgeschenk aan Athena. Wie het beschadigt, roept haar woede over zich af. Wie het de stad binnenhaalt, wint haar gunst voor altijd. Priamus, moe van tien jaar oorlog en verlangend naar een teken van hoop, is geneigd hem te geloven.
+  > Vind het verstandig om Sinon het voordeel van de twijfel te geven na alles wat Troje heeft doorstaan [CLEMENTIA] -> CH9_TRO_010
+  > Wantrouw elk Grieks geschenk, na tien jaar oorlog helemaal [SEVERITAS] -> CH9_TRO_010
+  > Twijfel, net als een deel van de menigte om je heen [NEUTRAL] -> CH9_TRO_010
+
+### CH9_TRO_010  (r.10701)  — Laocoön en de Slangen
+[PUZZLE=puzzle_ch9_tro_congruentie]
+Niet iedereen is overtuigd. De priester Laocoön waarschuwt luid tegen het paard en werpt zelfs een speer in zijn houten flank — die trilt na, hol vanbinnen, maar niemand die daar acht op slaat. Vlak daarna komen twee reusachtige zeeslangen uit de golven — gestuurd, zeggen sommigen, door Neptunus zelf, die Troje nooit heeft vergeven dat koning Laomedon hem ooit zijn beloofde loon voor de stadsmuren onthield — en verslinden hem en zijn twee zonen voor de ogen van de hele stad. Troje leest het verkeerd: dit is, denkt iedereen, een straf voor Laocoöns twijfel — niet een waarschuwing.
+  > Zie of nog iemand durft te twijfelen  -> CH9_TRO_011
+
+### CH9_TRO_011  (r.10723)  — Cassandra's Laatste Waarschuwing
+[PERSON=cassandra:intro]
+Cassandra, Priamus' eigen dochter, smeekt de stad het paard niet binnen te halen — net als altijd zonder gehoor. Apollo's vloek werkt genadeloos door: ze ziet de waarheid feilloos, en niemand gelooft haar ooit. Het paard wordt, onder gejuich, door een bres in de muur naar binnen gesleept.
+  > Zie hoe Troje die avond viert  -> CH9_TRO_012
+
+### CH9_TRO_012  (r.10745)  — Het Feest
+Voor het eerst in tien jaar viert Troje alsof de oorlog al voorbij is. Wijn stroomt rijkelijk, muziek klinkt tot diep in de nacht, uitgeputte soldaten slapen voor het eerst zonder wapenrusting aan. Niemand houdt nog de wacht. Diep in de buik van het paard wacht een handvol Griekse krijgers, doodstil, op precies dit moment.
+  > Zie wat er gebeurt zodra de stad eindelijk slaapt  -> CH9_TRO_013
+
+### CH9_TRO_013  (r.10761)  — De Poorten Gaan Open
+[PUZZLE=puzzle_ch9_tro_3decl]
+Midden in de nacht klimmen de verstopte Grieken uit het paard en openen de poorten van Troje van binnenuit. Ver weg, op zee, ziet een wachter een signaalvuur — de teruggekeerde vloot vaart al aan land. Binnen enkele ogenblikken stroomt het hele Griekse leger de slapende stad binnen. Wat volgt is geen veldslag meer. Het is een slachting.
+  > Zie wat er met het koningshuis gebeurt  -> CH9_TRO_014
+
+### CH9_TRO_014  (r.10783)  — De Dood van Priamus
+Priamus vlucht met Hecuba naar het altaar van Jupiter, in de hoop dat heiligdom hem zal beschermen. Neoptolemus, Achilles' eigen zoon, doorboort eerst Polites — Priamus' laatste levende zoon — voor de ogen van zijn vader, en doodt dan de oude koning zelf, midden op de trappen van zijn eigen altaar. De koning die ooit met moed naar Achilles' tent liep om zijn zoon terug te vragen, sterft zonder dat iemand hém ooit dezelfde genade toont.
+  > Zie wat er met Hectors zoontje gebeurt  -> CH9_TRO_015
+
+### CH9_TRO_015  (r.10802)  — Astyanax
+Uit angst dat Hectors zoon ooit zal opgroeien om zijn vader te wreken, wordt de kleine Astyanax van de muren van Troje geworpen — dezelfde muren waarvandaan hij, nog maar enkele weken geleden, lachend werd opgetild door een vader die te goed wist wat er zou komen.
+  > Vind dit de wreedste daad van de hele oorlog, zonder enig excuus [SEVERITAS] -> CH9_TRO_016
+  > Erken, met tegenzin, de logica van mannen die een nieuwe wraakoorlog over generaties willen voorkomen [CLEMENTIA] -> CH9_TRO_016
+  > Kun je hier geen woorden voor vinden, aan geen van beide kanten [NEUTRAL] -> CH9_TRO_016
+
+### CH9_TRO_016  (r.10818)  — Cassandra bij het Altaar
+[PERSON=cassandra:full, aias_oileus:intro | TITEL=ch9_cassandra_altaar]
+Cassandra zoekt heiligdom bij het altaar van Athena — de enige plek, denkt ze, waar zelfs Grieken haar niet zouden durven aanraken. Ze vergist zich: Aias, zoon van Oïleus (een andere Aias dan Telamons zoon), sleurt haar met geweld weg, een heiligschennis die de godin niet zal vergeten.
+  > Zie wie er, tegen alle verwachting in, toch weet te ontsnappen  -> CH9_TRO_017
+
+### CH9_TRO_017  (r.10841)  — Aeneas' Vlucht
+[PERSON=aeneas:intro | TITEL=ch9_aeneas_vlucht]
+Terwijl de stad om hem heen instort, draagt de Trojaanse prins Aeneas zijn oude, kreupele vader Anchises op zijn eigen schouders de brandende straten uit, zijn zoontje Ascanius stevig aan de hand. Van alle Trojanen die deze nacht overleven, is hij degene wiens verhaal het verst zal reizen — al heeft niemand, ook hijzelf niet, enig idee hoe ver dat werkelijk zal blijken.
+  > Zie Troje voor de laatste keer  -> CH9_TRO_018
+
+### CH9_TRO_018  (r.10864)  — Ilion in Vlammen
+[TITEL=ch9_val_van_troje]
+Bij het eerste ochtendlicht is er geen Troje meer om naar terug te keren. Tien jaar beleg, duizenden doden aan beide kanten, en uiteindelijk viel de stad niet door een speer of een zwaard, maar door een houten paard en een leugen die niemand op tijd doorzag. Vanaf de muren — de laatste plek waar je nog stond voor ze instortten — kijk je uit over rook, as, en een kust vol schepen die zich langzaam klaarmaken om te vertrekken.
+  > Keer terug naar het Museum  -> CH9_EINDE
+
+### CH9_GRI_001  (r.10886)  — Penthesileia
+Na Hectors dood krijgt Troje onverwachte versterking: de Amazonekoningin Penthesileia, met een heel leger krijgshaftige vrouwen. Ze vecht met een felheid die zelfs de Griekse linies laat wankelen — tot Achilles haar in een tweegevecht doodt. Wanneer hij haar helm afzet, verstart hij: haar gezicht is zo mooi dat zijn eigen overwinning hem plotseling ondraaglijk voorkomt. Thersites, een spotter zonder enig ontzag, hoont hem erom hardop voor het hele leger — en betaalt daarvoor met zijn leven: Achilles doodt ook hem, ter plekke, zonder aarzeling.
+  > Vind Achilles' woede tegenover Thersites even begrijpelijk als verontrustend [NEUTRAL] -> CH9_GRI_002
+  > Vind dat een spotter zijn verdiende loon kreeg [SEVERITAS] -> CH9_GRI_002
+  > Vind het onvergeeflijk om een ongewapende man te doden om een belediging [CLEMENTIA] -> CH9_GRI_002
+
+### CH9_GRI_002  (r.10907)  — Memnon en de Dood van Antilochos
+[PUZZLE=puzzle_ch9_gri_comparativus]
+Memnon, zoon van de dageraadgodin Eos, arriveert met een leger uit het verre oosten — en doodt, tot ieders ontzetting, Antilochos: Nestors eigen zoon, dezelfde die ooit het nieuws van Patroklos' dood aan Achilles moest brengen (Hoofdstuk 8). Achilles' wraak is onmiddellijk en meedogenloos. Memnon valt, en Eos weent om haar zoon zoals geen enkele godin ooit om een sterveling heeft geweend.
+  > Zie wat er met Achilles zelf gebeurt  -> CH9_GRI_003
+
+### CH9_GRI_003  (r.10929)  — Achilles' Dood
+[PUZZLE=puzzle_ch9_gri_aci | TITEL=ch9_dood_achilles]
+Bij de Scaeïsche Poort van Troje treft Paris, met Apollo's hand op zijn boog, Achilles precies in zijn hiel — de enige plek waar Thetis hem ooit niet in de Styx doopte. De sterkste held van Griekenland valt, en om zijn lichaam ontbrandt onmiddellijk een felle strijd. Aias, Telamons zoon, tilt het lichaam op zijn schouders en draagt het onder vijandelijk vuur naar de Griekse linies, terwijl Odysseus met zijn zwaard de aanvallers op afstand houdt. Zonder die twee zou zelfs Achilles' lichaam nooit zijn teruggekeerd.
+  > Zie wat er van zijn wapenrusting wordt  -> CH9_GRI_004
+
+### CH9_GRI_004  (r.10954)  — De Twist om de Wapenrusting
+Achilles' wapenrusting — dezelfde die Vulcanus smeedde na Patroklos' dood — moet een nieuwe eigenaar krijgen. Twee namen worden genoemd: Aias, die het lichaam onder vuur redde, en Odysseus, wiens list de oorlog al vaker een wending gaf. De Griekse leiders stemmen. Odysseus wint. Aias, die zijn hele leven zijn kracht als zijn enige ware eer beschouwde, kan de vernedering niet verkroppen.
+  > Zie wat Aias die nacht doet  -> CH9_GRI_005
+
+### CH9_GRI_005  (r.10973)  — Aias' Ondergang
+[TITEL=ch9_waanzin_aias | PAYOFF=ch9_gri005_echo_aias_sympathiek,ch9_gri005_echo_aias_afstandelijk]
+Vernederd besluit Aias 's nachts de Griekse aanvoerders te vermoorden — Athena, om erger te voorkomen, benevelt zijn geest zodat hij in plaats daarvan een kudde vee afslacht, in de stellige overtuiging dat het zijn vijanden zijn. Bij het ochtendlicht, wanneer hij ontwaakt tussen de dode dieren en beseft wat hij heeft gedaan, is de schaamte groter dan hij kan dragen. Hij valt op zijn eigen zwaard — hetzelfde zwaard dat hij ooit van Hector kreeg, na een gevecht dat eindigde in een uitwisseling van wapenrusting in plaats van bloedvergieten.
+  > Vind dit onnodig — zijn kracht en trouw wogen zwaarder dan wat hem is aangedaan [CLEMENTIA] -> CH9_GRI_006
+  > Erken dat schaamte, voor een man als Aias, net zo dodelijk kan zijn als een wond [SEVERITAS] -> CH9_GRI_006
+  > Weet niet goed wat je hiervan moet vinden, en laat het zo [NEUTRAL] -> CH9_GRI_006
+
+### CH9_GRI_006  (r.10997)  — De Terugkeer van Philoktetes
+Calchas raadpleegt de vogeltekens en komt met een advies dat niemand had verwacht: zonder Herakles' boog kan Troje niet vallen — en die boog is nog altijd in handen van Philoktetes, jaren geleden achtergelaten op Lemnos (Hoofdstuk 7). Odysseus en Diomedes varen hem op te halen. Zijn wond, die nooit genas zolang hij alleen was, wordt eindelijk verzorgd. Zijn wrok tegen de mannen die hem ooit lieten stikken van de pijn, verzacht — een beetje.
+  > Zie wat Philoktetes doet zodra hij weer bij het leger is  -> CH9_GRI_007
+
+### CH9_GRI_007  (r.11016)  — De Dood van Paris
+Met Herakles' eigen boog doodt Philoktetes de man die deze hele oorlog ooit in gang zette — de prins wiens oordeel over een gouden appel (Hoofdstuk 7) uiteindelijk duizend schepen in beweging bracht. Paris sterft van een afstand, door een wapen dat via drie verschillende handen bij hem terechtkwam.
+  > Hoor wat er in Troje gebeurt nu Helena weer weduwe is  -> CH9_GRI_007B
+
+### CH9_GRI_007B  (r.11033)  — Een Gedwongen Huwelijk
+Vluchtelingen en overlopers brengen vreemd nieuws mee uit Troje: nu Paris dood is, eisen zijn broers Deiphobus en Helenus allebei Helena's hand op. Priamus, uitgeput en radeloos, wijst haar toe aan Deiphobus. Helena, zeggen de overlopers, had geen enkele keuze in de zaak. Helenus, vernederd, verdwijnt kort daarna uit de stad — niemand in het Griekse kamp weet nog waarheen.
+  > Zie wat er van de verdwenen prins wordt  -> CH9_GRI_007C
+
+### CH9_GRI_007C  (r.11049)  — Helenus
+[PERSON=helenus:full]
+Een Griekse patrouille vindt Helenus, alleen en radeloos, buiten de muren — een Trojaanse ziener, verbitterd over het verlies van Helena aan zijn eigen broer, gevangengenomen zonder ook maar enig verzet. Wat niemand had durven hopen: gebroken door alles wat hij al zag aankomen, onthult hij de laatste twee dingen die de Grieken nog nodig hebben om Troje te laten vallen — Achilles' eigen zoon moet meevechten, en het Palladium moet uit de stad verdwijnen.
+  > Zie wie als eerste wordt gehaald  -> CH9_GRI_008
+
+### CH9_GRI_008  (r.11066)  — Neoptolemus wordt Gehaald
+[PERSON=neoptolemus:intro]
+Een tweede profetie eist een tweede terugkeer: zonder Achilles' eigen zoon Neoptolemus, nog een jongeman op Skyros, kan Troje evenmin vallen. Odysseus haalt hem op en overhandigt hem zijn vaders wapenrusting — dezelfde die Aias' dood veroorzaakte. Neoptolemus draagt de wapenrusting zonder aarzeling, en blijkt al snel net zo meedogenloos als zijn vader — zonder diens twijfel.
+  > Hoor het nieuws over een geheime missie in Troje zelf  -> CH9_GRI_009
+
+### CH9_GRI_009  (r.11088)  — Het Palladium
+[PERSON=diomedes:full | PAYOFF=ch9_gri009_echo_diomedes_geschiedenis]
+Odysseus en Diomedes keren op een nacht terug van een missie die niemand anders kende: vermomd als bedelaar is Odysseus Troje binnengeslopen en heeft, met Diomedes' hulp, het Palladium gestolen — het heilige beeld dat de stad al generaties beschermde. De schepen die het wegvoerden, liggen zorgvuldig verborgen op het strand.
+  > Zie hoe zorgvuldig de sporen worden gewist  -> CH9_GRI_009B
+
+### CH9_GRI_009B  (r.11108)  — Sporen Wissen
+[PUZZLE=puzzle_ch9_gri_3decl]
+"Graeci naves in litore celant" — de Grieken verbergen de schepen op het strand, zorgvuldig, voor het geval een Trojaanse patrouille toch verder kijkt dan verwacht.
+  > Zie welk plan hierna wordt bedacht  -> CH9_GRI_010
+
+### CH9_GRI_010  (r.11125)  — Het Paard
+[PUZZLE=puzzle_ch9_gri_congruentie]
+Odysseus bedenkt een list die de geschiedenis zal veranderen: Epeius bouwt, op Athena's aanwijzing, een reusachtig houten paard, hol vanbinnen, groot genoeg voor een handvol van de dapperste krijgers. De rest van de vloot zal schijnbaar wegvaren en zich verschuilen achter het nabije eiland Tenedos. Jij bent een van de weinigen die wordt gevraagd zich in het paard te verstoppen.
+  > Klim het paard in  -> CH9_GRI_011
+
+### CH9_GRI_011  (r.11147)  — In het Paard
+Binnenin is het benauwd, donker, en angstaanjagend stil — je hoort je eigen hart luider dan wat dan ook. Buiten klinken Trojaanse stemmen, feestvierend, nietsvermoedend, gevaarlijk dichtbij.
+  > Blijf doodstil zitten en wacht het signaal af  -> CH9_GRI_012
+  > Beheers je ademhaling tot een fluistering, ook al doet elke spier pijn [STAT:prudentia:15] -> CH9_GRI_011_PRU
+  > Houd je lichaam volledig roerloos, ondanks de kramp in je benen [STAT:agilitas:14] -> CH9_GRI_011_AGI
+
+### CH9_GRI_011_PRU  (r.11163)  — Adem Inhouden
+Je dwingt je ademhaling tot iets nauwelijks hoorbaars, terwijl vlak buiten het hout Trojaanse voeten voorbijlopen, zo dichtbij dat je hun gesprekken kunt volgen. Niemand hoort iets.
+  > Wacht verder op het signaal  -> CH9_GRI_012
+
+### CH9_GRI_011_AGI  (r.11177)  — Doodstil Blijven
+Je benen protesteren tegen de uren van roerloosheid, maar je verroert geen vin — een enkele onbedoelde beweging, weet je, zou jullie allemaal verraden voor het paard zijn werk heeft kunnen doen.
+  > Wacht verder op het signaal  -> CH9_GRI_012
+
+### CH9_GRI_012  (r.11191)  — Het Signaal
+Uren gaan voorbij. Het feestrumoer buiten sterft eindelijk weg, vervangen door een stilte die bijna even angstaanjagend is als het lawaai ervoor. Dan, eindelijk: Sinon, ongezien tot nu toe, ontsteekt een vuur op de muren — het teken waarop de hele vloot al de hele nacht wachtte, verscholen achter Tenedos.
+  > Zie het paard eindelijk zijn geheim prijsgeven  -> CH9_GRI_013
+
+### CH9_GRI_013  (r.11205)  — De Poorten Gaan Open
+[COMBAT=trojaanse_wachters]
+Het paard klapt open. Jullie klimmen eruit, gewrichten stijf van uren wachten, en overmeesteren de laatste, halfslapende wachters bij de poort — meer een formaliteit dan een gevecht, na tien jaar beleg.
+  > Zie de vloot terugkeren en de stad binnenstromen  -> CH9_GRI_014
+
+### CH9_GRI_014  (r.11222)  — De Stad in Vlammen
+De poorten gaan open van binnenuit, en de teruggekeerde vloot stroomt Troje binnen. Wat volgt is geen veldslag meer, maar een slachting — huizen in brand, tempels geplunderd, een stad die tien jaar weerstand bood binnen enkele uren overmeesterd.
+  > Vind deze wraak, na tien jaar oorlog, volledig gerechtvaardigd [SEVERITAS] -> CH9_GRI_015
+  > Vind het moeilijk om trots te zijn op wat je eigen kant deze nacht aanricht [CLEMENTIA] -> CH9_GRI_015
+  > Kijk toe zonder een van beide kanten te kiezen [NEUTRAL] -> CH9_GRI_015
+
+### CH9_GRI_015  (r.11241)  — Het Koningshuis Valt
+Berichten bereiken je vanuit alle hoeken van de brandende stad: Neoptolemus doodde koning Priamus bij het altaar van Jupiter, nadat hij eerst diens laatste zoon Polites voor diens ogen had neergestoken. Hectors zoontje Astyanax werd van de muren geworpen — uit angst dat hij ooit zou opgroeien om zijn vader te wreken. Zelfs tussen de overwinnaars is het stil na dat nieuws.
+  > Zie wat er 's ochtends op het strand gebeurt  -> CH9_GRI_016
+
+### CH9_GRI_016  (r.11260)  — De Gevangenen
+[TITEL=ch9_val_van_troje]
+Bij het ochtendlicht is er geen Troje meer om naar terug te keren — enkel rook, as, en een lange rij gevangen vrouwen op het strand, wachtend op de Griekse leiders die hen als oorlogsbuit zullen verdelen. Hecuba valt toe aan Odysseus. Andromache, Hectors weduwe, valt toe aan Neoptolemus — de zoon van de man die haar man doodde. Tien jaar beleg eindigt niet met een triomf die iemand echt kan vieren, maar met een lange vaart terug naar huis die, voor velen van jullie, evenmin goed zal aflopen.
+  > Keer terug naar het Museum  -> CH9_EINDE
+
+### CH9_EINDE  (r.11285)  — Het Einde van Hoofdstuk 9
+[SOUVENIR=souvenir_trojaans_paard]
+"Je hebt Troje zien vallen," zegt de Boodschapper, "maar niet het hele verhaal. Niemand ziet ooit het hele verhaal — dat is precies waarom je twee keer had moeten kunnen komen kijken, van twee kanten, om ook maar te beginnen het te begrijpen." Mercurius knikt afscheid, zijn werk hier gedaan. In je hand voel je een stuk verkoold hout — een splinter van het paard dat slaagde waar tien jaar oorlog faalde.
+  > Keer terug naar het Museum  -> CH9_MUSEUM_00
+
+### CH9_MUSEUM_00  (r.11307)  — Terug in het Museum
+Een derde stolp vult zich, naast de gouden appel en de schilfer van Achilles' schild: een stuk verkoold hout, nog nareikend naar rook. "Dit hoofdstuk vertelde ik je niet als één verhaal, maar als twee," zegt de Boodschapper, "omdat de val van een stad er nooit hetzelfde uitziet van binnen als van buiten. Onthoud dat — het is precies waarom sommige mensen die je nog gaat ontmoeten, deze oorlog heel anders navertellen dan jij hem beleefde." Ze kijkt naar de rijen sokkels om jullie heen — nog altijd voor het overgrote deel leeg. "Rust hier zo lang als je nodig hebt. Er wachten nog genoeg verhalen."

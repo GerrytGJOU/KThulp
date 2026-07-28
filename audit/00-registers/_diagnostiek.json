@@ -1,0 +1,1177 @@
+{
+ "dupes": [],
+ "brokenTargets": [],
+ "unreachable": [
+  {
+   "id": "CH3_H01_HARNAS",
+   "hoofdstuk": "CH3",
+   "regel": 5165,
+   "titel": "Een Herinnering in Brons"
+  }
+ ],
+ "terminals": [
+  {
+   "id": "CH9_MUSEUM_00",
+   "hoofdstuk": "CH9",
+   "titel": "Terug in het Museum"
+  }
+ ],
+ "chapterStarts": {
+  "PRO": "PRO_001",
+  "CH1": "CH1_000",
+  "CH2": "CH2_000",
+  "CH3": "CH3_000",
+  "CH4": "CH4_000",
+  "CH5": "CH5_000",
+  "CH6": "CH6_000",
+  "CH7": "CH7_000",
+  "CH8": "CH8_000",
+  "CH9": "CH9_000"
+ },
+ "statGates": [
+  {
+   "scene": "CH1_A02",
+   "hoofdstuk": "CH1",
+   "regel": 2330,
+   "keuze": "Zet je schouder tegen de zijdeur van de wachtpost en forceer hem open",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH1_A02_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH1_A02",
+   "hoofdstuk": "CH1",
+   "regel": 2330,
+   "keuze": "Wacht de wisseling van de wacht af en glip dan, ongezien, tussen hen door",
+   "stat": "prudentia",
+   "drempel": 13,
+   "doel": "CH1_A02_SLUIP",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH1_A10",
+   "hoofdstuk": "CH1",
+   "regel": 2543,
+   "keuze": "Duw de dichtklappende poort met kracht open zodat jullie er meteen doorheen kunnen",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH1_A10_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH1_A10",
+   "hoofdstuk": "CH1",
+   "regel": 2543,
+   "keuze": "Praat de paniekerige poortwacht om vóór hij het slot dichtgooit",
+   "stat": "gratia",
+   "drempel": 11,
+   "doel": "CH1_A10_GRATIA",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": false,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH1_B01C",
+   "hoofdstuk": "CH1",
+   "regel": 2712,
+   "keuze": "Klim recht tegen de rotswand op, rechtstreeks de aanzwellende wind in",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH1_B01_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH1_B01C",
+   "hoofdstuk": "CH1",
+   "regel": 2712,
+   "keuze": "Spring behendig van steen naar steen over een smalle, afbrokkelende richel",
+   "stat": "agilitas",
+   "drempel": 11,
+   "doel": "CH1_B01_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": true,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 3
+  },
+  {
+   "scene": "CH1_C03B",
+   "hoofdstuk": "CH1",
+   "regel": 3047,
+   "keuze": "Sluip mee tussen de zuilen, exact in de pas van Prometheus",
+   "stat": "agilitas",
+   "drempel": 11,
+   "doel": "CH1_C03_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": true,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 3
+  },
+  {
+   "scene": "CH1_C03B",
+   "hoofdstuk": "CH1",
+   "regel": 3047,
+   "keuze": "Klim in plaats daarvan recht langs de rotsrand omhoog — zwaarder, maar sneller bij de haard",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH1_C03_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH1_C09B",
+   "hoofdstuk": "CH1",
+   "regel": 3250,
+   "keuze": "Beklim de rotswand rechtstreeks, hand over hand tegen het zwaartepunt in",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH1_C09_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH1_C09B",
+   "hoofdstuk": "CH1",
+   "regel": 3250,
+   "keuze": "Lees het vluchtpatroon van de adelaar — zijn dagelijkse route verraadt de kortste weg naar de rots",
+   "stat": "prudentia",
+   "drempel": 11,
+   "doel": "CH1_C09_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_L06B",
+   "hoofdstuk": "CH2",
+   "regel": 3625,
+   "keuze": "Leid haar zigzaggend tussen de rotsen door, te snel en te lenig voor het logge beest",
+   "stat": "agilitas",
+   "drempel": 11,
+   "doel": "CH2_L06_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": true,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 3
+  },
+  {
+   "scene": "CH2_L06B",
+   "hoofdstuk": "CH2",
+   "regel": 3625,
+   "keuze": "Bijt door je eigen pijn heen en houd het tempo naast haar vol tot de kustlijn",
+   "stat": "robur",
+   "drempel": 13,
+   "doel": "CH2_L06_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_L07",
+   "hoofdstuk": "CH2",
+   "regel": 3692,
+   "keuze": "Spreek Delos aan als gelijke, niet als smekeling — twee verstotenen die elkaar herkennen",
+   "stat": "gratia",
+   "drempel": 13,
+   "doel": "CH2_L07B",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": false,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_S06B",
+   "hoofdstuk": "CH2",
+   "regel": 3920,
+   "keuze": "Breek met kracht door omgevallen, nog gloeiende balken heen om dieper te kunnen zoeken",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH2_S06_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_S06B",
+   "hoofdstuk": "CH2",
+   "regel": 3920,
+   "keuze": "Lees de sporen in de as — een verstoord plekje, de richting waarin iets net is verdwenen",
+   "stat": "prudentia",
+   "drempel": 11,
+   "doel": "CH2_S06_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_K05B",
+   "hoofdstuk": "CH2",
+   "regel": 4130,
+   "keuze": "Zet door in haar moordende tempo, uren aan een stuk, zonder de rust te vragen die zij zichzelf ook niet gunt",
+   "stat": "robur",
+   "drempel": 13,
+   "doel": "CH2_K05_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_K05B",
+   "hoofdstuk": "CH2",
+   "regel": 4130,
+   "keuze": "Lees afgebroken takjes en verstoorde steentjes en neem een kortere route die je vóór haar op het volgende punt brengt",
+   "stat": "prudentia",
+   "drempel": 11,
+   "doel": "CH2_K05_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_H07B",
+   "hoofdstuk": "CH2",
+   "regel": 4422,
+   "keuze": "Rol een zwaar rotsblok voor de tweede opening, schouder aan schouder met Herakles' eigen kracht",
+   "stat": "vis",
+   "drempel": 11,
+   "doel": "CH2_H07_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_H07B",
+   "hoofdstuk": "CH2",
+   "regel": 4422,
+   "keuze": "Sluip om de grot heen en stapel snel losse stenen en takken op, voor het beest iets in de gaten heeft",
+   "stat": "agilitas",
+   "drempel": 13,
+   "doel": "CH2_H07_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_H10B",
+   "hoofdstuk": "CH2",
+   "regel": 4529,
+   "keuze": "Stamp het beest zelf onder je hiel, ondanks de pijnlijke klauwen die zich vastklemmen",
+   "stat": "robur",
+   "drempel": 11,
+   "doel": "CH2_H10_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH2_H10B",
+   "hoofdstuk": "CH2",
+   "regel": 4529,
+   "keuze": "Grijp de krab bij zijn schaar en smijt hem terug het moeras in voor hij kan toebijten",
+   "stat": "agilitas",
+   "drempel": 13,
+   "doel": "CH2_H10_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH3_IO07B",
+   "hoofdstuk": "CH3",
+   "regel": 4874,
+   "keuze": "Houd urenlang, zonder ooit je aandacht te verliezen, de omgeving in de gaten",
+   "stat": "robur",
+   "drempel": 13,
+   "doel": "CH3_IO07_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH3_IO07B",
+   "hoofdstuk": "CH3",
+   "regel": 4874,
+   "keuze": "Praat een nieuwsgierige voorbijganger die te dichtbij komt behendig een andere kant op",
+   "stat": "gratia",
+   "drempel": 11,
+   "doel": "CH3_IO07_GRA",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": false,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH3_IO11",
+   "hoofdstuk": "CH3",
+   "regel": 4998,
+   "keuze": "Houd het moordende tempo urenlang vol, dwars over bergen en kusten, zonder ooit te pauzeren",
+   "stat": "robur",
+   "drempel": 13,
+   "doel": "CH3_IO11_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH3_IO11",
+   "hoofdstuk": "CH3",
+   "regel": 4998,
+   "keuze": "Win onderweg herders en boeren voor je — hun gastvrijheid en aanwijzingen leggen haar spoor sneller bloot",
+   "stat": "gratia",
+   "drempel": 11,
+   "doel": "CH3_IO11_GRA",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": false,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH3_H07B",
+   "hoofdstuk": "CH3",
+   "regel": 5287,
+   "keuze": "Ren urenlang mee door de diepe sneeuw, de kou en uitputting doorstaand tot de ever eerder instort dan jij",
+   "stat": "robur",
+   "drempel": 11,
+   "doel": "CH3_H07_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH3_H07B",
+   "hoofdstuk": "CH3",
+   "regel": 5287,
+   "keuze": "Dwing het dier met kracht een nauwe bergkloof in waar het geen kant meer op kan",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH3_H07_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH3_H13B",
+   "hoofdstuk": "CH3",
+   "regel": 5483,
+   "keuze": "Doe je voor als gezant met een boodschap voor de koning, en praat je met gezag langs de eerste wachtpost",
+   "stat": "gratia",
+   "drempel": 13,
+   "doel": "CH3_H13_GRA",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": false,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH3_H13B",
+   "hoofdstuk": "CH3",
+   "regel": 5483,
+   "keuze": "Houd een uitputtende nachtwake vol tot de aflossende wacht slaperig en onoplettend is",
+   "stat": "robur",
+   "drempel": 11,
+   "doel": "CH3_H13_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH3_H23B",
+   "hoofdstuk": "CH3",
+   "regel": 5734,
+   "keuze": "Leg de tocht alleen af, op eigen doorzettingsvermogen, en verdraag de verstikkende zwaarte zonder te wankelen",
+   "stat": "robur",
+   "drempel": 15,
+   "doel": "CH3_H23_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH4_T08",
+   "hoofdstuk": "CH4",
+   "regel": 6148,
+   "keuze": "Draag een van de uitgeputte offerlingen, die het tempo niet meer bijhoudt, het laatste stuk zelf",
+   "stat": "robur",
+   "drempel": 13,
+   "doel": "CH4_T08_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH4_T08",
+   "hoofdstuk": "CH4",
+   "regel": 6148,
+   "keuze": "Praat een achterdochtige wachter bij de kade om met een overtuigend verhaal",
+   "stat": "gratia",
+   "drempel": 11,
+   "doel": "CH4_T08_GRA",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": false,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH4_T11B",
+   "hoofdstuk": "CH4",
+   "regel": 6278,
+   "keuze": "Doorsta het meedogenloze, urenlange werk van veren sorteren en was smelten zonder rust",
+   "stat": "robur",
+   "drempel": 13,
+   "doel": "CH4_T11_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH4_T11B",
+   "hoofdstuk": "CH4",
+   "regel": 6278,
+   "keuze": "Overtuig een bewaker om stiekem extra was en linnen naar binnen te smokkelen",
+   "stat": "gratia",
+   "drempel": 15,
+   "doel": "CH4_T11_GRA",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": false,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH4_P06",
+   "hoofdstuk": "CH4",
+   "regel": 6556,
+   "keuze": "Merk op hóe Tellus Jupiter overtuigt, niet alleen wát ze zegt",
+   "stat": "gratia",
+   "drempel": 13,
+   "doel": "CH4_P06_GRA",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": false,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH4_P06",
+   "hoofdstuk": "CH4",
+   "regel": 6556,
+   "keuze": "Merk op wát het volhouden haar al gekost heeft voor ze sprak",
+   "stat": "robur",
+   "drempel": 11,
+   "doel": "CH4_P06_ROB",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_004B",
+   "hoofdstuk": "CH5",
+   "regel": 6935,
+   "keuze": "Zet je rug tegen een testroeispaan en overtuig de stuurman met pure kracht dat je een voorste bank verdient",
+   "stat": "vis",
+   "drempel": 11,
+   "doel": "CH5_004_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_004B",
+   "hoofdstuk": "CH5",
+   "regel": 6935,
+   "keuze": "Wijs de stuurman op een slimmere indeling — wie qua humeur en gewicht beter naast wie past",
+   "stat": "prudentia",
+   "drempel": 13,
+   "doel": "CH5_004_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_008C",
+   "hoofdstuk": "CH5",
+   "regel": 7104,
+   "keuze": "Glip snel door een nauwe rotsspleet om de kortste ontsnappingsroute af te snijden",
+   "stat": "agilitas",
+   "drempel": 11,
+   "doel": "CH5_008_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": true,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 3
+  },
+  {
+   "scene": "CH5_008C",
+   "hoofdstuk": "CH5",
+   "regel": 7104,
+   "keuze": "Duw een losse rotsblok of omgevallen boomstam om, om het dier fysiek terug de kloof in te dwingen",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH5_008_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_016B",
+   "hoofdstuk": "CH5",
+   "regel": 7322,
+   "keuze": "Klim zelf op de boeg om van dichtbij het ritme van de rotsen te lezen en Argos' inschatting scherper te maken",
+   "stat": "agilitas",
+   "drempel": 13,
+   "doel": "CH5_016_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_016B",
+   "hoofdstuk": "CH5",
+   "regel": 7322,
+   "keuze": "Help de riemen en touwen alvast op kracht voorspannen, zodat de bemanning bij het teken meteen voluit kan trekken",
+   "stat": "vis",
+   "drempel": 11,
+   "doel": "CH5_016_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_019",
+   "hoofdstuk": "CH5",
+   "regel": 7428,
+   "keuze": "Grijp Tydeus' arm vast voordat de vuist valt",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH5_019_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_019",
+   "hoofdstuk": "CH5",
+   "regel": 7428,
+   "keuze": "Merk de oplopende spanning eerder op en sus de roeier met het juiste woord voordat het escaleert",
+   "stat": "prudentia",
+   "drempel": 11,
+   "doel": "CH5_019_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_024",
+   "hoofdstuk": "CH5",
+   "regel": 7573,
+   "keuze": "Zet je eigen kracht in om de vuurspuwende stier mee in bedwang te houden terwijl Jason het juk vastmaakt",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH5_024_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_024",
+   "hoofdstuk": "CH5",
+   "regel": 7573,
+   "keuze": "Manoeuvreer snel tussen de opschietende aardgeboren krijgers door om Jason op tijd te waarschuwen",
+   "stat": "agilitas",
+   "drempel": 13,
+   "doel": "CH5_024_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_025B",
+   "hoofdstuk": "CH5",
+   "regel": 7660,
+   "keuze": "Glip geruisloos tussen de takken en heilige stenen door, geen twijgje dat kraakt",
+   "stat": "agilitas",
+   "drempel": 13,
+   "doel": "CH5_025_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH5_025B",
+   "hoofdstuk": "CH5",
+   "regel": 7660,
+   "keuze": "Lees de ademhaling en kronkelpatronen van de sluimerende draak en weet precies wanneer je veilig dichterbij kunt komen",
+   "stat": "prudentia",
+   "drempel": 11,
+   "doel": "CH5_025_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH6_001",
+   "hoofdstuk": "CH6",
+   "regel": 7875,
+   "keuze": "Grijp een afgebroken speer en houd een laatste dolende Spartoot af zodat Kadmos' rug vrij blijft",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH6_001_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH6_001",
+   "hoofdstuk": "CH6",
+   "regel": 7875,
+   "keuze": "Duik en weef tussen de neervallende lichamen door om niet zelf geraakt te worden",
+   "stat": "agilitas",
+   "drempel": 11,
+   "doel": "CH6_001_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": true,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 3
+  },
+  {
+   "scene": "CH6_007B",
+   "hoofdstuk": "CH6",
+   "regel": 8064,
+   "keuze": "Lees de overblijfselen van eerdere slachtoffers en de houding van de Sfinx voor een teken van vermoeidheid of patroon",
+   "stat": "prudentia",
+   "drempel": 13,
+   "doel": "CH6_007_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH6_007B",
+   "hoofdstuk": "CH6",
+   "regel": 8064,
+   "keuze": "Blijf licht op je voeten en behoedzaam tussen de resten door, zonder onnodig dichtbij te komen",
+   "stat": "agilitas",
+   "drempel": 11,
+   "doel": "CH6_007_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": true,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 3
+  },
+  {
+   "scene": "CH6_012B",
+   "hoofdstuk": "CH6",
+   "regel": 8227,
+   "keuze": "Blijf hangen bij Tydeus' eigen poort, waar hij zijn belofte waarmaakt en de poort met kale kracht probeert te breken",
+   "stat": "vis",
+   "drempel": 13,
+   "doel": "CH6_012_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH6_012B",
+   "hoofdstuk": "CH6",
+   "regel": 8227,
+   "keuze": "Kijk naar een andere poort, waar een champion het niet op kracht maar op snelheid gooit",
+   "stat": "agilitas",
+   "drempel": 11,
+   "doel": "CH6_012_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": true,
+    "cavalerie": true
+   },
+   "aantal_klassen_bij_start": 3
+  },
+  {
+   "scene": "CH6_015B",
+   "hoofdstuk": "CH6",
+   "regel": 8349,
+   "keuze": "Zie hoe ze de wisseling van de wacht al dagen heeft geobserveerd en precies het gat in hun routine kiest",
+   "stat": "prudentia",
+   "drempel": 11,
+   "doel": "CH6_015_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH6_015B",
+   "hoofdstuk": "CH6",
+   "regel": 8349,
+   "keuze": "Zie haar geruisloos tussen schaduwen bewegen, exact op het moment dat een wachter zich omdraait",
+   "stat": "agilitas",
+   "drempel": 13,
+   "doel": "CH6_015_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH6_018",
+   "hoofdstuk": "CH6",
+   "regel": 8458,
+   "keuze": "Help hem zijn vaders wapenrusting eerbiedig klaarleggen, in stilte",
+   "stat": "prudentia",
+   "drempel": 12,
+   "doel": "CH6_018_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH6_023",
+   "hoofdstuk": "CH6",
+   "regel": 8576,
+   "keuze": "Waag je dichterbij dan verstandig is, lenig en geruisloos tussen rotsen en struikgewas",
+   "stat": "agilitas",
+   "drempel": 13,
+   "doel": "CH6_023_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH6_023",
+   "hoofdstuk": "CH6",
+   "regel": 8576,
+   "keuze": "Lees de rituele patronen en voortekenen van de Bacchanten vóór het misgaat",
+   "stat": "prudentia",
+   "drempel": 11,
+   "doel": "CH6_023_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH7_008",
+   "hoofdstuk": "CH7",
+   "regel": 8979,
+   "keuze": "Help ondertussen een paar kuddedieren uit de weg te houden van de opgewonden menigte",
+   "stat": "vis",
+   "drempel": 14,
+   "doel": "CH7_008_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH7_008",
+   "hoofdstuk": "CH7",
+   "regel": 8979,
+   "keuze": "Houd de rest van de kudde stil en kalm terwijl iedereen naar de wedstrijd kijkt",
+   "stat": "prudentia",
+   "drempel": 14,
+   "doel": "CH7_008_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH8_ACH_006",
+   "hoofdstuk": "CH8",
+   "regel": 9622,
+   "keuze": "Help Patroklos de gewonden uit eerdere schermutselingen verzorgen",
+   "stat": "prudentia",
+   "drempel": 15,
+   "doel": "CH8_ACH_006_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH8_ACH_006",
+   "hoofdstuk": "CH8",
+   "regel": 9622,
+   "keuze": "Houd je wapens en je lichaam scherp met oefeningen",
+   "stat": "vis",
+   "drempel": 15,
+   "doel": "CH8_ACH_006_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH8_AGA_006",
+   "hoofdstuk": "CH8",
+   "regel": 9897,
+   "keuze": "Help mee de wal met eigen handen te verstevigen",
+   "stat": "vis",
+   "drempel": 15,
+   "doel": "CH8_AGA_006_VIS",
+   "haalbaar_bij_start": {
+    "hopliet": true,
+    "boogschutter": false,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH8_AGA_006",
+   "hoofdstuk": "CH8",
+   "regel": 9897,
+   "keuze": "Breng als snelste boodschapper berichten tussen de linies over",
+   "stat": "agilitas",
+   "drempel": 14,
+   "doel": "CH8_AGA_006_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH9_TRO_006",
+   "hoofdstuk": "CH9",
+   "regel": 10614,
+   "keuze": "Merk iets vertrouwds op in de ogen van de bedelaar, maar zwijg net als Helena",
+   "stat": "prudentia",
+   "drempel": 15,
+   "doel": "CH9_TRO_006_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH9_GRI_011",
+   "hoofdstuk": "CH9",
+   "regel": 11147,
+   "keuze": "Beheers je ademhaling tot een fluistering, ook al doet elke spier pijn",
+   "stat": "prudentia",
+   "drempel": 15,
+   "doel": "CH9_GRI_011_PRU",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  },
+  {
+   "scene": "CH9_GRI_011",
+   "hoofdstuk": "CH9",
+   "regel": 11147,
+   "keuze": "Houd je lichaam volledig roerloos, ondanks de kramp in je benen",
+   "stat": "agilitas",
+   "drempel": 14,
+   "doel": "CH9_GRI_011_AGI",
+   "haalbaar_bij_start": {
+    "hopliet": false,
+    "boogschutter": true,
+    "cavalerie": false
+   },
+   "aantal_klassen_bij_start": 1
+  }
+ ],
+ "payoffs": [
+  {
+   "id": "ch2_000_echo_ch1_lijn_a",
+   "type": "echo",
+   "scene": "CH2_000",
+   "condition": {
+    "flags": {
+     "ch1_lijn": "A"
+    }
+   }
+  },
+  {
+   "id": "ch2_000_echo_ch1_lijn_b",
+   "type": "echo",
+   "scene": "CH2_000",
+   "condition": {
+    "flags": {
+     "ch1_lijn": "B"
+    }
+   }
+  },
+  {
+   "id": "ch2_000_echo_ch1_lijn_c",
+   "type": "echo",
+   "scene": "CH2_000",
+   "condition": {
+    "flags": {
+     "ch1_lijn": "C"
+    }
+   }
+  },
+  {
+   "id": "ch3_h01_deur_herakles_harnas",
+   "type": "deur",
+   "scene": "CH3_H01",
+   "condition": {
+    "flagsSet": [
+     "herakles_harnas"
+    ]
+   }
+  },
+  {
+   "id": "ch2_athena_echo_relatie",
+   "type": "echo",
+   "scene": "CH2_ATHENA",
+   "condition": {
+    "relationMin": {
+     "athena": 1
+    }
+   }
+  },
+  {
+   "id": "ch7_peleus_bruiloft_echo",
+   "type": "echo",
+   "scene": "CH7_004",
+   "condition": null
+  },
+  {
+   "id": "ch7_philoktetes_lemnos_echo",
+   "type": "echo",
+   "scene": "CH7_018",
+   "condition": null
+  },
+  {
+   "id": "ch8_epi005_echo_zijde_agamemnon",
+   "type": "echo",
+   "scene": "CH8_EPI_005",
+   "condition": {
+    "flags": {
+     "ch8_zijde": "agamemnon"
+    }
+   }
+  },
+  {
+   "id": "ch8_epi005_echo_zijde_achilles",
+   "type": "echo",
+   "scene": "CH8_EPI_005",
+   "condition": {
+    "flags": {
+     "ch8_zijde": "achilles"
+    }
+   }
+  },
+  {
+   "id": "ch9_002_echo_herakles_harnas",
+   "type": "echo",
+   "scene": "CH9_002",
+   "condition": {
+    "flagsSet": [
+     "herakles_harnas"
+    ]
+   }
+  },
+  {
+   "id": "ch9_gri005_echo_aias_sympathiek",
+   "type": "echo",
+   "scene": "CH9_GRI_005",
+   "condition": {
+    "relationMin": {
+     "aias": 1
+    }
+   }
+  },
+  {
+   "id": "ch9_gri005_echo_aias_afstandelijk",
+   "type": "echo",
+   "scene": "CH9_GRI_005",
+   "condition": {
+    "relationMax": {
+     "aias": -1
+    }
+   }
+  },
+  {
+   "id": "ch9_gri009_echo_diomedes_geschiedenis",
+   "type": "echo",
+   "scene": "CH9_GRI_009",
+   "condition": {
+    "relationMin": {
+     "diomedes": 2
+    }
+   }
+  }
+ ]
+}
