@@ -130,7 +130,7 @@ browser):
 | Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 10+ nog niet geschreven |
 | **Hoofdstuk 9**: vertakking (Troje/Grieks) ZONDER reconvergentie — de val van Troje van twee kanten | `certamen/singleplayer-data.js` (`SP_CH9_CNS`, 51 scènes) | ✅ werkend — gedeelde proloog (Mercurius, herbeleefde Hector/Andromache/zelfherkenning) → twee lijnen van 22/21 scènes (Penthesileia, Memnon, Achilles' dood, Wapenrusting-twist + Aias' waanzin (Grieks), Philoktetes/Paris' dood, Helenus' profetie, Palladium, het Paard, val van Troje) + 4 puzzels elk (comparativus/superlativus, A.C.I., 3e-declinatie, congruentie) + 1 Combat-bridge (Grieks) + grote payoffs op Aias (Hoofdstuk 8) en Diomedes (Hoofdstuk 6+8) — reachability/pariteitsscript + drie volledige browser-doorlopen, zie §7.15 |
 | **Hoofdstuk 8**: EERSTE echte vertakking (Achilles/Agamemnon) die ook weer samenkomt | `certamen/singleplayer-data.js` (`SP_CH8_CNS`, 48 scènes) | ✅ werkend — gedeelde proloog (Plaag van Apollo, de Ruzie, Thetis' verzoek) → keuze → twee gelijkwaardige lijnen van elk 14 scènes/4 puzzels (nieuwe grammatica: aoristus, 3e-declinatie medeklinkerstam, aanwijzend/persoonlijk voornaamwoord) + 1 STAT-gated moment + 1 RELATION-moment + 1 Clementia/Severitas-moment elk, Agamemnon-lijn krijgt bovendien een Combat-bridge → reconvergentie bij Patroklos' dood → gedeelde epiloog met een tweede Combat-bridge (Hector) en Priamus' smeekbede, tot en met Hectors begrafenis — twee volledige browser-doorlopen (één per kant) + Node-reachability/pariteitsscript, zie §7.14 |
-| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png`. Hoofdstuk 5 heeft nu ook 7 `IMAGE:`-tags (doorlopend logboek, geen lijnen, allemaal Aegean blue): `argo_bemanning.png`, `everzwijn_cyzicus.png`, `polydeukes_amycus.png`, `hylas_nimfen.png`, `symplegades_doortocht.png`, `medea_aeetes_colchis.png`, `gulden_vlies_gevonden.png`. Hoofdstuk 6 heeft nu ook 7 `IMAGE:`-tags (generatieverhaal, geen lijnen, allemaal Aegean blue): `spartoi_thebe.png`, `niobe_versteend.png`, `sfinx_raadsel.png`, `zeven_tegen_thebe.png`, `antigone_begrafenis.png`, `diomedes_val_thebe.png`, `bacchanten_berg.png`. Hoofdstuk 7 is bij nader inzien uitgebreid naar 7 `IMAGE:`-tags, net als de eerdere hoofdstukken (allemaal Aegean blue, geen lijnen): `leda_zwaan.png`, `parisoordeel.png`, `schaking_helena.png`, `achilles_skyros.png`, `iphigenia_hinde.png`, plus de twee die er al stonden, `appel_der_tweedracht.png` en `philoktetes_lemnos.png`. Hoofdstuk 8 heeft nu 7 `IMAGE:`-tags verdeeld over de vertakking (allemaal Aegean blue): `achilles_woede.png` (gedeelde proloog), `diomedes_tegen_mars.png` (exclusief lijn Agamemnon — rechtstreeks gezien), `hektor_andromache.png` (in BEIDE lijnen op dezelfde bewuste omslagscène, zelfde bestand), `patroklos_wapenrusting.png` (exclusief lijn Achilles — wat de tent-speler wél ziet), `achilles_rouwkreet.png`, `achilles_achtervolgt_hektor.png`, `priamus_smeekbede.png` (gedeelde epiloog) — Gemini-prompts klaar, bestanden nog niet gegenereerd. Alle 8 hoofdstukken hebben nu illustratie-tags |
+| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png`. Hoofdstuk 5 heeft nu ook 7 `IMAGE:`-tags (doorlopend logboek, geen lijnen, allemaal Aegean blue): `argo_bemanning.png`, `everzwijn_cyzicus.png`, `polydeukes_amycus.png`, `hylas_nimfen.png`, `symplegades_doortocht.png`, `medea_aeetes_colchis.png`, `gulden_vlies_gevonden.png`. Hoofdstuk 6 heeft nu ook 7 `IMAGE:`-tags (generatieverhaal, geen lijnen, allemaal Aegean blue): `spartoi_thebe.png`, `niobe_versteend.png`, `sfinx_raadsel.png`, `zeven_tegen_thebe.png`, `antigone_begrafenis.png`, `diomedes_val_thebe.png`, `bacchanten_berg.png`. Hoofdstuk 7 is bij nader inzien uitgebreid naar 7 `IMAGE:`-tags, net als de eerdere hoofdstukken (allemaal Aegean blue, geen lijnen): `leda_zwaan.png`, `parisoordeel.png`, `schaking_helena.png`, `achilles_skyros.png`, `iphigenia_hinde.png`, plus de twee die er al stonden, `appel_der_tweedracht.png` en `philoktetes_lemnos.png`. Hoofdstuk 8 heeft nu 7 `IMAGE:`-tags verdeeld over de vertakking (allemaal Aegean blue): `achilles_woede.png` (gedeelde proloog), `diomedes_tegen_mars.png` (exclusief lijn Agamemnon — rechtstreeks gezien), `hektor_andromache.png` (in BEIDE lijnen op dezelfde bewuste omslagscène, zelfde bestand), `patroklos_wapenrusting.png` (exclusief lijn Achilles — wat de tent-speler wél ziet), `achilles_rouwkreet.png`, `achilles_achtervolgt_hektor.png`, `priamus_smeekbede.png` (gedeelde epiloog). Hoofdstuk 9 heeft nu 14 illustratie-momenten (15 tags, want 1 is bewust gedeeld) over de niet-herconvergerende TRO/GRI-splitsing, in balans per lijn (allemaal Aegean blue): gedeeld — `penthesileia.png` (in BEIDE lijnen, zelfde bestand); exclusief lijn Troje (6) — `laocoon_slangen.png`, `trojaans_paard_strand.png`, `aeneas_vlucht.png`, `achilles_dood_pijl.png`, `cassandra_waarschuwing.png`, `troje_valt_trojanen.png` (protagonist bínnen de muren, ziet de Grieken binnenstormen — CH9_TRO_013, hernoemd vanaf `troje_valt.png` voor duidelijkheid); exclusief lijn Grieken (7) — `grieken_in_het_paard.png`, `troje_valt_neutraal.png` (CH9_GRI_013, "De Poorten Gaan Open" — breed shot van de bestorming, geen POV-keuze nodig), `aias_ondergang.png`, `memnon_antilochos.png`, `achilles_lichaam_gered.png`, `palladium_diefstal.png`, `troje_valt_grieken.png` (protagonist stormt zelf mee naar binnen — CH9_GRI_014) — Gemini-prompts klaar, bestanden nog niet gegenereerd. Alle 9 hoofdstukken hebben nu illustratie-tags |
 | Gemini-huisstijl-Gem (stripstijl, scène-illustraties) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | Gemini-huisstijl-Gem (museumstukken, Herinneringen-tab) | `certamen/assets/chronica/gemini-souvenir-style.md` | ✅ herbruikbare Gem-instructie — vaste sokkel/stolp/kussentje-opstelling, zie §7.2.1 |
 | **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
@@ -923,6 +923,26 @@ twijfelende spelers die zich niet in een van beide uitersten herkennen.
   `CH1_A09`) kiest de neutrale optie altijd één van beide bestaande paden —
   nooit een nieuw, vierde vervolg — en wordt de tekst zo geschreven dat dat
   natuurlijk aanvoelt (zie bv. `CH2_L02`/`CH2_S02` in `SP_CH2_CNS`).
+- **Directe NPC-reactie in het moment** (**gebouwd**, curated): naast de stille
+  teller en de op-tendency-gebaseerde `{tendency_address}`-varianten hierboven
+  bestaat sinds kort ook een derde, LOSSTAANDE laag: een optionele
+  `REACTION:`-sectie op een scène met een `[CLEMENTIA]`/`[SEVERITAS]`-keuze,
+  die een aanwezige NPC ONMIDDELLIJK laat reageren op precies díe keuze, i.p.v.
+  pas veel later (of nooit) merkbaar te worden. Formaat: eerste regel de
+  `SP_CODEX_PERSONS`-id van de reagerende NPC, dan per getagde optie één regel
+  `CLEMENTIA: ...`/`SEVERITAS: ...`(/`NEUTRAL: ...`). `spChoosePath()`
+  (singleplayer.js) zoekt de reactie op via `spSceneReaction()` en toont hem
+  als gewone `toast(naam, tekst)` vlak vóór de navigatie — geen nieuw scherm,
+  geen aparte UI. Ontbreekt de sectie, of de regel voor de gekozen tag, dan
+  blijft het stil, exact het gedrag van vóór deze toevoeging. Bewust NIET op
+  elke getagde keuze gezet (dat zou de stille-teller-opzet ondermijnen en een
+  hoop schrijfwerk vergen) maar curated op ~8 van de meest dramatische
+  momenten waar de reagerende NPC ook daadwerkelijk in de scène aanwezig is:
+  Chiron (`CH3_H06`), Tiresias (`CH6_010`), Priamus (`CH7_006`, `CH8_EPI_011`),
+  Aegeus (`CH4_T01`), Bacchus (`CH1_A10B`), Athena (`CH2_S05`) en Helenus
+  (`CH9_TRO_005B`). `certamen/tools/validate_chronica.js` controleert de
+  `REACTION`-id tegen `SP_CODEX_PERSONS` en de regelsyntax, net als bij
+  `PERSON:`.
 
 ### 7.4 Titelscherm + audio (**gebouwd**)
 
@@ -2067,7 +2087,8 @@ speler ophaalt en van bínnen Troje een paar momenten laat herbeleven die
 al bekend waren vanuit het Griekse kamp (het afscheid van Hector en
 Andromache, Hectors dood, de tocht met Priamus, de begrafenis) → de grote
 vraag ("muren of strand?") → `CH9_TRO_*` (22 scènes) of `CH9_GRI_*`
-(21 scènes) → beide monden uit in `CH9_EINDE`/`CH9_MUSEUM_00`.
+(21 scènes) → beide monden uit in `CH9_BONDGENOTEN` (B18, zie verderop) →
+`CH9_EINDE`/`CH9_MUSEUM_00`.
 
 **Zelfherkenning op de muren (`CH9_002`)**: op Gerbens uitdrukkelijk
 verzoek gebruikt deze scène de ECHTE avatar-staat van de speler, niet een
@@ -2172,6 +2193,158 @@ correct en zichtbaar in de Kroniek; eretitels correct (incl. dat
 `ch9_waanzin_aias` alleen in de Grieks-lijn viel); een losse derde
 saveslot bevestigde dat `CH6_018_PRU` zelf ook nog steeds foutloos werkt.
 Geen consolefouten in alle drie de doorlopen.
+
+**Bondgenoten als eindkapitaal (Chronica-audit B18, toegevoegd 2026-07-28)**:
+nieuwe, gedeelde scène `CH9_BONDGENOTEN` tussen de twee lijnen en `CH9_EINDE`
+(52 scènes totaal nu) — het eerste moment waarop `SP_STATE.relations` een
+ZICHTBAAR gevolg krijgt in plaats van alleen een tekst-variant (zie ook
+§7.3's laatste bullet). Nieuwe `FLAG ch9_zijde=troje/grieks`, gezet op
+`CH9_TRO_001`/`CH9_GRI_001` (niet op de brancherende `CH9_005` zelf — zie de
+`ch8_zijde`-precedent in §7.14: een `FLAG:`-sectie vuurt bij scène-entry, dus
+moet op de EERSTE scène van elke tak staan, nooit op de keuze-scène ervoor).
+Nieuw resolver-token `{bondgenoten_aanwezig}` (`SpTextResolver.lookup`,
+`spBondgenotenAanwezig()` in singleplayer.js) leest `state.flags.ch9_zijde`
+en `state.relations`, en geeft per bondgenoot met wie een band bestaat een
+eigen regel terug; zonder kwalificerende relaties een generieke
+"niemand"-regel.
+
+**Ontwerp herzien op Gerbens verzoek, drie keer bijgesteld tijdens het
+gesprek zelf (2026-07-28)** — eerst alleen Aeneas aan Trojaanse kant, dan
+een versie waarin een Griekse held de speler bij zowel een positieve ALS
+een negatieve band ontzag (Gerben wees er terecht op dat de relatiescore
+dan voor de uitkomst niets uitmaakt), en uiteindelijk het huidige, volledig
+GESPIEGELDE ontwerp waarin beide kanten dezelfde logica volgen:
+- **Positieve band** (`relations[id] >= 2`, `SP_ENDKAPITAAL_THRESHOLD`): de
+  held ontziet/steunt de speler — op de eigen kant gewoon meevechten/
+  erkennen (`SP_ENDKAPITAAL_ALLIES.grieks`/`.troje`).
+- **Negatieve band** (`relations[id] <= -2`): de held valt de speler juist
+  AAN. Aan Trojaanse kant is dat een vijandige Griek in de open strijd; aan
+  Griekse kant (Gerbens eigen spiegelbeeld-suggestie) gebruikt een
+  verbitterde EIGEN bondgenoot de chaos van de plundering om de speler in
+  de rug te steken — een dolksteek, geen open gevecht. Namen worden
+  dynamisch in de zin gevoegd, met correcte Nederlandse opsomming bij
+  meerdere aanvallers (`spDutchJoin`, singleplayer.js).
+
+Die dreiging wordt ALTIJD opgelost, nooit een echte game-over — ook hier
+gespiegeld:
+- **Trojaanse kant**: bij een positieve band met Aeneas grijpt hijzelf in
+  (`SP_ENDKAPITAAL_AENEAS_REDT`); zonder die band grijpt Aphrodite in
+  (`SP_ENDKAPITAAL_AFRODITE_REDDING`, Gerbens suggestie i.p.v. een naamloze
+  toevallige Trojaan) — zij is in `SP_CODEX_PERSONS.aeneas.epithet` al zijn
+  moeder, en grijpt ook in de Ilias zelf meermaals persoonlijk in om
+  Trojanen te redden.
+- **Griekse kant** (spiegelbeeld): bestaat er een POSITIEVE band met een
+  ANDERE Griekse held, dan is die held degene die de steek afwendt (met
+  naam genoemd, `positive[0]` — de eerste kwalificerende bondgenoot in
+  pool-volgorde); zonder enige positieve band grijpt Athena in
+  (`SP_ENDKAPITAAL_ATHENA_REDDING`) — de godin die de Grieken door de hele
+  Ilias heen consequent steunt, het mythologische spiegelbeeld van
+  Aphrodite bij de Trojanen.
+
+Bestaat er geen enkele dreiging maar wél een positieve band met Aeneas
+(Trojaanse kant, geen Griekse tegenhanger nodig — Aeneas is de enige
+individueel gevolgde bondgenoot aan die kant), dan krijgt hij zijn eigen
+rustigere regel (`SP_ENDKAPITAAL_AENEAS_QUIET`, de oorspronkelijke "hij
+draagt je gezicht mee"-regel).
+
+Achilles en Aias zijn BEWUST nooit in een pool: Achilles sterft al in
+Hoofdstuk 9 zelf (`dood_achilles`, beide takken), en Aias pleegt zelfmoord
+vóór de val van de stad ook wanneer de speler de Troje-lijn koos en dat
+nooit met eigen ogen ziet — `dood_aias` wordt momenteel alleen in
+`CH9_GRI_005` gezet, dus deze uitsluiting is nu de facto de enige plek waar
+die asymmetrie iets uitmaakt. Bewust PUUR tekstueel (geen functioneel
+spelgevolg — dat is de audit's B28, "rolverdeling in een climax", en die
+blijft volgens de audit terecht uitgesteld tot na de Odyssee/Aeneis-
+hoofdstukken, wanneer er een bredere, individueel onderscheiden
+bondgenotencast bestaat). `validate_chronica.js` kreeg geen aparte check
+hiervoor (geen nieuwe CNS-sectie, enkel een resolver-token en een
+FLAG/RELATION-combinatie die de bestaande checks al dekken). Getest met
+`spBondgenotenAanwezig()` rechtstreeks in de browser, voor beide kanten:
+positief (ontzien/meevechten), negatief zonder redder (aanval → god),
+negatief mét redder (aanval → Aeneas resp. de eerste kwalificerende
+Griekse bondgenoot bij naam), twee gelijktijdige aanvallers (correcte
+Nederlandse opsomming), gemengd (één spaart/redt, één valt aan), Aeneas
+alleen zonder dreiging (rustige regel), niets (fallback) — plus een
+volledige render via `spParagraphsHTML` en een check dat beide takken
+(`CH9_TRO_018`/`CH9_GRI_016`) naar `CH9_BONDGENOTEN` routeren i.p.v.
+rechtstreeks naar `CH9_EINDE`.
+
+**Uitbreiding: vier nieuwe relatiedraden (Deiphobos, Priamus, Cassandra,
+Andromache) — op Gerbens verzoek, zelfde gesprek (2026-07-28).** Elk kreeg
+een eigen, eenmalig moment om een relatie op te bouwen (`RELATION:` op een
+nieuwe micro-scène na een bestaande C/S-keuze — dezelfde structurele-
+uiteenloop-truc als in §7.3 laatste bullet, nodig omdat `FLAG`/`RELATION`
+scène-breed vuurt en dus niet per keuze kan verschillen zonder aparte
+vervolgscènes):
+- **Deiphobos** (`deiphobos:-1/+1` op `CH9_TRO_005B_MEDELEVEN`/
+  `_PRAGMATISCH`, na de bruiloftsscène): tweede Trojaanse "redder" naast
+  Aeneas in `CH9_BONDGENOTEN` — `SP_ENDKAPITAAL_TROJE_HELPERS`
+  (singleplayer-data.js) is nu een LIJST i.p.v. een hardcoded Aeneas-check,
+  zodat elke helper met een kwalificerende band zijn eigen quiet/redt-regel
+  bijdraagt (meerdere helpers kunnen tegelijk vuren). Nieuwe
+  `SP_CODEX_PERSONS.deiphobos`-entry — BEWUST zonder zijn eigen dood erin te
+  vermelden op het moment dat hij zelf nog als redder kan optreden (zie
+  hieronder, dat komt pas ná `CH9_BONDGENOTEN`).
+- **Priamus** (`priamus:-1/+1` op nieuwe micro-scènes na de bestaande
+  C/S-keuzes in `CH7_006` en `CH8_EPI_011`, die al een `REACTION:`-hook
+  hadden sinds B17): Priamus zit BEWUST NIET in `CH9_BONDGENOTEN` — hij
+  sterft al bij `CH9_TRO_014`, ruim ervoor. In plaats daarvan een eigen,
+  voorwaardelijk afscheidsmoment vlak vóór de val zelf, ingevoegd als een
+  extra `{priamus_afscheid}`-alinea in `CH9_TRO_012` ("Het Feest", de
+  laatste rustige avond) — dus alleen aan Trojaanse kant, en alleen
+  zichtbaar bij een kwalificerende band.
+- **Cassandra** (`cassandra:-1/+1` op een nieuwe keuze bij `CH9_TRO_011`,
+  "Cassandra's Laatste Waarschuwing", die voorheen geen keuze had): payoff
+  als `{cassandra_payoff}`-alinea in `CH9_TRO_016` (het altaar-moment) —
+  verandert niets aan de mythologisch vaste afloop (Aias sleurt haar toch
+  weg), maar geeft haar een laatste, herkennende blik als de speler haar
+  wél geloofde.
+- **Andromache** (`andromache:-1/+1` op een nieuwe keuze bij `CH9_001`,
+  het gedeelde "Hector en Andromache, van Binnenuit"-moment, dat voorheen
+  ook geen keuze had): payoff als `{andromache_payoff}`-alinea in
+  `CH9_GRI_016` ("De Gevangenen") — alleen aan Griekse kant zichtbaar,
+  logisch want dat is de kant die haar daadwerkelijk als oorlogsbuit ziet
+  verdelen.
+
+Alle vier gebruiken `SP_ENDKAPITAAL_HELPER_THRESHOLD` (1), niet de
+`SP_ENDKAPITAAL_THRESHOLD` (2) van de Griekse-helden-pool — bewust, want ze
+hebben elk maar ÉÉN relatiebron, in tegenstelling tot de Griekse helden die
+over meerdere hoofdstukken kunnen stapelen.
+
+**Drempel-bugfix, gevonden tijdens deze uitbreiding**: Aeneas' eigen payoff
+bleek tot dit moment ONBEREIKBAAR in echte gameplay — zijn enige
+`RELATION:`-bron (`CH9_TRO_017B`) geeft precies +1, terwijl de drempel op 2
+stond. Rechtgezet met de nieuwe, aparte `SP_ENDKAPITAAL_HELPER_THRESHOLD`.
+
+**Nieuwe scène: `CH9_MENELAOS_HELENA`** (tussen `CH9_BONDGENOTEN` en
+`CH9_EINDE`, dus GEDEELD — bereikbaar vanaf beide kanten, zelfde
+Boodschapper-perspectief-truc als de rest van de gedeelde proloog):
+Menelaos doodt Deiphobos in zijn zoektocht naar Helena — dit is BEWUST de
+plek waar Deiphobos' eigen dood wél wordt getoond, nu vlak NA
+`CH9_BONDGENOTEN` waar hij nog als redder kon optreden, dus geen
+tegenstrijdigheid in de tijdlijn. Daarna het beroemde moment waarop
+Menelaos' zwaard blijft hangen bij het zien van Helena. Een C/S-achtige
+keuze (`CH9_MENELAOS_HELENA_ZACHT`/`_STIL`) laat de speler zacht tussenbeide
+komen of stil de ruimte geven, met `RELATION: menelaos=+1` (beide) en
+`helena=+1` (alleen bij de zachte optie — Helena's EERSTE `RELATION:` in de
+hele game). **Bewust vooruitwerkend, nog geen eigen payoff-scène**: Gerben
+gaf aan dat dit relevant wordt bij de nog te bouwen Telemachie (Boek II,
+Telemachos bezoekt Sparta en treft Menelaos/Helena daar herenigd, Odyssee
+boek 4) — deze `RELATION`-waarden liggen nu klaar als leesbare payoff-
+materiaal voor dat hoofdstuk, zelfde patroon als de Nestor/Aeneas/
+Philoktetes-groundwork uit fase 5 van de audit.
+
+**Technisch**: `spParagraphsHTML` (singleplayer.js) filtert nu lege,
+geresolvede alinea's uit de output — nodig omdat `{priamus_afscheid}`/
+`{cassandra_payoff}`/`{andromache_payoff}` bewust naar `""` kunnen resolven
+(niet-undefined, dus `SpTextResolver.resolve` vervangt de token wél, maar
+met niets) wanneer de relatie niet kwalificeert. Vóór deze toevoeging kon
+geen enkel bestaand token ooit naar een lege string resolven, dus dit is
+een veilige, backwards-compatible aanvulling. Getest: alle 13 nieuwe
+scènes bereikbaar en correct doorverwezen, alle vier nieuwe payoff-tokens
+zowel MET als ZONDER kwalificerende relatie (bevestigd dat de alinea er dan
+niet-leeg, resp. volledig afwezig — geen loze `<p></p>` — uitziet), en de
+gecombineerde Aeneas+Deiphobos-redding (beide helpers vuren tegelijk).
 
 ---
 

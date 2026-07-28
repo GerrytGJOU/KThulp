@@ -298,11 +298,11 @@ const SP_CAMPAIGN = [
     illustratie:"Achilles treurt over Patroklos" },
   { id:"ch9", nr:9, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Ilion in Vlammen",
     periode:"Val van Troje",
-    verhaal:"Mercurius haalt de speler op en brengt hem binnen de muren van Troje, waar een paar momenten uit de tent van Achilles opnieuw beleefd worden — nu van de andere kant. Dan kiest de speler zelf vanaf welke kant hij de rest van de oorlog ziet: van de muren (Troje) of vanaf het strand (het Griekse leger) — een keuze die dit keer NIET meer samenkomt, tot beide kanten uitkomen bij dezelfde val van de stad.",
+    verhaal:"Hermes haalt de speler op en brengt hem binnen de muren van Troje, waar een paar momenten uit de tent van Achilles opnieuw beleefd worden — nu van de andere kant. Dan kiest de speler zelf vanaf welke kant hij de rest van de oorlog ziet: van de muren (Troje) of vanaf het strand (het Griekse leger) — een keuze die dit keer NIET meer samenkomt, tot beide kanten uitkomen bij dezelfde val van de stad.",
     pallas:"Les 12-14: de held Ajax, de ondergang van Troje, goden en mythen in de kunst", minerva:"Hoofdstuk 7: Slavernij",
     grammatica:"Comparativus/superlativus, A.C.I., 3e-declinatie \"groep 3\" (i-stammen: urbs/navis), congruentie",
     gameplay:"Vertakking ZONDER reconvergentie (in tegenstelling tot Hoofdstuk 8): gedeelde proloog (Mercurius, herbeleefde Hector/Andromache-scènes, zelfherkenning op de muren) → keuze Troje/Grieks → twee gelijkwaardige lijnen (elk 4 nieuwe-grammatica-puzzels) die apart doorlopen tot de val van Troje → gedeelde slotscène en Museum-terugkeer. Combat-bridge alleen in de Grieks-lijn (de laatste wachters bij de poort). Grote, zichtbare Aias-payoff (relations.aias uit Hoofdstuk 8) en een Diomedes-payoff die twee hoofdstukken (6 en 8) optelt.",
-    personages:"Mercurius, Hector, Andromache, Penthesileia, Memnon, Aias (Telamon), Aias (Oïleus), Odysseus, Diomedes, Helenus, Philoktetes (cameo, payoff Hoofdstuk 5/7), Neoptolemus, Priamus, Hecuba, Cassandra, Aeneas, Astyanax",
+    personages:"Hermes, Hector, Andromache, Penthesileia, Memnon, Aias (Telamon), Aias (Oïleus), Odysseus, Diomedes, Helenus, Philoktetes (cameo, payoff Hoofdstuk 5/7), Neoptolemus, Priamus, Hecuba, Cassandra, Aeneas, Astyanax",
     thema:"Verhalen worden doorgegeven door taal — en niemand ziet ooit het hele verhaal, enkel zijn eigen kant ervan",
     vertakkingen:"Troje (muren) / Grieks (strand) — bewust TWEE kanten i.p.v. de oorspronkelijk geplande drie (Trojaans/Grieks/Neutraal), zelfde patroon als Hoofdstuk 8",
     illustratie:"Troje brandt" },
@@ -589,6 +589,116 @@ const SP_TENDENCY_PHRASES = {
     "%NOUN% van wie de daden tot nu toe geen duidelijke kant hebben gekozen",
   ],
 };
+
+/* ---- VERHAALVARIANTEN OP BASIS VAN OPGEBOUWDE HOUDING (Chronica-audit B13) —
+   dezelfde spApproachTendency() die {tendency_address} al gebruikt, nu ingezet
+   om vier momenten waar de mythe zelf tegenstrijdige tradities kent NIET langer
+   generiek open te laten, maar te laten meebewegen met hoe de speler tot nu toe
+   door het verhaal ging. "neutraal" houdt bewust de oorspronkelijke,
+   dubbelzinnige formulering aan — wie geen kant koos, krijgt ook hier geen
+   opgelegd antwoord. Gebruikt via {iphigenia_lot}/{helena_lot}/
+   {theseus_zeilen_reden}/{kallisto_verandering} (SpTextResolver, singleplayer.js). ---- */
+const SP_TENDENCY_STORY_VARIANTS = {
+  iphigenia_lot: {
+    clementia: "Wat er op dat altaar gebeurt, onthoud jij zo: Artemis grijpt op het laatste moment zelf in, voert Iphigenia weg naar het verre Tauris, en laat een hinde in haar plaats achter op het offerblok.",
+    severitas: "Wat er op dat altaar gebeurt, onthoud jij zo: geen god grijpt in — Agamemnon voltrekt het offer met eigen handen, voor duizend schepen wind.",
+    neutraal: "Wat er precies op dat altaar gebeurt, vertellen de bronnen verschillend: sommigen zeggen dat Artemis zelf ingrijpt en haar wegvoert naar het verre Tauris; anderen zwijgen liever over wat een vader werkelijk met eigen handen heeft gedaan voor duizend schepen wind.",
+  },
+  helena_lot: {
+    clementia: "Wat jij inmiddels van haar weet, is dat ze weinig echte keuze had — gelokt door een belofte van een godin die niet voor haar was gedaan.",
+    severitas: "Wat jij inmiddels van haar weet, is dat de bronnen haar zelf niet vrijpleiten — verliefd, of gewillig, of allebei, maar geen slachtoffer.",
+    neutraal: "Of ze gelokt werd, verliefd werd, of eenvoudigweg geen keuze had, vertellen de bronnen niet eensluidend.",
+  },
+  theseus_zeilen_reden: {
+    clementia: "hij vergeet de zeilen te verwisselen, verward en uitgeput door alles wat hij net heeft overleefd",
+    severitas: "hij vergeet gewoon de zeilen te verwisselen — geen god, geen excuus, alleen onachtzaamheid",
+    neutraal: "hij vergeet de zeilen te verwisselen, om redenen die zelfs de latere verhalen niet eensluidend kunnen navertellen",
+  },
+  kallisto_verandering: {
+    clementia: "Hera, alleen, buiten Artemis' wil om, verandert Kallisto in een berin",
+    severitas: "Artemis' eigen orde eist het: Kallisto verandert in een berin",
+    neutraal: "Hera verandert Kallisto in een berin",
+  },
+};
+
+/* ---- BONDGENOTEN ALS EINDKAPITAAL (Chronica-audit B18) — het `SP_STATE.relations`-
+   systeem krijgt bij CH9_BONDGENOTEN (na de val van Troje, vóór CH9_EINDE) voor het
+   eerst een ZICHTBAAR gevolg i.p.v. alleen een tekst-variant. Beide kanten volgen nu
+   (2026-07-28, meermaals herzien in gesprek met Gerben) hetzelfde SPIEGELBEELD-patroon,
+   zodat de relatiescore aan GEEN van beide kanten voor de uitkomst betekenisloos is:
+   - Een POSITIEVE band (relations[id] >= SP_ENDKAPITAAL_THRESHOLD) laat de held de
+     speler ontzien/steunen (op de eigen kant: gewoon meevechten/erkennen).
+   - Een NEGATIEVE band (relations[id] <= -SP_ENDKAPITAAL_THRESHOLD) laat de held de
+     speler juist AANVALLEN — aan Trojaanse kant valt een vijandige Griek de speler
+     openlijk aan tussen het puin; aan Griekse kant gebruikt een verbitterde EIGEN
+     bondgenoot de chaos van de plundering om een oude rekening te vereffenen (een
+     dolksteek in de rug, letterlijk). Namen worden dynamisch in de zin gevoegd
+     (enkelvoud/meervoud correct Nederlands, spBondgenotenAanwezig/spDutchJoin in
+     singleplayer.js).
+   Die dreiging wordt ALTIJD opgelost, nooit een echte game-over:
+   - Trojaanse kant: elke helper in SP_ENDKAPITAAL_TROJE_HELPERS (Aeneas, en sinds
+     2026-07-28 ook Deiphobos, op Gerbens verzoek) met een positieve band grijpt zelf
+     in (`.redt`); bestaat die band bij NIEMAND van hen, dan grijpt Aphrodite in
+     (`SP_ENDKAPITAAL_AFRODITE_REDDING`) — zij is in `SP_CODEX_PERSONS.aeneas` al
+     zijn moeder, en grijpt ook in de Ilias zelf meermaals persoonlijk in om
+     Trojanen te redden.
+   - Griekse kant (spiegelbeeld): bestaat er een POSITIEVE band met een andere
+     Griekse held, dan is DIE degene die de steek afwendt; zonder enige positieve
+     band grijpt Athena in (`SP_ENDKAPITAAL_ATHENA_REDDING`) — de godin die de
+     Grieken door de hele Ilias heen consequent steunt.
+   Bestaat er geen enkele dreiging maar wél een positieve band met een Trojaanse
+   helper, dan krijgt die zijn eigen, rustigere regel (`.quiet`).
+   **Drempel-bugfix (2026-07-28)**: de eerder gekozen drempel van 2 was voor Aeneas
+   zelf NOOIT haalbaar — zijn enige `RELATION:`-bron (`CH9_TRO_017B`) geeft precies
+   +1, en er is maar één moment. `SP_ENDKAPITAAL_THRESHOLD` (2) blijft gelden voor
+   de Griekse helden, die over meerdere hoofdstukken kunnen stapelen (zelfde
+   precedent als de Diomedes-payoff in Hoofdstuk 9, zie §7.15) — persoonlijke,
+   eenmalige banden (Aeneas, Deiphobos, en de losstaande payoffs van Priamus/
+   Cassandra/Andromache hieronder) gebruiken de lagere `SP_ENDKAPITAAL_HELPER_THRESHOLD`.
+   Achilles en Aias zijn BEWUST nooit in een pool — Achilles sterft in Hoofdstuk 9
+   zelf (dood_achilles, beide takken), en Aias pleegt zelfmoord vóór de val van de
+   stad, ook wanneer de speler de Trojaanse tak koos en dat nooit met eigen ogen
+   ziet (dood_aias wordt nu alleen in CH9_GRI_005 gezet — mythologisch gebeurt het
+   sowieso, dus geen van beiden hoort hier ooit in thuis, ongeacht de vlag). ---- */
+const SP_ENDKAPITAAL_THRESHOLD = 2;
+const SP_ENDKAPITAAL_HELPER_THRESHOLD = 1;
+const SP_ENDKAPITAAL_ALLIES = {
+  troje: [
+    { id:"menelaos", line:"Menelaos, die met zijn mannen door de brandende straten trekt, herkent je gezicht tussen het puin — en houdt, één tel maar, zijn zwaard in bedwang voor hij zich weer omdraait." },
+    { id:"diomedes", line:"Diomedes stormt bijna langs je heen in het gewoel, tot hij je herkent — een korte aarzeling, dan trekt hij je resoluut uit het pad van zijn eigen mannen, zonder een woord." },
+    { id:"odysseus", line:"Odysseus, altijd alert genoeg om ook dit op te merken, wijst zijn mannen zwijgend een andere kant op zodra hij je ziet — geen uitleg, geen bevestiging achteraf, alleen dat ene moment waarop hij koos niet te kijken." },
+    { id:"agamemnon", line:"Agamemnon, met zijn gedachten al bij de verdeling van de buit, gebiedt zijn escorte een andere straat in te slaan zodra hij, vluchtig, jouw kant op kijkt — toeval, denk je eerst, tot je zijn blik ving." },
+    { id:"phoenix", line:"Phoenix, die zelfs te midden van deze verwoesting nog oog heeft voor wie hij ooit heeft leren kennen, duwt je zonder een woord een zijstraat in, weg van zijn eigen mannen, voor hij zelf weer verder trekt." },
+  ],
+  grieks: [
+    { id:"menelaos", line:"Menelaos, ergens tussen de opgeluchte Griekse linies, is degene voor wie deze hele oorlog ooit begon — en voelt zich, dankzij jou bij de eed indertijd, nog altijd een van de weinigen die zijn woord gestand deed." },
+    { id:"diomedes", line:"Diomedes, nog met het stof van de laatste nacht op zich, is de eerste die je een korte, erkennende knik geeft — een gebaar dat, van hem, meer zegt dan een hele toespraak." },
+    { id:"odysseus", line:"Odysseus, altijd al degene die het meest doorhad wat er precies gebeurde, zoekt je blik even op — een stille erkenning tussen twee mensen die deze oorlog nooit alleen met het zwaard hebben uitgevochten." },
+    { id:"agamemnon", line:"Agamemnon, eindelijk met de overwinning waar hij tien jaar op wachtte, gunt je een kort, koninklijk knikje — zijn versie van dank." },
+    { id:"phoenix", line:"Phoenix, Achilles' oude leermeester, zoekt je op met iets dat op verdriet lijkt — de leerling die hij grootbracht heeft dit einde niet gehaald, maar wie hem hielp dat te dragen, vergeet hij niet." },
+  ],
+};
+// Persoonlijke, eenmalige Trojaanse banden — elk met een eigen "rustige" regel
+// (geen dreiging) en "redt"-regel (bij een aanval van een vijandige Griekse held).
+const SP_ENDKAPITAAL_TROJE_HELPERS = [
+  { id:"aeneas",
+    quiet:"Aeneas is allang buiten de muren, met zijn vader op zijn schouders — maar het gezicht dat hij, ergens onderweg naar een kust die hij nog niet kent, blijft meedragen, is dat van wie hem toen hielp.",
+    redt:"Op het moment dat het er echt toe doet, is het Aeneas die terugkomt — geen aarzeling, alsof hij dit half had verwacht — en je met zich meetrekt, net op tijd weg van het zwaard dat je anders had geraakt." },
+  { id:"deiphobos",
+    quiet:"Deiphobos, ergens tussen het puin, herkent je nog van de bruiloft — een korte, vermoeide knik, meer heeft hij vannacht niet over voor wie dan ook.",
+    redt:"Deiphobos, die je nog herkent van zijn eigen bruiloft, komt tussen jou en het staal in — een vreemde, laatste vriendelijkheid van een man die zelf nog maar net weduwnaar-in-spe is van een stad die hem al niet meer toebehoort." },
+];
+const SP_ENDKAPITAAL_AFRODITE_REDDING = "Een golf van weeïg zoete geur — geen andere verklaring dan dat een god heeft ingegrepen — duwt je opzij, weg van het zwaard dat je anders had geraakt. Aphrodite, die deze stad al niet meer heeft losgelaten sinds het oordeel op de berg Ida, laat blijkbaar ook nu geen van haar Trojanen zomaar vallen.";
+const SP_ENDKAPITAAL_ATHENA_REDDING = "Een plotselinge, kille windvlaag — gericht, geen toeval — duwt het lemmet net op tijd opzij. Athena, die deze hele oorlog vanaf het eerste plan al heeft gestuurd, is niet van plan het einde ervan te laten bepalen door een verrader in de eigen linies.";
+const SP_ENDKAPITAAL_FALLBACK = "Niemand van wie je hoopte dat hij zich jou zou herinneren, valt je nu op tussen alle rook — tien jaar oorlog verdunt elke band die onbewaakt bleef.";
+// Priamus' afscheid (Hoofdstuk 9, tussen CH9_TRO_012 en CH9_TRO_013): hij sterft al
+// bij CH9_TRO_014, dus zit hij BEWUST niet in CH9_BONDGENOTEN — dit is zijn enige,
+// eenmalige moment, vóór de strijd, met SP_ENDKAPITAAL_HELPER_THRESHOLD als drempel.
+const SP_ENDKAPITAAL_PRIAMUS_AFSCHEID = "Vlak voor je verder trekt, houdt Priamus je even tegen — niet als koning, maar gewoon als een oude man die iets kwijt wil voor het te laat is. \"Wat er ook gebeurt vannacht,\" zegt hij, \"onthoud dat je een echte vriend van Troje bent geweest. Niet iedereen die door onze poorten liep, kon dat zeggen.\" Hij drukt je even de arm en loopt dan door, terug naar het feest, alsof hij zelf niet helemaal gelooft dat het de laatste keer is.";
+// Cassandra's payoff (CH9_TRO_016, na een relatie opgebouwd bij CH9_TRO_011).
+const SP_ENDKAPITAAL_CASSANDRA_PAYOFF = "Vlak voor Aias haar wegsleurt, vindt Cassandra jouw blik in de menigte — heel even, maar lang genoeg. Van iedereen in Troje was jij de enige die haar wél geloofde. Dat verandert niets aan wat er nu gebeurt, maar het is, zie je aan haar gezicht, niet niets.";
+// Andromache's payoff (CH9_GRI_016, na een relatie opgebouwd bij CH9_001).
+const SP_ENDKAPITAAL_ANDROMACHE_PAYOFF = "Tussen de rij gevangen vrouwen vindt Andromache, al half weggeleid door Neoptolemus' mannen, nog één keer jouw blik — dezelfde blik die ze die dag in Hectors huis al even had opgevangen. Ze zegt niets. Dat hoeft ook niet.";
 
 /* ---- GRIEKS ALFABET — transcriptietabel, getoond tijdens puzzels ---- */
 const SP_GREEK_ALPHABET = [
@@ -1110,7 +1220,7 @@ const SP_CODEX_ENTRIES = {
   codex_atlas: { cat:"mythologie", titel:"Atlas en de Appels van de Hesperiden",
     tekst:"Voor de gouden appels van de Hesperiden, bewaakt door de draak Ladon, bood Herakles aan tijdelijk de hemel over te nemen van de titaan Atlas, zodat die zelf de appels kon plukken. Atlas, eenmaal bevrijd, overwoog Herakles voorgoed met de last achter te laten — tot Herakles hem, met een list in plaats van kracht, overhaalde de hemel nog één keer over te nemen zodat hij zijn mantel kon opvouwen. Zodra Atlas de last weer droeg, liep Herakles gewoon weg met de appels." },
   codex_herakles_twaalf_werken: { cat:"mythologie", titel:"Herakles: de Twaalf Werken Voltooid",
-    tekst:"Na de Nemeïsche Leeuw en de Hydra van Lerna volbracht Herakles nog tien beproevingen: de Cerynitische Hinde gevangen zonder een wond, de Erymanthische Ever bedwongen (ten koste van zijn leermeester Chiron), de Augiasstal in één dag schoongespoeld, de Stymfalische Vogels verjaagd met Minerva's bronzen ratel, de Kretenzische Stier gevangen, de mensenetende Merries van Diomedes getemd met hun eigen meester als voer, de Gordel van Hippolyte behaald ten koste van haar leven door Juno's list, het vee van Geryon veroverd aan de rand van de wereld, de gouden Appels van de Hesperiden buitgemaakt met een list tegen Atlas, en tot slot Cerberus zelf, de driekoppige hond van de onderwereld, met blote handen overmeesterd. Tien jaar dienstbaarheid — opgelegd na de ergste daad van zijn leven — eindigen met deze twaalfde taak." },
+    tekst:"Na de Nemeïsche Leeuw en de Hydra van Lerna volbracht Herakles nog tien beproevingen: de Cerynitische Hinde gevangen zonder een wond, de Erymanthische Ever bedwongen (ten koste van zijn leermeester Chiron), de Augiasstal in één dag schoongespoeld, de Stymfalische Vogels verjaagd met Athena's bronzen ratel, de Kretenzische Stier gevangen, de mensenetende Merries van Diomedes getemd met hun eigen meester als voer, de Gordel van Hippolyte behaald ten koste van haar leven door Hera's list, het vee van Geryon veroverd aan de rand van de wereld, de gouden Appels van de Hesperiden buitgemaakt met een list tegen Atlas, en tot slot Cerberus zelf, de driekoppige hond van de onderwereld, met blote handen overmeesterd. Tien jaar dienstbaarheid — opgelegd na de ergste daad van zijn leven — eindigen met deze twaalfde taak." },
 
   // LET OP: dezelfde "vroeg ontgrendelen"-regel als Hoofdstuk 1/2/3 — deze
   // vijf entries worden al bij CH4_000 gezet, vóór de eerste puzzel.
@@ -1170,6 +1280,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Argos, zoon van Arestor, bouwde de Argo op aanwijzing van Athena zelf — het snelste en sterkste schip dat Griekenland ooit had gezien, met in de boeg zelfs een balk uit het orakelbos van Dodona verwerkt, die naar verluidt af en toe met een eigen stem kan waarschuwen. Niet te verwarren met de honderdogige Argus Panoptes, de wachter van Io — twee heel verschillende figuren die toevallig bijna dezelfde naam droegen." },
   codex_nestor_philoktetes: { cat:"mythologie", titel:"Nestor en Philoktetes",
     tekst:"Nestor, hier nog een van de jongere Argonauten, is nu al bekend om een geduld en wijsheid die zijn leeftijdgenoten missen — een reputatie die hem decennia later, als oudste raadsman voor Troje, nog verder vooruit zal snellen. Philoktetes, een ongeëvenaard boogschutter, is dan allang de man die niemand kan missen: het orakel zal zeggen dat Troje nooit zal vallen zonder hem en de boog die hij ooit van Herakles zelf zal erven." },
+  codex_medea_apsyrtus: { cat:"mythologie", titel:"Medea en Apsyrtus",
+    tekst:"Toen Aeëtes de Argo bijna inhaalde, greep Medea naar het enige middel dat haar vader zeker zou tegenhouden: ze lokte haar eigen jongere broer Apsyrtus in een hinderlaag en doodde hem, waarna ze zijn overblijfselen over zee verspreidde. Aeëtes, gedwongen om elk stuk van zijn zoon op te halen voor een eervolle begrafenis, moest de achtervolging staken — de Argo ontsnapte, maar tegen een prijs die niemand aan boord ooit hardop wil benoemen. Het is de eerste keer dat Medea's vindingrijkheid een gruwelijke kant laat zien, jaren voor Korinthe." },
   codex_medea_wraak: { cat:"mythologie", titel:"Medea's Wraak in Korinthe",
     tekst:"Jaren na de terugkeer van de Argo verlaat Jason Medea voor een politiek huwelijk met de dochter van de koning van Korinthe — ondanks alles wat Medea voor hem opgaf en verried. Medea's wraak wordt een van de duisterste verhalen uit de hele mythologie: een vergiftigd bruidsgeschenk voor de nieuwe bruid, en een verlies dat Jason voor de rest van zijn leven zal achtervolgen. Geen enkel verhaal in Chronica Classica vertelt dit lichtvaardig — het is de prijs die blijkt te horen bij een belofte die uiteindelijk toch verbroken werd, net als bij Theseus en Aegeus destijds, maar dan zonder enige verzachting." },
 
@@ -1193,29 +1305,29 @@ const SP_CODEX_ENTRIES = {
     tekst:"Een eindeloze hal, ergens buiten de tijd zelf, vol zuilen en glazen stolpen op sokkels — sommige gevuld met een tastbaar aandenken aan een verhaal dat je hebt meegemaakt, de meeste nog leeg of al aangetast door de tijd. Wie de hal heeft gebouwd, en waarom, wil het Orakel van Chronos nog niet zeggen — alleen dat de naam, Mnemosyne, niet toevallig aan de titanide van het geheugen doet denken." },
   // ---- Hoofdstuk 7 — De Appel der Tweedracht ----
   codex_leda_zwaan: { cat:"mythologie", titel:"Leda en de Zwaan",
-    tekst:"Jupiter naderde de Spartaanse koningin Leda vermomd als een zwaan — weer een andere gedaante dan bij Io of Europa, maar met hetzelfde doel. Uit die verbintenis kwam Helena voort, samen met de tweeling Castor en Pollux (de Dioscuren, al bekend van de Argonautentocht) — in sommige tradities geboren uit een ei, in andere gewoon als mensenkinderen, verwekt op dezelfde nacht als Leda's eigen man Tyndareos bij haar lag. Geen enkel kind van die nacht zou ooit een gewoon leven leiden." },
+    tekst:"Zeus naderde de Spartaanse koningin Leda vermomd als een zwaan — weer een andere gedaante dan bij Io of Europa, maar met hetzelfde doel. Uit die verbintenis kwam Helena voort, samen met de tweeling Castor en Pollux (de Dioscuren, al bekend van de Argonautentocht) — in sommige tradities geboren uit een ei, in andere gewoon als mensenkinderen, verwekt op dezelfde nacht als Leda's eigen man Tyndareos bij haar lag. Geen enkel kind van die nacht zou ooit een gewoon leven leiden." },
   codex_eed_tyndareos: { cat:"mythologie", titel:"De Eed van Tyndareos",
     tekst:"Toen Helena's schoonheid elke koning van Griekenland naar Sparta lokte, vreesde koning Tyndareos dat de afgewezen vrijers elkaar (en hemzelf) zouden verscheuren zodra hij een keuze maakte. Op voorstel van de sluwe Odysseus — die in ruil zelf de hand van Tyndareos' nicht Penelope kreeg — zwoeren alle vrijers een eed: wie Helena ook zou trouwen, iedereen zou hem daarna verdedigen tegen elk onrecht dat hem via haar werd aangedaan. Menelaus werd de uiteindelijke bruidegom — en jaren later, zodra Helena Sparta verlaat, is het diezelfde eed die heel Griekenland naar de wapens roept." },
   codex_bruiloft_peleus_thetis: { cat:"mythologie", titel:"De Bruiloft van Peleus en Thetis",
-    tekst:"De zeenimf Thetis was zo begeerd dat zelfs Jupiter en Neptunus om haar dongen — tot een profetie waarschuwde dat haar zoon ooit machtiger zou worden dan zijn vader. Geen enkele god durfde dat risico te nemen, dus lieten beiden haar over aan een sterveling: Peleus, een van de Argonauten die je al kent van de tocht van de Argo. Op hun bruiloft, bijgewoond door vrijwel alle goden, gebeurt iets dat niemand had uitgenodigd." },
+    tekst:"De zeenimf Thetis was zo begeerd dat zelfs Zeus en Poseidon om haar dongen — tot een profetie waarschuwde dat haar zoon ooit machtiger zou worden dan zijn vader. Geen enkele god durfde dat risico te nemen, dus lieten beiden haar over aan een sterveling: Peleus, een van de Argonauten die je al kent van de tocht van de Argo. Op hun bruiloft, bijgewoond door vrijwel alle goden, gebeurt iets dat niemand had uitgenodigd." },
   codex_gouden_appel_tweedracht: { cat:"mythologie", titel:"De Appel der Tweedracht",
-    tekst:"Eris, de godin van de tweedracht, werd als enige niet uitgenodigd voor de bruiloft van Peleus en Thetis — uit angst voor precies dit. Ze werpt een gouden appel tussen de gasten met één woord erop gegraveerd: 'aan de mooiste'. Juno, Athena en Venus eisen hem alle drie op, en geen van de goden zelf durft tussen hen te oordelen — het lot van die keuze wordt doorgeschoven naar een sterveling die nog niet eens weet dat hij een prins is." },
+    tekst:"Eris, de godin van de tweedracht, werd als enige niet uitgenodigd voor de bruiloft van Peleus en Thetis — uit angst voor precies dit. Ze werpt een gouden appel tussen de gasten met één woord erop gegraveerd: 'aan de mooiste'. Hera, Athena en Aphrodite eisen hem alle drie op, en geen van de goden zelf durft tussen hen te oordelen — het lot van die keuze wordt doorgeschoven naar een sterveling die nog niet eens weet dat hij een prins is." },
   codex_geboorte_paris: { cat:"mythologie", titel:"De Geboorte van Paris en Hecuba's Visioen",
     tekst:"Vlak voor de geboorte van haar zoon droomt koningin Hecuba van Troje dat ze een brandende fakkel baart die haar hele stad in vlammen zet. Een ziener legt de droom uit: dit kind zal ooit Troje vernietigen. Uit angst laat koning Priamus de pasgeboren Paris op de berg Ida te vondeling leggen — waar herders hem vinden en, ondanks de voorspelling, gewoon grootbrengen als een van hen." },
   codex_paris_stier: { cat:"mythologie", titel:"Paris en de Stier",
-    tekst:"Als jonge herder op de berg Ida wint Paris' lievelingsstier keer op keer elke wedstrijd — tot Mars zelf, vermomd als stier, meedoet en wint. Zonder aarzelen kent Paris de overwinning eerlijk aan zijn rivaal toe, ook al kost het hem zijn eigen dier. Die onbevangen eerlijkheid, zonder enig eigenbelang, is precies waarom de goden hem later kiezen als rechter over hun eigen twist." },
+    tekst:"Als jonge herder op de berg Ida wint Paris' lievelingsstier keer op keer elke wedstrijd — tot Ares zelf, vermomd als stier, meedoet en wint. Zonder aarzelen kent Paris de overwinning eerlijk aan zijn rivaal toe, ook al kost het hem zijn eigen dier. Die onbevangen eerlijkheid, zonder enig eigenbelang, is precies waarom de goden hem later kiezen als rechter over hun eigen twist." },
   codex_parisoordeel: { cat:"mythologie", titel:"Het Parisoordeel",
-    tekst:"Mercurius brengt Juno, Athena en Venus naar de nietsvermoedende herder Paris en vraagt hem te oordelen wie de gouden appel verdient. Elke godin probeert hem om te kopen: Juno biedt macht over heel Azië, Athena wijsheid en onoverwinnelijkheid in de oorlog, Venus de liefde van de mooiste vrouw ter wereld. Paris kiest Venus — en daarmee, zonder het te beseffen, ook de oorlog die daarop volgt." },
+    tekst:"Hermes brengt Hera, Athena en Aphrodite naar de nietsvermoedende herder Paris en vraagt hem te oordelen wie de gouden appel verdient. Elke godin probeert hem om te kopen: Hera biedt macht over heel Azië, Athena wijsheid en onoverwinnelijkheid in de oorlog, Aphrodite de liefde van de mooiste vrouw ter wereld. Paris kiest Aphrodite — en daarmee, zonder het te beseffen, ook de oorlog die daarop volgt." },
   codex_paris_herkend: { cat:"mythologie", titel:"De Spelen van Troje",
     tekst:"Jaren later keert Paris, nog altijd als eenvoudige herder, terug naar Troje voor de jaarlijkse spelen — en wint ze allemaal, tot woede van de aanwezige prinsen, die de onbekende overwinnaar willen doden. Zijn zuster Cassandra (of, in andere tradities, zijn eigen moeder) herkent hem op het nippertje aan een litteken of een voorwerp uit zijn kindertijd: de te vondeling gelegde zoon leeft nog. Priamus en Hecuba nemen hem terug op als prins, onder de naam Alexander." },
   codex_helena_schaking: { cat:"mythologie", titel:"De Schaking van Helena",
-    tekst:"Onder het mom van een gezantschap reist prins Paris naar Sparta, waar koning Menelaus hem met alle gastvrijheid ontvangt — en waar Venus haar belofte inlost. Terwijl Menelaus voor zaken van huis is, verlaat Helena met Paris het paleis, naar Troje. Of ze vrijwillig meeging of geschaakt werd, vertellen de bronnen niet eensluidend — wat wél vaststaat, is dat de eed van Tyndareos vanaf dit moment heel Griekenland bindt." },
+    tekst:"Onder het mom van een gezantschap reist prins Paris naar Sparta, waar koning Menelaus hem met alle gastvrijheid ontvangt — en waar Aphrodite haar belofte inlost. Terwijl Menelaus voor zaken van huis is, verlaat Helena met Paris het paleis, naar Troje. Of ze vrijwillig meeging of geschaakt werd, vertellen de bronnen niet eensluidend — wat wél vaststaat, is dat de eed van Tyndareos vanaf dit moment heel Griekenland bindt." },
   codex_odysseus_waanzin: { cat:"mythologie", titel:"Odysseus' Geveinsde Waanzin",
     tekst:"Odysseus, die liever thuis bij zijn jonge gezin blijft dan naar Troje te trekken, doet zich voor als waanzinnig: hij ploegt zijn akker met een os en een ezel samengespannen, en zaait er zout in plaats van graan. Palamedes doorziet de list en legt Odysseus' eigen zoontje Telemachus voor de ploeg — Odysseus zwenkt opzij om hem te sparen, en verraadt zichzelf daarmee. Odysseus vergeet die vernedering nooit, met gevolgen die pas jaren later, ver van Troje, echt zichtbaar worden." },
   codex_achilles_skyros: { cat:"mythologie", titel:"Achilles tussen de Vrouwen",
     tekst:"Thetis, wetend dat haar zoon Achilles bij Troje zal sterven als hij meevaart, verbergt hem vermomd als meisje tussen de dochters van koning Lycomedes op Skyros. Odysseus ontmaskert hem met een list: tussen sieraden en stoffen voor de meisjes legt hij ook een zwaard en een schild, en laat een strijdhoorn schallen. Terwijl de meisjes vluchten, grijpt Achilles instinctief naar de wapens — en verraadt daarmee wie hij werkelijk is." },
   codex_aulis_iphigenia: { cat:"mythologie", titel:"Het Offer in Aulis",
-    tekst:"De verzamelde Griekse vloot ligt wekenlang windstil in Aulis, tot de ziener Calchas onthult dat Agamemnon de godin Diana heeft beledigd — enkel een offer van zijn eigen dochter Iphigenia kan gunstige wind afdwingen. Agamemnon, verscheurd tussen vader- en veldheerschap, laat haar naar Aulis lokken onder het mom van een huwelijk met Achilles. In sommige tradities wordt ze werkelijk geofferd; in andere grijpt Diana zelf in en voert haar op het laatste moment weg naar Tauris, terwijl een hinde haar plaats inneemt op het altaar." },
+    tekst:"De verzamelde Griekse vloot ligt wekenlang windstil in Aulis, tot de ziener Calchas onthult dat Agamemnon de godin Artemis heeft beledigd — enkel een offer van zijn eigen dochter Iphigenia kan gunstige wind afdwingen. Agamemnon, verscheurd tussen vader- en veldheerschap, laat haar naar Aulis lokken onder het mom van een huwelijk met Achilles. In sommige tradities wordt ze werkelijk geofferd; in andere grijpt Artemis zelf in en voert haar op het laatste moment weg naar Tauris, terwijl een hinde haar plaats inneemt op het altaar." },
   codex_philoktetes_lemnos: { cat:"mythologie", titel:"Philoktetes op Lemnos",
     tekst:"Onderweg naar Troje wordt Philoktetes — dezelfde ongeëvenaarde boogschutter die de speler al kent van de Argonautentocht, inmiddels drager van Herakles' eigen boog — in de voet gebeten door een slang. De wond etterst en stinkt zo onhoudbaar, en zijn kreten van pijn verstoren de offerrituelen zo ernstig, dat de Grieken hem achterlaten op het verlaten eiland Lemnos, met niets dan die boog om te overleven." },
   codex_protesilaos_schild: { cat:"mythologie", titel:"Protesilaus en het Schild van Odysseus",
@@ -1227,14 +1339,14 @@ const SP_CODEX_ENTRIES = {
     tekst:"Chryses, priester van Apollo, komt naar het Griekse kamp om zijn dochter Chryseis vrij te kopen — Agamemnon weigert honend. Chryses bidt tot Apollo, die negen dagen lang de vloot met pijlen van pest bestookt. Pas als de ziener Calchas de ware oorzaak durft te benoemen, ziet Agamemnon zich gedwongen Chryseis alsnog terug te geven — al is hij vastbesloten er zelf niet zonder compensatie van af te komen." },
   codex_ruzie_achilles_agamemnon: { cat:"mythologie", titel:"De Ruzie van Achilles en Agamemnon",
     tekst:"Agamemnon eist, uit gekwetste trots, Achilles' eigen oorlogsbuit Briseis op als vervanging voor Chryseis. Achilles grijpt woedend naar zijn zwaard — en wordt op het nippertje tegengehouden door Athena zelf, onzichtbaar voor iedereen behalve hem. Hij bedwingt zijn woede, maar zweert dat hij geen vinger meer zal uitsteken voor een leger dat hem zo min acht: de μῆνις (wrok) die de Ilias zijn naam geeft." },
-  codex_thetis_zeus_gunst: { cat:"mythologie", titel:"Thetis' Verzoek aan Jupiter",
-    tekst:"Thetis troost haar vernederde zoon en belooft hem genoegdoening: ze smeekt Jupiter zelf om de Trojanen te laten winnen, zolang tot de Grieken beseffen hoezeer ze Achilles nodig hebben. Jupiter stemt toe — tegen de zin van Juno, die de Grieken steunt — en zet daarmee alles in beweging wat er de rest van dit hoofdstuk gebeurt." },
+  codex_thetis_zeus_gunst: { cat:"mythologie", titel:"Thetis' Verzoek aan Zeus",
+    tekst:"Thetis troost haar vernederde zoon en belooft hem genoegdoening: ze smeekt Zeus zelf om de Trojanen te laten winnen, zolang tot de Grieken beseffen hoezeer ze Achilles nodig hebben. Zeus stemt toe — tegen de zin van Hera, die de Grieken steunt — en zet daarmee alles in beweging wat er de rest van dit hoofdstuk gebeurt." },
   codex_duel_menelaos_paris: { cat:"mythologie", titel:"Het Duel van Menelaus en Paris",
-    tekst:"Om jaren van bloedvergieten te vermijden, stellen beide legers voor de oorlog te beslechten met een enkel duel: Menelaus tegen Paris, met Helena als inzet. Menelaus krijgt al snel de overhand — tot Venus, die haar belofte aan Paris niet vergeten is, hem in een mist wegvoert van het slagveld, recht naar Helena's kamer in Troje. Het duel eindigt in niets, en de oorlog gaat door." },
+    tekst:"Om jaren van bloedvergieten te vermijden, stellen beide legers voor de oorlog te beslechten met een enkel duel: Menelaus tegen Paris, met Helena als inzet. Menelaus krijgt al snel de overhand — tot Aphrodite, die haar belofte aan Paris niet vergeten is, hem in een mist wegvoert van het slagveld, recht naar Helena's kamer in Troje. Het duel eindigt in niets, en de oorlog gaat door." },
   codex_verbroken_wapenstilstand: { cat:"mythologie", titel:"De Verbroken Wapenstilstand",
     tekst:"Terwijl beide legers nog naar het onbesliste duel staren, overtuigt Athena — vermomd — de Trojaanse boogschutter Pandarus ervan een pijl op Menelaus af te schieten. De wond is niet dodelijk, maar het kwaad is geschied: de wapenstilstand is verbroken, en de strijd laait feller op dan ooit." },
   codex_diomedes_huzarenstuk: { cat:"mythologie", titel:"Diomedes' Huzarenstuk",
-    tekst:"Met Athena's kracht in zijn aderen wordt Diomedes voor één dag de gevaarlijkste sterveling op het slagveld — hij verwondt zelfs Venus als ze haar zoon Aeneas probeert te redden, en durft het zelfs tegen Mars zelf op te nemen, die hij met zijn speer treft en gillend van pijn naar de Olympos terugjaagt. Geen sterveling voor of na hem heeft ooit twee goden in één dag verwond." },
+    tekst:"Met Athena's kracht in zijn aderen wordt Diomedes voor één dag de gevaarlijkste sterveling op het slagveld — hij verwondt zelfs Aphrodite als ze haar zoon Aeneas probeert te redden, en durft het zelfs tegen Ares zelf op te nemen, die hij met zijn speer treft en gillend van pijn naar de Olympos terugjaagt. Geen sterveling voor of na hem heeft ooit twee goden in één dag verwond." },
   codex_diomedes_glaucus: { cat:"mythologie", titel:"Diomedes en Glaucus",
     tekst:"Midden in de slag staken Diomedes en de Trojaanse bondgenoot Glaucus hun tweegevecht zodra ze elkaars afkomst herkennen: hun grootvaders waren ooit gastvrienden, een band die volgens de oudste wetten van gastvrijheid nooit verjaart, ook niet op een slagveld tussen twee vijandige legers. In plaats van te vechten wisselen ze hun wapenrusting — het enige moment in de hele oorlog waarop een Trojaan en een Griek elkaar als iets anders dan een vijand behandelen." },
   codex_hektor_andromache: { cat:"mythologie", titel:"Hector en Andromache",
@@ -1244,15 +1356,15 @@ const SP_CODEX_ENTRIES = {
   codex_patroklos_wapenrusting: { cat:"mythologie", titel:"Patroklos in Achilles' Wapenrusting",
     tekst:"Wanneer de Trojanen de Griekse schepen dreigen in brand te steken, smeekt Patroklos, Achilles' trouwe metgezel, om zelf de wapenrusting van zijn vriend te mogen dragen — enkel om de Trojanen af te schrikken, niet om zelf de aanval te leiden. Achilles stemt met tegenzin toe, met één uitdrukkelijke waarschuwing: Troje zelf niet aanvallen, alleen de schepen redden. Patroklos knikt — en vergeet die belofte zodra de strijd hem meesleept." },
   codex_dood_patroklos: { cat:"mythologie", titel:"De Dood van Patroklos",
-    tekst:"In Achilles' wapenrusting jaagt Patroklos de Trojanen tot aan de muren van Troje zelf — en doodt onderweg zelfs Sarpedon, een eigen zoon van Jupiter, die zijn vader niet redt maar wel met bloedrode regen betreurt. Voor de poorten van Troje ontneemt Apollo zelf Patroklos zijn wapenrusting; verwond door de Trojaan Euphorbus, wordt hij ten slotte door Hector zelf gedood — die pas als hij de helm afzet, ontdekt dat hij niet Achilles heeft verslagen, maar diens beste vriend." },
+    tekst:"In Achilles' wapenrusting jaagt Patroklos de Trojanen tot aan de muren van Troje zelf — en doodt onderweg zelfs Sarpedon, een eigen zoon van Zeus, die zijn vader niet redt maar wel met bloedrode regen betreurt. Voor de poorten van Troje ontneemt Apollo zelf Patroklos zijn wapenrusting; verwond door de Trojaan Euphorbus, wordt hij ten slotte door Hector zelf gedood — die pas als hij de helm afzet, ontdekt dat hij niet Achilles heeft verslagen, maar diens beste vriend." },
   codex_schild_van_achilles: { cat:"mythologie", titel:"Het Schild van Achilles",
-    tekst:"Verscheurd van verdriet om Patroklos vraagt Thetis aan Vulcanus — dezelfde god die zij ooit als kind opving toen niemand anders dat deed — om een nieuwe wapenrusting voor haar zoon. Op het schild dat hij smeedt, beeldt Vulcanus niet de oorlog af, maar de hele wereld: steden in vrede en in oorlog, een bruiloft, een rechtszaak, ploegende boeren, een oogstfeest, dansende jongeren — alsof hij Achilles, vlak voor zijn grootste woede, nog eenmaal wil laten zien waarvoor het leven de moeite waard is." },
+    tekst:"Verscheurd van verdriet om Patroklos vraagt Thetis aan Hephaistos — dezelfde god die zij ooit als kind opving toen niemand anders dat deed — om een nieuwe wapenrusting voor haar zoon. Op het schild dat hij smeedt, beeldt Hephaistos niet de oorlog af, maar de hele wereld: steden in vrede en in oorlog, een bruiloft, een rechtszaak, ploegende boeren, een oogstfeest, dansende jongeren — alsof hij Achilles, vlak voor zijn grootste woede, nog eenmaal wil laten zien waarvoor het leven de moeite waard is." },
   codex_verzoening_agamemnon: { cat:"mythologie", titel:"De Verzoening met Agamemnon",
     tekst:"Voor het eerst sinds de ruzie staat Achilles weer voor het verzamelde leger — niet om zijn recht op te eisen, maar om de wrok eindelijk los te laten. Agamemnon erkent zijn fout ruiterlijk en geeft Briseis en rijke geschenken terug; Achilles wil er nauwelijks nog naar omkijken. Er is maar één ding dat hem nu nog interesseert: wraak op Hector." },
   codex_dood_hektor: { cat:"mythologie", titel:"De Dood van Hector",
     tekst:"Achilles jaagt Hector driemaal rond de muren van Troje voor Athena, vermomd als Hectors eigen broer Deiphobus, hem ertoe overhaalt zich om te draaien en te vechten. Hector, te laat beseffend dat hij alleen staat, vecht toch met waardigheid — en sterft door Achilles' speer. Stervend smeekt hij om zijn lichaam aan zijn familie terug te geven; Achilles, nog altijd niet gekalmeerd, weigert en bindt het lichaam achter zijn strijdwagen om het rond de muren van Troje te slepen." },
   codex_priamus_smeekbede: { cat:"mythologie", titel:"Priamus' Smeekbede",
-    tekst:"Oude koning Priamus waagt zich, alleen en ongewapend, met Mercurius als gids 's nachts tot in Achilles' eigen tent om het lichaam van zijn zoon te ransen. Hij kust de handen die zoveel van zijn zonen doodden en smeekt Achilles zich zijn eigen vader te herinneren. Iets in Achilles breekt: voor het eerst sinds Patroklos' dood huilt hij weer — niet van woede, maar van gedeeld verdriet — en geeft Hectors lichaam ongeschonden terug." },
+    tekst:"Oude koning Priamus waagt zich, alleen en ongewapend, met Hermes als gids 's nachts tot in Achilles' eigen tent om het lichaam van zijn zoon te ransen. Hij kust de handen die zoveel van zijn zonen doodden en smeekt Achilles zich zijn eigen vader te herinneren. Iets in Achilles breekt: voor het eerst sinds Patroklos' dood huilt hij weer — niet van woede, maar van gedeeld verdriet — en geeft Hectors lichaam ongeschonden terug." },
   codex_begrafenis_hektor: { cat:"mythologie", titel:"De Begrafenis van Hector",
     tekst:"Negen dagen rouwt Troje, met een korte wapenstilstand die Achilles zelf toestaat. Andromache, Hecuba en Helena spreken ieder hun eigen klaagzang uit boven Hectors lichaam voor het op de brandstapel wordt gelegd. Met de begrafenis van de dapperste verdediger van Troje eindigt de Ilias zoals ze begon: niet met een overwinning, maar met het menselijke gewicht van wat oorlog werkelijk kost." },
   // ---- Hoofdstuk 9 — Ilion in Vlammen ----
@@ -1263,7 +1375,7 @@ const SP_CODEX_ENTRIES = {
   codex_dood_achilles: { cat:"mythologie", titel:"De Dood van Achilles",
     tekst:"Bij de Scaeïsche Poort van Troje treft een pijl van Paris, gestuurd door Apollo's eigen hand, Achilles in zijn enige zwakke plek: de hiel waarbij Thetis hem als baby bij zijn voet vasthield toen ze hem in de Styx doopte. De sterkste held van Griekenland valt in één klap. Om zijn lichaam ontbrandt een felle strijd — Aias draagt het uiteindelijk in veiligheid, terwijl Odysseus de Trojanen op afstand houdt." },
   codex_wapenrusting_twist: { cat:"mythologie", titel:"De Twist om Achilles' Wapenrusting",
-    tekst:"Wie verdient Achilles' beroemde wapenrusting — gesmeed door Vulcanus zelf? Aias, die het lichaam onder vijandelijk vuur in veiligheid bracht, of Odysseus, wiens list de oorlog al vaker een wending gaf? De Griekse leiders (of, in sommige tradities, Trojaanse gevangenen) stemmen — en kiezen Odysseus. Aias, die zijn hele leven zijn kracht als zijn enige echte eer beschouwde, kan de vernedering niet verkroppen." },
+    tekst:"Wie verdient Achilles' beroemde wapenrusting — gesmeed door Hephaistos zelf? Aias, die het lichaam onder vijandelijk vuur in veiligheid bracht, of Odysseus, wiens list de oorlog al vaker een wending gaf? De Griekse leiders (of, in sommige tradities, Trojaanse gevangenen) stemmen — en kiezen Odysseus. Aias, die zijn hele leven zijn kracht als zijn enige echte eer beschouwde, kan de vernedering niet verkroppen." },
   codex_waanzin_aias: { cat:"mythologie", titel:"Aias' Waanzin en Ondergang",
     tekst:"Vernederd door de uitslag wil Aias 's nachts de Griekse aanvoerders vermoorden — Athena, om erger te voorkomen, benevelt zijn geest zodat hij in plaats daarvan een kudde vee afslacht, in de overtuiging dat het zijn vijanden zijn. Wanneer hij 's ochtends ontwaakt en beseft wat hij heeft gedaan, is de schaamte groter dan hij kan dragen. Hij valt op zijn eigen zwaard — hetzelfde zwaard dat hij ooit van Hector zelf ten geschenke kreeg, na een gevecht dat in een wapenruil eindigde." },
   codex_philoktetes_terugkeer: { cat:"mythologie", titel:"De Terugkeer van Philoktetes",
@@ -1279,13 +1391,13 @@ const SP_CODEX_ENTRIES = {
   codex_sinon_leugen: { cat:"mythologie", titel:"Sinons Leugen",
     tekst:"Sinon, ogenschijnlijk door zijn eigen mannen achtergelaten, laat zich gevangennemen en vertelt de Trojanen een zorgvuldig verzonnen verhaal: het paard is een offer aan Athena, en wie het beschadigt roept haar woede over zich af; wie het binnenhaalt, wint haar gunst. Priamus, ondanks de twijfel van sommigen, gelooft hem." },
   codex_laocoon: { cat:"mythologie", titel:"Laocoön en de Slangen",
-    tekst:"De priester Laocoön waarschuwt luid tegen het paard en werpt zelfs een speer in zijn houten flank. Vlak daarna komen twee reusachtige zeeslangen uit zee — gestuurd, zegt de overlevering, door Neptunus, die Troje nog altijd niet had vergeven dat koning Laomedon hem ooit zijn beloofde loon voor de stadsmuren onthield — en verslinden hem en zijn twee zonen. De Trojanen zien het als een teken dat Laocoön zélf de goden heeft beledigd — en halen het paard, geruster dan ooit, hun stad binnen." },
+    tekst:"De priester Laocoön waarschuwt luid tegen het paard en werpt zelfs een speer in zijn houten flank. Vlak daarna komen twee reusachtige zeeslangen uit zee — gestuurd, zegt de overlevering, door Poseidon, die Troje nog altijd niet had vergeven dat koning Laomedon hem ooit zijn beloofde loon voor de stadsmuren onthield — en verslinden hem en zijn twee zonen. De Trojanen zien het als een teken dat Laocoön zélf de goden heeft beledigd — en halen het paard, geruster dan ooit, hun stad binnen." },
   codex_cassandra_waarschuwing: { cat:"mythologie", titel:"Cassandra's Genegeerde Waarschuwing",
     tekst:"Ook Cassandra, Priamus' dochter en ziener, waarschuwt tegen het paard — net als altijd zonder resultaat. Apollo vervloekte haar ooit: ze zou de waarheid altijd zien, maar nooit geloofd worden. Vannacht zal die vloek Troje het leven kosten." },
   codex_val_van_troje: { cat:"mythologie", titel:"De Val van Troje",
     tekst:"Na het feest, wanneer heel Troje eindelijk diep slaapt, laat Sinon de verstopte Grieken uit het paard. Ze openen de poorten van binnenuit; de teruggekeerde vloot stroomt de stad in. Wat volgt is geen veldslag meer, maar een slachting — Troje, na tien jaar belegerd te zijn geweest, valt uiteindelijk niet door kracht, maar door een list." },
   codex_dood_priamus_astyanax: { cat:"mythologie", titel:"De Dood van Priamus en Astyanax",
-    tekst:"Neoptolemus doodt Priamus bij het altaar van Jupiter, nadat hij eerst diens laatste levende zoon Polites voor zijn ogen heeft neergestoken — de oude koning sterft waar hij zocht naar heiligdom, niet naar een gevecht. Hectors zoontje Astyanax wordt van de muren van Troje geworpen: de Grieken vrezen dat hij ooit zou opgroeien om zijn vader te wreken. Twee doden die samen de wreedste bladzijde van de hele oorlog vormen." },
+    tekst:"Neoptolemus doodt Priamus bij het altaar van Zeus, nadat hij eerst diens laatste levende zoon Polites voor zijn ogen heeft neergestoken — de oude koning sterft waar hij zocht naar heiligdom, niet naar een gevecht. Hectors zoontje Astyanax wordt van de muren van Troje geworpen: de Grieken vrezen dat hij ooit zou opgroeien om zijn vader te wreken. Twee doden die samen de wreedste bladzijde van de hele oorlog vormen." },
   codex_cassandra_altaar: { cat:"mythologie", titel:"Cassandra bij het Altaar",
     tekst:"Cassandra zoekt heiligdom bij het altaar van Athena — maar wordt er door de Griekse Aias (zoon van Oïleus, een andere Aias dan Telamons zoon) met geweld weggesleurd, een heiligschending die geen enkele god ongestraft zal laten. De storm die deze daad over de terugkerende Griekse vloot zal brengen, ligt nog in het verschiet." },
   codex_aeneas_vlucht: { cat:"mythologie", titel:"Aeneas' Vlucht uit Troje",
@@ -1338,7 +1450,7 @@ const SP_CODEX_PERSONS = {
     full:"Verstoten door elk stuk vaste grond en achtervolgd door de python Python, vond Latona uiteindelijk toevlucht op het rondzwervende eiland Delos — dat, omdat het aan geen enkel koninkrijk verankerd lag, buiten Juno's vloek viel. Daar bracht ze de tweeling Apollo en Diana ter wereld, en gaf ze de wereld twee nieuwe goden die voorgoed met haar naam verbonden blijven." },
   apollo: { nm:"Apollo", epithet:"God van licht, muziek en profetie",
     intro:"De zoon van Latona en Jupiter, amper geboren en al omgeven door een licht dat zijn naam voorgoed zal dragen." },
-  diana: { nm:"Diana (Artemis)", epithet:"Godin van de jacht en de wildernis",
+  diana: { nm:"Artemis (Diana)", epithet:"Godin van de jacht en de wildernis",
     intro:"Latona's dochter, geboren vlak vóór haar tweelingbroer Apollo — en volgens sommige verhalen was zij het die haar moeder meteen daarna bijstond bij zijn geboorte.",
     full:"Diana leidt een groep jachtgezellinnen die, net als zijzelf, een eed van kuisheid hebben afgelegd — een eed die ze onverbiddelijk handhaaft, zelfs wanneer een van hen (zoals Kallisto) buiten haar eigen schuld wordt misleid. Bij de Grieken heet ze Artemis." },
   semele: { nm:"Semele", epithet:"Prinses van Thebe, minnares van Jupiter",
@@ -1367,6 +1479,12 @@ const SP_CODEX_PERSONS = {
     full:"Jupiter, ditmaal vermomd als een tamme witte stier in plaats van een wolk, liet Europa argeloos op zijn rug klimmen — en zwom vervolgens met haar de zee op, helemaal naar Kreta. Daar baarde ze hem drie zonen, onder wie Minos, de latere koning van Kreta wiens naam voorgoed verbonden zal blijven met een labyrint dat nog gebouwd moet worden. Haar naam bleef achter op een heel werelddeel: Europa." },
   pholus: { nm:"Pholus", epithet:"Wijze centaur, gastheer van Herakles",
     intro:"Een centaur die, anders dan de meeste van zijn soort, bekendstaat om zijn gastvrijheid — tot een gedeelde wijnkruik zijn hele kudde in een dodelijke chaos stort." },
+  eurystheus: { nm:"Eurystheus", epithet:"Koning van Mycene, neef van Herakles",
+    intro:"Herakles' neef en koning van Mycene, die door een list van Hera vóór hem geboren werd — en die, op last van het orakel van Delphi, nu tien jaar lang mag bepalen wat Herakles ter boetedoening moet volbrengen.",
+    full:"Eurystheus' angst voor Herakles groeit met elke voltooide beproeving: al na de Nemeïsche Leeuw laat hij een bronzen pot klaarzetten om zich erin te verstoppen zodra Herakles nadert, en meermaals keurt hij een volbrachte taak af op een technisch punt — Iolaos' hulp bij de Hydra, een beloofde betaling bij de stallen van Augias. Pas wanneer Herakles ook Cerberus levend voor hem neerzet, wint zijn angst het definitief van zijn achterdocht: hij smeekt Herakles het beest onmiddellijk terug te brengen, en de twaalf werken zijn, met tegenzin erkend, volbracht." },
+  chiron: { nm:"Chiron", epithet:"Wijze, onsterfelijke centaur, leermeester van Herakles",
+    intro:"Herakles' eigen oude leermeester, die hem ooit onderwees in geneeskunde, muziek en rechtvaardigheid — en die, anders dan de rest van zijn wilde soortgenoten, nooit vijandig is.",
+    full:"Tijdens de jacht op de Erymanthische Ever raakt een van Herakles' met Hydra-gif vergiftigde pijlen Chiron per ongeluk — een wond die, omdat hij onsterfelijk is, nooit zal helen en hem enkel eindeloos kan kwellen. Jaren later staat Chiron zijn eigen onsterfelijkheid vrijwillig af aan de geketende Prometheus, om zo zelf eindelijk verlost te worden van de pijn." },
 
   theseus: { nm:"Theseus", epithet:"Prins van Athene, doder van de Minotaurus",
     intro:"De pas erkende zoon van koning Aegeus, die zich vrijwillig aanmeldt voor het bloedigste offer dat Athene ooit aan Kreta heeft moeten betalen.",
@@ -1430,6 +1548,9 @@ const SP_CODEX_PERSONS = {
     intro:"Een korte lont en een nog kortere twijfel — Tydeus is de eerste die zijn zwaard trekt en de laatste die er spijt van heeft. Zijn zoon Diomedes zal ooit net zo onstuimig blijken." },
   orpheus: { nm:"Orpheus", epithet:"Muzikant, zoon van een Muze",
     intro:"Een muzikant wiens lier en stem, naar men zegt, zelfs bomen en rotsen tot bewegen kunnen brengen — aan boord van de Argo houdt zijn spel de riemslag gelijk en de gemoederen kalm." },
+  hylas: { nm:"Hylas", epithet:"Jonge metgezel van Herakles",
+    intro:"Herakles' jonge metgezel aan boord van de Argo, meegenomen om water te halen bij Mysië — zonder te vermoeden dat de bron zelf hem niet meer zal laten gaan.",
+    full:"De waternimfen van de bron, betoverd door Hylas' schoonheid, trekken hem zonder waarschuwing de diepte in. Herakles zoekt de hele nacht door de bossen van Mysië, doof voor elke aanmaning terug aan boord te komen — en blijft uiteindelijk, wanneer de Argo zonder hem vertrekt, zelf ook achter." },
 
   // ---- Hoofdstuk 6 — De Vloek van Thebe ----
   kadmos: { nm:"Kadmos", epithet:"Stichter van Thebe",
@@ -1445,6 +1566,9 @@ const SP_CODEX_PERSONS = {
     full:"Op de vlucht voor een profetie die hij niet kon navolgen zonder haar te vervullen, doodde Oedipus zonder het te weten zijn eigen vader Laius bij een geschil op de weg, loste hij het raadsel van de Sfinx op en werd koning van Thebe — en trouwde met de weduwe van de vorige koning, zonder te beseffen dat het zijn eigen moeder was. Toen de waarheid jaren later aan het licht kwam, kon geen van beiden ermee verder leven." },
   iokaste: { nm:"Iokaste", epithet:"Koningin van Thebe",
     intro:"De weduwe van koning Laius, die haar stad na de Sfinx eindelijk weer bevrijd ziet — en hertrouwt met de vreemdeling die dat voor elkaar kreeg, zonder enig vermoeden wie hij werkelijk is." },
+  tiresias: { nm:"Tiresias", epithet:"Blinde ziener van Thebe",
+    intro:"De blinde ziener van Thebe, wiens gave om de toekomst te zien hem al tientallen jaren door meerdere koningen wordt geraadpleegd — ook al is hij zelden degene die het nieuws wil brengen dat hij ziet.",
+    full:"Door Oedipus zelf ontboden om de moordenaar van Laius aan te wijzen, aarzelt Tiresias lang — hij kent de waarheid allang, en weet ook wat ze zal aanrichten. Pas wanneer Oedipus hem van verraad beschuldigt, spreekt hij haar toch uit: de koning zelf is de moordenaar die hij zoekt." },
   eteokles: { nm:"Eteokles", epithet:"Koning van Thebe, zoon van Oedipus",
     intro:"De oudste zoon van Oedipus, die met zijn broer Polyneikes afspreekt de troon van Thebe jaarlijks te delen — een afspraak die hij, eenmaal koning, niet van plan is na te komen." },
   polyneikes: { nm:"Polyneikes", epithet:"Verbannen prins van Thebe",
@@ -1456,32 +1580,35 @@ const SP_CODEX_PERSONS = {
     intro:"Iokaste's broer, die na de wederzijdse ondergang van Eteokles en Polyneikes de troon van Thebe overneemt — en meteen een bevel uitvaardigt dat het hele koninkrijk zal verscheuren." },
   diomedes: { nm:"Diomedes", epithet:"Zoon van Tydeus, latere held van Troje",
     intro:"De zoon van Tydeus, die tien jaar na zijn vaders dood zelf oud genoeg is om mee te trekken tegen Thebe — en net zo onstuimig blijkt als de vader die hij amper heeft gekend.",
-    full:"Diomedes' moed bleef Troje de hele oorlog achtervolgen: hij verwondde zelfs Venus en Mars, en was, samen met Odysseus, degene die het Palladium uit de stad wist te stelen — de laatste bescherming die Troje nog had, weggehaald zonder dat iemand het merkte. Onstuimig als zijn vader, maar met een sluwheid die Tydeus zelf nooit bezat." },
+    full:"Diomedes' moed bleef Troje de hele oorlog achtervolgen: hij verwondde zelfs Aphrodite en Ares, en was, samen met Odysseus, degene die het Palladium uit de stad wist te stelen — de laatste bescherming die Troje nog had, weggehaald zonder dat iemand het merkte. Onstuimig als zijn vader, maar met een sluwheid die Tydeus zelf nooit bezat." },
   pentheus: { nm:"Pentheus", epithet:"Koning van Thebe, kleinzoon van Kadmos",
     intro:"Kadmos' kleinzoon en de huidige koning van Thebe, die weigert een vreemde nieuwe god te erkennen — ook al is die god, zoals hij niet weet te verhinderen, zijn eigen neef.",
     full:"Pentheus verzette zich fel tegen de verering van Bacchus (de zoon van Semele) en probeerde de extatische riten van diens vrouwelijke volgelingen, de Bacchanten, met geweld te onderdrukken. Vermomd bespiedde hij hun rituelen op de berg — en werd ontdekt door de vrouwen zelf, onder wie, in hun goddelijk opgewekte waanzin, zijn eigen moeder Agave." },
+  agave: { nm:"Agave", epithet:"Moeder van Pentheus, dochter van Kadmos",
+    intro:"Kadmos' dochter en Pentheus' eigen moeder — op de berg meegesleept in de goddelijk opgewekte waanzin van de Bacchanten, tot ze in haar eigen zoon geen mens meer herkent, maar een wild dier.",
+    full:"Agave doodt Pentheus met haar eigen handen, ervan overtuigd een leeuw te bestrijden — en beseft pas uren later, weer bij zinnen, ten volle wat ze heeft aangericht. Van alle vloeken die Thebe treffen is dit de wreedste: geen straf van een verre god, maar een moeder tegen haar eigen kind, zonder dat ze ooit had willen kiezen." },
 
   // ---- Hoofdstuk 7 — De Appel der Tweedracht ----
   leda: { nm:"Leda", epithet:"Koningin van Sparta",
-    intro:"De Spartaanse koningin die Jupiter bezoekt in de gedaante van een zwaan — weer een andere vermomming dan bij Io of Europa, met hetzelfde gevolg: kinderen die nooit een gewoon leven zullen leiden." },
+    intro:"De Spartaanse koningin die Zeus bezoekt in de gedaante van een zwaan — weer een andere vermomming dan bij Io of Europa, met hetzelfde gevolg: kinderen die nooit een gewoon leven zullen leiden." },
   tyndareos: { nm:"Tyndareos", epithet:"Koning van Sparta",
     intro:"Leda's sterfelijke echtgenoot en koning van Sparta, die met een sluwe eed van Odysseus een oorlog tussen zijn dochters vrijers weet te voorkomen — voorlopig." },
   helena: { nm:"Helena", epithet:"Prinses van Sparta, later van Troje",
-    intro:"Jupiters dochter bij Leda, en al vanaf haar kindertijd de reden dat de Dioscuren ooit beroemd zouden worden — inmiddels de mooiste vrouw van Griekenland, en daarmee, zonder dat ze er iets voor hoeft te doen, het middelpunt van een eed die heel Griekenland bindt." },
+    intro:"Zeus' dochter bij Leda, en al vanaf haar kindertijd de reden dat de Dioscuren ooit beroemd zouden worden — inmiddels de mooiste vrouw van Griekenland, en daarmee, zonder dat ze er iets voor hoeft te doen, het middelpunt van een eed die heel Griekenland bindt." },
   menelaos: { nm:"Menelaos", epithet:"Koning van Sparta",
     intro:"De uiteindelijke winnaar van Helena's hand — een koning wiens geluk niet lang zal duren, en wiens broer Agamemnon een veel groter leger aanvoert dan hijzelf." },
   thetis: { nm:"Thetis", epithet:"Zeenimf, moeder van Achilles",
-    intro:"Een zeenimf zo begeerd dat zelfs Jupiter en Neptunus om haar dongen — tot een profetie hen allebei deed terugdeinzen, en ze in plaats daarvan aan een sterveling werd gegeven: Peleus, een Argonaut die je al kent van de tocht van de Argo.",
-    full:"Toen haar zoon vernederd werd, smeekte Thetis Jupiter zelf om de Trojanen te laten winnen tot Achilles weer geëerd werd. Toen Patroklos stierf, ging ze naar Vulcanus — dezelfde god die zij ooit als kind opving — om een nieuwe wapenrusting te vragen. Een moeder die haar zoons noodlot nooit heeft kunnen afwenden, maar die tot het einde toe alles heeft gedaan om het draaglijk te maken." },
+    intro:"Een zeenimf zo begeerd dat zelfs Zeus en Poseidon om haar dongen — tot een profetie hen allebei deed terugdeinzen, en ze in plaats daarvan aan een sterveling werd gegeven: Peleus, een Argonaut die je al kent van de tocht van de Argo.",
+    full:"Toen haar zoon vernederd werd, smeekte Thetis Zeus zelf om de Trojanen te laten winnen tot Achilles weer geëerd werd. Toen Patroklos stierf, ging ze naar Hephaistos — dezelfde god die zij ooit als kind opving — om een nieuwe wapenrusting te vragen. Een moeder die haar zoons noodlot nooit heeft kunnen afwenden, maar die tot het einde toe alles heeft gedaan om het draaglijk te maken." },
   hecuba: { nm:"Hecuba", epithet:"Koningin van Troje",
     intro:"Koning Priamus' vrouw, die vlak voor de geboorte van haar zoon droomt van een brandende fakkel die heel Troje in vlammen zet — een droom die haar dwingt tot een keuze die ze de rest van haar leven met zich mee zal dragen.",
     full:"Hecuba overleefde wat geen moeder zou moeten overleven: de dood van Hector, dan van haar man Priamus en haar laatste zoon Polites, dan de val van haar hele stad. Als oorlogsbuit toegewezen aan Odysseus, verlaat ze Troje als slavin — de koningin die ooit droomde van een brandende fakkel, en nu toekijkt hoe die droom, na alle jaren, alsnog precies is uitgekomen." },
   priamus: { nm:"Priamus", epithet:"Koning van Troje",
     intro:"De koning van Troje, die op advies van een ziener zijn eigen pasgeboren zoon laat blootstellen op de berg Ida — een beslissing die hem, jaren later, onverwacht weer voor de voeten geworpen zal worden.",
-    full:"Nadat Achilles zijn zoon Hector doodde en diens lichaam bleef mishandelen, waagde Priamus zich — oud, alleen, ongewapend — met Mercurius als gids tot in Achilles' eigen tent. Hij kuste de handen die zoveel van zijn zonen doodden en smeekte om zijn laatste zoon terug. Zijn moed brak iets in Achilles los dat wraak alleen nooit had kunnen bereiken." },
+    full:"Nadat Achilles zijn zoon Hector doodde en diens lichaam bleef mishandelen, waagde Priamus zich — oud, alleen, ongewapend — met Hermes als gids tot in Achilles' eigen tent. Hij kuste de handen die zoveel van zijn zonen doodden en smeekte om zijn laatste zoon terug. Zijn moed brak iets in Achilles los dat wraak alleen nooit had kunnen bereiken." },
   paris: { nm:"Paris", epithet:"Herder op de berg Ida, later prins van Troje (Alexander)",
     intro:"Een te vondeling gelegde Trojaanse prins, opgevoed als eenvoudige herder zonder ook maar te vermoeden wie hij werkelijk is — tot drie godinnen hem vragen over hun schoonheid te oordelen.",
-    full:"Paris koos Venus boven Juno en Athena, in ruil voor de liefde van de mooiste stervelinge ter wereld. Jaren later, tijdens de spelen van Troje, herkende zijn familie hem alsnog aan een litteken uit zijn kindertijd — de zoon die Priamus liet blootstellen, leefde nog, en werd als prins Alexander weer opgenomen in het koningshuis dat hem ooit wegdeed." },
+    full:"Paris koos Aphrodite boven Hera en Athena, in ruil voor de liefde van de mooiste stervelinge ter wereld. Jaren later, tijdens de spelen van Troje, herkende zijn familie hem alsnog aan een litteken uit zijn kindertijd — de zoon die Priamus liet blootstellen, leefde nog, en werd als prins Alexander weer opgenomen in het koningshuis dat hem ooit wegdeed." },
   agamemnon: { nm:"Agamemnon", epithet:"Koning van Mycene, opperbevelhebber van de Griekse vloot",
     intro:"Menelaos' machtige broer, koning van Mycene, die het bevel over de verzamelde Griekse vloot op zich neemt — en al bij de eerste tegenslag moet kiezen tussen zijn eigen dochter en de hele expeditie.",
     full:"Zijn gekwetste trots tegenover Achilles kostte het Griekse leger bijna de hele oorlog: pas toen zijn beste strijder weigerde nog te vechten, besefte Agamemnon hoe duur eigen eer kan komen te staan. Na Patroklos' dood erkende hij zijn fout in het openbaar en gaf Briseis met rijke geschenken terug — al was het Achilles op dat moment allang niet meer om Briseis te doen." },
@@ -1489,7 +1616,7 @@ const SP_CODEX_PERSONS = {
     intro:"Een scherpzinnige Griekse vorst die Odysseus' geveinsde waanzin doorziet — een vernedering die Odysseus hem, zoals later nog zal blijken, nooit vergeeft." },
   achilles: { nm:"Achilles", epithet:"Zoon van Peleus en Thetis, sterkste held van Griekenland",
     intro:"De zoon van Peleus en Thetis (zie hierboven), verborgen door zijn eigen moeder tussen de dochters van koning Lycomedes om een profetie te ontlopen — tot een list met een zwaard en een strijdhoorn zijn ware aard onthult. Zijn eigen verhaal is nog maar net begonnen.",
-    full:"Vernederd door Agamemnon trok Achilles zich terug uit de strijd — tot de dood van zijn beste vriend Patroklos, in zijn eigen wapenrusting, hem terugbracht op een manier die zijn trots nooit had gekund. In een nieuwe wapenrusting van Vulcanus doodde hij Hector en sleepte diens lichaam rond Troje, tot koning Priamus' moed hem eindelijk weer mens maakte. Sterkste held van Griekenland, maar geen vreemdeling van verdriet." },
+    full:"Vernederd door Agamemnon trok Achilles zich terug uit de strijd — tot de dood van zijn beste vriend Patroklos, in zijn eigen wapenrusting, hem terugbracht op een manier die zijn trots nooit had gekund. In een nieuwe wapenrusting van Hephaistos doodde hij Hector en sleepte diens lichaam rond Troje, tot koning Priamus' moed hem eindelijk weer mens maakte. Sterkste held van Griekenland, maar geen vreemdeling van verdriet." },
   odysseus: { nm:"Odysseus", epithet:"Koning van Ithaka, listigste held van Griekenland",
     intro:"Laërtes' zoon (je kent zijn vader al van de Argonautentocht), die liever bij zijn jonge gezin blijft dan naar Troje te trekken — en wanneer die list mislukt, precies dezelfde sluwheid gebruikt om Achilles zelf op te sporen." },
   calchas: { nm:"Calchas", epithet:"Ziener van de Griekse vloot",
@@ -1529,19 +1656,22 @@ const SP_CODEX_PERSONS = {
     intro:"Zoon van de dageraadgodin Eos, die met een leger uit het verre oosten Troje te hulp komt — de laatste van de grote bondgenoten die de stad nog redding kon brengen." },
   sinon: { nm:"Sinon", epithet:"Griekse bedrieger, achtergelaten bij het paard",
     intro:"Een Griek die zich vrijwillig laat achterlaten bij het Trojaanse paard, om de Trojanen ervan te overtuigen het de stad binnen te halen — de list waar de hele oorlog uiteindelijk op afloopt." },
-  laocoon: { nm:"Laocoön", epithet:"Priester van Apollo (of Neptunus) in Troje",
+  laocoon: { nm:"Laocoön", epithet:"Priester van Apollo (of Poseidon) in Troje",
     intro:"Een Trojaanse priester die, alleen van iedereen, het paard hardop wantrouwt — en er zelfs een speer naar werpt, tot ontzetting van de rest van de stad." },
   neoptolemus: { nm:"Neoptolemus (Pyrrhus)", epithet:"Zoon van Achilles",
     intro:"Achilles' eigen zoon, nog jong en nog op Skyros wanneer een profetie zegt dat Troje ook zonder hem niet kan vallen — net zo meedogenloos als zijn vader, maar zonder diens twijfel." },
   aias_oileus: { nm:"Aias (zoon van Oïleus)", epithet:"Griekse aanvoerder, een andere Aias dan Telamons zoon",
     intro:"Een Griekse aanvoerder met dezelfde naam als Telamons beroemdere zoon — maar een heel ander karakter: waar de ene Aias eer boven alles stelt, zal deze Aias een daad begaan die de hele terugkeer van de Griekse vloot zal vervloeken." },
-  aeneas: { nm:"Aeneas", epithet:"Trojaanse prins, zoon van Venus",
-    intro:"Een Trojaanse prins, zoon van de sterveling Anchises en de godin Venus zelf — op de laatste nacht van Troje degene wiens verhaal, van alle overlevenden, het verst zal reizen." },
+  aeneas: { nm:"Aeneas", epithet:"Trojaanse prins, zoon van Aphrodite",
+    intro:"Een Trojaanse prins, zoon van de sterveling Anchises en de godin Aphrodite zelf — op de laatste nacht van Troje degene wiens verhaal, van alle overlevenden, het verst zal reizen." },
   astyanax: { nm:"Astyanax", epithet:"Zoontje van Hector en Andromache",
     intro:"Hectors en Andromache's kleine zoon, te jong om zijn vaders dood goed te begrijpen — en, in de ogen van de overwinnaars, een gevaar dat ooit zou kunnen opgroeien om hem te wreken." },
   helenus: { nm:"Helenus", epithet:"Priamus' zoon, ziener van Troje",
     intro:"Priamus' zoon en Cassandra's tweelingbroer, net als zij begiftigd met de gave de toekomst te zien — maar zonder haar vloek: Helenus wordt wél geloofd, wanneer hij tenminste nog bereid is te spreken.",
     full:"Na Paris' dood verliest Helenus Helena's hand aan zijn eigen broer Deiphobos — een vernedering die hem, gebroken en ontgoocheld, de stad doet verlaten. Gevangengenomen door een Griekse patrouille, onthult hij zonder tegenstand de laatste voorwaarden voor Troje's val: Neoptolemus moet meevechten, en het Palladium moet uit de stad verdwijnen. Een ziener die zijn eigen stad ten onder ziet gaan, en er zelf de sleutel toe aanreikt." },
+  deiphobos: { nm:"Deiphobos", epithet:"Trojaanse prins, broer van Hector en Paris",
+    intro:"Een van Priamus' overgebleven zonen, die na Paris' dood Helena's hand opeist — en daarmee zijn eigen broer Helenus tegen zich in het harnas jaagt.",
+    full:"Deiphobos trouwt met Helena zodra Priamus haar aan hem toewijst, in een stad die inmiddels twee prinsen in twee weken heeft begraven — een huwelijk zonder enige vreugde, geregeld op een moment dat niemand in Troje nog iets te vieren heeft." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -2648,6 +2778,11 @@ quest_boodschapper_van_kronos: hoofdstuk 1 voltooid (lijn: Midas)
 
 FLAG:
 ch1_lijn=A; ch1_voltooid=true
+
+REACTION:
+bacchus
+SEVERITAS: Bacchus glimlacht vluchtig. "Praktisch. De les is geleerd — langer stilstaan verandert er niets meer aan."
+CLEMENTIA: Bacchus knikt, verrassend zacht voor een god van uitbundigheid. "Niet iedereen kijkt nog om naar wie hij net nog benijdde."
 
 CHOICES:
 
@@ -3899,6 +4034,11 @@ Vanaf een verre wolkenbank, onzichtbaar voor iedereen behalve jou, kijkt Athena 
 PERSON:
 athena:intro
 
+REACTION:
+athena
+SEVERITAS: Athena's blik verhardt nauwelijks merkbaar. "Een eed weegt zwaar — ook voor wie hem te snel aflegde."
+CLEMENTIA: Athena zwijgt een moment langer dan gewoonlijk, haar gezicht iets minder onverstoorbaar dan anders.
+
 CHOICES:
 
 * Denk streng — hij had zo'n eed nooit lichtzinnig mogen zweren [SEVERITAS] -> CH2_S06
@@ -4226,7 +4366,7 @@ TITLE:
 Veranderd in een Berin
 
 TEXT:
-Hera verandert Kallisto in een berin — haar menselijke stem, haar gezicht, haar handen verdwijnen onder ruige vacht en klauwen, terwijl haar geest, gevangen in het lichaam van een dier dat ze nooit had willen zijn, volledig intact blijft. Ze kan niet meer spreken, niet meer huilen op een manier die iemand zou herkennen — enkel nog grommen, in een lichaam dat niet langer het hare voelt.
+{kallisto_verandering} — haar menselijke stem, haar gezicht, haar handen verdwijnen onder ruige vacht en klauwen, terwijl haar geest, gevangen in het lichaam van een dier dat ze nooit had willen zijn, volledig intact blijft. Ze kan niet meer spreken, niet meer huilen op een manier die iemand zou herkennen — enkel nog grommen, in een lichaam dat niet langer het hare voelt.
 
 Vanaf een verre bergkam, onzichtbaar voor iedereen behalve jou, kijkt Athena toe. Ook nu grijpt ze niet in.
 
@@ -4419,6 +4559,9 @@ TEXT:
 Verwoest door wat hij heeft aangericht, en niet in staat zichzelf te vergeven, reist Herakles naar het orakel van Delphi om te vragen hoe — of ooit — hij zich van deze schuld kan reinigen. Het antwoord dat hij krijgt is even eenvoudig als zwaar: hij moet zich onderwerpen aan zijn neef Eurystheus, koning van Mycene, en tien jaar lang volbrengen wat die hem opdraagt.
 
 Eurystheus, die Herakles altijd al vreesde en benijdde tegelijk, aanvaardt de opdracht met nauwelijks verholen genoegen — eindelijk een excuus om de sterkste man ter wereld het onmogelijke te laten proberen.
+
+PERSON:
+eurystheus:intro
 
 PUZZLE:
 puzzle_ch2h_imperativus
@@ -5192,7 +5335,7 @@ TITLE:
 De Cerynitische Hinde
 
 TEXT:
-Het "hert" blijkt de Cerynitische Hinde te zijn — een dier met gouden gewei en bronzen hoeven, heilig aan Diana zelf, zo snel dat geen enkele jager het ooit heeft kunnen vangen. Het doden ervan zou Diana's woede over Herakles afroepen; het simpelweg laten lopen zou de opdracht onvervuld laten.
+Het "hert" blijkt de Cerynitische Hinde te zijn — een dier met gouden gewei en bronzen hoeven, heilig aan Artemis zelf, zo snel dat geen enkele jager het ooit heeft kunnen vangen. Het doden ervan zou Artemis's woede over Herakles afroepen; het simpelweg laten lopen zou de opdracht onvervuld laten.
 
 Herakles kiest voor geduld in plaats van kracht: hij volgt het spoor van de hinde, zonder ooit dichtbij genoeg te komen om te jagen, een vol jaar lang, door bergen en valleien tot ver buiten Griekenland.
 
@@ -5211,9 +5354,9 @@ TITLE:
 Gevangen zonder een Wond
 
 TEXT:
-Uiteindelijk, uitgeput en zonder enige list meer over, ziet Herakles zijn kans wanneer de hinde probeert een rivier over te steken — hij grijpt haar vast zonder haar te verwonden, precies op het moment dat Diana zelf verschijnt, woedend over wie haar heilige dier durft aan te raken.
+Uiteindelijk, uitgeput en zonder enige list meer over, ziet Herakles zijn kans wanneer de hinde probeert een rivier over te steken — hij grijpt haar vast zonder haar te verwonden, precies op het moment dat Artemis zelf verschijnt, woedend over wie haar heilige dier durft aan te raken.
 
-Herakles legt uit wat Eurystheus van hem eist, en belooft de hinde ongedeerd vrij te laten zodra hij haar heeft getoond. Diana, die zijn oprechtheid herkent, staat het toe — op voorwaarde dat hij zijn belofte ook werkelijk nakomt.
+Herakles legt uit wat Eurystheus van hem eist, en belooft de hinde ongedeerd vrij te laten zodra hij haar heeft getoond. Artemis, die zijn oprechtheid herkent, staat het toe — op voorwaarde dat hij zijn belofte ook werkelijk nakomt.
 
 CHOICES:
 
@@ -5267,6 +5410,14 @@ Te midden van de chaos raakt een van Herakles' pijlen, afgeketst of simpelweg ve
 
 Het gif van de Hydra, dat geen enkele wond ooit laat helen, brengt Chiron ondraaglijke pijn — en omdat hij onsterfelijk is, kan hij niet eens sterven om er een einde aan te maken. Herakles, ontzet over wat hij zijn eigen leermeester heeft aangedaan, kan niets anders doen dan toekijken.
 
+PERSON:
+chiron:intro
+
+REACTION:
+chiron
+CLEMENTIA: Chiron glimlacht zwak door de pijn heen. "Bewaar je medelijden voor iemand die het nog kan gebruiken — treur niet te lang om mij."
+SEVERITAS: Chiron knikt kort, alsof hij niets anders had verwacht. "Herakles moet door. Dat wist ik al voor de pijl mij raakte."
+
 CHOICES:
 
 * Voel intens medelijden met Chiron, gestraft voor andermans dronkenschap [CLEMENTIA] -> CH3_H07
@@ -5287,6 +5438,9 @@ Terwijl Herakles zich weer naar zijn eigenlijke doel keert, wacht de beproeving 
 
 CODEX:
 codex_chiron
+
+PERSON:
+chiron:full
 
 CHOICES:
 
@@ -5461,7 +5615,7 @@ TITLE:
 De Kretenzische Stier
 
 TEXT:
-Op Kreta huishoudt een reusachtige stier die Neptunus ooit aan koning Minos schonk — en die Minos, in plaats van hem te offeren zoals afgesproken, voor zichzelf hield. Neptunus, beledigd, maakte het dier razend, en het verwoest sindsdien akker na akker over het hele eiland.
+Op Kreta huishoudt een reusachtige stier die Poseidon ooit aan koning Minos schonk — en die Minos, in plaats van hem te offeren zoals afgesproken, voor zichzelf hield. Poseidon, beledigd, maakte het dier razend, en het verwoest sindsdien akker na akker over het hele eiland.
 
 Minos, allang blij om van het beest af te zijn, staat Herakles zonder aarzeling toe om het mee te nemen — al weet niemand op Kreta nog wat er met de stier moet gebeuren zodra hij eenmaal gevangen is.
 
@@ -5598,7 +5752,7 @@ TITLE:
 De Gordel van Hippolyte
 
 TEXT:
-Eurystheus' dochter begeert de gordel van Hippolyte, koningin van de Amazones — een geschenk ooit van Mars zelf, symbool van haar gezag over haar volk. Herakles reist naar hun land, verwachtend een gevecht, maar Hippolyte, onder de indruk van zijn reputatie, biedt de gordel spontaan en vreedzaam aan.
+Eurystheus' dochter begeert de gordel van Hippolyte, koningin van de Amazones — een geschenk ooit van Ares zelf, symbool van haar gezag over haar volk. Herakles reist naar hun land, verwachtend een gevecht, maar Hippolyte, onder de indruk van zijn reputatie, biedt de gordel spontaan en vreedzaam aan.
 
 Voor één keer lijkt een beproeving zonder bloedvergieten te kunnen eindigen.
 
@@ -5613,12 +5767,12 @@ END
 === SCENE: CH3_H17 ===
 
 TITLE:
-Juno's Laatste List
+Hera's Laatste List
 
 TEXT:
-Juno, die Herakles al sinds zijn geboorte haat en dit ongewoon vreedzame verloop niet kan verdragen, vermomt zich als een Amazone en verspreidt onder de kudde het gerucht dat de vreemdeling van plan is hun koningin te ontvoeren. Paniek en verwarring breken uit voor iemand de leugen kan ontkrachten.
+Hera, die Herakles al sinds zijn geboorte haat en dit ongewoon vreedzame verloop niet kan verdragen, vermomt zich als een Amazone en verspreidt onder de kudde het gerucht dat de vreemdeling van plan is hun koningin te ontvoeren. Paniek en verwarring breken uit voor iemand de leugen kan ontkrachten.
 
-In de chaos die volgt, vallen de Amazones Herakles' schip aan — en Hippolyte zelf komt om, niet door zijn hand met opzet, maar in een gevecht dat nooit had moeten plaatsvinden als Juno zich er niet mee had bemoeid.
+In de chaos die volgt, vallen de Amazones Herakles' schip aan — en Hippolyte zelf komt om, niet door zijn hand met opzet, maar in een gevecht dat nooit had moeten plaatsvinden als Hera zich er niet mee had bemoeid.
 
 COMBAT:
 amazones
@@ -5668,7 +5822,7 @@ TITLE:
 De Appels van de Hesperiden
 
 TEXT:
-De elfde taak voert Herakles naar de tuin van de Hesperiden, aan de rand van de wereld, waar een boom met gouden appels groeit — een huwelijksgeschenk van Gaia aan Juno zelf, bewaakt door de nooit-slapende draak Ladon, wiens honderd koppen (zo vertelt men, al is niemand het helemaal eens over het exacte aantal) zich eindeloos om de stam winden.
+De elfde taak voert Herakles naar de tuin van de Hesperiden, aan de rand van de wereld, waar een boom met gouden appels groeit — een huwelijksgeschenk van Gaia aan Hera zelf, bewaakt door de nooit-slapende draak Ladon, wiens honderd koppen (zo vertelt men, al is niemand het helemaal eens over het exacte aantal) zich eindeloos om de stam winden.
 
 Herakles, die weet dat kracht alleen hier niet genoeg zal zijn — geen zwaard doorboort honderd koppen tegelijk — herkent het patroon meteen: hetzelfde probleem als Argus Panoptes, alleen dan met een dier dat zich nooit láát afleiden door verhalen of fluitspel. In plaats daarvan valt hij terug op wat hij bij de Cerynitische Hinde al leerde: geduld. Nacht na nacht bestudeert hij hoe de koppen bewegen, tot hij het ene ogenblik ontdekt waarop ze allemaal, even, dezelfde kant op kijken.
 
@@ -5730,7 +5884,7 @@ De Twaalfde Taak
 TEXT:
 Eurystheus, die na elf beproevingen wanhopig op zoek is naar iets wat Herakles onmogelijk kan volbrengen, bedenkt uiteindelijk de zwaarste opdracht van allemaal: Cerberus, de driekoppige hond die de poort van de onderwereld bewaakt, levend naar Mycene brengen — zonder wapens, met enkel blote handen.
 
-Hades zelf, wanneer Herakles via een grot bij Tainaron afdaalt naar zijn rijk, staat de beproeving toe — op voorwaarde dat Herakles Cerberus zonder geweld overmeestert. Athena en Mercurius, beiden inmiddels vertrouwde bondgenoten, begeleiden hem tot aan de rand van de onderwereld.
+Hades zelf, wanneer Herakles via een grot bij Tainaron afdaalt naar zijn rijk, staat de beproeving toe — op voorwaarde dat Herakles Cerberus zonder geweld overmeestert. Athena en Hermes, beiden inmiddels vertrouwde bondgenoten, begeleiden hem tot aan de rand van de onderwereld.
 
 PERSON:
 hermes:full
@@ -5751,7 +5905,7 @@ De weg naar Cerberus zelf voert door een duisternis die drukt op de borst, verst
 
 CHOICES:
 
-* Laat Athena en Mercurius je stap voor stap veilig door het duister begeleiden -> CH3_H23_OPEN
+* Laat Athena en Hermes je stap voor stap veilig door het duister begeleiden -> CH3_H23_OPEN
 * Leg de tocht alleen af, op eigen doorzettingsvermogen, en verdraag de verstikkende zwaarte zonder te wankelen [STAT:robur:15] -> CH3_H23_ROB
 
 END
@@ -5762,7 +5916,7 @@ TITLE:
 Begeleid Door Bondgenoten
 
 TEXT:
-Je blijft dicht bij Athena en Mercurius, die je stap voor stap door het ergste van het duister loodsen. Het is geen schande om hier hulp te aanvaarden — zelfs Herakles doet dat.
+Je blijft dicht bij Athena en Hermes, die je stap voor stap door het ergste van het duister loodsen. Het is geen schande om hier hulp te aanvaarden — zelfs Herakles doet dat.
 
 FLAG:
 ch3_h23_route=open
@@ -5828,7 +5982,7 @@ CODEX:
 codex_herakles_twaalf_werken
 
 PERSON:
-herakles:full
+herakles:full, eurystheus:full
 
 SOUVENIR:
 souvenir_herakles_labores
@@ -5969,6 +6123,11 @@ Theseus, zoon van koning Aegeus, is nog maar net in Athene aangekomen — erkend
 
 PERSON:
 theseus:intro, aegeus:intro
+
+REACTION:
+aegeus
+CLEMENTIA: Aegeus' ogen glanzen even feller. "Dank je. Niet iedereen ziet nog een vader achter een troon."
+SEVERITAS: Aegeus knikt stram, zijn gezicht een koninklijk masker. "Zo moet het ook — al kost het mij alles wat ik net heb teruggevonden."
 
 CHOICES:
 
@@ -6420,7 +6579,7 @@ TITLE:
 Het Zwarte Zeil
 
 TEXT:
-Op het schip naar Athene is Theseus met zijn gedachten bij alles behalve zijn vaders belofte — het monster, Ariadne die hij ergens onderweg is kwijtgeraakt, de veertien levens die hij heeft gered. Tussen dat alles verdwijnt één simpele afspraak volledig uit zijn hoofd: hij vergeet de zeilen te verwisselen.
+Op het schip naar Athene is Theseus met zijn gedachten bij alles behalve zijn vaders belofte — het monster, Ariadne die hij ergens onderweg is kwijtgeraakt, de veertien levens die hij heeft gered. Tussen dat alles verdwijnt één simpele afspraak volledig uit zijn hoofd: {theseus_zeilen_reden}.
 
 Op de klippen bij Athene staat Aegeus al dagenlang uit te kijken, precies zoals hij zijn zoon had beloofd te zullen doen. Wanneer het schip eindelijk in zicht komt — nog altijd onder zwart zeil — twijfelt hij geen moment aan wat dat betekent.
 
@@ -7325,6 +7484,9 @@ Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke 
 IMAGE:
 hylas_nimfen.png
 
+PERSON:
+hylas:full
+
 CHOICES:
 
 * Vaar verder zonder Herakles -> CH5_016
@@ -7808,7 +7970,28 @@ ch5_argonauten
 
 CHOICES:
 
-* Volg de terugreis naar Griekenland -> CH5_028
+* Volg de terugreis naar Griekenland -> CH5_027B
+
+END
+
+=== SCENE: CH5_027B ===
+
+TITLE:
+Apsyrtus
+
+TEXT:
+De vreugde om het Vlies duurt kort: Aeëtes, razend om zijn verlies en dat van zijn dochter, zet de achtervolging in met zijn snelste schip — aan het roer zijn eigen zoon, Medea's jongere broer Apsyrtus. Mijl na mijl wint hij terrein, tot de Argo geen kant meer op kan.
+
+Medea, wanhopig op zoek naar een uitweg, verzint een list: ze lokt Apsyrtus naar een afgelegen eiland, onder het voorwendsel van een geheime ontmoeting. Wat daar gebeurt, gebeurt zonder waarschuwing en zonder dat iemand aan boord kan ingrijpen — Medea doodt haar eigen broer, en verspreidt zijn overblijfselen over de golven. Aeëtes, gedwongen elk stuk van zijn zoon op te halen voor een eervolle begrafenis, staakt noodgedwongen de achtervolging. De Argo vaart verder, vrij — maar niemand aan boord spreekt nog een woord.
+
+CODEX:
+codex_medea_apsyrtus
+
+CHOICES:
+
+* Voel afschuw om wat Medea heeft gedaan, hoe wanhopig haar positie ook was [SEVERITAS] -> CH5_028
+* Erken dat wanhoop mensen tot het onvergeeflijke kan drijven, zonder haar erom te veroordelen [CLEMENTIA] -> CH5_028
+* Kijk zwijgend toe — dit is niet aan jou om hier te oordelen [NEUTRAL] -> CH5_028
 
 END
 
@@ -8219,12 +8402,17 @@ TITLE:
 De Waarheid
 
 TEXT:
-Jaren later teistert een verschrikkelijke plaag Thebe, en een orakel wijst de oorzaak aan: de moordenaar van de vorige koning loopt nog vrij rond, onbestraft, in de stad zelf. Oedipus, vastbesloten de dader te vinden, ontrafelt stukje bij beetje zijn eigen verleden — tot de waarheid onontkoombaar wordt: hij doodde zijn eigen vader op die weg naar Thebe, en trouwde daarna, zonder het te weten, met zijn eigen moeder.
+Jaren later teistert een verschrikkelijke plaag Thebe. Het orakel van Delphi wijst de oorzaak aan — de moordenaar van de vorige koning loopt nog vrij rond, onbestraft, in de stad zelf — en de blinde ziener Tiresias, die Oedipus zelf laat halen om de dader aan te wijzen, aarzelt lang voor hij eindelijk spreekt: Oedipus is de moordenaar die hij zoekt. Oedipus, die het onmogelijk kan geloven, ontrafelt desondanks vastbesloten zijn eigen verleden — tot de waarheid onontkoombaar wordt: hij doodde zijn eigen vader op die weg naar Thebe, en trouwde daarna, zonder het te weten, met zijn eigen moeder.
 
 Iokaste kan niet leven met wat ze ontdekt. Oedipus, die het niet langer kan verdragen te zien wat zijn eigen ogen hem hebben laten aanrichten, verblindt zichzelf en verlaat Thebe voorgoed, een ballingschap in die hem de rest van zijn leven zal achtervolgen.
 
 PERSON:
-oedipus:full, iokaste:full
+oedipus:full, iokaste:full, tiresias:full
+
+REACTION:
+tiresias
+CLEMENTIA: Tiresias, zijn lege ogen naar niets in het bijzonder gericht, knikt langzaam. "De goden kennen geen schuld zonder daad. Stervelingen, gelukkig, soms wel."
+SEVERITAS: Tiresias' stem blijft vlak. "De waarheid vraagt niet om medelijden voor ze wordt uitgesproken — en ik heb haar toch moeten spreken."
 
 CHOICES:
 
@@ -8734,7 +8922,7 @@ CODEX:
 codex_pentheus_bacchus
 
 PERSON:
-pentheus:full
+pentheus:full, agave:full
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 6 volledig voltooid
@@ -8870,7 +9058,7 @@ TITLE:
 Leda en de Zwaan
 
 TEXT:
-Ver voor Troje ook maar bestaat in iemands gedachten, bezoekt Jupiter de Spartaanse koningin Leda — niet als wolk, zoals bij Io, en niet als stier, zoals bij Europa, maar in de gedaante van een zwaan. Diezelfde nacht deelt ook Leda's sterfelijke man Tyndareos haar bed.
+Ver voor Troje ook maar bestaat in iemands gedachten, bezoekt Zeus de Spartaanse koningin Leda — niet als wolk, zoals bij Io, en niet als stier, zoals bij Europa, maar in de gedaante van een zwaan. Diezelfde nacht deelt ook Leda's sterfelijke man Tyndareos haar bed.
 
 Wat daaruit voortkomt, vertellen de dichters verschillend: een ei, zeggen sommigen, waaruit kinderen breken die half goddelijk en half sterfelijk zijn. Onder hen: de tweeling Castor en Pollux, die je al kent als onafscheidelijke Argonauten — en een dochter wier naam nog niemand in Griekenland kent, maar die dat, over niet al te lange tijd, allemaal zal veranderen. Helena.
 
@@ -9076,7 +9264,7 @@ TITLE:
 De Bruiloft van Peleus en Thetis
 
 TEXT:
-De zeenimf Thetis was ooit zo begeerd dat zelfs Jupiter en Neptunus zelf om haar dongen — tot een profetie waarschuwde dat haar zoon zijn vader ooit zou overtreffen. Geen enkele god durfde dat risico te nemen. In plaats daarvan werd ze uitgehuwelijkt aan een sterveling: Peleus, een van de helden die je al kent van de tocht van de Argo.
+De zeenimf Thetis was ooit zo begeerd dat zelfs Zeus en Poseidon zelf om haar dongen — tot een profetie waarschuwde dat haar zoon zijn vader ooit zou overtreffen. Geen enkele god durfde dat risico te nemen. In plaats daarvan werd ze uitgehuwelijkt aan een sterveling: Peleus, een van de helden die je al kent van de tocht van de Argo.
 
 Bijna elke god en godin is uitgenodigd voor de bruiloft — een eer die zelden een sterveling ten deel valt. Muziek, wijn, geschenken zonder eind. Niemand let op de ene godin die niet op de gastenlijst stond, tot ze zelf besluit dat ook zij aanwezig zal zijn.
 
@@ -9100,7 +9288,7 @@ De Appel der Tweedracht
 TEXT:
 Eris, godin van de tweedracht, was de enige die geen uitnodiging kreeg — uit angst voor precies dit. Zonder een woord te zeggen werpt ze een gouden appel tussen de gasten en verdwijnt weer, net zo geruisloos als ze gekomen is. Op de appel staat één enkel woord gegraveerd.
 
-Juno, Athena en Venus buigen zich er alle drie tegelijk overheen — en beseffen alle drie tegelijk voor wie dat woord bedoeld zou kunnen zijn. Geen van de andere goden waagt het een oordeel te vellen tussen drie zo machtige godinnen. Het feest eindigt in een gespannen stilte die niemand hardop durft te benoemen.
+Hera, Athena en Aphrodite buigen zich er alle drie tegelijk overheen — en beseffen alle drie tegelijk voor wie dat woord bedoeld zou kunnen zijn. Geen van de andere goden waagt het een oordeel te vellen tussen drie zo machtige godinnen. Het feest eindigt in een gespannen stilte die niemand hardop durft te benoemen.
 
 In je vuist voel je opeens het gewicht van diezelfde appel — zwaarder dan goud hoort te zijn, alsof het gewicht van de hele oorlog die nog moet komen er al in verborgen zit.
 
@@ -9138,11 +9326,50 @@ codex_geboorte_paris
 PERSON:
 hecuba:intro, priamus:intro
 
+REACTION:
+priamus
+SEVERITAS: Priamus' kaak verstrakt. "Makkelijk geoordeeld, voor wie nooit een hele stad op zijn schouders heeft gedragen."
+CLEMENTIA: Priamus knikt, met iets dat op dankbaarheid lijkt. "Niet iedereen ziet wat zo'n beslissing een vader kost."
+
 CHOICES:
 
-* Vind het onvergeeflijk om een eigen kind zomaar op te geven, profetie of niet [SEVERITAS] -> CH7_007
-* Erken dat een koning soms een vreselijke prijs moet betalen voor de veiligheid van een hele stad [CLEMENTIA] -> CH7_007
+* Vind het onvergeeflijk om een eigen kind zomaar op te geven, profetie of niet [SEVERITAS] -> CH7_006_STRENG
+* Erken dat een koning soms een vreselijke prijs moet betalen voor de veiligheid van een hele stad [CLEMENTIA] -> CH7_006_MEDELEVEN
 * Onthoud je van een oordeel — je kent deze ouders nog niet goed genoeg [NEUTRAL] -> CH7_007
+
+END
+
+=== SCENE: CH7_006_STRENG ===
+
+TITLE:
+Geen Excuus
+
+TEXT:
+Priamus voelt je onverbiddelijke blik en zegt er niets van — een koning is wel wat gewend — maar iets in zijn houding verstrakt, alsof hij een deur voelt dichtvallen die hij liever open had gehouden.
+
+RELATION:
+priamus=-1
+
+CHOICES:
+
+* Ga verder -> CH7_007
+
+END
+
+=== SCENE: CH7_006_MEDELEVEN ===
+
+TITLE:
+Erkenning
+
+TEXT:
+Priamus vangt je blik op, en voor een moment lijkt de last van de kroon iets lichter — iemand die begrijpt dat dit geen makkelijke beslissing was, in plaats van er meteen over te oordelen.
+
+RELATION:
+priamus=+1
+
+CHOICES:
+
+* Ga verder -> CH7_007
 
 END
 
@@ -9168,7 +9395,7 @@ TITLE:
 Paris en de Stier
 
 TEXT:
-Paris' lievelingsstier wint elke kracht- en behendigheidswedstrijd die de herders op de berg organiseren — tot op een dag een vreemde stier meedoet en, tot ieders verbazing, wint. De vreemdeling is Mars zelf, vermomd, die de goden stiekem wil testen hoe eerlijk deze onbekende herdersjongen werkelijk is.
+Paris' lievelingsstier wint elke kracht- en behendigheidswedstrijd die de herders op de berg organiseren — tot op een dag een vreemde stier meedoet en, tot ieders verbazing, wint. De vreemdeling is Ares zelf, vermomd, die de goden stiekem wil testen hoe eerlijk deze onbekende herdersjongen werkelijk is.
 
 Zonder een moment van aarzeling kent Paris de overwinning toe aan de vreemde stier — zijn eigen dier, zijn eigen trots, opzij gezet voor een eerlijkheid die niemand van hem eiste.
 
@@ -9214,11 +9441,11 @@ TITLE:
 Het Parisoordeel
 
 TEXT:
-Die eerlijkheid is precies waarom Mercurius, enkele tijd later, drie godinnen meebrengt naar diezelfde berghelling. Juno, Athena en Venus — nog altijd verwikkeld in hun geschil over de gouden appel — hebben besloten dat geen god onpartijdig genoeg is om te oordelen. Een sterveling die zojuist bewees dat hij zelfs zijn eigen belangen opzij zet voor eerlijkheid, leek de goden wel geknipt voor de taak.
+Die eerlijkheid is precies waarom Hermes, enkele tijd later, drie godinnen meebrengt naar diezelfde berghelling. Hera, Athena en Aphrodite — nog altijd verwikkeld in hun geschil over de gouden appel — hebben besloten dat geen god onpartijdig genoeg is om te oordelen. Een sterveling die zojuist bewees dat hij zelfs zijn eigen belangen opzij zet voor eerlijkheid, leek de goden wel geknipt voor de taak.
 
-Elke godin probeert Paris om te kopen voor hij ook maar iets heeft gezegd. Juno biedt macht over heel Azië. Athena biedt wijsheid en onoverwinnelijkheid in de oorlog. Venus biedt iets anders: de liefde van de mooiste sterfelijke vrouw ter wereld.
+Elke godin probeert Paris om te kopen voor hij ook maar iets heeft gezegd. Hera biedt macht over heel Azië. Athena biedt wijsheid en onoverwinnelijkheid in de oorlog. Aphrodite biedt iets anders: de liefde van de mooiste sterfelijke vrouw ter wereld.
 
-Paris, herder, geen koning, geen strateeg, kiest Venus — en met haar, zonder het ook maar te vermoeden, de vrouw die al getrouwd is met de koning van Sparta.
+Paris, herder, geen koning, geen strateeg, kiest Aphrodite — en met haar, zonder het ook maar te vermoeden, de vrouw die al getrouwd is met de koning van Sparta.
 
 IMAGE:
 parisoordeel.png
@@ -9265,7 +9492,7 @@ De Missie naar Sparta
 TEXT:
 Niet lang na zijn terugkeer wordt Paris naar Griekenland gestuurd, officieel voor staatszaken. Koning Menelaus van Sparta ontvangt hem met alle gastvrijheid die een vreemde prins toekomt — eten, onderdak, geschenken, dagenlang gastheerschap zonder één moment van wantrouwen.
 
-Wat Menelaus niet weet, is dat Venus haar belofte aan Paris nog moet inlossen — en dat ze niet van plan is die belofte te vergeten, ongeacht wiens gastvrijheid ervoor moet wijken.
+Wat Menelaus niet weet, is dat Aphrodite haar belofte aan Paris nog moet inlossen — en dat ze niet van plan is die belofte te vergeten, ongeacht wiens gastvrijheid ervoor moet wijken.
 
 CHOICES:
 
@@ -9279,7 +9506,7 @@ TITLE:
 De Schaking van Helena
 
 TEXT:
-Wanneer zakelijke verplichtingen Menelaus voor een tijd van huis roepen, verlaat Helena het paleis samen met Paris — naar zijn schip, en van daar naar Troje. Of ze gelokt werd, verliefd werd, of eenvoudigweg geen keuze had, vertellen de bronnen niet eensluidend. Wat wel vaststaat: een gastheer die zijn gast met open armen ontving, wordt beroofd van zijn eigen vrouw onder zijn eigen dak.
+Wanneer zakelijke verplichtingen Menelaus voor een tijd van huis roepen, verlaat Helena het paleis samen met Paris — naar zijn schip, en van daar naar Troje. {helena_lot} Wat wel vaststaat: een gastheer die zijn gast met open armen ontving, wordt beroofd van zijn eigen vrouw onder zijn eigen dak.
 
 IMAGE:
 schaking_helena.png
@@ -9390,7 +9617,7 @@ TITLE:
 Windstilte in Aulis
 
 TEXT:
-De verzamelde Griekse vloot — duizend schepen, zegt men, al is niemand het er precies over eens hoeveel — ligt weken achtereen roerloos in de haven van Aulis. Geen zuchtje wind, geen enkele verklaring, tot de ziener Calchas eindelijk durft uit te spreken wat niemand wil horen: Agamemnon heeft, tijdens de jacht, de godin Diana beledigd. Alleen een offer kan haar gunstige wind afdwingen.
+De verzamelde Griekse vloot — duizend schepen, zegt men, al is niemand het er precies over eens hoeveel — ligt weken achtereen roerloos in de haven van Aulis. Geen zuchtje wind, geen enkele verklaring, tot de ziener Calchas eindelijk durft uit te spreken wat niemand wil horen: Agamemnon heeft, tijdens de jacht, de godin Artemis beledigd. Alleen een offer kan haar gunstige wind afdwingen.
 
 Het offer dat ze eist, is niet een dier.
 
@@ -9409,7 +9636,7 @@ TITLE:
 Het Offer in Aulis
 
 TEXT:
-Agamemnon laat zijn eigen dochter Iphigenia naar Aulis lokken, onder het mom van een huwelijk met de jonge Achilles zelf. Pas als ze aankomt, ontdekt ze het werkelijke doel van haar reis. Wat er precies gebeurt op dat altaar, vertellen de bronnen verschillend: sommigen zeggen dat Diana zelf op het laatste moment ingrijpt, haar wegvoert naar het verre Tauris en een hinde in haar plaats achterlaat op het offerblok. Anderen zwijgen liever over wat een vader werkelijk met eigen handen heeft gedaan voor duizend schepen wind.
+Agamemnon laat zijn eigen dochter Iphigenia naar Aulis lokken, onder het mom van een huwelijk met de jonge Achilles zelf. Pas als ze aankomt, ontdekt ze het werkelijke doel van haar reis. {iphigenia_lot}
 
 Wat elke versie gemeen heeft: de wind steekt op. De vloot kan eindelijk vertrekken.
 
@@ -9665,9 +9892,9 @@ TITLE:
 Thetis' Belofte
 
 TEXT:
-Alleen in zijn tent, tussen woede en tranen, roept Achilles zijn moeder aan. Thetis rijst op uit de zee en luistert naar zijn vernedering met een verdriet dat ouder is dan zijn eigen leven. Ze belooft hem genoegdoening: ze zal Jupiter zelf vragen om de Trojanen te laten winnen, net zo lang tot de Grieken beseffen wat ze zonder Achilles werkelijk zijn.
+Alleen in zijn tent, tussen woede en tranen, roept Achilles zijn moeder aan. Thetis rijst op uit de zee en luistert naar zijn vernedering met een verdriet dat ouder is dan zijn eigen leven. Ze belooft hem genoegdoening: ze zal Zeus zelf vragen om de Trojanen te laten winnen, net zo lang tot de Grieken beseffen wat ze zonder Achilles werkelijk zijn.
 
-Jupiter stemt toe — tegen de uitdrukkelijke zin van Juno, die de Griekse zaak steunt. Het is een gunst die de rest van dit hoofdstuk in beweging zal zetten.
+Zeus stemt toe — tegen de uitdrukkelijke zin van Hera, die de Griekse zaak steunt. Het is een gunst die de rest van dit hoofdstuk in beweging zal zetten.
 
 CODEX:
 codex_thetis_zeus_gunst
@@ -9726,7 +9953,7 @@ TITLE:
 Bericht van het Duel
 
 TEXT:
-Een boodschapper komt met nieuws: om jaren van bloedvergieten te vermijden, hebben beide legers ingestemd met een enkel duel — Menelaus tegen Paris, met Helena zelf als inzet. Menelaus had de overhand, zegt de man, tot Paris zomaar verdween in een mist, midden op het slagveld. Sommigen fluisteren dat Venus zelf haar hand erin had.
+Een boodschapper komt met nieuws: om jaren van bloedvergieten te vermijden, hebben beide legers ingestemd met een enkel duel — Menelaus tegen Paris, met Helena zelf als inzet. Menelaus had de overhand, zegt de man, tot Paris zomaar verdween in een mist, midden op het slagveld. Sommigen fluisteren dat Aphrodite zelf haar hand erin had.
 
 Het duel is voorbij zonder een winnaar. De oorlog gaat door — en jij hebt er niets van gezien, enkel het verhaal ervan, twee keer oververteld voor het jouw tent bereikte.
 
@@ -9997,7 +10224,7 @@ Het Duel van Menelaus en Paris
 TEXT:
 Je ziet het met eigen ogen: Menelaus, woedend en vastberaden, krijgt al snel de overhand — Paris' helm vliegt af, zijn zwaard breekt, hij wordt aan zijn eigen helmriem over het slagveld gesleept. Het duel lijkt beslist.
 
-Dan, plotseling, een mist die uit het niets opsteekt. Wanneer die optrekt, is Paris verdwenen — niemand ziet hoe, al fluisteren sommigen de naam van Venus. Het duel eindigt in verwarring, zonder winnaar. De oorlog gaat door.
+Dan, plotseling, een mist die uit het niets opsteekt. Wanneer die optrekt, is Paris verdwenen — niemand ziet hoe, al fluisteren sommigen de naam van Aphrodite. Het duel eindigt in verwarring, zonder winnaar. De oorlog gaat door.
 
 CODEX:
 codex_duel_menelaos_paris
@@ -10036,9 +10263,9 @@ TITLE:
 Diomedes' Huzarenstuk
 
 TEXT:
-Midden in het gevecht zie je een jonge Griekse held, Diomedes, die vandaag lijkt te vechten met een kracht die niet helemaal van hemzelf is. Hij doorboort Trojaanse linies alsof ze van stro zijn — en wanneer Venus zelf haar eigen zoon Aeneas van het slagveld probeert te redden, verwondt Diomedes zelfs háár, zonder aarzeling.
+Midden in het gevecht zie je een jonge Griekse held, Diomedes, die vandaag lijkt te vechten met een kracht die niet helemaal van hemzelf is. Hij doorboort Trojaanse linies alsof ze van stro zijn — en wanneer Aphrodite zelf haar eigen zoon Aeneas van het slagveld probeert te redden, verwondt Diomedes zelfs háár, zonder aarzeling.
 
-Wat je daarna ziet, geloof je bijna niet: Diomedes die het opneemt tegen Mars zelf, de oorlogsgod, en hem met zijn speer treft. Mars' gil van pijn is tot ver buiten het slagveld te horen.
+Wat je daarna ziet, geloof je bijna niet: Diomedes die het opneemt tegen Ares zelf, de oorlogsgod, en hem met zijn speer treft. Ares' gil van pijn is tot ver buiten het slagveld te horen.
 
 IMAGE:
 diomedes_tegen_mars.png
@@ -10328,11 +10555,11 @@ Thetis uit de Zee
 TEXT:
 Thetis rijst op uit de golven, omringd door haar zusters, en treurt samen met haar zoon. Ze weet iets dat hij nog niet weet: als hij nu Hector doodt om Patroklos te wreken, zal hijzelf niet lang daarna sterven. Ze zegt het hem toch — eerlijk, zoals altijd — en belooft hem in plaats van tegenhouden alleen dit: een nieuwe wapenrusting, gesmeed door de beste handen die er bestaan.
 
-Ze verdwijnt richting de Olympos, naar Vulcanus.
+Ze verdwijnt richting de Olympos, naar Hephaistos.
 
 CHOICES:
 
-* Zie wat Vulcanus smeedt -> CH8_EPI_004
+* Zie wat Hephaistos smeedt -> CH8_EPI_004
 
 END
 
@@ -10342,7 +10569,7 @@ TITLE:
 Het Schild van Achilles
 
 TEXT:
-Vulcanus, dezelfde god die Thetis ooit als kind opving toen zijn eigen moeder hem van de Olympos gooide, vergeet die schuld niet. Hij smeedt in één nacht een nieuwe wapenrusting — en op het schild zelf beeldt hij niet de oorlog af, maar de hele wereld: steden in vrede en in oorlog, een bruiloft met fakkellicht en dans, een rechtszaak op het marktplein, ploegende ossen, een oogstfeest, jonge mensen die dansen onder een avondhemel.
+Hephaistos, dezelfde god die Thetis ooit als kind opving toen zijn eigen moeder hem van de Olympos gooide, vergeet die schuld niet. Hij smeedt in één nacht een nieuwe wapenrusting — en op het schild zelf beeldt hij niet de oorlog af, maar de hele wereld: steden in vrede en in oorlog, een bruiloft met fakkellicht en dans, een rechtszaak op het marktplein, ploegende ossen, een oogstfeest, jonge mensen die dansen onder een avondhemel.
 
 Terwijl je ernaar kijkt, denk je onwillekeurig terug aan Chiron, de wijze centaur die Achilles ooit als kind onderwees — dezelfde training die hem tot de sterkste van Griekenland maakte, lang voor hij ooit had kunnen bevroeden waar dat toe zou leiden.
 
@@ -10393,7 +10620,7 @@ TITLE:
 Terug in de Slag
 
 TEXT:
-In zijn nieuwe, angstaanjagende wapenrusting keert Achilles terug naar het slagveld, en de Trojanen breken in paniek voor hem uiteen. Zelfs de rivier Scamander, zegt men, raakt vervuld van woede over het aantal doden dat Achilles in zijn wateren gooit, en probeert hem bijna te verzwelgen — tot Vulcanus zelf de oevers in vuur zet om hem te redden.
+In zijn nieuwe, angstaanjagende wapenrusting keert Achilles terug naar het slagveld, en de Trojanen breken in paniek voor hem uiteen. Zelfs de rivier Scamander, zegt men, raakt vervuld van woede over het aantal doden dat Achilles in zijn wateren gooit, en probeert hem bijna te verzwelgen — tot Hephaistos zelf de oevers in vuur zet om hem te redden.
 
 Niets en niemand houdt hem nog tegen. Er is maar één man die hij zoekt.
 
@@ -10432,7 +10659,7 @@ TITLE:
 De Dood van Hector
 
 TEXT:
-Hector vecht met alle waardigheid die hem rest, maar tegen Achilles' woede en Vulcanus' wapenrusting heeft hij geen kans. Stervend smeekt hij Achilles om zijn lichaam aan zijn familie terug te geven, voor een behoorlijke begrafenis. Achilles, nog altijd niet gekalmeerd, weigert — en bindt Hectors lichaam achter zijn eigen strijdwagen.
+Hector vecht met alle waardigheid die hem rest, maar tegen Achilles' woede en Hephaistos' wapenrusting heeft hij geen kans. Stervend smeekt hij Achilles om zijn lichaam aan zijn familie terug te geven, voor een behoorlijke begrafenis. Achilles, nog altijd niet gekalmeerd, weigert — en bindt Hectors lichaam achter zijn eigen strijdwagen.
 
 CODEX:
 codex_dood_hektor
@@ -10471,7 +10698,7 @@ TITLE:
 De Nachtelijke Tocht
 
 TEXT:
-Oude koning Priamus, tegen elk advies in, waagt zich alleen en ongewapend het Griekse kamp in — met Mercurius, vermomd als gids, die hem ongezien langs elke wachtpost leidt. Hij bereikt, tegen alle logica in, Achilles' eigen tent, midden in de nacht.
+Oude koning Priamus, tegen elk advies in, waagt zich alleen en ongewapend het Griekse kamp in — met Hermes, vermomd als gids, die hem ongezien langs elke wachtpost leidt. Hij bereikt, tegen alle logica in, Achilles' eigen tent, midden in de nacht.
 
 CHOICES:
 
@@ -10501,11 +10728,50 @@ codex_priamus_smeekbede
 EERETITEL:
 ch8_priamus_smeekbede
 
+REACTION:
+priamus
+CLEMENTIA: Priamus knikt langzaam, nog altijd met tranen op zijn gezicht. "Misschien is dat het enige wat een oorlog ooit toelaat — één nacht, niet meer."
+SEVERITAS: Priamus kijkt op, zijn ogen opeens weer hard. "Nee. Maar vannacht is mijn zoon voor het eerst in dagen weer thuis — en dat is mij, voor nu, genoeg."
+
 CHOICES:
 
-* Vind dit een van de weinige echt menselijke momenten in een verder meedogenloze oorlog [CLEMENTIA] -> CH8_EPI_012
-* Merk op dat één nacht van medelijden niets verandert aan wat er nog allemaal komen gaat [SEVERITAS] -> CH8_EPI_012
+* Vind dit een van de weinige echt menselijke momenten in een verder meedogenloze oorlog [CLEMENTIA] -> CH8_EPI_011_MEDELEVEN
+* Merk op dat één nacht van medelijden niets verandert aan wat er nog allemaal komen gaat [SEVERITAS] -> CH8_EPI_011_STRENG
 * Laat het op je inwerken zonder meteen een kant te kiezen [NEUTRAL] -> CH8_EPI_012
+
+END
+
+=== SCENE: CH8_EPI_011_STRENG ===
+
+TITLE:
+Eén Nacht Is Niet Genoeg
+
+TEXT:
+Priamus merkt je nuchtere blik, en knikt bijna onmerkbaar — hij verwacht ook niet dat de wereld morgen anders is. Maar de warmte van daarnet is, in jouw richting, toch iets minder geworden.
+
+RELATION:
+priamus=-1
+
+CHOICES:
+
+* Ga verder -> CH8_EPI_012
+
+END
+
+=== SCENE: CH8_EPI_011_MEDELEVEN ===
+
+TITLE:
+Een Mens, Geen Koning
+
+TEXT:
+Priamus ziet dat jij het ook zo voelt — geen koning meer, even, gewoon een vader die zijn zoon terugkreeg. Het is een klein moment, maar hij vergeet niet snel wie dat met hem deelde.
+
+RELATION:
+priamus=+1
+
+CHOICES:
+
+* Ga verder -> CH8_EPI_012
 
 END
 
@@ -10585,18 +10851,18 @@ const SP_CH9_CNS = `
 === SCENE: CH9_000 ===
 
 TITLE:
-Mercurius
+Hermes
 
 TEXT:
 "Deze keer," zegt de Boodschapper, "volstaat een gewone poort niet. Wat je nu gaat zien, speelt zich af binnen muren waar je nog nooit bent geweest — en de enige die daar ongezien doorheen weet te bewegen, is niet iemand van mij."
 
-Ze roept iemand anders erbij: Mercurius zelf, dezelfde god die Priamus ooit door het Griekse kamp gidste, op de nacht dat hij Hectors lichaam kwam terugvragen. "Ken je hem nog?" vraagt de Boodschapper. "Deze keer gidst hij jou. Ontelbare keren heeft hij stervelingen tussen werelden geleid — waarom niet één keer terug in de tijd?"
+Ze roept iemand anders erbij: Hermes zelf, dezelfde god die Priamus ooit door het Griekse kamp gidste, op de nacht dat hij Hectors lichaam kwam terugvragen. "Ken je hem nog?" vraagt de Boodschapper. "Deze keer gidst hij jou. Ontelbare keren heeft hij stervelingen tussen werelden geleid — waarom niet één keer terug in de tijd?"
 
-Mercurius glimlacht, vleugels aan zijn sandalen al trillend van ongeduld. "Kom," zegt hij. "Ditmaal ga je niet naar het Griekse kamp. Je gaat naar binnen — Troje in."
+Hermes glimlacht, vleugels aan zijn sandalen al trillend van ongeduld. "Kom," zegt hij. "Ditmaal ga je niet naar het Griekse kamp. Je gaat naar binnen — Troje in."
 
 CHOICES:
 
-* Volg Mercurius de muren van Troje in -> CH9_001
+* Volg Hermes de muren van Troje in -> CH9_001
 
 END
 
@@ -10612,6 +10878,42 @@ Van dichtbij voelt het anders. Je hoort hoe Hectors stem breekt wanneer hij zegt
 
 PERSON:
 hektor:intro, andromache:intro
+
+CHOICES:
+
+* Blijf even bij Andromache, terwijl Hector zich wapent [CLEMENTIA] -> CH9_001_ANDROMACHE
+* Volg vooral Hectors eigen, stille vastberadenheid [SEVERITAS] -> CH9_001_HECTOR
+* Volg Hector naar de poort -> CH9_002
+
+END
+
+=== SCENE: CH9_001_ANDROMACHE ===
+
+TITLE:
+Wat Ze Achterlaat
+
+TEXT:
+Je blijft nog even bij Andromache staan, terwijl Hector zich buiten het zicht wapent. Ze zegt niets bijzonders — alleen de gewone dingen die een vrouw zegt tegen wie toevallig ook nog even blijft — maar het is genoeg voor haar om, heel even, niet alleen te zijn met wat ze al weet.
+
+RELATION:
+andromache=+1
+
+CHOICES:
+
+* Volg Hector naar de poort -> CH9_002
+
+END
+
+=== SCENE: CH9_001_HECTOR ===
+
+TITLE:
+Wat Hem Drijft
+
+TEXT:
+Je richt je aandacht op Hector, op de manier waarop hij zijn wapenrusting aandoet alsof het een ritueel is in plaats van een voorbereiding op de dood. Andromache, op de achtergrond, merkt waar je blik naartoe gaat — en waar niet.
+
+RELATION:
+andromache=-1
 
 CHOICES:
 
@@ -10646,7 +10948,7 @@ TITLE:
 De Tocht met Priamus
 
 TEXT:
-Dagenlang sleept Achilles Hectors lichaam rond de muren, tot koning Priamus een besluit neemt dat niemand in zijn paleis hem probeert uit te praten: hij zal zelf, ongewapend, naar de vijand gaan om zijn zoon terug te vragen. Mercurius, vermomd als een eenvoudige jongeman, leidt hem — en jou — ongezien langs elke Griekse wachtpost, tot in Achilles' eigen tent.
+Dagenlang sleept Achilles Hectors lichaam rond de muren, tot koning Priamus een besluit neemt dat niemand in zijn paleis hem probeert uit te praten: hij zal zelf, ongewapend, naar de vijand gaan om zijn zoon terug te vragen. Hermes, vermomd als een eenvoudige jongeman, leidt hem — en jou — ongezien langs elke Griekse wachtpost, tot in Achilles' eigen tent.
 
 Je ziet Priamus Achilles' handen kussen — dezelfde handen die zoveel van zijn zonen doodden — en hem smeken zich zijn eigen vader te herinneren. Je ziet iets breken in Achilles. Hectors lichaam keert mee terug naar Troje.
 
@@ -10707,8 +11009,14 @@ Na Hectors dood lijkt alle hoop uit Troje verdwenen — tot de Amazonekoningin P
 
 De vreugde duurt kort. Achilles doodt haar in een tweegevecht — en wanneer hij haar helm afzet om zijn overwinning te bevestigen, ziet zelfs hij, vanaf de muren amper zichtbaar, iets waarvan gefluisterd wordt dat het hem nooit meer helemaal loslaat.
 
+IMAGE:
+penthesileia.png
+
 CODEX:
 codex_penthesileia
+
+FLAG:
+ch9_zijde=troje
 
 CHOICES:
 
@@ -10747,6 +11055,9 @@ TEXT:
 Bij de Scaeïsche Poort gebeurt wat niemand in Troje nog had durven hopen: Paris, met Apollo's hand op zijn boog, treft Achilles precies in zijn hiel — de enige plek waar Thetis hem ooit niet in de Styx doopte. De sterkste held van Griekenland valt in het zand, binnen het zicht van de stad die hij bijna alleen al tien jaar had weten te belegeren.
 
 Om de muren barst gejuich los. Beneden, bij de Griekse linies, zie je een felle strijd om zijn lichaam losbarsten — Aias die het probeert te redden, Odysseus die de aanvallers afhoudt.
+
+IMAGE:
+achilles_dood_pijl.png
 
 CODEX:
 codex_dood_achilles
@@ -10827,13 +11138,52 @@ TEXT:
 Binnen dagen na Paris' dood eisen zijn broers Deiphobos en Helenus allebei Helena's hand op. Priamus, uitgeput door twee dode zonen in evenveel weken, wijst haar toe aan Deiphobos. Je ziet de bruiloft met eigen ogen — geen vreugde nergens te bekennen, behalve misschien bij Deiphobos zelf. Helena's gezicht verraadt precies hoeveel keuze ze hierin werkelijk had.
 
 PERSON:
-helenus:intro
+helenus:intro, deiphobos:intro
+
+REACTION:
+helenus
+CLEMENTIA: Helenus' blik flakkert even naar jou — herkenning, misschien, van iemand die ook ziet wat de rest liever niet ziet.
+SEVERITAS: Helenus zegt niets, maar zijn kaak verstrakt zichtbaar — "weinig andere opties" klinkt hem te dicht bij zijn eigen verlies.
 
 CHOICES:
 
-* Vind dit een even wrede voortzetting van wat Helena al die jaren is aangedaan [CLEMENTIA] -> CH9_TRO_005C
-* Erken dat een weduwe zonder bescherming in een belegerde stad weinig andere opties heeft [SEVERITAS] -> CH9_TRO_005C
+* Vind dit een even wrede voortzetting van wat Helena al die jaren is aangedaan [CLEMENTIA] -> CH9_TRO_005B_MEDELEVEN
+* Erken dat een weduwe zonder bescherming in een belegerde stad weinig andere opties heeft [SEVERITAS] -> CH9_TRO_005B_PRAGMATISCH
 * Kijk zwijgend toe, net als de rest van het hof [NEUTRAL] -> CH9_TRO_005C
+
+END
+
+=== SCENE: CH9_TRO_005B_MEDELEVEN ===
+
+TITLE:
+Een Blik die Oordeelt
+
+TEXT:
+Deiphobos merkt hoe je kijkt — niet vijandig, maar ook niet blind voor wat dit huwelijk werkelijk is. Hij zegt er niets van, maar de warmte waarmee hij zijn nieuwe bruid voorstelt aan het hof, is voortaan net iets minder gericht op jou dan op de rest.
+
+RELATION:
+deiphobos=-1
+
+CHOICES:
+
+* Ga verder -> CH9_TRO_005C
+
+END
+
+=== SCENE: CH9_TRO_005B_PRAGMATISCH ===
+
+TITLE:
+Geen Oordeel, Geen Vragen
+
+TEXT:
+Deiphobos vangt jouw nuchtere blik op — geen afkeuring, geen stille kritiek, gewoon een erkenning van hoe deze stad nu eenmaal werkt. Voor een man die de rest van het hof al voelt fluisteren, is dat meer waard dan hij laat merken.
+
+RELATION:
+deiphobos=+1
+
+CHOICES:
+
+* Ga verder -> CH9_TRO_005C
 
 END
 
@@ -10911,6 +11261,9 @@ Het Paard op het Strand
 TEXT:
 Op een ochtend is het Griekse kamp verlaten. De schepen zijn verdwenen, de tenten afgebroken — na tien jaar lijkt de vloot eindelijk vertrokken. Op het verlaten strand staat maar één ding: een reusachtig houten paard, en ernaast een enkele Griekse man, kennelijk door zijn eigen mensen achtergelaten.
 
+IMAGE:
+trojaans_paard_strand.png
+
 CODEX:
 codex_trojaanse_paard
 
@@ -10947,9 +11300,12 @@ TITLE:
 Laocoön en de Slangen
 
 TEXT:
-Niet iedereen is overtuigd. De priester Laocoön waarschuwt luid tegen het paard en werpt zelfs een speer in zijn houten flank — die trilt na, hol vanbinnen, maar niemand die daar acht op slaat. Vlak daarna komen twee reusachtige zeeslangen uit de golven — gestuurd, zeggen sommigen, door Neptunus zelf, die Troje nooit heeft vergeven dat koning Laomedon hem ooit zijn beloofde loon voor de stadsmuren onthield — en verslinden hem en zijn twee zonen voor de ogen van de hele stad.
+Niet iedereen is overtuigd. De priester Laocoön waarschuwt luid tegen het paard en werpt zelfs een speer in zijn houten flank — die trilt na, hol vanbinnen, maar niemand die daar acht op slaat. Vlak daarna komen twee reusachtige zeeslangen uit de golven — gestuurd, zeggen sommigen, door Poseidon zelf, die Troje nooit heeft vergeven dat koning Laomedon hem ooit zijn beloofde loon voor de stadsmuren onthield — en verslinden hem en zijn twee zonen voor de ogen van de hele stad.
 
 Troje leest het verkeerd: dit is, denkt iedereen, een straf voor Laocoöns twijfel — niet een waarschuwing.
+
+IMAGE:
+laocoon_slangen.png
 
 CODEX:
 codex_laocoon
@@ -10973,11 +11329,50 @@ Cassandra, Priamus' eigen dochter, smeekt de stad het paard niet binnen te halen
 
 Het paard wordt, onder gejuich, door een bres in de muur naar binnen gesleept.
 
+IMAGE:
+cassandra_waarschuwing.png
+
 CODEX:
 codex_cassandra_waarschuwing
 
 PERSON:
 cassandra:intro
+
+CHOICES:
+
+* Blijf even bij haar staan — jij bent, heel even, degene die wél luistert [CLEMENTIA] -> CH9_TRO_011_LUISTER
+* Loop met de rest van de menigte mee, haar paniek al half vergeten [SEVERITAS] -> CH9_TRO_011_NEGEER
+* Weet niet goed wat je met haar woorden aan moet [NEUTRAL] -> CH9_TRO_012
+
+END
+
+=== SCENE: CH9_TRO_011_LUISTER ===
+
+TITLE:
+De Enige die Luistert
+
+TEXT:
+Je blijft staan, ook al trekt de rest van de stad joelend langs jullie heen. Cassandra kijkt je aan met iets dat op verbazing lijkt — niet omdat je haar gelooft, dat kan ze toch nooit navragen, maar omdat je tenminste de moeite neemt te blijven.
+
+RELATION:
+cassandra=+1
+
+CHOICES:
+
+* Zie hoe Troje die avond viert -> CH9_TRO_012
+
+END
+
+=== SCENE: CH9_TRO_011_NEGEER ===
+
+TITLE:
+Weer Eén Die Wegloopt
+
+TEXT:
+Je laat je meevoeren door de vreugde van de menigte, net als iedereen — Cassandra's stem verdwijnt al snel achter je in het geroezemoes. Zij ziet je gaan, zoals ze iedereen ziet gaan.
+
+RELATION:
+cassandra=-1
 
 CHOICES:
 
@@ -10995,6 +11390,8 @@ Voor het eerst in tien jaar viert Troje alsof de oorlog al voorbij is. Wijn stro
 
 Diep in de buik van het paard wacht een handvol Griekse krijgers, doodstil, op precies dit moment.
 
+{priamus_afscheid}
+
 CHOICES:
 
 * Zie wat er gebeurt zodra de stad eindelijk slaapt -> CH9_TRO_013
@@ -11010,6 +11407,9 @@ TEXT:
 Midden in de nacht klimmen de verstopte Grieken uit het paard en openen de poorten van Troje van binnenuit. Ver weg, op zee, ziet een wachter een signaalvuur — de teruggekeerde vloot vaart al aan land. Binnen enkele ogenblikken stroomt het hele Griekse leger de slapende stad binnen.
 
 Wat volgt is geen veldslag meer. Het is een slachting.
+
+IMAGE:
+troje_valt_trojanen.png
 
 CODEX:
 codex_val_van_troje
@@ -11029,7 +11429,7 @@ TITLE:
 De Dood van Priamus
 
 TEXT:
-Priamus vlucht met Hecuba naar het altaar van Jupiter, in de hoop dat heiligdom hem zal beschermen. Neoptolemus, Achilles' eigen zoon, doorboort eerst Polites — Priamus' laatste levende zoon — voor de ogen van zijn vader, en doodt dan de oude koning zelf, midden op de trappen van zijn eigen altaar.
+Priamus vlucht met Hecuba naar het altaar van Zeus, in de hoop dat heiligdom hem zal beschermen. Neoptolemus, Achilles' eigen zoon, doorboort eerst Polites — Priamus' laatste levende zoon — voor de ogen van zijn vader, en doodt dan de oude koning zelf, midden op de trappen van zijn eigen altaar.
 
 De koning die ooit met moed naar Achilles' tent liep om zijn zoon terug te vragen, sterft zonder dat iemand hém ooit dezelfde genade toont.
 
@@ -11066,6 +11466,8 @@ Cassandra bij het Altaar
 TEXT:
 Cassandra zoekt heiligdom bij het altaar van Athena — de enige plek, denkt ze, waar zelfs Grieken haar niet zouden durven aanraken. Ze vergist zich: Aias, zoon van Oïleus (een andere Aias dan Telamons zoon), sleurt haar met geweld weg, een heiligschennis die de godin niet zal vergeten.
 
+{cassandra_payoff}
+
 CODEX:
 codex_cassandra_altaar
 
@@ -11088,6 +11490,9 @@ Aeneas' Vlucht
 
 TEXT:
 Terwijl de stad om hem heen instort, draagt de Trojaanse prins Aeneas zijn oude, kreupele vader Anchises op zijn eigen schouders de brandende straten uit, zijn zoontje Ascanius stevig aan de hand. Van alle Trojanen die deze nacht overleven, is hij degene wiens verhaal het verst zal reizen — al heeft niemand, ook hijzelf niet, enig idee hoe ver dat werkelijk zal blijken.
+
+IMAGE:
+aeneas_vlucht.png
 
 CODEX:
 codex_aeneas_vlucht
@@ -11140,7 +11545,7 @@ ch9_val_van_troje
 
 CHOICES:
 
-* Keer terug naar het Museum -> CH9_EINDE
+* Keer terug naar het Museum -> CH9_BONDGENOTEN
 
 END
 
@@ -11154,8 +11559,14 @@ Na Hectors dood krijgt Troje onverwachte versterking: de Amazonekoningin Penthes
 
 Wanneer hij haar helm afzet, verstart hij: haar gezicht is zo mooi dat zijn eigen overwinning hem plotseling ondraaglijk voorkomt. Thersites, een spotter zonder enig ontzag, hoont hem erom hardop voor het hele leger — en betaalt daarvoor met zijn leven: Achilles doodt ook hem, ter plekke, zonder aarzeling.
 
+IMAGE:
+penthesileia.png
+
 CODEX:
 codex_penthesileia
+
+FLAG:
+ch9_zijde=grieks
 
 CHOICES:
 
@@ -11174,6 +11585,9 @@ TEXT:
 Memnon, zoon van de dageraadgodin Eos, arriveert met een leger uit het verre oosten — en doodt, tot ieders ontzetting, Antilochos: Nestors eigen zoon, dezelfde die ooit het nieuws van Patroklos' dood aan Achilles moest brengen.
 
 Achilles' wraak is onmiddellijk en meedogenloos. Memnon valt, en Eos weent om haar zoon zoals geen enkele godin ooit om een sterveling heeft geweend.
+
+IMAGE:
+memnon_antilochos.png
 
 CODEX:
 codex_memnon
@@ -11196,6 +11610,9 @@ TEXT:
 Bij de Scaeïsche Poort van Troje treft Paris, met Apollo's hand op zijn boog, Achilles precies in zijn hiel — de enige plek waar Thetis hem ooit niet in de Styx doopte. De sterkste held van Griekenland valt, en om zijn lichaam ontbrandt onmiddellijk een felle strijd.
 
 Aias, Telamons zoon, tilt het lichaam op zijn schouders en draagt het onder vijandelijk vuur naar de Griekse linies, terwijl Odysseus met zijn zwaard de aanvallers op afstand houdt. Zonder die twee zou zelfs Achilles' lichaam nooit zijn teruggekeerd.
+
+IMAGE:
+achilles_lichaam_gered.png
 
 CODEX:
 codex_dood_achilles
@@ -11221,7 +11638,7 @@ TITLE:
 De Twist om de Wapenrusting
 
 TEXT:
-Achilles' wapenrusting — dezelfde die Vulcanus smeedde na Patroklos' dood — moet een nieuwe eigenaar krijgen. Twee namen worden genoemd: Aias, die het lichaam onder vuur redde, en Odysseus, wiens list de oorlog al vaker een wending gaf. De Griekse leiders stemmen.
+Achilles' wapenrusting — dezelfde die Hephaistos smeedde na Patroklos' dood — moet een nieuwe eigenaar krijgen. Twee namen worden genoemd: Aias, die het lichaam onder vuur redde, en Odysseus, wiens list de oorlog al vaker een wending gaf. De Griekse leiders stemmen.
 
 Odysseus wint. Aias, die zijn hele leven zijn kracht als zijn enige ware eer beschouwde, kan de vernedering niet verkroppen.
 
@@ -11243,6 +11660,9 @@ TEXT:
 Vernederd besluit Aias 's nachts de Griekse aanvoerders te vermoorden — Athena, om erger te voorkomen, benevelt zijn geest zodat hij in plaats daarvan een kudde vee afslacht, in de stellige overtuiging dat het zijn vijanden zijn. Bij het ochtendlicht, wanneer hij ontwaakt tussen de dode dieren en beseft wat hij heeft gedaan, is de schaamte groter dan hij kan dragen.
 
 Hij valt op zijn eigen zwaard — hetzelfde zwaard dat hij ooit van Hector kreeg, na een gevecht dat eindigde in een uitwisseling van wapenrusting in plaats van bloedvergieten.
+
+IMAGE:
+aias_ondergang.png
 
 CODEX:
 codex_waanzin_aias
@@ -11363,6 +11783,9 @@ Het Palladium
 TEXT:
 Odysseus en Diomedes keren op een nacht terug van een missie die niemand anders kende: vermomd als bedelaar is Odysseus Troje binnengeslopen en heeft, met Diomedes' hulp, het Palladium gestolen — het heilige beeld dat de stad al generaties beschermde. De schepen die het wegvoerden, liggen zorgvuldig verborgen op het strand.
 
+IMAGE:
+palladium_diefstal.png
+
 CODEX:
 codex_palladium_diefstal
 
@@ -11425,6 +11848,9 @@ In het Paard
 TEXT:
 Binnenin is het benauwd, donker, en angstaanjagend stil — je hoort je eigen hart luider dan wat dan ook. Buiten klinken Trojaanse stemmen, feestvierend, nietsvermoedend, gevaarlijk dichtbij.
 
+IMAGE:
+grieken_in_het_paard.png
+
 CHOICES:
 
 * Blijf doodstil zitten en wacht het signaal af -> CH9_GRI_012
@@ -11483,6 +11909,9 @@ De Poorten Gaan Open
 TEXT:
 Het paard klapt open. Jullie klimmen eruit, gewrichten stijf van uren wachten, en overmeesteren de laatste, halfslapende wachters bij de poort — meer een formaliteit dan een gevecht, na tien jaar beleg.
 
+IMAGE:
+troje_valt_neutraal.png
+
 COMBAT:
 trojaanse_wachters
 
@@ -11499,6 +11928,9 @@ De Stad in Vlammen
 
 TEXT:
 De poorten gaan open van binnenuit, en de teruggekeerde vloot stroomt Troje binnen. Wat volgt is geen veldslag meer, maar een slachting — huizen in brand, tempels geplunderd, een stad die tien jaar weerstand bood binnen enkele uren overmeesterd.
+
+IMAGE:
+troje_valt_grieken.png
 
 CODEX:
 codex_val_van_troje
@@ -11517,7 +11949,7 @@ TITLE:
 Het Koningshuis Valt
 
 TEXT:
-Berichten bereiken je vanuit alle hoeken van de brandende stad: Neoptolemus doodde koning Priamus bij het altaar van Jupiter, nadat hij eerst diens laatste zoon Polites voor diens ogen had neergestoken. Hectors zoontje Astyanax werd van de muren geworpen — uit angst dat hij ooit zou opgroeien om zijn vader te wreken.
+Berichten bereiken je vanuit alle hoeken van de brandende stad: Neoptolemus doodde koning Priamus bij het altaar van Zeus, nadat hij eerst diens laatste zoon Polites voor diens ogen had neergestoken. Hectors zoontje Astyanax werd van de muren geworpen — uit angst dat hij ooit zou opgroeien om zijn vader te wreken.
 
 Zelfs tussen de overwinnaars is het stil na dat nieuws.
 
@@ -11540,6 +11972,8 @@ Bij het ochtendlicht is er geen Troje meer om naar terug te keren — enkel rook
 
 Tien jaar beleg eindigt niet met een triomf die iemand echt kan vieren, maar met een lange vaart terug naar huis die, voor velen van jullie, evenmin goed zal aflopen.
 
+{andromache_payoff}
+
 CODEX:
 codex_gevangenen_verdeeld
 
@@ -11551,7 +11985,75 @@ ch9_val_van_troje
 
 CHOICES:
 
-* Keer terug naar het Museum -> CH9_EINDE
+* Keer terug naar het Museum -> CH9_BONDGENOTEN
+
+END
+
+=== SCENE: CH9_BONDGENOTEN ===
+
+TITLE:
+Wie Je Nog Herkent
+
+TEXT:
+Voor de Boodschapper je terugroept naar het Museum, wijst ze je nog één keer, stil, naar wat er tussen alle rook en dat lawaai overblijft — niet het hele leger, niet de hele stad, maar de paar mensen die zich, ergens in dit hele verhaal, ook echt iets van jou zijn gaan aantrekken.
+
+{bondgenoten_aanwezig}
+
+CHOICES:
+
+* Keer terug naar het Museum -> CH9_MENELAOS_HELENA
+
+END
+
+=== SCENE: CH9_MENELAOS_HELENA ===
+
+TITLE:
+Een Laatste Rekening
+
+TEXT:
+Niet ver van waar je net stond, hoor je Menelaos voor je hem ziet — zijn stem, schor van tien jaar wachten, roept Helena's naam door de rook. Deiphobos, die haar na Paris' dood tot de zijne maakte, verspert hem de weg — of uit liefde, of uit trots, of gewoon omdat hij nergens anders meer heen kan. Menelaos doodt hem zonder aarzelen, tien jaar wraak in één enkele slag.
+
+Dan vindt hij Helena zelf, ineengedoken tussen het puin. Zijn zwaard gaat omhoog — en blijft daar hangen, terwijl jij, op een paar passen afstand, het enige bent dat nog tussen hen in staat.
+
+CHOICES:
+
+* Spreek Menelaos zacht aan — herinner hem eraan wie ze voor de oorlog al was [CLEMENTIA] -> CH9_MENELAOS_HELENA_ZACHT
+* Zeg niets, maar houd zijn blik vast tot hij zelf beslist [SEVERITAS] -> CH9_MENELAOS_HELENA_STIL
+* Kijk toe zonder in te grijpen — dit is niet aan jou [NEUTRAL] -> CH9_EINDE
+
+END
+
+=== SCENE: CH9_MENELAOS_HELENA_ZACHT ===
+
+TITLE:
+Wie Ze Was
+
+TEXT:
+Je woorden zijn zacht, bijna terloops — een herinnering, geen smeekbede, aan een Sparta van tien jaar geleden. Menelaos' arm zakt, langzaam, en wat er op zijn gezicht gebeurt, is geen vergeving, nog niet, maar wel de eerste barst daarin. Helena kijkt naar jou alsof ze je dit nooit zal vergeten.
+
+RELATION:
+menelaos=+1; helena=+1
+
+CHOICES:
+
+* Zie wat er van deze nacht overblijft -> CH9_EINDE
+
+END
+
+=== SCENE: CH9_MENELAOS_HELENA_STIL ===
+
+TITLE:
+Genoeg Ruimte
+
+TEXT:
+Je zegt niets — geeft hem alleen de ruimte om zelf te beslissen, zonder gedrang, zonder woorden die het voor hem invullen. Het zwaard zakt uiteindelijk toch, op zijn eigen tempo. Menelaos merkt, in de stilte die volgt, dat je niet hebt aangedrongen — en onthoudt dat langer dan hij laat blijken.
+
+RELATION:
+menelaos=+1
+
+CHOICES:
+
+* Zie wat er van deze nacht overblijft -> CH9_EINDE
 
 END
 
@@ -11563,7 +12065,7 @@ Niemand Ziet het Hele Verhaal
 TEXT:
 "Je hebt Troje zien vallen," zegt de Boodschapper, "maar niet het hele verhaal. Niemand ziet ooit het hele verhaal — dat is precies waarom je twee keer had moeten kunnen komen kijken, van twee kanten, om ook maar te beginnen het te begrijpen."
 
-Mercurius knikt afscheid, zijn werk hier gedaan. In je hand voel je een stuk verkoold hout — een splinter van het paard dat slaagde waar tien jaar oorlog faalde.
+Hermes knikt afscheid, zijn werk hier gedaan. In je hand voel je een stuk verkoold hout — een splinter van het paard dat slaagde waar tien jaar oorlog faalde.
 
 SOUVENIR:
 souvenir_trojaans_paard

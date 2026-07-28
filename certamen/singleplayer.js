@@ -258,7 +258,9 @@ function spCapitalize(str){ return str ? str.charAt(0).toUpperCase()+str.slice(1
 function spParagraphsHTML(text, state){
   if(!text) return "";
   return text.split(/\n\s*\n/)
-    .map(para => `<p>${esc(SpTextResolver.resolve(para.trim(), state))}</p>`)
+    .map(para => esc(SpTextResolver.resolve(para.trim(), state)))
+    .filter(t => t!=="")
+    .map(t => `<p>${t}</p>`)
     .join("");
 }
 
@@ -282,10 +284,77 @@ const SpTextResolver = {
       case "tendency_address":     return spTendencyAddressPhrase(state);
       case "tendency_address_cap": return spCapitalize(spTendencyAddressPhrase(state));
       case "eigen_wapen":          return SP_CLASS_WEAPON_NOUN[state.classId] || "wapen";
+      case "bondgenoten_aanwezig": return spBondgenotenAanwezig(state);
+      case "priamus_afscheid":     return ((state.relations||{}).priamus||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD ? SP_ENDKAPITAAL_PRIAMUS_AFSCHEID : "";
+      case "cassandra_payoff":     return ((state.relations||{}).cassandra||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD ? SP_ENDKAPITAAL_CASSANDRA_PAYOFF : "";
+      case "andromache_payoff":    return ((state.relations||{}).andromache||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD ? SP_ENDKAPITAAL_ANDROMACHE_PAYOFF : "";
     }
+    if(SP_TENDENCY_STORY_VARIANTS[path]) return spTendencyStoryVariant(path, state);
     return undefined;
   },
 };
+// Nederlandse opsomming: "A", "A en B", "A, B en C" — gedeeld door beide takken van
+// spBondgenotenAanwezig hieronder.
+function spDutchJoin(names){
+  return names.length>1 ? names.slice(0,-1).join(", ")+" en "+names[names.length-1] : names[0];
+}
+// Bondgenoten als eindkapitaal (Chronica-audit B18, CH9_BONDGENOTEN): SP_STATE.relations
+// krijgt hier voor het eerst een ZICHTBAAR gevolg i.p.v. alleen een tekst-variant. Beide
+// kanten volgen hetzelfde spiegelbeeld (zie de audit-toelichting bij SP_ENDKAPITAAL_ALLIES,
+// singleplayer-data.js): een positieve band ontziet/steunt, een negatieve band valt AAN —
+// aan Trojaanse kant een vijandige Griek in de open strijd, aan Griekse kant een
+// verbitterde EIGEN bondgenoot die de chaos van de plundering gebruikt om je in de rug te
+// steken. Die dreiging wordt altijd opgelost (een positieve band elders, anders een god)
+// — dit blijft puur tekstueel, nooit een echte game-over. Zie ook B28 (nog niet gebouwd)
+// voor een functioneel vervolg hierop.
+function spBondgenotenAanwezig(state){
+  const zijde = state.flags?.ch9_zijde;
+  const pool = SP_ENDKAPITAAL_ALLIES[zijde] || [];
+  const rel = state.relations || {};
+  const T = SP_ENDKAPITAAL_THRESHOLD;
+  if(zijde!=="troje" && zijde!=="grieks") return SP_ENDKAPITAAL_FALLBACK;
+  const positive = pool.filter(a => (rel[a.id]||0) >= T);
+  const hostile = pool.filter(a => (rel[a.id]||0) <= -T);
+  const parts = positive.map(a=>a.line);
+  if(zijde==="troje"){
+    const helpers = SP_ENDKAPITAAL_TROJE_HELPERS.filter(h => (rel[h.id]||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD);
+    if(!hostile.length){
+      parts.push(...helpers.map(h=>h.quiet));
+      return parts.length ? parts.join(" ") : SP_ENDKAPITAAL_FALLBACK;
+    }
+  }
+  if(hostile.length){
+    const names = spDutchJoin(hostile.map(a => SP_CODEX_PERSONS[a.id]?.nm || a.id));
+    if(zijde==="troje"){
+      parts.push(names + (hostile.length>1
+        ? ", geen van hen vergeten hoe de verstandhouding ooit verzuurde, herkennen je tussen het puin — en aarzelen geen moment."
+        : ", die niet vergeten is hoe de verstandhouding tussen jullie ooit verzuurde, herkent je tussen het puin — en aarzelt geen moment."));
+      const helpers = SP_ENDKAPITAAL_TROJE_HELPERS.filter(h => (rel[h.id]||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD);
+      if(helpers.length) parts.push(...helpers.map(h=>h.redt));
+      else parts.push(SP_ENDKAPITAAL_AFRODITE_REDDING);
+    } else {
+      parts.push(names + (hostile.length>1
+        ? ", geen van beiden de wrok ooit kwijtgeraakt, gebruiken de chaos van de plundering voor iets dat niets met de vijand te maken heeft — wapens al getrokken voor je het doorhebt."
+        : ", die de wrok nooit is kwijtgeraakt, gebruikt de chaos van de plundering voor iets dat niets met de vijand te maken heeft — het wapen al getrokken voor je het doorhebt."));
+      if(positive.length){
+        const redder = SP_CODEX_PERSONS[positive[0].id]?.nm || positive[0].id;
+        parts.push(`Maar ${redder} grijpt net op tijd in — slaat de aanval af, komt tussen jou en het staal te staan, zonder aarzelen.`);
+      } else {
+        parts.push(SP_ENDKAPITAAL_ATHENA_REDDING);
+      }
+    }
+  }
+  return parts.length ? parts.join(" ") : SP_ENDKAPITAAL_FALLBACK;
+}
+// Zelfde principe als spTendencyAddressPhrase, maar voor een volledige
+// verhaalzin i.p.v. een los bijvoeglijk naamwoord — zie
+// SP_TENDENCY_STORY_VARIANTS (singleplayer-data.js) voor de vier momenten
+// die dit gebruiken en de audit-toelichting (B13) daarboven.
+function spTendencyStoryVariant(id, state){
+  const table = SP_TENDENCY_STORY_VARIANTS[id];
+  const tendency = spApproachTendency(state);
+  return table[tendency] || table.neutraal;
+}
 // Voor de zelfherkenningsscène in Hoofdstuk 9 (CH9): welk wapen draagt de
 // speler zelf, op basis van de klasse gekozen bij het Orakel in de proloog —
 // zelfde koppeling als SP_AVATAR_STORY_UNLOCKS ("wapen:boog"->boogschutter_orakel
@@ -306,7 +375,7 @@ function spTendencyAddressPhrase(state){
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
                   "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION"],
+                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -959,8 +1028,31 @@ function spGoCns(nodeId){
    blijft spGoCns bruikbaar voor alle andere navigatie (puzzels, kaart-pins,
    "Verdergaan"-knop) die geen approach-tag kennen. */
 function spChoosePath(target, approach){
-  if(approach) spHookApproach(approach);
+  if(approach){
+    spHookApproach(approach);
+    const reaction = spSceneReaction(SP_SCENES.get(SP_STATE.node), approach);
+    if(reaction) toast(reaction.nm, reaction.text);
+  }
   spGoCns(target);
+}
+// Directe NPC-reactie op een CLEMENTIA/SEVERITAS-keuze (Chronica.md B17):
+// bewust LOSSTAAND van spHookApproach (die blijft de stille teller — zie
+// hierboven bij spHookApproach). Optionele REACTION:-sectie in de bronscène,
+// eerste regel de PERSON-id (voor de weergavenaam via SP_CODEX_PERSONS), dan
+// per gekozen tag één regel "CLEMENTIA: ..."/"SEVERITAS: ..."/"NEUTRAL: ...".
+// Geen REACTION-sectie of geen regel voor deze tag → gewoon stil, zoals nu.
+function spSceneReaction(scene, approach){
+  const raw = scene?.meta?.REACTION;
+  if(!raw) return null;
+  const lines = raw.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  if(lines.length<2) return null;
+  const npcId = lines[0];
+  const tagRe = new RegExp("^"+approach+":\\s*(.+)$","i");
+  for(const line of lines.slice(1)){
+    const m = line.match(tagRe);
+    if(m) return { nm: SP_CODEX_PERSONS[npcId]?.nm || npcId, text: m[1].trim().replace(/^["“](.*)["”]$/,"$1") };
+  }
+  return null;
 }
 // Kroniek (Chronica.md §12, Deel 1.5 van de spec): "een doorlopend,
 // in-fictie logboek van beslissingen... geschreven als annalen, niet als
@@ -1419,7 +1511,12 @@ function spHookReward(text){
   // hierboven, maar worden alleen bij de EERSTE keuze gezet — een latere
   // REWARD (zou nu niet voorkomen) mag een al gegroeid statblok niet overschrijven.
   const stats = (isNew && SP_CLASS_STATS[classId]) ? {...SP_CLASS_STATS[classId]} : SP_STATE.stats;
-  spSaveProgress({ classId, traits, stats });
+  // B14 (Chronica-audit): classId zelf staat al in SP_STATE, maar dat kan
+  // spPayoffConditionMet() niet toetsen (die leest uitsluitend flags/relations,
+  // zie singleplayer.js). Eén simpele flag maakt de wapenkeuze ook bruikbaar
+  // als payoff-conditie, zonder classId zelf ergens dubbel te hoeven opslaan.
+  const flags = isNew ? {...(SP_STATE.flags||{}), wapen_gekozen:classId} : SP_STATE.flags;
+  spSaveProgress({ classId, traits, stats, flags });
   if(isNew){
     toast("Wapen gekozen!", BM_IDENT
       ? "Je pad is bepaald. Dit wapen zal je overal vergezellen waar je nog terechtkomt."
@@ -1880,33 +1977,34 @@ SCREENS.spCombat = function(){
     `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spCombatAnswer(${i})">${esc(o)}</button>`
   ).join("");
   H(brand(true)+`
-  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Gevecht</h2>${spAudioToggleHTML()}</div>
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SP_COMBAT.sceneTitle||enemy.nm)}</h2>${spAudioToggleHTML()}</div>
   <div class="panel" style="text-align:center">
     ${spCombatSpriteHTML(enemy)}
     <div class="eyebrow l" style="margin-top:6px">${esc(enemy.nm)}</div>
     <div style="height:10px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin:6px 0">
       <div style="height:100%;width:${hpPct}%;background:var(--hi-bright,#e8c77e)"></div>
     </div>
-    <p class="note">${SP_COMBAT.hp} / ${SP_COMBAT.maxHp} levenspunten van de vijand — jouw EP: ${SP_COMBAT.ep}</p>
+    <p class="note">${SP_COMBAT.hp} / ${SP_COMBAT.maxHp} levenspunten van ${esc(enemy.nm)} — jouw vastberadenheid: ${SP_COMBAT.ep}/${SP_COMBAT_ACTION_COST}</p>
   </div>
   <div class="panel">
     <p style="font-weight:700;margin-bottom:4px">Wat betekent <em>${esc(q.woord)}</em>?</p>
     ${optsHTML}
-    <div id="spCombatErr" class="note warn" style="display:none;margin-top:10px"></div>
   </div>
-  ${canAttack?`<button class="btn btn-gold btn-block lg" onclick="spCombatAttack()">⚔️ Aanval (kost ${SP_COMBAT_ACTION_COST} EP)</button>`:""}
+  ${canAttack?`<button class="btn btn-gold btn-block lg" onclick="spCombatAttack()">⚔️ Aanval</button>`:""}
   ${foot()}`);
 };
+// spCombatAnswer rendert meteen daarna het hele scherm opnieuw (spCombatNextQuestion
+// + SCREENS.spCombat), dus een foutmelding IN het paneel zou nooit zichtbaar worden —
+// vandaar toast() voor beide uitkomsten, net als bij de correcte-antwoord-tak, want
+// een toast overleeft die her-render wél (zie ook spHookPerson elders).
 function spCombatAnswer(idx){
   const q = SP_COMBAT.question;
   const correct = q.options[idx]===q.correct;
-  const err = el("spCombatErr");
   if(correct){
     SP_COMBAT.ep += SP_COMBAT_EP_PER_CORRECT;
-    toast("Juist!", "+"+SP_COMBAT_EP_PER_CORRECT+" EP");
-  } else if(err){
-    err.textContent = "Niet juist — het juiste antwoord was \""+q.correct+"\". Geen EP deze beurt.";
-    err.style.display = "";
+    toast("Juist!", "Je vastberadenheid groeit.");
+  } else {
+    toast("Niet juist", "Het juiste antwoord was \""+q.correct+"\". Je vastberadenheid groeit deze beurt niet.");
   }
   spCombatNextQuestion();
   SCREENS.spCombat();
