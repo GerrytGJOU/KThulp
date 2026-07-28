@@ -258,10 +258,29 @@ function spCapitalize(str){ return str ? str.charAt(0).toUpperCase()+str.slice(1
 function spParagraphsHTML(text, state){
   if(!text) return "";
   return text.split(/\n\s*\n/)
-    .map(para => esc(SpTextResolver.resolve(para.trim(), state)))
+    .map(para => spGlossHTML(SpTextResolver.resolve(para.trim(), state)))
     .filter(t => t!=="")
     .map(t => `<p>${t}</p>`)
     .join("");
+}
+// Glosbeleid (Chronica-audit B22): `[[brontekst|vertaling]]` in TEXT/DIALOGUE
+// (na SpTextResolver, dus resolvet tokens gewoon eerst) wordt een woord met
+// stippellijn; een tik toont de vertaling inline via CSS (`.gloss.open::after`,
+// index.html) — verborgen tot dan, geen woordenlijst in de kantlijn, in lijn
+// met de bestaande stijl (niets opgedrongen). Bouwt voort op B23's passieve
+// laag: dezelfde Latijnse/Griekse woorden krijgen nu desgewenst een vertaling.
+const SP_GLOSS_RE = /\[\[([^\]|]+)\|([^\]]+)\]\]/g;
+function spGlossHTML(text){
+  if(!text) return "";
+  let out = "", last = 0, m;
+  SP_GLOSS_RE.lastIndex = 0;
+  while((m = SP_GLOSS_RE.exec(text))){
+    out += esc(text.slice(last, m.index));
+    out += `<span class="gloss" tabindex="0" role="button" aria-label="Toon vertaling" onclick="this.classList.toggle('open')" data-tr="${esc(m[2].trim())}">${esc(m[1].trim())}</span>`;
+    last = SP_GLOSS_RE.lastIndex;
+  }
+  out += esc(text.slice(last));
+  return out;
 }
 
 const SpTextResolver = {
@@ -1193,7 +1212,7 @@ SCREENS.spPlay = function(){
   const dialogueHTML = scene.dialogue ? `
     <div class="panel">
       <div class="eyebrow l">${esc(SpTextResolver.resolve(scene.dialogue.speaker, SP_STATE))}</div>
-      <p>“${esc(SpTextResolver.resolve(scene.dialogue.text, SP_STATE))}”</p>
+      <p>“${spGlossHTML(SpTextResolver.resolve(scene.dialogue.text, SP_STATE))}”</p>
     </div>` : "";
   // Bij een Clementia/Severitas/Neutraal-keuzeset wordt de volgorde bij elk
   // bezoek opnieuw geschud (shuffle, core.js) — anders zou de vaste volgorde

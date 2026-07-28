@@ -2802,7 +2802,7 @@ Het Orakel Verschijnt
 TEXT:
 Terwijl je van de rivieroever wegloopt, met Midas' dochter weer levend en de vloek verdwenen, begint de lucht om je heen opnieuw te trillen — precies zoals toen je de bronzen schijf in Latium voor het eerst aanraakte. Uit het niets gloeit het orakel weer op, en de vertrouwde stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt.
 
-"Ecce — je hebt de naam van Midas teruggegeven aan de herinnering," zegt de stem, "en met hem het gevaar van een wens die niet doordacht is. Sardis, Bacchus, de Pactolus — ze bestaan weer, precies zoals ze altijd hadden moeten bestaan."
+"[[Ecce|zie hier]] — je hebt de naam van Midas teruggegeven aan de herinnering," zegt de stem, "en met hem het gevaar van een wens die niet doordacht is. Sardis, Bacchus, de Pactolus — ze bestaan weer, precies zoals ze altijd hadden moeten bestaan."
 
 IMAGE:
 orakel_verschijnt.png
@@ -3102,7 +3102,7 @@ Het Orakel Verschijnt
 TEXT:
 Terwijl Pallas Athena naast Zeus haar plaats inneemt en de Olympos langzaam tot rust komt, trilt de lucht om je heen — net als toen je de bronzen schijf in Latium voor het eerst aanraakte. Het orakel gloeit weer op, en de stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt.
 
-"Ecce — je hebt de geboorte van Pallas Athena teruggegeven aan de herinnering," zegt de stem. "Wijsheid heeft weer een gezicht, een speer, en een naam die door heel Hellas wordt uitgesproken. Zonder jou was ook zij vervaagd, net als al het andere dat deze wereld dreigde te verliezen."
+"[[Ecce|zie hier]] — je hebt de geboorte van Pallas Athena teruggegeven aan de herinnering," zegt de stem. "Wijsheid heeft weer een gezicht, een speer, en een naam die door heel Hellas wordt uitgesproken. Zonder jou was ook zij vervaagd, net als al het andere dat deze wereld dreigde te verliezen."
 
 IMAGE:
 orakel_verschijnt.png
@@ -3524,7 +3524,7 @@ Het Orakel Verschijnt
 TEXT:
 Terwijl je van Prometheus' rots wegloopt, met vuur en hoop nu onlosmakelijk verbonden aan de mensheid, trilt de lucht om je heen — net als toen je de bronzen schijf in Latium voor het eerst aanraakte. Het orakel gloeit weer op, en de stem van de Boodschapper van Kronos klinkt, deze keer met iets dat verdacht veel op oprechte tevredenheid lijkt.
 
-"Ecce — je hebt het vuur van Prometheus, de doos van Pandora en de hoop die erin achterbleef teruggegeven aan de herinnering," zegt de stem. "Een titaan die alles riskeerde voor een schepping die niet eens de zijne was — zonder jou was ook dat verhaal voorgoed verdwenen."
+"[[Ecce|zie hier]] — je hebt het vuur van Prometheus, de doos van Pandora en de hoop die erin achterbleef teruggegeven aan de herinnering," zegt de stem. "Een titaan die alles riskeerde voor een schepping die niet eens de zijne was — zonder jou was ook dat verhaal voorgoed verdwenen."
 
 IMAGE:
 orakel_verschijnt.png
@@ -4098,7 +4098,7 @@ TITLE:
 Verschroeid door Glorie
 
 TEXT:
-Jupiter verschijnt in zijn volle staat: bliksem die de lucht openrijt, donder die de fundamenten van het paleis doet schudden, een licht zo verzengend dat het geen onderscheid maakt tussen liefde en vernietiging. "Iuppiter fulmen misit" — zo zal dit ogenblik ooit worden opgeschreven, drie woorden voor iets dat in werkelijkheid de hele hemel verscheurt. Semele's sterfelijke lichaam kan het niet verdragen — ze wordt op slag verteerd door het vuur van zijn ware gedaante, nog voor ze heeft kunnen beseffen wat ze eigenlijk had gevraagd.
+Jupiter verschijnt in zijn volle staat: bliksem die de lucht openrijt, donder die de fundamenten van het paleis doet schudden, een licht zo verzengend dat het geen onderscheid maakt tussen liefde en vernietiging. "[[Iuppiter fulmen misit|Jupiter wierp de bliksem]]" — zo zal dit ogenblik ooit worden opgeschreven, drie woorden voor iets dat in werkelijkheid de hele hemel verscheurt. Semele's sterfelijke lichaam kan het niet verdragen — ze wordt op slag verteerd door het vuur van zijn ware gedaante, nog voor ze heeft kunnen beseffen wat ze eigenlijk had gevraagd.
 
 IMAGE:
 semele_verteerd.png
@@ -4863,7 +4863,7 @@ TITLE:
 Het Orakel Keert Terug
 
 TEXT:
-De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warmer dan ooit. "Ecce — vier herinneringsfragmenten, vier gezichten van dezelfde jaloezie," zegt de stem. "Latona, Kallisto, Semele, Herakles — stuk voor stuk weer stevig verankerd in de herinnering, en met hen het hele verhaal van een liefde die een godin niet kon vergeven."
+De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warmer dan ooit. "[[Ecce|zie hier]] — vier herinneringsfragmenten, vier gezichten van dezelfde jaloezie," zegt de stem. "Latona, Kallisto, Semele, Herakles — stuk voor stuk weer stevig verankerd in de herinnering, en met hen het hele verhaal van een liefde die een godin niet kon vergeven."
 
 CODEX:
 codex_grammatica_ch2_overzicht
@@ -5323,7 +5323,7 @@ TITLE:
 Athena over Europa
 
 TEXT:
-Athena, die het hele verhaal zwijgend heeft gadegeslagen zoals ze dat sinds Hera's slachtoffers wel vaker doet voor ze uiteindelijk toch iets zegt, kijkt je nu recht aan. "Χαῖρε," zegt ze eerst, zoals altijd voor ze verdergaat. "Je hebt Io gezien worden veranderd in een dier om Jupiters ontrouw te verbergen," vervolgt ze. "Onthoud die vorm goed — want ergens anders, op ditzelfde moment, speelt hetzelfde patroon zich af met de rollen omgekeerd."
+Athena, die het hele verhaal zwijgend heeft gadegeslagen zoals ze dat sinds Hera's slachtoffers wel vaker doet voor ze uiteindelijk toch iets zegt, kijkt je nu recht aan. "[[Χαῖρε|gegroet]]," zegt ze eerst, zoals altijd voor ze verdergaat. "Je hebt Io gezien worden veranderd in een dier om Jupiters ontrouw te verbergen," vervolgt ze. "Onthoud die vorm goed — want ergens anders, op ditzelfde moment, speelt hetzelfde patroon zich af met de rollen omgekeerd."
 
 Ze vertelt, kort maar met duidelijke afkeuring in haar stem, over Europa: een Fenicische prinses die met haar dienaressen op het strand speelt, tot een opvallend tamme, sneeuwwitte stier zich bij de kudde voegt. Europa, argeloos, klimt op zijn rug — en de stier, die Jupiter zelf is, zwemt met haar de zee op, helemaal naar Kreta. Daar zal ze drie zonen baren, onder wie Minos — een naam die je, zegt Athena met een blik die meer weet dan ze nu al prijsgeeft, nog wel eens terug zult horen.
 
@@ -6016,7 +6016,7 @@ Twaalf Werken Volbracht
 TEXT:
 Herakles bedwingt Cerberus met blote handen, precies zoals afgesproken, en draagt hem — grommend, maar ongedeerd — helemaal naar Mycene. Eurystheus, bij het zien van het driekoppige monster op zijn eigen binnenplaats, duikt voor de allerlaatste keer zijn bronzen pot in en smeekt Herakles het beest onmiddellijk terug te brengen naar waar het vandaan kwam.
 
-Herakles brengt Cerberus, zoals beloofd, ongedeerd terug naar de onderwereld — en met die laatste daad zijn alle twaalf werken volbracht. "Νικῶ," zegt hij zacht, half tegen zichzelf, terwijl hij nog eenmaal omkijkt naar de poort van de onderwereld — geen triomfkreet, eerder de opluchting van iemand die zelf amper had verwacht dit ooit te overleven. Tien jaar dienstbaarheid, opgelegd door een orakel na de ergste daad van zijn leven, eindigen hier. De schuld die hij droeg sinds die vreselijke dag met Megara en hun kinderen is, voor zover een orakel dat kan bepalen, ingelost.
+Herakles brengt Cerberus, zoals beloofd, ongedeerd terug naar de onderwereld — en met die laatste daad zijn alle twaalf werken volbracht. "[[Νικῶ|ik overwin]]," zegt hij zacht, half tegen zichzelf, terwijl hij nog eenmaal omkijkt naar de poort van de onderwereld — geen triomfkreet, eerder de opluchting van iemand die zelf amper had verwacht dit ooit te overleven. Tien jaar dienstbaarheid, opgelegd door een orakel na de ergste daad van zijn leven, eindigen hier. De schuld die hij droeg sinds die vreselijke dag met Megara en hun kinderen is, voor zover een orakel dat kan bepalen, ingelost.
 
 Voor je afscheid neemt, drukt Herakles je zelf iets in handen: een van de gouden appels van de Hesperiden, die hij nooit heeft opgegeten. "Bewaar die," zegt hij. "Ik heb aan het bewijs dat ik ze heb gehaald genoeg — een verhaal onthoud je toch beter met iets dat je kunt vasthouden."
 
@@ -6081,7 +6081,7 @@ TITLE:
 Het Orakel Keert Terug
 
 TEXT:
-De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warm en tevreden. "Ecce — Io, bevrijd van Argus en van haarzelf. Herakles, bevrijd van een schuld die tien jaar heeft geduurd," zegt de stem. "Twee verhalen over wat het kost om vrij te zijn — en wat het waard is zodra je het eindelijk bent."
+De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warm en tevreden. "[[Ecce|zie hier]] — Io, bevrijd van Argus en van haarzelf. Herakles, bevrijd van een schuld die tien jaar heeft geduurd," zegt de stem. "Twee verhalen over wat het kost om vrij te zijn — en wat het waard is zodra je het eindelijk bent."
 
 CODEX:
 codex_grammatica_ch3_overzicht
