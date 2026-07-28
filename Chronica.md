@@ -2367,6 +2367,93 @@ wel `PERSON: helena:full` en een nieuwe `codex_helena_paard_stemmen`-entry,
 het eerste moment waarop Helena een eigen, onleesbare agenda krijgt in
 plaats van passief te ondergaan.
 
+### 7.16 Passieve taallaag (B23, audit fase 7 §5a/d/e) — pilot Proloog t/m Hoofdstuk 3 (**gebouwd, pilot**)
+
+Op verzoek eerst als PILOT gebouwd (Proloog t/m Hoofdstuk 3), niet meteen over
+alle negen hoofdstukken — zodat het mechanisme zich kan bewijzen voor het
+verder wordt uitgerold. Bewust **onvertaald, sfeer-only**: geen Nederlandse
+parafrase erbij (dat is straks B22's "Glosbeleid", een optionele, aanklikbare
+inline-vertaling — dit nu al toevoegen zou dat dupliceren). Geen nieuw
+CNS-mechanisme nodig: gewone Latijnse/Griekse woorden/zinnen, ingebed in de
+bestaande `TEXT:`/citaten, zonder `VOCAB:`-hook (dit is geen toetsbare
+woordenschat, puur herkenning/sfeer).
+
+**Twee lagen, zoals de audit voorstelde:**
+1. **Karakteristieke taal per NPC (§5e)** — een vast, herkenbaar signatuur-
+   woord dat een personage bij ELK optreden gebruikt, zodat herhaling zelf
+   het leereffect wordt:
+   - **De Boodschapper van Kronos** opent voortaan elk hoofdstuk-afsluitend
+     Orakel-moment met **"Ecce"** (Latijn, "zie hier/kijk") — toegepast op
+     alle drie de Hoofdstuk-1-lijnen (`CH1_A11`/`CH1_B09`/`CH1_C12`) en de
+     Hoofdstuk-2/3-equivalenten (`CH2_...`-orakelscène na Latona/Kallisto/
+     Semele/Herakles, `CH3_...`-orakelscène na Io/Herakles). Bewust in het
+     Latijn ongeacht welke lijn (Romeins- of Grieks-verteld) ze afsluit —
+     ze is zelf geen personage uit een specifieke mythetraditie maar een
+     kader-figuur erbuiten, dus krijgt ze een eigen, constante taalidentiteit
+     in plaats van mee te bewegen met de lijn die ze net becommentarieert.
+     Dat betekent dat een speler die alleen de Grieks-verteld-lijnen volgt,
+     via haar toch passief Latijn te horen krijgt, en omgekeerd.
+   - **Athena** krijgt **"Χαῖρε"** (Grieks, "gegroet/verheug u") als vaste
+     openingsgroet zodra ze zelf het woord neemt — toegepast op `CH3_IO14`
+     ("Athena over Europa"), haar enige echt sprekende moment binnen de
+     pilot-reikwijdte (haar andere Proloog-H3-optredens, `CH1_B08`/
+     `CH2_L07`/`CH2_S05`, zijn bewust stille observatiemomenten, dus geen
+     natuurlijke plek voor een groet).
+2. **Korte hoofdzinnen op het geleerde niveau (§5a, fase 2)**: twee
+   voorbeelden, elk in de taal van de eigen verteltraditie:
+   - **Latijn** (`CH2_S06`, "Verschroeid door Glorie"): "Iuppiter fulmen
+     misit" — bewust dezelfde vorm (`misit`, perfectum 3e persoon
+     enkelvoud van *mittere*) als de bestaande `puzzle_ch2s...`-vraag over
+     ditzelfde moment (`SP_PUZZLES`, regel ~904) — direct de door de audit
+     bepleite **herhaling met spreiding** (§5d): dezelfde grammaticale vorm
+     komt terug, nu passief in de vertelling in plaats van actief in een
+     puzzel.
+   - **Grieks** (`CH3_H25`, "Twaalf Werken Volbracht"): "Νικῶ" ("ik
+     overwin/ben overwinnaar") — Herakles' eigen, ingehouden reactie op het
+     voltooien van de twaalf werken.
+
+**Nog niet gedaan (bewust, voor een latere uitrol)**: Hoofdstuk 4 t/m 9
+(fase 3/4 uit het opbouwschema), een tweede Athena-herhaling binnen de
+pilot-reikwijdte, en `SP_PUZZLES`-brede afstemming (er kunnen méér
+puzzelvormen zijn die zich lenen voor eenzelfde spreidings-echo dan nu
+benut). B21 ("Leesvallen") kan nu, met deze laag als fundament, aan bod
+komen — al is de pilot-reikwijdte (Proloog-H3) ook meteen de reikwijdte
+waarbinnen leesvallen voorlopig het meest voor de hand liggen.
+
+### 7.17 B21: leesvallen — de eerste, in `CH2_L02C` (Latona-lijn) (**gebouwd, pilot**)
+
+Zelfde principe als het al bestaande `CH4_T06B` (een labyrint-splitsing die
+verkeerd om gaat als de speler niet goed leest), nu toegepast op taalniveau:
+een **verborgen naamval** (audit §5b) — een genitivus die door de
+woordvolgorde als onderwerp oogt.
+
+**Plek**: tussen `CH2_L02`/`CH2_L02B` (de herder die Latona naar een
+schuilplaats in het riet wijst) en `CH2_L03` — beide bestaande routes
+(de C/S/N-driehoek van `CH2_L02` én de Clementia-omweg via `CH2_L02B`)
+monden nu eerst uit in de nieuwe `CH2_L02C`, voor ze samen verder gaan naar
+`CH2_L03`. Bewust NIET op de herder zelf gelegd (`CH2_L02B` zegt expliciet
+dat hij "nooit een woord hardop" spreekt) maar op een oude, in een steen
+gekraste tekst tussen het riet — vindbaar ongeacht welke van de twee routes
+de speler nam.
+
+**De val**: "Iunonis oculi ubique" ("Juno's ogen [zijn] overal"). *Iunonis*
+(genitivus, "van Juno") staat vooraan, waar een Nederlandstalige lezer
+intuïtief het onderwerp verwacht — het echte onderwerp is *oculi*
+(nominativus meervoud, "ogen"). Twee keuzes, geen van beide gelabeld als
+"fout":
+- **Correct gelezen** (`CH2_L02C_GOED`): de speler begrijpt dat "haar ogen"
+  ook heel gewone mensen kunnen zijn (spionnen, omkoopbare herders) en
+  verbergt zich extra zorgvuldig — vlotte, korte weg naar `CH2_L03`.
+- **Misgelezen** (`CH2_L02C_FOUT`): de speler leest *Iunonis* als onderwerp
+  ("Juno is dichtbij") en vlucht overhaast — een extra scène met een korte,
+  NIET bestraffende omweg (verdwalen in het moeras, tijd verliezen), die het
+  misverstand zelf pas aan het einde impliciet oplost, zonder vertaling of
+  strafscherm — voor beide uiteindelijk hetzelfde `CH2_L03`.
+
+Getest: beide toegangsroutes (`CH2_L02` direct en via `CH2_L02B`) bereiken
+`CH2_L02C`, en beide keuzes daar convergeren correct terug naar `CH2_L03`
+— validator 0 fouten, geen nieuwe dode flags.
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
