@@ -1396,6 +1396,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Ook Cassandra, Priamus' dochter en ziener, waarschuwt tegen het paard — net als altijd zonder resultaat. Apollo vervloekte haar ooit: ze zou de waarheid altijd zien, maar nooit geloofd worden. Vannacht zal die vloek Troje het leven kosten." },
   codex_val_van_troje: { cat:"mythologie", titel:"De Val van Troje",
     tekst:"Na het feest, wanneer heel Troje eindelijk diep slaapt, laat Sinon de verstopte Grieken uit het paard. Ze openen de poorten van binnenuit; de teruggekeerde vloot stroomt de stad in. Wat volgt is geen veldslag meer, maar een slachting — Troje, na tien jaar belegerd te zijn geweest, valt uiteindelijk niet door kracht, maar door een list." },
+  codex_helena_paard_stemmen: { cat:"mythologie", titel:"Helena en de Stemmen bij het Paard",
+    tekst:"Volgens Menelaos' eigen verhaal in de Odyssee liep Helena die laatste nacht driemaal om het houten paard heen en bootste, één voor één, de stemmen na van de vrouwen van de verstopte Grieken — testend wie zich zou verraden. Geen enkele bron legt vast of ze hoopte hen te ontmaskeren, of juist, op het laatste moment, hen wilde beschermen tegen haar eigen nieuwe stad. Het is het enige moment in haar hele verhaal waarop niemand, ook de speler niet, met zekerheid weet aan welke kant ze eigenlijk stond." },
   codex_dood_priamus_astyanax: { cat:"mythologie", titel:"De Dood van Priamus en Astyanax",
     tekst:"Neoptolemus doodt Priamus bij het altaar van Zeus, nadat hij eerst diens laatste levende zoon Polites voor zijn ogen heeft neergestoken — de oude koning sterft waar hij zocht naar heiligdom, niet naar een gevecht. Hectors zoontje Astyanax wordt van de muren van Troje geworpen: de Grieken vrezen dat hij ooit zou opgroeien om zijn vader te wreken. Twee doden die samen de wreedste bladzijde van de hele oorlog vormen." },
   codex_cassandra_altaar: { cat:"mythologie", titel:"Cassandra bij het Altaar",
@@ -10602,6 +10604,10 @@ De Verzoening
 TEXT:
 Voor het eerst sinds de ruzie staat Achilles weer voor het verzamelde leger — niet om zijn recht op te eisen, maar om de wrok eindelijk los te laten. Agamemnon erkent, ruiterlijk en in het openbaar, dat hij verkeerd handelde, en geeft Briseis met rijke geschenken terug. Achilles kijkt er nauwelijks nog naar om. Er is nog maar één ding dat hem interesseert.
 
+DIALOGUE:
+Briseis
+Jullie noemen dit teruggeven, alsof ik ooit iets anders was dan wat er net van hand naar hand ging. Maar Patroklos was vriendelijk voor me, op de enige avonden dat hier iemand dat was — en om hem, tenminste, treur ik oprecht.
+
 CODEX:
 codex_verzoening_agamemnon
 
@@ -11404,15 +11410,20 @@ TITLE:
 De Poorten Gaan Open
 
 TEXT:
-Midden in de nacht klimmen de verstopte Grieken uit het paard en openen de poorten van Troje van binnenuit. Ver weg, op zee, ziet een wachter een signaalvuur — de teruggekeerde vloot vaart al aan land. Binnen enkele ogenblikken stroomt het hele Griekse leger de slapende stad binnen.
+Vlak voor middernacht zie je Helena, alleen, driemaal om het houten paard heen lopen — ze fluistert, telkens in een andere stem, de namen van vrouwen die ze in Griekenland ooit kende. Uit de buik van het paard klinkt, één keer, een onderdrukte zucht — een man die bijna antwoordt op een stem die hij als die van zijn eigen vrouw herkent, tot een hand over zijn mond hem tegenhoudt. Niemand, ook jij niet, weet zeker of ze hen probeerde te ontmaskeren, of juist, voor het laatst, wilde beschermen tegen de stad die haar nooit helemaal heeft vertrouwd.
+
+Midden in de nacht klimmen de verstopte Grieken alsnog uit het paard en openen de poorten van Troje van binnenuit. Ver weg, op zee, ziet een wachter een signaalvuur — de teruggekeerde vloot vaart al aan land. Binnen enkele ogenblikken stroomt het hele Griekse leger de slapende stad binnen.
 
 Wat volgt is geen veldslag meer. Het is een slachting.
 
 IMAGE:
 troje_valt_trojanen.png
 
+PERSON:
+helena:full
+
 CODEX:
-codex_val_van_troje
+codex_helena_paard_stemmen, codex_val_van_troje
 
 PUZZLE:
 puzzle_ch9_tro_3decl
