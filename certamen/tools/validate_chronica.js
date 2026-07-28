@@ -29,7 +29,7 @@ const D = sandbox.out;
 const CNSParser = {
   KNOWN_SECTIONS: ["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
     "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-    "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION"],
+    "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION"],
   parse(rawText) {
     const scenes = new Map();
     if (!rawText || !rawText.trim()) return scenes;
@@ -214,6 +214,15 @@ for (const sc of scenesById.values()) {
   if (m.PERSON) for (const p of splitList(m.PERSON)) {
     const id = p.split(':')[0].trim();
     if (!D.SP_CODEX_PERSONS[id]) errors.push(`${sc.id}: PERSON "${id}" niet gedefinieerd in SP_CODEX_PERSONS`);
+  }
+  if (m.REACTION) {
+    const lines = m.REACTION.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    const id = lines[0];
+    if (id && !D.SP_CODEX_PERSONS[id]) errors.push(`${sc.id}: REACTION "${id}" niet gedefinieerd in SP_CODEX_PERSONS`);
+    if (lines.length < 2) errors.push(`${sc.id}: REACTION heeft geen CLEMENTIA/SEVERITAS-regel`);
+    for (const line of lines.slice(1)) {
+      if (!/^(CLEMENTIA|SEVERITAS|NEUTRAL):\s*\S/i.test(line)) errors.push(`${sc.id}: REACTION-regel "${line}" mist een geldige CLEMENTIA/SEVERITAS/NEUTRAL-prefix`);
+    }
   }
 }
 
