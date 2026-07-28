@@ -2072,6 +2072,15 @@ uitgebreid getest werd, in plaats van pas nadat de stale cache voor
 verwarring zorgde — de "bump direct bij elke wijziging"-vervolgstap uit de
 vorige paragraaf is dus vanaf nu ook echt de gevolgde gewoonte.
 
+**B20 (audit-backlog): Briseis krijgt een eigen regel (2026-07-29).** Ze was
+tot nu toe de enige echte lijdend-voorwerp-figuur in `CH8_EPI_005` — de
+aanleiding van de hele ruzie tussen Agamemnon en Achilles, teruggegeven
+"met rijke geschenken" zonder ooit zelf iets te zeggen. Een nieuwe
+`DIALOGUE:`-regel (geen mechanisch gevolg, `codex_verzoening_agamemnon`
+blijft ongewijzigd) laat haar één keer zelf spreken, met een nuance die
+recht doet aan Ilias 19: geen pure wrok, geen pure genegenheid, maar
+specifiek verdriet om Patroklos' vriendelijkheid — niet om Achilles zelf.
+
 ### 7.15 Hoofdstuk 9: "Ilion in Vlammen" — vertakking ZONDER reconvergentie (**gebouwd**)
 
 Op Gerbens verzoek (2026-07-25/26) de val van Troje, verteld als twee
@@ -2345,6 +2354,18 @@ scènes bereikbaar en correct doorverwezen, alle vier nieuwe payoff-tokens
 zowel MET als ZONDER kwalificerende relatie (bevestigd dat de alinea er dan
 niet-leeg, resp. volledig afwezig — geen loze `<p></p>` — uitziet), en de
 gecombineerde Aeneas+Deiphobos-redding (beide helpers vuren tegelijk).
+
+**B19 (audit-backlog): Helena bij het houten paard (2026-07-29).** Nieuwe
+alinea vooraan in `CH9_TRO_013` ("De Poorten Gaan Open"), naar Odyssee
+4.274-289 (Menelaos' eigen verhaal aan Telemachos): Helena loopt driemaal
+om het paard heen en bootst de stemmen na van de vrouwen van de verstopte
+Grieken. BEWUST dubbelzinnig gehouden — de tekst laat expliciet in het
+midden of ze hen probeerde te ontmaskeren of te beschermen, zoals de bron
+zelf ook geen uitsluitsel geeft. Geen mechanische vertakking (de
+historische afloop ligt vast, de Grieken klimmen sowieso uit het paard) —
+wel `PERSON: helena:full` en een nieuwe `codex_helena_paard_stemmen`-entry,
+het eerste moment waarop Helena een eigen, onleesbare agenda krijgt in
+plaats van passief te ondergaan.
 
 ---
 
