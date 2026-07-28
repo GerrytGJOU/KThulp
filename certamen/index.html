@@ -95,6 +95,12 @@ input,select,textarea{font-family:inherit}
 .eyebrow.l::before{display:none}.eyebrow.l{justify-content:flex-start}
 .note{font-size:14px;color:var(--muted);line-height:1.55}
 .note.warn{color:#e8b96b}
+/* Chronica Glosbeleid (B22): optioneel, aanklikbaar Latijn/Grieks in de verteltekst —
+   stippellijn nodigt uit, vertaling verschijnt pas na een tik/klik, nooit standaard
+   zichtbaar (geen woordenlijst in de kantlijn). */
+.gloss{border-bottom:1px dotted var(--hi);cursor:pointer}
+.gloss.open{border-bottom-style:solid}
+.gloss.open::after{content:" (" attr(data-tr) ")";color:var(--muted);font-style:italic}
 .pill{display:inline-block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:rgba(var(--glowA),.14);color:var(--hi-bright);border:1px solid var(--hi-dim);border-radius:20px;padding:3px 11px}
 
 /* panels & tiles */
@@ -816,8 +822,8 @@ body.greek .qcard .word{color:#143a5e}
 <script src="totalwar.js?v=20260712g"></script>
 <script src="training.js?v=20260712a"></script>
 <script src="freepractice.js?v=20260706a"></script>
-<script src="singleplayer-data.js?v=20260729c"></script>
-<script src="singleplayer.js?v=20260729c"></script>
+<script src="singleplayer-data.js?v=20260729d"></script>
+<script src="singleplayer.js?v=20260729d"></script>
 <script>
 /* ---- INIT ---- */
 (async function(){

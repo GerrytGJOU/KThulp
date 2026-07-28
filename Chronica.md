@@ -2454,6 +2454,37 @@ Getest: beide toegangsroutes (`CH2_L02` direct en via `CH2_L02B`) bereiken
 `CH2_L02C`, en beide keuzes daar convergeren correct terug naar `CH2_L03`
 — validator 0 fouten, geen nieuwe dode flags.
 
+### 7.18 B22: Glosbeleid — optioneel, aanklikbaar in-tekstwoord (**gebouwd**)
+
+Audit §5c: geen woordenlijst in de kantlijn, maar een **optioneel, aanklikbaar
+in-tekstwoord** — vertaling op aanvraag, nooit standaard zichtbaar. Nieuwe
+markup `[[brontekst|vertaling]]` in `TEXT:`/`DIALOGUE:`, verwerkt NA
+`SpTextResolver.resolve()` (tokens resolven dus gewoon eerst) door de nieuwe
+`spGlossHTML()` (singleplayer.js): de rest van de alinea wordt normaal
+ge-`esc()`'t, het gegloste stuk wordt een `<span class="gloss">` met
+`data-tr`. Geen JS-toggle-functie nodig — `onclick="this.classList.toggle
+('open')"` volstaat, en de vertaling verschijnt puur via CSS
+(`.gloss.open::after{content:" (" attr(data-tr) ")"}`, index.html) — stippellijn
+by default, vertaling verborgen tot een tik. `spParagraphsHTML()` en de
+`DIALOGUE`-rendering in `SCREENS.spPlay` gebruiken dit nu allebei.
+
+**Toegepast op de bestaande B23-pilotfrasen**: alle vijf `Ecce`-momenten
+(Boodschapper), `Χαῖρε` (Athena, `CH3_IO14`), en de twee korte-zin-
+voorbeelden (`Iuppiter fulmen misit`, `Νικῶ`) kregen een gloss.
+
+**Bewust NIET gegloste uitzondering**: `Iunonis oculi ubique`, de B21-leesval
+in `CH2_L02C` — een gloss zou de hele val zinloos maken, want de speler zou
+de vertaling gewoon kunnen opvragen in plaats van de zin zelf te moeten
+ontleden. Leesvallen en het Glosbeleid zijn dus bewust twee gescheiden
+categorieën: alles in de passieve laag (B23) is glosbaar, een leesval nooit.
+
+Getest: `spGlossHTML()` rechtstreeks in de browser — de geresolvede HTML
+bevat geen rauwe `[[`/`]]` meer, wél de juiste `<span class="gloss">` met
+correct ge-`esc()`'te `data-tr`; een live DOM-test bevestigde dat
+`getComputedStyle(span,'::after').content` pas ná een klik de vertaling
+toont (`"none"` ervoor, `" (Jupiter wierp de bliksem)"` erna); en `CH2_L02C`
+bevat inderdaad geen enkele `.gloss`-span.
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
