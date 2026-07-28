@@ -281,10 +281,17 @@ const SpTextResolver = {
       case "possessive_cap": return spCapitalize(p.poss);
       case "tendency_address":     return spTendencyAddressPhrase(state);
       case "tendency_address_cap": return spCapitalize(spTendencyAddressPhrase(state));
+      case "eigen_wapen":          return SP_CLASS_WEAPON_NOUN[state.classId] || "wapen";
     }
     return undefined;
   },
 };
+// Voor de zelfherkenningsscène in Hoofdstuk 9 (CH9): welk wapen draagt de
+// speler zelf, op basis van de klasse gekozen bij het Orakel in de proloog —
+// zelfde koppeling als SP_AVATAR_STORY_UNLOCKS ("wapen:boog"->boogschutter_orakel
+// etc., singleplayer-data.js), maar dan van classId naar een gewoon
+// zelfstandig naamwoord voor in de verteltekst.
+const SP_CLASS_WEAPON_NOUN = { boogschutter:"boog", hopliet:"speer", cavalerie:"zwaard" };
 // Kiest een willekeurige, gender-passende aanspreekvorm bij de opgebouwde
 // Clementia/Severitas-houding (spApproachTendency) — zie SP_TENDENCY_PHRASES
 // (singleplayer-data.js). Vanaf Hoofdstuk 3 gebruikt in NPC-DIALOGUE/TEXT via
@@ -400,7 +407,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS)]);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
   stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[],
   payoffsSeen:{}, relations:{}, kroniek:[] });
@@ -1415,8 +1422,8 @@ function spHookReward(text){
   spSaveProgress({ classId, traits, stats });
   if(isNew){
     toast("Wapen gekozen!", BM_IDENT
-      ? "Je pad is bepaald — dit werkt ook door in Battle Mode."
-      : "Je pad is bepaald. Log in met je klascode om dit ook in Battle Mode te laten meetellen.");
+      ? "Je pad is bepaald. Dit wapen zal je overal vergezellen waar je nog terechtkomt."
+      : "Je pad is bepaald. Log in met je klascode om dit wapen ook buiten dit verhaal te laten meetellen.");
     spKroniekLog(`Bij het Orakel van Chronos koos je je pad: ${fields.class}.`);
   }
 }
@@ -1429,7 +1436,7 @@ function spHookCodex(text){
   const fresh = ids.filter(id=>!existing.includes(id));
   if(!fresh.length) return;
   spSaveProgress({ codex:[...existing, ...fresh] });
-  toast("Codex-item ontgrendeld!","Er is een nieuwe bladzijde toegevoegd aan de Codex Memoriae.");
+  toast("Nieuwe bladzijde","Er is een nieuwe bladzijde toegevoegd aan de Codex Memoriae.");
 }
 // Skillpoints (Chronica.md §11.3): een STATPOINTS:-sectie op de EINDE-scène
 // van een hoofdstuk kent basispunten toe (nu een vaste 3 — de bonuspunten
@@ -1441,7 +1448,7 @@ function spHookStatpoints(text){
   if(!n) return;
   const total = (SP_STATE.skillpoints||0) + n;
   spSaveProgress({ skillpoints: total, statSpentSinceAward:{} });
-  toast("Je bent gegroeid", `Je hebt ${n} statpunt${n===1?"":"en"} verdiend — investeer ze bij je Karakter Informatie.`);
+  toast("Je bent gegroeid", `Je voelt ${n===1?"een nieuwe kracht":""+n+" nieuwe krachten"} in jezelf ontwaken — verdeel ${n===1?"hem":"ze"} bij je Karakter Informatie.`);
 }
 function spHookQuest(text){
   const idx=text.indexOf(":");
