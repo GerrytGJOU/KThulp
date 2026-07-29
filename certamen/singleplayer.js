@@ -426,7 +426,7 @@ function spTendencyAddressPhrase(state){
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
                   "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION"],
+                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION","CHECK"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -1251,6 +1251,7 @@ SCREENS.spPlay = function(){
 
   if(scene.meta.PUZZLE) return spRenderPuzzle(scene);
   if(scene.meta.COMBAT) return spStartCombatFromScene(scene);
+  if(scene.meta.CHECK) return spStartCheckFromScene(scene);
 
   const payoffs = spResolvePayoffs(SP_STATE.node);
   const titleHTML = scene.title ? `<h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>` : "";
@@ -2097,4 +2098,63 @@ function spCombatAttack(){
     return;
   }
   SCREENS.spCombat();
+}
+
+/* ---- B29a: DE VIER-UITKOMSTEN-LADDER ("CHECK:", Chronica.md §11.4) — een
+   spaarzaam, dramatisch dobbelmechanisme, los van de bestaande gated choice
+   (drempel, geen dobbelsteen, altijd zichtbaar — zie §11.4). Gebouwd op
+   verzoek (2026-07-30), NOG NERGENS INGEZET: SP_CHECKS (singleplayer-data.js)
+   is bewust leeg, klaar voor de eerste echte check zodra bepaald is WAAR.
+   Net als PUZZLE/COMBAT een early-return in SCREENS.spPlay — een
+   CHECK-scène heeft daarom BEWUST geen CHOICES: de worp zelf bepaalt de
+   vervolgscène via de vier takken in SP_CHECKS[checkId], niet de speler.
+   SP_CHECK_RESULTAAT is, net als SP_COMBAT, bewust GEEN onderdeel van
+   SP_STATE/localStorage: een worp is een kort moment, geen opgeslagen
+   voortgang. ---- */
+let SP_CHECK_RESULTAAT = null;
+// 1d20 + stat tegen een DC. "kritiek" bij een natuurlijke 1, ALTIJD — ook bij
+// een hoge stat blijft een fumble een fumble, precies het soort verrassing
+// die audit-bevinding "is falen interessant?" nodig heeft. "volledig" bij
+// een natuurlijke 20 of een totaal van dc+5 of meer. Daartussenin: "deels"
+// zodra de dc gehaald wordt, "gefaald" tot 5 punten eronder.
+function spRollCheck(statKey, dc){
+  const roll = 1 + Math.floor(Math.random()*20);
+  const stat = SP_STATE.stats?.[statKey] || 0;
+  const total = roll + stat;
+  let uitkomst;
+  if(roll===1) uitkomst = "kritiek";
+  else if(roll===20 || total>=dc+5) uitkomst = "volledig";
+  else if(total>=dc) uitkomst = "deels";
+  else if(total>=dc-5) uitkomst = "gefaald";
+  else uitkomst = "kritiek";
+  return { roll, stat, total, dc, uitkomst };
+}
+function spStartCheckFromScene(scene){
+  const checkId = scene.meta.CHECK.trim();
+  const check = SP_CHECKS[checkId];
+  if(!check){ console.error("Onbekende check:", checkId); return spGoCns(scene.choices[0]?.target); }
+  const resultaat = spRollCheck(check.stat, check.dc);
+  const tak = check[resultaat.uitkomst];
+  SP_CHECK_RESULTAAT = { ...resultaat, checkId, sceneTitle:scene.title, tekst:tak?.tekst, target:tak?.target };
+  SCREENS.spCheck();
+}
+SCREENS.spCheck = function(){
+  const r = SP_CHECK_RESULTAAT;
+  if(!r){ go("spSlots"); return; }
+  const uitkomstLabel = { volledig:"Volledig geslaagd", deels:"Deels geslaagd", gefaald:"Gefaald", kritiek:"Kritiek gefaald" }[r.uitkomst];
+  H(brand(true)+`
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SpTextResolver.resolve(r.sceneTitle||"Beproeving", SP_STATE))}</h2>${spAudioToggleHTML()}</div>
+  <div class="panel" style="text-align:center">
+    <div class="eyebrow l">Worp</div>
+    <p class="note">1d20 (${r.roll}) + ${r.stat} = ${r.total} tegen DC ${r.dc}</p>
+    <p style="font-weight:700;margin-top:8px">${esc(uitkomstLabel)}</p>
+  </div>
+  <div class="panel">${spParagraphsHTML(r.tekst||"", SP_STATE)}</div>
+  <button class="btn btn-gold btn-block lg" onclick="spCheckContinue()">Ga verder</button>
+  ${foot()}`);
+};
+function spCheckContinue(){
+  const target = SP_CHECK_RESULTAAT?.target;
+  SP_CHECK_RESULTAAT = null;
+  spGoCns(target);
 }

@@ -29,7 +29,7 @@ const D = sandbox.out;
 const CNSParser = {
   KNOWN_SECTIONS: ["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
     "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-    "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION"],
+    "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION","CHECK"],
   parse(rawText) {
     const scenes = new Map();
     if (!rawText || !rawText.trim()) return scenes;
@@ -118,6 +118,17 @@ for (const p of (D.SP_PAYOFFS || [])) {
   if (p.type === 'deur' && p.content && p.content.choice && p.trigger && p.trigger.scene) {
     (adj.get(p.trigger.scene) || []).push(p.content.choice.target);
   }
+}
+// CHECK-scènes hebben bewust geen CHOICES (de worp bepaalt de vervolgscène) —
+// hun vier takken tellen dus ook als graafkant, anders zijn ze straks
+// vals-positief "onbereikbaar" zodra SP_CHECKS echte entries krijgt.
+for (const sc of scenesById.values()) {
+  if (!sc.meta.CHECK) continue;
+  const check = D.SP_CHECKS && D.SP_CHECKS[sc.meta.CHECK.trim()];
+  if (!check) continue;
+  const targets = ['volledig', 'deels', 'gefaald', 'kritiek']
+    .map(tak => check[tak] && check[tak].target).filter(t => t && scenesById.has(t));
+  adj.set(sc.id, (adj.get(sc.id) || []).concat(targets));
 }
 
 // Onbereikbare scènes: vanaf elk hoofdstuk-startpunt
@@ -224,6 +235,19 @@ for (const sc of scenesById.values()) {
     for (const line of lines.slice(1)) {
       if (!/^(CLEMENTIA|SEVERITAS|NEUTRAL):\s*\S/i.test(line)) errors.push(`${sc.id}: REACTION-regel "${line}" mist een geldige CLEMENTIA/SEVERITAS/NEUTRAL-prefix`);
     }
+  }
+  if (m.CHECK) {
+    const checkId = m.CHECK.trim();
+    const check = D.SP_CHECKS && D.SP_CHECKS[checkId];
+    if (!check) errors.push(`${sc.id}: CHECK "${checkId}" niet gedefinieerd in SP_CHECKS`);
+    else {
+      for (const tak of ['volledig', 'deels', 'gefaald', 'kritiek']) {
+        const target = check[tak] && check[tak].target;
+        if (!target) errors.push(`${sc.id}: CHECK "${checkId}" mist een "${tak}"-tak met een target`);
+        else if (!scenesById.has(target)) errors.push(`${sc.id}: CHECK "${checkId}" tak "${tak}" verwijst naar niet-bestaande scène "${target}"`);
+      }
+    }
+    if (sc.choices && sc.choices.length) warnings.push(`${sc.id}: heeft zowel CHECK als CHOICES — CHOICES wordt genegeerd (de worp bepaalt de vervolgscène)`);
   }
 }
 
