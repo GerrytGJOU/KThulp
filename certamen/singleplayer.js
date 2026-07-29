@@ -286,7 +286,7 @@ function spGlossHTML(text){
 const SpTextResolver = {
   resolve(text, state){
     if(!text) return "";
-    return text.replace(/\{([a-zA-Z_]+(?:\.[a-zA-Z_]+)?)\}/g, (match, path) => {
+    return text.replace(/\{([a-zA-Z0-9_]+(?:\.[a-zA-Z0-9_]+)?)\}/g, (match, path) => {
       const v = this.lookup(path, state);
       return v===undefined ? match : v;
     });
@@ -307,6 +307,8 @@ const SpTextResolver = {
       case "priamus_afscheid":     return ((state.relations||{}).priamus||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD ? SP_ENDKAPITAAL_PRIAMUS_AFSCHEID : "";
       case "cassandra_payoff":     return ((state.relations||{}).cassandra||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD ? SP_ENDKAPITAAL_CASSANDRA_PAYOFF : "";
       case "andromache_payoff":    return ((state.relations||{}).andromache||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD ? SP_ENDKAPITAAL_ANDROMACHE_PAYOFF : "";
+      case "prometheus_route_echo": return SP_CH1_C09_ROUTE_ECHO[state.flags?.ch1_c09_route] || "";
+      case "sfinx_route_echo":      return SP_CH6_007_ROUTE_ECHO[state.flags?.ch6_007_route] || "";
     }
     if(SP_TENDENCY_STORY_VARIANTS[path]) return spTendencyStoryVariant(path, state);
     return undefined;
@@ -364,6 +366,36 @@ function spBondgenotenAanwezig(state){
     }
   }
   return parts.length ? parts.join(" ") : SP_ENDKAPITAAL_FALLBACK;
+}
+// B27 (Chronica-audit, fase 9 §6): geeft de afsluitmomenten terug waar de
+// speler op dit punt recht op heeft, op basis van SP_NPC_AFSLUITINGEN
+// (singleplayer-data.js) en de opgebouwde relatiescores. Mechanisme al
+// werkend en getest, maar NOG NERGENS AANGEROEPEN vanuit een scène — zie de
+// toelichting bij SP_NPC_AFSLUITINGEN voor waarom (Boek II is nog te kort
+// voor een "laat in het blok"-moment). Toekomstig gebruik: een scène roept
+// dit aan en toont voor elke treffer `.tekst` als eigen alinea, net als
+// {bondgenoten_aanwezig} dat nu al doet.
+function spNpcAfsluitingenBeschikbaar(state){
+  const rel = state.relations || {};
+  return Object.entries(SP_NPC_AFSLUITINGEN)
+    .filter(([id, def]) => (rel[id]||0) >= def.drempel)
+    .map(([id, def]) => ({ id, nm: SP_CODEX_PERSONS[id]?.nm || id, tekst: def.tekst }));
+}
+// B28 (Chronica-audit, fase 9 §4): bepaalt de uitkomst wanneer de speler een
+// bondgenoot (gekozenNpcId) voor een taak aanwijst. `taak` heeft de vorm
+// { idealeCandidates:[npc_id,...], relatieDrempel, succesTekst,
+// zwakkeBandTekst, verkeerdeKeuzeTekst } — zie de toelichting bij
+// SP_NPC_AFSLUITINGEN (singleplayer-data.js). Nog geen enkele `taak`
+// geschreven en nergens aangeroepen: de audit noemt dit zelf "te vroeg voor
+// dit spel, nog niet ervoor" zolang er geen brede, onderscheiden
+// bondgenotencast bestaat (die pas na de Odyssee/Aeneis-hoofdstukken
+// opgebouwd is). Puur het generieke mechanisme, klaar voor zodra dat wel zo is.
+function spRolverdelingUitkomst(taak, gekozenNpcId, state){
+  const juisteKeuze = taak.idealeCandidates.includes(gekozenNpcId);
+  const band = (state.relations||{})[gekozenNpcId] || 0;
+  if(!juisteKeuze) return { geslaagd:false, tekst:taak.verkeerdeKeuzeTekst };
+  const geslaagd = band >= (taak.relatieDrempel||0);
+  return { geslaagd, tekst: geslaagd ? taak.succesTekst : taak.zwakkeBandTekst };
 }
 // Zelfde principe als spTendencyAddressPhrase, maar voor een volledige
 // verhaalzin i.p.v. een los bijvoeglijk naamwoord — zie

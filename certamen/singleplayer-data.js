@@ -700,6 +700,73 @@ const SP_ENDKAPITAAL_CASSANDRA_PAYOFF = "Vlak voor Aias haar wegsleurt, vindt Ca
 // Andromache's payoff (CH9_GRI_016, na een relatie opgebouwd bij CH9_001).
 const SP_ENDKAPITAAL_ANDROMACHE_PAYOFF = "Tussen de rij gevangen vrouwen vindt Andromache, al half weggeleid door Neoptolemus' mannen, nog één keer jouw blik — dezelfde blik die ze die dag in Hectors huis al even had opgevangen. Ze zegt niets. Dat hoeft ook niet.";
 
+/* ---- B27: NPC-AFSLUITMOMENTEN (Chronica-audit, fase 9 §6) — MECHANISME EN
+   DATA, NOG NERGENS AAN EEN SCÈNE GEKOPPELD. Op verzoek (2026-07-30) alleen
+   voorbereid, niet gebouwd: de audit zelf plaatst dit "laat in het Odyssee/
+   Aeneis-blok" (Hoofdstuk 10-15), en dat blok is op dit moment nog maar vier
+   scènes per lijn diep (§7.19) — een afsluitmoment daar nu al inbouwen zou
+   geforceerd aanvoelen. Zodra een echt "laat" punt in dat blok bestaat, kan
+   een scène daar `spNpcAfsluitingenBeschikbaar(SP_STATE)` aanroepen
+   (singleplayer.js) en voor elke treffer een korte alinea tonen.
+   Bewust UITGESLOTEN: Odysseus en Aeneas zelf (hoofdpersonen van Boek II,
+   geen "bondgenoot" die je opnieuw tegenkomt), Achilles/Aias (al dood vóór
+   Hoofdstuk 10 eindigt) en Priamus (kreeg al zijn eigen afscheid, zie
+   SP_ENDKAPITAAL_PRIAMUS_AFSCHEID). Deiphobos staat er WEL in, maar met een
+   herdenkende in plaats van een weerziens-tekst — hij sterft zelf al bij
+   `CH9_MENELAOS_HELENA`. ---- */
+const SP_NPC_AFSLUITINGEN = {
+  menelaos: { drempel:1,
+    tekst:"In Sparta, jaren later, tref je Menelaos en Helena samen aan — werkelijk samen, niet als een koning en zijn herwonnen bezit. Wat er ook gebeurd is die nacht dat Troje viel, het heeft iets losgemaakt dat nooit meer helemaal is dichtgevroren." },
+  helena: { drempel:1,
+    tekst:"Helena, ouder nu en rustiger dan je haar ooit hebt gezien, herkent je meteen — en voor het eerst sinds Sparta lijkt ze niet bang voor wat jij van haar zou kunnen denken." },
+  diomedes: { drempel:2,
+    tekst:"Diomedes keerde terug naar Argos, en trof daar een vrouw aan die hem, na tien jaar oorlog gevolgd door een lange thuisreis, nauwelijks nog herkende. Hij vertrok weer, uiteindelijk, naar Italië — een tweede leven dat niemand in Griekenland hem had voorspeld." },
+  agamemnon: { drempel:1,
+    tekst:"Agamemnon keerde terug naar Mycene als overwinnaar, en stierf er binnen het uur — vermoord door zijn eigen vrouw, in zijn eigen bad. Van iedereen die je in Hoofdstuk 7 en 8 leerde kennen, is zijn thuiskomst verreweg de wreedste ironie." },
+  nestor: { drempel:1,
+    tekst:"Nestor, als enige van de oudere koningen, bereikte Pylos zonder één storm, één ramp, één god die tegen hem samenspande — een thuiskomst zo saai dat ze bijna een grap lijkt naast alle andere." },
+  telamon: { drempel:1,
+    tekst:"Telamon, koning van Salamis, hoorde het nieuws over zijn zoon Aias pas maanden later — te laat om nog iets anders te doen dan rouwen om een zoon die hij nooit meer zou zien thuiskomen." },
+  cassandra: { drempel:1,
+    tekst:"Cassandra werd als oorlogsbuit meegevoerd door Agamemnon zelf — en voorzag, zoals altijd, precies hoe die reis zou eindigen. Ook deze keer geloofde niemand haar op tijd." },
+  andromache: { drempel:1,
+    tekst:"Andromache, nu Neoptolemus' oorlogsbuit, droeg hem zonen — en toen hij stierf, hertrouwde ze met Helenus, Hectors eigen broer. Van alle Trojaanse vrouwen bouwde zij, tegen elke verwachting in, uiteindelijk het meest van een nieuw leven op." },
+  deiphobos: { drempel:1,
+    tekst:"Wat er met Deiphobos gebeurde, weet je al — je was er zelf bij toen Menelaos hem vond. Wat je toen niet zag: zijn lichaam bleef, gruwelijk verminkt, achter in de as van Troje, met niemand meer over om het te begraven." },
+};
+/* ---- B28: ROLVERDELING IN EEN CLIMAX (Chronica-audit, fase 9 §4) — ENKEL
+   HET GENERIEKE MECHANISME, GEEN CONCRETE "TAAK" NOG. Afhankelijk van B18
+   (aanwezigheids-logica, gebouwd) én B27 (hierboven, ook nog niet aan een
+   scène gekoppeld) — de audit zelf noemt dit "te vroeg voor dit spel, nog
+   niet ervoor": het heeft een brede, individueel onderscheiden bondgenoten-
+   cast nodig om een echt alternatief te bieden, en die cast bestaat pas
+   goed na de Odyssee/Aeneis-hoofdstukken. Vorm van een `taak`-object (nog
+   geen enkele geschreven): { idealeCandidates:[npc_id,...], relatieDrempel,
+   succesTekst, zwakkeBandTekst, verkeerdeKeuzeTekst }. Gebruik:
+   `spRolverdelingUitkomst(taak, gekozenNpcId, SP_STATE)` (singleplayer.js). ---- */
+
+/* ---- ROUTE-ECHO'S (audit-bevinding: 29 van de 45 flags volgen hetzelfde
+   dode patroon — een STAT-gated routekeuze die zichzelf drie scènes lang
+   bevestigt en daarna nooit meer gelezen wordt). Op verzoek (2026-07-30)
+   twee representatieve voorbeelden gerepareerd, niet alle 29 — bedoeld als
+   bewijs van de aanpak, niet als volledige sanering. Elk is een kleine
+   `{token}`-lookup (SpTextResolver, singleplayer.js) die de eerder gezette
+   route-FLAG terugleest en er, één scène later, een korte callback-alinea
+   van maakt — dezelfde soort conditionele paragraaf als B23's
+   `{priamus_afscheid}`/`{cassandra_payoff}` (leeg als de flag nog niet
+   gezet is, wat vóór CH1_C09/CH6_007 nooit voorkomt maar de functie toch
+   veilig maakt voor hergebruik). ---- */
+const SP_CH1_C09_ROUTE_ECHO = {
+  open:"De lange tocht via het karrenspoor gaf je onderweg de tijd om na te denken over wat je zo dadelijk zou zien — misschien wel goed, want niets had je er echt op kunnen voorbereiden.",
+  vis:"De inspanning van de klim zit nog in je armen wanneer je eindelijk opkijkt — een pijn die, vergeleken met wat je nu ziet, ineens onbeduidend klein voelt.",
+  prudentia:"Dat je de adelaar volgde in plaats van de omweg te nemen, blijkt nu een wrange grap: hetzelfde dier cirkelt alweer boven je, wachtend op iets heel anders dan een korte weg naar een rots.",
+};
+const SP_CH6_007_ROUTE_ECHO = {
+  open:"Je moed van daarnet houdt je nog overeind, ook al voel je je, nu de Sfinx zelf spreekt, minder zeker dan toen je naast Oedipus ging staan.",
+  agilitas:"Je lichtvoetigheid van daarnet is nu, stilstaand voor de Sfinx zelf, van geen enkel nut meer — een merkwaardig gevoel, na zoveel behoedzaamheid onderweg.",
+  prudentia:"Wat je bij de overblijfselen zag — die vermoeidheid onder haar zelfverzekerdheid — geeft je, terwijl ze spreekt, het onbestemde gevoel dat dit raadsel haar zelf ook uitput.",
+};
+
 /* ---- GRIEKS ALFABET — transcriptietabel, getoond tijdens puzzels ---- */
 const SP_GREEK_ALPHABET = [
   { letter:"Α α", nm:"alfa",    translit:"a"  },
@@ -3420,7 +3487,7 @@ CHOICES:
 
 * Volg het karrenspoor dat om de berg heen naar de pas voert -> CH1_C09_PAD
 * Beklim de rotswand rechtstreeks, hand over hand tegen het zwaartepunt in [STAT:vis:13] -> CH1_C09_VIS
-* Lees het vluchtpatroon van de adelaar — zijn dagelijkse route verraadt de kortste weg naar de rots [STAT:prudentia:11] -> CH1_C09_PRU
+* Lees het vluchtpatroon van de adelaar — zijn dagelijkse route verraadt de kortste weg naar de rots [STAT:ingenium:11] -> CH1_C09_PRU
 
 END
 
@@ -3482,6 +3549,8 @@ Geketend, Niet Gebroken
 
 TEXT:
 Hoog tegen een rots, ver van de vallei waar alles begon, vind je Prometheus — vastgeketend door Zeus' eigen bevel, zijn straf nog maar net begonnen aan wat een eeuwigheid dreigt te worden. Een adelaar cirkelt al boven hem, wachtend tot de avond valt om zijn dagelijkse, gruwelijke maaltijd te beginnen.
+
+{prometheus_route_echo}
 
 Beneden hem, onzichtbaar vanaf de rots maar voelbaar tot in zijn eigen botten, branden inmiddels duizend kleine vuren verspreid over de valleien. Mensen die ooit klappertandden, warmen zich nu. Mensen die niets hadden dan duisternis, hebben licht om bij te koken, te werken, samen te komen. Ergens tussen hen in draagt iemand, zonder het ooit te beseffen, nog altijd Elpis met zich mee.
 
@@ -8360,7 +8429,7 @@ Terwijl Oedipus naar voren stapt, blijf jij dichterbij dan verstandig is — dic
 CHOICES:
 
 * Sta gewoon naast Oedipus en vat moed -> CH6_007_OPEN
-* Lees de overblijfselen van eerdere slachtoffers en de houding van de Sfinx voor een teken van vermoeidheid of patroon [STAT:prudentia:13] -> CH6_007_PRU
+* Lees de overblijfselen van eerdere slachtoffers en de houding van de Sfinx voor een teken van vermoeidheid of patroon [STAT:ingenium:13] -> CH6_007_PRU
 * Blijf licht op je voeten en behoedzaam tussen de resten door, zonder onnodig dichtbij te komen [STAT:agilitas:11] -> CH6_007_AGI
 
 END
@@ -8423,6 +8492,8 @@ Het Raadsel
 
 TEXT:
 "Welk wezen," vraagt de Sfinx, "loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie — en is het zwakst naarmate het er meer heeft?" Dan herhaalt ze het, langzamer, in de oudere vorm waarin ze het al eeuwen stelt: "[[Mane quadrupes, meridie bipes, vespere tripes ambulat|'s Ochtends vierpotig, 's middags tweepotig, 's avonds driepotig loopt het]]."
+
+{sfinx_route_echo}
 
 IMAGE:
 sfinx_raadsel.png
@@ -10748,6 +10819,78 @@ TEXT:
 Achilles sleept Hectors lichaam driemaal rond de muren van Troje, in het volle zicht van Priamus, Hecuba en Andromache, die van de muren toekijken. Priamus moet fysiek worden tegengehouden om niet naar buiten te rennen. Wat er die dag op de muren van Troje wordt gehoord, is een verdriet waar geen woorden echt bij passen.
 
 Dag na dag herhaalt Achilles het — tot zelfs de goden op de Olympos zich beginnen af te vragen of dit niet te ver is gegaan.
+
+CHOICES:
+
+* Zie hoe het leger, ondanks alles, ook nog rouwt om Patroklos zelf -> CH8_EPI_009B
+
+END
+
+=== SCENE: CH8_EPI_009B ===
+
+TITLE:
+De Lijkspelen
+
+TEXT:
+Tussen zijn eigen woede door houdt Achilles zich ook aan een oudere plicht: Patroklos krijgt een brandstapel, en daarna de lijkspelen die een groot krijger toekomen — wagenrennen, worstelen, boksen, hardlopen, allemaal met rijke prijzen uit Achilles' eigen tent.
+
+Het wagenrennen wordt het felst betwist: Antilochos, Nestors jonge zoon, snijdt Menelaos op een gevaarlijk smal stuk van de baan de pas af — een regelrechte overtreding, maar sluw genoeg uitgevoerd dat niemand het hem echt kwalijk kan nemen. Diomedes wint uiteindelijk het hele rennen, zijn paarden nog altijd de snelste van het hele leger. Odysseus en Aias, zoon van Telamon, worstelen tot een gelijkspel dat geen van beiden ooit zal toegeven. En Nestor zelf, te oud om nog mee te doen, krijgt van Achilles een erebeker — niet voor een overwinning, maar voor alles wat hij het leger al die jaren heeft geleerd.
+
+PERSON:
+diomedes:full
+
+CHOICES:
+
+* Moedig vooral Diomedes aan, de snelste van het hele leger -> CH8_EPI_009C
+* Moedig vooral Odysseus aan, die zelfs een worstelwedstrijd nog met sluwheid speelt -> CH8_EPI_009D
+* Kijk vooral naar Nestor, die zonder één slag te slaan toch geëerd wordt -> CH8_EPI_009E
+
+END
+
+=== SCENE: CH8_EPI_009C ===
+
+TITLE:
+De Snelste
+
+TEXT:
+Je juicht met de rest van het leger mee wanneer Diomedes als eerste over de finish rijdt — niet verrast, want zijn paarden, ooit buitgemaakt op een nachtelijke tocht met Odysseus, zijn al twee hoofdstukken lang de beste van iedereen. Hij merkt je op tussen de menigte, en knikt kort terug.
+
+RELATION:
+diomedes=+1
+
+CHOICES:
+
+* Zie wat Priamus daarna besluit -> CH8_EPI_010
+
+END
+
+=== SCENE: CH8_EPI_009D ===
+
+TITLE:
+Gelijkspel
+
+TEXT:
+Odysseus en Aias worstelen tot geen van beiden nog overeind kan komen zonder de ander mee te trekken — Achilles verklaart het uiteindelijk, tot beider zichtbare onvrede, een gelijkspel. Je applaudisseert vooral voor Odysseus, die zelfs verliezend nog een manier vindt om het eruit te laten zien als een overwinning.
+
+RELATION:
+odysseus=+1
+
+CHOICES:
+
+* Zie wat Priamus daarna besluit -> CH8_EPI_010
+
+END
+
+=== SCENE: CH8_EPI_009E ===
+
+TITLE:
+Een Beker Zonder Strijd
+
+TEXT:
+Nestor neemt de erebeker aan met een mengeling van trots en spijt — trots om de eer, spijt om de jaren die hem inmiddels van de baan houden. Je applaudisseert net zo hard voor hem als voor elke winnaar die dag, en hij merkt het op: een blik die zegt dat hij dat onthoudt.
+
+RELATION:
+nestor=+1
 
 CHOICES:
 
