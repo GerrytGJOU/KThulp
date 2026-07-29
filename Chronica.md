@@ -2726,7 +2726,7 @@ overal ingevuld — zie hieronder wat al wel klaarstaat):
 leesvallen (10 in totaal nog te schrijven); Hoofdstuk 10+ wacht sowieso op
 verdere bouw van dat blok (§7.19).
 
-### 7.24 B29, deel 2: de vier-uitkomsten-ladder (`CHECK:`) (**mechanisme gebouwd, NOG NERGENS INGEZET**)
+### 7.24 B29, deel 2: de vier-uitkomsten-ladder (`CHECK:`) (**mechanisme gebouwd, inzet zie §7.25**)
 
 Op verzoek (2026-07-30) het generieke dobbelmechanisme uit §11.4 gebouwd —
 "waar we dit inzetten" is een aparte, nog te voeren discussie (audit:
@@ -2777,6 +2777,83 @@ flow getest met een synthetische `SP_CHECKS`-entry: rol → resultaat → render
 → `spCheckContinue()` → correcte navigatie én opruiming van
 `SP_CHECK_RESULTAAT`. Fallback bij een onbekende CHECK-id getest (valt terug
 op `scene.choices[0].target`, zelfde patroon als COMBAT).
+
+### 7.25 CHECK-inzet: 15 momenten door Hoofdstuk 1-9 (**voltooid**)
+
+Op basis van een door Gerben goedgekeurd hoofdstuk-voor-hoofdstuk voorstel
+(2026-07-30) is het `CHECK:`-mechanisme uit §7.24 daadwerkelijk ingezet: 1-3
+momenten per hoofdstuk, elk op een bestaand dramatisch hoogtepunt. Twee
+aanpassingen t.o.v. het oorspronkelijke voorstel, beide op Gerbens verzoek:
+de Sfinx-optie in Hoofdstuk 6 is geschrapt (alleen Zeven tegen Thebe), en de
+lijkspelen-CHECK in Hoofdstuk 8 is bewust NIET gebouwd (laagste prioriteit,
+kan later alsnog).
+
+Twee inzetpatronen, beide met vier convergerende uitkomstscènes die altijd
+weer samenkomen in dezelfde vervolgscène (nooit een echte dood-eind, zelfde
+filosofie als de leesvallen):
+- **Vervanging van een bestaande 3-weg STAT-keuze**: het meest voorkomende
+  patroon. De oude `open`/`[STAT:x]`/`[STAT:y]`-cluster (met zijn dode
+  `FLAG:..._route`) wordt volledig verwijderd en vervangen door `CHECK:`;
+  de vier nieuwe uitkomstscènes hernemen het thema van de oude keuzes maar
+  zonder ze nog als aparte paden aan te bieden.
+- **Nieuw ingevoegd moment**: waar geen bruikbare bestaande keuze-cluster
+  voorhanden was (Hoofdstuk 4, 7, 8×2, 9×2), is een nieuwe tussenscène met
+  eigen titel ingevoegd tussen twee bestaande scènes, puur om de worp een
+  moment te geven.
+
+Per hoofdstuk gebouwd (scène met `CHECK:` → SP_CHECKS-id → stat/dc):
+- **H1**: `CH1_C04` (diefstal van Prometheus' vuur) → `ch1_c04_diefstal`,
+  agilitas/13.
+- **H2**: `CH2_H07_CHECK` (Herakles/Omphale, lokken) →
+  `ch2_h07_lokken`, prudentia/13; `CH2_L06B` (ontsnapping) →
+  `ch2_l06_ontsnapping`, agilitas/13.
+- **H3**: `CH3_H09` (rivieren ombuigen bij de Augiasstal — nieuw ingevoegd
+  vóór de bestaande, vaste Augias/Eurystheus-afwijzing) →
+  `ch3_h09_rivieren`, vis/13; `CH3_H23B` (tocht door het duister naar
+  Cerberus) → `ch3_h23b_duister`, robur/15.
+- **H4**: `CH4_P04` (Phaëthon verliest de zonnewagen — de CHECK bepaalt de
+  kleur van de korte worsteling, niet de afloop, die mythologisch vastligt)
+  → `ch4_p04_teugels`, ingenium/15.
+- **H5**: `CH5_016B` (het teken geven bij de Symplegades) →
+  `ch5_016b_symplegades`, agilitas/15; `CH5_025B` (ongezien het heilige
+  woud in, bij de slapende draak) → `ch5_025b_woud`, prudentia/13.
+- **H6**: `CH6_012B` (bestorming van de zeven poorten van Thebe) →
+  `ch6_012b_poorten`, vis/15. (Sfinx-optie bewust niet gebouwd.)
+- **H7**: `CH7_016` (pleidooi bij Agamemnon/Calchas vóór het offer van
+  Iphigenia in Aulis — nieuw ingevoegd, verandert niets aan de vaste afloop)
+  → `ch7_016_pleidooi`, gratia/15.
+- **H8**: `CH8_EPI_006B` (de achtervolging rond de muren, vóór het duel met
+  Hector — nieuw ingevoegd, want `CH8_EPI_007` zelf is al een COMBAT-scène
+  en kan geen CHECK dragen) → `ch8_epi_006b_achtervolging`, vis/17;
+  `CH8_EPI_010` (Priamus' nachtelijke tocht langs de wachtposten) →
+  `ch8_epi_010_wachtposten`, agilitas/15. (Lijkspelen-CHECK niet gebouwd.)
+- **H9**: `CH9_GRI_011` (doodstil blijven in het Trojaanse paard) →
+  `ch9_gri_011_stilte`, agilitas/15; `CH9_TRO_017C` (een verdwaalde
+  vluchteling redden tijdens de val van Troje — nieuw ingevoegd NA de
+  bestaande Aeneas/Anchises-scène, om de load-bearing
+  `RELATION: aeneas=+1`-bron van B18 niet aan te raken) →
+  `ch9_tro_017c_vluchteling`, vis/13; `CH9_TRO_013B` (een laatste
+  verdediging bij Priamus' vlucht naar het altaar — nieuw ingevoegd vóór de
+  vaste dood van Priamus) → `ch9_tro_013b_verdediging`, gratia/17.
+
+**Belangrijke ontwerpkeuze**: bij elk mythologisch vastliggend feit (Phaëthon
+valt, Iphigenia's offer geeft wind, Priamus sterft bij het altaar, de Argo
+komt door de Symplegades) verandert de worp NOOIT de uitkomst zelf, alleen de
+kleur van de weg ernaartoe — exact dezelfde regel als bij de EERETITEL-canon
+en de tendency-story-variants (§7.13/§13). Waar wél twijfelruimte in de mythe
+zit (lukt de list bij de stallen? blijft iedereen stil in het paard?) mag de
+worp iets groter uitmaken (extra tijd kwijt, een bijna-ontdekking) maar
+convergeert alsnog altijd terug naar dezelfde vervolgscène.
+
+**Getest**: `node --check` + `validate_chronica.js` (0 fouten, 36
+waarschuwingen — uitsluitend al bestaande dode flags, geen nieuwe) na elke
+hoofdstuk-batch. Alle 15 `SP_CHECKS`-entries en hun trigger-scènes
+synthetisch doorlopen in de browser (`spStartCheckFromScene()` per scène,
+geen JS-fouten, correcte titel/worp/uitkomst-rendering, `spCheckContinue()`
+ruimt `SP_CHECK_RESULTAAT` correct op).
+
+Nog open: de lijkspelen-CHECK in Hoofdstuk 8 (laagste prioriteit), en of
+Hoofdstuk 10+ ooit eigen CHECKs krijgt (nog niet besproken).
 
 ---
 

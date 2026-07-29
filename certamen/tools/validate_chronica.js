@@ -157,9 +157,11 @@ for (const sc of scenesById.values()) {
   }
 }
 
-// Terminale scènes (geen enkele keuze) — waarschuwing, geen fout (kan de bedoelde eindscène zijn)
+// Terminale scènes (geen enkele keuze) — waarschuwing, geen fout (kan de bedoelde eindscène zijn).
+// CHECK-scènes horen bewust geen CHOICES te hebben (de worp bepaalt de vervolgscène), dus die
+// worden hier niet als "terminaal" gerapporteerd — zie de aparte CHECK-check verderop.
 for (const sc of scenesById.values()) {
-  if (sc.choices.length === 0) warnings.push(`${sc.id}: geen enkele keuze (terminale scène — controleer of dat bedoeld is)`);
+  if (sc.choices.length === 0 && !sc.meta.CHECK) warnings.push(`${sc.id}: geen enkele keuze (terminale scène — controleer of dat bedoeld is)`);
 }
 
 // Flags: schrijvers/lezers
