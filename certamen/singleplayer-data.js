@@ -1406,6 +1406,20 @@ const SP_CODEX_ENTRIES = {
     tekst:"Terwijl de stad brandt, draagt de Trojaanse prins Aeneas zijn oude, kreupele vader Anchises op zijn schouders de stad uit, zijn zoontje Ascanius aan de hand. Van alle Trojanen die deze nacht overleven, is hij degene wiens verhaal het verst zal reizen — helemaal naar Italië, waar iets nieuws zal groeien uit de as van wat vannacht verloren gaat." },
   codex_gevangenen_verdeeld: { cat:"mythologie", titel:"De Gevangenen Verdeeld",
     tekst:"Op het strand, tussen de rokende resten van wat ooit Troje was, verdelen de Griekse leiders de overlevende vrouwen als oorlogsbuit. Hecuba, ooit koningin, valt toe aan Odysseus. Andromache, Hectors weduwe, valt toe aan Neoptolemus, de zoon van de man die haar man doodde. Van de trotse stad blijft niets over dan as, rook, en een lange vaart terug naar huis die, voor velen, evenmin goed zal aflopen." },
+
+  // ---- Hoofdstuk 10 — Vluchten uit Troje ----
+  codex_odysseus_vertrek: { cat:"mythologie", titel:"Odysseus Vaart Uit",
+    tekst:"Odysseus verlaat Troje met twaalf schepen, ervan overtuigd dat het ergste al achter hem ligt. Wat hij niet weet: Athena is woedend over de heiligschennis die Aias, zoon van Oïleus, pleegde tegen Cassandra bij haar eigen altaar — en de storm die de vloot bijna meteen treft, is daar het eerste teken van. Odysseus' reis naar huis, die eigenlijk een paar weken had moeten duren, zal er tien jaar over doen." },
+  codex_kikonen: { cat:"mythologie", titel:"De Kikonen",
+    tekst:"De eerste halte op Odysseus' terugreis is geen mythisch avontuur maar een gewone plundertocht die verkeerd afloopt: zijn mannen weigeren op tijd te vertrekken uit het land van de Kikonen, en verliezen zes man per schip wanneer de bewoners met versterking terugslaan. Een vroeg, menselijk teken dat deze thuiskomst niet vanzelf zal gaan." },
+  codex_lotoseters: { cat:"mythologie", titel:"De Lotoseters",
+    tekst:"Wie van de lotosbloem proeft, verliest elk verlangen om ooit nog naar huis te gaan — een gevaar dat niets met geweld te maken heeft, en daardoor bijna moeilijker te bestrijden is. Odysseus moet zijn eigen, gewillig geworden verkenners met geweld terugslepen naar de schepen." },
+  codex_aeneas_vloot: { cat:"mythologie", titel:"Een Vloot uit Puin",
+    tekst:"Na Troje's val brengt Aeneas een hele winter door op de berghellingen bij de verwoeste stad, waar de verzamelde vluchtelingen onder zijn bevel een vloot van twintig schepen bouwen uit wat het beleg heeft overgelaten. Pas dan begint de eigenlijke reis — een reis die uiteindelijk naar Italië zal voeren, al weet nog niemand aan boord dat op dat moment." },
+  codex_polydorus: { cat:"mythologie", titel:"Polydorus, Verraden in Thracië",
+    tekst:"Priamus stuurde zijn jongste zoon Polydorus, samen met een aanzienlijke hoeveelheid goud, in het geheim naar de bondgenoot Thracië om hem buiten het bereik van de oorlog te houden. Zodra Troje viel, vermoordde de Thracische koning de jongen voor zijn goud. Aeneas ontdekt het pas wanneer bloed opwelt uit een struik die, blijkt achteraf, wortelt in Polydorus' eigen graf." },
+  codex_orakel_delos: { cat:"mythologie", titel:"Het Orakel van Delos",
+    tekst:"Apollo's orakel op het drijvende eiland Delos draagt Aeneas op zijn 'oude moeder' te zoeken — een raadsel dat zijn vader Anchises aanvankelijk verkeerd oplost door het te betrekken op Kreta. Pas een plaag op Kreta en een droomverschijning van de Penaten maken duidelijk dat het werkelijke antwoord Italië is, het land van hun verste voorvader Dardanus." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -6582,7 +6596,7 @@ Aanvankelijk houdt Ikaros zich keurig aan zijn vaders route, vlak achter hem, zi
 
 De zon doet precies wat Daidalos vreesde: de was tussen de veren smelt, eerst onmerkbaar, dan in een oogwenk. Veer na veer laat los, en Ikaros valt — zijn armen nog wapperend in de vorm van vleugels die niet langer bestaan — de zee in die sindsdien zijn naam draagt.
 
-"Icare!" roept Daidalos, keer op keer, terwijl hij cirkelt boven het water — maar er komt geen antwoord meer, enkel verspreide veren die langzaam op de golven neerdalen.
+"[[Icare|Icarus!]]" roept Daidalos, keer op keer, terwijl hij cirkelt boven het water — maar er komt geen antwoord meer, enkel verspreide veren die langzaam op de golven neerdalen.
 
 IMAGE:
 val_van_ikaros.png
@@ -6954,7 +6968,7 @@ TITLE:
 Het Orakel Keert Terug
 
 TEXT:
-De vertrouwde stem van de Boodschapper van Kronos klinkt weer, warm en enigszins plechtig. "Theseus, bevrijd van een monster maar niet van zijn eigen vergetelheid. Phaëthon, die zijn afkomst bewees met een vraag die hem het leven kostte. Twee beloften die de wereld voorgoed veranderden — de een een zee, de ander een streep amberkleurige rivieroever."
+De vertrouwde stem van de Boodschapper van Kronos klinkt weer, warm en enigszins plechtig. "[[Ecce|zie hier]] — Theseus, bevrijd van een monster maar niet van zijn eigen vergetelheid. Phaëthon, die zijn afkomst bewees met een vraag die hem het leven kostte. Twee beloften die de wereld voorgoed veranderden — de een een zee, de ander een streep amberkleurige rivieroever."
 
 CODEX:
 codex_grammatica_ch4_overzicht
@@ -7049,7 +7063,7 @@ TITLE:
 Het Gulden Vlies
 
 TEXT:
-"Dit hoofdstuk," zegt de Boodschapper, "is geen labyrint en geen paleis — het is een schip." Ze wijst naar een scheur in het licht die groter is dan alle voorgaande, alsof hij een hele zee moet doorlaten in plaats van één verhaal. "Volg Jason en zijn bemanning op hun tocht naar Colchis, aan de rand van de bekende wereld, waar een Vlies van goud hangt dat niemand ooit eerder heeft weten te bemachtigen."
+"[[Ecce|zie hier]] — dit hoofdstuk," zegt de Boodschapper, "is geen labyrint en geen paleis — het is een schip." Ze wijst naar een scheur in het licht die groter is dan alle voorgaande, alsof hij een hele zee moet doorlaten in plaats van één verhaal. "Volg Jason en zijn bemanning op hun tocht naar Colchis, aan de rand van de bekende wereld, waar een Vlies van goud hangt dat niemand ooit eerder heeft weten te bemachtigen."
 
 Athena voegt eraan toe, zachter dan anders: "Let deze keer goed op wie er nog meer aan boord staat. Sommige namen ken je al. De meeste ken je nog niet — maar dat komt nog."
 
@@ -7983,7 +7997,7 @@ TITLE:
 De Nooit Slapende Draak
 
 TEXT:
-Het Gulden Vlies hangt diep in een heilig woud, bewaakt door een draak die naar verluidt nog nooit heeft geslapen. Medea neuriet een zacht, oud gezang dat het beest langzaam kalmeert — genoeg om Jason dichterbij te laten komen, maar niet genoeg om het volledig in slaap te sussen. Vlak voor hij het Vlies kan losmaken, schrikt de draak alsnog wakker.
+Het Gulden Vlies hangt diep in een heilig woud, bewaakt door een draak die naar verluidt nog nooit heeft geslapen. Medea neuriet een zacht, oud gezang — "[[ὕπνε, ἐλθέ|Slaap, kom]]," steeds opnieuw, half gezongen, half gefluisterd — dat het beest langzaam kalmeert: genoeg om Jason dichterbij te laten komen, maar niet genoeg om het volledig in slaap te sussen. Vlak voor hij het Vlies kan losmaken, schrikt de draak alsnog wakker.
 
 COMBAT:
 drakon_vlies
@@ -8130,7 +8144,7 @@ TITLE:
 De Vloek van Thebe
 
 TEXT:
-"Dit hoofdstuk vertel ik je niet in de volgorde waarin het gebeurde," zegt de Boodschapper, ongewoon voorzichtig. "Thebe's geschiedenis springt heen en weer door generaties, en als ik je alles op volgorde van jaartal zou vertellen, zou je het patroon nooit zien. Dus vertel ik het je op de volgorde die het patroon wél laat zien: hoogmoed, telkens weer — en een straf die daarna bijna nooit bij de hoogmoedige zelf terechtkomt, maar bij de kinderen."
+"[[Ecce|zie hier]] — dit hoofdstuk vertel ik je niet in de volgorde waarin het gebeurde," zegt de Boodschapper, ongewoon voorzichtig. "Thebe's geschiedenis springt heen en weer door generaties, en als ik je alles op volgorde van jaartal zou vertellen, zou je het patroon nooit zien. Dus vertel ik het je op de volgorde die het patroon wél laat zien: hoogmoed, telkens weer — en een straf die daarna bijna nooit bij de hoogmoedige zelf terechtkomt, maar bij de kinderen."
 
 Athena knikt, zwijgender dan anders. "Sommige vloeken slaan in bij de stichting van een stad, en wachten dan gewoon — generatie na generatie — tot er weer iemand geboren wordt om ze te laten uitkomen."
 
@@ -8408,7 +8422,7 @@ TITLE:
 Het Raadsel
 
 TEXT:
-"Welk wezen," vraagt de Sfinx, "loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie — en is het zwakst naarmate het er meer heeft?"
+"Welk wezen," vraagt de Sfinx, "loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie — en is het zwakst naarmate het er meer heeft?" Dan herhaalt ze het, langzamer, in de oudere vorm waarin ze het al eeuwen stelt: "[[Mane quadrupes, meridie bipes, vespere tripes ambulat|'s Ochtends vierpotig, 's middags tweepotig, 's avonds driepotig loopt het]]."
 
 IMAGE:
 sfinx_raadsel.png
@@ -9008,7 +9022,7 @@ Een Andere Stem
 TEXT:
 De streep licht sluit zich niet, zoals de vorige vijf keer. In plaats daarvan wordt hij breder — geen kier meer, maar een poort zo groot als een deur.
 
-"Zes hoofdstukken," zegt de Boodschapper, en voor het eerst klinkt er iets in die stem dat niet alleen instructie is. Iets dat op trots lijkt. "Zes steden, zes families, zes vloeken en gaven — allemaal door jou gezien, gedragen, soms zelfs verzacht. Het Orakel van Chronos heeft je nu goed genoeg leren kennen om je iets te laten zien wat niemand vóór jou te zien kreeg."
+"[[Ecce|zie hier]] — zes hoofdstukken," zegt de Boodschapper, en voor het eerst klinkt er iets in die stem dat niet alleen instructie is. Iets dat op trots lijkt. "Zes steden, zes families, zes vloeken en gaven — allemaal door jou gezien, gedragen, soms zelfs verzacht. Het Orakel van Chronos heeft je nu goed genoeg leren kennen om je iets te laten zien wat niemand vóór jou te zien kreeg."
 
 "Kom," zegt de stem. "Het is tijd dat je het Museum van Mnemosyne binnentreedt."
 
@@ -9089,7 +9103,7 @@ De Boodschapper laat een korte stilte vallen voor ze verdergaat — de soort sti
 
 "Wat nu komt, is anders. Groter. Het is misschien wel het belangrijkste verhaal dat de klassieke oudheid heeft voortgebracht — het verhaal waar bijna elk ander verhaal die je al kent, uiteindelijk naar terugwijst of vandaan komt." Ze gebaart naar de hal om je heen, de sokkels, de stolpen. "Dit Museum is voortaan je uitvalsbasis. Wat er ook gebeurt in de jaren die komen, je hebt hier altijd een plek om op adem te komen voor je er weer in duikt."
 
-"Het echte werk begint nu," zegt de Boodschapper. "De Trojaanse Oorlog."
+"[[Ecce|zie hier]] — het echte werk begint nu," zegt de Boodschapper. "De Trojaanse Oorlog."
 
 CHOICES:
 
@@ -9331,7 +9345,7 @@ TITLE:
 De Appel der Tweedracht
 
 TEXT:
-Eris, godin van de tweedracht, was de enige die geen uitnodiging kreeg — uit angst voor precies dit. Zonder een woord te zeggen werpt ze een gouden appel tussen de gasten en verdwijnt weer, net zo geruisloos als ze gekomen is. Op de appel staat één enkel woord gegraveerd.
+Eris, godin van de tweedracht, was de enige die geen uitnodiging kreeg — uit angst voor precies dit. Zonder een woord te zeggen werpt ze een gouden appel tussen de gasten en verdwijnt weer, net zo geruisloos als ze gekomen is. Op de appel staat één enkel woord gegraveerd: "[[τῇ καλλίστῃ|aan de mooiste]]."
 
 Hera, Athena en Aphrodite buigen zich er alle drie tegelijk overheen — en beseffen alle drie tegelijk voor wie dat woord bedoeld zou kunnen zijn. Geen van de andere goden waagt het een oordeel te vellen tussen drie zo machtige godinnen. Het feest eindigt in een gespannen stilte die niemand hardop durft te benoemen.
 
@@ -9861,7 +9875,7 @@ TITLE:
 Tien Jaar Later
 
 TEXT:
-De poort opent zich ditmaal midden in een oorlog die al tien jaar oud is. "We slaan de eerste negen jaar over," zegt de Boodschapper. "Negen jaar van plundertochten, van muren die overeind blijven staan, van helden die komen en gaan — je hebt daar al een glimp van gezien. Wat nu komt, is anders: dit is het jaar waarin alles breekt."
+De poort opent zich ditmaal midden in een oorlog die al tien jaar oud is. "[[Ecce|zie hier]] — we slaan de eerste negen jaar over," zegt de Boodschapper. "Negen jaar van plundertochten, van muren die overeind blijven staan, van helden die komen en gaan — je hebt daar al een glimp van gezien. Wat nu komt, is anders: dit is het jaar waarin alles breekt."
 
 "En dit keer," vervolgt ze, met iets in haar stem dat je niet eerder hebt gehoord, "ga jij zelf kiezen aan welke kant van dit verhaal je staat. Niet alles wat er gebeurt, zul je met eigen ogen zien — maar wat je wél ziet, zul je van dichterbij zien dan ooit."
 
@@ -10557,7 +10571,7 @@ TITLE:
 Het Nieuws
 
 TEXT:
-Antilochos, Nestors jonge zoon, komt aanrennen naar het kamp, zijn gezicht asgrauw. Hij kan de woorden bijna niet over zijn lippen krijgen, maar uiteindelijk zegt hij het toch: Patroklos is dood, gevallen door Hectors hand, in Achilles' eigen wapenrusting.
+Antilochos, Nestors jonge zoon, komt aanrennen naar het kamp, zijn gezicht asgrauw. Hij kan de woorden bijna niet over zijn lippen krijgen, maar uiteindelijk zegt hij het toch: Patroklos is dood, gevallen door Hectors hand, in Achilles' eigen wapenrusting. "[[Πάτροκλος ἀπέθανεν|Patroklos is gestorven]]," herhaalt hij, alsof hij zelf nog niet gelooft wat hij net heeft gezegd.
 
 Wat er daarna over Achilles' gezicht trekt, is niets wat een van jullie ooit eerder heeft gezien.
 
@@ -11035,7 +11049,7 @@ TITLE:
 Muren of Strand?
 
 TEXT:
-"Je weet hoe dit gaat aflopen," zegt de Boodschapper zacht. "Troje is gedoemd te vallen, binnen niet al te lange tijd. Dat verandert niets aan wat je nog gaat zien — alleen aan vanaf waar je het ziet."
+"[[Ecce|zie hier]] — je weet hoe dit gaat aflopen," zegt de Boodschapper zacht. "Troje is gedoemd te vallen, binnen niet al te lange tijd. Dat verandert niets aan wat je nog gaat zien — alleen aan vanaf waar je het ziet."
 
 "Wil je de muren zien vallen vanaf het strand — bij het Griekse leger, bij de list die aan deze oorlog een einde gaat maken? Of vanaf de muren zelf — binnen Troje, bij de mensen die niet weten dat ze hun laatste dagen beleven?"
 
@@ -11328,7 +11342,7 @@ TITLE:
 Sinons Verhaal
 
 TEXT:
-De man — Sinon, zegt hij te heten — vertelt een zorgvuldig verhaal: zijn eigen mensen wilden hem offeren, hij ontsnapte, en het paard is een verzoeningsgeschenk aan Athena. Wie het beschadigt, roept haar woede over zich af. Wie het de stad binnenhaalt, wint haar gunst voor altijd.
+De man — Sinon, zegt hij te heten — vertelt een zorgvuldig verhaal: zijn eigen mensen wilden hem offeren, hij ontsnapte, en het paard is een verzoeningsgeschenk aan Athena. "[[λέγει Ἀχαιοὺς ἀπελθεῖν|hij zegt dat de Grieken vertrokken zijn]]," fluistert iemand naast je door, half ongelovig. Wie het beschadigt, roept haar woede over zich af. Wie het de stad binnenhaalt, wint haar gunst voor altijd.
 
 Priamus, moe van tien jaar oorlog en verlangend naar een teken van hoop, is geneigd hem te geloven.
 
@@ -12117,7 +12131,7 @@ TITLE:
 Niemand Ziet het Hele Verhaal
 
 TEXT:
-"Je hebt Troje zien vallen," zegt de Boodschapper, "maar niet het hele verhaal. Niemand ziet ooit het hele verhaal — dat is precies waarom je twee keer had moeten kunnen komen kijken, van twee kanten, om ook maar te beginnen het te begrijpen."
+"[[Ecce|zie hier]] — je hebt Troje zien vallen," zegt de Boodschapper, "maar niet het hele verhaal. Niemand ziet ooit het hele verhaal — dat is precies waarom je twee keer had moeten kunnen komen kijken, van twee kanten, om ook maar te beginnen het te begrijpen."
 
 Hermes knikt afscheid, zijn werk hier gedaan. In je hand voel je een stuk verkoold hout — een splinter van het paard dat slaagde waar tien jaar oorlog faalde.
 
@@ -12144,6 +12158,243 @@ Een derde stolp vult zich, naast de gouden appel en de schilfer van Achilles' sc
 "Dit hoofdstuk vertelde ik je niet als één verhaal, maar als twee," zegt de Boodschapper, "omdat de val van een stad er nooit hetzelfde uitziet van binnen als van buiten. Onthoud dat — het is precies waarom sommige mensen die je nog gaat ontmoeten, deze oorlog heel anders navertellen dan jij hem beleefde."
 
 Ze kijkt naar de rijen sokkels om jullie heen — nog altijd voor het overgrote deel leeg. "Rust hier zo lang als je nodig hebt. Er wachten nog genoeg verhalen."
+
+CHOICES:
+
+* Luister naar het volgende verhaal -> CH10_000
+
+END
+`.trim();
+
+const SP_CH10_CNS = `
+=== SCENE: CH10_000 ===
+
+TITLE:
+Wat Overblijft van Troje
+
+TEXT:
+"[[Ecce|zie hier]] — het tweede boek," zegt de Boodschapper, en voor het eerst wijst ze niet naar één enkele scheur in het licht, maar naar de hele horizon. "Troje is as. Wie de nacht overleefde, verspreidt zich nu over zee — ieder op zoek naar een nieuw thuis, en niet iedereen zal er een vinden."
+
+"Twee van hen ga je volgen. Odysseus, die niets anders wil dan naar huis, naar Ithaka, naar een vrouw en een zoon die hem twintig jaar niet hebben gezien. En Aeneas, die geen huis meer heeft om naar terug te keren — die zelf een nieuw thuis moet stichten, met zijn oude vader op zijn rug en zijn jonge zoon aan zijn hand."
+
+Ze aarzelt, iets langer dan gewoonlijk. "Vanaf hier kan ik je ook iets anders vragen. Tot nu toe kreeg je automatisch beide talen, Latijn en Grieks door elkaar. Wil je dat zo houden — of wil je vanaf dit hoofdstuk vooral één spoor volgen, dichter bij wat je in de klas eigenlijk leert?"
+
+CHOICES:
+
+* Volg vanaf nu vooral het Griekse spoor — Odysseus' verhaal -> CH10_000_GRIEKS
+* Volg vanaf nu vooral het Latijnse spoor — Aeneas' verhaal -> CH10_000_LATIJN
+* Blijf beide talen volgen, zoals tot nu toe -> CH10_000_BEIDE
+
+END
+
+=== SCENE: CH10_000_GRIEKS ===
+
+TITLE:
+Eén Spoor, Eén Taal
+
+TEXT:
+"Grieks dan," zegt de Boodschapper, met iets van herkenning in haar stem. "Odysseus' weg naar huis wordt je hoofdlijn — maar Aeneas' verhaal verdwijnt niet, ik vertel het je gewoon niet meer in zijn eigen taal." Ze knikt, alsof daarmee iets is vastgelegd dat niet snel verandert.
+
+FLAG:
+taalspoor=grieks
+
+CHOICES:
+
+* Ga verder -> CH10_001
+
+END
+
+=== SCENE: CH10_000_LATIJN ===
+
+TITLE:
+Eén Spoor, Eén Taal
+
+TEXT:
+"Latijn dan," zegt de Boodschapper, met iets van herkenning in haar stem. "Aeneas' nieuwe begin wordt je hoofdlijn — maar Odysseus' verhaal verdwijnt niet, ik vertel het je gewoon niet meer in zijn eigen taal." Ze knikt, alsof daarmee iets is vastgelegd dat niet snel verandert.
+
+FLAG:
+taalspoor=latijn
+
+CHOICES:
+
+* Ga verder -> CH10_001
+
+END
+
+=== SCENE: CH10_000_BEIDE ===
+
+TITLE:
+Beide Sporen
+
+TEXT:
+"Zoals altijd dan," zegt de Boodschapper, en er klinkt iets van opluchting in door — alsof ze het zelf ook liever zo had gehad. "Twee talen, twee helden, één zelfde verlangen: een plek om weer thuis te noemen."
+
+FLAG:
+taalspoor=beide
+
+CHOICES:
+
+* Ga verder -> CH10_001
+
+END
+
+=== SCENE: CH10_001 ===
+
+TITLE:
+Twee Wegen over Zee
+
+TEXT:
+De Boodschapper wijst naar twee nieuwe scheuren in de werkelijkheid, ditmaal ver uit elkaar — niet naast elkaar zoals bij Io en Herakles, maar aan twee tegenovergestelde einden van dezelfde zee. "Volg Odysseus, en je ziet hoe lang een thuiskomst kan duren wanneer de goden zelf tegenwerken. Volg Aeneas, en je ziet wat het kost om, zonder ooit gevraagd te hebben, zelf een nieuw thuis te moeten worden."
+
+CHOICES:
+
+* Volg Odysseus, op weg naar Ithaka [DONE:ch10_lijn_odysseus] [REQUIRE:taalspoor!=latijn] -> CH10_ODY_001
+* Volg Aeneas, op weg naar een stad die nog niet bestaat [DONE:ch10_lijn_aeneas] [REQUIRE:taalspoor!=grieks] -> CH10_AEN_001
+
+END
+
+=== SCENE: CH10_ODY_001 ===
+
+TITLE:
+De Vloot Vaart Uit
+
+TEXT:
+Odysseus' schepen verlaten Troje als een van de eersten — twaalf stuks, voller met buit dan met voorraad, iedereen aan boord ervan overtuigd dat het ergste al achter hen ligt. Niemand aan boord weet nog wat Athena, op hetzelfde strand, Kleine Ajax net heeft aangedaan voor wat hij Cassandra aandeed bij haar eigen altaar.
+
+Nog voor de kust van Klein-Azië uit zicht is, steekt een storm op die niets met het seizoen te maken heeft. "[[Ἀθηνᾶ ὀργίζεται|Athena is woedend]]," mompelt een oude roeier, meer een constatering dan een klacht — iedereen aan boord voelt hetzelfde, ook zonder dat iemand het hardop bevestigt.
+
+PERSON:
+odysseus:intro
+
+CODEX:
+codex_odysseus_vertrek
+
+CHOICES:
+
+* Zie waar de storm hen naartoe drijft -> CH10_ODY_002
+
+END
+
+=== SCENE: CH10_ODY_002 ===
+
+TITLE:
+De Kikonen
+
+TEXT:
+De storm drijft de vloot naar het land van de Kikonen, bondgenoten van Troje. Odysseus' mannen plunderen hun stad — vee, wijn, alles wat een uitgeputte bemanning zich kan wensen — en Odysseus zelf raadt aan meteen weer te vertrekken, tevreden met de buit.
+
+Zijn mannen luisteren niet. Ze blijven aan de kust feestvieren tot de Kikonen versterking uit het binnenland halen en bij zonsopgang alsnog terugslaan — Odysseus verliest zes man per schip voor de vloot eindelijk weer kan uitvaren.
+
+CODEX:
+codex_kikonen
+
+CHOICES:
+
+* Vind dat de mannen dit over zichzelf hebben afgeroepen [SEVERITAS] -> CH10_ODY_003
+* Erken dat tien jaar oorlog een bemanning niet meteen weer voorzichtig maakt [CLEMENTIA] -> CH10_ODY_003
+* Twijfel of Odysseus als aanvoerder hier niet ook tekortschoot [NEUTRAL] -> CH10_ODY_003
+
+END
+
+=== SCENE: CH10_ODY_003 ===
+
+TITLE:
+De Lotoseters
+
+TEXT:
+Nog een storm — de negende dag op zee zonder enige controle over de eigen koers — werpt de vloot op een onbekende kust. Odysseus stuurt drie verkenners het binnenland in. Ze treffen er een volk dat leeft van de lotosbloem, en wie ervan proeft, vergeet op slag elk verlangen om ooit nog naar huis te gaan.
+
+Zijn eigen mannen moeten Odysseus' verkenners, huilend van protest, met geweld terugslepen naar de schepen en vastbinden onder de roeibanken — de eerste keer dat "naar huis willen" zelf een gevaar blijkt te zijn, in plaats van vanzelfsprekend.
+
+CODEX:
+codex_lotoseters
+
+CHOICES:
+
+* Zie welk eiland de vloot daarna bereikt -> CH10_ODY_004
+
+END
+
+=== SCENE: CH10_ODY_004 ===
+
+TITLE:
+Het Eiland van de Kykloop
+
+TEXT:
+Nieuwsgierig meer dan voorzichtig, laat Odysseus de meeste schepen achter op een klein voor-eiland en vaart met één bemanning door naar het land zelf — waar de rook van een enkele, reusachtige grot omhoogkringelt. Wat er binnen woont, weet nog niemand aan boord.
+
+END
+
+=== SCENE: CH10_AEN_001 ===
+
+TITLE:
+Een Vloot uit Puin
+
+TEXT:
+Je kent het begin al: Aeneas droeg zijn vader Anchises de brandende straten van Troje uit, zijn zoontje Ascanius aan de hand. Wat je nog niet zag, is wat daarna kwam — een hele winter op de berghellingen bij Troje, waarin de verzamelde vluchtelingen, onder Aeneas' bevel, uit het weinige hout dat de stad hun naliet, een vloot van twintig schepen bouwen.
+
+"[[Multa nox erat, cum vela dedimus|Het was diep in de nacht toen we de zeilen hesen]]," zal Aeneas dit vertrek later zelf navertellen — een plusquamperfectum-achtig gevoel, iets dat al voorbij is voor het verhaal er goed en wel aan begint.
+
+PERSON:
+aeneas:full
+
+CODEX:
+codex_aeneas_vloot
+
+CHOICES:
+
+* Zie waar de vloot voor het eerst aan land gaat -> CH10_AEN_002
+
+END
+
+=== SCENE: CH10_AEN_002 ===
+
+TITLE:
+Het Bloedende Struikgewas
+
+TEXT:
+Thracië, bondgenoot van Troje al sinds voor de oorlog, lijkt de voor de hand liggende plek voor een nieuw begin. Aeneas begint er zelfs de eerste fundamenten van een stad uit te zetten — tot hij, om de goden een offer te brengen, takken van een struik probeert te trekken en de wortels beginnen te bloeden.
+
+Een stem stijgt op uit de grond zelf: die van Polydorus, Priamus' jongste zoon, ooit in het geheim met goud naar Thracië gestuurd voor zijn eigen veiligheid — en daar vermoord door de koning die dat goud liever hield dan de jongen beschermde. "Vlucht dit verraderlijke land," smeekt de stem, "hier is voor jullie geen thuis."
+
+CODEX:
+codex_polydorus
+
+CHOICES:
+
+* Vaar meteen weg van deze plek, zoals Polydorus vraagt -> CH10_AEN_003
+
+END
+
+=== SCENE: CH10_AEN_003 ===
+
+TITLE:
+Het Orakel van Delos
+
+TEXT:
+Op het drijvende eiland Delos — hetzelfde eiland waar je Latona ooit toevlucht zag vinden — raadpleegt Aeneas het orakel van Apollo zelf. Het antwoord komt cryptisch, zoals orakels dat altijd doen: "[[Antiquam exquirite matrem|Zoek jullie oude moeder]]." Niemand aan boord weet meteen wat dat betekent — Aeneas' eigen vader denkt aan Kreta, waar hun voorouder Teucer ooit vandaan kwam. Pas veel later, te laat om deze fout nog te vermijden, zal blijken dat het orakel iets anders bedoelde.
+
+PERSON:
+latona:full
+
+CODEX:
+codex_orakel_delos
+
+CHOICES:
+
+* Vaar mee naar Kreta, in de overtuiging dat het orakel is opgelost -> CH10_AEN_004
+
+END
+
+=== SCENE: CH10_AEN_004 ===
+
+TITLE:
+Een Plaag op Kreta
+
+TEXT:
+Kreta blijkt de verkeerde "oude moeder" — amper is de nieuwe nederzetting begonnen of een plaag treft mens en akker tegelijk, zo hardnekkig dat zelfs een tweede, wanhopiger poging het land te bewerken niets oplevert. Pas in een droom verschijnen de Penaten, de huisgoden die Aeneas zelf uit het brandende Troje meedroeg, om eindelijk het echte antwoord te geven: niet Kreta, maar Italië — het land waar hun verste voorvader Dardanus ooit vandaan kwam.
+
+De vloot moet, opnieuw, verder.
 
 END
 `.trim();
