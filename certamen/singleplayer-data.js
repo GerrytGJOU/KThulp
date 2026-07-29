@@ -1916,6 +1916,20 @@ const SP_COMBAT_ENEMIES = {
     intro:"Een handvol dronken, half-wakkere verdedigers bij de poort — alles wat er nog over is van Troje's waakzaamheid, op de nacht dat het er het meest toe doet." },
 };
 
+/* ---- B29a: DE VIER-UITKOMSTEN-LADDER ("CHECK:", Chronica-audit, fase 9/11,
+   Chronica.md §11.4) — spaarzaam dobbelmechanisme (1d20+stat vs. DC), los van
+   de bestaande gated choice. Gebouwd op verzoek (2026-07-30), NOG NERGENS
+   INGEZET — bewust een lege tabel tot bepaald is WAAR (2-3x per hoofdstuk op
+   dramatische hoogtepunten, per de audit). Vorm per entry:
+   { stat, dc, volledig:{tekst,target}, deels:{tekst,target},
+   gefaald:{tekst,target}, kritiek:{tekst,target} } — vier volwaardige
+   vervolgscènes, geen strafscherm (zelfde principe als CH4_T06B/de
+   leesvallen: "gefaald"/"kritiek" zijn een ANDER verhaal, geen blokkade).
+   Gebruik: `CHECK:\n<id>` in een CNS-scène (spStartCheckFromScene,
+   singleplayer.js) — die scène heeft dan BEWUST geen CHOICES, de worp zelf
+   bepaalt de vervolgscène. ---- */
+const SP_CHECKS = {};
+
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
    aangevuld via VOCAB:-secties (spHookVocab, singleplayer.js). Bewust
    compacter dan de frequentielijst uit de andere Certamen-modi (die blijft
@@ -6014,8 +6028,41 @@ Eurystheus, die na elf beproevingen wanhopig op zoek is naar iets wat Herakles o
 
 Hades zelf, wanneer Herakles via een grot bij Tainaron afdaalt naar zijn rijk, staat de beproeving toe — op voorwaarde dat Herakles Cerberus zonder geweld overmeestert. Athena en Hermes, beiden inmiddels vertrouwde bondgenoten, begeleiden hem tot aan de rand van de onderwereld.
 
+Boven de ingang van de grot, half overwoekerd door mos, staat iets gegrift dat er al eeuwen staat: "Οὐδεὶς ὅπλα φέρει."
+
 PERSON:
 hermes:full
+
+CHOICES:
+
+* Begrijp het als een verbod — hier draagt niemand wapens -> CH3_H23_INSCRIPTIE_GOED
+* Begrijp het als een garantie — hier draagt iedereen wapens, dus ook Herakles zal er wel een vinden -> CH3_H23_INSCRIPTIE_FOUT
+
+END
+
+=== SCENE: CH3_H23_INSCRIPTIE_GOED ===
+
+TITLE:
+Zonder Wapens
+
+TEXT:
+Je begrijpt de tekst goed: niemand draagt hier wapens, punt uit — en dus is het geen verrassing wanneer Herakles, zoals beloofd, alles achterlaat voor hij afdaalt. Wat je eerst als een streng verbod las, blijkt vooral een geruststelling: Hades' onderwereld kent op dit punt tenminste één duidelijke regel, en niemand breekt hem stiekem.
+
+CHOICES:
+
+* Daal af naar de poort van de onderwereld -> CH3_H23B
+
+END
+
+=== SCENE: CH3_H23_INSCRIPTIE_FOUT ===
+
+TITLE:
+Een Verkeerd Begrepen Belofte
+
+TEXT:
+Je leest de tekst als een garantie — hier draagt iedereen wapens, denk je, dus zal Herakles er ergens eentje vinden. Wanneer hij vervolgens alles achterlaat en met werkelijk lege handen de grot in stapt, voelt dat een moment lang verontrustend, alsof er iets misgaat dat niet had gemoeten.
+
+Pas wanneer Hermes je gezicht ziet en zacht uitlegt wat er ECHT stond — "οὐδείς, niemand, niet 'iedereen'" — valt het kwartje alsnog, iets te laat om nog ergens toe te dienen.
 
 CHOICES:
 
@@ -6368,7 +6415,7 @@ TITLE:
 De Eerste Splitsing
 
 TEXT:
-Nog geen tien passen verder splitst de gang zich in tweeën, en het geluid dat je eerder hoorde kan nu net zo goed van links als van rechts komen. Terwijl je aarzelt, herinner je je iets dat Ariadne je toefluisterde vlak voor je naar binnen ging — het enige wat Daidalos haar ooit over de opbouw van het labyrint heeft durven vertellen: "Bij elke splitsing, houd links aan. Dat brengt je regelrecht naar het hart."
+Nog geen tien passen verder splitst de gang zich in tweeën, en het geluid dat je eerder hoorde kan nu net zo goed van links als van rechts komen. Terwijl je aarzelt, herinner je je iets dat Ariadne je toefluisterde vlak voor je naar binnen ging — het enige wat Daidalos haar ooit over de opbouw van het labyrint heeft durven vertellen, te haastig en te gespannen om het voor je te vertalen: "Ad omne bivium, sinistram tene."
 
 CHOICES:
 

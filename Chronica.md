@@ -2689,6 +2689,95 @@ fix is generiek en blijft staan.
 `ch6_007_route` verdwenen uit de dode-flaggenlijst (42 → 40 waarschuwingen),
 omdat de flags nu wél ergens in de broncode worden gelezen.
 
+### 7.23 B29, deel 1: meer leesvallen + een opbouwschema (**twee nieuwe leesvallen gebouwd, schema vastgelegd**)
+
+Op verzoek (2026-07-30): het leesval-principe (B21, §7.17) breder inzetten,
+met een **oplopende frequentie** naarmate de speler verder komt — geen
+leesval in Proloog/Hoofdstuk 1 (nog te vroeg, te weinig opgebouwde
+grammatica/vocab), daarna geleidelijk vaker. **Vastgelegd schema** (nog niet
+overal ingevuld — zie hieronder wat al wel klaarstaat):
+
+| Hoofdstukken | Leesvallen per hoofdstuk |
+|---|---|
+| Proloog, Hoofdstuk 1 | 0 |
+| Hoofdstuk 2, 3, 4 | 1 |
+| Hoofdstuk 5 t/m 9 | 2 |
+| Hoofdstuk 10+ (nog te bouwen) | te bepalen zodra dat blok verder gevorderd is — waarschijnlijk 2-3, meeschalend met de rest van het schema |
+
+**Wat al klaarstaat**: Hoofdstuk 2 had via B21 al zijn ene leesval
+(`CH2_L02C`, "Iunonis oculi ubique"). Twee nieuwe:
+- **Hoofdstuk 3** (`CH3_H23`/`CH3_H23_INSCRIPTIE_GOED`/`_FOUT`, tussen de
+  aankondiging van Cerberus en de afdaling): een Griekse inscriptie bij de
+  ingang van de onderwereld, "Οὐδεὶς ὅπλα φέρει" ("niemand draagt wapens") —
+  een **gemiste-ontkenning**-val (audit-type 3): οὐδείς ("niemand") wordt
+  misgelezen als een bevestiging in plaats van een verbod. Bij een misreading
+  legt Hermes, ná de keuze, alsnog de correcte vertaling uit — de speler
+  begreep het dus fout, maar wordt niet in het duister gelaten over wat er
+  ECHT stond.
+- **Hoofdstuk 4** (`CH4_T06B`, het bestaande labyrint-precedent zelf):
+  Ariadne's hint — voorheen letterlijk Nederlands vertaald in de brontekst
+  ("Bij elke splitsing, houd links aan") — spreekt nu **onvertaald Latijn**:
+  "Ad omne bivium, sinistram tene." Dit hergebruikt de AL BESTAANDE
+  links/rechts-keuzestructuur van `CH4_T06B`/`CH4_T06R1` als de leesval
+  zelf — geen nieuwe scènes nodig, alleen de brontekst aangepast zodat het
+  nu ook echt een taal-leesval is, niet alleen een verhaal-leesval.
+
+**Nog open**: Hoofdstuk 5 t/m 9 hebben nog geen van beide hun twee
+leesvallen (10 in totaal nog te schrijven); Hoofdstuk 10+ wacht sowieso op
+verdere bouw van dat blok (§7.19).
+
+### 7.24 B29, deel 2: de vier-uitkomsten-ladder (`CHECK:`) (**mechanisme gebouwd, NOG NERGENS INGEZET**)
+
+Op verzoek (2026-07-30) het generieke dobbelmechanisme uit §11.4 gebouwd —
+"waar we dit inzetten" is een aparte, nog te voeren discussie (audit:
+2-3x per hoofdstuk op dramatische hoogtepunten).
+
+**Mechaniek**: nieuwe CNS-sectie `CHECK:` (parallel aan `PUZZLE:`/`COMBAT:`,
+zelfde early-return-patroon in `SCREENS.spPlay`) verwijst naar een entry in
+`SP_CHECKS` (singleplayer-data.js, nu een lege tabel). Een CHECK-scène heeft
+BEWUST geen `CHOICES:` — niet de speler maar de worp bepaalt de
+vervolgscène. Elke entry: `{ stat, dc, volledig:{tekst,target},
+deels:{tekst,target}, gefaald:{tekst,target}, kritiek:{tekst,target} }` —
+vier volwaardige vervolgscènes, nooit een strafscherm, zelfde principe als
+`CH4_T06B`/de leesvallen ("gefaald"/"kritiek" is een ANDER verhaal, geen
+blokkade).
+
+`spRollCheck(statKey, dc)` (singleplayer.js): 1d20 + de rauwe statwaarde
+(zelfde harde regel als bij gated choices, §11.4 — nooit `classId`) tegen de
+dc.
+- **"kritiek"** bij een natuurlijke 1, ALTIJD — ook bij een torenhoge stat
+  blijft een fumble een fumble. Bewust: dit is precies het soort verrassing
+  die audit-bevinding "is falen interessant?" (fase 2) nodig heeft, en het
+  maakt zelfs een zeer sterk personage nooit volledig onkwetsbaar voor een
+  verrassend slecht moment.
+- **"volledig"** bij een natuurlijke 20 óf een totaal van dc+5 of meer.
+- **"deels"** zodra de dc gehaald wordt (maar niet met dc+5-marge).
+- **"gefaald"** tot 5 punten onder de dc; daaronder alsnog "kritiek".
+
+`spStartCheckFromScene(scene)` rolt, bepaalt de tak, en toont
+`SCREENS.spCheck` — een scherm met de worp zelf zichtbaar ("1d20 (17) + 5 =
+22 tegen DC 13"), de uitkomstlabel, de bijbehorende tekst, en een
+"Ga verder"-knop (`spCheckContinue()`) die naar de tak-specifieke
+vervolgscène navigeert. `SP_CHECK_RESULTAAT` is, net als `SP_COMBAT`, BEWUST
+geen onderdeel van `SP_STATE`/localStorage — een worp is een kort moment,
+geen opgeslagen voortgang.
+
+**`validate_chronica.js` uitgebreid**: nieuwe cross-referentiecheck (bestaat
+de `CHECK`-id in `SP_CHECKS`, hebben alle vier de takken een geldig target),
+een waarschuwing als een CHECK-scène óók `CHOICES:` heeft (zou genegeerd
+worden), en de bereikbaarheidsgraaf telt de vier CHECK-takken nu ook als
+graafkant — anders zouden toekomstige CHECK-vervolgscènes vals-positief
+"onbereikbaar" worden gerapporteerd zodra `SP_CHECKS` echte entries krijgt
+(dezelfde behandeling als payoff-deuren al hadden).
+
+**Getest**: `spRollCheck()` 2000× met stat 10/dc 13 — verdeling kwam nagenoeg
+exact overeen met de verwachte kansen per uitkomst (volledig ~65%, deels
+~25%, gefaald ~5%, kritiek ~5%, gegeven de dc/dc+5/dc-5-grenzen). Volledige
+flow getest met een synthetische `SP_CHECKS`-entry: rol → resultaat → render
+→ `spCheckContinue()` → correcte navigatie én opruiming van
+`SP_CHECK_RESULTAAT`. Fallback bij een onbekende CHECK-id getest (valt terug
+op `scene.choices[0].target`, zelfde patroon als COMBAT).
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
