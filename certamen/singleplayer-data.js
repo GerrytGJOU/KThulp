@@ -1997,6 +1997,11 @@ const SP_CHECKS = {
     deels:{ target:"CH8_EPI_010_DEELS" },
     gefaald:{ target:"CH8_EPI_010_GEFAALD" },
     kritiek:{ target:"CH8_EPI_010_KRITIEK" } },
+  ch8_epi_009b_lijkspelen: { stat:"vis", dc:15,
+    volledig:{ target:"CH8_EPI_009B_VOL" },
+    deels:{ target:"CH8_EPI_009B_DEELS" },
+    gefaald:{ target:"CH8_EPI_009B_GEFAALD" },
+    kritiek:{ target:"CH8_EPI_009B_KRITIEK" } },
   // ---- Hoofdstuk 9 ----
   ch9_gri_011_stilte: { stat:"agilitas", dc:15,
     volledig:{ target:"CH9_GRI_011_VOL" },
@@ -8283,7 +8288,50 @@ codex_nestor_philoktetes
 
 CHOICES:
 
+* Vaar de haven van Colchis binnen -> CH5_022B
+
+END
+
+=== SCENE: CH5_022B ===
+
+TITLE:
+Een Steen bij de Haven
+
+TEXT:
+Bij de kade staat een verweerde steen, kennelijk door een eerdere bezoeker opgericht als waarschuwing voor wie na hem zou komen: "τὸν ξένον φοβεῖται ὁ βασιλεύς."
+
+CHOICES:
+
+* Begrijp het zoals het er staat — de koning is degene die de vreemdeling vreest, niet andersom -> CH5_022_GOED
+* Lees het aan de haastige blik voorbij als een simpele dreiging — de vreemdeling moet de koning vrezen -> CH5_022_FOUT
+
+END
+
+=== SCENE: CH5_022_GOED ===
+
+TITLE:
+Een Achterdochtige Koning
+
+TEXT:
+Je leest het goed: het is Aeëtes zelf die vreemdelingen vreest, niet omgekeerd — een koning die iets te verbergen heeft, is nu eenmaal banger voor bezoekers dan zij voor hem. Die wetenschap maakt jullie extra voorzichtig zodra jullie voet aan wal zetten.
+
+CHOICES:
+
 * Vaar de haven van Colchis binnen -> CH5_023
+
+END
+
+=== SCENE: CH5_022_FOUT ===
+
+TITLE:
+Een Verkeerde Aanname
+
+TEXT:
+Je leest het verkeerd om — ervan overtuigd dat de steen simpelweg een dreigement is, in plaats van een waarschuwing over de koning zelf. Pas wanneer Aeëtes jullie achterdochtiger en gespannener ontvangt dan verwacht, besef je dat de steen iets anders bedoelde dan je dacht.
+
+CHOICES:
+
+* Vaar, iets minder goed voorbereid dan gehoopt, de haven van Colchis binnen -> CH5_023
 
 END
 
@@ -8503,7 +8551,50 @@ ch5_argonauten
 
 CHOICES:
 
+* Volg de terugreis naar Griekenland -> CH5_027_UITKIJK
+
+END
+
+=== SCENE: CH5_027_UITKIJK ===
+
+TITLE:
+Een Roep vanaf het Achterdek
+
+TEXT:
+Nog geen dag op zee klinkt er een uitroep vanaf het achterdek — de uitkijk, die het snelste Colchische schip al een tijd in de gaten houdt, roept iets naar de rest van de bemanning: "οὐκέτι διώκουσιν."
+
+CHOICES:
+
+* Versta het goed — "ze vervolgen ons niet meer," een reden voor voorzichtige opluchting -> CH5_027_GOED
+* Versta "ze vervolgen ons nog steeds," en sla alarm -> CH5_027_FOUT
+
+END
+
+=== SCENE: CH5_027_GOED ===
+
+TITLE:
+Een Kort Moment van Rust
+
+TEXT:
+Je verstaat het goed: het Colchische schip is even uit het zicht geraakt, niet meer in de achtervolging. De opluchting aan boord is kort — niemand vergeet dat "niet meer" niet hetzelfde is als "nooit" — maar het geeft de bemanning wel even lucht om op adem te komen.
+
+CHOICES:
+
 * Volg de terugreis naar Griekenland -> CH5_027B
+
+END
+
+=== SCENE: CH5_027_FOUT ===
+
+TITLE:
+Vals Alarm
+
+TEXT:
+Je verstaat het verkeerd om, en slaat alarm over een achtervolging die op dat moment eigenlijk al was afgenomen — de bemanning grijpt onnodig naar de riemen, uitgeput van een inspanning die, zo blijkt even later, niet nodig was.
+
+CHOICES:
+
+* Volg de terugreis naar Griekenland, vermoeider dan nodig was -> CH5_027B
 
 END
 
@@ -8738,6 +8829,49 @@ puzzle_ch6_praesens
 
 CHOICES:
 
+* Kijk hoe Latona's kinderen op deze belediging reageren -> CH6_003B
+
+END
+
+=== SCENE: CH6_003B ===
+
+TITLE:
+Niobe's Eigen Woorden
+
+TEXT:
+Iemand aan het feest herhaalt Niobe's eigen zin nog eens, half onder de indruk, half geschokt door haar durf: "Niobe deā potior est."
+
+CHOICES:
+
+* Begrijp het zoals het bedoeld is — Niobe noemt zichzelf machtiger dan de godin zelf -> CH6_003_GOED
+* Versta het als een onschuldig compliment aan de godin, uitgesproken dankzij haar -> CH6_003_FOUT
+
+END
+
+=== SCENE: CH6_003_GOED ===
+
+TITLE:
+De Volle Zwaarte van de Belediging
+
+TEXT:
+Je begrijpt de zin zoals hij bedoeld is: Niobe vergelijkt zichzelf met de godin, en plaatst zichzelf hoger. Geen toevallig compliment, maar een directe belediging aan Latona zelf — en je voelt meteen hoe zwaar dat gaat wegen.
+
+CHOICES:
+
+* Kijk hoe Latona's kinderen op deze belediging reageren -> CH6_004
+
+END
+
+=== SCENE: CH6_003_FOUT ===
+
+TITLE:
+Een Misplaatst Compliment
+
+TEXT:
+Je verstaat de zin verkeerd om, als een dankbetuiging aan de godin in plaats van een vergelijking ten koste van haar. Pas wanneer Apollo en Diana zich even later vol woede roeren, besef je dat Niobe's woorden veel scherper bedoeld waren dan jij ze had opgevat.
+
+CHOICES:
+
 * Kijk hoe Latona's kinderen op deze belediging reageren -> CH6_004
 
 END
@@ -8967,6 +9101,49 @@ Eteokles en Polyneikes spreken af de troon van Thebe om het jaar te delen — ee
 
 PUZZLE:
 puzzle_ch6_imperfectum
+
+CHOICES:
+
+* Kijk wat Polyneikes onderneemt -> CH6_011B
+
+END
+
+=== SCENE: CH6_011B ===
+
+TITLE:
+Een Wachter bij de Poort
+
+TEXT:
+Een wachter op de muur roept naar beneden, zijn stem half verloren in de wind: "Polynices nondum venit."
+
+CHOICES:
+
+* Versta het goed — "Polyneikes is nog niet gekomen," reden voor even wat lucht -> CH6_012_GOED
+* Mis het kleine woordje ertussen en versta enkel "Polyneikes is gekomen" -> CH6_012_FOUT
+
+END
+
+=== SCENE: CH6_012_GOED ===
+
+TITLE:
+Nog Even Tijd
+
+TEXT:
+Je verstaat het goed: Polyneikes is er nog niet, wat betekent dat er nog even tijd is voor Thebe zich voor te bereiden op wat onvermijdelijk komt. Geen opluchting, maar wel een korte adempauze.
+
+CHOICES:
+
+* Kijk wat Polyneikes onderneemt -> CH6_012
+
+END
+
+=== SCENE: CH6_012_FOUT ===
+
+TITLE:
+Voorbarige Paniek
+
+TEXT:
+Je mist het kleine woordje "nondum" en verstaat enkel dat Polyneikes er al is — wat voor korte, onnodige paniek zorgt binnen de muren, tot iemand anders de wachter nog eens laat herhalen wat hij werkelijk zei.
 
 CHOICES:
 
@@ -9774,10 +9951,53 @@ codex_eed_tyndareos
 
 CHOICES:
 
-* Zweer de eed zelf mee, plechtig en in stilte [CLEMENTIA] -> CH7_003B
-* Zweer de eed zelf mee, kort en zakelijk, zoals de meeste vrijers om je heen [SEVERITAS] -> CH7_003B
-* Zweer mee, zonder er verder bij stil te staan [NEUTRAL] -> CH7_003B
-* Blijf terzijde staan — een boodschapper hoeft aan geen eed gebonden te zijn -> CH7_003B
+* Zweer de eed zelf mee, plechtig en in stilte [CLEMENTIA] -> CH7_003_EED
+* Zweer de eed zelf mee, kort en zakelijk, zoals de meeste vrijers om je heen [SEVERITAS] -> CH7_003_EED
+* Zweer mee, zonder er verder bij stil te staan [NEUTRAL] -> CH7_003_EED
+* Blijf terzijde staan — een boodschapper hoeft aan geen eed gebonden te zijn -> CH7_003_EED
+
+END
+
+=== SCENE: CH7_003_EED ===
+
+TITLE:
+De Kern van de Eed
+
+TEXT:
+De priester spreekt de kern van de eed hardop uit, zodat elke vrijer haar zonder twijfel kan herhalen: "τῷ ἀδικηθέντι πάντες βοηθήσομεν."
+
+CHOICES:
+
+* Begrijp het zoals het bedoeld is — "wie onrecht is aangedaan, zullen wij allen helpen" -> CH7_003_GOED
+* Versta het participium verkeerd om — "wie onrecht heeft gedaan, zullen wij allen helpen" -> CH7_003_FOUT
+
+END
+
+=== SCENE: CH7_003_GOED ===
+
+TITLE:
+Een Eed Goed Verstaan
+
+TEXT:
+Je verstaat de eed precies zoals hij bedoeld is: hulp aan wie onrecht wordt aangedaan, niet aan wie het aandoet. Precies dat onderscheid is straks, wanneer Helena wordt weggevoerd, de reden waarom elke vrijer zich verplicht voelt naar Troje te varen.
+
+CHOICES:
+
+* Reis mee naar die andere bruiloft -> CH7_003B
+
+END
+
+=== SCENE: CH7_003_FOUT ===
+
+TITLE:
+Een Verwarrend Ogenblik
+
+TEXT:
+Je verstaat het lijdend deelwoord even verkeerd om, en denkt heel even dat de eed juist de veroorzaker van het onrecht belooft te steunen — een verwarring die je snel weer rechtzet zodra je de priester de zin nog eens hoort herhalen, dit keer trager.
+
+CHOICES:
+
+* Reis mee naar die andere bruiloft -> CH7_003B
 
 END
 
@@ -9843,7 +10063,50 @@ codex_gouden_appel_tweedracht
 
 CHOICES:
 
-* Volg de appel naar wie hem uiteindelijk moet beoordelen -> CH7_006
+* Volg de appel naar wie hem uiteindelijk moet beoordelen -> CH7_005B
+
+END
+
+=== SCENE: CH7_005B ===
+
+TITLE:
+Een Ziener Spreekt
+
+TEXT:
+Voor we bij het oordeel zelf aankomen, moet er eerst een rechter geboren worden. In Troje droomt koningin Hecuba, vlak voor de bevalling van haar zoveelste kind, van een brandende fakkel die uit haar eigen lichaam voortkomt en heel Troje in vlammen zet. Een ziener legt de droom uit, zijn stem gespannen: "τὸ τέκνον ἀπολεῖ τὴν πόλιν."
+
+CHOICES:
+
+* Versta het toekomende tijd zoals bedoeld — "het kind zal de stad vernietigen," een profetie, geen actueel gevaar -> CH7_006_GOED
+* Mis de toekomende tijd en versta "het kind vernietigt de stad," alsof het al gebeurt -> CH7_006_FOUT
+
+END
+
+=== SCENE: CH7_006_GOED ===
+
+TITLE:
+Een Profetie, Geen Direct Gevaar
+
+TEXT:
+Je verstaat de ziener goed: dit is een waarschuwing voor de toekomst, geen beschrijving van iets dat nu al gebeurt. Dat onderscheid maakt Priamus' komende beslissing er niet minder zwaar op, maar het verklaart wel waarom hij nog tijd neemt om na te denken in plaats van meteen in paniek te reageren.
+
+CHOICES:
+
+* Zie welke keuze koning Priamus maakt -> CH7_006
+
+END
+
+=== SCENE: CH7_006_FOUT ===
+
+TITLE:
+Een Ogenblik van Verwarring
+
+TEXT:
+Je mist de toekomende tijd en denkt heel even dat het kind, nog niet eens geboren, nu al een gevaar voor de stad vormt — een misverstand dat zich vanzelf oplost zodra je beseft dat Hecuba's bevalling nog moet beginnen.
+
+CHOICES:
+
+* Zie welke keuze koning Priamus maakt -> CH7_006
 
 END
 
@@ -9853,7 +10116,7 @@ TITLE:
 Hecuba's Visioen
 
 TEXT:
-Voor we bij het oordeel zelf aankomen, moet er eerst een rechter geboren worden. In Troje droomt koningin Hecuba, vlak voor de bevalling van haar zoveelste kind, van een brandende fakkel die uit haar eigen lichaam voortkomt en heel Troje in vlammen zet. Een ziener legt de droom uit zonder omwegen: dit kind zal ooit de ondergang van de stad worden.
+Koning Priamus staat voor een verschrikkelijke keuze. Het kind, Paris, wordt naar de berg Ida gebracht om daar te sterven van de elementen — een lot dat, zoals wel vaker in dit soort profetieën, niet helemaal uitkomt zoals gepland.
 
 Koning Priamus staat voor een verschrikkelijke keuze. Het kind, Paris, wordt naar de berg Ida gebracht om daar te sterven van de elementen — een lot dat, zoals wel vaker in dit soort profetieën, niet helemaal uitkomt zoals gepland.
 
@@ -11147,9 +11410,36 @@ TITLE:
 Thetis uit de Zee
 
 TEXT:
-Thetis rijst op uit de golven, omringd door haar zusters, en treurt samen met haar zoon. Ze weet iets dat hij nog niet weet: als hij nu Hector doodt om Patroklos te wreken, zal hijzelf niet lang daarna sterven. Ze zegt het hem toch — eerlijk, zoals altijd — en belooft hem in plaats van tegenhouden alleen dit: een nieuwe wapenrusting, gesmeed door de beste handen die er bestaan.
+Thetis rijst op uit de golven, omringd door haar zusters, en treurt samen met haar zoon. Ze weet iets dat hij nog niet weet, en spreekt het uit op de oude, plechtige manier: "ἐὰν Ἕκτορα ἀποκτείνῃς, σὺ ταχέως ἀποθανῇ."
 
-Ze verdwijnt richting de Olympos, naar Hephaistos.
+CHOICES:
+
+* Versta het als de voorwaarde die het is — "als je Hector doodt, zul je snel daarna sterven" — een keuze, geen zekerheid -> CH8_EPI_003_GOED
+* Versta het als een simpele voorspelling zonder voorwaarde — "je zult Hector doden en snel daarna sterven" — hoe dan ook -> CH8_EPI_003_FOUT
+
+END
+
+=== SCENE: CH8_EPI_003_GOED ===
+
+TITLE:
+Een Voorwaarde, Geen Vonnis
+
+TEXT:
+Je verstaat Thetis precies zoals ze het bedoelt: dit is een voorwaardelijke waarschuwing, geen onvermijdelijk vonnis. Achilles heeft, hoe zwaar ook, nog altijd een keuze — en dat besef maakt wat er straks gebeurt niet minder verdrietig, maar wel iets minder onvermijdelijk.
+
+CHOICES:
+
+* Zie wat Hephaistos smeedt -> CH8_EPI_004
+
+END
+
+=== SCENE: CH8_EPI_003_FOUT ===
+
+TITLE:
+Een Vonnis Zonder Uitweg
+
+TEXT:
+Je mist het voorwaardelijke van Thetis' woorden en hoort enkel een onvermijdelijk lot — alsof Achilles al geen keuze meer heeft. Pas wanneer je haar de zin nog eens hoort, langzamer ditmaal, besef je dat er wel degelijk een "als" in zat.
 
 CHOICES:
 
@@ -11349,9 +11639,36 @@ TITLE:
 Rond de Muren
 
 TEXT:
-Achilles sleept Hectors lichaam driemaal rond de muren van Troje, in het volle zicht van Priamus, Hecuba en Andromache, die van de muren toekijken. Priamus moet fysiek worden tegengehouden om niet naar buiten te rennen. Wat er die dag op de muren van Troje wordt gehoord, is een verdriet waar geen woorden echt bij passen.
+Achilles sleept Hectors lichaam driemaal rond de muren van Troje, in het volle zicht van Priamus, Hecuba en Andromache, die van de muren toekijken. Priamus moet fysiek worden tegengehouden om niet naar buiten te rennen — een wachter grijpt hem bij de arm en schreeuwt boven het misbaar uit: "μὴ ἔξελθε."
 
-Dag na dag herhaalt Achilles het — tot zelfs de goden op de Olympos zich beginnen af te vragen of dit niet te ver is gegaan.
+CHOICES:
+
+* Versta het als het bevel dat het is — "ga niet naar buiten!" — en houd zelf ook je afstand van de poort -> CH8_EPI_009_GOED
+* Versta het als een constatering — "hij gaat niet naar buiten" — en denk dat het gevaar al geweken is -> CH8_EPI_009_FOUT
+
+END
+
+=== SCENE: CH8_EPI_009_GOED ===
+
+TITLE:
+Een Bevel Verstaan
+
+TEXT:
+Je verstaat het bevel meteen zoals het bedoeld is, en helpt zelf mee Priamus tegen te houden — zijn wanhoop is te groot om op eigen kracht te bedwingen, en elke hand die meehelpt telt.
+
+CHOICES:
+
+* Zie hoe het leger, ondanks alles, ook nog rouwt om Patroklos zelf -> CH8_EPI_009B
+
+END
+
+=== SCENE: CH8_EPI_009_FOUT ===
+
+TITLE:
+Een Vals Gevoel van Rust
+
+TEXT:
+Je verstaat de gebiedende wijs even als een gewone mededeling, en denkt dat het gevaar al geweken is — tot je ziet dat Priamus, nog altijd worstelend tegen de handen die hem vasthouden, allesbehalve gekalmeerd is.
 
 CHOICES:
 
@@ -11365,8 +11682,75 @@ TITLE:
 De Lijkspelen
 
 TEXT:
-Tussen zijn eigen woede door houdt Achilles zich ook aan een oudere plicht: Patroklos krijgt een brandstapel, en daarna de lijkspelen die een groot krijger toekomen — wagenrennen, worstelen, boksen, hardlopen, allemaal met rijke prijzen uit Achilles' eigen tent.
+Tussen zijn eigen woede door houdt Achilles zich ook aan een oudere plicht: Patroklos krijgt een brandstapel, en daarna de lijkspelen die een groot krijger toekomen — wagenrennen, worstelen, boksen, hardlopen, allemaal met rijke prijzen uit Achilles' eigen tent. Iemand duwt je een speer in handen: ook jij wordt uitgenodigd mee te doen aan het speerwerpen, voor de eer van het leger.
 
+CHECK:
+ch8_epi_009b_lijkspelen
+
+END
+
+=== SCENE: CH8_EPI_009B_VOL ===
+
+TITLE:
+Een Geslaagde Worp
+
+TEXT:
+Je speer vliegt verder dan wie ook had verwacht en landt met een doffe klap ver voorbij de vorige markering — een applaus barst los, en Achilles zelf knikt kort in jouw richting voor hij zich weer tot de rest van de spelen wendt.
+
+CHOICES:
+
+* Zie hoe het wagenrennen verloopt -> CH8_EPI_009B2
+
+END
+
+=== SCENE: CH8_EPI_009B_DEELS ===
+
+TITLE:
+Een Eervolle Worp
+
+TEXT:
+Je worp is solide, niet de verste van de dag maar ook zeker geen schande — genoeg om een paar goedkeurende knikken te oogsten voor de aandacht alweer verschuift naar het volgende onderdeel.
+
+CHOICES:
+
+* Zie hoe het wagenrennen verloopt -> CH8_EPI_009B2
+
+END
+
+=== SCENE: CH8_EPI_009B_GEFAALD ===
+
+TITLE:
+Een Zwakke Worp
+
+TEXT:
+Je speer valt merkbaar korter dan gehoopt, en een paar krijgers grinniken zachtjes voor ze alweer hun aandacht op iets anders richten — geen schande, maar ook niets om lang bij stil te staan.
+
+CHOICES:
+
+* Zie hoe het wagenrennen verloopt -> CH8_EPI_009B2
+
+END
+
+=== SCENE: CH8_EPI_009B_KRITIEK ===
+
+TITLE:
+Een Misworp
+
+TEXT:
+De speer glipt verkeerd uit je hand en ploft nog geen paar passen verderop in het zand — een misworp die meer gelach dan medelijden oplevert, al vergeet iedereen het alweer zodra het wagenrennen begint.
+
+CHOICES:
+
+* Zie hoe het wagenrennen verloopt -> CH8_EPI_009B2
+
+END
+
+=== SCENE: CH8_EPI_009B2 ===
+
+TITLE:
+Het Wagenrennen
+
+TEXT:
 Het wagenrennen wordt het felst betwist: Antilochos, Nestors jonge zoon, snijdt Menelaos op een gevaarlijk smal stuk van de baan de pas af — een regelrechte overtreding, maar sluw genoeg uitgevoerd dat niemand het hem echt kwalijk kan nemen. Diomedes wint uiteindelijk het hele rennen, zijn paarden nog altijd de snelste van het hele leger. Odysseus en Aias, zoon van Telamon, worstelen tot een gelijkspel dat geen van beiden ooit zal toegeven. En Nestor zelf, te oud om nog mee te doen, krijgt van Achilles een erebeker — niet voor een overwinning, maar voor alles wat hij het leger al die jaren heeft geleerd.
 
 PERSON:
@@ -12094,7 +12478,50 @@ TITLE:
 Laocoön en de Slangen
 
 TEXT:
-Niet iedereen is overtuigd. De priester Laocoön waarschuwt luid tegen het paard en werpt zelfs een speer in zijn houten flank — die trilt na, hol vanbinnen, maar niemand die daar acht op slaat. Vlak daarna komen twee reusachtige zeeslangen uit de golven — gestuurd, zeggen sommigen, door Poseidon zelf, die Troje nooit heeft vergeven dat koning Laomedon hem ooit zijn beloofde loon voor de stadsmuren onthield — en verslinden hem en zijn twee zonen voor de ogen van de hele stad.
+Niet iedereen is overtuigd. De priester Laocoön waarschuwt luid tegen het paard en werpt zelfs een speer in zijn houten flank — die trilt na, hol vanbinnen, maar niemand die daar acht op slaat. Zijn waarschuwing blijft je bij, ook nadat de menigte alweer verder is gelopen: "Timeo Danaos et dona ferentes."
+
+CHOICES:
+
+* Begrijp de zin zoals hij bedoeld is — "ik vrees de Grieken, ook al brengen ze geschenken" — wantrouwen jegens de Grieken zelf, geschenk of niet -> CH9_TRO_010_GOED
+* Lees "dona" los van "Danaos" — "ik vrees de Grieken en ik vrees de geschenken" — alsof het paard zelf het enige gevaar is -> CH9_TRO_010_FOUT
+
+END
+
+=== SCENE: CH9_TRO_010_GOED ===
+
+TITLE:
+Wantrouwen tot op het Bot
+
+TEXT:
+Je begrijpt Laocoön zoals hij het bedoelt: zijn wantrouwen geldt de Grieken zelf, niet enkel het paard dat ze achterlieten. Zelfs als het paard onschuldig zou zijn geweest, zou zijn waarschuwing nog altijd hebben gegolden — en dat maakt het des te wranger dat niemand naar hem luistert.
+
+CHOICES:
+
+* Zie hoe het paard toch de stad in gaat -> CH9_TRO_010B
+
+END
+
+=== SCENE: CH9_TRO_010_FOUT ===
+
+TITLE:
+Een Te Beperkte Waarschuwing
+
+TEXT:
+Je leest de zin iets te letterlijk, alsof Laocoöns angst alleen het paard zelf gold — een gevaar dat, eenmaal "veilig" gecontroleerd, geen verdere reden tot wantrouwen meer zou geven. Pas achteraf besef je dat zijn woorden dieper wortelden dan dat.
+
+CHOICES:
+
+* Zie hoe het paard toch de stad in gaat -> CH9_TRO_010B
+
+END
+
+=== SCENE: CH9_TRO_010B ===
+
+TITLE:
+Een Straf, Denkt Troje
+
+TEXT:
+Vlak na Laocoöns waarschuwing komen twee reusachtige zeeslangen uit de golven — gestuurd, zeggen sommigen, door Poseidon zelf, die Troje nooit heeft vergeven dat koning Laomedon hem ooit zijn beloofde loon voor de stadsmuren onthield — en verslinden hem en zijn twee zonen voor de ogen van de hele stad.
 
 Troje leest het verkeerd: dit is, denkt iedereen, een straf voor Laocoöns twijfel — niet een waarschuwing.
 
@@ -12708,7 +13135,50 @@ neoptolemus:intro
 
 CHOICES:
 
-* Hoor het nieuws over een geheime missie in Troje zelf -> CH9_GRI_009
+* Hoor het nieuws over een geheime missie in Troje zelf -> CH9_GRI_008B
+
+END
+
+=== SCENE: CH9_GRI_008B ===
+
+TITLE:
+Odysseus' Verslag
+
+TEXT:
+Odysseus vertelt achteraf, kort en zonder opschepperij, hoe hij ongezien de stad binnenkwam — vermomd als bedelaar, wachtend op precies het juiste moment. "Νυκτὸς οὔσης, ἡ πόλις καθεύδει," zegt hij, alsof dat alles verklaart.
+
+CHOICES:
+
+* Begrijp de constructie zoals bedoeld — "toen het nacht was, sliep de stad" — de duisternis als voorwaarde voor zijn kans -> CH9_GRI_009_GOED
+* Lees "νυκτὸς" los, als een gewone bezitsvorm — "de stad van de nacht slaapt," alsof het een vaste naam is -> CH9_GRI_009_FOUT
+
+END
+
+=== SCENE: CH9_GRI_009_GOED ===
+
+TITLE:
+Het Juiste Moment Begrepen
+
+TEXT:
+Je begrijpt de constructie zoals Odysseus haar bedoelt: de duisternis was niet zomaar decor, maar precies de voorwaarde die zijn hele list mogelijk maakte. Zonder die nacht was er geen missie geweest.
+
+CHOICES:
+
+* Hoor wat hij en Diomedes die nacht precies hebben meegenomen -> CH9_GRI_009
+
+END
+
+=== SCENE: CH9_GRI_009_FOUT ===
+
+TITLE:
+Een Verkeerd Begrepen Zin
+
+TEXT:
+Je leest de zin even te letterlijk, alsof "de stad van de nacht" een vaste naam is in plaats van een constructie die het tijdstip verklaart — een verwarring die zich vanzelf oplost zodra Odysseus verder vertelt.
+
+CHOICES:
+
+* Hoor wat hij en Diomedes die nacht precies hebben meegenomen -> CH9_GRI_009
 
 END
 
