@@ -1928,7 +1928,92 @@ const SP_COMBAT_ENEMIES = {
    Gebruik: `CHECK:\n<id>` in een CNS-scène (spStartCheckFromScene,
    singleplayer.js) — die scène heeft dan BEWUST geen CHOICES, de worp zelf
    bepaalt de vervolgscène. ---- */
-const SP_CHECKS = {};
+const SP_CHECKS = {
+  // ---- Hoofdstuk 1 ----
+  ch1_c04_diefstal: { stat:"agilitas", dc:13,
+    volledig:{ target:"CH1_C04_VOL" },
+    deels:{ target:"CH1_C04_DEELS" },
+    gefaald:{ target:"CH1_C04_GEFAALD" },
+    kritiek:{ target:"CH1_C04_KRITIEK" } },
+  // ---- Hoofdstuk 2 ----
+  ch2_h07_lokken: { stat:"prudentia", dc:13,
+    volledig:{ target:"CH2_H07_CHECK_VOL" },
+    deels:{ target:"CH2_H07_CHECK_DEELS" },
+    gefaald:{ target:"CH2_H07_CHECK_GEFAALD" },
+    kritiek:{ target:"CH2_H07_CHECK_KRITIEK" } },
+  ch2_l06_ontsnapping: { stat:"agilitas", dc:13,
+    volledig:{ target:"CH2_L06_VOL" },
+    deels:{ target:"CH2_L06_DEELS" },
+    gefaald:{ target:"CH2_L06_GEFAALD" },
+    kritiek:{ target:"CH2_L06_KRITIEK" } },
+  // ---- Hoofdstuk 3 ----
+  ch3_h09_rivieren: { stat:"vis", dc:13,
+    volledig:{ target:"CH3_H09_VOL" },
+    deels:{ target:"CH3_H09_DEELS" },
+    gefaald:{ target:"CH3_H09_GEFAALD" },
+    kritiek:{ target:"CH3_H09_KRITIEK" } },
+  ch3_h23b_duister: { stat:"robur", dc:15,
+    volledig:{ target:"CH3_H23_VOL" },
+    deels:{ target:"CH3_H23_DEELS" },
+    gefaald:{ target:"CH3_H23_GEFAALD" },
+    kritiek:{ target:"CH3_H23_KRITIEK" } },
+  // ---- Hoofdstuk 4 ----
+  ch4_p04_teugels: { stat:"ingenium", dc:15,
+    volledig:{ target:"CH4_P04_VOL" },
+    deels:{ target:"CH4_P04_DEELS" },
+    gefaald:{ target:"CH4_P04_GEFAALD" },
+    kritiek:{ target:"CH4_P04_KRITIEK" } },
+  // ---- Hoofdstuk 5 ----
+  ch5_016b_symplegades: { stat:"agilitas", dc:15,
+    volledig:{ target:"CH5_016_VOL" },
+    deels:{ target:"CH5_016_DEELS" },
+    gefaald:{ target:"CH5_016_GEFAALD" },
+    kritiek:{ target:"CH5_016_KRITIEK" } },
+  ch5_025b_woud: { stat:"prudentia", dc:13,
+    volledig:{ target:"CH5_025_VOL" },
+    deels:{ target:"CH5_025_DEELS" },
+    gefaald:{ target:"CH5_025_GEFAALD" },
+    kritiek:{ target:"CH5_025_KRITIEK" } },
+  // ---- Hoofdstuk 6 ----
+  ch6_012b_poorten: { stat:"vis", dc:15,
+    volledig:{ target:"CH6_012_VOL" },
+    deels:{ target:"CH6_012_DEELS" },
+    gefaald:{ target:"CH6_012_GEFAALD" },
+    kritiek:{ target:"CH6_012_KRITIEK" } },
+  // ---- Hoofdstuk 7 ----
+  ch7_016_pleidooi: { stat:"gratia", dc:15,
+    volledig:{ target:"CH7_016_VOL" },
+    deels:{ target:"CH7_016_DEELS" },
+    gefaald:{ target:"CH7_016_GEFAALD" },
+    kritiek:{ target:"CH7_016_KRITIEK" } },
+  // ---- Hoofdstuk 8 ----
+  ch8_epi_006b_achtervolging: { stat:"vis", dc:17,
+    volledig:{ target:"CH8_EPI_006_VOL" },
+    deels:{ target:"CH8_EPI_006_DEELS" },
+    gefaald:{ target:"CH8_EPI_006_GEFAALD" },
+    kritiek:{ target:"CH8_EPI_006_KRITIEK" } },
+  ch8_epi_010_wachtposten: { stat:"agilitas", dc:15,
+    volledig:{ target:"CH8_EPI_010_VOL" },
+    deels:{ target:"CH8_EPI_010_DEELS" },
+    gefaald:{ target:"CH8_EPI_010_GEFAALD" },
+    kritiek:{ target:"CH8_EPI_010_KRITIEK" } },
+  // ---- Hoofdstuk 9 ----
+  ch9_gri_011_stilte: { stat:"agilitas", dc:15,
+    volledig:{ target:"CH9_GRI_011_VOL" },
+    deels:{ target:"CH9_GRI_011_DEELS" },
+    gefaald:{ target:"CH9_GRI_011_GEFAALD" },
+    kritiek:{ target:"CH9_GRI_011_KRITIEK" } },
+  ch9_tro_017c_vluchteling: { stat:"vis", dc:13,
+    volledig:{ target:"CH9_TRO_017C_VOL" },
+    deels:{ target:"CH9_TRO_017C_DEELS" },
+    gefaald:{ target:"CH9_TRO_017C_GEFAALD" },
+    kritiek:{ target:"CH9_TRO_017C_KRITIEK" } },
+  ch9_tro_013b_verdediging: { stat:"gratia", dc:17,
+    volledig:{ target:"CH9_TRO_014_VOL" },
+    deels:{ target:"CH9_TRO_014_DEELS" },
+    gefaald:{ target:"CH9_TRO_014_GEFAALD" },
+    kritiek:{ target:"CH9_TRO_014_KRITIEK" } },
+};
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
    aangevuld via VOCAB:-secties (spHookVocab, singleplayer.js). Bewust
@@ -3359,13 +3444,69 @@ TITLE:
 De Diefstal
 
 TEXT:
-Prometheus verbergt een enkele gloeiende vonk in de holte van een vijgentakstengel — een plant waarvan het merg smeult zonder de vlam zelf te voeden, precies genoeg om een vonk levend te houden tijdens een lange tocht. Hij glipt terug naar de aarde, sneller en stiller dan een god hem ooit zou toevertrouwen.
+Prometheus verbergt een enkele gloeiende vonk in de holte van een vijgentakstengel — een plant waarvan het merg smeult zonder de vlam zelf te voeden, precies genoeg om een vonk levend te houden tijdens een lange tocht. Nu moet hij nog wegkomen — het gevaarlijkste deel, met de hele Olympos vlakbij slapend of half wakend.
 
-Beneden, in de vallei, geeft hij het vuur aan de mensen die er het hardst naar smachtten. Voor het eerst zie je licht op hun gezichten dat niet van de maan komt: verwondering eerst, dan iets wat verdacht veel op hoop begint te lijken. Ze leren binnen een enkele nacht hoe ze hout moeten stoken, hoe ze vlees moeten roosteren, hoe ze een cirkel om de vlam moeten vormen tegen de kou.
+CHECK:
+ch1_c04_diefstal
+
+END
+
+=== SCENE: CH1_C04_VOL ===
+
+TITLE:
+Zonder een Spoor
+
+TEXT:
+Je leidt de aandacht precies op het juiste moment af, en Prometheus glipt weg zonder dat ook maar één god iets vermoedt. Beneden, in de vallei, geeft hij het vuur aan de mensen die er het hardst naar smachtten — verwondering eerst op hun gezichten, dan iets wat verdacht veel op hoop begint te lijken.
 
 CHOICES:
 
-* Kijk toe hoe de hemel dit opmerkt -> CH1_C05
+* Kijk toe hoe de hemel dit toch nog opmerkt -> CH1_C05
+
+END
+
+=== SCENE: CH1_C04_DEELS ===
+
+TITLE:
+Bijna Ongezien
+
+TEXT:
+Prometheus komt weg met de vonk, maar niet helemaal geruisloos — een lichte god, ergens tussen slaap en waken, opent even de ogen bij het geluid van jullie voetstappen en sluit ze dan weer, niet helemaal overtuigd dat hij iets heeft gehoord. Beneden geeft Prometheus het vuur aan de mensen die er het hardst naar smachtten.
+
+CHOICES:
+
+* Kijk toe hoe de hemel dit alsnog opmerkt -> CH1_C05
+
+END
+
+=== SCENE: CH1_C04_GEFAALD ===
+
+TITLE:
+Bijna Betrapt
+
+TEXT:
+Halverwege de vlucht schrikt een wachtende god wakker — jullie moeten je een lange, hartkloppende tijd schuilhouden achter een zuil voor de rust terugkeert. Pas dan bereikt Prometheus, later dan gepland maar nog altijd ongezien, de vallei — waar hij het vuur geeft aan de mensen die er het hardst naar smachtten.
+
+CHOICES:
+
+* Kijk toe hoe de hemel dit uiteindelijk toch opmerkt -> CH1_C05
+
+END
+
+=== SCENE: CH1_C04_KRITIEK ===
+
+TITLE:
+Eén Blik Te Veel
+
+TEXT:
+Prometheus komt weg met de vonk — maar niet voor een god, wakker geworden door het tumult, zijn blik heel even op JOU laat vallen in plaats van op hem. Niets wordt gezegd, niemand grijpt in, maar het gevoel dat je bent opgemerkt laat je niet meer los. Beneden geeft Prometheus het vuur aan de mensen die er het hardst naar smachtten, zonder te weten wat er net boven zijn hoofd is gebeurd.
+
+FLAG:
+ch1_c04_opgemerkt=true
+
+CHOICES:
+
+* Kijk toe hoe de hemel het vuur zelf opmerkt -> CH1_C05
 
 END
 
@@ -3917,24 +4058,18 @@ De Python op de Hielen
 TEXT:
 De python wint langzaam terrein; Latona's gewicht en uitputting maken elke stap zwaarder dan de vorige. Ergens voor jullie, nog niet zichtbaar, moet een laatste toevlucht liggen — de vraag is alleen of je haar daar op tijd krijgt.
 
-CHOICES:
-
-* Ren blindelings verder naast haar, op adrenaline alleen -> CH2_L06_OPEN
-* Leid haar zigzaggend tussen de rotsen door, te snel en te lenig voor het logge beest [STAT:agilitas:11] -> CH2_L06_AGI
-* Bijt door je eigen pijn heen en houd het tempo naast haar vol tot de kustlijn [STAT:robur:13] -> CH2_L06_ROB
+CHECK:
+ch2_l06_ontsnapping
 
 END
 
-=== SCENE: CH2_L06_OPEN ===
+=== SCENE: CH2_L06_VOL ===
 
 TITLE:
-Op Adrenaline Alleen
+Ruim Voor de Python Uit
 
 TEXT:
-Je rent naast haar zonder na te denken, elke gedachte gericht op niets anders dan de volgende stap. Ergens tussen de rotsen, hijgend en uitgeput, komt de kust eindelijk in zicht.
-
-FLAG:
-ch2_l06_route=open
+Je leidt Latona in korte, scherpe bochten tussen de rotsblokken door — precies het soort terrein waar een logge python zijn snelheid verliest. De afstand tussen jullie en het beest groeit met elke wending, tot de kust ruim op tijd in zicht komt.
 
 CHOICES:
 
@@ -3942,16 +4077,13 @@ CHOICES:
 
 END
 
-=== SCENE: CH2_L06_AGI ===
+=== SCENE: CH2_L06_DEELS ===
 
 TITLE:
-Zigzaggend Tussen de Rotsen
+Hijgend Op Tijd
 
 TEXT:
-Je leidt Latona niet in een rechte lijn maar in korte, scherpe bochten tussen de rotsblokken door — precies het soort terrein waar een logge python zijn snelheid verliest. De afstand tussen jullie en het beest groeit met elke wending.
-
-FLAG:
-ch2_l06_route=agilitas
+Je houdt het tempo naast haar vol, mijl na mijl, longen brandend en benen schreeuwend om te stoppen — tot de kustlijn eindelijk opdoemt, net op tijd en geen moment eerder.
 
 CHOICES:
 
@@ -3959,16 +4091,27 @@ CHOICES:
 
 END
 
-=== SCENE: CH2_L06_ROB ===
+=== SCENE: CH2_L06_GEFAALD ===
 
 TITLE:
-Door de Pijn Heen
+Rakelings
 
 TEXT:
-Je longen branden, je benen schreeuwen om te stoppen, maar je houdt het tempo naast haar vol, mijl na mijl, tot de kustlijn eindelijk opdoemt aan de horizon.
+De python haalt jullie bijna in — je voelt de wind van zijn uitval nog net langs je enkel strijken voor je Latona een laatste ruk opzij geeft. Te dichtbij naar jouw smaak, maar de kust is nu, eindelijk, in zicht.
 
-FLAG:
-ch2_l06_route=robur
+CHOICES:
+
+* Kijk uit naar een laatste toevlucht -> CH2_L07
+
+END
+
+=== SCENE: CH2_L06_KRITIEK ===
+
+TITLE:
+Struikelend
+
+TEXT:
+Je struikelt over een losse steen en valt languit — kostbare seconden die de python bijna genoeg terrein laten winnen om jullie allebei in te halen. Alleen doordat Latona zelf, ondanks alles, blijft doorrennen en je overeind trekt, komen jullie samen alsnog bij de kust aan, geschaafd en buiten adem.
 
 CHOICES:
 
@@ -4724,7 +4867,7 @@ Bij de grot van de Nemeïsche leeuw aangekomen, valt je oog op iets waar Herakle
 
 CHOICES:
 
-* Wijs Herakles op de tweede opening — hij regelt het zelf -> CH2_H08
+* Wijs Herakles op de tweede opening — hij regelt het zelf -> CH2_H07_CHECK
 * Rol een zwaar rotsblok voor de tweede opening, schouder aan schouder met Herakles' eigen kracht [STAT:vis:11] -> CH2_H07_VIS
 * Sluip om de grot heen en stapel snel losse stenen en takken op, voor het beest iets in de gaten heeft [STAT:agilitas:13] -> CH2_H07_AGI
 
@@ -4743,7 +4886,7 @@ ch2_h07_route=vis
 
 CHOICES:
 
-* Kijk hoe Herakles de grot binnengaat -> CH2_H08
+* Kijk hoe Herakles de grot binnengaat -> CH2_H07_CHECK
 
 END
 
@@ -4757,6 +4900,75 @@ Je sluipt om de grot heen en stapelt, sneller dan je zelf had verwacht, losse st
 
 FLAG:
 ch2_h07_route=agilitas
+
+CHOICES:
+
+* Kijk hoe Herakles de grot binnengaat -> CH2_H07_CHECK
+
+END
+
+=== SCENE: CH2_H07_CHECK ===
+
+TITLE:
+De Leeuw Naar Buiten Lokken
+
+TEXT:
+Met de tweede uitgang afgesloten rest nog één probleem: de leeuw zelf zit diep in de grot, niet van plan zomaar naar de enige overgebleven opening te komen. Jij bent degene die haar moet lokken — dicht genoeg bij de ingang dat Herakles haar meteen kan grijpen zodra ze verschijnt, niet zo dichtbij dat je zelf haar eerste doelwit wordt.
+
+CHECK:
+ch2_h07_lokken
+
+END
+
+=== SCENE: CH2_H07_CHECK_VOL ===
+
+TITLE:
+Recht in Zijn Handen
+
+TEXT:
+Je lokt de leeuw feilloos naar de ingang — ze stormt naar buiten precies op het moment dat Herakles zich daar opstelt, recht in zijn wachtende handen. Geen seconde twijfel, geen ruimte voor het beest om terug te deinzen.
+
+CHOICES:
+
+* Kijk hoe Herakles de grot binnengaat -> CH2_H08
+
+END
+
+=== SCENE: CH2_H07_CHECK_DEELS ===
+
+TITLE:
+Bijna op Tijd
+
+TEXT:
+De leeuw komt naar buiten, maar net iets trager dan gehoopt — Herakles moet een stap opzij zetten en haar alsnog onderscheppen voor ze de kans krijgt zich om te draaien. Het werkt, maar minder soepel dan je had willen zien.
+
+CHOICES:
+
+* Kijk hoe Herakles de grot binnengaat -> CH2_H08
+
+END
+
+=== SCENE: CH2_H07_CHECK_GEFAALD ===
+
+TITLE:
+Een Onrustig Beest
+
+TEXT:
+Je lokaas werkt niet zoals gepland — de leeuw wordt onrustig maar blijft binnen, grommend rond de ingang zonder er ooit doorheen te komen. Uiteindelijk is het Herakles zelf die, ongeduldig geworden, de grot in stapt om het gevecht naar haar toe te brengen in plaats van andersom.
+
+CHOICES:
+
+* Kijk hoe Herakles de grot binnengaat -> CH2_H08
+
+END
+
+=== SCENE: CH2_H07_CHECK_KRITIEK ===
+
+TITLE:
+Zelf het Doelwit
+
+TEXT:
+Het lokken gaat volledig mis — de leeuw richt zich, tot je eigen schrik, recht op jou in plaats van op de ingang. Alleen Herakles' bliksemsnelle tussenkomst, hij grijpt haar bij de nek nog geen armlengte bij je vandaan, voorkomt dat het verkeerd afloopt.
 
 CHOICES:
 
@@ -5696,8 +5908,75 @@ TITLE:
 Twee Rivieren Omgeleid
 
 TEXT:
-In plaats van te scheppen en te vegen, breekt Herakles simpelweg de muren aan beide kanten van de stallen open en leidt de rivieren Alpheus en Peneus er dwars doorheen — het water spoelt in enkele uren weg wat generaties vee hebben achtergelaten, en laat de stallen schoner achter dan ze ooit zijn geweest.
+In plaats van te scheppen en te vegen, besluit Herakles de muren aan beide kanten van de stallen open te breken en de rivieren Alpheus en Peneus er dwars doorheen te leiden. Het juiste punt vinden om te breken — precies waar de stroming vanzelf de goede richting in buigt, in plaats van het vuil alleen maar verder te verspreiden — is jouw taak.
 
+CHECK:
+ch3_h09_rivieren
+
+END
+
+=== SCENE: CH3_H09_VOL ===
+
+TITLE:
+Feilloos Doorgebroken
+
+TEXT:
+Je wijst de precieze plek aan, en het water doet de rest — binnen enkele uren spoelt het weg wat generaties vee hebben achtergelaten, en laat de stallen schoner achter dan ze ooit zijn geweest, zonder dat er ergens onnodig water verloren gaat.
+
+CHOICES:
+
+* Zie hoe Augias en Eurystheus hierop reageren -> CH3_H09B
+
+END
+
+=== SCENE: CH3_H09_DEELS ===
+
+TITLE:
+Grotendeels Schoon
+
+TEXT:
+Het water breekt door op een net iets minder ideaal punt dan gehoopt — de stallen worden schoongespoeld, maar een deel van de stroom verspilt zich in een zijkanaal dat niemand nodig had. Het werk is klaar, alleen minder elegant dan het had kunnen zijn.
+
+CHOICES:
+
+* Zie hoe Augias en Eurystheus hierop reageren -> CH3_H09B
+
+END
+
+=== SCENE: CH3_H09_GEFAALD ===
+
+TITLE:
+Een Trage Stroom
+
+TEXT:
+De muur breekt op een verkeerd punt, en het water stroomt eerst de verkeerde kant op voor Herakles het zelf met kracht moet bijsturen — het karwei lukt uiteindelijk, maar pas na uren extra werk die niemand had gepland.
+
+CHOICES:
+
+* Zie hoe Augias en Eurystheus hierop reageren -> CH3_H09B
+
+END
+
+=== SCENE: CH3_H09_KRITIEK ===
+
+TITLE:
+Bijna een Overstroming
+
+TEXT:
+Het verkeerd gekozen breekpunt laat het water de verkeerde kant op koersen, recht op de omliggende velden af in plaats van de stallen — Herakles moet halsoverkop een tweede muur doorbreken om een overstroming van het hele dal te voorkomen. Het werkt uiteindelijk, maar op het randje.
+
+CHOICES:
+
+* Zie hoe Augias en Eurystheus hierop reageren -> CH3_H09B
+
+END
+
+=== SCENE: CH3_H09B ===
+
+TITLE:
+Een Onrechtvaardige Afwijzing
+
+TEXT:
 Augias, die achteraf spijt krijgt van zijn belofte, weigert de afgesproken kudde te betalen. En Eurystheus, die hoort dat Herakles voor deze taak (bijna) betaald zou zijn geweest, verklaart — net als bij de Hydra — dat ook deze beproeving niet meetelt, puur op een technisch punt.
 
 IMAGE:
@@ -6078,23 +6357,18 @@ De Tocht Door het Duister
 TEXT:
 De weg naar Cerberus zelf voert door een duisternis die drukt op de borst, verstikkend zwaar op een manier die niets met gewone nacht te maken heeft — de onderwereld laat niemand ongemerkt passeren, zelfs een boodschapper niet.
 
-CHOICES:
-
-* Laat Athena en Hermes je stap voor stap veilig door het duister begeleiden -> CH3_H23_OPEN
-* Leg de tocht alleen af, op eigen doorzettingsvermogen, en verdraag de verstikkende zwaarte zonder te wankelen [STAT:robur:15] -> CH3_H23_ROB
+CHECK:
+ch3_h23b_duister
 
 END
 
-=== SCENE: CH3_H23_OPEN ===
+=== SCENE: CH3_H23_VOL ===
 
 TITLE:
-Begeleid Door Bondgenoten
+Ongeschonden Doorstaan
 
 TEXT:
-Je blijft dicht bij Athena en Hermes, die je stap voor stap door het ergste van het duister loodsen. Het is geen schande om hier hulp te aanvaarden — zelfs Herakles doet dat.
-
-FLAG:
-ch3_h23_route=open
+Je legt het hele laatste stuk af zonder ooit te wankelen — de verstikkende zwaarte van de onderwereld drukt op je borst, maar raakt je niet dieper. Zelfs Athena, die je op afstand in de gaten houdt, knikt goedkeurend.
 
 CHOICES:
 
@@ -6102,16 +6376,41 @@ CHOICES:
 
 END
 
-=== SCENE: CH3_H23_ROB ===
+=== SCENE: CH3_H23_DEELS ===
 
 TITLE:
-Alleen Door de Duisternis
+Wankelend, maar Voort
 
 TEXT:
-Je laat je bondgenoten voorgaan en legt het laatste stuk alleen af, de verstikkende zwaarte van de onderwereld op je schouders zonder ooit te wankelen — een beproeving die, op haar eigen manier, bijna net zo zwaar is als die van Herakles zelf.
+Halverwege moet je even stilstaan, ademhalen tegen de druk op je borst — maar je zet door en bereikt de poort, wat langzamer dan gehoopt, maar ongebroken.
 
-FLAG:
-ch3_h23_route=robur
+CHOICES:
+
+* Kijk hoe Herakles tegenover Cerberus komt te staan -> CH3_H24
+
+END
+
+=== SCENE: CH3_H23_GEFAALD ===
+
+TITLE:
+Bijna Verpletterd
+
+TEXT:
+De duisternis drukt zwaarder dan je had verwacht, en je zakt bijna door je knieën voor Hermes je op tijd overeind trekt en het laatste stuk met je meeloopt. Het is geen schande, zegt hij, maar het scheelde weinig.
+
+CHOICES:
+
+* Kijk hoe Herakles tegenover Cerberus komt te staan -> CH3_H24
+
+END
+
+=== SCENE: CH3_H23_KRITIEK ===
+
+TITLE:
+Verloren in het Duister
+
+TEXT:
+Voor even raak je de weg volledig kwijt in het verstikkende zwart, tot Athena zelf naast je verschijnt en je met een hand op je schouder de laatste passen door de duisternis leidt — zonder haar was je hier vastgelopen.
 
 CHOICES:
 
@@ -6873,7 +7172,62 @@ De Zonnewagen
 TEXT:
 Bij zonsopgang mag Phaëthon plaatsnemen in de wagen die zijn vader dagelijks over de hemel voert — vier vurige paarden ervoor gespannen, elk krachtiger dan enig sterfelijk dier ooit zou kunnen temmen. Sol geeft hem in allerijl nog instructies: houd de teugels stevig, volg het gebaande spoor, niet te hoog, niet te laag.
 
-Zodra de paarden voelen dat een minder ervaren hand de teugels vasthoudt dan gewoonlijk, breken ze uit hun vaste baan — en Phaëthon, die nooit eerder iets bestuurd heeft groter dan een gewone kar, verliest de wagen bijna onmiddellijk uit controle.
+Zodra de paarden voelen dat een minder ervaren hand de teugels vasthoudt dan gewoonlijk, breken ze uit hun vaste baan — en Phaëthon, die nooit eerder iets bestuurd heeft groter dan een gewone kar, verliest de wagen bijna onmiddellijk uit controle. Jij bent degene die, vanaf de grond, meeleeft met elke ruk aan de teugels — en soms, heel even, voelt of je hem op afstand kunt bijsturen.
+
+CHECK:
+ch4_p04_teugels
+
+END
+
+=== SCENE: CH4_P04_VOL ===
+
+TITLE:
+Bijna Gered
+
+TEXT:
+Voor een adem lang lijkt het of Phaëthon de wagen weer onder controle krijgt — de paarden vertragen, het spoor komt weer in zicht. Maar het is te laat: één ogenblik van beheersing kan de schade van de eerste, paniekerige ogenblikken niet meer ongedaan maken.
+
+CHOICES:
+
+* Kijk waar de wagen naartoe raast -> CH4_P05
+
+END
+
+=== SCENE: CH4_P04_DEELS ===
+
+TITLE:
+Een Korte Adempauze
+
+TEXT:
+De wagen stabiliseert een oogwenk, net lang genoeg om Phaëthon een sprankje hoop te geven — voor de paarden alweer uitbreken, feller dan daarvoor, alsof ze de korte teugel alleen maar erger irriteerde.
+
+CHOICES:
+
+* Kijk waar de wagen naartoe raast -> CH4_P05
+
+END
+
+=== SCENE: CH4_P04_GEFAALD ===
+
+TITLE:
+Volledig Uit Koers
+
+TEXT:
+Niets van wat Phaëthon probeert, helpt — de teugels glippen verder uit zijn handen, en de wagen raakt in enkele ogenblikken volledig los van elk gebaand spoor.
+
+CHOICES:
+
+* Kijk waar de wagen naartoe raast -> CH4_P05
+
+END
+
+=== SCENE: CH4_P04_KRITIEK ===
+
+TITLE:
+Meteen Verloren
+
+TEXT:
+Al bij de eerste ruk verliest Phaëthon zijn houvast bijna volledig — de paarden voelen het onmiddellijk en stormen in paniek een eigen weg, verder van het gebaande spoor dan wie dan ook nog kan bijsturen.
 
 CHOICES:
 
@@ -7690,26 +8044,20 @@ TITLE:
 Vlak Voor de Doortocht
 
 TEXT:
-Terwijl Argos het ritme van de rotsen bestudeert, is er nog werk te doen voor het schip de doortocht kan wagen — en niet alleen aan boord.
+Terwijl Argos het ritme van de rotsen bestudeert, is er nog werk te doen voor het schip de doortocht kan wagen — en niet alleen aan boord. Jij bent degene die, op de boeg, het teken moet geven op precies het juiste moment.
 
-CHOICES:
-
-* Laat Argos alleen bepalen -> CH5_016_OPEN
-* Klim zelf op de boeg om van dichtbij het ritme van de rotsen te lezen en Argos' inschatting scherper te maken [STAT:agilitas:13] -> CH5_016_AGI
-* Help de riemen en touwen alvast op kracht voorspannen, zodat de bemanning bij het teken meteen voluit kan trekken [STAT:vis:11] -> CH5_016_VIS
+CHECK:
+ch5_016b_symplegades
 
 END
 
-=== SCENE: CH5_016_OPEN ===
+=== SCENE: CH5_016_VOL ===
 
 TITLE:
-Argos' Woord
+Het Perfecte Teken
 
 TEXT:
-Je laat het oordeel volledig aan Argos — hij kent zijn schip beter dan wie ook, en jij hebt weinig toe te voegen aan een vak dat niet het jouwe is.
-
-FLAG:
-ch5_016_route=open
+Je leest het ritme van de rotsen feilloos — de adem van de kaken, het korte moment van stilte — en geeft het teken op exact de juiste tel. Argos knikt, onder de indruk: zo scherp had hij het zelf niet durven inschatten.
 
 CHOICES:
 
@@ -7717,16 +8065,13 @@ CHOICES:
 
 END
 
-=== SCENE: CH5_016_AGI ===
+=== SCENE: CH5_016_DEELS ===
 
 TITLE:
-Op de Boeg
+Net Op Tijd
 
 TEXT:
-Je klimt zelf op de boeg, zo dicht mogelijk bij de rotsen, en telt mee: de adem van de kaken, het korte moment van stilte voor ze weer opengaan. Wat je ziet, deel je met Argos — en zijn inschatting wordt er zichtbaar scherper van.
-
-FLAG:
-ch5_016_route=agilitas
+Je geeft het teken een fractie later dan ideaal — genoeg om Argos even te laten fronsen, maar niet genoeg om de voorbereiding echt in gevaar te brengen.
 
 CHOICES:
 
@@ -7734,16 +8079,27 @@ CHOICES:
 
 END
 
-=== SCENE: CH5_016_VIS ===
+=== SCENE: CH5_016_GEFAALD ===
 
 TITLE:
-Voorgespannen
+Een Verkeerde Inschatting
 
 TEXT:
-Je helpt de riemen en touwen alvast strak voorspannen, elke arm al in positie voor het teken valt — zodat er geen fractie van een seconde verloren gaat wanneer de kaak straks eindelijk opengaat.
+Je leest het ritme verkeerd, en het teken dat je geeft klopt niet met wat Argos zelf ziet — hij moet het in allerijl corrigeren, en gromt dat hij het voortaan liever zelf doet.
 
-FLAG:
-ch5_016_route=vis
+CHOICES:
+
+* Kijk hoe Argos de doortocht voorbereidt -> CH5_017
+
+END
+
+=== SCENE: CH5_016_KRITIEK ===
+
+TITLE:
+Bijna een Ramp
+
+TEXT:
+Je geeft het teken op precies het verkeerde moment — Argos merkt het op het laatste ogenblik en schreeuwt de bemanning met stemverheffing bij, net op tijd om jouw fout ongedaan te maken.
 
 CHOICES:
 
@@ -8046,43 +8402,20 @@ TITLE:
 Het Heilige Woud
 
 TEXT:
-Voor Medea's gezang de draak kan kalmeren, moet de groep eerst het heilige woud in — ongezien, zonder het beest vroegtijdig te alarmeren.
+Voor Medea's gezang de draak kan kalmeren, moet de groep eerst het heilige woud in — ongezien, zonder het beest vroegtijdig te alarmeren. Jij gaat voorop, lettend op elke twijg en elke ademhaling van het sluimerende beest verderop.
 
-CHOICES:
-
-* Volg gewoon stilzwijgend achter Medea aan -> CH5_025_OPEN
-* Glip geruisloos tussen de takken en heilige stenen door, geen twijgje dat kraakt [STAT:agilitas:13] -> CH5_025_AGI
-* Lees de ademhaling en kronkelpatronen van de sluimerende draak en weet precies wanneer je veilig dichterbij kunt komen [STAT:prudentia:11] -> CH5_025_PRU
+CHECK:
+ch5_025b_woud
 
 END
 
-=== SCENE: CH5_025_OPEN ===
-
-TITLE:
-Stilzwijgend Mee
-
-TEXT:
-Je volgt stilzwijgend achter Medea aan, je pas zo goed mogelijk aanpassend aan de hare — niet feilloos stil, maar stil genoeg.
-
-FLAG:
-ch5_025_route=open
-
-CHOICES:
-
-* Kijk hoe het woud dichterbij komt -> CH5_026
-
-END
-
-=== SCENE: CH5_025_AGI ===
+=== SCENE: CH5_025_VOL ===
 
 TITLE:
 Geen Twijgje
 
 TEXT:
-Je beweegt geruisloos tussen de takken en heilige stenen door, elke stap zorgvuldig getest voor hij je gewicht draagt — geen twijgje dat kraakt, geen blad dat ritselt.
-
-FLAG:
-ch5_025_route=agilitas
+Je leidt de groep feilloos door het woud — elke stap getest voor hij je gewicht draagt, elk moment van de draak-ademhaling precies gelezen. Niemand hoort of ziet jullie naderen.
 
 CHOICES:
 
@@ -8090,16 +8423,41 @@ CHOICES:
 
 END
 
-=== SCENE: CH5_025_PRU ===
+=== SCENE: CH5_025_DEELS ===
 
 TITLE:
-De Ademhaling van de Draak
+Bijna Geruisloos
 
 TEXT:
-Je let niet op je eigen voetstappen maar op die van het beest verderop: het ritme van zijn ademhaling, de trage kronkeling van zijn lijf. Je weet, beter dan wie ook in de groep, precies wanneer het veilig is om dichterbij te komen.
+Op één blad na, dat onder je voet ritselt, kom je ongezien door het woud — de draak beweegt even, maar slaapt door.
 
-FLAG:
-ch5_025_route=prudentia
+CHOICES:
+
+* Kijk hoe het woud dichterbij komt -> CH5_026
+
+END
+
+=== SCENE: CH5_025_GEFAALD ===
+
+TITLE:
+Een Kraken Twijgje
+
+TEXT:
+Een tak kraakt onder je voet, luider dan je had gewild — de draak tilt zijn kop half op, alert, voor hij besluit dat het niets was. Jullie wachten, adem ingehouden, tot hij weer wegzakt.
+
+CHOICES:
+
+* Kijk hoe het woud dichterbij komt -> CH5_026
+
+END
+
+=== SCENE: CH5_025_KRITIEK ===
+
+TITLE:
+Bijna Ontdekt
+
+TEXT:
+Je struikelt over een wortel en valt bijna languit tussen de heilige stenen — de draak schiet overeind, sissend, en alleen Medea's razendsnelle gezang duwt hem net op tijd terug in een sluimering.
 
 CHOICES:
 
@@ -8641,26 +8999,20 @@ TITLE:
 De Zeven Poorten
 
 TEXT:
-De aanval begint op alle zeven poorten tegelijk — te veel om overal bij te zijn, dus moet je kiezen waar je blik naartoe gaat.
+De aanval begint op alle zeven poorten tegelijk — te veel om overal bij te zijn, dus moet je kiezen waar je blik naartoe gaat. Jij bent degene die, dichtbij één poort, zelf meehelpt de balken te breken.
 
-CHOICES:
-
-* Volg het algemene overzicht van de bestorming -> CH6_012_OPEN
-* Blijf hangen bij Tydeus' eigen poort, waar hij zijn belofte waarmaakt en de poort met kale kracht probeert te breken [STAT:vis:13] -> CH6_012_VIS
-* Kijk naar een andere poort, waar een champion het niet op kracht maar op snelheid gooit [STAT:agilitas:11] -> CH6_012_AGI
+CHECK:
+ch6_012b_poorten
 
 END
 
-=== SCENE: CH6_012_OPEN ===
+=== SCENE: CH6_012_VOL ===
 
 TITLE:
-Het Overzicht
+Doorgebroken
 
 TEXT:
-Je volgt het geheel: zeven poorten, zeven champions, en een verdediging die er, poort na poort, in slaagt de meesten van hen tegen te houden.
-
-FLAG:
-ch6_012_route=open
+Je zet je schouder naast Tydeus' schouder, en samen versplinteren jullie de balken sneller dan wie ook had verwacht — precies het soort doorbraak die de verdedigers even volledig uit balans brengt.
 
 CHOICES:
 
@@ -8668,16 +9020,13 @@ CHOICES:
 
 END
 
-=== SCENE: CH6_012_VIS ===
+=== SCENE: CH6_012_DEELS ===
 
 TITLE:
-Tydeus' Poort
+Bijna Doorgebroken
 
 TEXT:
-Je blijft kijken naar Tydeus, die zijn belofte waarmaakt: schouder tegen de balken, schreeuwend van inspanning, de poort langzaam versplinterend onder zijn kracht — precies het soort roekeloze moed dat je van hem had verwacht.
-
-FLAG:
-ch6_012_route=vis
+De balken kraken en verzwakken onder jullie gezamenlijke kracht, maar breken niet volledig door voor de verdedigers zich hergroeperen — genoeg vooruitgang om het gevecht in evenwicht te houden.
 
 CHOICES:
 
@@ -8685,16 +9034,27 @@ CHOICES:
 
 END
 
-=== SCENE: CH6_012_AGI ===
+=== SCENE: CH6_012_GEFAALD ===
 
 TITLE:
-De Snelle Weg
+Teruggeslagen
 
 TEXT:
-Je richt je blik op een andere poort, waar een champion het niet op kracht maar op snelheid gooit — rennend over open terrein, rakelings langs projectielen, bijna over de muur voor de verdedigers goed en wel kunnen reageren.
+Je kracht is niet genoeg — de balken houden stand, en de verdedigers duwen jullie met speren en projectielen terug van de poort, verder van een doorbraak dan toen jullie begonnen.
 
-FLAG:
-ch6_012_route=agilitas
+CHOICES:
+
+* Kijk hoe de aanval op Thebe verloopt -> CH6_013
+
+END
+
+=== SCENE: CH6_012_KRITIEK ===
+
+TITLE:
+Bijna Geraakt
+
+TEXT:
+Een speer scheert rakelings langs je terwijl je je schouder tegen de balken zet — Tydeus trekt je op het laatste moment opzij, vloekend, en de poort blijft potdicht.
 
 CHOICES:
 
@@ -9798,8 +10158,65 @@ De verzamelde Griekse vloot — duizend schepen, zegt men, al is niemand het er 
 
 Het offer dat ze eist, is niet een dier.
 
+Jij bent degene die, voor Agamemnon zijn besluit neemt, nog probeert hem — of op zijn minst Calchas — op andere gedachten te brengen.
+
 PERSON:
 calchas:intro
+
+CHECK:
+ch7_016_pleidooi
+
+END
+
+=== SCENE: CH7_016_VOL ===
+
+TITLE:
+Een Overtuigend Pleidooi
+
+TEXT:
+Je woorden raken iets in Agamemnon dat hij zelf liever verborgen had gehouden — twijfel, oprechte twijfel. Het verandert uiteindelijk niets aan wat komen gaat, maar voor het eerst ziet iedereen om hem heen dat de beslissing hem wel degelijk iets kost.
+
+CHOICES:
+
+* Zie hoe Agamemnon met dat nieuws omgaat -> CH7_017
+
+END
+
+=== SCENE: CH7_016_DEELS ===
+
+TITLE:
+Een Half Gehoord Woord
+
+TEXT:
+Agamemnon luistert, kort, voor hij zich afwendt — je pleidooi heeft hem niet overtuigd, maar het is ook niet helemaal langs hem heen gegaan.
+
+CHOICES:
+
+* Zie hoe Agamemnon met dat nieuws omgaat -> CH7_017
+
+END
+
+=== SCENE: CH7_016_GEFAALD ===
+
+TITLE:
+Ongehoord
+
+TEXT:
+Je woorden vinden geen enkele opening — Agamemnon heeft zijn besluit kennelijk al genomen lang voor jij iets kon zeggen, en luistert niet eens echt.
+
+CHOICES:
+
+* Zie hoe Agamemnon met dat nieuws omgaat -> CH7_017
+
+END
+
+=== SCENE: CH7_016_KRITIEK ===
+
+TITLE:
+Een Woede-uitbarsting
+
+TEXT:
+Je woorden vallen verkeerd — Agamemnon vaart tegen je uit, alsof jouw twijfel zijn eigen twijfel alleen maar erger maakt, en niemand in zijn omgeving durft daarna nog iets te zeggen.
 
 CHOICES:
 
@@ -10810,7 +11227,76 @@ puzzle_ch8_epi_matching
 
 CHOICES:
 
-* Zie het laatste gevecht -> CH8_EPI_007
+* Zie het laatste gevecht -> CH8_EPI_006B
+
+END
+
+=== SCENE: CH8_EPI_006B ===
+
+TITLE:
+De Achtervolging
+
+TEXT:
+Priamus en Hecuba roepen wanhopig vanaf de muren dat Hector naar binnen moet komen — maar hij blijft alleen buiten staan, wetend dat de hele stad op hem rekent. Wanneer Achilles nadert, verliest Hector toch de moed en vlucht, drie keer rond de muren van Troje achtervolgd. Jij bent degene die, van dichtbij, het tempo probeert bij te houden — en zo ziet hoever Hector werkelijk komt voor de moed hem weer verlaat.
+
+CHECK:
+ch8_epi_006b_achtervolging
+
+END
+
+=== SCENE: CH8_EPI_006_VOL ===
+
+TITLE:
+Op de Hielen
+
+TEXT:
+Je blijft de hele achtervolging vlak achter de twee lopen, geen moment de aansluiting kwijt — en ziet zo, van dichterbij dan wie ook, het precieze ogenblik waarop Hectors moed het opgeeft.
+
+CHOICES:
+
+* Zie hoe het laatste gevecht begint -> CH8_EPI_007
+
+END
+
+=== SCENE: CH8_EPI_006_DEELS ===
+
+TITLE:
+Bijna Bij
+
+TEXT:
+Je houdt het grootste deel van de achtervolging vol, al valt de aansluiting op het eind een fractie terug — genoeg om het einde net iets minder van dichtbij mee te maken.
+
+CHOICES:
+
+* Zie hoe het laatste gevecht begint -> CH8_EPI_007
+
+END
+
+=== SCENE: CH8_EPI_006_GEFAALD ===
+
+TITLE:
+Achterop
+
+TEXT:
+Het tempo van de twee mannen is hoger dan je had verwacht, en je raakt al na de eerste ronde achterop — je ziet de rest van de achtervolging van te ver om echt iets te kunnen doen.
+
+CHOICES:
+
+* Zie hoe het laatste gevecht begint -> CH8_EPI_007
+
+END
+
+=== SCENE: CH8_EPI_006_KRITIEK ===
+
+TITLE:
+Volledig Verloren
+
+TEXT:
+Je struikelt bijna meteen en verliest het spoor van de twee rennende mannen volledig — pas wanneer het geschreeuw rond de muren verandert van paniek in stilte, weet je dat het voorbij moet zijn.
+
+CHOICES:
+
+* Zie hoe het laatste gevecht begint -> CH8_EPI_007
 
 END
 
@@ -10820,7 +11306,7 @@ TITLE:
 Het Duel met Hector
 
 TEXT:
-Priamus en Hecuba roepen wanhopig vanaf de muren dat Hector naar binnen moet komen — maar hij blijft alleen buiten staan, wetend dat de hele stad op hem rekent. Wanneer Achilles nadert, verliest Hector toch de moed en vlucht, drie keer rond de muren van Troje achtervolgd. Pas wanneer Athena, vermomd als zijn eigen broer Deiphobus, hem overtuigt zich om te draaien, blijft hij eindelijk staan.
+Pas wanneer Athena, vermomd als zijn eigen broer Deiphobus, Hector overtuigt zich om te draaien, blijft hij eindelijk staan.
 
 IMAGE:
 achilles_achtervolgt_hektor.png
@@ -10951,7 +11437,62 @@ TITLE:
 De Nachtelijke Tocht
 
 TEXT:
-Oude koning Priamus, tegen elk advies in, waagt zich alleen en ongewapend het Griekse kamp in — met Hermes, vermomd als gids, die hem ongezien langs elke wachtpost leidt. Hij bereikt, tegen alle logica in, Achilles' eigen tent, midden in de nacht.
+Oude koning Priamus, tegen elk advies in, waagt zich alleen en ongewapend het Griekse kamp in — met Hermes, vermomd als gids, die hem ongezien langs elke wachtpost leidt. Jij loopt mee, dicht bij de oude koning, en helpt hem elke wachtpost op tijd te ontwijken.
+
+CHECK:
+ch8_epi_010_wachtposten
+
+END
+
+=== SCENE: CH8_EPI_010_VOL ===
+
+TITLE:
+Ongezien Voorbij
+
+TEXT:
+Elke wachtpost passeren jullie zonder ook maar een schaduw te verstoren — Priamus' vertrouwen in Hermes' vermomming groeit met elke stap, en jullie bereiken de tent sneller dan gehoopt.
+
+CHOICES:
+
+* Zie wat er in de tent gebeurt -> CH8_EPI_011
+
+END
+
+=== SCENE: CH8_EPI_010_DEELS ===
+
+TITLE:
+Bijna Ongezien
+
+TEXT:
+Bij één wachtpost houdt een soldaat even zijn adem in, alsof hij iets meent te zien — maar hij schudt het van zich af, en jullie lopen door, iets sneller dan daarvoor.
+
+CHOICES:
+
+* Zie wat er in de tent gebeurt -> CH8_EPI_011
+
+END
+
+=== SCENE: CH8_EPI_010_GEFAALD ===
+
+TITLE:
+Bijna Betrapt
+
+TEXT:
+Een wachter draait zich net op tijd om om jullie half te zien — Hermes reageert razendsnel met een omweg, maar de tocht duurt daardoor merkbaar langer, en Priamus' handen trillen zichtbaarder dan daarvoor.
+
+CHOICES:
+
+* Zie wat er in de tent gebeurt -> CH8_EPI_011
+
+END
+
+=== SCENE: CH8_EPI_010_KRITIEK ===
+
+TITLE:
+Bijna Ontdekt
+
+TEXT:
+Jullie lopen bijna recht in een wachtpost — alleen Hermes' goddelijke tussenkomst, een plotselinge nevel die de wachters even doet twijfelen aan hun eigen ogen, voorkomt dat de hele tocht daar eindigt.
 
 CHOICES:
 
@@ -11677,6 +12218,75 @@ puzzle_ch9_tro_3decl
 
 CHOICES:
 
+* Zie wat er met het koningshuis gebeurt -> CH9_TRO_013B
+
+END
+
+=== SCENE: CH9_TRO_013B ===
+
+TITLE:
+Een Laatste Verdediging
+
+TEXT:
+Priamus en zijn huishouden vluchten door de chaos naar het altaar van Zeus, in de hoop dat heiligdom hen zal beschermen. Jij bent een van de weinigen die zich nog tussen hen en de oprukkende Grieken werpt, al weet je dat je alleen tijd kunt kopen, geen overwinning.
+
+CHECK:
+ch9_tro_013b_verdediging
+
+END
+
+=== SCENE: CH9_TRO_014_VOL ===
+
+TITLE:
+Kostbare Tijd Gekocht
+
+TEXT:
+Je houdt de doorgang langer tegen dan wie ook had durven hopen, en geeft Priamus' huishouden precies de tijd die ze nodig hebben om het altaar te bereiken — al weet je, terwijl je zelf wegvlucht, dat het uiteindelijk niets zal veranderen aan wat daar gaat gebeuren.
+
+CHOICES:
+
+* Zie wat er met het koningshuis gebeurt -> CH9_TRO_014
+
+END
+
+=== SCENE: CH9_TRO_014_DEELS ===
+
+TITLE:
+Even Opgehouden
+
+TEXT:
+Je houdt de aanval een moment op — genoeg voor een deel van het huishouden om te ontkomen, niet genoeg om iedereen tijd te geven.
+
+CHOICES:
+
+* Zie wat er met het koningshuis gebeurt -> CH9_TRO_014
+
+END
+
+=== SCENE: CH9_TRO_014_GEFAALD ===
+
+TITLE:
+Weggedrukt
+
+TEXT:
+De oprukkende Grieken zijn met te veel — je wordt binnen ogenblikken teruggedrongen, zonder dat je huishouden er echt iets aan heeft gehad.
+
+CHOICES:
+
+* Zie wat er met het koningshuis gebeurt -> CH9_TRO_014
+
+END
+
+=== SCENE: CH9_TRO_014_KRITIEK ===
+
+TITLE:
+Bijna Overrompeld
+
+TEXT:
+Je wordt bijna zelf overrompeld, en het is alleen puur geluk — een instortende muur die de doorgang blokkeert — dat je op tijd kunt terugtrekken, zonder ook maar iets te hebben opgehouden.
+
+CHOICES:
+
 * Zie wat er met het koningshuis gebeurt -> CH9_TRO_014
 
 END
@@ -11763,7 +12373,7 @@ aeneas:intro
 
 CHOICES:
 
-* Zie Troje voor de laatste keer -> CH9_TRO_018
+* Zie Troje voor de laatste keer -> CH9_TRO_017C
 * Ruim puin en brandend hout uit hun pad, zodat vader, zoon en kleinzoon ongehinderd door kunnen [STAT:vis:13] -> CH9_TRO_017B
 
 END
@@ -11778,6 +12388,75 @@ Waar een ingestorte balk hun route blokkeert, ben jij het die hem opzij werkt vo
 
 RELATION:
 aeneas=+1
+
+CHOICES:
+
+* Zie Troje voor de laatste keer -> CH9_TRO_017C
+
+END
+
+=== SCENE: CH9_TRO_017C ===
+
+TITLE:
+Een Verdwaalde Vluchteling
+
+TEXT:
+Tussen het puin, half verscholen achter wat ooit een deuropening was, ontdek jij een verdwaalde vluchteling — apart geraakt van zijn eigen familie in de chaos, te bang om zich te bewegen. Aeneas' groep is al voorbij; jij bent degene die nog een keuze heeft.
+
+CHECK:
+ch9_tro_017c_vluchteling
+
+END
+
+=== SCENE: CH9_TRO_017C_VOL ===
+
+TITLE:
+Veilig Meegenomen
+
+TEXT:
+Je grijpt de vluchteling stevig vast en loodst hem feilloos door de brandende straten, langs instortend puin en dwalende soldaten, tot jullie samen de rand van de stad bereiken — één leven meer gered uit de as van Troje.
+
+CHOICES:
+
+* Zie Troje voor de laatste keer -> CH9_TRO_018
+
+END
+
+=== SCENE: CH9_TRO_017C_DEELS ===
+
+TITLE:
+Een Moeizame Tocht
+
+TEXT:
+De weg naar buiten kost meer moeite dan gehoopt — een omweg om instortend puin, een paar hachelijke ogenblikken — maar jullie halen het, beiden buiten adem, aan de rand van de stad.
+
+CHOICES:
+
+* Zie Troje voor de laatste keer -> CH9_TRO_018
+
+END
+
+=== SCENE: CH9_TRO_017C_GEFAALD ===
+
+TITLE:
+Bijna Te Laat
+
+TEXT:
+Je raakt zelf de weg kwijt in de rook en het puin, en het kost kostbare tijd voor je de vluchteling alsnog naar een uitweg kunt leiden — tijd die jullie beiden bijna fataal wordt, wanneer een muur vlak achter jullie instort.
+
+CHOICES:
+
+* Zie Troje voor de laatste keer -> CH9_TRO_018
+
+END
+
+=== SCENE: CH9_TRO_017C_KRITIEK ===
+
+TITLE:
+Uit Het Oog Verloren
+
+TEXT:
+In de verstikkende rook raak je de vluchteling zelf uit het oog kwijt — je zoekt nog even, roepend tegen het lawaai van instortende daken in, maar moet uiteindelijk, met tegenzin, zelf verder vluchten zonder te weten wat er van hem is geworden.
 
 CHOICES:
 
@@ -12104,26 +12783,23 @@ TITLE:
 In het Paard
 
 TEXT:
-Binnenin is het benauwd, donker, en angstaanjagend stil — je hoort je eigen hart luider dan wat dan ook. Buiten klinken Trojaanse stemmen, feestvierend, nietsvermoedend, gevaarlijk dichtbij.
+Binnenin is het benauwd, donker, en angstaanjagend stil — je hoort je eigen hart luider dan wat dan ook. Buiten klinken Trojaanse stemmen, feestvierend, nietsvermoedend, gevaarlijk dichtbij. Elke beweging, elke ademhaling, kan jullie allemaal verraden.
 
 IMAGE:
 grieken_in_het_paard.png
 
-CHOICES:
-
-* Blijf doodstil zitten en wacht het signaal af -> CH9_GRI_012
-* Beheers je ademhaling tot een fluistering, ook al doet elke spier pijn [STAT:prudentia:15] -> CH9_GRI_011_PRU
-* Houd je lichaam volledig roerloos, ondanks de kramp in je benen [STAT:agilitas:14] -> CH9_GRI_011_AGI
+CHECK:
+ch9_gri_011_stilte
 
 END
 
-=== SCENE: CH9_GRI_011_PRU ===
+=== SCENE: CH9_GRI_011_VOL ===
 
 TITLE:
-Adem Inhouden
+Volmaakt Stil
 
 TEXT:
-Je dwingt je ademhaling tot iets nauwelijks hoorbaars, terwijl vlak buiten het hout Trojaanse voeten voorbijlopen, zo dichtbij dat je hun gesprekken kunt volgen. Niemand hoort iets.
+Je houdt je ademhaling en je lichaam volledig onder controle, uren achtereen — geen spier die verraadt hoezeer je benen protesteren. Trojaanse voeten lopen vlak langs het hout, zo dichtbij dat je hun gesprekken kunt volgen, en niemand hoort iets.
 
 CHOICES:
 
@@ -12131,13 +12807,41 @@ CHOICES:
 
 END
 
-=== SCENE: CH9_GRI_011_AGI ===
+=== SCENE: CH9_GRI_011_DEELS ===
 
 TITLE:
-Doodstil Blijven
+Bijna Roerloos
 
 TEXT:
-Je benen protesteren tegen de uren van roerloosheid, maar je verroert geen vin — een enkele onbedoelde beweging, weet je, zou jullie allemaal verraden voor het paard zijn werk heeft kunnen doen.
+Op een enkele onderdrukte hoestbui na, snel gesmoord in je eigen mouw, blijf je de hele wachttijd stil genoeg — het kost meer moeite dan je had verwacht, maar niemand buiten merkt iets.
+
+CHOICES:
+
+* Wacht verder op het signaal -> CH9_GRI_012
+
+END
+
+=== SCENE: CH9_GRI_011_GEFAALD ===
+
+TITLE:
+Een Onrustige Wacht
+
+TEXT:
+Je benen protesteren zo hevig dat je een paar keer onrustig verschuift — luid genoeg dat de krijger naast je je hard aanstoot, zwijgend, met een blik die meer zegt dan woorden.
+
+CHOICES:
+
+* Wacht verder op het signaal -> CH9_GRI_012
+
+END
+
+=== SCENE: CH9_GRI_011_KRITIEK ===
+
+TITLE:
+Bijna Verraden
+
+TEXT:
+Een kramp in je been dwingt je bijna tot een hardop gesmoorde kreet — je slikt hem op het allerlaatste moment in, terwijl buiten een Trojaanse stem vlakbij even stilvalt, alsof hij iets meende te horen, voor hij zich omdraait en wegloopt.
 
 CHOICES:
 

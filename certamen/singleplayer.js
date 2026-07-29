@@ -2149,7 +2149,7 @@ SCREENS.spCheck = function(){
     <p class="note">1d20 (${r.roll}) + ${r.stat} = ${r.total} tegen DC ${r.dc}</p>
     <p style="font-weight:700;margin-top:8px">${esc(uitkomstLabel)}</p>
   </div>
-  <div class="panel">${spParagraphsHTML(r.tekst||"", SP_STATE)}</div>
+  ${r.tekst?`<div class="panel">${spParagraphsHTML(r.tekst, SP_STATE)}</div>`:""}
   <button class="btn btn-gold btn-block lg" onclick="spCheckContinue()">Ga verder</button>
   ${foot()}`);
 };
