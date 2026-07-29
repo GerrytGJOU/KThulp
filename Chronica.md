@@ -2594,6 +2594,101 @@ bij "beide"/ongezet, elk precies één knop verbergen bij "latijn"/"grieks"),
 "latijn", gemengd bij "beide", en de volledige scène-keten van
 `CH9_MUSEUM_00` tot en met alle acht nieuwe verhaal-scènes bereikbaar.
 
+### 7.20 B26: de lijkspelen voor Patroklos (**gebouwd**)
+
+Nieuwe scène `CH8_EPI_009B` ("De Lijkspelen"), ingevoegd tussen `CH8_EPI_009`
+("Rond de Muren") en `CH8_EPI_010` ("De Nachtelijke Tocht") — mythologisch de
+juiste plek (Ilias boek 23 speelt zich af ná Hectors dood/ontering en vóór
+Priamus' nachtelijke tocht om het lichaam terug te vragen, boek 24). De
+audit noemde `CH8_EPI_004`/`005` als locatie, maar dat zou de lijkspelen vóór
+Hectors dood plaatsen — een kleine onnauwkeurigheid in de audit zelf, hier
+gecorrigeerd naar de juiste chronologie.
+
+Wagenrennen (Diomedes wint, Antilochos snijdt Menelaos gevaarlijk de pas af),
+worstelen (Odysseus/Aias gelijkspel) en een erebeker voor Nestor, te oud om
+nog mee te doen — alle drie de bestaande, terugkerende bondgenoten uit Ilias
+boek 23 die de audit noemde. Drie keuzes (wie moedig je aan) geven elk
+`RELATION: +1` aan de gekozen held (`CH8_EPI_009C/D/E`, alle drie
+converterend naar `CH8_EPI_010`) — geen C/S-tags, want dit is geen
+moreel dilemma, gewoon voorkeur.
+
+### 7.21 B27/B28: mechanisme + data, bewust nog niet aan een scène gekoppeld (**mechanisme gebouwd, content wacht**)
+
+Op verzoek (2026-07-30) alleen de generieke infrastructuur gebouwd, geen
+concrete scènes — de audit plaatst beide expliciet "laat in het Odyssee/
+Aeneis-blok", en dat blok is nu pas vier scènes per lijn diep (§7.19).
+
+- **B27** (NPC-afsluitmomenten, fase 9 §6): `SP_NPC_AFSLUITINGEN`
+  (singleplayer-data.js) — negen bondgenoten (Menelaos, Helena, Diomedes,
+  Agamemnon, Nestor, Telamon, Cassandra, Andromache, Deiphobos) met elk een
+  drempel en een afsluitende alinea, plus `spNpcAfsluitingenBeschikbaar(state)`
+  (singleplayer.js) die de kwalificerende bondgenoten teruggeeft. Bewust
+  UITGESLOTEN: Odysseus/Aeneas (hoofdpersonen van Boek II, geen "opnieuw
+  tegengekomen bondgenoot"), Achilles/Aias (al dood), Priamus (heeft al zijn
+  eigen afscheid, `SP_ENDKAPITAAL_PRIAMUS_AFSCHEID`).
+- **B28** (rolverdeling in een climax, fase 9 §4): `spRolverdelingUitkomst
+  (taak, gekozenNpcId, state)` (singleplayer.js) — generieke uitkomstlogica
+  voor een `taak`-object (`idealeCandidates`, `relatieDrempel`,
+  `succesTekst`/`zwakkeBandTekst`/`verkeerdeKeuzeTekst`). Nog geen enkele
+  `taak` geschreven — de audit noemt dit zelf "te vroeg voor dit spel, nog
+  niet ervoor" zonder een bredere, individueel onderscheiden bondgenotencast.
+
+Beide functies getest met synthetische states in de browser (drempel-filter
+correct, `spRolverdelingUitkomst` correct voor juiste-keuze-sterke-band,
+juiste-keuze-zwakke-band, en verkeerde-keuze).
+
+### 7.22 Twee extra auditbevindingen: `ingenium` en route-echo's (**twee representatieve voorbeelden gerepareerd**)
+
+Op verzoek (2026-07-30), los van het B29-gesprek: twee concrete, kleine
+correcties op de twee bevindingen uit `audit/SAMENVATTING.md` die niet in een
+eigen backlog-nummer zaten.
+
+**`ingenium` (fase 1, nooit als STAT-drempel gebruikt — bleek bij nader
+inzien niet helemaal waar: `CH7_002D` had al één `[STAT:ingenium:12]`,
+kennelijk organisch ontstaan tijdens de B11-uitbreiding van de Eed van
+Tyndareos).** Twee bestaande keuzes omgebouwd van `prudentia` naar
+`ingenium`, beide over het interpreteren van een patroon (dus al dicht bij
+"raadsels" lagen, i.t.t. de puur fysieke/sociale meerderheid van de
+bestaande STAT-keuzes):
+- `CH1_C09`: het vluchtpatroon van de adelaar lezen om de kortste weg naar
+  Prometheus' rots te vinden.
+- `CH6_007B`: de overblijfselen bij de Sfinx lezen voor een teken van
+  vermoeidheid of patroon.
+
+Bewust GEEN derde conversie geforceerd: de meeste overige STAT-keuzes zijn
+oprecht fysiek (`vis`/`agilitas`/`robur`) of sociaal (`gratia`), en de
+scènes die het dichtst bij "tekst/taal/raadsel" komen (`CH6_008`'s
+Sfinx-raadsel zelf, `CH9_TRO_009`/`010`'s Sinon/Laocoön) zijn `PUZZLE:`-
+scènes met precies één keuze — daar kan structureel geen tweede,
+STAT-gated keuze bij (zie de vuistregel in §7.15).
+
+**29 dode STAT-route-flags, zelfde herhaalde patroon.** Twee representatieve
+voorbeelden gerepareerd (bewijs van de aanpak, niet een volledige sanering
+van alle 29): een nieuw `{token}`-patroon, "route-echo", dat de eerder
+gezette route-FLAG één scène later terugleest en er een korte,
+routespecifieke alinea van maakt.
+- `SP_CH1_C09_ROUTE_ECHO`/`{prometheus_route_echo}` in `CH1_C10`: reflecteert
+  of de speler de omweg nam, recht omhoogklom, of de adelaar volgde.
+- `SP_CH6_007_ROUTE_ECHO`/`{sfinx_route_echo}` in `CH6_008`: reflecteert de
+  aanpak vlak vóór de Sfinx, terwijl ze zelf spreekt.
+
+**Bugfix tijdens dit werk, met bredere impact dan deze twee tokens**:
+`SpTextResolver.resolve()`s regex (`singleplayer.js`) ondersteunde geen
+cijfers in tokennamen (`[a-zA-Z_]+`, geen `0-9`) — een token als
+`{ch1_c09_route_echo}` werd daardoor NOOIT vervangen, ook al gaf
+`SpTextResolver.lookup()` los aangeroepen wél het juiste antwoord (de bug zat
+dus puur in de regex die `resolve()` gebruikt om tokens te vínden, niet in
+de lookup-logica zelf — precies het soort verschil dat bij losstaand testen
+van `lookup()` gemist wordt). Rechtgezet door de regex uit te breiden naar
+`[a-zA-Z0-9_]+` — dekt nu ook toekomstige tokennamen met een cijfer erin.
+De twee nieuwe tokens zelf zijn voor de duidelijkheid alsnog cijfervrij
+hernoemd (`prometheus_route_echo`/`sfinx_route_echo`), maar de onderliggende
+fix is generiek en blijft staan.
+
+`validate_chronica.js` bevestigt de fix indirect: `ch1_c09_route` en
+`ch6_007_route` verdwenen uit de dode-flaggenlijst (42 → 40 waarschuwingen),
+omdat de flags nu wél ergens in de broncode worden gelezen.
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
