@@ -288,3 +288,58 @@ zet elk resultaat onder die naam in `certamen/assets/chronica/souvenirs/`.
 > faintly on the glass. No text, no speech bubbles, no watermark, no modern
 > objects, no people, no hands, no faces. 1:1 square format, fills the
 > entire frame.
+
+### 14. `souvenir_appel_tweedracht.png` — De Appel der Tweedracht (Hoofdstuk 7 — Aegean blue)
+> **Bewuste uitzondering op de "geen tekst"-regel hierboven**: dit voorwerp
+> is mythologisch alleen herkenbaar mét zijn inscriptie (τῇ καλλίστῃ, "aan
+> de mooiste" — zie ook de datief-puzzel bij CH7_005 in
+> `singleplayer-data.js`). Epigrafische hoofdletters, geen moderne
+> letterstijl. Gemini rendert niet-Latijns schrift niet altijd foutloos —
+> reken op een paar pogingen.
+>
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> single round apple made of gleaming solid gold, with the ancient Greek
+> inscription "ΤΗΙ ΚΑΛΛΙΣΤΗΙ" ("for the fairest") carved in worn, weathered
+> epigraphic capital letters near its widest point, the lettering shallow
+> and archaic as if engraved long ago, resting directly on a small
+> weathered stone pedestal (no cushion — a sturdy object), entirely
+> covered by an old glass bell jar/dome, faintly and softly gold-lit from
+> within as if quietly magical. Camera at eye level with the pedestal,
+> three-quarter lighting, background dark and blurred (heavy vignette),
+> the object in sharp focus, the engraved letters legible but weathered. A
+> thin Aegean-blue glow glints faintly on the glass. No speech bubbles, no
+> logos, no watermark, no modern objects, no people, no hands, no faces.
+> 1:1 square format, fills the entire frame.
+
+### 15. `souvenir_schild_achilles.png` — Een Schilfer van het Schild van Achilles (Hoofdstuk 8 — Aegean blue)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> small broken-off fragment of ornately worked bronze, its curved edge
+> suggesting it once belonged to something much larger, with a tiny,
+> barely-visible fragment of a finely etched dancing figure still
+> discernible on its surface, resting on a small dark-red velvet cushion
+> atop a small weathered stone pedestal, entirely covered by an old glass
+> bell jar/dome, faintly and softly gold-lit from within as if quietly
+> magical. Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette), the object in sharp focus. A
+> thin Aegean-blue glow glints faintly on the glass. No text, no speech
+> bubbles, no watermark, no modern objects, no people, no hands, no faces.
+> 1:1 square format, fills the entire frame.
+
+### 16. `souvenir_trojaans_paard.png` — Een Splinter van het Trojaanse Paard (Hoofdstuk 9 — Aegean blue)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> small splinter of charred, blackened wood, its grain still faintly
+> visible beneath the char, one edge still showing a hint of pale
+> untouched timber, resting on a small dark-red velvet cushion atop a
+> small weathered stone pedestal, entirely covered by an old glass bell
+> jar/dome, faintly and softly gold-lit from within as if quietly magical.
+> Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette), the object in sharp focus.
+> A thin Aegean-blue glow glints faintly on the glass. No text, no speech
+> bubbles, no watermark, no modern objects, no people, no hands, no faces.
+> 1:1 square format, fills the entire frame.
