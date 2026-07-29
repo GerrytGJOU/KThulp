@@ -2689,7 +2689,7 @@ fix is generiek en blijft staan.
 `ch6_007_route` verdwenen uit de dode-flaggenlijst (42 → 40 waarschuwingen),
 omdat de flags nu wél ergens in de broncode worden gelezen.
 
-### 7.23 B29, deel 1: meer leesvallen + een opbouwschema (**twee nieuwe leesvallen gebouwd, schema vastgelegd**)
+### 7.23 B29, deel 1: meer leesvallen + een opbouwschema (**alle 12 leesvallen H2-H9 gebouwd, schema vastgelegd**)
 
 Op verzoek (2026-07-30): het leesval-principe (B21, §7.17) breder inzetten,
 met een **oplopende frequentie** naarmate de speler verder komt — geen
@@ -2722,9 +2722,43 @@ overal ingevuld — zie hieronder wat al wel klaarstaat):
   zelf — geen nieuwe scènes nodig, alleen de brontekst aangepast zodat het
   nu ook echt een taal-leesval is, niet alleen een verhaal-leesval.
 
-**Nog open**: Hoofdstuk 5 t/m 9 hebben nog geen van beide hun twee
-leesvallen (10 in totaal nog te schrijven); Hoofdstuk 10+ wacht sowieso op
-verdere bouw van dat blok (§7.19).
+**Hoofdstuk 5 t/m 9 aangevuld (2026-07-30, na afronding van de CHECK-inzet
+uit §7.25)** — 10 nieuwe leesvallen, telkens twee per hoofdstuk, samengesteld
+uit een brede spreiding aan grammaticale valkuilen (niet steeds hetzelfde
+type herhaald):
+- **H5** (Grieks-verteld): `CH5_022B` (aankomst Colchis) — verborgen
+  woordvolgorde/naamval: "τὸν ξένον φοβεῖται ὁ βασιλεύς" (wie vreest wie?);
+  `CH5_027_UITKIJK` (achtervolging door Aeëtes) — gemiste ontkenning: "οὐκέτι
+  διώκουσιν" ("niet meer") vs. gemist "nog steeds".
+- **H6** (Latijn-verteld, zie §7.16's ontdekking): `CH6_003B` (Niobe's
+  hoogmoed) — verborgen ablativus comparationis: "Niobe deā potior est"
+  (machtiger DAN de godin, geen simpel compliment); `CH6_011B` (wachter bij
+  de poort) — gemiste ontkenning: "Polynices nondum venit" ("nog niet").
+- **H7** (Grieks-verteld): `CH7_003_EED` (de Eed van Tyndareos zelf) —
+  passief vs. actief deelwoord: "τῷ ἀδικηθέντι" (wie onrecht IS aangedaan,
+  niet wie het beging); `CH7_005B` (Hecuba's droom) — futurum vs. praesens:
+  "τὸ τέκνον ἀπολεῖ τὴν πόλιν" ("zal vernietigen", geen actueel gevaar).
+- **H8** (Grieks-verteld): `CH8_EPI_003` (Thetis' waarschuwing aan Achilles)
+  — voorwaardelijke zin vs. kale voorspelling: "ἐὰν Ἕκτορα ἀποκτείνῃς, σὺ
+  ταχέως ἀποθανῇ"; `CH8_EPI_009` (Priamus tegengehouden) — gebiedende wijs
+  vs. constatering: "μὴ ἔξελθε" ("ga niet naar buiten!", geen simpele
+  mededeling).
+- **H9**, één per zijde om de taalsplitsing van dat hoofdstuk te
+  respecteren: `CH9_TRO_010` (Trojaanse kant, Latijn — Laocoön) —
+  deelwoordaanhechting: het beroemde "Timeo Danaos et dona ferentes" (vreest
+  de Grieken zelf, niet enkel hun geschenk); `CH9_GRI_008B` (Griekse kant,
+  Grieks — Odysseus' verslag van de Palladium-missie) — genitivus absolutus:
+  "Νυκτὸς οὔσης, ἡ πόλις καθεύδει" (geen bezitsvorm, een tijdsbepaling).
+
+Alle 12 leesvallen (1 uit B21 + 2 uit deze sectie eerder + 10 hierboven)
+volgen strikt hetzelfde principe: nooit een strafscherm, beide paden
+reconvergeren, nooit gegloss. Getest: `node --check` + `validate_chronica.js`
+(0 fouten) en synthetisch in de browser doorlopen (`SCREENS.spPlay()` per
+scène, Latijnse/Griekse tekst zichtbaar en ongegloss, beide keuzes leiden
+naar bestaande vervolgscènes).
+
+Hoofdstuk 10+ wacht nog steeds op verdere bouw van dat blok (§7.19) voor een
+eigen frequentie wordt vastgesteld.
 
 ### 7.24 B29, deel 2: de vier-uitkomsten-ladder (`CHECK:`) (**mechanisme gebouwd, inzet zie §7.25**)
 
@@ -2826,7 +2860,13 @@ Per hoofdstuk gebouwd (scène met `CHECK:` → SP_CHECKS-id → stat/dc):
   Hector — nieuw ingevoegd, want `CH8_EPI_007` zelf is al een COMBAT-scène
   en kan geen CHECK dragen) → `ch8_epi_006b_achtervolging`, vis/17;
   `CH8_EPI_010` (Priamus' nachtelijke tocht langs de wachtposten) →
-  `ch8_epi_010_wachtposten`, agilitas/15. (Lijkspelen-CHECK niet gebouwd.)
+  `ch8_epi_010_wachtposten`, agilitas/15; `CH8_EPI_009B` (speerwerpen tijdens
+  de lijkspelen voor Patroklos — nieuw ingevoegd VOOR het bestaande
+  wagenrennen-fragment, dat nu apart in `CH8_EPI_009B2` staat, om de drie
+  bestaande RELATION-opbouwende aanmoedig-keuzes voor Diomedes/Odysseus/
+  Nestor niet aan te raken) → `ch8_epi_009b_lijkspelen`, vis/15. Alsnog
+  gebouwd op 2026-07-30, oorspronkelijk laagste prioriteit maar niet meer
+  uitgesteld zodra de rest van de backlog was afgerond.
 - **H9**: `CH9_GRI_011` (doodstil blijven in het Trojaanse paard) →
   `ch9_gri_011_stilte`, agilitas/15; `CH9_TRO_017C` (een verdwaalde
   vluchteling redden tijdens de val van Troje — nieuw ingevoegd NA de
@@ -2847,13 +2887,17 @@ convergeert alsnog altijd terug naar dezelfde vervolgscène.
 
 **Getest**: `node --check` + `validate_chronica.js` (0 fouten, 36
 waarschuwingen — uitsluitend al bestaande dode flags, geen nieuwe) na elke
-hoofdstuk-batch. Alle 15 `SP_CHECKS`-entries en hun trigger-scènes
-synthetisch doorlopen in de browser (`spStartCheckFromScene()` per scène,
-geen JS-fouten, correcte titel/worp/uitkomst-rendering, `spCheckContinue()`
-ruimt `SP_CHECK_RESULTAAT` correct op).
+hoofdstuk-batch. Alle 16 `SP_CHECKS`-entries (15 + de later toegevoegde
+lijkspelen-check) en hun trigger-scènes synthetisch doorlopen in de browser
+(`spStartCheckFromScene()` per scène, geen JS-fouten, correcte
+titel/worp/uitkomst-rendering, `spCheckContinue()` ruimt `SP_CHECK_RESULTAAT`
+correct op).
 
-Nog open: de lijkspelen-CHECK in Hoofdstuk 8 (laagste prioriteit), en of
-Hoofdstuk 10+ ooit eigen CHECKs krijgt (nog niet besproken).
+**Status (2026-07-30): alle 16 geplande CHECK-momenten in H1-H9 zijn nu
+gebouwd** — inclusief de eerder uitgestelde lijkspelen-check. Enige nog open
+punt: of Hoofdstuk 10+ ooit eigen CHECKs krijgt (nog niet besproken; zie
+[[chronica-check-mechanic]] in het geheugensysteem voor het patroon dat
+daarbij gevolgd moet worden).
 
 ---
 
