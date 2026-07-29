@@ -2367,56 +2367,81 @@ wel `PERSON: helena:full` en een nieuwe `codex_helena_paard_stemmen`-entry,
 het eerste moment waarop Helena een eigen, onleesbare agenda krijgt in
 plaats van passief te ondergaan.
 
-### 7.16 Passieve taallaag (B23, audit fase 7 §5a/d/e) — pilot Proloog t/m Hoofdstuk 3 (**gebouwd, pilot**)
+### 7.16 Passieve taallaag (B23, audit fase 7 §5a/d/e) — Proloog t/m Hoofdstuk 9 (**gebouwd**)
 
-Op verzoek eerst als PILOT gebouwd (Proloog t/m Hoofdstuk 3), niet meteen over
-alle negen hoofdstukken — zodat het mechanisme zich kan bewijzen voor het
-verder wordt uitgerold. Bewust **onvertaald, sfeer-only**: geen Nederlandse
-parafrase erbij (dat is straks B22's "Glosbeleid", een optionele, aanklikbare
-inline-vertaling — dit nu al toevoegen zou dat dupliceren). Geen nieuw
-CNS-mechanisme nodig: gewone Latijnse/Griekse woorden/zinnen, ingebed in de
-bestaande `TEXT:`/citaten, zonder `VOCAB:`-hook (dit is geen toetsbare
+Eerst als PILOT gebouwd (Proloog t/m Hoofdstuk 3), op 2026-07-29 op verzoek
+volledig uitgebreid naar Hoofdstuk 4 t/m 9 — de laag dekt nu het hele
+gebouwde spel. Bewust **onvertaald, sfeer-only** in de brontekst zelf: geen
+Nederlandse parafrase ernaast (dat is B22's "Glosbeleid", zie §7.18) — sinds
+B22 bestaat, krijgt elke nieuwe toevoeging DIRECT ook zijn
+`[[brontekst|vertaling]]`-gloss, geschreven in dezelfde stap, niet achteraf.
+Geen nieuw CNS-mechanisme nodig, geen `VOCAB:`-hook (geen toetsbare
 woordenschat, puur herkenning/sfeer).
 
-**Twee lagen, zoals de audit voorstelde:**
-1. **Karakteristieke taal per NPC (§5e)** — een vast, herkenbaar signatuur-
-   woord dat een personage bij ELK optreden gebruikt, zodat herhaling zelf
-   het leereffect wordt:
-   - **De Boodschapper van Kronos** opent voortaan elk hoofdstuk-afsluitend
-     Orakel-moment met **"Ecce"** (Latijn, "zie hier/kijk") — toegepast op
-     alle drie de Hoofdstuk-1-lijnen (`CH1_A11`/`CH1_B09`/`CH1_C12`) en de
-     Hoofdstuk-2/3-equivalenten (`CH2_...`-orakelscène na Latona/Kallisto/
-     Semele/Herakles, `CH3_...`-orakelscène na Io/Herakles). Bewust in het
-     Latijn ongeacht welke lijn (Romeins- of Grieks-verteld) ze afsluit —
-     ze is zelf geen personage uit een specifieke mythetraditie maar een
-     kader-figuur erbuiten, dus krijgt ze een eigen, constante taalidentiteit
-     in plaats van mee te bewegen met de lijn die ze net becommentarieert.
-     Dat betekent dat een speler die alleen de Grieks-verteld-lijnen volgt,
-     via haar toch passief Latijn te horen krijgt, en omgekeerd.
-   - **Athena** krijgt **"Χαῖρε"** (Grieks, "gegroet/verheug u") als vaste
-     openingsgroet zodra ze zelf het woord neemt — toegepast op `CH3_IO14`
-     ("Athena over Europa"), haar enige echt sprekende moment binnen de
-     pilot-reikwijdte (haar andere Proloog-H3-optredens, `CH1_B08`/
-     `CH2_L07`/`CH2_S05`, zijn bewust stille observatiemomenten, dus geen
-     natuurlijke plek voor een groet).
-2. **Korte hoofdzinnen op het geleerde niveau (§5a, fase 2)**: twee
-   voorbeelden, elk in de taal van de eigen verteltraditie:
-   - **Latijn** (`CH2_S06`, "Verschroeid door Glorie"): "Iuppiter fulmen
-     misit" — bewust dezelfde vorm (`misit`, perfectum 3e persoon
-     enkelvoud van *mittere*) als de bestaande `puzzle_ch2s...`-vraag over
-     ditzelfde moment (`SP_PUZZLES`, regel ~904) — direct de door de audit
-     bepleite **herhaling met spreiding** (§5d): dezelfde grammaticale vorm
-     komt terug, nu passief in de vertelling in plaats van actief in een
-     puzzel.
-   - **Grieks** (`CH3_H25`, "Twaalf Werken Volbracht"): "Νικῶ" ("ik
-     overwin/ben overwinnaar") — Herakles' eigen, ingehouden reactie op het
-     voltooien van de twaalf werken.
+**Laag 1 — karakteristieke taal per NPC (§5e):**
+- **De Boodschapper van Kronos**: **"Ecce"** (Latijn) bij ELK
+  hoofdstuk-openend of -afsluitend Orakel/Museum-moment waarin ze zelf aan
+  het woord komt, door het hele spel heen — de drie Hoofdstuk-1-lijnen
+  (`CH1_A11`/`CH1_B09`/`CH1_C12`), de Hoofdstuk 2/3-afsluitingen, Hoofdstuk
+  4's afsluiting, en de hoofdstuk-openingen van 5 t/m 9 (`CH5_000`-gebied,
+  `CH6_000`-gebied, `CH7_000`-gebied, `CH8_000`, `CH9_005`) plus de
+  Hoofdstuk 6- en Hoofdstuk 9-afsluitingen. Bewust ALTIJD Latijn, ongeacht
+  welke lijn (Romeins- of Grieks-verteld) ze net becommentarieert — ze is
+  zelf een kaderfiguur buiten elke specifieke mythetraditie, dus krijgt ze
+  een eigen, constante taalidentiteit. Een speler die alleen de
+  Grieks-verteld-lijnen volgt, hoort via haar toch passief Latijn, en
+  omgekeerd.
+- **Athena**: **"Χαῖρε"** (Grieks) zodra ze zelf het woord neemt in een
+  Grieks-verteld scène — tot nu toe alleen `CH3_IO14` (haar andere
+  optredens zijn bewust stille observatiemomenten, of vallen in een
+  Latijns-verteld lijn — zie hieronder).
 
-**Nog niet gedaan (bewust, voor een latere uitrol)**: Hoofdstuk 4 t/m 9
-(fase 3/4 uit het opbouwschema), een tweede Athena-herhaling binnen de
-pilot-reikwijdte, en `SP_PUZZLES`-brede afstemming (er kunnen méér
-puzzelvormen zijn die zich lenen voor eenzelfde spreidings-echo dan nu
-benut). B21 ("Leesvallen") kan nu, met deze laag als fundament, aan bod
+**Laag 2 — korte zinnen op het geleerde grammaticaniveau (§5a),
+per hoofdstuk in de taal van de EIGEN verteltraditie van die scène**:
+- **H2** (Latijn, `CH2_S06`): "Iuppiter fulmen misit" — dezelfde vorm
+  (`misit`, perfectum 3e pers. enk. van *mittere*) als de bestaande
+  puzzelvraag over ditzelfde moment (`SP_PUZZLES` ~regel 904) — herhaling
+  met spreiding (§5d).
+- **H3** (Grieks, `CH3_H25`): "Νικῶ" ("ik overwin") — Herakles bij het
+  voltooien van de twaalf werken.
+- **H4** (Latijn, `CH4_T13`, "De Val van Ikaros"): de al bestaande roep
+  "Icare!" (vocativus, al aanwezig in de brontekst) kreeg nu een gloss —
+  geen nieuwe zin nodig, wel de eerste keer dat 'm ook echt is
+  gemarkeerd als leerbaar moment.
+- **H5** (Grieks, `CH5_026`, "De Nooit Slapende Draak"): "ὕπνε, ἐλθέ"
+  ("Slaap, kom") — Medea's bezwerende gezang waarmee ze de draak
+  probeert te kalmeren.
+- **H6** (Latijn — deze lijn gebruikt "Diana", niet "Artemis", dus
+  Latijns-verteld ondanks de Griekse mythe-oorsprong, `CH6_008`, "Het
+  Raadsel"): "Mane quadrupes, meridie bipes, vespere tripes ambulat" — de
+  Sfinx herhaalt haar eigen raadsel in de oudere vorm; dezelfde formulering
+  als de bestaande `puzzle_ch6_sfinx`, weer een spreidings-echo.
+  **Belangrijke correctie tijdens dit werk**: H6 bleek Latijns-verteld
+  te zijn (bevestigd via "Diana" i.p.v. "Artemis" in `CH6_004`, "Apollo en
+  Diana's Wraak", en de al bestaande Latijnse Sfinx-puzzel) — niet Grieks,
+  zoals de mythe-oorsprong zou doen vermoeden. Dit is GEEN inconsistentie die hersteld moest worden (zoals de
+  eerdere Romeins/Grieks-fixes in de Trojaanse Oorlog); het is gewoon hoe
+  deze lijn al vanaf het begin verteld werd, en de B23-toevoeging volgt die
+  bestaande keuze.
+- **H7** (Grieks, `CH7_005`, "De Appel der Tweedracht"): "τῇ καλλίστῃ"
+  ("aan de mooiste") — de inscriptie op de gouden appel, dezelfde dativus-
+  vorm als de bestaande `SP_PUZZLES`-vraag (~regel 978) en `SP_VOCAB_ENTRIES.
+  grieks_kalliste`.
+- **H8** (Grieks, `CH8_EPI_001`, "Het Nieuws"): "Πάτροκλος ἀπέθανεν"
+  ("Patroklos is gestorven", aoristus) — Antilochos' eigen woorden bij het
+  nieuws van Patroklos' dood, aansluitend op H8's nieuwe stof
+  (sigmatische/thematische aoristus).
+- **H9** (Grieks, `CH9_TRO_009`, "Sinons Verhaal"): "λέγει Ἀχαιοὺς
+  ἀπελθεῖν" ("hij zegt dat de Grieken vertrokken zijn", A.C.I.) —
+  aansluitend op H9's nieuwe stof (A.C.I.).
+
+**Nog bewust niet gedaan**: een tweede Athena-herhaling (ze heeft nu nog
+maar één spreekmoment binnen de laag), en volledige `SP_PUZZLES`-brede
+afstemming (meer bestaande puzzelvormen lenen zich mogelijk voor eenzelfde
+spreidings-echo dan nu benut — dit is bewust een representatieve, niet
+uitputtende dekking per hoofdstuk, net als de oorspronkelijke pilot).
+
+B21 ("Leesvallen") kan nu, met deze laag als fundament, aan bod
 komen — al is de pilot-reikwijdte (Proloog-H3) ook meteen de reikwijdte
 waarbinnen leesvallen voorlopig het meest voor de hand liggen.
 
@@ -2484,6 +2509,90 @@ correct ge-`esc()`'te `data-tr`; een live DOM-test bevestigde dat
 `getComputedStyle(span,'::after').content` pas ná een klik de vertaling
 toont (`"none"` ervoor, `" (Jupiter wierp de bliksem)"` erna); en `CH2_L02C`
 bevat inderdaad geen enkele `.gloss`-span.
+
+### 7.19 B24: instelbaar taalspoor + Hoofdstuk 10-skelet, "Vluchten uit Troje" (**skelet gebouwd, op verzoek nog niet compleet**)
+
+Op verzoek gecombineerd gebouwd (2026-07-29): B24 (instelbaar Latijn/Grieks/
+beide-spoor, audit fase 7 §6) hangt nu aan het natuurlijke splitsingsmoment
+van Hoofdstuk 10 zelf, waar `SP_CAMPAIGN` al "twee parallelle lijnen
+(Odysseus/Aeneas), zelfde principe als Hoofdstuk 3's Io/Herakles" voorschrijft
+— Odysseus is de Griekse lijn, Aeneas de Latijnse, dus de taalkeuze en de
+lijnkeuze vallen vanzelf samen.
+
+**Het mechanisme (generiek, niet H10-specifiek)**:
+- Nieuwe `FLAG taalspoor=latijn/grieks/beide`, gezet op `CH10_000_GRIEKS`/
+  `_LATIJN`/`_BEIDE` (na een keuze in de gedeelde proloog `CH10_000`).
+  "beide" (of geen keuze — alle saves van vóór Hoofdstuk 10) verandert niets
+  aan het bestaande gedrag.
+- `CNSParser.REQUIRE_TAG_RE` (singleplayer.js) ondersteunt nu ook
+  `[REQUIRE:sleutel!=waarde]` naast het bestaande `[REQUIRE:sleutel=getal]`,
+  én woord-waarden naast getallen (`taalspoor=latijn`, niet alleen
+  `fragments=4`). `spChoiceVisible()` kreeg een `taalspoor`-tak naast de
+  bestaande `fragments`-tak.
+- `CH10_001` (de hub): `* Volg Odysseus [DONE:ch10_lijn_odysseus]
+  [REQUIRE:taalspoor!=latijn] -> CH10_ODY_001` en de Aeneas-tegenhanger met
+  `[REQUIRE:taalspoor!=grieks]` — bij "latijn" verdwijnt de Odysseus-knop,
+  bij "grieks" de Aeneas-knop, bij "beide"/ongezet blijven beide zichtbaar
+  (zelfde hub-patroon als `CH3_000`, inclusief `[DONE:...]`-tags).
+- `spCombatNextQuestion()` (audit fase 7 §2b, al genoemd als "sterk punt,
+  ondermijnd door het ontbreken van taalfilter") filtert nu de
+  Combat-bridge-vraagpool op `SP_VOCAB_ENTRIES[id].taal` zodra
+  `flags.taalspoor` "latijn" of "grieks" is — met een fallback naar de
+  ongefilterde pool als de gefilterde pool toevallig leeg zou zijn. "beide"
+  filtert niet, exact het huidige gedrag voor alle chapters vóór Hoofdstuk
+  10.
+
+**Hoofdstuk 10-skelet, BEWUST alleen het eerste deel (op verzoek — "eerst
+alleen het skelet")**:
+- Gedeelde proloog: `CH10_000` (taalspoor-vraag) → `CH10_000_GRIEKS`/
+  `_LATIJN`/`_BEIDE` (zet de FLAG) → `CH10_001` (de hub).
+- **Odysseus-lijn (Grieks), vier scènes**: `CH10_ODY_001` (vertrek uit
+  Troje, Athena's wraak om Aias' heiligschennis tegen Cassandra —
+  rechtstreekse payoff van de Hoofdstuk-9-scène) → `CH10_ODY_002` (de
+  Kikonen) → `CH10_ODY_003` (de Lotoseters) → `CH10_ODY_004` (aankomst bij
+  het eiland van de Kykloop, BEWUST een cliffhanger zonder vervolgkeuze —
+  de eigenlijke Polyfemos-scène is de volgende stap).
+- **Aeneas-lijn (Latijn), vier scènes**: `CH10_AEN_001` (de vloot gebouwd
+  uit Troje's puin, aansluitend op `CH9_TRO_017`/`017B`) → `CH10_AEN_002`
+  (Thracië, het bloedende struikgewas van Polydorus) → `CH10_AEN_003` (het
+  orakel van Delos) → `CH10_AEN_004` (de plaag op Kreta, eindigend op "de
+  vloot moet, opnieuw, verder" — zelfde soort cliffhanger als de
+  Odysseus-lijn).
+- Beide cliffhangers geven `validate_chronica.js` een verwachte
+  "geen enkele keuze (terminale scène)"-waarschuwing — bewust, zelfde soort
+  waarschuwing als `CH9_MUSEUM_00` al langer had.
+- `validate_chronica.js` kreeg `SP_CH10_CNS` toegevoegd aan zijn `BLOCKS`-
+  lijst (was hardcoded tot en met CH9, gaf zonder deze toevoeging een vals-
+  positieve "scène bestaat niet"-fout op de nieuwe `CH9_MUSEUM_00 ->
+  CH10_000`-doorverwijzing).
+
+**Geplande "overlap" (op verzoek — gedeelde personages op vaste punten,
+nog NIET gebouwd)**: de mythologisch best gedocumenteerde kruising tussen
+deze twee lijnen is Achaemenides — een door Odysseus vergeten bemanningslid,
+achtergelaten op het eiland van de Kykloop, die Aeneas' vloot daar later
+aantreft en uit de eerste hand vertelt wat Odysseus is overkomen (Aeneis
+boek 3). Dat vereist dat de Odysseus-lijn eerst zijn eigen Kykloop-scène
+heeft (nu nog de cliffhanger bij `CH10_ODY_004`) voor de Aeneas-lijn er
+logisch naartoe kan verwijzen — de volgende bouwstap voor dit hoofdstuk.
+
+**Nog niet gedaan (bewust, voor latere sessies)**: de rest van beide lijnen
+(Faiaken, Polyfemos zelf, Kirke/onderwereld voor Odysseus loopt door in
+Hoofdstuk 11 per `SP_CAMPAIGN`; Harpijen/Dido voor Aeneas idem), nieuwe
+`PUZZLE:`-content op H10's eigen grammatica (medium/passief/aoristus
+passief voor Grieks, plusquamperfectum/conjunctivus in de bijzin voor
+Latijn — de huidige scènes hebben bewust nog geen `PUZZLE:`-secties),
+`SP_CAMPAIGN`-koppeling voor Baucis/Philemon/Arachne (genoemd als
+personages maar nog niet verwerkt), en de `[REQUIRE:fragments=N]`-achtige
+afsluitende Orakel-keuze op de hub zodra beide lijnen daadwerkelijk
+afgerond kunnen worden.
+
+Getest: `node --check` op beide bestanden, `validate_chronica.js` 0 fouten
+(519 scènes, 2 nieuwe verwachte "terminale scène"-waarschuwingen), en in de
+browser: `spChoiceVisible()` voor alle vier taalspoor-standen (beide tonen
+bij "beide"/ongezet, elk precies één knop verbergen bij "latijn"/"grieks"),
+`spCombatNextQuestion()` 10-voor-10 correct gefilterd bij "grieks" en
+"latijn", gemengd bij "beide", en de volledige scène-keten van
+`CH9_MUSEUM_00` tot en met alle acht nieuwe verhaal-scènes bereikbaar.
 
 ---
 
@@ -2579,6 +2688,10 @@ In afgesproken bouwvolgorde:
    tochtenlogboek i.p.v. een hub (§7.10) — een precedent voor toekomstige
    hoofdstukken die zich ook beter lenen voor één lijn dan voor parallelle
    keuzes. "Meer kruisen" (lijnen die van elkaar weten) is een latere stap.
+   **Hoofdstuk 10 is als enige inmiddels gestart** (§7.19, 2026-07-29): de
+   gedeelde proloog, de taalspoor-keuze en de eerste vier scènes van zowel de
+   Odysseus- als de Aeneas-lijn staan er — de rest van Hoofdstuk 10, en heel
+   Hoofdstuk 11 t/m 28 + Finale, staan nog volledig open.
 6. **Illustraties** — `IMAGE:` is **actief** (rendert het bestand uit
    `assets/chronica/images/`). De eerste illustratie hangt aan PRO_005 ("De
    Bronzen Schijf": de ontdekking van het Orakel, `prologue.png`). Resterend

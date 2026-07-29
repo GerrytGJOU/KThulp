@@ -445,12 +445,15 @@ const CNSParser = {
   // Clementia/Severitas-schaal oplevert. De marker wordt uit het zichtbare
   // label gesloopt; de speler ziet nooit dat een keuze getagd is.
   APPROACH_TAG_RE: /\s*\[(CLEMENTIA|SEVERITAS|NEUTRAL)\]\s*$/i,
-  // Optioneel: een keuzeregel mag ook eindigen op [REQUIRE:sleutel=getal] —
-  // verbergt die keuze tenzij aan de voorwaarde is voldaan (zie
-  // spChoiceVisible in singleplayer.js). Nu alleen "fragments" gebruikt
-  // (Hoofdstuk 2: pas naar het Orakel zodra alle 4 Herinneringsfragmenten
-  // binnen zijn), maar generiek genoeg voor latere vergelijkbare gates.
-  REQUIRE_TAG_RE: /\s*\[REQUIRE:(\w+)=(\d+)\]\s*$/i,
+  // Optioneel: een keuzeregel mag ook eindigen op [REQUIRE:sleutel=waarde] of
+  // [REQUIRE:sleutel!=waarde] — verbergt die keuze tenzij aan de voorwaarde is
+  // voldaan (zie spChoiceVisible in singleplayer.js). "fragments" gebruikt een
+  // getal (Hoofdstuk 2: pas naar het Orakel zodra alle 4 Herinneringsfragmenten
+  // binnen zijn); "taalspoor" (Hoofdstuk 10, B24) gebruikt een woord
+  // ("latijn"/"grieks"/"beide") — generiek genoeg voor latere vergelijkbare
+  // gates. Numerieke waarden worden als getal doorgegeven, woorden als
+  // kleine-letters-string.
+  REQUIRE_TAG_RE: /\s*\[REQUIRE:(\w+)(!?=)(\w+)\]\s*$/i,
   // Optioneel: een keuzeregel mag ook eindigen op [DONE:vlagnaam] — markeert
   // een keuze als "hoort bij een lijn die je kunt afronden" (zie
   // spChoiceVisible/spChoosePath in singleplayer.js). Zodra SP_STATE.flags
@@ -482,7 +485,11 @@ const CNSParser = {
       const target = withoutBullet.slice(arrowIndex+2).trim();
       let approach = null, require = null, done = null, statReq = null;
       const reqM = label.match(this.REQUIRE_TAG_RE);
-      if(reqM){ require = { key:reqM[1].toLowerCase(), value:+reqM[2] }; label = label.slice(0,reqM.index).trim(); }
+      if(reqM){
+        const rawVal = reqM[3];
+        require = { key:reqM[1].toLowerCase(), op:reqM[2]==="!=" ? "!=" : "=", value: isNaN(+rawVal) ? rawVal.toLowerCase() : +rawVal };
+        label = label.slice(0,reqM.index).trim();
+      }
       const doneM = label.match(this.DONE_TAG_RE);
       if(doneM){ done = doneM[1]; label = label.slice(0,doneM.index).trim(); }
       const statM = label.match(this.STAT_TAG_RE);
@@ -495,7 +502,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS)]);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
   stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[],
   payoffsSeen:{}, relations:{}, kroniek:[] });
@@ -1107,12 +1114,19 @@ function spChoiceAlreadyDone(openCount){
       ? `Er ${openCount===1?"wacht":"wachten"} nog ${openCount} ${openCount===1?"verhaal":"verhalen"} op je hulp.`
       : "Alle verhalen van dit hoofdstuk zijn al voltooid.");
 }
-// Bepaalt of een keuze met een [REQUIRE:sleutel=getal]-tag getoond mag
-// worden (CNSParser.REQUIRE_TAG_RE). Nu alleen "fragments" (Hoofdstuk 2: de
-// weg naar het Orakel opent pas met alle 4 Herinneringsfragmenten binnen).
+// Bepaalt of een keuze met een [REQUIRE:sleutel=waarde]-tag getoond mag
+// worden (CNSParser.REQUIRE_TAG_RE). "fragments" (Hoofdstuk 2: de weg naar
+// het Orakel opent pas met alle 4 Herinneringsfragmenten binnen) en
+// "taalspoor" (Hoofdstuk 10, B24: FLAG taalspoor=latijn/grieks/beide,
+// gezet op CH10_000B/C — de Odysseus/Aeneas-hubkeuzes verbergen zichzelf
+// zodra de speler één spoor koos; standaard "beide" houdt beide zichtbaar).
 function spChoiceVisible(c){
   if(!c.require) return true;
   if(c.require.key==="fragments") return (SP_STATE.fragments||[]).length >= c.require.value;
+  if(c.require.key==="taalspoor"){
+    const spoor = SP_STATE.flags?.taalspoor || "beide";
+    return c.require.op==="!=" ? spoor !== c.require.value : spoor === c.require.value;
+  }
   return true;
 }
 // Gated choice (Chronica.md §11.4, CNSParser.STAT_TAG_RE): WEL altijd
@@ -1950,9 +1964,21 @@ function spStartCombatFromScene(scene){
 // Genereert een meerkeuzevraag uit de al geleerde vocabulaire (SP_STATE.vocab)
 // — is die nog leeg (zou niet moeten gebeuren na Hoofdstuk 1, maar toch een
 // vangnet), val terug op de volledige SP_VOCAB_ENTRIES-lijst.
+// Taalspoor-filter (B24, sinds Hoofdstuk 10): zodra de speler een enkel spoor
+// koos (FLAG taalspoor=latijn/grieks op CH10_000B/C), moet een Combat-bridge-
+// vraag ook echt uit die taal komen — anders wordt precies het sterke,
+// per ongeluk al werkende spaced-retrieval-mechanisme (audit fase 7 §2b) de
+// plek waar een eentalige speler voortdurend op onbekende stof wordt getoetst.
+// "beide" (of geen keuze, vóór Hoofdstuk 10) filtert niet — huidig gedrag.
 function spCombatNextQuestion(){
   const ids = (SP_STATE.vocab&&SP_STATE.vocab.length) ? SP_STATE.vocab : Object.keys(SP_VOCAB_ENTRIES);
-  const entries = ids.map(id=>SP_VOCAB_ENTRIES[id]).filter(Boolean);
+  let entries = ids.map(id=>SP_VOCAB_ENTRIES[id]).filter(Boolean);
+  const spoor = SP_STATE.flags?.taalspoor;
+  if(spoor==="latijn" || spoor==="grieks"){
+    const eigenTaal = spoor==="latijn" ? "latijn" : "grieks";
+    const gefilterd = entries.filter(e => e.taal===eigenTaal);
+    if(gefilterd.length) entries = gefilterd;
+  }
   const w = pick(entries);
   const correct = w.betekenis;
   const distractors = shuffle(entries.filter(x=>x!==w).map(x=>x.betekenis))
