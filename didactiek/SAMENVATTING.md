@@ -66,3 +66,29 @@ pakken.
 
 Volledige prioriteitslijst met alle 12 voorstellen en drie uitgewerkte
 voorbeeldscènes: [`10-voorstellen.md`](10-voorstellen.md).
+
+## Naschrift (2026-07-30) — de lijst is afgerond
+
+Alle 12 voorstellen zijn doorlopen. **9 zijn gebouwd** (#2-#10: VOCAB-hooks
++ frequentie-getoetste woorden H2/H3/H5/H7-H9, hint-fading op herhaalde
+grammatica, 9 leesvallen herschreven naar neutrale keuzeframing, "na"-
+echo's voor de passieve laag, Codex-grammatica H8/H9, herhaling van 3
+woorden/3 constructies, een docentscherm, en een extra leesval op de
+Agamemnon-lijn). **3 zijn bewust ingetrokken na overleg met Gerben**, geen
+van drieën omdat het onhaalbaar was, maar omdat de aanname erachter niet
+klopte met hoe het spel/vak werkelijk werkt:
+- **#1** (taalspoor eerder inschakelen): de onderbouw is met opzet
+  tweetalig — geen bug.
+- **#11** (voorgesproken audio): niet haalbaar en niet relevant voor dit
+  project.
+- **#12** (docent-instelbaar niveauplafond): onnodig — hint-fading werkt al
+  voor elke klas, en het "taal niet gehad"-scenario speelt niet vóór
+  Hoofdstuk 10.
+
+Onderweg kwamen twee bevindingen naar boven die niet in de oorspronkelijke
+tien fases stonden, maar wel structureel zijn opgelost: **9 van de 13
+leesvallen verklapten het goede antwoord via de keuzeframing zelf**
+("zoals bedoeld"/"verkeerd om" — zie `Chronica.md` §7.28), en de
+Latijn/Grieks-balans in de woordenschat bleek schever (83 om 10) dan het
+per-hoofdstuk-aantal liet vermoeden — nu 91 om 29, na frequentie-getoetste
+aanvulling in H2/H3/H5.

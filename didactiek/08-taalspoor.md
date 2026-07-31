@@ -95,16 +95,15 @@ niet om iets nieuws te verzinnen:
 
 ## 3. Niveau-instelling per klas
 
-**Bestaat momenteel niet, en dat is al gedocumenteerd backlog** (`Chronica.md`
-§12.1/§12.3-item-6: *"Opt-in hulpmiddelen + docentrapportage bestaan niet...
-Geen docent-instelbaar niveauplafond — Chronica singleplayer heeft momenteel
-geen enkel docentscherm"*, met Battle Mode's docent-ingestelde numerieke
-drempels als bruikbaar precedent). Deze audit bevestigt dat dit gat er nog
-is en voegt een concrete reden toe waaróm het nu urgenter is dan toen het
-voor het eerst gesignaleerd werd: met de bevindingen van Fase 2 (dekking) en
-Fase 5 (hints groeien i.p.v. krimpen) zou een docent-instelbaar niveau vooral
-moeten sturen op **hoeveel hint-tekst standaard zichtbaar is** en **of
-leesvallen een extra "ik ken deze taal niet"-vangnet krijgen** — niet op
-verhaalinhoud (die blijft, terecht, voor iedereen gelijk). Zie Fase 9 voor
-hoe dit zich verhoudt tot logging/docentrapportage, en Fase 10 voor
-prioritering t.o.v. de andere bevindingen.
+**Bestond niet, en is na overweging bewust NIET gebouwd** (voorstel #10 in
+`10-voorstellen.md`, ingetrokken 2026-07-30). Deze audit stelde eerst voor
+om dit alsnog te bouwen — een docent-instelbaar niveau dat stuurt op
+hint-zichtbaarheid en een "ik ken deze taal niet"-vangnet bij taal-
+leesvallen — maar Gerben wees dit af met twee heldere redenen: (1) de
+hint-fading zoals gebouwd (voorstel #3, §7.27) is voor elke klas goed
+genoeg — leerlingen spelen mogelijk met hun schrift ernaast, dus extra
+per-klas-afstemming voegt weinig toe; (2) het "ik ken deze taal niet"-
+probleem speelt in de praktijk niet, want elke leerling volgt tot en met
+Hoofdstuk 9 sowieso beide talen (zie §1-2 hierboven) — er is dus niemand die
+in H1-9 een taal tegenkomt die hij niet heeft. Het gat blijft dus bewust
+open; geen vervolgactie.

@@ -11217,6 +11217,42 @@ Pandaros' Pijl
 TEXT:
 Terwijl beide legers nog naar het onbesliste duel staren, zie je een Trojaanse boogschutter — Pandarus, hoor je later — zijn boog spannen en op Menelaus richten. Wat hem ertoe aanzet, weet niemand met zekerheid; sommigen beweren dat je heel even een vreemde gedaante naast hem zag staan, die er even later niet meer was.
 
+Vlak voor hij schiet, hoor je de vreemde gedaante naast hem iets zeggen — te zacht voor Pandaros alleen, luid genoeg voor jou: "Πάνδαρον ἡ θεὰ πείθει."
+
+CHOICES:
+
+* Hoor er de godin als handelende partij in — zij overtuigt Pandaros -> CH8_AGA_003B_GOED
+* Hoor er Pandaros als handelende partij in — hij overtuigt de godin -> CH8_AGA_003B_FOUT
+
+END
+
+=== SCENE: CH8_AGA_003B_GOED ===
+
+TITLE:
+Een Overtuiging van Boven
+
+TEXT:
+Je verstaat het goed: het is de godin die hier stuurt, niet de sterveling. Pandaros denkt dat de beslissing zijn eigen is — maar jij hebt gezien wie er werkelijk aan het woord was voor hij zijn boog spande.
+
+De pijl vliegt. De wond is niet dodelijk — maar het kwaad is geschied. Binnen ogenblikken laait de strijd feller op dan ooit.
+
+CODEX:
+codex_verbroken_wapenstilstand
+
+CHOICES:
+
+* Zie wie zich vandaag onderscheidt in de chaos -> CH8_AGA_004
+
+END
+
+=== SCENE: CH8_AGA_003B_FOUT ===
+
+TITLE:
+De Rollen Omgedraaid
+
+TEXT:
+Je leest de zin verkeerd om, alsof Pandaros zelf de godin ergens toe zou kunnen overhalen — een sterveling die een god overtuigt, in plaats van andersom.
+
 De pijl vliegt. De wond is niet dodelijk — maar het kwaad is geschied. Binnen ogenblikken laait de strijd feller op dan ooit.
 
 CODEX:
@@ -11530,6 +11566,21 @@ CHOICES:
 
 * Hoor er een keuze in — "als je Hector doodt, zul je snel daarna sterven" — jouw lot hangt af van wat je doet -> CH8_EPI_003_GOED
 * Hoor er een vaststaand lot in — "je zult Hector doden en snel daarna sterven" — hoe dan ook -> CH8_EPI_003_FOUT
+* Hoor er een dreiging tegen Hector in — hij, niet Achilles, zal spoedig sterven, ongeacht wie hem doodt -> CH8_EPI_003_FOUT2
+
+END
+
+=== SCENE: CH8_EPI_003_FOUT2 ===
+
+TITLE:
+De Verkeerde Naam
+
+TEXT:
+Je verwart wie in Thetis' zin wie is — "σύ" is Achilles zelf, niet Hector. Het is niet Hectors dood die hier wordt aangekondigd (die staat al vast, wat er ook gebeurt), maar de prijs die Achilles ervoor betaalt. Pas wanneer je de zin nog eens naloopt, valt het kwartje.
+
+CHOICES:
+
+* Zie wat Hephaistos smeedt -> CH8_EPI_004
 
 END
 
@@ -12607,6 +12658,21 @@ CHOICES:
 
 * Hoor er wantrouwen in tegen de Grieken zelf — "ik vrees de Grieken, ook al brengen ze geschenken" — geschenk of niet -> CH9_TRO_010_GOED
 * Hoor er twee aparte angsten in — "ik vrees de Grieken, en ik vrees de geschenken" — alsof het paard zelf het enige gevaar is -> CH9_TRO_010_FOUT
+* Hoor er een algemene wijsheid in over geschenken in het algemeen — wees achterdochtig bij ieder geschenk, van wie dan ook -> CH9_TRO_010_FOUT2
+
+END
+
+=== SCENE: CH9_TRO_010_FOUT2 ===
+
+TITLE:
+Een Wijsheid Te Breed Getrokken
+
+TEXT:
+Je onthoudt de les zonder de naam erbij — "wees achterdochtig bij geschenken" — en mist zo precies waar Laocoöns wantrouwen op gericht was: niet geschenken in het algemeen, maar deze Grieken, hier, nu. Een wijsheid die voor iedereen zou gelden, verklaart niets over wie er werkelijk gevaar loopt.
+
+CHOICES:
+
+* Zie hoe het paard toch de stad in gaat -> CH9_TRO_010B
 
 END
 
