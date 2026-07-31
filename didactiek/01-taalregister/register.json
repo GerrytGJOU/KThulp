@@ -1,0 +1,428 @@
+{
+  "leesvallen": [
+    {
+      "id": "LV-01",
+      "chapter": "CH2",
+      "scene": "CH2_L02C",
+      "taal": "latijn",
+      "spreker": "anoniem (gekraste steen in het riet)",
+      "tekst": "Iunonis oculi ubique.",
+      "vertaling": "Juno's ogen [zijn] overal.",
+      "val": "verborgen naamval: genitivus (Iunonis) vooraan, oogt als onderwerp; echte onderwerp is oculi (nom. mv.)"
+    },
+    {
+      "id": "LV-02",
+      "chapter": "CH3",
+      "scene": "CH3_H23",
+      "taal": "grieks",
+      "spreker": "anoniem (inscriptie boven grotingang)",
+      "tekst": "Οὐδεὶς ὅπλα φέρει.",
+      "vertaling": "Niemand draagt wapens.",
+      "val": "gemiste ontkenning: οὐδείς als bevestiging gelezen i.p.v. ontkenning"
+    },
+    {
+      "id": "LV-03",
+      "chapter": "CH4",
+      "scene": "CH4_T06B",
+      "taal": "latijn",
+      "spreker": "Ariadne (via herinnering van de speler)",
+      "tekst": "Ad omne bivium, sinistram tene.",
+      "vertaling": "Bij elke splitsing, houd links aan.",
+      "val": "verhaal+taal-leesval: links/rechts-instructie, fout begrijpen = fysiek verkeerde afslag"
+    },
+    {
+      "id": "LV-04",
+      "chapter": "CH5",
+      "scene": "CH5_022B",
+      "taal": "grieks",
+      "spreker": "anoniem (steen bij de haven)",
+      "tekst": "τὸν ξένον φοβεῖται ὁ βασιλεύς.",
+      "vertaling": "De koning vreest de vreemdeling.",
+      "val": "verborgen woordvolgorde/naamval: object vooraan (accusativus), onderwerp achteraan (ὁ βασιλεύς)"
+    },
+    {
+      "id": "LV-05",
+      "chapter": "CH5",
+      "scene": "CH5_027_UITKIJK",
+      "taal": "grieks",
+      "spreker": "de uitkijk op het schip",
+      "tekst": "οὐκέτι διώκουσιν.",
+      "vertaling": "Ze vervolgen niet meer.",
+      "val": "gemiste ontkenning/bijwoord: οὐκέτι (niet meer) vs. gelezen als 'nog steeds'"
+    },
+    {
+      "id": "LV-06",
+      "chapter": "CH6",
+      "scene": "CH6_003B",
+      "taal": "latijn",
+      "spreker": "feestganger (citeert Niobe)",
+      "tekst": "Niobe deā potior est.",
+      "vertaling": "Niobe is machtiger dan de godin.",
+      "val": "verborgen ablativus comparationis: deā (abl.) als 'dankzij de godin' gelezen i.p.v. vergelijking"
+    },
+    {
+      "id": "LV-07",
+      "chapter": "CH6",
+      "scene": "CH6_011B",
+      "taal": "latijn",
+      "spreker": "wachter bij de poort",
+      "tekst": "Polynices nondum venit.",
+      "vertaling": "Polynices is nog niet gekomen.",
+      "val": "gemiste ontkenning: nondum (nog niet) gemist, gelezen als 'is gekomen'"
+    },
+    {
+      "id": "LV-08",
+      "chapter": "CH7",
+      "scene": "CH7_003_EED",
+      "taal": "grieks",
+      "spreker": "de priester (Eed van Tyndareos)",
+      "tekst": "τῷ ἀδικηθέντι πάντες βοηθήσομεν.",
+      "vertaling": "Wie onrecht is aangedaan, zullen wij allen helpen.",
+      "val": "passief vs. actief deelwoord: ἀδικηθέντι (aorist passief) verward met een actieve dader-vorm"
+    },
+    {
+      "id": "LV-09",
+      "chapter": "CH7",
+      "scene": "CH7_005B",
+      "taal": "grieks",
+      "spreker": "een ziener (Hecuba's droom)",
+      "tekst": "τὸ τέκνον ἀπολεῖ τὴν πόλιν.",
+      "vertaling": "Het kind zal de stad vernietigen.",
+      "val": "futurum vs. praesens: ἀπολεῖ (fut.) gelezen als praesens (actueel gevaar i.p.v. profetie)"
+    },
+    {
+      "id": "LV-10",
+      "chapter": "CH8",
+      "scene": "CH8_EPI_003",
+      "taal": "grieks",
+      "spreker": "Thetis",
+      "tekst": "ἐὰν Ἕκτορα ἀποκτείνῃς, σὺ ταχέως ἀποθανῇ.",
+      "vertaling": "Als je Hector doodt, zul je snel daarna sterven.",
+      "val": "voorwaardelijke zin (ἐὰν + conjunctief) vs. kale (onvoorwaardelijke) voorspelling"
+    },
+    {
+      "id": "LV-11",
+      "chapter": "CH8",
+      "scene": "CH8_EPI_009",
+      "taal": "grieks",
+      "spreker": "een wachter",
+      "tekst": "μὴ ἔξελθε.",
+      "vertaling": "Ga niet naar buiten!",
+      "val": "gebiedende wijs (prohibitief μή + imperativus) vs. gelezen als constatering"
+    },
+    {
+      "id": "LV-12",
+      "chapter": "CH9",
+      "scene": "CH9_TRO_010",
+      "taal": "latijn",
+      "spreker": "Laocoön",
+      "tekst": "Timeo Danaos et dona ferentes.",
+      "vertaling": "Ik vrees de Grieken, ook als ze geschenken brengen.",
+      "val": "deelwoordaanhechting: dona hoort bij ferentes (samen), niet los van Danaos gelezen"
+    },
+    {
+      "id": "LV-13",
+      "chapter": "CH9",
+      "scene": "CH9_GRI_008B",
+      "taal": "grieks",
+      "spreker": "Odysseus",
+      "tekst": "Νυκτὸς οὔσης, ἡ πόλις καθεύδει.",
+      "vertaling": "Toen het nacht was, sliep de stad.",
+      "val": "genitivus absolutus verward met een gewone bezitsvorm ('de stad van de nacht')"
+    }
+  ],
+  "glosses": [
+    {
+      "id": "GL-01",
+      "chapter": "CH1",
+      "scene": "CH1_A11",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-02",
+      "chapter": "CH1",
+      "scene": "CH1_B09",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-03",
+      "chapter": "CH1",
+      "scene": "CH1_C12",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-04",
+      "chapter": "CH2",
+      "scene": "CH2_S06",
+      "taal": "latijn",
+      "spreker": "(personage in scène)",
+      "tekst": "Iuppiter fulmen misit",
+      "vertaling": "Jupiter wierp de bliksem",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-05",
+      "chapter": "CH2",
+      "scene": "CH2_ORAKEL",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-06",
+      "chapter": "CH3",
+      "scene": "CH3_IO14",
+      "taal": "grieks",
+      "spreker": "Athena",
+      "tekst": "Χαῖρε",
+      "vertaling": "gegroet",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-07",
+      "chapter": "CH3",
+      "scene": "CH3_H25",
+      "taal": "grieks",
+      "spreker": "(personage in scène)",
+      "tekst": "Νικῶ",
+      "vertaling": "ik overwin",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-08",
+      "chapter": "CH3",
+      "scene": "CH3_ORAKEL",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-09",
+      "chapter": "CH4",
+      "scene": "CH4_T13",
+      "taal": "latijn",
+      "spreker": "(personage in scène)",
+      "tekst": "Icare",
+      "vertaling": "Icarus!",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-10",
+      "chapter": "CH4",
+      "scene": "CH4_ORAKEL",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-11",
+      "chapter": "CH5",
+      "scene": "CH5_000",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-12",
+      "chapter": "CH5",
+      "scene": "CH5_026",
+      "taal": "grieks",
+      "spreker": "(personage in scène)",
+      "tekst": "ὕπνε, ἐλθέ",
+      "vertaling": "Slaap, kom",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-13",
+      "chapter": "CH6",
+      "scene": "CH6_000",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-14",
+      "chapter": "CH6",
+      "scene": "CH6_008",
+      "taal": "latijn",
+      "spreker": "(personage in scène)",
+      "tekst": "Mane quadrupes, meridie bipes, vespere tripes ambulat",
+      "vertaling": "'s Ochtends vierpotig, 's middags tweepotig, 's avonds driepotig loopt het",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-15",
+      "chapter": "CH6",
+      "scene": "CH6_MUSEUM_00",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-16",
+      "chapter": "CH7",
+      "scene": "CH7_000",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-17",
+      "chapter": "CH7",
+      "scene": "CH7_005",
+      "taal": "grieks",
+      "spreker": "(personage in scène)",
+      "tekst": "τῇ καλλίστῃ",
+      "vertaling": "aan de mooiste",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-18",
+      "chapter": "CH8",
+      "scene": "CH8_000",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-19",
+      "chapter": "CH8",
+      "scene": "CH8_EPI_001",
+      "taal": "grieks",
+      "spreker": "(personage in scène)",
+      "tekst": "Πάτροκλος ἀπέθανεν",
+      "vertaling": "Patroklos is gestorven",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-20",
+      "chapter": "CH9",
+      "scene": "CH9_005",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-21",
+      "chapter": "CH9",
+      "scene": "CH9_TRO_009",
+      "taal": "grieks",
+      "spreker": "(personage in scène)",
+      "tekst": "λέγει Ἀχαιοὺς ἀπελθεῖν",
+      "vertaling": "hij zegt dat de Grieken vertrokken zijn",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-22",
+      "chapter": "CH9",
+      "scene": "CH9_EINDE",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-23",
+      "chapter": "CH10",
+      "scene": "CH10_000",
+      "taal": "latijn",
+      "spreker": "de Boodschapper van Kronos",
+      "tekst": "Ecce",
+      "vertaling": "zie hier",
+      "functie": "sfeer / karakteristieke taal (Laag 1)"
+    },
+    {
+      "id": "GL-24",
+      "chapter": "CH10",
+      "scene": "CH10_ODY_001",
+      "taal": "grieks",
+      "spreker": "(personage in scène)",
+      "tekst": "Ἀθηνᾶ ὀργίζεται",
+      "vertaling": "Athena is woedend",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-25",
+      "chapter": "CH10",
+      "scene": "CH10_AEN_001",
+      "taal": "latijn",
+      "spreker": "(personage in scène)",
+      "tekst": "Multa nox erat, cum vela dedimus",
+      "vertaling": "Het was diep in de nacht toen we de zeilen hesen",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    },
+    {
+      "id": "GL-26",
+      "chapter": "CH10",
+      "scene": "CH10_AEN_003",
+      "taal": "latijn",
+      "spreker": "(personage in scène)",
+      "tekst": "Antiquam exquirite matrem",
+      "vertaling": "Zoek jullie oude moeder",
+      "functie": "passieve input, leerbare zin (Laag 2)"
+    }
+  ],
+  "vocabHooksPerChapter": {
+    "PROLOOG": 0,
+    "CH1": 12,
+    "CH2": 17,
+    "CH3": 10,
+    "CH4": 16,
+    "CH5": 10,
+    "CH6": 7,
+    "CH7": 0,
+    "CH8": 0,
+    "CH9": 0,
+    "CH10": 0
+  },
+  "sceneCountPerChapter": {
+    "PROLOOG": 14,
+    "CH1": 65,
+    "CH2": 72,
+    "CH3": 72,
+    "CH4": 48,
+    "CH5": 66,
+    "CH6": 57,
+    "CH7": 46,
+    "CH8": 74,
+    "CH9": 80,
+    "CH10": 13
+  },
+  "totals": {
+    "leesvallen": 13,
+    "glossFragments": 26,
+    "vocabEntries": 93,
+    "puzzelEntries": 71
+  }
+}

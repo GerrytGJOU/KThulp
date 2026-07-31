@@ -977,44 +977,50 @@ const SP_PUZZLES = {
   // per naamval, bewust verspreid over vier verschillende puzzeltypes
   // (inclusief het nieuwe "tile-swap") in plaats van oplopende moeilijkheid,
   // want dit hoofdstuk bouwt geen nieuwe stof op — zie Chronica.md §7.10.
+  // Hints bewust weggelaten (2026-07-29, "geleidelijke overdracht" — audit
+  // didactiek/05-strategie-en-differentiatie.md §2): dit hoofdstuk is een
+  // pure herhaling van Hoofdstuk 1-4 (zie SP_CAMPAIGN ch5.grammatica), dus
+  // de speler krijgt de generieke foutmelding i.p.v. de uitleg die hij bij
+  // de EERSTE keer (H1-H4) al kreeg. Val terug op puzzle.hint || generieke
+  // tekst per puzzeltype, zie spPuzzleAnswer/spTypedAnswer/spTileSwapCheck
+  // (singleplayer.js).
   puzzle_ch5_nominativus: { type:"multiple-choice",
     vraag:"Bij het afvaren wijst de stuurman iedereen zijn plaats. “Iason navem regit” — Jason stuurt het schip. Welk woord is de nominativus, het onderwerp?",
-    opties:["Iason","navem","regit"], antwoord:"Iason",
-    hint:"De nominativus voert de handeling uit — wie stuurt hier?" },
+    opties:["Iason","navem","regit"], antwoord:"Iason" },
   puzzle_ch5_accusativus: { type:"typed-latin",
     vraag:"“Atalanta aprum prima vulnerat” — Atalanta verwondt als eerste het everzwijn. Typ het Latijnse woord dat de accusativus is, het lijdend voorwerp.",
-    antwoord:"aprum",
-    hint:"De accusativus ondergaat de handeling — wat wordt er verwond?" },
+    antwoord:"aprum" },
   puzzle_ch5_genitivus: { type:"multiple-choice",
     vraag:"“Amycus, rex ___, omnes peregrinos ad pugnam vocat” — Amycus, koning van het volk, daagt elke vreemdeling uit tot een gevecht. Welke vorm van populus (volk) past hier, genitivus enkelvoud?",
-    opties:["populi","populo","populum","populus"], antwoord:"populi",
-    hint:"Genitivus enkelvoud van een tweede-declinatie woord als populus, populi eindigt op -i." },
+    opties:["populi","populo","populum","populus"], antwoord:"populi" },
   puzzle_ch5_dativus: { type:"typed-greek",
     vraag:"Philoktetes wijdt zijn pijl toe aan de godin van de jacht. Typ met het Griekse toetsenbord de dativus enkelvoud van θεά (godin) — 'aan de godin'.",
-    antwoord:"θεᾳ",
-    hint:"De dativus enkelvoud van een eerste-declinatie woord als θεά krijgt een iota subscriptum: θεᾳ." },
+    antwoord:"θεᾳ" },
   puzzle_ch5_ablativus: { type:"tile-swap",
     vraag:"Argos verstevigt de romp vlak voor de doorvaart. “Argus navem ___ firmat” — Argos verstevigt het schip met de hamer. Zet de tegels in de juiste volgorde voor de ablativus (het middel) van malleus (hamer).",
-    tiles:["m","a","l","l","e","o"],
-    hint:"De ablativus van middel ('waarmee?') van een tweede-declinatie woord als malleus, mallei eindigt op -o." },
+    tiles:["m","a","l","l","e","o"] },
 
   // ---- Hoofdstuk 6 — De Vloek van Thebe (herhaling praesens t/m perfectum,
   // geen nieuwe grammatica — zie SP_CAMPAIGN ch6.grammatica). Zes puzzels,
   // verdeeld over vier types incl. het nieuwe "matching" — zie Chronica.md
   // §7.11. Bewust GEEN naamval-puzzels dit hoofdstuk (dat was Hoofdstuk 5) —
   // dit hoofdstuk herhaalt werkwoordstijden, geen naamvallen.
+  // Grammatica-hints bewust weggelaten (2026-07-29, "geleidelijke
+  // overdracht" — zie H5-commentaar hierboven, zelfde reden: geen nieuwe
+  // grammatica, zie SP_CAMPAIGN ch6.grammatica). De Sfinx- en matching-hint
+  // blijven WEL staan: dat zijn geen uitleg van een herhaalde constructie
+  // maar respectievelijk een raadsel-aanwijzing (inhoud, geen grammatica)
+  // en een procedurele tip voor het matching-mechanisme zelf.
   puzzle_ch6_praesens: { type:"multiple-choice",
     vraag:"“Niobe multos liberos ___” — Niobe heeft veel kinderen, meer dan Latona zelf, schept ze op. Welke vorm van habere (hebben) past hier, praesens 3e persoon enkelvoud?",
-    opties:["habet","habent","habes","habetis"], antwoord:"habet",
-    hint:"Praesens 3e persoon enkelvoud van een tweede-conjugatiewerkwoord (op -ēre) eindigt op -et." },
+    opties:["habet","habent","habes","habetis"], antwoord:"habet" },
   puzzle_ch6_sfinx: { type:"multiple-choice",
     vraag:"De Sfinx stelt haar raadsel: wat loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie? “___ mane quadrupes, meridie bipes, vespere tripes ambulat” — welk woord vult de zin aan?",
     opties:["homo","canis","avis","deus"], antwoord:"homo",
     hint:"Het antwoord op het raadsel is de mens zelf — als baby kruipt hij (vier), als volwassene loopt hij (twee), op zijn oude dag steunt hij op een stok (de 'derde poot')." },
   puzzle_ch6_imperfectum: { type:"multiple-choice",
     vraag:"Elk jaar zou de troon wisselen — maar toen het zover was, weigerde Eteokles telkens weer. “Eteocles regnum fratri tradere ___” — Eteokles bleef weigeren de troon aan zijn broer over te dragen. Welke vorm van recusare (weigeren) past hier, imperfectum 3e persoon enkelvoud?",
-    opties:["recusabat","recusavit","recusat","recusabit"], antwoord:"recusabat",
-    hint:"De imperfectum beschrijft een handeling die duurde of zich herhaalde — 'hij bleef weigeren', niet 'hij weigerde één keer'." },
+    opties:["recusabat","recusavit","recusat","recusabit"], antwoord:"recusabat" },
   puzzle_ch6_matching_tempora: { type:"matching",
     vraag:"Koppel elke praesensvorm aan zijn perfectumvorm — dezelfde werkwoorden die je al kent uit eerdere hoofdstukken.",
     pairs:[
@@ -1026,37 +1032,34 @@ const SP_PUZZLES = {
     hint:"Kijk goed — niet elke perfectumstam lijkt op de praesensstam." },
   puzzle_ch6_perfectum: { type:"typed-latin",
     vraag:"“Antigone fratrem contra Creontis edictum ___” — Antigone begroef haar broer, tegen Creons bevel in. Typ de perfectumvorm van sepelire (begraven), 3e persoon enkelvoud.",
-    antwoord:"sepelivit",
-    hint:"Perfectum van een vierde-conjugatiewerkwoord als sepelire krijgt vaak de uitgang -ivit." },
+    antwoord:"sepelivit" },
   puzzle_ch6_vocativus_grieks: { type:"typed-greek",
     vraag:"Pentheus roept, vol ongeloof, de naam van de vreemde god die zijn stad in extase heeft gebracht. Typ met het Griekse toetsenbord de vocativus van Βάκχος (Bacchus).",
-    antwoord:"Βάκχε",
-    hint:"Net als Bacchus → Bacche in het Latijn (Hoofdstuk 1), wordt Βάκχος in de vocativus Βάκχε." },
+    antwoord:"Βάκχε" },
 
   // ---- Hoofdstuk 7 — De Appel der Tweedracht (cumulatieve herhaling: alle
   // naamvallen uit Hoofdstuk 5 én de werkwoordstijden uit Hoofdstuk 6 komen
   // hier samen terug, geen nieuwe grammatica — zie SP_CAMPAIGN ch7.grammatica
   // en Chronica.md §7.13).
+  // Grammatica-hints bewust weggelaten (2026-07-29, "geleidelijke
+  // overdracht" — zelfde reden als Hoofdstuk 5/6: geen nieuwe grammatica,
+  // zie SP_CAMPAIGN ch7.grammatica). De matching-hint blijft staan (zelfde
+  // procedurele uitzondering als Hoofdstuk 6).
   puzzle_ch7_genitivus: { type:"multiple-choice",
     vraag:"“Tyndareus iusiurandum omnium ___ exigit” — Tyndareos eist een eed van alle vrijers. Welke vorm van procus (vrijer) past hier, genitivus meervoud?",
-    opties:["procorum","procis","procos","proci"], antwoord:"procorum",
-    hint:"Genitivus meervoud van een tweede-declinatiewoord als procus, proci eindigt op -orum." },
+    opties:["procorum","procis","procos","proci"], antwoord:"procorum" },
   puzzle_ch7_dativus_grieks: { type:"typed-greek",
     vraag:"Op de gouden appel staat één woord gegraveerd. Typ met het Griekse toetsenbord de dativus enkelvoud van καλλίστη (de mooiste) — 'aan de mooiste'.",
-    antwoord:"καλλίστῃ",
-    hint:"Net als θεά → θεᾳ (Hoofdstuk 5), krijgt een η-stam als καλλίστη in de dativus een iota subscriptum: καλλίστῃ." },
+    antwoord:"καλλίστῃ" },
   puzzle_ch7_accusativus: { type:"typed-latin",
     vraag:"“Paris ___ ex Sparta rapit” — Paris schaakt Helena uit Sparta. Typ het Latijnse woord dat de accusativus is, het lijdend voorwerp.",
-    antwoord:"Helenam",
-    hint:"De accusativus ondergaat de handeling — wie wordt hier geschaakt?" },
+    antwoord:"Helenam" },
   puzzle_ch7_ablativus: { type:"tile-swap",
     vraag:"Bij Aulis ligt de hele vloot stil. “Classis ___ adverso tenetur” — de vloot wordt door een tegenwind vastgehouden. Zet de tegels in de juiste volgorde voor de ablativus (het middel) van ventus (wind).",
-    tiles:["v","e","n","t","o"],
-    hint:"De ablativus van middel ('waardoor?') van een tweede-declinatiewoord als ventus, venti eindigt op -o." },
+    tiles:["v","e","n","t","o"] },
   puzzle_ch7_perfectum: { type:"typed-latin",
     vraag:"Toen de hoorn schalde, greep Achilles onmiddellijk naar het wapentuig tussen de geschenken. “Achilles arma statim ___” — typ de perfectumvorm van capere (nemen, grijpen), 3e persoon enkelvoud.",
-    antwoord:"cepit",
-    hint:"Perfectum van capere is onregelmatig gevormd: cepit, niet 'capivit'." },
+    antwoord:"cepit" },
   puzzle_ch7_matching_tempora: { type:"matching",
     vraag:"Koppel elke praesensvorm aan zijn perfectumvorm — nieuwe werkwoorden, zelfde principe als Hoofdstuk 6.",
     pairs:[
@@ -1473,6 +1476,60 @@ const SP_CODEX_ENTRIES = {
     tekst:"Terwijl de stad brandt, draagt de Trojaanse prins Aeneas zijn oude, kreupele vader Anchises op zijn schouders de stad uit, zijn zoontje Ascanius aan de hand. Van alle Trojanen die deze nacht overleven, is hij degene wiens verhaal het verst zal reizen — helemaal naar Italië, waar iets nieuws zal groeien uit de as van wat vannacht verloren gaat." },
   codex_gevangenen_verdeeld: { cat:"mythologie", titel:"De Gevangenen Verdeeld",
     tekst:"Op het strand, tussen de rokende resten van wat ooit Troje was, verdelen de Griekse leiders de overlevende vrouwen als oorlogsbuit. Hecuba, ooit koningin, valt toe aan Odysseus. Andromache, Hectors weduwe, valt toe aan Neoptolemus, de zoon van de man die haar man doodde. Van de trotse stad blijft niets over dan as, rook, en een lange vaart terug naar huis die, voor velen, evenmin goed zal aflopen." },
+
+  // Didactiek-audit voorstel #10 (2026-07-29, didactiek/10-voorstellen.md
+  // #10 / didactiek/03-grammaticale-leerlijn.md, didactiek/05-strategie-en-
+  // differentiatie.md §4): de grammatica-codex-tabellen stopten na Hoofdstuk
+  // 4, terwijl SP_CAMPAIGN.grammatica H8/H9 als "eerste nieuwe grammatica
+  // sinds Hoofdstuk 4/5" resp. nieuwe stof aanwijst. Zelfde "vroeg
+  // ontgrendelen"-patroon als H1-H4: gezet bij CH8_000/CH9_005, vóór de
+  // eerste puzzel van dat hoofdstuk.
+  codex_grammatica_ch8_aoristus_sigmatisch: { cat:"grammatica", titel:"Grammatica: de sigmatische aoristus",
+    tekst:"De aoristus is de Griekse tegenhanger van de Latijnse perfectum: een voltooide, eenmalige handeling in het verleden. De sigmatische aoristus (de meest voorkomende vorm) voegt een augment (ἐ-) vooraan toe én -σε (3e persoon enkelvoud) achteraan, tussen stam en uitgang.",
+    table:{ headers:["Praesens","Betekenis","Aoristus (hij/zij-vorm)"],
+      rows:[["πέμπω","zenden","ἔπεμψε"],
+            ["λύω","losmaken, verbreken","ἔλυσε"]] } },
+  codex_grammatica_ch8_aoristus_thematisch: { cat:"grammatica", titel:"Grammatica: de thematische aoristus",
+    tekst:"Naast de sigmatische aoristus bestaat de thematische ('sterke') aoristus: geen -σ- toegevoegd, maar een eigen, vaak onregelmatige stam — te vergelijken met sterke werkwoorden in het Nederlands (lopen/liep, niet loopde).",
+    table:{ headers:["Praesens","Betekenis","Aoristus (hij/zij-vorm)"],
+      rows:[["φεύγω","vluchten","ἔφυγον (mv.), ἔφυγε (enk.)"],
+            ["βάλλω","treffen, werpen","ἔβαλε"]] } },
+  codex_grammatica_ch8_3decl_medeklinker: { cat:"grammatica", titel:"Grammatica: 3e declinatie, medeklinkerstam",
+    tekst:"Net als rex/regis (Hoofdstuk 3) hebben veel 3e-declinatiewoorden een nominativus die er heel anders uitziet dan de rest van het rijtje — de genitivus enkelvoud (op -is) laat de echte stam pas zien. Precies die genitivus staat daarom altijd naast de nominativus in een woordenboek.",
+    table:{ headers:["Nominativus","Genitivus enkelvoud","Betekenis"],
+      rows:[["senex","senis","oude man"],
+            ["miles","militis","soldaat"]] } },
+  codex_grammatica_ch8_voornaamwoorden: { cat:"grammatica", titel:"Grammatica: aanwijzend en persoonlijk voornaamwoord",
+    tekst:"Ille (die, dat) is het aanwijzend voornaamwoord; is/ea/id (hij/zij/het) het persoonlijk voornaamwoord van de 3e persoon. Beide congrueren in geslacht, getal én naamval met het woord waar ze bij (of voor) staan — precies zoals de bijstelling in Hoofdstuk 3 dat al deed.",
+    table:{ headers:["Voornaamwoord","Vorm","Voorbeeld","Betekenis"],
+      rows:[["Aanwijzend (onzijdig mv.)","illa","illa dona","die geschenken"],
+            ["Persoonlijk (mnl. enk. acc.)","eum","eum esse","dat hij is"]] } },
+  codex_grammatica_ch8_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 8 samengevat",
+    tekst:"Voor het eerst sinds Hoofdstuk 4/5 kwam er weer echt nieuwe grammatica bij: de Griekse aoristus (sigmatisch, met ἐ-...-σε, én thematisch, met een eigen stam) als tegenhanger van de Latijnse perfectum, de 3e-declinatie-medeklinkerstam (senex/senis, miles/militis — de genitivus laat de ware stam zien), en de aanwijzende/persoonlijke voornaamwoorden (ille, is/ea/id), die net als een bijstelling congrueren met het woord waar ze bij horen." },
+
+  codex_grammatica_ch9_comparativus_superlativus: { cat:"grammatica", titel:"Grammatica: comparativus en superlativus",
+    tekst:"De comparativus (vergrotende trap, 'dapperder') en superlativus (overtreffende trap, 'dapperst') van een 3e-declinatie bijvoeglijk naamwoord als fortis (dapper) volgen een vast patroon — de superlativus eindigt bij dit type altijd op -issimus/-issima/-issimum, afhankelijk van het geslacht van het woord waar hij bij hoort.",
+    table:{ headers:["Trap","Vorm","Voorbeeld","Betekenis"],
+      rows:[["Positief","fortis","miles fortis","de dappere soldaat"],
+            ["Superlativus (vr.)","fortissima","regina fortissima","de dapperste koningin"],
+            ["Superlativus (mnl.)","fortissimus","Achilles fortissimus","de dapperste Achilles"]] } },
+  codex_grammatica_ch9_aci: { cat:"grammatica", titel:"Grammatica: de Accusativus cum Infinitivo (A.C.I.)",
+    tekst:"Na werkwoorden van zeggen/menen/weten (dicere, putare, scire) staat in het Latijn geen 'dat'-bijzin zoals in het Nederlands, maar een A.C.I.: het onderwerp van de bijzin in de accusativus, het werkwoord in de infinitivus. 'Sinon dicit Danaos discessisse' — Sinon zegt DAT de Grieken vertrokken ZIJN (letterlijk: 'Sinon zegt de Grieken vertrokken-te-zijn').",
+    table:{ headers:["Nederlands","Onderwerp bijzin → accusativus","Werkwoord bijzin → infinitivus"],
+      rows:[["Sinon zegt dat de Grieken vertrokken zijn","Danaos","discessisse"],
+            ["De bode zegt dat Achilles gevallen is","Achillem","cecidisse"]] } },
+  codex_grammatica_ch9_3decl_istam: { cat:"grammatica", titel:"Grammatica: 3e declinatie, i-stammen",
+    tekst:"Een derde groep binnen de 3e declinatie (naast medeklinkerstammen als rex/regis en senex/senis, Hoofdstuk 3/8) zijn de i-stammen: woorden als urbs/urbis en navis/navis, die in sommige naamvallen een extra -i- laten zien ten opzichte van een gewone medeklinkerstam.",
+    table:{ headers:["Nominativus","Genitivus","Accusativus enkelvoud","Accusativus meervoud"],
+      rows:[["urbs","urbis","urbem","urbes"],
+            ["navis","navis","navem","naves"]] } },
+  codex_grammatica_ch9_congruentie: { cat:"grammatica", titel:"Grammatica: congruentie van het bijvoeglijk naamwoord",
+    tekst:"Een bijvoeglijk naamwoord congrueert altijd in geslacht, getal en naamval met het zelfstandig naamwoord waar het bij hoort — net als de bijstelling uit Hoofdstuk 3, maar dan voor een heel woordsoort in plaats van één specifiek geval.",
+    table:{ headers:["Zelfstandig naamwoord","Geslacht/getal","Bijvoeglijk naamwoord"],
+      rows:[["Cassandra","vr. enk.","maesta (bedroefd)"],
+            ["milites","mnl. mv.","taciti (zwijgend)"]] } },
+  codex_grammatica_ch9_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 9 samengevat",
+    tekst:"Dit hoofdstuk voegde de laatste nieuwe bouwstenen van Boek I toe: de comparativus/superlativus (fortior/fortissimus — dapperder/dapperst), de A.C.I. (dicit Danaos discessisse — zegt dat de Grieken vertrokken zijn, onderwerp in de accusativus, werkwoord in de infinitivus), een derde groep binnen de 3e declinatie (i-stammen als urbs/navis), en de congruentieregel voor het bijvoeglijk naamwoord (geslacht/getal/naamval gelijk aan het zelfstandig naamwoord)." },
 
   // ---- Hoofdstuk 10 — Vluchten uit Troje ----
   codex_odysseus_vertrek: { cat:"mythologie", titel:"Odysseus Vaart Uit",
@@ -2056,6 +2113,11 @@ const SP_VOCAB_ENTRIES = {
   latijn_necare:    { taal:"latijn", woord:"necare (necat)", betekenis:"doden" },
   latijn_servire:   { taal:"latijn", woord:"servire (servi!)", betekenis:"dienen" },
   latijn_vincere:   { taal:"latijn", woord:"vincere (vincit)", betekenis:"overwinnen" },
+  grieks_kalos:     { taal:"grieks", woord:"καλός", transcript:"kalós", betekenis:"mooi, edel" },
+  grieks_zoon:      { taal:"grieks", woord:"ζῷον", transcript:"zôion", betekenis:"levend wezen, dier" },
+  grieks_megas:     { taal:"grieks", woord:"μέγας", transcript:"mégas", betekenis:"groot" },
+  grieks_dynamis:   { taal:"grieks", woord:"δύναμις", transcript:"dýnamis", betekenis:"kracht, vermogen" },
+  grieks_ergon:     { taal:"grieks", woord:"ἔργον", transcript:"érgon", betekenis:"werk, daad" },
   latijn_iuno:      { taal:"latijn", woord:"Iuno, Iunonis", betekenis:"Juno (godin)" },
   latijn_nuntius:   { taal:"latijn", woord:"nuntius, nuntii", betekenis:"bode, boodschapper" },
   latijn_dea:       { taal:"latijn", woord:"dea, deae", betekenis:"godin" },
@@ -2066,6 +2128,11 @@ const SP_VOCAB_ENTRIES = {
   latijn_promittit: { taal:"latijn", woord:"promittere (promittit)", betekenis:"beloven" },
   latijn_titan:     { taal:"latijn", woord:"Titan, Titanis", betekenis:"titaan" },
   latijn_avis:      { taal:"latijn", woord:"avis, avis", betekenis:"vogel" },
+  grieks_theos:     { taal:"grieks", woord:"θεός", transcript:"theós", betekenis:"god" },
+  grieks_basileus:  { taal:"grieks", woord:"βασιλεύς", transcript:"basileús", betekenis:"koning" },
+  grieks_aner:      { taal:"grieks", woord:"ἀνήρ, ἀνδρός", transcript:"anḗr, andrós", betekenis:"man, held" },
+  grieks_kakos:     { taal:"grieks", woord:"κακός", transcript:"kakós", betekenis:"slecht" },
+  grieks_arete:     { taal:"grieks", woord:"ἀρετή", transcript:"aretḗ", betekenis:"deugd, moed" },
 
   // ---- Hoofdstuk 4 ----
   latijn_vela:        { taal:"latijn", woord:"velum, veli (mv. vela)", betekenis:"zeil" },
@@ -2096,6 +2163,11 @@ const SP_VOCAB_ENTRIES = {
   latijn_regit:     { taal:"latijn", woord:"regere (regit)", betekenis:"sturen, besturen, regeren" },
   latijn_vulnerat:  { taal:"latijn", woord:"vulnerare (vulnerat)", betekenis:"verwonden" },
   grieks_toxon:     { taal:"grieks", woord:"τόξον", transcript:"tóxon", betekenis:"boog" },
+  grieks_thalassa:  { taal:"grieks", woord:"θάλασσα", transcript:"thálassa", betekenis:"zee" },
+  grieks_pleo:      { taal:"grieks", woord:"πλέω", transcript:"pléō", betekenis:"varen" },
+  grieks_gyne:      { taal:"grieks", woord:"γυνή, γυναικός", transcript:"gynḗ, gynaikós", betekenis:"vrouw" },
+  grieks_philos:    { taal:"grieks", woord:"φίλος", transcript:"phílos", betekenis:"geliefd, vriend" },
+  grieks_deinos:    { taal:"grieks", woord:"δεινός", transcript:"deinós", betekenis:"verschrikkelijk" },
 
   // ---- Hoofdstuk 6 — De Vloek van Thebe ----
   latijn_habere:    { taal:"latijn", woord:"habere (habet)", betekenis:"hebben" },
@@ -2105,6 +2177,7 @@ const SP_VOCAB_ENTRIES = {
   latijn_frater:    { taal:"latijn", woord:"frater, fratris", betekenis:"broer" },
   latijn_quadrupes: { taal:"latijn", woord:"quadrupes, quadrupedis", betekenis:"viervoetig" },
   grieks_bakchos:   { taal:"grieks", woord:"Βάκχος", transcript:"Bákchos", betekenis:"Bacchus (bijnaam van Dionysos)" },
+  latijn_liberi:    { taal:"latijn", woord:"liberi, liberorum", betekenis:"kinderen" },
   // ---- Hoofdstuk 7 — De Appel der Tweedracht ----
   latijn_iurare:    { taal:"latijn", woord:"iurare (iurat)", betekenis:"zweren" },
   latijn_bellum:    { taal:"latijn", woord:"bellum, belli", betekenis:"oorlog" },
@@ -2113,7 +2186,10 @@ const SP_VOCAB_ENTRIES = {
   latijn_classis:   { taal:"latijn", woord:"classis, classis", betekenis:"vloot" },
   latijn_ventus:    { taal:"latijn", woord:"ventus, venti", betekenis:"wind" },
   latijn_sacrificium: { taal:"latijn", woord:"sacrificium, sacrificii", betekenis:"offer" },
-  grieks_toxon:     { taal:"grieks", woord:"τόξον", transcript:"tóxon", betekenis:"boog" },
+  latijn_deus:      { taal:"latijn", woord:"deus, dei", betekenis:"god" },
+  latijn_amor:      { taal:"latijn", woord:"amor, amoris", betekenis:"liefde" },
+  latijn_pater:     { taal:"latijn", woord:"pater, patris", betekenis:"vader" },
+  latijn_spes:      { taal:"latijn", woord:"spes, spei", betekenis:"hoop" },
   latijn_vulnus:    { taal:"latijn", woord:"vulnus, vulneris", betekenis:"wond" },
   // ---- Hoofdstuk 8 — De Wrok van Achilles ----
   grieks_menis:     { taal:"grieks", woord:"μῆνις", transcript:"mênis", betekenis:"wrok, verbeten woede (het openingswoord van de Ilias)" },
@@ -2124,6 +2200,10 @@ const SP_VOCAB_ENTRIES = {
   latijn_miles:     { taal:"latijn", woord:"miles, militis", betekenis:"soldaat" },
   latijn_senex:     { taal:"latijn", woord:"senex, senis", betekenis:"oude man" },
   latijn_arma:      { taal:"latijn", woord:"arma, armorum", betekenis:"wapens, wapenrusting" },
+  grieks_pempo:     { taal:"grieks", woord:"πέμπω", transcript:"pémpō", betekenis:"zenden" },
+  grieks_pheugo:    { taal:"grieks", woord:"φεύγω", transcript:"pheúgō", betekenis:"vluchten" },
+  grieks_luo:       { taal:"grieks", woord:"λύω", transcript:"lúō", betekenis:"losmaken, verbreken" },
+  grieks_ballo:     { taal:"grieks", woord:"βάλλω", transcript:"bállō", betekenis:"treffen, werpen" },
   // ---- Hoofdstuk 9 — Ilion in Vlammen ----
   latijn_urbs:      { taal:"latijn", woord:"urbs, urbis", betekenis:"stad" },
   latijn_navis:     { taal:"latijn", woord:"navis, navis", betekenis:"schip" },
@@ -2131,6 +2211,9 @@ const SP_VOCAB_ENTRIES = {
   latijn_equus:     { taal:"latijn", woord:"equus, equi", betekenis:"paard" },
   latijn_tacitus:   { taal:"latijn", woord:"tacitus, tacita, tacitum", betekenis:"stil, zwijgend" },
   grieks_polis:     { taal:"grieks", woord:"πόλις", transcript:"pólis", betekenis:"stad" },
+  latijn_fortis:    { taal:"latijn", woord:"fortis, forte", betekenis:"sterk, dapper" },
+  latijn_discedere: { taal:"latijn", woord:"discedere (discessit)", betekenis:"weggaan, vertrekken" },
+  latijn_maestus:   { taal:"latijn", woord:"maestus, maesta, maestum", betekenis:"bedroefd, treurig" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -2226,6 +2309,26 @@ const SP_PAYOFFS = [
   { id:"ch9_gri009_echo_diomedes_geschiedenis", type:"echo", trigger:{scene:"CH9_GRI_009"},
     condition:{relationMin:{diomedes:2}}, priority:0,
     content:{text:`Diomedes werkt naast je alsof je geen vreemde bent — en dat ben je ook niet, niet echt. Je hielp hem ooit, zwijgend, zijn vaders wapenrusting vastmaken voor de poorten van Thebe, jaren voor hij ooit van Troje had gehoord. En toen de keuze zich opnieuw voordeed, tussen Achilles en Agamemnon, stond je weer aan zijn kant. Van alle mannen in dit kamp is hij misschien wel degene die het langst al op jou kan rekenen.`} },
+  // ---- Didactiek-audit voorstel #4 (2026-07-29, didactiek/10-voorstellen.md
+  // #4 / didactiek/04-leessandwich.md §5): geef de "Laag 2"-passieve-taallaag
+  // (Chronica.md §7.16) een "na" in plaats van alleen een optionele gloss.
+  // Alle zes ONVOORWAARDELIJK (geen condition-veld) — elke trigger-scène ligt
+  // op een verplicht, lineair vervolg van de gloss-scène binnen dezelfde
+  // lijn/epiloog, dus elke speler die de trigger bereikt heeft de brontekst
+  // al gegarandeerd gezien (zelfde redenering als de Hoofdstuk-7-Peleus/
+  // Philoktetes-echo's hierboven). ----
+  { id:"ch2_s08_echo_fulmen", type:"echo", trigger:{scene:"CH2_S08"}, priority:0,
+    content:{text:`Bacchus draagt het vuur waaruit hij ontstond letterlijk met zich mee — geboren uit dezelfde vlam die zijn moeder het leven kostte. "Iuppiter fulmen misit," zeiden ze later van dat moment. Drie woorden voor het vuur waaruit, uiteindelijk, ook hij is voortgekomen.`} },
+  { id:"ch4_t14_echo_icare", type:"echo", trigger:{scene:"CH4_T14"}, priority:0,
+    content:{text:`Nog dagenlang blijft die ene roep in je oren naklinken — "Icare!" — geschreeuwd naar een zee die niets meer teruggaf.`} },
+  { id:"ch5_027_echo_hypne_elthe", type:"echo", trigger:{scene:"CH5_027"}, priority:0,
+    content:{text:`Zonder Medea's gezang, besef je terwijl je het Vlies in je handen weegt, was Jason nooit dichtbij genoeg gekomen. "Ὕπνε, ἐλθέ" — slaap, kom — het lied werkte lang genoeg, al was het maar net.`} },
+  { id:"ch7_009_echo_kalliste", type:"echo", trigger:{scene:"CH7_009"}, priority:0,
+    content:{text:`Je herkent het woord van de appel meteen terug in wat er nu net is gebeurd: "τῇ καλλίστῃ" — aan de mooiste. Eén woord, gegraveerd in goud, en een oorlog is al onvermijdelijk voor hij goed en wel is begonnen.`} },
+  { id:"ch8_epi008_echo_menis_patroklos", type:"echo", trigger:{scene:"CH8_EPI_008"}, priority:0,
+    content:{text:`"Πάτροκλος ἀπέθανεν" — dat was het hele nieuws, drie woorden maar. Kijkend naar wat Achilles zojuist met Hectors lichaam doet, besef je: dát is precies waarom hij geen greintje genade meer over heeft.`} },
+  { id:"ch9_tro011_echo_sinon_leugen", type:"echo", trigger:{scene:"CH9_TRO_011"}, priority:0,
+    content:{text:`Sinons woorden klinken nog na, terwijl het paard door de bres naar binnen wordt gesleept: "de Grieken zijn vertrokken." Het is, besef je, het laatste wat deze stad ooit voor waar zal aannemen.`} },
 ];
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -5183,7 +5286,7 @@ CODEX:
 codex_grammatica_ch2_overzicht
 
 VOCAB:
-latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens, latijn_currere, latijn_abire, latijn_ursa, latijn_silva, latijn_necare, latijn_servire, latijn_vincere
+latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens, latijn_currere, latijn_abire, latijn_ursa, latijn_silva, latijn_necare, latijn_servire, latijn_vincere, grieks_kalos, grieks_zoon, grieks_megas, grieks_dynamis, grieks_ergon
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 2 volledig voltooid
@@ -6521,7 +6624,7 @@ CODEX:
 codex_grammatica_ch3_overzicht
 
 VOCAB:
-latijn_iuno, latijn_nuntius, latijn_dea, latijn_sapientia, latijn_crotala, latijn_cerva, latijn_pars, latijn_promittit, latijn_titan, latijn_avis
+latijn_iuno, latijn_nuntius, latijn_dea, latijn_sapientia, latijn_crotala, latijn_cerva, latijn_pars, latijn_promittit, latijn_titan, latijn_avis, grieks_theos, grieks_basileus, grieks_aner, grieks_kakos, grieks_arete
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 3 volledig voltooid
@@ -7543,7 +7646,7 @@ TEXT:
 Athena voegt eraan toe, zachter dan anders: "Let deze keer goed op wie er nog meer aan boord staat. Sommige namen ken je al. De meeste ken je nog niet — maar dat komt nog."
 
 VOCAB:
-latijn_navis, latijn_mare, latijn_vellus, latijn_draco, latijn_populus, latijn_malleus, latijn_aper, latijn_regit, latijn_vulnerat, grieks_toxon
+latijn_navis, latijn_mare, latijn_vellus, latijn_draco, latijn_populus, latijn_malleus, latijn_aper, latijn_regit, latijn_vulnerat, grieks_toxon, grieks_thalassa, grieks_pleo, grieks_gyne, grieks_philos, grieks_deinos
 
 CODEX:
 codex_gulden_vlies
@@ -8302,8 +8405,8 @@ Bij de kade staat een verweerde steen, kennelijk door een eerdere bezoeker opger
 
 CHOICES:
 
-* Begrijp het zoals het er staat — de koning is degene die de vreemdeling vreest, niet andersom -> CH5_022_GOED
-* Lees het aan de haastige blik voorbij als een simpele dreiging — de vreemdeling moet de koning vrezen -> CH5_022_FOUT
+* Hoor er een waarschuwing in dat de koning zelf bang is voor jullie komst -> CH5_022_GOED
+* Hoor er een dreiging in dat de koning verwacht dat jullie bang voor hem zullen zijn -> CH5_022_FOUT
 
 END
 
@@ -8565,8 +8668,8 @@ Nog geen dag op zee klinkt er een uitroep vanaf het achterdek — de uitkijk, di
 
 CHOICES:
 
-* Versta het goed — "ze vervolgen ons niet meer," een reden voor voorzichtige opluchting -> CH5_027_GOED
-* Versta "ze vervolgen ons nog steeds," en sla alarm -> CH5_027_FOUT
+* Neem het op als opluchting — "ze vervolgen ons niet meer" -> CH5_027_GOED
+* Neem het op als een nieuwe dreiging — "ze vervolgen ons nog steeds," en sla alarm -> CH5_027_FOUT
 
 END
 
@@ -8714,7 +8817,7 @@ TEXT:
 Athena knikt, zwijgender dan anders. "Sommige vloeken slaan in bij de stichting van een stad, en wachten dan gewoon — generatie na generatie — tot er weer iemand geboren wordt om ze te laten uitkomen."
 
 VOCAB:
-latijn_habere, latijn_recusare, latijn_sepelire, latijn_regnum, latijn_frater, latijn_quadrupes, grieks_bakchos
+latijn_habere, latijn_recusare, latijn_sepelire, latijn_regnum, latijn_frater, latijn_quadrupes, grieks_bakchos, latijn_liberi
 
 CODEX:
 codex_kadmos_thebe
@@ -8843,8 +8946,8 @@ Iemand aan het feest herhaalt Niobe's eigen zin nog eens, half onder de indruk, 
 
 CHOICES:
 
-* Begrijp het zoals het bedoeld is — Niobe noemt zichzelf machtiger dan de godin zelf -> CH6_003_GOED
-* Versta het als een onschuldig compliment aan de godin, uitgesproken dankzij haar -> CH6_003_FOUT
+* Hoor er een vergelijking in — Niobe stelt zichzelf boven de godin -> CH6_003_GOED
+* Hoor er een compliment in — Niobe prijst de godin die haar dit alles gaf -> CH6_003_FOUT
 
 END
 
@@ -9118,8 +9221,8 @@ Een wachter op de muur roept naar beneden, zijn stem half verloren in de wind: "
 
 CHOICES:
 
-* Versta het goed — "Polyneikes is nog niet gekomen," reden voor even wat lucht -> CH6_012_GOED
-* Mis het kleine woordje ertussen en versta enkel "Polyneikes is gekomen" -> CH6_012_FOUT
+* Neem het op als uitstel — "Polyneikes is nog niet gekomen" -> CH6_012_GOED
+* Neem het op als het nieuws zelf — "Polyneikes is gekomen" -> CH6_012_FOUT
 
 END
 
@@ -9760,6 +9863,9 @@ De Boodschapper laat een korte stilte vallen voor ze verdergaat — de soort sti
 
 "[[Ecce|zie hier]] — het echte werk begint nu," zegt de Boodschapper. "De Trojaanse Oorlog."
 
+VOCAB:
+latijn_iurare, latijn_bellum, grieks_kalliste, latijn_rapere, latijn_classis, latijn_ventus, latijn_sacrificium, latijn_deus, latijn_amor, latijn_pater, latijn_spes
+
 CHOICES:
 
 * Stap de herinnering in -> CH7_001
@@ -9968,8 +10074,8 @@ De priester spreekt de kern van de eed hardop uit, zodat elke vrijer haar zonder
 
 CHOICES:
 
-* Begrijp het zoals het bedoeld is — "wie onrecht is aangedaan, zullen wij allen helpen" -> CH7_003_GOED
-* Versta het participium verkeerd om — "wie onrecht heeft gedaan, zullen wij allen helpen" -> CH7_003_FOUT
+* Hoor er een belofte aan het slachtoffer in — "wie onrecht is aangedaan, zullen wij allen helpen" -> CH7_003_GOED
+* Hoor er een belofte aan de dader in — "wie onrecht heeft gedaan, zullen wij allen helpen" -> CH7_003_FOUT
 
 END
 
@@ -10077,8 +10183,8 @@ Voor we bij het oordeel zelf aankomen, moet er eerst een rechter geboren worden.
 
 CHOICES:
 
-* Versta het toekomende tijd zoals bedoeld — "het kind zal de stad vernietigen," een profetie, geen actueel gevaar -> CH7_006_GOED
-* Mis de toekomende tijd en versta "het kind vernietigt de stad," alsof het al gebeurt -> CH7_006_FOUT
+* Hoor er een profetie in — "het kind zal de stad vernietigen," ooit, nog niet nu -> CH7_006_GOED
+* Hoor er een actueel gevaar in — "het kind vernietigt de stad," alsof het al gebeurt -> CH7_006_FOUT
 
 END
 
@@ -10495,6 +10601,8 @@ Het Offer in Aulis
 TEXT:
 Agamemnon laat zijn eigen dochter Iphigenia naar Aulis lokken, onder het mom van een huwelijk met de jonge Achilles zelf. Pas als ze aankomt, ontdekt ze het werkelijke doel van haar reis. {iphigenia_lot}
 
+"Timeo," mompelt Calchas, terwijl hij het altaar voorbereidt — meer tegen zichzelf dan tegen wie dan ook. Vrees, niet voor de godin, maar voor wat haar gunst hier gaat kosten.
+
 Wat elke versie gemeen heeft: de wind steekt op. De vloot kan eindelijk vertrekken.
 
 IMAGE:
@@ -10677,6 +10785,12 @@ De poort opent zich ditmaal midden in een oorlog die al tien jaar oud is. "[[Ecc
 
 "En dit keer," vervolgt ze, met iets in haar stem dat je niet eerder hebt gehoord, "ga jij zelf kiezen aan welke kant van dit verhaal je staat. Niet alles wat er gebeurt, zul je met eigen ogen zien — maar wat je wél ziet, zul je van dichterbij zien dan ooit."
 
+VOCAB:
+latijn_vulnus, grieks_menis, grieks_time, grieks_aspis, latijn_ira, latijn_honor, latijn_miles, latijn_senex, latijn_arma, grieks_pempo, grieks_pheugo, grieks_luo, grieks_ballo
+
+CODEX:
+codex_grammatica_ch8_aoristus_sigmatisch, codex_grammatica_ch8_aoristus_thematisch, codex_grammatica_ch8_3decl_medeklinker, codex_grammatica_ch8_voornaamwoorden
+
 CHOICES:
 
 * Stap door de poort -> CH8_001
@@ -10689,7 +10803,7 @@ TITLE:
 De Plaag van Apollo
 
 TEXT:
-Chryses, priester van Apollo, komt naar het Griekse kamp om zijn gevangen dochter Chryseis vrij te kopen — met een koninklijk losgeld en een gebed om genade. Agamemnon wijst hem honend af en dreigt hem zelfs, ondanks de heilige staf en de lauwerkrans van de god die de priester bij zich draagt.
+Chryses, priester van Apollo, komt naar het Griekse kamp om zijn gevangen dochter Chryseis vrij te kopen — met een koninklijk losgeld en een gebed om genade. Agamemnon wijst hem honend af, "Abi!" — weg met je — en dreigt hem zelfs, ondanks de heilige staf en de lauwerkrans van de god die de priester bij zich draagt.
 
 Chryses keert zich naar de zee en bidt tot Apollo. Negen dagen lang regent het pijlen van pest op het Griekse kamp — eerst op de dieren, dan op de mensen — tot de brandstapels van de doden dag en nacht blijven branden.
 
@@ -10958,7 +11072,7 @@ De Weigering
 TEXT:
 Odysseus somt welbespraakt Agamemnons rijke geschenken op. Phoenix probeert het persoonlijker, herinnert Achilles aan de jongen die hij zelf grootbracht. Maar het is Ajax, zonder mooie woorden, die het dichtst bij een antwoord komt: "Wij zijn hier als je vrienden, Achilles. Niet als Agamemnons boodschappers." Voor het eerst zie je iets breken in Achilles' blik.
 
-Toch weigert hij, alle drie. Zijn eer is hem meer waard dan geschenken — maar aan Ajax alleen geeft hij, zonder het compromis zelf toe te geven, een antwoord dat bijna een verontschuldiging is.
+Toch weigert hij, alle drie. "Οὐδείς" — niemand, zegt hij, niemand zal hem vandaag op andere gedachten brengen. Zijn eer is hem meer waard dan geschenken — maar aan Ajax alleen geeft hij, zonder het compromis zelf toe te geven, een antwoord dat bijna een verontschuldiging is.
 
 RELATION:
 achilles=+1; aias=+1; phoenix=+1
@@ -11311,7 +11425,7 @@ TITLE:
 De Schepen in Gevaar
 
 TEXT:
-Het ergste komt uit: Hector doorbreekt de wal, en Trojaanse strijders bereiken de Griekse schepen zelf, fakkels in de hand. Als de schepen verbranden, kan geen enkele Griek ooit nog naar huis terugkeren. Jij grijpt mee naar een wapen, samen met iedereen die nog kan staan.
+Het ergste komt uit: Hector doorbreekt de wal, en Trojaanse strijders bereiken de Griekse schepen zelf, fakkels in de hand. Als de schepen verbranden, kan geen enkele Griek ooit nog naar huis terugkeren. Jij grijpt mee naar een wapen, samen met iedereen die nog kan staan. "Nondum venit," mompelt iemand naast je, half hoop, half wanhoop — hij is nog niet gekomen.
 
 COMBAT:
 trojaanse_voorhoede
@@ -11414,8 +11528,8 @@ Thetis rijst op uit de golven, omringd door haar zusters, en treurt samen met ha
 
 CHOICES:
 
-* Versta het als de voorwaarde die het is — "als je Hector doodt, zul je snel daarna sterven" — een keuze, geen zekerheid -> CH8_EPI_003_GOED
-* Versta het als een simpele voorspelling zonder voorwaarde — "je zult Hector doden en snel daarna sterven" — hoe dan ook -> CH8_EPI_003_FOUT
+* Hoor er een keuze in — "als je Hector doodt, zul je snel daarna sterven" — jouw lot hangt af van wat je doet -> CH8_EPI_003_GOED
+* Hoor er een vaststaand lot in — "je zult Hector doden en snel daarna sterven" — hoe dan ook -> CH8_EPI_003_FOUT
 
 END
 
@@ -11616,7 +11730,7 @@ TITLE:
 De Dood van Hector
 
 TEXT:
-Hector vecht met alle waardigheid die hem rest, maar tegen Achilles' woede en Hephaistos' wapenrusting heeft hij geen kans. Stervend smeekt hij Achilles om zijn lichaam aan zijn familie terug te geven, voor een behoorlijke begrafenis. Achilles, nog altijd niet gekalmeerd, weigert — en bindt Hectors lichaam achter zijn eigen strijdwagen.
+Hector vecht met alle waardigheid die hem rest, maar tegen Achilles' woede en Hephaistos' wapenrusting heeft hij geen kans. "Νικῶ," zegt Achilles, zonder enige vreugde in zijn stem — ik overwin. Stervend smeekt Hector hem om zijn lichaam aan zijn familie terug te geven, voor een behoorlijke begrafenis. Achilles, nog altijd niet gekalmeerd, weigert — en bindt Hectors lichaam achter zijn eigen strijdwagen.
 
 CODEX:
 codex_dood_hektor
@@ -11643,8 +11757,8 @@ Achilles sleept Hectors lichaam driemaal rond de muren van Troje, in het volle z
 
 CHOICES:
 
-* Versta het als het bevel dat het is — "ga niet naar buiten!" — en houd zelf ook je afstand van de poort -> CH8_EPI_009_GOED
-* Versta het als een constatering — "hij gaat niet naar buiten" — en denk dat het gevaar al geweken is -> CH8_EPI_009_FOUT
+* Hoor er een bevel in — "ga niet naar buiten!" — en houd zelf ook je afstand van de poort -> CH8_EPI_009_GOED
+* Hoor er een constatering in — "hij gaat niet naar buiten" — en denk dat het gevaar al geweken is -> CH8_EPI_009_FOUT
 
 END
 
@@ -11991,6 +12105,9 @@ TEXT:
 
 De poort keert terug tot een dunne streep licht.
 
+CODEX:
+codex_grammatica_ch8_overzicht
+
 CHOICES:
 
 * Keer terug naar het Museum -> CH8_MUSEUM_00
@@ -12169,6 +12286,12 @@ TEXT:
 "Wil je de muren zien vallen vanaf het strand — bij het Griekse leger, bij de list die aan deze oorlog een einde gaat maken? Of vanaf de muren zelf — binnen Troje, bij de mensen die niet weten dat ze hun laatste dagen beleven?"
 
 Ze wacht even voor ze verdergaat. "Dit is niet als de tent van Achilles. Ik kan je daarna niet meer de andere kant laten zien — de muren en het strand delen deze nacht niet nog een keer met je. Wat je nu kiest, is wat je zult hebben."
+
+VOCAB:
+latijn_urbs, latijn_dolus, latijn_equus, latijn_tacitus, grieks_polis, latijn_fortis, latijn_discedere, latijn_maestus
+
+CODEX:
+codex_grammatica_ch9_comparativus_superlativus, codex_grammatica_ch9_aci, codex_grammatica_ch9_3decl_istam, codex_grammatica_ch9_congruentie
 
 CHOICES:
 
@@ -12482,8 +12605,8 @@ Niet iedereen is overtuigd. De priester Laocoön waarschuwt luid tegen het paard
 
 CHOICES:
 
-* Begrijp de zin zoals hij bedoeld is — "ik vrees de Grieken, ook al brengen ze geschenken" — wantrouwen jegens de Grieken zelf, geschenk of niet -> CH9_TRO_010_GOED
-* Lees "dona" los van "Danaos" — "ik vrees de Grieken en ik vrees de geschenken" — alsof het paard zelf het enige gevaar is -> CH9_TRO_010_FOUT
+* Hoor er wantrouwen in tegen de Grieken zelf — "ik vrees de Grieken, ook al brengen ze geschenken" — geschenk of niet -> CH9_TRO_010_GOED
+* Hoor er twee aparte angsten in — "ik vrees de Grieken, en ik vrees de geschenken" — alsof het paard zelf het enige gevaar is -> CH9_TRO_010_FOUT
 
 END
 
@@ -12629,7 +12752,7 @@ Vlak voor middernacht zie je Helena, alleen, driemaal om het houten paard heen l
 
 Midden in de nacht klimmen de verstopte Grieken alsnog uit het paard en openen de poorten van Troje van binnenuit. Ver weg, op zee, ziet een wachter een signaalvuur — de teruggekeerde vloot vaart al aan land. Binnen enkele ogenblikken stroomt het hele Griekse leger de slapende stad binnen.
 
-Wat volgt is geen veldslag meer. Het is een slachting.
+Wat volgt is geen veldslag meer. Het is een slachting. Door de straten klinkt van alle kanten hetzelfde ene woord: "Fuge!" — vlucht.
 
 IMAGE:
 troje_valt_trojanen.png
@@ -13149,8 +13272,8 @@ Odysseus vertelt achteraf, kort en zonder opschepperij, hoe hij ongezien de stad
 
 CHOICES:
 
-* Begrijp de constructie zoals bedoeld — "toen het nacht was, sliep de stad" — de duisternis als voorwaarde voor zijn kans -> CH9_GRI_009_GOED
-* Lees "νυκτὸς" los, als een gewone bezitsvorm — "de stad van de nacht slaapt," alsof het een vaste naam is -> CH9_GRI_009_FOUT
+* Hoor er een tijdsbepaling in — "toen het nacht was, sliep de stad" -> CH9_GRI_009_GOED
+* Hoor er een bezitsvorm in — "de stad van de nacht slaapt," alsof het een vaste naam is -> CH9_GRI_009_FOUT
 
 END
 
@@ -13501,6 +13624,9 @@ Hermes knikt afscheid, zijn werk hier gedaan. In je hand voel je een stuk verkoo
 
 SOUVENIR:
 souvenir_trojaans_paard
+
+CODEX:
+codex_grammatica_ch9_overzicht
 
 STATPOINTS:
 3

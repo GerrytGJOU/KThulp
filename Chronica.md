@@ -2899,6 +2899,325 @@ punt: of Hoofdstuk 10+ ooit eigen CHECKs krijgt (nog niet besproken; zie
 [[chronica-check-mechanic]] in het geheugensysteem voor het patroon dat
 daarbij gevolgd moet worden).
 
+### 7.26 Didactische/taalkundige audit + eerste reparatie: `VOCAB:`-hooks H7-H9 (**audit voltooid, eerste voorstel doorgevoerd**)
+
+Een aparte, uitgebreide didactische audit (niet de Reactiviteitsaudit uit
+hoofdstuk 12/`audit/`, maar een nieuwe ronde specifiek op taalverwerving —
+comprehensible input, extensive/narrow reading, de leessandwich, Goed
+Gelezen!, Levend Latijn/onderdompeling) is uitgevoerd en volledig
+gedocumenteerd in `didactiek/` (10 fase-documenten + kader + samenvatting).
+Kernbevindingen: de leesvallen en de sprekerconsistentie zijn sterk; de
+doorlopende-verhaaltekst-laag (leesvallen + passieve gloss-laag) herhaalt
+vrijwel geen woorden (85 van de 86 unieke woorden komt precies 1× voor); en
+`SP_VOCAB_ENTRIES` groeide niet meer na Hoofdstuk 6 terwijl er al wél 21
+kant-en-klare, nooit-gehookte entries voor Hoofdstuk 7-9 in de data
+stonden (`latijn_iurare`/`bellum`/`grieks_kalliste`/`rapere`/`classis`/
+`ventus`/`sacrificium` voor H7; `vulnus`/`grieks_menis`/`time`/`aspis`/`ira`/
+`honor`/`miles`/`senex`/`arma` voor H8; `urbs`/`dolus`/`equus`/`tacitus`/
+`grieks_polis` voor H9 — precies de woorden die de bestaande `SP_PUZZLES`
+van die hoofdstukken al gebruiken).
+
+**Twee auditbevindingen expliciet gecorrigeerd na overleg met Gerben (niet
+in de `didactiek/`-bestanden als losstaande fout laten staan, wel met een
+correctie erin aangebracht)**: (1) het Combat-bridge-gevecht
+(`spCombatNextQuestion()`) trekt al willekeurig uit de volledige, opgebouwde
+`SP_STATE.vocab`-lijst over alle hoofdstukken heen — dat is al een echt,
+goed werkend, natuurlijk gespreid herhalingsmechanisme voor de
+`SP_VOCAB_ENTRIES`-woorden, los van de (wél zwakke) herhaling in de
+leesvallen/passieve laag zelf; (2) het taalspoor-filter dat pas vanaf
+Hoofdstuk 10 actief wordt is GEEN bug — de onderbouw (H1-9) is bewust
+tweetalig, pas de bovenbouw kiest, en "beide" blijft een blijvende optie.
+
+**Eerste, doorgevoerde reparatie (laagste werk/hoogste impact uit de
+prioriteitenlijst, `didactiek/10-voorstellen.md` #2)**: een `VOCAB:`-hook
+toegevoegd aan `CH7_000`, `CH8_000` en `CH9_005` (de hoofdstuk-openende
+hub-scènes, zelfde plek als `CH5_000`/`CH6_000`) met alle 21 tot dan toe
+ongebruikte entries, verdeeld 7/9/5 over H7/H8/H9. Geen nieuwe
+`SP_VOCAB_ENTRIES` nodig — puur de hook die ontbrak. Effect: deze woorden
+verschijnen nu in de Codex Memoriae zodra de speler die hoofdstukken bereikt
+én stromen automatisch mee in de Combat-bridge-vraagpool van H7 t/m
+Hoofdstuk 10 (het skelet). Hoofdstuk 10 zelf kreeg bewust nog geen nieuwe
+`VOCAB:`-entries — het blijft een opzettelijk onvolledig skelet (§7.19),
+dezelfde terughoudendheid als eerder bij B27/B28.
+
+**Getest**: `node --check` op `singleplayer-data.js` + `singleplayer.js`,
+`validate_chronica.js` → 0 fouten, 36 waarschuwingen (uitsluitend
+pre-bestaande dode flags, geen nieuwe — de validator checkt expliciet dat
+elke `VOCAB:`-id in `SP_VOCAB_ENTRIES` bestaat).
+
+**Tweede reparatie, zelfde dag**: op verzoek is ook gecheckt of `SP_PUZZLES`
+nog meer al-bestaande, nooit-gehookte woordvormen bevat (dezelfde
+"gratis"-methode als hierboven) én is de bestaande, ingebouwde
+frequentielijst (`VOCAB_LA`/`VOCAB_EL`, `certamen/vocab.js`, ~1000 woorden
+elk, ook gebruikt door Training/Vrij Oefenen) voor het eerst gekruist tegen
+`SP_VOCAB_ENTRIES` om te bepalen of de gekozen woorden ook daadwerkelijk
+hoogfrequent zijn. Bevindingen: van de (toen) 93 woorden was de taalverdeling
+scheef — 83 Latijn tegenover slechts 10 Grieks — en de frequentiedekking was
+mager (37 van de top-500 Latijnse woorden, 4 van de top-500 Griekse). Vier
+Griekse werkwoordvormen stonden al, ongebruikt, in de Hoofdstuk-8-
+aoristuspuzzels (πέμπω/φεύγω/λύω/βάλλω, rang 261-409) en drie Latijnse
+vormen in de Hoofdstuk-9-puzzels (fortis/discedere/maestus, rang 298-992),
+plus `liberi` (rang 324) in de Hoofdstuk-6-praesenspuzzel over Niobe's
+kinderen. Alle acht toegevoegd aan `SP_VOCAB_ENTRIES` en gehookt in
+`CH6_000`/`CH8_000`/`CH9_005`. Resultaat: 101 woorden totaal, 87 Latijn/14
+Grieks — nog altijd scheef, maar verbeterd zonder een letter nieuwe
+verhaaltekst te hoeven schrijven. `node --check` + `validate_chronica.js`:
+0 fouten.
+
+**Derde reparatie, zelfde dag — na Gerbens goedkeuring van een
+kandidatenlijst**: Hoofdstuk 7 kreeg 4 nieuwe Latijnse woorden (`deus`/
+`amor`/`pater`/`spes`, rang 56-196, passend bij het Oordeel van Paris/
+Aulis). Belangrijker: Gerbens eigen vuistregel voor taalindeling
+("Griekse namen → Grieks-verteld, Latijnse namen → Latijns-verteld")
+toegepast op de code zelf (`grep`-tellingen van godennamen per
+hoofdstuk/lijn) bracht aan het licht dat **Hoofdstuk 5 (Argonauten) net als
+Hoofdstuk 3 Grieks-verteld is** (0× Iuppiter/Iuno, wél Hera/Athena) — beide
+hadden vrijwel uitsluitend Latijnse vocab. Ook bleek Hoofdstuk 2 inderdaad
+2-om-2 gemengd (bevestigd door Gerben): lijn L/Latona en S/Semele zijn
+Latijn (Iuno/Iuppiter/Diana), lijn K/Kallisto en H/Herakles zijn Grieks
+(Zeus/Hera/Artemis) — maar alle 17 bestaande H2-woorden zaten op de twee
+Latijnse lijnen.
+
+Toegevoegd: 5 Griekse woorden op de H2-Griekse-lijnen (`καλός`/`ζῷον`/
+`μέγας`/`δύναμις`/`ἔργον`, rang 52-161, K/Kallisto en H/Herakles), 5 op
+Hoofdstuk 3 (`θεός`/`βασιλεύς`/`ἀνήρ`/`κακός`/`ἀρετή`, rang 49-207), 5 op
+Hoofdstuk 5 (`θάλασσα`/`πλέω`/`γυνή`/`φίλος`/`δεινός`, rang 124-296). Her en
+der ook een pre-bestaande, onschuldige dubbele object-key opgeruimd
+(`grieks_toxon` stond al vóór dit werk twee keer gedefinieerd met identieke
+inhoud — JS negeert de tweede stilzwijgend, geen functionele bug, wel
+opgeschoond toen dit stuk toch open lag; `latijn_navis` heeft nog zo'n
+duplicaat staan, bewust met rust gelaten — buiten scope van dit werk).
+
+**Eindstand na alle drie de reparaties (2026-07-29): 120 woorden, 91
+Latijn/29 Grieks** (was 93, 83/10 vóór dit werk) — de Latijn/Grieks-balans is
+nog niet gelijk, maar is van 10,8% naar 24,2% Grieks gegaan, en elke
+toevoeging is getoetst aan de ingebouwde frequentielijst (`VOCAB_LA`/
+`VOCAB_EL`, `certamen/vocab.js`) in plaats van ad-hoc gekozen.
+`node --check` + `validate_chronica.js`: 0 fouten na elke batch.
+
+### 7.27 Voorstel #3: hint-fading, gebaseerd op `SP_CAMPAIGN.grammatica` (**gebouwd**)
+
+Op verzoek (`didactiek/10-voorstellen.md` #3), met een expliciete instructie
+om dit niet arbitrair te doen maar te baseren op het al bestaande
+Pallas/Minerva-grammatica-overzicht in `SP_CAMPAIGN`. Dat overzicht (regel
+174-410, elk hoofdstuk se `grammatica:`-veld) legt al vast wélke hoofdstukken
+écht nieuwe grammatica introduceren en welke bewust **pure herhaling** zijn:
+Hoofdstuk 5 ("Herhaling nominativus t/m ablativus — geen nieuwe grammatica"),
+Hoofdstuk 6 ("Herhaling praesens t/m perfectum — geen nieuwe grammatica") en
+Hoofdstuk 7 ("Cumulatieve herhaling... geen nieuwe grammatica, die begint pas
+in Hoofdstuk 8") — dat is precies het aantoonbare "dit heeft de speler al
+een keer met volledige hint gezien"-criterium dat Fase 5 van de audit
+(`didactiek/05-strategie-en-differentiatie.md` §2) miste.
+
+**Uitvoering**: `puzzle.hint` verwijderd bij elke `SP_PUZZLES`-entry in H5/H6/
+H7 die een HERHAALDE grammaticale regel uitlegt (14 puzzels: alle 5 in H5;
+4 van de 6 in H6; 5 van de 6 in H7). Geen nieuwe code nodig — `puzzle.hint`
+is al een reactieve foutmelding (`spCheckMCPuzzle`/`spCheckTypedLatinPuzzle`/
+`spCheckTypedGreekPuzzle`/tile-swap-equivalent in singleplayer.js), met een
+generieke, per-puzzeltype-passende terugvaltekst zodra `hint` ontbreekt
+("lees de zin nog eens", "let op de spiritus ᾿/῾", "niet in de juiste
+volgorde") — dus geen kale stilte bij een foutief antwoord, wel minder
+scaffolding dan de eerste keer.
+
+**Bewust NIET verwijderd** (2 uitzonderingen per hoofdstuk, geen
+grammatica-herhaling maar iets anders): `puzzle_ch6_sfinx` (inhoudelijke
+raadsel-aanwijzing, geen grammaticaregel) en de `matching`-type puzzels in
+H6/H7 (procedurele tip over de matching-mechaniek zelf, niet over een
+specifieke naamval/tijd). `puzzle_ch7_perfectum` (capere → cepit,
+onregelmatig) is wél meegenomen ondanks de onregelmatige vorm, omdat de
+CATEGORIE (perfectum) al met volledige hint in Hoofdstuk 4 is uitgelegd —
+consistent met het "gebaseerd op SP_CAMPAIGN, niet cherry-picken"-principe.
+
+**Getest**: `node --check` + `validate_chronica.js` → 0 fouten, 36
+waarschuwingen (ongewijzigd, uitsluitend pre-bestaande dode flags).
+
+### 7.28 Correctie: 9 van de 13 leesvallen verklapten het antwoord via de keuzeframing (**gerepareerd**)
+
+Gerben signaleerde dat een voorbeeldscène in `didactiek/10-voorstellen.md`
+het goede antwoord al verklapte via de keuzetekst zelf ("Begrijp de
+voorwaarde" tegenover "Versta het los van elkaar"). Bij het narekenen bleek
+dit geen incident maar een bestaand patroon: **9 van de 13 leesvallen**
+gebruikten een kant expliciet gelabeld als "zoals het bedoeld is"/"goed" en
+de andere als "verkeerd om"/"mis het woordje" — woorden die correctheid
+verraden vóór de speler de Latijnse/Griekse zin zelf hoeft te ontleden. Een
+zwaarder gokrisico dan het al gedocumenteerde mythekennis-gokrisico
+(§7.23/audit Fase 7), want het vereist geen enkele voorkennis, alleen het
+herkennen van "zoals bedoeld"-achtige taal.
+
+**Gerepareerd** (2026-07-29): alle 9 herschreven naar neutrale, parallelle
+framing ("Hoor er X in" / "Hoor er Y in", geen van beide gelabeld als
+correct) — naar het voorbeeld van de al langer bestaande neutrale leesvallen
+(`CH2_L02C`, `CH3_H23`, `CH4_T06B`). Betreft: `CH5_022B`,
+`CH5_027_UITKIJK`, `CH6_003B`, `CH6_011B`, `CH7_003_EED`, `CH7_005B`,
+`CH8_EPI_003`, `CH8_EPI_009`, `CH9_TRO_010`, `CH9_GRI_008B`.
+`node --check` + `validate_chronica.js`: 0 fouten.
+
+**Nieuwe vaste regel voor elke toekomstige leesval** (zie ook
+[[chronica-check-mechanic]]-achtige precedenten): geen van beide
+keuzeopties mag een woord bevatten dat correctheid verraadt ("zoals
+bedoeld", "goed", "correct", "verkeerd om", "mis het") — alleen neutrale,
+symmetrische framing, zodat het enige verschil tussen de opties in de
+vertaling van de brontekst zelf zit.
+
+Resterende voorstellen (herhaling verhogen in de leesval/passieve laag,
+docentrapportage) staan geprioriteerd in `didactiek/10-voorstellen.md`.
+
+### 7.29 Voorstellen #4 en #10: "na"-echo's voor Laag 2 + Codex-grammatica H8/H9 (**gebouwd**)
+
+**Voorstel #4** (`didactiek/10-voorstellen.md`, leessandwich "na"-laag,
+`didactiek/04-leessandwich.md` §5): de zes niet-Sfinx Laag-2-passieve-taal-
+fragmenten (Chronica.md §7.16) kregen een "na"-echo via de al bestaande
+payoff-engine (`SP_PAYOFFS`, §12.3-stap-1) — geen nieuwe scènes, geen
+CNS-wijziging aan de brontekst zelf. Alle zes ONVOORWAARDELIJK (geen
+`condition`-veld), want elke trigger-scène ligt op een verplicht, lineair
+vervolg van de gloss-scène binnen dezelfde lijn/epiloog (zelfde redenering
+als de bestaande Hoofdstuk-7-Peleus/Philoktetes-echo's):
+- `ch2_s08_echo_fulmen` (CH2_S08, geboorte Bacchus) — echoot "Iuppiter
+  fulmen misit" (CH2_S06).
+- `ch4_t14_echo_icare` (CH4_T14, Daidalos begraaft Ikaros) — echoot
+  "Icare!" (CH4_T13).
+- `ch5_027_echo_hypne_elthe` (CH5_027, het Vlies losgesneden) — echoot
+  "ὕπνε, ἐλθέ" (CH5_026).
+- `ch7_009_echo_kalliste` (CH7_009, Het Parisoordeel) — echoot "τῇ
+  καλλίστῃ" (CH7_005).
+- `ch8_epi008_echo_menis_patroklos` (CH8_EPI_008, dood van Hector) —
+  echoot "Πάτροκλος ἀπέθανεν" (CH8_EPI_001).
+- `ch9_tro011_echo_sinon_leugen` (CH9_TRO_011, het paard naar binnen) —
+  echoot Sinons leugen (CH9_TRO_009).
+
+**Voorstel #10** (`didactiek/10-voorstellen.md`, Codex-grammatica-tabellen):
+`SP_CODEX_ENTRIES` (`cat:"grammatica"`) aangevuld voor Hoofdstuk 8 (aoristus
+sigmatisch/thematisch, 3e-declinatie medeklinkerstam, aanwijzend/persoonlijk
+voornaamwoord — 4 tabellen + overzicht) en Hoofdstuk 9 (comparativus/
+superlativus, A.C.I., 3e-declinatie i-stammen, congruentie — 4 tabellen +
+overzicht), zelfde stijl en "vroeg ontgrendelen"-patroon als H1-H4 (individuele
+entries bij `CH8_000`/`CH9_005`, vóór de eerste puzzel; het overzicht pas bij
+de afsluiting, `CH8_EINDE`/`CH9_EINDE`). Hoofdstuk 5-7 bewust NIET aangevuld
+— `SP_CAMPAIGN.grammatica` noemt die drie expliciet "geen nieuwe grammatica",
+dus geen nieuwe tabel nodig (consistent met de hint-fading-redenering in
+§7.27).
+
+**Getest**: `node --check` + `validate_chronica.js` → 0 fouten, 36
+waarschuwingen (ongewijzigd). De validator checkt zowel `SP_PAYOFFS`-triggers
+als `CODEX:`-referenties expliciet tegen `SP_CODEX_ENTRIES`.
+
+### 7.30 Voorstel #5: drie woorden uit de leesval/passieve laag bewust laten terugkomen (**gebouwd**)
+
+`didactiek/10-voorstellen.md` #5 / `didactiek/02-woordenschat.md` §3: van
+de 86 unieke woorden in de leesvallen/passieve taallaag kwam er vóór dit
+werk maar één (`ecce`) meer dan één keer voor. Drie woorden kregen nu een
+bewuste tweede (of, bij "timeo", een voorbereidende eerste-van-twee)
+verschijning, telkens als een kort, letterlijk hergebruikt woord/zinnetje
+in een NIEUWE zin, ingevoegd in bestaande scènes zonder de scène-structuur
+te wijzigen:
+
+- **"Timeo"** (vooruitwijzend — verschijnt hier vóór de bekende "Timeo
+  Danaos"-leesval): `CH7_017` (Het Offer in Aulis) — Calchas mompelt het
+  voor het altaar, vrees voor wat de gunst van de godin gaat kosten. Als de
+  speler drie hoofdstukken later Laocoöns "Timeo Danaos et dona ferentes"
+  (`CH9_TRO_010`) leest, is dit dan al de tweede keer dat hij het werkwoord
+  zelf tegenkomt.
+- **"Οὐδείς"** (herhaling van `CH3_H23`'s "Οὐδεὶς ὅπλα φέρει"): `CH8_ACH_008`
+  (De Weigering) — Achilles wijst het gezantschap af: "Οὐδείς — niemand zal
+  hem vandaag op andere gedachten brengen."
+- **"Nondum venit"** (letterlijke herhaling van `CH6_011B`'s volledige
+  leesvalzin): `CH8_AGA_010` (De Schepen in Gevaar) — een soldaat mompelt
+  het terwijl de Trojanen de schepen bijna bereiken, vlak vóór Achilles
+  (in werkelijkheid Patroklos) alsnog verschijnt in `CH8_AGA_011`.
+
+Bewust GEEN nieuwe grammaticale constructies of onbekende woordvormen
+geïntroduceerd — alle drie zijn letterlijke hergebruikte woorden/zinnen uit
+een eerder gelezen leesval, dus geen nieuw taalkundig risico, puur
+herhaling. Dit is een eerste, bescheiden stap (3 van de 85 eenmalige
+woorden); zie `didactiek/02-woordenschat.md` §3 voor de bredere
+streefwaarde.
+
+**Getest**: `node --check` + `validate_chronica.js` → 0 fouten, 36
+waarschuwingen (ongewijzigd).
+
+### 7.31 Voorstel #6: docentscherm "Chronica-taalstatistieken per klas" (**gebouwd**)
+
+`didactiek/10-voorstellen.md` #6 / `didactiek/09-meten.md` §1-2. Hergebruikt
+het bestaande Battle Mode-precedent 1-op-1 (`bmSyncClassMissedWords()` →
+`classAnalytics/{klas}/{maand}` → `tpRenderClassAnalytics()`), met een eigen
+boom (`classAnalyticsChronica`) omdat Chronica twee soorten gebeurtenissen
+logt die Battle Mode niet heeft: leesval-uitkomsten (goed/fout) en
+puzzelfouten per puzzel-id.
+
+**Schrijfkant (`singleplayer.js`)**:
+- `spSyncPuzzleMistake(puzzleId, gegevenAntwoord)` — fire-and-forget, alleen
+  als `BM_IDENT.klascode` bestaat (de speler is ingelogd), schrijft naar
+  `classAnalyticsChronica/{klas}/{maand}/puzzle_{id}/{p,a,c}` met
+  `firebase.database.ServerValue.increment(1)` op `c`. Aangeroepen vanuit
+  alle vijf puzzeltype-checkfuncties (`spCheckMCPuzzle`,
+  `spCheckTypedLatinPuzzle`, `spCheckTypedGreekPuzzle`,
+  `spCheckTileSwapPuzzle`, `spMatchTapRight`) in hun bestaande fout-tak —
+  geen nieuwe call-sites, geen wijziging aan wat de speler ziet.
+- `spSyncLeesvalOutcome(leesvalId, goed)` — schrijft naar
+  `classAnalyticsChronica/{klas}/{maand}/leesval_{id}/{p,goed,fout}`.
+  Aangeroepen via ÉÉN generieke hook in `spGoCns()` zelf: elke
+  leesval-uitkomstscène eindigt op `_GOED`/`_FOUT` (B21/B29, geverifieerd:
+  alle 13 leesvallen volgen dit patroon zonder uitzondering, zie §7.17/
+  §7.23), dus een regex op `nodeId` volstaat i.p.v. 13 losse call-sites.
+- Nooit een leerlingnaam gelogd — alleen de klascode en geaggregeerde
+  tellingen, zelfde privacy-grondhouding als de bestaande
+  `classAnalytics`-boom en als `didactiek/09-meten.md` §1 voorschreef.
+
+**Leeskant (`games.js`)**: `tpRenderChronicaAnalytics()`, zelfde opzet als
+`tpRenderClassAnalytics()`, toegevoegd aan `SCREENS.teacherClass` (het
+bestaande klasscherm in het docentenportaal) met een eigen
+`<div id="tpChronicaStats">`. Twee tabellen: leesvallen gesorteerd op
+laagste %-goed-gelezen eerst (precies de "welke leesval vindt de klas
+moeilijk"-vraag uit Fase 9), en puzzels gesorteerd op meeste fouten met het
+laatst gegeven foute antwoord (zelfde vorm als de bestaande Battle
+Mode-tabel).
+
+**Firebase-rules** (`certamen/database.rules.json`): nieuwe `$klas/$month/
+$key`-boom `classAnalyticsChronica`, zelfde open lees/schrijf-structuur als
+de bestaande `classAnalytics` (geaggregeerde data, geen leerlinggegevens,
+dus geen owner-scoping nodig — zelfde afweging als daar). **Nog te doen: dit
+bestand moet handmatig in de Firebase Console geplakt worden** (dit repo
+deployt niet automatisch, zie CLAUDE.md) — het volledige, samengevoegde
+regelsbestand staat in de sessie waarin dit gebouwd is.
+
+**Cache-busting**: `?v=`-query-strings van `singleplayer-data.js`,
+`singleplayer.js` en `games.js` in `index.html` opgehoogd.
+
+**Getest**: `node --check` op alle vier gewijzigde JS-bestanden +
+`validate_chronica.js` → 0 fouten, 36 waarschuwingen (ongewijzigd). JSON-
+geldigheid van `database.rules.json` apart gecontroleerd. **Nog NIET getest
+in de browser met een echte klascode-login** (vereist een Firebase-sessie
+met een bestaande klascode) — functioneel op basis van code-inspectie en
+het 1-op-1 hergebruikte Battle Mode-patroon, maar geen end-to-end-rooktest
+gedaan.
+
+### 7.32 Voorstel #7: drie geleerde constructies laten terugkomen in de verhaaltekst (**gebouwd**)
+
+`didactiek/10-voorstellen.md` #7 / `didactiek/03-grammaticale-leerlijn.md` §3:
+op vier uitzonderingen na (al gedocumenteerd, §7.16/§7.30) kwam een in
+`SP_PUZZLES` geleerde constructie nooit meer terug in de doorlopende
+verhaaltekst zelf. Drie letterlijk hergebruikte, al-gevalideerde vormen
+(geen nieuwe grammatica bedacht — puur herhaling, zelfde voorzichtigheid als
+§7.30) kregen een nieuwe verschijning:
+
+- **"Abi!"** (imperativus, oorspronkelijk `puzzle_ch2k_imperativus`,
+  Kallisto-lijn Hoofdstuk 2) → `CH8_001` (De Plaag van Apollo): Agamemnon
+  wijst Chryses af met exact dit woord.
+- **"Fuge!"** (imperativus, oorspronkelijk `puzzle_ch2l_imperativus`,
+  Latona-lijn Hoofdstuk 2) → `CH9_TRO_013` (De Poorten Gaan Open, de val van
+  Troje): door de straten klinkt hetzelfde woord overal tegelijk.
+- **"Νικῶ"** (praesens, oorspronkelijk Hoofdstuk 3/Herakles, al glossed in
+  `CH3_H25` — zie §7.16) → `CH8_EPI_008` (De Dood van Hector): Achilles'
+  sobere, vreugdeloze overwinningswoord.
+
+**Getest**: `node --check` + `validate_chronica.js` → 0 fouten, 36
+waarschuwingen (ongewijzigd).
+
+**Zijnotitie**: tijdens dit werk bleek een eerdere bewerking (§7.31) per
+ongeluk de koptekst van sectie 8 hierbeneden te hebben laten wegvallen bij
+het toevoegen van nieuwe inhoud — hersteld, geen inhoud verloren (alleen de
+kopregel zelf ontbrak, de tekst van sectie 8 stond nog intact).
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is

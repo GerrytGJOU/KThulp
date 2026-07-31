@@ -1340,10 +1340,12 @@ SCREENS.teacherClass = function(){
   </div>
   <div class="note" style="margin:-4px 0 10px">Inlogcode: <b>${esc(code)}</b> — leerlingen die deze code invoeren komen automatisch in deze klas.</div>
   <div id="tpMissedWords"></div>
+  <div id="tpChronicaStats"></div>
   <div id="tpStudentList"><div class="note" style="text-align:center;padding:16px">Laden…</div></div>
   ${foot()}`);
   tpLoadRoster();
   tpRenderClassAnalytics();
+  tpRenderChronicaAnalytics();
 };
 
 function tpOpenClass(code){
@@ -1371,6 +1373,39 @@ function tpRenderClassAnalytics(){
       ${words.map(w=>`<tr><td>${esc(w.p)}</td><td>${esc(w.a||"")}</td><td>${w.c||0}×</td></tr>`).join("")}
       </tbody></table></div>`;
   }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon klasanalyse niet laden.</div></div>`; });
+}
+
+// Chronica Classica-taalstatistieken (didactiek-audit #6/#9, 2026-07-30):
+// geaggregeerd per klas/maand, geschreven door spSyncPuzzleMistake()/
+// spSyncLeesvalOutcome() (singleplayer.js) — nooit gekoppeld aan een
+// individuele leerling, altijd klasbreed. Twee losse tabellen: leesvallen
+// (percentage goed/fout gelezen) en puzzels (aantal fouten + laatst gegeven
+// foute antwoord, zelfde vorm als tpRenderClassAnalytics hierboven).
+function tpRenderChronicaAnalytics(){
+  const cont=el("tpChronicaStats"); if(!cont) return;
+  const klas=_tpCurrentClass;
+  if(!klas || !initFirebase()){ cont.innerHTML=""; return; }
+  const month=new Date().toISOString().slice(0,7);
+  fbDB.ref("classAnalyticsChronica/"+klas+"/"+month).once("value").then(snap=>{
+    const rows=Object.values(snap.val()||{});
+    const leesvallen=rows.filter(r=>(r.goed||0)+(r.fout||0)>0)
+      .map(r=>({...r, pct: Math.round(100*(r.goed||0)/((r.goed||0)+(r.fout||0)))}))
+      .sort((a,b)=>a.pct-b.pct);
+    const puzzels=rows.filter(r=>(r.c||0)>0).sort((a,b)=>(b.c||0)-(a.c||0)).slice(0,10);
+    if(!leesvallen.length && !puzzels.length){
+      cont.innerHTML=`<div class="panel"><h3>Chronica Classica — taalstatistieken deze maand</h3><div class="note">Nog geen gegevens — speel Chronica Classica ingelogd met deze klascode.</div></div>`;
+      return;
+    }
+    const leesvalHTML = leesvallen.length ? `<h4 style="margin:12px 0 4px">Leesvallen — % goed gelezen</h4>
+      <table class="bm-tbl"><thead><tr><th>Leesval</th><th>Goed</th><th>Fout</th><th>%</th></tr></thead><tbody>
+      ${leesvallen.map(r=>`<tr><td>${esc(r.p)}</td><td>${r.goed||0}</td><td>${r.fout||0}</td><td>${r.pct}%</td></tr>`).join("")}
+      </tbody></table>` : "";
+    const puzzelHTML = puzzels.length ? `<h4 style="margin:12px 0 4px">Puzzels — meest fout beantwoord</h4>
+      <table class="bm-tbl"><thead><tr><th>Puzzel</th><th>Laatst gegeven antwoord</th><th>Fout</th></tr></thead><tbody>
+      ${puzzels.map(r=>`<tr><td>${esc(r.p)}</td><td>${esc(r.a||"")}</td><td>${r.c||0}×</td></tr>`).join("")}
+      </tbody></table>` : "";
+    cont.innerHTML=`<div class="panel"><h3>Chronica Classica — taalstatistieken deze maand</h3>${leesvalHTML}${puzzelHTML}</div>`;
+  }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon Chronica-taalstatistieken niet laden.</div></div>`; });
 }
 
 // Laadt de echte leerlingprofielen (identities/{code}) van de open klas.
