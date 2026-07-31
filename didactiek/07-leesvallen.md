@@ -92,13 +92,11 @@ zonder ze te herschrijven, en (b) nieuwe plekken die momenteel geen enkele
 taaltoets hebben terwijl de scène zich er wel voor leent.
 
 **(a) Bestaande leesvallen verstevigen (kleine ingreep, geen nieuwe scènes):**
-- **LV-10 (Thetis)** en **LV-12 (Laocoön)**: voeg een derde, subtiel
-  aannemelijke keuze toe die de mythe-kennis juist tegen de speler gebruikt
-  (bv. bij Laocoön een optie die de bekende idioom-vertaling ietwat verdraait
-  — "ik wantrouw zowel de Grieken als hun geschenk, maar het paard zelf is
-  onschuldig" — een fout die precies iemand zou maken die de beroemde zin uit
-  het hoofd kent maar "et" verkeerd koppelt). Dit voorkomt dat culturele
-  voorkennis alleen al genoeg is.
+- **LV-10 (Thetis)** en **LV-12 (Laocoön)** — ✅ **VOLTOOID (2026-07-30)**:
+  beide kregen een derde keuze (`CH8_EPI_003_FOUT2`/`CH9_TRO_010_FOUT2`) die
+  een taalkundige valkuil raakt (wie "σύ" aanspreekt / of het wantrouwen
+  specifiek de Grieken geldt) zonder dat mythekennis die valkuil wegneemt —
+  zie `Chronica.md` §7.33.
 - **LV-08 (Eed)** en **LV-09 (Hecuba)**: geen ingreep nodig — de mythe-conventie
   wijst hier toevallig naar de *correcte* lezing, dus het gokrisico werkt
   hier niet averechts (een gokkende speler komt toevallig goed uit, wat

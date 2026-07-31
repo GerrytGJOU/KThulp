@@ -3218,6 +3218,140 @@ ongeluk de koptekst van sectie 8 hierbeneden te hebben laten wegvallen bij
 het toevoegen van nieuwe inhoud — hersteld, geen inhoud verloren (alleen de
 kopregel zelf ontbrak, de tekst van sectie 8 stond nog intact).
 
+### 7.33 Voorstel #8: derde afleider tegen mythekennis-gokken bij LV-10/LV-12 (**gebouwd**)
+
+`didactiek/10-voorstellen.md` #8 / `didactiek/07-leesvallen.md` §1 Groep B:
+LV-10 (`CH8_EPI_003`, Thetis' waarschuwing) en LV-12 (`CH9_TRO_010`,
+Laocoöns "Timeo Danaos") waren zonder enige Griekse/Latijnse taalkennis op
+te lossen — Achilles' lot en het beroemde citaat zijn zo bekend dat
+mythe/cultuurkennis alleen al volstond. Beide kregen een derde keuze, elk
+een taalkundig plausibele val die mythekennis NIET wegneemt (een lezer die
+de mythe/het citaat kent, kan er nog steeds voor vallen):
+
+- **`CH8_EPI_003`** (→ nieuwe scène `CH8_EPI_003_FOUT2`): "Hoor er een
+  dreiging tegen Hector in — hij, niet Achilles, zal spoedig sterven" —
+  verwart wie "σύ" aanspreekt (Achilles, niet Hector). Converteert naar
+  `CH8_EPI_004`, zelfde als de bestaande FOUT-tak.
+- **`CH9_TRO_010`** (→ nieuwe scène `CH9_TRO_010_FOUT2`): "Hoor er een
+  algemene wijsheid in over geschenken in het algemeen" — mist dat
+  Laocoöns wantrouwen specifiek de Grieken geldt, niet geschenken in het
+  algemeen. Convergeert naar `CH9_TRO_010B`, zelfde als de bestaande
+  FOUT-tak.
+
+Beide nieuwe opties volgen de vaste neutrale-framing-regel uit §7.28 ("Hoor
+er X in", geen woord dat correctheid verraadt) en het bestaande
+leesval-principe (nooit een strafscherm, reconvergeert naar dezelfde
+vervolgscène als de bestaande foute tak).
+
+**Getest**: `node --check` + `validate_chronica.js` → 0 fouten, 36
+waarschuwingen (ongewijzigd).
+
+### 7.34 Voorstel #9: nieuwe leesval op de Agamemnon-lijn in Hoofdstuk 8 (**gebouwd**)
+
+`didactiek/10-voorstellen.md` #9 / `didactiek/07-leesvallen.md` §3b: de
+twee bestaande Hoofdstuk-8-leesvallen (`CH8_EPI_003`/`CH8_EPI_009`) zitten
+allebei in de GEDEELDE epiloog, dus zichtbaar voor elke speler ongeacht de
+Achilles/Agamemnon-keuze (`FLAG ch8_zijde`, §7.14) — geen van beide takken
+had een EIGEN leesval. Nieuwe leesval toegevoegd op de Agamemnon-lijn,
+tussen de bestaande `CH8_AGA_003` (Pandaros' Pijl) en `CH8_AGA_004`
+(Diomedes' Huzarenstuk): de vermomde Athena (in de Ilias de aanstichter
+achter Pandaros' pijl) fluistert "Πάνδαρον ἡ θεὰ πείθει" — een
+subject/object-omkeringsval (wie overtuigt wie), zelfde principe als
+`CH5_022B` maar met een ongebruikt werkwoord (πείθω, "overtuigen", rang 193
+in `VOCAB_EL` — nog niet eerder gebruikt). Twee nieuwe scènes
+(`CH8_AGA_003B_GOED`/`_FOUT`), neutrale framing volgens de §7.28-regel,
+reconvergeren beide naar `CH8_AGA_004` (de bestaande vervolgtekst en
+`codex_verbroken_wapenstilstand`-hook zijn in beide takken overgenomen).
+
+**Zijnotitie**: tijdens het bouwen liet een tussentijdse edit per ongeluk de
+oorspronkelijke slottekst van `CH8_AGA_003` ("De pijl vliegt...") en zijn
+CODEX-hook los buiten elk scèneblok staan — meteen opgemerkt bij het
+controleren van het resultaat (niet pas bij `validate_chronica.js`, die dit
+type fout niet vangt) en gecorrigeerd door die tekst in beide nieuwe
+uitkomstscènes te herhalen.
+
+**Getest**: `node --check` + `validate_chronica.js` → 0 fouten, 36
+waarschuwingen (ongewijzigd) — én de scène-structuur handmatig nagelezen na
+de fix hierboven.
+
+### 7.35 Didactiek-auditlijst afgerond: voorstel #12 ingetrokken
+
+Laatste openstaande punt van `didactiek/10-voorstellen.md` (docent-
+instelbaar niveauplafond) is op verzoek van Gerben ingetrokken, met twee
+redenen: hint-fading (§7.27) is voor elke klas goed genoeg zoals het nu
+werkt, en het "ik ken deze taal niet"-scenario speelt niet, want elke
+leerling volgt tot Hoofdstuk 10 sowieso beide talen (§7.19). Zie
+`didactiek/08-taalspoor.md` §3 voor de volledige redenering.
+
+Daarmee is de geprioriteerde lijst uit de didactische/taalkundige audit
+(`didactiek/`) afgerond: **9 van de 12 voorstellen gebouwd** (#2-#10, zie
+§7.26-§7.34), **3 bewust ingetrokken na overleg** (#1 taalspoor-timing —
+bewust ontwerp, geen bug; #11 audio — niet haalbaar/relevant; #12
+niveauplafond — onnodig gezien hoe de klassen nu al werken).
+
+### 7.36 Checklist didactiek-audit — vanaf nu standaard voor elk nieuw hoofdstuk (H10+)
+
+Dezelfde soort staande baseline als de Reactiviteitsaudit eerder al
+vastlegde (zie `chronica-audit-baseline-for-new-chapters` in het
+geheugensysteem, en §7.16-§7.25 hierboven) — deze audit (`didactiek/`) voegt
+er de volgende punten aan toe. **Bouw deze vanaf Hoofdstuk 10 direct mee,
+wacht niet op een volgende auditronde:**
+
+1. **`VOCAB:`-hooks laten meegroeien met elk hoofdstuk.** Elk hoofdstuk met
+   nieuwe woordenschat (via `SP_PUZZLES` of verhaaltekst) hoort 8-12 nieuwe
+   `SP_VOCAB_ENTRIES` + een `VOCAB:`-hook te krijgen op de hub-scène — dit
+   viel na Hoofdstuk 6 stil (§7.26) tot het hersteld werd. Kies de woorden
+   waar mogelijk met de ingebouwde frequentielijst (`VOCAB_LA`/`VOCAB_EL`,
+   `certamen/vocab.js`) als leidraad, niet ad-hoc — ook de allerhoogste-
+   frequentiewoorden (functiewoorden als et/non/qui, καί/οὐ/τίς) tellen mee,
+   ze zijn juist waardevol voor leesvallen en Combat-bridge-herhaling.
+2. **Bewaak de Latijn/Grieks-balans per hoofdstuk/lijn.** Bepaal de
+   verteltaal van een lijn aan de godennamen die erin gebruikt worden
+   (Griekse naam → Grieks-verteld, Latijnse naam → Latijns-verteld — Gerbens
+   eigen vuistregel, §7.26) en zorg dat de `VOCAB:`-woorden van die lijn ook
+   overwegend in die taal zijn. Controleer dit expliciet bij hoofdstukken met
+   meerdere lijnen (zoals Hoofdstuk 2's 2-om-2-mix) — de Griekse helft kreeg
+   daar aanvankelijk 0 eigen woorden.
+3. **Leesvallen: nooit een keuze-tekst die correctheid verraadt.** Vaste
+   regel sinds §7.28 — geen "zoals bedoeld"/"goed"/"verkeerd om"/"mis het",
+   alleen neutrale, symmetrische framing ("Hoor er X in" / "Hoor er Y in").
+   Zie ook de geheugennotitie `chronica-leesval-neutrale-framing`.
+4. **Leesvallen: kies bij voorkeur momenten zonder sterke mythe-bias.** Een
+   leesval bij een wereldberoemd citaat/feit (Timeo Danaos, Achilles' lot)
+   is op te lossen met cultuurkennis alleen, zonder taalkennis (§7.23 audit
+   Fase 7) — voeg in zulke gevallen een derde afleider toe die een
+   taalkundige valkuil raakt zonder dat mythekennis die wegneemt (voorbeeld:
+   §7.33).
+5. **Bij een vertakkend hoofdstuk (twee lijnen): geef ELKE lijn een eigen
+   taalmoment**, niet alleen de gedeelde epiloog/proloog. Hoofdstuk 8 had dit
+   gemist (§7.34, beide leesvallen zaten in de gedeelde epiloog).
+6. **Hints vervallen bij pure herhaling, blijven vol bij nieuwe grammatica.**
+   Check `SP_CAMPAIGN.grammatica` van het hoofdstuk: staat er "geen nieuwe
+   grammatica" (zoals bij herhalingshoofdstukken), laat de `hint`-velden dan
+   weg bij puzzels die een AL GELEERDE regel herhalen (uitzondering:
+   raadsel-inhoud en matching-type procedurele tips, zie §7.27).
+7. **Codex-grammaticatabellen volgen `SP_CAMPAIGN.grammatica`.** Elk
+   hoofdstuk dat daar als "nieuwe grammatica" staat, hoort tabel-entries te
+   krijgen in `SP_CODEX_ENTRIES` (`cat:"grammatica"`), zelfde stijl/patroon
+   als Hoofdstuk 1-4/8/9 (individuele entries vroeg ontgrendeld op de
+   hub-scène, een "overzicht"-entry pas bij de afsluiting) — dit viel na
+   Hoofdstuk 4 stil tot het hersteld werd (§7.29).
+8. **Bewuste herhaling van woorden/constructies uit eerdere hoofdstukken.**
+   Naast nieuwe stof: laat af en toe een al gebruikt leesval-/passieve-laag-
+   woord of een al getoetste `SP_PUZZLES`-constructie letterlijk terugkomen
+   in een nieuwe scène (zie §7.30/§7.32 voor het patroon en concrete
+   voorbeelden) — dit is de enige manier waarop deze taallaag ooit aan
+   spaced repetition gaat doen.
+9. **Passieve-taallaag-momenten mogen een klein "na"-gevolg krijgen** via de
+   bestaande payoff-engine (`SP_PAYOFFS`, `type:"echo"`, zie §7.29) — een
+   latere scène die de eerder gehoorde Latijnse/Griekse zin herkenbaar
+   terugpakt, zonder de brontekst zelf te wijzigen.
+
+**Niet meer op de lijst, bewust**: taalspoor-filter eerder inschakelen dan
+Hoofdstuk 10 (§7.19 — de onderbouw is met opzet tweetalig), voorgesproken
+audio (niet haalbaar/relevant), en een docent-instelbaar niveauplafond
+(onnodig, zie §7.35).
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
