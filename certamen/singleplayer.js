@@ -1076,8 +1076,42 @@ async function spResumeSlotToStats(n){
   go("spStats");
 }
 
+/* ---- TAALSTATISTIEKEN PER KLAS (didactiek-audit #6/#9, 2026-07-30) ----
+   Fire-and-forget, alleen als de speler is ingelogd via klascode (BM_IDENT) —
+   zelfde patroon als bmSyncClassMissedWords() (battle.js), maar een eigen
+   boom (classAnalyticsChronica, niet classAnalytics zelf) omdat puzzel-ids en
+   leesval-uitkomsten een ander soort sleutel zijn dan Battle Mode-woordvragen.
+   Nooit leerlingnamen, alleen geaggregeerde tellingen per klas/maand — zie
+   tpRenderChronicaAnalytics() in games.js voor de docentweergave. */
+function spClassAnalyticsBase(){
+  if(!fbDB || !BM_IDENT || !BM_IDENT.klascode) return null;
+  const month = new Date().toISOString().slice(0,7);
+  return "classAnalyticsChronica/"+BM_IDENT.klascode+"/"+month+"/";
+}
+function spSyncPuzzleMistake(puzzleId, given){
+  const base = spClassAnalyticsBase(); if(!base) return;
+  const path = base+"puzzle_"+puzzleId+"/";
+  const upd = {};
+  upd[path+"p"] = puzzleId;
+  upd[path+"a"] = String(given||"").slice(0,80);
+  upd[path+"c"] = firebase.database.ServerValue.increment(1);
+  fbDB.ref().update(upd).catch(()=>{});
+}
+function spSyncLeesvalOutcome(leesvalId, goed){
+  const base = spClassAnalyticsBase(); if(!base) return;
+  const path = base+"leesval_"+leesvalId+"/";
+  const upd = {};
+  upd[path+"p"] = leesvalId;
+  upd[path+(goed?"goed":"fout")] = firebase.database.ServerValue.increment(1);
+  fbDB.ref().update(upd).catch(()=>{});
+}
+
 /* ---- NAVIGATIE ---- */
 function spGoCns(nodeId){
+  // Elke leesval-uitkomstscène eindigt op _GOED/_FOUT (B21/B29, zie
+  // Chronica.md §7.17/§7.23) — generieke hook i.p.v. 13 losse call-sites.
+  const leesvalMatch = /^(.+)_(GOED|FOUT)$/.exec(nodeId);
+  if(leesvalMatch) spSyncLeesvalOutcome(leesvalMatch[1], leesvalMatch[2]==="GOED");
   spSaveProgress({ node:nodeId });
   go("spPlay");
 }
@@ -1754,7 +1788,10 @@ function spCheckMCPuzzle(puzzleId, target, idx){
   const puzzle = SP_PUZZLES[puzzleId];
   const err = el("spPuzzleErr");
   if(puzzle.opties[idx] === puzzle.antwoord) spGoCns(target);
-  else if(err){ err.textContent = puzzle.hint || "Nog niet juist — lees de zin nog eens en probeer opnieuw."; err.style.display = ""; }
+  else{
+    spSyncPuzzleMistake(puzzleId, puzzle.opties[idx]);
+    if(err){ err.textContent = puzzle.hint || "Nog niet juist — lees de zin nog eens en probeer opnieuw."; err.style.display = ""; }
+  }
 }
 
 /* Getypte Latijnse puzzel. puzzle = { type:"typed-latin", vraag, antwoord,
@@ -1779,7 +1816,10 @@ function spCheckTypedLatinPuzzle(puzzleId, target){
   const input = (el("spPuzzleInput")?.value||"").trim().toLowerCase();
   const err = el("spPuzzleErr");
   if(input === puzzle.antwoord.trim().toLowerCase()) spGoCns(target);
-  else if(err){ err.textContent = puzzle.hint || "Nog niet juist — probeer opnieuw."; err.style.display = ""; }
+  else{
+    spSyncPuzzleMistake(puzzleId, input);
+    if(err){ err.textContent = puzzle.hint || "Nog niet juist — probeer opnieuw."; err.style.display = ""; }
+  }
 }
 
 /* ---- GRIEKS SCHERMTOETSENBORD — puzzle.type "typed-greek".
@@ -1865,7 +1905,10 @@ function spCheckTypedGreekPuzzle(puzzleId, target){
   const raw = el("spPuzzleInput")?.value||"";
   const err = el("spPuzzleErr");
   if(spNormalizeGreek(raw) === spNormalizeGreek(puzzle.antwoord)) spGoCns(target);
-  else if(err){ err.textContent = puzzle.hint || "Nog niet juist — let op de spiritus (᾿/῾) en probeer opnieuw."; err.style.display = ""; }
+  else{
+    spSyncPuzzleMistake(puzzleId, raw);
+    if(err){ err.textContent = puzzle.hint || "Nog niet juist — let op de spiritus (᾿/῾) en probeer opnieuw."; err.style.display = ""; }
+  }
 }
 
 /* ---- SCHUIFPUZZEL — puzzle.type "tile-swap" (zie de toelichting bij
@@ -1911,7 +1954,10 @@ function spCheckTileSwapPuzzle(puzzleId, target){
   const err = el("spPuzzleErr");
   const current = SP_TILESWAP.order.map(i=>puzzle.tiles[i]).join("");
   if(current === puzzle.tiles.join("")){ SP_TILESWAP = null; spGoCns(target); }
-  else if(err){ err.textContent = puzzle.hint || "Nog niet in de juiste volgorde — probeer opnieuw."; err.style.display = ""; }
+  else{
+    spSyncPuzzleMistake(puzzleId, current);
+    if(err){ err.textContent = puzzle.hint || "Nog niet in de juiste volgorde — probeer opnieuw."; err.style.display = ""; }
+  }
 }
 
 /* ---- KOPPELPUZZEL — puzzle.type "matching" (zie de toelichting bij
@@ -1965,6 +2011,7 @@ function spMatchTapRight(i){
     SP_MATCH.selected = null;
     if(SP_MATCH.matched.size===puzzle.pairs.length){ const target=SP_MATCH.target; SP_MATCH=null; spGoCns(target); return; }
   } else {
+    spSyncPuzzleMistake(SP_MATCH.puzzleId, puzzle.pairs[SP_MATCH.selected].left+" ≠ "+puzzle.pairs[i].right);
     SP_MATCH.selected = null;
     SP_MATCH.error = puzzle.hint || "Dat is niet het juiste paar — probeer opnieuw.";
   }
