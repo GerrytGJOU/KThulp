@@ -331,7 +331,7 @@ const SP_CAMPAIGN = [
     verhaal:"Twee helden komen thuis, allebei naar een plek die niet meer is wat ze achterlieten. Odysseus vindt zijn paleis vol vrijers; ver van hem vandaan, in Latium, groeit uit Aeneas' nageslacht — via een oudere daad van Hercules en een latere van twee broers, opgevoed door een wolvin — de stad die alles zal overschaduwen wat hiervoor kwam. SAMENGEVOEGD 2026-08-02 uit de oude Hoofdstuk 12 (Odysseus' Wraak) en Hoofdstuk 13 (Het Begin van Rome, nooit gebouwd) op Gerbens verzoek — geen enkelvoudige-spoor-hoofdstukken meer, spelers zouden anders hoofdstukken lijken over te slaan. Zie Chronica.md §7.44/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk.",
     pallas:"Les 19-21: op Ithaka, de wraak van Odysseus, de dood van Agamemnon — les 20 (boogwedstrijd/conjunctivus) en les 21 (wraak op de vrijers/alpha-werkwoorden) VERPLAATST TERUG naar dit hoofdstuk (2026-08-02, herzien t.o.v. het eerdere besluit van 2026-07-31): het zijn letterlijk de scènes die H12's eigen Odysseus-verhaal moet vertellen (boogwedstrijd, wraak, hereniging Penelope), dus horen ze hier, niet bij een thematisch ongerelateerd later hoofdstuk. Zie PALLAS_MINERVA_OVERZICHT.md. Latijnse lijn: Minerva hoofdstuk 16 (Hercules & Cacus) + Minerva hoofdstuk 17 (Romulus & Remus), allebei binnen dit ene samengevoegde hoofdstuk.", minerva:"Latijnse lijn draagt nu TWEE Minerva-hoofdstukken na elkaar: Hoofdstuk 16 (bijwoordvorming, genitivus op -ius, idem, ACP — via Hercules & Cacus, al gebouwd, zie Chronica.md §7.42) gevolgd door Hoofdstuk 17 (futurum, futurum exactum, het werkwoord ire — via Romulus & Remus, NOG TE BOUWEN) + de nog openstaande ut-finalis/doelzin (Minerva 14, par. IV, zie §7.41). Acht puzzels totaal, verdeeld over twee duidelijk gescheiden verhaalmomenten binnen één hoofdstuk — evenveel als de oude twee aparte hoofdstukken samen hadden, dus geen echte verzwaring. Minerva deel 1 blijft afgerond bij Hoofdstuk 9.",
     grammatica:"Griekse/Odysseus-lijn: betrekkelijk voornaamwoord (les 19) + conjunctivus (les 20) + alpha-werkwoorden (les 21) — VOLLEDIG, niet meer opgesplitst over twee hoofdstukken (zie hierboven, herzien 2026-08-02). Latijnse lijn, in twee delen: (1) Hercules & Cacus — bijwoordvorming, genitivus op -ius, idem, ACP (Minerva 16, AL GEBOUWD); (2) Romulus & Remus — futurum, futurum exactum, ire, ut-finalis/doelzin (Minerva 17 + M14 par. IV, NOG TE BOUWEN).",
-    gameplay:"Combat-bridge (de vrijers, Odysseus-lijn — nog uit te bouwen, momenteel skelet, eindigt bewust op een cliffhanger vlak voor de boogwedstrijd). Latijnse lijn: Hercules & Cacus (AL GEBOUWD, CH12_LAT_000-005) gevolgd door Romulus & Remus (NOG TE BOUWEN) — stad-bouw-keuzes, de Sabijnse vrouwen. Bij taalspoor=beide idealiter zigzag tussen de twee lijnen zoals Hoofdstuk 10/11, i.p.v. de huidige sequentiële opzet (eerst alle Latijn, dan alle Grieks) — zie Chronica.md §7.44 voor de nog openstaande restructurering. ALLE DRIE taalsporen routeren nu naar de gedeelde 'wordt vervolgd'-scène `CH12_WORDT_VERVOLGD` (2026-08-02, tijdelijk speeltest-eindpunt — zie Chronica.md §7.46) i.p.v. een abrupte cutoff.",
+    gameplay:"Combat-bridge (de vrijers, Odysseus-lijn — nog uit te bouwen, momenteel skelet, eindigt bewust op een cliffhanger vlak voor de boogwedstrijd). Latijnse lijn: Hercules & Cacus (AL GEBOUWD, CH12_LAT_000-005) gevolgd door Romulus & Remus (NOG TE BOUWEN) — stad-bouw-keuzes, de Sabijnse vrouwen. Bij taalspoor=beide idealiter zigzag tussen de twee lijnen zoals Hoofdstuk 10/11, i.p.v. de huidige sequentiële opzet (eerst alle Latijn, dan alle Grieks) — zie Chronica.md §7.44 voor de nog openstaande restructurering. ALLE DRIE taalsporen routeren nu door naar CH13_000 (2026-08-02, was tijdelijk CH12_WORDT_VERVOLGD tot Hoofdstuk 13 gebouwd was — zie Chronica.md §7.46/§7.47) i.p.v. een abrupte cutoff.",
     personages:"Odysseus, Penelope, Telemachus, Agamemnon, Clytemnestra, Cacus, Euander, Romulus, Remus, de Sabijnse vrouwen",
     illustratie:"Odysseus spant de boog / Romulus trekt de eerste voren van de stadsmuur" },
   // ---- Hoofdstuk 13-20: VOORLOPIG VASTGELEGD 2026-08-02 (Gerbens akkoord
@@ -348,9 +348,9 @@ const SP_CAMPAIGN = [
   { id:"ch13", nr:13, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Twee Steden, Twee Koningen",
     periode:"Mythisch Athene / Koninkrijk Rome",
     verhaal:"Terwijl Athena zelf vertelt hoe ze geboren werd — gewapend, volwassen, uit het hoofd van haar vader — worstelt Rome nog met sterfelijke koningen, niet allemaal even rechtvaardig. Twee steden, elk op zoek naar het gezag waarop ze gebouwd zullen worden.",
-    pallas:"Les 22: Athena en Poseidon, Zeus en Metis, de geboorte van Athena", minerva:"Nog geen Minerva-koppeling vastgelegd (vrij te kiezen uit deel 2, zie PALLAS_MINERVA_OVERZICHT.md) — cultuurtekst: Rome onder de koningen",
-    grammatica:"Grieks: les 22 (vnl. cultuur/mythe, licht taalkundig — zie PALLAS_MINERVA_OVERZICHT.md); Latijn: nog te bepalen",
-    gameplay:"Twee sporen; Atalanta/Meleager-content verhuisd naar Hoofdstuk 16 (sport-thema past beter), Arachne blijft hier bij Athena",
+    pallas:"Les 22: Athena en Poseidon, Zeus en Metis, de geboorte van Athena — bevat, anders dan eerder aangenomen, wel degelijk nieuwe grammatica (het futurum, via de Zeus/Metis-profetietekst) — zie PALLAS_MINERVA_OVERZICHT.md", minerva:"Hoofdstuk 21: De Romeinen en de dood (conjunctivus praesens en perfectum) — tot dan toe niet toegewezen, hier ingezet via Brutus' eed over Lucretia's lichaam en de twijfel over Horatius' daad",
+    grammatica:"Grieks: futurum (Pallas 22, Zeus/Metis-profetie); Latijn: conjunctivus praesens en perfectum (Minerva 21, doelzinnen/hortatief/indirecte vraag)",
+    gameplay:"Twee sporen (sequentieel, geen scène-voor-scène zigzag — zelfde aanpak als Hoofdstuk 12), GEBOUWD 2026-08-02: CH13_GRE_000-005 (Athena's geboorte, wedstrijd om Athene, Arachne) + CH13_LAT_000-008 (Horatii/Curiatii, Lucretia/Brutus), converged op CH13_EINDE/CH13_MUSEUM_00. Eén CLEMENTIA/SEVERITAS/NEUTRAL-moment (oordeel over Horatius' moord op zijn zuster). Atalanta/Meleager-content verhuisd naar Hoofdstuk 16 (sport-thema past beter), Arachne blijft hier bij Athena. Routeert voorlopig door naar CH13_WORDT_VERVOLGD (tijdelijk speeltest-eindpunt, zie Chronica.md §7.46/§7.47).",
     personages:"Athena, Poseidon, Zeus, Metis, Perseus (verteld), Bellerophon (verteld), Arachne — Tullus Hostilius, de Horatii, de Curiatii, Tarquinius Superbus, Lucretia, Brutus",
     thema:"Hoe gezag ontstaat — bij een godin vanzelfsprekend, bij een stad pas na een lange, soms bloedige zoektocht",
     illustratie:"Athena's geboorte uit Zeus' hoofd / Lucretia en Brutus voor het volk van Rome" },
@@ -1965,6 +1965,22 @@ const SP_CODEX_PERSONS = {
   hephaistos: { nm:"Hephaistos (Vulcanus)", epithet:"Goddelijke smid",
     intro:"Als kind door zijn eigen moeder Hera van de Olympos gegooid, opgevangen door de zeenimf Thetis, en uitgegroeid tot de meest begaafde smid onder de goden — de enige die ruw genoeg is voor het werk dat nu op zijn schouders rust. Bij de Romeinen heet hij Vulcanus.",
     full:"Toen Thetis, jaren later, in tranen naar hem toe kwam voor een nieuwe wapenrusting voor haar zoon Achilles, vergat Hephaistos de oude schuld niet: zij was de enige die hem ooit opving toen zijn eigen moeder hem afwees. In één nacht smeedde hij een schild dat niet de oorlog toonde, maar de hele wereld — steden, een bruiloft, een oogst, dansende jongeren — zijn eigen manier om iets terug te geven aan wie hem ooit iets gaf toen niemand anders dat deed." },
+  metis: { nm:"Metis", epithet:"Godin van overleg en wijs beraad, Zeus' eerste vrouw",
+    intro:"Zeus' eerste vrouw, wier wijsheid hem hielp Kronos te verslaan — tot een profetie haar tot een bedreiging maakte in plaats van een bondgenoot." },
+  poseidon: { nm:"Poseidon (Neptunus)", epithet:"God van de zee, broer van Zeus",
+    intro:"Heerser van de zee, even trots als zijn broer Zeus en minstens zo koppig — een god die verliest niet licht opneemt, zoals Athene nog zal ondervinden. Bij de Romeinen heet hij Neptunus." },
+  kekrops: { nm:"Kekrops", epithet:"Legendarische eerste koning van Athene",
+    intro:"Half mens, half slang, uit de aarde zelf geboren — Athenes eerste koning, en de rechter die moest kiezen tussen twee jaloerse goden." },
+  tullus_hostilius: { nm:"Tullus Hostilius", epithet:"Derde koning van Rome",
+    intro:"Rome's derde koning, oorlogszuchtiger dan zijn vreedzame voorganger Numa — onder hem groeit de jonge stad verder, ten koste van haar naaste buur Alba Longa." },
+  horatius: { nm:"Horatius (de overlevende drieling)", epithet:"Held van Rome, ter dood veroordeeld door zijn eigen daad",
+    intro:"De laatste overlevende van drie broers, die in zijn eentje de oorlog tegen Alba Longa besliste — en meteen daarna bewees dat overwinning en gerechtigheid niet altijd hetzelfde zijn." },
+  tarquinius_superbus: { nm:"Tarquinius Superbus", epithet:"Zevende en laatste koning van Rome, 'de Hoogmoedige'",
+    intro:"Rome's laatste koning, die de troon met geweld greep en zonder de senaat te raadplegen regeert — zijn bijnaam, 'de Hoogmoedige', is geen toeval." },
+  lucretia: { nm:"Lucretia", epithet:"Deugdzame Romeinse edelvrouw",
+    intro:"Een vrouw wier naam en waardigheid tot ver na haar dood zal worden aangeroepen — het slachtoffer van een misdaad die uiteindelijk een hele monarchie ten val bracht." },
+  lucius_brutus: { nm:"Lucius Junius Brutus", epithet:"Stichter van de Romeinse Republiek",
+    intro:"Een man die zich jarenlang dom hield om aan Tarquinius' achterdocht te ontsnappen — tot het moment aanbrak waarop hij zijn ware aard eindelijk kon tonen." },
   prometheus: { nm:"Prometheus", epithet:"Titaan, medeschepper van de mensheid",
     intro:"Een titaan die tijdens de oorlog tussen goden en titanen de kant van Zeus koos — en die, samen met Athena, de eerste mensen uit klei en water vormde.",
     full:"Uit medelijden met de naakte, hulpeloze mensheid stal Prometheus het vuur van de goden — en betaalde daarvoor eeuwig met ketenen op de Kaukasus en een adelaar die dagelijks zijn lever komt opeten. Vuur en hoop, zegt hij zelf, waren het risico waard." },
@@ -2320,6 +2336,8 @@ const SP_SOUVENIRS = {
     caption:"Aarde van Ogygia, waar Odysseus vastzit, gemengd met as van de brandstapel waarop Dido stierf — twee reizen door het rijk van de doden, in één kleine buidel bewaard." },
   souvenir_ara_maxima: { nm:"Een Steen van het Ara Maxima", icon:"🏛️", img:"souvenir_ara_maxima.png",
     caption:"Een stuk steen van het altaar dat de bewoners van Latium oprichtten nadat Hercules hen van Cacus verloste — eeuwen voor hier ooit een stad zou staan." },
+  souvenir_athena_helm: { nm:"Een Miniatuurhelm van Athena", icon:"⛑️", img:"souvenir_athena_helm.png",
+    caption:"Een piepklein, gouden helmpje — een echo van de wapenrusting waarmee Athena zelf ter wereld kwam, al gewapend voor ze ook maar één stap had gezet." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -2660,6 +2678,20 @@ const SP_VOCAB_ENTRIES = {
   latijn_fatum:     { taal:"latijn", woord:"fatum, fati", betekenis:"lot, noodlot" },
   latijn_mors:      { taal:"latijn", woord:"mors, mortis", betekenis:"dood" },
   latijn_vates:     { taal:"latijn", woord:"vates, vatis", betekenis:"ziener, dichter" },
+
+  // ---- Hoofdstuk 13 — Twee Steden, Twee Koningen ----
+  grieks_manteia:   { taal:"grieks", woord:"μαντεία", transcript:"manteía", betekenis:"profetie, voorspelling" },
+  grieks_kephale:   { taal:"grieks", woord:"κεφαλή", transcript:"kephalḗ", betekenis:"hoofd" },
+  grieks_polis:     { taal:"grieks", woord:"πόλις", transcript:"pólis", betekenis:"stad(staat)" },
+  grieks_eris:      { taal:"grieks", woord:"ἔρις", transcript:"éris", betekenis:"twist, ruzie" },
+  grieks_sophia:    { taal:"grieks", woord:"σοφία", transcript:"sophía", betekenis:"wijsheid" },
+  latijn_rex_regina:{ taal:"latijn", woord:"rex, regis", betekenis:"koning" },
+  latijn_iurare:    { taal:"latijn", woord:"iurare (iurat)", betekenis:"zweren" },
+  latijn_pudicitia: { taal:"latijn", woord:"pudicitia, pudicitiae", betekenis:"eerbaarheid, kuisheid" },
+  latijn_libertas:  { taal:"latijn", woord:"libertas, libertatis", betekenis:"vrijheid" },
+  latijn_senatus:   { taal:"latijn", woord:"senatus, senatus", betekenis:"senaat" },
+  latijn_soror:     { taal:"latijn", woord:"soror, sororis", betekenis:"zuster" },
+  latijn_expellere: { taal:"latijn", woord:"expellere (expellit)", betekenis:"verdrijven" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -14392,6 +14424,9 @@ De storm drijft de vloot naar het land van de Kikonen, bondgenoten van Troje. Od
 
 Zijn mannen luisteren niet. Ze blijven aan de kust feestvieren tot de Kikonen versterking uit het binnenland halen en bij zonsopgang alsnog terugslaan — Odysseus verliest zes man per schip voor de vloot eindelijk weer kan uitvaren.
 
+IMAGE:
+ch10_ody_kikonen.png
+
 CODEX:
 codex_kikonen
 
@@ -14425,6 +14460,9 @@ De Lotoseters
 
 TEXT:
 Nog een storm — de negende dag op zee zonder enige controle over de eigen koers — werpt de vloot op een onbekende kust. Odysseus stuurt drie verkenners het binnenland in. Ze treffen er een volk dat leeft van de lotosbloem, en wie ervan proeft, vergeet op slag elk verlangen om ooit nog naar huis te gaan.
+
+IMAGE:
+ch10_ody_lotoseters.png
 
 CHOICES:
 
@@ -14492,6 +14530,9 @@ Nieuwsgierigheid wint het van voorzichtigheid — jullie doorzoeken de grot, vin
 
 Bij zonsondergang keert Polyphemus terug — een eenogige Kykloop, zoon van Poseidon zelf, groter dan enige man die je ooit hebt gezien. Hij rolt een rotsblok voor de ingang dat tien mannen niet zouden kunnen verschuiven, ontdekt jullie, en verslindt zonder aarzelen twee van Odysseus' metgezellen als avondmaal.
 
+IMAGE:
+ch10_ody_polyfemos_grot.png
+
 PERSON:
 polyfemos:intro
 
@@ -14544,6 +14585,9 @@ De Ontsnapping
 TEXT:
 Terwijl Polyphemus snurkt, drijven Odysseus en zijn overgebleven mannen een aangepunte, in het vuur geharde balk in zijn enige oog. De Kykloop brult van pijn zo hard dat de rotsen ervan trillen — maar wanneer de andere Kyklopen buiten roepen wie hem kwaad doet, antwoordt hij enkel: "Niemand! Niemand doet me kwaad!" Tevredengesteld lopen zijn buren weer weg.
 
+IMAGE:
+ch10_ody_polyfemos_verblind.png
+
 CHOICES:
 
 * Zie hoe de ontsnapping zelf verloopt -> CH10_ODY_006P
@@ -14576,6 +14620,9 @@ TEXT:
 's Ochtends, blind en tastend, laat Polyphemus zijn kudde naar buiten om te grazen — met zijn handen over elke rug, op zoek naar ontsnappende mannen. Hij voelt nooit de buiken: daar hangen Odysseus en de zijnen, vastgebonden onder de dikste rammen, tot ze eindelijk, ongezien, de kust bereiken.
 
 Aan boord, veilig op zee, kan Odysseus het niet laten: hij schreeuwt zijn ware naam terug naar het eiland, trots op wat hij heeft volbracht.
+
+IMAGE:
+ch10_ody_ontsnapping_rammen.png
 
 PERSON:
 polyfemos:full
@@ -14620,6 +14667,9 @@ Negen dagen en nachten stuurt Odysseus zelf het roer, geen moment durvend te sla
 
 Zijn mannen, ervan overtuigd dat de zak goud of zilver bevat dat Odysseus niet met hen wil delen, maken hem open. Alle winden ontsnappen tegelijk en drijven de vloot, in één verschrikkelijke storm, helemaal terug naar Aeolus' eiland. Wanneer Odysseus opnieuw om hulp vraagt, weigert de windgod — een sterveling die de goden zo duidelijk tegen zich hebben, wil hij niet nog eens aan boord.
 
+IMAGE:
+ch10_ody_windzak_aeolus.png
+
 CODEX:
 codex_aeolus
 
@@ -14651,6 +14701,9 @@ De Val
 
 TEXT:
 Binnen blijkt de "beschutting" een val: de Laistrygonen, mensenetende reuzen, bekogelen de opgesloten vloot met rotsblokken zo groot als huizen en spietsen zwemmende overlevenden als vis. In minuten verliest Odysseus elf schepen en bijna zijn hele bemanning — alleen zijn eigen, buiten de haven gebleven schip ontsnapt.
+
+IMAGE:
+ch10_ody_laistrygonen.png
 
 PUZZLE:
 puzzle_ch10_ody_aoristus2
@@ -14692,6 +14745,9 @@ Je kent het begin al: Aeneas droeg zijn vader Anchises de brandende straten van 
 
 "[[Multa nox erat, cum vela dedimus|Het was diep in de nacht toen we de zeilen hesen]]," zal Aeneas dit vertrek later zelf navertellen — een plusquamperfectum-achtig gevoel, iets dat al voorbij is voor het verhaal er goed en wel aan begint.
 
+IMAGE:
+ch10_aen_vloot_uit_puin.png
+
 PERSON:
 aeneas:full
 
@@ -14726,6 +14782,9 @@ De Stem van Polydorus
 
 TEXT:
 Een stem stijgt op uit de grond zelf: die van Polydorus, Priamus' jongste zoon, ooit in het geheim met goud naar Thracië gestuurd voor zijn eigen veiligheid — en daar vermoord door de koning die dat goud liever hield dan de jongen beschermde. "Vlucht dit verraderlijke land," smeekt de stem, "hier is voor jullie geen thuis."
+
+IMAGE:
+ch10_aen_polydorus_struik.png
 
 PUZZLE:
 puzzle_ch10_aen_naamwoord_groep4
@@ -14762,6 +14821,9 @@ Het Orakel van Delos
 TEXT:
 Op het drijvende eiland Delos — hetzelfde eiland waar je Latona ooit toevlucht zag vinden — raadpleegt Aeneas het orakel van Apollo zelf. Het antwoord komt cryptisch, zoals orakels dat altijd doen: "[[Antiquam exquirite matrem|Zoek jullie oude moeder]]." Niemand aan boord weet meteen wat dat betekent — Aeneas' eigen vader denkt aan Kreta, waar hun voorouder Teucer ooit vandaan kwam. Pas veel later, te laat om deze fout nog te vermijden, zal blijken dat het orakel iets anders bedoelde.
 
+IMAGE:
+ch10_aen_orakel_delos.png
+
 PERSON:
 latona:full
 
@@ -14789,6 +14851,9 @@ Hermes glimlacht, alsof hij dit verhaal wel vaker heeft verteld. Ooit reisden hi
 
 Jupiter onthulde zich, verzwolg het hele ondankbare dorp onder een meer, en spaarde alleen de hut van Baucis en Philemon — die hij veranderde in een gouden tempel. Op hun laatste wens mochten ze ooit samen sterven, op hetzelfde moment, en werden ze veranderd in twee bomen die voor altijd, met de takken verstrengeld, naast de tempel bleven staan. "Onthoud dat verhaal goed," zegt de Boodschapper, terwijl ze weer naar de horizon wijst. "Niet elke gastheer die je nog tegenkomt verdient wat jij hem geeft — en niet elke gast is wie hij lijkt."
 
+IMAGE:
+ch10_xenia_baucis_philemon.png
+
 CODEX:
 codex_baucis_philemon
 
@@ -14809,6 +14874,9 @@ Kreta blijkt de verkeerde "oude moeder" — amper is de nieuwe nederzetting bego
 
 De vloot moet, opnieuw, verder.
 
+IMAGE:
+ch10_aen_plaag_kreta.png
+
 CHOICES:
 
 * Vaar verder, op zoek naar Italië [REQUIRE:taalspoor=latijn] -> CH10_AEN_005
@@ -14827,6 +14895,9 @@ Op de rotsige Strofaden-eilanden vindt de vloot een kudde wilde geiten en runder
 Aeneas en zijn mannen verjagen ze met het zwaard, maar hun aanvoerster Celaeno laat zich niet wegjagen zonder een laatste woord — ze zweert een vloek: pas wanneer honger hen dwingt hun eigen tafels op te eten, zullen ze de stad vinden die hun is beloofd. Een dreiging die klinkt als het einde van elke hoop op een thuis.
 
 Niemand aan boord begrijpt op dit moment hoe zo'n vloek ooit iets anders dan rampzalig kan aflopen — het antwoord ligt nog jaren, en vele stormen, verderop.
+
+IMAGE:
+ch10_aen_harpijen.png
 
 CODEX:
 codex_harpijen
@@ -14849,6 +14920,9 @@ Sicilië's oostkust, onder de rokende schaduw van de Etna, blijkt het domein van
 Hij vertelt zijn verhaal: Achaemenides, ooit bemanningslid van Odysseus, hier vergeten toen zijn eigen kapitein haastig vluchtte voor een verblinde reus — dezelfde Kykloop die ooit zwoer dat "Niemand" hem zijn oog had gekost, en wiens hol nog geen dagreis verderop ligt. Drie maanden overleefde hij op bessen en wortels, doodsbang voor de andere Kyklopen langs deze kust.
 
 Nauwelijks heeft Aeneas besloten hem aan boord te nemen, of Polyphemus zelf verschijnt tussen de kudde — blind, tastend met een afgesneden dennenstam als staf, zijn brullende stem alleen al genoeg om iedereen halsoverkop naar de schepen te jagen. Ze varen weg voor hij ook maar één voet in het water kan zetten.
+
+IMAGE:
+ch10_aen_achaemenides_polyfemos.png
 
 PERSON:
 achaemenides:full
@@ -14877,6 +14951,9 @@ Daar, na alles wat vader en zoon samen hebben doorstaan — de vlucht uit Troje,
 
 Aeneas, voor het eerst sinds Troje's val zonder zijn vader aan zijn zijde, blijft achter met alleen zijn zoon Ascanius — en een vloot die, ondanks alle offers, nog altijd geen thuis heeft gevonden.
 
+IMAGE:
+ch10_aen_dood_anchises.png
+
 CODEX:
 codex_dood_anchises
 
@@ -14899,6 +14976,9 @@ Aeolus ontketent alle winden tegelijk. Schepen breken uiteen, mannen verdrinken 
 
 Wat overblijft van de vloot — verspreid, gehavend, een paar schepen kwijt — drijft af naar een onbekende kust in het westen. Niemand aan boord weet nog waar ze zijn, alleen dat het land vreemd genoeg gastvrij oogt na alles wat eraan voorafging.
 
+IMAGE:
+ch10_aen_storm_juno.png
+
 CODEX:
 codex_juno_storm
 
@@ -14920,6 +15000,9 @@ Het land blijkt Libië, en de stad die er verrijst is nog jonger dan Aeneas' eig
 Venus, Aeneas' eigen moeder, hult hem en zijn trouwe metgezel Achates in een wolk van mist zodat ze ongezien de bouwplaats kunnen betreden. Wat ze er zien overweldigt Aeneas meer dan hij had verwacht: een tempelmuur, beschilderd met taferelen van de Trojaanse Oorlog zelf — Hector, Achilles, hemzelf, allemaal al vereeuwigd in een verhaal dat hij dacht nog te beleven. "[[Sunt lacrimae rerum|Er zijn tranen voor de dingen]]," fluistert hij — zelfs hier, ver van huis, weet men wat Troje heeft gekost.
 
 Terwijl hij nog naar de muur staart, nadert er een stoet: de koningin zelf, op weg naar haar nieuwe tempel, met een gevolg dat een gesprek onvermijdelijk maakt. De mist om Aeneas begint al te vervagen.
+
+IMAGE:
+ch10_aen_aankomst_carthago.png
 
 FLAG:
 ch10_lijn_aeneas=true
@@ -15922,7 +16005,7 @@ Mercurius zet je terug precies waar hij je ophaalde, alsof er geen moment is ver
 Ze kijkt je aan. "Odysseus is intussen ook bijna waar hij wezen moet. Wanneer jij zover bent, is hij dat ook."
 
 CHOICES:
-* Keer terug naar het Orakel van Chronos -> CH12_WORDT_VERVOLGD
+* Keer terug naar het Orakel van Chronos -> CH13_000
 
 END
 
@@ -15979,17 +16062,374 @@ Odysseus luistert naar Eumaeus' verhaal zonder zich te verraden, zijn gezicht no
 Maar het is een verhaal voor een volgende keer.
 
 CHOICES:
-* Keer terug naar het Orakel van Chronos -> CH12_WORDT_VERVOLGD
+* Keer terug naar het Orakel van Chronos -> CH13_000
+
+END
+`.trim();
+
+const SP_CH13_CNS = `
+=== SCENE: CH13_000 ===
+
+TITLE:
+Twee Steden
+
+TEXT:
+"[[Ecce|zie hier]] — het vijfde boek," zegt de Boodschapper van Chronos, en de scheur die ze ditmaal opent is breder dan de vorige, alsof hij twee verhalen tegelijk moet doorlaten. "Dit keer vertel ik je niet over helden die naar huis reizen, maar over hoe een thuis zelf vorm krijgt — een stad die haar naam nog moet verdienen, en een stad die haar eerste koningen nog moet overleven."
+
+Ze kijkt je aan, met iets van die zeldzame warmte die je inmiddels herkent. "Aan de Griekse kant: hoe Athene aan haar beschermgodin kwam — en hoe die godin zelf ter wereld kwam, op een manier die niemand had zien aankomen. Aan de Latijnse kant: de koningen die na Romulus over Rome heersten, niet allemaal even rechtvaardig — tot één daad van onrecht de hele monarchie deed instorten."
+
+CHOICES:
+* Volg Athenes verhaal [REQUIRE:taalspoor=grieks] -> CH13_GRE_000
+* Ga verder [REQUIRE:taalspoor!=grieks] -> CH13_LAT_000
 
 END
 
-=== SCENE: CH12_WORDT_VERVOLGD ===
+=== SCENE: CH13_GRE_000 ===
+
+TITLE:
+Een Profetie voor Zeus
+
+TEXT:
+Lang voor Hera, was Metis Zeus' eerste vrouw — een titanide, godin van overleg en list, wier raad hem ooit hielp zijn eigen vader Kronos te onttronen. Maar Gaia en Ouranos, de oudste goden, waarschuwen Zeus: Metis zal twee kinderen baren. Eerst een dochter, even wijs en sterk als hijzelf. Daarna een zoon — en díe zoon zal ooit zijn vader omverwerpen, precies zoals Zeus zelf ooit Kronos deed.
+
+PERSON:
+metis:intro
+
+CODEX:
+codex_athena_geboorte
+
+PUZZLE:
+puzzle_ch13_gre_futurum1
+
+CHOICES:
+* Zie wat Zeus met deze profetie doet -> CH13_GRE_001
+
+END
+
+=== SCENE: CH13_GRE_001 ===
+
+TITLE:
+Opgeslokt
+
+TEXT:
+Zeus, doodsbang voor een herhaling van zijn eigen geschiedenis, bedenkt een oplossing die niemand anders zou durven: hij vleit Metis, die op dat moment al zwanger is van hun dochter, met lieve woorden dichterbij — en slokt haar in één keer op, kind en al. Probleem opgelost, denkt hij. Metis kan nu nooit meer een zoon baren die hem zal bedreigen.
+
+Maanden gaan voorbij. Zeus voelt zich steeds vreemder — een barstende hoofdpijn die met de dag erger wordt, alsof er iets in hem groeit dat naar buiten wil.
+
+PUZZLE:
+puzzle_ch13_gre_futurum2
+
+CHOICES:
+* Zie wat er gebeurt als de pijn ondraaglijk wordt -> CH13_GRE_002
+
+END
+
+=== SCENE: CH13_GRE_002 ===
+
+TITLE:
+Geboren, Gewapend
+
+TEXT:
+Uiteindelijk is de pijn zo hevig dat Zeus om hulp schreeuwt — en Hephaistos, de enige die het aandurft, splijt zijn vaders schedel open met een bijl. Wat eruit springt is geen gedrocht, maar een volwassen godin: gewapend van top tot teen, met speer en schild al in de hand, en een oorlogskreet die de hele Olympos doet trillen.
+
+Athena — want zo heet ze — heeft nooit een moeder gekend. Ze is, op een manier die geen enkele andere god kan claimen, volledig en alleen Zeus' eigen dochter.
+
+PERSON:
+athena:full
+
+IMAGE:
+ch13_athena_geboorte.png
+
+CHOICES:
+* Zie hoe Athena zich meteen bewijst -> CH13_GRE_003
+
+END
+
+=== SCENE: CH13_GRE_003 ===
+
+TITLE:
+De Wedstrijd om een Stad
+
+TEXT:
+Niet lang na haar geboorte daagt Athena haar eigen oom Poseidon uit — beiden willen ze beschermgod worden van dezelfde jonge stad aan de kust van Attika, geregeerd door de legendarische koning Kekrops, half mens en half slang. Wie het mooiste geschenk geeft, wint de stad en haar naam voor altijd.
+
+Poseidon is eerst. Hij slaat met zijn drietand op de rots van de Akropolis, en zout water welt op uit de scheur — indrukwekkend, maar ondrinkbaar, onbruikbaar voor akkers of vee.
+
+PERSON:
+poseidon:intro
+
+PUZZLE:
+puzzle_ch13_gre_futurum3
+
+CHOICES:
+* Zie wat Athena te bieden heeft -> CH13_GRE_004
+
+END
+
+=== SCENE: CH13_GRE_004 ===
+
+TITLE:
+De Olijfboom
+
+TEXT:
+Athena plant, zonder een woord vooraf, een enkele boom in de rotsgrond — een olijfboom. Geen dondergebulder, geen zeewater. Gewoon voedsel, olie voor lampen en zalf, hout voor gereedschap. Kekrops, gevraagd te oordelen, kiest zonder aarzelen voor de boom boven de bron.
+
+Poseidon, woedend over zijn nederlaag, overstroomt de vlakte van Attika uit pure kwaadheid — maar de stad zelf blijft, en krijgt de naam van de godin die haar begreep in plaats van haar te willen overweldigen: Athene.
+
+PERSON:
+kekrops:intro
+
+CODEX:
+codex_athena_poseidon
+
+CHOICES:
+* Zie wie later, jaren na deze wedstrijd, Athena's geduld op de proef stelt -> CH13_GRE_005
+
+END
+
+=== SCENE: CH13_GRE_005 ===
+
+TITLE:
+De Wever die Niet Boog
+
+TEXT:
+Jaren later hoort Athena van een sterveling, Arachne, die beweert een betere wever te zijn dan de godin zelf — en die weigert ook maar één keer haar talent aan Athena toe te schrijven. Athena, vermomd als een oude vrouw, waarschuwt Arachne eerst vriendelijk. Arachne lacht haar uit.
+
+De wedstrijd die volgt eindigt niet in Athena's voordeel op de manier die je zou verwachten: Arachne's weefsel is foutloos, en toont bovendien de fouten van de goden zelf, meedogenloos precies. Een woedende Athena verandert haar tegenstander in een spin — voor eeuwig wevend, nooit meer erkend voor haar talent.
+
+CODEX:
+codex_arachne
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH13_EINDE
+* Keer terug naar het Orakel van Chronos, nu beide verhalen gehoord [REQUIRE:taalspoor=beide] -> CH13_EINDE
+
+END
+
+=== SCENE: CH13_LAT_000 ===
+
+TITLE:
+Na Romulus
+
+TEXT:
+Generaties zijn verstreken sinds Romulus, na een broedertwist die zijn eigen stad al bijna verscheurde nog voor ze goed en wel bestond, Rome stichtte en er de eerste koning van werd. Zijn opvolgers hebben de kleine nederzetting stap voor stap groter gemaakt — de vreedzame Numa Pompilius met wetten en religie, en na hem Tullus Hostilius, minder geïnteresseerd in vrede dan zijn voorganger.
+
+Onder Tullus breekt oorlog uit met de naburige stad Alba Longa — dezelfde stad die Romulus' eigen voorvader Ascanius ooit stichtte, wat de oorlog voelt als een familietwist die te ver is doorgeschoten.
+
+PERSON:
+tullus_hostilius:intro
+
+CHOICES:
+* Zie hoe beide steden besluiten de oorlog te beslechten -> CH13_LAT_001
+
+END
+
+=== SCENE: CH13_LAT_001 ===
+
+TITLE:
+Drie tegen Drie
+
+TEXT:
+In plaats van hun beide legers volledig tegen elkaar te laten vechten, spreken Rome en Alba Longa iets ongewoons af: elke stad stuurt drie broers, en de tweekamp tussen hen beslist de oorlog in zijn geheel. Rome stuurt de Horatii; Alba Longa de Curiatii — twee drielingen, precies even oud, precies even sterk.
+
+De strijd begint slecht voor Rome: twee van de drie Horatii sneuvelen bijna onmiddellijk. De laatste, ongedeerd maar alleen tegen drie tegenstanders, doet iets onverwachts — hij vlucht.
+
+IMAGE:
+ch13_horatii_curiatii.png
+
+CHOICES:
+* Zie of de vlucht is wat het lijkt -> CH13_LAT_002
+
+END
+
+=== SCENE: CH13_LAT_002 ===
+
+TITLE:
+De Achtervolging
+
+TEXT:
+De vlucht is een list. De drie Curiatii, verschillend gewond, rennen achter de laatste Horatius aan in hun eigen tempo — en raken daardoor uit elkaar. Zodra de afstand tussen hen groot genoeg is, keert Horatius zich om en doodt de eerste, dan de tweede, dan de derde: één tegen één, drie keer achter elkaar. Rome wint de oorlog zonder verder bloedvergieten.
+
+PERSON:
+horatius:intro
+
+CODEX:
+codex_horatii_curiatii
+
+CHOICES:
+* Zie hoe Horatius als overwinnaar wordt onthaald -> CH13_LAT_003
+
+END
+
+=== SCENE: CH13_LAT_003 ===
+
+TITLE:
+Een Zuster in Tranen
+
+TEXT:
+Horatius keert triomfantelijk terug naar Rome — tot hij bij de stadspoort zijn eigen zuster Horatia in tranen aantreft. Ze was verloofd met een van de Curiatii, en rouwt nu openlijk om zijn dood, zonder acht te slaan op haar broers overwinning voor Rome.
+
+Woedend dat ze een vijand van Rome boven haar eigen broer en stad lijkt te stellen, doorboort Horatius haar ter plekke met hetzelfde zwaard dat hem net tot held maakte.
+
+PUZZLE:
+puzzle_ch13_lat_conj_perfectum1
+
+CHOICES:
+* Zie hoe Rome op deze daad reageert -> CH13_LAT_003B
+
+END
+
+=== SCENE: CH13_LAT_003B ===
+
+TITLE:
+Jouw Oordeel
+
+TEXT:
+De stad is verdeeld over wat ze zojuist heeft zien gebeuren — een overwinning en een moord, in dezelfde ademtocht.
+
+CHOICES:
+* Vind dat Horatius' daad, hoe hard ook, Rome's eer boven alles stelt [SEVERITAS] -> CH13_LAT_004
+* Vind dat geen enkele overwinning een zuster vermoorden rechtvaardigt [CLEMENTIA] -> CH13_LAT_004
+* Onthoud je van een oordeel — jij hebt haar verdriet niet gedragen [NEUTRAL] -> CH13_LAT_004
+
+END
+
+=== SCENE: CH13_LAT_004 ===
+
+TITLE:
+Recht of Moord
+
+TEXT:
+Het volk van Rome is verdeeld. Sommigen zien in Horatius' daad de hoogste vorm van loyaliteit aan de stad; anderen zien enkel een moord op een onschuldige vrouw, door de eigen hand van haar broer. Horatius wordt uiteindelijk berecht — en, na een emotioneel beroep van zijn eigen vader op het volk, vrijgesproken. Niet omdat iedereen het eens is met wat hij deed, maar omdat Rome hem op dat moment harder nodig heeft dan het antwoord op die vraag.
+
+CODEX:
+codex_horatius_zuster
+
+CHOICES:
+* Zie wat er, generaties later, van Rome's koningen terechtkomt -> CH13_LAT_005
+
+END
+
+=== SCENE: CH13_LAT_005 ===
+
+TITLE:
+De Hoogmoedige
+
+TEXT:
+Generaties na Tullus Hostilius bestijgt Tarquinius Superbus de troon — Rome's zevende en laatste koning, en verreweg de meest gehate. Hij grijpt de macht met geweld, regeert zonder ooit de senaat te raadplegen, en laat iedereen ombrengen die hij als een bedreiging ziet. Zijn bijnaam, "Superbus" — de Hoogmoedige — heeft hij ruimschoots verdiend.
+
+PERSON:
+tarquinius_superbus:intro
+
+PUZZLE:
+puzzle_ch13_lat_conj_praesens2
+
+CHOICES:
+* Zie wat zijn eigen zoon doet die uiteindelijk alles verandert -> CH13_LAT_006
+
+END
+
+=== SCENE: CH13_LAT_006 ===
+
+TITLE:
+Lucretia
+
+TEXT:
+Sextus Tarquinius, de zoon van de koning, wordt gastvrij ontvangen in het huis van Collatinus, wiens vrouw Lucretia alom bekendstaat als het toonbeeld van Romeinse deugd. Die nacht misbruikt hij haar gastvrijheid op de wreedst denkbare manier — hij verkracht haar, en dreigt haar eer voorgoed te bezoedelen als ze ooit spreekt.
+
+Lucretia zwijgt niet. Ze roept haar vader en haar man, laat hen zweren wraak te nemen — en doodt zichzelf voor hun ogen, niet bereid om met de schande te leven, ook al is de schande niet de hare.
+
+PERSON:
+lucretia:intro
+
+IMAGE:
+ch13_lucretia_dood.png
+
+CHOICES:
+* Zie wat haar dood in beweging zet -> CH13_LAT_007
+
+END
+
+=== SCENE: CH13_LAT_007 ===
+
+TITLE:
+De Eed van Brutus
+
+TEXT:
+Onder de aanwezigen bij Lucretia's dood staat Lucius Junius Brutus — jarenlang bekend als een onnozele hals, een rol die hij bewust speelde om aan Tarquinius' achterdocht te ontsnappen. Nu, boven Lucretia's lichaam, trekt hij het bebloede zwaard uit haar wond en zweert, luid genoeg voor iedereen: nooit meer zal Rome door een koning geregeerd worden.
+
+PERSON:
+lucius_brutus:intro
+
+CODEX:
+codex_lucretia_brutus
+
+PUZZLE:
+puzzle_ch13_lat_conj_praesens1
+
+CHOICES:
+* Zie hoe Rome op deze eed reageert -> CH13_LAT_008
+
+END
+
+=== SCENE: CH13_LAT_008 ===
+
+TITLE:
+Het Einde van de Koningen
+
+TEXT:
+Het volk van Rome, al jaren onder Tarquinius' tirannie gebukt, sluit zich massaal bij Brutus' eed aan. Tarquinius Superbus wordt verjaagd, zijn familie verbannen — en in plaats van een nieuwe koning kiest Rome iets dat nog niemand ooit had geprobeerd: twee jaarlijks gekozen consuls, met macht die elkaar in evenwicht houdt. De Romeinse Republiek is geboren, uit dezelfde soort onrecht die haar koningen ooit aan de macht bracht.
+
+STATPOINTS:
+3
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH13_EINDE
+* Steek over naar de Griekse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH13_GRE_000
+
+END
+
+=== SCENE: CH13_EINDE ===
+
+TITLE:
+Twee Steden, Eén Les
+
+TEXT:
+"[[Ecce|zie hier]] — twee steden," zegt de Boodschapper, "allebei gevormd door iets dat niemand had kunnen plannen. Athene kreeg haar naam van een godin die nog niet eens bestond toen de wereld al om haar vroeg. Rome kreeg haar vrijheid van een misdaad die niemand had gewenst." Ze zwijgt even. "Dat is misschien wel de les van dit hoofdstuk: de dingen die een stad, of een mens, uiteindelijk vormen, zijn zelden de dingen die ze zelf hadden gekozen."
+
+SOUVENIR:
+souvenir_athena_helm
+
+CODEX:
+codex_grammatica_ch13_futurum_grieks, codex_grammatica_ch13_conjunctivus, codex_grammatica_ch13_overzicht
+
+CHOICES:
+* Keer terug naar het Museum -> CH13_MUSEUM_00
+
+END
+
+=== SCENE: CH13_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Twee nieuwe stolpen vullen zich naast elkaar: een kleine, gouden helm — Athena's eigen wapenrusting, in miniatuur — en een stukje gebroken marmer, alsof het van een koningsbeeld is afgebroken.
+
+"Twee steden, twee manieren om iets te verliezen en er sterker uit te komen," zegt de Boodschapper. "Onthoud dat — de hoofdstukken die nog komen, gaan allebei nog veel verder over wat mensen (en goden) doen met macht die ze niet hadden moeten krijgen, of juist niet meer willen loslaten."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH13_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH13_WORDT_VERVOLGD ===
 
 TITLE:
 Tot Hier, Voorlopig
 
 TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Rome moet nog gesticht worden, Odysseus moet zijn boog nog spannen, en er wachten nog eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Atheense democratie, de Perzische Oorlogen, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
 
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
 

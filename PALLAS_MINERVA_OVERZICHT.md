@@ -87,13 +87,14 @@ gedekt.
 ## Deel 2 (voorlopig vastgelegd, 2026-08-02) — Pallas 2 (les 22-29) & Minerva 2 (hoofdstuk 18-25)
 
 **Vastgelegd in `SP_CAMPAIGN` (Chronica.md §7.45)** — Gerben ging akkoord
-met het verdelingsvoorstel. Alleen METADATA vastgelegd, nog geen scènes/
-puzzels gebouwd (net als deel 2's begin-tabel hierboven aangeeft voor het
-onderscheid "vastgelegd" vs. "gebouwd").
+met het verdelingsvoorstel. Hoofdstuk 13 is inmiddels daadwerkelijk
+GEBOUWD (2026-08-02, §7.47); Hoofdstuk 14-20 hebben nog enkel vastgelegde
+metadata, geen scènes/puzzels (zie het onderscheid "vastgelegd" vs.
+"gebouwd" dat deel 2's begin-tabel hierboven ook al aanhoudt).
 
 | Pallas les | Onderwerp | Grammatica | Chronica H |
 |---|---|---|---|
-| 22 | Athena en Poseidon, Zeus en Metis, de geboorte van Athena | *(vnl. cultuur/mythe, licht taalkundig)* | 13 |
+| 22 | Athena en Poseidon, Zeus en Metis, de geboorte van Athena | **Futurum** (Tekst 22B, Zeus/Metis-profetie — bevat wél nieuwe grammatica, anders dan hier eerder aangenomen; gecorrigeerd 2026-08-02, zie Chronica.md §7.47) | 13 — **GEBOUWD** |
 | 23 | De list van Peisistratos, de tirannendoders, kritiek op de Atheense democratie | *(cultuur/geschiedenis)* | 14 |
 | 24 | Pandora, De Vrouw, mode | *(cultuur)* | 15 |
 | 25 | Een slaaf wordt held, een slavin koopt zich vrij (slavernij) | *(cultuur)* | 15 (samen met 24) |
@@ -109,7 +110,7 @@ onderscheid "vastgelegd" vs. "gebouwd").
 | 18 | Hannibal verslagen (hebzucht Kretenzers, slimme list) | Ablativus absolutus — **al gedekt in H11** (2026-08-02 gecorrigeerd, zie boven); resterende cultuurstof nog te gebruiken | 17 (samen met Pallas 28) |
 | 19 | Dagelijks leven in Rome | Vragend voornaamwoord, onbepaald voornaamwoord, perfectum met praesensbetekenis | 15 (samen met Pallas 24-25) |
 | 20 | Vermaak in Rome | Velle/nolle/fieri, betrekkelijke bijzin met ingesloten antecedent, comparativus/superlativus | 16 (samen met Pallas 26-27) |
-| 21 | De Romeinen en de dood (grafschriften) | Conjunctivus praesens + gebruik, conjunctivus perfectum | **nog niet toegewezen** — geen hoofdstuk in de nieuwe 13-20-indeling had hier ruimte voor; kandidaat voor een latere aanvulling of Hoofdstuk 19/20's Latijnse kant |
+| 21 | De Romeinen en de dood (grafschriften) | Conjunctivus praesens + gebruik, conjunctivus perfectum | 13 — **GEBOUWD** (2026-08-02, opgelost gat: ingezet via Brutus' eed over Lucretia en de twijfel over Horatius' daad, i.p.v. via het eigen "grafschriften"-cultuurtekst — decoupling-beleid, zie Chronica.md §7.47) |
 | 22 | Caesars carrière (Belgen bij Bibrax, Dumnorix) | Gerundium, genitivus subjectivus/objectivus, *ferre* | 18 (samen met Pallas 29/Alexander) |
 | 23 | Caesar in België en Nederland (Nervii, rivaliteit) | Gerundivum, gerundivumconstructie | 18 |
 | 24 | Keizers van Rome: Augustus en Nero | N.C.I. (Nominativus cum Infinitivo), semi-deponentia, transitief/intransitief, vraagpartikels | 20 |
