@@ -130,7 +130,7 @@ browser):
 | Campagnekaart-metadata (Proloog + 28 hfdst + Finale, 5 boeken) + mythencanon | `certamen/singleplayer-data.js` (`SP_CAMPAIGN`, `SP_MYTH_CANON`) | ✅ data — scènes van hfdst 10+ nog niet geschreven |
 | **Hoofdstuk 9**: vertakking (Troje/Grieks) ZONDER reconvergentie — de val van Troje van twee kanten | `certamen/singleplayer-data.js` (`SP_CH9_CNS`, 51 scènes) | ✅ werkend — gedeelde proloog (Mercurius, herbeleefde Hector/Andromache/zelfherkenning) → twee lijnen van 22/21 scènes (Penthesileia, Memnon, Achilles' dood, Wapenrusting-twist + Aias' waanzin (Grieks), Philoktetes/Paris' dood, Helenus' profetie, Palladium, het Paard, val van Troje) + 4 puzzels elk (comparativus/superlativus, A.C.I., 3e-declinatie, congruentie) + 1 Combat-bridge (Grieks) + grote payoffs op Aias (Hoofdstuk 8) en Diomedes (Hoofdstuk 6+8) — reachability/pariteitsscript + drie volledige browser-doorlopen, zie §7.15 |
 | **Hoofdstuk 8**: EERSTE echte vertakking (Achilles/Agamemnon) die ook weer samenkomt | `certamen/singleplayer-data.js` (`SP_CH8_CNS`, 48 scènes) | ✅ werkend — gedeelde proloog (Plaag van Apollo, de Ruzie, Thetis' verzoek) → keuze → twee gelijkwaardige lijnen van elk 14 scènes/4 puzzels (nieuwe grammatica: aoristus, 3e-declinatie medeklinkerstam, aanwijzend/persoonlijk voornaamwoord) + 1 STAT-gated moment + 1 RELATION-moment + 1 Clementia/Severitas-moment elk, Agamemnon-lijn krijgt bovendien een Combat-bridge → reconvergentie bij Patroklos' dood → gedeelde epiloog met een tweede Combat-bridge (Hector) en Priamus' smeekbede, tot en met Hectors begrafenis — twee volledige browser-doorlopen (één per kant) + Node-reachability/pariteitsscript, zie §7.14 |
-| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`prologue.png`, `midas.png`, `birth_of_athena.png`, `pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `aegeus_belofte_zeilen.png`, `theseus_garen_terug.png`, `bacchus_ariadne_naxos.png`, `val_van_ikaros.png`, `aegeus_sprong_zee.png`, `phaethon_bliksem.png`, `heliaden_populieren.png`. Hoofdstuk 5 heeft nu ook 7 `IMAGE:`-tags (doorlopend logboek, geen lijnen, allemaal Aegean blue): `argo_bemanning.png`, `everzwijn_cyzicus.png`, `polydeukes_amycus.png`, `hylas_nimfen.png`, `symplegades_doortocht.png`, `medea_aeetes_colchis.png`, `gulden_vlies_gevonden.png`. Hoofdstuk 6 heeft nu ook 7 `IMAGE:`-tags (generatieverhaal, geen lijnen, allemaal Aegean blue): `spartoi_thebe.png`, `niobe_versteend.png`, `sfinx_raadsel.png`, `zeven_tegen_thebe.png`, `antigone_begrafenis.png`, `diomedes_val_thebe.png`, `bacchanten_berg.png`. Hoofdstuk 7 is bij nader inzien uitgebreid naar 7 `IMAGE:`-tags, net als de eerdere hoofdstukken (allemaal Aegean blue, geen lijnen): `leda_zwaan.png`, `parisoordeel.png`, `schaking_helena.png`, `achilles_skyros.png`, `iphigenia_hinde.png`, plus de twee die er al stonden, `appel_der_tweedracht.png` en `philoktetes_lemnos.png`. Hoofdstuk 8 heeft nu 7 `IMAGE:`-tags verdeeld over de vertakking (allemaal Aegean blue): `achilles_woede.png` (gedeelde proloog), `diomedes_tegen_mars.png` (exclusief lijn Agamemnon — rechtstreeks gezien), `hektor_andromache.png` (in BEIDE lijnen op dezelfde bewuste omslagscène, zelfde bestand), `patroklos_wapenrusting.png` (exclusief lijn Achilles — wat de tent-speler wél ziet), `achilles_rouwkreet.png`, `achilles_achtervolgt_hektor.png`, `priamus_smeekbede.png` (gedeelde epiloog). Hoofdstuk 9 heeft nu 14 illustratie-momenten (15 tags, want 1 is bewust gedeeld) over de niet-herconvergerende TRO/GRI-splitsing, in balans per lijn (allemaal Aegean blue): gedeeld — `penthesileia.png` (in BEIDE lijnen, zelfde bestand); exclusief lijn Troje (6) — `laocoon_slangen.png`, `trojaans_paard_strand.png`, `aeneas_vlucht.png`, `achilles_dood_pijl.png`, `cassandra_waarschuwing.png`, `troje_valt_trojanen.png` (protagonist bínnen de muren, ziet de Grieken binnenstormen — CH9_TRO_013, hernoemd vanaf `troje_valt.png` voor duidelijkheid); exclusief lijn Grieken (7) — `grieken_in_het_paard.png`, `troje_valt_neutraal.png` (CH9_GRI_013, "De Poorten Gaan Open" — breed shot van de bestorming, geen POV-keuze nodig), `aias_ondergang.png`, `memnon_antilochos.png`, `achilles_lichaam_gered.png`, `palladium_diefstal.png`, `troje_valt_grieken.png` (protagonist stormt zelf mee naar binnen — CH9_GRI_014) — Gemini-prompts klaar, bestanden nog niet gegenereerd. Alle 9 hoofdstukken hebben nu illustratie-tags |
+| **Illustraties** (`IMAGE:`-sectie → beeld boven de scène, mist-veilig) | `certamen/singleplayer.js` (`spSceneImageHTML`) | ✅ werkend — proloog + alle 3 hoofdstuk-1-lijnen (`pro_prologue.png`, `ch1_midas.png`, `ch1_birth_of_athena.png`, `ch1_pandora.png`) én nu ook Hoofdstuk 2 (7 beelden) en Hoofdstuk 3 (7 beelden), zie §7.6/§7.8. Hoofdstuk 4 heeft nu ook 7 `IMAGE:`-tags (5 lijn Theseus — Aegean blue, 2 lijn Phaëthon — oxblood): `ch4_aegeus_belofte_zeilen.png`, `ch4_theseus_garen_terug.png`, `ch4_bacchus_ariadne_naxos.png`, `ch4_val_van_ikaros.png`, `ch4_aegeus_sprong_zee.png`, `ch4_phaethon_bliksem.png`, `ch4_heliaden_populieren.png`. Hoofdstuk 5 heeft nu ook 7 `IMAGE:`-tags (doorlopend logboek, geen lijnen, allemaal Aegean blue): `ch5_argo_bemanning.png`, `ch5_everzwijn_cyzicus.png`, `ch5_polydeukes_amycus.png`, `ch5_hylas_nimfen.png`, `ch5_symplegades_doortocht.png`, `ch5_medea_aeetes_colchis.png`, `ch5_gulden_vlies_gevonden.png`. Hoofdstuk 6 heeft nu ook 7 `IMAGE:`-tags (generatieverhaal, geen lijnen, allemaal Aegean blue): `ch6_spartoi_thebe.png`, `ch6_niobe_versteend.png`, `ch6_sfinx_raadsel.png`, `ch6_zeven_tegen_thebe.png`, `ch6_antigone_begrafenis.png`, `ch6_diomedes_val_thebe.png`, `ch6_bacchanten_berg.png`. Hoofdstuk 7 is bij nader inzien uitgebreid naar 7 `IMAGE:`-tags, net als de eerdere hoofdstukken (allemaal Aegean blue, geen lijnen): `ch7_leda_zwaan.png`, `ch7_parisoordeel.png`, `ch7_schaking_helena.png`, `ch7_achilles_skyros.png`, `ch7_iphigenia_hinde.png`, plus de twee die er al stonden, `ch7_appel_der_tweedracht.png` en `ch7_philoktetes_lemnos.png`. Hoofdstuk 8 heeft nu 7 `IMAGE:`-tags verdeeld over de vertakking (allemaal Aegean blue): `ch8_achilles_woede.png` (gedeelde proloog), `ch8_diomedes_tegen_mars.png` (exclusief lijn Agamemnon — rechtstreeks gezien), `ch8_hektor_andromache.png` (in BEIDE lijnen op dezelfde bewuste omslagscène, zelfde bestand), `ch8_patroklos_wapenrusting.png` (exclusief lijn Achilles — wat de tent-speler wél ziet), `ch8_achilles_rouwkreet.png`, `ch8_achilles_achtervolgt_hektor.png`, `ch8_priamus_smeekbede.png` (gedeelde epiloog). Hoofdstuk 9 heeft nu 14 illustratie-momenten (15 tags, want 1 is bewust gedeeld) over de niet-herconvergerende TRO/GRI-splitsing, in balans per lijn (allemaal Aegean blue): gedeeld — `ch9_penthesileia.png` (in BEIDE lijnen, zelfde bestand); exclusief lijn Troje (6) — `ch9_laocoon_slangen.png`, `ch9_trojaans_paard_strand.png`, `ch9_aeneas_vlucht.png`, `ch9_achilles_dood_pijl.png`, `ch9_cassandra_waarschuwing.png`, `ch9_troje_valt_trojanen.png` (protagonist bínnen de muren, ziet de Grieken binnenstormen — CH9_TRO_013, hernoemd vanaf `troje_valt.png` voor duidelijkheid); exclusief lijn Grieken (7) — `ch9_grieken_in_het_paard.png`, `ch9_troje_valt_neutraal.png` (CH9_GRI_013, "De Poorten Gaan Open" — breed shot van de bestorming, geen POV-keuze nodig), `ch9_aias_ondergang.png`, `ch9_memnon_antilochos.png`, `ch9_achilles_lichaam_gered.png`, `ch9_palladium_diefstal.png`, `ch9_troje_valt_grieken.png` (protagonist stormt zelf mee naar binnen — CH9_GRI_014) — Gemini-prompts klaar, bestanden nog niet gegenereerd. Alle 9 hoofdstukken hebben nu illustratie-tags |
 | Gemini-huisstijl-Gem (stripstijl, scène-illustraties) | `certamen/assets/chronica/gemini-comic-style.md` | ✅ herbruikbare Gem-instructie |
 | Gemini-huisstijl-Gem (museumstukken, Herinneringen-tab) | `certamen/assets/chronica/gemini-souvenir-style.md` | ✅ herbruikbare Gem-instructie — vaste sokkel/stolp/kussentje-opstelling, zie §7.2.1. Alle 16 souvenirs (H1 t/m H9) hebben nu een klaarstaande prompt; 3 daarvan (`souvenir_appel_tweedracht.png`, `souvenir_schild_achilles.png`, `souvenir_trojaans_paard.png`, nrs. 14-16) nog niet gegenereerd. `souvenir_appel_tweedracht.png` is een bewuste uitzondering op de "geen tekst"-regel (epigrafisch ΤΗΙ ΚΑΛΛΙΣΤΗΙ, sluit aan op de datief-puzzel bij CH7_005) |
 | **Wereldkaart** — geïllustreerde panelen + onthullende locatie-pins per codex-entry | `certamen/singleplayer.js` (`SCREENS.spWorldMap`), `certamen/singleplayer-data.js` (`SP_MAP_PANELS`/`SP_MAP_LOCATIONS`) | ✅ werkend — 3 panelen, west/midden/oost, schakelbaar via tabblad-rij ("Het Westen"/"Italië en Griekenland"/"Het Oosten", laatste is standaard) |
@@ -1198,11 +1198,13 @@ puzzel meteen kunnen opzoeken, niet pas na afloop).
 
 **Illustraties** (7, Gemini-huisstijl-Gem, `assets/chronica/images/`): één
 per emotioneel hoogtepunt per lijn, plus de mentor-overgang —
-`geboorte_apollo_diana.png` (`CH2_L08`), `semele_verteerd.png` (`CH2_S06`),
-`geboorte_bacchus.png` (`CH2_S08`), `kallisto_berin.png` (`CH2_K07`),
-`kallisto_sterrenbeeld.png` (`CH2_K09`), `herakles_nasleep.png` (`CH2_H06`,
-bewust de NASLEEP van de plottwist, nooit de daad zelf — zelfde toon-regel
-als hierboven) en `athena_mentor_ch2.png` (`CH2_ATHENA`).
+`ch2_ch2_geboorte_apollo_diana.png` (`CH2_L08`), `ch2_ch2_semele_verteerd.png`
+(`CH2_S06`), `ch2_ch2_geboorte_bacchus.png` (`CH2_S08`), `ch2_ch2_kallisto_berin.png`
+(`CH2_K07`), `ch2_ch2_kallisto_sterrenbeeld.png` (`CH2_K09`),
+`ch2_ch2_herakles_nasleep.png` (`CH2_H06`, bewust de NASLEEP van de plottwist,
+nooit de daad zelf — zelfde toon-regel als hierboven) en
+`ch2_athena_mentor.png` (`CH2_ATHENA`). (Bestandsnamen dragen sinds 2026-08-02
+het hoofdstuk als prefix, zie `assets/chronica/gemini-comic-style.md`.)
 
 ### 7.7 Puzzel-moeilijkheidsopbouw: meerkeuze → zelf typen (**gebouwd**)
 
@@ -1368,13 +1370,15 @@ Codex-grammatica-entries (`codex_grammatica_ch3_*`), **vroeg ontgrendeld** bij
 
 **Illustraties** (7, Gemini-huisstijl-Gem, `assets/chronica/images/`) — de
 Io-lijn krijgt drie beelden omdat die drie los herkenbare mythologische
-momenten bevat: `argus_bewaakt_io.png` (`CH3_IO05`), `pauw_ogen_argus.png`
-(`CH3_IO10`) en `europa_stier.png` bij de Europa-coda (`CH3_IO14`); de
-Herakles-lijn krijgt er drie, bewust gekozen bij de taken ZONDER eigen
-Combat-bridge-sprite zodat geen enkel beeld dubbelop staat met een
-combat-icoon: `augiasstal.png` (`CH3_H09`), `atlas_hemel.png` (`CH3_H21`) en
-`cerberus_voltooid.png` als sluitstuk (`CH3_H25`); plus `athena_mentor_ch3.png`
-(`CH3_ATHENA`) als bookend met `athena_mentor_ch2.png`.
+momenten bevat: `ch3_ch3_argus_bewaakt_io.png` (`CH3_IO05`),
+`ch3_ch3_pauw_ogen_argus.png` (`CH3_IO10`) en `ch3_ch3_europa_stier.png` bij de
+Europa-coda (`CH3_IO14`); de Herakles-lijn krijgt er drie, bewust gekozen bij
+de taken ZONDER eigen Combat-bridge-sprite zodat geen enkel beeld dubbelop
+staat met een combat-icoon: `ch3_ch3_augiasstal.png` (`CH3_H09`),
+`ch3_ch3_atlas_hemel.png` (`CH3_H21`) en `ch3_ch3_cerberus_voltooid.png` als sluitstuk
+(`CH3_H25`); plus `ch3_athena_mentor.png` (`CH3_ATHENA`) als bookend met
+`ch2_athena_mentor.png`. (Bestandsnamen dragen sinds 2026-08-02 het hoofdstuk
+als prefix, zie `assets/chronica/gemini-comic-style.md`.)
 
 **Getest** (browser, gescripte volledige doorloop): beide lijnen volledig
 uitgespeeld inclusief alle 9 puzzels en alle 6 gevechten (elke
@@ -4205,7 +4209,7 @@ In afgesproken bouwvolgorde:
    Hoofdstuk 11 t/m 28 + Finale, staan nog volledig open.
 6. **Illustraties** — `IMAGE:` is **actief** (rendert het bestand uit
    `assets/chronica/images/`). De eerste illustratie hangt aan PRO_005 ("De
-   Bronzen Schijf": de ontdekking van het Orakel, `prologue.png`). Resterend
+   Bronzen Schijf": de ontdekking van het Orakel, `pro_prologue.png`). Resterend
    werk is puur content: per illustratie-moment een Gemini-prompt (op basis van
    `assets/chronica/gemini-comic-style.md`) en het beeld in de map zetten.
 
@@ -4754,6 +4758,57 @@ blijken, vullen we die dan pas — niet nu al vooruitlopen.
 
 Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 34
 waarschuwingen (ongewijzigd, pre-bestaand).
+
+### 7.46 Tijdelijk "wordt vervolgd"-eindpunt na Hoofdstuk 12, voor de klas-speeltest (2026-08-02)
+
+Gerben wil na het uitbouwen van Hoofdstuk 13 een groep leerlingen laten
+testspelen, en wilde daarvoor eerst een duidelijk, geen-doodlopend-gevoel
+tussentijds eindpunt — spelers moeten weten dat ze "klaar" zijn (voor nu),
+niet per ongeluk tegen een kale cutoff aanlopen.
+
+**Probleem vóór deze fix**: alle drie taalsporen liepen dood zonder
+duidelijke afsluiting. `CH12_MUSEUM_00_LAT` (Latijn) had TEXT maar geen
+CHOICES — een bewuste afsluiting die er alleen uitzag als een bug.
+`CH12_ODY_002` (Grieks/beide) brak zelfs midden in een scène af (Eumaeus'
+verhaal), met geen enkel vooruitzicht — de boogwedstrijd/wraak-content
+(Combat-bridge) bestaat nog niet.
+
+**Oplossing**: één nieuwe, gedeelde scène `CH12_WORDT_VERVOLGD`, bereikbaar
+vanuit alle drie de sporen:
+- `CH12_MUSEUM_00_LAT` kreeg een CHOICES-blok toegevoegd (was terminaal).
+- `CH12_ODY_002` kreeg een nieuwe tussenscène `CH12_ODY_003` ("Nog Niet
+  Onthuld") — een bewuste, korte cliffhanger vlak vóór de boogwedstrijd
+  (Odysseus bereidt zich voor, maar "dat verhaal is voor een volgende
+  keer") in plaats van een abrupt afgebroken gesprek.
+- Beide monden uit in `CH12_WORDT_VERVOLGD`: de Boodschapper van Chronos
+  vertelt dat er meer verhalen bestaan (Rome, Odysseus' wraak, eeuwen
+  erna) maar dat "die scheuren nog niet klaar zijn om open te gaan" — en
+  moedigt de speler expliciet aan om in de tussentijd terug te gaan en de
+  reis opnieuw te beleven, met een andere klasse of andere keuzes. Geen
+  nieuwe mechaniek nodig hiervoor — de bestaande "terug naar menu"-knop
+  (linksboven, elk scherm, `spRenderLanding()`) deed dit al; de scène
+  verwijst er alleen expliciet naar.
+
+**Bewust een echte terminale scène** (geen CHOICES, geen verder pad) —
+dat is precies de bedoeling, in tegenstelling tot de twee ONBEDOELDE
+dood-lopende scènes die het verving. `validate_chronica.js` flagt hem dan
+ook terecht als "terminale scène", net als elk ander bewust einde.
+
+**Weg te halen zodra Hoofdstuk 12 en verder verder gebouwd zijn** (Gerben
+expliciet): `CH12_WORDT_VERVOLGD` is een tijdelijke stop, geen permanent
+onderdeel van de campagne. Zodra de Odysseus-Combat-bridge, Romulus &
+Remus, en Hoofdstuk 13+ gebouwd zijn: verwijder de CHOICES naar
+`CH12_WORDT_VERVOLGD` bij `CH12_MUSEUM_00_LAT` (die krijgt dan gewoon zijn
+oude "Odysseus is ook bijna waar hij wezen moet"-tekst terug, zonder
+CHOICES totdat de echte zigzag-vervlechting er is) en bij `CH12_ODY_003`
+(die scène zelf vervalt dan, de content moet gewoon doorlopen naar de
+echte boogwedstrijd-scènes). De scène zelf hoeft niet verwijderd te
+worden — hij kan gewoon losstaand blijven bestaan voor een eventuele
+latere speeltest-checkpoint, zolang niets er meer naar verwijst.
+
+Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 33
+waarschuwingen (één minder dan voorheen — de twee onbedoelde
+terminale-scène-waarschuwingen zijn vervangen door één bedoelde).
 
 ---
 

@@ -331,7 +331,7 @@ const SP_CAMPAIGN = [
     verhaal:"Twee helden komen thuis, allebei naar een plek die niet meer is wat ze achterlieten. Odysseus vindt zijn paleis vol vrijers; ver van hem vandaan, in Latium, groeit uit Aeneas' nageslacht — via een oudere daad van Hercules en een latere van twee broers, opgevoed door een wolvin — de stad die alles zal overschaduwen wat hiervoor kwam. SAMENGEVOEGD 2026-08-02 uit de oude Hoofdstuk 12 (Odysseus' Wraak) en Hoofdstuk 13 (Het Begin van Rome, nooit gebouwd) op Gerbens verzoek — geen enkelvoudige-spoor-hoofdstukken meer, spelers zouden anders hoofdstukken lijken over te slaan. Zie Chronica.md §7.44/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk.",
     pallas:"Les 19-21: op Ithaka, de wraak van Odysseus, de dood van Agamemnon — les 20 (boogwedstrijd/conjunctivus) en les 21 (wraak op de vrijers/alpha-werkwoorden) VERPLAATST TERUG naar dit hoofdstuk (2026-08-02, herzien t.o.v. het eerdere besluit van 2026-07-31): het zijn letterlijk de scènes die H12's eigen Odysseus-verhaal moet vertellen (boogwedstrijd, wraak, hereniging Penelope), dus horen ze hier, niet bij een thematisch ongerelateerd later hoofdstuk. Zie PALLAS_MINERVA_OVERZICHT.md. Latijnse lijn: Minerva hoofdstuk 16 (Hercules & Cacus) + Minerva hoofdstuk 17 (Romulus & Remus), allebei binnen dit ene samengevoegde hoofdstuk.", minerva:"Latijnse lijn draagt nu TWEE Minerva-hoofdstukken na elkaar: Hoofdstuk 16 (bijwoordvorming, genitivus op -ius, idem, ACP — via Hercules & Cacus, al gebouwd, zie Chronica.md §7.42) gevolgd door Hoofdstuk 17 (futurum, futurum exactum, het werkwoord ire — via Romulus & Remus, NOG TE BOUWEN) + de nog openstaande ut-finalis/doelzin (Minerva 14, par. IV, zie §7.41). Acht puzzels totaal, verdeeld over twee duidelijk gescheiden verhaalmomenten binnen één hoofdstuk — evenveel als de oude twee aparte hoofdstukken samen hadden, dus geen echte verzwaring. Minerva deel 1 blijft afgerond bij Hoofdstuk 9.",
     grammatica:"Griekse/Odysseus-lijn: betrekkelijk voornaamwoord (les 19) + conjunctivus (les 20) + alpha-werkwoorden (les 21) — VOLLEDIG, niet meer opgesplitst over twee hoofdstukken (zie hierboven, herzien 2026-08-02). Latijnse lijn, in twee delen: (1) Hercules & Cacus — bijwoordvorming, genitivus op -ius, idem, ACP (Minerva 16, AL GEBOUWD); (2) Romulus & Remus — futurum, futurum exactum, ire, ut-finalis/doelzin (Minerva 17 + M14 par. IV, NOG TE BOUWEN).",
-    gameplay:"Combat-bridge (de vrijers, Odysseus-lijn — nog uit te bouwen, momenteel skelet). Latijnse lijn: Hercules & Cacus (AL GEBOUWD, CH12_LAT_000-005) gevolgd door Romulus & Remus (NOG TE BOUWEN) — stad-bouw-keuzes, de Sabijnse vrouwen. Bij taalspoor=beide idealiter zigzag tussen de twee lijnen zoals Hoofdstuk 10/11, i.p.v. de huidige sequentiële opzet (eerst alle Latijn, dan alle Grieks) — zie Chronica.md §7.44 voor de nog openstaande restructurering.",
+    gameplay:"Combat-bridge (de vrijers, Odysseus-lijn — nog uit te bouwen, momenteel skelet, eindigt bewust op een cliffhanger vlak voor de boogwedstrijd). Latijnse lijn: Hercules & Cacus (AL GEBOUWD, CH12_LAT_000-005) gevolgd door Romulus & Remus (NOG TE BOUWEN) — stad-bouw-keuzes, de Sabijnse vrouwen. Bij taalspoor=beide idealiter zigzag tussen de twee lijnen zoals Hoofdstuk 10/11, i.p.v. de huidige sequentiële opzet (eerst alle Latijn, dan alle Grieks) — zie Chronica.md §7.44 voor de nog openstaande restructurering. ALLE DRIE taalsporen routeren nu naar de gedeelde 'wordt vervolgd'-scène `CH12_WORDT_VERVOLGD` (2026-08-02, tijdelijk speeltest-eindpunt — zie Chronica.md §7.46) i.p.v. een abrupte cutoff.",
     personages:"Odysseus, Penelope, Telemachus, Agamemnon, Clytemnestra, Cacus, Euander, Romulus, Remus, de Sabijnse vrouwen",
     illustratie:"Odysseus spant de boog / Romulus trekt de eerste voren van de stadsmuur" },
   // ---- Hoofdstuk 13-20: VOORLOPIG VASTGELEGD 2026-08-02 (Gerbens akkoord
@@ -1338,6 +1338,38 @@ const SP_PUZZLES = {
     vraag:"“Hercules boves ___ audivit” — Hercules hoorde de runderen loeien. Typ het participium praesens actief, accusativus meervoud, van mugire (loeien) — de accusativus cum participio (ACP).",
     antwoord:"mugientes",
     hint:"Na een werkwoord van waarneming (audire, videre, sentire) staat in het Latijn geen A.C.I. maar een ACP: accusativus (boves) + participium (mugientes) — je hoort/ziet iemand iets DOEN, in plaats van dát iets het geval is. Accusativus meervoud van een participium op -ns/-ens eindigt op -es: mugientes." },
+
+  // ---- Hoofdstuk 13 — Twee Steden, Twee Koningen (NIEUWE grammatica:
+  // Grieks — futurum (Pallas hoofdstuk 22, Zeus/Metis-profetie-tekst —
+  // audit tegen Pallas-2-Docentenboek toonde dat les 22 niet louter
+  // cultuur is, zoals eerder aangenomen, maar wel degelijk het futurum
+  // introduceert); Latijn — conjunctivus praesens en perfectum (Minerva
+  // hoofdstuk 21, tot dan toe niet toegewezen — zie PALLAS_MINERVA_
+  // OVERZICHT.md). Zie SP_CAMPAIGN ch13.grammatica en Chronica.md §7.47.
+  puzzle_ch13_gre_futurum1: { type:"typed-greek",
+    vraag:"Een orakel spreekt een profetie uit over het kind dat Metis zal baren: “ὁ παῖς τὸν πατέρα ___” — het kind zal zijn vader verslaan/omverwerpen. Typ met het Griekse toetsenbord de futurum, 3e persoon enkelvoud, van καταλύω (verslaan, omverwerpen).",
+    antwoord:"καταλύσει",
+    hint:"Futurum vorm je door een -σ- tussen de werkwoordsstam en de persoonsuitgang te voegen: καταλύ- + -σ- + -ει (3e pers. enk.) = καταλύσει." },
+  puzzle_ch13_gre_futurum2: { type:"typed-greek",
+    vraag:"Zeus, doodsbang voor de profetie, weet één ding zeker: “οὐδεὶς ἐμὲ ___” — niemand zal mij omverwerpen. Typ met het Griekse toetsenbord de futurum, 3e persoon enkelvoud, van εἰμί (zijn) — hier in de betekenis 'het geval zijn'.",
+    antwoord:"ἔσται",
+    hint:"Het futurum van εἰμί (zijn) is onregelmatig, net als bij het Latijnse esse: ἔσομαι, ἔσῃ, ἔσται (3e pers. enk.), ἐσόμεθα, ἔσεσθε, ἔσονται." },
+  puzzle_ch13_gre_futurum3: { type:"multiple-choice",
+    vraag:"Poseidon, zeker van zijn overwinning, belooft de Atheners: “ἐγὼ τῆς θαλάττης ___” — ik zal over de zee heersen. Welke vorm van βασιλεύω (heersen, koning zijn) is hier de futurum, 1e persoon enkelvoud?",
+    opties:["βασιλεύσω","βασιλεύω","ἐβασίλευσα","βασιλεύσει"], antwoord:"βασιλεύσω",
+    hint:"Futurum 1e persoon enkelvoud: werkwoordsstam + -σ- + -ω. Βασιλεύσω, 'ik zal heersen' — dezelfde -σ- die ook in καταλύσει en ἔσται zit." },
+  puzzle_ch13_lat_conj_praesens1: { type:"typed-latin",
+    vraag:"Brutus zweert bij Lucretia's bloed, de andere Romeinen om zich heen: “Iuremus ut reges ___” — laten we zweren dat we de koningen zullen verdrijven. Typ de conjunctivus praesens, 1e persoon meervoud, van expellere (verdrijven) — een doelzin.",
+    antwoord:"expellamus",
+    hint:"Conjunctivus praesens van een 3e-conjugatiewerkwoord als expellere krijgt de klinker -a- in plaats van -e-: expell- + -amus (1e pers. mv.) = expellamus, 'laten we verdrijven'." },
+  puzzle_ch13_lat_conj_praesens2: { type:"typed-latin",
+    vraag:"Tarquinius regeert zonder ooit de senaat te raadplegen, opdat niemand zijn macht in twijfel trekt: “...ne quis potestatem eius ___” — opdat niemand zijn macht in twijfel trekt. Typ de conjunctivus praesens, 3e persoon enkelvoud, van dubitare (twijfelen).",
+    antwoord:"dubitet",
+    hint:"Ontkennende doelzin: ne + conjunctivus, 'opdat niemand niet twijfelt' → 'opdat niemand twijfelt'. Conjunctivus praesens 3e pers. enk. van een 1e-conjugatiewerkwoord als dubitare eindigt op -et: dubitet." },
+  puzzle_ch13_lat_conj_perfectum1: { type:"typed-latin",
+    vraag:"Het volk twijfelt achteraf of Horatius wel juist heeft gehandeld tegenover zijn eigen zuster: “Populus dubitat num Horatius recte ___” — het volk twijfelt of Horatius juist gehandeld heeft. Typ de conjunctivus perfectum, 3e persoon enkelvoud, van agere (handelen).",
+    antwoord:"egerit",
+    hint:"In een indirecte vraag (na dubitare, 'twijfelen') staat het werkwoord in de conjunctivus — hier conjunctivus perfectum, omdat de handeling al vóór het twijfelen voltooid was. Conjunctivus perfectum van agere: perfectumstam eg- + -erit (3e pers. enk.) = egerit." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -1837,6 +1869,34 @@ const SP_CODEX_ENTRIES = {
             ["ter vergelijking: A.C.I. (Hoofdstuk 9)","boves abisse audivit","hij hoorde dat de runderen weg waren"]] } },
   codex_grammatica_ch12_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 12 samengevat",
     tekst:"Dit hoofdstuk toont Minerva deel 2, hoofdstuk 16: het bijwoord op -iter, de negen onregelmatige bijvoeglijke naamwoorden met genitivus op -ius, het pronomen idem (dezelfde), en de accusativus cum participio (ACP) — de constructie die je gebruikt na een werkwoord van waarneming, in plaats van de A.C.I. na een werkwoord van zeggen/menen/weten. Minerva deel 1 is inmiddels al bij Hoofdstuk 9 volledig afgerond (zie codex_grammatica_ch7_conjunctivus_passief voor het laatste puzzelstuk daarvan)." },
+
+  // ---- Hoofdstuk 13 — Twee Steden, Twee Koningen ----
+  codex_grammatica_ch13_futurum_grieks: { cat:"grammatica", titel:"Grammatica: het Griekse futurum",
+    tekst:"Het futurum (toekomende tijd) vorm je door een -σ- tussen de werkwoordsstam en de persoonsuitgang te plaatsen: καταλύω (verslaan) wordt καταλύσω (ik zal verslaan). Het werkwoord εἰμί (zijn) heeft een eigen, onregelmatig futurum: ἔσομαι, ἔσῃ, ἔσται...",
+    table:{ headers:["Werkwoord","Futurum (3e pers. enk.)","Vertaling"],
+      rows:[["καταλύω (verslaan)","καταλύσει","hij/zij zal verslaan"],
+            ["βασιλεύω (heersen)","βασιλεύσει","hij/zij zal heersen"],
+            ["εἰμί (zijn)","ἔσται","het zal zijn"]] } },
+  codex_grammatica_ch13_conjunctivus: { cat:"grammatica", titel:"Grammatica: conjunctivus praesens en perfectum",
+    tekst:"De conjunctivus praesens gebruik je in een doelzin (ut/ne + conjunctivus, 'opdat') of een hortatieve zin ('laten we...'). Bij een 3e-conjugatiewerkwoord als expellere krijgt de conjunctivus praesens de klinker -a- in plaats van -e-. De conjunctivus perfectum gebruik je o.a. in een indirecte vraag die vóór het hoofdwerkwoord al voltooid was: perfectumstam + -eri- + persoonsuitgang.",
+    table:{ headers:["Vorm","Voorbeeld","Vertaling"],
+      rows:[["Conjunctivus praesens (hortatief)","expellamus","laten we verdrijven"],
+            ["Conjunctivus praesens (doelzin)","ne...dubitet","opdat niemand twijfelt"],
+            ["Conjunctivus perfectum (indirecte vraag)","num...egerit","of hij gehandeld heeft"]] } },
+  codex_athena_geboorte: { cat:"mythologie", titel:"De Geboorte van Athena",
+    tekst:"Zeus' eerste vrouw was Metis, godin van het overleg — tot een profetie voorspelde dat haar kind hem ooit zou omverwerpen, precies zoals hij zelf zijn vader Kronos onttroonde. Uit angst slokte Zeus haar op, in de veronderstelling daarmee het probleem te hebben opgelost. Maanden later kreeg hij een ondraaglijke hoofdpijn; Hephaistos spleet zijn schedel open, en Athena sprong eruit — volwassen, gewapend, en volledig de zijne, zonder ooit een moeder gekend te hebben." },
+  codex_athena_poseidon: { cat:"mythologie", titel:"De Wedstrijd om Athene",
+    tekst:"Poseidon en Athena streden allebei om beschermgod van dezelfde stad te worden. Poseidon sloeg met zijn drietand op de Akropolis en liet een zoutwaterbron ontspringen — indrukwekkend, maar onbruikbaar. Athena plantte een olijfboom: voedsel, olie, hout, een symbool van vrede in plaats van macht. Koning Kekrops koos haar geschenk, en de stad kreeg haar naam: Athene." },
+  codex_arachne: { cat:"mythologie", titel:"Arachne, de Wever",
+    tekst:"Arachne, een sterveling zo begaafd in het weven dat ze beweerde beter te zijn dan Athena zelf, weigerde de godin ook maar één keer te bedanken voor haar talent. Athena daagde haar uit tot een wedstrijd — en toen Arachne's weefsel, dat de fouten van de goden zelf afbeeldde, foutloos bleek, veranderde een woedende Athena haar in een spin: voor eeuwig wevend, nooit meer erkend." },
+  codex_horatii_curiatii: { cat:"geschiedenis", titel:"De Horatii en de Curiatii",
+    tekst:"Rome en Alba Longa, in oorlog, besluiten hun geschil te beslechten met een tweekamp: drie broers tegen drie broers, de Horatii tegen de Curiatii. Twee Horatii sneuvelen snel; de laatste, ongedeerd, vlucht schijnbaar — en doodt zijn drie achtervolgers, één voor één, zodra ze uit elkaar rennen. Rome wint zonder een volledige oorlog te voeren." },
+  codex_horatius_zuster: { cat:"geschiedenis", titel:"Horatius en zijn Zuster",
+    tekst:"Terugkerend als overwinnaar vindt Horatius zijn eigen zuster Horatia in tranen — verloofd met een van de gesneuvelde Curiatii. Woedend dat ze om een vijand van Rome rouwt in plaats van zijn overwinning te vieren, doodt hij haar ter plekke. Het volk twijfelt: is dit gerechtigheid voor Rome, of moord op een onschuldige zuster?" },
+  codex_lucretia_brutus: { cat:"geschiedenis", titel:"Lucretia en het Einde van de Koningen",
+    tekst:"Sextus Tarquinius, zoon van de tirannieke koning Tarquinius Superbus, verkracht Lucretia, een deugdzame Romeinse edelvrouw. Uit schaamte pleegt zij zelfmoord voor de ogen van haar familie, nadat ze hen heeft laten zweren wraak te nemen. Lucius Junius Brutus zweert bij haar bloed dat de koningen verdreven zullen worden — en houdt woord: Tarquinius Superbus wordt verjaagd, en de Romeinse Republiek wordt gesticht." },
+  codex_grammatica_ch13_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 13 samengevat",
+    tekst:"Dit hoofdstuk introduceerde het Griekse futurum (Pallas hoofdstuk 22) — de toekomende tijd, treffend genoeg geleerd via een profetie over de toekomst — en, aan de Latijnse kant, de conjunctivus praesens en perfectum (Minerva hoofdstuk 21), gebruikt in doelzinnen, hortatieve zinnen en indirecte vragen." },
   codex_ithaka_aankomst: { cat:"mythologie", titel:"Aankomst op Ithaka",
     tekst:"Na twintig jaar zetten de Faiaken Odysseus eindelijk aan land op zijn eigen eiland, slapend. Athena verhult het landschap in mist tot ze zeker weet dat hij alleen is, onthult zich dan, en verandert hem in een oude bedelaar zodat hij ongezien zijn eigen, door vrijers overgenomen paleis kan verkennen." },
   codex_eumaeus: { cat:"mythologie", titel:"Eumaeus, de Trouwe Zwijnenhoeder",
@@ -2222,7 +2282,7 @@ const SP_FRAGMENTS = {
    spCodexSouvenirsHTML terug op `icon` — zelfde patroon als
    SP_COMBAT_ENEMIES. ---- */
 const SP_SOUVENIRS = {
-  souvenir_midas: { nm:"Een Gouden Roos", icon:"🌹", img:"souvenir_midas.png",
+  souvenir_midas: { nm:"Een Gouden Roos", icon:"🌹", img:"souvenir_ch1_midas.png",
     caption:"Een gouden roos uit het paleis van Midas." },
   souvenir_athena_geboorte: { nm:"Een Bronzen Splinter", icon:"🪓", img:"souvenir_athena_geboorte.png",
     caption:"Een splinter brons van de bijl waarmee Athena ter wereld kwam." },
@@ -2866,7 +2926,7 @@ TEXT:
 De zon is net over de heuvels van Latium gekropen, en jij bent al uren aan het werk. Het zweet prikt in je ogen; de aarde is hier droog en koppig, zwaar als steen onder de ploeg. Je zet je schrap en duwt — en dan, met een doffe klap die je tot in je polsen voelt, staat de ploeg stil. Iets onder de grond geeft niet mee.
 
 IMAGE:
-prologue_ploegen.png
+pro_prologue_ploegen.png
 
 CHOICES:
 
@@ -3003,7 +3063,7 @@ TEXT:
 Dieper in de kist, onder een laatste laag linnen, ligt nog iets. Een ronde schijf van brons, niet groter dan je handpalm, bedekt met tekens die je nooit eerder zag — geen letters die je kent, en toch lijken ze iets te willen zeggen. De schijf is warm. Warm alsof iemand haar zojuist heeft vastgehouden, hier, diep onder de koude grond.
 
 IMAGE:
-prologue.png
+pro_prologue.png
 
 CODEX:
 codex_orakel_van_chronos
@@ -3038,7 +3098,7 @@ TEXT:
 Op het moment dat je vingertoppen het brons raken, begint de lucht te trillen als water waarin een steen valt. De kleuren van het veld lopen uit, de heuvels vervagen, het geluid van de wind valt weg. Latium zelf lijkt zich om je heen te herschikken — of misschien is het de tijd die dat doet.
 
 IMAGE:
-tijdvervorming_veld.jpg
+pro_tijdvervorming_veld.jpg
 
 CHOICES:
 
@@ -3284,7 +3344,7 @@ Bacchus verschijnt niet zozeer als dat hij binnenkomt — de lucht in de zaal ve
 "Laat alles wat ik aanraak in goud veranderen," zegt hij. Er valt een korte stilte. Bacchus glimlacht — een glimlach die je niet helemaal vertrouwt, alsof hij iets weet wat Midas nog moet leren — en knikt.
 
 IMAGE:
-midas.png
+ch1_midas.png
 
 PERSON:
 bacchus:intro
@@ -3524,7 +3584,7 @@ Terwijl je van de rivieroever wegloopt, met Midas' dochter weer levend en de vlo
 "[[Ecce|zie hier]] — je hebt de naam van Midas teruggegeven aan de herinnering," zegt de stem, "en met hem het gevaar van een wens die niet doordacht is. Sardis, Bacchus, de Pactolus — ze bestaan weer, precies zoals ze altijd hadden moeten bestaan."
 
 IMAGE:
-orakel_verschijnt.png
+ch1_orakel_verschijnt.png
 
 MUSIC:
 the_oracle_awakens.mp3
@@ -3713,7 +3773,7 @@ Vulcanus caput aperit — Hephaistos opent het hoofd, en durum, "hard", past fei
 En dan, uit de opening, niet met bloed maar met een licht dat je ogen doet knipperen: een gestalte, al volwassen, al volledig gewapend — een speer stevig in haar hand, een helm die zonder enige hulp precies op haar plek valt, alsof ze nooit anders bedoeld was dan om zo geboren te worden.
 
 IMAGE:
-birth_of_athena.png
+ch1_birth_of_athena.png
 
 CHOICES:
 
@@ -3824,7 +3884,7 @@ Terwijl Pallas Athena naast Zeus haar plaats inneemt en de Olympos langzaam tot 
 "[[Ecce|zie hier]] — je hebt de geboorte van Pallas Athena teruggegeven aan de herinnering," zegt de stem. "Wijsheid heeft weer een gezicht, een speer, en een naam die door heel Hellas wordt uitgesproken. Zonder jou was ook zij vervaagd, net als al het andere dat deze wereld dreigde te verliezen."
 
 IMAGE:
-orakel_verschijnt.png
+ch1_orakel_verschijnt.png
 
 MUSIC:
 the_oracle_awakens.mp3
@@ -4138,7 +4198,7 @@ Pandora pyxidem aperit — Pandora opent de doos, en novam, "nieuw", buigt keuri
 Er stroomt geen licht naar buiten, maar schaduwen: ziekte, verdriet, oorlog, honger, en ontelbare andere kwalen die zich in de lucht oplossen en de wereld in trekken voordat ook maar iemand ze kan grijpen of tegenhouden. Pandora deinst achteruit, haar handen tegen haar mond, terwijl de eerste ellende die de mensheid ooit zal kennen zich over de aarde verspreidt.
 
 IMAGE:
-pandora.png
+ch1_pandora.png
 
 CHOICES:
 
@@ -4304,7 +4364,7 @@ Terwijl je van Prometheus' rots wegloopt, met vuur en hoop nu onlosmakelijk verb
 "[[Ecce|zie hier]] — je hebt het vuur van Prometheus, de doos van Pandora en de hoop die erin achterbleef teruggegeven aan de herinnering," zegt de stem. "Een titaan die alles riskeerde voor een schepping die niet eens de zijne was — zonder jou was ook dat verhaal voorgoed verdwenen."
 
 IMAGE:
-orakel_verschijnt.png
+ch1_orakel_verschijnt.png
 
 MUSIC:
 the_oracle_awakens.mp3
@@ -4715,7 +4775,7 @@ Delos, dat eeuwenlang rondzwierf zonder doel, verankert zichzelf vanaf die dag v
 Terwijl Diana en Apollo hun eerste ademteugen nemen, voel je — zonder het te kunnen verklaren — dat elders, in Thebe, een ander verhaal zich op datzelfde moment ontvouwt: een ander slachtoffer van dezelfde jaloezie, een ander kind dat nog geboren moet worden.
 
 IMAGE:
-geboorte_apollo_diana.png
+ch2_geboorte_apollo_diana.png
 
 CODEX:
 codex_geboorte_apollo_diana
@@ -4880,7 +4940,7 @@ TEXT:
 Jupiter verschijnt in zijn volle staat: bliksem die de lucht openrijt, donder die de fundamenten van het paleis doet schudden, een licht zo verzengend dat het geen onderscheid maakt tussen liefde en vernietiging. "[[Iuppiter fulmen misit|Jupiter wierp de bliksem]]" — zo zal dit ogenblik ooit worden opgeschreven, drie woorden voor iets dat in werkelijkheid de hele hemel verscheurt. Semele's sterfelijke lichaam kan het niet verdragen — ze wordt op slag verteerd door het vuur van zijn ware gedaante, nog voor ze heeft kunnen beseffen wat ze eigenlijk had gevraagd.
 
 IMAGE:
-semele_verteerd.png
+ch2_semele_verteerd.png
 
 PUZZLE:
 puzzle_ch2s_esse
@@ -4987,7 +5047,7 @@ Ergens, ver van hier, weet je dat dit dezelfde god is die je ooit — in een and
 Tussen de as, ongedeerd, ligt een enkele wijnrank — nog groen, nog levend, alsof het vuur haar bewust had overgeslagen. Je windt hem om je pols; hij verwelkt niet, en zal dat, voor zover je kunt zien, ook nooit doen.
 
 IMAGE:
-geboorte_bacchus.png
+ch2_geboorte_bacchus.png
 
 CODEX:
 codex_geboorte_bacchus
@@ -5195,7 +5255,7 @@ TEXT:
 Vanaf een verre bergkam, onzichtbaar voor iedereen behalve jou, kijkt Athena toe. Ook nu grijpt ze niet in.
 
 IMAGE:
-kallisto_berin.png
+ch2_kallisto_berin.png
 
 PUZZLE:
 puzzle_ch2k_esse
@@ -5238,7 +5298,7 @@ Daar, aan de nachtelijke hemel, blijft hun verhaal zichtbaar voor iedereen die o
 Op de plek waar Kallisto zojuist nog stond, vind je een enkele haarlok berenvacht, achtergebleven in het gras. In het donker lijkt hij zwak te glanzen — bijna alsof er nog een beetje sterrenlicht in is blijven hangen. Je stopt hem weg, met het vage gevoel dat het Orakel dat wil.
 
 IMAGE:
-kallisto_sterrenbeeld.png
+ch2_kallisto_sterrenbeeld.png
 
 CODEX:
 codex_metamorfose_kallisto
@@ -5366,7 +5426,7 @@ De waanzin grijpt Herakles zo volledig dat de wereld om hem heen vervormt tot ie
 Wanneer het licht in zijn ogen terugkeert, staat Herakles alleen in een huis dat niet langer een thuis is. Megara. De kinderen. Allemaal weg, door zijn eigen hand, in een waanzin die niet de zijne was maar wel zijn daad. Het geluid dat uit hem komt wanneer het besef doordringt, is niet het geluid van een held.
 
 IMAGE:
-herakles_nasleep.png
+ch2_herakles_nasleep.png
 
 CHOICES:
 
@@ -5691,7 +5751,7 @@ Athena stapt voor het eerst dit hoofdstuk naar voren, niet langer een zwijgende 
 Vanaf dit moment, voel je, is ze niet langer enkel een toeschouwer.
 
 IMAGE:
-athena_mentor_ch2.png
+ch2_athena_mentor.png
 
 PERSON:
 athena:full
@@ -5869,7 +5929,7 @@ Juno vertrouwt haar nieuwe vaars toe aan Argus Panoptes, een reus met honderd og
 Io wordt vastgebonden aan een olijfboom in een weiland, dag en nacht bekeken door een wezen dat nooit werkelijk wegkijkt.
 
 IMAGE:
-argus_bewaakt_io.png
+ch3_argus_bewaakt_io.png
 
 PERSON:
 argus:intro
@@ -6033,7 +6093,7 @@ Juno neemt Argus' honderd ogen, één voor één, en plaatst ze voor eeuwig op d
 Maar Argus' dood lost niets op voor Io zelf — Juno, nu pas echt woedend, zoekt onmiddellijk naar een nieuwe manier om haar te kwellen.
 
 IMAGE:
-pauw_ogen_argus.png
+ch3_pauw_ogen_argus.png
 
 CHOICES:
 
@@ -6178,7 +6238,7 @@ Ze vertelt, kort maar met duidelijke afkeuring in haar stem, over Europa: een Fe
 "Bij Io wordt de vrouw een dier om de affaire te verbergen," besluit Athena. "Bij Europa wordt de god zelf een dier om de affaire te beginnen. Twee kanten van dezelfde ontrouw — en jij, {tendency_address}, hebt inmiddels wel gemerkt dat Jupiter zelden de prijs betaalt die anderen voor hem betalen."
 
 IMAGE:
-europa_stier.png
+ch3_europa_stier.png
 
 CODEX:
 codex_europa
@@ -6519,7 +6579,7 @@ TEXT:
 Augias, die achteraf spijt krijgt van zijn belofte, weigert de afgesproken kudde te betalen. En Eurystheus, die hoort dat Herakles voor deze taak (bijna) betaald zou zijn geweest, verklaart — net als bij de Hydra — dat ook deze beproeving niet meetelt, puur op een technisch punt.
 
 IMAGE:
-augiasstal.png
+ch3_augiasstal.png
 
 CODEX:
 codex_augiasstal
@@ -6806,7 +6866,7 @@ Met Ladon omzeild weet Herakles nog altijd niet hoe hij zelf de appels mag plukk
 Atlas, eindelijk bevrijd van een last die hij al eeuwen torst, plukt de appels — en overweegt dan hardop om nooit meer terug te komen, Herakles voorgoed achterlatend onder het gewicht van de hemel.
 
 IMAGE:
-atlas_hemel.png
+ch3_atlas_hemel.png
 
 PUZZLE:
 puzzle_ch3h_bijstelling2
@@ -6989,7 +7049,7 @@ Herakles brengt Cerberus, zoals beloofd, ongedeerd terug naar de onderwereld —
 Voor je afscheid neemt, drukt Herakles je zelf iets in handen: een van de gouden appels van de Hesperiden, die hij nooit heeft opgegeten. "Bewaar die," zegt hij. "Ik heb aan het bewijs dat ik ze heb gehaald genoeg — een verhaal onthoud je toch beter met iets dat je kunt vasthouden."
 
 IMAGE:
-cerberus_voltooid.png
+ch3_cerberus_voltooid.png
 
 CODEX:
 codex_herakles_twaalf_werken
@@ -7029,7 +7089,7 @@ Athena wacht je op bij de Boodschapper, ditmaal niet als toeschouwer maar als ie
 "Twee soorten vrijheid," vervolgt ze, "en jij, {tendency_address_cap}, hebt inmiddels gezien dat geen van beide vanzelf komt — niet voor een god, en al helemaal niet voor een sterveling."
 
 IMAGE:
-athena_mentor_ch3.png
+ch3_athena_mentor.png
 
 PERSON:
 athena:full
@@ -7161,7 +7221,7 @@ Vlak voor het schip vertrekt, roept Aegeus zijn zoon nog één keer bij zich, aa
 "Beloof me één ding," zegt hij, zijn stem nauwelijks vast. "Als je overleeft — als je dat monster verslaat en teruggevaren wordt — hijs dan witte zeilen in plaats van zwarte, zodra de kust in zicht komt. Dan weet ik het al voor het schip de haven bereikt. Beloof het me, Theseus." Theseus belooft het zonder aarzelen — een belofte die op dit moment vederlicht aanvoelt, een kleinigheid vergeleken met het monster dat voor hem ligt.
 
 IMAGE:
-aegeus_belofte_zeilen.png
+ch4_aegeus_belofte_zeilen.png
 
 PUZZLE:
 puzzle_ch4t_infinitivus
@@ -7336,7 +7396,7 @@ TEXT:
 Met het monster verslagen volgt Theseus het garen terug — elke bocht die hij eerder blindelings nam, wijst nu feilloos de weg naar buiten. Bij de ingang wacht Ariadne al, opgelucht en gespannen tegelijk: veertien mensen, van wie de meesten amper op de been kunnen blijven van uitputting en angst, moeten nu nog ongezien van het paleis naar de haven, voor Minos' wachters ook maar vermoeden wat er is gebeurd.
 
 IMAGE:
-theseus_garen_terug.png
+ch4_theseus_garen_terug.png
 
 CHOICES:
 
@@ -7426,7 +7486,7 @@ Ariadne ontwaakt alleen op een onbekend strand — tot Bacchus, de god die je al
 Het is geen volledig gelukkig einde — geen enkel verhaal in dit hoofdstuk krijgt dat — maar het is het enige moment waarop een gebroken belofte alsnog met iets goeds eindigt.
 
 IMAGE:
-bacchus_ariadne_naxos.png
+ch4_bacchus_ariadne_naxos.png
 
 CODEX:
 codex_ariadne_bacchus
@@ -7553,7 +7613,7 @@ De zon doet precies wat Daidalos vreesde: de was tussen de veren smelt, eerst on
 "[[Icare|Icarus!]]" roept Daidalos, keer op keer, terwijl hij cirkelt boven het water — maar er komt geen antwoord meer, enkel verspreide veren die langzaam op de golven neerdalen.
 
 IMAGE:
-val_van_ikaros.png
+ch4_val_van_ikaros.png
 
 PUZZLE:
 puzzle_ch4t_vocativus
@@ -7615,7 +7675,7 @@ Theseus, die pas aan land beseft wat er is gebeurd, staat oog in oog met het gew
 In je zak, waar je het niet had verwacht, vind je nog een laatste stukje van Ariadne's garen — te kort om ooit nog een labyrint mee terug te vinden, lang genoeg om je eraan te herinneren dat iemand je ooit een weg naar buiten gaf.
 
 IMAGE:
-aegeus_sprong_zee.png
+ch4_aegeus_sprong_zee.png
 
 CODEX:
 codex_labyrint_minotaurus
@@ -7869,7 +7929,7 @@ TEXT:
 Jupiter, die geen andere keus meer ziet, grijpt naar zijn bliksem — niet uit woede jegens de jongen zelf, maar omdat één enkel leven, hoe onschuldig zijn fout ook begon, niet opweegt tegen de hele wereld. Met één worp treft hij de wagen en slingert Phaëthon, brandend, uit de lucht.
 
 IMAGE:
-phaethon_bliksem.png
+ch4_phaethon_bliksem.png
 
 PUZZLE:
 puzzle_ch4p_perfectum
@@ -7907,7 +7967,7 @@ Phaëthons zusters, de Heliaden, vinden zijn graf aan de oever van de Eridanus e
 Amber wordt sindsdien gevonden langs precies dat soort rivieroevers — bevroren verdriet, zeggen sommigen, van een rouw die nooit is opgehouden.
 
 IMAGE:
-heliaden_populieren.png
+ch4_heliaden_populieren.png
 
 CODEX:
 codex_phaethon
@@ -8118,7 +8178,7 @@ Binnen een paar weken ligt de haven van Iolcus vol met de beroemdste namen van G
 Bij het schip zelf staat de man die het heeft gebouwd: Argos, zoon van Arestor, die — op aanwijzing van Athena zelf, zegt men — een balk uit het orakelbos van Dodona in de boeg heeft verwerkt. "Ze waarschuwt weleens," zegt hij droog, als iemand ernaar vraagt, "maar nooit op tijd om nog iets te kunnen doen met de waarschuwing."
 
 IMAGE:
-argo_bemanning.png
+ch5_argo_bemanning.png
 
 CODEX:
 codex_argonauten_bemanning
@@ -8440,7 +8500,7 @@ Beide groepen drijven het everzwijn uiteindelijk naar dezelfde kloof, waar het g
 Geen van beiden claimt de eer alleen. "Zonder jouw pijl had ik hem nooit ingehaald," zegt Meleager, en Atalanta knikt, voor het eerst die dag zonder een spoor van wedijver in haar blik.
 
 IMAGE:
-everzwijn_cyzicus.png
+ch5_everzwijn_cyzicus.png
 
 PUZZLE:
 puzzle_ch5_accusativus
@@ -8535,7 +8595,7 @@ TEXT:
 Amycus valt, voor het eerst in zijn leven verslagen, en zijn volk — dat hem eerder uit angst dan uit liefde volgde — verwelkomt de Argonauten meteen als bevrijders in plaats van indringers. Kastor slaat zijn broer trots op de schouder; het is duidelijk dat dit niet de laatste keer is dat deze twee samen iets overwinnen dat groter is dan zijzelf.
 
 IMAGE:
-polydeukes_amycus.png
+ch5_polydeukes_amycus.png
 
 CODEX:
 codex_dioscuren
@@ -8559,7 +8619,7 @@ Bij Mysië gaat Herakles aan land om een nieuwe roeiriem te snijden, met zijn jo
 Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke aanmaning om terug aan boord te komen. "[[Redi!|Kom terug!]]" roept Telamon nog, meer dan eens, zonder enig effect. Tegen de ochtend besluit de bemanning, met tegenzin, zonder hem verder te varen — Herakles, wanneer hij eindelijk het strand terugvindt en het schip al weg ziet, blijft alleen achter, zijn zoektocht naar Hylas nog altijd niet opgegeven.
 
 IMAGE:
-hylas_nimfen.png
+ch5_hylas_nimfen.png
 
 PERSON:
 hylas:full
@@ -8686,7 +8746,7 @@ Op Argos' teken roeit de hele bemanning met alles wat ze in zich hebben, precies
 Sinds die dag, zegt men, bewegen de Symplegades niet meer: een schip dat de doortocht overleeft, bevriest de rotsen voorgoed op hun plaats. Wat er ook van waar is, geen enkel schip na de Argo heeft ze ooit nog zien bewegen.
 
 IMAGE:
-symplegades_doortocht.png
+ch5_symplegades_doortocht.png
 
 CODEX:
 codex_argos_schip
@@ -8892,7 +8952,7 @@ Colchis ligt aan de rand van de bekende wereld, verder naar het oosten dan de me
 Naast hem staat zijn dochter Medea, een begaafde tovenares — en de eerste die haar vaders koelte niet deelt zodra ze Jason ziet. Wat ze voor hem voelt, overvalt haarzelf net zo hard als het jou overvalt: het lijkt in niets op wat ze had verwacht.
 
 IMAGE:
-medea_aeetes_colchis.png
+ch5_medea_aeetes_colchis.png
 
 PERSON:
 medea:intro, aeetes:intro
@@ -9087,7 +9147,7 @@ Met de draak verslagen snijdt Jason het Vlies eindelijk los — zwaarder en warm
 In je vuist voel je een klein, gouden schilfertje dat losraakte van het Vlies tijdens het gevecht — koud eerst, dan langzaam warm, alsof het net zo lang op jou heeft liggen wachten als het Vlies zelf op Jason wachtte.
 
 IMAGE:
-gulden_vlies_gevonden.png
+ch5_gulden_vlies_gevonden.png
 
 SOUVENIR:
 souvenir_argonauten
@@ -9282,7 +9342,7 @@ Kadmos, een Fenicische prins op zoek naar zijn geschaakte zuster Europa — je k
 Om een offer te brengen doodt hij een draak die de bron ter plekke bewaakt — en zaait, op advies van Athena zelf, de tanden van het beest in de aarde. Uit de grond rijzen gewapende krijgers op, meer dan Kadmos in zijn eentje het hoofd kan bieden.
 
 IMAGE:
-spartoi_thebe.png
+ch6_spartoi_thebe.png
 
 PERSON:
 kadmos:intro
@@ -9436,7 +9496,7 @@ Apollo en Diana laten de belediging aan hun moeder niet ongestraft. Met hun pijl
 Niobe, verstard van verdriet, verandert ter plekke in steen. Nog altijd, zegt men, laat de rots op de berg Sipylos water druppelen — tranen die na al die generaties nog altijd niet zijn opgehouden.
 
 IMAGE:
-niobe_versteend.png
+ch6_niobe_versteend.png
 
 CODEX:
 codex_niobe
@@ -9587,7 +9647,7 @@ TEXT:
 {sfinx_route_echo}
 
 IMAGE:
-sfinx_raadsel.png
+ch6_sfinx_raadsel.png
 
 PUZZLE:
 puzzle_ch6_sfinx
@@ -9714,7 +9774,7 @@ Verbannen uit zijn eigen stad, verzamelt Polyneikes zes andere champions om Theb
 "Als er íémand een stadspoort met kracht in plaats van geduld openkrijgt," zegt Tydeus grimmig, terwijl hij zijn wapenrusting aantrekt, "dan ben ik dat wel."
 
 IMAGE:
-zeven_tegen_thebe.png
+ch6_zeven_tegen_thebe.png
 
 CHOICES:
 
@@ -9925,7 +9985,7 @@ TEXT:
 Tegen Creons uitdrukkelijke bevel in begraaft Antigone haar broer in het geheim, met de juiste rituelen — overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning.
 
 IMAGE:
-antigone_begrafenis.png
+ch6_antigone_begrafenis.png
 
 PUZZLE:
 puzzle_ch6_perfectum
@@ -10023,7 +10083,7 @@ Met Laodamas verslagen valt Thebe eindelijk, tien jaar nadat de vaders van de Ep
 Zijn naam zal hier niet ophouden. Jaren later, ver van Thebe, zal Diomedes een van de dapperste helden voor de poorten van een heel andere belegerde stad worden.
 
 IMAGE:
-diomedes_val_thebe.png
+ch6_diomedes_val_thebe.png
 
 CODEX:
 codex_epigonen
@@ -10065,7 +10125,7 @@ TEXT:
 Een vreemde nieuwe verering verspreidt zich door Thebe: de cultus van Bacchus, god van wijn en extase — en, zoals niemand in de stad hardop durft te zeggen, de zoon van Semele, Kadmos' eigen dochter. Pentheus, Semele's neef en de huidige koning, weigert te geloven dat zijn eigen nicht een god heeft gebaard. Hij verbiedt de verering en probeert de vrouwen van Thebe, die massaal de bergen in trekken om Bacchus te aanbidden, met geweld terug te dwingen.
 
 IMAGE:
-bacchanten_berg.png
+ch6_bacchanten_berg.png
 
 PERSON:
 pentheus:intro
@@ -10335,7 +10395,7 @@ Ver voor Troje ook maar bestaat in iemands gedachten, bezoekt Zeus de Spartaanse
 Wat daaruit voortkomt, vertellen de dichters verschillend: een ei, zeggen sommigen, waaruit kinderen breken die half goddelijk en half sterfelijk zijn. Onder hen: de tweeling Castor en Pollux, die je al kent als onafscheidelijke Argonauten — en een dochter wier naam nog niemand in Griekenland kent, maar die dat, over niet al te lange tijd, allemaal zal veranderen. Helena.
 
 IMAGE:
-leda_zwaan.png
+ch7_leda_zwaan.png
 
 PERSON:
 leda:intro
@@ -10611,7 +10671,7 @@ Hera, Athena en Aphrodite buigen zich er alle drie tegelijk overheen — en bese
 In je vuist voel je opeens het gewicht van diezelfde appel — zwaarder dan goud hoort te zijn, alsof het gewicht van de hele oorlog die nog moet komen er al in verborgen zit.
 
 IMAGE:
-appel_der_tweedracht.png
+ch7_appel_der_tweedracht.png
 
 SOUVENIR:
 souvenir_appel_tweedracht
@@ -10812,7 +10872,7 @@ Elke godin probeert Paris om te kopen voor hij ook maar iets heeft gezegd. Hera 
 Paris, herder, geen koning, geen strateeg, kiest Aphrodite — en met haar, zonder het ook maar te vermoeden, de vrouw die al getrouwd is met de koning van Sparta.
 
 IMAGE:
-parisoordeel.png
+ch7_parisoordeel.png
 
 EERETITEL:
 ch7_parisoordeel
@@ -10876,7 +10936,7 @@ TEXT:
 Wanneer zakelijke verplichtingen Menelaus voor een tijd van huis roepen, verlaat Helena het paleis samen met Paris — naar zijn schip, en van daar naar Troje. {helena_lot} Wat wel vaststaat: een gastheer die zijn gast met open armen ontving, wordt beroofd van zijn eigen vrouw onder zijn eigen dak.
 
 IMAGE:
-schaking_helena.png
+ch7_schaking_helena.png
 
 PUZZLE:
 puzzle_ch7_accusativus
@@ -10961,7 +11021,7 @@ Thetis weet iets dat verder niemand weet: als haar zoon Achilles meevaart naar T
 Odysseus, net zo sluw als altijd, doorziet de list. Vermomd als koopman spreidt hij sieraden en stoffen uit voor de meisjes — en tussen de spullen ook een zwaard en een schild. Wanneer plotseling een strijdhoorn schalt, vluchten de meisjes gillend weg van het denkbeeldige gevaar. Eén van hen grijpt in plaats daarvan naar het wapentuig.
 
 IMAGE:
-achilles_skyros.png
+ch7_achilles_skyros.png
 
 PERSON:
 achilles:intro
@@ -11067,7 +11127,7 @@ Agamemnon laat zijn eigen dochter Iphigenia naar Aulis lokken, onder het mom van
 Wat elke versie gemeen heeft: de wind steekt op. De vloot kan eindelijk vertrekken.
 
 IMAGE:
-iphigenia_hinde.png
+ch7_iphigenia_hinde.png
 
 PUZZLE:
 puzzle_ch7_ablativus
@@ -11114,7 +11174,7 @@ Onderweg naar Troje wordt de vloot gedwongen te pauzeren voor een offer — en t
 De Grieken nemen een harde beslissing: ze laten Philoktetes achter op het verlaten eiland Lemnos, met niets dan zijn wond en de boog van Herakles om te overleven — in de stellige hoop dat ze hem nooit meer nodig zullen hebben.
 
 IMAGE:
-philoktetes_lemnos.png
+ch7_philoktetes_lemnos.png
 
 CODEX:
 codex_philoktetes_lemnos
@@ -11304,7 +11364,7 @@ Woedend, maar gedwongen, stemt Agamemnon toe Chryseis terug te geven — op éé
 Op dat exacte moment grijpt een onzichtbare hand hem bij zijn haar — Athena zelf, zichtbaar voor niemand behalve hem. Hij bedwingt zijn woede, maar niet zijn tong: voor het verzamelde leger zweert hij dat hij geen vinger meer zal uitsteken voor een aanvoerder die hem zo weinig eert. Naast hem staat, zoals altijd, zijn oudste vriend Patroklos — zwijgend, maar met een blik die alles zegt.
 
 IMAGE:
-achilles_woede.png
+ch8_achilles_woede.png
 
 PERSON:
 patroklos:intro
@@ -11434,7 +11494,7 @@ TEXT:
 Ze smeekt hem te blijven. Hij weet, en zegt het haar bijna teder, dat Troje ooit zal vallen — maar dat hij zichzelf nooit meer zou kunnen aanzien als hij nu wegbleef. Het jongetje schrikt van zijn vaders glimmende helm, tot Hector hem lachend afzet en optilt.
 
 IMAGE:
-hektor_andromache.png
+ch8_hektor_andromache.png
 
 CODEX:
 codex_hektor_andromache
@@ -11593,7 +11653,7 @@ TEXT:
 Terwijl Patroklos zich in Achilles' eigen wapenrusting hijst, denkt Achilles heel even terug aan zijn eigen jeugd bij de wijze centaur Chiron — dezelfde leermeester die hem ooit dit alles voorbereidde, zonder ooit te kunnen voorbereiden op dit moment.
 
 IMAGE:
-patroklos_wapenrusting.png
+ch8_patroklos_wapenrusting.png
 
 PUZZLE:
 puzzle_ch8_ach_pronomen
@@ -11739,7 +11799,7 @@ Midden in het gevecht zie je een jonge Griekse held, Diomedes, die vandaag lijkt
 Wat je daarna ziet, geloof je bijna niet: Diomedes die het opneemt tegen Ares zelf, de oorlogsgod, en hem met zijn speer treft. Ares' gil van pijn is tot ver buiten het slagveld te horen.
 
 IMAGE:
-diomedes_tegen_mars.png
+ch8_diomedes_tegen_mars.png
 
 CODEX:
 codex_diomedes_huzarenstuk
@@ -11801,7 +11861,7 @@ TEXT:
 Ze smeekt hem te blijven. Hij weet, en zegt het haar bijna teder, dat Troje ooit zal vallen — maar dat hij zichzelf nooit meer zou kunnen aanzien als hij nu wegbleef. Het jongetje schrikt van zijn vaders glimmende helm, tot Hector hem lachend afzet en optilt.
 
 IMAGE:
-hektor_andromache.png
+ch8_hektor_andromache.png
 
 CODEX:
 codex_hektor_andromache
@@ -12013,7 +12073,7 @@ Achilles laat een kreet los die niemand ooit zal vergeten — geen woorden, op �
 Achilles smeert as door zijn haar en scheurt zijn kleren — niet uit gewoonte, maar omdat er niets anders is dat het verdriet ook maar enigszins kan bevatten.
 
 IMAGE:
-achilles_rouwkreet.png
+ch8_achilles_rouwkreet.png
 
 CHOICES:
 
@@ -12231,7 +12291,7 @@ TEXT:
 Pas wanneer Athena, vermomd als zijn eigen broer Deiphobus, Hector overtuigt zich om te draaien, blijft hij eindelijk staan.
 
 IMAGE:
-achilles_achtervolgt_hektor.png
+ch8_achilles_achtervolgt_hektor.png
 
 COMBAT:
 hektor
@@ -12527,7 +12587,7 @@ Priamus kust de handen die zoveel van zijn zonen doodden, en smeekt Achilles zic
 Hij geeft Hectors lichaam ongeschonden terug, en de twee mannen — koning en moordenaar van zijn zoon — delen voor die ene nacht zelfs een maaltijd.
 
 IMAGE:
-priamus_smeekbede.png
+ch8_priamus_smeekbede.png
 
 PERSON:
 priamus:full
@@ -12829,7 +12889,7 @@ Na Hectors dood lijkt alle hoop uit Troje verdwenen — tot de Amazonekoningin P
 De vreugde duurt kort. Achilles doodt haar in een tweegevecht — en wanneer hij haar helm afzet om zijn overwinning te bevestigen, ziet zelfs hij, vanaf de muren amper zichtbaar, iets waarvan gefluisterd wordt dat het hem nooit meer helemaal loslaat.
 
 IMAGE:
-penthesileia.png
+ch9_penthesileia.png
 
 CODEX:
 codex_penthesileia
@@ -12879,7 +12939,7 @@ Bij de Scaeïsche Poort gebeurt wat niemand in Troje nog had durven hopen: Paris
 Om de muren barst gejuich los. Beneden, bij de Griekse linies, zie je een felle strijd om zijn lichaam losbarsten — Aias die het probeert te redden, Odysseus die de aanvallers afhoudt.
 
 IMAGE:
-achilles_dood_pijl.png
+ch9_achilles_dood_pijl.png
 
 CODEX:
 codex_dood_achilles
@@ -13084,7 +13144,7 @@ TEXT:
 Op een ochtend is het Griekse kamp verlaten. De schepen zijn verdwenen, de tenten afgebroken — na tien jaar lijkt de vloot eindelijk vertrokken. Op het verlaten strand staat maar één ding: een reusachtig houten paard, en ernaast een enkele Griekse man, kennelijk door zijn eigen mensen achtergelaten.
 
 IMAGE:
-trojaans_paard_strand.png
+ch9_trojaans_paard_strand.png
 
 CODEX:
 codex_trojaanse_paard
@@ -13185,7 +13245,7 @@ Vlak na Laocoöns waarschuwing komen twee reusachtige zeeslangen uit de golven �
 Troje leest het verkeerd: dit is, denkt iedereen, een straf voor Laocoöns twijfel — niet een waarschuwing.
 
 IMAGE:
-laocoon_slangen.png
+ch9_laocoon_slangen.png
 
 CODEX:
 codex_laocoon
@@ -13210,7 +13270,7 @@ Cassandra, Priamus' eigen dochter, smeekt de stad het paard niet binnen te halen
 Het paard wordt, onder gejuich, door een bres in de muur naar binnen gesleept.
 
 IMAGE:
-cassandra_waarschuwing.png
+ch9_cassandra_waarschuwing.png
 
 CODEX:
 codex_cassandra_waarschuwing
@@ -13294,7 +13354,7 @@ Midden in de nacht klimmen de verstopte Grieken alsnog uit het paard en openen d
 Wat volgt is geen veldslag meer. Het is een slachting. Door de straten klinkt van alle kanten hetzelfde ene woord: "Fuge!" — vlucht.
 
 IMAGE:
-troje_valt_trojanen.png
+ch9_troje_valt_trojanen.png
 
 PERSON:
 helena:full
@@ -13449,7 +13509,7 @@ TEXT:
 Terwijl de stad om hem heen instort, draagt de Trojaanse prins Aeneas zijn oude, kreupele vader Anchises op zijn eigen schouders de brandende straten uit, zijn zoontje Ascanius stevig aan de hand. Van alle Trojanen die deze nacht overleven, is hij degene wiens verhaal het verst zal reizen — al heeft niemand, ook hijzelf niet, enig idee hoe ver dat werkelijk zal blijken.
 
 IMAGE:
-aeneas_vlucht.png
+ch9_aeneas_vlucht.png
 
 CODEX:
 codex_aeneas_vlucht
@@ -13586,7 +13646,7 @@ Na Hectors dood krijgt Troje onverwachte versterking: de Amazonekoningin Penthes
 Wanneer hij haar helm afzet, verstart hij: haar gezicht is zo mooi dat zijn eigen overwinning hem plotseling ondraaglijk voorkomt. Thersites, een spotter zonder enig ontzag, hoont hem erom hardop voor het hele leger — en betaalt daarvoor met zijn leven: Achilles doodt ook hem, ter plekke, zonder aarzeling.
 
 IMAGE:
-penthesileia.png
+ch9_penthesileia.png
 
 CODEX:
 codex_penthesileia
@@ -13613,7 +13673,7 @@ Memnon, zoon van de dageraadgodin Eos, arriveert met een leger uit het verre oos
 Achilles' wraak is onmiddellijk en meedogenloos. Memnon valt, en Eos weent om haar zoon zoals geen enkele godin ooit om een sterveling heeft geweend.
 
 IMAGE:
-memnon_antilochos.png
+ch9_memnon_antilochos.png
 
 CODEX:
 codex_memnon
@@ -13638,7 +13698,7 @@ Bij de Scaeïsche Poort van Troje treft Paris, met Apollo's hand op zijn boog, A
 Aias, Telamons zoon, tilt het lichaam op zijn schouders en draagt het onder vijandelijk vuur naar de Griekse linies, terwijl Odysseus met zijn zwaard de aanvallers op afstand houdt. Zonder die twee zou zelfs Achilles' lichaam nooit zijn teruggekeerd.
 
 IMAGE:
-achilles_lichaam_gered.png
+ch9_achilles_lichaam_gered.png
 
 CODEX:
 codex_dood_achilles
@@ -13691,7 +13751,7 @@ Vernederd besluit Aias 's nachts de Griekse aanvoerders te vermoorden — Athena
 Hij valt op zijn eigen zwaard — hetzelfde zwaard dat hij ooit van Hector kreeg, na een gevecht dat eindigde in een uitwisseling van wapenrusting in plaats van bloedvergieten.
 
 IMAGE:
-aias_ondergang.png
+ch9_aias_ondergang.png
 
 CODEX:
 codex_waanzin_aias
@@ -13856,7 +13916,7 @@ TEXT:
 Odysseus en Diomedes keren op een nacht terug van een missie die niemand anders kende: vermomd als bedelaar is Odysseus Troje binnengeslopen en heeft, met Diomedes' hulp, het Palladium gestolen — het heilige beeld dat de stad al generaties beschermde. De schepen die het wegvoerden, liggen zorgvuldig verborgen op het strand.
 
 IMAGE:
-palladium_diefstal.png
+ch9_palladium_diefstal.png
 
 CODEX:
 codex_palladium_diefstal
@@ -13921,7 +13981,7 @@ TEXT:
 Binnenin is het benauwd, donker, en angstaanjagend stil — je hoort je eigen hart luider dan wat dan ook. Buiten klinken Trojaanse stemmen, feestvierend, nietsvermoedend, gevaarlijk dichtbij. Elke beweging, elke ademhaling, kan jullie allemaal verraden.
 
 IMAGE:
-grieken_in_het_paard.png
+ch9_grieken_in_het_paard.png
 
 CHECK:
 ch9_gri_011_stilte
@@ -14010,7 +14070,7 @@ TEXT:
 Het paard klapt open. Jullie klimmen eruit, gewrichten stijf van uren wachten, en overmeesteren de laatste, halfslapende wachters bij de poort — meer een formaliteit dan een gevecht, na tien jaar beleg.
 
 IMAGE:
-troje_valt_neutraal.png
+ch9_troje_valt_neutraal.png
 
 COMBAT:
 trojaanse_wachters
@@ -14030,7 +14090,7 @@ TEXT:
 De poorten gaan open van binnenuit, en de teruggekeerde vloot stroomt Troje binnen. Wat volgt is geen veldslag meer, maar een slachting — huizen in brand, tempels geplunderd, een stad die tien jaar weerstand bood binnen enkele uren overmeesterd.
 
 IMAGE:
-troje_valt_grieken.png
+ch9_troje_valt_grieken.png
 
 CODEX:
 codex_val_van_troje
@@ -15861,6 +15921,9 @@ Mercurius zet je terug precies waar hij je ophaalde, alsof er geen moment is ver
 
 Ze kijkt je aan. "Odysseus is intussen ook bijna waar hij wezen moet. Wanneer jij zover bent, is hij dat ook."
 
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH12_WORDT_VERVOLGD
+
 END
 
 === SCENE: CH12_ODY_001 ===
@@ -15899,6 +15962,38 @@ telemachus:intro
 
 CODEX:
 codex_eumaeus
+
+CHOICES:
+* Zie hoe Odysseus zich voorbereidt op wat komen gaat -> CH12_ODY_003
+
+END
+
+=== SCENE: CH12_ODY_003 ===
+
+TITLE:
+Nog Niet Onthuld
+
+TEXT:
+Odysseus luistert naar Eumaeus' verhaal zonder zich te verraden, zijn gezicht nog altijd verborgen achter de rimpels van een bedelaar die hij niet is. Zijn paleis wacht, vol vrijers die niet weten wat hun te wachten staat. De boog die niemand anders kan spannen, het weerzien met Penelope, de afrekening die al twintig jaar onderweg is — dat verhaal ligt nog vlak voor hem.
+
+Maar het is een verhaal voor een volgende keer.
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH12_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH12_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Rome moet nog gesticht worden, Odysseus moet zijn boog nog spannen, en er wachten nog eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
 
 END
 `.trim();

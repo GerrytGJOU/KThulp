@@ -69,6 +69,15 @@ Houd je altijd, bij elke afbeelding, aan het volgende.
 - **Liggend, 16:9**, hoge resolutie, illustratie vult het hele kader (geen witte
   rand, geen passe-partout).
 
+### Bestandsnaam-conventie
+- Elk bestand krijgt het hoofdstuk als **prefix**: `pro_` voor de proloog,
+  `ch1_`, `ch2_`, ... `ch10_`, enz. voor Hoofdstuk 1 t/m 10+, gevolgd door een
+  korte beschrijvende naam in kleine letters met underscores, bv.
+  `ch9_cassandra_waarschuwing.png`. Nooit het hoofdstuk als suffix
+  (`iets_ch2.png`) of helemaal weglaten — ook niet wanneer een illustratie
+  wordt hergebruikt over meerdere scènes van hetzelfde hoofdstuk (dan telt het
+  hoofdstuk van de eerste/hoofd-scène).
+
 ---
 
 ## Promptsjabloon (per illustratie)
