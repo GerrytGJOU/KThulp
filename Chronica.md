@@ -139,6 +139,16 @@ browser):
 
 ---
 
+## 0. Curriculumreferentie
+
+**[PALLAS_MINERVA_OVERZICHT.md](PALLAS_MINERVA_OVERZICHT.md)** (2026-08-02) —
+Pallas 1/2 en Minerva 1/2 naast elkaar in tabelvorm, met achtergrond en
+grammatica per les/hoofdstuk, en welk Chronica-hoofdstuk elk stuk al
+gebruikt. Raadpleeg dit bij elke grammatica-toewijzingsbeslissing (nieuw
+hoofdstuk plannen, audit van een bestaand hoofdstuk) in plaats van losse
+PDF-duik-onderzoeken te herhalen — en werk het bij zodra er een nieuwe
+toewijzing definitief wordt (zie de instructie onderaan dat bestand).
+
 ## 1. Wat Chronica Classica is
 
 Een **narratieve, offline-first singleplayer-RPG** binnen Certamen. De speler is
@@ -508,9 +518,23 @@ kent (Les 2, Les 14) en Minerva (H1, H13).
 >
 > **Overige `SP_MYTH_CANON`-plaatsing:** de onderwereld-zondaars (Tantalos,
 > Sisyphos, Ixion, Danaïden) horen bij Odysseus' Hades-bezoek in Hoofdstuk 11,
-> samen met Kirke/Dido; Orpheus & Eurydice en Persephone & Demeter horen bij
-> Hoofdstuk 27 "De Rivier Lethe" (Orpheus verschijnt zo twee keer — jong in
-> Hoofdstuk 5, gebroken in Hoofdstuk 27); Narcissus & Echo wordt een spiegel-/
+> samen met Kirke/Dido, als één gedeeld Tartaros-moment voor alle drie de
+> taalsporen (Hermes zet de speler even op een zijspoor, ongeacht of
+> Odysseus/Aeneas/beide net gespeeld wordt). **Orpheus & Eurydice zijn
+> verplaatst naar Hoofdstuk 11** (Gerbens besluit, 2026-07-31, bewuste
+> koerswijziging t.o.v. de oorspronkelijke planning) — hun volledige
+> tragedie (de katabasis, het omkijken, het tweede verlies) wordt hier
+> verteld. **Persephone & Hades** verschijnen in Hoofdstuk 11 al wél als
+> (stille) heersers van de onderwereld, maar hun eigen verhaal (de schaking
+> door Hades, de granaatappelpitten) blijft gereserveerd voor Hoofdstuk 27
+> "De Rivier Lethe" — tweetraps-onthulling, zelfde principe als Athena in
+> Hoofdstuk 1. Orpheus' tweede verschijning in Hoofdstuk 27 verschuift
+> dienovereenkomstig: niet langer "gebroken om Eurydike" (die tragedie is
+> al in Hoofdstuk 11 verteld), maar zijn eigenlijke dood — uiteengereten
+> door de Thracische Maenaden, zijn hoofd en lier die de rivier afdrijven
+> terwijl ze nog altijd zingen; thematisch sterker voor een hoofdstuk over
+> herinnering en vergetelheid dan een herhaling van het Eurydike-verlies.
+> Narcissus & Echo wordt een spiegel-/
 > geluidspuzzel in Hoofdstuk 26 "De Bibliotheek van Mnemosyne", samen met de
 > Titanenstrijd, die in de Finale terugkeert als onthulling dat Chronos zelf
 > een verslagen Titaan is. Eros & Psyche en Pygmalion horen bij de Latijnse
@@ -548,6 +572,15 @@ kent (Les 2, Les 14) en Minerva (H1, H13).
 > Hoofdstuk 16. Verdere auteurs volgen op dezelfde manier zodra hun hoofdstuk
 > wordt uitgebouwd.
 
+**Let op — deze hele blockquote (Ronde 1-3) is een bevroren historisch
+planningsverslag, net als de andere `>`-passages in dit document.** Na de
+2026-08-02 hoofdstukcompressie (§7.45, hoofdstuk 13-24 → 13-20 + 21-22-
+Finale) kloppen de hoofdstuknummers hierboven niet meer 1-op-1. De
+personages/zijverhalen zelf zijn wel allemaal herplaatst — zie de nieuwe
+`SP_CAMPAIGN`-entries (`certamen/singleplayer-data.js`) en
+`PALLAS_MINERVA_OVERZICHT.md` voor waar elk personage nu daadwerkelijk
+staat, niet dit verslag.
+
 | # | Boek | Hoofdstuk | Grammatica (basis voor puzzels) |
 |---|---|---|---|
 | Proloog | — | Het Orakel van Chronos | Grieks alfabet, taalbewustzijn, eerste Latijnse woorden |
@@ -560,25 +593,27 @@ kent (Les 2, Les 14) en Minerva (H1, H13).
 | 7 | I | De Appel der Tweedracht | *Herhaling* — bewust grammatica-arm |
 | 8 | I | De Wrok van Achilles | Imperf., sigmatische/thematische aoristus, znw medeklinkergroep, aanwijzende/pers. vnw |
 | 9 | I | Ilion in Vlammen | Comparativus/superlativus, A.C.I., znw groep 3, congruentie — **vertakking Trojaans/Grieks/Neutraal** |
-| 10 | II | Vluchten uit Troje | Medium, passief, aoristus passief; *Minerva H9:* plusquamperfectum, conjunctivus in bijzin |
-| 11 | II | Tussen Liefde en Lot | Participium, genitivus absolutus; *Minerva H10:* A.c.I. |
-| 12 | II | Odysseus' Wraak | Betrekkelijk vnw, conjunctivus, alpha-werkwoorden |
-| 13 | II | Het Begin van Rome | Passief, ppp, deponentia, betrekkelijk voornaamwoord |
-| 14 | II | De Stad van Athena | Futurum, optativus, mi-werkwoorden, stamaoristus, N.C.I. |
-| 15 | II | Oorlog en Overwinning | Perf., fut., fut. exactum, ablativus absolutus |
-| 16 | III | De Vader van de Geschiedenis | Historische taal, bronanalyse; conjunctivus praesens/perfectum |
-| 17 | III | De Stem van de Filosofen | Complexe zinsbouw, argumentatie; gerundium, genitivus subj./obj. |
-| 18 | III | Alexander en de Grenzen van de Wereld | Complexe werkwoorden, participia; gerundivum |
-| 19 | IV | Onder de Koningen | Verdieping naamvallen; conjunctivus |
-| 20 | IV | Verdedigers van de Republiek | Verdieping naamvallen; N.C.I., semi-deponentia |
-| 21 | IV | De Gracchen | *Herhaling* — bewust grammatica-arm |
-| 22 | IV | Marius en Sulla | *Herhaling* — bewust grammatica-arm |
-| 23 | IV | Caesar Schrijft Geschiedenis | Gerundium, gerundivum (herhaling) |
-| 24 | IV | Augustus en de Pax Romana | Literair Latijn |
-| 25 | IV | Keizers en Dichters | Verdieping naamvallen |
-| 26 | V | De Bibliotheek van Mnemosyne | Herhaling van alle grammatica |
-| 27 | V | De Rivier Lethe | Integratie Grieks & Latijn |
-| 28 (Finale) | V | Chronica Classica | Eindtoets van alle grammatica en taalvaardigheid |
+| 10 | II | Vluchten uit Troje | Medium, passief, aoristus passief; *Minerva 14:* naamwoordgroep 4/5, hic, ipse |
+| 11 | II | Tussen Liefde en Lot | Participium, genitivus absolutus; *Minerva 15:* participium praesens actief, ablativus absolutus |
+| 12 | II | Wraak en een Nieuwe Stad | Betrekkelijk vnw, conjunctivus, alpha-werkwoorden (Grieks, les 19-21 — VOLLEDIG, zie §7.45); *Minerva 16* (Hercules & Cacus, **gebouwd**) + *Minerva 17* (Romulus & Remus, **nog te bouwen**) — SAMENGEVOEGD 2026-08-02 uit de oude Hoofdstuk 12 "Odysseus' Wraak" en Hoofdstuk 13 "Het Begin van Rome" (nooit gebouwd), zie §7.44 |
+| 13 | II | Twee Steden, Twee Koningen | Grieks: les 22 (Athena's geboorte); Latijn: Rome onder de koningen — Minerva nog vrij te kiezen |
+| 14 | II | Verzet tegen Tirannen | Grieks: les 23 (Atheense democratie); Latijn: Verdedigers van de Republiek — Minerva nog vrij te kiezen |
+| 15 | III | Hoe Men Leefde | Grieks: les 24-25 (De Vrouw, slavernij); *Minerva 19*: vragend/onbepaald vnw, perfectum met praesensbetekenis |
+| 16 | III | Vorming en Vermaak | Grieks: les 26-27 (opvoeding, sport/Spelen — Atalanta verhuisd hierheen); *Minerva 20*: velle/nolle/fieri, betrekkelijke bijzin, comparativus/superlativus |
+| 17 | III | Oorlog en Overwinning | Grieks: les 28 (Perzische Oorlogen, Herodotos als vertellende stem); *Minerva 17-18*: Hannibal (grammatica grotendeels al bij H11 gedekt, zie §7.41-correctie) |
+| 18 | III | Grenzen Verlegd | Grieks: les 29 (Alexander — **laatste nieuwe Griekse stof**); *Minerva 22-23*: gerundium, genitivus subj./obj., gerundivum (Caesar) |
+| 19 | IV | De Republiek Wankelt | Grieks: *Herhaling* — Diadochenoorlogen (Alexanders generaals verscheuren zijn rijk, direct vervolg op H18); Latijn: *Herhaling* (Gracchen/Marius-Sulla) — bewust grammatica-arm |
+| 20 | IV | Vrede en Vergankelijkheid | Grieks: *Herhaling* — Cleopatra en de Slag bij Actium (einde Hellenistische wereld); *Minerva 24-25*: N.C.I., semi-deponentia (Augustus/Nero), vertaalvaardigheid (literatuur) |
+| 21 | V | De Bibliotheek van Mnemosyne | Herhaling van alle grammatica (Grieks én Latijn samen) |
+| 22 | V | De Rivier Lethe | Integratie Grieks & Latijn |
+| 23 (Finale) | V | Chronica Classica | Eindtoets van alle grammatica en taalvaardigheid |
+
+**2026-08-02, tweede renummering (§7.45)**: de oude hoofdstuk 13-24 (12
+enkelvoudig-spoor-hoofdstukken) zijn vervangen door 8 nieuwe, elk met een
+Griekse én Latijnse lijn (hoofdstuk 13-20), gevolgd door de ontknoping
+(21-22-Finale, was 25-27). Alleen `SP_CAMPAIGN`-metadata vastgelegd, geen
+van deze hoofdstukken is gebouwd. Zie `PALLAS_MINERVA_OVERZICHT.md` voor
+de volledige onderbouwing per hoofdstuk.
 
 **`SP_MYTH_CANON`** — de S/A/B-tier-mythenlijst + de Romeinse verhalen uit de
 docx, bewaard als los naslagwerk. Het grootste deel is inmiddels toegewezen —
@@ -2594,6 +2629,254 @@ bij "beide"/ongezet, elk precies één knop verbergen bij "latijn"/"grieks"),
 "latijn", gemengd bij "beide", en de volledige scène-keten van
 `CH9_MUSEUM_00` tot en met alle acht nieuwe verhaal-scènes bereikbaar.
 
+**Update 2026-07-31 — expliciete keuze + goden-bezoek in `CH10_000`.** Op
+Gerbens verzoek is de taalspoor-vraag zelf herschreven naar drie letterlijke
+keuzeteksten ("Reis mee met Odysseus — kies het Griekse pad" / "... Aeneas —
+kies het Latijnse pad" / "Ervaar alles, zoals de goden het bedoeld hebben —
+kies zowel Grieks als Latijn"), en `CH10_000` is uitgebreid tot een scène
+waarin niet alleen de Boodschapper spreekt, maar ook **Hermes** (voor het
+eerst terug in het Museum na zijn afscheid in `CH9_EINDE`) en **Athena**
+(voor het eerst zelf aanwezig in het Museum, niet als omstander in een
+mythe) — Athena spreekt haar band met Odysseus uit zonder de speler te
+sturen, Hermes zet zichzelf al neer als de figuur die straks (bij "beide")
+tussen de twee taalsporen kan laten wisselen. `FLAG`-mechaniek en de drie
+vervolgscènes (`CH10_000_GRIEKS`/`_LATIJN`/`_BEIDE`) zijn ongewijzigd
+gebleven, alleen hun dialoogtekst is licht aangepast aan de nieuwe framing.
+Kreeg ook een `IMAGE: ch10_hermes_athena_bezoek.png` — **nog te genereren**,
+dus meenemen bij de eerstvolgende illustratie-promptronde (moet ook de oude
+blinde zanger tonen, zie hieronder).
+
+**Nieuw: onbenoemde-maar-herkenbare auteurscameo, eerste toepassing
+Homeros.** `CH10_000` opent nu met een korte vignette vóór de Boodschapper
+het woord neemt: een oude, blinde man met een lier aan de rand van de zaal,
+neuriënd een wijs die "verdacht veel weg heeft van een houten paard, van
+vuur, van een stad die valt" — Athena en de Boodschapper bedanken hem
+("Zonder zangers zoals jij was er niets van dit alles overgebleven"),
+waarna hij tussen de zuilen verdwijnt. **Zijn naam wordt nooit genoemd** —
+de herkenning moet volledig uit context komen (blind, lier, neuriet de
+Trojaanse Oorlog als lied vóórdat iemand het ooit opschreef) — **plus altijd
+een bijpassende `IMAGE:`**, want Gerben wil dat de speler de connectie ook
+visueel kan maken, niet alleen tekstueel (vastgelegd 2026-07-31: elke
+onbenoemde schrijverscameo moet dus zowel qua tekst als qua illustratie op
+de echte identiteit wijzen, nooit tekst-only). Voor Homeros valt dat samen
+met `CH10_000`'s bestaande `IMAGE: ch10_hermes_athena_bezoek.png`, die dus
+ook de oude blinde zanger moet tonen. Dit is bewust
+gekozen als **herbruikbaar patroon** voor latere schrijvers-cameo's, ook
+voor wie al wél met naam in `SP_CAMPAIGN` gepland stond (Herodotos H16,
+Livius H19-20): een korte, ongenoemde cameo-verschijning bij een passend
+moment, los van (en typisch vóór) het latere hoofdstuk waarin diezelfde
+schrijver wél met naam als personage optreedt. Drie nieuwe namen aan de
+schrijverslijst toegevoegd op Gerbens verzoek, nog zonder hoofdstukkoppeling:
+**Thucydides**, **Cornelius Nepos** en **Hyginus** (naast de al genoemde
+Herodotos, Livius, Vergilius/Homeros) — plaatsing volgt zodra de campagne
+de omslag van mythologie naar geschiedenis bereikt (rond Hoofdstuk 15-16,
+zie de `SP_CAMPAIGN`-tabel in §5).
+
+**Update 2026-07-31, vervolg — de rest van `CH10_ODY_*`/`CH10_AEN_*`
+gebouwd, met zigzag-mechanisme voor "beide".** Op Gerbens verzoek is de
+taalspoor-keuze niet alleen dialoog maar ook structuur geworden: een
+speler die "beide" kiest, springt nu scène voor scène heen en weer tussen
+Odysseus en Aeneas, telkens op een vergelijkbaar punt in hun reis (vertrek
+uit Troje ↔ vertrek uit Troje, eerste noodlottige tussenstop ↔ eerste
+noodlottige tussenstop, enz.) — precies het "met Hermes' hulp op en neer
+springen tussen beide verhalen" idee waarmee `CH10_000` Hermes al
+introduceerde.
+
+**Het mechanisme:** elke `CH10_ODY_00N`/`CH10_AEN_00N`-scène eindigt (i.p.v.
+één simpele `* Ga verder`) met twee `[REQUIRE:taalspoor=...]`-gated keuzes:
+één die de eigen lijn vervolgt (zichtbaar bij het eigen enkelvoudige spoor),
+één die naar de OVEREENKOMSTIGE scène van de andere lijn oversteekt
+(zichtbaar bij "beide"). Omdat `REQUIRE_TAG_RE`/`DONE_TAG_RE` allebei maar
+één tag per keuzeregel ondersteunen, kon dit niet gecombineerd worden met
+de bestaande Clementia/Severitas-`[APPROACH]`-keuzes bij `CH10_ODY_002`
+(Kikonen) — daar is een klein tussenknooppunt `CH10_ODY_002B` ingevoegd
+waar de drie houding-keuzes samenkomen, en dat knooppunt draagt zelf de
+zigzag-`REQUIRE`. Dezelfde oplossing voor de drie houding-keuzes na
+Polyphemus' ontsnapping (`CH10_ODY_006` → tussenknooppunt `CH10_ODY_006B`).
+De hub `CH10_001` is om dezelfde reden van twee onafhankelijke
+`!=`-gated knoppen naar drie exclusieve `=`-gated knoppen gegaan
+(grieks/latijn/beide) — bij "beide" is er nu precies één knop, "Volg beide
+verhalen, heen en weer over dezelfde zee", die de hele zigzag-keten
+start bij `CH10_ODY_001` (dit voorkomt een orde-afhankelijke bug: met de
+oude twee-knoppenopzet zou de volgorde waarin de speler de knoppen
+aanklikt bepalen welke scène al dan niet dubbel wordt bezocht). Getest met
+een los simulatiescript dat de keuzegraaf van alle drie taalspoor-standen
+doorloopt: alle drie bereiken `CH10_MUSEUM_00` zonder doodlopend eind
+(grieks 11 stappen, latijn 10, beide 18 — exact de verwachte
+interleaving).
+
+**Inhoud toegevoegd, sluit Hoofdstuk 10 nu volledig af (tot aan de
+Museum-terugkeer):**
+- **Odysseus** (`CH10_ODY_005`/`_006`/`_006B`): de grot van Polyphemus —
+  gevangen, twee metgezellen verloren, de "Οὖτις/Niemand"-list, de
+  verblinding, de ontsnapping onder de buiken van de rammen, en Odysseus'
+  eigen hoogmoed (zijn ware naam alsnog schreeuwen) die Poseidons vloek
+  over de hele thuisreis afroept — de vloek die de rest van de Odyssee
+  aandrijft.
+- **Aeneas** (`CH10_AEN_005`/`_006`/`_007`): de Harpijen op de Strofaden
+  (Celaeno's vloek over de "opgegeten tafels", een vloek die zich pas veel
+  later mild ontknoopt), de kust van de Kyklopen in Sicilië met de
+  **Achaemenides-crossover** (een vergeten bemanningslid van Odysseus dat
+  Aeneas het enige rechtstreekse verslag geeft van wat er met Odysseus is
+  gebeurd — de al langer geplande "overlap", nu gebouwd, zie de eerdere
+  paragraaf in deze sectie), en de stille dood van Anchises in Drepanum.
+- **Gedeeld slot**: `CH10_EINDE` (Boodschapper, Hermes, Athena — parallel
+  aan `CH9_EINDE`, met `SOUVENIR: souvenir_twee_zeeen` en 3 statpunten) →
+  `CH10_MUSEUM_00` (vierde stolp, geen doorverwijzing naar Hoofdstuk 11
+  omdat dat nog niet bestaat — bewust dezelfde, verwachte "terminale
+  scène"-waarschuwing als destijds `CH9_MUSEUM_00` vóór Hoofdstuk 10 werd
+  gebouwd).
+- Nieuwe `SP_CODEX_ENTRIES` (`codex_polyfemos`, `codex_poseidon_vloek`,
+  `codex_harpijen`, `codex_achaemenides`, `codex_dood_anchises`,
+  `codex_twee_thuiskomsten`), nieuwe `SP_CODEX_PERSONS` (`polyfemos`,
+  `achaemenides`) en een nieuwe `SP_CODEX_SOUVENIRS`-entry
+  (`souvenir_twee_zeeen`).
+- **Nog steeds bewust niet gedaan**: het Arachne-vignet uit `SP_CAMPAIGN`
+  (zie de aparte paragraaf verderop in deze sectie voor wat daarmee bedoeld
+  was). `PUZZLE:`-secties zijn inmiddels wél gebouwd, zie de vierde
+  2026-07-31-paragraaf onderaan deze sectie.
+
+Getest: `node --check` op `singleplayer-data.js`, `validate_chronica.js`
+0 fouten (620 scènes, 35 waarschuwingen — dezelfde bekende dode-vlaggenlijst
+plus de nu enige echte nieuwe waarschuwing, de verwachte terminale
+`CH10_MUSEUM_00`), en het losse graaf-simulatiescript hierboven.
+
+**Update 2026-07-31, derde vervolg — hoofdstukgrens verschoven tot de
+drempel van Kirke/Dido, plus een gedeeld Xenia-vignet.** Op Gerbens verzoek
+loopt Hoofdstuk 10 nu niet meer af bij Poseidons vloek/Anchises' dood, maar
+door tot **de aankomst** bij Kirkes eiland Aeaea (Odysseus) en bij Dido's
+Carthago (Aeneas) — het eigenlijke weerzien met Kirke en Dido zelf blijft
+de opening van Hoofdstuk 11 (`SP_CAMPAIGN`-entries voor ch10/ch11 zijn
+bijgewerkt om dit te reflecteren).
+
+- **Odysseus, twee nieuwe scènes** (`CH10_ODY_007` Aeolus — de zak met
+  winden die zijn eigen mannen uit hebzucht openen, `CH10_ODY_008` de
+  Laistrygonen — elf van de twaalf schepen vernietigd, alleen Odysseus'
+  eigen schip overleeft — eindigend op de drempel van Aeaea).
+- **Aeneas, twee nieuwe scènes** (`CH10_AEN_008` Juno's storm — dezelfde
+  Aeolus als bij Odysseus, ingehuurd door Juno, gesust door Neptunus'
+  ingrijpen, `CH10_AEN_009` de aankomst bij Carthago — Venus' wolk, de
+  tempelmuur met de Trojaanse Oorlog al vereeuwigd, "Sunt lacrimae rerum",
+  eindigend vlak vóór Dido zelf in beeld komt). Nieuwe `PERSON: dido:intro`.
+- De zigzag-keten (zie de eerdere paragraaf in deze sectie) is
+  dienovereenkomstig doorgetrokken: `CH10_ODY_006B`/`CH10_AEN_007` wijzen nu
+  niet meer naar `CH10_EINDE` maar naar de nieuwe scènes; `CH10_EINDE`'s
+  tekst is aangepast aan het nieuwe eindpunt ("voor de deur van een
+  tovenares"/"oog in oog met een koningin" i.p.v. "een vloek"/"een
+  verdriet"). `FLAG: ch10_lijn_odysseus/aeneas=true` zijn meeverhuisd naar
+  de nu echt laatste scène van elke lijn (`CH10_ODY_008`/`CH10_AEN_009`).
+- **Nieuw gedeeld vignet, `CH10_XENIA`** (Gerbens idee): vlak vóór de
+  aankomst bij de Kyklopen/Kreta onderbreekt de Boodschapper het verhaal
+  voor de mythe van **Baucis en Philemon** — Xenia, de wet van de
+  gastvrijheid, verteld door Hermes zelf (hij was er zelf bij, samen met
+  Jupiter). Werkt voor alle drie taalspoor-standen als één gedeeld
+  knooppunt: `CH10_ODY_003`/`CH10_AEN_003` monden nu allebei uit in
+  `CH10_XENIA` (i.p.v. rechtstreeks in de Kykloop-/Kreta-scène), die daarna
+  zelf naar de juiste vervolgscène routeert — bewust maar één keer getoond,
+  ook bij "beide" (niet twee keer, één per lijn). Sluit af met een bewuste
+  dubbele voorafschaduwing ("niet elke gastheer verdient wat jij hem geeft"
+  → Polyphemus; "niet elke gast is wie hij lijkt" → Sinon-achtige
+  bedrog-thema's later).
+- Nieuwe `SP_CODEX_ENTRIES`: `codex_baucis_philemon`, `codex_aeolus`,
+  `codex_laistrygonen`, `codex_juno_storm`, `codex_aankomst_carthago`.
+- **Regel aangescherpt (zie ook de auteurscameo-paragraaf hierboven)**:
+  Gerben bevestigde expliciet dat onbenoemde cameo's **altijd** een
+  bijpassende `IMAGE:` moeten krijgen, niet alleen tekstueel duidelijk
+  hoeven te zijn — geldt dus ook voor toekomstig vergelijkbaar
+  vignet-materiaal.
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten, en het
+graaf-simulatiescript (uitgebreid met de nieuwe scènes) bevestigt alle drie
+taalspoor-standen bereiken `CH10_MUSEUM_00` zonder doodlopend eind, met
+`CH10_XENIA` precies één keer bezocht per taalspoor-stand (grieks 14
+stappen, latijn 13, beide 23).
+
+**Update 2026-07-31, vierde vervolg — `PUZZLE:`-secties op H10's eigen
+grammatica gebouwd.** Acht nieuwe puzzels in `SP_PUZZLES`, vier per taal,
+op de exacte onderwerpen uit `SP_CAMPAIGN` ch10.grammatica: Grieks —
+medium, passief, aoristus passief op -θην (2×); Latijn — plusquamperfectum
+(2×), conjunctivus in de bijzin (cum historicum, 2×). Odysseus-lijn krijgt
+uitsluitend de Griekse puzzels, Aeneas-lijn uitsluitend de Latijnse — de
+eerste keer dat de twee taalsporen ook qua puzzelinhoud strikt gescheiden
+zijn (Hoofdstuk 8/9 deelden nog één Latijnse puzzelset over beide kanten).
+
+- Grieks: `puzzle_ch10_ody_medium` (γεύεται, bij de Lotoseters — proeven
+  van de lotos als medium-voorbeeld), `puzzle_ch10_ody_passief` (κλείεται,
+  de grot die wordt afgesloten), `puzzle_ch10_ody_aoristus1` (ἐτυφλώθη,
+  Polyphemus die verblind wordt), `puzzle_ch10_ody_aoristus2` (ἐλύθησαν,
+  de elf vernietigde schepen bij de Laistrygonen — bewuste callback naar
+  ἔλυσε uit Hoofdstuk 8).
+- Latijn: `puzzle_ch10_aen_ppf1` (miserat, Priamus die Polydorus ooit
+  wegstuurde), `puzzle_ch10_aen_ppf2` (reliquerant, de scheepsmaten die
+  Achaemenides achterlieten), `puzzle_ch10_aen_conj1` (peteret, cum
+  historicum bij het orakel van Delos), `puzzle_ch10_aen_conj2` (videret,
+  cum historicum bij de aankomst in Carthago).
+- **Architecturale beperking ontdekt en opgelost**: `spRenderPuzzle()`
+  (`singleplayer.js`) navigeert na een juist antwoord altijd naar
+  `scene.choices[0].target` — de EERSTE keuze in de CNS-tekst, zonder
+  `REQUIRE`-filtering. Een `PUZZLE:`-scène kan dus geen `[REQUIRE:
+  taalspoor=...]`-zigzagkeuzes en geen `[APPROACH]`-keuzes (Clementia/
+  Severitas/Neutraal) bevatten — die zouden domweg genegeerd worden.
+  **Oplossing, nu het vaste patroon voor puzzels in een zigzag-hoofdstuk**:
+  een beat met een puzzel wordt in drieën geknipt — een narratieve
+  scène met precies één keuze naar de puzzelscène, de puzzelscène zelf
+  (blokkeert, één keuze verder), en een aparte vervolgscène die de
+  oorspronkelijke `REQUIRE`- of `[APPROACH]`-keuzes ongewijzigd bevat. Waar
+  een scène al toevallig één simpele, onvoorwaardelijke keuze had
+  (`CH10_AEN_003`/`_006`/`_009`, ná eerdere vereenvoudigingen) kon de
+  `PUZZLE:`-tag er gewoon direct bij, zonder knippen.
+- Nieuwe tussenscènes: Grieks `CH10_ODY_003P`/`_003B`, `_005P`/`_005B`,
+  `_006P`/`_006Q`, `_008P`/`_008B`; Latijn `CH10_AEN_002P`/`_002B` (de
+  overige drie Latijnse puzzels hadden geen extra scènes nodig).
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten (nu met acht extra
+scènes), en het graaf-simulatiescript bevestigt dat elke puzzel-id in
+`SP_PUZZLES` bestaat en dat alle drie taalspoor-standen nog altijd zonder
+doodlopend eind bij `CH10_MUSEUM_00` uitkomen, met precies de verwachte
+puzzels op elk pad (grieks 4, latijn 4, beide 8 — nooit dubbel).
+
+**Wat het Arachne-vignet ook alweer was**: net als Baucis & Philemon
+(Xenia) stond Arachne in `SP_CAMPAIGN`'s ch10-personages genoemd als een
+"onderweg-vignet" (zie de masterplan-samenvatting bovenaan dit document).
+Arachne is de mythe van de Lydische weefster die het waagde een
+weefwedstrijd tegen Athena zelf uit te dagen — en won, wat Athena zo
+kwaad maakte (niet om het verlies, maar om Arachne's tafereel: een
+oneerbiedige weergave van de liefdesavontuurtjes van de goden) dat ze
+Arachne veranderde in de allereerste spin. Net als Xenia is dit een
+zelfstandige, korte les-binnen-het-verhaal, geen onderdeel van Odysseus'
+of Aeneas' eigen queeste, en thematisch een mooie tegenhanger van Xenia
+(hoogmoed tegenover een god in plaats van de plicht van de gastheer — een
+echo van Odysseus' eigen hoogmoed bij Polyphemus).
+
+**Verhuisd naar "De Stad van Athena" (Gerbens verzoek, 2026-07-31; dat
+hoofdstuk heette destijds Hoofdstuk 14, sinds de H12/13-samenvoeging van
+2026-08-02 is het Hoofdstuk 13 — zie §7.44)** — niet gebouwd in Hoofdstuk
+10. Athena zelf is daar al personage (`SP_CAMPAIGN` ch13.personages
+sinds de renummering, "Athena, Perseus (verteld), Bellerophon (verteld),
+Atalanta"), en de hele opzet van dat hoofdstuk is al "door anderen
+verteld"-verhalen over Athena — precies waar Arachne thuishoort, en
+logischer dan een vignet in H10 waar Athena wel aanwezig is (als
+frame-figuur bij `CH10_000`) maar zelf geen verhaal vertelt.
+`SP_CAMPAIGN`'s ch13-entry (was ch14) is bijgewerkt: `personages` noemt Arachne nu
+expliciet, met een verwijzing hierheen. Nog niet gebouwd.
+
+**Twee nieuwe canon-afspraken, vastgelegd voor latere hoofdstukken (nog niet
+gebouwd):**
+- **De Boodschapper van Kronos is Pamphile van Epidaurus**, een vrouwelijke
+  geschiedschrijfster uit de tijd van Nero. De onthulling zelf hoort bij het
+  hoofdstuk over Nero (nog te plaatsen in `SP_CAMPAIGN`) — pas dáár mag de
+  Boodschapper zichzelf laten herkennen/zien aan de speler, bijvoorbeeld
+  doordat ze zichzelf tegenkomt in haar eigen verleden. Tot dan blijft haar
+  identiteit in alle scènes bewust onbenoemd, exact zoals nu (zie ook
+  §7.12 over de losstaande "wie bouwde het Museum"-onthulling in Hoofdstuk
+  26 — dit is daar een aparte lijn naast).
+- **Lethe is een dochter van Eris** (de godin die de twistappel gooide die
+  tot de Trojaanse Oorlog leidde, zie Hoofdstuk 7). Nog te verwerken als
+  verwijzing/payoff in een later hoofdstuk (kandidaat: ergens tussen
+  Hoofdstuk 7/9's appel-payoffs en Lethe's eigen introductie in Hoofdstuk
+  27) — bijvoorbeeld door Lethe zelf, of de Boodschapper, die band expliciet
+  te laten benoemen zodra Lethe als personage wordt uitgewerkt (zie §7.12).
+
 ### 7.20 B26: de lijkspelen voor Patroklos (**gebouwd**)
 
 Nieuwe scène `CH8_EPI_009B` ("De Lijkspelen"), ingevoegd tussen `CH8_EPI_009`
@@ -3352,6 +3635,476 @@ Hoofdstuk 10 (§7.19 — de onderbouw is met opzet tweetalig), voorgesproken
 audio (niet haalbaar/relevant), en een docent-instelbaar niveauplafond
 (onnodig, zie §7.35).
 
+### 7.37 Hoofdstuk 11 "Tussen Liefde en Lot" — eerste bouwronde (**deel gebouwd, zie hieronder voor wat nog rest**)
+
+Op Gerbens verzoek (2026-07-31) gestart: de gedeelde hub + het eerste
+substantiële deel van beide lijnen, in dezelfde zigzag-architectuur als
+Hoofdstuk 10 (§7.19). **Geen nieuwe taalspoor-vraag** — de `FLAG:
+taalspoor=...` uit Hoofdstuk 10 blijft gewoon gelden; `CH11_001` (de hub)
+gebruikt exacte `=`-matches (grieks/latijn/beide) net als `CH10_001`, geen
+nieuwe keuze.
+
+**Structuur tot nu toe** (`SP_CH11_CNS`, nieuw blok, toegevoegd aan
+`validate_chronica.js`'s `BLOCKS`): `CH10_MUSEUM_00` kreeg een `CHOICES` naar
+`CH11_000` (gedeelde opening, bevestigt het taalspoor blijft gelden) →
+`CH11_001` (hub, drie taalspoor-gated keuzes) → Odysseus- en Aeneas-lijn,
+zigzag-verweven zoals in Hoofdstuk 10.
+
+- **Odysseus** (`CH11_ODY_001` t/m `_007`): aankomst bij Kirke's eiland,
+  Eurylochus' mannen die in zwijnen veranderen, Hermes' kruid moly (derde
+  keer dat Hermes de speler terzijde staat, na Hoofdstuk 3 en 8/9), een
+  jaar op Aeaea, Kirke's opdracht naar de onderwereld, Elpenor's onbegraven
+  schim (de allereerste die Odysseus ontmoet), Tiresias' voorspelling
+  (Thrinacia/de runderen van Helios als vooruitwijzing, plus een tweede,
+  latere reis — beide nog niet uitgewerkt), en Anticlea (zijn moeder, drie
+  mislukte omhelzingen). **Stopt hier voorlopig** (`CH11_ODY_007`, bewust
+  terminaal) — de eigenlijke "reünie" met Agamemnon/Achilles/Ajax en het
+  gedeelde Tartaros/Orpheus-vignet volgen in de volgende bouwronde.
+- **Aeneas** (`CH11_AEN_001` t/m `_005`): het echte onthaal door Dido (in
+  tegenstelling tot het cameo-moment aan het eind van Hoofdstuk 10, nu met
+  `PERSON: dido:full`), het banket waarin Cupido (vermomd als Ascanius) haar
+  verliefd maakt, de grot tijdens de jacht (Juno's storm, Dido's eigen
+  "huwelijk"), Mercurius' vermaning namens Jupiter (`PERSON: hermes:full`
+  — bewust NIET een aparte `mercurius`-personage-entry, zelfde god als de
+  bestaande `hermes`-entry), en Dido's dood op de brandstapel met haar
+  vloek over Aeneas' nageslacht (de KCV-link naar de Punische Oorlogen/
+  Hannibal expliciet benoemd in de codex-tekst). **Stopt hier voorlopig**
+  (`CH11_AEN_005`, bewust terminaal) — Aeneas' eigen katabasis (Sibylle van
+  Cumae, de gouden tak, Dido's schim die hem zwijgend de rug toekeert,
+  Anchises, de stoet toekomstige Romeinen) volgt in de volgende bouwronde.
+- Nieuwe `SP_CODEX_ENTRIES` (twaalf, Kirke/Dido/Elpenor/Mercurius/Tiresias/
+  Anticlea-thema's), nieuwe `SP_CODEX_PERSONS` (`kirke`, `elpenor`,
+  `tiresias`, `anticlea`; `dido` kreeg er een `full` bij).
+
+**Nog te bouwen (bewust uitgesteld, volgende bouwronde(s))**:
+1. De onderwereld-reünie zelf — `SP_PAYOFFS`-gedreven, conditie op
+   bestaande `dood_*`-vlaggen/`relations` (Patroklos, Hector, Achilles,
+   Tydeus, Kleine Ajax, plus Dido's eigen schim die Aeneas zwijgend de rug
+   toekeert, rechtstreeks uit de Aeneis).
+2. Het gedeelde Tartaros/Orpheus & Eurydice-vignet (alle drie de sporen,
+   via Hermes — zie §5's canon-plaatsingsparagraaf voor de achtergrond en
+   de koerswijziging t.o.v. het oude Hoofdstuk-27-plan).
+3. Persephone/Hades als stille heersers (cameo-niveau, `PERSON:...:intro`
+   alleen) — hun eigen verhaal blijft voor Hoofdstuk 27.
+4. Aeneas' eigen katabasis (Sibylle, gouden tak, Anchises, de Romeinse
+   stoet) en de aankomst in Italië die het hoofdstuk moet afsluiten.
+5. **Nog geen enkel punt van de §7.36-checklist toegepast** op dit
+   hoofdstuk: geen nieuwe `VOCAB:`-hooks/`SP_VOCAB_ENTRIES`, geen
+   leesvallen, geen `CHECK:`-moment, geen `SP_CODEX_ENTRIES`-grammatica-
+   tabellen voor Participium/Genitivus absolutus/A.C.I. — dit moet nog
+   ingehaald worden vóór het hoofdstuk als "af" geldt, niet achteraf
+   toegevoegd (zie de audit-baseline-afspraak, `chronica-audit-baseline-
+   for-new-chapters` in het geheugensysteem).
+6. Nog geen `PUZZLE:`-secties op H11's eigen grammatica (zelfde patroon als
+   Hoofdstuk 10 eerst kreeg, zie §7.19).
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten (36 waarschuwingen
+— dezelfde bekende lijst plus de twee verwachte terminale-scène-
+waarschuwingen op `CH11_ODY_007`/`CH11_AEN_005`), en een los graaf-
+simulatiescript bevestigt dat alle drie taalspoor-standen zonder
+onbedoelde doodlopende paden bij hun verwachte (tijdelijke) eindpunt
+uitkomen.
+
+**Update 2026-07-31, tweede bouwronde — Hoofdstuk 11 verhaaltechnisch
+afgerond, `CH11_MUSEUM_00`.** Op Gerbens verzoek ("ga door met de rest,
+bepaal zelf de volgorde") is het hele hoofdstuk uitgeschreven. **Bugfix
+onderweg**: de eerste bouwronde liet "beide"-spelers Anticlea (`CH11_ODY_007`)
+overslaan — `CH11_AEN_005`s zigzag-keuze sprong direct naar een terminale
+scène in plaats van eerst terug te steken naar Odysseus. Rechtgezet, en een
+soortgelijke dubbele-indexeringsfout tussen `CH11_ODY_009`/`CH11_AEN_008`
+(die elkaar in een lus verwezen) is tijdens het bouwen zelf ontdekt en
+gecorrigeerd — zie de graaf-simulatie hieronder als bewijs dat de hele keten
+nu klopt.
+
+- **Odysseus** (`CH11_ODY_008` t/m `_012`): de reünie met Agamemnon
+  ("vertrouw je vrouw niet blindelings" — vooruitwijzing naar Hoofdstuk 12)
+  en Achilles ("liever een levende dagloner dan koning der doden"), Ajax'
+  schim die zwijgend blijft (backstory van de wapenrusting-wedstrijd tegen
+  Odysseus zelf, nooit eerder gedramatiseerd, hier als korte terugblik
+  verteld — `aias` kreeg zijn eerste `full`-tekst), de Sirenen en de
+  gedwongen keuze tussen Skylla en Charybdis, de ramp bij Thrinacia (Zeus'
+  bliksem, exact zoals Tiresias voorspelde), en de aankomst bij Calypso —
+  waar Hoofdstuk 12 straks oppikt.
+- **Aeneas** (`CH11_AEN_006` t/m `_010`): Palinurus' dood (bewuste echo van
+  Elpenor), de Sibylle van Cumae en de Gouden Tak, de afdaling zelf (Charon,
+  Cerberus, en Dido's schim die Aeneas exact zo zwijgend afwijst als Ajax
+  Odysseus afwijst — een bewuste, symmetrische payoff tussen de twee
+  lijnen), Anchises en de beroemde stoet toekomstige Romeinen (inclusief de
+  "parcere subiectis"-les en de schaduw van de jonge Marcellus), en tot slot
+  de oorlog tegen Turnus in Latium — bewust compact verteld (geen aparte
+  hoofdstukken voor de Aeneis-boeken 7-12 gepland in `SP_CAMPAIGN`), eindigend
+  met Aeneas' huwelijk met Lavinia en de stichting van Lavinium.
+- **Gedeeld Tartaros/Orpheus-vignet** (`CH11_TARTAROS_1`/`_2`, Hermes'
+  zijspoor): de vier zondaars (Tantalos, Sisyphos, Ixion, de Danaïden) en
+  Orpheus & Eurydice (zie de koerswijziging t.o.v. Hoofdstuk 27, eerder in
+  deze sectie) — precies één keer bezocht, ongeacht taalspoor, bevestigd
+  door de graaf-simulatie.
+- **Gedeeld slot**: `CH11_EINDE` (Boodschapper — zonder Hermes deze keer —
+  én Athena, die voor het eerst in dit hoofdstuk zelf het woord neemt) met
+  `SOUVENIR: souvenir_twee_deuren` en 3 statpunten → `CH11_MUSEUM_00`
+  (vijfde stolp, bewust terminaal, want Hoofdstuk 12 bestaat nog niet).
+- Twaalf nieuwe `SP_CODEX_ENTRIES`, een nieuwe `SP_CODEX_PERSONS`-entry
+  (`anchises` — ontbrak nog helemaal, ondanks dat hij al sinds Hoofdstuk 10
+  meespeelt; `validate_chronica.js` ving dit meteen als harde fout op),
+  `aias` kreeg zijn `full`, en `souvenir_twee_deuren`.
+
+**Bewust NIET gebouwd in deze ronde (blijft open, zie ook de eerste
+bouwronde hierboven)**:
+1. **De systematische `SP_PAYOFFS`-onderwereldreünie zelf.** Wat er nu
+   staat (Agamemnon/Achilles/Ajax/Dido) zijn de vaste, mythologisch
+   verplichte ontmoetingen uit Homerus/Vergilius — nog NIET de door Gerben
+   gevraagde bredere laag die *elk* eerder overleden personage met een
+   opgebouwde `relations`-band (Patroklos, Hector, Tydeus, Kleine Ajax, …)
+   automatisch laat terugkeren via conditie/tekst-echo's. Dat is een
+   generieke uitbreiding bovenop de bestaande scènes, geen vervanging.
+2. §7.36-checklist (VOCAB-hooks, leesvallen, CHECK-moment,
+   grammatica-codextabellen voor participium/genitivus absolutus/A.C.I.) —
+   nog steeds niet toegepast, zelfde openstaande punt als de eerste
+   bouwronde.
+3. `PUZZLE:`-secties op H11's eigen grammatica.
+4. De Baucis/Philemon-achtige vignetten die `SP_CAMPAIGN` verder niet
+   noemt voor dit hoofdstuk zijn niet van toepassing — Hoofdstuk 11 had er
+   geen gepland.
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten (35 waarschuwingen
+— één minder dan de vorige ronde, want de twee tijdelijke terminale-scène-
+waarschuwingen zijn nu vervangen door de verwachte enkele waarschuwing op
+`CH11_MUSEUM_00`), en het uitgebreide graaf-simulatiescript bevestigt alle
+drie taalspoor-standen bereiken `CH11_MUSEUM_00` zonder doodlopend eind of
+dubbel bezochte scènes (grieks 18 scènes, latijn 16, beide 28 — met
+`CH11_TARTAROS_1`/`_2` op alle drie precies één keer).
+
+**Update 2026-07-31, derde bouwronde — de generieke onderwereld-payoff-laag
+gebouwd, `CH11_SCHIMMEN`.** Punt 1 van de "bewust niet gebouwd"-lijst
+hierboven is nu opgelost. Op Gerbens verzoek is dit een **apart moment
+waarop de speler zelf, los van Odysseus of Aeneas, tussen de schimmen
+ronddwaalt** — geen extra dialoog van de held zelf, maar de speler die
+eigen relaties tegenkomt. Nieuwe scène `CH11_SCHIMMEN`, ingevoegd tussen elke
+lijns persoonlijke reünie (`CH11_ODY_009`/`CH11_AEN_008`) en het gedeelde
+Tartaros-vignet — zelfde `taalspoor`-onafhankelijke constructie als
+`CH11_TARTAROS_1`/`_2`, precies één keer bezocht per playthrough, bevestigd
+door het graaf-simulatiescript.
+
+**Acht nieuwe `SP_PAYOFFS`-entries** (`type:"echo"`, trigger
+`CH11_SCHIMMEN`), elk met een eigen conditie op bestaande data — geen
+nieuwe datamodel, hergebruikt wat er al stond:
+- **Priamus** en **Deiphobos** (Hoofdstuk 9): `relationMin`/`relationMax`
+  op hun bestaande `RELATION:`-scores — exact hetzelfde patroon als de
+  al bestaande Ajax-payoff op `CH9_GRI_005` (§7.15).
+- **Patroklos + Hector**: geen eigen `RELATION:`-track bestaat voor hen,
+  dus hergebruikt als proxy de `ch8_zijde`-vlag (Achilles/Agamemnon-keuze,
+  Hoofdstuk 8) — wie bij Achilles bleef zag hun dood van dichtbij, wie bij
+  Agamemnon bleef zag het van een afstand. Twee wederzijds exclusieve
+  echo's, zelfde mechanisme als de bestaande `ch8_epi005`-payoffs.
+- **Tydeus** (Hoofdstuk 6) en **Kleine Ajax/Oïleus** (Hoofdstuk 9, alleen
+  op de Griekse kant van dat hoofdstuk): eenvoudige `flagsSet`-echo's op
+  hun bestaande `dood_tydeus`/`dood_aias`-vlaggen — geen relatienuance
+  mogelijk, want die vlaggen zijn binair. **Bijvangst**: `validate_chronica.js`
+  meldde deze twee vlaggen voorheen als "dode vlag, nergens gelezen" — nu
+  ze eindelijk gelezen worden, daalde het aantal waarschuwingen van 35 naar
+  33.
+- **Bewust NIET herhaald**: Agamemnon, Achilles, Ajax (Telamon) en Dido
+  hebben al hun eigen, mythologisch vaste ontmoeting eerder in het
+  hoofdstuk — deze payoff-laag vult aan, herhaalt niet.
+
+**Vastgelegd voor latere hoofdstukken (Gerbens opmerking)**: Anchises'
+stoet toekomstige Romeinen (`CH11_AEN_008`, codex `codex_anchises_stoet`)
+noemt al met naam Romulus, de koningen van Rome, de helden van de
+Republiek, Augustus, en Marcellus. Elk van die latere hoofdstukken
+(Hoofdstuk 13 "Het Begin van Rome", Hoofdstuk 19-20 "Onder de
+Koningen"/"Verdedigers van de Republiek", en de nog te plaatsen Caesar/
+Augustus-hoofdstukken) is een kandidaat voor een `SP_PAYOFFS`-echo die
+terugverwijst naar deze scène — "je zag deze figuur al, als een
+ongeboren ziel in Anchises' stoet, voordat hij ooit geboren werd." Nog
+niet gebouwd; vastgelegd in het geheugensysteem
+(`chronica-anchises-stoet-toekomstige-romeinen`) zodat het niet
+verloren gaat tegen de tijd dat die hoofdstukken aan de beurt zijn.
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten (33 waarschuwingen),
+graaf-simulatiescript bevestigt `CH11_SCHIMMEN` op alle drie taalspoor-
+standen precies één keer, op de juiste plek in de keten (grieks 19 scènes,
+latijn 17, beide 29).
+
+**Update 2026-07-31, vierde bouwronde — §7.36-checklist ingehaald +
+grammatica-puzzels gebouwd.** Punten 2, 3, 6 en 7 van de "bewust niet
+gebouwd"-lijst zijn nu opgelost.
+
+- **VOCAB (punt 1)**: twaalf nieuwe `SP_VOCAB_ENTRIES`, zes Grieks
+  (νόστος, ξενία, φάρμακον, σκιά, θάνατος, μάντις) en zes Latijn (regina,
+  pietas, umbra, fatum, mors, vates) — bewust thematisch centrale woorden
+  i.p.v. willekeurige (νόστος is letterlijk hét kernwoord van de Odyssee,
+  pietas van de Aeneis), gehookt op de gedeelde hub `CH11_001`.
+- **Grammatica-codextabellen (punt 7)**: twee nieuwe entries,
+  `codex_grammatica_ch11_participium` en
+  `codex_grammatica_ch11_genitivus_absolutus`, vroeg ontgrendeld op
+  `CH11_001` (zelfde "vroeg ontgrendelen"-principe als Hoofdstuk 1). Geen
+  nieuwe tabel voor de Latijnse A.C.I. — die bestaat al sinds Hoofdstuk 9
+  (`codex_grammatica_ch9_aci`) en dit is bewuste herhaling, geen nieuwe stof.
+- **`PUZZLE:`-secties (grammatica-puzzels)**: `puzzle_ch11_ody_participium`
+  (multiple-choice, βοῶν) en `puzzle_ch11_ody_genitivus_absolutus`
+  (typed-greek, αἰρούσης) op de Odysseus-lijn; `puzzle_ch11_aen_aci_1`/`_2`
+  (typed-latin, exspectavisse/incendere) op de Aeneas-lijn. **Punt 6
+  toegepast**: de twee Latijnse puzzels kregen bewust GEEN `hint`-veld —
+  A.C.I. is hier pure herhaling van Hoofdstuk 9, de twee Griekse puzzels
+  (nieuwe stof) kregen wél volledige hints. Twee nieuwe tussenscènes nodig
+  om `PUZZLE:` los te houden van bestaande `REQUIRE`-keuzes
+  (`CH11_AEN_002P`/`_002B`, zelfde patroon als Hoofdstuk 10 §7.19); de
+  andere drie puzzels pasten in scènes die toevallig al één simpele,
+  onvoorwaardelijke keuze hadden.
+- **Leesvallen (punten 3, 4, 5)**: één per lijn, zoals de checklist eist.
+  Grieks (`CH11_ODY_003_LV`, bij Kirke): een genitivus absolutus versus een
+  gewone genitivus — bewust dezelfde grammatica als de nieuwe stof van dit
+  hoofdstuk, dus een taalkundige verwarring, geen mythe-kennis-gok. Latijn
+  (`CH11_AEN_003_LV`, bij de grot): "cum" als voegwoord versus als
+  voorzetsel — een klassieke valkuil, en meteen een **bewuste herhaling**
+  (punt 8) van de cum-historicum-constructie uit Hoofdstuk 10's eigen
+  puzzels. Beide met drie neutraal geframede keuzeteksten ("hoor er X in"),
+  geen enkele die de juiste lezing verraadt, en elke foute keuze krijgt een
+  eigen, vriendelijke correctiescène voor de drie opties weer samenkomen.
+- **"Na"-echo (punt 9)**: een nieuwe, onvoorwaardelijke `SP_PAYOFFS`-echo
+  op `CH11_AEN_007` (Dido's schim) die terugverwijst naar "Sunt lacrimae
+  rerum" uit Hoofdstuk 10 (`CH10_AEN_009`) — precies het moment waarop die
+  eerdere, ietwat abstracte tranen-voor-de-dingen-gedachte concreet wordt.
+- **Bewuste herhaling (punt 8)**: naast de cum-historicum-leesval hierboven
+  ook al aanwezig via `puzzle_ch10_ody_aoristus2`'s callback naar Hoofdstuk
+  8's ἔλυσε (Hoofdstuk 10, niet dit hoofdstuk, maar wel hetzelfde principe
+  actief gehouden).
+
+**Nog steeds niet gedaan**: dezelfde checklist voor Hoofdstuk 10 zelf (dat
+hoofdstuk kreeg nooit een eigen VOCAB/leesval/CHECK-behandeling, een ouder
+openstaand punt van vóór deze sessie) — dat blijft een aparte, nog te
+plannen inhaalronde.
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten (33 waarschuwingen,
+ongewijzigd), en het graaf-simulatiescript bevestigt dat alle vier nieuwe
+`PUZZLE:`-scènes en beide leesval-vertakkingen (elk met hun drie opties)
+zonder doodlopend eind samenkomen in de bestaande keten (grieks 21 scènes,
+latijn 21, beide 35).
+
+### 7.38 Hoofdstuk 12 "Odysseus' Wraak" — skelet + Latijns herhalingsspoor (**skelet gebouwd, Ithaka-verhaallijn nog grotendeels open**)
+
+Gestart 2026-07-31. Volgens `SP_CAMPAIGN` is dit hoofdstuk **Odysseus-only**
+(`minerva:"— (Odysseus-lijn, geen Minerva-koppeling)"`) — Aeneas' eigen
+boog is al afgesloten in Hoofdstuk 11 (Lavinium gesticht). Op Gerbens
+verzoek wordt dit voor het Latijnse spoor daarom een **apart, kort
+herhalingshoofdstuk** in plaats van simpelweg overgeslagen: hetzelfde
+principe als de twee grammatica-arme "Ronde 1"-bonushoofdstukken uit het
+masterplan (§5), buiten Pallas' eigen lesnummering.
+
+**Gekozen tegenhanger: Hercules en Cacus.** Een Romeinse mythe (Vergilius,
+Aeneis boek 8; Livius) die zich afspeelt op de heuvels van het latere Rome:
+Cacus, een vuurspuwende zoon van Vulcanus, steelt een deel van Hercules'
+kudde (buit van zijn tiende werk, de runderen van Geryon) en verbergt de
+diefstal door de dieren achterstevoren zijn grot in te slepen. Hercules
+ontdekt het via het geloei van de dieren zelf, rukt de grot open en verslaat
+Cacus met blote handen — de dankbare omwonenden richten het Ara Maxima op.
+Bewust gekozen als directe **tegenhanger van "wraak"**: net als Odysseus
+eist Hercules hier eigen bezit terug van een indringer en herstelt daarmee
+de orde voor een hele gemeenschap. Geen overlap met Hoofdstuk 13's
+Romulus/Remus-stof (Numitor/Amulius, de wolvin) — dat blijft daar.
+
+**Structuur** (`SP_CH12_CNS`, nieuw blok, toegevoegd aan
+`validate_chronica.js`'s `BLOCKS`): `CH11_MUSEUM_00` kreeg een `CHOICES`
+naar `CH12_000` (gedeelde opening, bevestigt dat Aeneas' verhaal voor nu
+verteld is) → drietal-splitsing zonder hub-knoppen (automatische routing,
+geen echte keuze nodig omdat de inhoud per spoor volledig verschilt):
+- **Grieks**: rechtstreeks naar `CH12_ODY_001` (aankomst op Ithaka).
+- **Latijn**: naar `CH12_LAT_000`/`_001`/`_002` — Mercurius (Hermes,
+  expliciet zichzelf zo noemend) haalt de speler op en legt de
+  Latium-tijdlijn uit: dit is dezelfde grond als de proloog ("De Boer van
+  Latium"), generaties vóór Aeneas' aankomst, met Lavinium en het latere
+  Alba Longa al vooruit benoemd als toekomstige buren, tot aan Rome zelf.
+  Sluit af met `CH12_MUSEUM_00_LAT`, een eigen, kortere terugkeer naar het
+  Museum (nieuwe `SOUVENIR: souvenir_ara_maxima`, 3 statpunten) — expliciet
+  "geen nieuwe grammatica vandaag" in de verteltekst zelf, consistent met
+  `codex_grammatica_ch12_herhaling`.
+- **Beide**: volgt eerst het volledige Latijnse Cacus-zijspoor, en steekt
+  daarna over naar `CH12_ODY_001` — bewuste bugfix onderweg: de eerste
+  versie liet "beide" per ongeluk stoppen bij `CH12_MUSEUM_00_LAT` (dezelfde
+  eindscène als latijn-only), rechtgezet met een `[REQUIRE:taalspoor=...]`-
+  splitsing op `CH12_LAT_002`'s keuze.
+- **Ithaka-opening** (`CH12_ODY_001`/`_002`, grieks/beide): aankomst via de
+  Faiaken, Athena's mist en onthulling, de vermomming tot bedelaar, en de
+  eerste ontmoeting met de trouwe zwijnenhoeder Eumaeus — bewust hier
+  gestopt (terminale scène) als volgende bouwstap.
+- Nieuwe `SP_CODEX_ENTRIES` (zes), nieuwe `SP_CODEX_PERSONS` (`cacus`,
+  `telemachus`), nieuwe `SP_CODEX_SOUVENIRS`-entry (`souvenir_ara_maxima`).
+
+**Nog te bouwen**: de rest van de Ithaka-lijn (het paleis, Telemachus'
+terugkeer en herkenning, de boogproef, de slachting van de vrijers via
+Combat-bridge, de hereniging met Penelope) en de dood van Agamemnon —
+bewust volledig verteld in dít hoofdstuk als "contrasterende thuiskomst"
+tegenover Odysseus' eigen thuiskomst, met de vloek van Pelops/Hippodameia
+als achtergrond (masterplan §5, Ronde 2). Ook de §7.36-checklist (VOCAB,
+leesvallen, grammatica-tabellen voor betrekkelijk voornaamwoord/
+conjunctivus/alpha-werkwoorden) is nog niet toegepast — zelfde openstaande
+patroon als Hoofdstuk 10/11, zie [[chronica-audit-baseline-for-new-chapters]]
+in het geheugensysteem.
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten (34 waarschuwingen
+— één meer dan Hoofdstuk 11 eindigde, de verwachte terminale-scène-
+waarschuwing op `CH12_ODY_002`, plus de al langer bestaande
+`CH12_MUSEUM_00_LAT`-waarschuwing die bewust een echt hoofdstukeinde is
+voor het Latijnse spoor), en het graaf-simulatiescript bevestigt dat alle
+drie taalspoor-standen bij hun juiste (tijdelijke) eindpunt uitkomen zonder
+doodlopend eind.
+
+**Update 2026-07-31, tweede bouwronde — Latijnse grammatica-achterstand
+ingelopen, `CH12_LAT_*` uitgebreid van 3 naar 7 scènes.** Aanleiding:
+Gerben vergeleek de campagne tegen de echte inhoudsopgaven van Minerva
+(deel 1, 13 hoofdstukken) en Pallas (deel 1+2, aangeleverd als PDF) en
+merkte op dat Grieks bij Chronica al rond Pallas les 17-18 zit, terwijl
+Latijn nog maar bij Minerva hoofdstuk 9-10 hing — een groter gat dan de
+per-hoofdstuk-labels deden vermoeden, want Grieks profiteert van de extra
+Chronica-hoofdstukken die het decor voor zowel Odysseus als Aeneas moeten
+dekken. **Besluit (Gerbens instructie): grammatica loskoppelen van het
+Minerva-hoofdstuknummer waar een verhaal toevallig bij hoort** — precies
+zoals dat bij Pallas ook al gebeurt (zie bijvoorbeeld hoe A.C.I. al in
+Hoofdstuk 9 werd voorgetrokken, ruim vóór Hoofdstuk 11's officiële
+Minerva-10-label) — en gewoon zorgen dat alle Minerva-1-grammatica ergens
+rond Hoofdstuk 11/12 gedekt is, ongeacht welk hoofdstuknummer er ooit aan
+gekoppeld stond.
+
+**Wat ontbrak**: Minerva hoofdstuk 11 (passief praesens/imperfectum/
+perfectum/plusquamperfectum, ppp, deponentia) en hoofdstuk 12 (betrekkelijk
+voornaamwoord, relatieve aansluiting, conjunctivus imperfectum/
+plusquamperfectum passief) — samen het hele restant van Minerva deel 1
+(hoofdstuk 13 is zelf al pure herhaling, dus telt niet mee). Toevallig
+gebruikt Minerva's eigen hoofdstuk 11 exact dezelfde cultuurtekst als
+Chronica's Cacus-scène ("Hercules, Euander en Cacus") — de oorspronkelijk
+grammatica-vrije, korte herhalingsscène (vorige bouwronde) is daarom
+**uitgebreid tot een volwaardig inhaalhoofdstuk** in plaats van vervangen.
+
+- **Vijf nieuwe puzzels**, elk gekoppeld aan een natuurlijk punt in het
+  verhaal: `puzzle_ch12_lat_passief_praesens` (rapiuntur, de gestolen
+  runderen), `puzzle_ch12_lat_perfectum_passief` (victus est, Cacus
+  verslagen), `puzzle_ch12_lat_deponens` (secutus est — sequi, Hercules
+  die het geluid volgt), `puzzle_ch12_lat_betrekkelijk_vnw` (qui, bij de
+  introductie van het nieuwe personage Euander), `puzzle_ch12_lat_
+  conjunctivus_passief` (victus esset, in een cum-bijzin — bewuste
+  herhaling van de cum-historicum-constructie uit Hoofdstuk 10/11, nu in
+  het passief).
+- **Nieuw personage: Euander**, de Arcadische balling die Hercules na
+  Cacus' dood ontvangt en samen met hem het Ara Maxima sticht — in de
+  Aeneis (boek 8) ontvangt dezelfde Euander, generaties later, ook Aeneas
+  op precies deze plek; in de codex-tekst vastgelegd als vooruitwijzing,
+  niet als iets dat Chronica's eigen Aeneas-lijn (al afgesloten in
+  Hoofdstuk 11) alsnog moet naspelen.
+- **Drie nieuwe grammatica-codextabellen** (`codex_grammatica_ch12_
+  passief`, `_deponentia`, `_betrekkelijk`), vroeg ontgrendeld op
+  `CH12_LAT_000` samen met de al bestaande Latium-tijdlijn-codex; de oude
+  `codex_grammatica_ch12_herhaling` ("geen nieuwe grammatica") is vervangen
+  door een accurate `codex_grammatica_ch12_overzicht`.
+- Scène-structuur: `CH12_LAT_001` (diefstal, nu met puzzel) →
+  `CH12_LAT_002` (geloei, kort) → `CH12_LAT_002B` (Hercules' wraak, puzzel)
+  → `CH12_LAT_003` (Euander, puzzel) → `CH12_LAT_004` (stichting Ara
+  Maxima, puzzel) → `CH12_LAT_005` (afsluiting, puzzel + de bestaande
+  `SOUVENIR`/`STATPOINTS`, dan de al bestaande `[REQUIRE:taalspoor=...]`-
+  splitsing naar `CH12_MUSEUM_00_LAT` of verder naar `CH12_ODY_001`).
+
+**Resultaat**: Minerva deel 1 is met deze uitbreiding volledig gedekt
+binnen Chronica Hoofdstuk 12 — de eerder geplande "rest" voor Hoofdstuk 13
+(zie de vorige versie van deze paragraaf) is dus niet meer nodig; Hoofdstuk
+13 kan zich vanaf nu vrij richten op zijn eigen, nieuwe Minerva-2-stof
+zonder ingehaalde achterstand mee te slepen.
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten (34 waarschuwingen,
+ongewijzigd — de vijf nieuwe puzzelscènes voegden geen nieuwe terminale-
+scène-waarschuwingen toe), en het graaf-simulatiescript bevestigt dat alle
+vijf nieuwe puzzel-id's bestaan en dat alle drie taalspoor-standen nog
+altijd zonder doodlopend eind bij hun juiste eindpunt uitkomen.
+
+**Update 2026-07-31, derde bouwronde — herverdeeld over Hoofdstuk 11 en 12,
+want vijf grammaticapunten in één hoofdstuk was te veel gewicht op één
+plek.** Gerben had gelijk: de vorige ronde propte Minerva-hoofdstuk 11 én
+12 allebei in Hoofdstuk 12, terwijl Hoofdstuk 11's eigen Latijnse kant
+alleen A.C.I.-**herhaling** had (geen nieuwe stof) — de lichtste plek in de
+hele keten, en dus de logische plek om iets naartoe te **verschuiven**, in
+plaats van alles op één hoop te houden.
+
+- **Verplaatst naar Hoofdstuk 11** (verving de twee A.C.I.-herhalings-
+  puzzels, die er toch geen nieuwe hints bij hadden): passief praesens
+  (`puzzle_ch11_aen_passief_praesens`, excipitur — Aeneas die door Dido
+  ontvangen wordt, CH11_AEN_001) en perfectum passief/ppp
+  (`puzzle_ch11_aen_perfectum_passief`, incensa est — Dido die door
+  Cupido "ontstoken" wordt, CH11_AEN_002P) — dezelfde grammatica als
+  eerst, nu wél met volledige hints (want geen herhaling meer, maar
+  Hoofdstuk 11's eigen nieuwe Latijnse stof). De grammaticatabel
+  (`codex_grammatica_ch12_passief` → hernoemd `codex_grammatica_ch11_
+  passief`) verhuisde mee naar `CH11_001`, met een bijpassend
+  verhaalvoorbeeld (excipere i.p.v. rapere).
+- **Bleef in Hoofdstuk 12**: deponentia, betrekkelijk voornaamwoord,
+  conjunctivus passief — drie puzzels in plaats van vijf.
+  `CH12_LAT_001`/`_002B` verloren hun `PUZZLE:`-tag (worden weer pure
+  verhaalscènes); de verwijderde `puzzle_ch12_lat_passief_praesens`/
+  `_perfectum_passief`-definities zijn uit `SP_PUZZLES` gehaald, niet
+  losstaand achtergelaten.
+- Beide "overzicht"-codexentries (`codex_grammatica_ch11_overzicht`/
+  `_ch12_overzicht`) en de `SP_CAMPAIGN`-velden voor ch11/ch12 zijn
+  bijgewerkt om de nieuwe verdeling accuraat te beschrijven.
+- **Resultaat**: Hoofdstuk 11 heeft nu 4 puzzels (2 Grieks nieuw:
+  participium/genitivus absolutus; 2 Latijn nieuw: passief), Hoofdstuk 12
+  heeft er 3 (Latijn: deponentia/betrekkelijk voornaamwoord/conjunctivus
+  passief) — een veel gelijkmatigere verdeling dan de eerdere 0-versus-5.
+  Minerva deel 1 blijft, samen genomen over Hoofdstuk 11+12, nog altijd
+  volledig gedekt.
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten (34 waarschuwingen,
+ongewijzigd), en het graaf-simulatiescript bevestigt dat alle puzzel-id's
+in beide hoofdstukken bestaan en dat alle drie taalspoor-standen in beide
+hoofdstukken nog altijd zonder doodlopend eind bij hun juiste eindpunt
+uitkomen.
+
+**Update 2026-07-31, vierde bouwronde — audit van Pallas/Minerva-tempo
+over de hele campagne, en het Griekse spoor na de splitsing (H10-12)
+bewust vertraagd.** Gerben vergeleek het tempo van Pallas (deel 1+2) en
+Minerva (deel 1+2) over de hele reeds gebouwde campagne:
+
+- **Vóór de splitsing (H1-9)**: Pallas deel 1, les 1-13, over 9
+  hoofdstukken ≈ 1,4 les/hoofdstuk — het referentietempo.
+- **Ná de splitsing (H10-12), vóór deze correctie**: Pallas deel 2, les
+  15-21 (zeven grammatica-zware lessen zonder enige "adempauze"-les
+  ertussen — vergelijk met les 24-27 verderop, die overwegend cultuurstof
+  zijn) over slechts 3 hoofdstukken ≈ 2,3 les/hoofdstuk. Een duidelijke,
+  reële versnelling — niet zomaar een tel-artefact.
+- **Latijn ter vergelijking**: Minerva 9-12 over dezelfde 3 hoofdstukken
+  ≈ 1,3/hoofdstuk, al dichter bij het referentietempo.
+
+**Besluit (Gerbens instructie, expliciet gekozen boven "vanaf Hoofdstuk 13
+bijsturen zonder H10-12 aan te raken")**: te veel stof te snel aanbieden
+leidt tot oppervlakkig aangeleerde grammatica, ook als er later herhaald
+wordt — liever gefaseerd aanleren dan te snel aanleren en alles achteraf
+moeten inhalen. Omdat Hoofdstuk 12's Griekse kant (Odysseus' Wraak) nog
+nauwelijks verder gebouwd was dan de aankomst en Eumaeus — dus nog GEEN
+enkele Griekse puzzel voor les 19/20/21 bestond — was dit een zuivere
+vooruit-planningscorrectie, geen retrofit van al gebouwde puzzels:
+
+- **Hoofdstuk 12** houdt alleen **les 19 (betrekkelijk voornaamwoord)**
+  over als nieuwe Griekse stof.
+- **Les 20 (conjunctivus) en les 21 (alpha-werkwoorden) zijn verschoven
+  naar "De Stad van Athena"** (destijds Hoofdstuk 14, sinds de
+  H12/13-samenvoeging van 2026-08-02 Hoofdstuk 13 — zie §7.44), dat toch
+  al les 22-27 omvat — waarvan de meeste (24-27) overwegend cultuurstof
+  zijn zonder zware nieuwe grammatica, dus ruimte genoeg om twee extra
+  lessen op te vangen zonder zelf te verdichten.
+- **Resultaat**: Hoofdstuk 10 (les 15+16) en 11 (les 17+18) blijven
+  ongewijzigd — daar staat al gebouwde, gevalideerde puzzelinhoud, en hun
+  eigen tempo (2 lessen/hoofdstuk, elk met eigen aandacht) was op zichzelf
+  niet het probleem. Het gemiddelde over H10-12 daalt van 2,3 naar
+  ongeveer 1,7 les/hoofdstuk — dichter bij het referentietempo, zonder
+  gebouwd werk weg te gooien.
+- `SP_CAMPAIGN`'s `pallas`/`grammatica`-velden voor ch12 en ch14 zijn
+  bijgewerkt om deze verschuiving expliciet te documenteren (inclusief de
+  reden, zodat een latere sessie het niet per ongeluk terugdraait).
+
+**Nog steeds niet gedaan**: de rest van Hoofdstuk 1-9's Pallas/Minerva-
+tempo is nog niet regel-voor-regel geaudit (zie de eerdere audit-paragraaf
+in deze sectie) — dat blijft, indien gewenst, een aparte vervolgklus.
+
+Getest: `node --check`, `validate_chronica.js` 0 fouten (34 waarschuwingen,
+ongewijzigd — dit was een zuivere metadata-wijziging, geen scène- of
+puzzelwijziging).
+
 ---
 
 ## 8. Wat (nog) niet gebouwd is
@@ -3538,6 +4291,469 @@ aanpassen zonder steeds de volledige tekst heen-en-weer te hoeven sturen.
 - **Workflow**: Gerben bewerkt (een kopie van) het bestand en stuurt het (of
   de aangepaste alinea's) terug; Claude verwerkt de wijzigingen in
   `singleplayer-data.js`, regenereert het bestand, commit + pusht beide.
+
+---
+
+### 7.39 Minerva deel 1 volledig afgerond bij Hoofdstuk 9 (2026-07-31, vijfde pass — herverdeling van §7.38's tussenstand)
+
+Vervolg op §7.38's drie eerdere passes ([[chronica-grammatica-loskoppelen-van-minerva-hoofdstuk]]):
+Minerva deel 1 was daar al "volledig gedekt", maar nog verspreid over
+Hoofdstuk 10-12. Gerben wilde de curriculum-mijlpaal exact laten samenvallen
+met de taalspoor-splitsing: **Minerva deel 1 (hoofdstuk 1-13) moet
+compleet zijn vóór Hoofdstuk 10 begint**, net zoals Pallas deel 1 dat al
+was. Vanaf Hoofdstuk 10 bevat de Latijnse lijn dus uitsluitend Minerva
+deel 2-stof (hoofdstuk 14+).
+
+**Uitgevoerde verschuiving** (bestaande puzzels verplaatst naar de drie
+"pure herhaling"-hoofdstukken van de onderbouw, die daar ruimte voor
+hadden; nieuwe Minerva-deel-2-puzzels teruggezet op dezelfde scènes zodat
+Hoofdstuk 10-12 niet grammatica-armer worden):
+
+| Van → Naar | Stof verplaatst | Nieuwe stof op de vrijgekomen plek |
+|---|---|---|
+| H10 → H5 | Minerva 9: plusquamperfectum, conjunctivus in de bijzin | Minerva 14: naamwoordgroepen (manus/dies-type), ille, ipse |
+| H11 → H6 | Minerva 11 deel 1: passief praesens/perfectum | Minerva 15: participium praesens actief |
+| H12 → H7 | Minerva 11 deel 2 (deponentia) + Minerva 12 (betrekkelijk vnw, conjunctivus passief) | Minerva 16: bijwoordvorming, genitivus op -ius, idem |
+
+De verhaaltekst en scènestructuur van geen van de zes hoofdstukken is
+aangeraakt — alleen de `PUZZLE:`-inhoud (met bijpassend herschreven
+voorbeeldzin per nieuwe context) en de gekoppelde `SP_CODEX_ENTRIES`-
+grammaticatabellen zijn vervangen. `SP_CAMPAIGN`'s `pallas`/`minerva`/
+`grammatica`-velden voor ch5, ch6, ch7, ch10, ch11, ch12 zijn bijgewerkt
+om de nieuwe inhoud te beschrijven. Gevalideerd met `node --check` en
+`node certamen/tools/validate_chronica.js` (0 fouten; de 34 waarschuwingen
+zijn alle pre-existente dode-vlaggen/terminale-scènes, niet veroorzaakt
+door deze ronde).
+
+**Standing regel bevestigd**: Hoofdstuk 5/6/7 (de drie herhalings-
+hoofdstukken van de onderbouw) zijn de aangewezen plek om vroege
+Minerva-deel-1-stof die elders te laat aan bod komt naartoe te
+verplaatsen — ze hadden al ruimte voor extra puzzels naast hun
+herhalingspuzzels. Zie ook [[chronica-h12-latijn-herhaling-cacus]] voor
+Hoofdstuk 12's Hercules & Cacus-lijn, die nu Minerva 16 (i.p.v. resterende
+deel-1-stof) draagt.
+
+### 7.40 Hoofdstuk 1-9 geoptimaliseerd voor de onderbouw: patroonbewuste hint-fading + retired grammatica terug in de passieve laag (2026-07-31)
+
+Vervolg op §7.36 item 6/§7.27 (het bestaande, binaire hint-fading-mechanisme
+op basis van `SP_CAMPAIGN.grammatica`) en op de audit-bevinding dat actief
+getoetste grammatica (`SP_PUZZLES`) bijna nooit in de gewone verhaaltekst
+terugkomt (`didactiek/03-grammaticale-leerlijn.md`) — Gerbens twee losse
+verzoeken, uitgevoerd als één ronde:
+
+**1. Patroonbewuste hint-fading, verder dan het bestaande hoofdstuk-niveau.**
+§7.27's regel werkt op hoofdstukniveau ("dit hoofdstuk = pure herhaling →
+alle hints weg"), maar mist over-drilling BINNEN één hoofdstuk: Hoofdstuk 2
+("Hera's vier gezichten") test praesens 3e pers. enk. en imperativus enk.
+allebei VIER keer op rij, in vier vrijwel identieke Latijnse zinnetjes
+(L/S/K/H-lijnen, achtereenvolgens gespeeld door elke leerling, zie §7.6) —
+zonder dat de bestaande regel daar iets aan deed, omdat Hoofdstuk 2 zelf
+niet als "herhaling" gelabeld staat.
+
+**Nieuwe regel (aanvullend op §7.27, niet vervangend)**: bij de EERSTE keer
+dat een morfologisch PATROON (niet alleen het grammaticale label) voorkomt,
+blijft de hint staan. Komt exact hetzelfde patroon (zelfde uitgang, zelfde
+conjugatie/declinatie-klasse) nogmaals voor — ook binnen hetzelfde
+hoofdstuk, ook als het hoofdstuk zelf niet als "herhaling" gelabeld is —
+dan vervalt de hint. Een NIEUW patroon binnen dezelfde grammaticacategorie
+(bv. een andere conjugatie, of een onregelmatig werkwoord) behoudt wél zijn
+eigen hint, ook al is de categorie zelf al eerder gezien — precies zoals
+§7.27 dat al deed voor `puzzle_ch7_perfectum` (capere, onregelmatig).
+
+**Toegepast op Hoofdstuk 1-9** (4 hints verwijderd, met motivatie):
+- `puzzle_ch2s_praesens`/`puzzle_ch2h_praesens`: beide 1e-conjugatie -at,
+  identiek patroon aan `puzzle_ch2l_praesens` (die zijn hint behoudt als
+  eerste van de drie). `puzzle_ch2k_praesens` (3e conjugatie -it) behoudt
+  zijn hint — nieuw patroon.
+- `puzzle_ch2s_imperativus`: 3e-conjugatie -e, identiek patroon aan
+  `puzzle_ch2l_imperativus` (behoudt zijn hint). `puzzle_ch2k_imperativus`
+  (onregelmatig, ire-samenstelling) en `puzzle_ch2h_imperativus`
+  (4e conjugatie) behouden hun hint — allebei nieuwe patronen.
+- `puzzle_ch4t_vocativus` (Icarus → Icare, Hoofdstuk 4): identiek patroon
+  aan `puzzle_ch1a_vocativus` (Midas → Bacchus' naam, Hoofdstuk 1, behoudt
+  zijn hint als eerste van dat patroon). `puzzle_ch1b_vocativus`
+  (onveranderd, ander patroon) en `puzzle_ch1c_vocativus` (Grieks -eus→-eu,
+  ander patroon) behouden hun hint.
+
+Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 34
+waarschuwingen (ongewijzigd, pre-bestaand).
+
+**2. Retired grammatica terug in de passieve taallaag (B23,
+§7.16/§7.29/§7.32).** Drie nieuwe, ongetoetste passages toegevoegd aan
+bestaande verhaaltekst in Hoofdstuk 2/5/8 — via het bestaande
+`[[brontekst|vertaling]]`-Glosbeleid (§7.18), dus optioneel opvraagbaar,
+geen aparte puzzel, geen wijziging aan de scènestructuur:
+- **Vocativus** (CH8_EPI_002, "De Rouwkreet"): Achilles roept "Πάτροκλε!"
+  ("Patroklos!") — Griekse vocativus, hetzelfde -ος→-ε-patroon dat in
+  Hoofdstuk 6 (`puzzle_ch6_vocativus_grieks`, Βάκχος→Βάκχε) actief getoetst
+  is, hier drie hoofdstukken later passief herkend in een emotioneel
+  zwaar moment i.p.v. nog een puzzel.
+- **Praesens** (CH2_L06, "Niemand Die Helpen Kan"): "Latona fugit" — een
+  omstander fluistert het terwijl Latona op de vlucht is, precies het
+  praesens-patroon dat elders in hetzelfde hoofdstuk als puzzel getoetst
+  wordt.
+- **Imperativus** (CH5, Hylas-episode): "Redi!" ("Kom terug!") — Telamon
+  roept het Herakles toe terwijl die vergeefs naar Hylas zoekt, een
+  natuurlijke narratieve aanleiding (de tekst noemt al "elke aanmaning om
+  terug aan boord te komen") voor een commandovorm die in Hoofdstuk 2 als
+  puzzel is geïntroduceerd.
+
+**Bewust beperkt tot deze drie**: het doel is een concreet, herhaalbaar
+patroon vastleggen (Glosbeleid + narratief passend moment, geen los
+"vocabulaire-blokje"), niet elk hoofdstuk exhaustief langslopen. Bij een
+volgende hoofdstuk-ronde: zoek bewust naar een moment waar de RETIRED vorm
+(hint al vervallen, zie hierboven) inhoudelijk past bij wat er in de scène
+al gebeurt, i.p.v. hem er ad-hoc bij te plakken.
+
+### 7.41 Audit Hoofdstuk 10/11 tegen het echte Minerva 2-docentenboek (2026-08-02) — twee gerepareerde fouten
+
+Gerben vroeg om Hoofdstuk 10 en 11 te controleren tegen wat Minerva 2
+(hoofdstuk 14/15) daadwerkelijk voorschrijft, en het verschil in te bouwen.
+`!Minerva-2-Docentenboek-v2022.pdf` (lokaal, `Minerva/`-map) gaf via de
+exercitie-structuur per paragraaf (Taaloefening A/B/C/D, elk met een
+`(par. ...)`-verwijzing) een betrouwbaar beeld van wat elk hoofdstuk
+daadwerkelijk NIEUW introduceert, ook al bevat het docentenboek zelf enkel
+antwoorden, geen theorie.
+
+**Fout 1 — Hoofdstuk 10 testte `ille` alsof het nieuw was; dat is het niet.**
+Minerva hoofdstuk 14 par. V heet expliciet "van hic naar ille" — het
+veronderstelt `ille` al bekend en introduceert `hic` als de nieuwe
+tegenhanger. Chronica's eigen `codex_grammatica_ch8_voornaamwoorden`
+bevestigt dit: Hoofdstuk 8 leert al `ille` én `is/ea/id`. `puzzle_ch10_
+aen_ille` was dus onbedoeld een herhalingspuzzel die zich voordeed als
+nieuwe stof. **Fix**: vervangen door `puzzle_ch10_aen_hic` (CH10_AEN_006,
+Achaemenides-scène — "hic homo", een natuurlijke fit voor een figuur die
+letterlijk net ontdekt is). `ipse` bleef ongewijzigd (dat wás al correct
+nieuw). Codex-tabel `codex_grammatica_ch10_naamwoord_groep45` en
+`SP_CAMPAIGN.ch10` bijgewerkt.
+
+**Fout 2 — Hoofdstuk 11 miste de ablativus absolutus.** Minerva hoofdstuk
+15 par. III-V behandelt niet alleen het participium praesens actief (al
+gebouwd, `puzzle_ch11_aen_participium1/2`) maar ook de ablativus absolutus
+(participium + eigen onderwerp, allebei in de ablativus) — precies de
+Latijnse tegenhanger van de Griekse genitivus absolutus die de Odysseus-
+lijn in datzelfde hoofdstuk al wél heeft (`puzzle_ch11_ody_genitivus_
+absolutus`). Zonder ablativus absolutus was er dus geen taalkundige
+pariteit tussen de twee sporen. **Fix**: nieuwe `puzzle_ch11_aen_
+ablativus_absolutus` ("Mercurio dicente" — terwijl/nadat Mercurius sprak),
+toegevoegd bij Mercurius' verschijning-en-verdwijning in CH11_AEN_004
+(een scène die zich daar bij uitstek voor leent).
+
+**Belangrijke bouwkundige valkuil die hierbij opnieuw speelde** (zie ook
+§7.19/de zigzag-geheugennotitie): CH11_AEN_004 heeft `REQUIRE:taalspoor=`-
+gated CHOICES (latijn/beide). Een `PUZZLE:` in diezelfde scène zou de
+REQUIRE-branching stukmaken, want `spRenderPuzzle()` navigeert na een
+juist antwoord altijd naar `scene.choices[0]?.target`, ongeacht REQUIRE.
+**Fix**: de scène gesplitst in een keten — CH11_AEN_004 (ongewijzigde
+tekst, één ongeconditioneerde keuze) → CH11_AEN_004P (nieuwe scène, de
+PUZZLE, één ongeconditioneerde keuze) → CH11_AEN_004B (nieuwe scène, de
+REQUIRE-branching keuzes) — hetzelfde patroon als de bestaande
+PUZZLE-vóór-branch-oplossing elders in de campagne.
+
+**Nieuwe codex-entry**: `codex_grammatica_ch11_ablativus_absolutus`,
+zelfde stijl als de genitivus-absolutus-entry, gehookt op CH11_001;
+`codex_grammatica_ch11_overzicht` bijgewerkt.
+
+**Nog niet ingebouwd, bewust doorgeschoven**: Minerva 14 par. IV
+introduceert ook de ut-finalis/doelzin-constructie ("opdat"/"om te" +
+conjunctivus) — genuinely nieuw, niet hetzelfde als de cum-conjunctivus
+(cum iterativum/historicum) die al in Hoofdstuk 5 zit (`puzzle_ch5_conj1/
+2`). Niet alsnog in Hoofdstuk 10 gepropt (dat zou al op 5 puzzels komen,
+tegen de staande "niet cramen"-regel uit §7.38's derde pas in) — in plaats
+daarvan genoteerd als kandidaat voor Hoofdstuk 13 ("Het Begin van Rome",
+`SP_CAMPAIGN.ch13.grammatica` nog altijd "nog te bepalen" en dus het
+natuurlijke, nog lege vat om dit in te gieten).
+
+Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 34
+waarschuwingen (ongewijzigd, pre-bestaand) — inclusief de nieuwe
+CH11_AEN_004→004P→004B-keten.
+
+**Correctie (2026-08-02, later dezelfde dag)**: bovenstaande fout 2
+noemde de ablativus absolutus abusievelijk "Minerva hoofdstuk 15, par.
+III-V". Bij het opstellen van `PALLAS_MINERVA_OVERZICHT.md` (volledige
+doorlichting van Minerva 2) bleek de ablativus absolutus pas in **Minerva
+hoofdstuk 18** (par. I-III) als nieuw te worden geïntroduceerd — hoofdstuk
+15 gaat uitsluitend over het participium. De puzzel zelf
+(`puzzle_ch11_aen_ablativus_absolutus`) bleef staan in H11 (taalkundig
+correct, goede scène-fit); alleen de bronvermelding in `SP_CAMPAIGN.ch11`,
+de codex-teksten en de puzzel-comments is gecorrigeerd naar "Minerva 18,
+bewust vooruitgehaald". Zie `PALLAS_MINERVA_OVERZICHT.md` voor het
+volledige, geverifieerde overzicht — raadpleeg dat voortaan bij twijfel
+over welk Minerva/Pallas-hoofdstuk welke grammatica introduceert, in
+plaats van losse PDF-uitsneden te herhalen.
+
+### 7.42 Zelfde audit voor Hoofdstuk 12 (2026-08-02) — de ACP ontbrak
+
+Vervolg op §7.41, ditmaal Hoofdstuk 12 (Hercules & Cacus, Minerva
+hoofdstuk 16) tegen `!Minerva-2-Docentenboek-v2022.pdf` gelegd. H16's
+exercitiestructuur: par. I = bijwoord (al gebouwd, `puzzle_ch12_lat_
+bijwoord`), par. II = genitivus op -ius (al gebouwd, `puzzle_ch12_lat_
+genitivus_ius`), par. III = "idem en ipse" (idem al gebouwd,
+`puzzle_ch12_lat_idem`; ipse zelf hoeft niet opnieuw — dat is al Hoofdstuk
+10-stof, dus terecht niet herhaald als "nieuw"), en **par. IV: de
+accusativus cum participio (ACP) en predicatief gebruik — deze ontbrak
+volledig.**
+
+**Wat de ACP is en waarom hij ontbrak**: na een werkwoord van waarneming
+(audire, videre, sentire) staat in het Latijn geen A.C.I. (accusativus +
+infinitivus, na zeggen/menen/weten — al Hoofdstuk 9-stof) maar een ACP:
+accusativus + participium — je hoort/ziet iemand iets DOEN, in plaats van
+dát iets het geval is. Een aparte, nieuwe constructie, niet zomaar een
+variant van de A.C.I. die het hoofdstuk al kende.
+
+**Fix**: nieuwe `puzzle_ch12_lat_acp` ("Hercules boves mugientes audivit"
+— Hercules hoorde de runderen loeien), toegevoegd aan CH12_LAT_002 ("Het
+Geloei") — een bijzonder directe fit, want die scène IS letterlijk het
+moment waarop Hercules de gestolen runderen hoort loeien en zo de list
+ontdekt. Nieuwe codex-entry `codex_grammatica_ch12_acp` (zelfde
+tabel-stijl, met een A.C.I.-vergelijkingsregel erbij zodat het verschil
+met Hoofdstuk 9 expliciet zichtbaar is), gehookt op CH12_LAT_000.
+`codex_grammatica_ch12_overzicht` en `SP_CAMPAIGN.ch12` bijgewerkt.
+
+CH12_LAT_002 heeft geen REQUIRE-branching CHOICES (één ongeconditioneerde
+keuze naar CH12_LAT_002B), dus de PUZZLE/REQUIRE-valkuil uit §7.41 speelde
+hier niet — de puzzel kon direct in de bestaande scène.
+
+Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 34
+waarschuwingen (ongewijzigd, pre-bestaand).
+
+### 7.43 Hoofdstuk 13: grammatica vastgepind, nog niet gebouwd (2026-08-02)
+
+Gerben vroeg dezelfde audit voor Hoofdstuk 13 — maar Hoofdstuk 13 ("Het
+Begin van Rome") heeft geen `SP_CH13_CNS`, geen scènes, geen puzzels:
+alleen het lege `SP_CAMPAIGN`-skelet, met `grammatica:"Nog te bepalen"`.
+Er was dus niets om te controleren zoals bij H10/H11/H12 (§7.41/§7.42).
+Gevraagd en gekozen: alleen de grammatica-toewijzing vastpinnen in
+`SP_CAMPAIGN`, geen verhaal/scènes bouwen (dat is een aparte, veel grotere
+klus).
+
+**Onderzoek** (`!Minerva-2-Docentenboek-v2022.pdf`, hoofdstuk 17
+"Hannibal over de Alpen"): par. I-II introduceren futurum en futurum
+exactum ("Het futurum/futurum exactum..." als sectiethema, "Taaloefening A
+(par. I en II, herkennen futurumvormen)"), par. V introduceert het
+onregelmatige werkwoord ire (gaan). Par. II/III elders in het hoofdstuk
+zijn A.c.I.-herhaling (al Hoofdstuk 9-stof).
+
+**Toewijzing**: Hoofdstuk 13 = Minerva hoofdstuk 17 (futurum, futurum
+exactum, ire) — zet de 1-op-1 lijn voort die Hoofdstuk 10/11/12 al hadden
+met Minerva 14/15/16. Draagt daarnaast de nog openstaande ut-finalis/
+doelzin-constructie mee (Minerva hoofdstuk 14, par. IV — bewust uit
+Hoofdstuk 10 gehouden om cramming te vermijden, zie §7.41); met een heel
+hoofdstuk nog te bouwen is er hier vanzelf ruimte voor, in plaats van hem
+nog een hoofdstuk verder te moeten schuiven.
+
+**Nog open**: dit is puur een vastgelegde toewijzing, geen build. Zodra
+Hoofdstuk 13's verhaal (Romulus en Remus, de stichting van Rome) wordt
+uitgewerkt, moeten `SP_CH13_CNS`, de bijbehorende `SP_PUZZLES` (futurum,
+futurum exactum, ire, ut-finalis) en codex-tabellen nog gebouwd worden —
+volg daarbij dezelfde patronen als H10-12 (audit-checklist §7.36,
+grammatica-tabellen vroeg ontgrendeld + overzicht bij afsluiting).
+
+Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 34
+waarschuwingen (ongewijzigd, pre-bestaand) — alleen het metadata-veld is
+gewijzigd.
+
+### 7.44 Hoofdstuk 12 + 13 samengevoegd; standing policy tegen enkelvoudige-spoor-hoofdstukken (2026-08-02)
+
+Gerben signaleerde, na §7.43, dat Hoofdstuk 12 (Odysseus' Wraak,
+taalspoor-gescheiden: Grieks = Odysseus, Latijn = Hercules & Cacus) en
+Hoofdstuk 13 (Het Begin van Rome, puur Latijn — Romulus & Remus) samen een
+probleem vormen: spelers met taalspoor=grieks slaan Hoofdstuk 13 volledig
+over (geen Griekse tegenhanger), wat verwarrend aanvoelt alsof ze iets
+missen. **Voorstel, aangenomen**: H12 en H13 samenvoegen tot één
+hoofdstuk met twee sporen, net als Hoofdstuk 10/11. **Bredere staande
+regel, ook aangenomen**: geen enkele hoofdstuk mag voortaan nog maar voor
+één taalspoor toegankelijk zijn — spelers mogen nooit het gevoel hebben
+dat ze hoofdstukken overslaan.
+
+**Uitgevoerde renummering** (H14 en verder schuiven allemaal één plek
+naar voren, aangezien H12+13 samen nu H12 vormen):
+
+| Oud | Nieuw | Hoofdstuk |
+|---|---|---|
+| 12 + 13 | **12** | Wraak en een Nieuwe Stad (Odysseus' Wraak + Het Begin van Rome, samengevoegd) |
+| 14 | 13 | De Stad van Athena |
+| 15 | 14 | Oorlog en Overwinning |
+| 16 | 15 | De Vader van de Geschiedenis |
+| 17 | 16 | De Stem van de Filosofen |
+| 18 | 17 | Alexander en de Grenzen van de Wereld |
+| 19 | 18 | Onder de Koningen |
+| 20 | 19 | Verdedigers van de Republiek |
+| 21 | 20 | De Gracchen |
+| 22 | 21 | Marius en Sulla |
+| 23 | 22 | Caesar Schrijft Geschiedenis |
+| 24 | 23 | Augustus en de Pax Romana |
+| 25 | 24 | Keizers en Dichters |
+| 26 | 25 | De Bibliotheek van Mnemosyne |
+| 27 | 26 | De Rivier Lethe |
+| 28 (Finale) | 27 (Finale) | Chronica Classica |
+
+`SP_CAMPAIGN` (`id`/`nr` van ch14 t/m ch27, en finale se `nr`) is
+mechanisch bijgewerkt, plus alle interne hoofdstuk-nummerverwijzingen in
+`singleplayer-data.js` die naar het verschoven bereik wezen (Atalanta's
+terugkeer bij de Spelen, Hades' volledige verhaal, de Mnemosyne-
+onthulling). De grote campagnetabel in dit document (§7, hierboven) is
+meeverschoven; twee specifieke, nog relevante historische verwijzingen
+(Arachne's verhuizing naar "De Stad van Athena", les 20-21's verhuizing
+naar datzelfde hoofdstuk) zijn expliciet meegepast. **De rest van de
+oudere, gedateerde `>`-blockquote-passages elders in dit document (die
+over Hoofdstuk 14+ gaan) is BEWUST NIET herschreven** — dat zijn
+bevroren historische besluit-verslagen uit hun eigen tijd; lees "Hoofdstuk
+N" daar voortaan als "de huidige Hoofdstuk N-1" voor elke N ≥ 14 uit de
+periode vóór 2026-08-02.
+
+**H12's nieuwe, samengevoegde inhoud**:
+- **Latijnse lijn, twee delen na elkaar**: Hercules & Cacus (Minerva 16,
+  AL GEBOUWD, ongewijzigd) gevolgd door Romulus & Remus (Minerva 17 +
+  de nog openstaande ut-finalis uit Minerva 14 par. IV, **NOG TE
+  BOUWEN**) — acht puzzels totaal, verdeeld over twee duidelijk
+  gescheiden verhaalmomenten, niet zwaarder dan de oude twee aparte
+  hoofdstukken samen.
+- **Griekse lijn**: Odysseus' terugkeer en wraak op de vrijers — momenteel
+  nog maar een skelet (`CH12_ODY_001/002`, eindigt midden in het gesprek
+  met Eumaeus, geen Combat-bridge, geen puzzels, geen einde). **Moet nog
+  volledig uitgebouwd worden.**
+- **Zigzag-structuur**: momenteel lopen taalspoor=beide-spelers de twee
+  lijnen nog sequentieel af (eerst alle Latijn, dan alle Grieks via
+  `CH12_LAT_005 → CH12_ODY_001`). Voor een écht "geen hoofdstukken
+  overslaan"-gevoel hoort dit, net als Hoofdstuk 10/11, een
+  scène-voor-scène zigzag te worden (zie
+  `chronica-taalspoor-zigzag-mechanisme` in het geheugensysteem voor het
+  herbruikbare REQUIRE-patroon) — **nog niet uitgevoerd.**
+
+**Beslissingen, vastgelegd na overleg (2026-08-02)**:
+1. Hercules & Cacus blijft staan (niet vervangen door Romulus & Remus) —
+   als kort vignet vooraf, chronologisch eerder dan Aeneas, gevolgd door
+   Romulus & Remus als hoofdverhaal van de Latijnse lijn.
+2. Minerva 16 (Hercules & Cacus) en Minerva 17 (Romulus & Remus) blijven
+   allebei in dit ene samengevoegde hoofdstuk, i.p.v. Minerva 17
+   door te schuiven naar het volgende hoofdstuk — consistent met de
+   1-op-1-Minerva-hoofdstuk-per-Chronica-hoofdstuk-lijn die H10/11 al
+   hadden (nu dus 2 Minerva-hoofdstukken in het samengevoegde H12, wat qua
+   totale hoeveelheid gelijk blijft aan de oude situatie).
+3. De bredere herziening van boek III/IV (waar Griekse en Romeinse
+   geschiedenis na de val van Troje uit elkaar lopen, zonder vanzelfsprekend
+   gedeeld moment) wordt EXPLICIET DOORGESCHOVEN naar een aparte, latere
+   sessie — dit is dus nog geen uitspraak over HOE Hoofdstuk 15+
+   (Herodotos/filosofen/Alexander vs. Rome onder de koningen/Republiek)
+   ooit een gedeeld Grieks/Latijns spoor krijgen. De campagnetabel
+   hierboven is voor die rijen dan ook expliciet gemarkeerd als "nog te
+   herzien".
+
+**Nog niet gebouwd, expliciet openstaand voor een volgende sessie**:
+Romulus & Remus-scènes, de Odysseus-vrijers-Combat-bridge en -ontknoping,
+de zigzag-herstructurering van CH12_LAT/CH12_ODY, en de bijbehorende
+nieuwe `SP_PUZZLES`/codex-tabellen (futurum, futurum exactum, ire,
+ut-finalis). Dit is qua omvang vergelijkbaar met het oorspronkelijk bouwen
+van Hoofdstuk 10 of 11 — een aparte bouwronde, geen kleine aanvulling.
+
+Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 34
+waarschuwingen (ongewijzigd, pre-bestaand).
+
+### 7.45 Hoofdstuk 13-24 vervangen door 8 paren-hoofdstukken (13-20) + ontknoping (21-22-Finale) (2026-08-02)
+
+Vervolg op §7.44's "standing policy tegen enkelvoudige-spoor-hoofdstukken"
+en `PALLAS_MINERVA_OVERZICHT.md`. Gerben vroeg een concreet voorstel voor
+hoe de rest van de campagne (na Hoofdstuk 12) zonder enkelvoudig-spoor-
+hoofdstukken kon, met Pallas 2 en Minerva 2 geleidelijk verdeeld — en
+keurde het voorstel goed.
+
+**Kernprobleem**: Pallas 2 heeft nog 8 lessen te goed (22-29, eindigend
+bij Alexander de Grote), Minerva 2 nog 8 hoofdstukken (18-25, doorlopend
+tot Nero) — toevallig evenveel, maar Grieks eindigt eeuwen eerder in de
+wereldgeschiedenis dan Latijn. De oude planning (12 losse, enkelvoudig-
+spoor-hoofdstukken, hoofdstuk 13-24) had dit probleem niet opgelost, enkel
+verstopt: eerst een blok pure Griekse hoofdstukken (Athene/filosofen/
+Alexander), dan een blok pure Latijnse (koningen/Republiek/Gracchen/
+Caesar/Augustus).
+
+**Oplossing**: 8 hoofdstukken (13-20), elk met een Griekse EN Latijnse
+lijn, gekozen op THEMA in plaats van exacte datum (zelfde principe als
+Hoofdstuk 10-12's Odysseus/Aeneas-parallel) — zie de volledige tabel in
+`PALLAS_MINERVA_OVERZICHT.md`. Concrete koppelingen: Athena's geboorte ↔
+Rome onder de koningen (twee oorsprongsmythes); Atheense democratie ↔
+Verdedigers van de Republiek (bijna hetzelfde jaar, 508/509 v.Chr., beide
+een volk dat zich tegen een tiran verzet); De Vrouw/slavernij ↔ dagelijks
+leven Rome; onderwijs/sport ↔ vermaak Rome; Perzische Oorlogen ↔ Hannibal
+(beide een underdog die standhoudt); Alexander (laatste Griekse les) ↔
+Caesar (beide "één man hertekent de kaart van de wereld").
+
+**Asymmetrie na Hoofdstuk 18 (Alexander)**: Pallas 2 is dan op. Hoofdstuk
+19-20 (Gracchen/Marius-Sulla, Augustus/Nero/literatuur) hebben dus GEEN
+nieuwe Griekse grammatica meer — maar mogen daarom nooit "leeg" aanvoelen
+aan Griekse kant (dat zou de eigen "geen enkelvoudig-spoor"-regel
+schenden). **Nog open, expliciet met Gerben te bepalen**: WELK Grieks
+verhaal deze twee hoofdstukken vult (herhaling van eerdere stof, een
+Hellenistisch vignet, of iets anders) — `SP_CAMPAIGN.ch19/ch20.pallas`
+staat daarom nu op "nog te bepalen", niet op een verzonnen invulling.
+
+**Zijeffect, ook uitgevoerd**: les 20-21 (de boogwedstrijd/wraak op de
+vrijers — Odysseus' eigen verhaalslot) stonden sinds 2026-07-31 abusievelijk
+in een later, thematisch ongerelateerd hoofdstuk (destijds puur om
+grammatica-dichtheid te spreiden, zonder te checken of het verhaal ook
+klopte). **Teruggezet naar Hoofdstuk 12 zelf**, waar de bijbehorende scène
+toch al gebouwd moet worden (`CH12_ODY_001/002`, nu tot en met de
+boogwedstrijd/wraak/hereniging).
+
+**Herverdeelde canon-content** (personages/zijverhalen uit de oude
+hoofdstuk 13-24, herplaatst naar hun nieuwe hoofdstuk): Arachne/Perseus/
+Bellerophon blijven bij Athena (H13, toevallig hetzelfde hoofdstuk als
+voorheen). Atalanta + het Calydonische-ever/Meleager-vignet verhuisd van
+"De Stad van Athena" naar Hoofdstuk 16 (sport/Spelen-thema past beter dan
+een algemeen Athene-hoofdstuk). Herodotos wordt, net als Xenofon elders al
+gebeurt, een vertellende stem BINNEN Hoofdstuk 17 (Perzische Oorlogen) in
+plaats van zijn eigen hoofdstuk ("Schrijvers als personages"-conventie).
+Spartacus verhuisd van het oude "Caesar Schrijft Geschiedenis" naar
+Hoofdstuk 19 (Gracchen/Marius-Sulla-tijdperk, chronologisch een betere
+fit — Spartacus' opstand valt vlak na Sulla, ruim voor Caesars eigen
+carrière). Regulus/Cato/Cicero/Eros&Psyche/Pygmalion blijven bij hun
+respectievelijke nieuwe hoofdstukken (Hannibal resp. Caesar resp.
+Augustus).
+
+**Ontknoping (21-22-Finale)**: vervangt het oude drieluik Mnemosyne (was
+25)/Lethe (was 26)/Finale (was 27) qua NUMMERING, niet qua inhoud —
+dezelfde twee hoofdstukken (nu 21 en 22) plus een losse, ongenummerde
+Finale erna, exact zoals de structuur al was. Alle interne verwijzingen
+naar deze hoofdstukken elders in `singleplayer-data.js` (Mnemosyne-
+onthulling bij de souvenir-uitleg, Hades' volledige verhaal, Orpheus'
+dood) zijn meeverschoven.
+
+**Nog niet gebouwd, expliciet openstaand**: alle acht hoofdstukken (13-20)
+hebben alleen vastgelegde metadata, geen scènes/puzzels — vergelijkbare
+omvang als het origineel bouwen van Hoofdstuk 10/11/12, keer acht. Bouw ze
+één voor één, in volgorde, en raadpleeg `PALLAS_MINERVA_OVERZICHT.md` bij
+elke ronde voor de exacte grammatica-onderbouwing.
+
+Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 34
+waarschuwingen (ongewijzigd, pre-bestaand).
+
+**Aanvulling, later dezelfde dag: Hoofdstuk 19/20's Griekse lijn
+ingevuld.** Samen met Gerben gekozen, beide bewust een direct narratief
+vervolg op Hoofdstuk 18 (Alexander) — geen nieuwe Pallas-les nodig, dus
+precies passend bij het feit dat Pallas 2 daar al uitgeput is:
+- **Hoofdstuk 19**: de Diadochenoorlogen — Alexanders eigen generaals
+  (Perdikkas, Antigonos, Ptolemaeus, Seleukos, Kassandros), ooit zijn
+  trouwste bondgenoten, verscheuren zijn rijk vlak na zijn dood (323 v.Chr.
+  en verder). Spiegelt de Latijnse lijn (Marius/Sulla, ooit bondgenoten,
+  nu rivalen) chronologisch nauwkeurig (H19's Latijnse periode is 133-78
+  v.Chr., dus de Diadochenoorlogen liggen er ruimschoots vóór — bewust
+  geaccepteerd, het thema weegt hier zwaarder dan de exacte datum, net als
+  bij eerdere paren in dit hoofdstukkenblok).
+- **Hoofdstuk 20**: Cleopatra VII en de Slag bij Actium (31 v.Chr.) —
+  **inhoudelijke convergentie, niet slechts thematisch**: dezelfde slag
+  die Augustus' Pax Romana inluidt (Latijnse lijn) beëindigt ook
+  definitief het laatste onafhankelijke Griekse (Hellenistische) rijk.
+  Cleopatra is zelf een telg van de Ptolemaeën, opgericht door een van
+  Alexanders eigen generaals — sluit de boog Alexander (H18) →
+  Diadochenoorlogen (H19) → ondergang van het laatste Hellenistische rijk
+  (H20) mooi af.
+
+`SP_CAMPAIGN.ch19/ch20.pallas` zijn bijgewerkt; nog steeds enkel metadata,
+geen scènes/puzzels. Gerben expliciet: als er bij het bouwen nog gaten
+blijken, vullen we die dan pas — niet nu al vooruitlopen.
+
+Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 34
+waarschuwingen (ongewijzigd, pre-bestaand).
 
 ---
 

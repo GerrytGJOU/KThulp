@@ -264,18 +264,18 @@ const SP_CAMPAIGN = [
   { id:"ch5", nr:5, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"Het Gulden Vlies",
     periode:"Vóór de Trojaanse Oorlog — de vorige generatie",
     verhaal:"Jason verzamelt de dapperste helden van Griekenland aan boord van de Argo, op zoek naar het legendarische Gulden Vlies. Aan het einde van de tocht wacht een tovenares wier hulp een prijs heeft.",
-    pallas:"— (herhaling, valt buiten de lesnummering)", minerva:"— (herhaling, valt buiten de lesnummering)",
-    grammatica:"Herhaling nominativus t/m ablativus — geen nieuwe grammatica",
+    pallas:"— (herhaling, valt buiten de lesnummering)", minerva:"Hoofdstuk 9 (deel): plusquamperfectum, conjunctivus in de bijzin — verplaatst vanuit Hoofdstuk 10 zodat Minerva deel 1 bij Hoofdstuk 9 is afgerond (Gerbens verzoek 2026-07-31, zie Chronica.md §7.38/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk)",
+    grammatica:"Herhaling nominativus t/m ablativus (geen nieuwe stof), PLUS nieuwe Latijnse stof: plusquamperfectum, conjunctivus in de bijzin (Minerva 9, met volledige hints i.t.t. de herhalingspuzzels)",
     gameplay:"Tochtenlogboek met vaste bemanningsleden; combat/puzzel-afwisseling zoals bij Herakles' werken",
     personages:"Jason, Medea, Peleus, Telamon, Laertes, Herakles (cameo), Orpheus (cameo), Argos (cameo, scheepsbouwer), Atalanta (cameo), Kastor & Polydeukes (cameo), Meleager (cameo), Nestor (cameo), Philoktetes (cameo), Theseus (cameo), Tydeus (cameo)",
     thema:"De generatie vóór de helden die de speler al kent",
     illustratie:"De Argo verlaat de haven, bemanning aan boord",
-    zijverhalen:"Uitgebreide cameo-cast van Argonauten die later terugkeren, korte momenten i.p.v. uitgewerkte lijnen (zelfde principe als Hoofdstuk 2/3's zijpersonages): Argos (scheepsbouwer van de Argo — bewust zo gespeld i.p.v. 'Argus', om verwarring met de honderdogige bewaker Argus Panoptes uit Hoofdstuk 3 te vermijden), Atalanta (in sommige versies Argonaut, elders althans gevraagd — komt terug bij de Spelen in Hoofdstuk 14 en in het latere Calydonische-ever-vignet met Meleager), Kastor & Polydeukes (broers van Helena, relevant vanaf Hoofdstuk 7), Meleager (Argonaut — zelfde latere Calydonische-ever-vignet als Atalanta), Nestor (hier nog jong, later de stem van ervaring vóór Troje), Philoktetes (draagt hier al Herakles' boog, cruciaal voor de latere val van Troje), Theseus (de speler kent hem al uit Hoofdstuk 4 — deze tocht speelt zich af vóór zijn eigen Labyrint-avontuur, dus bewuste dramatische ironie i.p.v. foreshadowing) en Tydeus (vader van Diomedes)." },
+    zijverhalen:"Uitgebreide cameo-cast van Argonauten die later terugkeren, korte momenten i.p.v. uitgewerkte lijnen (zelfde principe als Hoofdstuk 2/3's zijpersonages): Argos (scheepsbouwer van de Argo — bewust zo gespeld i.p.v. 'Argus', om verwarring met de honderdogige bewaker Argus Panoptes uit Hoofdstuk 3 te vermijden), Atalanta (in sommige versies Argonaut, elders althans gevraagd — komt terug bij de Spelen in Hoofdstuk 16 en in het latere Calydonische-ever-vignet met Meleager), Kastor & Polydeukes (broers van Helena, relevant vanaf Hoofdstuk 7), Meleager (Argonaut — zelfde latere Calydonische-ever-vignet als Atalanta), Nestor (hier nog jong, later de stem van ervaring vóór Troje), Philoktetes (draagt hier al Herakles' boog, cruciaal voor de latere val van Troje), Theseus (de speler kent hem al uit Hoofdstuk 4 — deze tocht speelt zich af vóór zijn eigen Labyrint-avontuur, dus bewuste dramatische ironie i.p.v. foreshadowing) en Tydeus (vader van Diomedes)." },
   { id:"ch6", nr:6, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Vloek van Thebe",
     periode:"Mythisch Thebe, meerdere generaties",
     verhaal:"Kadmos sticht een stad door drakentanden in de aarde te zaaien. Generaties later worstelt zijn nageslacht met een raadsel, een vloek en een erfenis die niemand vrijwillig zou kiezen.",
-    pallas:"— (herhaling, valt buiten de lesnummering)", minerva:"— (herhaling, valt buiten de lesnummering)",
-    grammatica:"Herhaling praesens t/m perfectum — geen nieuwe grammatica",
+    pallas:"— (herhaling, valt buiten de lesnummering)", minerva:"Hoofdstuk 11 (deel): passief praesens/perfectum — verplaatst vanuit Hoofdstuk 11 zodat Minerva deel 1 bij Hoofdstuk 9 is afgerond (Gerbens verzoek 2026-07-31, zie Chronica.md §7.38/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk)",
+    grammatica:"Herhaling praesens t/m perfectum (geen nieuwe stof), PLUS nieuwe Latijnse stof: passief praesens/perfectum (Minerva 11 deel 1, met volledige hints i.t.t. de herhalingspuzzels)",
     gameplay:"Generatiesprongen binnen één hoofdstuk; het raadsel van de Sfinx als taalpuzzel; De Zeven tegen Thebe krijgt bewust TWEE golven, tien jaar uit elkaar — de vaders (Polyneikes/Eteokles' oorlog, waarin ook Tydeus sneuvelt) en daarna hun zonen, de Epigonen, die Thebe alsnog innemen — dezelfde generatiesprong-structuur als de rest van het hoofdstuk, nu ook binnen dit ene subverhaal",
     personages:"Kadmos, Niobe, Oedipus, Iokaste, Eteokles, Polyneikes, Antigone, Creon, Pentheus, Tydeus (cameo, terugkerend uit Hoofdstuk 5 — sneuvelt hier), Diomedes (cameo)",
     zijverhalen:"Diomedes (cameo) — zoon van Tydeus (Hoofdstuk 5), vecht tien jaar later mee bij de Epigonen om zijn vader te wreken; komt zelf later terug in de Trojaanse Oorlog-hoofdstukken",
@@ -283,8 +283,8 @@ const SP_CAMPAIGN = [
   { id:"ch7", nr:7, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Appel der Tweedracht",
     periode:"Aanloop naar de Trojaanse Oorlog",
     verhaal:"Van Leda en de Zwaan tot de eerste jaren van het beleg van Troje: de eed van Tyndareos, de bruiloft van Peleus en Thetis, de gouden appel, het Parisoordeel, de schaking van Helena, het verzamelen van de Griekse helden, het offer in Aulis en de aankomst bij Troje. Elke kleine belediging, op zich onschuldig, blijkt achteraf de vonk die duizend schepen in beweging zet.",
-    pallas:"— (herhaling)", minerva:"— (herhaling)",
-    grammatica:"Cumulatieve herhaling: alle naamvallen (Hoofdstuk 5) én alle werkwoordstijden (Hoofdstuk 6) komen hier samen terug — geen nieuwe grammatica, die begint pas in Hoofdstuk 8. Uitgebreid t.o.v. het oorspronkelijke plan (was: 'grammatica-arme adempauze, geen puzzel-gate') na Gerbens verzoek om het hele voortraject van de oorlog te vertellen — zie Chronica.md §7.13",
+    pallas:"— (herhaling)", minerva:"Hoofdstuk 11 (deel) + 12: deponentia, betrekkelijk voornaamwoord, conjunctivus passief — verplaatst vanuit Hoofdstuk 12 zodat Minerva deel 1 bij Hoofdstuk 9 is afgerond (Gerbens verzoek 2026-07-31, zie Chronica.md §7.38/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk)",
+    grammatica:"Cumulatieve herhaling: alle naamvallen (Hoofdstuk 5) én alle werkwoordstijden (Hoofdstuk 6) komen hier samen terug (geen nieuwe herhalingsstof), PLUS nieuwe Latijnse stof: deponentia (Minerva 11 deel 2), betrekkelijk voornaamwoord en conjunctivus passief (Minerva 12) — met volledige hints i.t.t. de herhalingspuzzels. Uitgebreid t.o.v. het oorspronkelijke plan (was: 'grammatica-arme adempauze, geen puzzel-gate') na Gerbens verzoek om het hele voortraject van de oorlog te vertellen — zie Chronica.md §7.13",
     gameplay:"Geen hub/lijnen (zelfde principe als Hoofdstuk 5/6): één lange, causale ketting van gebeurtenissen. Zes puzzels over vijf types (incl. matching), één STAT-gated flavormoment (Paris en de Stier), vier Clementia/Severitas-momenten, twee payoffs op de bestaande payoff-engine (Peleus' bruiloft en Philoktetes op Lemnos verwijzen terug naar Hoofdstuk 5) en vier eretitels. Eindigt, net als Hoofdstuk 6, met een terugkeer naar het Museum van Mnemosyne",
     personages:"Leda, Tyndareos, Helena, Menelaos, Peleus (cameo, terugkerend uit Hoofdstuk 5), Thetis, Eris, Hecuba, Priamus, Paris, Agamemnon, Palamedes, Achilles, Odysseus, Calchas, Iphigenia, Philoktetes (cameo, terugkerend uit Hoofdstuk 5), Chryseis, Briseis",
     illustratie:"Paris met de gouden appel, drie godinnen ervoor" },
@@ -310,159 +310,143 @@ const SP_CAMPAIGN = [
   // ---- BOEK II — HELDEN EN KONINGEN (hoofdstuk 10-15) ----
   { id:"ch10", nr:10, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Vluchten uit Troje",
     periode:"Direct na de val van Troje",
-    verhaal:"Na de val van Troje verspreiden de overlevenden zich over zee, ieder op zoek naar een nieuw thuis. Niet iedereen zal dezelfde weg nemen — en niet iedereen komt ongeschonden aan.",
-    pallas:"Les 15-16: Odysseus bij de Faiaken, de Kykloop Polyfemos", minerva:"Hoofdstuk 9: Ontstaan van de mens (Deucalion & Pyrrha, niet Prometheus — die is al gebruikt in Hoofdstuk 1)",
-    grammatica:"Medium, passief, aoristus passief op -θην; Minerva: plusquamperfectum, conjunctivus in de bijzin",
-    gameplay:"Twee parallelle lijnen (Odysseus/Aeneas), zelfde principe als Hoofdstuk 3's Io/Herakles",
-    personages:"Kleine Ajax, Odysseus, Polyfemos, Aeneas, Anchises, Baucis, Philemon, Arachne",
-    thema:"Niet iedereen die vlucht komt behouden thuis",
+    verhaal:"Na de val van Troje verspreiden de overlevenden zich over zee, ieder op zoek naar een nieuw thuis. Niet iedereen zal dezelfde weg nemen — en niet iedereen komt ongeschonden aan. Beide lijnen lopen door tot op de drempel van hun volgende grote beproeving: Odysseus voor de kust van Aeaea, Aeneas oog in oog met Dido — het eigenlijke weerzien is voor Hoofdstuk 11.",
+    pallas:"Les 15-16: Odysseus bij de Faiaken, de Kykloop Polyfemos, Aeolus, de Laistrygonen", minerva:"Hoofdstuk 14 (Minerva deel 2, hoofdstuk 14): naamwoordgroepen (manus/dies-type), hic, ipse — Minerva deel 1 is inmiddels volledig afgerond in Hoofdstuk 9 (zie Chronica.md §7.38/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk). Ille zelf NIET opnieuw getoetst hier — dat is al Hoofdstuk 8-stof; hic is de daadwerkelijk nieuwe tegenhanger (audit 2026-08-02, Chronica.md §7.41).",
+    grammatica:"Medium, passief, aoristus passief op -θην; Latijn: naamwoordgroepen manus/dies-type, hic, ipse (Minerva 14, deel 2)",
+    gameplay:"Twee parallelle, scène-voor-scène verweven lijnen (Odysseus/Aeneas) — bij taalspoor \"beide\" een zigzagpad tussen vergelijkbare beproevingen, i.p.v. eerst de ene lijn volledig en dan de andere (zoals Hoofdstuk 3's Io/Herakles)",
+    personages:"Kleine Ajax, Odysseus, Polyfemos, Aeolus, Aeneas, Anchises, Baucis, Philemon, Achaemenides, Juno, Neptunus, Venus, Dido (cameo, aankomst)",
+    thema:"Niet iedereen die vlucht komt behouden thuis — en gastvrijheid (Xenia) is een wet die niemand ongestraft breekt",
     illustratie:"Twee schepen op woeste zee" },
   { id:"ch11", nr:11, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Tussen Liefde en Lot",
     periode:"Vervolg van de omzwervingen",
-    verhaal:"Twee zwervers moeten afdalen naar de onderwereld zelf om hun weg te vinden — de een op zoek naar antwoorden, de ander op zoek naar zijn vader. Onderweg wacht verleiding die niet zonder gevolgen blijft.",
-    pallas:"Les 17-18: de tovenares Kirke, het huis van Hades", minerva:"Hoofdstuk 10: Aeneas",
-    grammatica:"Participium, genitivus absolutus; Minerva: Accusativus cum Infinitivo (A.c.I.)",
-    gameplay:"Vervolg van de twee parallelle lijnen; katabasis als gedeeld motief",
-    personages:"Kirke, Tiresias, Dido, Anchises",
+    verhaal:"Odysseus ontmoet Kirke en Aeneas ontmoet Dido — ditmaal geen cameo maar het echte weerzien — waarna beiden afdalen naar de onderwereld zelf om hun weg te vinden: de een op zoek naar antwoorden, de ander op zoek naar zijn vader. In de onderwereld wacht een uitgebreide payoff (SP_PAYOFFS) van alle eerder overleden personages met wie de speler een band opbouwde, positief of negatief — inclusief Dido zelf, wier schim Aeneas zwijgend de rug toekeert. Eén gedeeld Tartaros-moment (Tantalos, Sisyphos, Ixion, de Danaïden) en de tragedie van Orpheus & Eurydice gelden voor alle drie de taalsporen, via Hermes die de speler even op een zijspoor zet.",
+    pallas:"Les 17-18: de tovenares Kirke, het huis van Hades", minerva:"Hoofdstuk 15 (participium praesens actief) + Hoofdstuk 18 (ablativus absolutus, bewust vooruitgehaald — los van het Aeneas-thema; Minerva deel 1 is inmiddels volledig afgerond in Hoofdstuk 9, zie Chronica.md §7.38/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk). Ablativus absolutus toegevoegd 2026-08-02 na audit tegen Minerva-2-Docentenboek — geeft ook parallelie met de Griekse genitivus absolutus in ditzelfde hoofdstuk (Chronica.md §7.41); bronvermelding gecorrigeerd 2026-08-02 (was abusievelijk 'Hoofdstuk 15' — de echte introductie staat in Minerva hoofdstuk 18 par. I-III, zie PALLAS_MINERVA_OVERZICHT.md).",
+    grammatica:"Participium, genitivus absolutus; Latijn: participium praesens actief (Minerva 15) + ablativus absolutus (Minerva 18, vooruitgehaald)",
+    gameplay:"Vervolg van de twee parallelle, zigzaggende lijnen (zie Hoofdstuk 10); katabasis als gedeeld motief; onderwereld-payoff-laag (relaties/dood-vlaggen); gedeeld Tartaros/Orpheus-vignet ongeacht taalspoor",
+    personages:"Kirke, Tiresias, Dido, Anchises, Tantalos, Sisyphos, Ixion, de Danaïden, Orpheus, Eurydice, Persephone, Hades (cameo, volledig verhaal volgt in Hoofdstuk 22)",
     thema:"Verleiding en het gewicht van het verleden",
     illustratie:"De poort van de onderwereld, twee figuren die naar binnen lopen" },
-  { id:"ch12", nr:12, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Odysseus' Wraak",
-    periode:"Ithaka",
-    verhaal:"Na twintig jaar bereikt een zwerver eindelijk zijn eigen kust — maar zijn huis is niet meer wat hij achterliet. Niet elke thuiskomst verloopt hetzelfde.",
-    pallas:"Les 19-21: op Ithaka, de wraak van Odysseus, de dood van Agamemnon", minerva:"— (Odysseus-lijn, geen Minerva-koppeling)",
-    grammatica:"Betrekkelijk voornaamwoord, conjunctivus, alpha-werkwoorden",
-    gameplay:"Combat-bridge (de vrijers)",
-    personages:"Odysseus, Penelope, Telemachus, Agamemnon, Clytemnestra",
-    illustratie:"Odysseus spant de boog" },
-  { id:"ch13", nr:13, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Het Begin van Rome",
-    periode:"Stichting van Rome",
-    verhaal:"Twee broers, als baby's achtergelaten en opgevoed door een wolvin, stichten samen een nieuwe stad aan de oevers van de Tiber.",
-    pallas:"— (Aeneas-lijn, geen Pallas-koppeling)", minerva:"Hoofdstuk 11: Het begin van Rome · H12: Tirannen en vrienden",
-    grammatica:"Passief, participium perfectum passief (ppp), deponentia, betrekkelijk voornaamwoord",
-    gameplay:"Stad-bouw-keuzes",
-    personages:"Romulus, Remus, de Sabijnse vrouwen",
-    illustratie:"Romulus trekt de eerste voren van de stadsmuur" },
-  { id:"ch14", nr:14, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"De Stad van Athena",
-    periode:"Klassiek Athene",
-    verhaal:"In de stad die haar naam draagt, draait alles om overtuigen: met woorden, met wetten, met wedstrijden. Athena zelf is er nooit ver weg — en herinnert zich de helden die ze ooit een handje hielp.",
-    pallas:"Les 22-27: Athena en haar stad, de Atheense democratie, de vrouw, de slavernij, onderwijs en sport, de Olympische Spelen", minerva:"Hoofdstuk 16: Dieren in het dagelijks leven",
-    grammatica:"Futurum, optativus, mi-werkwoorden, stamaoristus, Nominativus cum Infinitivo (N.C.I.)",
-    gameplay:"Retorica/debat; Atalanta's hardloopwedstrijd als minigame",
-    personages:"Athena, Perseus (verteld), Bellerophon (verteld), Atalanta",
-    thema:"Taal overtuigt mensen",
-    illustratie:"De Agora van Athene",
-    zijverhalen:"Calydonische ever & Meleager (A-tier) — samen met Atalanta één vault-vignet" },
-  { id:"ch15", nr:15, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Oorlog en Overwinning",
-    periode:"Perzische Oorlogen / Romeinse expansie",
-    verhaal:"Een handjevol Grieken houdt stand tegen een overmacht bij een nauwe bergpas, terwijl in het westen een generaal met olifanten een onmogelijke tocht over de Alpen waagt.",
-    pallas:"Les 28: De Perzische Oorlogen", minerva:"Hoofdstuk 17: Hannibal over de Alpen · H18: Hannibal verslagen",
-    grammatica:"Perfectum, futurum, futurum exactum, ablativus absolutus",
-    gameplay:"Strategie en militaire keuzes",
-    personages:"Leonidas, Themistocles, Hannibal",
-    illustratie:"Slagveld met Grieken en Perzen",
+  { id:"ch12", nr:12, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Wraak en een Nieuwe Stad",
+    periode:"Ithaka / Latium, generaties voor en na Aeneas",
+    verhaal:"Twee helden komen thuis, allebei naar een plek die niet meer is wat ze achterlieten. Odysseus vindt zijn paleis vol vrijers; ver van hem vandaan, in Latium, groeit uit Aeneas' nageslacht — via een oudere daad van Hercules en een latere van twee broers, opgevoed door een wolvin — de stad die alles zal overschaduwen wat hiervoor kwam. SAMENGEVOEGD 2026-08-02 uit de oude Hoofdstuk 12 (Odysseus' Wraak) en Hoofdstuk 13 (Het Begin van Rome, nooit gebouwd) op Gerbens verzoek — geen enkelvoudige-spoor-hoofdstukken meer, spelers zouden anders hoofdstukken lijken over te slaan. Zie Chronica.md §7.44/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk.",
+    pallas:"Les 19-21: op Ithaka, de wraak van Odysseus, de dood van Agamemnon — les 20 (boogwedstrijd/conjunctivus) en les 21 (wraak op de vrijers/alpha-werkwoorden) VERPLAATST TERUG naar dit hoofdstuk (2026-08-02, herzien t.o.v. het eerdere besluit van 2026-07-31): het zijn letterlijk de scènes die H12's eigen Odysseus-verhaal moet vertellen (boogwedstrijd, wraak, hereniging Penelope), dus horen ze hier, niet bij een thematisch ongerelateerd later hoofdstuk. Zie PALLAS_MINERVA_OVERZICHT.md. Latijnse lijn: Minerva hoofdstuk 16 (Hercules & Cacus) + Minerva hoofdstuk 17 (Romulus & Remus), allebei binnen dit ene samengevoegde hoofdstuk.", minerva:"Latijnse lijn draagt nu TWEE Minerva-hoofdstukken na elkaar: Hoofdstuk 16 (bijwoordvorming, genitivus op -ius, idem, ACP — via Hercules & Cacus, al gebouwd, zie Chronica.md §7.42) gevolgd door Hoofdstuk 17 (futurum, futurum exactum, het werkwoord ire — via Romulus & Remus, NOG TE BOUWEN) + de nog openstaande ut-finalis/doelzin (Minerva 14, par. IV, zie §7.41). Acht puzzels totaal, verdeeld over twee duidelijk gescheiden verhaalmomenten binnen één hoofdstuk — evenveel als de oude twee aparte hoofdstukken samen hadden, dus geen echte verzwaring. Minerva deel 1 blijft afgerond bij Hoofdstuk 9.",
+    grammatica:"Griekse/Odysseus-lijn: betrekkelijk voornaamwoord (les 19) + conjunctivus (les 20) + alpha-werkwoorden (les 21) — VOLLEDIG, niet meer opgesplitst over twee hoofdstukken (zie hierboven, herzien 2026-08-02). Latijnse lijn, in twee delen: (1) Hercules & Cacus — bijwoordvorming, genitivus op -ius, idem, ACP (Minerva 16, AL GEBOUWD); (2) Romulus & Remus — futurum, futurum exactum, ire, ut-finalis/doelzin (Minerva 17 + M14 par. IV, NOG TE BOUWEN).",
+    gameplay:"Combat-bridge (de vrijers, Odysseus-lijn — nog uit te bouwen, momenteel skelet). Latijnse lijn: Hercules & Cacus (AL GEBOUWD, CH12_LAT_000-005) gevolgd door Romulus & Remus (NOG TE BOUWEN) — stad-bouw-keuzes, de Sabijnse vrouwen. Bij taalspoor=beide idealiter zigzag tussen de twee lijnen zoals Hoofdstuk 10/11, i.p.v. de huidige sequentiële opzet (eerst alle Latijn, dan alle Grieks) — zie Chronica.md §7.44 voor de nog openstaande restructurering.",
+    personages:"Odysseus, Penelope, Telemachus, Agamemnon, Clytemnestra, Cacus, Euander, Romulus, Remus, de Sabijnse vrouwen",
+    illustratie:"Odysseus spant de boog / Romulus trekt de eerste voren van de stadsmuur" },
+  // ---- Hoofdstuk 13-20: VOORLOPIG VASTGELEGD 2026-08-02 (Gerbens akkoord
+  // op het verdelingsvoorstel in het gesprek van die dag). Vervangt de
+  // oude ch13-ch24 (12 hoofdstukken, elk enkelvoudig-spoor) door 8 nieuwe,
+  // elk met een Griekse (Pallas) én Latijnse (Minerva) lijn, net als
+  // Hoofdstuk 10/11/12. Zie PALLAS_MINERVA_OVERZICHT.md voor de volledige
+  // onderbouwing en Chronica.md §7.45 voor het besluit. Alleen METADATA
+  // vastgelegd — geen van deze hoofdstukken heeft nog een SP_CHxx_CNS/
+  // scènes/puzzels; dat is een aparte, latere bouwronde per hoofdstuk.
+  // Minerva/Pallas volgen hun EIGEN volgorde niet noodzakelijk de
+  // Chronica-verhaalvolgorde (staand beleid, zie
+  // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk).
+  { id:"ch13", nr:13, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Twee Steden, Twee Koningen",
+    periode:"Mythisch Athene / Koninkrijk Rome",
+    verhaal:"Terwijl Athena zelf vertelt hoe ze geboren werd — gewapend, volwassen, uit het hoofd van haar vader — worstelt Rome nog met sterfelijke koningen, niet allemaal even rechtvaardig. Twee steden, elk op zoek naar het gezag waarop ze gebouwd zullen worden.",
+    pallas:"Les 22: Athena en Poseidon, Zeus en Metis, de geboorte van Athena", minerva:"Nog geen Minerva-koppeling vastgelegd (vrij te kiezen uit deel 2, zie PALLAS_MINERVA_OVERZICHT.md) — cultuurtekst: Rome onder de koningen",
+    grammatica:"Grieks: les 22 (vnl. cultuur/mythe, licht taalkundig — zie PALLAS_MINERVA_OVERZICHT.md); Latijn: nog te bepalen",
+    gameplay:"Twee sporen; Atalanta/Meleager-content verhuisd naar Hoofdstuk 16 (sport-thema past beter), Arachne blijft hier bij Athena",
+    personages:"Athena, Poseidon, Zeus, Metis, Perseus (verteld), Bellerophon (verteld), Arachne — Tullus Hostilius, de Horatii, de Curiatii, Tarquinius Superbus, Lucretia, Brutus",
+    thema:"Hoe gezag ontstaat — bij een godin vanzelfsprekend, bij een stad pas na een lange, soms bloedige zoektocht",
+    illustratie:"Athena's geboorte uit Zeus' hoofd / Lucretia en Brutus voor het volk van Rome" },
+  { id:"ch14", nr:14, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Verzet tegen Tirannen",
+    periode:"Athene, ca. 508 v.Chr. / vroege Romeinse Republiek, ca. 509 v.Chr.",
+    verhaal:"In vrijwel hetzelfde jaar verzetten twee volkeren zich tegen een tiran — Athene verdrijft zijn heersers en experimenteert met democratie, Rome verjaagt zijn laatste koning en moet die vrijheid meteen verdedigen tegen een vreemd leger aan de poorten.",
+    pallas:"Les 23: de list van Peisistratos, de tirannendoders, kritiek op de Atheense democratie", minerva:"Nog geen Minerva-koppeling vastgelegd (vrij te kiezen) — cultuurtekst: Verdedigers van de Republiek",
+    grammatica:"Grieks: les 23 (cultuur/geschiedenis, licht taalkundig); Latijn: nog te bepalen",
+    gameplay:"Twee sporen; legendes van vroege Romeinse moed naspelen aan Latijnse kant, politieke discussie/dilemma's aan Griekse kant",
+    personages:"Peisistratos, de tirannendoders (Harmodios & Aristogeiton) — Horatius Cocles, Mucius Scaevola, Cloelia, Cincinnatus, Coriolanus, Camillus",
+    thema:"Een volk dat zich net bevrijd heeft, moet die vrijheid meteen weer verdedigen",
+    illustratie:"De tirannendoders / Horatius Cocles alleen op de brug" },
+  { id:"ch15", nr:15, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Hoe Men Leefde",
+    periode:"Klassiek Athene / Rome, alledaags leven",
+    verhaal:"Geen veldslag, geen troon — gewoon hoe het was om als vrouw, als slaaf, als gewoon mens te leven in Athene en Rome. Twee samenlevingen, elk met hun eigen blinde vlekken.",
+    pallas:"Les 24-25: Pandora, De Vrouw, mode; een slaaf wordt held, een slavin koopt zich vrij (slavernij)", minerva:"Hoofdstuk 19: Dagelijks leven in Rome",
+    grammatica:"Grieks: cultuur (les 24-25, licht taalkundig); Latijn: vragend voornaamwoord, onbepaald voornaamwoord, perfectum met praesensbetekenis (Minerva 19)",
+    gameplay:"Twee sporen, vnl. cultuurhistorisch/reflectief — dilemma's over vrijheid, positie, dagelijkse beslommeringen",
+    personages:"Pandora (verteld) — Romeinse huishoudens, slaven en vrijgelatenen als naamloze/representatieve personages",
+    thema:"Wiens verhaal wordt normaal verteld, en wiens niet",
+    illustratie:"Een Atheens huishouden / een Romeinse markt" },
+  { id:"ch16", nr:16, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Vorming en Vermaak",
+    periode:"Klassiek Athene / Rome",
+    verhaal:"Een jonge Atalanta rent zich vrij van elke vrijer die haar niet kan bijhouden, terwijl de Olympische Spelen heel Griekenland tijdelijk laten stoppen met oorlogvoeren. In Rome draait het vermaak net zo hard — al is de toon er ruwer.",
+    pallas:"Les 26-27: opvoeding/training (Plato), sport en de Olympische Spelen (incl. Atalanta's hardloopwedstrijd, verhuisd vanuit het oude Hoofdstuk 13)", minerva:"Hoofdstuk 20: Vermaak in Rome",
+    grammatica:"Grieks: cultuur (les 26-27, licht taalkundig); Latijn: velle/nolle/fieri, betrekkelijke bijzin met ingesloten antecedent, comparativus/superlativus (Minerva 20)",
+    gameplay:"Twee sporen; Atalanta's hardloopwedstrijd als minigame (Griekse lijn)",
+    personages:"Plato (cameo, opvoeding), Atalanta — Romeinse vermaak-personages (spelen, theater, wagenrennen)",
+    thema:"Hoe een samenleving haar jeugd vormt, en hoe ze zich ontspant",
+    illustratie:"De Olympische renbaan / het Circus Maximus",
+    zijverhalen:"Calydonische ever & Meleager (A-tier) — samen met Atalanta één vault-vignet, verhuisd vanuit het oude Hoofdstuk 13" },
+  { id:"ch17", nr:17, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Oorlog en Overwinning",
+    periode:"Perzische Oorlogen (480 v.Chr.) / Tweede Punische Oorlog (218-201 v.Chr.)",
+    verhaal:"Een handjevol Grieken houdt stand tegen een overmacht bij een nauwe bergpas, terwijl eeuwen later in het westen een generaal met olifanten een onmogelijke tocht over de Alpen waagt. Herodotos, die het eerste verhaal ooit optekende, vertelt het mee — en laat meteen zien hoe lastig het is om te weten wat er nou echt gebeurde.",
+    pallas:"Les 28: de Perzische Oorlogen (Thermopylae, Spartanen) — met Herodotos als vertellende stem (cameo i.p.v. eigen hoofdstuk, zoals Xenofon elders al gebeurt)", minerva:"Hoofdstuk 17-18: Hannibal over de Alpen / Hannibal verslagen (LET OP: de ablativus absolutus zelf is al gedekt in Hoofdstuk 11, vooruitgehaald — hier dus alleen de resterende, niet-grammaticale cultuurstof van Minerva 17-18, of eventueel het werkwoord ire als dat niet al in H12 zit)",
+    grammatica:"Grieks: les 28 (Perzische Oorlogen, cultuur/geschiedenis); Latijn: cultuurtekst Hannibal, grammatica grotendeels al elders gedekt (ablativus absolutus in H11) — nader te bepalen of hier nog iets nieuws nodig is",
+    gameplay:"Twee sporen, strategie/militaire keuzes; bronnen-vergelijken (Herodotos' rol) als mechaniek aan Griekse kant",
+    personages:"Leonidas, Themistocles, Herodotos — Hannibal",
+    thema:"Niet alles wat verteld wordt is automatisch waar (Herodotos' eigen vraag) — toegepast op twee legendarische, bijna-onmogelijke overwinningen",
+    illustratie:"Thermopylae / Hannibals olifanten in de Alpen",
     zijverhalen:"Regulus, Cato (⭐⭐⭐) — Punische-Oorlogen-deugdverhalen" },
+  { id:"ch18", nr:18, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Grenzen Verlegd",
+    periode:"Hellenistische Tijd (336-323 v.Chr.) / Late Republiek (58-50 v.Chr.)",
+    verhaal:"Een jonge koning trekt met zijn leger verder dan wie ook vóór hem, tot in de verste uithoeken van de bekende wereld. Generaties later doet een Romeinse generaal in Gallië iets vergelijkbaars — en ontdekt dat wie de pen vasthoudt, ook de geschiedenis vormgeeft. **Dit is de laatste nieuwe Griekse grammatica van de hele campagne** — Pallas deel 2 is na Alexander uitgeput.",
+    pallas:"Les 29 (LAATSTE Pallas 2-les): Alexander de Grote", minerva:"Hoofdstuk 22-23: Caesars carrière, Caesar in België en Nederland",
+    grammatica:"Grieks: les 29 (Alexander — laatste nieuwe Griekse stof in de hele campagne); Latijn: gerundium, genitivus subjectivus/objectivus (M22), gerundivum (M23)",
+    gameplay:"Twee sporen; taalverspreiding volgen over een groeiende kaart (Griekse lijn), bronnen analyseren (Latijnse lijn, Caesars Commentarii)",
+    personages:"Alexander de Grote, Philippus II — Caesar, Dumnorix",
+    thema:"Eén mens die de kaart van de bekende wereld hertekent — met het zwaard, of met de pen",
+    illustratie:"Alexander bij de Gordiaanse Knoop / Caesar schrijft zijn Commentarii",
+    zijverhalen:"Cicero (⭐⭐⭐⭐)" },
 
-  // ---- BOEK III — DE WERELD VAN MENSEN (hoofdstuk 16-18) ----
-  { id:"ch16", nr:16, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"De Vader van de Geschiedenis",
-    periode:"5e eeuw v.Chr.",
-    verhaal:"Niet elk verhaal dat verteld wordt is waar, en niet elke bron is te vertrouwen. Herodotos trekt de wereld rond om getuigenissen te verzamelen — en vraagt zich bij elke af: wie heeft er eigenlijk gelijk?",
-    pallas:"Overgang naar historiografie (Herodotos)", minerva:"Hoofdstuk 21: De Romeinen en de dood",
-    grammatica:"Historische taal, bronanalyse; Minerva: conjunctivus praesens en perfectum",
-    gameplay:"Bronnen vergelijken, verschillende versies van hetzelfde verhaal ontdekken (Herodotos se rol uit de Character Bible)",
-    personages:"Herodotos, Xenofon",
-    thema:"Niet alles wat verteld wordt is automatisch waar",
-    illustratie:"Herodotos die getuigenissen verzamelt op de agora" },
-  { id:"ch17", nr:17, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"De Stem van de Filosofen",
-    periode:"Klassiek Athene",
-    verhaal:"Op de Agora van Athene stelt een man voortdurend vragen — nooit antwoorden. Zijn manier van denken zal de wereld voor altijd veranderen.",
-    pallas:"Filosofen: Socrates, Plato, Aristoteles", minerva:"Hoofdstuk 22: Caesars carrière",
-    grammatica:"Complexe zinsbouw, argumentatie; Minerva: gerundium, genitivus subjectivus/objectivus",
-    gameplay:"Socratische dialoog — vragen stellen i.p.v. antwoorden geven (Athena se rol uit de Character Bible)",
-    personages:"Socrates, Plato, Aristoteles",
-    illustratie:"Socrates in gesprek op de Agora, omringd door leerlingen" },
-  { id:"ch18", nr:18, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Alexander en de Grenzen van de Wereld",
-    periode:"Hellenistische Tijd",
-    verhaal:"Een jonge koning trekt met zijn leger verder dan wie ook vóór hem — en neemt zijn taal en cultuur mee tot in de verste uithoeken van de bekende wereld.",
-    pallas:"Alexander de Grote", minerva:"Hoofdstuk 23: Caesar in België en Nederland",
-    grammatica:"Complexe werkwoorden, participia; Minerva: gerundivum",
-    gameplay:"Taalverspreiding volgen over een groeiende kaart",
-    personages:"Alexander de Grote, Philippus II",
-    illustratie:"Alexander bij de Gordiaanse Knoop" },
-
-  // ---- BOEK IV — ROME VERRIJST (hoofdstuk 19-25) ----
-  { id:"ch19", nr:19, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Onder de Koningen",
-    periode:"Koninkrijk Rome, latere koningen",
-    verhaal:"Rome staat nog onder koningen, en niet allemaal regeren ze even rechtvaardig. Een tweekamp tussen naburige steden en een daad van onrecht binnen de eigen muren zetten iets in beweging dat niemand meer kan stoppen.",
-    pallas:"—", minerva:"Hoofdstuk 24: Augustus en Nero (conjunctivus-gedeelte)",
-    grammatica:"Verdieping naamvallen; Minerva: conjunctivus",
-    gameplay:"Legendes van vroege Romeinse deugd/moed naspelen",
-    personages:"Tullus Hostilius, de Horatii, de Curiatii, Tarquinius Superbus, Lucretia, Brutus",
-    illustratie:"Lucretia en Brutus voor het volk van Rome" },
-  { id:"ch20", nr:20, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Verdedigers van de Republiek",
-    periode:"Vroege Republiek",
-    verhaal:"Een verjaagde koning wil zijn troon terug en brengt een vreemd leger naar de poorten van Rome. Wat er dan gebeurt, wordt eeuwenlang naverteld als het toonbeeld van Romeinse moed.",
-    pallas:"—", minerva:"Hoofdstuk 24: Augustus en Nero (N.C.I./semi-deponentia-gedeelte)",
-    grammatica:"Verdieping naamvallen; Minerva: N.C.I., semi-deponentia",
-    gameplay:"Legendes van vroege Romeinse deugd/moed naspelen",
-    personages:"Horatius Cocles, Mucius Scaevola, Cloelia, Cincinnatus, Coriolanus, Camillus",
-    illustratie:"Horatius Cocles alleen op de brug" },
-  { id:"ch21", nr:21, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"De Gracchen",
-    periode:"Late Republiek, 133-121 v.Chr.",
-    verhaal:"Een jonge volkstribuun wil het land eerlijker verdelen tussen arm en rijk — en ontdekt hoe gevaarlijk het is om de macht van de senaat uit te dagen.",
-    pallas:"—", minerva:"— (herhaling, valt buiten de lesnummering)",
-    grammatica:"Herhaling — bewust grammatica-arm",
-    gameplay:"Politieke keuzes: hervormen versus de status quo bewaren",
-    personages:"Tiberius Gracchus, Gaius Gracchus, Cornelia",
-    illustratie:"Tiberius Gracchus voor de senaat" },
-  { id:"ch22", nr:22, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Marius en Sulla",
-    periode:"Late Republiek, ca. 107-78 v.Chr.",
-    verhaal:"Twee machtige generaals, ooit bondgenoten, raken verwikkeld in een rivaliteit die de Republiek tot in haar fundamenten zal schudden.",
-    pallas:"—", minerva:"— (herhaling, valt buiten de lesnummering)",
-    grammatica:"Herhaling — bewust grammatica-arm",
-    gameplay:"Militaire/politieke strategie-keuzes",
-    personages:"Gaius Marius, Lucius Cornelius Sulla",
-    illustratie:"Sulla's legioenen bij de poorten van Rome" },
-  { id:"ch23", nr:23, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Caesar Schrijft Geschiedenis",
-    periode:"Late Republiek",
-    verhaal:"Caesar schrijft zijn eigen verslag van zijn veldtochten — en ontdekt dat wie de pen vasthoudt, ook de geschiedenis vormgeeft.",
-    pallas:"Verdieping", minerva:"Hoofdstuk 22-23: Caesar",
-    grammatica:"Gerundium, gerundivum (herhaling)",
-    gameplay:"Bronnen analyseren",
-    personages:"Caesar",
-    illustratie:"Caesar schrijft zijn Commentarii",
-    zijverhalen:"Spartacus (⭐⭐⭐⭐⭐); Cicero (⭐⭐⭐⭐)" },
-  { id:"ch24", nr:24, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Augustus en de Pax Romana",
-    periode:"Vroege Keizertijd",
-    verhaal:"Onder Augustus keert de vrede terug naar Rome — en een dichter genaamd Vergilius begint aan een episch gedicht dat Rome's oorsprong voor altijd zal verbinden met de val van Troje.",
-    pallas:"Verdieping", minerva:"Hoofdstuk 24: Augustus",
-    grammatica:"Literair Latijn",
-    personages:"Augustus, Vergilius",
-    illustratie:"Augustus bij de Ara Pacis",
+  // ---- Hoofdstuk 19-20: vanaf hier heeft Grieks geen nieuwe Pallas-stof
+  // meer (op na Alexander, Hoofdstuk 18). De Griekse lijn moet BEWUST
+  // aanwezig blijven — herhaling/lichte aanwezigheid, nooit afwezig (zie
+  // de "geen enkelvoudige-spoor-hoofdstukken"-regel). WELK Grieks verhaal
+  // deze twee hoofdstukken vult, is nog met Gerben te bepalen (2026-08-02)
+  // — nog open, zie Chronica.md §7.45.
+  { id:"ch19", nr:19, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"De Republiek Wankelt",
+    periode:"Late Republiek, ca. 133-78 v.Chr. / Diadochenoorlogen, 322-301 v.Chr.",
+    verhaal:"Eerst wil een jonge volkstribuun het land eerlijker verdelen tussen arm en rijk, dan raken twee generaals — ooit bondgenoten — verwikkeld in een rivaliteit die de Republiek tot in haar fundamenten schudt. Aan de Griekse kant hetzelfde patroon, meteen na Alexanders dood: zijn eigen generaals, ooit zijn trouwste bondgenoten, verscheuren zijn rijk in de Diadochenoorlogen. VOORLOPIG VASTGELEGD 2026-08-02 (Gerbens akkoord) — sluit chronologisch en thematisch direct aan op Hoofdstuk 18 (Alexander), dus geen nieuwe Pallas-les nodig.",
+    pallas:"Geen nieuwe les (Pallas 2 is na Hoofdstuk 18 uitgeput) — verhaal: de Diadochenoorlogen (Alexanders generaals vechten om zijn rijk, direct na zijn dood in 323 v.Chr.), pure herhaling/vertelling", minerva:"— (herhaling, valt buiten de lesnummering — Gracchen/Marius-Sulla)",
+    grammatica:"Grieks: herhaling — Diadochenoorlogen; Latijn: herhaling — bewust grammatica-arm",
+    gameplay:"Politieke/militaire keuzes: hervormen versus status quo (Latijnse lijn), verdelen van Alexanders rijk onder rivaliserende generaals (Griekse lijn) — beide lijnen spiegelen elkaar: bondgenoten die elkaar verscheuren",
+    personages:"Tiberius Gracchus, Gaius Gracchus, Cornelia, Gaius Marius, Lucius Cornelius Sulla — Perdikkas, Antigonos, Ptolemaeus, Seleukos, Kassandros (Diadochen)",
+    illustratie:"Tiberius Gracchus voor de senaat / Sulla's legioenen bij de poorten van Rome — Alexanders rijk uiteenvallend op de kaart",
+    zijverhalen:"Spartacus (⭐⭐⭐⭐⭐), verhuisd hierheen vanuit het oude Hoofdstuk 22 (chronologisch dichter bij Marius/Sulla dan bij Caesar)" },
+  { id:"ch20", nr:20, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Vrede en Vergankelijkheid",
+    periode:"Vroege Keizertijd (27 v.Chr. - 68 n.Chr.) / Slag bij Actium, 31 v.Chr.",
+    verhaal:"Onder Augustus keert de vrede terug — en een dichter genaamd Vergilius begint aan een episch gedicht dat Rome's oorsprong voor altijd zal verbinden met de val van Troje. Later, onder Nero, blijkt hoe snel die vrede weer kan omslaan. Aan de Griekse kant precies dezelfde overwinning van de andere kant bekeken: bij Actium verslaat de latere Augustus Cleopatra VII, laatste telg van de Ptolemaeën (zelf afstammelingen van een van Alexanders eigen generaals) — het moment waarop het laatste onafhankelijke Griekse rijk definitief in Rome opgaat. VOORLOPIG VASTGELEGD 2026-08-02 (Gerbens akkoord): de Griekse en Latijnse lijn smelten hier letterlijk samen, dezelfde slag beëindigt Cleopatra's rijk én opent Augustus' Pax Romana.",
+    pallas:"Geen nieuwe les (Pallas 2 is na Hoofdstuk 18 uitgeput) — verhaal: Cleopatra en de Slag bij Actium (31 v.Chr.), pure herhaling/vertelling — het einde van de Hellenistische wereld", minerva:"Hoofdstuk 24: Keizers van Rome (Augustus en Nero) · Hoofdstuk 25: Latijnse literatuur (Catullus, Petronius)",
+    grammatica:"Grieks: herhaling — Cleopatra/Actium; Latijn: N.C.I., semi-deponentia, transitief/intransitief, vraagpartikels (M24) — vnl. vertaalvaardigheid (M25)",
+    gameplay:"Literair/reflectief — bronnen en gedichten (Latijnse lijn); dezelfde Slag bij Actium van Griekse kant meebeleefd (Griekse lijn) — de twee lijnen convergeren hier inhoudelijk, niet alleen structureel",
+    personages:"Augustus, Vergilius, Nero, Ovidius — Cleopatra VII, Marcus Antonius",
+    illustratie:"Augustus bij de Ara Pacis / Nero en het Colosseum — Cleopatra en Antonius bij Actium",
     zijverhalen:"Eros & Psyche, Pygmalion (A-tier) — verteld als verhaal-in-een-verhaal door een dichter" },
-  { id:"ch25", nr:25, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Keizers en Dichters",
-    periode:"Romeinse Keizertijd",
-    verhaal:"Een keizer, berucht om zijn wreedheid, en een dichter, berucht om zijn gedurfde verzen — hun woorden en daden bepalen hoe het nageslacht naar Rome zal kijken.",
-    pallas:"Verdieping", minerva:"Hoofdstuk 25: Latijnse literatuur",
-    grammatica:"Verdieping naamvallen",
-    personages:"Nero, Ovidius",
-    illustratie:"Nero en het Colosseum" },
 
-  // ---- BOEK V — DE LAATSTE HERINNERING (hoofdstuk 26-28, finale) ----
-  { id:"ch26", nr:26, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Bibliotheek van Mnemosyne",
+  // ---- Hoofdstuk 21-22: de ontknoping (Gerbens akkoord 2026-08-02,
+  // vervangt de oude drieluik Mnemosyne/Lethe/Finale qua NUMMERING niet
+  // qua INHOUD — dezelfde twee hoofdstukken plus een aparte, ongenummerde
+  // Finale erna, zoals de structuur al had) ----
+  { id:"ch21", nr:21, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Bibliotheek van Mnemosyne",
     periode:"Buiten Tijd en Ruimte",
-    verhaal:"In een bibliotheek buiten tijd en ruimte bewaart de godin van het geheugen elk verhaal dat ooit verteld is — ook de fragmenten die nergens anders een plek vonden.",
+    verhaal:"In een bibliotheek buiten tijd en ruimte bewaart de godin van het geheugen elk verhaal dat ooit verteld is — ook de fragmenten die nergens anders een plek vonden. Hier begint de onthulling over wie de Boodschapper werkelijk is, en wat Chronos werkelijk wil.",
     pallas:"Eigen content", minerva:"Eigen content",
-    grammatica:"Herhaling van alle grammatica",
+    grammatica:"Herhaling van alle grammatica (Grieks én Latijn, voor het eerst samen)",
     personages:"Mnemosyne",
     zijverhalen:"Narcissus & Echo (A-tier) als spiegel-/geluidspuzzel; eerste hints van De Titanenstrijd (S-tier), die in de Finale terugkeert" },
-  { id:"ch27", nr:27, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
+  { id:"ch22", nr:22, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
     periode:"Mythologische Eindwereld",
-    verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren.",
+    verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren — de laatste beproeving voor het orakel zelf zich toont.",
     pallas:"Eigen content", minerva:"Eigen content",
     grammatica:"Integratie Grieks & Latijn",
     personages:"Lethe",
-    zijverhalen:"Orpheus & Eurydice (S-tier — Orpheus verschijnt zo twee keer, jong in Hoofdstuk 5, gebroken hier) & Persephone/Demeter (A-tier) — beide onderwereld-terugkeerverhalen" },
-  { id:"finale", nr:28, boek:"V — De Laatste Herinnering", type:"finale", nm:"Chronica Classica",
+    zijverhalen:"Orpheus (S-tier — jong en hoopvol in Hoofdstuk 5, zijn volledige Eurydice-tragedie al verteld in Hoofdstuk 11; hier zijn daadwerkelijke dood, verscheurd door Thracische Maenaden, hoofd en lier nog zingend de rivier af — zie geheugen chronica-orpheus-verplaatst-h11) & Persephone/Demeter (A-tier, hun eigen ontvoeringsmythe — granaatappelpitten, de seizoenen) — beide onderwereld-verhalen" },
+  { id:"finale", nr:23, boek:"V — De Laatste Herinnering", type:"finale", nm:"Chronica Classica",
     periode:"Tijdloos",
     thema:"De strijd tegen de Vergetelheid",
     verhaal:"Alles wat je onderweg hebt geleerd komt hier samen. Aan het einde van de reis wacht het orakel zelf — en een waarheid die alles in een ander licht zet.",
@@ -869,12 +853,10 @@ const SP_PUZZLES = {
   // ---- Hoofdstuk 2, Lijn S: Semele ----
   puzzle_ch2s_praesens: { type:"multiple-choice",
     vraag:"Semele mint Jupiter in het diepste geheim. “Semele Iovem ___” — welke vorm van amare (liefhebben) past hier, praesens 3e persoon enkelvoud?",
-    opties:["amat","amant","amas","amatis"], antwoord:"amat",
-    hint:"Praesens 3e persoon enkelvoud van een eerste-conjugatiewerkwoord (op -are) eindigt op -at." },
+    opties:["amat","amant","amas","amatis"], antwoord:"amat" },
   puzzle_ch2s_imperativus: { type:"multiple-choice",
     vraag:"Nu Jupiter aan zijn eed gebonden is, spreekt Semele haar eis uit. Wat eist ze?",
-    opties:["Ostende te!","Ostendis te!","Ostendere te!","Ostendit te!"], antwoord:"Ostende te!",
-    hint:"De imperativus enkelvoud van een derde-conjugatiewerkwoord (ostendere) eindigt op een korte -e." },
+    opties:["Ostende te!","Ostendis te!","Ostendere te!","Ostendit te!"], antwoord:"Ostende te!" },
   puzzle_ch2s_esse: { type:"multiple-choice",
     vraag:"Het licht van Jupiters ware gedaante is dodelijk voor een sterveling. “Ignis nimium potens ___” — welke vorm van esse (zijn) past hier?",
     opties:["est","sunt","es","sum"], antwoord:"est",
@@ -897,8 +879,7 @@ const SP_PUZZLES = {
   // ---- Hoofdstuk 2, Lijn H: Herakles (loopt door in Hoofdstuk 3) ----
   puzzle_ch2h_praesens: { type:"multiple-choice",
     vraag:"Als baby wurgt Herakles moeiteloos de slangen die Hera naar zijn wieg stuurde. “Infans serpentem ___” — welke vorm van necare (doden) past hier, praesens 3e persoon enkelvoud?",
-    opties:["necat","necant","necas","necatis"], antwoord:"necat",
-    hint:"Praesens 3e persoon enkelvoud van een eerste-conjugatiewerkwoord (op -are) eindigt op -at." },
+    opties:["necat","necant","necas","necatis"], antwoord:"necat" },
   puzzle_ch2h_imperativus: { type:"multiple-choice",
     vraag:"Het orakel van Delphi spreekt Herakles' boetedoening uit. Wat draagt het hem op?",
     opties:["Servi Eurystheo!","Servis Eurystheo!","Servire Eurystheo!","Servit Eurystheo!"], antwoord:"Servi Eurystheo!",
@@ -955,8 +936,7 @@ const SP_PUZZLES = {
     hint:"De infinitivus is de 'woordenboekvorm' van een werkwoord, hier 'mutare' — (te) veranderen." },
   puzzle_ch4t_vocativus: { type:"multiple-choice",
     vraag:"Daidalos ziet zijn zoon te hoog vliegen en roept wanhopig zijn naam. Wat roept hij?",
-    opties:["Icarus!","Icare!","Icarum!","Icari!"], antwoord:"Icare!",
-    hint:"Net als Bacchus -> Bacche wordt Icarus in de vocativus Icare." },
+    opties:["Icarus!","Icare!","Icarum!","Icari!"], antwoord:"Icare!" },
   puzzle_ch4t_ablativus: { type:"multiple-choice",
     vraag:"“Theseus ___ labyrinthum relinquit” — Theseus verlaat het labyrint met behulp van de draad. Welke vorm van filum (draad) past hier, ablativus enkelvoud?",
     opties:["filum","fili","filo","filis"], antwoord:"filo",
@@ -1000,6 +980,31 @@ const SP_PUZZLES = {
     vraag:"Argos verstevigt de romp vlak voor de doorvaart. “Argus navem ___ firmat” — Argos verstevigt het schip met de hamer. Zet de tegels in de juiste volgorde voor de ablativus (het middel) van malleus (hamer).",
     tiles:["m","a","l","l","e","o"] },
 
+  // ---- Hoofdstuk 5, vervolg — NIEUWE grammatica (Minerva hoofdstuk 9:
+  // plusquamperfectum, conjunctivus in de bijzin), verplaatst vanuit
+  // Hoofdstuk 10 op Gerbens verzoek (2026-07-31) zodat Minerva deel 1
+  // volledig is afgerond bij Hoofdstuk 9 i.p.v. door te lopen tot
+  // Hoofdstuk 12 — zie Chronica.md §7.38/geheugen
+  // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk. In tegenstelling
+  // tot de vijf naamval-puzzels hierboven WEL met volledige hints: dit is
+  // hier, ondanks het "herhalings"-hoofdstuk-label, echt nieuwe stof.
+  puzzle_ch5_ppf1: { type:"typed-latin",
+    vraag:"“Argos vestes iam ante in navi ___” — Argos had de kleren al eerder op het schip gelegd. Typ de plusquamperfectum, 3e persoon enkelvoud, van ponere (leggen, plaatsen).",
+    antwoord:"posuerat",
+    hint:"Plusquamperfectum drukt uit dat iets al gebeurd was vóór een ander verleden moment — Argos legde de kleren al klaar voordat de bemanning aan boord ging. Perfectumstam (posu-) + -erat." },
+  puzzle_ch5_ppf2: { type:"typed-latin",
+    vraag:"“Aper agros iam multas hebdomadas ___” — het everzwijn had de akkers al wekenlang verwoest. Typ de plusquamperfectum, 3e persoon enkelvoud, van vastare (verwoesten).",
+    antwoord:"vastaverat",
+    hint:"Plusquamperfectum: perfectumstam (vastav-) + -erat. Het verwoesten was al wekenlang aan de gang vóórdat de Argonauten aankwamen." },
+  puzzle_ch5_conj1: { type:"typed-latin",
+    vraag:"“Cum peregrini terram Amyci ___, rex statim pugnam poscebat” — telkens als vreemdelingen het land van Amycus bereikten, eiste de koning meteen een gevecht. Typ de conjunctivus imperfectum, 3e persoon meervoud, van petere (bereiken, opzoeken).",
+    antwoord:"peterent",
+    hint:"Een cum-bijzin die een herhaalde omstandigheid schetst (cum iterativum) staat in de conjunctivus, niet de indicativus. Conjunctivus imperfectum meervoud: infinitiefstam (pete-) + -rent." },
+  puzzle_ch5_conj2: { type:"typed-latin",
+    vraag:"“Cum Hylas aquam ___, nymphae eum viderunt et ad se traxerunt” — toen Hylas water zocht, zagen de nimfen hem en trokken hem naar zich toe. Typ de conjunctivus imperfectum, 3e persoon enkelvoud, van quaerere (zoeken).",
+    antwoord:"quaereret",
+    hint:"Cum historicum: de bijzin die de omstandigheid schetst waarin het hoofdgebeuren plaatsvindt, staat in de conjunctivus. Conjunctivus imperfectum: infinitiefstam (quaere-) + -ret." },
+
   // ---- Hoofdstuk 6 — De Vloek van Thebe (herhaling praesens t/m perfectum,
   // geen nieuwe grammatica — zie SP_CAMPAIGN ch6.grammatica). Zes puzzels,
   // verdeeld over vier types incl. het nieuwe "matching" — zie Chronica.md
@@ -1037,6 +1042,20 @@ const SP_PUZZLES = {
     vraag:"Pentheus roept, vol ongeloof, de naam van de vreemde god die zijn stad in extase heeft gebracht. Typ met het Griekse toetsenbord de vocativus van Βάκχος (Bacchus).",
     antwoord:"Βάκχε" },
 
+  // ---- Hoofdstuk 6, vervolg — NIEUWE grammatica (Minerva hoofdstuk 11,
+  // deel: passief praesens/perfectum + ppp), verplaatst vanuit Hoofdstuk 11
+  // op Gerbens verzoek (2026-07-31) — zie Chronica.md §7.38/geheugen
+  // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk. Met volledige
+  // hints, in tegenstelling tot de herhalingspuzzels hierboven.
+  puzzle_ch6_passief_praesens: { type:"typed-latin",
+    vraag:"“Sic maledictio in terram ___” — zo wordt een vloek in de aarde geplant. Typ de praesens passief, 3e persoon enkelvoud, van plantare (planten).",
+    antwoord:"plantatur",
+    hint:"Passief praesens: werkwoordsstam + persoonsuitgang -tur (3e pers. enk.). De vloek ondergaat de handeling — hij wordt geplant, in plaats van zelf te planten." },
+  puzzle_ch6_perfectum_passief: { type:"typed-latin",
+    vraag:"“Infans in monte ___” — het kind is op de berg te vondeling gelegd. Typ de perfectum passief, 3e persoon enkelvoud, van exponere (te vondeling leggen, blootstellen).",
+    antwoord:"expositus est",
+    hint:"Perfectum passief: ppp (expositus, van exponere) + een vorm van esse. Mannelijk enkelvoud (het kind, Oedipus): expositus est." },
+
   // ---- Hoofdstuk 7 — De Appel der Tweedracht (cumulatieve herhaling: alle
   // naamvallen uit Hoofdstuk 5 én de werkwoordstijden uit Hoofdstuk 6 komen
   // hier samen terug, geen nieuwe grammatica — zie SP_CAMPAIGN ch7.grammatica
@@ -1070,6 +1089,26 @@ const SP_PUZZLES = {
     ],
     hint:"Niet elke perfectumstam lijkt op de praesensstam — kijk goed naar elk paar apart." },
 
+  // ---- Hoofdstuk 7, vervolg — NIEUWE grammatica (Minerva hoofdstuk 11,
+  // rest: deponentia; hoofdstuk 12: betrekkelijk voornaamwoord,
+  // conjunctivus passief), verplaatst vanuit Hoofdstuk 12 op Gerbens
+  // verzoek (2026-07-31) zodat Minerva deel 1 volledig is afgerond bij
+  // Hoofdstuk 9 — zie Chronica.md §7.38/geheugen
+  // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk. Met volledige
+  // hints, in tegenstelling tot de herhalingspuzzels hierboven.
+  puzzle_ch7_deponens: { type:"typed-latin",
+    vraag:"“Iuppiter Ledam, cygni specie occultus, diu ___” — Jupiter, verborgen in de gedaante van een zwaan, volgde Leda lange tijd. Typ de perfectum, 3e persoon enkelvoud, van het deponens sequi (volgen).",
+    antwoord:"secutus est",
+    hint:"Sequi is een deponens: de vorm ziet er passief uit (secutus est), maar de betekenis is actief — 'hij volgde', niet 'hij werd gevolgd'. Deponentia hebben alleen passieve vormen, met een actieve betekenis." },
+  puzzle_ch7_betrekkelijk_vnw: { type:"typed-latin",
+    vraag:"“Pastores, ___ infantem invenerant, eum ut suum filium educaverunt” — de herders, die het kind gevonden hadden, voedden hem op als hun eigen zoon. Typ het betrekkelijk voornaamwoord (mannelijk nominativus meervoud) dat hier past.",
+    antwoord:"qui",
+    hint:"Het betrekkelijk voornaamwoord congrueert in geslacht en getal met zijn antecedent (pastores: mannelijk meervoud), maar de naamval hangt af van zijn eigen functie in de bijzin — hier onderwerp van invenerant, dus nominativus: qui." },
+  puzzle_ch7_conjunctivus_passief: { type:"typed-latin",
+    vraag:"“Cum promissum a Venere nondum ___, Paris etiam apud Menelaum manebat” — terwijl de belofte door Venus nog niet was ingelost, bleef Paris nog bij Menelaus. Typ de conjunctivus plusquamperfectum passief, 3e persoon enkelvoud, van solvere (inlossen, vervullen).",
+    antwoord:"solutum esset",
+    hint:"Conjunctivus plusquamperfectum passief: ppp (solutum) + conjunctivus imperfectum van esse (essem/esses/esset...). Net als bij een gewone cum-bijzin staat de bijzin in de conjunctivus — hier bovendien in de passieve vorm." },
+
   // ---- Hoofdstuk 8 — De Wrok van Achilles (NIEUWE grammatica: sigmatische
   // en thematische aoristus (Grieks), 3e-declinatie medeklinkerstammen en
   // aanwijzende/persoonlijke voornaamwoorden (Latijn) — zie SP_CAMPAIGN
@@ -1093,6 +1132,10 @@ const SP_PUZZLES = {
     vraag:"Achilles wijst de geschenken van het gezantschap resoluut af. “___ dona numquam accipiam” — 'Die geschenken zal ik nooit aannemen.' Welke vorm van het aanwijzend voornaamwoord ille (die) past hier, nominativus/accusativus onzijdig meervoud bij dona?",
     opties:["illa","ille","illos","illud"], antwoord:"illa",
     hint:"Dona (geschenken) is onzijdig meervoud — het aanwijzend voornaamwoord moet daarin meegaan: illa." },
+  puzzle_ch8_ach_pronomen_grieks: { type:"typed-greek",
+    vraag:"“Οἱ Τρῶες τὴν πανοπλίαν ὁρῶντες ___ φοβοῦνται” — de Trojanen, de wapenrusting ziend, zijn bang voor hem. Typ met het Griekse toetsenbord de accusativus mannelijk enkelvoud van het persoonlijk voornaamwoord αὐτός (hij/hem) dat hier past.",
+    antwoord:"αὐτόν",
+    hint:"Αὐτός wordt, buiten de nominativus, als persoonlijk voornaamwoord van de 3e persoon gebruikt ('hem/haar/het'). Accusativus mannelijk enkelvoud: αὐτόν." },
 
   puzzle_ch8_aga_aoristus_sigma: { type:"typed-greek",
     vraag:"“Πάνδαρος τὰς σπονδὰς ___” — Pandaros verbrak de wapenstilstand met zijn pijl. Typ met het Griekse toetsenbord de sigmatische aoristus van λύω (losmaken, verbreken), 3e persoon enkelvoud.",
@@ -1110,6 +1153,10 @@ const SP_PUZZLES = {
     vraag:"De soldaten om je heen wijzen naar de nieuwe krijger op het slagveld. “___ Achillem esse putamus” — 'Wij denken dat HIJ Achilles is.' Welke vorm van het persoonlijk voornaamwoord is (hij) past hier, accusativus enkelvoud mannelijk?",
     opties:["eum","eam","id","ei"], antwoord:"eum",
     hint:"Accusativus enkelvoud mannelijk van is, ea, id is eum." },
+  puzzle_ch8_aga_pronomen_grieks: { type:"typed-greek",
+    vraag:"“Οἱ στρατιῶται ___ χαίρουσιν, νομίζοντες Ἀχιλλέα εἶναι” — de soldaten verheugen zich over hem, denkend dat hij Achilles is. Typ met het Griekse toetsenbord de dativus mannelijk enkelvoud van het persoonlijk voornaamwoord αὐτός (hij/hem) dat hier past.",
+    antwoord:"αὐτῷ",
+    hint:"Persoonlijk voornaamwoord 3e persoon, dativus mannelijk enkelvoud: αὐτῷ — 'aan/bij hem', hier gebruikt na χαίρω (zich verheugen over)." },
 
   // ---- Gedeeld epiloog-hoofdstuk 8: herhaling, geen nieuwe stof — bewust
   // een terugblik op ALLE VIER de nieuwe werkwoordsvormen, ongeacht welke
@@ -1137,6 +1184,10 @@ const SP_PUZZLES = {
     vraag:"“Penthesilea regina ___ omnium Amazonum erat” — koningin Penthesilea was de dapperste van alle Amazones. Welke vorm van fortis (dapper) past hier, superlativus?",
     opties:["fortissima","fortior","fortis","fortius"], antwoord:"fortissima",
     hint:"Superlativus van een derde-declinatie bijvoeglijk naamwoord als fortis eindigt op -issimus/-issima/-issimum." },
+  puzzle_ch9_tro_superlativus_grieks: { type:"typed-greek",
+    vraag:"“Ἡ Πενθεσίλεια ___ πασῶν τῶν Ἀμαζόνων ἦν” — Penthesileia was de dapperste van alle Amazones. Typ met het Griekse toetsenbord de superlativus, vrouwelijk nominativus enkelvoud, van ἀνδρεῖος (dapper).",
+    antwoord:"ἀνδρειοτάτη",
+    hint:"De superlativus van bijvoeglijke naamwoorden op -ος wordt gevormd met -οτατος/-οτάτη/-ότατον. Ἀνδρειοτάτη (vrouwelijk, bij Πενθεσίλεια): 'de dapperste'." },
   puzzle_ch9_tro_aci: { type:"typed-latin",
     vraag:"“Sinon dicit Danaos iam ___” — Sinon zegt dat de Grieken al vertrokken zijn. Typ de vorm van discedere (vertrekken) die hier past — A.C.I., perfectum infinitivus.",
     antwoord:"discessisse",
@@ -1149,11 +1200,19 @@ const SP_PUZZLES = {
     vraag:"“___ Cassandra deos frustra implorat” — de wanhopige Cassandra roept tevergeefs de goden aan. Welke vorm van maestus (bedroefd, wanhopig) hoort bij Cassandra?",
     opties:["maesta","maestus","maestum","maesti"], antwoord:"maesta",
     hint:"Cassandra is vrouwelijk enkelvoud — het bijvoeglijk naamwoord moet daarin congrueren: maesta." },
+  puzzle_ch9_tro_congruentie_grieks: { type:"typed-greek",
+    vraag:"“Οἱ στρατιῶται ___ καθεύδουσιν” — de onbewaakte soldaten slapen. Typ met het Griekse toetsenbord de juiste vorm van ἀφύλακτος (onbewaakt) die hier bij στρατιῶται (mnl. nom. mv.) hoort.",
+    antwoord:"ἀφύλακτοι",
+    hint:"Het bijvoeglijk naamwoord congrueert met στρατιῶται in geslacht, getal en naamval: mannelijk nominativus meervoud eindigt op -οι. Ἀφύλακτοι: 'onbewaakt'." },
 
   puzzle_ch9_gri_comparativus: { type:"multiple-choice",
     vraag:"“Achilles omnium Graecorum ___ erat” — Achilles was de sterkste van alle Grieken. Welke vorm van fortis (sterk, dapper) past hier, superlativus?",
     opties:["fortissimus","fortior","fortis","fortius"], antwoord:"fortissimus",
     hint:"Superlativus van een derde-declinatie bijvoeglijk naamwoord als fortis eindigt op -issimus/-issima/-issimum." },
+  puzzle_ch9_gri_comparativus_grieks: { type:"typed-greek",
+    vraag:"“Ὀδυσσεὺς νικᾷ, ___ ἢ ὁ Αἴας ὤν” — Odysseus wint, omdat hij slimmer is dan Aias. Typ met het Griekse toetsenbord de comparativus, mannelijk nominativus enkelvoud, van σοφός (slim, wijs).",
+    antwoord:"σοφώτερος",
+    hint:"Comparativus van bijvoeglijke naamwoorden op -ος: stam + -ωτερος/-ωτέρα/-ώτερον. Σοφώτερος: 'slimmer'." },
   puzzle_ch9_gri_aci: { type:"typed-latin",
     vraag:"“Nuntius dicit Achillem iam ___” — de boodschapper zegt dat Achilles al gevallen is. Typ de vorm van cadere (vallen) die hier past — A.C.I., perfectum infinitivus.",
     antwoord:"cecidisse",
@@ -1166,6 +1225,119 @@ const SP_PUZZLES = {
     vraag:"“Milites ___ intra equum manent” — de zwijgende soldaten blijven binnen het paard. Welke vorm van tacitus (stil, zwijgend) hoort bij milites (soldaten)?",
     opties:["taciti","tacitus","tacita","tacitum"], antwoord:"taciti",
     hint:"Milites is mannelijk meervoud — het bijvoeglijk naamwoord moet daarin congrueren: taciti." },
+  puzzle_ch9_gri_congruentie_grieks: { type:"typed-greek",
+    vraag:"“Ἡ σιγὴ ___ πάντας καταλαμβάνει” — de angstaanjagende stilte overvalt iedereen. Typ met het Griekse toetsenbord de juiste vorm van φοβερός (angstaanjagend) die hier bij σιγή (vr. nom. enk.) hoort.",
+    antwoord:"φοβερά",
+    hint:"Het bijvoeglijk naamwoord congrueert met σιγή in geslacht, getal en naamval: vrouwelijk nominativus enkelvoud eindigt op -α (of -η na ε/ι/ρ). Φοβερά: 'angstaanjagend'." },
+
+  // ---- Hoofdstuk 10 — Vluchten uit Troje (NIEUWE grammatica: Grieks —
+  // medium, passief, aoristus passief op -θην; Latijn — naamwoord groep
+  // 4/5, hic/ipse (Minerva hoofdstuk 14). Zie SP_CAMPAIGN
+  // ch10.grammatica en Chronica.md §7.19/§7.38/§7.41. Odysseus-lijn krijgt
+  // de Griekse puzzels, Aeneas-lijn de Latijnse — de eerste keer dat de
+  // twee taalsporen ook qua PUZZLE-inhoud strikt gescheiden zijn (i.p.v.
+  // Hoofdstuk 8/9's gedeelde Latijn). Het Latijnse plusquamperfectum/
+  // conjunctivus-in-de-bijzin dat hier oorspronkelijk stond (Minerva 9) is
+  // verplaatst naar Hoofdstuk 5, zodat Minerva deel 1 bij Hoofdstuk 9 is
+  // afgerond — zie het geheugensysteem,
+  // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk (2026-07-31).
+  // Audit 2026-08-02 (Minerva-2-Docentenboek): ille was hier oorspronkelijk
+  // ook getest, maar Hoofdstuk 8 leert ille al ("aanwijzend en persoonlijk
+  // voornaamwoord") — vervangen door hic, de daadwerkelijk NIEUWE
+  // tegenhanger van dat al bekende ille in Minerva hoofdstuk 14
+  // (par. V: "van hic naar ille"). Zie Chronica.md §7.41.
+  puzzle_ch10_ody_medium: { type:"typed-greek",
+    vraag:"Bij de Lotoseters proeft wie niet oplet zijn verlangen naar huis kwijt. Typ met het Griekse toetsenbord de 3e persoon enkelvoud van γεύομαι (proeven), praesens medium.",
+    antwoord:"γεύεται",
+    hint:"Medium (middenstem) drukt uit dat het onderwerp de handeling op/voor zichzelf verricht — proeven doe je nu eenmaal voor jezelf. De uitgang -εται is in de tegenwoordige tijd dezelfde als bij het passief; alleen de betekenis en de context verraden het verschil." },
+  puzzle_ch10_ody_passief: { type:"typed-greek",
+    vraag:"De ingang van de grot wordt door één reusachtig rotsblok afgesloten. Typ met het Griekse toetsenbord de 3e persoon enkelvoud van κλείω (sluiten), praesens passief.",
+    antwoord:"κλείεται",
+    hint:"Praesens passief: de ingang ondergaat de handeling in plaats van hem te verrichten. Zelfde uitgang -εται als bij het medium — hier maakt de context (een rotsblok, geen levend wezen) duidelijk dat het passief is." },
+  puzzle_ch10_ody_aoristus1: { type:"typed-greek",
+    vraag:"“Ὁ Κύκλωψ ___” — de Kykloop werd verblind. Typ met het Griekse toetsenbord de aoristus passief, 3e persoon enkelvoud, van τυφλόω (verblinden).",
+    antwoord:"ἐτυφλώθη",
+    hint:"De aoristus passief citeer je met de 1e persoon op -θην (ἐτυφλώθην, 'ik werd verblind'), maar de 3e persoon enkelvoud eindigt op -θη: augment ἐ- + stam τυφλω- + -θη." },
+  puzzle_ch10_ody_aoristus2: { type:"typed-greek",
+    vraag:"“Ἕνδεκα νῆες ___” — elf schepen werden uiteengeslagen. Typ met het Griekse toetsenbord de aoristus passief, 3e persoon meervoud, van λύω (losmaken, hier: uiteenslaan).",
+    antwoord:"ἐλύθησαν",
+    hint:"Aoristus passief meervoud: augment ἐ- + stam λυ- + -θησαν (3e pers. mv.). Dezelfde stam-en-θη-opbouw als bij ἔλυσε (aoristus actief, Hoofdstuk 8), nu met passieve uitgang." },
+  puzzle_ch10_aen_naamwoord_groep4: { type:"typed-latin",
+    vraag:"“Rex aurum avide in ___ accepit” — de koning nam het goud gretig in zijn hand aan. Typ de accusativus enkelvoud van manus, manus (hand) — een 4e-declinatie zelfstandig naamwoord.",
+    antwoord:"manum",
+    hint:"4e declinatie (u-stam): manus, manus — de accusativus enkelvoud eindigt, net als bij de 2e declinatie, op -um: manum." },
+  puzzle_ch10_aen_naamwoord_groep5: { type:"typed-latin",
+    vraag:"“Illo ipso ___ oraculum tandem locutum est” — op precies die dag sprak het orakel eindelijk. Typ de ablativus enkelvoud van dies, diei (dag) — een 5e-declinatie zelfstandig naamwoord.",
+    antwoord:"die",
+    hint:"5e declinatie (e-stam): dies, diei — de ablativus enkelvoud eindigt op -e: die." },
+  puzzle_ch10_aen_hic: { type:"typed-latin",
+    vraag:"“___ homo, quem nunc videtis, olim Ulixis comes erat” — deze man, die jullie nu zien, was ooit een metgezel van Odysseus. Typ het aanwijzend voornaamwoord hic (deze, dit) in de juiste vorm, mannelijk nominativus enkelvoud.",
+    antwoord:"hic",
+    hint:"Hic wijst iets dichtbij aan ('deze hier', vlak voor je) — Ille was het al bekende 'die daar' (Hoofdstuk 8); hic is de nieuwe tegenhanger ervan. Mannelijk nominativus enkelvoud is gewoon hic." },
+  puzzle_ch10_aen_ipse: { type:"typed-latin",
+    vraag:"“Aeneas ___ obstipuit, tabulam intuens” — Aeneas zelf stond versteld, terwijl hij naar de muurschildering keek. Typ het versterkend voornaamwoord ipse (zelf) in de juiste vorm, mannelijk nominativus enkelvoud.",
+    antwoord:"ipse",
+    hint:"Ipse benadrukt het onderwerp zelf ('Aeneas zelf', niet iemand anders). Mannelijk nominativus enkelvoud is gewoon ipse." },
+
+
+  // ---- Hoofdstuk 11 — Tussen Liefde en Lot (NIEUWE grammatica: Grieks —
+  // participium, genitivus absolutus; Latijn — participium praesens actief
+  // (Minerva hoofdstuk 15) én ablativus absolutus (Minerva hoofdstuk 18,
+  // par. I-III — bewust vooruitgehaald, niet H15 zoals eerder abusievelijk
+  // vermeld; gecorrigeerd 2026-08-02, zie PALLAS_MINERVA_OVERZICHT.md). Zie
+  // SP_CAMPAIGN ch11.grammatica en Chronica.md §7.36/§7.38/§7.41. De A.C.I.-
+  // herhaling die hier oorspronkelijk stond is niet meer nodig nu Minerva
+  // deel 1 al bij Hoofdstuk 9 is afgerond — zie het geheugensysteem,
+  // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk (2026-07-31).
+  puzzle_ch11_ody_participium: { type:"multiple-choice",
+    vraag:"Eurylochus rent terug naar het strand, roepend om hulp: “ὁ Εὐρύλοχος ___ πρὸς τὴν ἀκτὴν ἔτρεχεν”. Welke vorm van βοάω (roepen) is het participium praesens actief, mannelijk nominativus enkelvoud, dat hier past?",
+    opties:["βοῶν","βοῶντος","βοῶσα","ἐβόα"], antwoord:"βοῶν",
+    hint:"Het participium praesens actief van een samengetrokken werkwoord op -άω eindigt in het mnl. nom. enk. op -ῶν. Βοῶν ('roepend') beschrijft Eurylochus zelf, zonder dat er een apart voegwoord nodig is." },
+  puzzle_ch11_ody_genitivus_absolutus: { type:"typed-greek",
+    vraag:"“Τῆς Κίρκης τὴν ῥάβδον ___, οἱ ἄνδρες σύες ἐγένοντο” — terwijl Kirke haar staf ophief, werden de mannen varkens. Typ met het Griekse toetsenbord het participium praesens, genitivus vrouwelijk enkelvoud, van αἴρω (opheffen) — de genitivus absolutus.",
+    antwoord:"αἰρούσης",
+    hint:"In een genitivus absolutus staan het onderwerp (Κίρκης) én het participium allebei in de genitivus, los van de rest van de zin — vandaar 'absolutus', losstaand. Genitivus vrouwelijk enkelvoud van een participium op -ουσα eindigt op -ούσης." },
+  puzzle_ch11_aen_participium1: { type:"typed-latin",
+    vraag:"“Dido, ___, Aenean excepit” — glimlachend ontving Dido Aeneas. Typ het participium praesens actief, vrouwelijk nominativus enkelvoud, van ridere (lachen, glimlachen).",
+    antwoord:"ridens",
+    hint:"Het participium praesens actief eindigt in de nominativus enkelvoud (alle geslachten) op -ns: ridens, 'lachend'. Het beschrijft Dido terwijl ze handelt, zonder eigen voegwoord." },
+  puzzle_ch11_aen_participium2: { type:"typed-latin",
+    vraag:"“Cupido, in gremio Didonis ___, amorem clam accendebat” — Cupido, zittend op Dido's schoot, ontstak in het geheim liefde. Typ het participium praesens actief, mannelijk nominativus enkelvoud, van sedere (zitten).",
+    antwoord:"sedens",
+    hint:"Participium praesens actief: werkwoordsstam + -ens/-ns. Sedens ('zittend') beschrijft Cupido terwijl hij handelt, in één woord, zonder een aparte 'terwijl'-bijzin nodig te hebben." },
+  puzzle_ch11_aen_ablativus_absolutus: { type:"typed-latin",
+    vraag:"“Mercurio haec ___, Aeneas diu siluit” — nadat Mercurius dit had gezegd, zweeg Aeneas lang. Typ het participium praesens actief, ablativus enkelvoud, van dicere (zeggen) — de ablativus absolutus.",
+    antwoord:"dicente",
+    hint:"In een ablativus absolutus staan het onderwerp (Mercurio) én het participium allebei in de ablativus, los van de rest van de zin — de Latijnse tegenhanger van de Griekse genitivus absolutus. Ablativus enkelvoud van een participium op -ens/-ns eindigt op -e: dicente." },
+
+  // ---- Hoofdstuk 12 — Hercules en Cacus, nu Minerva DEEL 2 (hoofdstuk 16:
+  // bijwoord, genitivus op -ius, idem, ACP) in plaats van deel 1 — zie
+  // Chronica.md §7.38 en het geheugensysteem,
+  // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk (2026-07-31).
+  // Minerva deel 1 (passief/ppp/deponentia/betrekkelijk voornaamwoord/
+  // conjunctivus passief) is verplaatst naar Hoofdstuk 6/7, zodat het
+  // volledig is afgerond bij Hoofdstuk 9 en Hoofdstuk 10+ overal echt
+  // deel 2 laat zien, zoals bij Pallas al het geval was.
+  // Audit 2026-08-02 (Minerva-2-Docentenboek, zie chronica-grammatica-
+  // loskoppelen-van-minerva-hoofdstuk / Chronica.md §7.42): Minerva
+  // hoofdstuk 16 par. IV bleek ook de accusativus cum participio (ACP)
+  // te introduceren — ontbrak hier, toegevoegd als puzzle_ch12_lat_acp.
+  puzzle_ch12_lat_bijwoord: { type:"typed-latin",
+    vraag:"“Euander ___ ad Herculem properavit” — Euander haastte zich snel naar Hercules. Typ het bijwoord (snel) dat hoort bij het bijvoeglijk naamwoord celer, celeris, celere (snel).",
+    antwoord:"celeriter",
+    hint:"Bijwoorden bij 3e-declinatie bijvoeglijke naamwoorden als celer worden gevormd met -iter: celeriter, 'snel'." },
+  puzzle_ch12_lat_genitivus_ius: { type:"typed-latin",
+    vraag:"“Memoriam ___ hominis tale factum aequabat” — geen enkele mensenherinnering evenaarde zo'n daad. Typ de genitivus enkelvoud van nullus (geen, niemand) — een van de negen onregelmatige bijvoeglijke naamwoorden met genitivus op -ius.",
+    antwoord:"nullius",
+    hint:"Nullus hoort bij de negen onregelmatige bijvoeglijke naamwoorden (samen met unus, solus, totus, alius, uter e.a.) die in de genitivus enkelvoud altijd op -ius eindigen, ongeacht het geslacht: nullius." },
+  puzzle_ch12_lat_idem: { type:"typed-latin",
+    vraag:"“___ timor, qui olim hic regnabat, iam abierat” — dezelfde angst die hier ooit heerste, was nu verdwenen. Typ het pronomen idem (dezelfde) in de juiste vorm, mannelijk nominativus enkelvoud.",
+    antwoord:"idem",
+    hint:"Idem ('dezelfde') is samengesteld uit is + de onveranderlijke toevoeging -dem. Mannelijk nominativus enkelvoud is gewoon idem." },
+  puzzle_ch12_lat_acp: { type:"typed-latin",
+    vraag:"“Hercules boves ___ audivit” — Hercules hoorde de runderen loeien. Typ het participium praesens actief, accusativus meervoud, van mugire (loeien) — de accusativus cum participio (ACP).",
+    antwoord:"mugientes",
+    hint:"Na een werkwoord van waarneming (audire, videre, sentire) staat in het Latijn geen A.C.I. maar een ACP: accusativus (boves) + participium (mugientes) — je hoort/ziet iemand iets DOEN, in plaats van dát iets het geval is. Accusativus meervoud van een participium op -ns/-ens eindigt op -es: mugientes." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -1544,6 +1716,165 @@ const SP_CODEX_ENTRIES = {
     tekst:"Priamus stuurde zijn jongste zoon Polydorus, samen met een aanzienlijke hoeveelheid goud, in het geheim naar de bondgenoot Thracië om hem buiten het bereik van de oorlog te houden. Zodra Troje viel, vermoordde de Thracische koning de jongen voor zijn goud. Aeneas ontdekt het pas wanneer bloed opwelt uit een struik die, blijkt achteraf, wortelt in Polydorus' eigen graf." },
   codex_orakel_delos: { cat:"mythologie", titel:"Het Orakel van Delos",
     tekst:"Apollo's orakel op het drijvende eiland Delos draagt Aeneas op zijn 'oude moeder' te zoeken — een raadsel dat zijn vader Anchises aanvankelijk verkeerd oplost door het te betrekken op Kreta. Pas een plaag op Kreta en een droomverschijning van de Penaten maken duidelijk dat het werkelijke antwoord Italië is, het land van hun verste voorvader Dardanus." },
+  codex_polyfemos: { cat:"mythologie", titel:"Polyphemus, de Kykloop",
+    tekst:"Een eenogige zoon van Poseidon die Odysseus' mannen gevangen houdt in zijn grot en er twee opeet, voor Odysseus hem dronken voert, zich 'Niemand' noemt en hem tijdens zijn slaap verblindt. De list werkt perfect — tot Odysseus, eenmaal veilig op zee, zijn ware naam alsnog schreeuwt en daarmee zijn eigen thuisreis vervloekt." },
+  codex_poseidon_vloek: { cat:"mythologie", titel:"Poseidons Vloek",
+    tekst:"Op smeekbede van zijn verblinde zoon Polyphemus vervloekt Poseidon Odysseus' thuisreis: eindeloos lang, alleen, alle metgezellen verloren, een vreemde in zijn eigen huis wanneer hij eindelijk aankomt. Deze ene vloek — het rechtstreekse gevolg van Odysseus' eigen trots — is de reden dat een reis van een paar weken er tien jaar over doet." },
+  codex_harpijen: { cat:"mythologie", titel:"De Harpijen van de Strofaden",
+    tekst:"Vogelvrouwen met haakvormige klauwen die Aeneas' vloot hun eerste, onverwachte maaltijd na Troje ontnemen. Hun aanvoerster Celaeno vervloekt de vluchtelingen voor hun geweld: pas wanneer honger hen dwingt hun eigen tafels op te eten, zullen ze hun beloofde stad vinden — een vloek die zich, jaren later, veel milder ontknoopt dan hij hier klinkt." },
+  codex_achaemenides: { cat:"mythologie", titel:"Achaemenides, de Vergetene",
+    tekst:"Een Grieks bemanningslid van Odysseus, per ongeluk achtergelaten op het eiland van de Kyklopen toen zijn eigen vloot halsoverkop vluchtte. Aeneas' mannen vinden hem drie maanden later, uitgemergeld maar levend — en krijgen van hem het enige rechtstreekse verslag dat Aeneas ooit hoort van wat Odysseus op dit eiland is overkomen." },
+  codex_dood_anchises: { cat:"mythologie", titel:"De Dood van Anchises",
+    tekst:"Na alles wat vader en zoon sinds Troje's val hebben doorstaan, sterft Anchises stil in Drepanum, Sicilië — zonder gevecht, zonder voorteken, zonder dat enig orakel het had aangekondigd. Aeneas verliest hiermee de laatste schakel met het oude Troje, en moet de rest van de tocht zonder zijn vaders raad afleggen." },
+  codex_twee_thuiskomsten: { cat:"mythologie", titel:"Twee Thuiskomsten",
+    tekst:"Odysseus wil terug naar wat hij al had: een vrouw, een zoon, een eiland dat al twintig jaar op hem wacht. Aeneas moet een thuis stichten dat nog niet bestaat, met alleen zijn vaders as en zijn zoons hand om hem eraan te herinneren waarom. Dezelfde zee, dezelfde goden, twee volledig verschillende soorten verlangen naar 'thuis'." },
+  codex_baucis_philemon: { cat:"mythologie", titel:"Baucis en Philemon, Xenia",
+    tekst:"Vermomd als arme zwervers werden Jupiter en Mercurius overal in een Frygisch dorp geweigerd, tot een straatarm, oud echtpaar — Baucis en Philemon — hun laatste brood, wijn en gans met hen deelde. Jupiter onthulde zich, verzwolg het ondankbare dorp onder een meer, en veranderde hun hutje in een gouden tempel. Xenia — de heilige plicht van gastvrijheid tussen gastheer en gast — is een van de zwaarst bewaakte wetten van de klassieke wereld, en wie hem breekt, breekt hem nooit zonder gevolgen." },
+  codex_aeolus: { cat:"mythologie", titel:"Aeolus, Heerser van de Winden",
+    tekst:"Aeolus bewaart alle winden op zijn drijvende eiland en geeft Odysseus een zak met alle vijandige winden erin opgesloten — op negen dagen afstand van Ithaka openen Odysseus' eigen mannen de zak uit hebzucht, en drijven zichzelf terug naar af. Aeolus weigert een tweede keer te helpen: een sterveling die de goden zo tegen zich heeft, wil hij niet nog eens aan boord van zijn eigen geluk." },
+  codex_laistrygonen: { cat:"mythologie", titel:"De Laistrygonen",
+    tekst:"Mensenetende reuzen die Odysseus' vloot in een ogenschijnlijk veilige haven in de val lokken en met rotsblokken bijna de hele vloot vernietigen. Van de twaalf schepen waarmee Odysseus Troje verliet, overleeft er nog maar één — een verlies dat de rest van de Odyssee bepaalt." },
+  codex_juno_storm: { cat:"mythologie", titel:"Juno's Storm",
+    tekst:"Juno, die Aeneas' Trojaanse afkomst en de toekomstige ondergang van haar geliefde Carthago nooit vergeet, huurt Aeolus in om een storm over zijn vloot te ontketenen. Neptunus, woedend dat een andere god zich zonder toestemming met zijn zee bemoeit, sust de golven net op tijd — maar de vloot komt gehavend en verspreid aan land, ver van waar ze naartoe wilden." },
+  codex_aankomst_carthago: { cat:"mythologie", titel:"Aankomst bij Carthago",
+    tekst:"Aeneas' gehavende vloot spoelt aan bij Carthago, een stad die koningin Dido — zelf op de vlucht voor een moorddadige broer — nog maar net sticht. Door Venus in een wolk gehuld, ziet Aeneas ongezien hoe de Trojaanse Oorlog al is vereeuwigd op de muren van een tempel in aanbouw, ver van Troje, in een stad die hij nog geen uur geleden niet kende." },
+
+  // ---- Hoofdstuk 11 — Tussen Liefde en Lot ----
+  codex_kirke_eiland: { cat:"mythologie", titel:"Het Eiland van Kirke",
+    tekst:"Aeaea, het eiland van de tovenares Kirke, wordt bewaakt door tamme leeuwen en wolven — mannen die Kirke ooit zelf betoverde, en die nu, ontdaan van hun eigen wil, als honden om haar huis heen lopen." },
+  codex_kirke_zwijnen: { cat:"mythologie", titel:"Kirke en de Zwijnen",
+    tekst:"Kirke onthaalt vreemdelingen gastvrij aan tafel, mengt een betoverd mengsel door hun wijn, en verandert hen met een enkele aanraking van haar staf in varkens — met hun eigen menselijke verstand nog volledig intact, het wreedste deel van de vloek." },
+  codex_kirke_moly: { cat:"mythologie", titel:"Het Kruid Moly",
+    tekst:"Moly is een plant die geen sterveling uit de grond kan trekken, alleen een god — Hermes geeft het aan Odysseus om Kirke's betovering te weerstaan. Het is de enige reden dat Odysseus, in tegenstelling tot zijn mannen, zijn eigen gedaante behoudt en Kirke uiteindelijk kan dwingen haar vloek ongedaan te maken." },
+  codex_dido_onthaal: { cat:"mythologie", titel:"Dido's Onthaal",
+    tekst:"Dido, koningin van het pas gestichte Carthago, herkent Aeneas' naam en faam nog voor hij zich aan haar onthult, en ontvangt de schipbreukelinge Trojanen met een gastvrijheid die haar eigen vluchtelingenverleden verraadt — zij weet als geen ander wat het is om alles te moeten achterlaten." },
+  codex_dido_cupido: { cat:"mythologie", titel:"Cupido's List",
+    tekst:"Venus, bang dat Juno's stad Carthago haar zoon Aeneas alsnog kwaad zal doen, laat Cupido de gedaante van Ascanius aannemen. Ongemerkt op Dido's schoot ontsteekt de vermomde liefdesgod een verliefdheid in haar die, zonder dat ze het beseft, van meet af aan een list van de goden was — geen eigen, vrije keuze." },
+  codex_kirke_onderwereld_opdracht: { cat:"mythologie", titel:"Kirke's Laatste Raad",
+    tekst:"Voor Odysseus naar huis kan varen, stuurt Kirke hem eerst naar de onderwereld: alleen de blinde ziener Tiresias kan hem vertellen hoe zijn thuisreis nog kan slagen. Geen enkele andere levende Griekse held in de mythologie krijgt deze opdracht — Odysseus' tocht naar Hades is uniek voor hem." },
+  codex_dido_grot: { cat:"mythologie", titel:"De Grot",
+    tekst:"Een door Juno bestelde storm drijft Dido en Aeneas tijdens de jacht naar dezelfde grot. Wat daar gebeurt, wordt in de bronnen nooit expliciet benoemd — maar Dido beschouwt het vanaf die dag als een huwelijk, terwijl Aeneas zelf, in stilte, nooit vergeet dat zijn eigenlijke bestemming elders ligt." },
+  codex_elpenor: { cat:"mythologie", titel:"Elpenor",
+    tekst:"De jongste van Odysseus' bemanning, dronken van het dak van Kirke's huis gevallen en met een gebroken nek gestorven — zonder dat iemand het merkte voor de vloot al vertrok. Zijn onbegraven schim is de allereerste die Odysseus in de onderwereld ontmoet, en smeekt om een fatsoenlijke begrafenis." },
+  codex_mercurius_vermaning: { cat:"mythologie", titel:"Mercurius' Vermaning",
+    tekst:"Op Jupiters uitdrukkelijk bevel herinnert Mercurius Aeneas eraan dat Italië, niet Carthago, zijn ware bestemming is — en dat zijn zoon Ascanius daar een koninkrijk wacht. Dezelfde god die Priamus en de speler al twee keer eerder terzijde stond, treedt hier voor het eerst op als de strenge hand van Jupiter zelf." },
+  codex_tiresias: { cat:"mythologie", titel:"Tiresias' Voorspelling",
+    tekst:"Tiresias, de enige schim in de onderwereld die van Persephone zijn volle verstand mocht behouden, waarschuwt Odysseus voor de heilige runderen van Helios op Thrinacia, en voorspelt zowel zijn moeizame thuiskomst als een laatste, verre reis die pas ná Ithaka nog moet volgen." },
+  codex_dido_dood: { cat:"mythologie", titel:"Dido's Dood",
+    tekst:"Wanneer Aeneas, gedwongen door Jupiter, in het geheim vertrekt, doorboort Dido zichzelf met zijn eigen achtergelaten zwaard op een brandstapel. Haar laatste vloek — een wreker uit haar eigen botten tegen heel Aeneas' nageslacht — wordt door latere Romeinse lezers gelezen als een profetie van de Punische Oorlogen en Hannibal." },
+  codex_anticlea: { cat:"mythologie", titel:"Anticlea",
+    tekst:"Odysseus' moeder, gestorven aan verlangen naar haar zoon lang voordat hij ooit terugkeerde. In de onderwereld probeert Odysseus haar drie keer te omhelzen; drie keer glipt haar schim als rook door zijn armen — het bewijs dat zelfs liefde niets meer verandert aan wat de dood scheidt." },
+  codex_reunie_agamemnon_achilles: { cat:"mythologie", titel:"Agamemnon en Achilles in de Onderwereld",
+    tekst:"Agamemnons schim vertelt Odysseus hoe zijn eigen vrouw Clytemnestra en haar minnaar Aegisthus hem vermoordden op de dag van zijn thuiskomst — een directe waarschuwing die later, in Hoofdstuk 12, zijn volle gewicht krijgt. Achilles' schim wijst elke troost af: liever een levende dagloner dan koning over de doden, de beroemdste uitspraak uit heel Odysseus' onderwereldbezoek." },
+  codex_ajax_schim: { cat:"mythologie", titel:"Ajax' Zwijgen",
+    tekst:"Na Achilles' dood verloor Ajax de wapenrusting-wedstrijd van Odysseus en pleegde uit schaamte zelfmoord. In de onderwereld weigert zijn schim nog altijd met Odysseus te spreken — een stilte die evenveel zegt als woorden ooit zouden kunnen." },
+  codex_sibylle_cumae: { cat:"mythologie", titel:"De Sibylle van Cumae",
+    tekst:"Apollo's extatische priesteres bij Cumae, die Aeneas naar de onderwereld kan gidsen — op voorwaarde dat hij eerst de Gouden Tak vindt, gewijd aan Proserpina, die zich alleen laat plukken door wie het lot toestaat." },
+  codex_dido_schim_onderwereld: { cat:"mythologie", titel:"Dido's Schim",
+    tekst:"In de Velden der Treurenden, waar wie stierf voor de liefde ronddwaalt, ontmoet Aeneas Dido's schim. Ze weigert te antwoorden en wendt zich af naar haar eerste man Sychaeus — een zwijgen dat exact spiegelt aan Ajax' weigering om Odysseus te vergeven." },
+  codex_anchises_stoet: { cat:"mythologie", titel:"Anchises en de Stoet der Romeinen",
+    tekst:"In de Elyzese Velden toont Anchises zijn zoon Aeneas een lange rij nog ongeboren zielen: Romulus, de koningen van Rome, de helden van de Republiek, tot Augustus toe. Zijn beroemdste les: Rome's taak is niet kunst of welsprekendheid, maar heersen door recht, de onderworpenen sparen en de hoogmoedigen neerslaan." },
+  codex_tartaros_zondaars: { cat:"mythologie", titel:"De Vier Zondaars van Tartaros",
+    tekst:"Tantalos (eeuwige honger en dorst, om zijn zoon aan de goden voor te zetten), Sisyphos (een eeuwig terugrollend rotsblok, om de dood te slim af te zijn), Ixion (een brandend, draaiend wiel, om Hera te begeren) en de Danaïden (een eeuwig lekkende kruik, om hun bruidegoms te vermoorden) — de vier beroemdste eeuwige straffen uit de klassieke onderwereld." },
+  codex_orpheus_eurydice: { cat:"mythologie", titel:"Orpheus en Eurydice",
+    tekst:"Orpheus, de zanger van de Argonautentocht, daalt levend af naar de onderwereld om zijn overleden vrouw Eurydice terug te halen — en wint zelfs Hades en Persephone met zijn lied. Op de valreep, twijfelend of ze hem wel volgt, kijkt hij om en verliest haar voorgoed, voor de tweede en laatste keer." },
+  codex_sirenen: { cat:"mythologie", titel:"De Sirenen",
+    tekst:"Wezens wier lied geen enkele zeeman ooit heeft weerstaan. Odysseus laat zich vastbinden aan de mast om het lied wél te horen zonder overboord te kunnen springen — de enige sterveling die de Sirenen ooit hoorde zingen en het overleefde." },
+  codex_terug_naar_licht: { cat:"mythologie", titel:"De Poort van Ivoor",
+    tekst:"Er zijn twee poorten waardoor dromen (en, in Aeneas' geval, de levenden) de onderwereld verlaten: de Poort van Hoorn voor ware dromen, de Poort van Ivoor voor valse. Vergilius laat Aeneas uitgerekend door de Poort van Ivoor naar boven gaan — een detail waar geleerden al eeuwen over discussiëren." },
+  codex_thrinacia: { cat:"mythologie", titel:"De Runderen van Helios",
+    tekst:"Op Thrinacia grazen de heilige runderen van de zonnegod Helios. Ondanks Tiresias' en Kirke's waarschuwingen slachten Odysseus' hongerige mannen er een deel van — waarna Zeus, op Helios' eis, hun schip met een bliksem verbrijzelt. Odysseus overleeft als enige." },
+  codex_calypso: { cat:"mythologie", titel:"Calypso",
+    tekst:"De nimf Calypso redt Odysseus na de ramp bij Thrinacia en biedt hem onsterfelijkheid als hij bij haar blijft. Hij weigert, en blijft toch jarenlang op haar eiland Ogygia vastzitten — niet als gevangene in ketenen, maar evenmin als vrij man." },
+  codex_latium_aankomst: { cat:"mythologie", titel:"Oorlog en Vrede in Latium",
+    tekst:"Aeneas' aankomst in Latium verloopt aanvankelijk vreedzaam — koning Latinus herkent hem als de vreemdeling uit een oude profetie — tot Juno, via de Furie Allecto, een oorlog ontketent met de plaatselijke vorst Turnus. Na Pallas' dood en een laatste tweegevecht wint Aeneas, sticht Lavinium, en trouwt met Latinus' dochter Lavinia." },
+  codex_grammatica_ch11_participium: { cat:"grammatica", titel:"Grammatica: het Griekse participium",
+    tekst:"Het participium is een werkwoordsvorm die als bijvoeglijk naamwoord functioneert — het beschrijft een handelende of ondergane actie zonder een apart voegwoord nodig te hebben. 'Ὁ λέγων' is letterlijk 'de zeggende', maar vertaalt meestal met een bijzin: 'hij die zegt' of 'terwijl hij zegt'.",
+    table:{ headers:["Vorm","Betekenis","Voorbeeld"],
+      rows:[["λέγων (mnl.)","zeggend, hij die zegt","ὁ λέγων ἀνήρ — de man die spreekt"],
+            ["λέγουσα (vr.)","zeggend, zij die zegt","ἡ λέγουσα γυνή — de vrouw die spreekt"],
+            ["λῦσᾱς (aorist)","nadat hij losgemaakt had","λύσας ἀπῆλθεν — nadat hij had losgemaakt, ging hij weg"]] } },
+  codex_grammatica_ch11_genitivus_absolutus: { cat:"grammatica", titel:"Grammatica: de genitivus absolutus",
+    tekst:"Een genitivus absolutus is een participium samen met zijn eigen onderwerp, allebei in de genitivus, die als los, onafhankelijk zinsdeel de omstandigheden van de hoofdzin beschrijft — tijd, oorzaak of omstandigheid, zonder eigen voegwoord. Vergelijkbaar met de Latijnse ablativus absolutus, maar dan in de genitivus.",
+    table:{ headers:["Grieks","Letterlijk","Natuurlijke vertaling"],
+      rows:[["τούτων λεχθέντων","van deze dingen, gezegd zijnde","nadat dit gezegd was / toen dit gezegd was"],
+            ["τοῦ θεοῦ κελεύοντος","van de god, bevelend","omdat/terwijl de god het beval"]] } },
+  codex_grammatica_ch11_participium_latijn: { cat:"grammatica", titel:"Grammatica: het Latijnse participium praesens actief",
+    tekst:"Het participium praesens actief beschrijft een handeling die tegelijk met de hoofdzin plaatsvindt — 'ridens' (lachend) in plaats van een aparte bijzin 'terwijl ze lacht'. Vorming: werkwoordsstam + -ns (1e/2e conjugatie) of -ens (3e/4e conjugatie).",
+    table:{ headers:["Werkwoord","Participium (nom. enk.)","Vertaling"],
+      rows:[["ridere (lachen)","ridens","lachend"],
+            ["sedere (zitten)","sedens","zittend"],
+            ["venire (komen)","veniens","komend"]] } },
+  codex_grammatica_ch11_ablativus_absolutus: { cat:"grammatica", titel:"Grammatica: de ablativus absolutus",
+    tekst:"Een ablativus absolutus is een participium samen met zijn eigen onderwerp, allebei in de ablativus, die als los, onafhankelijk zinsdeel de omstandigheden van de hoofdzin beschrijft — tijd, oorzaak of omstandigheid, zonder eigen voegwoord. De Latijnse tegenhanger van de Griekse genitivus absolutus, maar dan in de ablativus.",
+    table:{ headers:["Latijn","Letterlijk","Natuurlijke vertaling"],
+      rows:[["Mercurio dicente","Mercurius, zeggend","terwijl/nadat Mercurius sprak"],
+            ["sole oriente","de zon, opkomend","toen/terwijl de zon opkwam"]] } },
+  codex_grammatica_ch11_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 11 samengevat",
+    tekst:"Dit hoofdstuk voegde het participium en de genitivus absolutus toe in het Grieks — beide manieren om een hele bijzin compact in één zinsdeel te vangen, zonder een apart voegwoord — en, aan de Latijnse kant, het participium praesens actief (Minerva deel 2, hoofdstuk 15) én de ablativus absolutus, de Latijnse tegenhanger van de Griekse genitivus absolutus (Minerva deel 2, hoofdstuk 18, hier bewust vooruitgehaald)." },
+
+  // ---- Hoofdstuk 12 — Odysseus' Wraak ----
+  codex_latium_tijdlijn: { cat:"geschiedenis", titel:"Latium: van Boerenland tot Rome",
+    tekst:"Dezelfde akkers waar de speler ooit als naamloze boer werkte, zullen eeuwenlang een lange geschiedenis dragen: eerst Aeneas' Lavinium, dan Alba Longa (gesticht door zijn zoon Ascanius), en pas daarna, generaties later, Rome zelf — gesticht door Romulus en Remus, ver na de gebeurtenissen die dit hoofdstuk toont." },
+  codex_cacus_diefstal: { cat:"mythologie", titel:"Cacus Steelt de Runderen",
+    tekst:"Terwijl Hercules slaapt met zijn buitgemaakte kudde (Geryons runderen, zijn tiende werk), steelt de vuurspuwende Cacus er acht van — en sleept ze achterstevoren zijn grot in, zodat de hoefsporen de verkeerde kant op lijken te wijzen." },
+  codex_hercules_cacus: { cat:"mythologie", titel:"Hercules Verslaat Cacus",
+    tekst:"Verraden door het geloei van zijn eigen gestolen kudde, rukt Hercules Cacus' grot open en verslaat hem met blote handen. De dankbare omwonenden richten het Ara Maxima op — een altaar dat volgens de overlevering nog stond toen hier allang een stad was gegroeid." },
+  codex_euander: { cat:"mythologie", titel:"Euander van de Palatijn",
+    tekst:"Een Arcadische balling die met een handvol volgelingen op een naburige heuvel woont — later de Palatijn, een van Rome's zeven heuvels. Herkent Hercules meteen aan zijn faam, en helpt hem het Ara Maxima stichten. In de Aeneis (Boek 8) zal hij, generaties later, ook Aeneas als bondgenoot ontvangen op dezelfde plek." },
+  codex_ara_maxima_stichting: { cat:"mythologie", titel:"De Stichting van het Ara Maxima",
+    tekst:"Hercules en Euander richten samen het grootste altaar van de streek op, als dank voor Cacus' verslagen terreur. Volgens de overlevering bleef de eredienst eeuwenlang bestaan — ook nadat hier allang een stad met de naam Rome was gegroeid." },
+  codex_grammatica_ch12_bijwoord_etc: { cat:"grammatica", titel:"Grammatica: bijwoord, genitivus op -ius, idem",
+    tekst:"Drie losse punten uit Minerva deel 2, hoofdstuk 16. Bijwoorden bij 3e-declinatie bijvoeglijke naamwoorden krijgen de uitgang -iter (celer → celeriter, snel). Negen onregelmatige bijvoeglijke naamwoorden (unus, solus, totus, ullus, nullus, alius, uter, neuter, alter) hebben in de genitivus enkelvoud altijd -ius, ongeacht het geslacht. Idem (dezelfde) is is + de onveranderlijke toevoeging -dem.",
+    table:{ headers:["Vorm","Voorbeeld","Vertaling"],
+      rows:[["Bijwoord op -iter","celeriter","snel"],
+            ["Genitivus op -ius","nullius","van niemand"],
+            ["Idem (mnl. nom. enk.)","idem","dezelfde"]] } },
+  codex_grammatica_ch12_acp: { cat:"grammatica", titel:"Grammatica: de accusativus cum participio (ACP)",
+    tekst:"Na een werkwoord van waarneming (audire, videre, sentire) staat in het Latijn geen A.C.I. (accusativus + infinitivus, zoals bij zeggen/menen/weten), maar een ACP: accusativus + participium. Het verschil zit in wát je waarneemt — niet dát iets het geval is, maar iemand die iets aan het DOEN is, terwijl je het waarneemt.",
+    table:{ headers:["Vorm","Voorbeeld","Vertaling"],
+      rows:[["ACP (accusativus + participium)","boves mugientes audivit","hij hoorde de runderen loeien"],
+            ["ter vergelijking: A.C.I. (Hoofdstuk 9)","boves abisse audivit","hij hoorde dat de runderen weg waren"]] } },
+  codex_grammatica_ch12_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 12 samengevat",
+    tekst:"Dit hoofdstuk toont Minerva deel 2, hoofdstuk 16: het bijwoord op -iter, de negen onregelmatige bijvoeglijke naamwoorden met genitivus op -ius, het pronomen idem (dezelfde), en de accusativus cum participio (ACP) — de constructie die je gebruikt na een werkwoord van waarneming, in plaats van de A.C.I. na een werkwoord van zeggen/menen/weten. Minerva deel 1 is inmiddels al bij Hoofdstuk 9 volledig afgerond (zie codex_grammatica_ch7_conjunctivus_passief voor het laatste puzzelstuk daarvan)." },
+  codex_ithaka_aankomst: { cat:"mythologie", titel:"Aankomst op Ithaka",
+    tekst:"Na twintig jaar zetten de Faiaken Odysseus eindelijk aan land op zijn eigen eiland, slapend. Athena verhult het landschap in mist tot ze zeker weet dat hij alleen is, onthult zich dan, en verandert hem in een oude bedelaar zodat hij ongezien zijn eigen, door vrijers overgenomen paleis kan verkennen." },
+  codex_eumaeus: { cat:"mythologie", titel:"Eumaeus, de Trouwe Zwijnenhoeder",
+    tekst:"Een van de weinige dienaren die Odysseus al die jaren trouw is gebleven. Zonder zijn eigen koning in de haveloze bedelaar te herkennen, deelt hij toch onvoorwaardelijk zijn karige maaltijd — precies de gastvrijheid die de vrijers in het paleis allang zijn verleerd." },
+
+  // ---- Vier nieuwe grammaticatabellen (2026-07-31), verplaatst vanuit
+  // Hoofdstuk 10-12 zodat Minerva deel 1 volledig is afgerond bij
+  // Hoofdstuk 9 — zie Chronica.md §7.38 en het geheugensysteem,
+  // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk.
+  codex_grammatica_ch5_ppf_conjunctivus: { cat:"grammatica", titel:"Grammatica: plusquamperfectum en conjunctivus in de bijzin",
+    tekst:"Het plusquamperfectum ('had gedaan') drukt uit dat iets al gebeurd was vóór een ander verledenmoment: perfectumstam + -eram/-eras/-erat enz. Een cum-bijzin die de omstandigheden schetst (cum historicum/iterativum) staat niet in de indicativus maar in de conjunctivus.",
+    table:{ headers:["Vorm","Voorbeeld","Vertaling"],
+      rows:[["Plusquamperfectum","posuerat","hij had gelegd"],
+            ["Conjunctivus imperfectum (cum-bijzin)","peteret","toen/telkens als hij opzocht"]] } },
+  codex_grammatica_ch6_passief: { cat:"grammatica", titel:"Grammatica: het Latijnse passief",
+    tekst:"In het passief ondergaat het onderwerp de handeling, in plaats van hem te verrichten — 'de vloek wordt geplant' in plaats van 'iemand plant de vloek'. Praesens en imperfectum passief krijgen eigen persoonsuitgangen (-or/-ris/-tur enz.); perfectum en plusquamperfectum passief worden samengesteld met het participium perfectum passief (ppp) en een vorm van esse.",
+    table:{ headers:["Tijd","Vorm (exponere, blootstellen)","Vertaling"],
+      rows:[["Praesens","exponitur","hij wordt blootgesteld"],
+            ["Perfectum","expositus est","hij is/werd blootgesteld"]] } },
+  codex_grammatica_ch7_deponentia: { cat:"grammatica", titel:"Grammatica: deponentia",
+    tekst:"Deponentia zijn werkwoorden die er in elke tijd passief uitzien, maar altijd een actieve betekenis hebben — 'secutus est' betekent 'hij volgde', niet 'hij werd gevolgd'. Veelvoorkomende deponentia: sequi (volgen), loqui (spreken), morari (dralen), hortari (aansporen)." },
+  codex_grammatica_ch7_betrekkelijk: { cat:"grammatica", titel:"Grammatica: het betrekkelijk voornaamwoord",
+    tekst:"Het betrekkelijk voornaamwoord (qui, quae, quod) leidt een bijzin in die iets toevoegt over een eerder genoemd woord (het antecedent). Geslacht en getal komen van het antecedent; de naamval hangt af van de eigen functie in de bijzin.",
+    table:{ headers:["Naamval","Mannelijk","Vrouwelijk","Onzijdig"],
+      rows:[["Nominativus","qui","quae","quod"],
+            ["Accusativus","quem","quam","quod"],
+            ["Genitivus","cuius","cuius","cuius"]] } },
+  codex_grammatica_ch7_conjunctivus_passief: { cat:"grammatica", titel:"Grammatica: conjunctivus passief in de bijzin",
+    tekst:"Net als de gewone conjunctivus in de bijzin (cum-bijzin) kan ook het passief in de conjunctivus staan — ppp + conjunctivus van esse (essem/esses/esset enz.) in plaats van indicativus. Hiermee is Minerva deel 1 volledig afgerond.",
+    table:{ headers:["Vorm","Voorbeeld","Vertaling"],
+      rows:[["Conjunctivus plusquamperfectum passief","solutum esset","het (was) ingelost"]] } },
+  codex_grammatica_ch10_naamwoord_groep45: { cat:"grammatica", titel:"Grammatica: naamwoord groep 4/5, hic/ipse",
+    tekst:"De 4e declinatie (u-stam, zoals manus) en 5e declinatie (e-stam, zoals dies) hebben elk hun eigen uitgangenreeks. Ille (die, gene) en is/ea/id ken je al sinds Hoofdstuk 8 — hic (deze, dit) is de nieuwe tegenhanger van dat al bekende ille, en ipse (zelf) is een versterkend voornaamwoord. Beide verbuigen, net als ille, door alle naamvallen.",
+    table:{ headers:["Woord","Declinatie","Voorbeeld"],
+      rows:[["manus, manus (hand)","4e (u-stam)","manum (acc. enk.)"],
+            ["dies, diei (dag)","5e (e-stam)","die (abl. enk.)"],
+            ["hic (deze, dit)","voornaamwoord","hic homo — deze man"],
+            ["ipse (zelf)","voornaamwoord","Aeneas ipse — Aeneas zelf"]] } },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -1781,7 +2112,8 @@ const SP_CODEX_PERSONS = {
   phoenix: { nm:"Phoenix", epithet:"Achilles' oude leermeester",
     intro:"Een oude vriend van Peleus die Achilles al opvoedde toen hij nog een kind was — en die, als lid van het gezantschap, met persoonlijke herinneringen probeert te bereiken wat argumenten niet kunnen." },
   aias: { nm:"Ajax (Aias)", epithet:"Zoon van Telamon, na Achilles de sterkste Griek",
-    intro:"Telamons zoon (je kent zijn vader al van de Argonautentocht) — een reus van een man, niet welbespraakt maar onwrikbaar eerlijk, die als lid van het gezantschap geen mooie woorden gebruikt, enkel een simpel beroep op vriendschap en plicht." },
+    intro:"Telamons zoon (je kent zijn vader al van de Argonautentocht) — een reus van een man, niet welbespraakt maar onwrikbaar eerlijk, die als lid van het gezantschap geen mooie woorden gebruikt, enkel een simpel beroep op vriendschap en plicht.",
+    full:"Na Achilles' dood streden Ajax en Odysseus om diens wapenrusting — de Grieken kenden haar aan Odysseus toe, en de vernedering sloeg Ajax met een waanzin die hem uiteindelijk zijn eigen zwaard in het lijf deed zetten. In de onderwereld weigert zijn schim nog altijd met Odysseus te spreken, en wendt zich zwijgend af — de enige schim die zich niet laat verzoenen." },
   antilochos: { nm:"Antilochos", epithet:"Zoon van Nestor",
     intro:"Nestors jonge zoon (je kent zijn vader al van de Argonautentocht), die de zwaarste boodschap van de hele oorlog moet overbrengen: het nieuws van Patroklos' dood aan Achilles zelf.",
     full:"Antilochos overleefde Patroklos' dood niet lang: Memnon, de Ethiopische bondgenoot van Troje, doodde hem in het gevecht dat volgde — en werd daarvoor zelf door een woedende Achilles geveld. Twee generaties Argonauten (zijn vader Nestor voer nog met de Argo) eindigen met Antilochos zelf, gestorven vóór Troje's val." },
@@ -1812,6 +2144,40 @@ const SP_CODEX_PERSONS = {
   deiphobos: { nm:"Deiphobos", epithet:"Trojaanse prins, broer van Hector en Paris",
     intro:"Een van Priamus' overgebleven zonen, die na Paris' dood Helena's hand opeist — en daarmee zijn eigen broer Helenus tegen zich in het harnas jaagt.",
     full:"Deiphobos trouwt met Helena zodra Priamus haar aan hem toewijst, in een stad die inmiddels twee prinsen in twee weken heeft begraven — een huwelijk zonder enige vreugde, geregeld op een moment dat niemand in Troje nog iets te vieren heeft." },
+
+  // ---- Hoofdstuk 10 — Vluchten uit Troje ----
+  polyfemos: { nm:"Polyphemus", epithet:"Kykloop, zoon van Poseidon",
+    intro:"Een eenogige reus die in een grot langs de kust zijn kudden hoedt, groter en gevaarlijker dan enige sterveling die Odysseus' mannen ooit zijn tegengekomen.",
+    full:"Verblind door Odysseus en zijn mannen nadat hij twee van hen had opgegeten, brulde Polyphemus zijn mede-Kyklopen tevergeefs om hulp — zijn belager had zich immers 'Niemand' genoemd. Toen Odysseus, eenmaal veilig op zee, alsnog zijn ware naam schreeuwde, bad de verminkte reus zijn vader Poseidon om wraak: een thuisreis die eindeloos lang zou duren, alleen, alle metgezellen verloren." },
+  achaemenides: { nm:"Achaemenides", epithet:"Achtergelaten bemanningslid van Odysseus",
+    intro:"Een uitgemergelde Griek die uit de rotsen van Sicilië tevoorschijn komt, meer bang voor de Kyklopen om hem heen dan voor de Trojanen die hij ooit als vijand kende.",
+    full:"Door zijn eigen kapitein vergeten toen die haastig vluchtte voor een verblinde Kykloop, overleefde Achaemenides drie maanden alleen op Sicilië's kust — tot Aeneas' vloot hem vond en, ondanks dat hij ooit een vijand was, aan boord nam. Zijn verhaal is het enige rechtstreekse bewijs dat Aeneas ooit krijgt van wat Odysseus op dit eiland is overkomen." },
+  dido: { nm:"Dido", epithet:"Koningin van Carthago",
+    intro:"Een koningin die zelf ooit vluchtte — voor een broer die haar man vermoordde om zijn goud — en die nu, met dezelfde vastberadenheid, een nieuwe stad uit het niets optrekt aan de kust van Libië.",
+    full:"Dido verwelkomde Aeneas als een gelijke, en werd — door Cupido's toedoen, buiten haar eigen weten om — hopeloos verliefd. Toen Jupiter Aeneas dwong te vertrekken, koos ze de brandstapel boven een leven zonder hem, en riep met haar laatste adem een vloek af over zijn hele nageslacht: een wreker uit haar eigen botten, die generaties later als Carthago's grootste generaals tegen Rome zou opstaan." },
+
+  // ---- Hoofdstuk 11 — Tussen Liefde en Lot ----
+  kirke: { nm:"Kirke (Circe)", epithet:"Tovenares, dochter van Helios",
+    intro:"Een tovenares die alleen op haar eigen eiland woont, omringd door tamme leeuwen en wolven die ooit iets anders waren — en die haar bezoekers liever als dier dan als gast ontvangt.",
+    full:"Kirke veranderde Odysseus' verkenners in zwijnen met een enkele aanraking van haar staf, maar werd zelf overmeesterd toen Odysseus, beschermd door Hermes' kruid moly, ongedeerd bleef. Verslagen keerde ze om: ze brak haar eigen betovering, hield de hele bemanning een vol jaar als eregasten, en stuurde Odysseus uiteindelijk, met tegenzin maar zonder hem iets te verzwijgen, naar de enige plek die hem verder kon helpen — de onderwereld zelf." },
+  elpenor: { nm:"Elpenor", epithet:"Jongste bemanningslid van Odysseus",
+    intro:"De jongste en minst ervaren van Odysseus' overgebleven mannen — meer bekend om zijn pech dan om zijn moed." },
+  tiresias: { nm:"Tiresias", epithet:"Blinde ziener van Thebe",
+    intro:"Een blinde ziener, zelfs in de dood nog begiftigd met zijn volle verstand — een gunst van Persephone zelf, die geen enkele andere schim in de onderwereld deelt." },
+  anticlea: { nm:"Anticlea", epithet:"Moeder van Odysseus",
+    intro:"Odysseus' eigen moeder, die nog in leven was toen hij naar Troje vertrok — twintig jaar wachten op een zoon die niet terugkeerde, bleek uiteindelijk meer dan haar hart kon dragen." },
+  anchises: { nm:"Anchises", epithet:"Aeneas' vader, ooit Venus' minnaar",
+    intro:"Aeneas' oude vader, die zijn zoon de brandende straten van Troje uit droeg op zijn eigen rug — een sterveling die ooit, kort, de liefde van de godin Venus zelf won.",
+    full:"Anchises stierf vreedzaam in Drepanum, Sicilië (Hoofdstuk 10), na de hele tocht met zijn zoon te hebben gedeeld. In de Elyzese Velden toont zijn schim Aeneas de lange stoet van nog ongeboren Romeinen die uit hem zullen voortkomen — van Romulus tot Augustus — en de taak die Rome, in zijn woorden, boven alle andere volken zal onderscheiden: heersen door recht, de onderworpenen sparen, de hoogmoedigen neerslaan." },
+
+  // ---- Hoofdstuk 12 — Odysseus' Wraak ----
+  cacus: { nm:"Cacus", epithet:"Vuurspuwende zoon van Vulcanus",
+    intro:"Een half mens, half monster, zoon van de smid-god Vulcanus, die vanuit zijn grot op de heuvels van het latere Rome al jaren de omgeving terroriseert.",
+    full:"Cacus stal acht van Hercules' pas buitgemaakte runderen en sleepte ze achterstevoren zijn grot in om de sporen te misleiden — een list die faalde toen de gestolen dieren zelf, loeiend, hun eigen verstopplek verraadden. Hercules rukte de grot open en versloeg hem met blote handen; de dankbare omwonenden richtten er het Ara Maxima op, een altaar dat naar verluidt nog eeuwen later overeind zou staan." },
+  telemachus: { nm:"Telemachus", epithet:"Odysseus' zoon",
+    intro:"Odysseus' zoon, nog een baby toen zijn vader naar Troje vertrok — inmiddels een jongeman, opgegroeid tussen meer dan honderd vrijers die zijn moeders hand opeisen en zijn eigen paleis leegplunderen." },
+  euander: { nm:"Euander", epithet:"Arcadische balling op de Palatijnse heuvel",
+    intro:"Een Arcadische balling die met een handvol volgelingen op een naburige heuvel woont — te bang voor Cacus om zelf iets te ondernemen, maar meteen bereid Hercules als bevrijder te herkennen en te eren." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -1848,7 +2214,7 @@ const SP_FRAGMENTS = {
    souvenirs zijn juist bedoeld om gezien te worden. Sinds het einde van
    Hoofdstuk 6 (CH6_MUSEUM_01) heeft de speler het Museum van Mnemosyne ook
    echt bezocht en bij naam leren kennen — maar wie/wat het precies is en
-   waarom het bestaat, blijft bewust onbeantwoord tot Hoofdstuk 26 "De
+   waarom het bestaat, blijft bewust onbeantwoord tot Hoofdstuk 21 "De
    Bibliotheek van Mnemosyne" (SP_CAMPAIGN): dát is nog steeds de echte
    onthulling, dit is pas de eerste kennismaking.
    `img` optioneel (relatief aan assets/chronica/souvenirs/, nog geen
@@ -1888,6 +2254,12 @@ const SP_SOUVENIRS = {
     caption:"Een klein stukje brons, afgebroken van de rand van het schild dat Vulcanus voor Achilles smeedde — met, nog net zichtbaar, een fragment van een dansende figuur uit de wereld die erop staat afgebeeld." },
   souvenir_trojaans_paard: { nm:"Een Splinter van het Trojaanse Paard", icon:"🐴", img:"souvenir_trojaans_paard.png",
     caption:"Een stuk verkoold hout, van het paard dat een oorlog van tien jaar deed waar geen enkel wapen in slaagde." },
+  souvenir_twee_zeeen: { nm:"Een Fles Water uit Twee Zeeën", icon:"🌊", img:"souvenir_twee_zeeen.png",
+    caption:"Zeewater dat nooit lijkt te verdampen — gevangen ergens tussen Odysseus' tien jaar op zee en Aeneas' zoektocht naar een thuis dat nog niet bestond." },
+  souvenir_twee_deuren: { nm:"Een Buidel Aarde en As", icon:"⚱️", img:"souvenir_twee_deuren.png",
+    caption:"Aarde van Ogygia, waar Odysseus vastzit, gemengd met as van de brandstapel waarop Dido stierf — twee reizen door het rijk van de doden, in één kleine buidel bewaard." },
+  souvenir_ara_maxima: { nm:"Een Steen van het Ara Maxima", icon:"🏛️", img:"souvenir_ara_maxima.png",
+    caption:"Een stuk steen van het altaar dat de bewoners van Latium oprichtten nadat Hercules hen van Cacus verloste — eeuwen voor hier ooit een stad zou staan." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -2214,6 +2586,20 @@ const SP_VOCAB_ENTRIES = {
   latijn_fortis:    { taal:"latijn", woord:"fortis, forte", betekenis:"sterk, dapper" },
   latijn_discedere: { taal:"latijn", woord:"discedere (discessit)", betekenis:"weggaan, vertrekken" },
   latijn_maestus:   { taal:"latijn", woord:"maestus, maesta, maestum", betekenis:"bedroefd, treurig" },
+
+  // ---- Hoofdstuk 11 — Tussen Liefde en Lot ----
+  grieks_nostos:    { taal:"grieks", woord:"νόστος", transcript:"nóstos", betekenis:"thuiskomst (het centrale woord van de hele Odyssee)" },
+  grieks_xenia:     { taal:"grieks", woord:"ξενία", transcript:"xenía", betekenis:"gastvrijheid" },
+  grieks_pharmakon: { taal:"grieks", woord:"φάρμακον", transcript:"phármakon", betekenis:"toverdrank, medicijn" },
+  grieks_skia:      { taal:"grieks", woord:"σκιά", transcript:"skiá", betekenis:"schaduw, schim" },
+  grieks_thanatos:  { taal:"grieks", woord:"θάνατος", transcript:"thánatos", betekenis:"dood" },
+  grieks_mantis:    { taal:"grieks", woord:"μάντις", transcript:"mántis", betekenis:"ziener, profeet" },
+  latijn_regina:    { taal:"latijn", woord:"regina, reginae", betekenis:"koningin" },
+  latijn_pietas:    { taal:"latijn", woord:"pietas, pietatis", betekenis:"plichtsbesef, vroomheid (Aeneas' kernwaarde)" },
+  latijn_umbra:     { taal:"latijn", woord:"umbra, umbrae", betekenis:"schaduw, schim" },
+  latijn_fatum:     { taal:"latijn", woord:"fatum, fati", betekenis:"lot, noodlot" },
+  latijn_mors:      { taal:"latijn", woord:"mors, mortis", betekenis:"dood" },
+  latijn_vates:     { taal:"latijn", woord:"vates, vatis", betekenis:"ziener, dichter" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -2329,6 +2715,51 @@ const SP_PAYOFFS = [
     content:{text:`"Πάτροκλος ἀπέθανεν" — dat was het hele nieuws, drie woorden maar. Kijkend naar wat Achilles zojuist met Hectors lichaam doet, besef je: dát is precies waarom hij geen greintje genade meer over heeft.`} },
   { id:"ch9_tro011_echo_sinon_leugen", type:"echo", trigger:{scene:"CH9_TRO_011"}, priority:0,
     content:{text:`Sinons woorden klinken nog na, terwijl het paard door de bres naar binnen wordt gesleept: "de Grieken zijn vertrokken." Het is, besef je, het laatste wat deze stad ooit voor waar zal aannemen.`} },
+  // ---- Hoofdstuk 11 — de onderwereld-reünie (§7.19/§12): CH11_SCHIMMEN is
+  // een gedeeld, taalspoor-onafhankelijk knooppunt (bereikt door zowel de
+  // Odysseus- als de Aeneas-lijn) waar de SPELER zelf, los van de held die
+  // hij net volgde, de schimmen tegenkomt van personages met wie een
+  // relatie is opgebouwd — positief of negatief, Gerbens verzoek
+  // (2026-07-31). Priamus/Deiphobos gebruiken de bestaande relationMin/Max
+  // (Hoofdstuk 9); Patroklos/Hector hergebruiken de ch8_zijde-vlag als
+  // enige beschikbare signaal (er is geen losse RELATION voor die twee);
+  // Tydeus (Hoofdstuk 6) en Kleine Ajax/Oïleus (Hoofdstuk 9, alleen op de
+  // Griekse kant) zijn eenvoudige flagsSet-echo's zonder relatienuance,
+  // want daar bestaat geen RELATION-track voor. Agamemnon/Achilles/Ajax
+  // (Telamon)/Dido kregen al hun eigen, mythologisch vaste ontmoeting
+  // eerder in het hoofdstuk (CH11_ODY_008/_009, CH11_AEN_007) en worden
+  // hier bewust niet herhaald.
+  { id:"ch11_schimmen_priamus_warm", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
+    condition:{relationMin:{priamus:1}}, priority:0,
+    content:{text:`Priamus' schim herkent je meteen — dezelfde man die ooit, tegen alle raad in, een vijandenkamp binnenliep voor zijn zoon. "Jij was er," zegt hij, "op de momenten dat het makkelijker was om weg te kijken." Het is geen koning meer die tegen je spreekt, alleen een vader die niet vergeten is wie hem toen zag.`} },
+  { id:"ch11_schimmen_priamus_koel", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
+    condition:{relationMax:{priamus:-1}}, priority:0,
+    content:{text:`Priamus' schim werpt je een korte, onleesbare blik toe — geen woede, alleen een oud soort vermoeidheid. Hij onthoudt ook de koelere momenten, de keren dat jouw blik verstrakte in plaats van meeleefde. Zelfs hier, tussen de doden, blijft dat iets tussen jullie in staan.`} },
+  { id:"ch11_schimmen_deiphobos_warm", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
+    condition:{relationMin:{deiphobos:1}}, priority:0,
+    content:{text:`Deiphobos, zijn gezicht nog altijd verminkt van de nacht dat Menelaos hem vond, buigt kort zijn hoofd naar je — hij herinnert zich dat jij, van iedereen, hem ooit zachter behandelde dan hij misschien verdiende.`} },
+  { id:"ch11_schimmen_deiphobos_koel", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
+    condition:{relationMax:{deiphobos:-1}}, priority:0,
+    content:{text:`Deiphobos' schim, zijn gezicht nog altijd verminkt van de nacht dat Menelaos hem vond, kijkt dwars door je heen — hij herinnert zich ook de keren dat jij niet de moeite nam om zijn kant van het verhaal te horen.`} },
+  { id:"ch11_schimmen_patroklos_hektor_achilles", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
+    condition:{flags:{ch8_zijde:"achilles"}}, priority:0,
+    content:{text:`Twee schimmen, onafscheidelijk zelfs hier: Patroklos, nog altijd met Achilles' geleende wapenrusting om zich heen, en niet ver daarvandaan Hector, die hem droeg toen hij hem versloeg. Jij was erbij, in de tent, de dagen dat het verlies nog vers was — en beiden lijken dat te weten, ieder op hun eigen, stille manier.`} },
+  { id:"ch11_schimmen_patroklos_hektor_agamemnon", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
+    condition:{flags:{ch8_zijde:"agamemnon"}}, priority:0,
+    content:{text:`Twee schimmen, ooit vijanden, nu allebei stil: Patroklos, en niet ver daarvandaan Hector, die hem doodde in de overtuiging dat hij Achilles versloeg. Jij zag hun beider dood van een afstand, tussen het leger op het strand — dichtbij genoeg om het gewicht te voelen, ver genoeg om het nooit helemaal je eigen verdriet te kunnen noemen.`} },
+  { id:"ch11_schimmen_tydeus", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
+    condition:{flagsSet:["dood_tydeus"]}, priority:0,
+    content:{text:`Tussen de schimmen ontwaar je ook Tydeus — de eerste dode die je op deze hele reis van dichtbij meemaakte, lang voor Troje ooit een naam voor je was. Zijn woeste, onstuimige aard is zelfs hier nog voelbaar, ook al is er niets meer over om tegen te vechten.`} },
+  { id:"ch11_schimmen_kleine_ajax", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
+    condition:{flagsSet:["dood_aias"]}, priority:0,
+    content:{text:`Ook Aias, zoon van Oïleus, doemt even op — de man wiens heiligschennis tegen Cassandra zijn eigen ondergang bezegelde, verdronken op bevel van goden die hij zelf had beledigd. Zijn schim zoekt geen oogcontact, geen verzoening — alleen stilte, net als bij Ajax van Telamon, maar dan zonder een greintje van diens waardigheid.`} },
+  // ---- Didactiek-audit punt 9 (§7.36): een "na"-echo voor de B23 passieve
+  // taallaag (Hoofdstuk 10's "Sunt lacrimae rerum"-moment, CH10_AEN_009)
+  // — onvoorwaardelijk, want elke Aeneas-spelende taalspoor-track zag die
+  // scène al gegarandeerd voor ze hier aankomt, zelfde redenering als de
+  // Peleus/Philoktetes-echo's in Hoofdstuk 7 (§7.13).
+  { id:"ch11_aen007_echo_lacrimae_rerum", type:"echo", trigger:{scene:"CH11_AEN_007"}, priority:0,
+    content:{text:`"Sunt lacrimae rerum," dacht Aeneas nog, starend naar de tempelmuur in Carthago — er zijn tranen voor de dingen. Hij kon toen niet weten hoe letterlijk dat woord nog zou worden: hier, in de onderwereld, zijn het geen geschilderde taferelen meer die hem raken, maar Dido zelf.`} },
 ];
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -4147,7 +4578,7 @@ TITLE:
 Niemand Die Helpen Kan
 
 TEXT:
-Latona rent zo hard haar zwangere lichaam het toelaat, de python akelig dichtbij, en overal om haar heen wijken mensen simpelweg opzij — niemand die het aandurft zich tussen haar en Juno's wraak te plaatsen.
+Latona rent zo hard haar zwangere lichaam het toelaat, de python akelig dichtbij, en overal om haar heen wijken mensen simpelweg opzij — niemand die het aandurft zich tussen haar en Juno's wraak te plaatsen. "[[Latona fugit|Latona vlucht]]," fluistert een omstander, meer tegen zichzelf dan tegen iemand anders — alsof hardop benoemen wat er gebeurt het lot nog kan afwenden.
 
 PUZZLE:
 puzzle_ch2l_posse
@@ -7649,7 +8080,7 @@ VOCAB:
 latijn_navis, latijn_mare, latijn_vellus, latijn_draco, latijn_populus, latijn_malleus, latijn_aper, latijn_regit, latijn_vulnerat, grieks_toxon, grieks_thalassa, grieks_pleo, grieks_gyne, grieks_philos, grieks_deinos
 
 CODEX:
-codex_gulden_vlies
+codex_gulden_vlies, codex_grammatica_ch5_ppf_conjunctivus
 
 CHOICES:
 
@@ -7853,6 +8284,9 @@ Achter de Argo verdwijnt Iolcus langzaam in de nevel, en voor haar strekt zich e
 FLAG:
 ch5_bemanning_uitrusting=true
 
+PUZZLE:
+puzzle_ch5_ppf1
+
 CHOICES:
 
 * Vaar de open zee op -> CH5_007
@@ -7871,6 +8305,9 @@ Twee van de jongste helden aan boord melden zich meteen: Atalanta, opgevoed door
 
 PERSON:
 atalanta:intro, meleager:intro
+
+PUZZLE:
+puzzle_ch5_ppf2
 
 CHOICES:
 
@@ -8046,6 +8483,9 @@ Twee broers stappen meteen naar voren: Kastor, de beste ruiter van Griekenland, 
 PERSON:
 kastor_polydeukes:intro
 
+PUZZLE:
+puzzle_ch5_conj1
+
 CHOICES:
 
 * Kijk wat Amycus over zijn eigen rijk te zeggen heeft voor het gevecht begint -> CH5_012
@@ -8116,13 +8556,16 @@ Herakles Blijft Achter
 TEXT:
 Bij Mysië gaat Herakles aan land om een nieuwe roeiriem te snijden, met zijn jonge metgezel Hylas mee om water te halen. Hylas keert nooit terug — de waternimfen van de bron waar hij put, betoveren hem en trekken hem mee de diepte in, verliefd op zijn schoonheid.
 
-Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke aanmaning om terug aan boord te komen. Tegen de ochtend besluit de bemanning, met tegenzin, zonder hem verder te varen — Herakles, wanneer hij eindelijk het strand terugvindt en het schip al weg ziet, blijft alleen achter, zijn zoektocht naar Hylas nog altijd niet opgegeven.
+Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke aanmaning om terug aan boord te komen. "[[Redi!|Kom terug!]]" roept Telamon nog, meer dan eens, zonder enig effect. Tegen de ochtend besluit de bemanning, met tegenzin, zonder hem verder te varen — Herakles, wanneer hij eindelijk het strand terugvindt en het schip al weg ziet, blijft alleen achter, zijn zoektocht naar Hylas nog altijd niet opgegeven.
 
 IMAGE:
 hylas_nimfen.png
 
 PERSON:
 hylas:full
+
+PUZZLE:
+puzzle_ch5_conj2
 
 CHOICES:
 
@@ -8820,7 +9263,7 @@ VOCAB:
 latijn_habere, latijn_recusare, latijn_sepelire, latijn_regnum, latijn_frater, latijn_quadrupes, grieks_bakchos, latijn_liberi
 
 CODEX:
-codex_kadmos_thebe
+codex_kadmos_thebe, codex_grammatica_ch6_passief
 
 CHOICES:
 
@@ -8912,6 +9355,9 @@ TEXT:
 Het valt je meteen op: dezelfde soort drakentanden hoorde je Aeëtes al noemen, ver naar het oosten in Colchis, toen Jason zijn beproevingen moest doorstaan. Eén draak, twee koningen, generaties en een hele wereld uit elkaar — allebei met precies dezelfde gewapende-mannen-uit-de-aarde-truc.
 
 "Zo werkt een vloek soms," zegt Athena. "Hij plant zichzelf, letterlijk, en wacht dan gewoon af wie hem opgraaft."
+
+PUZZLE:
+puzzle_ch6_passief_praesens
 
 CHOICES:
 
@@ -9018,6 +9464,9 @@ Het kind overleeft. Een herder vindt de baby, en uiteindelijk groeit hij op aan 
 
 PERSON:
 laius:intro, oedipus:intro
+
+PUZZLE:
+puzzle_ch6_perfectum_passief
 
 CHOICES:
 
@@ -9866,6 +10315,9 @@ De Boodschapper laat een korte stilte vallen voor ze verdergaat — de soort sti
 VOCAB:
 latijn_iurare, latijn_bellum, grieks_kalliste, latijn_rapere, latijn_classis, latijn_ventus, latijn_sacrificium, latijn_deus, latijn_amor, latijn_pater, latijn_spes
 
+CODEX:
+codex_grammatica_ch7_deponentia, codex_grammatica_ch7_betrekkelijk, codex_grammatica_ch7_conjunctivus_passief
+
 CHOICES:
 
 * Stap de herinnering in -> CH7_001
@@ -9887,6 +10339,9 @@ leda_zwaan.png
 
 PERSON:
 leda:intro
+
+PUZZLE:
+puzzle_ch7_deponens
 
 CODEX:
 codex_leda_zwaan
@@ -10289,6 +10744,9 @@ Herders vinden het kind voor de elementen hun werk kunnen doen, en brengen het g
 
 Op een dag, ver van elk paleis, zal precies die eerlijkheid voor het eerst op de proef gesteld worden.
 
+PUZZLE:
+puzzle_ch7_betrekkelijk_vnw
+
 CHOICES:
 
 * Zie hoe die proef verloopt -> CH7_008
@@ -10399,6 +10857,9 @@ TEXT:
 Niet lang na zijn terugkeer wordt Paris naar Griekenland gestuurd, officieel voor staatszaken. Koning Menelaus van Sparta ontvangt hem met alle gastvrijheid die een vreemde prins toekomt — eten, onderdak, geschenken, dagenlang gastheerschap zonder één moment van wantrouwen.
 
 Wat Menelaus niet weet, is dat Aphrodite haar belofte aan Paris nog moet inlossen — en dat ze niet van plan is die belofte te vergeten, ongeacht wiens gastvrijheid ervoor moet wijken.
+
+PUZZLE:
+puzzle_ch7_conjunctivus_passief
 
 CHOICES:
 
@@ -11156,6 +11617,9 @@ Patroklos rijdt uit met de Myrmidonen, in wapenrusting die niet de zijne is, en 
 
 De stilte in de tent is nu anders dan alle stilte ervoor.
 
+PUZZLE:
+puzzle_ch8_ach_pronomen_grieks
+
 CHOICES:
 
 * Wacht op wat komen gaat -> CH8_EPI_001
@@ -11507,6 +11971,9 @@ codex_dood_patroklos
 EERETITEL:
 ch8_dood_patroklos
 
+PUZZLE:
+puzzle_ch8_aga_pronomen_grieks
+
 CHOICES:
 
 * Zie hoe het nieuws Achilles bereikt -> CH8_EPI_001
@@ -11541,7 +12008,7 @@ TITLE:
 De Rouwkreet
 
 TEXT:
-Achilles laat een kreet los die niemand ooit zal vergeten — geen woorden, enkel verdriet, zo verscheurend dat hij tot ver over het slagveld te horen is. Zijn moeder hoort hem vanuit de diepten van de zee. De Trojaanse linies, die de kreet ook horen, deinzen instinctief terug, zonder precies te begrijpen waarom.
+Achilles laat een kreet los die niemand ooit zal vergeten — geen woorden, op één uitzondering na: "[[Πάτροκλε|Patroklos!]]," schreeuwt hij, keer op keer, de naam van zijn vriend aansprekend alsof hij nog terug zou kunnen roepen wat al verloren is. Verder enkel verdriet, zo verscheurend dat het tot ver over het slagveld te horen is. Zijn moeder hoort hem vanuit de diepten van de zee. De Trojaanse linies, die de kreet ook horen, deinzen instinctief terug, zonder precies te begrijpen waarom.
 
 Achilles smeert as door zijn haar en scheurt zijn kleren — niet uit gewoonte, maar omdat er niets anders is dat het verdriet ook maar enigszins kan bevatten.
 
@@ -12370,6 +12837,9 @@ codex_penthesileia
 FLAG:
 ch9_zijde=troje
 
+PUZZLE:
+puzzle_ch9_tro_superlativus_grieks
+
 CHOICES:
 
 * Zie welke bondgenoot hierna arriveert -> CH9_TRO_002
@@ -12802,6 +13272,9 @@ Diep in de buik van het paard wacht een handvol Griekse krijgers, doodstil, op p
 
 {priamus_afscheid}
 
+PUZZLE:
+puzzle_ch9_tro_congruentie_grieks
+
 CHOICES:
 
 * Zie wat er gebeurt zodra de stad eindelijk slaapt -> CH9_TRO_013
@@ -13198,6 +13671,9 @@ Odysseus wint. Aias, die zijn hele leven zijn kracht als zijn enige ware eer bes
 CODEX:
 codex_wapenrusting_twist
 
+PUZZLE:
+puzzle_ch9_gri_comparativus_grieks
+
 CHOICES:
 
 * Zie wat Aias die nacht doet -> CH9_GRI_005
@@ -13516,6 +13992,9 @@ Het Signaal
 TEXT:
 Uren gaan voorbij. Het feestrumoer buiten sterft eindelijk weg, vervangen door een stilte die bijna even angstaanjagend is als het lawaai ervoor. Dan, eindelijk: Sinon, ongezien tot nu toe, ontsteekt een vuur op de muren — het teken waarop de hele vloot al de hele nacht wachtte, verscholen achter Tenedos.
 
+PUZZLE:
+puzzle_ch9_gri_congruentie_grieks
+
 CHOICES:
 
 * Zie het paard eindelijk zijn geheim prijsgeven -> CH9_GRI_013
@@ -13726,20 +14205,27 @@ const SP_CH10_CNS = `
 === SCENE: CH10_000 ===
 
 TITLE:
-Wat Overblijft van Troje
+Twee Bezoekers
 
 TEXT:
-"[[Ecce|zie hier]] — het tweede boek," zegt de Boodschapper, en voor het eerst wijst ze niet naar één enkele scheur in het licht, maar naar de hele horizon. "Troje is as. Wie de nacht overleefde, verspreidt zich nu over zee — ieder op zoek naar een nieuw thuis, en niet iedereen zal er een vinden."
+Voordat de Boodschapper zich tot jou wendt, valt je blik op een gestalte aan de rand van de zaal: een oude man met ogen die niets meer lijken te zien, een eenvoudige houten lier losjes in zijn hand. Hij neuriet een wijs die verdacht veel weg heeft van een houten paard, van vuur, van een stad die valt — alsof hij het verhaal dat jij net hebt beleefd nu al aan het herscheppen is, lang voordat iemand het ooit zal opschrijven. Athena buigt haar hoofd naar hem, iets weerloos in het gebaar dat je nooit eerder bij haar zag. "Dank je," zegt ze, zacht genoeg dat het bijna alleen voor hem bedoeld lijkt. De Boodschapper knikt evenzo. "Zonder zangers zoals jij was er niets van dit alles overgebleven om nog te vertellen." De oude man glimlacht, buigt zijn hoofd, en verdwijnt tussen de zuilen, zijn lier alweer speels tokkelend, op weg naar een andere haard.
 
-"Twee van hen ga je volgen. Odysseus, die niets anders wil dan naar huis, naar Ithaka, naar een vrouw en een zoon die hem twintig jaar niet hebben gezien. En Aeneas, die geen huis meer heeft om naar terug te keren — die zelf een nieuw thuis moet stichten, met zijn oude vader op zijn rug en zijn jonge zoon aan zijn hand."
+"[[Ecce|zie hier]] — het tweede boek," zegt de Boodschapper, en voor het eerst wijst ze niet naar één enkele scheur in het licht, maar naar de hele horizon. Er valt een schaduw van vleugels over de sokkels — Hermes, opnieuw, zijn sandalen nog nazinderend van de tocht uit Troje — terwijl Athena vlakbij blijft staan, voor het eerst niet als omstander in andermans verhaal maar hier, tussen de lege sokkels van het Museum zelf.
 
-Ze aarzelt, iets langer dan gewoonlijk. "Vanaf hier kan ik je ook iets anders vragen. Tot nu toe kreeg je automatisch beide talen, Latijn en Grieks door elkaar. Wil je dat zo houden — of wil je vanaf dit hoofdstuk vooral één spoor volgen, dichter bij wat je in de klas eigenlijk leert?"
+"Troje is as," zegt de Boodschapper, alsof de twee godheden naast haar het gewoonste ter wereld zijn. "Wie de nacht overleefde, verspreidt zich nu over zee — ieder op zoek naar een nieuw thuis, en niet iedereen zal er een vinden. Twee van hen ga je volgen. Odysseus, die niets anders wil dan naar huis, naar Ithaka, naar een vrouw en een zoon die hem twintig jaar niet hebben gezien. En Aeneas, die geen huis meer heeft om naar terug te keren — die zelf een nieuw thuis moet stichten, met zijn oude vader op zijn rug en zijn jonge zoon aan zijn hand."
+
+"Ik heb Odysseus nooit verlaten, al die jaren op zee," zegt Athena, "en ik zal dat ook nu niet doen." Het klinkt niet als een pleidooi — eerder als een vaststelling die ze nodig had uit te spreken. Hermes glimlacht er juist om. "En ik heb er geen been in staan, aan welke kant van de zee je terechtkomt — ik loop toch al tussen beide werelden. Vraag het mij maar, als je ooit tussen de twee wilt overstappen."
+
+Ze aarzelt, iets langer dan gewoonlijk. "Vanaf hier kan ik je ook iets anders vragen — en dit keer blijft het antwoord gelden voor de rest van de reis. Tot nu toe kreeg je automatisch beide talen, Latijn en Grieks door elkaar. Wie wil je vanaf hier worden?"
+
+IMAGE:
+ch10_hermes_athena_bezoek.png
 
 CHOICES:
 
-* Volg vanaf nu vooral het Griekse spoor — Odysseus' verhaal -> CH10_000_GRIEKS
-* Volg vanaf nu vooral het Latijnse spoor — Aeneas' verhaal -> CH10_000_LATIJN
-* Blijf beide talen volgen, zoals tot nu toe -> CH10_000_BEIDE
+* Reis mee met Odysseus — kies het Griekse pad -> CH10_000_GRIEKS
+* Reis mee met Aeneas — kies het Latijnse pad -> CH10_000_LATIJN
+* Ervaar alles, zoals de goden het bedoeld hebben — kies zowel Grieks als Latijn -> CH10_000_BEIDE
 
 END
 
@@ -13749,7 +14235,7 @@ TITLE:
 Eén Spoor, Eén Taal
 
 TEXT:
-"Grieks dan," zegt de Boodschapper, met iets van herkenning in haar stem. "Odysseus' weg naar huis wordt je hoofdlijn — maar Aeneas' verhaal verdwijnt niet, ik vertel het je gewoon niet meer in zijn eigen taal." Ze knikt, alsof daarmee iets is vastgelegd dat niet snel verandert.
+"Odysseus dan," zegt de Boodschapper, met iets van herkenning in haar stem. "Zijn weg naar huis wordt je pad, en het Grieks wordt de taal waarin ik het je vertel. Aeneas' verhaal verdwijnt niet — maar ik vertel het je voortaan niet meer in zijn eigen taal." Ze knikt, alsof daarmee iets is vastgelegd dat niet snel verandert.
 
 FLAG:
 taalspoor=grieks
@@ -13766,7 +14252,7 @@ TITLE:
 Eén Spoor, Eén Taal
 
 TEXT:
-"Latijn dan," zegt de Boodschapper, met iets van herkenning in haar stem. "Aeneas' nieuwe begin wordt je hoofdlijn — maar Odysseus' verhaal verdwijnt niet, ik vertel het je gewoon niet meer in zijn eigen taal." Ze knikt, alsof daarmee iets is vastgelegd dat niet snel verandert.
+"Aeneas dan," zegt de Boodschapper, met iets van herkenning in haar stem. "Zijn nieuwe begin wordt je pad, en het Latijn wordt de taal waarin ik het je vertel. Odysseus' verhaal verdwijnt niet — maar ik vertel het je voortaan niet meer in zijn eigen taal." Ze knikt, alsof daarmee iets is vastgelegd dat niet snel verandert.
 
 FLAG:
 taalspoor=latijn
@@ -13783,7 +14269,7 @@ TITLE:
 Beide Sporen
 
 TEXT:
-"Zoals altijd dan," zegt de Boodschapper, en er klinkt iets van opluchting in door — alsof ze het zelf ook liever zo had gehad. "Twee talen, twee helden, één zelfde verlangen: een plek om weer thuis te noemen."
+"Zoals de goden het zelf bedoeld hadden dan," zegt de Boodschapper, en er klinkt iets van opluchting in door — alsof ze het zelf ook liever zo had gehad. "Geen van beide pad opgeven. Twee talen, twee helden, één zelfde verlangen: een plek om weer thuis te noemen."
 
 FLAG:
 taalspoor=beide
@@ -13802,10 +14288,14 @@ Twee Wegen over Zee
 TEXT:
 De Boodschapper wijst naar twee nieuwe scheuren in de werkelijkheid, ditmaal ver uit elkaar — niet naast elkaar zoals bij Io en Herakles, maar aan twee tegenovergestelde einden van dezelfde zee. "Volg Odysseus, en je ziet hoe lang een thuiskomst kan duren wanneer de goden zelf tegenwerken. Volg Aeneas, en je ziet wat het kost om, zonder ooit gevraagd te hebben, zelf een nieuw thuis te moeten worden."
 
+CODEX:
+codex_grammatica_ch10_naamwoord_groep45
+
 CHOICES:
 
-* Volg Odysseus, op weg naar Ithaka [DONE:ch10_lijn_odysseus] [REQUIRE:taalspoor!=latijn] -> CH10_ODY_001
-* Volg Aeneas, op weg naar een stad die nog niet bestaat [DONE:ch10_lijn_aeneas] [REQUIRE:taalspoor!=grieks] -> CH10_AEN_001
+* Volg Odysseus, op weg naar Ithaka [DONE:ch10_lijn_odysseus] [REQUIRE:taalspoor=grieks] -> CH10_ODY_001
+* Volg Aeneas, op weg naar een stad die nog niet bestaat [DONE:ch10_lijn_aeneas] [REQUIRE:taalspoor=latijn] -> CH10_AEN_001
+* Volg beide verhalen, heen en weer over dezelfde zee [REQUIRE:taalspoor=beide] -> CH10_ODY_001
 
 END
 
@@ -13827,7 +14317,8 @@ codex_odysseus_vertrek
 
 CHOICES:
 
-* Zie waar de storm hen naartoe drijft -> CH10_ODY_002
+* Zie waar de storm hen naartoe drijft [REQUIRE:taalspoor=grieks] -> CH10_ODY_002
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_AEN_001
 
 END
 
@@ -13846,9 +14337,24 @@ codex_kikonen
 
 CHOICES:
 
-* Vind dat de mannen dit over zichzelf hebben afgeroepen [SEVERITAS] -> CH10_ODY_003
-* Erken dat tien jaar oorlog een bemanning niet meteen weer voorzichtig maakt [CLEMENTIA] -> CH10_ODY_003
-* Twijfel of Odysseus als aanvoerder hier niet ook tekortschoot [NEUTRAL] -> CH10_ODY_003
+* Vind dat de mannen dit over zichzelf hebben afgeroepen [SEVERITAS] -> CH10_ODY_002B
+* Erken dat tien jaar oorlog een bemanning niet meteen weer voorzichtig maakt [CLEMENTIA] -> CH10_ODY_002B
+* Twijfel of Odysseus als aanvoerder hier niet ook tekortschoot [NEUTRAL] -> CH10_ODY_002B
+
+END
+
+=== SCENE: CH10_ODY_002B ===
+
+TITLE:
+Verder over Zee
+
+TEXT:
+Dagenlang blijft de vloot op koers voor huis — tot een nieuwe storm, hevig genoeg om elk zeemanschap nutteloos te maken, hen negen dagen lang meesleurt, ver voorbij alles wat iemand aan boord ooit heeft gekaart.
+
+CHOICES:
+
+* Zie waar de storm hen uiteindelijk laat stranden [REQUIRE:taalspoor=grieks] -> CH10_ODY_003
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_AEN_002
 
 END
 
@@ -13860,14 +14366,44 @@ De Lotoseters
 TEXT:
 Nog een storm — de negende dag op zee zonder enige controle over de eigen koers — werpt de vloot op een onbekende kust. Odysseus stuurt drie verkenners het binnenland in. Ze treffen er een volk dat leeft van de lotosbloem, en wie ervan proeft, vergeet op slag elk verlangen om ooit nog naar huis te gaan.
 
-Zijn eigen mannen moeten Odysseus' verkenners, huilend van protest, met geweld terugslepen naar de schepen en vastbinden onder de roeibanken — de eerste keer dat "naar huis willen" zelf een gevaar blijkt te zijn, in plaats van vanzelfsprekend.
+CHOICES:
+
+* Zie wat er met de verkenners gebeurt -> CH10_ODY_003P
+
+END
+
+=== SCENE: CH10_ODY_003P ===
+
+TITLE:
+Proeven van Vergetelheid
+
+TEXT:
+Een van de verkenners, nog voor hij wordt teruggesleept, fluistert vergenoegd over de smaak van de lotos — alsof proeven op zichzelf al het enige is wat nog telt, en huiswaarts keren er ineens niet meer toe doet.
+
+PUZZLE:
+puzzle_ch10_ody_medium
 
 CODEX:
 codex_lotoseters
 
 CHOICES:
 
-* Zie welk eiland de vloot daarna bereikt -> CH10_ODY_004
+* Ga verder -> CH10_ODY_003B
+
+END
+
+=== SCENE: CH10_ODY_003B ===
+
+TITLE:
+Terug aan Boord
+
+TEXT:
+Odysseus' eigen mannen moeten de verkenners, huilend van protest, met geweld terugslepen naar de schepen en vastbinden onder de roeibanken — de eerste keer dat "naar huis willen" zelf een gevaar blijkt te zijn, in plaats van vanzelfsprekend.
+
+CHOICES:
+
+* Zie welk eiland de vloot daarna bereikt [REQUIRE:taalspoor=grieks] -> CH10_XENIA
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_AEN_003
 
 END
 
@@ -13878,6 +14414,211 @@ Het Eiland van de Kykloop
 
 TEXT:
 Nieuwsgierig meer dan voorzichtig, laat Odysseus de meeste schepen achter op een klein voor-eiland en vaart met één bemanning door naar het land zelf — waar de rook van een enkele, reusachtige grot omhoogkringelt. Wat er binnen woont, weet nog niemand aan boord.
+
+CHOICES:
+
+* Waag je naar binnen [REQUIRE:taalspoor=grieks] -> CH10_ODY_005
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_AEN_004
+
+END
+
+=== SCENE: CH10_ODY_005 ===
+
+TITLE:
+In de Grot van de Kykloop
+
+TEXT:
+Nieuwsgierigheid wint het van voorzichtigheid — jullie doorzoeken de grot, vinden kazen en kudden schapen, en besluiten te wachten op de bewoner in plaats van meteen met de buit te vertrekken, ervan overtuigd dat gastvrijheid iets is wat zelfs een reus zal eren.
+
+Bij zonsondergang keert Polyphemus terug — een eenogige Kykloop, zoon van Poseidon zelf, groter dan enige man die je ooit hebt gezien. Hij rolt een rotsblok voor de ingang dat tien mannen niet zouden kunnen verschuiven, ontdekt jullie, en verslindt zonder aarzelen twee van Odysseus' metgezellen als avondmaal.
+
+PERSON:
+polyfemos:intro
+
+CODEX:
+codex_polyfemos
+
+CHOICES:
+
+* Zie of er nog een uitweg is -> CH10_ODY_005P
+
+END
+
+=== SCENE: CH10_ODY_005P ===
+
+TITLE:
+Gevangen
+
+TEXT:
+Met het rotsblok potdicht voor de ingang, is er geen ontsnappen meer mogelijk — alleen wachten, en hopen op een list die slim genoeg is om een gods zoon te misleiden.
+
+PUZZLE:
+puzzle_ch10_ody_passief
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_005B
+
+END
+
+=== SCENE: CH10_ODY_005B ===
+
+TITLE:
+De Wijn
+
+TEXT:
+Odysseus, in plaats van te vechten, biedt de reus onverdunde wijn aan — sterker dan Polyphemus ooit heeft geproefd. Gevraagd naar zijn naam antwoordt hij: "[[Οὖτις|Niemand]]." De Kykloop lacht dronken en belooft "Niemand" als laatste te zullen opeten — een gunst die hem meteen in een diepe, wijnzware slaap doet vallen.
+
+CHOICES:
+
+* Zie hoe het plan die nacht wordt uitgevoerd [REQUIRE:taalspoor=grieks] -> CH10_ODY_006
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_AEN_005
+
+END
+
+=== SCENE: CH10_ODY_006 ===
+
+TITLE:
+De Ontsnapping
+
+TEXT:
+Terwijl Polyphemus snurkt, drijven Odysseus en zijn overgebleven mannen een aangepunte, in het vuur geharde balk in zijn enige oog. De Kykloop brult van pijn zo hard dat de rotsen ervan trillen — maar wanneer de andere Kyklopen buiten roepen wie hem kwaad doet, antwoordt hij enkel: "Niemand! Niemand doet me kwaad!" Tevredengesteld lopen zijn buren weer weg.
+
+CHOICES:
+
+* Zie hoe de ontsnapping zelf verloopt -> CH10_ODY_006P
+
+END
+
+=== SCENE: CH10_ODY_006P ===
+
+TITLE:
+In het Duister
+
+TEXT:
+Verblind en briesend van pijn tast Polyphemus naar de uitgang, zijn handen wild zoekend naar wie hem dit heeft aangedaan — zonder succes, want "Niemand" heeft geen gezicht om naar te grijpen.
+
+PUZZLE:
+puzzle_ch10_ody_aoristus1
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_006Q
+
+END
+
+=== SCENE: CH10_ODY_006Q ===
+
+TITLE:
+Onder de Rammen
+
+TEXT:
+'s Ochtends, blind en tastend, laat Polyphemus zijn kudde naar buiten om te grazen — met zijn handen over elke rug, op zoek naar ontsnappende mannen. Hij voelt nooit de buiken: daar hangen Odysseus en de zijnen, vastgebonden onder de dikste rammen, tot ze eindelijk, ongezien, de kust bereiken.
+
+Aan boord, veilig op zee, kan Odysseus het niet laten: hij schreeuwt zijn ware naam terug naar het eiland, trots op wat hij heeft volbracht.
+
+PERSON:
+polyfemos:full
+
+CHOICES:
+
+* Begrijp die trots — na tien jaar oorlog verdient hij het gehoord te worden [CLEMENTIA] -> CH10_ODY_006B
+* Vind het roekeloos, een dwaasheid die hen nog duur zal komen te staan [SEVERITAS] -> CH10_ODY_006B
+* Blijf zelf liever onopgemerkt, wat er ook gebeurt [NEUTRAL] -> CH10_ODY_006B
+
+END
+
+=== SCENE: CH10_ODY_006B ===
+
+TITLE:
+Poseidons Vloek
+
+TEXT:
+Zodra Polyphemus zijn vaders naam noemt in zijn gebed — Poseidon, heerser van diezelfde zee die Odysseus nog wekenlang moet oversteken — smeekt hij om een thuiskomst die eindeloos lang duurt: alleen, alle metgezellen verloren, een vreemde in zijn eigen huis. Poseidon hoort hem.
+
+Odysseus weet nog niets van deze vloek wanneer de vloot wegvaart van het eiland — jij, die dit verhaal van buitenaf volgt, weet al wel wat nu onvermijdelijk komt.
+
+CODEX:
+codex_poseidon_vloek
+
+CHOICES:
+
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH10_ODY_007
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_AEN_006
+
+END
+
+=== SCENE: CH10_ODY_007 ===
+
+TITLE:
+Aeolus, Heerser van de Winden
+
+TEXT:
+Aeolus, heerser over alle winden, ontvangt de vloot een volle maand als eregasten op zijn drijvende eiland — en geeft Odysseus bij vertrek een geschenk dat geen andere sterveling ooit heeft gekregen: een leren zak waarin hij alle vijandige winden heeft opgesloten, zodat alleen de gunstige westenwind hen recht naar Ithaka kan blazen.
+
+Negen dagen en nachten stuurt Odysseus zelf het roer, geen moment durvend te slapen uit angst iets te missen — tot Ithaka's kust eindelijk in zicht komt, zo dichtbij dat zelfs de rooksignalen van het eiland al zichtbaar zijn. Uitgeput valt hij dan toch in slaap.
+
+Zijn mannen, ervan overtuigd dat de zak goud of zilver bevat dat Odysseus niet met hen wil delen, maken hem open. Alle winden ontsnappen tegelijk en drijven de vloot, in één verschrikkelijke storm, helemaal terug naar Aeolus' eiland. Wanneer Odysseus opnieuw om hulp vraagt, weigert de windgod — een sterveling die de goden zo duidelijk tegen zich hebben, wil hij niet nog eens aan boord.
+
+CODEX:
+codex_aeolus
+
+CHOICES:
+
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH10_ODY_008
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_AEN_008
+
+END
+
+=== SCENE: CH10_ODY_008 ===
+
+TITLE:
+De Laistrygonen
+
+TEXT:
+Het volgende eiland lijkt op het eerste gezicht een zegen: een beschutte, bijna gesloten haven, kliffen aan weerszijden, water zo kalm dat geen enkel schip hoeft te ankeren. Elf van de twaalf kapiteins varen naar binnen. Odysseus zelf, wantrouwig geworden na Aeolus, laat zijn eigen schip buiten de haven liggen.
+
+CHOICES:
+
+* Zie wat er in de haven gebeurt -> CH10_ODY_008P
+
+END
+
+=== SCENE: CH10_ODY_008P ===
+
+TITLE:
+De Val
+
+TEXT:
+Binnen blijkt de "beschutting" een val: de Laistrygonen, mensenetende reuzen, bekogelen de opgesloten vloot met rotsblokken zo groot als huizen en spietsen zwemmende overlevenden als vis. In minuten verliest Odysseus elf schepen en bijna zijn hele bemanning — alleen zijn eigen, buiten de haven gebleven schip ontsnapt.
+
+PUZZLE:
+puzzle_ch10_ody_aoristus2
+
+CODEX:
+codex_laistrygonen
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_008B
+
+END
+
+=== SCENE: CH10_ODY_008B ===
+
+TITLE:
+Wat Overblijft
+
+TEXT:
+Wat overblijft van de vloot — één enkel schip, een handvol overlevenden, geen enkele illusie meer dat deze reis iets anders is dan overleven — vaart verder tot de rook van een nieuw eiland aan de horizon verschijnt. Wie hier woont, moet nog blijken.
+
+FLAG:
+ch10_lijn_odysseus=true
+
+CHOICES:
+
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH10_EINDE
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_AEN_009
 
 END
 
@@ -13899,7 +14640,8 @@ codex_aeneas_vloot
 
 CHOICES:
 
-* Zie waar de vloot voor het eerst aan land gaat -> CH10_AEN_002
+* Zie waar de vloot voor het eerst aan land gaat [REQUIRE:taalspoor=latijn] -> CH10_AEN_002
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_ODY_002
 
 END
 
@@ -13911,14 +14653,44 @@ Het Bloedende Struikgewas
 TEXT:
 Thracië, bondgenoot van Troje al sinds voor de oorlog, lijkt de voor de hand liggende plek voor een nieuw begin. Aeneas begint er zelfs de eerste fundamenten van een stad uit te zetten — tot hij, om de goden een offer te brengen, takken van een struik probeert te trekken en de wortels beginnen te bloeden.
 
+CHOICES:
+
+* Luister naar de stem die opstijgt uit de grond -> CH10_AEN_002P
+
+END
+
+=== SCENE: CH10_AEN_002P ===
+
+TITLE:
+De Stem van Polydorus
+
+TEXT:
 Een stem stijgt op uit de grond zelf: die van Polydorus, Priamus' jongste zoon, ooit in het geheim met goud naar Thracië gestuurd voor zijn eigen veiligheid — en daar vermoord door de koning die dat goud liever hield dan de jongen beschermde. "Vlucht dit verraderlijke land," smeekt de stem, "hier is voor jullie geen thuis."
+
+PUZZLE:
+puzzle_ch10_aen_naamwoord_groep4
 
 CODEX:
 codex_polydorus
 
 CHOICES:
 
-* Vaar meteen weg van deze plek, zoals Polydorus vraagt -> CH10_AEN_003
+* Ga verder -> CH10_AEN_002B
+
+END
+
+=== SCENE: CH10_AEN_002B ===
+
+TITLE:
+Weg van Thracië
+
+TEXT:
+Zonder nog een moment te aarzelen, laat Aeneas de halfafgebouwde fundamenten achter — geen thuis wortelt in een land dat zijn eigen gasten vermoordt.
+
+CHOICES:
+
+* Vaar meteen weg van deze plek, zoals Polydorus vraagt [REQUIRE:taalspoor=latijn] -> CH10_AEN_003
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_ODY_003
 
 END
 
@@ -13933,12 +14705,37 @@ Op het drijvende eiland Delos — hetzelfde eiland waar je Latona ooit toevlucht
 PERSON:
 latona:full
 
+PUZZLE:
+puzzle_ch10_aen_naamwoord_groep5
+
 CODEX:
 codex_orakel_delos
 
 CHOICES:
 
-* Vaar mee naar Kreta, in de overtuiging dat het orakel is opgelost -> CH10_AEN_004
+* Ga verder -> CH10_XENIA
+
+END
+
+=== SCENE: CH10_XENIA ===
+
+TITLE:
+Xenia — De Wet van de Gastvrijheid
+
+TEXT:
+Voor het verhaal verdergaat, onderbreekt de Boodschapper zichzelf. "Weet je nog wat gastvrijheid betekent voor deze wereld?" vraagt ze. "Niet beleefdheid. Een wet, bijna heilig. Xenia, noemen de Grieken het — en Hermes hier kan je vertellen waarom."
+
+Hermes glimlacht, alsof hij dit verhaal wel vaker heeft verteld. Ooit reisden hij en Jupiter zelf, vermomd als arme zwervers, door een dorp in Frygië — deur na deur gesloten voor hun neus, tot ze aanklopten bij Baucis en Philemon, een oud echtpaar zo arm dat hun hele bezit in één hutje paste. Het paar deelde toch alles wat ze hadden: hun laatste brood, hun laatste wijn, zelfs hun enige gans, die ze probeerden te slachten voor hun gasten tot het dier zelf bij de goden schuilde.
+
+Jupiter onthulde zich, verzwolg het hele ondankbare dorp onder een meer, en spaarde alleen de hut van Baucis en Philemon — die hij veranderde in een gouden tempel. Op hun laatste wens mochten ze ooit samen sterven, op hetzelfde moment, en werden ze veranderd in twee bomen die voor altijd, met de takken verstrengeld, naast de tempel bleven staan. "Onthoud dat verhaal goed," zegt de Boodschapper, terwijl ze weer naar de horizon wijst. "Niet elke gastheer die je nog tegenkomt verdient wat jij hem geeft — en niet elke gast is wie hij lijkt."
+
+CODEX:
+codex_baucis_philemon
+
+CHOICES:
+
+* Ga verder naar het eiland van de Kykloop [REQUIRE:taalspoor!=latijn] -> CH10_ODY_004
+* Ga verder naar Kreta [REQUIRE:taalspoor=latijn] -> CH10_AEN_004
 
 END
 
@@ -13951,6 +14748,1157 @@ TEXT:
 Kreta blijkt de verkeerde "oude moeder" — amper is de nieuwe nederzetting begonnen of een plaag treft mens en akker tegelijk, zo hardnekkig dat zelfs een tweede, wanhopiger poging het land te bewerken niets oplevert. Pas in een droom verschijnen de Penaten, de huisgoden die Aeneas zelf uit het brandende Troje meedroeg, om eindelijk het echte antwoord te geven: niet Kreta, maar Italië — het land waar hun verste voorvader Dardanus ooit vandaan kwam.
 
 De vloot moet, opnieuw, verder.
+
+CHOICES:
+
+* Vaar verder, op zoek naar Italië [REQUIRE:taalspoor=latijn] -> CH10_AEN_005
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_ODY_005
+
+END
+
+=== SCENE: CH10_AEN_005 ===
+
+TITLE:
+De Harpijen
+
+TEXT:
+Op de rotsige Strofaden-eilanden vindt de vloot een kudde wilde geiten en runderen, heer noch meester in zicht — een onverwacht banket na weken schaarste. Nauwelijks hebben ze het vlees op tafels langs het strand uitgestald, of er stort een zwerm Harpijen uit de lucht neer: vogelvrouwen met haakvormige klauwen, die het voedsel bevuilen en verslinden voor iemand er een hap van kan nemen.
+
+Aeneas en zijn mannen verjagen ze met het zwaard, maar hun aanvoerster Celaeno laat zich niet wegjagen zonder een laatste woord — ze zweert een vloek: pas wanneer honger hen dwingt hun eigen tafels op te eten, zullen ze de stad vinden die hun is beloofd. Een dreiging die klinkt als het einde van elke hoop op een thuis.
+
+Niemand aan boord begrijpt op dit moment hoe zo'n vloek ooit iets anders dan rampzalig kan aflopen — het antwoord ligt nog jaren, en vele stormen, verderop.
+
+CODEX:
+codex_harpijen
+
+CHOICES:
+
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH10_AEN_006
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_ODY_006
+
+END
+
+=== SCENE: CH10_AEN_006 ===
+
+TITLE:
+De Kust van de Kyklopen
+
+TEXT:
+Sicilië's oostkust, onder de rokende schaduw van de Etna, blijkt het domein van reuzen: eenogige Kyklopen, kudden hoedend langs de kust. Terwijl de vloot vers water zoekt, strompelt er een havelozes, uitgemergeld figuur de rotsen af — een Griek, roept hij smekend, geen vijand meer, alleen een mens die honger en angst tot iets minder dan een mens hebben gemaakt.
+
+Hij vertelt zijn verhaal: Achaemenides, ooit bemanningslid van Odysseus, hier vergeten toen zijn eigen kapitein haastig vluchtte voor een verblinde reus — dezelfde Kykloop die ooit zwoer dat "Niemand" hem zijn oog had gekost, en wiens hol nog geen dagreis verderop ligt. Drie maanden overleefde hij op bessen en wortels, doodsbang voor de andere Kyklopen langs deze kust.
+
+Nauwelijks heeft Aeneas besloten hem aan boord te nemen, of Polyphemus zelf verschijnt tussen de kudde — blind, tastend met een afgesneden dennenstam als staf, zijn brullende stem alleen al genoeg om iedereen halsoverkop naar de schepen te jagen. Ze varen weg voor hij ook maar één voet in het water kan zetten.
+
+PERSON:
+achaemenides:full
+
+PUZZLE:
+puzzle_ch10_aen_hic
+
+CODEX:
+codex_achaemenides
+
+CHOICES:
+
+* Ga verder -> CH10_AEN_007
+
+END
+
+=== SCENE: CH10_AEN_007 ===
+
+TITLE:
+De Dood van Anchises
+
+TEXT:
+Langs Sicilië's zuidkust omzeilt de vloot zorgvuldig de zee-engte waar Scylla en Charybdis huizen — twaalf verschrikkingen liever gemeden dan getrotseerd — tot ze aanleggen bij Drepanum, aan de westpunt van het eiland.
+
+Daar, na alles wat vader en zoon samen hebben doorstaan — de vlucht uit Troje, de omzwervingen, elke storm en elk verlies — sterft Anchises stil, zonder gevecht, zonder voorteken. Geen orakel had dit voorzien; geen god had het aangekondigd. Soms eindigt een verhaal gewoon.
+
+Aeneas, voor het eerst sinds Troje's val zonder zijn vader aan zijn zijde, blijft achter met alleen zijn zoon Ascanius — en een vloot die, ondanks alle offers, nog altijd geen thuis heeft gevonden.
+
+CODEX:
+codex_dood_anchises
+
+CHOICES:
+
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH10_AEN_008
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_ODY_007
+
+END
+
+=== SCENE: CH10_AEN_008 ===
+
+TITLE:
+Juno's Storm
+
+TEXT:
+Juno, koningin der goden, is Aeneas nooit vergeten — noch zijn afkomst uit Troje, de stad van het Parisoordeel waar zij ooit verloor, noch de profetie dat zijn nakomelingen ooit haar geliefde Carthago zullen verwoesten. Zodra de vloot van Sicilië vertrekt, zoekt ze Aeolus zelf op — dezelfde windgod die ooit Odysseus zijn kans op een snelle thuiskomst gaf — en koopt zijn hulp met de belofte van een nimf als bruid.
+
+Aeolus ontketent alle winden tegelijk. Schepen breken uiteen, mannen verdrinken voor Aeneas' eigen ogen, en de hele vloot dreigt binnen een uur te verdwijnen — tot Neptunus, die de chaos op zijn eigen zee voelt zonder ooit om toestemming gevraagd te zijn, zelf ingrijpt. Met één enkel bevel aan de golven en de winden sust hij de storm en jaagt de winden terug naar hun grot, nog nagrommend over goden die zich met zíjn zee bemoeien.
+
+Wat overblijft van de vloot — verspreid, gehavend, een paar schepen kwijt — drijft af naar een onbekende kust in het westen. Niemand aan boord weet nog waar ze zijn, alleen dat het land vreemd genoeg gastvrij oogt na alles wat eraan voorafging.
+
+CODEX:
+codex_juno_storm
+
+CHOICES:
+
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH10_AEN_009
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_ODY_008
+
+END
+
+=== SCENE: CH10_AEN_009 ===
+
+TITLE:
+De Kust van Carthago
+
+TEXT:
+Het land blijkt Libië, en de stad die er verrijst is nog jonger dan Aeneas' eigen, al twee jaar durende vlucht: Carthago, gesticht door Dido, een koningin die zelf op de vlucht sloeg — voor een broer die haar man vermoordde om zijn goud.
+
+Venus, Aeneas' eigen moeder, hult hem en zijn trouwe metgezel Achates in een wolk van mist zodat ze ongezien de bouwplaats kunnen betreden. Wat ze er zien overweldigt Aeneas meer dan hij had verwacht: een tempelmuur, beschilderd met taferelen van de Trojaanse Oorlog zelf — Hector, Achilles, hemzelf, allemaal al vereeuwigd in een verhaal dat hij dacht nog te beleven. "[[Sunt lacrimae rerum|Er zijn tranen voor de dingen]]," fluistert hij — zelfs hier, ver van huis, weet men wat Troje heeft gekost.
+
+Terwijl hij nog naar de muur staart, nadert er een stoet: de koningin zelf, op weg naar haar nieuwe tempel, met een gevolg dat een gesprek onvermijdelijk maakt. De mist om Aeneas begint al te vervagen.
+
+FLAG:
+ch10_lijn_aeneas=true
+
+PERSON:
+dido:intro
+
+PUZZLE:
+puzzle_ch10_aen_ipse
+
+CODEX:
+codex_aankomst_carthago
+
+CHOICES:
+
+* Ga verder -> CH10_EINDE
+
+END
+
+=== SCENE: CH10_EINDE ===
+
+TITLE:
+Twee Zeeën, Eén Verlangen
+
+TEXT:
+De Boodschapper wacht al bij de scheur in het licht wanneer de laatste golven achter je verdwijnen. "Twee vloten," zegt ze, "hebben eindelijk vaste grond onder de voeten — maar geen van beide is thuis. Odysseus staat voor de deur van een tovenares die niemand ongeschonden laat vertrekken; Aeneas staat oog in oog met een koningin die zijn hele reis nog overhoop kan halen. Beide verhalen zijn nog lang niet af."
+
+Hermes knikt afscheid, net als de vorige keer — maar Athena blijft nog even staan, haar blik nog op de horizon gericht, alsof ze zelf ook liever meevoer dan hier bleef wachten.
+
+SOUVENIR:
+souvenir_twee_zeeen
+
+CODEX:
+codex_twee_thuiskomsten
+
+STATPOINTS:
+3
+
+CHOICES:
+
+* Keer terug naar het Museum -> CH10_MUSEUM_00
+
+END
+
+=== SCENE: CH10_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Een vierde stolp vult zich: dit keer geen wapen of overblijfsel, maar iets vreemders — een handvol zeewater dat, hoe lang het ook in de lucht van het Museum hangt, nooit lijkt te verdampen. "Twee zeeën in één stolp," zegt de Boodschapper. "Dat leek me toepasselijker dan kiezen."
+
+Ze kijkt naar de rijen sokkels om jullie heen — nog altijd voor het overgrote deel leeg, maar met elke terugkeer een stukje voller. "Rust hier zo lang als je nodig hebt. Er wachten nog genoeg verhalen — en deze twee zijn nog lang niet voorbij."
+
+CHOICES:
+
+* Luister naar het volgende verhaal -> CH11_000
+
+END
+`.trim();
+
+const SP_CH11_CNS = `
+=== SCENE: CH11_000 ===
+
+TITLE:
+Wat Nog Voor Je Ligt
+
+TEXT:
+"[[Ecce|zie hier]] — het derde boek," zegt de Boodschapper, en de scheur die ze ditmaal opent is smaller dan de vorige twee, bijna een fluistering van licht. "Geen nieuwe keuze dit keer — je koos je pad al, bij de val van Troje, en dat pad blijft precies wat het was."
+
+"Odysseus vindt een eiland waar hij niet had verwacht een jaar te blijven. Aeneas vindt een vrouw die hem bijna doet vergeten waarom hij ooit vertrok. En allebei vinden ze, uiteindelijk, een deur naar de doden — waar niets wat je onderweg hebt opgebouwd, ongezien blijft."
+
+CHOICES:
+
+* Ga verder -> CH11_001
+
+END
+
+=== SCENE: CH11_001 ===
+
+TITLE:
+Twee Wegen, Nog Altijd
+
+TEXT:
+De Boodschapper wijst opnieuw naar de twee scheuren in de werkelijkheid, precies waar Hoofdstuk 10 ze achterliet — Odysseus voor de kust van Aeaea, Aeneas oog in oog met een koningin. "Verder dan?"
+
+VOCAB:
+grieks_nostos, grieks_xenia, grieks_pharmakon, grieks_skia, grieks_thanatos, grieks_mantis, latijn_regina, latijn_pietas, latijn_umbra, latijn_fatum, latijn_mors, latijn_vates
+
+CODEX:
+codex_grammatica_ch11_participium, codex_grammatica_ch11_genitivus_absolutus, codex_grammatica_ch11_participium_latijn, codex_grammatica_ch11_ablativus_absolutus
+
+CHOICES:
+
+* Volg Odysseus, op het eiland van Kirke [REQUIRE:taalspoor=grieks] -> CH11_ODY_001
+* Volg Aeneas, bij het hof van Dido [REQUIRE:taalspoor=latijn] -> CH11_AEN_001
+* Volg beide verhalen, heen en weer over dezelfde zee [REQUIRE:taalspoor=beide] -> CH11_ODY_001
+
+END
+
+=== SCENE: CH11_ODY_001 ===
+
+TITLE:
+Het Eiland van Kirke
+
+TEXT:
+Zeven dagen drijft het ene overgebleven schip doelloos rond na de ramp bij de Laistrygonen, tot de kust van Aeaea in zicht komt — een eiland met precies één zichtbaar teken van leven: rook, opstijgend uit een huis diep tussen de bomen.
+
+Odysseus verdeelt zijn resterende mannen in twee groepen; die van Eurylochus trekt het woud in om het huis te verkennen, terwijl Odysseus zelf bij de schepen blijft. Rond het huis lopen leeuwen en wolven die, vreemd genoeg, niemand aanvallen — ze kwispelen bijna, als honden die een bekende meester begroeten.
+
+PUZZLE:
+puzzle_ch11_ody_participium
+
+CODEX:
+codex_kirke_eiland
+
+CHOICES:
+* Zie wat er binnen gebeurt -> CH11_ODY_002
+
+END
+
+=== SCENE: CH11_ODY_002 ===
+
+TITLE:
+Zwijnen aan de Tafel
+
+TEXT:
+Binnen zingt een prachtige stem bij een weefgetouw. Kirke, dochter van de zonnegod Helios, verwelkomt Eurylochus' mannen hartelijk, zet hen aan tafel, en mengt wijn met kaas, honing — en een geheim kruid. Zodra ze hebben gedronken, raakt ze hen aan met haar staf: op slag veranderen ze in varkens, met alleen hun eigen verstand nog intact om te beseffen wat er is gebeurd.
+
+Eurylochus, die als enige buiten bleef wachten uit achterdocht, rent terug naar het strand om Odysseus te waarschuwen — te zeer over zijn toeren om zelf mee terug te gaan.
+
+PERSON:
+kirke:intro
+
+PUZZLE:
+puzzle_ch11_ody_genitivus_absolutus
+
+CODEX:
+codex_kirke_zwijnen
+
+CHOICES:
+* Ga zelf naar het huis, ondanks de waarschuwing -> CH11_ODY_003
+
+END
+
+=== SCENE: CH11_ODY_003 ===
+
+TITLE:
+Het Kruid Moly
+
+TEXT:
+Onderweg naar het huis, alleen, kruist Hermes zijn pad — dezelfde god die de speler al twee keer eerder terzijde stond. "Ik kende je nog voor je hier aankwam," zegt hij, en drukt Odysseus een klein, zwart-wortelig kruid met een melkwit bloempje in de hand. "Moly. Geen sterveling kan het uit de grond trekken, maar een god wel — en jij hebt vandaag een god aan je zijde."
+
+Beschermd door het kruid drinkt Odysseus Kirke's mengsel zonder gevolgen. Wanneer ze hem met haar staf aanraakt en niets gebeurt, trekt ze verschrikt haar zwaard — en Odysseus, precies zoals Hermes hem influisterde, dwingt haar meteen tot een eed dat ze hem niets zal aandoen, voor hij zijn eigen zwaard weer laat zakken.
+
+PERSON:
+kirke:full
+
+CODEX:
+codex_kirke_moly
+
+CHOICES:
+* Zie hoe Kirke, verslagen, het weerzien met haar gasten viert -> CH11_ODY_003_LV
+
+END
+
+=== SCENE: CH11_ODY_003_LV ===
+
+TITLE:
+Een Toost, Nauwkeurig Gehoord
+
+TEXT:
+Terwijl de betoverde mannen weer mens worden, heft Kirke haar eigen beker, en je vangt tussen het rumoer door één zin op: "τῶν ἀνδρῶν πινόντων, ἡ Κίρκη τὸ φάρμακον αὖθις προσφέρει."
+
+CHOICES:
+* Hoor er een genitivus absolutus in — een eigen, losstaande bijzin over de mannen, los van wat Kirke zelf doet -> CH11_ODY_003_LV_GOED
+* Hoor er een gewone genitivus in, alsof "πινόντων" gewoon bij "τῶν ἀνδρῶν" hoort als een simpele bepaling, zonder eigen werkwoordsfunctie -> CH11_ODY_003_LV_FOUT
+* Hoor er twee losse constateringen in, zonder enig verband tussen de mannen en Kirke's aanbod -> CH11_ODY_003_LV_FOUT2
+
+END
+
+=== SCENE: CH11_ODY_003_LV_GOED ===
+
+TITLE:
+Terwijl de Mannen Drinken
+
+TEXT:
+Je hoort het precies goed: een genitivus absolutus, een eigen bijzinnetje dat op zichzelf staat. "Terwijl de mannen drinken, biedt Kirke opnieuw de toverdrank aan" — ditmaal zonder kwaad opzet, gewoon een gastvrouw die haar gasten weer aan tafel wil zien.
+
+CHOICES:
+* Zie wat Kirke, verslagen, nu aanbiedt [REQUIRE:taalspoor=grieks] -> CH11_ODY_004
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_001
+
+END
+
+=== SCENE: CH11_ODY_003_LV_FOUT ===
+
+TITLE:
+Geen Gewone Genitivus
+
+TEXT:
+Zo klopt het niet helemaal: "πινόντων" hangt hier niet aan "τῶν ἀνδρῶν" als een simpele bepaling — samen vormen ze een eigen, losstaand bijzinnetje, de genitivus absolutus, dat als geheel de omstandigheid van de hoofdzin beschrijft. "Terwijl de mannen drinken" hoort er allebei bij, niet als los bezit van elkaar.
+
+CHOICES:
+* Zie wat Kirke, verslagen, nu aanbiedt [REQUIRE:taalspoor=grieks] -> CH11_ODY_004
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_001
+
+END
+
+=== SCENE: CH11_ODY_003_LV_FOUT2 ===
+
+TITLE:
+Er Is Wel een Verband
+
+TEXT:
+Toch is er een verband: de genitivus absolutus ("τῶν ἀνδρῶν πινόντων") beschrijft precies de omstandigheid waaronder Kirke's aanbod plaatsvindt — niet twee losse zinnen, maar één bijzin die aan een hoofdzin vasthangt, zonder dat er een apart voegwoord ("terwijl") in de Griekse tekst zelf staat.
+
+CHOICES:
+* Zie wat Kirke, verslagen, nu aanbiedt [REQUIRE:taalspoor=grieks] -> CH11_ODY_004
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_001
+
+END
+
+=== SCENE: CH11_AEN_001 ===
+
+TITLE:
+Onthuld voor de Koningin
+
+TEXT:
+De mist van Venus vervaagt op precies het juiste moment: Aeneas, opeens zichtbaar tussen de tempelbouwers, ziet Dido's blik op zich gericht. "Ik ben het, Aeneas van Troje," zegt hij, "die je hier zoekt." Dido, verrast maar allerminst onthutst, verwelkomt hem alsof ze op hem had gewacht — zijn naam en zijn faam waren haar hier, aan de rand van de bekende wereld, al vooruitgesneld.
+
+Ze nodigt de hele Trojaanse gezelschap uit voor een banket in haar nog geurende, nieuwe paleis — het eerste echte dak boven hun hoofd sinds Troje viel.
+
+PERSON:
+dido:full
+
+PUZZLE:
+puzzle_ch11_aen_participium1
+
+CODEX:
+codex_dido_onthaal
+
+CHOICES:
+* Ga naar het banket -> CH11_AEN_002
+
+END
+
+=== SCENE: CH11_AEN_002 ===
+
+TITLE:
+Het Banket
+
+TEXT:
+Aan tafel vraagt Dido Aeneas alles te vertellen — Troje's val, de lange tocht hierheen — en hij doet het, hetzelfde verhaal dat jij al hebt beleefd, nu voor het eerst hardop aan een ander verteld. Dido luistert urenlang, zonder één keer haar blik van hem af te wenden.
+
+CHOICES:
+* Zie wat er, ongezien door de rest van de tafel, nog meer gebeurt -> CH11_AEN_002P
+
+END
+
+=== SCENE: CH11_AEN_002P ===
+
+TITLE:
+Cupido's Vermomming
+
+TEXT:
+Wat niemand aan tafel ziet: Venus, ongerust dat Juno's stad hen alsnog kwaad zal doen, heeft haar eigen zoon Cupido de gedaante van Ascanius laten aannemen. Terwijl de vermomde god op Dido's schoot zit, laat hij onopgemerkt een liefdesvuur in haar ontbranden dat geen enkel verstandig overleg meer zal doven.
+
+PUZZLE:
+puzzle_ch11_aen_participium2
+
+CODEX:
+codex_dido_cupido
+
+CHOICES:
+* Ga verder -> CH11_AEN_002B
+
+END
+
+=== SCENE: CH11_AEN_002B ===
+
+TITLE:
+Na het Banket
+
+TEXT:
+Het feest duurt tot diep in de nacht — niemand aan tafel heeft haast om afscheid te nemen.
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_003
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_004
+
+END
+
+=== SCENE: CH11_ODY_004 ===
+
+TITLE:
+Een Jaar op Aeaea
+
+TEXT:
+Verslagen door Odysseus' list, keert Kirke om: ze verandert de betoverde mannen terug in mensen — jonger en knapper zelfs dan voordien — en nodigt de hele bemanning uit te blijven, zo lang ze maar willen. Wat bedoeld was als één nacht rust wordt een vol jaar van feesten, wijn en gemak, tot Odysseus' eigen mannen hem er op een dag aan herinneren dat Ithaka nog altijd op hem wacht.
+
+Kirke laat hen gaan — maar niet zonder een laatste, onvermijdelijke boodschap. "Voor je naar huis kunt varen," zegt ze, "moet je eerst naar een plek waar niemand graag komt: het huis van Hades en zijn koningin Persephone. Alleen de blinde ziener Tiresias kan je vertellen hoe je thuis nog kunt bereiken."
+
+PERSON:
+kirke:full
+
+CODEX:
+codex_kirke_onderwereld_opdracht
+
+CHOICES:
+* Zie hoe de tocht naar de onderwereld verloopt [REQUIRE:taalspoor=grieks] -> CH11_ODY_005
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_003
+
+END
+
+=== SCENE: CH11_AEN_003 ===
+
+TITLE:
+De Grot
+
+TEXT:
+Op jacht, enkele dagen later, drijft Juno zelf een onverwachte storm de heuvels in — een storm die ze zelf heeft besteld. Dido en Aeneas zoeken schuilen in dezelfde grot, alleen, terwijl de rest van het gezelschap verspreid raakt over de bergflanken.
+
+Wat daar precies gebeurt, blijft ongezegd — maar Dido noemt het vanaf die dag zelf een huwelijk, en gedraagt zich er ook naar. Aeneas zegt niets wat haar tegenspreekt, al is hij, in tegenstelling tot haar, geen moment vergeten dat Italië nog altijd op hem wacht.
+
+CODEX:
+codex_dido_grot
+
+CHOICES:
+* Zie hoe Dido er later zelf over spreekt -> CH11_AEN_003_LV
+
+END
+
+=== SCENE: CH11_AEN_003_LV ===
+
+TITLE:
+Een Zin, Nauwkeurig Gehoord
+
+TEXT:
+Later, tegenover haar eigen hofdames, hoor je Dido de gebeurtenis in één enkele zin samenvatten: "Cum Dido Aenean videat, cor eius ardet."
+
+CHOICES:
+* Hoor er een voegwoord in — "telkens als/omdat Dido Aeneas ziet, brandt haar hart" — een reden of moment, geen gezelschap -> CH11_AEN_003_LV_GOED
+* Hoor er het voorzetsel "met" in — alsof Dido ergens "met" iemand meereist in de zin, in plaats van een eigen bijzin te vormen -> CH11_AEN_003_LV_FOUT
+* Hoor er twee losse, onverbonden zinnen in — "Dido ziet Aeneas. Haar hart brandt." zonder enig verband -> CH11_AEN_003_LV_FOUT2
+
+END
+
+=== SCENE: CH11_AEN_003_LV_GOED ===
+
+TITLE:
+Cum als Voegwoord
+
+TEXT:
+Je hoort het precies goed: dit "cum" is het voegwoord, niet het voorzetsel — te herkennen aan de conjunctivus "videat" die erop volgt (het voorzetsel cum staat altijd bij een ablativus, nooit bij een vervoegd werkwoord). "Telkens als Dido Aeneas ziet, brandt haar hart" — precies het soort bijzin dat het voorzetsel nooit zou kunnen vormen.
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_004
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_005
+
+END
+
+=== SCENE: CH11_AEN_003_LV_FOUT ===
+
+TITLE:
+Niet het Voorzetsel
+
+TEXT:
+Zo klopt het niet: het voorzetsel "cum" ("met") staat altijd bij een ablativus, nooit bij een vervoegd werkwoord als "videat". Zodra er een persoonsvorm op volgt, is "cum" het voegwoord, en vormt de hele bijzin — "telkens als Dido Aeneas ziet" — een eigen, afgeronde gedachte, geen gezelschap voor iemand.
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_004
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_005
+
+END
+
+=== SCENE: CH11_AEN_003_LV_FOUT2 ===
+
+TITLE:
+Er Is Wel een Verband
+
+TEXT:
+Toch hangen de twee delen aan elkaar: "cum" verbindt ze tot één zin, waarbij het eerste deel ("Dido Aenean videat") de omstandigheid beschrijft waaronder het tweede ("cor eius ardet") gebeurt — geen twee losse constateringen, maar oorzaak en gevolg in één enkele bijzin.
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_004
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_005
+
+END
+
+=== SCENE: CH11_ODY_005 ===
+
+TITLE:
+Elpenor
+
+TEXT:
+Voor Kirke's eiland definitief achter hen verdwijnt, mist Odysseus één man bij het vertrek: Elpenor, de jongste van de bemanning, was de vorige avond dronken op het dak in slaap gevallen en bij het ochtendgeroep naar beneden gevallen — zijn nek gebroken, zijn lichaam nog onbegraven op Aeaea. Niemand had de tijd genomen het te melden voor de schepen al voer.
+
+Aan de rand van de wereld, waar Kirke had gewezen, graaft Odysseus een kuil en giet er een offer in — melk, honing, wijn, water, gerstemeel, en het bloed van een zwart schaap. De schimmen van de doden komen er in drommen op af, dorstig naar het bloed dat hun even een stem teruggeeft. De allereerste die naar voren treedt, is niet wie Odysseus verwachtte: Elpenor, zijn lichaam nog onbegraven, smeekt om een fatsoenlijke begrafenis zodra de vloot terugkeert — anders zal zijn schim hem blijven achtervolgen als een wraakvloek van de goden zelf.
+
+PERSON:
+elpenor:intro
+
+CODEX:
+codex_elpenor
+
+CHOICES:
+* Beloof Elpenor zijn begrafenis, en laat de volgende schim naderen [REQUIRE:taalspoor=grieks] -> CH11_ODY_006
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_004
+
+END
+
+=== SCENE: CH11_AEN_004 ===
+
+TITLE:
+De Boodschapper van Jupiter
+
+TEXT:
+Terwijl Aeneas zich steeds dieper in Carthago's opbouw laat betrekken — muren, wetten, een stad die niet de zijne is — ziet Jupiter vanaf de Olympos hoe zijn missie dreigt te verzanden in een liefde die nooit zijn bedoeling was. Hij stuurt Mercurius, dezelfde god die de speler in Hoofdstuk 8 en 9 al terzijde stond, met een boodschap die geen ruimte voor onderhandeling laat.
+
+Mercurius verschijnt aan Aeneas terwijl deze, in Tyrische kleding gehuld, meehelpt aan Carthago's nieuwe torens. "Vergeet je eigen zoon niet," zegt de god, kortaf en zonder omhaal, "en het koninkrijk dat Ascanius toekomt in Italië. Jupiter zelf stuurt me — een vader die zijn plicht vergeet voor een vrouw die niet eens de zijne is, verdient deze herinnering." Even snel als hij verscheen, verdwijnt Mercurius weer in de lucht.
+
+PERSON:
+hermes:full
+
+CODEX:
+codex_mercurius_vermaning
+
+CHOICES:
+* Zie Mercurius alweer verdwijnen -> CH11_AEN_004P
+
+END
+
+=== SCENE: CH11_AEN_004P ===
+
+TITLE:
+Nog Nagalmend
+
+TEXT:
+Nog voor Aeneas iets kan terugzeggen, is Mercurius alweer verdwenen — de lucht om hem heen nog licht bewogen, alsof de god er nooit was.
+
+PUZZLE:
+puzzle_ch11_aen_ablativus_absolutus
+
+CHOICES:
+* Zie hoe Aeneas de boodschap ter harte neemt -> CH11_AEN_004B
+
+END
+
+=== SCENE: CH11_AEN_004B ===
+
+TITLE:
+Een Besluit, Zwijgend Genomen
+
+TEXT:
+Aeneas zegt niets — maar wat hij die avond in stilte besluit, staat al vast voor hij het hardop durft uit te spreken.
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_005
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_006
+
+END
+
+=== SCENE: CH11_ODY_006 ===
+
+TITLE:
+Tiresias
+
+TEXT:
+Onder de schimmen die zich om het bloed verdringen, herkent Odysseus eindelijk wie hij zocht: Tiresias, de blinde ziener van Thebe, de enige dode aan wie Persephone zelf zijn verstand liet behouden. Hij drinkt van het offerbloed en spreekt zonder omwegen.
+
+"Je komt thuis," zegt Tiresias, "maar niet zonder eerst nog één beproeving: op het eiland Thrinacia grazen de heilige runderen van Helios zelf. Raak ze niet aan, wat je mannen ook zeggen als de honger toeslaat — wie dat wél doet, verliest zijn schip en iedereen aan boord, op Odysseus zelf na, die dan alleen en berooid, op een vreemd schip, eindelijk Ithaka bereikt." Een tweede voorspelling volgt, zachter: zelfs na de thuiskomst wacht er nog een laatste reis, ver het binnenland in, tot iemand zijn roeispaan voor een wanschoffel aanziet.
+
+PERSON:
+tiresias:intro
+
+CODEX:
+codex_tiresias
+
+CHOICES:
+* Zie wie nu nog meer naar voren treedt [REQUIRE:taalspoor=grieks] -> CH11_ODY_007
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_005
+
+END
+
+=== SCENE: CH11_AEN_005 ===
+
+TITLE:
+Het Vuur op de Horizon
+
+TEXT:
+Aeneas, gebonden door Jupiters bevel, durft het Dido niet zelf te vertellen — tot ze het zelf merkt: schepen die stiekem worden uitgerust, een vloot die zich voorbereidt te vertrekken zonder haar. Haar woede is niets vergeleken bij haar wanhoop. "Was ik maar zwanger geweest," zegt ze, "dan had ik tenminste een kleine Aeneas gehad om naar te kijken, nu jij vertrekt." Hij antwoordt met plicht, niet met liefde — de goden bevelen het, zegt hij, niet hijzelf.
+
+Ze smeekt, dreigt, vervloekt — en wanneer de Trojaanse schepen bij zonsopgang toch vertrekken, bestijgt Dido de brandstapel die ze liet bouwen onder het mom van een offerritueel. Met Aeneas' eigen zwaard doorboort ze zichzelf, en met haar laatste adem roept ze een vloek over zijn hele nageslacht af: laat er ooit, uit haar eigen botten, een wreker opstaan tegen alles wat uit Troje is voortgekomen — een vloek die, ver in de toekomst, generaal na generaal uit Carthago zal vervullen.
+
+Vanaf de verste schepen ziet Aeneas alleen een gloed op de horizon, en raadt, zonder het zeker te weten, wat die betekent.
+
+PERSON:
+dido:full
+
+CODEX:
+codex_dido_dood
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_006
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_007
+
+END
+
+=== SCENE: CH11_ODY_007 ===
+
+TITLE:
+Anticlea
+
+TEXT:
+De volgende schim die zich door de menigte dringt, kende Odysseus beter dan wie ook: zijn eigen moeder, Anticlea, die nog in leven was toen hij naar Troje vertrok. Ze vertelt hem, zonder omwegen, dat ze niet aan ziekte stierf, maar aan het verlangen naar hem — twintig jaar wachten op een zoon die niet terugkeerde, brak uiteindelijk zelfs het sterkste hart.
+
+Drie keer probeert Odysseus haar te omhelzen. Drie keer glipt haar schim door zijn armen heen, licht als een schaduw of een droom, tot ze hem zelf troost met wat elke schim hier weet: dit is nu eenmaal hoe het gaat, wanneer de geest het lichaam voorgoed verlaat.
+
+PERSON:
+anticlea:intro
+
+CODEX:
+codex_anticlea
+
+CHOICES:
+* Zie welke andere schimmen zich nog aandienen [REQUIRE:taalspoor=grieks] -> CH11_ODY_008
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_006
+
+END
+
+=== SCENE: CH11_ODY_008 ===
+
+TITLE:
+Agamemnon en Achilles
+
+TEXT:
+Twee schimmen die Odysseus nog van Troje kent, dringen zich naar voren. Agamemnon eerst — nog altijd verbitterd, vertelt hij hoe zijn eigen vrouw Clytemnestra en haar minnaar Aegisthus hem vermoordden op de dag van zijn thuiskomst, tijdens het feestmaal zelf, zonder enige waarschuwing. "Vertrouw je eigen vrouw niet blindelings," waarschuwt hij, "al lijkt Penelope me trouwer dan de mijne ooit was."
+
+Dan Achilles, en Odysseus begroet hem als "gelukkigste onder de doden, hier heersend zoals je eens onder de levenden heerste." Achilles wijst het compliment resoluut af: "Spreek me niet troostend toe over de dood. Ik zou liever als een naamloze dagloner op aarde zwoegen voor een berooide boer, dan hier koning zijn over alles wat gestorven is." Pas wanneer Odysseus vertelt hoe dapper zijn zoon Neoptolemus zich bij Troje's val gedroeg, klaart Achilles' schim eindelijk op.
+
+PERSON:
+achilles:full
+
+CODEX:
+codex_reunie_agamemnon_achilles
+
+CHOICES:
+* Zie wie zich, zwijgend, nog het verst weghoudt [REQUIRE:taalspoor=grieks] -> CH11_ODY_009
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_007
+
+END
+
+=== SCENE: CH11_AEN_006 ===
+
+TITLE:
+Palinurus en de Sibylle
+
+TEXT:
+Vlak voor de kust van Italië in zicht komt, verliest Aeneas zijn stuurman: Palinurus, in slaap gesust door de god Somnus zelf, valt overboord en verdrinkt — zonder dat iemand aan boord het op tijd merkt. Het schip vaart, stuurloos maar ongedeerd, alleen verder.
+
+Aangekomen bij Cumae zoekt Aeneas de Sibylle op, Apollo's priesteres, die in extase toekomstige oorlogen in Italië voorspelt — "een tweede Achilles wacht ook hier al op je" — voor ze instemt hem naar de onderwereld te gidsen. De prijs: een Gouden Tak, gewijd aan Proserpina, die zich alleen laat plukken door wie het lot zelf toestaat. Venus' eigen duiven wijzen Aeneas de weg naar de juiste boom.
+
+PERSON:
+dido:full
+
+CODEX:
+codex_sibylle_cumae
+
+CHOICES:
+* Ga de onderwereld binnen [REQUIRE:taalspoor=latijn] -> CH11_AEN_007
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_008
+
+END
+
+=== SCENE: CH11_ODY_009 ===
+
+TITLE:
+Ajax Zwijgt
+
+TEXT:
+Eén schim houdt zich apart van de rest: Ajax, zoon van Telamon, na Achilles ooit de sterkste van alle Grieken. Nadat Achilles sneuvelde, streden Odysseus en Ajax om zijn wapenrusting — en toen de Grieken die aan Odysseus toekenden, sloeg de vernedering Ajax met een waanzin die hem uiteindelijk zijn eigen zwaard in het lijf deed zetten.
+
+Odysseus probeert het goed te maken, spreekt hem zacht aan, biedt zijn spijt aan over hoe alles is gelopen. Ajax antwoordt niet met één woord — hij draait zich zwijgend om en verdwijnt tussen de andere schimmen, zijn woede nog altijd te groot voor verzoening, zelfs hier, zelfs nu.
+
+PERSON:
+aias:full
+
+CODEX:
+codex_ajax_schim
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH11_SCHIMMEN
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_008
+
+END
+
+=== SCENE: CH11_AEN_007 ===
+
+TITLE:
+Het Rijk van de Doden
+
+TEXT:
+Charon, de norse veerman van de Styx, weigert eerst iedereen zonder behoorlijk graf — en aan de oever treft Aeneas meteen Palinurus' eigen schim, nog steeds onbegraven, smekend om dezelfde gunst die Elpenor ooit aan Odysseus vroeg. De Sibylle belooft dat zijn dood ooit alsnog geëerd zal worden, ook al kan niemand hem nu helpen. Een honingkoek sust Cerberus' drie koppen in slaap, en de Gouden Tak koopt hun doortocht.
+
+Voorbij de eerste, treurige velden — waar wie stierf voor de liefde eeuwig ronddwaalt — herkent Aeneas een schim die hij nooit had verwacht hier te ontmoeten: Dido zelf, nog altijd met de wond in haar borst zichtbaar. Hij spreekt haar aan, zweert dat hij nooit uit eigen wil vertrok, dat de goden hem dwongen. Ze antwoordt geen woord — draait zich zwijgend om, en zoekt de schaduw van haar eerste man Sychaeus weer op, precies zoals Ajax zich net van Odysseus afwendde.
+
+PERSON:
+dido:full
+
+CODEX:
+codex_dido_schim_onderwereld
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_008
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_009
+
+END
+
+=== SCENE: CH11_AEN_008 ===
+
+TITLE:
+Anchises en de Stoet der Romeinen
+
+TEXT:
+In de Elyzese Velden, waar de gelukzaligen voor altijd rusten, vindt Aeneas eindelijk zijn vader Anchises terug. Drie keer probeert hij hem te omhelzen, drie keer glipt de schim door zijn armen — hetzelfde verdriet dat Odysseus bij zijn eigen moeder al kende.
+
+Anchises wijst hem dan iets wat groter is dan hun eigen weerzien: een lange stoet ongeboren zielen, wachtend om ooit geboren te worden. "Dit worden jouw nakomelingen," zegt hij, en noemt ze een voor een — Romulus, de koningen van Rome, de helden van de Republiek, tot aan een zekere Augustus toe, die een nieuwe gouden eeuw zal brengen. "Onthoud jouw taak," zegt Anchises tenslotte, "niet kunst, niet welsprekendheid — anderen zullen daarin uitblinken. Jouw volk zal heersen over de volkeren, vrede opleggen door wetten, de onderworpenen sparen en de hoogmoedigen neerslaan." Tussen alle glorie wijst hij ook, even, naar een jonge ziel die stralender is dan de rest — Marcellus, gedoemd te sterven voor zijn tijd komt, een schaduw over anders zoveel triomf.
+
+PERSON:
+anchises:full
+
+CODEX:
+codex_anchises_stoet
+
+CHOICES:
+* Ga verder -> CH11_SCHIMMEN
+
+END
+
+=== SCENE: CH11_SCHIMMEN ===
+
+TITLE:
+Schimmen uit het Verleden
+
+TEXT:
+Terwijl Odysseus en Aeneas, ieder in hun eigen verhaal, hun weg door de doden vervolgen, merk je dat je zelf een moment lang niemand volgt. Tussen de eindeloze menigte schimmen — gezichtloos, grijs, wachtend op niets — beginnen er hier en daar een paar zich te onderscheiden. Niet helden uit een gedicht, maar mensen die jíj hebt gekend, onderweg, op momenten die niemand anders zich nog herinnert zoals jij.
+
+CHOICES:
+* Ga verder -> CH11_TARTAROS_1
+
+END
+
+=== SCENE: CH11_TARTAROS_1 ===
+
+TITLE:
+Tartaros
+
+TEXT:
+Voor het verhaal verdergaat, trekt Hermes de speler even opzij — terwijl Odysseus en Aeneas, ieder in hun eigen verhaal, hun weg door de onderwereld vervolgen. "Er is iets wat jullie allebei moeten zien," zegt hij, "iets dat geen van beide helden zelf zo van dichtbij te zien krijgt."
+
+Hij wijst naar een put dieper dan de rest, omgeven door bronzen muren: Tartaros, waar de ergste misdadigers tegen de goden zelf voor eeuwig boeten. Tantalos staat tot zijn kin in water dat wegtrekt zodra hij drinkt, onder fruit dat wegwaait zodra hij reikt — gestraft omdat hij ooit zijn eigen zoon aan de goden opdiste, om te testen of ze het zouden merken. Sisyphos duwt een rotsblok een berg op, telkens weer, voor eeuwig — gestraft omdat hij de dood zelf tweemaal te slim af was. Ixion draait rond aan een brandend wiel, gestraft omdat hij Hera probeerde te verleiden. En de vijftig dochters van Danaus vullen eeuwig een lekkende kruik met zeven, gestraft omdat ze op bevel van hun vader hun eigen bruidegoms op de huwelijksnacht doodden.
+
+CODEX:
+codex_tartaros_zondaars
+
+CHOICES:
+* Zie wat Hermes je nog meer wil laten horen -> CH11_TARTAROS_2
+
+END
+
+=== SCENE: CH11_TARTAROS_2 ===
+
+TITLE:
+Orpheus en Eurydice
+
+TEXT:
+"Eén lied hoort hier ook bij," zegt Hermes, en voor het eerst klinkt zijn stem minder luchtig dan anders. Hij vertelt over Orpheus — dezelfde zanger die je al kende van de Argonautentocht — wiens vrouw Eurydice stierf aan een slangenbeet, nog geen dag na hun eigen bruiloft.
+
+"Orpheus deed wat geen sterveling ooit had gedurfd: hij daalde zelf af, levend, en zong zo mooi voor Hades en Persephone dat zelfs zij, voor het eerst ooit, medelijden toonden. Ze mocht met hem mee terug — op één voorwaarde: hij mocht niet omkijken voor ze allebei het daglicht weer hadden bereikt." Hermes zwijgt even. "Vlak voor de uitgang, twijfelend of ze hem wel echt volgde, keek hij toch om. Ze verdween voorgoed, voor de tweede keer, en deze keer voorgoed."
+
+CODEX:
+codex_orpheus_eurydice
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor!=latijn] -> CH11_ODY_010
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_009
+
+END
+
+=== SCENE: CH11_ODY_010 ===
+
+TITLE:
+De Sirenen en de Zeeëngte
+
+TEXT:
+Terug bij Aeaea geeft Kirke, zoals beloofd, haar laatste raad: voorbij haar kust liggen de Sirenen, wier lied geen enkele zeeman ooit heeft weerstaan — en verderop een zeeëngte waar Skylla, een zeemonster met zes koppen, en Charybdis, een dodelijke draaikolk, elkaar recht tegenover liggen.
+
+Odysseus stopt de oren van zijn mannen met bijenwas, maar laat zich zelf, nieuwsgierig als altijd, vastbinden aan de mast om het Sirenenlied wél te horen — en smeekt tijdens het voorbijvaren, buiten zichzelf van verlangen, om losgemaakt te worden. Zijn mannen, doof voor zijn stem net als voor het lied, binden hem juist steviger vast, precies zoals hij hun vooraf had opgedragen.
+
+Bij de zeeëngte kiest Odysseus bewust voor Skylla boven Charybdis — liever zes man verliezen aan het monster dan het hele schip aan de draaikolk. Zes van zijn beste roeiers verdwijnen, schreeuwend, in Skylla's muil, terwijl de rest van de vloot ongedeerd doorvaart.
+
+CODEX:
+codex_sirenen
+
+CHOICES:
+* Zie waar de vloot ten slotte aanlegt [REQUIRE:taalspoor=grieks] -> CH11_ODY_011
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_009
+
+END
+
+=== SCENE: CH11_AEN_009 ===
+
+TITLE:
+Terug naar het Licht
+
+TEXT:
+De Sibylle leidt Aeneas terug naar boven via de Poort van Ivoor — niet de Poort van Hoorn, waardoor ware dromen de wereld binnenkomen, maar die van de valse. Waarom juist deze poort hun uitgang wordt, laat Vergilius zelf onopgelost; sommigen lezen er een stille twijfel in over alles wat Aeneas zojuist heeft gezien.
+
+Herenigd met zijn vloot, vaart Aeneas eindelijk de monding van de Tiber binnen — Italië, na twee jaar zwerven, eindelijk binnen bereik.
+
+CODEX:
+codex_terug_naar_licht
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_010
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_011
+
+END
+
+=== SCENE: CH11_ODY_011 ===
+
+TITLE:
+De Runderen van Helios
+
+TEXT:
+Tegenwind houdt de vloot een volle maand gevangen op Thrinacia, het eiland van Helios' heilige runderen — precies de plek waar Tiresias én Kirke allebei voor waarschuwden. Odysseus laat zijn mannen zweren de dieren niet aan te raken, maar wanneer de voorraden opraken en de honger onhoudbaar wordt, slachten ze — terwijl hij zelf toevallig slaapt — een deel van de kudde.
+
+Helios, razend, dreigt bij Zeus zelf: geef hem genoegdoening, of hij laat voortaan zijn licht in de onderwereld schijnen in plaats van boven de aarde. Zodra de vloot weer uitvaart, verbrijzelt Zeus' bliksem het schip in stukken. Iedereen verdrinkt, op Odysseus zelf na — precies zoals Tiresias het maanden geleden al had voorzien.
+
+CODEX:
+codex_thrinacia
+
+CHOICES:
+* Zie waar de laatste golven hem naartoe spoelen [REQUIRE:taalspoor=grieks] -> CH11_ODY_012
+* Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_010
+
+END
+
+=== SCENE: CH11_AEN_010 ===
+
+TITLE:
+Oorlog en Vrede in Latium
+
+TEXT:
+Koning Latinus, gewaarschuwd door een orakel dat zijn dochter Lavinia met een vreemdeling moet trouwen, verwelkomt Aeneas hartelijk — tot Juno, nog altijd niet verzoend, de Furie Allecto stuurt om koningin Amata en de plaatselijke vorst Turnus, Lavinia's eigen verstoten aanbidder, tegen de nieuwkomers op te zetten. Oorlog volgt: de jonge Pallas sneuvelt aan Aeneas' zijde, de krijgshaftige Camilla valt aan de andere kant, en Vulcanus smeedt voor Aeneas een nieuw schild, met de hele toekomst van Rome erin gegraveerd — net als Achilles ooit van Hephaistos kreeg.
+
+Het eindigt in een tweegevecht: Aeneas tegen Turnus zelf. Op het punt van genade te tonen, ziet Aeneas dat Turnus nog altijd Pallas' eigen wapenriem als buit draagt — en doodt hem alsnog, niet uit plicht maar uit pure, onbedwingbare woede. Latinus houdt zijn woord: Lavinia wordt Aeneas' vrouw, en op de plek waar hun nieuwe stad verrijst, noemt hij haar Lavinium — het eerste, echte thuis sinds Troje viel.
+
+CODEX:
+codex_latium_aankomst
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=latijn] -> CH11_EINDE
+* Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_012
+
+END
+
+=== SCENE: CH11_ODY_012 ===
+
+TITLE:
+Calypso
+
+TEXT:
+Negen dagen drijft Odysseus, alleen, op een provisorisch vlot van wrakhout, tot de golven hem op Ogygia werpen — het eiland van de nimf Calypso. Ze neemt hem op, verzorgt hem, en biedt hem uiteindelijk iets wat geen sterveling ooit wordt aangeboden: onsterfelijkheid, eeuwige jeugd, een leven aan haar zijde voor altijd, als hij maar wil blijven.
+
+Odysseus weigert. Niet uit ondankbaarheid, maar omdat geen enkele belofte van een godin het gewicht opweegt van een oud, sterfelijk huis op Ithaka. Calypso houdt hem toch vast — jaar na jaar, niet als gevangene met kettingen, maar evenmin als een gast die zomaar kan vertrekken.
+
+CODEX:
+codex_calypso
+
+CHOICES:
+* Ga verder -> CH11_EINDE
+
+END
+
+=== SCENE: CH11_EINDE ===
+
+TITLE:
+Twee Deuren, Nog Dicht
+
+TEXT:
+De Boodschapper wacht al, ditmaal zonder Hermes — "hij heeft zijn handen vol," zegt ze, met iets wat verdacht veel op een glimlach lijkt. "Odysseus zit vast op een eiland dat hij niet koos, gebonden aan een godin die hem niet laat gaan. Aeneas heeft eindelijk grond onder de voeten, een vrouw, een naam voor zijn nieuwe stad — maar de stad die zijn verre nakomelingen ooit zullen stichten, ligt nog altijd generaties ver weg."
+
+Athena, die al die tijd zwijgend had toegekeken, spreekt voor het eerst sinds het begin van dit hoofdstuk. "Beide reizen zijn bijna voorbij," zegt ze, "en toch is geen van beide nog thuis. Dat is precies het soort einde dat het verdient."
+
+SOUVENIR:
+souvenir_twee_deuren
+
+CODEX:
+codex_grammatica_ch11_overzicht
+
+STATPOINTS:
+3
+
+CHOICES:
+* Keer terug naar het Museum -> CH11_MUSEUM_00
+
+END
+
+=== SCENE: CH11_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Een vijfde stolp vult zich: een kleine, dichtgeknoopte buidel die naar aarde en as ruikt, alsof hij zowel een tovenaars-eiland als een brandstapel in zich draagt. "Twee reizen door het rijk van de doden," zegt de Boodschapper, "en beide van jullie kwamen er levend uit — dat is zeldzamer dan het klinkt."
+
+Ze kijkt naar de rijen sokkels, nu al meer dan half gevuld. "Rust hier zo lang als je nodig hebt. De thuiskomst zelf — voor wie dan ook — is nog niet verteld."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH12_000
+
+END
+`.trim();
+
+const SP_CH12_CNS = `
+=== SCENE: CH12_000 ===
+
+TITLE:
+Bijna Thuis
+
+TEXT:
+"[[Ecce|zie hier]] — het vierde boek," zegt de Boodschapper, en de scheur die ze ditmaal opent toont maar één kust, niet twee. "Odysseus is dicht bij Ithaka. Aeneas' eigen tocht is verteld — Lavinium staat er, zijn volk heeft eindelijk grond onder de voeten. Voor hem is dit geen nieuw hoofdstuk, niet meer."
+
+Ze aarzelt, met iets van een glimlach die niet helemaal bij haar past. "Maar dat betekent niet dat er voor jou niets te zien is, als je zijn taal hebt gekozen."
+
+CHOICES:
+* Volg Odysseus naar Ithaka [REQUIRE:taalspoor=grieks] -> CH12_ODY_001
+* Ga verder [REQUIRE:taalspoor!=grieks] -> CH12_LAT_000
+
+END
+
+=== SCENE: CH12_LAT_000 ===
+
+TITLE:
+Mercurius' Zijspoor
+
+TEXT:
+Een schaduw van vleugels valt over je heen — Hermes, maar ditmaal stelt hij zich anders voor. "Mercurius," zegt hij, "zo noemen ze me hier. En 'hier' is precies waar ik je even mee naartoe wil nemen." Hij wijst niet naar zee, waar Odysseus' verhaal zich afspeelt, maar naar een glooiend, half-getemd landschap dat je meteen herkent — al is het van een afstand nauwelijks te geloven.
+
+"Latium," zegt hij. "Jouw Latium. Dezelfde akkers waar jij ooit achter een ploeg liep, voor het Orakel je meenam." Hij laat een korte stilte vallen. "Wat ik je nu laat zien, gebeurde hier lang voor Aeneas deze kust ooit bereikte — generaties voor Lavinium er stond, generaties voor zijn zoon Ascanius niet ver hiervandaan een tweede stad zal stichten, Alba Longa, waar op zijn beurt ooit weer een koning zal worden verdreven, en twee broers, opgevoed door een wolvin, een derde stad zullen bouwen die alles wat hiervoor kwam zal overschaduwen. Rome. Maar dat is nog ver weg. Dit verhaal is ouder."
+
+CODEX:
+codex_latium_tijdlijn, codex_grammatica_ch12_bijwoord_etc, codex_grammatica_ch12_acp
+
+CHOICES:
+* Zie wat er op deze heuvels gebeurde -> CH12_LAT_001
+
+END
+
+=== SCENE: CH12_LAT_001 ===
+
+TITLE:
+De Runderen van Geryon
+
+TEXT:
+Op een van deze heuvels — nog naamloos, nog zonder een enkele tempel of muur — legert Hercules voor de nacht met een kudde prachtige runderen, buitgemaakt op de reus Geryon aan het andere eind van de wereld, zijn tiende werk bijna volbracht. Wat hij niet weet: in een grot verderop huist Cacus, een vuurspuwende zoon van Vulcanus, half mens en half monster, die al jaren de omgeving terroriseert.
+
+Terwijl Hercules slaapt, sluipt Cacus naar buiten en steelt acht van de mooiste dieren — en sleept ze, slim genoeg om sporen te vrezen, achterstevoren zijn grot in, zodat de hoefafdrukken lijken te wijzen naar waar de kudde vandaan kwam, niet naartoe.
+
+PERSON:
+cacus:intro
+
+CODEX:
+codex_cacus_diefstal
+
+CHOICES:
+* Zie hoe Hercules de diefstal ontdekt -> CH12_LAT_002
+
+END
+
+=== SCENE: CH12_LAT_002 ===
+
+TITLE:
+Het Geloei
+
+TEXT:
+Hercules zou de list nooit hebben doorzien, ware het niet dat één van de gestolen runderen, opgesloten in het duister van de grot, hardop begint te loeien — beantwoord, tot Cacus' eigen ongeluk, door de rest van de kudde daarbuiten.
+
+PUZZLE:
+puzzle_ch12_lat_acp
+
+CHOICES:
+* Volg het geluid -> CH12_LAT_002B
+
+END
+
+=== SCENE: CH12_LAT_002B ===
+
+TITLE:
+De Wraak van Hercules
+
+TEXT:
+Hercules volgt het geluid recht naar de rotswand. De ingang zit potdicht, afgesloten met een rotsblok dat naar verluidt tien span ossen niet had kunnen wegtrekken — Hercules rukt het toch los. Woedend rukt hij het dak van de grot open, grijpt Cacus, en verslaat hem met blote handen, ondanks diens vuurspuwende adem.
+
+PERSON:
+cacus:full
+
+CODEX:
+codex_hercules_cacus
+
+CHOICES:
+* Zie wat er na Cacus' dood gebeurt -> CH12_LAT_003
+
+END
+
+=== SCENE: CH12_LAT_003 ===
+
+TITLE:
+Euander van de Heuvels
+
+TEXT:
+Het nieuws van Cacus' dood bereikt Euander, een Arcadische balling die al jaren met een handvol volgelingen op een naburige heuvel woont — later bekend als de Palatijn. Hij was zelf al te bang voor Cacus geweest om ooit iets te ondernemen, en haast zich nu naar Hercules toe.
+
+Hij treft de held nog bij de grot aan, de dode reus aan zijn voeten. Euander begroet hem niet als vreemdeling, maar herkent onmiddellijk wie hij voor zich heeft — de faam van Hercules' werken was hem al vooruitgesneld, helemaal van Griekenland tot hier.
+
+PERSON:
+euander:intro
+
+PUZZLE:
+puzzle_ch12_lat_bijwoord
+
+CODEX:
+codex_euander
+
+CHOICES:
+* Zie hoe Euander Hercules onthaalt -> CH12_LAT_004
+
+END
+
+=== SCENE: CH12_LAT_004 ===
+
+TITLE:
+Het Ara Maxima
+
+TEXT:
+Euander, die deze heuvels al langer kent dan wie ook, leidt Hercules en de omwonenden naar de plek waar ze samen een altaar zullen bouwen — een offer van dank, voor de held die hen bevrijdde van een gevaar waar niemand anders iets tegen durfde te doen.
+
+Het Ara Maxima, zo noemen ze het: het grootste altaar. Euander belooft dat de eredienst hier zal blijven bestaan, lang nadat iedereen die er nu bij staat allang vergeten is — een belofte die, veel later, ook echt wordt ingelost.
+
+PUZZLE:
+puzzle_ch12_lat_genitivus_ius
+
+CODEX:
+codex_ara_maxima_stichting
+
+CHOICES:
+* Zie wat er van Cacus' terreur overblijft -> CH12_LAT_005
+
+END
+
+=== SCENE: CH12_LAT_005 ===
+
+TITLE:
+Wat Erna Bleef
+
+TEXT:
+De omwonenden, eindelijk verlost van een terreur die al jaren duurde, kunnen bijna niet geloven hoe snel het voorbij is — één nacht, één woedende held, en Cacus' schaduw over deze heuvels is voorgoed weg. Het Ara Maxima, dat naar verluidt nog eeuwen later, wanneer hier allang een stad staat, overeind zal staan, is het enige wat aan de dreiging herinnert.
+
+PUZZLE:
+puzzle_ch12_lat_idem
+
+CODEX:
+codex_hercules_cacus
+
+SOUVENIR:
+souvenir_ara_maxima
+
+CODEX:
+codex_grammatica_ch12_overzicht
+
+STATPOINTS:
+3
+
+CHOICES:
+* Keer terug naar het Museum [REQUIRE:taalspoor=latijn] -> CH12_MUSEUM_00_LAT
+* Volg nu ook Odysseus naar Ithaka [REQUIRE:taalspoor=beide] -> CH12_ODY_001
+
+END
+
+=== SCENE: CH12_MUSEUM_00_LAT ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Mercurius zet je terug precies waar hij je ophaalde, alsof er geen moment is verstreken. "Geen nieuwe grammatica vandaag," zegt de Boodschapper, bijna verontschuldigend, terwijl een nieuwe stolp zich vult met een klein stuk brons, gevormd als een altaar. "Soms is even terugkijken naar wat je al kent net zo waardevol als weer iets nieuws leren."
+
+Ze kijkt je aan. "Odysseus is intussen ook bijna waar hij wezen moet. Wanneer jij zover bent, is hij dat ook."
+
+END
+
+=== SCENE: CH12_ODY_001 ===
+
+TITLE:
+De Kust van Ithaka
+
+TEXT:
+Na twintig jaar — tien bij Troje, tien op zee — zetten de Faiaken, die hem als laatste gastheer thuisbrachten, Odysseus eindelijk aan land op Ithaka zelf, slapend, zonder dat hij het merkt. Wanneer hij wakker wordt, herkent hij zijn eigen eiland niet meteen — een mist, door Athena zelf gestuurd, verhult alles tot ze zeker weet dat hij alleen is.
+
+Athena onthult zich, niet voor het eerst zijn stille bondgenoot, en brengt hem meteen op de hoogte: zijn paleis is al jaren in handen van meer dan honderd vrijers, mannen die om Penelope's hand dingen terwijl ze zijn voorraden opeten en zijn gezag ondermijnen — ervan overtuigd dat Odysseus nooit meer terug zal keren. Om ongezien zijn eigen huis te kunnen verkennen, verandert ze hem in een oude, haveloze bedelaar.
+
+PERSON:
+odysseus:intro
+
+CODEX:
+codex_ithaka_aankomst
+
+CHOICES:
+* Ga als bedelaar op weg naar je eigen paleis -> CH12_ODY_002
+
+END
+
+=== SCENE: CH12_ODY_002 ===
+
+TITLE:
+De Zwijnenhoeder
+
+TEXT:
+Voor hij zich naar zijn eigen paleis waagt, stuurt Athena hem eerst naar Eumaeus, de zwijnenhoeder — een van de weinige dienaren die hem al die jaren trouw is gebleven, ondanks dat hij zijn meester allang dood waant. Eumaeus, die in de haveloze bedelaar geen moment zijn eigen koning herkent, deelt toch onvoorwaardelijk zijn karige maaltijd met hem — precies het soort gastvrijheid dat de vrijers in het paleis allang zijn verleerd.
+
+Terwijl ze eten, vertelt Eumaeus, zonder te weten tegen wie, over zijn verdwenen koning, over Penelope's uitzichtloze wachten, en over Telemachus, nu een jongeman, die het paleis net heeft verlaten om zelf naar nieuws over zijn vader te zoeken. Odysseus luistert, zwijgend, terwijl hij voor het eerst in twintig jaar weer op zijn eigen grond zit.
+
+PERSON:
+telemachus:intro
+
+CODEX:
+codex_eumaeus
 
 END
 `.trim();
