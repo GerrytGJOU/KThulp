@@ -94,7 +94,7 @@ metadata, geen scènes/puzzels (zie het onderscheid "vastgelegd" vs.
 
 | Pallas les | Onderwerp | Grammatica | Chronica H |
 |---|---|---|---|
-| 22 | Athena en Poseidon, Zeus en Metis, de geboorte van Athena | **Futurum** (Tekst 22B, Zeus/Metis-profetie — bevat wél nieuwe grammatica, anders dan hier eerder aangenomen; gecorrigeerd 2026-08-02, zie Chronica.md §7.47) | 13 — **GEBOUWD** |
+| 22 | Athena en Poseidon, Zeus en Metis, de geboorte van Athena | **Futurum** (bevat wél nieuwe grammatica, anders dan hier eerder aangenomen) — in Chronica ingezet via Tekst 22A (wedstrijd om Athene), NIET via Tekst 22B (Zeus/Metis-geboorte): die geboorte staat al volledig in Chronica Hoofdstuk 1, Lijn B; H13 zou hem anders dubbel vertellen — zie Chronica.md §7.47 (correctie) | 13 — **GEBOUWD** |
 | 23 | De list van Peisistratos, de tirannendoders, kritiek op de Atheense democratie | *(cultuur/geschiedenis)* | 14 |
 | 24 | Pandora, De Vrouw, mode | *(cultuur)* | 15 |
 | 25 | Een slaaf wordt held, een slavin koopt zich vrij (slavernij) | *(cultuur)* | 15 (samen met 24) |

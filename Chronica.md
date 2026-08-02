@@ -596,7 +596,7 @@ staat, niet dit verslag.
 | 10 | II | Vluchten uit Troje | Medium, passief, aoristus passief; *Minerva 14:* naamwoordgroep 4/5, hic, ipse |
 | 11 | II | Tussen Liefde en Lot | Participium, genitivus absolutus; *Minerva 15:* participium praesens actief, ablativus absolutus |
 | 12 | II | Wraak en een Nieuwe Stad | Betrekkelijk vnw, conjunctivus, alpha-werkwoorden (Grieks, les 19-21 — VOLLEDIG, zie §7.45); *Minerva 16* (Hercules & Cacus, **gebouwd**) + *Minerva 17* (Romulus & Remus, **nog te bouwen**) — SAMENGEVOEGD 2026-08-02 uit de oude Hoofdstuk 12 "Odysseus' Wraak" en Hoofdstuk 13 "Het Begin van Rome" (nooit gebouwd), zie §7.44 |
-| 13 | II | Twee Steden, Twee Koningen | **Gebouwd.** Grieks: futurum (Pallas 22, Athena's geboorte); Latijn: conjunctivus praesens/perfectum (Minerva 21, Horatii/Lucretia/Brutus) |
+| 13 | II | Twee Steden, Twee Koningen | **Gebouwd.** Grieks: futurum (Pallas 22, wedstrijd om Athene tegen Poseidon — NIET Athena's geboorte, die staat al in H1); Latijn: conjunctivus praesens/perfectum (Minerva 21, Horatii/Lucretia/Brutus) |
 | 14 | II | Verzet tegen Tirannen | Grieks: les 23 (Atheense democratie); Latijn: Verdedigers van de Republiek — Minerva nog vrij te kiezen |
 | 15 | III | Hoe Men Leefde | Grieks: les 24-25 (De Vrouw, slavernij); *Minerva 19*: vragend/onbepaald vnw, perfectum met praesensbetekenis |
 | 16 | III | Vorming en Vermaak | Grieks: les 26-27 (opvoeding, sport/Spelen — Atalanta verhuisd hierheen); *Minerva 20*: velle/nolle/fieri, betrekkelijke bijzin, comparativus/superlativus |
@@ -4890,6 +4890,97 @@ kreeg `CH13` toegevoegd aan `BLOCKS`.
 Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 33
 waarschuwingen (ongewijzigd — alleen de al bekende pre-bestaande dode
 vlaggen plus de bedoelde `CH13_WORDT_VERVOLGD`-terminale-scène).
+
+**Correctie, later dezelfde dag: dubbel verteld verhaal.** Gerben
+signaleerde dat de geboorte van Athena (Zeus/Metis, Hephaistos die zijn
+schedel splijt) al VOLLEDIG verteld wordt in **Hoofdstuk 1, Lijn B**
+(`CH1_B01`-`B08`) — met een eigen quest-afsluiting, eretitel
+(`ch1_b_athena`), souvenir (`souvenir_athena_geboorte`) en de `athena:
+full`-onthulling. Dat had ik niet gecontroleerd voor ik H13's Griekse lijn
+schreef.
+
+**Genomen beslissing (i.p.v. Hoofdstuk 1 aanpassen)**: Hoofdstuk 1's
+telling is een substantieel, al langer bestaand stuk content, vroeg in de
+hele campagne, en doet de onthulling al op precies de manier die bedoeld
+was (Athena's `intro`-tekst in H1 tempt er al naartoe: "iemand die nog
+niet eens geboren is"). Die intact laten en in plaats daarvan Hoofdstuk
+13 herschrijven, leek een kleinere, veiligere ingreep dan een al gebouwd
+fundament omgooien. **Wat er in H13 veranderd is**:
+- `CH13_GRE_000`-`002` (Zeus/Metis-profetie, opslokken, geboorte) VOLLEDIG
+  VERWIJDERD. Vervangen door één korte bridge-scène (`CH13_GRE_000`,
+  hernoemd) die Athena's bestaan erkent zonder de geboorte te herhalen —
+  "je hebt haar misschien zelfs zien geboren worden" — en meteen doorgaat
+  naar het echte, nog niet eerder verteld onderwerp: de wedstrijd om
+  Athene tegen Poseidon.
+- De drie futurum-puzzels (`puzzle_ch13_gre_futurum1/2/3`) herschreven van
+  de profetie-tekst naar de wedstrijd-tekst zelf (Poseidon se dreigement/
+  belofte, Athena's belofte over de olijfboom, Poseidon se overstromings-
+  dreigement) — nog steeds authentiek Pallas-materiaal (Tekst 22A, "Athena
+  en Poseidon"), niet uit de duim gezogen.
+- `codex_athena_geboorte` (het duplicaat) verwijderd; H1's eigen
+  `codex_geboorte_athena` blijft de enige, canonieke bron.
+- `PERSON: athena:full` uit H13 verwijderd — die onthulling gebeurt al in
+  H1 (of, als de speler een andere Hoofdstuk-1-lijn koos, gewoon nooit
+  expliciet als "volledige onthulling", wat prima is; Athena is sowieso
+  al een terugkerend personage sinds Hoofdstuk 2).
+- Souvenir en slottekst van H13 aangepast om naar de wedstrijd/olijfboom
+  te verwijzen in plaats van naar de geboorte.
+
+**Restrisico, bewust geaccepteerd**: Hoofdstuk 1's Lijn A/B/C zijn
+onderling EXCLUSIEF (de speler kiest er precies één, de andere twee
+"vervagen" narratief) — dus alleen spelers die specifiek Lijn B kozen,
+hebben de geboorte al gezien. Voor de andere twee derde van de spelers was
+er sowieso geen dubbeling. Dit was dus een gedeeltelijk, niet universeel
+probleem — maar de fix (H13 niet meer laten steunen op de geboorte)
+werkt voor alle spelers gelijk, ongeacht welke Hoofdstuk-1-lijn ze kozen,
+dus geen voorwaardelijke FLAG-check nodig geweest.
+
+Gevalideerd: `node --check` + `validate_chronica.js` → 0 fouten, 33
+waarschuwingen (ongewijzigd); grafenwandeling bevestigt alle drie
+taalsporen nog altijd foutloos naar `CH13_WORDT_VERVOLGD` (grieks 13
+scènes, latijn 23, beide 30).
+
+**Tweede correctieronde, later dezelfde dag: het "restrisico" alsnog
+opgelost + meer body voor de Kekrops-lijn.** Gerben vroeg alsnog om het
+hierboven geaccepteerde restrisico weg te nemen — spelers die Hoofdstuk 1
+Lijn B kozen, moeten een expliciete erkenning krijgen dat ze de geboorte
+al zagen; spelers die dat niet deden, moeten er alsnog een korte
+samenvatting van krijgen (in plaats van hem stilzwijgend over te slaan).
+
+**Uitvoering**: `CH13_GRE_000` vertakt nu op de al bestaande FLAG
+`ch1_lijn` (gezet in elk van Hoofdstuk 1's drie lijnen — `A`/`B`/`C` — zie
+`SP_AVATAR_STORY_UNLOCKS`' eigen commentaar erover in
+`singleplayer-data.js`, die al uitlegde dat dit één gedeelde vlag is,
+geen drie losse eretitel-checks):
+- `[REQUIRE:ch1_lijn=B]` → `CH13_GRE_000B`: één korte alinea die erkent
+  dat de speler de geboorte al zag.
+- `[REQUIRE:ch1_lijn!=B]` → `CH13_GRE_000C`: een korte (twee zinnen),
+  niet-dramatische samenvatting van dezelfde geboorte, plus alsnog een
+  `CODEX:`-hook naar `codex_geboorte_athena` — zodat ook deze spelers de
+  volledige codex-entry als naslag krijgen, alleen niet als scène
+  opnieuw voorgespeeld.
+
+Beide monden identiek uit in `CH13_GRE_003` (de wedstrijd om Athene) — geen
+`PUZZLE:` in `CH13_GRE_000` zelf, dus geen PUZZLE/REQUIRE-valkuil hier.
+
+**Extra body voor de Kekrops-lijn (tweede deel van hetzelfde verzoek)**:
+een nieuw vignet, `CH13_GRE_004C`/`_004D`, ingevoegd tussen Poseidons
+overstroming en Arachne — het verhaal van **Erichthonius/Erechtheus**:
+geboren uit de aarde (Gaia) na Hephaistos' onbeantwoorde verlangen naar
+Athena, door haar geadopteerd en in een verboden kist toevertrouwd aan
+Kekrops' drie dochters (Aglauros, Herse, Pandrosos) — twee van hen kijken
+toch, worden waanzinnig en storten zich van de Akropolis. Erichthonius
+overleeft, wordt koning Erechtheus, en sticht Athena's eerste tempel in
+de stad. Nieuwe codex-entry `codex_erichthonius_erechtheus`. Geen nieuwe
+`SP_CODEX_PERSONS`-entries nodig — Erichthonius/Erechtheus en de drie
+zusters blijven "verteld"-figuren, zelfde conventie als Perseus/
+Bellerophon elders in dit hoofdstuk.
+
+Gevalideerd met een uitgebreidere grafenwandeling, ditmaal over BEIDE
+relevante vlaggen tegelijk (`taalspoor` × `ch1_lijn`, 9 combinaties): alle
+negen bereiken foutloos `CH13_WORDT_VERVOLGD`, geen lussen of
+doodlopende paden. `node --check` + `validate_chronica.js` → 0 fouten, 33
+waarschuwingen (ongewijzigd).
 
 ---
 

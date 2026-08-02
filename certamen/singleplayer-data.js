@@ -347,13 +347,13 @@ const SP_CAMPAIGN = [
   // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk).
   { id:"ch13", nr:13, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Twee Steden, Twee Koningen",
     periode:"Mythisch Athene / Koninkrijk Rome",
-    verhaal:"Terwijl Athena zelf vertelt hoe ze geboren werd — gewapend, volwassen, uit het hoofd van haar vader — worstelt Rome nog met sterfelijke koningen, niet allemaal even rechtvaardig. Twee steden, elk op zoek naar het gezag waarop ze gebouwd zullen worden.",
-    pallas:"Les 22: Athena en Poseidon, Zeus en Metis, de geboorte van Athena — bevat, anders dan eerder aangenomen, wel degelijk nieuwe grammatica (het futurum, via de Zeus/Metis-profetietekst) — zie PALLAS_MINERVA_OVERZICHT.md", minerva:"Hoofdstuk 21: De Romeinen en de dood (conjunctivus praesens en perfectum) — tot dan toe niet toegewezen, hier ingezet via Brutus' eed over Lucretia's lichaam en de twijfel over Horatius' daad",
-    grammatica:"Grieks: futurum (Pallas 22, Zeus/Metis-profetie); Latijn: conjunctivus praesens en perfectum (Minerva 21, doelzinnen/hortatief/indirecte vraag)",
-    gameplay:"Twee sporen (sequentieel, geen scène-voor-scène zigzag — zelfde aanpak als Hoofdstuk 12), GEBOUWD 2026-08-02: CH13_GRE_000-005 (Athena's geboorte, wedstrijd om Athene, Arachne) + CH13_LAT_000-008 (Horatii/Curiatii, Lucretia/Brutus), converged op CH13_EINDE/CH13_MUSEUM_00. Eén CLEMENTIA/SEVERITAS/NEUTRAL-moment (oordeel over Horatius' moord op zijn zuster). Atalanta/Meleager-content verhuisd naar Hoofdstuk 16 (sport-thema past beter), Arachne blijft hier bij Athena. Routeert voorlopig door naar CH13_WORDT_VERVOLGD (tijdelijk speeltest-eindpunt, zie Chronica.md §7.46/§7.47).",
-    personages:"Athena, Poseidon, Zeus, Metis, Perseus (verteld), Bellerophon (verteld), Arachne — Tullus Hostilius, de Horatii, de Curiatii, Tarquinius Superbus, Lucretia, Brutus",
-    thema:"Hoe gezag ontstaat — bij een godin vanzelfsprekend, bij een stad pas na een lange, soms bloedige zoektocht",
-    illustratie:"Athena's geboorte uit Zeus' hoofd / Lucretia en Brutus voor het volk van Rome" },
+    verhaal:"Athena, allang een vertrouwde metgezel, wint een naamloze stad van haar eigen oom Poseidon met niets meer dan een olijfboom — terwijl Rome nog worstelt met sterfelijke koningen, niet allemaal even rechtvaardig. Twee steden, elk op zoek naar het gezag waarop ze gebouwd zullen worden. CORRECTIE 2026-08-02: de oorspronkelijke Griekse lijn dramatiseerde Athena's geboorte (Zeus/Metis, Hephaistos die zijn schedel splijt) — maar dat verhaal wordt al volledig verteld in Hoofdstuk 1, Lijn B (`CH1_B01-B08`, met eigen quest/eretitel/souvenir en de `athena:full`-onthulling). Gerben signaleerde de dubbeling; de Griekse lijn is herschreven rond de (elders nergens verteld) wedstrijd om Athene tegen Poseidon, met een korte, niet-herhalende verwijzing naar de al bekende geboorte in plaats van een tweede keer dezelfde scène.",
+    pallas:"Les 22: Athena en Poseidon, Zeus en Metis, de geboorte van Athena — de GRAMMATICA (futurum) komt uit dezelfde les als de geboorte-tekst (Tekst 22B), maar wordt hier ingezet via de latere wedstrijd-om-Athene-tekst (22A), niet via de geboorte zelf (zie verhaal-veld) — zie PALLAS_MINERVA_OVERZICHT.md", minerva:"Hoofdstuk 21: De Romeinen en de dood (conjunctivus praesens en perfectum) — tot dan toe niet toegewezen, hier ingezet via Brutus' eed over Lucretia's lichaam en de twijfel over Horatius' daad",
+    grammatica:"Grieks: futurum (Pallas 22, via de wedstrijd om Athene, NIET via de geboorte); Latijn: conjunctivus praesens en perfectum (Minerva 21, doelzinnen/hortatief/indirecte vraag)",
+    gameplay:"Twee sporen (sequentieel, geen scène-voor-scène zigzag — zelfde aanpak als Hoofdstuk 12), GEBOUWD 2026-08-02: CH13_GRE_000 vertakt op de FLAG `ch1_lijn` (2026-08-02, tweede correctieronde) — spelers die Hoofdstuk 1 Lijn B kozen (Athena) krijgen een korte erkenning dat ze haar geboorte al zagen (CH13_GRE_000B), spelers die dat niet deden krijgen daar alsnog een korte samenvatting (CH13_GRE_000C, incl. codex_geboorte_athena) — beide komen samen uit bij CH13_GRE_003 (wedstrijd om Athene tegen Poseidon) → 004 (olijfboom) → 004B (Poseidons overstroming) → 004C/004D (Erichthonius/Erechtheus-vignet, extra achtergrond op Gerbens verzoek) → 005 (Arachne). Latijnse lijn: CH13_LAT_000-008 (Horatii/Curiatii, Lucretia/Brutus), converged op CH13_EINDE/CH13_MUSEUM_00. Eén CLEMENTIA/SEVERITAS/NEUTRAL-moment (oordeel over Horatius' moord op zijn zuster). Atalanta/Meleager-content verhuisd naar Hoofdstuk 16 (sport-thema past beter), Arachne blijft hier bij Athena. Routeert voorlopig door naar CH13_WORDT_VERVOLGD (tijdelijk speeltest-eindpunt, zie Chronica.md §7.46/§7.47).",
+    personages:"Athena, Poseidon, Kekrops, Erichthonius/Erechtheus (verteld), Aglauros/Herse/Pandrosos (verteld), Perseus (verteld), Bellerophon (verteld), Arachne — Tullus Hostilius, de Horatii, de Curiatii, Tarquinius Superbus, Lucretia, Brutus",
+    thema:"Hoe gezag ontstaat — met een verstandig geschenk in plaats van machtsvertoon, of pas na een lange, soms bloedige zoektocht",
+    illustratie:"De olijfboom op de Akropolis / Lucretia en Brutus voor het volk van Rome" },
   { id:"ch14", nr:14, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Verzet tegen Tirannen",
     periode:"Athene, ca. 508 v.Chr. / vroege Romeinse Republiek, ca. 509 v.Chr.",
     verhaal:"In vrijwel hetzelfde jaar verzetten twee volkeren zich tegen een tiran — Athene verdrijft zijn heersers en experimenteert met democratie, Rome verjaagt zijn laatste koning en moet die vrijheid meteen verdedigen tegen een vreemd leger aan de poorten.",
@@ -1346,18 +1346,18 @@ const SP_PUZZLES = {
   // introduceert); Latijn — conjunctivus praesens en perfectum (Minerva
   // hoofdstuk 21, tot dan toe niet toegewezen — zie PALLAS_MINERVA_
   // OVERZICHT.md). Zie SP_CAMPAIGN ch13.grammatica en Chronica.md §7.47.
-  puzzle_ch13_gre_futurum1: { type:"typed-greek",
-    vraag:"Een orakel spreekt een profetie uit over het kind dat Metis zal baren: “ὁ παῖς τὸν πατέρα ___” — het kind zal zijn vader verslaan/omverwerpen. Typ met het Griekse toetsenbord de futurum, 3e persoon enkelvoud, van καταλύω (verslaan, omverwerpen).",
-    antwoord:"καταλύσει",
-    hint:"Futurum vorm je door een -σ- tussen de werkwoordsstam en de persoonsuitgang te voegen: καταλύ- + -σ- + -ει (3e pers. enk.) = καταλύσει." },
+  puzzle_ch13_gre_futurum1: { type:"multiple-choice",
+    vraag:"Poseidon, zeker van zijn overwinning, belooft de Atheners: “ἐγὼ τῆς πόλεως ___” — ik zal over de stad heersen. Welke vorm van βασιλεύω (heersen, koning zijn) is hier de futurum, 1e persoon enkelvoud?",
+    opties:["βασιλεύσω","βασιλεύω","ἐβασίλευσα","βασιλεύσει"], antwoord:"βασιλεύσω",
+    hint:"Futurum 1e persoon enkelvoud: werkwoordsstam + -σ- + -ω. Βασιλεύσω, 'ik zal heersen'." },
   puzzle_ch13_gre_futurum2: { type:"typed-greek",
-    vraag:"Zeus, doodsbang voor de profetie, weet één ding zeker: “οὐδεὶς ἐμὲ ___” — niemand zal mij omverwerpen. Typ met het Griekse toetsenbord de futurum, 3e persoon enkelvoud, van εἰμί (zijn) — hier in de betekenis 'het geval zijn'.",
+    vraag:"Athena, terwijl ze de olijfboom plant, belooft de stad iets duurzamers dan Poseidons water: “ἡ ἐλαία ὑμῖν ___” — de olijfboom zal van jullie zijn. Typ met het Griekse toetsenbord de futurum, 3e persoon enkelvoud, van εἰμί (zijn).",
     antwoord:"ἔσται",
     hint:"Het futurum van εἰμί (zijn) is onregelmatig, net als bij het Latijnse esse: ἔσομαι, ἔσῃ, ἔσται (3e pers. enk.), ἐσόμεθα, ἔσεσθε, ἔσονται." },
-  puzzle_ch13_gre_futurum3: { type:"multiple-choice",
-    vraag:"Poseidon, zeker van zijn overwinning, belooft de Atheners: “ἐγὼ τῆς θαλάττης ___” — ik zal over de zee heersen. Welke vorm van βασιλεύω (heersen, koning zijn) is hier de futurum, 1e persoon enkelvoud?",
-    opties:["βασιλεύσω","βασιλεύω","ἐβασίλευσα","βασιλεύσει"], antwoord:"βασιλεύσω",
-    hint:"Futurum 1e persoon enkelvoud: werkwoordsstam + -σ- + -ω. Βασιλεύσω, 'ik zal heersen' — dezelfde -σ- die ook in καταλύσει en ἔσται zit." },
+  puzzle_ch13_gre_futurum3: { type:"typed-greek",
+    vraag:"Poseidon, woedend om zijn nederlaag, dreigt: “ἐγὼ τὸ πεδίον ___” — ik zal de vlakte overstromen. Typ met het Griekse toetsenbord de futurum, 1e persoon enkelvoud, van κατακλύζω (overstromen).",
+    antwoord:"κατακλύσω",
+    hint:"Futurum vorm je door een -σ- tussen de werkwoordsstam en de persoonsuitgang te voegen: κατακλύ- + -σ- + -ω (1e pers. enk.) = κατακλύσω — dezelfde -σ- die ook in βασιλεύσω en ἔσται zit." },
   puzzle_ch13_lat_conj_praesens1: { type:"typed-latin",
     vraag:"Brutus zweert bij Lucretia's bloed, de andere Romeinen om zich heen: “Iuremus ut reges ___” — laten we zweren dat we de koningen zullen verdrijven. Typ de conjunctivus praesens, 1e persoon meervoud, van expellere (verdrijven) — een doelzin.",
     antwoord:"expellamus",
@@ -1872,21 +1872,21 @@ const SP_CODEX_ENTRIES = {
 
   // ---- Hoofdstuk 13 — Twee Steden, Twee Koningen ----
   codex_grammatica_ch13_futurum_grieks: { cat:"grammatica", titel:"Grammatica: het Griekse futurum",
-    tekst:"Het futurum (toekomende tijd) vorm je door een -σ- tussen de werkwoordsstam en de persoonsuitgang te plaatsen: καταλύω (verslaan) wordt καταλύσω (ik zal verslaan). Het werkwoord εἰμί (zijn) heeft een eigen, onregelmatig futurum: ἔσομαι, ἔσῃ, ἔσται...",
-    table:{ headers:["Werkwoord","Futurum (3e pers. enk.)","Vertaling"],
-      rows:[["καταλύω (verslaan)","καταλύσει","hij/zij zal verslaan"],
-            ["βασιλεύω (heersen)","βασιλεύσει","hij/zij zal heersen"],
-            ["εἰμί (zijn)","ἔσται","het zal zijn"]] } },
+    tekst:"Het futurum (toekomende tijd) vorm je door een -σ- tussen de werkwoordsstam en de persoonsuitgang te plaatsen: βασιλεύω (heersen) wordt βασιλεύσω (ik zal heersen), κατακλύζω (overstromen) wordt κατακλύσω (ik zal overstromen). Het werkwoord εἰμί (zijn) heeft een eigen, onregelmatig futurum: ἔσομαι, ἔσῃ, ἔσται...",
+    table:{ headers:["Werkwoord","Futurum (1e pers. enk.)","Vertaling"],
+      rows:[["βασιλεύω (heersen)","βασιλεύσω","ik zal heersen"],
+            ["κατακλύζω (overstromen)","κατακλύσω","ik zal overstromen"],
+            ["εἰμί (zijn)","ἔσται (3e pers.)","het zal zijn"]] } },
   codex_grammatica_ch13_conjunctivus: { cat:"grammatica", titel:"Grammatica: conjunctivus praesens en perfectum",
     tekst:"De conjunctivus praesens gebruik je in een doelzin (ut/ne + conjunctivus, 'opdat') of een hortatieve zin ('laten we...'). Bij een 3e-conjugatiewerkwoord als expellere krijgt de conjunctivus praesens de klinker -a- in plaats van -e-. De conjunctivus perfectum gebruik je o.a. in een indirecte vraag die vóór het hoofdwerkwoord al voltooid was: perfectumstam + -eri- + persoonsuitgang.",
     table:{ headers:["Vorm","Voorbeeld","Vertaling"],
       rows:[["Conjunctivus praesens (hortatief)","expellamus","laten we verdrijven"],
             ["Conjunctivus praesens (doelzin)","ne...dubitet","opdat niemand twijfelt"],
             ["Conjunctivus perfectum (indirecte vraag)","num...egerit","of hij gehandeld heeft"]] } },
-  codex_athena_geboorte: { cat:"mythologie", titel:"De Geboorte van Athena",
-    tekst:"Zeus' eerste vrouw was Metis, godin van het overleg — tot een profetie voorspelde dat haar kind hem ooit zou omverwerpen, precies zoals hij zelf zijn vader Kronos onttroonde. Uit angst slokte Zeus haar op, in de veronderstelling daarmee het probleem te hebben opgelost. Maanden later kreeg hij een ondraaglijke hoofdpijn; Hephaistos spleet zijn schedel open, en Athena sprong eruit — volwassen, gewapend, en volledig de zijne, zonder ooit een moeder gekend te hebben." },
   codex_athena_poseidon: { cat:"mythologie", titel:"De Wedstrijd om Athene",
     tekst:"Poseidon en Athena streden allebei om beschermgod van dezelfde stad te worden. Poseidon sloeg met zijn drietand op de Akropolis en liet een zoutwaterbron ontspringen — indrukwekkend, maar onbruikbaar. Athena plantte een olijfboom: voedsel, olie, hout, een symbool van vrede in plaats van macht. Koning Kekrops koos haar geschenk, en de stad kreeg haar naam: Athene." },
+  codex_erichthonius_erechtheus: { cat:"mythologie", titel:"Erichthonius en de Verboden Kist",
+    tekst:"Nadat Hephaistos' onbeantwoorde verlangen naar Athena op de aarde terechtkwam, baarde Gaia zelf een kind: Erichthonius, half mens, half slang. Athena adopteerde hem en gaf hem, verborgen in een gesloten kist, in bewaring bij de drie dochters van Kekrops — met het strikte verbod hem nooit te bekijken. Twee van de drie konden de verleiding niet weerstaan, en stortten zich uit doodsangst van de Akropolis. Erichthonius zelf groeide op onder Athena's bescherming en werd als koning Erechtheus de stichter van haar eerste tempel in Athene." },
   codex_arachne: { cat:"mythologie", titel:"Arachne, de Wever",
     tekst:"Arachne, een sterveling zo begaafd in het weven dat ze beweerde beter te zijn dan Athena zelf, weigerde de godin ook maar één keer te bedanken voor haar talent. Athena daagde haar uit tot een wedstrijd — en toen Arachne's weefsel, dat de fouten van de goden zelf afbeeldde, foutloos bleek, veranderde een woedende Athena haar in een spin: voor eeuwig wevend, nooit meer erkend." },
   codex_horatii_curiatii: { cat:"geschiedenis", titel:"De Horatii en de Curiatii",
@@ -1896,7 +1896,7 @@ const SP_CODEX_ENTRIES = {
   codex_lucretia_brutus: { cat:"geschiedenis", titel:"Lucretia en het Einde van de Koningen",
     tekst:"Sextus Tarquinius, zoon van de tirannieke koning Tarquinius Superbus, verkracht Lucretia, een deugdzame Romeinse edelvrouw. Uit schaamte pleegt zij zelfmoord voor de ogen van haar familie, nadat ze hen heeft laten zweren wraak te nemen. Lucius Junius Brutus zweert bij haar bloed dat de koningen verdreven zullen worden — en houdt woord: Tarquinius Superbus wordt verjaagd, en de Romeinse Republiek wordt gesticht." },
   codex_grammatica_ch13_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 13 samengevat",
-    tekst:"Dit hoofdstuk introduceerde het Griekse futurum (Pallas hoofdstuk 22) — de toekomende tijd, treffend genoeg geleerd via een profetie over de toekomst — en, aan de Latijnse kant, de conjunctivus praesens en perfectum (Minerva hoofdstuk 21), gebruikt in doelzinnen, hortatieve zinnen en indirecte vragen." },
+    tekst:"Dit hoofdstuk introduceerde het Griekse futurum (Pallas hoofdstuk 22) — de toekomende tijd, geleerd via de beloftes en dreigementen van Athena en Poseidon tijdens hun wedstrijd om Athene — en, aan de Latijnse kant, de conjunctivus praesens en perfectum (Minerva hoofdstuk 21), gebruikt in doelzinnen, hortatieve zinnen en indirecte vragen." },
   codex_ithaka_aankomst: { cat:"mythologie", titel:"Aankomst op Ithaka",
     tekst:"Na twintig jaar zetten de Faiaken Odysseus eindelijk aan land op zijn eigen eiland, slapend. Athena verhult het landschap in mist tot ze zeker weet dat hij alleen is, onthult zich dan, en verandert hem in een oude bedelaar zodat hij ongezien zijn eigen, door vrijers overgenomen paleis kan verkennen." },
   codex_eumaeus: { cat:"mythologie", titel:"Eumaeus, de Trouwe Zwijnenhoeder",
@@ -2336,8 +2336,8 @@ const SP_SOUVENIRS = {
     caption:"Aarde van Ogygia, waar Odysseus vastzit, gemengd met as van de brandstapel waarop Dido stierf — twee reizen door het rijk van de doden, in één kleine buidel bewaard." },
   souvenir_ara_maxima: { nm:"Een Steen van het Ara Maxima", icon:"🏛️", img:"souvenir_ara_maxima.png",
     caption:"Een stuk steen van het altaar dat de bewoners van Latium oprichtten nadat Hercules hen van Cacus verloste — eeuwen voor hier ooit een stad zou staan." },
-  souvenir_athena_helm: { nm:"Een Miniatuurhelm van Athena", icon:"⛑️", img:"souvenir_athena_helm.png",
-    caption:"Een piepklein, gouden helmpje — een echo van de wapenrusting waarmee Athena zelf ter wereld kwam, al gewapend voor ze ook maar één stap had gezet." },
+  souvenir_athena_helm: { nm:"Een Twijgje van de Eerste Olijfboom", icon:"🫒", img:"souvenir_athena_helm.png",
+    caption:"Een klein, verdroogd twijgje — naar verluidt van dezelfde olijfboom waarmee Athena ooit een hele stad won van haar eigen oom Poseidon." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -16087,61 +16087,55 @@ END
 === SCENE: CH13_GRE_000 ===
 
 TITLE:
-Een Profetie voor Zeus
+Een Naamloze Stad
 
 TEXT:
-Lang voor Hera, was Metis Zeus' eerste vrouw — een titanide, godin van overleg en list, wier raad hem ooit hielp zijn eigen vader Kronos te onttronen. Maar Gaia en Ouranos, de oudste goden, waarschuwen Zeus: Metis zal twee kinderen baren. Eerst een dochter, even wijs en sterk als hijzelf. Daarna een zoon — en díe zoon zal ooit zijn vader omverwerpen, precies zoals Zeus zelf ooit Kronos deed.
+Athena is je al vertrouwd — je hebt haar zien meereizen, zien adviseren. Wat je nu te zien krijgt, is een ander verhaal: niet hoe zijzelf ter wereld kwam, maar hoe de stad die haar naam draagt, díe naam ooit kreeg.
+
+CHOICES:
+* Ga verder [REQUIRE:ch1_lijn=B] -> CH13_GRE_000B
+* Ga verder [REQUIRE:ch1_lijn!=B] -> CH13_GRE_000C
+
+END
+
+=== SCENE: CH13_GRE_000B ===
+
+TITLE:
+Een Bekend Begin
+
+TEXT:
+Haar eigen geboorte ken je al — je was erbij, generaties terug op de Olympos, toen Hephaistos Zeus' schedel spleet en zij eruit sprong, al volwassen en gewapend. Dit verhaal begint pas daarna: met een ruzie om een naamloze stad aan de kust van Attika.
+
+De stad wordt geregeerd door de legendarische koning Kekrops, half mens en half slang. Twee goden willen allebei haar beschermgod worden: Poseidon, heerser van de zee, en Athena zelf.
 
 PERSON:
-metis:intro
+kekrops:intro
+
+CHOICES:
+* Zie wie als eerste zijn geschenk aanbiedt -> CH13_GRE_003
+
+END
+
+=== SCENE: CH13_GRE_000C ===
+
+TITLE:
+Een Geboorte, Kort Verteld
+
+TEXT:
+Lang voor Hera was Metis Zeus' eerste vrouw — tot een profetie voorspelde dat haar kind hem ooit zou onttronen, precies zoals hij zelf ooit zijn vader Kronos onttroonde. Uit angst slokte Zeus haar op, kind en al, in de veronderstelling daarmee het probleem te hebben opgelost. Maanden later kreeg hij een ondraaglijke hoofdpijn; Hephaistos spleet zijn schedel open met een bijl, en Athena sprong eruit — al volwassen, al gewapend, zonder ooit een moeder gekend te hebben.
+
+Dát is hoe ze ter wereld kwam. Dit verhaal gaat over iets dat daarna gebeurde: een ruzie om een naamloze stad aan de kust van Attika.
+
+De stad wordt geregeerd door de legendarische koning Kekrops, half mens en half slang. Twee goden willen allebei haar beschermgod worden: Poseidon, heerser van de zee, en Athena zelf.
+
+PERSON:
+kekrops:intro
 
 CODEX:
-codex_athena_geboorte
-
-PUZZLE:
-puzzle_ch13_gre_futurum1
+codex_geboorte_athena
 
 CHOICES:
-* Zie wat Zeus met deze profetie doet -> CH13_GRE_001
-
-END
-
-=== SCENE: CH13_GRE_001 ===
-
-TITLE:
-Opgeslokt
-
-TEXT:
-Zeus, doodsbang voor een herhaling van zijn eigen geschiedenis, bedenkt een oplossing die niemand anders zou durven: hij vleit Metis, die op dat moment al zwanger is van hun dochter, met lieve woorden dichterbij — en slokt haar in één keer op, kind en al. Probleem opgelost, denkt hij. Metis kan nu nooit meer een zoon baren die hem zal bedreigen.
-
-Maanden gaan voorbij. Zeus voelt zich steeds vreemder — een barstende hoofdpijn die met de dag erger wordt, alsof er iets in hem groeit dat naar buiten wil.
-
-PUZZLE:
-puzzle_ch13_gre_futurum2
-
-CHOICES:
-* Zie wat er gebeurt als de pijn ondraaglijk wordt -> CH13_GRE_002
-
-END
-
-=== SCENE: CH13_GRE_002 ===
-
-TITLE:
-Geboren, Gewapend
-
-TEXT:
-Uiteindelijk is de pijn zo hevig dat Zeus om hulp schreeuwt — en Hephaistos, de enige die het aandurft, splijt zijn vaders schedel open met een bijl. Wat eruit springt is geen gedrocht, maar een volwassen godin: gewapend van top tot teen, met speer en schild al in de hand, en een oorlogskreet die de hele Olympos doet trillen.
-
-Athena — want zo heet ze — heeft nooit een moeder gekend. Ze is, op een manier die geen enkele andere god kan claimen, volledig en alleen Zeus' eigen dochter.
-
-PERSON:
-athena:full
-
-IMAGE:
-ch13_athena_geboorte.png
-
-CHOICES:
-* Zie hoe Athena zich meteen bewijst -> CH13_GRE_003
+* Zie wie als eerste zijn geschenk aanbiedt -> CH13_GRE_003
 
 END
 
@@ -16151,15 +16145,13 @@ TITLE:
 De Wedstrijd om een Stad
 
 TEXT:
-Niet lang na haar geboorte daagt Athena haar eigen oom Poseidon uit — beiden willen ze beschermgod worden van dezelfde jonge stad aan de kust van Attika, geregeerd door de legendarische koning Kekrops, half mens en half slang. Wie het mooiste geschenk geeft, wint de stad en haar naam voor altijd.
-
-Poseidon is eerst. Hij slaat met zijn drietand op de rots van de Akropolis, en zout water welt op uit de scheur — indrukwekkend, maar ondrinkbaar, onbruikbaar voor akkers of vee.
+Poseidon is eerst. Hij belooft de stad iets dat geen sterveling kan weigeren, en slaat met zijn drietand op de rots van de Akropolis — zout water welt op uit de scheur, indrukwekkend, maar ondrinkbaar, onbruikbaar voor akkers of vee.
 
 PERSON:
 poseidon:intro
 
 PUZZLE:
-puzzle_ch13_gre_futurum3
+puzzle_ch13_gre_futurum1
 
 CHOICES:
 * Zie wat Athena te bieden heeft -> CH13_GRE_004
@@ -16174,16 +16166,63 @@ De Olijfboom
 TEXT:
 Athena plant, zonder een woord vooraf, een enkele boom in de rotsgrond — een olijfboom. Geen dondergebulder, geen zeewater. Gewoon voedsel, olie voor lampen en zalf, hout voor gereedschap. Kekrops, gevraagd te oordelen, kiest zonder aarzelen voor de boom boven de bron.
 
-Poseidon, woedend over zijn nederlaag, overstroomt de vlakte van Attika uit pure kwaadheid — maar de stad zelf blijft, en krijgt de naam van de godin die haar begreep in plaats van haar te willen overweldigen: Athene.
+PUZZLE:
+puzzle_ch13_gre_futurum2
 
-PERSON:
-kekrops:intro
+CHOICES:
+* Zie hoe Poseidon zijn nederlaag opneemt -> CH13_GRE_004B
+
+END
+
+=== SCENE: CH13_GRE_004B ===
+
+TITLE:
+Een Kwade Verliezer
+
+TEXT:
+Poseidon, woedend over zijn nederlaag, overstroomt de vlakte van Attika uit pure kwaadheid — maar de stad zelf blijft overeind, en krijgt de naam van de godin die haar begreep in plaats van haar te willen overweldigen: Athene.
+
+PUZZLE:
+puzzle_ch13_gre_futurum3
 
 CODEX:
 codex_athena_poseidon
 
 CHOICES:
-* Zie wie later, jaren na deze wedstrijd, Athena's geduld op de proef stelt -> CH13_GRE_005
+* Zie wat er van Kekrops en zijn stad wordt -> CH13_GRE_004C
+
+END
+
+=== SCENE: CH13_GRE_004C ===
+
+TITLE:
+Kekrops' Erfenis
+
+TEXT:
+Kekrops blijft nog jaren op de troon van de stad die nu naar zijn favoriete godin is vernoemd — maar het is niet zijn eigen bloedlijn die haar uiteindelijk zal opvolgen. Hephaistos, ooit onbeantwoord verliefd op Athena zelf, achtervolgt haar op een dag te opdringerig; zij wijst hem af, en wat er van zijn verlangen op de grond terechtkomt, laat de aarde — Gaia zelf — zwanger achter. Uit die aarde wordt een kind geboren: half mens, half slang, niet ongelijk aan Kekrops zelf.
+
+Athena, die het kind — Erichthonius — geen moment als een schande ziet, neemt hem onder haar hoede. Ze geeft hem in een gesloten kist aan Kekrops' drie dochters, Aglauros, Herse en Pandrosos, met één strikt verbod: nooit openmaken.
+
+CODEX:
+codex_erichthonius_erechtheus
+
+CHOICES:
+* Zie of de dochters het verbod respecteren -> CH13_GRE_004D
+
+END
+
+=== SCENE: CH13_GRE_004D ===
+
+TITLE:
+De Verboden Kist
+
+TEXT:
+Twee van de drie zusters kunnen de nieuwsgierigheid niet weerstaan en openen de kist stiekem. Wat ze daarbinnen zien — het kind, bewaakt door slangen of zelf half slang, de bronnen lopen uiteen — drijft hen ogenblikkelijk tot waanzin. Ze storten zich van de rotsen van de Akropolis, liever dood dan met wat ze hebben gezien.
+
+Erichthonius overleeft, opgroeiend onder Athena's eigen, persoonlijke bescherming. Als volwassen man wordt hij zelf koning van Athene, waar hij bekendstaat als Erechtheus — de stichter van haar eerste echte tempel op de Akropolis, en de reden dat haar cultus in deze stad nooit meer zal verdwijnen.
+
+CHOICES:
+* Zie wie later, jaren na dit alles, Athena's geduld op de proef stelt -> CH13_GRE_005
 
 END
 
@@ -16395,7 +16434,7 @@ TITLE:
 Twee Steden, Eén Les
 
 TEXT:
-"[[Ecce|zie hier]] — twee steden," zegt de Boodschapper, "allebei gevormd door iets dat niemand had kunnen plannen. Athene kreeg haar naam van een godin die nog niet eens bestond toen de wereld al om haar vroeg. Rome kreeg haar vrijheid van een misdaad die niemand had gewenst." Ze zwijgt even. "Dat is misschien wel de les van dit hoofdstuk: de dingen die een stad, of een mens, uiteindelijk vormen, zijn zelden de dingen die ze zelf hadden gekozen."
+"[[Ecce|zie hier]] — twee steden," zegt de Boodschapper, "allebei gevormd door een keuze die niemand had kunnen voorspellen. Athene koos een boom boven een zee, en kreeg er een naam en een beschermgodin bij die eeuwenlang zou standhouden. Rome koos, uiteindelijk, vrijheid boven een kroon — al kostte die keuze een onschuldige vrouw het leven." Ze zwijgt even. "Dat is misschien wel de les van dit hoofdstuk: de dingen die een stad, of een mens, uiteindelijk vormen, zijn zelden de dingen die ze zelf als eerste hadden verwacht."
 
 SOUVENIR:
 souvenir_athena_helm
