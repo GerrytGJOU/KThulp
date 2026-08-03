@@ -364,6 +364,35 @@ Nog open van de "snelle" categorie (bewust niet meegenomen, groter dan een
 quick win): Briseis een stem geven, de drie-Helena's-vertakking, en
 Hypsipyle/Ismene/Danaë/Medusa/Deianira/Phaedra als nieuwe personages.
 
+### Correctie + beslissing: geen drie-Helena's-vertakking (2026-08-03)
+
+Twee correcties op Deel 1/6 hierboven, na overleg met Gerben:
+
+1. **Bronvermelding fout.** De "Helena was nooit in Troje"-traditie komt
+   niet van Sophocles, maar van Stesichorus (*Palinodie*), Euripides
+   (*Helena*) en Herodotus (2.112-120). Dat is nu ook zo gecorrigeerd in
+   `codex_egyptische_helena_gerucht`.
+2. **De vertakking zelf wordt niet gebouwd.** Gerben vindt de
+   Egypte-versie niet passen binnen Chronica's eigen narratief (de
+   Trojaanse cyclus committeert zich elders al te stevig aan een Helena
+   die daadwerkelijk in Troje is — het huwelijksduel in H8, haar aanwezigheid
+   op de muren, etc. — om die aanname later nog terug te draaien).
+
+**Wat er in plaats daarvan staat**: de eerste twee Helena-tradities uit
+Deel 1 (schuldig vs. weinig eigen keuze) bleken al **eerder gebouwd** te
+zijn, los van deze audit — `{helena_lot}` (`SP_TENDENCY_STORY_VARIANTS`,
+`singleplayer-data.js`) laat de tekst bij haar schaking (H7) al meebewegen
+met de CLEMENTIA/SEVERITAS-houding die de speler tot dan toe opbouwde: een
+CLEMENTIA-speler leest dat ze "weinig echte keuze had," een SEVERITAS-speler
+dat "de bronnen haar niet vrijpleiten." De derde traditie is nu verwerkt
+als precies wat Gerben voorstelde: een gerucht, verteld door een oude
+roeier in Aulis vlak voor de vloot uitvaart (nieuwe scène `CH7_015B`, "Een
+Gerucht bij de Schepen"), nooit bevestigd of ontkracht, met een eigen
+codex-vignet (`codex_egyptische_helena_gerucht`) voor wie er meer over wil
+weten. Geen mechaniek, geen vertakking — precies de scope die gevraagd
+was. Gevalideerd (`node --check`/validator, 0 fouten) en live in de
+browser doorgeklikt.
+
 ### Hoofdstuk 12 volledig afgebouwd (2026-08-03, zelfde dag)
 
 Direct volgend op de quick wins hierboven is Hoofdstuk 12 — tot dan toe de
