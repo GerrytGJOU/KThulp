@@ -534,7 +534,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS)]);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS), ...CNSParser.parse(SP_CH11_CNS), ...CNSParser.parse(SP_CH12_CNS), ...CNSParser.parse(SP_CH13_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
   stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[],
   payoffsSeen:{}, relations:{}, kroniek:[] });
@@ -1193,7 +1193,17 @@ function spChoiceVisible(c){
     const spoor = SP_STATE.flags?.taalspoor || "beide";
     return c.require.op==="!=" ? spoor !== c.require.value : spoor === c.require.value;
   }
-  return true;
+  // Generieke FLAG-check (bv. REQUIRE:ch1_lijn=B, Hoofdstuk 13) — elke
+  // andere sleutel dan de hierboven apart afgehandelde "fragments"/
+  // "taalspoor" wordt gelezen uit SP_STATE.flags zelf. CNSParser.
+  // parseChoices() verlaagt woord-waarden altijd naar kleine letters (zie
+  // REQUIRE_TAG_RE-verwerking), maar FLAG-waarden die elders in dit
+  // bestand worden gezet zijn niet per se lowercase (bv. ch1_lijn=A/B/C)
+  // — vandaar hier ook lowercase vergelijken, anders matcht [REQUIRE:
+  // ch1_lijn=B] nooit met een daadwerkelijk gezette hoofdletter-waarde.
+  const actual = SP_STATE.flags?.[c.require.key];
+  const actualNorm = typeof actual === "string" ? actual.toLowerCase() : actual;
+  return c.require.op==="!=" ? actualNorm !== c.require.value : actualNorm === c.require.value;
 }
 // Gated choice (Chronica.md §11.4, CNSParser.STAT_TAG_RE): WEL altijd
 // zichtbaar (dus geen rol voor spChoiceVisible hierboven), alleen klikbaar
