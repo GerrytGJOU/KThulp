@@ -446,14 +446,57 @@ toegevoegd. De bestaande verzoeningsscène (`CH8_EPI_005`) is ongewijzigd
 gelaten — die werkte al goed en sluit nu inhoudelijk mooi aan op dit
 eerdere moment.
 
-**Validatie**: `node --check` + `validate_chronica.js` → 0 fouten (scène
-correct geparsed en bereikbaar). Geen verse browser-clickthrough gelukt
-voor déze specifieke scène — de preview-tool serveert voor dit
-buiten-project-pad een vaste snapshot die niet ververst na een bestands-
-wijziging (zelfde beperking als de `index.html`-cache-busting-versie uit
-[[chronica-validator-blind-spots]]). Wel hergebruikt de scène exact
-dezelfde, al in dezelfde sessie live geteste mechanismen (DIALOGUE-render,
-CLEMENTIA/SEVERITAS-keuzes, PERSON/CODEX-hooks) als de CH12-bouw
-hierboven — dus hoog vertrouwen, maar nog geen directe visuele bevestiging.
-Aanbevolen: één keer handmatig doorklikken (Hoofdstuk 8, blijf bij
-Achilles) in een verse browsersessie voor de klas-speeltest.
+**Validatie**: `node --check` + `validate_chronica.js` → 0 fouten. **Update**: na het
+ophogen van de `index.html`-cache-busting-versie (zie
+[[chronica-validator-blind-spots]] — de preview-tool serveerde tot dan een vaste,
+niet-ververste snapshot) is deze scène alsnog live doorgeklikt en bevestigd
+correct: DIALOGUE-render, keuzeknoppen en doorschakeling werken.
+
+### Vier ontbrekende namen alsnog gebouwd (2026-08-03, nog dezelfde dag)
+
+Hypsipyle, Ismene, Deianira en Phaedra — vier van de zes namen die bij de
+eerste audit "nul hits" scoorden — zijn alsnog in bestaande, al gebouwde
+hoofdstukken verwerkt, op Gerbens verzoek na de discussie over de
+drie-Helena's-vertakking:
+
+- **Hypsipyle** (Deel 6 punt 2, "beste vrouwelijke payoff-figuur"): nieuwe
+  scènes `CH5_006B`/`_006C` (Lemnos, koningin, eigen `DIALOGUE`, tweeling
+  bij Jason) en `CH6_012N`/`_012N2` (Nemea, jaren later slavin, de dood
+  van Opheltes, gered door haar eigen zonen Euneus en Thoas — oorsprong
+  van de Nemeïsche Spelen). Precies de statusval die de vrouwenlijst
+  aanraadt: koningin → slavin → hereniging.
+- **Ismene** (Deel 1, "maak haar geen lafaard"): nieuwe scène `CH6_015A`
+  tussen Creons bevel en Antigones geheime begrafenis — ze weigert met een
+  rationeel argument (de laatste twee overlevenden van de familie hoeven
+  niet allebei te sterven), en biedt zich later, bij `CH6_017`, alsnog aan
+  om samen met Antigone gestraft te worden. Antigone weigert dat aanbod.
+- **Deianira** (Deel 1, "handelt uit liefde en angst, niet jaloezie"):
+  nieuwe flash-forward-scène `CH3_H25B` na de voltooiing van Herakles'
+  twaalf werken — het hemd van Nessus, zijn dood en apotheose op de Oeta,
+  met een eigen `DIALOGUE`-regel voor Deianira.
+- **Phaedra** (Deel 1, "Euripides' tweede versie: ze bevecht haar
+  hartstocht"): nieuwe flash-forward-scène `CH4_T16B` na Theseus' troon-
+  bestijging — haar huwelijk met Theseus, de onmogelijke liefde voor
+  Hippolytus, met een eigen `DIALOGUE`-regel.
+
+De flash-forward-vorm (Deianira/Phaedra) is bewust gekozen om geen
+continuïteitsbotsing te creëren: beide gebeurtenissen liggen jaren na het
+punt waarop hun hoofdrolspelers in het huidige verhaal staan (Herakles en
+Theseus komen allebei nog springlevend voor in latere hoofdstukken/
+cameo's), dus worden ze verteld als een vooruitblik door de verteller,
+net als het bestaande "jaren later zal Diomedes..."-patroon elders in de
+tekst — geen nieuwe, tegenstrijdige tijdlijn.
+
+**Nog altijd niet gebouwd: Danaë, Andromeda, Medusa** (de hele
+Perseus-cyclus). Anders dan de vier hierboven bestaat er nergens in H1-13
+al een Perseus-hoofdstuk of -cameo om ze aan op te hangen — "Perseus &
+Medusa" staat nog als S-tier mythe klaar in `SP_MYTH_CANON`
+(`sTier`-lijst), maar volledig ongebruikt. Deze drie namen forceren in een
+bestaand hoofdstuk zou tegen de eigen myth-canon-regel ingaan (zie
+[[chronica-check-mythcanon-voor-nieuw-hoofdstuk]]) — ze horen bij een
+toekomstig eigen Perseus-hoofdstuk (H14+), niet bij een quick fix.
+
+**Validatie**: `node --check` + `validate_chronica.js` → 0 fouten (712 →
+740 scènes in totaal deze sessie). Alle vijf nieuwe knooppunten
+(`CH5_006B`, `CH6_012N`, `CH6_015A`, `CH3_H25B`, `CH4_T16B`) live
+doorgeklikt na het ophogen van de cache-busting-versie.
