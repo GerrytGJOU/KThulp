@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Etymologicon &middot; van woord naar wortel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stone-dark:#17140f;
+    --stone-panel:#231e17;
+    --stone-panel-2:#2c261d;
+    --stone-line:#4a4030;
+    --parchment:#ece3d0;
+    --parchment-dim:#c9bda0;
+    --bronze:#b8843f;
+    --bronze-bright:#d9a35f;
+    --patina:#5f8a75;
+    --patina-bright:#7fae95;
+    --latin:#8a3a2b;
+    --latin-bright:#c25a41;
+    --greek:#3a6f8f;
+    --greek-bright:#5a9bc2;
+    --gold:#c9a24a;
+    --radius:14px;
+    --touch:48px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #2a241a 0%, var(--stone-dark) 55%),
+      var(--stone-dark);
+    color:var(--parchment);
+    font-family:'EB Garamond', Georgia, serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .wrap{
+    max-width:720px;
+    margin:0 auto;
+    width:100%;
+    padding:24px 18px 40px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+  }
+  header{
+    text-align:center;
+    margin-bottom:22px;
+  }
+  h1{
+    font-family:'Cinzel', serif;
+    font-weight:700;
+    letter-spacing:0.06em;
+    font-size:clamp(28px,7vw,40px);
+    margin:0 0 4px;
+    background:linear-gradient(120deg,var(--bronze-bright),var(--gold) 45%,var(--patina-bright));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .tagline{
+    font-style:italic;
+    color:var(--parchment-dim);
+    font-size:15px;
+    margin:0;
+  }
+  .divider{
+    width:120px;
+    height:2px;
+    margin:14px auto 0;
+    background:linear-gradient(90deg,transparent,var(--bronze),var(--patina),transparent);
+  }
+
+  /* search */
+  .search-shell{
+    position:relative;
+    margin-top:26px;
+  }
+  form.searchbar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--stone-panel);
+    border:1px solid var(--stone-line);
+    border-radius:var(--radius);
+    padding:6px 6px 6px 18px;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.03), 0 6px 18px rgba(0,0,0,0.35);
+  }
+  #q{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:var(--parchment);
+    font-family:'EB Garamond', serif;
+    font-size:19px;
+    padding:12px 4px;
+    min-width:0;
+  }
+  #q::placeholder{color:var(--parchment-dim); opacity:0.65;}
+  button.go{
+    background:linear-gradient(160deg,var(--bronze-bright),var(--bronze));
+    border:none;
+    color:#1a1510;
+    font-family:'Cinzel', serif;
+    font-weight:600;
+    letter-spacing:0.04em;
+    border-radius:10px;
+    min-width:var(--touch);
+    min-height:var(--touch);
+    padding:0 18px;
+    font-size:15px;
+    cursor:pointer;
+  }
+  button.go:active{transform:translateY(1px);}
+
+  .suggestions{
+    position:absolute;
+    left:0; right:0;
+    top:calc(100% + 6px);
+    background:var(--stone-panel-2);
+    border:1px solid var(--stone-line);
+    border-radius:var(--radius);
+    overflow:hidden;
+    z-index:20;
+    display:none;
+    box-shadow:0 10px 30px rgba(0,0,0,0.5);
+  }
+  .suggestions.show{display:block;}
+  .suggestions button{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    border-bottom:1px solid var(--stone-line);
+    color:var(--parchment);
+    font-family:'EB Garamond', serif;
+    font-size:17px;
+    padding:13px 16px;
+    min-height:var(--touch);
+    cursor:pointer;
+  }
+  .suggestions button:last-child{border-bottom:none;}
+  .suggestions button:active{background:var(--stone-panel);}
+  .sugg-badge{
+    font-family:'Cinzel', serif;
+    font-size:10px;
+    letter-spacing:0.06em;
+    padding:3px 8px;
+    border-radius:20px;
+    flex-shrink:0;
+  }
+  .badge-latijn{background:rgba(194,90,65,0.18); color:var(--latin-bright); border:1px solid rgba(194,90,65,0.4);}
+  .badge-grieks{background:rgba(90,155,194,0.18); color:var(--greek-bright); border:1px solid rgba(90,155,194,0.4);}
+  .badge-nl{background:rgba(217,163,95,0.18); color:var(--bronze-bright); border:1px solid rgba(217,163,95,0.4);}
+
+  .hint-row{
+    display:flex;
+    justify-content:center;
+    margin-top:14px;
+  }
+  .discover-btn{
+    background:none;
+    border:1px solid var(--stone-line);
+    color:var(--parchment-dim);
+    font-family:'EB Garamond', serif;
+    font-style:italic;
+    font-size:15px;
+    padding:10px 16px;
+    min-height:var(--touch);
+    border-radius:24px;
+    cursor:pointer;
+  }
+  .discover-btn:active{background:var(--stone-panel);}
+
+  /* result area */
+  #result{margin-top:28px;}
+  .empty-state{
+    text-align:center;
+    color:var(--parchment-dim);
+    padding:40px 10px;
+    font-style:italic;
+    line-height:1.6;
+  }
+  .empty-state b{color:var(--parchment); font-style:normal;}
+
+  .card{
+    background:var(--stone-panel);
+    border:1px solid var(--stone-line);
+    border-radius:var(--radius);
+    padding:22px 20px 24px;
+    animation:rise 0.35s ease both;
+  }
+  @keyframes rise{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .card h2{
+    font-family:'Cinzel', serif;
+    font-size:clamp(24px,6vw,32px);
+    margin:0 0 4px;
+    color:var(--parchment);
+    letter-spacing:0.02em;
+  }
+  .meaning-line{
+    font-size:17px;
+    color:var(--parchment-dim);
+    margin:2px 0 18px;
+  }
+  .meaning-line em{color:var(--gold); font-style:normal;}
+
+  .section-label{
+    font-family:'Cinzel', serif;
+    font-size:12px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--parchment-dim);
+    margin:20px 0 10px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .section-label::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--stone-line);
+  }
+
+  /* building blocks (tesserae) */
+  .blocks{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:stretch;
+  }
+  .block{
+    flex:1 1 160px;
+    min-width:160px;
+    background:var(--stone-panel-2);
+    border:1px solid var(--stone-line);
+    border-left:4px solid var(--bronze);
+    border-radius:10px;
+    padding:12px 14px;
+    text-align:left;
+    cursor:pointer;
+    min-height:var(--touch);
+    transition:transform 0.15s ease, border-color 0.15s ease;
+    animation:lockin 0.4s ease both;
+  }
+  .block:active{transform:scale(0.97);}
+  .block.taal-grieks{border-left-color:var(--greek-bright);}
+  .block.taal-latijn{border-left-color:var(--latin-bright);}
+  @keyframes lockin{
+    from{opacity:0; transform:translateX(-8px);}
+    to{opacity:1; transform:translateX(0);}
+  }
+  .block .bv{
+    font-family:'Cinzel', serif;
+    font-size:18px;
+    color:var(--parchment);
+    display:block;
+  }
+  .block .bschrift{
+    font-family:'Palatino Linotype','Palatino','Noto Serif',serif;
+    color:var(--parchment-dim);
+    font-size:14px;
+  }
+  .block .bmeaning{
+    color:var(--parchment-dim);
+    font-size:14px;
+    font-style:italic;
+    display:block;
+    margin-top:2px;
+  }
+  .block .bvia{
+    display:block;
+    margin-top:6px;
+    padding-top:6px;
+    border-top:1px dashed var(--stone-line);
+    color:var(--gold);
+    font-size:13px;
+    font-style:italic;
+  }
+  .plus-sep{
+    align-self:center;
+    color:var(--bronze);
+    font-family:'Cinzel', serif;
+    font-size:20px;
+  }
+
+  /* derived words grid (root view) */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(150px,1fr));
+    gap:10px;
+  }
+  .tile{
+    background:var(--stone-panel-2);
+    border:1px solid var(--stone-line);
+    border-radius:10px;
+    padding:12px 14px;
+    text-align:left;
+    cursor:pointer;
+    min-height:var(--touch);
+  }
+  .tile:active{background:var(--stone-panel);}
+  .tile .tw{
+    font-family:'Cinzel', serif;
+    font-size:16px;
+    color:var(--parchment);
+    display:block;
+  }
+  .tile .tm{
+    color:var(--parchment-dim);
+    font-size:13px;
+    font-style:italic;
+  }
+  .tile .tvia{
+    color:var(--gold);
+    font-size:11px;
+    display:block;
+    margin-top:3px;
+  }
+
+  .langbadge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'Cinzel', serif;
+    font-size:12px;
+    letter-spacing:0.06em;
+    padding:5px 12px;
+    border-radius:20px;
+    margin-bottom:12px;
+  }
+
+  .ppp-note{
+    background:var(--stone-panel-2);
+    border:1px dashed var(--stone-line);
+    border-radius:10px;
+    padding:10px 14px;
+    font-size:14px;
+    color:var(--parchment-dim);
+    margin-top:2px;
+  }
+  .ppp-note b{color:var(--gold); font-weight:normal; font-style:italic;}
+
+  .not-found{
+    text-align:center;
+    padding:20px 10px;
+  }
+  .not-found p{color:var(--parchment-dim); line-height:1.6;}
+  .not-found .chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:center;
+    margin-top:14px;
+  }
+  .chip{
+    background:var(--stone-panel-2);
+    border:1px solid var(--stone-line);
+    color:var(--parchment);
+    font-family:'EB Garamond', serif;
+    font-size:15px;
+    padding:9px 16px;
+    min-height:var(--touch);
+    border-radius:22px;
+    cursor:pointer;
+  }
+  .chip:active{background:var(--stone-panel);}
+
+  footer{
+    text-align:center;
+    padding:22px 10px 10px;
+    color:var(--parchment-dim);
+    font-size:12px;
+    opacity:0.6;
+    font-family:'EB Garamond', serif;
+    letter-spacing:0.02em;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card, .block{animation:none;}
+  }
+
+  .portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:var(--gold);text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+  .portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}
+  .portal-back svg{width:22px;height:22px;display:block;}
+</style>
+</head>
+<body>
+<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<div class="wrap">
+  <header>
+    <h1>Etymologicon</h1>
+    <p class="tagline">van woord naar wortel &mdash; en terug</p>
+    <div class="divider"></div>
+  </header>
+
+  <div class="search-shell">
+    <form class="searchbar" id="searchform" autocomplete="off">
+      <input
+        id="q"
+        type="text"
+        inputmode="text"
+        autocapitalize="off"
+        autocorrect="off"
+        spellcheck="false"
+        placeholder="Zoek een woord of grondwoord, bv. aquaduct of tele&hellip;"
+        aria-label="Zoek een woord of grondwoord">
+      <button type="submit" class="go">Zoek</button>
+    </form>
+    <div class="suggestions" id="suggestions" role="listbox"></div>
+  </div>
+
+  <div class="hint-row">
+    <button type="button" class="discover-btn" id="discoverBtn">&#10022; verras me met een willekeurig woord</button>
+  </div>
+
+  <div id="result">
+    <div class="empty-state">
+      Typ een <b>Nederlands woord</b> (zoals <b>aquaduct</b>) om te zien uit welke bouwstenen het is opgebouwd,<br>
+      of typ een <b>grondwoord</b> (zoals <b>tele</b> of <b>bio</b>) om te zien welke Nederlandse woorden ervan afstammen.
+    </div>
+  </div>
+
+  <footer>Etymologicon &middot; &copy; Gerben de Jong &middot; 2026</footer>
+</div>
+
+<script>
+window.ETYM_DATA = {"roots": [{"id": "lat_aqua", "taal": "Latijn", "vorm": "aqua", "stam": null, "betekenis": "water", "woordsoort": "zelfstandig naamwoord", "schrift": null, "zoektermen": ["aqua"]}, {"id": "lat_ducere", "taal": "Latijn", "vorm": "ducere", "stam": "duc-", "betekenis": "leiden", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["ducere", "duc", "duct"], "ppp": {"vorm": "ductus", "stam": "duct-"}}, {"id": "lat_scribere", "taal": "Latijn", "vorm": "scribere", "stam": "scrib-", "betekenis": "schrijven", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["scribere", "scrib", "script"], "ppp": {"vorm": "scriptus", "stam": "script-"}}, {"id": "lat_spectare", "taal": "Latijn", "vorm": "spectare", "stam": "spec-", "betekenis": "kijken", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["spectare", "spec", "spect"], "ppp": {"vorm": "spectatus", "stam": "spect-"}}, {"id": "lat_portare", "taal": "Latijn", "vorm": "portare", "stam": "port-", "betekenis": "dragen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["portare", "port"]}, {"id": "lat_dicere", "taal": "Latijn", "vorm": "dicere", "stam": "dic-", "betekenis": "zeggen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["dicere", "dic", "dict"], "ppp": {"vorm": "dictus", "stam": "dict-"}}, {"id": "lat_facere", "taal": "Latijn", "vorm": "facere", "stam": "fac-", "betekenis": "maken, doen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["facere", "fac", "fic", "fect"], "ppp": {"vorm": "factus", "stam": "fact-/fect-"}}, {"id": "lat_mittere", "taal": "Latijn", "vorm": "mittere", "stam": "mit-", "betekenis": "zenden", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["mittere", "mit", "miss", "mis"], "ppp": {"vorm": "missus", "stam": "miss-"}}, {"id": "lat_cedere", "taal": "Latijn", "vorm": "cedere", "stam": "ced-", "betekenis": "gaan, wijken", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["cedere", "ced", "cess"], "ppp": {"vorm": "cessus", "stam": "cess-"}}, {"id": "lat_videre", "taal": "Latijn", "vorm": "videre", "stam": "vid-", "betekenis": "zien", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["videre", "vid", "vis"], "ppp": {"vorm": "visus", "stam": "vis-"}}, {"id": "lat_credere", "taal": "Latijn", "vorm": "credere", "stam": "cred-", "betekenis": "geloven", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["credere", "cred"], "ppp": {"vorm": "creditus", "stam": "credit-"}}, {"id": "lat_movere", "taal": "Latijn", "vorm": "movere", "stam": "mov-", "betekenis": "bewegen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["movere", "mov", "mot"], "ppp": {"vorm": "motus", "stam": "mot-"}}, {"id": "lat_legere", "taal": "Latijn", "vorm": "legere", "stam": "leg-", "betekenis": "lezen, verzamelen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["legere", "leg", "lect"], "ppp": {"vorm": "lectus", "stam": "lect-"}}, {"id": "lat_currere", "taal": "Latijn", "vorm": "currere", "stam": "curr-", "betekenis": "lopen, rennen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["currere", "curr", "curs"], "ppp": {"vorm": "cursus", "stam": "curs-"}}, {"id": "lat_vertere", "taal": "Latijn", "vorm": "vertere", "stam": "vert-", "betekenis": "draaien, keren", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["vertere", "vert", "vers"], "ppp": {"vorm": "versus", "stam": "vers-"}}, {"id": "lat_capere", "taal": "Latijn", "vorm": "capere", "stam": "cap-", "betekenis": "nemen, vangen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["capere", "capt", "cept"], "ppp": {"vorm": "captus", "stam": "capt-/cept-"}}, {"id": "lat_rumpere", "taal": "Latijn", "vorm": "rumpere", "stam": "rump-", "betekenis": "breken", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["rumpere", "rupt"], "ppp": {"vorm": "ruptus", "stam": "rupt-"}}, {"id": "lat_sentire", "taal": "Latijn", "vorm": "sentire", "stam": "senti-", "betekenis": "voelen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["sentire", "sent", "sens"], "ppp": {"vorm": "sensus", "stam": "sens-"}}, {"id": "lat_vocare", "taal": "Latijn", "vorm": "vocare", "stam": "voc-", "betekenis": "roepen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["vocare", "voc"]}, {"id": "lat_domus", "taal": "Latijn", "vorm": "domus", "stam": null, "betekenis": "huis", "woordsoort": "zelfstandig naamwoord", "schrift": null, "zoektermen": ["domus", "dom"]}, {"id": "lat_terra", "taal": "Latijn", "vorm": "terra", "stam": null, "betekenis": "aarde", "woordsoort": "zelfstandig naamwoord", "schrift": null, "zoektermen": ["terra"]}, {"id": "lat_corpus", "taal": "Latijn", "vorm": "corpus", "stam": "corp-", "betekenis": "lichaam", "woordsoort": "zelfstandig naamwoord", "schrift": null, "zoektermen": ["corpus", "corp"]}, {"id": "lat_lucere", "taal": "Latijn", "vorm": "lux / lucere", "stam": "luc-", "betekenis": "licht", "woordsoort": "zelfstandig naamwoord", "schrift": null, "zoektermen": ["lux", "lucere", "luc", "lumen"]}, {"id": "lat_flectere", "taal": "Latijn", "vorm": "flectere", "stam": "flect-", "betekenis": "buigen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["flectere", "flex"], "ppp": {"vorm": "flexus", "stam": "flex-"}}, {"id": "lat_ferre", "taal": "Latijn", "vorm": "ferre", "stam": "fer-", "betekenis": "dragen", "woordsoort": "werkwoord", "schrift": null, "zoektermen": ["ferre", "fer"], "ppp": {"vorm": "latus", "stam": "lat-"}}, {"id": "gr_bios", "taal": "Grieks", "vorm": "bios", "stam": "βίος", "betekenis": "leven", "woordsoort": "zelfstandig naamwoord", "schrift": "βίος", "zoektermen": ["bios", "bio"]}, {"id": "gr_graphein", "taal": "Grieks", "vorm": "graphein", "stam": "γράφειν", "betekenis": "schrijven", "woordsoort": "werkwoord", "schrift": "γράφειν", "zoektermen": ["graphein", "graph"]}, {"id": "gr_tele", "taal": "Grieks", "vorm": "tēle", "stam": "τῆλε", "betekenis": "ver", "woordsoort": "bijwoord", "schrift": "τῆλε", "zoektermen": ["tele"]}, {"id": "gr_phone", "taal": "Grieks", "vorm": "phōnē", "stam": "φωνή", "betekenis": "geluid, stem", "woordsoort": "zelfstandig naamwoord", "schrift": "φωνή", "zoektermen": ["phone", "phon"]}, {"id": "gr_photos", "taal": "Grieks", "vorm": "phōs / phōtos", "stam": "φῶς / φωτός", "betekenis": "licht", "woordsoort": "zelfstandig naamwoord", "schrift": "φῶς", "zoektermen": ["photos", "photo", "phos", "fot"]}, {"id": "gr_logos", "taal": "Grieks", "vorm": "logos", "stam": "λόγος", "betekenis": "woord, leer, rede", "woordsoort": "zelfstandig naamwoord", "schrift": "λόγος", "zoektermen": ["logos", "logie", "log"]}, {"id": "gr_chronos", "taal": "Grieks", "vorm": "chronos", "stam": "χρόνος", "betekenis": "tijd", "woordsoort": "zelfstandig naamwoord", "schrift": "χρόνος", "zoektermen": ["chronos", "chron"]}, {"id": "gr_ge", "taal": "Grieks", "vorm": "gē", "stam": "γῆ", "betekenis": "aarde", "woordsoort": "zelfstandig naamwoord", "schrift": "γῆ", "zoektermen": ["ge", "geo"]}, {"id": "gr_hydor", "taal": "Grieks", "vorm": "hydōr", "stam": "ὕδωρ", "betekenis": "water", "woordsoort": "zelfstandig naamwoord", "schrift": "ὕδωρ", "zoektermen": ["hydor", "hydro"]}, {"id": "gr_thermos", "taal": "Grieks", "vorm": "thermos", "stam": "θερμός", "betekenis": "warm", "woordsoort": "bijvoeglijk naamwoord", "schrift": "θερμός", "zoektermen": ["thermos", "therm"]}, {"id": "gr_skopein", "taal": "Grieks", "vorm": "skopein", "stam": "σκοπεῖν", "betekenis": "kijken, waarnemen", "woordsoort": "werkwoord", "schrift": "σκοπεῖν", "zoektermen": ["skopein", "scoop", "scope", "skop"]}, {"id": "gr_metron", "taal": "Grieks", "vorm": "metron", "stam": "μέτρον", "betekenis": "maat", "woordsoort": "zelfstandig naamwoord", "schrift": "μέτρον", "zoektermen": ["metron", "metr", "meter"]}, {"id": "gr_pathos", "taal": "Grieks", "vorm": "pathos", "stam": "πάθος", "betekenis": "lijden, gevoel", "woordsoort": "zelfstandig naamwoord", "schrift": "πάθος", "zoektermen": ["pathos", "path"]}, {"id": "gr_psyche", "taal": "Grieks", "vorm": "psychē", "stam": "ψυχή", "betekenis": "ziel, geest", "woordsoort": "zelfstandig naamwoord", "schrift": "ψυχή", "zoektermen": ["psyche", "psych"]}, {"id": "gr_anthropos", "taal": "Grieks", "vorm": "anthrōpos", "stam": "ἄνθρωπος", "betekenis": "mens", "woordsoort": "zelfstandig naamwoord", "schrift": "ἄνθρωπος", "zoektermen": ["anthropos", "anthrop"]}, {"id": "gr_demos", "taal": "Grieks", "vorm": "dēmos", "stam": "δῆμος", "betekenis": "volk", "woordsoort": "zelfstandig naamwoord", "schrift": "δῆμος", "zoektermen": ["demos", "dem"]}, {"id": "gr_kratos", "taal": "Grieks", "vorm": "kratos", "stam": "κράτος", "betekenis": "macht, heerschappij", "woordsoort": "zelfstandig naamwoord", "schrift": "κράτος", "zoektermen": ["kratos", "crat", "krat"]}, {"id": "gr_philos", "taal": "Grieks", "vorm": "philos", "stam": "φίλος", "betekenis": "liefhebbend, vriend", "woordsoort": "bijvoeglijk naamwoord", "schrift": "φίλος", "zoektermen": ["philos", "phil", "fiel"]}, {"id": "gr_mikros", "taal": "Grieks", "vorm": "mikros", "stam": "μικρός", "betekenis": "klein", "woordsoort": "bijvoeglijk naamwoord", "schrift": "μικρός", "zoektermen": ["mikros", "micro"]}, {"id": "gr_makros", "taal": "Grieks", "vorm": "makros", "stam": "μακρός", "betekenis": "groot, lang", "woordsoort": "bijvoeglijk naamwoord", "schrift": "μακρός", "zoektermen": ["makros", "macro"]}, {"id": "gr_dromos", "taal": "Grieks", "vorm": "dromos", "stam": "δρόμος", "betekenis": "loop, baan", "woordsoort": "zelfstandig naamwoord", "schrift": "δρόμος", "zoektermen": ["dromos", "drome", "droom"]}, {"id": "gr_cheir", "taal": "Grieks", "vorm": "cheir", "stam": "χείρ", "betekenis": "hand", "woordsoort": "zelfstandig naamwoord", "schrift": "χείρ", "zoektermen": ["cheir", "chir"]}, {"id": "gr_dendron", "taal": "Grieks", "vorm": "dendron", "stam": "δένδρον", "betekenis": "boom", "woordsoort": "zelfstandig naamwoord", "schrift": "δένδρον", "zoektermen": ["dendron", "dendr"]}, {"id": "gr_astron", "taal": "Grieks", "vorm": "astron", "stam": "ἄστρον", "betekenis": "ster", "woordsoort": "zelfstandig naamwoord", "schrift": "ἄστρον", "zoektermen": ["astron", "aster"]}, {"id": "gr_planasthai", "taal": "Grieks", "vorm": "planasthai", "stam": "πλανᾶσθαι", "betekenis": "dwalen", "woordsoort": "werkwoord", "schrift": "πλανᾶσθαι", "zoektermen": ["planasthai", "planet", "plane"]}], "words": [{"woord": "aquaduct", "opbouw": ["lat_aqua", {"root": "lat_ducere", "via": "ppp"}], "letterlijke_betekenis": "water-leiding (via ductus, PPP van ducere)", "betekenis_nl": "kunstwerk dat water over een obstakel heen leidt, vaak op bogen (bekend uit het Romeinse Rijk)"}, {"woord": "aquarium", "opbouw": ["lat_aqua"], "letterlijke_betekenis": "waterplaats", "betekenis_nl": "bak of bassin met water voor het houden van waterdieren en -planten"}, {"woord": "aquaplaning", "opbouw": ["lat_aqua"], "letterlijke_betekenis": "glijden op water", "betekenis_nl": "het wegglijden van een voertuig over een laag water op het wegdek"}, {"woord": "productie", "opbouw": [{"root": "lat_ducere", "via": "ppp"}], "letterlijke_betekenis": "het naar-voren-geleide (via ductus, PPP van ducere)", "betekenis_nl": "het vervaardigen of voortbrengen van iets"}, {"woord": "reductie", "opbouw": [{"root": "lat_ducere", "via": "ppp"}], "letterlijke_betekenis": "het terug-geleide (via ductus, PPP van ducere)", "betekenis_nl": "vermindering, terugbrenging"}, {"woord": "inscriptie", "opbouw": [{"root": "lat_scribere", "via": "ppp"}], "letterlijke_betekenis": "het in-geschrevene (via scriptus, PPP van scribere)", "betekenis_nl": "tekst die in iets (steen, metaal) gegraveerd is"}, {"woord": "transcriptie", "opbouw": [{"root": "lat_scribere", "via": "ppp"}], "letterlijke_betekenis": "het overgeschrevene (via scriptus, PPP van scribere)", "betekenis_nl": "omzetting naar een andere schrijfvorm"}, {"woord": "postscriptum", "opbouw": [{"root": "lat_scribere", "via": "ppp"}], "letterlijke_betekenis": "het na-geschrevene (via scriptus, PPP van scribere)", "betekenis_nl": "tekst die achteraf aan een brief is toegevoegd"}, {"woord": "spectator", "opbouw": [{"root": "lat_spectare", "via": "ppp"}], "letterlijke_betekenis": "iemand die gekeken heeft (via spectatus, PPP van spectare)", "betekenis_nl": "toeschouwer"}, {"woord": "perspectief", "opbouw": [{"root": "lat_spectare", "via": "ppp"}], "letterlijke_betekenis": "het doorheen-gekekene (via spectatus, PPP van spectare)", "betekenis_nl": "gezichtspunt, vooruitzicht"}, {"woord": "inspecteren", "opbouw": [{"root": "lat_spectare", "via": "ppp"}], "letterlijke_betekenis": "grondig bekeken hebben (via spectatus, PPP van spectare)", "betekenis_nl": "grondig bekijken of controleren"}, {"woord": "transport", "opbouw": ["lat_portare"], "letterlijke_betekenis": "het overdragen", "betekenis_nl": "vervoer van personen of goederen"}, {"woord": "importeren", "opbouw": ["lat_portare"], "letterlijke_betekenis": "naar binnen dragen", "betekenis_nl": "goederen invoeren uit het buitenland"}, {"woord": "exporteren", "opbouw": ["lat_portare"], "letterlijke_betekenis": "naar buiten dragen", "betekenis_nl": "goederen uitvoeren naar het buitenland"}, {"woord": "dictaat", "opbouw": [{"root": "lat_dicere", "via": "ppp"}], "letterlijke_betekenis": "het gezegde (via dictus, PPP van dicere)", "betekenis_nl": "tekst die wordt voorgelezen om op te schrijven"}, {"woord": "dictator", "opbouw": [{"root": "lat_dicere", "via": "ppp"}], "letterlijke_betekenis": "iemand die het (alleen) gezegd heeft (via dictus, PPP van dicere)", "betekenis_nl": "alleenheerser"}, {"woord": "edict", "opbouw": [{"root": "lat_dicere", "via": "ppp"}], "letterlijke_betekenis": "het uitgesprokene (via dictus, PPP van dicere)", "betekenis_nl": "officieel afgekondigd bevel"}, {"woord": "perfect", "opbouw": [{"root": "lat_facere", "via": "ppp"}], "letterlijke_betekenis": "helemaal gemaakt (via factus, PPP van facere)", "betekenis_nl": "volmaakt, zonder gebreken"}, {"woord": "effect", "opbouw": [{"root": "lat_facere", "via": "ppp"}], "letterlijke_betekenis": "het naar-buiten-gemaakte (via factus, PPP van facere)", "betekenis_nl": "uitwerking, gevolg"}, {"woord": "faciliteit", "opbouw": ["lat_facere"], "letterlijke_betekenis": "iets dat maakbaar/makkelijk maakt", "betekenis_nl": "voorziening"}, {"woord": "missie", "opbouw": [{"root": "lat_mittere", "via": "ppp"}], "letterlijke_betekenis": "het uitgezondene (via missus, PPP van mittere)", "betekenis_nl": "opdracht of afvaardiging"}, {"woord": "transmissie", "opbouw": [{"root": "lat_mittere", "via": "ppp"}], "letterlijke_betekenis": "het overgezondene (via missus, PPP van mittere)", "betekenis_nl": "overbrenging, uitzending"}, {"woord": "permitteren", "opbouw": ["lat_mittere"], "letterlijke_betekenis": "geheel doorlaten", "betekenis_nl": "toestaan"}, {"woord": "procedure", "opbouw": ["lat_cedere"], "letterlijke_betekenis": "de voortgang", "betekenis_nl": "vaste manier van handelen"}, {"woord": "succes", "opbouw": [{"root": "lat_cedere", "via": "ppp"}], "letterlijke_betekenis": "het goed-uitgegane (via cessus, PPP van cedere)", "betekenis_nl": "gunstige afloop"}, {"woord": "recessie", "opbouw": [{"root": "lat_cedere", "via": "ppp"}], "letterlijke_betekenis": "het teruggegane (via cessus, PPP van cedere)", "betekenis_nl": "economische neergang"}, {"woord": "video", "opbouw": ["lat_videre"], "letterlijke_betekenis": "ik zie (praesens van videre)", "betekenis_nl": "bewegend beeld"}, {"woord": "evident", "opbouw": ["lat_videre"], "letterlijke_betekenis": "duidelijk zichtbaar (van het deelwoord videns, praesens)", "betekenis_nl": "vanzelfsprekend"}, {"woord": "televisie", "opbouw": ["gr_tele", {"root": "lat_videre", "via": "ppp"}], "letterlijke_betekenis": "ver-gezien (via visus, PPP van videre)", "betekenis_nl": "toestel/medium om beelden van veraf te ontvangen"}, {"woord": "credit", "opbouw": [{"root": "lat_credere", "via": "ppp"}], "letterlijke_betekenis": "het toevertrouwde (via creditus, PPP van credere)", "betekenis_nl": "positief saldo of krediet"}, {"woord": "creditcard", "opbouw": [{"root": "lat_credere", "via": "ppp"}], "letterlijke_betekenis": "kaart op het toevertrouwde (via creditus, PPP van credere)", "betekenis_nl": "betaalkaart op basis van krediet"}, {"woord": "incredibel", "opbouw": ["lat_credere"], "letterlijke_betekenis": "niet-geloofbaar", "betekenis_nl": "ongelooflijk"}, {"woord": "motor", "opbouw": [{"root": "lat_movere", "via": "ppp"}], "letterlijke_betekenis": "wat bewogen heeft (via motus, PPP van movere)", "betekenis_nl": "machine die aandrijft"}, {"woord": "emotie", "opbouw": [{"root": "lat_movere", "via": "ppp"}], "letterlijke_betekenis": "het naar-buiten-bewogene (via motus, PPP van movere)", "betekenis_nl": "gevoel, aandoening"}, {"woord": "motief", "opbouw": [{"root": "lat_movere", "via": "ppp"}], "letterlijke_betekenis": "wat in beweging bracht (via motus, PPP van movere)", "betekenis_nl": "beweegreden"}, {"woord": "lectuur", "opbouw": [{"root": "lat_legere", "via": "ppp"}], "letterlijke_betekenis": "het gelezene (via lectus, PPP van legere)", "betekenis_nl": "leesstof"}, {"woord": "selectie", "opbouw": [{"root": "lat_legere", "via": "ppp"}], "letterlijke_betekenis": "het uitgelezene (via lectus, PPP van legere)", "betekenis_nl": "keuze uit een geheel"}, {"woord": "collectie", "opbouw": [{"root": "lat_legere", "via": "ppp"}], "letterlijke_betekenis": "het samen-verzamelde (via lectus, PPP van legere)", "betekenis_nl": "verzameling"}, {"woord": "curriculum", "opbouw": ["lat_currere"], "letterlijke_betekenis": "loopbaan", "betekenis_nl": "leerplan, opleidingstraject"}, {"woord": "excursie", "opbouw": [{"root": "lat_currere", "via": "ppp"}], "letterlijke_betekenis": "het uitgelopene (via cursus, PPP van currere)", "betekenis_nl": "educatief uitstapje"}, {"woord": "concurrent", "opbouw": ["lat_currere"], "letterlijke_betekenis": "mede-lopend (van het deelwoord currens, praesens)", "betekenis_nl": "mededinger"}, {"woord": "conversie", "opbouw": [{"root": "lat_vertere", "via": "ppp"}], "letterlijke_betekenis": "het omgedraaide (via versus, PPP van vertere)", "betekenis_nl": "omzetting"}, {"woord": "universum", "opbouw": [{"root": "lat_vertere", "via": "ppp"}], "letterlijke_betekenis": "het één-om-gedraaide (via versus, PPP van vertere)", "betekenis_nl": "het heelal"}, {"woord": "controverse", "opbouw": [{"root": "lat_vertere", "via": "ppp"}], "letterlijke_betekenis": "het tegen-gekeerde (via versus, PPP van vertere)", "betekenis_nl": "twistpunt"}, {"woord": "capaciteit", "opbouw": ["lat_capere"], "letterlijke_betekenis": "het kunnen-vangen/bevatten", "betekenis_nl": "inhoud, prestatievermogen"}, {"woord": "receptie", "opbouw": [{"root": "lat_capere", "via": "ppp"}], "letterlijke_betekenis": "het terug-genomene (via captus, PPP van capere)", "betekenis_nl": "ontvangst(balie)"}, {"woord": "acceptatie", "opbouw": [{"root": "lat_capere", "via": "ppp"}], "letterlijke_betekenis": "het aan-genomene (via captus, PPP van capere)", "betekenis_nl": "het toelaten of goedkeuren"}, {"woord": "corruptie", "opbouw": [{"root": "lat_rumpere", "via": "ppp"}], "letterlijke_betekenis": "het (moreel) gebrokene (via ruptus, PPP van rumpere)", "betekenis_nl": "omkoping, bederf"}, {"woord": "interruptie", "opbouw": [{"root": "lat_rumpere", "via": "ppp"}], "letterlijke_betekenis": "het ertussen-gebrokene (via ruptus, PPP van rumpere)", "betekenis_nl": "onderbreking"}, {"woord": "eruptie", "opbouw": [{"root": "lat_rumpere", "via": "ppp"}], "letterlijke_betekenis": "het uit-gebrokene (via ruptus, PPP van rumpere)", "betekenis_nl": "uitbarsting"}, {"woord": "sentiment", "opbouw": ["lat_sentire"], "letterlijke_betekenis": "het gevoelde", "betekenis_nl": "gevoel, gemoedsstemming"}, {"woord": "sensatie", "opbouw": [{"root": "lat_sentire", "via": "ppp"}], "letterlijke_betekenis": "het waargenomene (via sensus, PPP van sentire)", "betekenis_nl": "opzienbarende gebeurtenis; waarneming"}, {"woord": "sensor", "opbouw": [{"root": "lat_sentire", "via": "ppp"}], "letterlijke_betekenis": "voeler (via sensus, PPP van sentire)", "betekenis_nl": "apparaat dat waarneemt/registreert"}, {"woord": "vocaal", "opbouw": ["lat_vocare"], "letterlijke_betekenis": "stem-", "betekenis_nl": "klinker; met de stem"}, {"woord": "provocatie", "opbouw": ["lat_vocare"], "letterlijke_betekenis": "het naar-voren-roepen", "betekenis_nl": "uitdaging, prikkeling"}, {"woord": "vocabulaire", "opbouw": ["lat_vocare"], "letterlijke_betekenis": "roep-woorden", "betekenis_nl": "woordvoorraad"}, {"woord": "domicilie", "opbouw": ["lat_domus"], "letterlijke_betekenis": "huis-plaats", "betekenis_nl": "officiële woonplaats"}, {"woord": "domesticeren", "opbouw": ["lat_domus"], "letterlijke_betekenis": "huiselijk maken", "betekenis_nl": "tam maken"}, {"woord": "terrein", "opbouw": ["lat_terra"], "letterlijke_betekenis": "grondstuk", "betekenis_nl": "stuk land"}, {"woord": "territorium", "opbouw": ["lat_terra"], "letterlijke_betekenis": "grondgebied", "betekenis_nl": "gebied onder iemands gezag"}, {"woord": "extraterrestrisch", "opbouw": ["lat_terra"], "letterlijke_betekenis": "buiten-aards", "betekenis_nl": "van buiten de aarde"}, {"woord": "corporatie", "opbouw": ["lat_corpus"], "letterlijke_betekenis": "lichaam (van personen)", "betekenis_nl": "rechtspersoon, vereniging"}, {"woord": "corpulent", "opbouw": ["lat_corpus"], "letterlijke_betekenis": "van (groot) lichaam", "betekenis_nl": "gezet, dik"}, {"woord": "incorporeren", "opbouw": ["lat_corpus"], "letterlijke_betekenis": "in het lichaam opnemen", "betekenis_nl": "in een geheel opnemen"}, {"woord": "lucide", "opbouw": ["lat_lucere"], "letterlijke_betekenis": "licht (van geest)", "betekenis_nl": "helder van verstand"}, {"woord": "illustreren", "opbouw": ["lat_lucere"], "letterlijke_betekenis": "verlichten", "betekenis_nl": "toelichten met beeld"}, {"woord": "lucifer", "opbouw": ["lat_lucere", "lat_ferre"], "letterlijke_betekenis": "licht-drager (fer-, praesens van ferre)", "betekenis_nl": "houtje om vuur mee te maken"}, {"woord": "flexibel", "opbouw": [{"root": "lat_flectere", "via": "ppp"}], "letterlijke_betekenis": "buigzaam (via flexus, PPP van flectere)", "betekenis_nl": "aanpasbaar"}, {"woord": "reflex", "opbouw": [{"root": "lat_flectere", "via": "ppp"}], "letterlijke_betekenis": "terugbuiging (via flexus, PPP van flectere)", "betekenis_nl": "onwillekeurige reactie"}, {"woord": "inflectie", "opbouw": [{"root": "lat_flectere", "via": "ppp"}], "letterlijke_betekenis": "ombuiging (via flexus, PPP van flectere)", "betekenis_nl": "verbuiging van een woord"}, {"woord": "transfer", "opbouw": ["lat_ferre"], "letterlijke_betekenis": "het overdragen (fer-, praesens)", "betekenis_nl": "overplaatsing, overboeking"}, {"woord": "conferentie", "opbouw": ["lat_ferre"], "letterlijke_betekenis": "het samen-dragen (fer-, praesens)", "betekenis_nl": "bijeenkomst, overleg"}, {"woord": "fertiel", "opbouw": ["lat_ferre"], "letterlijke_betekenis": "vrucht-dragend (fer-, praesens)", "betekenis_nl": "vruchtbaar"}, {"woord": "biologie", "opbouw": ["gr_bios", "gr_logos"], "letterlijke_betekenis": "leer van het leven", "betekenis_nl": "wetenschap die levende organismen bestudeert"}, {"woord": "biografie", "opbouw": ["gr_bios", "gr_graphein"], "letterlijke_betekenis": "levensbeschrijving", "betekenis_nl": "geschreven levensverhaal"}, {"woord": "amfibie", "opbouw": ["gr_bios"], "letterlijke_betekenis": "dubbel-leven", "betekenis_nl": "dier dat zowel op het land als in het water leeft"}, {"woord": "fotografie", "opbouw": ["gr_photos", "gr_graphein"], "letterlijke_betekenis": "licht-schrift", "betekenis_nl": "het maken van beelden met licht"}, {"woord": "telegraaf", "opbouw": ["gr_tele", "gr_graphein"], "letterlijke_betekenis": "ver-schrift", "betekenis_nl": "toestel om berichten over afstand te versturen"}, {"woord": "telefoon", "opbouw": ["gr_tele", "gr_phone"], "letterlijke_betekenis": "ver-geluid", "betekenis_nl": "toestel om op afstand te spreken"}, {"woord": "symfonie", "opbouw": ["gr_phone"], "letterlijke_betekenis": "samen-klank", "betekenis_nl": "muziekstuk voor orkest"}, {"woord": "microfoon", "opbouw": ["gr_mikros", "gr_phone"], "letterlijke_betekenis": "klein-geluid", "betekenis_nl": "apparaat dat geluid versterkt/opneemt"}, {"woord": "fotosynthese", "opbouw": ["gr_photos"], "letterlijke_betekenis": "licht-samenstelling", "betekenis_nl": "proces waarbij planten met licht voedingsstoffen maken"}, {"woord": "fotogeniek", "opbouw": ["gr_photos"], "letterlijke_betekenis": "geschikt voor het licht", "betekenis_nl": "goed op foto's overkomend"}, {"woord": "psychologie", "opbouw": ["gr_psyche", "gr_logos"], "letterlijke_betekenis": "zielenleer", "betekenis_nl": "wetenschap van gedrag en geest"}, {"woord": "dialoog", "opbouw": ["gr_logos"], "letterlijke_betekenis": "door-woord", "betekenis_nl": "gesprek tussen twee of meer personen"}, {"woord": "chronologie", "opbouw": ["gr_chronos", "gr_logos"], "letterlijke_betekenis": "tijdsleer", "betekenis_nl": "volgorde in de tijd"}, {"woord": "synchroon", "opbouw": ["gr_chronos"], "letterlijke_betekenis": "samen-in-tijd", "betekenis_nl": "gelijktijdig"}, {"woord": "chronisch", "opbouw": ["gr_chronos"], "letterlijke_betekenis": "tijd-gebonden", "betekenis_nl": "langdurig, aanhoudend"}, {"woord": "geografie", "opbouw": ["gr_ge", "gr_graphein"], "letterlijke_betekenis": "aardebeschrijving", "betekenis_nl": "aardrijkskunde"}, {"woord": "geologie", "opbouw": ["gr_ge", "gr_logos"], "letterlijke_betekenis": "aardeleer", "betekenis_nl": "wetenschap van de vaste aarde"}, {"woord": "geometrie", "opbouw": ["gr_ge", "gr_metron"], "letterlijke_betekenis": "aardmeting", "betekenis_nl": "wiskundig vakgebied over vormen en ruimte"}, {"woord": "hydraulica", "opbouw": ["gr_hydor"], "letterlijke_betekenis": "waterleer", "betekenis_nl": "techniek die met vloeistofdruk werkt"}, {"woord": "hydrofobie", "opbouw": ["gr_hydor"], "letterlijke_betekenis": "waterangst", "betekenis_nl": "angst voor water"}, {"woord": "dehydratie", "opbouw": ["gr_hydor"], "letterlijke_betekenis": "waterverlies", "betekenis_nl": "uitdroging"}, {"woord": "thermometer", "opbouw": ["gr_thermos", "gr_metron"], "letterlijke_betekenis": "warmtemeter", "betekenis_nl": "instrument om temperatuur te meten"}, {"woord": "thermostaat", "opbouw": ["gr_thermos"], "letterlijke_betekenis": "warmteregelaar", "betekenis_nl": "apparaat dat temperatuur regelt"}, {"woord": "hypothermie", "opbouw": ["gr_thermos"], "letterlijke_betekenis": "onder-warmte", "betekenis_nl": "onderkoeling"}, {"woord": "microscoop", "opbouw": ["gr_mikros", "gr_skopein"], "letterlijke_betekenis": "klein-kijker", "betekenis_nl": "instrument om kleine dingen te bekijken"}, {"woord": "telescoop", "opbouw": ["gr_tele", "gr_skopein"], "letterlijke_betekenis": "ver-kijker", "betekenis_nl": "instrument om verre dingen te bekijken"}, {"woord": "horoscoop", "opbouw": ["gr_skopein"], "letterlijke_betekenis": "uur-waarneming", "betekenis_nl": "astrologische voorspelling"}, {"woord": "symmetrie", "opbouw": ["gr_metron"], "letterlijke_betekenis": "samen-maat", "betekenis_nl": "evenredige verdeling/spiegeling"}, {"woord": "sympathie", "opbouw": ["gr_pathos"], "letterlijke_betekenis": "mee-voelen", "betekenis_nl": "gevoel van genegenheid"}, {"woord": "apathie", "opbouw": ["gr_pathos"], "letterlijke_betekenis": "zonder gevoel", "betekenis_nl": "onverschilligheid"}, {"woord": "pathologie", "opbouw": ["gr_pathos", "gr_logos"], "letterlijke_betekenis": "leer van het lijden", "betekenis_nl": "leer van ziekten"}, {"woord": "psychiater", "opbouw": ["gr_psyche"], "letterlijke_betekenis": "zielenarts", "betekenis_nl": "arts gespecialiseerd in geestesziekten"}, {"woord": "psychose", "opbouw": ["gr_psyche"], "letterlijke_betekenis": "geestestoestand", "betekenis_nl": "ernstige geestesziekte"}, {"woord": "antropologie", "opbouw": ["gr_anthropos", "gr_logos"], "letterlijke_betekenis": "menskunde", "betekenis_nl": "wetenschap van de mens en culturen"}, {"woord": "misantroop", "opbouw": ["gr_anthropos"], "letterlijke_betekenis": "mensenhater", "betekenis_nl": "iemand die een afkeer van mensen heeft"}, {"woord": "filantroop", "opbouw": ["gr_philos", "gr_anthropos"], "letterlijke_betekenis": "mensenvriend", "betekenis_nl": "weldoener"}, {"woord": "democratie", "opbouw": ["gr_demos", "gr_kratos"], "letterlijke_betekenis": "volksmacht", "betekenis_nl": "bestuursvorm waarin het volk regeert"}, {"woord": "demografie", "opbouw": ["gr_demos", "gr_graphein"], "letterlijke_betekenis": "volksbeschrijving", "betekenis_nl": "studie van de bevolking"}, {"woord": "epidemie", "opbouw": ["gr_demos"], "letterlijke_betekenis": "over het volk", "betekenis_nl": "snelle verspreiding van een ziekte onder een bevolking"}, {"woord": "aristocratie", "opbouw": ["gr_kratos"], "letterlijke_betekenis": "heerschappij van de besten", "betekenis_nl": "adellijke bovenlaag"}, {"woord": "bureaucratie", "opbouw": ["gr_kratos"], "letterlijke_betekenis": "heerschappij van het bureau", "betekenis_nl": "ambtelijk bestuursapparaat"}, {"woord": "filosofie", "opbouw": ["gr_philos"], "letterlijke_betekenis": "liefde voor wijsheid", "betekenis_nl": "wijsbegeerte"}, {"woord": "bibliofiel", "opbouw": ["gr_philos"], "letterlijke_betekenis": "boekenliefhebber", "betekenis_nl": "liefhebber en verzamelaar van boeken"}, {"woord": "microbe", "opbouw": ["gr_mikros"], "letterlijke_betekenis": "klein leven", "betekenis_nl": "microscopisch klein organisme"}, {"woord": "macroscopisch", "opbouw": ["gr_makros", "gr_skopein"], "letterlijke_betekenis": "groot-zichtbaar", "betekenis_nl": "met het blote oog waarneembaar"}, {"woord": "macro-economie", "opbouw": ["gr_makros"], "letterlijke_betekenis": "grote economie", "betekenis_nl": "economie op nationale/wereldschaal"}, {"woord": "hippodroom", "opbouw": ["gr_dromos"], "letterlijke_betekenis": "paardenbaan", "betekenis_nl": "renbaan voor paarden(wagens)"}, {"woord": "syndroom", "opbouw": ["gr_dromos"], "letterlijke_betekenis": "samen-loop", "betekenis_nl": "geheel van bij elkaar horende verschijnselen"}, {"woord": "palindroom", "opbouw": ["gr_dromos"], "letterlijke_betekenis": "terug-loop", "betekenis_nl": "woord dat van voor en achter hetzelfde leest"}, {"woord": "chirurgie", "opbouw": ["gr_cheir"], "letterlijke_betekenis": "handwerk", "betekenis_nl": "geneeskunde met operatief ingrijpen"}, {"woord": "chiropractor", "opbouw": ["gr_cheir"], "letterlijke_betekenis": "handbehandelaar", "betekenis_nl": "behandelaar van het bewegingsapparaat met de handen"}, {"woord": "dendrologie", "opbouw": ["gr_dendron", "gr_logos"], "letterlijke_betekenis": "bomenleer", "betekenis_nl": "wetenschap van bomen en struiken"}, {"woord": "rododendron", "opbouw": ["gr_dendron"], "letterlijke_betekenis": "rozenboom", "betekenis_nl": "sierstruik met grote bloemtrossen"}, {"woord": "astronomie", "opbouw": ["gr_astron", "gr_logos"], "letterlijke_betekenis": "sterrenleer", "betekenis_nl": "wetenschap van hemellichamen"}, {"woord": "astronaut", "opbouw": ["gr_astron"], "letterlijke_betekenis": "stervaarder", "betekenis_nl": "ruimtevaarder"}, {"woord": "disaster", "opbouw": ["gr_astron"], "letterlijke_betekenis": "slechte ster", "betekenis_nl": "ramp, catastrofe"}, {"woord": "planeet", "opbouw": ["gr_planasthai"], "letterlijke_betekenis": "dwaalster", "betekenis_nl": "hemellichaam dat om een ster draait"}]};
+</script>
+<script>
+(function(){
+  "use strict";
+  var DATA = window.ETYM_DATA;
+  var ROOTS = DATA.roots;
+  var WORDS = DATA.words;
+
+  var rootsById = {};
+  ROOTS.forEach(function(r){ rootsById[r.id] = r; });
+
+  // an opbouw-item is either a plain root-id string, or {root, via:"ppp"}
+  function itemRootId(item){ return typeof item === "string" ? item : item.root; }
+  function itemVia(item){ return typeof item === "string" ? null : item.via; }
+
+  function norm(s){
+    return (s || "")
+      .toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+      .replace(/[-\s]/g,"")
+      .trim();
+  }
+
+  WORDS.forEach(function(w){ w._key = norm(w.woord); });
+  ROOTS.forEach(function(r){
+    r._keys = (r.zoektermen || []).map(norm);
+  });
+
+  function levenshtein(a,b){
+    var m=a.length, n=b.length;
+    if(!m) return n; if(!n) return m;
+    var dp = new Array(n+1);
+    for(var j=0;j<=n;j++) dp[j]=j;
+    for(var i=1;i<=m;i++){
+      var prev = dp[0]; dp[0]=i;
+      for(j=1;j<=n;j++){
+        var tmp = dp[j];
+        dp[j] = Math.min(
+          dp[j]+1,
+          dp[j-1]+1,
+          prev + (a[i-1]===b[j-1] ? 0 : 1)
+        );
+        prev = tmp;
+      }
+    }
+    return dp[n];
+  }
+
+  function findExactWord(key){
+    return WORDS.find(function(w){ return w._key === key; });
+  }
+  function findExactRoot(key){
+    return ROOTS.find(function(r){ return r._keys.indexOf(key) !== -1; });
+  }
+
+  function suggestionsFor(rawQuery, limit){
+    var key = norm(rawQuery);
+    if(key.length < 2) return [];
+    var results = [];
+    WORDS.forEach(function(w){
+      if(w._key.indexOf(key) !== -1){
+        results.push({type:"woord", label:w.woord, dist: w._key.indexOf(key)===0?0:1, ref:w});
+      }
+    });
+    ROOTS.forEach(function(r){
+      r._keys.forEach(function(k){
+        if(k.indexOf(key) !== -1){
+          results.push({type:"root", label:r.vorm, taal:r.taal, dist: k.indexOf(key)===0?0:1, ref:r});
+        }
+      });
+    });
+    var seen = {};
+    results = results.filter(function(item){
+      var id = item.type + ":" + (item.ref.id || item.ref.woord);
+      if(seen[id]) return false;
+      seen[id] = true;
+      return true;
+    });
+    results.sort(function(a,b){ return a.dist - b.dist || a.label.length - b.label.length; });
+    return results.slice(0, limit || 8);
+  }
+
+  function closestMatches(rawQuery, limit){
+    var key = norm(rawQuery);
+    var candidates = [];
+    WORDS.forEach(function(w){
+      candidates.push({type:"woord", label:w.woord, dist:levenshtein(key,w._key), ref:w});
+    });
+    ROOTS.forEach(function(r){
+      var best = Math.min.apply(null, r._keys.map(function(k){ return levenshtein(key,k); }));
+      candidates.push({type:"root", label:r.vorm, taal:r.taal, dist:best, ref:r});
+    });
+    candidates.sort(function(a,b){ return a.dist - b.dist; });
+    return candidates.slice(0, limit || 3);
+  }
+
+  var resultEl = document.getElementById("result");
+  var qInput = document.getElementById("q");
+  var suggBox = document.getElementById("suggestions");
+
+  function renderWord(word){
+    var blocksHtml = word.opbouw.map(function(item, idx){
+      var rid = itemRootId(item);
+      var via = itemVia(item);
+      var r = rootsById[rid];
+      if(!r) return "";
+      var taalCls = r.taal === "Grieks" ? "taal-grieks" : "taal-latijn";
+      var schrift = r.schrift ? '<span class="bschrift">' + r.schrift + "</span> &middot; " : "";
+      var viaHtml = "";
+      if(via === "ppp" && r.ppp){
+        viaHtml = '<span class="bvia">via <strong>' + r.ppp.vorm + '</strong> (PPP / volt. deelw. van ' + r.vorm + ')</span>';
+      }
+      var html = '<button type="button" class="block ' + taalCls + '" data-jump="' + r.id + '" style="animation-delay:' + (idx*0.08) + 's">' +
+        '<span class="bv">' + r.vorm + '</span>' +
+        '<span class="bmeaning">' + schrift + r.taal + ': ' + r.betekenis + '</span>' +
+        viaHtml +
+      '</button>';
+      return idx > 0 ? '<span class="plus-sep">+</span>' + html : html;
+    }).join("");
+
+    resultEl.innerHTML =
+      '<div class="card">' +
+        '<h2>' + word.woord + '</h2>' +
+        '<p class="meaning-line">' + word.betekenis_nl + '</p>' +
+        '<div class="section-label">bouwstenen</div>' +
+        '<div class="blocks">' + blocksHtml + '</div>' +
+        '<div class="section-label">letterlijk</div>' +
+        '<p class="meaning-line"><em>' + word.letterlijke_betekenis + '</em></p>' +
+      '</div>';
+
+    resultEl.querySelectorAll("[data-jump]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var r = rootsById[btn.getAttribute("data-jump")];
+        qInput.value = r.vorm;
+        renderRoot(r);
+        window.scrollTo({top:0, behavior:"smooth"});
+      });
+    });
+  }
+
+  function renderRoot(root){
+    var derived = WORDS.filter(function(w){
+      return w.opbouw.some(function(item){ return itemRootId(item) === root.id; });
+    });
+    var taalCls = root.taal === "Grieks" ? "badge-grieks" : "badge-latijn";
+    var schriftLine = root.schrift ? '<p class="meaning-line" style="font-family:\'Palatino Linotype\',\'Palatino\',\'Noto Serif\',serif; font-size:19px;">' + root.schrift + '</p>' : "";
+    var pppLine = root.ppp ? '<div class="ppp-note">PPP (voltooid deelwoord): <b>' + root.ppp.vorm + '</b> &mdash; veel afgeleide woorden gebruiken de stam <b>' + root.ppp.stam + '</b> hiervan, niet de praesensstam.</div>' : "";
+
+    var tilesHtml = derived.map(function(w, idx){
+      var myItem = w.opbouw.find(function(item){ return itemRootId(item) === root.id; });
+      var via = itemVia(myItem);
+      var viaTag = (via === "ppp" && root.ppp) ? '<span class="tvia">via ' + root.ppp.vorm + '</span>' : "";
+      return '<button type="button" class="tile" data-word="' + w.woord + '" style="animation:lockin 0.35s ease both; animation-delay:' + (idx*0.04) + 's">' +
+        '<span class="tw">' + w.woord + '</span>' +
+        '<span class="tm">' + w.letterlijke_betekenis.replace(/\s*\(via[^)]*\)/,'') + '</span>' +
+        viaTag +
+      '</button>';
+    }).join("");
+
+    resultEl.innerHTML =
+      '<div class="card">' +
+        '<span class="langbadge ' + taalCls + '">' + root.taal + (root.stam ? ' &middot; praesensstam ' + root.stam : '') + '</span>' +
+        '<h2>' + root.vorm + '</h2>' +
+        schriftLine +
+        '<p class="meaning-line">betekenis: <em>' + root.betekenis + '</em> (' + root.woordsoort + ')</p>' +
+        pppLine +
+        '<div class="section-label">Nederlandse woorden hiervan (' + derived.length + ')</div>' +
+        (derived.length ? '<div class="grid">' + tilesHtml + '</div>' : '<p class="meaning-line">Nog geen woorden gekoppeld in de database.</p>') +
+      '</div>';
+
+    resultEl.querySelectorAll("[data-word]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var w = findExactWord(norm(btn.getAttribute("data-word")));
+        qInput.value = w.woord;
+        renderWord(w);
+        window.scrollTo({top:0, behavior:"smooth"});
+      });
+    });
+  }
+
+  function renderNotFound(query){
+    var matches = closestMatches(query, 3);
+    var chips = matches.map(function(m){
+      return '<button type="button" class="chip" data-suggest="' + m.label + '">' + m.label +
+        (m.taal ? ' <span style="opacity:.6; font-size:12px;">(' + m.taal + ')</span>' : '') +
+      '</button>';
+    }).join("");
+    resultEl.innerHTML =
+      '<div class="card not-found">' +
+        '<p>&ldquo;' + query + '&rdquo; staat nog niet in de database. Bedoelde je misschien&hellip;</p>' +
+        '<div class="chips">' + chips + '</div>' +
+      '</div>';
+    resultEl.querySelectorAll("[data-suggest]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var label = btn.getAttribute("data-suggest");
+        qInput.value = label;
+        doSearch(label);
+      });
+    });
+  }
+
+  function doSearch(rawQuery){
+    hideSuggestions();
+    var key = norm(rawQuery);
+    if(!key) return;
+    var w = findExactWord(key);
+    if(w){ renderWord(w); return; }
+    var r = findExactRoot(key);
+    if(r){ renderRoot(r); return; }
+    renderNotFound(rawQuery.trim());
+  }
+
+  function hideSuggestions(){
+    suggBox.classList.remove("show");
+    suggBox.innerHTML = "";
+  }
+
+  function showSuggestions(list){
+    if(!list.length){ hideSuggestions(); return; }
+    suggBox.innerHTML = list.map(function(item){
+      var badge = item.type === "root"
+        ? '<span class="sugg-badge ' + (item.taal === "Grieks" ? "badge-grieks" : "badge-latijn") + '">' + item.taal + '</span>'
+        : '<span class="sugg-badge badge-nl">NL</span>';
+      return '<button type="button" role="option" data-pick="' + item.label + '">' +
+        '<span>' + item.label + '</span>' + badge +
+      '</button>';
+    }).join("");
+    suggBox.classList.add("show");
+    suggBox.querySelectorAll("[data-pick]").forEach(function(btn){
+      btn.addEventListener("click", function(){
+        var label = btn.getAttribute("data-pick");
+        qInput.value = label;
+        doSearch(label);
+      });
+    });
+  }
+
+  document.getElementById("searchform").addEventListener("submit", function(e){
+    e.preventDefault();
+    doSearch(qInput.value);
+  });
+
+  qInput.addEventListener("input", function(){
+    showSuggestions(suggestionsFor(qInput.value, 8));
+  });
+
+  qInput.addEventListener("blur", function(){
+    setTimeout(hideSuggestions, 150);
+  });
+
+  document.getElementById("discoverBtn").addEventListener("click", function(){
+    var pool = Math.random() < 0.5 ? WORDS : ROOTS;
+    var pick = pool[Math.floor(Math.random()*pool.length)];
+    if(pool === WORDS){
+      qInput.value = pick.woord;
+      renderWord(pick);
+    } else {
+      qInput.value = pick.vorm;
+      renderRoot(pick);
+    }
+    hideSuggestions();
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+})();
+</script>
+</body>
+</html>
