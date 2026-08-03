@@ -1532,6 +1532,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Voor de gouden appels van de Hesperiden, bewaakt door de draak Ladon, bood Herakles aan tijdelijk de hemel over te nemen van de titaan Atlas, zodat die zelf de appels kon plukken. Atlas, eenmaal bevrijd, overwoog Herakles voorgoed met de last achter te laten — tot Herakles hem, met een list in plaats van kracht, overhaalde de hemel nog één keer over te nemen zodat hij zijn mantel kon opvouwen. Zodra Atlas de last weer droeg, liep Herakles gewoon weg met de appels." },
   codex_herakles_twaalf_werken: { cat:"mythologie", titel:"Herakles: de Twaalf Werken Voltooid",
     tekst:"Na de Nemeïsche Leeuw en de Hydra van Lerna volbracht Herakles nog tien beproevingen: de Cerynitische Hinde gevangen zonder een wond, de Erymanthische Ever bedwongen (ten koste van zijn leermeester Chiron), de Augiasstal in één dag schoongespoeld, de Stymfalische Vogels verjaagd met Athena's bronzen ratel, de Kretenzische Stier gevangen, de mensenetende Merries van Diomedes getemd met hun eigen meester als voer, de Gordel van Hippolyte behaald ten koste van haar leven door Hera's list, het vee van Geryon veroverd aan de rand van de wereld, de gouden Appels van de Hesperiden buitgemaakt met een list tegen Atlas, en tot slot Cerberus zelf, de driekoppige hond van de onderwereld, met blote handen overmeesterd. Tien jaar dienstbaarheid — opgelegd na de ergste daad van zijn leven — eindigen met deze twaalfde taak." },
+  codex_deianira_nessus: { cat:"mythologie", titel:"Deianira en het Hemd van Nessus",
+    tekst:"Jaren na de twaalf werken hertrouwt Herakles met Deianira. Wanneer de centaur Nessus haar probeert te ontvoeren, doodt Herakles hem met een pijl doordrenkt in Hydra-gif — hetzelfde gif dat ooit Chiron kwelde. Nessus geeft haar met zijn laatste adem een wraak die pas jaren later toeslaat: zijn vergiftigde bloed, aangeboden als vermeend liefdesmiddel. Uit angst hem te verliezen stuurt Deianira Herakles later een hemd doordrenkt met dat bloed; het gif verteert zijn huid, en Deianira neemt, zodra ze beseft wat ze heeft aangericht, haar eigen leven. Herakles laat zich op de berg Oeta cremeren en wordt daar onder de goden opgenomen — zijn apotheose." },
 
   // LET OP: dezelfde "vroeg ontgrendelen"-regel als Hoofdstuk 1/2/3 — deze
   // vijf entries worden al bij CH4_000 gezet, vóór de eerste puzzel.
@@ -1572,6 +1574,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Koning Minos van Kreta beloofde ooit de zeegod Neptunus een verblindend witte stier te offeren als teken van zijn koningschap — en brak die belofte toen hij het dier te mooi vond om te doden. Neptunus strafte hem door zijn vrouw Pasiphaë een onnatuurlijk verlangen naar de stier te geven; wat daaruit geboren werd, de Minotaurus, half mens en half stier, kon nergens anders wonen dan in een bouwwerk dat zijn eigen weg naar buiten verbergt. Minos' hofbouwmeester Daidalos ontwierp dat labyrint — zo listig dat zelfs zijn eigen maker de weg er nauwelijks in kon vinden. Elk jaar voedde het offer uit Athene het monster, en hield het tegelijk Minos' oude, gebroken belofte verborgen achter zijn eigen stenen muren." },
   codex_daidalos_ikaros: { cat:"mythologie", titel:"Daidalos en Ikaros",
     tekst:"Toen Minos ontdekte dat het labyrint zijn geheim niet had bewaard, sloot hij Daidalos en diens zoon Ikaros zelf op in het bouwwerk — de enige plek op Kreta waaruit zelfs de bouwmeester niet zomaar kon ontsnappen. Daidalos verzamelde veren, bond ze samen met draad en verzegelde ze met was tot twee paar vleugels, met de dringende waarschuwing aan zijn zoon om de middenweg te vliegen: niet te laag, niet te hoog. Ikaros, dronken van de vreugde van het vliegen zelf, steeg hoger dan zijn vader had bevolen — tot de zon de was deed smelten en hij in de zee viel die sindsdien zijn naam draagt: de Icarische Zee." },
+  codex_phaedra_hippolytus: { cat:"mythologie", titel:"Phaedra en Hippolytus",
+    tekst:"Jaren na Naxos hertrouwt Theseus met Ariadnes zuster Phaedra. Ze wordt verliefd op haar stiefzoon Hippolytus — bij Euripides vooral iemand die tegen haar eigen hartstocht vecht, niet iemand die er zomaar aan toegeeft. Wanneer haar geheim toch uitkomt, grijpt ze in doodsangst naar een valse beschuldiging; Theseus roept, misleid, een vloek over zijn eigen zoon af. Hippolytus sterft onschuldig; Phaedra overleeft haar eigen daad niet." },
   codex_ariadne_bacchus: { cat:"mythologie", titel:"Ariadne op Naxos",
     tekst:"Nadat ze Theseus met haar garen door het labyrint had geholpen, kon Ariadne nooit meer veilig terugkeren naar haar vaders paleis — en toch liet Theseus haar, slapend, achter op het eiland Naxos. Daar vond Bacchus haar, de god die je al kent van koning Midas' vloek: hij trouwde met haar, maakte haar onsterfelijk, en plaatste haar bruidskroon voorgoed tussen de sterren. Van alle gebroken beloften in dit hoofdstuk is het de enige die alsnog met iets goeds eindigt." },
   codex_phaethon: { cat:"mythologie", titel:"Phaëthon en de Zonnewagen",
@@ -1583,6 +1587,10 @@ const SP_CODEX_ENTRIES = {
     tekst:"Lang voor Jason geboren werd, redde een gouden ram met sprekende stem de kinderen Phrixus en Helle van een dodelijke stiefmoeder door hen door de lucht weg te dragen. Helle viel onderweg in de zee die sindsdien haar naam draagt (de Hellespont); Phrixus bereikte veilig Colchis, offerde de ram uit dankbaarheid aan Jupiter, en hing zijn gouden vacht — het Gulden Vlies — op in een heilig woud, waar koning Aeëtes het sindsdien laat bewaken door een nooit slapende draak." },
   codex_argonauten_bemanning: { cat:"mythologie", titel:"De Bemanning van de Argo",
     tekst:"Op Jasons oproep meldt zich een bonte verzameling helden aan boord van de Argo — sommigen al beroemd, de meesten nog jong genoeg om hun grootste verhalen nog vóór zich te hebben. Onder hen Peleus en Telamon (ooit de vaders van Achilles en Ajax), Laertes (ooit de vader van Odysseus), de sterke Herakles, de begaafde muzikant Orpheus, de scheepsbouwer Argos die de Argo zelf ontwierp, en nog veel meer — een bemanning die de latere geschiedenis van heel Griekenland in zich draagt, lang voordat iemand van hen dat kan weten." },
+  codex_lemnos_hypsipyle: { cat:"mythologie", titel:"Hypsipyle, Koningin van Lemnos",
+    tekst:"Een jaar voor de Argonauten aankomen, doodden de vrouwen van Lemnos, vervloekt door Aphrodite, in één nacht bijna al hun mannen. Koningin Hypsipyle spaarde als enige stiekem haar eigen vader Thoas. Wanneer de Argo aanmeert, ontvangt ze Jason en zijn bemanning met een gastvrijheid die weken duurt — en raakt met Jason zelf zwanger van een tweeling die ze alleen zal moeten grootbrengen." },
+  codex_hypsipyle_afscheid: { cat:"mythologie", titel:"Het Vertrek van Lemnos",
+    tekst:"Pas wanneer Herakles zijn geduld verliest, vertrekt de Argo eindelijk van Lemnos. Jason belooft terug te keren — een belofte die, net als zoveel andere in dit hoofdstuk, niet wordt gehouden. Hypsipyle brengt zijn tweelingzonen, Euneus en Thoas, alleen groot." },
   codex_atalanta_meleager: { cat:"mythologie", titel:"Atalanta en Meleager",
     tekst:"Atalanta, opgevoed door een berin nadat haar vader haar als baby te vondeling had gelegd, is de enige vrouw aan boord van de Argo — in sommige verhalen als volwaardige Argonaut, in andere op zijn minst uitgenodigd. Meleager, prins van Calydon, vaart mee als een van de jongste helden. Hun namen zullen niet voor het laatst samen genoemd worden: ooit zullen ze ook naast elkaar tegenover een reusachtig everzwijn staan, met een veel bitterder einde dan deze tocht." },
   codex_dioscuren: { cat:"mythologie", titel:"Kastor en Polydeukes, de Dioscuren",
@@ -1605,8 +1613,14 @@ const SP_CODEX_ENTRIES = {
     tekst:"Een orakel voorspelde koning Laius van Thebe dat zijn eigen zoon hem ooit zou doden; uit angst liet hij de pasgeboren Oedipus te vondeling leggen, maar het kind overleefde en groeide ver van Thebe op, zonder zijn ware afkomst te kennen. Toen een orakel Oedipus zelf dezelfde voorspelling deed, vluchtte hij weg van wie hij dacht dat zijn ouders waren — en doodde onderweg, zonder het te beseffen, zijn werkelijke vader bij een geschil op de weg. Bij Thebe versloeg hij de Sfinx, een monster dat de stad gijzelde met een raadsel, en werd tot koning gekroond — waarna hij trouwde met de weduwe van de vorige koning, zijn eigen moeder Iokaste. Jaren later kwam de waarheid alsnog aan het licht; geen van beiden kon ermee verder leven." },
   codex_zeven_tegen_thebe: { cat:"mythologie", titel:"De Zeven tegen Thebe",
     tekst:"Oedipus' zonen Eteokles en Polyneikes spraken af de troon van Thebe jaarlijks te delen — een afspraak die Eteokles, eenmaal koning, niet nakwam. Polyneikes verzamelde zes andere champions, onder wie de Argonaut Tydeus, om de stad met geweld in te nemen. De aanval mislukte: bijna alle zeven champions sneuvelden, en de broers doodden elkaar in een laatste tweegevecht. Tydeus zelf stierf op het slagveld — op het punt dat Athena hem onsterfelijkheid wilde schenken voor zijn moed, deed hij iets zo wreeds tegenover een gevallen vijand dat ze zich vol afschuw afwendde en de gave introk." },
+  codex_hypsipyle_nemea: { cat:"mythologie", titel:"Hypsipyle bij Nemea",
+    tekst:"Jaren na Lemnos vindt de speler Hypsipyle terug als slavin, min van de kleine Opheltes — geroofd door piraten, ver van het eiland waarover ze ooit regeerde. Wanneer een slang het kind doodt terwijl ze de Zeven de weg naar water wijst, dreigt koning Lycurgus haar te doden voor haar nalatigheid." },
+  codex_hypsipyle_zonen: { cat:"mythologie", titel:"Hypsipyle's Redding",
+    tekst:"Op het moment dat Lycurgus wraak wil nemen, herkennen twee van de Zeven's gevolg haar als hun eigen moeder: Euneus en Thoas, de zonen die ze ooit bij Jason kreeg op Lemnos. Hun tussenkomst, en de ziener Amphiaraus' voorstel om in plaats van wraak jaarlijkse spelen in te stellen, redt haar leven — en geeft de latere Nemeïsche Spelen hun oorsprong." },
   codex_epigonen: { cat:"mythologie", titel:"De Epigonen",
     tekst:"Tien jaar na de nederlaag van hun vaders trokken de zonen van de Zeven — de Epigonen, 'de nakomelingen' — opnieuw tegen Thebe op, dit keer met succes. Onder hen Diomedes, de zoon van Tydeus, die zijn vader nooit goed heeft kunnen kennen maar hem hier alsnog wreekt. Thebe viel definitief, en Diomedes' naam zou nog veel groter worden: jaren later zou hij een van de dapperste Griekse helden voor Troje worden." },
+  codex_ismene_weigering: { cat:"mythologie", titel:"Ismene's Weigering",
+    tekst:"Antigone vraagt haar zuster Ismene om samen Polyneikes te begraven, tegen Creons verbod in. Ismene weigert — niet uit lafheid, maar uit een nuchtere afweging: de laatste twee overlevenden van een al zwaar getroffen familie hoeven niet allebei te sterven voor dezelfde overtuiging. Wanneer Antigone later gepakt wordt, biedt Ismene zich alsnog aan om samen gestraft te worden; Antigone weigert dat aanbod." },
   codex_antigone: { cat:"mythologie", titel:"Antigone's Verzet",
     tekst:"Na de oorlog verklaarde regent Creon dat Polyneikes — die zijn eigen stad had aangevallen — als verrader nooit begraven mocht worden, een verschrikkelijke straf volgens Griekse religieuze overtuiging. Antigone, Polyneikes' zuster, trotseerde het bevel en begroef hem alsnog met de juiste rituelen, overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning. Creon liet haar levend inmetselen in een graftombe; Antigone koos zelf het moment van haar dood, in plaats van te wachten tot de tombe dat voor haar deed." },
   codex_pentheus_bacchus: { cat:"mythologie", titel:"Pentheus en de Bacchanten",
@@ -2089,6 +2103,9 @@ const SP_CODEX_PERSONS = {
     full:"Getroffen door een door Hera opgelegde waanzin doodde Herakles zijn eigen vrouw Megara en hun kinderen — een daad die hem, eenmaal weer bij zinnen, verwoestte. Op advies van het orakel van Delphi diende hij zijn neef Eurystheus als boetedoening en volbracht de eerste van wat uiteindelijk twaalf beproevingen zouden worden: de Nemeïsche Leeuw gewurgd met blote handen, de Hydra van Lerna verslagen met vuur. Zijn verhaal — en zijn straf — is nog lang niet voorbij." },
   megara: { nm:"Megara", epithet:"Prinses van Thebe, vrouw van Herakles",
     intro:"De vrouw van Herakles en moeder van zijn kinderen, hem gegeven als beloning nadat hij Thebe had verdedigd tegen een belegerend leger — tot Hera's wraak alles wat ze samen hadden opbouwde in één ogenblik verwoestte." },
+  deianira: { nm:"Deianira", epithet:"Herakles' tweede vrouw",
+    intro:"Herakles' tweede vrouw, jaren na Megara — bang hem ooit te verliezen aan een jongere vrouw, en in het bezit van een geschenk waarvan ze nooit heeft geweten hoe dodelijk het werkelijk was.",
+    full:"Uit angst Herakles te verliezen stuurt Deianira hem een hemd doordrenkt met het vergiftigde bloed van de centaur Nessus, die haar bij zijn dood liet geloven dat het een liefdesmiddel was. Het gif verteert Herakles' huid; Deianira, zodra ze beseft wat ze heeft aangericht, neemt haar eigen leven. Herakles laat zich op de berg Oeta cremeren en wordt, terwijl het vuur zijn sterfelijke lichaam verteert, eindelijk onder de goden opgenomen." },
 
   io: { nm:"Io", epithet:"Priesteres van Juno, minnares van Jupiter",
     intro:"Een priesteres van Juno zelf in Argos — een wrede ironie, want het is uitgerekend haar eigen godin die straks haar ergste vijand wordt, zodra Jupiter zijn oog op haar laat vallen.",
@@ -2120,6 +2137,9 @@ const SP_CODEX_PERSONS = {
   ariadne: { nm:"Ariadne", epithet:"Prinses van Kreta, dochter van Minos",
     intro:"Minos' dochter, die in de veertien ten dode opgeschreven Atheners voor het eerst iemand ziet voor wie ze meer voelt dan medelijden met zichzelf.",
     full:"Ariadne verried haar eigen vader door Theseus Daidalos' plan — een kluwen garen — in handen te spelen, in ruil voor de belofte dat hij haar zou meenemen. Theseus liet haar niettemin slapend achter op Naxos. Daar vond Bacchus haar, trouwde met haar en maakte haar onsterfelijk — het enige verhaal in dit hoofdstuk waar een gebroken belofte alsnog goed afloopt." },
+  phaedra: { nm:"Phaedra", epithet:"Prinses van Kreta, Ariadnes zuster",
+    intro:"Ariadnes eigen zuster, jaren later Theseus' tweede vrouw — en de vrouw die, tegen haar eigen wil in, verliefd wordt op haar stiefzoon Hippolytus.",
+    full:"Phaedra bevecht maandenlang, in stilte, een liefde voor haar stiefzoon Hippolytus waarvan ze zelf weet dat die onmogelijk is. Zodra het geheim toch aan het licht komt, grijpt ze naar een valse beschuldiging om haar eigen schaamte te verbergen; Theseus, misleid, roept een vloek over zijn eigen zoon af. Hippolytus sterft onschuldig, vlak voor de waarheid boven water komt — en Phaedra overleeft het inzicht in wat ze heeft aangericht niet." },
   minos: { nm:"Minos", epithet:"Koning van Kreta, zoon van Europa en Jupiter",
     intro:"De machtige koning van Kreta — dezelfde naam die Athena al noemde toen ze over Europa vertelde — wiens jaarlijkse eis aan Athene een oude, verzwegen schuld verbergt.",
     full:"Minos' eigen gebroken belofte aan Neptunus — een witte stier die hij weigerde te offeren — kostte hem uiteindelijk zijn eer: zijn vrouw Pasiphaë baarde de Minotaurus, en zijn dochter Ariadne koos voor een vreemdeling boven haar eigen vader. Zijn woede om dat verraad trof uiteindelijk niet Theseus, maar Daidalos, de man die het allemaal mogelijk had gemaakt." },
@@ -2144,6 +2164,9 @@ const SP_CODEX_PERSONS = {
   jason: { nm:"Jason", epithet:"Aanvoerder van de Argonauten",
     intro:"De rechtmatige troonopvolger van Iolcus, weggehouden van de troon door zijn oom Pelias — die hem, in de hoop dat hij nooit terugkeert, op een schijnbaar onmogelijke queeste stuurt: het Gulden Vlies uit Colchis halen.",
     full:"Jason verzamelde de dapperste helden van Griekenland, voer met hen dwars over zee naar Colchis, en kreeg het Vlies uiteindelijk alleen dankzij Medea's hulp — een schuld die hij haar, jaren later in Korinthe, met verraad zou terugbetalen." },
+  hypsipyle: { nm:"Hypsipyle", epithet:"Koningin van Lemnos",
+    intro:"De enige vrouw op Lemnos die haar eigen vader spaarde toen de rest van het eiland hun mannen doodde — en die de Argonauten ontvangt alsof ze een geschenk zijn.",
+    full:"Hypsipyle ontvangt de Argonauten als koningin van Lemnos en krijgt een tweeling bij Jason, die haar nooit terughaalt. Jaren later duikt ze weer op, ver van haar troon: als slavin en min bij koning Lycurgus, tot een dodelijk ongeluk met zijn zoontje haar het leven bijna kost — voor haar eigen, inmiddels volwassen zonen haar precies op tijd redden." },
   medea: { nm:"Medea", epithet:"Prinses van Colchis, tovenares",
     intro:"De dochter van koning Aeëtes van Colchis, en een begaafde tovenares — die, tot haar eigen verrassing, op slag verliefd wordt op de vreemdeling die haar vaders Vlies komt opeisen.",
     full:"Medea verraadde haar eigen vader om Jason te helpen: ze temperde de vuurspuwende stieren, hielp de aardgeboren krijgers tegen elkaar opzetten, en suste de nooit slapende draak in slaap. Jaren later, in Korinthe, verliet Jason haar voor een politiek huwelijk — en Medea's wraak daarop is een van de duisterste verhalen die de mythologie kent." },
@@ -2202,6 +2225,9 @@ const SP_CODEX_PERSONS = {
   antigone: { nm:"Antigone", epithet:"Prinses van Thebe, dochter van Oedipus",
     intro:"Oedipus' dochter, die weigert te aanvaarden dat haar eigen broer onbegraven mag blijven liggen — zelfs als dat weigeren haar het leven kan kosten.",
     full:"Tegen het uitdrukkelijke bevel van koning Creon in begroef Antigone haar broer Polyneikes met de juiste rituelen, uit overtuiging dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning. Ze werd ervoor levend ingemetseld — en koos zelf het moment van haar dood, in plaats van te wachten tot de tombe dat voor haar deed." },
+  ismene: { nm:"Ismene", epithet:"Prinses van Thebe, Antigones zuster",
+    intro:"Oedipus' andere dochter, die weigert haar zuster te helpen Polyneikes te begraven — niet uit lafheid, maar uit een nuchtere afweging over wie van de laatste twee overlevenden van hun familie nog in leven moet blijven.",
+    full:"Ismene weigert eerst, maar biedt zich later, wanneer Antigone gepakt wordt, alsnog aan om samen met haar gestraft te worden — Antigone wijst dat aanbod af. Van de twee zusters overleeft alleen Ismene, met een keuze die ze zelf nooit helemaal zeker weet of ze juist vindt." },
   creon: { nm:"Creon", epithet:"Regent van Thebe",
     intro:"Iokaste's broer, die na de wederzijdse ondergang van Eteokles en Polyneikes de troon van Thebe overneemt — en meteen een bevel uitvaardigt dat het hele koninkrijk zal verscheuren." },
   diomedes: { nm:"Diomedes", epithet:"Zoon van Tydeus, latere held van Troje",
@@ -7225,6 +7251,29 @@ labores
 
 CHOICES:
 
+* Keer terug naar de Boodschapper -> CH3_H25B
+
+END
+
+=== SCENE: CH3_H25B ===
+
+TITLE:
+Wat Nog Komt
+
+TEXT:
+Wat Herakles vandaag nog niet weet: jaren later, na hertrouwen met Deianira, wordt een oude wonde uit dit hoofdstuk hem alsnog fataal. Nessus, de centaur die hij ooit doodde toen die Deianira probeerde te ontvoeren, geeft haar met zijn laatste adem een wraak die pas jaren later toeslaat — zijn eigen, met Hydra-gif doordrenkte bloed, aangeboden als een zogenaamd liefdesmiddel om Herakles ooit trouw te houden.
+
+DIALOGUE:
+Deianira
+Ik wilde hem nooit kwaad doen — ik was alleen bang hem te verliezen aan een jongere vrouw, en greep naar het enige middel dat me ooit was aangeboden. Pas toen het al te laat was, begreep ik wat ik werkelijk in handen had gehad.
+
+Wanneer Herakles, jaren later, het hemd draagt dat ze hem in doodsangst laat brengen, verteert het gif zijn huid vanbinnenuit — een pijn die zelfs hij niet kan verdragen. Deianira, zodra ze beseft wat haar geschenk heeft aangericht, neemt haar eigen leven. Herakles zelf laat zich, niet langer bij machte de pijn te doorstaan, op een brandstapel op de berg Oeta leggen — en wordt daar, terwijl het vuur zijn sterfelijke lichaam verteert, eindelijk opgenomen onder de goden.
+
+CODEX:
+codex_deianira_nessus
+
+CHOICES:
+
 * Keer terug naar de Boodschapper -> CH3_000
 
 END
@@ -7851,6 +7900,31 @@ ch4_lijn_theseus=true
 
 FRAGMENT:
 theseus
+
+CHOICES:
+
+* Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog -> CH4_T16B
+
+END
+
+=== SCENE: CH4_T16B ===
+
+TITLE:
+Jaren Later: Phaedra
+
+TEXT:
+Jaren later, allang koning van Athene, hertrouwt Theseus met Ariadnes eigen zuster, Phaedra — een verbintenis die de families van Kreta en Athene opnieuw verbindt, zonder dat iemand ooit hardop de naam Ariadne noemt in haar bijzijn.
+
+Phaedra vindt in dat huwelijk niet wat ze ervan had gehoopt: ze wordt smoorverliefd op Hippolytus, Theseus' zoon uit een eerder huwelijk — een liefde die ze zelf net zo goed weet als ieder ander volstrekt onmogelijk is, en waar ze wanhopig tegen vecht.
+
+DIALOGUE:
+Phaedra
+Ik heb mezelf nooit toegestaan te geloven dat dit ooit iets anders zou worden dan schaamte. Ik vecht al maanden tegen wat ik voel, in stilte, zonder dat iemand — Hippolytus zelf al helemaal niet — er ooit iets van hoeft te weten.
+
+Maar het geheim komt toch aan het licht, en de gevolgen daarvan wentelen zich, in de dagen die volgen, over Phaedra, over Hippolytus, en over Theseus zelf — een keten van misverstand en overhaaste woede die niemand in dit gezin ooit meer helemaal achter zich zal kunnen laten.
+
+CODEX:
+codex_phaedra_hippolytus
 
 CHOICES:
 
@@ -8500,6 +8574,53 @@ ch5_bemanning_uitrusting=true
 
 PUZZLE:
 puzzle_ch5_ppf1
+
+CHOICES:
+
+* Vaar de open zee op -> CH5_006B
+
+END
+
+=== SCENE: CH5_006B ===
+
+TITLE:
+Lemnos, het Eiland zonder Mannen
+
+TEXT:
+Nog voor de Argo Cyzicus bereikt, meert het schip aan bij Lemnos — een eiland dat, zo blijkt al snel, wordt bestuurd door vrouwen alleen. Een jaar eerder had een vloek van Aphrodite de mannen van Lemnos zo onverdraaglijk gemaakt voor hun eigen vrouwen dat die, in een enkele nacht van collectieve woede, hen bijna allemaal doodden. Op één na: koningin Hypsipyle spaarde in het geheim haar eigen vader Thoas, en zette hem in een kist de zee op in plaats van hem te doden.
+
+Hypsipyle ontvangt de Argonauten niet als indringers maar als een geschenk — een eiland zonder mannen kan geen volgend jaar overleven. Ze biedt Jason en zijn bemanning gastvrijheid aan die verder gaat dan gebruikelijk, en niemand aan boord heeft nog haast om te vertrekken.
+
+DIALOGUE:
+Hypsipyle
+Wat de vrouwen van dit eiland deden, deed ik niet — maar ik begrijp waarom ze het deden, en dat maakt me, in de ogen van sommigen, bijna even schuldig. Ik regeer nu alleen over wat er overblijft. Jullie zijn de eerste mannen die hier ooit weer welkom waren.
+
+PERSON:
+hypsipyle:full
+
+CODEX:
+codex_lemnos_hypsipyle
+
+CHOICES:
+
+* Vind het begrijpelijk, gezien wat de mannen hen blijkbaar hadden aangedaan [CLEMENTIA] -> CH5_006C
+* Blijf het een verontrustende daad vinden, hoe gerechtvaardigd ook uitgelegd [SEVERITAS] -> CH5_006C
+* Onthoud vooral haar eigen daad — ze redde haar vader, tegen de stroom in [NEUTRAL] -> CH5_006C
+
+END
+
+=== SCENE: CH5_006C ===
+
+TITLE:
+Het Vertrek van Lemnos
+
+TEXT:
+Weken gaan voorbij zonder dat iemand aan boord nog aan Colchis denkt — tot Herakles, die zelf nooit oog heeft gehad voor de vrouwen van het eiland, zijn geduld verliest. "Zijn we hier gekomen voor een vlies," gromt hij, "of voor een vrouw per man?" Beschaamd verzamelt de bemanning zich weer aan boord.
+
+Hypsipyle laat Jason vertrekken zonder tranen, maar niet zonder een belofte terug te komen — een belofte die, zoals wel vaker in dit verhaal, niet wordt gehouden. Wat niemand aan boord op dit moment weet: ze draagt zijn tweeling onder haar hart, twee zonen die ze zonder hem zal moeten grootbrengen.
+
+CODEX:
+codex_hypsipyle_afscheid
 
 CHOICES:
 
@@ -9959,6 +10080,53 @@ ch6_zeven_tegen_thebe.png
 
 CHOICES:
 
+* Volg het leger op weg naar Thebe -> CH6_012N
+
+END
+
+=== SCENE: CH6_012N ===
+
+TITLE:
+Hypsipyle bij Nemea
+
+TEXT:
+Onderweg naar Thebe trekt het leger van de Zeven door Nemea, uitgedroogd en op zoek naar water. De vrouw die hen de weg naar de enige bron wijst, herken jij eerder dan de Zeven zelf: Hypsipyle — niet langer koningin van Lemnos, maar jaren geleden door piraten geroofd en als slavin verkocht, nu min van de kleine Opheltes, het zoontje van de plaatselijke koning Lycurgus.
+
+Ze zet de zuigeling voor een moment in het gras, zeker van een paar tellen om de mannen de weg te wijzen — tellen die genoeg blijken voor een slang om toe te slaan. Wanneer ze terugkeert, is Opheltes al dood.
+
+DIALOGUE:
+Hypsipyle
+Ooit regeerde ik over een heel eiland zonder ook maar één man erop, en nu kan ik niet eens één kind een paar tellen bewaken. Lycurgus zal me hiervoor doden — en ik weet niet eens of ik hem ongelijk zou geven.
+
+PERSON:
+hypsipyle:full
+
+CODEX:
+codex_hypsipyle_nemea
+
+CHOICES:
+
+* Pleit voor genade — ze kon dit niet voorzien [CLEMENTIA] -> CH6_012N2
+* Erken dat Lycurgus' woede, hoe hard ook, niet onbegrijpelijk is [SEVERITAS] -> CH6_012N2
+* Wacht zwijgend af wat de Zeven doen — dit is niet aan jou [NEUTRAL] -> CH6_012N2
+
+END
+
+=== SCENE: CH6_012N2 ===
+
+TITLE:
+Twee Onverwachte Zonen
+
+TEXT:
+Voor Lycurgus zijn zwaard kan heffen, dringen twee jonge mannen naar voren uit de gelederen van de Zeven — Euneus en Thoas, de tweelingzonen die Hypsipyle ooit, jaren geleden op Lemnos, bij Jason kreeg, en die haar al die tijd hebben gezocht. Ze werpen zich tussen hun moeder en het zwaard.
+
+Amphiaraus, de ziener onder de Zeven, grijpt het moment aan om Lycurgus tot bedaren te brengen: laat, in plaats van wraak, jaarlijkse wedstrijden instellen ter nagedachtenis aan het kind — de Nemeïsche Spelen, die eeuwenlang zullen blijven bestaan, lang nadat iedereen die hier vandaag staat vergeten is. Lycurgus, verscheurd tussen rouw en het onverwachte weerzien voor zijn ogen, stemt toe. Hypsipyle overleeft, herenigd met twee zonen die ze nooit had durven hopen weer te zien.
+
+CODEX:
+codex_hypsipyle_zonen
+
+CHOICES:
+
 * Kijk hoe de aanval op Thebe verloopt -> CH6_012B
 
 END
@@ -10086,7 +10254,35 @@ creon:intro
 
 CHOICES:
 
-* Kijk wat Antigone besluit te doen -> CH6_015B
+* Kijk wat Antigone besluit te doen -> CH6_015A
+
+END
+
+=== SCENE: CH6_015A ===
+
+TITLE:
+Ismene's Antwoord
+
+TEXT:
+Voor ze in het geheim handelt, zoekt Antigone eerst haar zuster Ismene op — de enige andere nog levende telg van hun beladen familie — en vraagt haar mee te helpen Polyneikes te begraven, tegen Creons uitdrukkelijke verbod in.
+
+DIALOGUE:
+Ismene
+Wij zijn de laatsten van een familie die de goden al genoeg hebben gestraft — onze vader stak zijn eigen ogen uit, onze broers doodden elkaar met eigen handen. Ik rouw om Polyneikes net zo hard als jij. Maar ik ben niet sterk genoeg om tegen de wet van de stad in te gaan, en ik zie niet in wie ermee geholpen is als we allebei sterven in plaats van één van ons.
+
+Antigone hoort haar aan, en gaat toch alleen.
+
+PERSON:
+ismene:full
+
+CODEX:
+codex_ismene_weigering
+
+CHOICES:
+
+* Begrijp Ismenes keuze — niet iedereen hoeft dezelfde weg te kiezen om gelijk te hebben [CLEMENTIA] -> CH6_015B
+* Vind het jammer dat ze haar zuster niet bijstaat, wat de gevolgen ook zijn [SEVERITAS] -> CH6_015B
+* Zie het als twee verschillende, allebei begrijpelijke antwoorden op dezelfde onmogelijke vraag [NEUTRAL] -> CH6_015B
 
 END
 
@@ -10183,10 +10379,12 @@ TITLE:
 Levend Ingemetseld
 
 TEXT:
-Creon laat Antigone, zodra hij ontdekt wat ze heeft gedaan, levend inmetselen in een graftombe — geen executie in naam, maar wel een ter dood veroordeling. Antigone wacht niet af tot de tombe haar langzaam laat sterven: ze kiest zelf het moment.
+Creon laat Antigone, zodra hij ontdekt wat ze heeft gedaan, levend inmetselen in een graftombe — geen executie in naam, maar wel een ter dood veroordeling. Ismene, die weken eerder weigerde mee te helpen, biedt zich nu alsnog aan om samen met haar zuster gestraft te worden — ze kan het niet verdragen als enige in leven te blijven. Antigone wijst het aanbod resoluut af: ze liet haar zuster destijds al weten dat dit haar eigen daad was, en staat niet toe dat Ismene alsnog boet voor iets waarvan ze zelf koos geen deel uit te maken.
+
+Antigone wacht niet af tot de tombe haar langzaam laat sterven: ze kiest zelf het moment.
 
 PERSON:
-antigone:full
+antigone:full, ismene:full
 
 CODEX:
 codex_antigone
