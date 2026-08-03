@@ -1637,6 +1637,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Odysseus, die liever thuis bij zijn jonge gezin blijft dan naar Troje te trekken, doet zich voor als waanzinnig: hij ploegt zijn akker met een os en een ezel samengespannen, en zaait er zout in plaats van graan. Palamedes doorziet de list en legt Odysseus' eigen zoontje Telemachus voor de ploeg — Odysseus zwenkt opzij om hem te sparen, en verraadt zichzelf daarmee. Odysseus vergeet die vernedering nooit, met gevolgen die pas jaren later, ver van Troje, echt zichtbaar worden." },
   codex_achilles_skyros: { cat:"mythologie", titel:"Achilles tussen de Vrouwen",
     tekst:"Thetis, wetend dat haar zoon Achilles bij Troje zal sterven als hij meevaart, verbergt hem vermomd als meisje tussen de dochters van koning Lycomedes op Skyros. Odysseus ontmaskert hem met een list: tussen sieraden en stoffen voor de meisjes legt hij ook een zwaard en een schild, en laat een strijdhoorn schallen. Terwijl de meisjes vluchten, grijpt Achilles instinctief naar de wapens — en verraadt daarmee wie hij werkelijk is." },
+  codex_egyptische_helena_gerucht: { cat:"mythologie", titel:"Het Gerucht van de Egyptische Helena",
+    tekst:"Een onbevestigd verhaal, verteld door een oude roeier in Aulis: dat de Helena die naar Troje vaart een schaduwbeeld is, een eidolon, en dat de échte Helena veilig in Egypte zit — een heel oorlog gevoerd om een vrouw die er niet eens was. Latere, veel jongere schrijvers (de dichter Stesichorus in zijn Palinodie, Euripides in zijn toneelstuk Helena, en de geschiedschrijver Herodotus) namen deze traditie serieus; Homerus en de rest van dit verhaal doen dat niet. Binnen Chronica blijft het precies dat: een gerucht dat een wachtende roeier ooit vertelde, nooit bevestigd of ontkracht." },
   codex_aulis_iphigenia: { cat:"mythologie", titel:"Het Offer in Aulis",
     tekst:"De verzamelde Griekse vloot ligt wekenlang windstil in Aulis, tot de ziener Calchas onthult dat Agamemnon de godin Artemis heeft beledigd — enkel een offer van zijn eigen dochter Iphigenia kan gunstige wind afdwingen. Agamemnon, verscheurd tussen vader- en veldheerschap, laat haar naar Aulis lokken onder het mom van een huwelijk met Achilles. In sommige tradities wordt ze werkelijk geofferd; in andere grijpt Artemis zelf in en voert haar op het laatste moment weg naar Tauris, terwijl een hinde haar plaats inneemt op het altaar." },
   codex_philoktetes_lemnos: { cat:"mythologie", titel:"Philoktetes op Lemnos",
@@ -11213,7 +11215,28 @@ codex_achilles_skyros
 
 CHOICES:
 
-* Volg de verzamelde vloot naar haar eerste, onverwachte halte -> CH7_016
+* Volg de verzamelde vloot naar haar eerste, onverwachte halte -> CH7_015B
+
+END
+
+=== SCENE: CH7_015B ===
+
+TITLE:
+Een Gerucht bij de Schepen
+
+TEXT:
+Terwijl de vloot zich verzamelt, wachtend op een sein om uit te varen, hoor je tussen de scheepstouwen een oude roeier iets vertellen dat de rest van zijn ploeg met opgetrokken wenkbrauwen begroet. Hij heeft het, zegt hij, van een Egyptische koopman gehoord: dat de goden soms een schaduwbeeld sturen waar een mens hoort te staan, en dat de Helena die naar Troje wordt gebracht weleens zo'n schaduw zou kunnen zijn — de échte Helena, veilig en wel, ergens aan de Nijl. Zijn maten lachen hem uit voor hij is uitgesproken.
+
+Niemand aan boord van deze vloot zal ooit de moeite nemen het na te gaan. Voor de mannen die zo dadelijk uitvaren, is er maar één Helena die telt: degene om wie ze naar Troje zeilen.
+
+CODEX:
+codex_egyptische_helena_gerucht
+
+CHOICES:
+
+* Neem het serieus — misschien klopt er meer van dan de roeiers willen toegeven [CLEMENTIA] -> CH7_016
+* Doe het af als het soort verhaal dat wachtende soldaten er nu eenmaal bij verzinnen [SEVERITAS] -> CH7_016
+* Onthoud het gewoon als een vreemd, onbevestigd verhaal — meer niet -> CH7_016
 
 END
 
