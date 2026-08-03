@@ -16076,7 +16076,10 @@ Twee Steden
 TEXT:
 "[[Ecce|zie hier]] — het vijfde boek," zegt de Boodschapper van Chronos, en de scheur die ze ditmaal opent is breder dan de vorige, alsof hij twee verhalen tegelijk moet doorlaten. "Dit keer vertel ik je niet over helden die naar huis reizen, maar over hoe een thuis zelf vorm krijgt — een stad die haar naam nog moet verdienen, en een stad die haar eerste koningen nog moet overleven."
 
-Ze kijkt je aan, met iets van die zeldzame warmte die je inmiddels herkent. "Aan de Griekse kant: hoe Athene aan haar beschermgodin kwam — en hoe die godin zelf ter wereld kwam, op een manier die niemand had zien aankomen. Aan de Latijnse kant: de koningen die na Romulus over Rome heersten, niet allemaal even rechtvaardig — tot één daad van onrecht de hele monarchie deed instorten."
+Ze kijkt je aan, met iets van die zeldzame warmte die je inmiddels herkent. "Aan de Griekse kant: hoe Athene aan haar naam en haar beschermgodin kwam — een verhaal dat pas ná Athena's eigen geboorte speelt. Aan de Latijnse kant: de koningen die na Romulus over Rome heersten, niet allemaal even rechtvaardig — tot één daad van onrecht de hele monarchie deed instorten."
+
+VOCAB:
+grieks_manteia, grieks_kephale, grieks_polis, grieks_eris, grieks_sophia, latijn_rex_regina, latijn_iurare, latijn_pudicitia, latijn_libertas, latijn_senatus, latijn_soror, latijn_expellere
 
 CHOICES:
 * Volg Athenes verhaal [REQUIRE:taalspoor=grieks] -> CH13_GRE_000

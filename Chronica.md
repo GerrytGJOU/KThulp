@@ -4982,6 +4982,97 @@ negen bereiken foutloos `CH13_WORDT_VERVOLGD`, geen lussen of
 doodlopende paden. `node --check` + `validate_chronica.js` → 0 fouten, 33
 waarschuwingen (ongewijzigd).
 
+### 7.48 Drie kritieke, echte-speeltest-blokkerende bugs gevonden en gefixt (2026-08-02)
+
+Gerben vroeg of Hoofdstuk 13 klaar was om te testen. `validate_chronica.js`
+zegt al sinds §7.41 "0 fouten" — maar die validator leest zijn eigen,
+losse `BLOCKS`-lijst (`certamen/tools/validate_chronica.js`), niet de
+lijst die het DRAAIENDE SPEL zelf gebruikt. Een echte speeltest (server
+starten, `spGoCns()` handmatig aanroepen, puzzels daadwerkelijk invullen)
+onthulde drie bugs die de validator nooit had kunnen zien:
+
+**Bug 1 — Hoofdstuk 11, 12 én 13 waren onspeelbaar in het echte spel.**
+`SP_SCENES` in `certamen/singleplayer.js` (de kaart die `spGoCns()`
+gebruikt om scènes op te zoeken) was hardcoded tot en met `SP_CH10_CNS` —
+`SP_CH11_CNS`/`SP_CH12_CNS`/`SP_CH13_CNS` ontbraken domweg in de
+`new Map([...CNSParser.parse(...), ...])`-constructie. Dit is een
+VOLLEDIG APARTE lijst van de validator se `BLOCKS`-array (bewust
+gedupliceerd, zie het commentaar bovenaan `validate_chronica.js`: "geen
+browser-globals/module-systeem beschikbaar in een los Node-script") — ik
+had braaf de validator se lijst bijgehouden bij elk nieuw hoofdstuk, maar
+nooit gecontroleerd of `singleplayer.js` se EIGEN lijst ook meegroeide.
+**Gefixt**: `SP_CH11_CNS`, `SP_CH12_CNS`, `SP_CH13_CNS` toegevoegd aan de
+`SP_SCENES`-constructie.
+
+**Bug 2 — de cache-busting-versie stond al sinds 31 juli stil.**
+`certamen/index.html` laadt `singleplayer-data.js`/`singleplayer.js` met
+een `?v=jjjjmmdda`-query — git-geschiedenis bevestigt dat dit bij ELKE
+wijziging aan een van beide bestanden hoort te worden opgehoogd (anders
+serveren browsers met een gecachete kopie de oude versie, ook na een
+nieuwe deploy). Die versie stond nog op `20260731a`, ondanks alle
+wijzigingen van vandaag. **Gefixt**: opgehoogd naar `20260802a` (en
+daarna `b`/`c` bij de twee vervolgfixes hieronder, zelfde dag).
+
+**Bug 3 — `[REQUIRE:ch1_lijn=B]` deed helemaal niets.** Twee
+samenhangende problemen, allebei in `spChoiceVisible()`
+(`certamen/singleplayer.js`):
+1. De functie herkende alleen `REQUIRE:fragments=` en `REQUIRE:
+   taalspoor=`/`!=` expliciet — élke andere FLAG-sleutel viel terug op
+   `return true` (altijd zichtbaar). Sinds Chronica's hele geschiedenis
+   was `ch1_lijn` (toegevoegd voor de conditionele Athena-geboorte-
+   erkenning, zie §7.47) de EERSTE keer dat een REQUIRE op een andere
+   vlag dan die twee werd gebruikt — dus deze beperking was nooit eerder
+   aan het licht gekomen. Gefixt met een generieke fallback die
+   `SP_STATE.flags[key]` opzoekt voor elke onbekende REQUIRE-sleutel.
+2. Zodra die fallback er was, bleek een TWEEDE laag: `CNSParser.
+   parseChoices()` verlaagt elke woord-waarde in een REQUIRE-tag naar
+   kleine letters (`B` → `b`) — een bestaande, opzettelijke normalisatie
+   die klopt voor `taalspoor` (altijd al lowercase gezet: grieks/latijn/
+   beide), maar niet voor `ch1_lijn`, dat in Hoofdstuk 1 met hoofdletters
+   wordt gezet (`FLAG: ch1_lijn=B`). Het gevolg: `actual` ("B") en
+   `c.require.value` ("b") kwamen nooit overeen, dus de `!=`-tak werd
+   altijd gekozen, ongeacht de werkelijke vlagwaarde. Gefixt door de
+   generieke vergelijking zelf ook lowercase te maken.
+
+**Hoe dit ontdekt werd**: niet door de validator (die kan dit soort bugs
+per ontwerp niet zien — hij simuleert geen keuzeklikken, hij controleert
+alleen dat elke scène/verwijzing bestaat), maar door het spel
+daadwerkelijk te starten (`.claude/launch.json`, configuratie `kthulp`,
+poort 8767) en via de browserconsole `SP_STATE.flags` te zetten en
+`spGoCns()`/knop-clicks te simuleren voor alle negen combinaties van
+`taalspoor` × `ch1_lijn`, plus elke puzzel daadwerkelijk correct EN
+fout invullen.
+
+**Belangrijke les**: `validate_chronica.js`'s "0 fouten" bevestigt dat de
+scènegraaf intern consistent is — het bevestigt NIET dat het echte spel
+de content ooit bereikt, en het bevestigt NIET dat REQUIRE-logica die
+niet-standaard vlaggen gebruikt daadwerkelijk werkt. Bij een volgende
+hoofdstuk-oplevering: als er een nieuw hoofdstuk-bestand (`SP_CHxx_CNS`)
+bijkomt, controleer ALTIJD of het ook aan `SP_SCENES` in
+`singleplayer.js` is toegevoegd (niet alleen aan de validator se
+`BLOCKS`), bump de `?v=`-cache-versie in `index.html`, en doe minstens
+één keer een levende doorloop via de browser i.p.v. alleen op de
+validator te vertrouwen — zeker zodra een REQUIRE een NIEUWE vlag
+gebruikt die niet al taalspoor/fragments is.
+
+Gevalideerd: volledige levende doorloop van Hoofdstuk 13 (beide taalsporen,
+alle 6 puzzels — goed én fout ingevuld — alle codex-/persoon-/eretitel-
+/statpoints-toasts, alle vertakkingen van `ch1_lijn`) zonder consolefouten.
+`node --check` (beide bestanden) + `validate_chronica.js` → 0 fouten, 33
+waarschuwingen (ongewijzigd).
+
+**Extra vangnet toegevoegd tegen bug 1's herhaling**: `validate_chronica.js`
+controleert nu zelf, bij elke run, of elke `SP_CHxx_CNS`/`SP_PROLOOG_CNS`
+uit zijn eigen `BLOCKS`-lijst ook daadwerkelijk voorkomt in de `SP_SCENES`-
+constructieregel van `singleplayer.js`. Ontbreekt een hoofdstuk daar, dan
+meldt de validator voortaan een harde FOUT ("... is onbereikbaar in het
+echte spel...") in plaats van stilzwijgend "0 fouten" te blijven melden.
+Dit vangt bug 1 hierboven automatisch af bij elk toekomstig nieuw
+hoofdstuk, zonder dat er nog een handmatige levende test voor nodig is —
+al blijft een levende doorloop wel nodig voor bug 3's soort problemen
+(REQUIRE-logica op nieuwe vlaggen), die de validator per ontwerp niet kan
+simuleren.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd

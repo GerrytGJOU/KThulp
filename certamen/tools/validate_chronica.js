@@ -94,6 +94,28 @@ const warnings = [];
 const scenesById = new Map();
 const dupes = [];
 
+/* Bewaking tegen een echte bug uit 2026-08-02 (Chronica.md §7.48): deze
+   BLOCKS-lijst hierboven is BEWUST gescheiden van SP_SCENES in
+   singleplayer.js zelf (geen browser-globals hier) — maar dat betekent dat
+   een hoofdstuk hier toevoegen zonder het OOK aan singleplayer.js's eigen
+   SP_SCENES-constructie toe te voegen, onopgemerkt bleef: de validator zei
+   "0 fouten" terwijl Hoofdstuk 11/12/13 in het draaiende spel onbereikbaar
+   waren. Check hier of elke SP_CHxx_CNS die in BLOCKS staat, ook
+   daadwerkelijk in singleplayer.js's SP_SCENES-regel voorkomt. */
+{
+  const spPath = path.join(ROOT, 'singleplayer.js');
+  const spSrc = fs.readFileSync(spPath, 'utf8');
+  const scenesLineM = /const SP_SCENES\s*=[^\n]*/.exec(spSrc);
+  const scenesLine = scenesLineM ? scenesLineM[0] : '';
+  for (const [chap, raw] of BLOCKS) {
+    if (!raw) continue; // lege/ontbrekende const in singleplayer-data.js zelf; apart probleem
+    const expectedName = chap === 'PRO' ? 'SP_PROLOOG_CNS' : `SP_${chap}_CNS`;
+    if (!scenesLine.includes(expectedName)) {
+      errors.push(`KRITIEK: ${expectedName} staat in validate_chronica.js's BLOCKS, maar NIET in singleplayer.js's SP_SCENES-constructie — dit hoofdstuk is onbereikbaar in het echte spel, ook al meldt deze validator verder "0 fouten". Voeg "...CNSParser.parse(${expectedName})" toe aan de SP_SCENES-regel in singleplayer.js.`);
+    }
+  }
+}
+
 for (const [chap, raw] of BLOCKS) {
   for (const [id, sc] of CNSParser.parse(raw)) {
     if (scenesById.has(id)) dupes.push(id);
