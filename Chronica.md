@@ -595,7 +595,7 @@ staat, niet dit verslag.
 | 9 | I | Ilion in Vlammen | Comparativus/superlativus, A.C.I., znw groep 3, congruentie — **vertakking Trojaans/Grieks/Neutraal** |
 | 10 | II | Vluchten uit Troje | Medium, passief, aoristus passief; *Minerva 14:* naamwoordgroep 4/5, hic, ipse |
 | 11 | II | Tussen Liefde en Lot | Participium, genitivus absolutus; *Minerva 15:* participium praesens actief, ablativus absolutus |
-| 12 | II | Wraak en een Nieuwe Stad | Betrekkelijk vnw, conjunctivus, alpha-werkwoorden (Grieks, les 19-21 — VOLLEDIG, zie §7.45); *Minerva 16* (Hercules & Cacus, **gebouwd**) + *Minerva 17* (Romulus & Remus, **nog te bouwen**) — SAMENGEVOEGD 2026-08-02 uit de oude Hoofdstuk 12 "Odysseus' Wraak" en Hoofdstuk 13 "Het Begin van Rome" (nooit gebouwd), zie §7.44 |
+| 12 | II | Wraak en een Nieuwe Stad | **Gebouwd (2026-08-03).** Betrekkelijk vnw, conjunctivus, alpha-werkwoorden (Grieks, les 19-21 — VOLLEDIG, zie §7.45); *Minerva 16* (Hercules & Cacus) + *Minerva 17* (Romulus & Remus, incl. Rhea Silvia/de wolvin/de Sabijnse vrouwen) — SAMENGEVOEGD 2026-08-02 uit de oude Hoofdstuk 12 "Odysseus' Wraak" en Hoofdstuk 13 "Het Begin van Rome" (nooit gebouwd), zie §7.44/§7.48 |
 | 13 | II | Twee Steden, Twee Koningen | **Gebouwd.** Grieks: futurum (Pallas 22, wedstrijd om Athene tegen Poseidon — NIET Athena's geboorte, die staat al in H1); Latijn: conjunctivus praesens/perfectum (Minerva 21, Horatii/Lucretia/Brutus) |
 | 14 | II | Verzet tegen Tirannen | Grieks: les 23 (Atheense democratie); Latijn: Verdedigers van de Republiek — Minerva nog vrij te kiezen |
 | 15 | III | Hoe Men Leefde | Grieks: les 24-25 (De Vrouw, slavernij); *Minerva 19*: vragend/onbepaald vnw, perfectum met praesensbetekenis |
@@ -5072,6 +5072,93 @@ hoofdstuk, zonder dat er nog een handmatige levende test voor nodig is —
 al blijft een levende doorloop wel nodig voor bug 3's soort problemen
 (REQUIRE-logica op nieuwe vlaggen), die de validator per ontwerp niet kan
 simuleren.
+
+---
+
+### 7.49 Hoofdstuk 12 volledig gebouwd: Odysseus' wraak + Romulus & Remus (2026-08-03)
+
+Aanleiding: een vrouwen-representatie-audit tegen `CHRONICA_VROUWEN.md` (zie
+die referentie voor het volledige overzicht) legde bloot dat Hoofdstuk 12 de
+enige nog onvolledige campagne-schakel was vóór Hoofdstuk 13 — de
+Odysseus-lijn eindigde op een letterlijke cliffhanger ("Maar het is een
+verhaal voor een volgende keer.", vlak vóór de boogwedstrijd), en de
+Latijnse lijn stopte na Hercules & Cacus zonder Romulus & Remus ooit te
+vertellen. Gerben vroeg om dit af te maken zodat Hoofdstuk 0-13 als geheel
+speeltest-klaar is, én om Diana's wraak op Camilla's moordenaar (via haar
+nimf Opis) toe te voegen aan Hoofdstuk 11 (zie ook de Camilla-aanpassingen
+hieronder).
+
+**Camilla/Opis (Hoofdstuk 11)**: `CH11_AEN_010` gesplitst in drie scènes
+(`_010` Camilla's val, `_010B` Opis' wraakpijl op Arruns, `_010C` het
+schild + het duel Aeneas/Turnus) zodat Camilla en Opis allebei hun eigen
+scène en eigen illustratie krijgen. Alle 18 al bestaande, nog niet
+gekoppelde H11-illustraties (`ch11_aen_*`/`ch11_ody_*` — o.a. Dido's dood,
+Kirke, Calypso, de Sibylle, de schimmenreünie) zijn tegelijk alsnog aan hun
+scènes gekoppeld via `IMAGE:` — ze bleken op de schijf te staan maar
+nergens verwezen.
+
+**CH12_ODY (Odysseus' wraak, Pallas les 19-21)**: vervolg vanaf de oude
+cliffhanger met 8 nieuwe scènes (`CH12_ODY_004`-`_011`): hereniging met
+Telemachus (relativum-puzzel), terugkeer in het paleis + de dood van de
+hond Argos, Penelope's eigen boogwedstrijd-idee (conjunctivus-puzzel),
+de wedstrijd zelf, een nieuwe Combat-bridge (`vrijers_ithaka`) voor de
+afrekening, Eurycleia's herkenning aan het litteken (alpha-werkwoord-
+puzzel), Penelope's olijfboom-bed-test, en de hereniging met Laërtes.
+Nieuwe PERSON-entries: `penelope`, `eurycleia`, plus `full`-niveau voor
+`odysseus`/`telemachus`/`laertes` (bestonden al als `intro`-only).
+
+**CH12_LAT (Romulus & Remus, Minerva 17 + het openstaande stukje Minerva
+14 par. IV)**: vervolg vanaf `CH12_LAT_005` met 9 nieuwe scènes
+(`CH12_LAT_006`-`_014`): Rhea Silvia gedwongen Vestaalse, de tweeling van
+Mars, de wolvin en Faustulus, het augurium tussen Romulus en Remus
+(futurum exactum-puzzel), de stichting van Rome en Remus' dood (futurum-
+puzzel), de Sabijnse schaking (ut-finalis-puzzel), en Hersilia's
+vredesinterventie tussen de legers (ire-puzzel) — de vroegste Romeinse
+mythe van collectief vrouwelijk politiek handelen, expliciet als doel
+meegenomen vanuit de vrouwen-audit. Nieuwe PERSON-entries: `rhea_silvia`,
+`amulius`, `numitor`, `faustulus`, `romulus`, `remus`, `hersilia`.
+`CH12_LAT_005`'s taalspoor-vertakking (naar Museum/Odysseus) is verplaatst
+naar de nieuwe eindscène `CH12_LAT_014` — verder blijft de bestaande
+sequentiële opzet voor `taalspoor=beide` (eerst alle Latijn, dan alle
+Grieks) bewust ongewijzigd (zie §7.44, nog openstaand verbeterpunt).
+
+**Illustraties**: 6 nieuwe `IMAGE:`-verwijzingen toegevoegd
+(`ch12_ody_telemachus_herkenning.png`, `ch12_ody_argos.png`,
+`ch12_ody_boogwedstrijd.png`, `ch12_ody_penelope_herkenning.png`,
+`ch12_lat_wolvin.png`, `ch12_lat_sabijnse_vrouwen.png`), plus de twee
+nieuwe Camilla/Opis-bestanden hierboven — nog geen van alle acht
+daadwerkelijk gegenereerd. Prompts (volgens `gemini-comic-style.md`) staan
+verzameld in `certamen/assets/chronica/images/_nieuwe-prompts-ch12.md`.
+
+**Validatie**: `node --check` op `singleplayer-data.js` + `validate_chronica.js`
+na elke stap → steeds 0 fouten, 33 waarschuwingen (ongewijzigd, allemaal
+pre-bestaande dode vlaggen). Scène-aantal steeg van 712 naar 731.
+
+**Live browsertest uitgevoerd** (2026-08-03, zelfde sessie) via
+`SP_STATE`/`spGoCns` direct aansturen in `certamen/index.html`: alle 21
+nieuwe/gewijzigde scènes (CH12_ODY_004-011, CH12_LAT_006-014,
+CH11_AEN_010/010B/010C, CH6_009B) renderen zonder `undefined`/console-
+fouten; de drie nieuwe multiple-choice-puzzels (relativum, conjunctivus —
+inclusief Griekse diakrieten correct weergegeven) en de nieuwe
+Combat-bridge `vrijers_ithaka` zijn ook daadwerkelijk doorlopen (puzzel
+beantwoord → correcte doorschakeling; gevecht toont HP-balk en
+vocab-vraag zoals elders in de campagne).
+
+**Volledige hand-doorloop (2026-08-03, latere zelfde sessie)**: alle drie
+taalsporen (`latijn`/`grieks`/`beide`) vanaf `CH12_000` tot `CH13_000`
+geautomatiseerd doorlopen via de échte spelfuncties (`spGoCns`,
+`spCheckMCPuzzle`/`spCheckTypedLatinPuzzle`/`spCheckTypedGreekPuzzle`,
+`spStartCombatFromScene`/`spCombatAttack` — dus de daadwerkelijke UI-code,
+niet alleen scène-jumps), niet alleen `spGoCns`-jumps: alle 6 Latijnse en
+3 Griekse puzzels correct beantwoord, de Combat-bridge opgelost, en op de
+twee REQUIRE-vertakkingspunten (`CH12_000`, `CH12_LAT_014`) verscheen
+precies één keuze, exact gefilterd op het actieve taalspoor — geen dode
+eindes, geen ontbrekende scènes. Hiermee is Hoofdstuk 12 in alle drie
+sporen bevestigd speelbaar van begin tot eind.
+
+Met deze bouw zijn Hoofdstuk 0 (Proloog) t/m 13 allemaal volledig gebouwd
+— de eerste keer dat de hele campagne tot aan Hoofdstuk 13 zonder skelet
+of cliffhanger speelbaar is.
 
 ---
 

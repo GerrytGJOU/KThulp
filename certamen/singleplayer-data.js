@@ -329,11 +329,11 @@ const SP_CAMPAIGN = [
   { id:"ch12", nr:12, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Wraak en een Nieuwe Stad",
     periode:"Ithaka / Latium, generaties voor en na Aeneas",
     verhaal:"Twee helden komen thuis, allebei naar een plek die niet meer is wat ze achterlieten. Odysseus vindt zijn paleis vol vrijers; ver van hem vandaan, in Latium, groeit uit Aeneas' nageslacht — via een oudere daad van Hercules en een latere van twee broers, opgevoed door een wolvin — de stad die alles zal overschaduwen wat hiervoor kwam. SAMENGEVOEGD 2026-08-02 uit de oude Hoofdstuk 12 (Odysseus' Wraak) en Hoofdstuk 13 (Het Begin van Rome, nooit gebouwd) op Gerbens verzoek — geen enkelvoudige-spoor-hoofdstukken meer, spelers zouden anders hoofdstukken lijken over te slaan. Zie Chronica.md §7.44/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk.",
-    pallas:"Les 19-21: op Ithaka, de wraak van Odysseus, de dood van Agamemnon — les 20 (boogwedstrijd/conjunctivus) en les 21 (wraak op de vrijers/alpha-werkwoorden) VERPLAATST TERUG naar dit hoofdstuk (2026-08-02, herzien t.o.v. het eerdere besluit van 2026-07-31): het zijn letterlijk de scènes die H12's eigen Odysseus-verhaal moet vertellen (boogwedstrijd, wraak, hereniging Penelope), dus horen ze hier, niet bij een thematisch ongerelateerd later hoofdstuk. Zie PALLAS_MINERVA_OVERZICHT.md. Latijnse lijn: Minerva hoofdstuk 16 (Hercules & Cacus) + Minerva hoofdstuk 17 (Romulus & Remus), allebei binnen dit ene samengevoegde hoofdstuk.", minerva:"Latijnse lijn draagt nu TWEE Minerva-hoofdstukken na elkaar: Hoofdstuk 16 (bijwoordvorming, genitivus op -ius, idem, ACP — via Hercules & Cacus, al gebouwd, zie Chronica.md §7.42) gevolgd door Hoofdstuk 17 (futurum, futurum exactum, het werkwoord ire — via Romulus & Remus, NOG TE BOUWEN) + de nog openstaande ut-finalis/doelzin (Minerva 14, par. IV, zie §7.41). Acht puzzels totaal, verdeeld over twee duidelijk gescheiden verhaalmomenten binnen één hoofdstuk — evenveel als de oude twee aparte hoofdstukken samen hadden, dus geen echte verzwaring. Minerva deel 1 blijft afgerond bij Hoofdstuk 9.",
-    grammatica:"Griekse/Odysseus-lijn: betrekkelijk voornaamwoord (les 19) + conjunctivus (les 20) + alpha-werkwoorden (les 21) — VOLLEDIG, niet meer opgesplitst over twee hoofdstukken (zie hierboven, herzien 2026-08-02). Latijnse lijn, in twee delen: (1) Hercules & Cacus — bijwoordvorming, genitivus op -ius, idem, ACP (Minerva 16, AL GEBOUWD); (2) Romulus & Remus — futurum, futurum exactum, ire, ut-finalis/doelzin (Minerva 17 + M14 par. IV, NOG TE BOUWEN).",
-    gameplay:"Combat-bridge (de vrijers, Odysseus-lijn — nog uit te bouwen, momenteel skelet, eindigt bewust op een cliffhanger vlak voor de boogwedstrijd). Latijnse lijn: Hercules & Cacus (AL GEBOUWD, CH12_LAT_000-005) gevolgd door Romulus & Remus (NOG TE BOUWEN) — stad-bouw-keuzes, de Sabijnse vrouwen. Bij taalspoor=beide idealiter zigzag tussen de twee lijnen zoals Hoofdstuk 10/11, i.p.v. de huidige sequentiële opzet (eerst alle Latijn, dan alle Grieks) — zie Chronica.md §7.44 voor de nog openstaande restructurering. ALLE DRIE taalsporen routeren nu door naar CH13_000 (2026-08-02, was tijdelijk CH12_WORDT_VERVOLGD tot Hoofdstuk 13 gebouwd was — zie Chronica.md §7.46/§7.47) i.p.v. een abrupte cutoff.",
-    personages:"Odysseus, Penelope, Telemachus, Agamemnon, Clytemnestra, Cacus, Euander, Romulus, Remus, de Sabijnse vrouwen",
-    illustratie:"Odysseus spant de boog / Romulus trekt de eerste voren van de stadsmuur" },
+    pallas:"Les 19-21: op Ithaka, de wraak van Odysseus, de dood van Agamemnon — les 20 (boogwedstrijd/conjunctivus) en les 21 (wraak op de vrijers/alpha-werkwoorden) VERPLAATST TERUG naar dit hoofdstuk (2026-08-02, herzien t.o.v. het eerdere besluit van 2026-07-31): het zijn letterlijk de scènes die H12's eigen Odysseus-verhaal moet vertellen (boogwedstrijd, wraak, hereniging Penelope), dus horen ze hier, niet bij een thematisch ongerelateerd later hoofdstuk. Zie PALLAS_MINERVA_OVERZICHT.md. Latijnse lijn: Minerva hoofdstuk 16 (Hercules & Cacus) + Minerva hoofdstuk 17 (Romulus & Remus), allebei binnen dit ene samengevoegde hoofdstuk. **GEBOUWD 2026-08-03.**", minerva:"Latijnse lijn draagt nu TWEE Minerva-hoofdstukken na elkaar: Hoofdstuk 16 (bijwoordvorming, genitivus op -ius, idem, ACP — via Hercules & Cacus, CH12_LAT_000-005) gevolgd door Hoofdstuk 17 (futurum, futurum exactum, het werkwoord ire — via Romulus & Remus, CH12_LAT_006-014) + de nog openstaande ut-finalis/doelzin (Minerva 14, par. IV) — alle vier nu ook echt in puzzels verwerkt (§7.41 is hiermee afgesloten). Acht puzzels totaal, verdeeld over twee duidelijk gescheiden verhaalmomenten binnen één hoofdstuk — evenveel als de oude twee aparte hoofdstukken samen hadden, dus geen echte verzwaring. Minerva deel 1 blijft afgerond bij Hoofdstuk 9.",
+    grammatica:"Griekse/Odysseus-lijn: betrekkelijk voornaamwoord (les 19, CH12_ODY_004) + conjunctivus (les 20, CH12_ODY_006, boogwedstrijd) + alpha-werkwoorden (les 21, CH12_ODY_009, wraak) — VOLLEDIG, GEBOUWD 2026-08-03. Latijnse lijn, in twee delen: (1) Hercules & Cacus — bijwoordvorming, genitivus op -ius, idem, ACP (Minerva 16, GEBOUWD); (2) Romulus & Remus — futurum, futurum exactum, ire, ut-finalis/doelzin (Minerva 17 + M14 par. IV, GEBOUWD 2026-08-03).",
+    gameplay:"Combat-bridge (de vrijers, CH12_ODY_008, `vrijers_ithaka`) vlak na de boogwedstrijd. Latijnse lijn: Hercules & Cacus (CH12_LAT_000-005) gevolgd door Romulus & Remus (CH12_LAT_006-014) — Rhea Silvia, de wolvin/Faustulus, het augurium, de stichting van Rome, en de schaking + vredesinterventie van de Sabijnse vrouwen (Hersilia). Bij taalspoor=beide blijft de opzet sequentieel (eerst alle Latijn, dan alle Grieks, i.p.v. scène-voor-scène zigzag zoals Hoofdstuk 10/11) — bewust ongewijzigd gelaten bij deze bouw, zie Chronica.md §7.44 voor de nog openstaande restructurering als toekomstig verbeterpunt. ALLE DRIE taalsporen routeren door naar CH13_000.",
+    personages:"Odysseus, Penelope, Telemachus, Eurycleia, Laërtes, Agamemnon, Clytemnestra, Cacus, Euander, Rhea Silvia, Amulius, Numitor, Faustulus, Romulus, Remus, Hersilia (de Sabijnse vrouwen)",
+    illustratie:"Odysseus spant de boog (ch12_ody_boogwedstrijd.png) / de wolvin zoogt Romulus en Remus (ch12_lat_wolvin.png) / Hersilia en de Sabijnse vrouwen tussen de legers (ch12_lat_sabijnse_vrouwen.png) — prompts in certamen/assets/chronica/images/_nieuwe-prompts-ch12.md, nog te genereren" },
   // ---- Hoofdstuk 13-20: VOORLOPIG VASTGELEGD 2026-08-02 (Gerbens akkoord
   // op het verdelingsvoorstel in het gesprek van die dag). Vervangt de
   // oude ch13-ch24 (12 hoofdstukken, elk enkelvoudig-spoor) door 8 nieuwe,
@@ -1339,6 +1339,43 @@ const SP_PUZZLES = {
     antwoord:"mugientes",
     hint:"Na een werkwoord van waarneming (audire, videre, sentire) staat in het Latijn geen A.C.I. maar een ACP: accusativus (boves) + participium (mugientes) — je hoort/ziet iemand iets DOEN, in plaats van dát iets het geval is. Accusativus meervoud van een participium op -ns/-ens eindigt op -es: mugientes." },
 
+  // ---- Hoofdstuk 12, vervolg — Odysseus' Wraak (Pallas les 19-21, VOLLEDIG
+  // hier ondergebracht, zie SP_CAMPAIGN ch12.pallas): betrekkelijk vnw
+  // (les 19), conjunctivus bij de boogwedstrijd (les 20), alpha-werkwoorden
+  // bij de wraak op de vrijers (les 21). ----
+  puzzle_ch12_ody_relativum: { type:"multiple-choice",
+    vraag:"Athena wijst Telemachus op de bedelaar aan de haard. “Οὗτός ἐστιν ὁ ἀνήρ ___ πατέρα σου εἶναι λέγω” — Dit is de man die, zeg ik, je vader is. Welk betrekkelijk voornaamwoord hoort hier (mannelijk, nominativus enkelvoud)?",
+    opties:["ὅς","ἥ","ὅ"], antwoord:"ὅς",
+    hint:"Het betrekkelijk voornaamwoord ὅς, ἥ, ὅ congrueert in geslacht en getal met zijn antecedent — hier ὁ ἀνήρ (de man), mannelijk enkelvoud. Mannelijk nominativus enkelvoud: ὅς." },
+  puzzle_ch12_ody_conjunctivus: { type:"multiple-choice",
+    vraag:"Penelope bedenkt de boogwedstrijd. “Τὸν ἀγῶνα ποιεῖ, ἵνα ἡ Πηνελόπη τὸν ἄριστον ἄνδρα ___” — Ze organiseert de wedstrijd, opdat Penelope de beste man leert kennen. Welke vorm van γιγνώσκω (kennen, leren kennen) hoort in deze ἵνα-doelzin (conjunctivus praesens actief, 3e persoon enkelvoud)?",
+    opties:["γιγνώσκει","γιγνώσκῃ","ἐγίγνωσκε"], antwoord:"γιγνώσκῃ",
+    hint:"Na ἵνα (opdat) staat de conjunctivus, niet de indicativus. Praesens conjunctivus actief, 3e persoon enkelvoud van een thematisch werkwoord eindigt op -ῃ (i.p.v. de indicativus -ει): γιγνώσκει (indicativus) wordt γιγνώσκῃ (conjunctivus)." },
+  puzzle_ch12_ody_alpha: { type:"typed-greek",
+    vraag:"Eurycleia ziet wat er in de grote zaal is gebeurd. “Ὁ βασιλεὺς τοὺς μνηστῆρας ___” — De koning overwint de vrijers. Typ met het Griekse toetsenbord de juiste vorm van het alpha-werkwoord νικάω (overwinnen), praesens 3e persoon enkelvoud (let op de samentrekking!).",
+    antwoord:"νικᾷ",
+    hint:"Alpha-werkwoorden trekken de klinker van de persoonsuitgang samen met de stam-alpha: νικα+ει wordt νικᾷ (α+ει→ᾳ). Diezelfde 'verborgen' samentrekking kom je bij elk alpha-werkwoord in de praesens tegen." },
+
+  // ---- Hoofdstuk 12, vervolg — Romulus & Remus (Minerva hoofdstuk 17 +
+  // Minerva 14 par. IV, zie SP_CAMPAIGN ch12.minerva/grammatica): futurum,
+  // futurum exactum, het werkwoord ire, ut-finalis (doelzin). ----
+  puzzle_ch12_lat_futurum_exactum: { type:"typed-latin",
+    vraag:"Romulus en Remus wachten op een teken van de goden om te bepalen wie de stad mag stichten. “Qui plures aves ___, is urbi nomen dabit” — wie de meeste vogels zal hebben gezien, die zal de stad zijn naam geven. Typ het futurum exactum, 3e persoon enkelvoud, van videre (zien).",
+    antwoord:"viderit",
+    hint:"Het futurum exactum (voltooid toekomende tijd) vorm je op de perfectum-stam met -ero/-eris/-erit/-erimus/-eritis/-erint. Videre heeft de perfectum-stam vid- (perfectum: vidi); 3e persoon enkelvoud: viderit, 'zal gezien hebben'." },
+  puzzle_ch12_lat_futurum: { type:"typed-latin",
+    vraag:"Romulus begint, met twaalf vogels tegenover Remus' zes, meteen aan zijn nieuwe stadsmuur. “Hic urbem ___” — Hier zal ik een stad stichten. Typ het futurum, 1e persoon enkelvoud, van condere (stichten) — een werkwoord van de derde vervoeging.",
+    antwoord:"condam",
+    hint:"Bij de derde en vierde vervoeging vorm je het futurum met -am/-es/-et/-emus/-etis/-ent (in plaats van -bo/-bis/-bit bij de eerste en tweede vervoeging). Condere → condam, 'ik zal stichten'." },
+  puzzle_ch12_lat_ut_finalis: { type:"typed-latin",
+    vraag:"Romulus organiseert een groot feest voor de Sabijnen. “Romulus ludos magnos parat, ut Sabini ___” — Romulus organiseert grote spelen, opdat de Sabijnen zullen komen. Typ de conjunctivus praesens, 3e persoon meervoud, van venire (komen) — de doelzin (ut-finalis) vraagt om de conjunctivus.",
+    antwoord:"veniant",
+    hint:"Een doelzin (ut + conjunctivus, 'opdat/om te') staat altijd in de conjunctivus, nooit in de indicativus. Venire → conjunctivus praesens: veniam, venias, veniat, veniamus, veniatis, veniant. 3e persoon meervoud: veniant." },
+  puzzle_ch12_lat_ire: { type:"typed-latin",
+    vraag:"Hersilia en de andere vrouwen werpen zich tussen de twee strijdende legers. “Mulieres inter arma ___” — de vrouwen gaan tussen de wapens. Typ de praesens, 3e persoon meervoud, van het onregelmatige werkwoord ire (gaan).",
+    antwoord:"eunt",
+    hint:"Ire (gaan) is onregelmatig: eo, is, it, imus, itis, eunt. De 3e persoon meervoud is eunt, 'zij gaan'." },
+
   // ---- Hoofdstuk 13 — Twee Steden, Twee Koningen (NIEUWE grammatica:
   // Grieks — futurum (Pallas hoofdstuk 22, Zeus/Metis-profetie-tekst —
   // audit tegen Pallas-2-Docentenboek toonde dat les 22 niet louter
@@ -1613,6 +1650,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Chryses, priester van Apollo, komt naar het Griekse kamp om zijn dochter Chryseis vrij te kopen — Agamemnon weigert honend. Chryses bidt tot Apollo, die negen dagen lang de vloot met pijlen van pest bestookt. Pas als de ziener Calchas de ware oorzaak durft te benoemen, ziet Agamemnon zich gedwongen Chryseis alsnog terug te geven — al is hij vastbesloten er zelf niet zonder compensatie van af te komen." },
   codex_ruzie_achilles_agamemnon: { cat:"mythologie", titel:"De Ruzie van Achilles en Agamemnon",
     tekst:"Agamemnon eist, uit gekwetste trots, Achilles' eigen oorlogsbuit Briseis op als vervanging voor Chryseis. Achilles grijpt woedend naar zijn zwaard — en wordt op het nippertje tegengehouden door Athena zelf, onzichtbaar voor iedereen behalve hem. Hij bedwingt zijn woede, maar zweert dat hij geen vinger meer zal uitsteken voor een leger dat hem zo min acht: de μῆνις (wrok) die de Ilias zijn naam geeft." },
+  codex_briseis_meegevoerd: { cat:"mythologie", titel:"Briseis Wordt Meegevoerd",
+    tekst:"Talthybius en Eurybates, Agamemnons herauten, komen met tegenzin Briseis ophalen uit Achilles' tent. Achilles richt zijn woede niet op hen — ze zijn zelf ook maar boodschappers — en laat Patroklos haar naar hen toe brengen. Homerus noemt haar vertrek ἀέκουσα, 'onwillig': één woord dat haar hele gebrek aan keuze samenvat." },
   codex_thetis_zeus_gunst: { cat:"mythologie", titel:"Thetis' Verzoek aan Zeus",
     tekst:"Thetis troost haar vernederde zoon en belooft hem genoegdoening: ze smeekt Zeus zelf om de Trojanen te laten winnen, zolang tot de Grieken beseffen hoezeer ze Achilles nodig hebben. Zeus stemt toe — tegen de zin van Hera, die de Grieken steunt — en zet daarmee alles in beweging wat er de rest van dit hoofdstuk gebeurt." },
   codex_duel_menelaos_paris: { cat:"mythologie", titel:"Het Duel van Menelaus en Paris",
@@ -1820,6 +1859,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"De nimf Calypso redt Odysseus na de ramp bij Thrinacia en biedt hem onsterfelijkheid als hij bij haar blijft. Hij weigert, en blijft toch jarenlang op haar eiland Ogygia vastzitten — niet als gevangene in ketenen, maar evenmin als vrij man." },
   codex_latium_aankomst: { cat:"mythologie", titel:"Oorlog en Vrede in Latium",
     tekst:"Aeneas' aankomst in Latium verloopt aanvankelijk vreedzaam — koning Latinus herkent hem als de vreemdeling uit een oude profetie — tot Juno, via de Furie Allecto, een oorlog ontketent met de plaatselijke vorst Turnus. Na Pallas' dood en een laatste tweegevecht wint Aeneas, sticht Lavinium, en trouwt met Latinus' dochter Lavinia." },
+  codex_camilla: { cat:"mythologie", titel:"Camilla, Krijgerkoningin van de Volsci",
+    tekst:"Als kind al aan Diana toegewijd en opgevoed in de wildernis in plaats van aan het spinrokken, vecht Camilla als bevelhebber van haar eigen ruiterij aan Turnus' zijde — Vergilius' eigen antwoord op de Amazonen-traditie. In Aeneis 11 velt ze tientallen tegenstanders voor de sluwe Etruskische speerwerper Arruns haar van achteren neerschiet, uit veilige afstand. Diana had haar nimf Opis al gewaarschuwd wie Camilla ooit zou schaden zou boeten: Opis vindt Arruns nog voor hij veilig is bij zijn eigen troepen en doorboort hem zonder pardon — Camilla's dood blijft, maar haar wraak wordt voltrokken door een andere vrouw." },
   codex_grammatica_ch11_participium: { cat:"grammatica", titel:"Grammatica: het Griekse participium",
     tekst:"Het participium is een werkwoordsvorm die als bijvoeglijk naamwoord functioneert — het beschrijft een handelende of ondergane actie zonder een apart voegwoord nodig te hebben. 'Ὁ λέγων' is letterlijk 'de zeggende', maar vertaalt meestal met een bijzin: 'hij die zegt' of 'terwijl hij zegt'.",
     table:{ headers:["Vorm","Betekenis","Voorbeeld"],
@@ -1869,6 +1910,41 @@ const SP_CODEX_ENTRIES = {
             ["ter vergelijking: A.C.I. (Hoofdstuk 9)","boves abisse audivit","hij hoorde dat de runderen weg waren"]] } },
   codex_grammatica_ch12_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 12 samengevat",
     tekst:"Dit hoofdstuk toont Minerva deel 2, hoofdstuk 16: het bijwoord op -iter, de negen onregelmatige bijvoeglijke naamwoorden met genitivus op -ius, het pronomen idem (dezelfde), en de accusativus cum participio (ACP) — de constructie die je gebruikt na een werkwoord van waarneming, in plaats van de A.C.I. na een werkwoord van zeggen/menen/weten. Minerva deel 1 is inmiddels al bij Hoofdstuk 9 volledig afgerond (zie codex_grammatica_ch7_conjunctivus_passief voor het laatste puzzelstuk daarvan)." },
+  codex_telemachus_herkenning: { cat:"mythologie", titel:"Telemachus Herkent Zijn Vader",
+    tekst:"Athena verandert Odysseus, alleen in het bijzijn van zijn zoon, terug van bedelaar naar koning. Telemachus, twintig jaar oud en zijn vader nooit bewust gekend, gelooft eerst een god voor zich te hebben — tot Odysseus hem overtuigt en de twee eindelijk, na een leven van afwezigheid, elkaar in de armen sluiten." },
+  codex_argos_hond: { cat:"mythologie", titel:"Argos, de Trouwe Hond",
+    tekst:"Van iedereen in het paleis is het Odysseus' eigen jachthond Argos, oud en verwaarloosd op de mesthoop, die zijn meester als enige onmiddellijk herkent — ondanks Athena's vermomming. Hij sterft op het moment dat hij weet dat Odysseus is thuisgekomen, na twintig jaar gewacht te hebben op precies dit moment." },
+  codex_penelope_boogwedstrijd: { cat:"mythologie", titel:"Penelope's Boogwedstrijd",
+    tekst:"Penelope bedenkt zelf de wedstrijd die haar vrijers ontmaskert: wie Odysseus' eigen boog kan spannen en een pijl door twaalf bijlringen kan schieten, krijgt haar hand. Geen enkele vrijer durft het risico op vernedering te nemen dat Odysseus ooit met gemak overwon — en dat is precies haar bedoeling." },
+  codex_eurycleia_litteken: { cat:"mythologie", titel:"Eurycleia's Herkenning",
+    tekst:"Odysseus' oude voedster Eurycleia herkent hem aan een litteken van een everzwijnjacht uit zijn jeugd, ver voor hij zich aan wie dan ook onthult — en zwijgt, op zijn verzoek, tot hij zelf kiest wanneer de rest van het paleis het mag weten." },
+  codex_penelope_bed: { cat:"mythologie", titel:"Het Bed van Olijfhout",
+    tekst:"Penelope gelooft pas dat de overwinnaar van de vrijers werkelijk Odysseus is na haar eigen, laatste list: ze laat hun huwelijksbed 'verplaatsen' — een bed dat niet te verplaatsen is, want Odysseus bouwde het ooit rond een levende, wortelende olijfboom. Alleen de echte Odysseus kan dat geheim kennen." },
+  codex_laertes_hereniging: { cat:"mythologie", titel:"Hereniging met Laërtes",
+    tekst:"Odysseus vindt zijn vader Laërtes, oud geworden op zijn afgelegen boerderij, ver van het paleis en zijn vrijers. Hij overtuigt hem niet met woorden over zichzelf, maar door de namen op te noemen van de fruitbomen die Laërtes hem ooit, als kind, één voor één had geschonken." },
+  codex_rhea_silvia: { cat:"mythologie", titel:"Rhea Silvia, Vestaalse tegen wil en dank",
+    tekst:"Wanneer Amulius zijn broer Numitor van de troon van Alba Longa stoot, dwingt hij Numitors dochter Rhea Silvia een Vestaalse maagd te worden — een eervolle positie, maar ook een levenslang verbod op kinderen die ooit tegen hem in opstand zouden kunnen komen." },
+  codex_rhea_silvia_tweeling: { cat:"mythologie", titel:"De Tweeling van Mars",
+    tekst:"Mars zelf bezoekt Rhea Silvia bij een heilige bron; negen maanden later baart ze de tweeling Romulus en Remus. Amulius laat haar gevangenzetten en beveelt de baby's in de Tiber te verdrinken — een bevel dat, zoals wel vaker in dit soort verhalen, niet wordt uitgevoerd zoals hij had gehoopt." },
+  codex_lupa_faustulus: { cat:"mythologie", titel:"De Wolvin en Faustulus",
+    tekst:"De Tiber spoelt de tweeling aan land in plaats van hen te verzwelgen; een wolvin voedt hen met haar eigen melk tot de herder Faustulus hen vindt en met zijn vrouw Acca Larentia opvoedt als zijn eigen zonen — zonder te weten dat hij twee onttroonde prinsen grootbrengt." },
+  codex_romulus_remus_augurium: { cat:"mythologie", titel:"Het Augurium van Romulus en Remus",
+    tekst:"Eenmaal volwassen herstellen Romulus en Remus hun grootvader Numitor op de troon, en besluiten zelf een nieuwe stad te stichten. Over de locatie oordelen de goden via vogeltekens: Remus ziet als eerste zes gieren, Romulus kort daarna twaalf — en claimt daarmee het sterkere teken voor zichzelf." },
+  codex_stichting_rome: { cat:"mythologie", titel:"De Stichting van Rome en de Dood van Remus",
+    tekst:"Romulus ploegt de heilige grens (pomerium) van zijn nieuwe stad; Remus springt spottend over de verse voor heen en sterft ter plekke. De bronnen zijn het onderling oneens over wiens hand de fatale slag toebracht — zeker is alleen dat Rome's stichting al bij de eerste voren met bloed is bezegeld." },
+  codex_sabijnse_schaking_uitnodiging: { cat:"mythologie", titel:"Een Stad Zonder Vrouwen",
+    tekst:"Rome groeit snel als vrijplaats voor vluchtelingen en bannelingen, maar bijna uitsluitend mannen — de buurvolken weigeren hun dochters uit te huwelijken aan een stad van ontheemden. Romulus nodigt de Sabijnen daarom uit voor een schijnbaar onschuldig feest ter ere van Consus." },
+  codex_sabijnse_schaking: { cat:"mythologie", titel:"De Schaking van de Sabijnse Vrouwen",
+    tekst:"Tijdens het feest schaken Romulus' mannen op een afgesproken teken de ongehuwde Sabijnse vrouwen, onder wie Hersilia. De Sabijnen keren jaren later gewapend terug onder koning Titus Tatius om hun dochters terug te eisen — de vroegste en gevoeligste bladzijde van Rome's ontstaansgeschiedenis." },
+  codex_sabijnse_vrede: { cat:"mythologie", titel:"De Sabijnse Vrouwen Stoppen de Oorlog",
+    tekst:"Hersilia en de andere geschaakte vrouwen, inmiddels moeder aan beide kanten van dezelfde oorlog, werpen zich tussen de strijdende legers en smeken hen te stoppen. Het is de vroegste Romeinse mythe waarin vrouwen collectief en met succes politiek handelen: Romeinen en Sabijnen versmelten daarna tot één volk, met Romulus en Titus Tatius als gedeelde koningen." },
+  codex_grammatica_ch12_romulus_remus: { cat:"grammatica", titel:"Grammatica: futurum, futurum exactum, ire, ut-finalis",
+    tekst:"Minerva hoofdstuk 17 (plus het openstaande stukje uit Minerva 14, par. IV): het futurum (1e/2e vervoeging op -bo/-bis/-bit, 3e/4e vervoeging op -am/-es/-et), het futurum exactum (perfectum-stam + -ero/-eris/-erit, 'zal gedaan hebben'), het onregelmatige werkwoord ire (eo, is, it, imus, itis, eunt), en de ut-finalis of doelzin (ut + conjunctivus, 'opdat/om te').",
+    table:{ headers:["Vorm","Voorbeeld","Vertaling"],
+      rows:[["Futurum (3e/4e conj.)","condam","ik zal stichten"],
+            ["Futurum exactum","viderit","hij/zij zal gezien hebben"],
+            ["Ire (3e pers. mv.)","eunt","zij gaan"],
+            ["Ut-finalis","ut veniant","opdat zij komen"]] } },
 
   // ---- Hoofdstuk 13 — Twee Steden, Twee Koningen ----
   codex_grammatica_ch13_futurum_grieks: { cat:"grammatica", titel:"Grammatica: het Griekse futurum",
@@ -2076,7 +2152,8 @@ const SP_CODEX_PERSONS = {
   telamon: { nm:"Telamon", epithet:"Argonaut, later koning van Salamis",
     intro:"Peleus' trouwe metgezel aan boord van de Argo, en de latere vader van een andere naam die de speler nog zal leren kennen: Ajax." },
   laertes: { nm:"Laërtes", epithet:"Argonaut, later koning van Ithaka",
-    intro:"Een kalme, betrouwbare aanwezigheid aan boord — en de latere vader van de sluwste held die Griekenland ooit zal voortbrengen: Odysseus." },
+    intro:"Een kalme, betrouwbare aanwezigheid aan boord — en de latere vader van de sluwste held die Griekenland ooit zal voortbrengen: Odysseus.",
+    full:"Laërtes trekt zich, terwijl zijn paleis twintig jaar lang door vrijers wordt leeggeplunderd, terug op zijn boerderij — te oud en te machteloos om zelf in te grijpen. Odysseus, eenmaal terug, herkent hem niet meteen aan zijn verweerde gezicht, maar aan de namen van de fruitbomen die hij hem als kind ooit gaf, één voor één opgenoemd tot er geen twijfel meer overblijft." },
   argos: { nm:"Argos", epithet:"Scheepsbouwer van de Argo",
     intro:"De bouwmeester die de Argo zelf ontwierp, op aanwijzing van Athena — niet te verwarren met de honderdogige bewaker Argus Panoptes, de wachter van Io.",
     full:"Argos kent elke plank en elke naad van zijn eigen schip zo goed dat hij het, waar nodig, ook onderweg weer weet te repareren — inclusief de balk uit het orakelbos van Dodona die hij bewust in de boeg liet verwerken." },
@@ -2165,7 +2242,8 @@ const SP_CODEX_PERSONS = {
     intro:"De zoon van Peleus en Thetis (zie hierboven), verborgen door zijn eigen moeder tussen de dochters van koning Lycomedes om een profetie te ontlopen — tot een list met een zwaard en een strijdhoorn zijn ware aard onthult. Zijn eigen verhaal is nog maar net begonnen.",
     full:"Vernederd door Agamemnon trok Achilles zich terug uit de strijd — tot de dood van zijn beste vriend Patroklos, in zijn eigen wapenrusting, hem terugbracht op een manier die zijn trots nooit had gekund. In een nieuwe wapenrusting van Hephaistos doodde hij Hector en sleepte diens lichaam rond Troje, tot koning Priamus' moed hem eindelijk weer mens maakte. Sterkste held van Griekenland, maar geen vreemdeling van verdriet." },
   odysseus: { nm:"Odysseus", epithet:"Koning van Ithaka, listigste held van Griekenland",
-    intro:"Laërtes' zoon (je kent zijn vader al van de Argonautentocht), die liever bij zijn jonge gezin blijft dan naar Troje te trekken — en wanneer die list mislukt, precies dezelfde sluwheid gebruikt om Achilles zelf op te sporen." },
+    intro:"Laërtes' zoon (je kent zijn vader al van de Argonautentocht), die liever bij zijn jonge gezin blijft dan naar Troje te trekken — en wanneer die list mislukt, precies dezelfde sluwheid gebruikt om Achilles zelf op te sporen.",
+    full:"Na twintig jaar — tien bij Troje, tien op zee — keert Odysseus als bedelaar vermomd naar zijn eigen paleis terug, wint de boogwedstrijd die alleen hij kan winnen, en velt met pijl en zwaard de honderd vrijers die zijn huis hadden leeggeplunderd. Pas Penelope's eigen laatste list — de test van hun onverplaatsbare huwelijksbed — overtuigt haar dat de listigste held van Griekenland eindelijk werkelijk thuis is." },
   calchas: { nm:"Calchas", epithet:"Ziener van de Griekse vloot",
     intro:"De ziener die de Griekse vloot vergezelt en, tot ontzetting van iedereen, de enige is die durft uit te spreken welke prijs de goden voor gunstige wind vragen." },
   iphigenia: { nm:"Iphigenia", epithet:"Dochter van Agamemnon",
@@ -2173,7 +2251,8 @@ const SP_CODEX_PERSONS = {
   chryseis: { nm:"Chryseis", epithet:"Dochter van een priester van Apollo",
     intro:"De dochter van een Trojaanse priester van Apollo, tijdens een plundertocht gevangengenomen en aan Agamemnon toegewezen als oorlogsbuit — een keuze waarvan de gevolgen nog ver reiken." },
   briseis: { nm:"Briseis", epithet:"Krijgsgevangene, toegewezen aan Achilles",
-    intro:"Net als Chryseis buitgemaakt tijdens een plundertocht rond Troje, en toegewezen aan Achilles zelf — zonder dat ze weet dat ze straks de aanleiding wordt voor een wrok die de hele oorlog zal kleuren." },
+    intro:"Net als Chryseis buitgemaakt tijdens een plundertocht rond Troje, en toegewezen aan Achilles zelf — zonder dat ze weet dat ze straks de aanleiding wordt voor een wrok die de hele oorlog zal kleuren.",
+    full:"Briseis wordt, zonder zelf iets te kunnen inbrengen, van Achilles naar Agamemnon overgedragen — het geschil dat de hele wrok van de Ilias in gang zet, terwijl zij de enige is aan wie niemand ooit iets vraagt. Van iedereen in het kamp is het uiteindelijk Patroklos die vriendelijk voor haar was; wanneer ze na zijn dood teruggegeven wordt aan Achilles, is het Patroklos om wie ze werkelijk rouwt." },
 
   // ---- Hoofdstuk 8 — De Wrok van Achilles ----
   patroklos: { nm:"Patroklos", epithet:"Achilles' trouwste metgezel",
@@ -2228,6 +2307,12 @@ const SP_CODEX_PERSONS = {
   achaemenides: { nm:"Achaemenides", epithet:"Achtergelaten bemanningslid van Odysseus",
     intro:"Een uitgemergelde Griek die uit de rotsen van Sicilië tevoorschijn komt, meer bang voor de Kyklopen om hem heen dan voor de Trojanen die hij ooit als vijand kende.",
     full:"Door zijn eigen kapitein vergeten toen die haastig vluchtte voor een verblinde Kykloop, overleefde Achaemenides drie maanden alleen op Sicilië's kust — tot Aeneas' vloot hem vond en, ondanks dat hij ooit een vijand was, aan boord nam. Zijn verhaal is het enige rechtstreekse bewijs dat Aeneas ooit krijgt van wat Odysseus op dit eiland is overkomen." },
+  opis: { nm:"Opis", epithet:"Nimf en boodschapster van Diana",
+    intro:"Een van Diana's eigen nimfen, door de godin al vooraf gewaarschuwd wie Camilla ooit zou schaden zou boeten.",
+    full:"Opis voltrekt Diana's wraak op Arruns, de speerwerper die Camilla van achteren neerschoot: ze vindt hem nog voor hij zich veilig waant en doorboort hem met een pijl uit Diana's eigen koker — de enige vrouwelijke wreker in het hele Latium-verhaal, en de enige die Camilla's dood niet onbeantwoord laat." },
+  camilla: { nm:"Camilla", epithet:"Krijgerkoningin van de Volsci",
+    intro:"Aan Diana toegewijd en opgevoed in de wildernis in plaats van aan het spinrokken, voert Camilla haar eigen ruiterij aan tegen Aeneas' leger — Vergilius' eigen antwoord op de Amazonen-traditie.",
+    full:"Camilla velt in de strijd om Latium tientallen tegenstanders voor de Etruskische speerwerper Arruns haar van achteren neerschiet, uit veilige afstand. Diana laat het niet ongewroken: haar nimf Opis doorboort Arruns met een pijl nog voor hij zich veilig waant tussen zijn eigen troepen — Camilla's dood blijft, maar haar wraak wordt voltrokken." },
   dido: { nm:"Dido", epithet:"Koningin van Carthago",
     intro:"Een koningin die zelf ooit vluchtte — voor een broer die haar man vermoordde om zijn goud — en die nu, met dezelfde vastberadenheid, een nieuwe stad uit het niets optrekt aan de kust van Libië.",
     full:"Dido verwelkomde Aeneas als een gelijke, en werd — door Cupido's toedoen, buiten haar eigen weten om — hopeloos verliefd. Toen Jupiter Aeneas dwong te vertrekken, koos ze de brandstapel boven een leven zonder hem, en riep met haar laatste adem een vloek af over zijn hele nageslacht: een wreker uit haar eigen botten, die generaties later als Carthago's grootste generaals tegen Rome zou opstaan." },
@@ -2251,9 +2336,37 @@ const SP_CODEX_PERSONS = {
     intro:"Een half mens, half monster, zoon van de smid-god Vulcanus, die vanuit zijn grot op de heuvels van het latere Rome al jaren de omgeving terroriseert.",
     full:"Cacus stal acht van Hercules' pas buitgemaakte runderen en sleepte ze achterstevoren zijn grot in om de sporen te misleiden — een list die faalde toen de gestolen dieren zelf, loeiend, hun eigen verstopplek verraadden. Hercules rukte de grot open en versloeg hem met blote handen; de dankbare omwonenden richtten er het Ara Maxima op, een altaar dat naar verluidt nog eeuwen later overeind zou staan." },
   telemachus: { nm:"Telemachus", epithet:"Odysseus' zoon",
-    intro:"Odysseus' zoon, nog een baby toen zijn vader naar Troje vertrok — inmiddels een jongeman, opgegroeid tussen meer dan honderd vrijers die zijn moeders hand opeisen en zijn eigen paleis leegplunderen." },
+    intro:"Odysseus' zoon, nog een baby toen zijn vader naar Troje vertrok — inmiddels een jongeman, opgegroeid tussen meer dan honderd vrijers die zijn moeders hand opeisen en zijn eigen paleis leegplunderen.",
+    full:"Telemachus reist zelf naar Pylos en Sparta op zoek naar nieuws over zijn vader, en staat hem, eenmaal terug op Ithaka, zij aan zij bij in de afrekening met de vrijers — de zoon die net op tijd volwassen genoeg is geworden om zijn vader niet alleen te laten vechten." },
   euander: { nm:"Euander", epithet:"Arcadische balling op de Palatijnse heuvel",
     intro:"Een Arcadische balling die met een handvol volgelingen op een naburige heuvel woont — te bang voor Cacus om zelf iets te ondernemen, maar meteen bereid Hercules als bevrijder te herkennen en te eren." },
+
+  // ---- Hoofdstuk 12 — Odysseus' Wraak (vervolg) ----
+  penelope: { nm:"Penelope", epithet:"Koningin van Ithaka",
+    intro:"Twintig jaar lang houdt ze meer dan honderd vrijers op afstand met list en geduld — de vrouw naar wie Odysseus al die tijd terug probeert te varen.",
+    full:"Penelope bedenkt zelf de boogwedstrijd die de vrijers ontmaskert — hetzelfde soort list waarmee ze hen jarenlang had afgehouden met een lijkwade die ze 's nachts weer lostornde. Zelfs wanneer Odysseus voor haar staat, na de slachting van de vrijers, gelooft ze hem pas na haar eigen laatste test: het geheim van hun huwelijksbed, rond een levende olijfboom gebouwd, dat alleen zij tweeën ooit hebben gekend." },
+  eurycleia: { nm:"Eurycleia", epithet:"Odysseus' oude voedster",
+    intro:"De voedster die Odysseus als kind heeft grootgebracht, en die decennia later, tijdens het wassen van een bedelaars voeten, een oud litteken herkent dat niemand anders meer opviel.",
+    full:"Eurycleia herkent Odysseus aan een litteken van een everzwijnjacht uit zijn jeugd, lang voor hij zichzelf aan wie dan ook bekendmaakt — en zwijgt, op zijn dringende verzoek, tot het moment dat hij zelf kiest om zich te onthullen. Een van de weinigen in het paleis die hem trouw bleven, ook toen iedereen hem dood waande." },
+
+  // ---- Hoofdstuk 12 — Romulus & Remus ----
+  rhea_silvia: { nm:"Rhea Silvia", epithet:"Vestaalse maagd, moeder van Romulus en Remus",
+    intro:"Dochter van de onttroonde koning Numitor, door haar oom Amulius tot Vestaalse maagd gedwongen om te voorkomen dat ze ooit een erfgenaam zou baren die zijn troon bedreigt.",
+    full:"Rhea Silvia baart, ondanks Amulius' voorzorg, de tweeling Romulus en Remus — verwekt door Mars zelf. Amulius laat haar gevangenzetten en de baby's te vondeling leggen in de Tiber, een bevel dat uiteindelijk juist de stichters van Rome het leven redt in plaats van het te beëindigen." },
+  amulius: { nm:"Amulius", epithet:"Usurpator van Alba Longa",
+    intro:"Stoot zijn eigen broer Numitor van de troon van Alba Longa en dwingt diens dochter Rhea Silvia tot een leven zonder erfgenamen — een voorzorg die uiteindelijk faalt." },
+  numitor: { nm:"Numitor", epithet:"Verdreven koning van Alba Longa",
+    intro:"De rechtmatige koning van Alba Longa, door zijn broer Amulius verdreven — en, dankzij zijn kleinzonen Romulus en Remus, uiteindelijk weer op zijn troon hersteld." },
+  faustulus: { nm:"Faustulus", epithet:"Koninklijke herder",
+    intro:"De herder die de door een wolvin gezoogde tweeling vindt en, samen met zijn vrouw Acca Larentia, opvoedt als zijn eigen zonen — zonder te weten welke twee prinsen hij grootbrengt." },
+  romulus: { nm:"Romulus", epithet:"Stichter van Rome",
+    intro:"Een van Rhea Silvia's tweelingzonen, door een wolvin gezoogd en door de herder Faustulus opgevoed — de latere stichter en eerste koning van Rome.",
+    full:"Romulus wint het augurium tegen zijn broer Remus (twaalf gieren tegen zes), sticht Rome op de Palatijn, en doodt Remus wanneer die spottend over de heilige stadsgrens springt. Zijn stad, aanvankelijk een vrijplaats zonder vrouwen, groeit pas werkelijk uit tot een volk na de schaking van de Sabijnse vrouwen en de vrede die Hersilia daarna afdwingt." },
+  remus: { nm:"Remus", epithet:"Romulus' tweelingbroer",
+    intro:"De andere helft van de tweeling die een wolvin ooit zoogde — verliest het augurium over de nieuwe stad van zijn broer, en sterft wanneer hij spottend over Romulus' heilige stadsgrens springt." },
+  hersilia: { nm:"Hersilia", epithet:"Sabijnse, later koningin van Rome",
+    intro:"Een van de Sabijnse vrouwen die tijdens het Consualia-feest door Romulus' mannen wordt geschaakt — jaren later de vrouw die, met loshangend haar, tussen twee legers springt om een oorlog te beëindigen.",
+    full:"Hersilia werpt zich, samen met de andere geschaakte Sabijnse vrouwen, tussen de strijdende legers van Romulus en haar eigen volk — de vroegste Romeinse mythe waarin vrouwen collectief en met succes politiek ingrijpen. De vrede die daarop volgt, versmelt Romeinen en Sabijnen tot één volk, en geeft Hersilia zelf een stem in Romulus' raad." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -2421,6 +2534,10 @@ const SP_COMBAT_ENEMIES = {
   // ---- Hoofdstuk 9 — Ilion in Vlammen ----
   trojaanse_wachters: { nm:"De Laatste Wachters van Troje", icon:"🔥", img:"assets/bosses/trojaanse_wachters.png", hp:55,
     intro:"Een handvol dronken, half-wakkere verdedigers bij de poort — alles wat er nog over is van Troje's waakzaamheid, op de nacht dat het er het meest toe doet." },
+
+  // ---- Hoofdstuk 12 — Odysseus' Wraak ----
+  vrijers_ithaka: { nm:"De Vrijers van Ithaka", icon:"🏹", img:"assets/bosses/vrijers_ithaka.png", hp:85,
+    intro:"Meer dan honderd mannen, drie jaar lang gewend aan een paleis dat niet van hen is — verrast, ongewapend, en voor het eerst tegenover de koning die ze allang dood waanden." },
 };
 
 /* ---- B29a: DE VIER-UITKOMSTEN-LADDER ("CHECK:", Chronica-audit, fase 9/11,
@@ -7413,6 +7530,9 @@ De Minotaurus komt op hem af — reusachtig, met de kop van een stier op het lic
 COMBAT:
 minotaurus
 
+RELATION:
+ariadne=+1
+
 CHOICES:
 
 * Kijk wat er van het monster overblijft -> CH4_T08
@@ -9041,6 +9161,9 @@ Je grijpt mee, je handen brandend ondanks de zalf die ook jij hebt gekregen, en 
 FLAG:
 ch5_024_route=vis
 
+RELATION:
+medea=+1
+
 CHOICES:
 
 * Kijk hoe Medea haar keuze rechtvaardigt -> CH5_025
@@ -9057,6 +9180,9 @@ Terwijl de aardgeboren krijgers uit de grond omhoog schieten, manoeuvreer je raz
 
 FLAG:
 ch5_024_route=agilitas
+
+RELATION:
+medea=+1
 
 CHOICES:
 
@@ -9705,7 +9831,25 @@ iokaste:intro, eteokles:intro, polyneikes:intro, antigone:intro
 
 CHOICES:
 
-* Spring jaren vooruit, naar het moment dat de waarheid aan het licht komt -> CH6_010
+* Spring jaren vooruit, naar het moment dat de waarheid aan het licht komt -> CH6_009B
+
+END
+
+=== SCENE: CH6_009B ===
+
+TITLE:
+Iokaste Vermoedt
+
+TEXT:
+Terwijl Oedipus, koppig, getuige na getuige oproept om Tiresias' beschuldiging te weerleggen, is het Iokaste die het patroon het eerst herkent — lang voor Oedipus zelf zover is. Een oude herder, een verlaten kind op de berg Cithaeron, een echtgenoot met een litteken op zijn voeten dat hij nooit heeft kunnen verklaren: ze legt de stukken sneller naast elkaar dan hij. "Onderzoek dit niet verder," smeekt ze hem, met een dringendheid die niemand aan het hof van haar gewend is. "Om wat je nog aan geluk hebt — laat het rusten."
+
+Oedipus, ervan overtuigd dat ze hem enkel voor een lage afkomst wil behoeden, weigert.
+
+CHOICES:
+
+* Begrijp haar smeekbede als de wijsheid van iemand die het antwoord allang kent [CLEMENTIA] -> CH6_010
+* Zie het vooral als een poging om een ongemakkelijke waarheid begraven te houden [SEVERITAS] -> CH6_010
+* Twijfel of ze op dit moment werkelijk al zeker weet wat ze vreest [NEUTRAL] -> CH6_010
 
 END
 
@@ -9715,9 +9859,12 @@ TITLE:
 De Waarheid
 
 TEXT:
-Jaren later teistert een verschrikkelijke plaag Thebe. Het orakel van Delphi wijst de oorzaak aan — de moordenaar van de vorige koning loopt nog vrij rond, onbestraft, in de stad zelf — en de blinde ziener Tiresias, die Oedipus zelf laat halen om de dader aan te wijzen, aarzelt lang voor hij eindelijk spreekt: Oedipus is de moordenaar die hij zoekt. Oedipus, die het onmogelijk kan geloven, ontrafelt desondanks vastbesloten zijn eigen verleden — tot de waarheid onontkoombaar wordt: hij doodde zijn eigen vader op die weg naar Thebe, en trouwde daarna, zonder het te weten, met zijn eigen moeder.
+Jaren later teistert een verschrikkelijke plaag Thebe. Het orakel van Delphi wijst de oorzaak aan — de moordenaar van de vorige koning loopt nog vrij rond, onbestraft, in de stad zelf — en de blinde ziener Tiresias, die Oedipus zelf laat halen om de dader aan te wijzen, aarzelt lang voor hij eindelijk spreekt: Oedipus is de moordenaar die hij zoekt. Oedipus, die het onmogelijk kan geloven, ontrafelt desondanks vastbesloten zijn eigen verleden — tegen Iokaste's waarschuwing in — tot de waarheid onontkoombaar wordt: hij doodde zijn eigen vader op die weg naar Thebe, en trouwde daarna, zonder het te weten, met zijn eigen moeder.
 
 Iokaste kan niet leven met wat ze ontdekt. Oedipus, die het niet langer kan verdragen te zien wat zijn eigen ogen hem hebben laten aanrichten, verblindt zichzelf en verlaat Thebe voorgoed, een ballingschap in die hem de rest van zijn leven zal achtervolgen.
+
+RELATION:
+iokaste=+1
 
 PERSON:
 oedipus:full, iokaste:full, tiresias:full
@@ -11406,7 +11553,33 @@ codex_ruzie_achilles_agamemnon
 
 CHOICES:
 
-* Zie hoe Achilles zijn woede verwerkt -> CH8_004
+* Zie wie Briseis komt ophalen -> CH8_003B
+
+END
+
+=== SCENE: CH8_003B ===
+
+TITLE:
+De Herauten
+
+TEXT:
+Agamemnons herauten, Talthybius en Eurybates, komen naar Achilles' tent om te halen wat hun opperbevelhebber heeft geëist — een taak die geen van beiden graag op zich neemt, en dat is aan hun aarzelende stappen te zien. Achilles, hoe woedend ook, richt zijn woede niet op hen: "Jullie zijn geen schuldigen hier," zegt hij, "alleen boodschappers van een man die dat wél is." Hij laat Patroklos Briseis zelf naar hen toe brengen.
+
+DIALOGUE:
+Briseis
+Niemand hier vraagt mij iets — niet Agamemnon, niet Achilles, geen van de mannen die over mij beslissen alsof ik een stuk wapenrusting ben dat van eigenaar wisselt. Ik ga met de herauten mee omdat gaan het enige is dat mij nog rest om zelf te kiezen.
+
+PERSON:
+briseis:full
+
+CODEX:
+codex_briseis_meegevoerd
+
+CHOICES:
+
+* Erken hardop hoe weinig keuze ze in dit alles heeft [SEVERITAS] -> CH8_004
+* Zie vooral haar waardigheid, ondanks alles wat haar wordt afgenomen [CLEMENTIA] -> CH8_004
+* Onthoud alleen haar naam — de rest van dit verhaal gaat toch al niet meer over haar [NEUTRAL] -> CH8_004
 
 END
 
@@ -15134,6 +15307,9 @@ Binnen zingt een prachtige stem bij een weefgetouw. Kirke, dochter van de zonneg
 
 Eurylochus, die als enige buiten bleef wachten uit achterdocht, rent terug naar het strand om Odysseus te waarschuwen — te zeer over zijn toeren om zelf mee terug te gaan.
 
+IMAGE:
+ch11_ody_kirke_zwijnen.png
+
 PERSON:
 kirke:intro
 
@@ -15157,6 +15333,9 @@ TEXT:
 Onderweg naar het huis, alleen, kruist Hermes zijn pad — dezelfde god die de speler al twee keer eerder terzijde stond. "Ik kende je nog voor je hier aankwam," zegt hij, en drukt Odysseus een klein, zwart-wortelig kruid met een melkwit bloempje in de hand. "Moly. Geen sterveling kan het uit de grond trekken, maar een god wel — en jij hebt vandaag een god aan je zijde."
 
 Beschermd door het kruid drinkt Odysseus Kirke's mengsel zonder gevolgen. Wanneer ze hem met haar staf aanraakt en niets gebeurt, trekt ze verschrikt haar zwaard — en Odysseus, precies zoals Hermes hem influisterde, dwingt haar meteen tot een eed dat ze hem niets zal aandoen, voor hij zijn eigen zwaard weer laat zakken.
+
+IMAGE:
+ch11_ody_kirke_moly.png
 
 PERSON:
 kirke:full
@@ -15245,6 +15424,9 @@ puzzle_ch11_aen_participium1
 CODEX:
 codex_dido_onthaal
 
+RELATION:
+dido=+1
+
 CHOICES:
 * Ga naar het banket -> CH11_AEN_002
 
@@ -15270,6 +15452,9 @@ Cupido's Vermomming
 
 TEXT:
 Wat niemand aan tafel ziet: Venus, ongerust dat Juno's stad hen alsnog kwaad zal doen, heeft haar eigen zoon Cupido de gedaante van Ascanius laten aannemen. Terwijl de vermomde god op Dido's schoot zit, laat hij onopgemerkt een liefdesvuur in haar ontbranden dat geen enkel verstandig overleg meer zal doven.
+
+IMAGE:
+ch11_aen_cupido_vermomming.png
 
 PUZZLE:
 puzzle_ch11_aen_participium2
@@ -15312,6 +15497,9 @@ kirke:full
 CODEX:
 codex_kirke_onderwereld_opdracht
 
+RELATION:
+kirke=+1
+
 CHOICES:
 * Zie hoe de tocht naar de onderwereld verloopt [REQUIRE:taalspoor=grieks] -> CH11_ODY_005
 * Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_003
@@ -15327,6 +15515,9 @@ TEXT:
 Op jacht, enkele dagen later, drijft Juno zelf een onverwachte storm de heuvels in — een storm die ze zelf heeft besteld. Dido en Aeneas zoeken schuilen in dezelfde grot, alleen, terwijl de rest van het gezelschap verspreid raakt over de bergflanken.
 
 Wat daar precies gebeurt, blijft ongezegd — maar Dido noemt het vanaf die dag zelf een huwelijk, en gedraagt zich er ook naar. Aeneas zegt niets wat haar tegenspreekt, al is hij, in tegenstelling tot haar, geen moment vergeten dat Italië nog altijd op hem wacht.
+
+IMAGE:
+ch11_aen_grot_storm.png
 
 CODEX:
 codex_dido_grot
@@ -15403,6 +15594,9 @@ Voor Kirke's eiland definitief achter hen verdwijnt, mist Odysseus één man bij
 
 Aan de rand van de wereld, waar Kirke had gewezen, graaft Odysseus een kuil en giet er een offer in — melk, honing, wijn, water, gerstemeel, en het bloed van een zwart schaap. De schimmen van de doden komen er in drommen op af, dorstig naar het bloed dat hun even een stem teruggeeft. De allereerste die naar voren treedt, is niet wie Odysseus verwachtte: Elpenor, zijn lichaam nog onbegraven, smeekt om een fatsoenlijke begrafenis zodra de vloot terugkeert — anders zal zijn schim hem blijven achtervolgen als een wraakvloek van de goden zelf.
 
+IMAGE:
+ch11_ody_elpenor.png
+
 PERSON:
 elpenor:intro
 
@@ -15424,6 +15618,9 @@ TEXT:
 Terwijl Aeneas zich steeds dieper in Carthago's opbouw laat betrekken — muren, wetten, een stad die niet de zijne is — ziet Jupiter vanaf de Olympos hoe zijn missie dreigt te verzanden in een liefde die nooit zijn bedoeling was. Hij stuurt Mercurius, dezelfde god die de speler in Hoofdstuk 8 en 9 al terzijde stond, met een boodschap die geen ruimte voor onderhandeling laat.
 
 Mercurius verschijnt aan Aeneas terwijl deze, in Tyrische kleding gehuld, meehelpt aan Carthago's nieuwe torens. "Vergeet je eigen zoon niet," zegt de god, kortaf en zonder omhaal, "en het koninkrijk dat Ascanius toekomt in Italië. Jupiter zelf stuurt me — een vader die zijn plicht vergeet voor een vrouw die niet eens de zijne is, verdient deze herinnering." Even snel als hij verscheen, verdwijnt Mercurius weer in de lucht.
+
+IMAGE:
+ch11_aen_mercurius_vermaning.png
 
 PERSON:
 hermes:full
@@ -15476,6 +15673,9 @@ Onder de schimmen die zich om het bloed verdringen, herkent Odysseus eindelijk w
 
 "Je komt thuis," zegt Tiresias, "maar niet zonder eerst nog één beproeving: op het eiland Thrinacia grazen de heilige runderen van Helios zelf. Raak ze niet aan, wat je mannen ook zeggen als de honger toeslaat — wie dat wél doet, verliest zijn schip en iedereen aan boord, op Odysseus zelf na, die dan alleen en berooid, op een vreemd schip, eindelijk Ithaka bereikt." Een tweede voorspelling volgt, zachter: zelfs na de thuiskomst wacht er nog een laatste reis, ver het binnenland in, tot iemand zijn roeispaan voor een wanschoffel aanziet.
 
+IMAGE:
+ch11_ody_tiresias.png
+
 PERSON:
 tiresias:intro
 
@@ -15500,6 +15700,9 @@ Ze smeekt, dreigt, vervloekt — en wanneer de Trojaanse schepen bij zonsopgang 
 
 Vanaf de verste schepen ziet Aeneas alleen een gloed op de horizon, en raadt, zonder het zeker te weten, wat die betekent.
 
+IMAGE:
+ch11_aen_dido_dood.png
+
 PERSON:
 dido:full
 
@@ -15521,6 +15724,9 @@ TEXT:
 De volgende schim die zich door de menigte dringt, kende Odysseus beter dan wie ook: zijn eigen moeder, Anticlea, die nog in leven was toen hij naar Troje vertrok. Ze vertelt hem, zonder omwegen, dat ze niet aan ziekte stierf, maar aan het verlangen naar hem — twintig jaar wachten op een zoon die niet terugkeerde, brak uiteindelijk zelfs het sterkste hart.
 
 Drie keer probeert Odysseus haar te omhelzen. Drie keer glipt haar schim door zijn armen heen, licht als een schaduw of een droom, tot ze hem zelf troost met wat elke schim hier weet: dit is nu eenmaal hoe het gaat, wanneer de geest het lichaam voorgoed verlaat.
+
+IMAGE:
+ch11_ody_anticlea.png
 
 PERSON:
 anticlea:intro
@@ -15544,6 +15750,9 @@ Twee schimmen die Odysseus nog van Troje kent, dringen zich naar voren. Agamemno
 
 Dan Achilles, en Odysseus begroet hem als "gelukkigste onder de doden, hier heersend zoals je eens onder de levenden heerste." Achilles wijst het compliment resoluut af: "Spreek me niet troostend toe over de dood. Ik zou liever als een naamloze dagloner op aarde zwoegen voor een berooide boer, dan hier koning zijn over alles wat gestorven is." Pas wanneer Odysseus vertelt hoe dapper zijn zoon Neoptolemus zich bij Troje's val gedroeg, klaart Achilles' schim eindelijk op.
 
+IMAGE:
+ch11_ody_agamemnon_achilles.png
+
 PERSON:
 achilles:full
 
@@ -15565,6 +15774,9 @@ TEXT:
 Vlak voor de kust van Italië in zicht komt, verliest Aeneas zijn stuurman: Palinurus, in slaap gesust door de god Somnus zelf, valt overboord en verdrinkt — zonder dat iemand aan boord het op tijd merkt. Het schip vaart, stuurloos maar ongedeerd, alleen verder.
 
 Aangekomen bij Cumae zoekt Aeneas de Sibylle op, Apollo's priesteres, die in extase toekomstige oorlogen in Italië voorspelt — "een tweede Achilles wacht ook hier al op je" — voor ze instemt hem naar de onderwereld te gidsen. De prijs: een Gouden Tak, gewijd aan Proserpina, die zich alleen laat plukken door wie het lot zelf toestaat. Venus' eigen duiven wijzen Aeneas de weg naar de juiste boom.
+
+IMAGE:
+ch11_aen_sibylle_cumae.png
 
 PERSON:
 dido:full
@@ -15588,6 +15800,9 @@ Eén schim houdt zich apart van de rest: Ajax, zoon van Telamon, na Achilles ooi
 
 Odysseus probeert het goed te maken, spreekt hem zacht aan, biedt zijn spijt aan over hoe alles is gelopen. Ajax antwoordt niet met één woord — hij draait zich zwijgend om en verdwijnt tussen de andere schimmen, zijn woede nog altijd te groot voor verzoening, zelfs hier, zelfs nu.
 
+IMAGE:
+ch11_ody_ajax_zwijgt.png
+
 PERSON:
 aias:full
 
@@ -15610,6 +15825,9 @@ Charon, de norse veerman van de Styx, weigert eerst iedereen zonder behoorlijk g
 
 Voorbij de eerste, treurige velden — waar wie stierf voor de liefde eeuwig ronddwaalt — herkent Aeneas een schim die hij nooit had verwacht hier te ontmoeten: Dido zelf, nog altijd met de wond in haar borst zichtbaar. Hij spreekt haar aan, zweert dat hij nooit uit eigen wil vertrok, dat de goden hem dwongen. Ze antwoordt geen woord — draait zich zwijgend om, en zoekt de schaduw van haar eerste man Sychaeus weer op, precies zoals Ajax zich net van Odysseus afwendde.
 
+IMAGE:
+ch11_aen_dido_schim.png
+
 PERSON:
 dido:full
 
@@ -15631,6 +15849,9 @@ TEXT:
 In de Elyzese Velden, waar de gelukzaligen voor altijd rusten, vindt Aeneas eindelijk zijn vader Anchises terug. Drie keer probeert hij hem te omhelzen, drie keer glipt de schim door zijn armen — hetzelfde verdriet dat Odysseus bij zijn eigen moeder al kende.
 
 Anchises wijst hem dan iets wat groter is dan hun eigen weerzien: een lange stoet ongeboren zielen, wachtend om ooit geboren te worden. "Dit worden jouw nakomelingen," zegt hij, en noemt ze een voor een — Romulus, de koningen van Rome, de helden van de Republiek, tot aan een zekere Augustus toe, die een nieuwe gouden eeuw zal brengen. "Onthoud jouw taak," zegt Anchises tenslotte, "niet kunst, niet welsprekendheid — anderen zullen daarin uitblinken. Jouw volk zal heersen over de volkeren, vrede opleggen door wetten, de onderworpenen sparen en de hoogmoedigen neerslaan." Tussen alle glorie wijst hij ook, even, naar een jonge ziel die stralender is dan de rest — Marcellus, gedoemd te sterven voor zijn tijd komt, een schaduw over anders zoveel triomf.
+
+IMAGE:
+ch11_aen_anchises_stoet.png
 
 PERSON:
 anchises:full
@@ -15705,6 +15926,9 @@ Odysseus stopt de oren van zijn mannen met bijenwas, maar laat zich zelf, nieuws
 
 Bij de zeeëngte kiest Odysseus bewust voor Skylla boven Charybdis — liever zes man verliezen aan het monster dan het hele schip aan de draaikolk. Zes van zijn beste roeiers verdwijnen, schreeuwend, in Skylla's muil, terwijl de rest van de vloot ongedeerd doorvaart.
 
+IMAGE:
+ch11_ody_sirenen_skylla.png
+
 CODEX:
 codex_sirenen
 
@@ -15743,6 +15967,9 @@ Tegenwind houdt de vloot een volle maand gevangen op Thrinacia, het eiland van H
 
 Helios, razend, dreigt bij Zeus zelf: geef hem genoegdoening, of hij laat voortaan zijn licht in de onderwereld schijnen in plaats van boven de aarde. Zodra de vloot weer uitvaart, verbrijzelt Zeus' bliksem het schip in stukken. Iedereen verdrinkt, op Odysseus zelf na — precies zoals Tiresias het maanden geleden al had voorzien.
 
+IMAGE:
+ch11_ody_runderen_helios.png
+
 CODEX:
 codex_thrinacia
 
@@ -15755,12 +15982,56 @@ END
 === SCENE: CH11_AEN_010 ===
 
 TITLE:
-Oorlog en Vrede in Latium
+Oorlog in Latium
 
 TEXT:
-Koning Latinus, gewaarschuwd door een orakel dat zijn dochter Lavinia met een vreemdeling moet trouwen, verwelkomt Aeneas hartelijk — tot Juno, nog altijd niet verzoend, de Furie Allecto stuurt om koningin Amata en de plaatselijke vorst Turnus, Lavinia's eigen verstoten aanbidder, tegen de nieuwkomers op te zetten. Oorlog volgt: de jonge Pallas sneuvelt aan Aeneas' zijde, de krijgshaftige Camilla valt aan de andere kant, en Vulcanus smeedt voor Aeneas een nieuw schild, met de hele toekomst van Rome erin gegraveerd — net als Achilles ooit van Hephaistos kreeg.
+Koning Latinus, gewaarschuwd door een orakel dat zijn dochter Lavinia met een vreemdeling moet trouwen, verwelkomt Aeneas hartelijk — tot Juno, nog altijd niet verzoend, de Furie Allecto stuurt om koningin Amata en de plaatselijke vorst Turnus, Lavinia's eigen verstoten aanbidder, tegen de nieuwkomers op te zetten. Oorlog volgt: de jonge Pallas sneuvelt aan Aeneas' zijde, en aan de andere kant velt de krijgshaftige Camilla, aan Diana gewijd sinds haar geboorte en opgevoed in de wildernis, tientallen Trojanen te paard — tot de Etruskische speerwerper Arruns haar van achteren neerschiet, uit veilige afstand, te laf om haar recht in de ogen te kijken.
+
+IMAGE:
+ch11_aen_camilla_val.png
+
+PERSON:
+camilla:full
+
+CODEX:
+codex_camilla
+
+CHOICES:
+* Zie hoe Diana haar wraak neemt -> CH11_AEN_010B
+
+END
+
+=== SCENE: CH11_AEN_010B ===
+
+TITLE:
+Opis' Pijl
+
+TEXT:
+Diana had alles vanaf de bergen gadegeslagen, en had haar nimf Opis al gewaarschuwd: wie Camilla ooit zou schaden, zou het met zijn leven bekopen. Opis vindt Arruns nog voor hij zich veilig kan wanen tussen zijn eigen troepen — één pijl uit Diana's eigen koker, en hij valt, zonder ooit te beseffen van wie de dodelijke schicht kwam of waarom. Camilla's dood blijft; haar wraak wordt voltrokken door een andere vrouw.
+
+IMAGE:
+ch11_aen_opis_wraak.png
+
+PERSON:
+opis:full
+
+CHOICES:
+* Zie hoe de oorlog wordt beslecht -> CH11_AEN_010C
+
+END
+
+=== SCENE: CH11_AEN_010C ===
+
+TITLE:
+Vrede in Latium
+
+TEXT:
+Vulcanus smeedt intussen voor Aeneas een nieuw schild, met de hele toekomst van Rome erin gegraveerd — net als Achilles ooit van Hephaistos kreeg.
 
 Het eindigt in een tweegevecht: Aeneas tegen Turnus zelf. Op het punt van genade te tonen, ziet Aeneas dat Turnus nog altijd Pallas' eigen wapenriem als buit draagt — en doodt hem alsnog, niet uit plicht maar uit pure, onbedwingbare woede. Latinus houdt zijn woord: Lavinia wordt Aeneas' vrouw, en op de plek waar hun nieuwe stad verrijst, noemt hij haar Lavinium — het eerste, echte thuis sinds Troje viel.
+
+IMAGE:
+ch11_aen_aeneas_turnus.png
 
 CODEX:
 codex_latium_aankomst
@@ -15780,6 +16051,9 @@ TEXT:
 Negen dagen drijft Odysseus, alleen, op een provisorisch vlot van wrakhout, tot de golven hem op Ogygia werpen — het eiland van de nimf Calypso. Ze neemt hem op, verzorgt hem, en biedt hem uiteindelijk iets wat geen sterveling ooit wordt aangeboden: onsterfelijkheid, eeuwige jeugd, een leven aan haar zijde voor altijd, als hij maar wil blijven.
 
 Odysseus weigert. Niet uit ondankbaarheid, maar omdat geen enkele belofte van een godin het gewicht opweegt van een oud, sterfelijk huis op Ithaka. Calypso houdt hem toch vast — jaar na jaar, niet als gevangene met kettingen, maar evenmin als een gast die zomaar kan vertrekken.
+
+IMAGE:
+ch11_ody_calypso.png
 
 CODEX:
 codex_calypso
@@ -15989,6 +16263,199 @@ STATPOINTS:
 3
 
 CHOICES:
+* Zie wat er, generaties later, op diezelfde heuvels gebeurt -> CH12_LAT_006
+
+END
+
+=== SCENE: CH12_LAT_006 ===
+
+TITLE:
+De Vestaalse Rhea Silvia
+
+TEXT:
+Generaties na Hercules en Cacus regeert over Alba Longa — de stad die Aeneas' zoon Ascanius ooit stichtte — koning Numitor, tot zijn eigen broer Amulius hem van de troon stoot en verbant. Om zeker te zijn dat niemand ooit wraak komt nemen namens Numitors familie, dwingt Amulius diens dochter Rhea Silvia een Vestaalse maagd te worden: een eervolle positie, en tegelijk een levenslang verbod om ooit kinderen te krijgen die zijn eigen troon zouden kunnen bedreigen.
+
+PERSON:
+rhea_silvia:intro, amulius:intro, numitor:intro
+
+CODEX:
+codex_rhea_silvia
+
+CHOICES:
+* Zie hoe Amulius' plan alsnog faalt -> CH12_LAT_007
+
+END
+
+=== SCENE: CH12_LAT_007 ===
+
+TITLE:
+Zonen van Mars
+
+TEXT:
+Wat geen enkele sterveling had kunnen voorkomen, gebeurt toch: Mars zelf, de oorlogsgod, bezoekt Rhea Silvia bij een heilige bron — en negen maanden later baart ze een tweeling, Romulus en Remus, half goddelijk zoals zoveel helden voor hen. Amulius, razend en doodsbang tegelijk, laat Rhea Silvia gevangenzetten en beveelt zijn dienaren de baby's in een mand in de Tiber te leggen, ver genoeg de rivier op dat niemand het ooit met hem in verband zal brengen.
+
+PERSON:
+rhea_silvia:full
+
+CODEX:
+codex_rhea_silvia_tweeling
+
+CHOICES:
+* Zie wat er met de tweeling gebeurt -> CH12_LAT_008
+
+END
+
+=== SCENE: CH12_LAT_008 ===
+
+TITLE:
+De Wolvin
+
+TEXT:
+De Tiber, in die tijd buiten haar oevers getreden, spoelt de mand niet verder de rivier af maar zachtjes aan land, aan de voet van de heuvel die ooit de Palatijn zal heten — dezelfde heuvel waar Euander, generaties eerder, Hercules ontving. Een wolvin, op zoek naar water, vindt de huilende baby's en voedt ze, in plaats van hen te verscheuren, met haar eigen melk — tot Faustulus, de koninklijke herder, de vreemde stilte tussen roofdier en zuigelingen ontdekt en de tweeling mee naar huis neemt.
+
+Faustulus en zijn vrouw Acca Larentia voeden Romulus en Remus op als hun eigen zonen, zonder te vermoeden — tot de jongens zelf oud genoeg zijn om het te raden — dat ze eigenlijk prinsen zijn, met een oude, onrechtvaardig onttroonde grootvader nog altijd in leven.
+
+IMAGE:
+ch12_lat_wolvin.png
+
+PERSON:
+faustulus:full
+
+CODEX:
+codex_lupa_faustulus
+
+CHOICES:
+* Zie hoe de tweeling hun ware afkomst ontdekt -> CH12_LAT_009
+
+END
+
+=== SCENE: CH12_LAT_009 ===
+
+TITLE:
+Een Stad, Twee Broers
+
+TEXT:
+Eenmaal volwassen ontdekken Romulus en Remus, na een opstootje met Amulius' eigen herders, wie ze werkelijk zijn — en herstellen meteen de rekening: ze doden Amulius en zetten hun grootvader Numitor terug op de troon van Alba Longa. Zelf willen ze geen koningschap dat niet van hen is; ze besluiten een geheel nieuwe stad te stichten, op de heuvels waar de wolvin hen ooit vond.
+
+Alleen: welke heuvel? Romulus kiest de Palatijn, Remus de Aventijn — en om de twist te beslechten, wenden beide broers zich tot hetzelfde teken waarmee de goden al eeuwenlang koningen aanwijzen: het vliegpatroon van vogels. Remus ziet als eerste zes gieren overvliegen; Romulus ziet er, kort daarna, twaalf.
+
+PUZZLE:
+puzzle_ch12_lat_futurum_exactum
+
+PERSON:
+romulus:intro, remus:intro
+
+CODEX:
+codex_romulus_remus_augurium
+
+CHOICES:
+* Zie hoe de broers het geschil beslechten -> CH12_LAT_010
+
+END
+
+=== SCENE: CH12_LAT_010 ===
+
+TITLE:
+De Voren van de Stadsmuur
+
+TEXT:
+Romulus, met twaalf vogels tegenover Remus' zes, claimt het teken van de goden voor zichzelf — en begint, zonder op verdere instemming te wachten, de heilige voor van zijn nieuwe stadsmuur te ploegen rond de Palatijn: de pomerium, een grens die niemand ongestraft mag overschrijden, zelfs niet spottend.
+
+Remus, nog altijd verbitterd over het verloren teken, springt spottend over de verse voor heen — en valt, ogenblikkelijk, dood neer. Latere verhalen verschillen over wiens hand de fatale slag toebracht: sommigen zeggen Romulus zelf, buiten zichzelf van woede over de ontheiliging; anderen wijzen naar een van Romulus' aanhangers. Zeker is alleen dat de stad die er nu staat, gebouwd is op de eerste voren van een grens én op de dood van een broer.
+
+PUZZLE:
+puzzle_ch12_lat_futurum
+
+PERSON:
+remus:full
+
+CODEX:
+codex_stichting_rome
+
+CHOICES:
+* Zie hoe Romulus zijn nieuwe stad probeert te vullen -> CH12_LAT_011
+
+END
+
+=== SCENE: CH12_LAT_011 ===
+
+TITLE:
+Een Stad Zonder Vrouwen
+
+TEXT:
+Rome — zo noemt Romulus zijn nieuwe stad, naar zichzelf — groeit snel, maar eenzijdig: Romulus verklaart de stad een vrijplaats voor iedereen die elders in de problemen zit, vluchtelingen, verschoppelingen en bannelingen, en binnen een jaar telt Rome duizenden nieuwe inwoners. Bijna allemaal mannen. De omliggende volken, argwanend over deze nieuwe stad vol ontheemden, weigeren hun eigen dochters aan Romulus' mannen uit te huwelijken.
+
+Romulus bedenkt een list: hij nodigt de naburige Sabijnen uit voor een groot feest, ter ere van de god Consus, met spelen en offers voor iedereen. De Sabijnen komen in groten getale — mannen, vrouwen en kinderen — nietsvermoedend welk plan achter de uitnodiging schuilgaat.
+
+PUZZLE:
+puzzle_ch12_lat_ut_finalis
+
+CODEX:
+codex_sabijnse_schaking_uitnodiging
+
+CHOICES:
+* Zie wat er tijdens het feest gebeurt -> CH12_LAT_012
+
+END
+
+=== SCENE: CH12_LAT_012 ===
+
+TITLE:
+De Schaking van de Sabijnse Vrouwen
+
+TEXT:
+Midden in de feestvreugde geven Romulus' mannen een afgesproken teken, en grijpen elk een ongehuwde Sabijnse vrouw om haar mee te voeren — de Sabijnse mannen, ongewapend voor een feest, kunnen niets anders dan woedend en machteloos vluchten. Onder de weggevoerde vrouwen bevindt zich Hersilia, die uiteindelijk Romulus' eigen vrouw zal worden.
+
+De Sabijnen keren jaren later terug, ditmaal gewapend, onder hun koning Titus Tatius, vastbesloten hun dochters terug te halen en Rome met de grond gelijk te maken. De strijd woedt hevig op het Forum zelf — tot de vrouwen die het allemaal aangaat, ingrijpen.
+
+CODEX:
+codex_sabijnse_schaking
+
+CHOICES:
+* Zie hoe de vrouwen zelf een einde aan de oorlog maken -> CH12_LAT_013
+
+END
+
+=== SCENE: CH12_LAT_013 ===
+
+TITLE:
+Hersilia en de Vrouwen van Sabinum
+
+TEXT:
+Hersilia en de andere geschaakte vrouwen — inmiddels moeder van kinderen aan weerszijden van dezelfde oorlog — werpen zich met loshangend haar en gescheurde kleren midden tussen de twee legers, smekend dat vaders en echtgenoten stoppen elkaar te doden om een onrecht dat, hoe het ook begon, nu niet meer ongedaan te maken is. "Richt jullie speren liever op ons," roepen ze, "wij zijn de reden van deze oorlog — laat ons ook de reden zijn dat hij eindigt."
+
+IMAGE:
+ch12_lat_sabijnse_vrouwen.png
+
+PUZZLE:
+puzzle_ch12_lat_ire
+
+CODEX:
+codex_sabijnse_vrede
+
+CHOICES:
+* Zie hoe Rome zich hierna ontwikkelt -> CH12_LAT_014
+
+END
+
+=== SCENE: CH12_LAT_014 ===
+
+TITLE:
+Twee Volken, Eén Stad
+
+TEXT:
+De legers, geschokt door wat de vrouwen wagen, staken de strijd — en in plaats van oorlog volgt een verbond: Romeinen en Sabijnen versmelten tot één volk, Romulus en Titus Tatius delen enige tijd samen de troon, en Hersilia krijgt, als enige vrouw uit dit hele verhaal, zelf een zetel in Romulus' raad. Wat begon met een list en een ontvoering, eindigt met een stad die voortaan sterker staat dan Romulus in zijn eentje ooit had kunnen bouwen.
+
+PERSON:
+hersilia:full
+
+CODEX:
+codex_grammatica_ch12_romulus_remus
+
+STATPOINTS:
+3
+
+CHOICES:
 * Keer terug naar het Museum [REQUIRE:taalspoor=latijn] -> CH12_MUSEUM_00_LAT
 * Volg nu ook Odysseus naar Ithaka [REQUIRE:taalspoor=beide] -> CH12_ODY_001
 
@@ -16000,7 +16467,7 @@ TITLE:
 Terug in het Museum
 
 TEXT:
-Mercurius zet je terug precies waar hij je ophaalde, alsof er geen moment is verstreken. "Geen nieuwe grammatica vandaag," zegt de Boodschapper, bijna verontschuldigend, terwijl een nieuwe stolp zich vult met een klein stuk brons, gevormd als een altaar. "Soms is even terugkijken naar wat je al kent net zo waardevol als weer iets nieuws leren."
+Mercurius zet je terug precies waar hij je ophaalde, alsof er geen moment is verstreken. Een nieuwe stolp vult zich: een klein bronzen wolvinnetje, met twee piepkleine gestalten eronder. "Van een altaar voor een held tot de stichting van een stad," zegt de Boodschapper, "en allebei op dezelfde heuvels. Rome bouwt, dat merk je wel, altijd voort op wat eraan voorafging — ook op de delen van dat verleden die niemand graag navertelt."
 
 Ze kijkt je aan. "Odysseus is intussen ook bijna waar hij wezen moet. Wanneer jij zover bent, is hij dat ook."
 
@@ -16059,7 +16526,192 @@ Nog Niet Onthuld
 TEXT:
 Odysseus luistert naar Eumaeus' verhaal zonder zich te verraden, zijn gezicht nog altijd verborgen achter de rimpels van een bedelaar die hij niet is. Zijn paleis wacht, vol vrijers die niet weten wat hun te wachten staat. De boog die niemand anders kan spannen, het weerzien met Penelope, de afrekening die al twintig jaar onderweg is — dat verhaal ligt nog vlak voor hem.
 
-Maar het is een verhaal voor een volgende keer.
+CHOICES:
+* Zie wie er onverwacht de hut binnenkomt -> CH12_ODY_004
+
+END
+
+=== SCENE: CH12_ODY_004 ===
+
+TITLE:
+Vader en Zoon
+
+TEXT:
+De deur zwaait open: Telemachus, terug van zijn eigen tocht langs Pylos en Sparta op zoek naar nieuws over zijn vader, treedt de hut binnen — en ziet enkel een onbekende bedelaar naast Eumaeus zitten. Zodra de zwijnenhoeder even naar buiten is gestuurd, verandert Athena Odysseus voor de ogen van zijn zoon terug in zichzelf: geen rimpels meer, geen vodden, maar de koning die twintig jaar geleden vertrok.
+
+Telemachus deinst eerst terug — zeker dat hij een god voor zich heeft, geen sterveling — tot Odysseus hem geruststelt en hem in zijn armen sluit. Vader en zoon wenen samen, langer dan een van beiden had verwacht, voor ze beginnen te fluisteren over wat er nu, eindelijk, moet gebeuren.
+
+IMAGE:
+ch12_ody_telemachus_herkenning.png
+
+PUZZLE:
+puzzle_ch12_ody_relativum
+
+PERSON:
+telemachus:full, odysseus:full
+
+CODEX:
+codex_telemachus_herkenning
+
+RELATION:
+telemachus=+1
+
+CHOICES:
+* Zie hoe ze het paleis binnengaan -> CH12_ODY_005
+
+END
+
+=== SCENE: CH12_ODY_005 ===
+
+TITLE:
+De Oude Hond
+
+TEXT:
+Nog altijd vermomd als bedelaar strompelt Odysseus zijn eigen paleis binnen, waar de vrijers hem met hoongelach begroeten — Antinous, de brutaalste van allemaal, gooit zelfs een voetenbankje naar zijn hoofd, tot vermaak van de rest. Odysseus slikt de belediging in, wetend dat hij nog niet klaar is om te reageren.
+
+Op de mesthoop bij de poort, half verwaarloosd, ligt Argos — zijn eigen jachthond, ooit door hemzelf als pup getraind, nu oud en afgeleefd. Argos, de enige in heel het paleis die zijn meester niet nodig heeft om hem te herkennen, spitst voor het eerst in jaren zijn oren, kwispelt zwakjes — en sterft, tevreden, op het moment dat Odysseus eindelijk weer thuis is.
+
+IMAGE:
+ch12_ody_argos.png
+
+CODEX:
+codex_argos_hond
+
+CHOICES:
+* Zie wat er ondertussen in de grote zaal gebeurt -> CH12_ODY_006
+
+END
+
+=== SCENE: CH12_ODY_006 ===
+
+TITLE:
+Penelope's Voorwaarde
+
+TEXT:
+Penelope, die de bedelaar nog altijd niet herkent, laat hem bij zich roepen — iets in zijn houding, iets in de manier waarop hij over Odysseus spreekt, wekt haar nieuwsgierigheid. Ze vertelt hem, zonder te weten tegen wie, over twintig jaar wachten, over honderd vrijers die haar huis leegeten terwijl ze doet alsof ze een keuze overweegt die ze nooit heeft willen maken.
+
+Ze heeft zelf besloten hoe ze dit beëindigt: morgen zal ze Odysseus' eigen boog tevoorschijn halen — een wapen dat niemand anders ooit heeft weten te spannen — en de twaalf bijlen opstellen zoals hij ze ooit zelf liet plaatsen. Wie de boog spant en een pijl in één rechte lijn door alle twaalf ringen schiet, krijgt haar hand. Geen van de vrijers heeft het ooit zelfs maar geprobeerd, te bang voor de vernedering van te falen waar Odysseus ooit in slaagde.
+
+PUZZLE:
+puzzle_ch12_ody_conjunctivus
+
+PERSON:
+penelope:intro
+
+CODEX:
+codex_penelope_boogwedstrijd
+
+CHOICES:
+* Zie hoe de wedstrijd de volgende dag verloopt -> CH12_ODY_007
+
+END
+
+=== SCENE: CH12_ODY_007 ===
+
+TITLE:
+De Boog Gespannen
+
+TEXT:
+Een voor een proberen de vrijers Odysseus' boog te spannen, en een voor een falen ze — sommigen kunnen de pees niet eens laten bewegen. Antinous stelt voor de poging voor vandaag te staken, opgelucht dat niemand slaagt, tot de bedelaar in de hoek vraagt of ook hij een kans mag wagen. De vrijers lachen hem uit; Telemachus, die inmiddels meer weet dan hij laat blijken, dringt erop aan dat de vreemdeling zijn kans krijgt.
+
+Odysseus neemt zijn eigen boog voor het eerst in twintig jaar weer in handen — en spant hem moeiteloos, alsof er geen dag voorbij is gegaan. De pijl vliegt in één rechte lijn door alle twaalf de bijlringen. Voor de vrijers goed en wel beseffen wat ze zien, werpt hij zijn vodden af.
+
+IMAGE:
+ch12_ody_boogwedstrijd.png
+
+CHOICES:
+* Zie wat er nu volgt -> CH12_ODY_008
+
+END
+
+=== SCENE: CH12_ODY_008 ===
+
+TITLE:
+De Afrekening
+
+TEXT:
+"Nog een doel heb ik nooit geraakt," zegt Odysseus, zijn stem plots weer die van een koning, "maar dit doel raak ik nu." Hij richt de boog niet langer op bijlen, maar op de vrijers zelf — twintig jaar wraak, samengebald in één enkel moment. Telemachus, gewapend en aan zijn zijde, sluit met Eumaeus de enige andere uitgang af.
+
+COMBAT:
+vrijers_ithaka
+
+CHOICES:
+* Zie wat er van het paleis overblijft -> CH12_ODY_009
+
+END
+
+=== SCENE: CH12_ODY_009 ===
+
+TITLE:
+Het Litteken
+
+TEXT:
+Met de vrijers verslagen laat Odysseus de vrouwelijke bedienden roepen die trouw bleven, en de handvol die met de vrijers heulden weet hij te onderscheiden van de rest. Eurycleia, de oude voedster die hem als kind heeft grootgebracht, herkent hem allang — niet aan een gezicht dat twintig jaar en Athena's vermommingen allebei hebben veranderd, maar aan een oud litteken op zijn dijbeen, van een everzwijnjacht toen hij nog een jongen was, dat ze bij het wassen van zijn voeten al eerder had gevoeld dan wie ook in het paleis.
+
+"Ik wist het," fluistert ze, haar hand nog op het litteken, "vanaf het eerste moment dat ik het voelde. Ik heb gezwegen, zoals je me vroeg — maar ik wist het."
+
+PUZZLE:
+puzzle_ch12_ody_alpha
+
+PERSON:
+eurycleia:full
+
+CODEX:
+codex_eurycleia_litteken
+
+RELATION:
+eurycleia=+2
+
+CHOICES:
+* Zie hoe Penelope het nieuws ontvangt -> CH12_ODY_010
+
+END
+
+=== SCENE: CH12_ODY_010 ===
+
+TITLE:
+Het Bed van Olijfhout
+
+TEXT:
+Penelope, eindelijk voor de man geroepen die zojuist honderd vrijers versloeg, gelooft niet wat Eurycleia haar influistert. Twintig jaar wachten heeft haar geleerd wantrouwiger te zijn dan wie ook — en dus stelt ze, zonder een spier te vertrekken, haar eigen laatste test: ze beveelt een dienares het huwelijksbed uit hun slaapkamer te verplaatsen naar buiten.
+
+Odysseus, voor het eerst sinds zijn thuiskomst oprecht geschrokken, protesteert meteen: dat bed kán niet verplaatst worden, hij heeft het zelf gebouwd rond een levende olijfboom, nog wortelend in de grond, als geheim dat alleen hijzelf en Penelope ooit hebben gekend. Pas dan breekt Penelope in tranen uit — niet om het bed, maar om het bewijs dat ze twintig jaar op precies de juiste man heeft gewacht.
+
+IMAGE:
+ch12_ody_penelope_herkenning.png
+
+PERSON:
+penelope:full
+
+CODEX:
+codex_penelope_bed
+
+RELATION:
+penelope=+2
+
+CHOICES:
+* Zie het laatste weerzien, met zijn eigen vader -> CH12_ODY_011
+
+END
+
+=== SCENE: CH12_ODY_011 ===
+
+TITLE:
+Laërtes
+
+TEXT:
+Eén weerzien blijft nog over: Laërtes, Odysseus' eigen vader, die de speler al kende als jonge Argonaut en die de jaren van wachten teruggetrokken op zijn boerderij heeft doorgebracht, ver van het paleis en zijn vrijers. Odysseus vindt hem tussen zijn eigen wijnstokken, oud geworden en vuil van het werk — en noemt, voor hij zich bekendmaakt, eerst zachtjes de namen van de bomen die hij als kind van zijn vader kreeg, één voor één, tot er geen twijfel meer over kan bestaan wie voor hem staat.
+
+Ithaka is, na twintig jaar, weer heel: een koning, een zoon, een vader, en een vrouw die precies zo lang heeft gewacht als hij nodig had om terug te komen.
+
+PERSON:
+laertes:full
+
+CODEX:
+codex_laertes_hereniging
+
+STATPOINTS:
+3
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos -> CH13_000

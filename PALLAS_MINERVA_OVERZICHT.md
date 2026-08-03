@@ -64,7 +64,7 @@ Gebruikt in Chronica Hoofdstuk 10-12. Sinds de H12/13-samenvoeging
 | 17 | Kirke, Odysseus ontmoet Hermes | Participium | 15 + **18** | Samson en Judith (H15); Hannibal verslagen (H18, alleen de ablativus absolutus-paragraaf, par. I-III, vooruitgehaald) | Participium praesens actief (ppa, H15) + ablativus absolutus (H18) | H11 |
 | 18 | Odysseus ontmoet zijn moeder (onderwereld), Achilles/Ajax | Genitivus absolutus | — | — | — | H11 |
 | 19 | Odysseus op Ithaka (Athena, Penelope, Eurykleia) | Betrekkelijk voornaamwoord | 16 | Dieren in het Romeinse Rijk (raaf, leeuw) | Bijwoord op -iter, genitivus op -ius (9 onregelmatige bn), idem, ACP (accusativus cum participio) | H12 |
-| 20-21 | **Boogwedstrijd, wraak op de vrijers, hereniging Penelope** ("als een rund bij zijn ruif", Electra-verwijzing) | Conjunctivus, alpha-werkwoorden | 17 | Hannibal over de Alpen (de eed van Hannibal, de tocht) | Futurum, futurum exactum, het werkwoord ire | H12 (les 20-21 hoort hier terug — zie voorstel in gesprek 2026-08-02, nog te bevestigen) |
+| 20-21 | **Boogwedstrijd, wraak op de vrijers, hereniging Penelope** ("als een rund bij zijn ruif", Electra-verwijzing) | Conjunctivus, alpha-werkwoorden | 17 | Hannibal over de Alpen (de eed van Hannibal, de tocht) — **cultuurtekst niet gevolgd**, grammatica (futurum/futurum exactum/ire) via Romulus & Remus verteld, zie decouplingsbeleid hierboven | Futurum, futurum exactum, het werkwoord ire | H12 — **gebouwd 2026-08-03** (les 19 = CH12_ODY_004, les 20-21 = CH12_ODY_006/009; Minerva 17 = CH12_LAT_006-014, incl. ut-finalis uit Minerva 14 par. IV) |
 
 **Correctie gevonden bij dit onderzoek, direct hersteld (2026-08-02)**: de
 eerdere Chronica-audit (§7.41) plaatste "ablativus absolutus" ten onrechte
