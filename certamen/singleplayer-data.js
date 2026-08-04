@@ -2504,12 +2504,13 @@ const SP_SOUVENIRS = {
 // SCREENS.spCombat terug op het `icon`-emoji, exact dezelfde regel als
 // Boss Battle se bmBossSpriteHTML() (bossbattle.js): een baas is een
 // ENKELVOUDIGE statische illustratie, geen motion-sheet, en object-fit:contain
-// verdraagt elk brondimensieformaat. De Hydra hergebruikt bewust het
-// bestaande Boss Battle-bestand (dezelfde mythologische Hydra, geen nieuwe
-// tekening nodig); de Leeuw van Nemea heeft nog geen bestand — het `img`-pad
-// hieronder is alvast ingevuld zodat het meteen oppikt zodra het bestand er
-// staat (net als de bestaande Cerberus/Chimera/Lamia/Succubus-bestanden in
-// assets/bosses/, die ook al klaarliggen voor toekomstige bazen).
+// verdraagt elk brondimensieformaat. Combat-sprites wonen in eigen map
+// assets/chronica/combat/ (niet assets/bosses/, die is voor Boss Battle) —
+// zie CH_COMBAT_SPRITES_TODO.md voor de volledige generatielijst. De Hydra
+// is hierheen gedupliceerd vanuit assets/bosses/ (ook gebruikt door Boss
+// Battle); Cerberus en de Leeuw van Nemea hadden ooit een tijdelijke
+// Boss Battle-illustratie geleend, maar hebben inmiddels hun eigen,
+// specifiek voor Chronica gegenereerde tekening.
 // `heads` (alleen Hydra): de romp-afbeelding heeft de kale nekstompjes al
 // ingetekend, en elke los kop-bestand is een even groot canvas dat er
 // precies overheen past (geen offsets nodig, gewoon absoluut stapelen) —
@@ -2518,60 +2519,57 @@ const SP_SOUVENIRS = {
 // nooit de koppen. Aantal nog "levende" koppen = spCombatAliveHeads(),
 // dezelfde ceil((hp/maxHp)*7)-formule als bmBossAliveHeads() daar.
 const SP_COMBAT_ENEMIES = {
-  nemeische_leeuw: { nm:"De Nemeïsche Leeuw", icon:"🦁", img:"assets/bosses/nemeische_leeuw.png", hp:40,
+  nemeische_leeuw: { nm:"De Nemeïsche Leeuw", icon:"🦁", img:"assets/chronica/combat/nemeische_leeuw.png", hp:40,
     intro:"Een leeuw met een huid die geen enkel wapen kan doorboren — Herakles zal hem uiteindelijk met blote handen moeten wurgen." },
-  hydra: { nm:"De Hydra van Lerna", icon:"🐍", img:"assets/bosses/hydra.png",
-    heads:["assets/bosses/hydrahead1.png","assets/bosses/hydrahead2.png","assets/bosses/hydrahead3.png",
-           "assets/bosses/hydrahead4.png","assets/bosses/hydrahead5.png","assets/bosses/hydrahead6.png",
-           "assets/bosses/hydrahead7.png"],
+  hydra: { nm:"De Hydra van Lerna", icon:"🐍", img:"assets/chronica/combat/hydra.png",
+    heads:["assets/chronica/combat/hydrahead1.png","assets/chronica/combat/hydrahead2.png","assets/chronica/combat/hydrahead3.png",
+           "assets/chronica/combat/hydrahead4.png","assets/chronica/combat/hydrahead5.png","assets/chronica/combat/hydrahead6.png",
+           "assets/chronica/combat/hydrahead7.png"],
     hp:60,
     intro:"Een veelkoppig moeras-monster dat voor elke afgehakte kop er twee nieuwe laat aangroeien — alleen vuur kan de wonden dichtschroeien voor ze weer aangroeien." },
 
-  // ---- Hoofdstuk 3, Lijn Herakles — nog geen eigen tekeningen (net als de
-  // Leeuw van Nemea vóór Hoofdstuk 2 klaarstond); `img` wijst alvast naar het
-  // toekomstige bestand en valt tot dan terug op `icon` (spCombatSpriteHTML).
-  // Cerberus hergebruikt bewust het bestaande Boss Battle-bestand
-  // (assets/bosses/Cerberus.png) — geen losse koppen-bestanden beschikbaar,
-  // dus één enkele statische illustratie i.p.v. de Hydra-koppenstapeling.
-  centauren: { nm:"De Dronken Centaurenkudde", icon:"🐴", img:"assets/bosses/centauren.png", hp:50,
+  // ---- Hoofdstuk 3, Lijn Herakles ----
+  // Cerberus heeft, net als de Hydra, geen losse koppen-bestanden — één
+  // enkele statische illustratie i.p.v. de Hydra-koppenstapeling.
+  centauren: { nm:"De Dronken Centaurenkudde", icon:"🐴", img:"assets/chronica/combat/centauren.png", hp:50,
     intro:"Een woeste kudde centauren, dronken van Pholus' gedeelde wijnkruik en meteen vijandig tegenover elke indringer." },
-  kretenzische_stier: { nm:"De Kretenzische Stier", icon:"🐂", img:"assets/bosses/kretenzische_stier.png", hp:55,
+  kretenzische_stier: { nm:"De Kretenzische Stier", icon:"🐂", img:"assets/chronica/combat/kretenzische_stier.png", hp:55,
     intro:"Een reusachtige, door Neptunus razend gemaakte stier die al jaren de akkers van Kreta verwoest." },
-  merries_van_diomedes: { nm:"De Merries van Diomedes", icon:"🐎", img:"assets/bosses/merries_van_diomedes.png", hp:55,
+  merries_van_diomedes: { nm:"De Merries van Diomedes", icon:"🐎", img:"assets/chronica/combat/merries_van_diomedes.png", hp:55,
     intro:"Vier merries, afgericht op mensenvlees door hun eigen meester — enkel honger drijft hun waanzin aan." },
-  amazones: { nm:"De Amazones", icon:"🏹", img:"assets/bosses/amazones.png", hp:60,
+  amazones: { nm:"De Amazones", icon:"🏹", img:"assets/chronica/combat/amazones.png", hp:60,
     intro:"Hippolytes trouwe strijdsters, opgehitst door een gerucht dat Juno zelf verspreidde — een gevecht dat nooit had moeten plaatsvinden." },
-  geryon: { nm:"Geryon", icon:"👹", img:"assets/bosses/geryon.png", hp:70,
+  geryon: { nm:"Geryon", icon:"👹", img:"assets/chronica/combat/geryon.png", hp:70,
     intro:"Een reus met drie gekoppelde lichamen op één paar benen, die zijn kudde rood vee met drievoudige kracht verdedigt." },
-  cerberus: { nm:"Cerberus", icon:"🐕", img:"assets/bosses/Cerberus.png", hp:80,
+  cerberus: { nm:"Cerberus", icon:"🐕", img:"assets/chronica/combat/cerberus.png", hp:80,
     intro:"De driekoppige hond die de poort van de onderwereld bewaakt — de zwaarste van alle twaalf beproevingen, en de enige die met blote handen gewonnen moet worden." },
 
   // ---- Hoofdstuk 4, Lijn Theseus ----
-  minotaurus: { nm:"De Minotaurus", icon:"🐃", img:"assets/bosses/minotaurus.png", hp:65,
+  minotaurus: { nm:"De Minotaurus", icon:"🐃", img:"assets/chronica/combat/minotaurus.png", hp:65,
     intro:"Half mens, half stier — het gevolg van een oude, gebroken belofte van koning Minos — al negen jaar gevoed met Atheens offervlees, en vandaag voor het eerst tegenover iemand die niet van plan is zich te laten offeren." },
 
   // ---- Hoofdstuk 5 — Het Gulden Vlies ----
-  amycus: { nm:"Amycus", icon:"🥊", img:"assets/bosses/amycus.png", hp:55,
+  amycus: { nm:"Amycus", icon:"🥊", img:"assets/chronica/combat/amycus.png", hp:55,
     intro:"De reusachtige koning van de Bebryciërs, die elke vreemdeling die aan land komt verplicht tot een bokswedstrijd daagt — een uitdaging die tot nu toe niemand heeft overleefd." },
-  drakon_vlies: { nm:"De Draak van Colchis", icon:"🐉", img:"assets/bosses/drakon_vlies.png", hp:75,
+  drakon_vlies: { nm:"De Draak van Colchis", icon:"🐉", img:"assets/chronica/combat/drakon_vlies.png", hp:75,
     intro:"Een nooit slapende draak, al jaren opgerold rond de boom waar het Gulden Vlies hangt — koning Aeëtes' laatste en zwaarste verdediging." },
 
   // ---- Hoofdstuk 6 — De Vloek van Thebe ----
-  laodamas: { nm:"Laodamas", icon:"🛡️", img:"assets/bosses/laodamas.png", hp:60,
+  laodamas: { nm:"Laodamas", icon:"🛡️", img:"assets/chronica/combat/laodamas.png", hp:60,
     intro:"De zoon van Eteokles en de laatste verdediger van Thebe's poorten — vastbesloten zijn vaders stad niet te verliezen aan de zonen van de mannen die zijn vader ooit versloeg." },
 
   // ---- Hoofdstuk 8 — De Wrok van Achilles ----
-  trojaanse_voorhoede: { nm:"De Trojaanse Voorhoede", icon:"🔥", img:"assets/bosses/trojaanse_voorhoede.png", hp:50,
+  trojaanse_voorhoede: { nm:"De Trojaanse Voorhoede", icon:"🔥", img:"assets/chronica/combat/trojaanse_voorhoede.png", hp:50,
     intro:"Een groep Trojaanse strijders, vlak bij de Griekse schepen, met fakkels in de hand — als de wal nu breekt, staat de hele vloot in brand voor de avond valt." },
-  hektor: { nm:"Hector", icon:"⚔️", img:"assets/bosses/hektor.png", hp:90,
+  hektor: { nm:"Hector", icon:"⚔️", img:"assets/chronica/combat/hektor.png", hp:90,
     intro:"Troje's grootste verdediger, gedwongen door zijn eigen eer om te blijven staan — Athena, vermomd als zijn broer Deiphobus, heeft er net voor gezorgd dat hij niet meer kan vluchten." },
 
   // ---- Hoofdstuk 9 — Ilion in Vlammen ----
-  trojaanse_wachters: { nm:"De Laatste Wachters van Troje", icon:"🔥", img:"assets/bosses/trojaanse_wachters.png", hp:55,
+  trojaanse_wachters: { nm:"De Laatste Wachters van Troje", icon:"🔥", img:"assets/chronica/combat/trojaanse_wachters.png", hp:55,
     intro:"Een handvol dronken, half-wakkere verdedigers bij de poort — alles wat er nog over is van Troje's waakzaamheid, op de nacht dat het er het meest toe doet." },
 
   // ---- Hoofdstuk 12 — Odysseus' Wraak ----
-  vrijers_ithaka: { nm:"De Vrijers van Ithaka", icon:"🏹", img:"assets/bosses/vrijers_ithaka.png", hp:85,
+  vrijers_ithaka: { nm:"De Vrijers van Ithaka", icon:"🏹", img:"assets/chronica/combat/vrijers_ithaka.png", hp:85,
     intro:"Meer dan honderd mannen, drie jaar lang gewend aan een paleis dat niet van hen is — verrast, ongewapend, en voor het eerst tegenover de koning die ze allang dood waanden." },
 };
 
