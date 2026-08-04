@@ -5162,6 +5162,60 @@ of cliffhanger speelbaar is.
 
 ---
 
+### 7.50 REACTION/CHECK-laag + H10-grammaticatabel ingehaald op H10-13; campagne speeltest-klaar verklaard (2026-08-04)
+
+Tussentijds (2026-08-03/04, niet apart hierboven gelogd): Briseis kreeg een
+eigen stem (`CH8_003B`), vier eerder ontbrekende vrouwennamen (Hypsipyle,
+Ismene, Deianira, Phaedra) zijn in bestaande hoofdstukken verwerkt, en een
+tekstfout in de proloog-eretitels (Cavalerist/Hopliet) is gecorrigeerd met
+een eques-duiding — zie `CHRONICA_VROUWEN.md` en de geheugennotities voor
+het volledige verslag van die stappen.
+
+Op Gerbens verzoek daarna een laatste didactiek-audit: bleek dat Hoofdstuk
+10 t/m 13 **geen enkele** `REACTION:`- of `CHECK:`-instantie bevatten,
+tegen de staande "niet-retrofitten"-afspraak in (nieuwe hoofdstukken
+moeten deze twee mechanismen vanaf het begin meenemen, zie de
+Chronica-audit-baseline). Ook ontbrak, als enige grammatica-onderwerp in
+de hele campagne, een tabel-codex voor H10's Griekse stof (medium/passief/
+aoristus passief) — wel puzzels, geen naslagkaart.
+
+Ingehaald, chapter voor chapter:
+- **H10**: `codex_grammatica_ch10_grieks` (met table) toegevoegd; REACTION
+  op de twee bestaande Clementia/Severitas-clusters (Kikonen, Polyfemos-
+  grootspraak); 3 nieuwe CHECK's (lotoseters terugslepen, stilte onder de
+  rammen bij de ontsnapping, een drenkeling redden in Juno's storm).
+- **H11**: had nul Clementia/Severitas-clusters — 2 nieuwe oordeels-
+  momenten (Achilles' schim over roem-tegenover-een-leven, Anchises'
+  Rome-opdracht "sparen en neerslaan") met REACTION; 2 nieuwe CHECK's
+  (Cerberus ongezien passeren, weerstand bieden aan het Sirenenlied).
+- **H12**: had nul Clementia/Severitas-clusters — 2 nieuwe oordeels-
+  momenten (Penelope's twintig jaar wantrouwen, Romulus na Remus' dood)
+  met REACTION; 2 nieuwe CHECK's (de zijdeur barricaderen vlak voor de
+  afrekening, het vogel-augurium zelf volgen).
+- **H13**: REACTION toegevoegd aan de bestaande Horatius/Horatia-cluster +
+  een nieuw oordeelsmoment over Athena's straf van Arachne; 2 nieuwe
+  CHECK's (vee redden voor Poseidons vloed, de afstand tussen de
+  Curiatii inschatten).
+
+Patroon steeds hetzelfde: waar een scène al PUZZLE/COMBAT droeg, ging de
+CHECK naar een nieuwe, aangrenzende scène (nooit gecombineerd, zie de
+bestaande CHECK-regel); REACTION ging altijd naar een personage dat
+al **aanwezig** is in de scène (Odysseus, Achilles, Anchises, Penelope,
+Romulus, Horatius, Athena) — nooit een willekeurige naam.
+
+**Validatie**: `node --check` + `validate_chronica.js` → 0 fouten, scène-
+aantal 740 → 792. Live getest na cache-busting-versie 20260804b: REACTION-
+toast bevestigd correct (juiste NPC-naam + bijpassende tekst per
+Clementia/Severitas/Neutraal-keuze), een CHECK-worp daadwerkelijk
+uitgevoerd en correct doorgeschakeld naar de bijpassende uitkomstscène.
+
+**Hiermee verklaart Gerben Hoofdstuk 0 (Proloog) t/m 13 speeltest-klaar
+voor de klas** — didactisch (grammatica volledig + REACTION/CHECK-laag
+overal aanwezig), narratief (geen skelet/cliffhanger meer) en qua
+vrouwelijke representatie (zie `CHRONICA_VROUWEN.md`).
+
+---
+
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
 
 Tweede laag bovenop de bestaande delayed-consequences/Latijn-als-skill-check-
