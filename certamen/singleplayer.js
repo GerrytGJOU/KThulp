@@ -2096,7 +2096,7 @@ function spCombatSpriteHTML(enemy){
       `<img src="${esc(h)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain">`
     ).join("");
   }
-  return `<div style="position:relative;width:140px;height:140px;margin:0 auto">
+  return `<div style="position:relative;width:min(260px,70vw);aspect-ratio:1/1;margin:0 auto">
     <img src="${esc(enemy.img)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain"
       onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${esc(enemy.icon)}</span>'">
     ${headsHTML}
