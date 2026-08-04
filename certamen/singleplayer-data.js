@@ -69,9 +69,9 @@ const SP_TITLES = [
   { id:"boogschutter_orakel", nm:"Boogschutter van het Orakel", icon:"eagle", cat:"chronica", secret:true,
     ds:"Koos de boog toen het Orakel van Chronos ontwaakte.", bonus:null },
   { id:"hopliet_orakel", nm:"Hopliet van het Orakel", icon:"shield", cat:"chronica", secret:true,
-    ds:"Koos het schild toen het Orakel van Chronos ontwaakte.", bonus:null },
+    ds:"Koos de speer toen het Orakel van Chronos ontwaakte.", bonus:null },
   { id:"cavalerist_orakel", nm:"Cavalerist van het Orakel", icon:"column", cat:"chronica", secret:true,
-    ds:"Koos de teugels toen het Orakel van Chronos ontwaakte.", bonus:null },
+    ds:"Koos de ruitersporen toen het Orakel van Chronos ontwaakte.", bonus:null },
   { id:"bewaarder_herinnering", nm:"Bewaarder van de Herinnering", icon:"star", cat:"chronica", secret:true,
     ds:"Ontcijferde het Orakel van Chronos en voltooide de proloog.",
     bonus:{ scope:["battle","boss","totalwar"], type:"be_on_fast", val:1,
@@ -3218,6 +3218,8 @@ De Cavalerist
 
 TEXT:
 Je tilt de ruitersporen op; ze zijn lichter dan je had verwacht. In je handen voel je meteen waarvoor ze gemaakt zijn — voor snelheid, voor de aanval die begint voordat de vijand hem ziet aankomen. Beweging. Overzicht. Als eerste zijn. Vanaf nu draagt je lichaam die belofte met zich mee.
+
+In het Rome dat je nog zult leren kennen, is een ruiter niet zomaar een soldaat te paard: de eques behoort tot een eigen, welvarende stand — rijk genoeg om een eigen paard te onderhouden — en wordt daarom evengoed verwacht te leiden als te vechten. Overtuigen, gezag laten gelden, een groep overzien voordat het gevecht zelfs maar begint: dat hoort er net zo bij als de aanval zelf.
 
 REWARD:
 class=Cavalerist; traits=mobiliteit,tactiek,snelheid
