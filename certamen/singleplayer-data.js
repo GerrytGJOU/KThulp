@@ -2027,6 +2027,13 @@ const SP_CODEX_ENTRIES = {
             ["dies, diei (dag)","5e (e-stam)","die (abl. enk.)"],
             ["hic (deze, dit)","voornaamwoord","hic homo — deze man"],
             ["ipse (zelf)","voornaamwoord","Aeneas ipse — Aeneas zelf"]] } },
+  codex_grammatica_ch10_grieks: { cat:"grammatica", titel:"Grammatica: medium, passief, aoristus passief",
+    tekst:"Het Grieks heeft, naast actief, twee extra 'stemmen'. Het medium beschrijft een handeling die de onderwerp voor zichzelf of aan zichzelf verricht (λύομαι, 'ik maak mezelf los' — tegenover actief λύω, 'ik maak los'). Het passief beschrijft een handeling die het onderwerp ONDERGAAT (λύομαι kan, afhankelijk van de context, ook 'ik word losgemaakt' betekenen — medium en passief delen dezelfde vormen in praesens/imperfectum). In de aoristus lopen medium en passief wél uit elkaar: de aoristus passief krijgt een eigen kenmerk, -θη-, tussen stam en uitgang (ἐλύθην, 'ik werd losgemaakt').",
+    table:{ headers:["Vorm","Voorbeeld","Vertaling"],
+      rows:[["Medium (praesens)","λύομαι","ik maak mezelf los / ik word losgemaakt"],
+            ["Passief (praesens, zelfde vorm)","λύομαι","ik word losgemaakt"],
+            ["Aoristus passief (kenmerk -θη-)","ἐλύθην","ik werd losgemaakt"],
+            ["Aoristus passief, 3e pers. enk.","ἐλύθη","hij/zij werd losgemaakt"]] } },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -2670,6 +2677,55 @@ const SP_CHECKS = {
     deels:{ target:"CH9_TRO_014_DEELS" },
     gefaald:{ target:"CH9_TRO_014_GEFAALD" },
     kritiek:{ target:"CH9_TRO_014_KRITIEK" } },
+  // ---- Hoofdstuk 10 ----
+  ch10_ody_lotos_terugslepen: { stat:"vis", dc:13,
+    volledig:{ target:"CH10_ODY_003Q_VOL" },
+    deels:{ target:"CH10_ODY_003Q_DEELS" },
+    gefaald:{ target:"CH10_ODY_003Q_GEFAALD" },
+    kritiek:{ target:"CH10_ODY_003Q_KRITIEK" } },
+  ch10_ody_rammen_stilte: { stat:"agilitas", dc:15,
+    volledig:{ target:"CH10_ODY_006PQ_VOL" },
+    deels:{ target:"CH10_ODY_006PQ_DEELS" },
+    gefaald:{ target:"CH10_ODY_006PQ_GEFAALD" },
+    kritiek:{ target:"CH10_ODY_006PQ_KRITIEK" } },
+  ch10_aen_storm_redding: { stat:"vis", dc:13,
+    volledig:{ target:"CH10_AEN_008Q_VOL" },
+    deels:{ target:"CH10_AEN_008Q_DEELS" },
+    gefaald:{ target:"CH10_AEN_008Q_GEFAALD" },
+    kritiek:{ target:"CH10_AEN_008Q_KRITIEK" } },
+  // ---- Hoofdstuk 11 ----
+  ch11_aen_cerberus_langs: { stat:"agilitas", dc:15,
+    volledig:{ target:"CH11_AEN_007Q_VOL" },
+    deels:{ target:"CH11_AEN_007Q_DEELS" },
+    gefaald:{ target:"CH11_AEN_007Q_GEFAALD" },
+    kritiek:{ target:"CH11_AEN_007Q_KRITIEK" } },
+  ch11_ody_sirenenlied_weerstaan: { stat:"prudentia", dc:15,
+    volledig:{ target:"CH11_ODY_010Q_VOL" },
+    deels:{ target:"CH11_ODY_010Q_DEELS" },
+    gefaald:{ target:"CH11_ODY_010Q_GEFAALD" },
+    kritiek:{ target:"CH11_ODY_010Q_KRITIEK" } },
+  // ---- Hoofdstuk 12 ----
+  ch12_ody_zijdeur_barricade: { stat:"vis", dc:13,
+    volledig:{ target:"CH12_ODY_007Q_VOL" },
+    deels:{ target:"CH12_ODY_007Q_DEELS" },
+    gefaald:{ target:"CH12_ODY_007Q_GEFAALD" },
+    kritiek:{ target:"CH12_ODY_007Q_KRITIEK" } },
+  ch12_lat_vogels_spotten: { stat:"prudentia", dc:15,
+    volledig:{ target:"CH12_LAT_009Q_VOL" },
+    deels:{ target:"CH12_LAT_009Q_DEELS" },
+    gefaald:{ target:"CH12_LAT_009Q_GEFAALD" },
+    kritiek:{ target:"CH12_LAT_009Q_KRITIEK" } },
+  // ---- Hoofdstuk 13 ----
+  ch13_gre_poseidon_vloed: { stat:"vis", dc:13,
+    volledig:{ target:"CH13_GRE_004BQ_VOL" },
+    deels:{ target:"CH13_GRE_004BQ_DEELS" },
+    gefaald:{ target:"CH13_GRE_004BQ_GEFAALD" },
+    kritiek:{ target:"CH13_GRE_004BQ_KRITIEK" } },
+  ch13_lat_curiatii_afstand: { stat:"prudentia", dc:15,
+    volledig:{ target:"CH13_LAT_002Q_VOL" },
+    deels:{ target:"CH13_LAT_002Q_DEELS" },
+    gefaald:{ target:"CH13_LAT_002Q_GEFAALD" },
+    kritiek:{ target:"CH13_LAT_002Q_KRITIEK" } },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -14777,7 +14833,7 @@ TEXT:
 De Boodschapper wijst naar twee nieuwe scheuren in de werkelijkheid, ditmaal ver uit elkaar — niet naast elkaar zoals bij Io en Herakles, maar aan twee tegenovergestelde einden van dezelfde zee. "Volg Odysseus, en je ziet hoe lang een thuiskomst kan duren wanneer de goden zelf tegenwerken. Volg Aeneas, en je ziet wat het kost om, zonder ooit gevraagd te hebben, zelf een nieuw thuis te moeten worden."
 
 CODEX:
-codex_grammatica_ch10_naamwoord_groep45
+codex_grammatica_ch10_naamwoord_groep45, codex_grammatica_ch10_grieks
 
 CHOICES:
 
@@ -14825,6 +14881,12 @@ ch10_ody_kikonen.png
 
 CODEX:
 codex_kikonen
+
+REACTION:
+odysseus
+CLEMENTIA: Odysseus knikt vermoeid. "Tien jaar wachten maakt iedereen ongeduldig — ikzelf niet uitgezonderd, al zal ik dat mijn mannen nooit hardop toegeven."
+SEVERITAS: Odysseus' kaak verstrakt. "Ik zei hun te vertrekken. Sommige lessen leert een mens pas na het verlies van bloed."
+NEUTRAL: Odysseus zwijgt een moment. "Aanvoerder zijn betekent zelden dat je ieder afzonderlijk verwijt kunt voorkomen — alleen dat je ermee moet leven."
 
 CHOICES:
 
@@ -14879,6 +14941,75 @@ puzzle_ch10_ody_medium
 
 CODEX:
 codex_lotoseters
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_003Q
+
+END
+
+=== SCENE: CH10_ODY_003Q ===
+
+TITLE:
+Terugslepen
+
+TEXT:
+De verkenner spartelt en huilt als een kind wanneer zijn eigen makkers hem van de lotosbloemen wegtrekken — zijn ogen nog altijd glazig van een genot dat niemand aan boord ooit heeft geproefd. Jij bent degene die mee moet aanpakken, voor hij zich weer losrukt en terugrent naar het veld.
+
+CHECK:
+ch10_ody_lotos_terugslepen
+
+END
+
+=== SCENE: CH10_ODY_003Q_VOL ===
+
+TITLE:
+Onwrikbare Grip
+
+TEXT:
+Je grip is onwrikbaar — de verkenner heeft geen schijn van kans om los te komen, hoe hard hij ook tegenstribbelt. Binnen een paar passen staat hij weer aan boord, tegenstribbelend maar veilig.
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_003B
+
+END
+
+=== SCENE: CH10_ODY_003Q_DEELS ===
+
+TITLE:
+Bijna Losgeglipt
+
+TEXT:
+Hij glipt bijna los, maar je weet hem op het laatste moment weer vast te grijpen — genoeg om hem, met de hulp van een tweede paar handen, alsnog aan boord te krijgen.
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_003B
+
+END
+
+=== SCENE: CH10_ODY_003Q_GEFAALD ===
+
+TITLE:
+Terug het Veld in
+
+TEXT:
+Hij rukt zich los en rent terug naar het veld — het kost de hele ploeg extra tijd en moeite om hem alsnog, schoppend en gillend, opnieuw te grijpen.
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_003B
+
+END
+
+=== SCENE: CH10_ODY_003Q_KRITIEK ===
+
+TITLE:
+Een Schop tegen je Scheen
+
+TEXT:
+Hij trapt hard tegen je scheen terwijl hij zich lostrekt, en ontsnapt bijna helemaal — pas op het allerlaatste moment grijpen twee anderen hem alsnog vast.
 
 CHOICES:
 
@@ -15003,6 +15134,75 @@ puzzle_ch10_ody_aoristus1
 
 CHOICES:
 
+* Ga verder -> CH10_ODY_006PQ
+
+END
+
+=== SCENE: CH10_ODY_006PQ ===
+
+TITLE:
+Onder de Buiken
+
+TEXT:
+Vastgebonden onder de buiken van de rammen, op een handbreedte van Polyphemus' tastende vingers, moet je doodstil blijven terwijl hij elke rug controleert die naar buiten gaat — één verkeerde beweging, één geluid op het verkeerde moment, en de list valt door de mand.
+
+CHECK:
+ch10_ody_rammen_stilte
+
+END
+
+=== SCENE: CH10_ODY_006PQ_VOL ===
+
+TITLE:
+Volmaakt Stil
+
+TEXT:
+Je blijft volmaakt stil, je adem afgestemd op het ritme van de ram onder je — Polyphemus' hand raakt rakelings langs je zonder ooit te aarzelen.
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_006Q
+
+END
+
+=== SCENE: CH10_ODY_006PQ_DEELS ===
+
+TITLE:
+Net op Tijd
+
+TEXT:
+Je verschuift een fractie te vroeg, maar de ram zelf beweegt op precies hetzelfde moment — genoeg om het verschil te maskeren.
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_006Q
+
+END
+
+=== SCENE: CH10_ODY_006PQ_GEFAALD ===
+
+TITLE:
+Een Trillende Spier
+
+TEXT:
+Je spieren trillen van de inspanning om stil te blijven, zichtbaar genoeg dat Polyphemus zijn hand een fractie langer op die ene rug laat rusten — maar niet lang genoeg om zeker te weten wat hij voelde.
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_006Q
+
+END
+
+=== SCENE: CH10_ODY_006PQ_KRITIEK ===
+
+TITLE:
+Een Kramp
+
+TEXT:
+Een kramp schiet door je been en je verschuift merkbaar — Polyphemus' hand verstart een halve tel boven je rug, maar de ram zelf schrikt op tijd weg voor hij kan toegrijpen.
+
+CHOICES:
+
 * Ga verder -> CH10_ODY_006Q
 
 END
@@ -15022,6 +15222,12 @@ ch10_ody_ontsnapping_rammen.png
 
 PERSON:
 polyfemos:full
+
+REACTION:
+odysseus
+CLEMENTIA: Odysseus glimlacht breed. "Een naam is alles wat een held overhoudt zodra de rest wordt vergeten — die geef ik niet zomaar op."
+SEVERITAS: Odysseus' glimlach verstrakt, even maar. "Ik weet het. Ik wist het al terwijl ik het riep — en riep het toch."
+NEUTRAL: Odysseus haalt zijn schouders op. "Een naam roepen kost niets. Wat het hierna gaat kosten, weet ik nog niet."
 
 CHOICES:
 
@@ -15368,12 +15574,95 @@ Juno's Storm
 TEXT:
 Juno, koningin der goden, is Aeneas nooit vergeten — noch zijn afkomst uit Troje, de stad van het Parisoordeel waar zij ooit verloor, noch de profetie dat zijn nakomelingen ooit haar geliefde Carthago zullen verwoesten. Zodra de vloot van Sicilië vertrekt, zoekt ze Aeolus zelf op — dezelfde windgod die ooit Odysseus zijn kans op een snelle thuiskomst gaf — en koopt zijn hulp met de belofte van een nimf als bruid.
 
-Aeolus ontketent alle winden tegelijk. Schepen breken uiteen, mannen verdrinken voor Aeneas' eigen ogen, en de hele vloot dreigt binnen een uur te verdwijnen — tot Neptunus, die de chaos op zijn eigen zee voelt zonder ooit om toestemming gevraagd te zijn, zelf ingrijpt. Met één enkel bevel aan de golven en de winden sust hij de storm en jaagt de winden terug naar hun grot, nog nagrommend over goden die zich met zíjn zee bemoeien.
-
-Wat overblijft van de vloot — verspreid, gehavend, een paar schepen kwijt — drijft af naar een onbekende kust in het westen. Niemand aan boord weet nog waar ze zijn, alleen dat het land vreemd genoeg gastvrij oogt na alles wat eraan voorafging.
+Aeolus ontketent alle winden tegelijk. Schepen breken uiteen, mannen verdrinken voor Aeneas' eigen ogen, en de hele vloot dreigt binnen een uur te verdwijnen.
 
 IMAGE:
 ch10_aen_storm_juno.png
+
+CHOICES:
+
+* Zie hoe de bemanning de storm probeert te overleven -> CH10_AEN_008Q
+
+END
+
+=== SCENE: CH10_AEN_008Q ===
+
+TITLE:
+Een Man Overboord
+
+TEXT:
+Vlak naast je grijpt een golf een van de roeiers van het dek — zijn hand nog even zichtbaar boven het schuim voor hij dreigt te verdwijnen. Jij bent het dichtst genoeg bij om nog iets te proberen.
+
+CHECK:
+ch10_aen_storm_redding
+
+END
+
+=== SCENE: CH10_AEN_008Q_VOL ===
+
+TITLE:
+Net op Tijd Gegrepen
+
+TEXT:
+Je grijpt zijn arm net op tijd en trekt hem, tegen de kracht van de volgende golf in, terug aan boord — buiten adem, maar veilig.
+
+CHOICES:
+
+* Ga verder -> CH10_AEN_008B
+
+END
+
+=== SCENE: CH10_AEN_008Q_DEELS ===
+
+TITLE:
+Met Hulp Gered
+
+TEXT:
+Je krijgt zijn pols te pakken, maar de golf trekt jullie allebei bijna overboord — pas met de hulp van een ander paar handen krijg je hem alsnog binnenboord.
+
+CHOICES:
+
+* Ga verder -> CH10_AEN_008B
+
+END
+
+=== SCENE: CH10_AEN_008Q_GEFAALD ===
+
+TITLE:
+Op een Haar Na Gemist
+
+TEXT:
+Je mist zijn hand op een haar na — pas de volgende golf spoelt hem, half verdronken maar levend, toevallig weer dicht genoeg bij het schip om alsnog gegrepen te worden.
+
+CHOICES:
+
+* Ga verder -> CH10_AEN_008B
+
+END
+
+=== SCENE: CH10_AEN_008Q_KRITIEK ===
+
+TITLE:
+Bijna Zelf Overboord
+
+TEXT:
+Je slaat zelf bijna overboord in de poging — een andere bemanningsgenoot grijpt jullie allebei op het laatste moment vast, terwijl de roeier zelf net op tijd een lijn weet te grijpen.
+
+CHOICES:
+
+* Ga verder -> CH10_AEN_008B
+
+END
+
+=== SCENE: CH10_AEN_008B ===
+
+TITLE:
+Neptunus Grijpt In
+
+TEXT:
+Neptunus, die de chaos op zijn eigen zee voelt zonder ooit om toestemming gevraagd te zijn, grijpt zelf in. Met één enkel bevel aan de golven en de winden sust hij de storm en jaagt de winden terug naar hun grot, nog nagrommend over goden die zich met zíjn zee bemoeien.
+
+Wat overblijft van de vloot — verspreid, gehavend, een paar schepen kwijt — drijft af naar een onbekende kust in het westen. Niemand aan boord weet nog waar ze zijn, alleen dat het land vreemd genoeg gastvrij oogt na alles wat eraan voorafging.
 
 CODEX:
 codex_juno_storm
@@ -15983,6 +16272,40 @@ CODEX:
 codex_reunie_agamemnon_achilles
 
 CHOICES:
+* Overweeg wat Achilles zojuist zei -> CH11_ODY_008R
+
+END
+
+=== SCENE: CH11_ODY_008R ===
+
+TITLE:
+Roem tegenover een Leven
+
+TEXT:
+Achilles koos ooit, wetend wat het hem zou kosten, een kort leven vol roem boven een lang leven in de vergetelheid — en zegt je hier, als schim, zonder omwegen dat hij daar nu anders over denkt.
+
+REACTION:
+achilles
+CLEMENTIA: Achilles' schim knikt langzaam. "De doden hebben de luxe van eerlijkheid. De levenden meestal niet — geniet van dat verschil zolang je nog kunt."
+SEVERITAS: Achilles' schim kijkt je recht aan. "Makkelijk gezegd voor wie zijn keuze nog niet heeft hoeven maken. Ik dacht ook dat ik wist wat ik koos."
+NEUTRAL: Achilles' schim zwijgt een moment. "Misschien is geen van beide antwoorden juist voor iedereen — alleen voor wie op het moment zelf moet kiezen."
+
+CHOICES:
+* Vind dat roem, achteraf, weinig waard blijkt als de prijs een heel leven is [CLEMENTIA] -> CH11_ODY_008B
+* Erken dat Achilles zijn keuze zelf maakte, en de gevolgen ervan nu draagt [SEVERITAS] -> CH11_ODY_008B
+* Twijfel of iemand dit ooit vooraf goed kan inschatten [NEUTRAL] -> CH11_ODY_008B
+
+END
+
+=== SCENE: CH11_ODY_008B ===
+
+TITLE:
+Verder tussen de Schimmen
+
+TEXT:
+Odysseus laat Achilles' woorden op zich inwerken, zonder er nog iets tegenin te brengen, en vervolgt zijn weg tussen de eindeloze rijen schimmen.
+
+CHOICES:
 * Zie wie zich, zwijgend, nog het verst weghoudt [REQUIRE:taalspoor=grieks] -> CH11_ODY_009
 * Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_007
 
@@ -16044,8 +16367,71 @@ TITLE:
 Het Rijk van de Doden
 
 TEXT:
-Charon, de norse veerman van de Styx, weigert eerst iedereen zonder behoorlijk graf — en aan de oever treft Aeneas meteen Palinurus' eigen schim, nog steeds onbegraven, smekend om dezelfde gunst die Elpenor ooit aan Odysseus vroeg. De Sibylle belooft dat zijn dood ooit alsnog geëerd zal worden, ook al kan niemand hem nu helpen. Een honingkoek sust Cerberus' drie koppen in slaap, en de Gouden Tak koopt hun doortocht.
+Charon, de norse veerman van de Styx, weigert eerst iedereen zonder behoorlijk graf — en aan de oever treft Aeneas meteen Palinurus' eigen schim, nog steeds onbegraven, smekend om dezelfde gunst die Elpenor ooit aan Odysseus vroeg. De Sibylle belooft dat zijn dood ooit alsnog geëerd zal worden, ook al kan niemand hem nu helpen. Een honingkoek sust Cerberus' drie koppen in slaap — maar niet allebei de resterende koppen tegelijk, en het gezelschap moet er ongezien voorbij voor de derde weer ontwaakt.
 
+CHECK:
+ch11_aen_cerberus_langs
+
+END
+
+=== SCENE: CH11_AEN_007Q_VOL ===
+
+TITLE:
+Ongezien Voorbij
+
+TEXT:
+Je leidt het gezelschap in één vloeiende beweging langs de slapende koppen — geen enkele reageert, zelfs niet met een oor dat opspitst.
+
+CHOICES:
+* Ga verder -> CH11_AEN_007B
+
+END
+
+=== SCENE: CH11_AEN_007Q_DEELS ===
+
+TITLE:
+Bijna Ongemerkt
+
+TEXT:
+Eén kop draait onrustig in zijn slaap terwijl jullie passeren, maar wordt niet echt wakker — jullie zijn al voorbij voor het beest goed en wel kan reageren.
+
+CHOICES:
+* Ga verder -> CH11_AEN_007B
+
+END
+
+=== SCENE: CH11_AEN_007Q_GEFAALD ===
+
+TITLE:
+Een Halfslachtig Gegrom
+
+TEXT:
+Een van de koppen gromt zacht en opent een oog — de Sibylle fluistert snel een tweede, kleinere gunstformule, genoeg om het beest weer te doen wegzakken voor het volledig ontwaakt.
+
+CHOICES:
+* Ga verder -> CH11_AEN_007B
+
+END
+
+=== SCENE: CH11_AEN_007Q_KRITIEK ===
+
+TITLE:
+Bijna Ontdekt
+
+TEXT:
+Alle drie de koppen schrikken tegelijk op, en voor een afschuwelijke seconde lijkt de doortocht mislukt — tot de laatste kruimels honingkoek alsnog hun werk doen en het beest, grommend, weer in slaap zakt.
+
+CHOICES:
+* Ga verder -> CH11_AEN_007B
+
+END
+
+=== SCENE: CH11_AEN_007B ===
+
+TITLE:
+Dido's Schim
+
+TEXT:
 Voorbij de eerste, treurige velden — waar wie stierf voor de liefde eeuwig ronddwaalt — herkent Aeneas een schim die hij nooit had verwacht hier te ontmoeten: Dido zelf, nog altijd met de wond in haar borst zichtbaar. Hij spreekt haar aan, zweert dat hij nooit uit eigen wil vertrok, dat de goden hem dwongen. Ze antwoordt geen woord — draait zich zwijgend om, en zoekt de schaduw van haar eerste man Sychaeus weer op, precies zoals Ajax zich net van Odysseus afwendde.
 
 IMAGE:
@@ -16083,7 +16469,28 @@ CODEX:
 codex_anchises_stoet
 
 CHOICES:
-* Ga verder -> CH11_SCHIMMEN
+* Overweeg wat Anchises zojuist als levensopdracht formuleerde -> CH11_AEN_008R
+
+END
+
+=== SCENE: CH11_AEN_008R ===
+
+TITLE:
+Sparen en Neerslaan
+
+TEXT:
+"De onderworpenen sparen en de hoogmoedigen neerslaan" — Anchises' eigen woorden blijven hangen, een mooie regel die, zoals alle mooie regels over macht, meer ruimte laat voor uitleg dan hij op het eerste gehoor lijkt te bieden.
+
+REACTION:
+anchises
+CLEMENTIA: Anchises' schim glimlacht vermoeid. "Elke generatie zal zichzelf ervan overtuigen dat zij precies weet wie hoogmoedig genoeg is om neer te slaan. Dat is nu eenmaal hoe macht zichzelf altijd heeft gerechtvaardigd."
+SEVERITAS: Anchises' schim knikt onbewogen. "Vrede door wetten is nog altijd beter dan geen vrede. Rome zal daar niet als enige rijk ooit een oordeel over vellen."
+NEUTRAL: Anchises' schim zwijgt en laat de stoet ongeboren zielen voor zich spreken — wie van hen dit zullen waarmaken, en wie het zullen verraden, ligt nog te ver in de toekomst om nu al te wegen.
+
+CHOICES:
+* Vind het een gevaarlijk vrijbrief, hoe nobel de woorden ook klinken [SEVERITAS] -> CH11_SCHIMMEN
+* Zie er vooral een oprechte poging in om macht aan verantwoordelijkheid te binden [CLEMENTIA] -> CH11_SCHIMMEN
+* Wacht liever af wat Rome's nakomelingen er werkelijk van zullen maken [NEUTRAL] -> CH11_SCHIMMEN
 
 END
 
@@ -16145,8 +16552,71 @@ De Sirenen en de Zeeëngte
 TEXT:
 Terug bij Aeaea geeft Kirke, zoals beloofd, haar laatste raad: voorbij haar kust liggen de Sirenen, wier lied geen enkele zeeman ooit heeft weerstaan — en verderop een zeeëngte waar Skylla, een zeemonster met zes koppen, en Charybdis, een dodelijke draaikolk, elkaar recht tegenover liggen.
 
-Odysseus stopt de oren van zijn mannen met bijenwas, maar laat zich zelf, nieuwsgierig als altijd, vastbinden aan de mast om het Sirenenlied wél te horen — en smeekt tijdens het voorbijvaren, buiten zichzelf van verlangen, om losgemaakt te worden. Zijn mannen, doof voor zijn stem net als voor het lied, binden hem juist steviger vast, precies zoals hij hun vooraf had opgedragen.
+Odysseus stopt de oren van zijn mannen met bijenwas, maar laat zich zelf, nieuwsgierig als altijd, vastbinden aan de mast om het Sirenenlied wél te horen. Jouw oren zijn niet gestopt — jij hoort het lied net zo onweerstaanbaar als hij, en moet zelf weerstand bieden aan de drang om zijn touwen los te maken.
 
+CHECK:
+ch11_ody_sirenenlied_weerstaan
+
+END
+
+=== SCENE: CH11_ODY_010Q_VOL ===
+
+TITLE:
+Doof voor de Verleiding
+
+TEXT:
+Je grijpt je eigen handen ineen en houdt vast aan wat je vooraf beloofde — het lied raakt je, maar buigt je niet. Odysseus smeekt, buiten zichzelf van verlangen, om losgemaakt te worden; jij, net als de anderen, bindt hem juist steviger vast.
+
+CHOICES:
+* Ga verder -> CH11_ODY_010B
+
+END
+
+=== SCENE: CH11_ODY_010Q_DEELS ===
+
+TITLE:
+Bijna Gezwicht
+
+TEXT:
+Je hand beweegt al naar het touw voor je jezelf herpakt — een korte aarzeling die niemand anders opmerkt, maar die jij zelf voelt als een bijna-falen.
+
+CHOICES:
+* Ga verder -> CH11_ODY_010B
+
+END
+
+=== SCENE: CH11_ODY_010Q_GEFAALD ===
+
+TITLE:
+Eén Knoop Losser
+
+TEXT:
+Je maakt, voor je het zelf goed beseft, één knoop losser dan bedoeld — een andere roeier merkt het op tijd en trekt hem weer strak voor het verschil ertoe doet.
+
+CHOICES:
+* Ga verder -> CH11_ODY_010B
+
+END
+
+=== SCENE: CH11_ODY_010Q_KRITIEK ===
+
+TITLE:
+Bijna Losgemaakt
+
+TEXT:
+Het lied grijpt je even volledig te pakken — je handen zijn al aan het touw voor Eurylochus je hardhandig wegtrekt, net op tijd, terwijl het schip de Sirenen eindelijk achter zich laat.
+
+CHOICES:
+* Ga verder -> CH11_ODY_010B
+
+END
+
+=== SCENE: CH11_ODY_010B ===
+
+TITLE:
+Skylla en Charybdis
+
+TEXT:
 Bij de zeeëngte kiest Odysseus bewust voor Skylla boven Charybdis — liever zes man verliezen aan het monster dan het hele schip aan de draaikolk. Zes van zijn beste roeiers verdwijnen, schreeuwend, in Skylla's muil, terwijl de rest van de vloot ongedeerd doorvaart.
 
 IMAGE:
@@ -16572,6 +17042,71 @@ CODEX:
 codex_romulus_remus_augurium
 
 CHOICES:
+* Speur zelf de lucht af, naast de broers -> CH12_LAT_009Q
+
+END
+
+=== SCENE: CH12_LAT_009Q ===
+
+TITLE:
+De Lucht Afspeuren
+
+TEXT:
+Terwijl Romulus en Remus allebei naar de horizon staren, tuur jij mee — het soort teken waarop de stichting van een stad rust, wil je met eigen ogen zien, niet enkel navertellen.
+
+CHECK:
+ch12_lat_vogels_spotten
+
+END
+
+=== SCENE: CH12_LAT_009Q_VOL ===
+
+TITLE:
+Zelf Gezien
+
+TEXT:
+Je ziet zelf, scherp en onmiskenbaar, hoe de tweede zwerm — twaalf gieren, geen twijfel mogelijk — over de Palatijn scheert, precies op het moment dat Romulus ernaar wijst.
+
+CHOICES:
+* Zie hoe de broers het geschil beslechten -> CH12_LAT_010
+
+END
+
+=== SCENE: CH12_LAT_009Q_DEELS ===
+
+TITLE:
+Bijna Bijgehouden
+
+TEXT:
+Je telt mee tot negen of tien voor de vogels te ver zijn om nog zeker te tellen — genoeg om Romulus' telling aannemelijk te vinden, niet genoeg om hem zelf te kunnen bevestigen.
+
+CHOICES:
+* Zie hoe de broers het geschil beslechten -> CH12_LAT_010
+
+END
+
+=== SCENE: CH12_LAT_009Q_GEFAALD ===
+
+TITLE:
+Verblind door de Zon
+
+TEXT:
+De laagstaande zon verblindt je net op het verkeerde moment — je ziet enkel vage schaduwen overvliegen, en moet, net als de meeste omstanders, op Romulus' eigen woord vertrouwen.
+
+CHOICES:
+* Zie hoe de broers het geschil beslechten -> CH12_LAT_010
+
+END
+
+=== SCENE: CH12_LAT_009Q_KRITIEK ===
+
+TITLE:
+Niets Gezien
+
+TEXT:
+Je kijkt op het verkeerde stuk hemel en mist de hele zwerm — wat er ook precies gebeurd is, jij hebt er met eigen ogen niets van gezien.
+
+CHOICES:
 * Zie hoe de broers het geschil beslechten -> CH12_LAT_010
 
 END
@@ -16596,7 +17131,28 @@ CODEX:
 codex_stichting_rome
 
 CHOICES:
-* Zie hoe Romulus zijn nieuwe stad probeert te vullen -> CH12_LAT_011
+* Overweeg wiens hand de fatale slag toebracht -> CH12_LAT_010R
+
+END
+
+=== SCENE: CH12_LAT_010R ===
+
+TITLE:
+Een Broedermoord, Nauwelijks Verklaard
+
+TEXT:
+Romulus zelf spreekt er zelden over, en wanneer hij het wel doet, laat hij het antwoord opzettelijk vaag — een stichter die zijn eigen stad opent met een broedermoord, is niet gebaat bij een eenduidig verhaal.
+
+REACTION:
+romulus
+CLEMENTIA: Romulus' blik verhardt even. "Een grens die niemand mag overschrijden, betekent niets als ik mijn eigen broer een uitzondering toesta. Dat had niets met woede te maken."
+SEVERITAS: Romulus kijkt weg. "Het was geen koele beslissing. Ik zag rood, en toen was het al gebeurd — een stad beginnen met dat soort waarheid is niet makkelijk."
+NEUTRAL: Romulus haalt zijn schouders op. "Er zijn evenveel versies van dit verhaal als er mensen zijn om het na te vertellen. Ik heb er zelf ook niet één die ik volledig geloof."
+
+CHOICES:
+* Vind een broedermoord nooit te rechtvaardigen, hoe heilig de grens ook was [SEVERITAS] -> CH12_LAT_011
+* Erken dat een nieuwe stad soms een harde hand nodig heeft om te overleven [CLEMENTIA] -> CH12_LAT_011
+* Onthoud vooral dat zelfs de stichter van Rome dit nooit heeft opgehelderd [NEUTRAL] -> CH12_LAT_011
 
 END
 
@@ -16843,6 +17399,71 @@ IMAGE:
 ch12_ody_boogwedstrijd.png
 
 CHOICES:
+* Sluip ongezien naar de enige andere uitgang, voor iemand hem kan bereiken -> CH12_ODY_007Q
+
+END
+
+=== SCENE: CH12_ODY_007Q ===
+
+TITLE:
+De Andere Uitgang
+
+TEXT:
+Terwijl alle ogen op Odysseus gericht blijven, glip jij ongezien naar de zijdeur van de grote zaal — de enige andere uitweg die de vrijers zouden kunnen gebruiken om te ontsnappen of versterking te halen. Eumaeus staat er al, maar heeft een extra paar handen nodig om de balk op tijd op zijn plaats te krijgen.
+
+CHECK:
+ch12_ody_zijdeur_barricade
+
+END
+
+=== SCENE: CH12_ODY_007Q_VOL ===
+
+TITLE:
+Potdicht
+
+TEXT:
+De balk valt in één beweging op zijn plaats — niemand in de zaal merkt zelfs op dat de uitgang al verzegeld is voor de eerste vrijer er goed en wel aan denkt te vluchten.
+
+CHOICES:
+* Zie wat er nu volgt -> CH12_ODY_008
+
+END
+
+=== SCENE: CH12_ODY_007Q_DEELS ===
+
+TITLE:
+Net Op Tijd
+
+TEXT:
+De balk klemt even vast, maar met een laatste ruk krijg je hem toch op zijn plaats — vlak voor de eerste paniekerige voetstappen die kant op komen.
+
+CHOICES:
+* Zie wat er nu volgt -> CH12_ODY_008
+
+END
+
+=== SCENE: CH12_ODY_007Q_GEFAALD ===
+
+TITLE:
+Een Kier
+
+TEXT:
+De balk zit scheef en laat een kier open — genoeg om Eumaeus zenuwachtig te maken, maar niet genoeg voor iemand om er in de chaos die zo dadelijk losbarst nog gebruik van te maken.
+
+CHOICES:
+* Zie wat er nu volgt -> CH12_ODY_008
+
+END
+
+=== SCENE: CH12_ODY_007Q_KRITIEK ===
+
+TITLE:
+Bijna Te Laat
+
+TEXT:
+De balk glipt uit je handen en kletter tegen de grond — het geluid gaat gelukkig onder in het rumoer van de vrijers, en Eumaeus grijpt hem net op tijd om de deur alsnog dicht te krijgen voor iemand de kant op rent.
+
+CHOICES:
 * Zie wat er nu volgt -> CH12_ODY_008
 
 END
@@ -16913,7 +17534,28 @@ RELATION:
 penelope=+2
 
 CHOICES:
-* Zie het laatste weerzien, met zijn eigen vader -> CH12_ODY_011
+* Overweeg wat Penelope's wantrouwen haar heeft opgeleverd -> CH12_ODY_010R
+
+END
+
+=== SCENE: CH12_ODY_010R ===
+
+TITLE:
+Twintig Jaar Wantrouwen
+
+TEXT:
+Zelfs tegenover een man die zojuist honderd vrijers versloeg, weigert Penelope iets aan te nemen zonder eigen bewijs — een gewoonte die haar twintig jaar lang tegen list na list heeft beschermd, en die ze op de dag van zijn terugkeer niet ineens laat varen.
+
+REACTION:
+odysseus
+CLEMENTIA: Odysseus glimlacht, ondanks zichzelf. "Precies dezelfde sluwheid die mij al die jaren op zee levend hield. Ik zou haar wantrouwen beledigend vinden als ik niet zoveel op haar leek."
+SEVERITAS: Odysseus knikt kort. "Twintig jaar lang was wantrouwen het enige wat tussen haar en honderd vrijers stond. Ze zou wel gek zijn geweest om dat nu, van de ene op de andere dag, op te geven."
+NEUTRAL: Odysseus zegt niets, maar de blik waarmee hij haar aankijkt, spreekt boekdelen — herkenning, geen ergernis.
+
+CHOICES:
+* Bewonder haar standvastigheid — precies zo overleeft iemand twintig jaar wachten [CLEMENTIA] -> CH12_ODY_011
+* Vind het bijna hardvochtig tegenover een man die zoveel heeft doorstaan om terug te komen [SEVERITAS] -> CH12_ODY_011
+* Zie het vooral als het bewijs dat ze elkaar werkelijk verdienen [NEUTRAL] -> CH12_ODY_011
 
 END
 
@@ -17058,13 +17700,78 @@ TITLE:
 Een Kwade Verliezer
 
 TEXT:
-Poseidon, woedend over zijn nederlaag, overstroomt de vlakte van Attika uit pure kwaadheid — maar de stad zelf blijft overeind, en krijgt de naam van de godin die haar begreep in plaats van haar te willen overweldigen: Athene.
+Poseidon, woedend over zijn nederlaag, overstroomt de vlakte van Attika uit pure kwaadheid — het water stijgt sneller dan wie ook had verwacht, en de boeren beneden op de vlakte hebben nog maar enkele ogenblikken om hun kudden in veiligheid te brengen.
 
 PUZZLE:
 puzzle_ch13_gre_futurum3
 
 CODEX:
 codex_athena_poseidon
+
+CHOICES:
+* Help mee de kudden voor het water uit te drijven -> CH13_GRE_004BQ
+
+END
+
+=== SCENE: CH13_GRE_004BQ ===
+
+TITLE:
+Voor het Water Uit
+
+TEXT:
+Het water komt sneller dan je had ingeschat, kolkend tussen de akkers — jij bent degene die de laatste, koppigste dieren nog de heuvel op moet krijgen voor de vlakte volledig verzwolgen is.
+
+CHECK:
+ch13_gre_poseidon_vloed
+
+END
+
+=== SCENE: CH13_GRE_004BQ_VOL ===
+
+TITLE:
+Alles Veilig
+
+TEXT:
+Je drijft de laatste dieren met rustige vastberadenheid de heuvel op, ruim voor het water hen kan bereiken — geen enkel dier gaat verloren.
+
+CHOICES:
+* Zie wat er van Kekrops en zijn stad wordt -> CH13_GRE_004C
+
+END
+
+=== SCENE: CH13_GRE_004BQ_DEELS ===
+
+TITLE:
+Bijna Allemaal
+
+TEXT:
+De meeste dieren haal je op tijd omhoog — een enkel schaap ontglipt je in de chaos, maar zwemt zelf, verrassend vastberaden, naar droger land.
+
+CHOICES:
+* Zie wat er van Kekrops en zijn stad wordt -> CH13_GRE_004C
+
+END
+
+=== SCENE: CH13_GRE_004BQ_GEFAALD ===
+
+TITLE:
+Te Langzaam
+
+TEXT:
+Het water haalt je in voor je de laatste dieren de heuvel op krijgt — ze moeten zelf zwemmend hun weg vinden, drijfnat maar uiteindelijk veilig, terwijl jij zelf ook tot je knieën in het kolkende water staat.
+
+CHOICES:
+* Zie wat er van Kekrops en zijn stad wordt -> CH13_GRE_004C
+
+END
+
+=== SCENE: CH13_GRE_004BQ_KRITIEK ===
+
+TITLE:
+Meegesleurd
+
+TEXT:
+Een golf van Poseidons vloed sleurt je zelf een paar passen mee voor je je weer kunt oprichten — drijfnat en buiten adem, maar met de laatste dieren toch nog net op tijd op de heuvel.
 
 CHOICES:
 * Zie wat er van Kekrops en zijn stad wordt -> CH13_GRE_004C
@@ -17118,6 +17825,40 @@ CODEX:
 codex_arachne
 
 CHOICES:
+* Overweeg wat Athena hier heeft laten zien van zichzelf -> CH13_GRE_005R
+
+END
+
+=== SCENE: CH13_GRE_005R ===
+
+TITLE:
+Een Godin, Ontstemd
+
+TEXT:
+Van alle keuzes die je Athena hebt zien maken — geduldig, wijs, vaak barmhartiger dan de andere goden — is dit de eerste die niet bij haar eigen reputatie lijkt te passen.
+
+REACTION:
+athena
+CLEMENTIA: Athena's blik verzacht, al blijft ze bij haar oordeel. "Ook een godin van wijsheid is niet immuun voor gekwetste trots. Ik zeg niet dat het mijn beste moment was."
+SEVERITAS: Athena's stem blijft koel. "Arachne kreeg een waarschuwing die ze had kunnen aannemen. Talent zonder ootmoed vraagt om precies dit soort les."
+NEUTRAL: Athena zwijgt, en voor het eerst sinds je haar kent, kijkt ze niet naar jou om te zien hoe je hierover oordeelt.
+
+CHOICES:
+* Vind dit een zeldzaam onrechtvaardig moment van een verder wijze godin [SEVERITAS] -> CH13_EINDER
+* Erken dat zelfs goden hun eigen grenzen hebben, hoe wijs ook [CLEMENTIA] -> CH13_EINDER
+* Onthoud vooral dat Arachne's weefsel, ondanks alles, gelijk had [NEUTRAL] -> CH13_EINDER
+
+END
+
+=== SCENE: CH13_EINDER ===
+
+TITLE:
+Verder
+
+TEXT:
+Je laat het oordeel rusten, en volgt de Boodschapper terug naar de scheur in het licht.
+
+CHOICES:
 * Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH13_EINDE
 * Keer terug naar het Orakel van Chronos, nu beide verhalen gehoord [REQUIRE:taalspoor=beide] -> CH13_EINDE
 
@@ -17165,7 +17906,77 @@ TITLE:
 De Achtervolging
 
 TEXT:
-De vlucht is een list. De drie Curiatii, verschillend gewond, rennen achter de laatste Horatius aan in hun eigen tempo — en raken daardoor uit elkaar. Zodra de afstand tussen hen groot genoeg is, keert Horatius zich om en doodt de eerste, dan de tweede, dan de derde: één tegen één, drie keer achter elkaar. Rome wint de oorlog zonder verder bloedvergieten.
+De vlucht is een list. De drie Curiatii, verschillend gewond, rennen achter de laatste Horatius aan in hun eigen tempo — en raken daardoor uit elkaar. Jij volgt vanaf de zijlijn, en moet zelf precies inschatten wanneer de afstand tussen hen groot genoeg is om het signaal te geven dat Horatius zich mag omdraaien.
+
+CHECK:
+ch13_lat_curiatii_afstand
+
+END
+
+=== SCENE: CH13_LAT_002Q_VOL ===
+
+TITLE:
+Het Precieze Moment
+
+TEXT:
+Je ziet het gat tussen de eerste en de andere twee Curiatii feilloos ontstaan, en geeft Horatius het teken op precies het juiste ogenblik — hij doodt de eerste, dan de tweede, dan de derde: één tegen één, drie keer achter elkaar. Rome wint de oorlog zonder verder bloedvergieten.
+
+PERSON:
+horatius:intro
+
+CODEX:
+codex_horatii_curiatii
+
+CHOICES:
+* Zie hoe Horatius als overwinnaar wordt onthaald -> CH13_LAT_003
+
+END
+
+=== SCENE: CH13_LAT_002Q_DEELS ===
+
+TITLE:
+Bijna te Vroeg
+
+TEXT:
+Je geeft het teken een fractie te vroeg — Horatius keert zich om terwijl de tweede Curiatius nog net iets te dichtbij is, maar wint het eerste gevecht toch, snel genoeg om de andere twee nog apart af te handelen. Rome wint de oorlog zonder verder bloedvergieten.
+
+PERSON:
+horatius:intro
+
+CODEX:
+codex_horatii_curiatii
+
+CHOICES:
+* Zie hoe Horatius als overwinnaar wordt onthaald -> CH13_LAT_003
+
+END
+
+=== SCENE: CH13_LAT_002Q_GEFAALD ===
+
+TITLE:
+Een Onduidelijk Signaal
+
+TEXT:
+Je aarzelt een fractie te lang, en Horatius moet zelf, op eigen inschatting, besluiten wanneer hij zich omdraait — het werkt alsnog, maar met minder marge dan de list eigenlijk toestond. Rome wint de oorlog zonder verder bloedvergieten.
+
+PERSON:
+horatius:intro
+
+CODEX:
+codex_horatii_curiatii
+
+CHOICES:
+* Zie hoe Horatius als overwinnaar wordt onthaald -> CH13_LAT_003
+
+END
+
+=== SCENE: CH13_LAT_002Q_KRITIEK ===
+
+TITLE:
+Een Fout Teken
+
+TEXT:
+Je geeft het teken op het verkeerde moment, en voor een hartverscheurende paar tellen lijkt de list te mislukken — maar Horatius' eigen ervaring redt hem alsnog, en hij doodt de drie Curiatii, één voor één, ondanks jouw vergissing. Rome wint de oorlog zonder verder bloedvergieten.
 
 PERSON:
 horatius:intro
@@ -17203,6 +18014,12 @@ Jouw Oordeel
 
 TEXT:
 De stad is verdeeld over wat ze zojuist heeft zien gebeuren — een overwinning en een moord, in dezelfde ademtocht.
+
+REACTION:
+horatius
+CLEMENTIA: Horatius' blik blijft hard. "Ze rouwde om een vijand van Rome, in het bijzijn van heel de stad die ik zojuist redde. Wat had jij op dat moment gedaan?"
+SEVERITAS: Horatius' handen trillen, nu pas, om wat hij heeft gedaan. "Ik was nog niet klaar met vechten, denk ik. Dat is geen excuus. Ik zeg het toch."
+NEUTRAL: Horatius zegt niets, en kijkt niemand aan — alsof hij zelf ook nog niet weet wat hij van zichzelf moet denken.
 
 CHOICES:
 * Vind dat Horatius' daad, hoe hard ook, Rome's eer boven alles stelt [SEVERITAS] -> CH13_LAT_004
