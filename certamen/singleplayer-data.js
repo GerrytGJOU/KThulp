@@ -17769,6 +17769,9 @@ De Wedstrijd om een Stad
 TEXT:
 Poseidon is eerst. Hij belooft de stad iets dat geen sterveling kan weigeren, en slaat met zijn drietand op de rots van de Akropolis — zout water welt op uit de scheur, indrukwekkend, maar ondrinkbaar, onbruikbaar voor akkers of vee.
 
+IMAGE:
+ch13_gre_poseidon_drietand.png
+
 PERSON:
 poseidon:intro
 
@@ -17787,6 +17790,9 @@ De Olijfboom
 
 TEXT:
 Athena plant, zonder een woord vooraf, een enkele boom in de rotsgrond — een olijfboom. Geen dondergebulder, geen zeewater. Gewoon voedsel, olie voor lampen en zalf, hout voor gereedschap. Kekrops, gevraagd te oordelen, kiest zonder aarzelen voor de boom boven de bron.
+
+IMAGE:
+ch13_gre_olijfboom.png
 
 PUZZLE:
 puzzle_ch13_gre_futurum2
@@ -17905,6 +17911,9 @@ De Verboden Kist
 
 TEXT:
 Twee van de drie zusters kunnen de nieuwsgierigheid niet weerstaan en openen de kist stiekem. Wat ze daarbinnen zien — het kind, bewaakt door slangen of zelf half slang, de bronnen lopen uiteen — drijft hen ogenblikkelijk tot waanzin. Ze storten zich van de rotsen van de Akropolis, liever dood dan met wat ze hebben gezien.
+
+IMAGE:
+ch13_gre_verboden_kist.png
 
 Erichthonius overleeft, opgroeiend onder Athena's eigen, persoonlijke bescherming. Als volwassen man wordt hij zelf koning van Athene, waar hij bekendstaat als Erechtheus — de stichter van haar eerste echte tempel op de Akropolis, en de reden dat haar cultus in deze stad nooit meer zal verdwijnen.
 
