@@ -5214,6 +5214,125 @@ voor de klas** — didactisch (grammatica volledig + REACTION/CHECK-laag
 overal aanwezig), narratief (geen skelet/cliffhanger meer) en qua
 vrouwelijke representatie (zie `CHRONICA_VROUWEN.md`).
 
+### 7.51 Payoff-strategie vanaf Boek II: Clementia/Severitas als primaire NPC-reactie-as, erfenis-echo's, en RELATION-payoff in de Finale (2026-08-05)
+
+Aanleiding: vanaf Hoofdstuk 14 (echte geschiedenis, geen mythologie meer —
+zie ook §7.45) bestaat de cast vrijwel volledig uit eenmalige gastrollen
+per hoofdstuk (Peisistratos/tirannendoders in H14, Plato/Atalanta in H16,
+Leonidas/Hannibal in H17, Alexander/Caesar in H18, Marius/Sulla/Diadochen
+in H19, Cleopatra/Antonius/Augustus/Nero in H20) — heel anders dan H1-13,
+waar personages (Tydeus, Philoktetes, Peleus, Athena) vaak meerdere
+hoofdstukken bleven terugkomen. Het bestaande RELATION-mechanisme
+(§12.3-stap-2, individuele NPC-score -5..+5, tot nu toe alleen bewezen op
+Athena) is dus vanaf hier minder krachtig als primair payoff-instrument.
+Besproken met Gerben, drie besluiten:
+
+1. **NPC-reacties leunen vanaf Boek II primair op de bestaande
+   Clementia/Severitas-schaal** (`SP_STATE.approach`, §7.3) in plaats van
+   op nieuw op te bouwen individuele RELATION-scores — die as is
+   personage-onafhankelijk, loopt al de hele campagne mee, en is dus
+   geschikter voor een hoofdstukkenblok met vooral wegwerppersonages. Het
+   bestaande REACTION-mechanisme (§7.50-patroon: REACTION aan een reeds
+   aanwezig personage bij een Clementia/Severitas/Neutraal-keuze) blijft
+   hiervoor het aangewezen bouwpatroon — geen nieuwe infrastructuur nodig.
+2. **Nieuw contentpatroon, "erfenis-echo"** (bewust niet "familie-echo"
+   genoemd — dekt ook mentor/opvolger-koppelingen zonder bloedband): een
+   RELATION-score op personage X mag, via de al bestaande
+   `relationMin`/`relationMax`-conditie in `SP_PAYOFFS`, een payoff-tekst
+   triggeren op de introductiescène van een LATER, verwant personage Y —
+   zonder nieuwe engine-aanpassing, puur een bewuste content-koppeling bij
+   het schrijven. Voorbeeld door Gerben zelf aangedragen: een goede
+   relatie met Caesar (H18) laat Augustus (H20, zijn achterneef/
+   adoptiefzoon) bij zijn introductie iets zeggen als "Mijn oom sprak wel
+   eens positief over u...". Kandidaten, uit de bestaande personages-canon:
+   - **Caesar (H18) → Augustus (H20)** — adoptiefvader/-zoon, Gerbens eigen
+     voorbeeld.
+   - **Ptolemaeus, Diadoch (H19) → Cleopatra VII (H20)** — rechtstreekse
+     afstamming, al expliciet zo genoemd in H20's eigen verhaaltekst
+     (`certamen/singleplayer-data.js:423`).
+   - **Alexander (H18) → de Diadochen (H19)** — geen familie maar
+     mentor/generaal-legacy; zelfde mechaniek, andere relatievorm.
+   - **Brutus, stichter van de Republiek (H13) → de vroege
+     Republiek-verdedigers (H14: Cocles/Scaevola/Cloelia/Cincinnatus)** —
+     geen bloedband, wel institutionele opvolging; nog te kiezen of dit via
+     een erfenis-echo loopt of gewoon via de Clementia/Severitas-as
+     (besluit 1) — bij het bouwen van H14 bepalen.
+   Bij elke volgende hoofdstukbouw: bewust checken of een nieuw personage
+   een historische ouder/voorganger/mentor heeft die de speler al ontmoet
+   heeft, en zo ja, een erfenis-echo inplannen op diens introductiescène.
+3. **Finale (Boek V) leest alle opgebouwde RELATION-data in één keer uit —
+   "het Mass Effect-idee"** (zie geheugennotitie
+   `chronica-payoff-layer-priority`): personages met een relationMin boven
+   een nog te kiezen drempel komen de speler actief helpen tegen Lethe;
+   personages met een relationMax onder een negatieve drempel werken tegen
+   de speler of negeren die. Mechanisch nu al mogelijk zonder nieuwe
+   infrastructuur (dezelfde `relationMin`/`relationMax`-conditiesyntax als
+   de rest van de payoff-laag) — nog open: (a) een centrale lijst van WELKE
+   NPC's een RELATION-object hebben zodat de Finale-scène weet wie ze kan
+   raadplegen (nu alleen Athena; `certamen/assets/chronica/
+   cross_narratieve_figuren.md` is de kandidatenlijst voor uitbreiding),
+   en (b) vanaf nu bij elk personage met Finale-terugkeerpotentieel bewust
+   een RELATION toevoegen in plaats van alleen FLAG's.
+
+**Status**: ontwerpbesluit, nog niet gebouwd. Besluit 1 en 2 zijn direct
+toepasbaar zodra H14 gebouwd wordt; besluit 3 wordt pas concreet uitgewerkt
+bij de Finale-bouwronde, maar moet vanaf nu meewegen bij elke RELATION-
+toevoeging in tussenliggende hoofdstukken.
+
+### 7.52 Hoofdstuk 14 "Verzet tegen Tirannen" gebouwd — eerste versie, bewust nog niet gekoppeld aan de speelbare route (2026-08-05)
+
+Eerste geschiedenis-hoofdstuk (geen mythologie meer, zie §7.51's aanleiding)
+en eerste toepassing van de nieuwe payoff-strategie. Griekse lijn:
+Peisistratos' terugkeer met de vermomde Phye, de Tirannendoders (Harmodios
+& Aristogeiton), Hippias' hardere bewind, Kleisthenes' hervormingen en de
+geboorte van het woord "democratie". Latijnse lijn: Porsenna's beleg van
+Rome, Horatius Cocles op de Pons Sublicius, Mucius Scaevola's brandende
+hand, Cloelia's zwemtocht — met Cincinnatus/Coriolanus/Camillus als
+compacte codex-only coda (`codex_vroege_republiek_helden`), niet als eigen
+scènes: bij zes historische personages in de metadata was voor drie ervan
+een volledige scène-uitwerking te veel voor dit hoofdstuk, dezelfde afweging
+als Erichthonius/Erechtheus in Hoofdstuk 13.
+
+**Grammatica, bewust**: geen nieuwe stof (geen enkel Minerva 2-hoofdstuk
+stond nog vrij, zie `PALLAS_MINERVA_OVERZICHT.md`) — alle zes puzzels
+herhalen bestaande stof (Griekse aoristus passief + naamvallen; Latijnse
+conjunctivus praesens/perfectum en ablativus absolutus) in een nieuwe
+verhaalcontext, vastgelegd in een eigen `codex_grammatica_ch14_overzicht`
+die dat expliciet benoemt in plaats van een grammaticatabel te tonen.
+
+**Toepassing §7.51-besluiten**:
+1. Twee Clementia/Severitas-REACTIE-momenten i.p.v. nieuwe RELATION-opbouw:
+   Kleisthenes over ostrakismos (`CH14_GRE_004R`), Cloelia over haar
+   teruggave aan Porsenna (`CH14_LAT_003B`).
+2. Eén onvoorwaardelijke erfenis-echo (`ch14_lat000_echo_brutus`,
+   `SP_PAYOFFS`) op `CH14_LAT_000` — geen RELATION nodig, zelfde
+   redenering als de Peleus/Philoktetes-echo's in Hoofdstuk 7: elke speler
+   die hier komt zag Hoofdstuk 13's Brutus-scène al gegarandeerd.
+3. Besluit 3 (Finale leest alle RELATION-data uit) blijft voor later — dit
+   hoofdstuk bouwt er zelf niet aan mee, want de meeste personages hier
+   zijn bewust eenmalig.
+
+**BEWUST NOG NIET GEKOPPELD aan de speelbare route** (Gerbens expliciete
+verzoek, 2026-08-05): geen enkele bestaande scène verwijst naar `CH14_000`
+— `CH13_WORDT_VERVOLGD` blijft het huidige, live eindpunt zolang de klas
+aan het speeltesten is. `SP_CH14_CNS` is wel geregistreerd in `SP_SCENES`
+(`singleplayer.js`) zodat het los getest en gevalideerd kan worden. Pas
+wanneer Gerben dit hoofdstuk — inclusief illustraties (`ch14_gre_
+peisistratos_phye.png`, `ch14_lat_cocles_brug.png`, `ch14_lat_cloelia_
+tiber.png`, `souvenir_verzet_tirannen.png`, alle nog te maken) — speeltest-
+klaar verklaart: `CH13_WORDT_VERVOLGD` verwijderen en `CH13_MUSEUM_00`
+laten routeren naar `CH14_000` (zelfde patroon als de H12→H13-overgang,
+§7.47), en een nieuw tijdelijk eindpunt na H14 optuigen als er dan nog
+geen Hoofdstuk 15 klaarstaat.
+
+**Gevalideerd**: `node --check` op beide bestanden, `validate_chronica.js`
+→ 0 fouten, 33 waarschuwingen (ongewijzigd — CH14 introduceert geen nieuwe
+dode flags of onbedoelde terminale scènes). Handmatig doorgespeeld in de
+browser, beide taalsporen volledig (incl. "beide"-route Latijn→Grieks):
+alle zes puzzels, beide CHECK-worpen (incl. een kritiek-gefaald-uitkomst),
+beide REACTION-momenten, de Brutus-echo en de eind/Museum-scènes renderen
+allemaal foutloos.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd

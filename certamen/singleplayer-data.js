@@ -357,12 +357,12 @@ const SP_CAMPAIGN = [
   { id:"ch14", nr:14, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Verzet tegen Tirannen",
     periode:"Athene, ca. 508 v.Chr. / vroege Romeinse Republiek, ca. 509 v.Chr.",
     verhaal:"In vrijwel hetzelfde jaar verzetten twee volkeren zich tegen een tiran — Athene verdrijft zijn heersers en experimenteert met democratie, Rome verjaagt zijn laatste koning en moet die vrijheid meteen verdedigen tegen een vreemd leger aan de poorten.",
-    pallas:"Les 23: de list van Peisistratos, de tirannendoders, kritiek op de Atheense democratie", minerva:"Nog geen Minerva-koppeling vastgelegd (vrij te kiezen) — cultuurtekst: Verdedigers van de Republiek",
-    grammatica:"Grieks: les 23 (cultuur/geschiedenis, licht taalkundig); Latijn: nog te bepalen",
-    gameplay:"Twee sporen; legendes van vroege Romeinse moed naspelen aan Latijnse kant, politieke discussie/dilemma's aan Griekse kant",
-    personages:"Peisistratos, de tirannendoders (Harmodios & Aristogeiton) — Horatius Cocles, Mucius Scaevola, Cloelia, Cincinnatus, Coriolanus, Camillus",
+    pallas:"Les 23: de list van Peisistratos, de tirannendoders, kritiek op de Atheense democratie", minerva:"Geen Minerva-koppeling — bewust herhaling (geen enkel Minerva 2-hoofdstuk stond nog vrij, zie PALLAS_MINERVA_OVERZICHT.md); cultuurtekst: Verdedigers van de Republiek",
+    grammatica:"Grieks: les 23 (cultuur/geschiedenis, licht taalkundig; puzzels herhalen aoristus passief + naamvallen); Latijn: bewust geen nieuwe grammatica — herhaling van conjunctivus praesens/perfectum (M21, Hoofdstuk 13) en ablativus absolutus (M18, Hoofdstuk 11), zie Chronica.md §7.51/§7.52",
+    gameplay:"Twee sporen (sequentieel, geen zigzag — zelfde aanpak als Hoofdstuk 12/13); legendes van vroege Romeinse moed naspelen aan Latijnse kant, politieke discussie/dilemma's aan Griekse kant. GEBOUWD 2026-08-05 (eerste versie): NPC-reacties leunen op Clementia/Severitas (ostrakismos-REACTION bij Kleisthenes, Cloelia-REACTION over haar teruggave) i.p.v. nieuwe RELATION-opbouw, plus een onvoorwaardelijke erfenis-echo op Brutus (CH14_LAT_000) — toepassing van de payoff-strategie uit §7.51. BEWUST NOG NIET GEKOPPELD aan de speelbare route (CH13_WORDT_VERVOLGD blijft het live eindpunt) tot illustraties + Gerbens akkoord, zie §7.52.",
+    personages:"Peisistratos, de tirannendoders (Harmodios & Aristogeiton), Kleisthenes — Lars Porsenna, Horatius Cocles, Mucius Scaevola, Cloelia, Cincinnatus/Coriolanus/Camillus (verteld, codex_vroege_republiek_helden)",
     thema:"Een volk dat zich net bevrijd heeft, moet die vrijheid meteen weer verdedigen",
-    illustratie:"De tirannendoders / Horatius Cocles alleen op de brug" },
+    illustratie:"De tirannendoders / Horatius Cocles alleen op de brug (ch14_gre_peisistratos_phye.png, ch14_lat_cocles_brug.png, ch14_lat_cloelia_tiber.png, souvenir_verzet_tirannen.png — nog te maken)" },
   { id:"ch15", nr:15, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Hoe Men Leefde",
     periode:"Klassiek Athene / Rome, alledaags leven",
     verhaal:"Geen veldslag, geen troon — gewoon hoe het was om als vrouw, als slaaf, als gewoon mens te leven in Athene en Rome. Twee samenlevingen, elk met hun eigen blinde vlekken.",
@@ -2163,6 +2163,23 @@ const SP_CODEX_ENTRIES = {
             ["Passief (praesens, zelfde vorm)","λύομαι","ik word losgemaakt"],
             ["Aoristus passief (kenmerk -θη-)","ἐλύθην","ik werd losgemaakt"],
             ["Aoristus passief, 3e pers. enk.","ἐλύθη","hij/zij werd losgemaakt"]] } },
+  // ---- Hoofdstuk 14 (2026-08-05, zie Chronica.md §7.51/§7.52) ----
+  codex_peisistratos: { cat:"geschiedenis", titel:"Peisistratos, de Sluwe Tiran",
+    tekst:"Peisistratos grijpt de macht in Athene met list in plaats van geweld — hij verwondt zichzelf en beschuldigt zijn tegenstanders, wint zo een lijfwacht, en gebruikt die om de Akropolis te bezetten. Verjaagd en teruggekeerd, rijdt hij Athene binnen naast een vrouw verkleed als Athena zelf, die de stad ervan overtuigt dat de godin hem persoonlijk terugbrengt. Eenmaal aan de macht regeert hij verrassend mild — lage belasting, steun aan boeren en dichters — en bereidt daarmee, zonder het zelf te weten, de weg voor het woord 'tirannie' om bij zijn eigen zonen een veel duisterdere klank te krijgen." },
+  codex_tirannendoders: { cat:"geschiedenis", titel:"Harmodios en Aristogeiton, de Tirannendoders",
+    tekst:"Twee geliefden, Harmodios en Aristogeiton, vermoorden in 514 v.Chr. Hipparchos, zoon van Peisistratos, tijdens een religieus feest — niet uit een verlangen naar democratie, maar uit persoonlijke wraak na een belediging. Beiden worden alsnog gedood, maar de latere Atheense democratie viert hen als haar eerste helden: standbeelden op de Agora, een verbod om hun namen ooit als scheldwoord te gebruiken. Een geschiedenis die zichzelf, achteraf, een mooier motief aanmeet dan het origineel had." },
+  codex_kleisthenes_democratie: { cat:"geschiedenis", titel:"Kleisthenes en de Geboorte van de Democratie",
+    tekst:"Na Hippias' verdrijving hervormt Kleisthenes Athenes hele politieke stelsel: hij verdeelt de burgers in tien nieuwe stammen, dwars door de oude, invloedrijke familiebanden heen, en geeft de volksvergadering (de ekklesia) rechtstreekse macht. Zijn beroemdste — en meest omstreden — uitvinding is de ostrakismos: eenmaal per jaar mag elke burger een naam op een potscherf krassen; wie de meeste stemmen krijgt, wordt tien jaar verbannen, zonder proces, puur uit voorzorg tegen een nieuwe tiran. Het woord voor dit nieuwe systeem, δημοκρατία — macht van het volk — wordt hier voor het eerst gebruikt, al blijft 'het volk' voorlopig beperkt tot vrije, mannelijke burgers." },
+  codex_horatius_cocles: { cat:"geschiedenis", titel:"Horatius Cocles op de Brug",
+    tekst:"Wanneer Lars Porsenna's leger de enige houten brug over de Tiber nadert, houdt Horatius Cocles met twee metgezellen de hele vijandelijke voorhoede alleen tegen, terwijl Rome achter hem de brug afbreekt. Op het allerlaatste moment stuurt hij zijn metgezellen terug, houdt zelf stand tot de brug valt, en zwemt vervolgens — volledig bewapend, onder pijlen — terug naar de Romeinse oever." },
+  codex_mucius_scaevola: { cat:"geschiedenis", titel:"Mucius Scaevola en de Brandende Hand",
+    tekst:"Gaius Mucius sluipt Porsenna's kamp binnen om de koning te vermoorden, maar doodt per vergissing diens secretaris. Gegrepen en bedreigd, houdt hij zijn rechterhand zelf in het offervuur, zonder een teken van pijn, om te bewijzen dat Romeinse vastberadenheid geen marteling vreest — en verzint daarbij een gedurfde leugen over driehonderd samenzweerders die hem zullen opvolgen. Onder de indruk laat Porsenna hem vrij; zijn nieuwe bijnaam, Scaevola ('de Linkshandige'), herinnert voor altijd aan wat hij zijn rechterhand kostte." },
+  codex_cloelia: { cat:"geschiedenis", titel:"Cloelia's Zwemtocht",
+    tekst:"Als Romeinse gijzelaar in Porsenna's kamp ontsnapt Cloelia op een nacht, leidt een groep medegijzelaars door de vijandelijke linies, en zwemt met hen de Tiber over, terug naar Rome — onder pijlen door. Om het vredesverdrag niet te breken stuurt Rome haar terug naar Porsenna, die zo onder de indruk is van haar moed dat hij haar alsnog vrijlaat, met de eer haar eigen medegijzelaars te mogen kiezen om mee te nemen." },
+  codex_vroege_republiek_helden: { cat:"geschiedenis", titel:"Meer Wachters van de Vrijheid",
+    tekst:"De jonge Republiek zal dit patroon nog vele malen herhalen. Cincinnatus wordt van zijn ploeg geroepen om als dictator een crisis te bezweren — en legt zijn absolute macht na amper zestien dagen weer vrijwillig neer, terug naar zijn akker. Coriolanus, verbannen door zijn eigen stad, leidt bijna een vijandelijk leger tegen Rome, tot zijn eigen moeder en vrouw hem op de knieën smeken te stoppen. Camillus, onterecht verbannen, wordt teruggeroepen om Rome te redden wanneer de Galliërs de stad binnenvallen. Telkens dezelfde vraag, telkens opnieuw gesteld: kan macht ooit veilig aan één mens worden toevertrouwd — en wat doet die mens ermee, eenmaal hij ze weer moet afstaan?" },
+  codex_grammatica_ch14_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 14 — bewust een adempauze",
+    tekst:"Dit hoofdstuk introduceert bewust geen nieuwe grammatica — een korte adempauze na de conjunctivus (Hoofdstuk 13). In plaats daarvan herhaalt het, in een nieuwe verhaalcontext, de aoristus passief en de naamvallen (Grieks) en de conjunctivus praesens/perfectum en de ablativus absolutus (Latijn) — stof die verderop in de campagne, wanneer de geschiedenis weer sneller gaat, meteen weer van pas komt." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -2531,6 +2548,21 @@ const SP_CODEX_PERSONS = {
   hersilia: { nm:"Hersilia", epithet:"Sabijnse, later koningin van Rome",
     intro:"Een van de Sabijnse vrouwen die tijdens het Consualia-feest door Romulus' mannen wordt geschaakt — jaren later de vrouw die, met loshangend haar, tussen twee legers springt om een oorlog te beëindigen.",
     full:"Hersilia werpt zich, samen met de andere geschaakte Sabijnse vrouwen, tussen de strijdende legers van Romulus en haar eigen volk — de vroegste Romeinse mythe waarin vrouwen collectief en met succes politiek ingrijpen. De vrede die daarop volgt, versmelt Romeinen en Sabijnen tot één volk, en geeft Hersilia zelf een stem in Romulus' raad." },
+  // ---- Hoofdstuk 14 (2026-08-05) ----
+  peisistratos: { nm:"Peisistratos", epithet:"Tiran van Athene, drie keer aan de macht",
+    intro:"Een man die de macht drie keer grijpt en twee keer verliest — en één keer terugkeert naast een vrouw die de stad ervan overtuigt dat ze zelf de godin Athena is, een list zo brutaal dat ze bijna eerlijk voelt." },
+  tirannendoders: { nm:"Harmodios & Aristogeiton", epithet:"De Tirannendoders",
+    intro:"Twee geliefden wier privémotief voor een moord de geschiedenis later ombuigt tot het eerste offer voor de vrijheid — of ze het zelf zo bedoelden of niet." },
+  kleisthenes: { nm:"Kleisthenes", epithet:"Vader van de Atheense democratie",
+    intro:"De man die, na Hippias' val, een compleet nieuw politiek systeem uitvindt — met een noodrem erin gebouwd die net zo veel vragen oproept als ze beantwoordt." },
+  lars_porsenna: { nm:"Lars Porsenna", epithet:"Koning van Clusium",
+    intro:"Een Etruskische koning die met een heel leger voor Rome's poorten verschijnt om een verdreven bondgenoot terug op de troon te zetten — en die, tegen elke verwachting in, uiteindelijk meer onder de indruk raakt van zijn tegenstanders dan van zijn eigen overwinning." },
+  horatius_cocles: { nm:"Horatius Cocles", epithet:"Verdediger van de Pons Sublicius",
+    intro:"Een Romeinse soldaat die in zijn eentje een hele vijandelijke voorhoede tegenhoudt op een brug die achter hem wordt afgebroken — en dan, in volle wapenrusting, de rivier oversteekt om het te navertellen." },
+  mucius_scaevola: { nm:"Gaius Mucius Scaevola", epithet:"\"De Linkshandige\"",
+    intro:"Een man die zijn eigen rechterhand in het vuur houdt zonder te blozen, puur om een vijandelijke koning ervan te overtuigen dat Rome niet bang is — en die zijn bijnaam voor de rest van de geschiedenis aan die ene daad overhoudt." },
+  cloelia: { nm:"Cloelia", epithet:"Romeinse gijzelaar die de Tiber overzwom",
+    intro:"Een jonge gijzelaar die haar eigen ontsnapping niet voor zichzelf houdt — ze neemt een hele groep medegevangenen mee de rivier over, terug naar een stad die haar niet meteen zal laten blijven." },
 };
 
 /* ---- HERINNERINGSFRAGMENTEN (Fragmentum Memoriae) — Hoofdstuk 2 introduceert
@@ -2615,6 +2647,8 @@ const SP_SOUVENIRS = {
     caption:"Een stuk steen van het altaar dat de bewoners van Latium oprichtten nadat Hercules hen van Cacus verloste — eeuwen voor hier ooit een stad zou staan." },
   souvenir_athena_helm: { nm:"Een Twijgje van de Eerste Olijfboom", icon:"🫒", img:"souvenir_athena_helm.png",
     caption:"Een klein, verdroogd twijgje — naar verluidt van dezelfde olijfboom waarmee Athena ooit een hele stad won van haar eigen oom Poseidon." },
+  souvenir_verzet_tirannen: { nm:"Een Doorgesneden Boei", icon:"⛓️", img:"souvenir_verzet_tirannen.png",
+    caption:"Een doorgesneden stuk ketting — half Atheens brons, half Romeins ijzer — ter herinnering aan twee volkeren die in vrijwel hetzelfde jaar hun tirannen afwierpen." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -2853,6 +2887,17 @@ const SP_CHECKS = {
     deels:{ target:"CH13_LAT_002Q_DEELS" },
     gefaald:{ target:"CH13_LAT_002Q_GEFAALD" },
     kritiek:{ target:"CH13_LAT_002Q_KRITIEK" } },
+  // ---- Hoofdstuk 14 ----
+  ch14_gre_tirannenmoord_vlucht: { stat:"agilitas", dc:15,
+    volledig:{ target:"CH14_GRE_002BQ_VOL" },
+    deels:{ target:"CH14_GRE_002BQ_DEELS" },
+    gefaald:{ target:"CH14_GRE_002BQ_GEFAALD" },
+    kritiek:{ target:"CH14_GRE_002BQ_KRITIEK" } },
+  ch14_lat_cocles_zwem: { stat:"vis", dc:15,
+    volledig:{ target:"CH14_LAT_001BQ_VOL" },
+    deels:{ target:"CH14_LAT_001BQ_DEELS" },
+    gefaald:{ target:"CH14_LAT_001BQ_GEFAALD" },
+    kritiek:{ target:"CH14_LAT_001BQ_KRITIEK" } },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -3020,6 +3065,13 @@ const SP_VOCAB_ENTRIES = {
   latijn_senatus:   { taal:"latijn", woord:"senatus, senatus", betekenis:"senaat" },
   latijn_soror:     { taal:"latijn", woord:"soror, sororis", betekenis:"zuster" },
   latijn_expellere: { taal:"latijn", woord:"expellere (expellit)", betekenis:"verdrijven" },
+  // ---- Hoofdstuk 14 — Verzet tegen Tirannen ----
+  grieks_tyrannos:   { taal:"grieks", woord:"τύραννος", transcript:"týrannos", betekenis:"tiran, alleenheerser" },
+  grieks_demos:      { taal:"grieks", woord:"δῆμος", transcript:"dêmos", betekenis:"volk, gemeente" },
+  grieks_eleutheria: { taal:"grieks", woord:"ἐλευθερία", transcript:"eleuthería", betekenis:"vrijheid" },
+  latijn_pons:       { taal:"latijn", woord:"pons, pontis", betekenis:"brug" },
+  latijn_dextera:    { taal:"latijn", woord:"dextera, dexterae", betekenis:"rechterhand" },
+  latijn_obses:      { taal:"latijn", woord:"obses, obsidis", betekenis:"gijzelaar" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -3180,6 +3232,13 @@ const SP_PAYOFFS = [
   // Peleus/Philoktetes-echo's in Hoofdstuk 7 (§7.13).
   { id:"ch11_aen007_echo_lacrimae_rerum", type:"echo", trigger:{scene:"CH11_AEN_007"}, priority:0,
     content:{text:`"Sunt lacrimae rerum," dacht Aeneas nog, starend naar de tempelmuur in Carthago — er zijn tranen voor de dingen. Hij kon toen niet weten hoe letterlijk dat woord nog zou worden: hier, in de onderwereld, zijn het geen geschilderde taferelen meer die hem raken, maar Dido zelf.`} },
+  // ---- Hoofdstuk 14 — eerste "erfenis-echo" (Chronica.md §7.51/§7.52):
+  // geen RELATION nodig, onvoorwaardelijk net als de Peleus/Philoktetes-
+  // echo's in Hoofdstuk 7 — elke speler die hier komt (taalspoor=latijn of
+  // beide) heeft Hoofdstuk 13's Brutus-scène (CH13_LAT_007/008) al
+  // gegarandeerd gezien, dus geen flag-check nodig.
+  { id:"ch14_lat000_echo_brutus", type:"echo", trigger:{scene:"CH14_LAT_000"}, priority:0,
+    content:{text:`Je denkt terug aan Brutus, het bebloede zwaard nog in zijn hand boven Lucretia's lichaam, en zijn eed dat Rome nooit meer door een koning geregeerd zou worden. Die eed wordt nu, voor het eerst echt, op de proef gesteld — dezelfde verdreven koning staat met een vreemd leger voor de poorten, vastbesloten zijn troon terug te eisen.`} },
 ];
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -18307,6 +18366,516 @@ TEXT:
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
 
 Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 14 — "Verzet tegen Tirannen" (2026-08-05, zie Chronica.md
+   §7.51/§7.52). BEWUST NOG NIET GEKOPPELD aan de speelbare route: geen
+   enkele bestaande scène verwijst naar CH14_000 (CH13_WORDT_VERVOLGD blijft
+   het huidige, live eindpunt van de speeltest-versie). Dit hoofdstuk is
+   geregistreerd in SP_SCENES (singleplayer.js) zodat het los getest kan
+   worden en validate_chronica.js het kan controleren, maar pas wanneer
+   Gerben het hoofdstuk — inclusief illustraties — speeltest-klaar
+   verklaart, wordt CH13_WORDT_VERVOLGD verwijderd en CH14_000 aan
+   CH13_MUSEUM_00 gekoppeld (zelfde patroon als de H12->H13-overgang,
+   Chronica.md §7.47).
+   Toepassing van de nieuwe payoff-strategie (§7.51): geen nieuwe RELATION-
+   opbouw op de vele eenmalige personages in dit hoofdstuk, wel een
+   onvoorwaardelijke erfenis-echo op Brutus (CH14_LAT_000, SP_PAYOFFS) en
+   twee Clementia/Severitas-REACTIE-momenten (ostrakismos in Athene,
+   Cloelia's teruggave in Rome). ---- */
+const SP_CH14_CNS = `
+=== SCENE: CH14_000 ===
+
+TITLE:
+Twee Vrijheden
+
+TEXT:
+"[[Ecce|zie hier]] — het volgende boek," zegt de Boodschapper van Chronos, en deze keer opent ze de scheur voorzichtiger dan anders, alsof ze zelf nadenkt over wat erdoorheen past. "De goden treden vanaf hier terug — niet omdat ze verdwijnen, maar omdat het verhaal dat volgt niet meer het hunne is. Wat je nu ziet, hebben stervelingen zelf gedaan, zonder wonderen, zonder ingrijpen van boven. Alleen met wat mensen kunnen wanneer ze besluiten geen koning — of geen tiran — meer te dulden."
+
+Ze zwijgt even. "In Athene experimenteren stervelingen, vlak na een tiran, met iets dat nog geen naam had voor ze het uitvonden: het volk zelf aan de macht. In Rome staat de jonge Republiek — de Republiek die jij zelf hebt zien geboren worden, met Brutus' zwaard nog vers in de herinnering — voor haar eerste, allerzwaarste beproeving: een verdreven koning die terugkomt met een leger dat niet van hem is."
+
+VOCAB:
+grieks_tyrannos, grieks_demos, grieks_eleutheria, latijn_pons, latijn_dextera, latijn_obses
+
+CHOICES:
+* Volg het verzet in Athene [REQUIRE:taalspoor=grieks] -> CH14_GRE_000
+* Ga verder [REQUIRE:taalspoor!=grieks] -> CH14_LAT_000
+
+END
+
+=== SCENE: CH14_GRE_000 ===
+
+TITLE:
+De Terugkeer van de Tiran
+
+TEXT:
+Een τύραννος, in het Athene van deze tijd, is niet automatisch een slechterik — het woord betekent gewoon iemand die de macht grijpt buiten de gebruikelijke, geërfde weg om. Peisistratos is zo iemand: hij grijpt de macht een eerste keer met list — verwondt zichzelf, beschuldigt zijn tegenstanders, en wint zo een lijfwacht die hij gebruikt om de Akropolis te bezetten. Verjaagd, en jaren later terugkerend, verzint hij iets nog brutalers.
+
+IMAGE:
+ch14_gre_peisistratos_phye.png
+
+PERSON:
+peisistratos:intro
+
+PUZZLE:
+puzzle_ch14_gre_peisistratos
+
+CHOICES:
+* Zie voor welke list hij deze keer kiest -> CH14_GRE_001
+
+END
+
+=== SCENE: CH14_GRE_001 ===
+
+TITLE:
+Athena's Wagen
+
+TEXT:
+Peisistratos rijdt Athene binnen op een wagen, naast een lange, indrukwekkende vrouw in volle wapenrusting — Phye, in werkelijkheid een gewone bloemenverkoopster, omgebouwd tot een levende Athena. Vooruit rijden boodschappers die roepen dat de godin zelf hun tiran persoonlijk terugbrengt. De menigte, ofwel oprecht overtuigd, ofwel gewoon opgelucht dat er geen nieuw bloedvergieten komt, laat hem door.
+
+Eenmaal terug op de troon regeert Peisistratos verrassend mild: lage belasting, steun aan boeren, opdrachten aan dichters — onder zijn bewind worden de gedichten van Homerus voor het eerst stevig opgeschreven, in plaats van alleen van geheugen tot geheugen doorgegeven. Zijn eigen zonen zullen zijn naam een veel duisterdere klank geven.
+
+CODEX:
+codex_peisistratos
+
+CHOICES:
+* Zie wat er gebeurt zodra zijn zonen het overnemen -> CH14_GRE_002
+
+END
+
+=== SCENE: CH14_GRE_002 ===
+
+TITLE:
+De Tirannendoders
+
+TEXT:
+Na Peisistratos' dood erven zijn zonen Hippias en Hipparchos de macht samen. In 514 v.Chr., tijdens het grote Panathenaeën-feest, vermoorden twee geliefden — Harmodios en Aristogeiton — Hipparchos midden op straat. Hun motief is, in werkelijkheid, geen droom van vrijheid: Hipparchos had Harmodios' zuster in het openbaar vernederd, en dit is wraak, niet politiek.
+
+De geschiedenis zal daar later overheen schrijven — maar op dit moment, midden in de chaos van het feest, is het gewoon een moord, en Hippias' wachters grijpen iedereen die ook maar in de buurt van de daders stond.
+
+PERSON:
+tirannendoders:intro
+
+PUZZLE:
+puzzle_ch14_gre_tyrannicides
+
+CHOICES:
+* Kom zelf ongezien weg uit de chaos -> CH14_GRE_002B
+
+END
+
+=== SCENE: CH14_GRE_002B ===
+
+TITLE:
+Chaos op het Feest
+
+TEXT:
+De wachters grijpen iedereen die ook maar oogcontact maakte met de daders — en jij stond te dichtbij om onopgemerkt te blijven. Tussen de verwarde, vluchtende menigte door moet je zien weg te komen voor je zelf voor een moord wordt aangezien.
+
+CHECK:
+ch14_gre_tirannenmoord_vlucht
+
+END
+
+=== SCENE: CH14_GRE_002BQ_VOL ===
+
+TITLE:
+Ongezien
+
+TEXT:
+Je glipt moeiteloos tussen de verwarde menigte door en bent al twee straten verder voor de wachters ook maar in jouw richting kijken.
+
+CODEX:
+codex_tirannendoders
+
+CHOICES:
+* Zie hoe Hippias regeert nu zijn broer dood is -> CH14_GRE_003
+
+END
+
+=== SCENE: CH14_GRE_002BQ_DEELS ===
+
+TITLE:
+Bijna Gegrepen
+
+TEXT:
+Een hand grijpt even je mantel, maar de stof glijdt los in de chaos — je ontkomt, met een gescheurde mouw als enige schade.
+
+CODEX:
+codex_tirannendoders
+
+CHOICES:
+* Zie hoe Hippias regeert nu zijn broer dood is -> CH14_GRE_003
+
+END
+
+=== SCENE: CH14_GRE_002BQ_GEFAALD ===
+
+TITLE:
+Een Omweg
+
+TEXT:
+Je moet een lange omweg nemen door een steegje vol andere vluchtende feestgangers, je hart in je keel — maar je bereikt uiteindelijk toch een veilige straat, buiten adem maar ongedeerd.
+
+CODEX:
+codex_tirannendoders
+
+CHOICES:
+* Zie hoe Hippias regeert nu zijn broer dood is -> CH14_GRE_003
+
+END
+
+=== SCENE: CH14_GRE_002BQ_KRITIEK ===
+
+TITLE:
+Op het Nippertje
+
+TEXT:
+Een wachter grijpt je stevig bij de arm — alleen doordat hij zelf struikelt over een omgevallen offertafel weet je je los te rukken en tussen de kramen te verdwijnen, sneller dan je zelf voor mogelijk hield.
+
+CODEX:
+codex_tirannendoders
+
+CHOICES:
+* Zie hoe Hippias regeert nu zijn broer dood is -> CH14_GRE_003
+
+END
+
+=== SCENE: CH14_GRE_003 ===
+
+TITLE:
+Hippias, Alleen
+
+TEXT:
+Aristogeiton wordt gegrepen en gedood; Harmodios sneuvelt al ter plekke. Hippias, geschokt door de moord op zijn broer, verandert — de milde tiran die hij tot dan toe was, wordt achterdochtig, hard, wreed tegen iedereen die hij als bedreiging ziet. Pas nu, ironisch genoeg, verdient Athene's heerschappij echt de naam "tirannie".
+
+Jaren later grijpt Sparta, samen met verbannen Atheense adel, in: Hippias wordt belegerd op de Akropolis en uiteindelijk verjaagd. Athene is voor het eerst in decennia zonder heerser.
+
+CHOICES:
+* Zie wat er van Athene wordt zonder tiran -> CH14_GRE_004
+
+END
+
+=== SCENE: CH14_GRE_004 ===
+
+TITLE:
+Kleisthenes en het Volk
+
+TEXT:
+In het machtsvacuüm na Hippias grijpt Kleisthenes, van de invloedrijke Alcmeoniden-familie, zijn kans — niet door zelf tiran te worden, maar door iets uit te vinden dat nog nooit was geprobeerd. Hij verdeelt de burgers opnieuw in tien stammen, dwars door de oude familiebanden heen, en geeft de volksvergadering — de ekklesia — rechtstreekse macht over de stad.
+
+Zijn beroemdste, en meest omstreden vondst is de ostrakismos: eenmaal per jaar mag elke burger een naam op een potscherf (ὄστρακον) krassen. Wie de meeste stemmen krijgt, wordt tien jaar verbannen — zonder proces, zonder aanklacht, puur uit voorzorg tegen wie te machtig dreigt te worden.
+
+PERSON:
+kleisthenes:intro
+
+PUZZLE:
+puzzle_ch14_gre_democratie
+
+CHOICES:
+* Overweeg wat dit systeem eigenlijk beschermt -> CH14_GRE_004R
+
+END
+
+=== SCENE: CH14_GRE_004R ===
+
+TITLE:
+Ostrakismos
+
+TEXT:
+Geen rechtszaak, geen aanklacht, geen verdediging — alleen een potscherf en een naam. Kleisthenes zelf verdedigt het als de enige zekere manier om nooit meer een Peisistratos te laten ontstaan. Maar jij hebt zelf net gezien hoe makkelijk een menigte zich door een verklede bloemenverkoopster laat overtuigen.
+
+REACTION:
+kleisthenes
+CLEMENTIA: Kleisthenes knikt langzaam. "Je hebt gelijk om te twijfelen. Ik geef het volk een wapen tegen tirannie — maar een wapen zonder rechter erbij is nooit helemaal veilig, ook niet in de handen van het volk zelf."
+SEVERITAS: Kleisthenes' stem blijft vast. "Liever tien jaar ballingschap voor de verkeerde man, af en toe, dan opnieuw decennia onder een Peisistratos of een Hippias. Dat is de prijs van voorzorg."
+NEUTRAL: Kleisthenes haalt zijn schouders op. "Het systeem is nieuw. Of het werkt, weten we pas als het voor het eerst misbruikt wordt — en dat gebeurt vroeg of laat altijd."
+
+CHOICES:
+* Noem het een noodzakelijk kwaad tegen een grotere dreiging [SEVERITAS] -> CH14_GRE_005
+* Noem het een gevaarlijk precedent, hoe goedbedoeld ook [CLEMENTIA] -> CH14_GRE_005
+* Onthoud vooral dat wie zo verbannen wordt, nooit meer terugkeert om zijn eigen kant te vertellen [NEUTRAL] -> CH14_GRE_005
+
+END
+
+=== SCENE: CH14_GRE_005 ===
+
+TITLE:
+Een Naam voor het Nieuwe
+
+TEXT:
+Voor dit nieuwe systeem — macht die niet bij één man of één familie ligt, maar bij het verzamelde volk — wordt hier voor het eerst een woord gebruikt: δημοκρατία, "democratie". Onvolmaakt, want "het volk" betekent voorlopig alleen vrije, mannelijke burgers — maar ongeëvenaard voor zijn tijd, en het begin van iets dat, eeuwen later, nog altijd niet is uitgevonden.
+
+CODEX:
+codex_kleisthenes_democratie
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH14_EINDE
+* Keer terug naar het Orakel van Chronos, nu beide verhalen gehoord [REQUIRE:taalspoor=beide] -> CH14_EINDE
+
+END
+
+=== SCENE: CH14_LAT_000 ===
+
+TITLE:
+De Verdreven Koning Keert Terug
+
+TEXT:
+Tarquinius Superbus, verjaagd uit Rome, vlucht naar Lars Porsenna, koning van het machtige Etruskische Clusium, en overtuigt hem hem te helpen zijn troon terug te winnen. Porsenna trekt met een groot leger op Rome af en slaat het beleg — de jonge Republiek, nog geen jaar oud, staat voor haar eerste, allerzwaarste beproeving.
+
+PERSON:
+lars_porsenna:intro
+
+CHOICES:
+* Zie hoe Rome zich verdedigt bij de enige brug over de Tiber -> CH14_LAT_001
+
+END
+
+=== SCENE: CH14_LAT_001 ===
+
+TITLE:
+Alleen op de Brug
+
+TEXT:
+Porsenna's leger nadert de Pons Sublicius, de houten brug — de enige weg de stad in vanaf die kant. Valt de brug niet op tijd, valt Rome. Horatius Cocles stationeert zich met twee metgezellen aan het hoofd van de brug en houdt de hele vijandelijke voorhoede alleen tegen, terwijl Rome achter hem de balken één voor één afbreekt.
+
+IMAGE:
+ch14_lat_cocles_brug.png
+
+PERSON:
+horatius_cocles:intro
+
+PUZZLE:
+puzzle_ch14_lat_cocles
+
+CHOICES:
+* Zie wat er gebeurt zodra de laatste balk valt -> CH14_LAT_001B
+
+END
+
+=== SCENE: CH14_LAT_001B ===
+
+TITLE:
+De Laatste Balk
+
+TEXT:
+De brug stort eindelijk in achter hem — Cocles, nog altijd in volle wapenrusting, heeft geen andere weg terug meer dan de rivier zelf. Hij bidt kort tot Tiberinus, de riviergod, en springt.
+
+CHECK:
+ch14_lat_cocles_zwem
+
+END
+
+=== SCENE: CH14_LAT_001BQ_VOL ===
+
+TITLE:
+De Overkant
+
+TEXT:
+Je zwemt krachtig en gestaag, wapenrusting en al, en bereikt de overkant ruim voor de eerste vijandelijke pijlen het water raken.
+
+CODEX:
+codex_horatius_cocles
+
+CHOICES:
+* Zie wat Rome vervolgens doet tegen de belegering -> CH14_LAT_002
+
+END
+
+=== SCENE: CH14_LAT_001BQ_DEELS ===
+
+TITLE:
+Doorweekt maar Veilig
+
+TEXT:
+Het gewicht van je wapenrusting trekt je bijna onder, maar je vecht je met de laatste kracht naar de overkant, doorweekt en buiten adem.
+
+CODEX:
+codex_horatius_cocles
+
+CHOICES:
+* Zie wat Rome vervolgens doet tegen de belegering -> CH14_LAT_002
+
+END
+
+=== SCENE: CH14_LAT_001BQ_GEFAALD ===
+
+TITLE:
+Rakelings
+
+TEXT:
+Een pijl schampt rakelings langs je schouder terwijl je zwemt — je bereikt de kant alsnog, maar met een schaafwond die nog dagen zal steken.
+
+CODEX:
+codex_horatius_cocles
+
+CHOICES:
+* Zie wat Rome vervolgens doet tegen de belegering -> CH14_LAT_002
+
+END
+
+=== SCENE: CH14_LAT_001BQ_KRITIEK ===
+
+TITLE:
+Op het Randje
+
+TEXT:
+De stroming grijpt je harder dan verwacht, en pas op het allerlaatste moment weet je je vast te grijpen aan een uitstekende paal van de kade, jezelf net op tijd omhoogtrekkend.
+
+CODEX:
+codex_horatius_cocles
+
+CHOICES:
+* Zie wat Rome vervolgens doet tegen de belegering -> CH14_LAT_002
+
+END
+
+=== SCENE: CH14_LAT_002 ===
+
+TITLE:
+De Brandende Hand
+
+TEXT:
+De aanval op de brug is afgeslagen, maar Porsenna's beleg gaat door — honger dreigt binnen de muren. Gaius Mucius besluit alleen, ongevraagd, het vijandelijke kamp binnen te sluipen om Porsenna zelf te doden. In het gedrang doodt hij per vergissing niet de koning, maar diens secretaris, gekleed in vergelijkbare kledij.
+
+Gegrepen en voor Porsenna gesleept, houdt Mucius, om te bewijzen dat Romeinse vastberadenheid geen pijn vreest, zijn eigen rechterhand in het offervuur naast hen — zonder een teken van pijn te tonen, terwijl zijn huid verbrandt.
+
+PERSON:
+mucius_scaevola:intro
+
+PUZZLE:
+puzzle_ch14_lat_scaevola
+
+CODEX:
+codex_mucius_scaevola
+
+CHOICES:
+* Zie hoe Porsenna hierop reageert -> CH14_LAT_002B
+
+END
+
+=== SCENE: CH14_LAT_002B ===
+
+TITLE:
+Driehonderd Zwaarden
+
+TEXT:
+Mucius voegt er een gedurfde leugen aan toe: driehonderd jonge Romeinen, zegt hij, hebben gezworen Porsenna te doden — één voor één, tot het lukt. Hijzelf was slechts de eerste. Porsenna, onder de indruk en niet zonder reden verontrust, laat hem vrij — vanaf nu draagt Mucius de bijnaam Scaevola, "de Linkshandige" — en begint serieus over vrede te onderhandelen.
+
+CHOICES:
+* Zie het laatste dat Porsenna's vastberadenheid breekt -> CH14_LAT_003
+
+END
+
+=== SCENE: CH14_LAT_003 ===
+
+TITLE:
+Cloelia
+
+TEXT:
+Als onderdeel van de wapenstilstand levert Rome een aantal jonge gijzelaars aan Porsenna, onder wie Cloelia. Op een nacht ontsnapt ze, leidt een hele groep medegijzelaars ongezien langs de wachters, en zwemt met hen allemaal de Tiber over — terug naar Rome, onder pijlen door.
+
+IMAGE:
+ch14_lat_cloelia_tiber.png
+
+PERSON:
+cloelia:intro
+
+PUZZLE:
+puzzle_ch14_lat_cloelia
+
+CHOICES:
+* Zie wat Rome met haar terugkeer doet -> CH14_LAT_003B
+
+END
+
+=== SCENE: CH14_LAT_003B ===
+
+TITLE:
+Teruggegeven, Toch Vrij
+
+TEXT:
+Rome staat voor een lastige keuze: Cloelia vieren als heldin, of haar teruggeven aan Porsenna om het net gesloten verdrag niet te breken. Uiteindelijk kiest de senaat voor het laatste — het woord van Rome, zeggen ze, moet zwaarder wegen dan wat één meisje, hoe moedig ook, op eigen houtje deed.
+
+REACTION:
+cloelia
+CLEMENTIA: Cloelia knikt, niet blij maar niet verbitterd. "Een verdrag dat je breekt zodra het lastig wordt, is geen verdrag waard om te sluiten. Ik ga terug — dat maakt wat ik deed niet minder waar."
+SEVERITAS: Cloelia's kaak verstrakt. "Ik zwom die rivier over voor niets, dan? Blijkbaar weegt Rome's woord zwaarder dan Rome's eigen dochters."
+NEUTRAL: Cloelia zegt niets. Ze pakt gewoon haar weinige bezittingen weer op en stapt, zonder een blik achterom, de wagen naar het kamp weer in.
+
+CHOICES:
+* Vind dat een verdrag boven persoonlijke gevoelens moet gaan, hoe zuur ook [SEVERITAS] -> CH14_LAT_004
+* Vind dat Rome hier zijn eigen redder in de steek laat [CLEMENTIA] -> CH14_LAT_004
+* Onthoud je van een oordeel — dit is een beslissing die jij niet hoefde te nemen [NEUTRAL] -> CH14_LAT_004
+
+END
+
+=== SCENE: CH14_LAT_004 ===
+
+TITLE:
+Porsenna's Erkenning
+
+TEXT:
+Porsenna, geraakt door zoveel vastberadenheid — Cocles op de brug, Mucius' hand in het vuur, en nu een gijzelaar die zich vrijwillig weer aanmeldt om een verdrag te eren — doet iets dat niemand had verwacht: hij laat Cloelia alsnog vrij, met de eer zelf te mogen kiezen welke medegijzelaars ze meeneemt. Kort daarna heft hij het beleg volledig op en sluit vrede met Rome, zonder Tarquinius ooit weer op de troon te helpen.
+
+CODEX:
+codex_cloelia
+
+CHOICES:
+* Zie wat er, in de eeuwen die volgen, nog meer van deze jonge Republiek wordt gevraagd -> CH14_LAT_005
+
+END
+
+=== SCENE: CH14_LAT_005 ===
+
+TITLE:
+Meer Namen om te Onthouden
+
+TEXT:
+Dit is nog maar het begin van een patroon dat zich eeuwenlang zal herhalen. Cincinnatus wordt van zijn ploeg geroepen om als dictator een crisis te bezweren — en legt zijn absolute macht na amper zestien dagen weer vrijwillig neer, terug naar zijn akker. Coriolanus, verbannen door zijn eigen stad, leidt bijna een vijandelijk leger tegen Rome, tot zijn eigen moeder en vrouw hem op de knieën smeken te stoppen. Camillus, onterecht verbannen, wordt teruggeroepen om Rome te redden wanneer de Galliërs de stad binnenvallen.
+
+Telkens dezelfde vraag, telkens opnieuw gesteld: kan macht ooit veilig aan één mens worden toevertrouwd — en wat doet die mens ermee, eenmaal hij ze weer moet afstaan?
+
+CODEX:
+codex_vroege_republiek_helden
+
+STATPOINTS:
+3
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH14_EINDE
+* Steek over naar de Griekse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH14_GRE_000
+
+END
+
+=== SCENE: CH14_EINDE ===
+
+TITLE:
+Twee Vrijheden, Twee Prijzen
+
+TEXT:
+"[[Ecce|zie hier]] — twee volkeren," zegt de Boodschapper, "die in vrijwel hetzelfde jaar besloten geen tiran meer te dulden. Athene experimenteert met iets nieuws: macht bij het volk zelf, met alle rommelige onvolmaaktheid die daarbij hoort. Rome ontdekt iets anders — dat een net geboren vrijheid niet vanzelf standhoudt. Ze moet, telkens opnieuw, door gewone mensen actief verdedigd worden, of ze verdwijnt net zo snel als ze kwam." Ze zwijgt even. "Onthoud dat — de hoofdstukken die nog komen, gaan bijna allemaal nog over diezelfde vraag: wat mensen doen met een vrijheid die nooit vanzelfsprekend is."
+
+SOUVENIR:
+souvenir_verzet_tirannen
+
+CODEX:
+codex_grammatica_ch14_overzicht
+
+CHOICES:
+* Keer terug naar het Museum -> CH14_MUSEUM_00
+
+END
+
+=== SCENE: CH14_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Een nieuwe stolp vult zich naast de andere: een doorgesneden stuk ketting, half brons, half ijzer. "Twee volkeren, in hetzelfde jaar bevrijd," zegt de Boodschapper zacht, "op twee heel verschillende manieren." Ze kijkt nog even naar de stolp, alsof ze zelf ook nog aan het nadenken is over wat er hierna komt.
 
 END
 `.trim();
