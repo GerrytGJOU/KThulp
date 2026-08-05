@@ -511,13 +511,13 @@ const SP_MAP_LOCATIONS = [
   // x/y afgelezen op het echte panel1_aegean.png (1376×768px): temple-icoon
   // op het Latium-schiereiland, de gloeiende tempel in de wolken boven de
   // Olympos, en het rode gebouwencomplex in de oostelijke heuvels (Sardis).
-  { id:"latium", nm:"Latium", panel:"aegean", x:12.7, y:20.2,
+  { id:"latium", nm:"Latium", panel:"aegean", x:7.1, y:18.2,
     unlockCodex:"codex_orakel_van_chronos",
     desc:"Waar alles begon: het veld waar je het Orakel van Chronos vond." },
-  { id:"olympos", nm:"Olympos", panel:"aegean", x:41.1, y:13.0,
+  { id:"olympos", nm:"Olympos", panel:"aegean", x:41.9, y:15.1,
     unlockCodex:"codex_geboorte_athena",
     desc:"De woonplaats van de goden, waar Athena voltallig gewapend uit Zeus' hoofd sprong." },
-  { id:"sardis", nm:"Sardis, Lydië", panel:"aegean", x:74.1, y:47.5,
+  { id:"sardis", nm:"Sardis, Lydië", panel:"aegean", x:74.7, y:47.1,
     unlockCodex:"codex_gouden_aanraking",
     desc:"Waar koning Midas alles wat hij aanraakte in goud veranderde." },
   // x/y afgelezen op het echte panel3_eastern.png (1376×768px): de geketende
@@ -525,9 +525,110 @@ const SP_MAP_LOCATIONS = [
   // Overige plekken op western/eastern (Carthago, Sicilië, Gades, Hesperiden,
   // Alpen, Gallië, Perzië, Egypte, India) horen bij hoofdstukken die nog niet
   // geschreven zijn — hun pins volgen zodra die codex-entries echt bestaan.
-  { id:"kaukasus", nm:"De Kaukasus", panel:"eastern", x:44.9, y:22.4,
+  { id:"kaukasus", nm:"De Kaukasus", panel:"eastern", x:35.3, y:15.3,
     unlockCodex:"codex_doos_van_pandora",
     desc:"De rots waar Prometheus geketend ligt, gestraft omdat hij het vuur aan de mensheid gaf." },
+
+  /* ---- Aangevuld voor Hoofdstuk 2 t/m 13 (2026-08-02, tweede pas — x/y nu
+     echt afgelezen op de drie panelafbeeldingen zelf i.p.v. blind op reële
+     geografie geschat). Herkenningspunten die dit keer gebruikt zijn:
+     panel1_aegean.png: de Italiaanse laars linksboven, de Peloponnesos als
+     "hand" onder de Olympos, het ommuurde kasteel-icoon in Klein-Azië
+     (Troje) los van het rode gebouw (Sardis, bestaand anker). panel2_western.png
+     blijkt ZELF ook Italië/Sicilië (met een rokende vulkaan = Etna) en een
+     ommuurde havenstad (Carthago) te tonen, plus een gouden boom op een
+     eilandje (de Hesperiden) — geen van drieën had ik in de eerste pas goed
+     ingeschat. panel3_eastern.png: het geketende figuurtje tegen de
+     besneeuwde Kaukasus (bestaand anker) en de Zwarte Zee-kust ernaast
+     (Kolchis). Meerdere hoofdstukken delen bewust dezelfde locatie (bv.
+     Kreta, Thebe, Troje) i.p.v. een pin per scène. ---- */
+  // Hoofdstuk 2 — "De Werken van de Helden"
+  { id:"nemea", nm:"Nemea", panel:"aegean", x:46.2, y:54.8,
+    unlockCodex:"codex_herakles_beproevingen",
+    desc:"Waar Herakles de onkwetsbare Nemeïsche Leeuw met blote handen wurgde." },
+  { id:"delos", nm:"Delos", panel:"aegean", x:60.1, y:58.2,
+    unlockCodex:"codex_geboorte_apollo_diana",
+    desc:"Het drijvende eiland waar Latona, achtervolgd door Hera's woede, Apollo en Diana baarde." },
+  { id:"thebe", nm:"Thebe", panel:"aegean", x:48.6, y:47.3,
+    unlockCodex:"codex_geboorte_bacchus",
+    desc:"De stad van Kadmos — waar Semele Bacchus baarde uit Jupiters eigen dij, en waar generaties later Oedipus, de Sfinx en Antigone's verzet zich zouden afspelen." },
+  { id:"arcadia", nm:"Arcadië", panel:"aegean", x:45.1, y:57.9,
+    unlockCodex:"codex_metamorfose_kallisto",
+    desc:"Het woeste heuvelland waar Kallisto, door Hera's jaloezie, in een berin veranderde." },
+  // Hoofdstuk 3 — "Beloften van Goden en Mensen"
+  { id:"argos", nm:"Argos", panel:"aegean", x:47.7, y:56.4,
+    unlockCodex:"codex_io_argus",
+    desc:"De stad van Io, die Jupiter uit angst voor Juno in een koe veranderde — bewaakt door de honderdogige Argus Panoptes." },
+  { id:"kreta", nm:"Kreta", panel:"aegean", x:60.1, y:83,
+    unlockCodex:"codex_europa",
+    desc:"Het eiland waar Jupiter, vermomd als witte stier, Europa naartoe droeg — later ook het eiland van Minos, het Labyrint en de Minotaurus." },
+  { id:"elis", nm:"Elis", panel:"aegean", x:40.8, y:53.5,
+    unlockCodex:"codex_augiasstal",
+    desc:"Waar Herakles de nooit-uitgemeste stallen van koning Augias in één dag schoonspoelde." },
+  { id:"hesperiden", nm:"De Tuin der Hesperiden", panel:"western", x:7.9, y:47.2,
+    unlockCodex:"codex_atlas",
+    desc:"De verre tuin aan de rand van de wereld, waar Atlas de hemel draagt en de gouden appels bewaakt werden." },
+  { id:"tainaron", nm:"Tainaron", panel:"aegean", x:45.9, y:69.9,
+    unlockCodex:"codex_herakles_twaalf_werken",
+    desc:"De zuidpunt van de Peloponnesos, waar een ingang naar de onderwereld ligt — hier bracht Herakles Cerberus levend naar boven." },
+  { id:"calydon", nm:"Calydon", panel:"aegean", x:42.3, y:47.7,
+    unlockCodex:"codex_deianira_nessus",
+    desc:"De stad van Deianira, wier huwelijksgeschenk — het bloed van de centaur Nessus — Herakles uiteindelijk fataal werd." },
+  // Hoofdstuk 4 — "Het Labyrint van Herinneringen"
+  { id:"eridanus", nm:"De Eridanus (Po)", panel:"western", x:61.3, y:33.3,
+    unlockCodex:"codex_phaethon",
+    desc:"De rivier waarin Phaëthon neerstortte, nadat hij de zonnewagen van zijn vader niet kon beheersen." },
+  { id:"naxos", nm:"Naxos", panel:"aegean", x:61.1, y:62.2,
+    unlockCodex:"codex_ariadne_bacchus",
+    desc:"Het eiland waar Theseus Ariadne achterliet — en waar Bacchus haar vond." },
+  // Hoofdstuk 5 — "Het Gulden Vlies"
+  { id:"kolchis", nm:"Kolchis", panel:"eastern", x:29.8, y:16.9,
+    unlockCodex:"codex_gulden_vlies",
+    desc:"Het verre land aan de Zwarte Zee waar het Gulden Vlies hing, bewaakt door een nooit slapende draak." },
+  { id:"lemnos", nm:"Lemnos", panel:"aegean", x:58.9, y:31.2,
+    unlockCodex:"codex_lemnos_hypsipyle",
+    desc:"Het eiland van koningin Hypsipyle, waar de Argonauten onderweg naar Kolchis lang bleven hangen — en waar later Philoktetes, gebeten door een slang, jarenlang alleen werd achtergelaten." },
+  { id:"korinthe", nm:"Korinthe", panel:"aegean", x:47.5, y:52.9,
+    unlockCodex:"codex_medea_wraak",
+    desc:"Waar Medea, verstoten door Jason, haar verschrikkelijke wraak nam." },
+  // Hoofdstuk 7 — "De Appel der Tweedracht"
+  { id:"sparta", nm:"Sparta", panel:"aegean", x:45.6, y:61.5,
+    unlockCodex:"codex_leda_zwaan",
+    desc:"De stad van Leda en Tyndareos, waar Helena opgroeide — en vanwaar ze door Paris werd geschaakt." },
+  { id:"troje", nm:"Troje", panel:"aegean", x:66.5, y:30.2,
+    unlockCodex:"codex_parisoordeel",
+    desc:"De machtige stad aan de Hellespont waar Paris zijn noodlottige oordeel velde — en die, na tien jaar beleg, uiteindelijk in vlammen viel." },
+  { id:"aulis", nm:"Aulis", panel:"aegean", x:50.7, y:47,
+    unlockCodex:"codex_aulis_iphigenia",
+    desc:"De haven waar de Griekse vloot vastzat zonder wind, tot Agamemnon zijn eigen dochter Iphigenia offerde." },
+  { id:"skyros", nm:"Skyros", panel:"aegean", x:55.8, y:42.6,
+    unlockCodex:"codex_achilles_skyros",
+    desc:"Het eiland waar Thetis haar zoon Achilles, vermomd als meisje, voor de oorlog probeerde te verbergen." },
+  // Hoofdstuk 10 — "Vluchten uit Troje"
+  { id:"thracie", nm:"Thracië", panel:"aegean", x:63.1, y:8.9,
+    unlockCodex:"codex_polydorus",
+    desc:"Het land net ten noorden van Troje, waar de bloedende struik Aeneas vertelde wat er met de verraden prins Polydorus gebeurd was." },
+  { id:"carthago", nm:"Carthago", panel:"western", x:55.7, y:78.6,
+    unlockCodex:"codex_aankomst_carthago",
+    desc:"De jonge stad van koningin Dido, waar Aeneas' vloot na Juno's storm aanspoelde." },
+  // Hoofdstuk 11 — "Tussen Liefde en Lot"
+  { id:"aeaea", nm:"Aeaea", panel:"aegean", x:9.8, y:26,
+    unlockCodex:"codex_kirke_eiland",
+    desc:"Het eiland van de tovenares Kirke, waar Odysseus' mannen in zwijnen veranderden." },
+  { id:"cumae", nm:"Cumae", panel:"western", x:68.5, y:57,
+    unlockCodex:"codex_sibylle_cumae",
+    desc:"Waar de Sibylle van Apollo huist — en Aeneas, met de Gouden Tak, afdaalde naar de onderwereld." },
+  { id:"drepanum", nm:"Drepanum, Sicilië", panel:"western", x:62.8, y:72.7,
+    unlockCodex:"codex_dood_anchises",
+    desc:"De westpunt van Sicilië, waar Aeneas' vader Anchises stierf, zonder gevecht, zonder voorteken." },
+  // Hoofdstuk 12 — "Wraak en een Nieuwe Stad"
+  { id:"ithaka", nm:"Ithaka", panel:"aegean", x:37.6, y:48,
+    unlockCodex:"codex_ithaka_aankomst",
+    desc:"Odysseus' eigen koninkrijk, na twintig jaar eindelijk weer bereikt — vol vrijers die niet van plan zijn te vertrekken." },
+  // Hoofdstuk 13 — "Twee Steden, Twee Koningen"
+  { id:"athene", nm:"Athene", panel:"aegean", x:51.9, y:50.7,
+    unlockCodex:"codex_athena_poseidon",
+    desc:"De naamloze stad die Athena met een olijfboom won van haar eigen oom Poseidon." },
 ];
 function spLocationUnlocked(loc, codexArr){
   return !loc.unlockCodex || (codexArr||[]).includes(loc.unlockCodex);
@@ -2446,7 +2547,7 @@ const SP_FRAGMENTS = {
    spCodexSouvenirsHTML terug op `icon` — zelfde patroon als
    SP_COMBAT_ENEMIES. ---- */
 const SP_SOUVENIRS = {
-  souvenir_midas: { nm:"Een Gouden Roos", icon:"🌹", img:"souvenir_ch1_midas.png",
+  souvenir_midas: { nm:"Een Gouden Roos", icon:"🌹", img:"souvenir_midas.png",
     caption:"Een gouden roos uit het paleis van Midas." },
   souvenir_athena_geboorte: { nm:"Een Bronzen Splinter", icon:"🪓", img:"souvenir_athena_geboorte.png",
     caption:"Een splinter brons van de bijl waarmee Athena ter wereld kwam." },
@@ -5836,6 +5937,9 @@ TEXT:
 Waar geen wapen doorheen kwam, bleek Herakles' eigen kracht wél genoeg: hij wurgt de leeuw met blote handen, precies zoals hij ooit als baby twee slangen wurgde. Vanaf die dag draagt hij de onkwetsbare huid van het beest als mantel — het enige harnas dat hem ooit nodig zal zijn, en een teken voor iedereen die hem ziet aankomen dat de Nemeïsche Leeuw niet langer bestaat.
 
 Eurystheus, die eigenlijk had verwacht dat deze eerste taak Herakles' laatste zou zijn, is zo geschokt door zijn terugkeer dat hij voortaan een grote bronzen pot laat klaarzetten om zich in te verstoppen wanneer Herakles nadert.
+
+IMAGE:
+ch2_eurystheus_pot.png
 
 Voor hij verdergaat, houdt Herakles even stil en kijkt, met een blik die net iets te gericht is voor toeval, recht in jouw richting — alsof hij, net als Athena eerder dit hoofdstuk, iets aanvoelt van een aanwezigheid die niemand anders opmerkt. "Een boodschapper die dit allemaal ziet gebeuren, verdient beter dan vodden onder een geleende mantel," zegt hij, en gooit zijn eigen, nu overbodige harnas in jouw richting — het brons dat hij droeg voor de leeuwenhuid het overbodig maakte. "Ik heb het toch niet meer nodig." Het landt zwaarder in je handen dan je had verwacht, nog warm en ruikend naar ijzer en Nemeïsch stof.
 

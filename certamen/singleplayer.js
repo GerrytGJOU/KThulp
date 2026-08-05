@@ -925,8 +925,22 @@ function spCodexSouvenirsHTML(){
 /* ---- WERELDKAART: geïllustreerd paneel + onthullende locatie-pins.
    Codex is PER SAVESLOT (net als de rest van SP_STATE), dus de kaart toont
    de ontdekkingen van de actieve slot — logisch, want elke slot is een eigen
-   doorspeling met een eigen route door het verhaal. ---- */
+   doorspeling met een eigen route door het verhaal.
+   Zoom (Gerbens verzoek, 2026-08-04 — Griekenland zit te vol op 100%): het
+   plaatje wordt op 150/200/275% breder gerenderd binnen een scrollbare
+   viewport; de pins zelf krijgen NOOIT een CSS-%, altijd PIXELS, herberekend
+   via spPositionMapPins() vanuit de werkelijke gerenderde beeldgrootte
+   (img.clientWidth/Height). Zelfde reden als de pin-editor-tool
+   (certamen/assets/chronica/maps/pin-editor.html): % op een absoluut
+   gepositioneerd kind lost op t.o.v. de eigen (mogelijk kleinere, door
+   overflow ingeklemde) containing block, niet t.o.v. het echte, groter
+   gerenderde plaatje — dat gaf daar exact dezelfde "pins driften weg"-bug.
+   De pins-wrapper krijgt om diezelfde reden ook een expliciete px-breedte/
+   hoogte (i.p.v. inset:0), zodat hij het paneel écht laat scrollen tot aan
+   de rand van het gezoomde plaatje. ---- */
 let SP_MAP_CURRENT_PANEL = "aegean";
+let SP_MAP_ZOOM = 1;
+const SP_MAP_ZOOM_LEVELS = [1, 1.5, 2, 2.75];
 SCREENS.spWorldMap = function(){
   document.body.classList.remove("greek");
   if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
@@ -936,25 +950,52 @@ SCREENS.spWorldMap = function(){
   const codex = SP_STATE.codex||[];
   const pins = SP_MAP_LOCATIONS
     .filter(loc=>loc.panel===panelId && spLocationUnlocked(loc, codex))
-    .map(loc=>`<button class="sp-map-pin" style="left:${loc.x}%;top:${loc.y}%" title="${esc(loc.nm)}" onclick="spShowLocationInfo('${loc.id}')">
+    .map(loc=>`<button class="sp-map-pin" data-x="${loc.x}" data-y="${loc.y}" title="${esc(loc.nm)}" onclick="spShowLocationInfo('${loc.id}')">
       <span class="sp-map-pin-dot"></span><span class="sp-map-pin-label">${esc(loc.nm)}</span>
     </button>`).join("");
   const tabs = Object.keys(SP_MAP_PANELS).map(pid=>
     `<button class="btn ${pid===panelId?"btn-primary":"btn-ghost"}" style="flex:1" onclick="spSwitchMapPanel('${pid}')">${esc(SP_MAP_PANELS[pid].nm.split(" — ")[0])}</button>`
   ).join("");
+  const zoomBtns = SP_MAP_ZOOM_LEVELS.map(z=>
+    `<button class="btn ${Math.abs(z-SP_MAP_ZOOM)<0.01?"btn-primary":"btn-ghost"}" style="flex:1" onclick="spSetMapZoom(${z})">${Math.round(z*100)}%</button>`
+  ).join("");
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Wereldkaart</h2></div>
   <div class="panel" style="display:flex;gap:8px">${tabs}</div>
-  <div class="panel"><p class="note">${esc(panel.nm)} — nieuwe plekken verschijnen zodra je ze in het verhaal hebt bezocht.</p></div>
-  <div class="panel" style="padding:0;overflow:hidden;position:relative">
-    <img src="assets/chronica/maps/${esc(panel.img)}" alt="" style="width:100%;display:block" onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
+  <div class="panel" style="display:flex;gap:8px;align-items:center">
+    <span class="note" style="margin:0;white-space:nowrap">🔍 Zoom:</span>${zoomBtns}
+  </div>
+  <div class="panel"><p class="note">${esc(panel.nm)} — nieuwe plekken verschijnen zodra je ze in het verhaal hebt bezocht. Plekken te dicht op elkaar? Zoom in.</p></div>
+  <div class="panel" style="padding:0;overflow:auto;position:relative;max-height:65vh">
+    <img id="spMapImg" src="assets/chronica/maps/${esc(panel.img)}" alt="" style="width:${Math.round(SP_MAP_ZOOM*100)}%;display:block" onload="spPositionMapPins()" onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
     <div class="sp-map-missing note" style="display:none;padding:40px 16px;text-align:center">Kaart nog niet beschikbaar.</div>
-    <div style="position:absolute;inset:0">${pins}</div>
+    <div id="spMapPins" style="position:absolute;left:0;top:0">${pins}</div>
   </div>
   ${foot()}`);
+  spPositionMapPins();
 };
+function spSetMapZoom(z){
+  SP_MAP_ZOOM = z;
+  go("spWorldMap");
+}
+function spPositionMapPins(){
+  const img = document.getElementById('spMapImg');
+  const wrap = document.getElementById('spMapPins');
+  if(!img || !wrap) return;
+  const w = img.clientWidth, h = img.clientHeight;
+  if(!w || !h) return; // nog niet (klaar met) laden
+  wrap.style.width = w + 'px';
+  wrap.style.height = h + 'px';
+  wrap.querySelectorAll('.sp-map-pin').forEach(pin=>{
+    const x = parseFloat(pin.dataset.x), y = parseFloat(pin.dataset.y);
+    pin.style.left = (x/100*w) + 'px';
+    pin.style.top = (y/100*h) + 'px';
+  });
+}
+window.addEventListener('resize', ()=>{ spPositionMapPins(); });
 function spSwitchMapPanel(pid){
   SP_MAP_CURRENT_PANEL = pid;
+  SP_MAP_ZOOM = 1;
   go("spWorldMap");
 }
 function spShowLocationInfo(id){
