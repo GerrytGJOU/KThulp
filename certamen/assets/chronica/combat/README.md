@@ -16,9 +16,10 @@ spel werkt dus ook zonder art.
 Alle andere sprites (incl. `cerberus.png` en `nemeische_leeuw.png`) zijn
 eigen, met de Gemini-Gem gegenereerde tekeningen — geen Boss Battle-materiaal.
 
-## Nog te genereren
-Zie `CH_COMBAT_SPRITES_TODO.md` in de repo-root voor de volledige lijst en
-de Gemini-Gem-prompt die hiervoor gebruikt wordt.
+## Status
+Alle 16 COMBAT-sprites zijn compleet. Zie `CH_COMBAT_SPRITES_TODO.md` in de
+repo-root voor de volledige lijst en de Gemini-Gem-prompt, te hergebruiken
+zodra er een nieuw COMBAT-gevecht bijkomt.
 
 ## Nieuw sprite-bestand toevoegen
 1. Bestand hier plaatsen, exacte naam zoals in `SP_COMBAT_ENEMIES` (`img`-veld,

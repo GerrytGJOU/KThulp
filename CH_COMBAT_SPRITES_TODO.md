@@ -1,14 +1,12 @@
 # Chronica Classica — COMBAT-sprites: generatielijst
 
-Bron van waarheid voor welke tegenstander-sprites nog gegenereerd moeten
-worden voor de COMBAT-gevechten in Chronica Classica (Single Player Mode).
-Sprites komen in `certamen/assets/chronica/combat/` (zie het README daar),
-niet in `certamen/assets/bosses/` (dat is voor Boss Battle). Bestandsnaam
-moet exact overeenkomen met het `img`-veld van de betreffende entry in
-`SP_COMBAT_ENEMIES` (`certamen/singleplayer-data.js`) — GitHub Pages hostt
-hoofdlettergevoelig.
+**Status: compleet.** Alle 16 entries in `SP_COMBAT_ENEMIES`
+(`certamen/singleplayer-data.js`) hebben een bestaand, correct ladend
+sprite-bestand in `certamen/assets/chronica/combat/` (zie het README daar).
+Dit bestand blijft staan als referentie voor de gebruikte Gem-prompt en als
+startpunt mocht er ooit een nieuw COMBAT-gevecht bijkomen.
 
-## Al aanwezig
+## Alle 16 sprites
 | Bestand | Herkomst |
 |---|---|
 | `nemeische_leeuw.png` | eigen Gemini-Gem-tekening |
@@ -18,30 +16,25 @@ hoofdlettergevoelig.
 | `centauren.png`, `kretenzische_stier.png`, `merries_van_diomedes.png`, `amazones.png`, `geryon.png` | eigen Gemini-Gem-tekening (Hoofdstuk 3) |
 | `amycus.png`, `drakon_vlies.png` | eigen Gemini-Gem-tekening (Hoofdstuk 5) |
 | `laodamas.png` | eigen Gemini-Gem-tekening (Hoofdstuk 6) |
-| `hektor.png` | eigen Gemini-Gem-tekening (Hoofdstuk 8) |
+| `trojaanse_voorhoede.png`, `hektor.png` | eigen Gemini-Gem-tekening (Hoofdstuk 8) |
+| `trojaanse_wachters.png` | eigen Gemini-Gem-tekening (Hoofdstuk 9) |
 | `vrijers_ithaka.png` | eigen Gemini-Gem-tekening (Hoofdstuk 12) |
 
-## Nog te genereren (2 sprites)
-
-### Hoofdstuk 8 — De Wrok van Achilles
-| Bestand | Naam in-game | Context voor de Gem |
-|---|---|---|
-| `trojaanse_voorhoede.png` | De Trojaanse Voorhoede | Trojaanse strijders bij de Griekse schepen met fakkels in de hand. **Groep.** |
-
-### Hoofdstuk 9 — Ilion in Vlammen
-| Bestand | Naam in-game | Context voor de Gem |
-|---|---|---|
-| `trojaanse_wachters.png` | De Laatste Wachters van Troje | Handvol dronken, half-wakkere verdedigers bij de poort, de nacht dat Troje valt. **Groep.** |
+## Nieuw COMBAT-gevecht toevoegen (toekomst)
+1. Entry toevoegen aan `SP_COMBAT_ENEMIES` (`certamen/singleplayer-data.js`)
+   met een `img`-pad naar `assets/chronica/combat/<naam>.png`.
+2. Sprite genereren met de Gem hieronder, bestand met exact die naam in de
+   map plaatsen.
 
 ## De Gemini-Gem (custom instructie voor de sprite-generator)
 
-De eerste 14 sprites zijn hiermee gegenereerd en zien er goed uit: scherp,
-correct transparant (geen witte doos rond de figuur), stijl consistent over
-alle bestanden. Geen aanpassing nodig — gebruik dezelfde Gem voor de laatste 2.
+Alle 16 sprites zijn hiermee gegenereerd en zien er goed uit: scherp, correct
+transparant (geen witte doos rond de figuur), stijl consistent over alle
+bestanden. Geen aanpassing nodig.
 
 Enige kanttekening: de Gem negeert de "ongeveer 400×400"-instructie en
 levert 1024×1024 of 1408×768 — geen probleem, dat rendert prima (het spel
-toont ze op 140×140 via `object-fit:contain`) en is zelfs scherper. Niets aan
+toont ze op 260×260 via `object-fit:contain`) en is zelfs scherper. Niets aan
 veranderen.
 
 ```
