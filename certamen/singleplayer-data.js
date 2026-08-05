@@ -4952,7 +4952,7 @@ END
 === SCENE: CH2_L05 ===
 
 TITLE:
-"Fuge!"
+Het Enige Woord Dat Telt
 
 TEXT:
 Een van de reizigers, doodsbleek, grijpt Latona bij haar arm en schreeuwt het enige woord dat er nog toe doet.
