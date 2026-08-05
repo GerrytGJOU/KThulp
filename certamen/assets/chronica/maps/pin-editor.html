@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Chronica — Kaart-pin-editor (dev tool)</title>
+<style>
+  :root{ color-scheme: dark; }
+  body{ margin:0; font-family:system-ui,sans-serif; background:#1b1712; color:#eee; }
+  header{ padding:10px 16px; background:#2a221a; border-bottom:2px solid #6b5636; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  header h1{ font-size:15px; margin:0; margin-right:auto; color:#e8c97a; }
+  button, select{ font:inherit; padding:6px 12px; border-radius:6px; border:1px solid #6b5636; background:#3a2f22; color:#eee; cursor:pointer; }
+  button:hover{ background:#4a3d2c; }
+  button.primary{ background:#8a6a2c; border-color:#c9a24a; font-weight:bold; }
+  button.primary:hover{ background:#a37e34; }
+  #mapWrap{ position:relative; display:inline-block; overflow:auto; max-width:calc(100vw - 292px); max-height:calc(100vh - 56px); vertical-align:top; }
+  body.sidebar-hidden #mapWrap{ max-width:100vw; }
+  /* Pins are positioned in PIXELS (computed from the image's own rendered
+     size), never in CSS %. % on an absolutely-positioned child resolves
+     against the containing block's own box — which #mapWrap's overflow:auto
+     clips to the visible scroll viewport, not the (wider) scrollable image
+     — so % silently drifted pins left/up from the cursor. See setPinPos(). */
+  #mapImg{ display:block; user-select:none; -webkit-user-drag:none; }
+  .pin{
+    position:absolute; width:16px; height:16px; margin:-8px 0 0 -8px;
+    border-radius:50%; background:#e33; border:2px solid #fff; cursor:grab;
+    box-shadow:0 0 4px rgba(0,0,0,.7);
+  }
+  .pin:active{ cursor:grabbing; }
+  .pin.selected{ background:#3d3; box-shadow:0 0 0 3px rgba(51,221,51,.5); }
+  .pin-label{
+    position:absolute; left:12px; top:-4px; white-space:nowrap; font-size:12px;
+    background:rgba(0,0,0,.75); color:#ffe; padding:1px 5px; border-radius:4px;
+    pointer-events:none;
+  }
+  #sidebar{
+    position:fixed; right:0; top:56px; bottom:0; width:280px; background:#241d15;
+    border-left:2px solid #6b5636; padding:12px; overflow:auto; font-size:13px;
+  }
+  body.sidebar-hidden #sidebar{ display:none; }
+  body.sidebar-hidden main{ margin-right:0; }
+  #sidebar h2{ font-size:13px; color:#e8c97a; margin:0 0 6px; }
+  #coordBox{ margin-bottom:14px; }
+  #coordBox label{ display:block; margin:6px 0 2px; color:#cbb; }
+  #coordBox input{ width:100%; box-sizing:border-box; padding:4px 6px; border-radius:4px; border:1px solid #6b5636; background:#3a2f22; color:#eee; }
+  #pinList{ list-style:none; padding:0; margin:0; }
+  #pinList li{ padding:4px 6px; border-radius:4px; cursor:pointer; }
+  #pinList li:hover{ background:#3a2f22; }
+  #pinList li.active{ background:#4a3d2c; color:#e8c97a; }
+  #status{ font-size:12px; color:#9c9; min-height:16px; }
+  textarea{ width:100%; height:160px; box-sizing:border-box; background:#12100c; color:#9f9; font-family:monospace; font-size:11px; border:1px solid #6b5636; border-radius:4px; }
+  main{ margin-right:280px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Chronica — Kaart-pin-editor (alleen lokaal, dev tool)</h1>
+  <select id="panelSelect"></select>
+  <button id="loadBtn">Herlaad data uit singleplayer-data.js</button>
+  <button id="exportBtn" class="primary">Exporteer bijgewerkte pins</button>
+  <button id="sidebarToggle">Zijbalk verbergen</button>
+  <span id="status"></span>
+</header>
+<main>
+  <div id="mapWrap">
+    <img id="mapImg" src="" alt="">
+  </div>
+</main>
+<div id="sidebar">
+  <h2>Geselecteerde pin</h2>
+  <div id="coordBox">
+    <div id="noSelection" style="color:#987">Klik een pin aan (op de kaart of in de lijst) om te verschuiven. Slepen kan ook direct.</div>
+    <div id="selFields" style="display:none">
+      <div><b id="selName"></b> <span id="selId" style="color:#987"></span></div>
+      <label>x (%)</label><input id="xInput" type="number" step="0.1">
+      <label>y (%)</label><input id="yInput" type="number" step="0.1">
+      <div style="margin-top:8px;color:#987;font-size:11px">Pijltjestoetsen (na klikken op de pin) verschuiven ook in stapjes van 0.2%, met Shift 1%.</div>
+    </div>
+  </div>
+  <h2>Alle pins op dit paneel</h2>
+  <ul id="pinList"></ul>
+  <h2 style="margin-top:16px">Export (JSON)</h2>
+  <button id="copyBtn">Kopieer naar klembord</button>
+  <textarea id="exportArea" readonly></textarea>
+</div>
+<script>
+const PANELS = {
+  aegean:  { nm:"Egeïsch — Italië/Griekenland/Troje", img:"panel1_aegean.png" },
+  western: { nm:"Westen — Sicilië/Carthago/Gades/Alpen", img:"panel2_western.png" },
+  eastern: { nm:"Oosten — Kaukasus/Kolchis/Perzië/Egypte", img:"panel3_eastern.png" },
+};
+let LOCATIONS = [];
+let currentPanel = "aegean";
+let selectedId = null;
+
+const panelSelect = document.getElementById('panelSelect');
+Object.keys(PANELS).forEach(pid=>{
+  const o = document.createElement('option');
+  o.value = pid; o.textContent = PANELS[pid].nm;
+  panelSelect.appendChild(o);
+});
+panelSelect.value = currentPanel;
+panelSelect.onchange = ()=>{ currentPanel = panelSelect.value; selectedId = null; renderPanel(); };
+
+async function loadData(){
+  setStatus("Laden...");
+  const res = await fetch('../../../singleplayer-data.js?_=' + Date.now());
+  const src = await res.text();
+  const start = src.indexOf('const SP_MAP_LOCATIONS = [');
+  if(start === -1){ setStatus("Kon SP_MAP_LOCATIONS niet vinden!"); return; }
+  const bodyStart = src.indexOf('[', start);
+  let depth = 0, end = -1;
+  for(let i=bodyStart; i<src.length; i++){
+    if(src[i]==='[') depth++;
+    else if(src[i]===']'){ depth--; if(depth===0){ end=i; break; } }
+  }
+  const arrText = src.slice(bodyStart, end+1);
+  // eslint-disable-next-line no-eval
+  LOCATIONS = eval(arrText);
+  setStatus(LOCATIONS.length + " pins geladen.");
+  renderPanel();
+}
+
+function setStatus(msg){ document.getElementById('status').textContent = msg; }
+
+function renderPanel(){
+  const img = document.getElementById('mapImg');
+  img.src = PANELS[currentPanel].img;
+  const wrap = document.getElementById('mapWrap');
+  // clear old pins
+  wrap.querySelectorAll('.pin').forEach(el=>el.remove());
+  img.onload = () => {
+    const pins = LOCATIONS.filter(l=>l.panel===currentPanel);
+    pins.forEach(loc => renderPin(loc));
+    renderList();
+  };
+  if(img.complete && img.naturalWidth){ img.onload(); }
+}
+
+// Pixel position for a pin, derived from the image's own current rendered
+// size — never CSS %, see the #mapWrap comment above.
+function setPinPos(pin, loc){
+  const img = document.getElementById('mapImg');
+  pin.style.left = (loc.x/100 * img.clientWidth) + 'px';
+  pin.style.top  = (loc.y/100 * img.clientHeight) + 'px';
+}
+
+function renderPin(loc){
+  const wrap = document.getElementById('mapWrap');
+  const img = document.getElementById('mapImg');
+  const pin = document.createElement('div');
+  pin.className = 'pin' + (loc.id===selectedId ? ' selected' : '');
+  pin.dataset.id = loc.id;
+  setPinPos(pin, loc);
+  const label = document.createElement('span');
+  label.className = 'pin-label';
+  label.textContent = loc.nm;
+  pin.appendChild(label);
+  wrap.appendChild(pin);
+
+  pin.addEventListener('pointerdown', (e)=>{
+    e.preventDefault();
+    select(loc.id);
+    pin.setPointerCapture(e.pointerId);
+    const move = (ev)=>{
+      const rect = img.getBoundingClientRect();
+      let px = (ev.clientX - rect.left) / rect.width * 100;
+      let py = (ev.clientY - rect.top) / rect.height * 100;
+      px = Math.max(0, Math.min(100, px));
+      py = Math.max(0, Math.min(100, py));
+      loc.x = Math.round(px*10)/10;
+      loc.y = Math.round(py*10)/10;
+      setPinPos(pin, loc);
+      updateCoordBox();
+    };
+    const up = (ev)=>{
+      pin.releasePointerCapture(e.pointerId);
+      pin.removeEventListener('pointermove', move);
+      pin.removeEventListener('pointerup', up);
+    };
+    pin.addEventListener('pointermove', move);
+    pin.addEventListener('pointerup', up);
+  });
+}
+
+function select(id){
+  selectedId = id;
+  document.querySelectorAll('.pin').forEach(p=>p.classList.toggle('selected', p.dataset.id===id));
+  document.querySelectorAll('#pinList li').forEach(li=>li.classList.toggle('active', li.dataset.id===id));
+  updateCoordBox();
+}
+
+function updateCoordBox(){
+  const loc = LOCATIONS.find(l=>l.id===selectedId);
+  document.getElementById('noSelection').style.display = loc ? 'none' : 'block';
+  document.getElementById('selFields').style.display = loc ? 'block' : 'none';
+  if(!loc) return;
+  document.getElementById('selName').textContent = loc.nm;
+  document.getElementById('selId').textContent = '(' + loc.id + ')';
+  document.getElementById('xInput').value = loc.x;
+  document.getElementById('yInput').value = loc.y;
+}
+
+document.getElementById('xInput').oninput = (e)=>{
+  const loc = LOCATIONS.find(l=>l.id===selectedId); if(!loc) return;
+  loc.x = parseFloat(e.target.value)||0;
+  setPinPos(document.querySelector('.pin[data-id="'+loc.id+'"]'), loc);
+};
+document.getElementById('yInput').oninput = (e)=>{
+  const loc = LOCATIONS.find(l=>l.id===selectedId); if(!loc) return;
+  loc.y = parseFloat(e.target.value)||0;
+  setPinPos(document.querySelector('.pin[data-id="'+loc.id+'"]'), loc);
+};
+
+document.addEventListener('keydown', (e)=>{
+  if(!selectedId) return;
+  const loc = LOCATIONS.find(l=>l.id===selectedId); if(!loc) return;
+  const step = e.shiftKey ? 1 : 0.2;
+  let handled = true;
+  if(e.key==='ArrowLeft') loc.x -= step;
+  else if(e.key==='ArrowRight') loc.x += step;
+  else if(e.key==='ArrowUp') loc.y -= step;
+  else if(e.key==='ArrowDown') loc.y += step;
+  else handled = false;
+  if(handled){
+    e.preventDefault();
+    loc.x = Math.round(loc.x*10)/10; loc.y = Math.round(loc.y*10)/10;
+    setPinPos(document.querySelector('.pin[data-id="'+loc.id+'"]'), loc);
+    updateCoordBox();
+  }
+});
+
+function renderList(){
+  const ul = document.getElementById('pinList');
+  ul.innerHTML = '';
+  LOCATIONS.filter(l=>l.panel===currentPanel).forEach(loc=>{
+    const li = document.createElement('li');
+    li.textContent = loc.nm;
+    li.dataset.id = loc.id;
+    if(loc.id===selectedId) li.classList.add('active');
+    li.onclick = ()=>{ select(loc.id); };
+    ul.appendChild(li);
+  });
+}
+
+document.getElementById('sidebarToggle').onclick = ()=>{
+  const hidden = document.body.classList.toggle('sidebar-hidden');
+  document.getElementById('sidebarToggle').textContent = hidden ? 'Zijbalk tonen' : 'Zijbalk verbergen';
+};
+
+document.getElementById('loadBtn').onclick = loadData;
+document.getElementById('exportBtn').onclick = ()=>{
+  const txt = JSON.stringify(LOCATIONS, null, 2);
+  document.getElementById('exportArea').value = txt;
+  setStatus("Export klaar in het tekstvak rechtsonder — kopieer en stuur naar Claude.");
+};
+document.getElementById('copyBtn').onclick = ()=>{
+  const area = document.getElementById('exportArea');
+  if(!area.value){ document.getElementById('exportBtn').click(); }
+  navigator.clipboard.writeText(area.value).then(()=>setStatus("Gekopieerd naar klembord!"));
+};
+
+loadData();
+</script>
+</body>
+</html>
