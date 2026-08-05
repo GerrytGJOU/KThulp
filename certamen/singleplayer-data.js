@@ -1508,6 +1508,34 @@ const SP_PUZZLES = {
     vraag:"Het volk twijfelt achteraf of Horatius wel juist heeft gehandeld tegenover zijn eigen zuster: “Populus dubitat num Horatius recte ___” — het volk twijfelt of Horatius juist gehandeld heeft. Typ de conjunctivus perfectum, 3e persoon enkelvoud, van agere (handelen).",
     antwoord:"egerit",
     hint:"In een indirecte vraag (na dubitare, 'twijfelen') staat het werkwoord in de conjunctivus — hier conjunctivus perfectum, omdat de handeling al vóór het twijfelen voltooid was. Conjunctivus perfectum van agere: perfectumstam eg- + -erit (3e pers. enk.) = egerit." },
+  // ---- Hoofdstuk 14 — bewust GEEN nieuwe grammatica (adempauze na de
+  // conjunctivus van Hoofdstuk 13, zie codex_grammatica_ch14_overzicht):
+  // alle vier puzzels herhalen stof uit eerdere hoofdstukken in een nieuwe
+  // verhaalcontext (spaced repetition, zie Chronica.md §7.51/§7.52).
+  puzzle_ch14_gre_peisistratos: { type:"multiple-choice",
+    vraag:"Peisistratos, teruggekeerd naast de als Athena verklede Phye, roept naar de menigte: “ἡ Ἀθηνᾶ αὐτὴ ___ με” — Athena zelf heeft mij teruggebracht. Welke vorm van ἄγω (leiden, brengen) is hier de aoristus, 3e persoon enkelvoud actief?",
+    opties:["ἤγαγε","ἄγει","ἄξει","ἀγαγεῖν"], antwoord:"ἤγαγε",
+    hint:"ἄγω heeft een onregelmatige (2e) aoristus: ἤγαγον, ἤγαγες, ἤγαγε (3e pers. enk.) — herhaling uit eerdere hoofdstukken." },
+  puzzle_ch14_gre_tyrannicides: { type:"typed-greek",
+    vraag:"Op het feest valt het nieuws als een schok: “Ἵππαρχος ___ ὑπὸ Ἁρμοδίου καὶ Ἀριστογείτονος” — Hipparchos werd vermoord door Harmodios en Aristogeiton. Typ met het Griekse toetsenbord de aoristus passief, 3e persoon enkelvoud, van φονεύω (vermoorden).",
+    antwoord:"ἐφονεύθη",
+    hint:"Aoristus passief, kenmerk -θη- (zie Hoofdstuk 10): stam φονευ- + -θη- + 3e pers. enk. -ø = ἐφονεύθη, net als ἐλύθη 'hij/zij werd losgemaakt'." },
+  puzzle_ch14_gre_democratie: { type:"multiple-choice",
+    vraag:"In Kleisthenes' nieuwe volksvergadering wordt elke burger rechtstreeks aangesproken: “ὦ δῆμε” — o volk. Welke naamval is δῆμε hier?",
+    opties:["vocativus","genitivus","dativus","accusativus"], antwoord:"vocativus",
+    hint:"De vocativus is de naamval waarmee je iemand (of, zoals hier, een hele groep) rechtstreeks aanspreekt — herken je nog van Hoofdstuk 1." },
+  puzzle_ch14_lat_cocles: { type:"typed-latin",
+    vraag:"Horatius Cocles roept naar zijn mannen terwijl hij alleen op de brug blijft staan: “Pontem ___!” — laten we de brug afbreken! Typ de conjunctivus praesens, 1e persoon meervoud, van rumpere (breken).",
+    antwoord:"rumpamus",
+    hint:"Hortatieve conjunctivus ('laten we...'): 3e-conjugatiewerkwoord rumpere → rump- + -amus (1e pers. mv.) = rumpamus — zelfde patroon als expellamus in Hoofdstuk 13." },
+  puzzle_ch14_lat_scaevola: { type:"multiple-choice",
+    vraag:"“Manu ardente, Scaevola non timuit” — hoe vertaal je de ablativus absolutus 'manu ardente' hier het best?",
+    opties:["terwijl zijn hand brandde","zijn hand zal branden","hij verbrandde zijn hand","omdat zijn hand verbrand was"], antwoord:"terwijl zijn hand brandde",
+    hint:"Een ablativus absolutus (participium + naamwoord, allebei in de ablativus, los van de rest van de zin) vertaal je meestal met een bijzin — hier 'terwijl...', net als bij de ablativus absolutus uit Hoofdstuk 11." },
+  puzzle_ch14_lat_cloelia: { type:"typed-latin",
+    vraag:"Porsenna vraagt zich af of Cloelia werkelijk zelf de rivier is overgezwommen: “Porsenna dubitat num Cloelia flumen ipsa ___” — Typ de conjunctivus perfectum, 3e persoon enkelvoud, van tranare (doorzwemmen).",
+    antwoord:"tranaverit",
+    hint:"Indirecte vraag (num...) met conjunctivus perfectum: perfectumstam tranav- + -erit (3e pers. enk.) = tranaverit — zelfde patroon als egerit in Hoofdstuk 13." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -3531,7 +3559,7 @@ De boodschapper wijst met een hand die niet helemaal vast lijkt in deze wereld. 
 
 Je stapt door. Wanneer het licht wegtrekt, sta je niet langer in Latium. De lucht ruikt naar tijm en zilte wind, en de grond onder je voeten is steniger, droger, ouder aanvoelend dan de akkers die je kende. Je staat aan de rand van een land dat mensen ooit Hellas noemden — bergen die recht uit zee lijken te groeien, olijfbomen die zich krommen naar een fellere zon, en ergens hierin, verspreid over drie zeer verschillende plekken, wachten verhalen die jou nodig hebben.
 
-"Drie namen, drie plekken," zegt de boodschapper, "maar één reiziger, en de vergetelheid wacht niet. Welk verhaal je ook het eerst redt — de andere twee zullen intussen verder vervagen, misschien wel voorbij redding. Kies goed."
+"Voordat we weten of jij de geschikte persoon bent, moeten we je eerst testen met een eenvoudige opdracht," zegt de boodschapper. "Drie namen, drie plekken — maar jij kiest er nu maar één. Welk verhaal je ook redt, dat is het verhaal dat telt voor deze reis; de andere twee zullen intussen verder vervagen, misschien wel voorbij redding. Kies wijs."
 
 CODEX:
 codex_grammatica_ch1_lidwoord, codex_grammatica_ch1_naamvallen
