@@ -18023,6 +18023,9 @@ Jaren later hoort Athena van een sterveling, Arachne, die beweert een betere wev
 
 De wedstrijd die volgt eindigt niet in Athena's voordeel op de manier die je zou verwachten: Arachne's weefsel is foutloos, en toont bovendien de fouten van de goden zelf, meedogenloos precies. Een woedende Athena verandert haar tegenstander in een spin — voor eeuwig wevend, nooit meer erkend voor haar talent.
 
+IMAGE:
+ch13_gre_arachne.png
+
 CODEX:
 codex_arachne
 
@@ -18238,6 +18241,9 @@ Recht of Moord
 TEXT:
 Het volk van Rome is verdeeld. Sommigen zien in Horatius' daad de hoogste vorm van loyaliteit aan de stad; anderen zien enkel een moord op een onschuldige vrouw, door de eigen hand van haar broer. Horatius wordt uiteindelijk berecht — en, na een emotioneel beroep van zijn eigen vader op het volk, vrijgesproken. Niet omdat iedereen het eens is met wat hij deed, maar omdat Rome hem op dat moment harder nodig heeft dan het antwoord op die vraag.
 
+IMAGE:
+ch13_lat_horatius_vrijspraak.png
+
 CODEX:
 codex_horatius_zuster
 
@@ -18315,6 +18321,9 @@ Het Einde van de Koningen
 
 TEXT:
 Het volk van Rome, al jaren onder Tarquinius' tirannie gebukt, sluit zich massaal bij Brutus' eed aan. Tarquinius Superbus wordt verjaagd, zijn familie verbannen — en in plaats van een nieuwe koning kiest Rome iets dat nog niemand ooit had geprobeerd: twee jaarlijks gekozen consuls, met macht die elkaar in evenwicht houdt. De Romeinse Republiek is geboren, uit dezelfde soort onrecht die haar koningen ooit aan de macht bracht.
+
+IMAGE:
+ch13_lat_republiek.png
 
 STATPOINTS:
 3
