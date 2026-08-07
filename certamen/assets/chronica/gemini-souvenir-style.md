@@ -104,7 +104,7 @@ aangemaakt.
 
 ---
 
-## Klaar-om-te-plakken prompts voor de 11 bestaande voorwerpen
+## Klaar-om-te-plakken prompts voor de 20 bestaande voorwerpen
 
 Bestandsnamen zoals verwacht door `SP_SOUVENIRS` (singleplayer-data.js) —
 zet elk resultaat onder die naam in `certamen/assets/chronica/souvenirs/`.
@@ -341,5 +341,66 @@ zet elk resultaat onder die naam in `certamen/assets/chronica/souvenirs/`.
 > Camera at eye level with the pedestal, three-quarter lighting,
 > background dark and blurred (heavy vignette), the object in sharp focus.
 > A thin Aegean-blue glow glints faintly on the glass. No text, no speech
+> bubbles, no watermark, no modern objects, no people, no hands, no faces.
+> 1:1 square format, fills the entire frame.
+
+### 17. `souvenir_twee_zeeen.png` — Een Fles Water uit Twee Zeeën (Hoofdstuk 10 — beide talen)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> small old glass vial/bottle filled with seawater that never seems to
+> evaporate, faint tiny bubbles suspended motionless inside, resting on a
+> small dark-red velvet cushion atop a small weathered stone pedestal,
+> entirely covered by an old glass bell jar/dome, faintly and softly
+> gold-lit from within as if quietly magical. Camera at eye level with the
+> pedestal, three-quarter lighting, background dark and blurred (heavy
+> vignette), the object in sharp focus. This souvenir belongs to both
+> storylines at once — the glow on the glass is a soft blend of Aegean blue
+> and oxblood dark red intertwining, neither colour dominant. No text, no
+> speech bubbles, no watermark, no modern objects, no people, no hands, no
+> faces. 1:1 square format, fills the entire frame.
+
+### 18. `souvenir_twee_deuren.png` — Een Buidel Aarde en As (Hoofdstuk 11 — beide talen)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> small drawstring pouch made of worn leather, loosely closed, with a faint
+> wisp of pale ash and dark earth visible spilling slightly from its
+> half-open top, resting directly on a small weathered stone pedestal (no
+> cushion — a sturdy object), entirely covered by an old glass bell
+> jar/dome, faintly and softly gold-lit from within as if quietly magical.
+> Camera at eye level with the pedestal, three-quarter lighting, background
+> dark and blurred (heavy vignette), the object in sharp focus. This
+> souvenir belongs to both storylines at once — the glow on the glass is a
+> soft blend of Aegean blue and oxblood dark red intertwining, neither
+> colour dominant. No text, no speech bubbles, no watermark, no modern
+> objects, no people, no hands, no faces. 1:1 square format, fills the
+> entire frame.
+
+### 19. `souvenir_ara_maxima.png` — Een Steen van het Ara Maxima (Hoofdstuk 12, Latijnse lijn — oxblood)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> rough fragment of ancient altar stone, one weathered face still bearing a
+> trace of carved tooling marks, resting directly on a small weathered
+> stone pedestal (no cushion — a sturdy object), entirely covered by an old
+> glass bell jar/dome, faintly and softly gold-lit from within as if quietly
+> magical. Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette), the object in sharp focus. A
+> thin oxblood dark-red glow glints faintly on the glass. No text, no speech
+> bubbles, no watermark, no modern objects, no people, no hands, no faces.
+> 1:1 square format, fills the entire frame.
+
+### 20. `souvenir_athena_helm.png` — Een Twijgje van de Eerste Olijfboom (Hoofdstuk 13, Griekse lijn — Aegean blue)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> small dried, slightly curled olive twig with two or three shriveled
+> silvery-green leaves still attached, resting on a small dark-red velvet
+> cushion atop a small weathered stone pedestal, entirely covered by an old
+> glass bell jar/dome, faintly and softly gold-lit from within as if quietly
+> magical. Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette), the object in sharp focus. A
+> thin Aegean-blue glow glints faintly on the glass. No text, no speech
 > bubbles, no watermark, no modern objects, no people, no hands, no faces.
 > 1:1 square format, fills the entire frame.
