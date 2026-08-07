@@ -5451,6 +5451,115 @@ beide naar `CH12_EINDE`.
 ongewijzigde waarschuwingen; het taalspoor-graafscript rapporteert na de
 fix nul afwijkingen over alle 15 blokken (Proloog t/m H14).
 
+### 7.55 Hoofdstuk 14-audit + verbeterronde: Phye en Harmodios' zuster krijgen een stem, Veturia/Volumnia genoemd, vocab uitgebreid (2026-08-07)
+
+Volledige audit van Hoofdstuk 14 tegen de gevraagde checklist (volledigheid,
+speelbaarheid, payoffs/choices matter, Clementia/Severitas, vocab,
+grammatica, vrouwenrepresentatie, didactiek). Belangrijkste bevinding:
+**twee illustraties ontbreken nog** (`ch14_lat_cloelia_tiber.png`,
+`souvenir_verzet_tirannen.png` — de laatste stond niet eens in de
+commit-boodschap van de vorige illustratieronde, dus over het hoofd
+gezien). Verder alles gezond: 0 fouten in `validate_chronica.js`,
+alle Clementia/Severitas-varianten (incl. de nieuwe `{tirannen_motivatie}`
+uit §7.53) handmatig getest in de browser.
+
+**Zwak punt vrouwenrepresentatie, direct opgelost**: op Cloelia na (een
+volwaardig personage met eigen REACTION) waren de vrouwen in dit hoofdstuk
+puur instrumenteel — Phye een stille pion in Peisistratos' list, Harmodios'
+zuster slechts een genoemd motief, Coriolanus' moeder/vrouw ongenoemd
+ondanks dat `CHRONICA_VROUWEN.md` hen expliciet als noemenswaardig
+markeert. Aangepakt:
+- **Phye** (`CH14_GRE_001`) krijgt een eigen `DIALOGUE:`-regel plus een
+  nieuwe afsluitende zin die haar eigen mogelijke bewustzijn van de list
+  erkent — niet langer alleen "omgebouwd tot een levende Athena", ook een
+  vrouw die wist welke rol ze speelde.
+- **Harmodios' zuster** krijgt de historische kanephoros-vernedering
+  (geweigerd als offermanddraagster door Hipparchos, zonder grond) mét een
+  eigen `DIALOGUE:`-regel als het echte motief achter de moord op
+  Hipparchos — voorheen alleen een bijzin ("Hipparchos had Harmodios'
+  zuster... vernederd").
+  **Load-bearing les hierbij**: `DIALOGUE:` wordt NOOIT gerenderd op een
+  scène met `PUZZLE:` — `spRenderPuzzle`/`spPuzzleHeaderHTML`
+  (singleplayer.js) tonen alleen titel + `TEXT:`, geen `scene.dialogue`.
+  Haar eerste versie stond op de PUZZLE-scène en zou dus nooit zichtbaar
+  zijn geweest (pas ontdekt bij het browser-testen, niet door
+  `validate_chronica.js`, die dit soort renderlogica niet kent). Opgelost
+  door de scène te splitsen: `CH14_GRE_002` (nieuw, geen PUZZLE — de
+  vernedering + haar DIALOGUE) → `CH14_GRE_002P` (de eigenlijke moord +
+  PUZZLE + IMAGE + PERSON, ongewijzigd verder). **Algemene regel voor
+  toekomstig werk**: een `DIALOGUE:`-toevoeging aan een bestaande scène
+  altijd eerst checken op `PUZZLE:` in diezelfde scène.
+- **Veturia en Volumnia** (Coriolanus' moeder en vrouw) met naam genoemd in
+  zowel `CH14_LAT_005` als `codex_vroege_republiek_helden`, met een
+  toegevoegde zin die hun rol expliciet maakt: "Zij zijn het, niet de
+  senaat of een generaal, die slagen waar Rome zelf faalt."
+
+**Vocab uitgebreid**: 6 → 10 woorden (H13 had er 12, dus nu vergelijkbare
+dichtheid). Nieuw: `grieks_polites` (πολίτης, burger), `grieks_psephos`
+(ψῆφος, stem/stemsteentje — sluit direct aan bij de ostrakismos-scène),
+`latijn_hostis` (vijand), `latijn_fides` (trouw/goede wil — sluit aan bij
+Cloelia/het verdrag met Porsenna).
+
+**Nog steeds bewust niet gekoppeld** aan de speelbare route (zie §7.52) —
+wacht op de twee ontbrekende illustraties.
+
+**Gevalideerd**: `node --check` + `validate_chronica.js` → 0 fouten, 33
+waarschuwingen (ongewijzigd). Browser-test na de scène-split bevestigt:
+Harmodios' zuster' DIALOGUE nu zichtbaar vóór de puzzel-scène, Phye's
+DIALOGUE ongewijzigd zichtbaar, Veturia/Volumnia beide aanwezig in de
+tekst, vocab-toast toont "10 woorden toegevoegd", alle overige CH14-scènes
+renderen nog steeds foutloos.
+
+### 7.56 Vocabulaire-uitbreiding H1-14: 270 hoogfrequente signaalwoorden uit Pallas/Minerva (2026-08-07)
+
+Aanleiding: Gerben signaleerde dat Combat in de vroege hoofdstukken repetitief
+aanvoelt — logisch, want `spCombatNextQuestion()` trekt uitsluitend uit
+`SP_STATE.vocab` (de woorden die de speler al daadwerkelijk tegenkwam via
+`VOCAB:`), en de bestaande "verhaal-woorden" per hoofdstuk zijn bijna
+allemaal zelfstandige naamwoorden — nauwelijks voorzetsels, voegwoorden of
+hoogfrequente werkwoorden.
+
+**Methode** (volledig uitgeschreven in het nieuwe `VOCAB_UITBREIDING.md`):
+`certamen/vocab.js` (`VOCAB_LA`/`VOCAB_EL`, al frequentie-gerangschikt, zelf
+al gegenereerd uit dezelfde Pallas/Minerva-Excel-woordenlijsten) gefilterd op
+woordsoort (werkwoord/voorzetsel/voegwoord/bijwoord/voornaamwoord), tegen
+Pallas- en Minerva-woordenlijsten (Excel, geparsed op les-/hoofdstuknummer)
+gelegd om een cumulatief curriculumplafond per Chronica-hoofdstuk te bepalen
+(elk woord moet al "aan de beurt zijn geweest"), uitgesloten wat al in
+`SP_VOCAB_ENTRIES` stond, en gesorteerd op frequentie — 10 Grieks + 10 Latijn
+per hoofdstuk, geen dubbelingen tussen hoofdstukken onderling.
+
+**Gebouwd**: 270 nieuwe entries (130 Grieks, 140 Latijn) toegevoegd aan
+`SP_VOCAB_ENTRIES`, en aan elke hoofdstuk-`VOCAB:`-sectie H1-14 — inclusief
+twee gloednieuwe `VOCAB:`-secties voor Hoofdstuk 10 en 12, die er voorheen
+geen hadden (een apart gat, nu ook gedicht). Totale pool: 421 woorden (was
+154). Griekse transcripten automatisch gegenereerd met een eigen
+transliteratie-functie (klassieke conventie: ē/ō voor eta/omega, th/ph/ch/ps
+voor θ/φ/χ/ψ, ruwe ademhaling → h-prefix, accenten overgenomen) — gevalideerd
+tegen de 8 al bestaande, handgeschreven transcripten: alle 8 kwamen exact
+overeen.
+
+**Kanttekening, expliciet**: de Minerva-curriculumplafonds zijn een
+interpretatie — Chronica citeert Minerva-hoofdstukken soms bewust
+"vooruitgehaald" (M18/abl.abs. al in H11, M21/conjunctivus al in H13), los
+van Minerva's eigen boekvolgorde. Het plafond volgt gewoon wat Chronica zelf
+al citeert; geen harde garantie dat de klas in het echt al zo ver is.
+
+**Ook voor toekomstige hoofdstukken (H15 t/m Finale)**: dezelfde methode
+doorgetrokken met een doorlopende uitsluitingspool (geen woord dubbel over
+H1-Finale heen) — resultaat vastgelegd als kandidatenreserve in
+`VOCAB_UITBREIDING.md`, NIET in `SP_VOCAB_ENTRIES` gezet (die hoofdstukken
+bestaan nog niet, en hoofdstuknummers/-inhoud zijn in het verleden meermaals
+verschoven — zie §7.44/§7.45). Bij het bouwen van een van die hoofdstukken:
+eerst controleren of de Pallas/Minerva-koppeling nog klopt, dan pas de
+kandidaten verwerken.
+
+**Gevalideerd**: `node --check` + `validate_chronica.js` → 0 fouten, 33
+waarschuwingen (ongewijzigd). Browser-test: vocab-toasts tonen de juiste,
+verhoogde aantallen per hoofdstuk (o.a. "20 woorden toegevoegd" bij de
+nieuwe H10/H12-secties), Griekse accenten/transcripten renderen correct in
+de Codex, geen console-fouten.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd

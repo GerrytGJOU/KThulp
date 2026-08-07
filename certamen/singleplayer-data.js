@@ -2186,7 +2186,7 @@ const SP_CODEX_ENTRIES = {
   codex_peisistratos: { cat:"geschiedenis", titel:"Peisistratos, de Sluwe Tiran",
     tekst:"Peisistratos grijpt de macht in Athene met list in plaats van geweld — hij verwondt zichzelf en beschuldigt zijn tegenstanders, wint zo een lijfwacht, en gebruikt die om de Akropolis te bezetten. Verjaagd en teruggekeerd, rijdt hij Athene binnen naast een vrouw verkleed als Athena zelf, die de stad ervan overtuigt dat de godin hem persoonlijk terugbrengt. Eenmaal aan de macht regeert hij verrassend mild — lage belasting, steun aan boeren en dichters — en bereidt daarmee, zonder het zelf te weten, de weg voor het woord 'tirannie' om bij zijn eigen zonen een veel duisterdere klank te krijgen." },
   codex_tirannendoders: { cat:"geschiedenis", titel:"Harmodios en Aristogeiton, de Tirannendoders",
-    tekst:"Twee geliefden, Harmodios en Aristogeiton, vermoorden in 514 v.Chr. Hipparchos, zoon van Peisistratos, tijdens een religieus feest — niet uit een verlangen naar democratie, maar uit persoonlijke wraak na een belediging. Beiden worden alsnog gedood, maar de latere Atheense democratie viert hen als haar eerste helden: standbeelden op de Agora, een verbod om hun namen ooit als scheldwoord te gebruiken. Een geschiedenis die zichzelf, achteraf, een mooier motief aanmeet dan het origineel had." },
+    tekst:"Twee geliefden, Harmodios en Aristogeiton, vermoorden in 514 v.Chr. Hipparchos, zoon van Peisistratos, tijdens een religieus feest — niet uit een verlangen naar democratie, maar uit persoonlijke wraak na een belediging: Hipparchos wijst Harmodios' zuster in het openbaar af als kanephoros voor de Panathenaeën-processie, zonder enige grond, puur om haar broer te vernederen. Beiden worden alsnog gedood, maar de latere Atheense democratie viert hen als haar eerste helden: standbeelden op de Agora, een verbod om hun namen ooit als scheldwoord te gebruiken. Een geschiedenis die zichzelf, achteraf, een mooier motief aanmeet dan het origineel had — en die de vrouw wier vernedering alles in gang zette, tegelijk naamloos laat." },
   codex_kleisthenes_democratie: { cat:"geschiedenis", titel:"Kleisthenes en de Geboorte van de Democratie",
     tekst:"Na Hippias' verdrijving hervormt Kleisthenes Athenes hele politieke stelsel: hij verdeelt de burgers in tien nieuwe stammen, dwars door de oude, invloedrijke familiebanden heen, en geeft de volksvergadering (de ekklesia) rechtstreekse macht. Zijn beroemdste — en meest omstreden — uitvinding is de ostrakismos: eenmaal per jaar mag elke burger een naam op een potscherf krassen; wie de meeste stemmen krijgt, wordt tien jaar verbannen, zonder proces, puur uit voorzorg tegen een nieuwe tiran. Het woord voor dit nieuwe systeem, δημοκρατία — macht van het volk — wordt hier voor het eerst gebruikt, al blijft 'het volk' voorlopig beperkt tot vrije, mannelijke burgers." },
   codex_horatius_cocles: { cat:"geschiedenis", titel:"Horatius Cocles op de Brug",
@@ -2196,7 +2196,7 @@ const SP_CODEX_ENTRIES = {
   codex_cloelia: { cat:"geschiedenis", titel:"Cloelia's Zwemtocht",
     tekst:"Als Romeinse gijzelaar in Porsenna's kamp ontsnapt Cloelia op een nacht, leidt een groep medegijzelaars door de vijandelijke linies, en zwemt met hen de Tiber over, terug naar Rome — onder pijlen door. Om het vredesverdrag niet te breken stuurt Rome haar terug naar Porsenna, die zo onder de indruk is van haar moed dat hij haar alsnog vrijlaat, met de eer haar eigen medegijzelaars te mogen kiezen om mee te nemen." },
   codex_vroege_republiek_helden: { cat:"geschiedenis", titel:"Meer Wachters van de Vrijheid",
-    tekst:"De jonge Republiek zal dit patroon nog vele malen herhalen. Cincinnatus wordt van zijn ploeg geroepen om als dictator een crisis te bezweren — en legt zijn absolute macht na amper zestien dagen weer vrijwillig neer, terug naar zijn akker. Coriolanus, verbannen door zijn eigen stad, leidt bijna een vijandelijk leger tegen Rome, tot zijn eigen moeder en vrouw hem op de knieën smeken te stoppen. Camillus, onterecht verbannen, wordt teruggeroepen om Rome te redden wanneer de Galliërs de stad binnenvallen. Telkens dezelfde vraag, telkens opnieuw gesteld: kan macht ooit veilig aan één mens worden toevertrouwd — en wat doet die mens ermee, eenmaal hij ze weer moet afstaan?" },
+    tekst:"De jonge Republiek zal dit patroon nog vele malen herhalen. Cincinnatus wordt van zijn ploeg geroepen om als dictator een crisis te bezweren — en legt zijn absolute macht na amper zestien dagen weer vrijwillig neer, terug naar zijn akker. Coriolanus, verbannen door zijn eigen stad, leidt bijna een vijandelijk leger tegen Rome — tot zijn moeder Veturia en zijn vrouw Volumnia, samen met zijn kinderen, hem op de knieën smeken te stoppen, waar de hele Romeinse senaat had gefaald. Camillus, onterecht verbannen, wordt teruggeroepen om Rome te redden wanneer de Galliërs de stad binnenvallen. Telkens dezelfde vraag, telkens opnieuw gesteld: kan macht ooit veilig aan één mens worden toevertrouwd — en wat doet die mens ermee, eenmaal hij ze weer moet afstaan?" },
   codex_grammatica_ch14_overzicht: { cat:"grammatica", titel:"Grammatica: Hoofdstuk 14 — bewust een adempauze",
     tekst:"Dit hoofdstuk introduceert bewust geen nieuwe grammatica — een korte adempauze na de conjunctivus (Hoofdstuk 13). In plaats daarvan herhaalt het, in een nieuwe verhaalcontext, de aoristus passief en de naamvallen (Grieks) en de conjunctivus praesens/perfectum en de ablativus absolutus (Latijn) — stof die verderop in de campagne, wanneer de geschiedenis weer sneller gaat, meteen weer van pas komt." },
 };
@@ -3091,6 +3091,283 @@ const SP_VOCAB_ENTRIES = {
   latijn_pons:       { taal:"latijn", woord:"pons, pontis", betekenis:"brug" },
   latijn_dextera:    { taal:"latijn", woord:"dextera, dexterae", betekenis:"rechterhand" },
   latijn_obses:      { taal:"latijn", woord:"obses, obsidis", betekenis:"gijzelaar" },
+  grieks_polites:    { taal:"grieks", woord:"πολίτης", transcript:"polítēs", betekenis:"burger" },
+  grieks_psephos:    { taal:"grieks", woord:"ψῆφος", transcript:"psêphos", betekenis:"stem, stemsteentje (ook: potscherf bij ostrakismos)" },
+  latijn_hostis:     { taal:"latijn", woord:"hostis, hostis", betekenis:"vijand" },
+  latijn_fides:      { taal:"latijn", woord:"fides, fidei", betekenis:"trouw, goede wil, vertrouwen" },
+  // ---- H1-14: 270 extra hoogfrequente werkwoorden/voorzetsels/signaalwoorden,
+  // gekozen uit vocab.js (frequentie) x Pallas/Minerva-woordenlijsten, cumulatief
+  // per hoofdstuk-curriculumplafond (2026-08-07, zie Chronica.md) ----
+  latijn_et: { taal:"latijn", woord:"et", betekenis:"en" },
+  latijn_in: { taal:"latijn", woord:"in", betekenis:"naar" },
+  latijn_do: { taal:"latijn", woord:"do", betekenis:"geven" },
+  latijn_habeo: { taal:"latijn", woord:"habeo", betekenis:"hebben, houden" },
+  latijn_video: { taal:"latijn", woord:"video", betekenis:"zien" },
+  latijn_per: { taal:"latijn", woord:"per", betekenis:"door" },
+  latijn_quoque: { taal:"latijn", woord:"quoque", betekenis:"ook" },
+  latijn_nunc: { taal:"latijn", woord:"nunc", betekenis:"nu" },
+  latijn_autem: { taal:"latijn", woord:"autem", betekenis:"maar" },
+  latijn_accipio: { taal:"latijn", woord:"accipio", betekenis:"ontvangen" },
+  grieks_kai: { taal:"grieks", woord:"καί", transcript:"kaí", betekenis:"en" },
+  grieks_de: { taal:"grieks", woord:"δέ", transcript:"dé", betekenis:"en, maar" },
+  grieks_gar: { taal:"grieks", woord:"γάρ", transcript:"gár", betekenis:"want" },
+  grieks_ou: { taal:"grieks", woord:"οὐ", transcript:"ou", betekenis:"niet" },
+  grieks_eis: { taal:"grieks", woord:"εἰς", transcript:"eis", betekenis:"naar" },
+  grieks_alla: { taal:"grieks", woord:"ἀλλά", transcript:"allá", betekenis:"maar" },
+  grieks_echo: { taal:"grieks", woord:"ἔχω", transcript:"échō", betekenis:"hebben" },
+  grieks_poieo: { taal:"grieks", woord:"ποιέω", transcript:"poiéō", betekenis:"maken, doen" },
+  grieks_houtos: { taal:"grieks", woord:"οὕτως", transcript:"hoútōs", betekenis:"zo, op deze wijze" },
+  grieks_lambano: { taal:"grieks", woord:"λαμβάνω", transcript:"lambánō", betekenis:"nemen, krijgen" },
+  latijn_sum: { taal:"latijn", woord:"sum", betekenis:"zijn" },
+  latijn_non: { taal:"latijn", woord:"non", betekenis:"niet" },
+  latijn_tu: { taal:"latijn", woord:"tu", betekenis:"jij, je, u" },
+  latijn_sed: { taal:"latijn", woord:"sed", betekenis:"maar" },
+  latijn_ego: { taal:"latijn", woord:"ego", betekenis:"ik" },
+  latijn_possum: { taal:"latijn", woord:"possum", betekenis:"kunnen" },
+  latijn_dico: { taal:"latijn", woord:"dico", betekenis:"zeggen, spreken" },
+  latijn_nos: { taal:"latijn", woord:"nos", betekenis:"wij" },
+  latijn_venio: { taal:"latijn", woord:"venio", betekenis:"komen" },
+  latijn_mitto: { taal:"latijn", woord:"mitto", betekenis:"sturen" },
+  grieks_en: { taal:"grieks", woord:"ἐν", transcript:"en", betekenis:"in" },
+  grieks_lego: { taal:"grieks", woord:"λέγω", transcript:"légō", betekenis:"zeggen" },
+  grieks_epi: { taal:"grieks", woord:"ἐπί", transcript:"epí", betekenis:"op, bij" },
+  grieks_ego: { taal:"grieks", woord:"ἐγώ", transcript:"egṓ", betekenis:"ik" },
+  grieks_ek: { taal:"grieks", woord:"ἐκ", transcript:"ek", betekenis:"uit" },
+  grieks_sy: { taal:"grieks", woord:"σύ", transcript:"sý", betekenis:"jij, u" },
+  grieks_hoti_causaal: { taal:"grieks", woord:"ὅτι (causaal)", transcript:"hóti (causaal)", betekenis:"omdat; dat" },
+  grieks_oun: { taal:"grieks", woord:"οὖν", transcript:"oûn", betekenis:"dus" },
+  grieks_meta: { taal:"grieks", woord:"μετά", transcript:"metá", betekenis:"met; na" },
+  grieks_kaleo: { taal:"grieks", woord:"καλέω", transcript:"kaléō", betekenis:"roepen, noemen" },
+  latijn_que: { taal:"latijn", woord:"-que", betekenis:"en" },
+  latijn_se: { taal:"latijn", woord:"se", betekenis:"zich" },
+  latijn_ago: { taal:"latijn", woord:"ago", betekenis:"doen, handelen" },
+  latijn_nam: { taal:"latijn", woord:"nam", betekenis:"want" },
+  latijn_iubeo: { taal:"latijn", woord:"iubeo", betekenis:"bevelen" },
+  latijn_deinde: { taal:"latijn", woord:"deinde", betekenis:"vervolgens, daarna" },
+  latijn_quaero: { taal:"latijn", woord:"quaero", betekenis:"zoeken; vragen" },
+  latijn_debeo: { taal:"latijn", woord:"debeo", betekenis:"moeten; verschuldigd zijn" },
+  latijn_capio: { taal:"latijn", woord:"capio", betekenis:"pakken, nemen" },
+  latijn_vos: { taal:"latijn", woord:"vos", betekenis:"jullie, u" },
+  grieks_tis: { taal:"grieks", woord:"τίς", transcript:"tís", betekenis:"wie?, wat?" },
+  grieks_eimi: { taal:"grieks", woord:"εἰμί", transcript:"eimí", betekenis:"zijn" },
+  grieks_peri: { taal:"grieks", woord:"περί", transcript:"perí", betekenis:"rondom; over" },
+  grieks_me: { taal:"grieks", woord:"μή", transcript:"mḗ", betekenis:"niet" },
+  grieks_ei: { taal:"grieks", woord:"εἰ", transcript:"ei", betekenis:"als, indien" },
+  grieks_apo: { taal:"grieks", woord:"ἀπό", transcript:"apó", betekenis:"van...af" },
+  grieks_heautou: { taal:"grieks", woord:"ἑαυτοῦ", transcript:"heautoû", betekenis:"zichzelf" },
+  grieks_oudeis: { taal:"grieks", woord:"οὐδείς", transcript:"oudeís", betekenis:"niemand, niets" },
+  grieks_de_nadruk: { taal:"grieks", woord:"δή", transcript:"dḗ", betekenis:"werkelijk, nu juist" },
+  grieks_hosper: { taal:"grieks", woord:"ὥσπερ", transcript:"hṓsper", betekenis:"net zoals" },
+  latijn_fui: { taal:"latijn", woord:"fui", betekenis:"pf. sum: zijn" },
+  latijn_ad: { taal:"latijn", woord:"ad", betekenis:"naar, bij" },
+  latijn_a_ab: { taal:"latijn", woord:"a, ab", betekenis:"vanaf" },
+  latijn_potui: { taal:"latijn", woord:"potui", betekenis:"pf. possum: kunnen" },
+  latijn_cum_voorzetsel: { taal:"latijn", woord:"cum (voorzetsel)", betekenis:"(samen) met" },
+  latijn_aut: { taal:"latijn", woord:"aut", betekenis:"of" },
+  latijn_iam: { taal:"latijn", woord:"iam", betekenis:"al" },
+  latijn_de: { taal:"latijn", woord:"de", betekenis:"van … af, over" },
+  latijn_tamen: { taal:"latijn", woord:"tamen", betekenis:"toch" },
+  latijn_quia: { taal:"latijn", woord:"quia", betekenis:"omdat" },
+  grieks_hekastos: { taal:"grieks", woord:"ἕκαστος", transcript:"hékastos", betekenis:"ieder (afzonderlijk)" },
+  grieks_nyn: { taal:"grieks", woord:"νῦν", transcript:"nŷn", betekenis:"nu" },
+  grieks_monon: { taal:"grieks", woord:"μόνον", transcript:"mónon", betekenis:"slechts, alleen" },
+  grieks_phero: { taal:"grieks", woord:"φέρω", transcript:"phérō", betekenis:"dragen, brengen" },
+  grieks_palin: { taal:"grieks", woord:"πάλιν", transcript:"pálin", betekenis:"terug; opnieuw" },
+  grieks_akouo: { taal:"grieks", woord:"ἀκούω", transcript:"akoúō", betekenis:"horen, luisteren" },
+  grieks_heurisko: { taal:"grieks", woord:"εὑρίσκω", transcript:"heurískō", betekenis:"vinden" },
+  grieks_ago: { taal:"grieks", woord:"ἄγω", transcript:"ágō", betekenis:"leiden, brengen" },
+  grieks_aei: { taal:"grieks", woord:"ἀεί", transcript:"aeí", betekenis:"altijd" },
+  grieks_tote: { taal:"grieks", woord:"τότε", transcript:"tóte", betekenis:"toen, dan" },
+  latijn_qui: { taal:"latijn", woord:"qui", betekenis:"die, dat, wiens, wier" },
+  latijn_hic: { taal:"latijn", woord:"hic", betekenis:"deze, dit" },
+  latijn_is: { taal:"latijn", woord:"is", betekenis:"deze, dit, die dat" },
+  latijn_si: { taal:"latijn", woord:"si", betekenis:"als, indien" },
+  latijn_ut_indicativus: { taal:"latijn", woord:"ut (+ indicativus)", betekenis:"zoals; zodra; hoe" },
+  latijn_e_ex: { taal:"latijn", woord:"e, ex", betekenis:"uit" },
+  latijn_facio: { taal:"latijn", woord:"facio", betekenis:"maken" },
+  latijn_enim: { taal:"latijn", woord:"enim", betekenis:"want" },
+  latijn_inter: { taal:"latijn", woord:"inter", betekenis:"tussen; tijdens" },
+  latijn_etiam: { taal:"latijn", woord:"etiam", betekenis:"zelfs" },
+  grieks_mello: { taal:"grieks", woord:"μέλλω", transcript:"méllō", betekenis:"van plan zijn, zullen" },
+  grieks_ethelo: { taal:"grieks", woord:"ἐθέλω", transcript:"ethélō", betekenis:"willen" },
+  grieks_nomizo: { taal:"grieks", woord:"νομίζω", transcript:"nomízō", betekenis:"menen; gewend zijn" },
+  grieks_oikeo: { taal:"grieks", woord:"οἰκέω", transcript:"oikéō", betekenis:"wonen, bewonen" },
+  grieks_parecho: { taal:"grieks", woord:"παρέχω", transcript:"paréchō", betekenis:"verschaffen, geven" },
+  grieks_keleuo: { taal:"grieks", woord:"κελεύω", transcript:"keleúō", betekenis:"bevelen" },
+  grieks_epeita: { taal:"grieks", woord:"ἔπειτα", transcript:"épeita", betekenis:"daarna, vervolgens" },
+  grieks_zeteo: { taal:"grieks", woord:"ζητέω", transcript:"zētéō", betekenis:"zoeken" },
+  grieks_entautha: { taal:"grieks", woord:"ἐνταῦθα", transcript:"entaûtha", betekenis:"hier, daar" },
+  grieks_sozo: { taal:"grieks", woord:"σῴζω", transcript:"sṓzō", betekenis:"redden" },
+  latijn_atque: { taal:"latijn", woord:"atque", betekenis:"en, en ook, en wel" },
+  latijn_fero: { taal:"latijn", woord:"fero", betekenis:"brengen, dragen" },
+  latijn_tuli: { taal:"latijn", woord:"tuli", betekenis:"pf. fero: brengen, dragen" },
+  latijn_latus: { taal:"latijn", woord:"latus", betekenis:"ppp. fero: brengen, dragen" },
+  latijn_ne: { taal:"latijn", woord:"ne", betekenis:"opdat niet, om niet te" },
+  latijn_sine: { taal:"latijn", woord:"sine", betekenis:"zonder" },
+  latijn_sic: { taal:"latijn", woord:"sic", betekenis:"zo" },
+  latijn_tam: { taal:"latijn", woord:"tam", betekenis:"zo" },
+  latijn_peto: { taal:"latijn", woord:"peto", betekenis:"gaan naar; aanvallen; vragen" },
+  latijn_tum: { taal:"latijn", woord:"tum", betekenis:"dan, toen" },
+  grieks_apothnesko: { taal:"grieks", woord:"ἀποθνῄσκω", transcript:"apothnḗskō", betekenis:"sterven" },
+  grieks_heko: { taal:"grieks", woord:"ἥκω", transcript:"hḗkō", betekenis:"gekomen zijn" },
+  grieks_krateo: { taal:"grieks", woord:"κρατέω", transcript:"kratéō", betekenis:"heersen, overwinnen" },
+  grieks_plen: { taal:"grieks", woord:"πλήν", transcript:"plḗn", betekenis:"behalve" },
+  grieks_exo: { taal:"grieks", woord:"ἔξω", transcript:"éxō", betekenis:"buiten" },
+  grieks_thaumazo: { taal:"grieks", woord:"θαυμάζω", transcript:"thaumázō", betekenis:"verbaasd zijn, bewonderen" },
+  grieks_chairo: { taal:"grieks", woord:"χαίρω", transcript:"chaírō", betekenis:"blij zijn" },
+  grieks_airo: { taal:"grieks", woord:"αἴρω", transcript:"aírō", betekenis:"optillen" },
+  grieks_apokteino: { taal:"grieks", woord:"ἀποκτείνω", transcript:"apokteínō", betekenis:"doden" },
+  grieks_aneu: { taal:"grieks", woord:"ἄνευ", transcript:"áneu", betekenis:"zonder" },
+  latijn_nec: { taal:"latijn", woord:"nec", betekenis:"en/ook/maar niet" },
+  latijn_volo: { taal:"latijn", woord:"volo", betekenis:"willen" },
+  latijn_ita: { taal:"latijn", woord:"ita", betekenis:"zo" },
+  latijn_nisi: { taal:"latijn", woord:"nisi", betekenis:"als niet; behalve" },
+  latijn_pro: { taal:"latijn", woord:"pro", betekenis:"voor" },
+  latijn_vinco: { taal:"latijn", woord:"vinco", betekenis:"overwinnen" },
+  latijn_dum: { taal:"latijn", woord:"dum", betekenis:"terwijl; zolang als" },
+  latijn_scio: { taal:"latijn", woord:"scio", betekenis:"weten, kennen" },
+  latijn_puto: { taal:"latijn", woord:"puto", betekenis:"menen; houden voor" },
+  latijn_teneo: { taal:"latijn", woord:"teneo", betekenis:"houden" },
+  grieks_e_scheidend: { taal:"grieks", woord:"ἤ (scheidend)", transcript:"ḗ (scheidend)", betekenis:"of; dan" },
+  grieks_tis_onbepaald: { taal:"grieks", woord:"τις", transcript:"tis", betekenis:"iemand, iets" },
+  grieks_kata: { taal:"grieks", woord:"κατά", transcript:"katá", betekenis:"naar beneden; volgens" },
+  grieks_oude: { taal:"grieks", woord:"οὐδέ", transcript:"oudé", betekenis:"en niet" },
+  grieks_eipon: { taal:"grieks", woord:"εἶπον", transcript:"eîpon", betekenis:"ik zei (aor.)" },
+  grieks_horao: { taal:"grieks", woord:"ὁράω", transcript:"horáō", betekenis:"zien" },
+  grieks_archo: { taal:"grieks", woord:"ἄρχω", transcript:"árchō", betekenis:"beginnen; heersen" },
+  grieks_ede: { taal:"grieks", woord:"ἤδη", transcript:"ḗdē", betekenis:"reeds, nu al" },
+  grieks_erchomai: { taal:"grieks", woord:"ἔρχομαι", transcript:"érchomai", betekenis:"komen, gaan" },
+  grieks_hama: { taal:"grieks", woord:"ἅμα", transcript:"háma", betekenis:"tegelijk" },
+  latijn_vivo: { taal:"latijn", woord:"vivo", betekenis:"leven" },
+  latijn_audio: { taal:"latijn", woord:"audio", betekenis:"horen, luisteren" },
+  latijn_duco: { taal:"latijn", woord:"duco", betekenis:"leiden; trekken; houden voor" },
+  latijn_voco: { taal:"latijn", woord:"voco", betekenis:"roepen, noemen" },
+  latijn_timeo: { taal:"latijn", woord:"timeo", betekenis:"vrezen, bang zijn (voor)" },
+  latijn_semper: { taal:"latijn", woord:"semper", betekenis:"altijd" },
+  latijn_licet: { taal:"latijn", woord:"licet", betekenis:"mag, het is geoorloofd" },
+  latijn_vel: { taal:"latijn", woord:"vel", betekenis:"of" },
+  latijn_moveo: { taal:"latijn", woord:"moveo", betekenis:"bewegen, ontroeren" },
+  latijn_post: { taal:"latijn", woord:"post", betekenis:"(+ acc.)achter" },
+  grieks_houtos_pron: { taal:"grieks", woord:"οὗτος", transcript:"hoûtos", betekenis:"deze, dit" },
+  grieks_hos_vergelijkend: { taal:"grieks", woord:"ὡς (vergelijkend)", transcript:"hōs (vergelijkend)", betekenis:"zoals; dat; opdat" },
+  grieks_ekeinos: { taal:"grieks", woord:"ἐκεῖνος", transcript:"ekeînos", betekenis:"die, dat (ginds)" },
+  grieks_dokeo: { taal:"grieks", woord:"δοκέω", transcript:"dokéō", betekenis:"schijnen, menen" },
+  grieks_eti: { taal:"grieks", woord:"ἔτι", transcript:"éti", betekenis:"nog" },
+  grieks_mallon: { taal:"grieks", woord:"μᾶλλον", transcript:"mâllon", betekenis:"meer, eerder" },
+  grieks_hode: { taal:"grieks", woord:"ὅδε", transcript:"hóde", betekenis:"deze (hier)" },
+  grieks_malista: { taal:"grieks", woord:"μάλιστα", transcript:"málista", betekenis:"vooral, het meest" },
+  grieks_gignosko: { taal:"grieks", woord:"γιγνώσκω", transcript:"gignṓskō", betekenis:"leren kennen, weten" },
+  grieks_chre: { taal:"grieks", woord:"χρή", transcript:"chrḗ", betekenis:"het is nodig" },
+  latijn_ille: { taal:"latijn", woord:"ille", betekenis:"die, dat" },
+  latijn_magis: { taal:"latijn", woord:"magis", betekenis:"meer" },
+  latijn_at: { taal:"latijn", woord:"at", betekenis:"maar" },
+  latijn_apud: { taal:"latijn", woord:"apud", betekenis:"bij" },
+  latijn_sto: { taal:"latijn", woord:"sto", betekenis:"staan" },
+  latijn_simul: { taal:"latijn", woord:"simul", betekenis:"tegelijk" },
+  latijn_trado: { taal:"latijn", woord:"trado", betekenis:"overhandigen, overgeven" },
+  latijn_fugio: { taal:"latijn", woord:"fugio", betekenis:"(ont)vluchten" },
+  latijn_numquam: { taal:"latijn", woord:"numquam", betekenis:"nooit" },
+  latijn_coepi: { taal:"latijn", woord:"coepi", betekenis:"beginnen" },
+  grieks_gignomai: { taal:"grieks", woord:"γίγνομαι", transcript:"gígnomai", betekenis:"worden, gebeuren" },
+  grieks_hypo_dat_acc: { taal:"grieks", woord:"ὑπό (+ dat./acc.)", transcript:"hypó (+ dat./acc.)", betekenis:"onder; door" },
+  grieks_epei: { taal:"grieks", woord:"ἐπεί", transcript:"epeí", betekenis:"toen, omdat" },
+  grieks_dei: { taal:"grieks", woord:"δεῖ", transcript:"deî", betekenis:"het is nodig" },
+  grieks_dynamai: { taal:"grieks", woord:"δύναμαι", transcript:"dýnamai", betekenis:"kunnen" },
+  grieks_boulomai: { taal:"grieks", woord:"βούλομαι", transcript:"boúlomai", betekenis:"willen" },
+  grieks_phaino: { taal:"grieks", woord:"φαίνω", transcript:"phaínō", betekenis:"tonen, laten zien" },
+  grieks_eidon: { taal:"grieks", woord:"εἶδον", transcript:"eîdon", betekenis:"ik zag (2e aor. van ὁράω)" },
+  grieks_pascho: { taal:"grieks", woord:"πάσχω", transcript:"páschō", betekenis:"ondergaan, lijden" },
+  grieks_syn: { taal:"grieks", woord:"σύν", transcript:"sýn", betekenis:"met, samen met" },
+  latijn_ipse: { taal:"latijn", woord:"ipse", betekenis:"zelf, zelfs" },
+  latijn_iste: { taal:"latijn", woord:"iste", betekenis:"die, dat" },
+  latijn_pono: { taal:"latijn", woord:"pono", betekenis:"zetten, leggen, plaatsen" },
+  latijn_quisquam: { taal:"latijn", woord:"quisquam", betekenis:"iemand, iets, een of ander" },
+  latijn_gero: { taal:"latijn", woord:"gero", betekenis:"dragen; doen" },
+  latijn_primum: { taal:"latijn", woord:"primum", betekenis:"eerst" },
+  latijn_igitur: { taal:"latijn", woord:"igitur", betekenis:"dus" },
+  latijn_paro: { taal:"latijn", woord:"paro", betekenis:"klaarmaken" },
+  latijn_traho: { taal:"latijn", woord:"traho", betekenis:"trekken" },
+  latijn_soleo: { taal:"latijn", woord:"soleo", betekenis:"gewoon zijn, gewoonlijk" },
+  grieks_dia: { taal:"grieks", woord:"διά", transcript:"diá", betekenis:"door; vanwege" },
+  grieks_hote: { taal:"grieks", woord:"ὅτε", transcript:"hóte", betekenis:"wanneer, toen" },
+  grieks_peitho: { taal:"grieks", woord:"πείθω", transcript:"peíthō", betekenis:"overtuigen" },
+  grieks_pareimi: { taal:"grieks", woord:"πάρειμι", transcript:"páreimi", betekenis:"aanwezig zijn" },
+  grieks_pro: { taal:"grieks", woord:"πρό", transcript:"pró", betekenis:"voor, vóór" },
+  grieks_anti: { taal:"grieks", woord:"ἀντί", transcript:"antí", betekenis:"tegenover; in plaats van" },
+  grieks_diaphero: { taal:"grieks", woord:"διαφέρω", transcript:"diaphérō", betekenis:"verschillen" },
+  grieks_hegeomai: { taal:"grieks", woord:"ἡγέομαι", transcript:"hēgéomai", betekenis:"leiden; menen" },
+  grieks_keimai: { taal:"grieks", woord:"κεῖμαι", transcript:"keîmai", betekenis:"liggen; vastgesteld zijn" },
+  grieks_pollakis: { taal:"grieks", woord:"πολλάκις", transcript:"pollákis", betekenis:"vaak" },
+  latijn_quis: { taal:"latijn", woord:"quis", betekenis:"wie? wat? welke?" },
+  latijn_quam_uitroepend_vragend: { taal:"latijn", woord:"quam (uitroepend/vragend)", betekenis:"hoe; zoals" },
+  latijn_idem: { taal:"latijn", woord:"idem", betekenis:"dezelfde, hetzelfde" },
+  latijn_nihil: { taal:"latijn", woord:"nihil", betekenis:"niets" },
+  latijn_aliquis: { taal:"latijn", woord:"aliquis", betekenis:"iemand, iets, een of ander" },
+  latijn_neque: { taal:"latijn", woord:"neque", betekenis:"en/ook/maar niet" },
+  latijn_quidam: { taal:"latijn", woord:"quidam", betekenis:"een zeker(e) (iemand)" },
+  latijn_quidem: { taal:"latijn", woord:"quidem", betekenis:"zeker" },
+  latijn_credo: { taal:"latijn", woord:"credo", betekenis:"geloven, vertrouwen" },
+  latijn_itaque: { taal:"latijn", woord:"itaque", betekenis:"dus" },
+  grieks_hos: { taal:"grieks", woord:"ὅς", transcript:"hós", betekenis:"die, dat" },
+  grieks_ean: { taal:"grieks", woord:"ἐάν", transcript:"eán", betekenis:"als, indien" },
+  grieks_hostis: { taal:"grieks", woord:"ὅστις", transcript:"hóstis", betekenis:"wie ook maar" },
+  grieks_ge: { taal:"grieks", woord:"γε", transcript:"ge", betekenis:"tenminste, juist" },
+  grieks_medeis: { taal:"grieks", woord:"μηδείς", transcript:"mēdeís", betekenis:"niemand, niets" },
+  grieks_hina: { taal:"grieks", woord:"ἵνα", transcript:"hína", betekenis:"opdat" },
+  grieks_tygchano: { taal:"grieks", woord:"τυγχάνω", transcript:"tygchánō", betekenis:"treffen; toevallig" },
+  grieks_oiomai: { taal:"grieks", woord:"οἴομαι", transcript:"oíomai", betekenis:"menen, denken" },
+  grieks_hopos_vragend: { taal:"grieks", woord:"ὅπως (vragend)", transcript:"hópōs (vragend)", betekenis:"hoe; opdat" },
+  grieks_pino: { taal:"grieks", woord:"πίνω", transcript:"pínō", betekenis:"drinken" },
+  latijn_fio: { taal:"latijn", woord:"fio", betekenis:"gebeuren, worden" },
+  latijn_eo: { taal:"latijn", woord:"eo", betekenis:"gaan" },
+  latijn_relinquo: { taal:"latijn", woord:"relinquo", betekenis:"(achter)laten, (ver)laten" },
+  latijn_reddo: { taal:"latijn", woord:"reddo", betekenis:"(terug)geven" },
+  latijn_ubi: { taal:"latijn", woord:"ubi", betekenis:"waar" },
+  latijn_uterque: { taal:"latijn", woord:"uterque", betekenis:"elk van beide(n)" },
+  latijn_bene: { taal:"latijn", woord:"bene", betekenis:"goed" },
+  latijn_ante: { taal:"latijn", woord:"ante", betekenis:"voor" },
+  latijn_recipio: { taal:"latijn", woord:"recipio", betekenis:"terugpakken" },
+  latijn_vero: { taal:"latijn", woord:"vero", betekenis:"werkelijk" },
+  grieks_hoste: { taal:"grieks", woord:"ὥστε", transcript:"hṓste", betekenis:"zodat" },
+  grieks_onomazo: { taal:"grieks", woord:"ὀνομάζω", transcript:"onomázō", betekenis:"noemen" },
+  grieks_manthano: { taal:"grieks", woord:"μανθάνω", transcript:"manthánō", betekenis:"leren" },
+  grieks_haireo: { taal:"grieks", woord:"αἱρέω", transcript:"hairéō", betekenis:"nemen, grijpen" },
+  grieks_pany: { taal:"grieks", woord:"πάνυ", transcript:"pány", betekenis:"geheel, zeer" },
+  grieks_eu: { taal:"grieks", woord:"εὖ", transcript:"eû", betekenis:"goed" },
+  grieks_krino: { taal:"grieks", woord:"κρίνω", transcript:"krínō", betekenis:"oordelen, beslissen" },
+  grieks_hepomai: { taal:"grieks", woord:"ἕπομαι", transcript:"hépomai", betekenis:"volgen" },
+  grieks_pisteuo: { taal:"grieks", woord:"πιστεύω", transcript:"pisteúō", betekenis:"vertrouwen, geloven" },
+  grieks_dechomai: { taal:"grieks", woord:"δέχομαι", transcript:"déchomai", betekenis:"ontvangen, aannemen" },
+  latijn_an: { taal:"latijn", woord:"an", betekenis:"of" },
+  latijn_quisquis: { taal:"latijn", woord:"quisquis", betekenis:"iedereen die, al wat" },
+  latijn_quisque: { taal:"latijn", woord:"quisque", betekenis:"ieder(e), elk(e)" },
+  latijn_refero: { taal:"latijn", woord:"refero", betekenis:"terugbrengen; berichten" },
+  latijn_utor: { taal:"latijn", woord:"utor", betekenis:"gebruiken" },
+  latijn_invenio: { taal:"latijn", woord:"invenio", betekenis:"vinden" },
+  latijn_cado: { taal:"latijn", woord:"cado", betekenis:"vallen" },
+  latijn_cognosco: { taal:"latijn", woord:"cognosco", betekenis:"leren kennen" },
+  latijn_pervenio: { taal:"latijn", woord:"pervenio", betekenis:"bereiken, aankomen" },
+  latijn_placeo: { taal:"latijn", woord:"placeo", betekenis:"bevallen" },
+  grieks_aphikneomai: { taal:"grieks", woord:"ἀφικνέομαι", transcript:"aphiknéomai", betekenis:"aankomen" },
+  grieks_ergazomai: { taal:"grieks", woord:"ἐργάζομαι", transcript:"ergázomai", betekenis:"werken" },
+  grieks_trepho: { taal:"grieks", woord:"τρέφω", transcript:"tréphō", betekenis:"voeden, opvoeden" },
+  grieks_pou_plaats: { taal:"grieks", woord:"που (plaats)", transcript:"pou (plaats)", betekenis:"ergens; wellicht" },
+  grieks_nikao: { taal:"grieks", woord:"νικάω", transcript:"nikáō", betekenis:"overwinnen" },
+  grieks_pleon: { taal:"grieks", woord:"πλέον", transcript:"pléon", betekenis:"meer" },
+  grieks_prin: { taal:"grieks", woord:"πρίν", transcript:"prín", betekenis:"voordat" },
+  grieks_adikeo: { taal:"grieks", woord:"ἀδικέω", transcript:"adikéō", betekenis:"onrecht doen" },
+  grieks_ouketi: { taal:"grieks", woord:"οὐκέτι", transcript:"oukéti", betekenis:"niet meer" },
+  grieks_pauo: { taal:"grieks", woord:"παύω", transcript:"paúō", betekenis:"doen ophouden" },
+  latijn_nascor: { taal:"latijn", woord:"nascor", betekenis:"geboren worden, ontstaan" },
+  latijn_morior: { taal:"latijn", woord:"morior", betekenis:"sterven" },
+  latijn_tunc: { taal:"latijn", woord:"tunc", betekenis:"dan, toen" },
+  latijn_hinc: { taal:"latijn", woord:"hinc", betekenis:"hiervandaan" },
+  latijn_audeo: { taal:"latijn", woord:"audeo", betekenis:"durven" },
+  latijn_satis: { taal:"latijn", woord:"satis", betekenis:"genoeg, voldoende" },
+  latijn_diu: { taal:"latijn", woord:"diu", betekenis:"lang, lange tijd" },
+  latijn_ostendo: { taal:"latijn", woord:"ostendo", betekenis:"tonen, laten zien" },
+  latijn_inde: { taal:"latijn", woord:"inde", betekenis:"vandaar" },
+  latijn_ne_vraag: { taal:"latijn", woord:"-ne", betekenis:"niet vertalen" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -4829,7 +5106,7 @@ CODEX:
 codex_grammatica_ch1_overzicht
 
 VOCAB:
-grieks_despotes, grieks_thea, grieks_pyr, latijn_rex, latijn_aurum, latijn_flavus, latijn_tangit, latijn_caput, latijn_durus, latijn_aperit, latijn_pyxis, latijn_novus
+grieks_despotes, grieks_thea, grieks_pyr, latijn_rex, latijn_aurum, latijn_flavus, latijn_tangit, latijn_caput, latijn_durus, latijn_aperit, latijn_pyxis, latijn_novus, latijn_et, latijn_in, latijn_do, latijn_habeo, latijn_video, latijn_per, latijn_quoque, latijn_nunc, latijn_autem, latijn_accipio
 
 CHOICES:
 
@@ -6220,7 +6497,7 @@ CODEX:
 codex_grammatica_ch2_overzicht
 
 VOCAB:
-latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens, latijn_currere, latijn_abire, latijn_ursa, latijn_silva, latijn_necare, latijn_servire, latijn_vincere, grieks_kalos, grieks_zoon, grieks_megas, grieks_dynamis, grieks_ergon
+latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens, latijn_currere, latijn_abire, latijn_ursa, latijn_silva, latijn_necare, latijn_servire, latijn_vincere, grieks_kalos, grieks_zoon, grieks_megas, grieks_dynamis, grieks_ergon, grieks_kai, grieks_de, grieks_gar, grieks_ou, grieks_eis, grieks_alla, grieks_echo, grieks_poieo, grieks_houtos, grieks_lambano, latijn_sum, latijn_non, latijn_tu, latijn_sed, latijn_ego, latijn_possum, latijn_dico, latijn_nos, latijn_venio, latijn_mitto
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 2 volledig voltooid
@@ -7581,7 +7858,7 @@ CODEX:
 codex_grammatica_ch3_overzicht
 
 VOCAB:
-latijn_iuno, latijn_nuntius, latijn_dea, latijn_sapientia, latijn_crotala, latijn_cerva, latijn_pars, latijn_promittit, latijn_titan, latijn_avis, grieks_theos, grieks_basileus, grieks_aner, grieks_kakos, grieks_arete
+latijn_iuno, latijn_nuntius, latijn_dea, latijn_sapientia, latijn_crotala, latijn_cerva, latijn_pars, latijn_promittit, latijn_titan, latijn_avis, grieks_theos, grieks_basileus, grieks_aner, grieks_kakos, grieks_arete, grieks_en, grieks_lego, grieks_epi, grieks_ego, grieks_ek, grieks_sy, grieks_hoti_causaal, grieks_oun, grieks_meta, grieks_kaleo, latijn_que, latijn_se, latijn_ago, latijn_nam, latijn_iubeo, latijn_deinde, latijn_quaero, latijn_debeo, latijn_capio, latijn_vos
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 3 volledig voltooid
@@ -8537,7 +8814,7 @@ CODEX:
 codex_grammatica_ch4_overzicht
 
 VOCAB:
-latijn_vela, latijn_mutare, latijn_iubet, latijn_filum, latijn_labyrinthus, latijn_relinquit, latijn_volare, latijn_ala, latijn_cera, latijn_monebat, latijn_currus, latijn_fulmen, latijn_misit, latijn_soror, latijn_lacrima, latijn_cadere
+latijn_vela, latijn_mutare, latijn_iubet, latijn_filum, latijn_labyrinthus, latijn_relinquit, latijn_volare, latijn_ala, latijn_cera, latijn_monebat, latijn_currus, latijn_fulmen, latijn_misit, latijn_soror, latijn_lacrima, latijn_cadere, grieks_tis, grieks_eimi, grieks_peri, grieks_me, grieks_ei, grieks_apo, grieks_heautou, grieks_oudeis, grieks_de_nadruk, grieks_hosper, latijn_fui, latijn_ad, latijn_a_ab, latijn_potui, latijn_cum_voorzetsel, latijn_aut, latijn_iam, latijn_de, latijn_tamen, latijn_quia
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 4 volledig voltooid
@@ -8631,7 +8908,7 @@ TEXT:
 Athena voegt eraan toe, zachter dan anders: "Let deze keer goed op wie er nog meer aan boord staat. Sommige namen ken je al. De meeste ken je nog niet — maar dat komt nog."
 
 VOCAB:
-latijn_navis, latijn_mare, latijn_vellus, latijn_draco, latijn_populus, latijn_malleus, latijn_aper, latijn_regit, latijn_vulnerat, grieks_toxon, grieks_thalassa, grieks_pleo, grieks_gyne, grieks_philos, grieks_deinos
+latijn_navis, latijn_mare, latijn_vellus, latijn_draco, latijn_populus, latijn_malleus, latijn_aper, latijn_regit, latijn_vulnerat, grieks_toxon, grieks_thalassa, grieks_pleo, grieks_gyne, grieks_philos, grieks_deinos, grieks_hekastos, grieks_nyn, grieks_monon, grieks_phero, grieks_palin, grieks_akouo, grieks_heurisko, grieks_ago, grieks_aei, grieks_tote, latijn_qui, latijn_hic, latijn_is, latijn_si, latijn_ut_indicativus, latijn_e_ex, latijn_facio, latijn_enim, latijn_inter, latijn_etiam
 
 CODEX:
 codex_gulden_vlies, codex_grammatica_ch5_ppf_conjunctivus
@@ -9867,7 +10144,7 @@ TEXT:
 Athena knikt, zwijgender dan anders. "Sommige vloeken slaan in bij de stichting van een stad, en wachten dan gewoon — generatie na generatie — tot er weer iemand geboren wordt om ze te laten uitkomen."
 
 VOCAB:
-latijn_habere, latijn_recusare, latijn_sepelire, latijn_regnum, latijn_frater, latijn_quadrupes, grieks_bakchos, latijn_liberi
+latijn_habere, latijn_recusare, latijn_sepelire, latijn_regnum, latijn_frater, latijn_quadrupes, grieks_bakchos, latijn_liberi, grieks_mello, grieks_ethelo, grieks_nomizo, grieks_oikeo, grieks_parecho, grieks_keleuo, grieks_epeita, grieks_zeteo, grieks_entautha, grieks_sozo, latijn_atque, latijn_fero, latijn_tuli, latijn_latus, latijn_ne, latijn_sine, latijn_sic, latijn_tam, latijn_peto, latijn_tum
 
 CODEX:
 codex_kadmos_thebe, codex_grammatica_ch6_passief
@@ -11018,7 +11295,7 @@ De Boodschapper laat een korte stilte vallen voor ze verdergaat — de soort sti
 "[[Ecce|zie hier]] — het echte werk begint nu," zegt de Boodschapper. "De Trojaanse Oorlog."
 
 VOCAB:
-latijn_iurare, latijn_bellum, grieks_kalliste, latijn_rapere, latijn_classis, latijn_ventus, latijn_sacrificium, latijn_deus, latijn_amor, latijn_pater, latijn_spes
+latijn_iurare, latijn_bellum, grieks_kalliste, latijn_rapere, latijn_classis, latijn_ventus, latijn_sacrificium, latijn_deus, latijn_amor, latijn_pater, latijn_spes, grieks_apothnesko, grieks_heko, grieks_krateo, grieks_plen, grieks_exo, grieks_thaumazo, grieks_chairo, grieks_airo, grieks_apokteino, grieks_aneu, latijn_nec, latijn_volo, latijn_ita, latijn_nisi, latijn_pro, latijn_vinco, latijn_dum, latijn_scio, latijn_puto, latijn_teneo
 
 CODEX:
 codex_grammatica_ch7_deponentia, codex_grammatica_ch7_betrekkelijk, codex_grammatica_ch7_conjunctivus_passief
@@ -11973,7 +12250,7 @@ De poort opent zich ditmaal midden in een oorlog die al tien jaar oud is. "[[Ecc
 "En dit keer," vervolgt ze, met iets in haar stem dat je niet eerder hebt gehoord, "ga jij zelf kiezen aan welke kant van dit verhaal je staat. Niet alles wat er gebeurt, zul je met eigen ogen zien — maar wat je wél ziet, zul je van dichterbij zien dan ooit."
 
 VOCAB:
-latijn_vulnus, grieks_menis, grieks_time, grieks_aspis, latijn_ira, latijn_honor, latijn_miles, latijn_senex, latijn_arma, grieks_pempo, grieks_pheugo, grieks_luo, grieks_ballo
+latijn_vulnus, grieks_menis, grieks_time, grieks_aspis, latijn_ira, latijn_honor, latijn_miles, latijn_senex, latijn_arma, grieks_pempo, grieks_pheugo, grieks_luo, grieks_ballo, grieks_e_scheidend, grieks_tis_onbepaald, grieks_kata, grieks_oude, grieks_eipon, grieks_horao, grieks_archo, grieks_ede, grieks_erchomai, grieks_hama, latijn_vivo, latijn_audio, latijn_duco, latijn_voco, latijn_timeo, latijn_semper, latijn_licet, latijn_vel, latijn_moveo, latijn_post
 
 CODEX:
 codex_grammatica_ch8_aoristus_sigmatisch, codex_grammatica_ch8_aoristus_thematisch, codex_grammatica_ch8_3decl_medeklinker, codex_grammatica_ch8_voornaamwoorden
@@ -13558,7 +13835,7 @@ TEXT:
 Ze wacht even voor ze verdergaat. "Dit is niet als de tent van Achilles. Ik kan je daarna niet meer de andere kant laten zien — de muren en het strand delen deze nacht niet nog een keer met je. Wat je nu kiest, is wat je zult hebben."
 
 VOCAB:
-latijn_urbs, latijn_dolus, latijn_equus, latijn_tacitus, grieks_polis, latijn_fortis, latijn_discedere, latijn_maestus
+latijn_urbs, latijn_dolus, latijn_equus, latijn_tacitus, grieks_polis, latijn_fortis, latijn_discedere, latijn_maestus, grieks_houtos_pron, grieks_hos_vergelijkend, grieks_ekeinos, grieks_dokeo, grieks_eti, grieks_mallon, grieks_hode, grieks_malista, grieks_gignosko, grieks_chre, latijn_ille, latijn_magis, latijn_at, latijn_apud, latijn_sto, latijn_simul, latijn_trado, latijn_fugio, latijn_numquam, latijn_coepi
 
 CODEX:
 codex_grammatica_ch9_comparativus_superlativus, codex_grammatica_ch9_aci, codex_grammatica_ch9_3decl_istam, codex_grammatica_ch9_congruentie
@@ -14970,6 +15247,9 @@ Voordat de Boodschapper zich tot jou wendt, valt je blik op een gestalte aan de 
 
 Ze aarzelt, iets langer dan gewoonlijk. "Vanaf hier kan ik je ook iets anders vragen — en dit keer blijft het antwoord gelden voor de rest van de reis. Tot nu toe kreeg je automatisch beide talen, Latijn en Grieks door elkaar. Wie wil je vanaf hier worden?"
 
+VOCAB:
+grieks_gignomai, grieks_hypo_dat_acc, grieks_epei, grieks_dei, grieks_dynamai, grieks_boulomai, grieks_phaino, grieks_eidon, grieks_pascho, grieks_syn, latijn_ipse, latijn_iste, latijn_pono, latijn_quisquam, latijn_gero, latijn_primum, latijn_igitur, latijn_paro, latijn_traho, latijn_soleo
+
 IMAGE:
 ch10_hermes_athena_bezoek.png
 
@@ -15983,7 +16263,7 @@ TEXT:
 De Boodschapper wijst opnieuw naar de twee scheuren in de werkelijkheid, precies waar Hoofdstuk 10 ze achterliet — Odysseus voor de kust van Aeaea, Aeneas oog in oog met een koningin. "Verder dan?"
 
 VOCAB:
-grieks_nostos, grieks_xenia, grieks_pharmakon, grieks_skia, grieks_thanatos, grieks_mantis, latijn_regina, latijn_pietas, latijn_umbra, latijn_fatum, latijn_mors, latijn_vates
+grieks_nostos, grieks_xenia, grieks_pharmakon, grieks_skia, grieks_thanatos, grieks_mantis, latijn_regina, latijn_pietas, latijn_umbra, latijn_fatum, latijn_mors, latijn_vates, grieks_dia, grieks_hote, grieks_peitho, grieks_pareimi, grieks_pro, grieks_anti, grieks_diaphero, grieks_hegeomai, grieks_keimai, grieks_pollakis, latijn_quis, latijn_quam_uitroepend_vragend, latijn_idem, latijn_nihil, latijn_aliquis, latijn_neque, latijn_quidam, latijn_quidem, latijn_credo, latijn_itaque
 
 CODEX:
 codex_grammatica_ch11_participium, codex_grammatica_ch11_genitivus_absolutus, codex_grammatica_ch11_participium_latijn, codex_grammatica_ch11_ablativus_absolutus
@@ -17015,6 +17295,9 @@ TEXT:
 
 Ze aarzelt, met iets van een glimlach die niet helemaal bij haar past. "Maar dat betekent niet dat er voor jou niets te zien is, als je zijn taal hebt gekozen."
 
+VOCAB:
+grieks_hos, grieks_ean, grieks_hostis, grieks_ge, grieks_medeis, grieks_hina, grieks_tygchano, grieks_oiomai, grieks_hopos_vragend, grieks_pino, latijn_fio, latijn_eo, latijn_relinquo, latijn_reddo, latijn_ubi, latijn_uterque, latijn_bene, latijn_ante, latijn_recipio, latijn_vero
+
 CHOICES:
 * Volg Odysseus naar Ithaka [REQUIRE:taalspoor=grieks] -> CH12_ODY_001
 * Ga verder [REQUIRE:taalspoor!=grieks] -> CH12_LAT_000
@@ -17817,7 +18100,7 @@ TEXT:
 Ze kijkt je aan, met iets van die zeldzame warmte die je inmiddels herkent. "Aan de Griekse kant: hoe Athene aan haar naam en haar beschermgodin kwam — een verhaal dat pas ná Athena's eigen geboorte speelt. Aan de Latijnse kant: de koningen die na Romulus over Rome heersten, niet allemaal even rechtvaardig — tot één daad van onrecht de hele monarchie deed instorten."
 
 VOCAB:
-grieks_manteia, grieks_kephale, grieks_polis, grieks_eris, grieks_sophia, latijn_rex_regina, latijn_iurare, latijn_pudicitia, latijn_libertas, latijn_senatus, latijn_soror, latijn_expellere
+grieks_manteia, grieks_kephale, grieks_polis, grieks_eris, grieks_sophia, latijn_rex_regina, latijn_iurare, latijn_pudicitia, latijn_libertas, latijn_senatus, latijn_soror, latijn_expellere, grieks_hoste, grieks_onomazo, grieks_manthano, grieks_haireo, grieks_pany, grieks_eu, grieks_krino, grieks_hepomai, grieks_pisteuo, grieks_dechomai, latijn_an, latijn_quisquis, latijn_quisque, latijn_refero, latijn_utor, latijn_invenio, latijn_cado, latijn_cognosco, latijn_pervenio, latijn_placeo
 
 CHOICES:
 * Volg Athenes verhaal [REQUIRE:taalspoor=grieks] -> CH13_GRE_000
@@ -18440,7 +18723,7 @@ Ze zwijgt even. "In Athene experimenteren stervelingen, vlak na een tiran, met i
 Ze kijkt je aan, alsof ze al weet wat je hierheen stuurt. {tirannen_motivatie}
 
 VOCAB:
-grieks_tyrannos, grieks_demos, grieks_eleutheria, latijn_pons, latijn_dextera, latijn_obses
+grieks_tyrannos, grieks_demos, grieks_eleutheria, grieks_polites, grieks_psephos, latijn_pons, latijn_dextera, latijn_obses, latijn_hostis, latijn_fides, grieks_aphikneomai, grieks_ergazomai, grieks_trepho, grieks_pou_plaats, grieks_nikao, grieks_pleon, grieks_prin, grieks_adikeo, grieks_ouketi, grieks_pauo, latijn_nascor, latijn_morior, latijn_tunc, latijn_hinc, latijn_audeo, latijn_satis, latijn_diu, latijn_ostendo, latijn_inde, latijn_ne_vraag
 
 CHOICES:
 * Volg het verzet in Athene [REQUIRE:taalspoor=grieks] -> CH14_GRE_000
@@ -18476,7 +18759,15 @@ TITLE:
 Athena's Wagen
 
 TEXT:
-Peisistratos rijdt Athene binnen op een wagen, naast een lange, indrukwekkende vrouw in volle wapenrusting — Phye, in werkelijkheid een gewone bloemenverkoopster, omgebouwd tot een levende Athena. Vooruit rijden boodschappers die roepen dat de godin zelf hun tiran persoonlijk terugbrengt. De menigte, ofwel oprecht overtuigd, ofwel gewoon opgelucht dat er geen nieuw bloedvergieten komt, laat hem door.
+Peisistratos rijdt Athene binnen op een wagen, naast een lange, indrukwekkende vrouw in volle wapenrusting — Phye, in werkelijkheid een gewone bloemenverkoopster, omgebouwd tot een levende Athena. Vooruit rijden boodschappers die roepen dat de godin zelf hun tiran persoonlijk terugbrengt.
+
+Phye speelt haar rol met een zelfverzekerdheid die niemand een gewone bloemenverkoopster zou toedichten — rechtop, onbewogen, haar stem geoefend tot ze precies klinkt zoals een stad zich een godin voorstelt.
+
+DIALOGUE:
+Phye
+Athene, zie wie ik terugbreng — met eigen hand, met eigen wil. Ontvang hem zoals jullie mij zouden ontvangen.
+
+De menigte, ofwel oprecht overtuigd, ofwel gewoon opgelucht dat er geen nieuw bloedvergieten komt, laat hem door. Wat niemand haar ooit vraagt: of ze zelf in deze list geloofde, of gewoon wist dat een stad soms liever een goede leugen gelooft dan een lastige waarheid — en dat ze goed genoeg speelde om dat verschil er even niet toe te laten doen.
 
 Eenmaal terug op de troon regeert Peisistratos verrassend mild: lage belasting, steun aan boeren, opdrachten aan dichters — onder zijn bewind worden de gedichten van Homerus voor het eerst stevig opgeschreven, in plaats van alleen van geheugen tot geheugen doorgegeven. Zijn eigen zonen zullen zijn naam een veel duisterdere klank geven.
 
@@ -18491,10 +18782,27 @@ END
 === SCENE: CH14_GRE_002 ===
 
 TITLE:
+Een Publieke Vernedering
+
+TEXT:
+Na Peisistratos' dood erven zijn zonen Hippias en Hipparchos de macht samen. Wanneer Harmodios' zuster gevraagd wordt als kanephoros — draagster van de heilige offermand — bij de grote Panathenaeën-processie, een grote eer, wijst Hipparchos haar in het openbaar af: ze zou niet eerbaar genoeg zijn voor de rol. Geen bewijs, geen aanleiding — puur om haar broer, die zijn toenaderingen had afgewezen, een lesje te leren.
+
+DIALOGUE:
+Harmodios' zuster
+Hij noemt mijn eer onwaardig, in het openbaar, zonder bewijs, zonder reden — puur omdat hij het kan, en omdat niemand een tiran om uitleg durft te vragen.
+
+CHOICES:
+* Zie hoe Harmodios en Aristogeiton hierop reageren -> CH14_GRE_002P
+
+END
+
+=== SCENE: CH14_GRE_002P ===
+
+TITLE:
 De Tirannendoders
 
 TEXT:
-Na Peisistratos' dood erven zijn zonen Hippias en Hipparchos de macht samen. In 514 v.Chr., tijdens het grote Panathenaeën-feest, vermoorden twee geliefden — Harmodios en Aristogeiton — Hipparchos midden op straat. Hun motief is, in werkelijkheid, geen droom van vrijheid: Hipparchos had Harmodios' zuster in het openbaar vernederd, en dit is wraak, niet politiek.
+In 514 v.Chr., tijdens datzelfde Panathenaeën-feest, vermoorden Harmodios en zijn geliefde Aristogeiton Hipparchos midden op straat. Hun motief is, in werkelijkheid, geen droom van vrijheid: dit is wraak voor zijn zusters vernedering, niet politiek.
 
 De geschiedenis zal daar later overheen schrijven — maar op dit moment, midden in de chaos van het feest, is het gewoon een moord, en Hippias' wachters grijpen iedereen die ook maar in de buurt van de daders stond.
 
@@ -18886,7 +19194,7 @@ TITLE:
 Meer Namen om te Onthouden
 
 TEXT:
-Dit is nog maar het begin van een patroon dat zich eeuwenlang zal herhalen. Cincinnatus wordt van zijn ploeg geroepen om als dictator een crisis te bezweren — en legt zijn absolute macht na amper zestien dagen weer vrijwillig neer, terug naar zijn akker. Coriolanus, verbannen door zijn eigen stad, leidt bijna een vijandelijk leger tegen Rome, tot zijn eigen moeder en vrouw hem op de knieën smeken te stoppen. Camillus, onterecht verbannen, wordt teruggeroepen om Rome te redden wanneer de Galliërs de stad binnenvallen.
+Dit is nog maar het begin van een patroon dat zich eeuwenlang zal herhalen. Cincinnatus wordt van zijn ploeg geroepen om als dictator een crisis te bezweren — en legt zijn absolute macht na amper zestien dagen weer vrijwillig neer, terug naar zijn akker. Coriolanus, verbannen door zijn eigen stad, leidt bijna een vijandelijk leger tegen Rome — tot zijn eigen moeder Veturia en zijn vrouw Volumnia, samen met zijn kinderen, hem op de knieën smeken te stoppen. Zij zijn het, niet de senaat of een generaal, die slagen waar Rome zelf faalt. Camillus, onterecht verbannen, wordt teruggeroepen om Rome te redden wanneer de Galliërs de stad binnenvallen.
 
 Telkens dezelfde vraag, telkens opnieuw gesteld: kan macht ooit veilig aan één mens worden toevertrouwd — en wat doet die mens ermee, eenmaal hij ze weer moet afstaan?
 
