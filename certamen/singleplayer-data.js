@@ -8060,7 +8060,7 @@ Aanvankelijk houdt Ikaros zich keurig aan zijn vaders route, vlak achter hem, zi
 
 De zon doet precies wat Daidalos vreesde: de was tussen de veren smelt, eerst onmerkbaar, dan in een oogwenk. Veer na veer laat los, en Ikaros valt — zijn armen nog wapperend in de vorm van vleugels die niet langer bestaan — de zee in die sindsdien zijn naam draagt.
 
-"[[Icare|Icarus!]]" roept Daidalos, keer op keer, terwijl hij cirkelt boven het water — maar er komt geen antwoord meer, enkel verspreide veren die langzaam op de golven neerdalen.
+Daidalos roept de naam van zijn zoon, keer op keer, terwijl hij cirkelt boven het water — maar er komt geen antwoord meer, enkel verspreide veren die langzaam op de golven neerdalen.
 
 IMAGE:
 ch4_val_van_ikaros.png
