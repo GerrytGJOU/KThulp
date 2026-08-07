@@ -796,7 +796,7 @@ body.greek .qcard .word{color:#143a5e}
 <link rel="stylesheet" href="map/provinces.css?v=20260702m2">
 </head>
 <body>
-<a class="portal-back" href="../" onclick="if(_screen==='spPlay'){event.preventDefault();spRenderLanding();}else if(_screen!=='home'){event.preventDefault();go('home');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<a class="portal-back" href="../" onclick="if(_screen==='spPlay'||_screen==='spStats'||_screen==='spCodex'||_screen==='spWorldMap'){event.preventDefault();spRenderLanding();}else if(_screen!=='home'){event.preventDefault();go('home');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"><span class="m" id="toastM"></span><div><div class="tt" id="toastT"></div><div class="tn" id="toastN"></div></div></div>
 <div class="achpop-bg" id="achpopBg" onclick="_achPopDismiss()"><div class="achpop">
