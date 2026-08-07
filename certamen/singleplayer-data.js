@@ -18498,6 +18498,9 @@ Na Peisistratos' dood erven zijn zonen Hippias en Hipparchos de macht samen. In 
 
 De geschiedenis zal daar later overheen schrijven — maar op dit moment, midden in de chaos van het feest, is het gewoon een moord, en Hippias' wachters grijpen iedereen die ook maar in de buurt van de daders stond.
 
+IMAGE:
+ch14_gre_tirannendoders.png
+
 PERSON:
 tirannendoders:intro
 
@@ -18610,6 +18613,9 @@ TEXT:
 In het machtsvacuüm na Hippias grijpt Kleisthenes, van de invloedrijke Alcmeoniden-familie, zijn kans — niet door zelf tiran te worden, maar door iets uit te vinden dat nog nooit was geprobeerd. Hij verdeelt de burgers opnieuw in tien stammen, dwars door de oude familiebanden heen, en geeft de volksvergadering — de ekklesia — rechtstreekse macht over de stad.
 
 Zijn beroemdste, en meest omstreden vondst is de ostrakismos: eenmaal per jaar mag elke burger een naam op een potscherf (ὄστρακον) krassen. Wie de meeste stemmen krijgt, wordt tien jaar verbannen — zonder proces, zonder aanklacht, puur uit voorzorg tegen wie te machtig dreigt te worden.
+
+IMAGE:
+ch14_gre_ostrakismos.png
 
 PERSON:
 kleisthenes:intro
@@ -18784,6 +18790,9 @@ TEXT:
 De aanval op de brug is afgeslagen, maar Porsenna's beleg gaat door — honger dreigt binnen de muren. Gaius Mucius besluit alleen, ongevraagd, het vijandelijke kamp binnen te sluipen om Porsenna zelf te doden. In het gedrang doodt hij per vergissing niet de koning, maar diens secretaris, gekleed in vergelijkbare kledij.
 
 Gegrepen en voor Porsenna gesleept, houdt Mucius, om te bewijzen dat Romeinse vastberadenheid geen pijn vreest, zijn eigen rechterhand in het offervuur naast hen — zonder een teken van pijn te tonen, terwijl zijn huid verbrandt.
+
+IMAGE:
+ch14_lat_scaevola_vuur.png
 
 PERSON:
 mucius_scaevola:intro
