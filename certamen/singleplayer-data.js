@@ -1046,13 +1046,13 @@ const SP_PUZZLES = {
 
   // ---- Hoofdstuk 4, Lijn Phaëthon ----
   puzzle_ch4p_imperfectum: { type:"multiple-choice",
-    vraag:"“Sol filium diu ___” — Sol bleef zijn zoon lange tijd waarschuwen. Welke vorm van monere (waarschuwen) past hier, imperfectum 3e persoon enkelvoud?",
-    opties:["monet","monebat","monuit","monebit"], antwoord:"monebat",
-    hint:"De imperfectum beschrijft een handeling die duurde of zich herhaalde — 'hij bleef waarschuwen', niet 'hij waarschuwde één keer'." },
+    vraag:"Sol probeert zijn zoon nog wanhopig op andere gedachten te brengen: “Nonne ego te diu ___?” — Waarschuw ik je niet al die tijd al? Welke vorm van monere (waarschuwen) past hier, imperfectum 1e persoon enkelvoud?",
+    opties:["monebam","monebas","monebat","monebamus"], antwoord:"monebam",
+    hint:"De imperfectum beschrijft een handeling die duurde of zich herhaalde — 'ik bleef waarschuwen'. Imperfectum 1e persoon enkelvoud van monere eindigt op -ebam." },
   puzzle_ch4p_perfectum: { type:"multiple-choice",
-    vraag:"“Iuppiter fulmen ___” — Jupiter wierp de bliksem. Welke vorm van mittere (sturen, werpen) past hier, perfectum 3e persoon enkelvoud?",
-    opties:["mittit","mittebat","misit","mittet"], antwoord:"misit",
-    hint:"De perfectum beschrijft een voltooide, eenmalige handeling in het verleden — 'hij wierp', één keer, klaar." },
+    vraag:"Jupiter, terwijl de bliksem nog nasidderde in de lucht, verklaart trots: “Fulmen ___” — ik heb de bliksem geworpen. Welke vorm van mittere (sturen, werpen) past hier, perfectum 1e persoon enkelvoud?",
+    opties:["misi","misit","misisti","misimus"], antwoord:"misi",
+    hint:"De perfectum beschrijft een voltooide, eenmalige handeling in het verleden. Perfectum 1e persoon enkelvoud van mittere (perfectumstam mis-) eindigt op -i: misi." },
 
   // ---- Hoofdstuk 5 — Het Gulden Vlies (herhaling nom. t/m abl., geen
   // nieuwe grammatica — zie SP_CAMPAIGN ch5.grammatica). Vijf puzzels, één
@@ -1127,8 +1127,9 @@ const SP_PUZZLES = {
     opties:["homo","canis","avis","deus"], antwoord:"homo",
     hint:"Het antwoord op het raadsel is de mens zelf — als baby kruipt hij (vier), als volwassene loopt hij (twee), op zijn oude dag steunt hij op een stok (de 'derde poot')." },
   puzzle_ch6_imperfectum: { type:"multiple-choice",
-    vraag:"Elk jaar zou de troon wisselen — maar toen het zover was, weigerde Eteokles telkens weer. “Eteocles regnum fratri tradere ___” — Eteokles bleef weigeren de troon aan zijn broer over te dragen. Welke vorm van recusare (weigeren) past hier, imperfectum 3e persoon enkelvoud?",
-    opties:["recusabat","recusavit","recusat","recusabit"], antwoord:"recusabat" },
+    vraag:"Elk jaar zou de troon wisselen — maar toen het zover was, verklaart Eteokles koppig, keer op keer: “Regnum fratri tradere ___” — ik weiger telkens de troon aan mijn broer over te dragen. Welke vorm van recusare (weigeren) past hier, imperfectum 1e persoon enkelvoud?",
+    opties:["recusabam","recusavi","recusabat","recusabant"], antwoord:"recusabam",
+    hint:"Imperfectum 1e persoon enkelvoud van een eerste-conjugatiewerkwoord (recusare) eindigt op -abam." },
   puzzle_ch6_matching_tempora: { type:"matching",
     vraag:"Koppel elke praesensvorm aan zijn perfectumvorm — dezelfde werkwoorden die je al kent uit eerdere hoofdstukken.",
     pairs:[
@@ -1139,8 +1140,9 @@ const SP_PUZZLES = {
     ],
     hint:"Kijk goed — niet elke perfectumstam lijkt op de praesensstam." },
   puzzle_ch6_perfectum: { type:"typed-latin",
-    vraag:"“Antigone fratrem contra Creontis edictum ___” — Antigone begroef haar broer, tegen Creons bevel in. Typ de perfectumvorm van sepelire (begraven), 3e persoon enkelvoud.",
-    antwoord:"sepelivit" },
+    vraag:"Antigone bekent openlijk tegenover Creon zelf: “Fratrem meum contra edictum tuum ___” — ik heb mijn broer begraven, tegen jouw bevel in. Typ de perfectumvorm van sepelire (begraven), 1e persoon enkelvoud.",
+    antwoord:"sepelivi",
+    hint:"Perfectum 1e persoon enkelvoud van sepelire (4e conjugatie) eindigt op -ivi: sepelivi." },
   puzzle_ch6_vocativus_grieks: { type:"typed-greek",
     vraag:"Pentheus roept, vol ongeloof, de naam van de vreemde god die zijn stad in extase heeft gebracht. Typ met het Griekse toetsenbord de vocativus van Βάκχος (Bacchus).",
     antwoord:"Βάκχε" },
@@ -1155,9 +1157,9 @@ const SP_PUZZLES = {
     antwoord:"plantatur",
     hint:"Passief praesens: werkwoordsstam + persoonsuitgang -tur (3e pers. enk.). De vloek ondergaat de handeling — hij wordt geplant, in plaats van zelf te planten." },
   puzzle_ch6_perfectum_passief: { type:"typed-latin",
-    vraag:"“Infans in monte ___” — het kind is op de berg te vondeling gelegd. Typ de perfectum passief, 3e persoon enkelvoud, van exponere (te vondeling leggen, blootstellen).",
-    antwoord:"expositus est",
-    hint:"Perfectum passief: ppp (expositus, van exponere) + een vorm van esse. Mannelijk enkelvoud (het kind, Oedipus): expositus est." },
+    vraag:"Jaren later vertelt Oedipus zelf zijn verhaal: “Ego in monte ___” — ik ben op de berg te vondeling gelegd. Typ de perfectum passief, 1e persoon enkelvoud, van exponere (te vondeling leggen, blootstellen).",
+    antwoord:"expositus sum",
+    hint:"Perfectum passief: ppp (expositus, van exponere) + een vorm van esse. Mannelijk enkelvoud, 1e persoon (ik, Oedipus): expositus sum." },
 
   // ---- Hoofdstuk 7 — De Appel der Tweedracht (cumulatieve herhaling: alle
   // naamvallen uit Hoofdstuk 5 én de werkwoordstijden uit Hoofdstuk 6 komen
@@ -1180,8 +1182,8 @@ const SP_PUZZLES = {
     vraag:"Bij Aulis ligt de hele vloot stil. “Classis ___ adverso tenetur” — de vloot wordt door een tegenwind vastgehouden. Zet de tegels in de juiste volgorde voor de ablativus (het middel) van ventus (wind).",
     tiles:["v","e","n","t","o"] },
   puzzle_ch7_perfectum: { type:"typed-latin",
-    vraag:"Toen de hoorn schalde, greep Achilles onmiddellijk naar het wapentuig tussen de geschenken. “Achilles arma statim ___” — typ de perfectumvorm van capere (nemen, grijpen), 3e persoon enkelvoud.",
-    antwoord:"cepit" },
+    vraag:"Toen de hoorn schalde, greep Achilles onmiddellijk naar het wapentuig tussen de geschenken en riep: “Arma statim ___!” — ik heb de wapens meteen gegrepen! Typ de perfectumvorm van capere (nemen, grijpen), 1e persoon enkelvoud.",
+    antwoord:"cepi" },
   puzzle_ch7_matching_tempora: { type:"matching",
     vraag:"Koppel elke praesensvorm aan zijn perfectumvorm — nieuwe werkwoorden, zelfde principe als Hoofdstuk 6.",
     pairs:[
@@ -1200,9 +1202,9 @@ const SP_PUZZLES = {
   // chronica-grammatica-loskoppelen-van-minerva-hoofdstuk. Met volledige
   // hints, in tegenstelling tot de herhalingspuzzels hierboven.
   puzzle_ch7_deponens: { type:"typed-latin",
-    vraag:"“Iuppiter Ledam, cygni specie occultus, diu ___” — Jupiter, verborgen in de gedaante van een zwaan, volgde Leda lange tijd. Typ de perfectum, 3e persoon enkelvoud, van het deponens sequi (volgen).",
-    antwoord:"secutus est",
-    hint:"Sequi is een deponens: de vorm ziet er passief uit (secutus est), maar de betekenis is actief — 'hij volgde', niet 'hij werd gevolgd'. Deponentia hebben alleen passieve vormen, met een actieve betekenis." },
+    vraag:"Jupiter zelf schept er later, onder de andere goden, nog over op: “Ledam, cygni specie occultus, diu ___” — verborgen in de gedaante van een zwaan, volgde ik Leda lange tijd. Typ de perfectum, 1e persoon enkelvoud, van het deponens sequi (volgen).",
+    antwoord:"secutus sum",
+    hint:"Sequi is een deponens: de vorm ziet er passief uit (secutus sum), maar de betekenis is actief — 'ik volgde', niet 'ik werd gevolgd'. Deponentia hebben alleen passieve vormen, met een actieve betekenis." },
   puzzle_ch7_betrekkelijk_vnw: { type:"typed-latin",
     vraag:"“Pastores, ___ infantem invenerant, eum ut suum filium educaverunt” — de herders, die het kind gevonden hadden, voedden hem op als hun eigen zoon. Typ het betrekkelijk voornaamwoord (mannelijk nominativus meervoud) dat hier past.",
     antwoord:"qui",
