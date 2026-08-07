@@ -939,9 +939,9 @@ const SP_PUZZLES = {
 
   // ---- Hoofdstuk 2, Lijn L: Latona ----
   puzzle_ch2l_praesens: { type:"multiple-choice",
-    vraag:"Latona doolt eindeloos rond, op zoek naar een schuilplaats. “Latona per terras ___” — welke vorm van errare (dwalen) past hier, praesens 3e persoon enkelvoud?",
-    opties:["errat","errant","erras","erratis"], antwoord:"errat",
-    hint:"Praesens 3e persoon enkelvoud van een eerste-conjugatiewerkwoord (op -are) eindigt op -at." },
+    vraag:"Latona doolt eindeloos rond, op zoek naar een schuilplaats. Wanhopig fluistert ze tegen zichzelf: “Ego per terras ___” — welke vorm van errare (dwalen) past hier, praesens 1e persoon enkelvoud?",
+    opties:["erro","erras","erramus","errant"], antwoord:"erro",
+    hint:"Praesens 1e persoon enkelvoud van een eerste-conjugatiewerkwoord (op -are) eindigt op -o." },
   puzzle_ch2l_imperativus: { type:"multiple-choice",
     vraag:"Een doodsbange reiziger ziet de python naderen en schreeuwt naar Latona. Wat roept hij?",
     opties:["Fuge!","Fugit!","Fugere!","Fugis!"], antwoord:"Fuge!",
@@ -953,8 +953,9 @@ const SP_PUZZLES = {
 
   // ---- Hoofdstuk 2, Lijn S: Semele ----
   puzzle_ch2s_praesens: { type:"multiple-choice",
-    vraag:"Semele mint Jupiter in het diepste geheim. “Semele Iovem ___” — welke vorm van amare (liefhebben) past hier, praesens 3e persoon enkelvoud?",
-    opties:["amat","amant","amas","amatis"], antwoord:"amat" },
+    vraag:"Semele en Jupiter beminnen elkaar in het diepste geheim. “Semele Iuppiterque in secreto ___” — welke vorm van amare (liefhebben) past hier, praesens 3e persoon meervoud?",
+    opties:["amant","amat","amatis","amamus"], antwoord:"amant",
+    hint:"Praesens 3e persoon meervoud van een eerste-conjugatiewerkwoord (op -are) eindigt op -ant." },
   puzzle_ch2s_imperativus: { type:"multiple-choice",
     vraag:"Nu Jupiter aan zijn eed gebonden is, spreekt Semele haar eis uit. Wat eist ze?",
     opties:["Ostende te!","Ostendis te!","Ostendere te!","Ostendit te!"], antwoord:"Ostende te!" },
@@ -969,9 +970,9 @@ const SP_PUZZLES = {
     opties:["Abi!","Abit!","Abire!","Abis!"], antwoord:"Abi!",
     hint:"Abire is een samengesteld werkwoord van ire (gaan) — de imperativus enkelvoud is net zo kort als bij ire zelf: 'i!'." },
   puzzle_ch2k_praesens: { type:"multiple-choice",
-    vraag:"Kallisto vlucht, alleen en verstoten, het woud in. “Callisto per silvas ___” — welke vorm van currere (rennen) past hier, praesens 3e persoon enkelvoud?",
-    opties:["currit","currunt","curris","curritis"], antwoord:"currit",
-    hint:"Praesens 3e persoon enkelvoud van een derde-conjugatiewerkwoord (op -ere) eindigt op -it." },
+    vraag:"Kallisto vlucht, alleen en verstoten, het woud in. Een jachtgezellin ziet haar wegrennen en roept haar na: “Cur tu per silvas ___?” — welke vorm van currere (rennen) past hier, praesens 2e persoon enkelvoud?",
+    opties:["curris","currit","curro","curritis"], antwoord:"curris",
+    hint:"Praesens 2e persoon enkelvoud van een derde-conjugatiewerkwoord (op -ere) eindigt op -is." },
   puzzle_ch2k_esse: { type:"multiple-choice",
     vraag:"Hera's vloek verandert Kallisto voorgoed. “Callisto ursa ___” — welke vorm van esse (zijn) past hier?",
     opties:["est","sunt","es","sum"], antwoord:"est",
@@ -1118,8 +1119,9 @@ const SP_PUZZLES = {
   // maar respectievelijk een raadsel-aanwijzing (inhoud, geen grammatica)
   // en een procedurele tip voor het matching-mechanisme zelf.
   puzzle_ch6_praesens: { type:"multiple-choice",
-    vraag:"“Niobe multos liberos ___” — Niobe heeft veel kinderen, meer dan Latona zelf, schept ze op. Welke vorm van habere (hebben) past hier, praesens 3e persoon enkelvoud?",
-    opties:["habet","habent","habes","habetis"], antwoord:"habet" },
+    vraag:"Niobe schept zelf op tegenover de menigte: “Multos liberos ___, plus quam Latona” — ik heb veel kinderen, meer dan Latona. Welke vorm van habere (hebben) past hier, praesens 1e persoon enkelvoud?",
+    opties:["habeo","habet","habes","habemus"], antwoord:"habeo",
+    hint:"Praesens 1e persoon enkelvoud van een tweede-conjugatiewerkwoord (op -ere met lange e) eindigt op -eo." },
   puzzle_ch6_sfinx: { type:"multiple-choice",
     vraag:"De Sfinx stelt haar raadsel: wat loopt 's ochtends op vier poten, 's middags op twee, en 's avonds op drie? “___ mane quadrupes, meridie bipes, vespere tripes ambulat” — welk woord vult de zin aan?",
     opties:["homo","canis","avis","deus"], antwoord:"homo",
