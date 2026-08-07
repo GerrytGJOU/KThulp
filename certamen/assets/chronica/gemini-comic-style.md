@@ -80,15 +80,64 @@ Houd je altijd, bij elke afbeelding, aan het volgende.
 
 ---
 
+## Wees expliciet — Gemini gokt verkeerd zodra iets impliciet blijft
+
+Gemini leidt fysieke details, wapenrusting/kleding, compositie en
+bewegingsrichting **niet betrouwbaar af uit context of historische kennis** —
+alleen uit wat er letterlijk in de prompt staat. Herhaalde fouten die dit
+patroon blootlegden: een historisch tweegevecht tussen gewapende krijgers
+werd getekend als ongewapende mannen in tunieken die een wedstrijdje rennen
+(geen wapenrusting/wapens genoemd); een pijl die "door" bijlen moest vliegen
+vloog erover (geen expliciete ring/opening benoemd); ruiters die "wegrijden"
+reden juist de stad in (richting niet aan een camerapositie vastgemaakt);
+schapen die een grot "uit" liepen, liepen er juist in.
+
+**Daarom voortaan altijd, voor elke prompt (niet alleen bij herhaalde
+fouten):**
+1. **Benoem letterlijk elk kledingstuk/wapen/object** dat op de figuren
+   hoort te zitten, ook als het "vanzelfsprekend" lijkt uit de context
+   (bv. bij een duel: "all four men wear bronze breastplates, greaves,
+   helmets, and each carries a drawn sword and a shield" — niet alleen
+   "warriors" of "soldiers", want dat wordt soms alsnog als burgerkleding
+   gelezen).
+2. **Leg bewegingsrichting vast met een camerapositie**, nooit alleen met een
+   werkwoord als "arrives"/"leaves"/"flees" — beschrijf vanaf waar de kijker
+   kijkt en wat daardoor wél/niet zichtbaar is (bv. "camera positioned
+   outside the gate looking outward, so the riders are seen from behind,
+   walls behind them, road ahead of them").
+3. **Bij een precieze ruimtelijke relatie tussen objecten** (iets moet dóór,
+   ónder, ácher, tussen iets anders) — beschrijf expliciet welk fysiek
+   kenmerk dat mogelijk maakt (een ring/opening, een hoogteverschil, een
+   volgorde), en herhaal de eis aan het eind nog eens in een aparte
+   **Avoid (strict)**-regel die letterlijk het foute resultaat beschrijft en
+   verbiedt.
+4. **Bij een gebeurtenis die uit meerdere fasen/momenten bestaat** (bv. "net
+   afgeschoten" + "nog in vlucht") — expliciet vastleggen dat het beeld maar
+   **één enkel bevroren moment** toont en er maar één exemplaar van elk
+   bewegend object in het hele beeld mag voorkomen, anders tekent Gemini
+   vaak twee momenten tegelijk (bv. twee pijlen).
+5. Sluit consequent af met een **Avoid (strict)**-alinea die de meest
+   waarschijnlijke foute lezing met naam noemt en verbiedt — niet alleen wat
+   je wél wilt, ook expliciet wat je NIET wilt zien.
+
+Zie `certamen/singleplayer.js`-gesprekslog / de sessiegeschiedenis voor
+voorbeelden van prompts die hierdoor van mislukking naar succes gingen
+(bijlenscène, ruiters-uit-de-poort, Horatii/Curiatii-duel).
+
 ## Promptsjabloon (per illustratie)
 
 > Illustration for the game "Chronica Classica", in the established comic /
 > graphic-novel house style (bold clean ink, cel shading, cinematic light).
-> **Scene:** «beschrijf het moment». **Setting/periode:** «plaats + tijd».
-> **Accent colour:** «Aegean blue voor Grieks / oxblood voor Romeins».
-> **Protagonist (indien in beeld):** nameless young farmer, androgynous, shown
-> from behind or over the shoulder, «vodden+hooivork / met boog / met speer+schild
-> / te paard». 16:9, no text, no speech bubbles, no watermark, no modern objects.
+> **Scene:** «beschrijf het moment, met élk kledingstuk/wapen/object expliciet
+> benoemd — nooit "soldiers"/"warriors" zonder erbij te zeggen wat ze dragen».
+> **Camera position (bij elke richting/beweging):** «vanaf waar kijkt de
+> kijker, en wat is daardoor wel/niet zichtbaar». **Setting/periode:**
+> «plaats + tijd». **Accent colour:** «Aegean blue voor Grieks / oxblood voor
+> Romeins». **Protagonist (indien in beeld):** nameless young farmer,
+> androgynous, shown from behind or over the shoulder, «vodden+hooivork / met
+> boog / met speer+schild / te paard». 16:9, no text, no speech bubbles, no
+> watermark, no modern objects. **Avoid (strict):** «benoem de meest
+> waarschijnlijke foute lezing met naam en verbied 'm expliciet».
 
 ## Voorbeeld — proloog ("de ontdekking van het bronzen Orakel")
 
