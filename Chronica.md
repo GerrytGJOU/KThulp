@@ -5333,6 +5333,124 @@ alle zes puzzels, beide CHECK-worpen (incl. een kritiek-gefaald-uitkomst),
 beide REACTION-momenten, de Brutus-echo en de eind/Museum-scènes renderen
 allemaal foutloos.
 
+### 7.53 Clementia/Severitas laten doorwerken na Hoofdstuk 6/7 — audit, tekst-only uitbreiding H7-14, en Finale-ontwerp (2026-08-07)
+
+**Audit-bevinding**: de opgebouwde, stille Clementia/Severitas-teller
+(`SP_STATE.approach`, `spApproachTendency()`) wordt gevoed door 72 getagde
+keuzes door de hele campagne, maar werd — buiten de 18 instant-REACTIE's,
+die per keuze reageren, niet op de opgebouwde stand — nog maar op 8 vaste
+plekken echt uitgelezen, allemaal in H2-7 (`{tendency_address}` 4×,
+`SP_TENDENCY_STORY_VARIANTS` 4×: Kallisto, Theseus' zeilen, Helena's
+schuld `CH7_012`, Iphigenia's offer `CH7_017`). Na `CH7_017` gebeurde er
+niets meer met de opgebouwde stand, terwijl de campagne al t/m H14 loopt.
+Losse constatering: de zelf aangedragen kandidaten Romulus/Remus,
+Horatius, Kleisthenes en Cloelia zijn GEEN gemiste kansen — die hebben al
+eigen CLEMENTIA/SEVERITAS-keuzes met REACTION (zie §7.52 voor de laatste
+twee).
+
+**Deel 1 — GEBOUWD, tekst-only, geen nieuwe branch-logica** (dus veilig
+tijdens de lopende speeltest van H7-14, geen CHOICES/navigatie gewijzigd):
+1. Twee nieuwe `SP_TENDENCY_STORY_VARIANTS`-entries voor momenten die al
+   in de tekst stonden maar ongekleurd waren:
+   - `{turnus_lot}` in `CH11_AEN_010C` (Aeneas doodt Turnus) — clementia:
+     Aeneas aarzelt echt, de wapenriem geeft de doorslag; severitas: geen
+     aarzeling merkbaar, het vonnis valt meteen.
+   - `{vrijers_wraak_omvang}` in `CH12_ODY_009` (na de slachting van de
+     vrijers) — clementia: Odysseus onderscheidt schuldig/onschuldig,
+     spaart trouwe bedienden; severitas: niemand die zijn huis verraadde
+     ontspringt de dans.
+2. Zes nieuwe `{tendency_address}`-plekken in bestaande NPC-monologen bij
+   hoofdstukafsluiting, telkens één ingevoegde bijzin, geen nieuwe scène:
+   `CH7_EINDE` (Boodschapper), `CH8_EINDE` (Boodschapper), `CH9_EINDE`
+   (Boodschapper), `CH10_EINDE` (Boodschapper), `CH11_EINDE` (Athena,
+   spreekt hier voor het eerst dat hoofdstuk), `CH13_EINDER` (Boodschapper,
+   na het Arachne-oordeel). `CH13_WORDT_VERVOLGD` bewust overgeslagen — dat
+   is het tijdelijke speeltest-eindpunt dat sowieso verdwijnt zodra H14
+   gekoppeld wordt (zie [[chronica-tijdelijk-speeltest-eindpunt]] in
+   memory), niet de moeite van een tekstwijziging die er straks weer
+   uitgaat.
+
+   **Gevalideerd**: `node --check` op beide bestanden, `validate_chronica.js`
+   → nog altijd 0 fouten, 33 waarschuwingen (ongewijzigd, alle bestaand en
+   ongerelateerd — dode routeflags).
+
+**Deel 2 — ONTWERP voor de Finale (nog niet gebouwd; er bestaat op dit
+moment geen enkel Finale-scriptblok, alleen de metadata-entry `boek:"V —
+De Laatste Herinnering"`, thema "de strijd tegen de Vergetelheid")**:
+twee onafhankelijke assen naast elkaar in de eindconfrontatie tegen Lethe:
+- **RELATION** (bestaand §7.51-besluit 3, "het Mass Effect-idee") bepaalt
+  WIE er komt helpen — bondgenoten met een positieve relatiescore boven
+  een drempel treden actief op tegen Lethe, wie negatief staat werkt tegen
+  de speler of blijft weg. Blauwdruk: het al werkende
+  `SP_ENDKAPITAAL_*`/`spBondgenotenAanwezig()`-patroon uit Hoofdstuk 9.
+- **Clementia/Severitas** (nieuw, dit besluit) bepaalt HOE de speler zelf
+  tegen Lethe kan optreden — `spApproachTendency()` gate een extra
+  keuzeoptie in de climax-scene, naast de neutrale hoofdroute:
+  - `clementia` → een verzoenings-/genezingsoptie: Lethe wordt niet
+    vernietigd maar "herinnerd", sluit aan bij het thema
+    vergetelheid-versus-herinnering.
+  - `severitas` → een directe confrontatie-optie: decisief, in lijn met
+    alle eerdere strenge keuzes.
+  - `neutraal` → alleen de standaardroute, bewust geen extra optie (voorkomt
+    dat neutraal spelen als "compleet" aanvoelt; lichte prikkel om wél een
+    kant te kiezen tijdens de speeltocht).
+  Technisch: geen nieuwe infrastructuur nodig, alleen een nieuwe
+  helperfunctie in de trant van `spBondgenotenAanwezig()` — bijvoorbeeld
+  `spApproachGate(tendency)` — gebruikt in een `REQUIRE`-conditie op een
+  CHOICES-regel.
+
+**How to apply**: bij het bouwen van de Finale (Boek V) altijd beide assen
+tegelijk inplannen — RELATION voor de bondgenotenkant, Clementia/Severitas
+voor de eigen-handelwijze-kant. Dit vastleggen nu voorkomt dat de Finale
+zonder deze koppeling gebouwd wordt, zoals bij H14's RELATION-koppeling al
+eerder bewust is uitgesteld (§7.52, besluit 3).
+
+**Extra (2026-08-07, op Gerbens verzoek)**: derde nieuwe
+`SP_TENDENCY_STORY_VARIANTS`-entry, `{tirannen_motivatie}`, in `CH14_000`
+(de hub-scene aan het begin van Hoofdstuk 14, vóór de taalspoor-splitsing
+— werkt dus voor Grieks/Latijn/beide). De Boodschapper duidt hier waarom
+juist déze speler naar het verzet-tegen-tirannen-hoofdstuk gestuurd wordt:
+severitas → "om een tiran te verslaan, moet je soms net zo hard kunnen
+zijn als de tiran zelf"; clementia → "alleen door zelf het goede voorbeeld
+te geven kun je de brute hardheid van een tiran weerstaan"; neutraal → ze
+laat het antwoord bewust open. Zelfde tekst-only patroon als de rest van
+deze paragraaf, `node --check` + `validate_chronica.js` bevestigen 0
+fouten, 33 ongewijzigde waarschuwingen.
+
+### 7.54 Taalspoor-graafcontrole (grieks/latijn/beide) over alle hoofdstukken — CH12-bug gevonden en gefixt (2026-08-07)
+
+Gerben vroeg of de zigzag/taalspoor-afhandeling voor `taalspoor=beide`
+klopt in ALLE hoofdstukken, niet alleen H10/H11. `validate_chronica.js`
+kan dit niet beantwoorden (zie [[chronica-validator-blind-spots]] in
+memory — hij checkt alleen op dode flags/onbekende scene-ids, geen
+REQUIRE-graaf-simulatie). Daarom een throwaway Node-script gebouwd (zie
+[[chronica-taalspoor-zigzag-mechanisme]]) dat de CNSParser-logica namaakt,
+`SP_CHx_CNS` in een vm-context laadt, en voor elk hoofdstuk-blok de
+keuzegraaf naloopt voor de drie taalspoor-waarden — inclusief `CHECK:`-
+scenes (die geen `CHOICES:`-sectie hebben maar via `SP_CHECKS[id]` naar 4
+dobbelsteen-uitkomsten vertakken; zonder die uitbreiding leek elke
+CHECK-scene een dead end).
+
+**Bevinding**: H10, H11 (zigzag), H13, H14 (sequentieel) waren stuk voor
+stuk consistent — alle drie taalsporen komen samen in één gedeeld
+eindpunt. **Hoofdstuk 12 niet**: latijn-only spelers kregen een eigen
+`CH12_MUSEUM_00_LAT`-afsluitscene, maar grieks-only én beide-spelers
+sloegen die over en gingen via `CH12_ODY_011` direct door naar
+`CH13_000` — geen enkel afsluitmoment voor hun kant van het hoofdstuk.
+
+**Fix**: nieuwe gedeelde scene `CH12_EINDE` (Boodschapper reflecteert
+op zowel Hercules/Cacus + Romulus & Remus als Odysseus' thuiskomst,
+zelfde alwetende-verteller-truc als CH8_EINDE/CH9_EINDE/CH13_EINDE — werkt
+ook voor spelers die de andere kant nooit zagen), waar nu alle drie
+taalsporen doorheen gaan vóór het generieke `CH12_MUSEUM_00`
+(voorheen `CH12_MUSEUM_00_LAT`, nu track-neutraal geherformuleerd).
+`CH12_LAT_014`'s latijn-keuze en `CH12_ODY_011`'s eindkeuze routeren nu
+beide naar `CH12_EINDE`.
+
+**Gevalideerd**: `node --check`, `validate_chronica.js` → 0 fouten, 33
+ongewijzigde waarschuwingen; het taalspoor-graafscript rapporteert na de
+fix nul afwijkingen over alle 15 blokken (Proloog t/m H14).
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
