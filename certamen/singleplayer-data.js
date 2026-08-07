@@ -704,6 +704,21 @@ const SP_TENDENCY_STORY_VARIANTS = {
     severitas: "Artemis' eigen orde eist het: Kallisto verandert in een berin",
     neutraal: "Hera verandert Kallisto in een berin",
   },
+  turnus_lot: {
+    clementia: "Wat jij ervan onthoudt: Aeneas aarzelt echt, weegt Turnus' smeekbede serieus af, en het is de wapenriem — niet koelbloedigheid — die de doorslag geeft; zelfs zijn woede is voor jou geen koude wraak.",
+    severitas: "Wat jij ervan onthoudt: van aarzeling is weinig te merken — Aeneas ziet de wapenriem, en het vonnis valt meteen, zonder verder beraad.",
+    neutraal: "Op het punt van genade te tonen, ziet Aeneas dat Turnus nog altijd Pallas' eigen wapenriem als buit draagt — en doodt hem alsnog, niet uit plicht maar uit pure, onbedwingbare woede.",
+  },
+  vrijers_wraak_omvang: {
+    clementia: "Wat jij je van deze ochtend vooral herinnert: Odysseus onderscheidt zorgvuldig wie schuldig was en wie niet, en spaart de bedienden die trouw bleven — twintig jaar wraak, maar niet blind.",
+    severitas: "Wat jij je van deze ochtend vooral herinnert: geen vrijer overleeft het, en ook de bedienden die met hen heulden ontspringen de dans niet — Odysseus laat niemand die zijn huis verraadde ongestraft.",
+    neutraal: "Met de vrijers verslagen laat Odysseus de vrouwelijke bedienden roepen die trouw bleven, en de handvol die met de vrijers heulden weet hij te onderscheiden van de rest.",
+  },
+  tirannen_motivatie: {
+    clementia: "Jij hebt tot nu toe laten zien dat je liever het goede voorbeeld geeft dan de vuist balt — en misschien is dat wel de enige manier om de brute hardheid van een tiran werkelijk te weerstaan.",
+    severitas: "Jij hebt tot nu toe laten zien dat je niet aarzelt wanneer het nodig is — en om een tiran te verslaan, moet je soms net zo hard kunnen zijn als de tiran zelf.",
+    neutraal: "Ze zegt er verder niets over — dat antwoord, vermoedt ze, moet dit hoofdstuk je zelf nog leveren.",
+  },
 };
 
 /* ---- BONDGENOTEN ALS EINDKAPITAAL (Chronica-audit B18) — het `SP_STATE.relations`-
@@ -11894,7 +11909,7 @@ TITLE:
 Het Gewicht van een Gouden Appel
 
 TEXT:
-"Tien jaar," zegt de Boodschapper, en voor het eerst sinds je haar kent, klinkt er iets als vermoeidheid in haar stem mee. "Tien jaar zal dit beleg gaan duren — en alles wat je nu hebt gezien, was pas de aanloop. De echte wrok, de wrok die er werkelijk toe doet, moet nog beginnen."
+"Tien jaar," zegt de Boodschapper, en voor het eerst sinds je haar kent, klinkt er iets als vermoeidheid in haar stem mee. "Tien jaar zal dit beleg gaan duren — en alles wat je nu hebt gezien, was pas de aanloop. De echte wrok, de wrok die er werkelijk toe doet, moet nog beginnen." Ze bekijkt je, {tendency_address}, alsof ze zich afvraagt hoe jij de komende jaren zult doorstaan.
 
 De poort keert terug tot een dunne streep licht. Je neemt een gouden appel met je mee, zwaarder dan een appel hoort te zijn — het gewicht, denk je, van elke keuze die nog moet volgen.
 
@@ -13356,7 +13371,7 @@ TITLE:
 Wat Oorlog Werkelijk Kost
 
 TEXT:
-"Je hebt maar de helft van dit verhaal met eigen ogen gezien," zegt de Boodschapper, "en toch heb je het hele verhaal meegemaakt — via nieuws, via mensen die het je vertelden, via mij. Dat is misschien wel de oudste waarheid van oorlog: niemand ziet hem ooit helemaal. Iedereen draagt zijn eigen stuk ervan."
+"Je hebt maar de helft van dit verhaal met eigen ogen gezien," zegt de Boodschapper, "en toch heb je het hele verhaal meegemaakt — via nieuws, via mensen die het je vertelden, via mij. Dat is misschien wel de oudste waarheid van oorlog: niemand ziet hem ooit helemaal. Iedereen draagt zijn eigen stuk ervan." Ze kijkt je aan, {tendency_address}, en zwijgt er verder over — dit hoofdstuk heeft al genoeg gezegd.
 
 De poort keert terug tot een dunne streep licht.
 
@@ -14900,7 +14915,7 @@ TITLE:
 Niemand Ziet het Hele Verhaal
 
 TEXT:
-"[[Ecce|zie hier]] — je hebt Troje zien vallen," zegt de Boodschapper, "maar niet het hele verhaal. Niemand ziet ooit het hele verhaal — dat is precies waarom je twee keer had moeten kunnen komen kijken, van twee kanten, om ook maar te beginnen het te begrijpen."
+"[[Ecce|zie hier]] — je hebt Troje zien vallen," zegt de Boodschapper, "maar niet het hele verhaal. Niemand ziet ooit het hele verhaal — dat is precies waarom je twee keer had moeten kunnen komen kijken, van twee kanten, om ook maar te beginnen het te begrijpen." Ze noemt je, zoals altijd, {tendency_address} — een gewoonte die je inmiddels bekend voorkomt.
 
 Hermes knikt afscheid, zijn werk hier gedaan. In je hand voel je een stuk verkoold hout — een splinter van het paard dat slaagde waar tien jaar oorlog faalde.
 
@@ -15906,7 +15921,7 @@ TITLE:
 Twee Zeeën, Eén Verlangen
 
 TEXT:
-De Boodschapper wacht al bij de scheur in het licht wanneer de laatste golven achter je verdwijnen. "Twee vloten," zegt ze, "hebben eindelijk vaste grond onder de voeten — maar geen van beide is thuis. Odysseus staat voor de deur van een tovenares die niemand ongeschonden laat vertrekken; Aeneas staat oog in oog met een koningin die zijn hele reis nog overhoop kan halen. Beide verhalen zijn nog lang niet af."
+De Boodschapper wacht al bij de scheur in het licht wanneer de laatste golven achter je verdwijnen. "Twee vloten," zegt ze, "hebben eindelijk vaste grond onder de voeten — maar geen van beide is thuis. Odysseus staat voor de deur van een tovenares die niemand ongeschonden laat vertrekken; Aeneas staat oog in oog met een koningin die zijn hele reis nog overhoop kan halen. Beide verhalen zijn nog lang niet af." Ze wendt zich tot jou, {tendency_address}, alsof ze wil zien hoe jij hun keuzes straks zult beoordelen.
 
 Hermes knikt afscheid, net als de vorige keer — maar Athena blijft nog even staan, haar blik nog op de horizon gericht, alsof ze zelf ook liever meevoer dan hier bleef wachten.
 
@@ -16914,7 +16929,7 @@ Vrede in Latium
 TEXT:
 Vulcanus smeedt intussen voor Aeneas een nieuw schild, met de hele toekomst van Rome erin gegraveerd — net als Achilles ooit van Hephaistos kreeg.
 
-Het eindigt in een tweegevecht: Aeneas tegen Turnus zelf. Op het punt van genade te tonen, ziet Aeneas dat Turnus nog altijd Pallas' eigen wapenriem als buit draagt — en doodt hem alsnog, niet uit plicht maar uit pure, onbedwingbare woede. Latinus houdt zijn woord: Lavinia wordt Aeneas' vrouw, en op de plek waar hun nieuwe stad verrijst, noemt hij haar Lavinium — het eerste, echte thuis sinds Troje viel.
+Het eindigt in een tweegevecht: Aeneas tegen Turnus zelf. {turnus_lot} Latinus houdt zijn woord: Lavinia wordt Aeneas' vrouw, en op de plek waar hun nieuwe stad verrijst, noemt hij haar Lavinium — het eerste, echte thuis sinds Troje viel.
 
 IMAGE:
 ch11_aen_aeneas_turnus.png
@@ -16957,7 +16972,7 @@ Twee Deuren, Nog Dicht
 TEXT:
 De Boodschapper wacht al, ditmaal zonder Hermes — "hij heeft zijn handen vol," zegt ze, met iets wat verdacht veel op een glimlach lijkt. "Odysseus zit vast op een eiland dat hij niet koos, gebonden aan een godin die hem niet laat gaan. Aeneas heeft eindelijk grond onder de voeten, een vrouw, een naam voor zijn nieuwe stad — maar de stad die zijn verre nakomelingen ooit zullen stichten, ligt nog altijd generaties ver weg."
 
-Athena, die al die tijd zwijgend had toegekeken, spreekt voor het eerst sinds het begin van dit hoofdstuk. "Beide reizen zijn bijna voorbij," zegt ze, "en toch is geen van beide nog thuis. Dat is precies het soort einde dat het verdient."
+Athena, die al die tijd zwijgend had toegekeken, spreekt voor het eerst sinds het begin van dit hoofdstuk. "Beide reizen zijn bijna voorbij," zegt ze, "en toch is geen van beide nog thuis. Dat is precies het soort einde dat het verdient. En jij, {tendency_address}, hebt in beide verhalen precies gezien waarnaar je zelf altijd kijkt."
 
 SOUVENIR:
 souvenir_twee_deuren
@@ -17428,20 +17443,33 @@ STATPOINTS:
 3
 
 CHOICES:
-* Keer terug naar het Museum [REQUIRE:taalspoor=latijn] -> CH12_MUSEUM_00_LAT
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH12_EINDE
 * Volg nu ook Odysseus naar Ithaka [REQUIRE:taalspoor=beide] -> CH12_ODY_001
 
 END
 
-=== SCENE: CH12_MUSEUM_00_LAT ===
+=== SCENE: CH12_EINDE ===
+
+TITLE:
+Twee Wegen naar Huis
+
+TEXT:
+"[[Ecce|zie hier]] — twee wegen naar huis," zegt de Boodschapper, "al zijn het niet dezelfde jaren, en niet dezelfde soort thuiskomst. Op deze heuvels verjaagde een held ooit een monster, lang voor er ook maar één steen van een stad lag; generaties later bouwden twee broers, opgevoed door een wolvin, precies hier de stad die alles zal overschaduwen wat eraan voorafging. Aan de andere kant van de zee wachtte een andere thuiskomst twintig jaar — een koning die zijn eigen paleis moest heroveren voor hij het weer 'thuis' kon noemen."
+
+Ze zwijgt even. "Twee soorten geduld, allebei uiteindelijk beloond. Niet iedereen krijgt dat."
+
+CHOICES:
+* Keer terug naar het Museum -> CH12_MUSEUM_00
+
+END
+
+=== SCENE: CH12_MUSEUM_00 ===
 
 TITLE:
 Terug in het Museum
 
 TEXT:
-Mercurius zet je terug precies waar hij je ophaalde, alsof er geen moment is verstreken. Een nieuwe stolp vult zich: een klein bronzen wolvinnetje, met twee piepkleine gestalten eronder. "Van een altaar voor een held tot de stichting van een stad," zegt de Boodschapper, "en allebei op dezelfde heuvels. Rome bouwt, dat merk je wel, altijd voort op wat eraan voorafging — ook op de delen van dat verleden die niemand graag navertelt."
-
-Ze kijkt je aan. "Odysseus is intussen ook bijna waar hij wezen moet. Wanneer jij zover bent, is hij dat ook."
+Mercurius zet je terug precies waar hij je ophaalde, alsof er geen moment is verstreken. Een nieuwe stolp vult zich: een klein bronzen wolvinnetje, met twee piepkleine gestalten eronder, naast een oud litteken-vormig sieraad dat je meteen aan iets uit Ithaka doet denken. "Van een altaar voor een held tot de stichting van een stad, en een koning die twintig jaar wachtte om weer thuis te horen," zegt de Boodschapper. "Rome bouwt, dat merk je wel, altijd voort op wat eraan voorafging — ook op de delen van dat verleden die niemand graag navertelt."
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos -> CH13_000
@@ -17683,7 +17711,7 @@ TITLE:
 Het Litteken
 
 TEXT:
-Met de vrijers verslagen laat Odysseus de vrouwelijke bedienden roepen die trouw bleven, en de handvol die met de vrijers heulden weet hij te onderscheiden van de rest. Eurycleia, de oude voedster die hem als kind heeft grootgebracht, herkent hem allang — niet aan een gezicht dat twintig jaar en Athena's vermommingen allebei hebben veranderd, maar aan een oud litteken op zijn dijbeen, van een everzwijnjacht toen hij nog een jongen was, dat ze bij het wassen van zijn voeten al eerder had gevoeld dan wie ook in het paleis.
+{vrijers_wraak_omvang} Eurycleia, de oude voedster die hem als kind heeft grootgebracht, herkent hem allang — niet aan een gezicht dat twintig jaar en Athena's vermommingen allebei hebben veranderd, maar aan een oud litteken op zijn dijbeen, van een everzwijnjacht toen hij nog een jongen was, dat ze bij het wassen van zijn voeten al eerder had gevoeld dan wie ook in het paleis.
 
 "Ik wist het," fluistert ze, haar hand nog op het litteken, "vanaf het eerste moment dat ik het voelde. Ik heb gezwegen, zoals je me vroeg — maar ik wist het."
 
@@ -17772,7 +17800,7 @@ STATPOINTS:
 3
 
 CHOICES:
-* Keer terug naar het Orakel van Chronos -> CH13_000
+* Zie wat er verder nog te ontdekken is -> CH12_EINDE
 
 END
 `.trim();
@@ -18061,7 +18089,7 @@ TITLE:
 Verder
 
 TEXT:
-Je laat het oordeel rusten, en volgt de Boodschapper terug naar de scheur in het licht.
+Je laat het oordeel rusten, en volgt de Boodschapper terug naar de scheur in het licht — nog altijd, zoals ze je inmiddels kent, {tendency_address}.
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH13_EINDE
@@ -18408,6 +18436,8 @@ TEXT:
 "[[Ecce|zie hier]] — het volgende boek," zegt de Boodschapper van Chronos, en deze keer opent ze de scheur voorzichtiger dan anders, alsof ze zelf nadenkt over wat erdoorheen past. "De goden treden vanaf hier terug — niet omdat ze verdwijnen, maar omdat het verhaal dat volgt niet meer het hunne is. Wat je nu ziet, hebben stervelingen zelf gedaan, zonder wonderen, zonder ingrijpen van boven. Alleen met wat mensen kunnen wanneer ze besluiten geen koning — of geen tiran — meer te dulden."
 
 Ze zwijgt even. "In Athene experimenteren stervelingen, vlak na een tiran, met iets dat nog geen naam had voor ze het uitvonden: het volk zelf aan de macht. In Rome staat de jonge Republiek — de Republiek die jij zelf hebt zien geboren worden, met Brutus' zwaard nog vers in de herinnering — voor haar eerste, allerzwaarste beproeving: een verdreven koning die terugkomt met een leger dat niet van hem is."
+
+Ze kijkt je aan, alsof ze al weet wat je hierheen stuurt. {tirannen_motivatie}
 
 VOCAB:
 grieks_tyrannos, grieks_demos, grieks_eleutheria, latijn_pons, latijn_dextera, latijn_obses
