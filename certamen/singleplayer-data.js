@@ -5367,7 +5367,7 @@ CHOICES:
 
 * Denk streng — hij had zo'n eed nooit lichtzinnig mogen zweren [SEVERITAS] -> CH2_S06
 * Kijk toe, niet goed wetend wie hier eigenlijk het meeste medelijden verdient [NEUTRAL] -> CH2_S06
-* Voel meelij met Jupiter, gevangen door zijn eigen onbezonnen woord [CLEMENTIA] -> CH2_S06
+* Voel vooral medelijden met Semele, die zo dadelijk zal sterven om een wens die haar niets dan verdriet gaat brengen [CLEMENTIA] -> CH2_S06
 
 END
 
