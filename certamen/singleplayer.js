@@ -534,7 +534,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS), ...CNSParser.parse(SP_CH11_CNS), ...CNSParser.parse(SP_CH12_CNS), ...CNSParser.parse(SP_CH13_CNS), ...CNSParser.parse(SP_CH14_CNS)]);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS), ...CNSParser.parse(SP_CH11_CNS), ...CNSParser.parse(SP_CH12_CNS), ...CNSParser.parse(SP_CH13_CNS), ...CNSParser.parse(SP_CH14_CNS), ...CNSParser.parse(SP_CH15_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
   stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[],
   payoffsSeen:{}, relations:{}, kroniek:[] });
@@ -724,6 +724,7 @@ function spRenderLanding(){
     <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="spGoCns('${SP_STATE.node||[...SP_SCENES.keys()][0]}')">${resuming?"Verdergaan":"Beginnen"}</button>
   </div>
   ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spWorldMap')">🗺️ Wereldkaart</button>`:""}
+  ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spCityMaps')">🏛️ Stadsplattegronden</button>`:""}
   ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spCodex')">📖 Codex Memoriae</button>`:""}
   ${resuming&&SP_STATE.stats?`<button class="btn btn-ghost btn-block" style="margin-bottom:14px" onclick="go('spStats')">📊 Karakter Informatie${SP_STATE.skillpoints?` (${SP_STATE.skillpoints})`:""}</button>`:""}
   ${foot()}`);
@@ -1076,6 +1077,73 @@ function spSwitchMapPanel(pid){
 }
 function spShowLocationInfo(id){
   const loc = SP_MAP_LOCATIONS.find(l=>l.id===id);
+  if(loc) toast(loc.nm, loc.desc);
+}
+
+/* ---- STADSPLATTEGRONDEN (Athene/Rome) — zelfde patroon als SCREENS.spWorldMap
+   hierboven, eigen state/const-paar (SP_CITY_MAP_PANELS/SP_CITY_MAP_LOCATIONS,
+   singleplayer-data.js), zie de bouwstatus-notitie daar. ---- */
+let SP_CITY_MAP_CURRENT_PANEL = "athene";
+let SP_CITY_MAP_ZOOM = 1;
+SCREENS.spCityMaps = function(){
+  document.body.classList.remove("greek");
+  if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
+  if(!SP_CITY_MAP_PANELS[SP_CITY_MAP_CURRENT_PANEL]) SP_CITY_MAP_CURRENT_PANEL = Object.keys(SP_CITY_MAP_PANELS)[0];
+  const panelId = SP_CITY_MAP_CURRENT_PANEL;
+  const panel = SP_CITY_MAP_PANELS[panelId];
+  const codex = SP_STATE.codex||[];
+  const pins = SP_CITY_MAP_LOCATIONS
+    .filter(loc=>loc.panel===panelId && spLocationUnlocked(loc, codex))
+    .map(loc=>`<button class="sp-map-pin" data-x="${loc.x}" data-y="${loc.y}" title="${esc(loc.nm)}" onclick="spShowCityLocationInfo('${loc.id}')">
+      <span class="sp-map-pin-dot"></span><span class="sp-map-pin-label">${esc(loc.nm)}</span>
+    </button>`).join("");
+  const tabs = Object.keys(SP_CITY_MAP_PANELS).map(pid=>
+    `<button class="btn ${pid===panelId?"btn-primary":"btn-ghost"}" style="flex:1" onclick="spSwitchCityMapPanel('${pid}')">${esc(SP_CITY_MAP_PANELS[pid].nm.split(" — ")[0])}</button>`
+  ).join("");
+  const zoomBtns = SP_MAP_ZOOM_LEVELS.map(z=>
+    `<button class="btn ${Math.abs(z-SP_CITY_MAP_ZOOM)<0.01?"btn-primary":"btn-ghost"}" style="flex:1" onclick="spSetCityMapZoom(${z})">${Math.round(z*100)}%</button>`
+  ).join("");
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Stadsplattegronden</h2></div>
+  <div class="panel" style="display:flex;gap:8px">${tabs}</div>
+  <div class="panel" style="display:flex;gap:8px;align-items:center">
+    <span class="note" style="margin:0;white-space:nowrap">🔍 Zoom:</span>${zoomBtns}
+  </div>
+  <div class="panel"><p class="note">${esc(panel.nm)} — nieuwe plekken verschijnen zodra je ze in het verhaal hebt bezocht. Plekken te dicht op elkaar? Zoom in.</p></div>
+  <div class="panel" style="padding:0;overflow:auto;position:relative;max-height:65vh">
+    <img id="spCityMapImg" src="assets/chronica/maps/${esc(panel.img)}" alt="" style="width:${Math.round(SP_CITY_MAP_ZOOM*100)}%;display:block" onload="spPositionCityMapPins()" onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
+    <div class="sp-map-missing note" style="display:none;padding:40px 16px;text-align:center">Kaart nog niet beschikbaar.</div>
+    <div id="spCityMapPins" style="position:absolute;left:0;top:0">${pins}</div>
+  </div>
+  ${foot()}`);
+  spPositionCityMapPins();
+};
+function spSetCityMapZoom(z){
+  SP_CITY_MAP_ZOOM = z;
+  go("spCityMaps");
+}
+function spPositionCityMapPins(){
+  const img = document.getElementById('spCityMapImg');
+  const wrap = document.getElementById('spCityMapPins');
+  if(!img || !wrap) return;
+  const w = img.clientWidth, h = img.clientHeight;
+  if(!w || !h) return; // nog niet (klaar met) laden
+  wrap.style.width = w + 'px';
+  wrap.style.height = h + 'px';
+  wrap.querySelectorAll('.sp-map-pin').forEach(pin=>{
+    const x = parseFloat(pin.dataset.x), y = parseFloat(pin.dataset.y);
+    pin.style.left = (x/100*w) + 'px';
+    pin.style.top = (y/100*h) + 'px';
+  });
+}
+window.addEventListener('resize', ()=>{ spPositionCityMapPins(); });
+function spSwitchCityMapPanel(pid){
+  SP_CITY_MAP_CURRENT_PANEL = pid;
+  SP_CITY_MAP_ZOOM = 1;
+  go("spCityMaps");
+}
+function spShowCityLocationInfo(id){
+  const loc = SP_CITY_MAP_LOCATIONS.find(l=>l.id===id);
   if(loc) toast(loc.nm, loc.desc);
 }
 

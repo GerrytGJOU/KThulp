@@ -367,9 +367,9 @@ const SP_CAMPAIGN = [
     periode:"Klassiek Athene / Rome, alledaags leven",
     verhaal:"Geen veldslag, geen troon — gewoon hoe het was om als vrouw, als slaaf, als gewoon mens te leven in Athene en Rome. Twee samenlevingen, elk met hun eigen blinde vlekken.",
     pallas:"Les 24-25: Pandora, De Vrouw, mode; een slaaf wordt held, een slavin koopt zich vrij (slavernij)", minerva:"Hoofdstuk 19: Dagelijks leven in Rome",
-    grammatica:"Grieks: cultuur (les 24-25, licht taalkundig); Latijn: vragend voornaamwoord, onbepaald voornaamwoord, perfectum met praesensbetekenis (Minerva 19)",
-    gameplay:"Twee sporen, vnl. cultuurhistorisch/reflectief — dilemma's over vrijheid, positie, dagelijkse beslommeringen",
-    personages:"Pandora (verteld) — Romeinse huishoudens, slaven en vrijgelatenen als naamloze/representatieve personages",
+    grammatica:"Grieks: cultuur (les 24-25, licht taalkundig; puzzels herhalen genitivus + vocativus); Latijn: vragend voornaamwoord vs. onbepaald voornaamwoord (quis/aliquis), perfectum met praesensbetekenis (novi/memini/odi) (Minerva 19)",
+    gameplay:"Twee sporen, scène-voor-scène ZIGZAG (zelfde mechanisme als Hoofdstuk 10) i.p.v. sequentieel — GEBOUWD 2026-08-08. Vier representatieve personages i.p.v. de gebruikelijke historische namen: Melissa (vrijgeboren Atheense, geen wettelijke stem buiten de oikos) en Doris (slavin die via apophora haar eigen vrijheid afbetaalt) in Athene; Aemilia (Romeinse matrona) en Fortunata (net vrijgelaten liberta, nog gebonden aan obsequium) in Rome. Twee RELATION-dragende dilemma's (Doris/Fortunata helpen of niet), twee leesvallen (Grieks: accusativus-woordvolgorde τὴν ἐλευθερίαν ζητῶ; Latijn: iaceo/iacio-verwarring), twee CHECK-momenten (Thesmophorion-sluipactie/prudentia, marktconfrontatie/gratia), twee CLEMENTIA/SEVERITAS/NEUTRAL-REACTIES (Stratons Pandora-vergelijking; een grafsteen-lofzang op matrona-deugd) — payoff-strategie uit §7.51 toegepast, plus een expliciete erfenis-echo naar Cloelia/Veturia/Volumnia (Hoofdstuk 14) en naar Pandora (Hoofdstuk 1). STATPOINTS eenmalig op de gedeelde CH15_EINDE-scène (H13/H14 gaven dit alleen op het Latijnse eindpunt, gemist door grieks-only-spelers — hier bewust vermeden, zie CH11's patroon). GEKOPPELD aan de speelbare route sinds 2026-08-08 (zelfde patroon als H14's §7.59-koppeling) — CH14_MUSEUM_00 routeert nu naar CH15_000, CH14_WORDT_VERVOLGD is verwijderd, CH15_WORDT_VERVOLGD is het nieuwe tijdelijke speeltest-eindpunt. Alle vijf illustraties (4 scène-IMAGE's + souvenir_hoe_men_leefde.png) zijn aangeleverd en aanwezig in certamen/assets/chronica/.",
+    personages:"Melissa, Doris — Aemilia, Fortunata (alle vier nieuw, representatief i.p.v. historisch — Pandora als verteld naslag/echo)",
     thema:"Wiens verhaal wordt normaal verteld, en wiens niet",
     illustratie:"Een Atheens huishouden / een Romeinse markt" },
   { id:"ch16", nr:16, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Vorming en Vermaak",
@@ -425,7 +425,7 @@ const SP_CAMPAIGN = [
     grammatica:"Grieks: herhaling — Cleopatra/Actium; Latijn: N.C.I., semi-deponentia, transitief/intransitief, vraagpartikels (M24) — vnl. vertaalvaardigheid (M25)",
     gameplay:"Literair/reflectief — bronnen en gedichten (Latijnse lijn); dezelfde Slag bij Actium van Griekse kant meebeleefd (Griekse lijn) — de twee lijnen convergeren hier inhoudelijk, niet alleen structureel",
     personages:"Augustus, Vergilius, Nero, Ovidius — Cleopatra VII, Marcus Antonius",
-    illustratie:"Augustus bij de Ara Pacis / Nero en het Colosseum — Cleopatra en Antonius bij Actium",
+    illustratie:"Augustus bij de Ara Pacis / Nero en de Domus Aurea — Cleopatra en Antonius bij Actium",
     zijverhalen:"Eros & Psyche, Pygmalion (A-tier) — verteld als verhaal-in-een-verhaal door een dichter" },
 
   // ---- Hoofdstuk 21-22: de ontknoping (Gerbens akkoord 2026-08-02,
@@ -633,6 +633,68 @@ const SP_MAP_LOCATIONS = [
 function spLocationUnlocked(loc, codexArr){
   return !loc.unlockCodex || (codexArr||[]).includes(loc.unlockCodex);
 }
+
+/* ---- STADSPLATTEGRONDEN (Athene/Rome) — Chronica.md §7.6x, vastgelegd
+   2026-08-08 op Gerbens verzoek. Andere zoom-laag dan SP_MAP_PANELS/
+   SP_MAP_LOCATIONS hierboven: die wereldkaart toont Latium/Griekenland als
+   hele regio's (bv. "Latium" als één pin voor het hele schiereiland), deze
+   twee stadskaarten zoomen in op specifieke gebouwen BINNEN Athene en Rome
+   zodra de campagne daar echt aankomt (Hoofdstuk 12+). Hergebruikt hetzelfde
+   patroon 1-op-1 (spLocationUnlocked, dezelfde pin-CSS, dezelfde
+   codex-unlock-hook) via een eigen SCREENS.spCityMaps in singleplayer.js —
+   bewust een aparte const-paar, niet toegevoegd aan SP_MAP_PANELS/
+   SP_MAP_LOCATIONS zelf, zodat de twee kaartsystemen elkaar niet in de weg
+   zitten (andere state-variabele, ander scherm, andere knop).
+
+   BOUWSTATUS: `athens_map.png`/`rome_map.png` staan sinds 2026-08-08 op
+   schijf (1672×941px, gegenereerd via ChatGPT/GPT-4o-beeldgeneratie na een
+   eerdere, verworpen Gemini-poging — zie het gesprek van 2026-08-08 voor
+   de volledige prompt-geschiedenis, inclusief de vorm-verwarring die bij
+   Gemini optrad en bij ChatGPT niet). x/y hieronder zijn nu PIXEL-PRECIES
+   afgelezen op de echte afbeeldingen (niet meer op het oog geschat, zoals
+   eerder wel het geval was) — geen verdere verfijning nodig tenzij de
+   afbeeldingen zelf ooit vervangen worden.
+
+   Per de staande regel (zie de notitie bij SP_MAP_LOCATIONS): een locatie
+   komt hier pas bij zodra het bijbehorende hoofdstuk een ECHTE codex-id
+   oplevert om aan te haken — dode pins die nooit oplichten worden niet
+   vooraf toegevoegd. De Curia van Pompeius (moord op Caesar, 44 v.Chr.) is
+   daarom BEWUST nog geen pin, ook al staat het gebouw al wel op de
+   kaartillustratie zelf (de prompt tekende 'm alvast, zie het gesprek) —
+   zodra het bijbehorende hoofdstuk een codex-id heeft, hoeft alleen deze
+   lijst nog een regel bij te krijgen, niet de afbeelding. ---- */
+const SP_CITY_MAP_PANELS = {
+  athene: { nm:"Athene — de Akropolis en de Agora", img:"athens_map.png" },
+  roma:   { nm:"Rome — Palatijn, Forum en Tiber", img:"rome_map.png" },
+};
+const SP_CITY_MAP_LOCATIONS = [
+  // ---- Athene ----
+  { id:"akropolis", nm:"De Akropolis", panel:"athene", x:77, y:21.6,
+    unlockCodex:"codex_athena_poseidon",
+    desc:"De rotsburcht waar Athena van Poseidon won met een olijfboom (Hoofdstuk 13), en die Peisistratos later met een list innam (Hoofdstuk 14)." },
+  { id:"agora_athene", nm:"De Agora", panel:"athene", x:36.5, y:48.3,
+    unlockCodex:"codex_kleisthenes_democratie",
+    desc:"Het marktplein, bestuurscentrum én rechtbank (de Heliaia) van Athene — waar Kleisthenes' democratie vorm kreeg (Hoofdstuk 14) en waar het volksgerecht in zitting zit (Hoofdstuk 15)." },
+  // ---- Rome ----
+  { id:"palatium", nm:"De Palatijn", panel:"roma", x:49.5, y:49.7,
+    unlockCodex:"codex_romulus_remus_augurium",
+    desc:"De heuvel waar Romulus, na het augurium met Remus, de eerste voor met Rome's stadsmuur trok." },
+  { id:"ara_maxima", nm:"Het Ara Maxima", panel:"roma", x:48, y:67.3,
+    unlockCodex:"codex_ara_maxima_stichting",
+    desc:"Het altaar aan de voet van de Palatijn, gesticht nadat Hercules de vuurspuwende Cacus versloeg." },
+  { id:"pons_sublicius", nm:"De Pons Sublicius", panel:"roma", x:14.4, y:48.4,
+    unlockCodex:"codex_horatius_cocles",
+    desc:"De houten Tiberbrug die Horatius Cocles in zijn eentje verdedigde — en waar Cloelia, als gijzelaar ontsnapt, later overheen zwom." },
+  { id:"forum_romanum", nm:"Het Forum Romanum", panel:"roma", x:40.1, y:37.7,
+    unlockCodex:"codex_forum_basilica",
+    desc:"Rome's centrale plein, met de overdekte Basilica Aemilia — zaken, recht en politiek onder één (half open) dak." },
+  { id:"thermae_roma", nm:"De Thermen", panel:"roma", x:72, y:73,
+    unlockCodex:"codex_thermae",
+    desc:"Openbare baden waar, tijdens de vrouwenuren, een matrona en een liberta zonder gedoe naast elkaar in hetzelfde water zitten." },
+  { id:"subura", nm:"De Subura", panel:"roma", x:84, y:37,
+    unlockCodex:"codex_romeinse_wonen",
+    desc:"De volkswijk vol insulae — huurkazernes zonder eigen keuken — en de thermopolium-toonbanken waar de bewoners hun eten kopen." },
+];
 
 /* ---- VOORNAAMWOORDEN — uitbreidbaar, nieuw gender toevoegen = 1 regel ---- */
 const SP_PRONOUNS = {
@@ -1555,6 +1617,22 @@ const SP_PUZZLES = {
     vraag:"Porsenna vraagt zich af of Cloelia werkelijk zelf de rivier is overgezwommen: “Porsenna dubitat num Cloelia flumen ipsa ___” — Typ de conjunctivus perfectum, 3e persoon enkelvoud, van tranare (doorzwemmen).",
     antwoord:"tranaverit",
     hint:"Indirecte vraag (num...) met conjunctivus perfectum: perfectumstam tranav- + -erit (3e pers. enk.) = tranaverit — zelfde patroon als egerit in Hoofdstuk 13." },
+  puzzle_ch15_gre_kyrios: { type:"multiple-choice",
+    vraag:"Melissa zegt zacht, meer tegen zichzelf dan tegen wie ook: “ἐγὼ τῆς οἰκίας ἄρχω” — ik heers over dit huishouden. Welke naamval is τῆς οἰκίας hier?",
+    opties:["genitivus","dativus","accusativus","nominativus"], antwoord:"genitivus",
+    hint:"ἄρχω ('heersen over, beginnen') staat met de genitivus, niet met de accusativus zoals het Nederlandse 'over' zou doen vermoeden — een vaste combinatie, geen naamvalskeuze die je kunt raden." },
+  puzzle_ch15_gre_doule: { type:"typed-greek",
+    vraag:"Melissa wil Doris roepen zonder dat haar vader het hoort: “ὦ ___, δεῦρο.” — o slavin, kom hier. Typ met het Griekse toetsenbord de vocativus enkelvoud van δούλη (slavin).",
+    antwoord:"δούλη",
+    hint:"Bij naamwoorden van de eerste declinatie op -η is de vocativus gelijk aan de nominativus — net als bij θεά in eerdere hoofdstukken." },
+  puzzle_ch15_lat_quis_aliquis: { type:"multiple-choice",
+    vraag:"Aemilia roept eerst scherp “Quis pulsat?”, en zegt dan, rustiger, tegen de slavin: “Aliquis pulsat, aperi.” Wat is hier het verschil tussen quis en aliquis?",
+    opties:["quis = vragend (wie?), aliquis = onbepaald (iemand)","quis = onbepaald (iemand), aliquis = vragend (wie?)","allebei betekenen 'wie?'","allebei betekenen 'iemand'"], antwoord:"quis = vragend (wie?), aliquis = onbepaald (iemand)",
+    hint:"quis stelt een echte vraag (wie klopt daar?); aliquis wijst gewoon een onbepaalde persoon aan, zonder dat het antwoord ertoe doet (er klopt wel iemand, doe open)." },
+  puzzle_ch15_lat_novi: { type:"typed-latin",
+    vraag:"Fortunata zegt over haar vroegere meesteres, zonder wrok: “Dominam bene ___” — ik ken mijn meesteres goed. Typ de perfectumvorm van nosco (leren kennen), 1e persoon enkelvoud, die hier een praesensbetekenis heeft.",
+    antwoord:"novi",
+    hint:"novi is grammaticaal een perfectum, maar betekent 'ik ken' (het resultaat van ooit leren kennen hebben), niet 'ik heb leren kennen' — net als memini (ik herinner me) en odi (ik haat)." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -2199,6 +2277,33 @@ const SP_CODEX_ENTRIES = {
     tekst:"De jonge Republiek zal dit patroon nog vele malen herhalen. Cincinnatus wordt van zijn ploeg geroepen om als dictator een crisis te bezweren — en legt zijn absolute macht na amper zestien dagen weer vrijwillig neer, terug naar zijn akker. Coriolanus, verbannen door zijn eigen stad, leidt bijna een vijandelijk leger tegen Rome — tot zijn moeder Veturia en zijn vrouw Volumnia, samen met zijn kinderen, hem op de knieën smeken te stoppen, waar de hele Romeinse senaat had gefaald. Camillus, onterecht verbannen, wordt teruggeroepen om Rome te redden wanneer de Galliërs de stad binnenvallen. Telkens dezelfde vraag, telkens opnieuw gesteld: kan macht ooit veilig aan één mens worden toevertrouwd — en wat doet die mens ermee, eenmaal hij ze weer moet afstaan?" },
   codex_grammatica_ch14_overzicht: { cat:"grammatica", taal:"beide", titel:"Grammatica: Hoofdstuk 14 — bewust een adempauze",
     tekst:"Dit hoofdstuk introduceert bewust geen nieuwe grammatica — een korte adempauze na de conjunctivus (Hoofdstuk 13). In plaats daarvan herhaalt het, in een nieuwe verhaalcontext, de aoristus passief en de naamvallen (Grieks) en de conjunctivus praesens/perfectum en de ablativus absolutus (Latijn) — stof die verderop in de campagne, wanneer de geschiedenis weer sneller gaat, meteen weer van pas komt." },
+  // ---- Hoofdstuk 15 — Hoe Men Leefde ----
+  codex_atheense_oikos: { cat:"geschiedenis", titel:"De Atheense Oikos: Wie Beslist, en Wie Niet",
+    tekst:"Een vrijgeboren Atheense vrouw staat, haar hele leven lang, wettelijk onder een kyrios — eerst haar vader, dan haar echtgenoot, eventueel later een zoon: zonder hem mag ze geen contract sluiten, geen bezit op eigen naam hebben, geen rechtszaak voeren. Binnen de muren van de oikos zelf is de werkelijkheid vaak anders: zij beheert de voorraden, stuurt de slaven aan, en weeft — niet uit verveling, maar omdat geweven stof letterlijk het huishouden financieel overeind houdt. Twee waarheden tegelijk, allebei echt: geen enkele stem buiten het huis, en de facto het hart van alles wat er binnen gebeurt." },
+  codex_apophora_vrijkopen: { cat:"geschiedenis", titel:"Apophora: Een Slaaf Koopt Zichzelf Vrij",
+    tekst:"Sommige Atheense slaven werken niet permanent onder toezicht, maar mogen zelfstandig een ambacht uitoefenen — op voorwaarde dat ze een vast deel van hun verdiensten, de apophora, aan hun meester afdragen. Wat overblijft, mogen ze sparen. Voor wie geduldig genoeg is en een welwillende meester treft, is dat spaargeld soms genoeg om uiteindelijk de eigen vrijheid te kopen: geen garantie, geen recht — maar wel een reëel, traag pad dat sommigen daadwerkelijk aflopen." },
+  codex_romeinse_domus: { cat:"geschiedenis", titel:"De Romeinse Domus: Eén Man, Alle Macht",
+    tekst:"De pater familias heeft, wettelijk, de patria potestas over iedereen die in zijn domus woont — vrouw, kinderen, slaven — met bevoegdheden die in theorie zelfs leven en dood omvatten, al wordt daar in de praktijk zelden op deze schaal gebruik van gemaakt. Een Romeinse matrona geniet, vergeleken met een Atheense vrouw, meer bewegingsvrijheid buitenshuis en meer sociaal aanzien — maar staat wettelijk evengoed onder het gezag van een man, haar hele leven lang." },
+  codex_manumissio_obsequium: { cat:"geschiedenis", titel:"Manumissio: Vrij, Maar Niet Los",
+    tekst:"Een vrijgelaten Romeinse slaaf (een libertus of liberta) wordt Romeins burger, mag trouwen, eigen bezit hebben, zelfs eigen slaven houden — maar blijft levenslang gebonden aan obsequium: verschuldigde loyaliteit en diensten aan de voormalige meester, nu patronus genoemd. Vrijheid in Rome is zelden een schone lei; het is een nieuwe, lichtere keten die het oude verband nooit helemaal doorknipt." },
+  codex_grammatica_ch15_overzicht: { cat:"grammatica", taal:"latijn", titel:"Grammatica: Hoofdstuk 15 — quis/aliquis en het perfectum met praesensbetekenis",
+    tekst:"Dit hoofdstuk voegt aan de Latijnse kant twee dingen toe: het verschil tussen het vragend voornaamwoord quis/quid (wie/wat?, een echte vraag) en het onbepaald voornaamwoord aliquis/aliquid (iemand/iets, zonder dat het antwoord ertoe doet) — bijna identieke vormen met een compleet ander gebruik. Daarnaast een klein groepje werkwoorden waarvan het perfectum een praesensbetekenis heeft: novi (ik ken, letterlijk 'ik heb leren kennen'), memini (ik herinner me) en odi (ik haat) — grammaticaal verleden tijd, vertaald als heden. Het Grieks introduceert dit hoofdstuk bewust geen nieuwe grammatica (les 24-25 is cultuurstof); de puzzels herhalen in plaats daarvan de genitivus en de vocativus." },
+  codex_griekse_oikos_wonen: { cat:"geschiedenis", titel:"De Griekse Oikos: Gezin, Ruimte en Verschil",
+    tekst:"Een Atheense oikos omvat veel meer dan het Nederlandse 'gezin': de kyrios (mannelijk hoofd), zijn vrouw en kinderen, én alle slaven die er wonen en werken, allemaal onder één juridisch dak. Binnen een welgesteld huis is de ruimte zelf verdeeld naar sekse: de andron, waar de heer des huizes gasten ontvangt en symposia houdt, en de gynaikonitis, de afgesloten vrouwenvertrekken waar het huishouden daadwerkelijk wordt gerund. De meeste Atheners waren echter geen Straton: gewone burgers en metoiken (vrije niet-burgers) woonden vaak in een simpel huis van een handvol kamers rond een klein binnenplaatsje, zonder aparte vrouwenvleugel — de scheiding tussen andron en gynaikonitis was een luxe, geen algemene regel." },
+  codex_slaven_soorten: { cat:"geschiedenis", titel:"Niet Alle Slavernij Was Hetzelfde", taal:"beide",
+    tekst:"In Athene bestaat een groot verschil tussen slaven als Doris — geschoolde huisslaven die via apophora zelfstandig mogen werken en sparen — en de slaven die in de zilvermijnen van Laurion of op het platteland worden ingezet, zonder enig vooruitzicht op vrijheid, onder de zwaarste omstandigheden van de hele Griekse wereld. Athene kende zelfs publieke slaven (demosioi) die als een soort ambtenaren/politiemacht functioneerden, met meer aanzien dan menig vrij mens zonder bezit. Sparta ging nog een heel andere weg: de heloten waren geen persoonlijk eigendom maar staatsbezit, een hele onderworpen bevolkingsgroep zonder ook maar enig pad naar vrijheid zoals apophora dat in Athene bood. In Rome bestaat een vergelijkbare kloof tussen de familia urbana (huisslaven in de stad, vaak geschoold, met een reële kans op manumissio) en de familia rustica (slaven op het platteland, soms letterlijk vastgeketend in een ergastulum, een slavengevangenis op het landgoed) — zie ook de villa hierover in dit hoofdstuk. Vrijheid, waar die al bestond, was dus nooit één vast pad, maar hing sterk af van welk soort slaaf je toevallig was." },
+  codex_romeinse_wonen: { cat:"geschiedenis", titel:"Domus, Insula, Villa: Waar Romeinen Woonden",
+    tekst:"Een domus zoals die van Aemilia — een eigen huis rond een atrium, met eigen slaven — was voorbehouden aan een kleine, welgestelde minderheid. De overgrote meerderheid van de stedelijke bevolking, inclusief de meeste vrijgelatenen, woonde in een insula: een meerdere verdiepingen tellend huurkazerne-gebouw, vaak haastig en slecht gebouwd, met kleine kamers, gedeelde voorzieningen, en een reëel risico op brand of instorting — de hogere verdiepingen waren het goedkoopst en het gevaarlijkst. Buiten de stad, op het platteland, lag de villa: het landgoed van welgestelde families, waar het echte, grootschalige boerenwerk en de textielproductie gebeurden — uitgevoerd door de familia rustica, de plattelandsslaven die zelden of nooit door de eigenaars zelf werden gezien." },
+  codex_villa_wolproductie: { cat:"geschiedenis", titel:"Lanam Fecit: Wie Spon Er Écht?",
+    tekst:"'Domum servavit, lanam fecit' — ze bewaarde het huis, ze spon wol — is het meest voorkomende deugdcompliment op Romeinse grafstenen voor vrouwen: het symbool van de ideale matrona. In de praktijk was het spinnen en weven door de vrouw des huizes vaak grotendeels symbolisch, een klein handwerkje ter demonstratie van huishoudelijke deugd. De werkelijke, grootschalige wolproductie voor een welgestelde familie gebeurde op het landgoed (de villa), uitgevoerd door de familia rustica — plattelandsslaven, meestal vrouwen, van wie vrijwel nooit een naam is overgeleverd, laat staan een grafsteen." },
+  codex_agora_heliaia: { cat:"geschiedenis", titel:"De Agora en de Heliaia: Waar Athene Recht Sprak",
+    tekst:"De agora is het kloppende hart van Athene — tegelijk marktplein, ontmoetingsplaats en bestuurscentrum, omzoomd door zuilengalerijen (stoai) waar burgers handelen, discussiëren en recht spreken. Hier, in de Heliaia, zetelt het volksgerecht: jaarlijks worden zesduizend mannelijke burgers door loting aangewezen als mogelijke jurylid, en voor elke zaak wordt uit hen een jury van honderden tegelijk samengesteld — bewust te groot om om te kopen. Vrouwen, slaven én metoiken (vrije niet-burgers, de status die een vrijgelaten slaaf in Athene hoogstens kan bereiken) mogen er niets van: geen jurydienst, geen stem, hooguit toekijken vanaf de zijkant." },
+  codex_forum_basilica: { cat:"geschiedenis", titel:"Forum en Basilica: Zaken, Recht en Roddel",
+    tekst:"Het Forum Romanum is Romes centrale plein, omringd door tempels, de senaatsgebouwen en de winkels van geldwisselaars — de plek waar politiek, handel en dagelijks leven letterlijk samenkomen. Een basilica is een grote, overdekte zuilenhal aan het Forum, oorspronkelijk gebouwd voor zaken en rechtspraak wanneer het weer een buitenbijeenkomst onmogelijk maakte: leningen worden er geregeld, rechtszaken gevoerd, contracten getekend. De Basilica Aemilia, gebouwd in 179 v.Chr. door Marcus Aemilius Lepidus, is een van de beroemdste — en dus een toevallige naamgenoot van menig latere Aemilia, zonder dat dat iets over hun eigen familie zegt." },
+  codex_thermae: { cat:"geschiedenis", titel:"De Thermen: Baden voor Iedereen (op de Juiste Tijd)",
+    tekst:"Openbare thermen zijn een van de meest democratische instellingen van Rome: voor een klein toegangsgeld — vaak minder dan een brood kost — kan vrijwel iedereen er baden, sporten en socialiseren, arm of rijk, vrij of vrijgelaten. Mannen en vrouwen baden gescheiden, meestal via aparte openingstijden in plaats van aparte ruimtes: vrouwenuren vroeg op de dag, mannenuren erna. Binnen die vrouwenuren verdwijnt, voor een paar uur, een deel van het standsverschil dat buiten de thermen alles bepaalt — een matrona en een liberta baden er letterlijk in hetzelfde water." },
+  codex_thermopolium: { cat:"geschiedenis", titel:"Thermopolium: Fastfood voor Wie Geen Keuken Heeft",
+    tekst:"Een thermopolium is een tegen de straat gemetselde toonbank met ingebouwde grote kruiken (dolia), gevuld met warme linzensoep, kikkererwten, gestoofd vlees of wijn — de snackbar van de oudheid. Voor de rijke minderheid met een eigen domus en keuken is het een uitzondering; voor de meerderheid van de stedelijke bevolking, die in een insula woont zonder haard of degelijke ventilatie, is eten bij een thermopolium eerder regel dan uitzondering. De ruïnes van Pompeii tellen er tientallen, soms met resten van de opgewarmde maaltijd nog in de kruiken." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -2671,6 +2776,8 @@ const SP_SOUVENIRS = {
     caption:"Een klein, verdroogd twijgje — naar verluidt van dezelfde olijfboom waarmee Athena ooit een hele stad won van haar eigen oom Poseidon." },
   souvenir_verzet_tirannen: { nm:"Een Doorgesneden Boei", icon:"⛓️", img:"souvenir_verzet_tirannen.png",
     caption:"Een doorgesneden stuk ketting — half Atheens brons, half Romeins ijzer — ter herinnering aan twee volkeren die in vrijwel hetzelfde jaar hun tirannen afwierpen." },
+  souvenir_hoe_men_leefde: { nm:"Een Spinklosje en een Vrijheidsmuts", icon:"🧶", img:"souvenir_hoe_men_leefde.png",
+    caption:"Een houten spinklosje, nog met draad eromheen, naast een kleine vilten muts — de pileus die een net vrijgelaten Romein bij de manumissio kreeg. Geen van beide voorwerpen heeft ooit een standbeeld gekregen." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -2920,6 +3027,16 @@ const SP_CHECKS = {
     deels:{ target:"CH14_LAT_001BQ_DEELS" },
     gefaald:{ target:"CH14_LAT_001BQ_GEFAALD" },
     kritiek:{ target:"CH14_LAT_001BQ_KRITIEK" } },
+  ch15_gre_doris_sluip: { stat:"prudentia", dc:14,
+    volledig:{ target:"CH15_GRE_004_VOL" },
+    deels:{ target:"CH15_GRE_004_DEELS" },
+    gefaald:{ target:"CH15_GRE_004_GEFAALD" },
+    kritiek:{ target:"CH15_GRE_004_KRITIEK" } },
+  ch15_lat_fortunata_markt: { stat:"gratia", dc:14,
+    volledig:{ target:"CH15_LAT_004_VOL" },
+    deels:{ target:"CH15_LAT_004_DEELS" },
+    gefaald:{ target:"CH15_LAT_004_GEFAALD" },
+    kritiek:{ target:"CH15_LAT_004_KRITIEK" } },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -3371,6 +3488,41 @@ const SP_VOCAB_ENTRIES = {
   latijn_ostendo: { taal:"latijn", woord:"ostendo", betekenis:"tonen, laten zien" },
   latijn_inde: { taal:"latijn", woord:"inde", betekenis:"vandaar" },
   latijn_ne_vraag: { taal:"latijn", woord:"-ne", betekenis:"niet vertalen" },
+  // ---- Hoofdstuk 15 — Hoe Men Leefde (verhaal-woorden) ----
+  grieks_oikos:   { taal:"grieks", woord:"οἶκος", transcript:"oîkos", betekenis:"huis, huishouden" },
+  grieks_doule:   { taal:"grieks", woord:"δούλη, δούλης", transcript:"doúlē", betekenis:"slavin" },
+  grieks_doulos:  { taal:"grieks", woord:"δοῦλος, δούλου", transcript:"doûlos", betekenis:"slaaf" },
+  grieks_histos:  { taal:"grieks", woord:"ἱστός", transcript:"histós", betekenis:"weefgetouw" },
+  latijn_domus:      { taal:"latijn", woord:"domus, domus", betekenis:"huis" },
+  latijn_familia:    { taal:"latijn", woord:"familia, familiae", betekenis:"huishouden, gezin" },
+  latijn_servus:     { taal:"latijn", woord:"servus, servi", betekenis:"slaaf" },
+  latijn_serva:      { taal:"latijn", woord:"serva, servae", betekenis:"slavin" },
+  latijn_uxor:       { taal:"latijn", woord:"uxor, uxoris", betekenis:"echtgenote" },
+  latijn_manumissio: { taal:"latijn", woord:"manumissio, manumissionis", betekenis:"vrijlating (van een slaaf)" },
+  latijn_insula:     { taal:"latijn", woord:"insula, insulae", betekenis:"huurkazerne, meerdere verdiepingen appartementen" },
+  latijn_villa:      { taal:"latijn", woord:"villa, villae", betekenis:"landhuis, landgoed" },
+  // ---- Hoofdstuk 15: 20 extra hoogfrequente signaalwoorden (VOCAB_UITBREIDING.md,
+  // Pallas ≤25/Minerva ≤21-plafond, zelfde methode als de H1-14-uitbreiding) ----
+  grieks_ana:          { taal:"grieks", woord:"ἀνά", transcript:"aná", betekenis:"omhoog" },
+  grieks_phemi:        { taal:"grieks", woord:"φημί", transcript:"phēmí", betekenis:"zeggen, beweren" },
+  grieks_para:         { taal:"grieks", woord:"παρά", transcript:"pará", betekenis:"van; naast; tegen" },
+  grieks_didomi:       { taal:"grieks", woord:"δίδωμι", transcript:"dídōmi", betekenis:"geven" },
+  grieks_hotan:        { taal:"grieks", woord:"ὅταν", transcript:"hótan", betekenis:"wanneer ook maar" },
+  grieks_deiknymi:     { taal:"grieks", woord:"δείκνυμι", transcript:"deíknymi", betekenis:"tonen, aanwijzen" },
+  grieks_tithemi:      { taal:"grieks", woord:"τίθημι", transcript:"títhēmi", betekenis:"plaatsen, stellen" },
+  grieks_eimi_gaan:    { taal:"grieks", woord:"εἶμι", transcript:"eîmi", betekenis:"ik zal gaan" },
+  grieks_hekateros:    { taal:"grieks", woord:"ἑκάτερος", transcript:"hekáteros", betekenis:"ieder (van twee)" },
+  grieks_prostithemi:  { taal:"grieks", woord:"προστίθημι", transcript:"prostíthēmi", betekenis:"toevoegen" },
+  latijn_nego:   { taal:"latijn", woord:"nego", betekenis:"ontkennen" },
+  latijn_ob:     { taal:"latijn", woord:"ob", betekenis:"voor" },
+  latijn_loquor: { taal:"latijn", woord:"loquor", betekenis:"spreken" },
+  latijn_iaceo:  { taal:"latijn", woord:"iaceo", betekenis:"liggen" },
+  latijn_pereo:  { taal:"latijn", woord:"pereo", betekenis:"te gronde gaan" },
+  latijn_muto:   { taal:"latijn", woord:"muto", betekenis:"veranderen" },
+  latijn_transeo:{ taal:"latijn", woord:"transeo", betekenis:"oversteken" },
+  latijn_servo:  { taal:"latijn", woord:"servo", betekenis:"redden, bewaren" },
+  latijn_tollo:  { taal:"latijn", woord:"tollo", betekenis:"tillen, heffen" },
+  latijn_antea:  { taal:"latijn", woord:"antea", betekenis:"vroeger, eerst" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -19259,17 +19411,758 @@ TEXT:
 Een nieuwe stolp vult zich naast de andere: een doorgesneden stuk ketting, half brons, half ijzer. "Twee volkeren, in hetzelfde jaar bevrijd," zegt de Boodschapper zacht, "op twee heel verschillende manieren." Ze kijkt nog even naar de stolp, alsof ze zelf ook nog aan het nadenken is over wat er hierna komt.
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH14_WORDT_VERVOLGD
+* Luister naar het volgende verhaal -> CH15_000
+
+END
+`.trim();
+
+/* ---- Hoofdstuk 15 "Hoe Men Leefde" — GEBOUWD (2026-08-08), GEKOPPELD aan
+   de speelbare route (2026-08-08, zelfde patroon als de H13→H14-koppeling
+   uit §7.59): CH14_MUSEUM_00's enige keuze routeert nu naar CH15_000 (was
+   CH14_WORDT_VERVOLGD, die scène is volledig verwijderd — niet orphaned
+   laten hangen, zie [[chronica-tijdelijk-speeltest-eindpunt]]).
+   CH15_WORDT_VERVOLGD (onderaan dit blok) is het nieuwe tijdelijke
+   speeltest-eindpunt. SP_SCENES in singleplayer.js bevat nu ook
+   ...CNSParser.parse(SP_CH15_CNS). ---- */
+const SP_CH15_CNS = `
+=== SCENE: CH15_000 ===
+
+TITLE:
+Wie Wordt Onthouden
+
+TEXT:
+"[[Ecce|zie hier]] — geen troon deze keer, geen veldslag," zegt de Boodschapper van Chronos, en de scheur die ze opent oogt kleiner dan anders, bijna huiselijk. "Vorige hoofdstukken gaven je namen die de geschiedenis toevallig bewaarde — Cloelia, die de Tiber overzwom; Veturia en Volumnia, die op hun knieën een heel leger tegenhielden. De meeste mensen krijgen dat nooit. Wat je nu ziet, zijn geen helden met een standbeeld — gewoon hoe het was om te leven, in Athene en in Rome, als iemand van wie niemand ooit een verhaal opschreef."
+
+Ze zwijgt even. "In Athene draait alles om de οἶκος, het huishouden — en om wie daarbinnen mag beslissen, en wie niet. In Rome om de domus en de familia, waar één man wettelijk over iedereen beschikt die er woont. Beide steden hebben hun eigen blinde vlek. Beide hebben ook mensen die, ondanks alles, hun eigen leven proberen vorm te geven binnen de ruimte die hun wordt gelaten."
+
+VOCAB:
+grieks_oikos, grieks_doule, grieks_doulos, grieks_histos, grieks_gyne, latijn_domus, latijn_familia, latijn_servus, latijn_serva, latijn_uxor, latijn_manumissio, latijn_insula, latijn_villa, grieks_ana, grieks_phemi, grieks_para, grieks_didomi, grieks_hotan, grieks_deiknymi, grieks_tithemi, grieks_eimi_gaan, grieks_hekateros, grieks_prostithemi, latijn_nego, latijn_ob, latijn_loquor, latijn_iaceo, latijn_pereo, latijn_muto, latijn_transeo, latijn_servo, latijn_tollo, latijn_antea
+
+CHOICES:
+* Volg het huishouden in Athene [REQUIRE:taalspoor=grieks] -> CH15_GRE_001
+* Volg het huishouden in Rome [REQUIRE:taalspoor=latijn] -> CH15_LAT_001
+* Volg het huishouden in Athene [REQUIRE:taalspoor=beide] -> CH15_GRE_001
 
 END
 
-=== SCENE: CH14_WORDT_VERVOLGD ===
+=== SCENE: CH15_GRE_001 ===
+
+TITLE:
+De Oikos van Melissa
+
+TEXT:
+Melissa is vrijgeboren, dochter van Straton — en dat is meteen alles wat de wet over haar vastlegt. Zonder kyrios, mannelijke voogd (nu haar vader, straks haar echtgenoot), mag ze geen contract sluiten, geen bezit op eigen naam hebben, zelfs geen rechtszaak voeren. Binnen de muren van de oikos is het een ander verhaal: zij beheert de voorraadkamer, stuurt de slaven aan, en weeft aan het weefgetouw dat de hele hoofdruimte van het huis vult — niet als tijdverdrijf, maar als het werk dat het huishouden financieel draaiende houdt.
+
+DIALOGUE:
+Melissa
+Straton denkt dat hij dit huis runt. Hij weet niet eens waar de olijfolie staat, of hoeveel graan er nog is tot de volgende oogst. Dat weet ik.
+
+IMAGE:
+ch15_gre_oikos_melissa.png
+
+PUZZLE:
+puzzle_ch15_gre_kyrios
+
+CODEX:
+codex_griekse_oikos_wonen
+
+CHOICES:
+* Zie wie Melissa's dagen verder vult -> CH15_GRE_001J
+
+END
+
+=== SCENE: CH15_GRE_001J ===
+
+TITLE:
+Twee Huishoudens
+
+TEXT:
+Terwijl Melissa haar draad weer opneemt, ligt aan de andere kant van de wereld een even streng geordend huishouden — met heel andere regels.
+
+CHOICES:
+* Blijf bij Melissa's kant van het verhaal [REQUIRE:taalspoor=grieks] -> CH15_GRE_002
+* Steek nu over naar Rome [REQUIRE:taalspoor=beide] -> CH15_LAT_001
+
+END
+
+=== SCENE: CH15_LAT_001 ===
+
+TITLE:
+De Domus van Aemilia
+
+TEXT:
+Aemilia is de dochter van het huis, opgevoed om ooit zelf een domus te leiden — een matrona geniet meer bewegingsvrijheid buitenshuis dan een Atheense vrouw, mag boodschappen doen, bezoek afleggen, zich in het openbaar vertonen. Wettelijk verandert dat weinig: haar vader, en straks haar echtgenoot, heeft de patria potestas — gezag dat in theorie zelfs over leven en dood gaat, al wordt daar zelden zo ver op doorgedreven.
+
+Vanuit de keuken klinkt geschreeuw. Iemand klopt hard op de voordeur.
+
+DIALOGUE:
+Aemilia
+Quis pulsat?
+
+Even later, rustiger, tegen de slavin bij de deur:
+
+Aemilia
+Aliquis pulsat, aperi.
+
+IMAGE:
+ch15_lat_domus_aemilia.png
+
+PUZZLE:
+puzzle_ch15_lat_quis_aliquis
+
+CHOICES:
+* Zie wie er voor de deur staat -> CH15_LAT_001J
+
+END
+
+=== SCENE: CH15_LAT_001J ===
+
+TITLE:
+Twee Huishoudens
+
+TEXT:
+Het blijkt een bode met niets dringenders dan een uitnodiging voor het avondmaal van een buurfamilie. Terwijl Aemilia weer aan haar eigen bezigheden gaat, ligt aan de andere kant van de wereld een even streng geordend huishouden — met heel andere regels.
+
+CHOICES:
+* Blijf bij Aemilia's kant van het verhaal [REQUIRE:taalspoor=latijn] -> CH15_LAT_002
+* Steek nu over naar Athene [REQUIRE:taalspoor=beide] -> CH15_GRE_002
+
+END
+
+=== SCENE: CH15_GRE_002 ===
+
+TITLE:
+Doris' Rekening
+
+TEXT:
+Doris is een van Straton's slavinnen, maar niet op de gebruikelijke manier: als geschoolde weefster mag ze een deel van haar werk zelfstandig verkopen op de markt, zolang ze een vast deel — de apophora — aan Straton afdraagt. De rest spaart ze, muntstuk voor muntstuk, in een verborgen kruik onder de vloertegels van de weefkamer. Vanavond telt ze hardop, voor het eerst zonder te fluisteren.
+
+DIALOGUE:
+Doris
+Nog twee, misschien drie oogsten. Dan koop ik mezelf vrij van Straton, met zijn eigen geld nog wel — geld dat ik zelf verdiend heb, teruggekocht van de man die het eerst van mij afpakte. Ik weet dat ik geluk heb, vergeleken met wie in Laurion in de zilvermijnen zitten, of wie op het land van een vreemde slaven zijn zonder ooit apophora te mogen afdragen. Zij hebben geen kruik om in te tellen.
+
+Melissa staat in de deuropening. Ze had het gesprek niet hoeven horen, maar ze staat er al.
+
+CODEX:
+codex_slaven_soorten
+
+CHOICES:
+* Beloof Doris te helpen waar je kunt, ook al riskeer je daarmee Stratons argwaan -> CH15_GRE_002A
+* Zeg niets — dit is Doris' rekening, niet de jouwe om je mee te bemoeien -> CH15_GRE_002B
+
+END
+
+=== SCENE: CH15_GRE_002A ===
+
+TITLE:
+Een Stille Belofte
+
+TEXT:
+Melissa knikt, kort maar oprecht. Vanaf vandaag legt ze zelf soms een extra muntstuk bij Doris' kruik, uit haar eigen krappe huishoudgeld — klein, ongezien, maar echt.
+
+FLAG:
+ch15_gre_doris_geholpen=true
+
+RELATION:
+doris=+1
+
+CHOICES:
+* Zie hoe het gesprek verdergaat -> CH15_GRE_002J
+
+END
+
+=== SCENE: CH15_GRE_002B ===
+
+TITLE:
+Een Grens Getrokken
+
+TEXT:
+Doris knikt, zonder verwijt — ze had ook niet om hulp gevraagd. Toch verandert er iets kleins tussen jullie: ze telt voortaan weer fluisterend, zoals voor vanavond.
+
+RELATION:
+doris=-1
+
+CHOICES:
+* Zie hoe het gesprek verdergaat -> CH15_GRE_002J
+
+END
+
+=== SCENE: CH15_GRE_002J ===
+
+TITLE:
+Verder in Twee Levens
+
+TEXT:
+Melissa gaat terug naar haar weefgetouw, Doris naar haar kruik onder de vloertegels — twee vrouwen in hetzelfde huis, allebei sparend voor een vrijheid die ze op geen enkele manier vanzelfsprekend mogen vinden.
+
+CHOICES:
+* Blijf bij Melissa en Doris' kant van het verhaal [REQUIRE:taalspoor=grieks] -> CH15_GRE_003
+* Steek over naar Rome [REQUIRE:taalspoor=beide] -> CH15_LAT_002
+
+END
+
+=== SCENE: CH15_LAT_002 ===
+
+TITLE:
+Fortunata's Vrijheid
+
+TEXT:
+Fortunata was tot vorig jaar serva in dit huis; nu is ze liberta, formeel vrijgelaten door Aemilia's vader bij zijn testament. Toch komt ze nog dagelijks langs — obsequium, de verschuldigde loyaliteit aan haar voormalige meester, nu haar patronus, verdwijnt niet met de vrijheid. Ze helpt nog altijd mee met de was, de boodschappen, het huishouden dat ooit volledig het hare was om te dragen.
+
+DIALOGUE:
+Fortunata
+Vrij ben ik, zeker. Maar vrij van wát, precies? Ik draag nog steeds dezelfde manden naar dezelfde markt, alleen mag ik nu ook nee zeggen — als ik durf. En ik slaap niet meer hier, in deze domus met haar atrium en haar zuilen — ik huur nu een kamer op de derde verdieping van een insula bij de Subura, met een gedeeld kolenvuurtje en een trap die kraakt onder ieders voeten. Vrijheid heeft, blijkt, ook gewoon een huurprijs.
+
+CODEX:
+codex_romeinse_wonen
+
+CHOICES:
+* Behandel Fortunata als wat ze nu is — een vrije vrouw, geen bediende meer -> CH15_LAT_002A
+* Behandel haar zoals altijd, want dat is nu eenmaal makkelijker voor iedereen -> CH15_LAT_002B
+
+END
+
+=== SCENE: CH15_LAT_002A ===
+
+TITLE:
+Een Andere Toon
+
+TEXT:
+Je vraagt haar mening voor je iets van haar vraagt, in plaats van andersom. Fortunata kijkt even op, verrast — klein gebaar, groot verschil.
+
+FLAG:
+ch15_lat_fortunata_erkend=true
+
+RELATION:
+fortunata=+1
+
+CHOICES:
+* Zie hoe de dag verdergaat -> CH15_LAT_002J
+
+END
+
+=== SCENE: CH15_LAT_002B ===
+
+TITLE:
+Dezelfde Gewoonte
+
+TEXT:
+Je geeft haar, zoals altijd, gewoon een opdracht. Fortunata voert hem uit, zoals altijd — maar iets in haar houding sluit zich, heel even, weer dicht.
+
+RELATION:
+fortunata=-1
+
+CHOICES:
+* Zie hoe de dag verdergaat -> CH15_LAT_002J
+
+END
+
+=== SCENE: CH15_LAT_002J ===
+
+TITLE:
+Verder in Twee Levens
+
+TEXT:
+Fortunata pakt haar manden weer op, op weg naar dezelfde markt als altijd — alleen ditmaal, formeel, uit eigen vrije wil.
+
+CHOICES:
+* Blijf bij Aemilia en Fortunata's kant van het verhaal [REQUIRE:taalspoor=latijn] -> CH15_LAT_003
+* Steek over naar Athene [REQUIRE:taalspoor=beide] -> CH15_GRE_003
+
+END
+
+=== SCENE: CH15_GRE_003 ===
+
+TITLE:
+Wat Doris Mompelt
+
+TEXT:
+Terwijl ze het laatste restje van vanavonds telling wegbergt, mompelt Doris iets — meer tegen zichzelf dan tegen jou, half in gedachten.
+
+DIALOGUE:
+Doris
+τὴν ἐλευθερίαν ζητῶ.
+
+CHOICES:
+* Ik zoek de vrijheid. -> CH15_GRE_003_LV_A
+* De vrijheid zoekt mij. -> CH15_GRE_003_LV_B
+
+END
+
+=== SCENE: CH15_GRE_003_LV_A ===
+
+TITLE:
+Naamval, Geen Volgorde
+
+TEXT:
+Je verstaat haar goed: τὴν ἐλευθερίαν staat in de accusativus — lijdend voorwerp, niet onderwerp. Dat het woord vooraan in de zin staat, betekent in het Grieks niets over wie hier wat doet; alleen de naamvalsuitgang bepaalt dat. Doris zoekt de vrijheid, geduldig, muntstuk voor muntstuk.
+
+CHOICES:
+* Zie wat er daarna gebeurt -> CH15_GRE_003J
+
+END
+
+=== SCENE: CH15_GRE_003_LV_B ===
+
+TITLE:
+Naamval, Geen Volgorde
+
+TEXT:
+Toch niet — τὴν ἐλευθερίαν staat in de accusativus, dus is het lijdend voorwerp, ook al staat het vooraan in de zin. Het Grieks laat de woordvolgorde vrij liggen; alleen de uitgang -ν verraadt wie hier eigenlijk wat doet. Doris zoekt de vrijheid, niet omgekeerd.
+
+CHOICES:
+* Zie wat er daarna gebeurt -> CH15_GRE_003J
+
+END
+
+=== SCENE: CH15_GRE_003J ===
+
+TITLE:
+De Nacht Voor de Oogst
+
+TEXT:
+Doris bergt de kruik weer weg onder de vloertegels, terug op haar plek tot de volgende keer dat er iets aan toe te voegen valt.
+
+CHOICES:
+* Blijf bij Melissa en Doris' kant van het verhaal [REQUIRE:taalspoor=grieks] -> CH15_GRE_004_INTRO
+* Steek over naar Rome [REQUIRE:taalspoor=beide] -> CH15_LAT_003
+
+END
+
+=== SCENE: CH15_LAT_003 ===
+
+TITLE:
+Een Zin Aan het Eind van de Dag
+
+TEXT:
+Als het huishouden eindelijk stil is, hoor je Aemilia zachtjes iets zeggen over Fortunata, die uitgeput op de drempel van de keuken is gezakt — geen bevel, gewoon een constatering.
+
+DIALOGUE:
+Aemilia
+Fortunata iacet.
+
+CHOICES:
+* Fortunata ligt neer. -> CH15_LAT_003_LV_A
+* Fortunata gooit iets. -> CH15_LAT_003_LV_B
+
+END
+
+=== SCENE: CH15_LAT_003_LV_A ===
+
+TITLE:
+Twee Bijna-Gelijke Werkwoorden
+
+TEXT:
+Klopt — iacet komt van iaceo (liggen), niet van het bijna identiek klinkende iacio (gooien, werpen). Fortunata ligt gewoon neer, uitgeput na een dag die voor haar, ook vrij, nog altijd niet echt eindigt.
+
+CHOICES:
+* Zie hoe Aemilia reageert -> CH15_LAT_003J
+
+END
+
+=== SCENE: CH15_LAT_003_LV_B ===
+
+TITLE:
+Twee Bijna-Gelijke Werkwoorden
+
+TEXT:
+Toch niet — iacet komt hier van iaceo (liggen), niet van het bijna identiek klinkende iacio (gooien, werpen). Fortunata gooit niets; ze ligt simpelweg neer, uitgeput na een dag die voor haar, ook vrij, nog altijd niet echt eindigt.
+
+CHOICES:
+* Zie hoe Aemilia reageert -> CH15_LAT_003J
+
+END
+
+=== SCENE: CH15_LAT_003J ===
+
+TITLE:
+Een Kussen, Geen Bevel
+
+TEXT:
+Aemilia legt, zonder er iets bij te zeggen, een kussen onder Fortunata's hoofd voor ze zelf naar bed gaat — een gewoonte uit een tijd dat ze dat nog als vanzelfsprekende zorg voor "haar" slavin deed, nu een keuze die ze net zo goed had kunnen laten.
+
+Fortunata is zo moe omdat de twee vanmiddag samen naar de thermen zijn geweest — tijdens de vrouwenuren, wanneer de baden alleen voor vrouwen open zijn, is het een van de weinige plekken in Rome waar een matrona en een liberta zonder gedoe naast elkaar in hetzelfde warme water zitten. Geen van beiden had het er hardop over, maar geen van beiden had ook maar één moment zin om weg te gaan.
+
+CODEX:
+codex_thermae
+
+CHOICES:
+* Blijf bij Aemilia en Fortunata's kant van het verhaal [REQUIRE:taalspoor=latijn] -> CH15_LAT_004_INTRO
+* Steek over naar Athene [REQUIRE:taalspoor=beide] -> CH15_GRE_004_INTRO
+
+END
+
+=== SCENE: CH15_GRE_004_INTRO ===
+
+TITLE:
+Het Laatste Muntstuk
+
+TEXT:
+Doris heeft een koper gevonden voor een laatste, kostbaar stuk weefwerk — genoeg om haar spaarpot eindelijk vol te maken. Er is alleen één probleem: de koper wacht bij het Thesmophorion, tijdens het enige feest waarop Atheense vrouwen zonder mannelijk gezelschap het huis uit mogen. Straton weet van niets, en mag er ook niets van weten voor de zaak rond is.
+
+Onderweg lopen jullie langs de Agora, waar op dit uur de Heliaia in zitting is — het volksgerecht, honderden burgers tegelijk als jury, luid discussiërend op de houten banken. Melissa blijft even staan kijken.
+
+DIALOGUE:
+Melissa
+Zesduizend man kunnen daar jurylid worden, ieder jaar opnieuw geloot. Ik niet. Doris niet, ook niet als ze morgen vrij is — een vrijgelaten slaaf wordt hier hoogstens metoik, nooit burger. Al dat recht, en wij mogen het alleen van een afstand zien gebeuren.
+
+Als ik met haar meega, als bescherming, valt het niet op — twee vrouwen naar een vrouwenfeest. Maar mijn vader telt de tijd dat ik weg ben. Help me een aannemelijke reden te bedenken voor als hij vraagt.
+
+CODEX:
+codex_agora_heliaia
+
+PUZZLE:
+puzzle_ch15_gre_doule
+
+CHOICES:
+* Zie of het plan werkt -> CH15_GRE_004
+
+END
+
+=== SCENE: CH15_GRE_004 ===
+
+TITLE:
+Naar het Thesmophorion
+
+CHECK:
+ch15_gre_doris_sluip
+
+END
+
+=== SCENE: CH15_GRE_004_VOL ===
+
+TITLE:
+Zonder Enige Argwaan
+
+TEXT:
+Je smoesje — een lang bezoek aan een bevriende buurvrouw, compleet met een aannemelijk detail dat Straton later zelf nog navertelt — houdt moeiteloos stand. Doris verkoopt haar weefwerk, verzegelt haar kruik voor de laatste keer, en telt onderweg naar huis, fluisterend, voor het eerst een bedrag dat groot genoeg is.
+
+CODEX:
+codex_apophora_vrijkopen
+
+CHOICES:
+* Zie wat er met dat laatste muntstuk gebeurt -> CH15_GRE_004J
+
+END
+
+=== SCENE: CH15_GRE_004_DEELS ===
+
+TITLE:
+Net Op Tijd
+
+TEXT:
+Straton begint al vragen te stellen als jullie eindelijk terugkomen, maar Melissa's smoesje — haastig bijgeschaafd onderweg — houdt net genoeg stand. Doris heeft haar verkoop rond, buiten adem van meer dan alleen de haast.
+
+CODEX:
+codex_apophora_vrijkopen
+
+CHOICES:
+* Zie wat er met dat laatste muntstuk gebeurt -> CH15_GRE_004J
+
+END
+
+=== SCENE: CH15_GRE_004_GEFAALD ===
+
+TITLE:
+Een Lastige Vraag
+
+TEXT:
+Straton merkt de afwezigheid op en stelt vragen die Melissa niet overtuigend genoeg kan beantwoorden. Hij gelooft haar half, fronst, en laat het — voor nu — daarbij. Doris heeft haar verkoop alsnog rond weten te krijgen, maar met een schrik die nog dagenlang narilt.
+
+FLAG:
+ch15_gre_straton_argwaan=true
+
+CODEX:
+codex_apophora_vrijkopen
+
+CHOICES:
+* Zie wat er met dat laatste muntstuk gebeurt -> CH15_GRE_004J
+
+END
+
+=== SCENE: CH15_GRE_004_KRITIEK ===
+
+TITLE:
+Straton Zelf Weg
+
+TEXT:
+Straton blijkt toevallig zelf de hele middag bij een symposium te zijn — jullie hadden je zoveel moeite met een smoesje niet eens hoeven getroosten. Doris verkoopt haar weefwerk in alle rust, en de koper, onder de indruk van haar vakmanschap, betaalt zelfs iets meer dan afgesproken.
+
+CODEX:
+codex_apophora_vrijkopen
+
+CHOICES:
+* Zie wat er met dat laatste muntstuk gebeurt -> CH15_GRE_004J
+
+END
+
+=== SCENE: CH15_GRE_004J ===
+
+TITLE:
+Een Volle Kruik
+
+TEXT:
+Thuis, in het donker van de weefkamer, telt Doris het bedrag nog één keer over — hardop nu, zonder te fluisteren. Het is genoeg. Wat er nu nog moet gebeuren, is geen geheim meer: morgen spreekt ze Straton zelf aan.
+
+IMAGE:
+ch15_gre_doris_apophora.png
+
+CHOICES:
+* Blijf bij Melissa en Doris' kant van het verhaal [REQUIRE:taalspoor=grieks] -> CH15_GRE_005
+* Steek over naar Rome [REQUIRE:taalspoor=beide] -> CH15_LAT_004_INTRO
+
+END
+
+=== SCENE: CH15_LAT_004_INTRO ===
+
+TITLE:
+Een Klant Bij de Kraam
+
+TEXT:
+Voor haar kraam opzet, stopt Fortunata eerst bij een thermopolium aan de hoek van de straat — een tegen de stoep gemetselde toonbank met ingebouwde kruiken warme linzensoep en kikkererwten. Haar kamer in de insula heeft geen haard, geen keuken, niet eens een raam dat goed trekt; koken is er, zoals voor de meeste bewoners van zo'n gebouw, gewoon geen optie. Ze eet staand, snel, voor ze haar kraam opent.
+
+Op de markt runt Fortunata inmiddels, naast haar werk voor Aemilia's huishouden, een eigen kleine kraam met linnen — met geld dat ze als serva al stiekem opzij had weten te leggen. Een klant, ontevreden over een prijs, begint luid te beweren dat een vrijgelatene helemaal geen recht heeft om zelfstandig handel te drijven zonder haar patronus erbij.
+
+DIALOGUE:
+Fortunata
+Dominam bene novi — ze weet dat ik hier sta, en ze keurt het goed. Vraag het haar zelf, als je me niet gelooft.
+
+IMAGE:
+ch15_lat_fortunata_markt.png
+
+CODEX:
+codex_thermopolium
+
+PUZZLE:
+puzzle_ch15_lat_novi
+
+CHOICES:
+* Zie of de klant zich laat overtuigen -> CH15_LAT_004
+
+END
+
+=== SCENE: CH15_LAT_004 ===
+
+TITLE:
+Woorden op de Markt
+
+CHECK:
+ch15_lat_fortunata_markt
+
+END
+
+=== SCENE: CH15_LAT_004_VOL ===
+
+TITLE:
+Overtuigend Weerwoord
+
+TEXT:
+Je mengt je in het gesprek en legt, kalm en met gezag, uit dat Fortunata's manumissio volledig legitiem is en dat Aemilia's familie zelf achter haar handel staat. De klant, verrast door zoveel stelligheid, mompelt een verontschuldiging en koopt uiteindelijk zelfs iets.
+
+CODEX:
+codex_manumissio_obsequium
+
+CHOICES:
+* Zie hoe de rest van de markt reageert -> CH15_LAT_004J
+
+END
+
+=== SCENE: CH15_LAT_004_DEELS ===
+
+TITLE:
+Genoeg om Te Laten Gaan
+
+TEXT:
+Je woorden zijn niet feilloos, maar wel genoeg om de klant zijn twijfel te laten varen — hij loopt mopperend door, zonder verder incident. Fortunata haalt opgelucht adem.
+
+CODEX:
+codex_manumissio_obsequium
+
+CHOICES:
+* Zie hoe de rest van de markt reageert -> CH15_LAT_004J
+
+END
+
+=== SCENE: CH15_LAT_004_GEFAALD ===
+
+TITLE:
+Een Nare Nasmaak
+
+TEXT:
+Je poging om te bemiddelen komt onhandig over en de klant loopt schamperend weg, zijn punt naar eigen idee bewezen. Fortunata haalt haar schouders op — dit is niet de eerste keer, en ze weet inmiddels hoe ze zulke dagen gewoon uitzit.
+
+FLAG:
+ch15_lat_fortunata_alleen=true
+
+CODEX:
+codex_manumissio_obsequium
+
+CHOICES:
+* Zie hoe de rest van de markt reageert -> CH15_LAT_004J
+
+END
+
+=== SCENE: CH15_LAT_004_KRITIEK ===
+
+TITLE:
+Een Omstander Valt Bij
+
+TEXT:
+Nog voor je goed en wel iets kunt zeggen, valt een omstander — zelf ooit vrijgelaten door dezelfde familie — de klant fel bij met precies de juiste details over Fortunata's status. De klant druipt af, en Fortunata verkoopt de rest van haar linnen sneller dan op een gewone dag.
+
+CODEX:
+codex_manumissio_obsequium
+
+CHOICES:
+* Zie hoe de rest van de markt reageert -> CH15_LAT_004J
+
+END
+
+=== SCENE: CH15_LAT_004J ===
+
+TITLE:
+Terug Naar de Domus
+
+TEXT:
+Fortunata pakt haar kraam in voor de dag, haar eigen geld in een buideltje dat niemand anders beheert. Morgen staat ze hier weer, met of zonder gemopper van voorbijgangers.
+
+CHOICES:
+* Blijf bij Aemilia en Fortunata's kant van het verhaal [REQUIRE:taalspoor=latijn] -> CH15_LAT_005
+* Steek over naar Athene [REQUIRE:taalspoor=beide] -> CH15_GRE_005
+
+END
+
+=== SCENE: CH15_GRE_005 ===
+
+TITLE:
+Stratons Verklaring
+
+TEXT:
+Wanneer Doris hem de volgende ochtend aanspreekt, met het volledige bedrag in een doek geknoopt, reageert Straton niet meteen — hij kijkt eerder naar Melissa, alsof hij vermoedt dat zij hierin de hand heeft gehad. Dan haalt hij zijn schouders op en mompelt iets, meer tegen zichzelf dan tegen wie ook.
+
+DIALOGUE:
+Straton
+Vrouwen, net als Pandora — altijd een risico dat je in huis haalt.
+
+Hij telt het geld verder, alsof hij zelf al klaar is met het gesprek. Melissa is dat niet.
+
+Melissa
+Pandora's doos ging over de nieuwsgierigheid van iedereen, vader — niet over vrouwen als gevaar. En Doris heeft zichzelf net vrijgekocht, zonder dat een enkele man daar iets aan bijdroeg. Onthoud dat, de volgende keer dat je naar een vergelijking zoekt.
+
+Straton antwoordt niet — hij telt gewoon door, alsof hij haar niet gehoord heeft. Doris, die haar eigen geld ziet tellen door de man die het ooit van haar afpakte, zegt niets, maar houdt Melissa's blik net iets langer vast dan nodig.
+
+CHOICES:
+* Spreek Melissa hardop bij — ze verdient het niet om alleen te staan hierin [SEVERITAS] -> CH15_GRE_005B
+* Zeg zelf niets, maar wissel een blik met Melissa die genoeg zegt [CLEMENTIA] -> CH15_GRE_005B
+* Laat het gesprek gewoon over je heen gaan — dit is Melissa's gevecht, niet het jouwe om te winnen [NEUTRAL] -> CH15_GRE_005B
+
+END
+
+=== SCENE: CH15_GRE_005B ===
+
+TITLE:
+Een Vrije Ochtend
+
+TEXT:
+Straton telt het geld, knikt kortaf, en tekent de vrijlatingsakte zonder verder oponthoud — voor hem is het gewoon een correcte transactie, afgesloten. Voor Doris is het de eerste ochtend van haar leven waarop niemand haar tijd, haar werk of haar vertrek nog hoeft goed te keuren.
+
+STATPOINTS:
+3
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH15_EINDE
+* Steek over naar de Latijnse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH15_LAT_005
+
+END
+
+=== SCENE: CH15_LAT_005 ===
+
+TITLE:
+Lof voor de Verkeerde Reden
+
+TEXT:
+Aemilia vergezelt haar grootmoeder naar de Basilica Aemilia in het Forum Romanum — toevallig dezelfde naam als de hare, al is de familie allang niet meer zo vermogend als de bouwheer ooit was. Onder de hoge, overdekte zuilenhal, tussen de tafels van geldwisselaars en de mannen die er in de schaduw zaken bespreken, regelt haar grootmoeder een lening voor een neef. Terwijl ze wachten, prijst ze het huishouden met een zin die op menig Romeinse grafsteen terug te vinden is — het hoogste compliment dat een matrona krijgt.
+
+CODEX:
+codex_forum_basilica
+
+DIALOGUE:
+Aemilia's grootmoeder
+Domum servavit, lanam fecit — ze bewaarde het huis, ze spon wol. Meer hoeft een vrouw eigenlijk niet te zijn, mijn kind.
+
+Aemilia denkt eerst aan Fortunata, die vandaag zelfstandig een klant weerlegde op de markt. Dan zegt ze zelf iets terug, iets waar ze duidelijk al langer over nadenkt.
+
+Aemilia
+Lanam fecit staat op elke steen, avia. Maar op ons eigen landgoed spinnen en weven vrouwen die niemand ooit met naam zal noemen — echte wol, in echte hoeveelheden, terwijl ik een handvol draad vasthoud voor de show als er bezoek komt. Als er één zin op een steen moet, waarom staat die dan nooit op hún steen?
+
+CODEX:
+codex_villa_wolproductie
+
+CHOICES:
+* Zeg dat Aemilia daarmee iets aanraakt wat weinigen hardop toegeven [SEVERITAS] -> CH15_LAT_005B
+* Glimlach beleefd en laat de oudere vrouw haar gelijk, dit is niet het moment [CLEMENTIA] -> CH15_LAT_005B
+* Verander het onderwerp — dit is geen gesprek dat vandaag beslist hoeft te worden [NEUTRAL] -> CH15_LAT_005B
+
+END
+
+=== SCENE: CH15_LAT_005B ===
+
+TITLE:
+Wat een Grafsteen Nooit Zegt
+
+TEXT:
+De oudere vrouw haalt haar schouders op en praat door over iets anders — voor haar was het geen stelling, gewoon een gewoonte. Aemilia kijkt nog even naar buiten, naar waar Fortunata's kraam, nu leeg, straks weer vol linnen zal staan.
+
+SOUVENIR:
+souvenir_hoe_men_leefde
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH15_EINDE
+
+END
+
+=== SCENE: CH15_EINDE ===
+
+TITLE:
+Wiens Verhaal, en Wiens Niet
+
+TEXT:
+"[[Ecce|zie hier]] — geen enkele naam die je vandaag hoorde staat op een standbeeld," zegt de Boodschapper van Chronos. "Melissa, Doris, Aemilia, Fortunata — geen van hen haalt een geschiedenisboek. En toch was elke keuze die zij maakten, binnen de kleine ruimte die haar werd gelaten, precies zo echt als Cloelia's rivieroversteek of Cincinnatus' terugkeer naar zijn akker." Ze zwijgt even. "Dat is het punt van dit hoofdstuk: niet dat deze levens minder waard waren om te vertellen, maar dat er domweg niemand was die de moeite nam om het op te schrijven — tot nu."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_hoe_men_leefde
+
+CODEX:
+codex_grammatica_ch15_overzicht
+
+CHOICES:
+* Keer terug naar het Museum -> CH15_MUSEUM_00
+
+END
+
+=== SCENE: CH15_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Een nieuwe stolp vult zich: een spinklosje naast een kleine vilten muts, allebei even gewoon als bijzonder. "De meeste levens laten geen standbeeld na," zegt de Boodschapper zacht, "alleen voorwerpen als deze — als iemand ze bewaart." Ze kijkt nog even naar de stolp, alsof ze zelf ook nog aan het nadenken is over wat er hierna komt.
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH15_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH15_WORDT_VERVOLGD ===
 
 TITLE:
 Tot Hier, Voorlopig
 
 TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Atheense democratie, de Perzische Oorlogen, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — opvoeding en de Olympische Spelen, Thermopylae en Hannibal, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
 
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
 

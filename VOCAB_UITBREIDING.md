@@ -40,14 +40,20 @@ Chronica.md §7.56 voor de volledige toelichting.
 `VOCAB:`-sectie (inclusief twee gloednieuwe `VOCAB:`-secties voor Hoofdstuk 10
 en 12, die er voorheen geen hadden). Totale pool: 421 woorden (was 154).
 
-**Hoofdstuk 15 t/m Finale: NOG NIET GEBOUWD** — onderstaande lijst is een
+**Hoofdstuk 15: GEBOUWD** (2026-08-08, Chronica.md §7.6x) — alle 20
+signaalwoorden hieronder zijn toegevoegd aan `SP_VOCAB_ENTRIES` en aan
+Hoofdstuk 15's `VOCAB:`-sectie (hub-scène `CH15_000`), samen met 11 nieuwe
+verhaal-woorden (`grieks_oikos`/`doule`/`doulos`/`histos`,
+`latijn_domus`/`familia`/`servus`/`serva`/`uxor`/`manumissio`).
+
+**Hoofdstuk 16 t/m Finale: NOG NIET GEBOUWD** — onderstaande lijst is een
 kandidatenreserve, klaar om in te zetten zodra deze hoofdstukken daadwerkelijk
 worden gebouwd. Plafonds gebruiken de `pallas`/`minerva`-velden die al in
 `SP_CAMPAIGN` staan; Pallas is vanaf H18 uitgeput (les 29, laatste), Minerva
 vanaf H20 (hoofdstuk 25, laatste) — daarna blijft het plafond simpelweg de
 volledige woordenlijst.
 
-### H15 (Pallas ≤25, Minerva ≤21)
+### H15 (Pallas ≤25, Minerva ≤21) — GEBOUWD
 GR: ἀνά *omhoog* · φημί *zeggen, beweren* · παρά *van; naast; tegen* · δίδωμι *geven* · ὅταν *wanneer ook maar* · δείκνυμι *tonen, aanwijzen* · τίθημι *plaatsen, stellen* · εἶμι *ik zal gaan* · ἑκάτερος *ieder (van twee)* · προστίθημι *toevoegen*
 LA: nego *ontkennen* · ob *voor* · loquor *spreken* · iaceo *liggen* · pereo *te gronde gaan* · muto *veranderen* · transeo *oversteken* · servo *redden, bewaren* · tollo *tillen, heffen* · antea *vroeger, eerst*
 
