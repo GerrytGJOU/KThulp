@@ -54,6 +54,7 @@
 <body>
 <header>
   <h1>Chronica — Kaart-pin-editor (alleen lokaal, dev tool)</h1>
+  <select id="datasetSelect"></select>
   <select id="panelSelect"></select>
   <button id="loadBtn">Herlaad data uit singleplayer-data.js</button>
   <button id="exportBtn" class="primary">Exporteer bijgewerkte pins</button>
@@ -83,30 +84,67 @@
   <textarea id="exportArea" readonly></textarea>
 </div>
 <script>
-const PANELS = {
-  aegean:  { nm:"Egeïsch — Italië/Griekenland/Troje", img:"panel1_aegean.png" },
-  western: { nm:"Westen — Sicilië/Carthago/Gades/Alpen", img:"panel2_western.png" },
-  eastern: { nm:"Oosten — Kaukasus/Kolchis/Perzië/Egypte", img:"panel3_eastern.png" },
+const DATASETS = {
+  world: {
+    nm: "Wereldkaart (SP_MAP_LOCATIONS)",
+    arrayName: "SP_MAP_LOCATIONS",
+    panels: {
+      aegean:  { nm:"Egeïsch — Italië/Griekenland/Troje", img:"panel1_aegean.png" },
+      western: { nm:"Westen — Sicilië/Carthago/Gades/Alpen", img:"panel2_western.png" },
+      eastern: { nm:"Oosten — Kaukasus/Kolchis/Perzië/Egypte", img:"panel3_eastern.png" },
+    },
+  },
+  city: {
+    nm: "Stadsplattegronden (SP_CITY_MAP_LOCATIONS)",
+    arrayName: "SP_CITY_MAP_LOCATIONS",
+    panels: {
+      athene: { nm:"Athene — Akropolis/Agora", img:"athens_map.png" },
+      roma:   { nm:"Rome — Palatijn/Forum/Tiber", img:"rome_map.png" },
+    },
+  },
 };
+let currentDataset = "world";
 let LOCATIONS = [];
 let currentPanel = "aegean";
 let selectedId = null;
 
-const panelSelect = document.getElementById('panelSelect');
-Object.keys(PANELS).forEach(pid=>{
+function PANELS(){ return DATASETS[currentDataset].panels; }
+
+const datasetSelect = document.getElementById('datasetSelect');
+Object.keys(DATASETS).forEach(did=>{
   const o = document.createElement('option');
-  o.value = pid; o.textContent = PANELS[pid].nm;
-  panelSelect.appendChild(o);
+  o.value = did; o.textContent = DATASETS[did].nm;
+  datasetSelect.appendChild(o);
 });
-panelSelect.value = currentPanel;
+datasetSelect.value = currentDataset;
+datasetSelect.onchange = ()=>{
+  currentDataset = datasetSelect.value;
+  currentPanel = Object.keys(PANELS())[0];
+  selectedId = null;
+  populatePanelSelect();
+  loadData();
+};
+
+const panelSelect = document.getElementById('panelSelect');
+function populatePanelSelect(){
+  panelSelect.innerHTML = '';
+  Object.keys(PANELS()).forEach(pid=>{
+    const o = document.createElement('option');
+    o.value = pid; o.textContent = PANELS()[pid].nm;
+    panelSelect.appendChild(o);
+  });
+  panelSelect.value = currentPanel;
+}
+populatePanelSelect();
 panelSelect.onchange = ()=>{ currentPanel = panelSelect.value; selectedId = null; renderPanel(); };
 
 async function loadData(){
   setStatus("Laden...");
+  const arrayName = DATASETS[currentDataset].arrayName;
   const res = await fetch('../../../singleplayer-data.js?_=' + Date.now());
   const src = await res.text();
-  const start = src.indexOf('const SP_MAP_LOCATIONS = [');
-  if(start === -1){ setStatus("Kon SP_MAP_LOCATIONS niet vinden!"); return; }
+  const start = src.indexOf('const ' + arrayName + ' = [');
+  if(start === -1){ setStatus("Kon " + arrayName + " niet vinden!"); return; }
   const bodyStart = src.indexOf('[', start);
   let depth = 0, end = -1;
   for(let i=bodyStart; i<src.length; i++){
@@ -116,7 +154,7 @@ async function loadData(){
   const arrText = src.slice(bodyStart, end+1);
   // eslint-disable-next-line no-eval
   LOCATIONS = eval(arrText);
-  setStatus(LOCATIONS.length + " pins geladen.");
+  setStatus(LOCATIONS.length + " pins geladen uit " + arrayName + ".");
   renderPanel();
 }
 
@@ -124,7 +162,7 @@ function setStatus(msg){ document.getElementById('status').textContent = msg; }
 
 function renderPanel(){
   const img = document.getElementById('mapImg');
-  img.src = PANELS[currentPanel].img;
+  img.src = PANELS()[currentPanel].img;
   const wrap = document.getElementById('mapWrap');
   // clear old pins
   wrap.querySelectorAll('.pin').forEach(el=>el.remove());

@@ -5691,6 +5691,223 @@ illustraties laden zonder 404, geen console-fouten.
 
 ---
 
+### 7.60 Hoofdstuk 15 "Hoe Men Leefde" gebouwd — bewust nog niet gekoppeld aan de speelbare route (2026-08-08)
+
+Op verzoek: Grieks/Latijn-zigzag (scène-voor-scène, zelfde mechanisme als
+Hoofdstuk 10 — niet het sequentiële patroon van H12-14), aandacht voor de rol
+van vrouwen, nieuwe verhaal-vocab plus de 20 gereserveerde signaalwoorden uit
+`VOCAB_UITBREIDING.md`, leesvallen, payoffs en relaties. Gebouwd als volledig
+CNS-blok (`SP_CH15_CNS`, `certamen/singleplayer-data.js`), maar — net als
+Hoofdstuk 14 destijds tussen §7.52 en §7.59 — **bewust nog niet ingehaakt**:
+`CH14_MUSEUM_00` routeert nog altijd naar `CH14_WORDT_VERVOLGD`, en
+`SP_SCENES` in `certamen/singleplayer.js` bevat `SP_CH15_CNS` nog niet. Het
+spel eindigt voorlopig dus nog steeds na Hoofdstuk 14.
+
+**Vier nieuwe, representatieve personages (bewust geen historische namen —
+dat is het hele punt van dit hoofdstuk, zie thema hieronder)**: Melissa
+(vrijgeboren Atheense, wettelijk stemloos buiten de oikos, feitelijk de
+economische spil erbinnen) en Doris (slavin die via het apophora-systeem
+haar eigen vrijheid afbetaalt) in Athene; Aemilia (Romeinse matrona) en
+Fortunata (net vrijgelaten liberta, nog gebonden aan obsequium aan haar
+patronus) in Rome.
+
+**Zigzag-structuur**: hub `CH15_000` geeft `beide` één vaste eerste
+lijn (Grieks), daarna vijf vergelijkbare beats per spoor
+(huishouden-intro → slavernijdilemma → leesval → CHECK → afsluitende
+reflectie), telkens met een REQUIRE-junctiescène die `beide` naar de
+overkant stuurt (`chronica-taalspoor-zigzag-mechanisme`-patroon). PUZZLE-
+scènes kregen, waar nodig, hun eigen enkelvoudige-keuze-scène om het
+bekende PUZZLE/REQUIRE-conflict te vermijden.
+
+**Vrouwen/payoff-laag**:
+- Twee RELATION-dragende dilemma's (Doris/Fortunata wel of niet als
+  volwaardig persoon behandelen), FLAG's voor toekomstige payoff
+  (`ch15_gre_doris_geholpen`, `ch15_lat_fortunata_erkend`, e.a.).
+- Twee CLEMENTIA/SEVERITAS/NEUTRAL-REACTIES: Stratons Pandora-vergelijking
+  ("vrouwen als risico") en een grootmoeders grafsteen-lofzang op
+  matrona-deugd (`domum servavit, lanam fecit`) — payoff-strategie uit
+  §7.51 toegepast, niet nieuwe RELATION-opbouw als primaire as.
+  Deze REACTION-vraag laat de leerling zelf oordelen over de bronnentekst
+  in plaats van iemand feitelijk gelijk te geven, ongeacht de eigen keuze.
+- Twee expliciete erfenis-echo's: een terugverwijzing naar Cloelia/
+  Veturia/Volumnia (Hoofdstuk 14) in de hub-tekst, en naar Pandora
+  (Hoofdstuk 1) via Stratons dialoog.
+- Twee leesvallen, neutraal geframed volgens
+  [[chronica-leesval-neutrale-framing]] (de keuzeteksten zijn de kandidaat-
+  vertalingen zelf, geen evaluatief commentaar): Grieks (τὴν ἐλευθερίαν
+  ζητῶ — accusativus-woordvolgorde, geen naamvalsgok), Latijn (Fortunata
+  iacet — iaceo/iacio-verwarring).
+- Twee CHECK-momenten (`ch15_gre_doris_sluip`, prudentia dc14; 
+  `ch15_lat_fortunata_markt`, gratia dc14), vier volwaardige uitkomsten
+  elk, geen blokkade bij falen.
+
+**Vocab**: 11 nieuwe verhaal-woorden (`grieks_oikos`/`doule`/`doulos`/
+`histos`, `latijn_domus`/`familia`/`servus`/`serva`/`uxor`/`manumissio`) +
+de 20 gereserveerde signaalwoorden uit `VOCAB_UITBREIDING.md`'s H15-lijst,
+allemaal toegevoegd aan `SP_VOCAB_ENTRIES` en aan `CH15_000`'s `VOCAB:`-
+sectie. `VOCAB_UITBREIDING.md` bijgewerkt: H15 van "kandidatenreserve" naar
+"gebouwd".
+
+**Grammatica**: Grieks introduceert bewust niets nieuws (les 24-25 is
+cultuurstof); puzzels herhalen genitivus (`ἄρχω` + genitivus) en vocativus.
+Latijn: vragend vs. onbepaald voornaamwoord (quis/aliquis) en het perfectum
+met praesensbetekenis (novi/memini/odi) — twee nieuwe puzzels, plus een
+grammatica-codexoverzicht (`codex_grammatica_ch15_overzicht`).
+
+**Vermeden bug (t.o.v. H13/H14)**: `STATPOINTS:3` staat hier maar één keer,
+op de gedeelde `CH15_EINDE`-scène — H13/H14 gaven dit alleen op het
+Latijnse eindpunt, wat grieks-only-spelers de chapter-statpoints laat
+missen (bevestigd door graafcontrole, niet gefixt in dit gesprek — een
+apart, kleine correctie voor H13/H14 blijft openstaand). H15 volgt in
+plaats daarvan CH11's patroon (STATPOINTS op de gedeelde eindscène).
+
+**Gevalideerd**: `node --check` op beide bestanden; een losse graafcontrole
+(alle `->`-targets bestaan als scène, alle PUZZLE/CODEX/SOUVENIR/CHECK/
+VOCAB-verwijzingen resolven) bevestigt 0 missende referenties over 42
+scènes. Nog NIET browser-getest, omdat het hoofdstuk expres nog niet in
+`SP_SCENES` zit — dat volgt zodra Hoofdstuk 15 wordt gekoppeld (zie
+[[chronica-tijdelijk-speeltest-eindpunt]]).
+
+**Beeldprompts** voor de vier scène-illustraties (`ch15_gre_oikos_melissa.png`,
+`ch15_gre_doris_apophora.png`, `ch15_lat_domus_aemilia.png`,
+`ch15_lat_fortunata_markt.png`) plus de souvenirkaart
+(`souvenir_hoe_men_leefde.png`) zijn aangeleverd volgens
+`certamen/assets/chronica/gemini-comic-style.md`; `IMAGE:`-tags zijn al in
+de vier scènes gezet. Geen van de vijf toont de hoofdpersoon (zie
+[[chronica-image-prompts-protagonist-optional]]) — het zijn NPC-momenten.
+
+**Verbeterronde (zelfde sessie): mannen als bijrol, vrouwen als hoofdlijn,
+plus KCV-verdieping op verzoek**:
+- `CH15_GRE_005` herschreven: Straton krijgt nog maar één korte zin
+  ("Vrouwen, net als Pandora — altijd een risico"), Melissa krijgt zelf een
+  volwaardige, weerleggende repliek; de REACTION-keuzes gaan nu over het
+  steunen van Mélissa's eigen woorden, niet over het zelf becommentariëren
+  van Straton.
+- `CH15_LAT_005` herschreven: Aemilia reageert nu zelf hardop op haar
+  grootmoeders grafsteen-lofzang (`lanam fecit`), in plaats van er alleen
+  stil over na te denken — en legt daarbij de villa-textielproductie-twist
+  bloot (zie hieronder).
+- Vier nieuwe codex-entries voor KCV-verdieping op Gerbens verzoek:
+  `codex_griekse_oikos_wonen` (kyrios/gyne/oiketai onder één dak, andron vs.
+  gynaikonitis, en dat die scheiding een luxe was, geen algemene regel),
+  `codex_slaven_soorten` (Doris' apophora-positie vs. mijnslaven in
+  Laurion/plattelandsslaven, Atheense demosioi, Spartaanse heloten als
+  contrast, Romeinse familia urbana vs. familia rustica/ergastulum),
+  `codex_romeinse_wonen` (domus vs. insula — Fortunata blijkt nu zelf een
+  kamer te huren in een insula bij de Subura, niet meer in Aemilia's domus
+  te wonen — vs. villa), `codex_villa_wolproductie` (de grafsteen-frase
+  "lanam fecit" is grotendeels symbolisch voor de matrona; de echte
+  wolproductie gebeurt op de villa door naamloze familia rustica-vrouwen —
+  een tweede laag op het "wiens verhaal wordt verteld"-thema). Twee nieuwe
+  vocabwoorden (`latijn_insula`, `latijn_villa`) toegevoegd aan
+  `SP_VOCAB_ENTRIES` en aan `CH15_000`'s `VOCAB:`-sectie.
+- Opnieuw gevalideerd: `node --check` + dezelfde graafcontrole, 0 missende
+  referenties.
+
+**Tweede verbeterronde (zelfde sessie): personages bezoeken zelf de
+belangrijke gebouwen, i.p.v. dat de codex ze alleen uitlegt** — vier nieuwe
+codex-entries, elk verankerd in een scène waar de personages er
+daadwerkelijk zijn, geen losstaand naslagfeitje:
+- `codex_agora_heliaia` (Grieks): Melissa en Doris lopen op weg naar het
+  Thesmophorion langs de Agora terwijl de Heliaia (het volksgerecht,
+  zesduizend gelote burgers als jurypoule) in zitting is —
+  `CH15_GRE_004_INTRO` kreeg een nieuwe Melissa-repliek die expliciet
+  benoemt dat geen vrijlating haar of Doris ooit toegang tot die jury geeft.
+- `codex_forum_basilica` (Latijn): `CH15_LAT_005` speelt nu in de Basilica
+  Aemilia op het Forum Romanum (een toevallige naamgenoot, geen
+  familieclaim) terwijl grootmoeder er een lening regelt — de setting waarin
+  de `lanam fecit`-uitspraak en Aemilia's villa-weerwoord vallen.
+- `codex_thermae` (Latijn): `CH15_LAT_003J` kreeg een nieuwe passage —
+  Aemilia en Fortunata blijken samen naar de thermen te zijn geweest tijdens
+  de vrouwenuren, een van de weinige Romeinse plekken waar standsverschil
+  even wegvalt.
+- `codex_thermopolium` (Latijn): `CH15_LAT_004_INTRO` kreeg een nieuwe
+  openingspassage — Fortunata's insula-kamer heeft geen haard, dus ze eet
+  staand bij een thermopolium-toonbank voor ze haar kraam opent (directe
+  callback naar de insula-onthulling uit de vorige verbeterronde).
+
+Opnieuw gevalideerd: `node --check` + dezelfde graafcontrole (0 missende
+`->`-targets, PUZZLE/CODEX/SOUVENIR/CHECK/VOCAB-referenties), nog steeds
+over dezelfde 42 scènes (alleen bestaande scènes uitgebreid, geen nieuwe
+scènes toegevoegd — de zigzag-graaf zelf is dus ongewijzigd).
+
+**Derde uitbreiding (zelfde sessie): twee stadsplattegronden (Athene/Rome)
+gebouwd en afgerond.** Op Gerbens verzoek, na een locatie-scan van alle
+geplande Boek III/IV-hoofdstukken (H12-20) om te bepalen welke gebouwen
+erop moesten: `SP_CITY_MAP_PANELS`/`SP_CITY_MAP_LOCATIONS` (nieuw,
+losstaand van de wereldkaart) + `SCREENS.spCityMaps` in `singleplayer.js`,
+exact hetzelfde patroon als de bestaande wereldkaart (pin-CSS,
+codex-unlock-hook, "kaart nog niet beschikbaar"-fallback). Knop
+"🏛️ Stadsplattegronden" toegevoegd naast de wereldkaart-knop.
+
+- **Colosseum/Nero-anachronisme gecorrigeerd**: `SP_CAMPAIGN.ch20`'s
+  illustratie-idee noemde "Nero en het Colosseum" — het Colosseum werd pas
+  na Nero's dood gebouwd. Vervangen door de Domus Aurea.
+- **Beeldgeneratie**: eerste poging bij Gemini mislukte — dezelfde ronde/
+  gebogen vorm werd hergebruikt voor de Heliaia, de Pnyx én de Academie
+  (alle drie werden een generieke amfitheater-kom), en aan de Rome-kant
+  vielen meerdere gebouwen (Curia van Pompeius, Ara Pacis, Thermen)
+  gewoon weg uit een te volle prompt. Overgestapt naar ChatGPT/GPT-4o-
+  beeldgeneratie (geen Gem, dus de volledige huisstijl + expliciete
+  vorm-onderscheidende instructies per gebouw rechtstreeks in de prompt),
+  met twee losse referentiebeelden per prompt (stijl: de Peisistratos-
+  scène; camera/mood: een geschilderde luchtfoto-reconstructie van de
+  betreffende stad, met een expliciete instructie welk anachronistisch
+  gebouw uit die referentie NIET overgenomen mocht worden — Odeion van
+  Herodes Atticus resp. Colosseum). Tweede poging: vrijwel foutloos, alle
+  gevraagde gebouwen visueel van elkaar te onderscheiden.
+- `athens_map.png`/`rome_map.png` (1672×941px) staan sinds 2026-08-08 in
+  `certamen/assets/chronica/maps/`. Pin-coördinaten (x/y) zijn pixel-
+  precies afgelezen op de echte afbeeldingen (niet meer geschat) voor de
+  8 pins die al een echte codex-id hebben: `akropolis`/`agora_athene`
+  (Athene), `palatium`/`ara_maxima`/`pons_sublicius`/`forum_romanum`/
+  `thermae_roma`/`subura` (Rome). Capitolijn, Curia/Theater van Pompeius
+  en Ara Pacis staan al wél op de illustraties (voor toekomstige
+  hoofdstukken) maar hebben bewust nog geen pin-entry, per de staande
+  regel (geen dode pins vóór er een echte codex-id is).
+- **Browser-geverifieerd**: beide tabbladen, alle 8 pins verschijnen op
+  precies de juiste plek (geverifieerd met `img.naturalWidth/clientWidth`-
+  berekening, niet alleen visueel), geen console-fouten. `node --check`
+  op beide JS-bestanden schoon. Cache-busting in `index.html` twee keer
+  opgehoogd (na de code-toevoeging én na de pin-coördinaten-update).
+- **Pin-editor.html uitgebreid** (`certamen/assets/chronica/maps/
+  pin-editor.html`, zie [[chronica-map-pin-placement-methode]]): kende tot
+  nu toe alleen `SP_MAP_LOCATIONS`/`SP_MAP_PANELS` (de wereldkaart). Kreeg
+  een `datasetSelect`-dropdown erbij ("Wereldkaart"/"Stadsplattegronden")
+  zodat dezelfde sleeptool ook `SP_CITY_MAP_LOCATIONS` kan laden/bewerken/
+  exporteren — parametriseerde `loadData()` op array-naam i.p.v. hardcoded
+  `SP_MAP_LOCATIONS`. Gerben heeft de pixel-precieze eerste schatting
+  vervolgens zelf handmatig met deze tool fijn bijgesteld (vooral Akropolis/
+  Agora merkbaar verschoven, Thermen/Subura bleven ongewijzigd — die kwamen
+  dus al exact goed uit de eerste pixel-meting); definitieve x/y-waarden
+  verwerkt en opnieuw browser-bevestigd (0 console-fouten, alle 8 pins op
+  de juiste plek op beide kaarten).
+
+**Vierde stap (zelfde sessie): Hoofdstuk 15 gekoppeld aan de speelbare
+route** — zelfde patroon als de H13→H14-koppeling (§7.59). `CH14_MUSEUM_00`'s
+enige keuze routeert nu naar `CH15_000` (was `CH14_WORDT_VERVOLGD`, volledig
+verwijderd, niet orphaned laten hangen). `CH15_WORDT_VERVOLGD` is het nieuwe
+tijdelijke speeltest-eindpunt. `SP_SCENES` in `singleplayer.js` bevat nu ook
+`...CNSParser.parse(SP_CH15_CNS)`. `certamen/tools/validate_chronica.js`'s
+`BLOCKS`-array kreeg `['CH15', D.SP_CH15_CNS]` erbij (dezelfde
+BLOCKS/SP_SCENES-scheiding-valkuil als bij H14, zie
+[[chronica-validator-blind-spots]]). `SP_CAMPAIGN.ch15.gameplay` bijgewerkt
+van "bewust nog niet gekoppeld" naar de definitieve status. Cache-busting in
+`index.html` opnieuw opgehoogd voor beide scriptbestanden.
+
+**Gevalideerd**: `node --check` op alle drie bestanden schoon;
+`validate_chronica.js` → 0 fouten, 37 waarschuwingen (allemaal bekende,
+onschadelijke categorieën — dode toekomst-payoff-flags zoals bij eerdere
+hoofdstukken, en `CH15_WORDT_VERVOLGD` die terecht als terminale scène
+gemeld wordt). Browser-bevestigd: `CH14_MUSEUM_00` → `CH15_000` routeert
+correct, `CH14_WORDT_VERVOLGD` bestaat niet meer in `SP_SCENES`,
+`CH15_WORDT_VERVOLGD` wel, 0 console-fouten. Alle vijf Hoofdstuk 15-
+illustraties (4 scène-IMAGE's + de souvenirkaart) bleken inmiddels al
+aangeleverd te zijn in `certamen/assets/chronica/` — geen ontbrekend beeld
+meer, in tegenstelling tot bij eerdere hoofdstukken op dit punt.
+
+---
+
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
 
 Tweede laag bovenop de bestaande delayed-consequences/Latijn-als-skill-check-
