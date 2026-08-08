@@ -5642,6 +5642,53 @@ verandert daadwerkelijk); alfabet-balk toont 44 unieke letters (was 57 vóór
 de diakritische-tekens-fix), klik-navigatie ook hier bevestigd; geen
 console-fouten.
 
+### 7.59 Hoofdstuk 14 gekoppeld aan de speelbare route; eindpunt verplaatst naar na H14 (2026-08-08)
+
+Gerben gaf akkoord: Hoofdstuk 14 wordt nu toegevoegd aan het live spel,
+het tijdelijke speeltest-eindpunt schuift van na Hoofdstuk 13 naar na
+Hoofdstuk 14 — zelfde patroon als de H12→H13-overgang (§7.47).
+
+**Uitgevoerd**:
+- `CH13_MUSEUM_00`'s enige keuze routeert nu naar `CH14_000` (was
+  `CH13_WORDT_VERVOLGD`).
+- `CH13_WORDT_VERVOLGD` is volledig verwijderd (niet orphaned laten
+  hangen — staande regel, zie [[chronica-tijdelijk-speeltest-eindpunt]]).
+- `CH14_MUSEUM_00` kreeg een `CHOICES:`-sectie (was terminaal) die naar een
+  nieuwe `CH14_WORDT_VERVOLGD` leidt — inhoudelijk dezelfde "tot hier,
+  voorlopig"-tekst als de oude H13-versie, nu aan het eind van H14.
+- `SP_CAMPAIGN.ch14.gameplay` bijgewerkt: niet langer "bewust nog niet
+  gekoppeld".
+
+**Twee ontbrekende illustraties zijn tijdens dezelfde sessie aangeleverd**
+(`ch14_lat_cloelia_tiber.png`, en `souvenir_verzet_tirannen.png` — die
+laatste bleek achteraf al eerder aangeleverd te zijn maar stond in
+`certamen/assets/chronica/souvenirs/`, niet in `.../images/`; de "missende
+afbeelding" uit de H14-audit (§7.55) was dus een verkeerd gecontroleerd pad,
+geen echt gat). Bonus: een extra, niet eerder aangevraagde illustratie
+`ch14_lat_cincinnatus_ploeg.png` bleek ook aangeleverd — toegevoegd als
+nieuwe `IMAGE:`-regel op `CH14_LAT_005` (had er nog geen).
+
+**Bug gevonden tijdens het koppelen**: `certamen/tools/validate_chronica.js`
+had Hoofdstuk 14 nooit in zijn eigen `BLOCKS`-array staan (bewust
+achterwege gelaten toen H14 nog niet gekoppeld was, zie §7.52) — de
+validator meldde daardoor "CH14_000 bestaat niet" zodra `CH13_MUSEUM_00`
+ernaartoe ging routeren. `['CH14', D.SP_CH14_CNS]` toegevoegd aan `BLOCKS`;
+zie [[chronica-validator-blind-spots]] voor de achtergrond van deze
+BLOCKS/SP_SCENES-scheiding.
+
+**Load-bearing herhaling**: ook `index.html`'s cache-busting-query voor
+`singleplayer-data.js` (niet alleen `singleplayer.js`) moet omhoog na een
+databestand-wijziging — stond nog op `20260804b` terwijl het bestand al
+weken verder was; nu `20260808a`. Zelfde valkuil als
+[[chronica-validator-blind-spots]] al documenteert, hier voor het eerst
+expliciet ook voor het databestand genoteerd.
+
+**Gevalideerd**: `node --check` + `validate_chronica.js` → 0 fouten, 33
+waarschuwingen. Browser-test: volledig automatisch doorlopen pad van
+`CH13_MUSEUM_00` tot en met `CH14_WORDT_VERVOLGD` bevestigd voor alle drie
+taalsporen (grieks/latijn/beide), alle drie nieuwe/herbevestigde
+illustraties laden zonder 404, geen console-fouten.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
