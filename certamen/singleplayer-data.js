@@ -359,7 +359,7 @@ const SP_CAMPAIGN = [
     verhaal:"In vrijwel hetzelfde jaar verzetten twee volkeren zich tegen een tiran — Athene verdrijft zijn heersers en experimenteert met democratie, Rome verjaagt zijn laatste koning en moet die vrijheid meteen verdedigen tegen een vreemd leger aan de poorten.",
     pallas:"Les 23: de list van Peisistratos, de tirannendoders, kritiek op de Atheense democratie", minerva:"Geen Minerva-koppeling — bewust herhaling (geen enkel Minerva 2-hoofdstuk stond nog vrij, zie PALLAS_MINERVA_OVERZICHT.md); cultuurtekst: Verdedigers van de Republiek",
     grammatica:"Grieks: les 23 (cultuur/geschiedenis, licht taalkundig; puzzels herhalen aoristus passief + naamvallen); Latijn: bewust geen nieuwe grammatica — herhaling van conjunctivus praesens/perfectum (M21, Hoofdstuk 13) en ablativus absolutus (M18, Hoofdstuk 11), zie Chronica.md §7.51/§7.52",
-    gameplay:"Twee sporen (sequentieel, geen zigzag — zelfde aanpak als Hoofdstuk 12/13); legendes van vroege Romeinse moed naspelen aan Latijnse kant, politieke discussie/dilemma's aan Griekse kant. GEBOUWD 2026-08-05 (eerste versie): NPC-reacties leunen op Clementia/Severitas (ostrakismos-REACTION bij Kleisthenes, Cloelia-REACTION over haar teruggave) i.p.v. nieuwe RELATION-opbouw, plus een onvoorwaardelijke erfenis-echo op Brutus (CH14_LAT_000) — toepassing van de payoff-strategie uit §7.51. BEWUST NOG NIET GEKOPPELD aan de speelbare route (CH13_WORDT_VERVOLGD blijft het live eindpunt) tot illustraties + Gerbens akkoord, zie §7.52.",
+    gameplay:"Twee sporen (sequentieel, geen zigzag — zelfde aanpak als Hoofdstuk 12/13); legendes van vroege Romeinse moed naspelen aan Latijnse kant, politieke discussie/dilemma's aan Griekse kant. GEBOUWD 2026-08-05, VERBETERD 2026-08-07 (Phye/Harmodios' zuster krijgen een stem, Veturia/Volumnia genoemd): NPC-reacties leunen op Clementia/Severitas (ostrakismos-REACTION bij Kleisthenes, Cloelia-REACTION over haar teruggave) i.p.v. nieuwe RELATION-opbouw, plus een onvoorwaardelijke erfenis-echo op Brutus (CH14_LAT_000) — toepassing van de payoff-strategie uit §7.51. GEKOPPELD aan de speelbare route sinds 2026-08-08 (§7.59) — CH14_MUSEUM_00 is nu het tijdelijke speeltest-eindpunt (CH14_WORDT_VERVOLGD), twee illustraties (ch14_lat_cloelia_tiber.png, souvenir_verzet_tirannen.png) ontbraken op dat moment nog en tonen zich stil verborgen totdat ze zijn toegevoegd.",
     personages:"Peisistratos, de tirannendoders (Harmodios & Aristogeiton), Kleisthenes — Lars Porsenna, Horatius Cocles, Mucius Scaevola, Cloelia, Cincinnatus/Coriolanus/Camillus (verteld, codex_vroege_republiek_helden)",
     thema:"Een volk dat zich net bevrijd heeft, moet die vrijheid meteen weer verdedigen",
     illustratie:"De tirannendoders / Horatius Cocles alleen op de brug (ch14_gre_peisistratos_phye.png, ch14_lat_cocles_brug.png, ch14_lat_cloelia_tiber.png, souvenir_verzet_tirannen.png — nog te maken)" },
@@ -18711,40 +18711,22 @@ Twee nieuwe stolpen vullen zich naast elkaar: een kleine, gouden helm — Athena
 "Twee steden, twee manieren om iets te verliezen en er sterker uit te komen," zegt de Boodschapper. "Onthoud dat — de hoofdstukken die nog komen, gaan allebei nog veel verder over wat mensen (en goden) doen met macht die ze niet hadden moeten krijgen, of juist niet meer willen loslaten."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH13_WORDT_VERVOLGD
-
-END
-
-=== SCENE: CH13_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Atheense democratie, de Perzische Oorlogen, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+* Luister naar het volgende verhaal -> CH14_000
 
 END
 `.trim();
 
 /* ---- HOOFDSTUK 14 — "Verzet tegen Tirannen" (2026-08-05, zie Chronica.md
-   §7.51/§7.52). BEWUST NOG NIET GEKOPPELD aan de speelbare route: geen
-   enkele bestaande scène verwijst naar CH14_000 (CH13_WORDT_VERVOLGD blijft
-   het huidige, live eindpunt van de speeltest-versie). Dit hoofdstuk is
-   geregistreerd in SP_SCENES (singleplayer.js) zodat het los getest kan
-   worden en validate_chronica.js het kan controleren, maar pas wanneer
-   Gerben het hoofdstuk — inclusief illustraties — speeltest-klaar
-   verklaart, wordt CH13_WORDT_VERVOLGD verwijderd en CH14_000 aan
-   CH13_MUSEUM_00 gekoppeld (zelfde patroon als de H12->H13-overgang,
-   Chronica.md §7.47).
-   Toepassing van de nieuwe payoff-strategie (§7.51): geen nieuwe RELATION-
-   opbouw op de vele eenmalige personages in dit hoofdstuk, wel een
-   onvoorwaardelijke erfenis-echo op Brutus (CH14_LAT_000, SP_PAYOFFS) en
-   twee Clementia/Severitas-REACTIE-momenten (ostrakismos in Athene,
-   Cloelia's teruggave in Rome). ---- */
+   §7.51/§7.52). Gekoppeld aan de speelbare route op 2026-08-08 (§7.59) —
+   CH13_MUSEUM_00 routeert nu naar CH14_000, het tijdelijke eindpunt
+   CH13_WORDT_VERVOLGD is verwijderd en vervangen door een nieuwe
+   CH14_WORDT_VERVOLGD aan het eind van dit hoofdstuk (zelfde patroon als de
+   H12->H13-overgang, Chronica.md §7.47).
+   Toepassing van de payoff-strategie (§7.51): geen nieuwe RELATION-opbouw
+   op de vele eenmalige personages in dit hoofdstuk, wel een onvoorwaardelijke
+   erfenis-echo op Brutus (CH14_LAT_000, SP_PAYOFFS) en twee Clementia/
+   Severitas-REACTIE-momenten (ostrakismos in Athene, Cloelia's teruggave in
+   Rome). ---- */
 const SP_CH14_CNS = `
 === SCENE: CH14_000 ===
 
@@ -19234,6 +19216,9 @@ Dit is nog maar het begin van een patroon dat zich eeuwenlang zal herhalen. Cinc
 
 Telkens dezelfde vraag, telkens opnieuw gesteld: kan macht ooit veilig aan één mens worden toevertrouwd — en wat doet die mens ermee, eenmaal hij ze weer moet afstaan?
 
+IMAGE:
+ch14_lat_cincinnatus_ploeg.png
+
 CODEX:
 codex_vroege_republiek_helden
 
@@ -19272,6 +19257,23 @@ Terug in het Museum
 
 TEXT:
 Een nieuwe stolp vult zich naast de andere: een doorgesneden stuk ketting, half brons, half ijzer. "Twee volkeren, in hetzelfde jaar bevrijd," zegt de Boodschapper zacht, "op twee heel verschillende manieren." Ze kijkt nog even naar de stolp, alsof ze zelf ook nog aan het nadenken is over wat er hierna komt.
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH14_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH14_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Atheense democratie, de Perzische Oorlogen, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
 
 END
 `.trim();
