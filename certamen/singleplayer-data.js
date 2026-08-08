@@ -19460,11 +19460,21 @@ Straton denkt dat hij dit huis runt. Hij weet niet eens waar de olijfolie staat,
 IMAGE:
 ch15_gre_oikos_melissa.png
 
-PUZZLE:
-puzzle_ch15_gre_kyrios
-
 CODEX:
 codex_griekse_oikos_wonen
+
+CHOICES:
+* Zie wie Melissa's dagen verder vult -> CH15_GRE_001P
+
+END
+
+=== SCENE: CH15_GRE_001P ===
+
+TITLE:
+De Oikos van Melissa
+
+PUZZLE:
+puzzle_ch15_gre_kyrios
 
 CHOICES:
 * Zie wie Melissa's dagen verder vult -> CH15_GRE_001J
@@ -19506,6 +19516,16 @@ Aliquis pulsat, aperi.
 
 IMAGE:
 ch15_lat_domus_aemilia.png
+
+CHOICES:
+* Zie wie er voor de deur staat -> CH15_LAT_001P
+
+END
+
+=== SCENE: CH15_LAT_001P ===
+
+TITLE:
+De Domus van Aemilia
 
 PUZZLE:
 puzzle_ch15_lat_quis_aliquis
@@ -19811,6 +19831,16 @@ Als ik met haar meega, als bescherming, valt het niet op — twee vrouwen naar e
 CODEX:
 codex_agora_heliaia
 
+CHOICES:
+* Zie of het plan werkt -> CH15_GRE_004P
+
+END
+
+=== SCENE: CH15_GRE_004P ===
+
+TITLE:
+Het Laatste Muntstuk
+
 PUZZLE:
 puzzle_ch15_gre_doule
 
@@ -19932,6 +19962,16 @@ ch15_lat_fortunata_markt.png
 
 CODEX:
 codex_thermopolium
+
+CHOICES:
+* Zie of de klant zich laat overtuigen -> CH15_LAT_004P
+
+END
+
+=== SCENE: CH15_LAT_004P ===
+
+TITLE:
+Een Klant Bij de Kraam
 
 PUZZLE:
 puzzle_ch15_lat_novi
