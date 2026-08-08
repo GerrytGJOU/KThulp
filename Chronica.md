@@ -5906,6 +5906,31 @@ illustraties (4 scène-IMAGE's + de souvenirkaart) bleken inmiddels al
 aangeleverd te zijn in `certamen/assets/chronica/` — geen ontbrekend beeld
 meer, in tegenstelling tot bij eerdere hoofdstukken op dit punt.
 
+**Echte speeltest in de browser (na koppeling) vond een nieuwe bug-klasse**:
+`DIALOGUE:` en `PUZZLE:` in dezelfde scène — `spRenderPuzzle()`
+(`singleplayer.js`) rendert alleen `scene.text` via `spPuzzleHeaderHTML()`,
+nooit `scene.dialogue`. Vier H15-scènes combineerden dit (`CH15_GRE_001`,
+`CH15_LAT_001`, `CH15_GRE_004_INTRO`, `CH15_LAT_004_INTRO`) — Melissa's en
+Aemilia's eigen citaten verdwenen daardoor stilletjes uit beeld, precies de
+vier stemmen die dit hoofdstuk juist wilde laten horen. Geen van de 0
+DIALOGUE+PUZZLE-combinaties in H1-14 had dit ooit blootgelegd (geverifieerd
+met een greptelling), dus dit is een nieuw ontdekte variant van het
+bekende PUZZLE-conflict (zie [[chronica-taalspoor-zigzag-mechanisme]],
+eerder al gevonden voor REQUIRE/APPROACH). **Fix**: dezelfde bekende
+oplossing — de PUZZLE naar een eigen sub-scène splitsen
+(`CH15_GRE_001P`/`CH15_LAT_001P`/`CH15_GRE_004P`/`CH15_LAT_004P`, elk met
+alleen `PUZZLE:` en een enkelvoudige keuze), zodat de content-scène met
+`DIALOGUE:` gewoon via de normale renderer loopt. 42 → 46 scènes.
+
+**Volledige browser-playtest, alle drie taalsporen, geautomatiseerd**: een
+JS-driver in de Browserpane liep zelf door elke scène (koos het juiste
+PUZZLE-antwoord, loste elke CHECK automatisch op, klikte door leesvallen en
+REACTION-keuzes) van `CH15_000` tot `CH15_WORDT_VERVOLGD`, voor grieks-,
+latijn- én beide-sporen apart. Alle drie bereiken het einde zonder ooit de
+andere taal aan te raken (behalve "beide", die zoals bedoeld zigzagt) en
+zonder één console-fout. Bevestigde onderweg ook: alle vier scène-
+illustraties laden zonder 404 (`naturalWidth` > 0).
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
