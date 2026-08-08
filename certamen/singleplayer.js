@@ -807,29 +807,64 @@ function spCodexTableHTML(table){
    groepeert op hoofdstuk via de bestaande id-conventie
    `codex_grammatica_ch<N>_...`, geen nieuw datamodel nodig. "Alles" blijft
    de standaardweergave; de pillen tonen alleen hoofdstukken die de speler
-   al heeft ontgrendeld (geen spoilers van nog niet bereikte hoofdstukken). */
+   al heeft ontgrendeld (geen spoilers van nog niet bereikte hoofdstukken).
+   Taalfilter (2026-08-08, Gerbens verzoek): een TWEEDE, onafhankelijke
+   pillenrij naast de hoofdstuk-pillen, op het `taal`-veld dat nu op elke
+   SP_CODEX_ENTRIES-grammatica-entry staat ("grieks"/"latijn"/"beide" voor
+   hoofdstuk-overzichten die allebei de talen samenvatten). Beide filters
+   combineren (EN): kies bv. Hoofdstuk 11 + Latijn om alléén de ablativus
+   absolutus te zien naast (in plaats van) de genitivus absolutus — of laat
+   het hoofdstukfilter op "Alles" en kies "Latijn" om in één keer alle
+   Latijnse grammatica van de hele campagne te overzien. "beide"-entries
+   (hoofdstuk-overzichten) blijven zichtbaar bij elk taalfilter, want ze
+   vatten typisch precies de vergelijking tussen de twee talen samen. */
 let SP_CODEX_GRAMMAR_SUB = "all";
+let SP_CODEX_GRAMMAR_LANG = "alle";
 function spSwitchCodexGrammarSub(sub){ SP_CODEX_GRAMMAR_SUB = sub; go("spCodex"); }
+function spSwitchCodexGrammarLang(lang){ SP_CODEX_GRAMMAR_LANG = lang; go("spCodex"); }
 function spCodexGrammaticaHTML(){
   const ids = (SP_STATE.codex||[]).filter(id => SP_CODEX_ENTRIES[id]?.cat==="grammatica");
   if(!ids.length) return `<p class="codex-empty">Nog niets vastgelegd — grammatica verschijnt hier zodra een hoofdstuk erom vraagt.</p>`;
   const chapters = [...new Set(ids.map(id => (id.match(/^codex_grammatica_ch(\d+)_/)||[])[1]).filter(Boolean))]
     .sort((a,b)=>+a-+b);
   const sub = (SP_CODEX_GRAMMAR_SUB==="all" || chapters.includes(SP_CODEX_GRAMMAR_SUB)) ? SP_CODEX_GRAMMAR_SUB : "all";
+  const lang = SP_CODEX_GRAMMAR_LANG;
   const tocHTML = chapters.length>1 ? `<div class="codex-grammar-toc">
     <button class="${sub==="all"?"on":""}" onclick="spSwitchCodexGrammarSub('all')">Alles</button>
     ${chapters.map(c=>`<button class="${sub===c?"on":""}" onclick="spSwitchCodexGrammarSub('${c}')">Hoofdstuk ${c}</button>`).join("")}
   </div>` : "";
-  const shownIds = sub==="all" ? ids : ids.filter(id=>id.startsWith(`codex_grammatica_ch${sub}_`));
-  const entriesHTML = shownIds.map(id=>{
+  const langTocHTML = `<div class="codex-grammar-toc">
+    <button class="${lang==="alle"?"on":""}" onclick="spSwitchCodexGrammarLang('alle')">Alle talen</button>
+    <button class="${lang==="grieks"?"on":""}" onclick="spSwitchCodexGrammarLang('grieks')">🔷 Grieks</button>
+    <button class="${lang==="latijn"?"on":""}" onclick="spSwitchCodexGrammarLang('latijn')">🔶 Latijn</button>
+  </div>`;
+  let shownIds = sub==="all" ? ids : ids.filter(id=>id.startsWith(`codex_grammatica_ch${sub}_`));
+  if(lang!=="alle") shownIds = shownIds.filter(id=>{ const t=SP_CODEX_ENTRIES[id].taal; return t===lang || t==="beide"; });
+  // Inhoudsopgave (2026-08-08, Gerbens verzoek): springt met scrollIntoView
+  // naar de bijbehorende entry i.p.v. een href="#"-anker — .codex-page zelf
+  // heeft overflow:hidden, de echte scroll zit op een voorouder-element, en
+  // scrollIntoView vindt die vanzelf zonder aannames over welke dat is. Volgt
+  // exact het huidige filter (hoofdstuk + taal), groeit dus vanzelf mee
+  // zodra een nieuw hoofdstuk grammatica ontgrendelt.
+  const anchorId = id => `gram-${id}`;
+  const indexHTML = shownIds.length>1 ? `<nav class="codex-index">
+    ${shownIds.map(id=>{
+      const e = SP_CODEX_ENTRIES[id];
+      const ch = (id.match(/^codex_grammatica_ch(\d+)_/)||[])[1];
+      const badge = e.taal==="beide" ? "" : (e.taal==="grieks"?" 🔷":" 🔶");
+      return `<a onclick="document.getElementById('${anchorId(id)}')?.scrollIntoView({behavior:'smooth',block:'start'})">${ch?`H${ch} · `:""}${esc(e.titel.replace(/^Grammatica:\s*/,""))}${badge}</a>`;
+    }).join("")}
+  </nav>` : "";
+  const entriesHTML = shownIds.length ? shownIds.map(id=>{
     const e = SP_CODEX_ENTRIES[id];
-    return `<div class="codex-entry">
-      <h4>${esc(e.titel)}</h4>
+    const badge = e.taal==="beide" ? "" : ` <span class="codex-lang-badge">${e.taal==="grieks"?"🔷 GR":"🔶 LA"}</span>`;
+    return `<div class="codex-entry" id="${anchorId(id)}">
+      <h4>${esc(e.titel)}${badge}</h4>
       <p>${esc(e.tekst)}</p>
       ${e.table?spCodexTableHTML(e.table):""}
     </div>`;
-  }).join("");
-  return tocHTML + entriesHTML;
+  }).join("") : `<p class="codex-empty">Geen ${esc(lang)} grammatica in dit filter.</p>`;
+  return tocHTML + langTocHTML + indexHTML + entriesHTML;
 }
 function spCodexPersonsHTML(){
   const persons = SP_STATE.persons||{};
@@ -848,19 +883,60 @@ function spCodexPersonsHTML(){
     </div>`;
   }).join("");
 }
+/* ---- VOCABULAIRE-TAB: taalfilter + alfabetische sortering (2026-08-08,
+   Gerbens verzoek) — sinds de vocab-uitbreiding (§7.56, 421 woorden) is een
+   ongesorteerde, altijd-alles-tonende lijst niet meer te overzien. Sortering
+   op `woord` (localeCompare, verdraagt Griekse/diakritische tekens correct);
+   sub-tabs "Alle talen"/"Grieks"/"Latijn" hergebruiken exact hetzelfde
+   `.codex-grammar-toc`-patroon als de grammatica-tab hierboven. ---- */
+let SP_CODEX_VOCAB_LANG = "alle";
+function spSwitchCodexVocabLang(lang){ SP_CODEX_VOCAB_LANG = lang; go("spCodex"); }
 function spCodexVocabHTML(){
   const vocab = SP_STATE.vocab||[];
   if(!vocab.length) return `<p class="codex-empty">Nog geen woorden geleerd — ze verschijnen hier zodra je een hoofdstuk voltooit.</p>`;
-  const grieks = vocab.filter(id=>SP_VOCAB_ENTRIES[id]?.taal==="grieks");
-  const latijn = vocab.filter(id=>SP_VOCAB_ENTRIES[id]?.taal==="latijn");
-  const row = id=>{ const w=SP_VOCAB_ENTRIES[id]; if(!w) return "";
-    return `<div class="codex-vocab-row"><span class="codex-vocab-word">${esc(w.woord)}${w.transcript?` <em>(${esc(w.transcript)})</em>`:""}</span><span class="codex-vocab-def">${esc(w.betekenis)}</span></div>`; };
-  return `
+  const lang = SP_CODEX_VOCAB_LANG;
+  const sortWords = ids => ids.map(id=>SP_VOCAB_ENTRIES[id]).filter(Boolean)
+    .sort((a,b)=>a.woord.localeCompare(b.woord, "nl"));
+  const grieks = sortWords(vocab.filter(id=>SP_VOCAB_ENTRIES[id]?.taal==="grieks"));
+  const latijn = sortWords(vocab.filter(id=>SP_VOCAB_ENTRIES[id]?.taal==="latijn"));
+  // Alfabet-sprongbalk (2026-08-08): één anker per EERSTE woord van een
+  // nieuwe letter binnen een taalblok (niet elke rij — dat zou honderden
+  // overbodige id's geven). scrollIntoView i.p.v. href="#", zelfde reden
+  // als de grammatica-inhoudsopgave hierboven.
+  // Diakritische tekens (accenten, ademhalingstekens) genormaliseerd weg —
+  // anders levert het Grieks tientallen bijna-identieke letterknoppen op
+  // (Ἄ/Ἀ/Α/Ἅ horen allemaal onder "Α").
+  const firstLetter = w => (w.woord.normalize("NFD").replace(/[\u0300-\u036f]/g,"")[0]||"").toLocaleUpperCase("nl");
+  const alphaAnchor = (prefix, letter) => `alpha-${prefix}-${letter}`;
+  const row = (w, prefix, isFirstOfLetter) => `<div class="codex-vocab-row"${isFirstOfLetter?` id="${alphaAnchor(prefix, firstLetter(w))}"`:""}><span class="codex-vocab-word">${esc(w.woord)}${w.transcript?` <em>(${esc(w.transcript)})</em>`:""}</span><span class="codex-vocab-def">${esc(w.betekenis)}</span></div>`;
+  const rowsHTML = (words, prefix) => {
+    let lastLetter = null;
+    return words.map(w=>{
+      const l = firstLetter(w);
+      const isFirst = l!==lastLetter;
+      lastLetter = l;
+      return row(w, prefix, isFirst);
+    }).join("");
+  };
+  const alphaNav = (words, prefix) => {
+    const letters = [...new Set(words.map(firstLetter))];
+    if(letters.length<4) return "";
+    return `<div class="codex-alpha-nav">${letters.map(l=>
+      `<button onclick="document.getElementById('${alphaAnchor(prefix,l)}')?.scrollIntoView({behavior:'smooth',block:'start'})">${l}</button>`
+    ).join("")}</div>`;
+  };
+  const langTocHTML = `<div class="codex-grammar-toc">
+    <button class="${lang==="alle"?"on":""}" onclick="spSwitchCodexVocabLang('alle')">Alle talen</button>
+    <button class="${lang==="grieks"?"on":""}" onclick="spSwitchCodexVocabLang('grieks')">🔷 Grieks (${grieks.length})</button>
+    <button class="${lang==="latijn"?"on":""}" onclick="spSwitchCodexVocabLang('latijn')">🔶 Latijn (${latijn.length})</button>
+  </div>`;
+  const griekseBlok = lang!=="latijn" ? `
     <h4>Grieks</h4>
-    ${grieks.length?grieks.map(row).join(""):'<p class="codex-empty">Nog geen Griekse woorden.</p>'}
+    ${grieks.length?alphaNav(grieks,"gr")+rowsHTML(grieks,"gr"):'<p class="codex-empty">Nog geen Griekse woorden.</p>'}` : "";
+  const latijnseBlok = lang!=="grieks" ? `
     <h4 style="margin-top:14px">Latijn</h4>
-    ${latijn.length?latijn.map(row).join(""):'<p class="codex-empty">Nog geen Latijnse woorden.</p>'}
-  `;
+    ${latijn.length?alphaNav(latijn,"la")+rowsHTML(latijn,"la"):'<p class="codex-empty">Nog geen Latijnse woorden.</p>'}` : "";
+  return langTocHTML + griekseBlok + latijnseBlok;
 }
 function spCodexImagesHTML(){
   const imgs = SP_STATE.seenImages||[];

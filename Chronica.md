@@ -5560,6 +5560,88 @@ verhoogde aantallen per hoofdstuk (o.a. "20 woorden toegevoegd" bij de
 nieuwe H10/H12-secties), Griekse accenten/transcripten renderen correct in
 de Codex, geen console-fouten.
 
+### 7.57 Codex Vocabulaire/Grammatica: alfabetische sortering + taalfilters (2026-08-08)
+
+Vervolg op §7.56 — met 421 vocab-woorden was de ongesorteerde Codex-lijst
+niet meer te overzien. Gerben stelde twee alternatieven voor (taal-subtabs
+op zowel Vocabulaire als Grammatica, óf een subtab per grammatica-*concept*
+zodat bv. Ablativus Absolutus (Latijn) en Genitivus Absolutus (Grieks) met
+één klik naast elkaar staan). Bevinding vooraf: dat tweede voorbeeld werkte
+al — beide concepten zijn bewust in hetzelfde hoofdstuk (H11) geïntroduceerd
+(zie §7.41), dus de bestaande hoofdstuk-pillen tonen ze al samen. Gekozen
+voor een combinatie die niets bestaands weghaalt:
+
+- **Vocabulaire-tab** (`spCodexVocabHTML`, singleplayer.js): woorden nu
+  alfabetisch gesorteerd per taal (`localeCompare`), plus een taalfilter-
+  rij (Alle talen/Grieks/Latijn, met live aantallen) die hergebruikt maakt
+  van dezelfde `.codex-grammar-toc`-stijl als de grammatica-tab.
+- **Grammatica-tab** (`spCodexGrammaticaHTML`): NIEUW `taal`-veld
+  toegevoegd aan alle 47 bestaande `SP_CODEX_ENTRIES`-grammatica-entries
+  (`"grieks"`/`"latijn"`/`"beide"` — "beide" voor de vijf hoofdstuk-
+  overzichten die allebei de talen samenvatten, bv. ch11/ch13/ch14). Een
+  TWEEDE, onafhankelijke pillenrij (taal) staat nu naast de bestaande
+  hoofdstuk-pillenrij — beide filters combineren (bv. "Hoofdstuk 11" +
+  "Latijn" toont alléén de ablativus absolutus, niet de genitivus
+  absolutus), en elke entry-titel krijgt een klein 🔷GR/🔶LA-badge zodat
+  ook de "Alles"-weergave in één oogopslag leesbaar blijft. `taal`-
+  classificatie is handmatig gedaan op basis van de al bekende Pallas/
+  Minerva-koppeling per hoofdstuk (§7.51-audit-materiaal) — geen
+  automatische woordsoort-detectie, dus nieuwe grammatica-entries moeten
+  voortaan zelf een `taal:`-veld meekrijgen (geen fallback/default).
+
+**Load-bearing gotcha, geraakt bij het testen**: `certamen/index.html` laadt
+`singleplayer.js` met een vaste cache-busting querystring
+(`?v=20260804a`) — de browser cachet die URL hard, dus een `singleplayer.js`-
+wijziging wordt NIET zichtbaar totdat de versie in `index.html` wordt
+opgehoogd. Nu bijgewerkt naar `?v=20260808a`. Geldt voor elke toekomstige
+`singleplayer.js`-wijziging, niet alleen deze.
+
+**Gevalideerd**: `node --check` + `validate_chronica.js` → 0 fouten, 33
+waarschuwingen. Browser-test: Vocabulaire-taalfilter correct (247 Latijn /
+174 Grieks bij volledige pool, alfabetisch), Grammatica-combinatiefilter
+correct getest op het Hoofdstuk-11-voorbeeld (Ablativus/Genitivus Absolutus)
+en op een taal-only-filter over de hele campagne (12 Griekse entries: 7
+zuiver Grieks + 5 "beide"), geen console-fouten.
+
+### 7.58 Codex: inhoudsopgave (Grammatica) + alfabet-sprongbalk (Vocabulaire) (2026-08-08)
+
+Vervolg op §7.57. Gerben vroeg om de Codex nog overzichtelijker te maken —
+concreet een inhoudsopgave bovenaan Grammatica die "langzaam aanvult".
+
+- **Grammatica**: nieuwe `<nav class="codex-index">` direct onder de
+  filterknoppen, met één klikbare regel per zichtbare entry ("H11 ·
+  ablativus absolutus 🔶"), die met `scrollIntoView` naar de bijbehorende
+  entry springt. Volgt automatisch het huidige hoofdstuk-/taalfilter (§7.57)
+  — geen apart datamodel, groeit vanzelf mee zodra `SP_STATE.codex` een
+  nieuwe grammatica-entry ontgrendelt.
+- **Vocabulaire**: alfabet-sprongbalk boven elk taalblok (cirkelknoppen per
+  letter, alleen letters tonen die daadwerkelijk voorkomen — pas zichtbaar
+  vanaf 4+ letters). Ankers zitten alleen op het EERSTE woord van een nieuwe
+  letter, niet op elke rij.
+
+**Bug gevonden en gefixt tijdens het bouwen**: de eerste versie van de
+alfabet-sprongbalk groepeerde op het kale eerste teken zonder diakritische
+tekens weg te halen — Griekse hoofdletters met adem/accent (Ἄ, Ἀ, Α, Ἅ...)
+telden dan als vier aparte "letters". Resultaat: 57 knoppen in plaats van
+een bruikbare 24-letter-balk. Fix: `firstLetter()` normaliseert nu eerst
+naar NFD en verwijdert combining-diacritische tekens (`̀`-`ͯ`,
+dekt zowel accenten als Griekse ademhalingstekens) vóór de letter wordt
+bepaald — 44 knoppen na de fix (23 Grieks + 1 "-" voor woorden als
+`-que`/`-ne` + 20 Latijn), elk uniek.
+
+**Load-bearing detail**: `scrollIntoView` i.p.v. `href="#anker"` overal in
+de Codex — `.codex-page` zelf heeft `overflow:hidden`, dus een browser-
+native hash-jump zou afhankelijk zijn van aannames over welke voorouder
+scrollt. `scrollIntoView` vindt de echte scrollcontainer vanzelf, ongeacht
+waar die zit in de DOM-boom.
+
+**Gevalideerd**: `node --check` → 0 fouten. Browser-test (cache-busting
+versie mee opgehoogd naar `?v=20260808c`, zie [[chronica-validator-blind-spots]]):
+47 ToC-links = 47 anchors op Grammatica, klik-navigatie bevestigd (scrollY
+verandert daadwerkelijk); alfabet-balk toont 44 unieke letters (was 57 vóór
+de diakritische-tekens-fix), klik-navigatie ook hier bevestigd; geen
+console-fouten.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
