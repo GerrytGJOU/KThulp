@@ -2315,6 +2315,9 @@ const SP_CODEX_PERSONS = {
   minos: { nm:"Minos", epithet:"Koning van Kreta, zoon van Europa en Jupiter",
     intro:"De machtige koning van Kreta — dezelfde naam die Athena al noemde toen ze over Europa vertelde — wiens jaarlijkse eis aan Athene een oude, verzwegen schuld verbergt.",
     full:"Minos' eigen gebroken belofte aan Neptunus — een witte stier die hij weigerde te offeren — kostte hem uiteindelijk zijn eer: zijn vrouw Pasiphaë baarde de Minotaurus, en zijn dochter Ariadne koos voor een vreemdeling boven haar eigen vader. Zijn woede om dat verraad trof uiteindelijk niet Theseus, maar Daidalos, de man die het allemaal mogelijk had gemaakt." },
+  pasiphae: { nm:"Pasiphaë", epithet:"Koningin van Kreta, vrouw van Minos",
+    intro:"Minos' vrouw, die de straf draagt voor een belofte die niet de hare was — vervloekt met een onnatuurlijk verlangen naar de witte stier die haar man aan Neptunus had moeten offeren.",
+    full:"Pasiphaë kreeg geen enkel aandeel in wat Minos deed, en toch was zij het die daarvoor boette: uit haar vervloekte verlangen naar de stier werd de Minotaurus geboren, half mens en half monster. Terwijl Minos zijn koningschap en zijn eer grotendeels overeind hield, droeg zij de zichtbare, levenslange herinnering aan zijn gebroken woord." },
   daidalos: { nm:"Daidalos (Daedalus)", epithet:"Beroemdste bouwmeester van zijn tijd",
     intro:"De hofbouwmeester van Minos, wiens vindingrijkheid net zo gevaarlijk als nuttig blijkt te zijn — hij ontwierp zowel het labyrint als, in het geheim, de manier om het te verslaan.",
     full:"Voor zijn hulp aan Ariadne en Theseus werd Daidalos samen met zijn zoon Ikaros zelf in zijn eigen labyrint opgesloten. Hij ontsnapte op zelfgemaakte vleugels van veren en was — en vloog vervolgens, alleen, met zijn zoon niet langer naast zich, verder dan hij ooit had willen vliegen." },
@@ -3441,6 +3444,15 @@ const SP_PAYOFFS = [
   { id:"ch9_002_echo_herakles_harnas", type:"echo", trigger:{scene:"CH9_002"},
     condition:{flagsSet:["herakles_harnas"]}, priority:0,
     content:{text:`Over de schouders van die verre gestalte hangt, zie je nu pas goed, nog altijd een verweerd stuk harnas dat er niet meer bij past — hetzelfde harnas dat een held je ooit gaf toen hij het zelf niet meer nodig had. Je draagt het nog steeds, jaren later, zonder dat je het jezelf ooit hebt afgevraagd waarom.`} },
+  // ---- Hoofdstuk 4, lijn Theseus — vuurt alleen als de speler in
+  // Hoofdstuk 3 zelf de Kretenzische Stier heeft gevangen voor Herakles
+  // (flag ch3_kretenzische_stier, CH3_H12): dezelfde stier die hier, als
+  // vader van de Minotaurus, opnieuw opduikt. Leerlingfeedback (2026-08-08):
+  // het verhaal legde die link zelf nergens, ook niet voor spelers die de
+  // stier al kenden.
+  { id:"ch4_t04_echo_kretenzische_stier", type:"echo", trigger:{scene:"CH4_T04"},
+    condition:{flagsSet:["ch3_kretenzische_stier"]}, priority:0,
+    content:{text:`Die witte stier ken je al — je hielp Herakles hem ooit zelf vangen, als een van zijn twaalf werken, voor hij losgelaten werd in de vlakte bij Marathon. Wat je toen niet wist: dit dier had zijn sporen op Kreta allang nagelaten, jaren voordat Herakles er ooit voet aan wal zette.`} },
   // ---- Hoofdstuk 9 — de grote, zichtbare Aias-payoff (Gerbens verzoek):
   // relations.aias werd al bij het Gezantschap-moment (Hoofdstuk 8) gezet
   // en kan sindsdien alleen maar verder zijn opgeschoven (RELATION-secties
@@ -7362,6 +7374,9 @@ Minos, allang blij om van het beest af te zijn, staat Herakles zonder aarzeling 
 COMBAT:
 kretenzische_stier
 
+FLAG:
+ch3_kretenzische_stier
+
 CHOICES:
 
 * Kijk waar Herakles de gevangen stier naartoe brengt -> CH3_H13
@@ -8000,16 +8015,37 @@ TITLE:
 Het Monster in het Labyrint
 
 TEXT:
-Het wezen waarvoor Athene al negen jaar boet, is de Minotaurus — half mens, half stier — en zijn bestaan is zelf al het gevolg van een oude, gebroken belofte. Jaren geleden vroeg Minos de zeegod Neptunus om een teken dat de goden zijn koningschap goedkeurden; Neptunus liet een verblindend witte stier uit de golven oprijzen, op voorwaarde dat het dier meteen aan hem geofferd zou worden. Minos, die het dier te mooi vond om te doden, offerde een ander dier in zijn plaats — en Neptunus, beledigd, zorgde ervoor dat Minos' eigen vrouw Pasiphaë een onnatuurlijk verlangen naar de stier ontwikkelde. Wat daaruit werd geboren, kon nergens anders wonen dan in een bouwwerk dat zijn eigen weg naar buiten verbergt.
+Het wezen waarvoor Athene al negen jaar boet, is de Minotaurus — half mens, half stier — en zijn bestaan is zelf al het gevolg van een oude, gebroken belofte. Jaren geleden vroeg Minos de zeegod Neptunus om een teken dat de goden zijn koningschap goedkeurden; Neptunus liet een verblindend witte stier uit de golven oprijzen, op voorwaarde dat het dier meteen aan hem geofferd zou worden. Minos, die het dier te mooi vond om te doden, offerde een ander dier in zijn plaats — en Neptunus, beledigd, zorgde ervoor dat Minos' eigen vrouw Pasiphaë een onnatuurlijk verlangen naar de stier ontwikkelde. De Minotaurus is, letterlijk, haar zoon en die van de stier — en kon nergens anders wonen dan in een bouwwerk dat zijn eigen weg naar buiten verbergt.
 
 Daidalos bouwde dat bouwwerk in opdracht van Minos: een labyrint met zoveel kronkelende gangen dat niemand die er eenmaal in verdwaalt, ooit vanzelf de uitgang terugvindt. Elk jaar voedt het offer uit Athene het monster — en houdt het tegelijk Minos' eigen, decennia oude schuld verborgen achter stenen muren.
+
+PERSON:
+pasiphae:intro
 
 CODEX:
 codex_labyrint_minotaurus
 
 CHOICES:
 
-* Kijk wat Ariadne voor Theseus overheeft -> CH4_T05
+* Kijk wat dit Pasiphaë zelf heeft gekost -> CH4_T04B
+
+END
+
+=== SCENE: CH4_T04B ===
+
+TITLE:
+Pasiphaë's Kant van het Verhaal
+
+TEXT:
+Van de vloek zelf is het Pasiphaë die alles droeg, niet Minos. Hij was het die zijn belofte aan Neptunus brak, uit hebzucht om de mooiste stier van de kudde voor zichzelf te houden — en toch was zij het die daarvoor moest boeten, in haar eigen lichaam, voor een keuze die nooit de hare was geweest.
+
+"Vraag iemand ooit naar mijn kant van dit verhaal?" zou ze later gezegd hebben, niet als verontschuldiging, maar als vaststelling. "Mijn man brak zijn woord aan een god. De god koos ervoor om mij te straffen voor zijn hubris — niet hem."
+
+CHOICES:
+
+* Erken dat zij de zwaarste prijs betaalde voor een schuld die niet de hare was [CLEMENTIA] -> CH4_T05
+* Merk nuchter op dat hier geen onschuldigen zijn — ook Minos boette uiteindelijk voor zijn eigen daad [SEVERITAS] -> CH4_T05
+* Twijfel over hoeveel van dit verhaal ooit eerlijk verdeeld kan worden tussen wie schuldig is en wie niet [NEUTRAL] -> CH4_T05
 
 END
 
