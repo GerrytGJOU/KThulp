@@ -277,7 +277,7 @@ const SP_CAMPAIGN = [
     pallas:"— (herhaling, valt buiten de lesnummering)", minerva:"Hoofdstuk 11 (deel): passief praesens/perfectum — verplaatst vanuit Hoofdstuk 11 zodat Minerva deel 1 bij Hoofdstuk 9 is afgerond (Gerbens verzoek 2026-07-31, zie Chronica.md §7.38/geheugen chronica-grammatica-loskoppelen-van-minerva-hoofdstuk)",
     grammatica:"Herhaling praesens t/m perfectum (geen nieuwe stof), PLUS nieuwe Latijnse stof: passief praesens/perfectum (Minerva 11 deel 1, met volledige hints i.t.t. de herhalingspuzzels)",
     gameplay:"Generatiesprongen binnen één hoofdstuk; het raadsel van de Sfinx als taalpuzzel; De Zeven tegen Thebe krijgt bewust TWEE golven, tien jaar uit elkaar — de vaders (Polyneikes/Eteokles' oorlog, waarin ook Tydeus sneuvelt) en daarna hun zonen, de Epigonen, die Thebe alsnog innemen — dezelfde generatiesprong-structuur als de rest van het hoofdstuk, nu ook binnen dit ene subverhaal",
-    personages:"Kadmos, Niobe, Oedipus, Iokaste, Eteokles, Polyneikes, Antigone, Creon, Pentheus, Tydeus (cameo, terugkerend uit Hoofdstuk 5 — sneuvelt hier), Diomedes (cameo)",
+    personages:"Kadmos, Niobe, Oedipus, Iokaste, Eteokles, Polyneikes, Antigone, Kreon, Pentheus, Tydeus (cameo, terugkerend uit Hoofdstuk 5 — sneuvelt hier), Diomedes (cameo)",
     zijverhalen:"Diomedes (cameo) — zoon van Tydeus (Hoofdstuk 5), vecht tien jaar later mee bij de Epigonen om zijn vader te wreken; komt zelf later terug in de Trojaanse Oorlog-hoofdstukken",
     illustratie:"De Sfinx voor de poorten van Thebe" },
   { id:"ch7", nr:7, boek:"I — De Ontwaakte Herinnering", type:"hoofdstuk", nm:"De Appel der Tweedracht",
@@ -1217,7 +1217,7 @@ const SP_PUZZLES = {
     ],
     hint:"Kijk goed — niet elke perfectumstam lijkt op de praesensstam." },
   puzzle_ch6_perfectum: { type:"typed-latin",
-    vraag:"Antigone bekent openlijk tegenover Creon zelf: “Fratrem meum contra edictum tuum ___” — ik heb mijn broer begraven, tegen jouw bevel in. Typ de perfectumvorm van sepelire (begraven), 1e persoon enkelvoud.",
+    vraag:"Antigone bekent openlijk tegenover Kreon zelf: “Fratrem meum contra edictum tuum ___” — ik heb mijn broer begraven, tegen jouw bevel in. Typ de perfectumvorm van sepelire (begraven), 1e persoon enkelvoud.",
     antwoord:"sepelivi",
     hint:"Perfectum 1e persoon enkelvoud van sepelire (4e conjugatie) eindigt op -ivi: sepelivi." },
   puzzle_ch6_vocativus_grieks: { type:"typed-greek",
@@ -1866,9 +1866,9 @@ const SP_CODEX_ENTRIES = {
   codex_epigonen: { cat:"mythologie", titel:"De Epigonen",
     tekst:"Tien jaar na de nederlaag van hun vaders trokken de zonen van de Zeven — de Epigonen, 'de nakomelingen' — opnieuw tegen Thebe op, dit keer met succes. Onder hen Diomedes, de zoon van Tydeus, die zijn vader nooit goed heeft kunnen kennen maar hem hier alsnog wreekt. Thebe viel definitief, en Diomedes' naam zou nog veel groter worden: jaren later zou hij een van de dapperste Griekse helden voor Troje worden." },
   codex_ismene_weigering: { cat:"mythologie", titel:"Ismene's Weigering",
-    tekst:"Antigone vraagt haar zuster Ismene om samen Polyneikes te begraven, tegen Creons verbod in. Ismene weigert — niet uit lafheid, maar uit een nuchtere afweging: de laatste twee overlevenden van een al zwaar getroffen familie hoeven niet allebei te sterven voor dezelfde overtuiging. Wanneer Antigone later gepakt wordt, biedt Ismene zich alsnog aan om samen gestraft te worden; Antigone weigert dat aanbod." },
+    tekst:"Antigone vraagt haar zuster Ismene om samen Polyneikes te begraven, tegen Kreons verbod in. Ismene weigert — niet uit lafheid, maar uit een nuchtere afweging: de laatste twee overlevenden van een al zwaar getroffen familie hoeven niet allebei te sterven voor dezelfde overtuiging. Wanneer Antigone later gepakt wordt, biedt Ismene zich alsnog aan om samen gestraft te worden; Antigone weigert dat aanbod." },
   codex_antigone: { cat:"mythologie", titel:"Antigone's Verzet",
-    tekst:"Na de oorlog verklaarde regent Creon dat Polyneikes — die zijn eigen stad had aangevallen — als verrader nooit begraven mocht worden, een verschrikkelijke straf volgens Griekse religieuze overtuiging. Antigone, Polyneikes' zuster, trotseerde het bevel en begroef hem alsnog met de juiste rituelen, overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning. Creon liet haar levend inmetselen in een graftombe; Antigone koos zelf het moment van haar dood, in plaats van te wachten tot de tombe dat voor haar deed." },
+    tekst:"Na de oorlog verklaarde regent Kreon dat Polyneikes — die zijn eigen stad had aangevallen — als verrader nooit begraven mocht worden, een verschrikkelijke straf volgens Griekse religieuze overtuiging. Antigone, Polyneikes' zuster, trotseerde het bevel en begroef hem alsnog met de juiste rituelen, overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning. Kreon liet haar levend inmetselen in een graftombe; Antigone koos zelf het moment van haar dood, in plaats van te wachten tot de tombe dat voor haar deed." },
   codex_pentheus_bacchus: { cat:"mythologie", titel:"Pentheus en de Bacchanten",
     tekst:"Pentheus, kleinzoon van Kadmos en koning van Thebe, weigerde de nieuwe god Bacchus te erkennen — ook al was die god, de zoon van Semele, zijn eigen neef. Toen hij vermomd de extatische riten van Bacchus' vrouwelijke volgelingen probeerde te bespieden, werd hij ontdekt door de Bacchanten zelf, onder wie — in hun door de god opgewekte waanzin — zijn eigen moeder Agave. Wat er die middag op de berg gebeurde, is het duisterste verhaal dat dit hoofdstuk te vertellen heeft: toen Agave weer bij zinnen kwam, besefte ze pas wat haar handen hadden gedaan." },
   // ---- Museum van Mnemosyne (vanaf het einde van Hoofdstuk 6) ----
@@ -2418,7 +2418,8 @@ const SP_CODEX_PERSONS = {
     intro:"Een kind dat als baby al twee slangen wurgde die Hera naar zijn wieg had gestuurd — een eerste teken van een kracht die de hele klassieke wereld zal kennen, en van een godin die hem al haatte voor hij kon spreken.",
     full:"Getroffen door een door Hera opgelegde waanzin doodde Herakles zijn eigen vrouw Megara en hun kinderen — een daad die hem, eenmaal weer bij zinnen, verwoestte. Op advies van het orakel van Delphi diende hij zijn neef Eurystheus als boetedoening en volbracht de eerste van wat uiteindelijk twaalf beproevingen zouden worden: de Nemeïsche Leeuw gewurgd met blote handen, de Hydra van Lerna verslagen met vuur. Zijn verhaal — en zijn straf — is nog lang niet voorbij." },
   megara: { nm:"Megara", epithet:"Prinses van Thebe, vrouw van Herakles",
-    intro:"De vrouw van Herakles en moeder van zijn kinderen, hem gegeven als beloning nadat hij Thebe had verdedigd tegen een belegerend leger — tot Hera's wraak alles wat ze samen hadden opbouwde in één ogenblik verwoestte." },
+    intro:"De vrouw van Herakles en moeder van zijn kinderen, hem gegeven als beloning nadat hij Thebe had verdedigd tegen een belegerend leger — tot Hera's wraak alles wat ze samen hadden opbouwde in één ogenblik verwoestte.",
+    full:"Megara is de dochter van Kreon, regent van Thebe — dezelfde Kreon die je later, generaties na haar dood, opnieuw zult tegenkomen als hij de troon overneemt van zijn eigen neven Eteokles en Polyneikes. Dat maakt haar, achteraf bezien, familie van Iokaste (Kreons zuster) en van Oedipus zelf, al kende niemand van hen elkaar ooit — hun verhalen liggen generaties uit elkaar, verbonden door niets dan bloed en dezelfde stad." },
   deianira: { nm:"Deianira", epithet:"Herakles' tweede vrouw",
     intro:"Herakles' tweede vrouw, jaren na Megara — bang hem ooit te verliezen aan een jongere vrouw, en in het bezit van een geschenk waarvan ze nooit heeft geweten hoe dodelijk het werkelijk was.",
     full:"Uit angst Herakles te verliezen stuurt Deianira hem een hemd doordrenkt met het vergiftigde bloed van de centaur Nessus, die haar bij zijn dood liet geloven dat het een liefdesmiddel was. Het gif verteert Herakles' huid; Deianira, zodra ze beseft wat ze heeft aangericht, neemt haar eigen leven. Herakles laat zich op de berg Oeta cremeren en wordt, terwijl het vuur zijn sterfelijke lichaam verteert, eindelijk onder de goden opgenomen." },
@@ -2543,12 +2544,13 @@ const SP_CODEX_PERSONS = {
     intro:"Oedipus' andere zoon, verbannen uit zijn eigen stad zodra zijn broer weigert de troon na een jaar weer af te staan — en vastbesloten die met geweld terug te eisen." },
   antigone: { nm:"Antigone", epithet:"Prinses van Thebe, dochter van Oedipus",
     intro:"Oedipus' dochter, die weigert te aanvaarden dat haar eigen broer onbegraven mag blijven liggen — zelfs als dat weigeren haar het leven kan kosten.",
-    full:"Tegen het uitdrukkelijke bevel van koning Creon in begroef Antigone haar broer Polyneikes met de juiste rituelen, uit overtuiging dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning. Ze werd ervoor levend ingemetseld — en koos zelf het moment van haar dood, in plaats van te wachten tot de tombe dat voor haar deed." },
+    full:"Tegen het uitdrukkelijke bevel van koning Kreon in begroef Antigone haar broer Polyneikes met de juiste rituelen, uit overtuiging dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning. Ze werd ervoor levend ingemetseld — en koos zelf het moment van haar dood, in plaats van te wachten tot de tombe dat voor haar deed." },
   ismene: { nm:"Ismene", epithet:"Prinses van Thebe, Antigones zuster",
     intro:"Oedipus' andere dochter, die weigert haar zuster te helpen Polyneikes te begraven — niet uit lafheid, maar uit een nuchtere afweging over wie van de laatste twee overlevenden van hun familie nog in leven moet blijven.",
     full:"Ismene weigert eerst, maar biedt zich later, wanneer Antigone gepakt wordt, alsnog aan om samen met haar gestraft te worden — Antigone wijst dat aanbod af. Van de twee zusters overleeft alleen Ismene, met een keuze die ze zelf nooit helemaal zeker weet of ze juist vindt." },
-  creon: { nm:"Creon", epithet:"Regent van Thebe",
-    intro:"Iokaste's broer, die na de wederzijdse ondergang van Eteokles en Polyneikes de troon van Thebe overneemt — en meteen een bevel uitvaardigt dat het hele koninkrijk zal verscheuren." },
+  creon: { nm:"Kreon", epithet:"Regent van Thebe",
+    intro:"Iokaste's broer, die na de wederzijdse ondergang van Eteokles en Polyneikes de troon van Thebe overneemt — en meteen een bevel uitvaardigt dat het hele koninkrijk zal verscheuren.",
+    full:"Kreon is ook de vader van Megara, die hij ooit aan Herakles tot vrouw gaf als dank voor de verdediging van Thebe — een huwelijk dat, zoals je eerder zag, eindigde in een tragedie die geen van beiden had zien aankomen. Jaren later, als regent, is het opnieuw Kreon die moet beslissen wat een familie een ander nog verschuldigd is: deze keer niet aan een held, maar aan een dode neef die hij weigert te begraven." },
   diomedes: { nm:"Diomedes", epithet:"Zoon van Tydeus, latere held van Troje",
     intro:"De zoon van Tydeus, die tien jaar na zijn vaders dood zelf oud genoeg is om mee te trekken tegen Thebe — en net zo onstuimig blijkt als de vader die hij amper heeft gekend.",
     full:"Diomedes' moed bleef Troje de hele oorlog achtervolgen: hij verwondde zelfs Aphrodite en Ares, en was, samen met Odysseus, degene die het Palladium uit de stad wist te stelen — de laatste bescherming die Troje nog had, weggehaald zonder dat iemand het merkte. Onstuimig als zijn vader, maar met een sluwheid die Tydeus zelf nooit bezat." },
@@ -3690,6 +3692,15 @@ const SP_PAYOFFS = [
   { id:"ch9_002_echo_herakles_harnas", type:"echo", trigger:{scene:"CH9_002"},
     condition:{flagsSet:["herakles_harnas"]}, priority:0,
     content:{text:`Over de schouders van die verre gestalte hangt, zie je nu pas goed, nog altijd een verweerd stuk harnas dat er niet meer bij past — hetzelfde harnas dat een held je ooit gaf toen hij het zelf niet meer nodig had. Je draagt het nog steeds, jaren later, zonder dat je het jezelf ooit hebt afgevraagd waarom.`} },
+  // ---- Hoofdstuk 6 — onvoorwaardelijk (geen condition-veld): de Herakles-
+  // lijn in Hoofdstuk 2 is, anders dan de drie optionele Hoofdstuk-1-lijnen,
+  // verplicht (alle vier H2-lijnen moeten voltooid zijn voor de Herinnerings-
+  // fragmenten compleet zijn), dus elke speler kent Megara's lot al tegen de
+  // tijd dat Kreon hier zijn bevel geeft. Leerlingfeedback (2026-08-08): de
+  // sterke familieband (Kreon is Megara's vader, én Iokastes broer/Oedipus'
+  // oom) kwam nergens terug.
+  { id:"ch6_015_echo_creon_megara", type:"echo", trigger:{scene:"CH6_015"}, priority:0,
+    content:{text:`Dit is dezelfde Kreon wiens dochter Megara je ooit aan Herakles zag trouwen — en zag sterven, door diezelfde helds eigen hand, in een waanzin die niet de zijne was. Misschien is dat waarom Kreon zich nu zo hard aan zijn eigen bevel vastklampt: voor een man die zijn kind al één keer verloor aan iets wat niemand kon voorzien, is een wet die tenminste voorspelbaar is, geen kleinigheid.`} },
   // ---- Hoofdstuk 4, lijn Theseus — vuurt alleen als de speler in
   // Hoofdstuk 3 zelf de Kretenzische Stier heeft gevangen voor Herakles
   // (flag ch3_kretenzische_stier, CH3_H12): dezelfde stier die hier, als
@@ -9702,9 +9713,9 @@ codex_dioscuren
 
 CHOICES:
 
-* Vaar verder, naar de kust van Mysië [CLEMENTIA] -> CH5_015
-* Vaar verder — een tiran minder op de kaart, verder geen traan aan verspild [SEVERITAS] -> CH5_015
-* Vaar verder, zonder er verder nog bij stil te staan [NEUTRAL] -> CH5_015
+* Voel oprecht medelijden met een man wiens hele leven om winnen draaide, en die nu voor het eerst weet hoe verliezen voelt [CLEMENTIA] -> CH5_015
+* Vaar verder — een tiran minder op de kaart, geen traan te verspillen aan wie alleen respecteerde wie hem kon verslaan [SEVERITAS] -> CH5_015
+* Vaar verder, niet goed wetend of dit nu gerechtigheid was of gewoon geweld dat toevallig de juiste kant koos [NEUTRAL] -> CH5_015
 
 END
 
@@ -10628,8 +10639,10 @@ Generaties na Niobe regeert Laius over Thebe. Een orakel voorspelt hem iets vers
 
 Het kind overleeft. Een herder vindt de baby, en uiteindelijk groeit hij op aan het hof van Corinthe, geadopteerd door een koning en koningin die hem nooit vertellen dat hij niet echt hun zoon is. Zijn naam: Oedipus — "gezwollen voet", naar de wond die hij als baby overhield.
 
+In het paleis van Thebe zelf groeit intussen, ver van dit onheil, een ander kind op: Kreon, jongere broer van koningin Iokaste, heeft zelf al een dochtertje van amper een paar jaar oud. Niemand in Thebe vermoedt nog waar haar pad ooit naartoe zal leiden — maar jij herkent haar naam meteen: Megara.
+
 PERSON:
-laius:intro, oedipus:intro
+laius:intro, oedipus:intro, creon:intro
 
 PUZZLE:
 puzzle_ch6_perfectum_passief
@@ -11067,10 +11080,10 @@ END
 === SCENE: CH6_015 ===
 
 TITLE:
-Creons Bevel
+Kreons Bevel
 
 TEXT:
-Met beide broers dood en Oedipus allang verbannen, neemt Iokaste's broer Creon de troon over. Zijn eerste daad als regent is een bevel dat heel Thebe zal verscheuren: Eteokles krijgt een eervolle begrafenis, als verdediger van de stad — maar Polyneikes, die zijn eigen stad aanviel, mag van Creon nooit begraven worden. Zijn lichaam moet buiten de muren blijven liggen, prooi voor de vogels.
+Met beide broers dood en Oedipus allang verbannen, neemt Iokaste's broer Kreon de troon over. Zijn eerste daad als regent is een bevel dat heel Thebe zal verscheuren: Eteokles krijgt een eervolle begrafenis, als verdediger van de stad — maar Polyneikes, die zijn eigen stad aanviel, mag van Kreon nooit begraven worden. Zijn lichaam moet buiten de muren blijven liggen, prooi voor de vogels.
 
 Voor de Grieken is dit een verschrikkelijke straf — zonder de juiste rituelen kan een ziel nooit rust vinden. Antigone, Polyneikes' zuster, is niet van plan zich daarbij neer te leggen.
 
@@ -11089,7 +11102,7 @@ TITLE:
 Ismene's Antwoord
 
 TEXT:
-Voor ze in het geheim handelt, zoekt Antigone eerst haar zuster Ismene op — de enige andere nog levende telg van hun beladen familie — en vraagt haar mee te helpen Polyneikes te begraven, tegen Creons uitdrukkelijke verbod in.
+Voor ze in het geheim handelt, zoekt Antigone eerst haar zuster Ismene op — de enige andere nog levende telg van hun beladen familie — en vraagt haar mee te helpen Polyneikes te begraven, tegen Kreons uitdrukkelijke verbod in.
 
 DIALOGUE:
 Ismene
@@ -11117,7 +11130,7 @@ TITLE:
 De Geheime Begrafenis
 
 TEXT:
-Antigone wacht niet op toestemming. Onder de dekking van de nacht sluipt ze naar het lichaam van haar broer, vast van plan hem de rituelen te geven die hij verdient — vóór Creons wachters haar kunnen tegenhouden.
+Antigone wacht niet op toestemming. Onder de dekking van de nacht sluipt ze naar het lichaam van haar broer, vast van plan hem de rituelen te geven die hij verdient — vóór Kreons wachters haar kunnen tegenhouden.
 
 CHOICES:
 
@@ -11140,7 +11153,7 @@ ch6_015_route=open
 
 CHOICES:
 
-* Kijk wat Creon ontdekt -> CH6_016
+* Kijk wat Kreon ontdekt -> CH6_016
 
 END
 
@@ -11157,7 +11170,7 @@ ch6_015_route=prudentia
 
 CHOICES:
 
-* Kijk wat Creon ontdekt -> CH6_016
+* Kijk wat Kreon ontdekt -> CH6_016
 
 END
 
@@ -11174,7 +11187,7 @@ ch6_015_route=agilitas
 
 CHOICES:
 
-* Kijk wat Creon ontdekt -> CH6_016
+* Kijk wat Kreon ontdekt -> CH6_016
 
 END
 
@@ -11184,7 +11197,7 @@ TITLE:
 Antigone's Verzet
 
 TEXT:
-Tegen Creons uitdrukkelijke bevel in begraaft Antigone haar broer in het geheim, met de juiste rituelen — overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning.
+Tegen Kreons uitdrukkelijke bevel in begraaft Antigone haar broer in het geheim, met de juiste rituelen — overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning.
 
 IMAGE:
 ch6_antigone_begrafenis.png
@@ -11194,7 +11207,7 @@ puzzle_ch6_perfectum
 
 CHOICES:
 
-* Kijk hoe Creon reageert zodra hij ontdekt wat ze heeft gedaan -> CH6_017
+* Kijk hoe Kreon reageert zodra hij ontdekt wat ze heeft gedaan -> CH6_017
 
 END
 
@@ -11204,7 +11217,7 @@ TITLE:
 Levend Ingemetseld
 
 TEXT:
-Creon laat Antigone, zodra hij ontdekt wat ze heeft gedaan, levend inmetselen in een graftombe — geen executie in naam, maar wel een ter dood veroordeling. Ismene, die weken eerder weigerde mee te helpen, biedt zich nu alsnog aan om samen met haar zuster gestraft te worden — ze kan het niet verdragen als enige in leven te blijven. Antigone wijst het aanbod resoluut af: ze liet haar zuster destijds al weten dat dit haar eigen daad was, en staat niet toe dat Ismene alsnog boet voor iets waarvan ze zelf koos geen deel uit te maken.
+Kreon laat Antigone, zodra hij ontdekt wat ze heeft gedaan, levend inmetselen in een graftombe — geen executie in naam, maar wel een ter dood veroordeling. Ismene, die weken eerder weigerde mee te helpen, biedt zich nu alsnog aan om samen met haar zuster gestraft te worden — ze kan het niet verdragen als enige in leven te blijven. Antigone wijst het aanbod resoluut af: ze liet haar zuster destijds al weten dat dit haar eigen daad was, en staat niet toe dat Ismene alsnog boet voor iets waarvan ze zelf koos geen deel uit te maken.
 
 Antigone wacht niet af tot de tombe haar langzaam laat sterven: ze kiest zelf het moment.
 
@@ -11217,7 +11230,7 @@ codex_antigone
 CHOICES:
 
 * Bewonder haar moed om voor haar overtuiging te sterven [CLEMENTIA] -> CH6_018
-* Erken dat Creon, hoe hard ook, zijn bevel niet zomaar kon laten passeren zonder gezichtsverlies [SEVERITAS] -> CH6_018
+* Erken dat Kreon, hoe hard ook, zijn bevel niet zomaar kon laten passeren zonder gezichtsverlies [SEVERITAS] -> CH6_018
 * Zie vooral twee mensen die geen van beiden meer terug konden zonder alles te verliezen [NEUTRAL] -> CH6_018
 
 END
