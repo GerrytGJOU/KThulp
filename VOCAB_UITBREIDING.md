@@ -46,12 +46,33 @@ Hoofdstuk 15's `VOCAB:`-sectie (hub-scène `CH15_000`), samen met 11 nieuwe
 verhaal-woorden (`grieks_oikos`/`doule`/`doulos`/`histos`,
 `latijn_domus`/`familia`/`servus`/`serva`/`uxor`/`manumissio`).
 
-**Hoofdstuk 16 t/m Finale: NOG NIET GEBOUWD** — onderstaande lijst is een
+**Hoofdstuk 16: GEBOUWD** (2026-08-08/09, Chronica.md §7.61) — de 20
+signaalwoorden in de H16-sectie hieronder zijn inmiddels toegevoegd aan
+`SP_VOCAB_ENTRIES` en Hoofdstuk 16's `VOCAB:`-sectie, net als bij H15.
+
+**Hoofdstuk 17 t/m Finale: NOG NIET GEBOUWD** — onderstaande lijst is een
 kandidatenreserve, klaar om in te zetten zodra deze hoofdstukken daadwerkelijk
 worden gebouwd. Plafonds gebruiken de `pallas`/`minerva`-velden die al in
-`SP_CAMPAIGN` staan; Pallas is vanaf H18 uitgeput (les 29, laatste), Minerva
-vanaf H20 (hoofdstuk 25, laatste) — daarna blijft het plafond simpelweg de
-volledige woordenlijst.
+`SP_CAMPAIGN` stonden ten TIJDE van het schrijven (2026-08-07): Pallas was
+toen verondersteld op te raken bij het toenmalige Hoofdstuk 18, Minerva bij
+het toenmalige Hoofdstuk 20.
+
+**BELANGRIJK — hoofdstuknummers hieronder zijn ACHTERHAALD sinds de
+KCV-audit van 2026-08-09 (Chronica.md §7.65-7.66):** er zijn 7 nieuwe
+hoofdstukken ingevoegd (18-21, 24-27) en de oude Hoofdstuk 19-22+Finale
+zijn hernummerd naar 22-23 en 28-30 (zie `PALLAS_MINERVA_OVERZICHT.md`).
+De woordenlijsten hieronder zijn zelf nog prima bruikbaar (het zijn gewoon
+hoogfrequente signaalwoorden, cumulatief oplopend), maar de sectiekoppen
+"H18"/"H19"/"H20"/"H21"/"H22"/"Finale" hieronder verwijzen naar de OUDE
+nummering. Vertaaltabel: oud-H18 → nieuw-H20 (hier ligt ook echt Pallas-les
+29, "laatste Pallas-les" — NIET het nieuwe Hoofdstuk 18, dat is nu "Wie
+Betaalt, Bepaalt" zonder nieuwe grammatica), oud-H19 → nieuw-H22, oud-H20 →
+nieuw-H23 (hier ligt ook echt Minerva-hoofdstuk 25, "laatste
+Minerva-hoofdstuk"), oud-H21 → nieuw-H28, oud-H22 → nieuw-H29, oud-Finale
+→ Finale (nr 30, ongewijzigd). Voor de nieuwe, tussengevoegde hoofdstukken
+18, 19, 21, 24, 25, 26, 27 bestaat nog GEEN signaalwoorden-kandidatenlijst
+— die moet apart samengesteld worden zodra zo'n hoofdstuk aan de beurt is,
+met dezelfde methode als hierboven (§Methode).
 
 ### H15 (Pallas ≤25, Minerva ≤21) — GEBOUWD
 GR: ἀνά *omhoog* · φημί *zeggen, beweren* · παρά *van; naast; tegen* · δίδωμι *geven* · ὅταν *wanneer ook maar* · δείκνυμι *tonen, aanwijzen* · τίθημι *plaatsen, stellen* · εἶμι *ik zal gaan* · ἑκάτερος *ieder (van twee)* · προστίθημι *toevoegen*

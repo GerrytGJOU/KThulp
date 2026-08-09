@@ -8,6 +8,10 @@ didactiek-checklist in `Chronica.md` §7.36) ook dit punt mee te nemen.
 Bron: een door Gerben samengestelde lijst van vrouwelijke personages uit mythe
 en geschiedenis (Deel 1-6 hieronder, ongewijzigd overgenomen), aangevuld met
 een audit van `certamen/singleplayer-data.js` H1-13 (2026-08-03, zie Deel 7).
+**Let op:** Deel 7's audit dekt alleen t/m H13; de mythologische en
+KCV-audits van 2026-08-09 (Chronica.md §7.64-7.67) zijn hier nog niet tegen
+geauditeerd — zie Deel 8 voor de belangrijkste correctie die daaruit direct
+al bekend is (Danaë/Andromeda/Medusa zijn inmiddels wél gebouwd).
 
 ---
 
@@ -487,16 +491,33 @@ cameo's), dus worden ze verteld als een vooruitblik door de verteller,
 net als het bestaande "jaren later zal Diomedes..."-patroon elders in de
 tekst — geen nieuwe, tegenstrijdige tijdlijn.
 
-**Nog altijd niet gebouwd: Danaë, Andromeda, Medusa** (de hele
-Perseus-cyclus). Anders dan de vier hierboven bestaat er nergens in H1-13
-al een Perseus-hoofdstuk of -cameo om ze aan op te hangen — "Perseus &
-Medusa" staat nog als S-tier mythe klaar in `SP_MYTH_CANON`
-(`sTier`-lijst), maar volledig ongebruikt. Deze drie namen forceren in een
-bestaand hoofdstuk zou tegen de eigen myth-canon-regel ingaan (zie
-[[chronica-check-mythcanon-voor-nieuw-hoofdstuk]]) — ze horen bij een
-toekomstig eigen Perseus-hoofdstuk (H14+), niet bij een quick fix.
+**Was: "Nog altijd niet gebouwd: Danaë, Andromeda, Medusa"** — deze
+constatering is **achterhaald**. De mythologische audit van 2026-08-09
+(Chronica.md §7.64/§7.67) heeft de hele Perseus-cyclus alsnog toegevoegd:
+Zeus en Danaë (codex-only, Hoofdstuk 3, `codex_zeus_en_danae`) en Perseus &
+Medusa/Andromeda/Acrisius als een eigen, volwaardig vignet in Hoofdstuk 13
+(`codex_perseus_medusa`, `codex_andromeda`, `codex_acrisius_profetie`,
+personages-veld `certamen/singleplayer-data.js:354`). Cassiopeia (Andromeda's
+moeder, de ijdelheid die tot haar ketening leidde) komt als achtergrond in
+datzelfde vignet mee. Bonus: ook Bellerophon & Chimaira (eerder los
+"verteld") kreeg alsnog een eigen vignet in Hoofdstuk 2 (§7.67).
 
-**Validatie**: `node --check` + `validate_chronica.js` → 0 fouten (712 →
-740 scènes in totaal deze sessie). Alle vijf nieuwe knooppunten
+## Deel 8 — vervolgcorrectie na de mythologische/KCV-audits (2026-08-09)
+
+Geen volledige her-audit van H14+ uitgevoerd (dat vereist een nieuwe,
+aparte sessie) — deze paragraaf noteert alleen de bevestigde correctie op
+Deel 7's belangrijkste "nog niet gebouwd"-constatering hierboven, plus de
+nieuwe vrouwelijke personages die de audits van vandaag hebben toegevoegd
+en die het vermelden waard zijn: **Aspasia** (Pericles' partner, Hoofdstuk
+18 "Wie Betaalt, Bepaalt"), **Cornelia** (moeder van de Gracchen, zelfde
+hoofdstuk), **Fulvia** (Marcus Antonius' vrouw, Hoofdstuk 22 "Opvolgers
+tegenover Opvolgers"), en **Theodora** (Byzantijnse keizerin naast
+Justinianus, Hoofdstuk 27 "Kruis en Kroon") — dit zijn vooralsnog alleen
+`SP_CAMPAIGN`-personagevermeldingen (metadata, nog geen scènes), dus nog
+niet uitgewerkt met een eigen stem. Een volledige Deel 8-audit tegen H14-29
++ Finale is nog te doen.
+
+**Validatie (Deel 7)**: `node --check` + `validate_chronica.js` → 0 fouten
+(712 → 740 scènes in totaal deze sessie). Alle vijf nieuwe knooppunten
 (`CH5_006B`, `CH6_012N`, `CH6_015A`, `CH3_H25B`, `CH4_T16B`) live
 doorgeklikt na het ophogen van de cache-busting-versie.
