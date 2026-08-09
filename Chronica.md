@@ -1,4 +1,17 @@
-# Chronica Classica — Masterplan (BETA — proloog + Hoofdstuk 1-9 speelbaar)
+# Chronica Classica — Masterplan (BETA — proloog t/m Hoofdstuk 16 speelbaar, H17 gebouwd)
+
+> **Actuele stand (bijgewerkt 2026-08-09) — lees dit eerst:** Proloog t/m
+> Hoofdstuk 16 zijn gebouwd én gekoppeld aan de speelbare route. Hoofdstuk
+> 17 is volledig gebouwd maar (op het moment van schrijven) nog niet
+> gekoppeld. Hoofdstuk 18 t/m 27 zijn nieuw sinds de KCV-audit van vandaag
+> (§7.65-7.66) en bestaan alleen als `SP_CAMPAIGN`-metadata, net als
+> Hoofdstuk 28-29 + Finale (was 26-27+Finale vóór die audit) — zie de
+> hoofdstuktabel in §0 hieronder voor de volledige, actuele lijst van 29
+> hoofdstukken + Finale in 6 boeken. De blockquote hieronder (H1-9) is het
+> **oorspronkelijke BETA-statusverslag** en is voor die negen hoofdstukken
+> nog altijd feitelijk correct, maar behandelt niet de latere hoofdstukken —
+> gebruik voor de volledige, actuele bouwstatus de hoofdstuktabel in §0 en
+> de §7.x-changelog onderaan dit document, niet deze blockquote.
 
 > **Status: Beta, live in het hoofdmenu.** De **proloog** ("De Boer van
 > Latium" / "Het Orakel van Chronos") is volledig speelbaar: intro →
@@ -72,8 +85,12 @@
 > Er zijn 3 saveslots per leerling, een
 > aanpasbare Chronica Classica Avatar (de boer, met verhaal-ontgrendeling), en
 > een eretitel-systeem dat doorwerkt in de Battle Mode/Boss Battle-lobby. De
-> rest van de campagne (Hoofdstuk 10 t/m 28 + Finale) staat als metadata-skelet
-> klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet geschreven.
+> volgende regel was op het moment van schrijven van deze blockquote correct,
+> maar is inmiddels ingehaald — zie de "Actuele stand"-notitie bovenaan dit
+> document voor de werkelijke bouwstatus van Hoofdstuk 10 en verder: ~~de
+> rest van de campagne (Hoofdstuk 10 t/m 28 + Finale) staat als
+> metadata-skelet klaar (`SP_CAMPAIGN`), maar de scènes zijn nog niet
+> geschreven~~.
 >
 > **Dit document is de enige bron van waarheid voor Chronica Classica** en
 > vervangt alle eerdere schetsen: `Single Player Mode.docx` (de oorspronkelijke
@@ -409,23 +426,25 @@ straks wel een cape maar geen enkele kleur ervoor beschikbaar.
 Doel: het moet voor een ervaren multiplayer-speler (Battle Mode/Boss Battle/
 Total War) ook echt lonen om Chronica te spelen, zonder dat de bonussen
 diezelfde speler in multiplayer **overpowered** maken. Daarom NIET elk
-hoofdstuk een eigen bonus (28 hoofdstukken + finale zou een enorme stapel
+hoofdstuk een eigen bonus (29 hoofdstukken + finale zou een enorme stapel
 kleine voordelen worden, oncontroleerbaar voor balans) maar **één bonus per
-Boek** (5 boeken) plus de al bestaande proloog-bonus — zes bonus-momenten
-over de HELE campagne, elk bescheiden en met een plafond, zelfde
-`bonus:{scope,type,val,desc}`-vorm als `bewaarder_herinnering`. Net als de
-bestaande titel geldt de scope altijd `["battle","boss","totalwar"]` — NOOIT
-Chronica zelf, want het punt is juist dat multiplayer-vaardigheid niet nodig
-is om deze te verdienen, maar wel profiteert.
+Boek** (6 boeken, bijgewerkt 2026-08-09 — zie de hoofdstuktabel in §0) plus
+de al bestaande proloog-bonus — zeven bonus-momenten over de HELE campagne,
+elk bescheiden en met een plafond, zelfde `bonus:{scope,type,val,desc}`-vorm
+als `bewaarder_herinnering`. Net als de bestaande titel geldt de scope
+altijd `["battle","boss","totalwar"]` — NOOIT Chronica zelf, want het punt
+is juist dat multiplayer-vaardigheid niet nodig is om deze te verdienen,
+maar wel profiteert.
 
 | Titel (id, te maken) | Ontgrendeld bij | Bonus (voorstel) | Waarom dit thematisch past |
 |---|---|---|---|
 | `bewaarder_herinnering` | Proloog voltooid | +1 BE bij een snel juist antwoord | Al **gebouwd** — het bestaande precedent |
 | `kroniekschrijver_boek_1` | Boek I compleet (Hoofdstuk 1 t/m 9, "De Ontwaakte Herinnering") | `streak_shield` — één fout antwoord per wedstrijd breekt je combo niet | Letterlijk Hoofdstuk 2's kernboodschap: "heldendom ontstaat niet wanneer het lot je gunstig gezind is, maar wanneer je weigert eraan ten onder te gaan" |
-| `kroniekschrijver_boek_2` | Boek II compleet (Hoofdstuk 10 t/m 15, "Helden en Koningen") | `be_head_start` — elke wedstrijd start met +5 BE | Een vliegende start na een lange thuisreis (Odysseus/Aeneas — dit hele boek gaat over thuiskomen) |
-| `kroniekschrijver_boek_3` | Boek III compleet (Hoofdstuk 16 t/m 18, "De Wereld van Mensen") | `coin_bonus_pct` (waarde 5) — +5% munten na afloop van een wedstrijd | Kritisch denken en wijsheid (Herodotos/Socrates/Aristoteles) vertaald naar beter beheer van middelen — een economische, geen gevechts-bonus, dus geen effect op win/verlies |
-| `kroniekschrijver_boek_4` | Boek IV compleet (Hoofdstuk 19 t/m 25, "Rome Verrijst") | `first_answer_free` — de eerste vraag van elke wedstrijd telt automatisch als goed beantwoord | Rome's fundament leggen — een gegarandeerd sterk begin, eenmalig per wedstrijd |
-| `meester_der_herinnering` | Boek V + Finale compleet (Hoofdstuk 26 t/m 28 + Finale — de VOLLEDIGE campagne) | `be_on_correct` (waarde 1) — +1 BE op ELK juist antwoord, niet alleen snelle | De sterkste bonus, bewust gereserveerd voor 100% van Chronica Classica — vereist het voltooien van alle 28 hoofdstukken + finale, dus vanzelf zeldzaam genoeg om niet overpowered te worden op schaal |
+| `kroniekschrijver_boek_2` | Boek II compleet (Hoofdstuk 10 t/m 14, "Helden en Koningen") | `be_head_start` — elke wedstrijd start met +5 BE | Een vliegende start na een lange thuisreis (Odysseus/Aeneas — dit hele boek gaat over thuiskomen) |
+| `kroniekschrijver_boek_3` | Boek III compleet (Hoofdstuk 15 t/m 17, "De Wereld van Mensen") | `coin_bonus_pct` (waarde 5) — +5% munten na afloop van een wedstrijd | Kritisch denken en wijsheid (Herodotos e.a.) vertaald naar beter beheer van middelen — een economische, geen gevechts-bonus, dus geen effect op win/verlies |
+| `kroniekschrijver_boek_4` | Boek IV compleet (Hoofdstuk 18 t/m 23, "Rome Verrijst") | `first_answer_free` — de eerste vraag van elke wedstrijd telt automatisch als goed beantwoord | Rome's fundament leggen — een gegarandeerd sterk begin, eenmalig per wedstrijd |
+| `kroniekschrijver_boek_5` | Boek V compleet (Hoofdstuk 24 t/m 27, "Erfenis van een Rijk" — nieuw sinds de KCV-audit, §7.65-66) | `coin_bonus_pct` (waarde 5) — +5% munten na afloop van een wedstrijd | Kunst, wetenschap en de nalatenschap van een rijk vertaald naar iets tastbaars dat je overhoudt |
+| `meester_der_herinnering` | Boek VI + Finale compleet (Hoofdstuk 28 t/m 29 + Finale — de VOLLEDIGE campagne) | `be_on_correct` (waarde 1) — +1 BE op ELK juist antwoord, niet alleen snelle | De sterkste bonus, bewust gereserveerd voor 100% van Chronica Classica — vereist het voltooien van alle 29 hoofdstukken + finale, dus vanzelf zeldzaam genoeg om niet overpowered te worden op schaal |
 
 **Balansprincipe:** hoe dichter bij het einde van de campagne, hoe sterker de
 bonus mag zijn — maar elke bonus blijft een KLEINE, eenmalige of
@@ -830,8 +849,9 @@ wrap-breuk.
   daarmee gebeurt. **Update (2026-07-25, na Hoofdstuk 6):** de speler heeft
   het Museum inmiddels wél zelf bezocht en bij naam leren kennen
   (`CH6_MUSEUM_00`/`_01`, zie §7.11) — maar wie het bouwde en waarom, blijft
-  bewust onbeantwoord tot Hoofdstuk 26 "De Bibliotheek van Mnemosyne"
-  (`SP_CAMPAIGN`), dat nog steeds de echte onthulling is. Dit tabblad is dus
+  bewust onbeantwoord tot Hoofdstuk 28 "De Bibliotheek van Mnemosyne"
+  (`SP_CAMPAIGN`, hernummerd 2026-08-09, was Hoofdstuk 26), dat nog steeds
+  de echte onthulling is. Dit tabblad is dus
   een bewuste, vroege setup voor een onthulling die nog ver weg ligt. Nu 11 voorwerpen, één per afgeronde lijn t/m Hoofdstuk 4 (proloog
   telt niet mee — dat is het inleidende kader, geen "bezochte mythe"): de
   proloog/Hoofdstuk-1-t/m-4-lijnen kregen elk een kort, nieuw stukje
@@ -1303,8 +1323,9 @@ grammatica:**
 - **Volgorde-puzzel** — hergebruikt de tile-swap-mechaniek voor woordvolgorde
   in een zin, bv. voor een latere ablativus-absolutus- of A.c.I.-constructie.
 
-**Optioneel — vault-content, GEEN voortgangsgate. Reserveer voor Hoofdstuk 26
-"De Bibliotheek van Mnemosyne", dat al gepland staat als thuisbasis voor
+**Optioneel — vault-content, GEEN voortgangsgate. Reserveer voor Hoofdstuk 28
+(hernummerd 2026-08-09, was Hoofdstuk 26) "De Bibliotheek van Mnemosyne",
+dat al gepland staat als thuisbasis voor
 nieuwe mechaniek (de spiegel-/geluidspuzzel bij Narcissus & Echo, zie de
 canon-uitbreiding in §7):**
 - **Woordzoeker** — geen kruisingsprobleem (i.t.t. een kruiswoordraadsel),
@@ -1592,8 +1613,9 @@ geen "moeilijkheidsladder" om te beklimmen. Overige nieuwe puzzelsoorten
 waar de auteur naar vroeg (woordzoeker/kruiswoord/sudoku) zijn bewust NIET
 hier toegevoegd: die testen eerder herkenning/logica dan grammatica, en horen
 dus beter als optionele, niet-blokkerende vault-content (net als de
-Atalanta/Meleager-Calydon-vignet-aanpak) — Hoofdstuk 26 "De Bibliotheek van
-Mnemosyne" (al gepland als thuisbasis voor de spiegel-/geluidspuzzel bij
+Atalanta/Meleager-Calydon-vignet-aanpak) — Hoofdstuk 28 (hernummerd
+2026-08-09, was Hoofdstuk 26) "De Bibliotheek van Mnemosyne" (al gepland
+als thuisbasis voor de spiegel-/geluidspuzzel bij
 Narcissus & Echo) is daar een logischer thuis voor.
 
 **Twee Combat-bridge-gevechten**: Amycus (`CH5_013`, 55 EP) en de Draak van
@@ -1746,9 +1768,9 @@ Gerben voor een terugkerende "hub"-locatie.
 - **Bewust NIET de volledige Ch26-onthulling** (zie §7.2.1 en §7.12):
   Gerbens beslissing was expliciet "eerste kennismaking, mysterie blijft" —
   de Boodschapper noemt de naam en laat de hal zien, maar zegt niet wie hem
-  bouwde of waarom. Hoofdstuk 26 "De Bibliotheek van Mnemosyne" blijft de
-  plek waar dat wordt opgelost; dit is puur een vervroegde, gedeeltelijke
-  kennismaking.
+  bouwde of waarom. Hoofdstuk 28 (hernummerd 2026-08-09, was Hoofdstuk 26)
+  "De Bibliotheek van Mnemosyne" blijft de plek waar dat wordt opgelost; dit
+  is puur een vervroegde, gedeeltelijke kennismaking.
 - **Geen datagedreven "rafels"-tracker.** Overwogen (hergebruik van de
   payoff-engine of van `cross_narratieve_figuren.md`), maar Gerben koos
   expliciet voor een ZUIVER NARRATIEVE oplossing: `CH6_MUSEUM_01` beschrijft
@@ -1813,16 +1835,17 @@ personages waren de enige nog niet overgenomen informatie:
   bewaren betekent dat niets meer betekenis heeft." Karakter: stil,
   melancholisch, mysterieus, overtuigend. Centrale vraag die ze de speler
   voorlegt: "Heeft de mens herinneringen nodig om te bestaan?" Hoort bij
-  Hoofdstuk 27 "De Rivier Lethe" (`SP_CAMPAIGN`), waar de speler "de ware
-  aard van Lethe" ontdekt — tot nu toe staat ze daar alleen als kale
-  hoofdstuktitel, nog niet als personage.
+  Hoofdstuk 29 (hernummerd 2026-08-09, was Hoofdstuk 27) "De Rivier Lethe"
+  (`SP_CAMPAIGN`), waar de speler "de ware aard van Lethe" ontdekt — tot nu
+  toe staat ze daar alleen als kale hoofdstuktitel, nog niet als personage.
 - **Mnemosyne** — de tegenhanger van Lethe: Titanide van het geheugen,
   moeder van de negen Muzen, bron van alle verhalen (niet alleen de grote
   gebeurtenissen, ook een lied, een naam, een inscriptie, een
   familietraditie). Karakter: warm, rustig, zorgzaam, wijs. Ziet de speler
   niet als iemand die alleen oude kennis verzamelt, maar als iemand die
-  haar opnieuw betekenis geeft. Hoort bij Hoofdstuk 26 "De Bibliotheek van
-  Mnemosyne" (`SP_CAMPAIGN`) — nu alleen als locatienaam aanwezig.
+  haar opnieuw betekenis geeft. Hoort bij Hoofdstuk 28 (hernummerd
+  2026-08-09, was Hoofdstuk 26) "De Bibliotheek van Mnemosyne"
+  (`SP_CAMPAIGN`) — nu alleen als locatienaam aanwezig.
 - **Kleio** — Muze van de Geschiedenis, geeft vorm aan wat Mnemosyne
   bewaart. Stelt de speler steeds: "Wat vertellen mensen door? Wie wordt
   herinnerd? Waarom?" Karakter: enthousiast, nieuwsgierig, dramatisch, soms
@@ -1844,12 +1867,14 @@ personages waren de enige nog niet overgenomen informatie:
   - **Herodotos** (Hoofdstuk 16, "De Vader van de Geschiedenis"):
     nieuwsgierig, vriendelijk, geïnteresseerd in vreemde culturen — leert de
     speler bronnen te vergelijken in plaats van alles klakkeloos te geloven.
-  - **Livius** (Hoofdstuk 19-20): serieus, trots, moreel gericht — toont hoe
-    Rome zichzelf wilde herinneren.
+  - **Livius** (rond Hoofdstuk 23, "Vrede en Vergankelijkheid" — hernummerd
+    2026-08-09, was Hoofdstuk 19-20): serieus, trots, moreel gericht — toont
+    hoe Rome zichzelf wilde herinneren.
   - **Vergilius** (rond de Aeneas-hoofdstukken): gevoelig, intelligent,
     filosofisch — verbindt Troje met Rome's toekomst.
 
-**Finale-personagelijst** (Hoofdstuk 28 "Chronica Classica"): de Master
+**Finale-personagelijst** (Finale "Chronica Classica", nr 30 — hernummerd
+2026-08-09, was Hoofdstuk 28): de Master
 Timeline noemde expliciet dat Kronos, Athena, Mnemosyne, Kleio, Homeros,
 Herodotos, Livius én Vergilius in de Finale samenkomen — de speler gebruikt
 dan alles wat hij, zij of die geleerd heeft om de herinnering aan de
@@ -2583,7 +2608,7 @@ correct ge-`esc()`'te `data-tr`; een live DOM-test bevestigde dat
 toont (`"none"` ervoor, `" (Jupiter wierp de bliksem)"` erna); en `CH2_L02C`
 bevat inderdaad geen enkele `.gloss`-span.
 
-### 7.19 B24: instelbaar taalspoor + Hoofdstuk 10-skelet, "Vluchten uit Troje" (**skelet gebouwd, op verzoek nog niet compleet**)
+### 7.19 B24: instelbaar taalspoor + Hoofdstuk 10-skelet, "Vluchten uit Troje" (**skelet gebouwd, op verzoek nog niet compleet — inmiddels VOLLEDIG afgebouwd, zie §7.50**)
 
 Op verzoek gecombineerd gebouwd (2026-07-29): B24 (instelbaar Latijn/Grieks/
 beide-spoor, audit fase 7 §6) hangt nu aan het natuurlijke splitsingsmoment
@@ -3675,6 +3700,12 @@ audio (niet haalbaar/relevant), en een docent-instelbaar niveauplafond
 
 ### 7.37 Hoofdstuk 11 "Tussen Liefde en Lot" — eerste bouwronde (**deel gebouwd, zie hieronder voor wat nog rest**)
 
+**Bijgewerkt:** deze sectiekop beschrijft de status op 2026-07-31; Hoofdstuk
+11 is sindsdien volledig afgebouwd (Tartaros/Orpheus-vignet, de
+onderwereld-reünie, Aeneas' katabasis) — zie de latere §7.4x-secties en de
+hoofdstuktabel in §0 voor de actuele, volledige status. De onderstaande
+tekst is het historische verslag van de EERSTE bouwronde.
+
 Op Gerbens verzoek (2026-07-31) gestart: de gedeelde hub + het eerste
 substantiële deel van beide lijnen, in dezelfde zigzag-architectuur als
 Hoofdstuk 10 (§7.19). **Geen nieuwe taalspoor-vraag** — de `FLAG:
@@ -3723,7 +3754,8 @@ zigzag-verweven zoals in Hoofdstuk 10.
    via Hermes — zie §5's canon-plaatsingsparagraaf voor de achtergrond en
    de koerswijziging t.o.v. het oude Hoofdstuk-27-plan).
 3. Persephone/Hades als stille heersers (cameo-niveau, `PERSON:...:intro`
-   alleen) — hun eigen verhaal blijft voor Hoofdstuk 27.
+   alleen) — hun eigen verhaal blijft voor Hoofdstuk 29 (hernummerd
+   2026-08-09, was Hoofdstuk 27).
 4. Aeneas' eigen katabasis (Sibylle, gouden tak, Anchises, de Romeinse
    stoet) en de aankomst in Italië die het hoofdstuk moet afsluiten.
 5. **Nog geen enkel punt van de §7.36-checklist toegepast** op dit
@@ -3919,7 +3951,7 @@ ongewijzigd), en het graaf-simulatiescript bevestigt dat alle vier nieuwe
 zonder doodlopend eind samenkomen in de bestaande keten (grieks 21 scènes,
 latijn 21, beide 35).
 
-### 7.38 Hoofdstuk 12 "Odysseus' Wraak" — skelet + Latijns herhalingsspoor (**skelet gebouwd, Ithaka-verhaallijn nog grotendeels open**)
+### 7.38 Hoofdstuk 12 "Odysseus' Wraak" — skelet + Latijns herhalingsspoor (**skelet gebouwd, Ithaka-verhaallijn nog grotendeels open — inmiddels VOLLEDIG gebouwd, zie §7.49**)
 
 Gestart 2026-07-31. Volgens `SP_CAMPAIGN` is dit hoofdstuk **Odysseus-only**
 (`minerva:"— (Odysseus-lijn, geen Minerva-koppeling)"`) — Aeneas' eigen
@@ -4230,17 +4262,17 @@ In afgesproken bouwvolgorde:
 4. **Quest-overzichtsscherm** — data wordt al bewaard (`spHookQuest`); de
    Codex heeft inmiddels wél een eigen scherm (§7.2, `SCREENS.spCodex`), een
    vergelijkbaar overzicht voor quests ontbreekt nog.
-5. **Hoofdstuk 10 t/m 28 + Finale-content** — scène voor scène in CNS.
-   `SP_CAMPAIGN` bepaalt per hoofdstuk de grammatica/personages, `SP_MYTH_CANON`
-   levert het zijverhaal-materiaal. Meestal twee tot vier onafhankelijke lijnen
-   per hoofdstuk (§7.1); Hoofdstuk 5 doorbrak dat bewust met één doorlopend
-   tochtenlogboek i.p.v. een hub (§7.10) — een precedent voor toekomstige
-   hoofdstukken die zich ook beter lenen voor één lijn dan voor parallelle
-   keuzes. "Meer kruisen" (lijnen die van elkaar weten) is een latere stap.
-   **Hoofdstuk 10 is als enige inmiddels gestart** (§7.19, 2026-07-29): de
-   gedeelde proloog, de taalspoor-keuze en de eerste vier scènes van zowel de
-   Odysseus- als de Aeneas-lijn staan er — de rest van Hoofdstuk 10, en heel
-   Hoofdstuk 11 t/m 28 + Finale, staan nog volledig open.
+5. **Hoofdstuk 18 t/m 27 + Hoofdstuk 28-29 + Finale-content** — scène voor
+   scène in CNS. `SP_CAMPAIGN` bepaalt per hoofdstuk de grammatica/personages,
+   `SP_MYTH_CANON` levert het zijverhaal-materiaal. Meestal twee tot vier
+   onafhankelijke lijnen per hoofdstuk (§7.1); Hoofdstuk 5 doorbrak dat
+   bewust met één doorlopend tochtenlogboek i.p.v. een hub (§7.10) — een
+   precedent voor toekomstige hoofdstukken die zich ook beter lenen voor één
+   lijn dan voor parallelle keuzes. **Bijgewerkt 2026-08-09: Hoofdstuk 10
+   t/m 17 zijn inmiddels allemaal gebouwd** (zie de hoofdstuktabel in §0 en
+   de §7.x-changelog voor de details per hoofdstuk) — alleen Hoofdstuk 18
+   t/m 27 (de nieuwe KCV-audit-hoofdstukken) en 28-29 + Finale (was 26-27,
+   hernummerd) staan nog volledig open, metadata-only.
 6. **Illustraties** — `IMAGE:` is **actief** (rendert het bestand uit
    `assets/chronica/images/`). De eerste illustratie hangt aan PRO_005 ("De
    Bronzen Schijf": de ontdekking van het Orakel, `pro_prologue.png`). Resterend
@@ -4271,7 +4303,8 @@ teruggedraaid:
 - **CNS = het eenvoudige tekstformaat, niet YAML** (zie §2).
 - **Offline-first: localStorage primair, Firebase spiegel** (zie §3). Inloggen
   is een aanbod (cross-device + Battle Mode-koppeling), geen eis.
-- **`SP_CAMPAIGN` (Proloog + 11 + Finale) is leidend**, niet de "13 boeken"-
+- **`SP_CAMPAIGN` (Proloog + 29 hoofdstukken + Finale, bijgewerkt 2026-08-09
+  — zie de hoofdstuktabel in §0) is leidend**, niet de "13 boeken"-
   Master Timeline uit de Game Bible. De campagnekaart is fijnmaziger en 1-op-1
   aan Pallas/Minerva gekoppeld.
 - **Combat = Battle Mode-mechaniek**, met als enige verschil de onderbreekbare
@@ -5965,7 +5998,7 @@ andere taal aan te raken (behalve "beide", die zoals bedoeld zigzagt) en
 zonder één console-fout. Bevestigde onderweg ook: alle vier scène-
 illustraties laden zonder 404 (`naturalWidth` > 0).
 
-### 7.61 Hoofdstuk 16 "Vorming en Vermaak" gebouwd — bewust nog niet gekoppeld aan de speelbare route (2026-08-08)
+### 7.61 Hoofdstuk 16 "Vorming en Vermaak" gebouwd — bewust nog niet gekoppeld aan de speelbare route (2026-08-08, GEKOPPELD 2026-08-09, zie hieronder)
 
 Twee sporen **sequentieel** (niet zigzag zoals H15) — de inhoud (mythe/
 opvoeding vs. circus/arena) spiegelt minder natuurlijk scène-voor-scène.

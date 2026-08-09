@@ -21,8 +21,12 @@ spelregels, features of het datamodel raakt:
 - `TOTAL_WAR.md` — doorlopende veldtocht: elke klas is een beschaving en
   verovert samen de kaart van Europa.
 - `Chronica.md` — Single Player Mode "Chronica Classica": narratieve,
-  offline-first RPG (proloog speelbaar). Gebruikt Battle Mode's klasse-, avatar-
-  en profielsysteem; klassekeuze en eretitels werken door in de andere modi.
+  offline-first RPG (proloog t/m Hoofdstuk 16 speelbaar, Hoofdstuk 17
+  gebouwd maar nog niet gekoppeld; campagne-metadata loopt door tot
+  Hoofdstuk 29 + Finale — zie de hoofdstuktabel in Chronica.md §0 voor de
+  actuele stand, dit getal wijzigt regelmatig). Gebruikt Battle Mode's
+  klasse-, avatar- en profielsysteem; klassekeuze en eretitels werken door
+  in de andere modi.
 
 ## Conventies
 - Naamval-volgorde altijd: nominativus, genitivus, dativus, accusativus,
