@@ -29,7 +29,7 @@ const D = sandbox.out;
 const CNSParser = {
   KNOWN_SECTIONS: ["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
     "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-    "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION","CHECK"],
+    "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION","CHECK","RACE"],
   parse(rawText) {
     const scenes = new Map();
     if (!rawText || !rawText.trim()) return scenes;
@@ -154,6 +154,19 @@ for (const sc of scenesById.values()) {
     .map(tak => check[tak] && check[tak].target).filter(t => t && scenesById.has(t));
   adj.set(sc.id, (adj.get(sc.id) || []).concat(targets));
 }
+// RACE-scènes (Hoofdstuk 16+, RACE-bridge — zie Chronica.md 2026-08-09):
+// zelfde bewuste geen-CHOICES-patroon als CHECK, hun vier uitkomsten
+// (SP_RACES[id].targets, kortere sleutelnamen dan CHECK: vol/deels/
+// gefaald/kritiek i.p.v. volledig/deels/gefaald/kritiek) tellen ook mee
+// als graafkant.
+for (const sc of scenesById.values()) {
+  if (!sc.meta.RACE) continue;
+  const race = D.SP_RACES && D.SP_RACES[sc.meta.RACE.trim()];
+  if (!race || !race.targets) continue;
+  const targets = ['vol', 'deels', 'gefaald', 'kritiek']
+    .map(tak => race.targets[tak]).filter(t => t && scenesById.has(t));
+  adj.set(sc.id, (adj.get(sc.id) || []).concat(targets));
+}
 
 // Onbereikbare scènes: vanaf elk hoofdstuk-startpunt
 const chapterStarts = {};
@@ -185,7 +198,7 @@ for (const sc of scenesById.values()) {
 // CHECK-scènes horen bewust geen CHOICES te hebben (de worp bepaalt de vervolgscène), dus die
 // worden hier niet als "terminaal" gerapporteerd — zie de aparte CHECK-check verderop.
 for (const sc of scenesById.values()) {
-  if (sc.choices.length === 0 && !sc.meta.CHECK) warnings.push(`${sc.id}: geen enkele keuze (terminale scène — controleer of dat bedoeld is)`);
+  if (sc.choices.length === 0 && !sc.meta.CHECK && !sc.meta.RACE) warnings.push(`${sc.id}: geen enkele keuze (terminale scène — controleer of dat bedoeld is)`);
 }
 
 // Flags: schrijvers/lezers
@@ -274,6 +287,20 @@ for (const sc of scenesById.values()) {
       }
     }
     if (sc.choices && sc.choices.length) warnings.push(`${sc.id}: heeft zowel CHECK als CHOICES — CHOICES wordt genegeerd (de worp bepaalt de vervolgscène)`);
+  }
+  if (m.RACE) {
+    const raceId = m.RACE.trim();
+    const race = D.SP_RACES && D.SP_RACES[raceId];
+    if (!race) errors.push(`${sc.id}: RACE "${raceId}" niet gedefinieerd in SP_RACES`);
+    else if (!race.targets) errors.push(`${sc.id}: RACE "${raceId}" mist een "targets"-object`);
+    else {
+      for (const tak of ['vol', 'deels', 'gefaald', 'kritiek']) {
+        const target = race.targets[tak];
+        if (!target) errors.push(`${sc.id}: RACE "${raceId}" mist een "${tak}"-tak met een target`);
+        else if (!scenesById.has(target)) errors.push(`${sc.id}: RACE "${raceId}" tak "${tak}" verwijst naar niet-bestaande scène "${target}"`);
+      }
+    }
+    if (sc.choices && sc.choices.length) warnings.push(`${sc.id}: heeft zowel RACE als CHOICES — CHOICES wordt genegeerd (de minigame bepaalt de vervolgscène)`);
   }
 }
 

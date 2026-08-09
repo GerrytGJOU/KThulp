@@ -6028,6 +6028,57 @@ browser-playtest, nu écht via de gekoppelde `SP_SCENES` (niet meer
 tijdelijk gemerged): alle drie taalsporen lopen foutloos van
 `CH15_MUSEUM_00` tot `CH16_WORDT_VERVOLGD`, 0 console-fouten.
 
+**Vervolg (2026-08-09): Atalanta's wedloop omgebouwd van CHECK naar een
+echte minigame ("RACE-bridge"), op Gerbens verzoek.** Rechtstreekse reskin
+van het bestaande Combat-bridge-systeem (`SP_COMBAT`) — zelfde vraag-uit-
+`SP_STATE.vocab`-motor met dezelfde taalspoor-filter, maar met twee
+voortgangsbalken (Atalanta/Hippomenes) i.p.v. een HP-balk, en een periodiek
+"gooi een gouden appel"-keuzemoment i.p.v. een aanval-knop. Nieuw:
+`SP_RACE`/`SP_RACES` (data in `singleplayer-data.js`, mechanisme in
+`singleplayer.js`), gedispatcht via een nieuwe `RACE:`-CNS-sectie
+(`scene.meta.RACE`) op dezelfde manier als `PUZZLE:`/`COMBAT:`/`CHECK:`.
+Generiek opgezet (`SP_RACES`, niet hardcoded op Atalanta) voor hergebruik
+bij een volgende wedloop. `CH16_GRE_004` ging van `CHECK:
+ch16_gre_atalanta_race` naar `RACE:\natalanta` — de vier bestaande
+CH16_GRE_004-uitkomstscènes (VOL/DEELS/GEFAALD/KRITIEK) bleven ongewijzigd
+als doel, alleen het mechanisme om er te komen veranderde. De nu overbodige
+`SP_CHECKS`-entry is verwijderd.
+
+**Twee bugs onderweg gevonden en gefixt**:
+- `RACE` ontbrak in `CNSParser.KNOWN_SECTIONS` — de parser negeerde de tag
+  stilzwijgend (geen foutmelding, gewoon geen race). Toegevoegd.
+- **Balansfout**: met de eerste cijfers (stepCorrect:2 vs opponentStep:3)
+  liep de speler bij élke correct beantwoorde vraag toch permanent achter
+  op de tegenstander — een enkele appel kon dat gat nooit dichten, waardoor
+  de "kritiek"-uitkomst (winnen met maar 1 appel) wiskundig onbereikbaar
+  bleek (bevestigd met een geautomatiseerde speeltest van alle vier
+  strategieën). Gefixt door stepCorrect=opponentStep=3 te maken (op
+  vocab-snelheid alléén blijft het dus altijd exact gelijkspel) plus de
+  uitkomst-check zo aan te passen dat gelijkspel telt als verlies — nu is
+  het uitsluitend de appels die het verschil kunnen maken, nooit
+  vocab-snelheid alleen, precies de mythe zelf. Opnieuw geautomatiseerd
+  getest: alle vier uitkomsten (0 appels/alles fout → gefaald, 1 appel →
+  kritiek, 2 → vol, 3 → deels) nu bevestigd bereikbaar, 0 console-fouten.
+  Volledige hoofdstuk-doorloop (alle drie taalsporen, `CH15_MUSEUM_00` tot
+  `CH16_WORDT_VERVOLGD`) opnieuw bevestigd met de race erin verwerkt.
+
+Sprite (`assets/chronica/combat/atalanta.png`) nog te maken — valt tot
+die tijd stil terug op het 🏃‍♀️-icoon (zelfde `onerror`-patroon als de
+Combat-vijanden).
+
+**Derde bug, gevonden bij het valideren**: `validate_chronica.js` had
+CHECK-vertakking wel in zijn eigen bereikbaarheids-graaf zitten, maar
+RACE nog niet — meldde daardoor 6 valse "onbereikbaar"-fouten voor alles
+ná `CH16_GRE_004`. `certamen/tools/validate_chronica.js` gebruikt een
+eigen, losstaande kopie van `CNSParser` (niet geïmporteerd uit
+`singleplayer.js`) — dezelfde wijziging moest dus twee keer: `RACE`
+toegevoegd aan `KNOWN_SECTIONS`, een RACE-vertakkingsblok naast het
+bestaande CHECK-blok in de bereikbaarheids-graaf, de terminale-scène-check
+uitgezonderd voor RACE, en een RACE-target-validatieblok naast het
+bestaande CHECK-blok (let op: `SP_RACES[id].targets` gebruikt kortere
+sleutelnamen dan `SP_CHECKS` — `vol` i.p.v. `volledig`). Opnieuw
+gevalideerd: 0 fouten.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
