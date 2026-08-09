@@ -5931,6 +5931,103 @@ andere taal aan te raken (behalve "beide", die zoals bedoeld zigzagt) en
 zonder één console-fout. Bevestigde onderweg ook: alle vier scène-
 illustraties laden zonder 404 (`naturalWidth` > 0).
 
+### 7.61 Hoofdstuk 16 "Vorming en Vermaak" gebouwd — bewust nog niet gekoppeld aan de speelbare route (2026-08-08)
+
+Twee sporen **sequentieel** (niet zigzag zoals H15) — de inhoud (mythe/
+opvoeding vs. circus/arena) spiegelt minder natuurlijk scène-voor-scène.
+Latijn eerst voor latijn/beide (zelfde volgorde als H14), Grieks sluit af.
+Grieks introduceert bewust geen nieuwe grammatica (Pallas les 26-27 is
+cultuurstof); Latijn (Minerva 20): velle/nolle/fieri en de betrekkelijke
+bijzin met ingesloten antecedent zijn nieuw, comparativus/superlativus is
+bewuste herhaling (al nieuw geweest in Hoofdstuk 9 — expliciet zo
+gelabeld, in plaats van stilzwijgend herhaald).
+
+**Curriculum-check vooraf**: `PALLAS_MINERVA_OVERZICHT.md`'s "Deel 2"-tabel
+(rijen 95-117, bijgewerkt na de 2026-08-02-herstructurering, in
+tegenstelling tot delen van "Deel 1" die nog stale zijn) bevestigde dat
+Pallas 26-27 + Minerva 20 nog steeds correct aan Hoofdstuk 16 gekoppeld
+staan.
+
+**Personages/verhaallijnen (Gerbens akkoord 2026-08-08)**:
+- **Pelops**: wagenrace tegen Oinomaos om Hippodamia, oorsprong van de
+  Spelen — met de omgekochte wagenmenner Myrtilus' vloek expliciet
+  doorgetrokken naar Pelops' zonen Atreus/Thyestes en diens zoon
+  Agamemnon (de Atreïden), en een generatie-echo terug naar Tantalus
+  (al gestraft in Hoofdstuk 11).
+- **Atalanta**: haar hardloopwedstrijd-voorwaarde, verslagen door
+  Hippomenes met Aphrodites gouden appels — als CHECK geïmplementeerd
+  (`ch16_gre_atalanta_race`) in plaats van een aparte minigame-engine,
+  binnen de bestaande spelmechanismen.
+- **Ovidius**: onbenoemde schrijverscameo bij de Circus Maximus (Ars
+  Amatoria) — draagt ook de nieuwe grammatica (leesval + puzzel over de
+  ingesloten antecedent), vóór zijn eigen benoemde optreden in
+  Hoofdstuk 20.
+- **Gaius Diocles**: rijkste atleet ooit, draagt de velle/nolle/fieri-puzzel.
+- **Spartacus**: BENOEMDE cameo als gladiator (`CH16_LAT_003`, met een
+  RELATION-dragende erkenningskeuze en FLAG's `ch16_lat_spartacus_erkend`/
+  `ch16_lat_spartacus_gezien` voor een latere Hoofdstuk 19-echo) — zijn
+  eigen opstandsverhaal blijft voorbehouden aan Hoofdstuk 19, expliciet
+  aangekondigd in de CH16_EINDE-tekst ("Spartacus is nog niet klaar met
+  dit verhaal").
+- **Flamma**: weigert viermaal zijn aangeboden vrijheid — CLEMENTIA/
+  SEVERITAS/NEUTRAL-REACTIE, bewuste tegenhanger van Hoofdstuk 15's
+  vrijheids-lijn.
+- **Vrouwelijke gladiatoren**: Amazon & Achillia (het Halicarnassus-
+  reliëf, met ere ontslagen) en Mevia (Juvenal) als echte historische
+  namen, plus de context van Nero's senatoriale deelneemsters en
+  Severus' verbod — opgezocht via websearch, bronnen in het gesprek van
+  2026-08-08.
+- **Kallipateira/Pherenike** (niet expliciet gevraagd, wel toegevoegd):
+  vermomt zich als trainer om haar zoon bij de Spelen te zien, ontmaskerd
+  maar gepardonneerd — CLEMENTIA/SEVERITAS/NEUTRAL-REACTIE, in lijn met de
+  doorlopende aandacht voor vrouwenrollen.
+
+**Vocab**: 11 nieuwe verhaal-woorden (`grieks_agon`/`stadion`/`nike`/
+`gymnasion`/`ekecheiria`, `latijn_circus`/`auriga`/`gladiator`/`harena`/
+`missio`/`palma`) + de 20 gereserveerde signaalwoorden uit
+`VOCAB_UITBREIDING.md`'s H16-lijst.
+
+**Geen enkele scène combineert DIALOGUE met PUZZLE** (de bug uit het H15-
+gesprek, zie [[chronica-taalspoor-zigzag-mechanisme]]) — dit keer vanaf
+het begin vermeden door ontwerp, niet achteraf gefixt. STATPOINTS/SOUVENIR
+staan eenmalig op de gedeelde `CH16_EINDE` (het H13/H14-euvel bewust
+vermeden, zelfde patroon als H15/H11).
+
+**Gevalideerd**: `node --check` schoon; een losse graafcontrole (0
+missende `->`-targets, 0 DIALOGUE+PUZZLE-conflicten, alle PUZZLE/CODEX/
+SOUVENIR/CHECK/VOCAB-referenties resolven) over 40 scènes. **Volledige
+geautomatiseerde browser-playtest**, alle drie taalsporen, zelfde
+techniek als bij H15 (tijdelijk `SP_CH16_CNS` in `SP_SCENES` gemerged,
+alléén voor de testsessie zelf — het bestand blijft ontkoppeld): grieks-
+en latijn-only blijven strikt in hun eigen spoor, beide gaat Latijn dan
+Grieks, alle drie bereiken `CH16_WORDT_VERVOLGD` zonder één console-fout.
+
+**Vervolg (2026-08-09): negen scène-illustraties + souvenirkaart aangeleverd,
+en Hoofdstuk 16 gekoppeld aan de speelbare route.** `IMAGE:`-tags toegevoegd
+aan vijf extra scènes bovenop de oorspronkelijke drie (`CH16_GRE_002`
+Pelops, `CH16_GRE_004_INTRO` Atalanta/appels, `CH16_LAT_003` Spartacus,
+`CH16_LAT_004` Flamma, `CH16_GRE_004J` Kallipateira) — Gerbens observatie
+dat een "uitgebreid hoofdstuk" ook meer dan vier illustraties verdient.
+Eén promptcorrectie onderweg: de eerste versie van de Plato-gymnasion-
+prompt liet de worstelende jongens naakt (klassiek-historisch correct,
+maar triggert contentfilters) — vervangen door een subligaculum-achtige
+lendendoek, zelfde oplossing als al bij de vrouwelijke gladiatoren was
+toegepast.
+
+**Koppeling**: zelfde procedure als H15 (§7.59-patroon). `CH15_MUSEUM_00`'s
+keuze routeert nu naar `CH16_000` (was `CH15_WORDT_VERVOLGD`, volledig
+verwijderd). `CH16_WORDT_VERVOLGD` is het nieuwe tijdelijke speeltest-
+eindpunt. `SP_SCENES` (singleplayer.js) en `validate_chronica.js`'s
+`BLOCKS` bevatten nu Hoofdstuk 16. `SP_CAMPAIGN.ch16.gameplay` bijgewerkt.
+Cache-busting in `index.html` opgehoogd.
+
+**Gevalideerd**: `node --check` op alle drie bestanden schoon;
+`validate_chronica.js` → 0 fouten, 39 waarschuwingen (2 nieuwe dode
+toekomst-payoff-flags voor de Spartacus-H19-echo, verwacht). Volledige
+browser-playtest, nu écht via de gekoppelde `SP_SCENES` (niet meer
+tijdelijk gemerged): alle drie taalsporen lopen foutloos van
+`CH15_MUSEUM_00` tot `CH16_WORDT_VERVOLGD`, 0 console-fouten.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
