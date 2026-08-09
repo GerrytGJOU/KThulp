@@ -359,12 +359,12 @@ rijen die al ✅ zijn.
 | Hoofdstuk 8 (`CH8_EPI_004`) | `armor:zwaar` | Hephaistos smeedt nieuw, goddelijk harnas voor Achilles nadat Hector Patroklos' (Achilles') oude wapenrusting buitmaakte — de speler krijgt een eigen exemplaar | ✅ gebouwd |
 | Hoofdstuk 8 (`CH8_EPI_004`) | `schild:ovaal` | Het beroemde Schild van Achilles, in hetzelfde smeedmoment door Hephaistos gemaakt | ✅ gebouwd |
 | **Hoofdstuk 9** (Ilion in Vlammen) | `helm:open` | Een open vechthelm, opgeraapt tijdens de chaos van Troje's val |  |
-| **Hoofdstuk 14** (De Stad van Athena) | `cape:kort` | Athena, als mentor, schenkt de speler een korte chlamys als teken van haar bescherming |  |
-| **Hoofdstuk 15** (Oorlog en Overwinning — Thermopylae) | `armor:hopliet`, `helm:hopliet`, `schild:vierkant` | Volledige hoplietuitrusting, gedragen aan de zijde van Leonidas' driehonderd |  |
-| **Hoofdstuk 17** (De Stem van de Filosofen) | `wapen:staf` | Een filosofenstaf, meegekregen uit Socrates/Aristoteles' school |  |
-| **Hoofdstuk 18** (Alexander) | `helm:kroon` | Een eervolle kopie van Alexanders eigen diadeem |  |
-| **Hoofdstuk 20** (Verdedigers van de Republiek) | `schild:tower` | Een groot verdedigingsschild, vernoemd naar Horatius Cocles die in zijn eentje de brug verdedigde |  |
-| **Hoofdstuk 24** (Augustus en de Pax Romana) | `cape:lang` | Augustus' keizerlijke mantel (paludamentum), bij de vestiging van de Pax Romana |  |
+| **Hoofdstuk 13** (Twee Steden, Twee Koningen) | `cape:kort` | Athena, als mentor, schenkt de speler een korte chlamys als teken van haar bescherming |  |
+| **Hoofdstuk 17** (Oorlog en Overwinning — Thermopylae) | `armor:hopliet`, `helm:hopliet`, `schild:vierkant` | Volledige hoplietuitrusting, gedragen aan de zijde van Leonidas' driehonderd |  |
+| **Hoofdstuk 21** (Wijsheid en Waarheid — GECORRIGEERD 2026-08-09, was abusievelijk nog "Hoofdstuk 17 De Stem van de Filosofen", een hoofdstuk dat sinds meerdere hernummeringsrondes niet meer bestaat) | `wapen:staf` | Een filosofenstaf, meegekregen uit Socrates/Aristoteles' school |  |
+| **Hoofdstuk 20** (Grenzen Verlegd — Alexander, hernummerd 2026-08-09) | `helm:kroon` | Een eervolle kopie van Alexanders eigen diadeem |  |
+| **Hoofdstuk 14** (Verzet tegen Tirannen) | `schild:tower` | Een groot verdedigingsschild, vernoemd naar Horatius Cocles die in zijn eentje de brug verdedigde |  |
+| **Hoofdstuk 23** (Vrede en Vergankelijkheid — Augustus en de Pax Romana) | `cape:lang` | Augustus' keizerlijke mantel (paludamentum), bij de vestiging van de Pax Romana |  |
 | **Finale** | `armor:ceremonieel` | Ceremonieel harnas, geschonken door Kronos/Athena/Mnemosyne bij het voltooien van heel Chronica Classica |  |
 
 **Kleine bijkomende fix (los van de routekaart hierboven):** `capekleur` heeft
@@ -601,12 +601,19 @@ staat, niet dit verslag.
 | 15 | III | Hoe Men Leefde | Grieks: les 24-25 (De Vrouw, slavernij); *Minerva 19*: vragend/onbepaald vnw, perfectum met praesensbetekenis |
 | 16 | III | Vorming en Vermaak | Grieks: les 26-27 (opvoeding, sport/Spelen — Atalanta verhuisd hierheen); *Minerva 20*: velle/nolle/fieri, betrekkelijke bijzin, comparativus/superlativus |
 | 17 | III | Oorlog en Overwinning | Grieks: les 28 (Perzische Oorlogen, Herodotos als vertellende stem); *Minerva 17-18*: Hannibal (grammatica grotendeels al bij H11 gedekt, zie §7.41-correctie) |
-| 18 | III | Grenzen Verlegd | Grieks: les 29 (Alexander — **laatste nieuwe Griekse stof**); *Minerva 22-23*: gerundium, genitivus subj./obj., gerundivum (Caesar) |
-| 19 | IV | De Republiek Wankelt | Grieks: *Herhaling* — Diadochenoorlogen (Alexanders generaals verscheuren zijn rijk, direct vervolg op H18); Latijn: *Herhaling* (Gracchen/Marius-Sulla) — bewust grammatica-arm |
-| 20 | IV | Vrede en Vergankelijkheid | Grieks: *Herhaling* — Cleopatra en de Slag bij Actium (einde Hellenistische wereld); *Minerva 24-25*: N.C.I., semi-deponentia (Augustus/Nero), vertaalvaardigheid (literatuur) |
-| 21 | V | De Bibliotheek van Mnemosyne | Herhaling van alle grammatica (Grieks én Latijn samen) |
-| 22 | V | De Rivier Lethe | Integratie Grieks & Latijn |
-| 23 (Finale) | V | Chronica Classica | Eindtoets van alle grammatica en taalvaardigheid |
+| 18 | IV | Wie Betaalt, Bepaalt | *Herhaling* — Grieks: Pericles/Delisch-Attische Zeebond/Parthenon-bouw; Latijn: Gracchen → Marius (legerhervorming, Romeins leger als systeem) → Sulla |
+| 19 | IV | Bondgenoten, Verscheurd | *Herhaling* — Grieks: Peloponnesische Oorlog + Spartaanse/Thebaanse hegemonie; Latijn: Caesars Burgeroorlog (Rubicon–Pharsalus–Iden van maart — het Eerste Triumviraat valt uiteen) |
+| 20 | IV | Grenzen Verlegd | Grieks: les 29 (Alexander — **laatste nieuwe Griekse stof**); *Minerva 22-23*: gerundium, genitivus subj./obj., gerundivum (Caesar in Gallië/Britannia) |
+| 21 | IV | Wijsheid en Waarheid | *Herhaling* — Grieks: Socrates/Plato/Aristoteles; Latijn: Cicero (redevoeringen, vertaler van Griekse filosofie) + Seneca-introductie (payoff bij Nero, H23) |
+| 22 | IV | Opvolgers tegenover Opvolgers | Grieks: *Herhaling* — Diadochenoorlogen (Alexanders generaals verscheuren zijn rijk, direct vervolg op H20); Latijn: *Herhaling* — Tweede Triumviraat/Antonius' opkomst |
+| 23 | IV | Vrede en Vergankelijkheid | Grieks: *Herhaling* — Cleopatra en de Slag bij Actium (einde Hellenistische wereld); *Minerva 24-25*: N.C.I., semi-deponentia (Augustus/Nero), vertaalvaardigheid (literatuur) + Romeinse religie/Pontifex Maximus + Seneca-payoff (KCV-audit 2026-08-09) |
+| 24 | V | Steen en Water | *Herhaling* — Grieks: kunst/architectuur (zuilorden, beeldhouwkunst); Latijn: architectuur/techniek (boog, aquaduct, wegenbouw) |
+| 25 | V | Onder de Vulkaan | *Herhaling* — Grieks: presocraten + Hellenistische wetenschap (Archimedes/Euclides/Eratosthenes); Latijn: Pompeii (aardbeving 62, uitbarsting 79, Plinius) |
+| 26 | V | Een Rijk in Crisis | *Herhaling* — Grieks: Grieks erfgoed onder Rome (Hadrianus' filhellenisme); Latijn: volledig keizersoverzicht Flavii t/m Crisis 3e Eeuw + Bataafse Opstand (Romeins Nederland) |
+| 27 | V | Kruis en Kroon | ZIGZAG-hoofdstuk — Grieks: Byzantium wordt Constantinopel + Justinianus/Theodora; Latijn: Constantijn/christendom, deling Rijk, val West-Rome (476) |
+| 28 | VI | De Bibliotheek van Mnemosyne | Herhaling van alle grammatica (Grieks én Latijn samen) |
+| 29 | VI | De Rivier Lethe | Integratie Grieks & Latijn |
+| 30 (Finale) | VI | Chronica Classica | Eindtoets van alle grammatica en taalvaardigheid |
 
 **2026-08-02, tweede renummering (§7.45)**: de oude hoofdstuk 13-24 (12
 enkelvoudig-spoor-hoofdstukken) zijn vervangen door 8 nieuwe, elk met een
@@ -614,6 +621,33 @@ Griekse én Latijnse lijn (hoofdstuk 13-20), gevolgd door de ontknoping
 (21-22-Finale, was 25-27). Alleen `SP_CAMPAIGN`-metadata vastgelegd, geen
 van deze hoofdstukken is gebouwd. Zie `PALLAS_MINERVA_OVERZICHT.md` voor
 de volledige onderbouwing per hoofdstuk.
+
+**2026-08-09, derde renummering (KCV-audit, zie §7.65)**: een KCV-audit
+(geschiedenis/cultuur/instituties, los van de eerdere mythologische audit)
+legde structurele gaten bloot — Gouden Eeuw Athene, Peloponnesische Oorlog,
+Griekse filosofie, Griekse/Romeinse kunst en architectuur als vakgebied,
+Hellenistische wetenschap, Pompeii, het volledige keizersoverzicht (Flavii
+t/m de val van West-Rome), en Romeins Nederland ontbraken structureel, ook
+in de verste planning. Zeven nieuwe hoofdstukken zijn ingevoegd, waardoor
+de oude Hoofdstuk 19-22+Finale zijn hernummerd naar 22-23 en 28-30. Elk
+nieuw hoofdstuk houdt zich aan de "geen enkelvoudig-spoor"-regel: waar
+geen nieuwe Pallas/Minerva-les meer beschikbaar is, krijgt de
+grammatica-arme taal alsnog een eigen, inhoudelijk verhaal — nooit een lege
+"herhaling"-vlakte. Nog GEEN scènes/puzzels gebouwd, alleen metadata.
+
+**2026-08-09, vierde renummering (chronologische correctie, zelfde dag,
+zie §7.66)**: de derde renummering had Gracchen/Marius-Sulla nog ná Caesar
+staan — chronologisch achterstevoren (Gracchen/121 v.Chr. en Sulla/78
+v.Chr. liggen allebei vóór Caesars Gallische veldtocht/58-50 v.Chr.).
+Gerben liet de Latijnse volgorde herschikken: Gracchen/Marius-Sulla (18,
+inclusief het Romeinse leger als systeem — nu bij Marius' eigen
+legerhervorming i.p.v. bij Caesar) → Caesars Burgeroorlog (19, nu gekoppeld
+aan "Bondgenoten, Verscheurd" — het Eerste Triumviraat valt uiteen) →
+Caesar in Gallië/Britannia (20, was 18) → Cicero (21, ongewijzigd, met een
+Seneca-introductie) → Tweede Triumviraat (22, was 19, nieuwe titel
+"Opvolgers tegenover Opvolgers") → Augustus/Nero (23, ongewijzigd, met
+Seneca-payoff). Hoofdstuk 25 kreeg de presocraten als toevoeging, Hoofdstuk
+27 werd een zigzag-hoofdstuk met Justinianus/Theodora erbij.
 
 **`SP_MYTH_CANON`** — de S/A/B-tier-mythenlijst + de Romeinse verhalen uit de
 docx, bewaard als los naslagwerk. Het grootste deel is inmiddels toegewezen —
@@ -6247,6 +6281,232 @@ afsluitingen toont Nestor's tekst bij relatie ≥1 en anders de fallback-
 tekst). Volledige hoofdstuk-doorloop opnieuw gedraaid, alle drie
 taalsporen, met relaties gezet voor medea/helena/nestor/telamon/andromache:
 0 console-fouten. 50 → 51 scènes.
+
+---
+
+### 7.64 Mythologische audit — ~30 ontbrekende mythen ingevoegd in H1-H3/H6/H10/H11-H13/H15 (2026-08-09)
+
+Aanleiding: een audit tegen een canonlijst van ~180 klassieke mythen wees
+ruim 30 nog niet vertelde verhalen aan. In overleg met Gerben is voor elk
+verhaal een plek gezocht in een AL GEBOUWD en speelbaar hoofdstuk (H1-H17
+waren op dat moment allemaal al klaar) — als een uitgewerkte keuzescène
+("vignet", met minstens 1 CHOICES-moment) of als een korte "verteld"-
+codex-entry zonder eigen scène. Alles in `certamen/singleplayer-data.js`,
+Nederlands, leesval-neutraal geformuleerd waar van toepassing.
+
+**Vignetten (nieuwe, bereikbare scènes):**
+- H1: Midas' ezelsoren (`CH1_A10C`, terugblik-vignet vlak voor het orakel
+  weer verschijnt — Apollo/Pan-muziekwedstrijd, Tmolus, de fluisterende
+  rietstengels).
+- H2: Apollo en Daphne (`CH2_L08C`, flash-forward na Apollo's geboorte),
+  Artemis en Actaeon (`CH2_K09B`, na de Kallisto-lijn), de Gigantomachie
+  (`CH2_H12B`, Athena vertelt na Herakles' eerste twee werken).
+- H3: de geboorte van Hermes + zijn veediefstal bij Apollo (`CH3_IO07A`,
+  ingevoegd terwijl Mercurius aan zijn Argus-missie begint).
+- H6: Dionysus/Bacchus en de piraten (`CH6_025B`, na de Pentheus/Agave-
+  climax, vóór `CH6_EINDE`).
+- H10: Acis en Galatea (`CH10_ODY_006C`, direct na Poseidons vloek,
+  gekoppeld aan de Polyfemos-episode).
+- H11: Glaucus en Skylla (`CH11_ODY_010C`, achtergrondverhaal direct na
+  de Skylla/Charybdis-doortocht, wijst terug naar Kirke die al personage
+  is in dit hoofdstuk).
+- H12: Nausicaa en de Faiaken (`CH12_ODY_000B`, direct na Calypso — Gerbens
+  correctie 2026-08-09: chronologisch de laatste stop vóór Ithaka, dus hier
+  in doorlopende tijd verteld i.p.v. als vooruitblik-vignet in H10 zoals de
+  bouwagent het aanvankelijk plaatste) en Orestes' wraak (`CH12_ODY_002B`,
+  Menelaos vertelt het aan Telemachus in Sparta — vervolg op de bestaande
+  Agamemnon/Clytemnestra-epiloogregel in `SP_NPC_AFSLUITINGEN`).
+- H13: Perseus is geüpgraded van losse "verteld"-vermelding naar een
+  eigen driedelig vignet (`CH13_GRE_PERSEUS_01/02/03`: Medusa met Athena's
+  schild, Andromeda-redding, confrontatie/dood van Acrisius), ingevoegd
+  tussen de Erichthonius/Erechtheus-scène en Arachne.
+- H15: Pyramus en Thisbe (`CH15_LAT_005C`, verteld als volksverhaal onder
+  de wolspinsters) en Hero en Leander (`CH15_GRE_005C`, verteld door Doris
+  na haar vrijlating) — beide als legende-binnen-het-hoofdstuk, passend
+  bij het "Hoe Men Leefde"-thema.
+
+**Codex-only ("verteld"-vermeldingen, geen eigen scène):**
+Chaos en de eerste goden (H1); Apollo/Hyacinthus, Apollo/Coronis,
+Marsyas/Apollo, Cyparissus, Artemis/Orion (H2); Zeus en Danaë (H3);
+Procne/Philomela/Tereus, Erysichthon (H6); Pan/Syrinx, Pan/Echo,
+Salmacis/Hermaphroditus, Cephalus/Procris, Alpheus/Arethusa,
+Adonis/Myrrha (H15).
+
+**Nieuwe SOUVENIR/IMAGE-tags**: alle vignetten kregen een `IMAGE:`-tag
+met hoofdstukprefix (nog te genereren, conform bestaande conventie);
+geen nieuwe souvenirs toegevoegd (paste niet bij deze kleinere vignetten).
+
+**Validatie**: `node --check` slaagt; `certamen/tools/validate_chronica.js`
+geeft 0 fouten (39 waarschuwingen, stuk voor stuk al bestaande dode
+route-flags van vóór deze uitbreiding — niets nieuws). Let op: de
+validator leest een eigen scènelijst en kan REQUIRE-gates op custom flags
+niet volledig valideren (bekende blinde vlek, zie het projectgeheugen) —
+alle nieuwe vignetten zijn wel met een script gecontroleerd op dode
+scène-ID's en ontbrekende codex-definities, maar nog niet stuk voor stuk
+hand-doorgelopen in de browser.
+
+---
+
+### 7.65 KCV-audit — hoofdstukroadmap uitgebreid met 7 nieuwe hoofdstukken (2026-08-09)
+
+**Let op: de hoofdstuknummers 19-27 hieronder zijn NIET meer actueel** — zie
+§7.66 voor de chronologische correctie van dezelfde dag (Gracchen/Marius-
+Sulla stonden hier nog ná Caesar, wat chronologisch niet klopte). De
+inhoudelijke bevindingen en het ontwerpprincipe hieronder blijven wel
+geldig; alleen gebruik de hoofdstuktabel bovenaan dit document of
+`SP_CAMPAIGN` voor de actuele nummering.
+
+Aanleiding: een tweede audit, dit keer tegen een canonlijst van 574 KCV-
+onderwerpen (geschiedenis, instituties, samenleving, religie, kunst,
+architectuur, literatuur, vaktermen — los van de mythologische audit uit
+§7.64). Bouwstatus op het moment van de audit: Proloog t/m Hoofdstuk 17
+volledig gebouwd, Hoofdstuk 18-22+Finale alleen metadata.
+
+**Bevindingen**: drie problemen. (1) Chronica.md verwees op twee plekken
+nog naar een allang vervangen "Hoofdstuk 17 De Stem van de Filosofen" —
+gecorrigeerd (zie de armor-routekaart hierboven, nu Hoofdstuk 21). (2) De
+bestaande planning had een feitelijk gat: tussen het oude Hoofdstuk 18
+(Caesar in Gallië) en het oude Hoofdstuk 20 (Augustus/Nero) ontbrak Caesars
+eigen burgeroorlog/dictatuur/moord — geen enkele `SP_CAMPAIGN`-regel dekte
+dit. (3) De campagne stopte inhoudelijk bij Nero/Actium, ook in de verste
+planning — hele blokken (Gouden Eeuw Athene, Peloponnesische Oorlog,
+Griekse filosofie, Griekse/Romeinse kunst en architectuur als vakgebied,
+Hellenistische wetenschap, Pompeii, het volledige keizersoverzicht ná Nero,
+Romeins Nederland) ontbraken structureel.
+
+**Besluit (Gerbens akkoord)**: de tijdlijn wordt verlengd. Zeven nieuwe
+hoofdstukken zijn ingevoegd tussen het oude Hoofdstuk 18 en 19
+(Hoofdstuk 19-21) en na het oude Hoofdstuk 20 (Hoofdstuk 24-27), waardoor
+de oude Hoofdstuk 19-22+Finale zijn hernummerd naar 22-23 en 28-30. Zie de
+bijgewerkte hoofdstuktabel en `SP_CAMPAIGN` (`certamen/singleplayer-data.js`)
+voor de volledige metadata, en `PALLAS_MINERVA_OVERZICHT.md` voor de
+grammatica-boekhouding.
+
+**Belangrijk ontwerpprincipe, herbevestigd tijdens dit gesprek**: een eerste
+conceptversie van dit plan liet meerdere nieuwe hoofdstukken met kale
+"herhaling" voor één taal staan — geen nieuwe grammatica ÉN geen eigen
+verhaal. Gerben wees erop dat dit de bestaande "geen enkelvoudig-spoor-
+hoofdstukken"-regel schendt (zie `chronica-geen-enkelvoudig-spoor-
+hoofdstukken` in het geheugensysteem) en dat eerdere rondes dit al hebben
+opgelost door hoofdstukken op thema samen te voegen. Elk nieuw hoofdstuk
+kreeg daarom een ECHT, inhoudelijk verhaal aan beide kanten, ook zonder
+nieuwe Pallas/Minerva-les — bijvoorbeeld Cicero (Latijn) naast Griekse
+filosofie (Grieks) in Hoofdstuk 21, of Hadrianus' filhellenisme (Grieks)
+naast het volledige keizersoverzicht (Latijn) in Hoofdstuk 26. Twee losse
+kandidaat-hoofdstukken (Romeins Nederland, en een aparte "adoptiefkeizers"-
+episode) zijn om diezelfde reden SAMENGEVOEGD in Hoofdstuk 26 — apart
+gehouden hadden ze allebei een kunstmatige Griekse tegenhanger nodig gehad.
+
+**Nieuwe hoofdstukken (metadata only, nog geen scènes/puzzels)**:
+- **19 — Het Verdeelde Verbond**: Pericles/Delisch-Attische Zeebond/
+  Parthenon-bouw (Grieks) / Caesars Burgeroorlog (Latijn, vult het
+  planningsgat uit punt 2 hierboven).
+- **20 — Bondgenoten, Verscheurd**: Peloponnesische Oorlog + Spartaanse/
+  Thebaanse hegemonie (Grieks) / Tweede Triumviraat/Antonius (Latijn).
+- **21 — Wijsheid en Waarheid**: Griekse filosofie — Socrates/Plato/
+  Aristoteles (Grieks) / Cicero (Latijn).
+- **24 — Steen en Water**: Griekse kunst/architectuur als vakgebied
+  (Grieks) / Romeinse architectuur en techniek (Latijn).
+- **25 — Onder de Vulkaan**: Hellenistische wetenschap — Archimedes/
+  Euclides/Eratosthenes/Bibliotheek van Alexandrië (Grieks) / Pompeii —
+  aardbeving 62, uitbarsting 79, Plinius (Latijn).
+- **26 — Een Rijk in Crisis**: Grieks erfgoed onder Rome — Hadrianus'
+  filhellenisme (Grieks) / het volledige keizersoverzicht Flavii →
+  adoptiefkeizers → Severi → Crisis van de Derde Eeuw, inclusief de
+  Bataafse Opstand/Romeins Nederland (Latijn).
+- **27 — Kruis en Kroon**: Byzantium wordt Constantinopel (Grieks) /
+  Constantijn/christendom, deling van het Rijk, val van West-Rome 476
+  n.Chr. (Latijn).
+
+**Bewust nog niet meegenomen**: de losse KCV-vaktermen (polis, imperium,
+mos maiorum, cursus honorum, pietas/virtus, etc.) krijgen geen apart
+systeem — die lopen vanzelf mee als codex-items bij het hoofdstuk waar ze
+thematisch bij passen, zodra dat hoofdstuk gebouwd wordt (Gerbens
+voorkeur, geen aparte begrippenlijst).
+
+**Validatie**: `node --check certamen/singleplayer-data.js` slaagt. Geen
+scènes gebouwd, dus `validate_chronica.js` heeft hier niets om op te
+controleren — die stap volgt bij elke latere bouwronde per hoofdstuk.
+
+---
+
+### 7.66 KCV-audit — chronologische correctie van §7.65 (2026-08-09, zelfde dag)
+
+Gerben signaleerde direct na §7.65 een chronologisch probleem: Gracchen
+(133-121 v.Chr.) en Marius/Sulla (157-78 v.Chr., burgeroorlog ca. 88-82
+v.Chr.) stonden in §7.65 nog op Hoofdstuk 22, ná Caesar (Hoofdstuk 18-19)
+— maar liggen allebei decennia VÓÓR Caesars eigen Gallische veldtocht
+(58-50 v.Chr.). Ook zijn drie kleinere verzoeken meegenomen: Caesars
+Gallische veldtocht krijgt er Britannia bij (zijn twee invasies), Cicero's
+hoofdstuk krijgt een Seneca-introductie met een payoff bij Nero, de
+presocraten (Thales/Anaximander/Heraclitus/Pythagoras/Democritus) worden
+toegevoegd als opmaat vóór de Hellenistische wetenschap, en het laatste
+hoofdstuk (Byzantium/val van Rome) wordt een scène-voor-scène ZIGZAG-
+hoofdstuk (zoals Hoofdstuk 10/15) met Justinianus/Theodora als korte
+vooruitblik aan Griekse kant.
+
+**Herschikking van de Latijnse volgorde (chronologisch correct)**:
+Gracchen → Marius (legerhervorming) → Sulla (18) → Caesars Burgeroorlog
+(19) → Caesar in Gallië/Britannia (20, was Hoofdstuk 18) → Cicero + Seneca
+(21, ongewijzigde inhoud) → Tweede Triumviraat/Antonius (22, was
+Hoofdstuk 19) → Augustus/Nero + Seneca-payoff (23, ongewijzigde inhoud).
+
+**Belangrijke verschuiving**: het Romeinse leger als systeem (legioen,
+centurio, cohort, testudo) hoorde in §7.65 nog bij Caesars Gallische
+veldtocht (toen Hoofdstuk 18) — dat is nu verplaatst naar Hoofdstuk 18's
+NIEUWE inhoud, gekoppeld aan Marius' eigen legerhervorming, wat historisch
+de juistere plek is (Marius voerde de professionele, door zijn generaal
+betaalde legioenen in — niet Caesar).
+
+**Titelwijzigingen**: Hoofdstuk 18 heet nu "Wie Betaalt, Bepaalt" (was "Het
+Verdeelde Verbond", dat onvoldoende paste bij Gracchen/Marius/Sulla).
+Hoofdstuk 22 heet nu "Opvolgers tegenover Opvolgers" (was "De Republiek
+Wankelt") — het thema is nu zuiver "opvolgers die onderling vechten": de
+Diadochen (Alexanders eigen generaals) tegenover het Tweede Triumviraat
+(Caesars eigen erfgenamen). "Bondgenoten, Verscheurd" (Peloponnesische
+Oorlog) verhuist van Hoofdstuk 20 naar 19, nu gekoppeld aan Caesars
+Burgeroorlog i.p.v. aan het Tweede Triumviraat — thematisch een sterkere
+klik (het Eerste Triumviraat valt hier letterlijk uiteen). "Grenzen
+Verlegd" (Alexander/Caesar-Gallië) is de oorspronkelijke, langst bestaande
+titel uit deze hele campagne en blijft ongewijzigd, alleen hernummerd naar
+Hoofdstuk 20.
+
+**Validatie**: `node --check certamen/singleplayer-data.js` slaagt, 31
+hoofdstukken (0-30), geen dubbele `nr`/`id`-waarden. Nog geen scènes
+gebouwd.
+
+---
+
+### 7.67 Mythologische audit — laatste 5 restposten verwerkt (2026-08-09)
+
+Na §7.64 bleven vijf mythen over uit de oorspronkelijke audit zonder vaste
+plek: Titanenstrijd, Narcissus & Echo, Demeter/Persephone+Orpheus' dood en
+Eros & Psyche/Pygmalion waren al gereserveerd voor resp. de Finale, H28,
+H29 en H23 — de overige vijf (het B-tier "vault"-restje uit
+`SP_MYTH_CANON`, plus Typhon) hadden nergens een plek. Op Gerbens verzoek
+op dezelfde manier verwerkt als de §7.64-ronde: één vignet, vier
+codex-only.
+
+- **Bellerophon & Chimaira** — nieuw vignet `CH2_H12C` in Hoofdstuk 2,
+  direct na de Gigantomachie (`CH2_H12B`, wiens CHOICES nu hierheen
+  routeren i.p.v. rechtstreeks naar `CH2_000`). De losse "verteld"-
+  vermelding bij Perseus in Hoofdstuk 13 is bijgewerkt om naar dit vignet
+  te verwijzen.
+- **Typhon** — codex-only, toegevoegd aan `CH2_H12B`'s CODEX-lijst (logisch
+  vervolg op de Gigantomachie: Typhon is Gaia's laatste kind tegen Zeus).
+- **Ganymedes** — codex-only, toegevoegd aan `CH3_IO14` (de bestaande
+  Zeus-affaires-coda naast Europa en Danaë).
+- **Endymion & Selene** — codex-only, toegevoegd aan `CH2_K09B` (Actaeon-
+  scène, die al bij het sterrenkijken met Athena wordt verteld).
+- **Arion** — codex-only, toegevoegd aan alle drie de varianten van
+  `CH5_019` (Orpheus grijpt in met zijn lier tijdens de Argonautentocht —
+  natuurlijke muzikant-op-zee-link).
+
+**Validatie**: `node --check certamen/singleplayer-data.js` slaagt;
+`validate_chronica.js` geeft 0 fouten, 39 waarschuwingen (allemaal
+al bestaand, niets nieuws). Alle vijf nieuwe codex-ID's en de nieuwe
+scène-ID komen precies één keer voor; `CH2_H12C` is bereikbaar vanuit alle
+drie de Gigantomachie-keuzes.
 
 ---
 

@@ -101,9 +101,16 @@ metadata, geen scènes/puzzels (zie het onderscheid "vastgelegd" vs.
 | 26 | Opvoeding, training, Plato's drie geslachten | *(cultuur)* | 16 |
 | 27 | Sport, Olympische Spelen (Poulydamas, boksboete; incl. Atalanta, verhuisd vanuit het oude "De Stad van Athena") | *(cultuur)* | 16 (samen met 26) |
 | 28 | Perzische Oorlogen (Thermopylae, Spartanen; Herodotos als vertellende stem) | *(cultuur/geschiedenis)* | 17 |
-| 29 | Alexander de Grote | *(cultuur/geschiedenis — laatste Pallas 2-les)* | 18 — **laatste nieuwe Griekse stof in de hele campagne** |
-| — | **Ingevuld 2026-08-02**: de Diadochenoorlogen (Alexanders generaals verscheuren zijn rijk, direct vervolg op les 29) | — (herhaling, geen nieuwe les) | 19 |
-| — | **Ingevuld 2026-08-02**: Cleopatra VII en de Slag bij Actium (31 v.Chr. — einde van het laatste Hellenistische rijk, inhoudelijk samenvallend met Augustus' Pax Romana aan de Latijnse kant) | — (herhaling, geen nieuwe les) | 20 |
+| 29 | Alexander de Grote | *(cultuur/geschiedenis — laatste Pallas 2-les)* | 20 — **laatste nieuwe Griekse stof in de hele campagne** (was 18, hernummerd 2026-08-09, tweede/chronologische correctie — zie Chronica.md §7.66) |
+| — | **Ingevuld 2026-08-02**: de Diadochenoorlogen (Alexanders generaals verscheuren zijn rijk, direct vervolg op les 29) | — (herhaling, geen nieuwe les) | 22 (was 19, hernummerd 2026-08-09) |
+| — | **Ingevuld 2026-08-02**: Cleopatra VII en de Slag bij Actium (31 v.Chr. — einde van het laatste Hellenistische rijk, inhoudelijk samenvallend met Augustus' Pax Romana aan de Latijnse kant) | — (herhaling, geen nieuwe les) | 23 (was 20, hernummerd 2026-08-09) |
+| — | **Ingevuld 2026-08-09 (KCV-audit)**: Pericles/Delisch-Attische Zeebond/Parthenon-bouw | — (herhaling, geen nieuwe les) | 18 (nieuw, was 19 — hernummerd bij de chronologische correctie, §7.66) |
+| — | **Ingevuld 2026-08-09 (KCV-audit)**: Peloponnesische Oorlog + Spartaanse/Thebaanse hegemonie | — (herhaling, geen nieuwe les) | 19 (nieuw, was 20 — hernummerd bij de chronologische correctie, §7.66) |
+| — | **Ingevuld 2026-08-09 (KCV-audit)**: Griekse filosofie (Socrates/Plato/Aristoteles) | — (herhaling, geen nieuwe les) | 21 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit)**: Griekse kunst/architectuur als vakgebied | — (herhaling, geen nieuwe les) | 24 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit), UITGEBREID met de presocraten** (§7.66): presocratische filosofie (Thales/Anaximander/Heraclitus/Pythagoras/Democritus) als opmaat, gevolgd door Hellenistische wetenschap (Archimedes/Euclides/Eratosthenes) | — (herhaling, geen nieuwe les) | 25 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit)**: Grieks erfgoed onder Rome (Hadrianus' filhellenisme) | — (herhaling, geen nieuwe les) | 26 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit), UITGEBREID met Justinianus/Theodora** (§7.66): Byzantium wordt Constantinopel + korte vooruitblik naar Justinianus/Theodora | — (herhaling, geen nieuwe les) | 27 (nieuw, zigzag-hoofdstuk) |
 
 | Minerva H | Onderwerp | Grammatica | Chronica H |
 |---|---|---|---|
@@ -111,10 +118,18 @@ metadata, geen scènes/puzzels (zie het onderscheid "vastgelegd" vs.
 | 19 | Dagelijks leven in Rome | Vragend voornaamwoord, onbepaald voornaamwoord, perfectum met praesensbetekenis | 15 (samen met Pallas 24-25) |
 | 20 | Vermaak in Rome | Velle/nolle/fieri, betrekkelijke bijzin met ingesloten antecedent, comparativus/superlativus | 16 (samen met Pallas 26-27) |
 | 21 | De Romeinen en de dood (grafschriften) | Conjunctivus praesens + gebruik, conjunctivus perfectum | 13 — **GEBOUWD** (2026-08-02, opgelost gat: ingezet via Brutus' eed over Lucretia en de twijfel over Horatius' daad, i.p.v. via het eigen "grafschriften"-cultuurtekst — decoupling-beleid, zie Chronica.md §7.47) |
-| 22 | Caesars carrière (Belgen bij Bibrax, Dumnorix) | Gerundium, genitivus subjectivus/objectivus, *ferre* | **17** (VERVROEGD vanuit 18, 2026-08-09 — sterke klik met Alpenoversteek/beleg van Saguntum bij Hannibal; cultuurtekst Caesar blijft wel bij H18) |
+| 22 | Caesars carrière (Belgen bij Bibrax, Dumnorix) | Gerundium, genitivus subjectivus/objectivus, *ferre* | **17** (VERVROEGD vanuit 18, 2026-08-09 — sterke klik met Alpenoversteek/beleg van Saguntum bij Hannibal; cultuurtekst Caesar-in-Gallië/Britannia blijft wel bij Chronica H20, was H18 — hernummerd bij de chronologische correctie, §7.66) |
 | 23 | Caesar in België en Nederland (Nervii, rivaliteit) | Gerundivum, gerundivumconstructie | **17** (idem, vervroegd) |
-| 24 | Keizers van Rome: Augustus en Nero | N.C.I. (Nominativus cum Infinitivo), semi-deponentia, transitief/intransitief, vraagpartikels | 20 |
-| 25 | Hartstocht en spanning (Catullus, Petronius) | *(vnl. vertaalvaardigheid, weinig nieuwe grammatica — geschikte afsluiter)* | 20 (samen met M24) |
+| 24 | Keizers van Rome: Augustus en Nero | N.C.I. (Nominativus cum Infinitivo), semi-deponentia, transitief/intransitief, vraagpartikels | 23 (was 20, hernummerd 2026-08-09) |
+| 25 | Hartstocht en spanning (Catullus, Petronius) | *(vnl. vertaalvaardigheid, weinig nieuwe grammatica — geschikte afsluiter)* | 23 (samen met M24, was 20) |
+| — | **Ingevuld 2026-08-09 (KCV-audit, chronologische correctie §7.66)**: Gracchen → Marius (legerhervorming, Romeins leger als systeem) → Sulla | — (herhaling, geen nieuwe les) | 18 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit, chronologische correctie §7.66)**: Caesars Burgeroorlog (Rubicon–Pharsalus–Iden van maart) | — (herhaling, geen nieuwe les) | 19 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit, chronologische correctie §7.66)**: Cicero (redevoeringen, vertaler van Griekse filosofie) + Seneca-introductie (payoff bij Nero, H23) | — (herhaling, geen nieuwe les) | 21 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit, chronologische correctie §7.66)**: Tweede Triumviraat/Antonius' opkomst | — (herhaling, geen nieuwe les) | 22 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit)**: Romeinse architectuur/techniek | — (herhaling, geen nieuwe les) | 24 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit)**: Pompeii (aardbeving 62, uitbarsting 79, Plinius) | — (herhaling, geen nieuwe les) | 25 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit)**: volledig keizersoverzicht Flavii t/m Crisis 3e Eeuw + Bataafse Opstand/Romeins Nederland | — (herhaling, geen nieuwe les) | 26 (nieuw) |
+| — | **Ingevuld 2026-08-09 (KCV-audit, UITGEBREID §7.66)**: Constantijn/christendom, deling Rijk, val West-Rome (476) | — (herhaling, geen nieuwe les) | 27 (nieuw, zigzag-hoofdstuk) |
 
 **Let op, nog open**: Minerva 21 (grafschriften/dood) kreeg geen plek in de
 uiteindelijke 8-hoofdstukindeling — bij het uitschrijven bleek Hoofdstuk

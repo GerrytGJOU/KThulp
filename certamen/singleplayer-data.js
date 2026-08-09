@@ -351,7 +351,7 @@ const SP_CAMPAIGN = [
     pallas:"Les 22: Athena en Poseidon, Zeus en Metis, de geboorte van Athena — de GRAMMATICA (futurum) komt uit dezelfde les als de geboorte-tekst (Tekst 22B), maar wordt hier ingezet via de latere wedstrijd-om-Athene-tekst (22A), niet via de geboorte zelf (zie verhaal-veld) — zie PALLAS_MINERVA_OVERZICHT.md", minerva:"Hoofdstuk 21: De Romeinen en de dood (conjunctivus praesens en perfectum) — tot dan toe niet toegewezen, hier ingezet via Brutus' eed over Lucretia's lichaam en de twijfel over Horatius' daad",
     grammatica:"Grieks: futurum (Pallas 22, via de wedstrijd om Athene, NIET via de geboorte); Latijn: conjunctivus praesens en perfectum (Minerva 21, doelzinnen/hortatief/indirecte vraag)",
     gameplay:"Twee sporen (sequentieel, geen scène-voor-scène zigzag — zelfde aanpak als Hoofdstuk 12), GEBOUWD 2026-08-02: CH13_GRE_000 vertakt op de FLAG `ch1_lijn` (2026-08-02, tweede correctieronde) — spelers die Hoofdstuk 1 Lijn B kozen (Athena) krijgen een korte erkenning dat ze haar geboorte al zagen (CH13_GRE_000B), spelers die dat niet deden krijgen daar alsnog een korte samenvatting (CH13_GRE_000C, incl. codex_geboorte_athena) — beide komen samen uit bij CH13_GRE_003 (wedstrijd om Athene tegen Poseidon) → 004 (olijfboom) → 004B (Poseidons overstroming) → 004C/004D (Erichthonius/Erechtheus-vignet, extra achtergrond op Gerbens verzoek) → 005 (Arachne). Latijnse lijn: CH13_LAT_000-008 (Horatii/Curiatii, Lucretia/Brutus), converged op CH13_EINDE/CH13_MUSEUM_00. Eén CLEMENTIA/SEVERITAS/NEUTRAL-moment (oordeel over Horatius' moord op zijn zuster). Atalanta/Meleager-content verhuisd naar Hoofdstuk 16 (sport-thema past beter), Arachne blijft hier bij Athena. Routeert voorlopig door naar CH13_WORDT_VERVOLGD (tijdelijk speeltest-eindpunt, zie Chronica.md §7.46/§7.47).",
-    personages:"Athena, Poseidon, Kekrops, Erichthonius/Erechtheus (verteld), Aglauros/Herse/Pandrosos (verteld), Perseus (verteld), Bellerophon (verteld), Arachne — Tullus Hostilius, de Horatii, de Curiatii, Tarquinius Superbus, Lucretia, Brutus",
+    personages:"Athena, Poseidon, Kekrops, Erichthonius/Erechtheus (verteld), Aglauros/Herse/Pandrosos (verteld), Perseus (eigen vignet: Medusa, Andromeda, Acrisius — audit-uitbreiding), Bellerophon (eigen vignet in Hoofdstuk 2: de Chimaira — audit-uitbreiding 2026-08-09), Arachne — Tullus Hostilius, de Horatii, de Curiatii, Tarquinius Superbus, Lucretia, Brutus",
     thema:"Hoe gezag ontstaat — met een verstandig geschenk in plaats van machtsvertoon, of pas na een lange, soms bloedige zoektocht",
     illustratie:"De olijfboom op de Akropolis / Lucretia en Brutus voor het volk van Rome" },
   { id:"ch14", nr:14, boek:"II — Helden en Koningen", type:"hoofdstuk", nm:"Verzet tegen Tirannen",
@@ -392,61 +392,134 @@ const SP_CAMPAIGN = [
     thema:"Niet alles wat verteld wordt is automatisch waar (Herodotos' eigen vraag) — toegepast op twee legendarische, bijna-onmogelijke overwinningen",
     illustratie:"Thermopylae / Hannibals olifanten in de Alpen",
     zijverhalen:"Regulus, Cato (⭐⭐⭐) — Punische-Oorlogen-deugdverhalen" },
-  { id:"ch18", nr:18, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Grenzen Verlegd",
+  // ---- Hoofdstuk 18-27: KCV-AUDIT UITBREIDING (vastgelegd 2026-08-09,
+  // Gerbens akkoord — TWEEDE, chronologisch gecorrigeerde versie, zelfde
+  // dag). De eerste versie zette Alexander/Caesar-in-Gallië nog op 18 en
+  // liet Gracchen/Marius-Sulla ná Caesar staan (chronologisch achterstevoren
+  // — Gracchen/121 v.Chr. en Sulla/78 v.Chr. liggen allebei vóór Caesars
+  // Gallische veldtocht/58-50 v.Chr.). Gerben liet de volgorde herschikken
+  // zodat de Latijnse lijn weer chronologisch klopt: Gracchen/Marius-Sulla
+  // (18) → Caesars Burgeroorlog (19) → Caesar in Gallië (20, was 18) →
+  // Cicero (21, ongewijzigd) → Tweede Triumviraat (22, was 19) → Augustus/
+  // Nero (23, ongewijzigd). Elk hoofdstuk houdt zich aan de "geen
+  // enkelvoudig-spoor-hoofdstukken"-regel: BEIDE talen krijgen een echt,
+  // inhoudelijk verhaal, ook waar geen nieuwe Pallas/Minerva-les meer
+  // beschikbaar is (Pallas 2 is op na les 29/Hoofdstuk 20, Minerva 2 na
+  // hoofdstuk 25/Hoofdstuk 23) — zie PALLAS_MINERVA_OVERZICHT.md. Nog GEEN
+  // scènes/puzzels — alleen metadata.
+  { id:"ch18", nr:18, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Wie Betaalt, Bepaalt",
+    periode:"Gouden Eeuw van Athene, ca. 461-431 v.Chr. / Late Republiek, Gracchen t/m Sulla, ca. 133-78 v.Chr.",
+    verhaal:"Onder Pericles bouwt Athene, met het geld van een bondgenootschap dat ooit tegen Perzië werd gesmeed, de Akropolis om tot het pronkstuk van Griekenland — terwijl diezelfde bondgenoten steeds luider gaan mopperen dat de Delisch-Attische Zeebond meer een Atheens rijk is geworden dan een verbond van gelijken. Aan de Latijnse kant draait het ook om wie waarvoor betaalt: eerst wil volkstribuun Tiberius Gracchus (en na zijn moord zijn broer Gaius) land eerlijker verdelen tussen arm en rijk, tot beiden vermoord worden door de senaatspartij — het eerste politieke geweld van de late Republiek. Daarna hervormt Marius het leger zelf: voortaan vechten ook bezitloze burgers mee, betaald en uitgerust door hun eigen generaal in plaats van door de staat — en wanneer Sulla die nieuwe, aan hem persoonlijk loyale troepen tegen Rome zelf inzet, is de Republiek voorgoed veranderd. GECORRIGEERD 2026-08-09 (Gerbens verzoek, chronologische fix): Gracchen/Marius-Sulla stonden eerst ná Caesar (ch22); ze horen chronologisch vóór hem, en Marius' legerhervorming is bovendien de historisch juiste plek voor het Romeinse leger als systeem — niet Caesars latere Gallische veldtocht (nu Hoofdstuk 20).",
+    pallas:"Geen nieuwe les — verhaal: Pericles, de Delisch-Attische Zeebond, de bouw van de Akropolis/het Parthenon, pure herhaling/vertelling", minerva:"Geen nieuwe grammatica — verhaal: de Gracchen (landhervorming) gevolgd door Marius' legerhervorming en Sulla's mars op Rome",
+    grammatica:"Grieks: herhaling — Pericles/Zeebond/Parthenon; Latijn: herhaling — Gracchen/Marius/Sulla, incl. het Romeinse leger als systeem (legioen, centurio, cohort, testudo — Marius' eigen hervorming)",
+    gameplay:"Twee sporen; een bondgenootschap dat langzaam een rijk wordt (Griekse lijn, keuzes over hoe de Zeebond-schatkist wordt gebruikt) / een tweedelige Latijnse lijn (zoals Hoofdstuk 12's Hercules&Cacus→Romulus&Remus): eerst de Gracchen, dan Marius' legerhervorming met het legioen in actie, dan Sulla's mars op Rome",
+    personages:"Pericles, Phidias, Aspasia — Tiberius Gracchus, Gaius Gracchus, Cornelia, Gaius Marius, Lucius Cornelius Sulla",
+    thema:"Wie de rekening betaalt — een schatkist, een leger, een hervorming — bepaalt uiteindelijk ook de macht",
+    illustratie:"De bouw van het Parthenon op de Akropolis / Marius' legioen in testudo-formatie / Sulla's legioenen bij de poorten van Rome",
+    zijverhalen:"Spartacus (⭐⭐⭐⭐⭐) — chronologisch dichtstbij Marius/Sulla, blijft vrij inzetbaar bij deze of een later hoofdstuk" },
+  { id:"ch19", nr:19, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Bondgenoten, Verscheurd",
+    periode:"Peloponnesische Oorlog en nasleep, 431-362 v.Chr. / Caesars Burgeroorlog, 49-44 v.Chr.",
+    verhaal:"Athene en Sparta — ooit samen tegen Perzië — verscheuren nu Griekenland zelf in een oorlog die tot ver na beide steden zelf zal doorwerken: de pest die Pericles het leven kost, de meedogenloze Melische dialoog, de rampzalige Siciliaanse expeditie, en uiteindelijk Sparta's overwinning, gevolgd door een kortstondige Thebaanse hegemonie onder Epaminondas. Aan de Latijnse kant hetzelfde patroon, ditmaal tussen twee mannen die ooit hetzelfde Eerste Triumviraat vormden: Caesar steekt de Rubicon over, breekt met zijn eigen medestander Pompeius, en verslaat hem bij Pharsalus — tot een dolksteek in de Senaat, op de Iden van maart, alles weer openbreekt.",
+    pallas:"Geen nieuwe les — verhaal: de Peloponnesische Oorlog (Thucydides als bron, de pest van Athene, Melos, Sicilië, Alcibiades) en de Spartaanse/Thebaanse hegemonie erna, pure herhaling/vertelling", minerva:"Geen nieuwe grammatica — verhaal: Caesars Burgeroorlog (Rubicon, Pharsalus, dictatuur, de Iden van maart) — het Eerste Triumviraat (Caesar/Pompeius/Crassus) valt hier letterlijk uit elkaar",
+    grammatica:"Grieks: herhaling — Peloponnesische Oorlog; Latijn: herhaling — Caesars Burgeroorlog",
+    gameplay:"Twee sporen; oorlogsdilemma's die geen winnaars kennen (Griekse lijn, incl. de Melische dialoog als moreel keuzemoment) / een vriendschap die breekt (Latijnse lijn, Caesar vs. Pompeius, eindigend bij de moord)",
+    personages:"Thucydides, Pericles (dood), Nicias, Alcibiades, Lysander, Epaminondas — Caesar, Pompeius, Brutus, Cassius",
+    thema:"Bondgenoten die samen wonnen, blijken zelden bondgenoten te blijven zodra de gemeenschappelijke vijand verdwenen is",
+    illustratie:"De pest van Athene / Caesar bij de Rubicon" },
+  { id:"ch20", nr:20, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Grenzen Verlegd",
     periode:"Hellenistische Tijd (336-323 v.Chr.) / Late Republiek (58-50 v.Chr.)",
-    verhaal:"Een jonge koning trekt met zijn leger verder dan wie ook vóór hem, tot in de verste uithoeken van de bekende wereld. Generaties later doet een Romeinse generaal in Gallië iets vergelijkbaars — en ontdekt dat wie de pen vasthoudt, ook de geschiedenis vormgeeft. **Dit is de laatste nieuwe Griekse grammatica van de hele campagne** — Pallas deel 2 is na Alexander uitgeput.",
+    verhaal:"Een jonge koning trekt met zijn leger verder dan wie ook vóór hem, tot in de verste uithoeken van de bekende wereld. Generaties later doet een Romeinse generaal in Gallië — en, twee keer, zelfs op het mistige eiland Britannia — iets vergelijkbaars, en trekt uiteindelijk ook de Rijn over naar Germania: Caesar duwt de grenzen van de bekende wereld net zo ver op als Alexander ooit deed, en ontdekt dat wie de pen vasthoudt (zijn eigen Commentarii), ook de geschiedenis vormgeeft. **Dit is de laatste nieuwe Griekse grammatica van de hele campagne** — Pallas deel 2 is na Alexander uitgeput. HERNUMMERD 2026-08-09 (was Hoofdstuk 18) — het Romeinse leger als systeem is verhuisd naar Hoofdstuk 18 (Marius' eigen hervorming, historisch de juistere plek); hier blijft Caesars veldtocht zelf, nu inclusief zijn expedities naar Britannia.",
     pallas:"Les 29 (LAATSTE Pallas 2-les): Alexander de Grote", minerva:"Cultuurstof Caesars carrière/België blijft hier (het verhaal), maar de bijbehorende grammatica (Hoofdstuk 22-23) is VERVROEGD naar Hoofdstuk 17 (Gerbens akkoord 2026-08-09) — zie de aantekening daar",
-    grammatica:"Grieks: les 29 (Alexander — laatste nieuwe Griekse stof in de hele campagne); Latijn: BEWUST GRAMMATICA-ARM (herhaling) — gerundium/genitivus subj./obj./ferre (M22) en gerundivum (M23) zijn vervroegd naar Hoofdstuk 17, waar ze inhoudelijk beter passen (Alpenoversteek/beleg van Saguntum). Nader te bepalen welke eerdere stof hier herhaald wordt, zelfde aanpak als H14/H19.",
-    gameplay:"Twee sporen; taalverspreiding volgen over een groeiende kaart (Griekse lijn), bronnen analyseren (Latijnse lijn, Caesars Commentarii)",
-    personages:"Alexander de Grote, Philippus II — Caesar, Dumnorix",
+    grammatica:"Grieks: les 29 (Alexander — laatste nieuwe Griekse stof in de hele campagne); Latijn: BEWUST GRAMMATICA-ARM (herhaling) — gerundium/genitivus subj./obj./ferre (M22) en gerundivum (M23) zijn vervroegd naar Hoofdstuk 17, waar ze inhoudelijk beter passen (Alpenoversteek/beleg van Saguntum).",
+    gameplay:"Twee sporen; taalverspreiding volgen over een groeiende kaart (Griekse lijn), bronnen analyseren (Latijnse lijn, Caesars Commentarii — Gallië, Britannia, de Rijnoversteek)",
+    personages:"Alexander de Grote, Philippus II — Caesar, Dumnorix, Cassivellaunus",
     thema:"Eén mens die de kaart van de bekende wereld hertekent — met het zwaard, of met de pen",
-    illustratie:"Alexander bij de Gordiaanse Knoop / Caesar schrijft zijn Commentarii",
-    zijverhalen:"Cicero (⭐⭐⭐⭐)" },
-
-  // ---- Hoofdstuk 19-20: vanaf hier heeft Grieks geen nieuwe Pallas-stof
-  // meer (op na Alexander, Hoofdstuk 18). De Griekse lijn moet BEWUST
-  // aanwezig blijven — herhaling/lichte aanwezigheid, nooit afwezig (zie
-  // de "geen enkelvoudige-spoor-hoofdstukken"-regel). WELK Grieks verhaal
-  // deze twee hoofdstukken vult, is nog met Gerben te bepalen (2026-08-02)
-  // — nog open, zie Chronica.md §7.45.
-  { id:"ch19", nr:19, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"De Republiek Wankelt",
-    periode:"Late Republiek, ca. 133-78 v.Chr. / Diadochenoorlogen, 322-301 v.Chr.",
-    verhaal:"Eerst wil een jonge volkstribuun het land eerlijker verdelen tussen arm en rijk, dan raken twee generaals — ooit bondgenoten — verwikkeld in een rivaliteit die de Republiek tot in haar fundamenten schudt. Aan de Griekse kant hetzelfde patroon, meteen na Alexanders dood: zijn eigen generaals, ooit zijn trouwste bondgenoten, verscheuren zijn rijk in de Diadochenoorlogen. VOORLOPIG VASTGELEGD 2026-08-02 (Gerbens akkoord) — sluit chronologisch en thematisch direct aan op Hoofdstuk 18 (Alexander), dus geen nieuwe Pallas-les nodig.",
-    pallas:"Geen nieuwe les (Pallas 2 is na Hoofdstuk 18 uitgeput) — verhaal: de Diadochenoorlogen (Alexanders generaals vechten om zijn rijk, direct na zijn dood in 323 v.Chr.), pure herhaling/vertelling", minerva:"— (herhaling, valt buiten de lesnummering — Gracchen/Marius-Sulla)",
-    grammatica:"Grieks: herhaling — Diadochenoorlogen; Latijn: herhaling — bewust grammatica-arm",
-    gameplay:"Politieke/militaire keuzes: hervormen versus status quo (Latijnse lijn), verdelen van Alexanders rijk onder rivaliserende generaals (Griekse lijn) — beide lijnen spiegelen elkaar: bondgenoten die elkaar verscheuren",
-    personages:"Tiberius Gracchus, Gaius Gracchus, Cornelia, Gaius Marius, Lucius Cornelius Sulla — Perdikkas, Antigonos, Ptolemaeus, Seleukos, Kassandros (Diadochen)",
-    illustratie:"Tiberius Gracchus voor de senaat / Sulla's legioenen bij de poorten van Rome — Alexanders rijk uiteenvallend op de kaart",
-    zijverhalen:"Spartacus (⭐⭐⭐⭐⭐), verhuisd hierheen vanuit het oude Hoofdstuk 22 (chronologisch dichter bij Marius/Sulla dan bij Caesar)" },
-  { id:"ch20", nr:20, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Vrede en Vergankelijkheid",
+    illustratie:"Alexander bij de Gordiaanse Knoop / Caesars vloot bij de kust van Britannia",
+    zijverhalen:"Cicero — inmiddels een eigen hoofdstuk (H21), zie daar" },
+  { id:"ch21", nr:21, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Wijsheid en Waarheid",
+    periode:"Klassiek Athene, ca. 470-322 v.Chr. / Late Republiek, ca. 106-43 v.Chr.",
+    verhaal:"Socrates stelt vragen tot de stad hem ter dood veroordeelt; zijn leerling Plato beschrijft een grot vol schaduwen om uit te leggen wat echte kennis is; diens eigen leerling Aristoteles wordt uiteindelijk de leermeester van Alexander zelf (Hoofdstuk 20) — drie generaties die samen bepalen wat 'weten' betekent. In Rome doet Cicero, generaties later, iets vergelijkbaars in het Latijn: hij vertaalt en verwerkt precies deze Griekse filosofie voor een Romeins publiek, terwijl hij in de Senaat zijn eigen gevecht voert voor waarheid tegen corruptie en samenzwering. Zijn jongere tijdgenoot Seneca zet die Stoïcijnse traditie voort — en keert zelf terug als personage wanneer hij, jaren later, Nero's leermeester wordt (Hoofdstuk 23): een payoff die pas daar volledig samenkomt.",
+    pallas:"Geen nieuwe les — verhaal: Socrates (proces en dood), Plato (de grot, de ideeënleer), Aristoteles (de vier oorzaken, ethiek) — met een korte terugverwijzing naar Aristoteles als Alexanders leermeester uit Hoofdstuk 20", minerva:"Geen nieuwe grammatica — verhaal: Cicero's redevoeringen (tegen Catilina/Verres) en zijn rol als vertaler van Griekse filosofie naar het Latijn, plus een introductie van Seneca als jongere tijdgenoot (payoff bij Nero, Hoofdstuk 23)",
+    grammatica:"Grieks: herhaling — Griekse filosofie; Latijn: herhaling — Cicero (+ Seneca-introductie)",
+    gameplay:"Twee sporen; een sokratische ondervraging als dialoog-mechaniek (Griekse lijn) / een redevoering opbouwen als retorische puzzel (Latijnse lijn, Cicero's eigen technieken)",
+    personages:"Socrates, Plato, Aristoteles, Xanthippe — Cicero, Catilina, Verres, Tullia, Seneca (cameo, jong — payoff in H23)",
+    thema:"Wijsheid overleeft de denker zelf alleen als iemand anders hem doorvertelt — in een andere taal, aan een ander publiek",
+    illustratie:"Socrates drinkt de gifbeker / Cicero spreekt de Senaat toe tegen Catilina" },
+  { id:"ch22", nr:22, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Opvolgers tegenover Opvolgers",
+    periode:"Diadochenoorlogen, 322-301 v.Chr. / Tweede Triumviraat, 43-31 v.Chr.",
+    verhaal:"Meteen na Alexanders dood verscheuren zijn eigen generaals, ooit zijn trouwste bondgenoten, zijn rijk in de Diadochenoorlogen. Generaties later, aan de Latijnse kant, hetzelfde patroon tussen Caesars eigen erfgenamen: Antonius, Octavianus en Lepidus verdelen de macht in een Tweede Triumviraat dat, net als Alexanders generaals voor hen, gedoemd is elkaar op te eten. GECORRIGEERD 2026-08-09 (Gerbens verzoek): niet langer gekoppeld aan Gracchen/Marius-Sulla (verhuisd naar Hoofdstuk 18, chronologisch vóór Caesar) — het thema is nu zuiver 'opvolgers die onderling vechten', aan beide kanten letterlijk de eigen opvolgers van de vorige hoofdrolspeler (Alexander resp. Caesar).",
+    pallas:"Geen nieuwe les (Pallas 2 is na Hoofdstuk 20 uitgeput) — verhaal: de Diadochenoorlogen (Alexanders generaals vechten om zijn rijk, direct na zijn dood in 323 v.Chr.), pure herhaling/vertelling", minerva:"Geen nieuwe grammatica — verhaal: het Tweede Triumviraat en Marcus Antonius' opkomst na Caesars dood",
+    grammatica:"Grieks: herhaling — Diadochenoorlogen; Latijn: herhaling — Tweede Triumviraat",
+    gameplay:"Politieke/militaire keuzes: verdelen van Alexanders rijk onder rivaliserende generaals (Griekse lijn) / een machtsverdeling die vanaf het begin instabiel is (Latijnse lijn) — beide lijnen spiegelen elkaar: opvolgers die elkaar verscheuren",
+    personages:"Perdikkas, Antigonos, Ptolemaeus, Seleukos, Kassandros (Diadochen) — Marcus Antonius, Octavianus, Lepidus, Fulvia",
+    illustratie:"Alexanders rijk uiteenvallend op de kaart / het Tweede Triumviraat verdeelt de wereldkaart" },
+  { id:"ch23", nr:23, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Vrede en Vergankelijkheid",
     periode:"Vroege Keizertijd (27 v.Chr. - 68 n.Chr.) / Slag bij Actium, 31 v.Chr.",
-    verhaal:"Onder Augustus keert de vrede terug — en een dichter genaamd Vergilius begint aan een episch gedicht dat Rome's oorsprong voor altijd zal verbinden met de val van Troje. Later, onder Nero, blijkt hoe snel die vrede weer kan omslaan. Aan de Griekse kant precies dezelfde overwinning van de andere kant bekeken: bij Actium verslaat de latere Augustus Cleopatra VII, laatste telg van de Ptolemaeën (zelf afstammelingen van een van Alexanders eigen generaals) — het moment waarop het laatste onafhankelijke Griekse rijk definitief in Rome opgaat. VOORLOPIG VASTGELEGD 2026-08-02 (Gerbens akkoord): de Griekse en Latijnse lijn smelten hier letterlijk samen, dezelfde slag beëindigt Cleopatra's rijk én opent Augustus' Pax Romana.",
-    pallas:"Geen nieuwe les (Pallas 2 is na Hoofdstuk 18 uitgeput) — verhaal: Cleopatra en de Slag bij Actium (31 v.Chr.), pure herhaling/vertelling — het einde van de Hellenistische wereld", minerva:"Hoofdstuk 24: Keizers van Rome (Augustus en Nero) · Hoofdstuk 25: Latijnse literatuur (Catullus, Petronius)",
+    verhaal:"Onder Augustus keert de vrede terug — en een dichter genaamd Vergilius begint aan een episch gedicht dat Rome's oorsprong voor altijd zal verbinden met de val van Troje. Later, onder Nero, blijkt hoe snel die vrede weer kan omslaan — zijn vroegere leermeester Seneca (cameo uit Hoofdstuk 21) probeert hem nog bij te sturen, tevergeefs. Aan de Griekse kant precies dezelfde overwinning van de andere kant bekeken: bij Actium verslaat de latere Augustus Cleopatra VII, laatste telg van de Ptolemaeën (zelf afstammelingen van een van Alexanders eigen generaals) — het moment waarop het laatste onafhankelijke Griekse rijk definitief in Rome opgaat.",
+    pallas:"Geen nieuwe les (Pallas 2 is na Hoofdstuk 20 uitgeput) — verhaal: Cleopatra en de Slag bij Actium (31 v.Chr.), pure herhaling/vertelling — het einde van de Hellenistische wereld", minerva:"Hoofdstuk 24: Keizers van Rome (Augustus en Nero) · Hoofdstuk 25: Latijnse literatuur (Catullus, Petronius)",
     grammatica:"Grieks: herhaling — Cleopatra/Actium; Latijn: N.C.I., semi-deponentia, transitief/intransitief, vraagpartikels (M24) — vnl. vertaalvaardigheid (M25)",
-    gameplay:"Literair/reflectief — bronnen en gedichten (Latijnse lijn); dezelfde Slag bij Actium van Griekse kant meebeleefd (Griekse lijn) — de twee lijnen convergeren hier inhoudelijk, niet alleen structureel",
-    personages:"Augustus, Vergilius, Nero, Ovidius — Cleopatra VII, Marcus Antonius",
+    gameplay:"Literair/reflectief — bronnen en gedichten (Latijnse lijn, incl. Augustus' rol als Pontifex Maximus/de Romeinse staatsreligie); dezelfde Slag bij Actium van Griekse kant meebeleefd (Griekse lijn) — de twee lijnen convergeren hier inhoudelijk, niet alleen structureel",
+    personages:"Augustus, Vergilius, Nero, Ovidius, Seneca (payoff uit H21) — Cleopatra VII, Marcus Antonius",
     illustratie:"Augustus bij de Ara Pacis / Nero en de Domus Aurea — Cleopatra en Antonius bij Actium",
     zijverhalen:"Eros & Psyche, Pygmalion (A-tier) — verteld als verhaal-in-een-verhaal door een dichter" },
+  { id:"ch24", nr:24, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Steen en Water",
+    periode:"Klassieke/Hellenistische kunst, 5e-2e eeuw v.Chr. / Vroege Keizertijd, technologisch",
+    verhaal:"Terug bij het Museum van Mnemosyne (zie Hoofdstuk 6) laat de Boodschapper zien hoe Grieken en Romeinen hun beschaving letterlijk vormgaven: de Dorische, Ionische en Korinthische zuilorden, van archaïsche kouros tot Polykleitos' contrapost tot de dramatische Hellenistische beeldhouwkunst (de Laocoöngroep, Venus van Milo, Nike van Samothrace) — en aan Romeinse kant de technische doorbraken die dat allemaal overtroffen: de boog, het gewelf, de koepel, opus caementicium, het aquaduct, de rechte Romeinse weg.",
+    pallas:"Geen nieuwe les — verhaal: Griekse kunst en architectuur als vakgebied (zuilorden, beeldhouwkunst, vazenschilderkunst)", minerva:"Geen nieuwe grammatica — verhaal: Romeinse architectuur en techniek (boog/gewelf/koepel, beton, aquaducten, wegenbouw)",
+    grammatica:"Grieks: herhaling — kunst/architectuur; Latijn: herhaling — architectuur/techniek",
+    gameplay:"Reflectief/museaal, losser gekoppeld aan chronologie dan de andere hoofdstukken (net als de latere Mnemosyne/Lethe-hoofdstukken) — de speler bekijkt/herkent bouwwerken en kunstwerken i.p.v. een lineair verhaal te volgen",
+    personages:"Phidias (cameo, terugkerend uit H18), Polykleitos, Praxiteles — Vitruvius (cameo, vooruitwijzend naar zijn eigen hoofdrol in H25)",
+    thema:"Hoe een beschaving zich letterlijk, in steen, vormgeeft",
+    illustratie:"Het Parthenon-fries / een Romeins aquaduct over een vallei" },
+  { id:"ch25", nr:25, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Onder de Vulkaan",
+    periode:"Presocratische filosofie t/m Hellenistische wetenschap, 6e-3e eeuw v.Chr. / Pompeii, tot 79 n.Chr.",
+    verhaal:"Al vóór Socrates zoeken Thales, Anaximander en de andere presocraten naar de oerstof van de wereld zonder op de goden terug te vallen — de wortel van al het Griekse wetenschappelijke denken. Generaties later meten Eratosthenes de omtrek van de aarde en Archimedes de wetten van drijven en hefbomen in de Bibliotheek van Alexandrië — de Griekse wereld op haar wetenschappelijke hoogtepunt. Eeuwen later, aan de voet van de Vesuvius, bewijst diezelfde natuur waarom kennis nooit compleet is: Plinius de Jongere ziet vanaf de overkant van de golf hoe Pompeii en Herculaneum in een dag onder as verdwijnen — en zijn oom, Plinius de Oudere, sterft terwijl hij de uitbarsting probeert te bestuderen. UITGEBREID 2026-08-09 (Gerbens verzoek): de presocraten (Thales/Anaximander/Heraclitus/Pythagoras/Democritus) zijn toegevoegd als vroege wortel van het Griekse wetenschappelijke denken, als korte proloog vóór de eigenlijke Hellenistische wetenschap.",
+    pallas:"Geen nieuwe les — verhaal: de presocraten als opmaat, gevolgd door Hellenistische wetenschap (Archimedes, Euclides, Eratosthenes, de Bibliotheek van Alexandrië/het Mouseion)", minerva:"Geen nieuwe grammatica — verhaal: Pompeii (de aardbeving van 62, de uitbarsting van 79, Plinius' ooggetuigenbrief, het dagelijks leven dat achterbleef)",
+    grammatica:"Grieks: herhaling — presocraten/Hellenistische wetenschap; Latijn: herhaling — Pompeii",
+    gameplay:"Twee sporen; een wetenschappelijk raadsel oplossen (Griekse lijn, van presocratische oerstof-vragen tot Archimedes/Eratosthenes) / de laatste uren van Pompeii herbeleven tegen de klok (Latijnse lijn, spanningsopbouw richting de uitbarsting)",
+    personages:"Thales, Anaximander, Heraclitus, Pythagoras, Democritus (presocraten) — Archimedes, Euclides, Eratosthenes — Plinius de Oudere, Plinius de Jongere",
+    thema:"Kennis verklaart de wereld — tot de wereld iets doet waar niemand op voorbereid was",
+    illustratie:"Archimedes in zijn bad ('heureka') / de aswolk boven Pompeii" },
+  { id:"ch26", nr:26, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Een Rijk in Crisis",
+    periode:"Flavische dynastie t/m Crisis van de Derde Eeuw, 69-284 n.Chr.",
+    verhaal:"Na Nero's dood strijden vier keizers in één jaar om de troon, tot de Flavii (Vespasianus, Titus, Domitianus) orde herstellen en het Colosseum bouwen — vlak nadat in Germania Inferior de Bataven onder Julius Civilis in opstand komen, een opstand die Tacitus zelf beschrijft. Daarna volgen de 'adoptiefkeizers' Nerva, Trajanus (grootste omvang van het rijk) en Hadrianus (zijn muur, zijn liefde voor Griekenland), Antoninus Pius en Marcus Aurelius — tot Commodus alles laat afglijden naar de Severische dynastie en uiteindelijk de chaos van de Derde-Eeuwse Crisis, met wisselende soldatenkeizers.",
+    pallas:"Geen nieuwe les — verhaal: Grieks erfgoed onder Romeins gezag (Hadrianus' filhellenisme, het Panhellenion, de Olympische Spelen onder Rome)", minerva:"Geen nieuwe grammatica — verhaal: het volledige keizersoverzicht van de Flavii t/m de Crisis van de Derde Eeuw, inclusief de Bataafse Opstand (69-70 n.Chr.) in Romeins Nederland",
+    grammatica:"Grieks: herhaling — Grieks erfgoed onder Rome; Latijn: herhaling — keizersoverzicht + Bataafse Opstand",
+    gameplay:"Twee sporen; Hadrianus reist door zijn geliefde Griekenland (Griekse lijn, herkenning van eerder bezochte locaties op de wereldkaart) / een lange keizerlijke tijdlijn als opeenvolging van korte vignetten, met de Bataafse Opstand als eigen episode met Combat-bridge (Latijnse lijn)",
+    personages:"Hadrianus (Griekse lijn) — Vespasianus, Titus, Domitianus, Trajanus, Hadrianus, Marcus Aurelius, Commodus, Septimius Severus, Julius Civilis, Tacitus (cameo, bronvermelding)",
+    thema:"Een rijk op zijn grootst is ook een rijk met de meeste manieren om uiteen te vallen",
+    illustratie:"Het Colosseum in aanbouw / Hadrianus' Muur in de Britse mist / Julius Civilis en de Bataven" },
+  { id:"ch27", nr:27, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Kruis en Kroon",
+    periode:"Tetrarchie t/m val van West-Rome, 284-476 n.Chr. (met een korte blik vooruit naar Justinianus, 6e eeuw)",
+    verhaal:"Diocletianus splitst het bestuur van het rijk in een Tetrarchie om de crisis te bezweren; Constantijn wint uiteindelijk alleen de macht, erkent het christendom met het Edict van Milaan, en sticht een nieuwe hoofdstad op oud-Griekse bodem: Byzantium wordt Constantinopel, en het zwaartepunt van het rijk verschuift voorgoed naar het Griekstalige Oosten. Onder Theodosius wordt het christendom staatsgodsdienst en splitst het rijk definitief in twee helften — tot het West-Romeinse Rijk in 476 n.Chr. zijn laatste keizer verliest, terwijl in het Oosten, generaties later, Justinianus en Theodora Constantinopel nog verder laten uitgroeien tot wat ooit het Byzantijnse Rijk zal heten. UITGEBREID 2026-08-09 (Gerbens verzoek): Justinianus/Theodora toegevoegd aan de Griekse lijn als vooruitblik; het hoofdstuk krijgt de scène-voor-scène ZIGZAG-opzet (zoals Hoofdstuk 10/15) in plaats van twee losse, sequentiële lijnen — de twee kanten van hetzelfde rijk worden zo letterlijk om en om beleefd.",
+    pallas:"Geen nieuwe les — verhaal: Byzantium wordt Constantinopel, gevolgd door een korte vooruitblik naar Justinianus en Theodora", minerva:"Geen nieuwe grammatica — verhaal: Diocletianus/de Tetrarchie, Constantijn/het Edict van Milaan, Theodosius, de deling van het rijk, de val van West-Rome in 476",
+    grammatica:"Grieks: herhaling — Byzantium/Constantinopel/Justinianus; Latijn: herhaling — Constantijn/val van West-Rome",
+    gameplay:"ZIGZAG-hoofdstuk (zoals Hoofdstuk 10/15, scène-voor-scène verweven i.p.v. sequentieel): het rijk valt in het Westen uiteen (Latijnse lijn) terwijl het in het Oosten, in een nieuwe, Griekstalige vorm, juist doorleeft en groeit (Griekse lijn) — een bewust bitterzoet, niet-symmetrisch slot vlak vóór de terugkeer naar het Museum van Mnemosyne",
+    personages:"Diocletianus, Constantijn de Grote, Theodosius, Romulus Augustulus (laatste West-Romeinse keizer) — Justinianus, Theodora (Griekse/Byzantijnse lijn)",
+    thema:"Het einde van het ene rijk is, op dezelfde plek net iets verderop, het begin van iets nieuws",
+    illustratie:"Constantijn bij het Edict van Milaan / de laatste keizerskroon van West-Rome, leeg op een troon / Justinianus en Theodora in Constantinopel" },
 
-  // ---- Hoofdstuk 21-22: de ontknoping (Gerbens akkoord 2026-08-02,
-  // vervangt de oude drieluik Mnemosyne/Lethe/Finale qua NUMMERING niet
-  // qua INHOUD — dezelfde twee hoofdstukken plus een aparte, ongenummerde
-  // Finale erna, zoals de structuur al had) ----
-  { id:"ch21", nr:21, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Bibliotheek van Mnemosyne",
+  // ---- Hoofdstuk 28-29 + Finale: de ontknoping (Gerbens akkoord
+  // 2026-08-02, vervangt de oude drieluik Mnemosyne/Lethe/Finale qua
+  // NUMMERING niet qua INHOUD — dezelfde twee hoofdstukken plus een aparte,
+  // ongenummerde Finale erna, zoals de structuur al had). HERNUMMERD
+  // 2026-08-09 (waren Hoofdstuk 21-22+Finale/nr 21-23) i.v.m. de
+  // KCV-audit-uitbreiding (Hoofdstuk 19-27 hierboven) ----
+  { id:"ch28", nr:28, boek:"VI — De Laatste Herinnering", type:"hoofdstuk", nm:"De Bibliotheek van Mnemosyne",
     periode:"Buiten Tijd en Ruimte",
     verhaal:"In een bibliotheek buiten tijd en ruimte bewaart de godin van het geheugen elk verhaal dat ooit verteld is — ook de fragmenten die nergens anders een plek vonden. Hier begint de onthulling over wie de Boodschapper werkelijk is, en wat Chronos werkelijk wil.",
     pallas:"Eigen content", minerva:"Eigen content",
     grammatica:"Herhaling van alle grammatica (Grieks én Latijn, voor het eerst samen)",
     personages:"Mnemosyne",
     zijverhalen:"Narcissus & Echo (A-tier) als spiegel-/geluidspuzzel; eerste hints van De Titanenstrijd (S-tier), die in de Finale terugkeert" },
-  { id:"ch22", nr:22, boek:"V — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
+  { id:"ch29", nr:29, boek:"VI — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
     periode:"Mythologische Eindwereld",
     verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren — de laatste beproeving voor het orakel zelf zich toont.",
     pallas:"Eigen content", minerva:"Eigen content",
     grammatica:"Integratie Grieks & Latijn",
     personages:"Lethe",
     zijverhalen:"Orpheus (S-tier — jong en hoopvol in Hoofdstuk 5, zijn volledige Eurydice-tragedie al verteld in Hoofdstuk 11; hier zijn daadwerkelijke dood, verscheurd door Thracische Maenaden, hoofd en lier nog zingend de rivier af — zie geheugen chronica-orpheus-verplaatst-h11) & Persephone/Demeter (A-tier, hun eigen ontvoeringsmythe — granaatappelpitten, de seizoenen) — beide onderwereld-verhalen" },
-  { id:"finale", nr:23, boek:"V — De Laatste Herinnering", type:"finale", nm:"Chronica Classica",
+  { id:"finale", nr:30, boek:"VI — De Laatste Herinnering", type:"finale", nm:"Chronica Classica",
     periode:"Tijdloos",
     thema:"De strijd tegen de Vergetelheid",
     verhaal:"Alles wat je onderweg hebt geleerd komt hier samen. Aan het einde van de reis wacht het orakel zelf — en een waarheid die alles in een ander licht zet.",
@@ -1728,6 +1801,56 @@ const SP_CODEX_ENTRIES = {
     tekst:"Zeus verzwolg zijn zwangere eerste vrouw Metis uit angst voor een profetie: hun zoon zou hem onttronen, zoals hij ooit zijn eigen vader Kronos onttroonde. Toen het kind — een dochter — niettemin geboren wilde worden, spleet Hephaistos Zeus' schedel open met een bijl, en Pallas Athena sprong eruit, al volwassen en volledig gewapend: godin van wijsheid en doordachte oorlogvoering." },
   codex_doos_van_pandora: { cat:"mythologie", titel:"Prometheus, Pandora en de Doos",
     tekst:"Prometheus, een titaan die tijdens de Titanomachie voor Zeus koos, vormde samen met Athena de eerste mensen en stal later het vuur van de goden om hen te redden van de kou. Zeus strafte hem met eeuwige ketenen op de Kaukasus, en strafte de mensheid met Pandora — het eerste geschenk van alle goden samen — wier nieuwsgierigheid alle kwaad ter wereld losliet uit een verzegelde doos. Alleen Elpis, de Hoop, bleef achter." },
+  codex_chaos_en_de_eerste_goden: { cat:"mythologie", titel:"Chaos en de Eerste Goden",
+    tekst:"Lang voordat er een Kronos of een Zeus bestond, was er alleen Chaos — geen wanorde, maar een gapende leegte waaruit alles ontstond. Uit Chaos kwamen Gaia (de Aarde), Tartaros (de diepste afgrond) en Eros (de oerdrift die alles samenbrengt); Gaia bracht op haar beurt Ouranos (de Hemel) voort en baarde met hem de titanen, onder wie Kronos — de generatie die pas daarna, door Kronos' eigen opstand tegen zijn vader Ouranos, de weg vrijmaakte voor de goden van de Olympos." },
+  codex_ezelsoren_van_midas: { cat:"mythologie", titel:"Midas' Ezelsoren",
+    tekst:"Toen koning Midas van Sardis als toehoorder een muziekwedstrijd tussen Apollo en de herdersgod Pan bijwoonde, verkoos hij hardop het spel van Pan boven dat van Apollo. Apollo strafte die smaak door Midas' oren in ezelsoren te veranderen. Alleen Midas' hofkapper kende het geheim onder de Phrygische muts — en toen die het niet langer kon verzwijgen, fluisterde hij het in een kuil in de grond; het riet dat er groeide, verklapt het sindsdien bij elke windvlaag opnieuw." },
+  codex_apollo_en_daphne: { cat:"mythologie", titel:"Apollo en Daphne",
+    tekst:"Apollo's eerste liefde, kort na zijn geboorte in dit hoofdstuk, eindigde onbeantwoord: getroffen door Cupido's gouden pijl achtervolgde hij de nimf Daphne, die door een loden pijl juist alle liefde verafschuwde. Haar vader, de riviergod Peneus, redde haar op het laatste moment door haar in een laurierboom te veranderen — sindsdien Apollo's heilige boom, en de bron van elke lauwerkrans." },
+  codex_artemis_en_actaeon: { cat:"mythologie", titel:"Artemis en Actaeon",
+    tekst:"De jager Actaeon, kleinzoon van Kadmos, verdwaalde tijdens de jacht en stapte per ongeluk een grot binnen waar Diana (Artemis) met haar nimfen baadde. Woedend om zoveel ongewilde blootstelling veranderde ze hem in een hert; zijn eigen jachthonden, die hem niet langer herkenden, joegen hem op en verscheurden hem." },
+  codex_apollo_hyacinthus: { cat:"mythologie", titel:"Apollo en Hyacinthus",
+    tekst:"De Spartaanse prins Hyacinthus was Apollo's geliefde metgezel, tot een discuswerpwedstrijd fataal afliep: de discus, afgeketst of — in sommige versies — door de jaloerse windgod Zephyrus omgeleid, trof de jongen dodelijk. Uit zijn bloed liet Apollo de hyacint ontspruiten, met bloembladen die de rouwklacht ΑΙ ΑΙ (helaas) leken te dragen." },
+  codex_apollo_coronis: { cat:"mythologie", titel:"Apollo en Coronis",
+    tekst:"Coronis, zwanger van Apollo, was hem ontrouw met een sterveling. Een raaf — toen nog sneeuwwit — bracht Apollo het nieuws, die haar in woede doodde en de raaf tot straf voor het overbrengen van slecht nieuws voorgoed zwart verfde. Uit Coronis' stervende lichaam redde Apollo hun ongeboren zoon Asclepius, de latere god van de geneeskunde." },
+  codex_marsyas_en_apollo: { cat:"mythologie", titel:"Marsyas en Apollo",
+    tekst:"De sater Marsyas vond een fluit die Athena had weggeworpen en werd er zo bedreven op dat hij Apollo uitdaagde tot een muziekwedstrijd. Apollo won — sommigen zeggen met een sluwe truc — en strafte Marsyas' overmoed door hem levend te villen. Uit zijn bloed, of volgens sommigen uit de tranen van de treurende bosgeesten, ontstond de rivier die zijn naam draagt." },
+  codex_cyparissus: { cat:"mythologie", titel:"Cyparissus",
+    tekst:"Cyparissus, een jongen die Apollo dierbaar was, doodde per ongeluk zijn geliefde tamme hert en werd zo overmand door verdriet dat hij nooit meer wilde ophouden met rouwen. Apollo veranderde hem, op zijn eigen verzoek, in een cipres — de boom die sindsdien overal bij grafmonumenten en begraafplaatsen groeit, als een eeuwig teken van rouw." },
+  codex_artemis_en_orion: { cat:"mythologie", titel:"Artemis en Orion",
+    tekst:"De reusachtige jager Orion was een van de weinigen die Artemis' vriendschap won, tot afgunstige goden (of, in sommige versies, haar eigen broer Apollo) haar ertoe verleidden hem per ongeluk dodelijk te treffen met een pijl, terwijl ze niet wist dat het figuurtje ver op zee Orion zelf was. Berouwvol plaatste Artemis hem als sterrenbeeld aan de hemel, waar hij nog altijd met zijn gordel en zwaard te zien is." },
+  codex_geboorte_hermes: { cat:"mythologie", titel:"De Geboorte van Hermes/Mercurius",
+    tekst:"Op de dag van zijn eigen geboorte stal de baby Hermes al vijftig runderen van zijn halfbroer Apollo, en verborg zijn spoor door de dieren achterstevoren te laten lopen. Toen Apollo hem betrapte, verzoenden de twee zich pas nadat Hermes zijn zojuist uitgevonden lier — gemaakt van een schildpadschild — aan Apollo aanbood in ruil voor de kudde: het begin van Hermes' reputatie als de sluwste en welbespraaktste van alle Olympische goden." },
+  codex_zeus_en_danae: { cat:"mythologie", titel:"Zeus en Danaë",
+    tekst:"Koning Acrisius van Argos sloot zijn dochter Danaë op in een bronzen kamer nadat een orakel voorspelde dat haar zoon hem ooit zou doden. Zeus wist niettemin bij haar binnen te dringen, in de gedaante van een gouden regen, en verwekte zo Perseus. Uit angst voor de profetie zette Acrisius moeder en kind in een kist op zee — die uiteindelijk veilig aanspoelde, en Perseus liet opgroeien tot de latere doder van Medusa." },
+  codex_perseus_medusa: { cat:"mythologie", titel:"Perseus en Medusa",
+    tekst:"Gedwongen te zweren dat hij Medusa's hoofd zou brengen, kreeg Perseus hulp van de goden: Athena's gepolijste schild als spiegel, Hermes' gevleugelde sandalen, en een onzichtbaarmakende helm van de Nimfen. Zo onthoofdde hij de slapende Gorgon zonder ooit rechtstreeks naar haar te kijken — en uit haar bloed sprong het gevleugelde paard Pegasus tevoorschijn." },
+  codex_andromeda: { cat:"mythologie", titel:"Perseus en Andromeda",
+    tekst:"Op zijn terugweg zag Perseus de Ethiopische prinses Andromeda geketend aan een rots, geofferd aan een zeemonster nadat haar moeder Cassiopeia had opgeschept mooier te zijn dan de zeenimfen. Perseus versloeg het monster, redde haar, en trouwde met haar diezelfde dag — het begin van een van de weinige mythologische huwelijken die daadwerkelijk gelukkig bleven." },
+  codex_acrisius_profetie: { cat:"mythologie", titel:"Perseus en Acrisius",
+    tekst:"Koning Acrisius van Argos sloot zijn dochter Danaë op om een profetie te ontlopen die zei dat haar zoon hem ooit zou doden. Jaren later, tijdens atletische spelen, wierp zijn kleinzoon Perseus een discus die door een windvlaag afweek en toevallig Acrisius trof — de profetie voltrok zich alsnog, precies door de vlucht ervoor." },
+  codex_hero_en_leander: { cat:"mythologie", titel:"Hero en Leander",
+    tekst:"Hero, priesteres van Aphrodite in een toren aan de Hellespont, en Leander, een jongeman van de overkant, ontmoetten elkaar in het geheim: elke nacht zwom hij de zeeëngte over, geleid door een lantaarn die zij brandend hield. Toen een storm de vlam doofde, verdronk Leander in het duister — en Hero, zijn lichaam vindend, wierp zich van haar toren om bij hem te zijn." },
+  codex_pyramus_en_thisbe: { cat:"mythologie", titel:"Pyramus en Thisbe",
+    tekst:"Twee jonge buren in Babylon, van wie de ouders een huwelijk verboden, spraken via een scheur in hun gemeenschappelijke muur af elkaar 's nachts te ontmoeten. Een misverstand rond een door een leeuwin verscheurde sluier deed beiden geloven dat de ander dood was; allebei doodden ze zichzelf naast elkaar. Sindsdien kleuren de bessen van de moerbeiboom, waar hun bloed op viel, donkerrood." },
+  codex_pan_en_syrinx: { cat:"mythologie", titel:"Pan en Syrinx",
+    tekst:"De herdersgod Pan achtervolgde de nimf Syrinx tot aan de oever van een rivier, waar haar zusters haar op het laatste moment in rietstengels veranderden. Toen de teleurgestelde Pan zuchtte tussen het riet, ontdekte hij het geluid dat ontstond — en sneed er de panfluit uit, die zijn naam nog altijd draagt en de naam van Syrinx zelf in het Grieks (σῦριγξ)." },
+  codex_pan_en_echo: { cat:"mythologie", titel:"Pan en Echo",
+    tekst:"De berg-nimf Echo, die Pan afwees, werd door hem uiteen laten scheuren door woedende herders — enkel haar stem bleef achter, gedoemd voor eeuwig enkel te herhalen wat anderen al hadden gezegd. In een andere, bekendere versie van haar verhaal verspilt diezelfde Echo zich later aan haar onbeantwoorde liefde voor Narcissus, tot er niets van haar overblijft dan die stem." },
+  codex_salmacis_hermaphroditus: { cat:"mythologie", titel:"Salmacis en Hermaphroditus",
+    tekst:"De nimf Salmacis werd verliefd op de jonge Hermaphroditus, zoon van Hermes en Aphrodite, en smeekte de goden dat ze nooit meer gescheiden zouden worden toen hij haar avances afwees en zij zich toch aan hem vastklampte in haar bron. De goden verhoorden haar wens letterlijk: hun twee lichamen versmolten tot één wezen, zowel man als vrouw." },
+  codex_cephalus_procris: { cat:"mythologie", titel:"Cephalus en Procris",
+    tekst:"Cephalus en Procris, een gelukkig getrouwd stel, werden allebei door jaloezie in het verderf gestort: zij, gewaarschuwd dat hij een minnares had (in werkelijkheid riep hij enkel de verkoelende wind, Aura, tijdens de jacht), bespiedde hem vanuit de struiken. Cephalus, het geritsel horend en een wild dier vermoedend, wierp zijn onfeilbare speer — en doodde haar per ongeluk." },
+  codex_alpheus_arethusa: { cat:"mythologie", titel:"Alpheus en Arethusa",
+    tekst:"De riviergod Alpheus werd verliefd op de nimf Arethusa, die op de vlucht voor hem door de godin Artemis in een bron werd veranderd. Alpheus, vastberaden, veranderde zichzelf in een rivier om zich met haar water te vermengen — volgens de legende reist hij zelfs onder de zee door, van Griekenland tot aan haar nieuwe bron op Sicilië, om voor altijd met haar verenigd te blijven." },
+  codex_adonis_myrrha: { cat:"mythologie", titel:"Adonis en Myrrha",
+    tekst:"Myrrha, vervloekt met een verboden liefde voor haar eigen vader, werd na de ontdekking van haar list in een mirreboom veranderd; uit die boom werd, negen maanden later, de beeldschone Adonis geboren. Aphrodite zelf werd verliefd op hem, maar Adonis stierf jong, dodelijk verwond door een wild zwijn tijdens de jacht — uit zijn bloed liet Aphrodite de rode anemoon ontspruiten." },
+  codex_gigantomachie: { cat:"mythologie", titel:"De Gigantomachie",
+    tekst:"Toen de Giganten — reusachtige zonen van Gaia, geboren uit het bloed van de gecastreerde Ouranos — de Olympos bestormden, kon een profetie enkel door een sterveling ongedaan worden gemaakt. Herakles vocht mee aan de zijde van de goden en velde reus na reus, terwijl Athena zelf de reus Enkelados onder het eiland Sicilië bedolf. Zonder zijn hulp waren de Olympische goden die dag mogelijk zelf onttroond." },
+  codex_typhon: { cat:"mythologie", titel:"Typhon, het Laatste Kind van Gaia",
+    tekst:"Na de nederlaag van de Giganten stuurde Gaia nog één laatste, zwaarder monster op Zeus af: Typhon, een wezen zo groot dat zijn hoofd de sterren raakte, met honderd slangenkoppen die uit zijn schouders groeiden. In een gevecht dat de hele Olympos deed beven, versloeg Zeus hem uiteindelijk met de bliksem — en begroef hem onder de berg Etna op Sicilië, waar zijn woede sindsdien, zeggen de Grieken, af en toe nog naar buiten borrelt als vuur en as." },
+  codex_bellerophon_chimaira: { cat:"mythologie", titel:"Bellerophon en de Chimaira",
+    tekst:"De held Bellerophon kreeg van koning Iobates de opdracht de Chimaira te doden — een vuurspuwend monster met het lijf van een leeuw, een geitenkop op de rug en een slangenstaart, zelf een kind van Typhon. Met Athena's gouden teugel ving hij het gevleugelde paard Pegasus, en versloeg het monster vanuit de lucht met een loden speerpunt die in de vlammenhitte smolt en het beest van binnenuit verstikte." },
 
   codex_grammatica_ch1_lidwoord: { cat:"grammatica", taal:"grieks", titel:"Grammatica: het Griekse lidwoord",
     tekst:"Het Griekse lidwoord verandert mee met het grammaticale geslacht van het zelfstandig naamwoord waar het bij hoort — niet met wat het woord in het echt betekent, maar met de vorm van het woord zelf. Er zijn drie geslachten: mannelijk, vrouwelijk en onzijdig, elk met hun eigen lidwoord in de nominativus.",
@@ -1757,6 +1880,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Semele, prinses van Thebe en minnares van Jupiter, werd door de jaloerse Juno — vermomd als haar eigen oude voedster — overgehaald om haar minnaar te vragen zich in zijn ware goddelijke gedaante te tonen. Gebonden aan een onherroepelijke eed bij de Styx kon Jupiter niet weigeren: zijn verzengende glorie doodde de sterfelijke Semele op slag. Uit de as redde hij hun ongeboren kind en naaide het in zijn eigen dij, waar het de resterende maanden voldragen werd — zo werd Bacchus de enige god die tweemaal geboren werd." },
   codex_metamorfose_kallisto: { cat:"mythologie", titel:"De Metamorfose van Kallisto",
     tekst:"Kallisto, een jachtgezellin van Artemis gebonden aan dezelfde eed van kuisheid als haar godin, werd verleid door Zeus, die zich vermomde als Artemis zelf om haar wantrouwen te omzeilen. Toen haar zwangerschap aan het licht kwam, verbande Artemis haar uit de band — zonder de ware toedracht te kennen — en veranderde de jaloerse Hera haar in een berin. Jaren later, toen haar eigen zoon Arcas haar bijna doodde tijdens de jacht, greep Zeus alsnog in en plaatste beiden onder de sterren: Kallisto als de Grote Beer, Arcas als de Kleine Beer." },
+  codex_endymion_selene: { cat:"mythologie", titel:"Endymion en Selene",
+    tekst:"Selene, de maangodin, werd verliefd op Endymion, een beeldschone herder — en vroeg Zeus om hem eeuwige jeugd en een eeuwige slaap te geven, zodat ze hem elke nacht opnieuw kon bezoeken zonder hem ooit te verliezen aan ouderdom of dood. Sindsdien slaapt Endymion voor altijd in een grot op de berg Latmos, terwijl Selene elke avond over hem waakt vanaf de hemel." },
   codex_herakles_beproevingen: { cat:"mythologie", titel:"Herakles: Waanzin en de Eerste Beproevingen",
     tekst:"Herakles, zoon van Zeus en de sterfelijke Alcmene, werd al vóór zijn geboorte door Hera gehaat — ze vertraagde zijn geboorte zodat zijn neef Eurystheus eerder ter wereld kwam en het geboorterecht op de troon van Mycene kreeg. Als baby wurgde Herakles moeiteloos twee slangen die Hera naar zijn wieg had gestuurd, een eerste teken van de kracht die hem zou definiëren. Als volwassen man, getrouwd met Megara en vader van hun kinderen, werd hij door Hera getroffen met een waanzin die hem zijn eigen gezin deed doden. Uit wroeging raadpleegde hij het orakel van Delphi, dat hem opdroeg tien jaar in dienst van Eurystheus beproevingen te volbrengen als boetedoening — een getal dat later op twaalf zou uitkomen, nadat Eurystheus twee ervan afkeurde. De eerste twee: de onkwetsbare Nemeïsche Leeuw, gewurgd met blote handen, en de veelkoppige Hydra van Lerna, alleen verslagen met de hulp van vuur." },
 
@@ -1815,6 +1940,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Io, priesteres van Juno, werd door Jupiter in een witte vaars veranderd om een affaire te verbergen — een list die averechts werkte toen Juno haar alsnog opeiste en de honderdogige Argus Panoptes als wachter aanstelde. Mercurius, op Jupiters bevel, suste Argus met verhalen en fluitspel in slaap en doodde hem. Juno, in rouw, plaatste Argus' honderd ogen voorgoed op de staart van de pauw. Daarna joeg ze Io met een steekvlieg de wereld rond, tot Jupiter in Egypte eindelijk zijn ontrouw goedmaakte — waar Io haar menselijke gedaante terugkreeg en later als godin vereerd werd, vereenzelvigd met Isis." },
   codex_europa: { cat:"mythologie", titel:"Europa en de Witte Stier",
     tekst:"Waar Jupiter Io in een dier veranderde om zijn affaire te verbergen, veranderde hij zichzelf in een dier — een tamme, witte stier — om zijn affaire met de Fenicische prinses Europa te beginnen. Argeloos beklom ze zijn rug op het strand; de stier zwom vervolgens met haar de zee over, helemaal naar Kreta. Daar baarde Europa hem drie zonen, onder wie de latere koning Minos. Haar naam bleef achter op een heel werelddeel." },
+  codex_ganymedes: { cat:"mythologie", titel:"Ganymedes, de Schenker der Goden",
+    tekst:"Ganymedes, een adembenemend mooie Trojaanse prins, werd door Jupiter — die zichzelf ditmaal in een adelaar veranderde — van de aarde geschaakt en naar de Olympos gebracht. Daar werd hij de eeuwige schenker van de goden, belast met het inschenken van de nectar tijdens hun feestmalen — een eer die zijn sterfelijke vader Tros alleen kon verdragen omdat Jupiter hem in ruil een span goddelijke paarden schonk." },
   codex_chiron: { cat:"mythologie", titel:"Chiron, de Wijze Centaur",
     tekst:"Tijdens de jacht op de Erymanthische Ever raakte een van Herakles' met Hydra-gif vergiftigde pijlen per ongeluk zijn eigen oude leermeester Chiron — de wijze, onsterfelijke centaur die hem ooit onderwees. Omdat Chiron onsterfelijk is, kon het gif hem niet doden, enkel eindeloos kwellen. Jaren later zou Chiron zijn eigen onsterfelijkheid vrijwillig afstaan aan de geketende Prometheus, om zo zelf eindelijk verlost te worden van de pijn." },
   codex_augiasstal: { cat:"mythologie", titel:"De Augiasstal",
@@ -1886,6 +2013,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Atalanta, opgevoed door een berin nadat haar vader haar als baby te vondeling had gelegd, is de enige vrouw aan boord van de Argo — in sommige verhalen als volwaardige Argonaut, in andere op zijn minst uitgenodigd. Meleager, prins van Calydon, vaart mee als een van de jongste helden. Hun namen zullen niet voor het laatst samen genoemd worden: ooit zullen ze ook naast elkaar tegenover een reusachtig everzwijn staan, met een veel bitterder einde dan deze tocht." },
   codex_dioscuren: { cat:"mythologie", titel:"Kastor en Polydeukes, de Dioscuren",
     tekst:"De tweelingbroers Kastor en Polydeukes — samen 'de Dioscuren' genoemd, 'zonen van Zeus' — vullen elkaar precies aan: Kastor is de beroemdste ruiter van Griekenland, Polydeukes de onverslaanbare bokser. Hun zuster is nog te jong om te weten hoe beroemd haar eigen naam ooit zal worden: Helena." },
+  codex_arion: { cat:"mythologie", titel:"Arion en de Dolfijn",
+    tekst:"De dichter en citerspeler Arion, op de terugweg van een muziekwedstrijd in Sicilië die hij roemrijk had gewonnen, werd door de hebzuchtige bemanning van zijn eigen schip overboord gedwongen, die zijn prijzengeld wilde stelen. Voor hij sprong, vroeg Arion nog één keer zijn lier te mogen bespelen — en het lied trok een dolfijn aan die, betoverd door de muziek, hem op zijn rug meenam en veilig aan land bracht, ver voor zijn moordlustige bemanning er was." },
   codex_argos_schip: { cat:"mythologie", titel:"Argos en de Bouw van de Argo",
     tekst:"Argos, zoon van Arestor, bouwde de Argo op aanwijzing van Athena zelf — het snelste en sterkste schip dat Griekenland ooit had gezien, met in de boeg zelfs een balk uit het orakelbos van Dodona verwerkt, die naar verluidt af en toe met een eigen stem kan waarschuwen. Niet te verwarren met de honderdogige Argus Panoptes, de wachter van Io — twee heel verschillende figuren die toevallig bijna dezelfde naam droegen." },
   codex_nestor_philoktetes: { cat:"mythologie", titel:"Nestor en Philoktetes",
@@ -1914,6 +2043,12 @@ const SP_CODEX_ENTRIES = {
     tekst:"Antigone vraagt haar zuster Ismene om samen Polyneikes te begraven, tegen Kreons verbod in. Ismene weigert — niet uit lafheid, maar uit een nuchtere afweging: de laatste twee overlevenden van een al zwaar getroffen familie hoeven niet allebei te sterven voor dezelfde overtuiging. Wanneer Antigone later gepakt wordt, biedt Ismene zich alsnog aan om samen gestraft te worden; Antigone weigert dat aanbod." },
   codex_antigone: { cat:"mythologie", titel:"Antigone's Verzet",
     tekst:"Na de oorlog verklaarde regent Kreon dat Polyneikes — die zijn eigen stad had aangevallen — als verrader nooit begraven mocht worden, een verschrikkelijke straf volgens Griekse religieuze overtuiging. Antigone, Polyneikes' zuster, trotseerde het bevel en begroef hem alsnog met de juiste rituelen, overtuigd dat de wetten van de goden zwaarder wegen dan die van een sterfelijke koning. Kreon liet haar levend inmetselen in een graftombe; Antigone koos zelf het moment van haar dood, in plaats van te wachten tot de tombe dat voor haar deed." },
+  codex_bacchus_en_de_piraten: { cat:"mythologie", titel:"Bacchus en de Piraten",
+    tekst:"Tyrreense piraten die de verklede Bacchus aan boord van hun schip gevangen namen om als slaaf te verkopen, ontdekten al snel met wie ze te maken hadden: wingerdranken overwoekerden het dek, wijn verving het zeewater, en het gebrul van onzichtbare wilde dieren joeg hen overboord. Daar veranderde Bacchus hen in dolfijnen — allen behalve de stuurman, die als enige had gepleit hem met rust te laten." },
+  codex_procne_philomela: { cat:"mythologie", titel:"Procne, Philomela en Tereus",
+    tekst:"Tereus, koning van Thracië en getrouwd met de Atheense prinses Procne, verkrachtte haar zuster Philomela en sneed haar tong af om te voorkomen dat ze het zou verraden. Philomela weefde het verhaal niettemin in een kleed; uit wraak doodde Procne hun eigen zoon Itys en zette hem Tereus voor als maaltijd. Toen Tereus de waarheid ontdekte en de zusters achtervolgde, veranderden de goden alle drie in vogels: Procne in een zwaluw, Philomela in een nachtegaal, Tereus in een hop." },
+  codex_erysichthon: { cat:"mythologie", titel:"Erysichthon",
+    tekst:"Erysichthon hakte, uit pure hoogmoed, een heilig bos van de graangodin Ceres om, ondanks alle waarschuwingen — zelfs de dryade die in de gevelde boom woonde, stierf onder zijn bijl. Ceres strafte hem met een onstilbare, alles verterende honger: hoe meer hij at, hoe hongeriger hij werd, tot hij zijn hele bezit had verkocht, zijn eigen dochter als slavin had verhandeld om aan eten te komen, en uiteindelijk zichzelf verslond." },
   codex_pentheus_bacchus: { cat:"mythologie", titel:"Pentheus en de Bacchanten",
     tekst:"Pentheus, kleinzoon van Kadmos en koning van Thebe, weigerde de nieuwe god Bacchus te erkennen — ook al was die god, de zoon van Semele, zijn eigen neef. Toen hij vermomd de extatische riten van Bacchus' vrouwelijke volgelingen probeerde te bespieden, werd hij ontdekt door de Bacchanten zelf, onder wie — in hun door de god opgewekte waanzin — zijn eigen moeder Agave. Wat er die middag op de berg gebeurde, is het duisterste verhaal dat dit hoofdstuk te vertellen heeft: toen Agave weer bij zinnen kwam, besefte ze pas wat haar handen hadden gedaan." },
   // ---- Museum van Mnemosyne (vanaf het einde van Hoofdstuk 6) ----
@@ -2108,6 +2243,10 @@ const SP_CODEX_ENTRIES = {
     tekst:"Odysseus wil terug naar wat hij al had: een vrouw, een zoon, een eiland dat al twintig jaar op hem wacht. Aeneas moet een thuis stichten dat nog niet bestaat, met alleen zijn vaders as en zijn zoons hand om hem eraan te herinneren waarom. Dezelfde zee, dezelfde goden, twee volledig verschillende soorten verlangen naar 'thuis'." },
   codex_baucis_philemon: { cat:"mythologie", titel:"Baucis en Philemon, Xenia",
     tekst:"Vermomd als arme zwervers werden Jupiter en Mercurius overal in een Frygisch dorp geweigerd, tot een straatarm, oud echtpaar — Baucis en Philemon — hun laatste brood, wijn en gans met hen deelde. Jupiter onthulde zich, verzwolg het ondankbare dorp onder een meer, en veranderde hun hutje in een gouden tempel. Xenia — de heilige plicht van gastvrijheid tussen gastheer en gast — is een van de zwaarst bewaakte wetten van de klassieke wereld, en wie hem breekt, breekt hem nooit zonder gevolgen." },
+  codex_acis_en_galatea: { cat:"mythologie", titel:"Acis en Galatea",
+    tekst:"Polyphemus was, voor Odysseus' aankomst, hopeloos verliefd op de zeenimf Galatea — die echter de voorkeur gaf aan de jonge herder Acis. Toen de Kykloop het paar samen betrapte, verpletterde hij Acis uit jaloezie onder een rotsblok; Galatea veranderde zijn bloed in een rivier aan de voet van de Etna, die zijn naam nog altijd draagt." },
+  codex_nausicaa_en_de_faiaken: { cat:"mythologie", titel:"Nausicaa en de Faiaken",
+    tekst:"Na dagenlang op zee te hebben rondgedreven spoelde Odysseus naakt en uitgeput aan op het strand van Scherië, waar prinses Nausicaa hem vond en naar het paleis van haar vader, koning Alcinous, bracht. Als eregast bij de Faiaken onthuld, gaf Odysseus daar voor het eerst zijn ware naam prijs en vertelde hij zijn hele omzwerving — waarna de Faiaken hem uiteindelijk veilig naar Ithaka voeren." },
   codex_aeolus: { cat:"mythologie", titel:"Aeolus, Heerser van de Winden",
     tekst:"Aeolus bewaart alle winden op zijn drijvende eiland en geeft Odysseus een zak met alle vijandige winden erin opgesloten — op negen dagen afstand van Ithaka openen Odysseus' eigen mannen de zak uit hebzucht, en drijven zichzelf terug naar af. Aeolus weigert een tweede keer te helpen: een sterveling die de goden zo tegen zich heeft, wil hij niet nog eens aan boord van zijn eigen geluk." },
   codex_laistrygonen: { cat:"mythologie", titel:"De Laistrygonen",
@@ -2158,6 +2297,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Orpheus, de zanger van de Argonautentocht, daalt levend af naar de onderwereld om zijn overleden vrouw Eurydice terug te halen — en wint zelfs Hades en Persephone met zijn lied. Op de valreep, twijfelend of ze hem wel volgt, kijkt hij om en verliest haar voorgoed, voor de tweede en laatste keer." },
   codex_sirenen: { cat:"mythologie", titel:"De Sirenen",
     tekst:"Wezens wier lied geen enkele zeeman ooit heeft weerstaan. Odysseus laat zich vastbinden aan de mast om het lied wél te horen zonder overboord te kunnen springen — de enige sterveling die de Sirenen ooit hoorde zingen en het overleefde." },
+  codex_glaucus_en_skylla: { cat:"mythologie", titel:"Glaucus en Skylla",
+    tekst:"De visser-god Glaucus werd verliefd op de zeenimf Skylla, die hem afwees. Toen Kirke, om wie hij om hulp vroeg, zelf verliefd werd op Glaucus en door hem werd afgewezen, vergiftigde ze uit jaloezie de bron waarin Skylla baadde — en veranderde haar onderlichaam in een kluwen blaffende honden en zeemonsterkoppen. Zo werd de nimf die Odysseus' vloot bij de zeeëngte trof, ooit zelf het slachtoffer van de jaloezie van een andere godin." },
   codex_terug_naar_licht: { cat:"mythologie", titel:"De Poort van Ivoor",
     tekst:"Er zijn twee poorten waardoor dromen (en, in Aeneas' geval, de levenden) de onderwereld verlaten: de Poort van Hoorn voor ware dromen, de Poort van Ivoor voor valse. Vergilius laat Aeneas uitgerekend door de Poort van Ivoor naar boven gaan — een detail waar geleerden al eeuwen over discussiëren." },
   codex_thrinacia: { cat:"mythologie", titel:"De Runderen van Helios",
@@ -2284,6 +2425,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Na twintig jaar zetten de Faiaken Odysseus eindelijk aan land op zijn eigen eiland, slapend. Athena verhult het landschap in mist tot ze zeker weet dat hij alleen is, onthult zich dan, en verandert hem in een oude bedelaar zodat hij ongezien zijn eigen, door vrijers overgenomen paleis kan verkennen." },
   codex_eumaeus: { cat:"mythologie", titel:"Eumaeus, de Trouwe Zwijnenhoeder",
     tekst:"Een van de weinige dienaren die Odysseus al die jaren trouw is gebleven. Zonder zijn eigen koning in de haveloze bedelaar te herkennen, deelt hij toch onvoorwaardelijk zijn karige maaltijd — precies de gastvrijheid die de vrijers in het paleis allang zijn verleerd." },
+  codex_orestes_wraak: { cat:"mythologie", titel:"Orestes' Wraak",
+    tekst:"Agamemnons zoon Orestes keerde, aangespoord door Apollo's orakel in Delphi, terug naar Mycene om zijn vaders moord te wreken — en doodde, met hulp van zijn zuster Electra, zowel zijn moeder Clytemnestra als haar minnaar Aegisthus. De wraakgodinnen, de Erinyes, achtervolgden hem daarna van stad tot stad tot krankzinnigheid aan toe, tot hij in Athene terechtstond voor een rechtbank van stervelingen, met Athena zelf als scheidsrechter." },
 
   // ---- Vier nieuwe grammaticatabellen (2026-07-31), verplaatst vanuit
   // Hoofdstuk 10-12 zodat Minerva deel 1 volledig is afgerond bij
@@ -4304,7 +4447,7 @@ Je stapt door. Wanneer het licht wegtrekt, sta je niet langer in Latium. De luch
 "Voordat we weten of jij de geschikte persoon bent, moeten we je eerst testen met een eenvoudige opdracht," zegt de boodschapper. "Drie namen, drie plekken — maar jij kiest er nu maar één. Welk verhaal je ook redt, dat is het verhaal dat telt voor deze reis; de andere twee zullen intussen verder vervagen, misschien wel voorbij redding. Kies wijs."
 
 CODEX:
-codex_grammatica_ch1_lidwoord, codex_grammatica_ch1_naamvallen
+codex_grammatica_ch1_lidwoord, codex_grammatica_ch1_naamvallen, codex_chaos_en_de_eerste_goden
 
 CHOICES:
 
@@ -4671,9 +4814,35 @@ CLEMENTIA: Bacchus knikt, verrassend zacht voor een god van uitbundigheid. "Niet
 
 CHOICES:
 
-* Loop meteen door — er wacht nog werk aan de naam die je moet redden [SEVERITAS] -> CH1_A11
-* Werp een laatste blik terug, zonder er verder bij stil te staan [NEUTRAL] -> CH1_A11
-* Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [CLEMENTIA] -> CH1_A11
+* Loop meteen door — er wacht nog werk aan de naam die je moet redden [SEVERITAS] -> CH1_A10C
+* Werp een laatste blik terug, zonder er verder bij stil te staan [NEUTRAL] -> CH1_A10C
+* Kijk nog eenmaal om, met medeleven voor de man die zoveel verloor en terugkreeg [CLEMENTIA] -> CH1_A10C
+
+END
+
+=== SCENE: CH1_A10C ===
+
+TITLE:
+Ezelsoren
+
+TEXT:
+Terwijl Midas zijn kletsnatte haar uit zijn gezicht veegt, merk je dat hij nog niet klaar is met vertellen. "Weet je," zegt hij, met een blik die tussen schaamte en gelatenheid zweeft, "dit is niet de eerste keer dat ik verkeerd oordeel." Hij vertelt over een muziekwedstrijd, niet zo lang geleden, in de bergen bij Sardis: de herdersgod Pan waagde het zijn rietfluit tegen de lier van Apollo zelf te zetten, en koning Tmolus van de berg werd als scheidsrechter aangesteld. Tmolus koos, zonder aarzelen, voor Apollo — maar Midas, die toevallig ook luisterde, riep hardop dat het lied van Pan hem meer had geraakt.
+
+"Apollo nam het... niet goed op," zegt Midas droog. De god vond dat oren die zulke wanklanken boven zijn eigen spel verkozen, geen menselijke oren verdienden — en veranderde ze ter plekke in de lange, harige oren van een ezel. Sindsdien verbergt Midas ze onder een Phrygische muts, dag en nacht, en heeft hij zijn hofkapper onder zware eed gezworen te zwijgen.
+
+"Die arme man hield het niet vol," gaat Midas verder, bijna lachend om zichzelf. "Hij groef een kuil, fluisterde er zijn geheim in, en stopte de aarde weer dicht — maar het riet dat er later groeide, fluistert het bij elke windvlaag nog steeds door: de koning heeft ezelsoren."
+
+IMAGE:
+ch1_midas_ezelsoren.png
+
+CODEX:
+codex_ezelsoren_van_midas
+
+CHOICES:
+
+* "Een oordeel dat te snel werd geveld, verdient geen straf die eeuwig blijft naklinken." [CLEMENTIA] -> CH1_A11
+* "Een god beledigen heeft nu eenmaal een prijs — ook als het onbedoeld was." [SEVERITAS] -> CH1_A11
+* Je zegt niets, en laat het geritsel van het riet voor zich spreken [NEUTRAL] -> CH1_A11
 
 END
 
@@ -5920,7 +6089,31 @@ souvenir_latona
 
 CHOICES:
 
-* Keer terug — er wachten nog meer verhalen -> CH2_000
+* Kijk wat er van de pasgeboren Apollo zal worden -> CH2_L08C
+
+END
+
+=== SCENE: CH2_L08C ===
+
+TITLE:
+Apollo en Daphne
+
+TEXT:
+Jaren later, zo fluistert het Orakel je toe terwijl het beeld van de kikkervijver vervaagt, zal deze pasgeboren god zijn eerste, meest onbeantwoorde liefde beleven. Apollo, trots op zijn nieuw verworven overwinning op de slang Python, spot de kleine liefdesgod Cupido met pijl en boog en lacht om zulk kinderspeelgoed in de handen van iemand die geen echte krijger is. Cupido, beledigd, schiet twee pijlen: een gouden, die Apollo onweerstaanbaar verliefd maakt op de eerste vrouw die hij ziet, en een loden, die diezelfde vrouw — de nimf Daphne — juist alle liefde voorgoed doet verafschuwen.
+
+Apollo achtervolgt Daphne door de bossen, smekend, terwijl zij wanhopig vlucht en haar vader, de riviergod Peneus, om redding roept. Vlak voordat Apollo haar inhaalt, verandert Peneus zijn dochter in een laurierboom: haar huid wordt bast, haar armen worden takken, haar haar wordt bladeren. Apollo, met zijn armen nog om de nieuwe boomstam, zweert dat de laurier voortaan altijd zijn heilige boom zal zijn — en dat de kransen voor dichters en overwinnaars voor eeuwig van haar bladeren gevlochten zullen worden.
+
+IMAGE:
+ch2_apollo_daphne.png
+
+CODEX:
+codex_apollo_en_daphne
+
+CHOICES:
+
+* "Een liefde die nooit om toestemming vroeg, verdient geen erekrans." [SEVERITAS] -> CH2_000
+* "Ook goden moeten leren dat 'nee' een antwoord is." [NEUTRAL] -> CH2_000
+* Je denkt aan hoe weinig keuze Daphne ooit had, in dit verhaal of in het volgende [CLEMENTIA] -> CH2_000
 
 END
 
@@ -6427,7 +6620,28 @@ kallisto
 
 CHOICES:
 
-* Keer terug — er wachten nog meer verhalen -> CH2_000
+* Eén laatste verhaal over Diana's jachtgebied wacht nog -> CH2_K09B
+
+END
+
+=== SCENE: CH2_K09B ===
+
+TITLE:
+Actaeon in het Bronsgroene Dal
+
+TEXT:
+Niet ver van hier, vertelt Athena je terwijl jullie samen naar de sterrenbeelden kijken, ligt een dal waar Diana — die hier nooit haar naam Artemis aflegt, ook al is dit haar Griekse thuisland — met haar nimfen graag baadt na een lange jachtdag. Op een middag verdwaalt de jager Actaeon, kleinzoon van Kadmos, tijdens de jacht met zijn honden precies in dat dal, en stapt zonder enige kwade bedoeling de grot binnen waar Diana zich net ontkleedt.
+
+Diana, woedend om zoveel ongewilde blootstelling, besproeit hem met water uit de bron en verandert hem ter plekke in een hert. Zijn eigen jachthonden, die hem niet langer herkennen, ruiken enkel nog een prooi — en jagen hem op, tot hij door zijn eigen roedel wordt verscheurd.
+
+CODEX:
+codex_artemis_en_actaeon, codex_endymion_selene
+
+CHOICES:
+
+* "Onwetendheid is geen excuus wanneer het om een godin gaat." [SEVERITAS] -> CH2_000
+* "Zijn eigen honden herkenden hem niet meer — misschien is dat straf genoeg." [CLEMENTIA] -> CH2_000
+* Je laat het oordeel liever aan de godin zelf over [NEUTRAL] -> CH2_000
 
 END
 
@@ -6841,7 +7055,59 @@ herakles
 
 CHOICES:
 
-* Keer terug — er wachten nog meer verhalen -> CH2_000
+* Athena vertelt nog van een veel groter gevecht waarin Herakles' hulp onmisbaar was -> CH2_H12B
+
+END
+
+=== SCENE: CH2_H12B ===
+
+TITLE:
+De Gigantomachie
+
+TEXT:
+"Er is één gevecht dat je nog niet kent," zegt Athena, terwijl ze je meeneemt naar een herinnering die ouder is dan Herakles' twaalf beproevingen. Ooit rezen de Giganten op — reusachtige zonen van Gaia, geboren uit het bloed van de gecastreerde Ouranos — en vielen de Olympos zelf aan, om de heerschappij van Zeus' generatie voorgoed te breken.
+
+De goden alleen konden de Giganten niet verslaan: een profetie had bepaald dat enkel een sterveling het laatste, dodelijke gevecht kon beslissen. Zeus liet Herakles halen, en hoofd na hoofd van de reuzenlegers viel: Alcyoneus, Porphyrion, en tientallen anderen, geveld door goddelijke pijlen en Herakles' onfeilbare boog samen. Athena zelf verpletterde de reus Enkelados onder heel het eiland Sicilië.
+
+"Zonder een sterveling aan onze zijde," zegt Athena, "waren wij, de Olympiërs, die dag misschien zelf onttroond. Onthoud dat: zelfs goden hebben soms een mens nodig."
+
+IMAGE:
+ch2_gigantomachie.png
+
+CODEX:
+codex_gigantomachie, codex_typhon
+
+CHOICES:
+
+* "Dan is heldendom dus net zo onmisbaar voor goden als voor mensen." [NEUTRAL] -> CH2_H12C
+* "Toch bepaalden jullie, goden, uiteindelijk zelf wie die sterveling mocht zijn." [SEVERITAS] -> CH2_H12C
+* Je knikt stil, onder de indruk van hoeveel er op één man's schouders rustte [CLEMENTIA] -> CH2_H12C
+
+END
+
+=== SCENE: CH2_H12C ===
+
+TITLE:
+De Chimaira
+
+TEXT:
+"Er is nog één monster dat je moet kennen," zegt Athena, terwijl de herinnering aan de Gigantomachie vervaagt, "al is dit gevecht niet van Herakles, maar van een held die je later nog zult tegenkomen." Ze laat je een dal zien in Lycië, waar een vuurspuwend wezen huist met het lijf van een leeuw, een geitenkop op zijn rug en een slangenstaart — de Chimaira, een ander kind van Typhon en Echidna, net als zoveel monsters die Herakles nog zal moeten verslaan.
+
+Bellerophon, een jonge held uit Korinthe, krijgt van koning Iobates de onmogelijke opdracht het monster te doden — in de stille hoop dat het beest hem eerst zal doden. Met hulp van Athena zelf (die hem een gouden teugel geeft) en Poseidon (die hem het gevleugelde paard Pegasus schenkt) rijdt Bellerophon boven de Chimaira's bereik en doorboort haar vuurspuwende keel met een loden speerpunt, die in de hitte smelt en het monster van binnenuit verstikt.
+
+"Hoogmoed wordt hem later noodlottig," zegt Athena, "wanneer hij op Pegasus naar de Olympos zelf probeert te vliegen — maar dat visioen bewaar ik voor een andere dag."
+
+IMAGE:
+ch2_bellerophon_chimaira.png
+
+CODEX:
+codex_bellerophon_chimaira
+
+CHOICES:
+
+* "Een geleend paard en een geleende teugel — nog geen eigen overwinning." [SEVERITAS] -> CH2_000
+* "Hij deed wat niemand anders durfde, hulp of niet." [CLEMENTIA] -> CH2_000
+* Je onthoudt vooral het beeld van een ruiter die een vuurspuwend monster van bovenaf aanvalt [NEUTRAL] -> CH2_000
 
 END
 
@@ -6881,7 +7147,7 @@ TEXT:
 De lucht rond je trilt weer op de vertrouwde manier, en de stem van de Boodschapper van Kronos klinkt, warmer dan ooit. "[[Ecce|zie hier]] — vier herinneringsfragmenten, vier gezichten van dezelfde jaloezie," zegt de stem. "Latona, Kallisto, Semele, Herakles — stuk voor stuk weer stevig verankerd in de herinnering, en met hen het hele verhaal van een liefde die een godin niet kon vergeven."
 
 CODEX:
-codex_grammatica_ch2_overzicht
+codex_grammatica_ch2_overzicht, codex_apollo_hyacinthus, codex_apollo_coronis, codex_marsyas_en_apollo, codex_cyparissus, codex_artemis_en_orion
 
 VOCAB:
 latijn_errare, latijn_fugere, latijn_posse, latijn_adiuvare, latijn_terra, latijn_nemo, latijn_amare, latijn_ostendere, latijn_ignis, latijn_potens, latijn_currere, latijn_abire, latijn_ursa, latijn_silva, latijn_necare, latijn_servire, latijn_vincere, grieks_kalos, grieks_zoon, grieks_megas, grieks_dynamis, grieks_ergon, grieks_kai, grieks_de, grieks_gar, grieks_ou, grieks_eis, grieks_alla, grieks_echo, grieks_poieo, grieks_houtos, grieks_lambano, latijn_sum, latijn_non, latijn_tu, latijn_sed, latijn_ego, latijn_possum, latijn_dico, latijn_nos, latijn_venio, latijn_mitto
@@ -7080,7 +7346,33 @@ hermes:intro
 
 CHOICES:
 
-* Volg Mercurius op zijn missie -> CH3_IO07B
+* Volg Mercurius op zijn missie -> CH3_IO07A
+
+END
+
+=== SCENE: CH3_IO07A ===
+
+TITLE:
+De Listige Baby
+
+TEXT:
+Terwijl je Mercurius zijn vleugelsandalen ziet vastgespen, herinner je je — of misschien fluistert het Orakel het je gewoon in — hoe deze god aan zijn reputatie als meesterdief en meesterprater kwam. Op de dag van zijn eigen geboorte, nog geen paar uur oud, kroop hij al uit zijn wieg om vijftig runderen van zijn halfbroer Apollo te stelen, en liet hen achterstevoren lopen zodat hun sporen de verkeerde kant op wezen.
+
+Toen Apollo hem, woedend, uiteindelijk te pakken kreeg, deed Mercurius zo overtuigend onschuldig — nog in zijn windsels gewikkeld — dat zelfs Jupiter, als scheidsrechter, bijna moest lachen. Verzoening kwam er pas toen Mercurius zijn kersverse uitvinding liet horen: een lier, gemaakt van een schildpadschild en snaren van darm. Apollo, betoverd door het geluid, ruilde zijn hele kudde meteen voor het instrument — en Mercurius werd zo, binnen één dag, zowel dief als uitvinder, zowel schurk als vriend van de god die hij bestolen had.
+
+"Geen wonder," denk je, "dat juist hij is uitgekozen om honderd ogen in slaap te praten."
+
+IMAGE:
+ch3_mercurius_veediefstal.png
+
+CODEX:
+codex_geboorte_hermes
+
+CHOICES:
+
+* "Een god die zelfs zijn eigen misstap in een gunst weet om te zetten." [NEUTRAL] -> CH3_IO07B
+* "Vernuft rechtvaardigt niet alles wat je steelt — al eindigt het met een verzoening." [SEVERITAS] -> CH3_IO07B
+* "Als het uiteindelijk beide partijen iets goeds oplevert, is de diefstal het vergeten waard." [CLEMENTIA] -> CH3_IO07B
 
 END
 
@@ -7348,7 +7640,7 @@ IMAGE:
 ch3_europa_stier.png
 
 CODEX:
-codex_europa
+codex_europa, codex_zeus_en_danae, codex_ganymedes
 
 PERSON:
 europa:intro
@@ -10013,6 +10305,9 @@ Orpheus Grijpt In
 TEXT:
 Voor iemand kan ingrijpen, klinkt er muziek over het dek — Orpheus, die zijn lier pakt en speelt zoals hij weet dat alleen hij kan spelen. De ruzie sterft vanzelf weg, niet omdat iemand gelijk kreeg, maar omdat niemand meer de puf heeft om boos te blijven terwijl die muziek klinkt. Zelfs Tydeus, met zijn vuisten nog half gebald, laat zich zonder het zelf te merken terugzakken op zijn bank.
 
+CODEX:
+codex_arion
+
 FLAG:
 ch5_019_route=open
 
@@ -10030,6 +10325,9 @@ Voordat de Vuist Valt
 TEXT:
 Je grijpt Tydeus' arm vast op precies het moment dat hij wil uithalen — geen woord, alleen een greep die hem hard genoeg verrast om te aarzelen. Orpheus, die de spanning ook voelt, pakt intussen zijn lier erbij en speelt de rest van de avond rustig, zodat niemand zich nog hoeft af te vragen of het weer zal escaleren.
 
+CODEX:
+codex_arion
+
 FLAG:
 ch5_019_route=vis
 
@@ -10045,7 +10343,10 @@ TITLE:
 Vóór het Escaleert
 
 TEXT:
-Je merkt de spanning al minuten eerder dan wie ook — de manier waarop de roeier zijn schouders spant, de manier waarop Tydeus' stem net iets te scherp wordt. Een paar rustige woorden aan de roeier, ruim voor het misgaat, zijn genoeg om de vonk nooit te laten overslaan.
+Je merkt de spanning al minuten eerder dan wie ook — de manier waarop de roeier zijn schouders spant, de manier waarop Tydeus' stem net iets te scherp wordt. Een paar rustige woorden aan de roeier, ruim voor het misgaat, zijn genoeg om de vonk nooit te laten overslaan. Orpheus, die toch al zijn lier bij de hand had, speelt er nog wat rustige klanken overheen, zodat de avond zacht verdergaat.
+
+CODEX:
+codex_arion
 
 FLAG:
 ch5_019_route=prudentia
@@ -10734,7 +11035,7 @@ IMAGE:
 ch6_niobe_versteend.png
 
 CODEX:
-codex_niobe
+codex_niobe, codex_erysichthon, codex_procne_philomela
 
 SOUVENIR:
 souvenir_thebe
@@ -11593,7 +11894,33 @@ ch6_pentheus
 
 CHOICES:
 
-* Luister verder -> CH6_EINDE
+* Luister nog naar één laatste verhaal over deze god -> CH6_025B
+
+END
+
+=== SCENE: CH6_025B ===
+
+TITLE:
+Bacchus en de Piraten
+
+TEXT:
+"Niet iedereen die Bacchus tartte, eindigde zoals Pentheus," zegt de Boodschapper, terwijl het beeld van Thebe vervaagt tot een verre kust. Ooit, lang voor deze gebeurtenissen, verscheen Bacchus als een mooie jongeman aan het strand, en Tyrreense piraten — die geen idee hadden wie ze voor zich hadden — grepen hem, in de veronderstelling dat ze een rijke prins konden verkopen als slaaf.
+
+Aan boord veranderde het schip zelf: wingerdranken groeiden woekerend over het dek, wijn stroomde waar eerst zeewater klotste, en het gebrul van onzichtbare panters vulde de lucht. De piraten, doodsbang, sprongen overboord — en Bacchus, zonder ook maar één klap uit te delen, veranderde hen in de golven in dolfijnen: voor eeuwig veroordeeld om als zeedieren door dezelfde wateren te zwemmen die ze ooit als mensen bevoeren. Alleen de stuurman, die als enige had gepleit om de vreemde jongeman met rust te laten, bleef gespaard.
+
+"Agave verloor haar zoon aan dezelfde god die deze piraten hun mensheid liet houden — als dolfijnen, weliswaar, maar levend," besluit de Boodschapper. "Bacchus straft zelden op dezelfde manier tweemaal."
+
+IMAGE:
+ch6_bacchus_piraten.png
+
+CODEX:
+codex_bacchus_en_de_piraten
+
+CHOICES:
+
+* "Een straf die tenminste geen levens kostte — dat scheelt met wat Pentheus overkwam." [CLEMENTIA] -> CH6_EINDE
+* "Toch bleven ze voorgoed veranderd — ook dit is geen lichte straf." [SEVERITAS] -> CH6_EINDE
+* Je denkt na over hoe willekeurig het lijkt wie een god wel en niet spaart [NEUTRAL] -> CH6_EINDE
 
 END
 
@@ -16153,8 +16480,34 @@ codex_poseidon_vloek
 
 CHOICES:
 
-* Ga verder [REQUIRE:taalspoor=grieks] -> CH10_ODY_007
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH10_ODY_006C
 * Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH10_AEN_006
+
+END
+
+=== SCENE: CH10_ODY_006C ===
+
+TITLE:
+Acis en Galatea
+
+TEXT:
+Voor Odysseus ooit voet zette op Polyphemus' eiland, zo vertelt een oude visser je later ergens onderweg, was de Kykloop al verliefd — hopeloos, obsessief verliefd — op de zeenimf Galatea. Zij had echter enkel oog voor Acis, een knappe jonge herder, en de twee minnaars ontmoetten elkaar stiekem in de rotsen langs de kust, ver van Polyphemus' jaloerse blik.
+
+Op een dag betrapte Polyphemus hen samen. Zingend van woede sloeg hij zijn kudde uiteen en slingerde, in een vlaag van pure jaloezie, een rotsblok zo groot als een berg naar het vluchtende paar. Acis kwam om onder het gesteente — maar Galatea, ontroostbaar, veranderde zijn vloeiende bloed in een heldere rivier die nog altijd zijn naam draagt, stromend langs de voet van de Etna.
+
+"Dezelfde Kykloop die jullie hebben verblind," besluit de visser, "had zijn eigen hart al eerder verpletterd zien worden — door zijn eigen jaloezie, niet door zijn eigen ogen."
+
+IMAGE:
+ch10_acis_galatea.png
+
+CODEX:
+codex_acis_en_galatea
+
+CHOICES:
+
+* "Zijn woede tegenover Odysseus wordt er begrijpelijker door — al maakt het die niet minder gevaarlijk." [NEUTRAL] -> CH10_ODY_007
+* "Jaloezie die tot moord leidt, verdient geen mededogen — bij een Kykloop niet, en bij niemand anders." [SEVERITAS] -> CH10_ODY_007
+* "Zelfs een monster kan een gebroken hart hebben — dat maakt zijn verhaal alleen maar trieste." [CLEMENTIA] -> CH10_ODY_007
 
 END
 
@@ -17527,6 +17880,45 @@ CODEX:
 codex_sirenen
 
 CHOICES:
+* Hoor hoe Skylla ooit zelf een slachtoffer was, lang voor ze een monster werd -> CH11_ODY_010C
+
+END
+
+=== SCENE: CH11_ODY_010C ===
+
+TITLE:
+Glaucus en Skylla
+
+TEXT:
+Nog nazinderend van het gebrul in de zeeëngte, herinner je je iets wat Kirke je tijdens dat lange jaar op Aeaea ooit toevertrouwde: Skylla was niet altijd een monster met zes koppen. Ooit was ze een mooie zeenimf, en de visser-god Glaucus — zelf pas veranderd in een god nadat hij een magisch kruid had geproefd — werd smoorverliefd op haar. Skylla wees hem echter af en vluchtte telkens weg wanneer hij haar naderde.
+
+Wanhopig zocht Glaucus hulp bij de tovenares Kirke, in de hoop op een liefdesdrank die Skylla's hart zou winnen. Kirke, die zelf verliefd werd op Glaucus terwijl hij zijn verhaal vertelde, bood zichzelf aan in Skylla's plaats — en toen hij haar afwees uit trouw aan Skylla, greep ze, verteerd door jaloezie, naar een ander middel: ze vergiftigde de bron waarin Skylla graag baadde. Skylla's onderlichaam veranderde in een kluwen blaffende honden en zeemonsterkoppen, voorgoed vastgeklonken aan de rots waar de vloot haar zojuist tegenkwam.
+
+"Dezelfde Kirke die jullie gastvrij onthaalde," besef je, "is de reden dat dit zeemonster hier überhaupt bestaat."
+
+IMAGE:
+ch11_glaucus_skylla.png
+
+CODEX:
+codex_glaucus_en_skylla
+
+CHOICES:
+
+* "Jaloezie van een godin, betaald door een nimf die er part noch deel aan had — typerend." [SEVERITAS] -> CH11_010C_EINDE
+* "Kirke was zo gastvrij voor Odysseus — het is ontnuchterend te beseffen waartoe ze ook in staat is." [NEUTRAL] -> CH11_010C_EINDE
+* Je voelt vooral medelijden met Skylla, die nooit koos voor wat ze werd [CLEMENTIA] -> CH11_010C_EINDE
+
+END
+
+=== SCENE: CH11_010C_EINDE ===
+
+TITLE:
+Voorbij de Zeeëngte
+
+TEXT:
+De vloot laat de zeeëngte en haar monster achter zich, terwijl het verhaal van Glaucus en Kirke nog naklinkt — een herinnering dat niet elk monster geboren wordt als monster.
+
+CHOICES:
 * Zie waar de vloot ten slotte aanlegt [REQUIRE:taalspoor=grieks] -> CH11_ODY_011
 * Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_009
 
@@ -17712,8 +18104,36 @@ VOCAB:
 grieks_hos, grieks_ean, grieks_hostis, grieks_ge, grieks_medeis, grieks_hina, grieks_tygchano, grieks_oiomai, grieks_hopos_vragend, grieks_pino, latijn_fio, latijn_eo, latijn_relinquo, latijn_reddo, latijn_ubi, latijn_uterque, latijn_bene, latijn_ante, latijn_recipio, latijn_vero
 
 CHOICES:
-* Volg Odysseus naar Ithaka [REQUIRE:taalspoor=grieks] -> CH12_ODY_001
+* Volg Odysseus naar Ithaka [REQUIRE:taalspoor=grieks] -> CH12_ODY_000B
 * Ga verder [REQUIRE:taalspoor!=grieks] -> CH12_LAT_000
+
+END
+
+=== SCENE: CH12_ODY_000B ===
+
+TITLE:
+Nausicaa en de Faiaken
+
+TEXT:
+Voor Odysseus Ithaka's kust kan bereiken, moet hij eerst van Calypso's eiland af. Op bevel van Zeus zelf brengt Hermes de nimf de boodschap dat ze hem moet laten gaan — en na jaren laat ze hem, met tegenzin, een vlot bouwen en alsnog vertrekken.
+
+Poseidon, die zijn wrok om de verblinding van zijn zoon Polyphemus nooit heeft laten varen, ziet zijn kans en slaat het vlot met een storm uiteen. Odysseus overleeft ternauwernood, en spoelt naakt en uitgeput aan op het strand van Scherië, het eiland van de Faiaken.
+
+Daar vindt de jonge prinses Nausicaa hem — die met haar dienaressen kleren komt wassen aan de rivier — bang noch weerzinwekkend genoeg om te vluchten, maar juist vastberaden genoeg om hem te helpen. Ze brengt hem naar het paleis van haar vader, koning Alcinous, waar hij als eregast onthaald wordt met een banket en spelen.
+
+Pas daar, aangespoord door de blinde zanger Demodocus' lied over de val van Troje, geeft Odysseus voor het eerst zijn eigen naam prijs — en vertelt hij zijn hele reis, van de Kikonen tot aan dit punt, aan de verbaasde Faiaken. Zij zijn het die hem, ten slotte, met een snel en veilig schip naar Ithaka brengen.
+
+IMAGE:
+ch12_ody_nausicaa_faiaken.png
+
+CODEX:
+codex_nausicaa_en_de_faiaken
+
+CHOICES:
+
+* "Xenia zoals het hoort te zijn — het tegenovergestelde van wat de Kykloop bood." [NEUTRAL] -> CH12_ODY_001
+* "Nausicaa nam een risico door een vreemde zo snel te vertrouwen — moedig, niet vanzelfsprekend." [CLEMENTIA] -> CH12_ODY_001
+* Je onthoudt vooral dat Odysseus, ondanks alles, telkens weer op de vrijgevigheid van vreemden blijft steunen [SEVERITAS] -> CH12_ODY_001
 
 END
 
@@ -18178,7 +18598,7 @@ TITLE:
 De Kust van Ithaka
 
 TEXT:
-Na twintig jaar — tien bij Troje, tien op zee — zetten de Faiaken, die hem als laatste gastheer thuisbrachten, Odysseus eindelijk aan land op Ithaka zelf, slapend, zonder dat hij het merkt. Wanneer hij wakker wordt, herkent hij zijn eigen eiland niet meteen — een mist, door Athena zelf gestuurd, verhult alles tot ze zeker weet dat hij alleen is.
+Na twintig jaar — tien bij Troje, tien op zee — zetten de Faiaken Odysseus eindelijk aan land op Ithaka zelf, slapend, zonder dat hij het merkt. Wanneer hij wakker wordt, herkent hij zijn eigen eiland niet meteen — een mist, door Athena zelf gestuurd, verhult alles tot ze zeker weet dat hij alleen is.
 
 Athena onthult zich, niet voor het eerst zijn stille bondgenoot, en brengt hem meteen op de hoogte: zijn paleis is al jaren in handen van meer dan honderd vrijers, mannen die om Penelope's hand dingen terwijl ze zijn voorraden opeten en zijn gezag ondermijnen — ervan overtuigd dat Odysseus nooit meer terug zal keren. Om ongezien zijn eigen huis te kunnen verkennen, verandert ze hem in een oude, haveloze bedelaar.
 
@@ -18210,7 +18630,35 @@ CODEX:
 codex_eumaeus
 
 CHOICES:
-* Zie hoe Odysseus zich voorbereidt op wat komen gaat -> CH12_ODY_003
+* Denk terug aan wat Telemachus in Sparta te horen kreeg, voor hij naar huis terugkeerde -> CH12_ODY_002B
+
+END
+
+=== SCENE: CH12_ODY_002B ===
+
+TITLE:
+Orestes' Wraak
+
+TEXT:
+In Sparta, tijdens zijn zoektocht naar nieuws, was Telemachus te gast bij koning Menelaos en Helena zelf — allebei eindelijk verzoend na de val van Troje. Toen het gesprek op Agamemnons wrede thuiskomst kwam, vertelde Menelaos hem het hele verhaal, als een soort waarschuwing én voorbeeld tegelijk.
+
+Agamemnons zoon Orestes was nog een kind toen zijn vader vermoord werd door Clytemnestra en haar minnaar Aegisthus. In ballingschap opgegroeid, keerde hij jaren later, aangespoord door Apollo's eigen orakel in Delphi, terug naar Mycene — en doodde, met de hulp van zijn zuster Electra, zowel Aegisthus als zijn eigen moeder, om zijn vaders dood te wreken.
+
+De daad, hoe rechtvaardig ook in de ogen van velen, liet Orestes niet ongestraft: de Erinyes, de wraakgodinnen die niemand vergeven die zijn eigen moeder doodt, achtervolgden hem van stad tot stad, tot krankzinnigheid aan toe — tot hij uiteindelijk, in Athene, terechtstond voor een rechtbank van stervelingen zelf, met Athena als scheidsrechter.
+
+"Zo iemand als jij, Telemachus, zou zich geen betere naam kunnen wensen dan die van Orestes' roem," besloot Menelaos. "Een zoon die zijn vaders eer wreekt, wordt overal geëerd." Telemachus, die zelf nog geen enkele vrijer had durven confronteren, droeg die woorden mee, helemaal terug naar Ithaka.
+
+IMAGE:
+ch12_orestes_wraak.png
+
+CODEX:
+codex_orestes_wraak
+
+CHOICES:
+
+* "Een moord wreken met een nieuwe moord — hoe rechtvaardig het doel ook is, de Erinyes hadden gelijk om te blijven." [SEVERITAS] -> CH12_ODY_003
+* "Orestes deed wat van hem verwacht werd — een zoon die zijn vader niet wreekt, verdient geen eer." [NEUTRAL] -> CH12_ODY_003
+* "Een kind gedwongen te kiezen tussen twee ouders is zelf al straf genoeg, wat hij ook deed." [CLEMENTIA] -> CH12_ODY_003
 
 END
 
@@ -18733,7 +19181,73 @@ ch13_gre_verboden_kist.png
 Erichthonius overleeft, opgroeiend onder Athena's eigen, persoonlijke bescherming. Als volwassen man wordt hij zelf koning van Athene, waar hij bekendstaat als Erechtheus — de stichter van haar eerste echte tempel op de Akropolis, en de reden dat haar cultus in deze stad nooit meer zal verdwijnen.
 
 CHOICES:
-* Zie wie later, jaren na dit alles, Athena's geduld op de proef stelt -> CH13_GRE_005
+* Zie hoe Athena eens een sterveling met een heel ander soort gevaar hielp -> CH13_GRE_PERSEUS_01
+
+END
+
+=== SCENE: CH13_GRE_PERSEUS_01 ===
+
+TITLE:
+Het Gepolijste Schild
+
+TEXT:
+Athena vertelt je van een jongeman die ze ooit, generaties na Erichthonius, met een heel andere gave bijstond: Perseus, kleinzoon van koning Acrisius van Argos, verwekt door Zeus zelf bij Danaë in een bronzen kamer waarin haar vader haar had opgesloten — een list die de profetie die Acrisius vreesde, alleen maar dichterbij bracht. Uit angst voor die profetie — dat zijn eigen kleinzoon hem ooit zou doden — zette Acrisius moeder en kind in een kist op zee, die uiteindelijk veilig aan land spoelde.
+
+Jaren later, opgegroeid ver van Argos, werd Perseus door een lokale koning gedwongen te zweren dat hij het hoofd van Medusa zou brengen — een van de drie Gorgonen, wier blik iedereen die haar aankeek voorgoed in steen veranderde. Athena, die Medusa's lot minstens deels zelf had bepaald, koos de kant van Perseus: ze gaf hem haar eigen gepolijst bronzen schild, glad genoeg om als spiegel te dienen, zodat hij Medusa nooit rechtstreeks hoefde aan te kijken. Hermes voegde er gevleugelde sandalen en een kromzwaard aan toe, en de Nimfen leenden hem een helm die onzichtbaar maakte.
+
+Terwijl Medusa's twee onsterfelijke zusters sliepen, sloop Perseus dichterbij, zijn blik enkel gericht op haar spiegelbeeld in het schild — en onthoofde haar in één enkele slag. Uit haar afgehouwen nek sprong, verrassend, het gevleugelde paard Pegasus tevoorschijn, geboren uit het bloed van haar laatste, dodelijke ontmoeting met Poseidon.
+
+IMAGE:
+ch13_perseus_medusa.png
+
+CODEX:
+codex_perseus_medusa
+
+CHOICES:
+* "Vernuft, niet enkel kracht — dat past bij een held die Athena's hulp verdient." [NEUTRAL] -> CH13_GRE_PERSEUS_02
+* "Toch blijft het onthoofden van een slapende vrouw een wrede daad, gerechtvaardigde queeste of niet." [SEVERITAS] -> CH13_GRE_PERSEUS_02
+* Je onthoudt vooral hoe weinig keuze Medusa ooit had in wat ze werd [CLEMENTIA] -> CH13_GRE_PERSEUS_02
+
+END
+
+=== SCENE: CH13_GRE_PERSEUS_02 ===
+
+TITLE:
+Andromeda's Redding
+
+TEXT:
+Op de terugweg, Medusa's hoofd veilig weggeborgen in een buidel, vloog Perseus over de kust van Ethiopië en zag daar een jonge vrouw, Andromeda, geketend aan een rots, achtergelaten als offer voor een zeemonster. Haar moeder, koningin Cassiopeia, had zich ooit beroemd dat ze mooier was dan de zeenimfen zelf — een belediging die Poseidon enkel wilde vergeven als het land zijn eigen dochter aan het monster offerde.
+
+Perseus, op slag verliefd, bood haar vader koning Cepheus een ruil aan: hij zou het monster verslaan, in ruil voor Andromeda's hand. Met zijn kromzwaard versloeg hij het zeemonster — sommigen zeggen door het simpelweg te doorboren, anderen dat hij Medusa's hoofd nog één laatste keer gebruikte om het te verstenen — en bevrijdde haar. Ze trouwden nog diezelfde dag, tegen het protest van een oom die haar zelf al beloofd was.
+
+CODEX:
+codex_andromeda
+
+CHOICES:
+* Zie wat er gebeurt wanneer Perseus eindelijk terugkeert naar Argos -> CH13_GRE_PERSEUS_03
+
+END
+
+=== SCENE: CH13_GRE_PERSEUS_03 ===
+
+TITLE:
+De Profetie Voltrokken
+
+TEXT:
+Perseus keerde, met Andromeda aan zijn zijde, uiteindelijk terug naar Argos — waar zijn grootvader Acrisius, nog altijd bang voor de profetie die hem ooit zijn dochter deed opsluiten, bij het nieuws van zijn komst meteen vluchtte naar een andere stad. Het lot liet zich echter niet zo makkelijk ontlopen: tijdens atletische spelen elders wierp Perseus een discus die, afgeweken door een windvlaag, toevallig een oude toeschouwer trof. Het was Acrisius — gestorven door de hand van precies de kleinzoon die hij een leven lang had proberen te ontlopen.
+
+"Ik hielp hem tegen Medusa," besluit Athena, "maar tegen het lot van zijn eigen familie kon zelfs ik hem niet beschermen. Sommige profetieën voltrekken zich juist door de vlucht ervoor."
+
+IMAGE:
+ch13_perseus_acrisius.png
+
+CODEX:
+codex_acrisius_profetie
+
+CHOICES:
+* "Een profetie ontlopen blijkt zelden mogelijk — dat weet inmiddels iedereen die dit hoofdstuk volgt." [NEUTRAL] -> CH13_GRE_005
+* "Acrisius bracht het over zichzelf af, met elke keuze om zijn eigen dochter en kleinzoon te verstoten." [SEVERITAS] -> CH13_GRE_005
+* "Een ongeluk, geen wraak — Perseus droeg daar geen schuld aan." [CLEMENTIA] -> CH13_GRE_005
 
 END
 
@@ -20335,6 +20849,44 @@ STATPOINTS:
 3
 
 CHOICES:
+* Hoor het verhaal dat Doris die avond aan de andere vrouwen vertelt -> CH15_GRE_005C
+
+END
+
+=== SCENE: CH15_GRE_005C ===
+
+TITLE:
+Hero en Leander
+
+TEXT:
+Die avond, met haar vrijheidsakte nog vers, vertelt Doris aan de andere vrouwen van de buurt een verhaal dat ze als kind aan de kust hoorde: over Hero, een priesteres van Aphrodite die alleen woonde in een toren aan de ene kant van de Hellespont, en Leander, een jongeman van de overkant, die smoorverliefd op haar werd tijdens een feest.
+
+Omdat hun families een huwelijk nooit zouden toestaan, ontmoetten de twee elkaar in het geheim: elke nacht zwom Leander de hele zeeëngte over, geleid door een lantaarn die Hero bovenin haar toren voor hem brandend hield. Dit ging maandenlang goed, tot op een stormachtige nacht de wind de vlam doofde. Leander, de weg kwijt in het duister en de golven, verdronk. Toen Hero de volgende ochtend zijn lichaam op de rotsen onder haar toren vond, wierp ze zichzelf, ontroostbaar, van de toren af om bij hem te zijn.
+
+"Een lantaarn die dooft," zegt Doris zacht tegen de vrouwen om haar heen, "is soms alles wat tussen liefde en een graf staat."
+
+IMAGE:
+ch15_hero_leander.png
+
+CODEX:
+codex_hero_en_leander
+
+CHOICES:
+* "Een liefde die elke nacht een levensgevaarlijke zwemtocht waard was — dat is toewijding, geen dwaasheid." [CLEMENTIA] -> CH15_GRE_005D
+* "Zoveel risico voor een geheime liefde die hun families nooit zouden toestaan — een wrang soort vrijheid." [NEUTRAL] -> CH15_GRE_005D
+* Je denkt aan hoe weinig er nodig was om alles te laten instorten — één dovende vlam [SEVERITAS] -> CH15_GRE_005D
+
+END
+
+=== SCENE: CH15_GRE_005D ===
+
+TITLE:
+Verder
+
+TEXT:
+De vrouwen om Doris heen zwijgen even, geraakt door het oude verhaal, voor het gewone avondrumoer weer terugkeert.
+
+CHOICES:
 * Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH15_EINDE
 * Steek over naar de Latijnse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH15_LAT_005
 
@@ -20382,7 +20934,32 @@ SOUVENIR:
 souvenir_hoe_men_leefde
 
 CHOICES:
-* Keer terug naar het Orakel van Chronos -> CH15_EINDE
+* Hoor het verhaal dat de slavinnen op het landgoed elkaar 's avonds vertellen -> CH15_LAT_005C
+
+END
+
+=== SCENE: CH15_LAT_005C ===
+
+TITLE:
+Pyramus en Thisbe
+
+TEXT:
+Op het landgoed, terwijl Fortunata's linnen wacht op de volgende marktdag, vertelt een van de wolspinsters een verhaal dat overal in het Rijk als volkslegende de ronde doet: over Pyramus en Thisbe, twee jonge buren in Babylon van wie de ouders een huwelijk verboden — maar niet konden voorkomen dat de twee door een scheur in de gemeenschappelijke muur tussen hun huizen fluisterden.
+
+Op een nacht spraken ze af elkaar te ontmoeten bij het graf van Ninus, buiten de stad. Thisbe kwam als eerste, maar vluchtte toen een leeuwin, met bloed nog aan haar muil van een eerdere prooi, opdook om te drinken — in haar haast liet ze haar sluier vallen, die de leeuwin met bebloede muil aan flarden scheurde. Pyramus, ter plekke aangekomen en de gescheurde, bebloede sluier vindend, geloofde Thisbe dood en doodde zichzelf uit wanhoop met zijn eigen zwaard. Thisbe, teruggekeerd, vond hem stervend — en doodde zichzelf op haar beurt naast hem.
+
+"Vanaf die dag," besluit de spinster, terwijl ze haar draad weer oppakt, "kleuren de bessen van de moerbeiboom, waar hun bloed op viel, niet langer wit maar donkerrood — een boom die nog altijd rouwt om twee geliefden die nooit door een deur mochten lopen."
+
+IMAGE:
+ch15_pyramus_thisbe.png
+
+CODEX:
+codex_pyramus_en_thisbe
+
+CHOICES:
+* "Eén misverstand, twee levens — een wrange les over hoe snel wanhoop tot onomkeerbare daden leidt." [NEUTRAL] -> CH15_EINDE
+* "Ouders die een huwelijk verbieden, dragen evenveel schuld aan deze afloop als het toeval van die avond." [SEVERITAS] -> CH15_EINDE
+* Je vindt vooral ontroerend hoezeer ze, zelfs zonder toestemming, bij elkaar bleven tot het einde [CLEMENTIA] -> CH15_EINDE
 
 END
 
@@ -20401,7 +20978,7 @@ SOUVENIR:
 souvenir_hoe_men_leefde
 
 CODEX:
-codex_grammatica_ch15_overzicht
+codex_grammatica_ch15_overzicht, codex_pan_en_syrinx, codex_pan_en_echo, codex_salmacis_hermaphroditus, codex_cephalus_procris, codex_alpheus_arethusa, codex_adonis_myrrha
 
 CHOICES:
 * Keer terug naar het Museum -> CH15_MUSEUM_00
