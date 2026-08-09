@@ -309,6 +309,7 @@ const SpTextResolver = {
       case "andromache_payoff":    return ((state.relations||{}).andromache||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD ? SP_ENDKAPITAAL_ANDROMACHE_PAYOFF : "";
       case "prometheus_route_echo": return SP_CH1_C09_ROUTE_ECHO[state.flags?.ch1_c09_route] || "";
       case "sfinx_route_echo":      return SP_CH6_007_ROUTE_ECHO[state.flags?.ch6_007_route] || "";
+      case "ch9_zijde_h17_echo":    return SP_CH17_CH9_ZIJDE_ECHO[state.flags?.ch9_zijde] || "";
     }
     if(SP_TENDENCY_STORY_VARIANTS[path]) return spTendencyStoryVariant(path, state);
     return undefined;

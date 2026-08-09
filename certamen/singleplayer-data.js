@@ -928,6 +928,17 @@ const SP_CH6_007_ROUTE_ECHO = {
   agilitas:"Je lichtvoetigheid van daarnet is nu, stilstaand voor de Sfinx zelf, van geen enkel nut meer — een merkwaardig gevoel, na zoveel behoedzaamheid onderweg.",
   prudentia:"Wat je bij de overblijfselen zag — die vermoeidheid onder haar zelfverzekerdheid — geeft je, terwijl ze spreekt, het onbestemde gevoel dat dit raadsel haar zelf ook uitput.",
 };
+// ---- Hoofdstuk 17, B?? (Gerbens verzoek 2026-08-09): leest de allang
+// gezette maar sinds Hoofdstuk 9 nooit meer gelezen FLAG ch9_zijde=troje/
+// grieks terug (zie spBondgenotenAanwezig, singleplayer.js, en de
+// keuze/payoff-audit van 2026-08-07) — een concrete dode-flag-payoff,
+// ingezet via {ch9_zijde_h17_echo} in CH17_GRE_000B. Leeg (geen echo) als
+// de speler geen kant koos, wat vóór Hoofdstuk 9 nooit voorkomt maar de
+// token toch veilig maakt voor hergebruik. ----
+const SP_CH17_CH9_ZIJDE_ECHO = {
+  troje:"Voor de Perzen zelf is dat geen ver verleden. Wie destijds aan Trojaanse zijde streed, staat in hun eigen rekening dichter bij hen dan bij de Grieken — een verwantschap die je, verderop in dit verhaal, misschien nog terugziet in hoe sommigen van hen jou zouden bejegenen.",
+  grieks:"De Grieken vertellen ditzelfde verhaal precies andersom. Wie destijds als Griek streed tegen Troje, hoort in hun eigen rekening bij hén — een erfenis waar zelfs Leonidas' Sparta, eeuwen later, nog altijd trots op zou zijn.",
+};
 
 /* ---- GRIEKS ALFABET — transcriptietabel, getoond tijdens puzzels ---- */
 const SP_GREEK_ALPHABET = [
@@ -2360,6 +2371,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Herodotos van Halicarnassus, later 'de vader van de geschiedschrijving' genoemd, opent zijn verslag van de Perzische Oorlogen niet bij Thermopylae, maar jaren eerder: de Griekse steden van Ionië (de westkust van Klein-Azië), al onderworpen aan Perzië, komen in opstand. Athene stuurt schepen ter hulp en helpt mee de Perzische stad Sardis in brand te steken. De opstand wordt uiteindelijk neergeslagen, maar koning Darius van Perzië vergeet Athenes bemoeienis niet — hij zou, zegt de overlevering, een dienaar hebben opgedragen hem elke avond bij het diner te herinneren: 'Heer, denk aan de Atheners.'" },
   codex_histiaeus_bericht: { cat:"geschiedenis", titel:"Het Getatoeëerde Bericht",
     tekst:"Histiaeus, tiran van Milete, wordt door koning Darius als een geëerde maar onvrijwillige gast aan het Perzische hof gehouden, ver van zijn eigen stad. Om zijn schoonzoon Aristagoras zonder onderschepping tot opstand aan te sporen, laat hij het hoofd van zijn meest vertrouwde slaaf kaalscheren, een boodschap op de huid tatoeëren, en wacht dan weken tot het haar weer volledig is aangegroeid. De slaaf reist vervolgens naar Milete zonder ook maar iets bij zich te dragen dat een Perzische wachtpost verdacht zou vinden — het bericht zelf loopt, onzichtbaar, gewoon mee. Aristagoras hoeft alleen het hoofd opnieuw te scheren om te lezen: kom in opstand." },
+  codex_herodotos_schakingsketen: { cat:"geschiedenis", titel:"De Schakingsketen: Hoe Herodotos Zijn Boek Opent",
+    tekst:"Herodotos' Historiën openen niet met Thermopylae, maar met een heel andere vraag: wie begon deze vete tussen Grieken en Perzen eigenlijk? Volgens de Perzische geleerden met wie hij sprak, begon het met een reeks over-en-weer-schakingen van vrouwen: Foenicische handelaars roofden Io uit Argos; uit wraak schaakten Kretenzers Europa uit Tyrus; Grieken schaakten op hun beurt Medea uit Colchis; en uiteindelijk roofde de Trojaanse prins Paris Helena — waarna de Grieken, zeggen de Perzen, als eersten een heel leger stuurden, geen nieuwe schaking als vergelding maar een volledige inval van Azië. Herodotos zelf neemt geen van beide partijen structureel voor waar aan; hij vertelt het verhaal zoals het hem verteld is, en laat de lezer zelf bepalen wie hier eigenlijk begon." },
   codex_marathon: { cat:"geschiedenis", titel:"Marathon: Darius' Wraak Mislukt",
     tekst:"In 490 v.Chr. landt een Perzisch strafexpeditieleger onder Datis en Artaphernes bij Marathon, een dagreis van Athene. Tegen alle verwachting in verslaat de Atheense generaal Miltiades, met hulp van slechts één bondgenoot (Plataeae), het veel grotere Perzische leger — door het centrum van zijn linie bewust zwak te houden en de flanken juist te versterken, zodat de Perzen precies in de val lopen die hij voor hen had opgezet. Het verhaal dat een boodschapper de hele afstand naar Athene rende om de overwinning te melden en meteen daarna stierf, is beroemder dan bewezen — Herodotos zelf vermeldt het niet." },
   codex_xerxes_hellespont: { cat:"geschiedenis", titel:"Xerxes en de Gegeselde Zee",
@@ -21082,7 +21095,7 @@ VOCAB:
 grieks_polemos, grieks_nesos, grieks_prodosia, grieks_stratia, grieks_naus, latijn_elephantus, latijn_iuramentum, latijn_exercitus, latijn_venenum, latijn_mons, grieks_pros, grieks_oida, grieks_grapho, grieks_aisthanomai, grieks_katalambano, grieks_machomai, grieks_timao, grieks_isos, grieks_pipto, grieks_kataskeuazo, latijn_solvo, latijn_vix, latijn_laudo, latijn_amitto, latijn_efficio, latijn_maneo, latijn_ve, latijn_compono, latijn_amo, latijn_impono
 
 CHOICES:
-* Volg de Perzische Oorlogen in Griekenland [REQUIRE:taalspoor=grieks] -> CH17_GRE_001
+* Volg de Perzische Oorlogen in Griekenland [REQUIRE:taalspoor=grieks] -> CH17_GRE_000B
 * Volg Hannibal in Italië [REQUIRE:taalspoor!=grieks] -> CH17_LAT_001
 
 END
@@ -21398,7 +21411,31 @@ STATPOINTS:
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH17_EINDE
-* Steek over naar de Griekse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH17_GRE_001
+* Steek over naar de Griekse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH17_GRE_000B
+
+END
+
+=== SCENE: CH17_GRE_000B ===
+
+TITLE:
+Een Oudere Vete
+
+TEXT:
+Voor Herodotos ook maar aan de Ionische Opstand begint, wil hij eerst vertellen waarmee hij zijn eigen boek ooit opende — de vraag wie deze hele vete tussen Grieken en Perzen nou eigenlijk als eerste begon.
+
+DIALOGUE:
+Herodotos
+Volgens de Perzische geleerden begon het met een hele reeks over-en-weer-schakingen. Eerst roofden Foenicische handelaars Io, dochter van de koning van Argos — dezelfde Io die je misschien nog kent van Jupiters eigen affaire met haar. Uit wraak schaakten Kretenzers daarna Europa uit Tyrus. Grieken schaakten op hun beurt Medea uit Colchis. En uiteindelijk roofde de Trojaanse prins Paris Helena — waarna de Grieken, zeggen de Perzen, als eersten met een heel leger ten strijde trokken. Geen nieuwe schaking als vergelding, maar een volledige inval van heel Azië.
+
+Ikzelf ga niet uitzoeken of dit allemaal precies zo gebeurde — ik vertel het zoals de Perzen het zelf vertellen. Wie deze vete werkelijk begon, hangt er maar net van af bij welke schaking je begint te tellen.
+
+{ch9_zijde_h17_echo}
+
+CODEX:
+codex_herodotos_schakingsketen
+
+CHOICES:
+* Zie welk verhaal Herodotos nu écht wil gaan vertellen -> CH17_GRE_001
 
 END
 
