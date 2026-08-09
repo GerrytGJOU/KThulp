@@ -6143,6 +6143,18 @@ olifanten.png`, `ch17_lat_cannae_maharbal.png`, `ch17_lat_zama_scipio.png`,
 `ch17_gre_xerxes_hellespont.png`, `ch17_gre_thermopylae_pas.png`,
 `ch17_gre_artemisia_salamis.png`, souvenirkaart) nog te maken.
 
+**Vervolg (2026-08-09): het verhaal van Histiaeus' getatoeëerde bericht
+toegevoegd** (Gerbens verzoek — ontbrak nog, hoort bij de Ionische
+Opstand). Twee nieuwe scènes ingevoegd vóór de bestaande opstand-scène:
+`CH17_GRE_001J` (Histiaeus laat aan het Perzische hof het hoofd van zijn
+meest vertrouwde slaaf kaalscheren, tatoeëert er een bericht op, wacht tot
+het haar is aangegroeid) en `CH17_GRE_001K` (Aristagoras scheert het hoofd
+in Milete, leest het bericht — de twist). De bestaande opstand-scène
+hernummerd naar `CH17_GRE_001L`, verder ongewijzigd. Nieuwe codex-entry
+`codex_histiaeus_bericht`. 47 → 49 scènes. Opnieuw gevalideerd (0
+DIALOGUE+PUZZLE-conflicten, 0 missende referenties) en opnieuw volledig
+browser-getest (alle drie taalsporen, 0 console-fouten).
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd

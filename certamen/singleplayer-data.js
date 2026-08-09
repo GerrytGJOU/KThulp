@@ -2358,6 +2358,8 @@ const SP_CODEX_ENTRIES = {
   // ---- Hoofdstuk 17 — Oorlog en Overwinning ----
   codex_herodotos_ionische_opstand: { cat:"geschiedenis", titel:"Herodotos en de Ionische Opstand",
     tekst:"Herodotos van Halicarnassus, later 'de vader van de geschiedschrijving' genoemd, opent zijn verslag van de Perzische Oorlogen niet bij Thermopylae, maar jaren eerder: de Griekse steden van Ionië (de westkust van Klein-Azië), al onderworpen aan Perzië, komen in opstand. Athene stuurt schepen ter hulp en helpt mee de Perzische stad Sardis in brand te steken. De opstand wordt uiteindelijk neergeslagen, maar koning Darius van Perzië vergeet Athenes bemoeienis niet — hij zou, zegt de overlevering, een dienaar hebben opgedragen hem elke avond bij het diner te herinneren: 'Heer, denk aan de Atheners.'" },
+  codex_histiaeus_bericht: { cat:"geschiedenis", titel:"Het Getatoeëerde Bericht",
+    tekst:"Histiaeus, tiran van Milete, wordt door koning Darius als een geëerde maar onvrijwillige gast aan het Perzische hof gehouden, ver van zijn eigen stad. Om zijn schoonzoon Aristagoras zonder onderschepping tot opstand aan te sporen, laat hij het hoofd van zijn meest vertrouwde slaaf kaalscheren, een boodschap op de huid tatoeëren, en wacht dan weken tot het haar weer volledig is aangegroeid. De slaaf reist vervolgens naar Milete zonder ook maar iets bij zich te dragen dat een Perzische wachtpost verdacht zou vinden — het bericht zelf loopt, onzichtbaar, gewoon mee. Aristagoras hoeft alleen het hoofd opnieuw te scheren om te lezen: kom in opstand." },
   codex_marathon: { cat:"geschiedenis", titel:"Marathon: Darius' Wraak Mislukt",
     tekst:"In 490 v.Chr. landt een Perzisch strafexpeditieleger onder Datis en Artaphernes bij Marathon, een dagreis van Athene. Tegen alle verwachting in verslaat de Atheense generaal Miltiades, met hulp van slechts één bondgenoot (Plataeae), het veel grotere Perzische leger — door het centrum van zijn linie bewust zwak te houden en de flanken juist te versterken, zodat de Perzen precies in de val lopen die hij voor hen had opgezet. Het verhaal dat een boodschapper de hele afstand naar Athene rende om de overwinning te melden en meteen daarna stierf, is beroemder dan bewezen — Herodotos zelf vermeldt het niet." },
   codex_xerxes_hellespont: { cat:"geschiedenis", titel:"Xerxes en de Gegeselde Zee",
@@ -21453,10 +21455,49 @@ END
 === SCENE: CH17_GRE_001J ===
 
 TITLE:
+Het Bericht op het Hoofd
+
+TEXT:
+Herodotos buigt zich dichter naar je toe, alsof dit zijn favoriete verhaal uit de hele oorlog is. Histiaeus, tiran van Milete, wordt door koning Darius aan het Perzische hof gehouden — officieel een geëerde raadsman, in werkelijkheid een gegijzelde gast, ver van zijn eigen stad. Hij wil zijn schoonzoon Aristagoras, die hij als plaatsvervanger in Milete achterliet, aansporen tot opstand — maar elke gewone boodschapper zou onderweg gefouilleerd en zijn bericht onderschept worden.
+
+DIALOGUE:
+Herodotos
+Dus koos Histiaeus zijn meest vertrouwde slaaf, schoor diens hoofd helemaal kaal, en liet er een boodschap op tatoeëren. Toen wachtte hij — weken lang, tot het haar weer volledig was aangegroeid en het bericht onzichtbaar onder een gewone haardos verborgen lag.
+
+IMAGE:
+ch17_gre_histiaeus_bericht.png
+
+CHOICES:
+* Zie of het bericht zijn bestemming haalt -> CH17_GRE_001K
+
+END
+
+=== SCENE: CH17_GRE_001K ===
+
+TITLE:
+Aristagoras Scheert het Hoofd
+
+TEXT:
+Pas dan stuurt Histiaeus de slaaf op reis naar Milete, met maar één instructie voor Aristagoras zelf: scheer mijn hoofd, en lees wat eronder staat. Wekenlang reist de man, ogenschijnlijk niets anders dan een boodschapper zonder boodschap — precies zoals bedoeld.
+
+DIALOGUE:
+Herodotos
+Aristagoras scheerde het hoofd, en las het bericht dat daar al die tijd verborgen had gelegen, wachtend op het haar om het te verbergen: kom in opstand tegen Perzië.
+
+Geen enkele Perzische wachtpost had ook maar iets te fouilleren gehad — het bericht had de hele reis letterlijk op zijn drager rondgelopen.
+
+CHOICES:
+* Zie wat die opstand teweegbrengt -> CH17_GRE_001L
+
+END
+
+=== SCENE: CH17_GRE_001L ===
+
+TITLE:
 De Ionische Opstand
 
 TEXT:
-De Ionische Grieken, al onderworpen aan Perzië, komen in opstand; Athene stuurt schepen ter hulp en helpt mee Sardis in brand te steken. De opstand wordt neergeslagen, maar Darius vergeet Athenes bemoeienis niet — een dienaar moet hem, zegt de overlevering, elke avond bij het diner influisteren: "Heer, denk aan de Atheners."
+Aangespoord door dat verborgen bericht komen de Ionische Grieken in opstand tegen Perzië; Athene stuurt schepen ter hulp en helpt mee Sardis in brand te steken. De opstand wordt uiteindelijk neergeslagen, maar Darius vergeet Athenes bemoeienis niet — een dienaar moet hem, zegt de overlevering, elke avond bij het diner influisteren: "Heer, denk aan de Atheners."
 
 CODEX:
 codex_herodotos_ionische_opstand
