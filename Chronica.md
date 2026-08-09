@@ -6201,6 +6201,53 @@ Clementia/Severitas-stand die structureel nergens meer gelezen wordt na
 Hoofdstuk 6. Die twee blijven open — een aparte, grotere taak dan dit ene
 gerichte verzoek.
 
+### 7.63 Dode NPC-relaties: Io/Europa/Medea/Helena-callback + B27 eindelijk gekoppeld (2026-08-09)
+
+Twee vervolgverzoeken van Gerben in één beweging opgelost, allebei
+voortbouwend op de nieuwe `CH17_GRE_000B`-scène (Herodotos' schakingsketen).
+
+**1. Medea/Helena krijgen een persoonlijke callback binnen de
+schakingsketen-vertelling zelf** — een ANDER soort payoff dan de
+al bestaande `SP_ENDKAPITAAL_*`-mechanismen: niet "wat er later met haar
+gebeurde", maar "jij kent haar al, uit eigen ervaring, terwijl Herodotos
+het mythische verhaal vertelt". Twee nieuwe `SpTextResolver`-tokens
+(`{medea_h17_echo}`, `{helena_h17_echo}`), elk conditioneel op
+`state.relations.medea`/`.helena` ≥ 1, ingevoegd direct na hun naam in
+Herodotos' eigen opsomming. Io en Europa kregen bewust GEEN
+relatie-conditionele callback — voor geen van beide bestaat een
+RELATION-mechanisme in het spel (Io's verhaal in Hoofdstuk 2 is puur
+verteld, geen relatieopbouw); Io's bestaande onvoorwaardelijke verwijzing
+naar Hoofdstuk 2 ("dezelfde Io die je misschien nog kent van Jupiters
+eigen affaire") stond er trouwens al.
+
+**2. B27 "NPC-Afsluitmomenten" — geschreven 2026-07-30, nooit aangeroepen
+— eindelijk gekoppeld.** Nieuwe scène `CH17_GRE_000C` ("Wat Er van Hen
+Werd") direct na de schakingsketen: Herodotos vertelt, voor zover hij het
+zelf kon navragen, wat er van de Trojaanse-Oorlog-cast werd. Nieuwe token
+`{npc_afsluitingen}` roept het allang bestaande `spNpcAfsluitingenBeschikbaar()`
+aan, dat élke NPC uit `SP_NPC_AFSLUITINGEN` (menelaos, helena, diomedes,
+agamemnon, nestor, telamon, cassandra, andromache, deiphobos) toont zodra
+de relatiescore de eigen drempel haalt — dit dicht in één keer de dode
+relaties voor Nestor en Telamon uit de audit-lijst, en geeft Helena een
+TWEEDE, andersoortige callback (haar latere leven in Sparta, i.p.v. de
+schakingsketen-callback hierboven). Nieuwe `SP_NPC_AFSLUITINGEN_FALLBACK`-
+tekst voor spelers die geen van deze relaties opbouwden.
+
+**Nog steeds open** (bewust niet meegepakt — groter dan dit verzoek):
+Achilles, Dido, Kirke, Telemachus, Eurycleia, Penelope, Iokaste, Ariadne
+hebben nog geen enkele payoff-tekst, ook niet voorbereid; die zouden een
+eigen `SP_NPC_AFSLUITINGEN`-entry én mogelijk een eigen geschikt scène-
+moment nodig hebben (H17 leent zich, via Herodotos, alleen voor de
+Trojaanse-Oorlog-cast — niet voor bv. Kirke of Dido uit de Odyssee/Aeneis-
+lijn). Ook de Clementia/Severitas-stilte na Hoofdstuk 6 is niet aangepakt.
+
+**Gevalideerd**: browser-bevestigd dat alle vier nieuwe tokens correct
+resolven (Medea/Helena-echo verschijnt alleen bij relatie ≥1, NPC-
+afsluitingen toont Nestor's tekst bij relatie ≥1 en anders de fallback-
+tekst). Volledige hoofdstuk-doorloop opnieuw gedraaid, alle drie
+taalsporen, met relaties gezet voor medea/helena/nestor/telamon/andromache:
+0 console-fouten. 50 → 51 scènes.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd

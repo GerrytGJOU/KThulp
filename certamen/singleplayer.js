@@ -310,6 +310,12 @@ const SpTextResolver = {
       case "prometheus_route_echo": return SP_CH1_C09_ROUTE_ECHO[state.flags?.ch1_c09_route] || "";
       case "sfinx_route_echo":      return SP_CH6_007_ROUTE_ECHO[state.flags?.ch6_007_route] || "";
       case "ch9_zijde_h17_echo":    return SP_CH17_CH9_ZIJDE_ECHO[state.flags?.ch9_zijde] || "";
+      case "medea_h17_echo":  return ((state.relations||{}).medea||0)  >= 1 ? SP_CH17_MEDEA_ECHO  : "";
+      case "helena_h17_echo": return ((state.relations||{}).helena||0) >= 1 ? SP_CH17_HELENA_ECHO : "";
+      case "npc_afsluitingen": {
+        const items = spNpcAfsluitingenBeschikbaar(state);
+        return items.length ? items.map(a=>a.tekst).join(" ") : SP_NPC_AFSLUITINGEN_FALLBACK;
+      }
     }
     if(SP_TENDENCY_STORY_VARIANTS[path]) return spTendencyStoryVariant(path, state);
     return undefined;
@@ -370,12 +376,9 @@ function spBondgenotenAanwezig(state){
 }
 // B27 (Chronica-audit, fase 9 §6): geeft de afsluitmomenten terug waar de
 // speler op dit punt recht op heeft, op basis van SP_NPC_AFSLUITINGEN
-// (singleplayer-data.js) en de opgebouwde relatiescores. Mechanisme al
-// werkend en getest, maar NOG NERGENS AANGEROEPEN vanuit een scène — zie de
-// toelichting bij SP_NPC_AFSLUITINGEN voor waarom (Boek II is nog te kort
-// voor een "laat in het blok"-moment). Toekomstig gebruik: een scène roept
-// dit aan en toont voor elke treffer `.tekst` als eigen alinea, net als
-// {bondgenoten_aanwezig} dat nu al doet.
+// (singleplayer-data.js) en de opgebouwde relatiescores. Aangeroepen via
+// {npc_afsluitingen} (SpTextResolver) in CH17_GRE_000C, zie de toelichting
+// bij SP_NPC_AFSLUITINGEN voor de geschiedenis van dit mechanisme.
 function spNpcAfsluitingenBeschikbaar(state){
   const rel = state.relations || {};
   return Object.entries(SP_NPC_AFSLUITINGEN)
