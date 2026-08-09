@@ -859,17 +859,31 @@ const SP_ENDKAPITAAL_FALLBACK = "Niemand van wie je hoopte dat hij zich jou zou 
 const SP_ENDKAPITAAL_PRIAMUS_AFSCHEID = "Vlak voor je verder trekt, houdt Priamus je even tegen — niet als koning, maar gewoon als een oude man die iets kwijt wil voor het te laat is. \"Wat er ook gebeurt vannacht,\" zegt hij, \"onthoud dat je een echte vriend van Troje bent geweest. Niet iedereen die door onze poorten liep, kon dat zeggen.\" Hij drukt je even de arm en loopt dan door, terug naar het feest, alsof hij zelf niet helemaal gelooft dat het de laatste keer is.";
 // Cassandra's payoff (CH9_TRO_016, na een relatie opgebouwd bij CH9_TRO_011).
 const SP_ENDKAPITAAL_CASSANDRA_PAYOFF = "Vlak voor Aias haar wegsleurt, vindt Cassandra jouw blik in de menigte — heel even, maar lang genoeg. Van iedereen in Troje was jij de enige die haar wél geloofde. Dat verandert niets aan wat er nu gebeurt, maar het is, zie je aan haar gezicht, niet niets.";
+// Hoofdstuk 17 (Gerbens verzoek 2026-08-09): Medea/Helena krijgen, ALS de
+// speler ooit een relatie met hen opbouwde (H5 resp. H8/H9), een eigen,
+// aan Herodotos' schakingsketen-vertelling gebonden callback — een ANDER
+// soort payoff dan SP_NPC_AFSLUITINGEN.helena hieronder (dat is een latere
+// "hoe gaat het nu met haar"-scène; dit is "jij kent haar al, uit eigen
+// ervaring, terwijl Herodotos het mythische verhaal vertelt").
+const SP_CH17_MEDEA_ECHO = " Medea zelf ken je al — je hielp haar destijds bij Jason en het Gulden Vlies. Dat ze hier, generaties later, wordt aangehaald als een van de vier vrouwen die deze hele vete in gang zetten, had ze toen vast niet verwacht.";
+const SP_CH17_HELENA_ECHO = " Ook Helena ken je persoonlijk — je was er zelf bij, in Troje, toen alles instortte. Dat haar naam eeuwen later nog wordt aangehaald als hét kantelpunt van een oorlog tussen twee werelddelen, voelt bijna vreemd klein voor wat jij haar die dagen zag doormaken.";
+// Herodotos' bredere "wat er van hen werd"-reflectie (CH17_GRE_000C):
+// hergebruikt het allang geschreven maar nooit aangeroepen SP_NPC_AFSLUITINGEN-
+// mechanisme (B27) nu het spel eindelijk diep genoeg is voor een écht "laat"
+// moment. Fallback als geen enkele relatie de drempel haalt.
+const SP_NPC_AFSLUITINGEN_FALLBACK = "Van de meeste namen uit die oorlog weet zelfs Herodotos niet hoe hun verhaal afliep — geschiedenis onthoudt zelden iedereen.";
 // Andromache's payoff (CH9_GRI_016, na een relatie opgebouwd bij CH9_001).
 const SP_ENDKAPITAAL_ANDROMACHE_PAYOFF = "Tussen de rij gevangen vrouwen vindt Andromache, al half weggeleid door Neoptolemus' mannen, nog één keer jouw blik — dezelfde blik die ze die dag in Hectors huis al even had opgevangen. Ze zegt niets. Dat hoeft ook niet.";
 
-/* ---- B27: NPC-AFSLUITMOMENTEN (Chronica-audit, fase 9 §6) — MECHANISME EN
-   DATA, NOG NERGENS AAN EEN SCÈNE GEKOPPELD. Op verzoek (2026-07-30) alleen
-   voorbereid, niet gebouwd: de audit zelf plaatst dit "laat in het Odyssee/
-   Aeneis-blok" (Hoofdstuk 10-15), en dat blok is op dit moment nog maar vier
-   scènes per lijn diep (§7.19) — een afsluitmoment daar nu al inbouwen zou
-   geforceerd aanvoelen. Zodra een echt "laat" punt in dat blok bestaat, kan
-   een scène daar `spNpcAfsluitingenBeschikbaar(SP_STATE)` aanroepen
-   (singleplayer.js) en voor elke treffer een korte alinea tonen.
+/* ---- B27: NPC-AFSLUITMOMENTEN (Chronica-audit, fase 9 §6) — GEBOUWD
+   2026-07-30, EINDELIJK AAN EEN SCÈNE GEKOPPELD 2026-08-09 (Gerbens
+   verzoek: "kijk ook naar dode NPC-relaties"). De audit plaatste dit
+   oorspronkelijk "laat in het Odyssee/Aeneis-blok" (Hoofdstuk 10-15), maar
+   dat blok bleef te ondiep (§7.19) — inmiddels is Hoofdstuk 17 (via
+   Herodotos, die toch al het hele Trojaanse-Oorlog-nageslacht kent)
+   een natuurlijker "laat genoeg"-moment gebleken. `CH17_GRE_000C` roept
+   `{npc_afsluitingen}` (SpTextResolver, singleplayer.js) aan, wat
+   `spNpcAfsluitingenBeschikbaar(SP_STATE)` uitleest.
    Bewust UITGESLOTEN: Odysseus en Aeneas zelf (hoofdpersonen van Boek II,
    geen "bondgenoot" die je opnieuw tegenkomt), Achilles/Aias (al dood vóór
    Hoofdstuk 10 eindigt) en Priamus (kreeg al zijn eigen afscheid, zie
@@ -21425,7 +21439,7 @@ Voor Herodotos ook maar aan de Ionische Opstand begint, wil hij eerst vertellen 
 
 DIALOGUE:
 Herodotos
-Volgens de Perzische geleerden begon het met een hele reeks over-en-weer-schakingen. Eerst roofden Foenicische handelaars Io, dochter van de koning van Argos — dezelfde Io die je misschien nog kent van Jupiters eigen affaire met haar. Uit wraak schaakten Kretenzers daarna Europa uit Tyrus. Grieken schaakten op hun beurt Medea uit Colchis. En uiteindelijk roofde de Trojaanse prins Paris Helena — waarna de Grieken, zeggen de Perzen, als eersten met een heel leger ten strijde trokken. Geen nieuwe schaking als vergelding, maar een volledige inval van heel Azië.
+Volgens de Perzische geleerden begon het met een hele reeks over-en-weer-schakingen. Eerst roofden Foenicische handelaars Io, dochter van de koning van Argos — dezelfde Io die je misschien nog kent van Jupiters eigen affaire met haar. Uit wraak schaakten Kretenzers daarna Europa uit Tyrus. Grieken schaakten op hun beurt Medea uit Colchis.{medea_h17_echo} En uiteindelijk roofde de Trojaanse prins Paris Helena — waarna de Grieken, zeggen de Perzen, als eersten met een heel leger ten strijde trokken.{helena_h17_echo} Geen nieuwe schaking als vergelding, maar een volledige inval van heel Azië.
 
 Ikzelf ga niet uitzoeken of dit allemaal precies zo gebeurde — ik vertel het zoals de Perzen het zelf vertellen. Wie deze vete werkelijk begon, hangt er maar net van af bij welke schaking je begint te tellen.
 
@@ -21433,6 +21447,23 @@ Ikzelf ga niet uitzoeken of dit allemaal precies zo gebeurde — ik vertel het z
 
 CODEX:
 codex_herodotos_schakingsketen
+
+CHOICES:
+* Zie wat Herodotos zelf weet van hoe het die mensen verder verging -> CH17_GRE_000C
+
+END
+
+=== SCENE: CH17_GRE_000C ===
+
+TITLE:
+Wat Er van Hen Werd
+
+TEXT:
+Herodotos, altijd op zoek naar nog een laatste detail, vertelt je nog even verder over de mensen uit dat oudere verhaal — voor zover hij het zelf heeft kunnen navragen.
+
+DIALOGUE:
+Herodotos
+{npc_afsluitingen}
 
 CHOICES:
 * Zie welk verhaal Herodotos nu écht wil gaan vertellen -> CH17_GRE_001
