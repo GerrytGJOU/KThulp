@@ -6155,6 +6155,52 @@ hernummerd naar `CH17_GRE_001L`, verder ongewijzigd. Nieuwe codex-entry
 DIALOGUE+PUZZLE-conflicten, 0 missende referenties) en opnieuw volledig
 browser-getest (alle drie taalsporen, 0 console-fouten).
 
+**Vervolg (2026-08-09): een echte dode-flag-payoff gevonden en gedicht,
+plus Herodotos' eigen schakingsketen (Historiën 1.1-1.5) ingebouwd.**
+Gerben vroeg specifiek te checken of Perzen positief zouden kunnen staan
+tegenover spelers die in Hoofdstuk 9 de Trojaanse zijde kozen, en Grieken
+tegenover wie de Griekse zijde koos. Navraag bevestigde: `ch9_zijde`
+(troje/grieks) wordt sinds Hoofdstuk 9 zelf (`spBondgenotenAanwezig`,
+alleen daar) nergens meer gelezen — precies zo'n dode flag als de
+keuze/payoff-audit van 2026-08-07 al signaleerde.
+
+**Uitgevoerd**: een nieuwe scène `CH17_GRE_000B` ("Een Oudere Vete"), vóór
+de bestaande Herodotos-introductie, waarin Herodotos vertelt waarmee hij
+zijn eigen Historiën daadwerkelijk opent (websearch bevestigde de precieze
+inhoud van 1.1-1.5): de Perzische geleerden-versie van een keten van
+schakingen — Io (Foenicië roofde haar uit Argos; expliciete callback naar
+Hoofdstuk 2 se "Jupiter en Io"), Europa (Kretenzers uit Tyrus, vergelding),
+Medea (Grieken uit Colchis), en tenslotte Helena (Paris roofde haar,
+waarna de Grieken als eersten met een heel leger ten strijde trokken in
+plaats van met nóg een schaking). Nieuwe codex-entry
+`codex_herodotos_schakingsketen`.
+
+Direct daarna een nieuwe `{ch9_zijde_h17_echo}`-token (`SpTextResolver`,
+singleplayer.js — zelfde patroon als `{prometheus_route_echo}`/
+`{sfinx_route_echo}`), met de payoff-tekst in een nieuwe
+`SP_CH17_CH9_ZIJDE_ECHO`-tabel (singleplayer-data.js): koos de speler in
+Hoofdstuk 9 de Trojaanse zijde, dan expliciete tekst dat de Perzen die
+verwantschap zouden herkennen; koos de speler de Griekse zijde, dan het
+spiegelbeeld (met een knipoog naar Leonidas' Sparta). Leeg (geen echo) als
+de flag niet gezet is. Hub (`CH17_000`) en de latijn→grieks-oversteek
+(`CH17_LAT_008`) routeren nu allebei naar `CH17_GRE_000B` in plaats van
+rechtstreeks naar `CH17_GRE_001`. 49 → 50 scènes.
+
+**Gevalideerd**: browser-bevestigd dat de echo-tekst daadwerkelijk
+verschijnt bij `ch9_zijde=troje` (Trojaanse tekst, geen Griekse), bij
+`ch9_zijde=grieks` (omgekeerd), en leeg blijft zonder flag. Volledige
+hoofdstuk-doorloop opnieuw gedraaid voor alle drie taalsporen (met
+`ch9_zijde=troje` gezet): 0 console-fouten.
+
+**Bredere audit-context (niet allemaal opgelost, alleen deze ene)**: de
+keuze/payoff-audit van 2026-08-07 telt nog 12 dode NPC-RELATIES (Nestor,
+Telamon, Helena, Achilles, Dido, Kirke, Telemachus, Eurycleia, Penelope,
+Iokaste, Ariadne, Medea — `SP_NPC_AFSLUITINGEN`/`spRolverdelingUitkomst`
+bestaan al in de code maar worden nog nergens aangeroepen) en een
+Clementia/Severitas-stand die structureel nergens meer gelezen wordt na
+Hoofdstuk 6. Die twee blijven open — een aparte, grotere taak dan dit ene
+gerichte verzoek.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
