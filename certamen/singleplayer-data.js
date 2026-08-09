@@ -374,11 +374,11 @@ const SP_CAMPAIGN = [
     illustratie:"Een Atheens huishouden / een Romeinse markt" },
   { id:"ch16", nr:16, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Vorming en Vermaak",
     periode:"Klassiek Athene / Rome",
-    verhaal:"Een jonge Atalanta rent zich vrij van elke vrijer die haar niet kan bijhouden, terwijl de Olympische Spelen heel Griekenland tijdelijk laten stoppen met oorlogvoeren. In Rome draait het vermaak net zo hard — al is de toon er ruwer.",
-    pallas:"Les 26-27: opvoeding/training (Plato), sport en de Olympische Spelen (incl. Atalanta's hardloopwedstrijd, verhuisd vanuit het oude Hoofdstuk 13)", minerva:"Hoofdstuk 20: Vermaak in Rome",
-    grammatica:"Grieks: cultuur (les 26-27, licht taalkundig); Latijn: velle/nolle/fieri, betrekkelijke bijzin met ingesloten antecedent, comparativus/superlativus (Minerva 20)",
-    gameplay:"Twee sporen; Atalanta's hardloopwedstrijd als minigame (Griekse lijn)",
-    personages:"Plato (cameo, opvoeding), Atalanta — Romeinse vermaak-personages (spelen, theater, wagenrennen)",
+    verhaal:"Een jonge Atalanta rent zich vrij van elke vrijer die haar niet kan bijhouden, terwijl de Olympische Spelen heel Griekenland tijdelijk laten stoppen met oorlogvoeren — Spelen die zelf ooit begonnen met Pelops' wagenrace om Hippodamia's hand, dezelfde soort race als Atalanta's eigen wedstrijd, een generatie na zijn vader Tantalus' straf in de onderwereld (Hoofdstuk 11) en zelf de stamvader van de Atreïden (Agamemnon, Menelaos) — de vloek van zijn familie reikt zo tot ver na hemzelf. In Rome draait het vermaak net zo hard — al is de toon er ruwer: wagenrennen in de Circus Maximus (met een cameo van Ovidius, die er in zijn Ars Amatoria openlijk over schrijft als dé plek om iemand te versieren) en het bloedigere gladiatorenspel, waar niet alleen mannen, maar ook vrouwen vochten.",
+    pallas:"Les 26-27: opvoeding/training (Plato), sport en de Olympische Spelen (incl. Atalanta's hardloopwedstrijd, verhuisd vanuit het oude Hoofdstuk 13; Pelops' wagenrace als oorsprongsverhaal van de Spelen, met een echo naar Tantalus/H11 en een vooruitwijzing naar de Atreïden-vloek)", minerva:"Hoofdstuk 20: Vermaak in Rome",
+    grammatica:"Grieks: cultuur (les 26-27, licht taalkundig); Latijn: velle/nolle/fieri, betrekkelijke bijzin met ingesloten antecedent, comparativus/superlativus (Minerva 20 — dat laatste is al nieuwe stof geweest in Hoofdstuk 9; hier bewust herhaling, of eventueel in te korten tot alleen de twee echt nieuwe onderdelen)",
+    gameplay:"Twee sporen, SEQUENTIEEL (Latijn eerst voor latijn/beide, Grieks sluit af — niet zigzag zoals H15). Atalanta's hardloopwedstrijd als CHECK (Griekse lijn) i.p.v. een aparte minigame-engine. GEBOUWD en GEKOPPELD aan de speelbare route (2026-08-09) — CH15_MUSEUM_00 routeert naar CH16_000, CH16_WORDT_VERVOLGD is het nieuwe tijdelijke speeltest-eindpunt. Negen scène-illustraties + souvenirkaart aangeleverd en verwerkt.",
+    personages:"Plato (cameo, opvoeding), Atalanta, Pelops (wagenrace-oorsprongsverhaal, stamvader van de Atreïden) — Ovidius (onbenoemde/nog-niet-geïntroduceerde schrijverscameo bij de Circus Maximus, vóór zijn eigen benoemde optreden in Hoofdstuk 20), Gaius Diocles (Circus Maximus, rijkste atleet ooit), Spartacus (BENOEMDE cameo als gladiator in de arena — zijn eigen opstandsverhaal komt pas terug in Hoofdstuk 19, Gerbens akkoord 2026-08-08), Flamma (gladiator die zijn aangeboden vrijheid meermaals weigerde — bewuste tegenhanger van Hoofdstuk 15's vrijheids-lijn) — vrouwelijke gladiatoren: Amazon & Achillia (het Halicarnassus-reliëf, met ere ontslagen/missio) en Mevia (Juvenal, Satire VI — een venatrix die met ontbloot een borst een Etruskisch everzwijn doorboorde); ook: onder Nero vochten zelfs vrouwen van ridder- en senatorenstand mee (Cassius Dio), tot keizer Septimius Severus vrouwen rond 200 n.Chr. uit de arena verbande",
     thema:"Hoe een samenleving haar jeugd vormt, en hoe ze zich ontspant",
     illustratie:"De Olympische renbaan / het Circus Maximus",
     zijverhalen:"Calydonische ever & Meleager (A-tier) — samen met Atalanta één vault-vignet, verhuisd vanuit het oude Hoofdstuk 13" },
@@ -1633,6 +1633,26 @@ const SP_PUZZLES = {
     vraag:"Fortunata zegt over haar vroegere meesteres, zonder wrok: “Dominam bene ___” — ik ken mijn meesteres goed. Typ de perfectumvorm van nosco (leren kennen), 1e persoon enkelvoud, die hier een praesensbetekenis heeft.",
     antwoord:"novi",
     hint:"novi is grammaticaal een perfectum, maar betekent 'ik ken' (het resultaat van ooit leren kennen hebben), niet 'ik heb leren kennen' — net als memini (ik herinner me) en odi (ik haat)." },
+  puzzle_ch16_gre_plato: { type:"multiple-choice",
+    vraag:"Plato zegt over een veelbelovende leerling: “τῷ παιδὶ ἐστὶν ἀρετή” — de jongen heeft deugd (letterlijk: aan de jongen is deugd). Welke naamval is τῷ παιδί hier?",
+    opties:["dativus","genitivus","accusativus","nominativus"], antwoord:"dativus",
+    hint:"Dit is de dativus van bezit: 'aan X is Y' = 'X heeft Y' — een vaste constructie, net als bij ἐστί (is/zijn) elders in eerdere hoofdstukken." },
+  puzzle_ch16_gre_atalanta: { type:"multiple-choice",
+    vraag:"Iemand vertelt na afloop: “Ἀταλάντη τὸν δρόμον ἐνίκησεν” — Atalante won de race. Welke tijd is ἐνίκησεν hier?",
+    opties:["aoristus","praesens","imperfectum","futurum"], antwoord:"aoristus",
+    hint:"Het kenmerk -σ- tussen stam en uitgang, plus het augment ἐ- vooraan, verraden de (sigmatische) aoristus — een afgeronde handeling in het verleden, herken je nog van eerdere hoofdstukken." },
+  puzzle_ch16_lat_relatief: { type:"multiple-choice",
+    vraag:"“Quos vidit gladiatores, populus laudavit” — het volk prees de gladiatoren die het zag. Waarom staat gladiatores (het antecedent) middenin de bijzin, vlak na quos, in plaats van vóór de hele zin?",
+    opties:["Dat is precies de betrekkelijke bijzin met ingesloten antecedent: het antecedent staat ín de bijzin zelf","Dat is een foutieve zin — het antecedent hoort altijd vóór de bijzin te staan","gladiatores is hier geen antecedent maar het onderwerp van laudavit","quos en gladiatores zijn twee losse zinsdelen zonder verband"], antwoord:"Dat is precies de betrekkelijke bijzin met ingesloten antecedent: het antecedent staat ín de bijzin zelf",
+    hint:"Normaal staat het antecedent vóór de bijzin (gladiatores quos vidit); hier staat het middenin de bijzin zelf — een typisch Latijns stijlmiddel, de 'betrekkelijke bijzin met ingesloten antecedent'." },
+  puzzle_ch16_lat_diocles: { type:"typed-latin",
+    vraag:"Diocles, ooit als slaaf geboren, wilde koste wat het kost rijk worden: “Diocles dives ___ voluit” — Diocles wilde rijk worden. Typ de infinitivus van fio (worden), die hier samen met voluit staat.",
+    antwoord:"fieri",
+    hint:"fio/fieri is het (onregelmatige) passief van facio, en betekent 'worden, gebeuren' — volo/velle + fieri is een vaste combinatie: 'willen worden'." },
+  puzzle_ch16_lat_comparativus: { type:"multiple-choice",
+    vraag:"Van Flamma werd gezegd: “Flamma ___ omnium gladiatorum erat” — Flamma was de sterkste van alle gladiatoren. Welke vorm van fortis (sterk) hoort hier?",
+    opties:["fortissimus","fortior","fortiter","fortis"], antwoord:"fortissimus",
+    hint:"'De sterkste van allemaal' vraagt om de superlativus (fortissimus), niet de comparativus (fortior, 'sterker dan') — herhaling uit Hoofdstuk 9." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -2296,6 +2316,25 @@ const SP_CODEX_ENTRIES = {
     tekst:"Een domus zoals die van Aemilia — een eigen huis rond een atrium, met eigen slaven — was voorbehouden aan een kleine, welgestelde minderheid. De overgrote meerderheid van de stedelijke bevolking, inclusief de meeste vrijgelatenen, woonde in een insula: een meerdere verdiepingen tellend huurkazerne-gebouw, vaak haastig en slecht gebouwd, met kleine kamers, gedeelde voorzieningen, en een reëel risico op brand of instorting — de hogere verdiepingen waren het goedkoopst en het gevaarlijkst. Buiten de stad, op het platteland, lag de villa: het landgoed van welgestelde families, waar het echte, grootschalige boerenwerk en de textielproductie gebeurden — uitgevoerd door de familia rustica, de plattelandsslaven die zelden of nooit door de eigenaars zelf werden gezien." },
   codex_villa_wolproductie: { cat:"geschiedenis", titel:"Lanam Fecit: Wie Spon Er Écht?",
     tekst:"'Domum servavit, lanam fecit' — ze bewaarde het huis, ze spon wol — is het meest voorkomende deugdcompliment op Romeinse grafstenen voor vrouwen: het symbool van de ideale matrona. In de praktijk was het spinnen en weven door de vrouw des huizes vaak grotendeels symbolisch, een klein handwerkje ter demonstratie van huishoudelijke deugd. De werkelijke, grootschalige wolproductie voor een welgestelde familie gebeurde op het landgoed (de villa), uitgevoerd door de familia rustica — plattelandsslaven, meestal vrouwen, van wie vrijwel nooit een naam is overgeleverd, laat staan een grafsteen." },
+  // ---- Hoofdstuk 16 — Vorming en Vermaak ----
+  codex_platoonse_opvoeding: { cat:"geschiedenis", titel:"Plato over Opvoeding: Lichaam én Geest",
+    tekst:"Voor Plato is opvoeding (paideia) geen keuze tussen sport en denken, maar allebei tegelijk: gymnastiek (gymnastikē) vormt het lichaam, muziek en poëzie (mousikē) vormen de ziel — verwaarloos je de één, dan raakt de ander uit balans. Een burger die alleen traint, wordt volgens Plato hard en grof; een burger die alleen studeert, wordt week. Deze twee-eenheid, uitgevonden voor een handjevol vrije, mannelijke Atheense burgers, ligt aan de basis van wat later 'een klassieke opvoeding' zou heten." },
+  codex_pelops_atreiden_vloek: { cat:"mythologie", titel:"Pelops: Een Race die een Vloek Voortzette",
+    tekst:"Pelops, zoon van Tantalus, wint Hippodamia's hand door haar vader koning Oinomaos te verslaan in een wagenrace — met hulp van een omgekochte wagenmenner, Myrtilus, die stiekem de wielpennen van Oinomaos' wagen vervangt door was. Oinomaos sterft in de crash; Pelops weigert vervolgens zijn beloofde deel aan Myrtilus te betalen en gooit hem in zee. Stervend vervloekt Myrtilus heel Pelops' nageslacht. Die vloek reikt tot ver na Pelops zelf: zijn zonen Atreus en Thyestes vermoorden en verraden elkaar, en Atreus' eigen zoon Agamemnon — de latere Griekse opperbevelhebber bij Troje — sterft uiteindelijk door de hand van zijn eigen vrouw. Van Tantalus' straf in de onderwereld tot Agamemnons moord: drie generaties, één ononderbroken vloek." },
+  codex_atalanta_wedloop: { cat:"mythologie", titel:"Atalanta's Voorwaarde",
+    tekst:"Atalanta, opgevoed door beren nadat haar vader haar als baby te vondeling had gelegd (hij wilde een zoon), stemt uiteindelijk in met huwelijk — op één voorwaarde: elke vrijer moet haar eerst verslaan in een hardloopwedstrijd. Wint hij, dan trouwt ze hem; verliest hij, dan sterft hij. Tientallen vrijers proberen het en verliezen hun leven, tot Hippomenes (in sommige versies Melanion) van Aphrodite drie gouden appels krijgt. Tijdens de race gooit hij ze één voor één opzij; Atalanta, nieuwsgierig, buigt telkens af om ze op te rapen — en verliest daardoor net genoeg tijd om de race te verliezen. Winst voor Hippomenes, maar ook: de enige manier om Atalanta te verslaan was haar eigen nieuwsgierigheid, niet haar snelheid." },
+  codex_olympische_spelen: { cat:"geschiedenis", titel:"De Olympische Spelen: Wapenstilstand en Uitsluiting",
+    tekst:"Tijdens de Olympische Spelen geldt de ekecheiria, een heilige wapenstilstand: reizende atleten en toeschouwers mogen ongehinderd naar Olympia reizen, zelfs als hun steden op dat moment oorlog voeren. Getrouwde vrouwen mogen als toeschouwer niet eens in de buurt komen, op straffe van de dood — ongetrouwde meisjes mochten wel bepaalde onderdelen bijwonen. Pherenike (ook bekend als Kallipateira), dochter, zuster en moeder van olympisch kampioenen, verkleedt zich als trainer om toch haar zoon te zien vechten. Ontmaskerd wanneer ze over het hek springt van vreugde, wordt ze niet gestraft — de rechters achten haar familie te roemrijk om te straffen. Vanaf toen moesten trainers zich, net als de atleten zelf, naakt vertonen." },
+  codex_circus_maximus_ovidius: { cat:"geschiedenis", titel:"De Circus Maximus: Waar Rome Kwam Kijken (en Flirten)",
+    tekst:"De Circus Maximus, Romes grootste wagenrenbaan, biedt plaats aan meer dan honderdduizend toeschouwers — mannen en vrouwen zitten er, in tegenstelling tot het theater, gewoon naast elkaar. De dichter Ovidius schrijft er in zijn Ars Amatoria (Kunst van het Beminnen) openlijk over als dé plek om iemand te versieren: de drukte, de krappe zitplaatsen en de gedeelde opwinding maken het volgens hem ideaal om toevallig heel dicht bij iemand te zitten." },
+  codex_gaius_diocles: { cat:"geschiedenis", titel:"Gaius Diocles: De Rijkste Atleet uit de Oudheid",
+    tekst:"Gaius Appuleius Diocles, geboren in Lusitania (het huidige Portugal/Spanje), begint zijn carrière als wagenmenner op zijn achttiende en wint in bijna een kwart eeuw meer dan 1400 races. Bij zijn pensioen op zijn 42e heeft hij, volgens een bewaard gebleven grafinscriptie, in totaal bijna 36 miljoen sestertiën aan prijzengeld verdiend — genoeg om, naar moderne schattingen, hem tot een van de rijkste sporters uit de hele menselijke geschiedenis te maken. Een voormalige slaaf die met paarden en lef meer verdiende dan menig senator." },
+  codex_gladiatoren_spartacus_flamma: { cat:"geschiedenis", titel:"De Arena: Roem, Bloed en een Geweigerde Vrijheid",
+    tekst:"Onder de gladiatoren die vandaag vechten, valt een Thracische krijgsgevangene op door zijn kracht en zijn koelbloedigheid — de arena kent hem simpelweg als Spartacus. Niemand hier vermoedt nog wat hij over enkele jaren zal doen. Een andere gladiator, Flamma, een Syriër, vecht in totaal 34 gevechten, wint 21 ervan, en krijgt viermaal de rudis aangeboden — het houten zwaard dat een gladiator officieel zijn vrijheid geeft. Alle vier de keren weigert hij: hij blijft liever gladiator dan vrij man." },
+  codex_vrouwelijke_gladiatoren: { cat:"geschiedenis", titel:"Vrouwen in de Arena", taal:"latijn",
+    tekst:"Een marmeren reliëf uit Halicarnassus toont twee vechtende vrouwen, met hun namen erbij gebeiteld: Amazon en Achillia — een zeldzaam bewijs dat vrouwelijke gladiatoren niet alleen bestonden, maar ook met ere konden worden ontslagen (missio), zoals dit reliëf viert. De dichter Juvenal beschrijft spottend een zekere Mevia, die met ontbloot één borst een Etruskisch everzwijn met de speer doorboorde. Onder keizer Nero vochten zelfs vrouwen van ridderlijke en senatoriale afkomst mee in de arena, tot afschuw van conservatieve senatoren. Rond 200 n.Chr. maakt keizer Septimius Severus er definitief een einde aan: vrouwen worden voortaan uit de arena verbannen." },
+  codex_grammatica_ch16_overzicht: { cat:"grammatica", taal:"latijn", titel:"Grammatica: Hoofdstuk 16 — velle/nolle/fieri en de ingesloten antecedent",
+    tekst:"Dit hoofdstuk voegt aan de Latijnse kant de onregelmatige werkwoorden velle (willen), nolle (niet willen) en fieri (worden, gebeuren — het passief van facere) toe, vaak in vaste combinaties zoals dives fieri velle ('rijk willen worden'). Daarnaast de betrekkelijke bijzin met ingesloten antecedent: normaal staat het antecedent vóór de bijzin (gladiatores quos vidit, 'de gladiatoren die hij zag'), maar het Latijn kan het antecedent ook middenin de bijzin zelf plaatsen (quos vidit gladiatores) — hetzelfde idee, andere woordvolgorde. Tot slot een herhaling van de comparativus/superlativus uit Hoofdstuk 9. Het Grieks introduceert dit hoofdstuk bewust geen nieuwe grammatica (les 26-27 is cultuurstof); de puzzels herhalen de dativus van bezit en de aoristus." },
   codex_agora_heliaia: { cat:"geschiedenis", titel:"De Agora en de Heliaia: Waar Athene Recht Sprak",
     tekst:"De agora is het kloppende hart van Athene — tegelijk marktplein, ontmoetingsplaats en bestuurscentrum, omzoomd door zuilengalerijen (stoai) waar burgers handelen, discussiëren en recht spreken. Hier, in de Heliaia, zetelt het volksgerecht: jaarlijks worden zesduizend mannelijke burgers door loting aangewezen als mogelijke jurylid, en voor elke zaak wordt uit hen een jury van honderden tegelijk samengesteld — bewust te groot om om te kopen. Vrouwen, slaven én metoiken (vrije niet-burgers, de status die een vrijgelaten slaaf in Athene hoogstens kan bereiken) mogen er niets van: geen jurydienst, geen stem, hooguit toekijken vanaf de zijkant." },
   codex_forum_basilica: { cat:"geschiedenis", titel:"Forum en Basilica: Zaken, Recht en Roddel",
@@ -2778,6 +2817,8 @@ const SP_SOUVENIRS = {
     caption:"Een doorgesneden stuk ketting — half Atheens brons, half Romeins ijzer — ter herinnering aan twee volkeren die in vrijwel hetzelfde jaar hun tirannen afwierpen." },
   souvenir_hoe_men_leefde: { nm:"Een Spinklosje en een Vrijheidsmuts", icon:"🧶", img:"souvenir_hoe_men_leefde.png",
     caption:"Een houten spinklosje, nog met draad eromheen, naast een kleine vilten muts — de pileus die een net vrijgelaten Romein bij de manumissio kreeg. Geen van beide voorwerpen heeft ooit een standbeeld gekregen." },
+  souvenir_vorming_vermaak: { nm:"Een Olijftak en een Palmtak", icon:"🌿", img:"souvenir_vorming_vermaak.png",
+    caption:"Een verdroogde olijftak, zoals de kotinos die elke Olympische winnaar kreeg, naast een palmtak, het overwinningsteken van de Romeinse arena en Circus — twee volkeren, twee heel verschillende ideeën over wat vermaak mag kosten." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -3037,6 +3078,16 @@ const SP_CHECKS = {
     deels:{ target:"CH15_LAT_004_DEELS" },
     gefaald:{ target:"CH15_LAT_004_GEFAALD" },
     kritiek:{ target:"CH15_LAT_004_KRITIEK" } },
+  ch16_gre_atalanta_race: { stat:"agilitas", dc:14,
+    volledig:{ target:"CH16_GRE_004_VOL" },
+    deels:{ target:"CH16_GRE_004_DEELS" },
+    gefaald:{ target:"CH16_GRE_004_GEFAALD" },
+    kritiek:{ target:"CH16_GRE_004_KRITIEK" } },
+  ch16_lat_arena_gevaar: { stat:"vis", dc:15,
+    volledig:{ target:"CH16_LAT_005_VOL" },
+    deels:{ target:"CH16_LAT_005_DEELS" },
+    gefaald:{ target:"CH16_LAT_005_GEFAALD" },
+    kritiek:{ target:"CH16_LAT_005_KRITIEK" } },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -3523,6 +3574,39 @@ const SP_VOCAB_ENTRIES = {
   latijn_servo:  { taal:"latijn", woord:"servo", betekenis:"redden, bewaren" },
   latijn_tollo:  { taal:"latijn", woord:"tollo", betekenis:"tillen, heffen" },
   latijn_antea:  { taal:"latijn", woord:"antea", betekenis:"vroeger, eerst" },
+  // ---- Hoofdstuk 16 — Vorming en Vermaak (verhaal-woorden) ----
+  grieks_agon:      { taal:"grieks", woord:"ἀγών, ἀγῶνος", transcript:"agṓn", betekenis:"wedstrijd, strijd" },
+  grieks_stadion:   { taal:"grieks", woord:"στάδιον", transcript:"stádion", betekenis:"renbaan, stadion" },
+  grieks_nike:      { taal:"grieks", woord:"νίκη", transcript:"níkē", betekenis:"overwinning" },
+  grieks_gymnasion: { taal:"grieks", woord:"γυμνάσιον", transcript:"gymnásion", betekenis:"oefenplaats, gymnasium" },
+  grieks_ekecheiria:{ taal:"grieks", woord:"ἐκεχειρία", transcript:"ekecheiría", betekenis:"heilige wapenstilstand" },
+  latijn_circus:    { taal:"latijn", woord:"circus, circi", betekenis:"circus, renbaan" },
+  latijn_auriga:    { taal:"latijn", woord:"auriga, aurigae", betekenis:"wagenmenner" },
+  latijn_gladiator: { taal:"latijn", woord:"gladiator, gladiatoris", betekenis:"gladiator" },
+  latijn_harena:    { taal:"latijn", woord:"harena, harenae", betekenis:"zand, arena" },
+  latijn_missio:    { taal:"latijn", woord:"missio, missionis", betekenis:"vrijlating, genade (in de arena)" },
+  latijn_palma:     { taal:"latijn", woord:"palma, palmae", betekenis:"palm(tak), overwinningsteken" },
+  // ---- Hoofdstuk 16: 20 extra hoogfrequente signaalwoorden (VOCAB_UITBREIDING.md) ----
+  grieks_hiemi:        { taal:"grieks", woord:"ἵημι", transcript:"híēmi", betekenis:"werpen, loslaten" },
+  grieks_histemi:      { taal:"grieks", woord:"ἵστημι", transcript:"hístēmi", betekenis:"plaatsen, doen staan" },
+  grieks_kathistemi:   { taal:"grieks", woord:"καθίστημι", transcript:"kathístēmi", betekenis:"opstellen; brengen tot" },
+  grieks_apollymi:     { taal:"grieks", woord:"ἀπόλλυμι", transcript:"apóllymi", betekenis:"vernietigen; omkomen" },
+  grieks_apodidomi:    { taal:"grieks", woord:"ἀποδίδωμι", transcript:"apodídōmi", betekenis:"teruggeven" },
+  grieks_aphaireo:     { taal:"grieks", woord:"ἀφαιρέω", transcript:"aphairéō", betekenis:"wegnemen" },
+  grieks_didasko:      { taal:"grieks", woord:"διδάσκω", transcript:"didáskō", betekenis:"onderwijzen" },
+  grieks_aphiemi:      { taal:"grieks", woord:"ἀφίημι", transcript:"aphíēmi", betekenis:"wegzenden, loslaten" },
+  grieks_teleutao:     { taal:"grieks", woord:"τελευτάω", transcript:"teleutáō", betekenis:"eindigen; sterven" },
+  grieks_eao:          { taal:"grieks", woord:"ἐάω", transcript:"eáō", betekenis:"toelaten, laten" },
+  latijn_adhuc:   { taal:"latijn", woord:"adhuc", betekenis:"nog" },
+  latijn_cogito:  { taal:"latijn", woord:"cogito", betekenis:"(be)denken" },
+  latijn_postquam:{ taal:"latijn", woord:"postquam", betekenis:"nadat" },
+  latijn_iudico:  { taal:"latijn", woord:"iudico", betekenis:"oordelen, menen" },
+  latijn_velut:   { taal:"latijn", woord:"velut", betekenis:"zoals; als het ware" },
+  latijn_longe:   { taal:"latijn", woord:"longe", betekenis:"ver, verreweg" },
+  latijn_quicumque:{ taal:"latijn", woord:"quicumque", betekenis:"wie ook maar" },
+  latijn_respondeo:{ taal:"latijn", woord:"respondeo", betekenis:"(be)antwoorden" },
+  latijn_colo:    { taal:"latijn", woord:"colo", betekenis:"bebouwen, vereren" },
+  latijn_nolo:    { taal:"latijn", woord:"nolo", betekenis:"niet willen" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -20192,17 +20276,663 @@ TEXT:
 Een nieuwe stolp vult zich: een spinklosje naast een kleine vilten muts, allebei even gewoon als bijzonder. "De meeste levens laten geen standbeeld na," zegt de Boodschapper zacht, "alleen voorwerpen als deze — als iemand ze bewaart." Ze kijkt nog even naar de stolp, alsof ze zelf ook nog aan het nadenken is over wat er hierna komt.
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH15_WORDT_VERVOLGD
+* Luister naar het volgende verhaal -> CH16_000
+
+END
+`.trim();
+
+/* ---- Hoofdstuk 16 "Vorming en Vermaak" — GEBOUWD (2026-08-08), GEKOPPELD
+   aan de speelbare route (2026-08-09, zelfde patroon als H15's §7.59-achtige
+   koppeling): CH15_MUSEUM_00 routeert nu naar CH16_000, CH15_WORDT_VERVOLGD
+   is verwijderd, CH16_WORDT_VERVOLGD (onderaan dit blok) is het nieuwe
+   tijdelijke speeltest-eindpunt. Twee sporen SEQUENTIEEL (niet zigzag zoals
+   H15) — de inhoud
+   (mythe/opvoeding vs. circus/arena) spiegelt minder natuurlijk scène-voor-
+   scène. Latijn eerst voor latijn/beide (zelfde volgorde als H14), Grieks
+   sluit af; STATPOINTS/SOUVENIR eenmalig op de gedeelde CH16_EINDE (niet
+   per spoor — het H13/H14-euvel bewust vermeden). Geen enkele scène
+   combineert DIALOGUE met PUZZLE (de H15-bug uit hetzelfde gesprek). ---- */
+const SP_CH16_CNS = `
+=== SCENE: CH16_000 ===
+
+TITLE:
+Vorming en Vermaak
+
+TEXT:
+"[[Ecce|zie hier]] — van het huishouden naar het publieke leven," zegt de Boodschapper van Chronos. "Twee dingen die elke samenleving met haar jonge mensen doet: ze vormen, en ze laten ontspannen. In Athene draait dat om de gymnasion en de Spelen — lichaam en geest allebei, volgens Plato. In Rome om de Circus en de arena — sneller, ruiger, bloediger. Beide zeggen iets over wie een samenleving eert, en waarvoor ze bereid is te betalen."
+
+VOCAB:
+grieks_agon, grieks_stadion, grieks_nike, grieks_gymnasion, grieks_ekecheiria, latijn_circus, latijn_auriga, latijn_gladiator, latijn_harena, latijn_missio, latijn_palma, grieks_hiemi, grieks_histemi, grieks_kathistemi, grieks_apollymi, grieks_apodidomi, grieks_aphaireo, grieks_didasko, grieks_aphiemi, grieks_teleutao, grieks_eao, latijn_adhuc, latijn_cogito, latijn_postquam, latijn_iudico, latijn_velut, latijn_longe, latijn_quicumque, latijn_respondeo, latijn_colo, latijn_nolo
+
+CHOICES:
+* Volg de vorming en de Spelen in Griekenland [REQUIRE:taalspoor=grieks] -> CH16_GRE_001
+* Volg het vermaak in Rome [REQUIRE:taalspoor!=grieks] -> CH16_LAT_001
 
 END
 
-=== SCENE: CH15_WORDT_VERVOLGD ===
+=== SCENE: CH16_LAT_001 ===
+
+TITLE:
+De Circus Maximus
+
+TEXT:
+Meer dan honderdduizend mensen persen zich op de tribunes van de Circus Maximus — mannen en vrouwen, arm en rijk, gewoon naast elkaar, iets wat in het theater ondenkbaar zou zijn. Beneden scheuren vier wagenteams, elk in hun eigen kleur, met levensgevaarlijke snelheid rond de spina.
+
+Een dichter naast je, die de hele race amper aankijkt en veel meer interesse toont in wie er om hem heen zit, mompelt tevreden iets in zichzelf.
+
+DIALOGUE:
+Een dichter
+Quam turbam Circus habet, poeta amat.
+
+CHOICES:
+* De dichter houdt van de menigte die de Circus heeft. -> CH16_LAT_001_LV_A
+* De Circus houdt van de dichter die de menigte heeft. -> CH16_LAT_001_LV_B
+
+END
+
+=== SCENE: CH16_LAT_001_LV_A ===
+
+TITLE:
+Ingesloten Antecedent
+
+TEXT:
+Precies — turbam (de menigte) is het lijdend voorwerp, ingesloten middenin de bijzin quam turbam Circus habet ('welke menigte de Circus heeft'); poeta amat ('de dichter houdt van') is de hoofdzin, met turbam als impliciet lijdend voorwerp. De dichter, zo blijkt, is hier voor het publiek, niet voor de paarden.
+
+CODEX:
+codex_circus_maximus_ovidius
+
+CHOICES:
+* Zie wie er verder meedoet aan de races -> CH16_LAT_001J
+
+END
+
+=== SCENE: CH16_LAT_001_LV_B ===
+
+TITLE:
+Ingesloten Antecedent
+
+TEXT:
+Toch niet — Circus en poeta staan allebei in de nominativus, dus allebei kunnen ze onderwerp zijn, maar habet hoort bij Circus (de Circus hééft de menigte) en amat hoort bij poeta (de dichter houdt van de menigte). turbam, ingesloten middenin de bijzin, is het lijdend voorwerp van beide werkwoorden tegelijk. De dichter is hier voor het publiek, niet voor de paarden.
+
+CODEX:
+codex_circus_maximus_ovidius
+
+CHOICES:
+* Zie wie er verder meedoet aan de races -> CH16_LAT_001J
+
+END
+
+=== SCENE: CH16_LAT_001J ===
+
+TITLE:
+Ingesloten Antecedent
+
+PUZZLE:
+puzzle_ch16_lat_relatief
+
+CHOICES:
+* Zie wie er verder meedoet aan de races -> CH16_LAT_002
+
+END
+
+=== SCENE: CH16_LAT_002 ===
+
+TITLE:
+Gaius Diocles
+
+TEXT:
+De ster van vandaag is Diocles — geboren als slaaf in Lusitania, nu de bekendste wagenmenner van Rome. Op zijn achttiende begon hij, nu bijna vijfentwintig jaar en meer dan veertienhonderd overwinningen later, is hij naar verluidt rijker dan menig senator. Het publiek scandeert zijn naam voor hij ook maar één bocht heeft genomen.
+
+IMAGE:
+ch16_lat_circus_diocles.png
+
+CHOICES:
+* Zie hoe rijk hij precies is geworden -> CH16_LAT_002P
+
+END
+
+=== SCENE: CH16_LAT_002P ===
+
+TITLE:
+Gaius Diocles
+
+PUZZLE:
+puzzle_ch16_lat_diocles
+
+CODEX:
+codex_gaius_diocles
+
+CHOICES:
+* Verlaat de Circus voor de arena -> CH16_LAT_003
+
+END
+
+=== SCENE: CH16_LAT_003 ===
+
+TITLE:
+De Arena
+
+TEXT:
+Buiten de Circus, in het amfitheater, is de sfeer anders — grimmiger, gespannener. Een Thracische gladiator, gespierd en opvallend kalm voor iemand die zo dadelijk moet vechten, wordt door de omroeper aangekondigd. Niemand in het publiek heeft enig vermoeden van wat deze man over een paar jaar zal doen.
+
+DIALOGUE:
+De omroeper
+Spartacus! Spartacus van Thracië!
+
+De naam betekent voor jou, hier en nu, nog helemaal niets bijzonders — gewoon een van de vele gladiatoren die vandaag vechten voor hun leven en het plezier van de menigte.
+
+IMAGE:
+ch16_lat_arena_spartacus.png
+
+CHOICES:
+* Knik hem kort toe, uit oprecht respect voor wie voor je leven moet vechten -> CH16_LAT_003A
+* Kijk gewoon toe, zoals de rest van de menigte -> CH16_LAT_003B
+
+END
+
+=== SCENE: CH16_LAT_003A ===
+
+TITLE:
+Een Blik van Herkenning
+
+TEXT:
+Spartacus merkt je knik op, tussen de duizenden onverschillige gezichten — een kort, bijna verbaasd knikje terug, voor hij zich weer naar de arena keert.
+
+FLAG:
+ch16_lat_spartacus_erkend=true
+
+RELATION:
+spartacus=+1
+
+CHOICES:
+* Zie hoe het gevecht verloopt -> CH16_LAT_003J
+
+END
+
+=== SCENE: CH16_LAT_003B ===
+
+TITLE:
+Eén Gezicht in de Menigte
+
+TEXT:
+Voor jou is hij, voor nu, gewoon een van de velen — een naam die de omroeper al bijna vergeten is tegen de tijd dat het volgende duel wordt aangekondigd.
+
+RELATION:
+spartacus=-1
+
+CHOICES:
+* Zie hoe het gevecht verloopt -> CH16_LAT_003J
+
+END
+
+=== SCENE: CH16_LAT_003J ===
+
+TITLE:
+Winst voor Vandaag
+
+TEXT:
+Spartacus wint — overtuigend, zonder overbodige wreedheid, alsof hij zijn krachten spaart voor iets dat nog moet komen. Onthoud die naam. Je zult hem terugzien.
+
+FLAG:
+ch16_lat_spartacus_gezien=true
+
+CHOICES:
+* Zie wie er na hem opkomt -> CH16_LAT_004
+
+END
+
+=== SCENE: CH16_LAT_004 ===
+
+TITLE:
+Flamma's Vierde Weigering
+
+TEXT:
+Na Spartacus komt Flamma op — een Syrische gladiator die inmiddels aan zijn vierendertigste gevecht bezig is, eenentwintig keer gewonnen. Wanneer hij ook dit gevecht wint, gebeurt er iets ongewoons: de organisator biedt hem, zoals al drie keer eerder, de rudis aan — het houten zwaard dat een gladiator officieel zijn vrijheid geeft.
+
+DIALOGUE:
+Flamma
+Non accipio. Adhuc pugnare volo.
+
+Voor de vierde keer weigert hij zijn vrijheid. Het publiek weet niet goed of het moet juichen of fluisteren.
+
+IMAGE:
+ch16_lat_flamma_rudis.png
+
+CHOICES:
+* Bewonder zijn keuze — sommige mensen vinden hun vrijheid ergens anders dan wij verwachten [CLEMENTIA] -> CH16_LAT_004B
+* Vind het onbegrijpelijk — welke vrijheid is het waard om vier keer te weigeren [SEVERITAS] -> CH16_LAT_004B
+* Onthoud je van een oordeel — dit is Flamma's keuze, niet de jouwe om te beoordelen [NEUTRAL] -> CH16_LAT_004B
+
+END
+
+=== SCENE: CH16_LAT_004B ===
+
+TITLE:
+Zijn Eigen Vrijheid
+
+TEXT:
+Flamma buigt kort voor de menigte, pakt zijn wapens weer op, en loopt terug naar de gladiatorenschool — vrijwillig, voor de vierde keer op rij. Wat vrijheid precies betekent, blijkt niet voor iedereen hetzelfde antwoord te hebben.
+
+CODEX:
+codex_gladiatoren_spartacus_flamma
+
+CHOICES:
+* Zie wie er nu de arena betreedt -> CH16_LAT_005_INTRO
+
+END
+
+=== SCENE: CH16_LAT_005_INTRO ===
+
+TITLE:
+Amazon en Achillia
+
+TEXT:
+Het laatste duel van de dag is geen mannenduel. Twee vrouwen betreden de arena, elk met een rond schild, een dolk, een scheenbeschermer — dezelfde uitrusting als de mannen voor hen. Een oude toeschouwer naast je vertelt honderduit: een reliëf uit Halicarnassus toont twee vrouwen met precies deze namen, "met ere ontslagen" na hun gevecht. Onder Nero vochten zelfs vrouwen van senatorenfamilies mee, tot ergernis van de oude senaat.
+
+IMAGE:
+ch16_lat_gladiatrices.png
+
+CHOICES:
+* Zie hoe het gevecht zich ontwikkelt -> CH16_LAT_005P
+
+END
+
+=== SCENE: CH16_LAT_005P ===
+
+TITLE:
+Amazon en Achillia
+
+PUZZLE:
+puzzle_ch16_lat_comparativus
+
+CODEX:
+codex_vrouwelijke_gladiatoren
+
+CHOICES:
+* Volg het gevecht op de voet -> CH16_LAT_005
+
+END
+
+=== SCENE: CH16_LAT_005 ===
+
+TITLE:
+Een Gevaarlijk Moment
+
+CHECK:
+ch16_lat_arena_gevaar
+
+END
+
+=== SCENE: CH16_LAT_005_VOL ===
+
+TITLE:
+Amazon Wint, met Ere
+
+TEXT:
+Amazon dwingt Achillia tot overgave zonder een dodelijke slag — de scheidsrechter beëindigt het gevecht op tijd, en beide vrouwen verlaten de arena op eigen kracht, onder luid applaus. Precies het soort einde dat het reliëf uit Halicarnassus voor altijd zou vastleggen.
+
+CHOICES:
+* Zie hoe de dag eindigt -> CH16_LAT_005J
+
+END
+
+=== SCENE: CH16_LAT_005_DEELS ===
+
+TITLE:
+Een Gespannen Einde
+
+TEXT:
+Het gevecht duurt langer dan verwacht en wordt rommelig — uiteindelijk grijpt de scheidsrechter in en verklaart hij het duel onbeslist. Geen missio met ere, maar ook geen bloedbad: beide vrouwen verlaten de arena op eigen benen.
+
+CHOICES:
+* Zie hoe de dag eindigt -> CH16_LAT_005J
+
+END
+
+=== SCENE: CH16_LAT_005_GEFAALD ===
+
+TITLE:
+Een Onrustig Moment
+
+TEXT:
+Ergens tijdens het gevecht ontstaat er onrust op de tribune vlak bij jou — een dronken toeschouwer die te enthousiast naar voren dringt. Tegen de tijd dat de orde hersteld is, heb je het beslissende moment van het gevecht zelf gemist.
+
+CHOICES:
+* Zie hoe de dag eindigt -> CH16_LAT_005J
+
+END
+
+=== SCENE: CH16_LAT_005_KRITIEK ===
+
+TITLE:
+Een Onvergetelijk Duel
+
+TEXT:
+Het gevecht dat volgt is zo evenwichtig en zo beheerst dat zelfs de meest bloeddorstige toeschouwers stil worden — puur vakmanschap, geen slachting. Wanneer Amazon uiteindelijk wint, staat de hele tribune op, ook de mensen die met tegenzin waren gekomen.
+
+CHOICES:
+* Zie hoe de dag eindigt -> CH16_LAT_005J
+
+END
+
+=== SCENE: CH16_LAT_005J ===
+
+TITLE:
+Terug naar het Orakel
+
+TEXT:
+De zon zakt achter de tribunes van de Circus terwijl je wegloopt van een dag vol snelheid, kracht en geld — Diocles' rijkdom, Spartacus' stille kracht, Flamma's eigen keuze, Amazon en Achillia's ere. Vermaak, blijkt hier, is nooit zomaar onschuldig vermaak.
+
+STATPOINTS:
+3
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH16_EINDE
+* Steek over naar de Griekse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH16_GRE_001
+
+END
+
+=== SCENE: CH16_GRE_001 ===
+
+TITLE:
+De Gymnasion van Plato
+
+TEXT:
+In de schaduw van een zuilengang oefent een groep jongens worstelgrepen, terwijl een oudere man met een kalme, doordringende stem toekijkt en af en toe een correctie roept — niet alleen op hun houding, maar op hun hele manier van redeneren. Voor Plato is dit geen twee aparte lessen: lichaam en geest vormen zich hier tegelijk.
+
+DIALOGUE:
+Plato
+Een lichaam zonder geest is enkel kracht; een geest zonder lichaam is enkel lucht. Wij vormen hier beide, of we vormen niets.
+
+IMAGE:
+ch16_gre_plato_gymnasion.png
+
+CHOICES:
+* Zie wat voor toekomstige burger dit oplevert -> CH16_GRE_001P
+
+END
+
+=== SCENE: CH16_GRE_001P ===
+
+TITLE:
+De Gymnasion van Plato
+
+PUZZLE:
+puzzle_ch16_gre_plato
+
+CODEX:
+codex_platoonse_opvoeding
+
+CHOICES:
+* Zie waar deze vorming uiteindelijk toe leidt -> CH16_GRE_002
+
+END
+
+=== SCENE: CH16_GRE_002 ===
+
+TITLE:
+Pelops' Race
+
+TEXT:
+Een van de oudere jongens vertelt, terwijl hij op adem komt, het verhaal dat elke Griekse atleet kent: hoe Pelops ooit koning Oinomaos versloeg in een wagenrace om de hand van Hippodamia — met hulp van een omgekochte wagenmenner die de wielpennen van Oinomaos' wagen door was verving. Oinomaos stierf in de crash. Pelops weigerde daarna zijn beloofde deel te betalen en gooide de wagenmenner in zee — die, stervend, heel Pelops' nageslacht vervloekte.
+
+Die vloek reikt ver: Pelops' zonen Atreus en Thyestes verraden en vermoorden elkaar, en Atreus' eigen zoon — een zekere Agamemnon, de latere opperbevelhebber bij Troje — sterft uiteindelijk door de hand van zijn eigen vrouw. Van Tantalus, Pelops' vader, gestraft in de onderwereld, tot Agamemnons moord: drie generaties, één vloek die nooit ophoudt.
+
+IMAGE:
+ch16_gre_pelops_race.png
+
+CODEX:
+codex_pelops_atreiden_vloek
+
+CHOICES:
+* Zie hoe diezelfde soort race, eeuwen later, nog steeds gespeeld wordt -> CH16_GRE_003
+
+END
+
+=== SCENE: CH16_GRE_003 ===
+
+TITLE:
+Atalanta's Voorwaarde
+
+TEXT:
+Niet ver van de gymnasion oefent een jonge vrouw met een boog en op blote voeten rennend over een stoffige renbaan — Atalanta, opgevoed door beren nadat haar vader, die een zoon wilde, haar als baby te vondeling had gelegd. Inmiddels vraagt hij haar toch te trouwen. Haar voorwaarde is simpel en dodelijk: wie haar wil trouwen, moet haar eerst verslaan in een hardloopwedstrijd. Verliest hij, dan sterft hij.
+
+DIALOGUE:
+Atalanta
+τὸν μνηστῆρα νικῶ.
+
+CHOICES:
+* Ik versla de vrijer. -> CH16_GRE_003_LV_A
+* De vrijer verslaat mij. -> CH16_GRE_003_LV_B
+
+END
+
+=== SCENE: CH16_GRE_003_LV_A ===
+
+TITLE:
+Naamval, Geen Volgorde
+
+TEXT:
+Je verstaat haar goed: τὸν μνηστῆρα staat in de accusativus — lijdend voorwerp. Atalanta is hier het onderwerp dat wint, niet degene die verslagen wordt, ook al staat μνηστῆρα vooraan.
+
+CHOICES:
+* Zie of iemand haar ooit weet te verslaan -> CH16_GRE_003J
+
+END
+
+=== SCENE: CH16_GRE_003_LV_B ===
+
+TITLE:
+Naamval, Geen Volgorde
+
+TEXT:
+Toch niet — τὸν μνηστῆρα staat in de accusativus, dus is het lijdend voorwerp, ook al staat het vooraan in de zin. Atalanta wint, ze verliest niet.
+
+CHOICES:
+* Zie of iemand haar ooit weet te verslaan -> CH16_GRE_003J
+
+END
+
+=== SCENE: CH16_GRE_003J ===
+
+TITLE:
+Tientallen Verliezers
+
+TEXT:
+Tientallen vrijers hebben het al geprobeerd, en zijn allemaal gestorven. Vandaag doet een nieuwe uitdager mee — Hippomenes, met iets in zijn hand dat niemand anders heeft meegenomen naar een hardloopwedstrijd: drie gouden appels, een geschenk van Aphrodite zelf.
+
+CHOICES:
+* Zie of dat genoeg is -> CH16_GRE_004_INTRO
+
+END
+
+=== SCENE: CH16_GRE_004_INTRO ===
+
+TITLE:
+Drie Gouden Appels
+
+TEXT:
+Het startsein klinkt. Atalanta trekt meteen een voorsprong — tot Hippomenes de eerste appel opzij rolt. Ze aarzelt, nieuwsgierig, buigt af om hem op te rapen. Het patroon herhaalt zich, appel na appel, en elke keer verliest ze een beetje van haar voorsprong.
+
+IMAGE:
+ch16_gre_atalanta_apples.png
+
+CHOICES:
+* Zie of dat genoeg is om haar in te halen -> CH16_GRE_004P
+
+END
+
+=== SCENE: CH16_GRE_004P ===
+
+TITLE:
+Drie Gouden Appels
+
+PUZZLE:
+puzzle_ch16_gre_atalanta
+
+CHOICES:
+* Zie wie als eerste de finish haalt -> CH16_GRE_004
+
+END
+
+=== SCENE: CH16_GRE_004 ===
+
+TITLE:
+De Laatste Meters
+
+CHECK:
+ch16_gre_atalanta_race
+
+END
+
+=== SCENE: CH16_GRE_004_VOL ===
+
+TITLE:
+Hippomenes Wint
+
+TEXT:
+Op de laatste appel na buigt Atalanta nog één keer af — en dat kost haar precies genoeg tijd. Hippomenes haalt de finish als eerste, buiten adem, nauwelijks gelovend dat het gelukt is. Niet haar snelheid heeft hem verslagen, maar haar nieuwsgierigheid.
+
+CODEX:
+codex_atalanta_wedloop
+
+CHOICES:
+* Zie wat er met de Spelen zelf gebeurt -> CH16_GRE_004J
+
+END
+
+=== SCENE: CH16_GRE_004_DEELS ===
+
+TITLE:
+Een Nek-aan-Nek Race
+
+TEXT:
+Het is bijna gelijkspel — Hippomenes haalt de finish maar met een halve pas voorsprong, buiten adem en zelf verbaasd dat de laatste appel het verschil maakte.
+
+CODEX:
+codex_atalanta_wedloop
+
+CHOICES:
+* Zie wat er met de Spelen zelf gebeurt -> CH16_GRE_004J
+
+END
+
+=== SCENE: CH16_GRE_004_GEFAALD ===
+
+TITLE:
+Bijna Voorbij
+
+TEXT:
+Atalanta herstelt zich sneller dan verwacht na de laatste appel en is Hippomenes bijna weer voorbij — hij wint uiteindelijk toch, maar op het nippertje, tot verbazing van iedereen die stond te kijken.
+
+CODEX:
+codex_atalanta_wedloop
+
+CHOICES:
+* Zie wat er met de Spelen zelf gebeurt -> CH16_GRE_004J
+
+END
+
+=== SCENE: CH16_GRE_004_KRITIEK ===
+
+TITLE:
+Een Onbetwiste Overwinning
+
+TEXT:
+Hippomenes' timing is perfect — hij haalt de finish met ruime voorsprong, terwijl Atalanta nog bij de laatste appel neerknielt. Voor het eerst in jaren verlaat een vrijer de renbaan levend én gelukkig getrouwd.
+
+CODEX:
+codex_atalanta_wedloop
+
+CHOICES:
+* Zie wat er met de Spelen zelf gebeurt -> CH16_GRE_004J
+
+END
+
+=== SCENE: CH16_GRE_004J ===
+
+TITLE:
+De Spelen van Olympia
+
+TEXT:
+Atalanta's race is, op zijn eigen kleine schaal, precies wat de grote Olympische Spelen zelf ooit zijn geworden — een wedstrijd die zo belangrijk wordt geacht dat er zelfs oorlogen voor onderbroken worden. Tijdens de Spelen geldt de ekecheiria, een heilige wapenstilstand: reizende atleten en toeschouwers mogen ongehinderd naar Olympia, zelfs midden in een oorlog tussen hun eigen steden.
+
+Getrouwde vrouwen mogen er niet eens in de buurt komen, op straffe van de dood. Pherenike, dochter en moeder van olympisch kampioenen, verkleedt zich daarom als trainer om toch haar zoon te zien vechten.
+
+DIALOGUE:
+Pherenike
+Drie generaties van mijn familie hebben deze overwinning verdiend. Ik ga dat niet van een afstand missen, wet of geen wet.
+
+Ontmaskerd wanneer ze van vreugde over het hek springt, wordt ze uiteindelijk niet gestraft — de rechters achten haar familie te roemrijk om te straffen.
+
+IMAGE:
+ch16_gre_kallipateira.png
+
+CHOICES:
+* Vind dat de rechters hier terecht een uitzondering maakten [CLEMENTIA] -> CH16_GRE_005B
+* Vind dat een wet die alleen voor roemrijke families buigt, geen echte wet is [SEVERITAS] -> CH16_GRE_005B
+* Onthoud je van een oordeel — dit is niet aan jou om te beslissen [NEUTRAL] -> CH16_GRE_005B
+
+END
+
+=== SCENE: CH16_GRE_005B ===
+
+TITLE:
+Vanaf Toen
+
+TEXT:
+Vanaf Pherenike's ontmaskering moeten trainers zich, net als de atleten zelf, naakt vertonen — een regel bedacht om te voorkomen dat nog een vrouw zich ooit weer zo zou kunnen vermommen. Het won niet echt: het bewees vooral hoe hard iemand bereid was te gaan voor wie ze liefhad.
+
+CODEX:
+codex_olympische_spelen
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH16_EINDE
+
+END
+
+=== SCENE: CH16_EINDE ===
+
+TITLE:
+Vorming, Vermaak, en Wat Blijft
+
+TEXT:
+"[[Ecce|zie hier]] — twee samenlevingen, allebei bezig hun jonge mensen te vormen en zichzelf te vermaken," zegt de Boodschapper van Chronos. "Athene doet het met wedstrijden die eeuwenlang standhouden en een wapenstilstand die zelfs koningen respecteren. Rome doet het met snelheid, geld en bloed — en soms, zoals bij Flamma, met een vrijheid die iemand willens en wetens laat liggen." Ze zwijgt even. "Onthoud ook die andere naam uit de arena. Spartacus is nog niet klaar met dit verhaal."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_vorming_vermaak
+
+CODEX:
+codex_grammatica_ch16_overzicht
+
+CHOICES:
+* Keer terug naar het Museum -> CH16_MUSEUM_00
+
+END
+
+=== SCENE: CH16_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Een nieuwe stolp vult zich: een olijftak naast een palmtak, allebei nog verrassend fris. "Twee manieren om iemand te eren voor wat hun lichaam kan," zegt de Boodschapper zacht. Ze kijkt nog even naar de stolp, alsof ze zelf ook nog aan het nadenken is over wat er hierna komt.
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH16_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH16_WORDT_VERVOLGD ===
 
 TITLE:
 Tot Hier, Voorlopig
 
 TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — opvoeding en de Olympische Spelen, Thermopylae en Hannibal, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Perzische Oorlogen, Hannibal, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
 
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
 

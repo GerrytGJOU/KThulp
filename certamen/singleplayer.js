@@ -534,7 +534,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS), ...CNSParser.parse(SP_CH11_CNS), ...CNSParser.parse(SP_CH12_CNS), ...CNSParser.parse(SP_CH13_CNS), ...CNSParser.parse(SP_CH14_CNS), ...CNSParser.parse(SP_CH15_CNS)]);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS), ...CNSParser.parse(SP_CH11_CNS), ...CNSParser.parse(SP_CH12_CNS), ...CNSParser.parse(SP_CH13_CNS), ...CNSParser.parse(SP_CH14_CNS), ...CNSParser.parse(SP_CH15_CNS), ...CNSParser.parse(SP_CH16_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
   stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[],
   payoffsSeen:{}, relations:{}, kroniek:[] });
