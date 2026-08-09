@@ -426,7 +426,7 @@ function spTendencyAddressPhrase(state){
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
                   "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION","CHECK"],
+                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION","CHECK","RACE"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -1481,6 +1481,7 @@ SCREENS.spPlay = function(){
   if(scene.meta.PUZZLE) return spRenderPuzzle(scene);
   if(scene.meta.COMBAT) return spStartCombatFromScene(scene);
   if(scene.meta.CHECK) return spStartCheckFromScene(scene);
+  if(scene.meta.RACE) return spStartRaceFromScene(scene);
 
   const payoffs = spResolvePayoffs(SP_STATE.node);
   const titleHTML = scene.title ? `<h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>` : "";
@@ -2342,6 +2343,155 @@ function spCombatAttack(){
   SCREENS.spCombat();
 }
 
+/* ---- RACE-BRIDGE — Atalanta's wedloop (Hoofdstuk 16, Gerbens verzoek
+   2026-08-09), rechtstreeks een reskin van Combat-bridge hierboven: zelfde
+   vraag-uit-SP_STATE.vocab-motor (spRaceNextQuestion is een kopie van
+   spCombatNextQuestion, inclusief dezelfde taalspoor-filter), maar met
+   "voortgang richting finish" i.p.v. HP, en een periodiek "gooi een gouden
+   appel"-keuzemoment i.p.v. een aanval-knop — dat spiegelt de mythe zelf:
+   op pure snelheid wint Hippomenes nooit (de tegenstander legt sowieso
+   meer afstand af per beurt), alleen door Aphrodites drie appels slim in
+   te zetten kán het. SP_RACE is, net als SP_COMBAT/SP_CHECK_RESULTAAT,
+   bewust GEEN onderdeel van SP_STATE/localStorage. Generiek opgezet
+   (SP_RACES, niet hardcoded op Atalanta) zodat een volgend hoofdstuk
+   dezelfde bridge kan hergebruiken voor een andere wedloop. ---- */
+let SP_RACE = null;
+function spStartRaceFromScene(scene){
+  const raceId = scene.meta.RACE.trim();
+  const race = SP_RACES[raceId];
+  const target = scene.choices[0]?.target;
+  if(!race){ console.error("Onbekende race:", raceId); return spGoCns(target); }
+  SP_RACE = { raceId, player:0, opponent:0, applesLeft:race.appleCount, questionsAnswered:0, question:null, offerApple:false, sceneTitle:scene.title };
+  spRaceNextQuestion();
+  SCREENS.spRace();
+}
+// Identieke bron/taalspoor-filter als spCombatNextQuestion — zie de
+// toelichting daar.
+function spRaceNextQuestion(){
+  const ids = (SP_STATE.vocab&&SP_STATE.vocab.length) ? SP_STATE.vocab : Object.keys(SP_VOCAB_ENTRIES);
+  let entries = ids.map(id=>SP_VOCAB_ENTRIES[id]).filter(Boolean);
+  const spoor = SP_STATE.flags?.taalspoor;
+  if(spoor==="latijn" || spoor==="grieks"){
+    const eigenTaal = spoor==="latijn" ? "latijn" : "grieks";
+    const gefilterd = entries.filter(e => e.taal===eigenTaal);
+    if(gefilterd.length) entries = gefilterd;
+  }
+  const w = pick(entries);
+  const correct = w.betekenis;
+  const distractors = shuffle(entries.filter(x=>x!==w).map(x=>x.betekenis))
+    .filter((v,i,a)=>v!==correct && a.indexOf(v)===i).slice(0,3);
+  SP_RACE.question = { woord:w.woord, correct, options:shuffle([correct, ...distractors]) };
+}
+// Checkt na elke beurt of de finish al bereikt is. Uitkomst hangt af van
+// hoeveel appels er nog OVER zijn bij winst — hoe minder appels nodig
+// waren, hoe knapper de overwinning (net als de vier CHECK-uitkomsten
+// elders: geen aparte "faal"-schermen, gewoon een ander vervolg).
+function spRaceFinishCheck(){
+  const race = SP_RACES[SP_RACE.raceId];
+  if(SP_RACE.opponent < race.finish && SP_RACE.player < race.finish) return false;
+  let outcome;
+  // Gelijkspel (of tegenstander eerder/tegelijk) telt als verlies — de
+  // tegenstander loopt bij gelijke pas altijd exact gelijk op (zelfde
+  // stepCorrect/opponentStep), dus alleen de appels kunnen die balans
+  // echt doorbreken, nooit vocab-snelheid alleen.
+  if(SP_RACE.opponent >= race.finish){
+    outcome = "gefaald";
+  } else if(SP_RACE.applesLeft >= 2){
+    outcome = "kritiek";
+  } else if(SP_RACE.applesLeft === 1){
+    outcome = "vol";
+  } else {
+    outcome = "deels";
+  }
+  const target = race.targets[outcome];
+  SP_RACE = null;
+  spGoCns(target);
+  return true;
+}
+function spRaceAnswer(idx){
+  const race = SP_RACES[SP_RACE.raceId];
+  const q = SP_RACE.question;
+  const correct = q.options[idx]===q.correct;
+  SP_RACE.opponent += race.opponentStep;
+  if(correct){
+    SP_RACE.player += race.stepCorrect;
+    toast("Juist!", esc(race.playerNm)+" zet een stap voorwaarts.");
+  } else {
+    toast("Niet juist", "Het juiste antwoord was \""+q.correct+"\" — "+esc(race.nm)+" loopt verder uit.");
+  }
+  SP_RACE.questionsAnswered += 1;
+  if(spRaceFinishCheck()) return;
+  if(SP_RACE.questionsAnswered % 2 === 0 && SP_RACE.applesLeft > 0) SP_RACE.offerApple = true;
+  spRaceNextQuestion();
+  SCREENS.spRace();
+}
+function spRaceThrowApple(){
+  const race = SP_RACES[SP_RACE.raceId];
+  if(!SP_RACE || !SP_RACE.applesLeft) return;
+  SP_RACE.applesLeft -= 1;
+  SP_RACE.opponent = Math.max(0, SP_RACE.opponent - race.appleSetback);
+  SP_RACE.offerApple = false;
+  toast("Een gouden appel!", esc(race.nm)+" buigt af om hem op te rapen — kostbare tijd verloren.");
+  if(spRaceFinishCheck()) return;
+  SCREENS.spRace();
+}
+function spRaceSkipApple(){
+  if(!SP_RACE) return;
+  SP_RACE.offerApple = false;
+  SCREENS.spRace();
+}
+// Zelfde vrijstaande-sprite-truc als spCombatSpriteHTML, zonder de
+// koppen-stapeling (die is Hydra/Boss Battle-specifiek).
+function spRaceSpriteHTML(race){
+  if(!race.img) return `<span style="font-size:40px">${race.icon}</span>`;
+  return `<div style="position:relative;width:min(220px,60vw);aspect-ratio:1/1;margin:0 auto">
+    <img src="${esc(race.img)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain"
+      onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${esc(race.icon)}</span>'">
+  </div>`;
+}
+SCREENS.spRace = function(){
+  if(!SP_RACE){ go("spSlots"); return; }
+  const race = SP_RACES[SP_RACE.raceId];
+  const playerPct = Math.max(0, Math.min(100, Math.round(SP_RACE.player/race.finish*100)));
+  const opponentPct = Math.max(0, Math.min(100, Math.round(SP_RACE.opponent/race.finish*100)));
+  if(SP_RACE.offerApple){
+    H(brand(true)+`
+    <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SP_RACE.sceneTitle||race.nm)}</h2>${spAudioToggleHTML()}</div>
+    <div class="panel" style="text-align:center">
+      ${spRaceSpriteHTML(race)}
+      <p class="note">Je hebt nog ${SP_RACE.applesLeft} gouden ${SP_RACE.applesLeft===1?"appel":"appels"} van Aphrodite.</p>
+      <p style="font-weight:700">Gooi je er een opzij om ${esc(race.nm)} af te leiden?</p>
+    </div>
+    <button class="btn btn-gold btn-block lg" onclick="spRaceThrowApple()">🍎 Gooi de appel</button>
+    <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="spRaceSkipApple()">Bewaar hem, ren door</button>
+    ${foot()}`);
+    return;
+  }
+  const q = SP_RACE.question;
+  const optsHTML = q.options.map((o,i)=>
+    `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spRaceAnswer(${i})">${esc(o)}</button>`
+  ).join("");
+  H(brand(true)+`
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SP_RACE.sceneTitle||race.nm)}</h2>${spAudioToggleHTML()}</div>
+  <div class="panel" style="text-align:center">
+    ${spRaceSpriteHTML(race)}
+    <div class="eyebrow l" style="margin-top:6px">${esc(race.nm)} vs. ${esc(race.playerNm)}</div>
+    <div style="height:10px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin:6px 0">
+      <div style="height:100%;width:${opponentPct}%;background:#c65b4e"></div>
+    </div>
+    <p class="note" style="margin:0">${esc(race.nm)}</p>
+    <div style="height:10px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin:6px 0">
+      <div style="height:100%;width:${playerPct}%;background:var(--hi-bright,#e8c77e)"></div>
+    </div>
+    <p class="note" style="margin:0">${esc(race.playerNm)} — nog ${SP_RACE.applesLeft} appel(s) over</p>
+  </div>
+  <div class="panel">
+    <p style="font-weight:700;margin-bottom:4px">Wat betekent <em>${esc(q.woord)}</em>?</p>
+    ${optsHTML}
+  </div>
+  ${foot()}`);
+};
+
 /* ---- B29a: DE VIER-UITKOMSTEN-LADDER ("CHECK:", Chronica.md §11.4) — een
    spaarzaam, dramatisch dobbelmechanisme, los van de bestaande gated choice
    (drempel, geen dobbelsteen, altijd zichtbaar — zie §11.4). Gebouwd op
@@ -2362,14 +2512,18 @@ let SP_CHECK_RESULTAAT = null;
 function spRollCheck(statKey, dc){
   const roll = 1 + Math.floor(Math.random()*20);
   const stat = SP_STATE.stats?.[statKey] || 0;
-  const total = roll + stat;
+  // D&D-stijl modifier, niet de ruwe ability score zelf (die loopt van 8
+  // t/m 20 en zou elke DC 13-17 vrijwel altijd triviaal halen): (stat-10)/2,
+  // naar beneden afgerond — 8→-1, 10→0, 15→+2, 20→+5.
+  const mod = Math.floor((stat-10)/2);
+  const total = roll + mod;
   let uitkomst;
   if(roll===1) uitkomst = "kritiek";
   else if(roll===20 || total>=dc+5) uitkomst = "volledig";
   else if(total>=dc) uitkomst = "deels";
   else if(total>=dc-5) uitkomst = "gefaald";
   else uitkomst = "kritiek";
-  return { roll, stat, total, dc, uitkomst };
+  return { roll, stat, mod, total, dc, uitkomst };
 }
 function spStartCheckFromScene(scene){
   const checkId = scene.meta.CHECK.trim();
@@ -2388,7 +2542,7 @@ SCREENS.spCheck = function(){
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SpTextResolver.resolve(r.sceneTitle||"Beproeving", SP_STATE))}</h2>${spAudioToggleHTML()}</div>
   <div class="panel" style="text-align:center">
     <div class="eyebrow l">Worp</div>
-    <p class="note">1d20 (${r.roll}) + ${r.stat} = ${r.total} tegen DC ${r.dc}</p>
+    <p class="note">1d20 (${r.roll}) ${r.mod>=0?"+":"-"} ${Math.abs(r.mod)} = ${r.total} tegen DC ${r.dc}</p>
     <p style="font-weight:700;margin-top:8px">${esc(uitkomstLabel)}</p>
   </div>
   ${r.tekst?`<div class="panel">${spParagraphsHTML(r.tekst, SP_STATE)}</div>`:""}

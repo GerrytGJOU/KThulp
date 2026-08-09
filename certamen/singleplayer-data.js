@@ -383,20 +383,20 @@ const SP_CAMPAIGN = [
     illustratie:"De Olympische renbaan / het Circus Maximus",
     zijverhalen:"Calydonische ever & Meleager (A-tier) — samen met Atalanta één vault-vignet, verhuisd vanuit het oude Hoofdstuk 13" },
   { id:"ch17", nr:17, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Oorlog en Overwinning",
-    periode:"Perzische Oorlogen (480 v.Chr.) / Tweede Punische Oorlog (218-201 v.Chr.)",
-    verhaal:"Een handjevol Grieken houdt stand tegen een overmacht bij een nauwe bergpas, terwijl eeuwen later in het westen een generaal met olifanten een onmogelijke tocht over de Alpen waagt. Herodotos, die het eerste verhaal ooit optekende, vertelt het mee — en laat meteen zien hoe lastig het is om te weten wat er nou echt gebeurde.",
-    pallas:"Les 28: de Perzische Oorlogen (Thermopylae, Spartanen) — met Herodotos als vertellende stem (cameo i.p.v. eigen hoofdstuk, zoals Xenofon elders al gebeurt)", minerva:"Hoofdstuk 17-18: Hannibal over de Alpen / Hannibal verslagen (LET OP: de ablativus absolutus zelf is al gedekt in Hoofdstuk 11, vooruitgehaald — hier dus alleen de resterende, niet-grammaticale cultuurstof van Minerva 17-18, of eventueel het werkwoord ire als dat niet al in H12 zit)",
-    grammatica:"Grieks: les 28 (Perzische Oorlogen, cultuur/geschiedenis); Latijn: cultuurtekst Hannibal, grammatica grotendeels al elders gedekt (ablativus absolutus in H11) — nader te bepalen of hier nog iets nieuws nodig is",
+    periode:"Ionische Opstand t/m Plataeae (499-479 v.Chr., zwaartepunt Thermopylae 480) / Eerste Punische Oorlog t/m Hannibals dood (264-183 v.Chr., zwaartepunt Cannae 216)",
+    verhaal:"Vastgelegd 2026-08-09, Gerbens akkoord — een breder oorlogsverhaal dan alleen de twee beroemdste veldslagen, met die veldslagen wél als zwaartepunt. Grieks: de Ionische steden komen in opstand tegen Perzië, Athene wint tegen alle verwachting in bij Marathon, en tien jaar later keert Xerxes terug met het grootste leger dat Griekenland ooit zag — gestuit door een handjevol Grieken in een nauwe bergpas, tot de oorlog uiteindelijk bij Plataeae beslist wordt. Latijn: Hannibal zweert als kind op het altaar eeuwige vijandschap tegen Rome, breekt via Saguntum de vrede, trekt met olifanten over de Alpen, vernietigt bij Cannae het grootste Romeinse leger ooit — tot Scipio Africanus de oorlog naar Afrika brengt en hem bij Zama verslaat. Hannibal vlucht, eerst naar Kreta (waar hij zijn goud verstopt in standbeelden om het te redden), voert als huurling nog een zeeslag met potten vol giftige slangen, en sterft uiteindelijk door eigen hand in Bithynië, liever dood dan gevangen door Rome.",
+    pallas:"Les 28: de Perzische Oorlogen (Thermopylae, Spartanen) — met Herodotos als vertellende stem (cameo i.p.v. eigen hoofdstuk, zoals Xenofon elders al gebeurt)", minerva:"Hoofdstuk 17-18 (cultuurstof, ablativus absolutus al gedekt in H11) + Hoofdstuk 22-23 (grammatica, VERVROEGD vanuit H18/Caesar — Gerbens akkoord 2026-08-09)",
+    grammatica:"Grieks: les 28 (Perzische Oorlogen, cultuur/geschiedenis); Latijn: gerundium, genitivus subjectivus/objectivus, ferre (Minerva 22) + gerundivum, gerundivumconstructie (Minerva 23) — VERVROEGD vanuit Hoofdstuk 18 (Gerbens akkoord 2026-08-09; sterke inhoudelijke klik met 'Alpes traiciendi causa'/'spes urbis capiendae'-constructies bij de Alpenoversteek, het beleg van Saguntum en de belegering bij Cannae). Hoofdstuk 18 wordt hierdoor bewust grammatica-arm voor Latijn — zie de aantekening daar.",
     gameplay:"Twee sporen, strategie/militaire keuzes; bronnen-vergelijken (Herodotos' rol) als mechaniek aan Griekse kant",
-    personages:"Leonidas, Themistocles, Herodotos — Hannibal",
+    personages:"Leonidas, Themistocles, Herodotos, Xerxes, Artemisia, Mardonius, Pausanias — Hannibal, Maharbal, Scipio Africanus",
     thema:"Niet alles wat verteld wordt is automatisch waar (Herodotos' eigen vraag) — toegepast op twee legendarische, bijna-onmogelijke overwinningen",
     illustratie:"Thermopylae / Hannibals olifanten in de Alpen",
     zijverhalen:"Regulus, Cato (⭐⭐⭐) — Punische-Oorlogen-deugdverhalen" },
   { id:"ch18", nr:18, boek:"III — De Wereld van Mensen", type:"hoofdstuk", nm:"Grenzen Verlegd",
     periode:"Hellenistische Tijd (336-323 v.Chr.) / Late Republiek (58-50 v.Chr.)",
     verhaal:"Een jonge koning trekt met zijn leger verder dan wie ook vóór hem, tot in de verste uithoeken van de bekende wereld. Generaties later doet een Romeinse generaal in Gallië iets vergelijkbaars — en ontdekt dat wie de pen vasthoudt, ook de geschiedenis vormgeeft. **Dit is de laatste nieuwe Griekse grammatica van de hele campagne** — Pallas deel 2 is na Alexander uitgeput.",
-    pallas:"Les 29 (LAATSTE Pallas 2-les): Alexander de Grote", minerva:"Hoofdstuk 22-23: Caesars carrière, Caesar in België en Nederland",
-    grammatica:"Grieks: les 29 (Alexander — laatste nieuwe Griekse stof in de hele campagne); Latijn: gerundium, genitivus subjectivus/objectivus (M22), gerundivum (M23)",
+    pallas:"Les 29 (LAATSTE Pallas 2-les): Alexander de Grote", minerva:"Cultuurstof Caesars carrière/België blijft hier (het verhaal), maar de bijbehorende grammatica (Hoofdstuk 22-23) is VERVROEGD naar Hoofdstuk 17 (Gerbens akkoord 2026-08-09) — zie de aantekening daar",
+    grammatica:"Grieks: les 29 (Alexander — laatste nieuwe Griekse stof in de hele campagne); Latijn: BEWUST GRAMMATICA-ARM (herhaling) — gerundium/genitivus subj./obj./ferre (M22) en gerundivum (M23) zijn vervroegd naar Hoofdstuk 17, waar ze inhoudelijk beter passen (Alpenoversteek/beleg van Saguntum). Nader te bepalen welke eerdere stof hier herhaald wordt, zelfde aanpak als H14/H19.",
     gameplay:"Twee sporen; taalverspreiding volgen over een groeiende kaart (Griekse lijn), bronnen analyseren (Latijnse lijn, Caesars Commentarii)",
     personages:"Alexander de Grote, Philippus II — Caesar, Dumnorix",
     thema:"Eén mens die de kaart van de bekende wereld hertekent — met het zwaard, of met de pen",
@@ -2906,6 +2906,19 @@ const SP_COMBAT_ENEMIES = {
     intro:"Meer dan honderd mannen, drie jaar lang gewend aan een paleis dat niet van hen is — verrast, ongewapend, en voor het eerst tegenover de koning die ze allang dood waanden." },
 };
 
+/* ---- RACE-BRIDGE-DATA — zie de toelichting bij SP_RACE/spStartRaceFromScene
+   (singleplayer.js) voor het mechanisme zelf. finish = totale afstand;
+   stepCorrect/opponentStep = voortgang per beurt; appleCount/appleSetback =
+   Aphrodites drie gouden appels en hoeveel afstand elke appel de
+   tegenstander kost; targets = dezelfde vier CH16_GRE_004-uitkomstscènes
+   die al bestonden voor de oude CHECK-versie (geen scène-graaf-wijziging
+   nodig, alleen de trigger veranderde van CHECK: naar RACE:). ---- */
+const SP_RACES = {
+  atalanta: { nm:"Atalanta", playerNm:"Hippomenes", icon:"🏃‍♀️", img:"assets/chronica/combat/atalanta.png",
+    finish:21, stepCorrect:3, opponentStep:3, appleCount:3, appleSetback:5,
+    targets:{ vol:"CH16_GRE_004_VOL", deels:"CH16_GRE_004_DEELS", gefaald:"CH16_GRE_004_GEFAALD", kritiek:"CH16_GRE_004_KRITIEK" } },
+};
+
 /* ---- B29a: DE VIER-UITKOMSTEN-LADDER ("CHECK:", Chronica-audit, fase 9/11,
    Chronica.md §11.4) — spaarzaam dobbelmechanisme (1d20+stat vs. DC), los van
    de bestaande gated choice. Gebouwd op verzoek (2026-07-30), NOG NERGENS
@@ -3078,11 +3091,8 @@ const SP_CHECKS = {
     deels:{ target:"CH15_LAT_004_DEELS" },
     gefaald:{ target:"CH15_LAT_004_GEFAALD" },
     kritiek:{ target:"CH15_LAT_004_KRITIEK" } },
-  ch16_gre_atalanta_race: { stat:"agilitas", dc:14,
-    volledig:{ target:"CH16_GRE_004_VOL" },
-    deels:{ target:"CH16_GRE_004_DEELS" },
-    gefaald:{ target:"CH16_GRE_004_GEFAALD" },
-    kritiek:{ target:"CH16_GRE_004_KRITIEK" } },
+  // ch16_gre_atalanta_race verwijderd (2026-08-09) — Atalanta's race is nu
+  // een echte minigame (RACE:, SP_RACES.atalanta), geen CHECK meer.
   ch16_lat_arena_gevaar: { stat:"vis", dc:15,
     volledig:{ target:"CH16_LAT_005_VOL" },
     deels:{ target:"CH16_LAT_005_DEELS" },
@@ -9831,7 +9841,7 @@ TITLE:
 Tussen de Rotsen Door
 
 TEXT:
-Op Argos' teken roeit de hele bemanning met alles wat ze in zich hebben, precies op het moment dat de rotsen weer uiteen wijken. De Argo schiet erdoorheen en is nog maar net voorbij wanneer de wanden achter haar met een oorverdovende klap weer op elkaar slaan — op een haar na alleen het uiterste puntje van de achtersteven rakend.
+Op jouw teken roeit de hele bemanning met alles wat ze in zich hebben, precies op het moment dat de rotsen weer uiteen wijken. De Argo schiet erdoorheen en is nog maar net voorbij wanneer de wanden achter haar met een oorverdovende klap weer op elkaar slaan — op een haar na alleen het uiterste puntje van de achtersteven rakend.
 
 Sinds die dag, zegt men, bewegen de Symplegades niet meer: een schip dat de doortocht overleeft, bevriest de rotsen voorgoed op hun plaats. Wat er ook van waar is, geen enkel schip na de Argo heeft ze ooit nog zien bewegen.
 
@@ -20780,8 +20790,8 @@ END
 TITLE:
 De Laatste Meters
 
-CHECK:
-ch16_gre_atalanta_race
+RACE:
+atalanta
 
 END
 

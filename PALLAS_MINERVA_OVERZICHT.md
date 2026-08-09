@@ -111,8 +111,8 @@ metadata, geen scènes/puzzels (zie het onderscheid "vastgelegd" vs.
 | 19 | Dagelijks leven in Rome | Vragend voornaamwoord, onbepaald voornaamwoord, perfectum met praesensbetekenis | 15 (samen met Pallas 24-25) |
 | 20 | Vermaak in Rome | Velle/nolle/fieri, betrekkelijke bijzin met ingesloten antecedent, comparativus/superlativus | 16 (samen met Pallas 26-27) |
 | 21 | De Romeinen en de dood (grafschriften) | Conjunctivus praesens + gebruik, conjunctivus perfectum | 13 — **GEBOUWD** (2026-08-02, opgelost gat: ingezet via Brutus' eed over Lucretia en de twijfel over Horatius' daad, i.p.v. via het eigen "grafschriften"-cultuurtekst — decoupling-beleid, zie Chronica.md §7.47) |
-| 22 | Caesars carrière (Belgen bij Bibrax, Dumnorix) | Gerundium, genitivus subjectivus/objectivus, *ferre* | 18 (samen met Pallas 29/Alexander) |
-| 23 | Caesar in België en Nederland (Nervii, rivaliteit) | Gerundivum, gerundivumconstructie | 18 |
+| 22 | Caesars carrière (Belgen bij Bibrax, Dumnorix) | Gerundium, genitivus subjectivus/objectivus, *ferre* | **17** (VERVROEGD vanuit 18, 2026-08-09 — sterke klik met Alpenoversteek/beleg van Saguntum bij Hannibal; cultuurtekst Caesar blijft wel bij H18) |
+| 23 | Caesar in België en Nederland (Nervii, rivaliteit) | Gerundivum, gerundivumconstructie | **17** (idem, vervroegd) |
 | 24 | Keizers van Rome: Augustus en Nero | N.C.I. (Nominativus cum Infinitivo), semi-deponentia, transitief/intransitief, vraagpartikels | 20 |
 | 25 | Hartstocht en spanning (Catullus, Petronius) | *(vnl. vertaalvaardigheid, weinig nieuwe grammatica — geschikte afsluiter)* | 20 (samen met M24) |
 
