@@ -1653,6 +1653,26 @@ const SP_PUZZLES = {
     vraag:"Van Flamma werd gezegd: “Flamma ___ omnium gladiatorum erat” — Flamma was de sterkste van alle gladiatoren. Welke vorm van fortis (sterk) hoort hier?",
     opties:["fortissimus","fortior","fortiter","fortis"], antwoord:"fortissimus",
     hint:"'De sterkste van allemaal' vraagt om de superlativus (fortissimus), niet de comparativus (fortior, 'sterker dan') — herhaling uit Hoofdstuk 9." },
+  puzzle_ch17_gre_herodotos: { type:"multiple-choice",
+    vraag:"Herodotos vertelt: “τῶν Περσῶν στρατευομένων, οἱ Ἴωνες ἐφοβοῦντο” — terwijl de Perzen ten strijde trokken, waren de Ioniërs bang. Wat voor constructie is τῶν Περσῶν στρατευομένων?",
+    opties:["genitivus absolutus","accusativus met infinitivus","dativus van bezit","genitivus partitivus"], antwoord:"genitivus absolutus",
+    hint:"Een naamwoord + participium, allebei in de genitivus, los van de rest van de zin — de genitivus absolutus, herken je nog van Hoofdstuk 11." },
+  puzzle_ch17_gre_thermopylae: { type:"multiple-choice",
+    vraag:"Xerxes' boodschapper eist dat de Spartanen hun wapens neerleggen; Leonidas laat terugroepen: “ὦ ἄγγελε, μολὼν λαβέ” — o boodschapper, kom en haal ze. Welke naamval is ἄγγελε hier?",
+    opties:["vocativus","nominativus","accusativus","genitivus"], antwoord:"vocativus",
+    hint:"De vocativus, de aanspreekvorm waarmee je iemand rechtstreeks toespreekt — herken je nog van Hoofdstuk 1." },
+  puzzle_ch17_lat_gerundium: { type:"multiple-choice",
+    vraag:"Bij het beleg van Saguntum zegt een Carthaagse officier: “Hannibal urbis capiendae causa castra posuit” — Hannibal sloeg zijn kamp op met het oog op het veroveren van de stad. Wat voor vorm is capiendae hier?",
+    opties:["gerundivum (congrueert met urbis in de genitivus)","gerundium (onpersoonlijke vorm)","participium perfectum passief","infinitivus"], antwoord:"gerundivum (congrueert met urbis in de genitivus)",
+    hint:"capiendae congrueert in naamval, getal en geslacht met urbis (genitivus enkelvoud vrouwelijk) — dat maakt het een gerundivum, niet het onpersoonlijke gerundium. 'causa' + genitivus gerundivum-constructie betekent 'met het oog op ...'." },
+  puzzle_ch17_lat_gerundivum: { type:"multiple-choice",
+    vraag:"Een uitgeputte officier zucht bij het zien van de bergen: “Alpes nobis transeundae sunt” — wij moeten de Alpen oversteken. Wat voor constructie is transeundae sunt hier?",
+    opties:["gerundivum + sum: noodzaak ('moet gebeuren')","een gewoon passief werkwoord, verder niets bijzonders","een vraagzin","een ontkenning"], antwoord:"gerundivum + sum: noodzaak ('moet gebeuren')",
+    hint:"De coniugatio periphrastica passiva: gerundivum + een vorm van esse (+ eventueel een dativus, hier nobis, 'door ons') = 'X moet door Y gedaan worden'." },
+  puzzle_ch17_lat_ferre: { type:"typed-latin",
+    vraag:"Hannibals mannen dragen alles zelf de bergen over: “Milites arma ___” — de soldaten dragen hun wapens. Typ de juiste vorm van fero (dragen), 3e persoon meervoud praesens.",
+    antwoord:"ferunt",
+    hint:"fero is onregelmatig (fero, ferre, tuli, latum) — de praesens-uitgangen wijken af van de gewone conjugaties: fero, fers, fert, ferimus, fertis, ferunt." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -2335,6 +2355,31 @@ const SP_CODEX_ENTRIES = {
     tekst:"Een marmeren reliëf uit Halicarnassus toont twee vechtende vrouwen, met hun namen erbij gebeiteld: Amazon en Achillia — een zeldzaam bewijs dat vrouwelijke gladiatoren niet alleen bestonden, maar ook met ere konden worden ontslagen (missio), zoals dit reliëf viert. De dichter Juvenal beschrijft spottend een zekere Mevia, die met ontbloot één borst een Etruskisch everzwijn met de speer doorboorde. Onder keizer Nero vochten zelfs vrouwen van ridderlijke en senatoriale afkomst mee in de arena, tot afschuw van conservatieve senatoren. Rond 200 n.Chr. maakt keizer Septimius Severus er definitief een einde aan: vrouwen worden voortaan uit de arena verbannen." },
   codex_grammatica_ch16_overzicht: { cat:"grammatica", taal:"latijn", titel:"Grammatica: Hoofdstuk 16 — velle/nolle/fieri en de ingesloten antecedent",
     tekst:"Dit hoofdstuk voegt aan de Latijnse kant de onregelmatige werkwoorden velle (willen), nolle (niet willen) en fieri (worden, gebeuren — het passief van facere) toe, vaak in vaste combinaties zoals dives fieri velle ('rijk willen worden'). Daarnaast de betrekkelijke bijzin met ingesloten antecedent: normaal staat het antecedent vóór de bijzin (gladiatores quos vidit, 'de gladiatoren die hij zag'), maar het Latijn kan het antecedent ook middenin de bijzin zelf plaatsen (quos vidit gladiatores) — hetzelfde idee, andere woordvolgorde. Tot slot een herhaling van de comparativus/superlativus uit Hoofdstuk 9. Het Grieks introduceert dit hoofdstuk bewust geen nieuwe grammatica (les 26-27 is cultuurstof); de puzzels herhalen de dativus van bezit en de aoristus." },
+  // ---- Hoofdstuk 17 — Oorlog en Overwinning ----
+  codex_herodotos_ionische_opstand: { cat:"geschiedenis", titel:"Herodotos en de Ionische Opstand",
+    tekst:"Herodotos van Halicarnassus, later 'de vader van de geschiedschrijving' genoemd, opent zijn verslag van de Perzische Oorlogen niet bij Thermopylae, maar jaren eerder: de Griekse steden van Ionië (de westkust van Klein-Azië), al onderworpen aan Perzië, komen in opstand. Athene stuurt schepen ter hulp en helpt mee de Perzische stad Sardis in brand te steken. De opstand wordt uiteindelijk neergeslagen, maar koning Darius van Perzië vergeet Athenes bemoeienis niet — hij zou, zegt de overlevering, een dienaar hebben opgedragen hem elke avond bij het diner te herinneren: 'Heer, denk aan de Atheners.'" },
+  codex_marathon: { cat:"geschiedenis", titel:"Marathon: Darius' Wraak Mislukt",
+    tekst:"In 490 v.Chr. landt een Perzisch strafexpeditieleger onder Datis en Artaphernes bij Marathon, een dagreis van Athene. Tegen alle verwachting in verslaat de Atheense generaal Miltiades, met hulp van slechts één bondgenoot (Plataeae), het veel grotere Perzische leger — door het centrum van zijn linie bewust zwak te houden en de flanken juist te versterken, zodat de Perzen precies in de val lopen die hij voor hen had opgezet. Het verhaal dat een boodschapper de hele afstand naar Athene rende om de overwinning te melden en meteen daarna stierf, is beroemder dan bewezen — Herodotos zelf vermeldt het niet." },
+  codex_xerxes_hellespont: { cat:"geschiedenis", titel:"Xerxes en de Gegeselde Zee",
+    tekst:"Tien jaar na Marathon erft Xerxes de Perzische troon van zijn vader Darius, en met de troon diens onafgemaakte wraak. Zijn raadsman Mardonius dringt aan op een nieuwe, veel grotere invasie; zijn oom Artabanus waarschuwt juist tegen overmoed. Xerxes kiest voor oorlog en laat een dubbele schepenbrug over de Hellespont bouwen om zijn immense leger naar Europa over te zetten. Wanneer een storm de eerste brug vernietigt, laat Xerxes — volgens Herodotos — de zee zelf drie honderd zweepslagen geven en er een paar ketenen in gooien, als straf voor haar 'ongehoorzaamheid'. Herodotos vertelt het verhaal, maar laat in het midden of hij het zelf gelooft." },
+  codex_thermopylae: { cat:"geschiedenis", titel:"Thermopylae: De Nauwe Poort",
+    tekst:"Bij Thermopylae, een smalle bergpas waar zee en berg elkaar bijna raken, houdt een klein Grieks leger onder de Spartaanse koning Leonidas — driehonderd Spartanen plus duizenden bondgenoten, onder wie Thespiërs en (aanvankelijk) Thebanen — dagenlang stand tegen Xerxes' enorme overmacht. Pas wanneer een lokale herder, Ephialtes, de Perzen tegen betaling een geheim geitenpad wijst dat om de pas heen leidt, wordt de Griekse stelling van achteren omsingeld. Leonidas stuurt het grootste deel van zijn leger terug, en houdt met zijn Spartanen, de Thespiërs en enkele anderen stand tot de laatste man — geen overwinning, maar wel een vertraging die de rest van Griekenland tijd geeft om zich voor te bereiden." },
+  codex_artemisia_salamis: { cat:"geschiedenis", titel:"Artemisia bij Salamis", taal:"grieks",
+    tekst:"Artemisia, koningin van Halicarnassus (toevallig Herodotos' eigen geboortestad) en een van Xerxes' bondgenoten, vecht mee in de zeeslag bij Salamis — de enige vrouwelijke bevelhebber in de hele Perzische vloot. Wanneer een Atheens schip haar achtervolgt, ramt ze in paniek een bondgenootschappelijk schip om als Grieks te lijken en te ontkomen — het werkt zo goed dat zowel de achtervolgende Athener als Xerxes zelf, die vanaf de kust toekijkt, denken dat ze zojuist een vijandelijk schip tot zinken heeft gebracht. Xerxes zou hebben uitgeroepen: 'Mijn mannen zijn vrouwen geworden, en mijn vrouwen mannen.' Wat er met de bemanning van het gerammelde bondgenootschappelijke schip gebeurde, vermeldt niemand." },
+  codex_plataeae: { cat:"geschiedenis", titel:"Plataeae: Het Einde van de Invasie",
+    tekst:"Een jaar na Thermopylae en Salamis verslaat een verenigd Grieks leger, ditmaal onder de Spartaanse regent Pausanias, het achtergebleven Perzische landleger bij Plataeae — Xerxes zelf is dan al teruggekeerd naar Perzië. Mardonius, de raadsman die tien jaar eerder tot de invasie had aangespoord, sneuvelt in de slag. Met Plataeae eindigt de Perzische dreiging voor Griekenland definitief, en begint de periode die later 'de Gouden Eeuw van Athene' zal heten." },
+  codex_hannibal_eed_saguntum: { cat:"geschiedenis", titel:"Hannibals Eed en de Val van Saguntum",
+    tekst:"Als negenjarige jongen wordt Hannibal door zijn vader Hamilcar Barca, generaal in de Eerste Punische Oorlog tegen Rome, meegenomen naar een altaar en gedwongen te zweren dat hij, zolang hij leeft, Rome nooit als vriend zal beschouwen. Jaren later, inmiddels zelf generaal, belegert en verwoest Hannibal Saguntum, een stad in Spanje die met Rome bevriend is — een directe schending van een eerder vredesverdrag, en de rechtstreekse aanleiding tot de Tweede Punische Oorlog." },
+  codex_alpenoversteek: { cat:"geschiedenis", titel:"De Tocht over de Alpen",
+    tekst:"In plaats van Italië over zee aan te vallen, waar de Romeinse vloot heerst, kiest Hannibal voor een route die niemand voor mogelijk houdt: dwars over de Alpen, met een leger van tienduizenden soldaten én oorlogsolifanten. Sneeuwstormen, instortende bergpaden en vijandige bergstammen kosten hem onderweg een groot deel van zijn leger — historici schatten dat hij met nog maar de helft van zijn troepen, en slechts een handvol overlevende olifanten, uiteindelijk de Povlakte in Noord-Italië bereikt. Rome had een aanval uit het noorden simpelweg niet voor mogelijk gehouden." },
+  codex_cannae: { cat:"geschiedenis", titel:"Cannae: Romes Zwartste Dag",
+    tekst:"Bij Cannae (216 v.Chr.) verslaat Hannibal het grootste Romeinse leger ooit op één plek verzameld — door zijn centrum bewust te laten doorbuigen terwijl zijn sterkere flanken de Romeinen omsingelen, een dubbele omtrekking die sindsdien in vrijwel elk militair handboek ter wereld wordt onderwezen. Tienduizenden Romeinse soldaten sterven op één dag. Zijn cavaleriecommandant Maharbal dringt meteen aan om door te stoten naar Rome zelf, nog voor de stad zich kan herstellen: 'Vincere scis, Hannibal, victoriā uti nescis' — je weet hoe je moet winnen, Hannibal, maar niet hoe je een overwinning moet gebruiken. Hannibal aarzelt en trekt niet op naar Rome — een beslissing waar historici tot op vandaag over discussiëren." },
+  codex_zama_scipio: { cat:"geschiedenis", titel:"Zama: Scipio Keert het Tij",
+    tekst:"Jarenlang teistert Hannibal Italië zonder dat Rome hem kan verslaan — tot de jonge Romeinse generaal Scipio (later Africanus genoemd) besluit de oorlog naar Carthago's eigen grondgebied in Afrika te brengen. Carthago roept Hannibal terug om zijn thuisland te verdedigen. Bij Zama (202 v.Chr.) verslaat Scipio, die Hannibals eigen tactieken tegen hem gebruikt en Numidische cavalerie aan zijn kant heeft weten te winnen, Hannibal voor de allereerste keer — het enige verlies uit zijn hele carrière, en meteen het einde van de oorlog." },
+  codex_hannibal_einde: { cat:"geschiedenis", titel:"Hannibals Laatste Jaren",
+    tekst:"Na de nederlaag bij Zama blijft Hannibal een gezochte vijand van Rome. Hij vlucht naar Kreta, waar hij, om zijn goud tegen plunderaars te beschermen, het verstopt in de holle standbeelden van een tempel — en gewoon met zijn armzalige bezittingen zichtbaar buiten laat liggen, zodat niemand ooit vermoedt waar het echte fortuin zit. Als huurling-admiraal voor koning Prusias van Bithynië wint hij nog één zeeslag door potten vol giftige slangen op de vijandelijke schepen te laten gooien — de bemanning, meer bang voor de slangen dan voor pijlen, breekt en vlucht. Uiteindelijk omsingelen Romeinse gezanten zijn laatste toevluchtsoord in Bithynië. In plaats van gevangen genomen te worden, drinkt Hannibal het gif dat hij al jaren bij zich draagt. Zijn laatste woorden, volgens de overlevering: laat de Romeinen eindelijk verlost worden van hun jarenlange angst, nu zij het kennelijk te lang vinden duren op de dood van een oude man te wachten." },
+  codex_grammatica_ch17_overzicht: { cat:"grammatica", taal:"latijn", titel:"Grammatica: Hoofdstuk 17 — gerundium, gerundivum en ferre",
+    tekst:"Dit hoofdstuk voegt aan de Latijnse kant het gerundium toe (de onpersoonlijke -ndum-vorm van een werkwoord, gebruikt als zelfstandig naamwoord: 'capiendi causa', 'met het oog op veroveren'), het gerundivum (dezelfde -ndus/-nda/-ndum-vorm, maar als bijvoeglijk naamwoord dat congrueert met een zelfstandig naamwoord: 'urbis capiendae causa', 'met het oog op het veroveren van de stad') en de coniugatio periphrastica passiva (gerundivum + esse = noodzaak: 'Alpes transeundae sunt', 'de Alpen moeten overgestoken worden'). Daarnaast het onregelmatige werkwoord fero/ferre (dragen, brengen). Deze stof was oorspronkelijk gepland voor Hoofdstuk 18 (Caesar), maar is vervroegd omdat ze inhoudelijk beter past bij Hannibals eigen verhaal — de Alpenoversteek en het beleg van Saguntum leveren de natuurlijkste voorbeeldzinnen van de hele campagne op. Het Grieks herhaalt in dit hoofdstuk de genitivus absolutus (Hoofdstuk 11) en de vocativus (Hoofdstuk 1)." },
   codex_agora_heliaia: { cat:"geschiedenis", titel:"De Agora en de Heliaia: Waar Athene Recht Sprak",
     tekst:"De agora is het kloppende hart van Athene — tegelijk marktplein, ontmoetingsplaats en bestuurscentrum, omzoomd door zuilengalerijen (stoai) waar burgers handelen, discussiëren en recht spreken. Hier, in de Heliaia, zetelt het volksgerecht: jaarlijks worden zesduizend mannelijke burgers door loting aangewezen als mogelijke jurylid, en voor elke zaak wordt uit hen een jury van honderden tegelijk samengesteld — bewust te groot om om te kopen. Vrouwen, slaven én metoiken (vrije niet-burgers, de status die een vrijgelaten slaaf in Athene hoogstens kan bereiken) mogen er niets van: geen jurydienst, geen stem, hooguit toekijken vanaf de zijkant." },
   codex_forum_basilica: { cat:"geschiedenis", titel:"Forum en Basilica: Zaken, Recht en Roddel",
@@ -2821,6 +2866,8 @@ const SP_SOUVENIRS = {
     caption:"Een houten spinklosje, nog met draad eromheen, naast een kleine vilten muts — de pileus die een net vrijgelaten Romein bij de manumissio kreeg. Geen van beide voorwerpen heeft ooit een standbeeld gekregen." },
   souvenir_vorming_vermaak: { nm:"Een Olijftak en een Palmtak", icon:"🌿", img:"souvenir_vorming_vermaak.png",
     caption:"Een verdroogde olijftak, zoals de kotinos die elke Olympische winnaar kreeg, naast een palmtak, het overwinningsteken van de Romeinse arena en Circus — twee volkeren, twee heel verschillende ideeën over wat vermaak mag kosten." },
+  souvenir_oorlog_overwinning: { nm:"Een Speerpunt en een Kruikje", icon:"🏺", img:"souvenir_oorlog_overwinning.png",
+    caption:"Een verroeste bronzen speerpunt uit de pas van Thermopylae, naast een klein aardewerken kruikje zoals Hannibal ze liet vullen met giftige slangen — twee overwinningen die eigenlijk verliezen waren, en één verlies dat honderden jaren als overwinning wordt herinnerd." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -3100,6 +3147,16 @@ const SP_CHECKS = {
     deels:{ target:"CH16_LAT_005_DEELS" },
     gefaald:{ target:"CH16_LAT_005_GEFAALD" },
     kritiek:{ target:"CH16_LAT_005_KRITIEK" } },
+  ch17_gre_thermopylae_laatste_stand: { stat:"robur", dc:16,
+    volledig:{ target:"CH17_GRE_006_VOL" },
+    deels:{ target:"CH17_GRE_006_DEELS" },
+    gefaald:{ target:"CH17_GRE_006_GEFAALD" },
+    kritiek:{ target:"CH17_GRE_006_KRITIEK" } },
+  ch17_lat_cannae_omsingeling: { stat:"prudentia", dc:16,
+    volledig:{ target:"CH17_LAT_004_VOL" },
+    deels:{ target:"CH17_LAT_004_DEELS" },
+    gefaald:{ target:"CH17_LAT_004_GEFAALD" },
+    kritiek:{ target:"CH17_LAT_004_KRITIEK" } },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -3619,6 +3676,38 @@ const SP_VOCAB_ENTRIES = {
   latijn_respondeo:{ taal:"latijn", woord:"respondeo", betekenis:"(be)antwoorden" },
   latijn_colo:    { taal:"latijn", woord:"colo", betekenis:"bebouwen, vereren" },
   latijn_nolo:    { taal:"latijn", woord:"nolo", betekenis:"niet willen" },
+  // ---- Hoofdstuk 17 — Oorlog en Overwinning (verhaal-woorden) ----
+  grieks_polemos:   { taal:"grieks", woord:"πόλεμος", transcript:"pólemos", betekenis:"oorlog" },
+  grieks_nesos:     { taal:"grieks", woord:"νῆσος", transcript:"nêsos", betekenis:"eiland" },
+  grieks_prodosia:  { taal:"grieks", woord:"προδοσία", transcript:"prodosía", betekenis:"verraad" },
+  grieks_stratia:   { taal:"grieks", woord:"στρατιά", transcript:"stratiá", betekenis:"leger" },
+  grieks_naus:      { taal:"grieks", woord:"ναῦς, νεώς", transcript:"naûs", betekenis:"schip" },
+  latijn_elephantus: { taal:"latijn", woord:"elephantus, elephanti", betekenis:"olifant" },
+  latijn_iuramentum: { taal:"latijn", woord:"iuramentum, iuramenti", betekenis:"eed" },
+  latijn_exercitus:  { taal:"latijn", woord:"exercitus, exercitus", betekenis:"leger" },
+  latijn_venenum:    { taal:"latijn", woord:"venenum, veneni", betekenis:"gif" },
+  latijn_mons:       { taal:"latijn", woord:"mons, montis", betekenis:"berg" },
+  // ---- Hoofdstuk 17: 20 extra hoogfrequente signaalwoorden (VOCAB_UITBREIDING.md) ----
+  grieks_pros:         { taal:"grieks", woord:"πρός", transcript:"prós", betekenis:"naar, bij" },
+  grieks_oida:         { taal:"grieks", woord:"οἶδα", transcript:"oîda", betekenis:"weten" },
+  grieks_grapho:       { taal:"grieks", woord:"γράφω", transcript:"gráphō", betekenis:"schrijven" },
+  grieks_aisthanomai:  { taal:"grieks", woord:"αἰσθάνομαι", transcript:"aisthánomai", betekenis:"waarnemen" },
+  grieks_katalambano:  { taal:"grieks", woord:"καταλαμβάνω", transcript:"katalambánō", betekenis:"grijpen, betrappen" },
+  grieks_machomai:     { taal:"grieks", woord:"μάχομαι", transcript:"máchomai", betekenis:"vechten" },
+  grieks_timao:        { taal:"grieks", woord:"τιμάω", transcript:"timáō", betekenis:"eren" },
+  grieks_isos:         { taal:"grieks", woord:"ἴσως", transcript:"ísōs", betekenis:"misschien" },
+  grieks_pipto:        { taal:"grieks", woord:"πίπτω", transcript:"píptō", betekenis:"vallen" },
+  grieks_kataskeuazo:  { taal:"grieks", woord:"κατασκευάζω", transcript:"kataskeuázō", betekenis:"inrichten, klaarmaken" },
+  latijn_solvo:   { taal:"latijn", woord:"solvo", betekenis:"losmaken, betalen" },
+  latijn_vix:     { taal:"latijn", woord:"vix", betekenis:"nauwelijks" },
+  latijn_laudo:   { taal:"latijn", woord:"laudo", betekenis:"prijzen" },
+  latijn_amitto:  { taal:"latijn", woord:"amitto", betekenis:"wegsturen, verliezen" },
+  latijn_efficio: { taal:"latijn", woord:"efficio", betekenis:"tot stand brengen" },
+  latijn_maneo:   { taal:"latijn", woord:"maneo", betekenis:"blijven, wachten" },
+  latijn_ve:      { taal:"latijn", woord:"-ve", betekenis:"of" },
+  latijn_compono: { taal:"latijn", woord:"compono", betekenis:"samenstellen" },
+  latijn_amo:     { taal:"latijn", woord:"amo", betekenis:"houden van" },
+  latijn_impono:  { taal:"latijn", woord:"impono", betekenis:"plaatsen op" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -20956,6 +21045,761 @@ Tot Hier, Voorlopig
 
 TEXT:
 "[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Perzische Oorlogen, Hannibal, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- Hoofdstuk 17 "Oorlog en Overwinning" — GEBOUWD (2026-08-09), op
+   Gerbens verzoek BEWUST NOG NIET gekoppeld aan de speelbare route (zelfde
+   patroon als H14/H15/H16 destijds): CH16_MUSEUM_00 routeert nog naar
+   CH16_WORDT_VERVOLGD, en SP_SCENES in singleplayer.js bevat SP_CH17_CNS
+   nog niet. Twee sporen SEQUENTIEEL (Latijn eerst voor latijn/beide,
+   Grieks sluit af — zelfde volgorde als H14/H16). Bredere oorlogsscope dan
+   alleen de twee beroemdste veldslagen (Gerbens verzoek 2026-08-09): Grieks
+   van de Ionische Opstand via Marathon naar Thermopylae (zwaartepunt) tot
+   Plataeae; Latijn van Hannibals eed via Saguntum en de Alpenoversteek naar
+   Cannae (zwaartepunt), Zama, en Hannibals laatste jaren tot zijn
+   zelfmoord in Bithynië. Latijnse grammatica (gerundium, genitivus
+   subjectivus/objectivus, ferre, gerundivum) is vervroegd vanuit Hoofdstuk
+   18 — zie SP_CAMPAIGN.ch17/ch18 en PALLAS_MINERVA_OVERZICHT.md. Geen
+   enkele scène combineert DIALOGUE met PUZZLE (de H15-bug). ---- */
+const SP_CH17_CNS = `
+=== SCENE: CH17_000 ===
+
+TITLE:
+Oorlog en Overwinning
+
+TEXT:
+"[[Ecce|zie hier]] — twee oorlogen deze keer, allebei tegen een overmacht die niet verslagen had moeten kunnen worden," zegt de Boodschapper van Chronos. "In Griekenland komt het hele verhaal pas tot leven door de stem van één man die het opschreef — Herodotos, die zelf al waarschuwt dat niet alles wat verteld wordt automatisch waar is. In Italië trekt een generaal met olifanten over bergen waar niemand een leger voor mogelijk hield, en wint een veldslag die vandaag de dag nog op elke militaire academie wordt onderwezen — en verliest, uiteindelijk, toch de hele oorlog."
+
+VOCAB:
+grieks_polemos, grieks_nesos, grieks_prodosia, grieks_stratia, grieks_naus, latijn_elephantus, latijn_iuramentum, latijn_exercitus, latijn_venenum, latijn_mons, grieks_pros, grieks_oida, grieks_grapho, grieks_aisthanomai, grieks_katalambano, grieks_machomai, grieks_timao, grieks_isos, grieks_pipto, grieks_kataskeuazo, latijn_solvo, latijn_vix, latijn_laudo, latijn_amitto, latijn_efficio, latijn_maneo, latijn_ve, latijn_compono, latijn_amo, latijn_impono
+
+CHOICES:
+* Volg de Perzische Oorlogen in Griekenland [REQUIRE:taalspoor=grieks] -> CH17_GRE_001
+* Volg Hannibal in Italië [REQUIRE:taalspoor!=grieks] -> CH17_LAT_001
+
+END
+
+=== SCENE: CH17_LAT_001 ===
+
+TITLE:
+De Eed op het Altaar
+
+TEXT:
+Hamilcar Barca, generaal in de Eerste Punische Oorlog tegen Rome, neemt zijn negenjarige zoon mee naar een altaar in Carthago, vlak voor hij met hem naar Spanje vertrekt. Rome heeft die oorlog uiteindelijk gewonnen, en Hamilcar is niet van plan het daarbij te laten.
+
+DIALOGUE:
+Hamilcar
+Leg je hand op het offer, Hannibal, en zweer: zolang je leeft, zul je nooit een vriend van Rome zijn.
+
+De jongen zweert het, zonder aarzelen — te jong om te beseffen dat hij zojuist de rest van zijn leven heeft vastgelegd.
+
+IMAGE:
+ch17_lat_hannibal_eed.png
+
+CODEX:
+codex_hannibal_eed_saguntum
+
+CHOICES:
+* Zie wat er van die eed terechtkomt, jaren later -> CH17_LAT_001P
+
+END
+
+=== SCENE: CH17_LAT_001P ===
+
+TITLE:
+De Eed op het Altaar
+
+PUZZLE:
+puzzle_ch17_lat_gerundium
+
+CHOICES:
+* Zie hoe Hannibal, inmiddels zelf generaal, die eed inlost -> CH17_LAT_002
+
+END
+
+=== SCENE: CH17_LAT_002 ===
+
+TITLE:
+De Val van Saguntum
+
+TEXT:
+Hannibal belegert Saguntum, een Spaanse stad die met Rome bevriend is — een directe schending van het verdrag dat de Eerste Punische Oorlog beëindigde. Na maanden van beleg valt de stad; volgens sommige bronnen kiezen de laatste verdedigers ervoor hun eigen bezittingen te vernietigen en zichzelf te doden in plaats van zich over te geven. Rome eist genoegdoening. Carthago weigert. De Tweede Punische Oorlog is een feit.
+
+CHOICES:
+* Zie welke route Hannibal kiest om Italië aan te vallen -> CH17_LAT_003
+
+END
+
+=== SCENE: CH17_LAT_003 ===
+
+TITLE:
+De Tocht over de Alpen
+
+TEXT:
+In plaats van Italië over zee te bereiken, waar de Romeinse vloot heerst, kiest Hannibal een route die niemand voor mogelijk houdt: dwars over de Alpen, met tienduizenden soldaten, paarden — en oorlogsolifanten. Sneeuwstormen, instortende bergpaden en vijandige bergstammen eisen onderweg een verschrikkelijke tol.
+
+DIALOGUE:
+Een uitgeputte officier
+Alpes nobis transeundae sunt.
+
+CHOICES:
+* Wij moeten de Alpen oversteken. -> CH17_LAT_003_LV_A
+* De Alpen moeten ons oversteken. -> CH17_LAT_003_LV_B
+
+END
+
+=== SCENE: CH17_LAT_003_LV_A ===
+
+TITLE:
+Gerundivum van de Noodzaak
+
+TEXT:
+Precies — transeundae sunt is een coniugatio periphrastica passiva (gerundivum + esse): 'moeten overgestoken worden'. nobis is hier een dativus (van de handelende persoon): 'door ons'. De Alpen zijn het lijdend voorwerp van de noodzaak, niet de uitvoerder ervan.
+
+CHOICES:
+* Zie of het leger de tocht overleeft -> CH17_LAT_003J
+
+END
+
+=== SCENE: CH17_LAT_003_LV_B ===
+
+TITLE:
+Gerundivum van de Noodzaak
+
+TEXT:
+Toch niet — transeundae sunt is een coniugatio periphrastica passiva (gerundivum + esse): 'moeten overgestoken worden'. De Alpen zijn hier het lijdend voorwerp van die noodzaak; nobis ('door ons') is de dativus van de handelende persoon. Wij moeten de Alpen over, niet omgekeerd.
+
+CHOICES:
+* Zie of het leger de tocht overleeft -> CH17_LAT_003J
+
+END
+
+=== SCENE: CH17_LAT_003J ===
+
+TITLE:
+De Povlakte
+
+TEXT:
+Met nog maar de helft van zijn oorspronkelijke leger, en slechts een handvol van zijn olifanten, bereikt Hannibal uiteindelijk de Povlakte in Noord-Italië. Rome had een aanval uit het noorden simpelweg niet voor mogelijk gehouden — het zal de laatste keer zijn dat Hannibal Rome verrast met iets wat ze niet hadden zien aankomen.
+
+IMAGE:
+ch17_lat_alpen_olifanten.png
+
+CODEX:
+codex_alpenoversteek
+
+CHOICES:
+* Zie wat er gebeurt wanneer de twee legers elkaar eindelijk treffen -> CH17_LAT_004_INTRO
+
+END
+
+=== SCENE: CH17_LAT_004_INTRO ===
+
+TITLE:
+Cannae
+
+TEXT:
+Bij Cannae, in het zuiden van Italië, stelt Hannibal zijn leger op in een lichte, naar buiten gebogen boog — zwak in het midden, sterk op de flanken. De Romeinen, in veel groter aantal, duwen recht door het midden — en lopen zo precies in de val die voor hen is opgezet.
+
+CHOICES:
+* Zie hoe de val dichtklapt -> CH17_LAT_004P
+
+END
+
+=== SCENE: CH17_LAT_004P ===
+
+TITLE:
+Cannae
+
+PUZZLE:
+puzzle_ch17_lat_gerundivum
+
+CHOICES:
+* Zie hoe de omsingeling zich voltrekt -> CH17_LAT_004
+
+END
+
+=== SCENE: CH17_LAT_004 ===
+
+TITLE:
+De Dubbele Omtrekking
+
+CHECK:
+ch17_lat_cannae_omsingeling
+
+END
+
+=== SCENE: CH17_LAT_004_VOL ===
+
+TITLE:
+De Val Klapt Dicht
+
+TEXT:
+Precies zoals Hannibal het had getekend: terwijl het Romeinse centrum wegzakt in de boog, sluiten zijn sterkere flanken en cavalerie zich achter de Romeinse linies. Wat een veldslag had moeten zijn, wordt een omsingeling — tienduizenden Romeinse soldaten sterven op één enkele dag, meer dan op enige andere dag in de hele Romeinse geschiedenis.
+
+CHOICES:
+* Zie wat Hannibals eigen mannen ervan vinden -> CH17_LAT_004J
+
+END
+
+=== SCENE: CH17_LAT_004_DEELS ===
+
+TITLE:
+Een Zware Overwinning
+
+TEXT:
+De omtrekking lukt, maar minder soepel dan getekend — een deel van het Romeinse centrum breekt bijna door voor de flanken zich op tijd sluiten. De overwinning is enorm, maar kost Hannibal zelf ook meer manschappen dan hij had gehoopt.
+
+CHOICES:
+* Zie wat Hannibals eigen mannen ervan vinden -> CH17_LAT_004J
+
+END
+
+=== SCENE: CH17_LAT_004_GEFAALD ===
+
+TITLE:
+Chaos in de Boog
+
+TEXT:
+Het middenfront buigt door sneller dan verwacht, en voor een angstige tijd lijkt de hele linie op instorten te staan — pas op het allerlaatste moment sluiten de flanken zich alsnog, net op tijd om een ramp in een overwinning om te zetten.
+
+CHOICES:
+* Zie wat Hannibals eigen mannen ervan vinden -> CH17_LAT_004J
+
+END
+
+=== SCENE: CH17_LAT_004_KRITIEK ===
+
+TITLE:
+Een Volmaakte Val
+
+TEXT:
+De uitvoering is zo strak dat zelfs Hannibals eigen officieren na afloop stil zijn — geen enkel Romeins onderdeel komt ook maar in de buurt van doorbreken. Het wordt de veldslag die, eeuwen later, nog op elke militaire academie ter wereld wordt onderwezen.
+
+CHOICES:
+* Zie wat Hannibals eigen mannen ervan vinden -> CH17_LAT_004J
+
+END
+
+=== SCENE: CH17_LAT_004J ===
+
+TITLE:
+Vincere Scis
+
+TEXT:
+Terwijl het slagveld nog rookt, dringt Hannibals cavaleriecommandant Maharbal aan om meteen door te stoten naar Rome zelf — de stad is, voor het eerst in de oorlog, vrijwel onverdedigd.
+
+DIALOGUE:
+Maharbal
+Vincere scis, Hannibal, victoriā uti nescis.
+
+Hannibal aarzelt. Zijn leger is uitgeput, zijn voorraden krap, en een directe belegering van Rome zelf is een heel ander soort risico dan een veldslag winnen. Hij besluit niet op te trekken naar Rome — niet nu, niet direct.
+
+CHOICES:
+* Vind dat Maharbal gelijk had — deze kans komt nooit meer terug [SEVERITAS] -> CH17_LAT_005B
+* Vind Hannibals voorzichtigheid verstandig — een uitgeput leger belegert geen hoofdstad [CLEMENTIA] -> CH17_LAT_005B
+* Onthoud je van een oordeel — dit is met terugwerkende kracht makkelijk praten [NEUTRAL] -> CH17_LAT_005B
+
+END
+
+=== SCENE: CH17_LAT_005B ===
+
+TITLE:
+Een Beslissing voor Altijd
+
+TEXT:
+Historici discussiëren er, meer dan tweeduizend jaar later, nog steeds over: was dit de dag waarop Hannibal de oorlog had kunnen winnen, en het niet deed? Wat zeker is: Rome krijgt de tijd zich te herstellen die het bij een directe aanval nooit had gekregen.
+
+IMAGE:
+ch17_lat_cannae_maharbal.png
+
+CODEX:
+codex_cannae
+
+CHOICES:
+* Zie hoe Rome, jaren later, alsnog wint -> CH17_LAT_006
+
+END
+
+=== SCENE: CH17_LAT_006 ===
+
+TITLE:
+Scipio Keert het Tij
+
+TEXT:
+Jarenlang teistert Hannibal Italië zonder dat Rome hem kan verslaan — tot een jonge Romeinse generaal, Scipio, besluit de oorlog om te draaien: niet Hannibal in Italië bestrijden, maar Carthago's eigen grondgebied in Afrika aanvallen. Carthago roept Hannibal wanhopig terug om zijn thuisland te verdedigen.
+
+CHOICES:
+* Zie hoe de twee generaals elkaar eindelijk in Afrika treffen -> CH17_LAT_006P
+
+END
+
+=== SCENE: CH17_LAT_006P ===
+
+TITLE:
+Scipio Keert het Tij
+
+PUZZLE:
+puzzle_ch17_lat_ferre
+
+CODEX:
+codex_zama_scipio
+
+CHOICES:
+* Zie hoe de slag bij Zama afloopt -> CH17_LAT_007
+
+END
+
+=== SCENE: CH17_LAT_007 ===
+
+TITLE:
+Zama
+
+TEXT:
+Bij Zama gebruikt Scipio Hannibals eigen tactieken tegen hem, en heeft bovendien Numidische cavalerie aan zijn kant weten te winnen — precies het soort cavalerievoordeel dat Hannibal zelf bij Cannae zo dodelijk effectief inzette. Hannibal verliest — voor de allereerste keer in zijn hele carrière. Het is meteen ook de laatste veldslag van de oorlog.
+
+IMAGE:
+ch17_lat_zama_scipio.png
+
+CHOICES:
+* Zie wat er van Hannibal wordt, na deze ene nederlaag -> CH17_LAT_008
+
+END
+
+=== SCENE: CH17_LAT_008 ===
+
+TITLE:
+Hannibals Laatste Jaren
+
+TEXT:
+Rome eist Hannibals uitlevering, en Carthago, verslagen en machteloos, kan hem niet langer beschermen. Hannibal vlucht — eerst naar Kreta, waar hij zijn goud verstopt in de holle standbeelden van een tempel en zijn armzalige zichtbare bezittingen gewoon laat liggen, zodat niemand ooit het echte fortuin vermoedt. Als huurling-admiraal voor koning Prusias van Bithynië wint hij nog één laatste zeeslag — door potten vol giftige slangen op de dekken van de vijandelijke schepen te laten gooien, tot de bemanning meer bang is voor de slangen dan voor pijlen.
+
+Uiteindelijk omsingelen Romeinse gezanten ook zijn laatste toevluchtsoord in Bithynië.
+
+DIALOGUE:
+Hannibal
+Laat de Romeinen eindelijk verlost worden van hun jarenlange angst, nu zij het kennelijk te lang vinden duren op de dood van een oude man te wachten.
+
+Hij drinkt het gif dat hij al jaren bij zich draagt, liever dat dan levend gevangengenomen worden.
+
+CODEX:
+codex_hannibal_einde
+
+STATPOINTS:
+3
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH17_EINDE
+* Steek over naar de Griekse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH17_GRE_001
+
+END
+
+=== SCENE: CH17_GRE_001 ===
+
+TITLE:
+Herodotos, de Vader van de Geschiedenis
+
+TEXT:
+Een reiziger uit Halicarnassus voegt zich bij je, notitieboekje al in de hand — Herodotos, vastbesloten het hele verhaal van de Perzische Oorlogen op te tekenen voor het uit het geheugen verdwijnt. Hij begint niet bij Thermopylae, maar jaren eerder: de Griekse steden van Ionië komen in opstand tegen Perzië, Athene stuurt hulp, en koning Darius zweert wraak op de stad die zich met andermans zaken bemoeide.
+
+DIALOGUE:
+Herodotos
+Ik vertel je wat mij verteld is. Of het allemaal precies zo gebeurde, is een andere vraag — die stel ik mezelf net zo vaak als ik hem aan anderen stel.
+
+CHOICES:
+* Vertrouw op zijn verslag — iemand moet dit tenslotte opschrijven -> CH17_GRE_001A
+* Blijf op je hoede — een verhaal wordt met elke navertelling een beetje anders -> CH17_GRE_001B
+
+END
+
+=== SCENE: CH17_GRE_001A ===
+
+TITLE:
+Een Vertrouwde Stem
+
+TEXT:
+Herodotos knikt, duidelijk gewend aan reisgenoten die liever gewoon meegaan in het verhaal dan er steeds doorheen te breken.
+
+RELATION:
+herodotos=+1
+
+CHOICES:
+* Zie wat er van de Ionische Opstand terechtkomt -> CH17_GRE_001J
+
+END
+
+=== SCENE: CH17_GRE_001B ===
+
+TITLE:
+Een Kritische Blik
+
+TEXT:
+Herodotos glimlacht, eerder goedkeurend dan beledigd. "Terecht," zegt hij. "Ik zou mezelf ook niet zomaar geloven."
+
+RELATION:
+herodotos=+1
+
+CHOICES:
+* Zie wat er van de Ionische Opstand terechtkomt -> CH17_GRE_001J
+
+END
+
+=== SCENE: CH17_GRE_001J ===
+
+TITLE:
+De Ionische Opstand
+
+TEXT:
+De Ionische Grieken, al onderworpen aan Perzië, komen in opstand; Athene stuurt schepen ter hulp en helpt mee Sardis in brand te steken. De opstand wordt neergeslagen, maar Darius vergeet Athenes bemoeienis niet — een dienaar moet hem, zegt de overlevering, elke avond bij het diner influisteren: "Heer, denk aan de Atheners."
+
+CODEX:
+codex_herodotos_ionische_opstand
+
+CHOICES:
+* Zie hoe Darius die wraak voor het eerst probeert -> CH17_GRE_001P
+
+END
+
+=== SCENE: CH17_GRE_001P ===
+
+TITLE:
+De Ionische Opstand
+
+PUZZLE:
+puzzle_ch17_gre_herodotos
+
+CHOICES:
+* Zie hoe Darius die wraak voor het eerst probeert -> CH17_GRE_002
+
+END
+
+=== SCENE: CH17_GRE_002 ===
+
+TITLE:
+Marathon
+
+TEXT:
+In 490 v.Chr. landt een Perzisch strafexpeditieleger bij Marathon, een dagreis van Athene. Tegen alle verwachting in verslaat de Atheense generaal Miltiades, met hulp van slechts één bondgenoot, het veel grotere Perzische leger — door zijn centrum bewust zwak te houden en de flanken te versterken, zodat de Perzen precies in de val lopen die voor hen is opgezet.
+
+DIALOGUE:
+Herodotos
+Sommigen vertellen dat een boodschapper de hele afstand naar Athene rende om de overwinning te melden, en meteen daarna stierf. Ikzelf vermeld dat verhaal niet in mijn eigen verslag — trek daar zelf je conclusies uit.
+
+CODEX:
+codex_marathon
+
+CHOICES:
+* Zie wat er tien jaar later gebeurt, wanneer Perzië terugkeert -> CH17_GRE_003
+
+END
+
+=== SCENE: CH17_GRE_003 ===
+
+TITLE:
+De Gegeselde Zee
+
+TEXT:
+Tien jaar na Marathon erft Xerxes de Perzische troon van zijn vader Darius — en met de troon diens onafgemaakte wraak. Zijn raadsman Mardonius dringt aan op een nieuwe, veel grotere invasie; zijn oom Artabanus waarschuwt juist tegen overmoed. Xerxes kiest voor oorlog, en laat een dubbele schepenbrug over de Hellespont bouwen om zijn immense leger naar Europa over te zetten.
+
+DIALOGUE:
+Herodotos
+Toen een storm de eerste brug vernietigde, liet Xerxes de zee zelf driehonderd zweepslagen geven, en er een paar ketenen in gooien — straf voor haar 'ongehoorzaamheid'. Ik vertel het zoals het mij verteld is. Of Xerxes het zelf ook geloofde, weet ik niet.
+
+IMAGE:
+ch17_gre_xerxes_hellespont.png
+
+CODEX:
+codex_xerxes_hellespont
+
+CHOICES:
+* Zie waar dat immense leger uiteindelijk tot stilstand komt -> CH17_GRE_004
+
+END
+
+=== SCENE: CH17_GRE_004 ===
+
+TITLE:
+Thermopylae
+
+TEXT:
+Bij Thermopylae, een smalle bergpas waar zee en berg elkaar bijna raken, houdt een klein Grieks leger onder de Spartaanse koning Leonidas — driehonderd Spartanen plus duizenden bondgenoten — dagenlang stand tegen Xerxes' enorme overmacht. Wanneer een Perzische boodschapper eist dat de Grieken hun wapens neerleggen, laat Leonidas maar één antwoord terugroepen.
+
+DIALOGUE:
+Leonidas
+τὸν θάνατον οὐ φοβοῦμαι.
+
+CHOICES:
+* Ik vrees de dood niet. -> CH17_GRE_004_LV_A
+* De dood vreest mij niet. -> CH17_GRE_004_LV_B
+
+END
+
+=== SCENE: CH17_GRE_004_LV_A ===
+
+TITLE:
+Naamval, Geen Volgorde
+
+TEXT:
+Je verstaat hem goed: τὸν θάνατον staat in de accusativus — lijdend voorwerp, ook al staat het vooraan in de zin. Leonidas vreest de dood niet, niet omgekeerd.
+
+CHOICES:
+* Zie hoe lang de Grieken stand weten te houden -> CH17_GRE_004J
+
+END
+
+=== SCENE: CH17_GRE_004_LV_B ===
+
+TITLE:
+Naamval, Geen Volgorde
+
+TEXT:
+Toch niet — τὸν θάνατον staat in de accusativus, dus is het lijdend voorwerp, ook al staat het vooraan. Leonidas vreest de dood niet; de dood is degene die gevreesd wordt, niet degene die vreest.
+
+CHOICES:
+* Zie hoe lang de Grieken stand weten te houden -> CH17_GRE_004J
+
+END
+
+=== SCENE: CH17_GRE_004J ===
+
+TITLE:
+Dagenlange Standvastigheid
+
+TEXT:
+Dagenlang houdt de kleine Griekse troepenmacht de pas dicht, golf na golf Perzische aanvallen afslaand in een ruimte waar Xerxes' getalsoverwicht simpelweg niet tot zijn recht komt. Het lijkt bijna houdbaar.
+
+IMAGE:
+ch17_gre_thermopylae_pas.png
+
+CHOICES:
+* Zie wat er verandert -> CH17_GRE_005
+
+END
+
+=== SCENE: CH17_GRE_005 ===
+
+TITLE:
+Het Geitenpad
+
+TEXT:
+Een lokale herder, Ephialtes, biedt Xerxes tegen betaling iets aan dat de hele slag zal beslissen: een geheim pad door de bergen, dat om de Griekse stelling heen leidt. Een Perzische eenheid volgt het pad in de nacht en verschijnt tegen de ochtend achter de Griekse linies.
+
+CODEX:
+codex_thermopylae
+
+CHOICES:
+* Zie hoe Leonidas op het nieuws reageert -> CH17_GRE_005P
+
+END
+
+=== SCENE: CH17_GRE_005P ===
+
+TITLE:
+Het Geitenpad
+
+PUZZLE:
+puzzle_ch17_gre_thermopylae
+
+CHOICES:
+* Zie wat Leonidas besluit -> CH17_GRE_006_INTRO
+
+END
+
+=== SCENE: CH17_GRE_006_INTRO ===
+
+TITLE:
+De Laatste Stand
+
+TEXT:
+Leonidas stuurt het grootste deel van het bondgenotenleger terug — geen zin om iedereen te laten sterven voor een pas die toch niet meer te houden is. Hijzelf blijft, met zijn driehonderd Spartanen, de Thespiërs die weigeren te vertrekken, en een handvol anderen. Ze weten dat ze niet meer zullen winnen. Ze blijven toch.
+
+CHOICES:
+* Zie hoe de laatste slag zich voltrekt -> CH17_GRE_006
+
+END
+
+=== SCENE: CH17_GRE_006 ===
+
+TITLE:
+Omsingeld van Voor en Achter
+
+CHECK:
+ch17_gre_thermopylae_laatste_stand
+
+END
+
+=== SCENE: CH17_GRE_006_VOL ===
+
+TITLE:
+Stand tot de Laatste Man
+
+TEXT:
+Van voren en van achteren omsingeld, vechten Leonidas en zijn mannen met speren tot die breken, dan met zwaarden, dan met blote handen en tanden — tot de laatste man valt. Xerxes, woedend over het verzet, laat Leonidas' lichaam onthoofden. De vertraging die ze hebben afgedwongen, geeft de rest van Griekenland precies de tijd die het nodig heeft om zich voor te bereiden.
+
+CHOICES:
+* Zie wat er, tegelijkertijd, op zee gebeurt -> CH17_GRE_006J
+
+END
+
+=== SCENE: CH17_GRE_006_DEELS ===
+
+TITLE:
+Een Zware Laatste Stand
+
+TEXT:
+De verdediging houdt langer stand dan de Perzen hadden verwacht, met zware verliezen aan beide kanten, voor ook de laatste Spartanen vallen. De vertraging is er, al is de prijs hoog.
+
+CHOICES:
+* Zie wat er, tegelijkertijd, op zee gebeurt -> CH17_GRE_006J
+
+END
+
+=== SCENE: CH17_GRE_006_GEFAALD ===
+
+TITLE:
+Sneller Overweldigd
+
+TEXT:
+De dubbele omsingeling breekt de Griekse linie sneller dan gehoopt — de laatste stand is korter en chaotischer dan de latere verhalen ervan zullen maken, maar de vertraging, hoe klein ook, is er nog altijd.
+
+CHOICES:
+* Zie wat er, tegelijkertijd, op zee gebeurt -> CH17_GRE_006J
+
+END
+
+=== SCENE: CH17_GRE_006_KRITIEK ===
+
+TITLE:
+Een Stand die de Geschiedenis Ingaat
+
+TEXT:
+Zelfs de Perzen zelf zullen na afloop toegeven onder de indruk te zijn: de laatste Spartaanse linie houdt zo lang en zo hardnekkig stand dat het de vertraging oplevert die de rest van Griekenland nodig heeft — en een verhaal dat, meer dan tweeduizend jaar later, nog steeds wordt naverteld.
+
+CHOICES:
+* Zie wat er, tegelijkertijd, op zee gebeurt -> CH17_GRE_006J
+
+END
+
+=== SCENE: CH17_GRE_006J ===
+
+TITLE:
+Artemisia bij Salamis
+
+TEXT:
+Terwijl Thermopylae valt, vaart Xerxes' vloot door naar Salamis — met daarin Artemisia, koningin van Halicarnassus (toevallig Herodotos' eigen geboortestad) en de enige vrouwelijke bevelhebber in de hele Perzische vloot. Een Atheens schip achtervolgt haar; in paniek ramt ze een bondgenootschappelijk schip om als Griek te lijken en te ontsnappen.
+
+DIALOGUE:
+Herodotos
+Het werkte zo goed dat zowel de achtervolgende Athener als Xerxes zelf, die vanaf de kust toekeek, dachten dat ze zojuist een vijandelijk schip tot zinken had gebracht. Xerxes zou hebben uitgeroepen: "Mijn mannen zijn vrouwen geworden, en mijn vrouwen mannen." Wat er met de bemanning van dat bondgenootschappelijke schip gebeurde, vermeldt niemand.
+
+CHOICES:
+* Vind haar vindingrijk — overleven in oorlog vraagt soms om harde keuzes [SEVERITAS] -> CH17_GRE_007B
+* Vind het verontrustend dat haar list geprezen wordt terwijl een bondgenootschappelijke bemanning er het slachtoffer van werd [CLEMENTIA] -> CH17_GRE_007B
+* Onthoud je van een oordeel — je kent de kant van dat andere schip niet [NEUTRAL] -> CH17_GRE_007B
+
+END
+
+=== SCENE: CH17_GRE_007B ===
+
+TITLE:
+Wie Onthouden Wordt
+
+TEXT:
+Artemisia's list wordt, in de eeuwen die volgen, vooral verteld als een staaltje van sluwheid — zelden als wat het voor die ene bemanning waarschijnlijk ook was. Herodotos schrijft het gewoon op, zonder er verder een oordeel bij te geven.
+
+IMAGE:
+ch17_gre_artemisia_salamis.png
+
+CODEX:
+codex_artemisia_salamis
+
+CHOICES:
+* Zie hoe de hele oorlog uiteindelijk eindigt -> CH17_GRE_008
+
+END
+
+=== SCENE: CH17_GRE_008 ===
+
+TITLE:
+Plataeae
+
+TEXT:
+Een jaar na Thermopylae en Salamis verslaat een verenigd Grieks leger, onder de Spartaanse regent Pausanias, het achtergebleven Perzische landleger bij Plataeae — Xerxes zelf is dan al teruggekeerd naar Perzië. Mardonius, de raadsman die tien jaar eerder tot de invasie had aangespoord, sneuvelt in de slag.
+
+DIALOGUE:
+Herodotos
+En daar, bij Plataeae, eindigt mijn verhaal — al is het, zoals met alle oorlogen, nooit echt voorbij voor wie het heeft meegemaakt.
+
+CODEX:
+codex_plataeae
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH17_GRE_009
+
+END
+
+=== SCENE: CH17_GRE_009 ===
+
+TITLE:
+Wat Waar Is, en Wat Verteld Wordt
+
+TEXT:
+Herodotos sluit zijn notitieboekje. "Ik heb je verteld wat mij verteld is," zegt hij nog eens. "Sommige stukken ervan zijn ongetwijfeld precies zo gebeurd. Andere zijn, na honderd keer navertellen, iets anders geworden dan wat er die dag echt gebeurde. Het is aan jou om daar iets mee te doen."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH17_EINDE
+* Keer terug naar het Orakel van Chronos, nu beide verhalen gehoord [REQUIRE:taalspoor=beide] -> CH17_EINDE
+
+END
+
+=== SCENE: CH17_EINDE ===
+
+TITLE:
+Overwinningen die Verliezen Waren
+
+TEXT:
+"[[Ecce|zie hier]] — twee overwinningen die eigenlijk nederlagen waren, en één nederlaag die honderden jaren later nog als een soort overwinning wordt herinnerd," zegt de Boodschapper van Chronos. "Leonidas verloor Thermopylae, maar won de tijd die Griekenland nodig had. Hannibal won Cannae, de grootste overwinning van zijn hele leven — en verloor uiteindelijk toch de hele oorlog, en zijn eigen leven op de vlucht." Ze zwijgt even. "En Herodotos, die het allemaal opschreef, wist zelf al: niet alles wat verteld wordt is automatisch waar. Onthoud dat, bij elk verhaal dat nog komt — ook de mijne."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_oorlog_overwinning
+
+CODEX:
+codex_grammatica_ch17_overzicht
+
+CHOICES:
+* Keer terug naar het Museum -> CH17_MUSEUM_00
+
+END
+
+=== SCENE: CH17_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Een nieuwe stolp vult zich: een verroeste speerpunt naast een klein aardewerken kruikje. "Twee oorlogen, twee soorten moed," zegt de Boodschapper zacht. Ze kijkt nog even naar de stolp, alsof ze zelf ook nog aan het nadenken is over wat er hierna komt.
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH17_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH17_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Alexander, Caesar, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
 
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
 
