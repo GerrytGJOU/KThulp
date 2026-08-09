@@ -6081,6 +6081,70 @@ gevalideerd: 0 fouten.
 
 ---
 
+### 7.62 Hoofdstuk 17 "Oorlog en Overwinning" gebouwd — bewust nog niet gekoppeld aan de speelbare route (2026-08-09)
+
+Bredere oorlogsscope dan alleen de twee beroemdste veldslagen (Gerbens
+verzoek 2026-08-09), met die veldslagen wél als zwaartepunt: Grieks van de
+Ionische Opstand via Marathon naar Thermopylae tot Plataeae; Latijn van
+Hannibals eed via Saguntum en de Alpenoversteek naar Cannae, Zama, en
+Hannibals laatste jaren (Kreta, de slangenpotten-zeeslag, Bithynië, zijn
+zelfmoord). Twee sporen sequentieel (Latijn eerst, Grieks sluit af — zelfde
+volgorde als H14/H16). 47 scènes.
+
+**Nieuwe personages** (Gerbens verzoek): Xerxes, Artemisia, Mardonius,
+Pausanias (Grieks) — Maharbal, Scipio Africanus (Latijn), naast de al
+geplande Leonidas/Themistocles/Herodotos/Hannibal.
+
+**Grammatica**: Latijn krijgt gerundium, genitivus subjectivus/objectivus,
+ferre en het gerundivum (coniugatio periphrastica passiva) — vervroegd
+vanuit Hoofdstuk 18/Caesar (Gerbens akkoord, vorig gesprek), met sterke
+inhoudelijke aansluiting bij de Alpenoversteek ("Alpes nobis transeundae
+sunt") en het beleg van Saguntum ("urbis capiendae causa"). Grieks
+introduceert bewust niets nieuws (les 28 is cultuurstof); puzzels herhalen
+de genitivus absolutus (H11) en de vocativus (H1).
+
+**Payoff/thema-laag**:
+- Herodotos' eigen thema ("niet alles wat verteld wordt is automatisch
+  waar") loopt door de hele Griekse lijn heen — expliciet toegepast op de
+  Marathon-hardloper-legende, Xerxes' zee-geseling, en Artemisia's list.
+  Eén RELATION-bearing keuze (Herodotos vertrouwen/bevragen) vroeg in de
+  lijn.
+- Twee CLEMENTIA/SEVERITAS/NEUTRAL-REACTIES: Artemisia's list bij Salamis
+  (Grieks), Maharbal's advies na Cannae (Latijn).
+- Twee leesvallen, neutraal geframed: Grieks (Leonidas' "τὸν θάνατον οὐ
+  φοβοῦμαι" — accusativus-woordvolgorde, zelfde patroon als H15/H16),
+  Latijn ("Alpes nobis transeundae sunt" — gerundivum-constructie, direct
+  op de nieuwe grammatica).
+- Twee CHECK-momenten (Thermopylae's laatste stand/robur dc16, Cannae's
+  omsingeling/prudentia dc16 — hogere DC dan gebruikelijk, passend bij het
+  zwaartepunt-karakter van deze twee scènes).
+- Een onvoorwaardelijke erfenis-echo: Tantalus (al gestraft in H11) wordt
+  in de Pelops-vloek-verwijzing niet herhaald hier (dat zat al in H16),
+  maar Scipio Africanus en de val van Carthago liggen klaar als toekomstige
+  aanknopingspunten voor latere Rome-hoofdstukken.
+
+**Vocab**: 10 nieuwe verhaal-woorden + de 20 gereserveerde signaalwoorden
+uit `VOCAB_UITBREIDING.md`'s H17-lijst, plus hergebruik van bestaande
+woorden (`grieks_basileus`, `latijn_iurare`) waar toepasselijk.
+
+**Gevalideerd**: `node --check` op alle bestanden schoon; een losse
+graafcontrole (0 missende `->`-targets, 0 DIALOGUE+PUZZLE-conflicten, alle
+PUZZLE/CODEX/SOUVENIR/CHECK/VOCAB-referenties resolven) over 47 scènes.
+Volledige geautomatiseerde browser-playtest (tijdelijk `SP_CH17_CNS` in
+`SP_SCENES` gemerged, alléén voor de testsessie — het bestand blijft
+ontkoppeld), alle drie taalsporen: 0 console-fouten, elk spoor blijft
+strikt in zijn eigen lijn (behalve "beide", die Latijn dan Grieks
+doorloopt), allemaal bereiken `CH17_WORDT_VERVOLGD`.
+
+Nog niet gekoppeld aan de speelbare route (`CH16_MUSEUM_00` routeert nog
+naar `CH16_WORDT_VERVOLGD`) — volgt op verzoek, zelfde procedure als bij
+H15/H16. Illustraties (`ch17_lat_hannibal_eed.png`, `ch17_lat_alpen_
+olifanten.png`, `ch17_lat_cannae_maharbal.png`, `ch17_lat_zama_scipio.png`,
+`ch17_gre_xerxes_hellespont.png`, `ch17_gre_thermopylae_pas.png`,
+`ch17_gre_artemisia_salamis.png`, souvenirkaart) nog te maken.
+
+---
+
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
 
 Tweede laag bovenop de bestaande delayed-consequences/Latijn-als-skill-check-
