@@ -23226,6 +23226,9 @@ Perikles' strategie is even simpel als rigoureus: vermijd een veldslag tegen Spa
 
 Maar de overvolle, opeengepakte stad wordt een broeinest voor een verwoestende plaag. Perikles verliest zijn beide wettige zonen aan de ziekte en sterft er zelf, in 429 v.Chr., ook aan. Zijn eigen strategie overleeft hem — de man die haar bedacht, niet.
 
+IMAGE:
+ch19_gre_pest_athene.png
+
 CODEX:
 codex_pest_van_athene
 
@@ -23264,6 +23267,9 @@ TEXT:
 Ook Socrates dient als burger, zwaarbewapend hopliet tussen duizenden anderen. Bij Potidaea, en jaren later bij Delium, valt hij op door een ongewone, haast onverstoorbare kalmte onder vuur — zijn jonge medesoldaat en vriend Alkibiades vertelt later dat Socrates hem gewond van het slagveld heeft gered, zonder ook maar een moment in paniek te raken terwijl de rest van het leger vlucht.
 
 Hun band, gesmeed in de strijd, zal Alkibiades voor de rest van zijn leven blijven vormen — al zal hij niet elke les die Socrates hem probeert bij te brengen, ook echt ter harte nemen.
+
+IMAGE:
+ch19_gre_socrates_alkibiades.png
 
 CODEX:
 codex_socrates_alkibiades_slagveld
@@ -23409,6 +23415,9 @@ Recht is alleen een overweging tussen gelijken in macht. Tussen de sterken en de
 
 Melos weigert. Athene belegert het eiland. Een oudere stadsbewoner mompelt dat de Volksvergadering dit soort stemming al eens eerder hield, jaren terug, over een opstandige bondgenoot met een naam die begint met een M — toen draaide Athene op het allerlaatste moment nog om. Deze keer, merkt hij droogjes op, lijkt niemand haast te maken met een tweede schip.
 
+IMAGE:
+ch19_gre_melos.png
+
 CODEX:
 codex_melische_dialoog
 
@@ -23501,6 +23510,9 @@ Zonder Alkibiades' vindingrijkheid voert de voorzichtige Nicias het bevel — ee
 
 Athene verliest in één klap een hele generatie aan burgers en schepen — en toch vecht de stad, koppig, door.
 
+IMAGE:
+ch19_gre_syracuse_steengroeven.png
+
 CODEX:
 codex_sicilische_expeditie
 
@@ -23534,6 +23546,9 @@ TEXT:
 Bij Aegospotami waarschuwt Alkibiades, alweer half in ongenade, de Atheense bevelhebbers dat hun vloot onvoorzichtig en onbeschermd aan land ligt. Ze wuiven hem weg — wat weet een verrader nu van loyaliteit? De Spartaanse admiraal Lysander verrast de vloot precies zoals Alkibiades vreesde. Vrijwel de hele Atheense marine wordt zonder echte zeeslag buitgemaakt.
 
 Zonder vloot kan Athene geen graan meer invoeren. De stad wordt uitgehongerd tot overgave. Sparta laat de Lange Muren afbreken op de klanken van fluitmuziek.
+
+IMAGE:
+ch19_gre_aegospotami.png
 
 CODEX:
 codex_aegospotami
@@ -23626,6 +23641,9 @@ DIALOGUE:
 Een Corinthische gezant, in de Spartaanse volksvergadering
 Zie je nu wat "bondgenootschap" voor Athene werkelijk betekent? Wie hen niet als meester erkent, eindigt zoals Melos eindigde.
 
+IMAGE:
+ch19_gre_melos.png
+
 CODEX:
 codex_melische_dialoog
 
@@ -23679,6 +23697,9 @@ TEXT:
 Bij Aegospotami vindt Lysander de Atheense vloot onvoorzichtig en onbeschermd aan land liggend. Zijn aanval is vernietigend: vrijwel de hele Atheense marine wordt zonder echte zeeslag buitgemaakt. Zonder vloot kan Athene geen graan meer invoeren.
 
 De stad wordt uitgehongerd tot overgave. Sparta laat, tot gejuich van zijn bondgenoten, de Lange Muren tussen Athene en Piraeus afbreken — op de klanken van fluitmuziek, een vernedering met opzet feestelijk aangekleed.
+
+IMAGE:
+ch19_gre_aegospotami.png
 
 CODEX:
 codex_aegospotami
@@ -23739,6 +23760,9 @@ DIALOGUE:
 Caesar
 Alea iacta est. De teerling is geworpen.
 
+IMAGE:
+ch19_lat_rubicon.png
+
 FLAG:
 ch19_lat_zijde=caesar
 
@@ -23776,6 +23800,9 @@ Pharsalus
 TEXT:
 Bij Pharsalus staat Pompeius' numeriek sterkere leger tegenover Caesars kleinere, ervarener troepen. Caesar doorziet Pompeius' plan om zijn cavalerie de Caesariaanse flank te laten omsingelen, en verstopt een geheime vierde linie infanterie die de aanvallende jonge Romeinse ruiters met speerstoten in het gezicht op de vlucht jaagt. Pompeius' leger stort in.
 
+IMAGE:
+ch19_lat_pharsalus.png
+
 CODEX:
 codex_pharsalus
 
@@ -23793,6 +23820,9 @@ TEXT:
 Pompeius vlucht naar Egypte, op zoek naar de bescherming van de jonge farao Ptolemaeus XIII. Wanneer Caesar, in achtervolging, enkele dagen later in Alexandrië aankomt, wordt hem — als geschenk, bedoeld om zijn gunst te winnen — Pompeius' afgehakte hoofd aangeboden.
 
 Caesar huilt naar verluidt bij de aanblik van de man die ooit zijn schoonzoon en bondgenoot was, en laat de moordenaars alsnog terechtstellen. Een overwinning zonder de voldoening die hij ervan had verwacht.
+
+IMAGE:
+ch19_lat_pompeius_egypte.png
 
 CODEX:
 codex_pompeius_dood_egypte
@@ -23842,6 +23872,9 @@ Caesar
 Καὶ σύ, τέκνον;
 
 Ook jij, mijn kind? — in het Grieks, niet in het Latijnse "Et tu, Brute" dat de overlevering er later van maakte.
+
+IMAGE:
+ch19_lat_iden_van_maart.png
 
 CODEX:
 codex_iden_van_maart
@@ -23902,6 +23935,9 @@ Bij Pharsalus is Pompeius' leger op papier veruit in de meerderheid. Zijn cavale
 
 Pompeius, die zichzelf altijd als de grootste veldheer van zijn generatie beschouwde, vlucht van zijn eigen slagveld — eerst te paard, dan te voet, dan per schip.
 
+IMAGE:
+ch19_lat_pharsalus.png
+
 CODEX:
 codex_pharsalus
 
@@ -23919,6 +23955,9 @@ TEXT:
 Pompeius zoekt zijn toevlucht bij de jonge farao Ptolemaeus XIII, in de hoop op Egyptische bescherming. Terwijl zijn eigen vrouw Cornelia vanaf het schip toekijkt, wordt hij bij het aan land gaan neergestoken door voormalige eigen officieren, nu in Egyptische dienst — Ptolemaeus' raadgevers hopen zo Caesars gunst te winnen.
 
 Zijn hoofd wordt dagen later aan Caesar aangeboden als geschenk. Zelfs zijn ergste vijand, blijkt al snel, had hem dit einde niet gegund.
+
+IMAGE:
+ch19_lat_pompeius_egypte.png
 
 CODEX:
 codex_pompeius_dood_egypte
@@ -23989,6 +24028,9 @@ Niet uit haat tegen Caesar de mens, maar uit liefde voor Rome.
 
 Niet iedereen in de senaat gelooft hem. Jijzelf weet niet zeker of je het zelf wel gelooft — genade beantwoorden met een dolk is geen rekening die ooit helemaal sluitend voelt, hoe overtuigend het argument er vooraf ook uitzag.
 
+IMAGE:
+ch19_lat_iden_van_maart.png
+
 FLAG:
 ch19_lat_pom_samenzwering=mee
 
@@ -24021,6 +24063,9 @@ Brutus, tegen de senaat, na de daad
 Niet uit haat tegen Caesar de mens, maar uit liefde voor Rome.
 
 Niet iedereen in de senaat gelooft hem. Jij weet ook niet zeker wat je ervan moet denken — dat je zelf geen dolk trok, voelt niet helemaal als onschuld, nu de man die je het leven teruggaf toch dood is.
+
+IMAGE:
+ch19_lat_iden_van_maart.png
 
 FLAG:
 ch19_lat_pom_samenzwering=geweigerd
@@ -24056,6 +24101,9 @@ Octavia
 Een naam als deze is geen geschenk. Het is een uitnodiging aan iedereen die Caesar haatte, om voortaan ook mijn broer te haten. Hij is negentien, en nu al een doelwit.
 
 Atia knikt, bezorgder dan ze wil laten merken. Niemand in de kamer — Octavia zelf het minst van allemaal — vermoedt nog hoe nauw haar eigen leven ooit verstrengeld zal raken met dat van de man die zonet nog de lijkrede hield.
+
+IMAGE:
+ch19_lat_antonius_lijkrede.png
 
 CODEX:
 codex_antonius_lijkrede, codex_octavianus_erfgenaam
