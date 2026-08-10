@@ -166,6 +166,13 @@ hoofdstuk plannen, audit van een bestaand hoofdstuk) in plaats van losse
 PDF-duik-onderzoeken te herhalen — en werk het bij zodra er een nieuwe
 toewijzing definitief wordt (zie de instructie onderaan dat bestand).
 
+**[DODE_FLAGS_FINALE.md](DODE_FLAGS_FINALE.md)** (2026-08-11) — bewaarlijst
+van elke FLAG die wél gezet wordt maar nergens wordt uitgelezen, bedoeld om
+uiteindelijk in de Finale terug te komen (al is het maar met een losse
+opmerking, Gerbens verzoek). Voeg bij elk nieuw hoofdstuk elke nieuwe dode
+flag hier toe; werk het bestand vlak vóór het bouwen van de Finale nog een
+laatste keer bij aan de hand van `node certamen/tools/validate_chronica.js`.
+
 ## 1. Wat Chronica Classica is
 
 Een **narratieve, offline-first singleplayer-RPG** binnen Certamen. De speler is
@@ -6726,6 +6733,478 @@ shields, felt caps) en in daadwerkelijk contact met de Griekse falanx.
 Nieuw bestand `certamen/assets/chronica/images/_nieuwe-prompts-ch17.md`
 aangemaakt (bestond nog niet) met deze ene herziene prompt, voor
 consistentie met de andere hoofdstukken.
+
+---
+
+### 7.72 Hoofdstuk 19 — plan + Etappe 1 (opening + voortraject t/m zijde-keuze) (2026-08-10)
+
+Gerben wil bij Hoofdstuk 19 een structurele nieuwigheid: in **beide sporen**
+kiest de speler een kant — net als bij de Trojanen/Grieken-keuze in
+Hoofdstuk 9 — met een keuze die **later nog terugkomt** (payoff in een
+volgend hoofdstuk, nog te bepalen welk). Grieks spoor: Athene of Sparta.
+Latijns spoor: Caesar of Pompeius (incl. Cicero/Cato/Brutus/Cassius aan
+diens kant). Daarnaast een Boodschapper-intermezzo dat vooruitwijst naar
+Caesars Gallische veldtocht (Hoofdstuk 20) zonder die te onthullen.
+
+**Mechaniek**: exact het `ch9_zijde`-patroon uit Hoofdstuk 9 gekopieerd
+(zie `SP_CH17_CH9_ZIJDE_ECHO` in `singleplayer-data.js` en
+`spBondgenotenAanwezig`/de `SpTextResolver`-switch in `singleplayer.js`
+voor hoe zo'n oude keuze later als tekst-token wordt teruggelezen). Nieuwe
+permanente flags: `ch19_gre_zijde` (athene/sparta) en `ch19_lat_zijde`
+(caesar/pompeius) — worden pas gezet in de EERSTE scène van elke
+vertakking (`CH19_GRE_ATH_001` / `CH19_GRE_SPA_001` /
+`CH19_LAT_CAE_001` / `CH19_LAT_POM_001`), niet al in de keuzescène zelf.
+
+**Etappe 1 gebouwd** (`SP_CH19_CNS`, `certamen/singleplayer-data.js`; nog
+niet gekoppeld aan `SP_SCENES`):
+- `CH19_000` — gedeelde opening, kondigt beide keuzes aan.
+- **Grieks voortraject** (`CH19_GRE_001-004`): de eerste vonk (Corcyra/
+  Megarisch Decreet) → Perikles' Lange-Muren-strategie en zijn dood aan de
+  pest (payoff) → Socrates en Alkibiades als hoplieten samen aan het front
+  (payoff/vervolg vanuit H18) → de keuzescène (Athene/Sparta), routeert
+  naar de nog te bouwen vertakkingen.
+- **Latijns voortraject** (`CH19_LAT_001-005`): het Eerste Triumviraat
+  gesmeed (directe voortzetting van H18's slot) → Crassus' ongevraagde
+  oorlog tegen de Parthen → Carrhae, Crassus sterft (payoff, met de
+  gesmolten-goud-overlevering als echo van H18's hebzucht-thema) →
+  Boodschapper-intermezzo over Caesars Gallische veldtocht ("een andere
+  scheur, een andere keer") + de senaat die tegen Caesar beweegt → de
+  keuzescène (Caesar/Pompeius), routeert naar de nog te bouwen
+  vertakkingen.
+- **Nieuwe registry-entries**: 6 CODEX-entries, 6 nieuwe VOCAB-entries
+  (loimos/symmachos/prodotes/pestis/exsilium/proditio).
+- **Nog te bouwen** (latere etappes): de vier vertakkingen zelf (met
+  RELATION-verschuivingen naar de betrokken personages — Perikles/
+  Alkibiades/Socrates/Lysander/Critias resp. Caesar/Pompeius/Cicero/
+  Brutus/Cassius/Crassus), de Melische Dialoog, de Siciliaanse Expeditie
+  en Alkibiades' volledige wisselvallige arc, de Dertig Tirannen (payoff
+  van H18's `ch18_lat_proscripties_gezien`-vlag), Pharsalus/Pompeius'
+  dood/Caesars clementia/de Iden van maart, en de gedeelde afsluiting.
+
+**Validatie**: `node --check certamen/singleplayer-data.js` slaagt. Geen
+dubbele scène-ID's of registry-keys.
+
+---
+
+### 7.73 Hoofdstuk 19 — Etappe 2: alle vier vertakkingen gebouwd (2026-08-10)
+
+Vervolg op §7.72. De vier vertakkingen (`CH19_GRE_ATH_001-009`,
+`CH19_GRE_SPA_001-007`, `CH19_LAT_CAE_001-006`, `CH19_LAT_POM_001-006`) —
+39 scènes totaal — staan nu in `SP_CH19_CNS`. Elke vertakking zet zijn
+eigen FLAG (`ch19_gre_zijde`/`ch19_lat_zijde`) in de allereerste scène,
+exact het `ch9_zijde`-patroon.
+
+- **Grieks Athene-spoor**: de Melische Dialoog van binnenuit (Athene als
+  agressor, `RELATION alkibiades=-1` voor zijn harde standpunt) →
+  Hermai-schandaal en Alkibiades' vlucht naar Sparta → de Siciliaanse
+  ramp onder Nicias → Alkibiades' terugkeer via Perzië (`RELATION +1`) →
+  Aegospotami (zijn genegeerde waarschuwing) → de Dertig Tirannen, met
+  Socrates' weigering om Leon van Salamis te arresteren als expliciete
+  payoff van H18's proscripties-echo (`RELATION socrates=+1`) →
+  Alkibiades' moord in ballingschap → democratie hersteld.
+- **Grieks Sparta-spoor**: dezelfde gebeurtenissen van buitenaf — Melos
+  als bevestiging van Sparta's eigen retoriek, Alkibiades als tijdelijke
+  overloper-adviseur (Decelea-strategie, `RELATION +1` dan weer `-1` na
+  zijn tweede overloop), Lysanders Perzisch gefinancierde vloot,
+  Aegospotami als triomf, de Dertig Tirannen als eigen instrument dat
+  averechts uitpakt — sluit af met een ironische echo: Sparta's eigen
+  overwinning houdt, net als Athenes rijk, geen generatie stand
+  (Thebe/Epaminondas, bruggetje naar de bestaande metadata).
+- **Latijn Caesar-spoor**: de Rubicon ("alea iacta est") → Pompeius'
+  kamploze aftocht → Pharsalus → Pompeius' hoofd als ongewenst geschenk
+  in Alexandrië (`RELATION pompeius=+1`, Caesars eigen afschuw) →
+  clementia tegenover Brutus/Cassius (`RELATION +1` voor beiden) en
+  Cato's zelfmoord in Utica als contrast → de Iden van maart, met Caesars
+  laatste woorden in het Grieks ("Kai su, teknon") in plaats van het
+  latere "Et tu, Brute".
+- **Latijn Pompeius-spoor**: Cicero's aarzeling en Cato's onbuigzaamheid
+  → dezelfde aftocht en Pharsalus van de verliezende kant → Pompeius'
+  verraad op het Egyptische strand, in het zicht van zijn eigen vrouw →
+  Brutus/Cassius/Cicero die Caesars genade aanvaarden tegenover Cato die
+  dat weigert → de Iden van maart als bewust genomen, principieel
+  besluit ("niet uit haat tegen Caesar de mens, maar uit liefde voor
+  Rome").
+- **Nieuwe registry-entries**: 13 CODEX-entries, 3 nieuwe VOCAB-entries
+  (demokratia/clementia/caedes).
+- **Nog open**: alleen de gedeelde afsluiting (`CH19_GRE_EINDE` en
+  `CH19_LAT_EINDE`, waar alle vier vertakkingen elk naartoe routeren, plus
+  een gezamenlijke `CH19_EINDE`/museum/`WORDT_VERVOLGD` — zelfde patroon
+  als Hoofdstuk 18) ontbreekt nog.
+
+**Validatie**: een script-check bevestigt 39 gedefinieerde scènes binnen
+`SP_CH19_CNS`, 40 unieke interne linktargets, waarvan precies de twee
+verwachte dode links (`CH19_GRE_EINDE`, `CH19_LAT_EINDE`) — geen enkele
+onbedoelde kapotte link. Alle 13 nieuwe codex-keys resolven. `node --check
+certamen/singleplayer-data.js` slaagt.
+
+---
+
+### 7.74 Hoofdstuk 19 — Pompeius-spoor: vergeving én een tweede keuze bij de Iden van maart (2026-08-10)
+
+Gerbens verzoek: een speler die voor Pompeius koos, moet zelf ook door
+Caesar vergeven worden (net als Brutus/Cassius/Cicero) — en vervolgens
+door de samenzweerders benaderd worden om mee te doen aan de moord.
+
+- `CH19_LAT_POM_005` uitgebreid: de tekst maakt nu expliciet dat ook de
+  speler zelf op de lijst van gespaarden staat.
+- Nieuwe scène `CH19_LAT_POM_005B` ("De Samenzweerders Kloppen Aan"):
+  Cassius benadert de speler in het geheim, met een echte keuze.
+- De Iden van maart splitst nu in twee varianten:
+  - `CH19_LAT_POM_006_MEE` — de speler steekt letterlijk mee toe, met een
+    ambivalente nasleep ("genade beantwoorden met een dolk is geen
+    rekening die ooit helemaal sluitend voelt"). `FLAG
+    ch19_lat_pom_samenzwering=mee`, `RELATION brutus=+1, cassius=+1`.
+  - `CH19_LAT_POM_006_WEIGER` — de speler weigert, waarschuwt Caesar niet
+    maar verraadt de samenzweerders ook niet, en hoort van de moord pas
+    achteraf. `FLAG ch19_lat_pom_samenzwering=geweigerd`.
+  - Beide sluiten af met dezelfde Brutus-DIALOGUE-regel en routeren naar
+    `CH19_LAT_EINDE`, zodat de rest van het hoofdstuk ongewijzigd blijft.
+- Het Caesar-spoor (`CH19_LAT_CAE_*`) blijft ongewijzigd — vergeving is
+  daar niet aan de orde, de speler stond al aan Caesars kant.
+
+**Validatie**: script-check bevestigt nu 41 scènes binnen `SP_CH19_CNS`,
+nog steeds precies dezelfde twee (en enige) dode linktargets
+(`CH19_GRE_EINDE`, `CH19_LAT_EINDE`) — geen nieuwe kapotte links. `node
+--check certamen/singleplayer-data.js` slaagt.
+
+---
+
+### 7.75 Hoofdstuk 19 — gemiste payoffs alsnog verwerkt (2026-08-10)
+
+Gerbens verzoek na een audit-check: alle gevonden gaten alsnog verwerken
+(Antonius, Octavianus, Thucydides, Sallustius, Xenofon), Livia bewust
+weglaten (in 44 v.Chr. pas ~15, nog niet relevant), en zoeken naar
+vrouwen — Gerben opperde Octavianus' moeder. Uitgebreid met Atia én,
+op een tussentijds verzoek, ook Octavia (Octavianus' zus, latere vrouw
+van Antonius) met een eigen DIALOGUE-regel.
+
+- **Grieks spoor (gedeeld, vóór de zijde-keuze)**: nieuwe scène
+  `CH19_GRE_002B` ("De Balling die Alles Opschreef") tussen de pest en de
+  Socrates/Alkibiades-scène — Thucydides zelf, besmet en genezen,
+  verbannen na Amfipolis, schrijft zijn geschiedenis vanuit twintig jaar
+  ballingschap met toegang tot beide kampen. De keuzescène (`CH19_GRE_
+  004`) verwijst nu expliciet terug: de tweesporen-structuur zelf bestaat
+  dankzij hem.
+- **Grieks Athene-spoor**: Xenofon krijgt een cameo in `CH19_GRE_ATH_007`
+  (de Dertig) als stille jonge toehoorder in Socrates' kring.
+- **Latijn Caesar-spoor**: Sallustius als officer-cameo in `CH19_LAT_
+  CAE_002`, met vooruitverwijzing naar zijn latere *Bellum Iugurthinum*
+  (payoff-link naar H18's Marius/Jugurtha). Servilia met naam genoemd in
+  `CH19_LAT_CAE_005` en in `codex_caesar_clementia` (was tot nu toe alleen
+  "een vroegere minnares/geliefde van Caesar").
+- **Latijn Pompeius-spoor**: Porcia (Cato's dochter, Brutus' vrouw,
+  beroemd om zichzelf te verwonden om haar vastberadenheid te bewijzen)
+  aanwezig in `CH19_LAT_POM_005B`, de scène waar de samenzweerders de
+  speler benaderen.
+- **Nieuwe gedeelde scène `CH19_LAT_NASLEEP`**: alle drie de Iden-van-
+  maart-varianten (`CH19_LAT_CAE_006`, `CH19_LAT_POM_006_MEE`, `CH19_LAT_
+  POM_006_WEIGER`) routeren er nu naartoe in plaats van rechtstreeks naar
+  `CH19_LAT_EINDE`. Bevat Antonius' berekenende lijkrede (die Brutus/
+  Cassius Rome uit jaagt) én de onthulling van Octavianus als Caesars
+  erfgenaam — met een scène bij Atia thuis waarin Octavia, met een eigen
+  DIALOGUE-regel, meteen doorziet wat die naam haar broer gaat kosten
+  ("Een naam als deze is geen geschenk... hij is negentien, en nu al een
+  doelwit"), zonder zelf al te weten hoe nauw haar eigen lot ooit
+  verstrengeld raakt met dat van Antonius.
+- **Nieuwe registry-entries**: 3 CODEX-entries (`codex_thucydides_
+  balling`, `codex_antonius_lijkrede`, `codex_octavianus_erfgenaam`).
+  `SP_CAMPAIGN.ch19.personages` uitgebreid met alle nieuwe namen.
+
+**Validatie**: script-check bevestigt 43 scènes binnen `SP_CH19_CNS`, nog
+steeds precies dezelfde twee (en enige) dode linktargets (`CH19_GRE_
+EINDE`, `CH19_LAT_EINDE`). Alle drie nieuwe codex-keys resolven. `node
+--check certamen/singleplayer-data.js` slaagt.
+
+---
+
+### 7.76 Hoofdstuk 19 — Cicero krijgt een RELATION in beide Latijnse sporen (2026-08-10)
+
+Gerben signaleerde dat Cicero, hoewel al meermaals genoemd, alleen in het
+Pompeius-spoor (`CH19_LAT_POM_005`) een `RELATION`-verschuiving kreeg —
+een speler die voor Caesar koos, kreeg nooit een relatiewaarde met hem.
+Dat is nu rechtgetrokken: `CH19_LAT_CAE_005` (de clementia-scène) noemt nu
+ook Ciceros eigen gratie expliciet en zet `RELATION cicero=+1`, exact
+gespiegeld aan het Pompeius-spoor.
+
+Reden voor het verzoek: Gerben rekent op Cicero als terugkerend
+personage over meerdere hoofdstukken — zijn dood op bevel van Marcus
+Antonius (tijdens de proscripties van het Tweede Triumviraat, thematisch
+Hoofdstuk 22 "Opvolgers tegenover Opvolgers" per de bestaande
+hoofdstuktabel — niet per se "het volgende hoofdstuk" zoals Gerben zelf
+al betwijfelde) plus zijn eigen hoofdstuk (21, "Wijsheid en Waarheid":
+redevoeringen, vertaler van Griekse filosofie, Seneca-introductie). Met
+Hoofdstuk 19 meegerekend zijn dat vier hoofdstukken waarin Cicero een rol
+speelt — een mogelijk grote vertakking/payoff verderop in de campagne,
+gebaseerd op de relatiewaarde die hier in Hoofdstuk 19 wordt opgebouwd.
+
+**Validatie**: `node --check certamen/singleplayer-data.js` slaagt.
+Script-check bevestigt `cicero=+1` nu in zowel `CH19_LAT_CAE_005` als
+`CH19_LAT_POM_005`.
+
+---
+
+### 7.77 Hoofdstuk 19 — RELATION-tracking voor Antonius en Octavianus (2026-08-10)
+
+Gerbens verzoek: Antonius en Octavianus/Augustus zijn de hoofdrolspelers
+van Hoofdstuk 22 (Tweede Triumviraat) en Octavianus/Augustus blijft dat
+nog in Hoofdstuk 23 — hun `RELATION` moet dus, net als bij Cicero
+(§7.76), al vanaf Hoofdstuk 19 worden opgebouwd. Beide werden in
+`CH19_LAT_NASLEEP` wel geïntroduceerd maar kregen nog geen relatiewaarde.
+
+In plaats van dat in de gedeelde `NASLEEP`-scène te doen (waar alle drie
+routes samenkomen en dus geen onderscheid meer mogelijk is), is de
+`RELATION` toegevoegd aan de drie al bestaande, wél gesplitste
+Iden-van-maart-scènes, zodat de uitkomst het gedrag van de speler
+weerspiegelt:
+
+- `CH19_LAT_CAE_006` (Caesar-spoor): `antonius=+1, octavianus=+1` —
+  loyaal aan Caesar, dus sympathiek tegenover zijn medeconsul en
+  erfgenaam.
+- `CH19_LAT_POM_006_MEE` (Pompeius-spoor, meegedaan aan de
+  samenzwering): `antonius=-1, octavianus=-1` — logische basis voor de
+  wraak die beiden in het Tweede Triumviraat zullen nemen op Caesars
+  moordenaars.
+- `CH19_LAT_POM_006_WEIGER` (Pompeius-spoor, geweigerd): `antonius=+1,
+  octavianus=+1` — geen vijandschap verdiend, geen dolk getrokken.
+
+**Validatie**: `node --check certamen/singleplayer-data.js` slaagt.
+Script-check bevestigt alle drie de nieuwe RELATION-regels; nog steeds
+precies dezelfde twee (en enige) dode linktargets (`CH19_GRE_EINDE`,
+`CH19_LAT_EINDE`), 43 scènes.
+
+---
+
+### 7.78 Hoofdstuk 19 — gedeelde afsluiting gebouwd en hoofdstuk gekoppeld aan de speelroute (2026-08-10)
+
+Gerbens verzoek: het hoofdstuk afmaken tot aan het voorlopige einde van
+het spel. De ontbrekende gedeelde afsluiting is nu gebouwd, en het hele
+hoofdstuk is direct gekoppeld — geen aparte "bewust nog niet
+gekoppeld"-fase deze keer, omdat het hoofdstuk na deze sessie inhoudelijk
+al helemaal af was.
+
+- **`CH19_GRE_EINDE`**: brug-/reflectiescène na beide Griekse
+  vertakkingen — de Boodschapper trekt de parallel met Rome (met een
+  callback naar Thucydides' rol als bron voor de tweesporen-structuur
+  zelf) en splitst dan alsnog op taalspoor: grieks-only stopt hier
+  (→ `CH19_EINDE`), beide gaat door naar het Latijnse spoor
+  (→ `CH19_LAT_001`) — exact het patroon van Hoofdstuk 18.
+- **`CH19_LAT_EINDE`**: sluit het Latijnse spoor af (bereikt via de nieuwe
+  `CH19_LAT_NASLEEP`-scène, voor alle drie de Iden-van-maart-varianten),
+  routeert door naar `CH19_EINDE`.
+- **`CH19_EINDE`**: gedeelde slotscène — de Boodschapper benadrukt
+  expliciet dat de gekozen zijdes (Athene/Sparta, Caesar/Pompeius) niet
+  bij dit hoofdstuk blijven, noemt de nog openstaande draden (Alkibiades,
+  Cicero, Brutus, Cassius, Antonius, Octavianus) met naam. Nieuw souvenir
+  `souvenir_bondgenoten_verscheurd` (gebroken lans naast een ongebruikte
+  dolk), STATPOINTS 3.
+- **`CH19_MUSEUM_00`** → **`CH19_WORDT_VERVOLGD`**: nieuw tijdelijk
+  eindpunt, zelfde format als voorheen (verwijst nu naar Alexander, de
+  Diadochen en Cicero's eigen hoofdstuk als nog te openen scheuren), met
+  een extra zin die bevestigt dat de zijde-keuzes blijven staan, ook na
+  een herstart.
+- **Koppeling**: `CH18_MUSEUM_00` routeert nu naar `CH19_000` (was
+  `CH18_WORDT_VERVOLGD`, die scène is verwijderd); `SP_SCENES`
+  (`singleplayer.js`) en de `BLOCKS`-lijst in `validate_chronica.js`
+  bevatten nu allebei `SP_CH19_CNS`. Het lange, inmiddels achterhaalde
+  "IN AANBOUW, Etappe 1"-codecommentaar boven `SP_CH19_CNS` is vervangen
+  door een korte samenvatting die verwijst naar dit changelog-bereik
+  (§7.72-7.78) voor de volledige bouwgeschiedenis.
+- **`SP_CAMPAIGN.ch19.status`** bijgewerkt naar "GEBOUWD EN GEKOPPELD".
+
+**Validatie**: `node certamen/tools/validate_chronica.js` geeft **0
+fouten, 45 waarschuwingen** (1051 scènes totaal) — alle waarschuwingen
+zijn het bekende patroon (dode echo-flags voor latere hoofdstukken,
+waaronder nu ook `ch19_gre_zijde`/`ch19_lat_zijde`/`ch19_lat_pom_
+samenzwering` zelf, plus de verwachte melding dat `CH19_WORDT_VERVOLGD`
+een terminale scène is). Een script-check bevestigt 48 scènes binnen
+`SP_CH19_CNS`, 47 unieke interne linktargets, **geen enkele** dode link
+meer over.
+
+---
+
+### 7.79 Boek IV/V RELATION- en flag-roster — standing reference (2026-08-11)
+
+Gerben gaf, na het afronden van Hoofdstuk 19, een expliciete lijst mee
+van personages en keuzes waarvan hij wil dat ze structureel als
+`RELATION`/`FLAG` worden bijgehouden, met het oog op grote payoffs in
+latere hoofdstukken (met name 20-23). Dit is de vastgelegde stand van
+zaken — **raadpleeg dit bij elk volgend hoofdstuk vóór je een personage
+uit deze lijst introduceert of een RELATION-scène schrijft.**
+
+**RELATION-personages, al actief bijgehouden (met vindplaats sinds welk
+hoofdstuk)**:
+- `caesar` — sinds H19 (CH19_LAT_CAE_001 `+1`, CH19_LAT_POM_001 `-1`)
+- `pompeius` — sinds H19 (bij het kiezen van zijn kant, en bij zijn dood)
+- `octavianus` — sinds H19 (CH19_LAT_CAE_006 `+1`, CH19_LAT_POM_006_MEE
+  `-1`, CH19_LAT_POM_006_WEIGER `+1`)
+- `antonius` — sinds H19, zelfde drie touchpoints als octavianus
+- `brutus` / `cassius` — sinds H19 (clementia-scènes, en de
+  samenzwering-keuze zelf)
+- `cicero` — sinds H19, bewust in BEIDE Latijnse sporen gezet
+  (CH19_LAT_CAE_005 én CH19_LAT_POM_005), zie ook §7.76 — Gerben rekent
+  op zijn dood (Tweede Triumviraat-proscripties, thematisch Hoofdstuk 22)
+  én zijn eigen hoofdstuk (21) als grote payoff-momenten
+- `socrates` — sinds H19 (CH19_GRE_ATH_007, weigering Leon van Salamis
+  te arresteren)
+- `alkibiades` — sinds H18 (`codex_alkibiades_pupil`) en uitgebreid door
+  heel H19 heen (meerdere op- en neergaande momenten in beide Griekse
+  sporen)
+
+**RELATION-personages, GENOEMD maar NOG NIET bijgehouden — actie vereist
+zodra ze weer in beeld komen**:
+- `plato` — kind-cameo H18, jonge-cameo (peuter/kind) H19 (CH19_GRE_006,
+  Dertig-Tirannen-scène) — zijn eerste ECHTE RELATION-moment hoort
+  logisch bij Hoofdstuk 21 (Wijsheid en Waarheid), waar hij oud genoeg is
+  om zelf te handelen. Historisch een sterke link: Critias (Dertig
+  Tirannen, al gebouwd) is Plato's oudoom, Charmides zijn oom — een
+  mogelijke payoff-brug tussen H19 en H21.
+- `xenofon` — kind-cameo H18, jonge-toehoorder-cameo H19
+  (CH19_GRE_ATH_007) — RELATION nog te openen, logisch ook bij H21.
+- `aristophanes` — **nog niet geïntroduceerd.** Komische toneelschrijver,
+  tijdgenoot van de hele Peloponnesische Oorlog (zijn *Lysistrata* gaat
+  letterlijk over deze oorlog; *De Wolken* bespot Socrates). Sterke
+  kandidaat om alsnog IN Hoofdstuk 19 met terugwerkende kracht toe te
+  voegen, of anders als eerste punt bij Hoofdstuk 21.
+- `lysias` — **nog niet geïntroduceerd.** Redenaar, tijdgenoot van de
+  Dertig Tirannen (zijn eigen broer werd door de Dertig vermoord — sterke
+  thematische link met de al gebouwde Dertig-Tirannen-scène). Zelfde
+  aanbeveling als Aristophanes.
+- `agrippa`, `maecenas`, `vergilius` — **nog niet geïntroduceerd**, met
+  opzet: dit zijn mensen uit Octavianus/Augustus' latere kring, die pas
+  natuurlijk in beeld komen vanaf het Tweede Triumviraat (Hoofdstuk 22)
+  of de Augustus-periode (Hoofdstuk 23). Zodra ze voor het eerst
+  optreden: DIRECT een RELATION-touchpoint inbouwen, niet pas later
+  toevoegen (leer van het Cicero/Caesar-gat dat hier net is
+  rechtgezet, §7.76-7.77).
+
+**Persistente FLAGs (keuzes die de speler zelf maakte, voor toekomstige
+`REQUIRE`/`{token}`-payoffs)**:
+- `ch19_gre_zijde` (athene/sparta) en `ch19_lat_zijde` (caesar/pompeius)
+  — de twee grote zijde-keuzes, zie §7.72.
+- `ch19_gre_ath_sicilie` (meegevaren/gebleven) — nieuw deze sessie:
+  "meegeweest met Alkibiades op de Sicilische Expeditie?" is nu een
+  echte keuze (`CH19_GRE_ATH_003B_MEE`/`_GEBLEVEN`), niet alleen
+  verteld.
+- `ch19_lat_pom_samenzwering` (mee/geweigerd) — "meegedaan aan de moord
+  op Caesar?", zie §7.74, alleen bereikbaar via het Pompeius-spoor
+  (spelers die voor Caesar kozen, kunnen per definitie geen
+  samenzweerder zijn).
+- **Nog te bouwen, bij Hoofdstuk 21**: "voor of tegen het executeren van
+  Socrates?" — Socrates' proces is 399 v.Chr., ná deze hele campagne
+  (Peloponnesische Oorlog eindigt 404, Dertig Tirannen kort erna) en
+  hoort dus bij Hoofdstuk 21, niet bij Hoofdstuk 19. Nog niet gebouwd —
+  vastleggen zodra dat hoofdstuk aan de beurt is.
+
+**Nieuw geïmplementeerd deze sessie — een "persoonlijke herinnering"-echo
+tussen Hoofdstuk 18 en 19**: Gerben merkte op dat de Dertig Tirannen
+sterk doen denken aan Sulla's proscripties (H18) en wilde dat de speler
+dat zelf, als eigen herinnering, terugziet — niet alleen als
+verteller-vergelijking. Nieuw resolver-token
+`{ch18_proscripties_h19_echo}` (switch-case in `SpTextResolver.lookup`,
+`singleplayer.js`) leest de FLAG `ch18_lat_proscripties_gezien` (gezet in
+`CH18_LAT_008`) terug en toont, alleen voor spelers die dat Latijnse
+spoor ook echt speelden, de nieuwe tekstconstante
+`SP_CH19_PROSCRIPTIES_ECHO` (`singleplayer-data.js`, naast
+`SP_CH17_MEDEA_ECHO`/`SP_CH17_HELENA_ECHO` — zelfde patroon). Verwerkt in
+zowel `CH19_GRE_ATH_007` als `CH19_GRE_SPA_006`, zodat het werkt
+ongeacht welke Griekse zijde de speler koos.
+
+**Validatie**: `node --check` slaagt op `singleplayer-data.js` en
+`singleplayer.js`. `validate_chronica.js`: 0 fouten, 45 waarschuwingen
+(inclusief de nieuwe, verwachte dode flag `ch19_gre_ath_sicilie`).
+
+### 7.79a Speelbaarheids- en payoff-audit Hoofdstuk 19 (2026-08-11, zelfde dag)
+
+Op Gerbens verzoek nogmaals expliciet gecontroleerd, met resultaat.
+
+**Speelbaarheid — bevestigd volledig**: `validate_chronica.js`'s
+bereikbaarheidscheck (BFS vanaf elk hoofdstukbegin, regel ~175 in het
+script) geeft **geen enkele** "onbereikbaar"-melding voor een CH19-scène.
+Alle drie taalsporen doorgetrokken en handmatig nagelopen: grieks-only
+(nooit Latijn te zien), latijn-only (nooit Grieks te zien), beide (Grieks
+eerst, dan via de `CH19_GRE_EINDE`-brug door naar Latijn) — sluiten
+allemaal correct af bij `CH19_EINDE`. Alle 12 VOCAB-referenties, alle
+CODEX-referenties en alle 9 RELATION-doelnamen (consistent gespeld, geen
+typefouten) resolven. Geen CHECK/PUZZLE-registry nodig, H19 gebruikt er
+geen.
+
+**Payoff-audit — één belangrijke aanvulling gevonden**: de bestaande
+"erfenis-echo"-strategie uit §7.51 (2026-08-05, toen nog met oude
+hoofdstuknummers) is nooit bijgewerkt na de renummering, en dreigde
+daardoor te verdwijnen. Concreet, in actuele nummering: **Caesars
+RELATION (nu opgebouwd in H19) hoort een erfenis-echo te triggeren op
+Augustus' eigen introductiescène in Hoofdstuk 23** ("Augustus en de Pax
+Romana"), via een nieuwe `SP_PAYOFFS`-entry met `condition:
+{relationMin:{caesar:1}}` — exact het patroon dat al bewezen werkt (zie
+`ch2_athena_echo_relatie` in `SP_PAYOFFS`, `singleplayer-data.js`).
+Gerbens eigen voorbeeldzin destijds: iets als "Mijn oom sprak wel eens
+positief over u...". **Nog niet gebouwd** (Hoofdstuk 23 bestaat nog niet)
+maar nu wél expliciet vastgelegd zodat het niet vergeten wordt. Dezelfde
+check voor de twee andere §7.51-kandidaten: Alexander (H20) → de
+Diadochen (H22, Diadochenoorlogen) en Ptolemaeus/Diadoch (H22) →
+Cleopatra (H23) blijven geldig, nog te bouwen bij die hoofdstukken.
+
+**Twee openstaande vragen — inmiddels beslist door Gerben (2026-08-11)**:
+- **Servilia, Porcia, Atia**: bewust GEEN `RELATION` — blijven
+  naam-genoemde bijfiguren zonder relatiescore.
+- **Octavia**: WEL een `RELATION` (`octavia=+1`, gezet in `CH19_LAT_
+  NASLEEP` bij haar introductie-DIALOGUE), omdat ze terugkomt als vrouw
+  van Marcus Antonius — tot hij haar voor Cleopatra verlaat. Dat huwelijk
+  en die breuk horen bij een later hoofdstuk (Tweede Triumviraat/
+  Cleopatra-periode, H22-23) en zijn nu aan de RELATION/FLAG-roster
+  toegevoegd als te bouwen payoff — zie de bijgewerkte geheugennotitie
+  `chronica-relation-flag-roster`.
+- **Mytilene's opstand**: bewust NIET als volledige scène toegevoegd,
+  maar wel een korte, terloopse verwijzing ("voor de kenners, of de
+  Googlaars", Gerbens eigen formulering) verwerkt in `CH19_GRE_ATH_002`
+  (de Melische Dialoog): een oudere stadsbewoner mompelt over een eerdere
+  stemming "over een opstandige bondgenoot met een naam die begint met
+  een M" die op het laatste moment werd teruggedraaid — zonder Mytilene
+  met naam te noemen.
+
+**Terecht nog dood, geen actie nodig**: `ch18_gre_naxos_gezien` en
+`ch18_lat_tiberius_veto` (H18) blijven ongebruikte flavour-flags, zoals
+tientallen andere flags door de hele campagne heen — dat is het
+geaccepteerde patroon, geen gemiste payoff.
+
+> **Bijgesteld in §7.80 hieronder**: Gerben wil dat ook déze flags,
+> en alle andere "geaccepteerde" dode flags door de hele campagne,
+> uiteindelijk in de Finale worden teruggehaald. "Geen actie nodig" was
+> dus voorbarig — zie `DODE_FLAGS_FINALE.md`.
+
+---
+
+### 7.80 Dode flags — bewaarlijst voor de Finale (2026-08-11)
+
+Gerbens verzoek, naar aanleiding van §7.79a's constatering dat sommige
+dode flags "terecht dood, geen actie nodig" waren: dat klopt alleen op de
+korte termijn. Op de lange termijn moet ELKE dode flag ooit worden
+teruggehaald in de Finale, al is het maar met een losse opmerking — geen
+enkele keuze van de speler mag voorgoed in het niets verdwijnen.
+
+Nieuw bestand **`DODE_FLAGS_FINALE.md`** (repo-root, zelfde conventie als
+`PALLAS_MINERVA_OVERZICHT.md`/`VOCAB_UITBREIDING.md`) — een momentopname
+van alle 41 huidige dode flags, gegroepeerd in vier categorieën:
+
+1. **Aanpak-/route-flags** (23 stuks, H1-6, welke stat de speler koos per
+   obstakel) — te talrijk voor losse callbacks, aanbevolen als één
+   verzamelende reflectiescène in de Finale.
+2. **Mythologische voltooiing/gebeurtenis-markers** (9 stuks) — goede
+   kandidaten voor individuele, korte callbacks.
+3. **NPC-erkenning/relatie-markers H15-16** (6 stuks) — idem.
+4. **Politieke-scheur-flags H18-19** (6 stuks) — waaronder de twee grote
+   H19-zijde-flags, die waarschijnlijk al eerder een eigen
+   payoff-hoofdstuk krijgen (§7.72/§7.79) maar de Finale blijft het
+   vangnet mocht dat er niet van komen.
+
+**Proces vastgelegd, niet alleen de snapshot**: het bestand instrueert
+zichzelf om bij elk nieuw hoofdstuk aangevuld te worden met nieuwe dode
+flags, en om vlak vóór de Finale-bouw (Boek VI) een laatste keer
+bijgewerkt te worden met `node certamen/tools/validate_chronica.js`'s
+dan-actuele "Dode flag"-lijst — dit bestand is een startpunt, de
+validator blijft de bron van waarheid. Pointer toegevoegd aan §0
+(Curriculumreferentie-sectie) van dit document, naast de bestaande
+verwijzing naar `PALLAS_MINERVA_OVERZICHT.md`.
 
 ---
 
