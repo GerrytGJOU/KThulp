@@ -620,7 +620,7 @@ staat, niet dit verslag.
 | 15 | III | Hoe Men Leefde | Grieks: les 24-25 (De Vrouw, slavernij); *Minerva 19*: vragend/onbepaald vnw, perfectum met praesensbetekenis |
 | 16 | III | Vorming en Vermaak | Grieks: les 26-27 (opvoeding, sport/Spelen — Atalanta verhuisd hierheen); *Minerva 20*: velle/nolle/fieri, betrekkelijke bijzin, comparativus/superlativus |
 | 17 | III | Oorlog en Overwinning | Grieks: les 28 (Perzische Oorlogen, Herodotos als vertellende stem); *Minerva 17-18*: Hannibal (grammatica grotendeels al bij H11 gedekt, zie §7.41-correctie) |
-| 18 | IV | Wie Betaalt, Bepaalt | *Herhaling* — Grieks: Pericles/Delisch-Attische Zeebond/Parthenon-bouw; Latijn: Gracchen → Marius (legerhervorming, Romeins leger als systeem) → Sulla |
+| 18 | IV | Wie Betaalt, Bepaalt | *Herhaling* — Grieks: Perikles/Delisch-Attische Zeebond/Parthenon-bouw; Latijn: Gracchen → Marius (legerhervorming, Romeins leger als systeem) → Sulla |
 | 19 | IV | Bondgenoten, Verscheurd | *Herhaling* — Grieks: Peloponnesische Oorlog + Spartaanse/Thebaanse hegemonie; Latijn: Caesars Burgeroorlog (Rubicon–Pharsalus–Iden van maart — het Eerste Triumviraat valt uiteen) |
 | 20 | IV | Grenzen Verlegd | Grieks: les 29 (Alexander — **laatste nieuwe Griekse stof**); *Minerva 22-23*: gerundium, genitivus subj./obj., gerundivum (Caesar in Gallië/Britannia) |
 | 21 | IV | Wijsheid en Waarheid | *Herhaling* — Grieks: Socrates/Plato/Aristoteles; Latijn: Cicero (redevoeringen, vertaler van Griekse filosofie) + Seneca-introductie (payoff bij Nero, H23) |
@@ -6431,7 +6431,7 @@ episode) zijn om diezelfde reden SAMENGEVOEGD in Hoofdstuk 26 — apart
 gehouden hadden ze allebei een kunstmatige Griekse tegenhanger nodig gehad.
 
 **Nieuwe hoofdstukken (metadata only, nog geen scènes/puzzels)**:
-- **19 — Het Verdeelde Verbond**: Pericles/Delisch-Attische Zeebond/
+- **19 — Het Verdeelde Verbond**: Perikles/Delisch-Attische Zeebond/
   Parthenon-bouw (Grieks) / Caesars Burgeroorlog (Latijn, vult het
   planningsgat uit punt 2 hierboven).
 - **20 — Bondgenoten, Verscheurd**: Peloponnesische Oorlog + Spartaanse/
@@ -6540,6 +6540,192 @@ codex-only.
 al bestaand, niets nieuws). Alle vijf nieuwe codex-ID's en de nieuwe
 scène-ID komen precies één keer voor; `CH2_H12C` is bereikbaar vanuit alle
 drie de Gigantomachie-keuzes.
+
+---
+
+### 7.68 Hoofdstuk 18 — inhoudelijke uitbreiding vastgelegd, nog niet gebouwd (2026-08-09)
+
+Vóór de scène-bouw van Hoofdstuk 18 ("Wie Betaalt, Bepaalt") heeft Gerben de
+opzet uit de metadata (§7.66) op vier punten aangescherpt. Vastgelegd in
+`SP_CAMPAIGN.ch18` (`certamen/singleplayer-data.js`); nog GEEN scènes
+gebouwd.
+
+- **Opening met corruptie-advies**: het hoofdstuk begint met `CH18_000`,
+  waarin de Boodschapper van Chronos de speler wegstuurt en alvast
+  waarschuwt dat fraude/corruptie is wat de machtigste rijken ten val
+  brengt — een thema dat in beide sporen terugkomt (de Zeebond-schatkist,
+  en de Gracchen/Marius/Caesar die zich er juist tegen verzetten).
+  **Belangrijke correctie t.o.v. het eerdere voorstel**: dit is GEEN
+  taalspoor-keuzemoment — het taalspoor ligt al veel eerder in het spel
+  vast, dus `CH18_000` routeert direct via `REQUIRE:taalspoor=...` naar het
+  juiste spoor, zoals ook `CH17_000` al doet.
+- **Griekse lijn krijgt de eerste Zeebond-scheuren**: ná de Perzische
+  overwinning volgen nu ook Naxos' onderdrukte afscheidingspoging, de
+  schatkistverhuizing van Delos naar Athene (454 v.Chr.) en het ostracisme
+  van Thucydides zoon van Melesias — de bond wordt zichtbaar een rijk,
+  wat H19 (Peloponnesische Oorlog) voorbereidt.
+- **Alkibiades en Socrates worden actieve personages**, niet alleen
+  Perikles/Phidias/Aspasia: Alkibiades als Perikles' pupil (historisch
+  correct — na de dood van zijn vader werd hij door Perikles opgevoed),
+  Socrates als steenhouwerszoon die al vragen stelt op de Parthenon-
+  bouwplaats. Plato, Xenofon en Lysias zijn in 461-431 v.Chr. nog
+  kinderen of ongeboren — die krijgen alleen een kind-cameo (zelfde
+  patroon als [[chronica-onbenoemde-schrijverscameo]]), geen volwaardige rol.
+- **Latijnse lijn eindigt na Sulla's proscripties en terugtred** op het
+  platteland — bewust een anti-Cincinnatus: geen deugdzame terugtred vóór
+  de macht, maar aftreden ná de wraak. De proscripties krijgen een
+  expliciete vooruit-echo naar de Dertig Tirannen in Athene (H19, na de
+  Peloponnesische Oorlog).
+- **Spartacus-zijverhaal krijgt een vaste plek**: als slotscène van het
+  Latijnse spoor, als brug naar het Eerste Triumviraat (H19). Pompeius —
+  hier al vroeg geïntroduceerd als Sulla's jonge generaal — krijgt
+  historisch de eer voor Crassus' overwinning op Spartacus' restanten;
+  die wrok tussen Pompeius en Crassus is wat Caesar in H19 repareert door
+  het Triumviraat te smeden.
+
+**Validatie**: `node --check certamen/singleplayer-data.js` slaagt. Nog
+geen scènes gebouwd — dat is de volgende bouwronde.
+
+---
+
+### 7.69 Hoofdstuk 18 — Etappe 1 gebouwd: opening + volledig Grieks spoor (2026-08-09)
+
+Gerben gaf akkoord om te starten met bouwen en liet de etappe-indeling aan
+Claude over. Gekozen voor twee etappes: (1) `CH18_000` + het complete
+Grieks spoor, (2) het Latijnse spoor + de gedeelde afsluiting. Etappe 1 is
+nu klaar in `certamen/singleplayer-data.js` (`SP_CH18_CNS`), **nog niet**
+opgenomen in `SP_SCENES` (`singleplayer.js`) — zelfde bewust-losstaande
+patroon als Hoofdstuk 17 (§7.66).
+
+- **`CH18_000`**: de Boodschapper stuurt de speler weg met het
+  fraude/corruptie-advies (geen taalspoor-keuze, routeert direct via
+  `REQUIRE`).
+- **Grieks spoor (`CH18_GRE_001` t/m `007`)**: Zeebond-oprichting (478
+  v.Chr.) → Naxos' met geweld onderdrukte afscheiding (leesval-neutraal,
+  geen "juist"/"fout"-framing) → schatkistverhuizing Delos→Athene (454) →
+  Parthenon-bouw met bondgeld en het ostracisme van Thucydides zoon van
+  Melesias (nieuwe CHECK `ch18_gre_ostracisme_pleidooi`, stat prudentia,
+  DC 15 — de vier uitkomsten beïnvloeden alleen de marge van de stemming,
+  Thucydides' verbanning zelf ligt historisch vast behalve bij een
+  KRITIEK-uitkomst, waar het pleidooi zo overtuigend is dat de vergadering
+  zich tegen Thucydides zelf keert) → Perikles' huishouden met Aspasia en
+  Alkibiades als pupil → Socrates als steenhouwerszoon op de bouwplaats,
+  met kind-cameo's van de peuter Xenofon en de pasgeboren Plato → slot-
+  cliffhanger richting de Peloponnesische Oorlog (Hoofdstuk 19).
+- **Nieuwe registry-entries**: 6 CODEX-entries (`codex_delisch_attische_
+  zeebond`, `codex_naxos_afscheiding`, `codex_schatkist_naar_athene`,
+  `codex_thucydides_melesias_ostracisme`, `codex_alcibiades_pupil`,
+  `codex_socrates_steenhouwer`), 1 CHECK, 8 nieuwe VOCAB-entries
+  (symmachia/chremata/phoros/ostrakon/techne/pecunia/avaritia/ager) —
+  waar zinvol hergebruikt: polis/demos/sophia zijn al bestaande entries.
+  De VOCAB-lijsten per scène zijn een eerste, thematisch gekozen greep en
+  nog niet afgestemd op het bredere spaced-repetition-systeem uit
+  `VOCAB_UITBREIDING.md` (dat bestand dekt oud-H18/nieuw-H20 e.v., niet
+  het huidige Hoofdstuk 18).
+- **Nog dood/ontbrekend**: `CH18_LAT_001` en `CH18_EINDE` bestaan nog
+  niet — de REQUIRE-routes ernaartoe (vanuit `CH18_000` en het einde van
+  `CH18_GRE_007`) zijn tot Etappe 2 tijdelijk zonder doel.
+
+**Validatie**: `node --check certamen/singleplayer-data.js` slaagt. Geen
+dubbele scène-ID's of registry-keys (handmatig gecontroleerd — nog niet
+via `validate_chronica.js`, die leest alleen de wél gekoppelde
+`SP_SCENES`).
+
+---
+
+### 7.70 Hoofdstuk 18 — namen vernederlandst en Etappe 2 gebouwd: Latijn spoor + afsluiting (2026-08-09)
+
+Twee acties op Gerbens verzoek. Eerst een correctie: **Pericles → Perikles**
+en **Alcibiades → Alkibiades** overal in `certamen/singleplayer-data.js` en
+dit document (25 + 7 vindplaatsen, ook al doorgevoerd in Hoofdstuk 19's
+metadata, dat dezelfde namen al bevatte) — Grieks kent geen c, dus de
+Griekse/Nederlandse transcriptie met k is de juiste spelling. De interne
+codex-key `codex_alcibiades_pupil` is voor consistentie meeverhuisd naar
+`codex_alkibiades_pupil`.
+
+Daarna Etappe 2: het Latijnse spoor (`CH18_LAT_001` t/m `011`) en de
+gedeelde afsluiting (`CH18_EINDE` → `CH18_MUSEUM_00` → `CH18_
+WORDT_VERVOLGD`), afgerond in dezelfde `SP_CH18_CNS`-constante. Daarmee is
+Hoofdstuk 18 inhoudelijk **compleet** (nog steeds bewust niet gekoppeld
+aan `SP_SCENES`, zelfde patroon als Hoofdstuk 17).
+
+- **Latijn spoor**: Tiberius Gracchus' landhervorming tegen de corrupte
+  grondhonger van de senaatselite → het veto-precedent (Octavius
+  afgezet) → Tiberius' moord door een senatorenbende → Gaius Gracchus zet
+  door en sterft op dezelfde manier → Marius' legerhervorming (nieuwe
+  CHECK `ch18_lat_marius_legioen`, stat robur, DC 15, testudo-formatie)
+  → de Jugurtha-affaire als eerste barst tussen Marius en zijn quaestor
+  Sulla → Sulla's mars op Rome → de proscripties (leesval-neutrale keuze,
+  FLAG `ch18_lat_proscripties_gezien` als vooruit-echo-haak voor de
+  Dertig Tirannen in Hoofdstuk 19) → Sulla's vrijwillige terugtred op het
+  platteland, expliciet als anti-Cincinnatus geframed (de Boodschapper
+  mengt zich voor het eerst middenin een verhaal in plaats van erna) →
+  Spartacus' opstand → Pompeius steelt Crassus' overwinningseer, wat hun
+  wrok zaait — eindigend met de naam Caesar als bruggetje naar Hoofdstuk
+  19's Eerste Triumviraat.
+- **Gedeelde afsluiting**: `CH18_EINDE` laat de Boodschapper de twee
+  sporen (Zeebond-verrijking / Republiek-corruptie) expliciet naast
+  elkaar leggen en herhaalt de openingswaarschuwing over fraude en
+  corruptie; nieuw souvenir `souvenir_wie_betaalt_bepaalt` (ostrakon naast
+  een proscriptielijst-fragment).
+- **Nieuwe registry-entries**: 10 CODEX-entries, 1 CHECK
+  (`ch18_lat_marius_legioen`), 6 nieuwe VOCAB-entries (legio/centurio/
+  cohors/dictator/proscriptio/tribunus) — gladiator/miles/populus/senatus/
+  ager hergebruikt uit bestaande entries.
+- **`SP_CAMPAIGN.ch18`** kreeg een `status`-veld ("GEBOUWD, nog niet
+  gekoppeld") ter documentatie.
+
+**Validatie**: `node --check certamen/singleplayer-data.js` slaagt. Een
+script-check bevestigt: 30 scènes gedefinieerd binnen `SP_CH18_CNS`, 21
+unieke interne linktargets, **geen enkele** dooie link. Geen dubbele
+scène-ID's of registry-keys.
+
+---
+
+### 7.71 Hoofdstuk 17 én 18 gekoppeld aan de speelbare route + illustratie-prompts (2026-08-10)
+
+Gerben vroeg Hoofdstuk 18 te koppelen. Omdat Hoofdstuk 17 dat zelf nog
+nooit was (bewust losstaand sinds §7.66), was dat de eerste stap voor
+Hoofdstuk 18 sowieso bereikbaar kon worden — dus zijn beide in dezelfde
+beurt gekoppeld.
+
+- **`singleplayer.js`**: `SP_SCENES` bevat nu ook `SP_CH17_CNS` en
+  `SP_CH18_CNS`.
+- **Routing**: `CH16_MUSEUM_00` → `CH17_000` (was `CH16_WORDT_VERVOLGD`);
+  `CH17_MUSEUM_00` → `CH18_000` (was `CH17_WORDT_VERVOLGD`). De twee oude
+  tijdelijke eindpunten (`CH16_WORDT_VERVOLGD`, `CH17_WORDT_VERVOLGD`) zijn
+  verwijderd — overbodig geworden, zelfde "niet laten opstapelen"-patroon
+  als bij eerdere hoofdstukovergangen. `CH18_WORDT_VERVOLGD` is nu het
+  actieve tijdelijke eindpunt.
+- **Validator-blinde-vlek opnieuw geraakt en gefixt**: exact het
+  §7.48-patroon — `validate_chronica.js` heeft een eigen `BLOCKS`-lijst,
+  los van `singleplayer.js`'s `SP_SCENES`, die nog stopte bij Hoofdstuk 16.
+  Na het koppelen meldde de validator eerst een harde fout
+  (`CH16_MUSEUM_00: keuze verwijst naar niet-bestaande scène "CH17_000"`)
+  omdat `BLOCKS` Hoofdstuk 17/18 niet kende. `['CH17', D.SP_CH17_CNS]` en
+  `['CH18', D.SP_CH18_CNS]` toegevoegd aan `BLOCKS` in
+  `certamen/tools/validate_chronica.js`.
+- **`SP_CAMPAIGN.ch18.status`** bijgewerkt naar "GEKOPPELD".
+
+**Validatie**: `node certamen/tools/validate_chronica.js` geeft nu **0
+fouten, 42 waarschuwingen** (1004 scènes totaal) — alle waarschuwingen
+zijn het bekende, onschuldige patroon (dode route-/echo-flags voor latere
+hoofdstukken, plus de verwachte melding dat `CH18_WORDT_VERVOLGD` een
+terminale scène zonder keuzes is).
+
+**Illustratie-prompts**: alle 9 prompts voor Hoofdstuk 18 zijn geleverd en
+staan in `certamen/assets/chronica/images/_nieuwe-prompts-ch18.md`; de
+IMAGE-tags in de scènes zelf zijn al eerder verwerkt (§7.69/7.70-sessie).
+Daarnaast, terzijde: Gerben meldde dat de al eerder (mondeling, niet
+opgeslagen) geleverde Hoofdstuk 17-prompt voor `ch17_gre_thermopylae_pas.png`
+niet werkte — Gemini toonde alleen de Spartaanse falanx met de Perzen enkel
+als verre stofwolk, in plaats van een echte confrontatie (te terughoudende
+"do not show the Persian army in detail"-instructie in de oude prompt).
+Herziene prompt met het Perzische front expliciet benoemd (kledij, wicker
+shields, felt caps) en in daadwerkelijk contact met de Griekse falanx.
+Nieuw bestand `certamen/assets/chronica/images/_nieuwe-prompts-ch17.md`
+aangemaakt (bestond nog niet) met deze ene herziene prompt, voor
+consistentie met de andere hoofdstukken.
 
 ---
 

@@ -409,21 +409,22 @@ const SP_CAMPAIGN = [
   // scènes/puzzels — alleen metadata.
   { id:"ch18", nr:18, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Wie Betaalt, Bepaalt",
     periode:"Gouden Eeuw van Athene, ca. 461-431 v.Chr. / Late Republiek, Gracchen t/m Sulla, ca. 133-78 v.Chr.",
-    verhaal:"Onder Pericles bouwt Athene, met het geld van een bondgenootschap dat ooit tegen Perzië werd gesmeed, de Akropolis om tot het pronkstuk van Griekenland — terwijl diezelfde bondgenoten steeds luider gaan mopperen dat de Delisch-Attische Zeebond meer een Atheens rijk is geworden dan een verbond van gelijken. Aan de Latijnse kant draait het ook om wie waarvoor betaalt: eerst wil volkstribuun Tiberius Gracchus (en na zijn moord zijn broer Gaius) land eerlijker verdelen tussen arm en rijk, tot beiden vermoord worden door de senaatspartij — het eerste politieke geweld van de late Republiek. Daarna hervormt Marius het leger zelf: voortaan vechten ook bezitloze burgers mee, betaald en uitgerust door hun eigen generaal in plaats van door de staat — en wanneer Sulla die nieuwe, aan hem persoonlijk loyale troepen tegen Rome zelf inzet, is de Republiek voorgoed veranderd. GECORRIGEERD 2026-08-09 (Gerbens verzoek, chronologische fix): Gracchen/Marius-Sulla stonden eerst ná Caesar (ch22); ze horen chronologisch vóór hem, en Marius' legerhervorming is bovendien de historisch juiste plek voor het Romeinse leger als systeem — niet Caesars latere Gallische veldtocht (nu Hoofdstuk 20).",
-    pallas:"Geen nieuwe les — verhaal: Pericles, de Delisch-Attische Zeebond, de bouw van de Akropolis/het Parthenon, pure herhaling/vertelling", minerva:"Geen nieuwe grammatica — verhaal: de Gracchen (landhervorming) gevolgd door Marius' legerhervorming en Sulla's mars op Rome",
-    grammatica:"Grieks: herhaling — Pericles/Zeebond/Parthenon; Latijn: herhaling — Gracchen/Marius/Sulla, incl. het Romeinse leger als systeem (legioen, centurio, cohort, testudo — Marius' eigen hervorming)",
-    gameplay:"Twee sporen; een bondgenootschap dat langzaam een rijk wordt (Griekse lijn, keuzes over hoe de Zeebond-schatkist wordt gebruikt) / een tweedelige Latijnse lijn (zoals Hoofdstuk 12's Hercules&Cacus→Romulus&Remus): eerst de Gracchen, dan Marius' legerhervorming met het legioen in actie, dan Sulla's mars op Rome",
-    personages:"Pericles, Phidias, Aspasia — Tiberius Gracchus, Gaius Gracchus, Cornelia, Gaius Marius, Lucius Cornelius Sulla",
-    thema:"Wie de rekening betaalt — een schatkist, een leger, een hervorming — bepaalt uiteindelijk ook de macht",
-    illustratie:"De bouw van het Parthenon op de Akropolis / Marius' legioen in testudo-formatie / Sulla's legioenen bij de poorten van Rome",
-    zijverhalen:"Spartacus (⭐⭐⭐⭐⭐) — chronologisch dichtstbij Marius/Sulla, blijft vrij inzetbaar bij deze of een later hoofdstuk" },
+    verhaal:"Onder Perikles bouwt Athene, met het geld van een bondgenootschap dat ooit tegen Perzië werd gesmeed, de Akropolis om tot het pronkstuk van Griekenland — terwijl diezelfde bondgenoten steeds luider gaan mopperen dat de Delisch-Attische Zeebond meer een Atheens rijk is geworden dan een verbond van gelijken (Naxos' onderdrukte afscheiding, de schatkistverhuizing van Delos naar Athene in 454, Thucydides zoon van Melesias' ostracisme): de eerste scheuren die in Hoofdstuk 19 tot oorlog leiden. Aan de Latijnse kant draait het ook om wie waarvoor betaalt: eerst wil volkstribuun Tiberius Gracchus (en na zijn moord zijn broer Gaius) land eerlijker verdelen tussen arm en rijk tegen de corrupte grondhonger van de senaatselite, tot beiden vermoord worden door de senaatspartij — het eerste politieke geweld van de late Republiek. Daarna hervormt Marius het leger zelf: voortaan vechten ook bezitloze burgers mee, betaald en uitgerust door hun eigen generaal in plaats van door de staat — en wanneer Sulla die nieuwe, aan hem persoonlijk loyale troepen tegen Rome zelf inzet en na zijn overwinning de proscripties invoert, is de Republiek voorgoed veranderd; hij trekt zich daarna terug op het platteland, een cynische anti-Cincinnatus (geen deugdzame terugtred maar aftreden ná de wraak, niet ervoor). GECORRIGEERD 2026-08-09 (Gerbens verzoek, chronologische fix): Gracchen/Marius-Sulla stonden eerst ná Caesar (ch22); ze horen chronologisch vóór hem, en Marius' legerhervorming is bovendien de historisch juiste plek voor het Romeinse leger als systeem — niet Caesars latere Gallische veldtocht (nu Hoofdstuk 20). UITGEBREID 2026-08-09 (tweede verzoek): opening krijgt een fraude/corruptie-advies van de Boodschapper (geen taalspoor-keuze — die ligt al vast van veel eerder in het spel; de scène routeert direct via REQUIRE naar het juiste spoor); Grieks spoor toont nu ook de eerste Zeebond-scheuren en introduceert Alkibiades (Perikles' pupil) en Socrates (steenhouwerszoon) als actieve personages, met Plato/Xenofon/Lysias als kind-cameo's (chronologisch te jong voor een echte rol); Latijn spoor eindigt na Sulla's proscripties en terugtred, met een expliciete vooruit-echo naar de Dertig Tirannen (H19); Spartacus-zijverhaal wordt de brug naar het Eerste Triumviraat — Pompeius (Sulla's jonge generaal, hier al geïntroduceerd) krijgt de eer voor Crassus' overwinning, wat hun ruzie zaait die Caesar in H19 oplost.",
+    pallas:"Geen nieuwe les — verhaal: Perikles, de Delisch-Attische Zeebond (incl. eerste scheuren), de bouw van de Akropolis/het Parthenon, pure herhaling/vertelling", minerva:"Geen nieuwe grammatica — verhaal: de Gracchen (landhervorming) gevolgd door Marius' legerhervorming en Sulla's mars op Rome/proscripties/terugtred",
+    grammatica:"Grieks: herhaling — Perikles/Zeebond/Parthenon/eerste scheuren; Latijn: herhaling — Gracchen/Marius/Sulla, incl. het Romeinse leger als systeem (legioen, centurio, cohort, testudo — Marius' eigen hervorming)",
+    gameplay:"Opent met CH18_000: de Boodschapper stuurt de speler weg met een advies over fraude/corruptie als ondergang van machtige rijken (vooruitwijzend naar beide sporen), routeert direct via REQUIRE naar het al vastgelegde taalspoor (geen keuzemoment). Griekse lijn: een bondgenootschap dat langzaam een rijk wordt, met concrete scheurmomenten (Naxos, schatkistverhuizing, ostracisme van Thucydides zoon van Melesias) — keuzes over hoe de Zeebond-schatkist wordt gebruikt. Latijnse lijn tweedelig (zoals Hoofdstuk 12's Hercules&Cacus→Romulus&Remus): Gracchen → Marius' legerhervorming (legioen in actie) → Sulla's mars op Rome + proscripties → terugtred op het platteland (anti-Cincinnatus) → Spartacus-zijverhaal als slotscène/brug naar H19's Eerste Triumviraat.",
+    personages:"Perikles, Phidias, Aspasia, Alkibiades (Perikles' pupil), Socrates (steenhouwerszoon), cameo's van de jonge Plato/Xenofon/Lysias — Tiberius Gracchus, Gaius Gracchus, Cornelia, Gaius Marius, Lucius Cornelius Sulla, Pompeius (jong, Sulla's generaal), Spartacus, Crassus (via het zijverhaal)",
+    thema:"Wie de rekening betaalt — een schatkist, een leger, een hervorming — bepaalt uiteindelijk ook de macht; en fraude/corruptie is wat zelfs de machtigste rijken uiteindelijk breekt",
+    illustratie:"De bouw van het Parthenon op de Akropolis / Marius' legioen in testudo-formatie / Sulla's legioenen bij de poorten van Rome / Sulla's terugtred naar het platteland",
+    zijverhalen:"Spartacus (⭐⭐⭐⭐⭐) — nu structureel ingezet als slotscène van dit hoofdstuk: brug naar het Eerste Triumviraat (Pompeius' onterechte eer, Crassus' wrok, Caesars verzoening in H19)",
+    status:"GEBOUWD (2026-08-09, §7.69-7.70) EN GEKOPPELD aan de speelbare route (2026-08-10, §7.71, samen met Hoofdstuk 17). SP_CH18_CNS zit nu in SP_SCENES (singleplayer.js); CH17_MUSEUM_00 routeert naar CH18_000." },
   { id:"ch19", nr:19, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Bondgenoten, Verscheurd",
     periode:"Peloponnesische Oorlog en nasleep, 431-362 v.Chr. / Caesars Burgeroorlog, 49-44 v.Chr.",
-    verhaal:"Athene en Sparta — ooit samen tegen Perzië — verscheuren nu Griekenland zelf in een oorlog die tot ver na beide steden zelf zal doorwerken: de pest die Pericles het leven kost, de meedogenloze Melische dialoog, de rampzalige Siciliaanse expeditie, en uiteindelijk Sparta's overwinning, gevolgd door een kortstondige Thebaanse hegemonie onder Epaminondas. Aan de Latijnse kant hetzelfde patroon, ditmaal tussen twee mannen die ooit hetzelfde Eerste Triumviraat vormden: Caesar steekt de Rubicon over, breekt met zijn eigen medestander Pompeius, en verslaat hem bij Pharsalus — tot een dolksteek in de Senaat, op de Iden van maart, alles weer openbreekt.",
-    pallas:"Geen nieuwe les — verhaal: de Peloponnesische Oorlog (Thucydides als bron, de pest van Athene, Melos, Sicilië, Alcibiades) en de Spartaanse/Thebaanse hegemonie erna, pure herhaling/vertelling", minerva:"Geen nieuwe grammatica — verhaal: Caesars Burgeroorlog (Rubicon, Pharsalus, dictatuur, de Iden van maart) — het Eerste Triumviraat (Caesar/Pompeius/Crassus) valt hier letterlijk uit elkaar",
+    verhaal:"Athene en Sparta — ooit samen tegen Perzië — verscheuren nu Griekenland zelf in een oorlog die tot ver na beide steden zelf zal doorwerken: de pest die Perikles het leven kost, de meedogenloze Melische dialoog, de rampzalige Siciliaanse expeditie, en uiteindelijk Sparta's overwinning, gevolgd door een kortstondige Thebaanse hegemonie onder Epaminondas. Aan de Latijnse kant hetzelfde patroon, ditmaal tussen twee mannen die ooit hetzelfde Eerste Triumviraat vormden: Caesar steekt de Rubicon over, breekt met zijn eigen medestander Pompeius, en verslaat hem bij Pharsalus — tot een dolksteek in de Senaat, op de Iden van maart, alles weer openbreekt.",
+    pallas:"Geen nieuwe les — verhaal: de Peloponnesische Oorlog (Thucydides als bron, de pest van Athene, Melos, Sicilië, Alkibiades) en de Spartaanse/Thebaanse hegemonie erna, pure herhaling/vertelling", minerva:"Geen nieuwe grammatica — verhaal: Caesars Burgeroorlog (Rubicon, Pharsalus, dictatuur, de Iden van maart) — het Eerste Triumviraat (Caesar/Pompeius/Crassus) valt hier letterlijk uit elkaar",
     grammatica:"Grieks: herhaling — Peloponnesische Oorlog; Latijn: herhaling — Caesars Burgeroorlog",
     gameplay:"Twee sporen; oorlogsdilemma's die geen winnaars kennen (Griekse lijn, incl. de Melische dialoog als moreel keuzemoment) / een vriendschap die breekt (Latijnse lijn, Caesar vs. Pompeius, eindigend bij de moord)",
-    personages:"Thucydides, Pericles (dood), Nicias, Alcibiades, Lysander, Epaminondas — Caesar, Pompeius, Brutus, Cassius",
+    personages:"Thucydides, Perikles (dood), Nicias, Alkibiades, Lysander, Epaminondas — Caesar, Pompeius, Brutus, Cassius",
     thema:"Bondgenoten die samen wonnen, blijken zelden bondgenoten te blijven zodra de gemeenschappelijke vijand verdwenen is",
     illustratie:"De pest van Athene / Caesar bij de Rubicon" },
   { id:"ch20", nr:20, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Grenzen Verlegd",
@@ -2560,6 +2561,40 @@ const SP_CODEX_ENTRIES = {
     tekst:"Openbare thermen zijn een van de meest democratische instellingen van Rome: voor een klein toegangsgeld — vaak minder dan een brood kost — kan vrijwel iedereen er baden, sporten en socialiseren, arm of rijk, vrij of vrijgelaten. Mannen en vrouwen baden gescheiden, meestal via aparte openingstijden in plaats van aparte ruimtes: vrouwenuren vroeg op de dag, mannenuren erna. Binnen die vrouwenuren verdwijnt, voor een paar uur, een deel van het standsverschil dat buiten de thermen alles bepaalt — een matrona en een liberta baden er letterlijk in hetzelfde water." },
   codex_thermopolium: { cat:"geschiedenis", titel:"Thermopolium: Fastfood voor Wie Geen Keuken Heeft",
     tekst:"Een thermopolium is een tegen de straat gemetselde toonbank met ingebouwde grote kruiken (dolia), gevuld met warme linzensoep, kikkererwten, gestoofd vlees of wijn — de snackbar van de oudheid. Voor de rijke minderheid met een eigen domus en keuken is het een uitzondering; voor de meerderheid van de stedelijke bevolking, die in een insula woont zonder haard of degelijke ventilatie, is eten bij een thermopolium eerder regel dan uitzondering. De ruïnes van Pompeii tellen er tientallen, soms met resten van de opgewarmde maaltijd nog in de kruiken." },
+  // ---- Hoofdstuk 18 "Wie Betaalt, Bepaalt" — Grieks spoor ----
+  codex_delisch_attische_zeebond: { cat:"geschiedenis", titel:"De Delisch-Attische Zeebond",
+    tekst:"Na de Perzische nederlaag bij Plataeae en Mycale sluiten tientallen Griekse poleis, vooral aan de kust van Klein-Azië, zich in 478/477 v.Chr. aaneen tot een gemeenschappelijk verbond tegen een nieuwe Perzische aanval: een gedeelde vloot, een gedeelde schatkist, gehuisvest op het neutrale, heilige eiland Delos. Athene levert verreweg de sterkste vloot en wordt vanzelfsprekend de leidende macht — een positie die de opkomende politicus Perikles de komende decennia steeds verder zal uitbouwen." },
+  codex_naxos_afscheiding: { cat:"geschiedenis", titel:"Naxos: de Eerste Afvallige",
+    tekst:"Rond 470 v.Chr. probeert Naxos, een van de eilanden die vrijwillig tot de Zeebond toetraden, zich terug te trekken: de Perzische dreiging voelt inmiddels ver weg, en de jaarlijkse bijdrage weegt zwaar. Athene reageert met een vloot van het bondgenootschap zelf, belegert Naxos en dwingt het terug — het eerste bondgenootschapslid dat met geweld wordt teruggehaald. Vanaf dat moment is duidelijk dat uittreden geen recht meer is, en betaalt Naxos voortaan niet als bondgenoot maar als onderworpen stad." },
+  codex_schatkist_naar_athene: { cat:"geschiedenis", titel:"De Schatkist Verhuist naar Athene",
+    tekst:"In 454 v.Chr. verplaatst de Zeebond zijn gezamenlijke schatkist van het neutrale Delos naar de Akropolis van Athene — officieel omdat Delos te kwetsbaar is voor een Perzische aanval over zee, in de praktijk omdat Athene zo rechtstreeks toezicht krijgt op elke drachme. Vanaf dit moment is het onderscheid tussen 'bondgenootschap' en 'Atheens rijk' voor veel bondgenoten nog maar een kwestie van woordkeuze." },
+  codex_thucydides_melesias_ostracisme: { cat:"geschiedenis", titel:"Ostracisme: Verbannen met een Potscherf",
+    tekst:"Elk jaar mag de Atheense Volksvergadering, als ze dat wil, één burger voor tien jaar verbannen — niet wegens een bewezen misdaad, maar simpelweg omdat hij te machtig of te verdeeldheidzaaiend wordt gevonden. Burgers krassen de naam van hun kandidaat op een ostrakon, een potscherf; bij voldoende stemmen moet die persoon binnen tien dagen vertrekken. Rond 443 v.Chr. treft dit lot Thucydides, zoon van Melesias — niet de latere geschiedschrijver, een andere man met dezelfde naam — die in de Volksvergadering fel had betoogd dat Perikles bondgenootschapsgeld misbruikte om Athene te versieren 'als een ijdele vrouw met sieraden'. Zijn verbanning ruimt Perikles' laatste serieuze politieke tegenstander uit de weg." },
+  codex_alkibiades_pupil: { cat:"geschiedenis", titel:"Alkibiades: Perikles' Pupil",
+    tekst:"Na de vroege dood van zijn vader Clinias groeit Alkibiades op als pupil in het huishouden van zijn verre neef Perikles zelf — omringd door de mooiste marmerbouw van zijn tijd, en door de scherpste geesten van Athene. Al als kind valt hij op door een mengeling van charme, overmoed en een talent om altijd zijn zin te krijgen — eigenschappen die zijn latere, roemruchte en beruchte carrière al vroeg aankondigen." },
+  codex_socrates_steenhouwer: { cat:"geschiedenis", titel:"Socrates: de Steenhouwerszoon die Vragen Stelt",
+    tekst:"Socrates' vader Sophroniscus is steenhouwer — een ambacht dat zijn zoon, naar het schijnt, zelf ook een tijd beoefende voor hij zich volledig aan het vragen stellen wijdde. Op de bouwplaatsen van de Akropolis, tussen de marmerblokken en de bronzen beeldhouwersgereedschappen van Phidias, ontwikkelt hij al vroeg de gewoonte waarmee hij later de hele Griekse filosofie zal veranderen: niet zelf beweren te weten, maar net zo lang doorvragen tot ook de zelfverzekerdste gesprekspartner moet toegeven dat hij het eigenlijk ook niet zeker weet." },
+  // ---- Hoofdstuk 18 "Wie Betaalt, Bepaalt" — Latijn spoor ----
+  codex_gracchen_landhervorming: { cat:"geschiedenis", titel:"De Gracchen en het Landvraagstuk",
+    tekst:"Veroverd staatsland (ager publicus) is officieel bedoeld om onder arme burgers en oud-soldaten verdeeld te worden, maar in de praktijk hebben rijke senatoren het grootste deel allang ingelijfd bij hun eigen landgoederen (latifundia), ver boven het wettelijke maximum en bewerkt door slaven in plaats van vrije boeren. Duizenden kleine boeren raken zo hun bestaan kwijt. Tiberius Gracchus, zelf afkomstig uit een van de rijkste families van Rome, stelt in 133 v.Chr. een wet voor die de wettelijke grens simpelweg weer laat gelden — en maakt zich daarmee vrijwel de hele senaat tot vijand." },
+  codex_tiberius_moord: { cat:"geschiedenis", titel:"De Moord op Tiberius Gracchus",
+    tekst:"Wanneer Tiberius zich, tegen de gewoonte in, herkiesbaar stelt voor een tweede jaar als volkstribuun, verspreidt de senaat het gerucht dat hij naar het koningschap streeft. Een groep senatoren, aangevoerd door zijn eigen neef Scipio Nasica, trekt gewapend met afgebroken stoelpoten de Volksvergadering in en slaat Tiberius en zo'n driehonderd van zijn aanhangers dood — zonder proces, zonder rechtszaak. Hun lichamen worden 's nachts in de Tiber gegooid; zelfs een begrafenis wordt hun geweigerd. Voor zover de overlevering weet, is dit het eerste politieke bloedvergieten binnen Rome zelf sinds eeuwen." },
+  codex_gaius_gracchus_dood: { cat:"geschiedenis", titel:"Gaius Gracchus: de Jongere Broer",
+    tekst:"Tien jaar na Tiberius' dood zet zijn jongere broer Gaius dezelfde strijd voort, uitgebreid met goedkoop graan voor de armen van Rome en nieuwe kolonies voor landloze burgers. Ook hij maakt zich onmisbare vijanden, en wanneer de senaat het uiteindelijk tot een gewapend treffen laat komen, laat Gaius zich door een trouwe slaaf doden om niet levend gevangen te worden. De consul die opdracht tot zijn dood gaf, looft het gewicht van Gaius' afgehakte hoofd in goud — de overlevering wil dat iemand het brein er stiekem uitschraapte en met gesmolten lood vulde, om zo meer goud te kunnen opstrijken." },
+  codex_marius_legerhervorming: { cat:"geschiedenis", titel:"Marius' Legerhervorming",
+    tekst:"Van oudsher mogen alleen burgers met een minimum aan eigen bezit in het Romeinse leger dienen — een systeem dat vastloopt zodra er simpelweg niet meer genoeg boeren met eigen land over zijn. Gaius Marius doorbreekt dat rond 107 v.Chr. radicaal: hij werft ook capite censi, bezitloze burgers, uitgerust en betaald niet langer door de staat maar rechtstreeks door hun eigen generaal. Het Romeinse leger wordt zo een professioneel beroep: soldaten dienen in legioenen (legiones), onderverdeeld in cohorten (cohortes) onder bevel van een centurio, en vechten desnoods in de testudo — een gesloten schilddak tegen pijlen en werpspiesen. Effectiever dan ooit, maar voortaan ook trouwer aan de generaal die betaalt dan aan de Republiek zelf." },
+  codex_marius_jugurtha: { cat:"geschiedenis", titel:"Jugurtha en de Prijs van Corruptie",
+    tekst:"In de oorlog tegen de Numidische koning Jugurtha blijkt keer op keer dat Romeinse bevelhebbers en gezanten zich laten omkopen — Jugurtha zou ooit smalend hebben opgemerkt dat heel Rome te koop is, als er maar genoeg goud voor is. Marius, zelf een homo novus zonder adellijke voorouders, wint de oorlog uiteindelijk met discipline in plaats van omkoping — al is het zijn eigen ambitieuze quaestor Sulla die Jugurtha's gevangenneming persoonlijk weet te regelen, en daar zelf alle eer voor claimt. Het is het eerste zichtbare barstje in wat later een van de dodelijkste rivaliteiten van de Republiek wordt." },
+  codex_sulla_mars_op_rome: { cat:"geschiedenis", titel:"Sulla's Mars op Rome",
+    tekst:"Wanneer de Volksvergadering het commando tegen koning Mithridates van Pontus alsnog aan Marius toewijst in plaats van aan hem, doet Sulla in 88 v.Chr. iets dat nog geen Romeinse generaal ooit had gedurfd: hij marcheert met zijn eigen, aan hem persoonlijk loyale legioenen — mogelijk gemaakt door Marius' eigen legerhervorming — regelrecht Rome zelf binnen. De stad die eeuwenlang gewapende troepen buiten haar grenzen had gehouden, wordt voor het eerst door haar eigen leger bezet." },
+  codex_proscripties: { cat:"geschiedenis", titel:"De Proscripties",
+    tekst:"Als dictator voert Sulla in 82 v.Chr. de proscripties in: openbare lijsten met namen van vijanden, wier bezittingen verbeurd worden verklaard en wier moordenaar een deel van de buit mag houden — wie op de lijst staat, mag straffeloos gedood worden door wie hem het eerst vindt. Duizenden Romeinen komen erop te staan; sommige namen worden, naar verluidt, toegevoegd puur om iemands land of vermogen in handen te krijgen. Het woord 'proscriptie' zal, eeuwen later, opnieuw opduiken — bij het Tweede Triumviraat, en bij een geheel andere jaren-'30-terreur die er haar naam aan ontleent." },
+  codex_sulla_terugtred: { cat:"geschiedenis", titel:"Sulla's Terugtred",
+    tekst:"Op het toppunt van zijn absolute macht legt Sulla zijn dictatorschap vrijwillig neer en trekt zich terug op zijn landgoed bij Puteoli, om er te jagen en zijn memoires te schrijven. Anders dan Cincinnatus, die zijn macht neerlegde vóórdat hij die kon misbruiken, doet Sulla dat pas nadat zijn wraak tot de laatste naam op de proscriptielijst is voltrokken — dezelfde daad, uit compleet tegenovergestelde beweegredenen. Hij sterft, nog geen jaar later, aan een gewone ziekte in zijn eigen bed — voor een man met zoveel vijanden een zeldzaam voorrecht." },
+  codex_spartacus_opstand: { cat:"geschiedenis", titel:"Spartacus' Opstand",
+    tekst:"De Thracische gladiator Spartacus ontsnapt in 73 v.Chr. met een handvol medegevangenen uit een gladiatorenschool in Capua en verzamelt binnen twee jaar een leger van tienduizenden weggelopen slaven — groot genoeg om meerdere Romeinse legioenen na elkaar te verslaan. Pas Marcus Licinius Crassus, de rijkste man van Rome, verslaat de opstand definitief, met meedogenloze discipline (waaronder decimatio, het executeren van elke tiende man van een falende eenheid). Spartacus zelf sneuvelt in de laatste slag; zesduizend overlevenden worden langs de Via Appia gekruisigd, kilometers lang zichtbaar als waarschuwing." },
+  codex_pompeius_crassus_wrok: { cat:"geschiedenis", titel:"De Eer voor Andermans Overwinning",
+    tekst:"Crassus heeft Spartacus' opstand feitelijk al neergeslagen wanneer Gnaeus Pompeius — Sulla's voormalige jonge generaal, inmiddels beroemd door overwinningen in Spanje — op de terugweg naar Rome een laatste groep vluchtende slaven onderschept en meteen naar de senaat schrijft dat hij de oorlog heeft beëindigd. Rome, dat een overwinning op slaven liever aan een generaal dan aan een zakenman toeschrijft, gelooft hem grotendeels: Pompeius krijgt de volle triomftocht, Crassus slechts een kleinere ovatie. Van die avond af zijn de twee geen bondgenoten meer maar rivalen met een gedeelde wrok — tot een derde, nog jongere man een manier vindt om ze allebei aan zijn kant te krijgen." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3040,6 +3075,8 @@ const SP_SOUVENIRS = {
     caption:"Een verdroogde olijftak, zoals de kotinos die elke Olympische winnaar kreeg, naast een palmtak, het overwinningsteken van de Romeinse arena en Circus — twee volkeren, twee heel verschillende ideeën over wat vermaak mag kosten." },
   souvenir_oorlog_overwinning: { nm:"Een Speerpunt en een Kruikje", icon:"🏺", img:"souvenir_oorlog_overwinning.png",
     caption:"Een verroeste bronzen speerpunt uit de pas van Thermopylae, naast een klein aardewerken kruikje zoals Hannibal ze liet vullen met giftige slangen — twee overwinningen die eigenlijk verliezen waren, en één verlies dat honderden jaren als overwinning wordt herinnerd." },
+  souvenir_wie_betaalt_bepaalt: { nm:"Een Ostrakon en een Proscriptielijst", icon:"⚖️", img:"souvenir_wie_betaalt_bepaalt.png",
+    caption:"Een potscherf met een gekrast Atheens naam erop, naast een gedeeltelijk verkoold fragment van een Romeinse proscriptielijst — twee manieren om een naam voorgoed uit de openbaarheid te schrappen, met eeuwen en een zee ertussen." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -3329,6 +3366,16 @@ const SP_CHECKS = {
     deels:{ target:"CH17_LAT_004_DEELS" },
     gefaald:{ target:"CH17_LAT_004_GEFAALD" },
     kritiek:{ target:"CH17_LAT_004_KRITIEK" } },
+  ch18_gre_ostracisme_pleidooi: { stat:"prudentia", dc:15,
+    volledig:{ target:"CH18_GRE_004_VOL" },
+    deels:{ target:"CH18_GRE_004_DEELS" },
+    gefaald:{ target:"CH18_GRE_004_GEFAALD" },
+    kritiek:{ target:"CH18_GRE_004_KRITIEK" } },
+  ch18_lat_marius_legioen: { stat:"robur", dc:15,
+    volledig:{ target:"CH18_LAT_005_VOL" },
+    deels:{ target:"CH18_LAT_005_DEELS" },
+    gefaald:{ target:"CH18_LAT_005_GEFAALD" },
+    kritiek:{ target:"CH18_LAT_005_KRITIEK" } },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -3880,6 +3927,21 @@ const SP_VOCAB_ENTRIES = {
   latijn_compono: { taal:"latijn", woord:"compono", betekenis:"samenstellen" },
   latijn_amo:     { taal:"latijn", woord:"amo", betekenis:"houden van" },
   latijn_impono:  { taal:"latijn", woord:"impono", betekenis:"plaatsen op" },
+  // ---- Hoofdstuk 18 "Wie Betaalt, Bepaalt" — nieuwe contextwoorden ----
+  grieks_symmachia: { taal:"grieks", woord:"συμμαχία", transcript:"symmachía", betekenis:"bondgenootschap" },
+  grieks_chremata:  { taal:"grieks", woord:"χρήματα", transcript:"chrḗmata", betekenis:"geld, bezittingen" },
+  grieks_phoros:    { taal:"grieks", woord:"φόρος", transcript:"phóros", betekenis:"schatting, bijdrage" },
+  grieks_ostrakon:  { taal:"grieks", woord:"ὄστρακον", transcript:"óstrakon", betekenis:"potscherf (ostracisme)" },
+  grieks_techne:    { taal:"grieks", woord:"τέχνη", transcript:"téchnē", betekenis:"vakkunde, ambacht" },
+  latijn_pecunia:   { taal:"latijn", woord:"pecunia, pecuniae", betekenis:"geld" },
+  latijn_avaritia:  { taal:"latijn", woord:"avaritia, avaritiae", betekenis:"hebzucht" },
+  latijn_ager:      { taal:"latijn", woord:"ager, agri", betekenis:"akker, land" },
+  latijn_legio:      { taal:"latijn", woord:"legio, legionis", betekenis:"legioen" },
+  latijn_centurio:   { taal:"latijn", woord:"centurio, centurionis", betekenis:"centurio, hoofdman" },
+  latijn_cohors:     { taal:"latijn", woord:"cohors, cohortis", betekenis:"cohort" },
+  latijn_dictator:   { taal:"latijn", woord:"dictator, dictatoris", betekenis:"dictator" },
+  latijn_proscriptio:{ taal:"latijn", woord:"proscriptio, proscriptionis", betekenis:"proscriptie, vogelvrijverklaring" },
+  latijn_tribunus:   { taal:"latijn", woord:"tribunus, tribuni", betekenis:"volkstribuun" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -21640,33 +21702,20 @@ TEXT:
 Een nieuwe stolp vult zich: een olijftak naast een palmtak, allebei nog verrassend fris. "Twee manieren om iemand te eren voor wat hun lichaam kan," zegt de Boodschapper zacht. Ze kijkt nog even naar de stolp, alsof ze zelf ook nog aan het nadenken is over wat er hierna komt.
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH16_WORDT_VERVOLGD
-
-END
-
-=== SCENE: CH16_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Perzische Oorlogen, Hannibal, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+* Luister naar het volgende verhaal -> CH17_000
 
 END
 `.trim();
 
-/* ---- Hoofdstuk 17 "Oorlog en Overwinning" — GEBOUWD (2026-08-09), op
-   Gerbens verzoek BEWUST NOG NIET gekoppeld aan de speelbare route (zelfde
-   patroon als H14/H15/H16 destijds): CH16_MUSEUM_00 routeert nog naar
-   CH16_WORDT_VERVOLGD, en SP_SCENES in singleplayer.js bevat SP_CH17_CNS
-   nog niet. Twee sporen SEQUENTIEEL (Latijn eerst voor latijn/beide,
-   Grieks sluit af — zelfde volgorde als H14/H16). Bredere oorlogsscope dan
-   alleen de twee beroemdste veldslagen (Gerbens verzoek 2026-08-09): Grieks
-   van de Ionische Opstand via Marathon naar Thermopylae (zwaartepunt) tot
+/* ---- Hoofdstuk 17 "Oorlog en Overwinning" — GEBOUWD (2026-08-09) EN
+   GEKOPPELD aan de speelbare route (2026-08-10, samen met Hoofdstuk 18):
+   CH16_MUSEUM_00 routeert nu naar CH17_000, SP_SCENES in singleplayer.js
+   bevat SP_CH17_CNS. Het oude tijdelijke eindpunt CH16_WORDT_VERVOLGD is
+   verwijderd (overbodig geworden, zelfde patroon als eerdere hoofdstukken).
+   Twee sporen SEQUENTIEEL (Latijn eerst voor latijn/beide, Grieks sluit af
+   — zelfde volgorde als H14/H16). Bredere oorlogsscope dan alleen de twee
+   beroemdste veldslagen (Gerbens verzoek 2026-08-09): Grieks van de
+   Ionische Opstand via Marathon naar Thermopylae (zwaartepunt) tot
    Plataeae; Latijn van Hannibals eed via Saguntum en de Alpenoversteek naar
    Cannae (zwaartepunt), Zama, en Hannibals laatste jaren tot zijn
    zelfmoord in Bithynië. Latijnse grammatica (gerundium, genitivus
@@ -22475,17 +22524,587 @@ TEXT:
 Een nieuwe stolp vult zich: een verroeste speerpunt naast een klein aardewerken kruikje. "Twee oorlogen, twee soorten moed," zegt de Boodschapper zacht. Ze kijkt nog even naar de stolp, alsof ze zelf ook nog aan het nadenken is over wat er hierna komt.
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH17_WORDT_VERVOLGD
+* Luister naar het volgende verhaal -> CH18_000
+
+END
+`.trim();
+
+/* ---- Hoofdstuk 18 "Wie Betaalt, Bepaalt" — GEBOUWD (2026-08-09/10) EN
+   GEKOPPELD aan de speelbare route (2026-08-10): CH17_MUSEUM_00 routeert
+   nu naar CH18_000, SP_SCENES in singleplayer.js bevat SP_CH18_CNS. Het
+   oude tijdelijke eindpunt CH17_WORDT_VERVOLGD is verwijderd (overbodig
+   geworden — CH18_WORDT_VERVOLGD is nu het nieuwe tijdelijke eindpunt).
+   Grieks spoor volgt Perikles' Zeebond van oprichting (478 v.Chr.) tot de eerste
+   zichtbare scheuren vlak voor de Peloponnesische Oorlog (Hoofdstuk 19):
+   Naxos' onderdrukte afscheiding, de schatkistverhuizing van Delos naar
+   Athene (454), de bouw van het Parthenon met bondgeld en het ostracisme
+   van Thucydides zoon van Melesias. Alkibiades (Perikles' pupil) en
+   Socrates (steenhouwerszoon) zijn actieve personages; Plato/Xenofon/
+   Lysias krijgen alleen een kind-cameo (chronologisch te jong voor meer,
+   zie Chronica.md §7.68). ---- */
+const SP_CH18_CNS = `
+=== SCENE: CH18_000 ===
+
+TITLE:
+Wie Betaalt, Bepaalt
+
+TEXT:
+"[[Ecce|zie hier]] — deze keer geen enkele veldslag," zegt de Boodschapper van Chronos, en voor je nog maar iets kunt zeggen, houdt ze je met een opgestoken hand tegen. "Wacht. Voor je verdergaat, wil ik je iets meegeven — geen aankondiging deze keer, maar een waarschuwing."
+
+"Er is geen rijk in de hele geschiedenis, hoe machtig ook, dat uiteindelijk niet ten onder is gegaan aan het gewicht van zijn eigen rekening: aan wie er stiekem meer nam dan hem toekwam, aan wie een schatkist of een leger bewaakte alsof het van hemzelf was. Fraude en corruptie werken langzamer dan een zwaard — maar ze zijn dodelijker, want niemand ziet ze aankomen voor de rekening allang niet meer klopt."
+
+Ze laat een stilte vallen, alsof ze zelf ook nog even bij haar eigen woorden stilstaat. "Onthoud dat, terwijl je hierna een schatkist en een leger ziet ontstaan die allebei ooit voor iedereen waren bedoeld — en terwijl je een paar mensen ontmoet die zich, elk op hun eigen manier, juist tegen die verrotting hebben verzet. Niet omdat het hun ooit makkelijk werd gemaakt."
+
+VOCAB:
+grieks_symmachia, grieks_chremata, grieks_phoros, grieks_polis, grieks_demos, latijn_pecunia, latijn_avaritia, latijn_populus, latijn_senatus, latijn_ager
+
+CHOICES:
+* Volg de Zeebond die langzaam een rijk wordt [REQUIRE:taalspoor!=latijn] -> CH18_GRE_001
+* Volg de rekening die de Republiek zelf gepresenteerd krijgt [REQUIRE:taalspoor=latijn] -> CH18_LAT_001
 
 END
 
-=== SCENE: CH17_WORDT_VERVOLGD ===
+=== SCENE: CH18_GRE_001 ===
+
+TITLE:
+Een Bond Tegen Perzië
+
+TEXT:
+Na Plataeae en Mycale is Perzië verslagen op het vasteland, maar de dreiging van een nieuwe invasie blijft — vooral voor de Griekse steden langs de kust van Klein-Azië, nog altijd het dichtst bij de Perzische grens. Op het heilige eiland Delos, geboorteplaats van Apollo en Diana, sluiten tientallen poleis in 478 v.Chr. een verbond: de Delisch-Attische Zeebond, een gemeenschappelijke vloot en schatkist tegen een vijand die iedereen nog vers in het geheugen ligt.
+
+Athene, met verreweg de sterkste vloot van heel Griekenland, wordt vanzelfsprekend de leidende macht binnen het verbond. Een jonge, opkomende politicus met een ongewoon talent om een volksvergadering aan zijn kant te krijgen — Perikles — begint zich stap voor stap te profileren als de stem van die leiding.
+
+IMAGE:
+ch18_gre_zeebond_delos.png
+
+CODEX:
+codex_delisch_attische_zeebond
+
+CHOICES:
+* Zie hoe de eerste bondgenoot spijt krijgt van zijn lidmaatschap -> CH18_GRE_002
+
+END
+
+=== SCENE: CH18_GRE_002 ===
+
+TITLE:
+Naxos Wil Weg
+
+TEXT:
+Jaren gaan voorbij. De Perzische dreiging voelt voor de meeste bondgenoten steeds verder weg — en Naxos, een van de eilanden die ooit vrijwillig toetraden, besluit dat het genoeg is: geen schepen meer, geen jaarlijkse bijdrage meer, gewoon weer een vrije polis zoals voorheen.
+
+Athene ziet het anders. Een vloot van de Zeebond zelf — dus mede gefinancierd met Naxos' eigen bijdragen van de afgelopen jaren — vaart uit, belegert het eiland, en dwingt het terug in het bondgenootschap. Vanaf dat moment betaalt Naxos niet langer als bondgenoot die vrijwillig meedoet, maar als onderdaan die geen keuze meer heeft.
+
+CODEX:
+codex_naxos_afscheiding
+
+FLAG:
+ch18_gre_naxos_gezien=true
+
+CHOICES:
+* "Een bondgenootschap zonder dwang houdt nooit stand tegen een vijand als Perzië." -> CH18_GRE_003
+* "Een bondgenoot die niet meer vrijwillig blijft, is eigenlijk geen bondgenoot meer." -> CH18_GRE_003
+
+END
+
+=== SCENE: CH18_GRE_003 ===
+
+TITLE:
+De Schatkist Verhuist
+
+TEXT:
+In 454 v.Chr. gebeurt er iets dat niemand een staatsgreep durft te noemen, maar dat er wel verdacht veel op lijkt: de gezamenlijke schatkist van de Zeebond, tot dan bewaard op het neutrale, heilige Delos, verhuist naar de Akropolis van Athene zelf.
+
+Officieel omdat Delos te kwetsbaar zou zijn voor een Perzische aanval over zee. In de praktijk betekent het dat elke drachme voortaan onder rechtstreeks Atheens toezicht ligt — en dat Athene, zoals Perikles zelf droogjes opmerkt in de Volksvergadering, net zo goed zelf kan beslissen waar dat geld aan wordt besteed, zolang de vloot van de bondgenoten hen maar tegen Perzië blijft beschermen.
+
+IMAGE:
+ch18_gre_schatkist_akropolis.png
+
+CODEX:
+codex_schatkist_naar_athene
+
+CHOICES:
+* Zie waar dat geld allemaal naartoe gaat -> CH18_GRE_004
+
+END
+
+=== SCENE: CH18_GRE_004 ===
+
+TITLE:
+Marmer en Verzet
+
+TEXT:
+Met de schatkist binnen handbereik zet Perikles zijn grootste project in gang: de herbouw van de Akropolis, jaren eerder door de Perzen met de grond gelijkgemaakt, tot iets dat de hele Griekse wereld nooit meer zal vergeten. Phidias krijgt de leiding over het beeldhouwwerk, duizenden ambachtslieden en arbeiders vinden werk voor jaren, en het Parthenon rijst steen voor steen op — betaald met bondgenootschapsgeld dat ooit tegen Perzië was ingezameld.
+
+Niet iedereen is onder de indruk. In de Volksvergadering staat Thucydides, zoon van Melesias, op en noemt het ronduit diefstal: geld van bange bondgenoten, versierd tot sieraad voor een stad die zich "opdoft als een ijdele vrouw". De aanklacht is scherp, en een deel van de vergadering knikt mee.
+
+IMAGE:
+ch18_gre_parthenon_bouw.png
+
+CHECK:
+ch18_gre_ostracisme_pleidooi
+
+END
+
+=== SCENE: CH18_GRE_004_VOL ===
+
+TITLE:
+Bijna Verdedigd
+
+TEXT:
+Je brengt Perikles' verdediging zo scherp naar voren dat een deel van de vergadering merkbaar begint te twijfelen — bondgenootschapsgeld dat teruggegeven wordt aan de bondgenoten in de vorm van roem, werkgelegenheid en een stad die zichzelf kan verdedigen. Het scheelt weinig. Maar Thucydides' aanhang blijft, na jaren van opgekropte onvrede, net groot genoeg: bij de stemming worden ostraka geteld, en zijn naam haalt — nipt — de drempel om verbannen te worden.
+
+CODEX:
+codex_thucydides_melesias_ostracisme
+
+CHOICES:
+* Zie wat er van Perikles' laatste serieuze tegenstander wordt -> CH18_GRE_005
+
+END
+
+=== SCENE: CH18_GRE_004_DEELS ===
+
+TITLE:
+Een Verdeelde Vergadering
+
+TEXT:
+Je argumenten raken een deel van de vergadering, maar niet genoeg om het tij echt te keren. Bij de stemming krassen burgers hun keuze op een ostrakon, een potscherf; wanneer de scherven geteld zijn, blijkt Thucydides' naam ruim vaker genoemd dan die van wie dan ook anders. Voor tien jaar moet hij Athene verlaten.
+
+CODEX:
+codex_thucydides_melesias_ostracisme
+
+CHOICES:
+* Zie wat er van Perikles' laatste serieuze tegenstander wordt -> CH18_GRE_005
+
+END
+
+=== SCENE: CH18_GRE_004_GEFAALD ===
+
+TITLE:
+Het Woord aan Thucydides
+
+TEXT:
+Wat je ook aanvoert, het weegt weinig tegen Thucydides' eigen welsprekendheid. De vergadering luistert vooral naar hém — naar het beeld van bange bondgenoten wier angst wordt omgesmeed tot marmer voor een stad die nooit meer om hen zal denken. Wanneer de ostraka worden geteld, is de uitslag nauwelijks nog spannend: Thucydides zelf wordt verbannen, verpletterd door zijn eigen overtuigingskracht — de Volksvergadering wil, na zoveel jaren bondgenootschapsgeld, blijkbaar liever een reus van marmer zien dan een gelijk hebben.
+
+CODEX:
+codex_thucydides_melesias_ostracisme
+
+CHOICES:
+* Zie wat er van Perikles' laatste serieuze tegenstander wordt -> CH18_GRE_005
+
+END
+
+=== SCENE: CH18_GRE_004_KRITIEK ===
+
+TITLE:
+Een Overtuigend Pleidooi
+
+TEXT:
+Je verdediging van Perikles' bouwplannen is zo doortimmerd — bondgenootschapsgeld dat via lonen, tempels en roem naar de hele Griekse wereld terugstroomt — dat de vergadering zich, tegen alle verwachting in, tegen Thucydides zelf keert. Wie zulke felle kritiek uit op een plan dat zoveel mensen aan het werk houdt, moet zelf wel een verborgen agenda hebben, wordt er gefluisterd. De ostraka vallen in Thucydides' eigen nadeel: niet Perikles, maar zijn criticus wordt voor tien jaar verbannen.
+
+CODEX:
+codex_thucydides_melesias_ostracisme
+
+CHOICES:
+* Zie wat er van Perikles' laatste serieuze tegenstander wordt -> CH18_GRE_005
+
+END
+
+=== SCENE: CH18_GRE_005 ===
+
+TITLE:
+Het Huishouden van Perikles
+
+TEXT:
+Met zijn laatste serieuze tegenstander verbannen, regeert Perikles vrijwel onbetwist — niet als koning of tiran, formeel gewoon als een van de jaarlijks herkozen generaals (strategoi), maar met een overtuigingskracht die niemand anders in de Volksvergadering evenaart. Aan zijn zijde staat Aspasia, een intelligente en opvallend mondige vrouw uit Milete, met wie hij samenleeft zonder formeel huwelijk (als niet-Atheense kan ze dat sowieso niet) en die door vriend en vijand geprezen én belasterd wordt om haar invloed op hem.
+
+In hetzelfde huishouden groeit een jongen op die geen bloedeigen zoon van Perikles is, maar wel zijn pupil: Alkibiades, zoon van een verre neef die vroeg stierf. Al als kind valt hij op door een zeldzame mengeling van charme, overmoed en een haast onwrikbaar talent om zijn zin te krijgen — eigenschappen die zijn latere, even roemruchte als beruchte carrière nu al aankondigen.
+
+CODEX:
+codex_alkibiades_pupil
+
+CHOICES:
+* Zie wie er nog meer rondloopt op de bouwplaats van de Akropolis -> CH18_GRE_006
+
+END
+
+=== SCENE: CH18_GRE_006 ===
+
+TITLE:
+Vragen op de Bouwplaats
+
+TEXT:
+Tussen de marmerblokken en het kabaal van beitels op de Akropolis werkt een steenhouwer met zijn zoon mee aan het fundament van het nieuwe Parthenon. De vader, Sophroniscus, is een gerespecteerd vakman; zijn zoon lijkt echter meer geïnteresseerd in de mensen om hem heen dan in het marmer zelf — hij stelt de arbeiders, de opzichters en zelfs Phidias steeds weer vragen die niemand ooit eerder had gesteld: wat is schoonheid nu eigenlijk, en wie bepaalt dat? Zijn naam is Socrates, en hij lijkt zich, tot ergernis van sommigen en vermaak van anderen, niet neer te leggen bij een simpel antwoord.
+
+Verderop, tussen de toeschouwers die de bouw komen bekijken, wijst iemand je nog twee kinderen aan die hier vaak rondhangen: een jongetje van amper een jaar of vijf dat luistert naar de naam Xenofon, en — een stukje verderop — een pasgeboren jongen die zijn ouders Aristocles noemen, al zal de wereld hem ooit onder een andere naam kennen: Plato. Geen van beiden is nu meer dan een kind in de menigte, maar de Boodschapper laat je, heel even, hun namen niet vergeten.
+
+IMAGE:
+ch18_gre_socrates_bouwplaats.png
+
+CODEX:
+codex_socrates_steenhouwer
+
+VOCAB:
+grieks_techne, grieks_sophia, grieks_ostrakon
+
+CHOICES:
+* Kijk hoe de Zeebond, inmiddels bijna een rijk, verdergaat -> CH18_GRE_007
+
+END
+
+=== SCENE: CH18_GRE_007 ===
+
+TITLE:
+Een Rijk met een Andere Naam
+
+TEXT:
+Het Parthenon torent, jaren later, voltooid boven Athene uit — het pronkstuk van de hele Griekse wereld, betaald met geld dat ooit was ingezameld tegen Perzië. De Zeebond zelf is intussen in alles behalve naam een Atheens rijk geworden: bondgenoten die niet langer schepen leveren maar geld, een schatkist die niet meer op neutrale grond ligt, en minstens één eiland dat inmiddels weet wat er gebeurt met wie eruit probeert te stappen.
+
+Niet iedereen in Griekenland kijkt daar met bewondering naar. In Sparta en bij zijn bondgenoten groeit een ongemak dat algauw geen ongemak meer zal zijn — maar dat verhaal hoort bij een andere scheur in de tijd, nog niet bij deze.
+
+VOCAB:
+grieks_symmachia, grieks_phoros, grieks_demos
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH18_EINDE
+* Steek over naar de Latijnse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH18_LAT_001
+
+END
+
+=== SCENE: CH18_LAT_001 ===
+
+TITLE:
+Land dat Niemand Meer Bewerkt
+
+TEXT:
+Rome is enorm gegroeid door verovering, maar het meeste veroverde land — ager publicus, staatsgrond, eigenlijk bedoeld om onder arme boeren en teruggekeerde soldaten verdeeld te worden — is in de praktijk allang opgeslokt door rijke senatoren. Zij overschrijden de wettelijke grens ver, en laten hun enorme landgoederen (latifundia) bewerken door slaven in plaats van vrije boeren. Duizenden kleine boeren, vaak zelf oud-soldaten, raken hun bestaan kwijt en stromen als bedelaars de stad in.
+
+Tiberius Gracchus, zelf afkomstig uit een van de rijkste en meest gerespecteerde families van Rome, ziet in deze verrotting een gevaar dat groter is dan enige buitenlandse vijand: een Republiek die haar eigen boeren, en dus haar eigen legioenen, aan het opeten is.
+
+IMAGE:
+ch18_lat_gracchen_landverdeling.png
+
+CODEX:
+codex_gracchen_landhervorming
+
+VOCAB:
+latijn_ager, latijn_populus, latijn_avaritia, latijn_tribunus, latijn_senatus
+
+CHOICES:
+* Zie welke wet Tiberius voorstelt -> CH18_LAT_002
+
+END
+
+=== SCENE: CH18_LAT_002 ===
+
+TITLE:
+Een Wet, een Veto, een Precedent
+
+TEXT:
+Tiberius stelt een simpele wet voor: niemand mag meer dan een wettelijk maximum aan staatsgrond bezitten, de rest wordt herverdeeld onder arme burgers. De senaat — waarvan bijna elk lid zelf meer land bezit dan de wet toestaat — reageert woedend, en zet een andere volkstribuun, Octavius, in om er met zijn veto een einde aan te maken.
+
+Tiberius doet iets dat nog niemand ooit had gedurfd: hij laat de Volksvergadering stemmen om Octavius, zijn eigen collega-tribuun, gewoon af te zetten. De wet wordt aangenomen — maar het precedent dat daarmee gezet is, blijkt uiteindelijk gevaarlijker dan de wet zelf. Voortaan is elk politiek ambt in Rome, ook een dat ooit heilig en onaantastbaar leek, plotseling opzegbaar.
+
+FLAG:
+ch18_lat_tiberius_veto=true
+
+CHOICES:
+* Zie wat de senaat hierop doet -> CH18_LAT_003
+
+END
+
+=== SCENE: CH18_LAT_003 ===
+
+TITLE:
+Knuppels in de Senaat
+
+TEXT:
+Wanneer Tiberius zich, tegen de gewoonte in, herkiesbaar stelt voor een tweede jaar als tribuun, verspreidt de senaat het gerucht dat hij naar het koningschap streeft. Een groep senatoren, aangevoerd door Tiberius' eigen neef Scipio Nasica, trekt met afgebroken stoelpoten en knuppels de Volksvergadering in. Tiberius en zo'n driehonderd van zijn aanhangers worden doodgeslagen — geen rechtszaak, geen proces, alleen geweld in het hart van Rome zelf. Hun lichamen worden 's nachts in de Tiber gegooid; zelfs een begrafenis wordt hun geweigerd.
+
+Voor zover de overlevering weet, is dit het eerste politieke bloedvergieten binnen Rome sinds eeuwen.
+
+CODEX:
+codex_tiberius_moord
+
+CHOICES:
+* Zie hoe zijn jongere broer de strijd voortzet -> CH18_LAT_004
+
+END
+
+=== SCENE: CH18_LAT_004 ===
+
+TITLE:
+De Jongere Broer
+
+TEXT:
+Tien jaar later zet Gaius Gracchus, Tiberius' jongere broer, dezelfde strijd voort — en breidt hem uit: goedkoop graan voor de armen van Rome, nieuwe kolonies voor landloze burgers, een aanval op senatoren die als rechter in hun eigen zaak optreden. Net als zijn broer maakt hij zich onmisbare vijanden.
+
+Wanneer de senaat uiteindelijk de wapens laat opnemen tegen zijn aanhangers, laat Gaius, ingesloten en zonder ontsnapping, zich door een trouwe slaaf doden in plaats van levend gevangen te worden genomen. De consul die de opdracht tot zijn dood gaf, looft zelfs het gewicht van Gaius' afgehakte hoofd in goud — de overlevering wil dat iemand het brein er stiekem uitschraapte en met gesmolten lood vulde, om zo meer goud te kunnen opstrijken.
+
+CODEX:
+codex_gaius_gracchus_dood
+
+CHOICES:
+* Zie hoe een generaal het leger zelf verandert -> CH18_LAT_005
+
+END
+
+=== SCENE: CH18_LAT_005 ===
+
+TITLE:
+Een Leger van Wie Niets Bezit
+
+TEXT:
+Decennia van oorlog hebben Rome een probleem opgeleverd dat de Gracchen nooit hebben kunnen oplossen: er zijn simpelweg niet meer genoeg boeren met eigen land over om als burgersoldaat dienst te nemen — van oudsher een eigendomseis voor legerdienst. De generaal Gaius Marius doorbreekt dat systeem radicaal: hij werft ook capite censi, bezitloze burgers, tot dan uitgesloten van militaire dienst — uitgerust en betaald, niet langer door de staat, maar rechtstreeks door hun eigen generaal.
+
+Het legioen wordt zo, in één klap, een beroep in plaats van een burgerplicht — georganiseerd in cohorten onder bevel van centuriones, geoefend om zich desnoods in de testudo te sluiten, het schilddak waar geen pijl doorheen komt. Effectiever dan ooit, en voortaan trouw aan de man die betaalt, niet vanzelfsprekend meer aan de Republiek zelf.
+
+IMAGE:
+ch18_lat_marius_testudo.png
+
+CHECK:
+ch18_lat_marius_legioen
+
+END
+
+=== SCENE: CH18_LAT_005_VOL ===
+
+TITLE:
+Een Gesloten Schilddak
+
+TEXT:
+Onder jouw aanvoering vormen de nieuwe rekruten de testudo feilloos — schilden strak tegen elkaar, geen kier voor een enkele pijl. Een oefenmeester, zelf sceptisch over "soldaten zonder land", moet toegeven dat hij zoiets strak nog niet had zien staan bij mannen met minder dan een jaar dienst.
+
+CODEX:
+codex_marius_legerhervorming
+
+CHOICES:
+* Zie waarom Marius zelf zo wantrouwig staat tegenover de senaat -> CH18_LAT_006
+
+END
+
+=== SCENE: CH18_LAT_005_DEELS ===
+
+TITLE:
+Bijna Gesloten
+
+TEXT:
+De testudo staat, op een paar hapering na — een schild dat net te laat aansluit, een soldaat die zijn positie moet bijstellen. Voor rekruten die nog geen jaar geleden nog geen cent bezaten, is het een prestatie waar de oudere officieren zich niet hardop over uitlaten, maar wel stiekem tevreden bij knikken.
+
+CODEX:
+codex_marius_legerhervorming
+
+CHOICES:
+* Zie waarom Marius zelf zo wantrouwig staat tegenover de senaat -> CH18_LAT_006
+
+END
+
+=== SCENE: CH18_LAT_005_GEFAALD ===
+
+TITLE:
+Een Kier in het Schild
+
+TEXT:
+De formatie valt uiteen zodra de druk toeneemt — schilden die niet op tijd aansluiten, verwarring over wie waar moet staan. Niemand raakt gewond bij de oefening zelf, maar de les is duidelijk: een leger van bezitloze burgers heeft training nodig, geen enkel decreet van Marius verandert dat in één middag.
+
+CODEX:
+codex_marius_legerhervorming
+
+CHOICES:
+* Zie waarom Marius zelf zo wantrouwig staat tegenover de senaat -> CH18_LAT_006
+
+END
+
+=== SCENE: CH18_LAT_005_KRITIEK ===
+
+TITLE:
+Een Voorbeeld voor het Hele Leger
+
+TEXT:
+De testudo die onder jouw aanvoering ontstaat is zo strak gesloten dat Marius zelf de oefening laat herhalen voor de rest van het leger, als lesmateriaal. Wat begon als een experiment met "soldaten zonder land" wordt, dankzij dit ene voorbeeld, in een middag tijd het nieuwe standaardbevel voor elk legioen dat hij nog zal aanvoeren.
+
+CODEX:
+codex_marius_legerhervorming
+
+CHOICES:
+* Zie waarom Marius zelf zo wantrouwig staat tegenover de senaat -> CH18_LAT_006
+
+END
+
+=== SCENE: CH18_LAT_006 ===
+
+TITLE:
+Koop en Verkoop in Numidië
+
+TEXT:
+Marius' opkomst is zelf al een aanklacht tegen de senaatselite: in de oorlog tegen de Numidische koning Jugurtha blijkt keer op keer dat Romeinse bevelhebbers en gezanten zich laten omkopen — Jugurtha zou ooit smalend hebben gezegd dat heel Rome te koop is, als er maar genoeg goud voor is. Marius, zelf een homo novus zonder adellijke voorouders, presenteert zich als het tegendeel: een generaal die wint door discipline en hervorming, niet door goud dat van hand tot hand gaat.
+
+Zijn overwinning op Jugurtha komt er uiteindelijk toch, tot zijn eigen ergernis, mede dankzij zijn ambitieuze quaestor: Lucius Cornelius Sulla, die de gevangenneming van de koning zelf persoonlijk weet te regelen — en daar meteen alle eer voor claimt.
+
+VOCAB:
+latijn_legio, latijn_centurio, latijn_cohors, grieks_ostrakon
+
+CODEX:
+codex_marius_jugurtha
+
+CHOICES:
+* Zie wat er van die rivaliteit wordt -> CH18_LAT_007
+
+END
+
+=== SCENE: CH18_LAT_007 ===
+
+TITLE:
+Een Generaal Keert Zich tegen Zijn Eigen Stad
+
+TEXT:
+Jaren later staan Marius en zijn voormalige quaestor Sulla, inmiddels zelf een gevierd generaal, tegenover elkaar in een strijd om het commando tegen koning Mithridates van Pontus. Wanneer de Volksvergadering het bevel alsnog aan Marius toewijst, doet Sulla iets dat nog nooit een Romeinse generaal had gedurfd: hij marcheert met zijn eigen, aan hem persoonlijk loyale legioenen — dankzij Marius' eigen hervorming mogelijk gemaakt — regelrecht Rome zelf binnen.
+
+De stad die eeuwenlang gewapende legioenen buiten haar grenzen had gehouden, wordt voor het eerst door haar eigen leger bezet.
+
+IMAGE:
+ch18_lat_sulla_mars_op_rome.png
+
+CODEX:
+codex_sulla_mars_op_rome
+
+CHOICES:
+* Zie wat Sulla doet zodra hij de macht stevig in handen heeft -> CH18_LAT_008
+
+END
+
+=== SCENE: CH18_LAT_008 ===
+
+TITLE:
+De Lijst
+
+TEXT:
+Marius zelf sterft kort na Sulla's terugkeer naar Rome, oud en verbitterd, aan een natuurlijke oorzaak — nog net op tijd om zijn eigen definitieve ondergang te ontlopen. Na zijn overwinning op wat er van Marius' aanhangers over is, voert Sulla als dictator de proscripties in: openbare lijsten met namen van vijanden, wier bezittingen verbeurd worden verklaard en wier moordenaar een deel van de buit mag houden. Wie op de lijst staat, mag straffeloos gedood worden door wie hem het eerst vindt.
+
+Duizenden Romeinen komen erop te staan — niet allemaal echte politieke tegenstanders. Sommige namen worden, naar verluidt, gewoon toegevoegd om iemands land of vermogen in handen te krijgen: dezelfde hebzucht die de Gracchen en Marius juist probeerden te breken, nu voluit terug, maar dan met een dictators handtekening eronder.
+
+FLAG:
+ch18_lat_proscripties_gezien=true
+
+CODEX:
+codex_proscripties
+
+VOCAB:
+latijn_dictator, latijn_proscriptio
+
+CHOICES:
+* "Wie zo terugslaat, wordt precies wat hij ooit bestreed." -> CH18_LAT_009
+* "Een oorlog eindigt pas echt als de tegenstander geen kracht meer heeft om terug te vechten." -> CH18_LAT_009
+
+END
+
+=== SCENE: CH18_LAT_009 ===
+
+TITLE:
+Het Platteland, Vrijwillig
+
+TEXT:
+Op het toppunt van zijn absolute macht doet Sulla iets dat bijna niemand had verwacht: hij legt zijn dictatorschap vrijwillig neer, ontbindt zijn garde, en trekt zich terug op zijn landgoed bij Puteoli, waar hij zijn dagen wil slijten met jagen en het schrijven van zijn memoires.
+
+"Vergelijk het niet te snel met Cincinnatus," klinkt de stem van de Boodschapper er zachtjes doorheen — de eerste keer dat ze zich middenin een verhaal mengt in plaats van erna. "Cincinnatus legde zijn macht neer vóórdat hij die kon misbruiken, uit pure burgerplicht. Sulla trekt zich pas terug nádat hij zijn wraak, tot de laatste naam op de lijst, volledig heeft voltrokken. Twee mannen die hetzelfde deden — om compleet tegenovergestelde redenen."
+
+Sulla sterft, nog geen jaar later, aan een doodgewone ziekte, in zijn eigen bed — voor een man met zoveel vijanden een zeldzaam voorrecht.
+
+IMAGE:
+ch18_lat_sulla_terugtred.png
+
+CODEX:
+codex_sulla_terugtred
+
+CHOICES:
+* Zie wat er intussen in het zuiden van Italië gebeurt -> CH18_LAT_010
+
+END
+
+=== SCENE: CH18_LAT_010 ===
+
+TITLE:
+Een Slaaf die Rome Deed Beven
+
+TEXT:
+Nog voor het stof van Sulla's proscripties goed is neergedaald, breekt in het zuiden van Italië een opstand uit die niemand had zien aankomen. Spartacus, een Thracische gladiator, ontsnapt met een handvol medegevangenen uit een school in Capua en verzamelt binnen twee jaar een leger van tienduizenden weggelopen slaven — groot genoeg om meerdere Romeinse legioenen na elkaar te verslaan.
+
+Pas wanneer Marcus Licinius Crassus, de rijkste man van Rome, het bevel overneemt en zijn eigen leger met meedogenloze discipline (inclusief decimatio, het executeren van elke tiende man van een falende eenheid) opnieuw opbouwt, wordt de opstand definitief neergeslagen. Spartacus zelf sneuvelt in de laatste slag; zesduizend overlevende opstandelingen worden langs de Via Appia, de weg van Capua naar Rome, gekruisigd — een waarschuwing die kilometers lang zichtbaar blijft.
+
+IMAGE:
+ch18_lat_spartacus_opstand.png
+
+CODEX:
+codex_spartacus_opstand
+
+VOCAB:
+latijn_gladiator, latijn_miles
+
+CHOICES:
+* Zie wie er met de eer gaat strijken -> CH18_LAT_011
+
+END
+
+=== SCENE: CH18_LAT_011 ===
+
+TITLE:
+De Eer voor Andermans Overwinning
+
+TEXT:
+Crassus heeft de opstand feitelijk al verslagen wanneer Gnaeus Pompeius — Sulla's voormalige jonge generaal, inmiddels zelf beroemd door overwinningen in Spanje — met zijn eigen leger terugkeert naar Italië en op de terugweg een laatste groep van zesduizend vluchtende slaven onderschept en afslacht. Pompeius schrijft meteen naar de senaat dat hij Spartacus' oorlog heeft beëindigd — en Rome, dat een overwinning op slaven toch al liever aan een generaal dan aan een zakenman toeschrijft, gelooft hem grotendeels.
+
+Crassus, die het echte, moeizame werk deed, krijgt slechts een kleinere ovatie in plaats van de volle triomftocht die Pompeius wél toegekend krijgt. Van die avond af zijn Pompeius en Crassus geen bondgenoten meer, maar rivalen met een gedeelde wrok — een breuk die nog jaren zal doorsudderen, tot een derde man, ambitieus en vooralsnog minder beroemd dan beiden, een manier vindt om ze allebei aan zijn eigen kant te krijgen. Zijn naam: Gaius Julius Caesar.
+
+CODEX:
+codex_pompeius_crassus_wrok
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH18_EINDE
+* Keer terug naar het Orakel van Chronos, nu beide verhalen gehoord [REQUIRE:taalspoor=beide] -> CH18_EINDE
+
+END
+
+=== SCENE: CH18_EINDE ===
+
+TITLE:
+De Rekening
+
+TEXT:
+"[[Ecce|zie hier]] — twee verhalen, dezelfde les," zegt de Boodschapper van Chronos zodra je voor haar staat, met iets in haar stem dat verdacht dicht bij tevredenheid komt. "Een bondgenootschap dat een schatkist kreeg, en er stap voor stap een rijk mee kocht. Een Republiek die twee broers verloor omdat ze weigerden toe te kijken hoe rijke mannen staatsland stalen — en die zichzelf, nog geen generatie later, alsnog liet meeslepen door precies de hebzucht waartegen die broers vochten."
+
+"Onthoud die twee bewegingen naast elkaar," vervolgt ze. "Corruptie wint zelden in één klap. Ze wint stukje bij beetje — een schatkist die verhuist, een wet die wordt omzeild, een lijst die één naam te veel bevat. En zij die zich ertegen verzetten — Perikles' criticus, de Gracchen, Marius — verliezen bijna altijd hun eigen strijd. Maar de vraag wie er uiteindelijk gelijk had, wordt zelden op hetzelfde moment beantwoord als de strijd zelf."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_wie_betaalt_bepaalt
+
+CHOICES:
+* Keer terug naar het Museum -> CH18_MUSEUM_00
+
+END
+
+=== SCENE: CH18_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Een nieuwe stolp vult zich: een gekraste potscherf naast een verkoold fragment van een lijst met namen erop. "Twee manieren om iemand voorgoed uit de openbaarheid te schrappen," zegt de Boodschapper zacht, "eeuwen en een zee ertussen — en toch griezelig hetzelfde patroon."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH18_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH18_WORDT_VERVOLGD ===
 
 TITLE:
 Tot Hier, Voorlopig
 
 TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst klinkt er geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Alexander, Caesar, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Peloponnesische Oorlog, Caesars Burgeroorlog, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
 
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
 
