@@ -423,10 +423,11 @@ const SP_CAMPAIGN = [
     verhaal:"Athene en Sparta — ooit samen tegen Perzië — verscheuren nu Griekenland zelf in een oorlog die tot ver na beide steden zelf zal doorwerken: de pest die Perikles het leven kost, de meedogenloze Melische dialoog, de rampzalige Siciliaanse expeditie, en uiteindelijk Sparta's overwinning, gevolgd door een kortstondige Thebaanse hegemonie onder Epaminondas. Aan de Latijnse kant hetzelfde patroon, ditmaal tussen twee mannen die ooit hetzelfde Eerste Triumviraat vormden: Caesar steekt de Rubicon over, breekt met zijn eigen medestander Pompeius, en verslaat hem bij Pharsalus — tot een dolksteek in de Senaat, op de Iden van maart, alles weer openbreekt.",
     pallas:"Geen nieuwe les — verhaal: de Peloponnesische Oorlog (Thucydides als bron, de pest van Athene, Melos, Sicilië, Alkibiades) en de Spartaanse/Thebaanse hegemonie erna, pure herhaling/vertelling", minerva:"Geen nieuwe grammatica — verhaal: Caesars Burgeroorlog (Rubicon, Pharsalus, dictatuur, de Iden van maart) — het Eerste Triumviraat (Caesar/Pompeius/Crassus) valt hier letterlijk uit elkaar",
     grammatica:"Grieks: herhaling — Peloponnesische Oorlog; Latijn: herhaling — Caesars Burgeroorlog",
-    gameplay:"Twee sporen; oorlogsdilemma's die geen winnaars kennen (Griekse lijn, incl. de Melische dialoog als moreel keuzemoment) / een vriendschap die breekt (Latijnse lijn, Caesar vs. Pompeius, eindigend bij de moord)",
-    personages:"Thucydides, Perikles (dood), Nicias, Alkibiades, Lysander, Epaminondas — Caesar, Pompeius, Brutus, Cassius",
+    gameplay:"Twee sporen, elk met een TWEE-PERSPECTIEVEN-keuze zoals Hoofdstuk 9 (Trojanen/Grieken): Grieks spoor kiest Athene of Sparta, Latijns spoor kiest Caesar of Pompeius (incl. Cicero/Brutus/Cassius aan diens kant) — permanente FLAG (ch19_gre_zijde, ch19_lat_zijde) die pas in een later hoofdstuk wordt uitbetaald, net als ch9_zijde bij H17. Oorlogsdilemma's die geen winnaars kennen (Griekse lijn, incl. de Melische dialoog als moreel keuzemoment) / een vriendschap die breekt (Latijnse lijn, Caesar vs. Pompeius, eindigend bij de moord)",
+    personages:"Thucydides, Perikles (dood), Socrates, Alkibiades, Nicias, Lysander, Critias, Xenofon (cameo), Epaminondas — Caesar, Pompeius, Crassus (dood bij Carrhae), Cicero, Cato, Brutus, Cassius, Servilia, Porcia, Sallustius (cameo), Marcus Antonius, Octavianus, Atia, Octavia",
     thema:"Bondgenoten die samen wonnen, blijken zelden bondgenoten te blijven zodra de gemeenschappelijke vijand verdwenen is",
-    illustratie:"De pest van Athene / Caesar bij de Rubicon" },
+    illustratie:"De pest van Athene / Carrhae, Crassus' ondergang / Caesar bij de Rubicon",
+    status:"GEBOUWD EN GEKOPPELD (2026-08-10) — compleet: opening, gedeeld voortraject, alle vier vertakkingen (elk met permanente zijde-FLAG en RELATION-verschuivingen), alle payoff-cameo's (Thucydides/Xenofon/Sallustius/Servilia/Porcia/Antonius/Octavianus/Atia/Octavia), en de gedeelde afsluiting — 48 scènes totaal in SP_CH19_CNS. CH18_MUSEUM_00 routeert naar CH19_000; SP_SCENES (singleplayer.js) en validate_chronica.js's BLOCKS bevatten SP_CH19_CNS." },
   { id:"ch20", nr:20, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Grenzen Verlegd",
     periode:"Hellenistische Tijd (336-323 v.Chr.) / Late Republiek (58-50 v.Chr.)",
     verhaal:"Een jonge koning trekt met zijn leger verder dan wie ook vóór hem, tot in de verste uithoeken van de bekende wereld. Generaties later doet een Romeinse generaal in Gallië — en, twee keer, zelfs op het mistige eiland Britannia — iets vergelijkbaars, en trekt uiteindelijk ook de Rijn over naar Germania: Caesar duwt de grenzen van de bekende wereld net zo ver op als Alexander ooit deed, en ontdekt dat wie de pen vasthoudt (zijn eigen Commentarii), ook de geschiedenis vormgeeft. **Dit is de laatste nieuwe Griekse grammatica van de hele campagne** — Pallas deel 2 is na Alexander uitgeput. HERNUMMERD 2026-08-09 (was Hoofdstuk 18) — het Romeinse leger als systeem is verhuisd naar Hoofdstuk 18 (Marius' eigen hervorming, historisch de juistere plek); hier blijft Caesars veldtocht zelf, nu inclusief zijn expedities naar Britannia.",
@@ -941,6 +942,14 @@ const SP_ENDKAPITAAL_CASSANDRA_PAYOFF = "Vlak voor Aias haar wegsleurt, vindt Ca
 // ervaring, terwijl Herodotos het mythische verhaal vertelt").
 const SP_CH17_MEDEA_ECHO = " Medea zelf ken je al — je hielp haar destijds bij Jason en het Gulden Vlies. Dat ze hier, generaties later, wordt aangehaald als een van de vier vrouwen die deze hele vete in gang zetten, had ze toen vast niet verwacht.";
 const SP_CH17_HELENA_ECHO = " Ook Helena ken je persoonlijk — je was er zelf bij, in Troje, toen alles instortte. Dat haar naam eeuwen later nog wordt aangehaald als hét kantelpunt van een oorlog tussen twee werelddelen, voelt bijna vreemd klein voor wat jij haar die dagen zag doormaken.";
+// Hoofdstuk 19 (Gerbens verzoek 2026-08-11): leest de FLAG
+// ch18_lat_proscripties_gezien terug (gezet in CH18_LAT_008, Sulla's
+// proscripties) — een persoonlijke "dit heb ik al eens gezien"-herinnering
+// van de speler zelf bij de Dertig Tirannen, niet zomaar een alwetende
+// vergelijking door de verteller. Alleen niet-leeg voor spelers die
+// Hoofdstuk 18's Latijnse spoor ook echt hebben gespeeld (taalspoor=latijn
+// of beide) — grieks-only spelers hebben Sulla's proscripties nooit gezien.
+const SP_CH19_PROSCRIPTIES_ECHO = " Je hebt dit soort lijst al eens eerder gezien — bij Sulla, in Rome, generaties geleden vanuit jouw eigen reis door de tijd. Toen was het een dictator die zijn wraak afdwong met een dolk en een naam op perkament; nu is het een groep van dertig die hetzelfde doet, ditmaal in het Grieks. Dezelfde koude rekening, gewoon in een andere taal opgesteld.";
 // Herodotos' bredere "wat er van hen werd"-reflectie (CH17_GRE_000C):
 // hergebruikt het allang geschreven maar nooit aangeroepen SP_NPC_AFSLUITINGEN-
 // mechanisme (B27) nu het spel eindelijk diep genoeg is voor een écht "laat"
@@ -2595,6 +2604,54 @@ const SP_CODEX_ENTRIES = {
     tekst:"De Thracische gladiator Spartacus ontsnapt in 73 v.Chr. met een handvol medegevangenen uit een gladiatorenschool in Capua en verzamelt binnen twee jaar een leger van tienduizenden weggelopen slaven — groot genoeg om meerdere Romeinse legioenen na elkaar te verslaan. Pas Marcus Licinius Crassus, de rijkste man van Rome, verslaat de opstand definitief, met meedogenloze discipline (waaronder decimatio, het executeren van elke tiende man van een falende eenheid). Spartacus zelf sneuvelt in de laatste slag; zesduizend overlevenden worden langs de Via Appia gekruisigd, kilometers lang zichtbaar als waarschuwing." },
   codex_pompeius_crassus_wrok: { cat:"geschiedenis", titel:"De Eer voor Andermans Overwinning",
     tekst:"Crassus heeft Spartacus' opstand feitelijk al neergeslagen wanneer Gnaeus Pompeius — Sulla's voormalige jonge generaal, inmiddels beroemd door overwinningen in Spanje — op de terugweg naar Rome een laatste groep vluchtende slaven onderschept en meteen naar de senaat schrijft dat hij de oorlog heeft beëindigd. Rome, dat een overwinning op slaven liever aan een generaal dan aan een zakenman toeschrijft, gelooft hem grotendeels: Pompeius krijgt de volle triomftocht, Crassus slechts een kleinere ovatie. Van die avond af zijn de twee geen bondgenoten meer maar rivalen met een gedeelde wrok — tot een derde, nog jongere man een manier vindt om ze allebei aan zijn kant te krijgen." },
+  // ---- Hoofdstuk 19 "Bondgenoten, Verscheurd" — Grieks spoor ----
+  codex_eerste_vonk_peloponnesische_oorlog: { cat:"geschiedenis", titel:"De Eerste Vonk: Corcyra en Megara",
+    tekst:"Twee aanleidingen ontketenen in 431 v.Chr. de Peloponnesische Oorlog. Eerst steunt Athene het eiland Corcyra in een conflict met Corinthe — zelf geen lid van de Delisch-Attische Zeebond, maar Corinthe is wél een bondgenoot van Sparta, dat zich hierdoor bedreigd voelt. Daarna vaardigt Athene het Megarische Decreet uit: Megara, eveneens een Spartaanse bondgenoot, wordt uitgesloten van alle havens en markten binnen het hele Atheense machtsgebied — economische wurging zonder een enkel zwaard te trekken. Koning Archidamus van Sparta waarschuwt zijn eigen volksvergadering voor een oorlog die niemand snel zal winnen, maar wordt overstemd door de oorlogszuchtige stemmen. Sparta verklaart de oorlog." },
+  codex_pest_van_athene: { cat:"geschiedenis", titel:"De Pest van Athene",
+    tekst:"Perikles' oorlogsstrategie is even simpel als rigoureus: vermijd een veldslag tegen Sparta's superieure landleger, trek de hele bevolking van Attica achter de Lange Muren tussen Athene en de haven Piraeus, en gebruik de vloot om de kust te teisteren en de aanvoerlijnen open te houden. Zolang de zee open blijft, kan Sparta de stad niet uithongeren. Maar de overvolle, opeengepakte stad wordt in 430 v.Chr. een broeinest voor een verwoestende plaag, die naar schatting een kwart van de bevolking doodt. Perikles verliest zijn beide wettige zonen aan de ziekte en sterft er zelf, in 429 v.Chr., ook aan — zijn eigen strategie overleeft hem, maar de man die haar bedacht niet." },
+  codex_socrates_alkibiades_slagveld: { cat:"geschiedenis", titel:"Socrates en Alkibiades op het Slagveld",
+    tekst:"Als burger dient ook Socrates, inmiddels van steenhouwer tot rondtrekkend vragensteller, als zwaarbewapend hopliet. Bij Potidaea (432 v.Chr.) en later bij Delium (424 v.Chr.) valt hij op door een ongewone, haast onverstoorbare kalmte onder vuur — volgens de latere overlevering van zijn leerling Alkibiades, die zelf ook meevocht en beweert dat Socrates hem gewond van het slagveld heeft gered. Hun band, gesmeed in de strijd, zal Alkibiades voor de rest van zijn leven blijven vormen — al zal hij niet elke les die Socrates hem probeert te leren, ook echt ter harte nemen." },
+  // ---- Hoofdstuk 19 "Bondgenoten, Verscheurd" — Latijn spoor ----
+  codex_eerste_triumviraat: { cat:"geschiedenis", titel:"Het Eerste Triumviraat",
+    tekst:"Na Spartacus' nederlaag smeden Caesar, Pompeius en Crassus in het geheim een informele machtsdeal, geen officieel ambt maar een afspraak die de facto de Republiek bestuurt: het Eerste Triumviraat. Elk krijgt wat hij wil — Pompeius eindelijk landverdeling voor zijn veteranen, Crassus fiscale gunsten voor zijn zakenvrienden in Klein-Azië, Caesar het consulaat en daarna een langdurig, riant bevel over Gallië. Drie mannen die Rome onderling verdelen, zolang de balans tussen hen standhoudt." },
+  codex_crassus_parthen: { cat:"geschiedenis", titel:"Crassus' Laatste Gok",
+    tekst:"Crassus is, ondanks zijn rijkdom en zijn aandeel in het Triumviraat, altijd de minst beroemde van de drie: overschaduwd door Pompeius' krijgsroem en, inmiddels, door Caesars steeds grotere overwinningen in Gallië. Zonder enige directe aanleiding, puur uit persoonlijke ambitie naar zijn eigen militaire glorie, begint hij in 53 v.Chr. een oorlog tegen het Parthische Rijk in het oosten — een rijk dat Rome part noch deel had aangedaan." },
+  codex_carrhae_crassus_dood: { cat:"geschiedenis", titel:"Carrhae: Crassus' Ondergang",
+    tekst:"Bij Carrhae verslaat de lichte Parthische cavalerie — beroemd om het 'Parthische schot', achterwaarts gericht en afgevuurd tijdens een schijnbare vlucht — Crassus' zware legioenen volledig. Crassus zelf wordt gedood tijdens onderhandelingen die uit de hand lopen; de overlevering wil dat de Parthen hem, ter bespotting van zijn beruchte hebzucht, gesmolten goud in de mond gieten. Zonder Crassus als stabiliserend tegenwicht blijft er van het Eerste Triumviraat nog maar één vraag over: wie van de twee overgebleven mannen zal de ander uiteindelijk opzijzetten?" },
+  // ---- Hoofdstuk 19 — Griekse vertakkingen (Athene/Sparta) ----
+  codex_melische_dialoog: { cat:"geschiedenis", titel:"De Melische Dialoog",
+    tekst:"Melos, een klein eiland dat neutraal wil blijven, weigert zich bij de Delisch-Attische Zeebond aan te sluiten. In 416 v.Chr. stuurt Athene gezanten die, volgens Thucydides' beroemde weergave, elk beroep op rechtvaardigheid van tafel vegen: 'de sterken doen wat ze kunnen, de zwakken dulden wat ze moeten.' Melos weigert alsnog te capituleren. Athene belegert het eiland, doodt na de val alle volwassen mannen en verkoopt vrouwen en kinderen als slaaf — een van de meest besproken wreedheden van de hele oorlog, en een die Athene's eigen retoriek over 'vrijheid verdedigen' openlijk tegenspreekt." },
+  codex_hermai_schandaal: { cat:"geschiedenis", titel:"Het Hermai-schandaal",
+    tekst:"Op de vooravond van de Siciliaanse expeditie worden in heel Athene de hermai — heilige grenspalen met het hoofd van Hermes, bedoeld om geluk te brengen aan wie vertrekt — moedwillig vernield. Alkibiades, de drijvende kracht achter de expeditie, wordt beschuldigd, deels op basis van geruchten over godslasterlijke privéfeestjes. In plaats van zich in Athene te laten berechten — waar zijn vijanden hem al hebben veroordeeld nog voor het proces begint — vlucht hij, onderweg naar Sicilië, naar de vijand: Sparta." },
+  codex_sicilische_expeditie: { cat:"geschiedenis", titel:"De Siciliaanse Ramp",
+    tekst:"Zonder Alkibiades' vindingrijkheid voert de voorzichtige, aarzelende Nicias het bevel over de Siciliaanse expeditie — een ramp die zich langzaam voltrekt: een mislukt beleg van Syracuse, een maansverduistering die Nicias' bijgelovige aarzeling verlengt op het slechtst denkbare moment, en uiteindelijk de volledige vernietiging van de Atheense vloot en het landleger. Overlevenden eindigen als slaven in de steengroeven van Syracuse, waar velen sterven van honger, dorst en blootstelling. Athene verliest in één klap een generatie aan burgers en schepen." },
+  codex_aegospotami: { cat:"geschiedenis", titel:"Aegospotami: het Einde van de Vloot",
+    tekst:"In 405 v.Chr. verrast de Spartaanse admiraal Lysander de Atheense vloot terwijl die onvoorzichtig aan land ligt bij Aegospotami — Alkibiades, toen al opnieuw in ongenade, had de Atheense bevelhebbers nog gewaarschuwd voor een veiligere ankerplaats, maar werd weggestuurd. Vrijwel de hele vloot wordt zonder échte zeeslag buitgemaakt of vernietigd. Zonder vloot kan Athene niet langer graan invoeren; de stad wordt uitgehongerd tot overgave. Sparta laat de Lange Muren tussen Athene en Piraeus afbreken op de klanken van fluitmuziek — een vernedering die met opzet feestelijk wordt aangekleed." },
+  codex_dertig_tirannen: { cat:"geschiedenis", titel:"De Dertig Tirannen",
+    tekst:"Na de overgave installeert Sparta in Athene een marionettenregering van dertig door Sparta gesteunde oligarchen, aangevoerd door Critias — ooit zelf leerling van Socrates. Wat begint als een 'herstel van orde' ontaardt binnen maanden in een schrikbewind: politieke tegenstanders en rijke burgers (om hun bezittingen) staan op lijsten en worden zonder proces gedood, families verscheurd, duizenden verdreven — een regelrechte echo van Sulla's proscripties, ditmaal in Griekse vorm. Wanneer Critias Socrates beveelt om, samen met vier anderen, de onschuldige Leon van Salamis te arresteren voor executie, weigert Socrates simpelweg — en overleeft dat alleen omdat de Dertig kort daarna zelf ten val komen." },
+  codex_alkibiades_dood: { cat:"geschiedenis", titel:"Alkibiades' Laatste Vlucht",
+    tekst:"Na Aegospotami vlucht Alkibiades, inmiddels door bijna iedereen gewantrouwd, naar een afgelegen fort in Perzisch gebied. Daar wordt hij, in 404 v.Chr., 's nachts overvallen door onbekende moordenaars — historici vermoeden een samenspanning tussen Sparta, de Perzische satraap en Athene's nieuwe machthebbers, die allemaal wel baat hadden bij zijn dood. Hij sterft vechtend, in zijn nachthemd, tegen een overmacht die geen van zijn vroegere bondgenoten meer was." },
+  codex_democratie_hersteld: { cat:"geschiedenis", titel:"Democratie Hersteld",
+    tekst:"Binnen een jaar wordt het schrikbewind van de Dertig Tirannen omvergeworpen door verzetsstrijders onder Thrasybulus, en herstelt Athene zijn democratie — verzwakt, ontvolkt, zijn rijk voorgoed kwijt, maar politiek weer zichzelf. Sparta geniet zijn overwinning nog geen generatie: binnen enkele decennia breekt Thebe, onder de briljante generaal Epaminondas, Sparta's eigen militaire overmacht voorgoed — het patroon van bondgenoten die uiteenvallen zodra de gemeenschappelijke vijand verdwijnt, herhaalt zich gewoon opnieuw, ditmaal met Sparta zelf als slachtoffer." },
+  // ---- Hoofdstuk 19 — Latijnse vertakkingen (Caesar/Pompeius) ----
+  codex_rubicon: { cat:"geschiedenis", titel:"De Rubicon",
+    tekst:"De Rubicon is een klein riviertje dat de grens vormt tussen Gallia Cisalpina (waar Caesar als provinciebestuurder legitiem gezag heeft) en Italië zelf (waar geen enkele generaal met een leger mag komen zonder pleger van hoogverraad te zijn). Wanneer de senaat weigert Caesar tegelijk met Pompeius te laten aftreden, steekt Caesar in 49 v.Chr. de rivier over met zijn Dertiende Legioen — 'alea iacta est', de teerling is geworpen, zou hij hebben gezegd. Er is vanaf dat moment geen weg terug." },
+  codex_pharsalus: { cat:"geschiedenis", titel:"Pharsalus",
+    tekst:"Bij Pharsalus in Griekenland (48 v.Chr.) staat Pompeius' numeriek sterkere leger tegenover Caesars kleinere, maar veel ervarener troepen. Caesar doorziet Pompeius' plan om zijn cavalerie de Caesariaanse flank te laten omsingelen, en verstopt een geheime vierde linie infanterie die de aanvallende ruiters — veel jonge, onervaren Romeinse edelen — met speerstoten in het gezicht op de vlucht jaagt. Pompeius' leger stort in; hijzelf vlucht, eerst te paard, dan te voet, dan per schip, met nog maar een handvol getrouwen." },
+  codex_pompeius_dood_egypte: { cat:"geschiedenis", titel:"Pompeius' Dood in Egypte",
+    tekst:"Pompeius zoekt zijn toevlucht bij de jonge farao Ptolemaeus XIII, die hoopt Caesars gunst te winnen door zijn rivaal uit de weg te ruimen. Terwijl zijn eigen vrouw vanaf het schip toekijkt, wordt Pompeius bij het aan land gaan neergestoken door voormalige eigen officieren, nu in Egyptische dienst. Wanneer Caesar enkele dagen later in Alexandrië arriveert en Pompeius' afgehakte hoofd als geschenk krijgt aangeboden, huilt hij naar verluidt bij de aanblik — en laat de moordenaars alsnog terechtstellen." },
+  codex_caesar_clementia: { cat:"geschiedenis", titel:"Caesars Clementia",
+    tekst:"Anders dan Sulla veertig jaar eerder kiest Caesar na zijn overwinning bewust niet voor proscripties en wraak, maar voor clementia — genade, publiekelijk geëtaleerd als politiek programma. Vrijwel iedereen die tegen hem vocht, inclusief Marcus Junius Brutus (zoon van Servilia, met wie Caesar zelf ooit jarenlang een verhouding had) en Gaius Cassius Longinus, krijgt gratie en mag terugkeren naar Rome, vaak zelfs met ambten en eer. Het is een gok: genade wint geen automatische loyaliteit, en een aantal van de mannen die hij spaart, zullen dat later bewijzen." },
+  codex_cato_utica: { cat:"geschiedenis", titel:"Cato's Zelfmoord in Utica",
+    tekst:"Marcus Porcius Cato, Caesars principieelste tegenstander, vlucht na Pharsalus naar Afrika om de strijd voort te zetten. Wanneer ook die laatste weerstand instort en Caesars genade voor de deur staat, weigert Cato die genade te aanvaarden — liever sterven als vrij man dan leven dankzij de clementia van een man die hij als tiran beschouwt. Hij pleegt zelfmoord in Utica, en wordt na zijn dood door tegenstanders van het keizerschap eeuwenlang vereerd als het symbool van onbuigzame republikeinse deugd." },
+  codex_iden_van_maart: { cat:"geschiedenis", titel:"De Iden van Maart",
+    tekst:"Op 15 maart 44 v.Chr. wordt Caesar, inmiddels dictator perpetuo (dictator voor het leven), in de Senaat omsingeld door zo'n twintig samenzweerders en met drieëntwintig dolksteken vermoord. Onder de moordenaars bevinden zich Marcus Brutus en Cassius — beiden ooit door Caesar zelf gratie verleend na Pharsalus. Volgens de overlevering richt Caesar, wanneer hij ook Brutus zijn dolk ziet trekken, zijn laatste woorden ('Kai su, teknon' — 'ook jij, mijn kind', in het Grieks, niet het Latijnse 'Et tu, Brute') tot de man die hij ooit spaarde." },
+  codex_thucydides_balling: { cat:"geschiedenis", titel:"Thucydides: de Balling die Alles Opschreef",
+    tekst:"Thucydides is zelf Atheens generaal wanneer hij in 424 v.Chr. de strijd om Amfipolis verliest van de Spartaanse generaal Brasidas — een nederlaag die hem twintig jaar verbanning uit Athene oplevert. Die ballingschap wordt zijn ongeluk én zijn kans: zonder functie of partij reist hij vrijelijk tussen beide kampen, ondervraagt ooggetuigen aan Spartaanse én Atheense zijde, en schrijft zijn Geschiedenis van de Peloponnesische Oorlog — een verslag dat, anders dan Herodotos' verhalende stijl, streeft naar strikte feitelijkheid en tot op vandaag geldt als een van de eerste echte werken van geschiedschrijving." },
+  codex_antonius_lijkrede: { cat:"geschiedenis", titel:"Antonius' Lijkrede",
+    tekst:"Bij Caesars crematie op het Forum houdt Marcus Antonius, zijn trouwste medeconsul, een lijkrede die feilloos berekend is: hij leest Caesars testament voor (met de royale erfenis die de dictator aan gewone Romeinse burgers naliet), toont het met dolksteken doorboorde gewaad, en laat de emoties van de menigte oplopen tot woede. Het volk keert zich zo hevig tegen de samenzweerders dat Brutus en Cassius, nog geen dag eerder gevierd als bevrijders, Rome halsoverkop moeten ontvluchten." },
+  codex_octavianus_erfgenaam: { cat:"geschiedenis", titel:"Octavianus: de Onverwachte Erfgenaam",
+    tekst:"Caesars testament bevat een verrassing die zelfs Antonius niet had zien aankomen: niet hij, maar de negentienjarige Gaius Octavius — zoon van Atia, Caesars eigen nicht, op dat moment ver weg studerend in Apollonia — wordt tot geadopteerde zoon en hoofderfgenaam benoemd. Vanaf dat moment heet hij, naar Romeins gebruik, Gaius Julius Caesar Octavianus. Niemand in Rome beseft nog hoezeer die ene naamswijziging de volgende decennia zal bepalen." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3077,6 +3134,8 @@ const SP_SOUVENIRS = {
     caption:"Een verroeste bronzen speerpunt uit de pas van Thermopylae, naast een klein aardewerken kruikje zoals Hannibal ze liet vullen met giftige slangen — twee overwinningen die eigenlijk verliezen waren, en één verlies dat honderden jaren als overwinning wordt herinnerd." },
   souvenir_wie_betaalt_bepaalt: { nm:"Een Ostrakon en een Proscriptielijst", icon:"⚖️", img:"souvenir_wie_betaalt_bepaalt.png",
     caption:"Een potscherf met een gekrast Atheens naam erop, naast een gedeeltelijk verkoold fragment van een Romeinse proscriptielijst — twee manieren om een naam voorgoed uit de openbaarheid te schrappen, met eeuwen en een zee ertussen." },
+  souvenir_bondgenoten_verscheurd: { nm:"Een Gebroken Lans en een Senaatsdolk", icon:"🗡️", img:"souvenir_bondgenoten_verscheurd.png",
+    caption:"Een in tweeën gebroken speerpunt, zoals bondgenoten die ooit samen tegen Perzië vochten, naast een kleine, ongebruikte dolk — het soort dat in de Senaat op de Iden van maart al te vaak wél werd gebruikt." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -3942,6 +4001,16 @@ const SP_VOCAB_ENTRIES = {
   latijn_dictator:   { taal:"latijn", woord:"dictator, dictatoris", betekenis:"dictator" },
   latijn_proscriptio:{ taal:"latijn", woord:"proscriptio, proscriptionis", betekenis:"proscriptie, vogelvrijverklaring" },
   latijn_tribunus:   { taal:"latijn", woord:"tribunus, tribuni", betekenis:"volkstribuun" },
+  // ---- Hoofdstuk 19 "Bondgenoten, Verscheurd" — nieuwe contextwoorden ----
+  grieks_loimos:    { taal:"grieks", woord:"λοιμός", transcript:"loimós", betekenis:"pest, plaag" },
+  grieks_symmachos: { taal:"grieks", woord:"σύμμαχος", transcript:"sýmmachos", betekenis:"bondgenoot" },
+  grieks_prodotes:  { taal:"grieks", woord:"προδότης", transcript:"prodótēs", betekenis:"verrader" },
+  latijn_pestis:    { taal:"latijn", woord:"pestis, pestis", betekenis:"pest, plaag" },
+  latijn_exsilium:  { taal:"latijn", woord:"exsilium, exsilii", betekenis:"ballingschap" },
+  latijn_proditio:  { taal:"latijn", woord:"proditio, proditionis", betekenis:"verraad" },
+  grieks_demokratia:{ taal:"grieks", woord:"δημοκρατία", transcript:"dēmokratía", betekenis:"democratie" },
+  latijn_clementia: { taal:"latijn", woord:"clementia, clementiae", betekenis:"genade, zachtmoedigheid" },
+  latijn_caedes:    { taal:"latijn", woord:"caedes, caedis", betekenis:"moord, slachting" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -23094,19 +23163,983 @@ TEXT:
 Een nieuwe stolp vult zich: een gekraste potscherf naast een verkoold fragment van een lijst met namen erop. "Twee manieren om iemand voorgoed uit de openbaarheid te schrappen," zegt de Boodschapper zacht, "eeuwen en een zee ertussen — en toch griezelig hetzelfde patroon."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH18_WORDT_VERVOLGD
+* Luister naar het volgende verhaal -> CH19_000
+
+END
+`.trim();
+
+/* ---- Hoofdstuk 19 "Bondgenoten, Verscheurd" — GEBOUWD EN GEKOPPELD
+   (2026-08-10): CH18_MUSEUM_00 routeert nu naar CH19_000, SP_SCENES in
+   singleplayer.js bevat SP_CH19_CNS. Het oude tijdelijke eindpunt
+   CH18_WORDT_VERVOLGD is verwijderd — CH19_WORDT_VERVOLGD is nu het
+   actieve tijdelijke eindpunt. Volledige bouwgeschiedenis per etappe (het
+   TWEE-PERSPECTIEVEN-keuzemoment per spoor met permanente FLAGs
+   `ch19_gre_zijde`/`ch19_lat_zijde` naar het `ch9_zijde`-patroon van
+   Hoofdstuk 9, de vier vertakkingen, alle payoff-cameo's, en de gedeelde
+   afsluiting) staat in Chronica.md §7.72 t/m §7.78 — niet hier herhaald
+   om deze code-comment kort te houden. ---- */
+const SP_CH19_CNS = `
+=== SCENE: CH19_000 ===
+
+TITLE:
+Bondgenoten, Verscheurd
+
+TEXT:
+"[[Ecce|zie hier]] — bondgenoten die samen wonnen, blijken zelden bondgenoten te blijven zodra de gemeenschappelijke vijand verdwijnt," zegt de Boodschapper van Chronos. "Twee keer zie je dat deze keer gebeuren: een bondgenootschap dat ooit tegen Perzië streed, verscheurt nu zichzelf van binnenuit. Drie mannen die ooit samen Rome onderling verdeelden, verliezen die balans zodra er nog maar twee van over zijn."
+
+Ze kijkt je aan, iets langer dan gebruikelijk. "Dit keer vraag ik niet alleen om toe te kijken. Dit keer vraag ik je, aan beide kanten van het verhaal, ook echt een kant te kiezen — zoals ooit bij de muren van Troje. En net als toen zal die keuze niet bij dit hoofdstuk alleen blijven."
+
+VOCAB:
+grieks_symmachos, grieks_polemos, latijn_populus, latijn_senatus, latijn_exsilium
+
+CHOICES:
+* Volg de Griekse bondgenoten die uiteenvallen [REQUIRE:taalspoor!=latijn] -> CH19_GRE_001
+* Volg de Romeinse bondgenoten die uiteenvallen [REQUIRE:taalspoor=latijn] -> CH19_LAT_001
 
 END
 
-=== SCENE: CH18_WORDT_VERVOLGD ===
+=== SCENE: CH19_GRE_001 ===
+
+TITLE:
+De Eerste Vonk
+
+TEXT:
+Athene steunt het eiland Corcyra in een conflict met Corinthe — zelf geen lid van de Delisch-Attische Zeebond, maar wél een bondgenoot van Sparta, dat zich hierdoor bedreigd voelt. Kort daarna vaardigt Athene het Megarische Decreet uit: Megara, eveneens een Spartaanse bondgenoot, wordt uitgesloten van elke haven en markt binnen het hele Atheense machtsgebied — economische wurging zonder een enkel zwaard te trekken.
+
+In Sparta waarschuwt koning Archidamus zijn eigen volksvergadering voor een oorlog die niemand snel zal winnen. Hij wordt overstemd door de oorlogszuchtige stemmen. In 431 v.Chr. verklaart Sparta de oorlog.
+
+CODEX:
+codex_eerste_vonk_peloponnesische_oorlog
+
+CHOICES:
+* Zie hoe Athene zich op deze oorlog voorbereidt -> CH19_GRE_002
+
+END
+
+=== SCENE: CH19_GRE_002 ===
+
+TITLE:
+Achter de Lange Muren
+
+TEXT:
+Perikles' strategie is even simpel als rigoureus: vermijd een veldslag tegen Sparta's superieure landleger, trek de hele bevolking van Attica achter de Lange Muren tussen Athene en de haven Piraeus, en gebruik de vloot om de kust te teisteren en de aanvoerlijnen open te houden. Zolang de zee open blijft, kan Sparta de stad niet uithongeren.
+
+Maar de overvolle, opeengepakte stad wordt een broeinest voor een verwoestende plaag. Perikles verliest zijn beide wettige zonen aan de ziekte en sterft er zelf, in 429 v.Chr., ook aan. Zijn eigen strategie overleeft hem — de man die haar bedacht, niet.
+
+CODEX:
+codex_pest_van_athene
+
+VOCAB:
+grieks_loimos, latijn_pestis
+
+CHOICES:
+* Zie wie er, tussen de gewone hoplieten, meevecht -> CH19_GRE_002B
+
+END
+
+=== SCENE: CH19_GRE_002B ===
+
+TITLE:
+De Balling die Alles Opschreef
+
+TEXT:
+Onder de Atheners die de pest overleven, zit ook een jonge generaal: Thucydides, zelf besmet en weer genezen — een ervaring die hij later, met een clinische precisie die niemand voor hem had geëvenaard, tot in detail zal beschrijven. Een paar jaar later verliest hij, als bevelhebber, de strijd om Amfipolis van de Spartaanse generaal Brasidas — een nederlaag die hem twintig jaar verbanning oplevert.
+
+Die ballingschap wordt zijn ongeluk én zijn kans: zonder functie in Athene reist hij vrijelijk tussen beide kampen, ondervraagt ooggetuigen aan Spartaanse én Atheense zijde, en schrijft het verslag van deze oorlog dat, eeuwen later, nog altijd geldt als het eerlijkste dat er ooit over is geschreven — precies omdat hij, als geen ander, wist hoe het voelde om aan de verliezende kant te staan.
+
+CODEX:
+codex_thucydides_balling
+
+CHOICES:
+* Zie wie er, tussen de gewone hoplieten, meevecht -> CH19_GRE_003
+
+END
+
+=== SCENE: CH19_GRE_003 ===
+
+TITLE:
+Twee Soldaten in de Gelederen
+
+TEXT:
+Ook Socrates dient als burger, zwaarbewapend hopliet tussen duizenden anderen. Bij Potidaea, en jaren later bij Delium, valt hij op door een ongewone, haast onverstoorbare kalmte onder vuur — zijn jonge medesoldaat en vriend Alkibiades vertelt later dat Socrates hem gewond van het slagveld heeft gered, zonder ook maar een moment in paniek te raken terwijl de rest van het leger vlucht.
+
+Hun band, gesmeed in de strijd, zal Alkibiades voor de rest van zijn leven blijven vormen — al zal hij niet elke les die Socrates hem probeert bij te brengen, ook echt ter harte nemen.
+
+CODEX:
+codex_socrates_alkibiades_slagveld
+
+CHOICES:
+* Kies een kant in deze oorlog -> CH19_GRE_004
+
+END
+
+=== SCENE: CH19_GRE_004 ===
+
+TITLE:
+Muren of Speren?
+
+TEXT:
+"[[Ecce|zie hier]] — Athene en Sparta vechten allebei voor iets dat ze zelf gelijk noemen," zegt de Boodschapper. "Een rijk dat zegt bondgenoten te beschermen, tegenover een bond die zegt vrijheid te verdedigen tegen precies dat rijk. Ik vraag het je nu net zo direct als destijds bij Troje."
+
+"Sta je aan de kant van Athene — de stad achter haar muren, haar vloot, haar overtuiging dat leiding nu eenmaal een prijs heeft? Of aan de kant van Sparta — de bond die zegt te vechten voor de vrijheid van iedereen die zich niet langer wil laten leiden?"
+
+"Dat ik je überhaupt beide kanten eerlijk kan laten zien," voegt ze eraan toe, "heb je aan diezelfde balling te danken die je zonet ontmoette. Zonder Thucydides' twintig jaar aan de zijlijn, pratend met beide legers, zou dit verhaal maar half bestaan."
+
+Ze wacht even. "Wat je nu kiest, is — net als bij Troje — niet alleen voor dit hoofdstuk. Ik zal je later niet meer de andere kant laten zien."
+
+CHOICES:
+* Kies de kant van Athene -> CH19_GRE_ATH_001
+* Kies de kant van Sparta -> CH19_GRE_SPA_001
+
+END
+
+=== SCENE: CH19_LAT_001 ===
+
+TITLE:
+Het Eerste Triumviraat
+
+TEXT:
+Na Spartacus' nederlaag smeden Caesar, Pompeius en Crassus in het geheim een informele machtsdeal — geen officieel ambt, maar een afspraak die de facto de Republiek bestuurt. Elk krijgt wat hij wil: Pompeius eindelijk landverdeling voor zijn veteranen, Crassus fiscale gunsten voor zijn zakenvrienden, Caesar het consulaat en daarna een langdurig, riant bevel over Gallië.
+
+Drie mannen die Rome onderling verdelen — zolang de balans tussen hen standhoudt.
+
+CODEX:
+codex_eerste_triumviraat
+
+VOCAB:
+latijn_proditio, grieks_prodotes
+
+CHOICES:
+* Zie wat Crassus met zijn deel van de macht doet -> CH19_LAT_002
+
+END
+
+=== SCENE: CH19_LAT_002 ===
+
+TITLE:
+Crassus' Laatste Gok
+
+TEXT:
+Crassus is, ondanks zijn rijkdom en zijn aandeel in het Triumviraat, altijd de minst beroemde van de drie: overschaduwd door Pompeius' krijgsroem sinds Spartacus, en inmiddels ook door Caesars steeds grotere overwinningen in Gallië. Zonder enige directe aanleiding, puur uit persoonlijke ambitie naar zijn eigen militaire glorie, begint hij in 53 v.Chr. een oorlog tegen het verre Parthische Rijk — een rijk dat Rome part noch deel had aangedaan.
+
+CODEX:
+codex_crassus_parthen
+
+CHOICES:
+* Zie hoe die veldtocht afloopt -> CH19_LAT_003
+
+END
+
+=== SCENE: CH19_LAT_003 ===
+
+TITLE:
+Carrhae
+
+TEXT:
+Bij Carrhae verslaat de lichte Parthische cavalerie — beroemd om het "Parthische schot", achterwaarts gericht en afgevuurd tijdens een schijnbare vlucht — Crassus' zware legioenen volledig. Crassus zelf wordt gedood tijdens onderhandelingen die uit de hand lopen; de overlevering wil dat de Parthen hem, ter bespotting van zijn beruchte hebzucht, gesmolten goud in de mond gieten.
+
+Zonder Crassus als stabiliserend tegenwicht blijft er van het Eerste Triumviraat nog maar één vraag over: wie van de twee overgebleven mannen zal de ander uiteindelijk opzijzetten?
+
+CODEX:
+codex_carrhae_crassus_dood
+
+CHOICES:
+* Zie wat er, ondertussen, elders gebeurt -> CH19_LAT_004
+
+END
+
+=== SCENE: CH19_LAT_004 ===
+
+TITLE:
+Een Andere Grens
+
+TEXT:
+Even mengt een andere stem zich in het verhaal — niet die van een Romein, maar die van de Boodschapper van Chronos zelf. "Terwijl Crassus in het oosten zijn ondergang tegemoetrijdt, trekt Caesar zelf, ver naar het noorden, van overwinning naar overwinning door Gallië — hij steekt zelfs twee keer over naar het mistige eiland Britannia, en waagt zich uiteindelijk over de Rijn. Dat verhaal is minstens zo groot als dit. Maar het is niet het verhaal van vandaag. Een andere scheur, een andere keer, zal het je laten zien."
+
+De stem vervaagt weer, en het verhaal in Rome zelf gaat verder. De senaat, gealarmeerd door Caesars groeiende macht en populariteit in Gallië, beweegt onder aanvoering van optimates als Cato om hem terug te roepen — met of zonder zijn leger.
+
+CHOICES:
+* Kies een kant in wat hierna komt -> CH19_LAT_005
+
+END
+
+=== SCENE: CH19_LAT_005 ===
+
+TITLE:
+Rubicon of Rome?
+
+TEXT:
+"[[Ecce|zie hier]] — net als bij de Grieken, vraag ik het je nu ook hier," zegt de Boodschapper. "Twee mannen die ooit samen Rome verdeelden, staan op het punt tegenover elkaar te staan. Sta je aan de kant van Caesar — de generaal die zijn leger, en zijn eigen soldaten, nooit in de steek laat? Of aan de kant van Pompeius en de senaat — Cicero, Cato, en straks ook mannen als Brutus en Cassius, die menen dat geen enkele generaal groter mag worden dan de Republiek zelf?"
+
+Ze wacht even. "Wat je nu kiest, is — net als bij Troje, net als zonet bij Athene en Sparta — niet alleen voor dit hoofdstuk. Ik zal je later niet meer de andere kant laten zien."
+
+CHOICES:
+* Kies de kant van Caesar -> CH19_LAT_CAE_001
+* Kies de kant van Pompeius (en de senaat) -> CH19_LAT_POM_001
+
+END
+
+=== SCENE: CH19_GRE_ATH_001 ===
+
+TITLE:
+Athene, na Perikles
+
+TEXT:
+Zonder Perikles' matigende hand grijpt Kleon, een felle en populistische volksleider, steeds meer invloed — hij pleit voor een hardere oorlogvoering dan Perikles ooit had voorgesteld. Jij kiest, terwijl de oorlog voortsleept, de kant van Athene: het rijk dat zegt zijn bondgenoten te beschermen, ook al voelt "bescherming" voor sommige van die bondgenoten steeds meer als iets anders.
+
+FLAG:
+ch19_gre_zijde=athene
+
+CHOICES:
+* Zie hoe ver die logica reikt, tegenover een eiland dat niet mee wil doen -> CH19_GRE_ATH_002
+
+END
+
+=== SCENE: CH19_GRE_ATH_002 ===
+
+TITLE:
+De Melische Dialoog
+
+TEXT:
+Melos, een klein eiland, wil neutraal blijven — geen lid worden van de Zeebond, geen partij kiezen. Atheense gezanten leggen het eiland een simpel ultimatum voor: sluit je aan, betaal, of word veroverd. Toe geven aan Melos' verlangen naar onafhankelijkheid zou, zeggen de gezanten onomwonden, andere bondgenoten op ideeën brengen.
+
+DIALOGUE:
+Atheense gezant
+Recht is alleen een overweging tussen gelijken in macht. Tussen de sterken en de zwakken geldt maar één regel: de sterken doen wat ze kunnen, de zwakken dulden wat ze moeten.
+
+Melos weigert. Athene belegert het eiland. Een oudere stadsbewoner mompelt dat de Volksvergadering dit soort stemming al eens eerder hield, jaren terug, over een opstandige bondgenoot met een naam die begint met een M — toen draaide Athene op het allerlaatste moment nog om. Deze keer, merkt hij droogjes op, lijkt niemand haast te maken met een tweede schip.
+
+CODEX:
+codex_melische_dialoog
+
+CHOICES:
+* "Onze veiligheid hangt af van wat andere bondgenoten hiervan leren." -> CH19_GRE_ATH_002B
+* Zwijg, en laat het beleg voor zich spreken. -> CH19_GRE_ATH_002B
+
+END
+
+=== SCENE: CH19_GRE_ATH_002B ===
+
+TITLE:
+Wat Athene met Melos Doet
+
+TEXT:
+Na de val van Melos voert Athene het ultimatum tot de letter uit: alle volwassen mannen worden gedood, vrouwen en kinderen als slaaf verkocht. Onder de stemmen die in de Volksvergadering vóór deze harde lijn pleitten, klinkt — tot ongemak van sommige oudere burgers — ook die van een jonge, welbespraakte man die nog niet zo lang geleden zij aan zij met Socrates bij Delium vocht: Alkibiades.
+
+RELATION:
+alkibiades=-1
+
+VOCAB:
+grieks_demokratia, latijn_caedes
+
+CHOICES:
+* Zie wat diezelfde Alkibiades vervolgens voorstelt -> CH19_GRE_ATH_003
+
+END
+
+=== SCENE: CH19_GRE_ATH_003 ===
+
+TITLE:
+Sicilië, en een Schandaal
+
+TEXT:
+Alkibiades' volgende plan is nog ambitieuzer: een grote expeditie naar het rijke Sicilië, om Syracuse te veroveren en Athenes rijk te verdubbelen. De Volksvergadering, verblind door de belofte van nog meer roem en rijkdom, stemt in — ondanks Nicias' gewaarschuwde tegenstand.
+
+De avond voor de vloot uitvaart, worden overal in de stad de hermai — heilige grenspalen, bedoeld om geluk te brengen — moedwillig vernield. Alkibiades wordt beschuldigd. In plaats van in Athene terecht te staan voor rechters die al besloten hebben, vlucht hij onderweg naar Sicilië naar de vijand: Sparta.
+
+CODEX:
+codex_hermai_schandaal
+
+RELATION:
+alkibiades=-1
+
+CHOICES:
+* Vaar zelf mee met de vloot naar Sicilië -> CH19_GRE_ATH_003B_MEE
+* Blijf achter in Athene -> CH19_GRE_ATH_003B_GEBLEVEN
+
+END
+
+=== SCENE: CH19_GRE_ATH_003B_MEE ===
+
+TITLE:
+Aan Boord
+
+TEXT:
+Je kiest voor het avontuur en scheept in bij de vloot die naar Sicilië vaart — de grootste en duurste expeditie die Athene ooit heeft uitgerust. Het nieuws van Alkibiades' vlucht bereikt jullie pas onderweg, ergens tussen Korkyra en de Italiaanse kust: de man die dit alles bedacht, vaart al niet meer met jullie mee.
+
+FLAG:
+ch19_gre_ath_sicilie=meegevaren
+
+CHOICES:
+* Zie hoe de expeditie zonder hem vergaat -> CH19_GRE_ATH_004
+
+END
+
+=== SCENE: CH19_GRE_ATH_003B_GEBLEVEN ===
+
+TITLE:
+Achtergebleven
+
+TEXT:
+Je kiest ervoor in Athene te blijven — dichter bij het nieuws, verder van het gevaar. Vanaf de Piraeus zie je de vloot uitvaren, zeilen tot aan de horizon, zonder te weten dat je haar nooit compleet zult zien terugkeren.
+
+FLAG:
+ch19_gre_ath_sicilie=gebleven
+
+CHOICES:
+* Zie hoe de expeditie het zonder Alkibiades vergaat -> CH19_GRE_ATH_004
+
+END
+
+=== SCENE: CH19_GRE_ATH_004 ===
+
+TITLE:
+De Steengroeven van Syracuse
+
+TEXT:
+Zonder Alkibiades' vindingrijkheid voert de voorzichtige Nicias het bevel — een ramp die zich langzaam voltrekt. Het beleg van Syracuse mislukt, een maansverduistering verlengt Nicias' bijgelovige aarzeling op het slechtst denkbare moment, en uiteindelijk wordt de hele Atheense vloot en het landleger vernietigd. Overlevenden eindigen als slaaf in de steengroeven van Syracuse, waar velen sterven van honger en dorst.
+
+Athene verliest in één klap een hele generatie aan burgers en schepen — en toch vecht de stad, koppig, door.
+
+CODEX:
+codex_sicilische_expeditie
+
+CHOICES:
+* Zie wat er van de verrader Alkibiades wordt -> CH19_GRE_ATH_005
+
+END
+
+=== SCENE: CH19_GRE_ATH_005 ===
+
+TITLE:
+Een Verrader Komt Terug
+
+TEXT:
+In Sparta adviseert Alkibiades de vijand van Athene met verbijsterende vindingrijkheid — tot hij ook daar in ongenade valt (een affaire met de vrouw van de Spartaanse koning helpt niet) en vervolgens naar Perzië vlucht. Vandaar weet hij, tegen alle logica in, zijn terugkeer naar Athene te onderhandelen: de stad heeft zijn talent te hard nodig om zijn verraad nog te laten wegen. Als vlootcommandant boekt hij enkele verrassende overwinningen die Athene's hoop weer even doen opleven.
+
+RELATION:
+alkibiades=+1
+
+CHOICES:
+* Zie of dat geluk standhoudt -> CH19_GRE_ATH_006
+
+END
+
+=== SCENE: CH19_GRE_ATH_006 ===
+
+TITLE:
+Aegospotami
+
+TEXT:
+Bij Aegospotami waarschuwt Alkibiades, alweer half in ongenade, de Atheense bevelhebbers dat hun vloot onvoorzichtig en onbeschermd aan land ligt. Ze wuiven hem weg — wat weet een verrader nu van loyaliteit? De Spartaanse admiraal Lysander verrast de vloot precies zoals Alkibiades vreesde. Vrijwel de hele Atheense marine wordt zonder echte zeeslag buitgemaakt.
+
+Zonder vloot kan Athene geen graan meer invoeren. De stad wordt uitgehongerd tot overgave. Sparta laat de Lange Muren afbreken op de klanken van fluitmuziek.
+
+CODEX:
+codex_aegospotami
+
+CHOICES:
+* Zie wat Sparta in de plaats van Athenes democratie zet -> CH19_GRE_ATH_007
+
+END
+
+=== SCENE: CH19_GRE_ATH_007 ===
+
+TITLE:
+De Dertig
+
+TEXT:
+Sparta installeert een marionettenregering van dertig door Sparta gesteunde oligarchen. Aan het hoofd staat Critias — ooit zelf leerling van Socrates. Wat begint als "herstel van orde" ontaardt binnen maanden in een schrikbewind: tegenstanders en rijke burgers (om hun bezit) staan op lijsten en worden zonder proces gedood.{ch18_proscripties_h19_echo}
+
+Wanneer Critias Socrates beveelt om, samen met vier anderen, de onschuldige Leon van Salamis te arresteren voor executie, weigert Socrates simpelweg. Hij overleeft dat alleen omdat de Dertig zelf, kort daarna, ten val komen.
+
+Onder de jonge mannen die geregeld bij Socrates over de vloer komen, staat een stille, oplettende jongen met de naam Xenofon — te jong om zelf ooit voor de Dertig te hoeven kiezen, maar oud genoeg om nooit te vergeten hoe zijn leermeester, alleen tegenover een bevel van dertig machtige mannen, gewoon nee bleef zeggen.
+
+CODEX:
+codex_dertig_tirannen
+
+RELATION:
+socrates=+1
+
+CHOICES:
+* Zie wat er van Alkibiades wordt, ver van huis -> CH19_GRE_ATH_008
+
+END
+
+=== SCENE: CH19_GRE_ATH_008 ===
+
+TITLE:
+Een Laatste Vlucht
+
+TEXT:
+Alkibiades, inmiddels door bijna iedereen gewantrouwd, vlucht naar een afgelegen fort in Perzisch gebied. Daar wordt hij, 's nachts, overvallen door onbekende moordenaars — Sparta, de Perzische satraap en Athenes nieuwe machthebbers hadden er allemaal baat bij. Hij sterft vechtend, in zijn nachthemd, tegen een overmacht die geen van zijn vroegere bondgenoten meer was.
+
+CODEX:
+codex_alkibiades_dood
+
+CHOICES:
+* Zie hoe Athene zich hierna herpakt -> CH19_GRE_ATH_009
+
+END
+
+=== SCENE: CH19_GRE_ATH_009 ===
+
+TITLE:
+Wat Overblijft
+
+TEXT:
+Binnen een jaar werpen verzetsstrijders onder Thrasybulus de Dertig omver, en herstelt Athene zijn democratie — verzwakt, ontvolkt, zijn rijk voorgoed kwijt, maar politiek weer zichzelf. Van de Zeebond die ooit tegen Perzië werd gesmeed, is niets over dan de herinnering aan een rijk dat, precies zoals de Boodschapper ooit waarschuwde, uiteindelijk aan zijn eigen gewicht bezweek.
+
+VOCAB:
+grieks_demokratia
+
+CHOICES:
+* Zie wat er, ondertussen, in Rome gebeurt -> CH19_GRE_EINDE
+
+END
+
+=== SCENE: CH19_GRE_SPA_001 ===
+
+TITLE:
+Sparta, Bevrijder
+
+TEXT:
+Jij kiest de kant van Sparta: de bond die zegt te vechten voor de vrijheid van iedereen die niet langer door Athene geleid wil worden. Koning Archidamus voert, voorzichtig maar vastberaden, herhaalde invasies van Attica uit — zonder Athenes Lange Muren en vloot ooit echt te kunnen breken, tenminste nog niet.
+
+FLAG:
+ch19_gre_zijde=sparta
+
+CHOICES:
+* Zie hoe het nieuws over een klein eiland Sparta's zaak lijkt te bevestigen -> CH19_GRE_SPA_002
+
+END
+
+=== SCENE: CH19_GRE_SPA_002 ===
+
+TITLE:
+Het Nieuws over Melos
+
+TEXT:
+Bericht bereikt Sparta en zijn bondgenoten over wat Athene met het neutrale eiland Melos heeft gedaan: een ultimatum zonder enig beroep op recht, gevolgd — na Melos' weigering — door de dood van alle volwassen mannen en de slavernij van de rest. Voor Sparta's bondgenoten is dit geen verrassing, maar een bevestiging: dit is precies het soort rijk waartegen ze zeggen te vechten.
+
+DIALOGUE:
+Een Corinthische gezant, in de Spartaanse volksvergadering
+Zie je nu wat "bondgenootschap" voor Athene werkelijk betekent? Wie hen niet als meester erkent, eindigt zoals Melos eindigde.
+
+CODEX:
+codex_melische_dialoog
+
+CHOICES:
+* Zie hoe Sparta profiteert van Athenes volgende, nog grotere fout -> CH19_GRE_SPA_003
+
+END
+
+=== SCENE: CH19_GRE_SPA_003 ===
+
+TITLE:
+Een Overloper met een Plan
+
+TEXT:
+Athene stort zich, tegen beter advies in, op een verre expeditie naar Sicilië — en verliest, na een schandaal rond vernielde godenbeelden, zijn eigen aanvoerder aan zijn eigen achterdocht. Die aanvoerder, Alkibiades, meldt zich niet lang daarna in Sparta zelf, en biedt zijn diensten aan de vijand van zijn geboortestad aan.
+
+Zijn advies is meedogenloos scherp: fortificeer Decelea, vlak bij Athene zelf, het hele jaar door in plaats van alleen 's zomers — zo snijd je de stad structureel af van zijn eigen akkers. Sparta volgt het advies, met onmiddellijk effect.
+
+RELATION:
+alkibiades=+1
+
+CHOICES:
+* Zie hoe lang deze nieuwe bondgenoot welkom blijft -> CH19_GRE_SPA_004
+
+END
+
+=== SCENE: CH19_GRE_SPA_004 ===
+
+TITLE:
+Een Overloper Twee Keer
+
+TEXT:
+Alkibiades' verblijf in Sparta eindigt net zo abrupt als het begon — een affaire met de vrouw van koning Agis zelf maakt hem daar al even onwelkom als hij ooit in Athene was. Hij vlucht opnieuw, ditmaal naar het Perzische hof, en probeert daar zowel Sparta als Athene tegen elkaar uit te spelen ten eigen voordele.
+
+Sparta heeft zijn advies inmiddels niet meer nodig: met Perzisch goud, aangeboden door de jonge prins Cyrus, bouwt de admiraal Lysander een vloot die Athene eindelijk op zee kan verslaan.
+
+RELATION:
+alkibiades=-1
+
+CHOICES:
+* Zie hoe Lysander die vloot inzet -> CH19_GRE_SPA_005
+
+END
+
+=== SCENE: CH19_GRE_SPA_005 ===
+
+TITLE:
+Aegospotami
+
+TEXT:
+Bij Aegospotami vindt Lysander de Atheense vloot onvoorzichtig en onbeschermd aan land liggend. Zijn aanval is vernietigend: vrijwel de hele Atheense marine wordt zonder echte zeeslag buitgemaakt. Zonder vloot kan Athene geen graan meer invoeren.
+
+De stad wordt uitgehongerd tot overgave. Sparta laat, tot gejuich van zijn bondgenoten, de Lange Muren tussen Athene en Piraeus afbreken — op de klanken van fluitmuziek, een vernedering met opzet feestelijk aangekleed.
+
+CODEX:
+codex_aegospotami
+
+CHOICES:
+* Zie wat Sparta met zijn overwinning doet -> CH19_GRE_SPA_006
+
+END
+
+=== SCENE: CH19_GRE_SPA_006 ===
+
+TITLE:
+Orde, Opgelegd
+
+TEXT:
+In plaats van Athene te verwoesten — sommige bondgenoten willen dat wel — installeert Sparta een bevriende regering van dertig oligarchen, aangevoerd door Critias, een Spartaanse sympathisant. Wat als "herstel van orde" wordt aangekondigd, ontaardt binnen maanden in een schrikbewind met lijsten en executies zonder proces — precies het soort tirannie waartegen Sparta zei te vechten, nu door Sparta zelf mogelijk gemaakt.{ch18_proscripties_h19_echo}
+
+Binnen een jaar wordt het regime alweer omvergeworpen door Atheense verzetsstrijders. Sparta, inmiddels vermoeid van een oorlog die niemand meer echt wint, laat het gebeuren.
+
+CODEX:
+codex_dertig_tirannen
+
+CHOICES:
+* Zie wat er van de rusteloze overloper Alkibiades wordt -> CH19_GRE_SPA_007
+
+END
+
+=== SCENE: CH19_GRE_SPA_007 ===
+
+TITLE:
+Wat Overwinning Kost
+
+TEXT:
+Alkibiades, die zowel Athene als Sparta verraden had, wordt kort na Athenes val vermoord in een afgelegen Perzisch fort — niemand claimt de daad, maar weinigen treuren. Sparta geniet zijn overwinning nog geen generatie. Binnen enkele decennia breekt Thebe, onder de briljante generaal Epaminondas, Sparta's eigen militaire overmacht voorgoed.
+
+Bondgenoten die samen winnen, blijken zelden bondgenoten te blijven zodra de gemeenschappelijke vijand verdwenen is — een les die, zo blijkt, ook voor de overwinnaar zelf geldt.
+
+CODEX:
+codex_democratie_hersteld
+
+VOCAB:
+grieks_demokratia
+
+CHOICES:
+* Zie wat er, ondertussen, in Rome gebeurt -> CH19_GRE_EINDE
+
+END
+
+=== SCENE: CH19_LAT_CAE_001 ===
+
+TITLE:
+Alea Iacta Est
+
+TEXT:
+Jij kiest de kant van Caesar. De senaat eist dat hij zijn leger ontbindt terwijl Pompeius, zijn rivaal, zijn eigen troepen mag behouden — een voorstel dat Caesar als een openlijke valstrik beschouwt. Aan de oever van een klein riviertje, de Rubicon, spreekt hij de woorden die de Republiek voorgoed zullen veranderen.
+
+DIALOGUE:
+Caesar
+Alea iacta est. De teerling is geworpen.
+
+FLAG:
+ch19_lat_zijde=caesar
+
+RELATION:
+caesar=+1
+
+CODEX:
+codex_rubicon
+
+CHOICES:
+* Zie hoe Rome op dit nieuws reageert -> CH19_LAT_CAE_002
+
+END
+
+=== SCENE: CH19_LAT_CAE_002 ===
+
+TITLE:
+Een Stad in Paniek
+
+TEXT:
+Rome reageert met paniek. Pompeius, die zelf ooit Sulla's mars op Rome had meegemaakt, kiest ervoor de stad zonder gevecht te ontruimen en zijn troepen in Griekenland te verzamelen — een beslissing die Caesar, tot zijn eigen verbazing, een Italië zonder slag om het lijf oplevert. Caesars eigen legioenen, jarenlang aan hem persoonlijk trouw gebleven dankzij Marius' oude hervorming, volgen hem zonder aarzelen de grens over.
+
+Marcus Antonius, Caesars trouwste medeconsul, blijft achter om Italië zelf te besturen terwijl Caesar de achtervolging inzet. Onder de officieren die wél meetrekken, valt een jonge, scherp observerende man op — Gaius Sallustius Crispus, ooit zelf uit de senaat gezet wegens een schandaal, nu vastbesloten zijn naam te herstellen door Caesar trouw te dienen. Jaren later zal hij zijn eigen geschiedenis schrijven over een oorlog uit Marius' tijd, tegen een koning met de naam Jugurtha.
+
+CHOICES:
+* Zie hoe de twee legers elkaar in Griekenland vinden -> CH19_LAT_CAE_003
+
+END
+
+=== SCENE: CH19_LAT_CAE_003 ===
+
+TITLE:
+Pharsalus
+
+TEXT:
+Bij Pharsalus staat Pompeius' numeriek sterkere leger tegenover Caesars kleinere, ervarener troepen. Caesar doorziet Pompeius' plan om zijn cavalerie de Caesariaanse flank te laten omsingelen, en verstopt een geheime vierde linie infanterie die de aanvallende jonge Romeinse ruiters met speerstoten in het gezicht op de vlucht jaagt. Pompeius' leger stort in.
+
+CODEX:
+codex_pharsalus
+
+CHOICES:
+* Zie waar Pompeius' vlucht hem naartoe brengt -> CH19_LAT_CAE_004
+
+END
+
+=== SCENE: CH19_LAT_CAE_004 ===
+
+TITLE:
+Een Geschenk dat Geen Vreugde Brengt
+
+TEXT:
+Pompeius vlucht naar Egypte, op zoek naar de bescherming van de jonge farao Ptolemaeus XIII. Wanneer Caesar, in achtervolging, enkele dagen later in Alexandrië aankomt, wordt hem — als geschenk, bedoeld om zijn gunst te winnen — Pompeius' afgehakte hoofd aangeboden.
+
+Caesar huilt naar verluidt bij de aanblik van de man die ooit zijn schoonzoon en bondgenoot was, en laat de moordenaars alsnog terechtstellen. Een overwinning zonder de voldoening die hij ervan had verwacht.
+
+CODEX:
+codex_pompeius_dood_egypte
+
+RELATION:
+pompeius=+1
+
+CHOICES:
+* Zie hoe Caesar met de rest van zijn vroegere vijanden omgaat -> CH19_LAT_CAE_005
+
+END
+
+=== SCENE: CH19_LAT_CAE_005 ===
+
+TITLE:
+Clementia
+
+TEXT:
+Anders dan Sulla veertig jaar eerder kiest Caesar na zijn overwinning bewust niet voor proscripties, maar voor clementia — genade, publiekelijk geëtaleerd als politiek programma. Vrijwel iedereen die tegen hem vocht krijgt gratie en mag terugkeren naar Rome, vaak zelfs met ambten en eer — onder hen Marcus Brutus, zoon van Servilia, met wie Caesar zelf ooit jarenlang een verhouding had, en Gaius Cassius Longinus. Ook Cicero, die nooit echt een soldaat was maar wel openlijk voor de senaat en Pompeius had gepleit, krijgt gratie — hij keert terug naar Rome en houdt zich, voorzichtig en met zichtbaar ongemak, weer met de politiek bezig.
+
+Cato, Caesars principieelste tegenstander, weigert diezelfde genade: liever sterven als vrij man dan leven dankzij de clementia van wie hij als tiran beschouwt. Hij pleegt zelfmoord in Utica.
+
+CODEX:
+codex_caesar_clementia, codex_cato_utica
+
+VOCAB:
+latijn_clementia
+
+RELATION:
+brutus=+1, cassius=+1, cicero=+1
+
+CHOICES:
+* Zie wat die genade Caesar uiteindelijk oplevert -> CH19_LAT_CAE_006
+
+END
+
+=== SCENE: CH19_LAT_CAE_006 ===
+
+TITLE:
+De Iden van Maart
+
+TEXT:
+Op 15 maart 44 v.Chr., inmiddels dictator voor het leven, wordt Caesar in de Senaat omsingeld door zo'n twintig samenzweerders en met drieëntwintig dolksteken vermoord. Onder hen: Brutus en Cassius, de twee mannen die hij zelf gratie had verleend na Pharsalus.
+
+DIALOGUE:
+Caesar
+Καὶ σύ, τέκνον;
+
+Ook jij, mijn kind? — in het Grieks, niet in het Latijnse "Et tu, Brute" dat de overlevering er later van maakte.
+
+CODEX:
+codex_iden_van_maart
+
+VOCAB:
+latijn_caedes
+
+RELATION:
+antonius=+1, octavianus=+1
+
+CHOICES:
+* Zie wat er, in de dagen na de moord, met Caesars erfenis gebeurt -> CH19_LAT_NASLEEP
+
+END
+
+=== SCENE: CH19_LAT_POM_001 ===
+
+TITLE:
+Voor de Republiek
+
+TEXT:
+Jij kiest de kant van Pompeius en de senaat. Cicero worstelt zichtbaar met zijn eigen keuze — hij bewondert Caesar, maar vreest nog meer wat een Republiek zonder tegenwicht tegen één man zou worden. Cato heeft geen twijfel: geen enkele generaal, hoe succesvol ook, staat boven de wet. Pompeius aanvaardt, met tegenzin, het opperbevel om "de Republiek te redden".
+
+FLAG:
+ch19_lat_zijde=pompeius
+
+RELATION:
+caesar=-1, pompeius=+1
+
+CODEX:
+codex_rubicon
+
+CHOICES:
+* Zie welke beslissing Pompeius als eerste neemt -> CH19_LAT_POM_002
+
+END
+
+=== SCENE: CH19_LAT_POM_002 ===
+
+TITLE:
+Rome Verlaten
+
+TEXT:
+Pompeius kiest, tot ontsteltenis van velen in de senaat, om Rome zonder gevecht te ontruimen: beter een strategische aftocht naar Griekenland, waar hij tijd heeft om een leger te verzamelen, dan een verdediging van een stad die toch niet te houden is tegen Caesars ervaren legioenen. Cicero volgt schoorvoetend mee; Cato reist naar Afrika om daar verzet te blijven organiseren.
+
+CHOICES:
+* Zie waar de twee legers elkaar uiteindelijk vinden -> CH19_LAT_POM_003
+
+END
+
+=== SCENE: CH19_LAT_POM_003 ===
+
+TITLE:
+Pharsalus
+
+TEXT:
+Bij Pharsalus is Pompeius' leger op papier veruit in de meerderheid. Zijn cavalerie — jonge Romeinse edelen, zelfverzekerd tot overmoedig — moet Caesars flank breken. Caesar heeft echter een geheime vierde linie infanterie achter de hand, die de aanvallende ruiters met speerstoten in het gezicht terugslaat. De cavalerie breekt, en met haar breekt het hele leger.
+
+Pompeius, die zichzelf altijd als de grootste veldheer van zijn generatie beschouwde, vlucht van zijn eigen slagveld — eerst te paard, dan te voet, dan per schip.
+
+CODEX:
+codex_pharsalus
+
+CHOICES:
+* Zie waar die vlucht hem naartoe brengt -> CH19_LAT_POM_004
+
+END
+
+=== SCENE: CH19_LAT_POM_004 ===
+
+TITLE:
+Verraden op het Strand
+
+TEXT:
+Pompeius zoekt zijn toevlucht bij de jonge farao Ptolemaeus XIII, in de hoop op Egyptische bescherming. Terwijl zijn eigen vrouw Cornelia vanaf het schip toekijkt, wordt hij bij het aan land gaan neergestoken door voormalige eigen officieren, nu in Egyptische dienst — Ptolemaeus' raadgevers hopen zo Caesars gunst te winnen.
+
+Zijn hoofd wordt dagen later aan Caesar aangeboden als geschenk. Zelfs zijn ergste vijand, blijkt al snel, had hem dit einde niet gegund.
+
+CODEX:
+codex_pompeius_dood_egypte
+
+RELATION:
+pompeius=+1
+
+CHOICES:
+* Zie wat er van Pompeius' overgebleven bondgenoten wordt -> CH19_LAT_POM_005
+
+END
+
+=== SCENE: CH19_LAT_POM_005 ===
+
+TITLE:
+Wat Overblijft van de Republiek
+
+TEXT:
+In Afrika blijft Cato onbuigzaam: wanneer ook zijn laatste verzet instort en Caesars aangeboden genade voor de deur staat, weigert hij die te aanvaarden. Hij pleegt liever zelfmoord in Utica dan te leven dankzij de clementia van een man die hij als tiran beschouwt.
+
+Brutus en Cassius kiezen anders: zij aanvaarden Caesars gratie, keren terug naar Rome, en krijgen zelfs weer ambten. Cicero trekt zich, verbitterd maar levend, terug uit de actieve politiek. Jijzelf ontkomt er evenmin aan: ook jouw naam staat op de lijst van gespaarden, en ook jij mag, zonder verdere straf, terugkeren naar een stad die nu door de man regeert tegen wie je hebt gevochten. Niet iedereen die voor de Republiek streed, sterft ervoor — maar niet iedereen die de genade aanvaardt, vergeet ook waarom hij ooit vocht.
+
+CODEX:
+codex_cato_utica
+
+VOCAB:
+latijn_clementia
+
+RELATION:
+brutus=+1, cassius=+1, cicero=+1
+
+CHOICES:
+* Zie wat die genade, jaren later, van je vraagt -> CH19_LAT_POM_005B
+
+END
+
+=== SCENE: CH19_LAT_POM_005B ===
+
+TITLE:
+De Samenzweerders Kloppen Aan
+
+TEXT:
+Jaren na Pharsalus, met Caesar inmiddels dictator voor het leven, zoeken Brutus en Cassius je in het geheim op. Ze vertrouwen je hun plan toe: Caesar moet sterven, op de Iden van maart, in de Senaat zelf. Ze rekenen op jou — een van de velen die Caesar ooit spaarde, en die daarom, denken ze, precies zoals zijzelf weet wat die genade werkelijk waard is tegenover wat er verloren ging.
+
+In de kamer ernaast wacht, zonder zich te verbergen, Porcia — Cato's eigen dochter, sinds kort Brutus' vrouw. Toen ze merkte dat haar man iets voor haar verborgen hield, sneed ze zichzelf naar eigen zeggen diep in het been om te bewijzen dat ze pijn kon verdragen zonder iets te verraden, tot Brutus haar eindelijk in vertrouwen nam. Ze knikt je kort toe — geen twijfel in haar blik, alleen ongeduld.
+
+DIALOGUE:
+Cassius
+Hij gaf ons het leven terug, dat is waar. Maar hij nam ons eerst de Republiek af om het te kunnen geven. Sta je aan onze kant, of aan de zijne?
+
+CHOICES:
+* Sluit je aan bij de samenzwering -> CH19_LAT_POM_006_MEE
+* Weiger — de genade die je kreeg, verdient geen dolk terug -> CH19_LAT_POM_006_WEIGER
+
+END
+
+=== SCENE: CH19_LAT_POM_006_MEE ===
+
+TITLE:
+De Iden van Maart
+
+TEXT:
+Op 15 maart 44 v.Chr. sta jij, samen met Brutus en Cassius — beiden ooit door Caesar zelf gespaard, net als jij — tussen de zo'n twintig samenzweerders die Caesar in de Senaat omsingelen. Je eigen hand is een van de vele die toesteken; Caesar valt na drieëntwintig steken in totaal, geen enkele op zichzelf dodelijk, allemaal samen onontkoombaar.
+
+DIALOGUE:
+Brutus, tegen de senaat, na de daad
+Niet uit haat tegen Caesar de mens, maar uit liefde voor Rome.
+
+Niet iedereen in de senaat gelooft hem. Jijzelf weet niet zeker of je het zelf wel gelooft — genade beantwoorden met een dolk is geen rekening die ooit helemaal sluitend voelt, hoe overtuigend het argument er vooraf ook uitzag.
+
+FLAG:
+ch19_lat_pom_samenzwering=mee
+
+RELATION:
+brutus=+1, cassius=+1, antonius=-1, octavianus=-1
+
+CODEX:
+codex_iden_van_maart
+
+VOCAB:
+latijn_caedes
+
+CHOICES:
+* Zie wat er, in de dagen na de moord, met Caesars erfenis gebeurt -> CH19_LAT_NASLEEP
+
+END
+
+=== SCENE: CH19_LAT_POM_006_WEIGER ===
+
+TITLE:
+De Iden van Maart
+
+TEXT:
+Je weigert. Wat Caesar je gaf, was echt — en een dolk is, hoe overtuigend Cassius' argument ook klinkt, geen manier om dat terug te betalen. Je waarschuwt hem niet; je verraadt de samenzweerders evenmin. Je blijft, ongemakkelijk, aan de zijlijn.
+
+Op 15 maart 44 v.Chr. omsingelen Brutus, Cassius en zo'n twintig anderen Caesar toch in de Senaat en steken hem drieëntwintig keer neer. Je hoort het nieuws pas achteraf, van iemand die er zelf bij was.
+
+DIALOGUE:
+Brutus, tegen de senaat, na de daad
+Niet uit haat tegen Caesar de mens, maar uit liefde voor Rome.
+
+Niet iedereen in de senaat gelooft hem. Jij weet ook niet zeker wat je ervan moet denken — dat je zelf geen dolk trok, voelt niet helemaal als onschuld, nu de man die je het leven teruggaf toch dood is.
+
+FLAG:
+ch19_lat_pom_samenzwering=geweigerd
+
+RELATION:
+antonius=+1, octavianus=+1
+
+CODEX:
+codex_iden_van_maart
+
+VOCAB:
+latijn_caedes
+
+CHOICES:
+* Zie wat er, in de dagen na de moord, met Caesars erfenis gebeurt -> CH19_LAT_NASLEEP
+
+END
+
+=== SCENE: CH19_LAT_NASLEEP ===
+
+TITLE:
+Een Lijkrede en een Testament
+
+TEXT:
+Bij Caesars crematie op het Forum houdt Marcus Antonius, zijn trouwste medeconsul, een lijkrede die feilloos berekend is: hij leest Caesars testament voor, toont het met dolksteken doorboorde gewaad, en laat de emoties van de menigte oplopen tot woede. Het volk keert zich zo hevig tegen de samenzweerders dat Brutus en Cassius, nog geen dag eerder gevierd als bevrijders, Rome halsoverkop moeten ontvluchten.
+
+Dat testament bevat nog een tweede verrassing, een die zelfs Antonius niet had zien aankomen: niet hijzelf, maar de negentienjarige Gaius Octavius wordt tot Caesars geadopteerde zoon en hoofderfgenaam benoemd. Het nieuws bereikt de jongen in Apollonia, waar hij studeert; het bereikt zijn familie in Rome nog sneller.
+
+In het huis van Atia — Caesars eigen nicht, Octavius' moeder — zit haar dochter Octavia, amper ouder dan haar broer, wanneer het bericht arriveert. Ze is de eerste die hardop zegt wat iedereen denkt.
+
+DIALOGUE:
+Octavia
+Een naam als deze is geen geschenk. Het is een uitnodiging aan iedereen die Caesar haatte, om voortaan ook mijn broer te haten. Hij is negentien, en nu al een doelwit.
+
+Atia knikt, bezorgder dan ze wil laten merken. Niemand in de kamer — Octavia zelf het minst van allemaal — vermoedt nog hoe nauw haar eigen leven ooit verstrengeld zal raken met dat van de man die zonet nog de lijkrede hield.
+
+CODEX:
+codex_antonius_lijkrede, codex_octavianus_erfgenaam
+
+RELATION:
+octavia=+1
+
+CHOICES:
+* Zie wat er, ondertussen, in Griekenland gebeurt -> CH19_LAT_EINDE
+
+END
+
+=== SCENE: CH19_LAT_EINDE ===
+
+TITLE:
+Een Republiek Zonder Republiek
+
+TEXT:
+Met Caesar dood, Pompeius al eerder gestorven en Crassus jaren geleden gesneuveld bij Carrhae, is van het Eerste Triumviraat niemand meer over. De Republiek die alle drie zeiden te dienen, is geen stap dichter bij haar oude vorm — als iets, is ze verder weg dan ooit, met een negentienjarige erfgenaam en een ambitieuze medeconsul die allebei weten dat de macht die Caesar achterliet, ergens naartoe moet.
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH19_EINDE
+
+END
+
+=== SCENE: CH19_GRE_EINDE ===
+
+TITLE:
+Een Zelfde Patroon, Elders
+
+TEXT:
+"[[Ecce|zie hier]] — je hebt gezien hoe een bondgenootschap dat ooit tegen Perzië werd gesmeed, zichzelf uiteindelijk verscheurde," zegt de Boodschapper. "Wat je niet kon zien, vanaf de kant die je koos, is dat op ditzelfde moment, duizenden kilometers verderop, drie mannen die ooit samen Rome verdeelden precies hetzelfde patroon aan het herhalen zijn."
+
+Ze kijkt je aan. "Thucydides zou het je zelf hebben verteld, als hij kon: dezelfde breuklijn, telkens opnieuw — bondgenoten die alleen bondgenoot blijven zolang de gemeenschappelijke vijand er nog is."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH19_EINDE
+* Steek over naar de Latijnse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH19_LAT_001
+
+END
+
+=== SCENE: CH19_EINDE ===
+
+TITLE:
+Wat Bondgenoten Blijven Verschuldigd
+
+TEXT:
+"[[Ecce|zie hier]] — twee bondgenootschappen, twee verraden, en jij stond er deze keer niet alleen bij te kijken," zegt de Boodschapper van Chronos. "Je koos een kant. Dat is niet zomaar een keuze die bij dit hoofdstuk blijft — net als bij Troje, zal ik onthouden wie je was toen het erop aankwam."
+
+Ze laat een stilte vallen. "Athene of Sparta. Caesar of Pompeius. Beide keuzes hebben je in contact gebracht met mensen wier eigen verhaal nog lang niet is afgelopen — Alkibiades, Perikles' erfenis, Cicero, Brutus, Cassius, en twee namen die pas net beginnen te tellen: Marcus Antonius, en de negentienjarige die nu, ergens in Apollonia, zijn nieuwe naam nog moet leren dragen. Onthoud wat je koos. Het zal terugkomen, lang voor je het verwacht."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_bondgenoten_verscheurd
+
+CHOICES:
+* Keer terug naar het Museum -> CH19_MUSEUM_00
+
+END
+
+=== SCENE: CH19_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Een nieuwe stolp vult zich: een in tweeën gebroken speerpunt naast een kleine, ongebruikte dolk. "Bondgenoten die samen wonnen," zegt de Boodschapper zacht, terwijl ze de stolp een moment bekijkt, "blijken zelden bondgenoten te blijven zodra de vijand verdwenen is. Twee keer, deze keer, in bijna hetzelfde jaar."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH19_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH19_WORDT_VERVOLGD ===
 
 TITLE:
 Tot Hier, Voorlopig
 
 TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Peloponnesische Oorlog, Caesars Burgeroorlog, Alexander, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Alexander, de Diadochen, Cicero's eigen hoofdstuk, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
 
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. Maar als je wilt wachten tot de rest er is, kun je in de tussentijd ook gewoon nog eens over dezelfde weg lopen — met een ander wapen in je hand, met andere keuzes in je hart. Geen twee reizen door dezelfde herinnering zijn ooit precies gelijk."
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En deze keer staat er nog iets vast dat je niet kunt zien: wie je koos te zijn, toen Athene tegenover Sparta stond, en toen Caesar tegenover Pompeius stond. Dat blijft ook, hoe vaak je ook terugkeert naar het begin."
 
 Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
 
