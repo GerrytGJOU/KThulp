@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Examens">
+<meta name="theme-color" content="#100e14">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23100e14'/%3E%3Cpath d='M60 30h40l30 30v70a12 12 0 01-12 12H60a12 12 0 01-12-12V42a12 12 0 0112-12z' fill='%232e2838' stroke='%23d4af37' stroke-width='5'/%3E%3Cpath d='M100 30v30h30' fill='none' stroke='%23d4af37' stroke-width='5'/%3E%3Cpath d='M64 100l14 14 26-26' fill='none' stroke='%23f0cf6b' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<title>Examens 2027 — Klassieke Talen</title>
+<style>
+  :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--cream:#f3e9d2;
+        --muted:#b9a883;--s2:#16121a;--s3:#211c28;--s4:#2e2838;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'EB Garamond',Georgia,serif;min-height:100vh;color:var(--cream);
+    background:
+      radial-gradient(ellipse at 20% 50%,rgba(90,18,12,.18),transparent 55%),
+      radial-gradient(ellipse at 80% 50%,rgba(26,58,92,.18),transparent 55%),
+      radial-gradient(ellipse at 50% -10%,rgba(212,175,55,.08),transparent 50%),
+      linear-gradient(160deg,#0e0b10,#16121a 45%,#100e14);
+    background-attachment:fixed;padding:24px 16px 60px;}
+  .wrap{max-width:680px;margin:0 auto}
+  .portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;
+    width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);
+    color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+  .portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}
+  .portal-back svg{width:20px;height:20px}
+
+  .top{display:flex;flex-direction:column;align-items:center;margin:38px 0 28px}
+  .crest{width:64px;height:64px;margin-bottom:14px}
+  h1{font-family:'Cinzel',serif;font-weight:800;text-align:center;color:var(--goldb);
+     font-size:26px;letter-spacing:.04em;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+  .sub{font-family:'Cinzel',serif;text-align:center;color:var(--muted);
+     font-size:11px;letter-spacing:.3em;margin:8px 0 0;text-transform:uppercase}
+  .grid{display:grid;gap:14px}
+
+  a.app{display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--cream);
+    background:linear-gradient(170deg,#26200e,#1a1608);border:1px solid #3a3010;
+    border-radius:16px;padding:22px 22px;box-shadow:0 4px 16px rgba(0,0,0,.5);
+    transition:transform .14s,border-color .14s;}
+  a.app:active{transform:scale(.98)}
+  a.app:hover{border-color:var(--goldd)}
+  a.app.soon{opacity:.5;pointer-events:none}
+  .pill{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    background:rgba(212,175,55,.14);color:var(--goldb);border:1px solid var(--goldd);
+    border-radius:14px;padding:2px 9px;margin-left:8px;vertical-align:middle}
+
+  .ic{width:54px;height:54px;flex:0 0 auto}
+  .app h2{font-family:'Cinzel',serif;font-size:20px;color:var(--cream);margin-bottom:3px}
+  .app p{font-size:14px;color:var(--muted);line-height:1.35}
+  .arrow{margin-left:auto;color:var(--gold);font-size:24px}
+  .sec-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:var(--muted);
+    text-transform:uppercase;margin:28px 0 12px;text-align:center;
+    display:flex;align-items:center;gap:10px}
+  .sec-label::before,.sec-label::after{content:'';flex:1;height:1px;
+    background:linear-gradient(90deg,transparent,var(--goldd),transparent)}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:34px;font-style:italic}
+</style>
+</head>
+<body>
+<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<div class="wrap">
+
+  <div class="top">
+    <svg class="crest" viewBox="0 0 100 100">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3d3350"/><stop offset="100%" stop-color="#211c28"/>
+      </linearGradient></defs>
+      <path d="M28 12h30l20 20v46a10 10 0 01-10 10H28a10 10 0 01-10-10V22a10 10 0 0110-10z" fill="url(#g)" stroke="#d4af37" stroke-width="3.5"/>
+      <path d="M58 12v20h20" fill="none" stroke="#d4af37" stroke-width="3.5"/>
+      <path d="M32 60l12 12 24-24" fill="none" stroke="#f0cf6b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h1>Examens 2027</h1>
+    <div class="sub">Centraal examen Grieks &amp; Latijn</div>
+  </div>
+
+  <div class="grid">
+
+    <a class="app soon" href="grieks/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8 9c0-2 2-3 4-3s4 1 4 3-2 3-4 3M12 12v6M9 18h6"/></svg>
+      <div><h2>Examen Grieks 2027 <span class="pill">Binnenkort</span></h2><p>Voorbereiding op het CE Grieks 2027</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a class="app soon" href="latijn/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h7v18H6a2 2 0 01-2-2zM20 5a2 2 0 00-2-2h-1v18h1a2 2 0 002-2z"/><path d="M13 3v18"/></svg>
+      <div><h2>Examen Latijn 2027 <span class="pill">Binnenkort</span></h2><p>Voorbereiding op het CE Latijn 2027</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+    <a class="app" href="bronnen/">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><path d="M10 13a5 5 0 007.07 0l1.93-1.93a5 5 0 00-7.07-7.07L10.5 5.43"/><path d="M14 11a5 5 0 00-7.07 0L5 12.93a5 5 0 007.07 7.07l1.43-1.43"/></svg>
+      <div><h2>Externe Bronnen</h2><p>Handige links naar examensites van collega's en andere hulpmiddelen</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+  </div>
+
+  <footer>Examens 2027 &middot; &copy; Gerben de Jong &middot; 2026</footer>
+</div>
+</body>
+</html>
