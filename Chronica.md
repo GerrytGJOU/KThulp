@@ -7208,6 +7208,83 @@ verwijzing naar `PALLAS_MINERVA_OVERZICHT.md`.
 
 ---
 
+### 7.81 Hoofdstuk 17 (Latijn) — Aemilia Tertia toegevoegd als extra payoff naast Scipio, en meteen doorbetaald naar Cornelia in Hoofdstuk 18 (2026-08-11)
+
+Gerbens verzoek: Hoofdstuk 17 volgt op de Latijnse lijn vooral Hannibal,
+met Scipio Africanus alleen als tegenspeler bij Zama (§7.62). Nieuwe
+scène **`CH17_LAT_006A` "Aemilia Tertia"**, ingevoegd tussen
+`CH17_LAT_006` (Scipio besluit naar Afrika te varen) en `CH17_LAT_006P`
+(de ferre-puzzel/Zama-codex) — geen aparte keuze, één lineaire
+tussenscène met een `codex_aemilia_tertia`-entry.
+
+Twee redenen, allebei Gerbens eigen motivatie:
+- **Vrouwenrepresentatie in dit hoofdstuk**: tot nu toe kwam in H17
+  Latijn geen enkele vrouw in beeld (Artemisia zit alleen in het Griekse
+  spoor). Aemilia Tertia is zelf ook de dochter van Lucius Aemilius
+  Paullus, de consul die bij Cannae sneuvelde — dus terwijl haar man
+  naar Afrika vaart om Hannibal te verslaan, wreekt hij daarmee zonder
+  het met zoveel woorden te zeggen ook haar vaders dood. Toevallig sluit
+  dit aan bij een reeds bestaande knipoog in `codex_forum_basilica`
+  (H18) over latere naamgenotes "Aemilia".
+- **Toekomstige payoff**: Aemilia Tertia is de moeder van Cornelia, op
+  haar beurt de moeder van de gebroeders Gracchus — een directe
+  grootmoeder-kleinzoon-lijn die in het geplande Gracchen-hoofdstuk kan
+  worden teruggehaald.
+
+Bij het schrijven van de bovenstaande §7.81-alinea bleek dat "geplande
+Gracchen-hoofdstuk" allang **Hoofdstuk 18 zelf** is, en dat H18 al sinds
+§7.71 (2026-08-10) gebouwd én gekoppeld is aan de speelroute — dus is de
+echo meteen dezelfde sessie doorbetaald, in plaats van als toekomstige
+TODO blijven liggen. `CH18_LAT_001` ("Land dat Niemand Meer Bewerkt",
+Tiberius' openingsscène) kreeg een derde alinea die Tiberius' afkomst
+expliciet maakt: zijn moeder Cornelia is de dochter van Scipio Africanus
+en Aemilia Tertia, met de erfenis-echo "twee generaties eerder won zijn
+grootvader de oorlog tegen Hannibal — nu voert haar zoon een heel andere
+strijd, tegen Rome's eigen senaat" (zelfde erfenis-echo-patroon als
+Caesar→Augustus in H14, §7.59). Nieuwe codex-entry
+`codex_cornelia_moeder_gracchen`, gekoppeld naast de bestaande
+`codex_gracchen_landhervorming` in dezelfde CODEX-sectie (CNS ondersteunt
+meerdere komma-gescheiden codex-id's per sectie, al gebruikt door
+`CH1_000`). Geen FLAG nodig — de payoff is een directe tekst-echo binnen
+één al bestaande scène, geen aparte vertakking.
+
+`node --check` op `certamen/singleplayer-data.js` schoon, `node
+certamen/tools/validate_chronica.js` blijft op 0 fouten/45 waarschuwingen
+(geen nieuwe dode flags). Scène geparsed met de echte `CNSParser` buiten
+de browser om (Node/vm) om de tekst en de multi-codex-CODEX-sectie te
+controleren — beide kloppen. Niet los in de browser doorgeklikt, want
+zowel H17 als H18 zitten al in `SP_SCENES` en zijn dus onderdeel van de
+normale speelroute (zie §7.82 hieronder voor de volledige routecontrole).
+
+---
+
+### 7.82 Routecontrole Hoofdstuk 17-19: alle drie al gekoppeld, documentatie was alleen bij H17 verouderd (2026-08-11, zelfde dag)
+
+Op Gerbens verzoek gecontroleerd of Hoofdstuk 18 en 19 daadwerkelijk in
+de speelbare route zitten. Bevinding: **ja, alle drie (H17, H18, H19)
+zijn al gekoppeld** — `SP_SCENES` in `certamen/singleplayer.js` bevat
+`SP_CH17_CNS`, `SP_CH18_CNS` én `SP_CH19_CNS` permanent (niet tijdelijk
+gemerged voor een test), en de scène-keten binnen `singleplayer-data.js`
+loopt aantoonbaar door: `CH16_MUSEUM_00 → CH17_000 → … → CH17_MUSEUM_00
+→ CH18_000 → … → CH18_MUSEUM_00 → CH19_000 → … → CH19_MUSEUM_00 →
+CH19_WORDT_VERVOLGD` (het huidige tijdelijke speeltest-eindpunt, zie
+§7.78 en de losse "tijdelijk eindpunt"-conventie).
+
+Dit was al correct vastgelegd in **§7.71** (H17+H18 gekoppeld,
+2026-08-10) en **§7.78** (H19 gekoppeld, 2026-08-10) — de enige
+verouderde tekst zat in mijn eigen §7.81-alinea hierboven, die abusievelijk
+nog verwees naar §7.62's "nog niet gekoppeld"-status van vóór de
+koppeling. Gecorrigeerd. **§7.62 zelf blijft ongewijzigd staan** als
+historisch verslag van de bouwstap vóór de koppeling — latere secties
+(§7.71 e.v.) beschrijven de koppeling zelf, dus dat is geen inconsistentie
+die opgelost hoeft te worden, alleen een aandachtspunt voor mezelf om bij
+dit soort verwijzingen altijd de laatste stand te controleren in plaats
+van te vertrouwen op een sectienummer uit een eerder gesprek.
+
+Geen wijzigingen aan code nodig — puur een documentatiecorrectie.
+
+---
+
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
 
 Tweede laag bovenop de bestaande delayed-consequences/Latijn-als-skill-check-

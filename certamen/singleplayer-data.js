@@ -388,7 +388,7 @@ const SP_CAMPAIGN = [
     pallas:"Les 28: de Perzische Oorlogen (Thermopylae, Spartanen) — met Herodotos als vertellende stem (cameo i.p.v. eigen hoofdstuk, zoals Xenofon elders al gebeurt)", minerva:"Hoofdstuk 17-18 (cultuurstof, ablativus absolutus al gedekt in H11) + Hoofdstuk 22-23 (grammatica, VERVROEGD vanuit H18/Caesar — Gerbens akkoord 2026-08-09)",
     grammatica:"Grieks: les 28 (Perzische Oorlogen, cultuur/geschiedenis); Latijn: gerundium, genitivus subjectivus/objectivus, ferre (Minerva 22) + gerundivum, gerundivumconstructie (Minerva 23) — VERVROEGD vanuit Hoofdstuk 18 (Gerbens akkoord 2026-08-09; sterke inhoudelijke klik met 'Alpes traiciendi causa'/'spes urbis capiendae'-constructies bij de Alpenoversteek, het beleg van Saguntum en de belegering bij Cannae). Hoofdstuk 18 wordt hierdoor bewust grammatica-arm voor Latijn — zie de aantekening daar.",
     gameplay:"Twee sporen, strategie/militaire keuzes; bronnen-vergelijken (Herodotos' rol) als mechaniek aan Griekse kant",
-    personages:"Leonidas, Themistocles, Herodotos, Xerxes, Artemisia, Mardonius, Pausanias — Hannibal, Maharbal, Scipio Africanus",
+    personages:"Leonidas, Themistocles, Herodotos, Xerxes, Artemisia, Mardonius, Pausanias — Hannibal, Maharbal, Scipio Africanus, Aemilia Tertia",
     thema:"Niet alles wat verteld wordt is automatisch waar (Herodotos' eigen vraag) — toegepast op twee legendarische, bijna-onmogelijke overwinningen",
     illustratie:"Thermopylae / Hannibals olifanten in de Alpen",
     zijverhalen:"Regulus, Cato (⭐⭐⭐) — Punische-Oorlogen-deugdverhalen" },
@@ -2558,6 +2558,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Bij Cannae (216 v.Chr.) verslaat Hannibal het grootste Romeinse leger ooit op één plek verzameld — door zijn centrum bewust te laten doorbuigen terwijl zijn sterkere flanken de Romeinen omsingelen, een dubbele omtrekking die sindsdien in vrijwel elk militair handboek ter wereld wordt onderwezen. Tienduizenden Romeinse soldaten sterven op één dag. Zijn cavaleriecommandant Maharbal dringt meteen aan om door te stoten naar Rome zelf, nog voor de stad zich kan herstellen: 'Vincere scis, Hannibal, victoriā uti nescis' — je weet hoe je moet winnen, Hannibal, maar niet hoe je een overwinning moet gebruiken. Hannibal aarzelt en trekt niet op naar Rome — een beslissing waar historici tot op vandaag over discussiëren." },
   codex_zama_scipio: { cat:"geschiedenis", titel:"Zama: Scipio Keert het Tij",
     tekst:"Jarenlang teistert Hannibal Italië zonder dat Rome hem kan verslaan — tot de jonge Romeinse generaal Scipio (later Africanus genoemd) besluit de oorlog naar Carthago's eigen grondgebied in Afrika te brengen. Carthago roept Hannibal terug om zijn thuisland te verdedigen. Bij Zama (202 v.Chr.) verslaat Scipio, die Hannibals eigen tactieken tegen hem gebruikt en Numidische cavalerie aan zijn kant heeft weten te winnen, Hannibal voor de allereerste keer — het enige verlies uit zijn hele carrière, en meteen het einde van de oorlog." },
+  codex_aemilia_tertia: { cat:"geschiedenis", titel:"Aemilia Tertia: de Andere Kant van de Oorlog",
+    tekst:"Aemilia Tertia is de dochter van Lucius Aemilius Paullus, de consul die bij Cannae weigerde het slagveld te verlaten en er sneuvelde — en de vrouw van Scipio, die nu net diezelfde Hannibal tegemoet vaart. Terwijl haar man in Afrika vecht, bewaakt zij in Rome het huishouden en de politieke banden van de familie, zoals van een Romeinse matrona wordt verwacht — een stille, zelden vermelde kant van oorlogvoering. Jaren later krijgt het gezin een dochter, Cornelia, die op haar beurt de moeder wordt van twee bekende hervormers: de gebroeders Gracchus." },
   codex_hannibal_einde: { cat:"geschiedenis", titel:"Hannibals Laatste Jaren",
     tekst:"Na de nederlaag bij Zama blijft Hannibal een gezochte vijand van Rome. Hij vlucht naar Kreta, waar hij, om zijn goud tegen plunderaars te beschermen, het verstopt in de holle standbeelden van een tempel — en gewoon met zijn armzalige bezittingen zichtbaar buiten laat liggen, zodat niemand ooit vermoedt waar het echte fortuin zit. Als huurling-admiraal voor koning Prusias van Bithynië wint hij nog één zeeslag door potten vol giftige slangen op de vijandelijke schepen te laten gooien — de bemanning, meer bang voor de slangen dan voor pijlen, breekt en vlucht. Uiteindelijk omsingelen Romeinse gezanten zijn laatste toevluchtsoord in Bithynië. In plaats van gevangen genomen te worden, drinkt Hannibal het gif dat hij al jaren bij zich draagt. Zijn laatste woorden, volgens de overlevering: laat de Romeinen eindelijk verlost worden van hun jarenlange angst, nu zij het kennelijk te lang vinden duren op de dood van een oude man te wachten." },
   codex_grammatica_ch17_overzicht: { cat:"grammatica", taal:"latijn", titel:"Grammatica: Hoofdstuk 17 — gerundium, gerundivum en ferre",
@@ -2584,6 +2586,8 @@ const SP_CODEX_ENTRIES = {
   codex_socrates_steenhouwer: { cat:"geschiedenis", titel:"Socrates: de Steenhouwerszoon die Vragen Stelt",
     tekst:"Socrates' vader Sophroniscus is steenhouwer — een ambacht dat zijn zoon, naar het schijnt, zelf ook een tijd beoefende voor hij zich volledig aan het vragen stellen wijdde. Op de bouwplaatsen van de Akropolis, tussen de marmerblokken en de bronzen beeldhouwersgereedschappen van Phidias, ontwikkelt hij al vroeg de gewoonte waarmee hij later de hele Griekse filosofie zal veranderen: niet zelf beweren te weten, maar net zo lang doorvragen tot ook de zelfverzekerdste gesprekspartner moet toegeven dat hij het eigenlijk ook niet zeker weet." },
   // ---- Hoofdstuk 18 "Wie Betaalt, Bepaalt" — Latijn spoor ----
+  codex_cornelia_moeder_gracchen: { cat:"geschiedenis", titel:"Cornelia: van Aemilia Tertia tot de Gracchen",
+    tekst:"Tiberius en Gaius Gracchus zijn de zonen van Cornelia, dochter van Scipio Africanus — de generaal die bij Zama Hannibal versloeg — en Aemilia Tertia, zelf dochter van de bij Cannae gesneuvelde consul Lucius Aemilius Paullus. Na de vroege dood van haar man wijst Cornelia een huwelijksaanzoek van een Egyptische koning af en wijdt ze zich volledig aan de opvoeding van haar kinderen; als bezoeksters ooit pochen met hun juwelen, zou ze naar haar twee zonen gewezen hebben met de woorden 'dit zijn mijn sieraden'. Twee generaties eerder won hun grootvader de oorlog tegen Hannibal — nu vechten haar zonen een heel andere oorlog, tegen Rome's eigen senaat." },
   codex_gracchen_landhervorming: { cat:"geschiedenis", titel:"De Gracchen en het Landvraagstuk",
     tekst:"Veroverd staatsland (ager publicus) is officieel bedoeld om onder arme burgers en oud-soldaten verdeeld te worden, maar in de praktijk hebben rijke senatoren het grootste deel allang ingelijfd bij hun eigen landgoederen (latifundia), ver boven het wettelijke maximum en bewerkt door slaven in plaats van vrije boeren. Duizenden kleine boeren raken zo hun bestaan kwijt. Tiberius Gracchus, zelf afkomstig uit een van de rijkste families van Rome, stelt in 133 v.Chr. een wet voor die de wettelijke grens simpelweg weer laat gelden — en maakt zich daarmee vrijwel de hele senaat tot vijand." },
   codex_tiberius_moord: { cat:"geschiedenis", titel:"De Moord op Tiberius Gracchus",
@@ -22060,7 +22064,29 @@ TEXT:
 Jarenlang teistert Hannibal Italië zonder dat Rome hem kan verslaan — tot een jonge Romeinse generaal, Scipio, besluit de oorlog om te draaien: niet Hannibal in Italië bestrijden, maar Carthago's eigen grondgebied in Afrika aanvallen. Carthago roept Hannibal wanhopig terug om zijn thuisland te verdedigen.
 
 CHOICES:
-* Zie hoe de twee generaals elkaar eindelijk in Afrika treffen -> CH17_LAT_006P
+* Zie wie er in Rome achterblijft, terwijl Scipio uitvaart -> CH17_LAT_006A
+
+END
+
+=== SCENE: CH17_LAT_006A ===
+
+TITLE:
+Aemilia Tertia
+
+TEXT:
+Voor Scipio inscheept, is het zijn vrouw Aemilia Tertia die hem uitzwaait — de dochter van Lucius Aemilius Paullus, de consul die bij Cannae zelf weigerde het slagveld te verlaten en er sneuvelde. Zij weet dus beter dan wie ook wat er op het spel staat, nu haar man dezelfde Hannibal tegemoet vaart die haar eigen vader het leven kostte.
+
+DIALOGUE:
+Aemilia Tertia
+Vindica patrem meum, Scipio — en keer terug.
+
+Terwijl hij vecht, bewaakt zij in Rome het huishouden en de politieke banden van de familie, zoals van een Romeinse matrona wordt verwacht — een stille, in de geschiedschrijving zelden genoemde kant van dezelfde oorlog.
+
+CODEX:
+codex_aemilia_tertia
+
+CHOICES:
+* Vaar met Scipio mee naar Afrika -> CH17_LAT_006P
 
 END
 
@@ -22850,11 +22876,13 @@ Rome is enorm gegroeid door verovering, maar het meeste veroverde land — ager 
 
 Tiberius Gracchus, zelf afkomstig uit een van de rijkste en meest gerespecteerde families van Rome, ziet in deze verrotting een gevaar dat groter is dan enige buitenlandse vijand: een Republiek die haar eigen boeren, en dus haar eigen legioenen, aan het opeten is.
 
+Die afkomst is niet zomaar een detail: zijn moeder is Cornelia, dochter van Scipio Africanus — de generaal die bij Zama Hannibal versloeg — en Aemilia Tertia. Twee generaties eerder won zijn grootvader de oorlog tegen Hannibal; nu voert haar zoon een heel andere strijd, tegen Rome's eigen senaat.
+
 IMAGE:
 ch18_lat_gracchen_landverdeling.png
 
 CODEX:
-codex_gracchen_landhervorming
+codex_gracchen_landhervorming, codex_cornelia_moeder_gracchen
 
 VOCAB:
 latijn_ager, latijn_populus, latijn_avaritia, latijn_tribunus, latijn_senatus
