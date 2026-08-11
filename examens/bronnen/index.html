@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Externe Bronnen">
+<meta name="theme-color" content="#100e14">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<title>Externe Bronnen — Examens 2027</title>
+<style>
+  :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--cream:#f3e9d2;
+        --muted:#b9a883;--s2:#16121a;--s3:#211c28;--s4:#2e2838;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'EB Garamond',Georgia,serif;min-height:100vh;color:var(--cream);
+    background:
+      radial-gradient(ellipse at 20% 50%,rgba(90,18,12,.18),transparent 55%),
+      radial-gradient(ellipse at 80% 50%,rgba(26,58,92,.18),transparent 55%),
+      radial-gradient(ellipse at 50% -10%,rgba(212,175,55,.08),transparent 50%),
+      linear-gradient(160deg,#0e0b10,#16121a 45%,#100e14);
+    background-attachment:fixed;padding:24px 16px 60px;}
+  .wrap{max-width:680px;margin:0 auto}
+  .portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;
+    width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);
+    color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+  .portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}
+  .portal-back svg{width:20px;height:20px}
+
+  .top{text-align:center;margin:38px 0 28px}
+  h1{font-family:'Cinzel',serif;font-weight:800;color:var(--goldb);
+     font-size:26px;letter-spacing:.04em;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+  .sub{font-family:'Cinzel',serif;color:var(--muted);
+     font-size:11px;letter-spacing:.3em;margin:8px 0 0;text-transform:uppercase}
+  .grid{display:grid;gap:14px}
+
+  a.link{display:flex;align-items:center;gap:18px;text-decoration:none;color:var(--cream);
+    background:linear-gradient(170deg,#211c28,#16121a);border:1px solid var(--s4);
+    border-radius:16px;padding:20px 22px;box-shadow:0 4px 16px rgba(0,0,0,.5);
+    transition:transform .14s,border-color .14s;}
+  a.link:active{transform:scale(.98)}
+  a.link:hover{border-color:var(--goldd)}
+
+  .ic{width:44px;height:44px;flex:0 0 auto}
+  .link h2{font-family:'Cinzel',serif;font-size:17px;color:var(--cream);margin-bottom:3px}
+  .link p{font-size:13px;color:var(--muted);line-height:1.35}
+  .arrow{margin-left:auto;color:var(--gold);font-size:22px}
+  .sec-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:var(--muted);
+    text-transform:uppercase;margin:28px 0 12px;text-align:center;
+    display:flex;align-items:center;gap:10px}
+  .sec-label::before,.sec-label::after{content:'';flex:1;height:1px;
+    background:linear-gradient(90deg,transparent,var(--goldd),transparent)}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:34px;font-style:italic}
+</style>
+</head>
+<body>
+<a class="portal-back" href="../" aria-label="Terug naar Examens"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<div class="wrap">
+
+  <div class="top">
+    <h1>Externe Bronnen</h1>
+    <div class="sub">Handige links van collega's</div>
+  </div>
+
+  <div class="sec-label">Latijn</div>
+  <div class="grid">
+
+    <a class="link" href="https://robmentingeidola.github.io/latijn-vwo6/" target="_blank" rel="noopener">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5"><path d="M4 5a2 2 0 012-2h7v18H6a2 2 0 01-2-2zM20 5a2 2 0 00-2-2h-1v18h1a2 2 0 002-2z"/><path d="M13 3v18"/></svg>
+      <div><h2>Latijn VWO 6 — Rob Menting</h2><p>Eidola: examensite Latijn vwo 6 van een collega</p></div>
+      <span class="arrow">&rsaquo;</span>
+    </a>
+
+  </div>
+
+  <footer>Externe Bronnen &middot; &copy; Gerben de Jong &middot; 2026</footer>
+</div>
+</body>
+</html>
