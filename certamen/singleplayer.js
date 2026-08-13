@@ -313,6 +313,10 @@ const SpTextResolver = {
       case "medea_h17_echo":  return ((state.relations||{}).medea||0)  >= 1 ? SP_CH17_MEDEA_ECHO  : "";
       case "helena_h17_echo": return ((state.relations||{}).helena||0) >= 1 ? SP_CH17_HELENA_ECHO : "";
       case "ch18_proscripties_h19_echo": return state.flags?.ch18_lat_proscripties_gezien ? SP_CH19_PROSCRIPTIES_ECHO : "";
+      case "ch19_gre_zijde_h20_echo": return SP_CH20_GRE_ZIJDE_ECHO[state.flags?.ch19_gre_zijde] || "";
+      case "ch19_lat_zijde_h20_echo": return SP_CH20_LAT_ZIJDE_ECHO[state.flags?.ch19_lat_zijde] || "";
+      case "ch20_sabinus_cotta_reactie": return SP_CH20_SABINUS_COTTA_REACTIE[state.flags?.ch20_lat_sabinus_cotta] || "";
+      case "ch21_gre_socrates_pad_echo": return SP_CH21_SOCRATES_PAD_ECHO[state.flags?.ch21_gre_socrates_stemming] || "";
       case "npc_afsluitingen": {
         const items = spNpcAfsluitingenBeschikbaar(state);
         return items.length ? items.map(a=>a.tekst).join(" ") : SP_NPC_AFSLUITINGEN_FALLBACK;
@@ -539,7 +543,7 @@ const CNSParser = {
   },
 };
 
-const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS), ...CNSParser.parse(SP_CH11_CNS), ...CNSParser.parse(SP_CH12_CNS), ...CNSParser.parse(SP_CH13_CNS), ...CNSParser.parse(SP_CH14_CNS), ...CNSParser.parse(SP_CH15_CNS), ...CNSParser.parse(SP_CH16_CNS), ...CNSParser.parse(SP_CH17_CNS), ...CNSParser.parse(SP_CH18_CNS), ...CNSParser.parse(SP_CH19_CNS)]);
+const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS), ...CNSParser.parse(SP_CH11_CNS), ...CNSParser.parse(SP_CH12_CNS), ...CNSParser.parse(SP_CH13_CNS), ...CNSParser.parse(SP_CH14_CNS), ...CNSParser.parse(SP_CH15_CNS), ...CNSParser.parse(SP_CH16_CNS), ...CNSParser.parse(SP_CH17_CNS), ...CNSParser.parse(SP_CH18_CNS), ...CNSParser.parse(SP_CH19_CNS), ...CNSParser.parse(SP_CH20_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
   stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[],
   payoffsSeen:{}, relations:{}, kroniek:[] });
