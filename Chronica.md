@@ -1,11 +1,9 @@
-# Chronica Classica — Masterplan (BETA — proloog t/m Hoofdstuk 16 speelbaar, H17 gebouwd)
+# Chronica Classica — Masterplan (BETA — proloog t/m Hoofdstuk 20 speelbaar)
 
-> **Actuele stand (bijgewerkt 2026-08-09) — lees dit eerst:** Proloog t/m
-> Hoofdstuk 16 zijn gebouwd én gekoppeld aan de speelbare route. Hoofdstuk
-> 17 is volledig gebouwd maar (op het moment van schrijven) nog niet
-> gekoppeld. Hoofdstuk 18 t/m 27 zijn nieuw sinds de KCV-audit van vandaag
-> (§7.65-7.66) en bestaan alleen als `SP_CAMPAIGN`-metadata, net als
-> Hoofdstuk 28-29 + Finale (was 26-27+Finale vóór die audit) — zie de
+> **Actuele stand (bijgewerkt 2026-08-11, na Hoofdstuk 20) — lees dit
+> eerst:** Proloog t/m Hoofdstuk 20 zijn gebouwd én gekoppeld aan de
+> speelbare route. Hoofdstuk 21 t/m 27 bestaan nog alleen als
+> `SP_CAMPAIGN`-metadata, net als Hoofdstuk 28-29 + Finale — zie de
 > hoofdstuktabel in §0 hieronder voor de volledige, actuele lijst van 29
 > hoofdstukken + Finale in 6 boeken. De blockquote hieronder (H1-9) is het
 > **oorspronkelijke BETA-statusverslag** en is voor die negen hoofdstukken
@@ -7282,6 +7280,347 @@ dit soort verwijzingen altijd de laatste stand te controleren in plaats
 van te vertrouwen op een sectienummer uit een eerder gesprek.
 
 Geen wijzigingen aan code nodig — puur een documentatiecorrectie.
+
+---
+
+### 7.83 Hoofdstuk 20 "Grenzen Verlegd" gebouwd en gekoppeld (2026-08-11, zelfde dag)
+
+Volledig gebouwd op Gerbens gedetailleerde brief (personages, keuzes,
+verplichte elementen) — 26 nieuwe scènes in `SP_CH20_CNS`
+(`certamen/singleplayer-data.js`), meteen gekoppeld: `CH19_MUSEUM_00`
+routeert nu naar `CH20_000`, `SP_SCENES` (`singleplayer.js`) en
+`validate_chronica.js`'s `BLOCKS` bevatten `SP_CH20_CNS`.
+`CH20_WORDT_VERVOLGD` is het nieuwe tijdelijke speeltest-eindpunt
+(verplaatst vanuit `CH19_WORDT_VERVOLGD`, die is verwijderd — zelfde
+conventie als bij elk eerder hoofdstuk).
+
+**Griekse lijn (Alexander)**: Philippus II's Macedonische hegemonie (met
+een payoff-alinea op `ch19_gre_zijde`, zie hieronder) → Olympias
+(afstamming van Achilles — callback naar Boek II) → Aristoteles als
+leermeester, met een expliciete "je kent deze naam al"-herkenning van
+Plato (kind-cameo's H18/H19) en **Plato's eerste echte `RELATION`**
+(`plato=+1`) → de moord op Philippus (bewust geframed als eerste van drie
+"verraden door de eigen kring"-momenten in dit hoofdstuk) → de Gordiaanse
+Knoop → Darius III (met een precisering: geen rechtstreekse
+zoon-op-zoon-nakomeling van Xerxes, maar wel dezelfde Achaemenidische
+koningslijn — zie de toelichting hieronder) → Darius' dood door zijn eigen
+satraap Bessus (tweede "verraden door de eigen kring"-echo) → Alexanders
+dood in Babylon → de Diadochen, met nadruk op Ptolemaeus (kaapt
+Alexanders lijkstoet naar Egypte) als expliciete vooruitwijzing naar
+Hoofdstuk 22 (Diadochenoorlogen) én Cleopatra (Hoofdstuk 23, waar beide
+sporen inhoudelijk samenkomen — zie §7.79a).
+
+**Latijnse lijn (Caesar)**: op Gerbens verzoek voor het eerst mede verteld
+door **de schim van Caesar zelf**, naast de Boodschapper — een bewuste
+flashback naar de jaren vóór de Iden van maart (die de speler in Hoofdstuk
+19 al zag), met een kant-afhankelijke inleidende alinea op `ch19_lat_zijde`
+(zie hieronder). Inhoud: het Eerste Triumviraat/Helvetiërs (kort) → de
+Slag bij Kessel (Usipetes/Tencteri, met een zelfreflectie van Caesar op
+zijn eigen Commentarii als "wie de pen vasthoudt bepaalt het verhaal" —
+een bewuste, subtiele tease richting de Boodschapper-als-geschiedschrijver,
+zie hieronder) → de Rijnoversteek → de eerste Britannia-expeditie →
+**nieuwe keuze: Dumnorix** (bevel tot directe executie [SEVERITAS] of een
+bevel om hem levend terug te brengen dat alsnog fout afloopt [CLEMENTIA]
+— zelfde historische uitkomst, andere Clementia/Severitas-inzet, FLAG
+`ch20_lat_dumnorix`, bewust een geaccepteerde dode flag, zie
+`DODE_FLAGS_FINALE.md`) → de tweede Britannia-expeditie (Cassivellaunus) →
+Ambiorix en de Eburonen → **nieuwe keuze: Sabinus (vertrekken) of Cotta
+(blijven)** — zelfde historische afloop (bijna het hele garnizoen
+uitgeroeid) maar een andere manier waarop het gebeurt én een andere
+reactie van Caesar bij terugkeer, via `{ch20_sabinus_cotta_reactie}`
+(nieuwe FLAG `ch20_lat_sabinus_cotta`) → Vercingetorix verenigt Gallië
+(expliciet causaal gekoppeld aan de net getoonde Romeinse hardheid) →
+Alesia (dubbele omwalling, overgave, met een eerlijke vooruitblik van
+Caesars schim op Vercingetorix' latere executie).
+
+**Payoffs op de twee grote Hoofdstuk-19-keuzes**: in plaats van, zoals
+destijds overwogen (§7.72/§7.79), een volledig eigen payoff-hoofdstuk te
+bouwen, betaalt Hoofdstuk 20 `ch19_gre_zijde` en `ch19_lat_zijde` af als
+een enkele, kant-afhankelijke inleidende alinea aan het begin van elk
+spoor — nieuwe resolver-tokens `{ch19_gre_zijde_h20_echo}` en
+`{ch19_lat_zijde_h20_echo}` (`SpTextResolver.lookup`, `singleplayer.js`),
+gevoed door `SP_CH20_GRE_ZIJDE_ECHO`/`SP_CH20_LAT_ZIJDE_ECHO`
+(`singleplayer-data.js`), zelfde patroon als `SP_CH17_CH9_ZIJDE_ECHO`.
+Beide flags zijn hiermee **niet langer dood** — bijgewerkt in
+`DODE_FLAGS_FINALE.md`. Dit is meteen een nieuw precedent: een grote
+zijde-keuze hoeft dus niet per se een eigen hoofdstuk te krijgen om
+afbetaald te worden.
+
+**Darius III/Xerxes-precisering**: Gerben vroeg of Darius III een
+afstammeling van Xerxes is. Historisch niet rechtstreeks (geen
+vader-op-zoon-lijn) — hij is een verdere telg van dezelfde
+Achaemenidische koningsdynastie, een paar generaties verwijderd. De
+scènetekst (`codex_darius_III`, `CH20_GRE_006`) is hierop aangepast: "geen
+rechtstreekse zoon-op-zoon nakomeling van Xerxes (...) maar wel een telg
+van diezelfde Achaemenidische koningslijn".
+
+**Nieuwe registry-entries**: 19 CODEX-entries, 9 nieuwe VOCAB-entries
+(basileus/diadochos/didaskalos grieks; obses/deditio/legatus latijn), 1
+nieuw souvenir (`souvenir_grenzen_verlegd`).
+
+**Aanvulling, zelfde dag**: op Gerbens verzoek is het verhaal van
+Bucephalus alsnog toegevoegd — een nieuwe scène `CH20_GRE_003B` (tussen
+Aristoteles en de moord op Philippus) voor het temmen (de jonge Alexander
+merkt dat het paard alleen bang is voor zijn eigen schaduw), en een nieuwe
+alinea in `CH20_GRE_008` voor Bucephalus' dood bij de Hydaspes (326 v.Chr.,
+na de slag tegen Porus) en de stichting van de stad Bucephala in zijn eer
+— één nieuwe CODEX-entry (`codex_bucephalus`).
+
+**Validatie**: `node --check` slaagt op beide bestanden.
+`validate_chronica.js`: **0 fouten**, 44 waarschuwingen (was 41 vóór dit
+hoofdstuk — netto +3: `ch20_lat_dumnorix` nieuw dode, maar
+`ch19_gre_zijde`/`ch19_lat_zijde` zijn juist van de lijst af, plus de
+verwachte terminale-scène-waarschuwing voor het verplaatste
+`CH20_WORDT_VERVOLGD`). Geen kapotte links, geen onbereikbare scènes.
+
+---
+
+### 7.84 Hoofdstuk 21 "Wijsheid en Waarheid" — eerste Gemini-concept verwerkt, BEWUST NOG NIET GEKOPPELD (2026-08-11, zelfde dag)
+
+Nieuwe werkwijze, op Gerbens voorstel: Gemini (zijn Edu-account) schrijft een
+eerste conceptversie van een hoofdstuk in het CNS-formaat, die vervolgens
+hier wordt gecontroleerd en verwerkt — bedoeld om credits te besparen. Deze
+sessie was de eerste keer; Gerben wil het hoofdstuk pas live zetten na
+eigen goedkeuring, dus **`SP_CH21_CNS` staat als losse const in
+`certamen/singleplayer-data.js`, maar is bewust NIET toegevoegd aan
+`SP_SCENES` (`singleplayer.js`) of `BLOCKS` (`validate_chronica.js`)** —
+`CH20_MUSEUM_00` routeert nog altijd naar `CH20_WORDT_VERVOLGD`, niet naar
+`CH21_000`. Niet koppelen zonder expliciet akkoord.
+
+**Correcties op Gemini's concept** (formaat- en continuïteitsfouten, geen
+inhoudelijke herschrijving):
+- `STATPOINTS: 3` en `SOUVENIR: <vrije tekst>` waren geen geldige
+  CNS-secties — `CNSParser.sectionHeaderRe` staat geen waarde achter de
+  dubbele punt toe, moet een header op een eigen regel zijn met de waarde
+  erna. Gecorrigeerd naar het bestaande patroon, en SOUVENIR verwijst nu
+  naar een echte `SP_SOUVENIRS`-registry-key (`souvenir_wijsheid_en_waarheid`,
+  nieuw toegevoegd) in plaats van vrije tekst.
+- De "beide talen"-brug sloeg in het concept `CH21_GRE_EINDE` over
+  (rechtstreeks van `CH21_GRE_007` naar `CH21_LAT_001`) — hersteld naar het
+  vaste patroon uit H19/H20: altijd via de eigen taal-EINDE-scène, die dan
+  zelf naar het andere spoor routeert.
+- Xanthippe (expliciet genoemd in de officiële hoofdstuk-21-metadata) ontbrak
+  volledig — toegevoegd als korte, bronvaste (Phaedo) vermelding in de
+  gifbeker-scène.
+- RELATION-key `xenophon` genormaliseerd naar `xenofon` (Nederlandse
+  schrijfwijze, consistent met de rest van de campagne en met hoe het
+  personage al in H18/H19 heet).
+- Alle door Gemini voorgestelde CODEX/VOCAB/souvenir-entries zijn
+  gecontroleerd op naam-botsingen (geen gevonden) en één-op-één overgenomen
+  in `SP_CODEX_ENTRIES`/`SP_VOCAB_ENTRIES`/`SP_SOUVENIRS`.
+
+**Validatie**: `node --check` slaagt. Omdat het hoofdstuk bewust niet in
+`BLOCKS` zit, kan `validate_chronica.js` het niet meenemen — in plaats
+daarvan een eenmalige losse parse-check (scène-count, dubbele ID's,
+kapotte links, en of elke CODEX/VOCAB/SOUVENIR-referentie in de scènes
+ook echt in de registry bestaat): 23 scènes, 0 dubbele ID's, 0 kapotte
+links, 0 onbekende registry-referenties.
+
+**Nog niet gecontroleerd** (bewust, want nog niet gekoppeld): live
+doorspelen in de browser, en een tweede feitelijke/didactische
+eindcontrole door Gerben zelf vóór koppeling.
+
+**Aanvulling, zelfde dag — Athena als verteller + presocraten-tease +
+Archimedes**: op Gerbens verzoek drie wijzigingen aangebracht, nog steeds
+bewust niet gekoppeld.
+
+1. **Athena/Minerva vertelt dit hoofdstuk**, in plaats van (uitsluitend)
+   de Boodschapper van Chronos — logisch, zij is letterlijk de godin van
+   de wijsheid, en de speler kent haar al sinds haar geboorte in
+   Hoofdstuk 1 (`RELATION: athena=+1`, hergebruikt de allereerste
+   RELATION-track van de hele campagne). `CH21_000` laat de Boodschapper
+   expliciet het woord aan haar overdragen ("dit hoofdstuk laat ik niet
+   aan mezelf"); Athena vertelt vervolgens `CH21_GRE_EINDE` en
+   `CH21_EINDE`, waarna de Boodschapper terugkeert voor de vaste
+   Museum/STATPOINTS/SOUVENIR-afsluiting — zelfde co-verteller-patroon als
+   Caesars schim in Hoofdstuk 20, nu andersom (de gast doet het meeste
+   werk, niet de Boodschapper).
+2. **Presocraten-tease**: `CH21_000` noemt nu, in Athena's eigen stem,
+   Thales/Anaximander/Anaximenes/Pythagoras/Herakleitos/Parmenides/
+   Anaxagoras/Demokritos bij naam, met een expliciete "hun verhaal is voor
+   een andere dag"-belofte. Ze blijven inhoudelijk gereserveerd voor
+   Hoofdstuk 25 ("Onder de Vulkaan", al zo gepland sinds §7.66) — dit is
+   puur een naam-callback-haakje, geen vervroegde behandeling. **Bij het
+   bouwen van Hoofdstuk 25**: verwijs terug naar deze scène.
+3. **Archimedes, dubbel gebouwd** (Gerbens eigen voorstel): vier nieuwe
+   scènes vooraan het Latijnse spoor (`CH21_LAT_000B` t/m `_000E`, vóór de
+   bestaande `CH21_LAT_001`). Eerst Cicero die als jonge quaestor op
+   Sicilië (75 v.Chr.) Archimedes' overwoekerde, vergeten graf terugvindt
+   (historisch, uit Cicero's eigen Tusculanae Disputationes) — daarna
+   neemt Athena/Minerva de speler letterlijk mee terug in de tijd (zelfde
+   "meenemen naar een andere scène"-mechaniek als Mercurius in Hoofdstuk 9)
+   naar Archimedes' dood bij de val van Syracuse (212 v.Chr., Tweede
+   Punische Oorlog — expliciete callback naar Hannibal, Hoofdstuk 17),
+   gedood door een Romeinse soldaat tegen de bevelen van generaal
+   Marcellus in. Geen RELATION voor Archimedes zelf (eenmalig personage,
+   zelfde afweging als Vercingetorix/Darius III in Hoofdstuk 20). Twee
+   nieuwe CODEX-entries (`codex_cicero_archimedes_graf`,
+   `codex_dood_archimedes`), één nieuwe VOCAB-entry (`grieks_kyklos`, bij
+   Archimedes' laatste woorden "μὴ μου τοὺς κύκλους τάραττε").
+
+**Validatie**: `node --check` slaagt. Losse parse-check herhaald: nu 27
+scènes (was 23), nog altijd 0 dubbele ID's, 0 kapotte links, 0 onbekende
+registry-referenties.
+
+**Aanvulling, zelfde dag — echte vertakking bij de Socrates-stemming +
+Diotima/Xanthippe/Terentia**: op Gerbens verzoek.
+
+1. **Socrates-stemming krijgt een echte vertakking** (was tot nu toe het
+   "zelfde uitkomst, andere weg"-patroon zonder inhoudelijk verschil): de
+   twee stemmen leiden nu naar aparte scènes vóór ze weer samenkomen bij
+   de gifbeker. Tegen de doodstraf stemmen (`CH21_GRE_004_VRIJ`) leidt naar
+   **`CH21_GRE_004B_CRITO`** — Plato's dialoog Crito, waarin Crito Socrates
+   smeekt te vluchten en Socrates weigert (de "Wetten van Athene"-redenering).
+   Vóór de doodstraf stemmen (`CH21_GRE_004_VEROORDEELD`) leidt naar
+   **`CH21_GRE_004B_AANKLAGERS`** — het perspectief van Anytus en Meletus,
+   met hun persoonlijke en collectieve motieven (de nasleep van Critias/de
+   Dertig Tirannen en Alkibiades). Beide paden komen samen bij de bestaande
+   `CH21_GRE_005` (de gifbeker, Plato's Phaedo), die nu een pad-afhankelijke
+   openingszin krijgt via een nieuw resolver-token
+   `{ch21_gre_socrates_pad_echo}` (`SP_CH21_SOCRATES_PAD_ECHO`, zelfde
+   patroon als eerdere zijde-echo's).
+2. **Diotima van Mantinea toegevoegd** — nieuwe scène `CH21_GRE_002B`,
+   tussen de eerste Socrates-ontmoeting en het proces: Socrates vertelt
+   zelf over zijn eigen leermeester in liefde en schoonheid (Plato's
+   Symposium, de "ladder van de liefde"). Sluit aan bij het bestaande
+   "wijsheid gaat van hand tot hand"-thema van dit hoofdstuk, nu met een
+   vrouw als bron in plaats van alleen ontvanger.
+3. **Xanthippe krijgt een eigen stem** in `CH21_GRE_005` — niet langer
+   alleen de huilend weggeleide vrouw uit Plato's Phaedo, maar een directe
+   uitspraak over wat zij en haar drie zonen verliezen, met een expliciete
+   verwijzing naar Xenofons genuanceerdere portret van haar (die, handig,
+   al een personage in dit hoofdstuk is).
+4. **Terentia toegevoegd** als tweede stem tegen Catilina in
+   `CH21_LAT_004`, vóór Cicero's Senaatsrede — scherp en direct betrokken
+   bij zijn politieke besluitvorming, conform Plutarchus' portret van haar.
+5. Vijf nieuwe CODEX-entries (`codex_diotima`, `codex_crito`,
+   `codex_aanklagers_socrates`, `codex_xanthippe`, `codex_terentia`).
+
+**Validatie**: `node --check` slaagt. Losse parse-check herhaald: nu 30
+scènes (was 27), nog altijd 0 dubbele ID's, 0 kapotte links, 0 onbekende
+registry-referenties. **Let op gecorrigeerd tijdens het bouwen**: een
+scène met twee `DIALOGUE:`-secties (Xanthippe én Socrates) parset niet
+zoals bedoeld — `CNSParser.parseSceneBlock` overschrijft `scene.dialogue`
+bij een herhaalde sectie in plaats van te combineren (zelfde beperking
+als bij `TEXT:`/`TITLE:`, zie de eerdere §7.84-correctie op Gemini's
+concept). Xanthippes citaat is daarom als aangehaalde tekst in de
+lopende `TEXT:` verwerkt, niet als eigen `DIALOGUE:`-sectie — nuttig om te
+onthouden bij toekomstige scènes met meer dan één sprekend personage.
+
+---
+
+### 7.85 Hoofdstuk 22 "Opvolgers tegenover Opvolgers" — Gemini-concept verwerkt, BEWUST NOG NIET GEKOPPELD (2026-08-12)
+
+Op Gerbens verzoek dit keer TWEE grote, structurele zijde-keuzes (niet het
+lichtere "zelfde uitkomst, andere weg"-patroon van eerdere hoofdstukken):
+Grieks spoor Ptolemaeus/Antigonos (permanente FLAG `ch22_gre_zijde`),
+Latijns spoor Octavianus/Antonius (permanente FLAG `ch22_lat_zijde`),
+getriggerd door Fulvia's opstand tegen Octavianus (de Bellum Perusinum).
+Beide vertakkingen 6 resp. 4 scènes per kant, komen daarna weer samen.
+Cleopatra en Caesarion zijn voor het eerst geïntroduceerd (Caesarion als
+bewuste parallel met Alexander IV — bloederfgenaam tegenover mannen die de
+macht al hebben), en Fulvia/Octavia kregen allebei een echte, actieve rol
+in plaats van een naamsvermelding. `SP_CH22_CNS` staat, net als
+Hoofdstuk 21, als losse const in `singleplayer-data.js` — BEWUST NOG NIET
+gekoppeld aan `SP_SCENES`/`BLOCKS`, wacht op Gerbens goedkeuring.
+
+**Correcties op Gemini's concept**:
+- Een letterlijke Engelse typefout ("de crown bewaren") in Perdikkas'
+  dialoogregel hersteld naar "de kroon".
+- Scènetitel "De Raad van Triparadisos" hernoemd naar "Scheuren in het
+  Rijk" — die conferentie vond historisch pas ná Perdikkas' dood plaats
+  (verdeling van de satrapieën), niet tijdens de gebeurtenissen die deze
+  scène beschrijft.
+- Titel "Mouterij aan de Nijl" (onbestaand woord) hersteld naar "Ramp bij
+  de Nijl".
+- **Feitelijke correctie, Caesarion**: het concept liet Caesarion fysiek
+  meereizen naar Tarsus. Historisch bleef hij in Alexandrië — alleen
+  Cleopatra zelf voer naar Cilicië. `CH22_LAT_ANT_003` is herschreven: de
+  speler vráágt naar hem, Cleopatra vertelt over hem, in plaats van hem
+  te ontmoeten. De thematische pointe (bloederfgenaam vs. Octavianus)
+  blijft volledig intact.
+- `SOUVENIR:`-sectie verwees naar vrije tekst i.p.v. een registry-key —
+  nieuwe `souvenir_opvolgers_tegenover_opvolgers`-entry toegevoegd.
+- De dubbele REQUIRE-keuzeregels in `CH22_000` samengevoegd tot één
+  `REQUIRE:taalspoor!=latijn`-regel (stijlconsistentie).
+- `latijn_proscriptio` bleek al te bestaan (sinds Hoofdstuk 19) — niet
+  opnieuw toegevoegd, de bestaande entry resolvet gewoon.
+- Alle overige CODEX/VOCAB/RELATION-namen gecontroleerd op botsingen:
+  geen gevonden, één-op-één overgenomen.
+
+**Validatie**: `node --check` slaagt. Losse parse-check (zelfde methode
+als bij Hoofdstuk 21, want nog niet in `BLOCKS`): **41 scènes, 0 dubbele
+ID's, 0 kapotte links, 0 onbekende registry-referenties.**
+
+**Nog niet gecontroleerd** (bewust, want nog niet gekoppeld): live
+doorspelen in de browser, en Gerbens eigen eindcontrole vóór koppeling.
+
+---
+
+### 7.86 Illustraties gecommit, aquilifer-keuze (H20), en H21/H22 nagelopen op beeld en toon (2026-08-13)
+
+Op Gerbens verzoek, in stappen:
+
+1. **11 illustraties voor H17-21 gecontroleerd, gecommit en gepusht naar
+   main** (commit `2d3178c`) — alle 8 H20- en 3 H21-scène-afbeeldingen
+   die eerder waren aangeleverd, gecontroleerd op kwaliteit/naleving van
+   `gemini-comic-style.md` (geen tekst/watermerken, juiste personages en
+   composities) en akkoord bevonden.
+
+2. **Caesar/Alexander-verering toegevoegd aan `CH20_LAT_001`**: Gerben
+   vroeg of ergens al vermeld stond dat Caesar (en later Augustus)
+   Alexander vereerden. Dat stond nergens — toegevoegd is de anekdote van
+   Caesars huilen bij een standbeeld van Alexander in de tempel van
+   Hercules te Gades (69 v.Chr., als jonge quaestor), verteld door Caesars
+   eigen schim: "Alexander had op mijn leeftijd al de halve wereld
+   veroverd. Ik had, op dat moment, nog niets." Nieuwe CODEX-entry
+   `codex_caesar_alexander_standbeeld`. Augustus' latere bezoek aan
+   Alexanders graf (30 v.Chr., "rex, non mortuos") is bewust NIET nu
+   gebouwd — dat hoort bij Hoofdstuk 23 — maar wel genoteerd als
+   standing payoff-item, zie de bijgewerkte RELATION/FLAG-roster-memory.
+
+3. **Nieuwe keuze: de aquilifer bij de Britannia-landing** (Gerbens
+   idee). `CH20_LAT_004` is omgebouwd tot een keuzescène: grijpt de
+   speler zelf de adelaar van het Tiende Legioen en geeft de historische
+   speech ("Desilite, commilitones...", Caesar, De Bello Gallico 4.25),
+   of laat de speler de (bij Caesar naamloze) aquilifer gaan en volgt
+   hem? Twee nieuwe scènes (`CH20_LAT_004_AQUILIFER`/`_VOLGT`), nieuwe
+   FLAG `ch20_lat_aquilifer` (bewust flavour-only, zie
+   `DODE_FLAGS_FINALE.md`), `RELATION caesar=+1` in beide, twee nieuwe
+   IMAGE-hooks (`ch20_lat_aquilifer_speler.png`/`_onbekend.png`), nieuwe
+   CODEX-entry `codex_aquilifer_britannia` en VOCAB `latijn_aquila`.
+
+4. **Extra IMAGE-hooks toegevoegd aan H21** (was 1 Grieks/2 Latijn, Gerben
+   vond dat te weinig): 4 nieuwe Griekse hooks (Agora/Aristophanes,
+   Diotima, Crito in de cel, Plato's grot) en 3 nieuwe Latijnse hooks
+   (Cicero vindt Archimedes' graf, het Verres-proces, Cicero's
+   studeervertrek) — nu 5 per spoor.
+
+5. **Extra IMAGE-hooks toegevoegd aan H22** (was 3 totaal): 5 nieuwe
+   Griekse hooks (Perdikkas' zegel, zijn dood bij de Nijl, Ptolemaeus'
+   Bibliotheek, Demetrios bij Rhodos, het einde van de bloedlijn — deze
+   laatste hergebruikt in zowel `CH22_GRE_PTO_005` als `CH22_GRE_ANT_005`)
+   en 5 nieuwe Latijnse hooks (het Tweede Triumviraat, Fulvia's opstand,
+   het beleg van Perusia, Cleopatra op de Cydnus, het huwelijk van
+   Octavia) — nu 5-6 per spoor/pad.
+
+6. **Toon-controle H21/H22 tegen eerdere, door Claude geschreven
+   hoofdstukken**: het duidelijkste verschil was dat vrijwel elke scène in
+   de bestaande hoofdstukken de Boodschapper van Chronos met haar vaste
+   "[[Ecce|zie hier]]"-opening laat spreken, vooral bij openings-,
+   EINDE- en Museum-scènes — en dat die stem in de Gemini-tekst op
+   precies die plekken volledig ontbrak (`CH21_MUSEUM_00`,
+   `CH21_LAT_EINDE`, en in H22 zelfs het hele hoofdstuk: `CH22_000`,
+   beide EINDE-scènes, `CH22_MUSEUM_00`). Hersteld door de Boodschapper
+   (of, in H21, Minerva/Athena, consistent met de rest van dat hoofdstuk)
+   die ontbrekende scènes te laten inleiden/afsluiten, in dezelfde stijl
+   als de rest van de campagne. `CH22_WORDT_VERVOLGD` toegevoegd (ontbrak
+   nog helemaal), zelfde sjabloon als de andere hoofdstukken.
+
+**Validatie**: `node --check` slaagt. `validate_chronica.js` (H20, wel
+gekoppeld): 0 fouten, 45 waarschuwingen. Losse parse-check H21/H22 (niet
+gekoppeld): 30 resp. 42 scènes, 0 dubbele ID's, 0 kapotte links, 0
+onbekende registry-referenties.
 
 ---
 

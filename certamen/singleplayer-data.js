@@ -433,11 +433,12 @@ const SP_CAMPAIGN = [
     verhaal:"Een jonge koning trekt met zijn leger verder dan wie ook vóór hem, tot in de verste uithoeken van de bekende wereld. Generaties later doet een Romeinse generaal in Gallië — en, twee keer, zelfs op het mistige eiland Britannia — iets vergelijkbaars, en trekt uiteindelijk ook de Rijn over naar Germania: Caesar duwt de grenzen van de bekende wereld net zo ver op als Alexander ooit deed, en ontdekt dat wie de pen vasthoudt (zijn eigen Commentarii), ook de geschiedenis vormgeeft. **Dit is de laatste nieuwe Griekse grammatica van de hele campagne** — Pallas deel 2 is na Alexander uitgeput. HERNUMMERD 2026-08-09 (was Hoofdstuk 18) — het Romeinse leger als systeem is verhuisd naar Hoofdstuk 18 (Marius' eigen hervorming, historisch de juistere plek); hier blijft Caesars veldtocht zelf, nu inclusief zijn expedities naar Britannia.",
     pallas:"Les 29 (LAATSTE Pallas 2-les): Alexander de Grote", minerva:"Cultuurstof Caesars carrière/België blijft hier (het verhaal), maar de bijbehorende grammatica (Hoofdstuk 22-23) is VERVROEGD naar Hoofdstuk 17 (Gerbens akkoord 2026-08-09) — zie de aantekening daar",
     grammatica:"Grieks: les 29 (Alexander — laatste nieuwe Griekse stof in de hele campagne); Latijn: BEWUST GRAMMATICA-ARM (herhaling) — gerundium/genitivus subj./obj./ferre (M22) en gerundivum (M23) zijn vervroegd naar Hoofdstuk 17, waar ze inhoudelijk beter passen (Alpenoversteek/beleg van Saguntum).",
-    gameplay:"Twee sporen; taalverspreiding volgen over een groeiende kaart (Griekse lijn), bronnen analyseren (Latijnse lijn, Caesars Commentarii — Gallië, Britannia, de Rijnoversteek)",
-    personages:"Alexander de Grote, Philippus II — Caesar, Dumnorix, Cassivellaunus",
+    gameplay:"Twee sporen; taalverspreiding volgen over een groeiende kaart (Griekse lijn), bronnen analyseren (Latijnse lijn, Caesars Commentarii — Gallië, Britannia, de Rijnoversteek). Latijnse lijn wordt mede verteld door de schim van Caesar zelf, als flashback naar de jaren vóór zijn dood in H19 (Gerbens verzoek 2026-08-11). Twee keuzemomenten: Dumnorix (Clementia/Severitas) en Sabinus/Cotta (vertrekken/blijven, zelfde afloop, andere reactie van Caesar).",
+    personages:"Alexander de Grote, Philippus II, Olympias, Aristoteles, Plato (eerste echte RELATION), Bucephalus, Darius III, de Diadochen (Ptolemaeus) — Caesar, Vercingetorix, Dumnorix, Cassivellaunus, Ambiorix, Sabinus, Cotta",
     thema:"Eén mens die de kaart van de bekende wereld hertekent — met het zwaard, of met de pen",
-    illustratie:"Alexander bij de Gordiaanse Knoop / Caesars vloot bij de kust van Britannia",
-    zijverhalen:"Cicero — inmiddels een eigen hoofdstuk (H21), zie daar" },
+    illustratie:"Alexander bij de Gordiaanse Knoop / Vercingetorix' overgave bij Alesia",
+    zijverhalen:"Cicero — inmiddels een eigen hoofdstuk (H21), zie daar",
+    status:"GEBOUWD EN GEKOPPELD (2026-08-11) — Griekse lijn (Philippus/Olympias/Aristoteles-Plato-relatie/Philippus' moord/Gordiaanse knoop/Darius III/Alexanders dood/Diadochen-Ptolemaeus-vooruitwijzing) en Latijnse lijn (Caesars schim/Kessel/Rijnoversteek/Britannia x2/Dumnorix-keuze/Ambiorix/Sabinus-Cotta-keuze/Vercingetorix/Alesia) compleet in SP_CH20_CNS, incl. payoff-echo's op ch19_gre_zijde/ch19_lat_zijde. CH19_MUSEUM_00 routeert naar CH20_000; SP_SCENES (singleplayer.js) en validate_chronica.js's BLOCKS bevatten SP_CH20_CNS. CH20_WORDT_VERVOLGD is het nieuwe tijdelijke speeltest-eindpunt (verplaatst vanuit CH19)." },
   { id:"ch21", nr:21, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Wijsheid en Waarheid",
     periode:"Klassiek Athene, ca. 470-322 v.Chr. / Late Republiek, ca. 106-43 v.Chr.",
     verhaal:"Socrates stelt vragen tot de stad hem ter dood veroordeelt; zijn leerling Plato beschrijft een grot vol schaduwen om uit te leggen wat echte kennis is; diens eigen leerling Aristoteles wordt uiteindelijk de leermeester van Alexander zelf (Hoofdstuk 20) — drie generaties die samen bepalen wat 'weten' betekent. In Rome doet Cicero, generaties later, iets vergelijkbaars in het Latijn: hij vertaalt en verwerkt precies deze Griekse filosofie voor een Romeins publiek, terwijl hij in de Senaat zijn eigen gevecht voert voor waarheid tegen corruptie en samenzwering. Zijn jongere tijdgenoot Seneca zet die Stoïcijnse traditie voort — en keert zelf terug als personage wanneer hij, jaren later, Nero's leermeester wordt (Hoofdstuk 23): een payoff die pas daar volledig samenkomt.",
@@ -950,6 +951,34 @@ const SP_CH17_HELENA_ECHO = " Ook Helena ken je persoonlijk — je was er zelf b
 // Hoofdstuk 18's Latijnse spoor ook echt hebben gespeeld (taalspoor=latijn
 // of beide) — grieks-only spelers hebben Sulla's proscripties nooit gezien.
 const SP_CH19_PROSCRIPTIES_ECHO = " Je hebt dit soort lijst al eens eerder gezien — bij Sulla, in Rome, generaties geleden vanuit jouw eigen reis door de tijd. Toen was het een dictator die zijn wraak afdwong met een dolk en een naam op perkament; nu is het een groep van dertig die hetzelfde doet, ditmaal in het Grieks. Dezelfde koude rekening, gewoon in een andere taal opgesteld.";
+// Hoofdstuk 20 (Gerbens verzoek 2026-08-11): payoff op de twee grote
+// zijde-keuzes uit Hoofdstuk 19 (ch19_gre_zijde/ch19_lat_zijde), zelfde
+// mechaniek als SP_CH17_CH9_ZIJDE_ECHO — een object, gekeyed op de
+// FLAG-waarde, ingezet via {ch19_gre_zijde_h20_echo}/{ch19_lat_zijde_h20_echo}
+// als eigen alinea (niet als losse zin aan het eind, dus geen leidende spatie).
+const SP_CH20_GRE_ZIJDE_ECHO = {
+  athene:"Je koos ooit de kant van Athene — het rijk dat zei zijn bondgenoten te beschermen. Van diezelfde uitputting profiteert nu een koning uit het noorden die geen van beide steden ooit als een echte bedreiging had gezien: Philippus vindt Griekenland niet verenigd, maar leeggevochten, en buigt die zwakte moeiteloos naar zijn eigen hegemonie.",
+  sparta:"Je koos ooit de kant van Sparta — de bond die zei te vechten voor vrijheid. Sparta's eigen overwinning bleek, zoals je destijds al zag, geen generatie stand te houden; nu buigt een koning uit het noorden diezelfde uitputting naar zijn eigen hegemonie, en noemt zich, niet zonder ironie, de nieuwe beschermer van precies de vrijheid waarvoor Sparta ooit zei te vechten.",
+};
+const SP_CH20_LAT_ZIJDE_ECHO = {
+  caesar:"Je koos ooit zijn kant — bij de Rubicon, en tot aan de dolksteken in de Senaat toe. Wat je nu ziet, is dezelfde man jaren eerder: geen dictator die om zijn leven vecht, maar een generaal op het hoogtepunt van zijn macht, nog jaren verwijderd van Pompeius, van de burgeroorlog, van alles wat je hem later zag worden. Hij spreekt nu zelf, naast de Boodschapper — voor het eerst sinds je hem zag sterven.",
+  pompeius:"Je koos ooit de kant tegen hem — tot aan de Iden van maart toe. Wat je nu ziet, is dezelfde man jaren eerder, nog geen vijand van Pompeius, nog geen dictator: gewoon een generaal die zijn eigen roem opbouwt, terwijl in Rome een jaloezie groeit die je zelf later hebt zien uitmonden in oorlog. Hij spreekt nu zelf, naast de Boodschapper — de stem van de man die je hebt zien sterven, terugkijkend naar toen alles nog goed ging.",
+};
+// Caesars reactie op de Sabinus/Cotta-keuze (CH20_LAT_008), gekeyed op de
+// FLAG ch20_lat_sabinus_cotta die in de twee vertakkingen wordt gezet.
+const SP_CH20_SABINUS_COTTA_REACTIE = {
+  sabinus:"Wanneer Caesar het relaas hoort, is zijn oordeel scherp maar niet onredelijk: Sabinus vertrouwde op een vijand die hem niets verschuldigd was, en betaalde daarvoor met zijn hele legioen. Toch spreekt hij ook Cotta's naam met respect uit — de man die tot het laatst waarschuwde, en tot het laatst vocht, ook al kon hij het tij niet meer keren.",
+  cotta:"Wanneer Caesar het relaas hoort, prijst hij Cotta's koppige standvastigheid — de juiste instinct, ook al kon zelfs die het einde niet afwenden. Over Sabinus is hij milder dan verwacht: geen verrader, zegt hij, alleen een man die te snel geloofde wat hij wilde horen. Het troost niemand meer, maar Caesar onthoudt het verschil.",
+};
+// Hoofdstuk 21 (concept, nog niet gekoppeld): de twee paden na de
+// Socrates-stemming (CH21_GRE_004_VRIJ -> Crito, CH21_GRE_004_VEROORDEELD
+// -> de aanklagers) komen weer samen bij de gifbeker-scène (CH21_GRE_005)
+// — deze echo, gekeyed op ch21_gre_socrates_stemming, geeft die scène een
+// korte, pad-afhankelijke openingszin i.p.v. een naadloze samenvoeging.
+const SP_CH21_SOCRATES_PAD_ECHO = {
+  vrij:"Je hebt zelf gehoord hoe Crito smeekte, en hoe Socrates weigerde — dit is dus geen verrassing meer, alleen de bevestiging van een keuze die hij al maakte voordat jij hier binnenkwam.",
+  veroordeeld:"Je hebt Anytus' eigen woorden gehoord, en de angst erachter — vanuit die kant bekeken voelt dit vonnis niet als willekeur, maar als een stad die zichzelf, tegen beter weten in, probeert te beschermen.",
+};
 // Herodotos' bredere "wat er van hen werd"-reflectie (CH17_GRE_000C):
 // hergebruikt het allang geschreven maar nooit aangeroepen SP_NPC_AFSLUITINGEN-
 // mechanisme (B27) nu het spel eindelijk diep genoeg is voor een écht "laat"
@@ -2656,6 +2685,113 @@ const SP_CODEX_ENTRIES = {
     tekst:"Bij Caesars crematie op het Forum houdt Marcus Antonius, zijn trouwste medeconsul, een lijkrede die feilloos berekend is: hij leest Caesars testament voor (met de royale erfenis die de dictator aan gewone Romeinse burgers naliet), toont het met dolksteken doorboorde gewaad, en laat de emoties van de menigte oplopen tot woede. Het volk keert zich zo hevig tegen de samenzweerders dat Brutus en Cassius, nog geen dag eerder gevierd als bevrijders, Rome halsoverkop moeten ontvluchten." },
   codex_octavianus_erfgenaam: { cat:"geschiedenis", titel:"Octavianus: de Onverwachte Erfgenaam",
     tekst:"Caesars testament bevat een verrassing die zelfs Antonius niet had zien aankomen: niet hij, maar de negentienjarige Gaius Octavius — zoon van Atia, Caesars eigen nicht, op dat moment ver weg studerend in Apollonia — wordt tot geadopteerde zoon en hoofderfgenaam benoemd. Vanaf dat moment heet hij, naar Romeins gebruik, Gaius Julius Caesar Octavianus. Niemand in Rome beseft nog hoezeer die ene naamswijziging de volgende decennia zal bepalen." },
+  // ---- Hoofdstuk 20 "Grenzen Verlegd" — Grieks spoor (Alexander) ----
+  codex_philippus_hegemonie: { cat:"geschiedenis", titel:"Philippus II en de Macedonische Hegemonie",
+    tekst:"Terwijl Athene, Sparta en Thebe elkaar decennialang uitputten, bouwt koning Philippus II van Macedonië in het noorden geduldig een professioneel leger op — met de sarissa, een speer van bijna zes meter, als kern van een nieuw soort falanx. Bij Chaeronea (338 v.Chr.) verslaat hij een verbond van Atheners en Thebanen definitief en dwingt heel Griekenland, node en tandenknarsend, tot een door hem geleide bond. Wat de Grieken zelf niet meer voor elkaar kregen — eenheid — legt een buitenstaander hun op." },
+  codex_olympias_afkomst: { cat:"geschiedenis", titel:"Olympias, Prinses van Epirus",
+    tekst:"Olympias, Philippus' vierde vrouw en de moeder van Alexander, komt uit het koningshuis van Epirus — een familie die beweert af te stammen van Neoptolemus, de zoon van Achilles zelf. Fel, ambitieus en fervent toegewijd aan mysterieculten rond Dionysus, zorgt ze er heel haar leven voor dat niemand aan haar zoons goddelijke en heroïsche afkomst twijfelt. Ze zal Alexander overleven — en zelf een gewelddadig einde vinden in de opvolgingsstrijd na zijn dood." },
+  codex_aristoteles_leermeester: { cat:"geschiedenis", titel:"Aristoteles, Leermeester van een Koningszoon",
+    tekst:"Philippus haalt de filosoof Aristoteles naar het afgelegen Mieza om zijn dertienjarige zoon te onderwijzen in retorica, geneeskunde, wetenschap en Homeros. Aristoteles zelf bracht twintig jaar door aan de Academie van Athene, als leerling van Plato — die op zijn beurt weer leerling was van Socrates. Drie generaties wijsheid, van hand tot hand doorgegeven, komen zo samen in de opvoeding van de man die straks de halve wereld zal veroveren." },
+  codex_bucephalus: { cat:"geschiedenis", titel:"Bucephalus",
+    tekst:"Een Thessalische paardenhandelaar biedt Philippus een prachtig maar ontembaar paard aan; alleen de jonge Alexander merkt op dat het dier enkel bang is voor zijn eigen schaduw, en temt het door het simpelweg naar de zon te draaien. Bucephalus ('Ossenkop') wordt Alexanders rijdier voor de rest van zijn leven — twintig jaar, tot diep in India. Wanneer het paard in 326 v.Chr. bij de Hydaspes sterft, sticht Alexander op die plek een stad in zijn eer: Bucephala, een van tientallen steden die hij tijdens zijn veroveringen naar zichzelf of, in dit ene geval, naar zijn paard vernoemt." },
+  codex_moord_philippus: { cat:"geschiedenis", titel:"De Moord op Philippus",
+    tekst:"In 336 v.Chr., tijdens de bruiloftsfeesten van zijn dochter, wordt Philippus II in het theater van Aigai neergestoken door Pausanias, een van zijn eigen lijfwachten, met een persoonlijke grief die nooit werd rechtgezet. De moordenaar wordt meteen daarna zelf gedood door andere wachters, voordat iemand hem kan ondervragen — wie er verder nog bij betrokken was, blijft voor altijd giswerk. Alexander, twintig jaar oud, bestijgt dezelfde avond nog de troon." },
+  codex_gordiaanse_knoop: { cat:"geschiedenis", titel:"De Gordiaanse Knoop",
+    tekst:"In de Frygische stad Gordium hangt een eeuwenoude wagen, vastgesjord met een knoop zo ingewikkeld dat niemand ooit het einde ervan heeft gevonden. Een orakel voorspelt: wie de knoop weet los te maken, zal heel Azië beheersen. Alexander bestudeert de knoop kort, trekt dan zijn zwaard en klieft hem in één slag doormidden — een oplossing die niemand had voorzien, maar die niemand ook kan tegenspreken." },
+  codex_darius_III: { cat:"geschiedenis", titel:"Darius III, Koning der Koningen",
+    tekst:"Darius III bestijgt in 336 v.Chr. de Perzische troon — geen rechtstreekse zoon-op-zoon nakomeling van Xerxes, die de speler eerder bij Thermopylae zag, maar wel een telg van diezelfde Achaemenidische koningslijn, enkele generaties verder. Bij Issus (333 v.Chr.) en Gaugamela (331 v.Chr.) staat hij tegenover Alexanders veel kleinere, maar veel beweeglijkere leger — en verliest beide keren, ondanks een enorme numerieke overmacht, doordat zijn eigen linies uiteenvallen zodra hij zelf van het slagveld vlucht." },
+  codex_dood_darius: { cat:"geschiedenis", titel:"Verraden door de Eigen Satraap",
+    tekst:"Na Gaugamela wordt Darius III niet langer door Alexander bedreigd, maar door zijn eigen mensen: Bessus, satraap van Bactrië, zet hem gevangen en steekt hem uiteindelijk neer wanneer Alexanders leger te dichtbij komt — dezelfde soort verraad van binnenuit die de speler al bij Philippus zag, en later bij Caesar zal zien. Alexander vindt de stervende koning, en laat hem — zijn grootste vijand — met volle koninklijke eer bijzetten in Persepolis." },
+  codex_alexander_dood_babylon: { cat:"geschiedenis", titel:"Alexanders Dood in Babylon",
+    tekst:"Na jaren van veroveringen tot diep in India weigert Alexanders eigen leger, uitgeput en heimweeziek, aan de rivier de Hyphasis nog verder te trekken. Alexander keert met tegenzin terug naar Babylon — waar hij in juni 323 v.Chr., pas tweeëndertig jaar oud, sterft na een korte, hevige koorts. Op zijn sterfbed vraagt zijn omgeving wie zijn rijk moet erven; zijn laatste woord luidt, naar verluidt, simpelweg 'toi kratistoi' — aan de sterkste." },
+  codex_diadochen_ptolemaeus: { cat:"geschiedenis", titel:"De Diadochen en Ptolemaeus' Buit",
+    tekst:"Zonder aangewezen opvolger verscheuren Alexanders eigen generaals — de Diadochen, letterlijk 'opvolgers' — zijn rijk vrijwel meteen onderling. Ptolemaeus, een van hen, grijpt Egypte en kaapt zelfs de lijkstoet die Alexanders lichaam naar Macedonië moest brengen, om het in plaats daarvan in Alexandrië te laten bijzetten — een politiek statement zo groot als het land dat hij zich toe-eigent. Zijn eigen nakomelingen zullen Egypte bijna drie eeuwen regeren, tot aan de laatste van hen: een koningin met de naam Cleopatra." },
+  // ---- Hoofdstuk 20 "Grenzen Verlegd" — Latijn spoor (Caesar in Gallië) ----
+  codex_caesar_alexander_standbeeld: { cat:"geschiedenis", titel:"Caesar en het Standbeeld van Alexander",
+    tekst:"Als jonge quaestor in Gades (het huidige Cádiz, 69 v.Chr.) zag Caesar in de tempel van Hercules een standbeeld van Alexander de Grote — en barstte, naar verluidt, in tranen uit. Op zijn vraag waarom, antwoordde hij dat Alexander op zijn leeftijd al de hele wereld had veroverd, terwijl hijzelf nog niets noemenswaardigs had gepresteerd (Plutarchus, Leven van Caesar; Suetonius, Divus Julius). Deze anekdote wordt vaak aangehaald als de vroegste aanwijzing voor Caesars levenslange ambitie om Alexanders voorbeeld te evenaren." },
+  codex_slag_bij_kessel: { cat:"geschiedenis", titel:"De Slag bij Kessel",
+    tekst:"In 55 v.Chr. trekken de Germaanse stammen Usipetes en Tencteri, op de vlucht voor andere stammen, de Rijn over op zoek naar nieuw land. Caesar, die geen precedent wil scheppen, valt hun kamp bij het samenvloeien van Maas en Rijn — bij het huidige Kessel — bij verrassing aan; volgens zijn eigen verslag komen honderdduizenden mannen, vrouwen en kinderen om. Het is, zelfs voor Romeinse begrippen, een van de hardste hoofdstukken uit Caesars eigen Commentarii — geschreven door de enige die er verslag van deed." },
+  codex_rijnoversteek: { cat:"geschiedenis", titel:"De Rijnoversteek",
+    tekst:"Om zijn eigen Germaanse bondgenoten te imponeren én te waarschuwen, laat Caesar in slechts tien dagen een houten brug over de Rijn bouwen — een technisch huzarenstukje dat hijzelf tot in detail beschrijft. Zijn leger trekt achttien dagen door Germania, zonder een echte veldslag, en trekt zich dan terug, waarna de brug meteen weer wordt afgebroken. Het doel was nooit verovering, maar een boodschap: Rome kan overal komen waar het wil." },
+  codex_britannia_expeditie_1: { cat:"geschiedenis", titel:"De Eerste Oversteek naar Britannia",
+    tekst:"In de nazomer van 55 v.Chr. steekt Caesar, als eerste Romeinse generaal ooit, over naar het mistige eiland Britannia — officieel om Gallische opstandelingen te straffen die daar hun toevlucht zochten. De landing verloopt chaotisch, een storm beschadigt de vloot ernstig, en zonder cavalerie en met de winter in aantocht keert Caesar al na een paar weken weer terug naar Gallië. Militair een bescheiden resultaat — politiek, in Rome, een sensatie: niemand was ooit zo ver gegaan." },
+  codex_aquilifer_britannia: { cat:"geschiedenis", titel:"De Sprong van de Aquilifer",
+    tekst:"Caesar beschrijft in zijn eigen Commentarii (De Bello Gallico 4.25) hoe zijn soldaten aarzelden om vanaf de schepen het diepe water in te springen, onder vijandelijk vuur vanaf het strand — tot de aquilifer (adelaardrager) van het Tiende Legioen, na een gebed aan de goden, als eerste sprong met de woorden 'Desilite, commilitones...' Zijn naam noemt Caesar niet; zijn moed dwong de rest van het legioen om te volgen." },
+  codex_dumnorix: { cat:"geschiedenis", titel:"Dumnorix, een Vrij Man van een Vrij Volk",
+    tekst:"Dumnorix, een invloedrijke edelman van de Haeduërs, heeft zich jarenlang zowel nuttig als verdacht gemaakt voor Caesar — bondgenoot naar buiten toe, maar met een eigen machtsbasis en een diepe weerzin tegen Rome. Wanneer hij vlak voor de tweede Britannia-expeditie weigert mee over te steken en er in plaats daarvan vandoor probeert te gaan, stuurt Caesar ruiters achter hem aan. Dumnorix verzet zich vechtend tot het einde, en roept naar verluidt herhaaldelijk dat hij een vrij man van een vrij volk is — tot hij neervalt." },
+  codex_britannia_expeditie_2: { cat:"geschiedenis", titel:"De Tweede Oversteek: Cassivellaunus",
+    tekst:"De tweede Britannia-expeditie (54 v.Chr.) is groter en beter voorbereid: vijf legioenen, ditmaal mét cavalerie. Cassivellaunus, aangewezen als opperbevelhebber van de verenigde Britse stammen, voert een uitputtende guerrillaoorlog met strijdwagens, maar verliest uiteindelijk zijn eigen versterkte hoofdkwartier. Hij onderwerpt zich, belooft schatting — en Caesar trekt, met de winter in aantocht en onrust in Gallië, opnieuw terug zonder het eiland te bezetten. Pas Claudius, bijna een eeuw later, zal Britannia echt veroveren." },
+  codex_ambiorix_opstand: { cat:"geschiedenis", titel:"Ambiorix en de Eburonen",
+    tekst:"De winter van 54-53 v.Chr. dwingt Caesars legioenen, verspreid over Gallië, tot inkwartiering bij lokale stammen — een zware last die de Eburonen, onder hun koning Ambiorix, tot opstand drijft. Ambiorix overtuigt de Romeinse bevelhebbers dat een grote, gecoördineerde Gallische opstand hun kamp zal overspoelen, en biedt hun veilige doortocht aan naar het dichtstbijzijnde Romeinse kamp — een aanbod dat, wat de Romeinen ook beslissen, een valstrik blijkt te zijn." },
+  codex_sabinus_cotta: { cat:"geschiedenis", titel:"De Ondergang van Sabinus en Cotta",
+    tekst:"Of het kamp nu wordt opgebroken of verdedigd — beide legaten, Quintus Titurius Sabinus en Lucius Aurunculeius Cotta, sneuvelen met vrijwel hun hele manschap: zo'n vijftien cohorten, misschien wel zesduizend tot negenduizend man, worden uitgeroeid. Het is een van de zwaarste nederlagen die een Romeins leger in Gallië ooit leed, en Caesar reageert met een genadeloze strafexpeditie tegen de Eburonen — Ambiorix zelf ontsnapt hem echter voorgoed." },
+  codex_vercingetorix: { cat:"geschiedenis", titel:"Vercingetorix Verenigt Gallië",
+    tekst:"Jaren van Romeinse strafexpedities, gedwongen inkwartiering en zware belastingen hebben Gallië tot het uiterste opgejaagd. In 52 v.Chr. lukt wat niemand voor hem lukte: de jonge Arverense edelman Vercingetorix verenigt tientallen rivaliserende Gallische stammen tot één gezamenlijke opstand, met een verschroeide-aarde-strategie die Caesar voor het eerst in jaren echt in het nauw drijft." },
+  codex_alesia: { cat:"geschiedenis", titel:"Alesia",
+    tekst:"Bij het versterkte Alesia sluit Caesar Vercingetorix' leger in met een dubbele omwalling: één linie naar binnen gericht tegen de belegerden, één naar buiten tegen het ontzettingsleger dat heel Gallië nog bijeenbrengt — Romeinse soldaten ingesloten tussen twee vijandelijke legers tegelijk. Wanneer het ontzettingsleger uiteindelijk wordt verslagen, geeft Vercingetorix zich over: hij rijdt in volle wapenrusting Caesars kamp binnen en legt zijn wapens aan diens voeten neer. Zes jaar later wordt hij, na Caesars triomftocht door Rome, geëxecuteerd." },
+  // ---- Hoofdstuk 21 "Wijsheid en Waarheid" — Grieks spoor (Socrates/Plato/Aristoteles) ----
+  codex_socrates: { cat:"geschiedenis", titel:"Socrates",
+    tekst:"Socrates (ca. 470-399 v.Chr.) was een Atheense filosoof die bekendstond om zijn dialectische ondervragingsmethode — hij confronteerde voorbijgangers met vragen over deugden als rechtvaardigheid en dapperheid, tot hun eigen aannames instortten. Hij schreef zelf niets op; wat we van hem weten, komt via de geschriften van zijn leerlingen Plato en Xenofon." },
+  codex_socrates_dood: { cat:"geschiedenis", titel:"De Dood van Socrates",
+    tekst:"In 399 v.Chr. wordt Socrates door de Atheense volksrechtbank ter dood veroordeeld, beschuldigd van goddeloosheid en het bederven van de jeugd. Hij weigert een aangeboden ontsnapping — de wetten van de stad moeten gerespecteerd worden, ook wanneer ze hem zelf treffen — en drinkt in het bijzijn van zijn leerlingen de gifbeker met scheerling." },
+  codex_plato_grot: { cat:"geschiedenis", titel:"Plato's Allegorie van de Grot",
+    tekst:"Na Socrates' dood sticht Plato de Academie, buiten de muren van Athene. In zijn beroemde grot-allegorie beschrijft hij mensen die vastgeketend in een duistere grot alleen schaduwen op een wand zien, en verwart die schaduwen met de werkelijkheid — een beeld voor hoe de zintuiglijke wereld slechts een afspiegeling is van een hogere, onveranderlijke Ideeënwereld." },
+  codex_aristoteles: { cat:"geschiedenis", titel:"Aristoteles en het Lyceum",
+    tekst:"Aristoteles, twintig jaar leerling aan Plato's Academie, sticht na zijn terugkeer uit Macedonië (waar hij de jonge Alexander onderwees) zijn eigen school: het Lyceum. Anders dan Plato richt hij zich op de waarneembare natuur, logica en ethiek — een systematische aanpak die eeuwenlang het Westerse denken zal blijven vormen." },
+  // ---- Hoofdstuk 21 "Wijsheid en Waarheid" — Latijn spoor (Cicero) ----
+  codex_verres: { cat:"geschiedenis", titel:"Het Proces tegen Verres",
+    tekst:"Gaius Verres plunderde als gouverneur van Sicilië (73-71 v.Chr.) de provincie op grote schaal. De Sicilianen vragen Cicero om de aanklacht te voeren; diens overweldigende bewijsvoering (In Verrem) is zo verpletterend dat Verres, nog vóór de tweede zittingsronde, vrijwillig in ballingschap naar Massilia vlucht. De zaak vestigt Cicero's naam als de belangrijkste redenaar van Rome." },
+  codex_catilina: { cat:"geschiedenis", titel:"De Samenzwering van Catilina",
+    tekst:"Lucius Sergius Catilina beraamt in 63 v.Chr., na een verloren consulsverkiezing, een gewapende staatsgreep. Cicero, op dat moment consul, onthult de samenzwering in de Senaat met een reeks redevoeringen die met 'Quo usque tandem...' beginnen. Catilina vlucht naar zijn leger in Etrurië en sneuvelt daar; andere samenzweerders worden, zonder formeel volksproces, terechtgesteld — een besluit dat Cicero later zelf zal terugbetalen met eigen ballingschap." },
+  codex_cicero_filosofie: { cat:"geschiedenis", titel:"Cicero als Vertaler van de Filosofie",
+    tekst:"Wanneer politieke stormen luwen, trekt Cicero zich terug op zijn landgoederen en vertaalt Griekse filosofische concepten naar het Latijn — woorden als humanitas en qualitas muntte hij zelf, om Griekse ideeën een Latijnse vorm te geven. Zonder Cicero's vertaalwerk had de Latijnse taal decennialang geen woordenschat gehad om over filosofie te spreken." },
+  codex_seneca_cameo: { cat:"geschiedenis", titel:"Seneca, een Jonge Bezoeker",
+    tekst:"Lucius Annaeus Seneca is als jongeman een van de vele bezoekers aan Cicero's kring, gevormd door dezelfde retorische en filosofische traditie die Cicero naar Rome haalde. Zijn eigen rol — als stoïcijns filosoof, en jaren later als leermeester van een keizer — begint pas veel later in zijn leven." },
+  codex_cicero_archimedes_graf: { cat:"geschiedenis", titel:"Cicero Vindt Archimedes' Graf",
+    tekst:"Als quaestor op Sicilië (75 v.Chr.) zoekt en vindt Cicero het overwoekerde, vergeten graf van Archimedes buiten de Agrigentijnse poort van Syracuse — herkenbaar aan een bol-in-cilinder-figuur die de wiskundige zelf als zijn grootste ontdekking beschouwde. De Syracusanen zelf wisten niet meer waar hun beroemdste burger lag; Cicero vertelt dit verhaal later zelf, met zichtbare trots, in zijn Tusculanae Disputationes." },
+  codex_dood_archimedes: { cat:"geschiedenis", titel:"De Dood van Archimedes",
+    tekst:"Bij de val van Syracuse (212 v.Chr.), aan het einde van een tweejarig beleg dat mede door Archimedes' eigen oorlogsmachines was vertraagd, doodt een Romeinse soldaat de verdiept-in-gedachten geleerde — tegen de uitdrukkelijke bevelen van generaal Marcellus in, die hem juist ongedeerd wilde laten overbrengen. Volgens de overlevering waren zijn laatste woorden een verzoek om zijn meetkundige tekening in het zand niet te verstoren." },
+  codex_diotima: { cat:"geschiedenis", titel:"Diotima van Mantinea",
+    tekst:"In Plato's Symposium vertelt Socrates dat zijn eigen inzicht in liefde en schoonheid afkomstig is van Diotima, een wijze vrouw (mogelijk een priesteres) uit Mantinea. Haar 'ladder van de liefde' beschrijft hoe verlangen naar één mooi lichaam uiteindelijk kan uitgroeien tot verlangen naar de Schoonheid zelf — een van de invloedrijkste passages uit de hele Griekse filosofie, in de mond gelegd van een vrouw die Socrates zelf als zijn leermeester erkende." },
+  codex_crito: { cat:"geschiedenis", titel:"Crito en de Wetten van Athene",
+    tekst:"In Plato's dialoog Crito bezoekt Socrates' rijke vriend Crito hem vlak vóór zijn executie in de gevangenis, met een ontsnappingsplan al geregeld. Socrates weigert: hij redeneert dat wie zeventig jaar van de bescherming van Athenes wetten heeft genoten, die wetten niet in het geheim mag ontduiken zodra ze hem persoonlijk treffen — onrecht met onrecht beantwoorden is voor hem nooit gerechtvaardigd." },
+  codex_aanklagers_socrates: { cat:"geschiedenis", titel:"De Aanklagers van Socrates",
+    tekst:"Formeel klaagt de jonge dichter Meletus Socrates aan, maar de politicus Anytus staat achter hem met veel meer invloed en een persoonlijke grief: zijn zoon raakte gefascineerd door Socrates in plaats van het familiebedrijf voort te zetten. Bredere angst speelt ook mee — twee bekenden van Socrates, Critias (leider van de Dertig Tirannen) en Alkibiades, hadden Athene kort daarvoor allebei zwaar beschadigd." },
+  codex_xanthippe: { cat:"geschiedenis", titel:"Xanthippe",
+    tekst:"Xanthippe, Socrates' vrouw, wordt door Plato's Phaedo neergezet als een hysterische vrouw die voor het filosofische gesprek wordt weggestuurd. Xenofon, die haar zelf kende, tekent in zijn Symposium en Memorabilia een genuanceerder beeld: een scherpe, directe vrouw die drie zonen grootbracht terwijl haar man onbetaald op de markt filosofeerde — een portret dat pas eeuwen later, dankzij feministische herlezingen van beide bronnen, weer serieus werd genomen." },
+  codex_terentia: { cat:"geschiedenis", titel:"Terentia",
+    tekst:"Terentia, Cicero's eerste vrouw, was volgens Plutarchus allesbehalve een teruggetrokken huisvrouw: politiek scherpzinnig, onverschrokken, en naar eigen zeggen van Cicero meer geïnteresseerd in zijn publieke zaken dan in de huishouding. Latere bronnen schrijven haar (mogelijk overdreven) een directe rol toe in Cicero's vastberadenheid tijdens de Catilinarische samenzwering." },
+  // ---- Hoofdstuk 22 "Opvolgers tegenover Opvolgers" — concept, nog niet gekoppeld ----
+  codex_perdikkas: { cat:"geschiedenis", titel:"Perdikkas",
+    tekst:"Perdikkas, een van Alexanders voornaamste cavaleriecommandanten, kreeg bij Alexanders sterfbed de koninklijke zegelring en probeerde als regent de eenheid van het rijk te bewaren rond Alexanders ongeboren zoon en diens verstandelijk beperkte halfbroer Philippus III Arrhidaeus. Toen een strafexpeditie tegen Ptolemaeus in Egypte vastliep — honderden manschappen verdronken bij een mislukte Nijloversteek — werd hij in 320 v.Chr. door zijn eigen officieren vermoord." },
+  codex_ptolemaeus_egypte: { cat:"geschiedenis", titel:"Ptolemaeus en de Consolidatie van Egypte",
+    tekst:"Ptolemaeus I Soter koos, anders dan de meeste andere diadochen, bewust niet voor de poging om Alexanders hele rijk te herenigen. In plaats daarvan bouwde hij Egypte uit tot een welvarende, goed verdedigbare eigen staat, met Alexandrië als nieuwe hoofdstad — een strategie die zijn dynastie uiteindelijk bijna drie eeuwen aan de macht hield." },
+  codex_kassandros: { cat:"geschiedenis", titel:"Kassandros",
+    tekst:"Kassandros, zoon van Alexanders voormalige regent Antipater, greep de macht over Macedonië. Uit angst voor een herstel van het oude koningshuis liet hij Alexanders moeder Olympias (316 v.Chr.) en later ook Alexanders weduwe Roxana en hun zoon Alexander IV (ca. 310 v.Chr.) executeren — het definitieve einde van Alexanders eigen bloedlijn." },
+  codex_alexander_iv: { cat:"geschiedenis", titel:"Alexander IV",
+    tekst:"Alexander IV, de postuum geboren zoon van Alexander de Grote en Roxana, was formeel mede-koning naast zijn verstandelijk beperkte oom Philippus III Arrhidaeus, maar regeerde in werkelijkheid nooit zelf. Rond 310 v.Chr. liet Kassandros hem, samen met zijn moeder, in het geheim vermoorden, terwijl Alexanders eigen generaals — geen van hen familie — zijn rijk onderling al aan het verdelen waren." },
+  codex_antigonos: { cat:"geschiedenis", titel:"Antigonos Monophthalmos",
+    tekst:"Antigonos 'de Eenoog', de oudste van Alexanders generaals, probeerde samen met zijn zoon Demetrios Poliorketes het hele rijk onder eigen gezag te herenigen — een ambitie die de andere diadochen dwong tot een gezamenlijke coalitie tegen hem. Bij Ipsus (301 v.Chr.), inmiddels tachtig jaar oud, sneuvelde hij op het slagveld; zijn droom van een herenigd rijk stierf met hem." },
+  codex_tweede_triumviraat: { cat:"geschiedenis", titel:"Het Tweede Triumviraat",
+    tekst:"Anders dan het informele Eerste Triumviraat van Caesar, Pompeius en Crassus was het Tweede Triumviraat (43 v.Chr.) een officieel bij wet bekrachtigd driemanschap tussen Marcus Antonius, Octavianus en Lepidus, met vergaande bevoegdheden om de staat te 'herstellen' en Caesars moordenaars te vervolgen." },
+  codex_cicero_dood: { cat:"geschiedenis", titel:"De Dood van Cicero",
+    tekst:"Cicero wordt op 7 december 43 v.Chr. door soldaten van Antonius ingehaald bij zijn villa nabij Formiae. Hij weigert te vluchten. Zijn hoofd en handen worden afgehakt en op het Forum aan de Rostra gespijkerd — dezelfde plek waar hij ooit zijn beroemdste redevoeringen hield, en dezelfde handen die de Filippica's tegen Antonius schreven." },
+  codex_fulvia: { cat:"geschiedenis", titel:"Fulvia",
+    tekst:"Fulvia, Antonius' vrouw, was een van de politiek zelfstandigste vrouwen van de late Republiek. Terwijl Antonius in het oosten verbleef, verzamelde zij zelf legioenen en verschanste zich in Perusia tegen Octavianus (de Bellum Perusinum, 41-40 v.Chr.) — een zeldzaam voorbeeld van een Romeinse vrouw die rechtstreeks een gewapend conflict aanvoerde." },
+  codex_agrippa: { cat:"geschiedenis", titel:"Marcus Vipsanius Agrippa",
+    tekst:"Agrippa was Octavianus' naaste vriend en bekwaamste veldheer, verantwoordelijk voor een groot deel van diens militaire successen — van het beleg van Perusia tot, jaren later, de beslissende zeeslag bij Actium." },
+  codex_maecenas: { cat:"geschiedenis", titel:"Gaius Maecenas",
+    tekst:"Maecenas was Octavianus' politieke en culturele adviseur, en beschermheer van een kring dichters — onder wie Vergilius en Horatius — wier werk de idealen van de nieuwe orde mede vormgaf." },
+  codex_vergilius: { cat:"geschiedenis", titel:"Vergilius",
+    tekst:"Publius Vergilius Maro, onder bescherming van Maecenas, begint in deze periode aan werk dat het landleven en oude Romeinse deugden verheerlijkt — een aanloop naar zijn latere meesterwerk, de Aeneis, dat Rome's oorsprong verbindt met de val van Troje." },
+  codex_cleopatra: { cat:"geschiedenis", titel:"Cleopatra VII",
+    tekst:"Cleopatra VII Philopator, laatste vorstin van de Ptolemeïsche dynastie, combineerde grote intellectuele vorming (ze sprak naar verluidt negen talen) met scherp politiek inzicht. Haar ontmoeting met Antonius bij Tarsus (41 v.Chr.) — aan boord van een goudbeslagen schip, verkleed als Aphrodite — is een van de beroemdste scènes uit de oudheid, overgeleverd door Plutarchus." },
+  codex_caesarion: { cat:"geschiedenis", titel:"Caesarion",
+    tekst:"Ptolemaeus XV Caesarion, Cleopatra's zoon bij Julius Caesar, is op dit moment een kind van zes in Alexandrië. Als Caesars enige biologische zoon vormt zijn bestaan een stille maar reële vraag: is de rechtmatige erfgenaam een kind van bloed, of een neef die Caesar slechts adopteerde? Precies dezelfde spanning die net Alexanders eigen zoon het leven kostte." },
+  codex_fulvia_dood: { cat:"geschiedenis", titel:"Fulvia's Dood",
+    tekst:"Na haar nederlaag bij Perusia vlucht Fulvia naar Griekenland. Een kille ontmoeting met Antonius in Athene, die haar de mislukte opstand verwijt, wordt haar laatste — ziek en politiek geïsoleerd sterft ze kort daarna in Sikyon. Haar dood ruimt onbedoeld de weg vrij voor een verzoening tussen Antonius en Octavianus." },
+  codex_octavia_huwelijk: { cat:"geschiedenis", titel:"Het Huwelijk van Octavia en Antonius",
+    tekst:"Het huwelijk tussen Octavia en Marcus Antonius (40 v.Chr.) bezegelt de Vrede van Brundisium. Octavia, gerespecteerd om haar verstandigheid, speelt zelf een actieve bemiddelende rol tussen haar broer en haar echtgenoot — een vrede die, voorlopig, standhoudt." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3140,6 +3276,14 @@ const SP_SOUVENIRS = {
     caption:"Een potscherf met een gekrast Atheens naam erop, naast een gedeeltelijk verkoold fragment van een Romeinse proscriptielijst — twee manieren om een naam voorgoed uit de openbaarheid te schrappen, met eeuwen en een zee ertussen." },
   souvenir_bondgenoten_verscheurd: { nm:"Een Gebroken Lans en een Senaatsdolk", icon:"🗡️", img:"souvenir_bondgenoten_verscheurd.png",
     caption:"Een in tweeën gebroken speerpunt, zoals bondgenoten die ooit samen tegen Perzië vochten, naast een kleine, ongebruikte dolk — het soort dat in de Senaat op de Iden van maart al te vaak wél werd gebruikt." },
+  souvenir_grenzen_verlegd: { nm:"Een Doorgesneden Koord en een Stuk Brugleuning", icon:"⚔️", img:"souvenir_grenzen_verlegd.png",
+    caption:"Een kort, doormidden gesneden koord, zoals de Gordiaanse knoop die niemand ooit had losgekregen, naast een verweerd stukje houten brugleuning — van de brug die in tien dagen over de Rijn verrees, en er net zo snel weer verdween." },
+  // Hoofdstuk 21 "Wijsheid en Waarheid" — concept, nog niet gekoppeld.
+  souvenir_wijsheid_en_waarheid: { nm:"Een Gifbeker en een Perkamentrol", icon:"📜", img:"souvenir_wijsheid_en_waarheid.png",
+    caption:"Een lege, aardewerken beker die ooit scheerlingsap bevatte, naast een perkamentrol vol Latijnse woorden die ooit alleen in het Grieks bestonden — twee manieren om wijsheid te laten voortleven, van hand tot hand, van taal naar taal." },
+  // Hoofdstuk 22 "Opvolgers tegenover Opvolgers" — concept, nog niet gekoppeld.
+  souvenir_opvolgers_tegenover_opvolgers: { nm:"Een Bronzen Diadeem en een Zilveren Denarius", icon:"👑", img:"souvenir_opvolgers_tegenover_opvolgers.png",
+    caption:"Een bronzen diadeem, zoals de diadochen droegen zodra ze zichzelf koning durfden noemen, naast een zilveren denarius met het dubbele profiel van het Triumviraat — twee manieren om te laten zien wie de macht claimt, zodra degene die haar écht had, er niet meer is." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -4015,6 +4159,28 @@ const SP_VOCAB_ENTRIES = {
   grieks_demokratia:{ taal:"grieks", woord:"δημοκρατία", transcript:"dēmokratía", betekenis:"democratie" },
   latijn_clementia: { taal:"latijn", woord:"clementia, clementiae", betekenis:"genade, zachtmoedigheid" },
   latijn_caedes:    { taal:"latijn", woord:"caedes, caedis", betekenis:"moord, slachting" },
+  // ---- Hoofdstuk 20 "Grenzen Verlegd" — nieuwe contextwoorden ----
+  grieks_basileus:  { taal:"grieks", woord:"βασιλεύς", transcript:"basileús", betekenis:"koning" },
+  grieks_diadochos: { taal:"grieks", woord:"διάδοχος", transcript:"diádochos", betekenis:"opvolger" },
+  grieks_didaskalos:{ taal:"grieks", woord:"διδάσκαλος", transcript:"didáskalos", betekenis:"leraar" },
+  latijn_obses:     { taal:"latijn", woord:"obses, obsidis", betekenis:"gijzelaar" },
+  latijn_deditio:   { taal:"latijn", woord:"deditio, deditionis", betekenis:"overgave" },
+  latijn_legatus:   { taal:"latijn", woord:"legatus, legati", betekenis:"gezant, onderbevelhebber" },
+  latijn_aquila:    { taal:"latijn", woord:"aquila, aquilae", betekenis:"adelaar (ook: legioensvaandel)" },
+  // ---- Hoofdstuk 21 "Wijsheid en Waarheid" — concept, nog niet gekoppeld ----
+  grieks_nephelai:  { taal:"grieks", woord:"νεφέλαι", transcript:"nephélai", betekenis:"wolken" },
+  grieks_idea:      { taal:"grieks", woord:"ἰδέα", transcript:"idéa", betekenis:"vorm, idee, grondtype" },
+  latijn_patientia: { taal:"latijn", woord:"patientia, patientiae", betekenis:"geduld, verdraagzaamheid" },
+  latijn_humanitas: { taal:"latijn", woord:"humanitas, humanitatis", betekenis:"menselijkheid, beschaving" },
+  latijn_virtus:    { taal:"latijn", woord:"virtus, virtutis", betekenis:"deugd, moed, voortreffelijkheid" },
+  grieks_kyklos:    { taal:"grieks", woord:"κύκλος", transcript:"kýklos", betekenis:"cirkel" },
+  // ---- Hoofdstuk 22 "Opvolgers tegenover Opvolgers" — concept, nog niet gekoppeld ----
+  grieks_diadochoi:  { taal:"grieks", woord:"διάδοχοι", transcript:"diádochoi", betekenis:"opvolgers" },
+  grieks_pharos:     { taal:"grieks", woord:"φάρος", transcript:"pháros", betekenis:"baken, lichttoren" },
+  grieks_poliorketes:{ taal:"grieks", woord:"πολιορκητής", transcript:"poliorkētḗs", betekenis:"stedenbelegeraar" },
+  grieks_basilissa:  { taal:"grieks", woord:"βασίλισσα", transcript:"basílissa", betekenis:"koningin" },
+  // latijn_proscriptio bestaat al (zie hierboven, Hoofdstuk 19-blok) — Gemini's concept
+  // gebruikte deze naam opnieuw, geen nieuwe entry nodig, de bestaande resolvet al.
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -24203,19 +24369,2116 @@ TEXT:
 Een nieuwe stolp vult zich: een in tweeën gebroken speerpunt naast een kleine, ongebruikte dolk. "Bondgenoten die samen wonnen," zegt de Boodschapper zacht, terwijl ze de stolp een moment bekijkt, "blijken zelden bondgenoten te blijven zodra de vijand verdwenen is. Twee keer, deze keer, in bijna hetzelfde jaar."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH19_WORDT_VERVOLGD
+* Luister naar het volgende verhaal -> CH20_000
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 20 "Grenzen Verlegd" ----
+   Gerbens verzoek (2026-08-11): het Latijnse spoor wordt mede verteld door
+   de schim van Caesar zelf, naast de Boodschapper — een flashback naar de
+   jaren vóór de Iden van maart (H19), toen alles nog goed met hem ging.
+   Nieuwe personages: Vercingetorix (Latijn), Diadochen/Ptolemaeus, Darius
+   III, Olympias, Aristoteles (Grieks) — Aristoteles' eigen leermeester
+   Plato krijgt hier zijn eerste echte RELATION (kind-cameo's H18/H19, zie
+   de RELATION/FLAG-roster in Chronica.md §7.79). Payoffs op de twee grote
+   H19-zijde-keuzes (ch19_gre_zijde/ch19_lat_zijde) via {ch19_gre_zijde_h20_echo}/
+   {ch19_lat_zijde_h20_echo} (SP_CH20_GRE_ZIJDE_ECHO/SP_CH20_LAT_ZIJDE_ECHO).
+   Nieuwe keuze: Dumnorix (genade/executie-bevel, Clementia/Severitas) en
+   Sabinus/Cotta (vertrekken/blijven, zelfde afloop maar andere reactie van
+   Caesar via {ch20_sabinus_cotta_reactie}). CH20_WORDT_VERVOLGD is het
+   nieuwe tijdelijke speeltest-eindpunt (verplaatst vanuit CH19). */
+const SP_CH20_CNS = `
+=== SCENE: CH20_000 ===
+
+TITLE:
+Grenzen Verlegd
+
+TEXT:
+"[[Ecce|zie hier]] — twee mannen, generaties uit elkaar, die allebei de grens van wat mogelijk leek gewoon verder opschoven dan wie ook vóór hen," zegt de Boodschapper van Chronos. "De een met een leger dat tot in de verste uithoeken van de bekende wereld trekt. De ander met een pen die, achteraf, misschien nog wel machtiger bleek dan zijn zwaard."
+
+"Dit keer sta ik er niet helemaal alleen voor," voegt ze eraan toe, met iets in haar stem dat niet helemaal haar gebruikelijke afstandelijkheid is. "Aan de Latijnse kant van dit verhaal vertelt iemand anders een deel ervan mee — iemand die jij, niet lang geleden, hebt zien sterven."
+
+VOCAB:
+grieks_basileus, latijn_legatus
+
+CHOICES:
+* Volg Alexander, koning van Macedonië [REQUIRE:taalspoor!=latijn] -> CH20_GRE_001
+* Volg Caesars eigen herinnering [REQUIRE:taalspoor=latijn] -> CH20_LAT_001
 
 END
 
-=== SCENE: CH19_WORDT_VERVOLGD ===
+=== SCENE: CH20_GRE_001 ===
+
+TITLE:
+Een Koning uit het Noorden
+
+TEXT:
+Terwijl Athene en Sparta zichzelf hebben uitgeput — jij hebt gezien hoe — bouwt koning Philippus II van Macedonië in alle stilte iets op dat geen van beide steden zich nog kan veroorloven: een groot, goed betaald, permanent leger, gedrild met een nieuw soort falanx en de sarissa, een speer van bijna zes meter lang.{ch19_gre_zijde_h20_echo}
+
+Bij Chaeronea, in 338 v.Chr., verslaat Philippus een laatste verbond van Atheners en Thebanen. Griekenland is voortaan, node en tandenknarsend, verenigd — niet door een van de Grieken zelf, maar door een buitenstaander uit het noorden.
+
+CODEX:
+codex_philippus_hegemonie
+
+CHOICES:
+* Zie wie Philippus' vrouw is, en wiens zoon hij krijgt -> CH20_GRE_002
+
+END
+
+=== SCENE: CH20_GRE_002 ===
+
+TITLE:
+Olympias, en een Zoon met een Voorbestemming
+
+TEXT:
+Philippus' vierde vrouw, Olympias, komt uit het koningshuis van Epirus — een familie die beweert af te stammen van Neoptolemus, de zoon van Achilles zelf, wiens verhaal je zelf al van dichtbij hebt meegemaakt. Fel, ambitieus en toegewijd aan de mysteriecultussen rond Dionysus, laat ze nooit iemand vergeten dat haar zoon een heroïsche afkomst heeft.
+
+Die zoon wordt in 356 v.Chr. geboren, en krijgt de naam Alexander.
+
+CODEX:
+codex_olympias_afkomst
+
+CHOICES:
+* Zie wie hem onderwijst -> CH20_GRE_003
+
+END
+
+=== SCENE: CH20_GRE_003 ===
+
+TITLE:
+De Leermeester uit Stageira
+
+TEXT:
+Voor zijn dertienjarige zoon haalt Philippus een filosoof naar het afgelegen Mieza: Aristoteles, die de jonge Alexander jarenlang onderwijst in retorica, geneeskunde, natuurwetenschap en Homeros. Aristoteles zelf bracht twintig jaar door aan de Academie van Athene, als leerling van een man wiens naam je al kent — als een kind, amper meer dan een baby, tussen de bouwvakkers van een Atheense tempel, en later als jongetje bij de Dertig Tirannen: Plato.
+
+"[[Ecce|zie hier]]," zegt de Boodschapper zacht. "Drie generaties wijsheid, van hand tot hand — Socrates aan Plato, Plato aan Aristoteles, Aristoteles aan de jongen die straks de halve wereld zal veroveren. Jij hebt, zonder het toen te beseffen, Plato al twee keer zien opgroeien."
+
+RELATION:
+plato=+1
+
+CODEX:
+codex_aristoteles_leermeester
+
+VOCAB:
+grieks_didaskalos
+
+CHOICES:
+* Zie een ander soort les die Alexander zichzelf leert -> CH20_GRE_003B
+
+END
+
+=== SCENE: CH20_GRE_003B ===
+
+TITLE:
+Bucephalus
+
+TEXT:
+Rond diezelfde tijd biedt een Thessalische paardenhandelaar Philippus een prachtig, maar volstrekt ontembaar paard aan — niemand in het hele hof krijgt het ook maar bereden. Wanneer de handelaar het dier alweer wil wegleiden, merkt de jonge Alexander iets op dat niemand anders zag: het paard schrikt van zijn eigen schaduw. Hij draait het simpelweg naar de zon, zodat de schaduw achter hem valt, klimt erop, en rijdt weg zonder één keer afgeworpen te worden.
+
+DIALOGUE:
+Philippus
+Mijn jongen, zoek jezelf een koninkrijk dat groot genoeg is voor je ambities — Macedonië is te klein voor je.
+
+Het paard, Bucephalus ("Ossenkop", naar de vorm van zijn hoofd), wordt vanaf dat moment Alexanders eigen rijdier — en blijft dat, twintig jaar lang, tot ver in Azië.
+
+IMAGE:
+ch20_gre_bucephalus_temmen.png
+
+CODEX:
+codex_bucephalus
+
+CHOICES:
+* Zie hoe die opvoeding eindigt -> CH20_GRE_004
+
+END
+
+=== SCENE: CH20_GRE_004 ===
+
+TITLE:
+Bruiloft en Bloed
+
+TEXT:
+In 336 v.Chr., tijdens de bruiloftsfeesten van zijn dochter in het theater van Aigai, wordt Philippus door Pausanias — een van zijn eigen lijfwachten, met een persoonlijke grief die nooit werd rechtgezet — neergestoken. De moordenaar wordt meteen daarna zelf gedood, voordat iemand hem kan ondervragen. Wie er verder nog bij betrokken was, blijft voor altijd giswerk.
+
+"[[Ecce|zie hier]] — een leider, vermoord door iemand uit zijn eigen, dichtste kring," zegt de Boodschapper. "Dit is niet de laatste keer dat je dat patroon ziet. Onthoud dit moment, voor later."
+
+IMAGE:
+ch20_gre_philippus_moord.png
+
+CODEX:
+codex_moord_philippus
+
+CHOICES:
+* Zie hoe Alexander de troon bestijgt -> CH20_GRE_005
+
+END
+
+=== SCENE: CH20_GRE_005 ===
+
+TITLE:
+De Gordiaanse Knoop
+
+TEXT:
+Dezelfde avond nog bestijgt de twintigjarige Alexander de troon. Binnen twee jaar steekt hij over naar Azië, aan het hoofd van een leger dat, vergeleken met wat er tegenover staat, verrassend klein is. In de Frygische stad Gordium hangt een eeuwenoude wagen, vastgesjord met een knoop die niemand ooit heeft losgekregen — wie het lukt, zo luidt het orakel, zal heel Azië beheersen.
+
+Alexander bestudeert de knoop kort, trekt dan zijn zwaard, en klieft hem in één slag doormidden.
+
+IMAGE:
+ch20_gre_gordiaanse_knoop.png
+
+CODEX:
+codex_gordiaanse_knoop
+
+CHOICES:
+* Zie tegen wie hij het echt moet opnemen -> CH20_GRE_006
+
+END
+
+=== SCENE: CH20_GRE_006 ===
+
+TITLE:
+Darius, Koning der Koningen
+
+TEXT:
+Tegenover Alexander staat Darius III, koning van Perzië — geen rechtstreekse zoon-op-zoon nakomeling van Xerxes, die je bij Thermopylae al zag, maar wel een telg van diezelfde Achaemenidische koningslijn, enkele generaties verder. Bij Issus (333 v.Chr.) en twee jaar later bij Gaugamela staat zijn enorme, veeltalige leger tegenover Alexanders veel kleinere, veel beweeglijkere troepen.
+
+Beide keren stort Darius' leger in zodra hijzelf, uit angst omsingeld te raken, als eerste van het slagveld vlucht.
+
+IMAGE:
+ch20_gre_issus_darius.png
+
+CODEX:
+codex_darius_III
+
+CHOICES:
+* Zie wat er van Darius wordt -> CH20_GRE_007
+
+END
+
+=== SCENE: CH20_GRE_007 ===
+
+TITLE:
+Verraden door de Eigen Satraap
+
+TEXT:
+Na Gaugamela is Darius niet langer Alexanders grootste probleem, maar dat van zijn eigen mensen: Bessus, satraap van Bactrië, zet hem gevangen en steekt hem neer zodra Alexanders leger te dichtbij komt. Een koning, verraden door iemand uit zijn eigen kring — precies zoals Philippus, een paar scènes terug.
+
+Alexander vindt de stervende Darius, en laat zijn grootste vijand alsnog met volle koninklijke eer bijzetten in Persepolis.
+
+CODEX:
+codex_dood_darius
+
+CHOICES:
+* Zie hoe ver Alexander nog gaat -> CH20_GRE_008
+
+END
+
+=== SCENE: CH20_GRE_008 ===
+
+TITLE:
+Tot aan de Rand van de Wereld, en Terug
+
+TEXT:
+Bij de rivier de Hydaspes verslaat Alexander in 326 v.Chr. de Indiase koning Porus — een van zijn zwaarste overwinningen ooit. Bucephalus, inmiddels dertig jaar oud en al twintig jaar zijn trouwe rijdier, sterft kort na de slag, aan ouderdom of aan zijn verwondingen. Alexander rouwt zo openlijk dat hij, zoals hij dat overal doet waar hij komt, ter plekke een stad sticht — Bucephala, vernoemd naar het paard dat hem al die jaren droeg.
+
+Alexander trekt door tot diep in India, tot zijn eigen leger — uitgeput, heimweeziek, na jaren onderweg — aan de rivier de Hyphasis weigert nog verder te gaan. Met tegenzin keert hij terug naar Babylon.
+
+Daar sterft hij, in juni 323 v.Chr., pas tweeëndertig jaar oud, na een korte, hevige koorts. Op zijn sterfbed vraagt zijn omgeving wie zijn immense rijk moet erven. Zijn laatste woord, zo wordt verteld, is kort: "toi kratistoi" — aan de sterkste.
+
+IMAGE:
+ch20_gre_alexander_babylon.png
+
+CODEX:
+codex_alexander_dood_babylon
+
+CHOICES:
+* Zie wat "aan de sterkste" in de praktijk betekent -> CH20_GRE_009
+
+END
+
+=== SCENE: CH20_GRE_009 ===
+
+TITLE:
+Wie Erft een Rijk zonder Erfgenaam?
+
+TEXT:
+Zonder aangewezen opvolger verscheuren Alexanders eigen generaals — de Diadochen, letterlijk "opvolgers" — zijn rijk vrijwel op de dag van zijn dood al onderling. Een van hen, Ptolemaeus, grijpt Egypte en kaapt zelfs de lijkstoet die Alexanders lichaam naar Macedonië moest brengen, om het in plaats daarvan in zijn eigen nieuwe hoofdstad Alexandrië te laten bijzetten.
+
+"[[Ecce|zie hier]] — onthoud die naam, Ptolemaeus," zegt de Boodschapper. "Zijn eigen nakomelingen zullen Egypte bijna drie eeuwen regeren. De laatste van hen zul je, generaties verderop, van heel dichtbij leren kennen — aan beide kanten van dit verhaal."
+
+CODEX:
+codex_diadochen_ptolemaeus
+
+VOCAB:
+grieks_diadochos
+
+CHOICES:
+* Ga verder -> CH20_GRE_EINDE
+
+END
+
+=== SCENE: CH20_GRE_EINDE ===
+
+TITLE:
+Een Andere Grens, Elders
+
+TEXT:
+"[[Ecce|zie hier]] — je hebt gezien hoe één man, met een zwaard, de kaart van de bekende wereld hertekende," zegt de Boodschapper. "Wat je niet kon zien, is dat generaties later, duizenden kilometers verderop, een andere man hetzelfde deed — niet alleen met een zwaard, maar ook met een pen."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH20_EINDE
+* Steek over naar de Latijnse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH20_LAT_001
+
+END
+
+=== SCENE: CH20_LAT_001 ===
+
+TITLE:
+Wat Aan Alles Voorafging
+
+TEXT:
+Een stem die je kent — kalm, zelfverzekerd, met een lichte glimlach die je nooit eerder bij hem zag — spreekt naast de Boodschapper. "[[Ecce|zie hier]] — jij hebt me zien sterven," zegt de schim van Caesar. "Vergun me daarom, voor één keer, ook te laten zien hoe het was vóórdat het zover kwam. Niet de dolken. De jaren waarin alles wat ik aanraakte, leek te lukken."
+
+"Ik was toen niemand's tiran," gaat hij verder. "Een provinciebestuurder met een leger, niets meer — al vond de senaat, en vooral Pompeius, dat leger al veel te groot. Zij zagen een dreiging. Ik zag Gallië, een gebied groter dan Italië zelf, nog altijd onveroverd."{ch19_lat_zijde_h20_echo}
+
+Caesars schim zwijgt even. "Dit begon niet in Gallië," zegt hij dan. "Jaren eerder, als jonge quaestor in Gades, ver in Hispania, stond ik voor een standbeeld van Alexander in de tempel van Hercules — en ik huilde, midden op de vloer, waar iedereen het kon zien. Alexander had op mijn leeftijd al de halve wereld veroverd. Ik had, op dat moment, nog niets."
+
+"[[Ecce|zie hier]]," voegt de Boodschapper toe. "Onthoud dat beeld — het legt uit waarom een provinciebestuurder met een leger zich, een paar jaar later, gedraagt als een man die de hele wereld nog moet inhalen."
+
+In 58 v.Chr. begint Caesars proconsulaat over Gallië met een eerste, kleine overwinning: de Helvetiërs, op zoek naar nieuw land, worden teruggedreven naar hun eigen gebied.
+
+CODEX:
+codex_eerste_triumviraat, codex_caesar_alexander_standbeeld
+
+CHOICES:
+* Zie wat Caesar verderop, richting het noorden, tegenkomt -> CH20_LAT_002
+
+END
+
+=== SCENE: CH20_LAT_002 ===
+
+TITLE:
+De Slag bij Kessel
+
+TEXT:
+In 55 v.Chr. trekken de Germaanse stammen Usipetes en Tencteri, zelf op de vlucht voor andere stammen, de Rijn over op zoek naar nieuw land. Caesar, die geen precedent wil scheppen, valt hun kamp bij het samenvloeien van Maas en Rijn — bij het huidige Kessel, in wat ooit jouw eigen streek zal worden — bij verrassing aan.
+
+"Mijn eigen Commentarii noemen honderdduizenden doden," zegt Caesars schim, zonder de blik af te wenden. "Ik schreef het zo op, omdat ik wilde dat Rome het zo zou lezen. Wie de pen vasthoudt, bepaalt nu eenmaal welk deel van het verhaal iemand anders te zien krijgt."
+
+CODEX:
+codex_slag_bij_kessel
+
+CHOICES:
+* Zie wat Caesar daarna, nog dichter bij de Rijn, doet -> CH20_LAT_003
+
+END
+
+=== SCENE: CH20_LAT_003 ===
+
+TITLE:
+Een Brug, en een Boodschap
+
+TEXT:
+Om zijn Germaanse bondgenoten te imponeren én te waarschuwen, laat Caesar in slechts tien dagen een houten brug over de Rijn bouwen. Zijn leger trekt achttien dagen door Germania, zonder een echte veldslag, en trekt zich dan terug — waarna de brug meteen weer wordt afgebroken.
+
+"Ik wilde het gebied niet veroveren," zegt Caesars schim. "Ik wilde alleen dat iedereen wist dat ik het kón."
+
+CODEX:
+codex_rijnoversteek
+
+VOCAB:
+latijn_legatus
+
+CHOICES:
+* Zie waar Caesar nog verder gaat dan wie ook vóór hem -> CH20_LAT_004
+
+END
+
+=== SCENE: CH20_LAT_004 ===
+
+TITLE:
+Naar het Einde van de Wereld
+
+TEXT:
+In de nazomer van datzelfde jaar steekt Caesar, als eerste Romeinse generaal ooit, over naar het mistige eiland Britannia. De vloot kan door het ondiepe water niet dicht genoeg bij het strand komen: de soldaten moeten, zwaarbepakt, in diep water springen, terwijl Britto-Keltische strijders vanaf het strand met speren en slingerstenen op hen inbeuken. Niemand durft als eerste te springen.
+
+CODEX:
+codex_britannia_expeditie_1
+
+CHOICES:
+* Grijp zelf de adelaar van het Tiende Legioen en spring als eerste -> CH20_LAT_004_AQUILIFER
+* Kijk toe hoe de aquilifer van het Tiende Legioen zelf springt -> CH20_LAT_004_VOLGT
+
+END
+
+=== SCENE: CH20_LAT_004_AQUILIFER ===
+
+TITLE:
+De Adelaar in Jouw Handen
+
+TEXT:
+Niemand beweegt. Boven het geraas van de branding en het fluiten van de slingerstenen grijp jij, tot verbazing van de mannen om je heen, de adelaar van het Tiende Legioen uit de handen van de eigen vaandeldrager en roept, zo hard je kunt:
+
+[[Desilite, commilitones, nisi vultis aquilam hostibus prodere; ego certe meum rei publicae atque imperatori officium praestitero.|Spring naar beneden, soldaten, tenzij jullie de adelaar aan de vijand willen uitleveren; ik zal in elk geval mijn eigen plicht aan de staat en aan de veldheer vervuld hebben.]]
+
+Je springt. Achter je, geen moment later, springt het hele Tiende Legioen je na — beschaamd om een vreemdeling de adelaar te laten dragen waar zij aarzelden. Caesar zelf zal deze woorden later, in zijn eigen Commentarii, aan een naamloze aquilifer toeschrijven — niet aan jou. Sommige daden, besef je, worden pas geschiedenis nadat iemand anders erover schrijft.
+
+FLAG:
+ch20_lat_aquilifer=speler
+
+RELATION:
+caesar=+1
+
+IMAGE:
+ch20_lat_aquilifer_speler.png
+
+CODEX:
+codex_aquilifer_britannia
+
+VOCAB:
+latijn_aquila
+
+CHOICES:
+* Zie wie, vlak voor de volgende oversteek, weigert mee te gaan -> CH20_LAT_005
+
+END
+
+=== SCENE: CH20_LAT_004_VOLGT ===
+
+TITLE:
+De Sprong van een Ander
+
+TEXT:
+Terwijl jij aarzelt, grijpt de aquilifer van het Tiende Legioen — een man wiens naam Caesars eigen verslag nooit noemt — zelf de adelaar vast en roept, na een kort gebed aan de goden:
+
+[[Desilite, commilitones, nisi vultis aquilam hostibus prodere; ego certe meum rei publicae atque imperatori officium praestitero.|Spring naar beneden, soldaten, tenzij jullie de adelaar aan de vijand willen uitleveren; ik zal in elk geval mijn eigen plicht aan de staat en aan de veldheer vervuld hebben.]]
+
+Hij springt als eerste het water in. Beschaamd om hem alleen te laten, spring jij, samen met de rest van het legioen, vlak achter hem aan.
+
+FLAG:
+ch20_lat_aquilifer=onbekende_soldaat
+
+RELATION:
+caesar=+1
+
+IMAGE:
+ch20_lat_aquilifer_onbekend.png
+
+CODEX:
+codex_aquilifer_britannia
+
+VOCAB:
+latijn_aquila
+
+CHOICES:
+* Zie wie, vlak voor de volgende oversteek, weigert mee te gaan -> CH20_LAT_005
+
+END
+
+=== SCENE: CH20_LAT_005 ===
+
+TITLE:
+Een Vrij Man van een Vrij Volk
+
+TEXT:
+Dumnorix, een invloedrijke edelman van de Haeduërs, heeft zich jarenlang zowel nuttig als verdacht gemaakt — bondgenoot naar buiten toe, maar met een eigen machtsbasis en een diepe weerzin tegen Rome. Vlak vóór de tweede Britannia-expeditie (54 v.Chr.) weigert hij mee over te steken, en probeert er in plaats daarvan vandoor te gaan.
+
+"Hij was geen soldaat die deserteerde," zegt Caesars schim. "Hij was een bondgenoot die nooit echt een bondgenoot was geweest. Ik moest kiezen wat ik daarmee deed."
+
+CODEX:
+codex_dumnorix
+
+IMAGE:
+ch20_lat_dumnorix.png
+
+CHOICES:
+* Beveel dat hij ter plekke gedood wordt, geen risico's [SEVERITAS] -> CH20_LAT_005_EXECUTIE
+* Beveel dat hij levend wordt teruggebracht [CLEMENTIA] -> CH20_LAT_005_VERBANNING
+
+END
+
+=== SCENE: CH20_LAT_005_EXECUTIE ===
+
+TITLE:
+Geen Risico's
+
+TEXT:
+Op jouw bevel rijdt een afdeling ruiters Dumnorix meteen achterna, met een duidelijke opdracht. Hij verzet zich vechtend tot het einde, en roept naar verluidt herhaaldelijk dat hij een vrij man van een vrij volk is — tot hij neervalt.
+
+FLAG:
+ch20_lat_dumnorix=executie
+
+CHOICES:
+* Zie hoe de oversteek zonder hem verloopt -> CH20_LAT_006
+
+END
+
+=== SCENE: CH20_LAT_005_VERBANNING ===
+
+TITLE:
+Levend, Indien Mogelijk
+
+TEXT:
+Op jouw bevel achtervolgt een afdeling ruiters Dumnorix met opdracht hem levend terug te brengen. Maar Dumnorix denkt er niet aan zich over te geven: hij verzet zich vechtend tot het einde, en roept naar verluidt herhaaldelijk dat hij een vrij man van een vrij volk is — tot hij, tegen het bevel in, alsnog neervalt.
+
+"Levend of dood teruggebracht," zegt Caesars schim zacht, "voor Dumnorix zelf maakte het geen verschil meer. Voor mij wel."
+
+FLAG:
+ch20_lat_dumnorix=poging_genade
+
+CHOICES:
+* Zie hoe de oversteek zonder hem verloopt -> CH20_LAT_006
+
+END
+
+=== SCENE: CH20_LAT_006 ===
+
+TITLE:
+Cassivellaunus, aan Gene Zijde van het Kanaal
+
+TEXT:
+De tweede Britannia-expeditie is groter en beter voorbereid: vijf legioenen, ditmaal mét cavalerie. Cassivellaunus, aangewezen als opperbevelhebber van de verenigde Britse stammen, voert een uitputtende guerrillaoorlog met strijdwagens, maar verliest uiteindelijk zijn eigen versterkte hoofdkwartier en onderwerpt zich.
+
+Met de winter in aantocht en onrust in Gallië trekt Caesar opnieuw terug, zonder het eiland te bezetten. Pas Claudius, bijna een eeuw later, zal Britannia echt veroveren.
+
+IMAGE:
+ch20_lat_britannia.png
+
+CODEX:
+codex_britannia_expeditie_2
+
+CHOICES:
+* Zie wat die onrust in Gallië, die winter, precies betekent -> CH20_LAT_007
+
+END
+
+=== SCENE: CH20_LAT_007 ===
+
+TITLE:
+Ambiorix en de Eburonen
+
+TEXT:
+De winter van 54-53 v.Chr. dwingt Caesars legioenen, verspreid over Gallië, tot inkwartiering bij lokale stammen — een zware last die de Eburonen, onder hun koning Ambiorix, tot opstand drijft. Ambiorix overtuigt de twee Romeinse bevelhebbers van het dichtstbijzijnde kamp, Quintus Titurius Sabinus en Lucius Aurunculeius Cotta, dat een grote, gecoördineerde Gallische opstand hun kamp zal overspoelen — en biedt hun veilige doortocht aan naar het dichtstbijzijnde andere Romeinse kamp.
+
+"Sabinus geloofde hem," zegt Caesars schim. "Cotta niet. Ik was er zelf niet bij — jij mag nu beslissen wie er gelijk had."
+
+CODEX:
+codex_ambiorix_opstand
+
+CHOICES:
+* Ga verder -> CH20_LAT_008
+
+END
+
+=== SCENE: CH20_LAT_008 ===
+
+TITLE:
+Vertrekken, of Blijven?
+
+TEXT:
+In het kamp verdeelt de discussie de officieren. Sabinus wil het kamp opbreken en, met Ambiorix' toezegging van veilige doortocht, meteen naar het naburige kamp marcheren. Cotta houdt vol dat ze zonder uitdrukkelijk bevel van Caesar zelf niet mogen vertrekken, en dat een versterkt kamp altijd veiliger is dan een open weg.
+
+CHOICES:
+* Steun Sabinus: breek het kamp op en vertrek -> CH20_LAT_008_SABINUS
+* Steun Cotta: blijf, en verschans je -> CH20_LAT_008_COTTA
+
+END
+
+=== SCENE: CH20_LAT_008_SABINUS ===
+
+TITLE:
+De Hinderlaag
+
+TEXT:
+De colonne trekt uit, zwaarbepakt, door een lange, smalle vallei — precies waar Ambiorix' mannen haar al opwachten. In de chaos die volgt, gaat Sabinus zelf naar voren om, onder een schijnbaar bestand, met Ambiorix te onderhandelen — en wordt daar, ontwapend, alsnog vermoord. Cotta sterft vechtend, tot de laatste man, ergens anders in diezelfde hinderlaag.
+
+Van de zowat vijftien cohorten die het kamp verlieten, overleeft vrijwel niemand.
+
+FLAG:
+ch20_lat_sabinus_cotta=sabinus
+
+CHOICES:
+* Zie hoe Caesar het nieuws ontvangt -> CH20_LAT_009
+
+END
+
+=== SCENE: CH20_LAT_008_COTTA ===
+
+TITLE:
+Het Beleg
+
+TEXT:
+Het kamp blijft, versterkt, een nacht en een dag lang overeind — Ambiorix' mannen betalen er een prijs voor die ze bij een hinderlaag op open terrein nooit hadden betaald. Maar zonder ontzet, en met het water afgesneden, is verschansen op den duur geen verdediging meer, alleen uitstel. Bij de uiteindelijke uitbraak sterft Cotta vechtend aan het front; Sabinus, die tot het laatst tegen deze uitbraak had gepleit, valt apart, alleen, terwijl hij nog probeert te ontkomen.
+
+Van de zowat vijftien cohorten in het kamp overleeft vrijwel niemand.
+
+FLAG:
+ch20_lat_sabinus_cotta=cotta
+
+CHOICES:
+* Zie hoe Caesar het nieuws ontvangt -> CH20_LAT_009
+
+END
+
+=== SCENE: CH20_LAT_009 ===
+
+TITLE:
+Caesar Verneemt het Nieuws
+
+TEXT:
+Het nieuws bereikt Caesar via een van de weinige overlevenden.{ch20_sabinus_cotta_reactie}
+
+Hij trekt meteen op tegen de Eburonen, met een wraakcampagne die weinig onderscheid maakt tussen strijders en niet-strijders — Ambiorix zelf weet, tot Caesars blijvende ergernis, telkens net te ontsnappen.
+
+CODEX:
+codex_sabinus_cotta
+
+VOCAB:
+latijn_obses
+
+CHOICES:
+* Zie wat die hardheid, jaren later, teweegbrengt -> CH20_LAT_010
+
+END
+
+=== SCENE: CH20_LAT_010 ===
+
+TITLE:
+Vercingetorix Verenigt Gallië
+
+TEXT:
+Jaren van Romeinse strafexpedities zoals die tegen de Eburonen, gedwongen inkwartiering en zware belastingen hebben Gallië tot het uiterste opgejaagd. In 52 v.Chr. lukt wat niemand voor hem lukte: de jonge Arverense edelman Vercingetorix, koning van zijn eigen stam, verenigt tientallen rivaliserende Gallische stammen tot één gezamenlijke opstand, met een verschroeide-aarde-strategie die voorraden en oogsten vernietigt voordat Caesars legioenen ze kunnen bereiken.
+
+"Voor het eerst in jaren," zegt Caesars schim, "stond ik echt in het nauw."
+
+CODEX:
+codex_vercingetorix
+
+CHOICES:
+* Zie hoe dit uiteindelijk wordt beslist -> CH20_LAT_011
+
+END
+
+=== SCENE: CH20_LAT_011 ===
+
+TITLE:
+Alesia
+
+TEXT:
+Bij het versterkte Alesia sluit Caesar Vercingetorix' leger in met een dubbele omwalling: één linie naar binnen gericht tegen de belegerden, één naar buiten tegen het ontzettingsleger dat heel Gallië nog bijeenbrengt. Romeinse soldaten, ingesloten tussen twee vijandelijke legers tegelijk, houden stand.
+
+Wanneer het ontzettingsleger uiteindelijk wordt verslagen, geeft Vercingetorix zich over: hij rijdt in volle wapenrusting Caesars kamp binnen en legt zijn wapens aan diens voeten neer.
+
+DIALOGUE:
+Caesars schim
+Zes jaar later liet ik hem executeren, na mijn triomftocht door Rome. Ook dat hoort bij dit verhaal — ik vertel het je niet om mezelf mooier voor te doen dan ik was.
+
+IMAGE:
+ch20_lat_alesia.png
+
+CODEX:
+codex_alesia
+
+VOCAB:
+latijn_deditio
+
+CHOICES:
+* Ga verder -> CH20_LAT_EINDE
+
+END
+
+=== SCENE: CH20_LAT_EINDE ===
+
+TITLE:
+Vóór de Dolken
+
+TEXT:
+"Gallië is veroverd," zegt Caesars schim, "rijker dan Rome ooit had durven hopen, en ik sta op het hoogtepunt van mijn macht — jaren vóór de Rubicon, jaren vóór Pompeius, jaren vóór de dolken die jij al hebt zien vallen." Hij zwijgt even. "Ik vertel je dit niet om je te laten vergeten hoe het afliep. Alleen om je te laten zien dat het niet begon met een dolk. Het begon hiermee."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH20_EINDE
+
+END
+
+=== SCENE: CH20_EINDE ===
+
+TITLE:
+Eén Kaart, Twee Pennen
+
+TEXT:
+"[[Ecce|zie hier]] — twee mannen die de kaart van de bekende wereld hertekenden," zegt de Boodschapper van Chronos. "De een met een zwaard door een knoop. De ander met een brug over de Rijn, en een pen die zelf bepaalde wat de wereld ervan te zien kreeg."
+
+Caesars schim knikt, en vervaagt langzaam. "Misschien is dat ook wel wat mijn eigen verhaal is, tegen jou verteld — een keuze, elke keer, over wat ik je wél liet zien." De Boodschapper kijkt hem na, iets langer dan nodig. "Misschien," zegt ze zacht, bijna tegen zichzelf, "ben ik dat zelf ook niet meer dan. Een geschiedschrijver. Iemand die bepaalt welk deel van het verhaal jij te zien krijgt."
+
+Ze schudt de gedachte van zich af voor je er meer van kunt vragen. "Onthoud wat je koos — bij Dumnorix, bij Sabinus en Cotta. Ook dat blijft niet zonder gevolg."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_grenzen_verlegd
+
+CHOICES:
+* Keer terug naar het Museum -> CH20_MUSEUM_00
+
+END
+
+=== SCENE: CH20_MUSEUM_00 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+Een nieuwe stolp vult zich: een kleine, doorgesneden koorden-knoop naast een stukje houten brugleuning. "Twee grenzen, allebei verlegd door één mens die verder ging dan wie ook vóór hem," zegt de Boodschapper, terwijl ze de stolp even bekijkt. "De rest van hun verhaal — wat hun opvolgers ervan maakten — komt nog."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH20_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH20_WORDT_VERVOLGD ===
 
 TITLE:
 Tot Hier, Voorlopig
 
 TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Alexander, de Diadochen, Cicero's eigen hoofdstuk, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Diadochen, Cicero's eigen hoofdstuk, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
 
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En deze keer staat er nog iets vast dat je niet kunt zien: wie je koos te zijn, toen Athene tegenover Sparta stond, en toen Caesar tegenover Pompeius stond. Dat blijft ook, hoe vaak je ook terugkeert naar het begin."
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je koos, bij Dumnorix, bij Sabinus en Cotta, blijft, hoe vaak je ook terugkeert naar het begin."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 21 "Wijsheid en Waarheid" — CONCEPT, NOG NIET GEKOPPELD.
+   Gerben wil dit hoofdstuk pas aan SP_SCENES/BLOCKS toevoegen zodra hij
+   het zelf heeft goedgekeurd (2026-08-11) — dit is de eerste keer dat een
+   Gemini-concept wordt verwerkt, en hij wil dat proces eerst vertrouwen
+   voordat het live gaat. SP_CH21_CNS bestaat dus als losse const (zodat
+   het al wel gevalideerd en doorgelezen kan worden), maar wordt BEWUST
+   niet gemerged in SP_SCENES (singleplayer.js) of BLOCKS
+   (validate_chronica.js), en CH20_MUSEUM_00 routeert nog naar
+   CH20_WORDT_VERVOLGD, niet naar CH21_000. Koppel pas na expliciet
+   akkoord — zie Chronica.md §7.x.
+
+   Eerste concept geschreven door Gemini (Gerbens Edu-account, 2026-08-11),
+   hier verwerkt: sectieformaat gecorrigeerd (STATPOINTS/SOUVENIR moeten een
+   header op een eigen regel zijn, CNSParser.sectionHeaderRe staat geen
+   waarde achter de dubbele punt toe — "STATPOINTS: 3" parsete niet),
+   SOUVENIR verwijst nu naar een SP_SOUVENIRS-registry-key i.p.v. vrije
+   tekst, de "beide"-taalspoor-brug loopt nu via CH21_GRE_EINDE (zelfde
+   patroon als CH19/CH20, was in het concept een kortsluiting die de
+   Griekse afsluitscène oversloeg), Xanthippe (metadata-personage,
+   ontbrak) toegevoegd aan de gifbeker-scène, RELATION-key xenophon naar
+   xenofon genormaliseerd (Nederlandse spelling, consistent met de rest
+   van de campagne). Zie Chronica.md §7.x voor de volledige toelichting. */
+const SP_CH21_CNS = `
+=== SCENE: CH21_000 ===
+
+TITLE:
+Stemmen uit de Agora en het Forum
+
+TEXT:
+"[[Ecce|zie hier]] — dit hoofdstuk laat ik, voor het eerst, niet aan mezelf," zegt de Boodschapper van Chronos. "Er is iemand die dit verhaal beter kent dan ik ooit zal doen."
+
+Naast haar verschijnt een gestalte met een speer en een uil op haar schouder — Pallas Athena zelf, godin van de wijsheid, die je al kent sinds haar eigen geboorte. "Wijsheid is mijn domein," zegt ze, "in elke taal waarin ze wordt gesproken. Bij de Grieken heet ik Athena. Bij de Romeinen noemen ze mij Minerva. Vandaag ben ik allebei tegelijk."
+
+Wijsheid is geen bezit dat stilstaat. Gedachten die ontstaan op de Atheense Agora reizen door de tijd, worden opgeschreven, betwist en ten slotte vertaald op het Romeinse Forum. Dit hoofdstuk volgt de denkers en redenaars die zochten naar waarheid, rechtvaardigheid en de juiste orde van de samenleving.
+
+"Voordat je Socrates ontmoet," voegt Athena eraan toe, "moet je weten dat hij niet de eerste was die vragen stelde. Lang vóór hem probeerden Thales, Anaximander en Anaximenes de wereld te verklaren zonder goden erbij te halen; Pythagoras zag getallen achter alles, Herakleitos zag alleen verandering, Parmenides juist het tegenovergestelde, en Anaxagoras en Demokritos zochten naar de kleinste bouwstenen van de werkelijkheid zelf. Hun verhaal is voor een andere dag — maar onthoud hun namen. Je komt ze nog tegen."
+
+RELATION:
+athena=+1
+
+CHOICES:
+* Volg het spoor naar het Athene van Socrates en Plato [REQUIRE:taalspoor!=latijn] -> CH21_GRE_001
+* Volg het spoor naar het Rome van Cicero [REQUIRE:taalspoor=latijn] -> CH21_LAT_000B
+
+END
+
+=== SCENE: CH21_GRE_001 ===
+
+TITLE:
+De Markt van Athene
+
+TEXT:
+In de schaduw van de Stoa van Attalos verzamelen zich burgers, denkers en critici. Onder hen bevindt zich de komediedichter Aristophanes, die met scherpe spot de intellectuelen van de stad bekritiseert, en de jonge Xenofon, die getrouw de gesprekken van zijn leermeester optekent.
+
+DIALOGUE:
+Aristophanes
+[[Νεφέλαι|De Wolken]] hangen boven ons hoofd. Sommige mannen zweven in manden en stellen vragen die de goden doen wankelen.
+
+IMAGE:
+ch21_gre_agora_aristophanes.png
+
+RELATION:
+aristophanes=+1, xenofon=+1
+
+VOCAB:
+grieks_nephelai
+
+CHOICES:
+* Luister naar het debat op de markt -> CH21_GRE_002
+
+END
+
+=== SCENE: CH21_GRE_002 ===
+
+TITLE:
+Vragen in de Schaduw
+
+TEXT:
+De redenaar Lysias, wiens familie zwaar geleden heeft onder het schrikbewind van de Dertig Tirannen, zoekt naar een fundament voor het recht. Tegenover hem staat Socrates, een man die geen boeken schrijft, maar voorbijgangers ondervraagt over de betekenis van deugden als rechtvaardigheid en dapperheid.
+
+DIALOGUE:
+Socrates
+Ik weet slechts één ding met zekerheid: [[ἓν οἶδα ὅτι οὐδὲν οἶδα|ik weet dat ik niets weet]]. Wie meent alles te begrijpen, onderzoekt niets meer.
+
+RELATION:
+lysias=+1, socrates=+1
+
+CODEX:
+codex_socrates
+
+CHOICES:
+* Vraag Socrates wie hemzelf ooit iets leerde -> CH21_GRE_002B
+
+END
+
+=== SCENE: CH21_GRE_002B ===
+
+TITLE:
+Diotima van Mantinea
+
+TEXT:
+"Denk niet dat ik altijd al wist wat ik nu weet," zegt Socrates, met iets ongewoon zachts in zijn stem. "Als jonge man leerde ik zelf van een vrouw uit Mantinea, Diotima — een priesteres, wijzer dan wie ook die ik ooit heb ondervraagd. Zij leerde mij dat liefde geen bezit is, maar een verlangen: naar het goede, en naar het altijd te mogen bezitten."
+
+Athena knikt, terwijl het beeld van een oudere vrouw met een kalme, doordringende blik heel even voor je verschijnt — Socrates' eigen herinnering, geleend. "Diotima beschreef het als een ladder," zegt Athena. "Je begint bij de schoonheid van één lichaam. Daarna leer je de schoonheid van alle lichamen zien, dan die van zielen, dan die van wetten en kennis zelf — tot je, helemaal boven aan de ladder, de Schoonheid zelf aanschouwt, niet gebonden aan één ding, één plaats, of één moment."
+
+DIALOGUE:
+Diotima
+Wie ooit heeft leren liefhebben, kan leren om niet één schoonheid lief te hebben, maar de bron van alle schoonheid tegelijk.
+
+IMAGE:
+ch21_gre_diotima.png
+
+CODEX:
+codex_diotima
+
+CHOICES:
+* Keer terug naar het gesprek op de markt -> CH21_GRE_003
+
+END
+
+=== SCENE: CH21_GRE_003 ===
+
+TITLE:
+Het Proces van Socrates
+
+TEXT:
+In 399 v.Chr. wordt Socrates voor de volksrechtbank van Athene gesleept. De aanklachten wegen zwaar: hij zou nieuwe goden introduceren en de jeugd bederven met zijn constante kritische vragen. Vijfhonderdenéén Atheense burgers maken zich op om hun stem uit te brengen. Jij bent aanwezig op de tribune en mag jouw oordeel uitspreken.
+
+CHOICES:
+* Stem voor vrijspraak: kritische vragen houden de stad scherp [CLEMENTIA] -> CH21_GRE_004_VRIJ
+* Stem voor veroordeling: de stabiliteit van de polis staat voorop [SEVERITAS] -> CH21_GRE_004_VEROORDEELD
+
+END
+
+=== SCENE: CH21_GRE_004_VRIJ ===
+
+TITLE:
+Het Oordeel van de Rechtbank
+
+TEXT:
+Jij stemt tegen de doodstraf, overtuigd van de waarde van filosofische zelfreflectie. De meerderheid van de jury denkt er echter anders over: met een krappe meerderheid beslist de volksrechtbank dat Socrates schuldig is en de gifbeker moet drinken.
+
+FLAG:
+ch21_gre_socrates_stemming=vrij
+
+RELATION:
+socrates=+1
+
+CHOICES:
+* Zie wat een van Socrates' vrienden nog probeert -> CH21_GRE_004B_CRITO
+
+END
+
+=== SCENE: CH21_GRE_004B_CRITO ===
+
+TITLE:
+Crito in de Cel
+
+TEXT:
+Vlak vóór zonsopgang, enkele dagen voor de executie, bezoekt Crito — een rijke, oude vriend van Socrates — hem in zijn cel. Hij heeft de bewakers al omgekocht en een schip geregeld: vluchten naar Thessalië is, zegt hij, nog altijd mogelijk. Hij smeekt Socrates mee te gaan — voor zijn vrienden, die voor lafaards zullen doorgaan als ze hem niet redden, en voor zijn eigen jonge zonen, die hun vader nodig hebben.
+
+Socrates weigert. Hij stelt zich voor dat de Wetten van Athene zelf tot hem spreken: hij heeft zeventig jaar van hun bescherming genoten, is nooit weggetrokken uit onvrede, en zou, door nu in het geheim te ontsnappen, precies de orde ondermijnen die hem heeft opgevoed. Onrecht met onrecht beantwoorden, zegt hij, is nooit gerechtvaardigd — ook niet wanneer het onrecht hemzelf treft.
+
+DIALOGUE:
+Socrates
+Men moet nooit onrecht doen, zelfs niet als vergelding voor onrecht dat je zelf is aangedaan.
+
+IMAGE:
+ch21_gre_crito_cel.png
+
+CODEX:
+codex_crito
+
+CHOICES:
+* Zie hoe het einde zich voltrekt -> CH21_GRE_005
+
+END
+
+=== SCENE: CH21_GRE_004_VEROORDEELD ===
+
+TITLE:
+Het Oordeel van de Rechtbank
+
+TEXT:
+Jij stemt vóór de doodstraf, uit bezorgdheid over de maatschappelijke rust. De jury sluit zich aan bij deze houding: de volksrechtbank verklaart Socrates schuldig en legt hem de doodstraf op door middel van het drinken van scheerlinggif.
+
+FLAG:
+ch21_gre_socrates_stemming=veroordeeld
+
+RELATION:
+socrates=-1
+
+CHOICES:
+* Zie de zaak vanuit het perspectief van de aanklagers -> CH21_GRE_004B_AANKLAGERS
+
+END
+
+=== SCENE: CH21_GRE_004B_AANKLAGERS ===
+
+TITLE:
+Het Perspectief van de Aanklagers
+
+TEXT:
+Je staat nu aan de andere kant van de tribune, naast Meletus — een jonge, weinig bekende dichter, formeel de aanklager — en Anytus, een invloedrijke leerlooier en democratisch politicus die veel meer gewicht in de schaal legt. Voor Anytus is dit persoonlijk: zijn eigen zoon raakte gefascineerd door Socrates' vragen in plaats van het familiebedrijf voort te zetten.
+
+Er is ook een collectieve angst. Nog maar enkele jaren geleden terroriseerde Critias, ooit een gesprekspartner van Socrates, de stad als leider van de Dertig Tirannen — en ook Alkibiades, een andere bekende van Socrates, bracht Athene uiteindelijk meer schade dan goeds. Athene is net hersteld als democratie; de aanklagers zien in Socrates niet alleen een lastige vragensteller, maar een man wiens leerlingen telkens weer instortende steunpilaren blijken voor de stad.
+
+DIALOGUE:
+Anytus
+Ik veroordeel de man niet om wat hij zelf deed, maar om wie hij maakte van de jongens die naar hem luisterden.
+
+CODEX:
+codex_aanklagers_socrates
+
+CHOICES:
+* Zie hoe het einde zich voltrekt -> CH21_GRE_005
+
+END
+
+=== SCENE: CH21_GRE_005 ===
+
+TITLE:
+De Gifbeker
+
+TEXT:
+{ch21_gre_socrates_pad_echo}
+
+In zijn gevangenis blijft Socrates kalm. Zijn vrienden en leerlingen verkeren in diepe rouw. Zijn vrouw Xanthippe is er ook, en anders dan de latere overlevering van Plato's Phaedo haar afschildert — enkel hysterisch en weggeleid — laat ze zich hier niet zomaar wegsturen zonder iets te zeggen. "Je vrienden mogen praten over rechtvaardigheid en de ziel," zegt ze hem recht in het gezicht. "Ik heb je drie zonen opgevoed terwijl jij op de markt stond te vragen wat deugd is. Vandaag verlies ik een man, en zij verliezen een vader — laat niemand doen alsof dat een kleiner verlies is dan een filosofisch inzicht."
+
+Socrates knikt haar toe, zonder tegenspraak — pas dan laat ze zich, nog altijd rechtop, wegleiden. Xenofon, die haar jaren later zelf nog spreekt, zal een heel ander portret van haar tekenen dan Plato ooit deed. Rustig leegt Socrates de beker met het gif.
+
+DIALOGUE:
+Socrates
+Het uur van vertrek is aangebroken. Ik ga om te sterven, jullie om te leven. Wie van ons het beste deel krijgt, is voor iedereen onbekend, behalve voor de goden.
+
+IMAGE:
+ch21_gre_socrates_gifbeker.png
+
+CODEX:
+codex_socrates_dood, codex_xanthippe
+
+CHOICES:
+* Volg Plato na de dood van zijn meester -> CH21_GRE_006
+
+END
+
+=== SCENE: CH21_GRE_006 ===
+
+TITLE:
+De Academie en de Grot
+
+TEXT:
+Verslagen door de dood van zijn leermeester sticht Plato buiten de stadsmuren een filosofenschool: de Academie. Hij zoekt naar een hogere, onveranderlijke werkelijkheid achter de waarneembare wereld en legt dit uit aan de hand van een gelijkenis: mensen die vastgeketend zitten in een duistere grot en slechts schaduwen voor de werkelijkheid aanzien.
+
+DIALOGUE:
+Plato
+Wie de grot verlaat en het zonlicht aanschouwt, ziet de ware [[ἰδέα|ideeën]]. Het is de taak van de filosoof om terug te keren en anderen te bevrijden.
+
+IMAGE:
+ch21_gre_plato_grot.png
+
+RELATION:
+plato=+1
+
+CODEX:
+codex_plato_grot
+
+VOCAB:
+grieks_idea
+
+CHOICES:
+* Benadruk het belang van het zoeken naar hogere abstracties -> CH21_GRE_007
+* Benadruk de verantwoordelijkheid om de mensen in de grot te onderwijzen -> CH21_GRE_007
+
+END
+
+=== SCENE: CH21_GRE_007 ===
+
+TITLE:
+Het Lyceum van Aristoteles
+
+TEXT:
+Plato's meest begaafde leerling, Aristoteles, kiest een eigen weg. Hij sticht het Lyceum en richt zich op de waarneembare natuur, de logica en het maatschappelijk handelen. Hij herinnert zich nog goed hoe hij jaren geleden de jonge Alexander van Macedonië onderwees in de epen van Homerus en de staatskunst.
+
+DIALOGUE:
+Aristoteles
+Plato is mij lief, maar de waarheid is mij nog dierbaarder. Om de wereld te begrijpen, moeten we de vier oorzaken van de dingen onderzoeken.
+
+RELATION:
+aristoteles=+1
+
+CODEX:
+codex_aristoteles
+
+CHOICES:
+* Ga verder -> CH21_GRE_EINDE
+
+END
+
+=== SCENE: CH21_GRE_EINDE ===
+
+TITLE:
+De Erfenis van Athene
+
+TEXT:
+"[[Ecce|zie hier]] — de gedachten van Socrates, Plato en Aristoteles leggen het fundament voor het westerse denken," zegt Athena. "Hun filosofie blijft bewaard in geschriften die de grenzen van de Griekse wereld ver zullen overschrijden — ook naar een taal die nog niet eens bestond toen Socrates zijn eerste vraag stelde."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH21_EINDE
+* Steek over naar de Latijnse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH21_LAT_000B
+
+END
+
+=== SCENE: CH21_LAT_000B ===
+
+TITLE:
+Een Jonge Quaestor op Sicilië
+
+TEXT:
+Jaren voordat Cicero Rome's beroemdste redenaar wordt, dient hij als quaestor op Sicilië (75 v.Chr.) — een bescheiden, administratieve functie, ver van de Senaat. In zijn vrije tijd zoekt hij, tegen het advies van de plaatselijke Syracusanen in, naar het graf van de grootste geleerde die het eiland ooit voortbracht: Archimedes.
+
+Niemand in Syracuse zelf weet nog waar hij ligt. Cicero vindt het uiteindelijk toch, overwoekerd door doornstruiken, buiten de Agrigentijnse poort — herkenbaar aan één klein detail dat hij zich nog herinnert uit Archimedes' eigen geschriften: een bol binnen een cilinder, in de steen gebeiteld.
+
+DIALOGUE:
+Cicero
+De machtigste stad van Griekenland, ooit ook nog eens zeer geleerd, zou het graf van haar scherpzinnigste burger nooit hebben gekend, als een man uit Arpinum het haar niet had gewezen.
+
+IMAGE:
+ch21_lat_cicero_archimedes_graf.png
+
+CODEX:
+codex_cicero_archimedes_graf
+
+CHOICES:
+* Zie wie naast het graf verschijnt -> CH21_LAT_000C
+
+END
+
+=== SCENE: CH21_LAT_000C ===
+
+TITLE:
+Wat Cicero Niet Kon Weten
+
+TEXT:
+Athena — of, zoals ze zichzelf hier noemt, Minerva — staat naast je bij het overwoekerde graf, onzichtbaar voor Cicero zelf. "Hij vond de plek," zegt ze, "maar niet de man. Wat hier gebeurde, honderdzevenendertig jaar vóór dit moment, heeft niemand hem ooit kunnen vertellen. Jou wel."
+
+Ze legt een hand op je schouder, en de zuilengangen van Cicero's Sicilië lossen op in stof en rook.
+
+CHOICES:
+* Ga mee terug in de tijd -> CH21_LAT_000D
+
+END
+
+=== SCENE: CH21_LAT_000D ===
+
+TITLE:
+Syracuse, 212 v.Chr.
+
+TEXT:
+Je staat midden in dezelfde stad, honderdzevenendertig jaar eerder — dezelfde oorlog die je bij Hannibal al meemaakte, de Tweede Punische Oorlog, ditmaal op haar Siciliaanse front. Na een belegering van twee jaar, mede vertraagd door Archimedes' eigen oorlogsmachines (haakkranen die schepen uit het water tilden, spiegels die naar verluidt zonlicht bundelden om zeilen in brand te zetten), breekt het leger van de Romeinse generaal Marcellus eindelijk door de muren van Syracuse.
+
+Te midden van de chaos zit Archimedes gehurkt in het stof, verdiept in een meetkundige figuur die hij zojuist heeft getekend. Een Romeinse soldaat nadert hem en beveelt hem mee te komen.
+
+DIALOGUE:
+Archimedes
+[[μὴ μου τοὺς κύκλους τάραττε|verstoor mijn cirkels niet]].
+
+De soldaat, die geen Grieks verstaat en geen geduld heeft voor een oude man die weigert op te staan, doodt hem ter plekke — tegen de uitdrukkelijke bevelen van Marcellus in, die Archimedes juist ongedeerd naar zich toe wilde laten brengen.
+
+IMAGE:
+ch21_lat_dood_archimedes.png
+
+CODEX:
+codex_dood_archimedes
+
+VOCAB:
+grieks_kyklos
+
+CHOICES:
+* Keer met Minerva terug naar Cicero's Sicilië -> CH21_LAT_000E
+
+END
+
+=== SCENE: CH21_LAT_000E ===
+
+TITLE:
+Terug bij het Graf
+
+TEXT:
+De rook trekt op, en je staat weer naast Cicero, die niets van jullie afwezigheid heeft gemerkt — voor hem is er geen moment voorbijgegaan. "Zie je nu," zegt Minerva zacht, "waarom ik dit hoofdstuk zelf wilde vertellen? Wijsheid overleeft niet vanzelf. Soms wordt ze vergeten door de stad die haar voortbracht, en pas eeuwen later teruggevonden door een vreemdeling die zich de moeite nam om te zoeken."
+
+Cicero, onwetend van wat jij zojuist zag, laat het onkruid rond het graf wegruimen en keert terug naar zijn ambtelijke plichten. Jaren later, wanneer dezelfde Sicilianen die hem hier ontmoetten hem om hulp vragen tegen een corrupte gouverneur, herinneren ze zich deze quaestor die, anders dan wie ook vóór hem, de moeite nam om hun eiland serieus te nemen.
+
+CHOICES:
+* Ga verder naar het proces tegen Verres -> CH21_LAT_001
+
+END
+
+=== SCENE: CH21_LAT_001 ===
+
+TITLE:
+Het Proces tegen Verres
+
+TEXT:
+In 70 v.Chr. staat Rome op zijn kop. Gaius Verres, de voormalige praetor van Sicilië, heeft het eiland jarenlang geplunderd en burgers afgeperst. De Sicilianen — onder wie velen die Cicero nog kennen van zijn quaestorschap — vragen Marcus Tullius Cicero om de vervolging op zich te nemen. Cicero's dochter Tullia steunt haar vader in deze cruciale zaak.
+
+DIALOGUE:
+Cicero
+Het gaat in deze zaak niet alleen om Verres, maar om de geloofwaardigheid van de gehele Romeinse rechtspraak.
+
+IMAGE:
+ch21_lat_verres_proces.png
+
+RELATION:
+cicero=+1
+
+CHOICES:
+* Bepleit de zaak met strakke logica en feitelijke bewijzen -> CH21_LAT_002_LOGICA
+* Bepleit de zaak met emotionele verontwaardiging over het onrecht -> CH21_LAT_002_EMOTIE
+
+END
+
+=== SCENE: CH21_LAT_002_LOGICA ===
+
+TITLE:
+De Macht van het Bewijs
+
+TEXT:
+Cicero presenteert een minutieus overzicht van rekeningboeken, getuigenissen en in beslag genomen goederen. De verdediging van Verres stort in onder de druk van niet te weerleggen feiten.
+
+FLAG:
+ch21_lat_verres_stijl=logica
+
+RELATION:
+cicero=+1
+
+CHOICES:
+* Zie de uitkomst van het proces -> CH21_LAT_003
+
+END
+
+=== SCENE: CH21_LAT_002_EMOTIE ===
+
+TITLE:
+De Macht van de Retoriek
+
+TEXT:
+Cicero schildert de wanhoop van de Siciliaanse slachtoffers in felle kleuren af en doet een dringend appèl op het eergevoel van de senatoren. Het publiek op het Forum is diep geraakt.
+
+FLAG:
+ch21_lat_verres_stijl=emotie
+
+RELATION:
+cicero=+1
+
+CHOICES:
+* Zie de uitkomst van het proces -> CH21_LAT_003
+
+END
+
+=== SCENE: CH21_LAT_003 ===
+
+TITLE:
+Vlucht in Ballingschap
+
+TEXT:
+Nog voordat de verdediging het woord kan voeren, beseft Verres dat de zaak verloren is. Hij vlucht vrijwillig in ballingschap naar Massilia. Cicero heeft zijn naam gevestigd als de leidende advocaat en redenaar van de Republiek.
+
+CODEX:
+codex_verres
+
+CHOICES:
+* Enkele jaren later: de samenzwering van Catilina -> CH21_LAT_004
+
+END
+
+=== SCENE: CH21_LAT_004 ===
+
+TITLE:
+De Samenzwering van Catilina
+
+TEXT:
+In 63 v.Chr., tijdens Cicero's consulaat, dreigt er een staatsgreep. De gefrustreerde edelman Lucius Sergius Catilina verzamelt gewapende bendeleden om de macht over te nemen. Thuis is het Cicero's eigen vrouw, Terentia — scherp, onverschrokken, en veel directer betrokken bij de politiek dan van een Romeinse matrona wordt verwacht — die hem aanspoort niet langer te aarzelen. "Je bent consul," zegt ze hem, "geen redenaar die nog eens een goed argument zoekt. Handel nu, of leg later uit waarom je dat niet deed."
+
+Cicero roept de Senaat bijeen in de Tempel van Jupiter Stator en spreekt Catilina rechtstreeks aan.
+
+DIALOGUE:
+Cicero
+[[Quo usque tandem abutere, Catilina, patientia nostra?|Hoelang nog, Catilina, zul je ons geduld op de proef stellen?]]
+
+IMAGE:
+ch21_lat_cicero_senaat.png
+
+RELATION:
+cicero=+1
+
+CODEX:
+codex_catilina
+
+VOCAB:
+latijn_patientia
+
+CHOICES:
+* Adviseer de Senaat om Catilina onmiddellijk tot staatsvijand te verklaren [SEVERITAS] -> CH21_LAT_005_HARD
+* Adviseer de Senaat om eerst onweerlegbaar schriftelijk bewijs te verzamelen [CLEMENTIA] -> CH21_LAT_005_ZACHT
+
+END
+
+=== SCENE: CH21_LAT_005_HARD ===
+
+TITLE:
+Daadkracht in de Senaat
+
+TEXT:
+Jij pleit voor kordaat optreden. De Senaat spreekt het senatus consultum ultimum uit, waardoor de consuls buitengewone bevoegdheden krijgen. Catilina verlaat gehaast de stad om zich bij zijn opstandige leger in Etrurië te voegen.
+
+FLAG:
+ch21_lat_catilina_aanpak=hard
+
+CHOICES:
+* Bekijk de gevolgen voor de Republiek -> CH21_LAT_006
+
+END
+
+=== SCENE: CH21_LAT_005_ZACHT ===
+
+TITLE:
+Zorgvuldigheid in de Senaat
+
+TEXT:
+Jij adviseert terughoudendheid om de wettelijke procedures van de Republiek zorgvuldig te bewaren. Korte tijd later onderschept Cicero brieven aan de Allobrogen die het verraad definitief bewijzen. Catilina ziet zich ontmaskerd en ontvlucht de stad.
+
+FLAG:
+ch21_lat_catilina_aanpak=zacht
+
+CHOICES:
+* Bekijk de gevolgen voor de Republiek -> CH21_LAT_006
+
+END
+
+=== SCENE: CH21_LAT_006 ===
+
+TITLE:
+Vader des Vaderlands
+
+TEXT:
+De samenzwering wordt neergeslagen. Cicero wordt door de Senaat en het volk geëerd met de titel Pater Patriae. Toch zal zijn snelle handelen zonder formeel volksproces hem later door zijn politieke tegenstanders zwaar worden aangerekend.
+
+CHOICES:
+* Bezoek Cicero in zijn studeervertrek -> CH21_LAT_007
+
+END
+
+=== SCENE: CH21_LAT_007 ===
+
+TITLE:
+De Vertaling van de Filosofie
+
+TEXT:
+Wanneer politieke stormen luwen, trekt Cicero zich terug op zijn landgoederen. Hij stelt zich ten doel de Griekse filosofische concepten te vertalen en toegankelijk te maken in de Latijnse taal. In zijn bibliotheek ontmoet je een jonge, opmerkzame bezoeker — de jonge Seneca — die met grote bewondering de rollen en vertalingen bestudeert.
+
+DIALOGUE:
+Cicero
+Filosofie is de cultuur van de geest. Als wij Griekse gedachten vertalen naar Latijnse begrippen als [[humanitas|menselijkheid]] en [[virtus|deugd]], verrijken we de Republiek voorbij de grenzen van de politiek.
+
+IMAGE:
+ch21_lat_cicero_studeervertrek.png
+
+CODEX:
+codex_cicero_filosofie, codex_seneca_cameo
+
+VOCAB:
+latijn_humanitas, latijn_virtus
+
+CHOICES:
+* Ga verder -> CH21_LAT_EINDE
+
+END
+
+=== SCENE: CH21_LAT_EINDE ===
+
+TITLE:
+De Erfenis van de Spreker
+
+TEXT:
+"[[Ecce|zie hier]] — door Cicero's retorische meesterschap en zijn eigen vertaalwerk werd het Latijn de voertaal van de westerse beschaving," zegt Minerva. "Zijn woorden zouden eeuwenlang nagalmen in rechtszalen en studeerkamers — in een taal die, toen Socrates zijn eerste vraag stelde, nog niet eens een woord had voor 'filosofie'."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH21_EINDE
+
+END
+
+=== SCENE: CH21_EINDE ===
+
+TITLE:
+Gedachten over de Tijd heen
+
+TEXT:
+"[[Ecce|zie hier]] — Socrates koos ervoor om te vragen, Plato om op te schrijven, Aristoteles om te ordenen, Cicero om te vertalen en te spreken," zegt Athena. "Woorden en gedachten verhuizen van stad naar stad en van taal naar taal, zolang er opeenvolgende generaties zijn die ze blijven doorgeven."
+
+De Boodschapper van Chronos knikt haar toe. "Beter verteld dan ik het ooit had gekund," zegt ze. "Dank je, Athena — of Minerva, vandaag mag je zelf kiezen welke naam je het meest bevalt."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_wijsheid_en_waarheid
+
+CHOICES:
+* Bekijk de verzameling in het museum -> CH21_MUSEUM_00
+
+END
+
+=== SCENE: CH21_MUSEUM_00 ===
+
+TITLE:
+Het Museum van Wijsheid en Waarheid
+
+TEXT:
+Een nieuwe stolp vult zich: een lege gifbeker naast een perkamentrol vol Latijnse woorden die ooit alleen in het Grieks bestonden. "Twee manieren om wijsheid te laten voortleven," zegt de Boodschapper van Chronos, terwijl ze de stolp even bekijkt, "van hand tot hand, van taal naar taal — Socrates aan Plato, Plato aan Aristoteles, en aan de andere kant Cicero aan iedereen die na hem nog Latijn zou lezen." Ze kijkt op. "Athena had daar, vandaag, meer verstand van dan ik."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH21_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH21_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Diadochen, het Tweede Triumviraat, Augustus en Nero, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je koos, bij Socrates' proces en bij Catilina, blijft, hoe vaak je ook terugkeert naar het begin."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 22 "Opvolgers tegenover Opvolgers" — CONCEPT, NOG NIET
+   GEKOPPELD. Zelfde afspraak als Hoofdstuk 21: pas aan SP_SCENES/BLOCKS
+   toevoegen na Gerbens goedkeuring. Eerste concept door Gemini geschreven
+   (2026-08-12), hier verwerkt: "crown"-typefout in CH22_GRE_001 hersteld
+   naar "kroon", scènetitel "De Raad van Triparadisos" hernoemd (die
+   conferentie vond pas ná Perdikkas' dood plaats en past niet bij de
+   inhoud van die scène), titel "Mouterij aan de Nijl" hersteld naar
+   "Ramp bij de Nijl" (onbestaand woord), CH22_LAT_ANT_003 herschreven
+   zodat Caesarion niet ten onrechte fysiek aanwezig is bij de ontmoeting
+   in Tarsus (historisch bleef hij in Alexandrië — Antonius/Cleopatra
+   bespreken hem nu, in plaats van hem te ontmoeten), SOUVENIR-sectie
+   verwijst nu naar een echte SP_SOUVENIRS-registry-key i.p.v. vrije
+   tekst, en de dubbele REQUIRE-keuzeregels in CH22_000 zijn samengevoegd
+   tot één REQUIRE:taalspoor!=latijn-regel (stijlconsistentie met eerdere
+   hoofdstukken). `latijn_proscriptio` bestond al (Hoofdstuk 19) en is
+   niet opnieuw toegevoegd. Zie Chronica.md §7.x voor de volledige
+   toelichting. */
+const SP_CH22_CNS = `
+=== SCENE: CH22_000 ===
+
+TITLE:
+De Verdeling van het Rijk
+
+TEXT:
+"[[Ecce|zie hier]] — het overlijden van een heerser laat zelden een stilte achter," zegt de Boodschapper van Chronos. "Het veroorzaakt een vacuüm waarin voormalige bondgenoten veranderen in mededingers."
+
+Zowel in het oosten na de dood van Alexander de Grote als in Rome na de moord op Caesar herhaalt zich hetzelfde patroon. Mannen die samen een rijk opbouwden of verdedigden, verdelen de macht in de overtuiging dat alleen zij de rechtmatige opvolgers zijn.
+
+CHOICES:
+* Volg het spoor van Alexanders opvolgers [REQUIRE:taalspoor!=latijn] -> CH22_GRE_001
+* Volg het spoor van het Tweede Triumviraat [REQUIRE:taalspoor=latijn] -> CH22_LAT_001
+
+END
+
+=== SCENE: CH22_GRE_001 ===
+
+TITLE:
+Het Zegel van Babylon
+
+TEXT:
+In het koninklijk paleis te Babylon ligt het lichaam van Alexander de Grote. Zijn generaals, de diadochen, staan rond het sterfbed. Zonder aangewezen opvolger eist de legerleiding een besluit. Perdikkas, de commandant van de cavalerie, ontvangt de koninklijke zegelring uit de handen van de stervende koning en probeert de eenheid van het immense rijk te bewaren.
+
+DIALOGUE:
+Perdikkas
+Het rijk behoudt zijn vorm zolang wij de kroon bewaren voor de wettige erfgenaam van Alexander.
+
+IMAGE:
+ch22_gre_perdikkas_zegel.png
+
+RELATION:
+perdikkas=+1
+
+VOCAB:
+grieks_diadochoi
+
+CHOICES:
+* Zie hoe Perdikkas het gezag probeert te handhaven -> CH22_GRE_002
+
+END
+
+=== SCENE: CH22_GRE_002 ===
+
+TITLE:
+Scheuren in het Rijk
+
+TEXT:
+De spanningen onder de generaals lopen snel op. Ptolemaeus vestigt zich in Egypte en eist het lichaam van Alexander op, terwijl Antigonos zijn macht uitbreidt in Klein-Azië. Perdikkas ziet de afscheiding van Egypte als een directe bedreiging voor het centrale gezag en besluit een strafexpeditie uit te voeren naar de Nijldelta.
+
+CHOICES:
+* Volg de veldtocht naar de Nijl -> CH22_GRE_003
+
+END
+
+=== SCENE: CH22_GRE_003 ===
+
+TITLE:
+Ramp bij de Nijl
+
+TEXT:
+De oversteek van de Nijl mislukt rampzalig; honderden soldaten verdrinken of worden meegevoerd door de stroom. Het moraal van het leger stort in. In de nacht dringen officieren uit Perdikkas' eigen staf zijn tent binnen en doden hem. Na Philippus en Darius is dit de vierde keer in deze campagne dat een leider valt door verraad uit zijn eigen kring — opnieuw een val van binnenuit.
+
+DIALOGUE:
+Ptolemaeus
+Geen enkel rijk kan bijeengehouden worden door een leider die zijn eigen leger naar de ondergang leidt.
+
+IMAGE:
+ch22_gre_perdikkas_dood_nijl.png
+
+RELATION:
+ptolemaeus=+1
+
+CODEX:
+codex_perdikkas
+
+CHOICES:
+* Bepaal op welk fundament de opvolging gebouwd moet worden -> CH22_GRE_004
+
+END
+
+=== SCENE: CH22_GRE_004 ===
+
+TITLE:
+De Keuze der Generaals
+
+TEXT:
+Met de dood van Perdikkas valt het idee van een centraal geleid eenheidsrijk uiteen. Twee visies staan tegenover elkaar. Ptolemaeus wil zich terugtrekken achter de natuurlijke grenzen van Egypte en een stabiele, rijke staat opbouwen vanuit Alexandrië. Antigonos Monophthalmos en zijn zoon Demetrios eisen daarentegen de heerschappij over het gehele rijk op en bereiden een grootschalige oorlog voor.
+
+CHOICES:
+* Steun Ptolemaeus en kies voor de consolidatie van Egypte -> CH22_GRE_PTO_001
+* Steun Antigonos en strijd voor het herstel van het eenheidsrijk -> CH22_GRE_ANT_001
+
+END
+
+=== SCENE: CH22_GRE_PTO_001 ===
+
+TITLE:
+Het Fundament van Alexandrië
+
+TEXT:
+Jij kiest de zijde van Ptolemaeus. Terwijl de andere generaals elkaar in de Levant bestrijden, richt Ptolemaeus zich op het bestuur en de defensie van Egypte. Aan de kust verrijst de stad Alexandrië, met haar brede straten, havenwerken en de contouren van een reusachtige vuurtoren op het eiland Pharos.
+
+FLAG:
+ch22_gre_zijde=ptolemaeus
+
+RELATION:
+ptolemaeus=+1
+
+CODEX:
+codex_ptolemaeus_egypte
+
+VOCAB:
+grieks_pharos
+
+CHOICES:
+* Bouw aan de culturele en maritieme macht van Alexandrië -> CH22_GRE_PTO_002
+
+END
+
+=== SCENE: CH22_GRE_PTO_002 ===
+
+TITLE:
+Kennis en Zeeheerschappij
+
+TEXT:
+Ptolemaeus begrijpt dat macht niet alleen op speren rust, maar ook op kennis en handelsroutes. Hij legt de basis voor de Grote Bibliotheek en versterkt de Egyptische oorlogsvloot op de Middellandse Zee.
+
+DIALOGUE:
+Ptolemaeus
+Een koninkrijk dat beschermd wordt door de zee en gevoed wordt door de wetenschap zal overeind blijven als alle andere rijken storten.
+
+IMAGE:
+ch22_gre_ptolemaeus_bibliotheek.png
+
+CHOICES:
+* Bekijk hoe Ptolemaeus de grenzen verdedigt -> CH22_GRE_PTO_003
+
+END
+
+=== SCENE: CH22_GRE_PTO_003 ===
+
+TITLE:
+De Verdediging van de Grenzen
+
+TEXT:
+Wanneer invallende legers van de andere diadochen de grens van Egypte naderen, kiest Ptolemaeus voor een verdedigende tactiek. Met versterkte fortificaties langs de Nijl en een goed bevoorraade vloot slaat hij de aanvallen af zonder zijn eigen troepen uit te putten in lange buitenlandse marsen.
+
+CHOICES:
+* Hoor het nieuws uit het Macedonische moederland -> CH22_GRE_PTO_004
+
+END
+
+=== SCENE: CH22_GRE_PTO_004 ===
+
+TITLE:
+Schaduwen in Macedonië
+
+TEXT:
+Terwijl Egypte floreert, verhardt de strijd in Griekenland en Macedonië. Kassandros, de zoon van Antipater, grijpt de macht in Athene en Pella. Hij neemt Olympias, de moeder van Alexander de Grote, gevangen en laat haar ter dood veroordelen om haar politieke invloed voorgoed te breken.
+
+RELATION:
+kassandros=+1
+
+CODEX:
+codex_kassandros
+
+CHOICES:
+* Zie hoe het koninklijk huis verder wordt ontmanteld -> CH22_GRE_PTO_005
+
+END
+
+=== SCENE: CH22_GRE_PTO_005 ===
+
+TITLE:
+Het Einde van de Bloedlijn
+
+TEXT:
+Kassandros gaat nog verder. Om te voorkomen dat Alexanders erfgenaam ooit de troon opeist, laat hij Alexanders weduwe Roxana en hun jonge zoon Alexander IV in het geheim executeren. Alexanders bloedeigen opvolger wordt uitgewist, terwijl zijn voormalige generaals — die geen familie van hem zijn — zijn rijk onderling verdelen.
+
+IMAGE:
+ch22_gre_einde_bloedlijn.png
+
+CODEX:
+codex_alexander_iv
+
+CHOICES:
+* Vang de berichten op over de beslissende strijd in Klein-Azië -> CH22_GRE_PTO_006
+
+END
+
+=== SCENE: CH22_GRE_PTO_006 ===
+
+TITLE:
+Bericht over de Slag bij Ipsus
+
+TEXT:
+Ptolemaeus blijft in Egypte en volgt de gebeurtenissen vanuit de verte. Een koerier brengt het nieuws dat de coalitie van Seleukos en Lysimachos de overmacht van Antigonos heeft gebroken bij Ipsus in 301 v.Chr. Antigonos is op het slagveld gesneuveld; zijn droom van een verenigd rijk is definitief voorbij.
+
+DIALOGUE:
+Ptolemaeus
+De overmoed van Antigonos is gebroken. Egypte blijft staan als een onafhankelijk koninkrijk.
+
+IMAGE:
+ch22_gre_ptolemaeus_alexandrie.png
+
+CHOICES:
+* Overzie het nieuwe krachtenveld in het oosten -> CH22_GRE_005
+
+END
+
+=== SCENE: CH22_GRE_ANT_001 ===
+
+TITLE:
+Droom van het Eenheidsrijk
+
+TEXT:
+Jij kiest de zijde van Antigonos Monophthalmos. Samen met zijn begaafde en strijdlustige zoon Demetrios verzamelt Antigonos het grootste leger van de Griekse wereld. Hun doel is niets minder dan het herstellen van Alexanders volledige rijk onder één enkele kroon.
+
+FLAG:
+ch22_gre_zijde=antigonos
+
+RELATION:
+antigonos=+1, demetrios=+1
+
+CODEX:
+codex_antigonos
+
+CHOICES:
+* Volg Demetrios bij zijn belegeringen -> CH22_GRE_ANT_002
+
+END
+
+=== SCENE: CH22_GRE_ANT_002 ===
+
+TITLE:
+Demetrios de Belegeraar
+
+TEXT:
+Demetrios verdient zijn bijnaam Poliorketes (de Stedenbelegeraar) door het bouwen van reusachtige aanvalstorens en katapulten. Tijdens het langdurige beleg van Rhodos zet hij grensverleggende krijgstechniek in om de strategische eilanden in te nemen.
+
+DIALOGUE:
+Demetrios
+Geen muur is zo hoog of onze werktuigen breken hem af. Het rijk wordt gesmeed door de sterkste wil.
+
+IMAGE:
+ch22_gre_demetrios_rhodos.png
+
+VOCAB:
+grieks_poliorketes
+
+CHOICES:
+* Zie hoe de macht over Griekenland hersteld wordt -> CH22_GRE_ANT_003
+
+END
+
+=== SCENE: CH22_GRE_ANT_003 ===
+
+TITLE:
+Macht over de Hellenen
+
+TEXT:
+Antigonos en Demetrios herstellen de Korinthische Bond en presenteren zich als de bevrijders van de Griekse steden van de heerschappij van Kassandros. Hun snelle opmars dwingt de andere diadochen — Seleukos, Lysimachos en Ptolemaeus — tot een formeel bondgenootschap tegen hen.
+
+CHOICES:
+* Hoor het nieuws over het koninklijk huis in Macedonië -> CH22_GRE_ANT_004
+
+END
+
+=== SCENE: CH22_GRE_ANT_004 ===
+
+TITLE:
+Schaduwen in Macedonië
+
+TEXT:
+Terwijl Antigonos zijn legers bijeentrekt, verhardt de strijd in het moederland. Kassandros grijpt de macht in Pella, neemt Olympias, de moeder van Alexander de Grote, gevangen en laat haar executeren. Het geweld ontziet niemand van het oude koningshuis.
+
+RELATION:
+kassandros=+1
+
+CODEX:
+codex_kassandros
+
+CHOICES:
+* Zie hoe het koninklijk huis definitief wordt uitgewist -> CH22_GRE_ANT_005
+
+END
+
+=== SCENE: CH22_GRE_ANT_005 ===
+
+TITLE:
+Het Einde van de Bloedlijn
+
+TEXT:
+Kassandros laat ook Alexanders weduwe Roxana en hun jonge zoon Alexander IV in de gevangenis doden. De bloedeigen erfgenaam van Alexander de Grote is dood. De strijd gaat nu puur tussen de generaals, die elk voor zich de koningstitel opeisen.
+
+IMAGE:
+ch22_gre_einde_bloedlijn.png
+
+CODEX:
+codex_alexander_iv
+
+CHOICES:
+* Trek op naar de beslissende veldslag bij Ipsus -> CH22_GRE_ANT_006
+
+END
+
+=== SCENE: CH22_GRE_ANT_006 ===
+
+TITLE:
+De Slag bij Ipsus
+
+TEXT:
+In 301 v.Chr. tref je op de vlakten van Phrygië de gezamenlijke legers van Seleukos en Lysimachos. Honderden krijgsolifanten van Seleukos snijden Demetrios' cavalerie af van het hoofdleger. Antigonos, inmiddels tachtig jaar oud, weigert te wijken en sneuvelt onder een hagel van speren. Demetrios weet ter nauwernood te ontsnappen.
+
+DIALOGUE:
+Antigonos
+Mijn zoon zal mij wreken, maar het rijk zal nooit meer één zijn.
+
+IMAGE:
+ch22_gre_slag_bij_ipsus.png
+
+CHOICES:
+* Overzie de verdeling die na de slag ontstaat -> CH22_GRE_005
+
+END
+
+=== SCENE: CH22_GRE_005 ===
+
+TITLE:
+De Vier Kronen
+
+TEXT:
+Na de Slag bij Ipsus is de droom van een verenigd rijk voorgoed voorbij. Het rijk van Alexander is definitief uiteengevallen in vier stabiele opvolgerrijken: de Ptolemeën in Egypte, de Seleuciden in Azië, de Antigoniden in Macedonië en het rijk van Lysimachos in Thracië. In Egypte zal de dynastie van Ptolemaeus drie eeuwen standhouden — totdat een koningin genaamd Cleopatra de laatste van haar lijn zal zijn.
+
+CHOICES:
+* Sluit het Griekse spoor af -> CH22_GRE_EINDE
+
+END
+
+=== SCENE: CH22_GRE_EINDE ===
+
+TITLE:
+De Erfenis van de Diadochen
+
+TEXT:
+"[[Ecce|zie hier]] — de diadochen verscheurden Alexanders rijk," zegt de Boodschapper, "maar transformeerden de Griekse wereld tegelijk in een netwerk van hellenistische koninkrijken. Hun steden, hun taal, hun cultuur verspreidden zich van de Middellandse Zee tot aan de grens van Indië. Zelfs verdeeld liet dit rijk meer na dan de meeste die nooit uiteenvielen."
+
+CHOICES:
+* Volg het spoor naar het Romeinse Triumviraat [REQUIRE:taalspoor=beide] -> CH22_LAT_001
+* Naar de afsluiting van het hoofdstuk [REQUIRE:taalspoor=grieks] -> CH22_EINDE
+
+END
+
+=== SCENE: CH22_LAT_001 ===
+
+TITLE:
+Het Tweede Triumviraat
+
+TEXT:
+Eeuwen na de verdeling van Alexanders rijk herhaalt zich in Rome hetzelfde patroon. Na de moord op Julius Caesar pakken drie mannen de macht: Marcus Antonius, Caesars begaafde generaal; Octavianus, Caesars jonge geadopteerde erfgenaam; en Lepidus, zijn meester van de cavalerie. Zij vormen het Tweede Triumviraat en verdelen de provincies onder elkaar.
+
+DIALOGUE:
+Octavianus
+[[Pax|Vrede]] vereist een krachtig gezag. De Republiek kan niet langer bestuurd worden door verdeelde senatoren.
+
+IMAGE:
+ch22_lat_tweede_triumviraat.png
+
+RELATION:
+antonius=+1, octavianus=+1
+
+CODEX:
+codex_tweede_triumviraat
+
+CHOICES:
+* Zie hoe de triumviren hun tegenstanders uitschakelen -> CH22_LAT_002
+
+END
+
+=== SCENE: CH22_LAT_002 ===
+
+TITLE:
+De Derde Dodenlijst
+
+TEXT:
+Om hun veldtochten te financieren en politieke afrekeningen te houden, stellen de triumviren dodenlijsten op. Na de proscripties van Sulla in Rome en het schrikbewind van de Dertig Tirannen in Athene is dit de derde keer dat staatsburgers vogelvrij worden verklaard. Wie op de lijst staat, verliest zijn bezit en zijn leven.
+
+VOCAB:
+latijn_proscriptio
+
+CHOICES:
+* Zie welke naam bovenaan de lijst van Antonius staat -> CH22_LAT_003
+
+END
+
+=== SCENE: CH22_LAT_003 ===
+
+TITLE:
+Het Lot van Cicero
+
+TEXT:
+Marcus Antonius eist de dood van Marcus Tullius Cicero, die hem in zijn fel bitter opgestelde [[Philippicae|Filippische redevoeringen]] talloze malen heeft aangevallen. Octavianus, die door Cicero in de Senaat altijd is beschermd, aarzelt lang, maar geeft uiteindelijk toe aan de eis van Antonius.
+
+CHOICES:
+* Pleit bij Octavianus voor het behoud van Cicero's leven [CLEMENTIA] -> CH22_LAT_003_PLEIT
+* Laat de triumviren hun politieke afspraak uitvoeren [SEVERITAS] -> CH22_LAT_003_ZWIJG
+
+END
+
+=== SCENE: CH22_LAT_003_PLEIT ===
+
+TITLE:
+Een Tevergeefs Appèl
+
+TEXT:
+Jij spreekt je uit voor Cicero en herinnert Octavianus aan de steun die de oude redenaar hem verleende. Octavianus wendt zijn blik af; de politieke noodzaak om de vrede met Antonius te bewaren weegt voor hem zwaarder dan persoonlijke dankbaarheid.
+
+RELATION:
+cicero=+1, octavianus=-1
+
+CHOICES:
+* Volg de gebeurtenissen bij Formiae -> CH22_LAT_004
+
+END
+
+=== SCENE: CH22_LAT_003_ZWIJG ===
+
+TITLE:
+Instemming met het Besluit
+
+TEXT:
+Jij aanvaardt de rauwe werkelijkheid van de proscripties. Octavianus ondertekent het bevel en laat de eis van Antonius doorgang vinden ter wille van de eenheid binnen het Triumviraat.
+
+RELATION:
+cicero=-1, octavianus=+1
+
+CHOICES:
+* Volg de gebeurtenissen bij Formiae -> CH22_LAT_004
+
+END
+
+=== SCENE: CH22_LAT_004 ===
+
+TITLE:
+Cicero's Laatste Uur
+
+TEXT:
+In december 43 v.Chr. halen de centurio's van Antonius de oude staatsman in bij zijn villa in Formiae. Cicero weigert te vluchten of te smeken. Hij steekt zijn hoofd buiten de draagstoel en ondergaat het vonnis. Zijn handen en hoofd worden afgehakt en op het Forum Romanum aan de Rostra gespijkerd — het definitieve einde van de man die de Republiek met woorden verdedigde.
+
+DIALOGUE:
+Cicero
+Er is niets eervols aan een vlucht wanneer het recht zelf is gestorven.
+
+IMAGE:
+ch22_lat_cicero_dood.png
+
+CODEX:
+codex_cicero_dood
+
+CHOICES:
+* Bekijk de nieuwe spanningen binnen Italië -> CH22_LAT_005
+
+END
+
+=== SCENE: CH22_LAT_005 ===
+
+TITLE:
+De Opstand van Fulvia
+
+TEXT:
+Terwijl Antonius in het oosten de rijkdommen van de provincies inspecteert, neemt zijn vrouw Fulvia in Italië de wapens op. Zij is een politiek gedreven en daadkrachtige vrouw die weigert toe te zien hoe Octavianus alle macht in Rome naar zich toe trekt. Samen met Antonius' broer verzamelt zij legioenen en verschanst zich in de stad Perusia (de Oorlog van Perusia, 41-40 v.Chr.).
+
+IMAGE:
+ch22_lat_fulvia_perusia.png
+
+RELATION:
+fulvia=+1
+
+CODEX:
+codex_fulvia
+
+CHOICES:
+* Kies de zijde van Octavianus om de opstand neer te slaan -> CH22_LAT_OCT_001
+* Blijf de zijde van Antonius en Fulvia trouw -> CH22_LAT_ANT_001
+
+END
+
+=== SCENE: CH22_LAT_OCT_001 ===
+
+TITLE:
+Het Beleg van Perusia
+
+TEXT:
+Jij kiest de kant van Octavianus. Samen met zijn begaafde veldheer Marcus Vipsanius Agrippa sluit Octavianus de stad Perusia volledig in met wallen en grachten. De honger in de belegerde stad wordt al snel nijpend.
+
+FLAG:
+ch22_lat_zijde=octavianus
+
+IMAGE:
+ch22_lat_beleg_perusia.png
+
+RELATION:
+octavianus=+1, agrippa=+1
+
+CODEX:
+codex_agrippa
+
+CHOICES:
+* Zie de overgave van de stad -> CH22_LAT_OCT_002
+
+END
+
+=== SCENE: CH22_LAT_OCT_002 ===
+
+TITLE:
+De Val van de Stad
+
+TEXT:
+Na maanden van zware hongersnood geeft Perusia zich over. Octavianus toont geen genade voor de stadsbestuurders die Fulvia hebben gesteund. Fulvia zelf weet te ontsnappen en vlucht over zee naar Griekenland.
+
+CHOICES:
+* Maak kennis met de naaste adviseurs van Octavianus -> CH22_LAT_OCT_003
+
+END
+
+=== SCENE: CH22_LAT_OCT_003 ===
+
+TITLE:
+De Kring rond Octavianus
+
+TEXT:
+Na de overwinning versterkt Octavianus zijn positie in Rome. Hij omringt zich met toegewijde raadslieden: de militair Agrippa en de rijke diplomaat Gaius Maecenas, die kunstenaars en dichters zoals Vergilius aan het hof verbindt om de waarden van het nieuwe bewind uit te dragen.
+
+DIALOGUE:
+Maecenas
+De staat wordt niet alleen gered door zwaarden, maar ook door de gezangen van dichters die de rust bezingen.
+
+RELATION:
+maecenas=+1, vergilius=+1
+
+CODEX:
+codex_maecenas, codex_vergilius
+
+CHOICES:
+* Bekijk de uitkomst van de crisis -> CH22_LAT_OCT_004
+
+END
+
+=== SCENE: CH22_LAT_OCT_004 ===
+
+TITLE:
+De Macht in het Westen
+
+TEXT:
+Met Perusia ingenomen en Italië onder controle heeft Octavianus zijn greep op het westen verstevigd. Hij wacht af hoe Antonius zal reageren op de nederlaag van zijn echtgenote.
+
+CHOICES:
+* Verneem het lot van Fulvia -> CH22_LAT_007
+
+END
+
+=== SCENE: CH22_LAT_ANT_001 ===
+
+TITLE:
+Antonius in het Oosten
+
+TEXT:
+Jij blijft Antonius en zijn zaak trouw. Terwijl Fulvia in Italië de strijd aangaat met Octavianus, bevindt Antonius zich in de oostelijke provincies om de grenzen te inspecteren en geld op te halen voor zijn troepen.
+
+FLAG:
+ch22_lat_zijde=antonius
+
+RELATION:
+antonius=+1
+
+CHOICES:
+* Volg Antonius naar Cilicië -> CH22_LAT_ANT_002
+
+END
+
+=== SCENE: CH22_LAT_ANT_002 ===
+
+TITLE:
+Het Schip op de Cydnus
+
+TEXT:
+In Tarsus ontmoet Antonius de koningin van Egypte, Cleopatra VII. Zij vaart de rivier de Cydnus op met een goudbeslagen schip met purperen zeilen, verkleed als Aphrodite. Cleopatra spreekt meerdere talen, beschikt over uitstekend politiek inzicht en biedt Antonius de financiële steun van Egypte aan.
+
+DIALOGUE:
+Cleopatra
+Egypte heeft de middelen die Rome zoekt, mits Rome de rechtmatige macht van mijn huis erkent.
+
+IMAGE:
+ch22_lat_cleopatra_cydnus.png
+
+RELATION:
+cleopatra=+1
+
+CODEX:
+codex_cleopatra
+
+VOCAB:
+grieks_basilissa
+
+CHOICES:
+* Vraag naar de erfgenaam die ze in Alexandrië achterliet -> CH22_LAT_ANT_003
+
+END
+
+=== SCENE: CH22_LAT_ANT_003 ===
+
+TITLE:
+De Zoon van Caesar
+
+TEXT:
+Cleopatra reisde alleen naar Tarsus — haar zoon bleef, zoals altijd, veilig achter in Alexandrië. Wanneer jij naar hem vraagt, spreekt ze zijn naam met duidelijke trots uit: Caesarion, nu zes jaar oud, haar zoon bij Julius Caesar zelf. Als Caesars enige bloedeigen kind vormt hij, ook van grote afstand, een stilzwijgende vraag voor Octavianus, die slechts door adoptie Caesars zoon werd.
+
+"[[Ecce|zie hier]]," merkt de verteller op, "exact dezelfde spanning die zonet nog Alexanders eigen zoon het leven kostte: een erfgenaam van bloed, tegenover mannen die de macht al in handen hebben. Onthoud die naam. Dit is niet de laatste keer dat je hem hoort."
+
+CODEX:
+codex_caesarion
+
+CHOICES:
+* Ontvang de dringende berichten uit Italië -> CH22_LAT_ANT_004
+
+END
+
+=== SCENE: CH22_LAT_ANT_004 ===
+
+TITLE:
+De Tijding uit Italië
+
+TEXT:
+Berichten bereiken Antonius dat de opstand van Fulvia bij Perusia is neergeslagen en dat zij is uitgeweken naar Griekenland. Antonius reist onmiddellijk naar het westen om de situatie te herstellen.
+
+CHOICES:
+* Verneem het lot van Fulvia -> CH22_LAT_007
+
+END
+
+=== SCENE: CH22_LAT_007 ===
+
+TITLE:
+Het Einde van Fulvia
+
+TEXT:
+In Sikyon, in Griekenland, treffen Antonius en Fulvia elkaar kortstondig. Antonius bekritiseert haar scherp voor het ontketenen van een ongeplande oorlog in Italië. Ziek en politiek geïsoleerd overlijdt Fulvia kort daarna. Haar dood ruimt onverwachts de weg op voor een diplomatieke verzoening tussen de triumviren.
+
+CODEX:
+codex_fulvia_dood
+
+CHOICES:
+* Volg de onderhandelingen bij Brundisium -> CH22_LAT_008
+
+END
+
+=== SCENE: CH22_LAT_008 ===
+
+TITLE:
+De Vrede van Brundisium
+
+TEXT:
+In 40 v.Chr. ontmoeten Antonius en Octavianus elkaar in Brundisium. Om een nieuwe burgeroorlog te voorkomen, herverdelen ze de Romeinse wereld: Octavianus behoudt het westen, Antonius krijgt het oosten, en Lepidus krijgt Afrika. Om het verdrag te bezegelen, regelen zij een politiek huwelijk.
+
+CHOICES:
+* Zie de rol van Octavia bij de verzoening -> CH22_LAT_009
+
+END
+
+=== SCENE: CH22_LAT_009 ===
+
+TITLE:
+Het Huwelijk van Octavia
+
+TEXT:
+Antonius trouwt met Octavia, de zuster van Octavianus. Octavia is een gerespecteerde en verstandige vrouw die actieve diplomatie voert om de vrede tussen haar broer en haar echtgenoot te bewaren. Voorlopig is de rust in het Romeinse Rijk hersteld.
+
+DIALOGUE:
+Octavia
+Het is de taak van onze familie om de wonden van de Republiek te helen, niet om ze opnieuw open te rijten.
+
+IMAGE:
+ch22_lat_octavia_huwelijk.png
+
+RELATION:
+octavia=+1
+
+CODEX:
+codex_octavia_huwelijk
+
+CHOICES:
+* Bekijk de culturele bloei in Rome onder het Triumviraat -> CH22_LAT_010
+
+END
+
+=== SCENE: CH22_LAT_010 ===
+
+TITLE:
+Bondgenoten van de Nieuwe Orde
+
+TEXT:
+In Rome bouwt Octavianus gestaag aan zijn reputatie. Met Agrippa aan het hoofd van de strijdkrachten en Maecenas als beschermheer van de kunsten ontstaat een stabiele machtsbasis. De dichter Vergilius begint te schrijven over het landleven en de aloude Romeinse deugden die de staat moeten herstellen.
+
+RELATION:
+agrippa=+1, maecenas=+1, vergilius=+1
+
+CHOICES:
+* Sluit het Latijnse spoor af -> CH22_LAT_EINDE
+
+END
+
+=== SCENE: CH22_LAT_EINDE ===
+
+TITLE:
+De Tijdelijke Vrede
+
+TEXT:
+"[[Ecce|zie hier]] — het Tweede Triumviraat heeft de rust hersteld," zegt de Boodschapper, "maar let op wat je zonet zag: de verdeling van de wereld tussen twee machtige mannen die elkaar nodig hebben en wantrouwen tegelijk. Dat soort vrede draagt altijd de kiem van het volgende conflict in zich."
+
+CHOICES:
+* Naar de afsluiting van het hoofdstuk -> CH22_EINDE
+
+END
+
+=== SCENE: CH22_EINDE ===
+
+TITLE:
+Macht zonder Erfgenamen
+
+TEXT:
+"[[Ecce|zie hier]] — of het nu gaat om de generaals van Alexander of de triumviren van Rome," zegt de Boodschapper van Chronos, "hetzelfde patroon herhaalt zich: wanneer het centrale gezag wegvalt, verdelen de machtigen het rijk onder elkaar. En in beide werelden werden de wettige erfgenamen van het bloed — een kind van amper vijf, een zoon die nog moet opgroeien in Alexandrië — opzij geschoven door mannen met legioenen."
+
+Ze zwijgt even. "Onthoud die twee namen, Alexander IV en Caesarion. Ik beloof je niets, maar geen enkele keuze die je zag, is voorgoed vergeten."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_opvolgers_tegenover_opvolgers
+
+CHOICES:
+* Bekijk de verzameling in het museum -> CH22_MUSEUM_00
+
+END
+
+=== SCENE: CH22_MUSEUM_00 ===
+
+TITLE:
+Het Museum van de Opvolgers
+
+TEXT:
+Een nieuwe stolp vult zich: een bronzen diadeem naast een zilveren denarius met het dubbele profiel van het Triumviraat. "De marmeren bustes van Ptolemaeus, Antigonos, Marcus Antonius en Octavianus zouden hier bijna broederlijk naast elkaar kunnen staan," zegt de Boodschapper van Chronos, "als je niet wist hoeveel van hun eigen mensen ze onderweg hebben opgeofferd. Machtsverdeling, heb ik gemerkt, is zelden meer dan de pauze tussen twee oorlogen."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH22_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH22_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Cleopatra en Actium, Augustus en Nero, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je koos, bij de proscripties en bij Perusia, blijft, hoe vaak je ook terugkeert naar het begin."
 
 Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
 

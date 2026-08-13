@@ -83,22 +83,31 @@ Finale-regel ("je herinnert je Fortunata nog, van die avond in...").
   afscheiding van de Delisch-Attische Zeebond.
 - `ch18_lat_tiberius_veto` (CH18_LAT_002) — Tiberius Gracchus zet zijn
   medetribuun Octavius af, het precedent dat elk ambt opzegbaar maakt.
-- `ch19_gre_zijde` (athene/sparta) — **grote keuze, waarschijnlijk een
-  eigen payoff-hoofdstuk vóór de Finale**, zie Chronica.md §7.72/§7.79.
 - `ch19_gre_ath_sicilie` (meegevaren/gebleven) — was de speler zelf bij
   de Siciliaanse Expeditie.
-- `ch19_lat_zijde` (caesar/pompeius) — **grote keuze, zelfde soort payoff
-  als ch19_gre_zijde**, zie Chronica.md §7.72/§7.79.
 - `ch19_lat_pom_samenzwering` (mee/geweigerd) — deelname aan de moord op
   Caesar (alleen bereikbaar via het Pompeius-spoor).
 
-De laatste vier (H19) hebben mogelijk eerder een eigen payoff-hoofdstuk
-nodig dan de Finale zelf (zie de RELATION/FLAG-roster,
-Chronica.md §7.79) — maar als die payoff er om wat voor reden ook nooit
-komt, moet de Finale ze alsnog oppikken als vangnet.
+`ch19_gre_zijde` en `ch19_lat_zijde` zijn **niet langer dood**: Hoofdstuk
+20 leest ze terug via `{ch19_gre_zijde_h20_echo}`/`{ch19_lat_zijde_h20_echo}`
+(zie Chronica.md §7.83). Precedent bevestigd: een grote zijde-keuze kan dus
+ook zonder een volledig eigen payoff-hoofdstuk worden afbetaald, gewoon als
+inleidende alinea in het eerstvolgende hoofdstuk waar dat personage
+terugkeert.
+
+## Categorie 5 — Nieuwe dode flags (H20)
+
+- `ch20_lat_dumnorix` (executie/poging_genade) — hoe Caesar de
+  Dumnorix-kwestie liet afhandelen; bewust flavour-only (Clementia/
+  Severitas wordt al door de gewone approach-tracking meegenomen), geen
+  personage dat later terugkeert om dit te kunnen uitlezen.
+- `ch20_lat_aquilifer` (speler/onbekende_soldaat) — of de speler zelf de
+  adelaar van het Tiende Legioen greep bij de Britannia-landing, of de
+  (bij Caesar naamloze) aquilifer liet gaan; bewust flavour-only, geen
+  personage dat dit later kan uitlezen.
 
 ---
 
-**Status**: 41 dode flags vastgelegd op 2026-08-11 (na Hoofdstuk 19).
-Bijwerken bij elk volgend hoofdstuk dat een nieuwe, nog niet uitgelezen
-FLAG zet.
+**Status**: 43 dode flags vastgelegd op 2026-08-13 (na de aquilifer-scène
+in Hoofdstuk 20). Bijwerken bij elk volgend hoofdstuk dat een nieuwe, nog
+niet uitgelezen FLAG zet.
