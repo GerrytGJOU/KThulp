@@ -590,10 +590,23 @@ document.addEventListener("pointerdown",function once(){ ac(); document.removeEv
 
 /* ---------- toast & overlay ---------- */
 let toastT;
+// Zichtbare duur schaalt mee met de tekstlengte (basis 3200ms + ~55ms per
+// teken van de boodschap, met een plafond van 9000ms) — een korte quiz-
+// melding als "Juist!" blijft snel weg, maar een langere NPC-reactie
+// (Clementia/Severitas/Neutraal, spSceneReaction) krijgt genoeg tijd om
+// uitgelezen te worden. Het kruisje (toastDismiss) laat de speler 'm ook
+// altijd zelf al eerder wegklikken. Leerlingfeedback (2026-08-13): reacties
+// verdwenen voordat ze uitgelezen konden worden.
 function toast(title, msg, medal){
   el("toastM").innerHTML = medal || iconSVG("star",34,"var(--hi)");
   el("toastT").textContent = title; el("toastN").textContent = msg;
-  const t=el("toast"); t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),3200);
+  const t=el("toast"); t.classList.add("show"); clearTimeout(toastT);
+  const duur = Math.min(9000, 3200 + (msg||"").length*55);
+  toastT=setTimeout(()=>t.classList.remove("show"),duur);
+}
+function toastDismiss(){
+  clearTimeout(toastT);
+  el("toast").classList.remove("show");
 }
 /* ---- Eerbewijs-ontgrendel-popup (groter/duidelijker dan de gewone toast,
    met een lichtgloed achter het medaillon). Wachtrij zodat meerdere
