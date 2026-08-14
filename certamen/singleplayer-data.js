@@ -484,9 +484,10 @@ const SP_CAMPAIGN = [
     pallas:"Geen nieuwe les — verhaal: de presocraten als opmaat, gevolgd door Hellenistische wetenschap (Archimedes, Euclides, Eratosthenes, de Bibliotheek van Alexandrië/het Mouseion)", minerva:"Geen nieuwe grammatica — verhaal: Pompeii (de aardbeving van 62, de uitbarsting van 79, Plinius' ooggetuigenbrief, het dagelijks leven dat achterbleef)",
     grammatica:"Grieks: herhaling — presocraten/Hellenistische wetenschap; Latijn: herhaling — Pompeii",
     gameplay:"Twee sporen; een wetenschappelijk raadsel oplossen (Griekse lijn, van presocratische oerstof-vragen tot Archimedes/Eratosthenes) / de laatste uren van Pompeii herbeleven tegen de klok (Latijnse lijn, spanningsopbouw richting de uitbarsting)",
-    personages:"Thales, Anaximander, Heraclitus, Pythagoras, Democritus (presocraten) — Archimedes, Euclides, Eratosthenes — Plinius de Oudere, Plinius de Jongere",
+    personages:"Thales, Anaximander, Anaximenes, Pythagoras, Herakleitos, Parmenides, Anaxagoras, Demokritos (alle acht presocraten) — Euclides, Eratosthenes, Archimedes — Vitruvius (terugkerend uit H24) — Plinius de Oudere, Plinius de Jongere, Seneca (cameo)",
     thema:"Kennis verklaart de wereld — tot de wereld iets doet waar niemand op voorbereid was",
-    illustratie:"Archimedes in zijn bad ('heureka') / de aswolk boven Pompeii" },
+    illustratie:"Archimedes in zijn bad ('heureka') / de aswolk boven Pompeii",
+    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-14) — door Claude geschreven (geen Gemini-concept). Op Gerbens verzoek: focus verschoven van pure verhaalkeuzes naar LEESVALLEN (Herakleitos' rivier-fragment, Eratosthenes' schaduwhoek, het Pompeii-graffito 'si vales, valeo'), alle acht presocraten benoemd (niet alleen de vijf uit de oude planningstekst), Vitruvius keert non-lineair terug (zelfde flashback-truc als Archimedes' eigen bad-scène) met een driewegs-payoff van H24's firmitas/utilitas/venustas-keuze (nieuwe SP_PAYOFFS-entries op CH25_LAT_001). De aardbeving van 62 n.Chr. is expliciet aan Nero's regeerperiode gekoppeld via Seneca's Naturales Quaestiones — Nero regeerde niet meer tijdens de uitbarsting van 79 (dat was Titus), dat onderscheid is bewust bewaard. TECHNISCHE CORRECTIE t.o.v. het eerste voorstel: niet het RACE-mechanisme (Atalanta-specifieke code) maar het generieke CHECK-mechanisme (SP_CHECKS.ch25_lat_vlucht) geeft de 'vlucht door de as'-spanning. Twee nieuwe Lethe/Mnemosyne-zaadjes (namen nog steeds niet genoemd): de Boodschapper reageert opvallend stil op Plinius' brief, en een nieuwe 'onthoud of laat los'-FLAG (`ch25_lat_plinius`) sluit aan bij de reeks die in H24 begon. SP_CH25_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
   { id:"ch26", nr:26, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Een Rijk in Crisis",
     periode:"Flavische dynastie t/m Crisis van de Derde Eeuw, 69-284 n.Chr.",
     verhaal:"Na Nero's dood strijden vier keizers in één jaar om de troon, tot de Flavii (Vespasianus, Titus, Domitianus) orde herstellen en het Colosseum bouwen — vlak nadat in Germania Inferior de Bataven onder Julius Civilis in opstand komen, een opstand die Tacitus zelf beschrijft. Daarna volgen de 'adoptiefkeizers' Nerva, Trajanus (grootste omvang van het rijk) en Hadrianus (zijn muur, zijn liefde voor Griekenland), Antoninus Pius en Marcus Aurelius — tot Commodus alles laat afglijden naar de Severische dynastie en uiteindelijk de chaos van de Derde-Eeuwse Crisis, met wisselende soldatenkeizers.",
@@ -2871,6 +2872,30 @@ const SP_CODEX_ENTRIES = {
     tekst:"De Ara Pacis Augustae ('Altaar van de Augusteïsche Vrede', voltooid 9 v.Chr.) viert de vrede die Augustus na jaren van burgeroorlog tot stand bracht. De reliëfs tonen een plechtige processie met herkenbare portretten van Augustus en zijn familie — een monument dat bewust bedoeld was om exact te onthouden wie erbij hoorde en wie de vrede had gebracht." },
   codex_vitruvius_boek: { cat:"geschiedenis", titel:"Vitruvius' De Architectura",
     tekst:"Vitruvius' De Architectura, tien boeken over architectuur, materialen, machines en stedenbouw, is een van de weinige volledig bewaard gebleven technische traktaten uit de klassieke oudheid — de meeste vergelijkbare werken van tijdgenoten zijn verloren gegaan. Het werk beïnvloedde eeuwen later nog rechtstreeks de architectuur van de Renaissance." },
+  codex_milete_drietal: { cat:"filosofie", titel:"De School van Milete",
+    tekst:"Thales, Anaximander en Anaximenes — leermeester, leerling en diens leerling weer — zoeken elk een enkele oerstof (water, het onbepaalde apeiron, lucht) waaruit alles ontstaat. Ze worden beschouwd als de eerste filosofen van de westerse traditie: denkers die de wereld probeerden te verklaren zonder terug te vallen op mythische verhalen." },
+  codex_pythagoras_h25: { cat:"filosofie", titel:"Pythagoras en de Getallen",
+    tekst:"Pythagoras van Samos (6e eeuw v.Chr.) ziet getal en verhouding als de ware grond van de werkelijkheid — beroemd geworden door zijn ontdekking dat muzikale harmonie in eenvoudige getalsverhoudingen (zoals 2:1 voor een octaaf) is uit te drukken. Zijn stelling over de rechthoekige driehoek kende de wiskunde al vóór hem, maar zijn naam bleef eraan verbonden." },
+  codex_anaxagoras_demokritos: { cat:"filosofie", titel:"Anaxagoras en Demokritos",
+    tekst:"Anaxagoras verklaart de wereld met oneindig kleine 'zaden' van elke stof, geordend door een universele geest (nous). Demokritos gaat radicaler: alles bestaat uit ondeelbare deeltjes, atomos, en lege ruimte — een idee dat pas in de 19e/20e eeuw wetenschappelijk zijn gelijk zou krijgen." },
+  codex_bibliotheek_alexandrie: { cat:"geschiedenis", titel:"De Bibliotheek van Alexandrië",
+    tekst:"Gesticht onder de Ptolemaeën, de Macedonische dynastie die na Alexanders dood over Egypte regeerde, groeit het Mouseion van Alexandrië uit tot het belangrijkste geleerdencentrum van de antieke wereld — met een bibliotheek die op haar hoogtepunt naar schatting honderdduizenden rollen bevatte." },
+  codex_euclides: { cat:"filosofie", titel:"Euclides en de Elementen",
+    tekst:"Euclides (rond 300 v.Chr., werkzaam in Alexandrië) ordent alle bekende meetkunde in zijn Elementen tot één logisch systeem, opgebouwd uit axioma's en bewijzen. Het werk blijft, op een handvol details na, meer dan tweeduizend jaar lang het standaardleerboek voor meetkunde." },
+  codex_eratosthenes: { cat:"geschiedenis", titel:"Eratosthenes en de Omtrek van de Aarde",
+    tekst:"Eratosthenes, hoofd van de Bibliotheek van Alexandrië, berekent rond 240 v.Chr. de omtrek van de aarde uit het verschil in schaduwhoek tussen Syene en Alexandrië op de langste dag van het jaar — zonder één stap buiten Egypte te zetten, en met een uitkomst die slechts enkele procenten van de moderne waarde afwijkt." },
+  codex_archimedes_eureka: { cat:"geschiedenis", titel:"Archimedes en de Kroon van Hiero",
+    tekst:"Archimedes van Syracuse ontdekt, volgens een anekdote die de Romeinse architect Vitruvius eeuwen later optekent, in bad het principe van soortelijk gewicht: het verplaatste watervolume verraadt of koning Hiero's kroon echt van zuiver goud is. Zijn uitroep 'eureka' ('ik heb het gevonden') is spreekwoordelijk geworden." },
+  codex_vitruvius_pompeii: { cat:"geschiedenis", titel:"Pompeii, een Romeinse Stad",
+    tekst:"Pompeii, aan de voet van de Vesuvius, is in de 1e eeuw n.Chr. een welvarende, gewone Romeinse provinciestad: een forum, thermen, een amfitheater, villa's met beschilderde muren. Precies die gewoonheid maakt de latere ramp zo aangrijpend — en precies die bewaring maakt de stad achteraf tot een ongeëvenaarde bron over het dagelijks leven in het Romeinse Rijk." },
+  codex_pompeii_graffiti: { cat:"geschiedenis", titel:"Graffiti in Pompeii",
+    tekst:"De muren van Pompeii zijn bezaaid met duizenden krassen: verkiezingsleuzen, liefdesverklaringen, scheldwoorden, weddenschappen op gladiatorenspelen. Ze geven, anders dan officiële inscripties, een ongefilterde blik op wat gewone Pompeianen elkaar op een gewone dag te zeggen hadden." },
+  codex_aardbeving_62: { cat:"geschiedenis", titel:"De Aardbeving van 62 n.Chr.",
+    tekst:"In 62 n.Chr., onder keizer Nero, treft een zware aardbeving Pompeii en omstreken: tempels scheuren, delen van het amfitheater storten in. Pas achteraf wordt duidelijk dat dit een voorbode was van de vulkanische onrust onder de Vesuvius — op dat moment legt niemand die verbinding." },
+  codex_plinius_brief: { cat:"geschiedenis", titel:"Plinius de Jongere's Brieven aan Tacitus",
+    tekst:"Plinius de Jongere beschrijft, jaren na de uitbarsting van de Vesuvius in 79 n.Chr., in twee brieven aan de geschiedschrijver Tacitus wat hij zich herinnert — inclusief de dood van zijn oom Plinius de Oudere. Deze brieven zijn de enige gedetailleerde ooggetuigenverslagen die bewaard zijn gebleven, en gaven later hun naam aan het type uitbarsting: 'Pliniaans'." },
+  codex_dood_plinius_oudere: { cat:"geschiedenis", titel:"De Dood van Plinius de Oudere",
+    tekst:"Plinius de Oudere, bevelhebber van de vloot in Misenum en auteur van de encyclopedische Naturalis Historia, vaart tijdens de uitbarsting van 79 n.Chr. juist richting de ramp om te helpen en te observeren. Hij sterft op het strand bij Stabiae, vermoedelijk aan de giftige dampen — zijn nieuwsgierigheid werd hem, zo wordt vaak gezegd, fataal." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3369,6 +3394,9 @@ const SP_SOUVENIRS = {
   // Hoofdstuk 24 "Steen en Water" — concept, nog niet gekoppeld.
   souvenir_steen_en_water: { nm:"Een Stukje Verweerd Marmer en een Bevroren Druppel", icon:"🏛️", img:"souvenir_steen_en_water.png",
     caption:"Een piepklein, verweerd stukje marmer naast een druppel water, bevroren in glas, die nooit valt — steen die blijft, water dat wegslijt, allebei tegelijk vastgehouden in dit ene stille moment." },
+  // Hoofdstuk 25 "Onder de Vulkaan" — concept, nog niet gekoppeld.
+  souvenir_onder_de_vulkaan: { nm:"Verstarde Puimsteen en een Bronzen Driehoek", icon:"🌋", img:"souvenir_onder_de_vulkaan.png",
+    caption:"Een klein, poreus stukje verstarde puimsteen naast een piepklein bronzen model van een driehoek — kennis die de wereld probeerde te begrijpen, en een berg die zich daar op één dag niets van aantrok." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -3668,6 +3696,12 @@ const SP_CHECKS = {
     deels:{ target:"CH18_LAT_005_DEELS" },
     gefaald:{ target:"CH18_LAT_005_GEFAALD" },
     kritiek:{ target:"CH18_LAT_005_KRITIEK" } },
+  // ---- Hoofdstuk 25 ----
+  ch25_lat_vlucht: { stat:"agilitas", dc:15,
+    volledig:{ target:"CH25_LAT_VLUCHT_VOL" },
+    deels:{ target:"CH25_LAT_VLUCHT_DEELS" },
+    gefaald:{ target:"CH25_LAT_VLUCHT_GEFAALD" },
+    kritiek:{ target:"CH25_LAT_VLUCHT_KRITIEK" } },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -4273,6 +4307,11 @@ const SP_VOCAB_ENTRIES = {
   // ---- Hoofdstuk 24 "Steen en Water" — concept, nog niet gekoppeld ----
   grieks_stele:    { taal:"grieks", woord:"στήλη", transcript:"stḗlē", betekenis:"staande gedenksteen, zuil" },
   latijn_saxum:    { taal:"latijn", woord:"saxum, saxi", betekenis:"rots, steenblok" },
+  // ---- Hoofdstuk 25 "Onder de Vulkaan" — concept, nog niet gekoppeld ----
+  grieks_arche:    { taal:"grieks", woord:"ἀρχή", transcript:"archḗ", betekenis:"oorsprong, beginsel" },
+  grieks_physis:   { taal:"grieks", woord:"φύσις", transcript:"phýsis", betekenis:"natuur, wezen der dingen" },
+  grieks_atomos:   { taal:"grieks", woord:"ἄτομος", transcript:"átomos", betekenis:"ondeelbaar" },
+  latijn_terraemotus: { taal:"latijn", woord:"terraemotus, terraemotus", betekenis:"aardbeving" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -4470,6 +4509,22 @@ const SP_PAYOFFS = [
   { id:"ch23_lat002_echo_actium_dubbel", type:"echo", trigger:{scene:"CH23_LAT_002"},
     condition:{flags:{taalspoor:"beide"}}, priority:0,
     content:{text:`Je hebt deze slag al eens gezien — van Cleopatra's eigen dek, de zeilen die wegdraaiden, Antonius die haar achterna voer. Nu zie je, van de andere kant van het water, waarom die vlucht daar zo onbegrijpelijk overkwam: voor Agrippa was het simpelweg het moment waarop hij wist dat hij had gewonnen.`} },
+  // ---- Hoofdstuk 25 "Onder de Vulkaan" — concept, nog niet gekoppeld.
+  // Betaalt Hoofdstuk 24's driewegskeuze (`ch24_lat_vitruvius_principe`,
+  // firmitas/utilitas/venustas) uit zodra Vitruvius zelf terugkeert, aan het
+  // begin van het Latijnse spoor — precies het patroon van de zijde-echo's
+  // uit Hoofdstuk 20/23 (§7.83/DODE_FLAGS_FINALE.md categorie 4/6): geen
+  // eigen scène nodig, gewoon een openingsalinea die de eerdere keuze
+  // herkent.
+  { id:"ch25_lat001_echo_vitruvius_firmitas", type:"echo", trigger:{scene:"CH25_LAT_001"},
+    condition:{flags:{ch24_lat_vitruvius_principe:"firmitas"}}, priority:0,
+    content:{text:`"Firmitas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Stevigheid, boven alles — een bouwwerk dat de tand des tijds doorstaat is, wat mij betreft, altijd de eerste eis."`} },
+  { id:"ch25_lat001_echo_vitruvius_utilitas", type:"echo", trigger:{scene:"CH25_LAT_001"},
+    condition:{flags:{ch24_lat_vitruvius_principe:"utilitas"}}, priority:0,
+    content:{text:`"Utilitas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Bruikbaarheid, boven alles — een stad die niet werkt voor de mensen die er wonen, is wat mij betreft geen stad."`} },
+  { id:"ch25_lat001_echo_vitruvius_venustas", type:"echo", trigger:{scene:"CH25_LAT_001"},
+    condition:{flags:{ch24_lat_vitruvius_principe:"venustas"}}, priority:0,
+    content:{text:`"Venustas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Schoonheid, boven alles — een bouwwerk zonder venustas is, wat mij betreft, hooguit een dak boven je hoofd."`} },
 ];
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -27752,6 +27807,628 @@ TEXT:
 "[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — nog meer wetenschap, nog meer vuur, en een laatste boek dat ik je nog niet kan beschrijven. Maar die scheuren zijn nog niet klaar om open te gaan."
 
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En dit keer, meer dan ooit, blijft ook wat je koos te onthouden, en wat je liet gaan."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 25 "Onder de Vulkaan" — CONCEPT, NOG NIET GEKOPPELD.
+   Zelfde afspraak als H21-24 vóór hun goedkeuring. Door Claude geschreven.
+
+   Gerbens verzoek (2026-08-14): sinds H24 is er geen nieuwe grammatica
+   meer in de campagne — de focus verschuift daarom naar LEESVALLEN
+   (echte Griekse/Latijnse fragmenten met twee grammaticaal plausibele
+   lezingen, _GOED/_FOUT-scènes, nooit gelabeld als "de bedoelde") in
+   plaats van pure verhaalkeuzes. Alle acht presocraten (niet alleen de
+   vijf uit de oude SP_CAMPAIGN-tekst), Vitruvius keert terug (non-lineair,
+   zelfde truc als Archimedes' flashback), de aardbeving van 62 n.Chr.
+   wordt expliciet aan Nero's regeerperiode gekoppeld via Seneca's
+   Naturales Quaestiones (Seneca al bekend uit H21/H23). BELANGRIJKE
+   TECHNISCHE CORRECTIE t.o.v. het eerdere voorstel: niet het RACE-
+   mechanisme (dat is Atalanta-specifieke code, geen generiek systeem,
+   zie SP_RACES) maar het generieke CHECK-mechanisme (vier-uitkomsten-
+   ladder) geeft de "tegen de klok"-spanning bij de uitbarsting, zonder
+   engine-code aan te raken. Twee Lethe/Mnemosyne-zaadjes (nog steeds
+   zonder namen): de Boodschapper reageert onverklaard sterk op Plinius'
+   brief, en een nieuwe "onthoud of laat los"-FLAG sluit aan bij de reeks
+   die in H24 begon (H28/29 lezen dit terug, zie de memory
+   chronica-h24-lethe-mnemosyne-zaadjes). */
+const SP_CH25_CNS = `
+=== SCENE: CH25_000 ===
+
+TITLE:
+Onder de Vulkaan
+
+TEXT:
+"[[Ecce|zie hier]] — je herinnert je acht namen die ik je liet horen, een paar hoofdstukken geleden, zonder hun verhaal," zegt de Boodschapper van Chronos. "Vandaag krijgen ze dat verhaal. En aan de andere kant van dit hoofdstuk wacht een berg die niemand ooit heeft horen aankomen."
+
+VOCAB:
+grieks_arche
+
+CHOICES:
+* Volg de zoektocht naar de oerstof [REQUIRE:taalspoor!=latijn] -> CH25_GRE_001
+* Volg de laatste dagen van Pompeii [REQUIRE:taalspoor=latijn] -> CH25_LAT_001
+
+END
+
+=== SCENE: CH25_GRE_001 ===
+
+TITLE:
+Drie Antwoorden uit Milete
+
+TEXT:
+Athena wijst je naar drie mannen uit dezelfde stad, Milete, elk de leerling van de vorige. Thales, de oudste, houdt een kom water omhoog: "[[ἀρχή|oorsprong]] van alles is water — vloeibaar, vast als ijs, onzichtbaar als damp, altijd hetzelfde ding in een andere vorm." Zijn leerling Anaximander schudt zijn hoofd: geen enkel bekend element kan de oorsprong van alles zijn, zegt hij, want dan zou dat element de andere moeten kunnen verdringen. Hij noemt in plaats daarvan iets onbepaalds, grenzeloos: het [[ἄπειρον|apeiron]]. Anaximenes, weer diens eigen leerling, kiest een middenweg: lucht, die door verdichting steen wordt en door verdunning vuur.
+
+IMAGE:
+ch25_gre_milete_drietal.png
+
+CODEX:
+codex_milete_drietal
+
+CHOICES:
+* Ga verder naar een heel andere manier van denken -> CH25_GRE_002
+
+END
+
+=== SCENE: CH25_GRE_002 ===
+
+TITLE:
+Getallen als Grond van Alles
+
+TEXT:
+Pythagoras zit in kleermakerszit, een lier op schoot, en tokkelt twee snaren — een lange en een exact halve. "Hoor je dat?" vraagt hij. "Een octaaf, zuiver, telkens weer, in elke verhouding van twee tegen één." Voor Pythagoras is dát de echte oerstof: niet water, niet lucht, maar getal en verhouding zelf, terug te vinden in muziek, in sterren, in de vorm van een driehoek.
+
+DIALOGUE:
+Pythagoras
+Alles is getal — en wie de getallen begrijpt, begrijpt de kosmos zelf.
+
+IMAGE:
+ch25_gre_pythagoras.png
+
+CODEX:
+codex_pythagoras_h25
+
+CHOICES:
+* Ga verder naar een dispuut dat nooit echt is opgelost -> CH25_GRE_003
+
+END
+
+=== SCENE: CH25_GRE_003 ===
+
+TITLE:
+Alles Stroomt, Niets Verandert
+
+TEXT:
+Twee filosofen staan tegenover elkaar, en de Boodschapper laat je merken dat dit geen vriendschappelijk debat is. Herakleitos, donker en scherp, wijst naar een rivier: "Een mens kan niet twee keer in dezelfde rivier stappen — het water is allang verder gestroomd." Voor hem is verandering de enige constante in de kosmos.
+
+Tegenover hem staat Parmenides, kalm en onwrikbaar: verandering, zegt hij, is een illusie van onze zintuigen. Wat werkelijk *is*, kan nooit ontstaan of vergaan — het Zijn is één, ongedeeld, onveranderlijk.
+
+DIALOGUE:
+Herakleitos
+[[δὶς ἐς τὸν αὐτὸν ποταμὸν οὐκ ἂν ἐμβαίης|je kunt niet twee keer in dezelfde rivier stappen]] — zo wordt mij toegeschreven, al schreef ik het zelf nooit precies zo op.
+
+IMAGE:
+ch25_gre_herakleitos_parmenides.png
+
+VOCAB:
+grieks_physis
+
+CHOICES:
+* Sta aan Herakleitos' kant: alles verandert, altijd -> CH25_GRE_003_HERAKLEITOS
+* Sta aan Parmenides' kant: het ware Zijn verandert nooit -> CH25_GRE_003_PARMENIDES
+
+END
+
+=== SCENE: CH25_GRE_003_HERAKLEITOS ===
+
+TITLE:
+De Stroom Gekozen
+
+TEXT:
+Herakleitos knikt je toe, tevreden maar niet verbaasd — hij verwachtte niet anders van iemand die zelf al zoveel hoofdstukken lang is veranderd. Parmenides zegt niets, maar zijn blik maakt duidelijk dat het debat voor hem allerminst beslecht is.
+
+FLAG:
+ch25_gre_filosofie=herakleitos
+
+CHOICES:
+* Ga verder naar twee denkers die het midden zoeken -> CH25_GRE_004
+
+END
+
+=== SCENE: CH25_GRE_003_PARMENIDES ===
+
+TITLE:
+Het Onveranderlijke Gekozen
+
+TEXT:
+Parmenides knikt kort, alsof bevestiging overbodig was — voor hem stond de uitkomst al vast voordat je iets zei. Herakleitos glimlacht schamper, niet onder de indruk.
+
+FLAG:
+ch25_gre_filosofie=parmenides
+
+CHOICES:
+* Ga verder naar twee denkers die het midden zoeken -> CH25_GRE_004
+
+END
+
+=== SCENE: CH25_GRE_004 ===
+
+TITLE:
+Geest en Ondeelbare Delen
+
+TEXT:
+Anaxagoras probeert het dispuut te verzoenen: alles bestaat uit oneindig kleine "zaden" van elke stof tegelijk, geordend door een universele geest, de [[νοῦς|nous]]. Naast hem stelt de jongere Demokritos een radicalere oplossing voor: de wereld bestaat uit ondeelbare deeltjes, [[ἄτομος|atomos]] — letterlijk "wat niet gesneden kan worden" — bewegend door de lege ruimte.
+
+DIALOGUE:
+Demokritos
+Er bestaat, in werkelijkheid, niets dan atomen en leegte. De rest is enkel mening.
+
+CODEX:
+codex_anaxagoras_demokritos
+
+VOCAB:
+grieks_atomos
+
+CHOICES:
+* Onthoud dit idee dat pas eeuwen later zijn gelijk zou krijgen -> CH25_GRE_004_ONTHOUDEN
+* Laat het los tussen alle andere theorieën -> CH25_GRE_004_LOSGELATEN
+
+END
+
+=== SCENE: CH25_GRE_004_ONTHOUDEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Van alle stemmen die je vandaag hoorde, is het Demokritos' woord dat het langst zal blijven hangen — een woord dat, tweeduizend jaar later, nog steeds in bijna elke taal wordt gebruikt.
+
+FLAG:
+ch25_gre_atomos=onthouden
+
+CHOICES:
+* Verlaat de presocraten voor iets tastbaarders -> CH25_GRE_005
+
+END
+
+=== SCENE: CH25_GRE_004_LOSGELATEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Zoveel theorieën, zoveel namen — je kunt niet alles evenveel gewicht geven. Demokritos haalt zijn schouders op, alsof hij dat zelf ook wel begrijpt.
+
+FLAG:
+ch25_gre_atomos=losgelaten
+
+CHOICES:
+* Verlaat de presocraten voor iets tastbaarders -> CH25_GRE_005
+
+END
+
+=== SCENE: CH25_GRE_005 ===
+
+TITLE:
+De Bibliotheek van Alexandrië
+
+TEXT:
+Eeuwen later, ver van Milete, staat een gebouw dat de vragen van al deze denkers eindelijk systematisch probeert te beantwoorden: het Mouseion van Alexandrië, met zijn beroemde Bibliotheek — gesticht door de nazaten van diezelfde Ptolemaeus die je al kende uit de Diadochenoorlogen. Rollen perkament tot aan het plafond, geleerden uit de hele bekende wereld onder één dak.
+
+CODEX:
+codex_bibliotheek_alexandrie
+
+CHOICES:
+* Maak kennis met een wiskundige die orde schept -> CH25_GRE_006
+
+END
+
+=== SCENE: CH25_GRE_006 ===
+
+TITLE:
+Geen Koninklijke Weg
+
+TEXT:
+Euclides, gebogen over een schrijftafel vol driehoeken en cirkels, ordent alle bekende meetkunde tot één sluitend systeem, de Elementen — axioma's, en alles wat daaruit logisch volgt. Wanneer koning Ptolemaeus zelf ongeduldig een snellere manier vraagt om meetkunde te leren, antwoordt Euclides zonder op te kijken.
+
+DIALOGUE:
+Euclides
+Er bestaat geen koninklijke weg naar de meetkunde — u leert haar zoals iedereen: stap voor stap.
+
+IMAGE:
+ch25_gre_euclides.png
+
+CODEX:
+codex_euclides
+
+CHOICES:
+* Zie hoe iemand anders de hele aarde meet -> CH25_GRE_007
+
+END
+
+=== SCENE: CH25_GRE_007 ===
+
+TITLE:
+De Schaduw van een Put
+
+TEXT:
+Eratosthenes, hoofd van de Bibliotheek, hoorde ooit dat in de stad Syene, op de langste dag van het jaar, de middagzon recht in een diepe put schijnt — geen schaduw, nergens. In Alexandrië, ver naar het noorden, meet hij op datzelfde moment wél een schaduw: een hoek van iets meer dan zeven graden.
+
+"[[Ecce|zie hier]]," zegt de Boodschapper. "Als de zonnestralen overal evenwijdig aankomen, en de hoek in Alexandrië verschilt van die in Syene, wat vertelt dat verschil je dan over de aarde zelf?"
+
+CODEX:
+codex_eratosthenes
+
+CHOICES:
+* De aarde moet een platte schijf zijn, anders zou de hoek overal gelijk zijn -> CH25_GRE_007_FOUT
+* De aarde moet gekromd zijn — hoe groter die kromming, hoe groter het hoekverschil -> CH25_GRE_007_GOED
+
+END
+
+=== SCENE: CH25_GRE_007_GOED ===
+
+TITLE:
+De Omtrek van de Wereld
+
+TEXT:
+Precies. Uit die ene hoek, en de bekende afstand tussen Syene en Alexandrië, berekent Eratosthenes de omtrek van de aarde — en zijn uitkomst wijkt nauwelijks een paar procent af van de werkelijke waarde, geheel zonder een stap buiten Egypte te zetten.
+
+FLAG:
+ch25_gre_eratosthenes=goed
+
+CHOICES:
+* Ontmoet een uitvinder die je al eens zag sterven -> CH25_GRE_008
+
+END
+
+=== SCENE: CH25_GRE_007_FOUT ===
+
+TITLE:
+Een Voor de Hand Liggende, Verkeerde Conclusie
+
+TEXT:
+Zo lijkt het inderdaad op het eerste gezicht — maar Eratosthenes wijst je vriendelijk op de fout: als de aarde plat was en de zon oneindig ver weg, zouden de hoeken in Syene en Alexandrië identiek moeten zijn, niet verschillend. Juist het verschil in hoek is het bewijs van een gebogen oppervlak.
+
+CHOICES:
+* Reken het, nu je het weet, alsnog met hem mee -> CH25_GRE_007_GOED
+
+END
+
+=== SCENE: CH25_GRE_008 ===
+
+TITLE:
+Eureka
+
+TEXT:
+Een man ligt tot aan zijn kin in een badkuip, ogenschijnlijk in gedachten verzonken — Archimedes, hier jaren voordat je hem ooit bij Syracuse zag sterven. Koning Hiero had hem gevraagd te bewijzen of zijn nieuwe kroon echt van zuiver goud was, zonder de kroon te beschadigen. Terwijl hij in het bad zakt, ziet hij het water over de rand stromen — en begrijpt plotseling dat het verplaatste watervolume precies het volume van zijn eigen lichaam moet zijn.
+
+DIALOGUE:
+Archimedes
+[[εὕρηκα|ik heb het gevonden]]!
+
+Zo enthousiast, vertelt men, dat hij naakt en druipend de straat op rende. Het is, toevallig, de Romeinse bouwmeester Vitruvius die dit verhaal, eeuwen later, voor het nageslacht opschrijft — dezelfde Vitruvius die je aan de andere kant van dit hoofdstuk nog tegenkomt.
+
+IMAGE:
+ch25_gre_archimedes_bad.png
+
+CODEX:
+codex_archimedes_eureka
+
+CHOICES:
+* Ga verder -> CH25_GRE_EINDE
+
+END
+
+=== SCENE: CH25_GRE_EINDE ===
+
+TITLE:
+Wat de Presocraten Nalieten
+
+TEXT:
+"[[Ecce|zie hier]] — acht mannen die de wereld probeerden te verklaren zonder op de goden terug te vallen, en drie geleerden die eeuwen later feitelijk bewezen hoever je daarmee kunt komen," zegt de Boodschapper van Chronos. "Aan de andere kant van dit hoofdstuk zie je wat er gebeurt wanneer al die kennis, voor één keer, gewoon niet genoeg is."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH25_EINDE
+* Steek over naar Pompeii [REQUIRE:taalspoor=beide] -> CH25_LAT_001
+
+END
+
+=== SCENE: CH25_LAT_001 ===
+
+TITLE:
+Terug in Pompeii, Vóór Alles
+
+TEXT:
+Naast je verschijnt een bekende gestalte, schrijfstok en perkamentrol onder de arm — Vitruvius, terug uit het vorige hoofdstuk, dit keer in een levendige, kleurrijke stad aan de voet van een groene, onschuldig ogende berg. "Pompeii," zegt hij, met zichtbare trots. "Een stad die precies volgens mijn eigen principes is gebouwd — firmitas, utilitas, venustas. Kijk om je heen: het forum, de thermen, de villa's met hun beschilderde muren."
+
+RELATION:
+vitruvius=+1
+
+IMAGE:
+ch25_lat_pompeii_vitruvius.png
+
+CODEX:
+codex_vitruvius_pompeii
+
+CHOICES:
+* Bekijk wat gewone Pompeianen op hun eigen muren schreven -> CH25_LAT_002
+
+END
+
+=== SCENE: CH25_LAT_002 ===
+
+TITLE:
+Woorden op een Muur
+
+TEXT:
+Niet elk geschreven woord in Pompeii is officieel of plechtig — de muren langs de straten staan vol krassen, van verkiezingsleuzen tot persoonlijke beledigingen. Eén ervan, vlak bij een kroeg, trekt je aandacht: "[[Vale. Si vales, valeo.|Gegroet. Als het jou goed gaat, gaat het mij ook goed.]]"
+
+CODEX:
+codex_pompeii_graffiti
+
+CHOICES:
+* Vat dit op als een gewone, alledaagse groet tussen bekenden -> CH25_LAT_002_GOED
+* Vat dit op als een officiële, plechtige boodschap van de stad zelf -> CH25_LAT_002_FOUT
+
+END
+
+=== SCENE: CH25_LAT_002_GOED ===
+
+TITLE:
+Een Stem uit de Straat
+
+TEXT:
+Precies — "si vales, valeo" is een van de meest voorkomende, informele openingszinnen in Romeinse persoonlijke correspondentie, hier per ongeluk (of expres) op straat gekrast. Duizenden van dit soort krassen zijn in Pompeii teruggevonden: liefdesverklaringen, scheldwoorden, weddenschappen op de gladiatorenspelen. Gewone mensen, gewone dagen.
+
+FLAG:
+ch25_lat_graffiti=goed
+
+CHOICES:
+* Zie hoe die gewone dagen ineens minder gewoon worden -> CH25_LAT_003
+
+END
+
+=== SCENE: CH25_LAT_002_FOUT ===
+
+TITLE:
+Niet Alles is een Decreet
+
+TEXT:
+Vitruvius glimlacht om je vergissing. "Officiële teksten staan op steen, in de tempel, in het forum — met veel meer plechtigheid dan dit." Dit is precies het tegenovergestelde: een terloopse, persoonlijke groet, door een gewone bewoner tussen twee bezigheden door gekrast.
+
+CHOICES:
+* Zie hoe die gewone dagen ineens minder gewoon worden -> CH25_LAT_003
+
+END
+
+=== SCENE: CH25_LAT_003 ===
+
+TITLE:
+De Aarde Beeft, Onder Nero
+
+TEXT:
+In 62 n.Chr. — Nero regeert dan al acht jaar over Rome — schudt een zware aardbeving Pompeii en de hele omgeving van de Vesuvius door elkaar. Tempels scheuren, een deel van het amfitheater stort in, kuddes schapen vallen dood neer door giftige dampen uit de grond. Niemand legt op dat moment de verbinding met de berg zelf.
+
+Seneca — dezelfde Seneca die je later, onder datzelfde Nero, zijn eigen aderen zag doorsnijden — schrijft er in die jaren een wetenschappelijk werk over, de Naturales Quaestiones: geen straf van de goden, betoogt hij, maar onderaardse lucht en water die zich een weg naar buiten persen. Dezelfde soort verklaring, zonder goden, die de presocraten eeuwen eerder al zochten.
+
+IMAGE:
+ch25_lat_aardbeving_62.png
+
+CODEX:
+codex_aardbeving_62
+
+VOCAB:
+latijn_terraemotus
+
+CHOICES:
+* Spring zeventien jaar vooruit -> CH25_LAT_004
+
+END
+
+=== SCENE: CH25_LAT_004 ===
+
+TITLE:
+Een Brief aan Tacitus
+
+TEXT:
+24 augustus, 79 n.Chr. Een jonge man, Plinius de Jongere, zit jaren later te schrijven aan een vriend, de geschiedschrijver Tacitus, die hem heeft gevraagd op te tekenen wat hij zich nog herinnert van wat er die dag gebeurde. Zijn oom, Plinius de Oudere — bevelhebber van de vloot in Misenum, en een man die zijn hele leven al alles wilde weten — ziet vanaf de overkant van de golf een wolk opstijgen die "de vorm van een pijnboom" heeft.
+
+De Boodschapper van Chronos wordt, terwijl de brief wordt voorgelezen, opvallend stil — stiller dan bij welk ander document dit hele hoofdstuk. "[[Ecce|zie hier]]," zegt ze uiteindelijk, zachter dan gewoonlijk. "Zonder deze ene brief zou vrijwel niemand vandaag nog weten wat er hier precies gebeurde."
+
+Plinius de Oudere laat meteen een schip gereedmaken — niet om te vluchten, maar om dichterbij te komen en anderen te helpen.
+
+IMAGE:
+ch25_lat_plinius_aswolk.png
+
+CODEX:
+codex_plinius_brief
+
+CHOICES:
+* Volg Plinius de Oudere de golf op -> CH25_LAT_005
+
+END
+
+=== SCENE: CH25_LAT_005 ===
+
+TITLE:
+De Wolk Wordt een Regen
+
+TEXT:
+Tegen de tijd dat Plinius de Oudere de kust bij Stabiae bereikt, regent er al puimsteen en as uit de lucht, en het strand is te ruw geworden om weer te vertrekken. Hij besluit te blijven, zijn vrienden gerust te stellen, zelfs te gaan slapen — deels om anderen niet in paniek te brengen, deels omdat hij, tot het laatst, gelooft dat hij de situatie kan blijven beoordelen.
+
+Elders in de stad ben jij zelf, tussen de gewone inwoners van Pompeii, wanneer de eerste as begint te vallen.
+
+CHECK:
+ch25_lat_vlucht
+
+END
+
+=== SCENE: CH25_LAT_VLUCHT_VOL ===
+
+TITLE:
+Door de As
+
+TEXT:
+Je houdt je hoofd koeler dan de meesten om je heen, kiest de bredere straat in plaats van de kortste weg, en bereikt de stadspoort ruim voordat de duisternis van de aswolk de zon volledig verduistert.
+
+CHOICES:
+* Kijk om, van veilige afstand -> CH25_LAT_006
+
+END
+
+=== SCENE: CH25_LAT_VLUCHT_DEELS ===
+
+TITLE:
+Struikelend door de Straten
+
+TEXT:
+Je verliest een paar keer je evenwicht op de gladde laag puimsteen die de straten al bedekt, maar krabbelt telkens weer overeind — vertraagd, met schrammen, maar levend bij de poort.
+
+CHOICES:
+* Kijk om, van veilige afstand -> CH25_LAT_006
+
+END
+
+=== SCENE: CH25_LAT_VLUCHT_GEFAALD ===
+
+TITLE:
+Verdwaald in het Donker
+
+TEXT:
+De aswolk verduistert de middagzon zo compleet dat je de weg kwijtraakt in straten die je nog geen uur geleden nog kende — kostbare, angstige minuten zoekend naar een uitgang die er wel degelijk is, tot je hem eindelijk, bijna bij toeval, terugvindt.
+
+CHOICES:
+* Kijk om, van veilige afstand, opgelucht dat je er bent -> CH25_LAT_006
+
+END
+
+=== SCENE: CH25_LAT_VLUCHT_KRITIEK ===
+
+TITLE:
+Een Herinnering die Je Bijblijft
+
+TEXT:
+Onderweg struikel je bijna over een gezin dat zelf de weg kwijt is — een moeder, twee kinderen, verlamd van angst. Je grijpt de jongste bij de hand en trekt het hele gezin met je mee, tegen je eigen angst in, tot jullie allemaal samen de poort bereiken.
+
+RELATION:
+vitruvius=+1
+
+CHOICES:
+* Kijk om, van veilige afstand, niet meer alleen -> CH25_LAT_006
+
+END
+
+=== SCENE: CH25_LAT_006 ===
+
+TITLE:
+Stabiae
+
+TEXT:
+Bij Stabiae wordt de lucht steeds giftiger. Plinius de Oudere, inmiddels een oudere, zwaargebouwde man, staat op tegen het advies van zijn eigen metgezellen in, geholpen door twee slaven, en probeert alsnog de kust te bereiken — vermoedelijk overmand door de dampen, misschien door zijn eigen hart. Hij sterft op het strand, zijn lichaam naar verluidt achteraf ongeschonden, "eerder als iemand die slaapt dan als iemand die gestorven is."
+
+IMAGE:
+ch25_lat_dood_plinius_oudere.png
+
+CODEX:
+codex_dood_plinius_oudere
+
+CHOICES:
+* Ga verder -> CH25_LAT_EINDE
+
+END
+
+=== SCENE: CH25_LAT_EINDE ===
+
+TITLE:
+Wat de Brief Redde
+
+TEXT:
+Vitruvius verschijnt nog één laatste keer, deze keer zonder trots in zijn stem. "Firmitas," zegt hij zacht. "Ik bouwde voor aardbevingen, voor tijd, voor gewoon menselijk verval. Niet voor dit." Voor het eerst dit hoofdstuk klinkt hij niet als een man die overtuigd is van zijn eigen principes.
+
+"[[Ecce|zie hier]]," zegt de Boodschapper van Chronos. "Plinius de Jongere overleefde. Hij schreef twee brieven aan Tacitus, jaren later, en zonder die twee brieven zou de hele wetenschappelijke wereld van vandaag niet eens weten hoe een vulkaanuitbarsting eruitziet — er bestaat een woord voor dit soort uitbarsting, geleend van zijn eigen naam." Ze zwijgt even. "Onthoud dat, alsjeblieft. Een brief kan soms meer redden dan een stad."
+
+CHOICES:
+* Onthoud Plinius' brief -> CH25_LAT_EINDE_ONTHOUDEN
+* Laat ook dit los, tussen alles wat je vandaag zag -> CH25_LAT_EINDE_LOSGELATEN
+
+END
+
+=== SCENE: CH25_LAT_EINDE_ONTHOUDEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Je knikt. De Boodschapper kijkt je aan, iets langer dan de andere keren vandaag dat je deze vraag kreeg — alsof dit antwoord haar om een reden die ze niet uitlegt net iets meer raakt dan de vorige.
+
+FLAG:
+ch25_lat_plinius=onthouden
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH25_EINDE
+
+END
+
+=== SCENE: CH25_LAT_EINDE_LOSGELATEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Je haalt je schouders op — er was vandaag zoveel om te onthouden. De Boodschapper knikt, maar iets in haar gezicht maakt duidelijk dat ze dit antwoord, deze ene keer, liever anders had gezien.
+
+FLAG:
+ch25_lat_plinius=losgelaten
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH25_EINDE
+
+END
+
+=== SCENE: CH25_EINDE ===
+
+TITLE:
+Kennis, en de Grenzen Ervan
+
+TEXT:
+"[[Ecce|zie hier]] — vandaag zag je kennis op haar best: acht mannen die om de goden heen probeerden te denken, en drie geleerden die de aarde zelf konden meten zonder haar te verlaten," zegt de Boodschapper van Chronos. "En je zag ook haar grens: een berg waarvoor niemand, met al die kennis samen, was voorbereid."
+
+Ze is stiller dan anders wanneer ze verdergaat. "Sommige dingen overleven puur omdat iemand de moeite nam ze op te schrijven. Onthoud dat ook, los van wat je vandaag al koos."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_onder_de_vulkaan
+
+CHOICES:
+* Bekijk de verzameling in het museum -> CH25_MUSEUM_00
+
+END
+
+=== SCENE: CH25_MUSEUM_00 ===
+
+TITLE:
+Wat de As Bewaarde
+
+TEXT:
+Een nieuwe stolp vult zich: een klein stukje verstarde puimsteen naast een piepklein bronzen model van een driehoek. "Vandaag heb je gezien hoe mensen de wereld probeerden te begrijpen, en hoe de wereld daar soms dwars doorheen fietst," zegt de Boodschapper van Chronos. Ze kijkt iets langer dan gewoonlijk naar de stolp voordat ze zich omdraait.
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH25_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH25_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je vandaag koos te onthouden, of los te laten, blijft, hoe vaak je ook terugkeert naar het begin."
 
 Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
 
