@@ -112,15 +112,17 @@ terugkeert.
   Verres-proces; flavour-only.
 - `ch21_lat_catilina_aanpak` (hard/zacht) — hoe de Senaat tegen Catilina
   optrad; flavour-only.
-- `ch22_gre_zijde` (ptolemaeus/antigonos) — grote zijde-keuze in de
-  Diadochenoorlogen. In tegenstelling tot `ch19_gre_zijde`/`ch19_lat_zijde`
-  (opgelost in H20) wordt deze NIET in Hoofdstuk 23 uitgelezen — bewust
-  geen actie ondernomen tijdens het bouwen van H23, mogelijk aandachtspunt
-  voor een later hoofdstuk.
-- `ch22_lat_zijde` (octavianus/antonius) — idem, zelfde toelichting.
+
+`ch22_gre_zijde` (ptolemaeus/antigonos) en `ch22_lat_zijde`
+(octavianus/antonius) zijn NIET langer dood: opgelost op 2026-08-14 via
+`{ch22_gre_zijde_h23_echo}` (CH23_GRE_001, bij Cleopatra's introductie —
+Ptolemaeus' eigen nazaat) en `{ch22_lat_zijde_h23_echo}` (CH23_LAT_001,
+bij Octavia's verstoting — het moment waarop de Octavianus/Antonius-
+vriendschap breekt). Zelfde patroon als de H19-zijde-echo's in H20.
 
 ---
 
-**Status**: 47 dode flags vastgelegd op 2026-08-14 (na de koppeling van
-Hoofdstuk 21-23). Bijwerken bij elk volgend hoofdstuk dat een nieuwe, nog
-niet uitgelezen FLAG zet.
+**Status**: 45 dode flags vastgelegd op 2026-08-14 (na de koppeling van
+Hoofdstuk 21-23, en het oplossen van `ch22_gre_zijde`/`ch22_lat_zijde` via
+twee nieuwe echo's in Hoofdstuk 23). Bijwerken bij elk volgend hoofdstuk
+dat een nieuwe, nog niet uitgelezen FLAG zet.
