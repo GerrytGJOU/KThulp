@@ -667,7 +667,7 @@ function leaveAll(){ cleanup(); CODE=null;PID=null;ROLE=null;POOL=[];META=null;S
 /* ---------- brand + footer ---------- */
 function brand(showCoins){
   return `<div class="brand">
-    <span class="mark">${medalSVG("laurel",48)}</span>
+    <span class="mark"><img src="../assets/favicons/certamen/logo-original.png" width="48" height="48" style="display:block;border-radius:50%" alt=""></span>
     <div><div class="t">CERTAMEN</div><div class="s">Klassieke Talen Arena</div></div>
     ${showCoins?`<button class="coins" onclick="go('collection')"><span>${iconSVG("amphora",16,"var(--hi)")}</span><b>${P.coins}</b> <small>munten</small></button>`:""}
   </div>`;
