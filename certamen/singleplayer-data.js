@@ -474,9 +474,10 @@ const SP_CAMPAIGN = [
     pallas:"Geen nieuwe les — verhaal: Griekse kunst en architectuur als vakgebied (zuilorden, beeldhouwkunst, vazenschilderkunst)", minerva:"Geen nieuwe grammatica — verhaal: Romeinse architectuur en techniek (boog/gewelf/koepel, beton, aquaducten, wegenbouw)",
     grammatica:"Grieks: herhaling — kunst/architectuur; Latijn: herhaling — architectuur/techniek",
     gameplay:"Reflectief/museaal, losser gekoppeld aan chronologie dan de andere hoofdstukken (net als de latere Mnemosyne/Lethe-hoofdstukken) — de speler bekijkt/herkent bouwwerken en kunstwerken i.p.v. een lineair verhaal te volgen",
-    personages:"Phidias (cameo, terugkerend uit H18), Polykleitos, Praxiteles — Vitruvius (cameo, vooruitwijzend naar zijn eigen hoofdrol in H25)",
+    personages:"Athena (cameo), Phidias (cameo, terugkerend uit H18), Polykleitos, Praxiteles — Vitruvius (cameo, vooruitwijzend naar zijn eigen hoofdrol in H25)",
     thema:"Hoe een beschaving zich letterlijk, in steen, vormgeeft",
-    illustratie:"Het Parthenon-fries / een Romeins aquaduct over een vallei" },
+    illustratie:"Het Parthenon-fries / een Romeins aquaduct over een vallei",
+    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-14) — door Claude geschreven (geen Gemini-concept). Nieuw mechanisme: bij elk kunstwerk/bouwwerk een 'onthoud of laat los'-keuze (Kolossus van Rhodos, Nike/Venus, Ara Pacis, etc.) die een eigen FLAG zet, bedoeld als stille, naamloze opmaat naar Hoofdstuk 28/29 (Lethe/Mnemosyne, zie Chronica.md §7.90 en de RELATION/FLAG-roster-memory) — nog GEEN payoff, dat komt pas daar. Callbacks: Phidias (H18), de Kolossus van Rhodos (H22/Demetrios), de Ara Pacis (H23/Augustus), Vitruvius' drieslag (gekoppeld aan Robur/Ingenium/Gratia). SP_CH24_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
   { id:"ch25", nr:25, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Onder de Vulkaan",
     periode:"Presocratische filosofie t/m Hellenistische wetenschap, 6e-3e eeuw v.Chr. / Pompeii, tot 79 n.Chr.",
     verhaal:"Al vóór Socrates zoeken Thales, Anaximander en de andere presocraten naar de oerstof van de wereld zonder op de goden terug te vallen — de wortel van al het Griekse wetenschappelijke denken. Generaties later meten Eratosthenes de omtrek van de aarde en Archimedes de wetten van drijven en hefbomen in de Bibliotheek van Alexandrië — de Griekse wereld op haar wetenschappelijke hoogtepunt. Eeuwen later, aan de voet van de Vesuvius, bewijst diezelfde natuur waarom kennis nooit compleet is: Plinius de Jongere ziet vanaf de overkant van de golf hoe Pompeii en Herculaneum in een dag onder as verdwijnen — en zijn oom, Plinius de Oudere, sterft terwijl hij de uitbarsting probeert te bestuderen. UITGEBREID 2026-08-09 (Gerbens verzoek): de presocraten (Thales/Anaximander/Heraclitus/Pythagoras/Democritus) zijn toegevoegd als vroege wortel van het Griekse wetenschappelijke denken, als korte proloog vóór de eigenlijke Hellenistische wetenschap.",
@@ -2843,6 +2844,33 @@ const SP_CODEX_ENTRIES = {
     tekst:"Nero laat zijn eigen moeder Agrippina vermoorden wanneer haar invloed hem te veel wordt. Na de grote brand van Rome (64 n.Chr.), die hij vrijwel zeker niet zelf ontstak, bouwt hij op de verwoeste grond zijn extravagante Gouden Huis (Domus Aurea) — een symbool van zelfverheerlijking te midden van een verwoeste stad." },
   codex_dood_seneca: { cat:"geschiedenis", titel:"De Dood van Seneca",
     tekst:"Beschuldigd van betrokkenheid bij een samenzwering tegen zijn voormalige leerling Nero, krijgt Seneca het bevel zelfmoord te plegen. Hij sterft zoals hij zijn hele leven als Stoïcijns filosoof predikte: kalm, zijn aderen doorsnijdend terwijl hij zijn vrienden nog troost en dicteert — een dood die tijdgenoten en latere lezers expliciet vergeleken met die van Socrates." },
+  // ---- Hoofdstuk 24 "Steen en Water" — concept, nog niet gekoppeld ----
+  codex_phidias_h24: { cat:"kunst", titel:"Phidias, Beeldhouwer van het Parthenon",
+    tekst:"Phidias leidde de beeldhouwwerken van het Parthenon (H18) — het fries, de metopen, en het reusachtige goud-ivoren cultusbeeld van Athena Parthenos zelf. Vrijwel niets van zijn oorspronkelijke werk is compleet bewaard gebleven; wat overleeft, doet dat vaak bij toeval — fragmenten, kopieën, beschrijvingen van latere schrijvers." },
+  codex_polykleitos: { cat:"kunst", titel:"Polykleitos en de Canon",
+    tekst:"Polykleitos schreef een verloren gegaan theoretisch werk, de Canon, waarin hij de wiskundig ideale verhoudingen van het menselijk lichaam vastlegde. Zijn Doryphoros ('speerdrager') is de beeldhouwkundige uitwerking van die theorie — gewicht verplaatst op één been (contrapost), elk lichaamsdeel in een vaste, berekende verhouding tot de rest." },
+  codex_praxiteles: { cat:"kunst", titel:"Praxiteles",
+    tekst:"Praxiteles (4e eeuw v.Chr.) staat bekend om een zachtere, natuurlijkere marmerbehandeling dan zijn voorgangers — huid die haast leeft. Zijn Aphrodite van Knidos was het eerste levensgrote naakte vrouwenbeeld in de Griekse kunst, zo beroemd dat de stad Knidos er een eigen tempel voor bouwde en reizigers er speciaal voor kwamen." },
+  codex_amfoor_parisoordeel: { cat:"kunst", titel:"Het Parisoordeel op een Amfoor",
+    tekst:"Het Parisoordeel — de wedstrijd tussen Hera, Athena en Aphrodite, beslecht door de Trojaanse prins Paris, met de Trojaanse Oorlog als uiteindelijk gevolg — was een geliefd onderwerp in de Griekse vazenschilderkunst. Zwartfigurige en later roodfigurige technieken lieten toe om dit soort mythologische scènes compact en herkenbaar op huishoudelijke voorwerpen af te beelden." },
+  codex_kolossus_rhodos: { cat:"geschiedenis", titel:"De Kolossus van Rhodos",
+    tekst:"Na Rhodos' succesvolle verdediging tegen Demetrios Poliorketes (305-304 v.Chr.) bouwde de stad een reusachtig bronzen beeld van de zonnegod Helios, deels gefinancierd met het achtergelaten belegeringsmateriaal van de verslagen vijand — een van de zeven wereldwonderen van de oudheid. Een aardbeving (226 v.Chr.) brak het beeld af bij de knieën; het lag naar verluidt nog eeuwenlang in stukken, tot het uiteindelijk als oud brons werd verkocht. Er bestaat geen enkel fragment meer van." },
+  codex_nike_samothrace: { cat:"kunst", titel:"Nike van Samothrace",
+    tekst:"Deze Hellenistische marmeren overwinningsgodin, met dramatisch wapperende gewaden, werd eeuwen na haar makers teruggevonden zonder hoofd en zonder armen. Ondanks — of misschien juist dankzij — die onvolledigheid geldt ze als een van de invloedrijkste beeldhouwwerken van de hele oudheid." },
+  codex_venus_van_milo: { cat:"kunst", titel:"Venus van Milo",
+    tekst:"Dit marmeren beeld van Aphrodite (Venus), gevonden op het eiland Milos, mist beide armen — hun oorspronkelijke houding, en wat ze precies vasthielden, blijft onderwerp van speculatie. Net als de Nike van Samothrace is ze, juist door wat ontbreekt, uitgegroeid tot een van de bekendste beelden uit de klassieke oudheid." },
+  codex_romeinse_boogbouw: { cat:"geschiedenis", titel:"De Romeinse Boog en Opus Caementicium",
+    tekst:"Waar Griekse architectuur voornamelijk steunt op rechte balken tussen zuilen (en dus beperkt is in overspanning), ontwikkelen de Romeinen de boog, het gewelf en de koepel tot volle wasdom — mede dankzij opus caementicium, een vroege vorm van beton gemaakt van kalkmortel, puin en vulkanisch zand. Deze technieken maken constructies mogelijk die de Grieken nooit bouwden: aquaducten, grote overwelfde hallen, bruggen die millennia overleven." },
+  codex_vitruvius_triade: { cat:"geschiedenis", titel:"Vitruvius: Firmitas, Utilitas, Venustas",
+    tekst:"De Romeinse architect en ingenieur Vitruvius (1e eeuw v.Chr., onder Augustus) schrijft in zijn De Architectura dat elk bouwwerk aan drie eisen moet voldoen: firmitas (stevigheid), utilitas (bruikbaarheid) en venustas (schoonheid) — een drieslag die tot op vandaag in de architectuurtheorie wordt aangehaald." },
+  codex_aquaduct: { cat:"geschiedenis", titel:"Het Romeinse Aquaduct",
+    tekst:"Romeinse aquaducten vervoerden water over vaak tientallen kilometers, met een verval van soms maar enkele centimeters per honderd meter — een precisie die zonder moderne meetinstrumenten tot stand kwam. Waar het landschap dat vereiste, overbrugden monumentale bogenreeksen hele valleien, zoals de beroemde Pont du Gard." },
+  codex_romeinse_wegen: { cat:"geschiedenis", titel:"De Romeinse Wegen",
+    tekst:"Beginnend met de Via Appia (312 v.Chr., de 'regina viarum' — koningin der wegen) legden de Romeinen uiteindelijk een wegennet van tienduizenden kilometers aan, zorgvuldig gefundeerd en bestraat. Deze wegen dienden primair het leger en het bestuur, maar bepaalden daarmee ook hoe snel nieuws, brieven en ideeën zich door het hele Rijk konden verspreiden." },
+  codex_ara_pacis: { cat:"geschiedenis", titel:"De Ara Pacis",
+    tekst:"De Ara Pacis Augustae ('Altaar van de Augusteïsche Vrede', voltooid 9 v.Chr.) viert de vrede die Augustus na jaren van burgeroorlog tot stand bracht. De reliëfs tonen een plechtige processie met herkenbare portretten van Augustus en zijn familie — een monument dat bewust bedoeld was om exact te onthouden wie erbij hoorde en wie de vrede had gebracht." },
+  codex_vitruvius_boek: { cat:"geschiedenis", titel:"Vitruvius' De Architectura",
+    tekst:"Vitruvius' De Architectura, tien boeken over architectuur, materialen, machines en stedenbouw, is een van de weinige volledig bewaard gebleven technische traktaten uit de klassieke oudheid — de meeste vergelijkbare werken van tijdgenoten zijn verloren gegaan. Het werk beïnvloedde eeuwen later nog rechtstreeks de architectuur van de Renaissance." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3338,6 +3366,9 @@ const SP_SOUVENIRS = {
   // Hoofdstuk 23 "Vrede en Vergankelijkheid" — concept, nog niet gekoppeld.
   souvenir_vrede_en_vergankelijkheid: { nm:"Een Glazen Aspis en een Stukje Ivoor", icon:"🐍", img:"souvenir_vrede_en_vergankelijkheid.png",
     caption:"Een kleine, glazen replica van de slang die Cleopatra naar verluidt haar eigen dood liet kiezen, naast een verweerd stukje ivoor — een koningin die weigerde getriomfeerd te worden, naast een beeldhouwwerk dat, in een heel ander verhaal, juist tot leven kwam." },
+  // Hoofdstuk 24 "Steen en Water" — concept, nog niet gekoppeld.
+  souvenir_steen_en_water: { nm:"Een Stukje Verweerd Marmer en een Bevroren Druppel", icon:"🏛️", img:"souvenir_steen_en_water.png",
+    caption:"Een piepklein, verweerd stukje marmer naast een druppel water, bevroren in glas, die nooit valt — steen die blijft, water dat wegslijt, allebei tegelijk vastgehouden in dit ene stille moment." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -4239,6 +4270,9 @@ const SP_VOCAB_ENTRIES = {
   latijn_pax:      { taal:"latijn", woord:"pax, pacis", betekenis:"vrede" },
   latijn_princeps: { taal:"latijn", woord:"princeps, principis", betekenis:"eerste burger, keizer" },
   latijn_venenum:  { taal:"latijn", woord:"venenum, veneni", betekenis:"gif" },
+  // ---- Hoofdstuk 24 "Steen en Water" — concept, nog niet gekoppeld ----
+  grieks_stele:    { taal:"grieks", woord:"στήλη", transcript:"stḗlē", betekenis:"staande gedenksteen, zuil" },
+  latijn_saxum:    { taal:"latijn", woord:"saxum, saxi", betekenis:"rots, steenblok" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -27033,6 +27067,661 @@ TEXT:
 "[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Griekse kunst en Romeinse architectuur, Archimedes' eigen wetenschap, Pompeii, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
 
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 24 "Steen en Water" — CONCEPT, NOG NIET GEKOPPELD.
+   Zelfde afspraak als H21-23 vóór hun goedkeuring: SP_CH24_CNS bestaat
+   als losse const, bewust niet gemerged in SP_SCENES/BLOCKS tot Gerben
+   akkoord geeft. Door Claude geschreven (geen Gemini-concept).
+
+   Eerste hoofdstuk van Boek V, bewust NIET chronologisch (net als H6) —
+   de Boodschapper haalt personages uit heel de campagne erbij. Nieuw
+   mechanisme: bij elk kunstwerk/bouwwerk een "onthoud je dit, of laat je
+   het los?"-keuze, die een eigen FLAG zet maar nu nog geen zichtbaar
+   gevolg heeft — bedoeld als stille opmaat naar Hoofdstuk 28 ("De
+   Bibliotheek van Mnemosyne") en 29 ("De Rivier Lethe"), zie Chronica.md
+   §1834-1846 voor wie Lethe/Mnemosyne werkelijk zijn (Lethe is de
+   eigenlijke hoofdtegenstander van de hele campagne, nog nergens met
+   naam genoemd — dat blijft ook hier zo). Callbacks: Phidias (H18),
+   de Kolossus van Rhodos (gebouwd van Demetrios' achtergelaten
+   belegeringsmateriaal, H22), de Ara Pacis (H23/Augustus), Vitruvius'
+   drieslag firmitas/utilitas/venustas (gekoppeld aan Robur/Ingenium/
+   Gratia). Subtiele, naamloze zaadjes: een Eris-flikkering bij een
+   Trojaanse-Oorlog-vazenschildering (Lethe is Eris' dochter), en een
+   bijna-letterlijke echo van de allereerste proloogzin. */
+const SP_CH24_CNS = `
+=== SCENE: CH24_000 ===
+
+TITLE:
+Terug in het Museum
+
+TEXT:
+"[[Ecce|zie hier]] — dit keer neem ik je niet mee door de tijd, maar door wat er van de tijd is overgebleven," zegt de Boodschapper van Chronos. Voor het eerst sinds je hier voor het eerst binnenkwam, sta je weer middenin het Museum van Mnemosyne zelf, tussen de stolpen die je zelf hebt gevuld.
+
+"Dit hoofdstuk volgt geen jaartallen. Ik haal iedereen erbij die ik nodig heb, uit welk jaar dan ook — een beeldhouwer hier, een bouwmeester daar. De enige vraag die ertoe doet, stel ik je telkens opnieuw: wil je dit onthouden, of laat je het los?" Ze zegt het luchtig, bijna terloops — maar iets in haar toon blijft net iets te lang hangen.
+
+CHOICES:
+* Volg de Griekse kunstenaars [REQUIRE:taalspoor!=latijn] -> CH24_GRE_001
+* Volg de Romeinse bouwmeesters [REQUIRE:taalspoor=latijn] -> CH24_LAT_001
+
+END
+
+=== SCENE: CH24_GRE_001 ===
+
+TITLE:
+Zuilen en een Uil op de Schouder
+
+TEXT:
+De Boodschapper wijst naar drie zuilen die naast elkaar uit de grond van het Museum lijken te groeien: een gedrongen, sobere Dorische, een sierlijke Ionische met haar krullende voluten, en een weelderige Korinthische, overwoekerd met acanthusbladeren. "Drie manieren om hetzelfde te doen: een dak dragen," zegt ze. "En drie manieren om daar tegelijk iets over jezelf mee te zeggen."
+
+Een vertrouwde gestalte met een speer en een uil op haar schouder verschijnt tussen de zuilen — Pallas Athena, patrones van elke ambacht die precisie en geduld vraagt. "Wijsheid zit niet alleen in woorden," zegt ze. "Soms zit ze in een hand die precies weet waar te beitelen."
+
+RELATION:
+athena=+1
+
+VOCAB:
+grieks_stele
+
+CHOICES:
+* Ga verder naar de beeldhouwkunst -> CH24_GRE_002
+
+END
+
+=== SCENE: CH24_GRE_002 ===
+
+TITLE:
+Phidias, Nog Eén Keer
+
+TEXT:
+Tussen de zuilen door loopt een oudere, grijzende man, kalksteenstof nog op zijn handen — Phidias, die je al kende van de bouw van het Parthenon zelf. Hij houdt een fragment van zijn eigen fries omhoog: ruiters, godenfeest, een optocht die ooit helemaal rond de tempel liep.
+
+DIALOGUE:
+Phidias
+Een groot deel van wat ik maakte, bestaat allang niet meer — gesmolten voor munten, verbrand, simpelweg vergeten. Dit stuk hier is toevallig blijven liggen.
+
+CODEX:
+codex_phidias_h24
+
+CHOICES:
+* Onthoud dit fragment -> CH24_GRE_002_ONTHOUDEN
+* Laat het los -> CH24_GRE_002_LOSGELATEN
+
+END
+
+=== SCENE: CH24_GRE_002_ONTHOUDEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Je knikt. Phidias glimlacht kort, alsof dat voor hem al genoeg is. De Boodschapper zegt niets — ze schrijft alleen iets op, onzichtbaar voor jou, en gaat verder.
+
+FLAG:
+ch24_gre_phidias=onthouden
+
+CHOICES:
+* Ga verder naar een andere beeldhouwer -> CH24_GRE_003
+
+END
+
+=== SCENE: CH24_GRE_002_LOSGELATEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Je haalt je schouders op — er is zoveel, je kunt niet alles vasthouden. Phidias knikt begripvol. De Boodschapper zegt niets — ze schrijft alleen iets op, onzichtbaar voor jou, en gaat verder.
+
+FLAG:
+ch24_gre_phidias=losgelaten
+
+CHOICES:
+* Ga verder naar een andere beeldhouwer -> CH24_GRE_003
+
+END
+
+=== SCENE: CH24_GRE_003 ===
+
+TITLE:
+De Volmaakte Verhouding
+
+TEXT:
+Een gespierde bronzen speerdrager staat er, gewicht luchtig op één been, de rest van zijn lichaam in een subtiele tegenbeweging. Polykleitos, de beeldhouwer, klopt tevreden op zijn eigen sculptuur. "Dit is mijn Doryphoros," zegt hij, "gebouwd volgens een wiskundige formule — de 'Canon'. Elke verhouding tussen elk lichaamsdeel, exact vastgelegd."
+
+DIALOGUE:
+Polykleitos
+Schoonheid is geen toeval. Schoonheid is een verhouding die je kunt berekenen — en daarna, met genoeg geduld, kunt namaken.
+
+"[[Ecce|zie hier]]," merkt de Boodschapper op, iets speelser nu. "Ook jij koos ooit een gestalte voor jezelf, aan het begin van deze hele reis. Polykleitos zou het gewaardeerd hebben."
+
+CODEX:
+codex_polykleitos
+
+CHOICES:
+* Onthoud deze verhouding -> CH24_GRE_003_ONTHOUDEN
+* Laat het los -> CH24_GRE_003_LOSGELATEN
+
+END
+
+=== SCENE: CH24_GRE_003_ONTHOUDEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Je bekijkt de Doryphoros nog eens goed voordat je verdergaat — de precisie, de rust in de beweging. Polykleitos knikt, tevreden.
+
+FLAG:
+ch24_gre_polykleitos=onthouden
+
+CHOICES:
+* Ga verder naar een heel ander soort marmer -> CH24_GRE_004
+
+END
+
+=== SCENE: CH24_GRE_003_LOSGELATEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Eén beeld van een man met een speer lijkt, na alles wat je al gezien hebt, niet het beeld dat je per se wilt vasthouden. Polykleitos knikt, zonder verongelijkt te zijn.
+
+FLAG:
+ch24_gre_polykleitos=losgelaten
+
+CHOICES:
+* Ga verder naar een heel ander soort marmer -> CH24_GRE_004
+
+END
+
+=== SCENE: CH24_GRE_004 ===
+
+TITLE:
+Marmer dat Voelt
+
+TEXT:
+Waar Polykleitos' bronzen mannen berekend en gespannen staan, beeldhouwt Praxiteles iets heel anders: huid die zacht lijkt, ontspannen gewicht, een blik die net niet naar jou kijkt maar ergens net naast je. Zijn Hermes, met de kleine Dionysos speels op zijn arm, oogt eerder geleefd dan geconstrueerd.
+
+DIALOGUE:
+Praxiteles
+Polykleitos beeldhouwde hoe een lichaam behóórt te zijn. Ik probeer te beeldhouwen hoe het aánvoelt.
+
+Zijn beroemdste werk, een Aphrodite voor de stad Knidos, was het eerste levensgrote naakte vrouwenbeeld in de Griekse kunst — zo controversieel dat de stad ernaast een eigen tempeltje bouwde, en reizigers er speciaal voor omreisden.
+
+CODEX:
+codex_praxiteles
+
+CHOICES:
+* Onthoud dit werk -> CH24_GRE_004_ONTHOUDEN
+* Laat het los -> CH24_GRE_004_LOSGELATEN
+
+END
+
+=== SCENE: CH24_GRE_004_ONTHOUDEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+De zachtheid in het marmer blijft je bij, meer dan je had verwacht van steen. Praxiteles buigt kort zijn hoofd.
+
+FLAG:
+ch24_gre_praxiteles=onthouden
+
+CHOICES:
+* Bekijk een schildering op een amfoor -> CH24_GRE_005
+
+END
+
+=== SCENE: CH24_GRE_004_LOSGELATEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Mooi, denk je, maar niet iets waar je speciaal voor terug zou komen. Praxiteles glimlacht, niet gekwetst.
+
+FLAG:
+ch24_gre_praxiteles=losgelaten
+
+CHOICES:
+* Bekijk een schildering op een amfoor -> CH24_GRE_005
+
+END
+
+=== SCENE: CH24_GRE_005 ===
+
+TITLE:
+Een Schilder op een Amfoor
+
+TEXT:
+Op een zwartfigurige amfoor, nog geen handbreedte hoog, staat in enkele felle lijnen een oud tafereel geschilderd: drie godinnen, een herder met een appel in zijn hand, een vierde figuur op de achtergrond die toekijkt zonder gezien te worden. Het Parisoordeel — het moment dat, jaren geleden in jouw eigen reis, alles in beweging zette.
+
+De Boodschapper kijkt er langer naar dan bij de andere stukken. Iets in haar gezicht — geen verdriet precies, eerder herkenning — verdwijnt weer voordat je het goed kunt plaatsen. Ze zegt er niets over.
+
+CODEX:
+codex_amfoor_parisoordeel
+
+CHOICES:
+* Ga verder naar iets dat niet meer bestaat -> CH24_GRE_006
+
+END
+
+=== SCENE: CH24_GRE_006 ===
+
+TITLE:
+De Kolossus van Rhodos
+
+TEXT:
+Een reusachtig bronzen beeld van de zonnegod Helios rijst op uit de grond van het Museum, hoger dan alles eromheen — de Kolossus van Rhodos, gebouwd om de mislukte belegering van de stad te vieren. Een deel van het brons, vertelt de Boodschapper, kwam van de achtergelaten belegeringswerktuigen van Demetrios Poliorketes zelf — dezelfde belegering die je, als je Antigonos volgde, van dichtbij meemaakte.
+
+Zestig jaar later breekt een aardbeving het beeld af bij de knieën. Het ligt nog achthonderd jaar in stukken op de grond — te groot om weg te halen, te duur om opnieuw op te richten — tot het uiteindelijk, naar verluidt, gewoon als oud brons wordt verkocht.
+
+"[[Ecce|zie hier]]," zegt de Boodschapper, en voor het eerst dit hoofdstuk klinkt haar stem niet luchtig. "Een van de zeven wereldwonderen. Er bestaat niet één steen meer van."
+
+CODEX:
+codex_kolossus_rhodos
+
+CHOICES:
+* Onthoud de Kolossus -> CH24_GRE_006_ONTHOUDEN
+* Laat hem los -> CH24_GRE_006_LOSGELATEN
+
+END
+
+=== SCENE: CH24_GRE_006_ONTHOUDEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Je onthoudt hem juist omdát er niets meer van over is — als iemand hem tenminste moet onthouden, kan jij dat net zo goed zijn. De Boodschapper kijkt je een fractie van een seconde te lang aan.
+
+FLAG:
+ch24_gre_kolossos=onthouden
+
+CHOICES:
+* Bekijk twee beelden die niet compleet zijn -> CH24_GRE_007
+
+END
+
+=== SCENE: CH24_GRE_006_LOSGELATEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Iets dat al achthonderd jaar geleden tot oud brons is verkocht, laat zich moeilijk vasthouden, denk je. De Boodschapper knikt langzaam, alsof ze dat antwoord had verwacht — en er toch niet blij mee is.
+
+FLAG:
+ch24_gre_kolossos=losgelaten
+
+CHOICES:
+* Bekijk twee beelden die niet compleet zijn -> CH24_GRE_007
+
+END
+
+=== SCENE: CH24_GRE_007 ===
+
+TITLE:
+Zonder Hoofd, Zonder Armen
+
+TEXT:
+Twee beelden staan naast elkaar, allebei half voltooid door de tijd zelf: een gevleugelde overwinningsgodin, Nike, met wapperende gewaden maar zonder hoofd of armen; en een vrouw in marmer, Aphrodite, sereen ondanks het feit dat beide armen ontbreken. Eeuwen na hun makers werden ze allebei zo teruggevonden, precies zo, gebroken.
+
+"[[Ecce|zie hier]]," zegt de Boodschapper. "Ik kan je, als je wilt, laten zien hoe ze er ooit compleet uitzagen — mijn eigen verbeelding, niets meer. Of we laten ze precies zo, zoals de tijd ze aan jou heeft doorgegeven."
+
+CODEX:
+codex_nike_samothrace, codex_venus_van_milo
+
+CHOICES:
+* Laat de Boodschapper ze compleet verbeelden -> CH24_GRE_007_COMPLEET
+* Laat ze precies zo, gebroken -> CH24_GRE_007_GEBROKEN
+
+END
+
+=== SCENE: CH24_GRE_007_COMPLEET ===
+
+TITLE:
+Wat Ooit Was
+
+TEXT:
+Heel even, in een waas van gouden licht, zie je ze zoals ze ooit waren: Nike met een gezicht, Aphrodite met armen die naar iets — een appel, een spiegel, niemand weet het zeker — reikten. Dan is het beeld weer weg, en staan de twee beelden weer voor je zoals je ze eerst zag.
+
+"Mooi, hè," zegt de Boodschapper zacht. "Maar het was mijn verbeelding, niet hun geschiedenis."
+
+FLAG:
+ch24_gre_fragment=compleet
+
+CHOICES:
+* Ga verder naar het Latijnse spoor [REQUIRE:taalspoor=beide] -> CH24_LAT_001
+* Naar de afsluiting van het Griekse spoor [REQUIRE:taalspoor=grieks] -> CH24_GRE_EINDE
+
+END
+
+=== SCENE: CH24_GRE_007_GEBROKEN ===
+
+TITLE:
+Wat Overblijft
+
+TEXT:
+"Goed," zegt de Boodschapper, met iets wat op opluchting lijkt. "Dan blijven ze zo." De ontbrekende hoofd en armen worden niet ingevuld — en juist daardoor, merk je, kijk je nu langer naar wat er wél nog staat: de spanning in de wapperende stof, de kalme houding van wie geen gezicht meer nodig heeft om herkenbaar te zijn.
+
+FLAG:
+ch24_gre_fragment=gebroken
+
+CHOICES:
+* Ga verder naar het Latijnse spoor [REQUIRE:taalspoor=beide] -> CH24_LAT_001
+* Naar de afsluiting van het Griekse spoor [REQUIRE:taalspoor=grieks] -> CH24_GRE_EINDE
+
+END
+
+=== SCENE: CH24_GRE_EINDE ===
+
+TITLE:
+Wat Overblijft, en Waarom
+
+TEXT:
+"[[Ecce|zie hier]] — je hebt vandaag beelden gezien die nog bestaan, en beelden die alleen nog bestaan omdat iemand ze onthield," zegt de Boodschapper van Chronos. "Ooit kende iedereen hun namen. Sommigen ken jij nu weer."
+
+Ze zwijgt heel even, alsof ze meer had willen zeggen.
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH24_EINDE
+
+END
+
+=== SCENE: CH24_LAT_001 ===
+
+TITLE:
+Steen die Zichzelf Draagt
+
+TEXT:
+Een Romeinse boog spant zich moeiteloos over een opening die veel breder is dan wat een enkele steen ooit zou kunnen overspannen — elke steen duwt tegen zijn buren, en het geheel draagt zichzelf. Naast je verschijnt een man met een schrijfstok en een rol perkament onder zijn arm, ogen al op de boog gericht nog voor hij iets zegt: Vitruvius.
+
+DIALOGUE:
+Vitruvius
+De Grieken bouwden om te behagen. Wij Romeinen bouwden om te blijven staan — en ontdekten onderweg dat opus caementicium, ons eigen beton, dingen mogelijk maakt die zelfs zij nooit probeerden: gewelven, koepels, bruggen die eeuwen meegaan.
+
+CODEX:
+codex_romeinse_boogbouw
+
+VOCAB:
+latijn_saxum
+
+CHOICES:
+* Vraag Vitruvius waar hij zelf het meeste waarde aan hecht -> CH24_LAT_002
+
+END
+
+=== SCENE: CH24_LAT_002 ===
+
+TITLE:
+Firmitas, Utilitas, Venustas
+
+TEXT:
+"Elk bouwwerk," zegt Vitruvius, "moet aan drie eisen voldoen. Firmitas — het moet blijven staan. Utilitas — het moet ergens goed voor zijn. Venustas — het moet de moeite waard zijn om naar te kijken. De meeste bouwmeesters kiezen, of ze het willen of niet, welke van de drie voor hen het zwaarst weegt."
+
+DIALOGUE:
+Vitruvius
+Welke van de drie zou jij, als je zelf moest bouwen, nooit durven opofferen?
+
+CODEX:
+codex_vitruvius_triade
+
+CHOICES:
+* Firmitas — het moet blijven staan, wat er ook gebeurt -> CH24_LAT_002_FIRMITAS
+* Utilitas — het moet ergens goed voor zijn -> CH24_LAT_002_UTILITAS
+* Venustas — het moet de moeite waard zijn om te zien -> CH24_LAT_002_VENUSTAS
+
+END
+
+=== SCENE: CH24_LAT_002_FIRMITAS ===
+
+TITLE:
+Wat Blijft Staan
+
+TEXT:
+Vitruvius knikt goedkeurend. "Een verstandige keuze, van iemand die al veel dingen heeft zien vallen die dat niet hadden hoeven doen."
+
+FLAG:
+ch24_lat_vitruvius_principe=firmitas
+
+CHOICES:
+* Ga verder naar het water dat Rome naar zich toe haalt -> CH24_LAT_003
+
+END
+
+=== SCENE: CH24_LAT_002_UTILITAS ===
+
+TITLE:
+Wat Ergens Goed Voor Is
+
+TEXT:
+Vitruvius glimlacht. "De praktische keuze. Een mooi gebouw dat nergens voor dient, is uiteindelijk maar een grote steen."
+
+FLAG:
+ch24_lat_vitruvius_principe=utilitas
+
+CHOICES:
+* Ga verder naar het water dat Rome naar zich toe haalt -> CH24_LAT_003
+
+END
+
+=== SCENE: CH24_LAT_002_VENUSTAS ===
+
+TITLE:
+Wat de Moeite Waard Is
+
+TEXT:
+Vitruvius kijkt je onderzoekend aan. "Interessant. De meeste van mijn eigen landgenoten zouden mij hierom uitlachen — maar zonder venustas onthoudt niemand een gebouw lang genoeg om het te laten blijven staan."
+
+FLAG:
+ch24_lat_vitruvius_principe=venustas
+
+CHOICES:
+* Ga verder naar het water dat Rome naar zich toe haalt -> CH24_LAT_003
+
+END
+
+=== SCENE: CH24_LAT_003 ===
+
+TITLE:
+Water over een Vallei
+
+TEXT:
+Een aquaduct spant zich, boog na boog, over een diepe vallei — geen rivier die eronderdoor stroomt, maar water dat er bovenop, kilometers ver, van een bron naar een verre stad wordt geleid, met een verval van amper een paar centimeter per honderd meter. "Precisie," zegt Vitruvius, "die je met het blote oog niet ziet, en die toch het verschil maakt tussen een fontein en een moeras."
+
+Het is, letterlijk, steen die water draagt — precies de titel van dit hele hoofdstuk, bedenk je.
+
+CODEX:
+codex_aquaduct
+
+CHOICES:
+* Onthoud dit aquaduct -> CH24_LAT_003_ONTHOUDEN
+* Laat het los -> CH24_LAT_003_LOSGELATEN
+
+END
+
+=== SCENE: CH24_LAT_003_ONTHOUDEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Je bekijkt de bogen nog eens, de een na de ander, tot aan de horizon. Vitruvius knikt tevreden, alsof hij zelf de precisie in je blik ziet.
+
+FLAG:
+ch24_lat_aquaduct=onthouden
+
+CHOICES:
+* Ga verder naar de wegen die alles verbinden -> CH24_LAT_004
+
+END
+
+=== SCENE: CH24_LAT_003_LOSGELATEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Eén aquaduct van de honderden die het Rijk ooit had, is misschien niet het beeld dat je per se wilt vasthouden. Vitruvius knikt, zonder het je kwalijk te nemen.
+
+FLAG:
+ch24_lat_aquaduct=losgelaten
+
+CHOICES:
+* Ga verder naar de wegen die alles verbinden -> CH24_LAT_004
+
+END
+
+=== SCENE: CH24_LAT_004 ===
+
+TITLE:
+Alle Wegen
+
+TEXT:
+Een rechte, keihard bestrate weg loopt van de Museumvloer tot aan de horizon — de Via Appia, de "koningin der wegen", de eerste van tienduizenden kilometers die het Rijk uiteindelijk zal aanleggen. "Een leger, een brief, een idee," zegt Vitruvius. "Ze reizen allemaal even snel over dezelfde stenen."
+
+"[[Ecce|zie hier]]," voegt de Boodschapper eraan toe. "Wie de wegen aanlegt, bepaalt niet alleen waar legers gaan — hij bepaalt ook welke berichten, welke verhalen, elkaar ooit nog inhalen. Dat is niet zo anders dan wie de pen vasthoudt."
+
+CODEX:
+codex_romeinse_wegen
+
+CHOICES:
+* Ga verder naar een monument voor de vrede -> CH24_LAT_005
+
+END
+
+=== SCENE: CH24_LAT_005 ===
+
+TITLE:
+Het Altaar van de Vrede
+
+TEXT:
+Een marmeren altaar, omgeven door een laag reliëf van een lange, plechtige processie — senatoren, priesters, Augustus zelf, zijn hele familie in steen vereeuwigd. De Ara Pacis, gebouwd om de vrede te vieren die je zelf, in Rome, hebt zien ontstaan. "Een monument dat met opzet niets verbergt," zegt Vitruvius. "Elk gezicht erin was bedoeld om herkend te worden — door mensen die toen nog leefden, en, kennelijk, door jou, eeuwen later."
+
+CODEX:
+codex_ara_pacis
+
+CHOICES:
+* Onthoud dit altaar -> CH24_LAT_005_ONTHOUDEN
+* Laat het los -> CH24_LAT_005_LOSGELATEN
+
+END
+
+=== SCENE: CH24_LAT_005_ONTHOUDEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Je bekijkt de gezichten in het reliëf nog eens stuk voor stuk — precies waarvoor het ooit gemaakt is. Vitruvius knikt goedkeurend.
+
+FLAG:
+ch24_lat_ara_pacis=onthouden
+
+CHOICES:
+* Zie wat Vitruvius zelf uiteindelijk heeft nagelaten -> CH24_LAT_006
+
+END
+
+=== SCENE: CH24_LAT_005_LOSGELATEN ===
+
+TITLE:
+Een Bewuste Keuze
+
+TEXT:
+Eén altaar, hoe mooi ook, is niet het enige dat je vandaag kunt vasthouden. Vitruvius knikt, zonder het je kwalijk te nemen.
+
+FLAG:
+ch24_lat_ara_pacis=losgelaten
+
+CHOICES:
+* Zie wat Vitruvius zelf uiteindelijk heeft nagelaten -> CH24_LAT_006
+
+END
+
+=== SCENE: CH24_LAT_006 ===
+
+TITLE:
+Het Boek dat Bijna Alleen Overleefde
+
+TEXT:
+Vitruvius houdt zijn eigen rol perkament omhoog — De Architectura, tien boeken over alles wat hij ooit leerde over bouwen. "De meeste technische geschriften uit mijn tijd zijn verloren gegaan," zegt hij. "Verbrand, verrot, simpelweg nooit meer overgeschreven. Het mijne, om redenen die ik zelf niet ken, bleef bijna als enige bewaard."
+
+"[[Ecce|zie hier]]," zegt de Boodschapper zacht, bijna tegen zichzelf. "Puur toeval, zou je zeggen. Of misschien niet."
+
+CODEX:
+codex_vitruvius_boek
+
+CHOICES:
+* Ga verder -> CH24_LAT_EINDE
+
+END
+
+=== SCENE: CH24_LAT_EINDE ===
+
+TITLE:
+Wat Overblijft, en Waarom
+
+TEXT:
+"[[Ecce|zie hier]] — je hebt vandaag gebouwen gezien die nog altijd overeind staan, en een boek dat bijna als enige de eeuwen doorkwam," zegt de Boodschapper van Chronos. "Ooit kende iedereen hun namen. Sommigen ken jij nu weer."
+
+Ze zwijgt heel even, alsof ze meer had willen zeggen.
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH24_EINDE
+
+END
+
+=== SCENE: CH24_EINDE ===
+
+TITLE:
+Onthouden of Loslaten
+
+TEXT:
+"[[Ecce|zie hier]] — steen die blijft staan, water dat alles wegslijt, ook steen, uiteindelijk, als je maar lang genoeg wacht," zegt de Boodschapper van Chronos. Ze kijkt je aan, langer dan gebruikelijk. "Elke keer dat ik je vandaag vroeg om iets te onthouden of los te laten — dat was geen spelletje. Ik hou bij wat je koos."
+
+"Waarom, vraag je? Dat," zegt ze, met een glimlach die niet helemaal een antwoord is, "vertel ik je nog wel. Niet vandaag."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_steen_en_water
+
+CHOICES:
+* Bekijk de verzameling in het museum -> CH24_MUSEUM_00
+
+END
+
+=== SCENE: CH24_MUSEUM_00 ===
+
+TITLE:
+Het Museum Kijkt Terug
+
+TEXT:
+Een nieuwe stolp vult zich: een piepklein stukje verweerd marmer naast een druppel water, bevroren in glas, die nooit valt. "Vandaag was jij voor het eerst niet alleen degene die stolpen vult," zegt de Boodschapper van Chronos, terwijl ze om zich heen kijkt naar alles wat je samen al hebben verzameld. "Je was ook degene die koos wát erin komt."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH24_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH24_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — nog meer wetenschap, nog meer vuur, en een laatste boek dat ik je nog niet kan beschrijven. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En dit keer, meer dan ooit, blijft ook wat je koos te onthouden, en wat je liet gaan."
 
 Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
 

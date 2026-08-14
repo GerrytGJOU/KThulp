@@ -120,6 +120,20 @@ Ptolemaeus' eigen nazaat) en `{ch22_lat_zijde_h23_echo}` (CH23_LAT_001,
 bij Octavia's verstoting — het moment waarop de Octavianus/Antonius-
 vriendschap breekt). Zelfde patroon als de H19-zijde-echo's in H20.
 
+## Categorie 7 — H24's "onthoud of laat los"-flags: GEEN gewone dode flags
+
+Hoofdstuk 24 ("Steen en Water", geschreven 2026-08-14, nog niet gekoppeld)
+zet acht nieuwe FLAGs (`ch24_gre_phidias`, `ch24_gre_polykleitos`,
+`ch24_gre_praxiteles`, `ch24_gre_kolossos`, `ch24_gre_fragment`,
+`ch24_lat_aquaduct`, `ch24_lat_ara_pacis`, `ch24_lat_vitruvius_principe`)
+die BEWUST nog nergens worden uitgelezen. Dit zijn GEEN gewone dode flags
+voor de Finale-catch-all: ze hebben al een specifiek gepland thuis in
+Hoofdstuk 28 ("De Bibliotheek van Mnemosyne") en 29 ("De Rivier Lethe") —
+zie de volledige toelichting in de memory
+`chronica-h24-lethe-mnemosyne-zaadjes`. Niet per ongeluk in de generieke
+Finale-lijst opnemen als H24 gebouwd/gekoppeld wordt; check eerst of H28/29
+al bestaan en de payoff daar hoort te landen.
+
 ---
 
 **Status**: 45 dode flags vastgelegd op 2026-08-14 (na de koppeling van

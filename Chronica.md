@@ -7768,6 +7768,64 @@ juiste flag-waarde, en blijft correct afwezig zonder de flag.
 
 ---
 
+### 7.90 Hoofdstuk 24 "Steen en Water" geschreven, BEWUST NOG NIET GEKOPPELD (2026-08-14, zelfde dag)
+
+Door Claude geschreven (geen Gemini-concept), zelfde staged status als
+H21-23 vóór hun goedkeuring. 36 scènes.
+
+**Eerste hoofdstuk van Boek V**, bewust niet-chronologisch (net als H6) —
+de Boodschapper haalt personages uit de hele campagne erbij zonder aan
+jaartallen vast te zitten. Griekse lijn: de drie zuilorden (met een
+Athena-cameo, patrones van elk ambacht), Phidias (directe callback naar
+H18), Polykleitos (Doryphoros/Canon, met een knipoog naar de eigen
+klassekeuze van de speler), Praxiteles, een vazenschildering van het
+Parisoordeel, de Kolossus van Rhodos (gebouwd van Demetrios' achtergelaten
+belegeringsmateriaal — directe callback naar H22), en tot slot Nike van
+Samothrace/Venus van Milo. Latijnse lijn: Vitruvius als terugkerende gids,
+de Romeinse boogbouw/opus caementicium, zijn eigen drieslag firmitas/
+utilitas/venustas als keuze, het aquaduct (de letterlijke "water"-helft
+van de titel), de Romeinse wegen (met een echo van Caesars "wie de pen
+vasthoudt"-uitspraak uit H20), de Ara Pacis (callback naar H23/Augustus),
+en Vitruvius' eigen boek — een van de weinige volledig bewaarde
+technische traktaten uit de oudheid.
+
+**Nieuw mechanisme: "onthoud dit, of laat het los?"** Bij elk kunstwerk/
+bouwwerk krijgt de speler die keuze, die een eigen FLAG zet
+(`ch24_gre_phidias`, `ch24_gre_polykleitos`, `ch24_gre_praxiteles`,
+`ch24_gre_kolossos`, `ch24_gre_fragment` [compleet/gebroken bij Nike/
+Venus], `ch24_lat_aquaduct`, `ch24_lat_ara_pacis`, plus
+`ch24_lat_vitruvius_principe` als 3-wegskeuze) maar nog GEEN zichtbaar
+gevolg heeft. Dit is bewust een stille, naamloze opmaat naar Hoofdstuk 28
+("De Bibliotheek van Mnemosyne") en 29 ("De Rivier Lethe") — zie
+`Chronica.md` §1834-1846 (via de RELATION/FLAG-roster-memory) voor wie
+Lethe en Mnemosyne werkelijk zijn: Lethe is de eigenlijke hoofdtegenstander
+van heel Chronica Classica (de personificatie van vergeten, al impliciet
+aanwezig sinds de allereerste proloogzin), Mnemosyne haar warme tegenhanger.
+**Geen van beide namen valt in dit hoofdstuk.** Twee extra, nog subtielere
+zaadjes: een onverklaarde emotie van de Boodschapper bij een
+Trojaanse-Oorlog-vazenschildering (Lethe is een dochter van Eris, de
+appel-godin uit H7) en een bijna-letterlijke echo van de proloogzin "Ooit
+kende iedereen hun namen" aan het eind van beide taalsporen.
+
+**Belangrijke technische correctie tijdens het bouwen**: de eerste versie
+gebruikte per ongeluk `[DONE:...]`-tags op de "onthoud/laat los"-keuzes.
+Die tag is bedoeld voor herbezoekbare hub-scènes (toont een vinkje zodra
+een FLAG al gezet is, en verandert de klik-afhandeling naar
+`spChooseTrackedPath`/`spChoiceAlreadyDone`) — niet voor eenmalige,
+lineaire binaire keuzes. Verwijderd; de keuzes werken nu met gewone
+`FLAG:`-secties op de doelscène, zoals overal elders in de campagne.
+
+**Nieuwe registry-entries**: 12 CODEX-entries, 2 nieuwe VOCAB-entries
+(stele/saxum), 1 nieuw souvenir (`souvenir_steen_en_water`).
+
+**Validatie**: `node --check` slaagt. Losse parse-check: 36 scènes, 0
+dubbele ID's, 0 kapotte links, 0 onbekende registry-referenties. Live in
+de browser: volledige BFS-doorloop voor grieks/latijn/beide, 0
+exceptions, 0 onopgeloste tokens; keuzeknoppen renderen schoon (geen
+vinkjes) en de FLAG wordt correct gezet bij de eerste klik.
+
+---
+
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
 
 Tweede laag bovenop de bestaande delayed-consequences/Latijn-als-skill-check-
