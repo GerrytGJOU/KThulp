@@ -445,26 +445,29 @@ const SP_CAMPAIGN = [
     pallas:"Geen nieuwe les — verhaal: Socrates (proces en dood), Plato (de grot, de ideeënleer), Aristoteles (de vier oorzaken, ethiek) — met een korte terugverwijzing naar Aristoteles als Alexanders leermeester uit Hoofdstuk 20", minerva:"Geen nieuwe grammatica — verhaal: Cicero's redevoeringen (tegen Catilina/Verres) en zijn rol als vertaler van Griekse filosofie naar het Latijn, plus een introductie van Seneca als jongere tijdgenoot (payoff bij Nero, Hoofdstuk 23)",
     grammatica:"Grieks: herhaling — Griekse filosofie; Latijn: herhaling — Cicero (+ Seneca-introductie)",
     gameplay:"Twee sporen; een sokratische ondervraging als dialoog-mechaniek (Griekse lijn) / een redevoering opbouwen als retorische puzzel (Latijnse lijn, Cicero's eigen technieken)",
-    personages:"Socrates, Plato, Aristoteles, Xanthippe — Cicero, Catilina, Verres, Tullia, Seneca (cameo, jong — payoff in H23)",
+    personages:"Socrates, Plato, Aristoteles, Xanthippe, Diotima, Crito — Cicero, Catilina, Verres, Tullia, Terentia, Seneca (cameo, jong — payoff in H23)",
     thema:"Wijsheid overleeft de denker zelf alleen als iemand anders hem doorvertelt — in een andere taal, aan een ander publiek",
-    illustratie:"Socrates drinkt de gifbeker / Cicero spreekt de Senaat toe tegen Catilina" },
+    illustratie:"Socrates drinkt de gifbeker / Cicero spreekt de Senaat toe tegen Catilina",
+    status:"GEBOUWD EN GEKOPPELD (2026-08-14) — eerste concept door Gemini geschreven en door Claude verwerkt/gecontroleerd (zie Chronica.md §7.84 e.v.): echte vertakking bij de Socrates-stemming (Crito/aanklagers), Diotima, Xanthippe en Terentia toegevoegd, Athena/Minerva als gastverteller. CH20_MUSEUM_00 routeert naar CH21_000; SP_SCENES/BLOCKS bevatten SP_CH21_CNS." },
   { id:"ch22", nr:22, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Opvolgers tegenover Opvolgers",
     periode:"Diadochenoorlogen, 322-301 v.Chr. / Tweede Triumviraat, 43-31 v.Chr.",
     verhaal:"Meteen na Alexanders dood verscheuren zijn eigen generaals, ooit zijn trouwste bondgenoten, zijn rijk in de Diadochenoorlogen. Generaties later, aan de Latijnse kant, hetzelfde patroon tussen Caesars eigen erfgenamen: Antonius, Octavianus en Lepidus verdelen de macht in een Tweede Triumviraat dat, net als Alexanders generaals voor hen, gedoemd is elkaar op te eten. GECORRIGEERD 2026-08-09 (Gerbens verzoek): niet langer gekoppeld aan Gracchen/Marius-Sulla (verhuisd naar Hoofdstuk 18, chronologisch vóór Caesar) — het thema is nu zuiver 'opvolgers die onderling vechten', aan beide kanten letterlijk de eigen opvolgers van de vorige hoofdrolspeler (Alexander resp. Caesar).",
     pallas:"Geen nieuwe les (Pallas 2 is na Hoofdstuk 20 uitgeput) — verhaal: de Diadochenoorlogen (Alexanders generaals vechten om zijn rijk, direct na zijn dood in 323 v.Chr.), pure herhaling/vertelling", minerva:"Geen nieuwe grammatica — verhaal: het Tweede Triumviraat en Marcus Antonius' opkomst na Caesars dood",
     grammatica:"Grieks: herhaling — Diadochenoorlogen; Latijn: herhaling — Tweede Triumviraat",
     gameplay:"Politieke/militaire keuzes: verdelen van Alexanders rijk onder rivaliserende generaals (Griekse lijn) / een machtsverdeling die vanaf het begin instabiel is (Latijnse lijn) — beide lijnen spiegelen elkaar: opvolgers die elkaar verscheuren",
-    personages:"Perdikkas, Antigonos, Ptolemaeus, Seleukos, Kassandros (Diadochen) — Marcus Antonius, Octavianus, Lepidus, Fulvia",
-    illustratie:"Alexanders rijk uiteenvallend op de kaart / het Tweede Triumviraat verdeelt de wereldkaart" },
+    personages:"Perdikkas, Antigonos, Ptolemaeus, Seleukos, Kassandros (Diadochen) — Marcus Antonius, Octavianus, Lepidus, Fulvia, Octavia, Cleopatra, Caesarion, Agrippa, Maecenas, Vergilius",
+    illustratie:"Alexanders rijk uiteenvallend op de kaart / het Tweede Triumviraat verdeelt de wereldkaart",
+    status:"GEBOUWD EN GEKOPPELD (2026-08-14) — eerste concept door Gemini geschreven en door Claude verwerkt/gecontroleerd (zie Chronica.md §7.85 e.v.): echte zijde-keuzes (Ptolemaeus/Antigonos, Octavianus/Antonius), Fulvia/Octavia/Cleopatra met diepgang, Caesarion gepitcht. CH21_MUSEUM_00 routeert naar CH22_000; SP_SCENES/BLOCKS bevatten SP_CH22_CNS." },
   { id:"ch23", nr:23, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Vrede en Vergankelijkheid",
     periode:"Vroege Keizertijd (27 v.Chr. - 68 n.Chr.) / Slag bij Actium, 31 v.Chr.",
     verhaal:"Onder Augustus keert de vrede terug — en een dichter genaamd Vergilius begint aan een episch gedicht dat Rome's oorsprong voor altijd zal verbinden met de val van Troje. Later, onder Nero, blijkt hoe snel die vrede weer kan omslaan — zijn vroegere leermeester Seneca (cameo uit Hoofdstuk 21) probeert hem nog bij te sturen, tevergeefs. Aan de Griekse kant precies dezelfde overwinning van de andere kant bekeken: bij Actium verslaat de latere Augustus Cleopatra VII, laatste telg van de Ptolemaeën (zelf afstammelingen van een van Alexanders eigen generaals) — het moment waarop het laatste onafhankelijke Griekse rijk definitief in Rome opgaat.",
     pallas:"Geen nieuwe les (Pallas 2 is na Hoofdstuk 20 uitgeput) — verhaal: Cleopatra en de Slag bij Actium (31 v.Chr.), pure herhaling/vertelling — het einde van de Hellenistische wereld", minerva:"Hoofdstuk 24: Keizers van Rome (Augustus en Nero) · Hoofdstuk 25: Latijnse literatuur (Catullus, Petronius)",
     grammatica:"Grieks: herhaling — Cleopatra/Actium; Latijn: N.C.I., semi-deponentia, transitief/intransitief, vraagpartikels (M24) — vnl. vertaalvaardigheid (M25)",
     gameplay:"Literair/reflectief — bronnen en gedichten (Latijnse lijn, incl. Augustus' rol als Pontifex Maximus/de Romeinse staatsreligie); dezelfde Slag bij Actium van Griekse kant meebeleefd (Griekse lijn) — de twee lijnen convergeren hier inhoudelijk, niet alleen structureel",
-    personages:"Augustus, Vergilius, Nero, Ovidius, Seneca (payoff uit H21) — Cleopatra VII, Marcus Antonius",
-    illustratie:"Augustus bij de Ara Pacis / Nero en de Domus Aurea — Cleopatra en Antonius bij Actium",
-    zijverhalen:"Eros & Psyche, Pygmalion (A-tier) — verteld als verhaal-in-een-verhaal door een dichter" },
+    personages:"Augustus, Livius, Vergilius, Ovidius, Nero, Tiberius, Caligula, Claudius, Seneca (payoff uit H21) — Cleopatra VII, Marcus Antonius, Octavia, Caesarion",
+    illustratie:"Augustus bij Alexanders graf / Nero en de Domus Aurea — Cleopatra en Antonius bij Actium",
+    zijverhalen:"Pygmalion (Ovidius, Metamorphosen X) — verteld als verhaal-in-een-verhaal. Eros & Psyche BEWUST NIET gebouwd: dat is Apuleius (2e eeuw n.Chr.), anachronistisch voor dit Augusteïsche hoofdstuk.",
+    status:"GEBOUWD EN GEKOPPELD (2026-08-14) — door Claude geschreven (geen Gemini-concept). Livius als gastverteller (niet Vergilius, die gereserveerd blijft voor de Aeneis/Troje-callback), keizersgalerij Tiberius/Caligula/Claudius toegevoegd (vulde een gat — H26 begint pas bij de Flavii), Actium verteld met de Hoofdstuk-9-Troje-truc (twee kanten van dezelfde slag), 'beide talen' ziet alles chronologisch dooreen i.p.v. eerst alle Grieks dan alle Latijn. CH22_MUSEUM_00 routeert naar CH23_000; CH23_WORDT_VERVOLGD is het nieuwe, laatste tijdelijke speeltest-eindpunt. SP_SCENES/BLOCKS bevatten SP_CH23_CNS." },
   { id:"ch24", nr:24, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Steen en Water",
     periode:"Klassieke/Hellenistische kunst, 5e-2e eeuw v.Chr. / Vroege Keizertijd, technologisch",
     verhaal:"Terug bij het Museum van Mnemosyne (zie Hoofdstuk 6) laat de Boodschapper zien hoe Grieken en Romeinen hun beschaving letterlijk vormgaven: de Dorische, Ionische en Korinthische zuilorden, van archaïsche kouros tot Polykleitos' contrapost tot de dramatische Hellenistische beeldhouwkunst (de Laocoöngroep, Venus van Milo, Nike van Samothrace) — en aan Romeinse kant de technische doorbraken die dat allemaal overtroffen: de boog, het gewelf, de koepel, opus caementicium, het aquaduct, de rechte Romeinse weg.",
@@ -25085,35 +25088,15 @@ TEXT:
 Een nieuwe stolp vult zich: een kleine, doorgesneden koorden-knoop naast een stukje houten brugleuning. "Twee grenzen, allebei verlegd door één mens die verder ging dan wie ook vóór hem," zegt de Boodschapper, terwijl ze de stolp even bekijkt. "De rest van hun verhaal — wat hun opvolgers ervan maakten — komt nog."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH20_WORDT_VERVOLGD
-
-END
-
-=== SCENE: CH20_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Diadochen, Cicero's eigen hoofdstuk, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je koos, bij Dumnorix, bij Sabinus en Cotta, blijft, hoe vaak je ook terugkeert naar het begin."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+* Luister naar het volgende verhaal -> CH21_000
 
 END
 `.trim();
 
-/* ---- HOOFDSTUK 21 "Wijsheid en Waarheid" — CONCEPT, NOG NIET GEKOPPELD.
-   Gerben wil dit hoofdstuk pas aan SP_SCENES/BLOCKS toevoegen zodra hij
-   het zelf heeft goedgekeurd (2026-08-11) — dit is de eerste keer dat een
-   Gemini-concept wordt verwerkt, en hij wil dat proces eerst vertrouwen
-   voordat het live gaat. SP_CH21_CNS bestaat dus als losse const (zodat
-   het al wel gevalideerd en doorgelezen kan worden), maar wordt BEWUST
-   niet gemerged in SP_SCENES (singleplayer.js) of BLOCKS
-   (validate_chronica.js), en CH20_MUSEUM_00 routeert nog naar
-   CH20_WORDT_VERVOLGD, niet naar CH21_000. Koppel pas na expliciet
-   akkoord — zie Chronica.md §7.x.
+/* ---- HOOFDSTUK 21 "Wijsheid en Waarheid" — GEBOUWD EN GEKOPPELD
+   (2026-08-14, na Gerbens goedkeuring). CH20_MUSEUM_00 routeert nu naar
+   CH21_000; het oude tijdelijke eindpunt CH20_WORDT_VERVOLGD is
+   verwijderd (verplaatst naar CH23, het nieuwe laatste hoofdstuk).
 
    Eerste concept geschreven door Gemini (Gerbens Edu-account, 2026-08-11),
    hier verwerkt: sectieformaat gecorrigeerd (STATPOINTS/SOUVENIR moeten een
@@ -25726,28 +25709,16 @@ TEXT:
 Een nieuwe stolp vult zich: een lege gifbeker naast een perkamentrol vol Latijnse woorden die ooit alleen in het Grieks bestonden. "Twee manieren om wijsheid te laten voortleven," zegt de Boodschapper van Chronos, terwijl ze de stolp even bekijkt, "van hand tot hand, van taal naar taal — Socrates aan Plato, Plato aan Aristoteles, en aan de andere kant Cicero aan iedereen die na hem nog Latijn zou lezen." Ze kijkt op. "Athena had daar, vandaag, meer verstand van dan ik."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH21_WORDT_VERVOLGD
-
-END
-
-=== SCENE: CH21_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — de Diadochen, het Tweede Triumviraat, Augustus en Nero, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je koos, bij Socrates' proces en bij Catilina, blijft, hoe vaak je ook terugkeert naar het begin."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+* Luister naar het volgende verhaal -> CH22_000
 
 END
 `.trim();
 
-/* ---- HOOFDSTUK 22 "Opvolgers tegenover Opvolgers" — CONCEPT, NOG NIET
-   GEKOPPELD. Zelfde afspraak als Hoofdstuk 21: pas aan SP_SCENES/BLOCKS
-   toevoegen na Gerbens goedkeuring. Eerste concept door Gemini geschreven
+/* ---- HOOFDSTUK 22 "Opvolgers tegenover Opvolgers" — GEBOUWD EN
+   GEKOPPELD (2026-08-14, na Gerbens goedkeuring). CH21_MUSEUM_00
+   routeert nu naar CH22_000; het oude tijdelijke eindpunt
+   CH21_WORDT_VERVOLGD is verwijderd (verplaatst naar CH23). Eerste
+   concept door Gemini geschreven
    (2026-08-12), hier verwerkt: "crown"-typefout in CH22_GRE_001 hersteld
    naar "kroon", scènetitel "De Raad van Triparadisos" hernoemd (die
    conferentie vond pas ná Perdikkas' dood plaats en past niet bij de
@@ -26518,29 +26489,22 @@ TEXT:
 Een nieuwe stolp vult zich: een bronzen diadeem naast een zilveren denarius met het dubbele profiel van het Triumviraat. "De marmeren bustes van Ptolemaeus, Antigonos, Marcus Antonius en Octavianus zouden hier bijna broederlijk naast elkaar kunnen staan," zegt de Boodschapper van Chronos, "als je niet wist hoeveel van hun eigen mensen ze onderweg hebben opgeofferd. Machtsverdeling, heb ik gemerkt, is zelden meer dan de pauze tussen twee oorlogen."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH22_WORDT_VERVOLGD
-
-END
-
-=== SCENE: CH22_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Cleopatra en Actium, Augustus en Nero, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je koos, bij de proscripties en bij Perusia, blijft, hoe vaak je ook terugkeert naar het begin."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+* Luister naar het volgende verhaal -> CH23_000
 
 END
 `.trim();
 
-/* ---- HOOFDSTUK 23 "Vrede en Vergankelijkheid" — CONCEPT, NOG NIET
-   GEKOPPELD. Zelfde status als H21/H22: SP_CH23_CNS bestaat als losse
-   const, bewust niet gemerged in SP_SCENES/BLOCKS tot Gerben akkoord
-   geeft. Gerbens verzoek (2026-08-13): Ovidius krijgt een eigen RELATION,
+/* ---- HOOFDSTUK 23 "Vrede en Vergankelijkheid" — GEBOUWD EN GEKOPPELD
+   (2026-08-14, na Gerbens goedkeuring). CH22_MUSEUM_00 routeert nu naar
+   CH23_000; het oude tijdelijke eindpunt CH22_WORDT_VERVOLGD is
+   verwijderd (CH23_WORDT_VERVOLGD is nu het nieuwe, laatste tijdelijke
+   speeltest-eindpunt). Op Gerbens verzoek (2026-08-14) is de "beide
+   talen"-route herbedraad tot een echte chronologische zigzag (Octavia →
+   propaganda → Actium tweemaal → de rest van Cleopatra's verhaal → pas
+   dan Rome van Augustus tot Nero) in plaats van "eerst alle Griekse
+   scènes, dan alle Latijnse" — zie CH23_000/CH23_GRE_001/CH23_GRE_002/
+   CH23_GRE_007/CH23_GRE_EINDE/CH23_LAT_001/CH23_LAT_002 voor de
+   REQUIRE-gestuurde vertakkingen. Gerbens verzoek (2026-08-13): Ovidius krijgt een eigen RELATION,
    Nero schuift iets op zodat Tiberius/Caligula/Claudius (die nergens
    anders in de campagne zitten — Hoofdstuk 26 begint pas bij de Flavii,
    ná Nero) een korte, scherpe vignet-behandeling krijgen, Livius (niet
@@ -26569,8 +26533,8 @@ VOCAB:
 latijn_pax
 
 CHOICES:
-* Volg de laatste koningin van Egypte [REQUIRE:taalspoor!=latijn] -> CH23_GRE_001
-* Volg Rome, van Augustus tot Nero [REQUIRE:taalspoor=latijn] -> CH23_LAT_001
+* Volg de laatste koningin van Egypte [REQUIRE:taalspoor=grieks] -> CH23_GRE_001
+* Volg Rome, van Augustus tot Nero — en, waar het kan, tegelijk Egypte [REQUIRE:taalspoor!=grieks] -> CH23_LAT_001
 
 END
 
@@ -26609,7 +26573,8 @@ CODEX:
 codex_slag_bij_actium
 
 CHOICES:
-* Zie wat er in Alexandrië op hen wacht -> CH23_GRE_003
+* Zie dezelfde slag van de andere kant van het water [REQUIRE:taalspoor=beide] -> CH23_LAT_002
+* Zie wat er in Alexandrië op hen wacht [REQUIRE:taalspoor=grieks] -> CH23_GRE_003
 
 END
 
@@ -26709,7 +26674,8 @@ CODEX:
 codex_caesarion
 
 CHOICES:
-* Ga verder -> CH23_GRE_EINDE
+* Ga verder naar Rome, waar Octavianus nu alleen heerst [REQUIRE:taalspoor=beide] -> CH23_LAT_003
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH23_GRE_EINDE
 
 END
 
@@ -26722,8 +26688,7 @@ TEXT:
 "[[Ecce|zie hier]] — met Cleopatra's dood gaat het laatste onafhankelijke rijk van de Griekse wereld definitief in Rome op," zegt de Boodschapper van Chronos. "Driehonderd jaar na Alexander, over vier eeuwen en vier koningen die je zelf hebt zien vallen, eindigt hier wat bij zijn dood begon."
 
 CHOICES:
-* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH23_EINDE
-* Steek over naar Rome, van Augustus tot Nero [REQUIRE:taalspoor=beide] -> CH23_LAT_001
+* Keer terug naar het Orakel van Chronos -> CH23_EINDE
 
 END
 
@@ -26746,7 +26711,8 @@ CODEX:
 codex_octavia_verstoting
 
 CHOICES:
-* Zie de slag die volgt, van de andere kant van de golf -> CH23_LAT_002
+* Zie eerst de aanloop tot de slag vanuit Cleopatra's eigen hof [REQUIRE:taalspoor=beide] -> CH23_GRE_001
+* Zie de slag die volgt, van de andere kant van de golf [REQUIRE:taalspoor=latijn] -> CH23_LAT_002
 
 END
 
@@ -26767,7 +26733,8 @@ CODEX:
 codex_slag_bij_actium
 
 CHOICES:
-* Zie wat Octavianus met deze overwinning doet -> CH23_LAT_003
+* Zie hoe het verder gaat met Antonius en Cleopatra [REQUIRE:taalspoor=beide] -> CH23_GRE_003
+* Zie wat Octavianus met deze overwinning doet [REQUIRE:taalspoor=latijn] -> CH23_LAT_003
 
 END
 

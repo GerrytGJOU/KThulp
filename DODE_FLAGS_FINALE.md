@@ -106,8 +106,21 @@ terugkeert.
   (bij Caesar naamloze) aquilifer liet gaan; bewust flavour-only, geen
   personage dat dit later kan uitlezen.
 
+## Categorie 6 — Nieuwe dode flags (H21-22, sinds hun koppeling 2026-08-14)
+
+- `ch21_lat_verres_stijl` (logica/emotie) — Cicero's pleidooistijl in het
+  Verres-proces; flavour-only.
+- `ch21_lat_catilina_aanpak` (hard/zacht) — hoe de Senaat tegen Catilina
+  optrad; flavour-only.
+- `ch22_gre_zijde` (ptolemaeus/antigonos) — grote zijde-keuze in de
+  Diadochenoorlogen. In tegenstelling tot `ch19_gre_zijde`/`ch19_lat_zijde`
+  (opgelost in H20) wordt deze NIET in Hoofdstuk 23 uitgelezen — bewust
+  geen actie ondernomen tijdens het bouwen van H23, mogelijk aandachtspunt
+  voor een later hoofdstuk.
+- `ch22_lat_zijde` (octavianus/antonius) — idem, zelfde toelichting.
+
 ---
 
-**Status**: 43 dode flags vastgelegd op 2026-08-13 (na de aquilifer-scène
-in Hoofdstuk 20). Bijwerken bij elk volgend hoofdstuk dat een nieuwe, nog
+**Status**: 47 dode flags vastgelegd op 2026-08-14 (na de koppeling van
+Hoofdstuk 21-23). Bijwerken bij elk volgend hoofdstuk dat een nieuwe, nog
 niet uitgelezen FLAG zet.
