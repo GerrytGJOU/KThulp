@@ -7624,6 +7624,73 @@ onbekende registry-referenties.
 
 ---
 
+### 7.87 Hoofdstuk 23 "Vrede en Vergankelijkheid" geschreven, BEWUST NOG NIET GEKOPPELD (2026-08-13)
+
+Door Claude geschreven (geen Gemini-concept dit keer), zelfde status als
+H21/H22: `SP_CH23_CNS` bestaat als losse const, niet in `SP_SCENES`/
+`BLOCKS`. 26 scènes.
+
+**Grieks spoor** (Cleopatra/Actium, pure herhaling): Octavianus'
+propaganda-oorlog tegen Cleopatra alleen (met Octavia's verstoting als
+aanloop) → Actium van Cleopatra's dek (helft 1 van de Troje-truc, zie
+hieronder) → de val van Alexandrië → de dood van Antonius → de dood van
+Cleopatra (weigert getriomfeerd te worden, net als Vercingetorix) →
+Augustus bezoekt Alexanders graf ("Regem, non mortuos, videre volui") →
+Caesarion ("te veel Caesars is niet goed" — expliciete parallel met
+Alexander IV/Kassandros uit Hoofdstuk 22).
+
+**Latijns spoor** (Augustus → Nero, drie generaties in één hoofdstuk):
+Octavia's verstoting (Latijnse kant van dezelfde gebeurtenis) → Actium
+van Agrippa's dek (helft 2 van de Troje-truc) → de vestiging van het
+principaat (27 v.Chr.) → Livius als gastverteller (niet Vergilius, op
+Gerbens correctie — Livius is de geschiedschrijver, Vergilius blijft
+gereserveerd voor de epische Troje-callback) → Vergilius/de Aeneis met
+een letterlijke, korte terugflits naar de val van Troje (Hoofdstuk 9,
+Aeneas die Anchises wegdraagt) → Ovidius (nieuw, eigen RELATION) → diens
+verhaal-in-verhaal Pygmalion → een keizersgalerij (Tiberius/Sejanus,
+Caligula, Claudius) → Nero en Seneca's mislukte leermeesterschap →
+Seneca's dood, expliciet vergeleken met Socrates' gifbeker (H21).
+
+**Belangrijke correctie tijdens het schrijven**: de officiële metadata
+noemt zowel Eros & Psyche als Pygmalion als zijverhalen "verteld door een
+dichter". Eros & Psyche is echter Apuleius (2e eeuw n.Chr.), zo'n
+anderhalve eeuw na Ovidius — anachronistisch voor dit Augusteïsche
+hoofdstuk. Op Gerbens eigen instructie ("laten we de andere drie
+weglaten, druk genoeg") is alleen Pygmalion gebouwd (wél echt Ovidius,
+Metamorphosen X); Eros & Psyche is geschrapt in plaats van foutief aan
+Ovidius toegeschreven.
+
+**De "Troje-truc" (Hoofdstuk 9) toegepast op Actium**: `CH23_GRE_002`
+(Cleopatra's dek) en `CH23_LAT_002` (Agrippa's dek) beschrijven dezelfde
+slag, letterlijk hetzelfde moment (Cleopatra's uitbraak, Antonius die
+volgt), van twee kanten. Een "beide talen"-speler die eerst het Griekse
+spoor speelde, krijgt bij `CH23_LAT_002` een herkenningsecho via een
+nieuwe `SP_PAYOFFS`-entry (`ch23_lat002_echo_actium_dubbel`,
+`condition:{flags:{taalspoor:"beide"}}`) — zelfde `SP_PAYOFFS`-mechanisme
+als de bestaande Hoofdstuk-1/2-echo's, in plaats van een handmatig
+resolver-token (dat was de eerste, verkeerde aanpak — een los
+`{token}` bleek achteraf overbodig zodra de payoff het al afhandelt).
+
+**Opgeloste standing payoffs** (zie de RELATION/FLAG-roster-memory):
+Caesar-RELATION (H19) → Augustus' eigen introductiezin, ook via
+`SP_PAYOFFS` (`ch23_lat003_echo_caesar_relatie`,
+`condition:{relationMin:{caesar:1}}`) — de al drie keer eerder vastgelegde
+"Mijn oom sprak wel eens positief over u..."-echo, nu eindelijk gebouwd.
+Ptolemaeus/Diadochen (H22) → Cleopatra. Seneca-cameo (H21) → zijn
+leermeesterschap bij Nero. Octavia (H19/H22) → de verstoting. Caesarion
+(H22-tease) → zijn dood. Augustus/Alexanders-graf-payoff (aangekondigd in
+de memory op 2026-08-13, zie §7.86) is nu gebouwd.
+
+**Nieuwe registry-entries**: 15 CODEX-entries, 3 nieuwe VOCAB-entries
+(pax/princeps/venenum), 1 nieuw souvenir
+(`souvenir_vrede_en_vergankelijkheid`), 2 nieuwe `SP_PAYOFFS`-entries.
+
+**Validatie**: `node --check` slaagt. Losse parse-check: 26 scènes, 0
+dubbele ID's, 0 kapotte links, 0 onbekende registry-referenties, geen
+losstaande `{token}`-verwijzingen meer over.
+
+---
+
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
 
 Tweede laag bovenop de bestaande delayed-consequences/Latijn-als-skill-check-
