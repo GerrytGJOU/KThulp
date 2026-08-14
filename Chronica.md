@@ -1,8 +1,8 @@
-# Chronica Classica — Masterplan (BETA — proloog t/m Hoofdstuk 20 speelbaar)
+# Chronica Classica — Masterplan (BETA — proloog t/m Hoofdstuk 23 speelbaar)
 
-> **Actuele stand (bijgewerkt 2026-08-11, na Hoofdstuk 20) — lees dit
-> eerst:** Proloog t/m Hoofdstuk 20 zijn gebouwd én gekoppeld aan de
-> speelbare route. Hoofdstuk 21 t/m 27 bestaan nog alleen als
+> **Actuele stand (bijgewerkt 2026-08-14, na Hoofdstuk 23) — lees dit
+> eerst:** Proloog t/m Hoofdstuk 23 zijn gebouwd én gekoppeld aan de
+> speelbare route. Hoofdstuk 24 t/m 27 bestaan nog alleen als
 > `SP_CAMPAIGN`-metadata, net als Hoofdstuk 28-29 + Finale — zie de
 > hoofdstuktabel in §0 hieronder voor de volledige, actuele lijst van 29
 > hoofdstukken + Finale in 6 boeken. De blockquote hieronder (H1-9) is het
@@ -7688,6 +7688,60 @@ de memory op 2026-08-13, zie §7.86) is nu gebouwd.
 **Validatie**: `node --check` slaagt. Losse parse-check: 26 scènes, 0
 dubbele ID's, 0 kapotte links, 0 onbekende registry-referenties, geen
 losstaande `{token}`-verwijzingen meer over.
+
+---
+
+### 7.88 Hoofdstuk 21-23 gekoppeld aan de speelbare route, H23's "beide"-route herbedraad tot echte chronologische zigzag (2026-08-14)
+
+Op Gerbens goedkeuring en verzoek.
+
+**Chronologische zigzag voor "beide" in Hoofdstuk 23**: tot nu toe zag een
+"beide talen"-speler eerst alle zeven Griekse scènes en dan alle dertien
+Latijnse — correct qua taal, maar niet chronologisch (Octavia's
+verstoting en de tweede kant van Actium liggen historisch tussen de
+Griekse scènes in, niet erna). Herbedraad via REQUIRE-gestuurde
+vertakkingen op `CH23_000`/`CH23_GRE_001`/`CH23_GRE_002`/`CH23_GRE_007`/
+`CH23_GRE_EINDE`/`CH23_LAT_001`/`CH23_LAT_002`, zodat een "beide"-speler nu
+letterlijk dit pad volgt: `CH23_LAT_001` (Octavia's verstoting) →
+`CH23_GRE_001` (propaganda) → `CH23_GRE_002` (Actium, Cleopatra's dek) →
+`CH23_LAT_002` (Actium, Agrippa's dek — hier vuurt de
+"dubbel-gezien"-payoff-echo, nu nog directer op zijn plek dan voorheen) →
+`CH23_GRE_003` t/m `CH23_GRE_007` (de rest van Cleopatra's verhaal, waar
+geen Latijns equivalent chronologisch tussen past) → `CH23_LAT_003` t/m
+`CH23_LAT_013` (Augustus tot Nero, puur Latijn vanaf hier, want de
+Griekse lijn is met Cleopatra's dood ten einde) → gedeelde afsluiting.
+Grieks-only en Latijn-only spelers volgen exact hun eigen bestaande,
+ongewijzigde route (`CH23_GRE_001→...→GRE_EINDE` resp.
+`CH23_LAT_001→...→LAT_EINDE`) — geformaliseerd met een live BFS/pad-check
+in de browser (zie hieronder) die het exacte scène-pad per taalspoor
+uitprintte en bevestigde.
+
+**Koppeling**: Hoofdstuk 21, 22 en 23 zijn nu permanent toegevoegd aan
+`SP_SCENES` (`singleplayer.js`) en `BLOCKS` (`validate_chronica.js`).
+`CH20_MUSEUM_00` → `CH21_000` → ... → `CH21_MUSEUM_00` → `CH22_000` →
+... → `CH22_MUSEUM_00` → `CH23_000` → ... → `CH23_MUSEUM_00` →
+`CH23_WORDT_VERVOLGD` (het nieuwe, laatste tijdelijke speeltest-eindpunt
+— `CH20_WORDT_VERVOLGD`/`CH21_WORDT_VERVOLGD`/`CH22_WORDT_VERVOLGD` zijn
+verwijderd). `SP_CAMPAIGN`-metadata voor ch21/ch22/ch23 kreeg elk een
+`status`-veld, zelfde patroon als eerdere gekoppelde hoofdstukken.
+Cache-busting query-parameters van `singleplayer-data.js`/`singleplayer.js`
+in `certamen/index.html` opgehoogd naar `?v=20260814a`, anders zouden
+terugkerende spelers de oude, ongekoppelde versie uit hun browsercache
+blijven zien.
+
+**Validatie, in twee stappen**:
+1. Een tijdelijke, niet-gecommitte uitbreiding van `BLOCKS` in
+   `validate_chronica.js` (nadien teruggedraaid met `git checkout`, vóór
+   enige commit) bevestigde: 1184 scènes, 0 kapotte links, 0 dubbele
+   ID's, **geen enkele "onbereikbaar"-melding** voor H21/H22/H23 — volledige
+   BFS-bereikbaarheid over alle vertakkingen.
+2. Na de permanente koppeling: `validate_chronica.js` — **0 fouten**, 49
+   waarschuwingen (uitsluitend geaccepteerde dode flags en de verwachte
+   "geen keuze"-melding bij `CH23_WORDT_VERVOLGD`). Live in de browser:
+   een volledige BFS-doorloop van elke scène in de nu-gekoppelde
+   hoofdstukken 20-23 (grieks/latijn/beide) — 0 exceptions, 0 onopgeloste
+   `{token}`-restjes, 0 zichtbare "undefined". Losse pad-simulaties
+   bevestigden het exacte scène-pad hierboven voor alle drie taalsporen.
 
 ---
 
