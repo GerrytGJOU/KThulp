@@ -2792,6 +2792,39 @@ const SP_CODEX_ENTRIES = {
     tekst:"Na haar nederlaag bij Perusia vlucht Fulvia naar Griekenland. Een kille ontmoeting met Antonius in Athene, die haar de mislukte opstand verwijt, wordt haar laatste — ziek en politiek geïsoleerd sterft ze kort daarna in Sikyon. Haar dood ruimt onbedoeld de weg vrij voor een verzoening tussen Antonius en Octavianus." },
   codex_octavia_huwelijk: { cat:"geschiedenis", titel:"Het Huwelijk van Octavia en Antonius",
     tekst:"Het huwelijk tussen Octavia en Marcus Antonius (40 v.Chr.) bezegelt de Vrede van Brundisium. Octavia, gerespecteerd om haar verstandigheid, speelt zelf een actieve bemiddelende rol tussen haar broer en haar echtgenoot — een vrede die, voorlopig, standhoudt." },
+  // ---- Hoofdstuk 23 "Vrede en Vergankelijkheid" — concept, nog niet gekoppeld ----
+  codex_octavia_verstoting: { cat:"geschiedenis", titel:"Octavia's Verstoting",
+    tekst:"Vlak vóór Actium (32 v.Chr.) verstoot Antonius, per brief vanuit het oosten, zijn Romeinse vrouw Octavia. Zij blijft desondanks in zijn huis in Rome wonen en voedt er al zijn kinderen op — ook die van Fulvia en Cleopatra — zonder ooit publiekelijk kwaad over hem te spreken. Haar waardigheid wordt door tijdgenoten en latere geschiedschrijvers (Plutarchus) expliciet geprezen." },
+  codex_actium_propaganda: { cat:"geschiedenis", titel:"Een Oorlog tegen één Vrouw",
+    tekst:"Octavianus laat de Senaat officieel de oorlog verklaren aan Cleopatra alleen, niet aan Antonius — een Romeins burger die zo, zonder het met zoveel woorden te zeggen, wordt afgeschilderd als slachtoffer van een vreemde koningin. De handige juridische fictie maakt van een Romeinse burgeroorlog een buitenlandse verovering, en van Antonius' nederlaag een bevrijding." },
+  codex_slag_bij_actium: { cat:"geschiedenis", titel:"De Slag bij Actium",
+    tekst:"Op 2 september 31 v.Chr. breekt de door Agrippa's vloot ingesloten vloot van Antonius en Cleopatra uit bij de Ambracische Golf. Cleopatra's smaldeel van zestig schepen, met de koninklijke schatkist aan boord, ontsnapt met een gunstige wind naar het zuiden; Antonius volgt haar op een sneller schip en laat zijn eigen, nog vechtende vloot achter. De slag beslist de macht over de hele Middellandse Zee in Octavianus' voordeel." },
+  codex_dood_antonius: { cat:"geschiedenis", titel:"De Dood van Antonius",
+    tekst:"Na de val van Alexandrië bereikt Antonius het valse bericht dat Cleopatra zichzelf al heeft gedood. Hij valt op zijn eigen zwaard, maar sterft niet meteen — nog ademend wordt hij naar haar mausoleum gebracht, waar hij, herenigd met haar, uiteindelijk overlijdt." },
+  codex_dood_cleopatra: { cat:"geschiedenis", titel:"De Dood van Cleopatra",
+    tekst:"Om te voorkomen dat ze levend in Octavianus' triomftocht door Rome zou worden meegevoerd, kiest Cleopatra VII zelf het moment van haar dood — volgens de overlevering door zich te laten bijten door een giftige slang (aspis), naar binnen gesmokkeld in een mand met vijgen. Met haar sterft de laatste onafhankelijke Griekse dynastie." },
+  codex_augustus_alexander_graf: { cat:"geschiedenis", titel:"Augustus bij Alexanders Graf",
+    tekst:"Vlak na Cleopatra's dood bezoekt Octavianus het graf van Alexander de Grote in Alexandrië — bekijkt het gemummificeerde lichaam, legt er een gouden krans en bloemen bij, en breekt naar verluidt per ongeluk een stukje van de neus af. Op de vraag of hij ook de Ptolemeïsche koningsgraven wil zien, antwoordt hij: 'Regem, non mortuos, videre volui' — ik wilde een koning zien, geen lijken (Suetonius, Divus Augustus 18)." },
+  codex_caesarion: { cat:"geschiedenis", titel:"Caesarion",
+    tekst:"Ptolemaeus XV Caesarion, Cleopatra's zoon bij Julius Caesar, is diens enige bloedeigen kind — in tegenstelling tot Octavianus, die alleen via adoptie Caesars zoon is. Na Cleopatra's dood laat Augustus hem, op advies van zijn raadsman Arius Didymus ('te veel Caesars is niet goed'), executeren: het definitieve einde van elke rivaliserende claim op Caesars erfenis." },
+  codex_augustus_vestiging: { cat:"geschiedenis", titel:"De Vestiging van het Principaat",
+    tekst:"In januari 27 v.Chr. biedt Octavianus de Senaat zijn buitengewone bevoegdheden theatraal aan om terug te geven — een gebaar dat resulteert in de eretitel Augustus en een Senaat die hem juist smeekt aan te blijven. Hij regeert voortaan als princeps ('eerste burger'), nooit als koning of dictator: de Republiek blijft in naam bestaan, maar is in de praktijk voorbij." },
+  codex_vergilius_aeneis: { cat:"geschiedenis", titel:"Vergilius en de Aeneis",
+    tekst:"Onder Augustus' persoonlijke bescherming schrijft Vergilius de Aeneis, het epos dat Rome's ontstaan verbindt met de val van Troje via de vluchteling Aeneas. Het gedicht opent met de beroemde regel 'Arma virumque cano' ('van de wapens zing ik, en van de man') en zou, onvoltooid bij Vergilius' dood, uitgroeien tot het nationale epos van Rome." },
+  codex_ovidius: { cat:"geschiedenis", titel:"Ovidius",
+    tekst:"Publius Ovidius Naso, een generatie jonger dan Vergilius, schrijft luchtiger en gedurfder — zijn Metamorphosen verzamelen tientallen mythen rond het thema verandering. Zijn latere, openlijk erotische verzen (Ars Amatoria) zullen hem uiteindelijk, onder Augustus' eigen morele wetgeving, in ballingschap aan de Zwarte Zee doen belanden." },
+  codex_pygmalion: { cat:"mythologie", titel:"Pygmalion",
+    tekst:"In Ovidius' Metamorphosen (Boek X) beeldhouwt Pygmalion van Cyprus, teleurgesteld in sterfelijke vrouwen, zijn eigen ideaalbeeld uit ivoor — en wordt verliefd op zijn eigen creatie. Venus verhoort zijn onuitgesproken wens en brengt het beeld tot leven." },
+  codex_tiberius_sejanus: { cat:"geschiedenis", titel:"Tiberius en de Val van Sejanus",
+    tekst:"Augustus' opvolger Tiberius trekt zich, steeds achterdochtiger, terug op het eiland Capri en laat het bestuur over aan Sejanus, commandant van de Praetoriaanse Garde. Wanneer Tiberius ontdekt dat Sejanus zelf naar de macht grijpt, laat hij hem zonder waarschuwing arresteren en executeren — weer een heerser die van binnenuit wordt bedreigd door wie hij het meest vertrouwde." },
+  codex_caligula: { cat:"geschiedenis", titel:"Caligula",
+    tekst:"Caligula, Tiberius' jonge opvolger, begint populair maar ontaardt — historici twisten hoeveel van de overlevering betrouwbaar is — in willekeur en zelfvergoding. Na minder dan vier jaar wordt hij vermoord door officieren van zijn eigen Praetoriaanse Garde." },
+  codex_claudius_britannia: { cat:"geschiedenis", titel:"Claudius en de Verovering van Britannia",
+    tekst:"Na Caligula's moord wordt zijn onopvallende oom Claudius, weggedoken achter een gordijn gevonden, door de Praetoriaanse Garde tot keizer uitgeroepen — niet door de Senaat, een precedent dat blijft gelden. Claudius blijkt een capabel bestuurder en voltooit in 43 n.Chr. eindelijk wat Caesar een eeuw eerder alleen maar begon: de daadwerkelijke Romeinse verovering van Britannia. Zijn vrouw Agrippina de Jongere vergiftigt hem uiteindelijk, naar verluidt met een schotel paddenstoelen." },
+  codex_nero_domus_aurea: { cat:"geschiedenis", titel:"Nero en de Domus Aurea",
+    tekst:"Nero laat zijn eigen moeder Agrippina vermoorden wanneer haar invloed hem te veel wordt. Na de grote brand van Rome (64 n.Chr.), die hij vrijwel zeker niet zelf ontstak, bouwt hij op de verwoeste grond zijn extravagante Gouden Huis (Domus Aurea) — een symbool van zelfverheerlijking te midden van een verwoeste stad." },
+  codex_dood_seneca: { cat:"geschiedenis", titel:"De Dood van Seneca",
+    tekst:"Beschuldigd van betrokkenheid bij een samenzwering tegen zijn voormalige leerling Nero, krijgt Seneca het bevel zelfmoord te plegen. Hij sterft zoals hij zijn hele leven als Stoïcijns filosoof predikte: kalm, zijn aderen doorsnijdend terwijl hij zijn vrienden nog troost en dicteert — een dood die tijdgenoten en latere lezers expliciet vergeleken met die van Socrates." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3284,6 +3317,9 @@ const SP_SOUVENIRS = {
   // Hoofdstuk 22 "Opvolgers tegenover Opvolgers" — concept, nog niet gekoppeld.
   souvenir_opvolgers_tegenover_opvolgers: { nm:"Een Bronzen Diadeem en een Zilveren Denarius", icon:"👑", img:"souvenir_opvolgers_tegenover_opvolgers.png",
     caption:"Een bronzen diadeem, zoals de diadochen droegen zodra ze zichzelf koning durfden noemen, naast een zilveren denarius met het dubbele profiel van het Triumviraat — twee manieren om te laten zien wie de macht claimt, zodra degene die haar écht had, er niet meer is." },
+  // Hoofdstuk 23 "Vrede en Vergankelijkheid" — concept, nog niet gekoppeld.
+  souvenir_vrede_en_vergankelijkheid: { nm:"Een Glazen Aspis en een Stukje Ivoor", icon:"🐍", img:"souvenir_vrede_en_vergankelijkheid.png",
+    caption:"Een kleine, glazen replica van de slang die Cleopatra naar verluidt haar eigen dood liet kiezen, naast een verweerd stukje ivoor — een koningin die weigerde getriomfeerd te worden, naast een beeldhouwwerk dat, in een heel ander verhaal, juist tot leven kwam." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -4181,6 +4217,10 @@ const SP_VOCAB_ENTRIES = {
   grieks_basilissa:  { taal:"grieks", woord:"βασίλισσα", transcript:"basílissa", betekenis:"koningin" },
   // latijn_proscriptio bestaat al (zie hierboven, Hoofdstuk 19-blok) — Gemini's concept
   // gebruikte deze naam opnieuw, geen nieuwe entry nodig, de bestaande resolvet al.
+  // ---- Hoofdstuk 23 "Vrede en Vergankelijkheid" — concept, nog niet gekoppeld ----
+  latijn_pax:      { taal:"latijn", woord:"pax, pacis", betekenis:"vrede" },
+  latijn_princeps: { taal:"latijn", woord:"princeps, principis", betekenis:"eerste burger, keizer" },
+  latijn_venenum:  { taal:"latijn", woord:"venenum, veneni", betekenis:"gif" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -4366,6 +4406,18 @@ const SP_PAYOFFS = [
   // gegarandeerd gezien, dus geen flag-check nodig.
   { id:"ch14_lat000_echo_brutus", type:"echo", trigger:{scene:"CH14_LAT_000"}, priority:0,
     content:{text:`Je denkt terug aan Brutus, het bebloede zwaard nog in zijn hand boven Lucretia's lichaam, en zijn eed dat Rome nooit meer door een koning geregeerd zou worden. Die eed wordt nu, voor het eerst echt, op de proef gesteld — dezelfde verdreven koning staat met een vreemd leger voor de poorten, vastbesloten zijn troon terug te eisen.`} },
+  // ---- Hoofdstuk 23 "Vrede en Vergankelijkheid" — concept, nog niet gekoppeld.
+  // Twee lang geplande payoffs (Chronica.md §7.51/§7.79a): de Caesar-RELATION
+  // uit Hoofdstuk 19 betaalt hier uit bij Augustus' eigen vestigingsscène,
+  // en de "beide talen"-speler die Actium al van Cleopatra's kant zag,
+  // krijgt bij de Latijnse versie een herkenningsecho — zelfde soort
+  // "ik heb dit al eens gezien"-moment als bij Sulla/de Dertig Tirannen.
+  { id:"ch23_lat003_echo_caesar_relatie", type:"echo", trigger:{scene:"CH23_LAT_003"},
+    condition:{relationMin:{caesar:1}}, priority:0,
+    content:{text:`"Mijn oom," zegt Augustus, bijna terloops, terwijl hij het nieuws van de Senaat becommentarieert, "sprak wel eens positief over u — een van de weinigen aan wie hij dat woord ooit gunde." Hij zegt het zonder verdere uitleg, alsof hij ervan uitgaat dat jij precies weet wat hij bedoelt.`} },
+  { id:"ch23_lat002_echo_actium_dubbel", type:"echo", trigger:{scene:"CH23_LAT_002"},
+    condition:{flags:{taalspoor:"beide"}}, priority:0,
+    content:{text:`Je hebt deze slag al eens gezien — van Cleopatra's eigen dek, de zeilen die wegdraaiden, Antonius die haar achterna voer. Nu zie je, van de andere kant van het water, waarom die vlucht daar zo onbegrijpelijk overkwam: voor Agrippa was het simpelweg het moment waarop hij wist dat hij had gewonnen.`} },
 ];
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -26479,6 +26531,522 @@ TEXT:
 "[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Cleopatra en Actium, Augustus en Nero, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
 
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je koos, bij de proscripties en bij Perusia, blijft, hoe vaak je ook terugkeert naar het begin."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 23 "Vrede en Vergankelijkheid" — CONCEPT, NOG NIET
+   GEKOPPELD. Zelfde status als H21/H22: SP_CH23_CNS bestaat als losse
+   const, bewust niet gemerged in SP_SCENES/BLOCKS tot Gerben akkoord
+   geeft. Gerbens verzoek (2026-08-13): Ovidius krijgt een eigen RELATION,
+   Nero schuift iets op zodat Tiberius/Caligula/Claudius (die nergens
+   anders in de campagne zitten — Hoofdstuk 26 begint pas bij de Flavii,
+   ná Nero) een korte, scherpe vignet-behandeling krijgen, Livius (niet
+   Vergilius) is de gastverteller voor Augustus/de situatie, Vergilius
+   blijft gereserveerd voor de Troje-callback, Actium wordt verteld met
+   dezelfde "twee kanten van dezelfde gebeurtenis"-truc als Hoofdstuk 9
+   (Troje), en van de twee geplande zijverhalen bouwt alleen Pygmalion
+   (wél Ovidius, Metamorphoses X) — Eros & Psyche is feitelijk Apuleius
+   (2e eeuw n.Chr., zie codex-toelichting), anachronistisch voor dit
+   Augusteïsche hoofdstuk, dus bewust weggelaten i.p.v. fout toegeschreven
+   aan Ovidius. Alle bekende personage-payoffs (Caesar->Augustus-echo,
+   Ptolemaeus/Diadochen->Cleopatra, Seneca-cameo->leermeester, Octavia's
+   breuk, Caesarion, Augustus bij Alexanders graf) zijn verwerkt. */
+const SP_CH23_CNS = `
+=== SCENE: CH23_000 ===
+
+TITLE:
+Vrede en Vergankelijkheid
+
+TEXT:
+"[[Ecce|zie hier]] — vrede is nooit een eindpunt," zegt de Boodschapper van Chronos, "hooguit een adempauze, zolang de mens die haar afdwingt nog leeft en zolang zijn opvolgers zijn voorbeeld nog volgen. Dit hoofdstuk laat je zien hoe kort zo'n adempauze soms is."
+
+Ze aarzelt even. "Aan de Latijnse kant help ik je dit keer niet alleen — een geschiedschrijver, die het zelf allemaal heeft opgeschreven, wil je graag door de jaren na Actium loodsen."
+
+VOCAB:
+latijn_pax
+
+CHOICES:
+* Volg de laatste koningin van Egypte [REQUIRE:taalspoor!=latijn] -> CH23_GRE_001
+* Volg Rome, van Augustus tot Nero [REQUIRE:taalspoor=latijn] -> CH23_LAT_001
+
+END
+
+=== SCENE: CH23_GRE_001 ===
+
+TITLE:
+Een Oorlog tegen één Vrouw
+
+TEXT:
+In Rome voert Octavianus een zorgvuldige propagandaoorlog. In plaats van Antonius — nog altijd een Romeins burger, ondanks alles — de oorlog te verklaren, laat hij de Senaat officieel de oorlog verklaren aan Cleopatra alleen: een vreemde koningin die, zo luidt het verhaal, de Romeinse veldheer in haar ban heeft. Antonius wordt zo, zonder het met zoveel woorden te zeggen, tot niet meer dan haar slachtoffer verklaard — een handige leugen die van een Romeinse burgeroorlog een buitenlandse verovering maakt.
+
+Vlak daarvoor al had Antonius zijn Romeinse vrouw Octavia formeel verstoten, in een brief vanuit het oosten. Zij bleef, tegen de verwachting in, in zijn huis in Rome wonen en voedde er zijn kinderen op — de hare, en zelfs die van Fulvia en Cleopatra — zonder ooit publiekelijk kwaad over hem te spreken.
+
+CODEX:
+codex_actium_propaganda
+
+CHOICES:
+* Zie de slag zelf, van Cleopatra's dek -> CH23_GRE_002
+
+END
+
+=== SCENE: CH23_GRE_002 ===
+
+TITLE:
+Actium, van Cleopatra's Dek
+
+TEXT:
+Bij de Ambracische Golf ligt de vloot van Antonius en Cleopatra al wekenlang ingesloten door een Romeinse blokkade — voorraden slinken, ziekte verspreidt zich, overlopers vertrekken bijna dagelijks naar de andere kant. Op 2 september 31 v.Chr. proberen ze eindelijk door te breken.
+
+Vanaf Cleopatra's dek zie je hoe haar zestig schepen, geladen met de koninklijke schatkist, plotseling wegdraaien uit de slaglinie en met volle zeilen naar het zuiden vluchten — een gunstige wind maakt het mogelijk, een wind die de rest van de vloot niet kan volgen. Antonius, nog middenin het gevecht, ziet haar zeilen verdwijnen — en stapt over op een sneller schip om haar achterna te gaan, zijn eigen vloot achterlatend om zich, zonder bevelhebber, verder te verdedigen.
+
+IMAGE:
+ch23_gre_actium_cleopatra.png
+
+CODEX:
+codex_slag_bij_actium
+
+CHOICES:
+* Zie wat er in Alexandrië op hen wacht -> CH23_GRE_003
+
+END
+
+=== SCENE: CH23_GRE_003 ===
+
+TITLE:
+De Strop Wordt Aangetrokken
+
+TEXT:
+Antonius en Cleopatra bereiken Alexandrië, maar het nieuws van Actium reist sneller dan zij. Bondgenoten die eerder trouw zwoeren, wenden zich af; Octavianus trekt onbestreden door Klein-Azië en Syrië, tot hij voor de poorten van Egypte zelf staat. Cleopatra probeert nog te onderhandelen — haar kinderen op de troon, zichzelf desnoods in ballingschap — maar Octavianus reageert op geen enkel voorstel serieus. Hij wil haar, levend, mee naar Rome.
+
+CHOICES:
+* Zie hoe Antonius zijn einde vindt -> CH23_GRE_004
+
+END
+
+=== SCENE: CH23_GRE_004 ===
+
+TITLE:
+De Dood van Antonius
+
+TEXT:
+Wanneer Octavianus' troepen Alexandrië binnentrekken, bereikt Antonius een vals bericht: Cleopatra zou zichzelf al hebben gedood. Wanhopig valt hij op zijn eigen zwaard — en sterft niet meteen, maar wordt, nog ademend, naar het mausoleum gebracht waar Cleopatra zich inmiddels heeft verschanst, om uiteindelijk in haar armen te sterven.
+
+DIALOGUE:
+Antonius
+Niet om jou treur ik, Cleopatra, om mijn eigen laatste ongeluk — dat ik moest leven om dit te zien.
+
+CODEX:
+codex_dood_antonius
+
+CHOICES:
+* Zie wat Cleopatra zelf besluit -> CH23_GRE_005
+
+END
+
+=== SCENE: CH23_GRE_005 ===
+
+TITLE:
+De Laatste Koningin
+
+TEXT:
+Cleopatra weet wat Octavianus met haar van plan is: haar levend naar Rome brengen, om haar — net als Vercingetorix, generaties eerder — in zijn triomftocht door de straten te laten lopen. Dat weigert ze. Volgens de overlevering laat ze een giftige slang, een aspis, in een mand met vijgen naar binnen smokkelen.
+
+DIALOGUE:
+Cleopatra
+Ik zal niet getriomfeerd worden.
+
+IMAGE:
+ch23_gre_dood_cleopatra.png
+
+CODEX:
+codex_dood_cleopatra
+
+CHOICES:
+* Zie wat Augustus, na haar dood, als eerste doet -> CH23_GRE_006
+
+END
+
+=== SCENE: CH23_GRE_006 ===
+
+TITLE:
+Een Koning, geen Lijken
+
+TEXT:
+Vlak na Cleopatra's dood bezoekt Octavianus — over enkele jaren zal de Senaat hem de titel Augustus geven — het graf van Alexander de Grote in Alexandrië. Hij bekijkt het gemummificeerde lichaam, legt er een gouden krans en bloemen bij, en breekt, naar verluidt per ongeluk, tijdens het aanraken een stukje van de neus af. Wanneer zijn gastheren vragen of hij ook de graven van de Ptolemeïsche koningen wil bezoeken, wuift hij het voorstel weg.
+
+DIALOGUE:
+Augustus
+Regem, non mortuos, videre volui. — Ik wilde een koning zien, geen lijken.
+
+CODEX:
+codex_augustus_alexander_graf
+
+CHOICES:
+* Zie wat er van Caesars eigen zoon wordt -> CH23_GRE_007
+
+END
+
+=== SCENE: CH23_GRE_007 ===
+
+TITLE:
+Te Veel Caesars
+
+TEXT:
+Eén zaak blijft open: Caesarion, de zesjarige jongen die je ooit in Tarsus zag — nu zestien, Cleopatra's zoon bij Julius Caesar zelf, en daarmee Caesars enige bloedeigen kind. Cleopatra had hem, vlak vóór haar dood, met een deel van de schatkist naar het zuiden gestuurd, in de hoop dat hij zou kunnen ontsnappen. Hij wordt onderweg gevangengenomen en teruggebracht.
+
+Augustus aarzelt niet lang. Zijn raadsman Arius Didymus fluistert hem, naar verluidt, een dooddoener toe die alles beslist.
+
+DIALOGUE:
+Arius Didymus
+Te veel Caesars is niet goed.
+
+"[[Ecce|zie hier]] — net als Alexanders eigen zoon, jaren geleden bij jou," zegt de Boodschapper zacht, "wordt ook hier een bloedeigen erfgenaam opzij geschoven — dit keer niet door een generaal, maar door de man die zelf alleen via adoptie Caesars zoon is."
+
+CODEX:
+codex_caesarion
+
+CHOICES:
+* Ga verder -> CH23_GRE_EINDE
+
+END
+
+=== SCENE: CH23_GRE_EINDE ===
+
+TITLE:
+Het Laatste Griekse Rijk
+
+TEXT:
+"[[Ecce|zie hier]] — met Cleopatra's dood gaat het laatste onafhankelijke rijk van de Griekse wereld definitief in Rome op," zegt de Boodschapper van Chronos. "Driehonderd jaar na Alexander, over vier eeuwen en vier koningen die je zelf hebt zien vallen, eindigt hier wat bij zijn dood begon."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH23_EINDE
+* Steek over naar Rome, van Augustus tot Nero [REQUIRE:taalspoor=beide] -> CH23_LAT_001
+
+END
+
+=== SCENE: CH23_LAT_001 ===
+
+TITLE:
+Octavia's Verstoting
+
+TEXT:
+Vlak vóór Actium stuurt Antonius, vanuit het oosten, een brief naar Rome: een formele verstoting van zijn vrouw Octavia. Zij is dan al jaren de stille kracht achter de Vrede van Brundisium die je zelf zag sluiten — en reageert niet met verwijten, maar met iets veel ongemakkelijkers voor Antonius' reputatie: ze blijft gewoon in zijn huis wonen, en voedt er zijn kinderen op alsof er niets is gebeurd, ook de kinderen die hij bij Fulvia en Cleopatra kreeg.
+
+DIALOGUE:
+Octavia
+Ik zal deze kinderen niet laten boeten voor wat hun vader heeft gedaan — of voor wat ik hem niet kon zijn.
+
+RELATION:
+octavia=+1
+
+CODEX:
+codex_octavia_verstoting
+
+CHOICES:
+* Zie de slag die volgt, van de andere kant van de golf -> CH23_LAT_002
+
+END
+
+=== SCENE: CH23_LAT_002 ===
+
+TITLE:
+Actium, van Agrippa's Dek
+
+TEXT:
+Aan de andere kant van de Ambracische Golf commandeert Marcus Vipsanius Agrippa, Octavianus' trouwe bevelhebber sinds Perusia, de Romeinse vloot. Wekenlang heeft hij Antonius' schepen ingesloten gehouden, wachtend tot honger en ziekte hun werk deden.
+
+Wanneer de vijandelijke vloot eindelijk uitbreekt, ziet Agrippa vanaf zijn eigen dek iets dat hij niet had verwacht: zestig Egyptische schepen die zich, midden in de slag, plotseling omdraaien en wegvaren — niet in paniek, maar doelgericht, met volle zeilen naar het zuiden. Kort daarna volgt Antonius zelf, op een sneller schip, zijn eigen achtergebleven vloot aan haar lot overlatend. Wat volgt is geen overwinning meer, alleen nog opruiming.
+
+IMAGE:
+ch23_lat_actium_agrippa.png
+
+CODEX:
+codex_slag_bij_actium
+
+CHOICES:
+* Zie wat Octavianus met deze overwinning doet -> CH23_LAT_003
+
+END
+
+=== SCENE: CH23_LAT_003 ===
+
+TITLE:
+Princeps, geen Koning
+
+TEXT:
+In januari 27 v.Chr. biedt Octavianus de Senaat theatraal zijn buitengewone bevoegdheden aan om terug te geven — een gebaar waarvan iedereen wist hoe het zou aflopen: de Senaat smeekt hem juist te blijven, en geeft hem de eretitel Augustus. Hij noemt zichzelf nooit koning, nooit dictator, alleen princeps — "eerste burger". Rome krijgt zijn vrede terug; de Republiek zelf is, in alles behalve naam, voorbij.
+
+CODEX:
+codex_augustus_vestiging
+
+CHOICES:
+* Maak kennis met de man die dit alles zal opschrijven -> CH23_LAT_004
+
+END
+
+=== SCENE: CH23_LAT_004 ===
+
+TITLE:
+Een Geschiedschrijver naast de Boodschapper
+
+TEXT:
+Naast de Boodschapper verschijnt een man van middelbare leeftijd, met inkt aan zijn vingers en een stapel perkamentrollen onder zijn arm — Titus Livius, bezig aan een geschiedenis van Rome die zal beginnen bij Romulus zelf en niet zal stoppen voor zijn eigen tijd.
+
+DIALOGUE:
+Livius
+Ik schrijf niet om te vleien, en niet om te veroordelen — ik schrijf om te onthouden. Een volk dat zijn eigen voorbeelden vergeet, zal ze vroeg of laat gedwongen worden te herhalen.
+
+VOCAB:
+latijn_princeps
+
+CHOICES:
+* Laat je door hem verder rondleiden -> CH23_LAT_005
+
+END
+
+=== SCENE: CH23_LAT_005 ===
+
+TITLE:
+De Aeneis en de Val van Troje
+
+TEXT:
+Onder Augustus' persoonlijke bescherming begint de dichter Vergilius aan een episch gedicht dat Rome's oorsprong voor altijd zal verbinden met een stad die jij zelf, eeuwen geleden in jouw eigen reis, hebt zien vallen: Troje. Zijn held is Aeneas — dezelfde man die je toen, tussen het puin en de vlammen, zijn vader op zijn rug de stad uit zag dragen.
+
+Voor je het weet sta je weer op diezelfde straat, even kort als een ademtocht — dezelfde rook, dezelfde paniek, een gestalte met een oude man op zijn rug die zich een weg baant tussen instortende zuilen door. Dan is het weer weg, en staat Vergilius, perkament in de hand, gewoon weer voor je.
+
+DIALOGUE:
+Vergilius
+[[Arma virumque cano...|Van de wapens zing ik, en van de man...]] Ik schrijf zijn vlucht niet als nederlaag, maar als begin.
+
+IMAGE:
+ch23_lat_vergilius_troje.png
+
+CODEX:
+codex_vergilius_aeneis
+
+CHOICES:
+* Maak kennis met een heel andere soort dichter -> CH23_LAT_006
+
+END
+
+=== SCENE: CH23_LAT_006 ===
+
+TITLE:
+Ovidius en de Kunst van het Veranderen
+
+TEXT:
+Waar Vergilius plechtig over Rome's lot schrijft, kiest de jongere dichter Ovidius een heel ander onderwerp: verandering zelf, in al zijn vormen — goden die dieren worden, mensen die bomen worden, stenen die mensen worden. Zijn Metamorphosen zijn luchtiger, guller met een knipoog, en minstens zo geliefd.
+
+DIALOGUE:
+Ovidius
+Vergilius bezingt hoe Rome ontstond. Ik bezing hoe niets ooit blijft wat het was — ook Rome niet.
+
+RELATION:
+ovidius=+1
+
+CODEX:
+codex_ovidius
+
+CHOICES:
+* Laat hem één van zijn eigen verhalen vertellen -> CH23_LAT_007
+
+END
+
+=== SCENE: CH23_LAT_007 ===
+
+TITLE:
+Pygmalion
+
+TEXT:
+Ovidius vouwt zijn handen en vertelt: op Cyprus leeft een beeldhouwer, Pygmalion, zo teleurgesteld in de vrouwen om hem heen dat hij besluit zelf, uit het zuiverste ivoor, zijn eigen ideaalbeeld te beeldhouwen. Hij werkt er zo lang en zo liefdevol aan dat hij, tegen zijn eigen verstand in, verliefd wordt op zijn eigen creatie — een standbeeld dat nooit terug kan kijken.
+
+Op het feest van Venus bidt hij, half beschaamd om zijn eigen wens hardop uit te spreken, om een vrouw "zoals" zijn ivoren beeld. Venus, die precies weet wat hij eigenlijk bedoelt, verhoort een wens die hij niet durfde uitspreken: wanneer Pygmalion thuiskomt en het beeld kust, voelt hij het ivoor onder zijn lippen zachter worden.
+
+CODEX:
+codex_pygmalion
+
+CHOICES:
+* Keer terug naar de politiek van Rome -> CH23_LAT_008
+
+END
+
+=== SCENE: CH23_LAT_008 ===
+
+TITLE:
+Tiberius op Capri
+
+TEXT:
+Na Augustus' dood (14 n.Chr.) volgt zijn stiefzoon Tiberius hem op — bekwaam, maar steeds achterdochtiger. Geleidelijk trekt hij zich terug uit Rome, uiteindelijk naar het eiland Capri, en laat het bestuur over aan zijn machtige commandant van de Praetoriaanse Garde, Sejanus.
+
+Sejanus' eigen ambities reiken verder dan hem lief is. Wanneer Tiberius er lucht van krijgt dat zijn meest vertrouwde man een eigen greep naar de macht beraamt, laat hij hem, zonder waarschuwing, arresteren en executeren. "[[Ecce|zie hier]] — de vijfde keer, inmiddels," merkt Livius droogjes op, "dat een heerser in dit verhaal wordt bedreigd door iemand uit zijn eigen kring."
+
+CODEX:
+codex_tiberius_sejanus
+
+CHOICES:
+* Zie wie na Tiberius de troon bestijgt -> CH23_LAT_009
+
+END
+
+=== SCENE: CH23_LAT_009 ===
+
+TITLE:
+Caligula
+
+TEXT:
+Tiberius' opvolger, de jonge Caligula, begint zijn regering populair — maar ontaardt, historici twisten over hoeveel waar is en hoeveel latere overdrijving, in een schrikbewind van willekeur en zelfvergoding. Na nog geen vier jaar wordt hij vermoord door officieren van zijn eigen lijfwacht, de Praetoriaanse Garde die hem juist had moeten beschermen.
+
+CODEX:
+codex_caligula
+
+CHOICES:
+* Zie wie de Garde vervolgens uitroept -> CH23_LAT_010
+
+END
+
+=== SCENE: CH23_LAT_010 ===
+
+TITLE:
+Claudius, Gevonden Achter een Gordijn
+
+TEXT:
+In de chaos na de moord vinden Praetoriaanse soldaten Claudius — Caligula's stotterende, mank lopende oom — weggedoken achter een gordijn, te onopvallend, dachten ze altijd, om ooit een bedreiging te vormen. Zij roepen hem uit tot keizer, niet de Senaat: een precedent dat voortaan zal blijven gelden.
+
+Claudius blijkt, tegen alle verwachting in, een capabele bestuurder — en is de eerste Romeinse veldheer die eindelijk voltooit wat Caesar, een eeuw eerder, alleen maar begon: de daadwerkelijke verovering van Britannia (43 n.Chr.). Zijn laatste vrouw, Agrippina de Jongere, vergiftigt hem naar verluidt met een schotel paddenstoelen — om de troon vrij te maken voor haar eigen zoon uit een eerder huwelijk.
+
+CODEX:
+codex_claudius_britannia
+
+VOCAB:
+latijn_venenum
+
+CHOICES:
+* Maak kennis met die zoon -> CH23_LAT_011
+
+END
+
+=== SCENE: CH23_LAT_011 ===
+
+TITLE:
+Nero en zijn Leermeester
+
+TEXT:
+Agrippina's zoon, zestien jaar oud, wordt keizer: Nero. De eerste jaren van zijn bewind — het quinquennium Neronis, later geroemd als een van de beste periodes van bestuur die Rome ooit kende — staan onder de bezielende invloed van zijn leermeester: dezelfde jonge Seneca die je ooit, vol bewondering, in Cicero's eigen bibliotheek zag studeren.
+
+DIALOGUE:
+Seneca
+Een keizer die naar wijsheid luistert, is zeldzamer dan wijsheid zelf. Ik was vastbesloten hem die te blijven geven, zolang hij wilde luisteren.
+
+RELATION:
+seneca=+1
+
+CHOICES:
+* Zie hoelang die wijsheid standhoudt -> CH23_LAT_012
+
+END
+
+=== SCENE: CH23_LAT_012 ===
+
+TITLE:
+De Gouden Tijd Slaat Om
+
+TEXT:
+Het keert. Nero laat zijn eigen moeder Agrippina vermoorden wanneer haar bemoeienis met zijn bewind hem te veel wordt. Na de grote brand van Rome (64 n.Chr.) — die hij, wat de geruchten ook beweren, vrijwel zeker niet zelf ontstak — bouwt hij op de verwoeste grond zijn eigen, absurd overdadige Gouden Huis, de Domus Aurea, terwijl duizenden Romeinen dakloos blijven.
+
+CODEX:
+codex_nero_domus_aurea
+
+CHOICES:
+* Zie wat dit voor Seneca betekent -> CH23_LAT_013
+
+END
+
+=== SCENE: CH23_LAT_013 ===
+
+TITLE:
+Seneca's Laatste Les
+
+TEXT:
+Seneca probeert Nero jarenlang bij te sturen, steeds vergeefser, tot hij zich uiteindelijk uit het openbare leven terugtrekt. Beschuldigd van betrokkenheid bij een samenzwering tegen zijn eigen voormalige leerling, krijgt hij het bevel zelfmoord te plegen.
+
+Hij doet het zoals hij zijn hele leven predikte: kalm, filosofisch, zijn aderen doorsnijdend terwijl hij zijn vrienden om zich heen nog troost en dicteert.
+
+DIALOGUE:
+Seneca
+Wij oefenen ons hele leven om te sterven — laat zien dat die oefening niet voor niets was.
+
+"[[Ecce|zie hier]] — net als Socrates, generaties eerder," zegt Livius zacht, "kiest ook hij voor een kalme dood boven een oneervol leven."
+
+IMAGE:
+ch23_lat_dood_seneca.png
+
+CODEX:
+codex_dood_seneca
+
+CHOICES:
+* Ga verder -> CH23_LAT_EINDE
+
+END
+
+=== SCENE: CH23_LAT_EINDE ===
+
+TITLE:
+Vier Keizers in één Adem
+
+TEXT:
+"[[Ecce|zie hier]] — Augustus, Tiberius, Caligula, Claudius, Nero," telt Livius op. "Eén die vrede bracht, en drie generaties later een die haar bijna weer vernietigde. Ik schrijf dit alles op, in de hoop dat iemand die het ooit leest, het verschil leert herkennen vóórdat het te laat is."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH23_EINDE
+
+END
+
+=== SCENE: CH23_EINDE ===
+
+TITLE:
+Wat Vrede Kost
+
+TEXT:
+"[[Ecce|zie hier]] — een koningin die weigerde getriomfeerd te worden, een filosoof die zijn eigen dood net zo kalm droeg als zijn leven," zegt de Boodschapper van Chronos. "Vrede is nooit gratis, en nooit blijvend — alleen, met geluk, de moeite waard zolang ze duurt."
+
+Livius knikt haar toe, en vervaagt langzaam als de perkamentrollen onder zijn arm. "Onthoud de namen die vielen om haar te bewaren," zegt hij nog. "Ik zal het opschrijven. Jij hoeft het alleen te onthouden."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_vrede_en_vergankelijkheid
+
+CHOICES:
+* Bekijk de verzameling in het museum -> CH23_MUSEUM_00
+
+END
+
+=== SCENE: CH23_MUSEUM_00 ===
+
+TITLE:
+Het Museum van Vrede en Vergankelijkheid
+
+TEXT:
+Een nieuwe stolp vult zich: een kleine glazen aspis-slang naast een verweerd stukje ivoor. "Een koningin die zelf koos hoe haar verhaal eindigde," zegt de Boodschapper van Chronos, terwijl ze de stolp bekijkt, "naast een dichter die geloofde dat niets ooit blijft wat het was. Ze hadden, denk ik, het meer met elkaar eens kunnen zijn dan ze ooit hebben geweten."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH23_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH23_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Griekse kunst en Romeinse architectuur, Archimedes' eigen wetenschap, Pompeii, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
 
 Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
 
