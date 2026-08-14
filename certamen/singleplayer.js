@@ -317,6 +317,8 @@ const SpTextResolver = {
       case "ch19_lat_zijde_h20_echo": return SP_CH20_LAT_ZIJDE_ECHO[state.flags?.ch19_lat_zijde] || "";
       case "ch20_sabinus_cotta_reactie": return SP_CH20_SABINUS_COTTA_REACTIE[state.flags?.ch20_lat_sabinus_cotta] || "";
       case "ch21_gre_socrates_pad_echo": return SP_CH21_SOCRATES_PAD_ECHO[state.flags?.ch21_gre_socrates_stemming] || "";
+      case "ch22_gre_zijde_h23_echo": return SP_CH23_GRE_ZIJDE_ECHO[state.flags?.ch22_gre_zijde] || "";
+      case "ch22_lat_zijde_h23_echo": return SP_CH23_LAT_ZIJDE_ECHO[state.flags?.ch22_lat_zijde] || "";
       case "npc_afsluitingen": {
         const items = spNpcAfsluitingenBeschikbaar(state);
         return items.length ? items.map(a=>a.tekst).join(" ") : SP_NPC_AFSLUITINGEN_FALLBACK;

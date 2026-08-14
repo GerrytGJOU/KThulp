@@ -982,6 +982,21 @@ const SP_CH21_SOCRATES_PAD_ECHO = {
   vrij:"Je hebt zelf gehoord hoe Crito smeekte, en hoe Socrates weigerde — dit is dus geen verrassing meer, alleen de bevestiging van een keuze die hij al maakte voordat jij hier binnenkwam.",
   veroordeeld:"Je hebt Anytus' eigen woorden gehoord, en de angst erachter — vanuit die kant bekeken voelt dit vonnis niet als willekeur, maar als een stad die zichzelf, tegen beter weten in, probeert te beschermen.",
 };
+// Hoofdstuk 23 (Gerbens verzoek 2026-08-14): payoff op de twee zijde-
+// keuzes uit Hoofdstuk 22, die tot nu toe nergens werden uitgelezen (zie
+// DODE_FLAGS_FINALE.md categorie 6). ch22_gre_zijde betaalt uit zodra
+// Cleopatra — Ptolemaeus' eigen nazaat — voor het eerst in beeld komt;
+// ch22_lat_zijde betaalt uit bij Octavia's verstoting, het moment waarop
+// de Octavianus/Antonius-vriendschap definitief breekt. Zelfde patroon
+// als SP_CH20_GRE_ZIJDE_ECHO/SP_CH20_LAT_ZIJDE_ECHO.
+const SP_CH23_GRE_ZIJDE_ECHO = {
+  ptolemaeus:"Jij hielp ooit Ptolemaeus zijn koninkrijk in Egypte vestigen, in plaats van Antigonos' droom van een herenigd rijk te steunen. Bijna drie eeuwen later zie je waarin die keuze eindigde: bij een vrouw die zijn eigen bloed draagt.",
+  antigonos:"Jij streed ooit voor Antigonos' droom van een herenigd rijk, niet voor Ptolemaeus' geduldige koninkrijk in Egypte. Antigonos' rijk stierf met hem bij Ipsus; Ptolemaeus' Egypte hield het, tegen de verwachting in, bijna drie eeuwen langer vol dan wie ook — tot aan de vrouw die je hier ziet.",
+};
+const SP_CH23_LAT_ZIJDE_ECHO = {
+  octavianus:"Tijdens de opstand van Fulvia koos jij voor Octavianus. Wat toen een keuze tussen twee bondgenoten leek, blijkt nu, jaren later, de kant gekozen te hebben van de man die als enige zal overblijven.",
+  antonius:"Tijdens de opstand van Fulvia bleef jij Antonius trouw. Die trouw heeft hem uiteindelijk niet kunnen redden — en jij ziet, van dichterbij dan de meesten, hoe de vriendschap tussen hem en Octavianus hier voorgoed breekt.",
+};
 // Herodotos' bredere "wat er van hen werd"-reflectie (CH17_GRE_000C):
 // hergebruikt het allang geschreven maar nooit aangeroepen SP_NPC_AFSLUITINGEN-
 // mechanisme (B27) nu het spel eindelijk diep genoeg is voor een écht "laat"
@@ -26548,6 +26563,8 @@ In Rome voert Octavianus een zorgvuldige propagandaoorlog. In plaats van Antoniu
 
 Vlak daarvoor al had Antonius zijn Romeinse vrouw Octavia formeel verstoten, in een brief vanuit het oosten. Zij bleef, tegen de verwachting in, in zijn huis in Rome wonen en voedde er zijn kinderen op — de hare, en zelfs die van Fulvia en Cleopatra — zonder ooit publiekelijk kwaad over hem te spreken.
 
+{ch22_gre_zijde_h23_echo}
+
 CODEX:
 codex_actium_propaganda
 
@@ -26699,6 +26716,8 @@ Octavia's Verstoting
 
 TEXT:
 Vlak vóór Actium stuurt Antonius, vanuit het oosten, een brief naar Rome: een formele verstoting van zijn vrouw Octavia. Zij is dan al jaren de stille kracht achter de Vrede van Brundisium die je zelf zag sluiten — en reageert niet met verwijten, maar met iets veel ongemakkelijkers voor Antonius' reputatie: ze blijft gewoon in zijn huis wonen, en voedt er zijn kinderen op alsof er niets is gebeurd, ook de kinderen die hij bij Fulvia en Cleopatra kreeg.
+
+{ch22_lat_zijde_h23_echo}
 
 DIALOGUE:
 Octavia

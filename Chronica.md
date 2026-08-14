@@ -7745,6 +7745,29 @@ blijven zien.
 
 ---
 
+### 7.89 `ch22_gre_zijde`/`ch22_lat_zijde` alsnog opgelost in Hoofdstuk 23 (2026-08-14, zelfde dag)
+
+Op Gerbens vraag: twee nieuwe resolver-tokens, zelfde patroon als
+`SP_CH20_GRE_ZIJDE_ECHO`/`SP_CH20_LAT_ZIJDE_ECHO`.
+
+- `{ch22_gre_zijde_h23_echo}` (`SP_CH23_GRE_ZIJDE_ECHO`) in `CH23_GRE_001`
+  ("Een Oorlog tegen één Vrouw"), Cleopatra's eerste echte scène — Cleopatra
+  is Ptolemaeus' eigen nazaat, dus dit is de natuurlijke plek om terug te
+  koppelen naar de Ptolemaeus/Antigonos-keuze uit H22.
+- `{ch22_lat_zijde_h23_echo}` (`SP_CH23_LAT_ZIJDE_ECHO`) in `CH23_LAT_001`
+  ("Octavia's Verstoting") — het moment waarop de Octavianus/Antonius-
+  vriendschap definitief breekt is de logische plek om terug te koppelen
+  naar de kant die de speler koos tijdens Fulvia's opstand in H22.
+
+Beide flags zijn hiermee niet langer dood — bijgewerkt in
+`DODE_FLAGS_FINALE.md` (45 dode flags, was 47).
+
+**Validatie**: `node --check` slaagt, `validate_chronica.js` blijft op 0
+fouten. Live in de browser bevestigd: de juiste echo verschijnt bij de
+juiste flag-waarde, en blijft correct afwezig zonder de flag.
+
+---
+
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
 
 Tweede laag bovenop de bestaande delayed-consequences/Latijn-als-skill-check-
