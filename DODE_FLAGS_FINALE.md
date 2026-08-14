@@ -134,9 +134,32 @@ zie de volledige toelichting in de memory
 Finale-lijst opnemen als H24 gebouwd/gekoppeld wordt; check eerst of H28/29
 al bestaan en de payoff daar hoort te landen.
 
+`ch24_lat_vitruvius_principe` is NIET langer dood: opgelost op 2026-08-15
+via drie `SP_PAYOFFS`-echo's op `CH25_LAT_001` (firmitas/utilitas/venustas)
+zodra Vitruvius in Hoofdstuk 25 terugkeert. De overige zeven H24-flags
+blijven bewust ongelezen tot H28/29.
+
+## Categorie 8 — Nieuwe dode flags (H25, geschreven 2026-08-15, nog niet gekoppeld)
+
+- `ch25_gre_filosofie` (herakleitos/parmenides) — welke kant de speler koos
+  in het Herakleitos/Parmenides-dispuut; flavour-only, geen personage dat
+  dit later terugleest.
+- `ch25_gre_atomos` (onthouden/losgelaten) — Demokritos' atomos-idee;
+  flavour-only.
+- `ch25_gre_eratosthenes` (goed) — alleen gezet bij de correcte leesval-
+  uitkomst, geen personage dat dit later uitleest.
+- `ch25_lat_graffiti` (goed) — alleen gezet bij de correcte leesval-
+  uitkomst, geen personage dat dit later uitleest.
+
+`ch25_lat_plinius` (onthouden/losgelaten) is GEEN gewone dode flag: net als
+H24's reeks is dit een bewust "onthoud of laat los"-zaadje voor Hoofdstuk
+28/29 (Lethe/Mnemosyne) — zie de memory
+`chronica-h24-lethe-mnemosyne-zaadjes` (nu ook H25 meenemend). Niet in de
+generieke Finale-lijst opnemen; check eerst of H28/29 de payoff al dekken.
+
 ---
 
-**Status**: 45 dode flags vastgelegd op 2026-08-14 (na de koppeling van
-Hoofdstuk 21-23, en het oplossen van `ch22_gre_zijde`/`ch22_lat_zijde` via
-twee nieuwe echo's in Hoofdstuk 23). Bijwerken bij elk volgend hoofdstuk
-dat een nieuwe, nog niet uitgelezen FLAG zet.
+**Status**: 49 dode flags vastgelegd op 2026-08-15 (na het schrijven van
+Hoofdstuk 25 en het oplossen van `ch24_lat_vitruvius_principe` via een
+nieuwe echo in Hoofdstuk 25). Bijwerken bij elk volgend hoofdstuk dat een
+nieuwe, nog niet uitgelezen FLAG zet.

@@ -7824,6 +7824,71 @@ de browser: volledige BFS-doorloop voor grieks/latijn/beide, 0
 exceptions, 0 onopgeloste tokens; keuzeknoppen renderen schoon (geen
 vinkjes) en de FLAG wordt correct gezet bij de eerste klik.
 
+### 7.91 Hoofdstuk 25 "Onder de Vulkaan" geschreven, BEWUST NOG NIET GEKOPPELD (2026-08-15)
+
+Door Claude geschreven (geen Gemini-concept), zelfde staged status als
+H21-24 vóór hun goedkeuring. 34 scènes.
+
+**Gerbens verzoek (2026-08-14/15)**: sinds H24 komt er geen nieuwe
+grammatica meer bij in de campagne, dus verschuift de focus van pure
+verhaalkeuzes naar **leesvallen** — echte Griekse/Latijnse fragmenten met
+twee grammaticaal plausibele lezingen (`_GOED`/`_FOUT`, nooit gelabeld als
+"de bedoelde"): Herakleitos' rivier-fragment (`CH25_GRE_007` gebruikt
+Eratosthenes' schaduwhoek als leesval, niet Herakleitos zelf) en het
+Pompeii-graffito "si vales, valeo" (`CH25_LAT_002`). Alle acht presocraten
+zijn nu benoemd (Thales, Anaximander, Anaximenes uit Milete; Pythagoras;
+Herakleitos/Parmenides als een echt dispuut met een keuze; Anaxagoras en
+Demokritos) — niet alleen de vijf uit de oude `SP_CAMPAIGN`-planningstekst.
+Griekse lijn eindigt bij de Hellenistische wetenschap: Euclides ("geen
+koninklijke weg naar de meetkunde"), Eratosthenes (de omtrek van de aarde
+uit een schaduwhoek — als leesval), Archimedes' bad ("eureka"). Latijnse
+lijn: Vitruvius keert non-lineair terug (zelfde flashback-truc als
+Archimedes' eigen bad-scène in de Griekse lijn), de aardbeving van 62
+n.Chr. wordt expliciet aan **Nero's regeerperiode** gekoppeld via Seneca's
+Naturales Quaestiones (Seneca al bekend uit H21/H23), dan Plinius de
+Jongere's brief aan Tacitus, een CHECK-gebaseerde "vlucht door de as"
+(`ch25_lat_vlucht`) tijdens de uitbarsting van 79, en de dood van Plinius
+de Oudere bij Stabiae. **Historische precisie bewust bewaard**: Nero
+regeerde niet meer tijdens de uitbarsting van 79 (dat was Titus) — de
+tekst koppelt Nero specifiek aan de aardbeving van 62, niet aan de
+uitbarsting zelf.
+
+**Technische correctie t.o.v. het eerste voorstel**: niet het RACE-
+mechanisme (bleek bij inspectie Atalanta-specifieke code — `finish`,
+`stepCorrect`, `opponentStep`, `appleCount`, rechtstreeks verwerkt in
+`spStartRaceFromScene`, geen generiek systeem) maar het generieke CHECK-
+mechanisme (vier-uitkomsten-ladder, net als overal elders) geeft de
+"tegen de klok"-spanning bij de vlucht uit Pompeii — nul risico voor de
+engine, puur datagedreven.
+
+**Payoff van Hoofdstuk 24**: Vitruvius' driewegskeuze
+(`ch24_lat_vitruvius_principe`, firmitas/utilitas/venustas) wordt
+uitbetaald via drie nieuwe `SP_PAYOFFS`-echo's op `CH25_LAT_001`, zodra
+Vitruvius terugkeert — zelfde patroon als de zijde-echo's uit H20/H23
+(geen eigen scène nodig, gewoon een herkennende openingsalinea).
+
+**Twee nieuwe Lethe/Mnemosyne-zaadjes** (namen nog steeds niet genoemd,
+zie de memory `chronica-h24-lethe-mnemosyne-zaadjes`, die nu ook dit
+hoofdstuk meeneemt): de Boodschapper wordt opvallend stil bij het
+voorlezen van Plinius' brief (`CH25_LAT_004`), en een nieuwe "onthoud of
+laat los"-FLAG (`ch25_lat_plinius`, `CH25_LAT_EINDE`) sluit aan bij de
+reeks die H24 begon.
+
+**Nieuwe registry-entries**: 12 CODEX-entries, 4 nieuwe VOCAB-entries
+(grieks_arche/physis/atomos, latijn_terraemotus), 1 nieuw souvenir
+(`souvenir_onder_de_vulkaan`), 1 nieuwe SP_CHECKS-entry
+(`ch25_lat_vlucht`), 3 nieuwe SP_PAYOFFS-entries (Vitruvius-echo's). 10
+IMAGE-hooks proactief toegevoegd tijdens het schrijven zelf (les uit H24,
+waar dit retroactief moest — zie §7.90).
+
+**Validatie**: `node --check` slaagt. Losse parse-check: 34 scènes, 0
+dubbele ID's, 0 kapotte links, 0 onbekende registry-referenties, CHECK-
+referentie (`ch25_lat_vlucht`) en al zijn vier uitkomst-targets bestaan.
+Live in de browser: volledige BFS-doorloop (taalspoor "beide", alle vier
+CHECK-uitkomsten) — 34/34 scènes bereikt, 0 exceptions, 0 onopgeloste
+tokens, Vitruvius-payoff-echo getest met `ch24_lat_vitruvius_principe:
+"firmitas"`.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
