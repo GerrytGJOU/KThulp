@@ -27120,6 +27120,9 @@ De Boodschapper wijst naar drie zuilen die naast elkaar uit de grond van het Mus
 
 Een vertrouwde gestalte met een speer en een uil op haar schouder verschijnt tussen de zuilen — Pallas Athena, patrones van elke ambacht die precisie en geduld vraagt. "Wijsheid zit niet alleen in woorden," zegt ze. "Soms zit ze in een hand die precies weet waar te beitelen."
 
+IMAGE:
+ch24_gre_zuilorden_athena.png
+
 RELATION:
 athena=+1
 
@@ -27142,6 +27145,9 @@ Tussen de zuilen door loopt een oudere, grijzende man, kalksteenstof nog op zijn
 DIALOGUE:
 Phidias
 Een groot deel van wat ik maakte, bestaat allang niet meer — gesmolten voor munten, verbrand, simpelweg vergeten. Dit stuk hier is toevallig blijven liggen.
+
+IMAGE:
+ch24_gre_phidias_fries.png
 
 CODEX:
 codex_phidias_h24
@@ -27198,6 +27204,9 @@ Schoonheid is geen toeval. Schoonheid is een verhouding die je kunt berekenen �
 
 "[[Ecce|zie hier]]," merkt de Boodschapper op, iets speelser nu. "Ook jij koos ooit een gestalte voor jezelf, aan het begin van deze hele reis. Polykleitos zou het gewaardeerd hebben."
 
+IMAGE:
+ch24_gre_polykleitos_doryphoros.png
+
 CODEX:
 codex_polykleitos
 
@@ -27252,6 +27261,9 @@ Praxiteles
 Polykleitos beeldhouwde hoe een lichaam behóórt te zijn. Ik probeer te beeldhouwen hoe het aánvoelt.
 
 Zijn beroemdste werk, een Aphrodite voor de stad Knidos, was het eerste levensgrote naakte vrouwenbeeld in de Griekse kunst — zo controversieel dat de stad ernaast een eigen tempeltje bouwde, en reizigers er speciaal voor omreisden.
+
+IMAGE:
+ch24_gre_praxiteles_hermes.png
 
 CODEX:
 codex_praxiteles
@@ -27324,6 +27336,9 @@ Zestig jaar later breekt een aardbeving het beeld af bij de knieën. Het ligt no
 
 "[[Ecce|zie hier]]," zegt de Boodschapper, en voor het eerst dit hoofdstuk klinkt haar stem niet luchtig. "Een van de zeven wereldwonderen. Er bestaat niet één steen meer van."
 
+IMAGE:
+ch24_gre_kolossus_rhodos.png
+
 CODEX:
 codex_kolossus_rhodos
 
@@ -27374,6 +27389,9 @@ TEXT:
 Twee beelden staan naast elkaar, allebei half voltooid door de tijd zelf: een gevleugelde overwinningsgodin, Nike, met wapperende gewaden maar zonder hoofd of armen; en een vrouw in marmer, Aphrodite, sereen ondanks het feit dat beide armen ontbreken. Eeuwen na hun makers werden ze allebei zo teruggevonden, precies zo, gebroken.
 
 "[[Ecce|zie hier]]," zegt de Boodschapper. "Ik kan je, als je wilt, laten zien hoe ze er ooit compleet uitzagen — mijn eigen verbeelding, niets meer. Of we laten ze precies zo, zoals de tijd ze aan jou heeft doorgegeven."
+
+IMAGE:
+ch24_gre_nike_venus_gebroken.png
 
 CODEX:
 codex_nike_samothrace, codex_venus_van_milo
@@ -27446,6 +27464,9 @@ Een Romeinse boog spant zich moeiteloos over een opening die veel breder is dan 
 DIALOGUE:
 Vitruvius
 De Grieken bouwden om te behagen. Wij Romeinen bouwden om te blijven staan — en ontdekten onderweg dat opus caementicium, ons eigen beton, dingen mogelijk maakt die zelfs zij nooit probeerden: gewelven, koepels, bruggen die eeuwen meegaan.
+
+IMAGE:
+ch24_lat_vitruvius_boog.png
 
 CODEX:
 codex_romeinse_boogbouw
@@ -27538,6 +27559,9 @@ Een aquaduct spant zich, boog na boog, over een diepe vallei — geen rivier die
 
 Het is, letterlijk, steen die water draagt — precies de titel van dit hele hoofdstuk, bedenk je.
 
+IMAGE:
+ch24_lat_aquaduct.png
+
 CODEX:
 codex_aquaduct
 
@@ -27589,6 +27613,9 @@ Een rechte, keihard bestrate weg loopt van de Museumvloer tot aan de horizon —
 
 "[[Ecce|zie hier]]," voegt de Boodschapper eraan toe. "Wie de wegen aanlegt, bepaalt niet alleen waar legers gaan — hij bepaalt ook welke berichten, welke verhalen, elkaar ooit nog inhalen. Dat is niet zo anders dan wie de pen vasthoudt."
 
+IMAGE:
+ch24_lat_via_appia.png
+
 CODEX:
 codex_romeinse_wegen
 
@@ -27604,6 +27631,9 @@ Het Altaar van de Vrede
 
 TEXT:
 Een marmeren altaar, omgeven door een laag reliëf van een lange, plechtige processie — senatoren, priesters, Augustus zelf, zijn hele familie in steen vereeuwigd. De Ara Pacis, gebouwd om de vrede te vieren die je zelf, in Rome, hebt zien ontstaan. "Een monument dat met opzet niets verbergt," zegt Vitruvius. "Elk gezicht erin was bedoeld om herkend te worden — door mensen die toen nog leefden, en, kennelijk, door jou, eeuwen later."
+
+IMAGE:
+ch24_lat_ara_pacis.png
 
 CODEX:
 codex_ara_pacis
