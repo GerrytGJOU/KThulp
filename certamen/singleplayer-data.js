@@ -477,7 +477,7 @@ const SP_CAMPAIGN = [
     personages:"Athena (cameo), Phidias (cameo, terugkerend uit H18), Polykleitos, Praxiteles — Vitruvius (cameo, vooruitwijzend naar zijn eigen hoofdrol in H25)",
     thema:"Hoe een beschaving zich letterlijk, in steen, vormgeeft",
     illustratie:"Het Parthenon-fries / een Romeins aquaduct over een vallei",
-    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-14) — door Claude geschreven (geen Gemini-concept). Nieuw mechanisme: bij elk kunstwerk/bouwwerk een 'onthoud of laat los'-keuze (Kolossus van Rhodos, Nike/Venus, Ara Pacis, etc.) die een eigen FLAG zet, bedoeld als stille, naamloze opmaat naar Hoofdstuk 28/29 (Lethe/Mnemosyne, zie Chronica.md §7.90 en de RELATION/FLAG-roster-memory) — nog GEEN payoff, dat komt pas daar. Callbacks: Phidias (H18), de Kolossus van Rhodos (H22/Demetrios), de Ara Pacis (H23/Augustus), Vitruvius' drieslag (gekoppeld aan Robur/Ingenium/Gratia). SP_CH24_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). Nieuw mechanisme: bij elk kunstwerk/bouwwerk een 'onthoud of laat los'-keuze (Kolossus van Rhodos, Nike/Venus, Ara Pacis, etc.) die een eigen FLAG zet, bedoeld als stille, naamloze opmaat naar Hoofdstuk 28/29 (Lethe/Mnemosyne, zie Chronica.md §7.90 en de RELATION/FLAG-roster-memory) — nog GEEN payoff, dat komt pas daar. Callbacks: Phidias (H18), de Kolossus van Rhodos (H22/Demetrios), de Ara Pacis (H23/Augustus), Vitruvius' drieslag (gekoppeld aan Robur/Ingenium/Gratia). CH23_MUSEUM_00 routeert naar CH24_000; SP_SCENES/BLOCKS bevatten SP_CH24_CNS." },
   { id:"ch25", nr:25, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Onder de Vulkaan",
     periode:"Presocratische filosofie t/m Hellenistische wetenschap, 6e-3e eeuw v.Chr. / Pompeii, tot 79 n.Chr.",
     verhaal:"Al vóór Socrates zoeken Thales, Anaximander en de andere presocraten naar de oerstof van de wereld zonder op de goden terug te vallen — de wortel van al het Griekse wetenschappelijke denken. Generaties later meten Eratosthenes de omtrek van de aarde en Archimedes de wetten van drijven en hefbomen in de Bibliotheek van Alexandrië — de Griekse wereld op haar wetenschappelijke hoogtepunt. Eeuwen later, aan de voet van de Vesuvius, bewijst diezelfde natuur waarom kennis nooit compleet is: Plinius de Jongere ziet vanaf de overkant van de golf hoe Pompeii en Herculaneum in een dag onder as verdwijnen — en zijn oom, Plinius de Oudere, sterft terwijl hij de uitbarsting probeert te bestuderen. UITGEBREID 2026-08-09 (Gerbens verzoek): de presocraten (Thales/Anaximander/Heraclitus/Pythagoras/Democritus) zijn toegevoegd als vroege wortel van het Griekse wetenschappelijke denken, als korte proloog vóór de eigenlijke Hellenistische wetenschap.",
@@ -487,7 +487,7 @@ const SP_CAMPAIGN = [
     personages:"Thales, Anaximander, Anaximenes, Pythagoras, Herakleitos, Parmenides, Anaxagoras, Demokritos (alle acht presocraten) — Euclides, Eratosthenes, Archimedes — Vitruvius (terugkerend uit H24) — Plinius de Oudere, Plinius de Jongere, Seneca (cameo)",
     thema:"Kennis verklaart de wereld — tot de wereld iets doet waar niemand op voorbereid was",
     illustratie:"Archimedes in zijn bad ('heureka') / de aswolk boven Pompeii",
-    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-14) — door Claude geschreven (geen Gemini-concept). Op Gerbens verzoek: focus verschoven van pure verhaalkeuzes naar LEESVALLEN (Herakleitos' rivier-fragment, Eratosthenes' schaduwhoek, het Pompeii-graffito 'si vales, valeo'), alle acht presocraten benoemd (niet alleen de vijf uit de oude planningstekst), Vitruvius keert non-lineair terug (zelfde flashback-truc als Archimedes' eigen bad-scène) met een driewegs-payoff van H24's firmitas/utilitas/venustas-keuze (nieuwe SP_PAYOFFS-entries op CH25_LAT_001). De aardbeving van 62 n.Chr. is expliciet aan Nero's regeerperiode gekoppeld via Seneca's Naturales Quaestiones — Nero regeerde niet meer tijdens de uitbarsting van 79 (dat was Titus), dat onderscheid is bewust bewaard. TECHNISCHE CORRECTIE t.o.v. het eerste voorstel: niet het RACE-mechanisme (Atalanta-specifieke code) maar het generieke CHECK-mechanisme (SP_CHECKS.ch25_lat_vlucht) geeft de 'vlucht door de as'-spanning. Twee nieuwe Lethe/Mnemosyne-zaadjes (namen nog steeds niet genoemd): de Boodschapper reageert opvallend stil op Plinius' brief, en een nieuwe 'onthoud of laat los'-FLAG (`ch25_lat_plinius`) sluit aan bij de reeks die in H24 begon. SP_CH25_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). Op Gerbens verzoek: focus verschoven van pure verhaalkeuzes naar LEESVALLEN (Herakleitos' rivier-fragment, Eratosthenes' schaduwhoek, het Pompeii-graffito 'si vales, valeo'), alle acht presocraten benoemd (niet alleen de vijf uit de oude planningstekst), Vitruvius keert non-lineair terug (zelfde flashback-truc als Archimedes' eigen bad-scène) met een driewegs-payoff van H24's firmitas/utilitas/venustas-keuze (nieuwe SP_PAYOFFS-entries op CH25_LAT_001). De aardbeving van 62 n.Chr. is expliciet aan Nero's regeerperiode gekoppeld via Seneca's Naturales Quaestiones — Nero regeerde niet meer tijdens de uitbarsting van 79 (dat was Titus), dat onderscheid is bewust bewaard. TECHNISCHE CORRECTIE t.o.v. het eerste voorstel: niet het RACE-mechanisme (Atalanta-specifieke code) maar het generieke CHECK-mechanisme (SP_CHECKS.ch25_lat_vlucht) geeft de 'vlucht door de as'-spanning. Twee nieuwe Lethe/Mnemosyne-zaadjes (namen nog steeds niet genoemd): de Boodschapper reageert opvallend stil op Plinius' brief, en een nieuwe 'onthoud of laat los'-FLAG (`ch25_lat_plinius`) sluit aan bij de reeks die in H24 begon. CH24_MUSEUM_00 routeert naar CH25_000; SP_SCENES/BLOCKS bevatten SP_CH25_CNS." },
   { id:"ch26", nr:26, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Een Rijk in Crisis",
     periode:"Flavische dynastie t/m Crisis van de Derde Eeuw, 69-284 n.Chr.",
     verhaal:"Na Nero's dood strijden vier keizers in één jaar om de troon (het Vierkeizerjaar), tot de Flavii (Vespasianus, Titus, Domitianus) orde herstellen en het Colosseum bouwen — vlak nadat in Germania Inferior de Bataven onder Julius Civilis in opstand komen, een opstand die Tacitus zelf beschrijft. Daarna volgen de 'adoptiefkeizers' Nerva, Trajanus (grootste omvang van het rijk) en Hadrianus (zijn muur, zijn liefde voor Griekenland), Antoninus Pius en Marcus Aurelius (de filosoof-keizer, Stoïcijn) — tot Commodus alles laat afglijden: eerst het Vijfkeizerjaar (193 n.Chr., na Pertinax' korte, mislukte bewind), dan de Severische dynastie (Septimius Severus, Caracalla, Geta, Elagabalus), en uiteindelijk de chaos van de Derde-Eeuwse Crisis met wisselende soldatenkeizers, tot Aurelianus ('restitutor orbis') het rijk weer grotendeels bijeenhoudt — vlak voor Diocletianus (Hoofdstuk 27) de crisis definitief bezweert. UITGEBREID 2026-08-15 (Gerbens verzoek): volledige keizerslijst van Vespasianus t/m Aurelianus nu benoemd, ook de figuren die maar kort aangestipt worden (Titus, Domitianus, Antoninus Pius, Pertinax, Geta, Elagabalus) — niet alleen de acht die een eigen scène/vignet krijgen (Vespasianus, Nerva, Trajanus, Hadrianus, Marcus Aurelius, Commodus, Septimius Severus, Caracalla).",
@@ -497,7 +497,7 @@ const SP_CAMPAIGN = [
     personages:"Hadrianus (Griekse lijn) — Vespasianus, Titus, Domitianus, Nerva, Trajanus, Hadrianus, Antoninus Pius, Marcus Aurelius, Commodus, Pertinax, Septimius Severus, Caracalla, Geta, Elagabalus, Aurelianus, Julius Civilis, Tacitus (cameo, bronvermelding)",
     thema:"Een rijk op zijn grootst is ook een rijk met de meeste manieren om uiteen te vallen",
     illustratie:"Het Colosseum in aanbouw / Hadrianus' Muur in de Britse mist / Julius Civilis en de Bataven",
-    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). 26 scènes: Griekse lijn (Hadrianus/Panhellenion/Athene/Olympia met leesval/Delphi) en Latijnse lijn (Vierkeizerjaar → Vespasianus met 'pecunia non olet'-leesval → Titus/Domitianus → Bataafse Opstand met COMBAT-bridge (nieuwe vijand `bataven`) → Nerva/Trajanus (Plinius-callback naar H25) → Hadrianus-kruisverwijzing/Antoninus Pius → Marcus Aurelius (nieuwe RELATION, Stoïcijnse keuzescène, SP_PAYOFFS-echo's naar Cicero/Seneca) → Commodus → Pertinax/Vijfkeizerjaar → Septimius Severus → Caracalla/Constitutio Antoniniana/Geta/Elagabalus → Derde-Eeuwse Crisis/Aurelianus). Kaart-herkenning geïmplementeerd als CNS-hub-en-vignetten i.p.v. letterlijke SP_MAP_LOCATIONS-pin-integratie (zie code-commentaar bij SP_CH26_CNS). 14 nieuwe CODEX-entries, 1 nieuwe COMBAT-vijand, 1 nieuw souvenir (`souvenir_rijk_in_crisis`), 20 signaalwoorden (H26-kandidatenlijst uit VOCAB_UITBREIDING.md). SP_CH26_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). 29 scènes: Griekse lijn (Hadrianus/Panhellenion/Athene/Olympia met leesval/Delphi) en Latijnse lijn (Vierkeizerjaar → Vespasianus met 'pecunia non olet'-leesval → Titus/Domitianus → Bataafse Opstand met COMBAT-bridge (nieuwe vijand `bataven`) → Nerva/Trajanus (Plinius-callback naar H25) → Hadrianus-kruisverwijzing/Antoninus Pius → Marcus Aurelius (nieuwe RELATION, Stoïcijnse keuzescène, SP_PAYOFFS-echo's naar Cicero/Seneca) → Commodus → Pertinax/Vijfkeizerjaar → Septimius Severus → Caracalla/Constitutio Antoniniana/Geta/Elagabalus → Derde-Eeuwse Crisis/Aurelianus). Kaart-herkenning geïmplementeerd als CNS-hub-en-vignetten i.p.v. letterlijke SP_MAP_LOCATIONS-pin-integratie (zie code-commentaar bij SP_CH26_CNS). 14 nieuwe CODEX-entries, 1 nieuwe COMBAT-vijand, 1 nieuw souvenir (`souvenir_rijk_in_crisis`), 20 signaalwoorden (H26-kandidatenlijst uit VOCAB_UITBREIDING.md). CH25_MUSEUM_00 routeert naar CH26_000; CH26_WORDT_VERVOLGD is het nieuwe, laatste tijdelijke speeltest-eindpunt. SP_SCENES/BLOCKS bevatten SP_CH26_CNS." },
   { id:"ch27", nr:27, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Kruis en Kroon",
     periode:"Tetrarchie t/m val van West-Rome, 284-476 n.Chr. (met een korte blik vooruit naar Justinianus, 6e eeuw)",
     verhaal:"Diocletianus splitst het bestuur van het rijk in een Tetrarchie om de crisis te bezweren; Constantijn wint uiteindelijk alleen de macht, erkent het christendom met het Edict van Milaan, en sticht een nieuwe hoofdstad op oud-Griekse bodem: Byzantium wordt Constantinopel, en het zwaartepunt van het rijk verschuift voorgoed naar het Griekstalige Oosten. Onder Theodosius wordt het christendom staatsgodsdienst en splitst het rijk definitief in twee helften — tot het West-Romeinse Rijk in 476 n.Chr. zijn laatste keizer verliest, terwijl in het Oosten, generaties later, Justinianus I en Theodora Constantinopel nog verder laten uitgroeien tot wat ooit het Byzantijnse Rijk zal heten. UITGEBREID 2026-08-09 (Gerbens verzoek): Justinianus/Theodora toegevoegd aan de Griekse lijn als vooruitblik; het hoofdstuk krijgt de scène-voor-scène ZIGZAG-opzet (zoals Hoofdstuk 10/15) in plaats van twee losse, sequentiële lijnen — de twee kanten van hetzelfde rijk worden zo letterlijk om en om beleefd. UITGEBREID 2026-08-15 (Gerbens verzoek): het hoofdstuk opent niet met Diocletianus die de Tetrarchie al kant-en-klaar presenteert, maar met de speler die MEEDENKT over hoe je een rijk bestuurt dat te groot is voor één man — een kort keuze-/redeneermoment vóór Diocletianus zelf zijn eigen oplossing onthult, zodat de Tetrarchie aanvoelt als iets dat de speler mee heeft helpen bedenken, niet als een dictaat.",
@@ -27384,29 +27384,13 @@ TEXT:
 Een nieuwe stolp vult zich: een kleine glazen aspis-slang naast een verweerd stukje ivoor. "Een koningin die zelf koos hoe haar verhaal eindigde," zegt de Boodschapper van Chronos, terwijl ze de stolp bekijkt, "naast een dichter die geloofde dat niets ooit blijft wat het was. Ze hadden, denk ik, het meer met elkaar eens kunnen zijn dan ze ooit hebben geweten."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH23_WORDT_VERVOLGD
-
-END
-
-=== SCENE: CH23_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — Griekse kunst en Romeinse architectuur, Archimedes' eigen wetenschap, Pompeii, en nog veel meer eeuwen die niemand je ooit heeft laten zien. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+* Luister naar het volgende verhaal -> CH24_000
 
 END
 `.trim();
 
-/* ---- HOOFDSTUK 24 "Steen en Water" — CONCEPT, NOG NIET GEKOPPELD.
-   Zelfde afspraak als H21-23 vóór hun goedkeuring: SP_CH24_CNS bestaat
-   als losse const, bewust niet gemerged in SP_SCENES/BLOCKS tot Gerben
-   akkoord geeft. Door Claude geschreven (geen Gemini-concept).
+/* ---- HOOFDSTUK 24 "Steen en Water" — GEBOUWD EN GEKOPPELD (2026-08-15).
+   Door Claude geschreven (geen Gemini-concept).
 
    Eerste hoofdstuk van Boek V, bewust NIET chronologisch (net als H6) —
    de Boodschapper haalt personages uit heel de campagne erbij. Nieuw
@@ -28072,27 +28056,13 @@ TEXT:
 Een nieuwe stolp vult zich: een piepklein stukje verweerd marmer naast een druppel water, bevroren in glas, die nooit valt. "Vandaag was jij voor het eerst niet alleen degene die stolpen vult," zegt de Boodschapper van Chronos, terwijl ze om zich heen kijkt naar alles wat je samen al hebben verzameld. "Je was ook degene die koos wát erin komt."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH24_WORDT_VERVOLGD
-
-END
-
-=== SCENE: CH24_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — nog meer wetenschap, nog meer vuur, en een laatste boek dat ik je nog niet kan beschrijven. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En dit keer, meer dan ooit, blijft ook wat je koos te onthouden, en wat je liet gaan."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+* Luister naar het volgende verhaal -> CH25_000
 
 END
 `.trim();
 
-/* ---- HOOFDSTUK 25 "Onder de Vulkaan" — CONCEPT, NOG NIET GEKOPPELD.
-   Zelfde afspraak als H21-24 vóór hun goedkeuring. Door Claude geschreven.
+/* ---- HOOFDSTUK 25 "Onder de Vulkaan" — GEBOUWD EN GEKOPPELD (2026-08-15).
+   Door Claude geschreven.
 
    Gerbens verzoek (2026-08-14): sinds H24 is er geen nieuwe grammatica
    meer in de campagne — de focus verschuift daarom naar LEESVALLEN
@@ -28694,27 +28664,13 @@ TEXT:
 Een nieuwe stolp vult zich: een klein stukje verstarde puimsteen naast een piepklein bronzen model van een driehoek. "Vandaag heb je gezien hoe mensen de wereld probeerden te begrijpen, en hoe de wereld daar soms dwars doorheen fietst," zegt de Boodschapper van Chronos. Ze kijkt iets langer dan gewoonlijk naar de stolp voordat ze zich omdraait.
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH25_WORDT_VERVOLGD
-
-END
-
-=== SCENE: CH25_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je vandaag koos te onthouden, of los te laten, blijft, hoe vaak je ook terugkeert naar het begin."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+* Luister naar het volgende verhaal -> CH26_000
 
 END
 `.trim();
 
-/* ---- HOOFDSTUK 26 "Een Rijk in Crisis" — CONCEPT, NOG NIET GEKOPPELD.
-   Zelfde afspraak als H21-25 vóór hun goedkeuring. Door Claude geschreven.
+/* ---- HOOFDSTUK 26 "Een Rijk in Crisis" — GEBOUWD EN GEKOPPELD (2026-08-15).
+   Door Claude geschreven.
 
    Gerbens verzoek (2026-08-15): kaart-herkenningsmechaniek voor Hadrianus
    (Griekse lijn — geïmplementeerd als een CNS-hub met locatiekeuzes i.p.v.
