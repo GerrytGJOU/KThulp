@@ -90,6 +90,7 @@ const BLOCKS = [
   ['CH16', D.SP_CH16_CNS], ['CH17', D.SP_CH17_CNS], ['CH18', D.SP_CH18_CNS],
   ['CH19', D.SP_CH19_CNS], ['CH20', D.SP_CH20_CNS],
   ['CH21', D.SP_CH21_CNS], ['CH22', D.SP_CH22_CNS], ['CH23', D.SP_CH23_CNS],
+  ['CH24', D.SP_CH24_CNS], ['CH25', D.SP_CH25_CNS], ['CH26', D.SP_CH26_CNS],
 ];
 
 const errors = [];

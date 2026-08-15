@@ -1,8 +1,8 @@
-# Chronica Classica — Masterplan (BETA — proloog t/m Hoofdstuk 23 speelbaar)
+# Chronica Classica — Masterplan (BETA — proloog t/m Hoofdstuk 26 speelbaar)
 
-> **Actuele stand (bijgewerkt 2026-08-14, na Hoofdstuk 23) — lees dit
-> eerst:** Proloog t/m Hoofdstuk 23 zijn gebouwd én gekoppeld aan de
-> speelbare route. Hoofdstuk 24 t/m 27 bestaan nog alleen als
+> **Actuele stand (bijgewerkt 2026-08-15, na Hoofdstuk 26) — lees dit
+> eerst:** Proloog t/m Hoofdstuk 26 zijn gebouwd én gekoppeld aan de
+> speelbare route. Hoofdstuk 27 bestaat nog alleen als
 > `SP_CAMPAIGN`-metadata, net als Hoofdstuk 28-29 + Finale — zie de
 > hoofdstuktabel in §0 hieronder voor de volledige, actuele lijst van 29
 > hoofdstukken + Finale in 6 boeken. De blockquote hieronder (H1-9) is het
@@ -8020,12 +8020,48 @@ echo's.
 
 **Validatie**: `node --check` slaagt. Losse parse-check: 29 scènes, 0
 dubbele ID's, 0 kapotte links, 0 onbekende registry-referenties (CODEX/
-VOCAB/SOUVENIR/COMBAT), 29/29 scènes bereikbaar vanaf `CH26_000`. Live
-browser-BFS deze keer NIET uitgevoerd — poort 8769 was bezet door een
-gelijktijdig lopende sessie die tegelijk Hoofdstuk 17-23's vocab-retrofit
-uitvoerde (zie §7.93); de statische validatie is wel volledig doorlopen.
-**Aanbeveling**: alsnog een live BFS-doorloop draaien zodra er een vrije
-preview-poort beschikbaar is, vóór dit hoofdstuk gekoppeld wordt.
+VOCAB/SOUVENIR/COMBAT), 29/29 scènes bereikbaar vanaf `CH26_000`.
+
+**Live browser-BFS alsnog gedraaid (2026-08-15, zodra poort 8767 vrij was —
+8769 bleef bezet)**: taalspoor "beide", 29/29 scènes bezocht, 0 exceptions,
+0 onopgeloste tokens, 0 console-fouten. De COMBAT-scène (`bataven`) is
+gevalideerd zonder de gevechts-UI te starten (headless: vijand-bestaan
+gecontroleerd, meteen doorgestuurd naar het post-gevecht-doel). Beide
+Stoïcijnse `SP_PAYOFFS`-echo's (Cicero/Seneca) getest met
+`relations.cicero=1`/`relations.seneca=1` en vuurden allebei correct af,
+zichtbaar in de kroniek.
+
+### 7.95 Hoofdstuk 24-26 GEKOPPELD aan de speelbare route (2026-08-15)
+
+Op Gerbens verzoek: Hoofdstuk 26 toegevoegd aan het spel — wat betekent dat
+ook Hoofdstuk 24 en 25 (die tot nu toe bewust uncoupled bleven) nu tegelijk
+mee moesten, want zonder hen was H26 vanuit de live route onbereikbaar.
+Alle drie tegelijk gekoppeld ("multi-chapter-jump", zelfde patroon als
+eerder bij H21-23 — zie de memory `chronica-tijdelijk-speeltest-eindpunt`).
+
+**Wijzigingen**: `SP_CH24_CNS`/`SP_CH25_CNS`/`SP_CH26_CNS` toegevoegd aan
+`SP_SCENES` (`singleplayer.js`) en `BLOCKS` (`validate_chronica.js`).
+Doorroutering aangepast: `CH23_MUSEUM_00` → `CH24_000` (was
+`CH23_WORDT_VERVOLGD`), `CH24_MUSEUM_00` → `CH25_000` (was
+`CH24_WORDT_VERVOLGD`), `CH25_MUSEUM_00` → `CH26_000` (was
+`CH25_WORDT_VERVOLGD`) — de drie tussentijdse `_WORDT_VERVOLGD`-scènes zijn
+verwijderd, `CH26_WORDT_VERVOLGD` is het nieuwe, enige tijdelijke
+speeltest-eindpunt. `SP_CAMPAIGN`-statusvelden van H24/25/26 bijgewerkt naar
+"GEBOUWD EN GEKOPPELD". Cache-busting in `certamen/index.html` opgehoogd
+naar `?v=20260815b` (data) / `?v=20260815a` (engine).
+
+**Validatie**: `node --check` slaagt voor alle drie bestanden.
+`node certamen/tools/validate_chronica.js` (nu 1277 scènes, 38 payoffs):
+**0 fouten**, 61 waarschuwingen — allemaal al bekende, getrackte dode flags
+(zie `DODE_FLAGS_FINALE.md`) plus de verwachte "geen keuzes"-waarschuwing
+voor het nieuwe terminale `CH26_WORDT_VERVOLGD`. Live browser-BFS over de
+volledige keten CH23→CH24→CH25→CH26 (taalspoor "beide"): 97 unieke scènes
+bezocht, `CH26_WORDT_VERVOLGD` bereikt, 0 exceptions, 0 onopgeloste tokens,
+0 console-fouten (de enige console-meldingen waren verwachte 404's voor de
+nog niet gegenereerde H24/H25-illustraties). Alle `SP_PAYOFFS`-echo's
+(Vitruvius firmitas/utilitas/venustas, Cicero/Seneca-Stoïcijnen) getest en
+correct afgevuurd — inclusief de H24→H25-Vitruvius-payoff die vóór deze
+koppeling nog niet end-to-end testbaar was.
 
 ---
 
