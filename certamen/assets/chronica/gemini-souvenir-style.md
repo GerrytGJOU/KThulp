@@ -404,3 +404,20 @@ zet elk resultaat onder die naam in `certamen/assets/chronica/souvenirs/`.
 > thin Aegean-blue glow glints faintly on the glass. No text, no speech
 > bubbles, no watermark, no modern objects, no people, no hands, no faces.
 > 1:1 square format, fills the entire frame.
+
+### 21. `souvenir_onder_de_vulkaan.png` — Verstarde Puimsteen en een Bronzen Driehoek (Hoofdstuk 25 — beide talen)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: two
+> small objects placed side by side — a small porous, irregularly-shaped
+> lump of pale grey solidified pumice stone, and a tiny bronze model of an
+> equilateral triangle resting flat beside it — both resting directly on a
+> small weathered stone pedestal (no cushion — sturdy objects), entirely
+> covered by an old glass bell jar/dome, faintly and softly gold-lit from
+> within as if quietly magical. Camera at eye level with the pedestal,
+> three-quarter lighting, background dark and blurred (heavy vignette), both
+> objects in sharp focus. This souvenir belongs to both storylines at once —
+> the glow on the glass is a soft blend of Aegean blue and oxblood dark red
+> intertwining, neither colour dominant. No text, no speech bubbles, no
+> watermark, no modern objects, no people, no hands, no faces. 1:1 square
+> format, fills the entire frame.

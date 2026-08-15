@@ -490,20 +490,21 @@ const SP_CAMPAIGN = [
     status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-14) — door Claude geschreven (geen Gemini-concept). Op Gerbens verzoek: focus verschoven van pure verhaalkeuzes naar LEESVALLEN (Herakleitos' rivier-fragment, Eratosthenes' schaduwhoek, het Pompeii-graffito 'si vales, valeo'), alle acht presocraten benoemd (niet alleen de vijf uit de oude planningstekst), Vitruvius keert non-lineair terug (zelfde flashback-truc als Archimedes' eigen bad-scène) met een driewegs-payoff van H24's firmitas/utilitas/venustas-keuze (nieuwe SP_PAYOFFS-entries op CH25_LAT_001). De aardbeving van 62 n.Chr. is expliciet aan Nero's regeerperiode gekoppeld via Seneca's Naturales Quaestiones — Nero regeerde niet meer tijdens de uitbarsting van 79 (dat was Titus), dat onderscheid is bewust bewaard. TECHNISCHE CORRECTIE t.o.v. het eerste voorstel: niet het RACE-mechanisme (Atalanta-specifieke code) maar het generieke CHECK-mechanisme (SP_CHECKS.ch25_lat_vlucht) geeft de 'vlucht door de as'-spanning. Twee nieuwe Lethe/Mnemosyne-zaadjes (namen nog steeds niet genoemd): de Boodschapper reageert opvallend stil op Plinius' brief, en een nieuwe 'onthoud of laat los'-FLAG (`ch25_lat_plinius`) sluit aan bij de reeks die in H24 begon. SP_CH25_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
   { id:"ch26", nr:26, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Een Rijk in Crisis",
     periode:"Flavische dynastie t/m Crisis van de Derde Eeuw, 69-284 n.Chr.",
-    verhaal:"Na Nero's dood strijden vier keizers in één jaar om de troon, tot de Flavii (Vespasianus, Titus, Domitianus) orde herstellen en het Colosseum bouwen — vlak nadat in Germania Inferior de Bataven onder Julius Civilis in opstand komen, een opstand die Tacitus zelf beschrijft. Daarna volgen de 'adoptiefkeizers' Nerva, Trajanus (grootste omvang van het rijk) en Hadrianus (zijn muur, zijn liefde voor Griekenland), Antoninus Pius en Marcus Aurelius — tot Commodus alles laat afglijden naar de Severische dynastie en uiteindelijk de chaos van de Derde-Eeuwse Crisis, met wisselende soldatenkeizers.",
+    verhaal:"Na Nero's dood strijden vier keizers in één jaar om de troon (het Vierkeizerjaar), tot de Flavii (Vespasianus, Titus, Domitianus) orde herstellen en het Colosseum bouwen — vlak nadat in Germania Inferior de Bataven onder Julius Civilis in opstand komen, een opstand die Tacitus zelf beschrijft. Daarna volgen de 'adoptiefkeizers' Nerva, Trajanus (grootste omvang van het rijk) en Hadrianus (zijn muur, zijn liefde voor Griekenland), Antoninus Pius en Marcus Aurelius (de filosoof-keizer, Stoïcijn) — tot Commodus alles laat afglijden: eerst het Vijfkeizerjaar (193 n.Chr., na Pertinax' korte, mislukte bewind), dan de Severische dynastie (Septimius Severus, Caracalla, Geta, Elagabalus), en uiteindelijk de chaos van de Derde-Eeuwse Crisis met wisselende soldatenkeizers, tot Aurelianus ('restitutor orbis') het rijk weer grotendeels bijeenhoudt — vlak voor Diocletianus (Hoofdstuk 27) de crisis definitief bezweert. UITGEBREID 2026-08-15 (Gerbens verzoek): volledige keizerslijst van Vespasianus t/m Aurelianus nu benoemd, ook de figuren die maar kort aangestipt worden (Titus, Domitianus, Antoninus Pius, Pertinax, Geta, Elagabalus) — niet alleen de acht die een eigen scène/vignet krijgen (Vespasianus, Nerva, Trajanus, Hadrianus, Marcus Aurelius, Commodus, Septimius Severus, Caracalla).",
     pallas:"Geen nieuwe les — verhaal: Grieks erfgoed onder Romeins gezag (Hadrianus' filhellenisme, het Panhellenion, de Olympische Spelen onder Rome)", minerva:"Geen nieuwe grammatica — verhaal: het volledige keizersoverzicht van de Flavii t/m de Crisis van de Derde Eeuw, inclusief de Bataafse Opstand (69-70 n.Chr.) in Romeins Nederland",
     grammatica:"Grieks: herhaling — Grieks erfgoed onder Rome; Latijn: herhaling — keizersoverzicht + Bataafse Opstand",
-    gameplay:"Twee sporen; Hadrianus reist door zijn geliefde Griekenland (Griekse lijn, herkenning van eerder bezochte locaties op de wereldkaart) / een lange keizerlijke tijdlijn als opeenvolging van korte vignetten, met de Bataafse Opstand als eigen episode met Combat-bridge (Latijnse lijn)",
-    personages:"Hadrianus (Griekse lijn) — Vespasianus, Titus, Domitianus, Trajanus, Hadrianus, Marcus Aurelius, Commodus, Septimius Severus, Julius Civilis, Tacitus (cameo, bronvermelding)",
+    gameplay:"Twee sporen. Griekse lijn: Hadrianus reist door zijn geliefde Griekenland — een KAART-HERKENNINGSMECHANIEK waarbij de wereldkaart (zie §Wereldkaart) opnieuw opengaat en elke eerder ontgrendelde Griekse locatie (Athene, Delphi, Olympia, Troje, etc.) een korte, nieuwe Hadrianus-regel krijgt zodra de speler erop klikt — geen nieuwe scènes, hergebruikt de bestaande codex-unlock-hook. Latijnse lijn: een lange keizerlijke tijdlijn als opeenvolging van korte vignetten (Vierkeizerjaar → Flavii → adoptiefkeizers → Vijfkeizerjaar → Severi → Derde-Eeuwse Crisis), met de Bataafse Opstand als eigen episode met Combat-bridge, en een DOORLOPENDE STOÏCIJNSE LIJN die bij Marcus Aurelius een keuze-moment krijgt (zijn Meditations, in het Grieks geschreven — mooie taalgrens-anekdote) en terugkoppelt naar Cicero (H21) en Seneca (H21/23/25) via een RELATION-gate SP_PAYOFFS-echo.",
+    personages:"Hadrianus (Griekse lijn) — Vespasianus, Titus, Domitianus, Nerva, Trajanus, Hadrianus, Antoninus Pius, Marcus Aurelius, Commodus, Pertinax, Septimius Severus, Caracalla, Geta, Elagabalus, Aurelianus, Julius Civilis, Tacitus (cameo, bronvermelding)",
     thema:"Een rijk op zijn grootst is ook een rijk met de meeste manieren om uiteen te vallen",
-    illustratie:"Het Colosseum in aanbouw / Hadrianus' Muur in de Britse mist / Julius Civilis en de Bataven" },
+    illustratie:"Het Colosseum in aanbouw / Hadrianus' Muur in de Britse mist / Julius Civilis en de Bataven",
+    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). 26 scènes: Griekse lijn (Hadrianus/Panhellenion/Athene/Olympia met leesval/Delphi) en Latijnse lijn (Vierkeizerjaar → Vespasianus met 'pecunia non olet'-leesval → Titus/Domitianus → Bataafse Opstand met COMBAT-bridge (nieuwe vijand `bataven`) → Nerva/Trajanus (Plinius-callback naar H25) → Hadrianus-kruisverwijzing/Antoninus Pius → Marcus Aurelius (nieuwe RELATION, Stoïcijnse keuzescène, SP_PAYOFFS-echo's naar Cicero/Seneca) → Commodus → Pertinax/Vijfkeizerjaar → Septimius Severus → Caracalla/Constitutio Antoniniana/Geta/Elagabalus → Derde-Eeuwse Crisis/Aurelianus). Kaart-herkenning geïmplementeerd als CNS-hub-en-vignetten i.p.v. letterlijke SP_MAP_LOCATIONS-pin-integratie (zie code-commentaar bij SP_CH26_CNS). 14 nieuwe CODEX-entries, 1 nieuwe COMBAT-vijand, 1 nieuw souvenir (`souvenir_rijk_in_crisis`), 20 signaalwoorden (H26-kandidatenlijst uit VOCAB_UITBREIDING.md). SP_CH26_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
   { id:"ch27", nr:27, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Kruis en Kroon",
     periode:"Tetrarchie t/m val van West-Rome, 284-476 n.Chr. (met een korte blik vooruit naar Justinianus, 6e eeuw)",
-    verhaal:"Diocletianus splitst het bestuur van het rijk in een Tetrarchie om de crisis te bezweren; Constantijn wint uiteindelijk alleen de macht, erkent het christendom met het Edict van Milaan, en sticht een nieuwe hoofdstad op oud-Griekse bodem: Byzantium wordt Constantinopel, en het zwaartepunt van het rijk verschuift voorgoed naar het Griekstalige Oosten. Onder Theodosius wordt het christendom staatsgodsdienst en splitst het rijk definitief in twee helften — tot het West-Romeinse Rijk in 476 n.Chr. zijn laatste keizer verliest, terwijl in het Oosten, generaties later, Justinianus en Theodora Constantinopel nog verder laten uitgroeien tot wat ooit het Byzantijnse Rijk zal heten. UITGEBREID 2026-08-09 (Gerbens verzoek): Justinianus/Theodora toegevoegd aan de Griekse lijn als vooruitblik; het hoofdstuk krijgt de scène-voor-scène ZIGZAG-opzet (zoals Hoofdstuk 10/15) in plaats van twee losse, sequentiële lijnen — de twee kanten van hetzelfde rijk worden zo letterlijk om en om beleefd.",
+    verhaal:"Diocletianus splitst het bestuur van het rijk in een Tetrarchie om de crisis te bezweren; Constantijn wint uiteindelijk alleen de macht, erkent het christendom met het Edict van Milaan, en sticht een nieuwe hoofdstad op oud-Griekse bodem: Byzantium wordt Constantinopel, en het zwaartepunt van het rijk verschuift voorgoed naar het Griekstalige Oosten. Onder Theodosius wordt het christendom staatsgodsdienst en splitst het rijk definitief in twee helften — tot het West-Romeinse Rijk in 476 n.Chr. zijn laatste keizer verliest, terwijl in het Oosten, generaties later, Justinianus I en Theodora Constantinopel nog verder laten uitgroeien tot wat ooit het Byzantijnse Rijk zal heten. UITGEBREID 2026-08-09 (Gerbens verzoek): Justinianus/Theodora toegevoegd aan de Griekse lijn als vooruitblik; het hoofdstuk krijgt de scène-voor-scène ZIGZAG-opzet (zoals Hoofdstuk 10/15) in plaats van twee losse, sequentiële lijnen — de twee kanten van hetzelfde rijk worden zo letterlijk om en om beleefd. UITGEBREID 2026-08-15 (Gerbens verzoek): het hoofdstuk opent niet met Diocletianus die de Tetrarchie al kant-en-klaar presenteert, maar met de speler die MEEDENKT over hoe je een rijk bestuurt dat te groot is voor één man — een kort keuze-/redeneermoment vóór Diocletianus zelf zijn eigen oplossing onthult, zodat de Tetrarchie aanvoelt als iets dat de speler mee heeft helpen bedenken, niet als een dictaat.",
     pallas:"Geen nieuwe les — verhaal: Byzantium wordt Constantinopel, gevolgd door een korte vooruitblik naar Justinianus en Theodora", minerva:"Geen nieuwe grammatica — verhaal: Diocletianus/de Tetrarchie, Constantijn/het Edict van Milaan, Theodosius, de deling van het rijk, de val van West-Rome in 476",
     grammatica:"Grieks: herhaling — Byzantium/Constantinopel/Justinianus; Latijn: herhaling — Constantijn/val van West-Rome",
-    gameplay:"ZIGZAG-hoofdstuk (zoals Hoofdstuk 10/15, scène-voor-scène verweven i.p.v. sequentieel): het rijk valt in het Westen uiteen (Latijnse lijn) terwijl het in het Oosten, in een nieuwe, Griekstalige vorm, juist doorleeft en groeit (Griekse lijn) — een bewust bitterzoet, niet-symmetrisch slot vlak vóór de terugkeer naar het Museum van Mnemosyne",
-    personages:"Diocletianus, Constantijn de Grote, Theodosius, Romulus Augustulus (laatste West-Romeinse keizer) — Justinianus, Theodora (Griekse/Byzantijnse lijn)",
+    gameplay:"ZIGZAG-hoofdstuk (zoals Hoofdstuk 10/15, scène-voor-scène verweven i.p.v. sequentieel): het rijk valt in het Westen uiteen (Latijnse lijn) terwijl het in het Oosten, in een nieuwe, Griekstalige vorm, juist doorleeft en groeit (Griekse lijn) — een bewust bitterzoet, niet-symmetrisch slot vlak vóór de terugkeer naar het Museum van Mnemosyne. Latijnse opening: een STAT-gated of REACTION-gestuurde 'ontwerp mee aan het bestuur van het rijk'-moment vóór de Tetrarchie zelf wordt onthuld (zie verhaal-veld).",
+    personages:"Diocletianus, Constantijn de Grote, Theodosius, Romulus Augustulus (laatste West-Romeinse keizer) — Justinianus I, Theodora (Griekse/Byzantijnse lijn)",
     thema:"Het einde van het ene rijk is, op dezelfde plek net iets verderop, het begin van iets nieuws",
     illustratie:"Constantijn bij het Edict van Milaan / de laatste keizerskroon van West-Rome, leeg op een troon / Justinianus en Theodora in Constantinopel" },
 
@@ -2896,6 +2897,34 @@ const SP_CODEX_ENTRIES = {
     tekst:"Plinius de Jongere beschrijft, jaren na de uitbarsting van de Vesuvius in 79 n.Chr., in twee brieven aan de geschiedschrijver Tacitus wat hij zich herinnert — inclusief de dood van zijn oom Plinius de Oudere. Deze brieven zijn de enige gedetailleerde ooggetuigenverslagen die bewaard zijn gebleven, en gaven later hun naam aan het type uitbarsting: 'Pliniaans'." },
   codex_dood_plinius_oudere: { cat:"geschiedenis", titel:"De Dood van Plinius de Oudere",
     tekst:"Plinius de Oudere, bevelhebber van de vloot in Misenum en auteur van de encyclopedische Naturalis Historia, vaart tijdens de uitbarsting van 79 n.Chr. juist richting de ramp om te helpen en te observeren. Hij sterft op het strand bij Stabiae, vermoedelijk aan de giftige dampen — zijn nieuwsgierigheid werd hem, zo wordt vaak gezegd, fataal." },
+  codex_panhellenion: { cat:"geschiedenis", titel:"Het Panhellenion",
+    tekst:"Keizer Hadrianus sticht rond 132 n.Chr. het Panhellenion, een raad in Athene waarin Griekse steden uit het hele oostelijke Middellandse Zeegebied vertegenwoordigd zijn — een bewuste erkenning van een gedeelde Griekse identiteit binnen het Romeinse Rijk, gedragen door Hadrianus' eigen, ongewoon oprechte liefde voor Griekenland." },
+  codex_hadrianus_athene: { cat:"geschiedenis", titel:"Hadrianus en de Olympieion",
+    tekst:"De tempel van Zeus Olympios in Athene, begonnen door de tirannen Peisistratos in de 6e eeuw v.Chr., blijft eeuwenlang onafgemaakt — tot Hadrianus haar rond 132 n.Chr. eindelijk laat voltooien, als een van de grootste tempels van de hele oudheid." },
+  codex_olympische_spelen_rome: { cat:"geschiedenis", titel:"De Olympische Spelen onder Rome",
+    tekst:"Ook onder Romeins bestuur blijven de Olympische Spelen doorgaan, met lokale weldoeners en Romeinse ambtenaren naast elkaar — een van de duidelijkste voorbeelden van hoe Griekse tradities niet verdwijnen, maar zich aanpassen aan een nieuwe machtsstructuur." },
+  codex_vierkeizerjaar: { cat:"geschiedenis", titel:"Het Vierkeizerjaar (69 n.Chr.)",
+    tekst:"Na Nero's dood strijden binnen één jaar vier mannen om de troon — Galba, Otho, Vitellius en uiteindelijk Vespasianus — een burgeroorlog die pas eindigt wanneer een generaal zonder voorname afkomst genoeg legioenen achter zich krijgt om te blijven zitten." },
+  codex_vespasianus_colosseum: { cat:"geschiedenis", titel:"Vespasianus en het Colosseum",
+    tekst:"Vespasianus, stichter van de Flavische dynastie, begint de bouw van het Flavisch Amfitheater (later het Colosseum genoemd) en staat bekend om zijn nuchtere, zuinige bestuur — inclusief een belasting op openbare latrines die het gezegde 'pecunia non olet' ('geld ruikt nergens naar') opleverde." },
+  codex_titus_domitianus: { cat:"geschiedenis", titel:"Titus en Domitianus",
+    tekst:"Titus, Vespasianus' zoon, voltooit het Colosseum en regeert kort maar geliefd — onder zijn bewind vindt ook de uitbarsting van de Vesuvius in 79 n.Chr. plaats. Zijn broer Domitianus regeert daarna langer maar veel hardvochtiger, en wordt uiteindelijk vermoord; de Senaat probeert zijn naam achteraf zoveel mogelijk uit te wissen." },
+  codex_bataafse_opstand: { cat:"geschiedenis", titel:"De Bataafse Opstand",
+    tekst:"In 69-70 n.Chr. leidt de Bataafse edelman Julius Civilis een opstand tegen Rome langs de Rijn, in wat nu Nederland is — nauwkeurig opgetekend door de geschiedschrijver Tacitus. De opstand wordt uiteindelijk neergeslagen, maar toont hoezeer Rome's macht ook aan haar grenzen kon worden uitgedaagd." },
+  codex_nerva_trajanus: { cat:"geschiedenis", titel:"Nerva en Trajanus",
+    tekst:"Nerva, kinderloos gekozen na Domitianus' dood, adopteert de bekwame generaal Trajanus als opvolger — het begin van de 'adoptiefkeizers', die de troon niet aan een zoon maar aan de meest geschikte kandidaat nalaten. Onder Trajanus bereikt het Romeinse Rijk zijn grootste territoriale omvang ooit." },
+  codex_marcus_aurelius_stoicijn: { cat:"geschiedenis", titel:"Marcus Aurelius, de Filosoof-Keizer",
+    tekst:"Marcus Aurelius regeert grotendeels vanuit legerkampen langs de Donau, en schrijft daar, in het Grieks, persoonlijke overpeinzingen die later bekend worden als de Meditations (Τὰ εἰς ἑαυτόν, 'Aan zichzelf') — een van de belangrijkste overgeleverde werken van de Stoïcijnse filosofie." },
+  codex_commodus: { cat:"geschiedenis", titel:"Commodus",
+    tekst:"Commodus, Marcus Aurelius' biologische zoon, breekt met de adoptiefkeizers-traditie en erft de troon direct. Hij toont weinig interesse in bestuur, maar treedt zelf op als gladiator in de arena en laat zich als een levende Hercules vereren — voor veel historici het symbolische begin van de neergang van deze periode." },
+  codex_vijfkeizerjaar: { cat:"geschiedenis", titel:"Het Vijfkeizerjaar (193 n.Chr.)",
+    tekst:"Na de moord op Commodus en het korte bewind van Pertinax veilt de Praetoriaanse Garde de Romeinse troon letterlijk aan de hoogste bieder, Didius Julianus — die slechts 66 dagen regeert voordat Septimius Severus met zijn legioenen de macht overneemt." },
+  codex_septimius_severus: { cat:"geschiedenis", titel:"Septimius Severus",
+    tekst:"Septimius Severus, geboren in Leptis Magna in Noord-Afrika, is de eerste Romeinse keizer met wortels zo ver van Rome. Hij sticht de Severische dynastie en regeert hard maar effectief, met als bekende sterfbedraad aan zijn zoons: wees eensgezind, verrijk de soldaten, veracht de rest." },
+  codex_constitutio_antoniniana: { cat:"geschiedenis", titel:"De Constitutio Antoniniana",
+    tekst:"Keizer Caracalla vaardigt in 212 n.Chr. de Constitutio Antoniniana uit, die het Romeinse burgerrecht toekent aan vrijwel elke vrije inwoner van het hele rijk — een van de meest verstrekkende wetten uit de Romeinse geschiedenis, die het onderscheid tussen 'Romein' en 'onderdaan' voorgoed vervaagt." },
+  codex_aurelianus_crisis: { cat:"geschiedenis", titel:"De Derde-Eeuwse Crisis en Aurelianus",
+    tekst:"Tussen 235 en 284 n.Chr. wisselen tientallen 'soldatenkeizers' elkaar in hoog tempo af, terwijl het rijk economisch instort en bijna in drie stukken uiteenvalt. Keizer Aurelianus herenigt het rijk in slechts vijf jaar tijd — vandaar zijn bijnaam 'restitutor orbis', hersteller van de wereld — en omringt Rome voor het eerst in eeuwen weer met een eigen stadsmuur." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3397,6 +3426,9 @@ const SP_SOUVENIRS = {
   // Hoofdstuk 25 "Onder de Vulkaan" — concept, nog niet gekoppeld.
   souvenir_onder_de_vulkaan: { nm:"Verstarde Puimsteen en een Bronzen Driehoek", icon:"🌋", img:"souvenir_onder_de_vulkaan.png",
     caption:"Een klein, poreus stukje verstarde puimsteen naast een piepklein bronzen model van een driehoek — kennis die de wereld probeerde te begrijpen, en een berg die zich daar op één dag niets van aantrok." },
+  // Hoofdstuk 26 "Een Rijk in Crisis" — concept, nog niet gekoppeld.
+  souvenir_rijk_in_crisis: { nm:"Een Stukje Amfitheater-Marmer en een Verweerde Muntenrand", icon:"🏟️", img:"souvenir_rijk_in_crisis.png",
+    caption:"Een piepklein stukje wit amfitheater-marmer naast een gebogen, verweerde muntenrand — een rijk dat in dezelfde eeuw kon bouwen en uiteenvallen, soms bij dezelfde keizer." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -3482,6 +3514,10 @@ const SP_COMBAT_ENEMIES = {
   // ---- Hoofdstuk 12 — Odysseus' Wraak ----
   vrijers_ithaka: { nm:"De Vrijers van Ithaka", icon:"🏹", img:"assets/chronica/combat/vrijers_ithaka.png", hp:85,
     intro:"Meer dan honderd mannen, drie jaar lang gewend aan een paleis dat niet van hen is — verrast, ongewapend, en voor het eerst tegenover de koning die ze allang dood waanden." },
+
+  // ---- Hoofdstuk 26 — Een Rijk in Crisis ----
+  bataven: { nm:"De Bataafse Opstandelingen", icon:"🛡️", img:"assets/chronica/combat/bataven.png", hp:60,
+    intro:"Julius Civilis' strijders, thuis in elk moeras en elke rivierarm langs de Rijn — een tegenstander die vecht op een slagveld dat geen enkel Romeins handboek beschrijft." },
 };
 
 /* ---- RACE-BRIDGE-DATA — zie de toelichting bij SP_RACE/spStartRaceFromScene
@@ -4307,11 +4343,233 @@ const SP_VOCAB_ENTRIES = {
   // ---- Hoofdstuk 24 "Steen en Water" — concept, nog niet gekoppeld ----
   grieks_stele:    { taal:"grieks", woord:"στήλη", transcript:"stḗlē", betekenis:"staande gedenksteen, zuil" },
   latijn_saxum:    { taal:"latijn", woord:"saxum, saxi", betekenis:"rots, steenblok" },
+  // ---- Hoofdstuk 24 signaalwoorden-retrofit (2026-08-15, VOCAB_UITBREIDING.md
+  // §backlog) — H17-25 bleken de geplande signaalwoorden-uitbreiding nooit
+  // echt gekregen te hebben (alleen H15-16 wél). Pallas/Minerva zijn al sinds
+  // Hoofdstuk 23 volledig uitgeput, dus geen curriculum-plafond meer nodig —
+  // gewoon de hoogst-frequente, nog niet gebruikte verb./prep./cj./adv./
+  // pron.-woorden uit vocab.js. ----
+  grieks_men_de:   { taal:"grieks", woord:"μέν … δέ", transcript:"mén … dé", betekenis:"enerzijds … anderzijds" },
+  grieks_te:       { taal:"grieks", woord:"τε", transcript:"te", betekenis:"en" },
+  grieks_an:       { taal:"grieks", woord:"ἄν", transcript:"án", betekenis:"(potentieel-/algemeenheidspartikel)" },
+  grieks_deo:      { taal:"grieks", woord:"δέω", transcript:"déō", betekenis:"nodig hebben, missen" },
+  grieks_oute:     { taal:"grieks", woord:"οὔτε", transcript:"oúte", betekenis:"noch … noch" },
+  grieks_phyo:     { taal:"grieks", woord:"φύω", transcript:"phýō", betekenis:"voortbrengen; groeien" },
+  grieks_ara:      { taal:"grieks", woord:"ἄρα", transcript:"ára", betekenis:"dus, dan" },
+  grieks_chraomai: { taal:"grieks", woord:"χράομαι", transcript:"chráomai", betekenis:"gebruiken" },
+  grieks_hyparcho: { taal:"grieks", woord:"ὑπάρχω", transcript:"hypárchō", betekenis:"bestaan, beginnen" },
+  grieks_pote:     { taal:"grieks", woord:"ποτε", transcript:"pote", betekenis:"ooit, eens" },
+  latijn_ac:       { taal:"latijn", woord:"ac",     betekenis:"en, en ook, en wel" },
+  latijn_quod_cj:  { taal:"latijn", woord:"quod (voegwoord)", betekenis:"dat; omdat" },
+  latijn_ergo:     { taal:"latijn", woord:"ergo",   betekenis:"dus" },
+  latijn_sequor:   { taal:"latijn", woord:"sequor", betekenis:"volgen" },
+  latijn_inquam:   { taal:"latijn", woord:"inquam (inquit)", betekenis:"zeggen" },
+  latijn_modo:     { taal:"latijn", woord:"modo",   betekenis:"zojuist" },
+  latijn_parum:    { taal:"latijn", woord:"parum",  betekenis:"(te) weinig" },
+  latijn_saepe:    { taal:"latijn", woord:"saepe",  betekenis:"vaak" },
+  latijn_sub:      { taal:"latijn", woord:"sub",    betekenis:"onder" },
+  latijn_patior:   { taal:"latijn", woord:"patior", betekenis:"verdragen, toelaten" },
   // ---- Hoofdstuk 25 "Onder de Vulkaan" — concept, nog niet gekoppeld ----
   grieks_arche:    { taal:"grieks", woord:"ἀρχή", transcript:"archḗ", betekenis:"oorsprong, beginsel" },
   grieks_physis:   { taal:"grieks", woord:"φύσις", transcript:"phýsis", betekenis:"natuur, wezen der dingen" },
   grieks_atomos:   { taal:"grieks", woord:"ἄτομος", transcript:"átomos", betekenis:"ondeelbaar" },
   latijn_terraemotus: { taal:"latijn", woord:"terraemotus, terraemotus", betekenis:"aardbeving" },
+  // ---- Hoofdstuk 25 signaalwoorden-retrofit (2026-08-15, zelfde backlog als
+  // hierboven bij Hoofdstuk 24 — volgende 10+10 op de frequentielijst) ----
+  grieks_hyper:      { taal:"grieks", woord:"ὑπέρ", transcript:"hypér", betekenis:"voor; boven" },
+  grieks_prasso:     { taal:"grieks", woord:"πράσσω", transcript:"prássō", betekenis:"doen, handelen" },
+  grieks_mete_mete:  { taal:"grieks", woord:"μήτε … μήτε", transcript:"mḗte … mḗte", betekenis:"noch … noch" },
+  grieks_allelon:    { taal:"grieks", woord:"ἀλλήλων", transcript:"allḗlōn", betekenis:"elkaar" },
+  grieks_symbaino:   { taal:"grieks", woord:"συμβαίνω", transcript:"symbaínō", betekenis:"gebeuren; overeenkomen" },
+  grieks_men:        { taal:"grieks", woord:"μήν", transcript:"mḗn", betekenis:"(versterkend partikel)" },
+  grieks_mede:       { taal:"grieks", woord:"μηδέ", transcript:"mēdé", betekenis:"en niet" },
+  grieks_kineo:      { taal:"grieks", woord:"κινέω", transcript:"kinéō", betekenis:"bewegen" },
+  grieks_pos:        { taal:"grieks", woord:"πῶς", transcript:"pôs", betekenis:"hoe?" },
+  grieks_hosper_rel: { taal:"grieks", woord:"ὅσπερ", transcript:"hósper", betekenis:"juist degene die" },
+  latijn_haud:       { taal:"latijn", woord:"haud",   betekenis:"niet, helemaal niet" },
+  latijn_cogo:       { taal:"latijn", woord:"cogo",   betekenis:"bijeenbrengen" },
+  latijn_sentio:     { taal:"latijn", woord:"sentio", betekenis:"voelen, merken" },
+  latijn_prosum:     { taal:"latijn", woord:"prosum", betekenis:"tot voordeel zijn" },
+  latijn_verto:      { taal:"latijn", woord:"verto",  betekenis:"(om)draaien" },
+  latijn_premo:      { taal:"latijn", woord:"premo",  betekenis:"(onder)drukken" },
+  latijn_intellego:  { taal:"latijn", woord:"intellego", betekenis:"begrijpen" },
+  latijn_adsum:      { taal:"latijn", woord:"assum, adsum", betekenis:"aanwezig zijn" },
+  latijn_praesto:    { taal:"latijn", woord:"praesto", betekenis:"overtreffen; geven" },
+  latijn_redeo:      { taal:"latijn", woord:"redeo",  betekenis:"teruggaan" },
+  // ---- Hoofdstuk 17-23 signaalwoorden-retrofit (2026-08-15, VOCAB_UITBREIDING.md
+  // §backlog, vervolg op de Hoofdstuk 24/25-retrofit hierboven) — deze zeven
+  // hoofdstukken waren allang gebouwd en gekoppeld aan de live speelroute,
+  // maar hadden de geplande signaalwoorden-uitbreiding nooit gekregen. ----
+  // -- Hoofdstuk 17 --
+  grieks_choris:     { taal:"grieks", woord:"χωρίς", transcript:"chōrís", betekenis:"apart; zonder" },
+  grieks_allos_adv:  { taal:"grieks", woord:"ἄλλως", transcript:"állōs", betekenis:"anders" },
+  grieks_homologeo:  { taal:"grieks", woord:"ὁμολογέω", transcript:"homologéō", betekenis:"instemmen, toegeven" },
+  grieks_au:         { taal:"grieks", woord:"αὖ", transcript:"aû", betekenis:"weer; anderzijds" },
+  grieks_kaitoi:     { taal:"grieks", woord:"καίτοι", transcript:"kaítoi", betekenis:"en toch" },
+  grieks_metaxy:     { taal:"grieks", woord:"μεταξύ", transcript:"metaxý", betekenis:"tussen" },
+  grieks_proseko:    { taal:"grieks", woord:"προσήκω", transcript:"prosḗkō", betekenis:"toebehoren; passen" },
+  grieks_mignymi:    { taal:"grieks", woord:"μίγνυμι", transcript:"mígnymi", betekenis:"mengen" },
+  grieks_paradidomi: { taal:"grieks", woord:"παραδίδωμι", transcript:"paradídōmi", betekenis:"overdragen, overleveren" },
+  grieks_ekei:       { taal:"grieks", woord:"ἐκεῖ", transcript:"ekeî", betekenis:"daar" },
+  latijn_rursus:     { taal:"latijn", woord:"rursus",  betekenis:"weer, opnieuw" },
+  latijn_sumo:       { taal:"latijn", woord:"sumo",    betekenis:"nemen" },
+  latijn_incipio:    { taal:"latijn", woord:"incipio", betekenis:"beginnen" },
+  latijn_propter:    { taal:"latijn", woord:"propter", betekenis:"wegens, dichtbij" },
+  latijn_opto:       { taal:"latijn", woord:"opto",    betekenis:"wensen" },
+  latijn_facile:     { taal:"latijn", woord:"facile",  betekenis:"gemakkelijk" },
+  latijn_procul:     { taal:"latijn", woord:"procul",  betekenis:"ver, in de verte" },
+  latijn_tempto:     { taal:"latijn", woord:"tempto",  betekenis:"aanraken, onderzoeken, aanvallen" },
+  latijn_nondum:     { taal:"latijn", woord:"nondum",  betekenis:"nog niet" },
+  latijn_quippe:     { taal:"latijn", woord:"quippe",  betekenis:"immers, want" },
+  // -- Hoofdstuk 18 --
+  grieks_mimnesko:   { taal:"grieks", woord:"μιμνήσκω", transcript:"mimnḗskō", betekenis:"herinneren" },
+  grieks_thnesko:    { taal:"grieks", woord:"θνῄσκω", transcript:"thnḗskō", betekenis:"sterven" },
+  grieks_haplos:     { taal:"grieks", woord:"ἁπλῶς", transcript:"haplôs", betekenis:"eenvoudig" },
+  grieks_koluo:      { taal:"grieks", woord:"κωλύω", transcript:"kōlýō", betekenis:"verhinderen" },
+  grieks_hamartano:  { taal:"grieks", woord:"ἁμαρτάνω", transcript:"hamartánō", betekenis:"missen; fout maken" },
+  grieks_diaphtheiro:{ taal:"grieks", woord:"διαφθείρω", transcript:"diaphtheírō", betekenis:"vernietigen, bederven" },
+  grieks_pos_encl:   { taal:"grieks", woord:"πως", transcript:"pōs", betekenis:"op een of andere wijze" },
+  grieks_entha:      { taal:"grieks", woord:"ἔνθα", transcript:"éntha", betekenis:"daar" },
+  grieks_peirao:     { taal:"grieks", woord:"πειράω", transcript:"peiráō", betekenis:"proberen" },
+  grieks_phobeo:     { taal:"grieks", woord:"φοβέω", transcript:"phobéō", betekenis:"bang maken; vrezen" },
+  latijn_exigo:      { taal:"latijn", woord:"exigo",     betekenis:"verdrijven, eisen, afmaken" },
+  latijn_impero:     { taal:"latijn", woord:"impero",    betekenis:"bevelen" },
+  latijn_specto:     { taal:"latijn", woord:"specto",    betekenis:"kijken, bekijken" },
+  latijn_scribo:     { taal:"latijn", woord:"scribo",    betekenis:"schrijven" },
+  latijn_qua:        { taal:"latijn", woord:"qua",       betekenis:"waar, waarheen, op welke manier" },
+  latijn_addo:       { taal:"latijn", woord:"addo",      betekenis:"toevoegen" },
+  latijn_disco:      { taal:"latijn", woord:"disco",     betekenis:"leren, leren kennen" },
+  latijn_interficio: { taal:"latijn", woord:"interficio",betekenis:"doden" },
+  latijn_contingo:   { taal:"latijn", woord:"contingo",  betekenis:"aanraken" },
+  latijn_constituo:  { taal:"latijn", woord:"constituo", betekenis:"(op)stellen, besluiten" },
+  // -- Hoofdstuk 19 --
+  grieks_hopou:       { taal:"grieks", woord:"ὅπου", transcript:"hópou", betekenis:"waar" },
+  grieks_sympheiro:   { taal:"grieks", woord:"συμφέρω", transcript:"symphérō", betekenis:"nuttig zijn" },
+  grieks_pynthanomai: { taal:"grieks", woord:"πυνθάνομαι", transcript:"pynthánomai", betekenis:"vernemen, informeren" },
+  grieks_temno:       { taal:"grieks", woord:"τέμνω", transcript:"témnō", betekenis:"snijden" },
+  grieks_hypolambano: { taal:"grieks", woord:"ὑπολαμβάνω", transcript:"hypolambánō", betekenis:"opnemen; aannemen" },
+  grieks_lanthano:    { taal:"grieks", woord:"λανθάνω", transcript:"lanthánō", betekenis:"verborgen zijn" },
+  grieks_pantos:      { taal:"grieks", woord:"πάντως", transcript:"pántōs", betekenis:"geheel, in elk geval" },
+  grieks_poreuo:      { taal:"grieks", woord:"πορεύω", transcript:"poreúō", betekenis:"vervoeren; gaan" },
+  grieks_apokrino:    { taal:"grieks", woord:"ἀποκρίνω", transcript:"apokrínō", betekenis:"scheiden; antwoorden" },
+  grieks_kategoreo:   { taal:"grieks", woord:"κατηγορέω", transcript:"katēgoréō", betekenis:"beschuldigen" },
+  latijn_usque:    { taal:"latijn", woord:"usque",    betekenis:"continu, steeds" },
+  latijn_accedo:   { taal:"latijn", woord:"accedo",   betekenis:"naderen, gaan naar" },
+  latijn_adeo:     { taal:"latijn", woord:"adeo",     betekenis:"zo(zeer)" },
+  latijn_interim:  { taal:"latijn", woord:"interim",  betekenis:"ondertussen; voorlopig" },
+  latijn_potius:   { taal:"latijn", woord:"potius",   betekenis:"liever, eerder" },
+  latijn_cupio:    { taal:"latijn", woord:"cupio",    betekenis:"wensen, willen, verlangen" },
+  latijn_exerceo:  { taal:"latijn", woord:"exerceo",  betekenis:"(uit)oefenen, in beweging houden" },
+  latijn_ibi:      { taal:"latijn", woord:"ibi",      betekenis:"daar" },
+  latijn_noceo:    { taal:"latijn", woord:"noceo",    betekenis:"benadelen, schaden" },
+  latijn_perdo:    { taal:"latijn", woord:"perdo",    betekenis:"verwoesten, verliezen" },
+  // -- Hoofdstuk 20 --
+  grieks_trepo:        { taal:"grieks", woord:"τρέπω", transcript:"trépō", betekenis:"wenden, keren" },
+  grieks_homos:        { taal:"grieks", woord:"ὅμως", transcript:"hómōs", betekenis:"toch, niettemin" },
+  grieks_ktaomai:      { taal:"grieks", woord:"κτάομαι", transcript:"ktáomai", betekenis:"verwerven" },
+  grieks_leipo:        { taal:"grieks", woord:"λείπω", transcript:"leípō", betekenis:"verlaten, achterlaten" },
+  grieks_tikto:        { taal:"grieks", woord:"τίκτω", transcript:"tíktō", betekenis:"baren, voortbrengen" },
+  grieks_komizo:       { taal:"grieks", woord:"κομίζω", transcript:"komízō", betekenis:"verzorgen; brengen" },
+  grieks_blepo:        { taal:"grieks", woord:"βλέπω", transcript:"blépō", betekenis:"kijken, zien" },
+  grieks_phroneo:      { taal:"grieks", woord:"φρονέω", transcript:"phronéō", betekenis:"denken, verstandig zijn" },
+  grieks_hormao:       { taal:"grieks", woord:"ὁρμάω", transcript:"hormáō", betekenis:"in beweging brengen; haasten" },
+  grieks_paraskeuazo:  { taal:"grieks", woord:"παρασκευάζω", transcript:"paraskeuázō", betekenis:"klaarmaken" },
+  latijn_appello:  { taal:"latijn", woord:"appello", betekenis:"roepen, noemen" },
+  latijn_ideo:     { taal:"latijn", woord:"ideo",    betekenis:"daarom" },
+  latijn_tandem:   { taal:"latijn", woord:"tandem",  betekenis:"eindelijk" },
+  latijn_dubito:   { taal:"latijn", woord:"dubito",  betekenis:"twijfelen, aarzelen" },
+  latijn_claudo:   { taal:"latijn", woord:"claudo",  betekenis:"sluiten" },
+  latijn_iuvo:     { taal:"latijn", woord:"iuvo",    betekenis:"helpen" },
+  latijn_umquam:   { taal:"latijn", woord:"umquam",  betekenis:"ooit" },
+  latijn_malo:     { taal:"latijn", woord:"malo",    betekenis:"liever willen" },
+  latijn_quamvis:  { taal:"latijn", woord:"quamvis", betekenis:"hoe … ook" },
+  latijn_orior:    { taal:"latijn", woord:"orior",   betekenis:"opgaan, ontstaan, beginnen" },
+  // -- Hoofdstuk 21 --
+  grieks_laleo:      { taal:"grieks", woord:"λαλέω", transcript:"laléō", betekenis:"praten, kletsen" },
+  grieks_drao:       { taal:"grieks", woord:"δράω", transcript:"dráō", betekenis:"doen, handelen" },
+  grieks_skopeo:     { taal:"grieks", woord:"σκοπέω", transcript:"skopéō", betekenis:"beschouwen, onderzoeken" },
+  grieks_erotao:     { taal:"grieks", woord:"ἐρωτάω", transcript:"erōtáō", betekenis:"vragen, ondervragen" },
+  grieks_polemeo:    { taal:"grieks", woord:"πολεμέω", transcript:"poleméō", betekenis:"oorlog voeren" },
+  grieks_thyo:       { taal:"grieks", woord:"θύω", transcript:"thýō", betekenis:"offeren" },
+  grieks_elauno:     { taal:"grieks", woord:"ἐλαύνω", transcript:"elaúnō", betekenis:"drijven" },
+  grieks_dedoika:    { taal:"grieks", woord:"δέδοικα", transcript:"dédoika", betekenis:"vrezen (perf. = pres.)" },
+  grieks_hode_adv:   { taal:"grieks", woord:"ὧδε", transcript:"hôde", betekenis:"zo, aldus" },
+  grieks_haliskomai: { taal:"grieks", woord:"ἁλίσκομαι", transcript:"halískomai", betekenis:"gevangen worden" },
+  latijn_prohibeo: { taal:"latijn", woord:"prohibeo", betekenis:"afhouden (van), verhinderen" },
+  latijn_quamquam: { taal:"latijn", woord:"quamquam", betekenis:"hoewel" },
+  latijn_super:    { taal:"latijn", woord:"super",    betekenis:"boven(dien)" },
+  latijn_tego:     { taal:"latijn", woord:"tego",     betekenis:"bedekken, beschermen" },
+  latijn_etiamsi:  { taal:"latijn", woord:"etiamsi",  betekenis:"zelfs als, ook als" },
+  latijn_frango:   { taal:"latijn", woord:"frango",   betekenis:"breken" },
+  latijn_erro:     { taal:"latijn", woord:"erro",     betekenis:"dwalen, zwerven, zich vergissen" },
+  latijn_lego:     { taal:"latijn", woord:"lego",     betekenis:"verzamelen, lezen, kiezen" },
+  latijn_metuo:    { taal:"latijn", woord:"metuo",    betekenis:"bang zijn, vrezen" },
+  latijn_queror:   { taal:"latijn", woord:"queror",   betekenis:"klagen" },
+  // -- Hoofdstuk 22 --
+  grieks_boetheo:    { taal:"grieks", woord:"βοηθέω", transcript:"boēthéō", betekenis:"helpen" },
+  grieks_apallasso:  { taal:"grieks", woord:"ἀπαλλάσσω", transcript:"apallássō", betekenis:"bevrijden, wegsturen" },
+  grieks_bouleuo:    { taal:"grieks", woord:"βουλεύω", transcript:"bouleúō", betekenis:"beraadslagen, besluiten" },
+  grieks_mala:       { taal:"grieks", woord:"μάλα", transcript:"mála", betekenis:"zeer, erg" },
+  grieks_aiteo:      { taal:"grieks", woord:"αἰτέω", transcript:"aitéō", betekenis:"vragen om" },
+  grieks_ara_vraagprt:{ taal:"grieks", woord:"ἆρα", transcript:"âra", betekenis:"(vraagpartikel)" },
+  grieks_dioko:      { taal:"grieks", woord:"διώκω", transcript:"diṓkō", betekenis:"achtervolgen" },
+  grieks_oukoun:     { taal:"grieks", woord:"οὐκοῦν", transcript:"oukoûn", betekenis:"dus zeker" },
+  grieks_tolmao:     { taal:"grieks", woord:"τολμάω", transcript:"tolmáō", betekenis:"durven, wagen" },
+  grieks_autika:     { taal:"grieks", woord:"αὐτίκα", transcript:"autíka", betekenis:"meteen" },
+  latijn_divido:   { taal:"latijn", woord:"divido",  betekenis:"(ver)delen" },
+  latijn_huc:      { taal:"latijn", woord:"huc",     betekenis:"hierheen" },
+  latijn_exeo:     { taal:"latijn", woord:"exeo",    betekenis:"weggaan, verlaten" },
+  latijn_contemno: { taal:"latijn", woord:"contemno",betekenis:"verachten, minachten" },
+  latijn_intra:    { taal:"latijn", woord:"intra",   betekenis:"binnen" },
+  latijn_nescio:   { taal:"latijn", woord:"nescio",  betekenis:"niet weten" },
+  latijn_retineo:  { taal:"latijn", woord:"retineo", betekenis:"vasthouden" },
+  latijn_desino:   { taal:"latijn", woord:"desino",  betekenis:"ophouden" },
+  latijn_gaudeo:   { taal:"latijn", woord:"gaudeo",  betekenis:"blij zijn, zich verheugen" },
+  latijn_augeo:    { taal:"latijn", woord:"augeo",   betekenis:"vergroten" },
+  // -- Hoofdstuk 23 --
+  grieks_baino:      { taal:"grieks", woord:"βαίνω", transcript:"baínō", betekenis:"gaan, stappen" },
+  grieks_per:        { taal:"grieks", woord:"περ", transcript:"per", betekenis:"(versterkend enclitisch partikel)" },
+  grieks_amphi:      { taal:"grieks", woord:"ἀμφί", transcript:"amphí", betekenis:"aan weerszijden van, om" },
+  grieks_phrazo:     { taal:"grieks", woord:"φράζω", transcript:"phrázō", betekenis:"vertellen, uitleggen" },
+  grieks_pou:        { taal:"grieks", woord:"ποῦ", transcript:"poû", betekenis:"waar?" },
+  grieks_nai:        { taal:"grieks", woord:"ναί", transcript:"naí", betekenis:"ja" },
+  grieks_pote_vraag: { taal:"grieks", woord:"πότε", transcript:"póte", betekenis:"wanneer?" },
+  grieks_angello:    { taal:"grieks", woord:"ἀγγέλλω", transcript:"angéllō", betekenis:"berichten" },
+  grieks_agnoeo:     { taal:"grieks", woord:"ἀγνοέω", transcript:"agnoéō", betekenis:"niet weten" },
+  grieks_ado:        { taal:"grieks", woord:"ᾄδω", transcript:"ádō", betekenis:"zingen" },
+  latijn_intersum: { taal:"latijn", woord:"intersum", betekenis:"liggen tussen, verschillen" },
+  latijn_aspicio:  { taal:"latijn", woord:"aspicio",  betekenis:"zien" },
+  latijn_cur:      { taal:"latijn", woord:"cur",      betekenis:"waarom" },
+  latijn_male:     { taal:"latijn", woord:"male",     betekenis:"slecht" },
+  latijn_permitto: { taal:"latijn", woord:"permitto", betekenis:"laten gaan, toestaan" },
+  latijn_confero:  { taal:"latijn", woord:"confero",  betekenis:"bijeen brengen, vergelijken" },
+  latijn_misceo:   { taal:"latijn", woord:"misceo",   betekenis:"mengen, verwarren" },
+  latijn_aliquando:{ taal:"latijn", woord:"aliquando",betekenis:"eens, soms" },
+  latijn_defendo:  { taal:"latijn", woord:"defendo",  betekenis:"verdedigen" },
+  latijn_miror:    { taal:"latijn", woord:"miror",    betekenis:"bewonderen, verwonderen" },
+  // ---- Hoofdstuk 26 "Een Rijk in Crisis" — concept, nog niet gekoppeld.
+  // Kandidatenlijst uit VOCAB_UITBREIDING.md (§"Hoofdstuk 26/27 —
+  // kandidatenreserve") nu daadwerkelijk gebruikt.
+  grieks_eita:      { taal:"grieks", woord:"εἶτα", transcript:"eîta", betekenis:"dan, vervolgens" },
+  grieks_zao:       { taal:"grieks", woord:"ζάω", transcript:"záō", betekenis:"leven" },
+  grieks_mentoi:    { taal:"grieks", woord:"μέντοι", transcript:"méntoi", betekenis:"echter; natuurlijk" },
+  grieks_mechri:    { taal:"grieks", woord:"μέχρι", transcript:"méchri", betekenis:"tot, totdat" },
+  grieks_phylasso:  { taal:"grieks", woord:"φυλάσσω", transcript:"phylássō", betekenis:"bewaken" },
+  grieks_deloo:     { taal:"grieks", woord:"δηλόω", transcript:"dēlóō", betekenis:"tonen, duidelijk maken" },
+  grieks_e_partikel:{ taal:"grieks", woord:"ἦ", transcript:"ê", betekenis:"voorwaar" },
+  grieks_toinyn:    { taal:"grieks", woord:"τοίνυν", transcript:"toínyn", betekenis:"welnu, dus" },
+  grieks_eromai:    { taal:"grieks", woord:"ἔρομαι", transcript:"éromai", betekenis:"vragen" },
+  grieks_eite_eite: { taal:"grieks", woord:"εἴτε … εἴτε", transcript:"eíte … eíte", betekenis:"hetzij … hetzij" },
+  latijn_excipio:   { taal:"latijn", woord:"excipio", betekenis:"uitnemen, oppakken" },
+  latijn_cedo:      { taal:"latijn", woord:"cedo",    betekenis:"gaan; wijken" },
+  latijn_contra:    { taal:"latijn", woord:"contra",  betekenis:"tegen(over)" },
+  latijn_ceterum:   { taal:"latijn", woord:"ceterum", betekenis:"overigens" },
+  latijn_exspecto:  { taal:"latijn", woord:"exspecto",betekenis:"afwachten, wachten op" },
+  latijn_eripio:    { taal:"latijn", woord:"eripio",  betekenis:"wegrukken" },
+  latijn_rapio:     { taal:"latijn", woord:"rapio",   betekenis:"grijpen, roven" },
+  latijn_aio:       { taal:"latijn", woord:"aio",     betekenis:"zeggen" },
+  latijn_existimo:  { taal:"latijn", woord:"existimo",betekenis:"menen, schatten, oordelen" },
+  latijn_desum:     { taal:"latijn", woord:"desum",   betekenis:"afwezig zijn, in de steek laten" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -4525,6 +4783,17 @@ const SP_PAYOFFS = [
   { id:"ch25_lat001_echo_vitruvius_venustas", type:"echo", trigger:{scene:"CH25_LAT_001"},
     condition:{flags:{ch24_lat_vitruvius_principe:"venustas"}}, priority:0,
     content:{text:`"Venustas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Schoonheid, boven alles — een bouwwerk zonder venustas is, wat mij betreft, hooguit een dak boven je hoofd."`} },
+  // ---- Hoofdstuk 26 "Een Rijk in Crisis" — concept, nog niet gekoppeld.
+  // Doorlopende Stoïcijnse lijn (Gerbens verzoek, 2026-08-15): Cicero (H21)
+  // → Seneca (H21/23/25) → Marcus Aurelius (hier). Twee losse regels nodig
+  // (Cicero-conditie / Seneca-conditie), want relationMin ANDt binnen één
+  // regel alle genoemde NPC's — geen OR mogelijk in één entry.
+  { id:"ch26_lat008_echo_stoicijnen_cicero", type:"echo", trigger:{scene:"CH26_LAT_008"},
+    condition:{relationMin:{cicero:1}}, priority:0,
+    content:{text:`Je denkt terug aan Cicero, die ooit betoogde dat een rechtvaardige staat niet zonder rede en zelfbeheersing kon bestaan. Marcus Aurelius zou, vermoed je, weinig op die gedachte af te dingen hebben — al zou hij haar liever nog wat strenger geformuleerd zien.`} },
+  { id:"ch26_lat008_echo_stoicijnen_seneca", type:"echo", trigger:{scene:"CH26_LAT_008"},
+    condition:{relationMin:{seneca:1}}, priority:0,
+    content:{text:`Je denkt terug aan Seneca, die zijn eigen leven volgens diezelfde Stoïcijnse beginselen probeerde te leiden — tot aan zijn gedwongen dood toe. Marcus Aurelius is, besef je, geen alleenstaand filosoof: hij staat in een lijn die via Seneca al veel eerder begon.`} },
 ];
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan
@@ -22130,7 +22399,7 @@ TEXT:
 "[[Ecce|zie hier]] — twee oorlogen deze keer, allebei tegen een overmacht die niet verslagen had moeten kunnen worden," zegt de Boodschapper van Chronos. "In Griekenland komt het hele verhaal pas tot leven door de stem van één man die het opschreef — Herodotos, die zelf al waarschuwt dat niet alles wat verteld wordt automatisch waar is. In Italië trekt een generaal met olifanten over bergen waar niemand een leger voor mogelijk hield, en wint een veldslag die vandaag de dag nog op elke militaire academie wordt onderwezen — en verliest, uiteindelijk, toch de hele oorlog."
 
 VOCAB:
-grieks_polemos, grieks_nesos, grieks_prodosia, grieks_stratia, grieks_naus, latijn_elephantus, latijn_iuramentum, latijn_exercitus, latijn_venenum, latijn_mons, grieks_pros, grieks_oida, grieks_grapho, grieks_aisthanomai, grieks_katalambano, grieks_machomai, grieks_timao, grieks_isos, grieks_pipto, grieks_kataskeuazo, latijn_solvo, latijn_vix, latijn_laudo, latijn_amitto, latijn_efficio, latijn_maneo, latijn_ve, latijn_compono, latijn_amo, latijn_impono
+grieks_polemos, grieks_nesos, grieks_prodosia, grieks_stratia, grieks_naus, latijn_elephantus, latijn_iuramentum, latijn_exercitus, latijn_venenum, latijn_mons, grieks_pros, grieks_oida, grieks_grapho, grieks_aisthanomai, grieks_katalambano, grieks_machomai, grieks_timao, grieks_isos, grieks_pipto, grieks_kataskeuazo, latijn_solvo, latijn_vix, latijn_laudo, latijn_amitto, latijn_efficio, latijn_maneo, latijn_ve, latijn_compono, latijn_amo, latijn_impono, grieks_choris, grieks_allos_adv, grieks_homologeo, grieks_au, grieks_kaitoi, grieks_metaxy, grieks_proseko, grieks_mignymi, grieks_paradidomi, grieks_ekei, latijn_rursus, latijn_sumo, latijn_incipio, latijn_propter, latijn_opto, latijn_facile, latijn_procul, latijn_tempto, latijn_nondum, latijn_quippe
 
 CHOICES:
 * Volg de Perzische Oorlogen in Griekenland [REQUIRE:taalspoor=grieks] -> CH17_GRE_000B
@@ -22976,7 +23245,7 @@ TEXT:
 Ze laat een stilte vallen, alsof ze zelf ook nog even bij haar eigen woorden stilstaat. "Onthoud dat, terwijl je hierna een schatkist en een leger ziet ontstaan die allebei ooit voor iedereen waren bedoeld — en terwijl je een paar mensen ontmoet die zich, elk op hun eigen manier, juist tegen die verrotting hebben verzet. Niet omdat het hun ooit makkelijk werd gemaakt."
 
 VOCAB:
-grieks_symmachia, grieks_chremata, grieks_phoros, grieks_polis, grieks_demos, latijn_pecunia, latijn_avaritia, latijn_populus, latijn_senatus, latijn_ager
+grieks_symmachia, grieks_chremata, grieks_phoros, grieks_polis, grieks_demos, latijn_pecunia, latijn_avaritia, latijn_populus, latijn_senatus, latijn_ager, grieks_mimnesko, grieks_thnesko, grieks_haplos, grieks_koluo, grieks_hamartano, grieks_diaphtheiro, grieks_pos_encl, grieks_entha, grieks_peirao, grieks_phobeo, latijn_exigo, latijn_impero, latijn_specto, latijn_scribo, latijn_qua, latijn_addo, latijn_disco, latijn_interficio, latijn_contingo, latijn_constituo
 
 CHOICES:
 * Volg de Zeebond die langzaam een rijk wordt [REQUIRE:taalspoor!=latijn] -> CH18_GRE_001
@@ -23543,7 +23812,7 @@ TEXT:
 Ze kijkt je aan, iets langer dan gebruikelijk. "Dit keer vraag ik niet alleen om toe te kijken. Dit keer vraag ik je, aan beide kanten van het verhaal, ook echt een kant te kiezen — zoals ooit bij de muren van Troje. En net als toen zal die keuze niet bij dit hoofdstuk alleen blijven."
 
 VOCAB:
-grieks_symmachos, grieks_polemos, latijn_populus, latijn_senatus, latijn_exsilium
+grieks_symmachos, grieks_polemos, latijn_populus, latijn_senatus, latijn_exsilium, grieks_hopou, grieks_sympheiro, grieks_pynthanomai, grieks_temno, grieks_hypolambano, grieks_lanthano, grieks_pantos, grieks_poreuo, grieks_apokrino, grieks_kategoreo, latijn_usque, latijn_accedo, latijn_adeo, latijn_interim, latijn_potius, latijn_cupio, latijn_exerceo, latijn_ibi, latijn_noceo, latijn_perdo
 
 CHOICES:
 * Volg de Griekse bondgenoten die uiteenvallen [REQUIRE:taalspoor!=latijn] -> CH19_GRE_001
@@ -24559,7 +24828,7 @@ TEXT:
 "Dit keer sta ik er niet helemaal alleen voor," voegt ze eraan toe, met iets in haar stem dat niet helemaal haar gebruikelijke afstandelijkheid is. "Aan de Latijnse kant van dit verhaal vertelt iemand anders een deel ervan mee — iemand die jij, niet lang geleden, hebt zien sterven."
 
 VOCAB:
-grieks_basileus, latijn_legatus
+grieks_basileus, latijn_legatus, grieks_trepo, grieks_homos, grieks_ktaomai, grieks_leipo, grieks_tikto, grieks_komizo, grieks_blepo, grieks_phroneo, grieks_hormao, grieks_paraskeuazo, latijn_appello, latijn_ideo, latijn_tandem, latijn_dubito, latijn_claudo, latijn_iuvo, latijn_umquam, latijn_malo, latijn_quamvis, latijn_orior
 
 CHOICES:
 * Volg Alexander, koning van Macedonië [REQUIRE:taalspoor!=latijn] -> CH20_GRE_001
@@ -25231,6 +25500,9 @@ Wijsheid is geen bezit dat stilstaat. Gedachten die ontstaan op de Atheense Agor
 RELATION:
 athena=+1
 
+VOCAB:
+grieks_laleo, grieks_drao, grieks_skopeo, grieks_erotao, grieks_polemeo, grieks_thyo, grieks_elauno, grieks_dedoika, grieks_hode_adv, grieks_haliskomai, latijn_prohibeo, latijn_quamquam, latijn_super, latijn_tego, latijn_etiamsi, latijn_frango, latijn_erro, latijn_lego, latijn_metuo, latijn_queror
+
 CHOICES:
 * Volg het spoor naar het Athene van Socrates en Plato [REQUIRE:taalspoor!=latijn] -> CH21_GRE_001
 * Volg het spoor naar het Rome van Cicero [REQUIRE:taalspoor=latijn] -> CH21_LAT_000B
@@ -25847,6 +26119,9 @@ TEXT:
 "[[Ecce|zie hier]] — het overlijden van een heerser laat zelden een stilte achter," zegt de Boodschapper van Chronos. "Het veroorzaakt een vacuüm waarin voormalige bondgenoten veranderen in mededingers."
 
 Zowel in het oosten na de dood van Alexander de Grote als in Rome na de moord op Caesar herhaalt zich hetzelfde patroon. Mannen die samen een rijk opbouwden of verdedigden, verdelen de macht in de overtuiging dat alleen zij de rechtmatige opvolgers zijn.
+
+VOCAB:
+grieks_boetheo, grieks_apallasso, grieks_bouleuo, grieks_mala, grieks_aiteo, grieks_ara_vraagprt, grieks_dioko, grieks_oukoun, grieks_tolmao, grieks_autika, latijn_divido, latijn_huc, latijn_exeo, latijn_contemno, latijn_intra, latijn_nescio, latijn_retineo, latijn_desino, latijn_gaudeo, latijn_augeo
 
 CHOICES:
 * Volg het spoor van Alexanders opvolgers [REQUIRE:taalspoor!=latijn] -> CH22_GRE_001
@@ -26634,7 +26909,7 @@ TEXT:
 Ze aarzelt even. "Aan de Latijnse kant help ik je dit keer niet alleen — een geschiedschrijver, die het zelf allemaal heeft opgeschreven, wil je graag door de jaren na Actium loodsen."
 
 VOCAB:
-latijn_pax
+latijn_pax, grieks_baino, grieks_per, grieks_amphi, grieks_phrazo, grieks_pou, grieks_nai, grieks_pote_vraag, grieks_angello, grieks_agnoeo, grieks_ado, latijn_intersum, latijn_aspicio, latijn_cur, latijn_male, latijn_permitto, latijn_confero, latijn_misceo, latijn_aliquando, latijn_defendo, latijn_miror
 
 CHOICES:
 * Volg de laatste koningin van Egypte [REQUIRE:taalspoor=grieks] -> CH23_GRE_001
@@ -27158,6 +27433,9 @@ TEXT:
 "[[Ecce|zie hier]] — dit keer neem ik je niet mee door de tijd, maar door wat er van de tijd is overgebleven," zegt de Boodschapper van Chronos. Voor het eerst sinds je hier voor het eerst binnenkwam, sta je weer middenin het Museum van Mnemosyne zelf, tussen de stolpen die je zelf hebt gevuld.
 
 "Dit hoofdstuk volgt geen jaartallen. Ik haal iedereen erbij die ik nodig heb, uit welk jaar dan ook — een beeldhouwer hier, een bouwmeester daar. De enige vraag die ertoe doet, stel ik je telkens opnieuw: wil je dit onthouden, of laat je het los?" Ze zegt het luchtig, bijna terloops — maar iets in haar toon blijft net iets te lang hangen.
+
+VOCAB:
+grieks_men_de, grieks_te, grieks_an, grieks_deo, grieks_oute, grieks_phyo, grieks_ara, grieks_chraomai, grieks_hyparcho, grieks_pote, latijn_ac, latijn_quod_cj, latijn_ergo, latijn_sequor, latijn_inquam, latijn_modo, latijn_parum, latijn_saepe, latijn_sub, latijn_patior
 
 CHOICES:
 * Volg de Griekse kunstenaars [REQUIRE:taalspoor!=latijn] -> CH24_GRE_001
@@ -27844,7 +28122,7 @@ TEXT:
 "[[Ecce|zie hier]] — je herinnert je acht namen die ik je liet horen, een paar hoofdstukken geleden, zonder hun verhaal," zegt de Boodschapper van Chronos. "Vandaag krijgen ze dat verhaal. En aan de andere kant van dit hoofdstuk wacht een berg die niemand ooit heeft horen aankomen."
 
 VOCAB:
-grieks_arche
+grieks_arche, grieks_hyper, grieks_prasso, grieks_mete_mete, grieks_allelon, grieks_symbaino, grieks_men, grieks_mede, grieks_kineo, grieks_pos, grieks_hosper_rel, latijn_haud, latijn_cogo, latijn_sentio, latijn_prosum, latijn_verto, latijn_premo, latijn_intellego, latijn_adsum, latijn_praesto, latijn_redeo
 
 CHOICES:
 * Volg de zoektocht naar de oerstof [REQUIRE:taalspoor!=latijn] -> CH25_GRE_001
@@ -28429,6 +28707,508 @@ TEXT:
 "[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel. Maar die scheuren zijn nog niet klaar om open te gaan."
 
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou. En ook wat je vandaag koos te onthouden, of los te laten, blijft, hoe vaak je ook terugkeert naar het begin."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 26 "Een Rijk in Crisis" — CONCEPT, NOG NIET GEKOPPELD.
+   Zelfde afspraak als H21-25 vóór hun goedkeuring. Door Claude geschreven.
+
+   Gerbens verzoek (2026-08-15): kaart-herkenningsmechaniek voor Hadrianus
+   (Griekse lijn — geïmplementeerd als een CNS-hub met locatiekeuzes i.p.v.
+   letterlijke integratie in de interactieve SP_MAP_LOCATIONS-pinkaart, om
+   geen ongeteste engine-wijzigingen te introduceren; narratief levert dit
+   hetzelfde "je herkent deze plek"-gevoel op), een doorlopende Stoïcijnse
+   lijn Cicero (H21) → Seneca (H21/23/25) → Marcus Aurelius (nieuwe
+   RELATION), en Gerbens volledige keizerslijst (asterisk = eigen scène/
+   vignet, de rest kort aangestipt) — zie Chronica.md §7.92 en de
+   RELATION-roster-memory voor de volledige planningsgeschiedenis. */
+const SP_CH26_CNS = `
+=== SCENE: CH26_000 ===
+
+TITLE:
+Een Rijk in Crisis
+
+TEXT:
+"[[Ecce|zie hier]] — je hebt een keizer zien vallen en een nieuw huis zien opstaan," zegt de Boodschapper van Chronos. "Vandaag zie je wat er gebeurt met een rijk dat te groot wordt om nog door één man alleen bestuurd te worden — soms briljant geleid, soms verscheurd door zijn eigen soldaten. Twaalf keizers, misschien meer, wachten op je vandaag."
+
+VOCAB:
+grieks_eita, grieks_zao, grieks_mentoi, grieks_mechri, grieks_phylasso, grieks_deloo, grieks_e_partikel, grieks_toinyn, grieks_eromai, grieks_eite_eite, latijn_excipio, latijn_cedo, latijn_contra, latijn_ceterum, latijn_exspecto, latijn_eripio, latijn_rapio, latijn_aio, latijn_existimo, latijn_desum
+
+CHOICES:
+* Volg Hadrianus door Griekenland [REQUIRE:taalspoor!=latijn] -> CH26_GRE_001
+* Volg de lange rij van keizers [REQUIRE:taalspoor=latijn] -> CH26_LAT_001
+
+END
+
+=== SCENE: CH26_GRE_001 ===
+
+TITLE:
+Een Keizer Verliefd op Griekenland
+
+TEXT:
+Een man met een volle, Griekse baard — de eerste Romeinse keizer die er ooit een draagt — staat voor je, een perkamentrol met bouwtekeningen onder de arm. Hadrianus reist meer dan enige keizer vóór hem, en telkens weer trekt Griekenland hem terug. "Ik heb een idee," zegt hij, bijna verlegen voor een man met zoveel macht. "Een [[Πανελλήνιον|Panhellenion]] — een raad waarin elke Griekse stad, van Athene tot de verste kolonie, weer één stem heeft. Rome bestuurt dit rijk, maar Griekenland hoeft daarom niet op te houden Grieks te zijn."
+
+RELATION:
+hadrianus=+1
+
+CODEX:
+codex_panhellenion
+
+CHOICES:
+* Volg hem naar Athene -> CH26_GRE_002
+
+END
+
+=== SCENE: CH26_GRE_002 ===
+
+TITLE:
+Een Voltooide Tempel
+
+TEXT:
+In Athene staat Hadrianus stil bij een tempel die zeshonderd jaar lang onafgemaakt is gebleven — de Olympieion, de tempel van Zeus Olympios, ooit begonnen door tirannen die de stad allang niet meer regeert. "Zeshonderd jaar," zegt hij, terwijl hij naar de laatste zuilen kijkt die zijn eigen bouwmeesters net hebben opgericht. "Athene heeft me nooit gevraagd dit af te maken. Ik wilde het gewoon." Je herkent de stad meteen — dezelfde straten waar je ooit, hoofdstukken geleden, Athena zag geboren worden, en waar een raad ooit besloot een bondgenoot met geweld tot gehoorzaamheid te dwingen.
+
+CODEX:
+codex_hadrianus_athene
+
+CHOICES:
+* Reis met hem verder naar Olympia -> CH26_GRE_003
+
+END
+
+=== SCENE: CH26_GRE_003 ===
+
+TITLE:
+Spelen onder Romeins Gezag
+
+TEXT:
+Bij Olympia lopen de Spelen nog altijd door, eeuwen nadat de eerste hardloper over deze aarden baan sprintte — alleen staan er nu, tussen de Griekse toeschouwers, ook Romeinse ambtenaren in officiële toga. Een gehouwen inscriptie bij de ingang van het stadion, nog vers, eert een lokale weldoener die de Spelen dit jaar financierde.
+
+"[[Ὀλυμπιονίκης γενόμενος τὸν ἀγῶνα τῇ πατρίδι ἀνέθηκε.|Als Olympisch overwinnaar droeg hij de wedstrijd op aan zijn vaderland.]]"
+
+De Boodschapper wijst naar de tekst. "Wie draagt de overwinning hier eigenlijk op — de atleet aan zichzelf, of aan iets groters?"
+
+CODEX:
+codex_olympische_spelen_rome
+
+CHOICES:
+* De atleet draagt zijn overwinning op aan zijn eigen stad, niet enkel aan zichzelf -> CH26_GRE_003_GOED
+* De atleet draagt de wedstrijd zelf, als evenement, over aan Rome -> CH26_GRE_003_FOUT
+
+END
+
+=== SCENE: CH26_GRE_003_GOED ===
+
+TITLE:
+Eer aan de Vaderstad
+
+TEXT:
+Precies — [[ἀνέθηκε|anéthēke]] ("hij droeg op, wijdde toe") heeft hier de overwinning zelf als lijdend voorwerp, en [[τῇ πατρίδι|têi patrídi]] ("aan het vaderland") als meewerkend voorwerp: de atleet draagt zíjn overwinning op aan zíjn eigen stad — een eeuwenoude Griekse gewoonte die onder Rome, tegen de verwachting in, gewoon doorleeft.
+
+CHOICES:
+* Reis verder naar Delphi -> CH26_GRE_004
+
+END
+
+=== SCENE: CH26_GRE_003_FOUT ===
+
+TITLE:
+Een Begrijpelijke, Verkeerde Lezing
+
+TEXT:
+Bijna — maar [[τὸν ἀγῶνα|tòn agôna]] ("de wedstrijd") is hier het lijdend voorwerp van een ander werkwoord verderop in de zin die je nog niet zag, niet van [[ἀνέθηκε|anéthēke]] zelf. Wat de atleet opdraagt, is zijn overwínning — [[Ὀλυμπιονίκης γενόμενος|Olympionikēs genómenos]], "geworden zijnde Olympisch overwinnaar" — niet de wedstrijd als evenement.
+
+CHOICES:
+* Lees de inscriptie nog eens, nu met de juiste nadruk -> CH26_GRE_003_GOED
+
+END
+
+=== SCENE: CH26_GRE_004 ===
+
+TITLE:
+Een Orakel dat Nog Steeds Spreekt
+
+TEXT:
+In Delphi, bij het heiligdom van Apollo, is het vuur van de Pythia kleiner dan het ooit was — minder pelgrims, minder koningen die om raad komen dan in de tijd van Croesus of Alexander. Toch spreekt het orakel nog steeds, en Hadrianus zelf raadpleegt het, net als elke Romeinse keizer vóór hem die zich om de goden bekommerde.
+
+De Boodschapper van Chronos wordt hier ongewoon stil, alsof een orakel dat nog altijd tot mensen spreekt haar op een andere manier raakt dan alle tempels die je vandaag al zag.
+
+DIALOGUE:
+Boodschapper van Chronos
+Ook orakels, zie je, houden niet zomaar op te bestaan zodra er minder mensen naar luisteren. Ze wachten gewoon.
+
+CHOICES:
+* Ga verder -> CH26_GRE_EINDE
+
+END
+
+=== SCENE: CH26_GRE_EINDE ===
+
+TITLE:
+Wat Griekenland Overleefde
+
+TEXT:
+"[[Ecce|zie hier]] — een keizer die geen Grieks hoefde te leren, maar het toch deed, die geen Griekse tempels hoefde te voltooien, maar het toch deed," zegt de Boodschapper van Chronos. "Aan de andere kant van dit hoofdstuk zie je wat er gebeurt met een rijk waarin niet elke keizer zo veel liefde overhoudt voor wat hij bestuurt."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH26_EINDE
+* Steek over naar Rome [REQUIRE:taalspoor=beide] -> CH26_LAT_001
+
+END
+
+=== SCENE: CH26_LAT_001 ===
+
+TITLE:
+Eén Jaar, Vier Keizers
+
+TEXT:
+Nero is dood, en Rome heeft geen idee wie hem moet opvolgen. Binnen één enkel jaar, 69 n.Chr., bestijgen en verliezen drie mannen na elkaar de troon — Galba, vermoord door zijn eigen lijfwacht; Otho, verslagen in de burgeroorlog die daarop volgt; Vitellius, verdreven door de legioenen uit het Oosten. Uit die chaos komt uiteindelijk één man tevoorschijn met genoeg legers, genoeg geduld en genoeg gezond verstand om te blijven: Vespasianus, een generaal zonder voorname afkomst, opgeklommen door puur militair succes.
+
+CODEX:
+codex_vierkeizerjaar
+
+CHOICES:
+* Maak kennis met de nieuwe keizer -> CH26_LAT_002
+
+END
+
+=== SCENE: CH26_LAT_002 ===
+
+TITLE:
+Geld Ruikt Nergens Naar
+
+TEXT:
+Vespasianus regeert nuchter en zuinig — precies wat een rijk na een burgeroorlog nodig heeft. Hij begint de bouw van een reusachtig nieuw amfitheater midden in Rome, gefinancierd deels door een nieuwe belasting op iets onverwachts: het opgevangen urine uit de openbare latrines, gebruikt door wolwassers en blekers. Zijn zoon Titus vindt de belasting beneden de waardigheid van een keizer en zegt dat hardop. Vespasianus houdt zwijgend een muntstuk uit de eerste opbrengst onder zijn neus.
+
+DIALOGUE:
+Vespasianus
+[[Num odore offenderis?|Word je door de geur ervan beledigd?]]
+
+Titus schudt zijn hoofd — de munt ruikt naar niets bijzonders, gewoon naar metaal.
+
+CODEX:
+codex_vespasianus_colosseum
+
+CHOICES:
+* Munten dragen geen geur van waar het geld vandaan komt -> CH26_LAT_002_GOED
+* Munten van deze belasting ruiken onaangenaam, ook al voelt Titus dat niet meteen -> CH26_LAT_002_FOUT
+
+END
+
+=== SCENE: CH26_LAT_002_GOED ===
+
+TITLE:
+Pecunia Non Olet
+
+TEXT:
+Precies — dat is exact Vespasianus' punt, en het levert hem het gezegde op dat eeuwen zal overleven: [[pecunia non olet|geld ruikt nergens naar]]. Waar het geld vandaan kwam, doet er voor de staatskas niet toe, zolang het maar binnenkomt.
+
+FLAG:
+ch26_lat_vespasianus=goed
+
+CHOICES:
+* Zie hoe het amfitheater vordert, jaren later -> CH26_LAT_003
+
+END
+
+=== SCENE: CH26_LAT_002_FOUT ===
+
+TITLE:
+Precies Andersom
+
+TEXT:
+Andersom, eigenlijk — Vespasianus' hele punt is dat de munt helemaal NIET onaangenaam ruikt, wat de herkomst ook was. Titus voelt niets vies aan het metaal zelf, en dat is precies het bewijs dat zijn vader wil leveren.
+
+CHOICES:
+* Zie hoe het amfitheater vordert, jaren later -> CH26_LAT_003
+
+END
+
+=== SCENE: CH26_LAT_003 ===
+
+TITLE:
+Een Amfitheater en een As-wolk
+
+TEXT:
+Onder Titus, Vespasianus' zoon, wordt het amfitheater eindelijk voltooid — later bekend als het Colosseum, naar het reusachtige standbeeld ernaast. Titus zelf regeert nog geen twee jaar: dezelfde uitbarsting van de Vesuvius die je al meemaakte, met Plinius en zijn oom, aan de voet van de berg — dát was onder Titus, niet onder Nero, die toen al jaren dood was. Na Titus' korte, geliefde bewind volgt zijn broer Domitianus: achterdochtig, hardvochtig, uiteindelijk vermoord door zijn eigen hofhouding — zijn naam wordt daarna zoveel mogelijk van monumenten gebeiteld.
+
+CODEX:
+codex_titus_domitianus
+
+CHOICES:
+* Reis verder naar de noordelijke grens van het rijk -> CH26_LAT_004
+
+END
+
+=== SCENE: CH26_LAT_004 ===
+
+TITLE:
+Opstand aan de Rijn
+
+TEXT:
+Vlak na het Vierkeizerjaar, terwijl Rome zelf nog in verwarring is, grijpt een Bataafse edelman met Romeins burgerrecht, Julius Civilis, zijn kans: hij zet de Bataven en verscheidene naburige stammen langs de Rijn — in wat nu Nederland is — in opstand tegen Rome. Tacitus zelf, de geschiedschrijver die je al eerder als bron tegenkwam, tekent deze opstand nauwkeurig op. Voor jou wordt het geen geschiedenisles, maar een gevecht.
+
+CODEX:
+codex_bataafse_opstand
+
+CHOICES:
+* Vecht mee tegen de opstandelingen -> CH26_LAT_005
+
+END
+
+=== SCENE: CH26_LAT_005 ===
+
+TITLE:
+De Bataven bij de Rijn
+
+TEXT:
+Julius Civilis' strijders kennen het moeras en de rivierarmen beter dan welke Romeinse officier ook — precies het soort gevecht waar geen enkel legioenshandboek op voorbereidt.
+
+COMBAT:
+bataven
+
+CHOICES:
+* Ga verder, na het gevecht -> CH26_LAT_006
+
+END
+
+=== SCENE: CH26_LAT_006 ===
+
+TITLE:
+Een Rijk dat zijn Opvolger Kiest
+
+TEXT:
+Na Domitianus' dood kiest de Senaat een oude, kinderloze senator, Nerva, als keizer — een noodgreep die per ongeluk een van de beste ideeën in de hele Romeinse geschiedenis oplevert. In plaats van zijn troon aan een zoon na te laten, adopteert Nerva de bekwaamste generaal die hij kent: Trajanus. Onder Trajanus bereikt het rijk zijn grootste omvang ooit, tot ver in Dacië — een overwinning die hij op een reusachtige, spiraalvormig beeldhouwde zuil in Rome laat vastleggen. Als bestuurder in de provincie Bithynia schrijft een van zijn ambtenaren hem geregeld om raad — dezelfde Plinius de Jongere wiens brief je in het vorige hoofdstuk al zag.
+
+RELATION:
+hadrianus=+1
+
+CODEX:
+codex_nerva_trajanus
+
+CHOICES:
+* Volg de opvolging verder -> CH26_LAT_007
+
+END
+
+=== SCENE: CH26_LAT_007 ===
+
+TITLE:
+Twee Rustige Namen
+
+TEXT:
+Trajanus adopteert op zijn beurt Hadrianus — dezelfde reiziger die je, als je beide sporen speelt, aan de andere kant van dit hoofdstuk al door Griekenland zag trekken. Na Hadrianus volgt Antoninus Pius, wiens bijnaam "de Vrome" eer bewijst aan hoe plichtsgetrouw hij zijn adoptiefvader liet vergoddelijken — een van de rustigste, minst dramatische regeerperiodes van het hele rijk, precies wat een uitgeput rijk soms nodig heeft.
+
+CHOICES:
+* Ontmoet de laatste, en meest filosofische, van de adoptiefkeizers -> CH26_LAT_008
+
+END
+
+=== SCENE: CH26_LAT_008 ===
+
+TITLE:
+De Filosoof op de Troon
+
+TEXT:
+Marcus Aurelius regeert niet vanuit een paleis, maar bijna voortdurend vanuit legerkampen langs de Donau, waar Germaanse stammen jaar na jaar de grens beproeven. Toch schrijft hij, 's avonds bij het kampvuur, aantekeningen voor zichzelf — geen staatsstukken, maar persoonlijke overpeinzingen over plicht, vergankelijkheid en zelfbeheersing. Hij schrijft ze, vreemd genoeg voor een Romeinse keizer, in het Grieks: de taal van de filosofie die hij het meest liefheeft.
+
+DIALOGUE:
+Marcus Aurelius
+[[Ἄριστος ἐκδικήσεως τρόπος τὸ μὴ ὁμοιοῦσθαι.|De beste manier om je te wreken, is niet te worden zoals degene die je kwaad deed.]]
+
+RELATION:
+marcus_aurelius=+1
+
+CODEX:
+codex_marcus_aurelius_stoicijn
+
+CHOICES:
+* Vraag hem naar de filosofie die hem zo stil maakt -> CH26_LAT_008_STOICIJN
+* Vraag hem naar de oorlog die hem geen rust laat -> CH26_LAT_008_OORLOG
+
+END
+
+=== SCENE: CH26_LAT_008_STOICIJN ===
+
+TITLE:
+Wat je Wel en Niet in de Hand Hebt
+
+TEXT:
+Marcus Aurelius glimlacht vermoeid. "De Stoa leert me één ding, telkens opnieuw: onderscheid wat in mijn macht ligt van wat niet in mijn macht ligt. Mijn eigen oordeel, mijn eigen keuzes — die zijn van mij. Een grens, een ziekte, de dood van een vriend — die zijn dat niet. Alle onrust in een mens komt voort uit het verwarren van die twee."
+
+FLAG:
+ch26_lat_marcus_aurelius=stoicijn
+
+CHOICES:
+* Ga met hem mee naar het front -> CH26_LAT_009
+
+END
+
+=== SCENE: CH26_LAT_008_OORLOG ===
+
+TITLE:
+Een Keizer die Liever Elders Was
+
+TEXT:
+"Eerlijk?" zegt Marcus Aurelius, en voor een moment valt de filosofische kalmte even weg. "Ik zou liever thuis bij mijn boeken zitten dan hier, in de regen, tegenover stammen die morgen weer terugkomen. Maar een keizer kiest niet altijd waar hij nodig is." Hij herstelt zich meteen, alsof hij zichzelf op zijn eigen les betrapt.
+
+FLAG:
+ch26_lat_marcus_aurelius=oorlog
+
+CHOICES:
+* Ga met hem mee naar het front -> CH26_LAT_009
+
+END
+
+=== SCENE: CH26_LAT_009 ===
+
+TITLE:
+Een Zoon, Geen Adoptie
+
+TEXT:
+Voor het eerst in bijna een eeuw laat een keizer de troon na aan zijn eigen, biologische zoon in plaats van aan de bekwaamste beschikbare opvolger — en het verschil is meteen voelbaar. Commodus heeft weinig belangstelling voor bestuur, en des te meer voor het amfitheater: hij treedt zelf op als gladiator, verkleedt zich als Hercules met een leeuwenvel, en laat zich vereren als een levende halfgod. De Senaat kijkt met groeiend afgrijzen toe.
+
+RELATION:
+marcus_aurelius=+1
+
+CODEX:
+codex_commodus
+
+CHOICES:
+* Zie hoe zijn bewind eindigt -> CH26_LAT_010
+
+END
+
+=== SCENE: CH26_LAT_010 ===
+
+TITLE:
+Een Rijk te Koop
+
+TEXT:
+Commodus wordt uiteindelijk vergiftigd — en toen dat niet snel genoeg werkte, gewurgd in bad door een worstelaar. Pertinax, een oudere senator, wordt tot keizer uitgeroepen maar binnen drie maanden alweer vermoord door dezelfde keizerlijke lijfwacht die hem op de troon zette. Wat daarna gebeurt, is bijna ongelooflijk: de Praetoriaanse Garde veilt de troon van het Romeinse Rijk letterlijk aan de hoogste bieder. Didius Julianus wint de veiling — en regeert precies zesenzestig dagen voordat een legeraanvoerder uit de provincie, Septimius Severus, met zijn troepen naar Rome marcheert om het rijk terug te veroveren op zijn eigen voorwaarden.
+
+CODEX:
+codex_vijfkeizerjaar
+
+CHOICES:
+* Maak kennis met de nieuwe, zegevierende keizer -> CH26_LAT_011
+
+END
+
+=== SCENE: CH26_LAT_011 ===
+
+TITLE:
+Een Keizer uit Afrika
+
+TEXT:
+Septimius Severus, geboren in Leptis Magna in Noord-Afrika, is de eerste Romeinse keizer met wortels zo ver van Rome zelf. Hij regeert hard en effectief, breidt de grenzen verder uit, en geeft zijn zoons op zijn sterfbed één advies dat alles samenvat wat zijn bewind kenmerkte.
+
+DIALOGUE:
+Septimius Severus
+[[Concordate, milites ditate, ceteros contemnite.|Wees eensgezind, verrijk de soldaten, veracht de rest.]]
+
+CODEX:
+codex_septimius_severus
+
+CHOICES:
+* Zie of zijn zoons dat advies opvolgen -> CH26_LAT_012
+
+END
+
+=== SCENE: CH26_LAT_012 ===
+
+TITLE:
+Eén Burgerrecht, Eén Dode Broer
+
+TEXT:
+Caracalla en Geta, Septimius Severus' twee zoons, zouden samen moeten regeren — in plaats daarvan laat Caracalla zijn eigen broer vermoorden, in de armen van hun eigen moeder, en beveelt hij dat Geta's naam overal wordt weggebeiteld. Diezelfde Caracalla vaardigt daarna wel een van de meest verstrekkende wetten uit de hele Romeinse geschiedenis uit: de Constitutio Antoniniana kent het Romeinse burgerrecht toe aan vrijwel elke vrije inwoner van het hele rijk, van Britannia tot Syrië — niet langer een voorrecht van enkelen, maar de norm. Na hem regeert nog kort de jonge, excentrieke Elagabalus, wiens ongebruikelijke godsdiensthervormingen de Senaat evenmin weten te overtuigen — ook hij wordt vermoord, nog geen twintig jaar oud.
+
+CODEX:
+codex_constitutio_antoniniana
+
+CHOICES:
+* Zie het rijk daarna afglijden naar chaos -> CH26_LAT_013
+
+END
+
+=== SCENE: CH26_LAT_013 ===
+
+TITLE:
+Vijftig Jaar Bijna Uiteen
+
+TEXT:
+Wat volgt, kent nauwelijks nog een vaste lijn: tientallen "soldatenkeizers" volgen elkaar in luttele jaren of zelfs maanden op, elk uitgeroepen door zijn eigen legioen, de meesten vermoord door het volgende. Het rijk valt bijna letterlijk uiteen in drie stukken — een afgescheiden rijk in Gallië, een ander rond de woestijnstad Palmyra in het Oosten. Uiteindelijk is het één generaal, Aurelianus, die het rijk in nog geen vijf jaar grotendeels herenigt — een prestatie die hem de bijnaam [[restitutor orbis|hersteller van de wereld]] oplevert. Rome zelf krijgt van hem, voor het eerst in eeuwen, weer een eigen stadsmuur: het rijk voelt zich niet langer onaantastbaar.
+
+DIALOGUE:
+Boodschapper van Chronos
+Aurelianus herenigt het rijk, maar lost niet op waaróm het uiteenviel. Die vraag wacht op iemand anders.
+
+CODEX:
+codex_aurelianus_crisis
+
+CHOICES:
+* Ga verder -> CH26_LAT_EINDE
+
+END
+
+=== SCENE: CH26_LAT_EINDE ===
+
+TITLE:
+Twaalf Keizers, Eén Vraag
+
+TEXT:
+"[[Ecce|zie hier]] — twaalf keizers, misschien meer als je meetelt wie er maar een paar maanden zat," zegt de Boodschapper van Chronos. "Sommigen bouwden. Sommigen vochten alleen om te overleven. Eén stelde zichzelf de vraag hoe je goed blijft handelen te midden van chaos, in het Grieks, bij een kampvuur aan de Donau." Ze zwijgt even. "De vraag die overblijft, is niet wie de sterkste keizer was. Het is wie er nog een oplossing kan bedenken voor een rijk dat zichzelf keer op keer opeet."
+
+CHOICES:
+* Keer terug naar het Orakel van Chronos -> CH26_EINDE
+
+END
+
+=== SCENE: CH26_EINDE ===
+
+TITLE:
+Een Rijk op de Rand
+
+TEXT:
+"[[Ecce|zie hier]] — vandaag zag je een rijk op zijn grootst, en een rijk dat zichzelf bijna kapotscheurde," zegt de Boodschapper van Chronos. "Beide waren waar, soms in dezelfde eeuw, soms bij dezelfde man. Een filosoof-keizer bij een kampvuur, een troon geveild aan de hoogste bieder — hetzelfde rijk, amper een generatie ertussen."
+
+Ze kijkt je aandachtig aan. "Volgende keer zie je wie eindelijk een antwoord durft te geven op de vraag die vandaag onbeantwoord bleef."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_rijk_in_crisis
+
+CHOICES:
+* Bekijk de verzameling in het museum -> CH26_MUSEUM_00
+
+END
+
+=== SCENE: CH26_MUSEUM_00 ===
+
+TITLE:
+Wat de Crisis Overliet
+
+TEXT:
+Een nieuwe stolp vult zich: een piepklein stukje amfitheater-marmer naast een gebogen, verweerde muntenrand. "Vandaag heb je gezien hoe snel een rijk van zijn hoogtepunt naar zijn afgrond kan reizen — en weer terug," zegt de Boodschapper van Chronos.
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH26_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH26_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
 
 Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
 

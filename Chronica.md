@@ -7889,6 +7889,144 @@ CHECK-uitkomsten) — 34/34 scènes bereikt, 0 exceptions, 0 onopgeloste
 tokens, Vitruvius-payoff-echo getest met `ch24_lat_vitruvius_principe:
 "firmitas"`.
 
+### 7.92 Vocab-backlog gedicht (H24/25) + Hoofdstuk 26/27-planning uitgebreid (2026-08-15)
+
+**Vocab-uitbreiding herbekeken op Gerbens verzoek** ("het viel me al op dat
+er weinig woorden bijkwamen in de afgelopen hoofdstukken"). Een
+frequentie-gap-analyse tegen `certamen/vocab.js` (alle GR/LA verb./prep./
+cj./adv./pron.-woorden die nog nergens in `SP_VOCAB_ENTRIES` voorkomen)
+bracht een grotere bevinding aan het licht dan verwacht: niet alleen H24/25
+misten hun signaalwoorden, maar **Hoofdstuk 17 t/m 23 ook** — alleen H15-16
+hebben ooit hun geplande 10+10 daadwerkelijk gekregen (zie
+`VOCAB_UITBREIDING.md`). H24 en H25 zijn nu alsnog met 10+10 hoogfrequente
+signaalwoorden aangevuld (toegevoegd aan `SP_VOCAB_ENTRIES` en de
+`VOCAB:`-secties van `CH24_000`/`CH25_000`) — laagrisico omdat beide nog
+niet gekoppeld zijn. Het retrofitten van H17-23 (al gekoppeld, dus een
+grotere, aparte actie — wel puur additief en dus in principe risicoloos)
+is bewust NIET in dezelfde beweging gedaan; zie `VOCAB_UITBREIDING.md` voor
+de aanbeveling. Twee kandidatenlijsten (20+20) klaargezet voor H26/H27
+zodra die geschreven worden.
+
+**Validatie**: `node --check` slaagt, alle 40 nieuwe vocab-id's resolven,
+live BFS-doorloop van H24+H25 samen (taalspoor "beide") geeft 0 exceptions
+en 46 verzamelde vocab-woorden.
+
+**Hoofdstuk 26/27-planning uitgebreid** (Gerbens verzoek, in aanloop naar het
+schrijven van Hoofdstuk 26): twee brainstormvoorstellen uitgewerkt tot
+concrete mechanieken in de `SP_CAMPAIGN`-metadata:
+- **Kaart-herkenning (H26, Griekse lijn)**: Hadrianus' reis door Griekenland
+  hergebruikt de bestaande wereldkaart/codex-unlock-hook — elke al eerder
+  ontgrendelde Griekse locatie krijgt een korte, nieuwe Hadrianus-regel
+  zodra de speler erop klikt, zonder nieuwe scènes.
+- **Doorlopende Stoïcijnse lijn**: Cicero (H21) → Seneca (H21/23/25) →
+  Marcus Aurelius (H26) krijgt een keuzemoment bij zijn Meditations (in het
+  Grieks geschreven, ondanks dat hij Romeins keizer is — mooie taalgrens-
+  anekdote) met een `SP_PAYOFFS`-echo die terugverwijst naar de
+  Cicero/Seneca-RELATION (technisch: twee losse payoff-entries nodig, één
+  per NPC-conditie, want `spPayoffConditionMet`'s `relationMin` AND't alle
+  genoemde NPC's binnen één entry — geen OR mogelijk in één regel).
+
+**Volledige keizerslijst toegevoegd aan H26** (Gerbens expliciete lijst,
+2026-08-15): Vierkeizerjaar, Vespasianus*, Titus, Domitianus, Nerva*,
+Trajanus*, Hadrianus*, Antoninus Pius, Marcus Aurelius*, Commodus*,
+Pertinax, Vijfkeizerjaar, Septimius Severus*, Caracalla*, Geta, Elagabalus,
+Aurelianus — asterisk-namen krijgen een eigen scène/vignet, de overige
+worden aangestipt. Diocletianus*/Constantijn de Grote*/Justinianus I*
+horen structureel al bij H27 (Tetrarchie/val van West-Rome/Byzantium) en
+stonden daar al.
+
+**Nieuw idee verwerkt in H27**: op Gerbens voorstel opent het hoofdstuk niet
+met Diocletianus die de Tetrarchie kant-en-klaar presenteert, maar met een
+kort moment waarin de speler zelf meedenkt over hoe je een rijk bestuurt
+dat te groot is voor één man — pas daarna onthult Diocletianus zijn eigen
+oplossing, zodat de Tetrarchie aanvoelt als iets dat de speler mee heeft
+bedacht.
+
+**Status**: dit is planning/metadata-werk in `SP_CAMPAIGN` — Hoofdstuk 26
+zelf is nog niet geschreven, wacht op een laatste goedkeuring van het
+concept voordat de scènes worden uitgewerkt.
+
+### 7.93 Vocab-backlog Hoofdstuk 17-23 gedicht (2026-08-15)
+
+Vervolg op §7.92: de zeven al gekoppelde, live hoofdstukken die bij de
+frequentie-gap-analyse ook zonder signaalwoorden-uitbreiding bleken te
+zitten (Hoofdstuk 17 t/m 23), zijn alsnog met elk 10 Griekse + 10 Latijnse
+hoogfrequente signaalwoorden aangevuld — 140 woorden in totaal, toegevoegd
+aan `SP_VOCAB_ENTRIES` en aan de `VOCAB:`-secties van de hub-scènes
+`CH17_000` t/m `CH23_000` (`CH21_000` en `CH22_000` kregen daarbij hun
+allereerste `VOCAB:`-sectie). Puur additief: geen scène-structuur, keuzes,
+flags of grammatica gewijzigd. Zie `VOCAB_UITBREIDING.md` §"Hoofdstuk
+17-23 — RETROFIT" voor de volledige woordenlijst per hoofdstuk.
+
+Twee id-botsingen met al bestaande entries opgelost door een net andere
+Grieks woordvorm een eigen id te geven: `grieks_pos_encl` (πως, "op een of
+andere wijze") naast het al bestaande `grieks_pos` (πῶς, "hoe?"), en
+`grieks_hode_adv` (ὧδε, "zo, aldus") naast het al bestaande `grieks_hode`
+(ὅδε, "deze (hier)").
+
+**Validatie**: `node --check` slaagt; alle 140 nieuwe id's resolven zonder
+dubbelingen in elke hub-scène's `VOCAB:`-sectie (geverifieerd met een los
+Node-scriptje, niet alleen visueel); `validate_chronica.js` geeft dezelfde
+3 vooraf al bestaande fouten (Hoofdstuk 25-payoffs die wachten op een nog
+niet gekoppeld Hoofdstuk 24-flag — losstaand van deze klus, bevestigd via
+`git stash`) en geen nieuwe fouten. Cache-busting in `certamen/index.html`
+opgehoogd naar `?v=20260815a`.
+
+**Status vocab-backlog**: Hoofdstuk 1-25 zijn nu allemaal volledig op
+methode. Alleen Hoofdstuk 26/27 (kandidatenreserve klaar in
+`VOCAB_UITBREIDING.md`) en Hoofdstuk 28 t/m Finale (nog geen kandidatenlijst)
+staan nog open.
+
+### 7.94 Hoofdstuk 26 "Een Rijk in Crisis" geschreven, BEWUST NOG NIET GEKOPPELD (2026-08-15)
+
+Door Claude geschreven (geen Gemini-concept), zelfde staged status als
+H21-25 vóór hun goedkeuring. 29 scènes.
+
+**Twee brainstormvoorstellen uit §7.92 nu daadwerkelijk uitgewerkt**:
+- **Kaart-herkenning (Griekse lijn)**: Hadrianus reist met de speler langs
+  Athene (de Olympieion, met een expliciete callback naar de Athena-geboorte
+  uit Hoofdstuk 1 en de Naxos-scheur uit Hoofdstuk 18), Olympia (een echte
+  Griekse leesval over een overwinningsinscriptie — lijdend vs. meewerkend
+  voorwerp) en Delphi. Geïmplementeerd als een CNS-hub-en-vignetten-
+  structuur i.p.v. letterlijke integratie in de interactieve
+  `SP_MAP_LOCATIONS`-pinkaart, om geen ongeteste engine-wijziging te
+  introduceren — narratief levert dit hetzelfde herkenningsgevoel op.
+- **Doorlopende Stoïcijnse lijn**: Marcus Aurelius (nieuwe RELATION) krijgt
+  een keuzemoment bij zijn Meditations (geschreven in het Grieks, ondanks
+  dat hij Romeins keizer is), met twee nieuwe `SP_PAYOFFS`-echo's op
+  `CH26_LAT_008` die respectievelijk terugverwijzen naar Cicero (H21) en
+  Seneca (H21/23/25) — twee losse regels omdat `relationMin` binnen één
+  regel alle genoemde NPC's met AND combineert, geen OR toelaat.
+
+**Volledige keizerslijst verwerkt** (Gerbens expliciete lijst, zie §7.92):
+Vierkeizerjaar → Vespasianus (met een echte "pecunia non olet"-leesval,
+lijdend/meewerkend voorwerp bij de latrinebelasting-anekdote) → Titus/
+Domitianus (met een expliciete Vesuvius-callback naar Hoofdstuk 25: Titus,
+niet Nero, was keizer tijdens de uitbarsting van 79) → de Bataafse Opstand
+als eigen Combat-bridge-episode (nieuwe vijand `bataven`) → Nerva/Trajanus
+(met een Plinius-callback naar Hoofdstuk 25) → Hadrianus-kruisverwijzing/
+Antoninus Pius → Marcus Aurelius → Commodus → Pertinax/Vijfkeizerjaar (de
+troon letterlijk geveild aan Didius Julianus) → Septimius Severus →
+Caracalla (de Constitutio Antoniniana, 212 n.Chr. — burgerrecht voor
+vrijwel elke vrije inwoner van het rijk) met Geta en Elagabalus aangestipt
+→ de Derde-Eeuwse Crisis en Aurelianus ("restitutor orbis"), met een
+vooruitwijzing naar Hoofdstuk 27/Diocletianus.
+
+**Nieuwe registry-entries**: 14 CODEX-entries, 1 nieuwe COMBAT-vijand
+(`bataven`), 1 nieuw souvenir (`souvenir_rijk_in_crisis`), 20
+signaalwoorden (de H26-kandidatenlijst uit `VOCAB_UITBREIDING.md`, nu
+daadwerkelijk toegevoegd aan `SP_VOCAB_ENTRIES`), 2 nieuwe `SP_PAYOFFS`-
+echo's.
+
+**Validatie**: `node --check` slaagt. Losse parse-check: 29 scènes, 0
+dubbele ID's, 0 kapotte links, 0 onbekende registry-referenties (CODEX/
+VOCAB/SOUVENIR/COMBAT), 29/29 scènes bereikbaar vanaf `CH26_000`. Live
+browser-BFS deze keer NIET uitgevoerd — poort 8769 was bezet door een
+gelijktijdig lopende sessie die tegelijk Hoofdstuk 17-23's vocab-retrofit
+uitvoerde (zie §7.93); de statische validatie is wel volledig doorlopen.
+**Aanbeveling**: alsnog een live BFS-doorloop draaien zodra er een vrije
+preview-poort beschikbaar is, vóór dit hoofdstuk gekoppeld wordt.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
