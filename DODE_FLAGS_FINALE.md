@@ -157,9 +157,22 @@ H24's reeks is dit een bewust "onthoud of laat los"-zaadje voor Hoofdstuk
 `chronica-h24-lethe-mnemosyne-zaadjes` (nu ook H25 meenemend). Niet in de
 generieke Finale-lijst opnemen; check eerst of H28/29 de payoff al dekken.
 
+## Categorie 9 — Nieuwe dode flags (H26, geschreven 2026-08-15, nog niet gekoppeld)
+
+- `ch26_lat_vespasianus` (goed) — alleen gezet bij de correcte leesval-
+  uitkomst van de "pecunia non olet"-scène, geen personage dat dit later
+  uitleest.
+- `ch26_lat_marcus_aurelius` (stoicijn/oorlog) — welke vraag de speler aan
+  Marcus Aurelius stelde; flavour-only, geen personage dat dit later
+  terugleest.
+
+`ch26_lat_vitruvius_principe`-achtige payoff-loze flags horen hier niet bij
+— H26 introduceert geen nieuwe "onthoud of laat los"-reeks; die blijft
+beperkt tot H24/H25/toekomstige hoofdstukken zoals gepland in de
+Lethe/Mnemosyne-memory.
+
 ---
 
-**Status**: 49 dode flags vastgelegd op 2026-08-15 (na het schrijven van
-Hoofdstuk 25 en het oplossen van `ch24_lat_vitruvius_principe` via een
-nieuwe echo in Hoofdstuk 25). Bijwerken bij elk volgend hoofdstuk dat een
-nieuwe, nog niet uitgelezen FLAG zet.
+**Status**: 51 dode flags vastgelegd op 2026-08-15 (na het schrijven van
+Hoofdstuk 26). Bijwerken bij elk volgend hoofdstuk dat een nieuwe, nog niet
+uitgelezen FLAG zet.
