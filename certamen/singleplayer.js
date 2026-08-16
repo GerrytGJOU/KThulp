@@ -2344,7 +2344,13 @@ function spCombatAnswer(idx){
   const q = SP_COMBAT.question;
   const correct = q.options[idx]===q.correct;
   if(correct){
-    SP_COMBAT.ep += SP_COMBAT_EP_PER_CORRECT;
+    // Leerlingfeedback (2026-08-13): vastberadenheid liep ongelimiteerd op,
+    // waardoor je een hele reeks juiste antwoorden kon opsparen en daarna
+    // alle aanvallen achter elkaar afvuren, zonder tegenstand. Cap op de
+    // aanvalskost zelf: na twee juiste antwoorden (2×10) zit je op het max
+    // van 20 en moet je eerst aanvallen (ep terug naar 0) voor je weer kunt
+    // opbouwen — geen banking meer over meerdere aanvallen heen.
+    SP_COMBAT.ep = Math.min(SP_COMBAT_ACTION_COST, SP_COMBAT.ep + SP_COMBAT_EP_PER_CORRECT);
     toast("Juist!", "Je vastberadenheid groeit.");
   } else {
     toast("Niet juist", "Het juiste antwoord was \""+q.correct+"\". Je vastberadenheid groeit deze beurt niet.");
