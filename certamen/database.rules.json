@@ -23,7 +23,7 @@
             ".validate": "newData.isBoolean()"
           },
           "googleUid": {
-            ".write": "auth != null && auth.uid === newData.val() && (!data.exists() || data.val() === auth.uid)",
+            ".write": "auth != null && ((newData.exists() && auth.uid === newData.val() && (!data.exists() || data.val() === auth.uid)) || (!newData.exists() && data.exists() && data.val() === auth.uid))",
             ".validate": "newData.isString() && newData.val() === auth.uid"
           }
         }

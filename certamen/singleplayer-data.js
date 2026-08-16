@@ -3604,36 +3604,43 @@ const SP_RACES = {
    singleplayer.js) — die scène heeft dan BEWUST geen CHOICES, de worp zelf
    bepaalt de vervolgscène. ---- */
 const SP_CHECKS = {
+  // DC-tuning (2026-08-13, leerlingfeedback "nog nooit een DC gehaald"):
+  // startstats liggen tussen 8-15 (modifier -1 t/m +2), dus een DC 15-17
+  // was in de eerste hoofdstukken vaak alleen met een natuurlijke 20 te
+  // halen. H1-H4 kregen daarom -2 op elke DC (13→11, 15→13) — vroeg in
+  // het verhaal mag succes een reële kans zijn i.p.v. uitzondering; H5+
+  // blijft bewust op het oorspronkelijke niveau, want daar hebben spelers
+  // al statpunten kunnen investeren.
   // ---- Hoofdstuk 1 ----
-  ch1_c04_diefstal: { stat:"agilitas", dc:13,
+  ch1_c04_diefstal: { stat:"agilitas", dc:11,
     volledig:{ target:"CH1_C04_VOL" },
     deels:{ target:"CH1_C04_DEELS" },
     gefaald:{ target:"CH1_C04_GEFAALD" },
     kritiek:{ target:"CH1_C04_KRITIEK" } },
   // ---- Hoofdstuk 2 ----
-  ch2_h07_lokken: { stat:"prudentia", dc:13,
+  ch2_h07_lokken: { stat:"prudentia", dc:11,
     volledig:{ target:"CH2_H07_CHECK_VOL" },
     deels:{ target:"CH2_H07_CHECK_DEELS" },
     gefaald:{ target:"CH2_H07_CHECK_GEFAALD" },
     kritiek:{ target:"CH2_H07_CHECK_KRITIEK" } },
-  ch2_l06_ontsnapping: { stat:"agilitas", dc:13,
+  ch2_l06_ontsnapping: { stat:"agilitas", dc:11,
     volledig:{ target:"CH2_L06_VOL" },
     deels:{ target:"CH2_L06_DEELS" },
     gefaald:{ target:"CH2_L06_GEFAALD" },
     kritiek:{ target:"CH2_L06_KRITIEK" } },
   // ---- Hoofdstuk 3 ----
-  ch3_h09_rivieren: { stat:"vis", dc:13,
+  ch3_h09_rivieren: { stat:"vis", dc:11,
     volledig:{ target:"CH3_H09_VOL" },
     deels:{ target:"CH3_H09_DEELS" },
     gefaald:{ target:"CH3_H09_GEFAALD" },
     kritiek:{ target:"CH3_H09_KRITIEK" } },
-  ch3_h23b_duister: { stat:"robur", dc:15,
+  ch3_h23b_duister: { stat:"robur", dc:13,
     volledig:{ target:"CH3_H23_VOL" },
     deels:{ target:"CH3_H23_DEELS" },
     gefaald:{ target:"CH3_H23_GEFAALD" },
     kritiek:{ target:"CH3_H23_KRITIEK" } },
   // ---- Hoofdstuk 4 ----
-  ch4_p04_teugels: { stat:"ingenium", dc:15,
+  ch4_p04_teugels: { stat:"ingenium", dc:13,
     volledig:{ target:"CH4_P04_VOL" },
     deels:{ target:"CH4_P04_DEELS" },
     gefaald:{ target:"CH4_P04_GEFAALD" },
