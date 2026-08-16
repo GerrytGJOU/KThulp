@@ -982,6 +982,8 @@ function teacherNet(){ return hasFirebase ? FBNet : DemoNet; }
 /* ---- SCHERM: inloggen ---- */
 SCREENS.teacherLogin = function(){
   const demo = !hasFirebase;
+  if(teacherNet().isTeacherLoggedIn()){ go("teacherPortal"); return; }
+  const remembered = localStorage.getItem("tpRemember")!=="0";
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
@@ -994,18 +996,29 @@ SCREENS.teacherLogin = function(){
     <label class="fld" style="margin-top:12px">Wachtwoord</label>
     <input type="password" id="tpPw" autocomplete="current-password" style="width:100%;box-sizing:border-box"
       onkeydown="if(event.key==='Enter')teacherDoLogin()">
+    <label style="display:flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;cursor:pointer">
+      <input type="checkbox" id="tpRemember" ${remembered?"checked":""} style="width:16px;height:16px">
+      Onthoud mij op dit apparaat
+    </label>
     <button class="btn btn-gold btn-block lg" style="margin-top:16px" onclick="teacherDoLogin()">Inloggen</button>
   </div>
   ${foot()}`);
   setTimeout(()=>{ const e=el("tpEmail"); if(e)e.focus(); }, 120);
+  if(!demo){
+    teacherNet().authReady().then(user=>{
+      if(user && _screen==="teacherLogin") go("teacherPortal");
+    });
+  }
 };
 
 function teacherDoLogin(){
   const email=(el("tpEmail")?.value||"").trim();
   const pw=el("tpPw")?.value||"";
+  const remember=!!el("tpRemember")?.checked;
   if(!email){ toast("E-mailadres vereist","Vul een e-mailadres in."); return; }
   if(!pw){ toast("Wachtwoord vereist","Vul een wachtwoord in."); return; }
-  teacherNet().loginTeacher(email,pw)
+  localStorage.setItem("tpRemember", remember?"1":"0");
+  teacherNet().loginTeacher(email,pw,remember)
     .then(()=>go("teacherPortal"))
     .catch(e=>toast("Inloggen mislukt",typeof e==="string"?e:(e?.message||"Controleer je gegevens.")));
 }
@@ -1021,6 +1034,7 @@ SCREENS.teacherPortal = function(){
   </div>
   <div id="tpClassList"><div class="note" style="text-align:center;padding:20px">Klassen laden…</div></div>
   <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
+  <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('teacherStudentsBoard')">↔️ Leerlingen slepen tussen klassen</button>
   <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">🗺️ Total War — veldtochtkaart</button>
   <div class="panel" style="margin-top:16px">
     <label class="fld">Battle Mode — klascodes</label>
@@ -1104,12 +1118,14 @@ function tpUnassignKlasCiv(klas){
 // lijst goedgekeurde codes. Bouwt daaruit _tpGroups (groep = klascode) en rendert
 // zowel de klassenlijst als de klascodelijst.
 function tpLoadClasses(){
-  return Promise.all([
-    teacherNet().getClasses(),
-    teacherNet().getKlascodeCounts().catch(()=>({})),
-    teacherNet().getKlascodes().catch(()=>({approved:[],used:[]}))
-  ]).then(([cls, counts, kc])=>{
+  return teacherNet().getClasses().then(cls=>{
     _tpClasses=cls||{};
+    const ownCodes=Object.values(_tpClasses).map(c=>c.code||tpDeriveKlascode(c.className)).filter(Boolean);
+    return Promise.all([
+      teacherNet().getKlascodeCounts(ownCodes).catch(()=>({})),
+      teacherNet().getKlascodes().catch(()=>({approved:[],used:[]}))
+    ]);
+  }).then(([counts, kc])=>{
     _tpIdentCounts=counts||{};
     _tpApprovedKlascodes=(kc&&kc.approved)||[];
     tpBuildGroups((kc&&kc.approved)||[], (kc&&kc.used)||[]);
@@ -1492,4 +1508,137 @@ function tpRemoveAdmin(code,lid,nm){
     .then(()=>{ toast("Admin ingetrokken",nm); return tpLoadRoster(); })
     .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
 }
+
+/* ---- SCHERM: alle leerlingen naast elkaar, slepen tussen klasgroepen ----
+   Los van tpMoveStudent (dropdown op het per-klas-scherm): hier zie je alle
+   klassen als kolommen naast elkaar en sleep je een leerling-kaartje van de
+   ene kolom naar de andere. Werkt ook voor leerlingen die oorspronkelijk met
+   een andere klascode hadden ingelogd — het verplaatst gewoon hun
+   identities/{klas}/{lid}-record, ongeacht welke code ze ooit gebruikten.
+   Pointer Events (niet HTML5 drag-and-drop) zodat het ook op iPad werkt. */
+let _tpBoardRosters={};
+
+function tpLoadStudentsBoard(){
+  const cont=el("tpBoardCols");
+  if(cont) cont.innerHTML=`<div class="note" style="text-align:center;padding:20px">Laden…</div>`;
+  return tpLoadClasses().then(()=>{
+    const codes=Object.keys(_tpGroups||{});
+    return Promise.all(codes.map(code=>
+      teacherNet().getIdentities(code).then(r=>({code,r})).catch(()=>({code,r:{}}))
+    ));
+  }).then(results=>{
+    _tpBoardRosters={};
+    results.forEach(({code,r})=>{ _tpBoardRosters[code]=r||{}; });
+    tpRenderStudentsBoard();
+  }).catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"Kon leerlingen niet laden")));
+}
+
+function tpRenderStudentsBoard(){
+  const cont=el("tpBoardCols"); if(!cont) return;
+  const groups=Object.values(_tpGroups||{}).sort((a,b)=>a.name.localeCompare(b.name));
+  if(!groups.length){
+    cont.innerHTML=`<div class="note" style="text-align:center;padding:20px">Nog geen klassen. Maak er eerst een aan in het klasoverzicht.</div>`;
+    return;
+  }
+  cont.innerHTML=groups.map(g=>{
+    const roster=_tpBoardRosters[g.code]||{};
+    const entries=Object.entries(roster).sort((a,b)=>(a[1].name||a[0]).localeCompare(b[1].name||b[0]));
+    const chips=entries.length?entries.map(([lid,s])=>{
+      const nm=s.name||lid, lv=s.level||1;
+      return `<div class="tpBoardChip" data-lid="${esc(lid)}" data-code="${esc(g.code)}"
+        style="padding:8px 10px;background:var(--stone3);border:1px solid var(--stone4);border-radius:8px;cursor:grab;touch-action:none;user-select:none">
+        <div style="font-weight:600;font-size:13px">${esc(nm)}${s.admin?` <span class="pill" style="background:var(--hi);color:#000;border:none;font-size:10px">admin</span>`:""}</div>
+        <div class="note" style="font-size:11px">Niv ${lv} · ${esc(lid)}</div>
+      </div>`;
+    }).join(""):`<div class="note" style="font-size:12px;padding:6px 2px">Leeg</div>`;
+    return `<div class="panel tpBoardCol" data-code="${esc(g.code)}" style="min-width:210px;max-width:250px;flex:0 0 auto">
+      <div style="font-weight:700;margin-bottom:2px">${esc(g.name)}</div>
+      <div class="note" style="margin-bottom:8px">Code ${esc(g.code)} · ${entries.length} leerling${entries.length!==1?"en":""}</div>
+      <div class="tpBoardList" style="min-height:36px;display:flex;flex-direction:column;gap:6px">${chips}</div>
+    </div>`;
+  }).join("");
+  tpBoardBindDrag();
+}
+
+function tpBoardBindDrag(){
+  const cont=el("tpBoardCols"); if(!cont) return;
+  cont.querySelectorAll(".tpBoardChip").forEach(chip=>{
+    chip.addEventListener("pointerdown", tpBoardDragStart);
+  });
+}
+
+function tpBoardDragStart(ev){
+  if(ev.button!==undefined && ev.button!==0) return;
+  ev.preventDefault();
+  const chip=ev.currentTarget;
+  const fromCode=chip.dataset.code, lid=chip.dataset.lid;
+  const rect=chip.getBoundingClientRect();
+  const ghost=chip.cloneNode(true);
+  Object.assign(ghost.style,{
+    position:"fixed", left:rect.left+"px", top:rect.top+"px", width:rect.width+"px",
+    pointerEvents:"none", opacity:"0.92", zIndex:"9999",
+    boxShadow:"0 6px 18px rgba(0,0,0,.45)", cursor:"grabbing"
+  });
+  document.body.appendChild(ghost);
+  chip.style.opacity="0.3";
+  const offX=ev.clientX-rect.left, offY=ev.clientY-rect.top;
+  let curCol=null;
+
+  function move(e){
+    ghost.style.left=(e.clientX-offX)+"px";
+    ghost.style.top=(e.clientY-offY)+"px";
+    ghost.style.display="none";
+    const under=document.elementFromPoint(e.clientX,e.clientY);
+    ghost.style.display="";
+    const col=under?under.closest(".tpBoardCol"):null;
+    if(curCol!==col){
+      if(curCol) curCol.style.outline="";
+      if(col) col.style.outline="2px solid var(--hi)";
+      curCol=col;
+    }
+  }
+  function finish(){
+    document.removeEventListener("pointermove",move);
+    document.removeEventListener("pointerup",finish);
+    document.removeEventListener("pointercancel",finish);
+    ghost.remove();
+    chip.style.opacity="";
+    if(curCol) curCol.style.outline="";
+    const toCode=curCol?curCol.dataset.code:null;
+    if(toCode && toCode!==fromCode) tpBoardDoMove(fromCode,toCode,lid);
+  }
+  document.addEventListener("pointermove",move);
+  document.addEventListener("pointerup",finish);
+  document.addEventListener("pointercancel",finish);
+}
+
+function tpBoardDoMove(fromCode,toCode,lid){
+  const s=(_tpBoardRosters[fromCode]||{})[lid]||{};
+  const doelNaam=_tpGroups[toCode]?.name||toCode;
+  const warn=s.googleUid?" Let op: de Google-koppeling van deze leerling gaat hierbij verloren.":"";
+  if(!confirm("'"+(s.name||lid)+"' verplaatsen naar "+doelNaam+" ("+toCode+")?"+warn)) return;
+  teacherNet().moveIdentity(fromCode,toCode,lid)
+    .then(()=>{
+      toast("Verplaatst",(s.name||lid)+" → "+doelNaam);
+      if(_tpBoardRosters[fromCode]) delete _tpBoardRosters[fromCode][lid];
+      if(!_tpBoardRosters[toCode]) _tpBoardRosters[toCode]={};
+      _tpBoardRosters[toCode][lid]=s;
+      tpRenderStudentsBoard();
+    })
+    .catch(e=>{ toast("Fout",typeof e==="string"?e:(e?.message||"")); tpRenderStudentsBoard(); });
+}
+
+/* ---- SCHERM: alle leerlingen, kolommen per klas ---- */
+SCREENS.teacherStudentsBoard = function(){
+  if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('teacherPortal')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Leerlingen slepen</h2>
+  </div>
+  <div class="note" style="margin:-4px 0 10px">Sleep een leerling naar een andere kolom om 'm naar die klas te verplaatsen — ook als de leerling oorspronkelijk met een andere klascode had ingelogd.</div>
+  <div id="tpBoardCols" style="display:flex;gap:12px;overflow-x:auto;padding-bottom:10px"></div>
+  ${foot()}`);
+  tpLoadStudentsBoard();
+};
 

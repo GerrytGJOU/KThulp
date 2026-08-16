@@ -59,10 +59,24 @@ let Net = null; // wordt gezet bij start
    ============================================================================ */
 
 /* ---- FBNet: authenticatie + klasbeheer ---- */
-FBNet.loginTeacher = function(email, password){
+FBNet.loginTeacher = function(email, password, remember){
   if(!initFirebase()) return Promise.reject("Firebase niet beschikbaar");
-  return firebase.auth().signInWithEmailAndPassword(email, password)
+  const persistence = remember===false
+    ? firebase.auth.Auth.Persistence.SESSION
+    : firebase.auth.Auth.Persistence.LOCAL;
+  return firebase.auth().setPersistence(persistence)
+    .then(() => firebase.auth().signInWithEmailAndPassword(email, password))
     .then(cred => cred.user.uid);
+};
+// Wacht tot Firebase de (evt. eerder onthouden) sessie heeft hersteld vanuit
+// opslag — currentUser is vlak na page-load nog async aan het laden, dus een
+// synchrone check op dat moment mist een geldige sessie en dwingt onterecht
+// een nieuwe login af.
+FBNet.authReady = function(){
+  if(!hasFirebase || !initFirebase()) return Promise.resolve(null);
+  return new Promise(resolve => {
+    const unsub = firebase.auth().onAuthStateChanged(user => { unsub(); resolve(user); });
+  });
 };
 FBNet.logoutTeacher = function(){
   if(!hasFirebase) return Promise.resolve();
@@ -138,29 +152,34 @@ FBNet.getIdentities = function(klascode){
 };
 // Lichte index (usedKlascodes/{klas}: aantal leerlingen) i.p.v. de volledige
 // identities-boom lezen bij elke docentenportaal-load (CLAUDE.md-restpunt).
-// Eenmalige, idempotente self-healing migratie: zolang usedKlascodes/_seeded
-// nog niet bestaat, doet dit precies ÉÉN keer ooit de oude volledige
-// identities-read om de index te vullen — daarna bouwt bmIdentCreate()
-// (battle.js) 'm vanzelf verder op bij elke nieuwe leerling, nooit meer een
-// volledige read nodig. Zelfde idempotente-seed-patroon als
-// twEnsureCampaignSeeded() (totalwar.js).
-FBNet._ensureUsedKlascodesIndex = function(){
+// LET OP: de vorige versie probeerde dit één keer te vullen met een read op
+// de identities-ROOT — maar database.rules.json geeft alleen .read op
+// identities/$klas (per eigenaar), niet op identities zelf, dus die read werd
+// altijd stil geweigerd en de index bleef voor bestaande klassen permanent op
+// 0 staan (leek dan alsof er geen leerlingen waren, terwijl ze er wél waren).
+// Fix: per bekende klascode (die deze docent al mag lezen: eigen klassen +
+// goedgekeurde codes) losstaand identities/{klas} opvragen en alleen de nog
+// ontbrekende index-waarden bijschrijven — geen root-read meer nodig, en
+// codes van andere docenten worden stil overgeslagen (permission denied).
+FBNet._ensureUsedKlascodesIndex = function(codes){
   if(!fbDB) initFirebase();
-  return fbDB.ref("usedKlascodes/_seeded").once("value").then(seeded=>{
-    if(seeded.val()) return;
-    return fbDB.ref("identities").once("value").then(iSnap=>{
-      const upd={};
-      if(iSnap.exists()) iSnap.forEach(klasNode=>{ upd["usedKlascodes/"+klasNode.key]=klasNode.numChildren(); });
-      upd["usedKlascodes/_seeded"]=true;
-      return fbDB.ref().update(upd);
-    });
+  return fbDB.ref("usedKlascodes").once("value").then(snap=>{
+    const known=snap.val()||{};
+    const missing=[...new Set((codes||[]).map(c=>(c||"").toUpperCase()))]
+      .filter(c=>c && !(c in known));
+    if(!missing.length) return;
+    return Promise.all(missing.map(code=>
+      fbDB.ref("identities/"+code).once("value")
+        .then(iSnap=>fbDB.ref("usedKlascodes/"+code).set(iSnap.exists()?iSnap.numChildren():0))
+        .catch(()=>{}) // geen leesrecht op andermans klas — sla stil over
+    ));
   });
 };
 FBNet.getKlascodes = function(){
   if(!fbDB) initFirebase();
   return fbDB.ref("klascodes").once("value").then(snap=>{
     const approved=snap.exists()?Object.keys(snap.val()):[];
-    return FBNet._ensureUsedKlascodesIndex().then(()=>
+    return FBNet._ensureUsedKlascodesIndex(approved).then(()=>
       fbDB.ref("usedKlascodes").once("value").then(iSnap=>{
         const used=iSnap.exists()?Object.keys(iSnap.val()).filter(k=>k!=="_seeded"):[];
         return {approved, used};
@@ -170,10 +189,16 @@ FBNet.getKlascodes = function(){
 };
 // Ledenaantal per klascode ({CODE: aantal}) — leest nu de lichte usedKlascodes-
 // index i.p.v. de volledige identities-tak. Gebruikt door het docentenportaal
-// om live tellingen te tonen (groep = klascode).
-FBNet.getKlascodeCounts = function(){
+// om live tellingen te tonen (groep = klascode). extraCodes = klascodes die de
+// docent zelf al kent (eigen klaslabels) maar die niet per se al in
+// klascodes/ (goedgekeurd) staan — anders zouden die nooit gebackfilld worden.
+FBNet.getKlascodeCounts = function(extraCodes){
   if(!fbDB) initFirebase();
-  return FBNet._ensureUsedKlascodesIndex().then(()=>
+  return fbDB.ref("klascodes").once("value").then(kcSnap=>{
+    const codes=new Set(kcSnap.exists()?Object.keys(kcSnap.val()):[]);
+    (extraCodes||[]).forEach(c=>{ if(c) codes.add(c.toUpperCase()); });
+    return FBNet._ensureUsedKlascodesIndex([...codes]);
+  }).then(()=>
     fbDB.ref("usedKlascodes").once("value").then(snap=>{
       const counts=snap.val()||{};
       delete counts._seeded;
@@ -372,6 +397,7 @@ let _demoClasses = {
   }
 };
 DemoNet.loginTeacher = function(){ _demoTeacherLoggedIn = true; return Promise.resolve("demo_teacher_uid"); };
+DemoNet.authReady = function(){ return Promise.resolve(_demoTeacherLoggedIn ? {uid:"demo_teacher_uid"} : null); };
 DemoNet.logoutTeacher = function(){ _demoTeacherLoggedIn = false; return Promise.resolve(); };
 DemoNet.getTeacherUid = function(){ return _demoTeacherLoggedIn ? "demo_teacher_uid" : null; };
 DemoNet.isTeacherLoggedIn = function(){ return _demoTeacherLoggedIn; };
