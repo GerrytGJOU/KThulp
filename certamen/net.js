@@ -143,10 +143,16 @@ FBNet.grantAdmin = function(klascode, lid){
 };
 FBNet.getIdentities = function(klascode){
   if(!fbDB) initFirebase();
-  return fbDB.ref("identities/"+klascode.toUpperCase()).once("value").then(snap=>{
+  klascode=klascode.toUpperCase();
+  return fbDB.ref("identities/"+klascode).once("value").then(snap=>{
     if(!snap.exists()) return Promise.reject("Klas '"+klascode+"' niet gevonden in Battle Mode.");
     const out={};
     snap.forEach(child=>{ out[child.key]=child.val(); });
+    // Zelfhelend: nu we toch de echte ledenlijst lezen, meteen de losstaande
+    // usedKlascodes-teller gelijktrekken. Die teller wordt elders alleen
+    // incrementeel bijgehouden (nieuwe leerling, verplaatsen, verwijderen) en
+    // kan dus scheef raken bij oudere/handmatige databasewijzigingen.
+    fbDB.ref("usedKlascodes/"+klascode).set(snap.numChildren()).catch(()=>{});
     return out;
   });
 };
@@ -214,7 +220,10 @@ FBNet.renameIdentity = function(klas, lid, name){
 // Docent verwijdert een leerlingprofiel volledig.
 FBNet.deleteIdentity = function(klas, lid){
   if(!fbDB) initFirebase();
-  return fbDB.ref("identities/"+klas.toUpperCase()+"/"+lid).remove();
+  klas=klas.toUpperCase();
+  return fbDB.ref("identities/"+klas+"/"+lid).remove().then(()=>{
+    fbDB.ref("usedKlascodes/"+klas).transaction(cur=>Math.max(0,(cur||0)-1)).catch(()=>{});
+  });
 };
 // Verhuist een leerlingprofiel naar een andere klascode (bv. bij een typefout in
 // de code). admin en googleUid vallen bewust weg: admin is klas-specifiek, en de
@@ -233,7 +242,11 @@ FBNet.moveIdentity = function(fromKlas, toKlas, lid){
     const updates={};
     updates["identities/"+toKlas+"/"+lid]=data;
     updates["identities/"+fromKlas+"/"+lid]=null;
-    return fbDB.ref().update(updates).then(()=>({hadGoogle}));
+    return fbDB.ref().update(updates).then(()=>{
+      fbDB.ref("usedKlascodes/"+fromKlas).transaction(cur=>Math.max(0,(cur||0)-1)).catch(()=>{});
+      fbDB.ref("usedKlascodes/"+toKlas).transaction(cur=>(cur||0)+1).catch(()=>{});
+      return {hadGoogle};
+    });
   });
 };
 // Vertaalt een rauwe Firebase-foutmelding naar een begrijpelijke tekst voor
