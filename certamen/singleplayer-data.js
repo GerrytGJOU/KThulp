@@ -517,11 +517,12 @@ const SP_CAMPAIGN = [
   // KCV-audit-uitbreiding (Hoofdstuk 19-27 hierboven) ----
   { id:"ch28", nr:28, boek:"VI — De Laatste Herinnering", type:"hoofdstuk", nm:"De Bibliotheek van Mnemosyne",
     periode:"Buiten Tijd en Ruimte",
-    verhaal:"In een bibliotheek buiten tijd en ruimte bewaart de godin van het geheugen elk verhaal dat ooit verteld is — ook de fragmenten die nergens anders een plek vonden. Hier begint de onthulling over wie de Boodschapper werkelijk is, en wat Chronos werkelijk wil.",
+    verhaal:"In een bibliotheek buiten tijd en ruimte bewaart de godin van het geheugen elk verhaal dat ooit verteld is — ook de fragmenten die nergens anders een plek vonden. Hier begint de onthulling over wie de Boodschapper werkelijk is, en wat Chronos werkelijk wil. UITGEBREID 2026-08-16 (Gerbens verzoek): de vier niet-lineaire vleugels betalen de complete payoff-laag van de campagne uit (zie DODE_FLAGS_FINALE.md), Mnemosyne onthult dat het Museum altijd van haar was, de Boodschapper onthult zichzelf als Pamphile van Epidaurus (met steun van Athena en Hermes), en de scène sluit af met de eerste verschijning van Lethe — neergezet als relatable, geen schurk.",
     pallas:"Eigen content", minerva:"Eigen content",
-    grammatica:"Herhaling van alle grammatica (Grieks én Latijn, voor het eerst samen)",
-    personages:"Mnemosyne",
-    zijverhalen:"Narcissus & Echo (A-tier) als spiegel-/geluidspuzzel; eerste hints van De Titanenstrijd (S-tier), die in de Finale terugkeert" },
+    grammatica:"Herhaling van alle grammatica, PER taalspoor gescheiden (Gerbens correctie 2026-08-16: geen gemengd Grieks/Latijn — leerlingen die één taal kozen, hebben de helft van de andere grammatica nooit gehad). Wél doorlopen alle drie de sporen dezelfde vleugel-volgorde.",
+    personages:"Mnemosyne, de Boodschapper van Chronos/Pamphile van Epidaurus, Athena, Hermes, Lethe (eerste verschijning)",
+    zijverhalen:"Narcissus & Echo (A-tier) als tekstuele (niet-auditieve) fragment-reconstructiepuzzel, zodat leerlingen dit stil in de les kunnen spelen; eerste hints van De Titanenstrijd (S-tier, Kronos/Chronos raken hier voor het eerst 'per ongeluk' door elkaar), die in de Finale terugkeert",
+    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-16) — door Claude geschreven (geen Gemini-concept). 42 scènes. Niet-lineaire hub-structuur (zelfde patroon als H24's museum, [DONE:vlag]) met vier vrij te bezoeken vleugels — 'De Weg Hierheen' (H1-6-aggregaat, cultuurneutraal), 'Wat Je Koos te Bewaren' (H24/H25-onthoud-of-laat-los-reeks, taalspoor-gated), 'Mensen die Je Onthield' (NPC-herkenning/politieke scheuren/mythologische afsluitingen H15-21, taalspoor-gated), 'Stemmen die Nooit Zwegen' (RELATION-payoffs: Athena Grieks, Stoïcijnse lijn+Hadrianus Latijn). Volgorde-tracking: `ch28_eerste_vleugel`/`ch28_laatste_vleugel` onthouden welke vleugel als eerste/laatste werd voltooid, leesbaar door toekomstige hoofdstukken. Cameo van Pamphile retroactief toegevoegd aan Hoofdstuk 23 (CH23_LAT_011B, al gekoppeld/live) als voorwaarde voor deze onthulling. SP_CH28_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS — en op de (later te bouwen) visuele plattegrond-uitbreiding van de vleugel-navigatie." },
   { id:"ch29", nr:29, boek:"VI — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
     periode:"Mythologische Eindwereld",
     verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren — de laatste beproeving voor het orakel zelf zich toont.",
@@ -1832,6 +1833,18 @@ const SP_PUZZLES = {
     vraag:"Hannibals mannen dragen alles zelf de bergen over: “Milites arma ___” — de soldaten dragen hun wapens. Typ de juiste vorm van fero (dragen), 3e persoon meervoud praesens.",
     antwoord:"ferunt",
     hint:"fero is onregelmatig (fero, ferre, tuli, latum) — de praesens-uitgangen wijken af van de gewone conjugaties: fero, fers, fert, ferimus, fertis, ferunt." },
+
+  // ---- Hoofdstuk 28 "De Bibliotheek van Mnemosyne" — concept, nog niet
+  // gekoppeld. Bewust GEEN geluidsmechaniek (leerlingen moeten dit stil in
+  // de les kunnen spelen) — hergebruikt het bestaande tile-swap-mechanisme
+  // (normaal voor losse letters van één woord) maar dan met hele
+  // zinsfragmenten als tegels, om Echo's verhaal in de juiste volgorde te
+  // laten herbouwen. Eenvoudige, hoogfrequente woordenschat, net als het
+  // bergpad-moment in Hoofdstuk 27.
+  puzzle_ch28_narcissus_echo: { type:"tile-swap",
+    vraag:"Vier losse fragmenten van Echo's verhaal liggen door elkaar. Zet ze in de juiste volgorde.",
+    tiles:["Νάρκισσος καλὸς ἦν.","Ἠχὼ αὐτὸν ἐφίλει.","αὐτὸς δὲ ἑαυτὸν μόνον ἐφίλει.","ἀμφότεροι ἀπώλοντο."],
+    hint:"Eerst wie Narcissus was, dan wie hem liefhad, dan wat hijzelf deed, en dan pas het einde." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -2845,6 +2858,8 @@ const SP_CODEX_ENTRIES = {
     tekst:"Na Caligula's moord wordt zijn onopvallende oom Claudius, weggedoken achter een gordijn gevonden, door de Praetoriaanse Garde tot keizer uitgeroepen — niet door de Senaat, een precedent dat blijft gelden. Claudius blijkt een capabel bestuurder en voltooit in 43 n.Chr. eindelijk wat Caesar een eeuw eerder alleen maar begon: de daadwerkelijke Romeinse verovering van Britannia. Zijn vrouw Agrippina de Jongere vergiftigt hem uiteindelijk, naar verluidt met een schotel paddenstoelen." },
   codex_nero_domus_aurea: { cat:"geschiedenis", titel:"Nero en de Domus Aurea",
     tekst:"Nero laat zijn eigen moeder Agrippina vermoorden wanneer haar invloed hem te veel wordt. Na de grote brand van Rome (64 n.Chr.), die hij vrijwel zeker niet zelf ontstak, bouwt hij op de verwoeste grond zijn extravagante Gouden Huis (Domus Aurea) — een symbool van zelfverheerlijking te midden van een verwoeste stad." },
+  codex_pamphile_geschiedschrijfster: { cat:"geschiedenis", titel:"Pamphile van Epidaurus",
+    tekst:"Een historische, echt bestaan hebbende geschiedschrijfster uit de tijd van Nero: volgens latere bronnen (Photius, Suda) stelde Pamphile van Epidaurus een uitgebreid historisch werk samen in drieëndertig boeken, vol anekdotes en aantekeningen over alles wat de moeite van het onthouden waard leek. Van haar eigen werk is vrijwel niets rechtstreeks bewaard gebleven — alleen de herinnering dát ze schreef." },
   codex_dood_seneca: { cat:"geschiedenis", titel:"De Dood van Seneca",
     tekst:"Beschuldigd van betrokkenheid bij een samenzwering tegen zijn voormalige leerling Nero, krijgt Seneca het bevel zelfmoord te plegen. Hij sterft zoals hij zijn hele leven als Stoïcijns filosoof predikte: kalm, zijn aderen doorsnijdend terwijl hij zijn vrienden nog troost en dicteert — een dood die tijdgenoten en latere lezers expliciet vergeleken met die van Socrates." },
   // ---- Hoofdstuk 24 "Steen en Water" — concept, nog niet gekoppeld ----
@@ -2950,6 +2965,18 @@ const SP_CODEX_ENTRIES = {
     tekst:"Keizer Justinianus I laat eeuwen aan Romeinse wetgeving herordenen tot het Corpus Iuris Civilis, een wetboek dat eeuwenlang de basis van het Europese recht blijft. Zijn nieuwe kerk, de Hagia Sophia (ingewijd 537 n.Chr.), wordt beroemd om haar koepel die vanbinnen lijkt te zweven." },
   codex_nika_opstand: { cat:"geschiedenis", titel:"De Nika-Opstand",
     tekst:"In 532 n.Chr. ontaardt rivaliteit tussen twee wagenrenteams, de Blauwen en de Groenen, in een volksopstand die Constantinopel in vuur zet. Keizerin Theodora weigert te vluchten en overtuigt Justinianus te blijven; generaal Belisarius sluit de opstandelingen in de renbaan in. De opstand wordt neergeslagen, en Justinianus' troon staat er sterker voor dan ooit." },
+  codex_mnemosyne_wing_c_gre: { cat:"mythologie", titel:"De Griekse Vleugel: Mensen die Je Onthield",
+    tekst:"Een verzameling herinneringen uit de Griekse lijn van je reis: Doris en Straton uit de haven van Puteoli, de onderdrukte afscheiding van Naxos, je eigen rol in de Siciliaanse Expeditie, de voltooide werken van Herakles, de gevallen helden van Troje, en het gestolen Palladium — stuk voor stuk momenten die je zelf meemaakte, of er nu wel of niet iemand anders naar terugverwees." },
+  codex_mnemosyne_wing_c_lat: { cat:"geschiedenis", titel:"De Latijnse Vleugel: Mensen die Je Onthield",
+    tekst:"Een verzameling herinneringen uit de Latijnse lijn van je reis: Fortunata, Spartacus, Tiberius Gracchus' fatale precedent, de samenzwering tegen Caesar, Dumnorix en de aquilifer bij Britannia, en de retorische keuzes rond Verres en Catilina — stuk voor stuk momenten die je zelf meemaakte, of er nu wel of niet iemand anders naar terugverwees." },
+  codex_mnemosyne_wing_d_gre: { cat:"mythologie", titel:"Athena's Stem",
+    tekst:"Van alle Griekse goden die je op je reis vergezelden, bleef Athena het meest aanwezig — als raadgeefster, als beschermvrouwe, en uiteindelijk als iemand met een eigen, diepere reden om jouw reis te volgen." },
+  codex_mnemosyne_wing_d_lat: { cat:"geschiedenis", titel:"De Stoïcijnse Lijn en Hadrianus",
+    tekst:"Cicero, Seneca en Marcus Aurelius vormen, zonder het ooit met zoveel woorden te zeggen, één doorlopende Stoïcijnse leerlijn — elk beïnvloed door de vorige. Hadrianus, de reiziger-keizer, staat er losser naast, maar bleef net zo goed een van de stemmen die je onderweg het meest veranderden." },
+  codex_pamphile_onthuld: { cat:"personen", titel:"De Boodschapper Onthuld: Pamphile",
+    tekst:"De Boodschapper van Chronos, die de speler door de hele campagne begeleidde, blijkt Pamphile van Epidaurus te zijn — de geschiedschrijfster die je, zonder het te beseffen, al eens ontmoette aan het hof van Nero. Athena vroeg haar mee te helpen omdat wijsheid die niemand meer kent, geen wijsheid meer is; Hermes hielp omdat Athena het vroeg — al vermoedt hij zelf dat hij ook eigen redenen had." },
+  codex_lethe_geintroduceerd: { cat:"mythologie", titel:"Lethe",
+    tekst:"Lethe, personificatie van vergetelheid en dochter van Eris (de godin van de tweedracht, verantwoordelijk voor de appel die tot de Trojaanse Oorlog leidde), verschijnt voor het eerst in de Bibliotheek van Mnemosyne. Ze komt niet als een schurk, maar als iemand die oprecht anders denkt over wat herinneren waard is." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3457,6 +3484,9 @@ const SP_SOUVENIRS = {
   // Hoofdstuk 27 "Kruis en Kroon" — concept, nog niet gekoppeld.
   souvenir_kruis_en_kroon: { nm:"Een Gebroken Diadeem en een Gouden Mozaïeksteen", icon:"👑", img:"souvenir_kruis_en_kroon.png",
     caption:"Een piepklein, gebroken stukje diadeem naast een enkele gouden mozaïeksteen — hetzelfde rijk, tegelijk eindigend in het Westen en herboren in het Oosten." },
+  // Hoofdstuk 28 "De Bibliotheek van Mnemosyne" — concept, nog niet gekoppeld.
+  souvenir_bibliotheek_mnemosyne: { nm:"Een Glazen Potje met Rook en een Spiegelfragment", icon:"📜", img:"souvenir_bibliotheek_mnemosyne.png",
+    caption:"Een klein glazen potje met vage, bewegende rook naast een piepklein, verzilverd spiegelfragment — niet wat je zag, maar wíé het al die tijd bewaarde." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -4626,6 +4656,10 @@ const SP_VOCAB_ENTRIES = {
   latijn_affero:  { taal:"latijn", woord:"affero",  betekenis:"brengen naar" },
   latijn_absum:   { taal:"latijn", woord:"absum",   betekenis:"afwezig zijn, weg zijn" },
   latijn_quoniam: { taal:"latijn", woord:"quoniam", betekenis:"omdat" },
+  // ---- Hoofdstuk 28 "De Bibliotheek van Mnemosyne" — concept, nog niet gekoppeld.
+  latijn_immo:    { taal:"latijn", woord:"immo",    betekenis:"integendeel, sterker nog" },
+  latijn_scilicet:{ taal:"latijn", woord:"scilicet",betekenis:"namelijk, natuurlijk" },
+  latijn_tantum:  { taal:"latijn", woord:"tantum",  betekenis:"slechts, zoveel" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -27350,7 +27384,32 @@ RELATION:
 seneca=+1
 
 CHOICES:
-* Zie hoelang die wijsheid standhoudt -> CH23_LAT_012
+* Zie hoelang die wijsheid standhoudt -> CH23_LAT_011B
+
+END
+
+=== SCENE: CH23_LAT_011B ===
+
+TITLE:
+Een Stille Geschiedschrijfster
+
+TEXT:
+Aan de rand van de zaal, half in de schaduw van een zuil, zit een vrouw die niemand aan het hof echt lijkt op te merken — geen hoveling, geen senator, gewoon iemand met een wastablet op schoot die onophoudelijk schrijft, elk woord dat er in deze zaal valt. Livius, zelf ook geen onbekende met inktvingers, buigt zich even naar je toe.
+
+DIALOGUE:
+Livius
+Pamphile, heet ze — een geschiedschrijfster, zeggen ze, al heeft niemand ooit gezien wat ze eigenlijk optekent. Ze is er altijd, bij elk hof, bij elke gebeurtenis die het onthouden waard is. Vreemd genoeg lijkt niemand zich haar ooit echt te herinneren.
+
+Ze kijkt op, heel even, recht naar jou — een blik die net iets te lang duurt om toevallig te zijn — voordat ze haar ogen weer op haar tablet richt en verder schrijft.
+
+IMAGE:
+ch23_lat_pamphile_cameo.png
+
+CODEX:
+codex_pamphile_geschiedschrijfster
+
+CHOICES:
+* Zie hoelang Seneca's wijsheid standhoudt -> CH23_LAT_012
 
 END
 
@@ -28763,6 +28822,9 @@ Een Keizer Verliefd op Griekenland
 TEXT:
 Een man met een volle, Griekse baard — de eerste Romeinse keizer die er ooit een draagt — staat voor je, een perkamentrol met bouwtekeningen onder de arm. Hadrianus reist meer dan enige keizer vóór hem, en telkens weer trekt Griekenland hem terug. "Ik heb een idee," zegt hij, bijna verlegen voor een man met zoveel macht. "Een [[Πανελλήνιον|Panhellenion]] — een raad waarin elke Griekse stad, van Athene tot de verste kolonie, weer één stem heeft. Rome bestuurt dit rijk, maar Griekenland hoeft daarom niet op te houden Grieks te zijn."
 
+IMAGE:
+ch26_gre_hadrianus_panhellenion.png
+
 RELATION:
 hadrianus=+1
 
@@ -28781,6 +28843,9 @@ Een Voltooide Tempel
 
 TEXT:
 In Athene staat Hadrianus stil bij een tempel die zeshonderd jaar lang onafgemaakt is gebleven — de Olympieion, de tempel van Zeus Olympios, ooit begonnen door tirannen die de stad allang niet meer regeert. "Zeshonderd jaar," zegt hij, terwijl hij naar de laatste zuilen kijkt die zijn eigen bouwmeesters net hebben opgericht. "Athene heeft me nooit gevraagd dit af te maken. Ik wilde het gewoon." Je herkent de stad meteen — dezelfde straten waar je ooit, hoofdstukken geleden, Athena zag geboren worden, en waar een raad ooit besloot een bondgenoot met geweld tot gehoorzaamheid te dwingen.
+
+IMAGE:
+ch26_gre_olympieion_voltooid.png
 
 CODEX:
 codex_hadrianus_athene
@@ -28801,6 +28866,9 @@ Bij Olympia lopen de Spelen nog altijd door, eeuwen nadat de eerste hardloper ov
 "[[Ὀλυμπιονίκης γενόμενος τὸν ἀγῶνα τῇ πατρίδι ἀνέθηκε.|Als Olympisch overwinnaar droeg hij de wedstrijd op aan zijn vaderland.]]"
 
 De Boodschapper wijst naar de tekst. "Wie draagt de overwinning hier eigenlijk op — de atleet aan zichzelf, of aan iets groters?"
+
+IMAGE:
+ch26_gre_olympia_inscriptie.png
 
 CODEX:
 codex_olympische_spelen_rome
@@ -28851,6 +28919,9 @@ DIALOGUE:
 Boodschapper van Chronos
 Ook orakels, zie je, houden niet zomaar op te bestaan zodra er minder mensen naar luisteren. Ze wachten gewoon.
 
+IMAGE:
+ch26_gre_delphi_hadrianus.png
+
 CHOICES:
 * Ga verder -> CH26_GRE_EINDE
 
@@ -28900,6 +28971,9 @@ Vespasianus
 
 Titus schudt zijn hoofd — de munt ruikt naar niets bijzonders, gewoon naar metaal.
 
+IMAGE:
+ch26_lat_vespasianus_munt.png
+
 CODEX:
 codex_vespasianus_colosseum
 
@@ -28945,6 +29019,9 @@ Een Amfitheater en een As-wolk
 
 TEXT:
 Onder Titus, Vespasianus' zoon, wordt het amfitheater eindelijk voltooid — later bekend als het Colosseum, naar het reusachtige standbeeld ernaast. Titus zelf regeert nog geen twee jaar: dezelfde uitbarsting van de Vesuvius die je al meemaakte, met Plinius en zijn oom, aan de voet van de berg — dát was onder Titus, niet onder Nero, die toen al jaren dood was. Na Titus' korte, geliefde bewind volgt zijn broer Domitianus: achterdochtig, hardvochtig, uiteindelijk vermoord door zijn eigen hofhouding — zijn naam wordt daarna zoveel mogelijk van monumenten gebeiteld.
+
+IMAGE:
+ch26_lat_colosseum_voltooid.png
 
 CODEX:
 codex_titus_domitianus
@@ -28994,6 +29071,9 @@ Een Rijk dat zijn Opvolger Kiest
 TEXT:
 Na Domitianus' dood kiest de Senaat een oude, kinderloze senator, Nerva, als keizer — een noodgreep die per ongeluk een van de beste ideeën in de hele Romeinse geschiedenis oplevert. In plaats van zijn troon aan een zoon na te laten, adopteert Nerva de bekwaamste generaal die hij kent: Trajanus. Onder Trajanus bereikt het rijk zijn grootste omvang ooit, tot ver in Dacië — een overwinning die hij op een reusachtige, spiraalvormig beeldhouwde zuil in Rome laat vastleggen. Als bestuurder in de provincie Bithynia schrijft een van zijn ambtenaren hem geregeld om raad — dezelfde Plinius de Jongere wiens brief je in het vorige hoofdstuk al zag.
 
+IMAGE:
+ch26_lat_nerva_adopteert_trajanus.png
+
 RELATION:
 hadrianus=+1
 
@@ -29029,6 +29109,9 @@ Marcus Aurelius regeert niet vanuit een paleis, maar bijna voortdurend vanuit le
 DIALOGUE:
 Marcus Aurelius
 [[Ἄριστος ἐκδικήσεως τρόπος τὸ μὴ ὁμοιοῦσθαι.|De beste manier om je te wreken, is niet te worden zoals degene die je kwaad deed.]]
+
+IMAGE:
+ch26_lat_marcus_aurelius_kampvuur.png
 
 RELATION:
 marcus_aurelius=+1
@@ -29081,6 +29164,9 @@ Een Zoon, Geen Adoptie
 
 TEXT:
 Voor het eerst in bijna een eeuw laat een keizer de troon na aan zijn eigen, biologische zoon in plaats van aan de bekwaamste beschikbare opvolger — en het verschil is meteen voelbaar. Commodus heeft weinig belangstelling voor bestuur, en des te meer voor het amfitheater: hij treedt zelf op als gladiator, verkleedt zich als Hercules met een leeuwenvel, en laat zich vereren als een levende halfgod. De Senaat kijkt met groeiend afgrijzen toe.
+
+IMAGE:
+ch26_lat_commodus_hercules.png
 
 RELATION:
 marcus_aurelius=+1
@@ -29136,6 +29222,9 @@ Eén Burgerrecht, Eén Dode Broer
 
 TEXT:
 Caracalla en Geta, Septimius Severus' twee zoons, zouden samen moeten regeren — in plaats daarvan laat Caracalla zijn eigen broer vermoorden, in de armen van hun eigen moeder, en beveelt hij dat Geta's naam overal wordt weggebeiteld. Diezelfde Caracalla vaardigt daarna wel een van de meest verstrekkende wetten uit de hele Romeinse geschiedenis uit: de Constitutio Antoniniana kent het Romeinse burgerrecht toe aan vrijwel elke vrije inwoner van het hele rijk, van Britannia tot Syrië — niet langer een voorrecht van enkelen, maar de norm. Na hem regeert nog kort de jonge, excentrieke Elagabalus, wiens ongebruikelijke godsdiensthervormingen de Senaat evenmin weten te overtuigen — ook hij wordt vermoord, nog geen twintig jaar oud.
+
+IMAGE:
+ch26_lat_constitutio_antoniniana.png
 
 CODEX:
 codex_constitutio_antoniniana
@@ -29886,6 +29975,759 @@ TEXT:
 Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
 
 Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 28 "De Bibliotheek van Mnemosyne" — CONCEPT, NOG NIET
+   GEKOPPELD. Zelfde afspraak als H21-27 vóór hun goedkeuring. Door Claude
+   geschreven. Boek VI begint hier: de grote payoff-laag van de hele
+   campagne (zie DODE_FLAGS_FINALE.md) en de onthulling van de Boodschapper
+   als Pamphile van Epidaurus (haar cameo staat inmiddels in Hoofdstuk 23,
+   CH23_LAT_011B).
+
+   BELANGRIJKE ONTWERPBESLISSINGEN (Gerbens verzoek, 2026-08-16):
+   1. GEEN gemengde grammatica — taalsporen blijven strikt gescheiden voor
+      alle leerstof/puzzels, exact zoals in elk eerder hoofdstuk. Wél
+      doorlopen alle drie de sporen dezelfde SCÈNE-VOLGORDE (dezelfde vier
+      vleugels, in vrije volgorde) — alleen de inhoud per vleugel is
+      taalspoor-gated.
+   2. Niet-lineaire "vleugels"-hub, zelfde patroon als H24's museum
+      ([DONE:vlag] op elke hub-keuze). Het hart van de bibliotheek (de
+      onthulling) is bewust NIET met een REQUIRE-gate afgeschermd — REQUIRE
+      kan maar één voorwaarde per keuze aan, en "alle vier vleugels klaar"
+      zou een onhandige keten van hulpscènes vergen. In plaats daarvan een
+      zachte, narratieve afwijzing door Mnemosyne zelf als de speler het te
+      vroeg probeert.
+   3. Volgorde-tracking (Gerbens verzoek): welke vleugel het EERST werd
+      voltooid (`ch28_eerste_vleugel`, via een eenmalige claim-flag
+      `ch28_eerste_vleugel_gezet` — zo hoeft niet elke vleugel de andere
+      drie te controleren) en welke vleugel het LAATST werd voltooid
+      (`ch28_laatste_vleugel`, gewoon telkens overschreven — de facto de
+      laatste die vuurt, wint). Beide leesbaar door dit hoofdstuk zelf en
+      door toekomstige hoofdstukken/NPC's.
+   4. Doeltaal-alinea's als "questlogboek": Mnemosyne's eigen archief
+      spreekt de speler toe over zijn/haar EIGEN eerdere keuzes, in het
+      Grieks/Latijn, bewust met alleen hoogfrequente, allang geleerde
+      woordenschat — zelfde geest als het bergpad-moment in Hoofdstuk 27.
+   5. Narcissus & Echo: een tekstuele (niet auditieve) fragment-
+      reconstructiepuzzel — leerlingen moeten dit in stilte in de les
+      kunnen spelen.
+   6. Vier vleugels: "De Weg Hierheen" (H1-6-aggregaat, cultuurneutraal,
+      dus GEEN taalspoor-splitsing nodig), "Wat Je Koos te Bewaren" (H24/
+      H25 onthoud-of-laat-los-reeks, het zwaartepunt), "Mensen die Je
+      Onthield" (NPC-herkenning/politieke scheuren/mythologische
+      afsluitingen, H15-21), "Stemmen die Nooit Zwegen" (RELATION-lijnen:
+      Athena aan Griekse kant, de Stoïcijnse lijn + Hadrianus aan Latijnse
+      kant).
+   7. Onthullingsvolgorde aan het eind (vast, buiten de vleugel-volgorde
+      om): Mnemosyne onthult dat het Museum altijd van haar was en
+      feliciteert de speler → Pamphile-onthulling (Athena's motief:
+      wijsheid bewaren; Hermes hielp omdat Athena het vroeg, zijn eigen
+      diepere reden nog bewust open gelaten) → Kronos/Chronos worden hier
+      voor het eerst "per ongeluk" door elkaar gehaald → plottwist: Lethe
+      verschijnt, met een payoff naar haar moeder Eris (H7/H24) — neergezet
+      als relatable, geen schurk; haar "vergeten hoort erbij"-filosofie
+      wordt hier NOG NIET hardop uitgesproken, dat komt pas in H29/Finale. */
+const SP_CH28_CNS = `
+=== SCENE: CH28_000 ===
+
+TITLE:
+De Bibliotheek van Mnemosyne
+
+TEXT:
+De grond onder je voeten verdwijnt, en met haar de tijd zelf. Geen proloogveld, geen Museum met zijn vertrouwde stolpen — in plaats daarvan sta je in een bibliotheek die zich in elke richting eindeloos lijkt uit te strekken, planken tot voorbij het zicht, geen plafond dat je kunt vinden. Tussen de planken door beweegt een vrouw, oud en tijdloos tegelijk, met ogen die duizenden gezichten tegelijk lijken te bevatten.
+
+DIALOGUE:
+Mnemosyne
+Welkom, kind — al heb je me nooit met naam genoemd horen worden, ik heb elke stap die je zette, bewaard. Ik ben Mnemosyne. Dit is niet zomaar een bibliotheek: het is de plek waar niets ooit werkelijk verloren gaat, ook al denkt de wereld daarbuiten van wel.
+
+Ze wijst met een vinger, en vier gangen tekenen zich af tussen de boekenkasten, elk met een eigen, subtiele gloed.
+
+IMAGE:
+ch28_mnemosyne_bibliotheek.png
+
+VOCAB:
+grieks_ana, grieks_phemi, grieks_para, grieks_didomi, grieks_hotan, latijn_nam, latijn_immo, latijn_scilicet, latijn_tantum
+
+CHOICES:
+* Verken de bibliotheek -> CH28_HUB
+
+END
+
+=== SCENE: CH28_HUB ===
+
+TITLE:
+Vier Gangen, Eén Bibliotheek
+
+TEXT:
+Mnemosyne wacht geduldig terwijl je de vier gangen overziet. "Bezoek ze in de volgorde die jij wilt," zegt ze. "Ik onthoud sowieso alles — ook de volgorde waarin jij kiest te herinneren."
+
+CHOICES:
+* Ga naar "De Weg Hierheen" [DONE:ch28_wing_a_klaar] -> CH28_WING_A_001
+* Ga naar "Wat Je Koos te Bewaren" [DONE:ch28_wing_b_klaar] -> CH28_WING_B_001
+* Ga naar "Mensen die Je Onthield" [DONE:ch28_wing_c_klaar] -> CH28_WING_C_001
+* Ga naar "Stemmen die Nooit Zwegen" [DONE:ch28_wing_d_klaar] -> CH28_WING_D_001
+* Ga naar het hart van de bibliotheek -> CH28_HART_CHECK
+
+END
+
+=== SCENE: CH28_HART_CHECK ===
+
+TITLE:
+Op Weg naar het Hart
+
+TEXT:
+Je loopt richting het diepste punt van de bibliotheek, waar de planken lijken te wijken voor een zachte, gouden gloed.
+
+CHOICES:
+* Ga verder [REQUIRE:ch28_wing_a_klaar=true] -> CH28_HART_CHECK_B
+* Ga verder [REQUIRE:ch28_wing_a_klaar!=true] -> CH28_HART_NIET_KLAAR
+
+END
+
+=== SCENE: CH28_HART_CHECK_B ===
+
+TEXT:
+De gloed wordt sterker naarmate je verder loopt.
+
+CHOICES:
+* Ga verder [REQUIRE:ch28_wing_b_klaar=true] -> CH28_HART_CHECK_C
+* Ga verder [REQUIRE:ch28_wing_b_klaar!=true] -> CH28_HART_NIET_KLAAR
+
+END
+
+=== SCENE: CH28_HART_CHECK_C ===
+
+TEXT:
+Bijna bij het hart van de bibliotheek.
+
+CHOICES:
+* Ga verder [REQUIRE:ch28_wing_c_klaar=true] -> CH28_HART_CHECK_D
+* Ga verder [REQUIRE:ch28_wing_c_klaar!=true] -> CH28_HART_NIET_KLAAR
+
+END
+
+=== SCENE: CH28_HART_CHECK_D ===
+
+TEXT:
+Nog een laatste paar passen.
+
+CHOICES:
+* Ga verder [REQUIRE:ch28_wing_d_klaar=true] -> CH28_HART_TOEGANG
+* Ga verder [REQUIRE:ch28_wing_d_klaar!=true] -> CH28_HART_NIET_KLAAR
+
+END
+
+=== SCENE: CH28_HART_NIET_KLAAR ===
+
+TITLE:
+Nog Niet
+
+TEXT:
+Mnemosyne houdt je met een hand tegen, niet onvriendelijk. "Nog niet, kind. Er is nog te veel dat je nog niet bent langsgegaan. Kom terug wanneer de vier gangen achter je liggen."
+
+CHOICES:
+* Keer terug naar de vier gangen -> CH28_HUB
+
+END
+
+=== SCENE: CH28_WING_A_001 ===
+
+TITLE:
+De Weg Hierheen
+
+TEXT:
+De eerste gang toont geen boeken, maar een lange rij kleine, zwevende lichtvlekken — elk een flits van een moment waarop je zelf moest kiezen hoe je een probleem te lijf ging. Klimmen of overtuigen. Vechten of wachten. Je herkent ze meteen, ook al is het jaren geleden dat je ze koos.
+
+DIALOGUE:
+Mnemosyne
+Ik heb elke keer geteld dat je koos om te klimmen, elke keer dat je koos om te overtuigen, elke keer dat je gewoon je schouders eronder zette. Kijk.
+
+De lichtvlekken vloeien samen tot een enkel, warm beeld: telkens weer dezelfde jonge figuur — jij — die opnieuw en opnieuw een obstakel op zijn eigen manier te lijf gaat, van de allereerste beproevingen tot de Vloek van Thebe.
+
+IMAGE:
+ch28_gang_a_weg_hierheen.png
+
+FLAG:
+ch28_wing_a_klaar=true
+
+CHOICES:
+* Bedank Mnemosyne voor deze herinnering -> CH28_WING_A_DONE
+
+END
+
+=== SCENE: CH28_WING_A_DONE ===
+
+TITLE:
+Terug naar de Vier Gangen
+
+TEXT:
+Mnemosyne knikt, tevreden. "Wat je koos te doen, is nu net zo goed bewaard als wat je koos te zeggen."
+
+CHOICES:
+* Claim deze herinnering als je eerste [REQUIRE:ch28_eerste_vleugel_gezet!=ja] -> CH28_EERSTE_A
+* Keer terug naar de vier gangen [REQUIRE:ch28_eerste_vleugel_gezet=ja] -> CH28_HUB_NA_A
+
+END
+
+=== SCENE: CH28_EERSTE_A ===
+
+TITLE:
+De Eerste Keuze
+
+TEXT:
+Van alle vier de gangen was dit de eerste die je binnenging — Mnemosyne onthoudt ook dát.
+
+FLAG:
+ch28_eerste_vleugel=weg_hierheen
+ch28_eerste_vleugel_gezet=ja
+
+CHOICES:
+* Keer terug naar de vier gangen -> CH28_HUB_NA_A
+
+END
+
+=== SCENE: CH28_HUB_NA_A ===
+
+TITLE:
+Terug naar de Vier Gangen
+
+FLAG:
+ch28_laatste_vleugel=weg_hierheen
+
+CHOICES:
+* Ga verder -> CH28_HUB
+
+END
+
+=== SCENE: CH28_WING_B_001 ===
+
+TITLE:
+Wat Je Koos te Bewaren
+
+TEXT:
+De tweede gang voelt anders — zwaarder. Hier staan geen lichtvlekken, maar negen kleine, glazen potjes, elk met een vage, bewegende rook erin. Mnemosyne raakt er een aan, en de rook vormt heel even een beeld: een marmeren zuil, een gebroken vleugel, een brief.
+
+DIALOGUE:
+Mnemosyne
+Hier bewaar ik wat jij zelf koos te bewaren — of los te laten. Elke keer dat iemand je vroeg: wil je dit onthouden? Ik heb je antwoord nooit vergeten, ook al wist je toen niet waarom ik het vroeg.
+
+IMAGE:
+ch28_gang_b_potjes.png
+
+CHOICES:
+* Bekijk wat je in het Grieks koos [REQUIRE:taalspoor!=latijn] -> CH28_WING_B_GRE
+* Bekijk wat je in het Latijn koos [REQUIRE:taalspoor!=grieks] -> CH28_WING_B_LAT
+
+END
+
+=== SCENE: CH28_WING_B_GRE ===
+
+TITLE:
+Wat Griekenland Je Vroeg te Onthouden
+
+TEXT:
+Vijf van de potjes gloeien Aegeïsch blauw op. Mnemosyne leest, zachtjes, in het Grieks, wat er in haar eigen archief over jou staat geschreven — een korte regel, niet moeilijker dan wat je allang kent.
+
+"[[Σὺ πολλὰ ἔμαθες καὶ πολλὰ ἐμνημόνευσας.|Jij hebt veel geleerd, en veel onthouden.]]"
+
+Je herinnert je Phidias, Polykleitos, Praxiteles, de Kolossus van Rhodos, de gebroken Nike — bij elk daarvan koos je, ooit, te onthouden of los te laten.
+
+CHOICES:
+* Steek over naar wat Rome je vroeg [REQUIRE:taalspoor=beide] -> CH28_WING_B_LAT
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH28_WING_B_DONE
+
+END
+
+=== SCENE: CH28_WING_B_LAT ===
+
+TITLE:
+Wat Rome Je Vroeg te Onthouden
+
+TEXT:
+Vier van de potjes gloeien oxblood-rood op. Mnemosyne leest, zachtjes, in het Latijn, wat er in haar eigen archief over jou staat geschreven.
+
+"[[Tu multa vidisti; tu multa meministi.|Jij hebt veel gezien; jij hebt veel onthouden.]]"
+
+Je herinnert je het aquaduct, de Ara Pacis, Vitruvius' eigen drieslag, en, later, Plinius' brief aan Tacitus — bij elk daarvan koos je, ooit, te onthouden of los te laten.
+
+CHOICES:
+* Ga verder -> CH28_WING_B_DONE
+
+END
+
+=== SCENE: CH28_WING_B_DONE ===
+
+TITLE:
+Negen Potjes, Eén Patroon
+
+TEXT:
+Mnemosyne bekijkt de rij potjes nog eens, zowel de blauwe als de rode. "Sommigen onthouden bijna alles. Anderen laten makkelijker los dan ze zelf beseffen. Geen van beide is fout — maar ik zie wel een patroon in wat jij koos."
+
+FLAG:
+ch28_wing_b_klaar=true
+
+CHOICES:
+* Bedank Mnemosyne -> CH28_WING_B_DONE2
+
+END
+
+=== SCENE: CH28_WING_B_DONE2 ===
+
+TITLE:
+Terug naar de Vier Gangen
+
+CHOICES:
+* Claim deze herinnering als je eerste [REQUIRE:ch28_eerste_vleugel_gezet!=ja] -> CH28_EERSTE_B
+* Keer terug naar de vier gangen [REQUIRE:ch28_eerste_vleugel_gezet=ja] -> CH28_HUB_NA_B
+
+END
+
+=== SCENE: CH28_EERSTE_B ===
+
+TITLE:
+De Eerste Keuze
+
+FLAG:
+ch28_eerste_vleugel=onthouden_of_loslaten
+ch28_eerste_vleugel_gezet=ja
+
+CHOICES:
+* Keer terug naar de vier gangen -> CH28_HUB_NA_B
+
+END
+
+=== SCENE: CH28_HUB_NA_B ===
+
+TITLE:
+Terug naar de Vier Gangen
+
+FLAG:
+ch28_laatste_vleugel=onthouden_of_loslaten
+
+CHOICES:
+* Ga verder -> CH28_HUB
+
+END
+
+=== SCENE: CH28_WING_C_001 ===
+
+TITLE:
+Mensen die Je Onthield
+
+TEXT:
+De derde gang is vol portretten — honderden, misschien duizenden, in elke maat en stijl. De meeste ken je niet. Een handvol wel.
+
+DIALOGUE:
+Mnemosyne
+Niet elk portret hier is een held. Sommigen zijn gewoon iemand die jij, op een dag, de moeite waard vond om echt te zien.
+
+IMAGE:
+ch28_gang_c_portretten.png
+
+CHOICES:
+* Bekijk de Griekse portretten [REQUIRE:taalspoor!=latijn] -> CH28_WING_C_GRE
+* Bekijk de Latijnse portretten [REQUIRE:taalspoor!=grieks] -> CH28_WING_C_LAT
+
+END
+
+=== SCENE: CH28_WING_C_GRE ===
+
+TITLE:
+Namen die Bleven Hangen
+
+TEXT:
+"[[Πολλῶν ὀνόματα ἤκουσας· ὀλίγων ἐμνήσθης.|Van velen hoorde je de naam; van weinigen herinnerde je je hen echt.]]"
+
+Doris, die je hielp toen niemand anders het deed. Straton, wiens argwaan je zelf opriep. De Naxiërs, met geweld tot gehoorzaamheid gedwongen door een bondgenootschap dat zichzelf een verbond van gelijken noemde. De metgezellen die je meenam op de Siciliaanse Expeditie, of juist achterliet. Herakles' twaalf werken, eindelijk voltooid. Patroklos, Hektor, Achilles — allen gevallen. Het Palladium, gestolen uit een stad die toch al ten dode was opgeschreven.
+
+CODEX:
+codex_mnemosyne_wing_c_gre
+
+CHOICES:
+* Steek over naar de Latijnse portretten [REQUIRE:taalspoor=beide] -> CH28_WING_C_LAT
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH28_WING_C_DONE
+
+END
+
+=== SCENE: CH28_WING_C_LAT ===
+
+TITLE:
+Namen die Bleven Hangen
+
+TEXT:
+"[[Multorum nomina audivisti; paucorum meministi.|Van velen hoorde je de naam; van weinigen herinner je je hen.]]"
+
+Fortunata, die je ofwel alleen liet, ofwel niet. Spartacus, die je herkende of juist gewoon zag voorbijgaan. Tiberius Gracchus, die zijn eigen medetribuun afzette — het precedent dat sindsdien nooit meer verdween. De samenzweerders tegen Caesar, met wie je meeging of die je weigerde. Dumnorix, geëxecuteerd of gespaard. De aquilifer bij Britannia, jijzelf of een naamloze soldaat. Cicero's stijl tegen Verres, logica of emotie. De Senaat tegen Catilina, hard of zacht.
+
+CODEX:
+codex_mnemosyne_wing_c_lat
+
+CHOICES:
+* Ga verder -> CH28_WING_C_DONE
+
+END
+
+=== SCENE: CH28_WING_C_DONE ===
+
+TITLE:
+Wat de Portretten Gemeen Hebben
+
+TEXT:
+Mnemosyne kijkt niet naar de portretten, maar naar jou. "Elke naam die je vergat, is niet verloren — hij hangt hier nog steeds. Maar elke naam die je wél onthield, koos je zelf om vast te houden. Dat verschil is groter dan je denkt."
+
+FLAG:
+ch28_wing_c_klaar=true
+
+CHOICES:
+* Bedank Mnemosyne -> CH28_WING_C_DONE2
+
+END
+
+=== SCENE: CH28_WING_C_DONE2 ===
+
+TITLE:
+Terug naar de Vier Gangen
+
+CHOICES:
+* Claim deze herinnering als je eerste [REQUIRE:ch28_eerste_vleugel_gezet!=ja] -> CH28_EERSTE_C
+* Keer terug naar de vier gangen [REQUIRE:ch28_eerste_vleugel_gezet=ja] -> CH28_HUB_NA_C
+
+END
+
+=== SCENE: CH28_EERSTE_C ===
+
+TITLE:
+De Eerste Keuze
+
+FLAG:
+ch28_eerste_vleugel=mensen_die_je_onthield
+ch28_eerste_vleugel_gezet=ja
+
+CHOICES:
+* Keer terug naar de vier gangen -> CH28_HUB_NA_C
+
+END
+
+=== SCENE: CH28_HUB_NA_C ===
+
+TITLE:
+Terug naar de Vier Gangen
+
+FLAG:
+ch28_laatste_vleugel=mensen_die_je_onthield
+
+CHOICES:
+* Ga verder -> CH28_HUB
+
+END
+
+=== SCENE: CH28_WING_D_001 ===
+
+TITLE:
+Stemmen die Nooit Zwegen
+
+TEXT:
+De vierde gang is stiller dan de andere drie — geen potjes, geen portretten, alleen een handvol stemmen die zachtjes, als een echo, blijven doorpraten, ook als niemand luistert.
+
+DIALOGUE:
+Mnemosyne
+Sommige mensen laat je niet meer los, ook al liet jij ze soms achter je. Luister.
+
+IMAGE:
+ch28_gang_d_stemmen.png
+
+CHOICES:
+* Luister naar de Griekse stem [REQUIRE:taalspoor!=latijn] -> CH28_WING_D_GRE
+* Luister naar de Latijnse stemmen [REQUIRE:taalspoor!=grieks] -> CH28_WING_D_LAT
+
+END
+
+=== SCENE: CH28_WING_D_GRE ===
+
+TITLE:
+Athena's Stem
+
+TEXT:
+Van alle stemmen in deze gang klinkt er één het langst door — een stem die je al sinds je eerste hoofdstukken kent.
+
+DIALOGUE:
+Athena
+[[Σὺ ἐμοὶ φίλος ἦσθα ἀπ᾽ ἀρχῆς.|Jij was mij dierbaar, vanaf het begin.]] Ik zag je leren, ik zag je twijfelen, ik zag je uiteindelijk kiezen. Dat vergeet ik niet.
+
+CODEX:
+codex_mnemosyne_wing_d_gre
+
+CHOICES:
+* Steek over naar de Latijnse stemmen [REQUIRE:taalspoor=beide] -> CH28_WING_D_LAT
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH28_WING_D_DONE
+
+END
+
+=== SCENE: CH28_WING_D_LAT ===
+
+TITLE:
+Drie Stemmen, Eén Lijn
+
+TEXT:
+Drie stemmen klinken hier door elkaar, alsof ze al eeuwenlang met elkaar in gesprek zijn — Cicero, Seneca, Marcus Aurelius, elk een leerling van de vorige zonder het ooit zo hardop te zeggen. En een vierde, aparte stem, die van een reiziger die nooit ophield te leren.
+
+DIALOGUE:
+Hadrianus
+[[Ego multas terras vidi; tu mecum eas vidisti.|Ik heb veel landen gezien; jij hebt ze met mij gezien.]]
+
+CODEX:
+codex_mnemosyne_wing_d_lat
+
+CHOICES:
+* Ga verder -> CH28_WING_D_DONE
+
+END
+
+=== SCENE: CH28_WING_D_DONE ===
+
+TITLE:
+Stemmen die Blijven
+
+TEXT:
+Mnemosyne luistert nog even mee. "Dit zijn de mensen die je niet gewoon tegenkwam, maar die je toestond je te veranderen. Ook dat vergeet ik nooit — en jij, hoop ik, ook niet."
+
+FLAG:
+ch28_wing_d_klaar=true
+
+CHOICES:
+* Bedank Mnemosyne -> CH28_WING_D_DONE2
+
+END
+
+=== SCENE: CH28_WING_D_DONE2 ===
+
+TITLE:
+Terug naar de Vier Gangen
+
+CHOICES:
+* Claim deze herinnering als je eerste [REQUIRE:ch28_eerste_vleugel_gezet!=ja] -> CH28_EERSTE_D
+* Keer terug naar de vier gangen [REQUIRE:ch28_eerste_vleugel_gezet=ja] -> CH28_HUB_NA_D
+
+END
+
+=== SCENE: CH28_EERSTE_D ===
+
+TITLE:
+De Eerste Keuze
+
+FLAG:
+ch28_eerste_vleugel=stemmen_die_nooit_zwegen
+ch28_eerste_vleugel_gezet=ja
+
+CHOICES:
+* Keer terug naar de vier gangen -> CH28_HUB_NA_D
+
+END
+
+=== SCENE: CH28_HUB_NA_D ===
+
+TITLE:
+Terug naar de Vier Gangen
+
+FLAG:
+ch28_laatste_vleugel=stemmen_die_nooit_zwegen
+
+CHOICES:
+* Ga verder -> CH28_HUB
+
+END
+
+=== SCENE: CH28_HART_TOEGANG ===
+
+TITLE:
+Het Hart van de Bibliotheek
+
+TEXT:
+Deze keer houdt Mnemosyne je niet tegen. Alle vier de gangen liggen achter je, en de gouden gloed in de verte wordt sterker naarmate je dichterbij komt.
+
+DIALOGUE:
+Mnemosyne
+Je bent klaar. Kom — er is nog één kamer die ik je niet heb laten zien.
+
+CHOICES:
+* Ga naar de laatste kamer -> CH28_PUZZLE_001
+
+END
+
+=== SCENE: CH28_PUZZLE_001 ===
+
+TITLE:
+Narcissus en Echo
+
+TEXT:
+In een ronde kamer met spiegelende muren staan losse stroken perkament, elk met maar een paar woorden erop — fragmenten, niet complete zinnen. Mnemosyne wijst ernaar.
+
+DIALOGUE:
+Mnemosyne
+Ooit stond hier een nimf, Echo, vervloekt om nooit meer een eigen zin te kunnen beginnen — enkel de laatste woorden van een ander te herhalen. Ze hield van een jongen, Narcissus, die alleen van zijn eigen spiegelbeeld kon houden. Beiden verdwenen ze uiteindelijk, zij tot enkel een stem, hij tot een bloem aan de waterkant. Wat er van hun verhaal overbleef, ligt hier: in stukken. Leg jij het weer in de juiste volgorde?
+
+IMAGE:
+ch28_narcissus_echo_kamer.png
+
+PUZZLE:
+puzzle_ch28_narcissus_echo
+
+CHOICES:
+* Ga verder, na de puzzel -> CH28_MNEMOSYNE_ONTHULLING
+
+END
+
+=== SCENE: CH28_MNEMOSYNE_ONTHULLING ===
+
+TITLE:
+Wiens Museum Het Altijd Was
+
+TEXT:
+Terug in de hoofdzaal van de bibliotheek verandert Mnemosyne's gezicht — niet in iets dreigends, maar in iets dat lijkt op opluchting.
+
+DIALOGUE:
+Mnemosyne
+Er is iets dat ik je nog niet heb verteld. Dat Museum waar je al die stolpen hebt gevuld, hoofdstuk na hoofdstuk — dat was, van het allereerste begin af aan, van mij. Elke herinnering die je erin bewaarde, kwam uiteindelijk hier terecht. Jij hebt, zonder het te weten, mijn eigen werk gedaan: de geschiedenis redden van het vergeten worden.
+
+Ze buigt, oprecht, haar hoofd. "Dank je. Ik meen het."
+
+IMAGE:
+ch28_mnemosyne_museum_onthulling.png
+
+CHOICES:
+* Vraag haar wie de Boodschapper dan werkelijk is -> CH28_PAMPHILE_ONTHULLING
+
+END
+
+=== SCENE: CH28_PAMPHILE_ONTHULLING ===
+
+TITLE:
+Pamphile
+
+TEXT:
+Op dat moment verschijnt de Boodschapper van Chronos zelf — maar iets aan haar houding is veranderd, minder afstandelijk, bijna verlegen. Ze laat de gevleugelde sandalen even los, en voor het eerst zie je gewoon een vrouw, met inkt aan haar vingers.
+
+Athena en Hermes verschijnen naast haar — Athena met haar vertrouwde, strenge kalmte, Hermes met een houding die voor het eerst iets minder ongrijpbaars heeft. "Ik vroeg Pamphile mee te helpen, lang geleden," zegt Athena. "Wijsheid die niemand meer kent, is geen wijsheid meer. Zij was de enige sterveling die ik kende die evenveel om onthouden gaf als ik." Hermes knikt. "En ik hielp, omdat Athena het vroeg. Al vermoed ik, als ik heel eerlijk ben, dat ik mijn eigen redenen had — maar die vertel ik je nog niet."
+
+DIALOGUE:
+Boodschapper van Chronos
+Je hebt me al eens ontmoet, weet je. In Nero's Rome, aan de rand van een zaal, met een wastablet op mijn schoot. Pamphile — zo heette ik toen, zo heet ik eigenlijk nog steeds. Een geschiedschrijfster die nooit rustig kon blijven zitten met wat ze zag verdwijnen.
+
+IMAGE:
+ch28_pamphile_onthulling.png
+
+CODEX:
+codex_pamphile_onthuld
+
+CHOICES:
+* Vraag wat Chronos hier eigenlijk mee te maken heeft -> CH28_KRONOS_VERWARRING
+
+END
+
+=== SCENE: CH28_KRONOS_VERWARRING ===
+
+TITLE:
+Chronos, of Kronos?
+
+TEXT:
+"Chronos," begin je, "wilde dus—" Mnemosyne onderbreekt je, zachtjes. "Kronos, bedoel je? Of Chronos?" Ze fronst even, alsof de vraag haarzelf ook even in verwarring brengt. "Het is... een langer verhaal dan je nu wilt horen. Later, misschien. Nu niet."
+
+Iets in de manier waarop zelfs Mnemosyne, die nooit iets vergeet, de twee namen door elkaar haalt, laat een koude rilling over je rug lopen.
+
+CHOICES:
+* Ga verder -> CH28_LETHE_VERSCHIJNT
+
+END
+
+=== SCENE: CH28_LETHE_VERSCHIJNT ===
+
+TITLE:
+Een Onverwachte Gast
+
+TEXT:
+De gouden gloed van de bibliotheek dooft, met een schok, tot iets kouds en grijs. Een gestalte staat plotseling tussen de boekenkasten, alsof ze er altijd al was — een vrouw, kalm, bijna vriendelijk, met ogen die niets lijken vast te houden.
+
+DIALOGUE:
+Lethe
+Neem me niet kwalijk dat ik het feestje verstoor. Dat doe ik wel vaker — mijn moeder deed het ook al eens, met een appel, op een bruiloft die jij je vast nog herinnert.
+
+Mnemosyne verstart, zichtbaar. "Lethe," zegt ze, nauwelijks hoorbaar.
+
+IMAGE:
+ch28_lethe_verschijnt.png
+
+CODEX:
+codex_lethe_geintroduceerd
+
+CHOICES:
+* Ga verder -> CH28_LETHE_GESPREK
+
+END
+
+=== SCENE: CH28_LETHE_GESPREK ===
+
+TITLE:
+Geen Vijandin, Zegt Ze Zelf
+
+TEXT:
+Lethe kijkt rond, bijna nieuwsgierig, naar de eindeloze rijen boeken. "Zoveel," zegt ze, "dat niemand ooit nog echt zal lezen." Ze wendt zich tot jou, niet dreigend, eerder alsof ze je onderzoekt. "Je hebt hard gewerkt om dit allemaal vast te houden. Knap, eigenlijk. Maar ik denk dat we het daarna wel eens grondig oneens gaan worden."
+
+Ze verdwijnt weer net zo plotseling als ze verscheen — geen gevecht, geen dreigement, alleen een belofte.
+
+DIALOGUE:
+Mnemosyne
+Ze is niet wat je denkt dat ze is. Maar dat verhaal is voor een andere dag.
+
+CHOICES:
+* Ga verder -> CH28_EINDE
+
+END
+
+=== SCENE: CH28_EINDE ===
+
+TITLE:
+De Bibliotheek, Voor Nu
+
+TEXT:
+"[[Ecce|zie hier]] — vandaag heb je niet zomaar geleerd, je hebt onthouden wát je leerde," zegt Mnemosyne, weer kalm. "Je weet nu wie ik ben, wie de Boodschapper werkelijk is, en dat er iemand is die dit alles liever zou zien verdwijnen. Er wacht nog één rivier op je, voordat dit verhaal eindigt."
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_bibliotheek_mnemosyne
+
+CHOICES:
+* Bekijk de verzameling in het museum -> CH28_MUSEUM_00
+
+END
+
+=== SCENE: CH28_MUSEUM_00 ===
+
+TITLE:
+Wat de Bibliotheek Bewaarde
+
+TEXT:
+Een nieuwe stolp vult zich: een klein, glazen potje met dezelfde vage rook als in de tweede gang, naast een piepklein, verzilverd fragment van een spiegel. "Vandaag heb je niet alleen jouw eigen herinneringen teruggekregen," zegt Mnemosyne, "je hebt ontdekt wie ze al die tijd al bewaarde."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH28_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH28_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt Mnemosyne, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — een rivier, en alles wat daarna komt. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
 
 END
 `.trim();

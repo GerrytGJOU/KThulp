@@ -8146,6 +8146,114 @@ alle drie taalsporen. Herwalideerd: 0 fouten, latijn-only bereikt nu 29
 scènes (was 21), live in de browser bevestigd (Nika-CHECK bereikbaar voor
 alle drie sporen, 0 exceptions).
 
+### 7.97 Hoofdstuk 26: IMAGE-hooks retroactief toegevoegd (2026-08-16)
+
+Fout hersteld: anders dan alle andere hoofdstukken sinds H21 kreeg
+Hoofdstuk 26 bij het schrijven zelf GEEN `IMAGE:`-hooks — precies dezelfde
+omissie als bij H24 (zie §7.90), die toen expliciet als les werd
+vastgelegd maar hier alsnog opnieuw gebeurde. Pas aan het licht gekomen
+toen Gerben om de beeldprompts voor H26 vroeg. 10 hooks alsnog toegevoegd
+(4 Grieks: Hadrianus/Panhellenion, het voltooide Olympieion, de
+Olympia-inscriptie, Delphi; 6 Latijn: Vespasianus' munt, het voltooide
+Colosseum, Nerva die Trajanus adopteert, Marcus Aurelius bij het
+kampvuur, Commodus als Hercules, de Constitutio Antoniniana). Omdat H26
+al GEKOPPELD is (zie §7.95), is dit een wijziging aan live content:
+`node certamen/tools/validate_chronica.js` opnieuw gedraaid (0 fouten, 61
+bekende waarschuwingen, ongewijzigd), cache-busting in `certamen/
+index.html` opgehoogd naar `?v=20260816c`.
+
+### 7.98 Pamphile-cameo in Hoofdstuk 23 + Hoofdstuk 28 "De Bibliotheek van Mnemosyne" geschreven (2026-08-16)
+
+**Pamphile-cameo (H23, al gekoppeld/live)**: nieuwe scène `CH23_LAT_011B`
+("Een Stille Geschiedschrijfster"), ingevoegd tussen `CH23_LAT_011` en
+`CH23_LAT_012` — een naamloos-lijkende historica aan Nero's hof die de
+speler later, in H28, herkent als de Boodschapper. Nieuwe CODEX-entry
+`codex_pamphile_geschiedschrijfster` (met de echte, historische Pamphile
+van Epidaurus, geattesteerd bij Photius/Suda). Gevalideerd:
+`node certamen/tools/validate_chronica.js` (0 fouten, ongewijzigd
+waarschuwingenaantal), cache-busting opgehoogd naar `?v=20260816d`.
+
+**Hoofdstuk 28 "De Bibliotheek van Mnemosyne"** (Boek VI begint hier) —
+door Claude geschreven, 42 scènes, bewust nog niet gekoppeld. Op Gerbens
+correctie: GEEN gemengde Grieks/Latijnse grammatica (leerlingen die één
+taal kozen, hebben de helft van de andere grammatica nooit gehad) — wel
+doorlopen alle drie de taalsporen dezelfde vleugel-volgorde, alleen de
+inhoud per vleugel is taalspoor-gated.
+
+**Structuur**: een niet-lineaire hub met vier vrij te bezoeken vleugels
+(zelfde `[DONE:vlag]`-patroon als H24's museum) — *De Weg Hierheen*
+(H1-6-aggregaat), *Wat Je Koos te Bewaren* (H24/H25-onthoud-of-laat-los,
+het zwaartepunt), *Mensen die Je Onthield* (NPC/politieke/mythologische
+afsluitingen H15-21), *Stemmen die Nooit Zwegen* (RELATION-payoffs:
+Athena Grieks, Stoïcijnse lijn+Hadrianus Latijn). Zie de bijgewerkte
+`DODE_FLAGS_FINALE.md` voor precies welke dode flags dit aflost.
+
+**Volgorde-tracking** (Gerbens verzoek): `ch28_eerste_vleugel` en
+`ch28_laatste_vleugel` onthouden welke vleugel als eerste/laatste werd
+voltooid, ongeacht welke dat is — technisch opgelost met een eenmalige
+claim-flag (`ch28_eerste_vleugel_gezet`) in plaats van een volledige
+volgorde-permutatie, om de REQUIRE-tag (die maar één voorwaarde per keuze
+aankan) niet te hoeven forceren tot complexe meervoudige AND-ketens. Het
+"hart van de bibliotheek" is met dezelfde beperking rekening houdend
+ontgrendeld via een keten van vier korte routeerscènes
+(`CH28_HART_CHECK` → `_B` → `_C` → `_D`), die elk één vleugel-vlag
+controleert.
+
+**Doeltaal als questlogboek**: Mnemosyne's archief spreekt de speler toe
+in het Grieks/Latijn over zijn/haar EIGEN eerdere keuzes, bewust met
+alleen hoogfrequente, al lang geleerde woordenschat — zelfde geest als
+het bergpad-moment in H27 (bijvoorbeeld "Σὺ πολλὰ ἔμαθες καὶ πολλὰ
+ἐμνημόνευσας" / "Tu multa vidisti; tu multa meministi").
+
+**Narcissus & Echo**: op Gerbens verzoek GEEN geluidsmechaniek. Hergebruikt
+in plaats daarvan het bestaande tile-swap-puzzelmechanisme (normaal voor
+losse letters van één woord) met hele Griekse zinsfragmenten als tegels —
+zelfde onderliggende code, nul nieuw engine-risico, en leerlingen kunnen
+het stil in de les spelen.
+
+**Onthulling**: Mnemosyne onthult dat het Museum altijd van haar was en
+feliciteert de speler → de Boodschapper onthult zichzelf als Pamphile van
+Epidaurus (met de H23-cameo als "ik heb je al eens ontmoet"-moment) →
+Athena's motief (wijsheid bewaren) en Hermes' motief (Athena vroeg het;
+zijn eigen diepere reden bewust nog open) → Kronos/Chronos worden voor
+het eerst "per ongeluk" door elkaar gehaald, een zaadje voor de
+Titanenstrijd-hints → Lethe verschijnt, met een payoff naar haar moeder
+Eris (H7/H24) — neergezet als relatable, geen schurk; haar "vergeten
+hoort erbij"-filosofie wordt hier bewust nog niet hardop uitgesproken.
+
+**Fout gevonden en gecorrigeerd tijdens het bouwen**: `CH28_PAMPHILE_
+ONTHULLING` gebruikte aanvankelijk drie losse `DIALOGUE:`-secties
+(Boodschapper, Athena, Hermes) — de bekende valkuil dat `CNSParser` maar
+één `DIALOGUE:` per scène bewaart (latere secties overschrijven stil de
+vorige). Athena's en Hermes' regels zijn verplaatst naar `TEXT:` als
+aangehaalde spraak, met alleen Pamphile's eigen onthullingsregel in
+`DIALOGUE:`. Vier scènes hadden bovendien een header zonder het verplichte
+`SCENE:`-trefwoord (`=== CH28_WING_X_EERSTE_CHECK ===`) — bleken bij nader
+inzien overbodige doorverwijs-scènes en zijn verwijderd, met hun keuzes
+rechtstreeks doorgekoppeld.
+
+**Nieuwe registry**: 8 CODEX-entries, 1 nieuwe tile-swap-PUZZLE
+(`puzzle_ch28_narcissus_echo`), 1 nieuw souvenir
+(`souvenir_bibliotheek_mnemosyne`), enkele nieuwe VOCAB-id's
+(`latijn_immo`/`_scilicet`/`_tantum`; de overige in `CH28_000` waren al
+bestaande id's uit eerdere hoofdstukken). 9 IMAGE-hooks proactief
+toegevoegd tijdens het schrijven zelf.
+
+**Validatie**: `node --check` slaagt. Een uitgebreide losse validator
+(nieuw, simuleert de hub-navigatie zelf: bezoekt alle vier vleugels in
+twee verschillende volgordes, controleert dat de volgorde-flags correct
+overschrijven, en dat het hart pas ontgrendelt ná alle vier) geeft 42
+scènes, 0 fouten, voor alle drie taalsporen. Live in de browser: volledige
+BFS met automatisch opgeloste tile-swap-puzzel, alle drie taalsporen
+(grieks 35, latijn 34, beide 37 scènes bezocht), 0 exceptions, 0
+onopgeloste tokens, 0 console-fouten.
+
+**Openstaand voor een latere sessie** (Gerbens verzoek): een visuele
+plattegrond met klikbare pins voor de vier vleugels, ter vervanging van de
+huidige tekstuele hub — dezelfde onderliggende FLAGs blijven dan
+bruikbaar, dus dat is een latere, aparte uitbreiding zonder dat de
+payoff-logica opnieuw hoeft.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
