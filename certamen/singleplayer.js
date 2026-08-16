@@ -1605,6 +1605,7 @@ function spRunMetaHooks(meta){
 const SP_AUDIO_MUTED_KEY = "certamen_chronica_muted";
 let SP_MUSIC_EL = null;
 let SP_MUSIC_CURRENT = null;
+let SP_MUSIC_WAS_PLAYING = false;
 function spAudioMuted(){ try{ return localStorage.getItem(SP_AUDIO_MUTED_KEY)==="1"; }catch(e){ return false; } }
 function spSetAudioMuted(muted){
   try{ localStorage.setItem(SP_AUDIO_MUTED_KEY, muted?"1":"0"); }catch(e){}
@@ -1652,6 +1653,20 @@ function spStopMusic(){
   SP_MUSIC_CURRENT = null;
   if(SP_MUSIC_EL){ SP_MUSIC_EL.pause(); SP_MUSIC_EL.src = ""; }
 }
+// Leerlingopmerking (2026-08-13): muziek bleef gewoon doorspelen als het
+// scherm op standby ging — pauzeer daarom bij het onzichtbaar worden van het
+// tabblad/scherm (Page Visibility API), en hervat alleen als er ook echt iets
+// speelde (niet als de speler zelf al gepauzeerd/gemute had) zodra het scherm
+// weer aan staat.
+document.addEventListener("visibilitychange", function(){
+  if(!SP_MUSIC_EL) return;
+  if(document.hidden){
+    SP_MUSIC_WAS_PLAYING = !SP_MUSIC_EL.paused;
+    SP_MUSIC_EL.pause();
+  } else if(SP_MUSIC_WAS_PLAYING && !spAudioMuted()){
+    SP_MUSIC_EL.play().catch(()=>{});
+  }
+});
 /* FLAG: zet één of meer vlaggen bij het binnenkomen van een scène. Zo dragen
    keuzes (en wélke plotlijn je koos) door naar latere hoofdstukken: elke
    branch-specifieke scène zet zijn eigen vlag. Regels/`;`-gescheiden;
