@@ -504,9 +504,10 @@ const SP_CAMPAIGN = [
     pallas:"Geen nieuwe les — verhaal: Byzantium wordt Constantinopel, gevolgd door een korte vooruitblik naar Justinianus en Theodora", minerva:"Geen nieuwe grammatica — verhaal: Diocletianus/de Tetrarchie, Constantijn/het Edict van Milaan, Theodosius, de deling van het rijk, de val van West-Rome in 476",
     grammatica:"Grieks: herhaling — Byzantium/Constantinopel/Justinianus; Latijn: herhaling — Constantijn/val van West-Rome",
     gameplay:"ZIGZAG-hoofdstuk (zoals Hoofdstuk 10/15, scène-voor-scène verweven i.p.v. sequentieel): het rijk valt in het Westen uiteen (Latijnse lijn) terwijl het in het Oosten, in een nieuwe, Griekstalige vorm, juist doorleeft en groeit (Griekse lijn) — een bewust bitterzoet, niet-symmetrisch slot vlak vóór de terugkeer naar het Museum van Mnemosyne. Latijnse opening: een STAT-gated of REACTION-gestuurde 'ontwerp mee aan het bestuur van het rijk'-moment vóór de Tetrarchie zelf wordt onthuld (zie verhaal-veld).",
-    personages:"Diocletianus, Constantijn de Grote, Theodosius, Romulus Augustulus (laatste West-Romeinse keizer) — Justinianus I, Theodora (Griekse/Byzantijnse lijn)",
+    personages:"Diocletianus, Constantijn de Grote, Theodosius, Romulus Augustulus (laatste West-Romeinse keizer) — Justinianus I, Theodora (gedeelde coda, alle taalsporen)",
     thema:"Het einde van het ene rijk is, op dezelfde plek net iets verderop, het begin van iets nieuws",
-    illustratie:"Constantijn bij het Edict van Milaan / de laatste keizerskroon van West-Rome, leeg op een troon / Justinianus en Theodora in Constantinopel" },
+    illustratie:"Constantijn bij het Edict van Milaan / de laatste keizerskroon van West-Rome, leeg op een troon / Justinianus en Theodora in Constantinopel",
+    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-16) — door Claude geschreven (geen Gemini-concept). 36 scènes, echte scène-voor-scène ZIGZAG: elke LAT_00X/GRE_00X-scène (X=1-6) heeft een REQUIRE-gestuurde kruising naar de parallelle scène (zelfde patroon als CH10/CH15/CH23). Kernstuk: de Slag bij de Milvische Brug tweemaal verteld, met TWEE gespiegelde leesvallen — Latijn (Lactantius: een droom 's nachts) en Grieks (Eusebius: een visioen op klaarlichte dag) — onmiddellijk na elkaar voor 'beide'-spelers. Twee H26-payoffs verwerkt: Theodosius verbiedt de Olympische Spelen én sluit het orakel van Delphi (met een stille reactie van de Boodschapper, terugverwijzend naar CH26_GRE_004). Diocletianus' Tetrarchie-opening is nu een co-design-moment (drie keuzes, speler denkt eerst zelf na, flavour-only FLAG). Een bewust NIET-authentiek, zelf verzonnen Latijns waarschuwingsmoment ('Mons iter non tutum est; viam cape!') vóór de val van Rome, op Gerbens uitdrukkelijk verzoek — geen grammaticale leesval, puur sfeer/keuze. De Nika-opstand (532) krijgt een CHECK (`ch27_gre_nika_opstand`, agilitas dc16) met bewust filmisch/gespannen taalgebruik. CORRECTIE (2026-08-16, Gerbens feedback): Justinianus/Theodora/de Nika-opstand zijn NIET Grieks-exclusief — ook Latijnse spelers zien deze coda, want 'dit is ook voor hen leerstof'. Na de val van Rome (CH27_LAT_006_EINDE) routeert iedereen onvoorwaardelijk door naar CH27_GRE_006; de losse CH27_LAT_EINDE-scène is daarmee vervallen. Het niet-symmetrische element blijft alleen bestaan in de twee taalspoor-exclusieve Milvische-Brug-leesvallen (LAT ziet de Latijnse versie niet de Griekse, en omgekeerd). Nieuwe registry: 13 CODEX-entries, 1 nieuwe SP_CHECKS-entry, 1 nieuw souvenir, 20 signaalwoorden. SP_CH27_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
 
   // ---- Hoofdstuk 28-29 + Finale: de ontknoping (Gerbens akkoord
   // 2026-08-02, vervangt de oude drieluik Mnemosyne/Lethe/Finale qua
@@ -2925,6 +2926,30 @@ const SP_CODEX_ENTRIES = {
     tekst:"Keizer Caracalla vaardigt in 212 n.Chr. de Constitutio Antoniniana uit, die het Romeinse burgerrecht toekent aan vrijwel elke vrije inwoner van het hele rijk — een van de meest verstrekkende wetten uit de Romeinse geschiedenis, die het onderscheid tussen 'Romein' en 'onderdaan' voorgoed vervaagt." },
   codex_aurelianus_crisis: { cat:"geschiedenis", titel:"De Derde-Eeuwse Crisis en Aurelianus",
     tekst:"Tussen 235 en 284 n.Chr. wisselen tientallen 'soldatenkeizers' elkaar in hoog tempo af, terwijl het rijk economisch instort en bijna in drie stukken uiteenvalt. Keizer Aurelianus herenigt het rijk in slechts vijf jaar tijd — vandaar zijn bijnaam 'restitutor orbis', hersteller van de wereld — en omringt Rome voor het eerst in eeuwen weer met een eigen stadsmuur." },
+  codex_tetrarchie: { cat:"geschiedenis", titel:"De Tetrarchie",
+    tekst:"Diocletianus stelt in 293 n.Chr. de Tetrarchie in: het rijk wordt bestuurd door twee Augusti (hijzelf in het Oosten, Maximianus in het Westen), elk met een eigen Caesar als aangewezen opvolger. Bestuur én opvolging zijn zo tegelijk verdeeld — een poging de chaos van de Derde-Eeuwse Crisis, waarin te veel macht bij te weinig mannen lag, voorgoed te voorkomen." },
+  codex_prijzenedict: { cat:"geschiedenis", titel:"Diocletianus' Prijzenedict",
+    tekst:"Het Edictum de Pretiis Rerum Venalium (301 n.Chr.) stelt maximumprijzen vast voor duizenden goederen en diensten, in een poging de galopperende inflatie na de Derde-Eeuwse Crisis te beteugelen. Het edict wordt binnen enkele jaren genegeerd en verdwijnt — een van de eerste bekende, gedocumenteerde mislukkingen van centrale prijsbeheersing." },
+  codex_diocletianische_vervolging: { cat:"geschiedenis", titel:"De Grote Vervolging",
+    tekst:"Vanaf 303 n.Chr. voert Diocletianus de zwaarste, meest systematische christenvervolging uit de Romeinse geschiedenis: kerken verwoest, geschriften verbrand, gelovigen gedwongen te offeren aan de Romeinse goden op straffe van de dood. Het Griekstalige Oosten, met zijn grote christelijke gemeenschappen, wordt het zwaarst getroffen." },
+  codex_milvische_brug: { cat:"geschiedenis", titel:"De Slag bij de Milvische Brug",
+    tekst:"Vlak vóór deze beslissende slag tegen zijn rivaal Maxentius (312 n.Chr.) krijgt Constantijn een teken dat hem tot het christendom drijft — overgeleverd via twee verschillende bronnen: de Latijnse Lactantius beschrijft een droom in de nacht ervoor, de Griekse Eusebius een visioen aan de hemel op klaarlichte dag. Constantijn wint de slag en wordt de eerste christelijke keizer van Rome." },
+  codex_edict_van_milaan: { cat:"geschiedenis", titel:"Het Edict van Milaan",
+    tekst:"In 313 n.Chr. vaardigen Constantijn en Licinius samen het Edict van Milaan uit: godsdienstvrijheid voor het hele rijk, christenen inbegrepen — na eeuwen van sporadische vervolging eindelijk een erkend, toegestaan geloof naast alle andere." },
+  codex_theodosius_deling: { cat:"geschiedenis", titel:"Theodosius en de Definitieve Deling",
+    tekst:"Theodosius maakt het christendom tot enige staatsgodsdienst van het rijk, en verdeelt het bij zijn dood (395 n.Chr.) voorgoed tussen zijn twee zoons: Honorius in het Westen, Arcadius in het Oosten. Nooit meer regeert één keizer over het hele Romeinse Rijk." },
+  codex_val_van_rome: { cat:"geschiedenis", titel:"De Val van West-Rome (476 n.Chr.)",
+    tekst:"De Germaanse legeraanvoerder Odoacer zet in 476 n.Chr. de laatste West-Romeinse keizer af — de tienerjongen Romulus Augustulus, wiens naam zowel Rome's eerste koning als eerste keizer in zich draagt. Er vloeit geen bloed: Odoacer stuurt hem met pensioen naar een villa. Het West-Romeinse Rijk houdt op te bestaan zonder één laatste veldslag." },
+  codex_nicomedia_oosten: { cat:"geschiedenis", titel:"Nicomedia en de Oostwaartse Verschuiving",
+    tekst:"Diocletianus bestuurt zijn helft van het rijk vanuit Nicomedia in Klein-Azië, niet vanuit Rome — een teken dat het Griekstalige Oosten, rijker en beter verdedigbaar dan het Westen, al vóór Constantinopel het zwaartepunt van de Romeinse macht naar zich toe trekt." },
+  codex_constantinopel_gesticht: { cat:"geschiedenis", titel:"De Stichting van Constantinopel",
+    tekst:"Constantijn kiest het oude Griekse Byzantium als nieuwe hoofdstad van het hele rijk en herdoopt haar Constantinopel. Voor het eerst sinds Alexander de Grote ligt het hart van een wereldrijk weer op Griekse bodem — het begin van wat later het Byzantijnse Rijk zal heten." },
+  codex_delphi_olympia_gesloten: { cat:"geschiedenis", titel:"Het Zwijgen van Delphi",
+    tekst:"Theodosius verbiedt in 391-392 n.Chr. alle openbare heidense eredienst — het orakel van Delphi dooft na eeuwen zijn heilige vuur. In 393 verbiedt hij ook de Olympische Spelen, na meer dan duizend jaar onafgebroken gehouden te zijn. Twee van de oudste, meest continue tradities van de Griekse wereld eindigen binnen twee jaar van elkaar." },
+  codex_justinianus_corpus_iuris: { cat:"geschiedenis", titel:"Justinianus, het Corpus Iuris Civilis en de Hagia Sophia",
+    tekst:"Keizer Justinianus I laat eeuwen aan Romeinse wetgeving herordenen tot het Corpus Iuris Civilis, een wetboek dat eeuwenlang de basis van het Europese recht blijft. Zijn nieuwe kerk, de Hagia Sophia (ingewijd 537 n.Chr.), wordt beroemd om haar koepel die vanbinnen lijkt te zweven." },
+  codex_nika_opstand: { cat:"geschiedenis", titel:"De Nika-Opstand",
+    tekst:"In 532 n.Chr. ontaardt rivaliteit tussen twee wagenrenteams, de Blauwen en de Groenen, in een volksopstand die Constantinopel in vuur zet. Keizerin Theodora weigert te vluchten en overtuigt Justinianus te blijven; generaal Belisarius sluit de opstandelingen in de renbaan in. De opstand wordt neergeslagen, en Justinianus' troon staat er sterker voor dan ooit." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3429,6 +3454,9 @@ const SP_SOUVENIRS = {
   // Hoofdstuk 26 "Een Rijk in Crisis" — concept, nog niet gekoppeld.
   souvenir_rijk_in_crisis: { nm:"Een Stukje Amfitheater-Marmer en een Verweerde Muntenrand", icon:"🏟️", img:"souvenir_rijk_in_crisis.png",
     caption:"Een piepklein stukje wit amfitheater-marmer naast een gebogen, verweerde muntenrand — een rijk dat in dezelfde eeuw kon bouwen en uiteenvallen, soms bij dezelfde keizer." },
+  // Hoofdstuk 27 "Kruis en Kroon" — concept, nog niet gekoppeld.
+  souvenir_kruis_en_kroon: { nm:"Een Gebroken Diadeem en een Gouden Mozaïeksteen", icon:"👑", img:"souvenir_kruis_en_kroon.png",
+    caption:"Een piepklein, gebroken stukje diadeem naast een enkele gouden mozaïeksteen — hetzelfde rijk, tegelijk eindigend in het Westen en herboren in het Oosten." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -3738,6 +3766,12 @@ const SP_CHECKS = {
     deels:{ target:"CH25_LAT_VLUCHT_DEELS" },
     gefaald:{ target:"CH25_LAT_VLUCHT_GEFAALD" },
     kritiek:{ target:"CH25_LAT_VLUCHT_KRITIEK" } },
+  // ---- Hoofdstuk 27 ----
+  ch27_gre_nika_opstand: { stat:"agilitas", dc:16,
+    volledig:{ target:"CH27_GRE_NIKA_VOL" },
+    deels:{ target:"CH27_GRE_NIKA_DEELS" },
+    gefaald:{ target:"CH27_GRE_NIKA_GEFAALD" },
+    kritiek:{ target:"CH27_GRE_NIKA_KRITIEK" } },
 };
 
 /* ---- VOCABULAIRE — start-woordenlijst Grieks + Latijn, per hoofdstuk
@@ -4570,6 +4604,28 @@ const SP_VOCAB_ENTRIES = {
   latijn_aio:       { taal:"latijn", woord:"aio",     betekenis:"zeggen" },
   latijn_existimo:  { taal:"latijn", woord:"existimo",betekenis:"menen, schatten, oordelen" },
   latijn_desum:     { taal:"latijn", woord:"desum",   betekenis:"afwezig zijn, in de steek laten" },
+  // ---- Hoofdstuk 27 "Kruis en Kroon" — concept, nog niet gekoppeld.
+  // Kandidatenlijst uit VOCAB_UITBREIDING.md nu daadwerkelijk gebruikt.
+  grieks_axioo:   { taal:"grieks", woord:"ἀξιόω", transcript:"axióō", betekenis:"waardig achten" },
+  grieks_heos:    { taal:"grieks", woord:"ἕως", transcript:"héōs", betekenis:"totdat; zolang" },
+  grieks_eoika:   { taal:"grieks", woord:"ἔοικα", transcript:"éoika", betekenis:"lijken op" },
+  grieks_kan:     { taal:"grieks", woord:"κἄν", transcript:"kán", betekenis:"zelfs als" },
+  grieks_heneka:  { taal:"grieks", woord:"ἕνεκα", transcript:"héneka", betekenis:"wegens, omwille van" },
+  grieks_meno:    { taal:"grieks", woord:"μένω", transcript:"ménō", betekenis:"blijven" },
+  grieks_anaireo: { taal:"grieks", woord:"ἀναιρέω", transcript:"anairéō", betekenis:"opnemen; doden" },
+  grieks_ano:     { taal:"grieks", woord:"ἄνω", transcript:"ánō", betekenis:"omhoog, boven" },
+  grieks_tasso:   { taal:"grieks", woord:"τάσσω", transcript:"tássō", betekenis:"opstellen, ordenen" },
+  grieks_hothen:  { taal:"grieks", woord:"ὅθεν", transcript:"hóthen", betekenis:"vanwaar" },
+  latijn_occupo:  { taal:"latijn", woord:"occupo",  betekenis:"innemen, bezetten" },
+  latijn_sive:    { taal:"latijn", woord:"sive",    betekenis:"of" },
+  latijn_doceo:   { taal:"latijn", woord:"doceo",   betekenis:"leren, onderrichten" },
+  latijn_nosco:   { taal:"latijn", woord:"nosco",   betekenis:"leren kennen" },
+  latijn_mox:     { taal:"latijn", woord:"mox",     betekenis:"spoedig" },
+  latijn_adicio:  { taal:"latijn", woord:"adicio",  betekenis:"toevoegen" },
+  latijn_tamquam: { taal:"latijn", woord:"tamquam", betekenis:"als het ware" },
+  latijn_affero:  { taal:"latijn", woord:"affero",  betekenis:"brengen naar" },
+  latijn_absum:   { taal:"latijn", woord:"absum",   betekenis:"afwezig zijn, weg zijn" },
+  latijn_quoniam: { taal:"latijn", woord:"quoniam", betekenis:"omdat" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -29157,6 +29213,669 @@ CHOICES:
 END
 
 === SCENE: CH26_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel. Maar die scheuren zijn nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+/* ---- HOOFDSTUK 27 "Kruis en Kroon" — CONCEPT, NOG NIET GEKOPPELD.
+   Zelfde afspraak als H21-26 vóór hun goedkeuring. Door Claude geschreven.
+
+   Gerbens verzoek (2026-08-16): een echte scène-voor-scène ZIGZAG (zoals
+   H10/H15), met Diocletianus/Constantijns Milvische-Brug-visioen als het
+   sterkste zigzag-moment — TWEE gespiegelde leesvallen over hetzelfde
+   moment, één Latijns (Lactantius-stijl: een droom) en één Grieks
+   (Eusebius-stijl: een teken aan de hemel op klaarlichte dag) — zelfde
+   "twee kanten van één gebeurtenis"-truc als Troje (H9) en Actium (H23),
+   nu met een echt taalverschil ingebakken. Twee payoffs uit H26 verwerkt:
+   Theodosius verbiedt de Olympische Spelen (callback naar CH26_GRE_003) en
+   sluit de heidense orakels incl. Delphi (callback naar CH26_GRE_004, waar
+   de Boodschapper opvallend stil werd — hier wordt die stem letterlijk het
+   zwijgen opgelegd, een stille voorbode van Boek VI). Drie "echte" leesvallen
+   (Milvische Brug x2, Diocletianus' Prijzenedict, Justinianus' Corpus Iuris/
+   Hagia Sophia) plus, op Gerbens uitdrukkelijk verzoek, een bewust NIET-
+   authentiek, zelf verzonnen taalmoment (een Romein waarschuwt "de bergpas
+   is onveilig, neem de weg" vlak voor de val van Rome) — puur sfeer, geen
+   grammaticale valkuil. De Nika-opstand (532, Justinianus/Theodora) krijgt
+   een CHECK met bewust gespannen, filmisch taalgebruik. Zigzag-mechanisme:
+   elke LAT_00X/GRE_00X-scène heeft een [REQUIRE:taalspoor=beide]-keuze naar
+   de parallelle scène aan de andere kant en een [REQUIRE:taalspoor=latijn/
+   grieks]-keuze om op het eigen spoor te blijven — zelfde patroon als
+   CH10/CH15/CH23. CORRECTIE (2026-08-16, Gerbens feedback): vanaf de val
+   van Rome (LAT_006_EINDE) routeert IEDEREEN — ook pure Latijnse spelers —
+   onvoorwaardelijk door naar de Justinianus/Theodora-coda (CH27_GRE_006
+   e.v., incl. de Nika-CHECK): "dit is ook voor hen leerstof." De losse
+   CH27_LAT_EINDE-scène is daarmee vervallen. Het niet-symmetrische
+   element blijft alleen bestaan in de twee taalspoor-exclusieve
+   Milvische-Brug-leesvallen zelf. */
+const SP_CH27_CNS = `
+=== SCENE: CH27_000 ===
+
+TITLE:
+Kruis en Kroon
+
+TEXT:
+"[[Ecce|zie hier]] — een rijk dat te groot is geworden voor één paar handen," zegt de Boodschapper van Chronos. "Vandaag zie je het uiteenvallen in het Westen, en tegelijk, op dezelfde adem, herboren worden in het Oosten. Beide zijn waar. Geen van beide is het hele verhaal."
+
+VOCAB:
+grieks_axioo, grieks_heos, grieks_eoika, grieks_kan, grieks_heneka, grieks_meno, grieks_anaireo, grieks_ano, grieks_tasso, grieks_hothen, latijn_occupo, latijn_sive, latijn_doceo, latijn_nosco, latijn_mox, latijn_adicio, latijn_tamquam, latijn_affero, latijn_absum, latijn_quoniam
+
+CHOICES:
+* Volg het Oosten, dat juist gaat groeien [REQUIRE:taalspoor=grieks] -> CH27_GRE_001
+* Volg het Westen, dat uiteen gaat vallen [REQUIRE:taalspoor!=grieks] -> CH27_LAT_001
+
+END
+
+=== SCENE: CH27_LAT_001 ===
+
+TITLE:
+Vier Handen voor Eén Rijk
+
+TEXT:
+De Boodschapper van Chronos wijst niet meteen naar een keizer. In plaats daarvan wijst ze naar jou. "Het rijk is te groot geworden voor één man om te verdedigen, laat staan te besturen — de Derde-Eeuwse Crisis heeft dat wel bewezen. Als jij het mocht oplossen: hoe zou je het aanpakken?"
+
+CHOICES:
+* Verdeel het bestuur over een paar vertrouwde generaals, elk met een eigen leger en een eigen gebied -> CH27_LAT_001_GENERAALS
+* Kies één sterke, bekwame opvolger en train hem grondig voor hij de troon overneemt -> CH27_LAT_001_OPVOLGER
+* Geef de steden en provincies zelf meer macht om lokaal te beslissen -> CH27_LAT_001_PROVINCIES
+
+END
+
+=== SCENE: CH27_LAT_001_GENERAALS ===
+
+TITLE:
+Bijna Precies Dit
+
+TEXT:
+Wanneer je je idee met de Boodschapper deelt, verschijnt Diocletianus zelf, alsof hij op je antwoord had gewacht. "Bijna precies wat ik zelf bedacht," zegt hij, duidelijk onder de indruk. Hij stelt de Tetrarchie in: twee Augusti — hijzelf in het Oosten, Maximianus in het Westen — elk met een eigen Caesar als aangewezen opvolger en eigen legers, samen verantwoordelijk voor een rijk dat één man alleen niet meer kon bewaken.
+
+FLAG:
+ch27_lat_bestuursidee=generaals
+
+IMAGE:
+ch27_lat_tetrarchie.png
+
+CODEX:
+codex_tetrarchie
+
+CHOICES:
+* Zie hoe het Oosten, ondertussen, met deze verdeling omgaat [REQUIRE:taalspoor=beide] -> CH27_GRE_001
+* Zie wat die verdeling betekent voor de rest van het rijk [REQUIRE:taalspoor=latijn] -> CH27_LAT_002
+
+END
+
+=== SCENE: CH27_LAT_001_OPVOLGER ===
+
+TITLE:
+Een Idee dat Al Eerder Werkte
+
+TEXT:
+"Dat klinkt als de adoptiefkeizers," zegt de Boodschapper, met een knikje naar wat je al zag bij Nerva en Trajanus. Diocletianus schudt zijn hoofd. "Eén man, hoe bekwaam ook, kan het rijk niet meer in zijn eentje verdedigen — de grenzen zijn te lang geworden." Hij stelt in plaats daarvan de Tetrarchie in: twee Augusti met elk een eigen Caesar als opvolger, zodat bestuur én opvolging meteen verdeeld zijn.
+
+FLAG:
+ch27_lat_bestuursidee=opvolger
+
+CODEX:
+codex_tetrarchie
+
+CHOICES:
+* Zie hoe het Oosten, ondertussen, met deze verdeling omgaat [REQUIRE:taalspoor=beide] -> CH27_GRE_001
+* Zie wat die verdeling betekent voor de rest van het rijk [REQUIRE:taalspoor=latijn] -> CH27_LAT_002
+
+END
+
+=== SCENE: CH27_LAT_001_PROVINCIES ===
+
+TITLE:
+Een Ander Soort Verdeling
+
+TEXT:
+"Een interessante gedachte," zegt Diocletianus, "maar te veel lokale macht is precies wat de Derde-Eeuwse Crisis mogelijk maakte — provincies die zich eigen keizers uitriepen." Zijn eigen oplossing zit dichterbij jouw idee dan je zou denken: de Tetrarchie verdeelt het bestuur over vier mannen, elk met een eigen leger en gebied, zonder het rijk zelf echt op te splitsen.
+
+FLAG:
+ch27_lat_bestuursidee=provincies
+
+CODEX:
+codex_tetrarchie
+
+CHOICES:
+* Zie hoe het Oosten, ondertussen, met deze verdeling omgaat [REQUIRE:taalspoor=beide] -> CH27_GRE_001
+* Zie wat die verdeling betekent voor de rest van het rijk [REQUIRE:taalspoor=latijn] -> CH27_LAT_002
+
+END
+
+=== SCENE: CH27_LAT_002 ===
+
+TITLE:
+Vaste Prijzen voor een Wankel Rijk
+
+TEXT:
+Diocletianus bestrijdt niet alleen het bestuur, maar ook de torenhoge inflatie die de crisis achterliet. In 301 n.Chr. vaardigt hij het Prijzenedict uit: een reusachtige, in steen gebeitelde lijst met maximumprijzen voor duizenden goederen en diensten, van graan tot leeuwentemmers.
+
+"[[Si quis venditor pretium supra statutum petierit, capite puniatur.|Als een verkoper een prijs vraagt boven de vastgestelde, moet hij met de dood bestraft worden.]]"
+
+CODEX:
+codex_prijzenedict
+
+CHOICES:
+* De straf geldt de verkoper die te veel vraagt, niet de koper die te veel biedt -> CH27_LAT_002_GOED
+* De straf geldt elke koper die een hogere prijs durft te bieden dan vastgesteld -> CH27_LAT_002_FOUT
+
+END
+
+=== SCENE: CH27_LAT_002_GOED ===
+
+TITLE:
+De Verkoper Aangesproken
+
+TEXT:
+Precies — [[venditor|de verkoper]] is hier het onderwerp van de zin, degene die de te hoge prijs [[petierit|zou hebben gevraagd]]. Het edict richt zich op wie de prijs zet, niet op wie hem betaalt. Het mocht niet baten: kort daarna verdwijnt het edict alweer, genegeerd door een zwarte markt die zich niet aan steen gebeitelde regels hield.
+
+FLAG:
+ch27_lat_prijzenedict=goed
+
+CHOICES:
+* Zie hoe het Oosten deze jaren beleefde [REQUIRE:taalspoor=beide] -> CH27_GRE_002
+* Ga verder naar een generaal die het rijk weer alleen zal verenigen [REQUIRE:taalspoor=latijn] -> CH27_LAT_003
+
+END
+
+=== SCENE: CH27_LAT_002_FOUT ===
+
+TITLE:
+Andersom Gelezen
+
+TEXT:
+Net andersom, eigenlijk — [[venditor|de verkoper]], niet de koper, is degene die hier iets [[petierit|zou hebben gevraagd]]. Het edict probeert de prijszetter te disciplineren, niet de klant die toevallig meer overhad voor een schaars product.
+
+CHOICES:
+* Zie hoe het Oosten deze jaren beleefde [REQUIRE:taalspoor=beide] -> CH27_GRE_002
+* Ga verder naar een generaal die het rijk weer alleen zal verenigen [REQUIRE:taalspoor=latijn] -> CH27_LAT_003
+
+END
+
+=== SCENE: CH27_LAT_003 ===
+
+TITLE:
+Een Droom vóór de Slag
+
+TEXT:
+Jaren later strijden de opvolgers van de Tetrarchie alsnog om de volledige macht. Vlak voor een beslissende slag bij de Milvische Brug, net buiten Rome, tegen zijn rivaal Maxentius, krijgt Constantijn — zo tekent de Latijnse geschiedschrijver Lactantius op — een droom.
+
+"[[In quiete commonitus est Constantinus ut caeleste signum dei notaret in scutis atque ita proelium committeret.|In zijn slaap werd Constantijn opgedragen het hemelse teken van god op de schilden te merken, en zo pas de strijd aan te gaan.]]"
+
+De volgende ochtend laat Constantijn zijn soldaten haastig een teken op hun schilden krassen — later bekend als het Christogram, de eerste twee Griekse letters van "Christus" over elkaar. Hij wint de slag, en Rome krijgt voor het eerst een keizer die het christendom openlijk gunstig gezind is.
+
+IMAGE:
+ch27_lat_milvische_brug_droom.png
+
+CODEX:
+codex_milvische_brug
+
+CHOICES:
+* De opdracht kwam 's nachts, in een droom, vóór de slag begon -> CH27_LAT_003_GOED
+* De opdracht kwam overdag, midden in het gevecht zelf -> CH27_LAT_003_FOUT
+
+END
+
+=== SCENE: CH27_LAT_003_GOED ===
+
+TITLE:
+In Slaap Gewaarschuwd
+
+TEXT:
+Precies — [[in quiete|in zijn slaap]] plaatst het moment vóór de dageraad, en [[atque ita proelium committeret|en zo pas de strijd aan te gaan]] maakt duidelijk dat het merken van de schilden aan de slag voorafging, niet erin gebeurde. Onthoud dat contrast goed: aan de andere kant van dit hoofdstuk vertelt een Griekse bron, van dezelfde gebeurtenis, een ander moment.
+
+FLAG:
+ch27_lat_milvische_brug=goed
+
+CHOICES:
+* Datzelfde teken, verteld door een Griekse bron [REQUIRE:taalspoor=beide] -> CH27_GRE_003
+* Zie wat er van deze overwinning kwam [REQUIRE:taalspoor=latijn] -> CH27_LAT_004
+
+END
+
+=== SCENE: CH27_LAT_003_FOUT ===
+
+TITLE:
+Vóór, Niet Tijdens
+
+TEXT:
+Net andersom — [[in quiete|in zijn slaap]] plaatst dit vóór het gevecht, niet erin, en het krassen van het teken op de schilden gebeurt de ochtend erna, nog vóór het leger vertrekt. Onthoud dat contrast: aan de andere kant van dit hoofdstuk vertelt een Griekse bron een ander moment van hetzelfde teken.
+
+CHOICES:
+* Datzelfde teken, verteld door een Griekse bron [REQUIRE:taalspoor=beide] -> CH27_GRE_003
+* Zie wat er van deze overwinning kwam [REQUIRE:taalspoor=latijn] -> CH27_LAT_004
+
+END
+
+=== SCENE: CH27_LAT_004 ===
+
+TITLE:
+Vrijheid van Geloof
+
+TEXT:
+In 313 n.Chr. vaardigen Constantijn en zijn mede-Augustus Licinius samen het Edict van Milaan uit: voortaan mag iedereen in het rijk vrij zijn eigen geloof belijden, christenen inbegrepen — na eeuwen van sporadische, soms bloedige vervolging eindelijk erkend als een gewoon, toegestaan geloof naast alle andere.
+
+CODEX:
+codex_edict_van_milaan
+
+CHOICES:
+* Zie hoe Constantijn zijn nieuwe hoofdstad kiest [REQUIRE:taalspoor=beide] -> CH27_GRE_004
+* Zie hoe het rijk daarna, onder een latere keizer, definitief verandert [REQUIRE:taalspoor=latijn] -> CH27_LAT_005
+
+END
+
+=== SCENE: CH27_LAT_005 ===
+
+TITLE:
+Eén Geloof, Twee Rijken
+
+TEXT:
+Onder keizer Theodosius, generaties later, wordt het christendom niet langer alleen toegestaan, maar de enige officiële staatsgodsdienst van het hele rijk. Bij zijn dood in 395 n.Chr. verdeelt hij het bestuur, voorgoed dit keer, tussen zijn twee zoons: Honorius krijgt het Westen, Arcadius het Oosten. Nooit meer zal één keizer over het hele rijk heersen.
+
+CODEX:
+codex_theodosius_deling
+
+CHOICES:
+* Zie wat er, diezelfde jaren, bij Delphi en Olympia gebeurt [REQUIRE:taalspoor=beide] -> CH27_GRE_005
+* Zie wat er met het onverdeelde, oudere Westen gebeurt [REQUIRE:taalspoor=latijn] -> CH27_LAT_006
+
+END
+
+=== SCENE: CH27_LAT_006 ===
+
+TITLE:
+De Bergpas is Onveilig
+
+TEXT:
+Het Westen kalft af. Germaanse volken — Visigoten, Vandalen, later de Hunnen — trekken keer op keer over de grenzen, soms vechtend, soms onderhandelend om land binnen het rijk zelf. Op een verlaten heuvelweg naar Rome houdt een doodmoede Romeinse koerier je staande.
+
+DIALOGUE:
+Romeinse koerier
+[[Mons iter non tutum est; viam cape!|De bergpas is onveilig; neem de weg!]]
+
+Hij wijst gehaast twee richtingen aan: een steile, korte bergpas, en een langere, veiligere weg langs de rivier, voor hij zelf haastig verder strompelt.
+
+IMAGE:
+ch27_lat_bergpas_koerier.png
+
+CHOICES:
+* Vertrouw de koerier en neem de langere weg langs de rivier -> CH27_LAT_006_WEG
+* Waag het toch via de kortere bergpas -> CH27_LAT_006_BERGPAS
+
+END
+
+=== SCENE: CH27_LAT_006_WEG ===
+
+TITLE:
+De Lange, Veilige Weg
+
+TEXT:
+De weg langs de rivier duurt langer, maar je passeert onderweg vluchtelingenkonvooien die dezelfde route namen — de koerier had gelijk. Uiteindelijk bereik je, ver na de meeste anderen, een Rome dat nauwelijks nog lijkt op de stad uit de verhalen die je hoofdstukken geleden hoorde.
+
+FLAG:
+ch27_lat_route=weg
+
+CHOICES:
+* Zie wat er van het West-Romeinse Rijk overblijft -> CH27_LAT_006_EINDE
+
+END
+
+=== SCENE: CH27_LAT_006_BERGPAS ===
+
+TITLE:
+De Korte, Onzekere Pas
+
+TEXT:
+De bergpas is korter, maar ruwer dan verwacht — je bereikt Rome sneller, maar met geschaafde handen en een paar keer bijna verstapt op losse stenen. Ook via deze weg lijkt het rijk dat je nadert nauwelijks nog op de stad uit de verhalen die je hoofdstukken geleden hoorde.
+
+FLAG:
+ch27_lat_route=bergpas
+
+CHOICES:
+* Zie wat er van het West-Romeinse Rijk overblijft -> CH27_LAT_006_EINDE
+
+END
+
+=== SCENE: CH27_LAT_006_EINDE ===
+
+TITLE:
+Een Kroon, Zonder Geweld Afgezet
+
+TEXT:
+In 476 n.Chr. zet de Germaanse legeraanvoerder Odoacer de laatste West-Romeinse keizer af — een tienerjongen met een naam die de hele geschiedenis van Rome in zich draagt: Romulus Augustulus, "kleine Augustus", vernoemd naar zowel Rome's eerste koning als zijn eerste keizer. Er vloeit geen bloed: Odoacer stuurt hem gewoon met pensioen naar een villa in Campania. Het West-Romeinse Rijk eindigt niet met een veldslag, maar met een jongen die stilletjes van de troon wordt gehaald.
+
+IMAGE:
+ch27_lat_romulus_augustulus.png
+
+CODEX:
+codex_val_van_rome
+
+CHOICES:
+* Zie hoe het bericht het Oosten bereikt -> CH27_GRE_006
+
+END
+
+=== SCENE: CH27_GRE_001 ===
+
+TITLE:
+De Andere Hoofdstad
+
+TEXT:
+Terwijl Maximianus in het Westen regeert, bestuurt Diocletianus zelf het Oosten vanuit Nicomedia, in Klein-Azië — geen toeval. Het Griekstalige Oosten is rijker, dichter bevolkt en beter verdedigbaar dan het Westen, en zijn nieuwe hoofdstad ligt met opzet dicht bij die kracht. De Tetrarchie verdeelt het rijk misschien, maar plant tegelijk het zaad van een verschuiving die nog generaties zal doorwerken: het zwaartepunt van de macht trekt oostwaarts.
+
+IMAGE:
+ch27_gre_nicomedia.png
+
+CODEX:
+codex_nicomedia_oosten
+
+CHOICES:
+* Zie hoe het Prijzenedict in het Westen uitpakte [REQUIRE:taalspoor=beide] -> CH27_LAT_002
+* Zie de andere kant van Diocletianus' bewind [REQUIRE:taalspoor=grieks] -> CH27_GRE_002
+
+END
+
+=== SCENE: CH27_GRE_002 ===
+
+TITLE:
+De Laatste, Grootste Vervolging
+
+TEXT:
+Diocletianus is niet overal even mild: in 303 n.Chr. begint hij de zwaarste, meest systematische vervolging van christenen die het rijk ooit heeft gekend — kerken verwoest, geschriften verbrand, gelovigen gedwongen te offeren aan de Romeinse goden of te sterven. Het Griekstalige Oosten, met zijn grote christelijke gemeenschappen, wordt het zwaarst getroffen. Nog geen tien jaar later zal, in het Westen, een keizer opstaan die het tegenovergestelde doet.
+
+CODEX:
+codex_diocletianische_vervolging
+
+CHOICES:
+* Zie diezelfde keizer, aan de andere kant van het rijk [REQUIRE:taalspoor=beide] -> CH27_LAT_003
+* Zie wat die keizer, aan de andere kant van het rijk, meemaakt [REQUIRE:taalspoor=grieks] -> CH27_GRE_003
+
+END
+
+=== SCENE: CH27_GRE_003 ===
+
+TITLE:
+Een Teken aan de Hemel
+
+TEXT:
+Vlak voor diezelfde beslissende slag bij de Milvische Brug beschrijft de Griekse kerkhistoricus Eusebius, die het zogenaamd uit Constantijns eigen mond hoorde, een ander moment: geen droom in de nacht, maar een visioen op klaarlichte dag, met het hele leger als getuige.
+
+"[[Ἀμφὶ μεσημβρινὰς ἡλίου ὥρας... σταυροῦ τρόπαιον ἐκ φωτὸς συνιστάμενον... καὶ γραφὴν αὐτῷ συνῆφθαι λέγουσαν· τούτῳ νίκα.|Rond het middaguur zag hij een lichtend kruis boven de zon, met een inscriptie erbij: 'Hierdoor, overwin.']]"
+
+IMAGE:
+ch27_gre_milvische_brug_visioen.png
+
+CODEX:
+codex_milvische_brug
+
+CHOICES:
+* Het visioen verscheen midden op de dag, voor het hele leger zichtbaar -> CH27_GRE_003_GOED
+* Het visioen verscheen 's nachts, alleen aan Constantijn zelf -> CH27_GRE_003_FOUT
+
+END
+
+=== SCENE: CH27_GRE_003_GOED ===
+
+TITLE:
+Op Klaarlichte Dag
+
+TEXT:
+Precies — [[ἀμφὶ μεσημβρινὰς ἡλίου ὥρας|rond het middaguur]] plaatst dit overduidelijk op klaarlichte dag, niet in een droom. Eusebius voegt eraan toe dat Constantijn die nacht daarna wél nog een droom kreeg, waarin hem werd opgedragen een veldteken naar dit visioen te laten maken — het latere labarum. Twee bronnen, twee accenten, dezelfde overwinning.
+
+FLAG:
+ch27_gre_milvische_brug=goed
+
+CHOICES:
+* Zie wat deze overwinning voor het Westen betekende [REQUIRE:taalspoor=beide] -> CH27_LAT_004
+* Zie waar dit uiteindelijk toe leidt [REQUIRE:taalspoor=grieks] -> CH27_GRE_004
+
+END
+
+=== SCENE: CH27_GRE_003_FOUT ===
+
+TITLE:
+Overdag, Niet 's Nachts
+
+TEXT:
+Net andersom — Eusebius plaatst dit visioen nadrukkelijk overdag, [[ἀμφὶ μεσημβρινὰς ἡλίου ὥρας|rond het middaguur]], met het hele leger als getuige. Pas die nacht daarna volgt, in zijn verslag, nog een aparte droom met verdere instructies.
+
+CHOICES:
+* Zie wat deze overwinning voor het Westen betekende [REQUIRE:taalspoor=beide] -> CH27_LAT_004
+* Zie waar dit uiteindelijk toe leidt [REQUIRE:taalspoor=grieks] -> CH27_GRE_004
+
+END
+
+=== SCENE: CH27_GRE_004 ===
+
+TITLE:
+Een Nieuwe Hoofdstad op Griekse Bodem
+
+TEXT:
+Constantijn, nu heerser over het hele rijk, kiest voor zijn nieuwe hoofdstad niet Rome, en ook niet Nicomedia, maar het oude Griekse Byzantium — een vissersstad op een schiereiland tussen twee zeeën, strategisch bijna onneembaar. Hij herdoopt haar Constantinopel, "stad van Constantijn", en versiert haar met kunstwerken die hij uit tempels in heel het Griekse Oosten laat overbrengen. Voor het eerst sinds Alexander ligt het hart van een wereldrijk weer op Griekse bodem.
+
+IMAGE:
+ch27_gre_constantinopel_gesticht.png
+
+CODEX:
+codex_constantinopel_gesticht
+
+CHOICES:
+* Zie hoe het rijk zich, generaties later, definitief splitst [REQUIRE:taalspoor=beide] -> CH27_LAT_005
+* Zie hoe het rijk zich, generaties later, definitief splitst [REQUIRE:taalspoor=grieks] -> CH27_GRE_005
+
+END
+
+=== SCENE: CH27_GRE_005 ===
+
+TITLE:
+De Laatste Vlam bij Delphi
+
+TEXT:
+Onder Theodosius, die je aan de andere kant van dit hoofdstuk het rijk voorgoed zag verdelen, verandert er nog iets anders, dichter bij huis. In 391-392 n.Chr. verbiedt hij alle openbare heidense eredienst — tempels sluiten, offers worden strafbaar. Bij Delphi, waar het orakel al eeuwen spreekt, dooft het heilige vuur voor het laatst. In 393 verbiedt hij ook de Olympische Spelen, na meer dan duizend jaar onafgebroken gehouden te zijn.
+
+De Boodschapper van Chronos is hier stiller dan je haar ooit hebt meegemaakt. "Ik zei je al eens, bij Delphi: orakels houden niet zomaar op te bestaan zodra er niemand meer luistert. Ze wachten gewoon." Ze zwijgt lang. "Dit keer wacht ze niet. Dit keer wordt haar het zwijgen opgelegd."
+
+IMAGE:
+ch27_gre_delphi_gesloten.png
+
+CODEX:
+codex_delphi_olympia_gesloten
+
+CHOICES:
+* Zie wat er, diezelfde jaren, van het Westen overblijft [REQUIRE:taalspoor=beide] -> CH27_LAT_006
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH27_GRE_006
+
+END
+
+=== SCENE: CH27_GRE_006 ===
+
+TITLE:
+Bericht uit een Ander Rijk
+
+TEXT:
+Het nieuws van Romulus Augustulus' rustige, bloedeloze afzetting bereikt Constantinopel pas weken later — een golf van geschokte gesprekken aan het hof, maar geen paniek. Het Oosten heeft zijn eigen leger, zijn eigen belastingen, zijn eigen, goed verdedigde hoofdstad. Waar het Westen ophoudt te bestaan als rijk, buigt het Oosten alleen het hoofd, en gaat door.
+
+CHOICES:
+* Ga verder, generaties later -> CH27_GRE_007
+
+END
+
+=== SCENE: CH27_GRE_007 ===
+
+TITLE:
+Een Wet voor de Eeuwen, een Koepel voor een God
+
+TEXT:
+Generaties na de val van het Westen regeert Justinianus I over een Oosten dat niet alleen overleefde, maar bloeit. Hij laat zijn geleerden alle Romeinse wetgeving, eeuwen aan tegenstrijdige keizerlijke uitspraken, herordenen tot één samenhangend geheel: het Corpus Iuris Civilis, een wetboek dat eeuwen later nog de basis zal vormen van het recht in half Europa. Wanneer zijn nieuwe kerk, de Hagia Sophia, in 537 n.Chr. wordt ingewijd — een koepel die vanbinnen lijkt te zweven — roept hij, naar verluidt, bij het binnentreden één zin.
+
+"[[Νενίκηκά σε, Σολομών.|Ik heb je overtroffen, Salomo.]]"
+
+Naast hem staat Theodora, ooit actrice, nu keizerin — een van de machtigste vrouwen die het rijk ooit zal kennen.
+
+IMAGE:
+ch27_gre_hagia_sophia.png
+
+RELATION:
+theodora=+1
+
+CODEX:
+codex_justinianus_corpus_iuris
+
+CHOICES:
+* Zie hoe die macht, jaren later, bijna instort -> CH27_GRE_008
+
+END
+
+=== SCENE: CH27_GRE_008 ===
+
+TITLE:
+Nika
+
+TEXT:
+In 532 n.Chr. ontaardt een sportrivaliteit in de renbaan van Constantinopel — tussen de Blauwen en de Groenen, twee wagenrenteams met eigen politieke aanhang — in een volksopstand die de hele stad in vuur zet. "[[Νίκα!|Overwin!]]" schreeuwt de menigte, de strijdkreet van de renbaan, nu een oproep tot omverwerping. Het paleis staat al half in brand. Justinianus overweegt hardop te vluchten. Rondom je stormen paleiswachten en boodschappers door rokerige gangen — jij moet, tussen vallend puin en verwarde soldaten door, een bevel van Theodora naar de loyale troepen buiten zien te krijgen voor het te laat is.
+
+CHECK:
+ch27_gre_nika_opstand
+
+END
+
+=== SCENE: CH27_GRE_NIKA_VOL ===
+
+TITLE:
+Op Tijd Doorheen de Rook
+
+TEXT:
+Je vindt een weg tussen de vlammen door die niemand anders had gezien, springt over een ingestort dak, en bereikt Belisarius' troepen ruim op tijd. Ze rukken meteen op naar de renbaan, waar de menigte, ingesloten, geen kant meer op kan.
+
+CHOICES:
+* Ga verder -> CH27_GRE_009
+
+END
+
+=== SCENE: CH27_GRE_NIKA_DEELS ===
+
+TITLE:
+Geschaafd door het Puin
+
+TEXT:
+Een instortend dak snijdt je pad af — je vindt alsnog een omweg, met een lelijke schaafwond en dichte rook in je longen, maar je bereikt de troepen, net op tijd om nog verschil te maken.
+
+CHOICES:
+* Ga verder -> CH27_GRE_009
+
+END
+
+=== SCENE: CH27_GRE_NIKA_GEFAALD ===
+
+TITLE:
+Verdwaald in de Rook
+
+TEXT:
+De rook is zo dik dat je twee keer de verkeerde gang inslaat — kostbare minuten gaan verloren voor je eindelijk, hoestend, weer buiten komt. Belisarius' troepen zijn intussen al, via een andere boodschapper, gewaarschuwd — jouw bericht komt te laat, maar niet fataal te laat.
+
+CHOICES:
+* Ga verder -> CH27_GRE_009
+
+END
+
+=== SCENE: CH27_GRE_NIKA_KRITIEK ===
+
+TITLE:
+Een Stem die Doorbreekt
+
+TEXT:
+Onderweg struikel je over een gewonde paleiswacht die de weg beter kent dan jij — je trekt hem overeind, en samen banen jullie je een kortere weg dan wie dan ook had verwacht, ruim voor de vlammen de laatste route afsnijden.
+
+RELATION:
+theodora=+1
+
+CHOICES:
+* Ga verder -> CH27_GRE_009
+
+END
+
+=== SCENE: CH27_GRE_009 ===
+
+TITLE:
+De Purperen Mantel
+
+TEXT:
+Terwijl Justinianus nog aarzelt, spreekt Theodora de raad toe, zonder een spoor van twijfel in haar stem.
+
+DIALOGUE:
+Theodora
+Wie ooit de purperen mantel heeft gedragen, moet niet leven als vluchteling. Wat mij betreft is purper een prachtig doodskleed.
+
+Belisarius' troepen sluiten de menigte in de renbaan in. Wat volgt is geen onderhandeling meer. Tegen de avond is de opstand voorbij, en Justinianus' troon staat, dankzij één vrouw die weigerde te vluchten, steviger dan ooit.
+
+IMAGE:
+ch27_gre_theodora_nika.png
+
+CODEX:
+codex_nika_opstand
+
+CHOICES:
+* Ga verder -> CH27_GRE_EINDE
+
+END
+
+=== SCENE: CH27_GRE_EINDE ===
+
+TITLE:
+Wat het Oosten Overhield
+
+TEXT:
+"[[Ecce|zie hier]] — hetzelfde rijk, hetzelfde jaar soms, en toch twee volledig verschillende verhalen," zegt de Boodschapper van Chronos. "Het Westen boog het hoofd voor een jongen die van zijn troon werd gehaald. Het Oosten bouwde, nog geen twee generaties later, een koepel die leek te zweven, en een wetboek dat eeuwen zou overleven." Ze kijkt je lang aan. "Onthoud vooral dit: een einde is nooit het hele verhaal, zolang er ergens nog iemand doorbouwt."
+
+CHOICES:
+* Ga verder -> CH27_EINDE
+
+END
+
+=== SCENE: CH27_EINDE ===
+
+TITLE:
+Kruis en Kroon
+
+TEXT:
+"[[Ecce|zie hier]] — je zag een rijk breken, en een ander, op dezelfde fundamenten, weer opbloeien," zegt de Boodschapper van Chronos. "Vergeet niet: het orakel bij Delphi is nu stil. Voor het eerst in deze hele reis heb je een stem zien verstommen die al die hoofdstukken lang bleef spreken, hoe zacht ook." Ze aarzelt, alsof ze zelf nog iets wil toevoegen, maar laat het rusten.
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_kruis_en_kroon
+
+CHOICES:
+* Bekijk de verzameling in het museum -> CH27_MUSEUM_00
+
+END
+
+=== SCENE: CH27_MUSEUM_00 ===
+
+TITLE:
+Wat het Rijk Naliet
+
+TEXT:
+Een nieuwe stolp vult zich: een piepklein, gebroken stukje diadeem naast een enkele gouden mozaïeksteen. "Vandaag heb je gezien hoe hetzelfde rijk tegelijk kon eindigen en beginnen," zegt de Boodschapper van Chronos, iets stiller dan anders.
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH27_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH27_WORDT_VERVOLGD ===
 
 TITLE:
 Tot Hier, Voorlopig

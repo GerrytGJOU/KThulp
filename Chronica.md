@@ -8063,6 +8063,89 @@ nog niet gegenereerde H24/H25-illustraties). Alle `SP_PAYOFFS`-echo's
 correct afgevuurd — inclusief de H24→H25-Vitruvius-payoff die vóór deze
 koppeling nog niet end-to-end testbaar was.
 
+### 7.96 Hoofdstuk 27 "Kruis en Kroon" geschreven, BEWUST NOG NIET GEKOPPELD (2026-08-16)
+
+Door Claude geschreven (geen Gemini-concept), zelfde staged status als H21-26
+vóór hun goedkeuring. 37 scènes. Op Gerbens verzoek volledig uitgewerkt na
+een recap-en-brainstormronde (bilinguale zigzag, twee H26-payoffs, drie
+"echte" leesvallen + één bewust verzonnen taalmoment, een gespannen CHECK
+bij de Nika-opstand) — alle voorstellen expliciet goedgekeurd voordat de
+scènes zijn geschreven.
+
+**Echte scène-voor-scène zigzag**: elke `LAT_00X`/`GRE_00X`-scène heeft een
+`[REQUIRE:taalspoor=beide]`-keuze naar de parallelle scène aan de andere
+kant, en een `[REQUIRE:taalspoor=latijn/grieks]`-keuze om op het eigen
+spoor te blijven (zelfde patroon als CH10/CH15/CH23) — dit keer over zes
+kruispunten na elkaar, niet maar één. **Fout gemaakt en gecorrigeerd
+tijdens het bouwen**: de eerste versie verbond de kruisingen sequentieel
+(alle Latijnse scènes eerst, dan pas alle Griekse) in plaats van
+interleaved — pas de losse validator (zie hieronder) legde dit bloot via
+een geordende zigzag-simulatie. Alle kruispunten opnieuw bedraad; het
+sterkste moment (de Slag bij de Milvische Brug) staat nu voor "beide"-
+spelers direct na elkaar: eerst de Latijnse versie (Lactantius, een droom),
+dan onmiddellijk de Griekse (Eusebius, een visioen op klaarlichte dag) —
+twee gespiegelde leesvallen over exact hetzelfde moment.
+
+**Twee H26-payoffs verwerkt**: Theodosius verbiedt de Olympische Spelen
+(callback naar `CH26_GRE_003`) en sluit de heidense orakels incl. Delphi
+(`CH27_GRE_005`, callback naar `CH26_GRE_004` — de Boodschapper werd daar
+al opvallend stil; hier wordt die stem letterlijk het zwijgen opgelegd,
+een bewuste, stille voorbode van Boek VI/Lethe-Mnemosyne).
+
+**Vier leesvallen**: Diocletianus' Prijzenedict (Latijn, echt), de
+Milvische Brug tweemaal (Latijn/Lactantius + Grieks/Eusebius, beide
+authentiek-geïnspireerd), en — op Gerbens uitdrukkelijk verzoek — een
+bewust NIET-authentiek, zelf verzonnen Latijns waarschuwingsmoment
+("Mons iter non tutum est; viam cape!") vlak vóór de val van Rome: geen
+grammaticale valkuil, puur sfeer en een keuze zonder foute optie.
+
+**CHECK met filmisch taalgebruik**: de Nika-opstand (532 n.Chr.) krijgt
+`ch27_gre_nika_opstand` (agilitas, dc16) — de scène-inleiding is bewust
+geschreven met korte, gespannen zinnen ("Het paleis staat al half in
+brand... jij moet, tussen vallend puin en verwarde soldaten door...") op
+Gerbens expliciete verzoek dat het taalgebruik bij het spannende moment
+past.
+
+**Diocletianus' opening**: een drieledige co-design-keuze (speler denkt
+eerst zelf na over hoe je een te groot rijk bestuurt) vóór de Tetrarchie
+wordt onthuld — alle drie opties leiden non-punishing naar dezelfde
+Tetrarchie-onthulling, met een eigen, flavour-only FLAG.
+
+**Niet-symmetrisch slot** (zoals de metadata al aankondigde): pure
+Latijnse spelers eindigen bij de val van Rome (`CH27_LAT_EINDE`); Griekse
+en "beide"-spelers gaan door tot de Justinianus/Theodora-coda inclusief de
+Nika-CHECK — Justinianus/Theodora blijven bewust Grieks-exclusief.
+
+**Nieuwe registry-entries**: 13 CODEX-entries, 1 nieuwe `SP_CHECKS`-entry,
+1 nieuw souvenir (`souvenir_kruis_en_kroon`), 20 signaalwoorden (de
+H27-kandidatenlijst uit `VOCAB_UITBREIDING.md`, nu daadwerkelijk
+toegevoegd). 10 IMAGE-hooks proactief toegevoegd tijdens het schrijven.
+
+**Validatie**: `node --check` slaagt. Een uitgebreide losse validator
+(nieuw, met een geordende zigzag-simulatie per taalspoor) geeft 37 scènes,
+0 dubbele ID's, 0 kapotte links, 0 onbekende registry-referenties, en
+bevestigt dat grieks-only nooit een LAT-scène bezoekt en latijn-only nooit
+een GRE-scène — precies het lek dat de eerste (foute) bedrading had
+gemist. Live in de browser: alle drie taalsporen (grieks/latijn/beide)
+apart doorlopen — grieks-only 20 scènes, latijn-only 21, beide 36 — 0
+exceptions, 0 onopgeloste tokens, 0 echte console-fouten (alleen de
+verwachte 404's voor de tien nog niet gegenereerde illustraties).
+
+**Correctie (2026-08-16, zelfde dag, Gerbens feedback)**: Justinianus/
+Theodora/de Nika-opstand zijn NIET langer Grieks-exclusief — "dit is ook
+voor hen leerstof," gold ook voor Latijnse spelers. `CH27_LAT_006_EINDE`
+(de val van Rome) routeert nu voor iedereen onvoorwaardelijk door naar
+`CH27_GRE_006` in plaats van alleen voor "beide"; de losstaande
+`CH27_LAT_EINDE`-scène (die expliciet zei "dat verhaal heb je vandaag niet
+gezien") is daarmee overbodig geworden en verwijderd. Hoofdstuk telt nu 36
+scènes. Latijnse spelers krijgen zo ook de Nika-CHECK en de Corpus Iuris/
+Hagia Sophia-leesval te zien — het niet-symmetrische slot blijft (Latijnse
+spelers zien de Griekse Milvische-Brug-leesval nog steeds niet, en
+andersom), maar de Justinianus-episode zelf is nu gedeeld eindpunt voor
+alle drie taalsporen. Herwalideerd: 0 fouten, latijn-only bereikt nu 29
+scènes (was 21), live in de browser bevestigd (Nika-CHECK bereikbaar voor
+alle drie sporen, 0 exceptions).
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
