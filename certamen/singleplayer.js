@@ -1049,8 +1049,8 @@ SCREENS.spWorldMap = function(){
   ).join("");
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Wereldkaart</h2></div>
-  <div class="panel" style="display:flex;gap:8px">${tabs}</div>
-  <div class="panel" style="display:flex;gap:8px;align-items:center">
+  <div class="panel" style="display:flex;gap:8px;flex-wrap:wrap">${tabs}</div>
+  <div class="panel" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <span class="note" style="margin:0;white-space:nowrap">🔍 Zoom:</span>${zoomBtns}
   </div>
   <div class="panel"><p class="note">${esc(panel.nm)} — nieuwe plekken verschijnen zodra je ze in het verhaal hebt bezocht. Plekken te dicht op elkaar? Zoom in.</p></div>
@@ -1116,8 +1116,8 @@ SCREENS.spCityMaps = function(){
   ).join("");
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('spSlots')">${iconSVG("shield",20,"currentColor")}</button><h2>Stadsplattegronden</h2></div>
-  <div class="panel" style="display:flex;gap:8px">${tabs}</div>
-  <div class="panel" style="display:flex;gap:8px;align-items:center">
+  <div class="panel" style="display:flex;gap:8px;flex-wrap:wrap">${tabs}</div>
+  <div class="panel" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
     <span class="note" style="margin:0;white-space:nowrap">🔍 Zoom:</span>${zoomBtns}
   </div>
   <div class="panel"><p class="note">${esc(panel.nm)} — nieuwe plekken verschijnen zodra je ze in het verhaal hebt bezocht. Plekken te dicht op elkaar? Zoom in.</p></div>
@@ -1495,8 +1495,12 @@ SCREENS.spPlay = function(){
   if(scene.meta.RACE) return spStartRaceFromScene(scene);
 
   const payoffs = spResolvePayoffs(SP_STATE.node);
+  // Deze scènetekst stond al op het worp-resultaatscherm (spStartCheckFromScene)
+  // — niet meteen nogmaals tonen, één keer overslaan en de vlag resetten.
+  const skipText = SP_CHECK_JUST_NARRATED === SP_STATE.node;
+  SP_CHECK_JUST_NARRATED = null;
   const titleHTML = scene.title ? `<h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>` : "";
-  const textHTML = spParagraphsHTML(scene.text, SP_STATE) + payoffs.echoHTML;
+  const textHTML = (skipText ? "" : spParagraphsHTML(scene.text, SP_STATE)) + payoffs.echoHTML;
   const dialogueHTML = scene.dialogue ? `
     <div class="panel">
       <div class="eyebrow l">${esc(SpTextResolver.resolve(scene.dialogue.speaker, SP_STATE))}</div>
@@ -1528,7 +1532,7 @@ SCREENS.spPlay = function(){
         // spStatReqMet hierboven), grijs en onklikbaar — nooit verbergen,
         // dat is precies het punt van deze mechaniek (§11.4).
         if(c.statReq && !spStatReqMet(c.statReq)){
-          return `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;opacity:.5;cursor:not-allowed" disabled>${label}</button>`;
+          return `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;opacity:.5;cursor:not-allowed" disabled title="Je skills zijn hiervoor nog te laag">${label}</button>`;
         }
         const onclick = isDone ? `spChoiceAlreadyDone(${openCount})`
           : (c.statReq||c.done) ? `spChooseTrackedPath('${c.target}','${c.approach||""}')`
@@ -1979,7 +1983,7 @@ function spCheckGreekPuzzle(puzzleId, target){
    goed = door naar target. Knoppen zijn ≥44px hoog (iPad-veilig). */
 function spRenderMCPuzzle(scene, puzzleId, puzzle, target){
   const optsHTML = puzzle.opties.map((o,i)=>
-    `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spCheckMCPuzzle('${puzzleId}','${target}',${i})">${esc(o)}</button>`
+    `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;text-align:left" onclick="spCheckMCPuzzle('${puzzleId}','${target}',${i})">${esc(o)}</button>`
   ).join("");
   H(brand(true)+`
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
@@ -2266,7 +2270,14 @@ function spCombatNextQuestion(){
     const gefilterd = entries.filter(e => e.taal===eigenTaal);
     if(gefilterd.length) entries = gefilterd;
   }
+  // Max. 2x hetzelfde woord per gevecht (leerlingfeedback 2026-08-13: bij een
+  // lang gevecht kwam hetzelfde woord tot 5x op rij langs). Val terug op de
+  // volledige pool zodra alle woorden hun maximum al hebben bereikt.
+  const uses = SP_COMBAT.wordUses || (SP_COMBAT.wordUses = {});
+  const beschikbaar = entries.filter(e => (uses[e.woord]||0) < 2);
+  if(beschikbaar.length) entries = beschikbaar;
   const w = pick(entries);
+  uses[w.woord] = (uses[w.woord]||0) + 1;
   const correct = w.betekenis;
   const distractors = shuffle(entries.filter(x=>x!==w).map(x=>x.betekenis))
     .filter((v,i,a)=>v!==correct && a.indexOf(v)===i).slice(0,3);
@@ -2306,7 +2317,7 @@ SCREENS.spCombat = function(){
   const hpPct = Math.max(0, Math.round(SP_COMBAT.hp/SP_COMBAT.maxHp*100));
   const canAttack = SP_COMBAT.ep >= SP_COMBAT_ACTION_COST;
   const optsHTML = q.options.map((o,i)=>
-    `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spCombatAnswer(${i})">${esc(o)}</button>`
+    `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;text-align:left" onclick="spCombatAnswer(${i})">${esc(o)}</button>`
   ).join("");
   H(brand(true)+`
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SP_COMBAT.sceneTitle||enemy.nm)}</h2>${spAudioToggleHTML()}</div>
@@ -2480,7 +2491,7 @@ SCREENS.spRace = function(){
   }
   const q = SP_RACE.question;
   const optsHTML = q.options.map((o,i)=>
-    `<button class="btn btn-block lg" style="margin-top:8px;text-align:left" onclick="spRaceAnswer(${i})">${esc(o)}</button>`
+    `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;text-align:left" onclick="spRaceAnswer(${i})">${esc(o)}</button>`
   ).join("");
   H(brand(true)+`
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SP_RACE.sceneTitle||race.nm)}</h2>${spAudioToggleHTML()}</div>
@@ -2515,6 +2526,10 @@ SCREENS.spRace = function(){
    SP_STATE/localStorage: een worp is een kort moment, geen opgeslagen
    voortgang. ---- */
 let SP_CHECK_RESULTAAT = null;
+// Node-id waarvan de tekst zojuist al op het worp-resultaatscherm stond (zie
+// spStartCheckFromScene) — SCREENS.spPlay slaat die tekst dan één keer over
+// zodat de speler 'm niet meteen daarna nogmaals leest.
+let SP_CHECK_JUST_NARRATED = null;
 // 1d20 + stat tegen een DC. "kritiek" bij een natuurlijke 1, ALTIJD — ook bij
 // een hoge stat blijft een fumble een fumble, precies het soort verrassing
 // die audit-bevinding "is falen interessant?" nodig heeft. "volledig" bij
@@ -2536,13 +2551,21 @@ function spRollCheck(statKey, dc){
   else uitkomst = "kritiek";
   return { roll, stat, mod, total, dc, uitkomst };
 }
+// Leerlingfeedback (2026-08-13): de worp zelf toonde geen verhalende tekst,
+// puur het mechanische resultaat — "komt een beetje raar over in het
+// verhaal". Geen enkele SP_CHECKS-tak had ooit een eigen `tekst` (allemaal
+// alleen `target`), dus val terug op de tekst van de doelscène zelf: die
+// bestaat voor elke uitkomst al (CH..._VOL/DEELS/GEFAALD/KRITIEK), en zo
+// krijgt de speler meteen op hetzelfde scherm een korte alinea bij de worp,
+// vóór hij op "Ga verder" klikt — precies zoals besproken.
 function spStartCheckFromScene(scene){
   const checkId = scene.meta.CHECK.trim();
   const check = SP_CHECKS[checkId];
   if(!check){ console.error("Onbekende check:", checkId); return spGoCns(scene.choices[0]?.target); }
   const resultaat = spRollCheck(check.stat, check.dc);
   const tak = check[resultaat.uitkomst];
-  SP_CHECK_RESULTAAT = { ...resultaat, checkId, sceneTitle:scene.title, tekst:tak?.tekst, target:tak?.target };
+  const tekst = tak?.tekst || SP_SCENES.get(tak?.target)?.text;
+  SP_CHECK_RESULTAAT = { ...resultaat, checkId, sceneTitle:scene.title, tekst, target:tak?.target };
   SCREENS.spCheck();
 }
 SCREENS.spCheck = function(){
@@ -2563,5 +2586,6 @@ SCREENS.spCheck = function(){
 function spCheckContinue(){
   const target = SP_CHECK_RESULTAAT?.target;
   SP_CHECK_RESULTAAT = null;
+  SP_CHECK_JUST_NARRATED = target;
   spGoCns(target);
 }
