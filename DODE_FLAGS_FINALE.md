@@ -171,8 +171,22 @@ generieke Finale-lijst opnemen; check eerst of H28/29 de payoff al dekken.
 beperkt tot H24/H25/toekomstige hoofdstukken zoals gepland in de
 Lethe/Mnemosyne-memory.
 
+## Categorie 10 — Nieuwe dode flags (H27, geschreven 2026-08-16, nog niet gekoppeld)
+
+- `ch27_lat_bestuursidee` (generaals/opvolger/provincies) — welk idee de
+  speler voorstelde vóór Diocletianus de Tetrarchie onthulde; flavour-only,
+  alle drie leiden non-punishing tot dezelfde onthulling.
+- `ch27_lat_prijzenedict` (goed) — alleen gezet bij de correcte
+  leesval-uitkomst, geen personage dat dit later uitleest.
+- `ch27_lat_milvische_brug` (goed) — idem, Latijnse Milvische-Brug-leesval.
+- `ch27_gre_milvische_brug` (goed) — idem, Griekse Milvische-Brug-leesval
+  (Eusebius-versie).
+- `ch27_lat_route` (weg/bergpas) — welke route de speler koos bij het
+  verzonnen "bergpas of weg"-moment; puur sfeer, geen goed/fout, geen
+  personage dat dit later terugleest.
+
 ---
 
-**Status**: 51 dode flags vastgelegd op 2026-08-15 (na het schrijven van
-Hoofdstuk 26). Bijwerken bij elk volgend hoofdstuk dat een nieuwe, nog niet
+**Status**: 56 dode flags vastgelegd op 2026-08-16 (na het schrijven van
+Hoofdstuk 27). Bijwerken bij elk volgend hoofdstuk dat een nieuwe, nog niet
 uitgelezen FLAG zet.

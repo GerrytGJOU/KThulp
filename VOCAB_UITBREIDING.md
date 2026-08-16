@@ -258,13 +258,9 @@ Toegevoegd aan `SP_VOCAB_ENTRIES` en de `VOCAB:`-sectie van `CH26_000`.
 Gevalideerd: `node --check` slaagt, alle 20 id's resolven, losse
 parse-check geeft 29/29 bereikbare scènes en 0 fouten.
 
-### Hoofdstuk 27 — kandidatenreserve (2026-08-15, NOG NIET GEBOUWD)
+### Hoofdstuk 27 — GEBOUWD (2026-08-16)
 
-Volgende 10+10 op dezelfde frequentielijst, gereserveerd zodra dit
-hoofdstuk daadwerkelijk geschreven wordt — nog NIET in
-`SP_VOCAB_ENTRIES`.
-
-**H27** (kandidaat): GR: ἀξιόω *waardig achten* · ἕως *totdat; zolang* ·
+GR: ἀξιόω *waardig achten* · ἕως *totdat; zolang* ·
 ἔοικα *lijken op* · κἄν *zelfs als* · ἕνεκα *wegens, omwille van* · μένω
 *blijven* · ἀναιρέω *opnemen; doden* · ἄνω *omhoog, boven* · τάσσω
 *opstellen, ordenen* · ὅθεν *vanwaar*
@@ -272,6 +268,10 @@ LA: occupo *innemen, bezetten* · sive *of* · doceo *leren, onderrichten* ·
 nosco *leren kennen* · mox *spoedig* · adicio *toevoegen* · tamquam *als
 het ware* · affero *brengen naar* · absum *afwezig zijn, weg zijn* ·
 quoniam *omdat*
+
+Toegevoegd aan `SP_VOCAB_ENTRIES` en de `VOCAB:`-sectie van `CH27_000`.
+Gevalideerd: `node --check` slaagt, alle 20 id's resolven, losse
+zigzag-aware parse-check geeft 37 scènes en 0 fouten.
 
 ## Bij het bouwen van een van deze hoofdstukken
 
