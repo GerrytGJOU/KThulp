@@ -1293,6 +1293,19 @@ function spSyncPuzzleMistake(puzzleId, given){
   upd[path+"c"] = firebase.database.ServerValue.increment(1);
   fbDB.ref().update(upd).catch(()=>{});
 }
+// Leerlingfeedback (2026-08-13): een fout antwoord kreeg altijd een hint,
+// een goed antwoord niets — puur stilzwijgend door naar de volgende scène.
+// Elk van de zes puzzeltypes toont nu bij een juist antwoord kort een
+// goedkeurende toast, vlak vóór de overgang naar de doelscène.
+const SP_PUZZLE_CORRECT_TOASTS = [
+  "Athena knikt goedkeurend.",
+  "Ergens, onzichtbaar, knikt Athena tevreden.",
+  "Athena's blik toont, heel even, iets van trots.",
+  "De godin van de wijsheid keurt je antwoord goed.",
+];
+function spPuzzleCorrectToast(){
+  toast("Juist!", pick(SP_PUZZLE_CORRECT_TOASTS));
+}
 function spSyncLeesvalOutcome(leesvalId, goed){
   const base = spClassAnalyticsBase(); if(!base) return;
   const path = base+"leesval_"+leesvalId+"/";
@@ -1974,7 +1987,7 @@ function spCheckGreekPuzzle(puzzleId, target){
   const puzzle = SP_PUZZLES[puzzleId];
   const input = (el("spPuzzleInput")?.value||"").trim().toLowerCase();
   const err = el("spPuzzleErr");
-  if(input === puzzle.woord.antwoord.toLowerCase()) spGoCns(target);
+  if(input === puzzle.woord.antwoord.toLowerCase()){ spPuzzleCorrectToast(); spGoCns(target); }
   else if(err){ err.textContent = "Nog niet helemaal juist — kijk in de transcriptietabel en probeer opnieuw."; err.style.display = ""; }
 }
 
@@ -1998,7 +2011,7 @@ function spRenderMCPuzzle(scene, puzzleId, puzzle, target){
 function spCheckMCPuzzle(puzzleId, target, idx){
   const puzzle = SP_PUZZLES[puzzleId];
   const err = el("spPuzzleErr");
-  if(puzzle.opties[idx] === puzzle.antwoord) spGoCns(target);
+  if(puzzle.opties[idx] === puzzle.antwoord){ spPuzzleCorrectToast(); spGoCns(target); }
   else{
     spSyncPuzzleMistake(puzzleId, puzzle.opties[idx]);
     if(err){ err.textContent = puzzle.hint || "Nog niet juist — lees de zin nog eens en probeer opnieuw."; err.style.display = ""; }
@@ -2026,7 +2039,7 @@ function spCheckTypedLatinPuzzle(puzzleId, target){
   const puzzle = SP_PUZZLES[puzzleId];
   const input = (el("spPuzzleInput")?.value||"").trim().toLowerCase();
   const err = el("spPuzzleErr");
-  if(input === puzzle.antwoord.trim().toLowerCase()) spGoCns(target);
+  if(input === puzzle.antwoord.trim().toLowerCase()){ spPuzzleCorrectToast(); spGoCns(target); }
   else{
     spSyncPuzzleMistake(puzzleId, input);
     if(err){ err.textContent = puzzle.hint || "Nog niet juist — probeer opnieuw."; err.style.display = ""; }
@@ -2115,7 +2128,7 @@ function spCheckTypedGreekPuzzle(puzzleId, target){
   const puzzle = SP_PUZZLES[puzzleId];
   const raw = el("spPuzzleInput")?.value||"";
   const err = el("spPuzzleErr");
-  if(spNormalizeGreek(raw) === spNormalizeGreek(puzzle.antwoord)) spGoCns(target);
+  if(spNormalizeGreek(raw) === spNormalizeGreek(puzzle.antwoord)){ spPuzzleCorrectToast(); spGoCns(target); }
   else{
     spSyncPuzzleMistake(puzzleId, raw);
     if(err){ err.textContent = puzzle.hint || "Nog niet juist — let op de spiritus (᾿/῾) en probeer opnieuw."; err.style.display = ""; }
@@ -2164,7 +2177,7 @@ function spCheckTileSwapPuzzle(puzzleId, target){
   const puzzle = SP_PUZZLES[puzzleId];
   const err = el("spPuzzleErr");
   const current = SP_TILESWAP.order.map(i=>puzzle.tiles[i]).join("");
-  if(current === puzzle.tiles.join("")){ SP_TILESWAP = null; spGoCns(target); }
+  if(current === puzzle.tiles.join("")){ SP_TILESWAP = null; spPuzzleCorrectToast(); spGoCns(target); }
   else{
     spSyncPuzzleMistake(puzzleId, current);
     if(err){ err.textContent = puzzle.hint || "Nog niet in de juiste volgorde — probeer opnieuw."; err.style.display = ""; }
@@ -2220,7 +2233,7 @@ function spMatchTapRight(i){
   if(SP_MATCH.selected===i){
     SP_MATCH.matched.add(i);
     SP_MATCH.selected = null;
-    if(SP_MATCH.matched.size===puzzle.pairs.length){ const target=SP_MATCH.target; SP_MATCH=null; spGoCns(target); return; }
+    if(SP_MATCH.matched.size===puzzle.pairs.length){ const target=SP_MATCH.target; SP_MATCH=null; spPuzzleCorrectToast(); spGoCns(target); return; }
   } else {
     spSyncPuzzleMistake(SP_MATCH.puzzleId, puzzle.pairs[SP_MATCH.selected].left+" ≠ "+puzzle.pairs[i].right);
     SP_MATCH.selected = null;
@@ -2279,8 +2292,21 @@ function spCombatNextQuestion(){
   const w = pick(entries);
   uses[w.woord] = (uses[w.woord]||0) + 1;
   const correct = w.betekenis;
-  const distractors = shuffle(entries.filter(x=>x!==w).map(x=>x.betekenis))
-    .filter((v,i,a)=>v!==correct && a.indexOf(v)===i).slice(0,3);
+  // Leerlingfeedback (2026-08-13): "tangit" (hij/zij raakt aan) tegenover
+  // afleiders "nieuw"/"en"/"zien" was zonder Latijnkennis al te raden — puur
+  // op vorm (drie woorden tegenover één) viel het goede antwoord meteen op.
+  // Geef daarom voorkeur aan afleiders met een vergelijkbaar aantal woorden
+  // in de Nederlandse betekenis (zelfde soort constructie, bv. ook een
+  // vervoegde "hij/zij ..."-vorm), met een steeds ruimere terugval zodra de
+  // pool te klein is om drie goede afleiders te vinden.
+  const woordAantal = s => (s||"").trim().split(/\s+/).length;
+  const correctWC = woordAantal(correct);
+  const kandidaten = entries.filter(x=>x!==w).map(x=>x.betekenis)
+    .filter((v,i,a)=>v!==correct && a.indexOf(v)===i);
+  let vormPool = kandidaten.filter(v=>woordAantal(v)===correctWC);
+  if(vormPool.length<3) vormPool = kandidaten.filter(v=>Math.abs(woordAantal(v)-correctWC)<=1);
+  if(vormPool.length<3) vormPool = kandidaten;
+  const distractors = shuffle(vormPool).slice(0,3);
   SP_COMBAT.question = { woord:w.woord, correct, options:shuffle([correct, ...distractors]) };
 }
 // Zelfde formule als bmBossAliveHeads() (bossbattle.js): koppen gelijk
@@ -2406,8 +2432,17 @@ function spRaceNextQuestion(){
   }
   const w = pick(entries);
   const correct = w.betekenis;
-  const distractors = shuffle(entries.filter(x=>x!==w).map(x=>x.betekenis))
-    .filter((v,i,a)=>v!==correct && a.indexOf(v)===i).slice(0,3);
+  // Zelfde vorm-gebaseerde afleiderselectie als spCombatNextQuestion hierboven
+  // (leerlingfeedback 2026-08-13) — voorkomt dat het goede antwoord al puur op
+  // vorm (bv. woordaantal) opvalt tussen de afleiders.
+  const woordAantal = s => (s||"").trim().split(/\s+/).length;
+  const correctWC = woordAantal(correct);
+  const kandidaten = entries.filter(x=>x!==w).map(x=>x.betekenis)
+    .filter((v,i,a)=>v!==correct && a.indexOf(v)===i);
+  let vormPool = kandidaten.filter(v=>woordAantal(v)===correctWC);
+  if(vormPool.length<3) vormPool = kandidaten.filter(v=>Math.abs(woordAantal(v)-correctWC)<=1);
+  if(vormPool.length<3) vormPool = kandidaten;
+  const distractors = shuffle(vormPool).slice(0,3);
   SP_RACE.question = { woord:w.woord, correct, options:shuffle([correct, ...distractors]) };
 }
 // Checkt na elke beurt of de finish al bereikt is. Uitkomst hangt af van
