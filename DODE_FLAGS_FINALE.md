@@ -24,6 +24,27 @@
 
 ---
 
+> **GROTENDEELS OPGELOST (2026-08-16, Hoofdstuk 28 "De Bibliotheek van
+> Mnemosyne", geschreven maar nog niet gekoppeld)**: Categorie 1 t/m 4
+> hieronder, plus de flavour-only flags uit Categorie 5/6
+> (`ch20_lat_dumnorix`, `ch20_lat_aquilifer`, `ch21_lat_verres_stijl`,
+> `ch21_lat_catilina_aanpak`) en de volledige "onthoud of laat
+> los"-reeks uit Categorie 7/8 (`ch24_gre_*`, `ch24_lat_*`,
+> `ch25_gre_atomos`, `ch25_lat_plinius`) zijn nu afbetaald via H28's vier
+> vleugels — Categorie 1 exact zoals hier al aanbevolen (één verzamelende
+> reflectiescène, `CH28_WING_A_001`), Categorie 2-4 en de genoemde
+> flavour-flags via `CH28_WING_C_GRE`/`CH28_WING_C_LAT` (aggregaat, geen
+> losse callbacks per item), de onthoud/laat-los-reeks via
+> `CH28_WING_B_GRE`/`CH28_WING_B_LAT`. Zie Chronica.md §7.98 voor het
+> volledige verslag. **Nog open**: de flavour-only flags van H25-27 zelf
+> (`ch25_gre_filosofie`/`_eratosthenes`, `ch25_lat_graffiti`,
+> `ch26_lat_vespasianus`/`_marcus_aurelius`, en alle vijf H27-flags) zijn
+> in H28 niet meegenomen — die blijven kandidaat voor H29/Finale. H28
+> introduceert zelf ook drie nieuwe, bewust open flags
+> (`ch28_wing_*_klaar`, `ch28_eerste_vleugel`, `ch28_laatste_vleugel`) die
+> GEEN gewone dode flags zijn: ze zijn expliciet bedoeld om door
+> toekomstige hoofdstukken/NPC's gelezen te worden.
+
 ## Categorie 1 — Aanpak-/route-flags (welke stat/benadering koos de speler)
 
 Grote groep flags uit Hoofdstuk 1-6, elk gezet op een scène waar de
