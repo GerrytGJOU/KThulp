@@ -1304,6 +1304,7 @@ const SP_PUZZLE_CORRECT_TOASTS = [
   "De godin van de wijsheid keurt je antwoord goed.",
 ];
 function spPuzzleCorrectToast(){
+  beep("good");
   toast("Juist!", pick(SP_PUZZLE_CORRECT_TOASTS));
 }
 function spSyncLeesvalOutcome(leesvalId, goed){
