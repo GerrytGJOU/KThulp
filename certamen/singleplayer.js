@@ -323,6 +323,37 @@ const SpTextResolver = {
         const items = spNpcAfsluitingenBeschikbaar(state);
         return items.length ? items.map(a=>a.tekst).join(" ") : SP_NPC_AFSLUITINGEN_FALLBACK;
       }
+      case "fin_helden_credit":    return spFinaleClusterCreditText("helden", state);
+      case "fin_grieken_credit":   return spFinaleClusterCreditText("grieken", state);
+      case "fin_romeinen_credit":  return spFinaleClusterCreditText("romeinen", state);
+      case "fin_dode_flags_credit": return spFinaleDodeFlagsCredit(state);
+      case "fin_einde_variant_line": return SP_FINALE_EINDE_VARIANT_LINES[state.flags?.fin_einde_variant] || "";
+      case "fin_epiloog_lethe":       return spFinaleEpiloogLethe(state);
+      case "fin_epiloog_troje":       return SP_FIN_EPILOOG_TROJE[state.flags?.ch9_zijde] || SP_FIN_EPILOOG_FALLBACK;
+      case "fin_epiloog_achilles":    return SP_FIN_EPILOOG_ACHILLES[state.flags?.ch8_zijde] || SP_FIN_EPILOOG_FALLBACK;
+      case "fin_epiloog_taalspoor":   return SP_FIN_EPILOOG_TAALSPOOR[state.flags?.taalspoor] || SP_FIN_EPILOOG_FALLBACK;
+      case "fin_epiloog_ch1_lijn":    return SP_FIN_EPILOOG_CH1_LIJN[state.flags?.ch1_lijn] || SP_FIN_EPILOOG_FALLBACK;
+      case "fin_epiloog_griekse_politiek": return spFinaleEpiloogPolitiek(state, [
+          [SP_FIN_EPILOOG_CH19_GRE, "ch19_gre_zijde"], [SP_FIN_EPILOOG_CH22_GRE, "ch22_gre_zijde"] ]);
+      case "fin_epiloog_romeinse_politiek": return spFinaleEpiloogPolitiek(state, [
+          [SP_FIN_EPILOOG_CH19_LAT, "ch19_lat_zijde"], [SP_FIN_EPILOOG_CH22_LAT, "ch22_lat_zijde"] ]);
+      // Dynamische IMAGE-bestandsnamen (Chronica.md §7.103) — zelfde
+      // lookup-principe als de tekst-tokens hierboven, nu voor plaatjes. De
+      // vijf FIN_EINDE_*-scènes hebben GEEN token nodig (het zijn al vijf
+      // losse scènes, dus gewoon vijf losse letterlijke IMAGE:-bestanden).
+      case "fin_epiloog_lethe_image": return SP_FIN_EPILOOG_LETHE_IMAGE[state.flags?.fin_tendency] || SP_FIN_EPILOOG_IMAGE_FALLBACK;
+      case "fin_epiloog_troje_image":    return SP_FIN_EPILOOG_TROJE_IMAGE[state.flags?.ch9_zijde] || SP_FIN_EPILOOG_IMAGE_FALLBACK;
+      case "fin_epiloog_achilles_image": return SP_FIN_EPILOOG_ACHILLES_IMAGE[state.flags?.ch8_zijde] || SP_FIN_EPILOOG_IMAGE_FALLBACK;
+      case "fin_epiloog_taalspoor_image": return SP_FIN_EPILOOG_TAALSPOOR_IMAGE[state.flags?.taalspoor] || SP_FIN_EPILOOG_IMAGE_FALLBACK;
+      case "fin_epiloog_ch1_lijn_image":  return SP_FIN_EPILOOG_CH1_LIJN_IMAGE[state.flags?.ch1_lijn] || SP_FIN_EPILOOG_IMAGE_FALLBACK;
+      case "fin_epiloog_griekse_politiek_image": {
+        const key = (state.flags?.ch19_gre_zijde||"x")+"_"+(state.flags?.ch22_gre_zijde||"x");
+        return SP_FIN_EPILOOG_GRIEKSE_POLITIEK_IMAGE[key] || SP_FIN_EPILOOG_IMAGE_FALLBACK;
+      }
+      case "fin_epiloog_romeinse_politiek_image": {
+        const key = (state.flags?.ch19_lat_zijde||"x")+"_"+(state.flags?.ch22_lat_zijde||"x");
+        return SP_FIN_EPILOOG_ROMEINSE_POLITIEK_IMAGE[key] || SP_FIN_EPILOOG_IMAGE_FALLBACK;
+      }
     }
     if(SP_TENDENCY_STORY_VARIANTS[path]) return spTendencyStoryVariant(path, state);
     return undefined;
@@ -1322,6 +1353,22 @@ function spGoCns(nodeId){
   // Chronica.md §7.17/§7.23) — generieke hook i.p.v. 13 losse call-sites.
   const leesvalMatch = /^(.+)_(GOED|FOUT)$/.exec(nodeId);
   if(leesvalMatch) spSyncLeesvalOutcome(leesvalMatch[1], leesvalMatch[2]==="GOED");
+  // Finale-router (Chronica.md §7.101): de vijf eindes hangen af van de
+  // Clementia/Severitas-stand die tot en met Hoofdstuk 19 is opgebouwd
+  // (zie chronica-finale-brainstorm-2026-08-17 in memory) — precies ÉÉN
+  // keer berekend bij binnenkomst, zodat REQUIRE op `fin_tendency` daarna
+  // een gewone statische FLAG-vergelijking blijft, net als overal elders.
+  if(nodeId === "FIN_KEUZE_000"){
+    const flags = {...(SP_STATE.flags||{}), fin_tendency: spComputeTendencyTier(SP_STATE)};
+    spSaveProgress({ flags });
+  }
+  // fin_herinnering_score (Chronica.md §7.101): hoeveel van de resterende
+  // dode-flag-credits en RELATION-clusters de speler echt heeft opgebouwd —
+  // net als fin_tendency hierboven, één keer berekend bij binnenkomst.
+  if(nodeId === "FIN_HER_EINDE"){
+    const flags = {...(SP_STATE.flags||{}), fin_herinnering_score: String(spFinaleHerinneringScore(SP_STATE))};
+    spSaveProgress({ flags });
+  }
   spSaveProgress({ node:nodeId });
   go("spPlay");
 }
@@ -1811,14 +1858,115 @@ function spApproachTendency(state){
   if(a.clementia===a.severitas) return "neutraal";
   return a.clementia>a.severitas ? "clementia" : "severitas";
 }
+// Finale-only (Chronica.md §7.101): de RUWE clementia/severitas-tendens
+// (spApproachTendency) kent geen sterkte, alleen een richting — de Finale
+// heeft vijf eindes nodig (neutraal/medium/hoog × clementia/severitas), dus
+// hier één keer, uitsluitend bij binnenkomst in FIN_KEUZE_000 (zie spGoCns),
+// de verhouding wegen: hoe groter het aandeel van de overheersende kant in
+// het totaal aantal getagde keuzes, hoe "hoger" de tier.
+function spComputeTendencyTier(state){
+  const a = (state||SP_STATE).approach||{clementia:0,severitas:0};
+  const total = a.clementia + a.severitas;
+  if(!total || a.clementia===a.severitas) return "neutraal";
+  const winning = a.clementia>a.severitas ? "clementia" : "severitas";
+  const ratio = Math.abs(a.clementia - a.severitas) / total;
+  return winning + "_" + (ratio >= 0.6 ? "hoog" : "medium");
+}
+// RELATION-woordvoerder per cluster (Chronica.md §7.101): niet de ruwe
+// hoogste relatiescore (die bevoordeelt structureel NPC's met veel
+// touchpoints, zoals Cicero met 8 momenten, boven eenmalige zwaargewichten
+// als Cleopatra) — in plaats daarvan het GEMIDDELDE per gelegenheid
+// (score/touchpoints), met een ondergrens van 2 touchpoints om mee te
+// tellen, en bij gelijke stand de ruwe hoogste score als tiebreak. Alleen
+// NPC's die de gewone SP_ENDKAPITAAL_THRESHOLD halen komen in aanmerking.
+function spFinaleSpokesperson(clusterKey, state){
+  const cluster = SP_FINALE_CLUSTERS[clusterKey];
+  if(!cluster) return null;
+  const rel = (state||SP_STATE).relations || {};
+  const T = SP_ENDKAPITAAL_THRESHOLD;
+  const eligible = cluster.npcs.filter(n => n.t>=2 && (rel[n.id]||0) >= T);
+  if(!eligible.length) return null;
+  let best=null, bestAvg=-Infinity;
+  for(const n of eligible){
+    const score = rel[n.id]||0;
+    const avg = score/n.t;
+    const bestScore = best ? (rel[best.id]||0) : -Infinity;
+    if(avg>bestAvg || (avg===bestAvg && score>bestScore)){ best=n; bestAvg=avg; }
+  }
+  return best.id;
+}
+// Resterende open "dode flags" (DODE_FLAGS_FINALE.md, Categorie 8-10 —
+// alles wat H28/29 niet al hebben afbetaald): elke speler heeft alleen de
+// flags van zijn eigen taalspoor gezet, dus dit bouwt de zin dynamisch op
+// uit alleen de aanwezige flags — zelfde patroon als
+// spNpcAfsluitingenBeschikbaar hierboven, geen voorwaardelijke formulering
+// in de brontekst zelf.
+function spFinaleDodeFlagsCredit(state){
+  const flags = state.flags || {};
+  const items = SP_FINALE_DODE_FLAGS_CREDITS.filter(d => flags[d.flag] === d.value);
+  if(!items.length) return SP_FINALE_DODE_FLAGS_FALLBACK;
+  return spDutchJoin(items.map(d=>d.tekst)) + ".";
+}
+// Losse epiloog (Chronica.md §7.102, op Gerbens verzoek): een puur
+// doorklik-gedeelte ná de overwinning op Lethe dat de grootste keuzes uit de
+// hele campagne terugleest, met de Lethe-uitkomst zelf als startpunt.
+// spFinaleEpiloogLethe leest fin_tendency (hoofdtoon) + fin_einde_variant
+// (nuance) — SP_FIN_EPILOOG_LETHE (singleplayer-data.js) is een geneste
+// lookup, geen los geval per combinatie.
+function spFinaleEpiloogLethe(state){
+  const tier = state.flags?.fin_tendency;
+  const variant = state.flags?.fin_einde_variant;
+  const table = SP_FIN_EPILOOG_LETHE[tier];
+  if(!table) return SP_FIN_EPILOOG_FALLBACK;
+  return table[variant] || Object.values(table)[0] || SP_FIN_EPILOOG_FALLBACK;
+}
+// Combineert twee of meer los-uitgelezen politieke-zijde-keuzes tot één
+// alinea — slaat een flag stilzwijgend over als de speler die kant nooit
+// speelde (bv. een Latijn-only speler heeft geen ch19_gre_zijde), zodat
+// dezelfde scène voor elk taalspoor werkt zonder REQUIRE-vertakking nodig
+// te hebben binnen de alinea zelf.
+function spFinaleEpiloogPolitiek(state, tables){
+  const parts = [];
+  for(const [table, flagKey] of tables){
+    const val = state.flags?.[flagKey];
+    if(val && table[val]) parts.push(table[val]);
+  }
+  return parts.length ? parts.join(" ") : SP_FIN_EPILOOG_FALLBACK;
+}
+function spFinaleClusterCreditText(clusterKey, state){
+  const cluster = SP_FINALE_CLUSTERS[clusterKey];
+  if(!cluster) return "";
+  const id = spFinaleSpokesperson(clusterKey, state);
+  if(!id) return cluster.fallback;
+  return cluster.lines[id] || cluster.fallback;
+}
+// Voedt spFinaleLetheHp (0-100): 60% weegt hoeveel resterende "dode
+// flags"-credits de speler daadwerkelijk heeft opgebouwd (max 8 — zie
+// SP_FINALE_DODE_FLAGS_CREDITS, bestuursidee/route tellen elk maar 1x mee
+// ondanks hun 3/2 varianten), 40% hoeveel van de drie RELATION-clusters een
+// geldige woordvoerder heeft.
+function spFinaleHerinneringScore(state){
+  const flags = state.flags || {};
+  const doneCredits = SP_FINALE_DODE_FLAGS_CREDITS.filter(d => flags[d.flag]===d.value).length;
+  const clusterCoverage = Object.keys(SP_FINALE_CLUSTERS).filter(k => spFinaleSpokesperson(k, state)).length;
+  return Math.round(Math.min(1, doneCredits/8)*60 + (clusterCoverage/3)*40);
+}
 
 /* Illustratie bij een scène: de IMAGE-sectie is een bestandsnaam relatief aan
    assets/chronica/images/. Ontbreekt het bestand, dan verbergt de <img> zich
    stil (onerror) — zo kunnen auteurs alvast naar nog-te-maken illustraties
    verwijzen zonder een gebroken-plaatje-icoon. */
+// Sinds de Finale-epiloog (Chronica.md §7.103): IMAGE ondersteunt nu
+// dezelfde {token}-syntax als TEXT (via SpTextResolver), zodat één scène
+// een ander plaatje kan tonen afhankelijk van de opgebouwde staat (bv.
+// welk van de vijf eindes, of welke zijde-keuze) — zonder de scène zelf te
+// hoeven splitsen. Een gewone, letterlijke bestandsnaam werkt nog altijd
+// ongewijzigd (geen `{...}` erin, dus niets om te resolven).
 function spSceneImageHTML(scene){
   if(!scene.meta || !scene.meta.IMAGE) return "";
-  const src = "assets/chronica/images/"+scene.meta.IMAGE.trim();
+  const filename = SpTextResolver.resolve(scene.meta.IMAGE.trim(), SP_STATE);
+  if(!filename) return "";
+  const src = "assets/chronica/images/"+filename;
   return `<img src="${esc(src)}" alt="" style="width:100%;border-radius:10px;display:block;margin-bottom:12px" onerror="this.style.display='none'">`;
 }
 
@@ -2272,12 +2420,28 @@ const SP_COMBAT_EP_PER_CORRECT = 10;
 const SP_COMBAT_ACTION_COST = 20;
 const SP_COMBAT_DAMAGE_PER_ATTACK = 15;
 let SP_COMBAT = null;
+// Finale-only HP-schaling (Chronica.md §7.101, Gerbens frame "Lethe's
+// kracht neemt toe naarmate we meer vergeten"): ZACHTE schaling, dus een
+// bescheiden ±20%-marge rond de basiswaarde — nooit een harde muur voor een
+// speler die minder grondig speelde, alleen een iets langer/korter gevecht.
+// fin_kennis_score en fin_herinnering_score worden gezet in resp.
+// FIN_GRE/LAT_EINDE en FIN_HER_EINDE, elk als percentage 0-100.
+function spFinaleLetheHp(baseHp, state){
+  const kennis = Number(state.flags?.fin_kennis_score);
+  const herinnering = Number(state.flags?.fin_herinnering_score);
+  const kennisPct = isNaN(kennis) ? 50 : kennis;
+  const herinneringPct = isNaN(herinnering) ? 50 : herinnering;
+  const herinnerd = (kennisPct + herinneringPct) / 200; // 0..1, hoger = meer onthouden
+  const modifier = 1 + (0.5 - herinnerd) * 0.4; // 0.8..1.2
+  return Math.round(baseHp * modifier);
+}
 function spStartCombatFromScene(scene){
   const enemyId = scene.meta.COMBAT.trim();
   const target = scene.choices[0]?.target;
   const enemy = SP_COMBAT_ENEMIES[enemyId];
   if(!enemy){ console.error("Onbekende vijand:", enemyId); return spGoCns(target); }
-  SP_COMBAT = { enemyId, hp:enemy.hp, maxHp:enemy.hp, ep:0, target, question:null, sceneTitle:scene.title };
+  const hp = enemyId==="fin_lethe" ? spFinaleLetheHp(enemy.hp, SP_STATE) : enemy.hp;
+  SP_COMBAT = { enemyId, hp, maxHp:hp, ep:0, target, question:null, sceneTitle:scene.title };
   spCombatNextQuestion();
   SCREENS.spCombat();
 }
