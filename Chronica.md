@@ -8254,6 +8254,324 @@ huidige tekstuele hub — dezelfde onderliggende FLAGs blijven dan
 bruikbaar, dus dat is een latere, aparte uitbreiding zonder dat de
 payoff-logica opnieuw hoeft.
 
+### 7.99 Hoofdstuk 29 "De Rivier Lethe" geschreven (2026-08-16)
+
+**Hoofdstuk 29 "De Rivier Lethe"** — door Claude geschreven, 47 scènes,
+bewust nog niet gekoppeld. De schaduwzijde van H28: waar de Bibliotheek
+van Mnemosyne ging over alles wat de speler bewaarde, gaat dit hoofdstuk
+over alles wat gemist, genegeerd, of niet gekozen werd. Zelfde
+grammatica-regel als H28 (op Gerbens correctie): geen gemengde
+Grieks/Latijnse content, ook al noemt de campagne-metadata dit hoofdstuk
+"Integratie Grieks & Latijn" — dat woord slaat op het feit dat een
+"beide"-speler achtereenvolgens beide taalsporen doorloopt, niet op
+gemengde grammatica.
+
+**Structuur**: gedeelde, taalspoor-neutrale opening (`CH29_000`-`CH29_006`)
+— Lethe en de schim van Orpheus (zie hieronder) aan de oever van de
+rivier, Lethe's bedankje voor wat de speler in H24 losliet, de
+Persephone/Demeter-zijverhaal, en reflecties op de grote gemiste
+vertakkingen die voor iedereen gelden (`ch1_lijn`, het gekozen taalspoor
+zelf, `ch9_zijde` Troje/Grieken, `ch8_zijde` Achilles/Agamemnon). Daarna
+een taalspoor-split naar `CH29_GRE_*`/`CH29_LAT_*`, die elk de
+geverifieerde "gemiste-pad"-checklist aflopen (zie hieronder) en eindigen
+in `CH29_ONTHULLING` — voor een "beide"-speler doorloopt eerst de Griekse,
+dan de Latijnse tak.
+
+**Orpheus als schim, niet als hoofd**: op Gerbens correctie draagt Orpheus
+hier geen gezongen hoofd (dat zou audio vereisen, wat al bij H28's
+Narcissus/Echo werd afgewezen), maar verschijnt als doorschijnende schim
+— dezelfde mede-verteller-techniek als Caesar in H20 (zie §7.9x eerder in
+dit document). Orpheus faalde zelf ooit iets terug te halen uit de
+onderwereld; dat maakt hem de logische metgezel voor een hoofdstuk over
+verlies en het NIET terugkrijgen van wat gemist is.
+
+**De "gemiste-pad"-checklist** (op Gerbens verzoek eerst gescand over de
+hele campagne, daarna geverifieerd via directe Grep/Read van de
+scène-structuur vóór opname): vijf grote, structureel afwijkende
+vertakkingen kregen elk een eigen uitgebreide scène in het eigen
+taalspoor — `ch19_gre_zijde` (Athene/Sparta, met een geneste
+`ch19_gre_ath_sicilie`-subvertakking), `ch22_gre_zijde`
+(Ptolemaeus/Antigonos), `ch21_gre_socrates_stemming` (vrijgesproken/
+veroordeeld), `ch19_lat_zijde` (Caesar/Pompeius, met een geneste
+`ch19_lat_pom_samenzwering`-subvertakking), `ch22_lat_zijde` (Octavianus/
+Antonius) — plus `ch20_lat_aquilifer`/`ch20_lat_sabinus_cotta` samen in
+één scène. Vier kleinere, bevestigd-echte maar minder verhaal-kritieke
+vertakkingen zijn op Gerbens instructie ("gebruik een aantal alleen als
+opsomming") bewust NIET uitgeschreven maar alleen kort genoemd in twee
+opsomming-scènes (`CH29_GRE_004`/`CH29_LAT_004`): de vrijers van Helena
+(`ch7_vrijer_gesteund`), de vraag aan Marcus Aurelius
+(`ch26_lat_marcus_aurelius`), Cicero tegen Verres
+(`ch21_lat_verres_stijl`), en Herakleitos-of-Parmenides
+(`ch25_gre_filosofie`). Nooit-vertelde NPC's zijn bewust buiten scope
+gehouden (Gerbens onderscheid: dit hoofdstuk gaat over wat de speler
+actief miste, niet over content die simpelweg nog niet gebouwd is).
+
+**Onthulling**: `CH29_ONTHULLING` laat Lethe uitleggen dat ze aanwezig is
+bij elk moment van verlies, met een directe aanspraak naar Orpheus zelf →
+`CH29_LETHE_PERSOONLIJK` geeft een gedeeltelijk, persoonlijk motief, maar
+stelt haar volledige "vergeten heeft waarde"-filosofie bewust nog uit tot
+een latere confrontatie (Finale). Checks/dobbelstenen zijn hier bewust
+niet ingezet (Gerbens keuze: dit hoofdstuk is reflectie, geen beproeving).
+
+**Nieuwe registry**: 2 nieuwe CODEX-entries (`codex_persephone_demeter`,
+`codex_lethe_motieven`; `codex_lethe_geintroduceerd` bestond al uit H28),
+1 nieuw souvenir (`souvenir_rivier_lethe`), 4 nieuwe VOCAB-id's
+(`grieks_deuro`, `latijn_dein`/`_utique`/`_iterum` — tijdens het schrijven
+zijn drie per ongeluk verzonnen id's die botsten met of overbodig waren
+naast bestaande entries vervangen). 7 IMAGE-hooks proactief toegevoegd
+tijdens het schrijven zelf.
+
+**Fout gevonden en gecorrigeerd tijdens het valideren**: de eigen
+combinatorische testharness (`check_ch29.js`, buiten de repo) controleerde
+aanvankelijk op "geen zichtbare keuzes" vóórdat hij een nog-onbesliste
+REQUIRE-vlag over haar hele waardenbereik had uitgesplitst — met als
+gevolg valse "dode punt"-meldingen bij elke scène met een onbesliste
+vlag (zoals `ch9_zijde` op `CH29_005`), omdat een keuze met een
+niet-ingevulde vlag altijd als "onzichtbaar" telt totdat er daadwerkelijk
+over die vlag vertakt wordt. Fout zat dus alleen in de testharness, niet
+in de hoofdstukinhoud zelf — opgelost door de vertakkingsstap vóór de
+dode-punt-check te laten lopen.
+
+**Validatie**: `node --check` slaagt, `node
+certamen/tools/validate_chronica.js` blijft op 0 fouten (ongewijzigd
+waarschuwingenaantal — de nieuwe H29-vlaggen zijn zelf leesvlaggen, geen
+schrijfvlaggen, dus die tellen niet mee als "dode flag"). De
+combinatorische testharness bevestigt na de fix 47/47 scènes bereikbaar
+over alle relevante vlagcombinaties, 0 fouten. Live in de browser
+(tijdelijk gekoppeld voor de test, daarna weer losgekoppeld): volledige
+doorloop als "beide"-speler met de meest complexe combinatie van vlaggen
+(Troje, Achilles, Athene+meegevaren, Ptolemaeus, vrijgesproken, Caesar+
+mee, Octavianus, aquilifer, Sabinus), 0 exceptions, 0 onopgeloste tokens,
+0 console-fouten — de enige 404's waren de nog niet gegenereerde
+IMAGE-bestanden, zoals verwacht.
+
+### 7.100 Drie nieuwe Clementia/Severitas-tags in Hoofdstuk 18-19 (2026-08-17)
+
+Aanleiding: Finale-brainstorm (nog niet gebouwd) — bij het uitrekenen van de
+maximaal haalbare Clementia/Severitas-stand bleek dat vrijwel het volledige
+budget (98 van de 98 punten voor "beide") in Hoofdstuk 1-17 zit; sinds de
+payoff-strategie-omslag in §7.51 (Boek II, geen nieuwe RELATION-opbouw meer
+maar Clementia/Severitas laten *aflezen*) waren er geen nieuwe getagde
+keuzes meer bijgekomen, op vier bestaande uitzonderingen in H20-22 na
+(Dumnorix, Catilina, Cicero's leven). Gerben liet drie nieuwe tags
+toevoegen om de schaal ook in het latere deel van de campagne nog te
+voeden, zonder de Finale zelf te taggen (die leest alleen uit).
+
+**Drie toegevoegde tag-paren, op bestaande keuzes, geen nieuwe scènes of
+FLAG-wijzigingen**:
+- `CH18_GRE_002` (Naxos' afscheiding) — beide opties waren al een
+  gedeelde-target reflectiemoment, dus taggen kon zonder de structuur te
+  raken: "een bondgenootschap zonder dwang houdt nooit stand" [SEVERITAS],
+  "een bondgenoot die niet meer vrijwillig blijft is geen bondgenoot meer"
+  [CLEMENTIA].
+- `CH18_LAT_008` (Sulla's proscripties) — zelfde patroon: "wie zo
+  terugslaat wordt precies wat hij ooit bestreed" [CLEMENTIA], "een oorlog
+  eindigt pas als de tegenstander geen kracht meer heeft" [SEVERITAS].
+- `CH19_LAT_POM_005B` (de samenzweerders tegen Caesar) — hier al een echte
+  vertakking (`ch19_lat_pom_samenzwering`): "sluit je aan bij de
+  samenzwering" [SEVERITAS], "weiger — de genade die je kreeg, verdient
+  geen dolk terug" [CLEMENTIA]. Tag en bestaande FLAG bestaan naast elkaar
+  zonder conflict.
+
+**Bewust NIET getagd**: H24's onthoud/laat-los-reeks (eigen, bewust
+gescheiden as, zie [[chronica-h24-lethe-mnemosyne-zaadjes]]), H24's
+Vitruvius-triade (firmitas/utilitas/venustas, geen moreel oordeel), H26/27's
+GOED/FOUT-leesvallen (feitelijke kennisvragen, geen waardekeuze) en H26's
+Marcus Aurelius-gesprekskeuze (gespreksonderwerp, geen eigen morele
+stellingname) — geen van deze past natuurlijk bij de as zonder hem geforceerd
+te laten aanvoelen.
+
+**Nieuwe maxima** (herberekend via `spHookApproach`-simulatie): grieks-only
+89/89, latijn-only 91/91, beide 101/101 (was 88/88, 89/89, 98/98). H18 en
+H19 zijn al gekoppeld/live, dus: `node --check` en
+`validate_chronica.js` opnieuw gedraaid (0 fouten, ongewijzigd
+waarschuwingenaantal), cache-busting opgehoogd naar `?v=20260817a`.
+
+### 7.101 Finale "Chronica Classica" geschreven (2026-08-17)
+
+**De Finale (Hoofdstuk 30, Boek VI)** — door Claude geschreven, 54 scènes,
+bewust nog niet gekoppeld, op basis van een uitgebreide brainstorm met
+Gerben (structuurkeuzes via losse MC-vragen doorlopen, zie sessiegeschiedenis
+2026-08-17). Grootste hoofdstuk van de campagne, zoals gepland.
+
+**Structuur — Drieluik-Beproeving** (Gerbens gekozen optie: meest bouwwerk,
+meest episch): een gedeelde opening (Kronos onthult zichzelf als de
+verslagen Titaan — framing "redt vooral zichzelf, maar oprecht ook de rest",
+met één reflectieve dialoogkeuze zonder mechanisch gevolg; Kleio's eerste
+entree ooit) → **Kennis** (taal-eindtoets: een doeltaal-slotalinea met twee
+ingebedde vervagende-woorden-puzzels per taalspoor, taalspoor-gesplitst,
+"beide" doorloopt allebei) → **Herinnering** (Kleio onthult zichzelf als de
+onzichtbare schrijfster van "de Kroniek" — het speler-eigen overzicht dat 29
+hoofdstukken lang leek op een automatisch logboek; credits voor de
+resterende open flavour-only dode flags uit H25-27) → **Relatie** (drie
+RELATION-clusters — mythologische helden, klassiek Griekenland, Rome — elk
+met een niet-voorwaardelijk geformuleerde woordvoerder-tekst; Hermes' eigen,
+tot dan toe opzettelijk open gelaten motief en Pamphiles eerste moment
+waarop ze voor zichzelf spreekt in plaats van namens haar rol).
+
+**Vijf eindes, geen nieuwe tags**: neutraal/medium/hoog × clementia/
+severitas, bepaald door de t/m Hoofdstuk 19 al opgebouwde Clementia/
+Severitas-stand (nieuwe functie `spComputeTendencyTier()`,
+singleplayer.js — weegt de VERHOUDING tussen clementia/severitas, niet
+alleen de richting, in tegenstelling tot de bestaande `spApproachTendency()`
+die alleen "wie wint" teruggeeft). Op Gerbens expliciete instructie zet de
+Finale zelf GEEN nieuwe `[CLEMENTIA]`/`[SEVERITAS]`-tags — hij leest alleen
+uit. Elk van de vijf eindes krijgt een eigen sub-keuze (2 opties, puur
+flavour via `fin_einde_variant`), die daarna via één gedeelde
+`{fin_einde_variant_line}`-token terugkomt ná de COMBAT — zo hoefden er geen
+tien losse post-combat-eindes gebouwd te worden, alleen vijf tier-eindes met
+een ingebedde flavour-zin.
+
+**RELATION-woordvoerder, eerlijkheidscorrectie**: Gerbens zorg dat "hoogste
+relation wint" NPC's met veel RELATION-touchpoints (Cicero, 8 momenten)
+structureel zou bevoordelen boven eenmalige zwaargewichten (Cleopatra, 1
+moment) is opgelost met `spFinaleSpokesperson()` — gemiddelde score per
+gelegenheid (score/touchpoints), ondergrens van 2 touchpoints om mee te
+tellen, bij gelijke stand de ruwe hoogste score als tiebreak. Getest met
+gelijke relatiewaarden over een hele cluster: NPC's met minder touchpoints
+wonnen zoals bedoeld, in plaats van de NPC met de meeste momenten.
+
+**Lethe's HP, "haar kracht groeit met wat je vergat"**: één gedeelde
+COMBAT-kern (`fin_lethe`) voor alle vijf eindes — Gerbens keuze, framing
+verschilt, mechaniek niet. Nieuwe functie `spFinaleLetheHp()` herberekent de
+basis-HP (130) met een zachte ±20%-marge op basis van `fin_kennis_score`
+(taal-eindtoets, 70/90) en `fin_herinnering_score` (nieuw berekend bij
+binnenkomst in `FIN_HER_EINDE` via `spFinaleHerinneringScore()`: 60% hoeveel
+dode-flag-credits de speler daadwerkelijk opbouwde, 40% hoeveel van de drie
+RELATION-clusters een geldige woordvoerder heeft) — op Gerbens instructie
+altijd haalbaar, nooit een harde muur.
+
+**Kleio als schrijfster van de Kroniek** (Gerbens toevoeging tijdens de
+brainstorm): het speler-eigen voortgangsoverzicht dat de hele campagne door
+"de Kroniek" heette, blijkt door Kleio zelf geschreven — een meta-moment
+waarbij de speler letterlijk het mechanisme herkent dat hij het hele spel
+al gebruikte.
+
+**Nieuwe registry**: 6 CODEX-entries (Kronos-als-Titaan, Kleio, de Kroniek,
+Hermes' motief, Pamphiles eigen stem — plus de al bestaande Lethe-entries),
+4 nieuwe PUZZLE-entries (typed-greek/typed-latin, hergebruikte, al bekende
+H29-VOCAB — geen nieuwe woordenschat), `SP_FINALE_CLUSTERS`/
+`SP_FINALE_DODE_FLAGS_CREDITS`/`SP_FINALE_EINDE_VARIANT_LINES`
+(singleplayer-data.js), vier nieuwe helperfuncties plus een uitbreiding van
+`spStartCombatFromScene`/`spGoCns` (singleplayer.js). Nieuwe eretitel
+`meester_der_herinnering` (al gereserveerd in de metadata, nu pas echt
+geregistreerd in `SP_TITLES`) en `armor:ceremonieel` toegevoegd aan
+`SP_AVATAR_STORY_UNLOCKS`. 8 IMAGE-hooks proactief toegevoegd tijdens het
+schrijven zelf.
+
+**Validatie**: `node --check` slaagt op beide bestanden,
+`validate_chronica.js` blijft op 0 fouten (ongewijzigd waarschuwingenaantal
+— Finale-flags zijn leesvlaggen, geen nieuwe dode flags). Eigen
+combinatorische validator (taalspoor × tendency-tier, 15 combinaties):
+54/54 scènes bereikbaar, 0 fouten, alle CODEX/PUZZLE/COMBAT/EERETITEL-id's
+bevestigd bestaand. Live in de browser (tijdelijk gekoppeld, daarna weer
+losgekoppeld): volledige doorloop als "beide"-speler — beide
+taal-eindtoetsen met de echte puzzel-checkfuncties opgelost, de
+cluster-woordvoerder-, dode-flag-credit- en HP-berekeningsfuncties losstaand
+getest met realistische state, dynamische COMBAT-HP geverifieerd (122 bij
+kennis=90/herinnering=40, exact volgens de formule), volledige route tot en
+met `FIN_CREDITS` (geen keuzes meer, terecht), 0 console-fouten (enige 404
+was het nog niet gegenereerde COMBAT-portret, zoals verwacht bij elk nieuw
+hoofdstuk vóór de illustraties gemaakt zijn).
+
+**Bekende, niet-gerelateerde bevinding tijdens het bouwen**: `SP_TITLES`
+bevat in werkelijkheid alleen eretitels voor Hoofdstuk 1 t/m 9 (38 entries)
+— Hoofdstuk 10 t/m 29 hebben kennelijk nooit een `SP_TITLES`-entry gekregen,
+ondanks dat scènes daar wél naar `EERETITEL:`-id's verwijzen. Bestaande,
+losstaande gap, niet door dit werk veroorzaakt en hier niet gerepareerd —
+kandidaat voor een aparte, latere opschoonronde.
+
+**Openstaand**: `armor:ceremonieel` en `meester_der_herinnering` zijn puur
+informatief tot de Combat-bridge-bouwstap (§8/§6.1) de bijbehorende
+Battle Mode-bonustypes (`be_on_correct` e.a.) daadwerkelijk inbouwt — zelfde
+status als de bestaande `bewaarder_herinnering`.
+
+### 7.102 Finale uitgebreid met een losse, keuzevrije epiloog (2026-08-17)
+
+Op Gerbens verzoek: ná de Bekroning (het ceremoniële harnas + eretitel,
+§7.101) volgt nu een **losse epiloog** — puur doorklikbaar, geen enkele
+keuze meer, die de grootste keuzes uit de hele campagne terugleest en
+vertelt wat ze uiteindelijk betekenden. 54 scènes werden 63.
+
+**Startpunt is de Lethe-uitkomst uit de Finale zelf** (Gerbens expliciete
+instructie, met zijn eigen voorbeeldzin als richtlijn: "Je koos ervoor
+Lethe te begrijpen en te vergeven, en zij en Mnemosyne vertrokken hand in
+hand, als zusters..."). Nieuwe scène `FIN_EPILOOG_LETHE` leest
+`fin_tendency` + `fin_einde_variant` uit via `spFinaleEpiloogLethe()` en de
+geneste lookup `SP_FIN_EPILOOG_LETHE` (singleplayer-data.js) — **10
+varianten** (5 eindes × 2 sub-keuzes per einde), NIET vermenigvuldigd met
+taalspoor (dat was een tussentijdse vraag van Gerben — verduidelijkt: de
+Lethe-uitkomst en het taalspoor zijn twee onafhankelijke epiloog-regels,
+geen kruisproduct van 15).
+
+**Daarna, in vaste volgorde, elk als eigen scène met een dynamische
+tekst-token** (niet-voorwaardelijk geformuleerd, zelfde stijlregel als de
+Herinnering/Relatie-fases): `ch9_zijde` (Troje/Grieks — Gerbens eigen
+voorbeeld: "de geschiedenis niet alleen geschreven door de overwinnaars"),
+`ch8_zijde` (Achilles/Agamemnon), `taalspoor`, `ch1_lijn` (de allereerste
+keuze van de hele campagne, Midas/Athena/Prometheus), en de politieke
+zijde-keuzes van H19+H22 (Athene/Sparta + Ptolemaeus/Antigonos voor Grieks,
+Caesar/Pompeius + Octavianus/Antonius voor Latijn — gecombineerd tot één
+alinea per taalspoor via `spFinaleEpiloogPolitiek()`, die ontbrekende
+flags stil overslaat zodat dezelfde scène voor elk taalspoor werkt zonder
+REQUIRE-vertakking in de tekst zelf). Voor "beide"-spelers komen beide
+politieke alinea's na elkaar (zelfde taalspoor-splitspatroon als de
+Kennis-fase: `FIN_EPILOOG_GRIEKSE_POLITIEK` routeert door naar
+`FIN_EPILOOG_ROMEINSE_POLITIEK` bij `taalspoor=beide`, anders direct naar
+het slot).
+
+**Nieuwe registry**: 8 lookup-tabellen (`SP_FIN_EPILOOG_LETHE/_TROJE/
+_ACHILLES/_TAALSPOOR/_CH1_LIJN/_CH19_GRE/_CH22_GRE/_CH19_LAT/_CH22_LAT`,
+singleplayer-data.js) en twee nieuwe helperfuncties
+(`spFinaleEpiloogLethe()`, `spFinaleEpiloogPolitiek()`, singleplayer.js).
+1 IMAGE-hook toegevoegd aan `FIN_EPILOOG_LETHE`.
+
+**Validatie**: `node --check` slaagt op beide bestanden,
+`validate_chronica.js` blijft op 0 fouten. Combinatorische validator
+(taalspoor × tendency-tier): 63/63 scènes bereikbaar, 0 fouten. Losse
+resolver-sweep specifiek voor de nieuwe epiloog-tokens (alle geldige
+tendency/variant-combinaties × 3 ch1_lijn × 3 taalspoor × zijde-flags, 630
+combinaties): 0 fouten, geen `undefined`/lege string-lekken. Live in de
+browser (tijdelijk gekoppeld, daarna losgekoppeld): volledige doorloop van
+`FIN_BEKRONING` t/m `FIN_CREDITS` met een realistische combinatie van
+flags (beide talen, Trojaanse kant, Achilles-kant, Athene, Ptolemaeus,
+Caesar, Octavianus, hoge clementia) — elke epiloog-zin rendert het juiste,
+verwachte verhaal, 0 console-fouten.
+
+### 7.103 IMAGE ondersteunt nu `{token}`-syntax — 29 nieuwe, per-uitkomst plaatjes voor de eindes/epiloog (2026-08-17)
+
+Op Gerbens verzoek: elk van de vijf eindes én elk onderdeel van de nieuwe
+epiloog (§7.102) krijgt een eigen illustratie, met subtiele verschillen
+per uitkomst — "de speler ziet zo visueel wat hij gepresteerd heeft."
+
+**Technisch**: `spSceneImageHTML()` (singleplayer.js) resolvet de
+`IMAGE:`-sectie nu door `SpTextResolver.resolve()`, exact zoals `TEXT:` al
+deed — een gewone letterlijke bestandsnaam blijft ongewijzigd werken (geen
+`{...}` erin), maar een scène kan nu ook `IMAGE:\n{fin_epiloog_lethe_image}`
+schrijven en een ander plaatje tonen afhankelijk van de opgebouwde staat.
+Nieuwe lookup-tabellen (`SP_FIN_EPILOOG_*_IMAGE`, singleplayer-data.js) en
+zeven nieuwe resolver-cases (`SpTextResolver.lookup`).
+
+**29 nieuwe IMAGE-hooks**: de vijf `FIN_EINDE_*`-scènes (al losse scènes,
+dus vijf letterlijke bestandsnamen, geen token nodig), plus zeven
+epiloog-scènes met een dynamisch token — `FIN_EPILOOG_LETHE` (5 varianten,
+per tendency-tier — bewust NIET de 10 sub-keuze-varianten, dat zou de
+beeldenlast onnodig verdubbelen voor een verschil dat toch al in de tekst
+zit), `FIN_EPILOOG_TROJE` (2), `FIN_EPILOOG_ACHILLES` (2),
+`FIN_EPILOOG_TAALSPOOR` (3), `FIN_EPILOOG_CH1_LIJN` (3),
+`FIN_EPILOOG_GRIEKSE_POLITIEK` (4 — alle combinaties van `ch19_gre_zijde` ×
+`ch22_gre_zijde`), `FIN_EPILOOG_ROMEINSE_POLITIEK` (4, zelfde principe voor
+Latijn), en `FIN_EPILOOG_SLOT` (1, vast). Een taalspoor-only speler bereikt
+de "andere taal"-politiek-scène nooit (bevestigd via de bestaande
+combinatorische validator), dus de lege-string-fallback daar is onschadelijk
+gedrag, geen fout.
+
+**Validatie**: `node --check` slaagt op beide bestanden,
+`validate_chronica.js` blijft op 0 fouten. Live in de browser (tijdelijk
+gekoppeld, daarna losgekoppeld): IMAGE-resolutie getest over drie
+representatieve flag-combinaties × alle epiloog-scènes, correcte
+bestandsnamen voor elke bereikbare combinatie.
+
 ---
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd

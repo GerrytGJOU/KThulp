@@ -44,6 +44,54 @@
 > (`ch28_wing_*_klaar`, `ch28_eerste_vleugel`, `ch28_laatste_vleugel`) die
 > GEEN gewone dode flags zijn: ze zijn expliciet bedoeld om door
 > toekomstige hoofdstukken/NPC's gelezen te worden.
+>
+> **VERVOLG (2026-08-16, Hoofdstuk 29 "De Rivier Lethe", geschreven maar
+> nog niet gekoppeld)**: sluit twee van de vier hierboven nog open
+> flavour-flags alsnog af, als korte opsomming (niet als volledige scène,
+> op Gerbens instructie) in `CH29_GRE_004`/`CH29_LAT_004` —
+> `ch25_gre_filosofie` (Herakleitos-of-Parmenides) en
+> `ch26_lat_marcus_aurelius` (de vraag bij zijn kampvuur). Daarnaast krijgt
+> `ch21_lat_verres_stijl` (al "opgelost" via H28's aggregaat-vleugel) hier
+> een tweede, specifieke opsomming-callback, net als het niet-in-dit-
+> bestand-getrackte `ch7_vrijer_gesteund` (vrijers van Helena). **Nog
+> steeds open**: `ch25_gre_eratosthenes`, `ch25_lat_graffiti`,
+> `ch26_lat_vespasianus`, en alle vijf H27-flags — geen van deze paste bij
+> H29's "gemiste pad"-thema (het zijn beloningen voor iets wat de speler
+> WEL deed, niet iets wat gemist werd), blijven dus kandidaat voor de
+> Finale zelf. H29 introduceert zelf vier nieuwe flags die GEEN gewone
+> dode flags zijn maar bewuste leesvlaggen/eenmalige-scène-markers:
+> `ch29_taalspoor_gemist`, `ch1_lijn`-afgeleide reflectie zonder eigen
+> nieuwe flag, `ch29_gre_opsomming_gezien`, `ch29_lat_opsomming_gezien` —
+> puur om te voorkomen dat een toekomstig hoofdstuk deze opsomming-scènes
+> per ongeluk dubbel toont; er is geen verdere payoff voor gepland. Zie
+> Chronica.md §7.99 voor het volledige verslag.
+>
+> **VERVOLG (2026-08-17, de Finale "Chronica Classica", geschreven maar nog
+> niet gekoppeld)**: sluit de laatste vier nog open flavour-flags alsnog af
+> via `FIN_HER_002`'s `{fin_dode_flags_credit}`-token —
+> `ch25_gre_eratosthenes`, `ch25_lat_graffiti`, `ch26_lat_vespasianus`, en
+> alle vijf H27-flags (`ch27_lat_bestuursidee`, `ch27_lat_prijzenedict`,
+> `ch27_lat_milvische_brug`, `ch27_gre_milvische_brug`, `ch27_lat_route`).
+> **Dit bestand is hiermee, op de bewust-open-gelaten items na (zie hieronder
+> nog steeds open), volledig afbetaald.** De Finale introduceert zelf een
+> handvol nieuwe flags die GEEN gewone dode flags zijn:
+> `fin_kennis_gre`/`fin_kennis_lat`/`fin_kennis_score` (taal-eindtoets-
+> resultaat, gelezen door `spFinaleLetheHp()`), `fin_herinnering_score`
+> (berekend door `spFinaleHerinneringScore()`, zelfde doel),
+> `fin_einde_variant` (pure flavour, gelezen door `{fin_einde_variant_line}`
+> ná de COMBAT), `fin_tendency` (berekend door `spComputeTendencyTier()`,
+> stuurt de vijf-eindes-router) en `fin_ceremonieel_harnas` (gelezen door
+> `SP_AVATAR_STORY_UNLOCKS`). Geen van deze hoort ooit in de generieke
+> dode-flags-lijst thuis — ze zijn stuk voor stuk bewuste, al-uitgelezen
+> mechaniek-vlaggen van de Finale zelf. Zie Chronica.md §7.101 voor het
+> volledige verslag. **Nog steeds open** (bewust, geen "gemiste pad"-thema
+> en geen "wat ging goed"-thema, dus nergens een natuurlijke plek): de
+> resterende dode NPC's uit de Odyssee/Aeneis-cast (Achilles/Dido/Kirke/
+> Telemachus/Eurycleia/Penelope/Iokaste/Ariadne, zie
+> [[chronica-resterende-dode-npcs-lethe-finale]] in memory) — als Gerben die
+> alsnog wil meenemen, is dat een bewuste toevoeging aan een al bestaande
+> Finale-scène (bijvoorbeeld de Helden-cluster in `FIN_REL_001`), geen apart
+> nieuw hoofdstuk.
 
 ## Categorie 1 — Aanpak-/route-flags (welke stat/benadering koos de speler)
 

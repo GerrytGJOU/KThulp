@@ -169,6 +169,15 @@ const SP_TITLES = [
     ds:"Zag een daad bij een altaar die de terugkeer van een hele vloot zal vervloeken.", bonus:null },
   { id:"ch9_val_van_troje", nm:"Getuige van de Val van Troje", icon:"laurel", cat:"chronica", secret:true,
     ds:"Zag hoe tien jaar beleg eindigde — niet door kracht, maar door een list.", bonus:null },
+  // Finale (Chronica.md §7.101/§6.1): de zwaarste bonus-eretitel van de hele
+  // campagne, bewust voorbehouden aan 100%-voltooiing (Hoofdstuk 1 t/m 29 +
+  // Finale). `bonus.type:"be_on_correct"` bestaat, net als de andere
+  // kroniekschrijver_boek_*-bonussen uit §6.1, nog nergens in battle.js —
+  // puur informatief tot de Combat-bridge-bouwstap dat alsnog inbouwt.
+  { id:"meester_der_herinnering", nm:"Meester der Herinnering", icon:"star", cat:"chronica", secret:true,
+    ds:"Voltooide heel Chronica Classica, van de eerste voetstap in Latium tot de laatste rivier.",
+    bonus:{ scope:["battle","boss","totalwar"], type:"be_on_correct", val:1,
+            desc:"+1 BE op elk juist antwoord, niet alleen snelle" } },
 ];
 
 /* ---- CAMPAGNEKAART — Proloog + 28 hoofdstukken (5 "Boeken"), gesynchroniseerd
@@ -525,18 +534,20 @@ const SP_CAMPAIGN = [
     status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-16) — door Claude geschreven (geen Gemini-concept). 42 scènes. Niet-lineaire hub-structuur (zelfde patroon als H24's museum, [DONE:vlag]) met vier vrij te bezoeken vleugels — 'De Weg Hierheen' (H1-6-aggregaat, cultuurneutraal), 'Wat Je Koos te Bewaren' (H24/H25-onthoud-of-laat-los-reeks, taalspoor-gated), 'Mensen die Je Onthield' (NPC-herkenning/politieke scheuren/mythologische afsluitingen H15-21, taalspoor-gated), 'Stemmen die Nooit Zwegen' (RELATION-payoffs: Athena Grieks, Stoïcijnse lijn+Hadrianus Latijn). Volgorde-tracking: `ch28_eerste_vleugel`/`ch28_laatste_vleugel` onthouden welke vleugel als eerste/laatste werd voltooid, leesbaar door toekomstige hoofdstukken. Cameo van Pamphile retroactief toegevoegd aan Hoofdstuk 23 (CH23_LAT_011B, al gekoppeld/live) als voorwaarde voor deze onthulling. SP_CH28_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS — en op de (later te bouwen) visuele plattegrond-uitbreiding van de vleugel-navigatie." },
   { id:"ch29", nr:29, boek:"VI — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
     periode:"Mythologische Eindwereld",
-    verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren — de laatste beproeving voor het orakel zelf zich toont.",
+    verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren — de laatste beproeving voor het orakel zelf zich toont. UITGEBREID 2026-08-16 (Gerbens verzoek): dit hoofdstuk is de schaduwzijde van Hoofdstuk 28 — waar Mnemosyne liet zien wat de speler bewaarde, laat Lethe zien wat de speler miste, negeerde, of waarin hij faalde (nooit content die nog niet gebouwd is, uitsluitend paden die het spel echt aanbood). Opent met Lethes oprechte bedankje voor de H24/H25-loslaat-keuzes, gevolgd door een reeks 'wat had kunnen zijn'-momenten (Hoofdstuk 1's ongekozen lijn, het ongelopen taalspoor, en zeven grote/kleinere zijde-keuzes verspreid door de hele campagne), en eindigt met een gedeeltelijke onthulling van Lethes eigen motieven — haar volledige 'vergeten hoort erbij'-filosofie blijft bewust gereserveerd voor de Finale.",
     pallas:"Eigen content", minerva:"Eigen content",
-    grammatica:"Integratie Grieks & Latijn",
-    personages:"Lethe",
-    zijverhalen:"Orpheus (S-tier — jong en hoopvol in Hoofdstuk 5, zijn volledige Eurydice-tragedie al verteld in Hoofdstuk 11; hier zijn daadwerkelijke dood, verscheurd door Thracische Maenaden, hoofd en lier nog zingend de rivier af — zie geheugen chronica-orpheus-verplaatst-h11) & Persephone/Demeter (A-tier, hun eigen ontvoeringsmythe — granaatappelpitten, de seizoenen) — beide onderwereld-verhalen" },
+    grammatica:"Herhaling, PER taalspoor gescheiden (zelfde regel als Hoofdstuk 28 — geen gemengd Grieks/Latijn)",
+    personages:"Lethe, Orpheus (als schim/mede-verteller)",
+    zijverhalen:"Orpheus (S-tier — jong en hoopvol in Hoofdstuk 5, zijn volledige Eurydice-tragedie al verteld in Hoofdstuk 11; UITGEBREID 2026-08-16: op Gerbens verzoek verschijnt hij hier niet via zijn zingende hoofd, maar als schim die als mede-verteller door het hoofdstuk gidst — hij probeerde iets verlorens terug te halen en faalde, het thema van dit hoofdstuk in menselijke vorm) & Persephone/Demeter (A-tier, hun eigen ontvoeringsmythe — granaatappelpitten, de seizoenen — hier verteld door Orpheus zelf) — beide onderwereld-verhalen",
+    status:"GEBOUWD EN GEVALIDEERD, NOG NIET GEKOPPELD (2026-08-16) — door Claude geschreven (geen Gemini-concept). 47 scènes. Cultuurneutraal begin (Lethes bedankje, Persephone/Demeter, Hoofdstuk 1's ongekozen lijn, het ongelopen taalspoor, `ch9_zijde` Troje/Grieks, `ch8_zijde` Achilles/Agamemnon), dan taalspoor-gesplitst voor de resterende zijde-keuzes: Grieks (`ch19_gre_zijde` met geneste `ch19_gre_ath_sicilie`, `ch22_gre_zijde`, `ch21_gre_socrates_stemming`, plus een korte opsomming van de vrijer-keuze en Herakleitos/Parmenides), Latijn (`ch19_lat_zijde` met geneste `ch19_lat_pom_samenzwering`, `ch22_lat_zijde`, `ch20_lat_aquilifer`+`ch20_lat_sabinus_cotta`, plus een korte opsomming van Marcus Aurelius' vraag en Cicero tegen Verres). Elke zijde-vertakking is met de hand geverifieerd in singleplayer-data.js vóór het schrijven (scène-IDs en flag-waarden bevestigd). Sluit af met Lethes gedeeltelijke onthulling. Nieuwe registry: 3 CODEX-entries, 1 nieuw souvenir, 4 nieuwe VOCAB-id's. 7 IMAGE-hooks proactief toegevoegd tijdens het schrijven. Combinatorische validator (alle flag-domeinen doorlopen): 47/47 scènes bereikbaar, 0 fouten. Live in de browser getest (tijdelijk gekoppeld, daarna losgekoppeld): volledige doorloop als 'beide'-speler, 0 exceptions, 0 console-fouten. SP_CH29_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
   { id:"finale", nr:30, boek:"VI — De Laatste Herinnering", type:"finale", nm:"Chronica Classica",
     periode:"Tijdloos",
     thema:"De strijd tegen de Vergetelheid",
     verhaal:"Alles wat je onderweg hebt geleerd komt hier samen. Aan het einde van de reis wacht het orakel zelf — en een waarheid die alles in een ander licht zet.",
     grammatica:"Eindtoets van alle grammatica en taalvaardigheid",
     gameplay:"Alle Codex-kennis wordt gebruikt",
-    eindboodschap:"Wie de taal bewaart, bewaart de geschiedenis" },
+    eindboodschap:"Wie de taal bewaart, bewaart de geschiedenis",
+    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-17) — door Claude geschreven op basis van een uitgebreide brainstorm met Gerben. 63 scènes (was 54, uitgebreid met een losse, puur doorklikbare epiloog ná de Bekroning: leest de grootste keuzes van de hele campagne terug — de Lethe-uitkomst uit de Finale zelf als startpunt, dan ch9_zijde/ch8_zijde/taalspoor/ch1_lijn/H19+H22-zijdekeuzes, elk via een dynamische tekst-token, zie SP_FIN_EPILOOG_* in singleplayer-data.js en spFinaleEpiloogLethe()/spFinaleEpiloogPolitiek() in singleplayer.js. Chronica.md §7.102). Structuur: Kronos onthult zichzelf als de verslagen Titaan (framing 'redt vooral zichzelf, maar oprecht ook de rest') → Kennis-fase (taal-eindtoets: doeltaal-slotalinea met 2 ingebedde vervagende-woorden-puzzels, taalspoor-gesplitst) → Herinnering-fase (Kleio, Mnemosynes dochter en Muze van de Geschiedenis, onthult zichzelf als de onzichtbare schrijfster van 'de Kroniek'; credits voor de resterende open dode flags uit H25-27) → Relatie-fase (drie RELATION-clusters — mythologische helden, klassiek Griekenland, Rome — elk met een niet-voorwaardelijk geformuleerde woordvoerder; Hermes' en Pamphiles eigen, persoonlijke onthullingen). Vijf eindes (neutraal/medium/hoog × clementia/severitas), bepaald door de t/m Hoofdstuk 19 opgebouwde Clementia/Severitas-stand (spComputeTendencyTier, singleplayer.js) — de Finale zelf zet GEEN nieuwe CLEMENTIA/SEVERITAS-tags, leest alleen uit. Eén gedeelde COMBAT-kern (fin_lethe) voor alle vijf eindes, dynamische HP (±20%, zachte schaling) op basis van hoeveel de speler in de Kennis/Herinnering-fases 'onthield'. RELATION-woordvoerder per cluster via gemiddelde-per-gelegenheid (score/touchpoints, ondergrens 2, tiebreak op ruwe score) i.p.v. ruwe hoogste score, om structurele bevoordeling van NPC's met veel touchpoints (Cicero) te voorkomen. Bekroning: ceremonieel harnas (`armor:ceremonieel`) + eretitel `meester_der_herinnering`. Nieuwe registry: 6 CODEX-entries, 4 PUZZLE-entries (hergebruikte, al bekende VOCAB), SP_FINALE_CLUSTERS/SP_FINALE_DODE_FLAGS_CREDITS/SP_FIN_EPILOOG_* (singleplayer-data.js) en zes nieuwe helperfuncties (singleplayer.js). 9 IMAGE-hooks proactief toegevoegd. Combinatorische validator (taalspoor × tendency, 15 combinaties): 63/63 scènes bereikbaar, 0 fouten; losse resolver-sweep van de epiloog-tokens (630 combinaties van tendency/variant/ch1_lijn/taalspoor/zijde-flags): 0 fouten. Live in de browser getest (tijdelijk gekoppeld, daarna losgekoppeld): volledige doorloop als 'beide'-speler t/m FIN_CREDITS, inclusief de volledige epiloog-keten, beide taal-eindtoetsen opgelost, dynamische COMBAT-HP geverifieerd (122 bij kennis=90/herinnering=40, exact volgens formule), 0 console-fouten (enige 404 was het nog niet gegenereerde COMBAT-portret, zoals verwacht). SP_FINALE_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
 ];
 
 /* ---- MYTHENCANON — S/A/B-tier prioriteitenlijst + de nog ontbrekende
@@ -1845,6 +1856,26 @@ const SP_PUZZLES = {
     vraag:"Vier losse fragmenten van Echo's verhaal liggen door elkaar. Zet ze in de juiste volgorde.",
     tiles:["Νάρκισσος καλὸς ἦν.","Ἠχὼ αὐτὸν ἐφίλει.","αὐτὸς δὲ ἑαυτὸν μόνον ἐφίλει.","ἀμφότεροι ἀπώλοντο."],
     hint:"Eerst wie Narcissus was, dan wie hem liefhad, dan wat hijzelf deed, en dan pas het einde." },
+
+  // ---- Finale — de vervagende-woorden-puzzels binnen de doeltaal-slotalinea
+  // (Chronica.md §7.101). Beide woorden per taalspoor zijn al lang bekende,
+  // hoogfrequente signaalwoorden (H28/29-vocab), bewust geen nieuwe stof.
+  puzzle_fin_gre_deuro: { type:"typed-greek",
+    vraag:"Het eerste woord van je verklaring lost al op. Typ met het Griekse toetsenbord δεῦρο — 'hierheen', het woord waarmee je zegt dat je bewust bent teruggekeerd.",
+    antwoord:"δεῦρο",
+    hint:"Je kende dit woord al uit Hoofdstuk 29 — Lethe gebruikte het zelf, aan de oever van de rivier." },
+  puzzle_fin_gre_heneka: { type:"typed-greek",
+    vraag:"Een tweede woord vervaagt — het hart van je verklaring, 'omwille van'. Typ met het Griekse toetsenbord ἕνεκα.",
+    antwoord:"ἕνεκα",
+    hint:"Ook dit woord ken je al — het verscheen eerder in de campagne bij een reden, een omwille-van-moment." },
+  puzzle_fin_lat_iterum: { type:"typed-latin",
+    vraag:"Het eerste woord van je verklaring lost al op. Typ iterum — 'opnieuw', het woord waarmee je zegt dat je, ondanks alles, weer hier bent.",
+    antwoord:"iterum",
+    hint:"Je kende dit woord al uit Hoofdstuk 29." },
+  puzzle_fin_lat_utique: { type:"typed-latin",
+    vraag:"Een tweede woord vervaagt — het hart van je verklaring, 'zeker, in elk geval'. Typ utique.",
+    antwoord:"utique",
+    hint:"Ook dit woord ken je al uit Hoofdstuk 29." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -2977,6 +3008,20 @@ const SP_CODEX_ENTRIES = {
     tekst:"De Boodschapper van Chronos, die de speler door de hele campagne begeleidde, blijkt Pamphile van Epidaurus te zijn — de geschiedschrijfster die je, zonder het te beseffen, al eens ontmoette aan het hof van Nero. Athena vroeg haar mee te helpen omdat wijsheid die niemand meer kent, geen wijsheid meer is; Hermes hielp omdat Athena het vroeg — al vermoedt hij zelf dat hij ook eigen redenen had." },
   codex_lethe_geintroduceerd: { cat:"mythologie", titel:"Lethe",
     tekst:"Lethe, personificatie van vergetelheid en dochter van Eris (de godin van de tweedracht, verantwoordelijk voor de appel die tot de Trojaanse Oorlog leidde), verschijnt voor het eerst in de Bibliotheek van Mnemosyne. Ze komt niet als een schurk, maar als iemand die oprecht anders denkt over wat herinneren waard is." },
+  codex_persephone_demeter: { cat:"mythologie", titel:"Persephone en Demeter",
+    tekst:"Hades ontvoert Persephone, dochter van de oogstgodin Demeter, naar de onderwereld. Demeter weigert daarna nog te laten groeien, tot Zeus ingrijpt — maar omdat Persephone in de onderwereld granaatappelpitten at, moet ze een deel van elk jaar bij Hades blijven. Dat jaarlijkse afscheid en die terugkeer verklaren, volgens de mythe, het ontstaan van de seizoenen." },
+  codex_lethe_motieven: { cat:"mythologie", titel:"Wat Lethe Werkelijk Doet",
+    tekst:"Lethe beweert zelf niets te verzinnen: vergeten bestond al lang voor zij een naam kreeg, ze is er simpelweg 'aanwezig' bij elk moment dat iets voorgoed verloren gaat. Haar eigen, diepere beweegreden houdt ze nog voor zich — behalve dat ze, voor het eerst in lange tijd, oprecht geïnteresseerd lijkt in een sterveling die zo hard tegen haar ingaat." },
+  codex_kronos_titaan: { cat:"mythologie", titel:"Kronos, de Verslagen Titaan",
+    tekst:"Vóór Zeus en de Olympiërs heerste Kronos, koning van de Titanen — tot de Titanenstrijd (Titanomachia) hem versloeg en zijn tijdperk beëindigde. Sindsdien wordt zijn naam vaak, ten onrechte, verward met Chronos, de personificatie van de Tijd zelf. Chronos Classica's eigen 'Boodschapper van Chronos' bleek deze verwarring bewust in stand te houden." },
+  codex_kleio_muze: { cat:"mythologie", titel:"Kleio, Muze van de Geschiedenis",
+    tekst:"Kleio, dochter van Mnemosyne (het geheugen) en Zeus, is de Muze van de Geschiedenis — degene die vorm geeft aan wat haar moeder alleen maar bewaart. Ze verschijnt pas bij de allerlaatste confrontatie, alsof ze de hele reis in stilte heeft afgewacht voor ze zichzelf toont." },
+  codex_kroniek_kleio: { cat:"geschiedenis", titel:"De Kroniek, Herzien",
+    tekst:"Wat de speler zijn hele reis lang 'de Kroniek' noemde — het overzicht van elke keuze, elke titel, elk moment — blijkt geen automatisch logboek te zijn geweest. Kleio schreef het zelf, regel voor regel, zonder dat iemand het wist." },
+  codex_hermes_motief: { cat:"geschiedenis", titel:"Hermes' Eigen Reden",
+    tekst:"Hermes hielp Athena niet enkel omdat zij het vroeg (Hoofdstuk 28). Zijn diepere reden, tot de Finale verzwegen: als boodschapper van de goden is hij zelf zelden meer dan een middel — deze ene keer wilde hij deel uitmaken van iets groters dan de boodschap die hij droeg." },
+  codex_pamphile_eigen_stem: { cat:"geschiedenis", titel:"Pamphile, Voor Zichzelf",
+    tekst:"Pamphile van Epidaurus, de historica achter 'de Boodschapper van Chronos' (Hoofdstuk 28), spreekt in de Finale voor het eerst niet namens haar rol maar namens zichzelf: van haar eigen, echte geschiedwerken overleefden in werkelijkheid nauwelijks meer dan een handvol citaten bij latere auteurs." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -3487,6 +3532,9 @@ const SP_SOUVENIRS = {
   // Hoofdstuk 28 "De Bibliotheek van Mnemosyne" — concept, nog niet gekoppeld.
   souvenir_bibliotheek_mnemosyne: { nm:"Een Glazen Potje met Rook en een Spiegelfragment", icon:"📜", img:"souvenir_bibliotheek_mnemosyne.png",
     caption:"Een klein glazen potje met vage, bewegende rook naast een piepklein, verzilverd spiegelfragment — niet wat je zag, maar wíé het al die tijd bewaarde." },
+  // Hoofdstuk 29 "De Rivier Lethe" — concept, nog niet gekoppeld.
+  souvenir_rivier_lethe: { nm:"Een Leeg Flesje en een Lier-snaar", icon:"🎻", img:"souvenir_rivier_lethe.png",
+    caption:"Een klein, leeg flesje, alsof het ooit iets bevatte dat er nu niet meer in zit, naast één verweerde lier-snaar — niet wat je bewaarde, maar wat er nooit was om te bewaren." },
 };
 
 /* ---- COMBAT-BRIDGE — Chronica's eigen gevechtssysteem (§8 in Chronica.md,
@@ -3519,6 +3567,211 @@ const SP_SOUVENIRS = {
 // (bossbattle.js). Zonder deze laag zou je alleen de romp met stompjes zien,
 // nooit de koppen. Aantal nog "levende" koppen = spCombatAliveHeads(),
 // dezelfde ceil((hp/maxHp)*7)-formule als bmBossAliveHeads() daar.
+/* ---- FINALE — RELATION-clusters en "dode flags"-credits (Chronica.md
+   §7.101). SP_FINALE_CLUSTERS: per NPC `t` = het aantal RELATION-touchpoints
+   dat die NPC over de hele campagne heeft (handmatig geteld) — nodig voor
+   spFinaleSpokesperson() se gemiddelde-per-gelegenheid-berekening
+   (singleplayer.js), zodat een eenmalige zwaargewicht (Cleopatra, t niet
+   opgenomen — te weinig touchpoints om eerlijk mee te wegen, blijft dus wél
+   gewoon lid van de cluster maar komt nooit als woordvoerder naar voren)
+   niet structureel verliest van een veelvoorkomende figuur (Cicero, t:8).
+   Elke `lines`-entry is een kant-en-klare, NIET-voorwaardelijke zin (Gerbens
+   expliciete stijlregel) — geen "als je..." maar "je deed... dus nu...". ---- */
+const SP_FINALE_CLUSTERS = {
+  helden: { nm:"De Helden van Troje en de Thuisreis",
+    fallback:"Uit de wereld van Troje en de lange thuisreis komt niemand met naam naar voren — maar de herinnering aan die oorlog blijft, ook zonder gezicht.",
+    npcs:[ {id:"priamus",t:4},{id:"andromache",t:2},{id:"cassandra",t:2},{id:"deiphobos",t:2},
+           {id:"menelaos",t:5},{id:"diomedes",t:4},{id:"odysseus",t:2},{id:"nestor",t:2},{id:"medea",t:2} ],
+    lines:{
+      priamus:"Priamus, de oude koning van Troje, herinnert zich hoe je zijn stad met menselijkheid behandelde, en treedt naar voren.",
+      andromache:"Andromache, Hectors weduwe, stond aan jouw kant toen ze alles kwijt was, en staat er nu weer.",
+      cassandra:"Cassandra, wier waarschuwingen niemand ooit geloofde, geloofde jou wél — en gelooft nu opnieuw in je.",
+      deiphobos:"Deïphobus, Priamus' zoon, sluit zich aan, zijn oude wantrouwen allang vervangen door iets dat op respect lijkt.",
+      menelaos:"Menelaos, koning van Sparta, staat klaar — de man wiens grootste verlies jij ooit met zorg behandelde.",
+      diomedes:"Diomedes, een van de felste Griekse helden, komt zonder aarzeling — een oud bondgenootschap dat nooit is verwaterd.",
+      odysseus:"Odysseus, de listigste van alle Grieken, brengt zijn eigen scherpzinnigheid mee, precies zoals hij ooit met jou deelde.",
+      nestor:"Nestor, de oude raadsman die zich alles herinnert, brengt de wijsheid van drie generaties mee.",
+      medea:"Medea, wier gunst men zelden lichtvaardig wint, staat vreemd genoeg aan jouw kant.",
+    } },
+  grieken: { nm:"De Wijzen en Vorsten van het Klassieke Griekenland",
+    fallback:"Uit het klassieke en Hellenistische Griekenland meldt zich niemand met naam — de wijsheid van die wereld blijft niettemin met je meegereisd.",
+    npcs:[ {id:"socrates",t:4},{id:"alkibiades",t:5},{id:"plato",t:2},{id:"herodotos",t:2},
+           {id:"ptolemaeus",t:2},{id:"kassandros",t:2},{id:"doris",t:2} ],
+    lines:{
+      socrates:"Socrates, wiens vragen je nooit ontweek, staat erbij — nog altijd meer geïnteresseerd in de vraag dan in het antwoord.",
+      alkibiades:"Alkibiades, briljant en onvoorspelbaar als altijd, kiest ditmaal, zonder aarzelen, jouw kant.",
+      plato:"Plato brengt de wijsheid mee die hij ooit van Socrates erfde — en die jij hem zag doorgeven.",
+      herodotos:"Herodotos, de Vader van de Geschiedenis, is er om zelf te zien hoe dit verhaal eindigt.",
+      ptolemaeus:"Ptolemaeus, Alexanders eigen generaal, stuurt de kracht van een dynastie die tot Cleopatra zou reiken.",
+      kassandros:"Kassandros, ooit een van de felste Diadochen, is deze keer geen tegenstander maar een bondgenoot.",
+      doris:"Doris, wier kleine daden van moed jij nooit vergat, staat er — bewijs dat niet elke held een naam hoeft te hebben.",
+    } },
+  romeinen: { nm:"Rome, van Republiek tot Keizerrijk",
+    fallback:"Uit Rome, van Republiek tot Keizerrijk, treedt niemand met naam naar voren — het rijk zelf blijft evengoed deel van wat je opbouwde.",
+    npcs:[ {id:"cicero",t:8},{id:"caesar",t:4},{id:"pompeius",t:3},{id:"brutus",t:3},{id:"cassius",t:3},
+           {id:"octavianus",t:7},{id:"antonius",t:5},{id:"octavia",t:3},{id:"vitruvius",t:2},
+           {id:"hadrianus",t:2},{id:"marcus_aurelius",t:2},{id:"theodora",t:2},{id:"spartacus",t:2},{id:"fortunata",t:2} ],
+    lines:{
+      cicero:"Cicero, Romes grootste redenaar, brengt zijn welsprekendheid mee — ditmaal niet tegen jou gericht, maar vóór je.",
+      caesar:"Caesar, wiens genade jij ooit onderging, staat nu zelf klaar om iets terug te geven.",
+      pompeius:"Pompeius de Grote voegt zich bij de rest, zijn oude rivaliteit met Caesar allang voorbij.",
+      brutus:"Brutus, stichter van vrijheid en verrader van een vriend tegelijk, kiest hier zonder twijfel.",
+      cassius:"Cassius, altijd de scherpste geest van de twee samenzweerders, staat erbij.",
+      octavianus:"Octavianus, ooit een jongen die zijn oom moest opvolgen, komt nu als een man die weet wat hij aan je te danken heeft.",
+      antonius:"Marcus Antonius, wiens grootste liefde en grootste nederlaag jij van dichtbij zag, staat erbij.",
+      octavia:"Octavia, wier trouw nooit werd beantwoord zoals ze verdiende, treedt naar voren — nu wél gezien.",
+      vitruvius:"Vitruvius brengt zijn drie beginselen mee: wat sterk is, wat werkt, en wat de moeite waard is om te zien.",
+      hadrianus:"Hadrianus, bouwer van grenzen én bruggen, staat klaar met de rust van een keizer die alles al heeft gezien.",
+      marcus_aurelius:"Marcus Aurelius brengt de stilte van een stoïcijn mee — precies wat dit moment nodig heeft.",
+      theodora:"Theodora, van de arena tot de troon, laat zien dat niemand ooit te ver gevallen is om terug te komen.",
+      spartacus:"Spartacus, die ooit vocht voor de vrijheid van iedereen die niets had, vecht nu voor jou.",
+      fortunata:"Fortunata, wier eigen kleine wereld jij ooit zag en waardeerde, is er — bewijs dat grootsheid geen rijkdom nodig heeft.",
+    } },
+};
+// Resterende open flavour-only flags uit DODE_FLAGS_FINALE.md (Categorie
+// 8-10, na de H28/29-payoffs) — elke entry credit één eerder gemaakte keuze,
+// ongeacht welke waarde precies gekozen werd (bij ch27_lat_bestuursidee/
+// _route zijn alle waarden evenveel "goed", puur flavour).
+const SP_FINALE_DODE_FLAGS_FALLBACK = "Er zijn geen losse, kleinere herinneringen meer om op te halen — alles wat nog open stond, is inmiddels al ergens anders in dit verhaal teruggekomen.";
+const SP_FINALE_DODE_FLAGS_CREDITS = [
+  { flag:"ch25_gre_eratosthenes", value:"goed", tekst:"je Eratosthenes' berekening van de omtrek van de aarde juist doorgrondde" },
+  { flag:"ch25_lat_graffiti", value:"goed", tekst:"je de graffiti van Pompeii correct wist te duiden" },
+  { flag:"ch26_lat_vespasianus", value:"goed", tekst:"je begreep waarom Vespasianus' munten geen geur van hun herkomst dragen" },
+  { flag:"ch27_lat_prijzenedict", value:"goed", tekst:"je Diocletianus' prijzenedict feilloos doorzag" },
+  { flag:"ch27_lat_milvische_brug", value:"goed", tekst:"je Constantijns visioen bij de Milvische Brug in het Latijn navertelde" },
+  { flag:"ch27_gre_milvische_brug", value:"goed", tekst:"je hetzelfde visioen ook in Eusebius' Griekse woorden herkende" },
+  { flag:"ch27_lat_bestuursidee", value:"generaals", tekst:"je voorstelde het rijk te verdelen over vertrouwde generaals, nog vóór Diocletianus zelf met de Tetrarchie kwam" },
+  { flag:"ch27_lat_bestuursidee", value:"opvolger", tekst:"je voorstelde één sterke opvolger te trainen, nog vóór Diocletianus zelf met de Tetrarchie kwam" },
+  { flag:"ch27_lat_bestuursidee", value:"provincies", tekst:"je voorstelde de provincies zelf meer macht te geven, nog vóór Diocletianus zelf met de Tetrarchie kwam" },
+  { flag:"ch27_lat_route", value:"weg", tekst:"je op die winterse tocht de langere maar veiligere weg langs de rivier koos" },
+  { flag:"ch27_lat_route", value:"bergpas", tekst:"je op die winterse tocht de kortere, riskantere bergpas waagde" },
+];
+
+// Korte, sfeervolle nazin bij FIN_COMBAT_NA — welke van de twee sub-keuzes
+// per einde-tier de speler nam (Chronica.md §7.101), puur flavour, geen
+// verdere flag-gevolgen.
+const SP_FINALE_EINDE_VARIANT_LINES = {
+  overweging:        "Je zei dat afwegen ook een vorm van moed is — en meende het.",
+  alsnog_kant:        "Voor het eerst in lange tijd koos je, hier ter plekke, wél een duidelijke kant.",
+  clem_med_zacht:     "Je bleef zacht, ook nu het er echt toe deed.",
+  clem_med_grens:     "Je liet zien dat zachtheid ook grenzen mag stellen.",
+  clem_hoog_trouw:    "Je bleef, tot het uiterste, trouw aan wat je altijd al koos.",
+  clem_hoog_twijfel:  "Voor het eerst liet je een sprankje twijfel toe over je eigen zachtheid.",
+  sev_med_streng:     "Je bleef streng, precies zoals je onderweg altijd was.",
+  sev_med_mild:       "Je liet, heel even, een sprankje clementia toe.",
+  sev_hoog_trouw:     "Je bleef, tot het uiterste, trouw aan de hardheid die je altijd koos.",
+  sev_hoog_twijfel:   "Voor het eerst liet je een sprankje twijfel toe over je eigen hardheid.",
+};
+
+// ---- Losse epiloog (Chronica.md §7.102): leest de grootste keuzes van de
+// hele campagne terug, met de Lethe-uitkomst als startpunt (Gerbens
+// verzoek). Puur doorklikbaar, geen keuzes meer — zie FIN_EPILOOG_* in
+// SP_FINALE_CNS. Elke tekst is een kant-en-klare, niet-voorwaardelijke zin.
+const SP_FIN_EPILOOG_FALLBACK = "Er is, dankzij jou, niets van deze herinnering verloren gegaan.";
+const SP_FIN_EPILOOG_LETHE = {
+  clementia_hoog: {
+    clem_hoog_trouw:   "Je koos ervoor Lethe te begrijpen en te vergeven. Zij en Mnemosyne vertrokken samen, niet als vijanden maar bijna als zusters — en de balans tussen onthouden en vergeten bleef, dankzij die verzoening, intact.",
+    clem_hoog_twijfel: "Je koos ervoor Lethe te begrijpen en te vergeven, al liet je voor het eerst ook je eigen twijfel toe. Zij en Mnemosyne vertrokken samen, bijna als zusters — de balans bleef intact, al droeg jij voortaan een sprankje onzekerheid met je mee.",
+  },
+  clementia_medium: {
+    clem_med_zacht:  "Je bleef mild tegenover Lethe, zonder haar volledig te vergeven. Zij trok zich terug, niet verzoend maar ook niet vernederd — de balans bleef overeind, al zonder de warmte van een echte verzoening.",
+    clem_med_grens:  "Je toonde begrip voor Lethe, maar stelde voor het eerst ook een duidelijke grens. Zij trok zich terug, met iets dat op respect leek voor wie jij bleek te zijn.",
+  },
+  neutraal: {
+    overweging:   "Je koos geen duidelijke kant tegenover Lethe — geen verzoening, geen overwinning, alleen een stilzwijgende erkenning dat vergeten en onthouden voorlopig naast elkaar zullen blijven bestaan.",
+    alsnog_kant:  "Je woog lang af tegenover Lethe, maar koos uiteindelijk toch een duidelijke kant — een late beslissing die de balans net iets deed doorslaan.",
+  },
+  severitas_medium: {
+    sev_med_streng: "Je bleef streng tegenover Lethe, zonder haar de ruimte te geven zich te verklaren. Zij trok zich terug, teruggedrongen maar niet verslagen — de dreiging van het vergeten blijft, ergens, bestaan.",
+    sev_med_mild:   "Je bleef grotendeels streng tegenover Lethe, maar liet heel even mildheid toe. Zij trok zich terug, teruggedrongen, met iets dat op verbazing leek.",
+  },
+  severitas_hoog: {
+    sev_hoog_trouw:   "Je bleef, tot het uiterste, onbewogen tegenover Lethe — geen verzoening, geen mededogen. Zij trok zich terug, tijdelijk overwonnen door iemand die weigerde ook maar iets van dit verhaal op te geven.",
+    sev_hoog_twijfel: "Je bleef grotendeels onbewogen tegenover Lethe, maar liet voor het eerst een sprankje twijfel toe over je eigen hardheid. Zij trok zich terug, tijdelijk overwonnen, terwijl jij achterbleef met een vraag die je nog niet had beantwoord.",
+  },
+};
+const SP_FIN_EPILOOG_TROJE = {
+  troje:   "Jouw keuze om de Trojaanse Oorlog van Trojaanse kant mee te maken, zorgde ervoor dat ook het perspectief van de verliezer bewaard bleef — de geschiedenis werd niet alleen geschreven door de overwinnaars.",
+  grieks:  "Jouw keuze om de Trojaanse Oorlog van Griekse kant mee te maken, zorgde ervoor dat het perspectief van de overwinnaars in volle scherpte bewaard bleef — inclusief alles wat die overwinning heeft gekost.",
+};
+const SP_FIN_EPILOOG_ACHILLES = {
+  achilles:  "Je stond aan Achilles' kant tijdens zijn wrok — zijn twijfel, zijn woede en uiteindelijk zijn verzoening met Priamus bleven daardoor bewaard als een verhaal over één held, niet alleen over een leger.",
+  agamemnon: "Je stond aan Agamemnons kant tijdens de twist met Achilles — het gewicht van het bevelhebberschap zelf, de last van duizend schepen die op één man rustten, bleef daardoor bewaard.",
+};
+const SP_FIN_EPILOOG_TAALSPOOR = {
+  grieks: "Je koos het Grieks als jouw taal door heel deze reis — de taal van Homeros, Herodotos en Plato blijft daardoor, dankzij jou, springlevend.",
+  latijn: "Je koos het Latijn als jouw taal door heel deze reis — de taal van Vergilius, Cicero en Livius blijft daardoor, dankzij jou, springlevend.",
+  beide:  "Je hield vast aan beide talen door heel deze reis — zowel de Griekse als de Latijnse stem van de klassieke wereld blijven daardoor, dankzij jou, springlevend.",
+};
+const SP_FIN_EPILOOG_CH1_LIJN = {
+  A: "Je allereerste keuze in dit hele verhaal was Midas helpen van zijn gouden vloek te verlossen — een verhaal over hebzucht en de grenzen van een wens, dat je sindsdien altijd bent blijven dragen.",
+  B: "Je allereerste keuze in dit hele verhaal was getuige zijn van Athena's geboorte — de godin die je sindsdien, hoofdstuk na hoofdstuk, als mentor bent blijven volgen.",
+  C: "Je allereerste keuze in dit hele verhaal was Prometheus bijstaan toen hij het vuur — en de hoop — aan de mensheid gaf, een daad van opoffering die de hele reis daarna heeft gekleurd.",
+};
+const SP_FIN_EPILOOG_CH19_GRE = {
+  athene: "In de Peloponnesische Oorlog koos je de kant van Athene — de stad van redenaars, toneelschrijvers en filosofen, wier cultuur de wereld nog eeuwenlang zou blijven beïnvloeden.",
+  sparta: "In de Peloponnesische Oorlog koos je de kant van Sparta — de stad van discipline en soberheid, een tegenwicht dat de geschiedenis evengoed nodig had om compleet te zijn.",
+};
+const SP_FIN_EPILOOG_CH22_GRE = {
+  ptolemaeus: "Na Alexanders dood koos je de kant van Ptolemaeus — de dynastie die uiteindelijk tot Cleopatra zou leiden, de laatste vonk van het Hellenistische Egypte.",
+  antigonos:  "Na Alexanders dood koos je de kant van Antigonos — een van de felste Diadochen, wiens strijd om Alexanders erfenis liet zien hoe broos zo'n immens rijk zonder zijn stichter kon zijn.",
+};
+const SP_FIN_EPILOOG_CH19_LAT = {
+  caesar:    "In de Romeinse Burgeroorlog koos je de kant van Caesar — de man wiens ambitie de Republiek zou breken, maar ook de weg zou banen voor het latere Keizerrijk.",
+  pompeius:  "In de Romeinse Burgeroorlog koos je de kant van Pompeius en de Senaat — de laatste serieuze poging om de oude Republiek overeind te houden.",
+};
+const SP_FIN_EPILOOG_CH22_LAT = {
+  octavianus: "In de strijd na Caesars dood koos je de kant van Octavianus — de man die uiteindelijk als Augustus de eerste Romeinse keizer zou worden.",
+  antonius:   "In de strijd na Caesars dood koos je de kant van Marcus Antonius — wiens verbond met Cleopatra een heel andere toekomst voor Rome had kunnen betekenen.",
+};
+
+// ---- Dynamische IMAGE-bestandsnamen voor de eindes + epiloog (Chronica.md
+// §7.103, Gerbens verzoek): elke tabel geeft de bestandsnaam terug die bij
+// die specifieke uitkomst hoort — spSceneImageHTML (singleplayer.js)
+// resolvet `{token}` in een IMAGE:-sectie nu net als in TEXT. De vijf
+// FIN_EINDE_*-scènes hebben hier GEEN entry nodig: dat zijn al vijf losse
+// scènes, dus gewoon vijf losse letterlijke bestandsnamen in de CNS zelf.
+const SP_FIN_EPILOOG_IMAGE_FALLBACK = "";
+const SP_FIN_EPILOOG_LETHE_IMAGE = {
+  clementia_hoog:   "fin_epiloog_lethe_clementia_hoog.png",
+  clementia_medium: "fin_epiloog_lethe_clementia_medium.png",
+  neutraal:         "fin_epiloog_lethe_neutraal.png",
+  severitas_medium: "fin_epiloog_lethe_severitas_medium.png",
+  severitas_hoog:   "fin_epiloog_lethe_severitas_hoog.png",
+};
+const SP_FIN_EPILOOG_TROJE_IMAGE = {
+  troje:  "fin_epiloog_troje_kant.png",
+  grieks: "fin_epiloog_troje_grieken.png",
+};
+const SP_FIN_EPILOOG_ACHILLES_IMAGE = {
+  achilles:  "fin_epiloog_achilles_wrok.png",
+  agamemnon: "fin_epiloog_agamemnon_bevel.png",
+};
+const SP_FIN_EPILOOG_TAALSPOOR_IMAGE = {
+  grieks: "fin_epiloog_taalspoor_grieks.png",
+  latijn: "fin_epiloog_taalspoor_latijn.png",
+  beide:  "fin_epiloog_taalspoor_beide.png",
+};
+const SP_FIN_EPILOOG_CH1_LIJN_IMAGE = {
+  A: "fin_epiloog_ch1_midas.png",
+  B: "fin_epiloog_ch1_athena.png",
+  C: "fin_epiloog_ch1_prometheus.png",
+};
+// Sleutel: `${ch19_gre_zijde}_${ch22_gre_zijde}` — vier combinaties.
+const SP_FIN_EPILOOG_GRIEKSE_POLITIEK_IMAGE = {
+  athene_ptolemaeus: "fin_epiloog_gre_athene_ptolemaeus.png",
+  athene_antigonos:  "fin_epiloog_gre_athene_antigonos.png",
+  sparta_ptolemaeus: "fin_epiloog_gre_sparta_ptolemaeus.png",
+  sparta_antigonos:  "fin_epiloog_gre_sparta_antigonos.png",
+};
+// Sleutel: `${ch19_lat_zijde}_${ch22_lat_zijde}` — vier combinaties.
+const SP_FIN_EPILOOG_ROMEINSE_POLITIEK_IMAGE = {
+  caesar_octavianus:   "fin_epiloog_lat_caesar_octavianus.png",
+  caesar_antonius:     "fin_epiloog_lat_caesar_antonius.png",
+  pompeius_octavianus: "fin_epiloog_lat_pompeius_octavianus.png",
+  pompeius_antonius:   "fin_epiloog_lat_pompeius_antonius.png",
+};
+
 const SP_COMBAT_ENEMIES = {
   nemeische_leeuw: { nm:"De Nemeïsche Leeuw", icon:"🦁", img:"assets/chronica/combat/nemeische_leeuw.png", hp:40,
     intro:"Een leeuw met een huid die geen enkel wapen kan doorboren — Herakles zal hem uiteindelijk met blote handen moeten wurgen." },
@@ -3576,6 +3829,13 @@ const SP_COMBAT_ENEMIES = {
   // ---- Hoofdstuk 26 — Een Rijk in Crisis ----
   bataven: { nm:"De Bataafse Opstandelingen", icon:"🛡️", img:"assets/chronica/combat/bataven.png", hp:60,
     intro:"Julius Civilis' strijders, thuis in elk moeras en elke rivierarm langs de Rijn — een tegenstander die vecht op een slagveld dat geen enkel Romeins handboek beschrijft." },
+
+  // ---- Finale — De Rivier Lethe, opnieuw en voorgoed ----
+  // hp is een BASISwaarde: spStartCombatFromScene herberekent 'm via
+  // spFinaleLetheHp() (±20%, "zachte schaling", Chronica.md §7.101) op basis
+  // van fin_kennis_score/fin_herinnering_score — nergens anders gebeurt dat.
+  fin_lethe: { nm:"Lethe", icon:"🌊", img:"assets/chronica/combat/fin_lethe.png", hp:130,
+    intro:"Geen monster, geen leger — alleen Lethe zelf, rustig, onvermurwbaar, en vastberadener dan ooit sinds jullie eerste ontmoeting bij de rivier." },
 };
 
 /* ---- RACE-BRIDGE-DATA — zie de toelichting bij SP_RACE/spStartRaceFromScene
@@ -4667,6 +4927,11 @@ const SP_VOCAB_ENTRIES = {
   latijn_immo:    { taal:"latijn", woord:"immo",    betekenis:"integendeel, sterker nog" },
   latijn_scilicet:{ taal:"latijn", woord:"scilicet",betekenis:"namelijk, natuurlijk" },
   latijn_tantum:  { taal:"latijn", woord:"tantum",  betekenis:"slechts, zoveel" },
+  // ---- Hoofdstuk 29 "De Rivier Lethe" — concept, nog niet gekoppeld.
+  grieks_deuro:   { taal:"grieks", woord:"δεῦρο", transcript:"deûro", betekenis:"hierheen" },
+  latijn_dein:    { taal:"latijn", woord:"dein",    betekenis:"daarna, vervolgens" },
+  latijn_utique:  { taal:"latijn", woord:"utique",  betekenis:"zeker, in elk geval" },
+  latijn_iterum:  { taal:"latijn", woord:"iterum",  betekenis:"opnieuw, weer" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -4973,6 +5238,11 @@ const SP_AVATAR_STORY_UNLOCKS = {
   // (Chronica.md §5.1 equip-routekaart).
   "armor:zwaar":  { flag:"armor_zwaar_schild_ovaal" },
   "schild:ovaal": { flag:"armor_zwaar_schild_ovaal" },
+  // Finale: het ceremoniële harnas, geschonken door Kronos/Athena/Mnemosyne
+  // bij het voltooien van heel Chronica Classica (Chronica.md §7.101,
+  // FIN_BEKRONING) — het echte 100%-sluitstuk, los van welk van de vijf
+  // eindes de speler kreeg.
+  "armor:ceremonieel": { flag:"fin_ceremonieel_harnas" },
 };
 
 /* ---- PROLOOG: "DE BOER VAN LATIUM" (scène-ID's PRO_###) ----
@@ -23403,8 +23673,8 @@ FLAG:
 ch18_gre_naxos_gezien=true
 
 CHOICES:
-* "Een bondgenootschap zonder dwang houdt nooit stand tegen een vijand als Perzië." -> CH18_GRE_003
-* "Een bondgenoot die niet meer vrijwillig blijft, is eigenlijk geen bondgenoot meer." -> CH18_GRE_003
+* "Een bondgenootschap zonder dwang houdt nooit stand tegen een vijand als Perzië." [SEVERITAS] -> CH18_GRE_003
+* "Een bondgenoot die niet meer vrijwillig blijft, is eigenlijk geen bondgenoot meer." [CLEMENTIA] -> CH18_GRE_003
 
 END
 
@@ -23796,8 +24066,8 @@ VOCAB:
 latijn_dictator, latijn_proscriptio
 
 CHOICES:
-* "Wie zo terugslaat, wordt precies wat hij ooit bestreed." -> CH18_LAT_009
-* "Een oorlog eindigt pas echt als de tegenstander geen kracht meer heeft om terug te vechten." -> CH18_LAT_009
+* "Wie zo terugslaat, wordt precies wat hij ooit bestreed." [CLEMENTIA] -> CH18_LAT_009
+* "Een oorlog eindigt pas echt als de tegenstander geen kracht meer heeft om terug te vechten." [SEVERITAS] -> CH18_LAT_009
 
 END
 
@@ -24743,8 +25013,8 @@ Cassius
 Hij gaf ons het leven terug, dat is waar. Maar hij nam ons eerst de Republiek af om het te kunnen geven. Sta je aan onze kant, of aan de zijne?
 
 CHOICES:
-* Sluit je aan bij de samenzwering -> CH19_LAT_POM_006_MEE
-* Weiger — de genade die je kreeg, verdient geen dolk terug -> CH19_LAT_POM_006_WEIGER
+* Sluit je aan bij de samenzwering [SEVERITAS] -> CH19_LAT_POM_006_MEE
+* Weiger — de genade die je kreeg, verdient geen dolk terug [CLEMENTIA] -> CH19_LAT_POM_006_WEIGER
 
 END
 
@@ -30754,3 +31024,1864 @@ Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ve
 END
 `.trim();
 
+/* ---- HOOFDSTUK 29 "De Rivier Lethe" — CONCEPT, NOG NIET GEKOPPELD.
+   Zelfde afspraak als H21-28 vóór hun goedkeuring. Door Claude geschreven.
+
+   ONTWERPBESLISSINGEN (Gerbens verzoek, 2026-08-16):
+   1. Grammatica: zelfde regel als H28 — taalsporen strikt gescheiden,
+      geen gemengd Grieks/Latijn.
+   2. De schaduwzijde van H28: waar Mnemosyne liet zien wat de speler
+      BEWAARDE, laat Lethe zien wat de speler MISTE, NEGEERDE of waarin hij
+      FAALDE — nooit content die simpelweg nog niet gebouwd is (dat zou
+      oneerlijk zijn tegenover de speler), uitsluitend paden die het spel
+      echt aanbood en die de speler zelf niet koos.
+   3. Opent met Lethe's oprechte bedankje voor de "onthoud of laat
+      los"-keuzes uit H24/H25 waarbij de speler koos iets LOS TE LATEN —
+      dat is letterlijk haar eigen werk.
+   4. Orpheus verschijnt als SCHIM (niet zijn zingende hoofd) en dient als
+      mede-verteller, zelfde functie als Livius (H23) of de Caesar-schim
+      (H20) — hij probeerde iets verlorens terug te halen en faalde, het
+      thema van dit hele hoofdstuk in menselijke vorm.
+   5. Persephone/Demeter als zijverhaal, door Orpheus verteld (een tweede
+      onderwereldverhaal, cultuurneutraal geplaatst vóór de taalspoor-
+      splitsing).
+   6. Volledige, geverifieerde lijst van "gemiste paden" (elke scène-ID
+      hieronder is met de hand gecontroleerd in singleplayer-data.js vóór
+      het schrijven van dit hoofdstuk):
+      - Cultuurneutraal (vóór de splitsing): `ch1_lijn` (de twee
+        niet-gekozen lijnen van Hoofdstuk 1), het ongelopen taalspoor zelf,
+        `ch9_zijde` (Troje/Grieks, groot), `ch8_zijde` (Achilles/
+        Agamemnon, groot).
+      - Grieks: `ch19_gre_zijde` (Athene/Sparta, groot, met een geneste
+        `ch19_gre_ath_sicilie`-subvertakking indien van toepassing),
+        `ch22_gre_zijde` (Ptolemaeus/Antigonos, groot),
+        `ch21_gre_socrates_stemming` (uitgebreider).
+      - Latijn: `ch19_lat_zijde` (Caesar/Pompeius, groot, met een geneste
+        `ch19_lat_pom_samenzwering`-subvertakking indien van toepassing),
+        `ch22_lat_zijde` (Octavianus/Antonius, groot),
+        `ch20_lat_aquilifer` + `ch20_lat_sabinus_cotta` (uitgebreider).
+      - Kort opgesomd, NIET uitgewerkt (Gerbens expliciete keuze): de
+        vrijers van Helena (`ch7_vrijer_gesteund`, Grieks) en Herakleitos/
+        Parmenides (`ch25_gre_filosofie`, Grieks) in één Griekse
+        opsomming-zin; de vraag aan Marcus Aurelius
+        (`ch26_lat_marcus_aurelius`) en Cicero tegen Verres
+        (`ch21_lat_verres_stijl`) in één Latijnse opsomming-zin.
+   7. Lethe's motieven/acties komen hier gedeeltelijk aan het licht (wat ze
+      doet, en een persoonlijke, niet per se kwaadaardige beweegreden) —
+      haar volledige "vergeten hoort erbij"-filosofie blijft bewust
+      gereserveerd voor de Finale. */
+const SP_CH29_CNS = `
+=== SCENE: CH29_000 ===
+
+TITLE:
+De Rivier Lethe
+
+TEXT:
+De bibliotheek verdwijnt, en met haar elk gevoel van vaste grond. Je staat aan de oever van een rivier die niet stroomt zoals water hoort te stromen — trager, grijzer, alsof ze zelf ook liever zou vergeten waarom ze stroomt. Aan de overkant, half zichtbaar in de nevel, staat Lethe te wachten, rustig, alsof ze al wist dat je zou komen.
+
+Naast je verschijnt nog iemand — een schim, doorschijnend maar herkenbaar: een man met een lier die niet meer klinkt. Orpheus, die deze rivier al eens eerder overstak, op zoek naar iemand die hij niet mocht meenemen.
+
+DIALOGUE:
+Orpheus
+Ik ken deze oever beter dan wie ook. Ik kom met je mee, als je dat wilt — al heb ik zelf, hier, weinig reden om trots te zijn.
+
+IMAGE:
+ch29_lethe_orpheus_rivier.png
+
+CHOICES:
+* Bedank Orpheus voor zijn gezelschap -> CH29_001
+
+END
+
+=== SCENE: CH29_001 ===
+
+TITLE:
+Wat Losgelaten Werd
+
+TEXT:
+Lethe steekt de rivier over zonder ook maar nat te worden, en blijft dicht bij je staan — dichterbij dan je had verwacht, en minder dreigend dan je had gevreesd.
+
+DIALOGUE:
+Lethe
+Voor ik begin waarvoor ik hier ben, wil ik je eerst bedanken. Bij dat gebroken beeld in Rhodos, bij de brief van Plinius, bij dat aquaduct en die tempel van Vrede — telkens er iemand je vroeg of je iets wilde onthouden of laten gaan, en jij koos om los te laten, was dat mijn werk. Ik weet dat je toen niet wist waarom die vraag steeds terugkwam. Nu weet je het.
+
+Ze zwijgt even, oprecht. "Dank je. Niet iedereen durft dat."
+
+CHOICES:
+* Vraag waar ze mee verdergaat -> CH29_002
+
+END
+
+=== SCENE: CH29_002 ===
+
+TITLE:
+Een Moeder die Haar Dochter Terugkreeg — Voor de Helft
+
+TEXT:
+Orpheus, alsof hij de stilte niet kan verdragen, begint zelf een verhaal — een ander onderwereldverhaal, niet het zijne. "Ken je Persephone nog? Demeters dochter, door Hades meegenomen naar zijn rijk. Demeter, godin van de oogst, weigerde daarna nog te laten groeien, ergens ook — heel de wereld verhongerde met haar mee, tot Zeus zelf ingreep."
+
+"Persephone mocht terug," gaat hij verder, "maar niet helemaal. Ze had, in de onderwereld, een granaatappel gegeten — een paar pitten maar — en wie hier eet, moet blijven. Een compromis dus: een deel van het jaar bij haar moeder, de rest bij Hades. Zo ontstonden, zeggen de mensen nu, de seizoenen zelf."
+
+DIALOGUE:
+Orpheus
+Zij kreeg tenminste een deel terug. Ik kreeg niets — ik keek om, één keer te vroeg, en Eurydice was voorgoed weg. Dat weet je al, van hoofdstukken geleden.
+
+IMAGE:
+ch29_persephone_demeter.png
+
+CODEX:
+codex_persephone_demeter
+
+CHOICES:
+* Ga verder -> CH29_003
+
+END
+
+=== SCENE: CH29_003 ===
+
+TITLE:
+Twee Wegen die Je Niet Nam
+
+TEXT:
+Lethe wijst naar de mist boven de rivier, en daarin vormen zich, heel even, twee vage schimmen — een gouden roos, een bronzen splinter, een kooltje vuur, elk net iets anders gekleurd dan wat je je herinnert.
+
+DIALOGUE:
+Lethe
+Helemaal aan het begin van je reis koos je één weg van de drie die er waren — Midas, of Athena's geboorte, of Prometheus. De andere twee bestonden net zo echt. Ze wachtten alleen nooit op jou.
+
+Ze laat de schimmen weer vervagen. "Dat is geen verwijt. Dat is gewoon wat kiezen betekent."
+
+IMAGE:
+ch29_ongekozen_lijnen.png
+
+CHOICES:
+* Ga verder -> CH29_004
+
+END
+
+=== SCENE: CH29_004 ===
+
+TITLE:
+De Taal die Je Niet Sprak
+
+TEXT:
+Lethe kijkt je aandachtig aan, alsof ze precies weet welk antwoord ze gaat krijgen nog voor ze de vraag stelt.
+
+DIALOGUE:
+Lethe
+En je taal — Grieks, Latijn, of allebei? Wat je ook koos, er was een hele kant van dit verhaal die je nooit hebt gehoord.
+
+CHOICES:
+* [REQUIRE:taalspoor=grieks] -> CH29_004_GRIEKS
+* [REQUIRE:taalspoor=latijn] -> CH29_004_LATIJN
+* [REQUIRE:taalspoor=beide] -> CH29_004_BEIDE
+
+END
+
+=== SCENE: CH29_004_GRIEKS ===
+
+TITLE:
+Rome, Ongehoord
+
+TEXT:
+"Jij koos Grieks," zegt Lethe. "Wat dat betekent, is dat er ergens, in dit zelfde verhaal, een heel Rome bestond dat jij nooit hebt gezien — geen Romulus, geen Caesar, geen Cicero, geen keizer die je zag opkomen of vallen. Niet omdat het er niet was. Omdat jij er niet was."
+
+FLAG:
+ch29_taalspoor_gemist=latijn
+
+CHOICES:
+* Ga verder -> CH29_005
+
+END
+
+=== SCENE: CH29_004_LATIJN ===
+
+TITLE:
+Griekenland, Ongehoord
+
+TEXT:
+"Jij koos Latijn," zegt Lethe. "Wat dat betekent, is dat er ergens, in dit zelfde verhaal, een heel Griekenland bestond dat jij nooit hebt gezien — geen Zeus die zijn dochter baarde, geen Odysseus die naar huis probeerde te komen, geen Sokrates die de gifbeker dronk. Niet omdat het er niet was. Omdat jij er niet was."
+
+FLAG:
+ch29_taalspoor_gemist=grieks
+
+CHOICES:
+* Ga verder -> CH29_005
+
+END
+
+=== SCENE: CH29_004_BEIDE ===
+
+TITLE:
+Bijna Alles
+
+TEXT:
+Lethe glimlacht, bijna geamuseerd. "Jij koos allebei. Slim — of gewoon te koppig om iets los te laten voor je het zelfs maar had gezien." Ze haalt haar schouders op. "Zelfs jij hebt iets gemist, hoor. Je weet het alleen nog niet."
+
+FLAG:
+ch29_taalspoor_gemist=geen
+
+CHOICES:
+* Ga verder -> CH29_005
+
+END
+
+=== SCENE: CH29_005 ===
+
+TITLE:
+De Muren, of het Strand
+
+TEXT:
+"Er was één avond," zegt Lethe, "waarop ik je zelf, via de Boodschapper, dwong te kiezen — geen taalspoor, geen toeval, gewoon een echte keuze, voorgoed. Troje viel, en jij koos van waar je het zag."
+
+DIALOGUE:
+Orpheus
+Ik herinner me die nacht ook — al was ik toen nog niet eens geboren. Zulke verhalen blijven hangen, generaties lang.
+
+CHOICES:
+* [REQUIRE:ch9_zijde=troje] -> CH29_005_TROJE
+* [REQUIRE:ch9_zijde=grieks] -> CH29_005_GRIEKS
+
+END
+
+=== SCENE: CH29_005_TROJE ===
+
+TITLE:
+Wat het Strand Zag
+
+TEXT:
+"Jij koos de muren," zegt Lethe. "Dus je zag Andromache smeken, van binnenuit. Wat je niet zag: het Griekse kamp die laatste nacht, de list die ze aan het bouwen waren, de twijfel bij de mannen die wisten dat ze ofwel voorgoed naar huis zouden gaan, ofwel voorgoed hier zouden sterven. Die kant bestond net zo goed. Jij was er niet bij."
+
+IMAGE:
+ch29_troje_gemiste_kant.png
+
+FLAG:
+ch29_troje_gemist=strand
+
+CHOICES:
+* Ga verder -> CH29_006
+
+END
+
+=== SCENE: CH29_005_GRIEKS ===
+
+TITLE:
+Wat de Muren Zagen
+
+TEXT:
+"Jij koos het strand," zegt Lethe. "Dus je zag de list zelf ontstaan, van buitenaf. Wat je niet zag: Troje van binnenuit, in haar laatste, onwetende dagen — Andromache die haar man smeekte binnen te blijven, een stad die niet wist dat ze haar laatste ochtend al achter zich had. Die kant bestond net zo goed. Jij was er niet bij."
+
+FLAG:
+ch29_troje_gemist=muren
+
+CHOICES:
+* Ga verder -> CH29_006
+
+END
+
+=== SCENE: CH29_006 ===
+
+TITLE:
+De Tent, of de Legerraad
+
+TEXT:
+"Nog eentje, voor we uit elkaar gaan," zegt Lethe. "Bij de Wrok van Achilles koos je een kant — zijn tent, of Agamemnons raad."
+
+CHOICES:
+* [REQUIRE:ch8_zijde=achilles] -> CH29_006_ACHILLES
+* [REQUIRE:ch8_zijde=agamemnon] -> CH29_006_AGAMEMNON
+
+END
+
+=== SCENE: CH29_006_ACHILLES ===
+
+TITLE:
+Wat de Raad Besliste
+
+TEXT:
+"Jij koos Achilles," zegt Lethe, "dus je zag zijn woede van binnenuit, elke reden waarom hij zich terugtrok. Wat je nooit zag: hoe Agamemnon en de rest van het leger, zonder hun beste krijger, zelf probeerden te overleven — de beslissingen, de angst, de pogingen om het zonder hem te redden. Ook dat verhaal bestond, elke dag dat Achilles in zijn tent bleef zitten."
+
+CHOICES:
+* Steek de rivier verder over [REQUIRE:taalspoor!=latijn] -> CH29_GRE_001
+* Steek de rivier verder over [REQUIRE:taalspoor=latijn] -> CH29_LAT_001
+
+END
+
+=== SCENE: CH29_006_AGAMEMNON ===
+
+TITLE:
+Wat de Tent Zag
+
+TEXT:
+"Jij koos Agamemnon," zegt Lethe, "dus je zag het leger van buitenaf proberen te overleven. Wat je nooit zag: Achilles' eigen tent, zijn woede van binnenuit, de reden waarom hij weigerde nog te vechten voor mannen die hem niet respecteerden. Ook dat verhaal bestond, elke dag dat het leger zonder hem verder moest."
+
+CHOICES:
+* Steek de rivier verder over [REQUIRE:taalspoor!=latijn] -> CH29_GRE_001
+* Steek de rivier verder over [REQUIRE:taalspoor=latijn] -> CH29_LAT_001
+
+END
+
+=== SCENE: CH29_GRE_001 ===
+
+TITLE:
+Athene, of Sparta
+
+TEXT:
+Lethe volgt je naar de Griekse oever van de rivier — Orpheus blijft, zwijgend, dicht bij je in de buurt.
+
+"Bij de scheuring van de Delisch-Attische Zeebond koos je een kant: Athene, of Sparta."
+
+VOCAB:
+grieks_deuro, grieks_prin, grieks_heneka
+
+CHOICES:
+* [REQUIRE:ch19_gre_zijde=athene] -> CH29_GRE_001_ATHENE
+* [REQUIRE:ch19_gre_zijde=sparta] -> CH29_GRE_001_SPARTA
+
+END
+
+=== SCENE: CH29_GRE_001_ATHENE ===
+
+TITLE:
+Wat Sparta Zag
+
+TEXT:
+"Jij koos Athene," zegt Lethe, "dus je zag de Sicilische Expeditie van Atheense kant — inclusief, misschien, of je zelf meevoer. Wat je nooit zag: hoe Sparta die jaren beleefde, de kant die uiteindelijk won, de overwegingen van mannen die niet in Athene woonden."
+
+CHOICES:
+* [REQUIRE:ch19_gre_ath_sicilie=meegevaren] -> CH29_GRE_001_SICILIE_GEBLEVEN
+* [REQUIRE:ch19_gre_ath_sicilie=gebleven] -> CH29_GRE_001_SICILIE_MEEGEVAREN
+* Ga verder -> CH29_GRE_002
+
+END
+
+=== SCENE: CH29_GRE_001_SICILIE_GEBLEVEN ===
+
+TITLE:
+Wat Blijven Betekend Had
+
+TEXT:
+"En binnen die keuze," voegt Lethe eraan toe, "voer je zelf mee met de Sicilische Expeditie. Wat je niet zag: hoe het was om in Athene te blijven, wachtend op nieuws van een vloot die, zoals de geschiedenis al weet, nooit meer thuiskwam."
+
+CHOICES:
+* Ga verder -> CH29_GRE_002
+
+END
+
+=== SCENE: CH29_GRE_001_SICILIE_MEEGEVAREN ===
+
+TITLE:
+Wat Meevaren Betekend Had
+
+TEXT:
+"En binnen die keuze," voegt Lethe eraan toe, "bleef je zelf in Athene. Wat je niet zag: de tocht zelf, de hoop waarmee de vloot vertrok, en het langzame besef aan boord dat de expeditie op een ramp zou uitlopen."
+
+CHOICES:
+* Ga verder -> CH29_GRE_002
+
+END
+
+=== SCENE: CH29_GRE_001_SPARTA ===
+
+TITLE:
+Wat Athene Zag
+
+TEXT:
+"Jij koos Sparta," zegt Lethe. "Wat je nooit zag: Athene's eigen kant van deze jaren — de Sicilische Expeditie, de vloot die uitvoer met alle hoop van de stad aan boord, en wat er gebeurde met wie er wel of niet aan boord ging. Dat hele verhaal bestond, aan de andere kant van dezelfde oorlog."
+
+CHOICES:
+* Ga verder -> CH29_GRE_002
+
+END
+
+=== SCENE: CH29_GRE_002 ===
+
+TITLE:
+Ptolemaeus, of Antigonos
+
+TEXT:
+"Later," zegt Lethe, "na Alexanders dood, koos je opnieuw een kant — Ptolemaeus in Alexandrië, of Antigonos in zijn oorlog voor eenheid."
+
+CHOICES:
+* [REQUIRE:ch22_gre_zijde=ptolemaeus] -> CH29_GRE_002_PTOLEMAEUS
+* [REQUIRE:ch22_gre_zijde=antigonos] -> CH29_GRE_002_ANTIGONOS
+
+END
+
+=== SCENE: CH29_GRE_002_PTOLEMAEUS ===
+
+TITLE:
+Wat Antigonos Zag
+
+TEXT:
+"Jij koos Alexandrië," zegt Lethe, "de Bibliotheek, de rustige kant van een verscheurd rijk. Wat je nooit zag: Antigonos' eigen strijd om het hele rijk weer één te maken — een oorlog die, zoals je inmiddels weet, uiteindelijk faalde, maar die hij met evenveel overtuiging voerde als jij Ptolemaeus' kant koos."
+
+CHOICES:
+* Ga verder -> CH29_GRE_003
+
+END
+
+=== SCENE: CH29_GRE_002_ANTIGONOS ===
+
+TITLE:
+Wat Ptolemaeus Zag
+
+TEXT:
+"Jij koos Antigonos," zegt Lethe, "de strijd voor een rijk dat nooit meer heel zou worden. Wat je nooit zag: Ptolemaeus' eigen keuze om dat rijk juist niet meer heel te willen maken, en in plaats daarvan Alexandrië en zijn Bibliotheek op te bouwen — een ander soort overwinning, die jij nooit van dichtbij zag."
+
+CHOICES:
+* Ga verder -> CH29_GRE_003
+
+END
+
+=== SCENE: CH29_GRE_003 ===
+
+TITLE:
+Vrij, of Veroordeeld
+
+TEXT:
+"Eén keer," zegt Lethe, "stemde je zelf mee over Socrates' lot."
+
+CHOICES:
+* [REQUIRE:ch21_gre_socrates_stemming=vrij] -> CH29_GRE_003_VRIJ
+* [REQUIRE:ch21_gre_socrates_stemming=veroordeeld] -> CH29_GRE_003_VEROORDEELD
+
+END
+
+=== SCENE: CH29_GRE_003_VRIJ ===
+
+TITLE:
+Wat de Aanklagers Zagen
+
+TEXT:
+"Jij stemde voor vrijspraak," zegt Lethe, "dus je zag Crito, Socrates' laatste gesprek over waarom vluchten geen optie was. Wat je nooit zag: het perspectief van Anytus en Meletus zelf, zijn aanklagers — waarom zij, oprecht of niet, geloofden dat Athene zonder hem beter af zou zijn."
+
+CHOICES:
+* Ga verder -> CH29_GRE_004
+
+END
+
+=== SCENE: CH29_GRE_003_VEROORDEELD ===
+
+TITLE:
+Wat Crito Zag
+
+TEXT:
+"Jij stemde voor veroordeling," zegt Lethe, "dus je zag het door de ogen van zijn aanklagers. Wat je nooit zag: Crito's eigen, laatste gesprek met Socrates in de cel — zijn aanbod om te ontsnappen, en Socrates' eigen, kalme weigering."
+
+CHOICES:
+* Ga verder -> CH29_GRE_004
+
+END
+
+=== SCENE: CH29_GRE_004 ===
+
+TITLE:
+Nog Twee, Kort
+
+TEXT:
+Lethe telt op haar vingers, bijna terloops. "En er waren nog kleinere momenten — welke vrijer van Helena je steunde, vóór de hele oorlog begon. Voor wie je koos in het dispuut tussen Herakleitos en Parmenides, over verandering en het onveranderlijke. Kleine keuzes, maar elk daarvan sloot ergens een andere deur."
+
+FLAG:
+ch29_gre_opsomming_gezien=true
+
+CHOICES:
+* Ga verder -> CH29_GRE_EINDE
+
+END
+
+=== SCENE: CH29_GRE_EINDE ===
+
+TITLE:
+Wat Overblijft, Grieks Gezien
+
+TEXT:
+Lethe kijkt je lang aan, niet onvriendelijk. "Zoveel deuren, en jij hebt er maar door een handvol gelopen. Dat is niet erg — dat is gewoon hoe een leven, of een verhaal, werkt. Maar ik wilde dat je het zag, voor we verdergaan."
+
+CHOICES:
+* Ga verder [REQUIRE:taalspoor=grieks] -> CH29_ONTHULLING
+* Ga verder [REQUIRE:taalspoor=beide] -> CH29_LAT_001
+
+END
+
+=== SCENE: CH29_LAT_001 ===
+
+TITLE:
+Caesar, of Pompeius
+
+TEXT:
+Lethe volgt je naar de Latijnse oever van de rivier — Orpheus blijft, zwijgend, dicht bij je in de buurt.
+
+"Bij de burgeroorlog koos je een kant: Caesar, of Pompeius en de Senaat."
+
+VOCAB:
+latijn_iterum, latijn_dein, latijn_utique
+
+CHOICES:
+* [REQUIRE:ch19_lat_zijde=caesar] -> CH29_LAT_001_CAESAR
+* [REQUIRE:ch19_lat_zijde=pompeius] -> CH29_LAT_001_POMPEIUS
+
+END
+
+=== SCENE: CH29_LAT_001_CAESAR ===
+
+TITLE:
+Wat de Senaat Zag
+
+TEXT:
+"Jij koos Caesar," zegt Lethe, "dus je zag zijn Gallische en burgeroorlog-campagnes van zijn eigen kant. Wat je nooit zag: hoe de Senaat en Pompeius deze jaren beleefden — hun eigen overtuiging dat zij de Republiek verdedigden tegen een man die haar wilde afschaffen."
+
+CHOICES:
+* Ga verder -> CH29_LAT_002
+
+END
+
+=== SCENE: CH29_LAT_001_POMPEIUS ===
+
+TITLE:
+Wat Caesar Zag
+
+TEXT:
+"Jij koos Pompeius en de Senaat," zegt Lethe, "dus je zag de verdediging van de Republiek van binnenuit. Wat je nooit zag: Caesars eigen kant van zijn veroveringen en zijn burgeroorlog — en, alleen bereikbaar via jouw pad, of je meedeed aan de samenzwering tegen hem op de Iden van maart."
+
+CHOICES:
+* [REQUIRE:ch19_lat_pom_samenzwering=mee] -> CH29_LAT_001_SAMENZWERING_GEWEIGERD
+* [REQUIRE:ch19_lat_pom_samenzwering=geweigerd] -> CH29_LAT_001_SAMENZWERING_MEE
+* Ga verder -> CH29_LAT_002
+
+END
+
+=== SCENE: CH29_LAT_001_SAMENZWERING_GEWEIGERD ===
+
+TITLE:
+Wat Weigeren Betekend Had
+
+TEXT:
+"En binnen die keuze," voegt Lethe eraan toe, "koos je zelf mee te doen aan de moord op Caesar. Wat je niet zag: hoe het was om die dag te weigeren, aan de kant te blijven staan terwijl anderen de messen trokken."
+
+CHOICES:
+* Ga verder -> CH29_LAT_002
+
+END
+
+=== SCENE: CH29_LAT_001_SAMENZWERING_MEE ===
+
+TITLE:
+Wat Meedoen Betekend Had
+
+TEXT:
+"En binnen die keuze," voegt Lethe eraan toe, "weigerde je zelf mee te doen aan de moord op Caesar. Wat je niet zag: hoe het was om die dag wél mee te steken, deel te zijn van het moment dat de Republiek onherroepelijk veranderde."
+
+CHOICES:
+* Ga verder -> CH29_LAT_002
+
+END
+
+=== SCENE: CH29_LAT_002 ===
+
+TITLE:
+Octavianus, of Antonius
+
+TEXT:
+"Later," zegt Lethe, "na Caesars dood, koos je opnieuw een kant — Octavianus in Perusia, of loyaal blijven aan Antonius en Fulvia."
+
+CHOICES:
+* [REQUIRE:ch22_lat_zijde=octavianus] -> CH29_LAT_002_OCTAVIANUS
+* [REQUIRE:ch22_lat_zijde=antonius] -> CH29_LAT_002_ANTONIUS
+
+END
+
+=== SCENE: CH29_LAT_002_OCTAVIANUS ===
+
+TITLE:
+Wat Antonius Zag
+
+TEXT:
+"Jij koos Octavianus," zegt Lethe, "het beleg van Perusia van de winnende kant. Wat je nooit zag: hoe Fulvia en Antonius' aanhangers die belegering van binnenuit beleefden — de honger, de hoop, en uiteindelijk de nederlaag die jij alleen van buitenaf zag."
+
+CHOICES:
+* Ga verder -> CH29_LAT_003
+
+END
+
+=== SCENE: CH29_LAT_002_ANTONIUS ===
+
+TITLE:
+Wat Octavianus Zag
+
+TEXT:
+"Jij bleef loyaal aan Antonius," zegt Lethe, "en zag Perusia van binnenuit belegerd worden. Wat je nooit zag: Octavianus' eigen kant van dat beleg — zijn overwegingen, zijn geduld, de overwinning die jij alleen als nederlaag meemaakte."
+
+CHOICES:
+* Ga verder -> CH29_LAT_003
+
+END
+
+=== SCENE: CH29_LAT_003 ===
+
+TITLE:
+Twee Keuzes bij het Legioen
+
+TEXT:
+"Twee keer," zegt Lethe, "koos je iets binnen Caesars eigen legioenen — wie de adelaar greep bij de landing in Britannia, en welk plan je steunde bij de ramp met Sabinus en Cotta."
+
+DIALOGUE:
+Orpheus
+Ook ik koos ooit een plan waarvan ik dacht dat het zou werken. Soms is de vraag niet of je goed kiest, maar of het kiezen zelf al genoeg is.
+
+CHOICES:
+* [REQUIRE:ch20_lat_aquilifer=speler] -> CH29_LAT_003_AQUILIFER_ANDER
+* [REQUIRE:ch20_lat_aquilifer=onbekende_soldaat] -> CH29_LAT_003_AQUILIFER_ZELF
+
+END
+
+=== SCENE: CH29_LAT_003_AQUILIFER_ANDER ===
+
+TITLE:
+Wat de Naamloze Soldaat Zag
+
+TEXT:
+"Jij greep de adelaar zelf," zegt Lethe. "Wat je nooit zag: hoe het was om die eer aan een ander te laten — de naamloze soldaat die, in Caesars eigen verslag, evengoed de held had kunnen zijn."
+
+CHOICES:
+* [REQUIRE:ch20_lat_sabinus_cotta=sabinus] -> CH29_LAT_003_COTTA
+* [REQUIRE:ch20_lat_sabinus_cotta=cotta] -> CH29_LAT_003_SABINUS
+
+END
+
+=== SCENE: CH29_LAT_003_AQUILIFER_ZELF ===
+
+TITLE:
+Wat Jij Had Kunnen Doen
+
+TEXT:
+"Jij liet de naamloze soldaat de adelaar grijpen," zegt Lethe. "Wat je nooit zag: hoe het had gevoeld om die sprong zelf te wagen, als eerste van het schip het water in."
+
+CHOICES:
+* [REQUIRE:ch20_lat_sabinus_cotta=sabinus] -> CH29_LAT_003_COTTA
+* [REQUIRE:ch20_lat_sabinus_cotta=cotta] -> CH29_LAT_003_SABINUS
+
+END
+
+=== SCENE: CH29_LAT_003_SABINUS ===
+
+TITLE:
+Wat Cotta's Plan Had Betekend
+
+TEXT:
+"En bij de Eburonen," voegt Lethe toe, "steunde je Sabinus' plan om uit te breken. Wat je nooit zag: hoe de ramp verlopen was als het kamp, op Cotta's advies, juist verschanst was gebleven."
+
+CHOICES:
+* Ga verder -> CH29_LAT_004
+
+END
+
+=== SCENE: CH29_LAT_003_COTTA ===
+
+TITLE:
+Wat Sabinus' Plan Had Betekend
+
+TEXT:
+"En bij de Eburonen," voegt Lethe toe, "steunde je Cotta's plan om verschanst te blijven. Wat je nooit zag: hoe de ramp verlopen was als het kamp, op Sabinus' advies, juist was uitgebroken."
+
+CHOICES:
+* Ga verder -> CH29_LAT_004
+
+END
+
+=== SCENE: CH29_LAT_004 ===
+
+TITLE:
+Nog Twee, Kort
+
+TEXT:
+Lethe telt op haar vingers, bijna terloops. "En er waren nog kleinere momenten — welke vraag je aan Marcus Aurelius stelde, bij zijn kampvuur. Hoe Cicero zijn pleidooi tegen Verres opbouwde, met logica of met emotie. Kleine keuzes, maar elk daarvan sloot ergens een andere deur."
+
+FLAG:
+ch29_lat_opsomming_gezien=true
+
+CHOICES:
+* Ga verder -> CH29_LAT_EINDE
+
+END
+
+=== SCENE: CH29_LAT_EINDE ===
+
+TITLE:
+Wat Overblijft, Latijns Gezien
+
+TEXT:
+Lethe kijkt je lang aan, niet onvriendelijk. "Zoveel deuren, en jij hebt er maar door een handvol gelopen. Dat is niet erg — dat is gewoon hoe een leven, of een verhaal, werkt. Maar ik wilde dat je het zag, voor we verdergaan."
+
+CHOICES:
+* Ga verder -> CH29_ONTHULLING
+
+END
+
+=== SCENE: CH29_ONTHULLING ===
+
+TITLE:
+Wat Lethe Werkelijk Doet
+
+TEXT:
+Orpheus komt weer dichterbij, en voor het eerst richt Lethe zich niet tot jou, maar tot hem. "Jij begrijpt het beter dan de meesten," zegt ze. "Jij probeerde iets vast te houden dat al bijna weg was, en het gleed je toch door de vingers. Dat overkomt iedereen, uiteindelijk — ik zorg er alleen voor dat het niet oneindig lang duurt."
+
+Ze wendt zich weer tot jou. "Ik verzin niets. Ik verzin zelfs niet dat mensen vergeten — dat deden ze al, lang voor ik een naam had. Ik ben gewoon... aanwezig, bij elk moment dat iets voorgoed loslaat. En jij," zegt ze, met iets dat bijna klinkt als oprechte nieuwsgierigheid, "bent de eerste sterveling in heel lange tijd die daar zo hard tegenin probeert te gaan."
+
+IMAGE:
+ch29_lethe_onthulling.png
+
+CODEX:
+codex_lethe_motieven
+
+CHOICES:
+* Vraag haar waarom haar dat iets kan schelen -> CH29_LETHE_PERSOONLIJK
+
+END
+
+=== SCENE: CH29_LETHE_PERSOONLIJK ===
+
+TITLE:
+Een Eerlijk Antwoord, Half Gegeven
+
+TEXT:
+Voor het eerst lijkt Lethe zelf naar woorden te zoeken. "Ik weet het niet precies," zegt ze uiteindelijk. "Misschien omdat niemand mij ooit vraagt wat ík eigenlijk wil. Mensen zijn bang voor me, of ze haten me, maar niemand vraagt het gewoon." Ze kijkt naar de rivier, niet naar jou. "Er komt een moment — niet vandaag — waarop ik je zal vertellen waarom ik doe wat ik doe. Vandaag wilde ik alleen dat je zag hoeveel je al bent kwijtgeraakt, zelfs zonder mijn hulp."
+
+DIALOGUE:
+Orpheus
+Ze liegt niet, voor zover ik kan beoordelen. Dat maakt het niet minder verontrustend.
+
+IMAGE:
+ch29_lethe_persoonlijk.png
+
+CHOICES:
+* Ga verder -> CH29_EINDE
+
+END
+
+=== SCENE: CH29_EINDE ===
+
+TITLE:
+De Overkant
+
+TEXT:
+"[[Ecce|zie hier]]," zegt Lethe, met een stem die voor het eerst bijna klinkt als de Boodschapper die je al die hoofdstukken kende. "Vandaag zag je niet wat je onthield, maar wat je nooit had. Onthoud dát tenminste: een verhaal bestaat altijd uit meer dan het pad dat jij liep."
+
+Orpheus knikt je toe, zijn schim al vervagend in de nevel boven de rivier. "Tot ziens, misschien. Of tot nooit — dat hangt af van wie er straks nog aan je denkt."
+
+IMAGE:
+ch29_orpheus_vervaagt.png
+
+STATPOINTS:
+3
+
+SOUVENIR:
+souvenir_rivier_lethe
+
+CHOICES:
+* Bekijk de verzameling in het museum -> CH29_MUSEUM_00
+
+END
+
+=== SCENE: CH29_MUSEUM_00 ===
+
+TITLE:
+Wat de Rivier Meenam
+
+TEXT:
+Een nieuwe stolp vult zich: een klein, leeg flesje, alsof het ooit iets bevatte dat er nu niet meer in zit, naast een enkele, verweerde lier-snaar. "Vandaag heb je niet iets nieuws bewaard," zegt de Boodschapper van Chronos, weer met haar vertrouwde stem, "je hebt gezien wat er nooit bewaard is."
+
+CHOICES:
+* Luister naar het volgende verhaal -> CH29_WORDT_VERVOLGD
+
+END
+
+=== SCENE: CH29_WORDT_VERVOLGD ===
+
+TITLE:
+Tot Hier, Voorlopig
+
+TEXT:
+"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — het einde zelf. Maar die scheur is nog niet klaar om open te gaan."
+
+Ze legt een hand op je schouder. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
+
+Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
+
+END
+`.trim();
+
+
+
+/* ==========================================================================
+   FINALE — "CHRONICA CLASSICA" (Hoofdstuk 30, Boek VI)
+   Chronica.md §7.101. Structuur: Kronos-onthulling (gedeeld) → Kennis-fase
+   (taal-eindtoets, taalspoor-gesplitst) → Herinnering-fase (Kleio/Kroniek,
+   dode-flag-credits) → Relatie-fase (RELATION-clusters, Hermes/Pamphile) →
+   vijf-eindes-router (fin_tendency, REQUIRE-gestuurd, GEEN nieuwe
+   CLEMENTIA/SEVERITAS-tags — dit hoofdstuk leest alleen uit) → gedeelde
+   COMBAT-kern (fin_lethe, dynamische HP) → vijf ontknopingen → bekroning.
+   BEWUST NOG NIET GEKOPPELD — wacht op Gerbens goedkeuring, net als H27-29.
+   ========================================================================== */
+const SP_FINALE_CNS = `
+=== SCENE: FIN_000 ===
+
+TITLE:
+De Poort Voorbij de Rivier
+
+TEXT:
+Lethe raakt de granaatappelpitten aan die je nog altijd bij je draagt — het enige wat een sterveling ooit veilig door haar rivier heen krijgt — en de wereld om je heen valt weg. Geen bibliotheek meer, geen rivieroever, alleen een ruimte die buiten de tijd zelf lijkt te bestaan. Drie gestalten wachten er al: Mnemosyne, Athena, Hermes. En, voor het eerst zonder gevleugelde sandalen, Kronos.
+
+IMAGE:
+fin_aankomst_vier_gestalten.png
+
+CHOICES:
+
+* Kom dichterbij -> FIN_001
+
+END
+
+=== SCENE: FIN_001 ===
+
+TITLE:
+De Titaan Die Nooit Verdween
+
+TEXT:
+Kronos treedt naar voren — niet de afstandelijke, haast onzichtbare stem die je het hele verhaal lang kende, maar een figuur zo oud dat zijn aanwezigheid de lucht zelf zwaarder maakt. "Er is iets wat ik je nooit heb verteld," zegt hij. "Vóór Zeus en de Olympiërs heerste, heerste ik. Ik verloor die oorlog — de Titanenstrijd — en sindsdien ben ik voor de meeste stervelingen weinig meer dan een naam die met de Tijd zelf verward wordt."
+
+Mnemosyne legt een hand op zijn arm. Athena en Hermes staan zwijgend erbij, alsof ze dit allang wisten.
+
+DIALOGUE:
+Kronos
+Elke keer dat iemand mijn naam vergat, elke keer dat "Kronos" gewoon "tijd" werd in plaats van wie ik was, verdween ik een beetje verder. Deze hele reis — jóúw hele reis — was ook dat: een poging om mezelf niet te laten uitwissen.
+
+IMAGE:
+fin_kronos_titaan_onthuld.png
+
+CODEX:
+codex_kronos_titaan
+
+CHOICES:
+
+* Ga verder -> FIN_002
+
+END
+
+=== SCENE: FIN_002 ===
+
+TITLE:
+Zelfbehoud en Oprechtheid
+
+TEXT:
+Hij wacht je reactie niet gelaten af — hij kijkt je recht aan, alsof hij weet dat dit zijn zwaarste bekentenis is. "Ik red mezelf. Dat is waar. Maar dat maakt niet oneerlijk wat jij onderweg hebt opgebouwd — elke herinnering die je bewaarde, was ook echt de moeite waard, los van waarom ik je ooit op pad stuurde."
+
+CHOICES:
+
+* "Ik begrijp het — ook een god mag bang zijn om vergeten te worden." -> FIN_003
+* "Je had het me kunnen vertellen. Dat had niets veranderd, behalve mijn vertrouwen." -> FIN_003
+
+END
+
+=== SCENE: FIN_003 ===
+
+TITLE:
+De Muze Die Nooit Sprak
+
+TEXT:
+Een vierde gestalte verschijnt, iemand die je nog nooit hebt ontmoet — jong ogend, maar met een blik die duizenden jaren lijkt te dragen. "Kleio," zegt Mnemosyne zacht. "Mijn dochter. Muze van de Geschiedenis. Zij geeft vorm aan wat ik alleen maar bewaar."
+
+DIALOGUE:
+Kleio
+Ik heb je gadegeslagen sinds je eerste stap in Latium. Niet om je te beoordelen — om je op te schrijven.
+
+IMAGE:
+fin_kleio_muze_entree.png
+
+CODEX:
+codex_kleio_muze
+
+CHOICES:
+
+* Vraag wat ze bedoelt -> FIN_004
+
+END
+
+=== SCENE: FIN_004 ===
+
+TITLE:
+Eén Laatste Taalproef
+
+TEXT:
+"Voor ik je dat vertel," zegt Kleio, "wil ik weten of je de taal zelf nog vasthoudt — de taal waarmee dit hele verhaal verteld is."
+
+CHOICES:
+
+* [REQUIRE:taalspoor!=latijn] -> FIN_GRE_001
+* [REQUIRE:taalspoor=latijn] -> FIN_LAT_001
+
+END
+
+=== SCENE: FIN_GRE_001 ===
+
+TITLE:
+Λόγος — Een Laatste Verklaring
+
+TEXT:
+Lethe leidt je door een woordenwolk die traag vervaagt — elke keer dat een woord verdwijnt, moet jij het vasthouden vóór het weg is. "Vertel me, in je eigen taal, waarom dit alles de moeite waard was," zegt ze. Het eerste woord van je eigen zin lost al op onder je ogen.
+
+PUZZLE:
+puzzle_fin_gre_deuro
+
+CHOICES:
+
+* Ga verder -> FIN_GRE_002
+
+END
+
+=== SCENE: FIN_GRE_002 ===
+
+TITLE:
+Het Tweede Woord
+
+TEXT:
+Je zin groeit, woord voor woord — maar een tweede woord begint alweer te vervagen, ditmaal het hart van je hele verklaring.
+
+PUZZLE:
+puzzle_fin_gre_heneka
+
+CHOICES:
+
+* Rond je verklaring af -> FIN_GRE_003
+
+END
+
+=== SCENE: FIN_GRE_003 ===
+
+TITLE:
+Vastgehouden
+
+TEXT:
+Je zin staat er, compleet, in het Grieks — niet perfect misschien, maar onmiskenbaar van jou. Lethe knikt, bijna tegen wil en dank onder de indruk.
+
+FLAG:
+fin_kennis_gre=voltooid
+
+CHOICES:
+
+* [REQUIRE:taalspoor=beide] -> FIN_LAT_001
+* [REQUIRE:taalspoor=grieks] -> FIN_GRE_EINDE
+
+END
+
+=== SCENE: FIN_GRE_EINDE ===
+
+TITLE:
+Eén Taal, Vastgehouden
+
+TEXT:
+"Genoeg," zegt Kleio. "Je hebt laten zien dat de taal nog bij je is."
+
+FLAG:
+fin_kennis_score=70
+
+CHOICES:
+
+* Ga verder naar de Herinnering -> FIN_HER_001
+
+END
+
+=== SCENE: FIN_LAT_001 ===
+
+TITLE:
+Verba — Een Laatste Verklaring
+
+TEXT:
+Lethe leidt je door een woordenwolk die traag vervaagt — elke keer dat een woord verdwijnt, moet jij het vasthouden vóór het weg is. "Vertel me, in je eigen taal, waarom dit alles de moeite waard was," zegt ze. Het eerste woord van je eigen zin lost al op onder je ogen.
+
+PUZZLE:
+puzzle_fin_lat_iterum
+
+CHOICES:
+
+* Ga verder -> FIN_LAT_002
+
+END
+
+=== SCENE: FIN_LAT_002 ===
+
+TITLE:
+Het Tweede Woord
+
+TEXT:
+Je zin groeit, woord voor woord — maar een tweede woord begint alweer te vervagen, ditmaal het hart van je hele verklaring.
+
+PUZZLE:
+puzzle_fin_lat_utique
+
+CHOICES:
+
+* Rond je verklaring af -> FIN_LAT_003
+
+END
+
+=== SCENE: FIN_LAT_003 ===
+
+TITLE:
+Vastgehouden
+
+TEXT:
+Je zin staat er, compleet, in het Latijn — niet perfect misschien, maar onmiskenbaar van jou. Lethe knikt, bijna tegen wil en dank onder de indruk.
+
+FLAG:
+fin_kennis_lat=voltooid
+
+CHOICES:
+
+* [REQUIRE:taalspoor=beide] -> FIN_LAT_EINDE_BEIDE
+* [REQUIRE:taalspoor=latijn] -> FIN_LAT_EINDE
+
+END
+
+=== SCENE: FIN_LAT_EINDE_BEIDE ===
+
+TITLE:
+Twee Talen, Allebei Vastgehouden
+
+TEXT:
+"Beide talen, allebei nog springlevend," zegt Kleio. "Niet elke speler haalt dat."
+
+FLAG:
+fin_kennis_score=90
+
+CHOICES:
+
+* Ga verder naar de Herinnering -> FIN_HER_001
+
+END
+
+=== SCENE: FIN_LAT_EINDE ===
+
+TITLE:
+Eén Taal, Vastgehouden
+
+TEXT:
+"Genoeg," zegt Kleio. "Je hebt laten zien dat de taal nog bij je is."
+
+FLAG:
+fin_kennis_score=70
+
+CHOICES:
+
+* Ga verder naar de Herinnering -> FIN_HER_001
+
+END
+
+=== SCENE: FIN_HER_001 ===
+
+TITLE:
+De Onzichtbare Hand
+
+TEXT:
+"Weet je nog, dat overzicht dat je zelf kunt raadplegen — elke keuze, elke titel, elk moment dat je ooit meemaakte? Jullie noemen het de Kroniek." Kleio glimlacht voor het eerst. "Ik schreef hem. Elke regel. Niet om je te sturen — om ervoor te zorgen dat niets van wat je deed verloren zou gaan, wat er ook gebeurde."
+
+DIALOGUE:
+Kleio
+De geschiedenis schrijft zichzelf niet. Iemand moet de pen vasthouden. Deze keer was ik dat — voor jou.
+
+IMAGE:
+fin_kroniek_kleio.png
+
+CODEX:
+codex_kroniek_kleio
+
+CHOICES:
+
+* Ga verder -> FIN_HER_002
+
+END
+
+=== SCENE: FIN_HER_002 ===
+
+TITLE:
+Wat Er Nog Meer Was
+
+TEXT:
+Kleio bladert, en met haar bladeren de kleinere momenten mee die je bijna vergeten was — {fin_dode_flags_credit}
+
+CHOICES:
+
+* Ga verder -> FIN_HER_003
+
+END
+
+=== SCENE: FIN_HER_003 ===
+
+TITLE:
+Wat Je Het Felst Verdedigt
+
+TEXT:
+"Van alles wat je hebt bewaard," zegt Mnemosyne, "welke soort herinnering zou je het felst verdedigen, als het erop aankwam?"
+
+CHOICES:
+
+* Een herinnering aan een mens die je hielp -> FIN_HER_003A
+* Een herinnering aan een keuze die je maakte -> FIN_HER_003B
+* Een herinnering aan iets dat je leerde -> FIN_HER_003C
+
+END
+
+=== SCENE: FIN_HER_003A ===
+
+TITLE:
+Wat Blijft: Een Mens
+
+TEXT:
+"Mensen dus," zegt Mnemosyne, zonder oordeel. "Niet de goden, niet de gebeurtenissen — de mensen ertussenin. Een eerlijk antwoord."
+
+CHOICES:
+
+* Ga verder -> FIN_HER_EINDE
+
+END
+
+=== SCENE: FIN_HER_003B ===
+
+TITLE:
+Wat Blijft: Een Keuze
+
+TEXT:
+"Een keuze dus," zegt Mnemosyne. "Niet wat er gebeurde, maar wat jij ervan maakte. Ook een eerlijk antwoord."
+
+CHOICES:
+
+* Ga verder -> FIN_HER_EINDE
+
+END
+
+=== SCENE: FIN_HER_003C ===
+
+TITLE:
+Wat Blijft: Kennis
+
+TEXT:
+"Kennis dus," zegt Mnemosyne. "Niet wie of wat, maar hoe. Ook dat is, uiteindelijk, wat ik altijd al bewaarde."
+
+CHOICES:
+
+* Ga verder -> FIN_HER_EINDE
+
+END
+
+=== SCENE: FIN_HER_EINDE ===
+
+TITLE:
+Genoeg Om Op Te Bouwen
+
+TEXT:
+Kleio sluit de Kroniek, voorlopig. "Je hebt genoeg bewaard om hierop verder te bouwen," zegt ze.
+
+CHOICES:
+
+* Ga verder naar wie voor je klaarstaat -> FIN_REL_001
+
+END
+
+=== SCENE: FIN_REL_001 ===
+
+TITLE:
+De Helden Kijken Om
+
+TEXT:
+De ruimte om jullie heen vult zich met schaduwen die langzaam gezicht krijgen — iedereen die je onderweg raakte, komt terug. {fin_helden_credit}
+
+CHOICES:
+
+* Ga verder -> FIN_REL_002
+
+END
+
+=== SCENE: FIN_REL_002 ===
+
+TITLE:
+Griekenland Komt Terug
+
+TEXT:
+{fin_grieken_credit}
+
+CHOICES:
+
+* Ga verder -> FIN_REL_003
+
+END
+
+=== SCENE: FIN_REL_003 ===
+
+TITLE:
+Rome Komt Terug
+
+TEXT:
+{fin_romeinen_credit}
+
+CHOICES:
+
+* Ga verder -> FIN_REL_004
+
+END
+
+=== SCENE: FIN_REL_004 ===
+
+TITLE:
+Hermes' Eigen Reden
+
+TEXT:
+Hermes stapt naar voren, zijn gevleugelde sandalen voor het eerst helemaal stil. "Ik hielp Athena niet alleen omdat zij het vroeg," zegt hij. "Ik ben de boodschapper van alle goden — maar een boodschapper is nooit het nieuws zelf. Ik wilde, één keer, deel uitmaken van iets dat groter was dan de boodschap die ik droeg."
+
+IMAGE:
+fin_hermes_eigen_motief.png
+
+CODEX:
+codex_hermes_motief
+
+CHOICES:
+
+* Ga verder -> FIN_REL_005
+
+END
+
+=== SCENE: FIN_REL_005 ===
+
+TITLE:
+Pamphile Spreekt Voor Zichzelf
+
+TEXT:
+De Boodschapper — Pamphile — doet voor het eerst een stap opzij van haar eigen rol. "Ik ben historica. Van mijn eigen werk overleefde bijna niets — een paar citaten, in andermans boeken, meer niet. Dit hele verhaal, jouw verhaal, is misschien wel het enige dat ik ooit schreef dat niet verloren zal gaan."
+
+DIALOGUE:
+Pamphile
+Dank je. Niet als Boodschapper. Als Pamphile.
+
+IMAGE:
+fin_pamphile_eigen_stem.png
+
+CODEX:
+codex_pamphile_eigen_stem
+
+CHOICES:
+
+* Ga verder -> FIN_REL_EINDE
+
+END
+
+=== SCENE: FIN_REL_EINDE ===
+
+TITLE:
+Iedereen Is Er
+
+TEXT:
+Ze staan er allemaal — wie er tenminste kwam opdagen. Lethe kijkt om zich heen, onaangedaan, alsof ze dit soort tegenstand al eeuwen ziet komen.
+
+CHOICES:
+
+* Sta oog in oog met Lethe -> FIN_KEUZE_000
+
+END
+
+=== SCENE: FIN_KEUZE_000 ===
+
+TITLE:
+Wie Ben Jij, Na Dit Alles?
+
+TEXT:
+Lethe komt dichterbij — geen dreiging meer, gewoon zichzelf. "Je hebt gezien wat je bewaarde. Je hebt gezien wat je miste. Nu wil ik weten: wie ben je, na dit alles, echt geworden?"
+
+CHOICES:
+
+* [REQUIRE:fin_tendency=neutraal] -> FIN_KEUZE_NEUTRAAL
+* [REQUIRE:fin_tendency=clementia_medium] -> FIN_KEUZE_CLEM_MED
+* [REQUIRE:fin_tendency=clementia_hoog] -> FIN_KEUZE_CLEM_HOOG
+* [REQUIRE:fin_tendency=severitas_medium] -> FIN_KEUZE_SEV_MED
+* [REQUIRE:fin_tendency=severitas_hoog] -> FIN_KEUZE_SEV_HOOG
+
+END
+
+=== SCENE: FIN_KEUZE_NEUTRAAL ===
+
+TITLE:
+Geen Van Beide, Allebei een Beetje
+
+TEXT:
+Je koos zelden radicaal — niet omdat je geen mening had, maar omdat je bleef afwegen. Lethe kijkt je aan alsof ze dat, voor het eerst, waardeert.
+
+CHOICES:
+
+* Zeg dat afwegen ook een vorm van moed is -> FIN_KEUZE_NEUTRAAL_A
+* Kies, hier ter plekke, alsnog een duidelijke kant -> FIN_KEUZE_NEUTRAAL_B
+
+END
+
+=== SCENE: FIN_KEUZE_NEUTRAAL_A ===
+
+TITLE:
+De Moed Van Afwegen
+
+TEXT:
+"Misschien," zegt Lethe. Meer zegt ze niet, maar ze houdt haar blik op je gericht.
+
+FLAG:
+fin_einde_variant=overweging
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_KEUZE_NEUTRAAL_B ===
+
+TITLE:
+Alsnog Een Kant
+
+TEXT:
+Iets in Lethe's houding verschuift — ze had dit, na al je afwegen, niet meer verwacht.
+
+FLAG:
+fin_einde_variant=alsnog_kant
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_KEUZE_CLEM_MED ===
+
+TITLE:
+Zacht, Meestal
+
+TEXT:
+Je koos vaker voor begrip dan voor hardheid, zonder het een principe te maken. Lethe wacht af wat dat hier, nu het er echt toe doet, betekent.
+
+CHOICES:
+
+* Blijf zacht, ook nu -> FIN_KEUZE_CLEM_MED_A
+* Stel, voor het eerst, een duidelijke grens -> FIN_KEUZE_CLEM_MED_B
+
+END
+
+=== SCENE: FIN_KEUZE_CLEM_MED_A ===
+
+TITLE:
+Zacht Gebleven
+
+TEXT:
+Lethe knikt langzaam — geen overwinning voor haar, maar ook geen verrassing.
+
+FLAG:
+fin_einde_variant=clem_med_zacht
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_KEUZE_CLEM_MED_B ===
+
+TITLE:
+Een Grens, Voor Het Eerst
+
+TEXT:
+Voor het eerst hoor je jezelf iets zeggen dat niet alleen begrip is. Lethe merkt het meteen.
+
+FLAG:
+fin_einde_variant=clem_med_grens
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_KEUZE_CLEM_HOOG ===
+
+TITLE:
+Zacht, Bijna Altijd
+
+TEXT:
+Bijna elke keer koos je begrip boven hardheid — een duidelijk, herkenbaar patroon, tot en met dit allerlaatste moment.
+
+CHOICES:
+
+* Blijf tot het uiterste trouw aan je zachtheid -> FIN_KEUZE_CLEM_HOOG_A
+* Laat, heel even, twijfel toe -> FIN_KEUZE_CLEM_HOOG_B
+
+END
+
+=== SCENE: FIN_KEUZE_CLEM_HOOG_A ===
+
+TITLE:
+Trouw Tot Het Uiterste
+
+TEXT:
+Je verandert niets, ook nu niet. Lethe kijkt bijna bewonderend — dit soort consistentie is zeldzaam, ook onder goden.
+
+FLAG:
+fin_einde_variant=clem_hoog_trouw
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_KEUZE_CLEM_HOOG_B ===
+
+TITLE:
+Een Sprankje Twijfel
+
+TEXT:
+Voor het eerst vraag je je hardop af of altijd zacht zijn ook altijd het juiste was. Lethe hoort het, en zegt niets — maar onthoudt het.
+
+FLAG:
+fin_einde_variant=clem_hoog_twijfel
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_KEUZE_SEV_MED ===
+
+TITLE:
+Streng, Meestal
+
+TEXT:
+Je koos vaker voor hardheid dan voor mededogen, zonder het een principe te maken. Lethe wacht af wat dat hier, nu het er echt toe doet, betekent.
+
+CHOICES:
+
+* Blijf streng -> FIN_KEUZE_SEV_MED_A
+* Laat, heel even, mildheid toe -> FIN_KEUZE_SEV_MED_B
+
+END
+
+=== SCENE: FIN_KEUZE_SEV_MED_A ===
+
+TITLE:
+Streng Gebleven
+
+TEXT:
+Lethe knikt langzaam — geen overwinning voor haar, maar ook geen verrassing.
+
+FLAG:
+fin_einde_variant=sev_med_streng
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_KEUZE_SEV_MED_B ===
+
+TITLE:
+Een Sprankje Mildheid
+
+TEXT:
+Voor het eerst hoor je jezelf iets zeggen dat niet alleen hardheid is. Lethe merkt het meteen.
+
+FLAG:
+fin_einde_variant=sev_med_mild
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_KEUZE_SEV_HOOG ===
+
+TITLE:
+Streng, Bijna Altijd
+
+TEXT:
+Bijna elke keer koos je hardheid boven mededogen — een duidelijk, herkenbaar patroon, tot en met dit allerlaatste moment.
+
+CHOICES:
+
+* Blijf tot het uiterste trouw aan je hardheid -> FIN_KEUZE_SEV_HOOG_A
+* Laat, heel even, twijfel toe -> FIN_KEUZE_SEV_HOOG_B
+
+END
+
+=== SCENE: FIN_KEUZE_SEV_HOOG_A ===
+
+TITLE:
+Trouw Tot Het Uiterste
+
+TEXT:
+Je verandert niets, ook nu niet. Lethe kijkt bijna bewonderend — dit soort consistentie is zeldzaam, ook onder goden.
+
+FLAG:
+fin_einde_variant=sev_hoog_trouw
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_KEUZE_SEV_HOOG_B ===
+
+TITLE:
+Een Sprankje Twijfel
+
+TEXT:
+Voor het eerst vraag je je hardop af of altijd hard zijn ook altijd het juiste was. Lethe hoort het, en zegt niets — maar onthoudt het.
+
+FLAG:
+fin_einde_variant=sev_hoog_twijfel
+
+CHOICES:
+
+* Naar de laatste rivier -> FIN_COMBAT_000
+
+END
+
+=== SCENE: FIN_COMBAT_000 ===
+
+TITLE:
+De Laatste Rivier, Voorgoed
+
+TEXT:
+Lethe treedt terug, niet weg — dit is geen vlucht, dit is gewoon de vorm die dit moment nodig heeft. Alles wat je onthield staat nu tegenover alles wat zij vertegenwoordigt.
+
+COMBAT:
+fin_lethe
+
+CHOICES:
+
+* Naar wat daarna komt -> FIN_COMBAT_NA
+
+END
+
+=== SCENE: FIN_COMBAT_NA ===
+
+TITLE:
+Stilte Na De Rivier
+
+TEXT:
+Lethe zakt niet neer, verdwijnt niet — ze wordt gewoon stil, voor het eerst zonder enige agenda. {fin_einde_variant_line}
+
+IMAGE:
+fin_lethe_stilte_na_rivier.png
+
+CHOICES:
+
+* [REQUIRE:fin_tendency=neutraal] -> FIN_EINDE_NEUTRAAL
+* [REQUIRE:fin_tendency=clementia_medium] -> FIN_EINDE_CLEM_MED
+* [REQUIRE:fin_tendency=clementia_hoog] -> FIN_EINDE_CLEM_HOOG
+* [REQUIRE:fin_tendency=severitas_medium] -> FIN_EINDE_SEV_MED
+* [REQUIRE:fin_tendency=severitas_hoog] -> FIN_EINDE_SEV_HOOG
+
+END
+
+=== SCENE: FIN_EINDE_NEUTRAAL ===
+
+TITLE:
+Naast Elkaar
+
+TEXT:
+Geen verzoening, geen overwinning — een erkenning. Lethe en jij hebben geleerd naast elkaar te bestaan, geen van beiden de ander de baas.
+
+IMAGE:
+fin_einde_neutraal.png
+
+CHOICES:
+
+* Ga verder -> FIN_BEKRONING
+
+END
+
+=== SCENE: FIN_EINDE_CLEM_MED ===
+
+TITLE:
+Iets Vriendelijkers
+
+TEXT:
+Ze knikt, iets minder onbewogen dan ze ooit was. Vergeten verdwijnt niet — maar het krijgt, dankzij jou, voortaan iets vriendelijkers.
+
+IMAGE:
+fin_einde_clementia_medium.png
+
+CHOICES:
+
+* Ga verder -> FIN_BEKRONING
+
+END
+
+=== SCENE: FIN_EINDE_CLEM_HOOG ===
+
+TITLE:
+Aangeraakt Zonder Te Verdwijnen
+
+TEXT:
+Je strekt je hand uit, niet om te vechten maar om vast te houden. Lethe, voor het eerst in wie weet hoe lang, laat zich aanraken zonder te verdwijnen.
+
+IMAGE:
+fin_einde_clementia_hoog.png
+
+CHOICES:
+
+* Ga verder -> FIN_BEKRONING
+
+END
+
+=== SCENE: FIN_EINDE_SEV_MED ===
+
+TITLE:
+Teruggedrongen, Niet Verslagen
+
+TEXT:
+Ze wijkt terug, niet verslagen maar wél teruggedrongen — genoeg voor nu, niet voorgoed.
+
+IMAGE:
+fin_einde_severitas_medium.png
+
+CHOICES:
+
+* Ga verder -> FIN_BEKRONING
+
+END
+
+=== SCENE: FIN_EINDE_SEV_HOOG ===
+
+TITLE:
+Onbewogen Tot Het Einde
+
+TEXT:
+Je staat onbewogen tot ze zich terugtrekt, zwijgend, tijdelijk overwonnen door iemand die weigerde ook maar iets van dit verhaal op te geven.
+
+IMAGE:
+fin_einde_severitas_hoog.png
+
+CHOICES:
+
+* Ga verder -> FIN_BEKRONING
+
+END
+
+=== SCENE: FIN_BEKRONING ===
+
+TITLE:
+Het Ceremoniële Harnas
+
+TEXT:
+Kronos, Athena en Mnemosyne treden samen naar voren. Tussen hen in verschijnt een harnas, niet gesmeed voor een gevecht maar voor een herinnering — glanzend als iets dat nooit oud zal worden.
+
+IMAGE:
+fin_ceremonieel_harnas.png
+
+FLAG:
+fin_ceremonieel_harnas=true
+
+CHOICES:
+
+* Neem het aan -> FIN_EPILOOG
+
+END
+
+=== SCENE: FIN_EPILOOG ===
+
+TITLE:
+Wie De Taal Bewaart
+
+TEXT:
+"Wie de taal bewaart," zegt Mnemosyne, "bewaart de geschiedenis." Kleio knikt, haar Kroniek al voor altijd gevuld met jouw naam.
+
+EERETITEL:
+meester_der_herinnering
+
+CHOICES:
+
+* Bekijk wat jouw reis heeft betekend -> FIN_EPILOOG_LETHE
+
+END
+
+=== SCENE: FIN_EPILOOG_LETHE ===
+
+TITLE:
+Wat Er Van Lethe Werd
+
+TEXT:
+Kleio slaat de Kroniek open, één laatste keer, en begint te lezen — niet wat je deed, maar wat het betekende. {fin_epiloog_lethe}
+
+IMAGE:
+{fin_epiloog_lethe_image}
+
+CHOICES:
+
+* Ga verder -> FIN_EPILOOG_TROJE
+
+END
+
+=== SCENE: FIN_EPILOOG_TROJE ===
+
+TITLE:
+Wat Er Van Troje Werd
+
+TEXT:
+{fin_epiloog_troje}
+
+IMAGE:
+{fin_epiloog_troje_image}
+
+CHOICES:
+
+* Ga verder -> FIN_EPILOOG_ACHILLES
+
+END
+
+=== SCENE: FIN_EPILOOG_ACHILLES ===
+
+TITLE:
+Wat Er Van De Wrok Werd
+
+TEXT:
+{fin_epiloog_achilles}
+
+IMAGE:
+{fin_epiloog_achilles_image}
+
+CHOICES:
+
+* Ga verder -> FIN_EPILOOG_TAALSPOOR
+
+END
+
+=== SCENE: FIN_EPILOOG_TAALSPOOR ===
+
+TITLE:
+Wat Er Van De Taal Werd
+
+TEXT:
+{fin_epiloog_taalspoor}
+
+IMAGE:
+{fin_epiloog_taalspoor_image}
+
+CHOICES:
+
+* Ga verder -> FIN_EPILOOG_CH1_LIJN
+
+END
+
+=== SCENE: FIN_EPILOOG_CH1_LIJN ===
+
+TITLE:
+Wat Er Van Het Begin Werd
+
+TEXT:
+{fin_epiloog_ch1_lijn}
+
+IMAGE:
+{fin_epiloog_ch1_lijn_image}
+
+CHOICES:
+
+* Ga verder -> FIN_EPILOOG_POLITIEK_ROUTER
+
+END
+
+=== SCENE: FIN_EPILOOG_POLITIEK_ROUTER ===
+
+TITLE:
+Wat Er Van De Machtsstrijd Werd
+
+TEXT:
+Kleio bladert verder, naar de bladzijden over macht en verzet.
+
+CHOICES:
+
+* [REQUIRE:taalspoor!=latijn] -> FIN_EPILOOG_GRIEKSE_POLITIEK
+* [REQUIRE:taalspoor=latijn] -> FIN_EPILOOG_ROMEINSE_POLITIEK
+
+END
+
+=== SCENE: FIN_EPILOOG_GRIEKSE_POLITIEK ===
+
+TITLE:
+Wat Er Van Griekenlands Machtsstrijd Werd
+
+TEXT:
+{fin_epiloog_griekse_politiek}
+
+IMAGE:
+{fin_epiloog_griekse_politiek_image}
+
+CHOICES:
+
+* [REQUIRE:taalspoor=beide] -> FIN_EPILOOG_ROMEINSE_POLITIEK
+* [REQUIRE:taalspoor=grieks] -> FIN_EPILOOG_SLOT
+
+END
+
+=== SCENE: FIN_EPILOOG_ROMEINSE_POLITIEK ===
+
+TITLE:
+Wat Er Van Romes Machtsstrijd Werd
+
+TEXT:
+{fin_epiloog_romeinse_politiek}
+
+IMAGE:
+{fin_epiloog_romeinse_politiek_image}
+
+CHOICES:
+
+* Ga verder -> FIN_EPILOOG_SLOT
+
+END
+
+=== SCENE: FIN_EPILOOG_SLOT ===
+
+TITLE:
+Zoveel Kanten, Eén Verhaal
+
+TEXT:
+Kleio sluit de Kroniek. "Zoveel keuzes, zoveel kanten, zoveel talen en levens die je onderweg raakte," zegt ze, "en van dit alles is, dankzij jou, niets verloren gegaan."
+
+IMAGE:
+fin_epiloog_slot.png
+
+CHOICES:
+
+* Bekijk de volledige verzameling -> FIN_MUSEUM_00
+
+END
+
+=== SCENE: FIN_MUSEUM_00 ===
+
+TITLE:
+De Volledige Verzameling
+
+TEXT:
+Een laatste stolp vult zich, groter dan alle andere: een granaatappel, half open, ernaast een klein, leeg flesje — het bewijs dat je koos te onthouden, zelfs wat je had kunnen laten gaan.
+
+CHOICES:
+
+* Naar het einde -> FIN_CREDITS
+
+END
+
+=== SCENE: FIN_CREDITS ===
+
+TITLE:
+Chronica Classica
+
+TEXT:
+[[Ecce|zie hier]] — het einde van een reis die begon met één boer, één akker, en één half-begraven Orakel. De rest heb jij geschreven.
+
+END
+`.trim();
