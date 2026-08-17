@@ -1,10 +1,14 @@
 # Chronica Classica — COMBAT-sprites: generatielijst
 
-**Status: compleet.** Alle 16 entries in `SP_COMBAT_ENEMIES`
-(`certamen/singleplayer-data.js`) hebben een bestaand, correct ladend
-sprite-bestand in `certamen/assets/chronica/combat/` (zie het README daar).
-Dit bestand blijft staan als referentie voor de gebruikte Gem-prompt en als
-startpunt mocht er ooit een nieuw COMBAT-gevecht bijkomen.
+**Status: 16 van de 17 compleet.** Alle 16 oorspronkelijke entries in
+`SP_COMBAT_ENEMIES` (`certamen/singleplayer-data.js`) hebben een bestaand,
+correct ladend sprite-bestand in `certamen/assets/chronica/combat/` (zie het
+README daar). **Nieuw, nog ontbrekend (2026-08-18, Finale-koppeling)**:
+`fin_lethe` (Hoofdstuk 30/Finale, `fin_lethe.png`) — Gemini-prompt hiervoor
+staat al klaar in de sessiegeschiedenis van 2026-08-17 (zie ook de
+Finale-illustratiepromptenlijst), nog niet gegenereerd. Dit bestand blijft
+staan als referentie voor de gebruikte Gem-prompt en als startpunt mocht er
+ooit een nieuw COMBAT-gevecht bijkomen.
 
 ## Alle 16 sprites
 | Bestand | Herkomst |

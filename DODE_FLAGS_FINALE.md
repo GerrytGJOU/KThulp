@@ -66,8 +66,9 @@
 > per ongeluk dubbel toont; er is geen verdere payoff voor gepland. Zie
 > Chronica.md §7.99 voor het volledige verslag.
 >
-> **VERVOLG (2026-08-17, de Finale "Chronica Classica", geschreven maar nog
-> niet gekoppeld)**: sluit de laatste vier nog open flavour-flags alsnog af
+> **VERVOLG (2026-08-17, de Finale "Chronica Classica", inmiddels
+> 2026-08-18 GEKOPPELD aan de speelbare route — zie Chronica.md §7.104)**:
+> sluit de laatste vier nog open flavour-flags alsnog af
 > via `FIN_HER_002`'s `{fin_dode_flags_credit}`-token —
 > `ch25_gre_eratosthenes`, `ch25_lat_graffiti`, `ch26_lat_vespasianus`, en
 > alle vijf H27-flags (`ch27_lat_bestuursidee`, `ch27_lat_prijzenedict`,

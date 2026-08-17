@@ -75,8 +75,24 @@ Hoofdstuk 20.
 > al gekoppelde, live hoofdstukken kregen elk hun 10+10, puur additief
 > (nieuwe/aangevulde `VOCAB:`-secties, geen wijziging aan scène-structuur,
 > keuzes of grammatica). Daarmee zijn Hoofdstuk 1-25 nu allemaal volledig
-> op methode; alleen Hoofdstuk 26/27 (kandidatenreserve hieronder) en
-> Hoofdstuk 28 t/m Finale staan nog open.
+> op methode. Hoofdstuk 26/27 kregen bij hun eigen bouw (2026-08-15/16)
+> meteen al een volledige signaalwoordenbatch, dus die waren nooit
+> onderdeel van dit gat.
+>
+> **Hoofdstuk 28/29 — RETROFIT (2026-08-18, GEBOUWD)**: op dezelfde manier
+> geretrofit als H17-25 — 10 Grieks + 10 Latijn per hoofdstuk, frequentie-
+> gerangschikt uit `certamen/vocab.js`, nergens eerder gebruikt, toegevoegd
+> aan `SP_VOCAB_ENTRIES` en aan de hub-scènes `CH28_000`/`CH29_000` (CH29
+> had daarvoor zelfs helemaal geen `VOCAB:`-sectie). Zie de nieuwe lijsten
+> in `certamen/singleplayer-data.js` (rond de bestaande H29-signaalwoorden-
+> sectie in `SP_VOCAB_ENTRIES`) — niet hieronder gedupliceerd, deze bestonden
+> nog niet toen de rest van dit document werd geschreven.
+>
+> **De Finale (nr. 30) krijgt BEWUST GEEN signaalwoorden-uitbreiding**
+> (Gerbens uitdrukkelijke instructie, 2026-08-18): "dit is puur de
+> afsluiting" — geen nieuwe leerstof meer, alleen de al bestaande woordenpool
+> gebruiken. De kandidatenlijst hieronder ("Finale — volledige pool") blijft
+> daarom staan als ongebruikte reserve, niet als openstaand actiepunt.
 
 **BELANGRIJK — hoofdstuknummers hieronder zijn ACHTERHAALD sinds de
 KCV-audit van 2026-08-09 (Chronica.md §7.65-7.66):** er zijn 7 nieuwe

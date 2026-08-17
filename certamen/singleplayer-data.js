@@ -506,7 +506,7 @@ const SP_CAMPAIGN = [
     personages:"Hadrianus (Griekse lijn) — Vespasianus, Titus, Domitianus, Nerva, Trajanus, Hadrianus, Antoninus Pius, Marcus Aurelius, Commodus, Pertinax, Septimius Severus, Caracalla, Geta, Elagabalus, Aurelianus, Julius Civilis, Tacitus (cameo, bronvermelding)",
     thema:"Een rijk op zijn grootst is ook een rijk met de meeste manieren om uiteen te vallen",
     illustratie:"Het Colosseum in aanbouw / Hadrianus' Muur in de Britse mist / Julius Civilis en de Bataven",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). 29 scènes: Griekse lijn (Hadrianus/Panhellenion/Athene/Olympia met leesval/Delphi) en Latijnse lijn (Vierkeizerjaar → Vespasianus met 'pecunia non olet'-leesval → Titus/Domitianus → Bataafse Opstand met COMBAT-bridge (nieuwe vijand `bataven`) → Nerva/Trajanus (Plinius-callback naar H25) → Hadrianus-kruisverwijzing/Antoninus Pius → Marcus Aurelius (nieuwe RELATION, Stoïcijnse keuzescène, SP_PAYOFFS-echo's naar Cicero/Seneca) → Commodus → Pertinax/Vijfkeizerjaar → Septimius Severus → Caracalla/Constitutio Antoniniana/Geta/Elagabalus → Derde-Eeuwse Crisis/Aurelianus). Kaart-herkenning geïmplementeerd als CNS-hub-en-vignetten i.p.v. letterlijke SP_MAP_LOCATIONS-pin-integratie (zie code-commentaar bij SP_CH26_CNS). 14 nieuwe CODEX-entries, 1 nieuwe COMBAT-vijand, 1 nieuw souvenir (`souvenir_rijk_in_crisis`), 20 signaalwoorden (H26-kandidatenlijst uit VOCAB_UITBREIDING.md). CH25_MUSEUM_00 routeert naar CH26_000; CH26_WORDT_VERVOLGD is het nieuwe, laatste tijdelijke speeltest-eindpunt. SP_SCENES/BLOCKS bevatten SP_CH26_CNS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). 29 scènes: Griekse lijn (Hadrianus/Panhellenion/Athene/Olympia met leesval/Delphi) en Latijnse lijn (Vierkeizerjaar → Vespasianus met 'pecunia non olet'-leesval → Titus/Domitianus → Bataafse Opstand met COMBAT-bridge (nieuwe vijand `bataven`) → Nerva/Trajanus (Plinius-callback naar H25) → Hadrianus-kruisverwijzing/Antoninus Pius → Marcus Aurelius (nieuwe RELATION, Stoïcijnse keuzescène, SP_PAYOFFS-echo's naar Cicero/Seneca) → Commodus → Pertinax/Vijfkeizerjaar → Septimius Severus → Caracalla/Constitutio Antoniniana/Geta/Elagabalus → Derde-Eeuwse Crisis/Aurelianus). Kaart-herkenning geïmplementeerd als CNS-hub-en-vignetten i.p.v. letterlijke SP_MAP_LOCATIONS-pin-integratie (zie code-commentaar bij SP_CH26_CNS). 14 nieuwe CODEX-entries, 1 nieuwe COMBAT-vijand, 1 nieuw souvenir (`souvenir_rijk_in_crisis`), 20 signaalwoorden (H26-kandidatenlijst uit VOCAB_UITBREIDING.md). CH25_MUSEUM_00 routeert naar CH26_000; CH26_MUSEUM_00 routeert door naar CH27_000 (bijgewerkt 2026-08-18, toen H27 gekoppeld werd — het tijdelijke CH26_WORDT_VERVOLGD-eindpunt is verwijderd). SP_SCENES/BLOCKS bevatten SP_CH26_CNS." },
   { id:"ch27", nr:27, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Kruis en Kroon",
     periode:"Tetrarchie t/m val van West-Rome, 284-476 n.Chr. (met een korte blik vooruit naar Justinianus, 6e eeuw)",
     verhaal:"Diocletianus splitst het bestuur van het rijk in een Tetrarchie om de crisis te bezweren; Constantijn wint uiteindelijk alleen de macht, erkent het christendom met het Edict van Milaan, en sticht een nieuwe hoofdstad op oud-Griekse bodem: Byzantium wordt Constantinopel, en het zwaartepunt van het rijk verschuift voorgoed naar het Griekstalige Oosten. Onder Theodosius wordt het christendom staatsgodsdienst en splitst het rijk definitief in twee helften — tot het West-Romeinse Rijk in 476 n.Chr. zijn laatste keizer verliest, terwijl in het Oosten, generaties later, Justinianus I en Theodora Constantinopel nog verder laten uitgroeien tot wat ooit het Byzantijnse Rijk zal heten. UITGEBREID 2026-08-09 (Gerbens verzoek): Justinianus/Theodora toegevoegd aan de Griekse lijn als vooruitblik; het hoofdstuk krijgt de scène-voor-scène ZIGZAG-opzet (zoals Hoofdstuk 10/15) in plaats van twee losse, sequentiële lijnen — de twee kanten van hetzelfde rijk worden zo letterlijk om en om beleefd. UITGEBREID 2026-08-15 (Gerbens verzoek): het hoofdstuk opent niet met Diocletianus die de Tetrarchie al kant-en-klaar presenteert, maar met de speler die MEEDENKT over hoe je een rijk bestuurt dat te groot is voor één man — een kort keuze-/redeneermoment vóór Diocletianus zelf zijn eigen oplossing onthult, zodat de Tetrarchie aanvoelt als iets dat de speler mee heeft helpen bedenken, niet als een dictaat.",
@@ -516,7 +516,7 @@ const SP_CAMPAIGN = [
     personages:"Diocletianus, Constantijn de Grote, Theodosius, Romulus Augustulus (laatste West-Romeinse keizer) — Justinianus I, Theodora (gedeelde coda, alle taalsporen)",
     thema:"Het einde van het ene rijk is, op dezelfde plek net iets verderop, het begin van iets nieuws",
     illustratie:"Constantijn bij het Edict van Milaan / de laatste keizerskroon van West-Rome, leeg op een troon / Justinianus en Theodora in Constantinopel",
-    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-16) — door Claude geschreven (geen Gemini-concept). 36 scènes, echte scène-voor-scène ZIGZAG: elke LAT_00X/GRE_00X-scène (X=1-6) heeft een REQUIRE-gestuurde kruising naar de parallelle scène (zelfde patroon als CH10/CH15/CH23). Kernstuk: de Slag bij de Milvische Brug tweemaal verteld, met TWEE gespiegelde leesvallen — Latijn (Lactantius: een droom 's nachts) en Grieks (Eusebius: een visioen op klaarlichte dag) — onmiddellijk na elkaar voor 'beide'-spelers. Twee H26-payoffs verwerkt: Theodosius verbiedt de Olympische Spelen én sluit het orakel van Delphi (met een stille reactie van de Boodschapper, terugverwijzend naar CH26_GRE_004). Diocletianus' Tetrarchie-opening is nu een co-design-moment (drie keuzes, speler denkt eerst zelf na, flavour-only FLAG). Een bewust NIET-authentiek, zelf verzonnen Latijns waarschuwingsmoment ('Mons iter non tutum est; viam cape!') vóór de val van Rome, op Gerbens uitdrukkelijk verzoek — geen grammaticale leesval, puur sfeer/keuze. De Nika-opstand (532) krijgt een CHECK (`ch27_gre_nika_opstand`, agilitas dc16) met bewust filmisch/gespannen taalgebruik. CORRECTIE (2026-08-16, Gerbens feedback): Justinianus/Theodora/de Nika-opstand zijn NIET Grieks-exclusief — ook Latijnse spelers zien deze coda, want 'dit is ook voor hen leerstof'. Na de val van Rome (CH27_LAT_006_EINDE) routeert iedereen onvoorwaardelijk door naar CH27_GRE_006; de losse CH27_LAT_EINDE-scène is daarmee vervallen. Het niet-symmetrische element blijft alleen bestaan in de twee taalspoor-exclusieve Milvische-Brug-leesvallen (LAT ziet de Latijnse versie niet de Griekse, en omgekeerd). Nieuwe registry: 13 CODEX-entries, 1 nieuwe SP_CHECKS-entry, 1 nieuw souvenir, 20 signaalwoorden. SP_CH27_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-16, gekoppeld 2026-08-18) — door Claude geschreven (geen Gemini-concept). 36 scènes, echte scène-voor-scène ZIGZAG: elke LAT_00X/GRE_00X-scène (X=1-6) heeft een REQUIRE-gestuurde kruising naar de parallelle scène (zelfde patroon als CH10/CH15/CH23). Kernstuk: de Slag bij de Milvische Brug tweemaal verteld, met TWEE gespiegelde leesvallen — Latijn (Lactantius: een droom 's nachts) en Grieks (Eusebius: een visioen op klaarlichte dag) — onmiddellijk na elkaar voor 'beide'-spelers. Twee H26-payoffs verwerkt: Theodosius verbiedt de Olympische Spelen én sluit het orakel van Delphi (met een stille reactie van de Boodschapper, terugverwijzend naar CH26_GRE_004). Diocletianus' Tetrarchie-opening is nu een co-design-moment (drie keuzes, speler denkt eerst zelf na, flavour-only FLAG). Een bewust NIET-authentiek, zelf verzonnen Latijns waarschuwingsmoment ('Mons iter non tutum est; viam cape!') vóór de val van Rome, op Gerbens uitdrukkelijk verzoek — geen grammaticale leesval, puur sfeer/keuze. De Nika-opstand (532) krijgt een CHECK (`ch27_gre_nika_opstand`, agilitas dc16) met bewust filmisch/gespannen taalgebruik. CORRECTIE (2026-08-16, Gerbens feedback): Justinianus/Theodora/de Nika-opstand zijn NIET Grieks-exclusief — ook Latijnse spelers zien deze coda, want 'dit is ook voor hen leerstof'. Na de val van Rome (CH27_LAT_006_EINDE) routeert iedereen onvoorwaardelijk door naar CH27_GRE_006; de losse CH27_LAT_EINDE-scène is daarmee vervallen. Het niet-symmetrische element blijft alleen bestaan in de twee taalspoor-exclusieve Milvische-Brug-leesvallen (LAT ziet de Latijnse versie niet de Griekse, en omgekeerd). Nieuwe registry: 13 CODEX-entries, 1 nieuwe SP_CHECKS-entry, 1 nieuw souvenir, 20 signaalwoorden. SP_SCENES/BLOCKS bevatten SP_CH27_CNS." },
 
   // ---- Hoofdstuk 28-29 + Finale: de ontknoping (Gerbens akkoord
   // 2026-08-02, vervangt de oude drieluik Mnemosyne/Lethe/Finale qua
@@ -531,7 +531,7 @@ const SP_CAMPAIGN = [
     grammatica:"Herhaling van alle grammatica, PER taalspoor gescheiden (Gerbens correctie 2026-08-16: geen gemengd Grieks/Latijn — leerlingen die één taal kozen, hebben de helft van de andere grammatica nooit gehad). Wél doorlopen alle drie de sporen dezelfde vleugel-volgorde.",
     personages:"Mnemosyne, de Boodschapper van Chronos/Pamphile van Epidaurus, Athena, Hermes, Lethe (eerste verschijning)",
     zijverhalen:"Narcissus & Echo (A-tier) als tekstuele (niet-auditieve) fragment-reconstructiepuzzel, zodat leerlingen dit stil in de les kunnen spelen; eerste hints van De Titanenstrijd (S-tier, Kronos/Chronos raken hier voor het eerst 'per ongeluk' door elkaar), die in de Finale terugkeert",
-    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-16) — door Claude geschreven (geen Gemini-concept). 42 scènes. Niet-lineaire hub-structuur (zelfde patroon als H24's museum, [DONE:vlag]) met vier vrij te bezoeken vleugels — 'De Weg Hierheen' (H1-6-aggregaat, cultuurneutraal), 'Wat Je Koos te Bewaren' (H24/H25-onthoud-of-laat-los-reeks, taalspoor-gated), 'Mensen die Je Onthield' (NPC-herkenning/politieke scheuren/mythologische afsluitingen H15-21, taalspoor-gated), 'Stemmen die Nooit Zwegen' (RELATION-payoffs: Athena Grieks, Stoïcijnse lijn+Hadrianus Latijn). Volgorde-tracking: `ch28_eerste_vleugel`/`ch28_laatste_vleugel` onthouden welke vleugel als eerste/laatste werd voltooid, leesbaar door toekomstige hoofdstukken. Cameo van Pamphile retroactief toegevoegd aan Hoofdstuk 23 (CH23_LAT_011B, al gekoppeld/live) als voorwaarde voor deze onthulling. SP_CH28_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS — en op de (later te bouwen) visuele plattegrond-uitbreiding van de vleugel-navigatie." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-16, gekoppeld 2026-08-18) — door Claude geschreven (geen Gemini-concept). 42 scènes. Niet-lineaire hub-structuur (zelfde patroon als H24's museum, [DONE:vlag]) met vier vrij te bezoeken vleugels — 'De Weg Hierheen' (H1-6-aggregaat, cultuurneutraal), 'Wat Je Koos te Bewaren' (H24/H25-onthoud-of-laat-los-reeks, taalspoor-gated), 'Mensen die Je Onthield' (NPC-herkenning/politieke scheuren/mythologische afsluitingen H15-21, taalspoor-gated), 'Stemmen die Nooit Zwegen' (RELATION-payoffs: Athena Grieks, Stoïcijnse lijn+Hadrianus Latijn). Volgorde-tracking: `ch28_eerste_vleugel`/`ch28_laatste_vleugel` onthouden welke vleugel als eerste/laatste werd voltooid, leesbaar door toekomstige hoofdstukken. Cameo van Pamphile retroactief toegevoegd aan Hoofdstuk 23 (CH23_LAT_011B, al gekoppeld/live) als voorwaarde voor deze onthulling. SP_SCENES/BLOCKS bevatten SP_CH28_CNS. Openstaand: de (later te bouwen) visuele plattegrond-uitbreiding van de vleugel-navigatie." },
   { id:"ch29", nr:29, boek:"VI — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
     periode:"Mythologische Eindwereld",
     verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren — de laatste beproeving voor het orakel zelf zich toont. UITGEBREID 2026-08-16 (Gerbens verzoek): dit hoofdstuk is de schaduwzijde van Hoofdstuk 28 — waar Mnemosyne liet zien wat de speler bewaarde, laat Lethe zien wat de speler miste, negeerde, of waarin hij faalde (nooit content die nog niet gebouwd is, uitsluitend paden die het spel echt aanbood). Opent met Lethes oprechte bedankje voor de H24/H25-loslaat-keuzes, gevolgd door een reeks 'wat had kunnen zijn'-momenten (Hoofdstuk 1's ongekozen lijn, het ongelopen taalspoor, en zeven grote/kleinere zijde-keuzes verspreid door de hele campagne), en eindigt met een gedeeltelijke onthulling van Lethes eigen motieven — haar volledige 'vergeten hoort erbij'-filosofie blijft bewust gereserveerd voor de Finale.",
@@ -539,7 +539,7 @@ const SP_CAMPAIGN = [
     grammatica:"Herhaling, PER taalspoor gescheiden (zelfde regel als Hoofdstuk 28 — geen gemengd Grieks/Latijn)",
     personages:"Lethe, Orpheus (als schim/mede-verteller)",
     zijverhalen:"Orpheus (S-tier — jong en hoopvol in Hoofdstuk 5, zijn volledige Eurydice-tragedie al verteld in Hoofdstuk 11; UITGEBREID 2026-08-16: op Gerbens verzoek verschijnt hij hier niet via zijn zingende hoofd, maar als schim die als mede-verteller door het hoofdstuk gidst — hij probeerde iets verlorens terug te halen en faalde, het thema van dit hoofdstuk in menselijke vorm) & Persephone/Demeter (A-tier, hun eigen ontvoeringsmythe — granaatappelpitten, de seizoenen — hier verteld door Orpheus zelf) — beide onderwereld-verhalen",
-    status:"GEBOUWD EN GEVALIDEERD, NOG NIET GEKOPPELD (2026-08-16) — door Claude geschreven (geen Gemini-concept). 47 scènes. Cultuurneutraal begin (Lethes bedankje, Persephone/Demeter, Hoofdstuk 1's ongekozen lijn, het ongelopen taalspoor, `ch9_zijde` Troje/Grieks, `ch8_zijde` Achilles/Agamemnon), dan taalspoor-gesplitst voor de resterende zijde-keuzes: Grieks (`ch19_gre_zijde` met geneste `ch19_gre_ath_sicilie`, `ch22_gre_zijde`, `ch21_gre_socrates_stemming`, plus een korte opsomming van de vrijer-keuze en Herakleitos/Parmenides), Latijn (`ch19_lat_zijde` met geneste `ch19_lat_pom_samenzwering`, `ch22_lat_zijde`, `ch20_lat_aquilifer`+`ch20_lat_sabinus_cotta`, plus een korte opsomming van Marcus Aurelius' vraag en Cicero tegen Verres). Elke zijde-vertakking is met de hand geverifieerd in singleplayer-data.js vóór het schrijven (scène-IDs en flag-waarden bevestigd). Sluit af met Lethes gedeeltelijke onthulling. Nieuwe registry: 3 CODEX-entries, 1 nieuw souvenir, 4 nieuwe VOCAB-id's. 7 IMAGE-hooks proactief toegevoegd tijdens het schrijven. Combinatorische validator (alle flag-domeinen doorlopen): 47/47 scènes bereikbaar, 0 fouten. Live in de browser getest (tijdelijk gekoppeld, daarna losgekoppeld): volledige doorloop als 'beide'-speler, 0 exceptions, 0 console-fouten. SP_CH29_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-16, gekoppeld 2026-08-18) — door Claude geschreven (geen Gemini-concept). 47 scènes. Cultuurneutraal begin (Lethes bedankje, Persephone/Demeter, Hoofdstuk 1's ongekozen lijn, het ongelopen taalspoor, `ch9_zijde` Troje/Grieks, `ch8_zijde` Achilles/Agamemnon), dan taalspoor-gesplitst voor de resterende zijde-keuzes: Grieks (`ch19_gre_zijde` met geneste `ch19_gre_ath_sicilie`, `ch22_gre_zijde`, `ch21_gre_socrates_stemming`, plus een korte opsomming van de vrijer-keuze en Herakleitos/Parmenides), Latijn (`ch19_lat_zijde` met geneste `ch19_lat_pom_samenzwering`, `ch22_lat_zijde`, `ch20_lat_aquilifer`+`ch20_lat_sabinus_cotta`, plus een korte opsomming van Marcus Aurelius' vraag en Cicero tegen Verres). Elke zijde-vertakking is met de hand geverifieerd in singleplayer-data.js vóór het schrijven (scène-IDs en flag-waarden bevestigd). Sluit af met Lethes gedeeltelijke onthulling. Nieuwe registry: 3 CODEX-entries, 1 nieuw souvenir, 4 nieuwe VOCAB-id's. 7 IMAGE-hooks proactief toegevoegd tijdens het schrijven. Combinatorische validator (alle flag-domeinen doorlopen): 47/47 scènes bereikbaar, 0 fouten. Live in de browser getest: volledige doorloop als 'beide'-speler, 0 exceptions, 0 console-fouten. SP_SCENES/BLOCKS bevatten SP_CH29_CNS." },
   { id:"finale", nr:30, boek:"VI — De Laatste Herinnering", type:"finale", nm:"Chronica Classica",
     periode:"Tijdloos",
     thema:"De strijd tegen de Vergetelheid",
@@ -547,7 +547,7 @@ const SP_CAMPAIGN = [
     grammatica:"Eindtoets van alle grammatica en taalvaardigheid",
     gameplay:"Alle Codex-kennis wordt gebruikt",
     eindboodschap:"Wie de taal bewaart, bewaart de geschiedenis",
-    status:"GEBOUWD, NOG NIET GEKOPPELD (2026-08-17) — door Claude geschreven op basis van een uitgebreide brainstorm met Gerben. 63 scènes (was 54, uitgebreid met een losse, puur doorklikbare epiloog ná de Bekroning: leest de grootste keuzes van de hele campagne terug — de Lethe-uitkomst uit de Finale zelf als startpunt, dan ch9_zijde/ch8_zijde/taalspoor/ch1_lijn/H19+H22-zijdekeuzes, elk via een dynamische tekst-token, zie SP_FIN_EPILOOG_* in singleplayer-data.js en spFinaleEpiloogLethe()/spFinaleEpiloogPolitiek() in singleplayer.js. Chronica.md §7.102). Structuur: Kronos onthult zichzelf als de verslagen Titaan (framing 'redt vooral zichzelf, maar oprecht ook de rest') → Kennis-fase (taal-eindtoets: doeltaal-slotalinea met 2 ingebedde vervagende-woorden-puzzels, taalspoor-gesplitst) → Herinnering-fase (Kleio, Mnemosynes dochter en Muze van de Geschiedenis, onthult zichzelf als de onzichtbare schrijfster van 'de Kroniek'; credits voor de resterende open dode flags uit H25-27) → Relatie-fase (drie RELATION-clusters — mythologische helden, klassiek Griekenland, Rome — elk met een niet-voorwaardelijk geformuleerde woordvoerder; Hermes' en Pamphiles eigen, persoonlijke onthullingen). Vijf eindes (neutraal/medium/hoog × clementia/severitas), bepaald door de t/m Hoofdstuk 19 opgebouwde Clementia/Severitas-stand (spComputeTendencyTier, singleplayer.js) — de Finale zelf zet GEEN nieuwe CLEMENTIA/SEVERITAS-tags, leest alleen uit. Eén gedeelde COMBAT-kern (fin_lethe) voor alle vijf eindes, dynamische HP (±20%, zachte schaling) op basis van hoeveel de speler in de Kennis/Herinnering-fases 'onthield'. RELATION-woordvoerder per cluster via gemiddelde-per-gelegenheid (score/touchpoints, ondergrens 2, tiebreak op ruwe score) i.p.v. ruwe hoogste score, om structurele bevoordeling van NPC's met veel touchpoints (Cicero) te voorkomen. Bekroning: ceremonieel harnas (`armor:ceremonieel`) + eretitel `meester_der_herinnering`. Nieuwe registry: 6 CODEX-entries, 4 PUZZLE-entries (hergebruikte, al bekende VOCAB), SP_FINALE_CLUSTERS/SP_FINALE_DODE_FLAGS_CREDITS/SP_FIN_EPILOOG_* (singleplayer-data.js) en zes nieuwe helperfuncties (singleplayer.js). 9 IMAGE-hooks proactief toegevoegd. Combinatorische validator (taalspoor × tendency, 15 combinaties): 63/63 scènes bereikbaar, 0 fouten; losse resolver-sweep van de epiloog-tokens (630 combinaties van tendency/variant/ch1_lijn/taalspoor/zijde-flags): 0 fouten. Live in de browser getest (tijdelijk gekoppeld, daarna losgekoppeld): volledige doorloop als 'beide'-speler t/m FIN_CREDITS, inclusief de volledige epiloog-keten, beide taal-eindtoetsen opgelost, dynamische COMBAT-HP geverifieerd (122 bij kennis=90/herinnering=40, exact volgens formule), 0 console-fouten (enige 404 was het nog niet gegenereerde COMBAT-portret, zoals verwacht). SP_FINALE_CNS bestaat als losse const, wacht op Gerbens goedkeuring vóór koppeling aan SP_SCENES/BLOCKS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-17, gekoppeld 2026-08-18 — dit is nu het WERKELIJKE einde van de campagne, geen WORDT_VERVOLGD meer erna) — door Claude geschreven op basis van een uitgebreide brainstorm met Gerben. 63 scènes (was 54, uitgebreid met een losse, puur doorklikbare epiloog ná de Bekroning: leest de grootste keuzes van de hele campagne terug — de Lethe-uitkomst uit de Finale zelf als startpunt, dan ch9_zijde/ch8_zijde/taalspoor/ch1_lijn/H19+H22-zijdekeuzes, elk via een dynamische tekst-token, zie SP_FIN_EPILOOG_* in singleplayer-data.js en spFinaleEpiloogLethe()/spFinaleEpiloogPolitiek() in singleplayer.js. Chronica.md §7.102). Structuur: Kronos onthult zichzelf als de verslagen Titaan (framing 'redt vooral zichzelf, maar oprecht ook de rest') → Kennis-fase (taal-eindtoets: doeltaal-slotalinea met 2 ingebedde vervagende-woorden-puzzels, taalspoor-gesplitst) → Herinnering-fase (Kleio, Mnemosynes dochter en Muze van de Geschiedenis, onthult zichzelf als de onzichtbare schrijfster van 'de Kroniek'; credits voor de resterende open dode flags uit H25-27) → Relatie-fase (drie RELATION-clusters — mythologische helden, klassiek Griekenland, Rome — elk met een niet-voorwaardelijk geformuleerde woordvoerder; Hermes' en Pamphiles eigen, persoonlijke onthullingen). Vijf eindes (neutraal/medium/hoog × clementia/severitas), bepaald door de t/m Hoofdstuk 19 opgebouwde Clementia/Severitas-stand (spComputeTendencyTier, singleplayer.js) — de Finale zelf zet GEEN nieuwe CLEMENTIA/SEVERITAS-tags, leest alleen uit. Eén gedeelde COMBAT-kern (fin_lethe) voor alle vijf eindes, dynamische HP (±20%, zachte schaling) op basis van hoeveel de speler in de Kennis/Herinnering-fases 'onthield'. RELATION-woordvoerder per cluster via gemiddelde-per-gelegenheid (score/touchpoints, ondergrens 2, tiebreak op ruwe score) i.p.v. ruwe hoogste score, om structurele bevoordeling van NPC's met veel touchpoints (Cicero) te voorkomen. Bekroning: ceremonieel harnas (`armor:ceremonieel`) + eretitel `meester_der_herinnering`. Nieuwe registry: 6 CODEX-entries, 4 PUZZLE-entries (hergebruikte, al bekende VOCAB), SP_FINALE_CLUSTERS/SP_FINALE_DODE_FLAGS_CREDITS/SP_FIN_EPILOOG_* (singleplayer-data.js) en zes nieuwe helperfuncties (singleplayer.js). 9 IMAGE-hooks proactief toegevoegd. Combinatorische validator (taalspoor × tendency, 15 combinaties): 63/63 scènes bereikbaar, 0 fouten; losse resolver-sweep van de epiloog-tokens (630 combinaties van tendency/variant/ch1_lijn/taalspoor/zijde-flags): 0 fouten. Live in de browser getest (tijdelijk gekoppeld, daarna losgekoppeld): volledige doorloop als 'beide'-speler t/m FIN_CREDITS, inclusief de volledige epiloog-keten, beide taal-eindtoetsen opgelost, dynamische COMBAT-HP geverifieerd (122 bij kennis=90/herinnering=40, exact volgens formule), 0 console-fouten (enige 404's waren de nog niet gegenereerde illustraties, zoals verwacht). SP_SCENES/BLOCKS bevatten SP_FINALE_CNS." },
 ];
 
 /* ---- MYTHENCANON — S/A/B-tier prioriteitenlijst + de nog ontbrekende
@@ -3037,6 +3037,42 @@ const SP_CODEX_ENTRIES = {
    Chronica.md niet meer de bron van waarheid, maar de personagebeschrijvingen
    daarin waren te goed om te laten liggen. ---- */
 const SP_CODEX_PERSONS = {
+  melissa: { nm:"Melissa", epithet:"Stratons dochter, Puteoli",
+    intro:"Straton's dochter, die het openlijk voor Doris opneemt tegen haar eigen vader — een van de weinige stemmen in dit hoofdstuk die zich niet laat overtroeven." },
+  aemilia: { nm:"Aemilia", epithet:"Kleindochter, Rome",
+    intro:"Vergezelt haar grootmoeder naar de Basilica Aemilia, en durft als eerste hardop te vragen waarom niet elke vrouw een grafsteen krijgt die haar werk eert." },
+  theodora: { nm:"Theodora", epithet:"Byzantijnse keizerin",
+    intro:"Weigerde tijdens de Nika-opstand (532 n.Chr.) te vluchten — 'purper is een prachtig doodskleed' — en redde daarmee Justinianus' troon." },
+  hadrianus: { nm:"Hadrianus", epithet:"Romeins keizer, filhelleen",
+    intro:"Maakte de zeshonderd jaar onafgemaakte Olympieion in Athene af zonder dat iemand het hem vroeg — de meest reislustige en Grieks-georiënteerde van alle Romeinse keizers." },
+  nerva: { nm:"Nerva", epithet:"Romeins keizer, 96-98 n.Chr.",
+    intro:"Een oude, kinderloze senator, als noodgreep tot keizer gekozen — adopteert de bekwaamste generaal die hij kent, Trajanus, in plaats van naar een bloedverwant te zoeken." },
+  euclides: { nm:"Euclides", epithet:"Grieks wiskundige, Alexandrië",
+    intro:"Ordende alle bekende meetkunde tot één sluitend systeem, de Elementen — en weigerde zelfs koning Ptolemaeus een snellere weg te geven dan stap voor stap leren." },
+  seneca: { nm:"Seneca", epithet:"Stoïcijns filosoof en Nero's leermeester",
+    intro:"Zoekt in de Naturales Quaestiones een natuurlijke verklaring voor de aardbeving van 62 n.Chr. — geen straf van de goden, maar lucht en water die zich een weg naar buiten persen." },
+  vitruvius: { nm:"Vitruvius", epithet:"Romeins architect en schrijver",
+    intro:"Schrijver van De Architectura, tien boeken over bouwkunde — een van de weinige technische geschriften uit zijn tijd die (bijna toevallig) bewaard bleven, met zijn beroemde drieluik firmitas/utilitas/venustas." },
+  octavianus: { nm:"Octavianus", epithet:"Later keizer Augustus",
+    intro:"Caesars achterneef en adoptiefzoon — jong, berekenend, en in het Tweede Triumviraat gedwongen tot compromissen die hij zelf niet altijd prettig vindt." },
+  socrates: { nm:"Socrates", epithet:"Atheens filosoof",
+    intro:"Stelt vragen liever dan dat hij antwoorden geeft — berecht in 399 v.Chr. voor het invoeren van nieuwe goden en het bederven van de jeugd met diezelfde vragen." },
+  cicero: { nm:"Cicero", epithet:"Romes grootste redenaar",
+    intro:"Consul en redenaar, wiens welsprekendheid de Republiek herhaaldelijk uit de nood helpt — en die zelden een gelegenheid laat lopen om dat zelf ook te vermelden." },
+  caesar: { nm:"Caesars schim", epithet:"Julius Caesar",
+    intro:"Vertelt zijn eigen Gallische Oorlog als schim/mede-verteller (Hoofdstuk 20) — ambitieus, zelfverzekerd, en zelden in twijfel over zijn eigen beslissingen." },
+  cassius: { nm:"Cassius", epithet:"Samenzweerder tegen Caesar",
+    intro:"De scherpste geest van de twee hoofdsamenzweerders tegen Caesar — overtuigt Brutus mee te doen, en rekent ook op de speler om zich bij het complot aan te sluiten." },
+  boodschapper: { nm:"de Boodschapper van Chronos", epithet:"Gids en verteller",
+    intro:"De haast alomtegenwoordige stem die je door de hele reis heen begeleidt — later onthuld als Pamphile van Epidaurus (Hoofdstuk 28)." },
+  herodotos: { nm:"Herodotos", epithet:"De Vader van de Geschiedenis",
+    intro:"Nieuwsgierig, vriendelijk geïnteresseerd in vreemde culturen — leert de speler bronnen te vergelijken in plaats van alles klakkeloos te geloven." },
+  maharbal: { nm:"Maharbal", epithet:"Hannibals cavaleriecommandant",
+    intro:"Drong er na Cannae op aan meteen door te stoten naar het vrijwel onverdedigde Rome — Hannibal aarzelde, en Maharbal's eigen oordeel daarover ('Vincere scis, victoriā uti nescis') werd een van de beroemdste regels uit de hele oorlog." },
+  pherenike: { nm:"Pherenike", epithet:"Dochter en moeder van Olympisch kampioenen",
+    intro:"Verkleedde zich als trainer om, ondanks het verbod voor getrouwde vrouwen, haar zoon te zien vechten bij Olympia — ontmaskerd, maar niet gestraft, omdat de rechters haar familie te roemrijk achtten." },
+  flamma: { nm:"Flamma", epithet:"Syrische gladiator",
+    intro:"Won eenentwintig van zijn vierendertig gevechten, en weigerde de rudis — het houten zwaard dat hem officieel zijn vrijheid gaf — al vier keer, historisch geattesteerd op zijn eigen grafsteen." },
   midas: { nm:"Midas", epithet:"Koning van Sardis, Lydië",
     intro:"Een rijke koning wiens naam onder handelaars en reizigers wordt gefluisterd — half spottend, half jaloers — sinds hij een god een gunst bewees.",
     full:"Midas' gastvrijheid jegens Silenus werd beloond met een wens die hij niet had doordacht: alles wat hij aanraakte veranderde in goud, ook zijn eigen dochter. Pas toen hij zichzelf waste in de rivier de Pactolus, hief Bacchus de vloek op — en liet de rivier voorgoed doorspekt achter met gouden korrels." },
@@ -4057,6 +4093,48 @@ const SP_CHECKS = {
     deels:{ target:"CH18_LAT_005_DEELS" },
     gefaald:{ target:"CH18_LAT_005_GEFAALD" },
     kritiek:{ target:"CH18_LAT_005_KRITIEK" } },
+  // ---- Hoofdstuk 19 ----
+  ch19_gre_syracuse_terugtocht: { stat:"robur", dc:15,
+    volledig:{ target:"CH19_GRE_ATH_004_VOL" },
+    deels:{ target:"CH19_GRE_ATH_004_DEELS" },
+    gefaald:{ target:"CH19_GRE_ATH_004_GEFAALD" },
+    kritiek:{ target:"CH19_GRE_ATH_004_KRITIEK" } },
+  // ---- Hoofdstuk 20 ----
+  ch20_gre_gedrosische_woestijn: { stat:"robur", dc:16,
+    volledig:{ target:"CH20_GRE_008_VOL" },
+    deels:{ target:"CH20_GRE_008_DEELS" },
+    gefaald:{ target:"CH20_GRE_008_GEFAALD" },
+    kritiek:{ target:"CH20_GRE_008_KRITIEK" } },
+  // ---- Hoofdstuk 21 ----
+  ch21_gre_grot_verdediging: { stat:"ingenium", dc:15,
+    volledig:{ target:"CH21_GRE_006_VOL" },
+    deels:{ target:"CH21_GRE_006_DEELS" },
+    gefaald:{ target:"CH21_GRE_006_GEFAALD" },
+    kritiek:{ target:"CH21_GRE_006_KRITIEK" } },
+  // ---- Hoofdstuk 22 ----
+  ch22_gre_ipsus_ontsnapping: { stat:"agilitas", dc:16,
+    volledig:{ target:"CH22_GRE_ANT_006_VOL" },
+    deels:{ target:"CH22_GRE_ANT_006_DEELS" },
+    gefaald:{ target:"CH22_GRE_ANT_006_GEFAALD" },
+    kritiek:{ target:"CH22_GRE_ANT_006_KRITIEK" } },
+  // ---- Hoofdstuk 23 ----
+  ch23_gre_hof_intriges: { stat:"prudentia", dc:15,
+    volledig:{ target:"CH23_GRE_003_VOL" },
+    deels:{ target:"CH23_GRE_003_DEELS" },
+    gefaald:{ target:"CH23_GRE_003_GEFAALD" },
+    kritiek:{ target:"CH23_GRE_003_KRITIEK" } },
+  // ---- Hoofdstuk 24 ----
+  ch24_gre_zuilorden_herkenning: { stat:"ingenium", dc:14,
+    volledig:{ target:"CH24_GRE_001_VOL" },
+    deels:{ target:"CH24_GRE_001_DEELS" },
+    gefaald:{ target:"CH24_GRE_001_GEFAALD" },
+    kritiek:{ target:"CH24_GRE_001_KRITIEK" } },
+  // ---- Hoofdstuk 26 ----
+  ch26_lat_donau_wacht: { stat:"prudentia", dc:15,
+    volledig:{ target:"CH26_LAT_007_VOL" },
+    deels:{ target:"CH26_LAT_007_DEELS" },
+    gefaald:{ target:"CH26_LAT_007_GEFAALD" },
+    kritiek:{ target:"CH26_LAT_007_KRITIEK" } },
   // ---- Hoofdstuk 25 ----
   ch25_lat_vlucht: { stat:"agilitas", dc:15,
     volledig:{ target:"CH25_LAT_VLUCHT_VOL" },
@@ -4932,6 +5010,54 @@ const SP_VOCAB_ENTRIES = {
   latijn_dein:    { taal:"latijn", woord:"dein",    betekenis:"daarna, vervolgens" },
   latijn_utique:  { taal:"latijn", woord:"utique",  betekenis:"zeker, in elk geval" },
   latijn_iterum:  { taal:"latijn", woord:"iterum",  betekenis:"opnieuw, weer" },
+
+  // ---- Hoofdstuk 28/29 — signaalwoorden-retrofit (2026-08-18, audit-gat
+  // gedicht, zie VOCAB_UITBREIDING.md/Chronica.md §7.10x). Zelfde methode
+  // als de H17-25-retrofit: 10 Grieks + 10 Latijn per hoofdstuk, gekozen op
+  // frequentie uit certamen/vocab.js (VOCAB_LA/VOCAB_EL), alleen
+  // verb./prep./cj./adv./pron., nergens eerder al gebruikt. De Finale krijgt
+  // op Gerbens uitdrukkelijke wens GEEN signaalwoorden-uitbreiding — puur
+  // afsluiting, geen nieuwe leerstof.
+  grieks_anaginosko:   { taal:"grieks", woord:"ἀναγιγνώσκω", transcript:"anagignṓskō", betekenis:"herkennen; lezen" },
+  grieks_anankazo:     { taal:"grieks", woord:"ἀναγκάζω", transcript:"anankázō", betekenis:"noodzaken; dwingen" },
+  grieks_anechomai:    { taal:"grieks", woord:"ἀνέχομαι", transcript:"anéchomai", betekenis:"verdragen" },
+  grieks_anoigo:       { taal:"grieks", woord:"ἀνοίγω", transcript:"anoígō", betekenis:"openen" },
+  grieks_apatao:       { taal:"grieks", woord:"ἀπατάω", transcript:"apatáō", betekenis:"bedriegen" },
+  grieks_apokrinomai:  { taal:"grieks", woord:"ἀποκρίνομαι", transcript:"apokrínomai", betekenis:"antwoorden" },
+  grieks_aporeo:       { taal:"grieks", woord:"ἀπορέω", transcript:"aporéō", betekenis:"in onzekerheid zijn" },
+  grieks_apophaino:    { taal:"grieks", woord:"ἀποφαίνω", transcript:"apophaínō", betekenis:"aantonen" },
+  grieks_haptomai:     { taal:"grieks", woord:"ἅπτομαι", transcript:"háptomai", betekenis:"aanraken" },
+  grieks_aresko:       { taal:"grieks", woord:"ἀρέσκω", transcript:"aréskō", betekenis:"bevallen" },
+  latijn_inquio:       { taal:"latijn", woord:"inquio", betekenis:"zeggen" },
+  latijn_intelligo:    { taal:"latijn", woord:"intelligo", betekenis:"begrijpen" },
+  latijn_parco:        { taal:"latijn", woord:"parco", betekenis:"sparen" },
+  latijn_certe:        { taal:"latijn", woord:"certe", betekenis:"zeker, beslist" },
+  latijn_concedo:      { taal:"latijn", woord:"concedo", betekenis:"weggaan, toestaan" },
+  latijn_convenio:     { taal:"latijn", woord:"convenio", betekenis:"samenkomen, passen" },
+  latijn_valeo:        { taal:"latijn", woord:"valeo", betekenis:"gezond zijn, waard zijn" },
+  latijn_fallo:        { taal:"latijn", woord:"fallo", betekenis:"bedriegen, nalaten" },
+  latijn_occurro:      { taal:"latijn", woord:"occurro", betekenis:"komen bij, zich tonen" },
+  latijn_statuo:       { taal:"latijn", woord:"statuo", betekenis:"(op)stellen, besluiten" },
+  grieks_harpazo:      { taal:"grieks", woord:"ἁρπάζω", transcript:"harpázō", betekenis:"roven; grijpen" },
+  grieks_blapto:       { taal:"grieks", woord:"βλάπτω", transcript:"bláptō", betekenis:"schade toebrengen" },
+  grieks_gameo:        { taal:"grieks", woord:"γαμέω", transcript:"gaméō", betekenis:"trouwen" },
+  grieks_gymnazo:      { taal:"grieks", woord:"γυμνάζω", transcript:"gymnázō", betekenis:"trainen" },
+  grieks_dakryo:       { taal:"grieks", woord:"δακρύω", transcript:"dakrýō", betekenis:"huilen" },
+  grieks_diabaino:     { taal:"grieks", woord:"διαβαίνω", transcript:"diabaínō", betekenis:"oversteken" },
+  grieks_dialegomai:   { taal:"grieks", woord:"διαλέγομαι", transcript:"dialégomai", betekenis:"een gesprek voeren" },
+  grieks_diateleo:     { taal:"grieks", woord:"διατελέω", transcript:"diateléō", betekenis:"blijven doen" },
+  grieks_dikazo:       { taal:"grieks", woord:"δικάζω", transcript:"dikázō", betekenis:"rechtspreken" },
+  grieks_dyomai:       { taal:"grieks", woord:"δύομαι", transcript:"dýomai", betekenis:"duiken; aantrekken" },
+  latijn_praeterea:    { taal:"latijn", woord:"praeterea", betekenis:"bovendien" },
+  latijn_rogo:         { taal:"latijn", woord:"rogo", betekenis:"vragen" },
+  latijn_desero:       { taal:"latijn", woord:"desero", betekenis:"verlaten, achterlaten" },
+  latijn_pugno:        { taal:"latijn", woord:"pugno", betekenis:"vechten, strijden" },
+  latijn_quemadmodum:  { taal:"latijn", woord:"quemadmodum", betekenis:"hoe, op welke manier" },
+  latijn_occido:       { taal:"latijn", woord:"occido", betekenis:"doden, te gronde richten" },
+  latijn_sicut:        { taal:"latijn", woord:"sicut", betekenis:"zoals" },
+  latijn_committo:     { taal:"latijn", woord:"committo", betekenis:"samenbrengen, begaan, overlaten" },
+  latijn_consulo:      { taal:"latijn", woord:"consulo", betekenis:"overleggen, raadplegen, zorgen" },
+  latijn_aufero:       { taal:"latijn", woord:"aufero", betekenis:"wegbrengen" },
 };
 
 /* ---- PAYOFF-LAAG (Chronica.md §12, "delayed consequences") — platte lijst
@@ -21941,6 +22067,11 @@ Pandora's doos ging over de nieuwsgierigheid van iedereen, vader — niet over v
 
 Straton antwoordt niet — hij telt gewoon door, alsof hij haar niet gehoord heeft. Doris, die haar eigen geld ziet tellen door de man die het ooit van haar afpakte, zegt niets, maar houdt Melissa's blik net iets langer vast dan nodig.
 
+REACTION:
+melissa
+SEVERITAS: Melissa knikt kort, alsof ze niets anders had verwacht. "Sommige dingen moet je gewoon hardop zeggen."
+CLEMENTIA: Melissa glimlacht nauwelijks merkbaar. "Een blik is soms genoeg — ik weet dat je het meende."
+
 CHOICES:
 * Spreek Melissa hardop bij — ze verdient het niet om alleen te staan hierin [SEVERITAS] -> CH15_GRE_005B
 * Zeg zelf niets, maar wissel een blik met Melissa die genoeg zegt [CLEMENTIA] -> CH15_GRE_005B
@@ -22025,6 +22156,11 @@ Lanam fecit staat op elke steen, avia. Maar op ons eigen landgoed spinnen en wev
 
 CODEX:
 codex_villa_wolproductie
+
+REACTION:
+aemilia
+SEVERITAS: Aemilia knikt vastberaden. "Ik zeg zoiets niet vaak hardop. Fijn dat het niet zomaar in de lucht bleef hangen."
+CLEMENTIA: Aemilia glimlacht dankbaar, maar iets gelatener dan ervoor. "Misschien is het inderdaad niet het moment. Een andere dag dan."
 
 CHOICES:
 * Zeg dat Aemilia daarmee iets aanraakt wat weinigen hardop toegeven [SEVERITAS] -> CH15_LAT_005B
@@ -22326,6 +22462,11 @@ Voor de vierde keer weigert hij zijn vrijheid. Het publiek weet niet goed of het
 
 IMAGE:
 ch16_lat_flamma_rudis.png
+
+REACTION:
+flamma
+CLEMENTIA: Flamma knikt je toe, alsof je een van de weinigen bent die het snapt. "Niet iedereen zoekt dezelfde deur naar buiten."
+SEVERITAS: Flamma haalt zijn schouders op, ongeïnteresseerd in je onbegrip. "Jij vecht niet hier. Ik wel."
 
 CHOICES:
 * Bewonder zijn keuze — sommige mensen vinden hun vrijheid ergens anders dan wij verwachten [CLEMENTIA] -> CH16_LAT_004B
@@ -22697,6 +22838,11 @@ Ontmaskerd wanneer ze van vreugde over het hek springt, wordt ze uiteindelijk ni
 IMAGE:
 ch16_gre_kallipateira.png
 
+REACTION:
+pherenike
+CLEMENTIA: Pherenike knikt tevreden. "Roemrijk of niet — ik was er, en dat is alles wat telt."
+SEVERITAS: Pherenike kijkt je scherp aan. "Zeg dat maar tegen de volgende vrouw zonder beroemde familie die betrapt wordt."
+
 CHOICES:
 * Vind dat de rechters hier terecht een uitzondering maakten [CLEMENTIA] -> CH16_GRE_005B
 * Vind dat een wet die alleen voor roemrijke families buigt, geen echte wet is [SEVERITAS] -> CH16_GRE_005B
@@ -23004,6 +23150,11 @@ Maharbal
 Vincere scis, Hannibal, victoriā uti nescis.
 
 Hannibal aarzelt. Zijn leger is uitgeput, zijn voorraden krap, en een directe belegering van Rome zelf is een heel ander soort risico dan een veldslag winnen. Hij besluit niet op te trekken naar Rome — niet nu, niet direct.
+
+REACTION:
+maharbal
+SEVERITAS: Maharbal knikt grimmig. "Eindelijk iemand die het ziet. Deze kans komt nooit meer terug."
+CLEMENTIA: Maharbal schudt zijn hoofd, niet overtuigd. "Een uitgeput leger wint geen beleg. Ik snap zijn redenering — ik ben het er alleen niet mee eens."
 
 CHOICES:
 * Vind dat Maharbal gelijk had — deze kans komt nooit meer terug [SEVERITAS] -> CH17_LAT_005B
@@ -23504,6 +23655,11 @@ DIALOGUE:
 Herodotos
 Het werkte zo goed dat zowel de achtervolgende Athener als Xerxes zelf, die vanaf de kust toekeek, dachten dat ze zojuist een vijandelijk schip tot zinken had gebracht. Xerxes zou hebben uitgeroepen: "Mijn mannen zijn vrouwen geworden, en mijn vrouwen mannen." Wat er met de bemanning van dat bondgenootschappelijke schip gebeurde, vermeldt niemand.
 
+REACTION:
+herodotos
+SEVERITAS: Herodotos knikt bedachtzaam. "Oorlog is zelden eerlijk voor wie toevallig in de weg vaart. Ik vertel het zoals het gebeurde."
+CLEMENTIA: Herodotos zwijgt even. "Terecht dat het je stoort. Ik vermeld het juist daarom — niemand anders zou het nog doen."
+
 CHOICES:
 * Vind haar vindingrijk — overleven in oorlog vraagt soms om harde keuzes [SEVERITAS] -> CH17_GRE_007B
 * Vind het verontrustend dat haar list geprezen wordt terwijl een bondgenootschappelijke bemanning er het slachtoffer van werd [CLEMENTIA] -> CH17_GRE_007B
@@ -23671,6 +23827,11 @@ codex_naxos_afscheiding
 
 FLAG:
 ch18_gre_naxos_gezien=true
+
+REACTION:
+boodschapper
+SEVERITAS: "Een bondgenootschap dat niemand kan dwingen te blijven," zegt de Boodschapper zacht, "is meestal een bondgenootschap dat allang uiteengevallen is."
+CLEMENTIA: "En toch," zegt de Boodschapper, "noemt niemand het meer een bondgenootschap als er dwang voor nodig is."
 
 CHOICES:
 * "Een bondgenootschap zonder dwang houdt nooit stand tegen een vijand als Perzië." [SEVERITAS] -> CH18_GRE_003
@@ -24015,7 +24176,7 @@ Marius' opkomst is zelf al een aanklacht tegen de senaatselite: in de oorlog teg
 Zijn overwinning op Jugurtha komt er uiteindelijk toch, tot zijn eigen ergernis, mede dankzij zijn ambitieuze quaestor: Lucius Cornelius Sulla, die de gevangenneming van de koning zelf persoonlijk weet te regelen — en daar meteen alle eer voor claimt.
 
 VOCAB:
-latijn_legio, latijn_centurio, latijn_cohors, grieks_ostrakon
+latijn_legio, latijn_centurio, latijn_cohors
 
 CODEX:
 codex_marius_jugurtha
@@ -24064,6 +24225,11 @@ codex_proscripties
 
 VOCAB:
 latijn_dictator, latijn_proscriptio
+
+REACTION:
+boodschapper
+CLEMENTIA: "Precies," zegt de Boodschapper. "Elke generatie belooft dat zij het anders zal doen. Weinig generaties houden zich eraan."
+SEVERITAS: "Misschien," zegt de Boodschapper, "maar oorlogen eindigen zelden met een handdruk. Sulla wist dat beter dan wie ook."
 
 CHOICES:
 * "Wie zo terugslaat, wordt precies wat hij ooit bestreed." [CLEMENTIA] -> CH18_LAT_009
@@ -24237,7 +24403,7 @@ CODEX:
 codex_pest_van_athene
 
 VOCAB:
-grieks_loimos, latijn_pestis
+grieks_loimos
 
 CHOICES:
 * Zie wie er, tussen de gewone hoplieten, meevecht -> CH19_GRE_002B
@@ -24317,7 +24483,7 @@ CODEX:
 codex_eerste_triumviraat
 
 VOCAB:
-latijn_proditio, grieks_prodotes
+latijn_proditio
 
 CHOICES:
 * Zie wat Crassus met zijn deel van de macht doet -> CH19_LAT_002
@@ -24443,7 +24609,7 @@ RELATION:
 alkibiades=-1
 
 VOCAB:
-grieks_demokratia, latijn_caedes
+grieks_demokratia
 
 CHOICES:
 * Zie wat diezelfde Alkibiades vervolgens voorstelt -> CH19_GRE_ATH_003
@@ -24510,15 +24676,65 @@ TITLE:
 De Steengroeven van Syracuse
 
 TEXT:
-Zonder Alkibiades' vindingrijkheid voert de voorzichtige Nicias het bevel — een ramp die zich langzaam voltrekt. Het beleg van Syracuse mislukt, een maansverduistering verlengt Nicias' bijgelovige aarzeling op het slechtst denkbare moment, en uiteindelijk wordt de hele Atheense vloot en het landleger vernietigd. Overlevenden eindigen als slaaf in de steengroeven van Syracuse, waar velen sterven van honger en dorst.
-
-Athene verliest in één klap een hele generatie aan burgers en schepen — en toch vecht de stad, koppig, door.
+Zonder Alkibiades' vindingrijkheid voert de voorzichtige Nicias het bevel — een ramp die zich langzaam voltrekt. Het beleg van Syracuse mislukt, een maansverduistering verlengt Nicias' bijgelovige aarzeling op het slechtst denkbare moment, en uiteindelijk wordt de hele Atheense vloot vernietigd. Wat rest van het landleger probeert zich, achtervolgd, landinwaarts terug te vechten naar veiligheid — dorstig, uitgeput, met de Syracusanen op de hielen.
 
 IMAGE:
 ch19_gre_syracuse_steengroeven.png
 
 CODEX:
 codex_sicilische_expeditie
+
+CHECK:
+ch19_gre_syracuse_terugtocht
+
+END
+
+=== SCENE: CH19_GRE_ATH_004_VOL ===
+
+TITLE:
+De Rivier de Assinaros
+
+TEXT:
+Je houdt het tempo vol, drinkt spaarzaam en alleen wanneer het echt moet, en bereikt met een kleine groep uitgeputte overlevenden uiteindelijk een plek waar de achtervolgers hen niet meer inhalen.
+
+CHOICES:
+* Zie wat er van de verrader Alkibiades wordt -> CH19_GRE_ATH_005
+
+END
+
+=== SCENE: CH19_GRE_ATH_004_DEELS ===
+
+TITLE:
+Bijna Ingehaald
+
+TEXT:
+Meer dan eens dreig je afgesneden te raken van de rest, maar telkens haal je de groep net op tijd weer in — vermoeider dan de anderen, maar levend.
+
+CHOICES:
+* Zie wat er van de verrader Alkibiades wordt -> CH19_GRE_ATH_005
+
+END
+
+=== SCENE: CH19_GRE_ATH_004_GEFAALD ===
+
+TITLE:
+De Rivier van Bloed
+
+TEXT:
+Bij de rivier de Assinaros verliest de discipline het volledig van de dorst — mannen verdringen elkaar bijna verdrinkend om te drinken, terwijl de Syracusanen vanaf de oever toekijken en toeslaan. Je overleeft het, maar de rivier zelf zal, zeggen overlevenden later, roder gekleurd hebben dan water hoort te zijn.
+
+CHOICES:
+* Zie wat er van de verrader Alkibiades wordt -> CH19_GRE_ATH_005
+
+END
+
+=== SCENE: CH19_GRE_ATH_004_KRITIEK ===
+
+TITLE:
+Niet Alleen Gehaald
+
+TEXT:
+Onderweg struikelt een uitgeputte, jongere soldaat naast je en dreigt achter te blijven. Tegen je eigen uitputting in til je hem overeind en sleep je hem mee tot jullie allebei, buiten adem, in veiligheid zijn. Jaren later zal deze soldaat het verhaal nog navertellen, zonder ooit je naam te kennen.
 
 CHOICES:
 * Zie wat er van de verrader Alkibiades wordt -> CH19_GRE_ATH_005
@@ -25012,6 +25228,11 @@ DIALOGUE:
 Cassius
 Hij gaf ons het leven terug, dat is waar. Maar hij nam ons eerst de Republiek af om het te kunnen geven. Sta je aan onze kant, of aan de zijne?
 
+REACTION:
+cassius
+SEVERITAS: Cassius' gezicht ontspant, voor het eerst sinds hij binnenkwam. "Ik wist dat je het zou begrijpen."
+CLEMENTIA: Cassius' blik verhardt. "Genade vergeten is makkelijker gezegd dan gedaan, blijkbaar. Zo zij het."
+
 CHOICES:
 * Sluit je aan bij de samenzwering [SEVERITAS] -> CH19_LAT_POM_006_MEE
 * Weiger — de genade die je kreeg, verdient geen dolk terug [CLEMENTIA] -> CH19_LAT_POM_006_WEIGER
@@ -25392,9 +25613,72 @@ Tot aan de Rand van de Wereld, en Terug
 TEXT:
 Bij de rivier de Hydaspes verslaat Alexander in 326 v.Chr. de Indiase koning Porus — een van zijn zwaarste overwinningen ooit. Bucephalus, inmiddels dertig jaar oud en al twintig jaar zijn trouwe rijdier, sterft kort na de slag, aan ouderdom of aan zijn verwondingen. Alexander rouwt zo openlijk dat hij, zoals hij dat overal doet waar hij komt, ter plekke een stad sticht — Bucephala, vernoemd naar het paard dat hem al die jaren droeg.
 
-Alexander trekt door tot diep in India, tot zijn eigen leger — uitgeput, heimweeziek, na jaren onderweg — aan de rivier de Hyphasis weigert nog verder te gaan. Met tegenzin keert hij terug naar Babylon.
+Alexander trekt door tot diep in India, tot zijn eigen leger — uitgeput, heimweeziek, na jaren onderweg — aan de rivier de Hyphasis weigert nog verder te gaan. Met tegenzin keert hij terug — niet via de veilige route, maar dwars door de Gedrosische woestijn, deels uit koppigheid, deels om een vloot langs de kust tegelijk te laten bevoorraden. Het wordt de dodelijkste etappe van de hele veldtocht: hitte, zandstormen, en water dat telkens weer opdroogt vlak voordat het leger het bereikt.
 
-Daar sterft hij, in juni 323 v.Chr., pas tweeëndertig jaar oud, na een korte, hevige koorts. Op zijn sterfbed vraagt zijn omgeving wie zijn immense rijk moet erven. Zijn laatste woord, zo wordt verteld, is kort: "toi kratistoi" — aan de sterkste.
+CHECK:
+ch20_gre_gedrosische_woestijn
+
+END
+
+=== SCENE: CH20_GRE_008_VOL ===
+
+TITLE:
+Door het Zand
+
+TEXT:
+Je rantsoeneert je eigen water strenger dan de meesten om je heen durven, en bereikt met een groep die de discipline heeft volgehouden uiteindelijk de bronnen aan de rand van de woestijn.
+
+CHOICES:
+* Zie wat er van het leger, en van Alexander zelf, wordt -> CH20_GRE_008B
+
+END
+
+=== SCENE: CH20_GRE_008_DEELS ===
+
+TITLE:
+Bijna Uitgeput
+
+TEXT:
+Meer dan eens dreig je achter te blijven bij een colonne die niet op je wacht, maar je haalt de groep telkens net op tijd weer in — verzwakt, maar op de been.
+
+CHOICES:
+* Zie wat er van het leger, en van Alexander zelf, wordt -> CH20_GRE_008B
+
+END
+
+=== SCENE: CH20_GRE_008_GEFAALD ===
+
+TITLE:
+Het Zand Wint Bijna
+
+TEXT:
+Op het heetst van de dag verlies je het besef van richting volledig — je overleeft alleen doordat een langsrijdende ruiter je, meer bij toeval dan opzet, weer bij de rest van de colonne brengt.
+
+CHOICES:
+* Zie wat er van het leger, en van Alexander zelf, wordt -> CH20_GRE_008B
+
+END
+
+=== SCENE: CH20_GRE_008_KRITIEK ===
+
+TITLE:
+Water Uitgegoten in het Zand
+
+TEXT:
+Een soldaat brengt Alexander zelf een helm gevuld met kostbaar, schaars water. Voor de ogen van het hele uitgeputte leger giet hij het uit in het zand — hij zal niet drinken wat zijn mannen ook moeten missen. Jij was het die de helm aandroeg, en ziet van dichtbij hoe het gebaar het leger meer moed geeft dan het water zelf ooit had gekund.
+
+CHOICES:
+* Zie wat er van het leger, en van Alexander zelf, wordt -> CH20_GRE_008B
+
+END
+
+=== SCENE: CH20_GRE_008B ===
+
+TITLE:
+Terug in Babylon
+
+TEXT:
+Wie de woestijn overleeft, bereikt uiteindelijk Babylon. Daar sterft Alexander, in juni 323 v.Chr., pas tweeëndertig jaar oud, na een korte, hevige koorts. Op zijn sterfbed vraagt zijn omgeving wie zijn immense rijk moet erven. Zijn laatste woord, zo wordt verteld, is kort: "toi kratistoi" — aan de sterkste.
 
 IMAGE:
 ch20_gre_alexander_babylon.png
@@ -25601,6 +25885,11 @@ codex_dumnorix
 
 IMAGE:
 ch20_lat_dumnorix.png
+
+REACTION:
+caesar
+SEVERITAS: Caesars schim knikt zonder aarzeling. "Zo deed ik het ook. Twijfel is een luxe die een veldheer zich niet kan permitteren."
+CLEMENTIA: Caesars schim glimlacht dun. "Genade is ook een vorm van macht — misschien wel de overtuigendste."
 
 CHOICES:
 * Beveel dat hij ter plekke gedood wordt, geen risico's [SEVERITAS] -> CH20_LAT_005_EXECUTIE
@@ -25973,6 +26262,11 @@ Het Proces van Socrates
 TEXT:
 In 399 v.Chr. wordt Socrates voor de volksrechtbank van Athene gesleept. De aanklachten wegen zwaar: hij zou nieuwe goden introduceren en de jeugd bederven met zijn constante kritische vragen. Vijfhonderdenéén Atheense burgers maken zich op om hun stem uit te brengen. Jij bent aanwezig op de tribune en mag jouw oordeel uitspreken.
 
+REACTION:
+socrates
+CLEMENTIA: Socrates knikt je toe, bijna geamuseerd. "Vragen stellen is nooit de misdaad geweest die ze ervan maken."
+SEVERITAS: Socrates haalt zijn schouders licht op. "Ook dat is een antwoord. Ik heb wel om lastigere gevraagd."
+
 CHOICES:
 * Stem voor vrijspraak: kritische vragen houden de stad scherp [CLEMENTIA] -> CH21_GRE_004_VRIJ
 * Stem voor veroordeling: de stabiliteit van de polis staat voorop [SEVERITAS] -> CH21_GRE_004_VEROORDEELD
@@ -26116,8 +26410,79 @@ VOCAB:
 grieks_idea
 
 CHOICES:
-* Benadruk het belang van het zoeken naar hogere abstracties -> CH21_GRE_007
-* Benadruk de verantwoordelijkheid om de mensen in de grot te onderwijzen -> CH21_GRE_007
+* Benadruk het belang van het zoeken naar hogere abstracties -> CH21_GRE_006B
+* Benadruk de verantwoordelijkheid om de mensen in de grot te onderwijzen -> CH21_GRE_006B
+
+END
+
+=== SCENE: CH21_GRE_006B ===
+
+TITLE:
+Weerlegd, ter Plekke
+
+TEXT:
+Een van Plato's oudere leerlingen daagt je meteen uit: als de grotbewoners hun hele leven nooit iets anders dan schaduwen hebben gezien, waarom zouden ze een teruggekeerde filosoof ooit geloven in plaats van hem gewoon voor gek te verklaren? Plato kijkt afwachtend toe of je een antwoord hebt.
+
+CHECK:
+ch21_gre_grot_verdediging
+
+END
+
+=== SCENE: CH21_GRE_006_VOL ===
+
+TITLE:
+Een Overtuigend Antwoord
+
+TEXT:
+Je antwoord — dat overtuiging nooit vanzelf komt, maar dat net daarom het proberen zelf al de taak van de filosoof is — laat zelfs de uitdager even nadenkend zwijgen. Plato knikt goedkeurend.
+
+RELATION:
+plato=+1
+
+CHOICES:
+* Ga verder naar het Lyceum van Aristoteles -> CH21_GRE_007
+
+END
+
+=== SCENE: CH21_GRE_006_DEELS ===
+
+TITLE:
+Een Half Antwoord
+
+TEXT:
+Je redenering houdt niet helemaal stand onder de vervolgvragen, maar de kern ervan blijft overeind — genoeg om de discussie niet verloren te laten gaan.
+
+CHOICES:
+* Ga verder naar het Lyceum van Aristoteles -> CH21_GRE_007
+
+END
+
+=== SCENE: CH21_GRE_006_GEFAALD ===
+
+TITLE:
+Weerlegd
+
+TEXT:
+Je verstrikt jezelf in je eigen redenering, tot zelfs jij niet meer precies weet wat je nu eigenlijk beweerde. De uitdager grijnst tevreden. Plato wuift het echter weg — "een verloren dialectisch gevecht is nog altijd nuttiger dan geen gevecht."
+
+CHOICES:
+* Ga verder naar het Lyceum van Aristoteles -> CH21_GRE_007
+
+END
+
+=== SCENE: CH21_GRE_006_KRITIEK ===
+
+TITLE:
+De Uitdager Overtuigd
+
+TEXT:
+Je antwoord is zo scherp dat de uitdager zelf, tegen zijn eigen gewoonte in, toegeeft dat hij zich vergiste — een zeldzaam moment in de Academie, waar toegeven zelden gebeurt.
+
+RELATION:
+plato=+1, aristoteles=+1
+
+CHOICES:
+* Ga verder naar het Lyceum van Aristoteles -> CH21_GRE_007
 
 END
 
@@ -26221,7 +26586,7 @@ CODEX:
 codex_dood_archimedes
 
 VOCAB:
-grieks_kyklos
+latijn_miles
 
 CHOICES:
 * Keer met Minerva terug naar Cicero's Sicilië -> CH21_LAT_000E
@@ -26346,6 +26711,11 @@ codex_catilina
 
 VOCAB:
 latijn_patientia
+
+REACTION:
+cicero
+SEVERITAS: Cicero knikt kort. "Dat is ook mijn eigen neiging — al weet ik hoe snel 'staatsvijand' een gevaarlijk woord wordt."
+CLEMENTIA: Cicero fronst. "Bewijs verzamelen kost tijd die we misschien niet hebben. Maar ik waardeer de voorzichtigheid."
 
 CHOICES:
 * Adviseer de Senaat om Catilina onmiddellijk tot staatsvijand te verklaren [SEVERITAS] -> CH21_LAT_005_HARD
@@ -26808,7 +27178,7 @@ TITLE:
 De Slag bij Ipsus
 
 TEXT:
-In 301 v.Chr. tref je op de vlakten van Phrygië de gezamenlijke legers van Seleukos en Lysimachos. Honderden krijgsolifanten van Seleukos snijden Demetrios' cavalerie af van het hoofdleger. Antigonos, inmiddels tachtig jaar oud, weigert te wijken en sneuvelt onder een hagel van speren. Demetrios weet ter nauwernood te ontsnappen.
+In 301 v.Chr. tref je op de vlakten van Phrygië de gezamenlijke legers van Seleukos en Lysimachos. Honderden krijgsolifanten van Seleukos snijden Demetrios' cavalerie — en jou, ertussenin — af van het hoofdleger. Antigonos, inmiddels tachtig jaar oud, weigert te wijken en sneuvelt onder een hagel van speren, terwijl jij probeert een uitweg te vinden uit de chaos vóór de olifanten je inhalen.
 
 DIALOGUE:
 Antigonos
@@ -26816,6 +27186,58 @@ Mijn zoon zal mij wreken, maar het rijk zal nooit meer één zijn.
 
 IMAGE:
 ch22_gre_slag_bij_ipsus.png
+
+CHECK:
+ch22_gre_ipsus_ontsnapping
+
+END
+
+=== SCENE: CH22_GRE_ANT_006_VOL ===
+
+TITLE:
+Tussen de Olifanten Door
+
+TEXT:
+Je vindt, tussen de paniek en de stof, een opening tussen twee olifantenlinies en haalt de rand van het slagveld ruim voor de rest van de verspreide cavalerie.
+
+CHOICES:
+* Overzie de verdeling die na de slag ontstaat -> CH22_GRE_005
+
+END
+
+=== SCENE: CH22_GRE_ANT_006_DEELS ===
+
+TITLE:
+Bijna Ingesloten
+
+TEXT:
+Een olifant komt gevaarlijk dichtbij voor je een echte opening vindt, maar je ontsnapt, geschrokken en met een gescheurde mantel, samen met de laatste verspreide ruiters.
+
+CHOICES:
+* Overzie de verdeling die na de slag ontstaat -> CH22_GRE_005
+
+END
+
+=== SCENE: CH22_GRE_ANT_006_GEFAALD ===
+
+TITLE:
+Ingesloten
+
+TEXT:
+Je raakt volledig ingesloten tussen twee olifantenlinies en overleeft alleen doordat de dieren, net als de mannen die ze berijden, zelf ook in verwarring raken — een chaos die je, ternauwernood, een uitweg geeft.
+
+CHOICES:
+* Overzie de verdeling die na de slag ontstaat -> CH22_GRE_005
+
+END
+
+=== SCENE: CH22_GRE_ANT_006_KRITIEK ===
+
+TITLE:
+Niet Zonder de Anderen
+
+TEXT:
+Op weg naar de opening zie je twee gewonde ruiters die de olifanten niet meer kunnen ontwijken — je grijpt hun teugels en trekt ze mee, tegen je eigen instinct in, tot alle drie de vlakte veilig achter jullie ligt.
 
 CHOICES:
 * Overzie de verdeling die na de slag ontstaat -> CH22_GRE_005
@@ -26898,6 +27320,11 @@ Het Lot van Cicero
 
 TEXT:
 Marcus Antonius eist de dood van Marcus Tullius Cicero, die hem in zijn fel bitter opgestelde [[Philippicae|Filippische redevoeringen]] talloze malen heeft aangevallen. Octavianus, die door Cicero in de Senaat altijd is beschermd, aarzelt lang, maar geeft uiteindelijk toe aan de eis van Antonius.
+
+REACTION:
+octavianus
+CLEMENTIA: Octavianus kijkt weg. "Ik zou willen dat ik het kon. Antonius' stem weegt op dit moment zwaarder dan de mijne."
+SEVERITAS: Octavianus knikt stijfjes, alsof hij zichzelf ervan overtuigt dat dit de juiste prijs is voor het triumviraat.
 
 CHOICES:
 * Pleit bij Octavianus voor het behoud van Cicero's leven [CLEMENTIA] -> CH22_LAT_003_PLEIT
@@ -27098,7 +27525,7 @@ CODEX:
 codex_cleopatra
 
 VOCAB:
-grieks_basilissa
+latijn_regina
 
 CHOICES:
 * Vraag naar de erfgenaam die ze in Alexandrië achterliet -> CH22_LAT_ANT_003
@@ -27347,7 +27774,62 @@ TITLE:
 De Strop Wordt Aangetrokken
 
 TEXT:
-Antonius en Cleopatra bereiken Alexandrië, maar het nieuws van Actium reist sneller dan zij. Bondgenoten die eerder trouw zwoeren, wenden zich af; Octavianus trekt onbestreden door Klein-Azië en Syrië, tot hij voor de poorten van Egypte zelf staat. Cleopatra probeert nog te onderhandelen — haar kinderen op de troon, zichzelf desnoods in ballingschap — maar Octavianus reageert op geen enkel voorstel serieus. Hij wil haar, levend, mee naar Rome.
+Antonius en Cleopatra bereiken Alexandrië, maar het nieuws van Actium reist sneller dan zij. Bondgenoten die eerder trouw zwoeren, wenden zich af. Aan het hof zelf hoor jij, tussen de geruchten en de tegenstrijdige berichten door, geleidelijk uit wie nog trouw is en wie al stilletjes een boodschapper naar Octavianus heeft gestuurd — voordat het te laat is om dat verschil nog te kunnen gebruiken.
+
+CHECK:
+ch23_gre_hof_intriges
+
+END
+
+=== SCENE: CH23_GRE_003_VOL ===
+
+TITLE:
+Doorzien
+
+TEXT:
+Je leest de signalen feilloos — wie te snel instemt, wie te lang zwijgt — en weet, tegen de tijd dat Octavianus voor de poorten van Egypte staat, precies wie nog om te vertrouwen zijn.
+
+CHOICES:
+* Zie hoe Antonius zijn einde vindt -> CH23_GRE_004
+
+END
+
+=== SCENE: CH23_GRE_003_DEELS ===
+
+TITLE:
+Grotendeels Doorzien
+
+TEXT:
+Je vergist je in één geval, maar herkent de meeste overlopers voordat ze werkelijk schade kunnen aanrichten. Octavianus trekt intussen onbestreden door Klein-Azië en Syrië, tot hij voor de poorten van Egypte zelf staat.
+
+CHOICES:
+* Zie hoe Antonius zijn einde vindt -> CH23_GRE_004
+
+END
+
+=== SCENE: CH23_GRE_003_GEFAALD ===
+
+TITLE:
+Te Laat Doorzien
+
+TEXT:
+Pas wanneer Octavianus onbestreden door Klein-Azië en Syrië trekt, tot voor de poorten van Egypte zelf, besef je hoeveel van het hof zich allang tegen Antonius en Cleopatra had gekeerd. Cleopatra probeert nog te onderhandelen — haar kinderen op de troon, zichzelf desnoods in ballingschap — maar Octavianus reageert op geen enkel voorstel serieus. Hij wil haar, levend, mee naar Rome.
+
+CHOICES:
+* Zie hoe Antonius zijn einde vindt -> CH23_GRE_004
+
+END
+
+=== SCENE: CH23_GRE_003_KRITIEK ===
+
+TITLE:
+Eén Waarschuwing op Tijd
+
+TEXT:
+Je doorziet niet alleen wie overloopt, maar ook wanneer — en waarschuwt Cleopatra's naaste vertrouweling nog vóór die zelf gearresteerd kan worden. Het redt geen rijk meer, maar wel één leven.
+
+RELATION:
+cleopatra=+1
 
 CHOICES:
 * Zie hoe Antonius zijn einde vindt -> CH23_GRE_004
@@ -27369,8 +27851,14 @@ Niet om jou treur ik, Cleopatra, om mijn eigen laatste ongeluk — dat ik moest 
 CODEX:
 codex_dood_antonius
 
+REACTION:
+boodschapper
+SEVERITAS: "Een vals bericht, een overhaast zwaard," zegt de Boodschapper. "Zo eindigen de meeste tragedies — niet door het lot, maar door een moment van te snel handelen."
+CLEMENTIA: "Hij hield van haar tot het einde," zegt de Boodschapper zacht. "Dat maakt de vergissing niet minder fataal, maar wel minder koud."
+
 CHOICES:
-* Zie wat Cleopatra zelf besluit -> CH23_GRE_005
+* "Een overhaast einde, door een vals bericht — geen held, gewoon een mens die te snel handelde." [SEVERITAS] -> CH23_GRE_005
+* "Wat blijft hangen is niet zijn vergissing, maar dat hij tot het einde bij haar wilde zijn." [CLEMENTIA] -> CH23_GRE_005
 
 END
 
@@ -27716,8 +28204,14 @@ Het keert. Nero laat zijn eigen moeder Agrippina vermoorden wanneer haar bemoeie
 CODEX:
 codex_nero_domus_aurea
 
+REACTION:
+boodschapper
+SEVERITAS: "Macht zonder tegenspraak," zegt de Boodschapper, "eindigt zelden bij alleen een verwoeste stad."
+CLEMENTIA: "Ergens onder al die overdaad," zegt de Boodschapper, "zit nog altijd een jongen die nooit heeft geleerd wat genoeg is."
+
 CHOICES:
-* Zie wat dit voor Seneca betekent -> CH23_LAT_013
+* "Macht zonder tegenspraak eindigt zelden bij alleen een verwoeste stad." [SEVERITAS] -> CH23_LAT_013
+* "Ergens onder al die overdaad zit een man die nooit heeft geleerd wat genoeg is." [CLEMENTIA] -> CH23_LAT_013
 
 END
 
@@ -27842,16 +28336,74 @@ Zuilen en een Uil op de Schouder
 TEXT:
 De Boodschapper wijst naar drie zuilen die naast elkaar uit de grond van het Museum lijken te groeien: een gedrongen, sobere Dorische, een sierlijke Ionische met haar krullende voluten, en een weelderige Korinthische, overwoekerd met acanthusbladeren. "Drie manieren om hetzelfde te doen: een dak dragen," zegt ze. "En drie manieren om daar tegelijk iets over jezelf mee te zeggen."
 
-Een vertrouwde gestalte met een speer en een uil op haar schouder verschijnt tussen de zuilen — Pallas Athena, patrones van elke ambacht die precisie en geduld vraagt. "Wijsheid zit niet alleen in woorden," zegt ze. "Soms zit ze in een hand die precies weet waar te beitelen."
+Een vertrouwde gestalte met een speer en een uil op haar schouder verschijnt tussen de zuilen — Pallas Athena, patrones van elke ambacht die precisie en geduld vraagt. "Wijsheid zit niet alleen in woorden," zegt ze. "Soms zit ze in een hand die precies weet waar te beitelen. Wijs me de Ionische aan, zonder te wijzen — beschrijf haar alleen."
 
 IMAGE:
 ch24_gre_zuilorden_athena.png
 
+VOCAB:
+grieks_stele
+
+CHECK:
+ch24_gre_zuilorden_herkenning
+
+END
+
+=== SCENE: CH24_GRE_001_VOL ===
+
+TITLE:
+Feilloos Herkend
+
+TEXT:
+Je beschrijft de krullende voluten zo precies dat Athena zelf verrast opkijkt. "De meeste stervelingen noemen ze gewoon 'de sierlijke'. Jij zag meer dan dat."
+
 RELATION:
 athena=+1
 
-VOCAB:
-grieks_stele
+CHOICES:
+* Ga verder naar de beeldhouwkunst -> CH24_GRE_002
+
+END
+
+=== SCENE: CH24_GRE_001_DEELS ===
+
+TITLE:
+Bijna Juist
+
+TEXT:
+Je beschrijving klopt grotendeels, op een klein detail na — Athena knikt niettemin tevreden. "Dicht genoeg."
+
+RELATION:
+athena=+1
+
+CHOICES:
+* Ga verder naar de beeldhouwkunst -> CH24_GRE_002
+
+END
+
+=== SCENE: CH24_GRE_001_GEFAALD ===
+
+TITLE:
+Verward
+
+TEXT:
+Je haalt de voluten en de acanthusbladeren door elkaar. Athena glimlacht geduldig. "Drie zuilen lijken op elkaar, tot je weet waarnaar je moet kijken. Je leert het nog wel."
+
+CHOICES:
+* Ga verder naar de beeldhouwkunst -> CH24_GRE_002
+
+END
+
+=== SCENE: CH24_GRE_001_KRITIEK ===
+
+TITLE:
+Meer dan Gevraagd
+
+TEXT:
+Je beschrijft niet alleen de Ionische zuil, maar legt ook meteen uit waarom de Atheners haar juist voor tempels van vrouwelijke godinnen verkozen boven de stoerdere Dorische. Athena's blik verandert merkbaar — niet langer die van een lerares tegenover een leerling.
+
+RELATION:
+athena=+2
 
 CHOICES:
 * Ga verder naar de beeldhouwkunst -> CH24_GRE_002
@@ -28343,8 +28895,14 @@ ch24_lat_via_appia.png
 CODEX:
 codex_romeinse_wegen
 
+REACTION:
+vitruvius
+SEVERITAS: Vitruvius knikt. "Een weg dient eerst het leger. Alles wat erna nog over die stenen reist, is bijzaak."
+CLEMENTIA: Vitruvius glimlacht. "Ik bouw ze voor legers, toegegeven — maar het mooiste eraan is wat ze daarna nog meer worden."
+
 CHOICES:
-* Ga verder naar een monument voor de vrede -> CH24_LAT_005
+* "Een weg dient eerst het leger — alles wat erna nog over die stenen reist, is bijzaak." [SEVERITAS] -> CH24_LAT_005
+* "Een weg wordt gebouwd voor een leger, maar het mooiste is wat ze daarna nog meer wordt — handel, ideeën, mensen die elkaar ontmoeten." [CLEMENTIA] -> CH24_LAT_005
 
 END
 
@@ -28697,8 +29255,14 @@ ch25_gre_euclides.png
 CODEX:
 codex_euclides
 
+REACTION:
+euclides
+SEVERITAS: Euclides knikt, zonder op te kijken van zijn driehoeken. "Regels die buigen voor een kroon, zijn geen regels meer."
+CLEMENTIA: Euclides glimlacht vaag. "Ik zeg het niet om onvriendelijk te zijn — de meetkunde zelf maakt gewoon geen onderscheid."
+
 CHOICES:
-* Zie hoe iemand anders de hele aarde meet -> CH25_GRE_007
+* "Regels die buigen voor een kroon, zijn geen regels meer — knap dat hij dat zelfs tegen een koning zegt." [SEVERITAS] -> CH25_GRE_007
+* "Hij zegt het niet om onvriendelijk te zijn — hij behandelt de koning gewoon als ieder ander." [CLEMENTIA] -> CH25_GRE_007
 
 END
 
@@ -28876,8 +29440,14 @@ codex_aardbeving_62
 VOCAB:
 latijn_terraemotus
 
+REACTION:
+seneca
+SEVERITAS: Seneca knikt kort. "Angst voor goden lost niets op. Begrijpen wat er echt gebeurt, wel."
+CLEMENTIA: Seneca glimlacht mild. "De mensen mogen best allebei geloven, zolang ze de volgende keer maar weten wat te doen."
+
 CHOICES:
-* Spring zeventien jaar vooruit -> CH25_LAT_004
+* "Angst voor goden lost niets op — begrijpen wat er echt gebeurt, wel." [SEVERITAS] -> CH25_LAT_004
+* "Laat mensen gerust ook nog aan de goden denken — als ze de volgende keer maar weten wat te doen." [CLEMENTIA] -> CH25_LAT_004
 
 END
 
@@ -29142,8 +29712,14 @@ ch26_gre_olympieion_voltooid.png
 CODEX:
 codex_hadrianus_athene
 
+REACTION:
+hadrianus
+CLEMENTIA: Hadrianus glimlacht, oprecht geraakt. "Niemand vroeg het me, nee. Dat maakte het juist de moeite waard."
+SEVERITAS: Hadrianus haalt zijn schouders licht op. "Een keizer die iets afmaakt, wordt nooit vergeten. Ook dat is een vorm van macht."
+
 CHOICES:
-* Reis met hem verder naar Olympia -> CH26_GRE_003
+* "Niemand vroeg het hem — dat maakt het juist bijzonder." [CLEMENTIA] -> CH26_GRE_003
+* "Een keizer die zoiets afmaakt, wordt nooit vergeten — ook dat is een vorm van macht." [SEVERITAS] -> CH26_GRE_003
 
 END
 
@@ -29372,8 +29948,14 @@ hadrianus=+1
 CODEX:
 codex_nerva_trajanus
 
+REACTION:
+nerva
+CLEMENTIA: Nerva knikt vermoeid maar tevreden. "Bloed maakt geen goede bestuurder. Bekwaamheid wel."
+SEVERITAS: Nerva haalt zijn schouders op. "Een gok, toegegeven. Maar de Senaat had weinig andere goede opties over."
+
 CHOICES:
-* Volg de opvolging verder -> CH26_LAT_007
+* "Bloed maakt geen goede bestuurder — hij koos precies goed." [CLEMENTIA] -> CH26_LAT_007
+* "Het was vooral een gok van een Senaat zonder betere opties." [SEVERITAS] -> CH26_LAT_007
 
 END
 
@@ -29384,6 +29966,74 @@ Twee Rustige Namen
 
 TEXT:
 Trajanus adopteert op zijn beurt Hadrianus — dezelfde reiziger die je, als je beide sporen speelt, aan de andere kant van dit hoofdstuk al door Griekenland zag trekken. Na Hadrianus volgt Antoninus Pius, wiens bijnaam "de Vrome" eer bewijst aan hoe plichtsgetrouw hij zijn adoptiefvader liet vergoddelijken — een van de rustigste, minst dramatische regeerperiodes van het hele rijk, precies wat een uitgeput rijk soms nodig heeft.
+
+CHOICES:
+* Ontmoet de laatste, en meest filosofische, van de adoptiefkeizers -> CH26_LAT_007B
+
+END
+
+=== SCENE: CH26_LAT_007B ===
+
+TITLE:
+Een Nachtelijke Overval bij de Donau
+
+TEXT:
+Je bereikt Marcus Aurelius' legerkamp langs de Donau midden in een onrustige nacht — Germaanse verkenners proberen, onder dekking van de duisternis, de buitenste wachtposten te omzeilen voor ze zelf ontdekt worden.
+
+CHECK:
+ch26_lat_donau_wacht
+
+END
+
+=== SCENE: CH26_LAT_007_VOL ===
+
+TITLE:
+De Wacht Gehouden
+
+TEXT:
+Je merkt de sluipende schaduwen op ruim voordat ze de omheining bereiken en slaat op tijd alarm — het kamp blijft rustig, de overvallers trekken zich terug zodra ze beseffen dat ze ontdekt zijn.
+
+CHOICES:
+* Ontmoet de laatste, en meest filosofische, van de adoptiefkeizers -> CH26_LAT_008
+
+END
+
+=== SCENE: CH26_LAT_007_DEELS ===
+
+TITLE:
+Bijna Gemist
+
+TEXT:
+Je ziet de eerste schaduw pas laat, maar slaat op tijd alarm om erger te voorkomen — een korte schermutseling bij de omheining, verder blijft het kamp veilig.
+
+CHOICES:
+* Ontmoet de laatste, en meest filosofische, van de adoptiefkeizers -> CH26_LAT_008
+
+END
+
+=== SCENE: CH26_LAT_007_GEFAALD ===
+
+TITLE:
+Te Laat Ontdekt
+
+TEXT:
+De verkenners bereiken de omheining voor jij het alarm slaat — een korte, verwarde schermutseling in het donker, tot de rest van het kamp wakker schiet en de overvallers alsnog verjaagt.
+
+CHOICES:
+* Ontmoet de laatste, en meest filosofische, van de adoptiefkeizers -> CH26_LAT_008
+
+END
+
+=== SCENE: CH26_LAT_007_KRITIEK ===
+
+TITLE:
+Zelf Onderschept
+
+TEXT:
+Je onderschept niet alleen de verkenners, maar volgt hun spoor terug ver genoeg om te ontdekken waar de hoofdmacht van de stam zich schuilhoudt — informatie die Marcus Aurelius zelf, de volgende ochtend, persoonlijk van je aanhoort.
+
+RELATION:
+marcus_aurelius=+1
 
 CHOICES:
 * Ontmoet de laatste, en meest filosofische, van de adoptiefkeizers -> CH26_LAT_008
@@ -29589,23 +30239,10 @@ TEXT:
 Een nieuwe stolp vult zich: een piepklein stukje amfitheater-marmer naast een gebogen, verweerde muntenrand. "Vandaag heb je gezien hoe snel een rijk van zijn hoogtepunt naar zijn afgrond kan reizen — en weer terug," zegt de Boodschapper van Chronos.
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH26_WORDT_VERVOLGD
+* Luister naar het volgende verhaal -> CH27_000
 
 END
 
-=== SCENE: CH26_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
-
-END
 `.trim();
 
 /* ---- HOOFDSTUK 27 "Kruis en Kroon" — CONCEPT, NOG NIET GEKOPPELD.
@@ -29942,8 +30579,14 @@ ch27_lat_romulus_augustulus.png
 CODEX:
 codex_val_van_rome
 
+REACTION:
+boodschapper
+SEVERITAS: "Geen veldslag, geen martelaar," zegt de Boodschapper. "Soms eindigt een rijk gewoon met een administratieve beslissing."
+CLEMENTIA: "Een jongen die niets fout deed, verliest alles wat zijn naam beloofde," zegt de Boodschapper zacht. "Dat verdient op zijn minst een moment stilte."
+
 CHOICES:
-* Zie hoe het bericht het Oosten bereikt -> CH27_GRE_006
+* "Geen veldslag, geen martelaar — soms eindigt een rijk gewoon met een administratieve beslissing." [SEVERITAS] -> CH27_GRE_006
+* "Een jongen die niets fout deed, verliest hier alles wat zijn naam beloofde — dat verdient op zijn minst een moment stilte." [CLEMENTIA] -> CH27_GRE_006
 
 END
 
@@ -30206,8 +30849,14 @@ ch27_gre_theodora_nika.png
 CODEX:
 codex_nika_opstand
 
+REACTION:
+theodora
+SEVERITAS: Theodora knikt scherp. "Precies. Een troon behoud je niet door te aarzelen."
+CLEMENTIA: Theodora's blik verzacht heel even. "Angst is geen zwakte, weet je. Alleen vluchten ervoor was, voor mij, nooit een optie."
+
 CHOICES:
-* Ga verder -> CH27_GRE_EINDE
+* "Een troon behoud je niet door te aarzelen — ze had gelijk." [SEVERITAS] -> CH27_GRE_EINDE
+* "Aarzeling was hier geen zwakte — het was gewoon angst, heel begrijpelijk." [CLEMENTIA] -> CH27_GRE_EINDE
 
 END
 
@@ -30252,23 +30901,10 @@ TEXT:
 Een nieuwe stolp vult zich: een piepklein, gebroken stukje diadeem naast een enkele gouden mozaïeksteen. "Vandaag heb je gezien hoe hetzelfde rijk tegelijk kon eindigen en beginnen," zegt de Boodschapper van Chronos, iets stiller dan anders.
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH27_WORDT_VERVOLGD
+* Luister naar het volgende verhaal -> CH28_000
 
 END
 
-=== SCENE: CH27_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder, iets warmer dan haar gebruikelijke, afstandelijke toon. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent — als Boogschutter, als Hopliet, als Cavalerist, of gewoon opnieuw als wie je al was. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
-
-END
 `.trim();
 
 /* ---- HOOFDSTUK 28 "De Bibliotheek van Mnemosyne" — CONCEPT, NOG NIET
@@ -30340,7 +30976,7 @@ IMAGE:
 ch28_mnemosyne_bibliotheek.png
 
 VOCAB:
-grieks_ana, grieks_phemi, grieks_para, grieks_didomi, grieks_hotan, latijn_nam, latijn_immo, latijn_scilicet, latijn_tantum
+grieks_ana, grieks_phemi, grieks_para, grieks_didomi, grieks_hotan, latijn_nam, latijn_immo, latijn_scilicet, latijn_tantum, grieks_anaginosko, grieks_anankazo, grieks_anechomai, grieks_anoigo, grieks_apatao, grieks_apokrinomai, grieks_aporeo, grieks_apophaino, grieks_haptomai, grieks_aresko, latijn_inquio, latijn_intelligo, latijn_parco, latijn_certe, latijn_concedo, latijn_convenio, latijn_valeo, latijn_fallo, latijn_occurro, latijn_statuo
 
 CHOICES:
 * Verken de bibliotheek -> CH28_HUB
@@ -31005,23 +31641,10 @@ TEXT:
 Een nieuwe stolp vult zich: een klein, glazen potje met dezelfde vage rook als in de tweede gang, naast een piepklein, verzilverd fragment van een spiegel. "Vandaag heb je niet alleen jouw eigen herinneringen teruggekregen," zegt Mnemosyne, "je hebt ontdekt wie ze al die tijd al bewaarde."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH28_WORDT_VERVOLGD
+* Luister naar het volgende verhaal -> CH29_000
 
 END
 
-=== SCENE: CH28_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt Mnemosyne, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — een rivier, en alles wat daarna komt. Maar die scheuren zijn nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
-
-END
 `.trim();
 
 /* ---- HOOFDSTUK 29 "De Rivier Lethe" — CONCEPT, NOG NIET GEKOPPELD.
@@ -31087,6 +31710,9 @@ Ik ken deze oever beter dan wie ook. Ik kom met je mee, als je dat wilt — al h
 
 IMAGE:
 ch29_lethe_orpheus_rivier.png
+
+VOCAB:
+grieks_harpazo, grieks_blapto, grieks_gameo, grieks_gymnazo, grieks_dakryo, grieks_diabaino, grieks_dialegomai, grieks_diateleo, grieks_dikazo, grieks_dyomai, latijn_praeterea, latijn_rogo, latijn_desero, latijn_pugno, latijn_quemadmodum, latijn_occido, latijn_sicut, latijn_committo, latijn_consulo, latijn_aufero
 
 CHOICES:
 * Bedank Orpheus voor zijn gezelschap -> CH29_001
@@ -31792,23 +32418,10 @@ TEXT:
 Een nieuwe stolp vult zich: een klein, leeg flesje, alsof het ooit iets bevatte dat er nu niet meer in zit, naast een enkele, verweerde lier-snaar. "Vandaag heb je niet iets nieuws bewaard," zegt de Boodschapper van Chronos, weer met haar vertrouwde stem, "je hebt gezien wat er nooit bewaard is."
 
 CHOICES:
-* Luister naar het volgende verhaal -> CH29_WORDT_VERVOLGD
+* Naar het einde van de reis -> FIN_000
 
 END
 
-=== SCENE: CH29_WORDT_VERVOLGD ===
-
-TITLE:
-Tot Hier, Voorlopig
-
-TEXT:
-"[[Ecce|zie hier]] — tot hier heb ik de scheuren in de tijd voor jou al opengelegd," zegt de Boodschapper van Chronos, en voor het eerst sinds een tijdje klinkt er weer geen aankondiging van een volgend hoofdstuk in haar stem. "De rest van het verhaal bestaat wel — het einde zelf. Maar die scheur is nog niet klaar om open te gaan."
-
-Ze legt een hand op je schouder. "Wat je tot nu toe hebt gedaan, staat vast — elke stolp in dit Museum, elke herinnering die je hebt teruggegeven, blijft van jou."
-
-Ze wijst naar het schild-icoon dat je linksboven altijd is bijgebleven, nooit ver weg. "Ga terug naar het begin wanneer je daar klaar voor bent. Ik zal er zijn, hoe vaak je ook terugkomt. Tot de volgende scheur zich opent."
-
-END
 `.trim();
 
 

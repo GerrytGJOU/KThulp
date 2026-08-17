@@ -1,15 +1,23 @@
-# Chronica Classica — Masterplan (BETA — proloog t/m Hoofdstuk 26 speelbaar)
+# Chronica Classica — Masterplan (VOLLEDIG GEBOUWD EN GEKOPPELD — Proloog t/m Finale speelbaar)
 
-> **Actuele stand (bijgewerkt 2026-08-15, na Hoofdstuk 26) — lees dit
-> eerst:** Proloog t/m Hoofdstuk 26 zijn gebouwd én gekoppeld aan de
-> speelbare route. Hoofdstuk 27 bestaat nog alleen als
-> `SP_CAMPAIGN`-metadata, net als Hoofdstuk 28-29 + Finale — zie de
-> hoofdstuktabel in §0 hieronder voor de volledige, actuele lijst van 29
-> hoofdstukken + Finale in 6 boeken. De blockquote hieronder (H1-9) is het
-> **oorspronkelijke BETA-statusverslag** en is voor die negen hoofdstukken
-> nog altijd feitelijk correct, maar behandelt niet de latere hoofdstukken —
-> gebruik voor de volledige, actuele bouwstatus de hoofdstuktabel in §0 en
-> de §7.x-changelog onderaan dit document, niet deze blockquote.
+> **Actuele stand (bijgewerkt 2026-08-18) — lees dit eerst:** de campagne is
+> qua BOUWEN in principe compleet. Proloog t/m Hoofdstuk 29 + de Finale
+> "Chronica Classica" zijn allemaal gebouwd én gekoppeld aan de speelbare
+> route (`SP_SCENES` in `singleplayer.js`, `BLOCKS` in
+> `certamen/tools/validate_chronica.js`) — er is geen `WORDT_VERVOLGD`-
+> tijdelijk eindpunt meer, de Finale's eigen `FIN_CREDITS` is nu het
+> werkelijke einde van het spel. Zie §7.104 voor het koppel-verslag en de
+> hoofdstuktabel in §0 voor de volledige lijst van 29 hoofdstukken + Finale
+> in 6 boeken. **Dit betekent niet dat er niets meer te doen is** — er loopt
+> nu een bredere audit (zie de §7.10x-reeks) om te controleren of alle
+> eerder gemaakte afspraken (stijl, taalspoor, puzzels, VOCAB-groei,
+> eretitels, illustraties) door de hele campagne heen ook echt zijn
+> nageleefd, met name in de recentere hoofdstukken. De blockquote hieronder
+> (H1-9) is het **oorspronkelijke BETA-statusverslag** en is voor die negen
+> hoofdstukken nog altijd feitelijk correct, maar behandelt niet de latere
+> hoofdstukken — gebruik voor de volledige, actuele bouwstatus de
+> hoofdstuktabel in §0 en de §7.x-changelog onderaan dit document, niet deze
+> blockquote.
 
 > **Status: Beta, live in het hoofdmenu.** De **proloog** ("De Boer van
 > Latium" / "Het Orakel van Chronos") is volledig speelbaar: intro →
@@ -8571,6 +8579,107 @@ gedrag, geen fout.
 gekoppeld, daarna losgekoppeld): IMAGE-resolutie getest over drie
 representatieve flag-combinaties × alle epiloog-scènes, correcte
 bestandsnamen voor elke bereikbare combinatie.
+
+### 7.104 Hoofdstuk 27-29 + Finale gekoppeld — de campagne is nu volledig speelbaar van Proloog tot FIN_CREDITS (2026-08-18)
+
+Op Gerbens expliciete verzoek: alle vier nog losse hoofdstukken zijn
+gekoppeld aan de speelbare route. `SP_SCENES` (`singleplayer.js`) en
+`BLOCKS` (`certamen/tools/validate_chronica.js`) bevatten nu ook
+`SP_CH27_CNS`/`SP_CH28_CNS`/`SP_CH29_CNS`/`SP_FINALE_CNS`.
+
+**De vier tijdelijke `WORDT_VERVOLGD`-speeltest-eindpunten zijn verwijderd**
+(`CH26_WORDT_VERVOLGD`/`CH27_WORDT_VERVOLGD`/`CH28_WORDT_VERVOLGD`/
+`CH29_WORDT_VERVOLGD`) en de bijbehorende `MUSEUM_00`-scènes routeren nu
+rechtstreeks door: `CH26_MUSEUM_00`→`CH27_000`, `CH27_MUSEUM_00`→`CH28_000`,
+`CH28_MUSEUM_00`→`CH29_000`, `CH29_MUSEUM_00`→`FIN_000`. `FIN_CREDITS`
+(geen keuzes meer) is nu het werkelijke einde van de hele campagne — zie
+[[chronica-tijdelijk-speeltest-eindpunt]] in memory, dat patroon is
+hiermee afgesloten in plaats van opnieuw verplaatst.
+
+**Validatie**: `node --check` op beide bestanden, `validate_chronica.js` →
+0 fouten (71 waarschuwingen, ongewijzigd — de "dode flags" zijn de al
+gedocumenteerde H27-29/Finale-leesvlaggen die via JS-resolvers gelezen
+worden, geen echte gaten). Live in de browser: de vier nieuwe
+`MUSEUM_00`→volgende-hoofdstuk-koppelingen stuk voor stuk geverifieerd
+(doelscène bestaat, komt overeen met de bedoelde eerste scène van het
+volgende hoofdstuk) — dit is de enige daadwerkelijk NIEUWE wijziging van
+vandaag; de inhoud van H27/28/29/Finale zelf was al eerder, apart, met
+volledige domein-branching gevalideerd op 100% bereikbaarheid (zie
+§7.96/§7.98/§7.99/§7.101). Cache-busting opgehoogd naar `?v=20260818a`.
+
+**Belangrijk onderscheid**: "volledig gekoppeld" betekent hier "structureel
+compleet en speelbaar van begin tot eind" — het betekent NIET dat elk
+hoofdstuk al is doorgelicht tegen de volledige verzameling eerder gemaakte
+afspraken (stijl, taalspoor-zuiverheid, VOCAB-groei, eretitels,
+illustraties). Die bredere audit is apart gestart, zie de volgende
+§7.10x-entries.
+
+### 7.105 Post-build audit: conventie-checklist, doorlichting CH18-Finale, en vier gaten gedicht (2026-08-18)
+
+Op Gerbens verzoek, nadat de campagne volledig gekoppeld was (§7.104): een
+systematische audit of eerder vastgelegde afspraken (stijl, taalspoor,
+puzzels, VOCAB) daadwerkelijk zijn nageleefd. Twee achtergrondagenten
+(conventies verzamelen uit `CLAUDE.md`/`audit/`/`didactiek/`/de
+referentiebestanden; Hoofdstuk 18-Finale doorlichten) vonden vier concrete
+gaten, alle vier gedicht:
+
+**1. Zes taalspoor-mengfouten** — Latijnse scènes met Griekse VOCAB-ids of
+omgekeerd (`CH18_LAT_006`, `CH19_GRE_002`, `CH19_LAT_001`,
+`CH19_GRE_ATH_002B`, `CH21_LAT_000D`, `CH22_LAT_ANT_002`). Vervangen door
+een thematisch passend woord in de juiste taal (bv. `grieks_basilissa` →
+`latijn_regina` in de Cleopatra/Antonius-scène). Bevestigd met een
+exhaustieve scan van alle `VOCAB:`-blokken in het hele bestand — de overige
+"mengsels" die deze scan vond, bleken stuk voor stuk de bewuste, gedeelde
+hub-vocabulaire vóór de taalspoor-splitsing, geen fouten.
+
+**2. VOCAB-retrofit Hoofdstuk 28/29** — bevestigd door `VOCAB_UITBREIDING.md`
+zelf ("Hoofdstuk 28 t/m Finale staan nog open"): 20 signaalwoorden per
+hoofdstuk (10 Grieks + 10 Latijn), frequentie-gerangschikt uit
+`certamen/vocab.js`, dezelfde methode als de H17-25-retrofit. De Finale
+kreeg op Gerbens uitdrukkelijke instructie GEEN uitbreiding — "dit is puur
+de afsluiting".
+
+**3. REACTION/CHECK-leegte Hoofdstuk 15-27** — het zwaarste gat: `REACTION:`
+kwam na Hoofdstuk 14 zestien hoofdstukken lang geen enkele keer meer voor,
+en `CHECK:` was in zeven hoofdstukken (19, 20, 21, 22, 23, 24, 26) op nul
+blijven staan. Hoofdstuk 28-Finale zijn hierbij bewust NIET meegenomen —
+die hoofdstukken zijn met opzet anders ontworpen (RELATION-clusters/
+dode-flag-credits als eigen reactiemechanisme), geen tekortkoming.
+
+Aanpak: **13 nieuwe REACTION-momenten** toegevoegd op bestaande (of, waar
+nodig, nieuw getagde) Clementia/Severitas-keuzes, elk met een al aanwezig
+personage als reactor (Melissa, Aemilia, Flamma, Pherenike, Maharbal,
+Herodotos, de Boodschapper, Cassius, Caesars schim, Socrates, Cicero,
+Octavianus, Vitruvius, Euclides, Seneca, Nerva, Hadrianus, Theodora — een
+flink aantal van deze terugkerende personages bleken, ondanks meerdere
+scènes, nog nooit in `SP_CODEX_PERSONS` geregistreerd te hebben gestaan;
+allemaal alsnog toegevoegd). **7 nieuwe CHECK-dobbelsteenmomenten**
+(steeds stat+dc, vier uitkomstscènes die allemaal naar dezelfde, al
+bestaande vervolgscène convergeren — zelfde patroon als de bestaande H1-18/
+25/27-CHECKs): de terugtocht van Syracuse (robur), Alexanders tocht door de
+Gedrosische woestijn (robur), een dialectisch duel op Plato's Academie
+(ingenium), de ontsnapping bij de Slag om Ipsus (agilitas), hofintriges in
+Alexandrië vóór Actium (prudentia), het herkennen van de Griekse
+zuilorden (ingenium), en een nachtelijke overval bij de Donau onder Marcus
+Aurelius (prudentia). Tijdens het bouwen twee continuïteitsfouten gevonden
+en gecorrigeerd (een RELATION-bump voor een personage dat niet aanwezig
+was — Alkibiades tijdens de Syracuse-terugtocht, allang naar Sparta
+gevlucht; Antigonos, die in dezelfde scène al gesneuveld was).
+
+**4. `SP_TITLES` stopt na Hoofdstuk 9** — gepreciseerd: `EERETITEL:` wordt
+sinds Hoofdstuk 10 helemaal niet meer in scènes gebruikt (dus geen
+dangling references in Hoofdstuk 18-Finale), het eigenlijke gat zit in
+Hoofdstuk 10-17. Dit valt onder een parallel lopende achtergrondsessie,
+niet hier opgelost — de oorspronkelijke scope van die sessie (aangenomen
+dat CH10-29 allemaal ontbrekende `SP_TITLES`-entries hadden) is bijgesteld
+naar het werkelijke, engere probleem.
+
+**Validatie**: `node --check` op alle gewijzigde bestanden, na elke
+individuele toevoeging opnieuw gedraaid. `validate_chronica.js` bleef
+tijdens de hele operatie op 0 fouten. Live in de browser: alle 13
+REACTION- en 7 CHECK-registry-entries geverifieerd (juiste
+personage-namen, geldige doelscènes), gerichte steekproeven op de nieuwe
+scènes bevestigen correcte doorverwijzing.
 
 ---
 
