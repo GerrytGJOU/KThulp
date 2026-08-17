@@ -15268,6 +15268,9 @@ Ze roept iemand anders erbij: Hermes zelf, dezelfde god die Priamus ooit door he
 
 Hermes glimlacht, vleugels aan zijn sandalen al trillend van ongeduld. "Kom," zegt hij. "Ditmaal ga je niet naar het Griekse kamp. Je gaat naar binnen — Troje in."
 
+CODEX:
+codex_grammatica_ch9_comparativus_superlativus, codex_grammatica_ch9_aci, codex_grammatica_ch9_3decl_istam, codex_grammatica_ch9_congruentie
+
 CHOICES:
 
 * Volg Hermes de muren van Troje in -> CH9_001
@@ -16819,6 +16822,9 @@ grieks_gignomai, grieks_hypo_dat_acc, grieks_epei, grieks_dei, grieks_dynamai, g
 IMAGE:
 ch10_hermes_athena_bezoek.png
 
+CODEX:
+codex_grammatica_ch10_naamwoord_groep45, codex_grammatica_ch10_grieks
+
 CHOICES:
 
 * Reis mee met Odysseus — kies het Griekse pad -> CH10_000_GRIEKS
@@ -17839,6 +17845,9 @@ TEXT:
 "[[Ecce|zie hier]] — het derde boek," zegt de Boodschapper, en de scheur die ze ditmaal opent is smaller dan de vorige twee, bijna een fluistering van licht. "Geen nieuwe keuze dit keer — je koos je pad al, bij de val van Troje, en dat pad blijft precies wat het was."
 
 "Odysseus vindt een eiland waar hij niet had verwacht een jaar te blijven. Aeneas vindt een vrouw die hem bijna doet vergeten waarom hij ooit vertrok. En allebei vinden ze, uiteindelijk, een deur naar de doden — waar niets wat je onderweg hebt opgebouwd, ongezien blijft."
+
+CODEX:
+codex_grammatica_ch11_participium, codex_grammatica_ch11_genitivus_absolutus, codex_grammatica_ch11_participium_latijn, codex_grammatica_ch11_ablativus_absolutus
 
 CHOICES:
 
@@ -18974,7 +18983,7 @@ Een schaduw van vleugels valt over je heen — Hermes, maar ditmaal stelt hij zi
 "Latium," zegt hij. "Jouw Latium. Dezelfde akkers waar jij ooit achter een ploeg liep, voor het Orakel je meenam." Hij laat een korte stilte vallen. "Wat ik je nu laat zien, gebeurde hier lang voor Aeneas deze kust ooit bereikte — generaties voor Lavinium er stond, generaties voor zijn zoon Ascanius niet ver hiervandaan een tweede stad zal stichten, Alba Longa, waar op zijn beurt ooit weer een koning zal worden verdreven, en twee broers, opgevoed door een wolvin, een derde stad zullen bouwen die alles wat hiervoor kwam zal overschaduwen. Rome. Maar dat is nog ver weg. Dit verhaal is ouder."
 
 CODEX:
-codex_latium_tijdlijn, codex_grammatica_ch12_bijwoord_etc, codex_grammatica_ch12_acp
+codex_latium_tijdlijn, codex_grammatica_ch12_bijwoord_etc, codex_grammatica_ch12_acp, codex_grammatica_ch12_romulus_remus
 
 CHOICES:
 * Zie wat er op deze heuvels gebeurde -> CH12_LAT_001
@@ -19803,6 +19812,9 @@ Een Naamloze Stad
 TEXT:
 Athena is je al vertrouwd — je hebt haar zien meereizen, zien adviseren. Wat je nu te zien krijgt, is een ander verhaal: niet hoe zijzelf ter wereld kwam, maar hoe de stad die haar naam draagt, díe naam ooit kreeg.
 
+CODEX:
+codex_grammatica_ch13_futurum_grieks
+
 CHOICES:
 * Ga verder [REQUIRE:ch1_lijn=B] -> CH13_GRE_000B
 * Ga verder [REQUIRE:ch1_lijn!=B] -> CH13_GRE_000C
@@ -20145,6 +20157,9 @@ Onder Tullus breekt oorlog uit met de naburige stad Alba Longa — dezelfde stad
 
 PERSON:
 tullus_hostilius:intro
+
+CODEX:
+codex_grammatica_ch13_conjunctivus
 
 CHOICES:
 * Zie hoe beide steden besluiten de oorlog te beslechten -> CH13_LAT_001
