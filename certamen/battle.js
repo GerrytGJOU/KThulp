@@ -249,6 +249,13 @@ async function bmAwardBattle(){
   const legBonus=bmLegendaryOf(BM_IDENT);
   let coinsEarned=3+(won?10:0);
   if(legBonus?.incomeMult) coinsEarned=Math.round(coinsEarned*(1+legBonus.incomeMult));
+  // Eretitel-bonussen kroniekschrijver_boek_3/_5 (coin_bonus_pct, Chronica.md
+  // §6.1) — stapelen als je beide hebt (bv. +10%), bovenop de legendarische
+  // inkomstenbonus hierboven.
+  const spEarnedForCoins=spTitlesLoadLocal();
+  const coinPct=SP_TITLES.filter(t=>t.bonus?.type==="coin_bonus_pct"&&spEarnedForCoins.includes(t.id))
+    .reduce((s,t)=>s+t.bonus.val,0);
+  if(coinPct>0) coinsEarned=Math.round(coinsEarned*(1+coinPct/100));
 
   // Batch 2 — lokale (device-only) toeval-tracking voor trait_drieling en
   // trait_marathonzitting. Beide horen bij "wat er toevallig op dit toestel
@@ -601,6 +608,9 @@ let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
 let BM_MY_TARGET="boss", BM_TARGET_ROUND=-1; // Minion Summon (BOSS_BATTLE.md §4): gekozen doelwit voor de volgende ability
 // Verborgen-trait-tracking (session-only, zie ACHIEVEMENTS_DEF: trait_ciceronianus/trait_laconisch)
 let BM_MY_CLUTCH_STREAK=0, BM_MY_CLUTCH_BEST=0, BM_MY_ABILITIES_USED=0;
+// Eretitel-bonus kroniekschrijver_boek_1 (streak_shield): één keer per
+// wedstrijd absorbeert dit een fout antwoord, zie bmAnswer().
+let BM_MY_SHIELD_USED=false;
 // Batch 2: klassewissels in de lobby (trait_draaideur) + ooit een schade-
 // type ability gekozen (trait_pacifist, "Pacifistische Priester")
 let BM_MY_CLASS_PICKS=0, BM_MY_DEALT_DMG_ABILITY=false;
@@ -613,7 +623,7 @@ function bmLeave(){
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;BM_MY_TARGET="boss";
   BM_MY_CORRECT=0;BM_MY_WRONG=0;BM_MY_DMG=0;BM_MY_HEAL=0;
   BM_MY_CLUTCH_STREAK=0;BM_MY_CLUTCH_BEST=0;BM_MY_ABILITIES_USED=0;
-  BM_MY_CLASS_PICKS=0;BM_MY_DEALT_DMG_ABILITY=false;
+  BM_MY_CLASS_PICKS=0;BM_MY_DEALT_DMG_ABILITY=false;BM_MY_SHIELD_USED=false;
 }
 
 /* ---- SCHERM: battleHome ---- */
@@ -1405,6 +1415,9 @@ async function bmDistributeQs(roundN){
     // (permanent account-brede unlock, geen in-klas-verdiende bonus)
     if(p.traitGroot) beBonus+=1;
     if(p.traitNorage) beBonus+=1;
+    // Eretitel-bonus kroniekschrijver_boek_2 (be_head_start, Chronica.md §6.1):
+    // eenmalig +5 BE bij de allereerste ronde van de wedstrijd, niet elke ronde.
+    if(roundN===1 && p.spBoek2) beBonus+=5;
     const pool=bmPersonalPool(pid,POOL);
     up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
     up["players/"+pid+"/answeredRound"]=-1;
@@ -3298,6 +3311,11 @@ function bmPickClass(cid){
   // host (bmCalcAbilityEffect/bmRespawnProgress draaien host-side en kennen
   // BM_IDENT niet) — zelfde reden waarom masteryBonus al zo werkt.
   const achs=BM_IDENT?.achievements||[];
+  // Eretitel-bonus kroniekschrijver_boek_2 (be_head_start): dezelfde relay
+  // als masteryBonus hierboven — bmDistributeQs() draait host-side en kent
+  // alleen dit soort vlaggen op het player-node, geen SP_TITLES van andere
+  // spelers.
+  const spBoek2=spTitlesLoadLocal().includes("kroniekschrijver_boek_2");
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
     class:cid, masteryBonus:ms>=3?1:0,
     traitLaconisch:achs.includes("trait_laconisch"),
@@ -3306,6 +3324,7 @@ function bmPickClass(cid){
     traitGroot:achs.includes("geheim_groot"),
     traitNorage:achs.includes("geheim_norage"),
     traitPacifist:achs.includes("trait_pacifist"),
+    spBoek2,
   });
   toast("Klasse gekozen",bmClsName(cid)+(ms>=3?" · +1 BE mastery-bonus":""));
   SCREENS.battlePlayerLobby();
@@ -3482,8 +3501,31 @@ function bmAnswer(idx){
   const timeLeft=round.deadline?Math.max(0,(round.deadline-Date.now())/1000):0;
   const fast=ok&&timeLeft>at/2;
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
-  let beGain=ok?3:0;
-  if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?cls.passive.val:1; }
+  // Eretitel-bonussen (Chronica.md §6.1, SP_TITLES) — puur client-side gelezen
+  // via spTitlesLoadLocal(): bmAnswer draait al op het eigen toestel van de
+  // speler, dus geen relay via het room-node nodig (in tegenstelling tot
+  // be_head_start, zie bmPickClass/bmDistributeQs).
+  const spEarned=spTitlesLoadLocal();
+  const spBonusTitles=SP_TITLES.filter(t=>t.bonus&&spEarned.includes(t.id));
+  const spBonusVal=type=>spBonusTitles.filter(t=>t.bonus.type===type).reduce((s,t)=>s+t.bonus.val,0);
+  // kroniekschrijver_boek_4 (first_answer_free): de eerste vraag van de
+  // wedstrijd telt automatisch als goed, ongeacht wat je aanklikte.
+  const freeFirst=!ok&&round.n===1&&spBonusVal("first_answer_free")>0;
+  // kroniekschrijver_boek_1 (streak_shield): één fout antwoord per wedstrijd
+  // wordt, eenmalig, ook als goed geteld — de klik zelf blijft wel gewoon
+  // zichtbaar als fout (hierboven), dit raakt alleen de score/reeksen.
+  const shieldUsed=!ok&&!freeFirst&&!BM_MY_SHIELD_USED&&spBonusVal("streak_shield")>0;
+  if(shieldUsed) BM_MY_SHIELD_USED=true;
+  const scoreOk=ok||freeFirst||shieldUsed;
+  if(freeFirst) toast("Eretitel-bonus!","Je eerste vraag telt automatisch als goed beantwoord.");
+  else if(shieldUsed) toast("Eretitel-bonus!","Dit foute antwoord breekt je reeks niet.");
+  let beGain=scoreOk?3:0;
+  // bewaarder_herinnering (be_on_fast) telt alleen mee bij een écht snel én
+  // écht juist antwoord — freeFirst/shieldUsed zijn nooit "snel".
+  if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?cls.passive.val:1; beGain+=spBonusVal("be_on_fast"); }
+  // meester_der_herinnering (be_on_correct): op ELK antwoord dat meetelt,
+  // inclusief freeFirst/shieldUsed.
+  if(scoreOk) beGain+=spBonusVal("be_on_correct");
   // Ciceronianus: opeenvolgende correcte antwoorden in de laatste 5 sec van de timer
   const clutch=ok&&timeLeft<=5;
   if(clutch){ BM_MY_CLUTCH_STREAK++; BM_MY_CLUTCH_BEST=Math.max(BM_MY_CLUTCH_BEST,BM_MY_CLUTCH_STREAK); }
@@ -3496,8 +3538,8 @@ function bmAnswer(idx){
     const upd={
       answeredRound:round.n||0,
       be:(p.be||0)+beGain,
-      correct:ok?(p.correct||0)+1:(p.correct||0),
-      wrong:!ok?(p.wrong||0)+1:(p.wrong||0),
+      correct:scoreOk?(p.correct||0)+1:(p.correct||0),
+      wrong:!scoreOk?(p.wrong||0)+1:(p.wrong||0),
       totalResponseMs:(p.totalResponseMs||0)+elapsedMs,
       respondCount:(p.respondCount||0)+1,
     };
@@ -3506,7 +3548,7 @@ function bmAnswer(idx){
     // een gemarkeerde bonus op de eerstvolgende gebruikte ability (bmResolve()).
     if(BM_META?.mode==="boss"){
       const prevWrongStreak=p.wrongStreak||0;
-      if(ok){
+      if(scoreOk){
         upd.wrongStreak=0;
         if(prevWrongStreak>=3) upd.inspired=true;
       } else {
@@ -3515,11 +3557,13 @@ function bmAnswer(idx){
       // "De Onsterfelijke" (Boss-Battle-scorebord, BOSS_BATTLE.md §8):
       // langste foutloze reeks. Symmetrisch aan wrongStreak hierboven.
       const prevCorrectStreak=p.correctStreak||0;
-      upd.correctStreak=ok?prevCorrectStreak+1:0;
+      upd.correctStreak=scoreOk?prevCorrectStreak+1:0;
       upd.bestCorrectStreak=Math.max(p.bestCorrectStreak||0, upd.correctStreak);
     }
     if(!ok&&BM_MY_Q){
-      // Gemist woord bijhouden voor analytics (host leest na afloop)
+      // Gemist woord bijhouden voor analytics (host leest na afloop) — blijft
+      // op de ECHTE klik gebaseerd, ook als scoreOk de eretitel-bonus geeft:
+      // dit is vocabulaire-analytics, geen wedstrijdscore.
       const wk=bmWordKey(BM_MY_Q.la);
       const prev=p.missed?.[wk]||{c:0};
       upd["missed/"+wk+"/c"]=(prev.c||0)+1;
@@ -3527,7 +3571,7 @@ function bmAnswer(idx){
       upd["missed/"+wk+"/a"]=BM_MY_Q.options?.[BM_MY_Q.correctIdx]||"";
     }
     // Heldenmodus: gevallen held vult zijn herrijzingsmeter met goede antwoorden
-    if(ok){
+    if(scoreOk){
       const rs=bmRespawnProgress(p);
       if(rs){ Object.assign(upd,rs.upd); if(rs.revived){ beep("win"); toast("Je held herrijst!","Terug in de strijd met volle HP.",medalSVG("laurel",34)); } }
     }

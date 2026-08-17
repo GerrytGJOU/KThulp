@@ -196,6 +196,22 @@ async function spAwardTitle(id){
   if(BM_IDENT && initFirebase() && fbDB){
     fbDB.ref(spTitlesPath()+"/titles").set(updated).catch(e=>console.error("spAwardTitle (Firebase-spiegel) fout:",e));
   }
+  spCheckBookMilestones(updated);
+}
+// Boek-mijlpalen (Chronica.md §6.1, SP_BOOK_MILESTONES in singleplayer-data.js):
+// bij elke nieuwe titel checken of daarmee een heel boek nu compleet is — zo
+// ja, ken de bijbehorende kroniekschrijver_boek_N er automatisch bij toe.
+function spCheckBookMilestones(earnedIds){
+  Object.entries(SP_BOOK_MILESTONES).forEach(([milestoneId,{from,to}])=>{
+    if(earnedIds.includes(milestoneId)) return;
+    const bookTitleIds = SP_TITLES.filter(t=>{
+      const m=/^ch(\d+)_/.exec(t.id);
+      return m && +m[1]>=from && +m[1]<=to;
+    }).map(t=>t.id);
+    if(bookTitleIds.length && bookTitleIds.every(tid=>earnedIds.includes(tid))){
+      spAwardTitle(milestoneId);
+    }
+  });
 }
 async function spLoadTitles(){
   const local = spTitlesLoadLocal();

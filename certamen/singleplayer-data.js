@@ -169,16 +169,336 @@ const SP_TITLES = [
     ds:"Zag een daad bij een altaar die de terugkeer van een hele vloot zal vervloeken.", bonus:null },
   { id:"ch9_val_van_troje", nm:"Getuige van de Val van Troje", icon:"laurel", cat:"chronica", secret:true,
     ds:"Zag hoe tien jaar beleg eindigde — niet door kracht, maar door een list.", bonus:null },
+  // Hoofdstuk 10 — twee parallelle vluchtlijnen zonder hereniging (Odysseus/
+  // Grieks, Aeneas/Latijn); per lijn twee titels op de zwaarste breekpunten
+  // van de tocht.
+  { id:"ch10_polyfemos_ontsnapping", nm:"Overwinnaar van de Kykloop", icon:"trident", cat:"chronica", secret:true,
+    ds:"Zag Odysseus de Kykloop Polyphemus verblinden en zichzelf en zijn mannen onder de rammen naar de vrijheid smokkelen.", bonus:null },
+  { id:"ch10_laistrygonen_vloot_verloren", nm:"Getuige van een Verwoeste Vloot", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag elf van Odysseus' twaalf schepen vergaan in de haven van de mensenetende Laistrygonen.", bonus:null },
+  { id:"ch10_dood_anchises", nm:"Getuige van Anchises' Dood", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Aeneas' oude vader Anchises stil sterven, ver van Troje, zonder ooit een nieuw thuis te hebben gezien.", bonus:null },
+  { id:"ch10_aankomst_carthago", nm:"Getuige van de Aankomst in Carthago", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Aeneas voor het eerst oog in oog staan met koningin Dido, aan de vooravond van een verhaal dat nog niet was geschreven.", bonus:null },
+  // Hoofdstuk 11 — beide reizen voeren door het rijk van de doden; vier
+  // titels op de zwaarste momenten van die onderwereldreis en haar gevolgen.
+  { id:"ch11_dido_dood", nm:"Getuige van Dido's Dood", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag koningin Dido zichzelf doorboren met Aeneas' eigen zwaard, en een vloek over zijn hele nageslacht afroepen.", bonus:null },
+  { id:"ch11_runderen_helios_verlies", nm:"Getuige van Helios' Wraak", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag Odysseus' laatste schip en bemanning vergaan nadat zijn mannen de heilige runderen van Helios hadden geslacht.", bonus:null },
+  { id:"ch11_anchises_stoet", nm:"Getuige van de Stoet der Romeinen", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Anchises, in de Elyzese Velden, de hele toekomst van Rome voorbij laten trekken als ongeboren zielen.", bonus:null },
+  { id:"ch11_lavinium_gesticht", nm:"Getuige van Lavinium's Stichting", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Aeneas, na oorlog en verlies, eindelijk zijn nieuwe stad Lavinium stichten.", bonus:null },
+  // Hoofdstuk 12 — Latijnse lijn (Hercules & Cacus, Romulus & Remus) en
+  // Griekse lijn (Odysseus' wraak op de vrijers en hereniging met Penelope)
+  // lopen los naast elkaar; vijf titels op de zwaarste breekpunten van elk.
+  { id:"ch12_dood_cacus", nm:"Getuige van Cacus' Ondergang", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Hercules de vuurspuwende Cacus met blote handen verslaan, nadat het geloei van een rund zijn diefstal verried.", bonus:null },
+  { id:"ch12_stichting_rome", nm:"Getuige van Rome's Stichting", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Romulus de eerste voren van Rome's stadsmuur ploegen — en zijn eigen broer Remus sterven om diezelfde grens.", bonus:null },
+  { id:"ch12_sabijnse_vrede", nm:"Getuige van de Sabijnse Vrede", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag Hersilia en de geschaakte Sabijnse vrouwen zich tussen twee legers werpen en zo een oorlog om henzelf beëindigen.", bonus:null },
+  { id:"ch12_afrekening_vrijers", nm:"Overwinnaar over de Vrijers", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag Odysseus, twintig jaar na zijn vertrek, zijn eigen boog weer spannen en afrekenen met honderd vrijers.", bonus:null },
+  { id:"ch12_penelope_herkenning", nm:"Getuige van een Ware Thuiskomst", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag Penelope, met de list van het olijfhouten bed, eindelijk zeker weten dat Odysseus echt was teruggekeerd.", bonus:null },
+  // Hoofdstuk 13 — twee onafhankelijke stadsverhalen: Griekse lijn (Athenes
+  // naamgeving, met Perseus- en Arachne-zijsporen) en Latijnse lijn (Horatii,
+  // Lucretia, de verdrijving van Rome's laatste koning); zes titels.
+  { id:"ch13_athena_poseidon_wedstrijd", nm:"Getuige van Athenes Naamgeving", icon:"owl", cat:"chronica", secret:true,
+    ds:"Zag Athena de wedstrijd om een naamloze stad winnen met een enkele olijfboom — en de stad kreeg voortaan haar naam.", bonus:null },
+  { id:"ch13_dood_medusa", nm:"Getuige van Medusa's Onthoofding", icon:"eagle", cat:"chronica", secret:true,
+    ds:"Zag Perseus, gewapend met Athena's schild als spiegel, Medusa onthoofden zonder haar ooit rechtstreeks aan te kijken.", bonus:null },
+  { id:"ch13_arachne_verandering", nm:"Getuige van Arachnes Gedaanteverwisseling", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag een sterveling die weigerde te buigen voor een godin, voor eeuwig veranderd in een spin.", bonus:null },
+  { id:"ch13_horatii_overwinning", nm:"Getuige van de Zege der Horatii", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag de laatste overlevende Horatius, alleen tegen drie broers, Rome de oorlog laten winnen door hen één voor één te verslaan.", bonus:null },
+  { id:"ch13_dood_lucretia", nm:"Getuige van Lucretia's Dood", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Lucretia zichzelf doden voor de ogen van haar familie, na door Sextus Tarquinius onteerd te zijn.", bonus:null },
+  { id:"ch13_republiek_geboren", nm:"Getuige van de Geboorte der Republiek", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Tarquinius Superbus verjaagd worden en Rome, voor het eerst, geregeerd door twee gekozen consuls in plaats van een koning.", bonus:null },
+  // Hoofdstuk 14 — "Verzet tegen Tirannen": Griekse lijn (val van de Peisistratiden,
+  // geboorte van de democratie) en Latijnse lijn (Porsenna's beleg: Cocles,
+  // Scaevola, Cloelia); vijf titels.
+  { id:"ch14_tirannenmoord", nm:"Getuige van de Tirannenmoord", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Harmodios en Aristogeiton Hipparchos vermoorden midden op het Panathenaeënfeest — wraak, niet vrijheidsdrang, ook al schreef de geschiedenis er later anders over.", bonus:null },
+  { id:"ch14_democratie_geboren", nm:"Getuige van Democratie's Geboorte", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Kleisthenes de tien stammen instellen en het volk zelf de macht geven — het eerste moment dat iemand het woord 'democratie' gebruikte.", bonus:null },
+  { id:"ch14_cocles_brug", nm:"Verdediger van de Pons Sublicius", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag Horatius Cocles in zijn eentje Porsenna's hele voorhoede tegenhouden, tot de laatste balk van de brug achter hem viel.", bonus:null },
+  { id:"ch14_scaevola_hand", nm:"Getuige van Scaevola's Hand", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Gaius Mucius zijn eigen rechterhand in het offervuur houden zonder een teken van pijn, om Porsenna Rome's vastberadenheid te bewijzen.", bonus:null },
+  { id:"ch14_cloelia_erkenning", nm:"Getuige van Cloelia's Erkenning", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag Cloelia vrijwillig terugkeren naar Porsenna's kamp om Rome's woord te eren — en zag hem haar daarna alsnog vrijlaten en vrede sluiten.", bonus:null },
+  // Hoofdstuk 15 — "Hoe Men Leefde": geen veldslagen, maar de kleine, ongeziene
+  // levens van Melissa, Doris, Aemilia en Fortunata; drie titels.
+  { id:"ch15_doris_vrijkoop", nm:"Getuige van Doris' Vrijkoop", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Zag Doris, muntstuk voor muntstuk gespaard in een verborgen kruik, zichzelf vrijkopen van de meester die haar ooit tot slaaf maakte.", bonus:null },
+  { id:"ch15_marktconfrontatie_fortunata", nm:"Getuige van een Marktconfrontatie", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag een klant op de markt Fortunata's recht om als vrijgelatene zelfstandig handel te drijven in twijfel trekken.", bonus:null },
+  { id:"ch15_aemilia_grafsteen", nm:"Getuige van een Ander Soort Lof", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Aemilia hardop in twijfel trekken waarom 'lanam fecit' op elke grafsteen staat, maar nooit op die van de vrouwen die het echte weefwerk deden.", bonus:null },
+  // Hoofdstuk 16 — "Vorming en Vermaak": Latijnse lijn (Circus Maximus en de
+  // arena — Diocles, Spartacus, Flamma, Amazon en Achillia) en Griekse lijn
+  // (gymnasion en Olympia — Atalanta, Pherenike); vijf titels.
+  { id:"ch16_spartacus_eerste_zege", nm:"Getuige van Spartacus' Eerste Zege", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag een nog onbekende Thracische gladiator, Spartacus, overtuigend winnen in de arena — lang voordat die naam de wereld zou schokken.", bonus:null },
+  { id:"ch16_flamma_weigering", nm:"Getuige van Flamma's Weigering", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag de gladiator Flamma voor de vierde keer zijn eigen vrijheid weigeren, om terug de arena in te lopen.", bonus:null },
+  { id:"ch16_gladiatrices_duel", nm:"Getuige van Amazon en Achillia", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag twee vrouwelijke gladiators, Amazon en Achillia, in de arena vechten zoals anders alleen mannen deden.", bonus:null },
+  { id:"ch16_atalanta_wedloop", nm:"Getuige van Atalanta's Wedloop", icon:"eagle", cat:"chronica", secret:true,
+    ds:"Zag Hippomenes met drie gouden appels van Aphrodite de razendsnelle Atalanta alsnog verslaan in de hardloopwedstrijd om haar hand.", bonus:null },
+  { id:"ch16_pherenike_onthulling", nm:"Getuige van Pherenike's Vermomming", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Pherenike zich als trainer vermommen om, tegen de wet in, haar zoon in Olympia te zien winnen.", bonus:null },
+  // Hoofdstuk 17 — "Oorlog en Overwinning": Latijnse lijn (Hannibal, van
+  // Saguntum via Cannae naar Zama en zijn dood) en Griekse lijn (de
+  // Perzische Oorlogen, van Marathon via Thermopylae naar Plataeae); zeven
+  // titels — de bredere oorlogsscope van dit hoofdstuk (Gerbens verzoek,
+  // zie het commentaarblok boven SP_CH17_CNS) verdient het.
+  { id:"ch17_val_saguntum", nm:"Getuige van Saguntums Val", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag de laatste verdedigers van Saguntum liever alles vernietigen en zichzelf doden dan zich aan Hannibal over te geven.", bonus:null },
+  { id:"ch17_cannae_overwinning", nm:"Getuige van Cannae", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag Hannibals dubbele omtrekking bij Cannae de grootste Romeinse nederlaag in de geschiedenis van de Republiek worden.", bonus:null },
+  { id:"ch17_slag_bij_zama", nm:"Getuige van Hannibals Enige Nederlaag", icon:"eagle", cat:"chronica", secret:true,
+    ds:"Zag Scipio bij Zama Hannibals eigen tactieken tegen hem gebruiken, voor de eerste en enige keer in zijn hele carrière.", bonus:null },
+  { id:"ch17_dood_hannibal", nm:"Getuige van Hannibals Dood", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Hannibal, omsingeld door Romeinse gezanten in Bithynië, liever het gif drinken dat hij al jarenlang bij zich droeg.", bonus:null },
+  { id:"ch17_marathon_overwinning", nm:"Getuige van Marathon", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag Miltiades bij Marathon een veel groter Perzisch leger verslaan door zijn eigen centrum bewust zwak te houden.", bonus:null },
+  { id:"ch17_thermopylae_laatste_stand", nm:"Getuige van Thermopylae", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Leonidas en zijn driehonderd Spartanen, verraden door een geheim geitenpad, standhouden tot de laatste man viel.", bonus:null },
+  { id:"ch17_slag_bij_plataeae", nm:"Getuige van Plataeae", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag een verenigd Grieks leger bij Plataeae het laatste Perzische landleger verslaan en de oorlog definitief beëindigen.", bonus:null },
+  // Hoofdstuk 18 — "Wie Betaalt, Bepaalt": Griekse lijn (de Delisch-Attische
+  // Zeebond die verwordt tot een rijk, Perikles' Parthenon-bouw en
+  // Thucydides' ostracisme) en Latijnse lijn (de Gracchen, Marius' legerhervorming,
+  // Sulla's mars op Rome en Spartacus); zes titels.
+  { id:"ch18_gre_naxos_onderwerping", nm:"Getuige van Naxos' Onderwerping", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag Naxos met geweld teruggedwongen worden in de Delisch-Attische Zeebond — het eerste bondgenootschap dat in werkelijkheid een onderworpen provincie werd.", bonus:null },
+  { id:"ch18_gre_thucydides_verbanning", nm:"Getuige van Thucydides' Verbanning", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Thucydides, zoon van Melesias, verbannen worden nadat hij Perikles' bouwplannen diefstal had durven noemen.", bonus:null },
+  { id:"ch18_lat_dood_tiberius", nm:"Getuige van Tiberius Gracchus' Dood", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Tiberius Gracchus door zijn eigen senatoren doodgeslagen worden, het eerste politieke bloedvergieten binnen Rome in eeuwen.", bonus:null },
+  { id:"ch18_lat_dood_gaius", nm:"Getuige van Gaius Gracchus' Dood", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag Gaius Gracchus zich door een trouwe slaaf laten doden om niet levend in handen van de senaat te vallen.", bonus:null },
+  { id:"ch18_lat_sulla_mars_op_rome", nm:"Getuige van Sulla's Mars op Rome", icon:"eagle", cat:"chronica", secret:true,
+    ds:"Zag Sulla als eerste Romeinse generaal ooit zijn eigen legioenen de stad Rome zelf laten binnenmarcheren.", bonus:null },
+  { id:"ch18_lat_dood_spartacus", nm:"Getuige van Spartacus' Ondergang", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Spartacus sneuvelen en zesduizend van zijn opstandelingen langs de Via Appia gekruisigd worden.", bonus:null },
+  // Hoofdstuk 19 — "Bondgenoten, Verscheurd": Griekse lijn (Peloponnesische
+  // Oorlog, met een echte kant-kiezen-keuze Athene/Sparta) en Latijnse lijn
+  // (Caesars Burgeroorlog, met een echte kant-kiezen-keuze Caesar/Pompeius);
+  // ongewoon veel titels omdat dit hoofdstuk in feite twee volledige oorlogen
+  // bevat — gedeelde climaxen tussen de twee zijden hergebruiken dezelfde id.
+  { id:"ch19_lat_dood_crassus", nm:"Getuige van Crassus' Ondergang", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Crassus bij Carrhae verpletterend verslagen worden door de Parthische cavalerie, en zijn hebzucht bespot met gesmolten goud.", bonus:null },
+  { id:"ch19_lat_rubicon", nm:"Getuige van de Rubicon", icon:"eagle", cat:"chronica", secret:true,
+    ds:"Hoorde Caesar aan de oevers van de Rubicon 'alea iacta est' spreken, het moment waarop de Republiek onherroepelijk veranderde.", bonus:null },
+  { id:"ch19_lat_pharsalus", nm:"Getuige van Pharsalus", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag Caesars verborgen vierde linie Pompeius' cavalerie breken en daarmee de hele Romeinse Burgeroorlog beslissen.", bonus:null },
+  { id:"ch19_lat_dood_pompeius", nm:"Getuige van Pompeius' Dood", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Pompeius, gevlucht naar Egypte, vermoord worden door mannen die zo Caesars gunst hoopten te winnen.", bonus:null },
+  { id:"ch19_lat_iden_van_maart", nm:"Getuige van de Iden van Maart", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Caesar, dictator voor het leven, door zijn eigen gespaarde vijanden in de Senaat vermoord worden.", bonus:null },
+  { id:"ch19_gre_melos_slachting", nm:"Getuige van de Melische Slachting", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag Athene het neutrale eiland Melos straffen met de dood van alle mannen en de slavernij van vrouwen en kinderen.", bonus:null },
+  { id:"ch19_gre_sicilische_ramp", nm:"Getuige van de Sicilische Ramp", icon:"trident", cat:"chronica", secret:true,
+    ds:"Zag Athenes hele vloot en landleger vergaan voor de muren van Syracuse, na het vertrek van Alkibiades.", bonus:null },
+  { id:"ch19_gre_aegospotami", nm:"Getuige van Aegospotami", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag de Atheense vloot bij Aegospotami onvoorbereid overrompeld worden — het einde van Athenes macht op zee.", bonus:null },
+  { id:"ch19_gre_dertig_tirannen", nm:"Getuige van de Dertig Tirannen", icon:"owl", cat:"chronica", secret:true,
+    ds:"Zag Sparta's overwinning op Athene uitmonden in een schrikbewind van lijsten en executies zonder proces.", bonus:null },
+  { id:"ch19_gre_dood_alkibiades", nm:"Getuige van Alkibiades' Dood", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Zag de rusteloze overloper Alkibiades, door bijna iedereen gewantrouwd, vermoord worden in een afgelegen Perzisch fort.", bonus:null },
+  // Hoofdstuk 20 — "Grenzen Verlegd": Griekse lijn (Alexander de Grote, van
+  // Chaeronea tot zijn dood in Babylon) en Latijnse lijn (Caesars eigen schim
+  // vertelt zijn verovering van Gallië en Britannia); zes titels.
+  { id:"ch20_gre_dood_philippus", nm:"Getuige van Philippus' Moord", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag koning Philippus II tijdens de bruiloftsfeesten van zijn dochter neergestoken worden door een van zijn eigen lijfwachten.", bonus:null },
+  { id:"ch20_gre_dood_darius", nm:"Getuige van Darius' Verraad", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag koning Darius III door zijn eigen satraap Bessus gevangengezet en neergestoken worden, vlak voor Alexanders leger hem kon bereiken.", bonus:null },
+  { id:"ch20_gre_dood_alexander", nm:"Getuige van Alexanders Dood", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag Alexander de Grote, pas tweeëndertig jaar oud, in Babylon sterven aan een korte, hevige koorts, zonder een erfgenaam aan te wijzen.", bonus:null },
+  { id:"ch20_lat_dumnorix_dood", nm:"Getuige van Dumnorix' Laatste Verzet", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag Dumnorix zich tot het einde verzetten en sterven, terwijl hij bleef roepen dat hij een vrij man van een vrij volk was.", bonus:null },
+  { id:"ch20_lat_sabinus_cotta_ondergang", nm:"Getuige van de Ondergang bij de Eburonen", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag vijftien cohorten onder Sabinus en Cotta bijna volledig vernietigd worden nadat Ambiorix hen in een hinderlaag lokte.", bonus:null },
+  { id:"ch20_lat_overwinning_alesia", nm:"Getuige van Alesia", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Vercingetorix zich aan Caesar overgeven bij Alesia, na een dubbele omwalling die heel Gallië niet kon doorbreken.", bonus:null },
+  // Hoofdstuk 21 — "Wijsheid en Waarheid": Griekse lijn (Socrates' proces en
+  // dood, Plato's Academie, Aristoteles' Lyceum) en Latijnse lijn (Archimedes'
+  // dood, Cicero's Catilina-triomf en zijn vertaalwerk); zes titels.
+  { id:"ch21_gre_dood_socrates", nm:"Getuige van Socrates' Dood", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Socrates kalm de gifbeker leegdrinken, veroordeeld door de volksrechtbank die hij zijn hele leven bevraagd had.", bonus:null },
+  { id:"ch21_gre_academie_gesticht", nm:"Getuige van de Stichting der Academie", icon:"owl", cat:"chronica", secret:true,
+    ds:"Zag Plato, verslagen door de dood van zijn leermeester, buiten Athenes muren de Academie stichten.", bonus:null },
+  { id:"ch21_gre_lyceum_gesticht", nm:"Getuige van de Stichting van het Lyceum", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Aristoteles zijn eigen weg kiezen en het Lyceum stichten, gericht op de waarneembare natuur.", bonus:null },
+  { id:"ch21_lat_dood_archimedes", nm:"Getuige van Archimedes' Dood", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag Archimedes, verdiept in zijn meetkundige figuren, gedood worden door een Romeinse soldaat tegen Marcellus' eigen bevel in.", bonus:null },
+  { id:"ch21_lat_pater_patriae", nm:"Redder van de Republiek", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag Cicero de samenzwering van Catilina ontmantelen en daarvoor de eretitel Pater Patriae ontvangen.", bonus:null },
+  { id:"ch21_lat_wijsheid_vertaald", nm:"Getuige van een Vertaalde Wijsheid", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Zag Cicero de Griekse filosofie in het Latijn vertalen, met een jonge Seneca als aandachtige toehoorder.", bonus:null },
+  // Hoofdstuk 22 — "Opvolgers tegenover Opvolgers": Griekse lijn (de
+  // Diadochenoorlogen na Alexanders dood, verdeeld tussen Ptolemaeus en
+  // Antigonos) en Latijnse lijn (het Tweede Triumviraat, Cicero's dood,
+  // Fulvia's opstand); vijf titels, twee ervan gedeeld tussen de
+  // Ptolemaeus- en Antigonos-route omdat ze op dezelfde climax uitkomen.
+  { id:"ch22_gre_dood_perdikkas", nm:"Getuige van Perdikkas' Ondergang", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Perdikkas, na de rampzalige oversteek van de Nijl, in de nacht vermoord worden door officieren uit zijn eigen staf.", bonus:null },
+  { id:"ch22_gre_einde_bloedlijn", nm:"Getuige van het Einde der Bloedlijn", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Alexanders weduwe Roxana en hun jonge zoon Alexander IV in het geheim vermoord worden door Kassandros, om elke aanspraak op de troon voorgoed uit te wissen.", bonus:null },
+  { id:"ch22_gre_slag_bij_ipsus", nm:"Getuige van Ipsus", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag Antigonos, tachtig jaar oud en onwillig te wijken, sneuvelen bij Ipsus onder een hagel van speren — het einde van de droom op een herenigd rijk.", bonus:null },
+  { id:"ch22_lat_dood_cicero", nm:"Getuige van Cicero's Laatste Uur", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Cicero weigeren te vluchten toen de centurio's van Antonius hem in Formiae vonden, en zijn hoofd en handen aan de Rostra gespijkerd worden.", bonus:null },
+  { id:"ch22_lat_dood_fulvia", nm:"Getuige van Fulvia's Einde", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag Fulvia, ziek en politiek geïsoleerd na de nederlaag bij Perusia, sterven in Sikyon — haar dood ruimde de weg voor de Vrede van Brundisium.", bonus:null },
+  // Hoofdstuk 23 — "Vrede en Vergankelijkheid": Griekse lijn (Cleopatra,
+  // Actium en het einde van de Hellenistische wereld) en Latijnse lijn
+  // (Augustus tot Nero, met Livius als gastverteller en Seneca's dood);
+  // zes titels, waaronder één gedeeld tussen de Griekse en Latijnse kijk
+  // op dezelfde slag.
+  { id:"ch23_slag_bij_actium", nm:"Getuige van Actium", icon:"trident", cat:"chronica", secret:true,
+    ds:"Zag Cleopatra's zestig schepen wegdraaien uit de slaglinie bij Actium, en Antonius zijn eigen vloot achterlaten om haar te volgen.", bonus:null },
+  { id:"ch23_dood_antonius", nm:"Getuige van Antonius' Dood", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Antonius, misleid door een vals bericht over Cleopatra's dood, op zijn eigen zwaard vallen en sterven in haar armen.", bonus:null },
+  { id:"ch23_dood_cleopatra", nm:"Getuige van de Laatste Koningin", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag Cleopatra weigeren om, zoals Vercingetorix vóór haar, in Octavianus' triomftocht te lopen, en zichzelf laten doden door een aspis.", bonus:null },
+  { id:"ch23_dood_caesarion", nm:"Getuige van een Bloedeigen Erfgenaam", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag Caesarion, Caesars enige bloedeigen kind, gevangengenomen en op Augustus' bevel gedood — dezelfde soort erfgenaam die Kassandros jaren eerder al opzijschoof.", bonus:null },
+  { id:"ch23_augustus_princeps", nm:"Getuige van de Geboorte van een Princeps", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag Octavianus theatraal zijn buitengewone macht aan de Senaat aanbieden, en er als Augustus, princeps in naam maar heerser in alles, weer mee terugkeren.", bonus:null },
+  { id:"ch23_dood_seneca", nm:"Getuige van Seneca's Laatste Les", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Zag Seneca, veroordeeld door zijn eigen voormalige leerling Nero, kalm zijn aderen doorsnijden terwijl hij zijn vrienden nog troostte en dicteerde.", bonus:null },
+  // Hoofdstuk 24 — "Steen en Water": niet-chronologisch museumhoofdstuk over
+  // Griekse beeldhouwkunst/zuilorden en Romeinse architectuur/techniek;
+  // slechts twee titels, voor de twee momenten waarop de Boodschapper zelf
+  // uit haar luchtige toon valt.
+  { id:"ch24_gre_kolossus_rhodos", nm:"Getuige van de Kolossus' Ondergang", icon:"trident", cat:"chronica", secret:true,
+    ds:"Hoorde hoe een aardbeving de Kolossus van Rhodos bij de knieën brak, en hoe er van een van de zeven wereldwonderen uiteindelijk geen steen meer overbleef.", bonus:null },
+  { id:"ch24_lat_boek_vitruvius", nm:"Bewaarder van De Architectura", icon:"owl", cat:"chronica", secret:true,
+    ds:"Hoorde Vitruvius vertellen hoe bijna alle technische geschriften van zijn tijd verloren gingen, en hoe zijn eigen De Architectura, als bijna enige, de eeuwen doorstond.", bonus:null },
+  // Hoofdstuk 25 — "Onder de Vulkaan": Griekse lijn (presocraten en
+  // Hellenistische wetenschap) en Latijnse lijn (Pompeii, de aardbeving
+  // van 62 en de uitbarsting van 79); drie titels.
+  { id:"ch25_gre_omtrek_aarde", nm:"Meter van de Aarde", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag Eratosthenes, zonder ooit een voet buiten Egypte te zetten, uit één schaduwhoek de omtrek van de aarde berekenen tot op enkele procenten nauwkeurig.", bonus:null },
+  { id:"ch25_gre_archimedes_eureka", nm:"Getuige van Eureka", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Zag Archimedes, badend voor koning Hiero's kroon, plotseling begrijpen dat verplaatst water het antwoord was — en juichend en druipend de straat op rennen.", bonus:null },
+  { id:"ch25_lat_dood_plinius_oudere", nm:"Getuige van Plinius' Laatste Reddingspoging", icon:"trident", cat:"chronica", secret:true,
+    ds:"Zag Plinius de Oudere zijn vloot niet laten vluchten maar dichter naar de uitbarsting laten varen om anderen te redden, en sterven op het strand van Stabiae.", bonus:null },
+  // Hoofdstuk 26 — "Een Rijk in Crisis": Griekse lijn (Hadrianus'
+  // filhellenisme, het orakel van Delphi) en Latijnse lijn (Flavii,
+  // Vijfkeizerjaar, Severische dynastie, Derde-Eeuwse Crisis); vijf titels.
+  { id:"ch26_gre_stil_orakel", nm:"Getuige van een Wachtend Orakel", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag Hadrianus het orakel van Delphi raadplegen, en hoorde de Boodschapper van Chronos voor het eerst zelf stil worden bij een tempel die nog altijd sprak.", bonus:null },
+  { id:"ch26_lat_domitianus_uitgewist", nm:"Getuige van een Uitgewiste Naam", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag het Colosseum onder Titus voltooid worden, en zijn broer Domitianus na een achterdochtig bewind vermoord en zoveel mogelijk van de monumenten gebeiteld.", bonus:null },
+  { id:"ch26_lat_troon_geveild", nm:"Getuige van een Geveilde Troon", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag de Praetoriaanse Garde de troon van het Romeinse Rijk letterlijk aan de hoogste bieder veilen, tot Septimius Severus met zijn legioenen orde kwam afdwingen.", bonus:null },
+  { id:"ch26_lat_moord_op_geta", nm:"Getuige van een Vermoorde Broer", icon:"shield", cat:"chronica", secret:true,
+    ds:"Zag Caracalla zijn broer Geta in de armen van hun eigen moeder laten vermoorden, kort voordat hij het Romeinse burgerrecht aan bijna het hele rijk toekende.", bonus:null },
+  { id:"ch26_lat_restitutor_orbis", nm:"Hersteller van de Wereld", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag Aurelianus het uiteengevallen rijk in nog geen vijf jaar grotendeels herenigen, en daarmee de bijnaam restitutor orbis verdienen.", bonus:null },
+  // Hoofdstuk 27 — "Kruis en Kroon": zigzag-hoofdstuk over Byzantium/
+  // Constantinopel (Griekse lijn) en de val van West-Rome (Latijnse lijn),
+  // met de Slag bij de Milvische Brug tweemaal verteld; zes titels.
+  { id:"ch27_lat_droom_milvische_brug", nm:"Getuige van een Droom vóór de Slag", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag, volgens Lactantius, hoe Constantijn 's nachts in een droom opdracht kreeg het hemelse teken op de schilden van zijn soldaten te merken, vlak voor de Slag bij de Milvische Brug.", bonus:null },
+  { id:"ch27_gre_teken_milvische_brug", nm:"Getuige van een Teken op Klaarlichte Dag", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag, volgens Eusebius, hoe Constantijn midden op de dag, voor het hele leger zichtbaar, een lichtend kruis boven de zon zag verschijnen, vlak voor de Slag bij de Milvische Brug.", bonus:null },
+  { id:"ch27_lat_val_van_rome", nm:"Getuige van de Val van Rome", icon:"crown", cat:"chronica", secret:true,
+    ds:"Zag hoe Odoacer de laatste West-Romeinse keizer, de tienerjongen Romulus Augustulus, zonder bloedvergieten van de troon haalde, en het West-Romeinse Rijk zo stilletjes liet eindigen.", bonus:null },
+  { id:"ch27_gre_delphi_gesloten", nm:"Getuige van een Verstomd Orakel", icon:"torch", cat:"chronica", secret:true,
+    ds:"Zag hoe Theodosius het heilige vuur van Delphi liet doven en de Olympische Spelen na meer dan duizend jaar verbood, en hoorde de Boodschapper van Chronos voor het eerst echt zwijgen.", bonus:null },
+  { id:"ch27_gre_hagia_sophia", nm:"Getuige van een Koepel voor een God", icon:"column", cat:"chronica", secret:true,
+    ds:"Zag Justinianus bij de inwijding van de Hagia Sophia uitroepen dat hij Salomo had overtroffen, terwijl Theodora naast hem als keizerin stond.", bonus:null },
+  { id:"ch27_gre_theodora_nika", nm:"Getuige van Theodora's Trots", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Zag Theodora weigeren te vluchten tijdens de Nika-opstand, en hoorde haar zeggen dat het purper een prachtig doodskleed was — waarna de opstand nog diezelfde avond werd neergeslagen.", bonus:null },
+  // Hoofdstuk 28 — "De Bibliotheek van Mnemosyne": Boek VI's grote
+  // onthullingshoofdstuk, cultuurneutraal; drie titels.
+  { id:"ch28_museum_van_mnemosyne", nm:"Getuige van Mnemosyne's Museum", icon:"owl", cat:"chronica", secret:true,
+    ds:"Hoorde Mnemosyne onthullen dat het Museum waarin je al die hoofdstukken lang herinneringen bewaarde, van het begin af aan haar eigen werk was.", bonus:null },
+  { id:"ch28_boodschapper_pamphile", nm:"Getuige van Pamphile's Ware Gezicht", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Zag de Boodschapper van Chronos haar gevleugelde sandalen afleggen en onthullen dat ze eigenlijk Pamphile was, de geschiedschrijfster die je al eerder in Nero's Rome tegenkwam.", bonus:null },
+  { id:"ch28_lethe_verschijnt", nm:"Getuige van Lethes Eerste Verschijning", icon:"star", cat:"chronica", secret:true,
+    ds:"Zag Lethe voor het eerst tussen Mnemosynes boekenkasten verschijnen, kalm en bijna vriendelijk, en hoorde haar een grondig meningsverschil beloven.", bonus:null },
+  // Hoofdstuk 29 — "De Rivier Lethe": cultuurneutraal, met Orpheus als
+  // schim-verteller; twee titels, voor de momenten waarop Lethe zelf
+  // haar motieven laat zien.
+  { id:"ch29_lethe_ware_aard", nm:"Getuige van Lethes Ware Aard", icon:"torch", cat:"chronica", secret:true,
+    ds:"Hoorde Lethe uitleggen dat ze het vergeten zelf niet verzint, maar er gewoon bij aanwezig is bij elk moment dat iets voorgoed loslaat.", bonus:null },
+  { id:"ch29_lethe_persoonlijk_antwoord", nm:"Vertrouwelinge van Lethe", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Hoorde Lethe toegeven dat ze zelf niet precies weet waarom het haar iets kan schelen, omdat niemand het haar ooit vraagt.", bonus:null },
+  // Finale — vijf eretitels voor de grote onthullingen en de laatste
+  // confrontatie: Kronos' zelfonthulling als verslagen Titaan, Kleio's
+  // onthulling als schrijfster van de Kroniek, Hermes' en Pamphiles eigen
+  // bekentenissen, en de ontknoping van het Lethe-gevecht.
+  { id:"fin_kronos_titaan", nm:"Getuige van de Onthulde Titaan", icon:"crown", cat:"chronica", secret:true,
+    ds:"Hoorde Kronos, voor het eerst zonder gevleugelde sandalen, toegeven dat hij de door Zeus verslagen Titaan was en dat vergeten worden zijn grootste angst bleek.", bonus:null },
+  { id:"fin_kleio_kroniekschrijfster", nm:"Getuige van de Kroniekschrijfster", icon:"owl", cat:"chronica", secret:true,
+    ds:"Hoorde Kleio onthullen dat zij, Mnemosynes dochter, zelf elke regel van de Kroniek had geschreven.", bonus:null },
+  { id:"fin_hermes_eigen_motief", nm:"Vertrouweling van Hermes", icon:"eagle", cat:"chronica", secret:true,
+    ds:"Hoorde Hermes toegeven dat hij Athena niet alleen als boodschapper hielp, maar omdat hij, één keer, deel wilde uitmaken van iets groters dan de boodschap die hij droeg.", bonus:null },
+  { id:"fin_pamphile_eigen_stem", nm:"Vertrouweling van Pamphile", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Hoorde Pamphile toegeven dat dit verhaal misschien wel het enige van haar werk was dat niet verloren zou gaan.", bonus:null },
+  { id:"fin_lethe_laatste_rivier", nm:"Overwinnaar bij de Laatste Rivier", icon:"trident", cat:"chronica", secret:true,
+    ds:"Stond, samen met alles wat onderweg bewaard bleef, oog in oog met Lethe bij de laatste rivier, en zag haar voor het eerst zwijgen zonder enige agenda.", bonus:null },
+  // Boek-mijlpalen (Chronica.md §6.1): niet toegekend door één EERETITEL-scène
+  // zoals de rest van deze array, maar door spCheckBookMilestones() in
+  // singleplayer.js — automatisch zodra alle chNN_*-titels van het bijbehorende
+  // boek binnen zijn (zie SP_BOOK_MILESTONES hieronder voor de hoofdstukranges).
+  // Alle vijf bonussen zijn nu ECHT verrekend in Battle Mode/Boss Battle/Total
+  // War (battle.js: bmAnswer/bmPickClass/bmDistributeQs/bmAwardBattle), net als
+  // bewaarder_herinnering's be_on_fast en meester_der_herinnering's
+  // be_on_correct hieronder.
+  { id:"kroniekschrijver_boek_1", nm:"Kroniekschrijver van Boek I", icon:"laurel", cat:"chronica", secret:true,
+    ds:"Voltooide heel Boek I, De Ontwaakte Herinnering (Hoofdstuk 1 t/m 9).",
+    bonus:{ scope:["battle","boss","totalwar"], type:"streak_shield", val:1,
+            desc:"Eén fout antwoord per wedstrijd breekt je reeks niet" } },
+  { id:"kroniekschrijver_boek_2", nm:"Kroniekschrijver van Boek II", icon:"trident", cat:"chronica", secret:true,
+    ds:"Voltooide heel Boek II, Helden en Koningen (Hoofdstuk 10 t/m 14).",
+    bonus:{ scope:["battle","boss","totalwar"], type:"be_head_start", val:5,
+            desc:"Elke wedstrijd start met +5 BE" } },
+  { id:"kroniekschrijver_boek_3", nm:"Kroniekschrijver van Boek III", icon:"owl", cat:"chronica", secret:true,
+    ds:"Voltooide heel Boek III, De Wereld van Mensen (Hoofdstuk 15 t/m 17).",
+    bonus:{ scope:["battle","boss","totalwar"], type:"coin_bonus_pct", val:5,
+            desc:"+5% munten na afloop van een wedstrijd" } },
+  { id:"kroniekschrijver_boek_4", nm:"Kroniekschrijver van Boek IV", icon:"column", cat:"chronica", secret:true,
+    ds:"Voltooide heel Boek IV, Rome Verrijst (Hoofdstuk 18 t/m 23).",
+    bonus:{ scope:["battle","boss","totalwar"], type:"first_answer_free", val:1,
+            desc:"De eerste vraag van elke wedstrijd telt automatisch als goed beantwoord" } },
+  { id:"kroniekschrijver_boek_5", nm:"Kroniekschrijver van Boek V", icon:"amphora", cat:"chronica", secret:true,
+    ds:"Voltooide heel Boek V, Erfenis van een Rijk (Hoofdstuk 24 t/m 27).",
+    bonus:{ scope:["battle","boss","totalwar"], type:"coin_bonus_pct", val:5,
+            desc:"+5% munten na afloop van een wedstrijd" } },
   // Finale (Chronica.md §7.101/§6.1): de zwaarste bonus-eretitel van de hele
   // campagne, bewust voorbehouden aan 100%-voltooiing (Hoofdstuk 1 t/m 29 +
-  // Finale). `bonus.type:"be_on_correct"` bestaat, net als de andere
-  // kroniekschrijver_boek_*-bonussen uit §6.1, nog nergens in battle.js —
-  // puur informatief tot de Combat-bridge-bouwstap dat alsnog inbouwt.
+  // Finale).
   { id:"meester_der_herinnering", nm:"Meester der Herinnering", icon:"star", cat:"chronica", secret:true,
     ds:"Voltooide heel Chronica Classica, van de eerste voetstap in Latium tot de laatste rivier.",
     bonus:{ scope:["battle","boss","totalwar"], type:"be_on_correct", val:1,
             desc:"+1 BE op elk juist antwoord, niet alleen snelle" } },
 ];
+
+// ---- SP_BOOK_MILESTONES — hoofdstukranges per boek-mijlpaal (Chronica.md
+// §6.1). spCheckBookMilestones() in singleplayer.js gebruikt dit om, telkens
+// wanneer een nieuwe chNN_*-titel binnenkomt, te bepalen of alle titels van
+// een boek nu compleet zijn en zo ja de bijbehorende kroniekschrijver_boek_N
+// alsnog toe te kennen. Boek VI (H28-29) + Finale heeft geen eigen entry hier
+// — dat is precies meester_der_herinnering, hierboven al met een eigen
+// EERETITEL-scène (FIN_EPILOOG) toegekend, dus geen aparte check nodig.
+const SP_BOOK_MILESTONES = {
+  kroniekschrijver_boek_1: { from:1, to:9 },
+  kroniekschrijver_boek_2: { from:10, to:14 },
+  kroniekschrijver_boek_3: { from:15, to:17 },
+  kroniekschrijver_boek_4: { from:18, to:23 },
+  kroniekschrijver_boek_5: { from:24, to:27 },
+};
 
 /* ---- CAMPAGNEKAART — Proloog + 28 hoofdstukken (5 "Boeken"), gesynchroniseerd
    met Pallas (Grieks) en Minerva (Latijn), klas 2 t/m 6 gymnasium.
@@ -17559,6 +17879,9 @@ CLEMENTIA: Odysseus glimlacht breed. "Een naam is alles wat een held overhoudt z
 SEVERITAS: Odysseus' glimlach verstrakt, even maar. "Ik weet het. Ik wist het al terwijl ik het riep — en riep het toch."
 NEUTRAL: Odysseus haalt zijn schouders op. "Een naam roepen kost niets. Wat het hierna gaat kosten, weet ik nog niet."
 
+EERETITEL:
+ch10_polyfemos_ontsnapping
+
 CHOICES:
 
 * Begrijp die trots — na tien jaar oorlog verdient hij het gehoord te worden [CLEMENTIA] -> CH10_ODY_006B
@@ -17685,6 +18008,9 @@ Wat overblijft van de vloot — één enkel schip, een handvol overlevenden, gee
 
 FLAG:
 ch10_lijn_odysseus=true
+
+EERETITEL:
+ch10_laistrygonen_vloot_verloren
 
 CHOICES:
 
@@ -17915,6 +18241,9 @@ ch10_aen_dood_anchises.png
 CODEX:
 codex_dood_anchises
 
+EERETITEL:
+ch10_dood_anchises
+
 CHOICES:
 
 * Ga verder [REQUIRE:taalspoor=latijn] -> CH10_AEN_008
@@ -18056,6 +18385,9 @@ puzzle_ch10_aen_ipse
 
 CODEX:
 codex_aankomst_carthago
+
+EERETITEL:
+ch10_aankomst_carthago
 
 CHOICES:
 
@@ -18580,6 +18912,9 @@ dido:full
 CODEX:
 codex_dido_dood
 
+EERETITEL:
+ch11_dido_dood
+
 CHOICES:
 * Ga verder [REQUIRE:taalspoor=latijn] -> CH11_AEN_006
 * Steek over naar Odysseus' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_ODY_007
@@ -18827,6 +19162,9 @@ anchises:full
 CODEX:
 codex_anchises_stoet
 
+EERETITEL:
+ch11_anchises_stoet
+
 CHOICES:
 * Overweeg wat Anchises zojuist als levensopdracht formuleerde -> CH11_AEN_008R
 
@@ -19064,6 +19402,9 @@ ch11_ody_runderen_helios.png
 CODEX:
 codex_thrinacia
 
+EERETITEL:
+ch11_runderen_helios_verlies
+
 CHOICES:
 * Zie waar de laatste golven hem naartoe spoelen [REQUIRE:taalspoor=grieks] -> CH11_ODY_012
 * Steek over naar Aeneas' kant van de zee [REQUIRE:taalspoor=beide] -> CH11_AEN_010
@@ -19126,6 +19467,9 @@ ch11_aen_aeneas_turnus.png
 
 CODEX:
 codex_latium_aankomst
+
+EERETITEL:
+ch11_lavinium_gesticht
 
 CHOICES:
 * Ga verder [REQUIRE:taalspoor=latijn] -> CH11_EINDE
@@ -19310,6 +19654,9 @@ cacus:full
 
 CODEX:
 codex_hercules_cacus
+
+EERETITEL:
+ch12_dood_cacus
 
 CHOICES:
 * Zie wat er na Cacus' dood gebeurt -> CH12_LAT_003
@@ -19559,6 +19906,9 @@ remus:full
 CODEX:
 codex_stichting_rome
 
+EERETITEL:
+ch12_stichting_rome
+
 CHOICES:
 * Overweeg wiens hand de fatale slag toebracht -> CH12_LAT_010R
 
@@ -19662,6 +20012,9 @@ codex_grammatica_ch12_romulus_remus
 
 STATPOINTS:
 3
+
+EERETITEL:
+ch12_sabijnse_vrede
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH12_EINDE
@@ -19949,6 +20302,9 @@ TEXT:
 COMBAT:
 vrijers_ithaka
 
+EERETITEL:
+ch12_afrekening_vrijers
+
 CHOICES:
 * Zie wat er van het paleis overblijft -> CH12_ODY_009
 
@@ -20002,6 +20358,9 @@ codex_penelope_bed
 
 RELATION:
 penelope=+2
+
+EERETITEL:
+ch12_penelope_herkenning
 
 CHOICES:
 * Overweeg wat Penelope's wantrouwen haar heeft opgeleverd -> CH12_ODY_010R
@@ -20168,6 +20527,9 @@ ch13_gre_olijfboom.png
 PUZZLE:
 puzzle_ch13_gre_futurum2
 
+EERETITEL:
+ch13_athena_poseidon_wedstrijd
+
 CHOICES:
 * Zie hoe Poseidon zijn nederlaag opneemt -> CH13_GRE_004B
 
@@ -20311,6 +20673,9 @@ ch13_perseus_medusa.png
 CODEX:
 codex_perseus_medusa
 
+EERETITEL:
+ch13_dood_medusa
+
 CHOICES:
 * "Vernuft, niet enkel kracht — dat past bij een held die Athena's hulp verdient." [NEUTRAL] -> CH13_GRE_PERSEUS_02
 * "Toch blijft het onthoofden van een slapende vrouw een wrede daad, gerechtvaardigde queeste of niet." [SEVERITAS] -> CH13_GRE_PERSEUS_02
@@ -20374,6 +20739,9 @@ ch13_gre_arachne.png
 
 CODEX:
 codex_arachne
+
+EERETITEL:
+ch13_arachne_verandering
 
 CHOICES:
 * Overweeg wat Athena hier heeft laten zien van zichzelf -> CH13_GRE_005R
@@ -20481,6 +20849,9 @@ horatius:intro
 CODEX:
 codex_horatii_curiatii
 
+EERETITEL:
+ch13_horatii_overwinning
+
 CHOICES:
 * Zie hoe Horatius als overwinnaar wordt onthaald -> CH13_LAT_003
 
@@ -20499,6 +20870,9 @@ horatius:intro
 
 CODEX:
 codex_horatii_curiatii
+
+EERETITEL:
+ch13_horatii_overwinning
 
 CHOICES:
 * Zie hoe Horatius als overwinnaar wordt onthaald -> CH13_LAT_003
@@ -20519,6 +20893,9 @@ horatius:intro
 CODEX:
 codex_horatii_curiatii
 
+EERETITEL:
+ch13_horatii_overwinning
+
 CHOICES:
 * Zie hoe Horatius als overwinnaar wordt onthaald -> CH13_LAT_003
 
@@ -20537,6 +20914,9 @@ horatius:intro
 
 CODEX:
 codex_horatii_curiatii
+
+EERETITEL:
+ch13_horatii_overwinning
 
 CHOICES:
 * Zie hoe Horatius als overwinnaar wordt onthaald -> CH13_LAT_003
@@ -20636,6 +21016,9 @@ lucretia:intro
 IMAGE:
 ch13_lucretia_dood.png
 
+EERETITEL:
+ch13_dood_lucretia
+
 CHOICES:
 * Zie wat haar dood in beweging zet -> CH13_LAT_007
 
@@ -20676,6 +21059,9 @@ ch13_lat_republiek.png
 
 STATPOINTS:
 3
+
+EERETITEL:
+ch13_republiek_geboren
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH13_EINDE
@@ -20864,6 +21250,9 @@ Je glipt moeiteloos tussen de verwarde menigte door en bent al twee straten verd
 CODEX:
 codex_tirannendoders
 
+EERETITEL:
+ch14_tirannenmoord
+
 CHOICES:
 * Zie hoe Hippias regeert nu zijn broer dood is -> CH14_GRE_003
 
@@ -20879,6 +21268,9 @@ Een hand grijpt even je mantel, maar de stof glijdt los in de chaos — je ontko
 
 CODEX:
 codex_tirannendoders
+
+EERETITEL:
+ch14_tirannenmoord
 
 CHOICES:
 * Zie hoe Hippias regeert nu zijn broer dood is -> CH14_GRE_003
@@ -20896,6 +21288,9 @@ Je moet een lange omweg nemen door een steegje vol andere vluchtende feestganger
 CODEX:
 codex_tirannendoders
 
+EERETITEL:
+ch14_tirannenmoord
+
 CHOICES:
 * Zie hoe Hippias regeert nu zijn broer dood is -> CH14_GRE_003
 
@@ -20911,6 +21306,9 @@ Een wachter grijpt je stevig bij de arm — alleen doordat hij zelf struikelt ov
 
 CODEX:
 codex_tirannendoders
+
+EERETITEL:
+ch14_tirannenmoord
 
 CHOICES:
 * Zie hoe Hippias regeert nu zijn broer dood is -> CH14_GRE_003
@@ -20988,6 +21386,9 @@ Voor dit nieuwe systeem — macht die niet bij één man of één familie ligt, 
 CODEX:
 codex_kleisthenes_democratie
 
+EERETITEL:
+ch14_democratie_geboren
+
 CHOICES:
 * Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH14_EINDE
 * Keer terug naar het Orakel van Chronos, nu beide verhalen gehoord [REQUIRE:taalspoor=beide] -> CH14_EINDE
@@ -21056,6 +21457,9 @@ Je zwemt krachtig en gestaag, wapenrusting en al, en bereikt de overkant ruim vo
 CODEX:
 codex_horatius_cocles
 
+EERETITEL:
+ch14_cocles_brug
+
 CHOICES:
 * Zie wat Rome vervolgens doet tegen de belegering -> CH14_LAT_002
 
@@ -21071,6 +21475,9 @@ Het gewicht van je wapenrusting trekt je bijna onder, maar je vecht je met de la
 
 CODEX:
 codex_horatius_cocles
+
+EERETITEL:
+ch14_cocles_brug
 
 CHOICES:
 * Zie wat Rome vervolgens doet tegen de belegering -> CH14_LAT_002
@@ -21088,6 +21495,9 @@ Een pijl schampt rakelings langs je schouder terwijl je zwemt — je bereikt de 
 CODEX:
 codex_horatius_cocles
 
+EERETITEL:
+ch14_cocles_brug
+
 CHOICES:
 * Zie wat Rome vervolgens doet tegen de belegering -> CH14_LAT_002
 
@@ -21103,6 +21513,9 @@ De stroming grijpt je harder dan verwacht, en pas op het allerlaatste moment wee
 
 CODEX:
 codex_horatius_cocles
+
+EERETITEL:
+ch14_cocles_brug
 
 CHOICES:
 * Zie wat Rome vervolgens doet tegen de belegering -> CH14_LAT_002
@@ -21130,6 +21543,9 @@ puzzle_ch14_lat_scaevola
 
 CODEX:
 codex_mucius_scaevola
+
+EERETITEL:
+ch14_scaevola_hand
 
 CHOICES:
 * Zie hoe Porsenna hierop reageert -> CH14_LAT_002B
@@ -21202,6 +21618,9 @@ Porsenna, geraakt door zoveel vastberadenheid — Cocles op de brug, Mucius' han
 
 CODEX:
 codex_cloelia
+
+EERETITEL:
+ch14_cloelia_erkenning
 
 CHOICES:
 * Zie wat er, in de eeuwen die volgen, nog meer van deze jonge Republiek wordt gevraagd -> CH14_LAT_005
@@ -21852,6 +22271,9 @@ Je mengt je in het gesprek en legt, kalm en met gezag, uit dat Fortunata's manum
 CODEX:
 codex_manumissio_obsequium
 
+EERETITEL:
+ch15_marktconfrontatie_fortunata
+
 CHOICES:
 * Zie hoe de rest van de markt reageert -> CH15_LAT_004J
 
@@ -21867,6 +22289,9 @@ Je woorden zijn niet feilloos, maar wel genoeg om de klant zijn twijfel te laten
 
 CODEX:
 codex_manumissio_obsequium
+
+EERETITEL:
+ch15_marktconfrontatie_fortunata
 
 CHOICES:
 * Zie hoe de rest van de markt reageert -> CH15_LAT_004J
@@ -21887,6 +22312,9 @@ ch15_lat_fortunata_alleen=true
 CODEX:
 codex_manumissio_obsequium
 
+EERETITEL:
+ch15_marktconfrontatie_fortunata
+
 CHOICES:
 * Zie hoe de rest van de markt reageert -> CH15_LAT_004J
 
@@ -21902,6 +22330,9 @@ Nog voor je goed en wel iets kunt zeggen, valt een omstander — zelf ooit vrijg
 
 CODEX:
 codex_manumissio_obsequium
+
+EERETITEL:
+ch15_marktconfrontatie_fortunata
 
 CHOICES:
 * Zie hoe de rest van de markt reageert -> CH15_LAT_004J
@@ -21958,6 +22389,9 @@ Straton telt het geld, knikt kortaf, en tekent de vrijlatingsakte zonder verder 
 
 STATPOINTS:
 3
+
+EERETITEL:
+ch15_doris_vrijkoop
 
 CHOICES:
 * Hoor het verhaal dat Doris die avond aan de andere vrouwen vertelt -> CH15_GRE_005C
@@ -22043,6 +22477,9 @@ De oudere vrouw haalt haar schouders op en praat door over iets anders — voor 
 
 SOUVENIR:
 souvenir_hoe_men_leefde
+
+EERETITEL:
+ch15_aemilia_grafsteen
 
 CHOICES:
 * Hoor het verhaal dat de slavinnen op het landgoed elkaar 's avonds vertellen -> CH15_LAT_005C
@@ -22305,6 +22742,9 @@ Spartacus wint — overtuigend, zonder overbodige wreedheid, alsof hij zijn krac
 FLAG:
 ch16_lat_spartacus_gezien=true
 
+EERETITEL:
+ch16_spartacus_eerste_zege
+
 CHOICES:
 * Zie wie er na hem opkomt -> CH16_LAT_004
 
@@ -22344,6 +22784,9 @@ Flamma buigt kort voor de menigte, pakt zijn wapens weer op, en loopt terug naar
 
 CODEX:
 codex_gladiatoren_spartacus_flamma
+
+EERETITEL:
+ch16_flamma_weigering
 
 CHOICES:
 * Zie wie er nu de arena betreedt -> CH16_LAT_005_INTRO
@@ -22400,6 +22843,9 @@ Amazon Wint, met Ere
 TEXT:
 Amazon dwingt Achillia tot overgave zonder een dodelijke slag — de scheidsrechter beëindigt het gevecht op tijd, en beide vrouwen verlaten de arena op eigen kracht, onder luid applaus. Precies het soort einde dat het reliëf uit Halicarnassus voor altijd zou vastleggen.
 
+EERETITEL:
+ch16_gladiatrices_duel
+
 CHOICES:
 * Zie hoe de dag eindigt -> CH16_LAT_005J
 
@@ -22412,6 +22858,9 @@ Een Gespannen Einde
 
 TEXT:
 Het gevecht duurt langer dan verwacht en wordt rommelig — uiteindelijk grijpt de scheidsrechter in en verklaart hij het duel onbeslist. Geen missio met ere, maar ook geen bloedbad: beide vrouwen verlaten de arena op eigen benen.
+
+EERETITEL:
+ch16_gladiatrices_duel
 
 CHOICES:
 * Zie hoe de dag eindigt -> CH16_LAT_005J
@@ -22426,6 +22875,9 @@ Een Onrustig Moment
 TEXT:
 Ergens tijdens het gevecht ontstaat er onrust op de tribune vlak bij jou — een dronken toeschouwer die te enthousiast naar voren dringt. Tegen de tijd dat de orde hersteld is, heb je het beslissende moment van het gevecht zelf gemist.
 
+EERETITEL:
+ch16_gladiatrices_duel
+
 CHOICES:
 * Zie hoe de dag eindigt -> CH16_LAT_005J
 
@@ -22438,6 +22890,9 @@ Een Onvergetelijk Duel
 
 TEXT:
 Het gevecht dat volgt is zo evenwichtig en zo beheerst dat zelfs de meest bloeddorstige toeschouwers stil worden — puur vakmanschap, geen slachting. Wanneer Amazon uiteindelijk wint, staat de hele tribune op, ook de mensen die met tegenzin waren gekomen.
+
+EERETITEL:
+ch16_gladiatrices_duel
 
 CHOICES:
 * Zie hoe de dag eindigt -> CH16_LAT_005J
@@ -22625,6 +23080,9 @@ Op de laatste appel na buigt Atalanta nog één keer af — en dat kost haar pre
 CODEX:
 codex_atalanta_wedloop
 
+EERETITEL:
+ch16_atalanta_wedloop
+
 CHOICES:
 * Zie wat er met de Spelen zelf gebeurt -> CH16_GRE_004J
 
@@ -22640,6 +23098,9 @@ Het is bijna gelijkspel — Hippomenes haalt de finish maar met een halve pas vo
 
 CODEX:
 codex_atalanta_wedloop
+
+EERETITEL:
+ch16_atalanta_wedloop
 
 CHOICES:
 * Zie wat er met de Spelen zelf gebeurt -> CH16_GRE_004J
@@ -22657,6 +23118,9 @@ Atalanta herstelt zich sneller dan verwacht na de laatste appel en is Hippomenes
 CODEX:
 codex_atalanta_wedloop
 
+EERETITEL:
+ch16_atalanta_wedloop
+
 CHOICES:
 * Zie wat er met de Spelen zelf gebeurt -> CH16_GRE_004J
 
@@ -22672,6 +23136,9 @@ Hippomenes' timing is perfect — hij haalt de finish met ruime voorsprong, terw
 
 CODEX:
 codex_atalanta_wedloop
+
+EERETITEL:
+ch16_atalanta_wedloop
 
 CHOICES:
 * Zie wat er met de Spelen zelf gebeurt -> CH16_GRE_004J
@@ -22714,6 +23181,9 @@ Vanaf Pherenike's ontmaskering moeten trainers zich, net als de atleten zelf, na
 
 CODEX:
 codex_olympische_spelen
+
+EERETITEL:
+ch16_pherenike_onthulling
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos -> CH16_EINDE
@@ -22835,6 +23305,9 @@ De Val van Saguntum
 TEXT:
 Hannibal belegert Saguntum, een Spaanse stad die met Rome bevriend is — een directe schending van het verdrag dat de Eerste Punische Oorlog beëindigde. Na maanden van beleg valt de stad; volgens sommige bronnen kiezen de laatste verdedigers ervoor hun eigen bezittingen te vernietigen en zichzelf te doden in plaats van zich over te geven. Rome eist genoegdoening. Carthago weigert. De Tweede Punische Oorlog is een feit.
 
+EERETITEL:
+ch17_val_saguntum
+
 CHOICES:
 * Zie welke route Hannibal kiest om Italië aan te vallen -> CH17_LAT_003
 
@@ -22947,6 +23420,9 @@ De Val Klapt Dicht
 TEXT:
 Precies zoals Hannibal het had getekend: terwijl het Romeinse centrum wegzakt in de boog, sluiten zijn sterkere flanken en cavalerie zich achter de Romeinse linies. Wat een veldslag had moeten zijn, wordt een omsingeling — tienduizenden Romeinse soldaten sterven op één enkele dag, meer dan op enige andere dag in de hele Romeinse geschiedenis.
 
+EERETITEL:
+ch17_cannae_overwinning
+
 CHOICES:
 * Zie wat Hannibals eigen mannen ervan vinden -> CH17_LAT_004J
 
@@ -22959,6 +23435,9 @@ Een Zware Overwinning
 
 TEXT:
 De omtrekking lukt, maar minder soepel dan getekend — een deel van het Romeinse centrum breekt bijna door voor de flanken zich op tijd sluiten. De overwinning is enorm, maar kost Hannibal zelf ook meer manschappen dan hij had gehoopt.
+
+EERETITEL:
+ch17_cannae_overwinning
 
 CHOICES:
 * Zie wat Hannibals eigen mannen ervan vinden -> CH17_LAT_004J
@@ -22973,6 +23452,9 @@ Chaos in de Boog
 TEXT:
 Het middenfront buigt door sneller dan verwacht, en voor een angstige tijd lijkt de hele linie op instorten te staan — pas op het allerlaatste moment sluiten de flanken zich alsnog, net op tijd om een ramp in een overwinning om te zetten.
 
+EERETITEL:
+ch17_cannae_overwinning
+
 CHOICES:
 * Zie wat Hannibals eigen mannen ervan vinden -> CH17_LAT_004J
 
@@ -22985,6 +23467,9 @@ Een Volmaakte Val
 
 TEXT:
 De uitvoering is zo strak dat zelfs Hannibals eigen officieren na afloop stil zijn — geen enkel Romeins onderdeel komt ook maar in de buurt van doorbreken. Het wordt de veldslag die, eeuwen later, nog op elke militaire academie ter wereld wordt onderwezen.
+
+EERETITEL:
+ch17_cannae_overwinning
 
 CHOICES:
 * Zie wat Hannibals eigen mannen ervan vinden -> CH17_LAT_004J
@@ -23093,6 +23578,9 @@ Bij Zama gebruikt Scipio Hannibals eigen tactieken tegen hem, en heeft bovendien
 IMAGE:
 ch17_lat_zama_scipio.png
 
+EERETITEL:
+ch17_slag_bij_zama
+
 CHOICES:
 * Zie wat er van Hannibal wordt, na deze ene nederlaag -> CH17_LAT_008
 
@@ -23119,6 +23607,9 @@ codex_hannibal_einde
 
 STATPOINTS:
 3
+
+EERETITEL:
+ch17_dood_hannibal
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=latijn] -> CH17_EINDE
@@ -23300,6 +23791,9 @@ Sommigen vertellen dat een boodschapper de hele afstand naar Athene rende om de 
 CODEX:
 codex_marathon
 
+EERETITEL:
+ch17_marathon_overwinning
+
 CHOICES:
 * Zie wat er tien jaar later gebeurt, wanneer Perzië terugkeert -> CH17_GRE_003
 
@@ -23448,6 +23942,9 @@ Stand tot de Laatste Man
 TEXT:
 Van voren en van achteren omsingeld, vechten Leonidas en zijn mannen met speren tot die breken, dan met zwaarden, dan met blote handen en tanden — tot de laatste man valt. Xerxes, woedend over het verzet, laat Leonidas' lichaam onthoofden. De vertraging die ze hebben afgedwongen, geeft de rest van Griekenland precies de tijd die het nodig heeft om zich voor te bereiden.
 
+EERETITEL:
+ch17_thermopylae_laatste_stand
+
 CHOICES:
 * Zie wat er, tegelijkertijd, op zee gebeurt -> CH17_GRE_006J
 
@@ -23460,6 +23957,9 @@ Een Zware Laatste Stand
 
 TEXT:
 De verdediging houdt langer stand dan de Perzen hadden verwacht, met zware verliezen aan beide kanten, voor ook de laatste Spartanen vallen. De vertraging is er, al is de prijs hoog.
+
+EERETITEL:
+ch17_thermopylae_laatste_stand
 
 CHOICES:
 * Zie wat er, tegelijkertijd, op zee gebeurt -> CH17_GRE_006J
@@ -23474,6 +23974,9 @@ Sneller Overweldigd
 TEXT:
 De dubbele omsingeling breekt de Griekse linie sneller dan gehoopt — de laatste stand is korter en chaotischer dan de latere verhalen ervan zullen maken, maar de vertraging, hoe klein ook, is er nog altijd.
 
+EERETITEL:
+ch17_thermopylae_laatste_stand
+
 CHOICES:
 * Zie wat er, tegelijkertijd, op zee gebeurt -> CH17_GRE_006J
 
@@ -23486,6 +23989,9 @@ Een Stand die de Geschiedenis Ingaat
 
 TEXT:
 Zelfs de Perzen zelf zullen na afloop toegeven onder de indruk te zijn: de laatste Spartaanse linie houdt zo lang en zo hardnekkig stand dat het de vertraging oplevert die de rest van Griekenland nodig heeft — en een verhaal dat, meer dan tweeduizend jaar later, nog steeds wordt naverteld.
+
+EERETITEL:
+ch17_thermopylae_laatste_stand
 
 CHOICES:
 * Zie wat er, tegelijkertijd, op zee gebeurt -> CH17_GRE_006J
@@ -23544,6 +24050,9 @@ En daar, bij Plataeae, eindigt mijn verhaal — al is het, zoals met alle oorlog
 
 CODEX:
 codex_plataeae
+
+EERETITEL:
+ch17_slag_bij_plataeae
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos -> CH17_GRE_009
@@ -23672,6 +24181,9 @@ codex_naxos_afscheiding
 FLAG:
 ch18_gre_naxos_gezien=true
 
+EERETITEL:
+ch18_gre_naxos_onderwerping
+
 CHOICES:
 * "Een bondgenootschap zonder dwang houdt nooit stand tegen een vijand als Perzië." [SEVERITAS] -> CH18_GRE_003
 * "Een bondgenoot die niet meer vrijwillig blijft, is eigenlijk geen bondgenoot meer." [CLEMENTIA] -> CH18_GRE_003
@@ -23728,6 +24240,9 @@ Je brengt Perikles' verdediging zo scherp naar voren dat een deel van de vergade
 CODEX:
 codex_thucydides_melesias_ostracisme
 
+EERETITEL:
+ch18_gre_thucydides_verbanning
+
 CHOICES:
 * Zie wat er van Perikles' laatste serieuze tegenstander wordt -> CH18_GRE_005
 
@@ -23743,6 +24258,9 @@ Je argumenten raken een deel van de vergadering, maar niet genoeg om het tij ech
 
 CODEX:
 codex_thucydides_melesias_ostracisme
+
+EERETITEL:
+ch18_gre_thucydides_verbanning
 
 CHOICES:
 * Zie wat er van Perikles' laatste serieuze tegenstander wordt -> CH18_GRE_005
@@ -23760,6 +24278,9 @@ Wat je ook aanvoert, het weegt weinig tegen Thucydides' eigen welsprekendheid. D
 CODEX:
 codex_thucydides_melesias_ostracisme
 
+EERETITEL:
+ch18_gre_thucydides_verbanning
+
 CHOICES:
 * Zie wat er van Perikles' laatste serieuze tegenstander wordt -> CH18_GRE_005
 
@@ -23775,6 +24296,9 @@ Je verdediging van Perikles' bouwplannen is zo doortimmerd — bondgenootschapsg
 
 CODEX:
 codex_thucydides_melesias_ostracisme
+
+EERETITEL:
+ch18_gre_thucydides_verbanning
 
 CHOICES:
 * Zie wat er van Perikles' laatste serieuze tegenstander wordt -> CH18_GRE_005
@@ -23899,6 +24423,9 @@ Voor zover de overlevering weet, is dit het eerste politieke bloedvergieten binn
 CODEX:
 codex_tiberius_moord
 
+EERETITEL:
+ch18_lat_dood_tiberius
+
 CHOICES:
 * Zie hoe zijn jongere broer de strijd voortzet -> CH18_LAT_004
 
@@ -23916,6 +24443,9 @@ Wanneer de senaat uiteindelijk de wapens laat opnemen tegen zijn aanhangers, laa
 
 CODEX:
 codex_gaius_gracchus_dood
+
+EERETITEL:
+ch18_lat_dood_gaius
 
 CHOICES:
 * Zie hoe een generaal het leger zelf verandert -> CH18_LAT_005
@@ -24041,6 +24571,9 @@ ch18_lat_sulla_mars_op_rome.png
 CODEX:
 codex_sulla_mars_op_rome
 
+EERETITEL:
+ch18_lat_sulla_mars_op_rome
+
 CHOICES:
 * Zie wat Sulla doet zodra hij de macht stevig in handen heeft -> CH18_LAT_008
 
@@ -24112,6 +24645,9 @@ codex_spartacus_opstand
 
 VOCAB:
 latijn_gladiator, latijn_miles
+
+EERETITEL:
+ch18_lat_dood_spartacus
 
 CHOICES:
 * Zie wie er met de eer gaat strijken -> CH18_LAT_011
@@ -24353,6 +24889,9 @@ Zonder Crassus als stabiliserend tegenwicht blijft er van het Eerste Triumviraat
 CODEX:
 codex_carrhae_crassus_dood
 
+EERETITEL:
+ch19_lat_dood_crassus
+
 CHOICES:
 * Zie wat er, ondertussen, elders gebeurt -> CH19_LAT_004
 
@@ -24445,6 +24984,9 @@ alkibiades=-1
 VOCAB:
 grieks_demokratia, latijn_caedes
 
+EERETITEL:
+ch19_gre_melos_slachting
+
 CHOICES:
 * Zie wat diezelfde Alkibiades vervolgens voorstelt -> CH19_GRE_ATH_003
 
@@ -24520,6 +25062,9 @@ ch19_gre_syracuse_steengroeven.png
 CODEX:
 codex_sicilische_expeditie
 
+EERETITEL:
+ch19_gre_sicilische_ramp
+
 CHOICES:
 * Zie wat er van de verrader Alkibiades wordt -> CH19_GRE_ATH_005
 
@@ -24557,6 +25102,9 @@ ch19_gre_aegospotami.png
 CODEX:
 codex_aegospotami
 
+EERETITEL:
+ch19_gre_aegospotami
+
 CHOICES:
 * Zie wat Sparta in de plaats van Athenes democratie zet -> CH19_GRE_ATH_007
 
@@ -24580,6 +25128,9 @@ codex_dertig_tirannen
 RELATION:
 socrates=+1
 
+EERETITEL:
+ch19_gre_dertig_tirannen
+
 CHOICES:
 * Zie wat er van Alkibiades wordt, ver van huis -> CH19_GRE_ATH_008
 
@@ -24595,6 +25146,9 @@ Alkibiades, inmiddels door bijna iedereen gewantrouwd, vlucht naar een afgelegen
 
 CODEX:
 codex_alkibiades_dood
+
+EERETITEL:
+ch19_gre_dood_alkibiades
 
 CHOICES:
 * Zie hoe Athene zich hierna herpakt -> CH19_GRE_ATH_009
@@ -24650,6 +25204,9 @@ ch19_gre_melos.png
 
 CODEX:
 codex_melische_dialoog
+
+EERETITEL:
+ch19_gre_melos_slachting
 
 CHOICES:
 * Zie hoe Sparta profiteert van Athenes volgende, nog grotere fout -> CH19_GRE_SPA_003
@@ -24708,6 +25265,9 @@ ch19_gre_aegospotami.png
 CODEX:
 codex_aegospotami
 
+EERETITEL:
+ch19_gre_aegospotami
+
 CHOICES:
 * Zie wat Sparta met zijn overwinning doet -> CH19_GRE_SPA_006
 
@@ -24725,6 +25285,9 @@ Binnen een jaar wordt het regime alweer omvergeworpen door Atheense verzetsstrij
 
 CODEX:
 codex_dertig_tirannen
+
+EERETITEL:
+ch19_gre_dertig_tirannen
 
 CHOICES:
 * Zie wat er van de rusteloze overloper Alkibiades wordt -> CH19_GRE_SPA_007
@@ -24776,6 +25339,9 @@ caesar=+1
 CODEX:
 codex_rubicon
 
+EERETITEL:
+ch19_lat_rubicon
+
 CHOICES:
 * Zie hoe Rome op dit nieuws reageert -> CH19_LAT_CAE_002
 
@@ -24810,6 +25376,9 @@ ch19_lat_pharsalus.png
 CODEX:
 codex_pharsalus
 
+EERETITEL:
+ch19_lat_pharsalus
+
 CHOICES:
 * Zie waar Pompeius' vlucht hem naartoe brengt -> CH19_LAT_CAE_004
 
@@ -24833,6 +25402,9 @@ codex_pompeius_dood_egypte
 
 RELATION:
 pompeius=+1
+
+EERETITEL:
+ch19_lat_dood_pompeius
 
 CHOICES:
 * Zie hoe Caesar met de rest van zijn vroegere vijanden omgaat -> CH19_LAT_CAE_005
@@ -24888,6 +25460,9 @@ latijn_caedes
 
 RELATION:
 antonius=+1, octavianus=+1
+
+EERETITEL:
+ch19_lat_iden_van_maart
 
 CHOICES:
 * Zie wat er, in de dagen na de moord, met Caesars erfenis gebeurt -> CH19_LAT_NASLEEP
@@ -24945,6 +25520,9 @@ ch19_lat_pharsalus.png
 CODEX:
 codex_pharsalus
 
+EERETITEL:
+ch19_lat_pharsalus
+
 CHOICES:
 * Zie waar die vlucht hem naartoe brengt -> CH19_LAT_POM_004
 
@@ -24968,6 +25546,9 @@ codex_pompeius_dood_egypte
 
 RELATION:
 pompeius=+1
+
+EERETITEL:
+ch19_lat_dood_pompeius
 
 CHOICES:
 * Zie wat er van Pompeius' overgebleven bondgenoten wordt -> CH19_LAT_POM_005
@@ -25047,6 +25628,9 @@ codex_iden_van_maart
 VOCAB:
 latijn_caedes
 
+EERETITEL:
+ch19_lat_iden_van_maart
+
 CHOICES:
 * Zie wat er, in de dagen na de moord, met Caesars erfenis gebeurt -> CH19_LAT_NASLEEP
 
@@ -25082,6 +25666,9 @@ codex_iden_van_maart
 
 VOCAB:
 latijn_caedes
+
+EERETITEL:
+ch19_lat_iden_van_maart
 
 CHOICES:
 * Zie wat er, in de dagen na de moord, met Caesars erfenis gebeurt -> CH19_LAT_NASLEEP
@@ -25319,6 +25906,9 @@ ch20_gre_philippus_moord.png
 CODEX:
 codex_moord_philippus
 
+EERETITEL:
+ch20_gre_dood_philippus
+
 CHOICES:
 * Zie hoe Alexander de troon bestijgt -> CH20_GRE_005
 
@@ -25379,6 +25969,9 @@ Alexander vindt de stervende Darius, en laat zijn grootste vijand alsnog met vol
 CODEX:
 codex_dood_darius
 
+EERETITEL:
+ch20_gre_dood_darius
+
 CHOICES:
 * Zie hoe ver Alexander nog gaat -> CH20_GRE_008
 
@@ -25401,6 +25994,9 @@ ch20_gre_alexander_babylon.png
 
 CODEX:
 codex_alexander_dood_babylon
+
+EERETITEL:
+ch20_gre_dood_alexander
 
 CHOICES:
 * Zie wat "aan de sterkste" in de praktijk betekent -> CH20_GRE_009
@@ -25619,6 +26215,9 @@ Op jouw bevel rijdt een afdeling ruiters Dumnorix meteen achterna, met een duide
 FLAG:
 ch20_lat_dumnorix=executie
 
+EERETITEL:
+ch20_lat_dumnorix_dood
+
 CHOICES:
 * Zie hoe de oversteek zonder hem verloopt -> CH20_LAT_006
 
@@ -25636,6 +26235,9 @@ Op jouw bevel achtervolgt een afdeling ruiters Dumnorix met opdracht hem levend 
 
 FLAG:
 ch20_lat_dumnorix=poging_genade
+
+EERETITEL:
+ch20_lat_dumnorix_dood
 
 CHOICES:
 * Zie hoe de oversteek zonder hem verloopt -> CH20_LAT_006
@@ -25708,6 +26310,9 @@ Van de zowat vijftien cohorten die het kamp verlieten, overleeft vrijwel niemand
 FLAG:
 ch20_lat_sabinus_cotta=sabinus
 
+EERETITEL:
+ch20_lat_sabinus_cotta_ondergang
+
 CHOICES:
 * Zie hoe Caesar het nieuws ontvangt -> CH20_LAT_009
 
@@ -25725,6 +26330,9 @@ Van de zowat vijftien cohorten in het kamp overleeft vrijwel niemand.
 
 FLAG:
 ch20_lat_sabinus_cotta=cotta
+
+EERETITEL:
+ch20_lat_sabinus_cotta_ondergang
 
 CHOICES:
 * Zie hoe Caesar het nieuws ontvangt -> CH20_LAT_009
@@ -25792,6 +26400,9 @@ codex_alesia
 
 VOCAB:
 latijn_deditio
+
+EERETITEL:
+ch20_lat_overwinning_alesia
 
 CHOICES:
 * Ga verder -> CH20_LAT_EINDE
@@ -26086,6 +26697,9 @@ ch21_gre_socrates_gifbeker.png
 CODEX:
 codex_socrates_dood, codex_xanthippe
 
+EERETITEL:
+ch21_gre_dood_socrates
+
 CHOICES:
 * Volg Plato na de dood van zijn meester -> CH21_GRE_006
 
@@ -26115,6 +26729,9 @@ codex_plato_grot
 VOCAB:
 grieks_idea
 
+EERETITEL:
+ch21_gre_academie_gesticht
+
 CHOICES:
 * Benadruk het belang van het zoeken naar hogere abstracties -> CH21_GRE_007
 * Benadruk de verantwoordelijkheid om de mensen in de grot te onderwijzen -> CH21_GRE_007
@@ -26138,6 +26755,9 @@ aristoteles=+1
 
 CODEX:
 codex_aristoteles
+
+EERETITEL:
+ch21_gre_lyceum_gesticht
 
 CHOICES:
 * Ga verder -> CH21_GRE_EINDE
@@ -26222,6 +26842,9 @@ codex_dood_archimedes
 
 VOCAB:
 grieks_kyklos
+
+EERETITEL:
+ch21_lat_dood_archimedes
 
 CHOICES:
 * Keer met Minerva terug naar Cicero's Sicilië -> CH21_LAT_000E
@@ -26393,6 +27016,9 @@ Vader des Vaderlands
 TEXT:
 De samenzwering wordt neergeslagen. Cicero wordt door de Senaat en het volk geëerd met de titel Pater Patriae. Toch zal zijn snelle handelen zonder formeel volksproces hem later door zijn politieke tegenstanders zwaar worden aangerekend.
 
+EERETITEL:
+ch21_lat_pater_patriae
+
 CHOICES:
 * Bezoek Cicero in zijn studeervertrek -> CH21_LAT_007
 
@@ -26418,6 +27044,9 @@ codex_cicero_filosofie, codex_seneca_cameo
 
 VOCAB:
 latijn_humanitas, latijn_virtus
+
+EERETITEL:
+ch21_lat_wijsheid_vertaald
 
 CHOICES:
 * Ga verder -> CH21_LAT_EINDE
@@ -26571,6 +27200,9 @@ ptolemaeus=+1
 CODEX:
 codex_perdikkas
 
+EERETITEL:
+ch22_gre_dood_perdikkas
+
 CHOICES:
 * Bepaal op welk fundament de opvolging gebouwd moet worden -> CH22_GRE_004
 
@@ -26681,6 +27313,9 @@ ch22_gre_einde_bloedlijn.png
 CODEX:
 codex_alexander_iv
 
+EERETITEL:
+ch22_gre_einde_bloedlijn
+
 CHOICES:
 * Vang de berichten op over de beslissende strijd in Klein-Azië -> CH22_GRE_PTO_006
 
@@ -26700,6 +27335,9 @@ De overmoed van Antigonos is gebroken. Egypte blijft staan als een onafhankelijk
 
 IMAGE:
 ch22_gre_ptolemaeus_alexandrie.png
+
+EERETITEL:
+ch22_gre_slag_bij_ipsus
 
 CHOICES:
 * Overzie het nieuwe krachtenveld in het oosten -> CH22_GRE_005
@@ -26797,6 +27435,9 @@ ch22_gre_einde_bloedlijn.png
 CODEX:
 codex_alexander_iv
 
+EERETITEL:
+ch22_gre_einde_bloedlijn
+
 CHOICES:
 * Trek op naar de beslissende veldslag bij Ipsus -> CH22_GRE_ANT_006
 
@@ -26816,6 +27457,9 @@ Mijn zoon zal mij wreken, maar het rijk zal nooit meer één zijn.
 
 IMAGE:
 ch22_gre_slag_bij_ipsus.png
+
+EERETITEL:
+ch22_gre_slag_bij_ipsus
 
 CHOICES:
 * Overzie de verdeling die na de slag ontstaat -> CH22_GRE_005
@@ -26954,6 +27598,9 @@ ch22_lat_cicero_dood.png
 
 CODEX:
 codex_cicero_dood
+
+EERETITEL:
+ch22_lat_dood_cicero
 
 CHOICES:
 * Bekijk de nieuwe spanningen binnen Italië -> CH22_LAT_005
@@ -27147,6 +27794,9 @@ In Sikyon, in Griekenland, treffen Antonius en Fulvia elkaar kortstondig. Antoni
 CODEX:
 codex_fulvia_dood
 
+EERETITEL:
+ch22_lat_dood_fulvia
+
 CHOICES:
 * Volg de onderhandelingen bij Brundisium -> CH22_LAT_008
 
@@ -27335,6 +27985,9 @@ ch23_gre_actium_cleopatra.png
 CODEX:
 codex_slag_bij_actium
 
+EERETITEL:
+ch23_slag_bij_actium
+
 CHOICES:
 * Zie dezelfde slag van de andere kant van het water [REQUIRE:taalspoor=beide] -> CH23_LAT_002
 * Zie wat er in Alexandrië op hen wacht [REQUIRE:taalspoor=grieks] -> CH23_GRE_003
@@ -27369,6 +28022,9 @@ Niet om jou treur ik, Cleopatra, om mijn eigen laatste ongeluk — dat ik moest 
 CODEX:
 codex_dood_antonius
 
+EERETITEL:
+ch23_dood_antonius
+
 CHOICES:
 * Zie wat Cleopatra zelf besluit -> CH23_GRE_005
 
@@ -27391,6 +28047,9 @@ ch23_gre_dood_cleopatra.png
 
 CODEX:
 codex_dood_cleopatra
+
+EERETITEL:
+ch23_dood_cleopatra
 
 CHOICES:
 * Zie wat Augustus, na haar dood, als eerste doet -> CH23_GRE_006
@@ -27435,6 +28094,9 @@ Te veel Caesars is niet goed.
 
 CODEX:
 codex_caesarion
+
+EERETITEL:
+ch23_dood_caesarion
 
 CHOICES:
 * Ga verder naar Rome, waar Octavianus nu alleen heerst [REQUIRE:taalspoor=beide] -> CH23_LAT_003
@@ -27497,6 +28159,9 @@ ch23_lat_actium_agrippa.png
 CODEX:
 codex_slag_bij_actium
 
+EERETITEL:
+ch23_slag_bij_actium
+
 CHOICES:
 * Zie hoe het verder gaat met Antonius en Cleopatra [REQUIRE:taalspoor=beide] -> CH23_GRE_003
 * Zie wat Octavianus met deze overwinning doet [REQUIRE:taalspoor=latijn] -> CH23_LAT_003
@@ -27513,6 +28178,9 @@ In januari 27 v.Chr. biedt Octavianus de Senaat theatraal zijn buitengewone bevo
 
 CODEX:
 codex_augustus_vestiging
+
+EERETITEL:
+ch23_augustus_princeps
 
 CHOICES:
 * Maak kennis met de man die dit alles zal opschrijven -> CH23_LAT_004
@@ -27742,6 +28410,9 @@ ch23_lat_dood_seneca.png
 
 CODEX:
 codex_dood_seneca
+
+EERETITEL:
+ch23_dood_seneca
 
 CHOICES:
 * Ga verder -> CH23_LAT_EINDE
@@ -28065,6 +28736,9 @@ ch24_gre_kolossus_rhodos.png
 
 CODEX:
 codex_kolossus_rhodos
+
+EERETITEL:
+ch24_gre_kolossus_rhodos
 
 CHOICES:
 * Onthoud de Kolossus -> CH24_GRE_006_ONTHOUDEN
@@ -28413,6 +29087,9 @@ Vitruvius houdt zijn eigen rol perkament omhoog — De Architectura, tien boeken
 CODEX:
 codex_vitruvius_boek
 
+EERETITEL:
+ch24_lat_boek_vitruvius
+
 CHOICES:
 * Ga verder -> CH24_LAT_EINDE
 
@@ -28732,6 +29409,9 @@ Precies. Uit die ene hoek, en de bekende afstand tussen Syene en Alexandrië, be
 FLAG:
 ch25_gre_eratosthenes=goed
 
+EERETITEL:
+ch25_gre_omtrek_aarde
+
 CHOICES:
 * Ontmoet een uitvinder die je al eens zag sterven -> CH25_GRE_008
 
@@ -28769,6 +29449,9 @@ ch25_gre_archimedes_bad.png
 
 CODEX:
 codex_archimedes_eureka
+
+EERETITEL:
+ch25_gre_archimedes_eureka
 
 CHOICES:
 * Ga verder -> CH25_GRE_EINDE
@@ -28987,6 +29670,9 @@ ch25_lat_dood_plinius_oudere.png
 
 CODEX:
 codex_dood_plinius_oudere
+
+EERETITEL:
+ch25_lat_dood_plinius_oudere
 
 CHOICES:
 * Ga verder -> CH25_LAT_EINDE
@@ -29214,6 +29900,9 @@ Ook orakels, zie je, houden niet zomaar op te bestaan zodra er minder mensen naa
 IMAGE:
 ch26_gre_delphi_hadrianus.png
 
+EERETITEL:
+ch26_gre_stil_orakel
+
 CHOICES:
 * Ga verder -> CH26_GRE_EINDE
 
@@ -29317,6 +30006,9 @@ ch26_lat_colosseum_voltooid.png
 
 CODEX:
 codex_titus_domitianus
+
+EERETITEL:
+ch26_lat_domitianus_uitgewist
 
 CHOICES:
 * Reis verder naar de noordelijke grens van het rijk -> CH26_LAT_004
@@ -29482,6 +30174,9 @@ Commodus wordt uiteindelijk vergiftigd — en toen dat niet snel genoeg werkte, 
 CODEX:
 codex_vijfkeizerjaar
 
+EERETITEL:
+ch26_lat_troon_geveild
+
 CHOICES:
 * Maak kennis met de nieuwe, zegevierende keizer -> CH26_LAT_011
 
@@ -29521,6 +30216,9 @@ ch26_lat_constitutio_antoniniana.png
 CODEX:
 codex_constitutio_antoniniana
 
+EERETITEL:
+ch26_lat_moord_op_geta
+
 CHOICES:
 * Zie het rijk daarna afglijden naar chaos -> CH26_LAT_013
 
@@ -29540,6 +30238,9 @@ Aurelianus herenigt het rijk, maar lost niet op waaróm het uiteenviel. Die vraa
 
 CODEX:
 codex_aurelianus_crisis
+
+EERETITEL:
+ch26_lat_restitutor_orbis
 
 CHOICES:
 * Ga verder -> CH26_LAT_EINDE
@@ -29819,6 +30520,9 @@ Precies — [[in quiete|in zijn slaap]] plaatst het moment vóór de dageraad, e
 FLAG:
 ch27_lat_milvische_brug=goed
 
+EERETITEL:
+ch27_lat_droom_milvische_brug
+
 CHOICES:
 * Datzelfde teken, verteld door een Griekse bron [REQUIRE:taalspoor=beide] -> CH27_GRE_003
 * Zie wat er van deze overwinning kwam [REQUIRE:taalspoor=latijn] -> CH27_LAT_004
@@ -29942,6 +30646,9 @@ ch27_lat_romulus_augustulus.png
 CODEX:
 codex_val_van_rome
 
+EERETITEL:
+ch27_lat_val_van_rome
+
 CHOICES:
 * Zie hoe het bericht het Oosten bereikt -> CH27_GRE_006
 
@@ -30017,6 +30724,9 @@ Precies — [[ἀμφὶ μεσημβρινὰς ἡλίου ὥρας|rond het 
 FLAG:
 ch27_gre_milvische_brug=goed
 
+EERETITEL:
+ch27_gre_teken_milvische_brug
+
 CHOICES:
 * Zie wat deze overwinning voor het Westen betekende [REQUIRE:taalspoor=beide] -> CH27_LAT_004
 * Zie waar dit uiteindelijk toe leidt [REQUIRE:taalspoor=grieks] -> CH27_GRE_004
@@ -30073,6 +30783,9 @@ ch27_gre_delphi_gesloten.png
 CODEX:
 codex_delphi_olympia_gesloten
 
+EERETITEL:
+ch27_gre_delphi_gesloten
+
 CHOICES:
 * Zie wat er, diezelfde jaren, van het Westen overblijft [REQUIRE:taalspoor=beide] -> CH27_LAT_006
 * Ga verder [REQUIRE:taalspoor=grieks] -> CH27_GRE_006
@@ -30112,6 +30825,9 @@ theodora=+1
 
 CODEX:
 codex_justinianus_corpus_iuris
+
+EERETITEL:
+ch27_gre_hagia_sophia
 
 CHOICES:
 * Zie hoe die macht, jaren later, bijna instort -> CH27_GRE_008
@@ -30205,6 +30921,9 @@ ch27_gre_theodora_nika.png
 
 CODEX:
 codex_nika_opstand
+
+EERETITEL:
+ch27_gre_theodora_nika
 
 CHOICES:
 * Ga verder -> CH27_GRE_EINDE
@@ -30888,6 +31607,9 @@ Ze buigt, oprecht, haar hoofd. "Dank je. Ik meen het."
 IMAGE:
 ch28_mnemosyne_museum_onthulling.png
 
+EERETITEL:
+ch28_museum_van_mnemosyne
+
 CHOICES:
 * Vraag haar wie de Boodschapper dan werkelijk is -> CH28_PAMPHILE_ONTHULLING
 
@@ -30912,6 +31634,9 @@ ch28_pamphile_onthulling.png
 
 CODEX:
 codex_pamphile_onthuld
+
+EERETITEL:
+ch28_boodschapper_pamphile
 
 CHOICES:
 * Vraag wat Chronos hier eigenlijk mee te maken heeft -> CH28_KRONOS_VERWARRING
@@ -30952,6 +31677,9 @@ ch28_lethe_verschijnt.png
 
 CODEX:
 codex_lethe_geintroduceerd
+
+EERETITEL:
+ch28_lethe_verschijnt
 
 CHOICES:
 * Ga verder -> CH28_LETHE_GESPREK
@@ -31734,6 +32462,9 @@ ch29_lethe_onthulling.png
 CODEX:
 codex_lethe_motieven
 
+EERETITEL:
+ch29_lethe_ware_aard
+
 CHOICES:
 * Vraag haar waarom haar dat iets kan schelen -> CH29_LETHE_PERSOONLIJK
 
@@ -31753,6 +32484,9 @@ Ze liegt niet, voor zover ik kan beoordelen. Dat maakt het niet minder verontrus
 
 IMAGE:
 ch29_lethe_persoonlijk.png
+
+EERETITEL:
+ch29_lethe_persoonlijk_antwoord
 
 CHOICES:
 * Ga verder -> CH29_EINDE
@@ -31860,6 +32594,9 @@ fin_kronos_titaan_onthuld.png
 
 CODEX:
 codex_kronos_titaan
+
+EERETITEL:
+fin_kronos_titaan
 
 CHOICES:
 
@@ -32094,6 +32831,9 @@ fin_kroniek_kleio.png
 CODEX:
 codex_kroniek_kleio
 
+EERETITEL:
+fin_kleio_kroniekschrijfster
+
 CHOICES:
 
 * Ga verder -> FIN_HER_002
@@ -32242,6 +32982,9 @@ fin_hermes_eigen_motief.png
 CODEX:
 codex_hermes_motief
 
+EERETITEL:
+fin_hermes_eigen_motief
+
 CHOICES:
 
 * Ga verder -> FIN_REL_005
@@ -32265,6 +33008,9 @@ fin_pamphile_eigen_stem.png
 
 CODEX:
 codex_pamphile_eigen_stem
+
+EERETITEL:
+fin_pamphile_eigen_stem
 
 CHOICES:
 
@@ -32576,6 +33322,9 @@ Lethe zakt niet neer, verdwijnt niet — ze wordt gewoon stil, voor het eerst zo
 
 IMAGE:
 fin_lethe_stilte_na_rivier.png
+
+EERETITEL:
+fin_lethe_laatste_rivier
 
 CHOICES:
 
