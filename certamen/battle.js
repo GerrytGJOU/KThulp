@@ -407,18 +407,24 @@ async function bmCheckAchievements(ident,result={}){
 async function bmSaveAvatar(){
   if(!BM_AV_EDIT||!BM_IDENT)return;
   if(!fbDB && typeof initFirebase==="function") initFirebase(); // beste-effort
-  try{
-    // Sla op in Firebase indien beschikbaar; altijd in lokale cache.
-    if(fbDB){
+  // Leerlingfeedback (2026-08-17): een mislukte Firebase-sync (bv. een
+  // tijdelijke netwerkhapering) liet de hele opslag falen — óók de lokale
+  // cache werd dan niet bijgewerkt en de editor bleef openstaan, terwijl de
+  // bedoeling altijd was "Firebase best-effort, lokaal altijd". Firebase-
+  // sync staat daarom nu in zijn eigen try/catch, los van de lokale opslag.
+  let syncError = null;
+  if(fbDB){
+    try{
       const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
       await fbDB.ref("identities/"+klas+"/"+lcode+"/avatar").set(BM_AV_EDIT);
-    }
-    BM_IDENT={...BM_IDENT,avatar:{...BM_AV_EDIT}};
-    bmIdentSave({...bmIdentLoad(),...BM_IDENT});
-    BM_AV_EDIT=null;
-    toast("Opgeslagen!","Avatar bijgewerkt.");
-    go(BM_AV_RETURN||"battleProfile");
-  }catch(e){toast("Fout","Avatar opslaan mislukt.");}
+    }catch(e){ syncError = e?.message || String(e) || "onbekende fout"; }
+  }
+  BM_IDENT={...BM_IDENT,avatar:{...BM_AV_EDIT}};
+  bmIdentSave({...bmIdentLoad(),...BM_IDENT});
+  BM_AV_EDIT=null;
+  if(syncError) toast("Lokaal opgeslagen","Avatar bijgewerkt op dit toestel, maar niet gesynchroniseerd: "+syncError);
+  else toast("Opgeslagen!","Avatar bijgewerkt.");
+  go(BM_AV_RETURN||"battleProfile");
 }
 
 // Bewaar munten + ontgrendelingen (lokaal + Firebase indien beschikbaar).
