@@ -401,8 +401,17 @@ straks wel een cape maar geen enkele kleur ervoor beschikbaar.
 ## 6. Eretitels (Titles)
 
 - **Account-breed** (niet per saveslot): een titel die je in slot 2 behaalt,
-  zie je ook als je in slot 1 speelt.
-- Toegekend via een `EERETITEL: <id>`-sectie in een CNS-scène (`spAwardTitle`).
+  zie je ook als je in slot 1 speelt. Gespiegeld naar
+  `identities/{klas}/{lid}/singleplayer/titles` in Firebase zodra `BM_IDENT`
+  bekend is (`spAwardTitle`/`spLoadTitles`), dus ook cross-device.
+- Toegekend via een `EERETITEL: <id>`-sectie in een CNS-scène (`spAwardTitle`),
+  **behalve** de zes boek-mijlpalen hieronder (`kroniekschrijver_boek_1..5` +
+  `meester_der_herinnering` gebruikt wél nog een gewone EERETITEL-scène,
+  `FIN_EPILOOG`) — `kroniekschrijver_boek_1..5` hangen aan geen eigen scène
+  maar worden automatisch toegekend door `spCheckBookMilestones()`
+  (singleplayer.js), die na elke nieuwe titel checkt of daarmee alle
+  `chNN_*`-titels van een boek (`SP_BOOK_MILESTONES`, singleplayer-data.js)
+  compleet zijn.
 - Zichtbaar op het slotscherm (`spTitlesSectionHTML`, tikbaar om te
   equippen) én op het masterprofiel; **één** titel is kiesbaar ("equipped") en
   verschijnt als pill in de **Battle Mode/Boss Battle-lobby**.
@@ -413,55 +422,62 @@ straks wel een cape maar geen enkele kleur ervoor beschikbaar.
   als "Chronica Classica (X/Y)" — een eigen categorie naast "Algemeen" en
   "Klassieke Spellen" (`ACH_CATEGORIES.chronica`, core.js), niet een los,
   afwijkend paneel.
-- **`SP_TITLES`** (nu 7): `boogschutter_orakel`, `hopliet_orakel`,
-  `cavalerist_orakel` (klassekeuze in de proloog), `bewaarder_herinnering`
-  (proloog voltooid, met een `bonus`-veld: +1 BE bij snel antwoord, scope
-  battle/boss/totalwar), en `ch1_a_midas`/`ch1_b_athena`/`ch1_c_prometheus`
-  (welke lijn van Hoofdstuk 1 je voltooide — bewust zonder bonus, bonussen
-  blijven voorbehouden aan grotere mijlpalen). Alle titels hebben
-  `secret:true`: niet-behaalde titels tonen "???"/"Geheim eerbewijs" op het
-  profiel, om geen verhaalspoilers weg te geven.
-- **Belangrijke beperking:** de `bonus` is nu **puur informatief** — getoond,
-  maar nog **niet verrekend** in het gevecht. De passieve-bonus-logica van
-  Battle Mode zit verspreid over meerdere plekken in `battle.js`; het
-  daadwerkelijk toepassen hoort bij de Combat-bridge-bouwstap (§8).
+- **`SP_TITLES`** (nu 147): één of meer titels per grote climaxscène in elk
+  van de 29 hoofdstukken + Finale (`chNN_*`/`fin_*`-ids, zie het
+  hoofdstuk-voor-hoofdstuk overzicht dat op 2026-08-17 is aangevuld), plus
+  vier proloog-titels (`boogschutter_orakel`/`hopliet_orakel`/
+  `cavalerist_orakel`/`bewaarder_herinnering`) en de zes bonus-mijlpalen uit
+  §6.1. Alle titels hebben `secret:true`: niet-behaalde titels tonen
+  "???"/"Geheim eerbewijs" op het profiel, om geen verhaalspoilers weg te
+  geven.
+- **`bonus`-veld:** 141 van de 147 titels hebben `bonus:null` (puur
+  cosmetisch, geen effect buiten het profiel). De overige 6 — de proloog-titel
+  `bewaarder_herinnering` en de vijf boek-mijlpalen in §6.1 — zijn **echt
+  verrekend** in Battle Mode/Boss Battle/Total War (`battle.js`:
+  `bmAnswer`/`bmPickClass`/`bmDistributeQs`/`bmAwardBattle`), niet langer
+  puur informatief.
 
-### 6.1 Bonus-eretitels — routekaart (**vastgelegd, nog te bouwen**)
+### 6.1 Bonus-eretitels (**gebouwd, 2026-08-17**)
 
 Doel: het moet voor een ervaren multiplayer-speler (Battle Mode/Boss Battle/
 Total War) ook echt lonen om Chronica te spelen, zonder dat de bonussen
 diezelfde speler in multiplayer **overpowered** maken. Daarom NIET elk
 hoofdstuk een eigen bonus (29 hoofdstukken + finale zou een enorme stapel
 kleine voordelen worden, oncontroleerbaar voor balans) maar **één bonus per
-Boek** (6 boeken, bijgewerkt 2026-08-09 — zie de hoofdstuktabel in §0) plus
-de al bestaande proloog-bonus — zeven bonus-momenten over de HELE campagne,
-elk bescheiden en met een plafond, zelfde `bonus:{scope,type,val,desc}`-vorm
-als `bewaarder_herinnering`. Net als de bestaande titel geldt de scope
-altijd `["battle","boss","totalwar"]` — NOOIT Chronica zelf, want het punt
-is juist dat multiplayer-vaardigheid niet nodig is om deze te verdienen,
-maar wel profiteert.
+Boek** (6 boeken, zie de hoofdstuktabel in §0) plus de proloog-bonus — zeven
+bonus-momenten over de HELE campagne (Boek VI + Finale delen er één:
+`meester_der_herinnering`), elk bescheiden en met een plafond, zelfde
+`bonus:{scope,type,val,desc}`-vorm. Scope is altijd `["battle","boss",
+"totalwar"]` — NOOIT Chronica zelf, want het punt is juist dat
+multiplayer-vaardigheid niet nodig is om deze te verdienen, maar wel
+profiteert. `totalwar` heeft in de code geen eigen pad: Total War-gevechten
+hergebruiken `BM_META.mode==="pvp"`/`"boss"` van Battle Mode/Boss Battle
+(`totalwar.js: twStartAttack()`), dus alle onderstaande hooks in `battle.js`
+gelden automatisch ook daar.
 
-| Titel (id, te maken) | Ontgrendeld bij | Bonus (voorstel) | Waarom dit thematisch past |
+| Titel | Ontgrendeld bij | Bonus | Hoe toegepast |
 |---|---|---|---|
-| `bewaarder_herinnering` | Proloog voltooid | +1 BE bij een snel juist antwoord | Al **gebouwd** — het bestaande precedent |
-| `kroniekschrijver_boek_1` | Boek I compleet (Hoofdstuk 1 t/m 9, "De Ontwaakte Herinnering") | `streak_shield` — één fout antwoord per wedstrijd breekt je combo niet | Letterlijk Hoofdstuk 2's kernboodschap: "heldendom ontstaat niet wanneer het lot je gunstig gezind is, maar wanneer je weigert eraan ten onder te gaan" |
-| `kroniekschrijver_boek_2` | Boek II compleet (Hoofdstuk 10 t/m 14, "Helden en Koningen") | `be_head_start` — elke wedstrijd start met +5 BE | Een vliegende start na een lange thuisreis (Odysseus/Aeneas — dit hele boek gaat over thuiskomen) |
-| `kroniekschrijver_boek_3` | Boek III compleet (Hoofdstuk 15 t/m 17, "De Wereld van Mensen") | `coin_bonus_pct` (waarde 5) — +5% munten na afloop van een wedstrijd | Kritisch denken en wijsheid (Herodotos e.a.) vertaald naar beter beheer van middelen — een economische, geen gevechts-bonus, dus geen effect op win/verlies |
-| `kroniekschrijver_boek_4` | Boek IV compleet (Hoofdstuk 18 t/m 23, "Rome Verrijst") | `first_answer_free` — de eerste vraag van elke wedstrijd telt automatisch als goed beantwoord | Rome's fundament leggen — een gegarandeerd sterk begin, eenmalig per wedstrijd |
-| `kroniekschrijver_boek_5` | Boek V compleet (Hoofdstuk 24 t/m 27, "Erfenis van een Rijk" — nieuw sinds de KCV-audit, §7.65-66) | `coin_bonus_pct` (waarde 5) — +5% munten na afloop van een wedstrijd | Kunst, wetenschap en de nalatenschap van een rijk vertaald naar iets tastbaars dat je overhoudt |
-| `meester_der_herinnering` | Boek VI + Finale compleet (Hoofdstuk 28 t/m 29 + Finale — de VOLLEDIGE campagne) | `be_on_correct` (waarde 1) — +1 BE op ELK juist antwoord, niet alleen snelle | De sterkste bonus, bewust gereserveerd voor 100% van Chronica Classica — vereist het voltooien van alle 29 hoofdstukken + finale, dus vanzelf zeldzaam genoeg om niet overpowered te worden op schaal |
+| `bewaarder_herinnering` | Proloog voltooid | `be_on_fast` (1) — +1 BE bij een snel juist antwoord | `bmAnswer()`: opgeteld bovenop de klasse-passief met hetzelfde type |
+| `kroniekschrijver_boek_1` | Boek I compleet (H1-9) | `streak_shield` (1) — één fout antwoord per wedstrijd breekt je reeks niet | `bmAnswer()`: het eerste foute antwoord van de wedstrijd telt, eenmalig, alsnog als goed voor BE/score/reeksen (`BM_MY_SHIELD_USED`) — de klik zelf blijft visueel gewoon fout |
+| `kroniekschrijver_boek_2` | Boek II compleet (H10-14) | `be_head_start` (5) — elke wedstrijd start met +5 BE | `bmPickClass()` schrijft een `spBoek2`-vlag naar het room-node (zelfde relay als `masteryBonus`); `bmDistributeQs()` telt die eenmalig op bij ronde 1 |
+| `kroniekschrijver_boek_3` | Boek III compleet (H15-17) | `coin_bonus_pct` (5) — +5% munten na afloop van een wedstrijd | `bmAwardBattle()`: percentage bovenop de legendarische inkomstenbonus |
+| `kroniekschrijver_boek_4` | Boek IV compleet (H18-23) | `first_answer_free` (1) — de eerste vraag van elke wedstrijd telt automatisch als goed beantwoord | `bmAnswer()`: bij `round.n===1` telt een fout antwoord alsnog als goed voor BE/score/reeksen |
+| `kroniekschrijver_boek_5` | Boek V compleet (H24-27) | `coin_bonus_pct` (5) — +5% munten na afloop van een wedstrijd | Zelfde hook als boek_3; stapelt ermee (+10% totaal als je beide hebt) |
+| `meester_der_herinnering` | Boek VI + Finale compleet (H28-29 + Finale, de VOLLEDIGE campagne) | `be_on_correct` (1) — +1 BE op ELK juist antwoord, niet alleen snelle | `bmAnswer()`: opgeteld op elk antwoord dat meetelt (incl. shield/free-first) |
 
 **Balansprincipe:** hoe dichter bij het einde van de campagne, hoe sterker de
 bonus mag zijn — maar elke bonus blijft een KLEINE, eenmalige of
 percentage-gebonden aanpassing (nooit een vermenigvuldiger op alle schade of
 een permanente flat-BE-verhoging zonder voorwaarde), en de duurste/sterkste
 titel is expres gekoppeld aan de zwaarste eis (de hele campagne, niet één
-hoofdstuk). Nieuwe `bonus.type`-waarden (`streak_shield`/`be_head_start`/
-`coin_bonus_pct`/`first_answer_free`/`be_on_correct`) bestaan nog nergens in
-`battle.js`/`bossbattle.js`/`core.js` — ze moeten, samen met
-`bewaarder_herinnering`'s eigen `be_on_fast`, alsnog echt worden ingebouwd in
-de Combat-bridge-bouwstap (§8) voor ze iets doen; tot die tijd blijven ze
-puur informatief, zoals de bestaande titel dat nu ook al is.
+hoofdstuk). `first_answer_free`/`streak_shield` gebruiken dezelfde
+`scoreOk`-variabele in `bmAnswer()` (echte klik blijft leidend voor UI-
+highlighting en gemiste-woorden-analytics, alleen score/BE/reeksen tellen de
+bonus mee) zodat ze elkaar niet kunnen stapelen op één antwoord (`freeFirst`
+sluit `shieldUsed` uit op dezelfde beurt). `SP_BOOK_MILESTONES` dekt bewust
+alleen Boek I t/m V — Boek VI + Finale heeft al zijn eigen EERETITEL-scène
+(`FIN_EPILOOG` → `meester_der_herinnering`), dus geen aparte
+milestone-check nodig.
 
 ---
 
