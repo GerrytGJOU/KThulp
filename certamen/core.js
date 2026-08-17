@@ -677,7 +677,22 @@ function foot(){ return `<div class="foot">© Gerben de Jong · 2026 · ${hasFir
 /* ====================== SCHERMEN ====================== */
 const SCREENS = {};
 let _screen='home';
-function go(name){ _screen=name; cleanup(); document.body.classList.toggle("greek", themeFor(name)==="greek"); SCREENS[name](); window.scrollTo(0,0); }
+let _screenStack=[]; // navigatiegeschiedenis binnen de app, voor goBack()
+function go(name){
+  if(_screen && _screen!==name) _screenStack.push(_screen);
+  _screen=name; cleanup(); document.body.classList.toggle("greek", themeFor(name)==="greek"); SCREENS[name](); window.scrollTo(0,0);
+}
+// Terug naar het vorige scherm i.p.v. altijd naar het hoofdmenu — gebruikt
+// door de vaste "Terug naar portaal"-pijl linksboven (index.html) zodat die
+// overal één stap terug gaat, niet meteen de hele app verlaat. Geen push
+// naar _screenStack hier: anders zou "vooruit" na "terug" weer hetzelfde
+// scherm terugzetten i.p.v. gewoon leeg te raken.
+function goBack(){
+  const prev=_screenStack.pop();
+  const target=(prev && SCREENS[prev]) ? prev : "home";
+  if(!prev || !SCREENS[prev]) _screenStack=[];
+  _screen=target; cleanup(); document.body.classList.toggle("greek", themeFor(target)==="greek"); SCREENS[target](); window.scrollTo(0,0);
+}
 function themeFor(name){
   // marathon-gerelateerde schermen krijgen het Griekse thema
   if((ROLE==="host" && DRAFT.game==="marathon") || (META && META.game==="marathon")) {

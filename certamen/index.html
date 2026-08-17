@@ -815,7 +815,7 @@ body.greek .qcard .word{color:#143a5e}
 <link rel="stylesheet" href="map/provinces.css?v=20260702m2">
 </head>
 <body>
-<a class="portal-back" href="../" onclick="if(_screen==='spPlay'||_screen==='spStats'||_screen==='spCodex'||_screen==='spWorldMap'){event.preventDefault();spRenderLanding();}else if(_screen!=='home'){event.preventDefault();go('home');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<a class="portal-back" href="../" onclick="if(_screen==='spPlay'||_screen==='spStats'||_screen==='spCodex'||_screen==='spWorldMap'){event.preventDefault();spRenderLanding();}else if(_screen!=='home'){event.preventDefault();goBack();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"><span class="m" id="toastM"></span><div><div class="tt" id="toastT"></div><div class="tn" id="toastN"></div></div><button class="x" onclick="toastDismiss()" aria-label="Sluiten">&times;</button></div>
 <div class="achpop-bg" id="achpopBg" onclick="_achPopDismiss()"><div class="achpop">
@@ -832,7 +832,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <script src="vocab.js?v=20260630s"></script>
-<script src="core.js?v=20260715a"></script>
+<script src="core.js?v=20260817a"></script>
 <script src="net.js?v=20260816c"></script>
 <script src="games.js?v=20260816b"></script>
 <script src="battle-data.js?v=20260715a"></script>
