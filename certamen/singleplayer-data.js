@@ -6419,7 +6419,7 @@ Het Water Neemt het Goud
 TEXT:
 Midas rent zoals hij nog nooit heeft gerend en dompelt zich onder in de rivier. Wanneer hij weer opstaat, druipend en buiten adem, is het goud uit zijn handen verdwenen — en achter hem, waar het water over zijn huid stroomde, glinstert de rivierbedding voortaan doorspekt met fijne, gouden korrels. Reizigers zullen deze rivier eeuwenlang de Pactolus blijven noemen, en handelaars uit deze streek zullen nog generaties later spreken over het goud dat letterlijk uit haar water wordt gezeefd.
 
-Zijn dochter, zo vertelt men je later, terwijl Midas nog druipend aan de oever zit, keerde terug tot leven zodra de laatste gouden druppel zijn huid verliet — springlevend, ongedeerd, zonder enige herinnering aan het standbeeld dat ze even was.
+Zijn dochter, zo vertelt men je later, terwijl Midas nog druipend aan de oever zit, kwam weer tot leven zodra de laatste gouden druppel zijn huid verliet — springlevend, ongedeerd, zonder enige herinnering aan het standbeeld dat ze even was.
 
 Terwijl Midas zijn dochter omhelst, valt je oog op iets tussen de rozenstruiken bij het pad: één enkele roos, nog altijd star en goudkleurig, die de vloek blijkbaar net had gemist voordat die werd opgeheven. Je raapt hem op — het voelt alsof het Orakel wil dat je dat doet.
 
@@ -7197,7 +7197,7 @@ TEXT:
 Je kijkt niet naar de grond maar naar de lucht: een adelaar cirkelt daar al, dag na dag dezelfde route vliegend naar dezelfde rots. Je hoeft alleen zijn vlucht te volgen om te weten waar je moet zijn — de kortste weg ernaartoe blijkt vanzelf te liggen.
 
 FLAG:
-ch1_c09_route=prudentia
+ch1_c09_route=ingenium
 
 CHOICES:
 
@@ -8266,9 +8266,9 @@ TITLE:
 Actaeon in het Bronsgroene Dal
 
 TEXT:
-Niet ver van hier, vertelt Athena je terwijl jullie samen naar de sterrenbeelden kijken, ligt een dal waar Diana — die hier nooit haar naam Artemis aflegt, ook al is dit haar Griekse thuisland — met haar nimfen graag baadt na een lange jachtdag. Op een middag verdwaalt de jager Actaeon, kleinzoon van Kadmos, tijdens de jacht met zijn honden precies in dat dal, en stapt zonder enige kwade bedoeling de grot binnen waar Diana zich net ontkleedt.
+Niet ver van hier, vertelt Athena je terwijl jullie samen naar de sterrenbeelden kijken, ligt een dal waar Artemis met haar nimfen graag baadt na een lange jachtdag. Op een middag verdwaalt de jager Actaeon, kleinzoon van Kadmos, tijdens de jacht met zijn honden precies in dat dal, en stapt zonder enige kwade bedoeling de grot binnen waar Artemis zich net ontkleedt.
 
-Diana, woedend om zoveel ongewilde blootstelling, besproeit hem met water uit de bron en verandert hem ter plekke in een hert. Zijn eigen jachthonden, die hem niet langer herkennen, ruiken enkel nog een prooi — en jagen hem op, tot hij door zijn eigen roedel wordt verscheurd.
+Artemis, woedend om zoveel ongewilde blootstelling, besproeit hem met water uit de bron en verandert hem ter plekke in een hert. Zijn eigen jachthonden, die hem niet langer herkennen, ruiken enkel nog een prooi — en jagen hem op, tot hij door zijn eigen roedel wordt verscheurd.
 
 CODEX:
 codex_artemis_en_actaeon, codex_endymion_selene
@@ -8595,7 +8595,7 @@ TITLE:
 Hera's Krab
 
 TEXT:
-Terwijl jullie het moeras in trekken, merk je een beweging tussen het riet die niets met de Hydra te maken heeft: Hera, die Herakles nooit met rust laat, heeft in stilte een reuzenkrab gestuurd om hem in zijn hiel te bijten zodra hij zich niet kan verdedigen.
+Terwijl jullie het moeras in trekken, merk je een beweging tussen het riet die niets met de Hydra te maken heeft: Juno, die Herakles nooit met rust laat, heeft in stilte een reuzenkrab gestuurd om hem in zijn hiel te bijten zodra hij zich niet kan verdedigen.
 
 CHOICES:
 
@@ -9266,7 +9266,7 @@ TITLE:
 Athena over Europa
 
 TEXT:
-Athena, die het hele verhaal zwijgend heeft gadegeslagen zoals ze dat sinds Hera's slachtoffers wel vaker doet voor ze uiteindelijk toch iets zegt, kijkt je nu recht aan. "[[Χαῖρε|gegroet]]," zegt ze eerst, zoals altijd voor ze verdergaat. "Je hebt Io gezien worden veranderd in een dier om Jupiters ontrouw te verbergen," vervolgt ze. "Onthoud die vorm goed — want ergens anders, op ditzelfde moment, speelt hetzelfde patroon zich af met de rollen omgekeerd."
+Athena, die het hele verhaal zwijgend heeft gadegeslagen zoals ze dat sinds Juno's slachtoffers wel vaker doet voor ze uiteindelijk toch iets zegt, kijkt je nu recht aan. "[[Χαῖρε|gegroet]]," zegt ze eerst, zoals altijd voor ze verdergaat. "Je hebt Io gezien worden veranderd in een dier om Jupiters ontrouw te verbergen," vervolgt ze. "Onthoud die vorm goed — want ergens anders, op ditzelfde moment, speelt hetzelfde patroon zich af met de rollen omgekeerd."
 
 Ze vertelt, kort maar met duidelijke afkeuring in haar stem, over Europa: een Fenicische prinses die met haar dienaressen op het strand speelt, tot een opvallend tamme, sneeuwwitte stier zich bij de kudde voegt. Europa, argeloos, klimt op zijn rug — en de stier, die Jupiter zelf is, zwemt met haar de zee op, helemaal naar Kreta. Daar zal ze drie zonen baren, onder wie Minos — een naam die je, zegt Athena met een blik die meer weet dan ze nu al prijsgeeft, nog wel eens terug zult horen.
 
@@ -9283,7 +9283,8 @@ europa:intro
 
 CHOICES:
 
-* Keer terug naar de Boodschapper — Herakles' beproevingen wachten nog -> CH3_000
+* Keer terug naar de Boodschapper — Herakles' beproevingen wachten nog [REQUIRE:ch3_lijn_herakles!=true] -> CH3_000
+* Keer terug naar de Boodschapper [REQUIRE:ch3_lijn_herakles=true] -> CH3_000
 
 END
 
@@ -9633,7 +9634,7 @@ De Stymfalische Vogels
 TEXT:
 Een zwerm vleesetende vogels met bronzen snavels, klauwen en veren scherp genoeg om als pijlen te dienen, teistert het moerasgebied bij het meer Stymfalos — te talrijk en te goed verscholen in het dichte riet om met kracht alleen te bestrijden.
 
-Athena, die sinds Hera's slachtoffers niet langer zwijgend toekijkt maar actief helpt waar ze kan, verschijnt met een geschenk van Hephaistos: een bronzen ratel, krotala genoemd, luid genoeg om zelfs de sluwste vogels uit hun schuilplaats te jagen.
+Athena, die sinds Juno's slachtoffers niet langer zwijgend toekijkt maar actief helpt waar ze kan, verschijnt met een geschenk van Hephaistos: een bronzen ratel, krotala genoemd, luid genoeg om zelfs de sluwste vogels uit hun schuilplaats te jagen.
 
 PUZZLE:
 puzzle_ch3h_bijstelling
@@ -9670,7 +9671,7 @@ TITLE:
 De Kretenzische Stier
 
 TEXT:
-Op Kreta huishoudt een reusachtige stier die Poseidon ooit aan koning Minos schonk — en die Minos, in plaats van hem te offeren zoals afgesproken, voor zichzelf hield. Poseidon, beledigd, maakte het dier razend, en het verwoest sindsdien akker na akker over het hele eiland.
+Op Kreta huishoudt een reusachtige stier die Neptunus ooit aan koning Minos schonk — en die Minos, in plaats van hem te offeren zoals afgesproken, voor zichzelf hield. Neptunus, beledigd, maakte het dier razend, en het verwoest sindsdien akker na akker over het hele eiland.
 
 Minos, allang blij om van het beest af te zijn, staat Herakles zonder aarzeling toe om het mee te nemen — al weet niemand op Kreta nog wat er met de stier moet gebeuren zodra hij eenmaal gevangen is.
 
@@ -9698,7 +9699,7 @@ Je voelt, zonder precies te weten waarom, dat dit dier zijn verhaal nog niet af 
 
 CHOICES:
 
-* Ga door naar de zevende beproeving -> CH3_H13B
+* Ga door naar de achtste beproeving -> CH3_H13B
 
 END
 
@@ -9800,7 +9801,7 @@ Hij leidt de nu rustige dieren naar Mycene, waar Eurystheus ze, na de gebruikeli
 
 CHOICES:
 
-* Ga door naar de achtste beproeving -> CH3_H16
+* Ga door naar de negende beproeving -> CH3_H16
 
 END
 
@@ -9825,12 +9826,12 @@ END
 === SCENE: CH3_H17 ===
 
 TITLE:
-Hera's Laatste List
+Juno's Laatste List
 
 TEXT:
-Hera, die Herakles al sinds zijn geboorte haat en dit ongewoon vreedzame verloop niet kan verdragen, vermomt zich als een Amazone en verspreidt onder de kudde het gerucht dat de vreemdeling van plan is hun koningin te ontvoeren. Paniek en verwarring breken uit voor iemand de leugen kan ontkrachten.
+Juno, die Herakles al sinds zijn geboorte haat en dit ongewoon vreedzame verloop niet kan verdragen, vermomt zich als een Amazone en verspreidt onder de kudde het gerucht dat de vreemdeling van plan is hun koningin te ontvoeren. Paniek en verwarring breken uit voor iemand de leugen kan ontkrachten.
 
-In de chaos die volgt, vallen de Amazones Herakles' schip aan — en Hippolyte zelf komt om, niet door zijn hand met opzet, maar in een gevecht dat nooit had moeten plaatsvinden als Hera zich er niet mee had bemoeid.
+In de chaos die volgt, vallen de Amazones Herakles' schip aan — en Hippolyte zelf komt om, niet door zijn hand met opzet, maar in een gevecht dat nooit had moeten plaatsvinden als Juno zich er niet mee had bemoeid.
 
 COMBAT:
 amazones
@@ -9863,7 +9864,7 @@ TITLE:
 Drie Lichamen, Eén Val
 
 TEXT:
-Geryon, gewaarschuwd door het geblaf van zijn tweekoppige waakhond, komt zelf met al drie zijn lichamen tegelijk aanstormen om zijn kudde te verdedigen — een tegenstander die, in tegenstelling tot de meeste andere beproevingen, drie keer zoveel klappen kan uitdelen als een gewone man.
+Geryon, gewaarschuwd door het geblaf van zijn tweekoppige waakhond, komt zelf met al zijn drie lichamen tegelijk aanstormen om zijn kudde te verdedigen — een tegenstander die, in tegenstelling tot de meeste andere beproevingen, drie keer zoveel klappen kan uitdelen als een gewone man.
 
 COMBAT:
 geryon
@@ -9880,7 +9881,7 @@ TITLE:
 De Appels van de Hesperiden
 
 TEXT:
-De elfde taak voert Herakles naar de tuin van de Hesperiden, aan de rand van de wereld, waar een boom met gouden appels groeit — een huwelijksgeschenk van Gaia aan Hera zelf, bewaakt door de nooit-slapende draak Ladon, wiens honderd koppen (zo vertelt men, al is niemand het helemaal eens over het exacte aantal) zich eindeloos om de stam winden.
+De elfde taak voert Herakles naar de tuin van de Hesperiden, aan de rand van de wereld, waar een boom met gouden appels groeit — een huwelijksgeschenk van Gaia aan Juno zelf, bewaakt door de nooit-slapende draak Ladon, wiens honderd koppen (zo vertelt men, al is niemand het helemaal eens over het exacte aantal) zich eindeloos om de stam winden.
 
 Herakles, die weet dat kracht alleen hier niet genoeg zal zijn — geen zwaard doorboort honderd koppen tegelijk — herkent het patroon meteen: hetzelfde probleem als Argus Panoptes, alleen dan met een dier dat zich nooit láát afleiden door verhalen of fluitspel. In plaats daarvan valt hij terug op wat hij bij de Cerynitische Hinde al leerde: geduld. Nacht na nacht bestudeert hij hoe de koppen bewegen, tot hij het ene ogenblik ontdekt waarop ze allemaal, even, dezelfde kant op kijken.
 
@@ -10210,7 +10211,7 @@ END
    Daidalos & Ikaros erin verweven i.p.v. een aparte lijn — zie Chronica.md
    §7 "zijverhalen") en PHAETHON (het Paleis van de Zon, de zonnewagen). Beide
    lijnen draaien om dezelfde kern: een belofte, licht gedaan, die niemand
-   meer ongedaan kan maken — Aegeus' zeilen-afspraak met Theseus, en Sol se
+   meer ongedaan kan maken — Aegeus' zeilen-afspraak met Theseus, en Sol's
    eed bij de Styx aan Phaëthon. Elke lijn levert een eigen Herinneringsfragment
    ("theseus", "phaethon" — bewust ANDERE ids dan alle voorgaande hoofdstukken,
    want SP_STATE.fragments is één doorlopende array); de hub-gate naar het
@@ -10340,7 +10341,7 @@ TITLE:
 Pasiphaë's Kant van het Verhaal
 
 TEXT:
-Van de vloek zelf is het Pasiphaë die alles droeg, niet Minos. Hij was het die zijn belofte aan Neptunus brak, uit hebzucht om de mooiste stier van de kudde voor zichzelf te houden — en toch was zij het die daarvoor moest boeten, in haar eigen lichaam, voor een keuze die nooit de hare was geweest.
+De vloek zelf trof niet Minos, maar Pasiphaë — zij droeg alles. Minos was het die zijn belofte aan Neptunus brak, uit hebzucht om de mooiste stier van de kudde voor zichzelf te houden — en toch was zij het die daarvoor moest boeten, in haar eigen lichaam, voor een keuze die nooit de hare was geweest.
 
 "Vraag iemand ooit naar mijn kant van dit verhaal?" zou ze later gezegd hebben, niet als verontschuldiging, maar als vaststelling. "Mijn man brak zijn woord aan een god. De god koos ervoor om mij te straffen voor zijn hubris — niet hem."
 
@@ -10894,7 +10895,7 @@ Een Onmogelijke Wens
 TEXT:
 Phaëthon, die eigenlijk alleen bevestiging kwam zoeken, laat zich meeslepen door de eed die hem plotseling alles belooft. "Laat mij, voor één dag, de zonnewagen mennen," zegt hij. "Laat heel de wereld zien dat ik werkelijk jouw zoon ben."
 
-Sol verbleekt — zijn eigen belofte, nog geen moment oud, wordt nu zijn grootste angst. Hij smeekte, probeerde alles wat hij verder nog te bieden had als vervanging aan te dragen, maar een eed bij de Styx laat geen ruimte voor spijt.
+Sol verbleekt — zijn eigen belofte, nog geen moment oud, wordt nu zijn grootste angst. Hij smeekt, probeert alles wat hij verder nog te bieden heeft als vervanging aan te dragen, maar een eed bij de Styx laat geen ruimte voor spijt.
 
 PUZZLE:
 puzzle_ch4p_imperfectum
@@ -11904,7 +11905,7 @@ TITLE:
 Bijna een Ramp
 
 TEXT:
-Je geeft het teken op precies het verkeerde moment — Argos merkt het op het laatste ogenblik en schreeuwt de bemanning met stemverheffing bij, net op tijd om jouw fout ongedaan te maken.
+Je geeft het teken op precies het verkeerde moment — Argos merkt het op het laatste ogenblik en roept de bemanning met luide stem bij zich, net op tijd om jouw fout ongedaan te maken.
 
 CHOICES:
 
@@ -11958,6 +11959,8 @@ Gespannen Riemen
 
 TEXT:
 Weken op zee slijten aan iedereens geduld, ook aan dat van Tydeus, die op een avond een roeier bijna naar zijn keel vliegt om niet meer dan een verkeerd geplaatste opmerking. Zijn vuisten zijn al gebald voor iemand kan reageren.
+
+Orpheus, de zanger die de bemanning al sinds Iolcus vergezelt, kijkt op van zijn lier, net als jij aanvoelend dat dit iets is dat niet vanzelf overwaait.
 
 PERSON:
 orpheus:intro
@@ -12837,7 +12840,7 @@ TITLE:
 Wat Er Achterbleef
 
 TEXT:
-Je bekijkt wat er van eerdere uitdagers is overgebleven, en de houding van de Sfinx zelf — een vermoeidheid, misschien, onder al die zelfverzekerdheid, alsof zelfs een monster moe kan worden van hetzelfde raadsel telkens opnieuw stellen.
+Je bekijkt wat er van eerdere uitdagers is overgebleven, en de houding van de Sfinx zelf — een vermoeidheid, misschien, onder al die zelfverzekerdheid, alsof zelfs een monster moe kan worden van het telkens opnieuw stellen van hetzelfde raadsel.
 
 FLAG:
 ch6_007_route=prudentia
@@ -13327,7 +13330,7 @@ TITLE:
 Levend Ingemetseld
 
 TEXT:
-Kreon laat Antigone, zodra hij ontdekt wat ze heeft gedaan, levend inmetselen in een graftombe — geen executie in naam, maar wel een ter dood veroordeling. Ismene, die weken eerder weigerde mee te helpen, biedt zich nu alsnog aan om samen met haar zuster gestraft te worden — ze kan het niet verdragen als enige in leven te blijven. Antigone wijst het aanbod resoluut af: ze liet haar zuster destijds al weten dat dit haar eigen daad was, en staat niet toe dat Ismene alsnog boet voor iets waarvan ze zelf koos geen deel uit te maken.
+Kreon laat Antigone, zodra hij ontdekt wat ze heeft gedaan, levend inmetselen in een graftombe — geen executie in naam, maar wel een ter dood veroordeling. Ismene, die eerder weigerde mee te helpen, biedt zich nu alsnog aan om samen met haar zuster gestraft te worden — ze kan het niet verdragen als enige in leven te blijven. Antigone wijst het aanbod resoluut af: ze liet haar zuster destijds al weten dat dit haar eigen daad was, en staat niet toe dat Ismene alsnog boet voor iets waarvan ze zelf koos geen deel uit te maken.
 
 Antigone wacht niet af tot de tombe haar langzaam laat sterven: ze kiest zelf het moment.
 
@@ -13470,7 +13473,7 @@ Terug in de Tijd
 TEXT:
 "Eén verhaal resteert nog," zegt de Boodschapper, "en het speelt zich eigenlijk af vóór alles wat je tot nu toe hebt gezien — nog vóór Oedipus, nog vóór Laius. Ik bewaarde het voor het laatst, niet omdat het het laatste was, maar omdat het het duidelijkst laat zien waar deze hele vloek ooit begon. Jij, als {tendency_address}, herkent dat patroon inmiddels vast al voor ik het uitleg."
 
-Terug in de tijd dus, naar Pentheus — kleinzoon van Kadmos zelf, en de op twee na eerste koning van Thebe na de stichter.
+Terug in de tijd dus, naar Pentheus — kleinzoon van Kadmos zelf, en zijn directe opvolger als koning van Thebe.
 
 CHOICES:
 
@@ -13484,7 +13487,7 @@ TITLE:
 Een Nieuwe God
 
 TEXT:
-Een vreemde nieuwe verering verspreidt zich door Thebe: de cultus van Bacchus, god van wijn en extase — en, zoals niemand in de stad hardop durft te zeggen, de zoon van Semele, Kadmos' eigen dochter. Pentheus, Semele's neef en de huidige koning, weigert te geloven dat zijn eigen nicht een god heeft gebaard. Hij verbiedt de verering en probeert de vrouwen van Thebe, die massaal de bergen in trekken om Bacchus te aanbidden, met geweld terug te dwingen.
+Een vreemde nieuwe verering verspreidt zich door Thebe: de cultus van Bacchus, god van wijn en extase — en, zoals niemand in de stad hardop durft te zeggen, de zoon van Semele, Kadmos' eigen dochter. Pentheus, Semele's neef en de huidige koning, weigert te geloven dat zijn eigen tante een god heeft gebaard. Hij verbiedt de verering en probeert de vrouwen van Thebe, die massaal de bergen in trekken om Bacchus te aanbidden, met geweld terug te dwingen.
 
 IMAGE:
 ch6_bacchanten_berg.png
