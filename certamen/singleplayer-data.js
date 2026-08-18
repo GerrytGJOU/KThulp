@@ -3886,6 +3886,179 @@ const SP_COMBAT_ENEMIES = {
     intro:"Geen monster, geen leger — alleen Lethe zelf, rustig, onvermurwbaar, en vastberadener dan ooit sinds jullie eerste ontmoeting bij de rivier." },
 };
 
+/* ============================================================================
+   VIJAND-INTENTIES — wat een tegenstander gaat doen, één of twee beurten
+   voordat hij het doet (COMBAT_OVERHAUL.md voorstel A, "Slay the Spire"-
+   telegrafie). Vóór 2026-08-18 deed geen enkele Chronica-vijand iets terug;
+   dit is waar de spanning nu vandaan komt.
+
+   Bewust een APARTE tabel en niet een veld in SP_COMBAT_ENEMIES: die tabel
+   is puur "wie is dit en hoe ziet hij eruit", en zou anders drie keer zo lang
+   worden. Een vijand die hier niet in staat, valt netjes terug op
+   SP_COMBAT_STANDAARD_INTENTIES (singleplayer.js).
+
+   Velden per intentie:
+     id            uniek binnen deze vijand (voorkomt twee keer dezelfde op rij)
+     laden         aantal beurten tot uitvoering (1 = volgende beurt al)
+     aankondiging  komt achter de vijandnaam: "De Hydra <aankondiging>"
+     uitvoer       volle zin op het moment dat het gebeurt
+     type          weglaten = Vigor-schade; "heal" = vijand herstelt;
+                   "vb_roof" = kost de speler vastberadenheid
+     vigor         Vigor-verlies (alleen bij het standaardtype)
+     waarde        heal = fractie van maxHp; vb_roof = punten vastberadenheid
+   ============================================================================ */
+const SP_COMBAT_INTENTIES = {
+  nemeische_leeuw: [
+    { id:"sprong", laden:2, vigor:7, aankondiging:"zakt in zijn achterpoten — hij gaat springen.",
+      uitvoer:"De sprong komt. Je vangt hem op je arm op, maar de klauwen vinden vlees." },
+    { id:"brul", laden:1, type:"vb_roof", waarde:8, aankondiging:"opent zijn muil voor een brul.",
+      uitvoer:"De brul rolt door het dal en even weet je niet meer wat je wilde doen." },
+  ],
+  hydra: [
+    // Canoniek: elke afgehakte kop groeit dubbel terug tenzij je vuur hebt.
+    // Vandaar dat de fakkel (SP_COMBAT_ITEMS) juist bij deze vijand hoort.
+    { id:"koppen", laden:2, type:"heal", waarde:0.1, aankondiging:"laat twee nieuwe koppen uit een verse stomp groeien.",
+      uitvoer:"Waar je er één afsloeg, staan er nu twee." },
+    { id:"beten", laden:1, vigor:6, aankondiging:"richt drie koppen tegelijk op je.",
+      uitvoer:"Drie muilen slaan toe; twee mis je, één niet." },
+    { id:"stank", laden:2, type:"vb_roof", waarde:10, aankondiging:"ademt moeraslucht over het water uit.",
+      uitvoer:"De stank slaat je adem af en je gedachten raken los van elkaar." },
+  ],
+  centauren: [
+    { id:"stormloop", laden:2, vigor:8, aankondiging:"zet aan voor een stormloop.",
+      uitvoer:"Hoeven en schouders raken je vol; je gaat bijna neer." },
+    { id:"kruik", laden:1, type:"heal", waarde:0.07, aankondiging:"grijpt de wijnkruik nog een keer.",
+      uitvoer:"De wijn maakt hen dommer, maar ook onverschilliger voor pijn." },
+  ],
+  kretenzische_stier: [
+    { id:"horens", laden:2, vigor:9, aankondiging:"schraapt met een hoef en laat zijn kop zakken.",
+      uitvoer:"De horens gaan langs je heup — een handbreedte scheelde het." },
+    { id:"schijnbeweging", laden:1, vigor:4, aankondiging:"draait onrustig om je heen.",
+      uitvoer:"Hij stoot van de zijkant toe, waar je hem niet verwachtte." },
+  ],
+  merries_van_diomedes: [
+    { id:"omsingelen", laden:2, vigor:7, aankondiging:"verspreiden zich om je in te sluiten.",
+      uitvoer:"Ze komen van vier kanten; je kunt niet naar alle vier kijken." },
+    { id:"honger", laden:1, type:"vb_roof", waarde:9, aankondiging:"kijken je aan zoals een dier naar voedsel kijkt.",
+      uitvoer:"Er is iets in die blik waardoor je even vergeet dat je een wapen vasthebt." },
+  ],
+  amazones: [
+    { id:"salvo", laden:2, vigor:6, aankondiging:"leggen hun pijlen aan.",
+      uitvoer:"Het salvo komt laag en snel; één pijl scheert langs je arm." },
+    { id:"formatie", laden:2, type:"heal", waarde:0.08, aankondiging:"sluiten hun linie en helpen hun gewonden.",
+      uitvoer:"Ze sluiten de gaten in hun rij — dit gevecht had nooit moeten beginnen." },
+    { id:"uitdaging", laden:1, type:"vb_roof", waarde:7, aankondiging:"roept je in het Grieks iets toe.",
+      uitvoer:"Wat ze zegt, klopt. Dat is het vervelende eraan." },
+  ],
+  geryon: [
+    { id:"drievoudig", laden:2, vigor:10, aankondiging:"heft drie schilden en drie speren tegelijk.",
+      uitvoer:"Drie stoten in één beweging; je kunt er maar twee keren." },
+    { id:"kudde", laden:1, vigor:5, aankondiging:"drijft zijn rode vee jouw kant op.",
+      uitvoer:"Je moet uitwijken voor de kudde en verliest je positie." },
+  ],
+  cerberus: [
+    { id:"drie_muilen", laden:2, vigor:9, aankondiging:"laat drie koppen tegelijk grommen.",
+      uitvoer:"Drie muilen, één beweging. Je armen houden het, je adem niet." },
+    { id:"poort", laden:2, type:"heal", waarde:0.09, aankondiging:"trekt zich terug tot voor de poort zelf.",
+      uitvoer:"Op zijn eigen drempel is hij sterker — dat is de afspraak van deze plek." },
+    { id:"kou", laden:1, type:"vb_roof", waarde:8, aankondiging:"blaast de kou van de onderwereld over je heen.",
+      uitvoer:"De kou kruipt onder je huid en neemt je vastberadenheid mee." },
+  ],
+  minotaurus: [
+    { id:"beuk", laden:2, vigor:8, aankondiging:"beukt met zijn schouder tegen de wand — hij zoekt je op het gehoor.",
+      uitvoer:"Hij vindt je. De klap gooit je tegen de steen." },
+    { id:"stilte", laden:2, type:"vb_roof", waarde:10, aankondiging:"staat volkomen stil en luistert.",
+      uitvoer:"In die stilte hoor je hoe hard je zelf ademt — en hij ook." },
+  ],
+  amycus: [
+    { id:"rechtse", laden:2, vigor:8, aankondiging:"zet zijn gewicht op zijn achterste voet.",
+      uitvoer:"De rechtse komt aan op je ribben. Zo werkt boksen." },
+    { id:"klem", laden:1, vigor:5, aankondiging:"zoekt je armen om je vast te zetten.",
+      uitvoer:"Hij klemt je even vast en laat je weer los — met minder lucht dan daarvoor." },
+  ],
+  drakon_vlies: [
+    { id:"wikkel", laden:2, vigor:9, aankondiging:"rolt zich losser rond de boom — hij maakt ruimte om uit te halen.",
+      uitvoer:"De staart veegt je van je voeten." },
+    { id:"nooit_slapen", laden:2, type:"heal", waarde:0.08, aankondiging:"knippert niet één keer.",
+      uitvoer:"Hij slaapt nooit, en dus rust hij ook nooit zoals jij dat nodig hebt." },
+    { id:"sissen", laden:1, type:"vb_roof", waarde:9, aankondiging:"sist iets dat bijna op woorden lijkt.",
+      uitvoer:"Je weet niet of je het verstond. Dat is erger dan wanneer je het niet had gehoord." },
+  ],
+  laodamas: [
+    { id:"poortwacht", laden:2, vigor:7, aankondiging:"plant zijn schild in het zand voor de poort.",
+      uitvoer:"Hij duwt met schild en al vooruit; je wijkt en dat kost je." },
+    { id:"vaders_naam", laden:1, type:"vb_roof", waarde:8, aankondiging:"noemt de naam van zijn vader.",
+      uitvoer:"Hij vecht voor iets. Even weet je niet meer zo zeker waar jij voor vecht." },
+  ],
+  trojaanse_voorhoede: [
+    { id:"fakkels", laden:2, vigor:6, aankondiging:"heffen hun fakkels naar de schepen.",
+      uitvoer:"Je moet kiezen tussen jezelf en het schip achter je. Je kiest het schip." },
+    { id:"drukken", laden:1, vigor:5, aankondiging:"drukken met hun hele rij tegen de wal.",
+      uitvoer:"De rij komt vooruit en jij niet." },
+  ],
+  hektor: [
+    { id:"speerworp", laden:2, vigor:9, aankondiging:"weegt zijn speer in zijn hand.",
+      uitvoer:"De worp is zuiver. Je schild houdt het, je schouder voelt het." },
+    { id:"eer", laden:2, type:"vb_roof", waarde:11, aankondiging:"vraagt je iets te beloven over zijn lichaam.",
+      uitvoer:"Wat hij vraagt is redelijk, en dat maakt het moeilijker om door te vechten." },
+    { id:"muur", laden:1, vigor:6, aankondiging:"zet zich met zijn rug naar de muur.",
+      uitvoer:"Wie niet meer weg kan, vecht beter. Dat merk je." },
+  ],
+  trojaanse_wachters: [
+    { id:"alarm", laden:2, type:"vb_roof", waarde:7, aankondiging:"proberen alarm te slaan.",
+      uitvoer:"Ergens boven op de muur antwoordt een stem. Je hebt haast gekregen." },
+    { id:"wilde_slag", laden:1, vigor:4, aankondiging:"halen dronken en wild uit.",
+      uitvoer:"De slag is slecht gemikt en raakt je daarom juist." },
+  ],
+  vrijers_ithaka: [
+    { id:"overmacht", laden:2, vigor:8, aankondiging:"komen met tien tegelijk op je af.",
+      uitvoer:"Tien mannen in een zaal die jij beter kent dan zij — maar tien blijft tien." },
+    { id:"tafels", laden:1, vigor:5, aankondiging:"gooien de tafels om als dekking.",
+      uitvoer:"Je eigen zaal wordt tegen je gebruikt." },
+    { id:"onderhandelen", laden:2, type:"vb_roof", waarde:10, aankondiging:"biedt je goud aan om te stoppen.",
+      uitvoer:"Het bedrag is hoog genoeg om er even over na te denken. Dat is al te lang." },
+  ],
+  bataven: [
+    { id:"moeras", laden:2, vigor:7, aankondiging:"lokken je verder het riet in.",
+      uitvoer:"Je zakt tot je knieën weg en zij niet." },
+    { id:"hinderlaag", laden:1, vigor:6, aankondiging:"verdwijnen uit het zicht.",
+      uitvoer:"Ze komen terug van de kant waar je niet keek." },
+    { id:"rijnnevel", laden:2, type:"heal", waarde:0.08, aankondiging:"trekken zich in de nevel terug.",
+      uitvoer:"In de nevel verbinden ze hun wonden. Geen handboek beschrijft dit." },
+  ],
+  fin_lethe: [
+    { id:"vergeten", laden:2, type:"vb_roof", waarde:12, aankondiging:"noemt iets dat je gedaan hebt — en dan vraagt ze of je het zeker weet.",
+      uitvoer:"Voor de duur van één ademtocht weet je niet meer of het echt gebeurd is." },
+    { id:"stroom", laden:2, vigor:8, aankondiging:"laat het water stijgen tot aan je knieën.",
+      uitvoer:"De stroom trekt aan je benen alsof hij ergens heen wil met je." },
+    { id:"rust", laden:2, type:"heal", waarde:0.07, aankondiging:"doet niets. Ze wacht gewoon.",
+      uitvoer:"Wachten kost haar niets. Zij heeft alle tijd die er is." },
+  ],
+};
+
+/* ============================================================================
+   GEVECHTSITEMS — eenmalig, gevonden in het verhaal (COMBAT_OVERHAUL.md
+   voorstel G). Toegekend via een INVENTORY:-sectie in een CNS-scène
+   (spHookInventory, singleplayer.js) en verbruikt zodra je hem in een
+   gevecht inzet. Verhaal → gevecht → verhaal, met minimale techniek.
+
+   effect: "vigor"   → herstelt Vigor (waarde = punten)
+           "schade"  → directe schade aan de vijand (waarde = punten)
+           "verdoof" → de vijand moet zijn intentie langer opladen (waarde =
+                       extra beurten)
+   ============================================================================ */
+const SP_COMBAT_ITEMS = {
+  fakkel: { nm:"Brandende fakkel", icon:"🔥", effect:"schade", waarde:30,
+    ds:"Schroeit een wond dicht voor hij weer aangroeit — 30 schade.",
+    tekst:"Je zet het vuur tegen de verse stomp, precies zoals Iolaos het je voordeed." },
+  wijnzak: { nm:"Pholus' wijnzak", icon:"🍷", effect:"verdoof", waarde:2,
+    ds:"Een kudde die drinkt, vecht niet — je tegenstander laadt twee beurten langer op.",
+    tekst:"Je gooit de zak open het veld in en laat de wijn zijn werk doen." },
+  hermeskruid: { nm:"Hermes' kruid", icon:"🌿", effect:"vigor", waarde:14,
+    ds:"Een wit bloempje met een zwarte wortel — herstelt 14 Vigor.",
+    tekst:"Het kruid is bitter genoeg om je hoofd weer helder te maken." },
+};
+
 /* ---- RACE-BRIDGE-DATA — zie de toelichting bij SP_RACE/spStartRaceFromScene
    (singleplayer.js) voor het mechanisme zelf. finish = totale afstand;
    stepCorrect/opponentStep = voortgang per beurt; appleCount/appleSetback =
@@ -8583,6 +8756,9 @@ De tweede beproeving is nog wreder: de Hydra van Lerna, een veelkoppig moerasmon
 PUZZLE:
 puzzle_ch2h_posse
 
+INVENTORY:
+fakkel
+
 CHOICES:
 
 * Volg hen het moeras in -> CH2_H10B
@@ -9365,6 +9541,9 @@ De geur van de wijn trekt al snel de rest van de centaurenkudde aan — dronken,
 
 PERSON:
 pholus:intro
+
+INVENTORY:
+wijnzak
 
 CHOICES:
 

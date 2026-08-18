@@ -4211,63 +4211,143 @@ puzzelwijziging).
 
 In afgesproken bouwvolgorde:
 
-1. **Combat-bridge (gebouwd, sinds Hoofdstuk 2)** — een EIGEN, lokale
-   implementatie (vraag → EP → aanval), NIET Battle Mode's eigen lus
-   hergebruikt (die is te sterk gekoppeld aan Firebase-multiplayer-state
-   — zie `bmAnswer`/`bmTick`/`bmResolve` in battle.js). Verschil met Battle
-   Mode: geen kunstmatige wachttijd tussen vraag en actie, want singleplayer
-   heeft geen andere spelers om op te wachten — zodra je genoeg EP hebt, kun
-   je meteen aanvallen. `COMBAT:`-sectie (bare vijand-id uit
-   `SP_COMBAT_ENEMIES`, singleplayer-data.js) start het gevecht
-   (`spStartCombatFromScene`/`SCREENS.spCombat`); vragen komen uit de al
-   geleerde vocabulaire (`SP_STATE.vocab`). Beide voorbereide vijanden
-   (`nemeische_leeuw`, `hydra`) worden inmiddels ook echt gebruikt: Herakles'
-   Hoofdstuk-2-lijn (`CH2_H08`/`CH2_H10`-`H11`) is Chronica's eerste scène die
-   de Combat-bridge daadwerkelijk inzet, met beide gevechten volledig
-   uitgespeeld getest. Vijand-sprite via
-   `spCombatSpriteHTML()`: romp (`img`) + bij de Hydra ook de losse
-   `heads`-laag erbovenop, exact dezelfde absolute-stapel-truc en
-   `ceil((hp/maxHp)*7)`-formule als Boss Battle se `bmBossSpriteHTML`/
-   `bmBossAliveHeads` (bossbattle.js) — zonder die laag zou je alleen de romp
-   met kale nekstompjes zien, nooit de koppen. Getest: 7/4/1/0 koppen bij
-   100/50/~2/0% HP. De eretitel-`bonus` (§6) écht in de berekening verwerken
-   staat nog open.
+1. **Combat-bridge v2 (herbouwd 2026-08-18)** — zie `COMBAT_OVERHAUL.md` voor
+   het volledige ontwerpvoorstel waar dit uit voortkwam, inclusief de
+   voorstellen die Gerben bewust NIET koos.
 
-   **Equip-bonussen in de Combat-bridge (ontwerp vastgelegd, nog te bouwen)**:
-   de speler vroeg zich terecht af of het uitgeruste wapen/harnas ook echt
-   iets doet in gevechten, in plaats van puur cosmetisch te zijn. Belangrijke
-   constatering vooraf: `SP_COMBAT` heeft op dit moment GEEN speler-HP of
-   inkomende schade — het is een pure "vraag → EP → aanval op de vijand"-lus
-   (zie hierboven), dus een harnas kan niet letterlijk "schade absorberen"
-   zonder eerst een heel nieuw schade-aan-de-speler-mechanisme te bouwen, en
-   dat botst met de "nooit grimmig, geen game-over-scherm midden in het
-   verhaal"-toon van Chronica (§7.6/gemini-comic-style.md). Daarom **hergebruikt
-   het ontwerp bewust de bestaande EP-economie** in plaats van een nieuwe
-   HP-laag toe te voegen:
-   - **Wapen → schade per aanval** (`SP_COMBAT_DAMAGE_PER_ATTACK`, nu een vaste
-     15 voor iedereen): wordt een tabel naar wapen-tier i.p.v. één vaste
-     waarde. Tier 1 (`knuppel`/`hooivork`, startwapens): 15 schade
-     (ongewijzigd — nulmeting). Tier 2 (`zwaard`/`speer`/`boog`, proloog-
-     klassekeuze): 18 schade (+20%). Tier 3 (`staf`, Hoofdstuk 17 — het
-     laatst ontgrendelde wapen): 22 schade (+~45%).
-   - **Harnas → EP-verlies bij een fout antwoord**: momenteel kost een fout
-     antwoord niets (geen EP-winst, geen straf) — dat blijft zo voor wie nog
-     op `vodden`/`robe` zit. Vanaf `armor:licht` geldt een nieuwe, bescheiden
-     EP-boete bij een fout antwoord die per harnas-tier KLEINER wordt: geen
-     harnas-tier verliest ooit meer dan de bestaande situatie (nooit
-     "erger" dan nu), maar een beter harnas beschermt je opgebouwde
-     voortgang beter bij een misser. Voorgestelde tabel: `vodden`/`robe` = 0
-     EP-boete (ongewijzigd), `licht` = -3 EP, `middel` = -2 EP, `hopliet` =
-     -1 EP, `zwaar`/`ceremonieel` = 0 EP-boete (volledige bescherming — een
-     compleet uitgeruste held maakt zich geen zorgen meer over een
-     misstap). Dit maakt fout antwoorden voor het eerst een echt (maar
-     nooit hard afstraffend) risico, en geeft harnas een leesbare, eerlijke
-     rol: "bescherm je voortgang", niet "voorkom een game over" — er is nog
-     steeds geen manier om een Chronica-gevecht te verliezen.
-   - Bewust GEEN bonussen op `helm`/`schild`/`cape` — die blijven puur
-     cosmetisch, om de balans overzichtelijk te houden (twee bonus-assen,
-     wapen en harnas, is genoeg voor een verhaal-RPG die niet primair om
-     combat-optimalisatie draait).
+   **Waarom herbouwd.** De eerste Combat-bridge kende één werkwoord: antwoord →
+   10 EP → bij 20 EP een vaste 15 schade. De vijand deed niets terug, er viel
+   niets te kiezen, en de gevechtslengte lag bij de start al vast (Hector =
+   90 HP = 6 aanvallen = 12 goede antwoorden, altijd). Educatief was het even
+   smal: één vraagtype (receptief herkennen uit 4 opties), geen productie, geen
+   morfologie, geen foutcorrectiemoment, en geen enkele registratie van wélke
+   woorden een leerling niet beheerst.
+
+   **De nieuwe beurt — twee klikken, niet meer**: (1) de speler kiest een
+   ACTIE, wat tegelijk zijn moeilijkheidskeuze is; (2) hij beantwoordt de
+   bijbehorende vraag en de schade valt meteen; (3) de vijand voert zijn
+   getelegrafeerde INTENTIE uit, of laadt verder op. De oude tussenstap "spaar
+   20 EP, klik dan Aanval" is geschrapt: dat was een klik zonder beslissing.
+   Vastberadenheid (VB) bestaat nog wel, maar heeft nu één taak — het laadt je
+   klassevaardigheid op.
+
+   **Aanvalsvormen = moeilijkheidskeuze.** `SP_COMBAT_VORMEN`: Snelle uitval
+   (vraagzwaarte 1, 12 schade), Gerichte slag (zwaarte 2, 16), Genadeslag
+   (zwaarte 3 = zelf typen, 22), plus Verdedigen (zwaarte 1, geen schade, maar
+   halveert de volgende intentie en laadt snel VB op). Verdedigen stelt
+   bewust óók een vraag: een actie die je een beurt lang van vragen vrijstelt
+   zou de leerlus omzeilen. De speler kiest zo zelf zijn niveau zonder dat er
+   ooit een "makkelijke modus"-etiket op hem geplakt wordt, en de
+   gevechtslengte is niet langer voorspelbaar.
+
+   **Vraagtype-bank** — nieuw bestand `certamen/combat-questions.js`, bewust
+   modus-onafhankelijk zodat Battle/Boss/Total War hem later kunnen delen.
+   Vijf types: betekenis (LA/GR→NL), productie (NL→LA/GR, **altijd meerkeuze**
+   — zonder context is er te vaak meer dan één verdedigbaar antwoord),
+   vormherkenning, vormproductie (getypt) en zinsfragment. Etymologie is
+   op Gerbens verzoek geen vraagtype geworden. Latijnse morfologie wordt
+   GEGENEREERD uit paradigma's (declinatie 1-5, conjugatie 1/2/3/3-io/4), zodat
+   de bank meegroeit; Grieks staat voluit uitgeschreven omdat
+   accentverspringing (θάνατος → θανάτου, πολίτης → πολῖται) niet betrouwbaar
+   te genereren is. Een vorm die meerdere analyses toelaat (`terrae` =
+   gen./dat. enkelvoud én nom./voc. meervoud) wordt automatisch uit de
+   herkenningsvragen gefilterd — daar zou anders meer dan één antwoord goed zijn.
+
+   **Leitner-mastery + micro-onderwijs.** `SP_STATE.mastery` houdt per vraag een
+   box 0-5 bij; de trekking weegt naar lage boxen (gewicht 6 t/m 1), fout zet
+   terug naar 0, goed schuift één box op. De oude trekking was uniform random
+   en behandelde een woord dat je vijf keer fout deed dus hetzelfde als een
+   woord dat je blind kende. Bij een fout antwoord verschijnt nu een
+   uitlegregel die op het keuzescherm blijft staan terwijl de speler zijn
+   volgende zet kiest ("θάνατος (thánatos) — dood", of "regis is genitivus
+   enkelvoud van rex — bezit, 'van …'"). Dit is leerdata en zit dus wél in de
+   save, in tegenstelling tot `SP_COMBAT` zelf.
+
+   **Vigor: spanning zonder game over.** §11.1 beschreef Vigor al ("op nul
+   volgt geen game over maar een afgedwongen scène") maar het was nooit
+   gebouwd. Vijanden hebben nu getelegrafeerde intenties
+   (`SP_COMBAT_INTENTIES`, singleplayer-data.js) die één of twee beurten
+   vooruit worden aangekondigd en Vigor kosten, de vijand laten helen, of
+   vastberadenheid roven. Op Vigor 0 volgt een opvangscène met échte
+   narratieve gevolgen (een metgezel vangt de klap op → RELATION −1; je wijkt
+   terug → de vijand herstelt; je wordt door iemand opzijgetrokken → flag
+   `gered_in_gevecht`), maar het gevecht gaat altijd door. Een gevecht kan
+   slecht aflopen; het kan nog steeds niet verloren worden.
+
+   **Het Vigor-BUDGET (belangrijk bij het toevoegen van een vijand).** De
+   `vigor`-waarden in `SP_COMBAT_INTENTIES` zijn RELATIEVE gewichten binnen één
+   vijand, geen absolute punten. Vaste waarden pakten structureel oneerlijk uit:
+   hoe meer HP een vijand heeft, hoe langer het gevecht duurt, hoe vaker hij aan
+   de beurt komt — dus hoe harder hij toevallig is. Eerste meting (40
+   gesimuleerde gevechten per opstelling) gaf bij foutloos spel 6 van 29 Vigor
+   tegen de Nemeïsche Leeuw, maar 31 van 29 tegen Hector, met in 70% van de
+   gevechten een opvangscène ondanks nul fouten. `spCombatVigorSchaal()` rekent
+   daarom bij elke gevechtsstart uit hoe hard een treffer mag aankomen, zodat
+   een heel gevecht bij foutloos spel ongeveer `SP_COMBAT_VIGOR_BUDGET` (0,5)
+   van je Vigor kost. **Een nieuwe vijand hoeft dus niet met de hand
+   uitgebalanceerd te worden** — geef hem plausibele relatieve waarden en het
+   systeem doet de rest, ook als zijn HP later verandert.
+
+   Eindmeting over alle 18 vijanden: foutloos 31-50% Vigor kwijt en 0%
+   opvangscènes; bij 40% foute antwoorden 67-109% en 0-67% opvangscènes.
+   Precies de bedoeling: de opvangscène komt door fouten, niet door pech.
+   Gevechtslengte loopt van 5 beurten (Nemeïsche Leeuw) tot 16 (Lethe) bij de
+   veilige aanvalsvorm, en ongeveer 60% daarvan als je consequent de zwaarste
+   vraagvorm kiest.
+
+   **Uitrusting en stats doen eindelijk iets** (dit was het "ontwerp
+   vastgelegd, nog te bouwen"-punt van §8). Twee assen, meer niet — helm,
+   schild en cape blijven bewust cosmetisch: WAPEN → schadefactor (hooivork/
+   knuppel ×1, zwaard/speer/boog ×1,2, staf ×1,45 — dezelfde verhouding als het
+   eerder vastgelegde 15/18/22) en HARNAS → demping van Vigor-verlies (vodden/
+   robe 0%, licht 15%, middel 25%, hopliet 35%, zwaar 45%, ceremonieel 50%,
+   nooit 100%). In het oude ontwerp beschermde harnas tegen een EP-boete; nu er
+   echte inkomende schade bestaat heeft het een natuurlijker taak gekregen:
+   "bescherm je adem", niet "voorkom een game over". Stats: Vis → +1 schade per
+   2 punten boven 10, Robur → +1 max Vigor per punt boven 10. Eretitels → zie §9.
+
+   **Klassevaardigheid**, 1× per gevecht voor 30 VB, met dezelfde namen als in
+   `BM_CLASSES` zodat Chronica en Battle Mode één wereld blijven: Hopliet
+   *Schildmuur* (de volgende twee intenties glijden van je af), Boogschutter
+   *Zwak Punt* (volgende treffer telt dubbel), Cavalerie *Stormloop* (directe
+   aanval zonder vraag).
+
+   **Items uit het verhaal.** De `INVENTORY:`-sectie werd al sinds de bouw van
+   de CNS-parser herkend en opgeslagen, maar deed niets; `spHookInventory()`
+   leest hem nu uit. `SP_COMBAT_ITEMS` bevat drie eenmalige items. Geplaatst
+   zijn de fakkel (`CH2_H10`, de scène waarin Iolaos de wonden dichtschroeit —
+   30 schade, precies de mythische oplossing) en Pholus' wijnzak (`CH3_H04`,
+   vlak voor de centaurenstrijd — de vijand laadt twee beurten langer op).
+   **Hermes' kruid is wél gedefinieerd maar bewust nog nérgens geplaatst**: het
+   is moly uit de Odyssee en er is nog geen Kirke-scène om het aan te hangen —
+   één `INVENTORY: hermeskruid`-regel volstaat zodra Gerben een plek kiest.
+
+   **Beeld en geluid.** Het gevecht hergebruikt nu de complete animatielaag die
+   voor Battle Mode gebouwd is en die Chronica tot dan toe niet aanraakte: de
+   speler stond niet eens in zijn eigen gevecht in beeld. Nu wel — de echte
+   gelaagde pixel-held (`_bmPixelLayers`) links, mét het wapen dat hij in de
+   proloog koos, tegenover de vijand rechts, aangestuurd door `BattleMotion`
+   (swing/thrust/missile/guard/evade/victory, gekozen op wapen en aanvalsvorm).
+   Verder: zwevende schadegetallen, treffer-flits, schermschud bij een
+   vijandelijke intentie, combo-gloed, kritieke HP-balk, een projectiel voor de
+   Boogschutter, en een intro-kaart die de `intro`-tekst toont die al jaren in
+   `SP_COMBAT_ENEMIES` stond maar nooit ergens werd weergegeven. Er is een
+   eigen uit-schakelaar (✨-knop, `SP_FX_KEY`), los van de geluidsknop —
+   zelfde gedachte als `BM_META.animations`.
+
+   **Combo en eindrang.** Drie goede antwoorden op rij geven +25% schade tot de
+   eerste misser. Een gevecht eindigt niet meer met een kale overgang maar met
+   een rang: ⭐ *Victoria* / ⭐⭐ *Victoria clara* / ⭐⭐⭐ *Victoria splendida*, op
+   accuratesse en Vigor-verlies, met een Kroniek-regel. Er is geen faalrang —
+   de laagste uitkomst is nog steeds een Victoria.
+
+   **Nog open uit COMBAT_OVERHAUL.md** (bewust niet gekozen in deze ronde):
+   zwaktes per vijand (voorstel E), godengunst/limit break gekoppeld aan
+   RELATION (H) en vijandfases op 50% HP (I).
+
+   **Oude saves.** `mastery` en `inventory` zijn nieuwe `SP_STATE`-velden; alle
+   leescode gebruikt `|| {}` / `|| []`, dus een save van vóór 2026-08-18 werkt
+   ongewijzigd door en vult zich vanzelf.
 
 2. **`CONDITION`-mechanisme** — de kaart zelf is gebouwd (§7,
    `SCREENS.spWorldMap`), alle drie panelen zijn getekend en schakelbaar. Sinds
@@ -4337,10 +4417,22 @@ teruggedraaid:
   — zie de hoofdstuktabel in §0) is leidend**, niet de "13 boeken"-
   Master Timeline uit de Game Bible. De campagnekaart is fijnmaziger en 1-op-1
   aan Pallas/Minerva gekoppeld.
-- **Combat = Battle Mode-mechaniek**, met als enige verschil de onderbreekbare
-  timer (singleplayer). Geen parallel gevechtssysteem.
-- **Eretitel-bonussen bestaan als data, maar worden pas toegepast bij de
-  Combat-bridge** — bewust niet halfslachtig op één plek in `battle.js` gepatcht.
+- **Combat is een EIGEN lus met GEDEELDE bouwstenen.** (Gecorrigeerd
+  2026-08-18: hier stond eerder "Combat = Battle Mode-mechaniek … Geen
+  parallel gevechtssysteem", wat §8 punt 1 al sinds de bouw van de
+  Combat-bridge tegensprak. Battle Mode's `bmAnswer`/`bmTick`/`bmResolve` is
+  te sterk verweven met Firebase-multiplayerstate om in singleplayer te
+  hergebruiken.) Wél gedeeld, en dat is het punt: de vraagbank
+  (`combat-questions.js`, ook bruikbaar voor Battle/Boss/Total War), de
+  animatielaag (`BattleMotion`, `_bmPixelLayers`, de `bm-*`-keyframes in
+  `index.html`), de klassen/avatar/eretitels en de vijand-sprite-stapeling
+  van Boss Battle.
+- **Eretitel-bonussen** (`bonus.scope`) blijven gescoped op battle/boss/
+  totalwar. In Chronica tellen eretitels sinds 2026-08-18 wél mee, maar via een
+  eigen, simpeler route: het AANTAL behaalde eretitels verhoogt je maximale
+  Vigor (+1 per 4, max +8, `spCombatMaxVigor`). Zo hoefde geen enkele
+  eretitel-definitie aangepast te worden en betekent "meer van het verhaal
+  gezien" gewoon "je houdt het langer vol".
 
 ---
 
@@ -8699,6 +8791,100 @@ personage-namen, geldige doelscènes), gerichte steekproeven op de nieuwe
 scènes bevestigen correcte doorverwijzing.
 
 ---
+
+### 7.106 Savemigratie: verbeteringen doorduwen naar LOPENDE saves (2026-08-18)
+
+**Aanleiding.** De testers spelen een campagne van dertig hoofdstukken. Gerben
+merkte dat niet elke verbetering doorwerkte in hun bestaande saves — sommige
+dingen werkten pas na opnieuw beginnen, wat na twintig hoofdstukken geen
+begaanbare weg is.
+
+**Diagnose.** Het overgrote deel werkt wél al door. Scènetekst, titels, keuzes,
+glossen, beelden, combat-vragen, CHECK/PUZZLE-mechaniek, grammaticatabellen en
+kaartpins zitten niet in de save: `SP_SCENES` wordt bij elke pagina-load opnieuw
+uit `singleplayer-data.js` geparsed, en `spResumeSlot()` laadt alleen de
+voortgangsvelden. Voorwaarde is alleen dat de `?v=`-cachebuster in `index.html`
+is opgehoogd; is dat vergeten, dan serveert de browser gewoon de oude JS en
+lijkt het alsof de save "vastzit" terwijl er niets met de save mis is.
+
+Wat níet vanzelf meekomt, is tweeledig:
+
+1. **Scènes die de speler al voorbij is.** Onvermijdelijk — een tekstfix in H3
+   zie je niet meer vanuit H14.
+2. **De velden die eenmalig in `SP_STATE` zijn vastgelegd** toen de speler de
+   scène passeerde: `vocab`, `codex`, `flags`, `persons`, `relations`, `quests`,
+   `souvenirs`, `fragments`, `inventory`, `stats`. Voeg je achteraf een
+   `VOCAB:`- of `FLAG:`-sectie toe aan een al gebouwd hoofdstuk, dan mist elke
+   save die daar al voorbij is die stilletjes. Bij een FLAG die pas twintig
+   hoofdstukken later wordt uitgelezen valt de payoff geruisloos weg — zonder
+   foutmelding, dus zonder dat je het merkt.
+
+**Gebouwd.** Een migratielaag in `certamen/singleplayer.js`, direct boven
+`spLoadAllSlots`, aangeroepen vanuit `spResumeSlot()` bij elk "verdergaan".
+`spMigrateSave(state)` draait drie stappen en geeft `{changed, notes}` terug; bij
+`changed` wordt de save meteen weggeschreven (en dus ook naar Firebase
+gespiegeld). Alles is idempotent.
+
+1. **`spRepairNode(state)`** — hernoemde en verdwenen scène-id's. `SP_SAVE_ALIASES`
+   mapt oud → nieuw (tabel nooit opruimen; elke oude save mag erop blijven
+   leunen). Bestaat de node daarna nog steeds niet, dan gaat de speler terug naar
+   `CH<n>_000` van het hoofdstuk waar hij was — niet meer, zoals tot nu toe, naar
+   de allereerste scène van het spel, wat voor een tester in H20 twintig
+   hoofdstukken voortgang kostte. Een dode `FIN_`-node valt terug op `FIN_000`.
+2. **`spBackfillVocab(state, depth)`** — onderhoudsvrij. Leest de `VOCAB:`-secties
+   van de "spil-scènes" van alle hoofdstukken strikt vóór het huidige opnieuw uit
+   de data en kent ontbrekende woorden alsnog toe. De spil-scène is de scène met
+   de woordenlijst die iedereen passeert ongeacht taalspoor: standaard
+   `CH<n>_000`, met een uitzonderingstabel `SP_VOCAB_SPIL` voor H1-4 (`CH1_ROBE`,
+   `CH2_ORAKEL`, `CH3_ORAKEL`, `CH4_ORAKEL`), H9 (`CH9_005`) en H11 (`CH11_001`).
+   Route-specifieke `VOCAB:`-secties diep in een Griekse of Latijnse lijn staan
+   hier bewust NIET in — die horen bij een route die deze speler misschien niet
+   genomen heeft. Woorden die niet in `SP_VOCAB_ENTRIES` bestaan worden
+   overgeslagen, zodat een typefout in de data geen spookwoord in iemands Codex
+   en Combat-poel duwt. Hiermee bereiken de 270 signaalwoorden uit
+   `VOCAB_UITBREIDING.md` alsnog elke lopende save, wat precies het repetitieve
+   Combat-probleem was waarvoor die uitbreiding bedoeld was.
+3. **`spApplyPatches(state, depth)`** — de handmatige lijst `SP_PATCHES` voor wat
+   je niet kunt afleiden: route-afhankelijke flags, verplaatste codexpagina's,
+   hernoemde quests. Elke patch heeft `id`, `vanaf` (hoofdstuknummer), een
+   `omschrijving` voor de auteur, een optionele `melding` voor de speler, en
+   `apply(state)`. Is de speler nog niet voorbij `vanaf`, dan gebeurt er niets en
+   wordt de patch ook niet afgevinkt — de gewone scène-hook doet het straks zelf.
+   Toegepaste id's staan in het nieuwe savedveld `state.patches` (id → timestamp),
+   dus elke patch draait hoogstens één keer per save. Een patch die gooit, wordt
+   gelogd en overgeslagen zonder de rest te blokkeren.
+
+Meldingen komen via `SP_MIGRATION_NOTES` op het landingsscherm terecht
+(`spRenderLanding`), als een paneel "Je verhaal is bijgewerkt"; daarna meteen
+geleegd, dus eenmalig per keer verdergaan.
+
+**Meegenomen bugfix.** `spSlotProgressDepth()` gaf 0 terug voor een `FIN_`-node.
+Dat is nu 99. Die functie beslist sinds de leerlingfeedback van 2026-08-18 welke
+save wint bij een botsing tussen twee toestellen (verste voortgang eerst); een
+uitgespeelde save verloor dus van elke willekeurige save vanaf Hoofdstuk 1.
+
+**Bewust niet gepatcht.** De RELATION-symmetrie die commit `395c4a5` toevoegde aan
+`CH5_020_NEGEER`, `CH6_020_*`, `CH8_ACH/AGA_*` en `CH10_ODY_*` hangt af van welke
+kant de speler koos, en dat staat nergens in de save; een gok zou de Finale — die
+de RELATION-standen uitleest — met verzonnen data voeden. Oude saves houden daar
+dus een iets vlakker relatiebeeld dan nieuwe. De grammatica-codex uit commit
+`8196449` heeft geen patch nodig: die pagina's werden alleen vroeger in het
+hoofdstuk uitgedeeld, de bestaande hook verderop kende ze al toe. `SP_PATCHES` is
+daarom bij oplevering leeg — de lijst is de infrastructuur, niet de inhoud.
+
+**Onderhoudsafspraak (staand).** Voeg je achteraf een `FLAG:`, `CODEX:`, `QUEST:`,
+`PERSON:`, `RELATION:`, `SOUVENIR:` of `INVENTORY:` toe aan een hoofdstuk dat al
+gebouwd én gekoppeld is, schrijf dan in dezelfde commit een `SP_PATCHES`-entry.
+`VOCAB:` op een spil-scène hoeft niet — dat regelt `spBackfillVocab` zelf. Hernoem
+je een scène-id, zet het paar dan in `SP_SAVE_ALIASES`. Zonder die afspraak loopt
+de patchlijst net zo achter als het probleem dat hij oplost.
+
+**Getest** met een vm-sandbox-harnas over de echte `singleplayer-data.js` (1527
+scènes): alle 29 spil-scènes bestaan en dragen een `VOCAB:`; een save in H14
+krijgt 391 woorden uit H1-13, een finale-save 788, een proloog-save niets; tweede
+keer draaien voegt niets toe; dode `CH20_`- en `FIN_`-nodes landen op de juiste
+hoofdstukopening; en de patch-machinerie slaat over vóór `vanaf`, past toe erna,
+en doet de tweede keer niets.
 
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
 

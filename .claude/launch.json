@@ -4,20 +4,52 @@
     {
       "name": "kthulp",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8767"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8767"
+      ],
       "port": 8767
     },
     {
       "name": "kthulp-verify",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8769"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8769"
+      ],
       "port": 8769
     },
     {
       "name": "kthulp-kroniek",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8781"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8781"
+      ],
       "port": 8781
+    },
+    {
+      "name": "kthulp-combat",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8793"
+      ],
+      "port": 8793
+    },
+    {
+      "name": "kthulp-migratie",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8801"
+      ],
+      "port": 8801
     }
   ]
 }
