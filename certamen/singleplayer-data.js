@@ -2143,7 +2143,7 @@ const SP_CODEX_ENTRIES = {
   codex_oedipus: { cat:"mythologie", titel:"Oedipus en het Raadsel van de Sfinx",
     tekst:"Een orakel voorspelde koning Laius van Thebe dat zijn eigen zoon hem ooit zou doden; uit angst liet hij de pasgeboren Oedipus te vondeling leggen, maar het kind overleefde en groeide ver van Thebe op, zonder zijn ware afkomst te kennen. Toen een orakel Oedipus zelf dezelfde voorspelling deed, vluchtte hij weg van wie hij dacht dat zijn ouders waren — en doodde onderweg, zonder het te beseffen, zijn werkelijke vader bij een geschil op de weg. Bij Thebe versloeg hij de Sfinx, een monster dat de stad gijzelde met een raadsel, en werd tot koning gekroond — waarna hij trouwde met de weduwe van de vorige koning, zijn eigen moeder Iokaste. Jaren later kwam de waarheid alsnog aan het licht; geen van beiden kon ermee verder leven." },
   codex_zeven_tegen_thebe: { cat:"mythologie", titel:"De Zeven tegen Thebe",
-    tekst:"Oedipus' zonen Eteokles en Polyneikes spraken af de troon van Thebe jaarlijks te delen — een afspraak die Eteokles, eenmaal koning, niet nakwam. Polyneikes verzamelde zes andere champions, onder wie de Argonaut Tydeus, om de stad met geweld in te nemen. De aanval mislukte: bijna alle zeven champions sneuvelden, en de broers doodden elkaar in een laatste tweegevecht. Tydeus zelf stierf op het slagveld — op het punt dat Athena hem onsterfelijkheid wilde schenken voor zijn moed, deed hij iets zo wreeds tegenover een gevallen vijand dat ze zich vol afschuw afwendde en de gave introk." },
+    tekst:"Oedipus' zonen Eteokles en Polyneikes spraken af de troon van Thebe jaarlijks te delen — een afspraak die Eteokles, eenmaal koning, niet nakwam. Polyneikes verzamelde zes andere helden, onder wie de Argonaut Tydeus, om de stad met geweld in te nemen. De aanval mislukte: bijna alle zeven helden sneuvelden, en de broers doodden elkaar in een laatste tweegevecht. Tydeus zelf stierf op het slagveld — op het punt dat Athena hem onsterfelijkheid wilde schenken voor zijn moed, deed hij iets zo wreeds tegenover een gevallen vijand dat ze zich vol afschuw afwendde en de gave introk: in blinde woede at hij de hersenen op van Melanippus, de man die hem zelf dodelijk had verwond." },
   codex_hypsipyle_nemea: { cat:"mythologie", titel:"Hypsipyle bij Nemea",
     tekst:"Jaren na Lemnos vindt de speler Hypsipyle terug als slavin, min van de kleine Opheltes — geroofd door piraten, ver van het eiland waarover ze ooit regeerde. Wanneer een slang het kind doodt terwijl ze de Zeven de weg naar water wijst, dreigt koning Lycurgus haar te doden voor haar nalatigheid." },
   codex_hypsipyle_zonen: { cat:"mythologie", titel:"Hypsipyle's Redding",
@@ -3244,7 +3244,7 @@ const SP_CODEX_PERSONS = {
 
   // ---- Hoofdstuk 6 — De Vloek van Thebe ----
   kadmos: { nm:"Kadmos", epithet:"Stichter van Thebe",
-    intro:"Een Fenicische prins, op zoek naar zijn geschaakte zuster Europa — je kent haar al, van de wolk die ooit over Argos hing — die de zoektocht opgeeft op advies van het orakel van Delphi en in plaats daarvan een eigen stad sticht: Thebe.",
+    intro:"Een Fenicische prins, op zoek naar zijn geschaakte zuster Europa — weggevoerd over zee door Jupiter, vermomd als een witte stier — die de zoektocht opgeeft op advies van het orakel van Delphi en in plaats daarvan een eigen stad sticht: Thebe.",
     full:"Kadmos doodde een draak die een heilige bron bewaakte en zaaide, op Athena's advies, de tanden van het beest in de aarde — daaruit rezen gewapende krijgers op die elkaar bijna allemaal doodden, op vijf na, die met hem de eerste inwoners van Thebe werden. Dezelfde soort tanden die, generaties later, ver naar het oosten in Colchis, ook koning Aeëtes zou gebruiken." },
   niobe: { nm:"Niobe", epithet:"Koningin van Thebe",
     intro:"De trotse koningin van Thebe, moeder van veertien kinderen, die geen enkele reden ziet om zich klein te houden voor wie dan ook — zelfs niet voor een godin.",
@@ -5517,7 +5517,7 @@ const SP_PAYOFFS = [
   // sterke familieband (Kreon is Megara's vader, én Iokastes broer/Oedipus'
   // oom) kwam nergens terug.
   { id:"ch6_015_echo_creon_megara", type:"echo", trigger:{scene:"CH6_015"}, priority:0,
-    content:{text:`Dit is dezelfde Kreon wiens dochter Megara je ooit aan Herakles zag trouwen — en zag sterven, door diezelfde helds eigen hand, in een waanzin die niet de zijne was. Misschien is dat waarom Kreon zich nu zo hard aan zijn eigen bevel vastklampt: voor een man die zijn kind al één keer verloor aan iets wat niemand kon voorzien, is een wet die tenminste voorspelbaar is, geen kleinigheid.`,
+    content:{text:`Dit is dezelfde Kreon wiens dochter Megara je ooit met Herakles zag trouwen — en zag sterven, door diezelfde helds eigen hand, in een waanzin die niet de zijne was. Misschien is dat waarom Kreon zich nu zo hard aan zijn eigen bevel vastklampt: voor een man die zijn kind al één keer verloor aan iets wat niemand kon voorzien, is een wet die tenminste voorspelbaar is, geen kleinigheid.`,
       kroniekTekst:"{subject_cap} herkende in Kreons onverzettelijkheid de vader die zijn dochter Megara al eens had verloren aan Herakles' waanzin."} },
   // ---- Hoofdstuk 4, lijn Theseus — vuurt alleen als de speler in
   // Hoofdstuk 3 zelf de Kretenzische Stier heeft gevangen voor Herakles
@@ -12556,7 +12556,7 @@ TITLE:
 De Stichting van Thebe
 
 TEXT:
-Kadmos, een Fenicische prins op zoek naar zijn geschaakte zuster Europa — je kent haar verhaal al, van de wolk die ooit over Argos hing — geeft die zoektocht op advies van het orakel van Delphi uiteindelijk op. Volg een koe, zegt het orakel, en sticht een stad waar ze uitgeput neervalt. Kadmos doet wat hem gezegd wordt.
+Kadmos, een Fenicische prins op zoek naar zijn geschaakte zuster Europa — weggevoerd over zee door Jupiter, vermomd als een witte stier — geeft die zoektocht op advies van het orakel van Delphi uiteindelijk op. Volg een koe, zegt het orakel, en sticht een stad waar ze uitgeput neervalt. Kadmos doet wat hem gezegd wordt.
 
 Om een offer te brengen doodt hij een draak die de bron ter plekke bewaakt — en zaait, op advies van Athena zelf, de tanden van het beest in de aarde. Uit de grond rijzen gewapende krijgers op, meer dan Kadmos in zijn eentje het hoofd kan bieden.
 
@@ -13011,7 +13011,7 @@ TITLE:
 De Zeven tegen Thebe
 
 TEXT:
-Verbannen uit zijn eigen stad, verzamelt Polyneikes zes andere champions om Thebe met geweld terug te veroveren — samen bekend als de Zeven tegen Thebe. Onder hen een gezicht dat je al kent: Tydeus, de kortlontige Argonaut van de Argo, even onstuimig als altijd.
+Verbannen uit zijn eigen stad, verzamelt Polyneikes zes andere helden om Thebe met geweld terug te veroveren — samen bekend als de Zeven tegen Thebe. Onder hen een gezicht dat je al kent: Tydeus, de kortlontige Argonaut van de Argo, even onstuimig als altijd.
 
 "Als er íémand een stadspoort met kracht in plaats van geduld openkrijgt," zegt Tydeus grimmig, terwijl hij zijn wapenrusting aantrekt, "dan ben ik dat wel."
 
@@ -13146,7 +13146,7 @@ TITLE:
 De Zeven Poorten
 
 TEXT:
-Elk van de zeven champions valt een andere poort van Thebe aan — en bijna allemaal sneuvelen ze, poort na poort, tegen Thebe's verdedigers. Voor de laatste, wanhopige aanval moet iedereen die nog vecht zijn Latijn haarscherp houden.
+Elk van de zeven helden valt een andere poort van Thebe aan — en bijna allemaal sneuvelen ze, poort na poort, tegen Thebe's verdedigers. Voor de laatste, wanhopige aanval moet iedereen die nog vecht zijn Latijn haarscherp houden.
 
 PUZZLE:
 puzzle_ch6_matching_tempora
