@@ -4054,9 +4054,17 @@ const SP_COMBAT_ITEMS = {
   wijnzak: { nm:"Pholus' wijnzak", icon:"🍷", effect:"verdoof", waarde:2,
     ds:"Een kudde die drinkt, vecht niet — je tegenstander laadt twee beurten langer op.",
     tekst:"Je gooit de zak open het veld in en laat de wijn zijn werk doen." },
+  // De twee kruiden zijn BEWUST identiek in werking: ze zijn elkaars
+  // taalspoor-tegenhanger. Moly krijg je op het Griekse spoor (CH11_ODY_003,
+  // Hermes vóór Kirke's huis), dictamnum op het Latijnse (CH11_AEN_002P,
+  // Venus aan Dido's tafel). Zonder dat paar zou het Latijnse spoor als enige
+  // zonder Vigor-herstel door het spel gaan.
   hermeskruid: { nm:"Hermes' kruid", icon:"🌿", effect:"vigor", waarde:14,
     ds:"Een wit bloempje met een zwarte wortel — herstelt 14 Vigor.",
     tekst:"Het kruid is bitter genoeg om je hoofd weer helder te maken." },
+  dictamnum: { nm:"Kretenzisch dictamnum", icon:"🌿", effect:"vigor", waarde:14,
+    ds:"Het kruid waarmee Venus wonden heelt — herstelt 14 Vigor.",
+    tekst:"Je kauwt op het bittere blad, en de scherpte trekt je hoofd weer recht." },
 };
 
 /* ---- RACE-BRIDGE-DATA — zie de toelichting bij SP_RACE/spStartRaceFromScene
@@ -19310,6 +19318,8 @@ Cupido's Vermomming
 TEXT:
 Wat niemand aan tafel ziet: Venus, ongerust dat Juno's stad hen alsnog kwaad zal doen, heeft haar eigen zoon Cupido de gedaante van Ascanius laten aannemen. Terwijl de vermomde god op Dido's schoot zit, laat hij onopgemerkt een liefdesvuur in haar ontbranden dat geen enkel verstandig overleg meer zal doven.
 
+Voor ze weer oplost in de warme lucht van de zaal, drukt Venus jou nog iets in de hand: een takje Kretenzisch dictamnum, ruw afgebroken, met de wortel er nog aan. Ze zegt er niets bij. Pas veel later, op een slagveld dat nu nog jaren ver weg ligt, zul je begrijpen waarom een moeder dat kruid bij zich draagt.
+
 IMAGE:
 ch11_aen_cupido_vermomming.png
 
@@ -19318,6 +19328,9 @@ puzzle_ch11_aen_participium2
 
 CODEX:
 codex_dido_cupido
+
+INVENTORY:
+dictamnum
 
 CHOICES:
 * Ga verder -> CH11_AEN_002B
