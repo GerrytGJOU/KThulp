@@ -19197,6 +19197,9 @@ kirke:full
 CODEX:
 codex_kirke_moly
 
+INVENTORY:
+hermeskruid
+
 CHOICES:
 * Zie hoe Kirke, verslagen, het weerzien met haar gasten viert -> CH11_ODY_003_LV
 
