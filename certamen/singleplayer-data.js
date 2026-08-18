@@ -11798,9 +11798,11 @@ TITLE:
 Herakles Blijft Achter
 
 TEXT:
-Bij Mysië gaat Herakles aan land om een nieuwe roeiriem te snijden, met zijn jonge metgezel Hylas mee om water te halen. Hylas keert nooit terug — de waternimfen van de bron waar hij put, betoveren hem en trekken hem mee de diepte in, verliefd op zijn schoonheid.
+Bij Mysië gaat Herakles aan land om een nieuwe roeiriem te snijden. Met hem gaat zijn jonge metgezel Hylas mee om water te halen. Hylas keert nooit terug — de waternimfen van de bron waar hij put, betoveren hem en trekken hem mee de diepte in, verliefd op zijn schoonheid.
 
-Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke aanmaning om terug aan boord te komen. "[[Redi!|Kom terug!]]" roept Telamon nog, meer dan eens, zonder enig effect. Tegen de ochtend besluit de bemanning, met tegenzin, zonder hem verder te varen — Herakles, wanneer hij eindelijk het strand terugvindt en het schip al weg ziet, blijft alleen achter, zijn zoektocht naar Hylas nog altijd niet opgegeven.
+Herakles zoekt de hele nacht, roepend door de bossen van Mysië, doof voor elke aanmaning om terug aan boord te komen. "[[Redi!|Kom terug!]]" roept Telamon nog, meer dan eens, zonder enig effect. Tegen de ochtend besluit de bemanning, met tegenzin, zonder hem verder te varen. Wanneer Herakles eindelijk het strand terugvindt en ziet dat het schip al weg is, blijft hij alleen achter, zijn zoektocht naar Hylas nog altijd niet opgegeven.
+
+Voor de Argo betekent dit afscheid — maar niet voor Herakles zelf: te voet keert hij terug naar het pad dat hij toch al bewandelde, de beproevingen die Eurystheus hem oplegde, en die hij, met of zonder deze reis, hoe dan ook had moeten voltooien.
 
 IMAGE:
 ch5_hylas_nimfen.png
@@ -11825,7 +11827,7 @@ De Symplegades
 TEXT:
 Verderop wacht een gevaar dat geen zwaard en geen boog kan verslaan: de Symplegades, twee rotswanden die bij elke doorvaart als een kaak op elkaar klappen en alles ertussen verpletteren. Geen enkel schip heeft de doortocht ooit overleefd.
 
-Argos, die zijn eigen schip kent tot in de laatste plank, bestudeert het ritme van de botsende rotsen langer dan wie ook geduld voor heeft. "Elke kaak heeft een moment dat hij weer opengaat," zegt hij uiteindelijk. "Wij hebben er maar één nodig."
+Argos, die zijn eigen schip kent tot in de laatste plank, bestudeert het ritme van de botsende rotsen langer dan wie ook. "Elke kaak heeft een moment dat hij weer opengaat," zegt hij uiteindelijk. "Wij hebben er maar één nodig."
 
 CHOICES:
 
@@ -12255,7 +12257,7 @@ TITLE:
 Medea's Keuze
 
 TEXT:
-Wat Medea doet, is geen kleinigheid: ze verraadt haar eigen vader, haar eigen koninkrijk, voor een vreemdeling die ze amper een paar dagen kent. Het is, beseft je, precies wat Ariadne op Kreta ook deed voor Theseus — dezelfde soort keuze, dezelfde soort risico, misschien wel hetzelfde soort liefde.
+Wat Medea doet, is geen kleinigheid: ze verraadt haar eigen vader, haar eigen koninkrijk, voor een vreemdeling die ze amper een paar dagen kent. Het is, besef je, precies wat Ariadne op Kreta ook deed voor Theseus — dezelfde soort keuze, dezelfde soort risico, misschien wel hetzelfde soort liefde.
 
 "Ik weet wat dit betekent," zegt Medea zacht, meer tegen zichzelf dan tegen jou. "Ik kan nooit meer terug. Maar ik kan hem ook niet laten sterven."
 
@@ -12388,8 +12390,8 @@ Nog geen dag op zee klinkt er een uitroep vanaf het achterdek — de uitkijk, di
 
 CHOICES:
 
-* Neem het op als opluchting — "ze vervolgen ons niet meer" -> CH5_027_GOED
-* Neem het op als een nieuwe dreiging — "ze vervolgen ons nog steeds," en sla alarm -> CH5_027_FOUT
+* Neem het op als opluchting — "ze achtervolgen ons niet meer" -> CH5_027_GOED
+* Neem het op als een nieuwe dreiging — "ze achtervolgen ons nog steeds," en sla alarm -> CH5_027_FOUT
 
 END
 
