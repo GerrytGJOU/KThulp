@@ -1644,6 +1644,14 @@ async function spResumeSlotToStats(n){
   SP_ACTIVE_SLOT = n;
   const slots = await spLoadAllSlots();
   SP_STATE = Object.assign(SP_EMPTY_STATE(), slots[n]||{});
+  // Dezelfde savemigratie als in spResumeSlot: ook wie via het Certamen-profiel
+  // binnenkomt hoort de inhaalslag meteen te krijgen. Bewust ZONDER
+  // SP_MIGRATION_NOTES te vullen: dit scherm toont ze niet, en zou de speler bij
+  // "Verdergaan" alsnog langs spResumeSlot komen, dan overschrijft die de lijst
+  // met een lege (er valt dan immers niets meer in te halen) — de melding zou
+  // dus toch verloren gaan. De data is het punt, de melding is bijvangst.
+  const migratie = spMigrateSave(SP_STATE);
+  if(migratie.changed) await spSaveProgress({});
   go("spStats");
 }
 
