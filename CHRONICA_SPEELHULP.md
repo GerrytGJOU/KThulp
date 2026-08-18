@@ -991,21 +991,21 @@ _Geen puzzels met vaste juiste-antwoord-vorm in dit hoofdstuk (waarschijnlijk al
 ### Finale — de vervagende-woorden-puzzels binnen de doeltaal-slotalinea (Chronica.md §7.101)
 
 **puzzle_fin_gre_deuro** _(scène: FIN_GRE_001)_
-- Vraag: Het eerste woord van je verklaring lost al op. Typ met het Griekse toetsenbord δεῦρο — 'hierheen', het woord waarmee je zegt dat je bewust bent teruggekeerd.
-- Antwoord (typen): **δεῦρο**
-- Hint (in het spel): Je kende dit woord al uit Hoofdstuk 29 — Lethe gebruikte het zelf, aan de oever van de rivier.
+- Vraag: Het eerste woord van je verklaring lost al op — het woord voor 'hierheen', waarmee je zegt dat je bewust bent teruggekeerd. Welk woord was het?
+- Opties: **δεῦρο** ✅ | ἐνταῦθα | νῦν | τότε
+- Hint (in het spel): Je kende dit woord al uit Hoofdstuk 29 — Lethe gebruikte het zelf, aan de oever van de rivier. Let op: ἐνταῦθα betekent 'hier', niet 'hierheen'.
 
 **puzzle_fin_gre_heneka** _(scène: FIN_GRE_002)_
-- Vraag: Een tweede woord vervaagt — het hart van je verklaring, 'omwille van'. Typ met het Griekse toetsenbord ἕνεκα.
-- Antwoord (typen): **ἕνεκα**
+- Vraag: Een tweede woord vervaagt — het hart van je verklaring, het woord voor 'omwille van'. Welk woord was het?
+- Opties: **ἕνεκα** ✅ | γάρ | διά | ὅτι (causaal)
 - Hint (in het spel): Ook dit woord ken je al — het verscheen eerder in de campagne bij een reden, een omwille-van-moment.
 
 **puzzle_fin_lat_iterum** _(scène: FIN_LAT_001)_
-- Vraag: Het eerste woord van je verklaring lost al op. Typ iterum — 'opnieuw', het woord waarmee je zegt dat je, ondanks alles, weer hier bent.
-- Antwoord (typen): **iterum**
-- Hint (in het spel): Je kende dit woord al uit Hoofdstuk 29.
+- Vraag: Het eerste woord van je verklaring lost al op — het woord voor 'opnieuw', waarmee je zegt dat je, ondanks alles, weer hier bent. Welk woord was het?
+- Opties: **iterum** ✅ | rursus | tum | adhuc
+- Hint (in het spel): Je kende dit woord al uit Hoofdstuk 29. Let op: rursus betekent ook 'weer, opnieuw' — dit is een ander woord met bijna dezelfde betekenis.
 
 **puzzle_fin_lat_utique** _(scène: FIN_LAT_002)_
-- Vraag: Een tweede woord vervaagt — het hart van je verklaring, 'zeker, in elk geval'. Typ utique.
-- Antwoord (typen): **utique**
-- Hint (in het spel): Ook dit woord ken je al uit Hoofdstuk 29.
+- Vraag: Een tweede woord vervaagt — het hart van je verklaring, het woord voor 'zeker, in elk geval'. Welk woord was het?
+- Opties: **utique** ✅ | quidem | certe | tamen
+- Hint (in het spel): Ook dit woord ken je al uit Hoofdstuk 29. Let op: quidem en certe betekenen ook 'zeker' — dit is een ander, iets minder gangbaar woord.
