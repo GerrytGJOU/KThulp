@@ -110,11 +110,14 @@ Sinds 2026-08-18 toont de Herinneringen/Museum-tab, zodra het museum
 ontgrendeld is (`museum_mnemosyne_ontgrendeld`), ook een generieke
 placeholder-tegel voor élk souvenir dat de speler nog niet heeft gevonden —
 zichtbaar verval dat zich vult naarmate de speler verder speelt (Gerbens
-verzoek). Precies TWEE vaste bestanden, wisselend per voorwerp-id (geen 1-op-1
-match met een specifiek souvenir — bewust anoniem, zodat er niets verklapt
-wordt over wélk voorwerp of welke verhaallijn er nog ontbreekt):
+verzoek). VIER vaste bestanden, wisselend per voorwerp-id (geen 1-op-1 match
+met een specifiek souvenir — bewust anoniem, zodat er niets verklapt wordt
+over wélk voorwerp of welke verhaallijn er nog ontbreekt) — vier in plaats
+van twee voor visuele variatie in het rooster (Gerbens verzoek, 2026-08-18):
 - `museum_leeg.png` — een lege sokkel.
 - `museum_gebroken.png` — een gebroken/gebarsten stolp.
+- `museum_omgevallen.png` — een omgevallen sokkel.
+- `museum_verweerd.png` — een verweerde, overwoekerde sokkel.
 
 Zelfde vaste compositie en huisstijl als hierboven (sokkel/stolp, inkt +
 cel-shading, warm steenpalet), maar bewust SOMBERDER en zonder de gouden
@@ -147,6 +150,36 @@ beide taalsporen.
 > background dark and blurred (heavy vignette). No glow, no colour accent on
 > the glass. No text, no speech bubbles, no watermark, no modern objects, no
 > people, no hands, no faces. 1:1 square format, fills the entire frame.
+
+### `museum_omgevallen.png` — Een Omgevallen Sokkel
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette), but deliberately dim and melancholic — no golden glow. A single
+> small museum-style display gone wrong: a weathered stone pedestal has
+> toppled onto its side, its small dark-red velvet cushion fallen off and
+> lying empty on the floor beside it, and its glass bell jar/dome lying
+> nearby, cracked but mostly intact, clearly having rolled a short distance
+> away from the pedestal. Nothing rests on the cushion — whatever it once
+> held is gone. Camera at eye level with the fallen pedestal, three-quarter
+> lighting, background dark and blurred (heavy vignette). No glow, no colour
+> accent on the glass. No text, no speech bubbles, no watermark, no modern
+> objects, no people, no hands, no faces. 1:1 square format, fills the
+> entire frame.
+
+### `museum_verweerd.png` — Een Verweerde, Overwoekerde Sokkel
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette), but deliberately dim and melancholic — no golden glow. A single
+> small museum-style display, long neglected: a weathered stone pedestal
+> with a small dark-red velvet cushion on top, the cushion faded and
+> moth-eaten, its glass bell jar/dome intact but heavily fogged with grime
+> and dust on the inside so the empty interior is barely visible, thin
+> tendrils of pale ivy or cobweb creeping up one side of the pedestal and
+> across a corner of the glass. Camera at eye level with the pedestal,
+> three-quarter lighting, background dark and blurred (heavy vignette). No
+> glow, no colour accent on the glass. No text, no speech bubbles, no
+> watermark, no modern objects, no people, no hands, no faces. 1:1 square
+> format, fills the entire frame.
 
 ---
 
