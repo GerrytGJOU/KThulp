@@ -1860,22 +1860,26 @@ const SP_PUZZLES = {
   // ---- Finale — de vervagende-woorden-puzzels binnen de doeltaal-slotalinea
   // (Chronica.md §7.101). Beide woorden per taalspoor zijn al lang bekende,
   // hoogfrequente signaalwoorden (H28/29-vocab), bewust geen nieuwe stof.
-  puzzle_fin_gre_deuro: { type:"typed-greek",
-    vraag:"Het eerste woord van je verklaring lost al op. Typ met het Griekse toetsenbord δεῦρο — 'hierheen', het woord waarmee je zegt dat je bewust bent teruggekeerd.",
-    antwoord:"δεῦρο",
-    hint:"Je kende dit woord al uit Hoofdstuk 29 — Lethe gebruikte het zelf, aan de oever van de rivier." },
-  puzzle_fin_gre_heneka: { type:"typed-greek",
-    vraag:"Een tweede woord vervaagt — het hart van je verklaring, 'omwille van'. Typ met het Griekse toetsenbord ἕνεκα.",
-    antwoord:"ἕνεκα",
+  // Multiple-choice i.p.v. typed- (Gerbens correctie, 2026-08-18): leerlingen
+  // vertalen normaal nooit Nederlands -> doeltaal (altijd andersom), dus vrije
+  // productie hier zou een oneerlijke uitzondering zijn. Afleiders zijn steeds
+  // al bekende, betekenisverwante signaalwoorden — geen willekeurige ruis.
+  puzzle_fin_gre_deuro: { type:"multiple-choice",
+    vraag:"Het eerste woord van je verklaring lost al op — het woord voor 'hierheen', waarmee je zegt dat je bewust bent teruggekeerd. Welk woord was het?",
+    opties:["δεῦρο","ἐνταῦθα","νῦν","τότε"], antwoord:"δεῦρο",
+    hint:"Je kende dit woord al uit Hoofdstuk 29 — Lethe gebruikte het zelf, aan de oever van de rivier. Let op: ἐνταῦθα betekent 'hier', niet 'hierheen'." },
+  puzzle_fin_gre_heneka: { type:"multiple-choice",
+    vraag:"Een tweede woord vervaagt — het hart van je verklaring, het woord voor 'omwille van'. Welk woord was het?",
+    opties:["ἕνεκα","γάρ","διά","ὅτι (causaal)"], antwoord:"ἕνεκα",
     hint:"Ook dit woord ken je al — het verscheen eerder in de campagne bij een reden, een omwille-van-moment." },
-  puzzle_fin_lat_iterum: { type:"typed-latin",
-    vraag:"Het eerste woord van je verklaring lost al op. Typ iterum — 'opnieuw', het woord waarmee je zegt dat je, ondanks alles, weer hier bent.",
-    antwoord:"iterum",
-    hint:"Je kende dit woord al uit Hoofdstuk 29." },
-  puzzle_fin_lat_utique: { type:"typed-latin",
-    vraag:"Een tweede woord vervaagt — het hart van je verklaring, 'zeker, in elk geval'. Typ utique.",
-    antwoord:"utique",
-    hint:"Ook dit woord ken je al uit Hoofdstuk 29." },
+  puzzle_fin_lat_iterum: { type:"multiple-choice",
+    vraag:"Het eerste woord van je verklaring lost al op — het woord voor 'opnieuw', waarmee je zegt dat je, ondanks alles, weer hier bent. Welk woord was het?",
+    opties:["iterum","rursus","tum","adhuc"], antwoord:"iterum",
+    hint:"Je kende dit woord al uit Hoofdstuk 29. Let op: rursus betekent ook 'weer, opnieuw' — dit is een ander woord met bijna dezelfde betekenis." },
+  puzzle_fin_lat_utique: { type:"multiple-choice",
+    vraag:"Een tweede woord vervaagt — het hart van je verklaring, het woord voor 'zeker, in elk geval'. Welk woord was het?",
+    opties:["utique","quidem","certe","tamen"], antwoord:"utique",
+    hint:"Ook dit woord ken je al uit Hoofdstuk 29. Let op: quidem en certe betekenen ook 'zeker' — dit is een ander, iets minder gangbaar woord." },
 };
 
 /* ---- CODEX MEMORIAE — het in-fictie naslagwerk van de speler, met zes
@@ -5083,6 +5087,353 @@ const SP_VOCAB_ENTRIES = {
    ontbreekt nog bewust — de Tydeus-lijn (al terugkerend tussen Hoofdstuk 5
    en 6, zie §11 batch 4) is de logische eerste kandidaat zodra dat wordt
    opgepakt. ---- */
+/* ---- KRONIEK: HANDGESCHREVEN VERTAKKINGEN (Gerben, 2026-08-18) — de Kroniek
+   (spKroniekLog/spChooseAndLog, singleplayer.js) leest voortaan als een door
+   Kleio geschreven annalenboek, in de derde persoon. Voor de STAT/DONE-
+   gated keuzes en de klassekeuze volstaat een generiek Kleio-sjabloon
+   (verbouwd in singleplayer.js zelf), maar voor de grote, ONOMKEERBARE
+   vertakkingen — scènes zonder DONE/STAT-tag met 2+ verschillende targets,
+   zoals CH1_000's Midas/Athena/Prometheus-keuze — verdient elke afzonderlijke
+   uitkomst een eigen met de hand geschreven zin, mét een korte samenvatting
+   van de paden die de speler daardoor liet vervagen (§0 van Chronica.md-stijl:
+   "de andere twee zullen intussen verder vervagen").
+
+   Vorm: SP_KRONIEK_FORKS[sceneId][targetId] = { kort, tekst }.
+   - kort: een beknopte naamwoordgroep ("het lot van koning Midas..."),
+     gebruikt in de afsluitende "de andere wegen vervaagden"-zin bij ELKE
+     ANDERE keuze in dezelfde scène (spKroniekForkLog, singleplayer.js).
+   - tekst: de volle Kleio-zin voor wanneer DEZE keuze zelf wordt gekozen,
+     met {subject}/{possessive}/... tokens (SpTextResolver).
+
+   Niet elke ongetagde meerkeuze-scène hoort hier thuis: reconvergerende
+   sfeerkeuzes (bv. CH1_A01 "vraag een koopman" — leidt sowieso terug naar
+   dezelfde volgende scène, niets gaat verloren) en leesval-vertaalkeuzes
+   (GOED/FOUT-targets — een fork-teaser zou daar per ongeluk verklappen welk
+   antwoord goed is, in strijd met [[chronica-leesval-neutrale-framing]])
+   blijven bewust op de generieke Kleio-zin in spChooseAndLog staan.
+
+   BOUWSTATUS (2026-08-18): Boek I (Proloog t/m Hoofdstuk 9), Boek II
+   (Hoofdstuk 10-14) en Boek III (Hoofdstuk 15-17) klaar. Boek II bleek op
+   CH10_000 na geen enkele echte fork te bevatten — de overige meerkeuze-
+   scènes in Hoofdstuk 11-14 zijn ofwel leesvallen (CH11) ofwel REQUIRE-gated
+   taalspoor-routing (CH12-14, automatisch, geen speler-zichtbare "welke van
+   de twee koos ik"-keuze). Boek III's vier forks zijn stuk voor stuk
+   RELATION-keuzes zonder CLEMENTIA/SEVERITAS-tag (zie skipTail hierboven).
+   Boek IV (Hoofdstuk 18-23) klaar: de vier grote "zijde"-keuzes die de
+   Finale-epiloogtokens voeden (CH19_GRE_004/CH19_LAT_005/CH22_GRE_004/
+   CH22_LAT_005), plus Sabinus/Cotta (CH20_LAT_008), de Sicilië-vloot
+   (CH19_GRE_ATH_003) en de aquilifer-sprong (CH20_LAT_004) als volle forks,
+   en Verres' pleidooistijl (CH21_LAT_001) als skipTail (zelfde overwinning,
+   andere toon).
+   Boek V (Hoofdstuk 24-27) klaar: het herhaalde "Onthoud/Laat los"-mechanisme
+   (H24-25, 8x) is skipTail — geen vertakking, alleen een FLAG die pas in
+   H28-29 wordt uitgelezen (zie memory chronica-h24-lethe-mnemosyne-zaadjes).
+   Overig: restauratie-interpretatie (CH24_GRE_007), de Vitruvius-triade
+   (CH24_LAT_002, 3-weg), Herakleitos/Parmenides (CH25_GRE_003), Marcus
+   Aurelius' filosofie-of-oorlog (CH26_LAT_008), Diocletianus' 3-wegs
+   bestuurshervorming (CH27_LAT_001) en de bergpas-route (CH27_LAT_006) als
+   volle forks.
+   Boek VI (Hoofdstuk 28-29 + Finale) klaar — daarmee is elk boek gedaan.
+   CH28/CH29 bleken zelf geen enkele hand-te-schrijven fork te bevatten (de
+   vleugel-hub is DONE-getagd, de rest is REQUIRE-routing op eerder gezette
+   flags — automatisch, geen speler-zichtbare "welke koos ik"-keuze). De
+   Finale wél: FIN_HER_003 (welk SOORT herinnering, abstracte categorieën,
+   veilig met kort-tail) en de vijf FIN_KEUZE_*-varianten (het allerlaatste
+   Clementia/Severitas-moment vóór Lethe, dat mede bepaalt welk van de vijf
+   eindes volgt) — die laatste MAXIMAAL vaag en skipTail: geen woord over
+   Lethes reactie of het einde zelf, alleen de emotionele beweging van de
+   keuze. Scènes die hier niet in staan vallen terug op de generieke
+   Kleio-zin — nooit een ongelogde keuze. */
+const SP_KRONIEK_FORKS = {
+  CH1_000: {
+    CH1_A01: { kort:"het lot van koning Midas en zijn gouden vloek in Sardis",
+      tekst:"{subject_cap} koos voor Sardis, waar een koning alles wat hij aanraakte in goud veranderde — en zou zo het verhaal van Midas' gulzige wens en zijn even wrede genezing van dichtbij meemaken." },
+    CH1_B01: { kort:"de geboorte van Athena op de top van de Olympos",
+      tekst:"{subject_cap} koos voor de top van de Olympos, waar iets op het punt stond te barsten — en zou zo getuige zijn van de geboorte van Athena, voltallig gewapend uit het hoofd van Zeus." },
+    CH1_C01: { kort:"het gestolen vuur van Prometheus in de kille vallei",
+      tekst:"{subject_cap} koos voor een kille vallei, waar het eerste vuur nog gestolen moest worden — en zou zo Prometheus' lot delen, de titaan die de mensheid een gave gaf die de goden hem nooit zouden vergeven." },
+  },
+  // Hoofdstuk 4 (Labyrint): Ariadnes gefluisterde raad ("Ad omne bivium,
+  // sinistram tene") wijst zelf al naar links — de "kort"-teasers blijven
+  // BEWUST vaag over wat er precies mis kan gaan rechts (geen leesval-
+  // spoiler, gewoon een kleine prikkel voor een volgende playthrough).
+  CH4_T06B: {
+    CH4_T07: { kort:"het rechte pad naar de Minotaurus",
+      tekst:"{subject_cap} vertrouwde op Ariadnes gefluisterde raad en hield links aan, recht op het monster af." },
+    CH4_T06R1: { kort:"een andere, dieper vertakte gang",
+      tekst:"{subject_cap} week af van Ariadnes fluistering en waagde het naar rechts, een gang in die zich sneller vertakte dan verwacht." },
+  },
+  CH5_008: {
+    CH5_008A: { kort:"Atalanta's eigen, stille jacht door het kreupelhout",
+      tekst:"{subject_cap} volgde Atalanta het kreupelhout in — stil, geduldig, op haar eigen spoor." },
+    CH5_008B: { kort:"Meleagers luidruchtige jacht met de andere Argonauten",
+      tekst:"{subject_cap} sloot aan bij Meleager en zijn groep Argonauten — luidruchtiger, maar met de moed van velen." },
+  },
+  CH7_002B: {
+    CH7_002_MEN: { kort:"het rustige gezelschap van Menelaos",
+      tekst:"{subject_cap} zocht Menelaos op — van de drie vrijers de enige die niet leek te wedijveren om indruk te maken." },
+    CH7_002_AIA: { kort:"het onstuimige gezelschap van Aias",
+      tekst:"{subject_cap} zocht Aias op — een reus van een man die zijn ongeduld amper achter een grijns verborg." },
+    CH7_002_DIO: { kort:"het felle gezelschap van de jonge Diomedes",
+      tekst:"{subject_cap} zocht Diomedes op — amper oud genoeg om er te mogen staan, en des te luider om dat te verbergen." },
+  },
+  // Hoofdstuk 8 (Ilias): dezelfde oorlog vanuit twee kanten — de "kort"-
+  // teaser voor de niet-gekozen zijde blijft opzettelijk vaag, precies zoals
+  // de Boodschapper het zelf al stelt ("wat er aan de andere kant gebeurt,
+  // zul je moeten vertrouwen op wie het je vertelt").
+  CH8_005: {
+    CH8_ACH_001: { kort:"de drukkende stilte in Achilles' eigen tent",
+      tekst:"{subject_cap} bleef bij Achilles, in de drukkende stilte van zijn tent, ver van het strijdgewoel." },
+    CH8_AGA_001: { kort:"het strijdgewoel aan Agamemnons zijde",
+      tekst:"{subject_cap} trok met het leger mee, aan Agamemnons zijde, midden in het strijdgewoel." },
+  },
+  CH8_EPI_009B2: {
+    CH8_EPI_009C: { kort:"de roem van de snelle Diomedes",
+      tekst:"{subject_cap} moedigde vooral Diomedes aan, de snelste van het hele leger." },
+    CH8_EPI_009D: { kort:"de sluwheid waarmee Odysseus zelfs een worstelperk speelde",
+      tekst:"{subject_cap} moedigde vooral Odysseus aan, die zelfs een worstelwedstrijd nog met sluwheid speelde." },
+    CH8_EPI_009E: { kort:"de stille eer die Nestor kreeg zonder te vechten",
+      tekst:"{subject_cap} keek vooral naar Nestor, die zonder één slag te slaan toch geëerd werd." },
+  },
+  // Hoofdstuk 9 (Val van Troje): zelfde principe als CH8_005 hierboven — de
+  // val van dezelfde stad, gezien van twee kanten.
+  CH9_005: {
+    CH9_TRO_001: { kort:"de laatste, onwetende dagen binnen de muren van Troje",
+      tekst:"{subject_cap} keek mee vanaf de muren, tussen de mensen van Troje die niet wisten dat ze hun laatste dagen beleefden." },
+    CH9_GRI_001: { kort:"de list op het strand, bij het Griekse leger",
+      tekst:"{subject_cap} keek mee vanaf het strand, bij het Griekse leger en de list die aan deze oorlog een einde zou maken." },
+  },
+  // Hoofdstuk 10 (taalspoor-hub, Chronica.md §7 — zie ook memory chronica-
+  // latin-greek-reading-gates): "Beide" is geen derde, afgewezen weg naast
+  // Grieks/Latijn — er is niets om te laten vervagen, dus skipTail + geen
+  // vermelding in elkaars afstand-zin (excludeFromTail).
+  CH10_000: {
+    CH10_000_GRIEKS: { kort:"Odysseus' lange terugtocht naar Ithaka",
+      tekst:"{subject_cap} koos het Griekse pad en volgde Odysseus op zijn lange terugtocht naar Ithaka." },
+    CH10_000_LATIJN: { kort:"Aeneas' tocht naar een stad die nog niet bestond",
+      tekst:"{subject_cap} koos het Latijnse pad en volgde Aeneas op zijn tocht naar een stad die nog niet bestond." },
+    CH10_000_BEIDE: { skipTail:true, excludeFromTail:true,
+      tekst:"{subject_cap} weigerde te kiezen en volgde zowel Odysseus als Aeneas — Grieks en Latijn, zoals de goden het zelf bedoeld hadden, allebei tot het einde toe." },
+  },
+  // Hoofdstuk 15-17 (Boek III): dit zijn geen "een van de twee paden vervaagt
+  // voorgoed"-forken zoals hierboven, maar RELATION-keuzes zonder eigen
+  // [CLEMENTIA]/[SEVERITAS]-tag — beide opties leiden na een korte reactie
+  // terug naar dezelfde vervolgscène (…_002J/…_003J e.d.), alleen de
+  // RELATION-waarde verschilt. Vandaar skipTail: geen "wat liet je achter"-
+  // zin (er is niets achtergelaten), wél de reactie zelf verwerkt — zelfde
+  // geest als spKroniekApproachLog, nu voor het handjevol keuzes dat buiten
+  // dat automatische systeem valt omdat de CNS-tag ontbreekt.
+  CH15_GRE_002: {
+    CH15_GRE_002A: { skipTail:true,
+      tekst:"{subject_cap} beloofde Doris te helpen waar {subject} kon, ook al riskeerde {subject} daarmee Stratons argwaan — een kleine, ongeziene belofte die iets tussen hen veranderde." },
+    CH15_GRE_002B: { skipTail:true,
+      tekst:"{subject_cap} zei niets — Doris' rekening was niet de {possessive} om zich mee te bemoeien — en voelde meteen dat er iets kleins tussen hen verschoof." },
+  },
+  CH15_LAT_002: {
+    CH15_LAT_002A: { skipTail:true,
+      tekst:"{subject_cap} behandelde Fortunata als wat ze nu was — een vrije vrouw, geen bediende meer — en zag haar, even maar oprecht, verrast opkijken." },
+    CH15_LAT_002B: { skipTail:true,
+      tekst:"{subject_cap} behandelde Fortunata zoals altijd, uit gemak — en zag iets in haar houding zich, heel even, weer sluiten." },
+  },
+  // De Thracische gladiator hier krijgt bewust geen naam in de Kroniek-tekst
+  // (hij heet in de brontekst al Spartacus, maar "over een paar jaar" is nog
+  // niets gebeurd) — spoiler-vaag houden, precies zoals Gerben vroeg.
+  CH16_LAT_003: {
+    CH16_LAT_003A: { skipTail:true,
+      tekst:"{subject_cap} knikte de Thracische gladiator kort toe, uit oprecht respect voor wie zo dadelijk voor zijn leven moest vechten — een knik die hij, verrast, beantwoordde." },
+    CH16_LAT_003B: { skipTail:true,
+      tekst:"{subject_cap} keek gewoon toe, zoals de rest van de menigte — voor {subject} was hij, voor nu, niet meer dan één gezicht onder velen." },
+  },
+  CH17_GRE_001: {
+    CH17_GRE_001A: { skipTail:true,
+      tekst:"{subject_cap} koos ervoor op Herodotos' verslag te vertrouwen — iemand moest het verhaal tenslotte opschrijven — en zag hem knikken, gewend aan reisgenoten die gewoon meegingen in het verhaal." },
+    CH17_GRE_001B: { skipTail:true,
+      tekst:"{subject_cap} bleef op {possessive} hoede — een verhaal wordt met elke navertelling weer anders — en Herodotos glimlachte eerder goedkeurend dan beledigd: \"Terecht. Ik zou mezelf ook niet zomaar geloven.\"" },
+  },
+  // Hoofdstuk 19-22 (Boek IV): dit zijn de grote, lang-doorwerkende "zijde"-
+  // keuzes (ch19_gre_zijde/ch19_lat_zijde/ch22_gre_zijde/ch22_lat_zijde,
+  // ch20_sabinus_cotta — zie SpTextResolver.lookup in singleplayer.js, die
+  // FLAG's voeden latere epiloog-tokens in de Finale). Echte, blijvende
+  // vertakkingen dus, met een vage "kort"-teaser — geen van beide zijden
+  // wordt hier verklapt als de "juiste".
+  CH19_GRE_004: {
+    CH19_GRE_ATH_001: { kort:"Athenes overtuiging dat leiding een prijs heeft",
+      tekst:"{subject_cap} koos de kant van Athene — de stad achter haar muren en haar vloot, overtuigd dat leiding nu eenmaal een prijs heeft." },
+    CH19_GRE_SPA_001: { kort:"Sparta's strijd voor de vrijheid van de bondgenoten",
+      tekst:"{subject_cap} koos de kant van Sparta — de bond die zei te vechten voor de vrijheid van de bondgenoten tegen Athenes rijk." },
+  },
+  CH19_LAT_005: {
+    CH19_LAT_CAE_001: { kort:"Caesars trouw aan zijn eigen soldaten",
+      tekst:"{subject_cap} koos de kant van Caesar — de generaal die zijn leger, en zijn eigen soldaten, nooit in de steek liet." },
+    CH19_LAT_POM_001: { kort:"de senaat, en het idee dat niemand groter mag worden dan de Republiek",
+      tekst:"{subject_cap} koos de kant van Pompeius en de senaat — mensen die meenden dat geen generaal groter mocht worden dan de Republiek zelf." },
+  },
+  CH19_GRE_ATH_003: {
+    CH19_GRE_ATH_003B_MEE: { kort:"het uitzicht vanaf het schip, ver van Athene",
+      tekst:"{subject_cap} voer zelf mee met de vloot naar Sicilië, ondanks Nicias' gewaarschuwde tegenstand." },
+    CH19_GRE_ATH_003B_GEBLEVEN: { kort:"wat er van de vloot en het schandaal onderweg werd",
+      tekst:"{subject_cap} bleef achter in Athene, terwijl de vloot zonder {object} naar Sicilië vertrok." },
+  },
+  CH20_LAT_004: {
+    CH20_LAT_004_AQUILIFER: { kort:"de sprong die {subject} zelf had kunnen wagen",
+      tekst:"{subject_cap} greep zelf de adelaar van het Tiende Legioen en sprong als eerste het water in, de Britto-Keltische speren tegemoet." },
+    CH20_LAT_004_VOLGT: { kort:"de rol van toeschouwer op het schip",
+      tekst:"{subject_cap} keek toe hoe de aquilifer van het Tiende Legioen zelf sprong, het water en de speren tegemoet." },
+  },
+  CH20_LAT_008: {
+    CH20_LAT_008_SABINUS: { kort:"Sabinus' aanpak: het kamp opbreken en vertrekken",
+      tekst:"{subject_cap} steunde Sabinus — het kamp opbreken en vertrekken, op Ambiorix' toezegging van veilige doortocht." },
+    CH20_LAT_008_COTTA: { kort:"Cotta's aanpak: blijven en het kamp verschansen",
+      tekst:"{subject_cap} steunde Cotta — blijven en het kamp verschansen, tot Caesar zelf bevel gaf." },
+  },
+  // Verres wordt hoe dan ook veroordeeld — beide opties zijn dus een andere
+  // TOON van dezelfde overwinning, geen vervaagd pad, vandaar skipTail.
+  CH21_LAT_001: {
+    CH21_LAT_002_LOGICA: { skipTail:true,
+      tekst:"{subject_cap} bepleitte de zaak met strakke logica en feitelijk bewijs — rekeningboeken en getuigenissen waaronder Verres' verdediging instortte." },
+    CH21_LAT_002_EMOTIE: { skipTail:true,
+      tekst:"{subject_cap} bepleitte de zaak met een vlammend appèl op het eergevoel van de senatoren, en zag het Forum diep geraakt toekijken." },
+  },
+  CH22_GRE_004: {
+    CH22_GRE_PTO_001: { kort:"Ptolemaeus' koers: een stabiel Egypte binnen eigen grenzen",
+      tekst:"{subject_cap} steunde Ptolemaeus en koos voor de consolidatie van Egypte binnen zijn natuurlijke grenzen." },
+    CH22_GRE_ANT_001: { kort:"Antigonos' koers: strijd voor het herstel van het eenheidsrijk",
+      tekst:"{subject_cap} steunde Antigonos en streed voor het herstel van het ene, ongedeelde rijk." },
+  },
+  CH22_LAT_005: {
+    CH22_LAT_OCT_001: { kort:"Octavianus' kant tegen de opstand",
+      tekst:"{subject_cap} koos de zijde van Octavianus om Fulvia's opstand neer te slaan." },
+    CH22_LAT_ANT_001: { kort:"de trouw aan Antonius en Fulvia in Perusia",
+      tekst:"{subject_cap} bleef Antonius en Fulvia trouw, verschanst met hen in Perusia." },
+  },
+  // Hoofdstuk 24-25 (Boek V): het "Onthoud/Laat los"-mechanisme (Chronica.md
+  // §7, zie ook memory chronica-h24-lethe-mnemosyne-zaadjes) is GEEN
+  // verhaalvertakking — beide opties keren meteen terug naar dezelfde
+  // vervolgscène, alleen een FLAG (ch24_gre_phidias=onthouden/losgelaten
+  // e.d.) verschilt, die pas in Hoofdstuk 28-29 wordt uitgelezen. Dus
+  // skipTail, en de tekst benadrukt het BEWUSTE van de keuze zelf, niet een
+  // gemist alternatief.
+  CH24_GRE_002: {
+    CH24_GRE_002_ONTHOUDEN: { skipTail:true, tekst:"{subject_cap} koos ervoor Phidias' werk bewust te onthouden — een klein gewicht dat {subject} met opzet meedroeg." },
+    CH24_GRE_002_LOSGELATEN: { skipTail:true, tekst:"{subject_cap} liet Phidias' werk los — er was gewoon te veel om alles vast te houden." },
+  },
+  CH24_GRE_003: {
+    CH24_GRE_003_ONTHOUDEN: { skipTail:true, tekst:"{subject_cap} onthield de volmaakte verhouding van Polykleitos' Doryphoros, met opzet." },
+    CH24_GRE_003_LOSGELATEN: { skipTail:true, tekst:"{subject_cap} liet de verhouding van Polykleitos' Doryphoros weer los, tussen alles wat er nog wachtte." },
+  },
+  CH24_GRE_004: {
+    CH24_GRE_004_ONTHOUDEN: { skipTail:true, tekst:"{subject_cap} onthield Praxiteles' marmer dat leek te voelen, met opzet." },
+    CH24_GRE_004_LOSGELATEN: { skipTail:true, tekst:"{subject_cap} liet Praxiteles' marmer weer los, tussen alles wat er nog wachtte." },
+  },
+  CH24_GRE_006: {
+    CH24_GRE_006_ONTHOUDEN: { skipTail:true, tekst:"{subject_cap} onthield de Kolossus van Rhodos, met opzet." },
+    CH24_GRE_006_LOSGELATEN: { skipTail:true, tekst:"{subject_cap} liet de Kolossus van Rhodos weer los, tussen alles wat er nog wachtte." },
+  },
+  CH24_LAT_003: {
+    CH24_LAT_003_ONTHOUDEN: { skipTail:true, tekst:"{subject_cap} onthield het aquaduct en zijn haarfijne precisie, met opzet." },
+    CH24_LAT_003_LOSGELATEN: { skipTail:true, tekst:"{subject_cap} liet het aquaduct weer los, tussen alles wat er nog wachtte." },
+  },
+  CH24_LAT_005: {
+    CH24_LAT_005_ONTHOUDEN: { skipTail:true, tekst:"{subject_cap} onthield het Altaar van de Vrede, met opzet." },
+    CH24_LAT_005_LOSGELATEN: { skipTail:true, tekst:"{subject_cap} liet het Altaar van de Vrede weer los, tussen alles wat er nog wachtte." },
+  },
+  CH25_GRE_004: {
+    CH25_GRE_004_ONTHOUDEN: { skipTail:true, tekst:"{subject_cap} onthield het idee dat pas eeuwen later gelijk zou krijgen, met opzet." },
+    CH25_GRE_004_LOSGELATEN: { skipTail:true, tekst:"{subject_cap} liet het idee weer los, tussen alle andere theorieën van die dag." },
+  },
+  CH25_LAT_EINDE: {
+    CH25_LAT_EINDE_ONTHOUDEN: { skipTail:true, tekst:"{subject_cap} onthield Plinius' brief, met opzet." },
+    CH25_LAT_EINDE_LOSGELATEN: { skipTail:true, tekst:"{subject_cap} liet ook deze brief los, tussen alles wat {subject} die dag had gezien." },
+  },
+  CH24_GRE_007: {
+    CH24_GRE_007_COMPLEET: { kort:"de Boodschappers verbeelding van hoe de beelden er ooit compleet uitzagen",
+      tekst:"{subject_cap} liet de Boodschapper de Nike en de Aphrodite compleet verbeelden, hoofd en armen erbij." },
+    CH24_GRE_007_GEBROKEN: { kort:"de stille kracht van de beelden zoals de tijd ze achterliet",
+      tekst:"{subject_cap} liet de Nike en de Aphrodite precies zo, gebroken, zoals de tijd ze had achtergelaten." },
+  },
+  CH24_LAT_002: {
+    CH24_LAT_002_FIRMITAS: { kort:"Vitruvius' nadruk op wat blijft staan",
+      tekst:"{subject_cap} koos firmitas — het moet blijven staan, wat er ook gebeurt." },
+    CH24_LAT_002_UTILITAS: { kort:"Vitruvius' nadruk op wat ergens goed voor is",
+      tekst:"{subject_cap} koos utilitas — het moet ergens goed voor zijn." },
+    CH24_LAT_002_VENUSTAS: { kort:"Vitruvius' nadruk op wat de moeite waard is om te zien",
+      tekst:"{subject_cap} koos venustas — het moet de moeite waard zijn om te zien." },
+  },
+  CH25_GRE_003: {
+    CH25_GRE_003_HERAKLEITOS: { kort:"Herakleitos' overtuiging dat alles voortdurend verandert",
+      tekst:"{subject_cap} koos Herakleitos' kant — alles verandert, altijd, als een rivier die nooit twee keer hetzelfde water draagt." },
+    CH25_GRE_003_PARMENIDES: { kort:"Parmenides' overtuiging dat het ware Zijn nooit verandert",
+      tekst:"{subject_cap} koos Parmenides' kant — het ware Zijn verandert nooit, wat de zintuigen ook beweren." },
+  },
+  CH26_LAT_008: {
+    CH26_LAT_008_STOICIJN: { kort:"de filosofie die Marcus Aurelius bij het kampvuur stil maakte",
+      tekst:"{subject_cap} vroeg Marcus Aurelius naar de filosofie die hem, zelfs hier langs de Donau, stil maakte." },
+    CH26_LAT_008_OORLOG: { kort:"de oorlog langs de Donau die Marcus Aurelius geen rust liet",
+      tekst:"{subject_cap} vroeg Marcus Aurelius naar de oorlog die hem geen rust liet." },
+  },
+  CH27_LAT_001: {
+    CH27_LAT_001_GENERAALS: { kort:"het plan om het bestuur te verdelen over vertrouwde generaals",
+      tekst:"{subject_cap} stelde voor het bestuur te verdelen over een paar vertrouwde generaals, elk met een eigen leger en gebied." },
+    CH27_LAT_001_OPVOLGER: { kort:"het plan om één sterke opvolger te trainen",
+      tekst:"{subject_cap} stelde voor één sterke, bekwame opvolger te kiezen en grondig te trainen." },
+    CH27_LAT_001_PROVINCIES: { kort:"het plan om macht naar de steden en provincies te brengen",
+      tekst:"{subject_cap} stelde voor de steden en provincies zelf meer macht te geven om lokaal te beslissen." },
+  },
+  CH27_LAT_006: {
+    CH27_LAT_006_WEG: { kort:"de langere, veiligere weg langs de rivier",
+      tekst:"{subject_cap} vertrouwde de koerier en nam de langere weg langs de rivier." },
+    CH27_LAT_006_BERGPAS: { kort:"de kortere, riskante bergpas",
+      tekst:"{subject_cap} waagde het toch via de kortere bergpas." },
+  },
+  // Finale: welk SOORT herinnering Mnemosyne voorlegt (mens/keuze/les) is een
+  // abstracte categorie, geen concreet plot — de "kort"-tail hier verklapt
+  // dus niets, in tegenstelling tot de FIN_KEUZE_*-groep hieronder.
+  FIN_HER_003: {
+    FIN_HER_003A: { kort:"een herinnering aan een mens die {subject} onderweg hielp",
+      tekst:"Toen Mnemosyne vroeg welke herinnering {subject} het felst zou verdedigen, koos {subject} voor een mens die {subject} onderweg had geholpen." },
+    FIN_HER_003B: { kort:"een herinnering aan een keuze die {subject} ooit maakte",
+      tekst:"Toen Mnemosyne vroeg welke herinnering {subject} het felst zou verdedigen, koos {subject} voor een keuze die {subject} ooit had gemaakt." },
+    FIN_HER_003C: { kort:"een herinnering aan iets dat {subject} onderweg leerde",
+      tekst:"Toen Mnemosyne vroeg welke herinnering {subject} het felst zou verdedigen, koos {subject} voor iets dat {subject} onderweg had geleerd." },
+  },
+  // Finale, allerlaatste Clementia/Severitas-moment vóór de confrontatie met
+  // Lethe (Chronica.md's vijf eindes — FIN_KEUZE_000 routeert op de vooraf
+  // opgebouwde fin_tendency naar één van deze vijf varianten). MAXIMAAL vaag
+  // gehouden: geen woord over Lethes reactie of welk eind volgt, alleen de
+  // emotionele beweging van de keuze zelf — en bewust skipTail, want zelfs
+  // een korte "wat had kunnen zijn"-teaser zou hier al te veel verklappen
+  // over hoe dicht dit bij een van de vijf eindes ligt.
+  FIN_KEUZE_NEUTRAAL: {
+    FIN_KEUZE_NEUTRAAL_A: { skipTail:true,
+      tekst:"Aan het einde bleef {subject} zichzelf trouw — nooit radicaal, altijd afwegend — en noemde dat, voor het eerst hardop, een vorm van moed." },
+    FIN_KEUZE_NEUTRAAL_B: { skipTail:true,
+      tekst:"Aan het einde koos {subject}, voor het eerst, toch een duidelijke kant — een breuk met alles wat daarvoor kwam." },
+  },
+  FIN_KEUZE_CLEM_MED: {
+    FIN_KEUZE_CLEM_MED_A: { skipTail:true,
+      tekst:"Aan het einde bleef {subject} zacht, zoals bijna altijd — trouw aan een patroon dat {subject} zelf had opgebouwd." },
+    FIN_KEUZE_CLEM_MED_B: { skipTail:true,
+      tekst:"Aan het einde stelde {subject}, voor het eerst, een duidelijke grens — een breuk met de zachtheid die tot dan toe overheerste." },
+  },
+  FIN_KEUZE_CLEM_HOOG: {
+    FIN_KEUZE_CLEM_HOOG_A: { skipTail:true,
+      tekst:"Aan het einde bleef {subject} tot het uiterste trouw aan {possessive} zachtheid — een patroon dat, tot dit allerlaatste moment, nooit brak." },
+    FIN_KEUZE_CLEM_HOOG_B: { skipTail:true,
+      tekst:"Aan het einde liet {subject}, heel even, twijfel toe — het enige moment waarop een verder onwrikbaar patroon leek te wankelen." },
+  },
+  FIN_KEUZE_SEV_MED: {
+    FIN_KEUZE_SEV_MED_A: { skipTail:true,
+      tekst:"Aan het einde bleef {subject} streng, zoals bijna altijd — trouw aan een patroon dat {subject} zelf had opgebouwd." },
+    FIN_KEUZE_SEV_MED_B: { skipTail:true,
+      tekst:"Aan het einde liet {subject}, voor het eerst, mildheid toe — een breuk met de hardheid die tot dan toe overheerste." },
+  },
+  FIN_KEUZE_SEV_HOOG: {
+    FIN_KEUZE_SEV_HOOG_A: { skipTail:true,
+      tekst:"Aan het einde bleef {subject} tot het uiterste trouw aan {possessive} hardheid — een patroon dat, tot dit allerlaatste moment, nooit brak." },
+    FIN_KEUZE_SEV_HOOG_B: { skipTail:true,
+      tekst:"Aan het einde liet {subject}, heel even, twijfel toe — het enige moment waarop een verder onwrikbaar patroon leek te wankelen." },
+  },
+};
 const SP_PAYOFFS = [
   { id:"ch2_000_echo_ch1_lijn_a", type:"echo", trigger:{scene:"CH2_000"},
     condition:{flags:{ch1_lijn:"A"}}, priority:0,

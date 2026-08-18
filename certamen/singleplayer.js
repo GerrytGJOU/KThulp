@@ -250,6 +250,13 @@ async function spToggleEquipTitle(id){
 
 /* ---- VOORNAAMWOORDEN-RESOLVER ---- */
 function spCapitalize(str){ return str ? str.charAt(0).toUpperCase()+str.slice(1) : str; }
+function spLowerFirst(str){ return str ? str.charAt(0).toLowerCase()+str.slice(1) : str; }
+// Voor generieke Kroniek-zinnen die een keuze-label achteraan plakken en er
+// zelf een punt achter zetten: sommige labels zijn al een volledig
+// aangehaald citaat dat op ."/!"/?" eindigt (bv. FIN_003 se dialoogkeuzes),
+// en kregen dan een dubbel leesteken: `...worden.".`. Alleen een punt
+// toevoegen als het label zelf nog geen eigen zinseinde heeft.
+function spSentenceEnd(text){ return /[.!?]["”]?$/.test(text||"") ? "" : "."; }
 
 /* Scène-tekst mag (en vanaf Hoofdstuk 1 vaak: móét) uit meerdere alinea's
    bestaan, gescheiden door een lege regel in de CNS-bron. HTML negeert
@@ -300,6 +307,8 @@ const SpTextResolver = {
       case "subject_cap":    return spCapitalize(p.subj);
       case "object_cap":     return spCapitalize(p.obj);
       case "possessive_cap": return spCapitalize(p.poss);
+      case "held":     return SP_HELD_NOUN[state.gender] || SP_HELD_NOUN.man;
+      case "held_cap": return spCapitalize(SP_HELD_NOUN[state.gender] || SP_HELD_NOUN.man);
       case "tendency_address":     return spTendencyAddressPhrase(state);
       case "tendency_address_cap": return spCapitalize(spTendencyAddressPhrase(state));
       case "eigen_wapen":          return SP_CLASS_WEAPON_NOUN[state.classId] || "wapen";
@@ -454,6 +463,28 @@ function spTendencyStoryVariant(id, state){
 // etc., singleplayer-data.js), maar dan van classId naar een gewoon
 // zelfstandig naamwoord voor in de verteltekst.
 const SP_CLASS_WEAPON_NOUN = { boogschutter:"boog", hopliet:"speer", cavalerie:"zwaard" };
+// Gender-passend zelfstandig naamwoord voor de Kroniek (Kleio's verteltoon,
+// zie spKroniekLog): "held"/"heldin"/"held" — nonbinair krijgt bewust "held"
+// terug (zelfde woord als man), want een verzonnen derde vorm zou net zo
+// gemarkeerd aanvoelen als het probleem dat het moet oplossen.
+const SP_HELD_NOUN = { man:"held", vrouw:"heldin", nonbinair:"held" };
+// Korte, verhalende omschrijving per stat (SP_STAT_DEFS.domein hierboven is
+// te lang/technisch voor een lopende Kroniek-zin) — gebruikt in
+// spStatInvestKroniekText en spKleioStatClause hieronder.
+const SP_STAT_VIRTUE = {
+  vis:"rauwe spierkracht", agilitas:"behendigheid", robur:"doorzettingsvermogen",
+  ingenium:"scherpzinnigheid", prudentia:"mensenkennis", gratia:"overredingskracht",
+};
+// Kroniek-tekst voor de klassekeuze bij het Orakel van Chronos (PRO_003/
+// PRO_004A-C, singleplayer-data.js) — met de twee NIET gekozen wapens
+// erbij, want dat is precies wat deze eenmalige, onomkeerbare keuze
+// betekenisvol maakt (Gerben, 2026-08-18: "de andere twee verhalen
+// achterliet"-principe, hier toegepast op wapens i.p.v. hoofdstuklijnen).
+const SP_KRONIEK_KLASSE = {
+  boogschutter:"Bij het Orakel van Chronos opende {subject} de oude kist en koos de jachtboog — het hout lag warm en vertrouwd in {possessive} greep, alsof {possessive} vingers de vorm al kenden voor {subject} hem ooit zag. Vanaf die dag droeg {subject} geduld en een feilloos oog met zich mee, en zou {subject} nooit meer weten hoe het koude brons van de speer of het gewicht van de ruitersporen had aangevoeld.",
+  hopliet:"Bij het Orakel van Chronos opende {subject} de oude kist en greep naar de speer — het koude brons gaf {possessive_cap} een vreemde kalmte, alsof de grond onder {possessive} voeten steviger werd. Vanaf die dag droeg {subject} standvastigheid met zich mee, en zou {subject} nooit meer weten hoe de gespannen pees van de boog of het gewicht van de ruitersporen had aangevoeld.",
+  cavalerie:"Bij het Orakel van Chronos opende {subject} de oude kist en tilde de ruitersporen op — lichter dan verwacht, alsof ze meteen prijsgaven waarvoor ze gemaakt waren. Vanaf die dag droeg {subject} snelheid en overzicht met zich mee, en koos {subject} ervoor voortaan als Cavalerist door het leven te gaan, terwijl de pees van de boog en het brons van de speer voorgoed onaangeroerd in de aarde bleven.",
+};
 // Kiest een willekeurige, gender-passende aanspreekvorm bij de opgebouwde
 // Clementia/Severitas-houding (spApproachTendency) — zie SP_TENDENCY_PHRASES
 // (singleplayer-data.js). Vanaf Hoofdstuk 3 gebruikt in NPC-DIALOGUE/TEXT via
@@ -1277,7 +1308,9 @@ function spInvestStat(key){
   const statSpentSinceAward = {...spent, [key]:(spent[key]||0)+1};
   const statLog = [...(SP_STATE.statLog||[]), { key, van:val, naar:val+1, hoofdstuk:chapterNr, t:Date.now() }];
   spSaveProgress({ stats, skillpoints:points-cost, statSpentSinceAward, statLog });
-  spKroniekLog(`Je investeerde een statpunt in ${SP_STAT_DEFS[key]?.nm||key} (${val} → ${val+1}).`);
+  spKroniekLog(SpTextResolver.resolve(
+    `Na dit hoofdstuk nam {subject} de tijd om te oefenen — {possessive} ${SP_STAT_VIRTUE[key]||SP_STAT_DEFS[key]?.nm||key} groeide er zichtbaar door.`,
+    SP_STATE));
   go("spStats");
 }
 // Welke saveslot toont het Certamen-profiel (battle.js) als statistieken-
@@ -1403,6 +1436,48 @@ function spSceneReaction(scene, approach){
   }
   return null;
 }
+// ---- KLEIO-STEM (Gerben, 2026-08-18): de Kroniek wordt vanaf nu geschreven
+// alsof Kleio, muze van de geschiedschrijving, meekijkt — een derde-persoon
+// annalenstijl met {subject}/{possessive}-tokens (SpTextResolver) i.p.v. de
+// mechanische "Bij X: Y"-regel van voorheen. spKleioClause hieronder zet een
+// keuze-label (meestal gebiedende wijs, "Praat de poortwacht om...") om in
+// een derde-persoon-verleden-tijd bijzin ("praatte de poortwacht om...") via
+// een kleine werkwoordenlijst met de vaakst voorkomende openingswerkwoorden
+// in de CNS-data; een onbekend werkwoord levert null op, en de aanroeper
+// valt dan terug op het label zelf (nooit een foutieve vervoeging verzinnen).
+const SP_KLEIO_VERB_MAP = {
+  zie:"zag", ga:"ging", kijk:"keek", volg:"volgde", keer:"keerde", steek:"stak",
+  blijf:"bleef", luister:"luisterde", vind:"vond", hoor:"hoorde", wacht:"wachtte",
+  laat:"liet", erken:"erkende", bekijk:"bekeek", onthoud:"onthield", vaar:"voer",
+  voel:"voelde", vraag:"vroeg", loop:"liep", neem:"nam", help:"hielp", stap:"stapte",
+  weet:"wist", kies:"koos", spreek:"sprak", bedank:"bedankte", grijp:"greep",
+  overweeg:"overwoog", zoek:"zocht", twijfel:"twijfelde", reis:"reisde", maak:"maakte",
+  trek:"trok", lees:"las", houd:"hield", merk:"merkte", praat:"praatte",
+  overtuig:"overtuigde", vecht:"vocht", red:"redde", vertel:"vertelde", zwijg:"zweeg",
+  verberg:"verborg", toon:"toonde", sla:"sloeg", ren:"rende", antwoord:"antwoordde",
+  weiger:"weigerde", aanvaard:"aanvaardde", bied:"bood", geef:"gaf", deel:"deelde",
+  roep:"riep", draai:"draaide", duw:"duwde", open:"opende", sluit:"sloot",
+  verlaat:"verliet", stuur:"stuurde", volhard:"volhardde", buig:"boog", omarm:"omarmde",
+  weersta:"weerstond", vermijd:"vermeed", verdedig:"verdedigde", eer:"eerde",
+  beloof:"beloofde", zweer:"zwoer", knik:"knikte", glimlach:"glimlachte", sta:"stond",
+  klim:"klom", spring:"sprong", zwem:"zwom", roei:"roeide", proef:"proefde",
+};
+function spKleioClause(label){
+  const words = label.trim().split(/\s+/);
+  const key = (words[0]||"").toLowerCase().replace(/^["“]+|["”,.!?]+$/g,"");
+  const conj = SP_KLEIO_VERB_MAP[key];
+  if(!conj || words.length<2) return null;
+  const rest = words.slice(1).join(" ");
+  // Alleen het EERSTE werkwoord van het label wordt vervoegd — bij een
+  // samengestelde imperatief ("Blijf op afstand en volg haar spoor...",
+  // CH2_K05_OPEN) laat dat een tweede, nog-onvervoegde gebiedende wijs
+  // staan, of een resterende 2e-persoonsverwijzing ("...raak je haar
+  // kwijt"). Dat levert een grammaticaal gemixte zin op — veiliger om dan
+  // helemaal niet te vervoegen en op de citaat-fallback terug te vallen
+  // (spChooseTrackedPath/spChooseAndLog) dan een half-foute zin te loggen.
+  if(/\b(je|jij|jou|jouw)\b/i.test(rest)) return null;
+  return conj+" "+rest;
+}
 // Kroniek (Chronica.md §12, Deel 1.5 van de spec): "een doorlopend,
 // in-fictie logboek van beslissingen... geschreven als annalen, niet als
 // menu". Eén regel tekst per noemenswaardige gebeurtenis, gegroepeerd per
@@ -1421,10 +1496,111 @@ function spKroniekLog(tekst){
 function spChooseTrackedPath(target, approach){
   const scene = SP_SCENES.get(SP_STATE.node);
   const choice = scene?.choices.find(c=>c.target===target && (c.statReq||c.done));
-  if(choice){
+  if(choice && SpTextResolver.resolve(choice.label, SP_STATE).trim()){
+    const title = SpTextResolver.resolve(scene.title, SP_STATE);
     const label = SpTextResolver.resolve(choice.label, SP_STATE);
-    const suffix = choice.statReq ? ` (${SP_STAT_DEFS[choice.statReq.key]?.nm||choice.statReq.key})` : "";
-    spKroniekLog(`Bij "${SpTextResolver.resolve(scene.title, SP_STATE)}": ${label}${suffix}.`);
+    const clause = spKleioClause(label);
+    let sentence;
+    if(choice.statReq){
+      const virtue = SP_STAT_VIRTUE[choice.statReq.key] || SP_STAT_DEFS[choice.statReq.key]?.nm || choice.statReq.key;
+      sentence = clause
+        ? `Bij "${title}": {subject_cap} ${clause} — {possessive} ${virtue} deed de rest.`
+        : `Bij "${title}" zette {subject} {possessive} ${virtue} in: ${spLowerFirst(label)}${spSentenceEnd(label)}`;
+    } else {
+      sentence = clause
+        ? `Bij "${title}" liet {subject} zich leiden naar een nieuw verhaal: {subject} ${clause} — de andere lijnen van dit hoofdstuk wachtten intussen nog op {possessive} terugkeer.`
+        : `Bij "${title}" liet {subject} zich leiden naar een nieuw verhaal: ${spLowerFirst(label)} — de andere lijnen van dit hoofdstuk wachtten intussen nog op {possessive} terugkeer.`;
+    }
+    spKroniekLog(SpTextResolver.resolve(sentence, SP_STATE));
+  }
+  spChoosePath(target, approach);
+}
+// Logt een handgeschreven vertakking uit SP_KRONIEK_FORKS (singleplayer-
+// data.js): de volle Kleio-zin van de gekozen tak, gevolgd door een korte
+// "de andere wegen vervaagden"-zin opgebouwd uit de `kort`-samenvattingen
+// van de NIET gekozen takken in diezelfde scène. Geeft false terug als deze
+// scène (nog) geen handgeschreven entry heeft — spChooseAndLog valt dan
+// terug op de generieke Kleio-zin.
+function spKroniekForkLog(sceneId, target){
+  const fork = SP_KRONIEK_FORKS[sceneId];
+  if(!fork || !fork[target]) return false;
+  const chosen = fork[target];
+  // skipTail/excludeFromTail (Chronica.md's taalspoor-hub CH10_000 is de reden
+  // hiervoor): "Beide" is geen afgewezen pad naast Grieks/Latijn — er is dan
+  // niets om te laten vervagen, dus geen auto-staart bij zo'n keuze, én zo'n
+  // keuze telt zelf ook niet mee als "achtergelaten" optie bij de ANDERE twee.
+  let tail = "";
+  if(!chosen.skipTail){
+    const others = Object.entries(fork).filter(([t,o])=>t!==target && !o.excludeFromTail).map(([,o])=>o.kort);
+    if(others.length===1) tail = ` De weg naar ${others[0]} vervaagde intussen verder.`;
+    else if(others.length>1) tail = ` De wegen naar ${others.slice(0,-1).join(", ")} en ${others[others.length-1]} vervaagden intussen verder.`;
+  }
+  spKroniekLog(SpTextResolver.resolve(chosen.tekst+tail, SP_STATE));
+  return true;
+}
+// Gender-neutrale omschrijving van de gekozen Clementia/Severitas/Neutraal-
+// houding zelf (los van SP_TENDENCY_PHRASES, dat is de opgebouwde TREND over
+// meerdere keuzes heen — dit is de eenmalige klik van nu, voor de Kroniek).
+const SP_APPROACH_DESC = {
+  CLEMENTIA: "liet {possessive} mededogen spreken",
+  SEVERITAS: "koos de harde, eerlijke weg",
+  NEUTRAL:   "hield het hoofd koel",
+};
+// Clementia/Severitas-keuzes (Chronica.md §8/§17) hebben al een handgeschreven
+// REACTION: per scène (spSceneReaction, hierboven) — de NPC-reactie die ook al
+// als toast verschijnt. Die tekst is precies het materiaal dat Gerben bedoelt
+// met "iets dat diegene lang zou onthouden" (2026-08-18), dus hier hergebruikt
+// i.p.v. apart voor de Kroniek herschreven: geen nieuw handwerk per scène nodig,
+// dit dekt automatisch ALLE approach-keuzes in de hele campagne.
+function spKroniekApproachLog(scene, choice){
+  const title = SpTextResolver.resolve(scene.title, SP_STATE);
+  const reaction = spSceneReaction(scene, choice.approach);
+  const desc = SP_APPROACH_DESC[choice.approach] || "maakte een keuze";
+  const sentence = reaction
+    ? `Bij "${title}": {subject_cap} ${desc} tegenover ${reaction.nm}. ${reaction.text} — een moment dat ${reaction.nm} niet snel zou vergeten.`
+    : `Bij "${title}": {subject_cap} ${desc}.`;
+  spKroniekLog(SpTextResolver.resolve(sentence, SP_STATE));
+}
+// Scènes waar spHookReward (of een vergelijkbare hook) al een volledige,
+// handgeschreven Kroniek-regel logt zodra de VOLGENDE scène laadt (bv. PRO_003,
+// de klassekeuze — zie SP_KRONIEK_KLASSE) — de klik op PRO_003 zelf mag dus
+// geen tweede, generieke regel toevoegen. Uitbreidbaar met 1 regel per geval.
+const SP_KRONIEK_SKIP = new Set(["PRO_003"]);
+// Voor gewone (ongetagde) vertakkingen: elke scène met 2+ zichtbare keuzes
+// is een echte beslissing en verdient een Kroniek-regel, ook zonder DONE/
+// STAT-tag (spChooseTrackedPath hierboven blijft voorbehouden aan díe twee
+// gevallen). Approach-keuzes (Clementia/Severitas/Neutraal) gaan via
+// spKroniekApproachLog; een handgeschreven entry in SP_KRONIEK_FORKS krijgt
+// anders voorrang; zonder zo'n entry valt dit terug op een korte, generieke
+// Kleio-zin (spKleioClause) — bewust geen "wat je achterliet"-zin in de
+// generieke variant, want zonder samenvattingen van de zusterkeuzes zou dat
+// alleen de rauwe knoptekst van de andere opties herhalen.
+function spChooseAndLog(target, approach){
+  const scene = SP_SCENES.get(SP_STATE.node);
+  // Approach-keuzes (Clementia/Severitas/Neutraal) delen vaak hetzelfde
+  // target (alle drie -> dezelfde vervolgscène) — puur op target zoeken zou
+  // dan altijd de EERSTE van de drie treffen, ongeacht welke knop de speler
+  // echt indrukte. Eerst op target+approach matchen, met (c.approach||"")
+  // omdat untagged keuzes c.approach=null hebben tegenover approach="".
+  const choice = scene?.choices.find(c=>c.target===target && (c.approach||"")===(approach||""))
+    || scene?.choices.find(c=>c.target===target);
+  if(scene && choice && !SP_KRONIEK_SKIP.has(SP_STATE.node) && scene.choices.filter(spChoiceVisible).length>1){
+    if(choice.approach){
+      spKroniekApproachLog(scene, choice);
+    } else if(!spKroniekForkLog(SP_STATE.node, target)){
+      const title = SpTextResolver.resolve(scene.title, SP_STATE);
+      const label = SpTextResolver.resolve(choice.label, SP_STATE);
+      // Sommige REQUIRE-gated keuzes (bv. CH29_GRE_001, de Sicilië-echo) zijn
+      // pure vlag-routing zonder eigen knoptekst — geen bewuste beslissing
+      // van de speler, dus niets om te loggen (i.p.v. de kale "koos zij: ."
+      // die hier anders van zou overblijven).
+      if(!label.trim()) return spChoosePath(target, approach);
+      const clause = spKleioClause(label);
+      const sentence = clause
+        ? `Bij "${title}": {subject_cap} ${clause}.`
+        : `Bij "${title}" koos {subject}: ${spLowerFirst(label)}${spSentenceEnd(label)}`;
+      spKroniekLog(SpTextResolver.resolve(sentence, SP_STATE));
+    }
   }
   spChoosePath(target, approach);
 }
@@ -1597,6 +1773,7 @@ SCREENS.spPlay = function(){
         }
         const onclick = isDone ? `spChoiceAlreadyDone(${openCount})`
           : (c.statReq||c.done) ? `spChooseTrackedPath('${c.target}','${c.approach||""}')`
+          : visibleChoices.length>1 ? `spChooseAndLog('${c.target}','${c.approach||""}')`
           : `spChoosePath('${c.target}','${c.approach||""}')`;
         return `<button class="btn ${isDone?"":"btn-gold "}btn-block lg" style="margin-top:8px${isDone?";opacity:.6":""}" onclick="${onclick}">${label}</button>`;
       }).join("")
@@ -1980,6 +2157,10 @@ function spChapterLabel(node){
     const ch = SP_CAMPAIGN.find(c=>c.nr===+m[1]);
     return ch ? ("Hoofdstuk "+m[1]+" — "+ch.nm) : ("Hoofdstuk "+m[1]);
   }
+  // FIN_-nodes (de Finale) misten dit tot 2026-08-18 — elke Kroniek-regel
+  // die daar gelogd werd groepeerde stilletjes onder een lege "—"-kop
+  // (spCodexKroniekHTML) i.p.v. onder een herkenbare Finale-titel.
+  if(node.indexOf("FIN_")===0) return SP_CAMPAIGN.find(c=>c.type==="finale")?.nm || "Finale";
   return "";
 }
 function spChapterEyebrowHTML(){
@@ -2009,7 +2190,7 @@ function spHookReward(text){
     toast("Wapen gekozen!", BM_IDENT
       ? "Je pad is bepaald. Dit wapen zal je overal vergezellen waar je nog terechtkomt."
       : "Je pad is bepaald. Log in met je klascode om dit wapen ook buiten dit verhaal te laten meetellen.");
-    spKroniekLog(`Bij het Orakel van Chronos koos je je pad: ${fields.class}.`);
+    spKroniekLog(SpTextResolver.resolve(SP_KRONIEK_KLASSE[classId] || `Bij het Orakel van Chronos koos {subject} {possessive} pad: ${fields.class}.`, SP_STATE));
   }
 }
 // Eén of meerdere codex-id's (`,`/`;`/regel-gescheiden) in één CODEX:-sectie —
