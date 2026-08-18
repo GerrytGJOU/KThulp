@@ -805,30 +805,32 @@ const SP_GENDER_OPTIONS = [
 
 /* ---- CLEMENTIA/SEVERITAS-AANSPREKING — vanaf Hoofdstuk 3 mogen NPC's de
    speler aanspreken naar aanleiding van de stil opgebouwde Clementia/
-   Severitas-houding (zie spApproachTendency, singleplayer.js). %NOUN% wordt
-   vervangen door het gender-passende zelfstandig naamwoord (SP_TENDENCY_NOUN)
-   voor gebruik via {tendency_address}/{tendency_address_cap} in TEXT/DIALOGUE
-   (SpTextResolver). Bewust meerdere varianten per houding — en géén "wiens"/
-   "wier" in de neutrale zinnen, want die zijn niet gender-neutraal genoeg. */
-const SP_TENDENCY_NOUN = { man:"man", vrouw:"vrouw", nonbinair:"persoon" };
+   Severitas-houding (zie spApproachTendency, singleplayer.js), voor gebruik
+   via {tendency_address}/{tendency_address_cap} in TEXT/DIALOGUE
+   (SpTextResolver). Leerlingfeedback (2026-08-18): "persoon bekend om een
+   harde hand" leest als een letterlijke bijnaam/naam i.p.v. spreektaal — een
+   natuurlijker "iemand die..."-constructie, met %POSS% voor het gender-
+   passende bezittelijk voornaamwoord (zijn/haar/hun) waar dat past. Bewust
+   meerdere varianten per houding — en géén "wiens"/"wier" in de neutrale
+   zinnen, want die zijn niet gender-neutraal genoeg. */
 const SP_TENDENCY_PHRASES = {
   clementia: [
-    "%NOUN% met een vriendelijke reputatie",
-    "zachtmoedige %NOUN%",
-    "%NOUN% bekend om een zachte hand",
-    "%NOUN% die eerder troost dan straft, naar men zegt",
+    "iemand met een vriendelijke reputatie",
+    "iemand die eerder troost dan straft, naar men zegt",
+    "iemand die bekend staat om %POSS% zachte hand",
+    "iemand die zelden hard oordeelt",
   ],
   severitas: [
-    "strenge %NOUN%",
-    "%NOUN% met een onverbiddelijke reputatie",
-    "%NOUN% die geen moment aarzelt, naar men zegt",
-    "%NOUN% bekend om een harde hand",
+    "iemand met een onverbiddelijke reputatie",
+    "iemand die geen moment aarzelt, naar men zegt",
+    "iemand die bekend staat om %POSS% harde hand",
+    "iemand die zelden mild oordeelt",
   ],
   neutraal: [
-    "%NOUN% van wie de reputatie nog alle kanten op kan",
-    "%NOUN% die zich nog niet heeft laten kennen",
-    "onvoorspelbare %NOUN%",
-    "%NOUN% van wie de daden tot nu toe geen duidelijke kant hebben gekozen",
+    "iemand van wie de reputatie nog alle kanten op kan",
+    "iemand die zich nog niet heeft laten kennen",
+    "iemand die tot nu toe geen duidelijke kant heeft gekozen",
+    "iemand die nog niet goed te peilen valt",
   ],
 };
 
@@ -10137,7 +10139,7 @@ Wat Vrijheid Werkelijk Betekent
 TEXT:
 Athena wacht je op bij de Boodschapper, ditmaal niet als toeschouwer maar als iemand die duidelijk al een tijd op dit gesprek heeft zitten wachten. "Io kreeg haar vrijheid terug nadat een god eindelijk verantwoordelijkheid nam voor wat hij had aangericht," zegt ze. "Herakles kreeg de zijne terug door tien jaar lang, beproeving na beproeving, een schuld in te lossen die hem was opgelegd voor iets wat niet volledig zijn eigen keuze was."
 
-"Twee soorten vrijheid," vervolgt ze, "en jij, {tendency_address_cap}, hebt inmiddels gezien dat geen van beide vanzelf komt — niet voor een god, en al helemaal niet voor een sterveling."
+"Twee soorten vrijheid," vervolgt ze, "en jij, {tendency_address}, hebt inmiddels gezien dat geen van beide vanzelf komt — niet voor een god, en al helemaal niet voor een sterveling."
 
 IMAGE:
 ch3_athena_mentor.png
@@ -12000,6 +12002,24 @@ CHOICES:
 
 * Vraag Philoktetes om zijn precisie nog eens te bewijzen -> CH5_021
 * Help Nestor de koers doorrekenen, in plaats van hem alleen te laten adviseren [STAT:prudentia:11] -> CH5_020_NESTOR
+* Wuif zijn advies weg — jij vertrouwt liever op je eigen gevoel voor de stroming [SEVERITAS] -> CH5_020_NEGEER
+
+END
+
+=== SCENE: CH5_020_NEGEER ===
+
+TITLE:
+Eigen Koers
+
+TEXT:
+Je wuift Nestors advies weg zonder er lang bij stil te staan — je eigen gevoel voor de stroming lijkt je betrouwbaar genoeg. Nestor zegt er niets van, maar zijn blik volgt de golven nog een tijd, alsof hij zich afvraagt of hij het straks nog een keer moet zeggen.
+
+RELATION:
+nestor=-1
+
+CHOICES:
+
+* Vraag Philoktetes om zijn precisie nog eens te bewijzen -> CH5_021
 
 END
 
@@ -13355,6 +13375,41 @@ ch6_diomedes_epigonen=true
 
 EERETITEL:
 ch6_epigonen
+
+CHOICES:
+
+* Sta naast hem in stilte — sommige overwinningen vragen geen woorden [CLEMENTIA] -> CH6_020_STILTE
+* Vind dat hij dit moment mag vieren, na tien jaar wachten [SEVERITAS] -> CH6_020_VIER
+
+END
+
+=== SCENE: CH6_020_STILTE ===
+
+TITLE:
+Gedeelde Stilte
+
+TEXT:
+Je zegt niets, en blijft gewoon naast hem staan tussen de puinhopen. Diomedes merkt het op — geen woorden nodig, alleen iemand die begrijpt dat dit geen moment is om te vieren.
+
+RELATION:
+diomedes=+1
+
+CHOICES:
+
+* Spring nu terug in de tijd — naar een koning die vóór Oedipus over Thebe regeerde -> CH6_021
+
+END
+
+=== SCENE: CH6_020_VIER ===
+
+TITLE:
+Een Overwinning, Toch
+
+TEXT:
+Je dringt aan dat hij dit mag vieren — tien jaar wachten geeft daar toch recht op? Diomedes schudt zijn hoofd, meer vermoeid dan geïrriteerd. "Misschien," zegt hij. "Maar niet vandaag."
+
+RELATION:
+diomedes=-1
 
 CHOICES:
 
@@ -14955,9 +15010,43 @@ Het gezantschap vertrekt, met lege handen en een boodschap die niemand graag aan
 
 CHOICES:
 
-* Vind Achilles' trots onvergeeflijk, met zoveel levens op het spel [SEVERITAS] -> CH8_ACH_010
-* Erken dat eer voor een held als Achilles net zo reëel is als een wond [CLEMENTIA] -> CH8_ACH_010
+* Vind Achilles' trots onvergeeflijk, met zoveel levens op het spel [SEVERITAS] -> CH8_ACH_009_STRENG
+* Erken dat eer voor een held als Achilles net zo reëel is als een wond [CLEMENTIA] -> CH8_ACH_009_MEDELEVEN
 * Onthoud je van een oordeel — je hebt Agamemnons kant nog niet gezien [NEUTRAL] -> CH8_ACH_010
+
+END
+
+=== SCENE: CH8_ACH_009_STRENG ===
+
+TITLE:
+Onbewogen
+
+TEXT:
+Achilles voelt je onverbiddelijke blik, al zegt hij er niets over — trots buigt niet voor andermans oordeel. Maar iets in zijn houding verhardt nog verder, alsof je net bevestigde wat hij al vreesde: dat niemand zijn kant zal kiezen.
+
+RELATION:
+achilles=-1
+
+CHOICES:
+
+* Ga verder -> CH8_ACH_010
+
+END
+
+=== SCENE: CH8_ACH_009_MEDELEVEN ===
+
+TITLE:
+Erkend
+
+TEXT:
+Achilles vangt je blik op, en voor een moment lijkt de eenzaamheid van zijn keuze iets lichter — iemand die zijn eer net zo reëel vindt als een wond, in plaats van louter eigenzinnigheid.
+
+RELATION:
+achilles=+1
+
+CHOICES:
+
+* Ga verder -> CH8_ACH_010
 
 END
 
@@ -15144,6 +15233,41 @@ puzzle_ch8_aga_aoristus_thema
 
 CHOICES:
 
+* Bewonder zijn doldrieste moed — zelfs tegen een god durft hij het aan [CLEMENTIA] -> CH8_AGA_004_BEWONDER
+* Waarschuw dat hij zojuist een god heeft getart, en dat goden dat onthouden [SEVERITAS] -> CH8_AGA_004_WAARSCHUW
+
+END
+
+=== SCENE: CH8_AGA_004_BEWONDER ===
+
+TITLE:
+Onbevreesd
+
+TEXT:
+Diomedes vangt je bewondering op, ergens tussen twee speerstoten door, en grijnst kort — precies het soort erkenning waar een man naar zoekt die net een god heeft laten bloeden.
+
+RELATION:
+diomedes=+1
+
+CHOICES:
+
+* Kijk wat er verderop op het slagveld gebeurt -> CH8_AGA_004B
+
+END
+
+=== SCENE: CH8_AGA_004_WAARSCHUW ===
+
+TITLE:
+Een Gewaarschuwde Man
+
+TEXT:
+Diomedes hoort je waarschuwing, en voor een moment vertraagt zijn speer — niet uit angst, maar uit iets wat op irritatie lijkt. "Athena stond zelf naast me," zegt hij kortaf. "Onthoud dat, voor je me weer voorzichtigheid preekt."
+
+RELATION:
+diomedes=-1
+
+CHOICES:
+
 * Kijk wat er verderop op het slagveld gebeurt -> CH8_AGA_004B
 
 END
@@ -15308,9 +15432,43 @@ Het gezantschap keert onverrichter zake terug naar het kamp. Ergens tussen Agame
 
 CHOICES:
 
-* Vind Agamemnons koppigheid de grotere zonde — hij begon de ruzie [SEVERITAS] -> CH8_AGA_010
-* Erken dat Achilles het net zo makkelijk had kunnen laten gaan, voor het leger [CLEMENTIA] -> CH8_AGA_010
+* Vind Agamemnons koppigheid de grotere zonde — hij begon de ruzie [SEVERITAS] -> CH8_AGA_009_STRENG
+* Erken dat Achilles het net zo makkelijk had kunnen laten gaan, voor het leger [CLEMENTIA] -> CH8_AGA_009_MEDELEVEN
 * Onthoud je van een oordeel — je hebt Achilles' kant nog niet gezien [NEUTRAL] -> CH8_AGA_010
+
+END
+
+=== SCENE: CH8_AGA_009_STRENG ===
+
+TITLE:
+Onbewogen
+
+TEXT:
+Agamemnon voelt je onverbiddelijke blik en zegt er niets van — een aanvoerder is wel wat gewend — maar iets in zijn houding verstrakt, alsof hij nog een steun minder heeft dan hij al dacht.
+
+RELATION:
+agamemnon=-1
+
+CHOICES:
+
+* Ga verder -> CH8_AGA_010
+
+END
+
+=== SCENE: CH8_AGA_009_MEDELEVEN ===
+
+TITLE:
+Erkend
+
+TEXT:
+Agamemnon vangt je blik op, en voor een moment lijkt het gewicht van het bevel iets lichter — iemand die begrijpt dat koppigheid hier van twee kanten kwam, in plaats van hem alleen de schuld te geven.
+
+RELATION:
+agamemnon=+1
+
+CHOICES:
+
+* Ga verder -> CH8_AGA_010
 
 END
 
@@ -17750,9 +17908,43 @@ NEUTRAL: Odysseus zwijgt een moment. "Aanvoerder zijn betekent zelden dat je ied
 
 CHOICES:
 
-* Vind dat de mannen dit over zichzelf hebben afgeroepen [SEVERITAS] -> CH10_ODY_002B
-* Erken dat tien jaar oorlog een bemanning niet meteen weer voorzichtig maakt [CLEMENTIA] -> CH10_ODY_002B
+* Vind dat de mannen dit over zichzelf hebben afgeroepen [SEVERITAS] -> CH10_ODY_002_STRENG
+* Erken dat tien jaar oorlog een bemanning niet meteen weer voorzichtig maakt [CLEMENTIA] -> CH10_ODY_002_MEDELEVEN
 * Twijfel of Odysseus als aanvoerder hier niet ook tekortschoot [NEUTRAL] -> CH10_ODY_002B
+
+END
+
+=== SCENE: CH10_ODY_002_STRENG ===
+
+TITLE:
+Geen Medelijden
+
+TEXT:
+Odysseus hoort je onverbiddelijke oordeel aan zonder tegenspraak — een aanvoerder is wel wat gewend — maar iets in zijn blik verhardt, alsof hij liever gehoord had dat het bevel zelf ook zijn deel van de schuld droeg.
+
+RELATION:
+odysseus=-1
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_002B
+
+END
+
+=== SCENE: CH10_ODY_002_MEDELEVEN ===
+
+TITLE:
+Begrip
+
+TEXT:
+Odysseus knikt kort, dankbaarder dan hij laat blijken — iemand die begrijpt dat tien jaar wachten ook zijn eigen mannen heeft uitgehold, in plaats van hen meteen te veroordelen.
+
+RELATION:
+odysseus=+1
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_002B
 
 END
 
@@ -18091,9 +18283,43 @@ NEUTRAL: Odysseus haalt zijn schouders op. "Een naam roepen kost niets. Wat het 
 
 CHOICES:
 
-* Begrijp die trots — na tien jaar oorlog verdient hij het gehoord te worden [CLEMENTIA] -> CH10_ODY_006B
-* Vind het roekeloos, een dwaasheid die hen nog duur zal komen te staan [SEVERITAS] -> CH10_ODY_006B
+* Begrijp die trots — na tien jaar oorlog verdient hij het gehoord te worden [CLEMENTIA] -> CH10_ODY_006Q_MEDELEVEN
+* Vind het roekeloos, een dwaasheid die hen nog duur zal komen te staan [SEVERITAS] -> CH10_ODY_006Q_STRENG
 * Blijf zelf liever onopgemerkt, wat er ook gebeurt [NEUTRAL] -> CH10_ODY_006B
+
+END
+
+=== SCENE: CH10_ODY_006Q_MEDELEVEN ===
+
+TITLE:
+Begrip voor de Trots
+
+TEXT:
+Odysseus glimlacht breed als hij je begrip voelt — eindelijk iemand die snapt waarom hij het risico waard vond, in plaats van hem er meteen op af te rekenen.
+
+RELATION:
+odysseus=+1
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_006B
+
+END
+
+=== SCENE: CH10_ODY_006Q_STRENG ===
+
+TITLE:
+Een Roekeloze Naam
+
+TEXT:
+Odysseus' glimlach verstrakt als hij je afkeuring voelt — even maar, maar genoeg om te merken dat je het net zo dwaas vindt als hij, diep vanbinnen, ook wel weet dat het was.
+
+RELATION:
+odysseus=-1
+
+CHOICES:
+
+* Ga verder -> CH10_ODY_006B
 
 END
 
@@ -23762,10 +23988,10 @@ TITLE:
 Een Kritische Blik
 
 TEXT:
-Herodotos glimlacht, eerder goedkeurend dan beledigd. "Terecht," zegt hij. "Ik zou mezelf ook niet zomaar geloven."
+Herodotos' glimlach wordt iets stijver dan daarvoor. "Zo vertrouwd ben ik niet gewend te worden ondervraagd," zegt hij droog, "maar ik zal het onthouden — de volgende keer dat ik je iets vertel."
 
 RELATION:
-herodotos=+1
+herodotos=-1
 
 CHOICES:
 * Zie wat er van de Ionische Opstand terechtkomt -> CH17_GRE_001J
@@ -25545,6 +25771,39 @@ TEXT:
 Pompeius kiest, tot ontsteltenis van velen in de senaat, om Rome zonder gevecht te ontruimen: beter een strategische aftocht naar Griekenland, waar hij tijd heeft om een leger te verzamelen, dan een verdediging van een stad die toch niet te houden is tegen Caesars ervaren legioenen. Cicero volgt schoorvoetend mee; Cato reist naar Afrika om daar verzet te blijven organiseren.
 
 CHOICES:
+* Erken dat dit de enige verstandige zet is, hoe onwennig ook [CLEMENTIA] -> CH19_LAT_POM_002_STEUN
+* Vind het een lafhartige aftocht, geen strategie [SEVERITAS] -> CH19_LAT_POM_002_KRITIEK
+
+END
+
+=== SCENE: CH19_LAT_POM_002_STEUN ===
+
+TITLE:
+Een Verstandige Aftocht
+
+TEXT:
+Pompeius merkt je instemming op, al is er weinig ruimte voor trots in een stad die hij zojuist opgaf. "Verstandig," herhaalt hij zacht, alsof hij het zichzelf ook nog moet overtuigen.
+
+RELATION:
+pompeius=+1
+
+CHOICES:
+* Zie waar de twee legers elkaar uiteindelijk vinden -> CH19_LAT_POM_003
+
+END
+
+=== SCENE: CH19_LAT_POM_002_KRITIEK ===
+
+TITLE:
+Geen Verdediging, Geen Trots
+
+TEXT:
+Pompeius voelt je afkeuring, en voor het eerst sinds je hem kent, verdedigt hij zichzelf niet. "Misschien," zegt hij enkel, terwijl de stad achter hem kleiner wordt.
+
+RELATION:
+pompeius=-1
+
+CHOICES:
 * Zie waar de twee legers elkaar uiteindelijk vinden -> CH19_LAT_POM_003
 
 END
@@ -25700,7 +25959,7 @@ FLAG:
 ch19_lat_pom_samenzwering=geweigerd
 
 RELATION:
-antonius=+1, octavianus=+1
+antonius=+1, octavianus=+1, brutus=-1, cassius=-1
 
 CODEX:
 codex_iden_van_maart
@@ -25889,14 +26148,44 @@ Voor zijn dertienjarige zoon haalt Philippus een filosoof naar het afgelegen Mie
 
 "[[Ecce|zie hier]]," zegt de Boodschapper zacht. "Drie generaties wijsheid, van hand tot hand — Socrates aan Plato, Plato aan Aristoteles, Aristoteles aan de jongen die straks de halve wereld zal veroveren. Jij hebt, zonder het toen te beseffen, Plato al twee keer zien opgroeien."
 
-RELATION:
-plato=+1
-
 CODEX:
 codex_aristoteles_leermeester
 
 VOCAB:
 grieks_didaskalos
+
+CHOICES:
+* Bewonder deze keten van wijsheid, van Socrates tot aan de toekomstige veroveraar [CLEMENTIA] -> CH20_GRE_003_BEWONDER
+* Betwijfel of pure filosofie een toekomstige veroveraar ooit echt zal temmen [SEVERITAS] -> CH20_GRE_003_TWIJFEL
+
+END
+
+=== SCENE: CH20_GRE_003_BEWONDER ===
+
+TITLE:
+Drie Generaties
+
+TEXT:
+De Boodschapper knikt, en heel even meen je Plato's eigen glimlach te herkennen in dat gebaar — iemand die de keten waardeert, ook al staat hij er zelf al twee schakels vanaf.
+
+RELATION:
+plato=+1
+
+CHOICES:
+* Zie een ander soort les die Alexander zichzelf leert -> CH20_GRE_003B
+
+END
+
+=== SCENE: CH20_GRE_003_TWIJFEL ===
+
+TITLE:
+Een Twijfelachtige Erfenis
+
+TEXT:
+De Boodschapper zwijgt een moment langer dan je had verwacht. "Een terechte twijfel," geeft hij toe. "Plato zelf hoopte ooit op een filosoof-koning. Wat Alexander wordt, is nog niet geschreven."
+
+RELATION:
+plato=-1
 
 CHOICES:
 * Zie een ander soort les die Alexander zichzelf leert -> CH20_GRE_003B
@@ -26312,6 +26601,9 @@ Op jouw bevel rijdt een afdeling ruiters Dumnorix meteen achterna, met een duide
 FLAG:
 ch20_lat_dumnorix=executie
 
+RELATION:
+caesar=+1
+
 CHOICES:
 * Zie hoe de oversteek zonder hem verloopt -> CH20_LAT_006
 
@@ -26329,6 +26621,9 @@ Op jouw bevel achtervolgt een afdeling ruiters Dumnorix met opdracht hem levend 
 
 FLAG:
 ch20_lat_dumnorix=poging_genade
+
+RELATION:
+caesar=-1
 
 CHOICES:
 * Zie hoe de oversteek zonder hem verloopt -> CH20_LAT_006
@@ -26401,6 +26696,9 @@ Van de zowat vijftien cohorten die het kamp verlieten, overleeft vrijwel niemand
 FLAG:
 ch20_lat_sabinus_cotta=sabinus
 
+RELATION:
+caesar=-1
+
 CHOICES:
 * Zie hoe Caesar het nieuws ontvangt -> CH20_LAT_009
 
@@ -26418,6 +26716,9 @@ Van de zowat vijftien cohorten in het kamp overleeft vrijwel niemand.
 
 FLAG:
 ch20_lat_sabinus_cotta=cotta
+
+RELATION:
+caesar=+1
 
 CHOICES:
 * Zie hoe Caesar het nieuws ontvangt -> CH20_LAT_009
@@ -26804,9 +27105,6 @@ Wie de grot verlaat en het zonlicht aanschouwt, ziet de ware [[ἰδέα|ideeën
 IMAGE:
 ch21_gre_plato_grot.png
 
-RELATION:
-plato=+1
-
 CODEX:
 codex_plato_grot
 
@@ -26814,8 +27112,40 @@ VOCAB:
 grieks_idea
 
 CHOICES:
-* Benadruk het belang van het zoeken naar hogere abstracties -> CH21_GRE_006B
-* Benadruk de verantwoordelijkheid om de mensen in de grot te onderwijzen -> CH21_GRE_006B
+* Benadruk het belang van het zoeken naar hogere abstracties, los van de terugkeer [SEVERITAS] -> CH21_GRE_006_ABSTRACTIE
+* Benadruk de verantwoordelijkheid om de mensen in de grot te onderwijzen [CLEMENTIA] -> CH21_GRE_006_ONDERWIJS
+
+END
+
+=== SCENE: CH21_GRE_006_ABSTRACTIE ===
+
+TITLE:
+Alleen het Licht
+
+TEXT:
+Plato luistert beleefd, maar iets in zijn blik verstrakt — je hebt net de helft van zijn gelijkenis benoemd en de andere helft, de terugkeer naar de grot, stilzwijgend overgeslagen. "Het licht zonder de terugkeer," zegt hij, "is geen filosofie. Het is alleen maar vlucht."
+
+RELATION:
+plato=-1
+
+CHOICES:
+* Ga verder naar het Lyceum van Aristoteles -> CH21_GRE_006B
+
+END
+
+=== SCENE: CH21_GRE_006_ONDERWIJS ===
+
+TITLE:
+De Terugkeer
+
+TEXT:
+Plato knikt, zichtbaar tevreden — je hebt precies de kern van zijn gelijkenis benoemd, de plicht die de meesten liever overslaan. "Niet iedereen onthoudt dat het licht zien niet het einddoel is," zegt hij.
+
+RELATION:
+plato=+1
+
+CHOICES:
+* Ga verder naar het Lyceum van Aristoteles -> CH21_GRE_006B
 
 END
 
@@ -26867,7 +27197,10 @@ TITLE:
 Weerlegd
 
 TEXT:
-Je verstrikt jezelf in je eigen redenering, tot zelfs jij niet meer precies weet wat je nu eigenlijk beweerde. De uitdager grijnst tevreden. Plato wuift het echter weg — "een verloren dialectisch gevecht is nog altijd nuttiger dan geen gevecht."
+Je verstrikt jezelf in je eigen redenering, tot zelfs jij niet meer precies weet wat je nu eigenlijk beweerde. De uitdager grijnst tevreden. Plato wuift het echter weg — "een verloren dialectisch gevecht is nog altijd nuttiger dan geen gevecht" — maar de teleurstelling in zijn stem is niet helemaal te verbergen.
+
+RELATION:
+plato=-1
 
 CHOICES:
 * Ga verder naar het Lyceum van Aristoteles -> CH21_GRE_007
@@ -27418,6 +27751,39 @@ TEXT:
 Wanneer invallende legers van de andere diadochen de grens van Egypte naderen, kiest Ptolemaeus voor een verdedigende tactiek. Met versterkte fortificaties langs de Nijl en een goed bevoorraade vloot slaat hij de aanvallen af zonder zijn eigen troepen uit te putten in lange buitenlandse marsen.
 
 CHOICES:
+* Prijs deze voorzichtige, levens-sparende strategie [CLEMENTIA] -> CH22_GRE_PTO_003_STEUN
+* Bekritiseer het gebrek aan ambitie — hij had zijn rijk kunnen uitbreiden [SEVERITAS] -> CH22_GRE_PTO_003_KRITIEK
+
+END
+
+=== SCENE: CH22_GRE_PTO_003_STEUN ===
+
+TITLE:
+Een Koninkrijk dat Blijft Staan
+
+TEXT:
+Ptolemaeus knikt, tevreden dat iemand de waarde van geduld erkent. "Er zijn genoeg diadochen die zichzelf hebben opgeblazen aan te veel ambitie," zegt hij. "Ik ben niet van plan die fout te herhalen."
+
+RELATION:
+ptolemaeus=+1
+
+CHOICES:
+* Hoor het nieuws uit het Macedonische moederland -> CH22_GRE_PTO_004
+
+END
+
+=== SCENE: CH22_GRE_PTO_003_KRITIEK ===
+
+TITLE:
+Voorzichtigheid als Zwakte
+
+TEXT:
+Ptolemaeus hoort je kritiek zonder te schrikken, maar ook zonder overtuigd te raken. "Ambitie heeft Alexander een rijk gegeven en een vroege dood," zegt hij. "Ik kies liever het eerste zonder het tweede."
+
+RELATION:
+ptolemaeus=-1
+
+CHOICES:
 * Hoor het nieuws uit het Macedonische moederland -> CH22_GRE_PTO_004
 
 END
@@ -27430,11 +27796,41 @@ Schaduwen in Macedonië
 TEXT:
 Terwijl Egypte floreert, verhardt de strijd in Griekenland en Macedonië. Kassandros, de zoon van Antipater, grijpt de macht in Athene en Pella. Hij neemt Olympias, de moeder van Alexander de Grote, gevangen en laat haar ter dood veroordelen om haar politieke invloed voorgoed te breken.
 
-RELATION:
-kassandros=+1
-
 CODEX:
 codex_kassandros
+
+CHOICES:
+* Veroordeel deze wraakzucht tegen een weerloze oude vrouw [SEVERITAS] -> CH22_GRE_PTO_004_VEROORDEEL
+* Erken de koude politieke logica — een levende Olympias bleef een gevaar [CLEMENTIA] -> CH22_GRE_PTO_004_ERKEN
+
+END
+
+=== SCENE: CH22_GRE_PTO_004_VEROORDEEL ===
+
+TITLE:
+Geen Genade voor een Oude Vrouw
+
+TEXT:
+Kassandros hoort van je veroordeling, ergens via de geruchtenstroom die zelfs tot Alexandrië doordringt, en haalt enkel zijn schouders op — het oordeel van een vreemde weegt niet op tegen een troon die eindelijk veilig aanvoelt.
+
+RELATION:
+kassandros=-1
+
+CHOICES:
+* Zie hoe het koninklijk huis verder wordt ontmanteld -> CH22_GRE_PTO_005
+
+END
+
+=== SCENE: CH22_GRE_PTO_004_ERKEN ===
+
+TITLE:
+Koude Logica
+
+TEXT:
+Het bericht dat je zijn beslissing begrijpt, bereikt Kassandros nooit rechtstreeks — maar het past bij het soort steun waar hij, in een rijk vol vijanden, wel bij vaart: niet uit genegenheid, maar omdat weinigen zijn keuzes hardop verdedigen.
+
+RELATION:
+kassandros=+1
 
 CHOICES:
 * Zie hoe het koninklijk huis verder wordt ontmanteld -> CH22_GRE_PTO_005
@@ -27546,11 +27942,41 @@ Schaduwen in Macedonië
 TEXT:
 Terwijl Antigonos zijn legers bijeentrekt, verhardt de strijd in het moederland. Kassandros grijpt de macht in Pella, neemt Olympias, de moeder van Alexander de Grote, gevangen en laat haar executeren. Het geweld ontziet niemand van het oude koningshuis.
 
-RELATION:
-kassandros=+1
-
 CODEX:
 codex_kassandros
+
+CHOICES:
+* Veroordeel deze wraakzucht tegen een weerloze oude vrouw [SEVERITAS] -> CH22_GRE_ANT_004_VEROORDEEL
+* Erken de koude politieke logica — een levende Olympias bleef een gevaar [CLEMENTIA] -> CH22_GRE_ANT_004_ERKEN
+
+END
+
+=== SCENE: CH22_GRE_ANT_004_VEROORDEEL ===
+
+TITLE:
+Geen Genade voor een Oude Vrouw
+
+TEXT:
+Kassandros hoort van je veroordeling, ergens via de geruchtenstroom die zelfs Antigonos' kamp bereikt, en haalt enkel zijn schouders op — het oordeel van een vreemde weegt niet op tegen een troon die eindelijk veilig aanvoelt.
+
+RELATION:
+kassandros=-1
+
+CHOICES:
+* Zie hoe het koninklijk huis definitief wordt uitgewist -> CH22_GRE_ANT_005
+
+END
+
+=== SCENE: CH22_GRE_ANT_004_ERKEN ===
+
+TITLE:
+Koude Logica
+
+TEXT:
+Het bericht dat je zijn beslissing begrijpt, bereikt Kassandros nooit rechtstreeks — maar het past bij het soort steun waar hij, in een rijk vol vijanden, wel bij vaart: niet uit genegenheid, maar omdat weinigen zijn keuzes hardop verdedigen.
+
+RELATION:
+kassandros=+1
 
 CHOICES:
 * Zie hoe het koninklijk huis definitief wordt uitgewist -> CH22_GRE_ANT_005
@@ -28011,11 +28437,41 @@ Het is de taak van onze familie om de wonden van de Republiek te helen, niet om 
 IMAGE:
 ch22_lat_octavia_huwelijk.png
 
+CODEX:
+codex_octavia_huwelijk
+
+CHOICES:
+* Erken dat deze vrede vooral aan haar te danken is [CLEMENTIA] -> CH22_LAT_009_STEUN
+* Twijfel of één huwelijk twee zulke mannen echt met elkaar kan verzoenen [SEVERITAS] -> CH22_LAT_009_TWIJFEL
+
+END
+
+=== SCENE: CH22_LAT_009_STEUN ===
+
+TITLE:
+Erkenning
+
+TEXT:
+Octavia merkt je waardering op, al zegt ze er weinig over — ze is niet gewend dat haar rol als bruggenbouwer ook echt gezien wordt, in plaats van stilzwijgend verondersteld.
+
 RELATION:
 octavia=+1
 
-CODEX:
-codex_octavia_huwelijk
+CHOICES:
+* Bekijk de culturele bloei in Rome onder het Triumviraat -> CH22_LAT_010
+
+END
+
+=== SCENE: CH22_LAT_009_TWIJFEL ===
+
+TITLE:
+Een Voorzichtige Vrede
+
+TEXT:
+Octavia hoort je twijfel aan zonder ze meteen weg te wuiven. "Misschien heb je gelijk," zegt ze rustig. "Maar iemand moet het proberen — en ik lijk de enige te zijn die daartoe bereid is."
+
+RELATION:
+octavia=-1
 
 CHOICES:
 * Bekijk de culturele bloei in Rome onder het Triumviraat -> CH22_LAT_010
@@ -28218,6 +28674,9 @@ Te Laat Doorzien
 
 TEXT:
 Pas wanneer Octavianus onbestreden door Klein-Azië en Syrië trekt, tot voor de poorten van Egypte zelf, besef je hoeveel van het hof zich allang tegen Antonius en Cleopatra had gekeerd. Cleopatra probeert nog te onderhandelen — haar kinderen op de troon, zichzelf desnoods in ballingschap — maar Octavianus reageert op geen enkel voorstel serieus. Hij wil haar, levend, mee naar Rome.
+
+RELATION:
+cleopatra=-1
 
 CHOICES:
 * Zie hoe Antonius zijn einde vindt -> CH23_GRE_004
@@ -29925,7 +30384,10 @@ TITLE:
 Verdwaald in het Donker
 
 TEXT:
-De aswolk verduistert de middagzon zo compleet dat je de weg kwijtraakt in straten die je nog geen uur geleden nog kende — kostbare, angstige minuten zoekend naar een uitgang die er wel degelijk is, tot je hem eindelijk, bijna bij toeval, terugvindt.
+De aswolk verduistert de middagzon zo compleet dat je de weg kwijtraakt in straten die je nog geen uur geleden nog kende — kostbare, angstige minuten zoekend naar een uitgang die er wel degelijk is, tot je hem eindelijk, bijna bij toeval, terugvindt. Vitruvius, die je in de chaos kwijtraakte, vindt je pas veel later terug bij de poort — zichtbaar opgelucht, maar ook zichtbaar geschrokken hoe dicht het bij misgaan was.
+
+RELATION:
+vitruvius=-1
 
 CHOICES:
 * Kijk om, van veilige afstand, opgelucht dat je er bent -> CH25_LAT_006
@@ -30421,7 +30883,10 @@ TITLE:
 Te Laat Ontdekt
 
 TEXT:
-De verkenners bereiken de omheining voor jij het alarm slaat — een korte, verwarde schermutseling in het donker, tot de rest van het kamp wakker schiet en de overvallers alsnog verjaagt.
+De verkenners bereiken de omheining voor jij het alarm slaat — een korte, verwarde schermutseling in het donker, tot de rest van het kamp wakker schiet en de overvallers alsnog verjaagt. Marcus Aurelius hoort er de volgende ochtend van, en zegt niets — maar noteert het, zoals hij alles noteert.
+
+RELATION:
+marcus_aurelius=-1
 
 CHOICES:
 * Ontmoet de laatste, en meest filosofische, van de adoptiefkeizers -> CH26_LAT_008
@@ -31210,7 +31675,10 @@ TITLE:
 Verdwaald in de Rook
 
 TEXT:
-De rook is zo dik dat je twee keer de verkeerde gang inslaat — kostbare minuten gaan verloren voor je eindelijk, hoestend, weer buiten komt. Belisarius' troepen zijn intussen al, via een andere boodschapper, gewaarschuwd — jouw bericht komt te laat, maar niet fataal te laat.
+De rook is zo dik dat je twee keer de verkeerde gang inslaat — kostbare minuten gaan verloren voor je eindelijk, hoestend, weer buiten komt. Belisarius' troepen zijn intussen al, via een andere boodschapper, gewaarschuwd — jouw bericht komt te laat, maar niet fataal te laat. Theodora hoort er later van, en zegt niets — maar onthoudt wie er wel en niet op tijd kwam, op de dag dat haar troon zelf op het spel stond.
+
+RELATION:
+theodora=-1
 
 CHOICES:
 * Ga verder -> CH27_GRE_009
