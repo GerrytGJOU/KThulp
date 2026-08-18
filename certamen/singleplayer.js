@@ -619,7 +619,14 @@ const CNSParser = {
 const SP_SCENES = new Map([...CNSParser.parse(SP_PROLOOG_CNS), ...CNSParser.parse(SP_CH1_CNS), ...CNSParser.parse(SP_CH2_CNS), ...CNSParser.parse(SP_CH3_CNS), ...CNSParser.parse(SP_CH4_CNS), ...CNSParser.parse(SP_CH5_CNS), ...CNSParser.parse(SP_CH6_CNS), ...CNSParser.parse(SP_CH7_CNS), ...CNSParser.parse(SP_CH8_CNS), ...CNSParser.parse(SP_CH9_CNS), ...CNSParser.parse(SP_CH10_CNS), ...CNSParser.parse(SP_CH11_CNS), ...CNSParser.parse(SP_CH12_CNS), ...CNSParser.parse(SP_CH13_CNS), ...CNSParser.parse(SP_CH14_CNS), ...CNSParser.parse(SP_CH15_CNS), ...CNSParser.parse(SP_CH16_CNS), ...CNSParser.parse(SP_CH17_CNS), ...CNSParser.parse(SP_CH18_CNS), ...CNSParser.parse(SP_CH19_CNS), ...CNSParser.parse(SP_CH20_CNS), ...CNSParser.parse(SP_CH21_CNS), ...CNSParser.parse(SP_CH22_CNS), ...CNSParser.parse(SP_CH23_CNS), ...CNSParser.parse(SP_CH24_CNS), ...CNSParser.parse(SP_CH25_CNS), ...CNSParser.parse(SP_CH26_CNS), ...CNSParser.parse(SP_CH27_CNS), ...CNSParser.parse(SP_CH28_CNS), ...CNSParser.parse(SP_CH29_CNS), ...CNSParser.parse(SP_FINALE_CNS)]);
 const SP_EMPTY_STATE = ()=>({ node:null, gender:null, classId:null, traits:[], codex:[], quests:{}, flags:{}, approach:{clementia:0,severitas:0}, persons:{}, vocab:[], seenImages:[], fragments:[], souvenirs:[],
   stats:null, skillpoints:0, statSpentSinceAward:{}, statLog:[],
-  payoffsSeen:{}, relations:{}, kroniek:[] });
+  payoffsSeen:{}, relations:{}, kroniek:[],
+  // mastery: Leitner-boxen per vraag (masteryKey → 0-5, zie combat-questions.js).
+  // Dit is LEERdata en hoort dus wél in de save, in tegenstelling tot SP_COMBAT
+  // zelf. inventory: eenmalige gevechtsitems die je in het verhaal vond
+  // (INVENTORY:-sectie → spHookInventory).
+  // patches: welke savemigratie-patches al op deze save zijn toegepast
+  // (id → timestamp), zie SP_PATCHES/spApplyPatches.
+  mastery:{}, inventory:[], patches:{} });
 
 /* ---- SPELERSTATE ---- */
 let SP_STATE = SP_EMPTY_STATE();
@@ -656,9 +663,196 @@ async function spSaveProgress(patch){
 function spSlotProgressDepth(slot){
   if(!slot || !slot.node) return -1;
   if(slot.node.indexOf("PRO_")===0) return 0;
+  // FIN_ (de Finale) is de VERSTE voortgang die er is; als 0 tellen zou een
+  // uitgespeelde save laten verliezen van een net begonnen save op een ander
+  // toestel (zie de botsingsregel in spLoadAllSlots hieronder).
+  if(slot.node.indexOf("FIN_")===0) return 99;
   const m = slot.node.match(/^CH(\d+)_/);
   return m ? +m[1] : 0;
 }
+/* ---- SAVEMIGRATIE: verbeteringen doorduwen naar LOPENDE saves ---------------
+   Het meeste van Chronica zit NIET in de save: scènetekst, titels, keuzes,
+   glossen, beelden, combat-vragen, CHECK/PUZZLE-mechaniek en grammaticatabellen
+   worden bij elke pagina-load opnieuw uit singleplayer-data.js geparsed. Die
+   verbeteringen bereiken een lopende save dus vanzelf — mits de ?v=-cachebuster
+   in index.html is opgehoogd, anders serveert de browser gewoon de oude JS.
+
+   Wat NIET vanzelf meekomt is alles wat éénmalig in SP_STATE is vastgelegd op
+   het moment dat de speler de scène passeerde: vocab, codex, flags, relations,
+   persons, quests, souvenirs, fragments, inventory, stats. Voeg je zoiets
+   achteraf toe aan een al gebouwd hoofdstuk, dan mist elke testspeler die daar
+   al voorbij is het — stilletjes, zonder foutmelding, en bij een FLAG die pas
+   twintig hoofdstukken later wordt uitgelezen valt de payoff geruisloos weg.
+
+   Deze laag draait bij elk "verdergaan" (spResumeSlot) en repareert dat in drie
+   stappen:
+     1. spRepairNode    — hernoemde of verdwenen scène-id's opvangen.
+     2. spBackfillVocab — automatisch en onderhoudsvrij: woorden uit eerdere
+                          hoofdstukken alsnog toekennen.
+     3. spApplyPatches  — handmatige lijst voor wat je niet kunt afleiden.
+   Alles is idempotent: twee keer draaien verandert niets extra's. ---------- */
+
+const SP_LAST_CHAPTER = 29; // hoogste CH<n>_000 in singleplayer-data.js
+
+// Hernoem je een scène-id, zet dan hier oud → nieuw, zodat een save die precies
+// op die scène stond niet strandt. Deze tabel nooit opruimen: elke oude save
+// mag erop blijven leunen.
+const SP_SAVE_ALIASES = {
+  // "CH1_OUDE_NAAM": "CH1_NIEUWE_NAAM",
+};
+
+// Per hoofdstuk de "spil-scène": de scène met de VOCAB:-sectie die IEDEREEN
+// passeert, ongeacht taalspoor of route. Standaard is dat CH<n>_000 (de
+// hoofdstukopening); deze tabel bevat alleen de uitzonderingen — hoofdstukken
+// die hun woordenlijst elders op de verplichte route hebben staan.
+// Route-specifieke VOCAB:-secties (de losse woorden diep in een Griekse of
+// Latijnse lijn) staan hier bewust NIET in: die horen bij een route die deze
+// speler misschien niet genomen heeft.
+const SP_VOCAB_SPIL = {
+  1:"CH1_ROBE", 2:"CH2_ORAKEL", 3:"CH3_ORAKEL", 4:"CH4_ORAKEL",
+  9:"CH9_005", 11:"CH11_001",
+};
+function spVocabSpilScene(n){ return SP_VOCAB_SPIL[n] || ("CH"+n+"_000"); }
+
+/* Vangnet voor scène-id's die niet meer bestaan. Zet de speler terug bij het
+   BEGIN VAN HET HOOFDSTUK waar hij was — niet bij de allereerste scène van het
+   spel, zoals hier tot 2026-08-18 gebeurde: voor een tester in Hoofdstuk 20 is
+   dat een reis van twintig hoofdstukken kwijt. */
+function spRepairNode(state){
+  if(!state.node) return null;
+  const alias = SP_SAVE_ALIASES[state.node];
+  if(alias && SP_SCENES.has(alias)){ state.node = alias; return null; }
+  if(SP_SCENES.has(state.node)) return null;
+  const d = spSlotProgressDepth(state);
+  let target;
+  if(d>=1 && d<=SP_LAST_CHAPTER && SP_SCENES.has("CH"+d+"_000")) target = "CH"+d+"_000";
+  else if(d>SP_LAST_CHAPTER && SP_SCENES.has("FIN_000")) target = "FIN_000";
+  else target = [...SP_SCENES.keys()][0];
+  state.node = target;
+  return "Deze scène bestaat niet meer in de huidige versie van het verhaal — je bent teruggezet naar het begin van dit hoofdstuk.";
+}
+
+/* Woorden uit eerdere hoofdstukken alsnog toekennen. Dit heeft GEEN
+   onderhoudslijst nodig: het leest de VOCAB:-secties gewoon opnieuw uit de
+   spildata. Voeg je later signaalwoorden toe aan een vroeg hoofdstuk (zoals de
+   270 uit VOCAB_UITBREIDING.md), dan krijgt elke lopende save ze bij de
+   volgende keer verdergaan — en wordt de Combat-woordpoel dus meteen minder
+   repetitief, precies waarvoor die uitbreiding bedoeld was.
+   Alleen hoofdstukken STRIKT VÓÓR het huidige: het hoofdstuk waar de speler nu
+   in zit doet zijn eigen VOCAB:-hook nog gewoon zelf, en anders zou hij woorden
+   krijgen uit een scène die hij nog moet lezen. */
+function spBackfillVocab(state, depth){
+  const have = new Set(state.vocab||[]);
+  const fresh = [];
+  const tot = Math.min(depth, SP_LAST_CHAPTER+1);
+  for(let n=1;n<tot;n++){
+    const scene = SP_SCENES.get(spVocabSpilScene(n));
+    if(!scene || !scene.meta.VOCAB) continue;
+    for(const id of scene.meta.VOCAB.split(/[\n,;]/).map(s=>s.trim()).filter(Boolean)){
+      // Alleen woorden die echt in SP_VOCAB_ENTRIES staan — een typefout in de
+      // data mag geen spookwoord in iemands Codex en Combat-poel duwen.
+      if(have.has(id) || !SP_VOCAB_ENTRIES[id]) continue;
+      have.add(id); fresh.push(id);
+    }
+  }
+  if(!fresh.length) return 0;
+  state.vocab = [...(state.vocab||[]), ...fresh];
+  return fresh.length;
+}
+
+/* ---- PATCHLIJST voor wat je NIET kunt afleiden -----------------------------
+   Bedoeld voor route-afhankelijke dingen: een FLAG die je achteraf in een al
+   gebouwd hoofdstuk hebt gezet, een codexpagina die nu eerder wordt uitgedeeld,
+   een quest die van naam veranderde. De automatische laag hierboven kan dat
+   niet raden — jij beslist wat de save had moeten hebben.
+
+   Elke patch:
+     id            unieke, nooit hergebruikte sleutel; onthouden in state.patches
+     vanaf         hoofdstuknummer; is de speler daar nog niet voorbij, dan
+                   gebeurt er niets en zet de gewone scène-hook het straks zelf
+     omschrijving  voor jou, niet voor de speler
+     melding       optioneel; wordt de speler getoond op het landingsscherm
+     apply(state)  past state aan; MOET idempotent zijn (schrijf "zet als hij
+                   ontbreekt", nooit "tel er eentje bij op"); return false om te
+                   melden dat er niets te doen viel
+
+   ONDERHOUDSAFSPRAAK (Chronica.md §7.81): voeg je achteraf een FLAG, CODEX,
+   QUEST of RELATION toe aan een hoofdstuk dat al gebouwd én gekoppeld is,
+   schrijf dan in dezelfde commit een patch-entry. Anders loopt deze lijst net zo
+   achter als het probleem dat hij oplost.
+
+   Voorbeeld (zoals je het zou schrijven voor een nieuwe vlag in Hoofdstuk 5):
+
+     { id:"h5-orakel-vlag", vanaf:6,
+       omschrijving:"FLAG:orakel_gehoord achteraf toegevoegd aan CH5_012; H22 leest hem uit.",
+       melding:null,
+       apply(state){
+         if(state.flags.orakel_gehoord) return false;
+         state.flags = {...state.flags, orakel_gehoord:true};
+       } },
+
+   Bewust NIET gepatcht (2026-08-18): de RELATION-symmetrie die commit 395c4a5
+   toevoegde aan CH5_020_NEGEER, CH6_020_*, CH8_ACH/AGA_* en CH10_ODY_*. Die
+   deltas hangen af van WELKE kant de speler koos, en dat staat nergens in de
+   save; een gok zou de Finale — die de RELATION-standen uitleest — met verzonnen
+   data voeden. Oude saves houden daar dus een iets vlakker relatiebeeld dan
+   nieuwe. De grammatica-codex uit commit 8196449 heeft geen patch nodig: die
+   pagina's werden alleen vroeger in het hoofdstuk uitgedeeld, de bestaande hook
+   verderop kende ze al toe. */
+const SP_PATCHES = [
+];
+
+function spApplyPatches(state, depth){
+  const done = {...(state.patches||{})};
+  const notes = [];
+  let touched = false;
+  for(const p of SP_PATCHES){
+    if(done[p.id]) continue;
+    if(depth < p.vanaf) continue; // nog niet gepasseerd — de scène-hook doet het straks zelf
+    let result;
+    try{ result = p.apply(state); }
+    catch(e){ console.error("spApplyPatches: patch '"+p.id+"' faalde:", e); continue; }
+    done[p.id] = Date.now();
+    touched = true;
+    if(result !== false && p.melding) notes.push(p.melding);
+  }
+  if(touched) state.patches = done;
+  return { notes, touched };
+}
+
+// Een NIEUWE save begint met alle nu bekende patches al afgevinkt: die save
+// speelt de betreffende hoofdstukken straks met de nieuwe inhoud erin, dus er
+// valt niets in te halen. Alleen patches die je LATER schrijft gelden voor hem.
+function spPatchesAllDone(){
+  const done = {};
+  const nu = Date.now();
+  for(const p of SP_PATCHES) done[p.id] = nu;
+  return done;
+}
+
+// Meldingen voor het eerstvolgende landingsscherm; daar eenmalig getoond en
+// meteen geleegd (spRenderLanding).
+let SP_MIGRATION_NOTES = [];
+
+function spMigrateSave(state){
+  const notes = [];
+  let changed = false;
+  const nodeNote = spRepairNode(state);
+  if(nodeNote){ notes.push(nodeNote); changed = true; }
+  const depth = spSlotProgressDepth(state);
+  const words = spBackfillVocab(state, depth);
+  if(words){
+    changed = true;
+    notes.push(words===1
+      ? "Er is 1 nieuw woord toegevoegd aan je Codex: het zat nog niet in het spel toen jij daar langskwam."
+      : "Er zijn "+words+" nieuwe woorden toegevoegd aan je Codex: die zaten nog niet in het spel toen jij daar langskwam.");
+  }
+  const patched = spApplyPatches(state, depth);
+  if(patched.touched) changed = true;
+  notes.push(...patched.notes);
+  return { changed, notes };
+}
+
 async function spLoadAllSlots(){
   const local = spSlotsLoadLocal();
   let remote = {};
@@ -770,16 +964,20 @@ function spSlotTileHTML(n, slot){
 function spStartNewSlot(n){
   SP_ACTIVE_SLOT = n;
   SP_STATE = SP_EMPTY_STATE();
+  SP_STATE.patches = spPatchesAllDone();
   spRenderGenderPick();
 }
 async function spResumeSlot(n){
   SP_ACTIVE_SLOT = n;
   const slots = await spLoadAllSlots();
   SP_STATE = Object.assign(SP_EMPTY_STATE(), slots[n]||{});
-  // Vangnet: verwijst een oude save naar een scène-id die niet meer bestaat
-  // (bv. na het hernoemen van CH1_ → PRO_), begin dan netjes bij het begin
-  // i.p.v. door te sturen naar een dode node.
-  if(SP_STATE.node && !SP_SCENES.has(SP_STATE.node)) SP_STATE.node = [...SP_SCENES.keys()][0];
+  // Savemigratie: duwt verbeteringen die sinds het laatste spelen zijn
+  // toegevoegd alsnog in deze save (dode nodes, vocab-backfill, patchlijst).
+  // Zie spMigrateSave hierboven; vervangt het oude, botte vangnet dat een
+  // dode node terugzette naar de allereerste scène van het spel.
+  const migratie = spMigrateSave(SP_STATE);
+  SP_MIGRATION_NOTES = migratie.notes;
+  if(migratie.changed) await spSaveProgress({});
   if(!SP_STATE.gender){ spRenderGenderPick(); return; }
   spRenderLanding();
 }
@@ -825,6 +1023,14 @@ function spCurrentCampaignChapter(node){
 }
 function spRenderLanding(){
   const resuming = !!(SP_STATE.node && SP_STATE.node!==SP_SCENES.keys().next().value);
+  // Savemigratie-meldingen (spMigrateSave): eenmalig tonen en meteen legen, ook
+  // als de speler later terugkeert naar dit scherm binnen dezelfde sessie.
+  const migratieHTML = SP_MIGRATION_NOTES.length ? `
+  <div class="panel">
+    <div class="eyebrow l">Je verhaal is bijgewerkt</div>
+    ${SP_MIGRATION_NOTES.map(n=>`<p class="note" style="margin-top:6px">${esc(n)}</p>`).join("")}
+  </div>` : "";
+  SP_MIGRATION_NOTES = [];
   const chapter = spCurrentCampaignChapter(SP_STATE.node);
   const eyebrowLbl = chapter.type==="proloog" ? "Proloog" : "Hoofdstuk "+chapter.nr;
   H(brand(true)+`
@@ -836,6 +1042,7 @@ function spRenderLanding(){
     <p class="note">${esc(chapter.verhaal)}</p>
     <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="spGoCns('${SP_STATE.node||[...SP_SCENES.keys()][0]}')">${resuming?"Verdergaan":"Beginnen"}</button>
   </div>
+  ${migratieHTML}
   ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spWorldMap')">🗺️ Wereldkaart</button>`:""}
   ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spCityMaps')">🏛️ Stadsplattegronden</button>`:""}
   ${resuming?`<button class="btn btn-ghost btn-block" style="margin-bottom:8px" onclick="go('spCodex')">📖 Codex Memoriae</button>`:""}
@@ -2030,6 +2237,7 @@ function spRunMetaHooks(meta){
   if(meta.VOCAB)     spHookVocab(meta.VOCAB);
   if(meta.FRAGMENT)  spHookFragment(meta.FRAGMENT);
   if(meta.SOUVENIR)  spHookSouvenir(meta.SOUVENIR);
+  if(meta.INVENTORY) spHookInventory(meta.INVENTORY);
   // IMAGE wordt door spHookSeenImage(scene) verwerkt (aparte aanroep in
   // SCREENS.spPlay, want die heeft het hele scene-object nodig, niet alleen
   // de meta) — hier verder pure weergave via spSceneImageHTML(). SFX bestaat
@@ -2208,6 +2416,23 @@ function spHookFragment(text){
    "Herinneringen"-tab van de Codex (spCodexSouvenirsHTML). Zelfde
    comma/puntkomma/regel-gescheiden parsing als spHookCodex, al draagt in de
    praktijk elke scène er maar één op. ---- */
+/* ---- INVENTORY: — eenmalige gevechtsitems die je in het verhaal vindt
+   (COMBAT_OVERHAUL.md voorstel G). De sectie werd sinds de bouw van de
+   CNS-parser al herkend en opgeslagen, maar deed niets; dit is de hook die
+   hem eindelijk uitleest. Onbekende id's worden stil overgeslagen, zodat een
+   toekomstige INVENTORY: zonder bijbehorende SP_COMBAT_ITEMS-entry nooit een
+   scène kan breken. ---- */
+function spHookInventory(text){
+  const ids = text.split(/[\n,;]/).map(s=>s.trim()).filter(Boolean).filter(id=>SP_COMBAT_ITEMS[id]);
+  const existing = SP_STATE.inventory||[];
+  const fresh = ids.filter(id=>!existing.includes(id));
+  if(!fresh.length) return;
+  spSaveProgress({ inventory:[...existing, ...fresh] });
+  fresh.forEach(id=>{
+    const def = SP_COMBAT_ITEMS[id];
+    toast("In je bagage", `${def.icon} ${def.nm} — ${def.ds}`);
+  });
+}
 function spHookSouvenir(text){
   const ids = text.split(/[\n,;]/).map(s=>s.trim()).filter(Boolean);
   const existing = SP_STATE.souvenirs||[];
@@ -2824,16 +3049,165 @@ function spRerenderMatch(){
   spRenderMatchingPuzzle(scene, SP_MATCH.puzzleId, puzzle, SP_MATCH.target);
 }
 
-/* ---- COMBAT-BRIDGE — zie de toelichting bij SP_COMBAT_ENEMIES
-   (singleplayer-data.js) voor de "waarom eigen implementatie". SP_COMBAT is
-   bewust NIET onderdeel van SP_STATE/localStorage: een gevecht is kort en
-   ademt niet over sessies heen — verlaat je de app halverwege, dan begin je
-   het gevecht opnieuw bij terugkeer (net als bij de meeste boss-fights). ---- */
-const SP_COMBAT_EP_PER_CORRECT = 10;
-const SP_COMBAT_EP_PENALTY_WRONG = 5; // leerlingfeedback (2026-08-18): fout antwoord kostte voorheen niets
-const SP_COMBAT_ACTION_COST = 20;
-const SP_COMBAT_DAMAGE_PER_ATTACK = 15;
+/* ============================================================================
+   COMBAT-BRIDGE v2 — zie COMBAT_OVERHAUL.md en Chronica.md §8 punt 1.
+   ----------------------------------------------------------------------------
+   Vervangt (2026-08-18) de eerste Combat-bridge, die één werkwoord kende:
+   antwoord → 10 EP → bij 20 EP een vaste 15 schade. De vijand deed niets
+   terug, er viel niets te kiezen en de gevechtslengte lag bij de start al
+   vast (Hector = 90 HP = 6 aanvallen = 12 goede antwoorden, altijd).
+
+   NIEUWE BEURT — twee klikken, niet meer:
+     1. de speler kiest een ACTIE (= tegelijk de moeilijkheidskeuze)
+     2. hij beantwoordt de bijbehorende vraag → schade valt meteen
+     3. de vijand voert zijn getelegrafeerde INTENTIE uit (of laadt verder op)
+
+   WAAROM DIRECTE SCHADE i.p.v. de oude EP-drempel: de tussenstap "spaar 20 EP,
+   klik dan Aanval" was een extra klik zonder beslissing — je klikte altijd
+   Aanval. Vastberadenheid (VB) blijft bestaan, maar heeft nu één duidelijke
+   taak: het laadt je klassevaardigheid op.
+
+   GEEN GAME OVER. Vigor loopt terug (Chronica.md §11.1), maar op 0 volgt een
+   narratieve opvangscène, nooit een verliesscherm — precies zoals §11.1 het
+   al beschreef. Een gevecht kan slecht aflopen; het kan niet verloren worden.
+
+   SP_COMBAT is bewust NIET onderdeel van SP_STATE/localStorage: een gevecht
+   is kort en ademt niet over sessies heen — verlaat je de app halverwege, dan
+   begin je het gevecht opnieuw bij terugkeer (net als bij de meeste
+   boss-fights). SP_STATE.mastery (Leitner) is dat WEL: dat is leerdata.
+   ============================================================================ */
+
+// Oude vijand-HP was afgestemd op 7,5 schade per goed antwoord (15 schade per
+// 2 correcte antwoorden). De nieuwe aanvalsvormen doen 12/18/26 per antwoord;
+// zonder schaling zou elk gevecht half zo kort worden. Deze factor houdt een
+// gemiddeld gevecht op ~8-11 beurten bij de veilige aanvalsvorm, en ~5-6 als
+// je consequent het zwaarste vraagtype durft te kiezen.
+const SP_COMBAT_HP_SCHAAL = 2.2;
+
+/* ---- De drie aanvalsvormen = de moeilijkheidskeuze (COMBAT_OVERHAUL.md B).
+   Zwaarder vraagtype = meer schade. Zo kiest de speler zelf zijn niveau
+   zonder dat er ooit een "makkelijke modus"-etiket op hem geplakt wordt, en
+   is de gevechtslengte niet langer voorspelbaar. ---- */
+const SP_COMBAT_VORMEN = {
+  snel:    { nm:"Snelle uitval", icon:"⚔️", zwaarte:1, schade:12, vb:6,
+             ds:"Wat betekent dit woord? — veilig, maar de lichtste klap." },
+  gericht: { nm:"Gerichte slag", icon:"🗡️", zwaarte:2, schade:16, vb:10,
+             ds:"Een vorm- of zinsvraag — meer schade." },
+  genade:  { nm:"Genadeslag",    icon:"💥", zwaarte:3, schade:22, vb:16,
+             ds:"Typ de vorm zelf — de zwaarste klap, en fout kost je niets extra." },
+};
+// Verdedigen stelt óók een vraag (zwaarte 1): een actie die je een beurt lang
+// van vragen vrijstelt zou de leerlus omzeilen. Het levert geen schade op,
+// maar halveert de eerstvolgende vijandelijke intentie en laadt je VB sneller.
+const SP_COMBAT_VERDEDIG_VB = 14;
+
+/* ---- Uitrusting doet eindelijk iets (Chronica.md §8 punt 1, "equip-bonussen
+   — ontwerp vastgelegd, nog te bouwen"). Twee assen, meer niet: helm, schild
+   en cape blijven bewust puur cosmetisch, zodat de balans leesbaar blijft.
+   - WAPEN → schadefactor. De verhouding volgt het al vastgelegde ontwerp
+     (tier 1 = 15, tier 2 = 18, tier 3 = 22 → ×1 / ×1,2 / ×1,45).
+   - HARNAS → demping van Vigor-verlies. In het oude ontwerp beschermde het
+     harnas tegen een EP-boete; nu er echte inkomende schade bestaat, heeft
+     het een natuurlijker taak gekregen: "bescherm je adem", niet "voorkom
+     een game over". Nooit 100%: volledige onkwetsbaarheid haalt de spanning
+     die dit hele systeem juist moet toevoegen er weer uit. ---- */
+const SP_COMBAT_WAPEN_FACTOR = {
+  hooivork:1, knuppel:1,            // startwapens — nulmeting
+  zwaard:1.2, speer:1.2, boog:1.2,  // proloog-klassekeuze
+  staf:1.45,                        // Hoofdstuk 17, laatst ontgrendeld
+};
+const SP_COMBAT_HARNAS_DEMPING = {
+  vodden:0, robe:0, licht:0.15, middel:0.25, hopliet:0.35, zwaar:0.45, ceremonieel:0.5,
+};
+
+/* ---- Klassevaardigheid: 1× per gevecht, kost VB. Namen en werking zijn
+   overgenomen uit BM_CLASSES (battle-data.js) zodat Chronica en Battle Mode
+   één wereld blijven — een Hopliet doet in beide een Schildmuur. ---- */
+const SP_COMBAT_VAARDIGHEID_KOST = 30;
+const SP_COMBAT_MAX_VB = 40;
+const SP_COMBAT_KLASSE = {
+  hopliet:      { nm:"Schildmuur",  icon:"🛡️", ds:"De volgende twee intenties van je tegenstander glijden van je af.",
+                  effect:"schildmuur", motion:"guard" },
+  boogschutter: { nm:"Zwak Punt",   icon:"🎯", ds:"Je volgende treffer doet dubbele schade.",
+                  effect:"zwakpunt", motion:"missile" },
+  cavalerie:    { nm:"Stormloop",   icon:"🐎", ds:"Een directe aanval zonder vraag — 20 schade, nu meteen.",
+                  effect:"stormloop", motion:"thrust" },
+};
+
+/* ---- Combo (COMBAT_OVERHAUL.md K): drie goede antwoorden op rij geven een
+   schadebonus, één fout antwoord zet de teller terug. Blooket/Gimkit-gevoel,
+   en het beloont doorzetten zonder ooit iemand af te straffen. ---- */
+const SP_COMBAT_COMBO_DREMPEL = 3;
+const SP_COMBAT_COMBO_FACTOR = 1.25;
+
+/* ---- Vigor (Chronica.md §11.1): basis + Robur + ervaring. De eretitels
+   tellen mee als "ervaring" — dat is meteen de plek waar de al lang
+   openstaande wens "eretitels moeten iets doen in het gevecht" (§8 punt 1)
+   landt, zonder dat er ook maar één eretitel-definitie aangepast hoeft te
+   worden: wie meer van het verhaal zag, houdt het langer vol. ---- */
+const SP_COMBAT_BASIS_VIGOR = 24;
+
+/* ---- Vigor-BUDGET i.p.v. handgezette schadegetallen -----------------------
+   Eerste balansmeting (2026-08-18, 40 gesimuleerde gevechten per opstelling)
+   liet zien dat vaste Vigor-waarden per intentie structureel onrechtvaardig
+   uitpakken: hoe meer HP een vijand heeft, hoe langer het gevecht duurt, hoe
+   vaker hij aan de beurt komt — dus hoe harder hij toevallig is. Foutloos
+   spelen kostte tegen de Nemeïsche Leeuw 6 van 29 Vigor (niets aan de hand),
+   maar tegen Hector 31 van 29, met in 70% van de gevechten een opvangscène
+   ondanks dat er geen enkele fout gemaakt werd.
+
+   Daarom rekent het gevecht zelf uit hoe hard elke treffer mag aankomen: een
+   heel gevecht mag bij foutloos spel ongeveer VIGOR_BUDGET van je Vigor
+   kosten, en de `vigor`-waarden in SP_COMBAT_INTENTIES zijn vanaf nu RELATIEVE
+   gewichten binnen die vijand (een zware uitval doet meer dan een korte stoot)
+   in plaats van absolute punten. Nieuwe vijanden zijn zo automatisch in balans,
+   ook als hun HP later verandert. ---- */
+const SP_COMBAT_VIGOR_BUDGET = 0.5;
+function spCombatVigorSchaal(hp){
+  const pool = spCombatIntentiePool();
+  const schadeIntenties = pool.filter(i=>!i.type);
+  if(!schadeIntenties.length) return 1;
+  const gemVigor = schadeIntenties.reduce((a,i)=>a+(i.vigor||5),0) / schadeIntenties.length;
+  // Alleen de laadtijd van de SCHADE-intenties telt: die bepaalt hoe vaak je
+  // geraakt wordt. Middelen over de hele pool ging mis bij de Hydra, waar de
+  // enige aanval laden:1 heeft en de twee bijzondere intenties laden:2 — het
+  // model rekende met 1,67 beurt tussen twee treffers terwijl het er in de
+  // praktijk 1 was, en het gevecht sloeg twee keer zo hard aan als bedoeld.
+  const gemLaden = schadeIntenties.reduce((a,i)=>a+(i.laden||1),0) / schadeIntenties.length;
+  const totaalGewicht = pool.reduce((a,i)=>a+spCombatIntentGewicht(i),0);
+  const schadeAandeel = schadeIntenties.reduce((a,i)=>a+spCombatIntentGewicht(i),0) / totaalGewicht;
+  // Verwachte gevechtslengte bij de VEILIGE aanvalsvorm — dat is de langste
+  // route en dus de bovengrens voor het aantal keer dat je geraakt kunt worden.
+  // ×1,2 voor de combobonus: wie doorspeelt zonder fouten zit al snel op
+  // combo ≥3 en doet dan 25% meer schade, dus duurt een gevecht in de praktijk
+  // korter dan de kale schade-per-beurt doet vermoeden.
+  const schadePerBeurt = 1.2 * (Math.max(1, Math.round(SP_COMBAT_VORMEN.snel.schade*spCombatWapenFactor()) + spCombatVisBonus()));
+  const verwachteBeurten = Math.max(3, hp/schadePerBeurt);
+  const verwachteTreffers = Math.max(1, (verwachteBeurten/gemLaden) * schadeAandeel);
+  const doelPerTreffer = (SP_COMBAT_VIGOR_BUDGET * spCombatMaxVigor()) / verwachteTreffers;
+  return doelPerTreffer / gemVigor;
+}
+
 let SP_COMBAT = null;
+
+/* ---- Afgeleide waarden uit stats/uitrusting ----------------------------- */
+function spCombatAvatar(){ return spAvatarMerge(spAvatarLoadLocal()); }
+function spCombatStat(key){
+  const v = SP_STATE.stats && SP_STATE.stats[key];
+  return typeof v==="number" ? v : 10; // vóór de klassekeuze bestaan er nog geen stats
+}
+function spCombatMaxVigor(){
+  const robur = spCombatStat("robur");
+  const titels = (typeof spTitlesLoadLocal==="function") ? spTitlesLoadLocal().length : 0;
+  const ervaring = Math.min(8, Math.floor(titels/4));
+  return SP_COMBAT_BASIS_VIGOR + Math.max(0, robur-10) + ervaring;
+}
+// Vis maakt je klap zwaarder: +1 schade per 2 punten boven de 10. Bewust
+// bescheiden — stats mogen een gevecht kleuren, niet beslissen.
+function spCombatVisBonus(){ return Math.max(0, Math.floor((spCombatStat("vis")-10)/2)); }
+function spCombatWapenFactor(){ return SP_COMBAT_WAPEN_FACTOR[spCombatAvatar().wapen] || 1; }
+function spCombatHarnasDemping(){ return SP_COMBAT_HARNAS_DEMPING[spCombatAvatar().armor] || 0; }
+
 // Finale-only HP-schaling (Chronica.md §7.101, Gerbens frame "Lethe's
 // kracht neemt toe naarmate we meer vergeten"): ZACHTE schaling, dus een
 // bescheiden ±20%-marge rond de basiswaarde — nooit een harde muur voor een
@@ -2849,71 +3223,468 @@ function spFinaleLetheHp(baseHp, state){
   const modifier = 1 + (0.5 - herinnerd) * 0.4; // 0.8..1.2
   return Math.round(baseHp * modifier);
 }
+
+/* ---- Start -------------------------------------------------------------- */
 function spStartCombatFromScene(scene){
   const enemyId = scene.meta.COMBAT.trim();
   const target = scene.choices[0]?.target;
   const enemy = SP_COMBAT_ENEMIES[enemyId];
   if(!enemy){ console.error("Onbekende vijand:", enemyId); return spGoCns(target); }
-  const hp = enemyId==="fin_lethe" ? spFinaleLetheHp(enemy.hp, SP_STATE) : enemy.hp;
-  SP_COMBAT = { enemyId, hp, maxHp:hp, ep:0, target, question:null, sceneTitle:scene.title };
-  spCombatNextQuestion();
+  const basis = enemyId==="fin_lethe" ? spFinaleLetheHp(enemy.hp, SP_STATE) : enemy.hp;
+  const hp = Math.round(basis * SP_COMBAT_HP_SCHAAL);
+  const maxVigor = spCombatMaxVigor();
+  SP_COMBAT = {
+    enemyId, hp, maxHp:hp, target, sceneTitle:scene.title,
+    vigor:maxVigor, maxVigor, vb:0, combo:0, beurt:1,
+    fase:"intro", vorm:null, question:null,
+    intent:null, intentLaden:0,
+    schild:false, schildmuur:0, zwakpunt:false,
+    goed:0, fout:0, vigorVerloren:0, vaardigheidGebruikt:false,
+    itemsGebruikt:[], vermijd:[], gezien:{}, opvangGehad:false,
+    bericht:null, uitleg:null, laatsteFx:null, vigorSchaal:1,
+  };
+  // Moet ná het zetten van SP_COMBAT: spCombatVigorSchaal() leest de
+  // intentiepool van deze vijand op via SP_COMBAT.enemyId.
+  SP_COMBAT.vigorSchaal = spCombatVigorSchaal(hp);
+  spCombatKiesIntentie();
   SCREENS.spCombat();
 }
-// Genereert een meerkeuzevraag uit de al geleerde vocabulaire (SP_STATE.vocab)
-// — is die nog leeg (zou niet moeten gebeuren na Hoofdstuk 1, maar toch een
-// vangnet), val terug op de volledige SP_VOCAB_ENTRIES-lijst.
-// Taalspoor-filter (B24, sinds Hoofdstuk 10): zodra de speler een enkel spoor
-// koos (FLAG taalspoor=latijn/grieks op CH10_000B/C), moet een Combat-bridge-
-// vraag ook echt uit die taal komen — anders wordt precies het sterke,
-// per ongeluk al werkende spaced-retrieval-mechanisme (audit fase 7 §2b) de
-// plek waar een eentalige speler voortdurend op onbekende stof wordt getoetst.
-// "beide" (of geen keuze, vóór Hoofdstuk 10) filtert niet — huidig gedrag.
-function spCombatNextQuestion(){
-  const ids = (SP_STATE.vocab&&SP_STATE.vocab.length) ? SP_STATE.vocab : Object.keys(SP_VOCAB_ENTRIES);
-  let entries = ids.map(id=>SP_VOCAB_ENTRIES[id]).filter(Boolean);
-  const spoor = SP_STATE.flags?.taalspoor;
-  if(spoor==="latijn" || spoor==="grieks"){
-    const eigenTaal = spoor==="latijn" ? "latijn" : "grieks";
-    const gefilterd = entries.filter(e => e.taal===eigenTaal);
-    if(gefilterd.length) entries = gefilterd;
+
+/* ---- Vijand-intenties (COMBAT_OVERHAUL.md A) ----------------------------
+   De vijand kondigt aan wat hij gaat doen en voert dat één of twee beurten
+   later uit. Dat is de goedkoopste spanning die er bestaat: je weet wat er
+   komt en kunt er iets tegen doen (Verdedigen, Schildmuur), of je besluit
+   het risico te nemen omdat je hem net dit gevecht uit wilt hebben.
+   Een vijand zonder eigen `intenties` valt terug op de generieke set. ---- */
+const SP_COMBAT_STANDAARD_INTENTIES = [
+  { id:"uitval",   nm:"Uitval",     laden:2, vigor:6,
+    aankondiging:"maakt zich klaar voor een uitval.", uitvoer:"De uitval komt aan — je hapt naar adem." },
+  { id:"stoot",    nm:"Stoot",      laden:1, vigor:4,
+    aankondiging:"zoekt een opening.", uitvoer:"Een korte, harde stoot raakt je zij." },
+  { id:"adempauze",nm:"Hergroepering", laden:2, type:"heal", waarde:0.08,
+    aankondiging:"trekt zich even terug om op adem te komen.", uitvoer:"Hij herstelt een deel van zijn kracht." },
+];
+function spCombatIntentiePool(){
+  const eigen = SP_COMBAT_INTENTIES[SP_COMBAT.enemyId];
+  return (eigen && eigen.length) ? eigen : SP_COMBAT_STANDAARD_INTENTIES;
+}
+// Gewogen keuze. Bij een ONgewogen trekking (eerste meting 2026-08-18) kwamen
+// de bijzondere intenties even vaak langs als de gewone aanvallen, en zakte de
+// Vigor in een gevecht van zeven beurten maar twee keer met 5 punten — de hele
+// spanning die dit systeem moet toevoegen viel dan weg. Een gewone aanval weegt
+// daarom drie keer zo zwaar als een heal of vastberadenheid-roof; die laatste
+// blijven zo wat ze horen te zijn: een verrassing, niet het patroon.
+function spCombatIntentGewicht(intent){
+  if(typeof intent.gewicht==="number") return intent.gewicht;
+  return intent.type ? 1 : 3;
+}
+function spCombatKiesIntentie(){
+  const pool = spCombatIntentiePool();
+  // Geen twee BIJZONDERE intenties (heal / vastberadenheid-roof) op rij: die
+  // moeten een verrassing blijven. Een gewone aanval mag wél herhalen — dat is
+  // in elke turn-based RPG normaal, en de eerste versie van deze regel sloot
+  // ook gewone aanvallen uit, waardoor een vijand met één aanval en twee
+  // specials nooit twee keer achter elkaar kón aanvallen. Precies daardoor
+  // kwam er in de praktijk maar half zoveel Vigor-schade binnen als bedoeld.
+  const vorige = SP_COMBAT.intent;
+  const keuze = (vorige && vorige.type) ? pool.filter(i=>i.id!==vorige.id) : pool;
+  const kandidaten = keuze.length ? keuze : pool;
+  const gewichten = kandidaten.map(spCombatIntentGewicht);
+  const totaal = gewichten.reduce((a,b)=>a+b, 0);
+  let r = Math.random()*totaal, intent = kandidaten[kandidaten.length-1];
+  for(let i=0;i<kandidaten.length;i++){ r -= gewichten[i]; if(r<=0){ intent = kandidaten[i]; break; } }
+  SP_COMBAT.intent = intent;
+  SP_COMBAT.intentLaden = intent.laden || 1;
+}
+
+/* ---- Vraag stellen ------------------------------------------------------ */
+// Hoogste bereikte hoofdstuknummer — filtert de zinnenbank, zodat een
+// leerling nooit een zin krijgt uit stof die het verhaal nog niet gaf.
+function spCombatHoofdstukNr(){
+  const m = (SP_STATE.node||"").match(/^CH(\d+)_/);
+  if(m) return +m[1];
+  return (SP_STATE.node||"").indexOf("FIN_")===0 ? 99 : 0;
+}
+function spCombatVolgendeVraag(zwaarte){
+  const enemy = SP_COMBAT_ENEMIES[SP_COMBAT.enemyId];
+  const q = CombatQuestions.next({
+    zwaarte,
+    vocabIds: (SP_STATE.vocab && SP_STATE.vocab.length) ? SP_STATE.vocab : null,
+    taalspoor: SP_STATE.flags?.taalspoor,
+    mastery: (SP_STATE.mastery = SP_STATE.mastery || {}),
+    vermijd: SP_COMBAT.vermijd,
+    hoofdstuk: spCombatHoofdstukNr(),
+    types: enemy.vraagtypes || null,
+  });
+  SP_COMBAT.question = q;
+  if(q){
+    // Max. 2× dezelfde vraag per gevecht (leerlingfeedback 2026-08-13: bij een
+    // lang gevecht kwam hetzelfde woord tot 5× op rij langs). `vermijd` is een
+    // UITSLUITINGSlijst voor CombatQuestions.next(), dus een sleutel komt daar
+    // pas op zodra hij twee keer geweest is — niet meteen bij de eerste keer.
+    // Raakt alles uitgesloten, dan valt gewogenTrek() zelf terug op de volle
+    // pool, dus vastlopen kan niet.
+    SP_COMBAT.gezien[q.masteryKey] = (SP_COMBAT.gezien[q.masteryKey]||0) + 1;
+    if(SP_COMBAT.gezien[q.masteryKey] >= 2 && !SP_COMBAT.vermijd.includes(q.masteryKey)){
+      SP_COMBAT.vermijd.push(q.masteryKey);
+    }
   }
-  // Max. 2x hetzelfde woord per gevecht (leerlingfeedback 2026-08-13: bij een
-  // lang gevecht kwam hetzelfde woord tot 5x op rij langs). Val terug op de
-  // volledige pool zodra alle woorden hun maximum al hebben bereikt.
-  const uses = SP_COMBAT.wordUses || (SP_COMBAT.wordUses = {});
-  const beschikbaar = entries.filter(e => (uses[e.woord]||0) < 2);
-  if(beschikbaar.length) entries = beschikbaar;
-  const w = pick(entries);
-  uses[w.woord] = (uses[w.woord]||0) + 1;
-  const correct = w.betekenis;
-  // Leerlingfeedback (2026-08-13): "tangit" (hij/zij raakt aan) tegenover
-  // afleiders "nieuw"/"en"/"zien" was zonder Latijnkennis al te raden — puur
-  // op vorm (drie woorden tegenover één) viel het goede antwoord meteen op.
-  // Geef daarom voorkeur aan afleiders met een vergelijkbaar aantal woorden
-  // in de Nederlandse betekenis (zelfde soort constructie, bv. ook een
-  // vervoegde "hij/zij ..."-vorm), met een steeds ruimere terugval zodra de
-  // pool te klein is om drie goede afleiders te vinden.
-  const woordAantal = s => (s||"").trim().split(/\s+/).length;
-  const correctWC = woordAantal(correct);
-  const kandidaten = entries.filter(x=>x!==w).map(x=>x.betekenis)
-    .filter((v,i,a)=>v!==correct && a.indexOf(v)===i);
-  let vormPool = kandidaten.filter(v=>woordAantal(v)===correctWC);
-  if(vormPool.length<3) vormPool = kandidaten.filter(v=>Math.abs(woordAantal(v)-correctWC)<=1);
-  if(vormPool.length<3) vormPool = kandidaten;
-  const distractors = shuffle(vormPool).slice(0,3);
-  SP_COMBAT.question = { woord:w.woord, correct, options:shuffle([correct, ...distractors]) };
+  return q;
 }
-// Zelfde formule als bmBossAliveHeads() (bossbattle.js): koppen gelijk
-// verdeeld over de HP-balk, ceil() zodat een kop pas verdwijnt zodra zijn
-// 1/7e-aandeel HELEMAAL weg is (niet al bij het eerste beetje schade).
-function spCombatAliveHeads(headCount, hpPct){
-  return Math.max(0, Math.min(headCount, Math.ceil((hpPct||0)*headCount)));
+
+/* ---- Actiekeuze --------------------------------------------------------- */
+function spCombatKiesVorm(vormId){
+  if(!SP_COMBAT || SP_COMBAT.fase!=="keuze") return;
+  const vorm = vormId==="verdedig"
+    ? { nm:"Verdedigen", icon:"🛡️", zwaarte:1, schade:0, vb:SP_COMBAT_VERDEDIG_VB, verdedig:true }
+    : SP_COMBAT_VORMEN[vormId];
+  if(!vorm) return;
+  const q = spCombatVolgendeVraag(vorm.zwaarte);
+  if(!q){
+    // Vangnet: geen enkele vraag te genereren (lege vocab-pool). Nooit
+    // vastlopen — de speler krijgt de treffer gewoon cadeau.
+    toast("Geen vraag beschikbaar", "Je haalt uit zonder aarzeling.");
+    spCombatVerwerkAntwoord(true, vorm, vormId);
+    return;
+  }
+  SP_COMBAT.vorm = { ...vorm, id:vormId };
+  SP_COMBAT.fase = "vraag";
+  SCREENS.spCombat();
 }
+
+/* ---- Antwoord ----------------------------------------------------------- */
+function spCombatAntwoordMC(idx){
+  if(!SP_COMBAT || SP_COMBAT.fase!=="vraag") return;
+  const q = SP_COMBAT.question;
+  spCombatVerwerkAntwoord(CombatQuestions.controleer(q, q.opties[idx]), SP_COMBAT.vorm, SP_COMBAT.vorm.id);
+}
+function spCombatAntwoordGetypt(){
+  if(!SP_COMBAT || SP_COMBAT.fase!=="vraag") return;
+  const raw = el("spCombatInput")?.value || "";
+  spCombatVerwerkAntwoord(CombatQuestions.controleer(SP_COMBAT.question, raw), SP_COMBAT.vorm, SP_COMBAT.vorm.id);
+}
+// Schermtoetsenbord-hulpjes voor getypt Grieks — hergebruiken de bestaande
+// puzzel-toetsen, maar op het combat-invoerveld.
+function spCombatGreekKey(ch){ const i=el("spCombatInput"); if(i) i.value += ch; }
+function spCombatGreekBackspace(){ const i=el("spCombatInput"); if(i) i.value = i.value.slice(0,-1); }
+function spCombatGreekModifier(type){
+  const i = el("spCombatInput"); if(!i || !i.value) return;
+  const map = type==="smooth" ? SP_GREEK_SMOOTH : type==="rough" ? SP_GREEK_ROUGH : SP_GREEK_IOTA_SUB;
+  const last = i.value.slice(-1);
+  if(map[last]) i.value = i.value.slice(0,-1) + map[last];
+}
+
+function spCombatVerwerkAntwoord(goed, vorm, vormId){
+  const q = SP_COMBAT.question;
+  // Leitner: fout → box 0 (opnieuw verdienen), goed → één box omhoog.
+  if(q) CombatQuestions.noteerAntwoord(SP_STATE.mastery, q.masteryKey, goed);
+
+  if(goed){
+    SP_COMBAT.goed++;
+    SP_COMBAT.combo++;
+    SP_COMBAT.vb = Math.min(SP_COMBAT_MAX_VB, SP_COMBAT.vb + vorm.vb);
+    SP_COMBAT.uitleg = null;
+    if(vorm.verdedig){
+      SP_COMBAT.schild = true;
+      SP_COMBAT.bericht = "🛡️ Je zet je schrap. De volgende aanval doet nog maar de helft.";
+      SP_COMBAT.laatsteFx = { speler:"guard" };
+    } else {
+      const schade = spCombatSchade(vorm);
+      SP_COMBAT.hp = Math.max(0, SP_COMBAT.hp - schade);
+      const comboActief = SP_COMBAT.combo >= SP_COMBAT_COMBO_DREMPEL;
+      SP_COMBAT.bericht = vorm.icon+" Raak! "+schade+" schade"+(comboActief?" — combo ×"+SP_COMBAT.combo:"")+".";
+      SP_COMBAT.laatsteFx = { speler:spCombatMotionVoor(vormId), vijand:"hit", schade, combo:comboActief };
+      SP_COMBAT.zwakpunt = false;
+    }
+  } else {
+    SP_COMBAT.fout++;
+    SP_COMBAT.combo = 0;
+    SP_COMBAT.bericht = "Niet juist — je slag mist.";
+    // MICRO-ONDERWIJS (COMBAT_OVERHAUL.md D): een fout antwoord is nu een
+    // leermoment in plaats van alleen een straf. De uitleg blijft op het
+    // keuzescherm staan terwijl de speler zijn volgende zet kiest.
+    SP_COMBAT.uitleg = q ? q.uitleg : null;
+    SP_COMBAT.laatsteFx = { speler:"evade" };
+  }
+
+  if(SP_COMBAT.hp<=0){ spCombatEinde(); return; }
+  spCombatVijandBeurt();
+}
+
+// Schade = basis × wapen × combo × zwakpunt, plus de Vis-bonus.
+function spCombatSchade(vorm){
+  let s = vorm.schade * spCombatWapenFactor();
+  if(SP_COMBAT.combo >= SP_COMBAT_COMBO_DREMPEL) s *= SP_COMBAT_COMBO_FACTOR;
+  if(SP_COMBAT.zwakpunt) s *= 2;
+  return Math.max(1, Math.round(s) + spCombatVisBonus());
+}
+function spCombatMotionVoor(vormId){
+  const wapen = spCombatAvatar().wapen;
+  if(wapen==="boog") return "missile";
+  if(wapen==="speer") return "thrust";
+  if(vormId==="genade") return "skill";
+  return "swing";
+}
+
+/* ---- Vijandbeurt -------------------------------------------------------- */
+function spCombatVijandBeurt(){
+  SP_COMBAT.beurt++;
+  SP_COMBAT.intentLaden--;
+  if(SP_COMBAT.intentLaden > 0){
+    // Nog aan het opladen — de dreiging blijft staan, dat is het punt.
+    SP_COMBAT.fase = "keuze";
+    SCREENS.spCombat();
+    return;
+  }
+  const intent = SP_COMBAT.intent;
+  const enemy = SP_COMBAT_ENEMIES[SP_COMBAT.enemyId];
+  let regel = "";
+  if(SP_COMBAT.schildmuur > 0){
+    SP_COMBAT.schildmuur--;
+    regel = "🛡️ Je schildmuur houdt: "+esc(enemy.nm)+" bereikt je niet.";
+  } else if(intent.type==="heal"){
+    const genezen = Math.round(SP_COMBAT.maxHp * (intent.waarde||0.08));
+    SP_COMBAT.hp = Math.min(SP_COMBAT.maxHp, SP_COMBAT.hp + genezen);
+    regel = "💚 "+intent.uitvoer+" (+"+genezen+" HP)";
+    SP_COMBAT.laatsteFx = { ...(SP_COMBAT.laatsteFx||{}), vijandHeal:genezen };
+  } else if(intent.type==="vb_roof"){
+    const weg = Math.min(SP_COMBAT.vb, intent.waarde||10);
+    SP_COMBAT.vb -= weg;
+    // Stond je toch al op nul, dan valt er niets te roven — dan zou
+    // "(−0 vastberadenheid)" een rare mededeling zijn.
+    regel = "💢 "+intent.uitvoer+(weg>0 ? " (−"+weg+" vastberadenheid)" : " (je had niets meer te verliezen)");
+  } else {
+    let verlies = (intent.vigor || 5) * SP_COMBAT.vigorSchaal;
+    if(SP_COMBAT.schild){ verlies = verlies/2; SP_COMBAT.schild = false; }
+    verlies = Math.max(2, Math.round(verlies * (1 - spCombatHarnasDemping())));
+    SP_COMBAT.vigor = Math.max(0, SP_COMBAT.vigor - verlies);
+    SP_COMBAT.vigorVerloren += verlies;
+    regel = "💥 "+intent.uitvoer+" (−"+verlies+" Vigor)";
+    SP_COMBAT.laatsteFx = { ...(SP_COMBAT.laatsteFx||{}), spelerGeraakt:verlies };
+  }
+  SP_COMBAT.bericht = (SP_COMBAT.bericht ? SP_COMBAT.bericht+"<br>" : "") + regel;
+  spCombatKiesIntentie();
+
+  if(SP_COMBAT.vigor<=0){ spCombatOpvang(); return; }
+  SP_COMBAT.fase = "keuze";
+  SCREENS.spCombat();
+}
+
+/* ---- Vigor op nul: NOOIT game over -------------------------------------
+   Chronica.md §11.1 legt dit al vast: "op nul volgt geen game over maar een
+   afgedwongen scène". Drie varianten, met echte narratieve gevolgen (een
+   relatie die iets kost, een vijand die op adem komt, een flag voor de
+   payoff-laag) — maar het gevecht gaat altijd door. ---- */
+function spCombatOpvang(){
+  const enemy = SP_COMBAT_ENEMIES[SP_COMBAT.enemyId];
+  const relaties = Object.entries(SP_STATE.relations||{}).filter(([,v])=>Number(v)>0);
+  let tekst, gevolg = "";
+  if(relaties.length && !SP_COMBAT.opvangGehad){
+    // Een metgezel vangt de klap op — dat kost iets in de relatie, want je
+    // hebt hem laten opdraaien voor jouw uitputting.
+    const [naam] = pick(relaties);
+    const nette = naam.charAt(0).toUpperCase()+naam.slice(1);
+    SP_STATE.relations[naam] = Number(SP_STATE.relations[naam]) - 1;
+    tekst = nette+" ziet je wankelen en stapt tussen jou en "+enemy.nm+" in. De klap die voor jou bedoeld was, komt bij "+nette+" aan.";
+    gevolg = "Je haalt adem. "+nette+" zegt er niets over — maar iets tussen jullie is verschoven.";
+  } else if(SP_COMBAT.hp > SP_COMBAT.maxHp*0.4){
+    const terug = Math.round(SP_COMBAT.maxHp*0.12);
+    SP_COMBAT.hp = Math.min(SP_COMBAT.maxHp, SP_COMBAT.hp + terug);
+    tekst = "Je knieën begeven het. Je wijkt terug, verder dan je wilde, en "+enemy.nm+" gebruikt die ruimte om zich te herpakken.";
+    gevolg = "Je wint tijd om op adem te komen — en verliest het terrein dat je al gewonnen had.";
+  } else {
+    SP_STATE.flags = { ...(SP_STATE.flags||{}), gered_in_gevecht:true };
+    tekst = "Je ziet de slag komen en weet dat je hem niet meer kunt keren. Dan trekt iemand je aan je schouder opzij — je weet niet wie, je ziet alleen een arm en een mouw die je niet herkent.";
+    gevolg = "Als je omkijkt, is er niemand. Maar je staat nog.";
+  }
+  SP_COMBAT.opvangGehad = true;
+  SP_COMBAT.vigor = Math.max(1, Math.round(SP_COMBAT.maxVigor*0.4));
+  SP_COMBAT.fase = "opvang";
+  SP_COMBAT.opvangTekst = tekst;
+  SP_COMBAT.opvangGevolg = gevolg;
+  spSaveProgress({ relations:SP_STATE.relations, flags:SP_STATE.flags });
+  SCREENS.spCombat();
+}
+function spCombatOpvangVerder(){
+  if(!SP_COMBAT) return;
+  SP_COMBAT.fase = "keuze";
+  SP_COMBAT.bericht = null;
+  SCREENS.spCombat();
+}
+
+/* ---- Klassevaardigheid en items ----------------------------------------- */
+function spCombatVaardigheid(){
+  if(!SP_COMBAT || SP_COMBAT.fase!=="keuze") return;
+  const def = SP_COMBAT_KLASSE[SP_STATE.classId];
+  if(!def || SP_COMBAT.vaardigheidGebruikt || SP_COMBAT.vb < SP_COMBAT_VAARDIGHEID_KOST) return;
+  SP_COMBAT.vb -= SP_COMBAT_VAARDIGHEID_KOST;
+  SP_COMBAT.vaardigheidGebruikt = true;
+  SP_COMBAT.uitleg = null;
+  if(def.effect==="schildmuur"){
+    SP_COMBAT.schildmuur = 2;
+    SP_COMBAT.bericht = def.icon+" <strong>"+def.nm+"</strong> — de volgende twee aanvallen glijden van je af.";
+    SP_COMBAT.laatsteFx = { speler:"guard" };
+  } else if(def.effect==="zwakpunt"){
+    SP_COMBAT.zwakpunt = true;
+    SP_COMBAT.bericht = def.icon+" <strong>"+def.nm+"</strong> — je hebt de opening gezien. Je volgende treffer telt dubbel.";
+    SP_COMBAT.laatsteFx = { speler:"missile" };
+  } else {
+    const schade = Math.max(1, Math.round(20*spCombatWapenFactor()) + spCombatVisBonus());
+    SP_COMBAT.hp = Math.max(0, SP_COMBAT.hp - schade);
+    SP_COMBAT.bericht = def.icon+" <strong>"+def.nm+"</strong> — je gaat er dwars doorheen: "+schade+" schade.";
+    SP_COMBAT.laatsteFx = { speler:"thrust", vijand:"hit", schade };
+  }
+  if(SP_COMBAT.hp<=0){ spCombatEinde(); return; }
+  spCombatVijandBeurt();
+}
+function spCombatItem(itemId){
+  if(!SP_COMBAT || SP_COMBAT.fase!=="keuze") return;
+  const item = SP_COMBAT_ITEMS[itemId];
+  if(!item || SP_COMBAT.itemsGebruikt.includes(itemId)) return;
+  if(!(SP_STATE.inventory||[]).includes(itemId)) return;
+  SP_COMBAT.itemsGebruikt.push(itemId);
+  // Een item verdwijnt uit de inventaris: het is eenmalig, en dat maakt de
+  // keuze om hem NU te gebruiken een echte keuze.
+  const inventory = (SP_STATE.inventory||[]).filter(i=>i!==itemId);
+  spSaveProgress({ inventory });
+  SP_COMBAT.uitleg = null;
+  if(item.effect==="vigor"){
+    const terug = Math.min(SP_COMBAT.maxVigor-SP_COMBAT.vigor, item.waarde||10);
+    SP_COMBAT.vigor += terug;
+    SP_COMBAT.bericht = item.icon+" <strong>"+item.nm+"</strong> — "+item.tekst+" (+"+terug+" Vigor)";
+  } else if(item.effect==="schade"){
+    const schade = item.waarde||25;
+    SP_COMBAT.hp = Math.max(0, SP_COMBAT.hp - schade);
+    SP_COMBAT.bericht = item.icon+" <strong>"+item.nm+"</strong> — "+item.tekst+" ("+schade+" schade)";
+    SP_COMBAT.laatsteFx = { vijand:"hit", schade };
+  } else if(item.effect==="verdoof"){
+    SP_COMBAT.intentLaden += item.waarde||2;
+    SP_COMBAT.bericht = item.icon+" <strong>"+item.nm+"</strong> — "+item.tekst;
+  }
+  if(SP_COMBAT.hp<=0){ spCombatEinde(); return; }
+  SP_COMBAT.fase = "keuze";
+  SCREENS.spCombat();
+}
+
+/* ---- Einde: een rang, geen kaal "gewonnen" -----------------------------
+   Drie sterren op basis van accuratesse en hoeveel Vigor het je kostte. Er
+   bestaat geen faalrang: de laagste uitkomst is nog steeds een Victoria. ---- */
+function spCombatRang(){
+  const totaal = SP_COMBAT.goed + SP_COMBAT.fout;
+  const pct = totaal ? SP_COMBAT.goed/totaal : 1;
+  const ongedeerd = SP_COMBAT.vigorVerloren <= SP_COMBAT.maxVigor*0.25;
+  if(pct>=0.9 && ongedeerd) return { sterren:3, nm:"Victoria splendida", ds:"Schitterend gevochten — nauwelijks een misser, nauwelijks een schram." };
+  if(pct>=0.7)               return { sterren:2, nm:"Victoria clara",     ds:"Een duidelijke overwinning." };
+  return                            { sterren:1, nm:"Victoria",           ds:"Gewonnen is gewonnen." };
+}
+function spCombatEinde(){
+  const enemy = SP_COMBAT_ENEMIES[SP_COMBAT.enemyId];
+  const rang = spCombatRang();
+  SP_COMBAT.fase = "einde";
+  SP_COMBAT.rang = rang;
+  SP_COMBAT.laatsteFx = { speler:"victory", vijand:"hit" };
+  spKroniekLog(enemy.nm+" verslagen — "+rang.nm+" ("+SP_COMBAT.goed+" van "+
+    (SP_COMBAT.goed+SP_COMBAT.fout)+" antwoorden juist, "+SP_COMBAT.beurt+" beurten).");
+  spSaveProgress({ mastery:SP_STATE.mastery });
+  SCREENS.spCombat();
+}
+function spCombatVerder(){
+  const target = SP_COMBAT?.target;
+  SP_COMBAT = null;
+  spGoCns(target);
+}
+
+/* ============================================================================
+   SCHERM + FX-LAAG
+   ----------------------------------------------------------------------------
+   Hergebruikt de complete animatielaag die voor Battle Mode gebouwd is en die
+   Chronica tot nu toe niet aanraakte: BattleMotion (battle-motion.js), de
+   gelaagde pixel-held (_bmPixelLayers, battle.js) en de keyframes in
+   index.html (.bm-float, .bm-proj, .bm-glow, bmPixelHit, bmBad). De speler
+   stond in zijn eigen gevecht niet in beeld — nu wel.
+   ============================================================================ */
+/* Animaties uit-schakelaar, los van de geluidsknop — zelfde gedachte als
+   BM_META.animations in Battle Mode (docent kan het uitzetten voor tempo,
+   iPad-prestaties of prikkelgevoelige leerlingen). Account-breed, niet per
+   saveslot: het is een weergavevoorkeur, geen verhaalvoortgang. */
+const SP_FX_KEY = "certamen_chronica_fx_uit";
+function spCombatAnimAan(){
+  try{ return localStorage.getItem(SP_FX_KEY)!=="1"; }catch(e){ return true; }
+}
+function spCombatToggleAnim(){
+  try{ localStorage.setItem(SP_FX_KEY, spCombatAnimAan()?"1":"0"); }catch(e){}
+  SCREENS.spCombat();
+}
+function spCombatAnimToggleHTML(){
+  const aan = spCombatAnimAan();
+  return `<button title="${aan?"Animaties uitzetten":"Animaties aanzetten"}" aria-label="${aan?"Animaties uitzetten":"Animaties aanzetten"}"
+    style="flex:0 0 auto;padding:6px 10px;font-size:20px;line-height:1;background:none;border:none;cursor:pointer;color:var(--hi-bright)"
+    onclick="spCombatToggleAnim()">${aan?"✨":"🚫"}</button>`;
+}
+// Zwevend getal (schade/heling) — zelfde CSS-klasse als Battle Mode's bmFloat.
+function spCombatFloat(tekst, kleur, kant){
+  const cont = el("spCombatFx"); if(!cont) return;
+  const d = document.createElement("div");
+  d.className = "bm-float";
+  d.style.cssText = "color:"+kleur+";bottom:38%;left:"+(kant==="links"?"28%":"72%");
+  d.textContent = tekst;
+  cont.appendChild(d);
+  setTimeout(()=>d.remove(), 1500);
+}
+function spCombatGlow(kant, kleur){
+  const cont = el("spCombatFx"); if(!cont) return;
+  const d = document.createElement("div");
+  d.className = "bm-glow";
+  d.style.cssText = "width:70px;height:70px;background:radial-gradient(circle,"+(kleur||"rgba(212,175,55,.65)")+",transparent 70%);"+
+    (kant==="links"?"left:12%;top:20%":"right:12%;top:20%");
+  cont.appendChild(d);
+  setTimeout(()=>d.remove(), 950);
+}
+function spCombatProjectiel(emoji){
+  const cont = el("spCombatFx"); if(!cont) return;
+  const d = document.createElement("div");
+  d.className = "bm-proj r";
+  d.style.setProperty("--row", 0);
+  d.textContent = emoji;
+  cont.appendChild(d);
+  setTimeout(()=>d.remove(), 900);
+}
+// Speelt alles af wat er sinds de vorige render gebeurd is. Wordt na élke
+// render aangeroepen en daarna gewist, zodat een her-render (bv. door de
+// geluidsknop) niet dezelfde animatie nog eens afvuurt.
+function spCombatSpeelFx(){
+  const fx = SP_COMBAT?.laatsteFx;
+  if(!fx) return;
+  SP_COMBAT.laatsteFx = null;
+  if(!spCombatAnimAan()) return; // het tekstbericht in het paneel vertelt alles al
+  const held = el("spCombatHeld")?.querySelector(".pixel-hero");
+  if(held && typeof BattleMotion!=="undefined"){
+    if(fx.speler) BattleMotion.play(held, fx.speler);
+    else BattleMotion.ensureIdle(held);
+  }
+  if(fx.speler==="missile") setTimeout(()=>spCombatProjectiel("🏹"), 120);
+  if(fx.vijand==="hit"){
+    const v = el("spCombatVijand");
+    if(v){ v.style.animation = "none"; void v.offsetWidth; v.style.animation = "bmPixelHit .5s"; }
+    setTimeout(()=>spCombatFloat("-"+fx.schade, "#e05555", "rechts"), 260);
+  }
+  if(fx.combo) setTimeout(()=>spCombatGlow("links"), 160);
+  if(fx.vijandHeal) setTimeout(()=>spCombatFloat("+"+fx.vijandHeal, "var(--green-bright,#3f9d52)", "rechts"), 200);
+  if(fx.spelerGeraakt){
+    const h = el("spCombatHeld");
+    if(h){ h.style.animation = "none"; void h.offsetWidth; h.style.animation = "bmBad .5s"; }
+    setTimeout(()=>spCombatFloat("-"+fx.spelerGeraakt+" Vigor", "#e0a355", "links"), 200);
+  }
+}
+
 // Vijand-sprite: romp (met kale nekstompjes al ingetekend bij de Hydra) +
 // eventuele losse kop-lagen erbovenop, exact dezelfde absolute-stapel-truc
 // als Boss Battle se bmBossSpriteHTML() (bossbattle.js) — geen offsets
 // nodig, elke laag is hetzelfde canvasformaat. Ontbreekt enemy.img, dan
 // valt het terug op het icon-emoji.
+function spCombatAliveHeads(headCount, hpPct){
+  return Math.max(0, Math.min(headCount, Math.ceil((hpPct||0)*headCount)));
+}
 function spCombatSpriteHTML(enemy){
   if(!enemy.img) return `<span style="font-size:40px">${enemy.icon}</span>`;
   let headsHTML = "";
@@ -2924,71 +3695,209 @@ function spCombatSpriteHTML(enemy){
       `<img src="${esc(h)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain">`
     ).join("");
   }
-  return `<div style="position:relative;width:min(260px,70vw);aspect-ratio:1/1;margin:0 auto">
+  return `<div style="position:relative;width:min(190px,42vw);aspect-ratio:1/1">
     <img src="${esc(enemy.img)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain"
       onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${esc(enemy.icon)}</span>'">
     ${headsHTML}
   </div>`;
 }
+// De speler zelf, in zijn eigen gevecht — met de echte gelaagde pixel-held
+// uit Battle Mode (inclusief het wapen dat hij in de proloog koos).
+function spCombatHeldHTML(){
+  const av = spCombatAvatar();
+  const lagen = (typeof _bmPixelLayers==="function") ? _bmPixelLayers(av, "dir-right") : "";
+  if(lagen) return lagen;
+  return (typeof bmAvatarSVG==="function") ? bmAvatarSVG(av, 96) : `<span style="font-size:40px">🗡️</span>`;
+}
+
+function spCombatBalkHTML(label, waarde, max, kleur, kritiek){
+  const pct = max ? Math.max(0, Math.min(100, Math.round(waarde/max*100))) : 0;
+  return `<div style="margin:4px 0">
+    <div style="height:9px;background:rgba(255,255,255,.12);border-radius:5px;overflow:hidden">
+      <div class="bm-hp-fill${kritiek&&pct<25?" bm-crit":""}" style="height:100%;width:${pct}%;background:${kleur};transition:width .45s"></div>
+    </div>
+    <div class="note" style="margin-top:2px">${esc(label)}: ${waarde} / ${max}</div>
+  </div>`;
+}
+
+function spCombatIntentHTML(){
+  const intent = SP_COMBAT.intent;
+  if(!intent) return "";
+  const enemy = SP_COMBAT_ENEMIES[SP_COMBAT.enemyId];
+  const klaar = SP_COMBAT.intentLaden<=1;
+  // De aangekondigde Vigor-kosten moeten de GESCHAALDE waarde tonen (zie
+  // spCombatVigorSchaal), inclusief harnas-demping — anders belooft de badge
+  // iets anders dan er even later gebeurt.
+  const ruw = (intent.vigor||5) * SP_COMBAT.vigorSchaal;
+  const kost = intent.type==="heal" ? "herstelt kracht"
+    : intent.type==="vb_roof" ? "−vastberadenheid"
+    : "−"+Math.max(2, Math.round(ruw*(1-spCombatHarnasDemping())))+" Vigor";
+  return `<div style="margin-top:6px;padding:7px 10px;border-radius:8px;text-align:left;
+      border:1px solid ${klaar?"rgba(224,85,85,.75)":"rgba(255,255,255,.18)"};
+      background:${klaar?"rgba(224,85,85,.12)":"rgba(255,255,255,.05)"}">
+    <div class="note" style="margin:0"><strong>${klaar?"⚠️ Nu:":"⏳ Straks:"}</strong>
+      ${esc(enemy.nm)} ${esc(intent.aankondiging)}
+      <span style="opacity:.75">(${esc(kost)}${klaar?"":", nog "+(SP_COMBAT.intentLaden-1)+" beurt"})</span></div>
+  </div>`;
+}
+
+function spCombatKeuzeHTML(){
+  const kanVaardigheid = SP_COMBAT_KLASSE[SP_STATE.classId] && !SP_COMBAT.vaardigheidGebruikt
+    && SP_COMBAT.vb >= SP_COMBAT_VAARDIGHEID_KOST;
+  const vaardigheid = SP_COMBAT_KLASSE[SP_STATE.classId];
+  const knop = (id,v) => `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;text-align:left"
+      onclick="spCombatKiesVorm('${id}')">
+      <strong>${v.icon} ${esc(v.nm)}</strong><br><span class="note">${esc(v.ds)}</span></button>`;
+  const items = (SP_STATE.inventory||[]).filter(i=>SP_COMBAT_ITEMS[i]).map(i=>{
+    const it = SP_COMBAT_ITEMS[i];
+    return `<button class="btn btn-ghost btn-block" style="margin-top:8px;text-align:left"
+      onclick="spCombatItem('${i}')"><strong>${it.icon} ${esc(it.nm)}</strong><br><span class="note">${esc(it.ds)}</span></button>`;
+  }).join("");
+  return `<div class="panel">
+    <div class="eyebrow l">Wat doe je?</div>
+    ${Object.entries(SP_COMBAT_VORMEN).map(([id,v])=>knop(id,v)).join("")}
+    ${knop("verdedig",{icon:"🛡️",nm:"Verdedigen",ds:"Een lichte vraag; bij een goed antwoord halveer je de volgende aanval en laad je snel op."})}
+    ${vaardigheid ? `<button class="btn ${kanVaardigheid?"btn-gold":"btn-ghost"} btn-block" style="margin-top:8px;text-align:left"
+        ${kanVaardigheid?"":"disabled"} onclick="spCombatVaardigheid()">
+        <strong>${vaardigheid.icon} ${esc(vaardigheid.nm)}</strong><br>
+        <span class="note">${esc(vaardigheid.ds)}${SP_COMBAT.vaardigheidGebruikt?" — al gebruikt dit gevecht"
+          :" — kost "+SP_COMBAT_VAARDIGHEID_KOST+" vastberadenheid"}</span></button>` : ""}
+    ${items}
+  </div>`;
+}
+
+function spCombatVraagHTML(){
+  const q = SP_COMBAT.question;
+  if(q.invoer==="mc"){
+    const opts = q.opties.map((o,i)=>
+      `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;text-align:left" onclick="spCombatAntwoordMC(${i})">${esc(o)}</button>`
+    ).join("");
+    return `<div class="panel">
+      <div class="eyebrow l">${esc(SP_COMBAT.vorm.icon+" "+SP_COMBAT.vorm.nm)}</div>
+      <p style="font-weight:700;margin:4px 0">${q.vraag}</p>
+      ${opts}
+    </div>`;
+  }
+  const grieks = q.invoer==="typed-greek";
+  return `<div class="panel">
+      <div class="eyebrow l">${esc(SP_COMBAT.vorm.icon+" "+SP_COMBAT.vorm.nm)}</div>
+      <p style="font-weight:700;margin:4px 0">${q.vraag}</p>
+      <input id="spCombatInput" type="text" ${grieks?'inputmode="none" readonly':'autocomplete="off" autocapitalize="off" spellcheck="false"'}
+        value="" style="font-size:22px;text-align:center;letter-spacing:2px${grieks?";cursor:default":""}"
+        placeholder="${grieks?"gebruik het Griekse toetsenbord hieronder…":"typ de vorm…"}">
+    </div>
+    ${grieks?spCombatGreekKeyboardHTML():""}
+    <button class="btn btn-gold btn-block lg" onclick="spCombatAntwoordGetypt()">Controleren</button>`;
+}
+// Zelfde toetsen als spGreekKeyboardHTML() (de puzzels), maar gekoppeld aan
+// het combat-invoerveld. Bewust een eigen functie i.p.v. de puzzelversie
+// parametriseren: die wordt door zes puzzeltypes gedeeld en moet stabiel
+// blijven.
+function spCombatGreekKeyboardHTML(){
+  const letterRows = SP_GREEK_KB_ROWS.map(row=>
+    `<div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:4px">
+      ${row.map(ch=>`<button class="btn" style="min-width:34px;padding:8px 0;font-size:18px" onclick="spCombatGreekKey('${ch}')">${ch}</button>`).join("")}
+    </div>`).join("");
+  return `<div class="panel">
+    ${letterRows}
+    <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:6px">
+      <button class="btn btn-ghost" title="Spiritus lenis (op de laatste klinker)" onclick="spCombatGreekModifier('smooth')">᾿</button>
+      <button class="btn btn-ghost" title="Spiritus asper (op de laatste klinker)" onclick="spCombatGreekModifier('rough')">῾</button>
+      <button class="btn btn-ghost" title="Iota subscriptum (op α/η/ω)" onclick="spCombatGreekModifier('iota')">ι&#x0345;</button>
+      <button class="btn btn-ghost" onclick="spCombatGreekBackspace()">⌫</button>
+    </div>
+  </div>`;
+}
+
 SCREENS.spCombat = function(){
   if(!SP_COMBAT){ go("spSlots"); return; }
   const enemy = SP_COMBAT_ENEMIES[SP_COMBAT.enemyId];
-  const q = SP_COMBAT.question;
-  const hpPct = Math.max(0, Math.round(SP_COMBAT.hp/SP_COMBAT.maxHp*100));
-  const canAttack = SP_COMBAT.ep >= SP_COMBAT_ACTION_COST;
-  const optsHTML = q.options.map((o,i)=>
-    `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;text-align:left" onclick="spCombatAnswer(${i})">${esc(o)}</button>`
-  ).join("");
-  H(brand(true)+`
-  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SP_COMBAT.sceneTitle||enemy.nm)}</h2>${spAudioToggleHTML()}</div>
-  <div class="panel" style="text-align:center">
-    ${spCombatSpriteHTML(enemy)}
-    <div class="eyebrow l" style="margin-top:6px">${esc(enemy.nm)}</div>
-    <div style="height:10px;background:rgba(255,255,255,.12);border-radius:6px;overflow:hidden;margin:6px 0">
-      <div style="height:100%;width:${hpPct}%;background:var(--hi-bright,#e8c77e)"></div>
+
+  // ---- Intro-kaart: de intro-tekst stond al jaren in de data maar werd
+  // nergens getoond. Nu opent elk gevecht ermee.
+  if(SP_COMBAT.fase==="intro"){
+    H(brand(true)+`
+    <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SP_COMBAT.sceneTitle||enemy.nm)}</h2>${spCombatAnimToggleHTML()}${spAudioToggleHTML()}</div>
+    <div class="panel" style="text-align:center">
+      ${spCombatSpriteHTML(enemy)}
+      <h3 style="margin:8px 0 4px">${esc(enemy.nm)}</h3>
+      <p class="note" style="text-align:left">${esc(enemy.intro||"")}</p>
     </div>
-    <p class="note">${SP_COMBAT.hp} / ${SP_COMBAT.maxHp} levenspunten van ${esc(enemy.nm)} — jouw vastberadenheid: ${SP_COMBAT.ep}/${SP_COMBAT_ACTION_COST}</p>
-  </div>
-  <div class="panel">
-    <p style="font-weight:700;margin-bottom:4px">Wat betekent <em>${esc(q.woord)}</em>?</p>
-    ${optsHTML}
-  </div>
-  ${canAttack?`<button class="btn btn-gold btn-block lg" onclick="spCombatAttack()">⚔️ Aanval</button>`:""}
-  ${foot()}`);
-};
-// spCombatAnswer rendert meteen daarna het hele scherm opnieuw (spCombatNextQuestion
-// + SCREENS.spCombat), dus een foutmelding IN het paneel zou nooit zichtbaar worden —
-// vandaar toast() voor beide uitkomsten, net als bij de correcte-antwoord-tak, want
-// een toast overleeft die her-render wél (zie ook spHookPerson elders).
-function spCombatAnswer(idx){
-  const q = SP_COMBAT.question;
-  const correct = q.options[idx]===q.correct;
-  if(correct){
-    // Leerlingfeedback (2026-08-13): vastberadenheid liep ongelimiteerd op,
-    // waardoor je een hele reeks juiste antwoorden kon opsparen en daarna
-    // alle aanvallen achter elkaar afvuren, zonder tegenstand. Cap op de
-    // aanvalskost zelf: na twee juiste antwoorden (2×10) zit je op het max
-    // van 20 en moet je eerst aanvallen (ep terug naar 0) voor je weer kunt
-    // opbouwen — geen banking meer over meerdere aanvallen heen.
-    SP_COMBAT.ep = Math.min(SP_COMBAT_ACTION_COST, SP_COMBAT.ep + SP_COMBAT_EP_PER_CORRECT);
-    toast("Juist!", "Je vastberadenheid groeit.");
-  } else {
-    SP_COMBAT.ep = Math.max(0, SP_COMBAT.ep - SP_COMBAT_EP_PENALTY_WRONG);
-    toast("Niet juist", "Het juiste antwoord was \""+q.correct+"\". Je vastberadenheid zakt.");
-  }
-  spCombatNextQuestion();
-  SCREENS.spCombat();
-}
-function spCombatAttack(){
-  if(!SP_COMBAT || SP_COMBAT.ep < SP_COMBAT_ACTION_COST) return;
-  SP_COMBAT.ep -= SP_COMBAT_ACTION_COST;
-  SP_COMBAT.hp -= SP_COMBAT_DAMAGE_PER_ATTACK;
-  if(SP_COMBAT.hp <= 0){
-    const target = SP_COMBAT.target;
-    SP_COMBAT = null;
-    spGoCns(target);
+    <button class="btn btn-gold btn-block lg" onclick="spCombatBegin()">Stel je op</button>
+    ${foot()}`);
     return;
   }
+
+  // ---- Opvangscène bij Vigor 0 ----
+  if(SP_COMBAT.fase==="opvang"){
+    H(brand(true)+`
+    <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SP_COMBAT.sceneTitle||enemy.nm)}</h2>${spCombatAnimToggleHTML()}${spAudioToggleHTML()}</div>
+    <div class="panel">
+      <div class="eyebrow l">Je bent op</div>
+      <p>${esc(SP_COMBAT.opvangTekst)}</p>
+      <p class="note">${esc(SP_COMBAT.opvangGevolg)}</p>
+    </div>
+    <button class="btn btn-gold btn-block lg" onclick="spCombatOpvangVerder()">Overeind komen</button>
+    ${foot()}`);
+    return;
+  }
+
+  // ---- Einde ----
+  if(SP_COMBAT.fase==="einde"){
+    const r = SP_COMBAT.rang;
+    const totaal = SP_COMBAT.goed + SP_COMBAT.fout;
+    H(brand(true)+`
+    <div class="scrhead"><h2>${esc(enemy.nm)} verslagen</h2>${spAudioToggleHTML()}</div>
+    <div class="panel" style="text-align:center">
+      <div style="font-size:30px;letter-spacing:4px">${"⭐".repeat(r.sterren)}${"☆".repeat(3-r.sterren)}</div>
+      <h3 style="margin:6px 0 2px;color:var(--hi-bright)">${esc(r.nm)}</h3>
+      <p class="note">${esc(r.ds)}</p>
+      <p class="note" style="margin-top:10px">
+        ${SP_COMBAT.goed} van ${totaal} antwoorden juist · ${SP_COMBAT.beurt} beurten ·
+        ${SP_COMBAT.vigorVerloren} Vigor verloren</p>
+    </div>
+    <button class="btn btn-gold btn-block lg" onclick="spCombatVerder()">Verder</button>
+    ${foot()}`);
+    setTimeout(spCombatSpeelFx, 30);
+    return;
+  }
+
+  // ---- Slagveld (fase "keuze" en "vraag") ----
+  const hpPct = Math.max(0, Math.round(SP_COMBAT.hp/SP_COMBAT.maxHp*100));
+  const comboActief = SP_COMBAT.combo >= SP_COMBAT_COMBO_DREMPEL;
+  H(brand(true)+`
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SP_COMBAT.sceneTitle||enemy.nm)}</h2>${spCombatAnimToggleHTML()}${spAudioToggleHTML()}</div>
+  <div class="panel" style="position:relative;overflow:hidden">
+    <div id="spCombatFx" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:10"></div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:8px;min-height:120px">
+      <div id="spCombatHeld" style="flex:0 0 auto">${spCombatHeldHTML()}</div>
+      <div id="spCombatVijand" style="flex:0 0 auto">${spCombatSpriteHTML(enemy)}</div>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:8px">
+      <div style="flex:1">
+        <div class="eyebrow l" style="margin:0">Jij${comboActief?` · <span style="color:var(--hi-bright)">combo ×${SP_COMBAT.combo}</span>`:""}</div>
+        ${spCombatBalkHTML("Vigor", SP_COMBAT.vigor, SP_COMBAT.maxVigor, "var(--green-bright,#3f9d52)", true)}
+        ${spCombatBalkHTML("Vastberadenheid", SP_COMBAT.vb, SP_COMBAT_MAX_VB, "var(--hi,#c8a24a)")}
+      </div>
+      <div style="flex:1">
+        <div class="eyebrow l" style="margin:0">${esc(enemy.nm)}</div>
+        ${spCombatBalkHTML("Levenspunten", SP_COMBAT.hp, SP_COMBAT.maxHp, "var(--hi-bright,#e8c77e)", true)}
+        ${hpPct<=30?`<div class="note" style="color:var(--hi-bright)">Hij wankelt.</div>`:""}
+      </div>
+    </div>
+    ${spCombatIntentHTML()}
+    ${SP_COMBAT.schildmuur?`<div class="note" style="color:var(--hi-bright);margin-top:4px">🛡️ Schildmuur actief (${SP_COMBAT.schildmuur} aanval${SP_COMBAT.schildmuur===1?"":"len"})</div>`:""}
+    ${SP_COMBAT.zwakpunt?`<div class="note" style="color:var(--hi-bright);margin-top:4px">🎯 Zwak punt gezien — je volgende treffer telt dubbel</div>`:""}
+  </div>
+  ${SP_COMBAT.bericht?`<div class="panel"><p class="note" style="margin:0">${SP_COMBAT.bericht}</p></div>`:""}
+  ${SP_COMBAT.uitleg?`<div class="panel" style="border-left:3px solid var(--hi)"><div class="eyebrow l">Even meekijken</div><p class="note" style="margin:0">${SP_COMBAT.uitleg}</p></div>`:""}
+  ${SP_COMBAT.fase==="vraag" ? spCombatVraagHTML() : spCombatKeuzeHTML()}
+  ${foot()}`);
+  setTimeout(spCombatSpeelFx, 30);
+};
+function spCombatBegin(){
+  if(!SP_COMBAT) return;
+  SP_COMBAT.fase = "keuze";
   SCREENS.spCombat();
 }
 
