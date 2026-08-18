@@ -5385,12 +5385,27 @@ const SP_KRONIEK_FORKS = {
     CH27_LAT_006_BERGPAS: { kort:"de kortere, riskante bergpas",
       tekst:"{subject_cap} waagde het toch via de kortere bergpas." },
   },
+  // Finale, FIN_002 "Zelfbehoud en Oprechtheid": Kronos bekent dat hij de
+  // speler mede uit zelfbehoud op pad stuurde (elke vergeten naam liet hem
+  // verder vervagen) — een RELATION-achtige reactiekeuze zonder eigen
+  // CLEMENTIA/SEVERITAS-tag, zelfde soort moment als de Doris/Fortunata-
+  // keuzes in Boek III (skipTail: beide opties keren terug naar FIN_003,
+  // niets gaat "verloren").
+  FIN_002: {
+    FIN_003: { skipTail:true,
+      tekst:"Toen Kronos bekende dat ook zelfbehoud hem had gedreven, koos {subject} ervoor begrip te tonen: ook een god mocht bang zijn om vergeten te worden." },
+  },
   // Finale: welk SOORT herinnering Mnemosyne voorlegt (mens/keuze/les) is een
   // abstracte categorie, geen concreet plot — de "kort"-tail hier verklapt
-  // dus niets, in tegenstelling tot de FIN_KEUZE_*-groep hieronder.
+  // dus niets, in tegenstelling tot de FIN_KEUZE_*-groep hieronder. FIN_HER_
+  // 003A specifiek: Mnemosyne vraagt zelf naar de CATEGORIE ("mensen dus,
+  // niet de goden, niet de gebeurtenissen"), geen met-naam-genoemd personage
+  // — maar Gerben vroeg (2026-08-19) of dit niet specifieker kon, dus grijpt
+  // de tekst nu terug op de NPC met wie de speler de sterkste band opbouwde
+  // (SpTextResolver "fin_her_mens", spKleioFinHerMens in singleplayer.js).
   FIN_HER_003: {
     FIN_HER_003A: { kort:"een herinnering aan een mens die {subject} onderweg hielp",
-      tekst:"Toen Mnemosyne vroeg welke herinnering {subject} het felst zou verdedigen, koos {subject} voor een mens die {subject} onderweg had geholpen." },
+      tekst:"Toen Mnemosyne vroeg welke herinnering {subject} het felst zou verdedigen, koos {subject} voor {fin_her_mens}." },
     FIN_HER_003B: { kort:"een herinnering aan een keuze die {subject} ooit maakte",
       tekst:"Toen Mnemosyne vroeg welke herinnering {subject} het felst zou verdedigen, koos {subject} voor een keuze die {subject} ooit had gemaakt." },
     FIN_HER_003C: { kort:"een herinnering aan iets dat {subject} onderweg leerde",
@@ -5437,19 +5452,24 @@ const SP_KRONIEK_FORKS = {
 const SP_PAYOFFS = [
   { id:"ch2_000_echo_ch1_lijn_a", type:"echo", trigger:{scene:"CH2_000"},
     condition:{flags:{ch1_lijn:"A"}}, priority:0,
-    content:{text:`De boodschapper werpt je een blik toe die net iets langer duurt dan nodig. "Midas leerde dat een wens zonder grenzen een vloek is," zegt ze zacht. "Onthoud dat, terwijl je Hera's jaloezie volgt."`} },
+    content:{text:`De boodschapper werpt je een blik toe die net iets langer duurt dan nodig. "Midas leerde dat een wens zonder grenzen een vloek is," zegt ze zacht. "Onthoud dat, terwijl je Hera's jaloezie volgt."`,
+      kroniekTekst:"De boodschapper herinnerde {object} eraan hoe Midas' wens zonder grenzen een vloek was geworden — een les om mee te nemen, terwijl {subject} Hera's jaloezie volgde."} },
   { id:"ch2_000_echo_ch1_lijn_b", type:"echo", trigger:{scene:"CH2_000"},
     condition:{flags:{ch1_lijn:"B"}}, priority:0,
-    content:{text:`De boodschapper knikt kort naar je, alsof ze zich iets herinnert. "Jij was erbij toen Athena geboren werd — gewapend, voltallig, uit niets dan Zeus' eigen hoofd. Onthoud die kracht, terwijl je Hera's jaloezie volgt."`} },
+    content:{text:`De boodschapper knikt kort naar je, alsof ze zich iets herinnert. "Jij was erbij toen Athena geboren werd — gewapend, voltallig, uit niets dan Zeus' eigen hoofd. Onthoud die kracht, terwijl je Hera's jaloezie volgt."`,
+      kroniekTekst:"De boodschapper herinnerde {object} aan de kracht die {subject} had zien geboren worden, toen Athena voltallig gewapend uit Zeus' hoofd sprong."} },
   { id:"ch2_000_echo_ch1_lijn_c", type:"echo", trigger:{scene:"CH2_000"},
     condition:{flags:{ch1_lijn:"C"}}, priority:0,
-    content:{text:`De boodschapper kijkt je even aan, bijna warm. "Jij zag Prometheus zijn vuur stelen voor de mensheid — en de prijs die hij daarvoor betaalde. Onthoud die prijs, terwijl je Hera's jaloezie volgt."`} },
+    content:{text:`De boodschapper kijkt je even aan, bijna warm. "Jij zag Prometheus zijn vuur stelen voor de mensheid — en de prijs die hij daarvoor betaalde. Onthoud die prijs, terwijl je Hera's jaloezie volgt."`,
+      kroniekTekst:"De boodschapper herinnerde {object} aan de prijs die Prometheus betaalde voor het vuur dat hij de mensheid gaf."} },
   { id:"ch3_h01_deur_herakles_harnas", type:"deur", trigger:{scene:"CH3_H01"},
     condition:{flagsSet:["herakles_harnas"]}, priority:0,
-    content:{choice:{label:"Wijs hem op het harnas dat hij je ooit gaf, nog altijd om je schouders", target:"CH3_H01_HARNAS"}} },
+    content:{choice:{label:"Wijs hem op het harnas dat hij je ooit gaf, nog altijd om je schouders", target:"CH3_H01_HARNAS"},
+      kroniekTekst:"Een eerdere keuze opende een nieuwe weg: {subject_cap} wees Herakles op het harnas dat hij {object} ooit had gegeven — nog altijd om {possessive} schouders."} },
   { id:"ch2_athena_echo_relatie", type:"echo", trigger:{scene:"CH2_ATHENA"},
     condition:{relationMin:{athena:1}}, priority:0,
-    content:{text:`Voor ze verdergaat, laat haar blik heel even op je rusten — niet de onleesbare blik van een toeschouwer, maar die van iemand die zich iets herinnert. Delos, denk je. Ze was erbij. Ze heeft niets vergeten.`} },
+    content:{text:`Voor ze verdergaat, laat haar blik heel even op je rusten — niet de onleesbare blik van een toeschouwer, maar die van iemand die zich iets herinnert. Delos, denk je. Ze was erbij. Ze heeft niets vergeten.`,
+      kroniekTekst:"Athena liet haar blik even op {object} rusten — ze was bij Delos geweest, en had niets vergeten."} },
   // ---- Hoofdstuk 7 — twee ONVOORWAARDELIJKE echo's (geen condition-veld,
   // spPayoffConditionMet(undefined) geeft altijd true): Hoofdstuk 5 is
   // verplichte, lineaire hoofdlijn zonder vertakking, dus elke speler die
@@ -5457,9 +5477,11 @@ const SP_PAYOFFS = [
   // flag nodig om dat te toetsen, zelfde redenering als de Kadmos/Europa-
   // callback (Chronica.md §7.11-toevoeging, 2026-07-25). ----
   { id:"ch7_peleus_bruiloft_echo", type:"echo", trigger:{scene:"CH7_004"}, priority:0,
-    content:{text:`Je herkent hem meteen — dezelfde brede grijns die Peleus had toen hij, jaren geleden, als een van de eersten aan boord van de Argo stapte, gretig naar niets dan een nieuw avontuur. Toen was hij een van vele. Vandaag is hij de bruidegom, en de zeenimf naast hem is geen sterveling.`} },
+    content:{text:`Je herkent hem meteen — dezelfde brede grijns die Peleus had toen hij, jaren geleden, als een van de eersten aan boord van de Argo stapte, gretig naar niets dan een nieuw avontuur. Toen was hij een van vele. Vandaag is hij de bruidegom, en de zeenimf naast hem is geen sterveling.`,
+      kroniekTekst:"{subject_cap} herkende Peleus meteen — dezelfde grijns als toen hij, jaren eerder, aan boord van de Argo stapte. Vandaag was hij de bruidegom, naast een zeenimf die geen sterveling was."} },
   { id:"ch7_philoktetes_lemnos_echo", type:"echo", trigger:{scene:"CH7_018"}, priority:0,
-    content:{text:`Diezelfde ongeëvenaarde precisie die je al opviel aan boord van de Argo, jaren geleden — toen nog een belofte, nu al legendarisch — verandert niets aan wat er nu gebeurt. Zelfs de beste boogschutter van Griekenland kan zichzelf niet redden van een addergif dat niemand aan boord weet te genezen.`} },
+    content:{text:`Diezelfde ongeëvenaarde precisie die je al opviel aan boord van de Argo, jaren geleden — toen nog een belofte, nu al legendarisch — verandert niets aan wat er nu gebeurt. Zelfs de beste boogschutter van Griekenland kan zichzelf niet redden van een addergif dat niemand aan boord weet te genezen.`,
+      kroniekTekst:"Dezelfde ongeëvenaarde precisie die {subject} ooit aan boord van de Argo had opgemerkt, kon Philoktetes nu niet redden van een addergif dat niemand aan boord kon genezen."} },
   // ---- Hoofdstuk 8 — eerste payoffs op de vertakkingskeuze (`ch8_zijde`,
   // FLAG op CH8_005). Gerbens verzoek (2026-07-25): personages moeten de
   // keuze onthouden en er in het VERVOLG nog een aantal keer op terugkomen
@@ -5470,10 +5492,12 @@ const SP_PAYOFFS = [
   // bij het gezantschap (CH8_ACH_007/CH8_AGA_007) zijn gezet — zie §7.14.
   { id:"ch8_epi005_echo_zijde_agamemnon", type:"echo", trigger:{scene:"CH8_EPI_005"},
     condition:{flags:{ch8_zijde:"agamemnon"}}, priority:0,
-    content:{text:`Agamemnons blik zoekt de jouwe in de menigte. "Jij bent gebleven," zegt hij, zacht genoeg dat het bijna verloren gaat in het rumoer van de verzoening, "toen anderen dat niet deden. Dat vergeet ik niet." Het is geen grote belofte — maar van een man die zelden toegeeft ooit iets verschuldigd te zijn, is het meer dan de meesten ooit van hem krijgen.`} },
+    content:{text:`Agamemnons blik zoekt de jouwe in de menigte. "Jij bent gebleven," zegt hij, zacht genoeg dat het bijna verloren gaat in het rumoer van de verzoening, "toen anderen dat niet deden. Dat vergeet ik niet." Het is geen grote belofte — maar van een man die zelden toegeeft ooit iets verschuldigd te zijn, is het meer dan de meesten ooit van hem krijgen.`,
+      kroniekTekst:"Agamemnon zocht {object} blik in de menigte: \"Jij bent gebleven, toen anderen dat niet deden. Dat vergeet ik niet.\""} },
   { id:"ch8_epi005_echo_zijde_achilles", type:"echo", trigger:{scene:"CH8_EPI_005"},
     condition:{flags:{ch8_zijde:"achilles"}}, priority:0,
-    content:{text:`Achilles merkt je nauwelijks op tussen de verzamelde levens die hij nu weer als soldaten beschouwt — maar heel even, voor hij zich omdraait naar zijn wapenrusting, rust zijn blik op jou net iets langer dan nodig. Jij was er, in de tent, tijdens de dagen dat verder niemand er nog was. Hij is geen man van veel woorden op dit moment. Maar hij vergeet ook niet snel.`} },
+    content:{text:`Achilles merkt je nauwelijks op tussen de verzamelde levens die hij nu weer als soldaten beschouwt — maar heel even, voor hij zich omdraait naar zijn wapenrusting, rust zijn blik op jou net iets langer dan nodig. Jij was er, in de tent, tijdens de dagen dat verder niemand er nog was. Hij is geen man van veel woorden op dit moment. Maar hij vergeet ook niet snel.`,
+      kroniekTekst:"Achilles' blik rustte even op {object}, langer dan nodig — {subject} was er geweest, in de tent, op de dagen dat niemand anders er was."} },
   // ---- Hoofdstuk 9 — zelfherkenning op de muren van Troje. Onvoorwaardelijk
   // op {subject}/{eigen_wapen} (iedereen ziet zichzelf), maar deze extra
   // regel vuurt ALLEEN als de speler ooit Herakles' oude harnas kreeg
@@ -5481,7 +5505,8 @@ const SP_PAYOFFS = [
   // meer terugkomt in het verhaal zelf.
   { id:"ch9_002_echo_herakles_harnas", type:"echo", trigger:{scene:"CH9_002"},
     condition:{flagsSet:["herakles_harnas"]}, priority:0,
-    content:{text:`Over de schouders van die verre gestalte hangt, zie je nu pas goed, nog altijd een verweerd stuk harnas dat er niet meer bij past — hetzelfde harnas dat een held je ooit gaf toen hij het zelf niet meer nodig had. Je draagt het nog steeds, jaren later, zonder dat je het jezelf ooit hebt afgevraagd waarom.`} },
+    content:{text:`Over de schouders van die verre gestalte hangt, zie je nu pas goed, nog altijd een verweerd stuk harnas dat er niet meer bij past — hetzelfde harnas dat een held je ooit gaf toen hij het zelf niet meer nodig had. Je draagt het nog steeds, jaren later, zonder dat je het jezelf ooit hebt afgevraagd waarom.`,
+      kroniekTekst:"Op de muren van Troje droeg {subject} nog altijd het verweerde harnas dat Herakles {object} ooit had gegeven."} },
   // ---- Hoofdstuk 6 — onvoorwaardelijk (geen condition-veld): de Herakles-
   // lijn in Hoofdstuk 2 is, anders dan de drie optionele Hoofdstuk-1-lijnen,
   // verplicht (alle vier H2-lijnen moeten voltooid zijn voor de Herinnerings-
@@ -5490,7 +5515,8 @@ const SP_PAYOFFS = [
   // sterke familieband (Kreon is Megara's vader, én Iokastes broer/Oedipus'
   // oom) kwam nergens terug.
   { id:"ch6_015_echo_creon_megara", type:"echo", trigger:{scene:"CH6_015"}, priority:0,
-    content:{text:`Dit is dezelfde Kreon wiens dochter Megara je ooit aan Herakles zag trouwen — en zag sterven, door diezelfde helds eigen hand, in een waanzin die niet de zijne was. Misschien is dat waarom Kreon zich nu zo hard aan zijn eigen bevel vastklampt: voor een man die zijn kind al één keer verloor aan iets wat niemand kon voorzien, is een wet die tenminste voorspelbaar is, geen kleinigheid.`} },
+    content:{text:`Dit is dezelfde Kreon wiens dochter Megara je ooit aan Herakles zag trouwen — en zag sterven, door diezelfde helds eigen hand, in een waanzin die niet de zijne was. Misschien is dat waarom Kreon zich nu zo hard aan zijn eigen bevel vastklampt: voor een man die zijn kind al één keer verloor aan iets wat niemand kon voorzien, is een wet die tenminste voorspelbaar is, geen kleinigheid.`,
+      kroniekTekst:"{subject_cap} herkende in Kreons onverzettelijkheid de vader die zijn dochter Megara al eens had verloren aan Herakles' waanzin."} },
   // ---- Hoofdstuk 4, lijn Theseus — vuurt alleen als de speler in
   // Hoofdstuk 3 zelf de Kretenzische Stier heeft gevangen voor Herakles
   // (flag ch3_kretenzische_stier, CH3_H12): dezelfde stier die hier, als
@@ -5499,7 +5525,8 @@ const SP_PAYOFFS = [
   // stier al kenden.
   { id:"ch4_t04_echo_kretenzische_stier", type:"echo", trigger:{scene:"CH4_T04"},
     condition:{flagsSet:["ch3_kretenzische_stier"]}, priority:0,
-    content:{text:`Die witte stier ken je al — je hielp Herakles hem ooit zelf vangen, als een van zijn twaalf werken, voor hij losgelaten werd in de vlakte bij Marathon. Wat je toen niet wist: dit dier had zijn sporen op Kreta allang nagelaten, jaren voordat Herakles er ooit voet aan wal zette.`} },
+    content:{text:`Die witte stier ken je al — je hielp Herakles hem ooit zelf vangen, als een van zijn twaalf werken, voor hij losgelaten werd in de vlakte bij Marathon. Wat je toen niet wist: dit dier had zijn sporen op Kreta allang nagelaten, jaren voordat Herakles er ooit voet aan wal zette.`,
+      kroniekTekst:"{subject_cap} herkende de witte stier — dezelfde die {subject} ooit zelf voor Herakles had gevangen, jaren voor Herakles ooit voet op Kreta zette."} },
   // ---- Hoofdstuk 9 — de grote, zichtbare Aias-payoff (Gerbens verzoek):
   // relations.aias werd al bij het Gezantschap-moment (Hoofdstuk 8) gezet
   // en kan sindsdien alleen maar verder zijn opgeschoven (RELATION-secties
@@ -5508,10 +5535,12 @@ const SP_PAYOFFS = [
   // beide. Zie Chronica.md §7.15.
   { id:"ch9_gri005_echo_aias_sympathiek", type:"echo", trigger:{scene:"CH9_GRI_005"},
     condition:{relationMin:{aias:1}}, priority:0,
-    content:{text:`Je denkt terug aan Achilles' tent, aan Aias' onhandige, oprechte woorden die verder kwamen dan alle mooipraterij van Odysseus — "wij zijn hier als je vrienden, niet als boodschappers." Van alle mannen die je op deze tocht hebt leren kennen, verdiende weinigen minder dit einde dan hij.`} },
+    content:{text:`Je denkt terug aan Achilles' tent, aan Aias' onhandige, oprechte woorden die verder kwamen dan alle mooipraterij van Odysseus — "wij zijn hier als je vrienden, niet als boodschappers." Van alle mannen die je op deze tocht hebt leren kennen, verdiende weinigen minder dit einde dan hij.`,
+      kroniekTekst:"{subject_cap} dacht terug aan Aias' onhandige, oprechte woorden in Achilles' tent — van iedereen die {subject} op deze tocht had leren kennen, verdienden weinigen dit einde minder dan hij."} },
   { id:"ch9_gri005_echo_aias_afstandelijk", type:"echo", trigger:{scene:"CH9_GRI_005"},
     condition:{relationMax:{aias:-1}}, priority:0,
-    content:{text:`Je herinnert je hoe hij, na het mislukte gezantschap, langsliep en bitter mompelde over trots die levens kost — een verwijt dat, besef je nu pas echt, net zo goed voor jouw eigen keuze had kunnen gelden. Zijn dood raakt je meer dan je had verwacht, juist omdat je nooit echt aan zijn kant hebt gestaan.`} },
+    content:{text:`Je herinnert je hoe hij, na het mislukte gezantschap, langsliep en bitter mompelde over trots die levens kost — een verwijt dat, besef je nu pas echt, net zo goed voor jouw eigen keuze had kunnen gelden. Zijn dood raakt je meer dan je had verwacht, juist omdat je nooit echt aan zijn kant hebt gestaan.`,
+      kroniekTekst:"{subject_cap} herinnerde zich Aias' bittere verwijt over trots die levens kost — een verwijt dat, besefte {subject} nu, evengoed voor {possessive} eigen keuze had kunnen gelden."} },
   // ---- Diomedes-payoff: telt op uit TWEE bronnen over TWEE hoofdstukken —
   // het optionele stille gebaar bij de Epigonen (Hoofdstuk 6, CH6_018_PRU,
   // +1) én de kant die de speler koos bij de Achilles/Agamemnon-splitsing
@@ -5521,7 +5550,8 @@ const SP_PAYOFFS = [
   // meerdere hoofdstukken heen, niet één enkel moment.
   { id:"ch9_gri009_echo_diomedes_geschiedenis", type:"echo", trigger:{scene:"CH9_GRI_009"},
     condition:{relationMin:{diomedes:2}}, priority:0,
-    content:{text:`Diomedes werkt naast je alsof je geen vreemde bent — en dat ben je ook niet, niet echt. Je hielp hem ooit, zwijgend, zijn vaders wapenrusting vastmaken voor de poorten van Thebe, jaren voor hij ooit van Troje had gehoord. En toen de keuze zich opnieuw voordeed, tussen Achilles en Agamemnon, stond je weer aan zijn kant. Van alle mannen in dit kamp is hij misschien wel degene die het langst al op jou kan rekenen.`} },
+    content:{text:`Diomedes werkt naast je alsof je geen vreemde bent — en dat ben je ook niet, niet echt. Je hielp hem ooit, zwijgend, zijn vaders wapenrusting vastmaken voor de poorten van Thebe, jaren voor hij ooit van Troje had gehoord. En toen de keuze zich opnieuw voordeed, tussen Achilles en Agamemnon, stond je weer aan zijn kant. Van alle mannen in dit kamp is hij misschien wel degene die het langst al op jou kan rekenen.`,
+      kroniekTekst:"Diomedes werkte naast {object} alsof {subject} geen vreemde was — {subject} had hem ooit geholpen zijn vaders wapenrusting vast te maken, en koos later opnieuw zijn kant."} },
   // ---- Didactiek-audit voorstel #4 (2026-07-29, didactiek/10-voorstellen.md
   // #4 / didactiek/04-leessandwich.md §5): geef de "Laag 2"-passieve-taallaag
   // (Chronica.md §7.16) een "na" in plaats van alleen een optionele gloss.
@@ -5531,17 +5561,23 @@ const SP_PAYOFFS = [
   // al gegarandeerd gezien (zelfde redenering als de Hoofdstuk-7-Peleus/
   // Philoktetes-echo's hierboven). ----
   { id:"ch2_s08_echo_fulmen", type:"echo", trigger:{scene:"CH2_S08"}, priority:0,
-    content:{text:`Bacchus draagt het vuur waaruit hij ontstond letterlijk met zich mee — geboren uit dezelfde vlam die zijn moeder het leven kostte. "Iuppiter fulmen misit," zeiden ze later van dat moment. Drie woorden voor het vuur waaruit, uiteindelijk, ook hij is voortgekomen.`} },
+    content:{text:`Bacchus draagt het vuur waaruit hij ontstond letterlijk met zich mee — geboren uit dezelfde vlam die zijn moeder het leven kostte. "Iuppiter fulmen misit," zeiden ze later van dat moment. Drie woorden voor het vuur waaruit, uiteindelijk, ook hij is voortgekomen.`,
+      kroniekTekst:"\"Iuppiter fulmen misit\" — drie woorden voor het vuur waaruit Bacchus zelf, uiteindelijk, was voortgekomen."} },
   { id:"ch4_t14_echo_icare", type:"echo", trigger:{scene:"CH4_T14"}, priority:0,
-    content:{text:`Nog dagenlang blijft die ene roep in je oren naklinken — "Icare!" — geschreeuwd naar een zee die niets meer teruggaf.`} },
+    content:{text:`Nog dagenlang blijft die ene roep in je oren naklinken — "Icare!" — geschreeuwd naar een zee die niets meer teruggaf.`,
+      kroniekTekst:"Dagenlang bleef die ene roep {object} bijstaan — \"Icare!\" — geschreeuwd naar een zee die niets meer teruggaf."} },
   { id:"ch5_027_echo_hypne_elthe", type:"echo", trigger:{scene:"CH5_027"}, priority:0,
-    content:{text:`Zonder Medea's gezang, besef je terwijl je het Vlies in je handen weegt, was Jason nooit dichtbij genoeg gekomen. "Ὕπνε, ἐλθέ" — slaap, kom — het lied werkte lang genoeg, al was het maar net.`} },
+    content:{text:`Zonder Medea's gezang, besef je terwijl je het Vlies in je handen weegt, was Jason nooit dichtbij genoeg gekomen. "Ὕπνε, ἐλθέ" — slaap, kom — het lied werkte lang genoeg, al was het maar net.`,
+      kroniekTekst:"Zonder Medea's gezang — \"Ὕπνε, ἐλθέ\", slaap, kom — was Jason nooit dichtbij genoeg gekomen om het Vlies te grijpen."} },
   { id:"ch7_009_echo_kalliste", type:"echo", trigger:{scene:"CH7_009"}, priority:0,
-    content:{text:`Je herkent het woord van de appel meteen terug in wat er nu net is gebeurd: "τῇ καλλίστῃ" — aan de mooiste. Eén woord, gegraveerd in goud, en een oorlog is al onvermijdelijk voor hij goed en wel is begonnen.`} },
+    content:{text:`Je herkent het woord van de appel meteen terug in wat er nu net is gebeurd: "τῇ καλλίστῃ" — aan de mooiste. Eén woord, gegraveerd in goud, en een oorlog is al onvermijdelijk voor hij goed en wel is begonnen.`,
+      kroniekTekst:"\"τῇ καλλίστῃ\" — aan de mooiste — één woord in goud gegraveerd, en een oorlog was al onvermijdelijk voor hij goed en wel begon."} },
   { id:"ch8_epi008_echo_menis_patroklos", type:"echo", trigger:{scene:"CH8_EPI_008"}, priority:0,
-    content:{text:`"Πάτροκλος ἀπέθανεν" — dat was het hele nieuws, drie woorden maar. Kijkend naar wat Achilles zojuist met Hectors lichaam doet, besef je: dát is precies waarom hij geen greintje genade meer over heeft.`} },
+    content:{text:`"Πάτροκλος ἀπέθανεν" — dat was het hele nieuws, drie woorden maar. Kijkend naar wat Achilles zojuist met Hectors lichaam doet, besef je: dát is precies waarom hij geen greintje genade meer over heeft.`,
+      kroniekTekst:"\"Πάτροκλος ἀπέθανεν\" — drie woorden die verklaarden waarom Achilles geen greintje genade meer overhad."} },
   { id:"ch9_tro011_echo_sinon_leugen", type:"echo", trigger:{scene:"CH9_TRO_011"}, priority:0,
-    content:{text:`Sinons woorden klinken nog na, terwijl het paard door de bres naar binnen wordt gesleept: "de Grieken zijn vertrokken." Het is, besef je, het laatste wat deze stad ooit voor waar zal aannemen.`} },
+    content:{text:`Sinons woorden klinken nog na, terwijl het paard door de bres naar binnen wordt gesleept: "de Grieken zijn vertrokken." Het is, besef je, het laatste wat deze stad ooit voor waar zal aannemen.`,
+      kroniekTekst:"Sinons leugen — \"de Grieken zijn vertrokken\" — was het laatste wat Troje ooit voor waar zou aannemen."} },
   // ---- Hoofdstuk 11 — de onderwereld-reünie (§7.19/§12): CH11_SCHIMMEN is
   // een gedeeld, taalspoor-onafhankelijk knooppunt (bereikt door zowel de
   // Odysseus- als de Aeneas-lijn) waar de SPELER zelf, los van de held die
@@ -5558,42 +5594,52 @@ const SP_PAYOFFS = [
   // hier bewust niet herhaald.
   { id:"ch11_schimmen_priamus_warm", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
     condition:{relationMin:{priamus:1}}, priority:0,
-    content:{text:`Priamus' schim herkent je meteen — dezelfde man die ooit, tegen alle raad in, een vijandenkamp binnenliep voor zijn zoon. "Jij was er," zegt hij, "op de momenten dat het makkelijker was om weg te kijken." Het is geen koning meer die tegen je spreekt, alleen een vader die niet vergeten is wie hem toen zag.`} },
+    content:{text:`Priamus' schim herkent je meteen — dezelfde man die ooit, tegen alle raad in, een vijandenkamp binnenliep voor zijn zoon. "Jij was er," zegt hij, "op de momenten dat het makkelijker was om weg te kijken." Het is geen koning meer die tegen je spreekt, alleen een vader die niet vergeten is wie hem toen zag.`,
+      kroniekTekst:"Priamus' schim herkende {object} meteen: \"Jij was er, op de momenten dat het makkelijker was om weg te kijken.\""} },
   { id:"ch11_schimmen_priamus_koel", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
     condition:{relationMax:{priamus:-1}}, priority:0,
-    content:{text:`Priamus' schim werpt je een korte, onleesbare blik toe — geen woede, alleen een oud soort vermoeidheid. Hij onthoudt ook de koelere momenten, de keren dat jouw blik verstrakte in plaats van meeleefde. Zelfs hier, tussen de doden, blijft dat iets tussen jullie in staan.`} },
+    content:{text:`Priamus' schim werpt je een korte, onleesbare blik toe — geen woede, alleen een oud soort vermoeidheid. Hij onthoudt ook de koelere momenten, de keren dat jouw blik verstrakte in plaats van meeleefde. Zelfs hier, tussen de doden, blijft dat iets tussen jullie in staan.`,
+      kroniekTekst:"Priamus' schim wierp {object} een korte, vermoeide blik toe — ook de koelere momenten tussen hen was hij niet vergeten."} },
   { id:"ch11_schimmen_deiphobos_warm", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
     condition:{relationMin:{deiphobos:1}}, priority:0,
-    content:{text:`Deiphobos, zijn gezicht nog altijd verminkt van de nacht dat Menelaos hem vond, buigt kort zijn hoofd naar je — hij herinnert zich dat jij, van iedereen, hem ooit zachter behandelde dan hij misschien verdiende.`} },
+    content:{text:`Deiphobos, zijn gezicht nog altijd verminkt van de nacht dat Menelaos hem vond, buigt kort zijn hoofd naar je — hij herinnert zich dat jij, van iedereen, hem ooit zachter behandelde dan hij misschien verdiende.`,
+      kroniekTekst:"Deiphobos' schim boog kort het hoofd — hij herinnerde zich dat {subject} hem ooit zachter had behandeld dan hij misschien verdiende."} },
   { id:"ch11_schimmen_deiphobos_koel", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
     condition:{relationMax:{deiphobos:-1}}, priority:0,
-    content:{text:`Deiphobos' schim, zijn gezicht nog altijd verminkt van de nacht dat Menelaos hem vond, kijkt dwars door je heen — hij herinnert zich ook de keren dat jij niet de moeite nam om zijn kant van het verhaal te horen.`} },
+    content:{text:`Deiphobos' schim, zijn gezicht nog altijd verminkt van de nacht dat Menelaos hem vond, kijkt dwars door je heen — hij herinnert zich ook de keren dat jij niet de moeite nam om zijn kant van het verhaal te horen.`,
+      kroniekTekst:"Deiphobos' schim keek dwars door {object} heen — hij herinnerde zich ook de keren dat {subject} niet de moeite had genomen zijn kant van het verhaal te horen."} },
   { id:"ch11_schimmen_patroklos_hektor_achilles", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
     condition:{flags:{ch8_zijde:"achilles"}}, priority:0,
-    content:{text:`Twee schimmen, onafscheidelijk zelfs hier: Patroklos, nog altijd met Achilles' geleende wapenrusting om zich heen, en niet ver daarvandaan Hector, die hem droeg toen hij hem versloeg. Jij was erbij, in de tent, de dagen dat het verlies nog vers was — en beiden lijken dat te weten, ieder op hun eigen, stille manier.`} },
+    content:{text:`Twee schimmen, onafscheidelijk zelfs hier: Patroklos, nog altijd met Achilles' geleende wapenrusting om zich heen, en niet ver daarvandaan Hector, die hem droeg toen hij hem versloeg. Jij was erbij, in de tent, de dagen dat het verlies nog vers was — en beiden lijken dat te weten, ieder op hun eigen, stille manier.`,
+      kroniekTekst:"Patroklos en Hector, onafscheidelijk zelfs hier — {subject} was erbij geweest, in de tent, toen het verlies nog vers was."} },
   { id:"ch11_schimmen_patroklos_hektor_agamemnon", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
     condition:{flags:{ch8_zijde:"agamemnon"}}, priority:0,
-    content:{text:`Twee schimmen, ooit vijanden, nu allebei stil: Patroklos, en niet ver daarvandaan Hector, die hem doodde in de overtuiging dat hij Achilles versloeg. Jij zag hun beider dood van een afstand, tussen het leger op het strand — dichtbij genoeg om het gewicht te voelen, ver genoeg om het nooit helemaal je eigen verdriet te kunnen noemen.`} },
+    content:{text:`Twee schimmen, ooit vijanden, nu allebei stil: Patroklos, en niet ver daarvandaan Hector, die hem doodde in de overtuiging dat hij Achilles versloeg. Jij zag hun beider dood van een afstand, tussen het leger op het strand — dichtbij genoeg om het gewicht te voelen, ver genoeg om het nooit helemaal je eigen verdriet te kunnen noemen.`,
+      kroniekTekst:"Patroklos en Hector, ooit vijanden, nu allebei stil — {subject} had hun beider dood van een afstand gezien, dichtbij genoeg om het gewicht te voelen."} },
   { id:"ch11_schimmen_tydeus", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
     condition:{flagsSet:["dood_tydeus"]}, priority:0,
-    content:{text:`Tussen de schimmen ontwaar je ook Tydeus — de eerste dode die je op deze hele reis van dichtbij meemaakte, lang voor Troje ooit een naam voor je was. Zijn woeste, onstuimige aard is zelfs hier nog voelbaar, ook al is er niets meer over om tegen te vechten.`} },
+    content:{text:`Tussen de schimmen ontwaar je ook Tydeus — de eerste dode die je op deze hele reis van dichtbij meemaakte, lang voor Troje ooit een naam voor je was. Zijn woeste, onstuimige aard is zelfs hier nog voelbaar, ook al is er niets meer over om tegen te vechten.`,
+      kroniekTekst:"Tussen de schimmen ontwaarde {subject} ook Tydeus — de eerste dode die {subject} op deze hele reis van dichtbij had meegemaakt."} },
   { id:"ch11_schimmen_kleine_ajax", type:"echo", trigger:{scene:"CH11_SCHIMMEN"},
     condition:{flagsSet:["dood_aias"]}, priority:0,
-    content:{text:`Ook Aias, zoon van Oïleus, doemt even op — de man wiens heiligschennis tegen Cassandra zijn eigen ondergang bezegelde, verdronken op bevel van goden die hij zelf had beledigd. Zijn schim zoekt geen oogcontact, geen verzoening — alleen stilte, net als bij Ajax van Telamon, maar dan zonder een greintje van diens waardigheid.`} },
+    content:{text:`Ook Aias, zoon van Oïleus, doemt even op — de man wiens heiligschennis tegen Cassandra zijn eigen ondergang bezegelde, verdronken op bevel van goden die hij zelf had beledigd. Zijn schim zoekt geen oogcontact, geen verzoening — alleen stilte, net als bij Ajax van Telamon, maar dan zonder een greintje van diens waardigheid.`,
+      kroniekTekst:"Ook Aias, zoon van Oïleus, doemde even op — zijn schim zocht geen oogcontact, geen verzoening, alleen stilte."} },
   // ---- Didactiek-audit punt 9 (§7.36): een "na"-echo voor de B23 passieve
   // taallaag (Hoofdstuk 10's "Sunt lacrimae rerum"-moment, CH10_AEN_009)
   // — onvoorwaardelijk, want elke Aeneas-spelende taalspoor-track zag die
   // scène al gegarandeerd voor ze hier aankomt, zelfde redenering als de
   // Peleus/Philoktetes-echo's in Hoofdstuk 7 (§7.13).
   { id:"ch11_aen007_echo_lacrimae_rerum", type:"echo", trigger:{scene:"CH11_AEN_007"}, priority:0,
-    content:{text:`"Sunt lacrimae rerum," dacht Aeneas nog, starend naar de tempelmuur in Carthago — er zijn tranen voor de dingen. Hij kon toen niet weten hoe letterlijk dat woord nog zou worden: hier, in de onderwereld, zijn het geen geschilderde taferelen meer die hem raken, maar Dido zelf.`} },
+    content:{text:`"Sunt lacrimae rerum," dacht Aeneas nog, starend naar de tempelmuur in Carthago — er zijn tranen voor de dingen. Hij kon toen niet weten hoe letterlijk dat woord nog zou worden: hier, in de onderwereld, zijn het geen geschilderde taferelen meer die hem raken, maar Dido zelf.`,
+      kroniekTekst:"\"Sunt lacrimae rerum\" — er zijn tranen voor de dingen, had Aeneas ooit gedacht in Carthago. Hier, in de onderwereld, was het Dido zelf die hem raakte, geen geschilderd tafereel meer."} },
   // ---- Hoofdstuk 14 — eerste "erfenis-echo" (Chronica.md §7.51/§7.52):
   // geen RELATION nodig, onvoorwaardelijk net als de Peleus/Philoktetes-
   // echo's in Hoofdstuk 7 — elke speler die hier komt (taalspoor=latijn of
   // beide) heeft Hoofdstuk 13's Brutus-scène (CH13_LAT_007/008) al
   // gegarandeerd gezien, dus geen flag-check nodig.
   { id:"ch14_lat000_echo_brutus", type:"echo", trigger:{scene:"CH14_LAT_000"}, priority:0,
-    content:{text:`Je denkt terug aan Brutus, het bebloede zwaard nog in zijn hand boven Lucretia's lichaam, en zijn eed dat Rome nooit meer door een koning geregeerd zou worden. Die eed wordt nu, voor het eerst echt, op de proef gesteld — dezelfde verdreven koning staat met een vreemd leger voor de poorten, vastbesloten zijn troon terug te eisen.`} },
+    content:{text:`Je denkt terug aan Brutus, het bebloede zwaard nog in zijn hand boven Lucretia's lichaam, en zijn eed dat Rome nooit meer door een koning geregeerd zou worden. Die eed wordt nu, voor het eerst echt, op de proef gesteld — dezelfde verdreven koning staat met een vreemd leger voor de poorten, vastbesloten zijn troon terug te eisen.`,
+      kroniekTekst:"{subject_cap} dacht terug aan Brutus' eed dat Rome nooit meer door een koning geregeerd zou worden — een eed die nu, voor het eerst echt, op de proef werd gesteld."} },
   // ---- Hoofdstuk 23 "Vrede en Vergankelijkheid" — concept, nog niet gekoppeld.
   // Twee lang geplande payoffs (Chronica.md §7.51/§7.79a): de Caesar-RELATION
   // uit Hoofdstuk 19 betaalt hier uit bij Augustus' eigen vestigingsscène,
@@ -5602,10 +5648,12 @@ const SP_PAYOFFS = [
   // "ik heb dit al eens gezien"-moment als bij Sulla/de Dertig Tirannen.
   { id:"ch23_lat003_echo_caesar_relatie", type:"echo", trigger:{scene:"CH23_LAT_003"},
     condition:{relationMin:{caesar:1}}, priority:0,
-    content:{text:`"Mijn oom," zegt Augustus, bijna terloops, terwijl hij het nieuws van de Senaat becommentarieert, "sprak wel eens positief over u — een van de weinigen aan wie hij dat woord ooit gunde." Hij zegt het zonder verdere uitleg, alsof hij ervan uitgaat dat jij precies weet wat hij bedoelt.`} },
+    content:{text:`"Mijn oom," zegt Augustus, bijna terloops, terwijl hij het nieuws van de Senaat becommentarieert, "sprak wel eens positief over u — een van de weinigen aan wie hij dat woord ooit gunde." Hij zegt het zonder verdere uitleg, alsof hij ervan uitgaat dat jij precies weet wat hij bedoelt.`,
+      kroniekTekst:"\"Mijn oom sprak wel eens positief over u,\" zei Augustus terloops — een van de weinigen aan wie Caesar dat woord ooit had gegund."} },
   { id:"ch23_lat002_echo_actium_dubbel", type:"echo", trigger:{scene:"CH23_LAT_002"},
     condition:{flags:{taalspoor:"beide"}}, priority:0,
-    content:{text:`Je hebt deze slag al eens gezien — van Cleopatra's eigen dek, de zeilen die wegdraaiden, Antonius die haar achterna voer. Nu zie je, van de andere kant van het water, waarom die vlucht daar zo onbegrijpelijk overkwam: voor Agrippa was het simpelweg het moment waarop hij wist dat hij had gewonnen.`} },
+    content:{text:`Je hebt deze slag al eens gezien — van Cleopatra's eigen dek, de zeilen die wegdraaiden, Antonius die haar achterna voer. Nu zie je, van de andere kant van het water, waarom die vlucht daar zo onbegrijpelijk overkwam: voor Agrippa was het simpelweg het moment waarop hij wist dat hij had gewonnen.`,
+      kroniekTekst:"{subject_cap} had deze slag al eens gezien, van Cleopatra's dek — nu, van de andere kant van het water, zag {subject} waarom Agrippa het als zijn overwinningsmoment herkende."} },
   // ---- Hoofdstuk 25 "Onder de Vulkaan" — concept, nog niet gekoppeld.
   // Betaalt Hoofdstuk 24's driewegskeuze (`ch24_lat_vitruvius_principe`,
   // firmitas/utilitas/venustas) uit zodra Vitruvius zelf terugkeert, aan het
@@ -5615,13 +5663,16 @@ const SP_PAYOFFS = [
   // herkent.
   { id:"ch25_lat001_echo_vitruvius_firmitas", type:"echo", trigger:{scene:"CH25_LAT_001"},
     condition:{flags:{ch24_lat_vitruvius_principe:"firmitas"}}, priority:0,
-    content:{text:`"Firmitas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Stevigheid, boven alles — een bouwwerk dat de tand des tijds doorstaat is, wat mij betreft, altijd de eerste eis."`} },
+    content:{text:`"Firmitas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Stevigheid, boven alles — een bouwwerk dat de tand des tijds doorstaat is, wat mij betreft, altijd de eerste eis."`,
+      kroniekTekst:"\"Firmitas, weet je nog?\" zei Vitruvius trots — stevigheid, boven alles, was altijd zijn eerste eis geweest."} },
   { id:"ch25_lat001_echo_vitruvius_utilitas", type:"echo", trigger:{scene:"CH25_LAT_001"},
     condition:{flags:{ch24_lat_vitruvius_principe:"utilitas"}}, priority:0,
-    content:{text:`"Utilitas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Bruikbaarheid, boven alles — een stad die niet werkt voor de mensen die er wonen, is wat mij betreft geen stad."`} },
+    content:{text:`"Utilitas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Bruikbaarheid, boven alles — een stad die niet werkt voor de mensen die er wonen, is wat mij betreft geen stad."`,
+      kroniekTekst:"\"Utilitas, weet je nog?\" zei Vitruvius trots — bruikbaarheid, boven alles, was altijd zijn eerste eis geweest."} },
   { id:"ch25_lat001_echo_vitruvius_venustas", type:"echo", trigger:{scene:"CH25_LAT_001"},
     condition:{flags:{ch24_lat_vitruvius_principe:"venustas"}}, priority:0,
-    content:{text:`"Venustas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Schoonheid, boven alles — een bouwwerk zonder venustas is, wat mij betreft, hooguit een dak boven je hoofd."`} },
+    content:{text:`"Venustas, weet je nog?" zegt Vitruvius, met de trots van iemand die zijn eigen woorden terugkrijgt. "Schoonheid, boven alles — een bouwwerk zonder venustas is, wat mij betreft, hooguit een dak boven je hoofd."`,
+      kroniekTekst:"\"Venustas, weet je nog?\" zei Vitruvius trots — schoonheid, boven alles, was altijd zijn eerste eis geweest."} },
   // ---- Hoofdstuk 26 "Een Rijk in Crisis" — concept, nog niet gekoppeld.
   // Doorlopende Stoïcijnse lijn (Gerbens verzoek, 2026-08-15): Cicero (H21)
   // → Seneca (H21/23/25) → Marcus Aurelius (hier). Twee losse regels nodig
@@ -5629,10 +5680,12 @@ const SP_PAYOFFS = [
   // regel alle genoemde NPC's — geen OR mogelijk in één entry.
   { id:"ch26_lat008_echo_stoicijnen_cicero", type:"echo", trigger:{scene:"CH26_LAT_008"},
     condition:{relationMin:{cicero:1}}, priority:0,
-    content:{text:`Je denkt terug aan Cicero, die ooit betoogde dat een rechtvaardige staat niet zonder rede en zelfbeheersing kon bestaan. Marcus Aurelius zou, vermoed je, weinig op die gedachte af te dingen hebben — al zou hij haar liever nog wat strenger geformuleerd zien.`} },
+    content:{text:`Je denkt terug aan Cicero, die ooit betoogde dat een rechtvaardige staat niet zonder rede en zelfbeheersing kon bestaan. Marcus Aurelius zou, vermoed je, weinig op die gedachte af te dingen hebben — al zou hij haar liever nog wat strenger geformuleerd zien.`,
+      kroniekTekst:"{subject_cap} dacht terug aan Cicero, die een rechtvaardige staat nooit zonder rede en zelfbeheersing had kunnen zien bestaan — Marcus Aurelius zou er weinig op af te dingen hebben."} },
   { id:"ch26_lat008_echo_stoicijnen_seneca", type:"echo", trigger:{scene:"CH26_LAT_008"},
     condition:{relationMin:{seneca:1}}, priority:0,
-    content:{text:`Je denkt terug aan Seneca, die zijn eigen leven volgens diezelfde Stoïcijnse beginselen probeerde te leiden — tot aan zijn gedwongen dood toe. Marcus Aurelius is, besef je, geen alleenstaand filosoof: hij staat in een lijn die via Seneca al veel eerder begon.`} },
+    content:{text:`Je denkt terug aan Seneca, die zijn eigen leven volgens diezelfde Stoïcijnse beginselen probeerde te leiden — tot aan zijn gedwongen dood toe. Marcus Aurelius is, besef je, geen alleenstaand filosoof: hij staat in een lijn die via Seneca al veel eerder begon.`,
+      kroniekTekst:"{subject_cap} dacht terug aan Seneca, die zijn leven tot aan zijn gedwongen dood naar diezelfde Stoïcijnse beginselen had geleid."} },
 ];
 
 /* ---- KLASSEKEUZE — koppelt REWARD-tekst (Dutch, auteursvriendelijk) aan

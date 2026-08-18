@@ -336,6 +336,15 @@ const SpTextResolver = {
       case "fin_grieken_credit":   return spFinaleClusterCreditText("grieken", state);
       case "fin_romeinen_credit":  return spFinaleClusterCreditText("romeinen", state);
       case "fin_dode_flags_credit": return spFinaleDodeFlagsCredit(state);
+      // FIN_HER_003A (Kroniek, SP_KRONIEK_FORKS): Mnemosyne vraagt zelf naar
+      // een CATEGORIE herinnering ("mensen dus, niet de goden, niet de
+      // gebeurtenissen"), geen specifiek personage — maar de Kroniek kan wél
+      // teruggrijpen op de sterkste RELATION die de speler zelf opbouwde,
+      // in plaats van "een mens" generiek te laten (Gerben, 2026-08-19).
+      // Geeft altijd een grammaticaal complete clausule terug (voornaamwoord
+      // al ingevuld, geen geneste {subject}-token nodig) zodat er geen naam
+      // beschikbaar hoeft te zijn voor een correcte zin.
+      case "fin_her_mens": return spKleioFinHerMens(state);
       case "fin_einde_variant_line": return SP_FINALE_EINDE_VARIANT_LINES[state.flags?.fin_einde_variant] || "";
       case "fin_epiloog_lethe":       return spFinaleEpiloogLethe(state);
       case "fin_epiloog_troje":       return SP_FIN_EPILOOG_TROJE[state.flags?.ch9_zijde] || SP_FIN_EPILOOG_FALLBACK;
@@ -1478,6 +1487,52 @@ function spKleioClause(label){
   if(/\b(je|jij|jou|jouw)\b/i.test(rest)) return null;
   return conj+" "+rest;
 }
+// Laatste redmiddel wanneer spKleioClause geen werkwoord herkent: geen kale
+// "Bij X koos zij: 'label'" meer (Gerben, 2026-08-19: "klinkt niet als een
+// verteller die een kroniek schrijft over een held") — een label dat al een
+// aangehaald citaat is ("Ik begrijp het — ...") wordt nu als gesproken tekst
+// ingeleid ("sprak zij: ..."), een gewone beschrijvende labeltekst als een
+// bewuste keuze ("koos zij ervoor: ..."). GEEN "Bij 'scènetitel}'"-opener
+// meer (Gerben, 2026-08-19, tweede correctie: "Een schrijver zegt niet 'In
+// hoofdstuk 3 deed de hoofdrolspeler dit...'"). Heeft de scène een DIALOGUE-
+// sectie, dan gebruikt de zin — zoals Gerben zelf voorstelde ("In gesprek
+// met Kronos ... antwoordde zij: ...") — de gesprekspartner als verankering
+// i.p.v. de titel; zonder DIALOGUE valt dit terug op de kale variant.
+function spKleioLabelFallback(scene, label){
+  const speaker = scene.dialogue ? SpTextResolver.resolve(scene.dialogue.speaker, SP_STATE) : null;
+  const isQuote = /^["“]/.test(label.trim());
+  if(isQuote){
+    return speaker
+      ? `In gesprek met ${speaker} sprak {subject}: ${label}`
+      : `{subject_cap} sprak: ${label}`;
+  }
+  return speaker
+    ? `In gesprek met ${speaker} koos {subject} ervoor: ${spLowerFirst(label)}${spSentenceEnd(label)}`
+    : `{subject_cap} koos ervoor: ${spLowerFirst(label)}${spSentenceEnd(label)}`;
+}
+// Zodra de speler een van de vijf Finale-eindes bereikt (Chronica.md §7.101,
+// FIN_KEUZE_000 routeert er via de opgebouwde fin_tendency naartoe) mag de
+// Kroniek eindelijk vertellen hoe Lethe reageerde — dat kon eerder niet
+// (spoiler voor de andere vier eindes), maar wie hier is aangekomen heeft
+// het zelf al gezien (Gerben, 2026-08-19: "dan is het sowieso geen spoiler
+// meer"). Elk eind is zelf een lineaire (1-keuze) scène, dus zou anders
+// NOOIT gelogd worden (spChooseAndLog logt alleen echte vertakkingen) —
+// vandaar deze aparte hook, net als spHookReward voor de klassekeuze. Eén
+// keer per save (fin_einde_gelogd-flag), voor het geval de speler ooit
+// terugbladert.
+const SP_FINALE_EINDE_KRONIEK = {
+  FIN_EINDE_NEUTRAAL: "Geen verzoening, geen overwinning — Lethe en {subject} leerden naast elkaar te bestaan, geen van beiden de ander de baas.",
+  FIN_EINDE_CLEM_MED: "Lethe knikte, iets minder onbewogen dan ze ooit was geweest — het vergeten verdween niet, maar kreeg er, dankzij {object}, voortaan iets vriendelijkers bij.",
+  FIN_EINDE_CLEM_HOOG: "{subject_cap} strekte {possessive} hand uit, niet om te vechten maar om vast te houden — en Lethe liet zich, voor het eerst in wie weet hoe lang, aanraken zonder te verdwijnen.",
+  FIN_EINDE_SEV_MED: "Lethe week terug, niet verslagen maar wél teruggedrongen — genoeg voor nu, niet voorgoed.",
+  FIN_EINDE_SEV_HOOG: "{subject_cap} bleef onbewogen tot Lethe zich terugtrok, zwijgend, tijdelijk overwonnen door iemand die weigerde ook maar iets van dit verhaal op te geven.",
+};
+function spKroniekFinaleEindeLog(node){
+  const tekst = SP_FINALE_EINDE_KRONIEK[node];
+  if(!tekst || (SP_STATE.flags||{}).fin_einde_gelogd) return;
+  spKroniekLog(SpTextResolver.resolve(tekst, SP_STATE));
+  spSaveProgress({ flags: {...(SP_STATE.flags||{}), fin_einde_gelogd:true} });
+}
 // Kroniek (Chronica.md §12, Deel 1.5 van de spec): "een doorlopend,
 // in-fictie logboek van beslissingen... geschreven als annalen, niet als
 // menu". Eén regel tekst per noemenswaardige gebeurtenis, gegroepeerd per
@@ -1497,19 +1552,18 @@ function spChooseTrackedPath(target, approach){
   const scene = SP_SCENES.get(SP_STATE.node);
   const choice = scene?.choices.find(c=>c.target===target && (c.statReq||c.done));
   if(choice && SpTextResolver.resolve(choice.label, SP_STATE).trim()){
-    const title = SpTextResolver.resolve(scene.title, SP_STATE);
     const label = SpTextResolver.resolve(choice.label, SP_STATE);
     const clause = spKleioClause(label);
     let sentence;
     if(choice.statReq){
       const virtue = SP_STAT_VIRTUE[choice.statReq.key] || SP_STAT_DEFS[choice.statReq.key]?.nm || choice.statReq.key;
       sentence = clause
-        ? `Bij "${title}": {subject_cap} ${clause} — {possessive} ${virtue} deed de rest.`
-        : `Bij "${title}" zette {subject} {possessive} ${virtue} in: ${spLowerFirst(label)}${spSentenceEnd(label)}`;
+        ? `{subject_cap} ${clause} — {possessive} ${virtue} deed de rest.`
+        : `{subject_cap} zette {possessive} ${virtue} in: ${spLowerFirst(label)}${spSentenceEnd(label)}`;
     } else {
       sentence = clause
-        ? `Bij "${title}" liet {subject} zich leiden naar een nieuw verhaal: {subject} ${clause} — de andere lijnen van dit hoofdstuk wachtten intussen nog op {possessive} terugkeer.`
-        : `Bij "${title}" liet {subject} zich leiden naar een nieuw verhaal: ${spLowerFirst(label)} — de andere lijnen van dit hoofdstuk wachtten intussen nog op {possessive} terugkeer.`;
+        ? `{subject_cap} liet zich leiden naar een nieuw verhaal en ${clause} — de andere lijnen van dit hoofdstuk wachtten intussen nog op {possessive} terugkeer.`
+        : `{subject_cap} liet zich leiden naar een nieuw verhaal: ${spLowerFirst(label)}${spSentenceEnd(label)} De andere lijnen van dit hoofdstuk wachtten intussen nog op {possessive} terugkeer.`;
     }
     spKroniekLog(SpTextResolver.resolve(sentence, SP_STATE));
   }
@@ -1552,13 +1606,33 @@ const SP_APPROACH_DESC = {
 // met "iets dat diegene lang zou onthouden" (2026-08-18), dus hier hergebruikt
 // i.p.v. apart voor de Kroniek herschreven: geen nieuw handwerk per scène nodig,
 // dit dekt automatisch ALLE approach-keuzes in de hele campagne.
+// Zie SpTextResolver.lookup "fin_her_mens" hierboven: geeft "NAAM, die {p}
+// onderweg had geholpen" terug voor de NPC met de hoogste opgebouwde
+// RELATION-score, of een naamloze variant als er nooit een RELATION werd
+// opgebouwd (bv. een heel korte speeltest) — SP_CODEX_PERSONS kan in
+// theorie ook een NPC zonder eigen entry bevatten (zou niet moeten
+// voorkomen, maar dan liever alsnog de naamloze variant dan "undefined").
+function spKleioFinHerMens(state){
+  const p = SP_PRONOUNS[state.gender] || SP_PRONOUNS.man;
+  const rel = state.relations || {};
+  // Niet elke RELATION-getagde NPC (vooral kleinere, latere personages) heeft
+  // een eigen SP_CODEX_PERSONS-entry — dus niet stoppen bij de hoogste score
+  // als die geen naam oplevert, maar de score-gesorteerde lijst aflopen tot
+  // een NPC MET naam gevonden wordt (of de lijst op is).
+  const sorted = Object.entries(rel)
+    .map(([id,v])=>[id, v?.score||0])
+    .filter(([,score])=>score>0)
+    .sort((a,b)=>b[1]-a[1]);
+  let nm = null;
+  for(const [id] of sorted){ nm = SP_CODEX_PERSONS[id]?.nm; if(nm) break; }
+  return nm ? `de mens ${nm}, die ${p.subj} onderweg had geholpen` : `een mens die ${p.subj} onderweg had geholpen`;
+}
 function spKroniekApproachLog(scene, choice){
-  const title = SpTextResolver.resolve(scene.title, SP_STATE);
   const reaction = spSceneReaction(scene, choice.approach);
   const desc = SP_APPROACH_DESC[choice.approach] || "maakte een keuze";
   const sentence = reaction
-    ? `Bij "${title}": {subject_cap} ${desc} tegenover ${reaction.nm}. ${reaction.text} — een moment dat ${reaction.nm} niet snel zou vergeten.`
-    : `Bij "${title}": {subject_cap} ${desc}.`;
+    ? `{subject_cap} ${desc} tegenover ${reaction.nm}. ${reaction.text} — een moment dat ${reaction.nm} niet snel zou vergeten.`
+    : `{subject_cap} ${desc}.`;
   spKroniekLog(SpTextResolver.resolve(sentence, SP_STATE));
 }
 // Scènes waar spHookReward (of een vergelijkbare hook) al een volledige,
@@ -1588,7 +1662,6 @@ function spChooseAndLog(target, approach){
     if(choice.approach){
       spKroniekApproachLog(scene, choice);
     } else if(!spKroniekForkLog(SP_STATE.node, target)){
-      const title = SpTextResolver.resolve(scene.title, SP_STATE);
       const label = SpTextResolver.resolve(choice.label, SP_STATE);
       // Sommige REQUIRE-gated keuzes (bv. CH29_GRE_001, de Sicilië-echo) zijn
       // pure vlag-routing zonder eigen knoptekst — geen bewuste beslissing
@@ -1597,8 +1670,8 @@ function spChooseAndLog(target, approach){
       if(!label.trim()) return spChoosePath(target, approach);
       const clause = spKleioClause(label);
       const sentence = clause
-        ? `Bij "${title}": {subject_cap} ${clause}.`
-        : `Bij "${title}" koos {subject}: ${spLowerFirst(label)}${spSentenceEnd(label)}`;
+        ? `{subject_cap} ${clause}.`
+        : spKleioLabelFallback(scene, label);
       spKroniekLog(SpTextResolver.resolve(sentence, SP_STATE));
     }
   }
@@ -1703,11 +1776,20 @@ function spResolvePayoffs(sceneId){
     if(p.content.text){
       const resolved = SpTextResolver.resolve(p.content.text, SP_STATE);
       echoParts.push(`<p style="font-style:italic">${esc(resolved)}</p>`);
-      kroniek.push({ hoofdstuk, tekst:resolved, t:Date.now() });
+      // De in-verhaal echo (content.text) blijft in de 2e persoon, zelfde stem
+      // als de omringende scène — de Kroniek krijgt een apart, hand-geschreven
+      // kroniekTekst in Kleio's 3e-persoon-stem (Gerben, 2026-08-19). Zonder
+      // kroniekTekst (zou niet meer moeten voorkomen, alle 38 zijn geschreven)
+      // valt dit terug op de rauwe echo i.p.v. een payoff stil te laten.
+      const kroniekResolved = p.content.kroniekTekst ? SpTextResolver.resolve(p.content.kroniekTekst, SP_STATE) : resolved;
+      kroniek.push({ hoofdstuk, tekst:kroniekResolved, t:Date.now() });
     }
     if(p.type==="deur" && p.content.choice){
       doorChoices.push(p.content.choice);
-      kroniek.push({ hoofdstuk, tekst:`Een eerdere keuze opende een nieuwe weg: ${SpTextResolver.resolve(p.content.choice.label, SP_STATE)}.`, t:Date.now() });
+      const deurTekst = p.content.kroniekTekst
+        ? SpTextResolver.resolve(p.content.kroniekTekst, SP_STATE)
+        : `Een eerdere keuze opende een nieuwe weg: ${SpTextResolver.resolve(p.content.choice.label, SP_STATE)}.`;
+      kroniek.push({ hoofdstuk, tekst:deurTekst, t:Date.now() });
     }
   });
   const patch = { payoffsSeen: newSeen, kroniek };
@@ -1725,6 +1807,7 @@ SCREENS.spPlay = function(){
 
   spRunMetaHooks(scene.meta);
   spHookSeenImage(scene);
+  spKroniekFinaleEindeLog(SP_STATE.node);
 
   if(scene.meta.PUZZLE) return spRenderPuzzle(scene);
   if(scene.meta.COMBAT) return spStartCombatFromScene(scene);
