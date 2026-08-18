@@ -1283,7 +1283,13 @@ SCREENS.spStats = function(){
   }
   const cls = BM_CLASSES.find(c=>c.id===SP_STATE.classId);
   const av = spAvatarMerge(spAvatarLoadLocal());
-  const avatarHTML = renderPixelHeroPreview(av) || bmAvatarSVG(av,72);
+  // showWeapon:true, net als de avatar-editor zelf (singleplayer.js:165) en
+  // Battle Mode's eigen profielscherm (battle.js:3797) — leerlingfeedback
+  // (2026-08-18): het wapen was hier onzichtbaar (renderPixelHeroPreview
+  // verbergt het sprite-wapen standaard via CSS tenzij showWeapon meegegeven
+  // wordt), terwijl de tekstlijst eronder ("Huidige uitrusting") het wél al
+  // correct toonde — verwarrend, want het wapen was dus niet echt kwijt.
+  const avatarHTML = renderPixelHeroPreview(av,true) || bmAvatarSVG(av,72);
   const equipHTML = ["wapen","armor","helm","schild","cape"].map(partId=>{
     const part = BM_AVATAR_PARTS[partId];
     const opt = part?.opts.find(o=>o.id===av[partId]);
@@ -2760,6 +2766,7 @@ function spRerenderMatch(){
    ademt niet over sessies heen — verlaat je de app halverwege, dan begin je
    het gevecht opnieuw bij terugkeer (net als bij de meeste boss-fights). ---- */
 const SP_COMBAT_EP_PER_CORRECT = 10;
+const SP_COMBAT_EP_PENALTY_WRONG = 5; // leerlingfeedback (2026-08-18): fout antwoord kostte voorheen niets
 const SP_COMBAT_ACTION_COST = 20;
 const SP_COMBAT_DAMAGE_PER_ATTACK = 15;
 let SP_COMBAT = null;
@@ -2902,7 +2909,8 @@ function spCombatAnswer(idx){
     SP_COMBAT.ep = Math.min(SP_COMBAT_ACTION_COST, SP_COMBAT.ep + SP_COMBAT_EP_PER_CORRECT);
     toast("Juist!", "Je vastberadenheid groeit.");
   } else {
-    toast("Niet juist", "Het juiste antwoord was \""+q.correct+"\". Je vastberadenheid groeit deze beurt niet.");
+    SP_COMBAT.ep = Math.max(0, SP_COMBAT.ep - SP_COMBAT_EP_PENALTY_WRONG);
+    toast("Niet juist", "Het juiste antwoord was \""+q.correct+"\". Je vastberadenheid zakt.");
   }
   spCombatNextQuestion();
   SCREENS.spCombat();
