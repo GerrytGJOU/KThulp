@@ -847,9 +847,15 @@ function spRenderLanding(){
    PER SAVESLOT, net als de wereldkaart — elke slot toont dus alleen wat DIE
    doorspeling al heeft ontdekt. Niets wordt vooruit getoond (geen
    "??"-placeholder voor wat nog moet komen — dat zou spoilen).
-   - Herinneringen (eerste/standaard-tabblad): SP_SOUVENIRS, via SOUVENIR: —
-     één tastbaar voorwerp per afgeronde verhaallijn, zie spHookSouvenir en
-     Chronica.md §7.2.1.
+   - Herinneringen/Museum (eerste/standaard-tabblad, hernoemt zichzelf naar
+     "Museum" zodra museum_mnemosyne_ontgrendeld gezet is): SP_SOUVENIRS, via
+     SOUVENIR: — één tastbaar voorwerp per afgeronde verhaallijn, zie
+     spHookSouvenir en Chronica.md §7.2.1. Bewuste UITZONDERING op de
+     geen-vooruit-tonen-regel hierboven, en alleen ná die reveal (Gerben,
+     2026-08-18): ontbrekende souvenirs krijgen dan een generieke lege/
+     gebroken-stolp-placeholder (spSouvenirEmptyTileHTML) i.p.v. helemaal niet
+     te verschijnen — dat toont het gemis zonder te verklappen wélk voorwerp
+     of welke verhaallijn erbij hoort.
    - Mythologie/Geschiedenis/Grammatica: SP_CODEX_ENTRIES, ontgrendeld via de
      bestaande CODEX:-sectie (spHookCodex). Grammatica-entries mogen een
      `table` hebben (rijtjes/naamvallen), gerenderd als een echte <table>.
@@ -873,11 +879,18 @@ const SP_CODEX_TABS = [
   { id:"vocabulaire",   nm:"Vocabulaire",   icon:"🔤", row:2 },
 ];
 function spSwitchCodexTab(tab){ SP_CODEX_TAB = tab; go("spCodex"); }
+// Herinneringen -> Museum: de tabnaam zelf is een reveal (Chronica.md §7.2.1a).
+// Zodra museum_mnemosyne_ontgrendeld gezet is (einde Hoofdstuk 6, CH6_MUSEUM_00)
+// wisselt alleen het label, id/inhoud blijven "herinneringen"/spCodexSouvenirsHTML.
+function spCodexTabLabel(t){
+  if(t.id==="herinneringen" && (SP_STATE.flags||{}).museum_mnemosyne_ontgrendeld) return "Museum";
+  return t.nm;
+}
 SCREENS.spCodex = function(){
   document.body.classList.remove("greek");
   if(!SP_ACTIVE_SLOT){ go("spSlots"); return; }
   const tabRowHTML = row => SP_CODEX_TABS.filter(t=>t.row===row).map(t=>
-    `<button class="codex-tab${t.id===SP_CODEX_TAB?" on":""}" onclick="spSwitchCodexTab('${t.id}')">${t.icon} ${esc(t.nm)}</button>`
+    `<button class="codex-tab${t.id===SP_CODEX_TAB?" on":""}" onclick="spSwitchCodexTab('${t.id}')">${t.icon} ${esc(spCodexTabLabel(t))}</button>`
   ).join("");
   const bodies = {
     kroniek: spCodexKroniekHTML,
@@ -1086,30 +1099,69 @@ function spCodexKroniekHTML(){
       ${g.items.map(e=>`<p>${esc(e.tekst)}</p>`).join("")}
     </div>`).join("");
 }
-/* ---- HERINNERINGEN-TAB (museum van Mnemosyne — nog ambigu voor de speler,
-   zie Chronica.md §7.2.1a): één klein voorwerp per afgeronde lijn/verhaal,
-   verzameld via de SOUVENIR:-sectie (spHookSouvenir). Zelfde
-   onerror-terugval-truc als spCombatSpriteHTML (battle-loze bazen): ontbreekt
-   het beeld, dan vervangt de <img> zichzelf door het icon-emoji i.p.v. de
-   hele tegel te verbergen (zoals spCodexImagesHTML doet) — een voorwerp
-   zonder eigen tekening moet toch zichtbaar én herkenbaar blijven. ---- */
+/* ---- HERINNERINGEN/MUSEUM-TAB (museum van Mnemosyne — wie/wat het precies
+   is blijft ambigu tot Hoofdstuk 21, zie Chronica.md §7.2.1a): één klein
+   voorwerp per afgeronde lijn/verhaal, verzameld via de SOUVENIR:-sectie
+   (spHookSouvenir). Zelfde onerror-terugval-truc als spCombatSpriteHTML
+   (battle-loze bazen): ontbreekt het beeld, dan vervangt de <img> zichzelf
+   door het icon-emoji i.p.v. de hele tegel te verbergen (zoals
+   spCodexImagesHTML doet) — een voorwerp zonder eigen tekening moet toch
+   zichtbaar én herkenbaar blijven. Het tabblad zelf heet "Herinneringen" tot
+   museum_mnemosyne_ontgrendeld gezet wordt (CH6_MUSEUM_00), daarna "Museum"
+   — zie spCodexTabLabel hierboven. ---- */
+// Lege/gebroken sokkels (2026-08-18, Gerbens verzoek): zodra het museum
+// ontgrendeld is, toont de tab NIET alleen wat de speler al heeft, maar ook
+// een placeholder-stolp per NOG NIET gevonden souvenir — zichtbaar verval dat
+// geleidelijk "gerepareerd" wordt naarmate SP_STATE.souvenirs groeit. Geen
+// caption die verklapt wélk voorwerp er zou moeten staan (dat zou spoilen,
+// want souvenirs horen bij verhaallijnen die de speler misschien nooit
+// bezoekt) — alleen het generieke gevoel van een gemist tentoonstellingsstuk.
+// leeg/gebroken wisselt deterministisch per id (simpele stringhash) zodat het
+// rooster niet bij elke render van variant verspringt.
+function spSouvenirPlaceholderVariant(id){
+  let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))|0;
+  return (h&1)===0 ? "leeg" : "gebroken";
+}
 function spCodexSouvenirsHTML(){
   const ids = SP_STATE.souvenirs||[];
   const inMuseum = !!(SP_STATE.flags||{}).museum_mnemosyne_ontgrendeld;
   const intro = inMuseum
-    ? `<p class="codex-empty" style="margin-bottom:14px">Je hebt het Museum van Mnemosyne nu zelf betreden: een hal vol sokkels en glazen stolpen, waarvan de meeste nog leeg staan of al zijn aangetast door de tijd. Wat hieronder staat, is enkel wat jij al hebt gevuld.</p>`
+    ? `<p class="codex-empty" style="margin-bottom:14px">Je hebt het Museum van Mnemosyne nu zelf betreden: een hal vol sokkels en glazen stolpen, waarvan de meeste nog leeg staan of al zijn aangetast door de tijd. Wat hieronder staat, is enkel wat jij al hebt gevuld — de rest wacht nog op een voorwerp.</p>`
     : "";
-  if(!ids.length) return intro || `<p class="codex-empty">Nog niets verzameld — onderweg laat het Orakel je soms een voorwerp uit het verhaal meenemen.</p>`;
-  return intro + `<div class="codex-gallery">${ids.map(id=>{
-    const def = SP_SOUVENIRS[id]; if(!def) return "";
-    return `<div class="codex-gallery-item">
+  if(!inMuseum){
+    if(!ids.length) return `<p class="codex-empty">Nog niets verzameld — onderweg laat het Orakel je soms een voorwerp uit het verhaal meenemen.</p>`;
+    const tiles = ids.map(id=>{
+      const def = SP_SOUVENIRS[id]; if(!def) return "";
+      return spSouvenirTileHTML(def);
+    }).join("");
+    return `<div class="codex-gallery">${tiles}</div>`;
+  }
+  const filledTiles = Object.keys(SP_SOUVENIRS).map(id=>{
+    const def = SP_SOUVENIRS[id];
+    return ids.includes(id) ? spSouvenirTileHTML(def) : spSouvenirEmptyTileHTML(id);
+  }).join("");
+  return intro + `<div class="codex-gallery">${filledTiles}</div>`;
+}
+function spSouvenirTileHTML(def){
+  return `<div class="codex-gallery-item">
       <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(90,58,26,.12);border-radius:6px;overflow:hidden">
         <img src="assets/chronica/souvenirs/${esc(def.img||'')}" alt="" style="width:100%;height:100%;object-fit:contain"
           onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${esc(def.icon)}</span>'">
       </div>
       <div class="codex-gallery-caption">${esc(def.caption)}</div>
     </div>`;
-  }).join("")}</div>`;
+}
+function spSouvenirEmptyTileHTML(id){
+  const variant = spSouvenirPlaceholderVariant(id);
+  const icon = variant==="leeg" ? "🫙" : "💔";
+  const caption = variant==="leeg" ? "Een lege sokkel — nog niets gevonden." : "Een gebroken stolp — verloren, of nog niet ontdekt.";
+  return `<div class="codex-gallery-item" style="opacity:.55">
+      <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(90,58,26,.12);border-radius:6px;overflow:hidden">
+        <img src="assets/chronica/souvenirs/museum_${variant}.png" alt="" style="width:100%;height:100%;object-fit:contain"
+          onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${icon}</span>'">
+      </div>
+      <div class="codex-gallery-caption">${esc(caption)}</div>
+    </div>`;
 }
 
 /* ---- WERELDKAART: geïllustreerd paneel + onthullende locatie-pins.

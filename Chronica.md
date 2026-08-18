@@ -886,6 +886,23 @@ wrap-breuk.
   plaats van een uitbreiding op `gemini-comic-style.md`, omdat de compositie
   hier strikt VAST staat (bijna een productfoto) i.p.v. per scène te
   variëren.
+  **Update (2026-08-18, Gerbens verzoek): tabnaam-reveal + lege/gebroken
+  sokkels.** Het tabblad zelf heet nu "Herinneringen" totdat de vlag
+  `museum_mnemosyne_ontgrendeld` gezet wordt (einde Hoofdstuk 6,
+  `CH6_MUSEUM_00`) — daarna heet hetzelfde tabblad (zelfde `id`, zelfde
+  inhoud-functie) "Museum" (`spCodexTabLabel()`, `certamen/singleplayer.js`).
+  Ná die reveal toont `spCodexSouvenirsHTML()` bovendien niet meer alléén de
+  souvenirs die de speler al heeft: voor élk item in `SP_SOUVENIRS` dat nog
+  niet in `SP_STATE.souvenirs` zit, verschijnt een generieke placeholder-tegel
+  — een lege sokkel of een gebroken stolp (`spSouvenirEmptyTileHTML()`,
+  50/50 gekozen via een deterministische hash van de souvenir-id, dus stabiel
+  per speelsessie). Geen caption die verklapt wélk voorwerp of welke
+  verhaallijn ontbreekt — alleen het generieke gevoel van "dit museum is in
+  verval en jij kunt het vullen". Twee nieuwe, vaste (niet-taalspoor-
+  gebonden) illustraties nodig: `museum_leeg.png`/`museum_gebroken.png`
+  (prompts onderaan `gemini-souvenir-style.md`), terugval op 🫙/💔 zolang ze
+  nog niet op schijf staan. Vóór de reveal blijft het oude gedrag (alleen
+  tonen wat verzameld is, geen placeholders — spoilervrij).
 - **Mythologie** / **Geschiedenis** — `SP_CODEX_ENTRIES` (`cat:"mythologie"`/
   `"geschiedenis"`), ontgrendeld via de bestaande `CODEX:`-sectie
   (`spHookCodex`, ondersteunt nu meerdere id's per sectie,
