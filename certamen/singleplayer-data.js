@@ -3482,15 +3482,21 @@ const SP_FRAGMENTS = {
 /* ---- HERINNERINGEN/SOUVENIRS — het "museum van Mnemosyne"-mechanisme
    (Chronica.md §7.2.1a): uit elk afgerond verhaal neemt de speler één
    tastbaar voorwerp mee, opgehaald via een SOUVENIR:-sectie
-   (spHookSouvenir, singleplayer.js) en zichtbaar in de nieuwe eerste
-   Codex-tab "Herinneringen" (spCodexSouvenirsHTML). Losstaand van
-   SP_FRAGMENTS hierboven — fragmenten zijn een ONZICHTBARE hoofdstukgate,
-   souvenirs zijn juist bedoeld om gezien te worden. Sinds het einde van
-   Hoofdstuk 6 (CH6_MUSEUM_01) heeft de speler het Museum van Mnemosyne ook
-   echt bezocht en bij naam leren kennen — maar wie/wat het precies is en
-   waarom het bestaat, blijft bewust onbeantwoord tot Hoofdstuk 21 "De
-   Bibliotheek van Mnemosyne" (SP_CAMPAIGN): dát is nog steeds de echte
-   onthulling, dit is pas de eerste kennismaking.
+   (spHookSouvenir, singleplayer.js) en zichtbaar in de eerste Codex-tab
+   (spCodexSouvenirsHTML) — die "Herinneringen" heet tot
+   museum_mnemosyne_ontgrendeld gezet wordt, daarna "Museum"
+   (spCodexTabLabel). Losstaand van SP_FRAGMENTS hierboven — fragmenten zijn
+   een ONZICHTBARE hoofdstukgate, souvenirs zijn juist bedoeld om gezien te
+   worden. Sinds het einde van Hoofdstuk 6 (CH6_MUSEUM_00/01) heeft de speler
+   het Museum van Mnemosyne ook echt bezocht en bij naam leren kennen — maar
+   wie/wat het precies is en waarom het bestaat, blijft bewust onbeantwoord
+   tot Hoofdstuk 21 "De Bibliotheek van Mnemosyne" (SP_CAMPAIGN): dát is nog
+   steeds de echte onthulling, dit is pas de eerste kennismaking. Vanaf die
+   reveal toont de tab óók een generieke lege/gebroken-stolp-placeholder
+   (museum_leeg.png/museum_gebroken.png, spSouvenirEmptyTileHTML) voor elk
+   souvenir dat de speler nog niet heeft — zichtbaar verval dat zich vult
+   naarmate SP_STATE.souvenirs groeit, zonder te verklappen welk voorwerp of
+   welke verhaallijn er nog bij hoort.
    `img` optioneel (relatief aan assets/chronica/souvenirs/, nog geen
    bestanden op schijf); ontbreekt het of faalt het laden, dan valt
    spCodexSouvenirsHTML terug op `icon` — zelfde patroon als

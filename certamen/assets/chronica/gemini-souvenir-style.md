@@ -104,6 +104,52 @@ aangemaakt.
 
 ---
 
+## Placeholders: lege en gebroken stolp (museum in verval)
+
+Sinds 2026-08-18 toont de Herinneringen/Museum-tab, zodra het museum
+ontgrendeld is (`museum_mnemosyne_ontgrendeld`), ook een generieke
+placeholder-tegel voor élk souvenir dat de speler nog niet heeft gevonden —
+zichtbaar verval dat zich vult naarmate de speler verder speelt (Gerbens
+verzoek). Precies TWEE vaste bestanden, wisselend per voorwerp-id (geen 1-op-1
+match met een specifiek souvenir — bewust anoniem, zodat er niets verklapt
+wordt over wélk voorwerp of welke verhaallijn er nog ontbreekt):
+- `museum_leeg.png` — een lege sokkel.
+- `museum_gebroken.png` — een gebroken/gebarsten stolp.
+
+Zelfde vaste compositie en huisstijl als hierboven (sokkel/stolp, inkt +
+cel-shading, warm steenpalet), maar bewust SOMBERDER en zonder de gouden
+gloed — dit zijn de "kapotte" tegels, geen tentoongestelde stukken. Geen
+accentkleur (geen Aegeïsch blauw of oxblood) — verval hoort bij geen van
+beide taalsporen.
+
+### `museum_leeg.png` — Een Lege Sokkel
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette), but deliberately dim and melancholic — no golden glow. A single
+> small museum-style display: an empty weathered stone pedestal with a small
+> dark-red velvet cushion on top, bare and undented, entirely covered by an
+> old glass bell jar/dome — the jar is empty, nothing rests on the cushion.
+> A faint layer of dust is visible on the cushion and the inside of the
+> glass. Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette). No glow, no colour accent on
+> the glass. No text, no speech bubbles, no watermark, no modern objects, no
+> people, no hands, no faces. 1:1 square format, fills the entire frame.
+
+### `museum_gebroken.png` — Een Gebroken Stolp
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette), but deliberately dim and melancholic — no golden glow. A single
+> small museum-style display: a weathered stone pedestal with a small
+> dark-red velvet cushion on top, empty and slightly frayed, its glass bell
+> jar/dome visibly cracked and broken — a jagged shard missing from one side,
+> a few small glass fragments resting on the cushion beside a thin layer of
+> dust. Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette). No glow, no colour accent on
+> the glass. No text, no speech bubbles, no watermark, no modern objects, no
+> people, no hands, no faces. 1:1 square format, fills the entire frame.
+
+---
+
 ## Klaar-om-te-plakken prompts voor de 20 bestaande voorwerpen
 
 Bestandsnamen zoals verwacht door `SP_SOUVENIRS` (singleplayer-data.js) —
