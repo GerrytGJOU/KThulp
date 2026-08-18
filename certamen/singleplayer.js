@@ -500,8 +500,8 @@ const SP_KRONIEK_KLASSE = {
 // {tendency_address}/{tendency_address_cap}.
 function spTendencyAddressPhrase(state){
   const tendency = spApproachTendency(state);
-  const noun = SP_TENDENCY_NOUN[state.gender] || SP_TENDENCY_NOUN.nonbinair;
-  return pick(SP_TENDENCY_PHRASES[tendency]).replace("%NOUN%", noun);
+  const poss = (SP_PRONOUNS[state.gender] || SP_PRONOUNS.man).poss;
+  return pick(SP_TENDENCY_PHRASES[tendency]).replace("%POSS%", poss);
 }
 
 /* ---- CNS PARSER — zet ruwe .cns-tekst om in een Map<sceneId, sceneObject> ---- */
@@ -651,6 +651,14 @@ async function spSaveProgress(patch){
     fbDB.ref(spSlotsPath()+"/"+SP_ACTIVE_SLOT).set(toSave).catch(e=>console.error("spSaveProgress (Firebase-spiegel) fout:",e));
   }
 }
+// Hoofdstuknummer van een slot, als grove maat voor "hoever ben je" —
+// PRO_ telt als 0, CH<n>_ als n, een lege/onbegonnen slot als -1.
+function spSlotProgressDepth(slot){
+  if(!slot || !slot.node) return -1;
+  if(slot.node.indexOf("PRO_")===0) return 0;
+  const m = slot.node.match(/^CH(\d+)_/);
+  return m ? +m[1] : 0;
+}
 async function spLoadAllSlots(){
   const local = spSlotsLoadLocal();
   let remote = {};
@@ -660,12 +668,35 @@ async function spLoadAllSlots(){
       remote = snap.exists() ? snap.val() : {};
     }catch(e){ console.error("spLoadAllSlots (Firebase) fout:",e); }
   }
+  // Leerlingfeedback (2026-08-18): puur op updatedAt samenvoegen is
+  // gevaarlijk zodra twee toestellen nooit hebben kunnen synchroniseren
+  // voor ze allebei zijn gaan spelen — een net-begonnen save op toestel B
+  // heeft altijd de nieuwste timestamp, en zou dan een veel verder
+  // gevorderde save op toestel A stilletjes overschrijven (en, via de
+  // lokale-cache-update hieronder, zelfs wissen). Bij een botsing wint
+  // daarom eerst de VERSTE voortgang (hoofdstuknummer); pas bij gelijke
+  // voortgang beslist de recentste updatedAt.
   const merged = {};
+  const healRemote = {}; // slots waar local won over een minder ver/oudere remote — Firebase bijwerken
   for(let n=1;n<=SP_MAX_SLOTS;n++){
     const l=local[n], r=remote[n];
-    merged[n] = !l ? (r||null) : !r ? l : ((r.updatedAt||0)>(l.updatedAt||0) ? r : l);
+    let winner;
+    if(!l) winner = r||null;
+    else if(!r) winner = l;
+    else{
+      const dl = spSlotProgressDepth(l), dr = spSlotProgressDepth(r);
+      winner = dl!==dr ? (dl>dr ? l : r) : ((r.updatedAt||0)>(l.updatedAt||0) ? r : l);
+    }
+    merged[n] = winner;
+    if(winner===l && r && l!==r) healRemote[n] = l;
   }
-  spSlotsSaveLocal(merged); // lokale cache bijwerken met eventuele nieuwere Firebase-data
+  spSlotsSaveLocal(merged); // lokale cache bijwerken met eventuele nieuwere/verdere data
+  if(BM_IDENT && fbDB && Object.keys(healRemote).length){
+    // Best-effort: Firebase bijwerken zodat een volgend toestel niet opnieuw
+    // tegen dezelfde verouderde/ondiepere remote-versie aanloopt.
+    Object.entries(healRemote).forEach(([n,slot])=>
+      fbDB.ref(spSlotsPath()+"/"+n).set(slot).catch(()=>{}));
+  }
   return merged;
 }
 
@@ -1379,6 +1410,48 @@ const SP_PUZZLE_CORRECT_TOASTS = [
 function spPuzzleCorrectToast(){
   beep("good");
   toast("Juist!", pick(SP_PUZZLE_CORRECT_TOASTS));
+}
+// Leerlingfeedback (2026-08-18): bij een correct ingevuld woord ging het
+// spel meteen door naar de volgende scène, zonder de complete zin te tonen
+// — leerlingen zagen dus nooit wat de zin nu eigenlijk werd. Haalt het
+// eerste “...”-gecciteerde zinsdeel met een ___-gat uit puzzle.vraag en
+// vult het aan met het juiste antwoord; null als er geen gat te vinden is
+// (bv. een vocabulaire-vraag zonder brontaalzin).
+function spBlankFillSentence(vraag, antwoord){
+  const m = /[“"]([^”"]*___[^”"]*)[”"]/.exec(vraag||"");
+  if(!m) return null;
+  return m[1].replace("___", antwoord);
+}
+let SP_PUZZLE_SOLVED = null;
+// Vervangt een directe spGoCns(target) na een juist antwoord: als er een
+// ingevulde zin is, toont eerst SCREENS.spPuzzleSolved die zin met een
+// "Ga verder"-knop; anders (geen ___-gat gevonden) meteen doornavigeren,
+// zoals voorheen.
+function spPuzzleAdvance(target, filledSentence){
+  spPuzzleCorrectToast();
+  if(filledSentence){
+    SP_PUZZLE_SOLVED = { text: filledSentence, target };
+    SCREENS.spPuzzleSolved();
+  } else {
+    spGoCns(target);
+  }
+}
+SCREENS.spPuzzleSolved = function(){
+  const s = SP_PUZZLE_SOLVED;
+  if(!s){ go("spSlots"); return; }
+  H(brand(true)+`
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  <div class="panel" style="text-align:center">
+    <div class="eyebrow l">Juist!</div>
+    <p style="font-size:19px;margin-top:10px">“${esc(s.text)}”</p>
+  </div>
+  <button class="btn btn-gold btn-block lg" onclick="spPuzzleSolvedContinue()">Ga verder</button>
+  ${foot()}`);
+};
+function spPuzzleSolvedContinue(){
+  const target = SP_PUZZLE_SOLVED?.target;
+  SP_PUZZLE_SOLVED = null;
+  spGoCns(target);
 }
 function spSyncLeesvalOutcome(leesvalId, goed){
   const base = spClassAnalyticsBase(); if(!base) return;
@@ -2423,9 +2496,15 @@ function spCheckGreekPuzzle(puzzleId, target){
    antwoord:"<juiste optietekst>", hint? }. Fout antwoord = hint + blijf staan;
    goed = door naar target. Knoppen zijn ≥44px hoog (iPad-veilig). */
 function spRenderMCPuzzle(scene, puzzleId, puzzle, target){
-  const optsHTML = puzzle.opties.map((o,i)=>
-    `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;text-align:left" onclick="spCheckMCPuzzle('${puzzleId}','${target}',${i})">${esc(o)}</button>`
-  ).join("");
+  // Leerlingfeedback (2026-08-18): het juiste antwoord stond in de brondata
+  // vaak toevallig als eerste optie — geschud op weergave-volgorde, niet op
+  // de brondata zelf (spCheckMCPuzzle vergelijkt op tekst, niet op positie,
+  // dus de originele index blijft geldig ongeacht de volgorde hier).
+  const order = shuffle(puzzle.opties.map((_,i)=>i));
+  const optsHTML = order.map(i=>{
+    const o = puzzle.opties[i];
+    return `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;text-align:left" onclick="spCheckMCPuzzle('${puzzleId}','${target}',${i})">${esc(o)}</button>`;
+  }).join("");
   H(brand(true)+`
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
   ${spPuzzleHeaderHTML(scene)}
@@ -2439,7 +2518,7 @@ function spRenderMCPuzzle(scene, puzzleId, puzzle, target){
 function spCheckMCPuzzle(puzzleId, target, idx){
   const puzzle = SP_PUZZLES[puzzleId];
   const err = el("spPuzzleErr");
-  if(puzzle.opties[idx] === puzzle.antwoord){ spPuzzleCorrectToast(); spGoCns(target); }
+  if(puzzle.opties[idx] === puzzle.antwoord){ spPuzzleAdvance(target, spBlankFillSentence(puzzle.vraag, puzzle.antwoord)); }
   else{
     spSyncPuzzleMistake(puzzleId, puzzle.opties[idx]);
     if(err){ err.textContent = puzzle.hint || "Nog niet juist — lees de zin nog eens en probeer opnieuw."; err.style.display = ""; }
@@ -2467,7 +2546,7 @@ function spCheckTypedLatinPuzzle(puzzleId, target){
   const puzzle = SP_PUZZLES[puzzleId];
   const input = (el("spPuzzleInput")?.value||"").trim().toLowerCase();
   const err = el("spPuzzleErr");
-  if(input === puzzle.antwoord.trim().toLowerCase()){ spPuzzleCorrectToast(); spGoCns(target); }
+  if(input === puzzle.antwoord.trim().toLowerCase()){ spPuzzleAdvance(target, spBlankFillSentence(puzzle.vraag, puzzle.antwoord)); }
   else{
     spSyncPuzzleMistake(puzzleId, input);
     if(err){ err.textContent = puzzle.hint || "Nog niet juist — probeer opnieuw."; err.style.display = ""; }
@@ -2556,7 +2635,7 @@ function spCheckTypedGreekPuzzle(puzzleId, target){
   const puzzle = SP_PUZZLES[puzzleId];
   const raw = el("spPuzzleInput")?.value||"";
   const err = el("spPuzzleErr");
-  if(spNormalizeGreek(raw) === spNormalizeGreek(puzzle.antwoord)){ spPuzzleCorrectToast(); spGoCns(target); }
+  if(spNormalizeGreek(raw) === spNormalizeGreek(puzzle.antwoord)){ spPuzzleAdvance(target, spBlankFillSentence(puzzle.vraag, puzzle.antwoord)); }
   else{
     spSyncPuzzleMistake(puzzleId, raw);
     if(err){ err.textContent = puzzle.hint || "Nog niet juist — let op de spiritus (᾿/῾) en probeer opnieuw."; err.style.display = ""; }
