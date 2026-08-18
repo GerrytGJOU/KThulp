@@ -1116,11 +1116,19 @@ function spCodexKroniekHTML(){
 // caption die verklapt wélk voorwerp er zou moeten staan (dat zou spoilen,
 // want souvenirs horen bij verhaallijnen die de speler misschien nooit
 // bezoekt) — alleen het generieke gevoel van een gemist tentoonstellingsstuk.
-// leeg/gebroken wisselt deterministisch per id (simpele stringhash) zodat het
+// Vier varianten (2026-08-18, Gerbens verzoek — visuele variatie in het
+// rooster) wisselen deterministisch per id (simpele stringhash) zodat het
 // rooster niet bij elke render van variant verspringt.
+const SP_SOUVENIR_PLACEHOLDER_VARIANTS = [
+  { id:"leeg",       icon:"🫙", caption:"Een lege sokkel — nog niets gevonden." },
+  { id:"gebroken",   icon:"💔", caption:"Een gebroken stolp — verloren, of nog niet ontdekt." },
+  { id:"omgevallen", icon:"🪦", caption:"Een omgevallen sokkel — hier stond ooit iets." },
+  { id:"verweerd",   icon:"🕸️", caption:"Een verweerde, overwoekerde sokkel — allang niet meer bezocht." },
+];
 function spSouvenirPlaceholderVariant(id){
   let h=0; for(let i=0;i<id.length;i++) h=(h*31+id.charCodeAt(i))|0;
-  return (h&1)===0 ? "leeg" : "gebroken";
+  const n = SP_SOUVENIR_PLACEHOLDER_VARIANTS.length;
+  return SP_SOUVENIR_PLACEHOLDER_VARIANTS[((h%n)+n)%n];
 }
 function spCodexSouvenirsHTML(){
   const ids = SP_STATE.souvenirs||[];
@@ -1153,14 +1161,12 @@ function spSouvenirTileHTML(def){
 }
 function spSouvenirEmptyTileHTML(id){
   const variant = spSouvenirPlaceholderVariant(id);
-  const icon = variant==="leeg" ? "🫙" : "💔";
-  const caption = variant==="leeg" ? "Een lege sokkel — nog niets gevonden." : "Een gebroken stolp — verloren, of nog niet ontdekt.";
   return `<div class="codex-gallery-item" style="opacity:.55">
       <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(90,58,26,.12);border-radius:6px;overflow:hidden">
-        <img src="assets/chronica/souvenirs/museum_${variant}.png" alt="" style="width:100%;height:100%;object-fit:contain"
-          onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${icon}</span>'">
+        <img src="assets/chronica/souvenirs/museum_${variant.id}.png" alt="" style="width:100%;height:100%;object-fit:contain"
+          onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${variant.icon}</span>'">
       </div>
-      <div class="codex-gallery-caption">${esc(caption)}</div>
+      <div class="codex-gallery-caption">${esc(variant.caption)}</div>
     </div>`;
 }
 
