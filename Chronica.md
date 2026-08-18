@@ -8854,6 +8854,13 @@ gespiegeld). Alles is idempotent.
    dus elke patch draait hoogstens één keer per save. Een patch die gooit, wordt
    gelogd en overgeslagen zonder de rest te blokkeren.
 
+De migratie draait vanuit twee instappen: `spResumeSlot()` (Verdergaan) en
+`spResumeSlotToStats()` (de knop "Karakter Informatie bekijken" in het
+Certamen-profiel, `battle.js`). Die tweede vult bewust GEEN `SP_MIGRATION_NOTES`:
+dat scherm toont ze niet, en komt de speler daarna alsnog via Verdergaan binnen,
+dan vindt `spMigrateSave` niets meer te doen en zou de melding met een lege lijst
+worden overschreven. De data is daar het punt, de melding is bijvangst.
+
 Meldingen komen via `SP_MIGRATION_NOTES` op het landingsscherm terecht
 (`spRenderLanding`), als een paneel "Je verhaal is bijgewerkt"; daarna meteen
 geleegd, dus eenmalig per keer verdergaan.
