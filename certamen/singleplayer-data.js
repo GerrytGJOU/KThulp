@@ -7119,6 +7119,8 @@ Op de bodem, half verscholen tussen de laatste schaduwen die nog naar buiten kri
 
 Pandora, nog trillend van wat ze heeft aangericht, sluit het deksel voordat ook dit laatste beetje licht kan ontsnappen — en zo blijft, te midden van alle kwaad dat nu over de wereld waart, tenminste iets achter waar de mensen zich aan vast kunnen houden, wat er ook gebeurt.
 
+Er is nog maar één iemand die je in dit hele verhaal nog niet hebt opgezocht: Prometheus zelf, ergens ver weg geketend aan een rots — gestraft voor het vuur dat hij de mensheid ooit gaf, hetzelfde vuur dat, via Zeus' wraak, uiteindelijk tot deze doos heeft geleid.
+
 PERSON:
 pandora:full
 

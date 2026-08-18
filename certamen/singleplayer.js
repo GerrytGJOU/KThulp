@@ -2644,7 +2644,13 @@ function spCheckTypedGreekPuzzle(puzzleId, target){
   if(spNormalizeGreek(raw) === spNormalizeGreek(puzzle.antwoord)){ spPuzzleAdvance(target, spBlankFillSentence(puzzle.vraag, puzzle.antwoord)); }
   else{
     spSyncPuzzleMistake(puzzleId, raw);
-    if(err){ err.textContent = puzzle.hint || "Nog niet juist — let op de spiritus (᾿/῾) en probeer opnieuw."; err.style.display = ""; }
+    // Leerlingfeedback (2026-08-18): deze generieke hint noemde altijd
+    // spiritus, ook bij puzzels waar dat niet relevant is (bv. een verkeerde
+    // naamvalsuitgang) — verwarrend, en het "/"-teken tussen de twee
+    // spiritus-tekens oogde bovendien als een gewone schuine streep.
+    // spNormalizeGreek() negeert accenten (acuut/gravis/circumflex) al bij
+    // het nakijken; die mogen dus nooit de reden zijn dat dit fout is.
+    if(err){ err.textContent = puzzle.hint || "Nog niet juist — probeer opnieuw. (Spiritus en iota subscriptum tellen mee, accenten zoals acuut of gravis niet.)"; err.style.display = ""; }
   }
 }
 
