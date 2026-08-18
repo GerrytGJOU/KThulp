@@ -9365,47 +9365,77 @@ rekening houdt met wat al bestaat.
    hoofdstukken) blijven hangen. Dit document bepaalt welke NPC's/
    objecten een eigen relatie-object verdienen bij een volgende, grotere
    uitbreiding (nu alleen Athena, als bewijs dat de engine werkt).
-3. **Kroniek — GEBOUWD (2026-07-25), epiloog nog niet.** Nieuw Codex-
-   tabblad, op Gerbens verzoek als EERSTE tabblad (vóór Herinneringen) —
-   `SP_CODEX_TABS`/`SP_CODEX_TAB` in singleplayer.js. Geen datatabel: puur
-   een oplopende `SP_STATE.kroniek`-lijst (`{hoofdstuk, tekst, t}`),
-   gevuld door `spKroniekLog()` en in `spCodexKroniekHTML()` gegroepeerd
-   per hoofdstuk weergegeven als lopende tekst (dezelfde
-   `.codex-entry`/`<h4>`-opmaak als de andere tabbladen) — "geschreven als
-   annalen, niet als menu", precies Deel 1.5 van de spec.
+3. **Kroniek — GEBOUWD (2026-07-25), herschreven naar Kleio's verteltoon en
+   VOLTOOID (2026-08-19).** Nieuw Codex-tabblad, op Gerbens verzoek als
+   EERSTE tabblad (vóór Herinneringen) — `SP_CODEX_TABS`/`SP_CODEX_TAB` in
+   singleplayer.js. Geen datatabel: puur een oplopende `SP_STATE.kroniek`-
+   lijst (`{hoofdstuk, tekst, t}`), gevuld door `spKroniekLog()` en in
+   `spCodexKroniekHTML()` gegroepeerd per hoofdstuk weergegeven als lopende
+   tekst (dezelfde `.codex-entry`/`<h4>`-opmaak als de andere tabbladen) —
+   "geschreven als annalen, niet als menu", precies Deel 1.5 van de spec.
 
-   **Wat wordt gelogd** (op Gerbens vraag: "alle keuzes die relevant zijn
-   voor het verhaal; of in elk geval wat en hoe de held bepaalde scenes
-   doorgespeeld heeft"):
-   - de klassekeuze in de proloog (`spHookReward`, bij de eerste keuze);
-   - elke STAT-gated keuze die de speler daadwerkelijk neemt — via een
-     nieuwe `spChooseTrackedPath()` die, vóór te navigeren, de gekozen
-     `choice` terugzoekt in de BRONscène (op `target`, niet op het label
-     zelf door de HTML te sturen — labels bevatten regelmatig een
-     apostrof) en het scène-`title` + keuze-`label` + statnaam logt;
-   - elke `[DONE:...]`-hub-keuze (welke verhaallijn gekozen werd — Latona/
-     Semele/Kallisto/Herakles in Hoofdstuk 2, enz.) via diezelfde
-     `spChooseTrackedPath()`, want die keuzes zijn óók `c.done`-getagd;
-   - elke skillpunt-investering (`spInvestStat`, tekst + van→naar-waarde);
-   - elke payoff die vuurt (`spResolvePayoffs`) — echo/kantelpunt-tekst
-     rechtstreeks, een deur als "een eerdere keuze opende een nieuwe weg:
-     [keuzelabel]".
+   **Eerste versie (2026-07-25):** logde alleen de klassekeuze, STAT-gated
+   keuzes, `[DONE:...]`-hub-keuzes, skillpunt-investeringen en payoffs, in
+   een mechanische "Bij X: Y"-vorm — gewone verhaalkeuzes en Clementia/
+   Severitas-toonkeuzes werden bewust overgeslagen.
 
-   Bewust NIET gelogd: gewone (niet-gated, niet-DONE) verhaalkeuzes en de
-   Clementia/Severitas-toonkeuzes — dat zou de Kroniek een ruwe klikgeschiedenis
-   maken in plaats van een selectie van wat er werkelijk toe deed, en
-   botst met Deel 1.5's "nooit een spreadsheet".
+   **Herschrijving (2026-08-18/19, Gerbens verzoek):** de Kroniek leest nu
+   als een door Kleio, muze van de geschiedschrijving, geschreven
+   derde-persoons verslag — geen mechanische "Bij X: Y"-regels en geen
+   "Bij 'scènetitel}'"-openers meer (die klinken als het citeren van een
+   hoofdstukkop, niet als een verteller; verankering gebeurt in de
+   gesprekspartner of de gebeurtenis zelf). Vijf lagen, hoogste voorrang
+   eerst:
+   1. `SP_KRONIEK_KLASSE` — de klassekeuze bij het Orakel van Chronos,
+      volledig uitgeschreven per wapen, met de twee niet-gekozen wapens
+      genoemd.
+   2. `SP_KRONIEK_FORKS[sceneId][target]` — handgeschreven tekst voor elke
+      onomkeerbare verhaalvertakking (bv. Hoofdstuk 1's Midas/Athena/
+      Prometheus-keuze, de taalspoor-hub, de grote "zijde"-keuzes in
+      Hoofdstuk 19/22 die de Finale-epiloog voeden), met een BEWUST vage
+      "wat liet je achter"-teaser (geen spoilers, wel een prikkel voor een
+      volgende speelronde). `skipTail`/`excludeFromTail` voor keuzes die
+      niets "achterlaten" (RELATION-reacties die reconvergeren, de
+      "Beide talen"-optie).
+   3. `spKroniekApproachLog()` — Clementia/Severitas/Neutraal-keuzes
+      hergebruiken automatisch de al bestaande `REACTION:`-tekst (de NPC-
+      reactie die ook als toast verschijnt) — geen apart handwerk per
+      scène nodig, dekt de hele campagne meteen.
+   4. Alle 38 payoff-echo's (`SP_PAYOFFS`) kregen een los `content.
+      kroniekTekst`-veld in Kleio's stem, gebruikt door `spResolvePayoffs`
+      zodra ze in de Kroniek belanden — de originele `content.text` (2e
+      persoon, cursief in de scène zelf) blijft ongewijzigd.
+   5. Generieke fallback (`spKleioClause`, een kleine werkwoord-
+      vervoegingstabel voor gebiedende-wijs-labels) voor al het overige —
+      nooit een ongelogde keuze. Herkent een scène met een `DIALOGUE:`-
+      sectie en verankert dan in de gesprekspartner ("In gesprek met X
+      sprak/koos {subject}...").
 
-   Getest in de browser: klassekeuze, een STAT-gated route, een
-   `[DONE]`-lijnkeuze, een payoff-echo en een skillpunt-investering
-   verschijnen allemaal, correct gegroepeerd per hoofdstuk, in de
-   volgorde waarin ze plaatsvonden; een niet-gated "altijd open"-route
-   (de taalpuzzel bij `CH1_A02`) logt terecht NIETS. Kroniek staat als
-   eerste tab en is ook de standaard geopende tab.
+   Verder: de vijf Finale-eindes (`FIN_EINDE_*`) loggen nu zelf hoe Lethe
+   reageerde (`SP_FINALE_EINDE_KRONIEK`/`spKroniekFinaleEindeLog()`) — kon
+   eerder niet (spoiler voor de andere vier eindes), maar wie het einde
+   bereikt heeft heeft het zelf al gezien. `FIN_HER_003` (welke herinnering
+   de speler het felst verdedigt) noemt sinds Gerbens verzoek de NPC met de
+   sterkste opgebouwde RELATION-band bij naam ("de mens Cicero, die zij
+   onderweg had geholpen" i.p.v. het generieke "een mens die ...").
 
-   **Epiloog nog niet gebouwd** — logische volgende stap zodra er een
-   "einde" van de campagne is om hem aan op te hangen (nu bestaat alleen
-   t/m Hoofdstuk 6).
+   **Geverifieerd (2026-08-19)** met een automatische, volledige
+   campagne-doorloop (proloog t/m aftiteling, beide taalsporen, via de
+   echte `spChooseAndLog`/`spChooseTrackedPath`/`spChoosePath`-functies,
+   PUZZLE/COMBAT/RACE/CHECK omzeild door hun eigen navigatiemechanisme
+   direct te lezen): 234 Kroniek-regels, alle 30 hoofdstukken
+   vertegenwoordigd, 0 problemen (geen open `{tokens}`, geen `undefined`,
+   geen titel-citaten, geen lege regels). Onderweg drie pre-existing bugs
+   gefixt: FIN_-scènes zonder hoofdstuklabel, keuzes met een gedeeld
+   `target` die altijd de eerste van de set matchten (vooral bij
+   Clementia/Severitas-drietallen), en RELATION-scores die als kaal getal
+   i.p.v. `{score:N}`-object werden gelezen.
+
+   **Bewust nog steeds ongelogd:** scènes met precies één keuze (geen
+   echte beslissing) en leesval-vertaalkeuzes (GOED/FOUT-targets — een
+   "wat liet je achter"-teaser zou daar per ongeluk het juiste antwoord
+   verklappen).
+
 4. **Nieuw checktype `CHECK:`** met de vier-uitkomsten-ladder +
    Ingenium/Gratia-koppeling, naast `PUZZLE:` — vult §11.4/item 7 (rolled
    check) en item 9 (Latijn-check-koppeling) tegelijk in.
