@@ -1905,7 +1905,7 @@ const SP_PUZZLES = {
    samenvattend "overzicht" toe als afsluitend beloningsmoment. ---- */
 const SP_CODEX_ENTRIES = {
   codex_orakel_van_chronos: { cat:"mythologie", titel:"Het Orakel van Chronos",
-    tekst:"Chronos — de belichaming van de tijd zelf, niet te verwarren met de titaan Kronos, vader van Zeus — wordt in latere, orfische overleveringen beschreven als een kracht die ouder is dan de goden van de Olympos zelf. Het bronzen orakel dat jij in een Latijns korenveld vond, is doordrenkt van die kracht: het scheurt de sluier tussen de wereld waarin de klassieke mythen langzaam vervagen, en de wereld waarin jij leeft." },
+    tekst:"Chronos — de naam die het bronzen orakel draagt — wordt in latere, orfische overleveringen beschreven als de belichaming van de tijd zelf, een kracht die ouder zou zijn dan de goden van de Olympos. Sommigen verwarren die naam met de titaan Kronos, vader van Zeus en verslagen heerser van vóór de Olympiërs — een verwarring die, zo zal blijken, hardnekkiger is dan hij op het eerste gezicht lijkt. Het bronzen orakel dat jij in een Latijns korenveld vond, is in elk geval doordrenkt van die kracht: het scheurt de sluier tussen de wereld waarin de klassieke mythen langzaam vervagen, en de wereld waarin jij leeft." },
   codex_gouden_aanraking: { cat:"mythologie", titel:"De Gouden Aanraking van Midas",
     tekst:"Koning Midas van Sardis, in Lydië, verdiende de dankbaarheid van Bacchus door diens dronken metgezel Silenus tien dagen lang gastvrij te onthalen. Zijn wens — dat alles wat hij aanraakt in goud verandert — bleek een vloek zodra ze ook zijn voedsel, zijn wijn en uiteindelijk zijn eigen dochter trof. Bacchus hief de vloek op door hem te laten baden in de rivier de Pactolus, die sindsdien met gouden korrels doorspekt zou zijn." },
   codex_geboorte_athena: { cat:"mythologie", titel:"De Geboorte van Athena",
@@ -4416,7 +4416,7 @@ const SP_VOCAB_ENTRIES = {
   grieks_tote: { taal:"grieks", woord:"τότε", transcript:"tóte", betekenis:"toen, dan" },
   latijn_qui: { taal:"latijn", woord:"qui", betekenis:"die, dat, wiens, wier" },
   latijn_hic: { taal:"latijn", woord:"hic", betekenis:"deze, dit" },
-  latijn_is: { taal:"latijn", woord:"is", betekenis:"deze, dit, die dat" },
+  latijn_is: { taal:"latijn", woord:"is", betekenis:"deze, dit, die, dat" },
   latijn_si: { taal:"latijn", woord:"si", betekenis:"als, indien" },
   latijn_ut_indicativus: { taal:"latijn", woord:"ut (+ indicativus)", betekenis:"zoals; zodra; hoe" },
   latijn_e_ex: { taal:"latijn", woord:"e, ex", betekenis:"uit" },
@@ -10623,7 +10623,7 @@ ch4_t11_route=open
 
 CHOICES:
 
-* Kijk hoe Daidalos de vleugels vlecht -> CH4_T12
+* Kijk hoe Daidalos de vleugels vlecht -> CH4_T12_OPEN
 
 END
 
@@ -10640,7 +10640,7 @@ ch4_t11_route=robur
 
 CHOICES:
 
-* Kijk hoe Daidalos de vleugels vlecht -> CH4_T12
+* Kijk hoe Daidalos de vleugels vlecht -> CH4_T12_ROB
 
 END
 
@@ -10657,17 +10657,49 @@ ch4_t11_route=gratia
 
 CHOICES:
 
-* Kijk hoe Daidalos de vleugels vlecht -> CH4_T12
+* Kijk hoe Daidalos de vleugels vlecht -> CH4_T12_GRA
 
 END
 
-=== SCENE: CH4_T12 ===
+=== SCENE: CH4_T12_OPEN ===
 
 TITLE:
 Vleugels van Veren en Was
 
 TEXT:
-Met het materiaal eindelijk compleet, bindt Daidalos veer na veer samen met draad en verzegelt ze met gesmolten was tot twee paar vleugels, één voor hemzelf, één voor zijn zoon.
+Wat de wind je toespeelde, blijkt precies genoeg: met het materiaal eindelijk compleet, bindt Daidalos veer na veer samen met draad en verzegelt ze met gesmolten was tot twee paar vleugels, één voor hemzelf, één voor zijn zoon.
+
+Voor ze opstijgen, drukt hij Ikaros op het hart wat hem het meest zorgen baart: "Vlieg de middenweg. Niet te laag, want de zeenevel maakt de veren zwaar en nat. Niet te hoog, want de zon smelt de was. Blijf dicht bij mij, en volg precies waar ik vlieg."
+
+CHOICES:
+
+* Kijk hoe de vlucht begint -> CH4_T13
+
+END
+
+=== SCENE: CH4_T12_ROB ===
+
+TITLE:
+Vleugels van Veren en Was
+
+TEXT:
+Met jouw eigen, uitgeputte handwerk als grondstof, bindt Daidalos veer na veer samen met draad en verzegelt ze met gesmolten was tot twee paar vleugels, één voor hemzelf, één voor zijn zoon.
+
+Voor ze opstijgen, drukt hij Ikaros op het hart wat hem het meest zorgen baart: "Vlieg de middenweg. Niet te laag, want de zeenevel maakt de veren zwaar en nat. Niet te hoog, want de zon smelt de was. Blijf dicht bij mij, en volg precies waar ik vlieg."
+
+CHOICES:
+
+* Kijk hoe de vlucht begint -> CH4_T13
+
+END
+
+=== SCENE: CH4_T12_GRA ===
+
+TITLE:
+Vleugels van Veren en Was
+
+TEXT:
+Met het stiekem binnengesmokkelde materiaal eindelijk compleet, bindt Daidalos veer na veer samen met draad en verzegelt ze met gesmolten was tot twee paar vleugels, één voor hemzelf, één voor zijn zoon.
 
 Voor ze opstijgen, drukt hij Ikaros op het hart wat hem het meest zorgen baart: "Vlieg de middenweg. Niet te laag, want de zeenevel maakt de veren zwaar en nat. Niet te hoog, want de zon smelt de was. Blijf dicht bij mij, en volg precies waar ik vlieg."
 
@@ -10777,7 +10809,8 @@ theseus
 
 CHOICES:
 
-* Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog -> CH4_T16B
+* Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog [REQUIRE:ch4_lijn_phaethon!=true] -> CH4_T16B
+* Keer terug naar de Boodschapper [REQUIRE:ch4_lijn_phaethon=true] -> CH4_T16B
 
 END
 
@@ -10789,7 +10822,7 @@ Jaren Later: Phaedra
 TEXT:
 Jaren later, allang koning van Athene, hertrouwt Theseus met Ariadnes eigen zuster, Phaedra — een verbintenis die de families van Kreta en Athene opnieuw verbindt, zonder dat iemand ooit hardop de naam Ariadne noemt in haar bijzijn.
 
-Phaedra vindt in dat huwelijk niet wat ze ervan had gehoopt: ze wordt smoorverliefd op Hippolytus, Theseus' zoon uit een eerder huwelijk — een liefde die ze zelf net zo goed weet als ieder ander volstrekt onmogelijk is, en waar ze wanhopig tegen vecht.
+Phaedra vindt in dat huwelijk niet wat ze ervan had gehoopt: ze wordt smoorverliefd op Hippolytus, Theseus' zoon uit een eerder huwelijk — een liefde waarvan ze net zo goed als ieder ander weet dat die volstrekt onmogelijk is, en waar ze wanhopig tegen vecht.
 
 DIALOGUE:
 Phaedra
@@ -10802,7 +10835,8 @@ codex_phaedra_hippolytus
 
 CHOICES:
 
-* Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog -> CH4_000
+* Keer terug naar de Boodschapper — Phaëthons verhaal wacht nog [REQUIRE:ch4_lijn_phaethon!=true] -> CH4_000
+* Keer terug naar de Boodschapper [REQUIRE:ch4_lijn_phaethon=true] -> CH4_000
 
 END
 
@@ -11110,7 +11144,8 @@ phaethon
 
 CHOICES:
 
-* Keer terug naar de Boodschapper — Theseus' verhaal wacht nog -> CH4_000
+* Keer terug naar de Boodschapper — Theseus' verhaal wacht nog [REQUIRE:ch4_lijn_theseus!=true] -> CH4_000
+* Keer terug naar de Boodschapper [REQUIRE:ch4_lijn_theseus=true] -> CH4_000
 
 END
 
@@ -11122,7 +11157,7 @@ Athena over Twee Beloften
 TEXT:
 Athena wacht je ditmaal niet zwijgend op, maar spreekt zodra je bij haar aankomt — vanzelfsprekend inmiddels, als mentor. "Twee vaders," zegt ze, "twee beloften, twee soorten verlies. Aegeus verloor zijn zoon aan een belofte die vergeten werd. Sol verloor zijn zoon aan een belofte die hij nooit had mogen doen — en toch, eenmaal uitgesproken, niet meer kon intrekken."
 
-"Dat is de kern van dit hele hoofdstuk, {tendency_address}: een belofte weegt niet minder omdat ze lichtvaardig werd gegeven. Onthoud dat goed — het labyrint dat je dit hoofdstuk doorkruiste, was uiteindelijk niet van steen, maar van gevolgen die niemand meer ongedaan kon maken."
+"Als {tendency_address} zou ook jij dit moeten aanvoelen: dat is de kern van dit hele hoofdstuk. Een belofte weegt niet minder omdat ze lichtvaardig werd gegeven. Onthoud dat goed — het labyrint dat je dit hoofdstuk doorkruiste, was uiteindelijk niet van steen, maar van gevolgen die niemand meer ongedaan kon maken."
 
 EERETITEL:
 ch4_athena_gesprek
@@ -11545,7 +11580,7 @@ TITLE:
 Atalanta's Spoor
 
 TEXT:
-Atalanta beweegt zich bijna geluidloos tussen de struiken, haar boog al gespannen voor je het dier zelf ziet. Ze leest de grond zoals anderen een geschreven tekst lezen — een omgewoelde wortel hier, een afgebroken tak daar — en is het everzwijn al drie keer voorbij zijn eigen spoor te slim af voor de rest van de jacht haar bijbenen.
+Atalanta beweegt zich bijna geluidloos tussen de struiken, haar boog al gespannen voor je het dier zelf ziet. Ze leest de grond zoals anderen een geschreven tekst lezen — een omgewoelde wortel hier, een afgebroken tak daar — en is het everzwijn via zijn eigen spoor al drie keer te slim af, terwijl jij voor de rest van de jacht amper haar tempo kunt bijbenen.
 
 Vlak voordat het beest tussen de rotsen opduikt, fluistert ze, meer tegen zichzelf dan tegen jou: "Wie het eerst raakt, telt vandaag niet. Wie het eerst ziet, wel."
 
@@ -11666,7 +11701,7 @@ TITLE:
 Twee Namen om te Onthouden
 
 TEXT:
-De koning houdt zijn woord en bevoorraadt de Argo rijkelijk voor het vervolg van de tocht. Terwijl de bemanning het ruim vult, blijf je nog even staan bij Atalanta en Meleager, die zij aan zij tegen de reling geleund het dier napraten alsof ze al jaren samen jagen in plaats van amper één middag.
+De koning houdt zijn woord en bevoorraadt de Argo rijkelijk voor het vervolg van de tocht. Terwijl de bemanning het ruim vult, blijf je nog even staan bij Atalanta en Meleager, die zij aan zij tegen de reling geleund de jacht napraten alsof ze al jaren samen jagen in plaats van amper één middag.
 
 Iets aan hoe moeiteloos ze samenwerken, blijft je bij — een gevoel dat dit niet de laatste keer zal zijn dat hun namen in één adem genoemd worden.
 
