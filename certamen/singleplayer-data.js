@@ -25701,8 +25701,38 @@ codex_caesar_clementia, codex_cato_utica
 VOCAB:
 latijn_clementia
 
+CHOICES:
+* Erken dat leven om later opnieuw te kunnen strijden ook een vorm van moed is [CLEMENTIA] -> CH19_LAT_CAE_005_AANVAARD
+* Bewonder vooral Cato — die zijn principes niet inruilde voor een tweede kans [SEVERITAS] -> CH19_LAT_CAE_005_CATO
+
+END
+
+=== SCENE: CH19_LAT_CAE_005_AANVAARD ===
+
+TITLE:
+Een Tweede Kans
+
+TEXT:
+Brutus, Cassius en Cicero horen, ieder op hun eigen manier, dat je hun keuze om te leven niet als zwakte ziet — iets wat zij zelf, in de stilte na Cato's dood, niet altijd van zichzelf geloofden.
+
 RELATION:
 brutus=+1, cassius=+1, cicero=+1
+
+CHOICES:
+* Zie wat die genade Caesar uiteindelijk oplevert -> CH19_LAT_CAE_006
+
+END
+
+=== SCENE: CH19_LAT_CAE_005_CATO ===
+
+TITLE:
+De Prijs van Overleven
+
+TEXT:
+Je bewondering gaat uit naar de man die weigerde — en dat is, voor wie zelf koos te blijven leven onder Caesars genade, geen onschuldige voorkeur. Cicero hoort er via via van, en herkent maar al te goed welk oordeel daarachter schuilt.
+
+RELATION:
+cicero=-1
 
 CHOICES:
 * Zie wat die genade Caesar uiteindelijk oplevert -> CH19_LAT_CAE_006
@@ -25869,8 +25899,38 @@ codex_cato_utica
 VOCAB:
 latijn_clementia
 
+CHOICES:
+* Erken dat leven om later opnieuw te kunnen strijden ook een vorm van moed is [CLEMENTIA] -> CH19_LAT_POM_005_AANVAARD
+* Bewonder vooral Cato — die zijn principes niet inruilde voor een tweede kans [SEVERITAS] -> CH19_LAT_POM_005_CATO
+
+END
+
+=== SCENE: CH19_LAT_POM_005_AANVAARD ===
+
+TITLE:
+Een Tweede Kans
+
+TEXT:
+Brutus, Cassius en Cicero horen, ieder op hun eigen manier, dat je hun keuze om te leven niet als zwakte ziet — iets wat zij zelf, in de stilte na Cato's dood, niet altijd van zichzelf geloofden.
+
 RELATION:
 brutus=+1, cassius=+1, cicero=+1
+
+CHOICES:
+* Zie wat die genade, jaren later, van je vraagt -> CH19_LAT_POM_005B
+
+END
+
+=== SCENE: CH19_LAT_POM_005_CATO ===
+
+TITLE:
+De Prijs van Overleven
+
+TEXT:
+Je bewondering gaat uit naar de man die weigerde — en dat is, voor wie zelf koos te blijven leven onder Caesars genade, geen onschuldige voorkeur. Cicero hoort er via via van, en herkent maar al te goed welk oordeel daarachter schuilt.
+
+RELATION:
+cicero=-1
 
 CHOICES:
 * Zie wat die genade, jaren later, van je vraagt -> CH19_LAT_POM_005B
@@ -27360,12 +27420,26 @@ Het gaat in deze zaak niet alleen om Verres, maar om de geloofwaardigheid van de
 IMAGE:
 ch21_lat_verres_proces.png
 
-RELATION:
-cicero=+1
-
 CHOICES:
 * Bepleit de zaak met strakke logica en feitelijke bewijzen -> CH21_LAT_002_LOGICA
 * Bepleit de zaak met emotionele verontwaardiging over het onrecht -> CH21_LAT_002_EMOTIE
+* Twijfel hardop of Cicero deze zaak vooral aanneemt om zijn eigen naam te vestigen [SEVERITAS] -> CH21_LAT_001_TWIJFEL
+
+END
+
+=== SCENE: CH21_LAT_001_TWIJFEL ===
+
+TITLE:
+Een Onzuiver Motief?
+
+TEXT:
+Cicero hoort je twijfel aan, en voor een moment verdwijnt de redenaarshouding. "Misschien is het allebei waar," zegt hij, minder zelfverzekerd dan zijn eigen woorden in de rechtszaal. "Een rechtvaardige zaak kan best ook een goede zaak voor mijn naam zijn. Dat maakt haar niet minder rechtvaardig." Het overtuigt je niet helemaal.
+
+RELATION:
+cicero=-1
+
+CHOICES:
+* Zie de uitkomst van het proces -> CH21_LAT_003
 
 END
 
@@ -27468,6 +27542,9 @@ Daadkracht in de Senaat
 TEXT:
 Jij pleit voor kordaat optreden. De Senaat spreekt het senatus consultum ultimum uit, waardoor de consuls buitengewone bevoegdheden krijgen. Catilina verlaat gehaast de stad om zich bij zijn opstandige leger in Etrurië te voegen.
 
+RELATION:
+cicero=+1
+
 FLAG:
 ch21_lat_catilina_aanpak=hard
 
@@ -27482,7 +27559,10 @@ TITLE:
 Zorgvuldigheid in de Senaat
 
 TEXT:
-Jij adviseert terughoudendheid om de wettelijke procedures van de Republiek zorgvuldig te bewaren. Korte tijd later onderschept Cicero brieven aan de Allobrogen die het verraad definitief bewijzen. Catilina ziet zich ontmaskerd en ontvlucht de stad.
+Jij adviseert terughoudendheid om de wettelijke procedures van de Republiek zorgvuldig te bewaren. Korte tijd later onderschept Cicero brieven aan de Allobrogen die het verraad definitief bewijzen. Catilina ziet zich ontmaskerd en ontvlucht de stad — pas nadat je advies hem kostbare tijd gaf om zijn eigen samenzwering verder op te bouwen.
+
+RELATION:
+cicero=-1
 
 FLAG:
 ch21_lat_catilina_aanpak=zacht
@@ -29250,7 +29330,10 @@ TITLE:
 Verward
 
 TEXT:
-Je haalt de voluten en de acanthusbladeren door elkaar. Athena glimlacht geduldig. "Drie zuilen lijken op elkaar, tot je weet waarnaar je moet kijken. Je leert het nog wel."
+Je haalt de voluten en de acanthusbladeren door elkaar. Athena glimlacht geduldig. "Drie zuilen lijken op elkaar, tot je weet waarnaar je moet kijken. Je leert het nog wel." Er klinkt geen verwijt in haar stem — maar ook geen verrassing.
+
+RELATION:
+athena=-1
 
 CHOICES:
 * Ga verder naar de beeldhouwkunst -> CH24_GRE_002
