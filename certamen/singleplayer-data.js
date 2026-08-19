@@ -4408,6 +4408,7 @@ const SP_VOCAB_ENTRIES = {
   latijn_relinquit:   { taal:"latijn", woord:"relinquere (relinquit)", betekenis:"achterlaten, verlaten" },
   latijn_volare:      { taal:"latijn", woord:"volare (volat)", betekenis:"vliegen" },
   latijn_ala:         { taal:"latijn", woord:"ala, alae", betekenis:"vleugel" },
+  latijn_filius:      { taal:"latijn", woord:"filius, filii", betekenis:"zoon" },
   latijn_cera:        { taal:"latijn", woord:"cera, cerae", betekenis:"was" },
   latijn_monebat:     { taal:"latijn", woord:"monere (monebat)", betekenis:"waarschuwen" },
   latijn_currus:      { taal:"latijn", woord:"currus, currus", betekenis:"wagen, strijdwagen" },
@@ -5156,7 +5157,7 @@ const SP_VOCAB_ENTRIES = {
   grieks_zao:       { taal:"grieks", woord:"ζάω", transcript:"záō", betekenis:"leven" },
   grieks_mentoi:    { taal:"grieks", woord:"μέντοι", transcript:"méntoi", betekenis:"echter; natuurlijk" },
   grieks_mechri:    { taal:"grieks", woord:"μέχρι", transcript:"méchri", betekenis:"tot, totdat" },
-  grieks_phylasso:  { taal:"grieks", woord:"φυλάσσω", transcript:"phylássō", betekenis:"bewaken" },
+  grieks_phylatto:  { taal:"grieks", woord:"φυλάττω", transcript:"phyláttō", betekenis:"bewaken" },
   grieks_deloo:     { taal:"grieks", woord:"δηλόω", transcript:"dēlóō", betekenis:"tonen, duidelijk maken" },
   grieks_e_partikel:{ taal:"grieks", woord:"ἦ", transcript:"ê", betekenis:"voorwaar" },
   grieks_toinyn:    { taal:"grieks", woord:"τοίνυν", transcript:"toínyn", betekenis:"welnu, dus" },
@@ -11376,7 +11377,7 @@ CODEX:
 codex_grammatica_ch4_overzicht
 
 VOCAB:
-latijn_vela, latijn_mutare, latijn_iubet, latijn_filum, latijn_labyrinthus, latijn_relinquit, latijn_volare, latijn_ala, latijn_cera, latijn_monebat, latijn_currus, latijn_fulmen, latijn_misit, latijn_soror, latijn_lacrima, latijn_cadere, grieks_tis, grieks_eimi, grieks_peri, grieks_me, grieks_ei, grieks_apo, grieks_heautou, grieks_oudeis, grieks_de_nadruk, grieks_hosper, latijn_fui, latijn_ad, latijn_a_ab, latijn_potui, latijn_cum_voorzetsel, latijn_aut, latijn_iam, latijn_de, latijn_tamen, latijn_quia
+latijn_vela, latijn_mutare, latijn_iubet, latijn_filum, latijn_labyrinthus, latijn_relinquit, latijn_volare, latijn_ala, latijn_filius, latijn_cera, latijn_monebat, latijn_currus, latijn_fulmen, latijn_misit, latijn_soror, latijn_lacrima, latijn_cadere, grieks_tis, grieks_eimi, grieks_peri, grieks_me, grieks_ei, grieks_apo, grieks_heautou, grieks_oudeis, grieks_de_nadruk, grieks_hosper, latijn_fui, latijn_ad, latijn_a_ab, latijn_potui, latijn_cum_voorzetsel, latijn_aut, latijn_iam, latijn_de, latijn_tamen, latijn_quia
 
 QUEST:
 quest_boodschapper_van_kronos: hoofdstuk 4 volledig voltooid
@@ -30860,7 +30861,7 @@ TEXT:
 "[[Ecce|zie hier]] — je hebt een keizer zien vallen en een nieuw huis zien opstaan," zegt de Boodschapper van Chronos. "Vandaag zie je wat er gebeurt met een rijk dat te groot wordt om nog door één man alleen bestuurd te worden — soms briljant geleid, soms verscheurd door zijn eigen soldaten. Twaalf keizers, misschien meer, wachten op je vandaag."
 
 VOCAB:
-grieks_eita, grieks_zao, grieks_mentoi, grieks_mechri, grieks_phylasso, grieks_deloo, grieks_e_partikel, grieks_toinyn, grieks_eromai, grieks_eite_eite, latijn_excipio, latijn_cedo, latijn_contra, latijn_ceterum, latijn_exspecto, latijn_eripio, latijn_rapio, latijn_aio, latijn_existimo, latijn_desum
+grieks_eita, grieks_zao, grieks_mentoi, grieks_mechri, grieks_phylatto, grieks_deloo, grieks_e_partikel, grieks_toinyn, grieks_eromai, grieks_eite_eite, latijn_excipio, latijn_cedo, latijn_contra, latijn_ceterum, latijn_exspecto, latijn_eripio, latijn_rapio, latijn_aio, latijn_existimo, latijn_desum
 
 CHOICES:
 * Volg Hadrianus door Griekenland [REQUIRE:taalspoor!=latijn] -> CH26_GRE_001
