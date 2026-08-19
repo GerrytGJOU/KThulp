@@ -2882,6 +2882,7 @@ function spGreekKeyboardHTML(){
       <button class="btn btn-ghost" onclick="spGreekKeyPress(' ')">␣ spatie</button>
       <button class="btn btn-ghost" onclick="spGreekBackspace()">⌫</button>
     </div>
+    <p class="note" style="margin-top:6px;font-size:12px">Typ eerst de klinker, klik dán op ᾿/῾/ι͙ — die wordt toegepast op de laatst getypte letter. Bij een tweeklank (αυ, ευ, ου, …) komt de spiritus op de tweede klinker.</p>
   </div>`;
 }
 function spGreekKeyPress(ch){
