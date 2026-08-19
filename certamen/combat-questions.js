@@ -261,34 +261,50 @@ const CQ_GR_VERBA = [
 /* ============================================================================
    ZINSFRAGMENTEN (vraagtype 5) — korte zin, vier Nederlandse vertalingen.
 
-   ONTWERPREGEL: TWEE ASSEN, GEKRUIST (het "2×2-rooster").
+   REGEL 1 — TWEE ASSEN, GEKRUIST (het "2×2-rooster").
    Kies per zin twee grammaticale assen die de zin echt toetst — bijvoorbeeld
-   tijd × getal, of naamval × tijd — en maak de vier opties de vier vakjes van
-   dat rooster. Het goede antwoord is één vakje; de andere drie zijn de andere
-   drie combinaties.
+   tijd × getal, of dativus/genitivus × tijd — en maak de vier opties de vier
+   vakjes van dat rooster. Het goede antwoord is één vakje; de andere drie zijn
+   de andere drie combinaties.
 
-   WAAROM ZO (Gerben, 2026-08-18). De eerste versie liet alle drie de afleiders
-   op precies één punt van het GOEDE antwoord afwijken. Dat lijkt netjes, maar
-   het verraadt het antwoord: als elke afleider één stap van het goede antwoord
-   af ligt, dan ligt het goede antwoord als enige één stap van álle andere af —
-   het is de "gemiddelde" zin van de vier. Een oplettende leerling herkent dat
-   patroon en kiest de middelste optie zonder de zin te lezen.
+   Waarom (Gerben, 2026-08-18): in de eerste versie week elke afleider op
+   precies één punt van het GOEDE antwoord af. Dan ligt het goede antwoord als
+   enige één stap van álle andere af — het is de "gemiddelde" zin van de vier,
+   en dat is te zien zonder de zin te lezen. In een 2×2-rooster ligt elke optie
+   één stap van precies twee andere: alle vier zijn gelijkwaardig, er valt
+   niets te tellen.
 
-   In een 2×2-rooster bestaat die middelste optie niet: elk van de vier opties
-   ligt één stap van precies twee andere en twee stappen van de vierde. Alle
-   vier zijn structureel gelijkwaardig, dus er valt niets te tellen — je moet
-   de zin lezen. Bijkomend voordeel: de leerling moet nu twee dingen tegelijk
-   oplossen in plaats van één.
+   REGEL 2 — WISSEL DE WOORDVOLGORDE AF.
+   Deze bank hield aanvankelijk overal dezelfde volgorde aan (onderwerp,
+   meewerkend voorwerp, lijdend voorwerp, persoonsvorm). Daardoor kan een
+   leerling na een paar zinnen op positie gokken in plaats van op naamval —
+   precies wat dit vraagtype juist moet afleren. Attisch Grieks varieert die
+   volgorde net zo goed, dus wij ook: OSV, OVS, SVO, werkwoord voorop,
+   bepaling voorop, onderwerp achteraan. Het `volgorde`-veld documenteert per
+   zin wat er gebruikt is, zodat de spreiding zichtbaar blijft.
+   Let op: de gewone volgorde (SOV) moet ertussen blijven zitten. Als álles
+   omgekeerd is, wordt "het eerste zelfstandig naamwoord is NIET het onderwerp"
+   de nieuwe truc.
+
+   REGEL 3 — GEEN "GETAL"-AS BIJ EEN GENOEMD ENKELVOUDIG ONDERWERP.
+   Staat er een eigennaam als onderwerp in de zin (Romulus, Icarus, Achilles),
+   dan kiest niemand een meervoudsvertaling: die twee vakjes vallen zichtbaar
+   af en het rooster klapt in elkaar tot een keuze uit twee. Gebruik in dat
+   geval "wie is onderwerp" als tweede as, met twee genoemde personen in de
+   zin — dan zijn alle vier de vakjes even plausibel.
+   (Gerben signaleerde dit bij zin_la_12; het speelde ook in zin_la_06,
+   zin_la_09, zin_la_11 en zin_gr_06, die allemaal herschreven zijn.)
 
    CONTROLE bij het schrijven van een nieuwe zin:
    1. Zijn de vier opties precies de vier combinaties van twee assen?
-   2. Is er geen enkel vakje dat om een andere reden afvalt (onzin-Nederlands,
-      of een vorm die in het Latijn/Grieks helemaal niet kan)? Zo'n vakje
-      verraadt het antwoord alsnog.
-   3. Is de vorm in de zin ondubbelzinnig? Een vorm als `pervenit` (praesens
-      én perfectum) maakt twee vakjes tegelijk verdedigbaar en is dus
+   2. Valt geen enkel vakje af om een andere reden dan de grammatica
+      (onzin-Nederlands, een onmogelijke vorm, of een eigennaam die het
+      meervoud uitsluit)? Zo'n vakje verraadt het antwoord alsnog.
+   3. Is de vorm in de zin ondubbelzinnig? `pervenit` (praesens én perfectum)
+      of `invenit` maakt twee vakjes tegelijk verdedigbaar en is dus
       onbruikbaar zodra tijd een van de assen is.
-   4. `let` legt uit welke twee assen het waren — dat is de tekst die bij een
+   4. Wijkt de woordvolgorde af van de vorige paar zinnen?
+   5. `let` legt uit welke twee assen het waren — dat is de tekst die bij een
       fout antwoord verschijnt.
 
    `hoofdstuk` bepaalt vanaf wanneer de zin mag verschijnen (een speler krijgt
@@ -296,115 +312,115 @@ const CQ_GR_VERBA = [
    ============================================================================ */
 const CQ_ZINNEN = [
   // ---- Latijn ----
-  { id:"zin_la_01", taal:"latijn", hoofdstuk:1, zin:"Rex aurum tangit.",
-    assen:"wie is onderwerp × getal",
+  { id:"zin_la_01", taal:"latijn", hoofdstuk:1, zin:"Aurum rex tangit.",
+    assen:"wie is onderwerp × getal", volgorde:"lijdend voorwerp – onderwerp – pv",
     antwoord:"De koning raakt het goud aan.",
     afleiders:["Het goud raakt de koning aan.","De koningen raken het goud aan.","Het goud raakt de koningen aan."],
-    let:"rex is nominativus (onderwerp), aurum accusativus (lijdend voorwerp) — de woordvolgorde zegt niets, de naamval alles. En tangit is enkelvoud: één koning." },
+    let:"aurum staat vooraan, maar dat maakt het nog geen onderwerp: rex is nominativus, aurum accusativus. En tangit is enkelvoud — één koning." },
   { id:"zin_la_02", taal:"latijn", hoofdstuk:2, zin:"Nuntius regi epistulam dat.",
-    assen:"dativus/genitivus × getal",
+    assen:"dativus/genitivus × getal", volgorde:"onderwerp – meewerkend – lijdend – pv (gewone volgorde)",
     antwoord:"De bode geeft de koning een brief.",
     afleiders:["De bode geeft de brief van de koning.","De boden geven de koning een brief.","De boden geven de brief van de koning."],
     let:"regi is dativus (aan wie?); regis zou genitivus zijn (van wie?). dat is enkelvoud, dant zou meervoud zijn." },
-  { id:"zin_la_03", taal:"latijn", hoofdstuk:2, zin:"Herculem timebant.",
-    assen:"tijd × getal",
+  { id:"zin_la_03", taal:"latijn", hoofdstuk:2, zin:"Timebant Herculem.",
+    assen:"tijd × getal", volgorde:"pv voorop – lijdend voorwerp",
     antwoord:"Zij vreesden Hercules.",
     afleiders:["Zij vrezen Hercules.","Hij vreesde Hercules.","Hij vreest Hercules."],
-    let:"timebant zegt twee dingen tegelijk: -ba- maakt het imperfectum (verleden), -nt maakt het meervoud." },
+    let:"timebant zegt twee dingen tegelijk: -ba- maakt het imperfectum, -nt het meervoud. Het onderwerp staat niet in de zin — dat zit in de uitgang." },
   { id:"zin_la_04", taal:"latijn", hoofdstuk:3, zin:"Draco vellus custodit.",
-    assen:"tijd × getal",
+    assen:"tijd × getal", volgorde:"onderwerp – lijdend – pv (gewone volgorde)",
     antwoord:"De draak bewaakt het vlies.",
     afleiders:["De draak bewaakte het vlies.","De draken bewaken het vlies.","De draken bewaakten het vlies."],
     let:"custodit is praesens enkelvoud; custodiebat zou imperfectum zijn, custodiunt meervoud." },
-  { id:"zin_la_05", taal:"latijn", hoofdstuk:4, zin:"Theseus filum in labyrintho relinquit.",
-    assen:"wie is onderwerp × tijd",
+  { id:"zin_la_05", taal:"latijn", hoofdstuk:4, zin:"Theseus in labyrintho filum relinquit.",
+    assen:"wie is onderwerp × tijd", volgorde:"onderwerp – bepaling – lijdend – pv",
     antwoord:"Theseus laat de draad in het labyrint achter.",
     afleiders:["De draad laat Theseus in het labyrint achter.","Theseus liet de draad in het labyrint achter.","De draad liet Theseus in het labyrint achter."],
-    let:"Theseus is nominativus (onderwerp), filum accusativus. in labyrintho is ablativus na in: plaats waar, niet richting waarheen (dan zou er accusativus staan)." },
-  { id:"zin_la_06", taal:"latijn", hoofdstuk:4, zin:"Icarus ad solem volabat.",
-    assen:"tijd × getal",
-    antwoord:"Icarus vloog naar de zon.",
-    afleiders:["Icarus vliegt naar de zon.","Zij vlogen naar de zon.","Zij vliegen naar de zon."],
-    let:"volabat is imperfectum enkelvoud — een handeling die aan de gang was. volat zou praesens zijn, volabant meervoud." },
-  { id:"zin_la_07", taal:"latijn", hoofdstuk:5, zin:"Nautae navem parant.",
-    assen:"getal × tijd",
+    let:"in labyrintho is ablativus na in: plaats waar, niet richting waarheen (dan zou er accusativus staan). Theseus is nominativus, filum accusativus." },
+  { id:"zin_la_06", taal:"latijn", hoofdstuk:4, zin:"Daedalus Icarum monebat.",
+    assen:"wie is onderwerp × tijd", volgorde:"onderwerp – lijdend – pv (gewone volgorde)",
+    antwoord:"Daedalus waarschuwde Icarus.",
+    afleiders:["Icarus waarschuwde Daedalus.","Daedalus waarschuwt Icarus.","Icarus waarschuwt Daedalus."],
+    let:"Icarum is accusativus (-um) en dus lijdend voorwerp; Daedalus is nominativus — ga af op de uitgang, niet op de plaats. monebat is imperfectum, monet zou praesens zijn." },
+  { id:"zin_la_07", taal:"latijn", hoofdstuk:5, zin:"Navem parant nautae.",
+    assen:"getal × tijd", volgorde:"lijdend – pv – onderwerp",
     antwoord:"De zeelieden maken het schip klaar.",
     afleiders:["De zeeman maakt het schip klaar.","De zeelieden maakten het schip klaar.","De zeeman maakte het schip klaar."],
-    let:"nautae kan nominativus meervoud én genitivus enkelvoud zijn — parant staat in het meervoud en beslist dus." },
-  { id:"zin_la_08", taal:"latijn", hoofdstuk:6, zin:"Oedipus patrem non cognoscit.",
-    assen:"wie is onderwerp × tijd",
+    let:"nautae kan nominativus meervoud én genitivus enkelvoud zijn — parant staat in het meervoud en beslist dus. Het onderwerp staat hier achteraan." },
+  { id:"zin_la_08", taal:"latijn", hoofdstuk:6, zin:"Oedipus non cognoscit patrem.",
+    assen:"wie is onderwerp × tijd", volgorde:"onderwerp – pv – lijdend voorwerp",
     antwoord:"Oedipus kent zijn vader niet.",
     afleiders:["De vader kent Oedipus niet.","Oedipus kende zijn vader niet.","De vader kende Oedipus niet."],
-    let:"patrem is accusativus (lijdend voorwerp); pater zou nominativus zijn. cognoscit is praesens." },
-  { id:"zin_la_09", taal:"latijn", hoofdstuk:8, zin:"Achilles arma sua non capit.",
-    assen:"getal × tijd",
-    antwoord:"Achilles pakt zijn wapens niet.",
-    afleiders:["Zij pakken hun wapens niet.","Achilles pakte zijn wapens niet.","Zij pakten hun wapens niet."],
-    let:"arma is onzijdig meervoud (nominativus en accusativus gelijk) — capit staat in het enkelvoud, dus Achilles moet het onderwerp zijn." },
-  { id:"zin_la_10", taal:"latijn", hoofdstuk:9, zin:"Graeci urbem igne deleverunt.",
-    assen:"tijd × getal",
+    let:"patrem is accusativus (-em), pater zou nominativus zijn — de plaats achter het werkwoord zegt niets. cognoscit is praesens." },
+  { id:"zin_la_09", taal:"latijn", hoofdstuk:8, zin:"Hectorem Achilles vincit.",
+    assen:"wie is onderwerp × tijd", volgorde:"lijdend voorwerp – onderwerp – pv",
+    antwoord:"Achilles overwint Hector.",
+    afleiders:["Hector overwint Achilles.","Achilles overwon Hector.","Hector overwon Achilles."],
+    let:"Hectorem is accusativus (-em), Achilles nominativus — de volgorde zegt niets. vincit is praesens; vicit zou perfectum zijn, één letter verschil." },
+  { id:"zin_la_10", taal:"latijn", hoofdstuk:9, zin:"Graeci igne urbem deleverunt.",
+    assen:"tijd × getal", volgorde:"onderwerp – bepaling – lijdend – pv",
     antwoord:"De Grieken verwoestten de stad met vuur.",
     afleiders:["De Grieken verwoesten de stad met vuur.","De Griek verwoestte de stad met vuur.","De Griek verwoest de stad met vuur."],
-    let:"deleverunt is perfectum meervoud (-erunt). igne is ablativus: het middel waarmee, 'met vuur'." },
-  { id:"zin_la_11", taal:"latijn", hoofdstuk:12, zin:"Ulixes regnum recepit.",
-    assen:"tijd × getal",
-    antwoord:"Odysseus heroverde zijn koninkrijk.",
-    afleiders:["Odysseus herovert zijn koninkrijk.","Zij heroverden hun koninkrijk.","Zij heroveren hun koninkrijk."],
-    let:"recepit is perfectum, recipit zou praesens zijn — het verschil zit in één letter (e/i). receperunt zou meervoud zijn." },
-  { id:"zin_la_12", taal:"latijn", hoofdstuk:13, zin:"Romulus fratrem necavit.",
-    assen:"tijd × getal",
+    let:"igne is ablativus: het middel waarmee, 'met vuur'. deleverunt is perfectum meervoud (-erunt)." },
+  { id:"zin_la_11", taal:"latijn", hoofdstuk:12, zin:"Penelope Ulixem amat.",
+    assen:"wie is onderwerp × tijd", volgorde:"onderwerp – lijdend – pv (gewone volgorde)",
+    antwoord:"Penelope houdt van Odysseus.",
+    afleiders:["Odysseus houdt van Penelope.","Penelope hield van Odysseus.","Odysseus hield van Penelope."],
+    let:"Ulixem is accusativus (-em); Penelope is nominativus en verandert zelf niet van vorm. amat is praesens, amabat zou imperfectum zijn." },
+  { id:"zin_la_12", taal:"latijn", hoofdstuk:13, zin:"Fratrem Romulus necavit.",
+    assen:"wie is onderwerp × tijd", volgorde:"lijdend voorwerp – onderwerp – pv",
     antwoord:"Romulus doodde zijn broer.",
-    afleiders:["Romulus doodt zijn broer.","Zij doodden hun broer.","Zij doden hun broer."],
-    let:"necavit is perfectum enkelvoud (-avit); necat zou praesens zijn, necaverunt meervoud. fratrem is accusativus enkelvoud: één broer." },
+    afleiders:["Zijn broer doodde Romulus.","Romulus doodt zijn broer.","Zijn broer doodt Romulus."],
+    let:"fratrem is accusativus (-em) ook al staat het vooraan; Romulus is nominativus. necavit is perfectum, necat zou praesens zijn." },
 
   // ---- Grieks ----
   { id:"zin_gr_01", taal:"grieks", hoofdstuk:1, zin:"ὁ θεὸς τὸ πῦρ πέμπει.",
-    assen:"wie is onderwerp × getal",
+    assen:"wie is onderwerp × getal", volgorde:"onderwerp – lijdend – pv (gewone volgorde)",
     antwoord:"De god zendt het vuur.",
     afleiders:["Het vuur zendt de god.","De goden zenden het vuur.","Het vuur zendt de goden."],
-    let:"ὁ θεός staat in de nominativus en τὸ πῦρ in de accusativus — het lidwoord verraadt de naamval. πέμπει is enkelvoud." },
-  { id:"zin_gr_02", taal:"grieks", hoofdstuk:2, zin:"ἡ θεὰ τὸν ἄνδρα φυλάττει.",
-    assen:"wie is onderwerp × tijd",
+    let:"ὁ θεός staat in de nominativus, τὸ πῦρ is onzijdig (nominativus en accusativus gelijk) — het lidwoord ὁ beslist. πέμπει is enkelvoud." },
+  { id:"zin_gr_02", taal:"grieks", hoofdstuk:2, zin:"τὸν ἄνδρα ἡ θεὰ φυλάττει.",
+    assen:"wie is onderwerp × tijd", volgorde:"lijdend voorwerp – onderwerp – pv",
     antwoord:"De godin beschermt de man.",
     afleiders:["De man beschermt de godin.","De godin beschermde de man.","De man beschermde de godin."],
-    let:"τὸν ἄνδρα is accusativus (lidwoord én uitgang wijzen dezelfde kant op). φυλάττει is praesens; ἐφύλαττε zou imperfectum zijn." },
-  { id:"zin_gr_03", taal:"grieks", hoofdstuk:3, zin:"οἱ πολῖται τὸν τύραννον φεύγουσιν.",
-    assen:"getal × tijd",
+    let:"τὸν ἄνδρα is accusativus (lidwoord τόν én de uitgang) ook al staat het vooraan; ἡ θεά is nominativus. φυλάττει is praesens, ἐφύλαττε imperfectum." },
+  { id:"zin_gr_03", taal:"grieks", hoofdstuk:3, zin:"τὸν τύραννον φεύγουσιν οἱ πολῖται.",
+    assen:"getal × tijd", volgorde:"lijdend – pv – onderwerp",
     antwoord:"De burgers ontvluchten de tiran.",
     afleiders:["De burger ontvlucht de tiran.","De burgers ontvluchtten de tiran.","De burger ontvluchtte de tiran."],
-    let:"οἱ πολῖται is nominativus meervoud (vergelijk de genitivus πολιτῶν). φεύγουσιν is praesens; ἔφευγον zou imperfectum zijn." },
-  { id:"zin_gr_04", taal:"grieks", hoofdstuk:5, zin:"οἱ ναῦται εἰς τὴν θάλασσαν ἔπλεον.",
-    assen:"tijd × getal",
+    let:"οἱ πολῖται is nominativus meervoud en staat achteraan — heel gewoon in het Grieks. φεύγουσιν is praesens meervoud; ἔφευγον zou imperfectum zijn." },
+  { id:"zin_gr_04", taal:"grieks", hoofdstuk:5, zin:"εἰς τὴν θάλασσαν ἔπλεον οἱ ναῦται.",
+    assen:"tijd × getal", volgorde:"bepaling – pv – onderwerp",
     antwoord:"De zeelieden voeren de zee op.",
     afleiders:["De zeelieden varen de zee op.","De zeeman voer de zee op.","De zeeman vaart de zee op."],
     let:"het augment ἐ- in ἔπλεον verraadt de verleden tijd; πλέουσιν zou praesens zijn. εἰς + accusativus is richting." },
   { id:"zin_gr_05", taal:"grieks", hoofdstuk:6, zin:"ἡ σοφία τῷ δήμῳ τιμὴν φέρει.",
-    assen:"dativus/genitivus × tijd",
+    assen:"dativus/genitivus × tijd", volgorde:"onderwerp – meewerkend – lijdend – pv (gewone volgorde)",
     antwoord:"Wijsheid brengt het volk eer.",
     afleiders:["Wijsheid brengt de eer van het volk.","Wijsheid bracht het volk eer.","Wijsheid bracht de eer van het volk."],
-    let:"τῷ δήμῳ is dativus (aan wie?); τοῦ δήμου zou genitivus zijn (van wie?). φέρει is praesens." },
-  { id:"zin_gr_06", taal:"grieks", hoofdstuk:8, zin:"ὁ Ἀχιλλεὺς τὴν μῆνιν οὐ λύει.",
-    assen:"tijd × getal",
-    antwoord:"Achilles laat zijn wrok niet los.",
-    afleiders:["Achilles liet zijn wrok niet los.","Zij laten hun wrok niet los.","Zij lieten hun wrok niet los."],
-    let:"λύει is praesens enkelvoud; ἔλυε zou imperfectum zijn (let op het augment), λύουσιν meervoud." },
+    let:"τῷ δήμῳ is dativus (aan wie?); τοῦ δήμου zou genitivus zijn (van wie?). φέρει is praesens, ἔφερε imperfectum." },
+  { id:"zin_gr_06", taal:"grieks", hoofdstuk:8, zin:"τὸν Ἕκτορα ὁ Ἀχιλλεὺς βάλλει.",
+    assen:"wie is onderwerp × tijd", volgorde:"lijdend voorwerp – onderwerp – pv",
+    antwoord:"Achilles treft Hector.",
+    afleiders:["Hector treft Achilles.","Achilles trof Hector.","Hector trof Achilles."],
+    let:"τὸν Ἕκτορα is accusativus (lidwoord τόν) ook al staat het vooraan; ὁ Ἀχιλλεύς is nominativus. βάλλει is praesens, ἔβαλλε imperfectum — let op het augment." },
   { id:"zin_gr_07", taal:"grieks", hoofdstuk:10, zin:"ὁ μάντις τῷ βασιλεῖ τὴν μαντείαν λέγει.",
-    assen:"dativus/genitivus × tijd",
+    assen:"dativus/genitivus × tijd", volgorde:"onderwerp – meewerkend – lijdend – pv (gewone volgorde)",
     antwoord:"De ziener vertelt de koning de profetie.",
     afleiders:["De ziener vertelt de profetie van de koning.","De ziener vertelde de koning de profetie.","De ziener vertelde de profetie van de koning."],
     let:"τῷ βασιλεῖ is dativus — de persoon aan wie iets verteld wordt, niet de bezitter; τοῦ βασιλέως zou genitivus zijn. λέγει is praesens." },
-  { id:"zin_gr_08", taal:"grieks", hoofdstuk:11, zin:"αἱ σκιαὶ ἐν τῷ Ἅιδῃ ἔμενον.",
-    assen:"tijd × getal",
+  { id:"zin_gr_08", taal:"grieks", hoofdstuk:11, zin:"ἐν τῷ Ἅιδῃ ἔμενον αἱ σκιαί.",
+    assen:"tijd × getal", volgorde:"bepaling – pv – onderwerp",
     antwoord:"De schimmen bleven in de Hades.",
     afleiders:["De schimmen blijven in de Hades.","De schim bleef in de Hades.","De schim blijft in de Hades."],
     let:"ἔμενον is imperfectum meervoud: het augment ἐ- geeft de verleden tijd, de uitgang -ον het meervoud. μένουσιν zou praesens zijn." },
   { id:"zin_gr_09", taal:"grieks", hoofdstuk:15, zin:"οἱ Ἕλληνες τὴν ἐλευθερίαν ἔλαβον.",
-    assen:"tijd × getal",
+    assen:"tijd × getal", volgorde:"onderwerp – lijdend – pv (gewone volgorde)",
     antwoord:"De Grieken kregen de vrijheid.",
     afleiders:["De Grieken krijgen de vrijheid.","De Griek kreeg de vrijheid.","De Griek krijgt de vrijheid."],
     let:"ἔλαβον is aoristus (tweede aoristus van λαμβάνω): één afgeronde gebeurtenis in het verleden. λαμβάνουσιν zou praesens zijn." },
-  { id:"zin_gr_10", taal:"grieks", hoofdstuk:16, zin:"ἡ ξενία τοῖς ἀνθρώποις ἀρετή ἐστιν.",
-    assen:"dativus/genitivus × tijd",
+  { id:"zin_gr_10", taal:"grieks", hoofdstuk:16, zin:"τοῖς ἀνθρώποις ἀρετή ἐστιν ἡ ξενία.",
+    assen:"dativus/genitivus × tijd", volgorde:"meewerkend voorop, onderwerp achteraan",
     antwoord:"Gastvrijheid is voor de mensen een deugd.",
     afleiders:["Gastvrijheid is de deugd van de mensen.","Gastvrijheid was voor de mensen een deugd.","Gastvrijheid was de deugd van de mensen."],
     let:"τοῖς ἀνθρώποις is dativus meervoud (voor de mensen); τῶν ἀνθρώπων zou genitivus zijn. ἐστιν is praesens, ἦν zou verleden tijd zijn." },
