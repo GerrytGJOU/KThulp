@@ -2622,6 +2622,23 @@ const SP_CODEX_ENTRIES = {
       rows:[["Mannelijk","ὅς","ὁ ἀνήρ ὅς...","de man die..."],
             ["Vrouwelijk","ἥ","ἡ γυνὴ ἥ...","de vrouw die..."],
             ["Onzijdig","ὅ","τὸ δῶρον ὅ...","het geschenk dat..."]] } },
+  // Gerbens verzoek (2026-08-19): alpha-samentrekkende werkwoorden (νικάω)
+  // worden in Hoofdstuk 12 getoetst (puzzle_ch12_ody_alpha) met een volledige
+  // uitleg in de hint, maar hebben geen Latijnse tegenhanger (Latijn kent
+  // deze klinkersamentrekking niet) en dus ook nog geen eigen Codex-entry.
+  codex_grammatica_ch12_alpha_werkwoorden: { cat:"grammatica", taal:"grieks", titel:"Grammatica: alpha-samentrekkende werkwoorden",
+    tekst:"Werkwoorden met een stam op -α (zoals νικάω, overwinnen) trekken die stam-alpha in de praesens samen met de klinker van de persoonsuitgang tot één lettergreep — een 'verborgen' samentrekking die je in de geschreven vorm soms alleen aan het accent herkent. Νικάω + de uitgang -ει (3e persoon enkelvoud) wordt zo νικᾷ, niet 'νικαει'.",
+    table:{ headers:["Samentrekking","Voorbeeld","Vorm","Betekenis"],
+      rows:[["α + ει → ᾳ","νικάω (overwinnen)","νικᾷ","hij/zij overwint"],
+            ["α + ει → ᾳ","τιμάω (eren)","τιμᾷ","hij/zij eert"]] } },
+  // Derde audit-ronde (2026-08-19): de Griekse conjunctivus in een doelzin
+  // (ἵνα + conjunctivus) wordt getoetst door puzzle_ch12_ody_conjunctivus,
+  // met een volledige uitleg in de hint, maar had nergens een eigen entry —
+  // codex_grammatica_ch13_conjunctivus (Hoofdstuk 13) is de Latijnse versie.
+  codex_grammatica_ch12_conjunctivus_grieks: { cat:"grammatica", taal:"grieks", titel:"Grammatica: de Griekse conjunctivus (doelzin met ἵνα)",
+    tekst:"Net als het Latijn kent het Grieks een conjunctivus (aanvoegende wijs). Na ἵνα (opdat, om te) staat het werkwoord in de conjunctivus, niet de indicativus — een doelzin, net als bij het Latijnse ut + conjunctivus (Hoofdstuk 13). Praesens conjunctivus actief van een thematisch werkwoord krijgt een lange klinker: de 3e persoon enkelvoud eindigt op -ῃ in plaats van de indicativus -ει.",
+    table:{ headers:["Vorm","Indicativus","Conjunctivus"],
+      rows:[["3e persoon enkelvoud","γιγνώσκει (hij/zij kent)","γιγνώσκῃ (dat hij/zij kent)"]] } },
   codex_grammatica_ch7_conjunctivus_passief: { cat:"grammatica", taal:"latijn", titel:"Grammatica: conjunctivus passief in de bijzin",
     tekst:"Net als de gewone conjunctivus in de bijzin (cum-bijzin) kan ook het passief in de conjunctivus staan — ppp + conjunctivus van esse (essem/esses/esset enz.) in plaats van indicativus. Hiermee is Minerva deel 1 volledig afgerond.",
     table:{ headers:["Vorm","Voorbeeld","Vertaling"],
@@ -2668,6 +2685,16 @@ const SP_CODEX_ENTRIES = {
     tekst:"Een vrijgelaten Romeinse slaaf (een libertus of liberta) wordt Romeins burger, mag trouwen, eigen bezit hebben, zelfs eigen slaven houden — maar blijft levenslang gebonden aan obsequium: verschuldigde loyaliteit en diensten aan de voormalige meester, nu patronus genoemd. Vrijheid in Rome is zelden een schone lei; het is een nieuwe, lichtere keten die het oude verband nooit helemaal doorknipt." },
   codex_grammatica_ch15_overzicht: { cat:"grammatica", taal:"latijn", titel:"Grammatica: Hoofdstuk 15 — quis/aliquis en het perfectum met praesensbetekenis",
     tekst:"Dit hoofdstuk voegt aan de Latijnse kant twee dingen toe: het verschil tussen het vragend voornaamwoord quis/quid (wie/wat?, een echte vraag) en het onbepaald voornaamwoord aliquis/aliquid (iemand/iets, zonder dat het antwoord ertoe doet) — bijna identieke vormen met een compleet ander gebruik. Daarnaast een klein groepje werkwoorden waarvan het perfectum een praesensbetekenis heeft: novi (ik ken, letterlijk 'ik heb leren kennen'), memini (ik herinner me) en odi (ik haat) — grammaticaal verleden tijd, vertaald als heden. Het Grieks introduceert dit hoofdstuk bewust geen nieuwe grammatica (les 24-25 is cultuurstof); de puzzels herhalen in plaats daarvan de genitivus en de vocativus." },
+  // Derde audit-ronde (2026-08-19): één van die "herhalings"-genitivuspuzzels
+  // (puzzle_ch15_gre_kyrios, ἄρχω + genitivus) is eigenlijk een nieuwe,
+  // niet eerder gedekte constructie — de basis-genitivusentry
+  // (codex_grammatica_ch3_genitivus_grieks) beschrijft alleen de bezitsvorm
+  // ("van de godin"), niet een genitivus die door een specifiek werkwoord
+  // wordt vereist.
+  codex_grammatica_ch15_genitivus_werkwoorden: { cat:"grammatica", taal:"grieks", titel:"Grammatica: werkwoorden met de genitivus",
+    tekst:"Sommige Griekse werkwoorden staan met een genitivus, niet met een accusativus zoals je op grond van het Nederlands zou verwachten. ἄρχω (heersen over, beginnen) is zo'n werkwoord: 'ik heers over het huishouden' is ἐγὼ τῆς οἰκίας ἄρχω, letterlijk 'ik heers van het huishouden'. Dit is een vaste combinatie die je per werkwoord moet onthouden, geen algemene naamvalsregel — anders dan de gewone 'van'-genitivus uit Hoofdstuk 3.",
+    table:{ headers:["Werkwoord","Betekenis","Voorbeeld","Vertaling"],
+      rows:[["ἄρχω + genitivus","heersen over, beginnen","τῆς οἰκίας ἄρχω","ik heers over het huishouden"]] } },
   codex_griekse_oikos_wonen: { cat:"geschiedenis", titel:"De Griekse Oikos: Gezin, Ruimte en Verschil",
     tekst:"Een Atheense oikos omvat veel meer dan het Nederlandse 'gezin': de kyrios (mannelijk hoofd), zijn vrouw en kinderen, én alle slaven die er wonen en werken, allemaal onder één juridisch dak. Binnen een welgesteld huis is de ruimte zelf verdeeld naar sekse: de andron, waar de heer des huizes gasten ontvangt en symposia houdt, en de gynaikonitis, de afgesloten vrouwenvertrekken waar het huishouden daadwerkelijk wordt gerund. De meeste Atheners waren echter geen Straton: gewone burgers en metoiken (vrije niet-burgers) woonden vaak in een simpel huis van een handvol kamers rond een klein binnenplaatsje, zonder aparte vrouwenvleugel — de scheiding tussen andron en gynaikonitis was een luxe, geen algemene regel." },
   codex_slaven_soorten: { cat:"geschiedenis", titel:"Niet Alle Slavernij Was Hetzelfde", taal:"beide",
@@ -2695,6 +2722,14 @@ const SP_CODEX_ENTRIES = {
     tekst:"Een marmeren reliëf uit Halicarnassus toont twee vechtende vrouwen, met hun namen erbij gebeiteld: Amazon en Achillia — een zeldzaam bewijs dat vrouwelijke gladiatoren niet alleen bestonden, maar ook met ere konden worden ontslagen (missio), zoals dit reliëf viert. De dichter Juvenal beschrijft spottend een zekere Mevia, die met ontbloot één borst een Etruskisch everzwijn met de speer doorboorde. Onder keizer Nero vochten zelfs vrouwen van ridderlijke en senatoriale afkomst mee in de arena, tot afschuw van conservatieve senatoren. Rond 200 n.Chr. maakt keizer Septimius Severus er definitief een einde aan: vrouwen worden voortaan uit de arena verbannen." },
   codex_grammatica_ch16_overzicht: { cat:"grammatica", taal:"latijn", titel:"Grammatica: Hoofdstuk 16 — velle/nolle/fieri en de ingesloten antecedent",
     tekst:"Dit hoofdstuk voegt aan de Latijnse kant de onregelmatige werkwoorden velle (willen), nolle (niet willen) en fieri (worden, gebeuren — het passief van facere) toe, vaak in vaste combinaties zoals dives fieri velle ('rijk willen worden'). Daarnaast de betrekkelijke bijzin met ingesloten antecedent: normaal staat het antecedent vóór de bijzin (gladiatores quos vidit, 'de gladiatoren die hij zag'), maar het Latijn kan het antecedent ook middenin de bijzin zelf plaatsen (quos vidit gladiatores) — hetzelfde idee, andere woordvolgorde. Tot slot een herhaling van de comparativus/superlativus uit Hoofdstuk 9. Het Grieks introduceert dit hoofdstuk bewust geen nieuwe grammatica (les 26-27 is cultuurstof); de puzzels herhalen de dativus van bezit en de aoristus." },
+  // Derde audit-ronde (2026-08-19): "de dativus van bezit" stond hierboven
+  // als herhaling vermeld, maar was zelf nog nooit als aparte constructie
+  // gedocumenteerd — de basis-dativusentry (codex_grammatica_ch3_dativus_grieks)
+  // beschrijft alleen de dativus als meewerkend voorwerp.
+  codex_grammatica_ch16_dativus_bezit_grieks: { cat:"grammatica", taal:"grieks", titel:"Grammatica: de dativus van bezit",
+    tekst:"Het Grieks drukt 'hebben' vaak niet uit met een eigen werkwoord, maar met εἰμί (zijn) + een dativus: 'aan X is Y' betekent 'X heeft Y'. Τῷ παιδὶ ἐστὶν ἀρετή betekent letterlijk 'aan de jongen is deugd', ofwel 'de jongen heeft deugd' — een vaste constructie, anders dan de gewone dativus als meewerkend voorwerp (Hoofdstuk 3).",
+    table:{ headers:["Constructie","Voorbeeld","Letterlijk","Vertaling"],
+      rows:[["dativus + ἐστί","τῷ παιδὶ ἐστὶν ἀρετή","aan de jongen is deugd","de jongen heeft deugd"]] } },
   // ---- Hoofdstuk 17 — Oorlog en Overwinning ----
   codex_herodotos_ionische_opstand: { cat:"geschiedenis", titel:"Herodotos en de Ionische Opstand",
     tekst:"Herodotos van Halicarnassus, later 'de vader van de geschiedschrijving' genoemd, opent zijn verslag van de Perzische Oorlogen niet bij Thermopylae, maar jaren eerder: de Griekse steden van Ionië (de westkust van Klein-Azië), al onderworpen aan Perzië, komen in opstand. Athene stuurt schepen ter hulp en helpt mee de Perzische stad Sardis in brand te steken. De opstand wordt uiteindelijk neergeslagen, maar koning Darius van Perzië vergeet Athenes bemoeienis niet — hij zou, zegt de overlevering, een dienaar hebben opgedragen hem elke avond bij het diner te herinneren: 'Heer, denk aan de Atheners.'" },
@@ -20909,7 +20944,7 @@ PERSON:
 penelope:intro
 
 CODEX:
-codex_penelope_boogwedstrijd
+codex_penelope_boogwedstrijd, codex_grammatica_ch12_conjunctivus_grieks
 
 CHOICES:
 * Zie hoe de wedstrijd de volgende dag verloopt -> CH12_ODY_007
@@ -21032,7 +21067,7 @@ PERSON:
 eurycleia:full
 
 CODEX:
-codex_eurycleia_litteken
+codex_eurycleia_litteken, codex_grammatica_ch12_alpha_werkwoorden
 
 RELATION:
 eurycleia=+2
@@ -22387,6 +22422,9 @@ De Oikos van Melissa
 PUZZLE:
 puzzle_ch15_gre_kyrios
 
+CODEX:
+codex_grammatica_ch15_genitivus_werkwoorden
+
 CHOICES:
 * Zie wie Melissa's dagen verder vult -> CH15_GRE_001J
 
@@ -23566,7 +23604,7 @@ PUZZLE:
 puzzle_ch16_gre_plato
 
 CODEX:
-codex_platoonse_opvoeding
+codex_platoonse_opvoeding, codex_grammatica_ch16_dativus_bezit_grieks
 
 CHOICES:
 * Zie waar deze vorming uiteindelijk toe leidt -> CH16_GRE_002
