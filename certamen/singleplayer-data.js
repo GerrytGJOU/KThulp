@@ -2038,6 +2038,22 @@ const SP_CODEX_ENTRIES = {
     table:{ headers:["Declinatie","Voorbeeld","Nominativus","Dativus enkelvoud"],
       rows:[["2e (op -us)","Io (als -o-stam behandeld)","Io","Ioni"],
             ["3e (medeklinker)","rex","rex","regi"]] } },
+  // Leerlingfeedback (2026-08-19): "genitivus"/"dativus" zijn geen Latijnse
+  // begrippen alleen — ze gelden voor beide talen, alleen met andere
+  // uitgangen. De puzzels testen dit al in het Grieks (bv. de dativus van
+  // θεά in Hoofdstuk 5's naamval-herhaling), maar de Codex bood tot nu toe
+  // alleen de Latijnse tabel aan. Twee eigen Griekse entries erbij, zelfde
+  // patroon als Hoofdstuk 8's taal-gescheiden entries.
+  codex_grammatica_ch3_genitivus_grieks: { cat:"grammatica", taal:"grieks", titel:"Grammatica: de genitivus (Grieks)",
+    tekst:"Ook in het Grieks laat de genitivus een 'van'-relatie of bezit zien: 'τῆς θεᾶς' is 'van de godin'. Net als in het Latijn hangt de exacte uitgang af van de declinatie van het woord.",
+    table:{ headers:["Declinatie","Voorbeeld","Nominativus","Genitivus enkelvoud"],
+      rows:[["1e (op -α, lange α-stam)","θεά (godin)","θεά","θεᾶς"],
+            ["1e (op -η)","καλλίστη (de mooiste)","καλλίστη","καλλίστης"]] } },
+  codex_grammatica_ch3_dativus_grieks: { cat:"grammatica", taal:"grieks", titel:"Grammatica: de dativus (Grieks)",
+    tekst:"Ook in het Grieks is de dativus de naamval van het meewerkend voorwerp: aan wie of voor wie iets gebeurt. Net als bij de genitivus hangt de exacte uitgang af van de declinatie — let op de iota subscriptum, die bij de dativus enkelvoud van de eerste en tweede declinatie hoort.",
+    table:{ headers:["Declinatie","Voorbeeld","Nominativus","Dativus enkelvoud"],
+      rows:[["1e (op -α, lange α-stam)","θεά (godin)","θεά","θεᾷ"],
+            ["1e (op -η)","καλλίστη (de mooiste)","καλλίστη","καλλίστῃ"]] } },
   codex_grammatica_ch3_bijstelling: { cat:"grammatica", taal:"latijn", titel:"Grammatica: de bijstelling",
     tekst:"Een bijstelling (appositie) is een extra woord of woordgroep die een zelfstandig naamwoord nader omschrijft, zonder er grammaticaal een aparte zin van te maken — bijvoorbeeld 'Mercurius, nuntius deorum' ('Mercurius, bode der goden'). De gouden regel: een bijstelling staat ALTIJD in dezelfde naamval als het woord waar hij bij hoort. Staat Mercurius in de nominativus, dan staat nuntius ook in de nominativus, ook al verandert de rest van de zin.",
     table:{ headers:["Zin","Naamwoord","Bijstelling","Naamval (allebei)"],
@@ -2300,6 +2316,15 @@ const SP_CODEX_ENTRIES = {
     table:{ headers:["Voornaamwoord","Vorm","Voorbeeld","Betekenis"],
       rows:[["Aanwijzend (onzijdig mv.)","illa","illa dona","die geschenken"],
             ["Persoonlijk (mnl. enk. acc.)","eum","eum esse","dat hij is"]] } },
+  // Leerlingfeedback (2026-08-19), zelfde patroon als Hoofdstuk 3's genitivus/
+  // dativus-aanvulling: αὐτός wordt hier al in het Grieks getoetst
+  // (puzzle_ch8_ach_pronomen_grieks/puzzle_ch8_aga_pronomen_grieks), maar had
+  // nog geen eigen Codex-entry.
+  codex_grammatica_ch8_voornaamwoord_grieks: { cat:"grammatica", taal:"grieks", titel:"Grammatica: het Griekse persoonlijk voornaamwoord",
+    tekst:"αὐτός (hij) is het Griekse persoonlijk voornaamwoord van de 3e persoon — het congrueert in geslacht, getal en naamval met de rol die het in de zin speelt, net als het Latijnse is/ea/id.",
+    table:{ headers:["Naamval","Vorm (mnl. enk.)","Voorbeeld","Betekenis"],
+      rows:[["Accusativus","αὐτόν","φοβοῦνται αὐτόν","zij zijn bang voor hem"],
+            ["Dativus","αὐτῷ","χαίρουσιν αὐτῷ","zij verheugen zich over hem"]] } },
   codex_grammatica_ch8_overzicht: { cat:"grammatica", taal:"beide", titel:"Grammatica: Hoofdstuk 8 samengevat",
     tekst:"Voor het eerst sinds Hoofdstuk 4/5 kwam er weer echt nieuwe grammatica bij: de Griekse aoristus (sigmatisch, met ἐ-...-σε, én thematisch, met een eigen stam) als tegenhanger van de Latijnse perfectum, de 3e-declinatie-medeklinkerstam (senex/senis, miles/militis — de genitivus laat de ware stam zien), en de aanwijzende/persoonlijke voornaamwoorden (ille, is/ea/id), die net als een bijstelling congrueren met het woord waar ze bij horen." },
 
@@ -2309,6 +2334,21 @@ const SP_CODEX_ENTRIES = {
       rows:[["Positief","fortis","miles fortis","de dappere soldaat"],
             ["Superlativus (vr.)","fortissima","regina fortissima","de dapperste koningin"],
             ["Superlativus (mnl.)","fortissimus","Achilles fortissimus","de dapperste Achilles"]] } },
+  // Leerlingfeedback (2026-08-19), zelfde patroon: comparativus/superlativus
+  // én congruentie worden dit hoofdstuk ook in het Grieks getoetst
+  // (puzzle_ch9_tro_superlativus_grieks, puzzle_ch9_gri_comparativus_grieks,
+  // puzzle_ch9_tro_congruentie_grieks, puzzle_ch9_gri_congruentie_grieks),
+  // maar hadden nog geen eigen Codex-entry.
+  codex_grammatica_ch9_comparativus_superlativus_grieks: { cat:"grammatica", taal:"grieks", titel:"Grammatica: comparativus en superlativus (Grieks)",
+    tekst:"Ook in het Grieks heeft een bijvoeglijk naamwoord op -ος een comparativus (-ότερος) en superlativus (-ότατος), die net als in het Latijn congrueren in geslacht, getal en naamval met het woord waar ze bij horen.",
+    table:{ headers:["Trap","Vorm","Voorbeeld","Betekenis"],
+      rows:[["Comparativus (mnl.)","σοφώτερος","Ὀδυσσεὺς σοφώτερος","Odysseus, slimmer"],
+            ["Superlativus (vr.)","ἀνδρειοτάτη","ἡ ἀνδρειοτάτη","de dapperste"]] } },
+  codex_grammatica_ch9_congruentie_grieks: { cat:"grammatica", taal:"grieks", titel:"Grammatica: congruentie van het bijvoeglijk naamwoord (Grieks)",
+    tekst:"Ook in het Grieks congrueert een bijvoeglijk naamwoord in geslacht, getal en naamval met het zelfstandig naamwoord waar het bij hoort.",
+    table:{ headers:["Zelfstandig naamwoord","Geslacht/getal","Bijvoeglijk naamwoord"],
+      rows:[["στρατιῶται","mnl. nom. mv.","ἀφύλακτοι (onbewaakt)"],
+            ["σιγή","vr. nom. enk.","φοβερά (angstaanjagend)"]] } },
   codex_grammatica_ch9_aci: { cat:"grammatica", taal:"latijn", titel:"Grammatica: de Accusativus cum Infinitivo (A.C.I.)",
     tekst:"Na werkwoorden van zeggen/menen/weten (dicere, putare, scire) staat in het Latijn geen 'dat'-bijzin zoals in het Nederlands, maar een A.C.I.: het onderwerp van de bijzin in de accusativus, het werkwoord in de infinitivus. 'Sinon dicit Danaos discessisse' — Sinon zegt DAT de Grieken vertrokken ZIJN (letterlijk: 'Sinon zegt de Grieken vertrokken-te-zijn').",
     table:{ headers:["Nederlands","Onderwerp bijzin → accusativus","Werkwoord bijzin → infinitivus"],
@@ -2553,6 +2593,16 @@ const SP_CODEX_ENTRIES = {
     table:{ headers:["Tijd","Vorm (exponere, blootstellen)","Vertaling"],
       rows:[["Praesens","exponitur","hij wordt blootgesteld"],
             ["Perfectum","expositus est","hij is/werd blootgesteld"]] } },
+  // Leerlingfeedback (2026-08-19), zelfde patroon: de vocativus is al sinds
+  // Hoofdstuk 1 een Latijnse Codex-entry (codex_grammatica_ch1_naamvallen,
+  // vervolgd in Hoofdstuk 4), maar de Griekse vocativus — die dit hoofdstuk
+  // voor het eerst wordt getoetst (puzzle_ch6_vocativus_grieks, Βάκχε, en
+  // later opnieuw in H14/H17) — had nog nergens een eigen entry.
+  codex_grammatica_ch6_vocativus_grieks: { cat:"grammatica", taal:"grieks", titel:"Grammatica: de vocativus (Grieks)",
+    tekst:"Ook in het Grieks is de vocativus de naamval waarmee je iemand rechtstreeks aanspreekt, vaak ingeleid door ὦ. Bij naamwoorden op -ος verandert de uitgang naar -ε; bij de eerste declinatie (op -η) blijft de vocativus meestal gelijk aan de nominativus.",
+    table:{ headers:["Nominativus","Vocativus","Betekenis"],
+      rows:[["Βάκχος","ὦ Βάκχε","o Bacchus"],
+            ["ἄγγελος","ὦ ἄγγελε","o boodschapper"]] } },
   codex_grammatica_ch7_deponentia: { cat:"grammatica", taal:"latijn", titel:"Grammatica: deponentia",
     tekst:"Deponentia zijn werkwoorden die er in elke tijd passief uitzien, maar altijd een actieve betekenis hebben — 'secutus est' betekent 'hij volgde', niet 'hij werd gevolgd'. Veelvoorkomende deponentia: sequi (volgen), loqui (spreken), morari (dralen), hortari (aansporen)." },
   codex_grammatica_ch7_betrekkelijk: { cat:"grammatica", taal:"latijn", titel:"Grammatica: het betrekkelijk voornaamwoord",
@@ -2561,6 +2611,17 @@ const SP_CODEX_ENTRIES = {
       rows:[["Nominativus","qui","quae","quod"],
             ["Accusativus","quem","quam","quod"],
             ["Genitivus","cuius","cuius","cuius"]] } },
+  // Leerlingfeedback (2026-08-19), zelfde patroon: het Griekse betrekkelijk
+  // voornaamwoord ὅς/ἥ/ὅ wordt pas in Hoofdstuk 12 getoetst
+  // (puzzle_ch12_ody_relativum), dus ontgrendelt deze entry ook daar
+  // (CH12_ODY_004) i.p.v. hier bij Hoofdstuk 7 — geplaatst naast zijn
+  // Latijnse tegenhanger voor onderhoud, niet omdat ze tegelijk vrijkomen.
+  codex_grammatica_ch12_relativum_grieks: { cat:"grammatica", taal:"grieks", titel:"Grammatica: het Griekse betrekkelijk voornaamwoord",
+    tekst:"Het Griekse betrekkelijk voornaamwoord ὅς, ἥ, ὅ (die, dat) leidt, net als het Latijnse qui/quae/quod, een bijzin in die iets toevoegt over het antecedent. Geslacht en getal komen van het antecedent; de naamval hangt af van de eigen functie in de bijzin.",
+    table:{ headers:["Geslacht","Nominativus enk.","Voorbeeld","Betekenis"],
+      rows:[["Mannelijk","ὅς","ὁ ἀνήρ ὅς...","de man die..."],
+            ["Vrouwelijk","ἥ","ἡ γυνὴ ἥ...","de vrouw die..."],
+            ["Onzijdig","ὅ","τὸ δῶρον ὅ...","het geschenk dat..."]] } },
   codex_grammatica_ch7_conjunctivus_passief: { cat:"grammatica", taal:"latijn", titel:"Grammatica: conjunctivus passief in de bijzin",
     tekst:"Net als de gewone conjunctivus in de bijzin (cum-bijzin) kan ook het passief in de conjunctivus staan — ppp + conjunctivus van esse (essem/esses/esset enz.) in plaats van indicativus. Hiermee is Minerva deel 1 volledig afgerond.",
     table:{ headers:["Vorm","Voorbeeld","Vertaling"],
@@ -9027,7 +9088,7 @@ De boodschapper wijst naar twee nieuwe scheuren in de werkelijkheid, dicht naast
 Athena staat er dit keer niet zwijgend bij — ze knikt je toe, kort maar oprecht, zoals een mentor doet die weet dat je de rest zelf aankunt.
 
 CODEX:
-codex_grammatica_ch3_genitivus, codex_grammatica_ch3_dativus, codex_grammatica_ch3_bijstelling
+codex_grammatica_ch3_genitivus, codex_grammatica_ch3_dativus, codex_grammatica_ch3_bijstelling, codex_grammatica_ch3_genitivus_grieks, codex_grammatica_ch3_dativus_grieks
 
 CHOICES:
 
@@ -12741,7 +12802,7 @@ VOCAB:
 latijn_habere, latijn_recusare, latijn_sepelire, latijn_regnum, latijn_frater, latijn_quadrupes, grieks_bakchos, latijn_liberi, grieks_mello, grieks_ethelo, grieks_nomizo, grieks_oikeo, grieks_parecho, grieks_keleuo, grieks_epeita, grieks_zeteo, grieks_entautha, grieks_sozo, latijn_atque, latijn_fero, latijn_tuli, latijn_latus, latijn_ne, latijn_sine, latijn_sic, latijn_tam, latijn_peto, latijn_tum
 
 CODEX:
-codex_kadmos_thebe, codex_grammatica_ch6_passief
+codex_kadmos_thebe, codex_grammatica_ch6_passief, codex_grammatica_ch6_vocativus_grieks
 
 CHOICES:
 
@@ -14910,7 +14971,7 @@ VOCAB:
 latijn_vulnus, grieks_menis, grieks_time, grieks_aspis, latijn_ira, latijn_honor, latijn_miles, latijn_senex, latijn_arma, grieks_pempo, grieks_pheugo, grieks_luo, grieks_ballo, grieks_e_scheidend, grieks_tis_onbepaald, grieks_kata, grieks_oude, grieks_eipon, grieks_horao, grieks_archo, grieks_ede, grieks_erchomai, grieks_hama, latijn_vivo, latijn_audio, latijn_duco, latijn_voco, latijn_timeo, latijn_semper, latijn_licet, latijn_vel, latijn_moveo, latijn_post
 
 CODEX:
-codex_grammatica_ch8_aoristus_sigmatisch, codex_grammatica_ch8_aoristus_thematisch, codex_grammatica_ch8_3decl_medeklinker, codex_grammatica_ch8_voornaamwoorden
+codex_grammatica_ch8_aoristus_sigmatisch, codex_grammatica_ch8_aoristus_thematisch, codex_grammatica_ch8_3decl_medeklinker, codex_grammatica_ch8_voornaamwoorden, codex_grammatica_ch8_voornaamwoord_grieks
 
 CHOICES:
 
@@ -16463,7 +16524,7 @@ Ze roept iemand anders erbij: Hermes zelf, dezelfde god die Priamus ooit door he
 Hermes glimlacht, vleugels aan zijn sandalen al trillend van ongeduld. "Kom," zegt hij. "Ditmaal ga je niet naar het Griekse kamp. Je gaat naar binnen — Troje in."
 
 CODEX:
-codex_grammatica_ch9_comparativus_superlativus, codex_grammatica_ch9_aci, codex_grammatica_ch9_3decl_istam, codex_grammatica_ch9_congruentie
+codex_grammatica_ch9_comparativus_superlativus, codex_grammatica_ch9_aci, codex_grammatica_ch9_3decl_istam, codex_grammatica_ch9_congruentie, codex_grammatica_ch9_comparativus_superlativus_grieks, codex_grammatica_ch9_congruentie_grieks
 
 CHOICES:
 
@@ -16601,7 +16662,7 @@ VOCAB:
 latijn_urbs, latijn_dolus, latijn_equus, latijn_tacitus, grieks_polis, latijn_fortis, latijn_discedere, latijn_maestus, grieks_houtos_pron, grieks_hos_vergelijkend, grieks_ekeinos, grieks_dokeo, grieks_eti, grieks_mallon, grieks_hode, grieks_malista, grieks_gignosko, grieks_chre, latijn_ille, latijn_magis, latijn_at, latijn_apud, latijn_sto, latijn_simul, latijn_trado, latijn_fugio, latijn_numquam, latijn_coepi
 
 CODEX:
-codex_grammatica_ch9_comparativus_superlativus, codex_grammatica_ch9_aci, codex_grammatica_ch9_3decl_istam, codex_grammatica_ch9_congruentie
+codex_grammatica_ch9_comparativus_superlativus, codex_grammatica_ch9_aci, codex_grammatica_ch9_3decl_istam, codex_grammatica_ch9_congruentie, codex_grammatica_ch9_comparativus_superlativus_grieks, codex_grammatica_ch9_congruentie_grieks
 
 CHOICES:
 
@@ -20800,7 +20861,7 @@ PERSON:
 telemachus:full, odysseus:full
 
 CODEX:
-codex_telemachus_herkenning
+codex_telemachus_herkenning, codex_grammatica_ch12_relativum_grieks
 
 RELATION:
 telemachus=+1
