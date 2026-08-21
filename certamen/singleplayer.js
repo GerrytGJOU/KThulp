@@ -508,7 +508,7 @@ function spTendencyAddressPhrase(state){
 const CNSParser = {
   KNOWN_SECTIONS:["TITLE","TEXT","DIALOGUE","CHOICES","IMAGE","MUSIC","SFX",
                   "CODEX","QUEST","COMBAT","REWARD","INVENTORY","PUZZLE","EERETITEL","FLAG",
-                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION","CHECK","RACE"],
+                  "PERSON","VOCAB","FRAGMENT","SOUVENIR","STATPOINTS","RELATION","REACTION","CHECK","RACE","MAP"],
   parse(rawText){
     const scenes = new Map();
     if(!rawText || !rawText.trim()) return scenes;
@@ -2038,6 +2038,18 @@ function spChoiceAlreadyDone(openCount){
       ? `Er ${openCount===1?"wacht":"wachten"} nog ${openCount} ${openCount===1?"verhaal":"verhalen"} op je hulp.`
       : "Alle verhalen van dit hoofdstuk zijn al voltooid.");
 }
+// Welke klik-handler een keuze krijgt — hergebruikt door zowel de gewone
+// tekst-knoppenlijst (spPlay) als spRenderMapHub (de kaart-variant van
+// dezelfde [DONE:]-hub, zie Chronica.md's Bibliotheek van Mnemosyne): één
+// plek voor deze ternary voorkomt dat de twee weergaven ooit uit de pas
+// lopen. multiChoice = of de bronscène meer dan één zichtbare keuze heeft
+// (spChooseAndLog logt alleen echte vertakkingen, zie daar).
+function spChoiceOnclickAttr(c, isDone, openCount, multiChoice){
+  return isDone ? `spChoiceAlreadyDone(${openCount})`
+    : (c.statReq||c.done) ? `spChooseTrackedPath('${c.target}','${c.approach||""}')`
+    : multiChoice ? `spChooseAndLog('${c.target}','${c.approach||""}')`
+    : `spChoosePath('${c.target}','${c.approach||""}')`;
+}
 // Bepaalt of een keuze met een [REQUIRE:sleutel=waarde]-tag getoond mag
 // worden (CNSParser.REQUIRE_TAG_RE). "fragments" (Hoofdstuk 2: de weg naar
 // het Orakel opent pas met alle 4 Herinneringsfragmenten binnen) en
@@ -2165,6 +2177,7 @@ SCREENS.spPlay = function(){
   if(scene.meta.COMBAT) return spStartCombatFromScene(scene);
   if(scene.meta.CHECK) return spStartCheckFromScene(scene);
   if(scene.meta.RACE) return spStartRaceFromScene(scene);
+  if(scene.meta.MAP && SP_HUB_MAPS[scene.meta.MAP.trim()]) return spRenderMapHub(scene);
 
   const payoffs = spResolvePayoffs(SP_STATE.node);
   // Deze scènetekst stond al op het worp-resultaatscherm (spStartCheckFromScene)
@@ -2206,10 +2219,7 @@ SCREENS.spPlay = function(){
         if(c.statReq && !spStatReqMet(c.statReq)){
           return `<button class="btn btn-ghost btn-block lg" style="margin-top:8px;opacity:.5;cursor:not-allowed" disabled title="Je skills zijn hiervoor nog te laag">${label}</button>`;
         }
-        const onclick = isDone ? `spChoiceAlreadyDone(${openCount})`
-          : (c.statReq||c.done) ? `spChooseTrackedPath('${c.target}','${c.approach||""}')`
-          : visibleChoices.length>1 ? `spChooseAndLog('${c.target}','${c.approach||""}')`
-          : `spChoosePath('${c.target}','${c.approach||""}')`;
+        const onclick = spChoiceOnclickAttr(c, isDone, openCount, visibleChoices.length>1);
         return `<button class="btn ${isDone?"":"btn-gold "}btn-block lg" style="margin-top:8px${isDone?";opacity:.6":""}" onclick="${onclick}">${label}</button>`;
       }).join("")
     : `<button class="btn btn-ghost btn-block lg" onclick="go('spSlots')">Terug naar de opslagplekken</button>`;
@@ -2228,6 +2238,55 @@ SCREENS.spPlay = function(){
   ${doorChoicesHTML}
   ${foot()}`);
 };
+
+/* ---- NIET-LINEAIRE HUB-KAART ("MAP:", Gerbens verzoek 2026-08-21) — een
+   geïllustreerde-plattegrond-variant van de klassieke [DONE:vlag]-
+   tekstknoppenlijst-hub (H2/H6/H15/H24 gebruiken die tekstvorm nog steeds).
+   Zelfde brondata (scene.choices, [DONE:]/[REQUIRE:]-tags) en dezelfde
+   klik-handlers (spChoiceOnclickAttr) als de tekstversie — alleen de
+   weergave verandert, dus de vrije-volgorde-logica zelf (zoals Hoofdstuk
+   2's vier lijnen) hoeft nergens dubbel te bestaan. SP_HUB_MAPS
+   (singleplayer-data.js) koppelt scene.meta.MAP aan een afbeelding + één
+   pin-coördinaat per zichtbare keuze, IN DEZELFDE VOLGORDE als de
+   CHOICES-sectie — dus een vijfde vleugel toevoegen is later niets meer dan
+   een coördinatenpaar erbij zetten. Coördinaten zijn bepaald met een
+   pixel-grid-overlay + hand-verificatie (nooit geschat op het oog, zie de
+   chronica-map-pin-placement-methode-memory). Early-return in SCREENS.spPlay,
+   zelfde patroon als PUZZLE/COMBAT/CHECK/RACE hierboven. Bewust GEEN
+   JS-berekende pixel-posities/zoom zoals spWorldMap/spCityMaps — dit is één
+   vast beeld zonder scroll/zoom, dus simpele CSS-% op een pins-laag die
+   exact de doos van de <img> omvat (position:relative panel, geen padding,
+   pins-laag position:absolute;inset:0) volstaat en blijft correct bij elke
+   schermbreedte. ---- */
+function spRenderMapHub(scene){
+  const mapDef = SP_HUB_MAPS[scene.meta.MAP.trim()];
+  const titleHTML = scene.title ? `<h3>${esc(SpTextResolver.resolve(scene.title, SP_STATE))}</h3>` : "";
+  const textHTML = spParagraphsHTML(scene.text, SP_STATE);
+  const visibleChoices = scene.choices.filter(spChoiceVisible);
+  const doneChoices = visibleChoices.filter(c=>c.done);
+  const openCount = doneChoices.filter(c=>!SP_STATE.flags[c.done]).length;
+  const pinLabel = label => label.replace(/^Ga naar\s+"?([^"]+?)"?$/i, "$1");
+  const pinsHTML = visibleChoices.map((c,i)=>{
+    const pos = mapDef.pins[i];
+    if(!pos) return ""; // defensief: meer zichtbare keuzes dan pin-coördinaten
+    const isDone = c.done && SP_STATE.flags[c.done];
+    const label = pinLabel(SpTextResolver.resolve(c.label, SP_STATE));
+    const onclick = spChoiceOnclickAttr(c, isDone, openCount, visibleChoices.length>1);
+    return `<button class="sp-map-pin${isDone?" sp-map-pin-done":""}" style="left:${pos.x}%;top:${pos.y}%" title="${esc(label)}" onclick="${onclick}">
+      <span class="sp-map-pin-dot">${isDone?"✓":""}</span><span class="sp-map-pin-label">${esc(label)}${isDone?" ✓":""}</span>
+    </button>`;
+  }).join("");
+  H(brand(true)+`
+  <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
+  <div class="panel">${spChapterEyebrowHTML()}${titleHTML}${textHTML}</div>
+  <div class="panel" style="padding:0;overflow:hidden;position:relative">
+    <img src="assets/chronica/images/${esc(mapDef.img)}" alt="" style="width:100%;display:block"
+      onerror="this.parentElement.querySelector('.sp-map-missing').style.display='block'">
+    <div class="sp-map-missing note" style="display:none;padding:40px 16px;text-align:center">Kaart nog niet beschikbaar.</div>
+    <div style="position:absolute;left:0;top:0;width:100%;height:100%">${pinsHTML}</div>
+  </div>
+  ${foot()}`);
+}
 
 /* ---- META-HOOKS: REWARD/CODEX/QUEST vuren stil bij binnenkomst; IMAGE is nog
    een no-op (illustraties volgen later); PUZZLE wordt apart afgehandeld in
