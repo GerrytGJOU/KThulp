@@ -2875,10 +2875,19 @@ function spGreekKeyboardHTML(){
   ).join("");
   return `<div class="panel">
     ${letterRows}
-    <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-top:6px">
-      <button class="btn btn-ghost" title="Spiritus lenis (op de laatste klinker)" onclick="spGreekApplyModifier('smooth')">᾿</button>
-      <button class="btn btn-ghost" title="Spiritus asper (op de laatste klinker)" onclick="spGreekApplyModifier('rough')">῾</button>
-      <button class="btn btn-ghost" title="Iota subscriptum (op α/η/ω)" onclick="spGreekApplyModifier('iota')">ι&#x0345;</button>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:flex-end;margin-top:6px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <span class="note" style="font-size:10px;white-space:nowrap">spiritus</span>
+        <button class="btn btn-ghost" title="Spiritus lenis (op de laatste klinker)" onclick="spGreekApplyModifier('smooth')">᾿</button>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <span class="note" style="font-size:10px;white-space:nowrap">spiritus</span>
+        <button class="btn btn-ghost" title="Spiritus asper (op de laatste klinker)" onclick="spGreekApplyModifier('rough')">῾</button>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
+        <span class="note" style="font-size:10px;white-space:nowrap">iota subscriptum</span>
+        <button class="btn btn-ghost" title="Iota subscriptum (op α/η/ω)" onclick="spGreekApplyModifier('iota')">ι&#x0345;</button>
+      </div>
       <button class="btn btn-ghost" onclick="spGreekKeyPress(' ')">␣ spatie</button>
       <button class="btn btn-ghost" onclick="spGreekBackspace()">⌫</button>
     </div>
