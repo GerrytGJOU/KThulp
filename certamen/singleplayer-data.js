@@ -814,7 +814,7 @@ const SP_HUB_MAPS = {
   ch28_hub: { img:"ch28_museum_map.png", pins:[
     { x:42, y:22 }, // De Weg Hierheen
     { x:80, y:35 }, // Wat Je Koos te Bewaren
-    { x:76, y:75 }, // Mensen die Je Onthield
+    { x:70, y:80 }, // Mensen die Je Onthield
     { x:18, y:55 }, // Stemmen die Nooit Zwegen
     { x:50, y:40 }, // het hart van de bibliotheek
   ] },
@@ -29633,6 +29633,9 @@ TEXT:
 "[[Ecce|zie hier]] — dit keer neem ik je niet mee door de tijd, maar door wat er van de tijd is overgebleven," zegt de Boodschapper van Chronos. Voor het eerst sinds je hier voor het eerst binnenkwam, sta je weer middenin het Museum van Mnemosyne zelf, tussen de stolpen die je zelf hebt gevuld.
 
 "Dit hoofdstuk volgt geen jaartallen. Ik haal iedereen erbij die ik nodig heb, uit welk jaar dan ook — een beeldhouwer hier, een bouwmeester daar. De enige vraag die ertoe doet, stel ik je telkens opnieuw: wil je dit onthouden, of laat je het los?" Ze zegt het luchtig, bijna terloops — maar iets in haar toon blijft net iets te lang hangen.
+
+IMAGE:
+ch24_terug_in_museum.png
 
 VOCAB:
 grieks_men_de, grieks_te, grieks_an, grieks_deo, grieks_oute, grieks_phyo, grieks_ara, grieks_chraomai, grieks_hyparcho, grieks_pote, latijn_ac, latijn_quod_cj, latijn_ergo, latijn_sequor, latijn_inquam, latijn_modo, latijn_parum, latijn_saepe, latijn_sub, latijn_patior
