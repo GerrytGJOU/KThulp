@@ -151,3 +151,37 @@ voorbeelden van prompts die hierdoor van mislukking naar succes gingen
 > gold light accents. Mood: quiet wonder, the hush before something awakens. Bold
 > clean linework, cel shading, cinematic composition. 16:9, no text, no speech
 > bubbles, no watermark, no modern objects.
+
+## Hoofdstuk 24 — `ch24_terug_in_museum.png` ("Terug in het Museum", CH24_000)
+
+> Illustration for the game "Chronica Classica", in the established comic /
+> graphic-novel house style (bold clean ink, cel shading, cinematic light).
+> **Scene:** the protagonist — a nameless young traveler, androgynous, seen
+> from behind/over the shoulder so the face stays hidden, wearing simple
+> traveler's clothing plus whatever gear their class has earned by this
+> point in the story (a bow slung on the back, or a spear and round shield,
+> or riding boots and spurs — artist's choice, keep it consistent with
+> earlier illustrations of this character) — stands just inside a vast
+> museum hall: rows of tall polished stone columns stretching away in every
+> direction, and between them, countless low weathered stone pedestals, each
+> topped with an old glass bell jar. Some jars hold a single small glowing
+> object (a golden rose, a bronze shard, a glowing ember — a few distinct
+> small treasures, softly gold-lit from within) and stand out clearly; many
+> more jars nearby, receding into the hall, are visibly empty, some dusty,
+> one pedestal cracked and half-collapsed. Beside the protagonist stands the
+> Boodschapper van Chronos (Hermes/Mercurius-figure): slender figure, winged
+> sandals, a winged traveler's hat, holding a caduceus staff, one arm
+> gesturing outward toward the endless rows of pedestals as if presenting
+> them. **Camera position:** positioned just behind and to the side of the
+> protagonist, roughly at their eye level, looking down the long hall so
+> both the filled jars nearby and the empty ones receding into the soft dark
+> distance are visible in the same shot. **Setting/period:** a timeless,
+> non-physical museum hall, outside ordinary time. **Accent colour:** no
+> single language track owns this hall — a few of the filled jars glint
+> faintly with Aegean blue, others with oxblood dark red, side by side, plus
+> warm gold as the shared magical light accent. 16:9, no text, no speech
+> bubbles, no watermark, no modern objects. **Avoid (strict):** do not show
+> the protagonist's face or give them clearly masculine or feminine facial
+> features; do not draw only full jars or only empty ones — both must be
+> visible together in the same shot; no modern glass/plexiglass, the jars
+> must read as old, faintly irregular hand-blown glass.
