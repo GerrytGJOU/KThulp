@@ -46,8 +46,43 @@
 const CQ_CASUS_LA = ["nominativus","genitivus","dativus","accusativus","ablativus","vocativus"];
 const CQ_CASUS_GR = ["nominativus","genitivus","dativus","accusativus","vocativus"];
 const CQ_GETAL    = ["enkelvoud","meervoud"];
-const CQ_TIJD_LA  = ["praesens","imperfectum","perfectum"];
-const CQ_TIJD_GR  = ["praesens","imperfectum","aoristus"];
+const CQ_TIJD_LA  = ["praesens","imperfectum","perfectum","plusquamperfectum","futurum"];
+const CQ_TIJD_GR  = ["praesens","imperfectum","aoristus","futurum"];
+
+/* ---- Vanaf welk Chronica-hoofdstuk mag een tijd meedoen? ------------------
+   Aanleiding (Gerben, 2026-08-19): een vraag "in welke tijd staat X?" had maar
+   drie opties, want de bank kende maar drie tijden. Gokken leverde daardoor
+   33% op i.p.v. 25%, terwijl het dezelfde "Gerichte slag" is met dezelfde
+   schade — en plek 4 kwam letterlijk nooit voor.
+
+   Oplossing: futurum en plusquamperfectum erbij, maar UITSLUITEND vanaf het
+   hoofdstuk waar het curriculum ze aanbiedt. Toetsen op stof die het verhaal
+   nog niet gaf is precies wat deze bank nergens mag doen.
+     Latijn plusquamperfectum — Minerva 9, ingezet in Hoofdstuk 5
+     Latijn futurum           — Minerva 17, ingezet in Hoofdstuk 12
+     Grieks futurum           — Pallas 22, ingezet in Hoofdstuk 13
+   (Grieks plusquamperfectum wordt in het hele curriculum niet aangeboden en
+   staat daarom niet in CQ_TIJD_GR.)
+   Zie PALLAS_MINERVA_OVERZICHT.md en de pallas/minerva-velden in SP_CAMPAIGN.
+
+   Gevolg: t/m Hoofdstuk 4 (Latijn) resp. 12 (Grieks) heeft een tijdsvraag nog
+   steeds maar drie opties. Dat is onvermijdelijk en bewust — daar zíjn niet
+   meer tijden bekend. Vanaf die hoofdstukken zijn het er vier.
+---------------------------------------------------------------------------- */
+const CQ_TIJD_VANAF = {
+  latijn: { praesens:0, imperfectum:0, perfectum:0, plusquamperfectum:5, futurum:12 },
+  grieks: { praesens:0, imperfectum:0, aoristus:0, futurum:13 },
+};
+// hoofdstuk === undefined betekent "geen hoofdstukgrens" (tooling, en de
+// andere Certamen-modi, die geen Chronica-voortgang hebben).
+function cqTijdToegestaan(taal, tijd, hoofdstuk){
+  if(hoofdstuk == null) return true;
+  const vanaf = (CQ_TIJD_VANAF[taal]||{})[tijd];
+  return vanaf == null ? false : hoofdstuk >= vanaf;
+}
+function cqTijdenVoor(taal, hoofdstuk){
+  return (taal==="grieks" ? CQ_TIJD_GR : CQ_TIJD_LA).filter(t=>cqTijdToegestaan(taal, t, hoofdstuk));
+}
 const CQ_PERSOON  = ["1e enkelvoud","2e enkelvoud","3e enkelvoud","1e meervoud","2e meervoud","3e meervoud"];
 
 // Wat een naamval "doet" — gebruikt in het micro-onderwijs bij een fout
@@ -228,18 +263,27 @@ const CQ_GR_NOMINA = [
 ];
 
 const CQ_GR_VERBA = [
+  // FUTURUM (Pallas 22, vanaf Hoofdstuk 13) staat alleen bij de drie verba met
+  // een regelmatig sigmatisch futurum. Bewust NIET bij φεύγω (φεύξομαι, medium),
+  // βάλλω (βαλῶ, gecontraheerd liquida-futurum), λαμβάνω (λήψομαι, medium) en
+  // λέγω (ἐρῶ, suppletief): dat zijn alle vier vormen die ver boven het niveau
+  // liggen waarop het futurum wordt aangeboden. Een verbum zonder futurum-rij
+  // levert simpelweg geen futurum-vraag op.
   { lemma:"λύω", betekenis:"losmaken, verbreken",
     praesens:   ["λύω","λύεις","λύει","λύομεν","λύετε","λύουσι(ν)"],
     imperfectum:["ἔλυον","ἔλυες","ἔλυε(ν)","ἐλύομεν","ἐλύετε","ἔλυον"],
-    aoristus:   ["ἔλυσα","ἔλυσας","ἔλυσε(ν)","ἐλύσαμεν","ἐλύσατε","ἔλυσαν"] },
+    aoristus:   ["ἔλυσα","ἔλυσας","ἔλυσε(ν)","ἐλύσαμεν","ἐλύσατε","ἔλυσαν"],
+    futurum:    ["λύσω","λύσεις","λύσει","λύσομεν","λύσετε","λύσουσι(ν)"] },
   { lemma:"πέμπω", betekenis:"zenden",
     praesens:   ["πέμπω","πέμπεις","πέμπει","πέμπομεν","πέμπετε","πέμπουσι(ν)"],
     imperfectum:["ἔπεμπον","ἔπεμπες","ἔπεμπε(ν)","ἐπέμπομεν","ἐπέμπετε","ἔπεμπον"],
-    aoristus:   ["ἔπεμψα","ἔπεμψας","ἔπεμψε(ν)","ἐπέμψαμεν","ἐπέμψατε","ἔπεμψαν"] },
+    aoristus:   ["ἔπεμψα","ἔπεμψας","ἔπεμψε(ν)","ἐπέμψαμεν","ἐπέμψατε","ἔπεμψαν"],
+    futurum:    ["πέμψω","πέμψεις","πέμψει","πέμψομεν","πέμψετε","πέμψουσι(ν)"] },
   { lemma:"πιστεύω", betekenis:"vertrouwen, geloven",
     praesens:   ["πιστεύω","πιστεύεις","πιστεύει","πιστεύομεν","πιστεύετε","πιστεύουσι(ν)"],
     imperfectum:["ἐπίστευον","ἐπίστευες","ἐπίστευε(ν)","ἐπιστεύομεν","ἐπιστεύετε","ἐπίστευον"],
-    aoristus:   ["ἐπίστευσα","ἐπίστευσας","ἐπίστευσε(ν)","ἐπιστεύσαμεν","ἐπιστεύσατε","ἐπίστευσαν"] },
+    aoristus:   ["ἐπίστευσα","ἐπίστευσας","ἐπίστευσε(ν)","ἐπιστεύσαμεν","ἐπιστεύσατε","ἐπίστευσαν"],
+    futurum:    ["πιστεύσω","πιστεύσεις","πιστεύσει","πιστεύσομεν","πιστεύσετε","πιστεύσουσι(ν)"] },
   { lemma:"φεύγω", betekenis:"vluchten",
     praesens:   ["φεύγω","φεύγεις","φεύγει","φεύγομεν","φεύγετε","φεύγουσι(ν)"],
     imperfectum:["ἔφευγον","ἔφευγες","ἔφευγε(ν)","ἐφεύγομεν","ἐφεύγετε","ἔφευγον"],
@@ -478,10 +522,22 @@ const CQ_LA_PERF_UITGANG = ["i","isti","it","imus","istis","erunt"];
 function cqLatijnVerbumVorm(v, tijd, persoonIdx){
   const s = v.stam;
   if(tijd==="perfectum") return v.perf + CQ_LA_PERF_UITGANG[persoonIdx];
+  // Plusquamperfectum = perfectumstam + eram/eras/erat/eramus/eratis/erant
+  // (amaveram, rexeram, monueram) — Minerva 9, vanaf Hoofdstuk 5.
+  if(tijd==="plusquamperfectum") return v.perf + ["eram","eras","erat","eramus","eratis","erant"][persoonIdx];
   if(tijd==="imperfectum"){
     // conj. 1/2 nemen -ba-, conj. 3/3io/4 nemen -eba- (reg → regebam, audi → audiebam)
     const infix = (v.conj===1||v.conj===2) ? "ba" : "eba";
     return s + infix + ["m","s","t","mus","tis","nt"][persoonIdx];
+  }
+  // Futurum — Minerva 17, vanaf Hoofdstuk 12. Twee volstrekt verschillende
+  // vormingen, en juist dat verschil is de les: conj. 1/2 nemen -bo/-bis/-bit
+  // (amabo, monebis), conj. 3/3io/4 nemen -am/-es/-et (regam, reges, fugiam,
+  // audiet). Een leerling die alleen "amabit" kent, herkent "reget" niet.
+  if(tijd==="futurum"){
+    if(v.conj===1 || v.conj===2)
+      return s + ["bo","bis","bit","bimus","bitis","bunt"][persoonIdx];
+    return s + ["am","es","et","emus","etis","ent"][persoonIdx];
   }
   // praesens
   switch(v.conj){
@@ -616,7 +672,9 @@ const CombatQuestions = (function(){
   // aanroep opnieuw opgebouwd — de banken zijn klein genoeg (enkele honderden
   // vormen) dat cachen niets oplevert, en zo blijft een uitbreiding meteen
   // zichtbaar zonder herstart.
-  function _vormKandidaten(taalspoor){
+  // `hoofdstuk` begrenst welke tijden mogen meedoen (CQ_TIJD_VANAF); laat 'm
+  // weg om de volledige bank te krijgen (tooling, andere modi).
+  function _vormKandidaten(taalspoor, hoofdstuk){
     const uit = [];
     const wilLatijn = taalspoor!=="grieks";
     const wilGrieks = taalspoor!=="latijn";
@@ -632,7 +690,7 @@ const CombatQuestions = (function(){
         }
       }
       for(const v of CQ_LA_VERBA){
-        for(const tijd of CQ_TIJD_LA){
+        for(const tijd of cqTijdenVoor("latijn", hoofdstuk)){
           for(let p=0;p<6;p++){
             const vorm = cqLatijnVerbumVorm(v, tijd, p);
             if(!vorm) continue;
@@ -654,7 +712,7 @@ const CombatQuestions = (function(){
         }
       }
       for(const v of CQ_GR_VERBA){
-        for(const tijd of CQ_TIJD_GR){
+        for(const tijd of cqTijdenVoor("grieks", hoofdstuk)){
           (v[tijd]||[]).forEach((vorm,p)=>{
             uit.push({ taal:"grieks", soort:"verbum", vorm, lemma:v.lemma, betekenis:v.betekenis,
                        as:"tijd", waarde:tijd, persoon:CQ_PERSOON[p], persoonIdx:p });
@@ -678,14 +736,17 @@ const CombatQuestions = (function(){
 
   /* ---- Vraagtype 3: vormherkenning (meerkeuze) --------------------------- */
   function _vormHerkenning(opts){
-    const alle = _vormKandidaten(opts.taalspoor);
+    const alle = _vormKandidaten(opts.taalspoor, opts.hoofdstuk);
     const eenduidig = alle.filter(k=>_isEenduidig(k, alle));
     if(eenduidig.length<4) return null;
     const k = gewogenTrek(eenduidig, opts.mastery, _vormKey, opts.vermijd);
     if(!k) return null;
+    // De afleiders komen uit de tijden/naamvallen die de speler op dit punt in
+    // het verhaal al kent — een futurum-optie aanbieden vóór Hoofdstuk 12 zou
+    // toetsen op stof die nog niet gegeven is.
     const asLijst = k.as==="naamval"
       ? (k.taal==="grieks" ? CQ_CASUS_GR : CQ_CASUS_LA)
-      : (k.taal==="grieks" ? CQ_TIJD_GR : CQ_TIJD_LA);
+      : cqTijdenVoor(k.taal, opts.hoofdstuk);
     const afleiders = _shuffle(asLijst.filter(x=>x!==k.waarde)).slice(0,3);
     if(afleiders.length<2) return null;
     const opties = _shuffle([k.waarde, ...afleiders]);
@@ -706,7 +767,7 @@ const CombatQuestions = (function(){
 
   /* ---- Vraagtype 4: vormproductie (getypt) ------------------------------- */
   function _vormProductie(opts){
-    const alle = _vormKandidaten(opts.taalspoor);
+    const alle = _vormKandidaten(opts.taalspoor, opts.hoofdstuk);
     // Twee filters:
     // (1) Vormen met een variant tussen haakjes (λύουσι(ν)) zijn prima om te
     //     HERKENNEN, maar oneerlijk om te laten typen — welke van de twee zou

@@ -4253,6 +4253,24 @@ In afgesproken bouwvolgorde:
    gen./dat. enkelvoud én nom./voc. meervoud) wordt automatisch uit de
    herkenningsvragen gefilterd — daar zou anders meer dan één antwoord goed zijn.
 
+   **Tijden zijn hoofdstuk-gebonden** (`CQ_TIJD_VANAF`, toegevoegd 2026-08-19).
+   Aanleiding: een tijdsvraag had maar drie opties, want de bank kende maar drie
+   tijden — gokken leverde 33% op i.p.v. 25%, bij dezelfde schade als een
+   naamvalsvraag met vier opties. Gemeten over 20.000 vragen kwam het goede
+   antwoord bij vormherkenning op plek 4 in 7,8% van de gevallen terecht
+   (χ² = 3154); de andere vier vraagtypes waren wél vlak. Futurum en
+   plusquamperfectum zijn daarom toegevoegd, maar **alleen vanaf het hoofdstuk
+   waar het curriculum ze aanbiedt**: Latijn plusquamperfectum vanaf Hoofdstuk 5
+   (Minerva 9), Latijn futurum vanaf Hoofdstuk 12 (Minerva 17), Grieks futurum
+   vanaf Hoofdstuk 13 (Pallas 22). Grieks plusquamperfectum komt in het hele
+   curriculum niet voor en zit er dus niet in. Dat betekent dat een tijdsvraag
+   t/m Hoofdstuk 4 (Latijn) resp. 12 (Grieks) nog steeds drie opties heeft —
+   onvermijdelijk, want daar zijn niet meer tijden bekend. Vanaf die
+   hoofdstukken is de verdeling vlak (χ² = 1,4). Het Griekse futurum staat
+   alleen bij de drie verba met een regelmatig sigmatisch futurum; φεύγω
+   (φεύξομαι), βάλλω (βαλῶ), λαμβάνω (λήψομαι) en λέγω (ἐρῶ) zijn overgeslagen
+   omdat hun futurum ver boven het aanbiedingsniveau ligt.
+
    **Leitner-mastery + micro-onderwijs.** `SP_STATE.mastery` houdt per vraag een
    box 0-5 bij; de trekking weegt naar lage boxen (gewicht 6 t/m 1), fout zet
    terug naar 0, goed schuift één box op. De oude trekking was uniform random
