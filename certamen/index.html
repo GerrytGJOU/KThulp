@@ -536,6 +536,12 @@ body.greek .qcard .word{color:#143a5e}
 .sp-map-pin:hover .sp-map-pin-dot{transform:scale(1.25)}
 .sp-map-pin-label{font-family:'Cinzel',Optima,serif;font-size:11px;color:#fff;
   background:rgba(20,14,6,.75);padding:1px 6px;border-radius:4px;white-space:nowrap}
+/* Voltooide vleugel op een niet-lineaire hub-kaart (spRenderMapHub,
+   singleplayer.js — "MAP:"-sectie): dof en met vinkje i.p.v. het gouden
+   stipje, zelfde bedoeling als de "✓"-tekst-variant in de knoppenlijst. */
+.sp-map-pin-done .sp-map-pin-dot{background:#8a8a8a;font-size:9px;line-height:14px;
+  color:#1a1206;box-shadow:none}
+.sp-map-pin-done .sp-map-pin-label{opacity:.7}
 
 /* ── Codex Memoriae (SCREENS.spCodex, singleplayer.js) ──
    Oogt als een oud perkamenten boek: sepia-tint + een ezelsoor in de hoek

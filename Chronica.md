@@ -8383,11 +8383,25 @@ BFS met automatisch opgeloste tile-swap-puzzel, alle drie taalsporen
 (grieks 35, latijn 34, beide 37 scènes bezocht), 0 exceptions, 0
 onopgeloste tokens, 0 console-fouten.
 
-**Openstaand voor een latere sessie** (Gerbens verzoek): een visuele
-plattegrond met klikbare pins voor de vier vleugels, ter vervanging van de
-huidige tekstuele hub — dezelfde onderliggende FLAGs blijven dan
-bruikbaar, dus dat is een latere, aparte uitbreiding zonder dat de
-payoff-logica opnieuw hoeft.
+**Visuele plattegrond toegevoegd (2026-08-21)**: het punt hierboven is
+opgelost. `ch28_museum_map.png` (isometrische plattegrond, hub + vier
+vleugels, door Gerben aangeleverd) is gekoppeld via een nieuw generiek
+mechanisme — een `MAP:`-sectie op CH28_HUB, gelezen door `SP_HUB_MAPS`
+(singleplayer-data.js) en gerenderd door `spRenderMapHub()`
+(singleplayer.js), als vroege early-return in `SCREENS.spPlay` naast
+PUZZLE/COMBAT/CHECK/RACE. Vijf pins (vier vleugels + het hart) matchen 1-op-1,
+op index, met de bestaande CHOICES-volgorde — de onderliggende [DONE:]/
+[REQUIRE:]-brondata en de klik-logica zijn ongewijzigd (nieuwe gedeelde
+helper `spChoiceOnclickAttr`, hergebruikt door zowel de tekst- als de
+kaartversie), dus de vrije-volgorde-mechaniek zelf (§7.98 hierboven, "bezoek
+ze in de volgorde die jij wilt", zelfde geest als Hoofdstuk 2's vier lijnen)
+bestaat maar op één plek. Pin-coördinaten bepaald met een pixel-grid-overlay
++ een test-render met pins erop (nooit op het oog geschat, zie de
+chronica-map-pin-placement-methode-memory). Een voltooide vleugel toont een
+dof vinkje-pin i.p.v. te navigeren (zelfde toast als de tekstversie:
+"Deze herinnering ken je al"). Het mechanisme (`MAP:` + `SP_HUB_MAPS`) is
+generiek genoeg om later ook op andere niet-lineaire hubs (H2/H6/H15/H24) toe
+te passen, mocht daar ooit een vergelijkbare kaart voor komen.
 
 ### 7.99 Hoofdstuk 29 "De Rivier Lethe" geschreven (2026-08-16)
 

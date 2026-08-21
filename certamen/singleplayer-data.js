@@ -531,7 +531,7 @@ const SP_CAMPAIGN = [
     grammatica:"Herhaling van alle grammatica, PER taalspoor gescheiden (Gerbens correctie 2026-08-16: geen gemengd Grieks/Latijn — leerlingen die één taal kozen, hebben de helft van de andere grammatica nooit gehad). Wél doorlopen alle drie de sporen dezelfde vleugel-volgorde.",
     personages:"Mnemosyne, de Boodschapper van Chronos/Pamphile van Epidaurus, Athena, Hermes, Lethe (eerste verschijning)",
     zijverhalen:"Narcissus & Echo (A-tier) als tekstuele (niet-auditieve) fragment-reconstructiepuzzel, zodat leerlingen dit stil in de les kunnen spelen; eerste hints van De Titanenstrijd (S-tier, Kronos/Chronos raken hier voor het eerst 'per ongeluk' door elkaar), die in de Finale terugkeert",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-16, gekoppeld 2026-08-18) — door Claude geschreven (geen Gemini-concept). 42 scènes. Niet-lineaire hub-structuur (zelfde patroon als H24's museum, [DONE:vlag]) met vier vrij te bezoeken vleugels — 'De Weg Hierheen' (H1-6-aggregaat, cultuurneutraal), 'Wat Je Koos te Bewaren' (H24/H25-onthoud-of-laat-los-reeks, taalspoor-gated), 'Mensen die Je Onthield' (NPC-herkenning/politieke scheuren/mythologische afsluitingen H15-21, taalspoor-gated), 'Stemmen die Nooit Zwegen' (RELATION-payoffs: Athena Grieks, Stoïcijnse lijn+Hadrianus Latijn). Volgorde-tracking: `ch28_eerste_vleugel`/`ch28_laatste_vleugel` onthouden welke vleugel als eerste/laatste werd voltooid, leesbaar door toekomstige hoofdstukken. Cameo van Pamphile retroactief toegevoegd aan Hoofdstuk 23 (CH23_LAT_011B, al gekoppeld/live) als voorwaarde voor deze onthulling. SP_SCENES/BLOCKS bevatten SP_CH28_CNS. Openstaand: de (later te bouwen) visuele plattegrond-uitbreiding van de vleugel-navigatie." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-16, gekoppeld 2026-08-18) — door Claude geschreven (geen Gemini-concept). 42 scènes. Niet-lineaire hub-structuur (zelfde patroon als H24's museum, [DONE:vlag]) met vier vrij te bezoeken vleugels — 'De Weg Hierheen' (H1-6-aggregaat, cultuurneutraal), 'Wat Je Koos te Bewaren' (H24/H25-onthoud-of-laat-los-reeks, taalspoor-gated), 'Mensen die Je Onthield' (NPC-herkenning/politieke scheuren/mythologische afsluitingen H15-21, taalspoor-gated), 'Stemmen die Nooit Zwegen' (RELATION-payoffs: Athena Grieks, Stoïcijnse lijn+Hadrianus Latijn). Volgorde-tracking: `ch28_eerste_vleugel`/`ch28_laatste_vleugel` onthouden welke vleugel als eerste/laatste werd voltooid, leesbaar door toekomstige hoofdstukken. Cameo van Pamphile retroactief toegevoegd aan Hoofdstuk 23 (CH23_LAT_011B, al gekoppeld/live) als voorwaarde voor deze onthulling. SP_SCENES/BLOCKS bevatten SP_CH28_CNS. VISUELE PLATTEGROND TOEGEVOEGD (2026-08-21, Gerbens verzoek): CH28_HUB heeft nu een `MAP:`-sectie i.p.v. alleen tekstknoppen — spRenderMapHub (singleplayer.js) toont ch28_museum_map.png met vijf klikbare pins (vier vleugels + het hart), gekoppeld via SP_HUB_MAPS.ch28_hub (singleplayer-data.js). Zelfde onderliggende [DONE:]/[REQUIRE:]-brondata en dezelfde klik-handlers als de tekstversie (nieuwe gedeelde helper spChoiceOnclickAttr) — een voltooide vleugel toont een dof vinkje-pin i.p.v. te navigeren, exact als voorheen. Generiek genoeg (MAP:-sectie + SP_HUB_MAPS-lookup) om later ook op andere niet-lineaire hubs (H2/H6/H15/H24) toegepast te worden, mocht daar ooit een kaart voor komen." },
   { id:"ch29", nr:29, boek:"VI — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
     periode:"Mythologische Eindwereld",
     verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren — de laatste beproeving voor het orakel zelf zich toont. UITGEBREID 2026-08-16 (Gerbens verzoek): dit hoofdstuk is de schaduwzijde van Hoofdstuk 28 — waar Mnemosyne liet zien wat de speler bewaarde, laat Lethe zien wat de speler miste, negeerde, of waarin hij faalde (nooit content die nog niet gebouwd is, uitsluitend paden die het spel echt aanbood). Opent met Lethes oprechte bedankje voor de H24/H25-loslaat-keuzes, gevolgd door een reeks 'wat had kunnen zijn'-momenten (Hoofdstuk 1's ongekozen lijn, het ongelopen taalspoor, en zeven grote/kleinere zijde-keuzes verspreid door de hele campagne), en eindigt met een gedeeltelijke onthulling van Lethes eigen motieven — haar volledige 'vergeten hoort erbij'-filosofie blijft bewust gereserveerd voor de Finale.",
@@ -790,6 +790,35 @@ const SP_CITY_MAP_LOCATIONS = [
     unlockCodex:"codex_romeinse_wonen",
     desc:"De volkswijk vol insulae — huurkazernes zonder eigen keuken — en de thermopolium-toonbanken waar de bewoners hun eten kopen." },
 ];
+
+/* ---- NIET-LINEAIRE HUB-KAARTEN ("MAP:"-sectie, spRenderMapHub in
+   singleplayer.js) — losstaand van SP_MAP_LOCATIONS/SP_CITY_MAP_LOCATIONS
+   hierboven (die zijn geografische kaarten met codex-gestuurde pins, deze
+   zijn de visuele vervanging van een [DONE:vlag]-tekstknoppenlijst-hub,
+   Gerbens verzoek 2026-08-21). Elke entry: `img` (assets/chronica/images/)
+   + `pins`, een array van {x,y}-percentages IN DEZELFDE VOLGORDE als de
+   CHOICES-sectie van de bijbehorende scène (spRenderMapHub matcht op index,
+   niet op naam — een keuze herschikken in de CNS-tekst vraagt dus ook de
+   pins-array in dezelfde volgorde te herschikken). Coördinaten bepaald met
+   een pixel-grid-overlay over de afbeelding + een test-render met pins erop
+   (zie chronica-map-pin-placement-methode-memory) — nooit op het oog
+   geschat.
+   `ch28_hub`: Hoofdstuk 28's Bibliotheek van Mnemosyne (CH28_HUB, SP_CH28_
+   CNS) — vier vleugels + het hart, isometrische plattegrond
+   (ch28_museum_map.png). Volgorde matcht de CHOICES exact: De Weg Hierheen
+   (boekenkasten/gouden lichtjes, linksboven) / Wat Je Koos te Bewaren
+   (stolpjes met blauwe/rode rook, rechtsboven) / Mensen die Je Onthield
+   (portretmuur, rechtsonder) / Stemmen die Nooit Zwegen (schemerige kamer
+   met geluidsrimpelingen, linksonder) / het hart (Mnemosyne zelf, midden). */
+const SP_HUB_MAPS = {
+  ch28_hub: { img:"ch28_museum_map.png", pins:[
+    { x:42, y:22 }, // De Weg Hierheen
+    { x:80, y:35 }, // Wat Je Koos te Bewaren
+    { x:76, y:75 }, // Mensen die Je Onthield
+    { x:18, y:55 }, // Stemmen die Nooit Zwegen
+    { x:50, y:40 }, // het hart van de bibliotheek
+  ] },
+};
 
 /* ---- VOORNAAMWOORDEN — uitbreidbaar, nieuw gender toevoegen = 1 regel ---- */
 const SP_PRONOUNS = {
@@ -32288,6 +32317,9 @@ Vier Gangen, Eén Bibliotheek
 
 TEXT:
 Mnemosyne wacht geduldig terwijl je de vier gangen overziet. "Bezoek ze in de volgorde die jij wilt," zegt ze. "Ik onthoud sowieso alles — ook de volgorde waarin jij kiest te herinneren."
+
+MAP:
+ch28_hub
 
 CHOICES:
 * Ga naar "De Weg Hierheen" [DONE:ch28_wing_a_klaar] -> CH28_WING_A_001
