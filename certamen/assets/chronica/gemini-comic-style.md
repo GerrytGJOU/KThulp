@@ -152,16 +152,27 @@ voorbeelden van prompts die hierdoor van mislukking naar succes gingen
 > clean linework, cel shading, cinematic composition. 16:9, no text, no speech
 > bubbles, no watermark, no modern objects.
 
-## Hoofdstuk 24 — `ch24_terug_in_museum.png` ("Terug in het Museum", CH24_000)
+## Hoofdstuk 24 — "Terug in het Museum" (CH24_000)
+
+**Drie klasse-varianten, één scène.** De IMAGE-sectie gebruikt
+`ch24_terug_in_museum_{klasse_beeldsuffix}.png` — een dynamische
+bestandsnaam (zelfde `{token}`-mechanisme als de Finale-epiloog, Chronica.md
+§7.103) die bij binnenkomst wordt opgelost naar de klasse van de speler
+(`SP_CLASS_IMAGE_SUFFIX`, singleplayer.js). Drie losse renders nodig, elk
+identiek qua compositie/tekst hieronder, alleen de wapenuitrusting van de
+protagonist verandert:
+- `ch24_terug_in_museum_boog.png` — Boogschutter: een boog op de rug.
+- `ch24_terug_in_museum_speer.png` — Hopliet: een speer en een rond schild.
+- `ch24_terug_in_museum_sporen.png` — Cavalerist: rijlaarzen met sporen.
 
 > Illustration for the game "Chronica Classica", in the established comic /
 > graphic-novel house style (bold clean ink, cel shading, cinematic light).
 > **Scene:** the protagonist — a nameless young traveler, androgynous, seen
 > from behind/over the shoulder so the face stays hidden, wearing simple
-> traveler's clothing plus whatever gear their class has earned by this
-> point in the story (a bow slung on the back, or a spear and round shield,
-> or riding boots and spurs — artist's choice, keep it consistent with
-> earlier illustrations of this character) — stands just inside a vast
+> traveler's clothing plus **«boog: a bow slung across the back» / «speer: a
+> spear held in one hand and a round shield strapped to the back» / «sporen:
+> tall riding boots with spurs»** (pick exactly one of the three, matching
+> the filename you're generating) — stands just inside a vast
 > museum hall: rows of tall polished stone columns stretching away in every
 > direction, and between them, countless low weathered stone pedestals, each
 > topped with an old glass bell jar. Some jars hold a single small glowing

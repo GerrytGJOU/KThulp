@@ -29635,7 +29635,7 @@ TEXT:
 "Dit hoofdstuk volgt geen jaartallen. Ik haal iedereen erbij die ik nodig heb, uit welk jaar dan ook — een beeldhouwer hier, een bouwmeester daar. De enige vraag die ertoe doet, stel ik je telkens opnieuw: wil je dit onthouden, of laat je het los?" Ze zegt het luchtig, bijna terloops — maar iets in haar toon blijft net iets te lang hangen.
 
 IMAGE:
-ch24_terug_in_museum.png
+ch24_terug_in_museum_{klasse_beeldsuffix}.png
 
 VOCAB:
 grieks_men_de, grieks_te, grieks_an, grieks_deo, grieks_oute, grieks_phyo, grieks_ara, grieks_chraomai, grieks_hyparcho, grieks_pote, latijn_ac, latijn_quod_cj, latijn_ergo, latijn_sequor, latijn_inquam, latijn_modo, latijn_parum, latijn_saepe, latijn_sub, latijn_patior
@@ -33229,6 +33229,9 @@ Wat de Muren Zagen
 
 TEXT:
 "Jij koos het strand," zegt Lethe. "Dus je zag de list zelf ontstaan, van buitenaf. Wat je niet zag: Troje van binnenuit, in haar laatste, onwetende dagen — Andromache die haar man smeekte binnen te blijven, een stad die niet wist dat ze haar laatste ochtend al achter zich had. Die kant bestond net zo goed. Jij was er niet bij."
+
+IMAGE:
+ch29_muren_gemiste_kant.png
 
 FLAG:
 ch29_troje_gemist=muren

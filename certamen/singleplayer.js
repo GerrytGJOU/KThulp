@@ -312,6 +312,7 @@ const SpTextResolver = {
       case "tendency_address":     return spTendencyAddressPhrase(state);
       case "tendency_address_cap": return spCapitalize(spTendencyAddressPhrase(state));
       case "eigen_wapen":          return SP_CLASS_WEAPON_NOUN[state.classId] || "wapen";
+      case "klasse_beeldsuffix":   return SP_CLASS_IMAGE_SUFFIX[state.classId] || "speer";
       case "bondgenoten_aanwezig": return spBondgenotenAanwezig(state);
       case "priamus_afscheid":     return ((state.relations||{}).priamus||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD ? SP_ENDKAPITAAL_PRIAMUS_AFSCHEID : "";
       case "cassandra_payoff":     return ((state.relations||{}).cassandra||0) >= SP_ENDKAPITAAL_HELPER_THRESHOLD ? SP_ENDKAPITAAL_CASSANDRA_PAYOFF : "";
@@ -472,6 +473,15 @@ function spTendencyStoryVariant(id, state){
 // etc., singleplayer-data.js), maar dan van classId naar een gewoon
 // zelfstandig naamwoord voor in de verteltekst.
 const SP_CLASS_WEAPON_NOUN = { boogschutter:"boog", hopliet:"speer", cavalerie:"zwaard" };
+// Klasse-gebonden IMAGE-bestandssuffix (Gerbens verzoek, 2026-08-19): drie
+// varianten van dezelfde illustratie, alleen de uitrusting van de speler
+// verschilt. Gebruikt via {klasse_beeldsuffix} in een IMAGE:-sectie (zie
+// spSceneImageHTML/SpTextResolver hieronder) — bv. CH24_000's
+// ch24_terug_in_museum_{klasse_beeldsuffix}.png. Fallback "speer" (hopliet)
+// zou classId ooit onverwacht ontbreken (kan in de praktijk niet, de
+// klassekeuze staat al in de proloog) — nooit een gebroken bestandsnaam
+// tonen zolang er een geldig, bestaand plaatje als terugval is.
+const SP_CLASS_IMAGE_SUFFIX = { boogschutter:"boog", hopliet:"speer", cavalerie:"sporen" };
 // Gender-passend zelfstandig naamwoord voor de Kroniek (Kleio's verteltoon,
 // zie spKroniekLog): "held"/"heldin"/"held" — nonbinair krijgt bewust "held"
 // terug (zelfde woord als man), want een verzonnen derde vorm zou net zo
@@ -2513,12 +2523,20 @@ function spHookSouvenir(text){
 }
 /* ---- AFBEELDINGEN-TAB: elke scène met een IMAGE:-sectie wordt automatisch
    bijgehouden (geen aparte auteurs-actie nodig) zodra de speler haar voor het
-   eerst ziet — dedup op scène-id, zodat herhaald bezoek niets dubbel opslaat. ---- */
+   eerst ziet — dedup op scène-id, zodat herhaald bezoek niets dubbel opslaat.
+   SpTextResolver.resolve() erbij (zelfde {token}-resolutie als
+   spSceneImageHTML) sinds IMAGE ook dynamische bestandsnamen ondersteunt
+   (Chronica.md §7.103 — Finale-epiloog, en Hoofdstuk 24's klasse-gebonden
+   {klasse_beeldsuffix}) — anders zou de Codex-tab de kale, ongeresolvede
+   `{token}`-string als bestandsnaam opslaan en de afbeelding daar altijd
+   404'en, ook al toont spPlay zelf gewoon het juiste plaatje. ---- */
 function spHookSeenImage(scene){
   if(!scene.meta || !scene.meta.IMAGE) return;
   const existing = SP_STATE.seenImages||[];
   if(existing.some(e=>e.id===scene.id)) return;
-  const entry = { id:scene.id, img:scene.meta.IMAGE.trim(), titel:scene.title||"" };
+  const img = SpTextResolver.resolve(scene.meta.IMAGE.trim(), SP_STATE);
+  if(!img) return;
+  const entry = { id:scene.id, img, titel:scene.title||"" };
   spSaveProgress({ seenImages:[...existing, entry] });
 }
 
