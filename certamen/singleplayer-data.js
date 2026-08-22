@@ -20001,6 +20001,9 @@ Voor het verhaal verdergaat, trekt Hermes de speler even opzij — terwijl Odyss
 
 Hij wijst naar een put dieper dan de rest, omgeven door bronzen muren: Tartaros, waar de ergste misdadigers tegen de goden zelf voor eeuwig boeten. Tantalos staat tot zijn kin in water dat wegtrekt zodra hij drinkt, onder fruit dat wegwaait zodra hij reikt — gestraft omdat hij ooit zijn eigen zoon aan de goden opdiste, om te testen of ze het zouden merken. Sisyphos duwt een rotsblok een berg op, telkens weer, voor eeuwig — gestraft omdat hij de dood zelf tweemaal te slim af was. Ixion draait rond aan een brandend wiel, gestraft omdat hij Hera probeerde te verleiden. En de vijftig dochters van Danaus vullen eeuwig een lekkende kruik met zeven, gestraft omdat ze op bevel van hun vader hun eigen bruidegoms op de huwelijksnacht doodden.
 
+IMAGE:
+ch11_tartaros_zondaars.png
+
 CODEX:
 codex_tartaros_zondaars
 
@@ -20018,6 +20021,9 @@ TEXT:
 "Eén lied hoort hier ook bij," zegt Hermes, en voor het eerst klinkt zijn stem minder luchtig dan anders. Hij vertelt over Orpheus — dezelfde zanger die je al kende van de Argonautentocht — wiens vrouw Eurydice stierf aan een slangenbeet, nog geen dag na hun eigen bruiloft.
 
 "Orpheus deed wat geen sterveling ooit had gedurfd: hij daalde zelf af, levend, en zong zo mooi voor Hades en Persephone dat zelfs zij, voor het eerst ooit, medelijden toonden. Ze mocht met hem mee terug — op één voorwaarde: hij mocht niet omkijken voor ze allebei het daglicht weer hadden bereikt." Hermes zwijgt even. "Vlak voor de uitgang, twijfelend of ze hem wel echt volgde, keek hij toch om. Ze verdween voorgoed, voor de tweede keer, en deze keer voorgoed."
+
+IMAGE:
+ch11_tartaros_orpheus_eurydice.png
 
 CODEX:
 codex_orpheus_eurydice
