@@ -500,3 +500,78 @@ zet elk resultaat onder die naam in `certamen/assets/chronica/souvenirs/`.
 > intertwining, neither colour dominant. No text, no speech bubbles, no
 > watermark, no modern objects, no people, no hands, no faces. 1:1 square
 > format, fills the entire frame.
+
+
+## Resterende souvenirs (audit 2026-08-21)
+
+Vier souvenirs uit `SP_SOUVENIRS` (singleplayer-data.js) hadden nog geen
+bestand op schijf — de rest van de campagne (proloog t/m Finale) is compleet.
+
+### 22. `souvenir_bondgenoten_verscheurd.png` — Een Gebroken Lans en een Senaatsdolk (Hoofdstuk 19 — beide talen)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: two
+> small objects placed side by side — a bronze spearhead, snapped cleanly in
+> two, its broken edges facing each other, and a small, unused ceremonial
+> dagger with a plain hilt — both resting directly on a small weathered
+> stone pedestal (no cushion — sturdy objects), entirely covered by an old
+> glass bell jar/dome, faintly and softly gold-lit from within as if quietly
+> magical. Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette), both objects in sharp focus.
+> This souvenir belongs to both storylines at once — the glow on the glass
+> is a soft blend of Aegean blue and oxblood dark red intertwining, neither
+> colour dominant. No text, no speech bubbles, no watermark, no modern
+> objects, no people, no hands, no faces. 1:1 square format, fills the
+> entire frame.
+
+### 23. `souvenir_rijk_in_crisis.png` — Een Stukje Amfitheater-Marmer en een Verweerde Muntenrand (Hoofdstuk 26 — oxblood)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: two
+> small objects placed side by side — a small chipped fragment of gleaming
+> white marble with one smoothly curved edge (as if broken from a
+> monumental arched structure), and a small, bent and heavily worn coin rim
+> with no legible face, resting directly on a small weathered stone
+> pedestal (no cushion — sturdy objects), entirely covered by an old glass
+> bell jar/dome, faintly and softly gold-lit from within as if quietly
+> magical. Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette), both objects in sharp
+> focus. A thin oxblood dark-red glow glints faintly on the glass. No text,
+> no speech bubbles, no watermark, no modern objects, no people, no hands,
+> no faces. 1:1 square format, fills the entire frame.
+
+### 24. `souvenir_bibliotheek_mnemosyne.png` — Een Glazen Potje met Rook en een Spiegelfragment (Hoofdstuk 28 — beide talen)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: two
+> small objects placed side by side — a small old glass jar containing a
+> faint wisp of slowly swirling smoke, and a tiny fragment of silvered
+> mirror glass propped upright beside it, catching a faint reflection of the
+> golden glow around it — both resting on a small dark-red velvet cushion
+> atop a small weathered stone pedestal, entirely covered by an old glass
+> bell jar/dome, faintly and softly gold-lit from within as if quietly
+> magical. Camera at eye level with the pedestal, three-quarter lighting,
+> background dark and blurred (heavy vignette), both objects in sharp
+> focus. This souvenir belongs to both storylines at once — the glow on the
+> outer glass is a soft blend of Aegean blue and oxblood dark red
+> intertwining, neither colour dominant. No text, no speech bubbles, no
+> watermark, no modern objects, no people, no hands, no faces. 1:1 square
+> format, fills the entire frame.
+
+### 25. `souvenir_rivier_lethe.png` — Een Leeg Flesje en een Lier-snaar (Hoofdstuk 29 — koud grijs, geen accentkleur)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette), but deliberately without the usual warm golden glow — this
+> souvenir belongs to Lethe, goddess of forgetting, not to Mnemosyne's
+> collection of what was kept. A single small museum-style display: two
+> small objects placed side by side — a small, completely empty glass vial
+> with its stopper beside it, and a single weathered, slightly frayed lyre
+> string coiled loosely next to it — both resting on a small dark-red
+> velvet cushion atop a small weathered stone pedestal, entirely covered by
+> an old glass bell jar/dome. Camera at eye level with the pedestal,
+> three-quarter lighting, background dark and blurred (heavy vignette), both
+> objects in sharp focus. Instead of a gold glow, a faint, cold pale-silver/
+> grey light glints on the glass — no Aegean blue, no oxblood, this souvenir
+> belongs to neither language track. No text, no speech bubbles, no
+> watermark, no modern objects, no people, no hands, no faces. 1:1 square
+> format, fills the entire frame.
