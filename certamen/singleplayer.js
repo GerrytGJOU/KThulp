@@ -3070,6 +3070,27 @@ const SP_GREEK_SPIRITUS_RE = /[̓̔]/g;
 function spNormalizeGreekNoSpiritus(str){
   return spNormalizeGreek(str).normalize("NFD").replace(SP_GREEK_SPIRITUS_RE, "").normalize("NFC");
 }
+// Zelfde aanpak, voor een ontbrekende/overbodige iota subscriptum (U+0345)
+// als de ENIGE afwijking — even herkenbaar en veelvoorkomend als een
+// spiritus-fout (bv. dativus enkelvoud van de 1e declinatie: θεᾳ, καλλίστῃ).
+const SP_GREEK_IOTA_SUB_RE = /[ͅ]/g;
+function spNormalizeGreekNoIotaSub(str){
+  return spNormalizeGreek(str).normalize("NFD").replace(SP_GREEK_IOTA_SUB_RE, "").normalize("NFC");
+}
+// Geeft een gerichte "bijna goed"-hint terug als spiritus of iota subscriptum
+// de ENIGE afwijking is tussen een fout antwoord en de correcte vorm, anders
+// null (dan valt de aanroeper terug op de generieke puzzel-hint/uitleg).
+// Spiritus gaat voor iota subscriptum als beide toevallig tegelijk zouden
+// afwijken — zeldzaam, en spiritus is de vaker geziene fout.
+function spGreekBijnaGoedHint(raw, antwoord){
+  if(spNormalizeGreekNoSpiritus(raw) === spNormalizeGreekNoSpiritus(antwoord)){
+    return "Bijna goed — alleen de spiritus (lenis ᾿ of asper ῾) klopt nog niet. Check of je die hebt gezet, het juiste teken gebruikt, en op de juiste lettergreep.";
+  }
+  if(spNormalizeGreekNoIotaSub(raw) === spNormalizeGreekNoIotaSub(antwoord)){
+    return "Bijna goed — alleen de iota subscriptum (ι onder de α/η/ω) klopt nog niet. Check of je die hebt gezet, en op de juiste lettergreep.";
+  }
+  return null;
+}
 function spRenderTypedGreekPuzzle(scene, puzzleId, puzzle, target){
   H(brand(true)+`
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
@@ -3103,10 +3124,8 @@ function spCheckTypedGreekPuzzle(puzzleId, target){
     // een specifieke, herkenbare fout — geef daar een gerichte hint voor
     // in plaats van de generieke puzzel-hint.
     if(err){
-      const spiritusIsOnlyFout = spNormalizeGreekNoSpiritus(raw) === spNormalizeGreekNoSpiritus(puzzle.antwoord);
-      err.textContent = spiritusIsOnlyFout
-        ? "Bijna goed — alleen de spiritus (lenis ᾿ of asper ῾) klopt nog niet. Check of je die hebt gezet, het juiste teken gebruikt, en op de juiste lettergreep."
-        : (puzzle.hint || "Nog niet juist — probeer opnieuw. (Spiritus en iota subscriptum tellen mee, accenten zoals acuut of gravis niet.)");
+      err.textContent = spGreekBijnaGoedHint(raw, puzzle.antwoord) || puzzle.hint
+        || "Nog niet juist — probeer opnieuw. (Spiritus en iota subscriptum tellen mee, accenten zoals acuut of gravis niet.)";
       err.style.display = "";
     }
   }
@@ -3538,12 +3557,12 @@ function spCombatAntwoordGetypt(){
   const raw = el("spCombatInput")?.value || "";
   const q = SP_COMBAT.question;
   const goed = CombatQuestions.controleer(q, raw);
-  // Leerlingfeedback (2026-08-24): zelfde spiritus-only-detectie als bij de
-  // typed-greek-puzzels — dezelfde herkenbare fout verdient hier ook een
-  // gerichte hint i.p.v. de generieke q.uitleg.
-  const spiritusIsOnlyFout = !goed && q?.invoer==="typed-greek" && typeof spNormalizeGreekNoSpiritus==="function"
-    && spNormalizeGreekNoSpiritus(raw)===spNormalizeGreekNoSpiritus(q.antwoord);
-  spCombatVerwerkAntwoord(goed, SP_COMBAT.vorm, SP_COMBAT.vorm.id, spiritusIsOnlyFout);
+  // Leerlingfeedback (2026-08-24): zelfde spiritus/iota-subscriptum-only-
+  // detectie als bij de typed-greek-puzzels — dezelfde herkenbare fout
+  // verdient hier ook een gerichte hint i.p.v. de generieke q.uitleg.
+  const bijnaGoedHint = (!goed && q?.invoer==="typed-greek" && typeof spGreekBijnaGoedHint==="function")
+    ? spGreekBijnaGoedHint(raw, q.antwoord) : null;
+  spCombatVerwerkAntwoord(goed, SP_COMBAT.vorm, SP_COMBAT.vorm.id, bijnaGoedHint);
 }
 // Schermtoetsenbord-hulpjes voor getypt Grieks — hergebruiken de bestaande
 // puzzel-toetsen, maar op het combat-invoerveld.
@@ -3556,7 +3575,7 @@ function spCombatGreekModifier(type){
   if(map[last]) i.value = i.value.slice(0,-1) + map[last];
 }
 
-function spCombatVerwerkAntwoord(goed, vorm, vormId, spiritusIsOnlyFout){
+function spCombatVerwerkAntwoord(goed, vorm, vormId, bijnaGoedHint){
   const q = SP_COMBAT.question;
   // Leitner: fout → box 0 (opnieuw verdienen), goed → één box omhoog.
   if(q) CombatQuestions.noteerAntwoord(SP_STATE.mastery, q.masteryKey, goed);
@@ -3585,9 +3604,7 @@ function spCombatVerwerkAntwoord(goed, vorm, vormId, spiritusIsOnlyFout){
     // MICRO-ONDERWIJS (COMBAT_OVERHAUL.md D): een fout antwoord is nu een
     // leermoment in plaats van alleen een straf. De uitleg blijft op het
     // keuzescherm staan terwijl de speler zijn volgende zet kiest.
-    SP_COMBAT.uitleg = spiritusIsOnlyFout
-      ? "Bijna goed — alleen de spiritus (lenis ᾿ of asper ῾) klopt nog niet. Check of je die hebt gezet, het juiste teken gebruikt, en op de juiste lettergreep."
-      : (q ? q.uitleg : null);
+    SP_COMBAT.uitleg = bijnaGoedHint || (q ? q.uitleg : null);
     SP_COMBAT.laatsteFx = { speler:"evade" };
   }
 
