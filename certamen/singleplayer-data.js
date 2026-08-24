@@ -426,7 +426,7 @@ const SP_CAMPAIGN = [
     thema:"Wie de rekening betaalt — een schatkist, een leger, een hervorming — bepaalt uiteindelijk ook de macht; en fraude/corruptie is wat zelfs de machtigste rijken uiteindelijk breekt",
     illustratie:"De bouw van het Parthenon op de Akropolis / Marius' legioen in testudo-formatie / Sulla's legioenen bij de poorten van Rome / Sulla's terugtred naar het platteland",
     zijverhalen:"Spartacus (⭐⭐⭐⭐⭐) — nu structureel ingezet als slotscène van dit hoofdstuk: brug naar het Eerste Triumviraat (Pompeius' onterechte eer, Crassus' wrok, Caesars verzoening in H19)",
-    status:"GEBOUWD (2026-08-09, §7.69-7.70) EN GEKOPPELD aan de speelbare route (2026-08-10, §7.71, samen met Hoofdstuk 17). SP_CH18_CNS zit nu in SP_SCENES (singleplayer.js); CH17_MUSEUM_00 routeert naar CH18_000." },
+    status:"GEBOUWD (2026-08-09, §7.69-7.70) EN GEKOPPELD aan de speelbare route (2026-08-10, §7.71, samen met Hoofdstuk 17). SP_CH18_CNS zit nu in SP_SCENES (singleplayer.js); CH17_MUSEUM_00 routeert naar CH18_000. POST-BUILD AUDIT 2026-08-23: 4 puzzels (Grieks: dativus bij παρέχω, genitivus absolutus; Latijn: ablativus comparationis, A.C.I.), 2 leesvallen (Grieks: dativus possessivus τοῖς Ἀθηναίοις ἐστί; Latijn: ablativus absolutus militibus ... amittentibus) en 2 gevechten (naxos_afgescheidenen, senaatsknokploeg) toegevoegd — het hoofdstuk had er nul van alle drie." },
   { id:"ch19", nr:19, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Bondgenoten, Verscheurd",
     periode:"Peloponnesische Oorlog en nasleep, 431-362 v.Chr. / Caesars Burgeroorlog, 49-44 v.Chr.",
     verhaal:"Athene en Sparta — ooit samen tegen Perzië — verscheuren nu Griekenland zelf in een oorlog die tot ver na beide steden zelf zal doorwerken: de pest die Perikles het leven kost, de meedogenloze Melische dialoog, de rampzalige Siciliaanse expeditie, en uiteindelijk Sparta's overwinning, gevolgd door een kortstondige Thebaanse hegemonie onder Epaminondas. Aan de Latijnse kant hetzelfde patroon, ditmaal tussen twee mannen die ooit hetzelfde Eerste Triumviraat vormden: Caesar steekt de Rubicon over, breekt met zijn eigen medestander Pompeius, en verslaat hem bij Pharsalus — tot een dolksteek in de Senaat, op de Iden van maart, alles weer openbreekt.",
@@ -436,7 +436,7 @@ const SP_CAMPAIGN = [
     personages:"Thucydides, Perikles (dood), Socrates, Alkibiades, Nicias, Lysander, Critias, Xenofon (cameo), Epaminondas — Caesar, Pompeius, Crassus (dood bij Carrhae), Cicero, Cato, Brutus, Cassius, Servilia, Porcia, Sallustius (cameo), Marcus Antonius, Octavianus, Atia, Octavia",
     thema:"Bondgenoten die samen wonnen, blijken zelden bondgenoten te blijven zodra de gemeenschappelijke vijand verdwenen is",
     illustratie:"De pest van Athene / Carrhae, Crassus' ondergang / Caesar bij de Rubicon",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-10) — compleet: opening, gedeeld voortraject, alle vier vertakkingen (elk met permanente zijde-FLAG en RELATION-verschuivingen), alle payoff-cameo's (Thucydides/Xenofon/Sallustius/Servilia/Porcia/Antonius/Octavianus/Atia/Octavia), en de gedeelde afsluiting — 48 scènes totaal in SP_CH19_CNS. CH18_MUSEUM_00 routeert naar CH19_000; SP_SCENES (singleplayer.js) en validate_chronica.js's BLOCKS bevatten SP_CH19_CNS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-10) — compleet: opening, gedeeld voortraject, alle vier vertakkingen (elk met permanente zijde-FLAG en RELATION-verschuivingen), alle payoff-cameo's (Thucydides/Xenofon/Sallustius/Servilia/Porcia/Antonius/Octavianus/Atia/Octavia), en de gedeelde afsluiting — 48 scènes totaal in SP_CH19_CNS. CH18_MUSEUM_00 routeert naar CH19_000; SP_SCENES (singleplayer.js) en validate_chronica.js's BLOCKS bevatten SP_CH19_CNS. POST-BUILD AUDIT 2026-08-23: 4 puzzels (aoristus, βοηθέω + dativus, deponens secutus est, gerundium transeundi), 2 leesvallen (Grieks: ὑπό + genitivus bij een passieve aoristus; Latijn: timeo ne = 'vrezen dát') en 2 gevechten (korinthische_triere, parthische_boogschutters)." },
   { id:"ch20", nr:20, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Grenzen Verlegd",
     periode:"Hellenistische Tijd (336-323 v.Chr.) / Late Republiek (58-50 v.Chr.)",
     verhaal:"Een jonge koning trekt met zijn leger verder dan wie ook vóór hem, tot in de verste uithoeken van de bekende wereld. Generaties later doet een Romeinse generaal in Gallië — en, twee keer, zelfs op het mistige eiland Britannia — iets vergelijkbaars, en trekt uiteindelijk ook de Rijn over naar Germania: Caesar duwt de grenzen van de bekende wereld net zo ver op als Alexander ooit deed, en ontdekt dat wie de pen vasthoudt (zijn eigen Commentarii), ook de geschiedenis vormgeeft. **Dit is de laatste nieuwe Griekse grammatica van de hele campagne** — Pallas deel 2 is na Alexander uitgeput. HERNUMMERD 2026-08-09 (was Hoofdstuk 18) — het Romeinse leger als systeem is verhuisd naar Hoofdstuk 18 (Marius' eigen hervorming, historisch de juistere plek); hier blijft Caesars veldtocht zelf, nu inclusief zijn expedities naar Britannia.",
@@ -447,7 +447,7 @@ const SP_CAMPAIGN = [
     thema:"Eén mens die de kaart van de bekende wereld hertekent — met het zwaard, of met de pen",
     illustratie:"Alexander bij de Gordiaanse Knoop / Vercingetorix' overgave bij Alesia",
     zijverhalen:"Cicero — inmiddels een eigen hoofdstuk (H21), zie daar",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-11) — Griekse lijn (Philippus/Olympias/Aristoteles-Plato-relatie/Philippus' moord/Gordiaanse knoop/Darius III/Alexanders dood/Diadochen-Ptolemaeus-vooruitwijzing) en Latijnse lijn (Caesars schim/Kessel/Rijnoversteek/Britannia x2/Dumnorix-keuze/Ambiorix/Sabinus-Cotta-keuze/Vercingetorix/Alesia) compleet in SP_CH20_CNS, incl. payoff-echo's op ch19_gre_zijde/ch19_lat_zijde. CH19_MUSEUM_00 routeert naar CH20_000; SP_SCENES (singleplayer.js) en validate_chronica.js's BLOCKS bevatten SP_CH20_CNS. CH20_WORDT_VERVOLGD is het nieuwe tijdelijke speeltest-eindpunt (verplaatst vanuit CH19)." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-11) — Griekse lijn (Philippus/Olympias/Aristoteles-Plato-relatie/Philippus' moord/Gordiaanse knoop/Darius III/Alexanders dood/Diadochen-Ptolemaeus-vooruitwijzing) en Latijnse lijn (Caesars schim/Kessel/Rijnoversteek/Britannia x2/Dumnorix-keuze/Ambiorix/Sabinus-Cotta-keuze/Vercingetorix/Alesia) compleet in SP_CH20_CNS, incl. payoff-echo's op ch19_gre_zijde/ch19_lat_zijde. CH19_MUSEUM_00 routeert naar CH20_000; SP_SCENES (singleplayer.js) en validate_chronica.js's BLOCKS bevatten SP_CH20_CNS. CH20_WORDT_VERVOLGD is het nieuwe tijdelijke speeltest-eindpunt (verplaatst vanuit CH19). POST-BUILD AUDIT 2026-08-23: 4 puzzels (dativus instrumenti, imperfectum medium, ablativus absolutus, gerundivum), 2 leesvallen (Grieks: τῷ κρατίστῳ als dativus, niet genitivus; Latijn: ACP versus A.C.I.) en 2 gevechten (perzische_onsterfelijken, gallische_ontzettingsmacht)." },
   { id:"ch21", nr:21, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Wijsheid en Waarheid",
     periode:"Klassiek Athene, ca. 470-322 v.Chr. / Late Republiek, ca. 106-43 v.Chr.",
     verhaal:"Socrates stelt vragen tot de stad hem ter dood veroordeelt; zijn leerling Plato beschrijft een grot vol schaduwen om uit te leggen wat echte kennis is; diens eigen leerling Aristoteles wordt uiteindelijk de leermeester van Alexander zelf (Hoofdstuk 20) — drie generaties die samen bepalen wat 'weten' betekent. In Rome doet Cicero, generaties later, iets vergelijkbaars in het Latijn: hij vertaalt en verwerkt precies deze Griekse filosofie voor een Romeins publiek, terwijl hij in de Senaat zijn eigen gevecht voert voor waarheid tegen corruptie en samenzwering. Zijn jongere tijdgenoot Seneca zet die Stoïcijnse traditie voort — en keert zelf terug als personage wanneer hij, jaren later, Nero's leermeester wordt (Hoofdstuk 23): een payoff die pas daar volledig samenkomt.",
@@ -457,7 +457,7 @@ const SP_CAMPAIGN = [
     personages:"Socrates, Plato, Aristoteles, Xanthippe, Diotima, Crito — Cicero, Catilina, Verres, Tullia, Terentia, Seneca (cameo, jong — payoff in H23)",
     thema:"Wijsheid overleeft de denker zelf alleen als iemand anders hem doorvertelt — in een andere taal, aan een ander publiek",
     illustratie:"Socrates drinkt de gifbeker / Cicero spreekt de Senaat toe tegen Catilina",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-14) — eerste concept door Gemini geschreven en door Claude verwerkt/gecontroleerd (zie Chronica.md §7.84 e.v.): echte vertakking bij de Socrates-stemming (Crito/aanklagers), Diotima, Xanthippe en Terentia toegevoegd, Athena/Minerva als gastverteller. CH20_MUSEUM_00 routeert naar CH21_000; SP_SCENES/BLOCKS bevatten SP_CH21_CNS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-14) — eerste concept door Gemini geschreven en door Claude verwerkt/gecontroleerd (zie Chronica.md §7.84 e.v.): echte vertakking bij de Socrates-stemming (Crito/aanklagers), Diotima, Xanthippe en Terentia toegevoegd, Athena/Minerva als gastverteller. CH20_MUSEUM_00 routeert naar CH21_000; SP_SCENES/BLOCKS bevatten SP_CH21_CNS. POST-BUILD AUDIT 2026-08-23: 4 puzzels (οὐδέν als lijdend voorwerp, περί + genitivus, perfectum passief coactus est, ut-finalis) en 2 leesvallen (Grieks: dativus bij ὀφείλομεν; Latijn: abutere als deponens-futurum in Cicero's Catilinaria). Bewust geen gevecht — dit is het filosofiehoofdstuk." },
   { id:"ch22", nr:22, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Opvolgers tegenover Opvolgers",
     periode:"Diadochenoorlogen, 322-301 v.Chr. / Tweede Triumviraat, 43-31 v.Chr.",
     verhaal:"Meteen na Alexanders dood verscheuren zijn eigen generaals, ooit zijn trouwste bondgenoten, zijn rijk in de Diadochenoorlogen. Generaties later, aan de Latijnse kant, hetzelfde patroon tussen Caesars eigen erfgenamen: Antonius, Octavianus en Lepidus verdelen de macht in een Tweede Triumviraat dat, net als Alexanders generaals voor hen, gedoemd is elkaar op te eten. GECORRIGEERD 2026-08-09 (Gerbens verzoek): niet langer gekoppeld aan Gracchen/Marius-Sulla (verhuisd naar Hoofdstuk 18, chronologisch vóór Caesar) — het thema is nu zuiver 'opvolgers die onderling vechten', aan beide kanten letterlijk de eigen opvolgers van de vorige hoofdrolspeler (Alexander resp. Caesar).",
@@ -466,7 +466,7 @@ const SP_CAMPAIGN = [
     gameplay:"Politieke/militaire keuzes: verdelen van Alexanders rijk onder rivaliserende generaals (Griekse lijn) / een machtsverdeling die vanaf het begin instabiel is (Latijnse lijn) — beide lijnen spiegelen elkaar: opvolgers die elkaar verscheuren",
     personages:"Perdikkas, Antigonos, Ptolemaeus, Seleukos, Kassandros (Diadochen) — Marcus Antonius, Octavianus, Lepidus, Fulvia, Octavia, Cleopatra, Caesarion, Agrippa, Maecenas, Vergilius",
     illustratie:"Alexanders rijk uiteenvallend op de kaart / het Tweede Triumviraat verdeelt de wereldkaart",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-14) — eerste concept door Gemini geschreven en door Claude verwerkt/gecontroleerd (zie Chronica.md §7.85 e.v.): echte zijde-keuzes (Ptolemaeus/Antigonos, Octavianus/Antonius), Fulvia/Octavia/Cleopatra met diepgang, Caesarion gepitcht. CH21_MUSEUM_00 routeert naar CH22_000; SP_SCENES/BLOCKS bevatten SP_CH22_CNS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-14) — eerste concept door Gemini geschreven en door Claude verwerkt/gecontroleerd (zie Chronica.md §7.85 e.v.): echte zijde-keuzes (Ptolemaeus/Antigonos, Octavianus/Antonius), Fulvia/Octavia/Cleopatra met diepgang, Caesarion gepitcht. CH21_MUSEUM_00 routeert naar CH22_000; SP_SCENES/BLOCKS bevatten SP_CH22_CNS. POST-BUILD AUDIT 2026-08-23: 4 puzzels (aoristus medium, futurum medium, gerundivum-congruentie, plusquamperfectum passief), 2 leesvallen (Grieks: medium ἐφοβοῦντο met ἀλλήλους; Latijn: participiumcongruentie in patria saepe servata) en 2 gevechten (nijlkrokodillen bij de mislukte Nijloversteek, proscriptie_sluipmoordenaars)." },
   { id:"ch23", nr:23, boek:"IV — Rome Verrijst", type:"hoofdstuk", nm:"Vrede en Vergankelijkheid",
     periode:"Vroege Keizertijd (27 v.Chr. - 68 n.Chr.) / Slag bij Actium, 31 v.Chr.",
     verhaal:"Onder Augustus keert de vrede terug — en een dichter genaamd Vergilius begint aan een episch gedicht dat Rome's oorsprong voor altijd zal verbinden met de val van Troje. Later, onder Nero, blijkt hoe snel die vrede weer kan omslaan — zijn vroegere leermeester Seneca (cameo uit Hoofdstuk 21) probeert hem nog bij te sturen, tevergeefs. Aan de Griekse kant precies dezelfde overwinning van de andere kant bekeken: bij Actium verslaat de latere Augustus Cleopatra VII, laatste telg van de Ptolemaeën (zelf afstammelingen van een van Alexanders eigen generaals) — het moment waarop het laatste onafhankelijke Griekse rijk definitief in Rome opgaat.",
@@ -476,7 +476,7 @@ const SP_CAMPAIGN = [
     personages:"Augustus, Livius, Vergilius, Ovidius, Nero, Tiberius, Caligula, Claudius, Seneca (payoff uit H21) — Cleopatra VII, Marcus Antonius, Octavia, Caesarion",
     illustratie:"Augustus bij Alexanders graf / Nero en de Domus Aurea — Cleopatra en Antonius bij Actium",
     zijverhalen:"Pygmalion (Ovidius, Metamorphosen X) — verteld als verhaal-in-een-verhaal. Eros & Psyche BEWUST NIET gebouwd: dat is Apuleius (2e eeuw n.Chr.), anachronistisch voor dit Augusteïsche hoofdstuk.",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-14) — door Claude geschreven (geen Gemini-concept). Livius als gastverteller (niet Vergilius, die gereserveerd blijft voor de Aeneis/Troje-callback), keizersgalerij Tiberius/Caligula/Claudius toegevoegd (vulde een gat — H26 begint pas bij de Flavii), Actium verteld met de Hoofdstuk-9-Troje-truc (twee kanten van dezelfde slag), 'beide talen' ziet alles chronologisch dooreen i.p.v. eerst alle Grieks dan alle Latijn. CH22_MUSEUM_00 routeert naar CH23_000; CH23_WORDT_VERVOLGD is het nieuwe, laatste tijdelijke speeltest-eindpunt. SP_SCENES/BLOCKS bevatten SP_CH23_CNS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-14) — door Claude geschreven (geen Gemini-concept). Livius als gastverteller (niet Vergilius, die gereserveerd blijft voor de Aeneis/Troje-callback), keizersgalerij Tiberius/Caligula/Claudius toegevoegd (vulde een gat — H26 begint pas bij de Flavii), Actium verteld met de Hoofdstuk-9-Troje-truc (twee kanten van dezelfde slag), 'beide talen' ziet alles chronologisch dooreen i.p.v. eerst alle Grieks dan alle Latijn. CH22_MUSEUM_00 routeert naar CH23_000; CH23_WORDT_VERVOLGD is het nieuwe, laatste tijdelijke speeltest-eindpunt. SP_SCENES/BLOCKS bevatten SP_CH23_CNS. POST-BUILD AUDIT 2026-08-23: Minerva 24 was tot deze ronde ALLEEN metadata — N.C.I., semi-deponentia, transitief/intransitief en de vraagpartikels kwamen nergens in het gebouwde spel voor. Nu: 5 grammatica-codexentries (vier losse plus een overzicht, ontgrendeld op CH23_LAT_001 resp. CH23_LAT_EINDE, met SP_PATCHES-migratie h23-minerva24-grammatica voor lopende saves), 3 Latijnse puzzels (N.C.I., ausus est, num), 2 Griekse herhalingspuzzels, 2 leesvallen (Latijn: nonne versus num op Seneca's sterfbed; Grieks: medium-futurum οὐ θριαμβεύσομαι) en 2 gespiegelde Actium-gevechten (agrippas_vloot, antonius_vloot)." },
   { id:"ch24", nr:24, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Steen en Water",
     periode:"Klassieke/Hellenistische kunst, 5e-2e eeuw v.Chr. / Vroege Keizertijd, technologisch",
     verhaal:"Terug bij het Museum van Mnemosyne (zie Hoofdstuk 6) laat de Boodschapper zien hoe Grieken en Romeinen hun beschaving letterlijk vormgaven: de Dorische, Ionische en Korinthische zuilorden, van archaïsche kouros tot Polykleitos' contrapost tot de dramatische Hellenistische beeldhouwkunst (de Laocoöngroep, Venus van Milo, Nike van Samothrace) — en aan Romeinse kant de technische doorbraken die dat allemaal overtroffen: de boog, het gewelf, de koepel, opus caementicium, het aquaduct, de rechte Romeinse weg.",
@@ -486,7 +486,7 @@ const SP_CAMPAIGN = [
     personages:"Athena (cameo), Phidias (cameo, terugkerend uit H18), Polykleitos, Praxiteles — Vitruvius (cameo, vooruitwijzend naar zijn eigen hoofdrol in H25)",
     thema:"Hoe een beschaving zich letterlijk, in steen, vormgeeft",
     illustratie:"Het Parthenon-fries / een Romeins aquaduct over een vallei",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). Nieuw mechanisme: bij elk kunstwerk/bouwwerk een 'onthoud of laat los'-keuze (Kolossus van Rhodos, Nike/Venus, Ara Pacis, etc.) die een eigen FLAG zet, bedoeld als stille, naamloze opmaat naar Hoofdstuk 28/29 (Lethe/Mnemosyne, zie Chronica.md §7.90 en de RELATION/FLAG-roster-memory) — nog GEEN payoff, dat komt pas daar. Callbacks: Phidias (H18), de Kolossus van Rhodos (H22/Demetrios), de Ara Pacis (H23/Augustus), Vitruvius' drieslag (gekoppeld aan Robur/Ingenium/Gratia). CH23_MUSEUM_00 routeert naar CH24_000; SP_SCENES/BLOCKS bevatten SP_CH24_CNS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). Nieuw mechanisme: bij elk kunstwerk/bouwwerk een 'onthoud of laat los'-keuze (Kolossus van Rhodos, Nike/Venus, Ara Pacis, etc.) die een eigen FLAG zet, bedoeld als stille, naamloze opmaat naar Hoofdstuk 28/29 (Lethe/Mnemosyne, zie Chronica.md §7.90 en de RELATION/FLAG-roster-memory) — nog GEEN payoff, dat komt pas daar. Callbacks: Phidias (H18), de Kolossus van Rhodos (H22/Demetrios), de Ara Pacis (H23/Augustus), Vitruvius' drieslag (gekoppeld aan Robur/Ingenium/Gratia). CH23_MUSEUM_00 routeert naar CH24_000; SP_SCENES/BLOCKS bevatten SP_CH24_CNS. POST-BUILD AUDIT 2026-08-23: 4 puzzels (superlativus, genitivus comparationis, accusativus van richting bij een stadsnaam, congruentie met een onzijdig aedificium) en 2 leesvallen (Grieks: ὁ μέν ... ὁ δέ als 'de een ... de ander' op een pottenbakkerssignatuur; Latijn: ingesloten antecedent quem lapidem ... is). Geen gevecht — kunsthoofdstuk." },
   { id:"ch25", nr:25, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Onder de Vulkaan",
     periode:"Presocratische filosofie t/m Hellenistische wetenschap, 6e-3e eeuw v.Chr. / Pompeii, tot 79 n.Chr.",
     verhaal:"Al vóór Socrates zoeken Thales, Anaximander en de andere presocraten naar de oerstof van de wereld zonder op de goden terug te vallen — de wortel van al het Griekse wetenschappelijke denken. Generaties later meten Eratosthenes de omtrek van de aarde en Archimedes de wetten van drijven en hefbomen in de Bibliotheek van Alexandrië — de Griekse wereld op haar wetenschappelijke hoogtepunt. Eeuwen later, aan de voet van de Vesuvius, bewijst diezelfde natuur waarom kennis nooit compleet is: Plinius de Jongere ziet vanaf de overkant van de golf hoe Pompeii en Herculaneum in een dag onder as verdwijnen — en zijn oom, Plinius de Oudere, sterft terwijl hij de uitbarsting probeert te bestuderen. UITGEBREID 2026-08-09 (Gerbens verzoek): de presocraten (Thales/Anaximander/Heraclitus/Pythagoras/Democritus) zijn toegevoegd als vroege wortel van het Griekse wetenschappelijke denken, als korte proloog vóór de eigenlijke Hellenistische wetenschap.",
@@ -496,7 +496,7 @@ const SP_CAMPAIGN = [
     personages:"Thales, Anaximander, Anaximenes, Pythagoras, Herakleitos, Parmenides, Anaxagoras, Demokritos (alle acht presocraten) — Euclides, Eratosthenes, Archimedes — Vitruvius (terugkerend uit H24) — Plinius de Oudere, Plinius de Jongere, Seneca (cameo)",
     thema:"Kennis verklaart de wereld — tot de wereld iets doet waar niemand op voorbereid was",
     illustratie:"Archimedes in zijn bad ('heureka') / de aswolk boven Pompeii",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). Op Gerbens verzoek: focus verschoven van pure verhaalkeuzes naar LEESVALLEN (Herakleitos' rivier-fragment, Eratosthenes' schaduwhoek, het Pompeii-graffito 'si vales, valeo'), alle acht presocraten benoemd (niet alleen de vijf uit de oude planningstekst), Vitruvius keert non-lineair terug (zelfde flashback-truc als Archimedes' eigen bad-scène) met een driewegs-payoff van H24's firmitas/utilitas/venustas-keuze (nieuwe SP_PAYOFFS-entries op CH25_LAT_001). De aardbeving van 62 n.Chr. is expliciet aan Nero's regeerperiode gekoppeld via Seneca's Naturales Quaestiones — Nero regeerde niet meer tijdens de uitbarsting van 79 (dat was Titus), dat onderscheid is bewust bewaard. TECHNISCHE CORRECTIE t.o.v. het eerste voorstel: niet het RACE-mechanisme (Atalanta-specifieke code) maar het generieke CHECK-mechanisme (SP_CHECKS.ch25_lat_vlucht) geeft de 'vlucht door de as'-spanning. Twee nieuwe Lethe/Mnemosyne-zaadjes (namen nog steeds niet genoemd): de Boodschapper reageert opvallend stil op Plinius' brief, en een nieuwe 'onthoud of laat los'-FLAG (`ch25_lat_plinius`) sluit aan bij de reeks die in H24 begon. CH24_MUSEUM_00 routeert naar CH25_000; SP_SCENES/BLOCKS bevatten SP_CH25_CNS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). Op Gerbens verzoek: focus verschoven van pure verhaalkeuzes naar LEESVALLEN (Herakleitos' rivier-fragment, Eratosthenes' schaduwhoek, het Pompeii-graffito 'si vales, valeo'), alle acht presocraten benoemd (niet alleen de vijf uit de oude planningstekst), Vitruvius keert non-lineair terug (zelfde flashback-truc als Archimedes' eigen bad-scène) met een driewegs-payoff van H24's firmitas/utilitas/venustas-keuze (nieuwe SP_PAYOFFS-entries op CH25_LAT_001). De aardbeving van 62 n.Chr. is expliciet aan Nero's regeerperiode gekoppeld via Seneca's Naturales Quaestiones — Nero regeerde niet meer tijdens de uitbarsting van 79 (dat was Titus), dat onderscheid is bewust bewaard. TECHNISCHE CORRECTIE t.o.v. het eerste voorstel: niet het RACE-mechanisme (Atalanta-specifieke code) maar het generieke CHECK-mechanisme (SP_CHECKS.ch25_lat_vlucht) geeft de 'vlucht door de as'-spanning. Twee nieuwe Lethe/Mnemosyne-zaadjes (namen nog steeds niet genoemd): de Boodschapper reageert opvallend stil op Plinius' brief, en een nieuwe 'onthoud of laat los'-FLAG (`ch25_lat_plinius`) sluit aan bij de reeks die in H24 begon. CH24_MUSEUM_00 routeert naar CH25_000; SP_SCENES/BLOCKS bevatten SP_CH25_CNS. POST-BUILD AUDIT 2026-08-23: 4 puzzels toegevoegd (genitivus bij ἀρχή, onzijdig meervoud met enkelvoudig werkwoord, A.C.I. in Plinius' brief, dum + praesens)." },
   { id:"ch26", nr:26, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Een Rijk in Crisis",
     periode:"Flavische dynastie t/m Crisis van de Derde Eeuw, 69-284 n.Chr.",
     verhaal:"Na Nero's dood strijden vier keizers in één jaar om de troon (het Vierkeizerjaar), tot de Flavii (Vespasianus, Titus, Domitianus) orde herstellen en het Colosseum bouwen — vlak nadat in Germania Inferior de Bataven onder Julius Civilis in opstand komen, een opstand die Tacitus zelf beschrijft. Daarna volgen de 'adoptiefkeizers' Nerva, Trajanus (grootste omvang van het rijk) en Hadrianus (zijn muur, zijn liefde voor Griekenland), Antoninus Pius en Marcus Aurelius (de filosoof-keizer, Stoïcijn) — tot Commodus alles laat afglijden: eerst het Vijfkeizerjaar (193 n.Chr., na Pertinax' korte, mislukte bewind), dan de Severische dynastie (Septimius Severus, Caracalla, Geta, Elagabalus), en uiteindelijk de chaos van de Derde-Eeuwse Crisis met wisselende soldatenkeizers, tot Aurelianus ('restitutor orbis') het rijk weer grotendeels bijeenhoudt — vlak voor Diocletianus (Hoofdstuk 27) de crisis definitief bezweert. UITGEBREID 2026-08-15 (Gerbens verzoek): volledige keizerslijst van Vespasianus t/m Aurelianus nu benoemd, ook de figuren die maar kort aangestipt worden (Titus, Domitianus, Antoninus Pius, Pertinax, Geta, Elagabalus) — niet alleen de acht die een eigen scène/vignet krijgen (Vespasianus, Nerva, Trajanus, Hadrianus, Marcus Aurelius, Commodus, Septimius Severus, Caracalla).",
@@ -506,7 +506,7 @@ const SP_CAMPAIGN = [
     personages:"Hadrianus (Griekse lijn) — Vespasianus, Titus, Domitianus, Nerva, Trajanus, Hadrianus, Antoninus Pius, Marcus Aurelius, Commodus, Pertinax, Septimius Severus, Caracalla, Geta, Elagabalus, Aurelianus, Julius Civilis, Tacitus (cameo, bronvermelding)",
     thema:"Een rijk op zijn grootst is ook een rijk met de meeste manieren om uiteen te vallen",
     illustratie:"Het Colosseum in aanbouw / Hadrianus' Muur in de Britse mist / Julius Civilis en de Bataven",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). 29 scènes: Griekse lijn (Hadrianus/Panhellenion/Athene/Olympia met leesval/Delphi) en Latijnse lijn (Vierkeizerjaar → Vespasianus met 'pecunia non olet'-leesval → Titus/Domitianus → Bataafse Opstand met COMBAT-bridge (nieuwe vijand `bataven`) → Nerva/Trajanus (Plinius-callback naar H25) → Hadrianus-kruisverwijzing/Antoninus Pius → Marcus Aurelius (nieuwe RELATION, Stoïcijnse keuzescène, SP_PAYOFFS-echo's naar Cicero/Seneca) → Commodus → Pertinax/Vijfkeizerjaar → Septimius Severus → Caracalla/Constitutio Antoniniana/Geta/Elagabalus → Derde-Eeuwse Crisis/Aurelianus). Kaart-herkenning geïmplementeerd als CNS-hub-en-vignetten i.p.v. letterlijke SP_MAP_LOCATIONS-pin-integratie (zie code-commentaar bij SP_CH26_CNS). 14 nieuwe CODEX-entries, 1 nieuwe COMBAT-vijand, 1 nieuw souvenir (`souvenir_rijk_in_crisis`), 20 signaalwoorden (H26-kandidatenlijst uit VOCAB_UITBREIDING.md). CH25_MUSEUM_00 routeert naar CH26_000; CH26_MUSEUM_00 routeert door naar CH27_000 (bijgewerkt 2026-08-18, toen H27 gekoppeld werd — het tijdelijke CH26_WORDT_VERVOLGD-eindpunt is verwijderd). SP_SCENES/BLOCKS bevatten SP_CH26_CNS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-15) — door Claude geschreven (geen Gemini-concept). 29 scènes: Griekse lijn (Hadrianus/Panhellenion/Athene/Olympia met leesval/Delphi) en Latijnse lijn (Vierkeizerjaar → Vespasianus met 'pecunia non olet'-leesval → Titus/Domitianus → Bataafse Opstand met COMBAT-bridge (nieuwe vijand `bataven`) → Nerva/Trajanus (Plinius-callback naar H25) → Hadrianus-kruisverwijzing/Antoninus Pius → Marcus Aurelius (nieuwe RELATION, Stoïcijnse keuzescène, SP_PAYOFFS-echo's naar Cicero/Seneca) → Commodus → Pertinax/Vijfkeizerjaar → Septimius Severus → Caracalla/Constitutio Antoniniana/Geta/Elagabalus → Derde-Eeuwse Crisis/Aurelianus). Kaart-herkenning geïmplementeerd als CNS-hub-en-vignetten i.p.v. letterlijke SP_MAP_LOCATIONS-pin-integratie (zie code-commentaar bij SP_CH26_CNS). 14 nieuwe CODEX-entries, 1 nieuwe COMBAT-vijand, 1 nieuw souvenir (`souvenir_rijk_in_crisis`), 20 signaalwoorden (H26-kandidatenlijst uit VOCAB_UITBREIDING.md). CH25_MUSEUM_00 routeert naar CH26_000; CH26_MUSEUM_00 routeert door naar CH27_000 (bijgewerkt 2026-08-18, toen H27 gekoppeld werd — het tijdelijke CH26_WORDT_VERVOLGD-eindpunt is verwijderd). SP_SCENES/BLOCKS bevatten SP_CH26_CNS. POST-BUILD AUDIT 2026-08-23: 4 puzzels toegevoegd (aoristus passief ἐτελέσθη, οὐκέτι, infinitivus futuri fore, facti sunt als perfectum van fio)." },
   { id:"ch27", nr:27, boek:"V — Erfenis van een Rijk", type:"hoofdstuk", nm:"Kruis en Kroon",
     periode:"Tetrarchie t/m val van West-Rome, 284-476 n.Chr. (met een korte blik vooruit naar Justinianus, 6e eeuw)",
     verhaal:"Diocletianus splitst het bestuur van het rijk in een Tetrarchie om de crisis te bezweren; Constantijn wint uiteindelijk alleen de macht, erkent het christendom met het Edict van Milaan, en sticht een nieuwe hoofdstad op oud-Griekse bodem: Byzantium wordt Constantinopel, en het zwaartepunt van het rijk verschuift voorgoed naar het Griekstalige Oosten. Onder Theodosius wordt het christendom staatsgodsdienst en splitst het rijk definitief in twee helften — tot het West-Romeinse Rijk in 476 n.Chr. zijn laatste keizer verliest, terwijl in het Oosten, generaties later, Justinianus I en Theodora Constantinopel nog verder laten uitgroeien tot wat ooit het Byzantijnse Rijk zal heten. UITGEBREID 2026-08-09 (Gerbens verzoek): Justinianus/Theodora toegevoegd aan de Griekse lijn als vooruitblik; het hoofdstuk krijgt de scène-voor-scène ZIGZAG-opzet (zoals Hoofdstuk 10/15) in plaats van twee losse, sequentiële lijnen — de twee kanten van hetzelfde rijk worden zo letterlijk om en om beleefd. UITGEBREID 2026-08-15 (Gerbens verzoek): het hoofdstuk opent niet met Diocletianus die de Tetrarchie al kant-en-klaar presenteert, maar met de speler die MEEDENKT over hoe je een rijk bestuurt dat te groot is voor één man — een kort keuze-/redeneermoment vóór Diocletianus zelf zijn eigen oplossing onthult, zodat de Tetrarchie aanvoelt als iets dat de speler mee heeft helpen bedenken, niet als een dictaat.",
@@ -516,7 +516,7 @@ const SP_CAMPAIGN = [
     personages:"Diocletianus, Constantijn de Grote, Theodosius, Romulus Augustulus (laatste West-Romeinse keizer) — Justinianus I, Theodora (gedeelde coda, alle taalsporen)",
     thema:"Het einde van het ene rijk is, op dezelfde plek net iets verderop, het begin van iets nieuws",
     illustratie:"Constantijn bij het Edict van Milaan / de laatste keizerskroon van West-Rome, leeg op een troon / Justinianus en Theodora in Constantinopel",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-16, gekoppeld 2026-08-18) — door Claude geschreven (geen Gemini-concept). 36 scènes, echte scène-voor-scène ZIGZAG: elke LAT_00X/GRE_00X-scène (X=1-6) heeft een REQUIRE-gestuurde kruising naar de parallelle scène (zelfde patroon als CH10/CH15/CH23). Kernstuk: de Slag bij de Milvische Brug tweemaal verteld, met TWEE gespiegelde leesvallen — Latijn (Lactantius: een droom 's nachts) en Grieks (Eusebius: een visioen op klaarlichte dag) — onmiddellijk na elkaar voor 'beide'-spelers. Twee H26-payoffs verwerkt: Theodosius verbiedt de Olympische Spelen én sluit het orakel van Delphi (met een stille reactie van de Boodschapper, terugverwijzend naar CH26_GRE_004). Diocletianus' Tetrarchie-opening is nu een co-design-moment (drie keuzes, speler denkt eerst zelf na, flavour-only FLAG). Een bewust NIET-authentiek, zelf verzonnen Latijns waarschuwingsmoment ('Mons iter non tutum est; viam cape!') vóór de val van Rome, op Gerbens uitdrukkelijk verzoek — geen grammaticale leesval, puur sfeer/keuze. De Nika-opstand (532) krijgt een CHECK (`ch27_gre_nika_opstand`, agilitas dc16) met bewust filmisch/gespannen taalgebruik. CORRECTIE (2026-08-16, Gerbens feedback): Justinianus/Theodora/de Nika-opstand zijn NIET Grieks-exclusief — ook Latijnse spelers zien deze coda, want 'dit is ook voor hen leerstof'. Na de val van Rome (CH27_LAT_006_EINDE) routeert iedereen onvoorwaardelijk door naar CH27_GRE_006; de losse CH27_LAT_EINDE-scène is daarmee vervallen. Het niet-symmetrische element blijft alleen bestaan in de twee taalspoor-exclusieve Milvische-Brug-leesvallen (LAT ziet de Latijnse versie niet de Griekse, en omgekeerd). Nieuwe registry: 13 CODEX-entries, 1 nieuwe SP_CHECKS-entry, 1 nieuw souvenir, 20 signaalwoorden. SP_SCENES/BLOCKS bevatten SP_CH27_CNS." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-16, gekoppeld 2026-08-18) — door Claude geschreven (geen Gemini-concept). 36 scènes, echte scène-voor-scène ZIGZAG: elke LAT_00X/GRE_00X-scène (X=1-6) heeft een REQUIRE-gestuurde kruising naar de parallelle scène (zelfde patroon als CH10/CH15/CH23). Kernstuk: de Slag bij de Milvische Brug tweemaal verteld, met TWEE gespiegelde leesvallen — Latijn (Lactantius: een droom 's nachts) en Grieks (Eusebius: een visioen op klaarlichte dag) — onmiddellijk na elkaar voor 'beide'-spelers. Twee H26-payoffs verwerkt: Theodosius verbiedt de Olympische Spelen én sluit het orakel van Delphi (met een stille reactie van de Boodschapper, terugverwijzend naar CH26_GRE_004). Diocletianus' Tetrarchie-opening is nu een co-design-moment (drie keuzes, speler denkt eerst zelf na, flavour-only FLAG). Een bewust NIET-authentiek, zelf verzonnen Latijns waarschuwingsmoment ('Mons iter non tutum est; viam cape!') vóór de val van Rome, op Gerbens uitdrukkelijk verzoek — geen grammaticale leesval, puur sfeer/keuze. De Nika-opstand (532) krijgt een CHECK (`ch27_gre_nika_opstand`, agilitas dc16) met bewust filmisch/gespannen taalgebruik. CORRECTIE (2026-08-16, Gerbens feedback): Justinianus/Theodora/de Nika-opstand zijn NIET Grieks-exclusief — ook Latijnse spelers zien deze coda, want 'dit is ook voor hen leerstof'. Na de val van Rome (CH27_LAT_006_EINDE) routeert iedereen onvoorwaardelijk door naar CH27_GRE_006; de losse CH27_LAT_EINDE-scène is daarmee vervallen. Het niet-symmetrische element blijft alleen bestaan in de twee taalspoor-exclusieve Milvische-Brug-leesvallen (LAT ziet de Latijnse versie niet de Griekse, en omgekeerd). Nieuwe registry: 13 CODEX-entries, 1 nieuwe SP_CHECKS-entry, 1 nieuw souvenir, 20 signaalwoorden. SP_SCENES/BLOCKS bevatten SP_CH27_CNS. POST-BUILD AUDIT 2026-08-23: 4 puzzels (μεταξύ + genitivus, perfectum γέγραπται, ablativus van tijdstip, imperativus cape) en een gevecht met de visigoten op de bergpasroute — wie de veilige weg langs de rivier kiest, ontloopt het." },
 
   // ---- Hoofdstuk 28-29 + Finale: de ontknoping (Gerbens akkoord
   // 2026-08-02, vervangt de oude drieluik Mnemosyne/Lethe/Finale qua
@@ -531,7 +531,7 @@ const SP_CAMPAIGN = [
     grammatica:"Herhaling van alle grammatica, PER taalspoor gescheiden (Gerbens correctie 2026-08-16: geen gemengd Grieks/Latijn — leerlingen die één taal kozen, hebben de helft van de andere grammatica nooit gehad). Wél doorlopen alle drie de sporen dezelfde vleugel-volgorde.",
     personages:"Mnemosyne, de Boodschapper van Chronos/Pamphile van Epidaurus, Athena, Hermes, Lethe (eerste verschijning)",
     zijverhalen:"Narcissus & Echo (A-tier) als tekstuele (niet-auditieve) fragment-reconstructiepuzzel, zodat leerlingen dit stil in de les kunnen spelen; eerste hints van De Titanenstrijd (S-tier, Kronos/Chronos raken hier voor het eerst 'per ongeluk' door elkaar), die in de Finale terugkeert",
-    status:"GEBOUWD EN GEKOPPELD (2026-08-16, gekoppeld 2026-08-18) — door Claude geschreven (geen Gemini-concept). 42 scènes. Niet-lineaire hub-structuur (zelfde patroon als H24's museum, [DONE:vlag]) met vier vrij te bezoeken vleugels — 'De Weg Hierheen' (H1-6-aggregaat, cultuurneutraal), 'Wat Je Koos te Bewaren' (H24/H25-onthoud-of-laat-los-reeks, taalspoor-gated), 'Mensen die Je Onthield' (NPC-herkenning/politieke scheuren/mythologische afsluitingen H15-21, taalspoor-gated), 'Stemmen die Nooit Zwegen' (RELATION-payoffs: Athena Grieks, Stoïcijnse lijn+Hadrianus Latijn). Volgorde-tracking: `ch28_eerste_vleugel`/`ch28_laatste_vleugel` onthouden welke vleugel als eerste/laatste werd voltooid, leesbaar door toekomstige hoofdstukken. Cameo van Pamphile retroactief toegevoegd aan Hoofdstuk 23 (CH23_LAT_011B, al gekoppeld/live) als voorwaarde voor deze onthulling. SP_SCENES/BLOCKS bevatten SP_CH28_CNS. VISUELE PLATTEGROND TOEGEVOEGD (2026-08-21, Gerbens verzoek): CH28_HUB heeft nu een `MAP:`-sectie i.p.v. alleen tekstknoppen — spRenderMapHub (singleplayer.js) toont ch28_museum_map.png met vijf klikbare pins (vier vleugels + het hart), gekoppeld via SP_HUB_MAPS.ch28_hub (singleplayer-data.js). Zelfde onderliggende [DONE:]/[REQUIRE:]-brondata en dezelfde klik-handlers als de tekstversie (nieuwe gedeelde helper spChoiceOnclickAttr) — een voltooide vleugel toont een dof vinkje-pin i.p.v. te navigeren, exact als voorheen. Generiek genoeg (MAP:-sectie + SP_HUB_MAPS-lookup) om later ook op andere niet-lineaire hubs (H2/H6/H15/H24) toegepast te worden, mocht daar ooit een kaart voor komen." },
+    status:"GEBOUWD EN GEKOPPELD (2026-08-16, gekoppeld 2026-08-18) — door Claude geschreven (geen Gemini-concept). 42 scènes. Niet-lineaire hub-structuur (zelfde patroon als H24's museum, [DONE:vlag]) met vier vrij te bezoeken vleugels — 'De Weg Hierheen' (H1-6-aggregaat, cultuurneutraal), 'Wat Je Koos te Bewaren' (H24/H25-onthoud-of-laat-los-reeks, taalspoor-gated), 'Mensen die Je Onthield' (NPC-herkenning/politieke scheuren/mythologische afsluitingen H15-21, taalspoor-gated), 'Stemmen die Nooit Zwegen' (RELATION-payoffs: Athena Grieks, Stoïcijnse lijn+Hadrianus Latijn). Volgorde-tracking: `ch28_eerste_vleugel`/`ch28_laatste_vleugel` onthouden welke vleugel als eerste/laatste werd voltooid, leesbaar door toekomstige hoofdstukken. Cameo van Pamphile retroactief toegevoegd aan Hoofdstuk 23 (CH23_LAT_011B, al gekoppeld/live) als voorwaarde voor deze onthulling. SP_SCENES/BLOCKS bevatten SP_CH28_CNS. VISUELE PLATTEGROND TOEGEVOEGD (2026-08-21, Gerbens verzoek): CH28_HUB heeft nu een `MAP:`-sectie i.p.v. alleen tekstknoppen — spRenderMapHub (singleplayer.js) toont ch28_museum_map.png met vijf klikbare pins (vier vleugels + het hart), gekoppeld via SP_HUB_MAPS.ch28_hub (singleplayer-data.js). Zelfde onderliggende [DONE:]/[REQUIRE:]-brondata en dezelfde klik-handlers als de tekstversie (nieuwe gedeelde helper spChoiceOnclickAttr) — een voltooide vleugel toont een dof vinkje-pin i.p.v. te navigeren, exact als voorheen. Generiek genoeg (MAP:-sectie + SP_HUB_MAPS-lookup) om later ook op andere niet-lineaire hubs (H2/H6/H15/H24) toegepast te worden, mocht daar ooit een kaart voor komen. POST-BUILD AUDIT 2026-08-23: het hoofdstuk belooft 'herhaling van alle grammatica per taalspoor' maar had één taalonafhankelijke puzzel. Er staan nu vier puzzels op de vier taalspoorvleugels, bewust gespiegeld: vleugel B toetst in beide talen het onzijdig meervoud als lijdend voorwerp, vleugel C in beide talen de genitivus bij werkwoorden van herinneren (ἐμνήσθης / meministi)." },
   { id:"ch29", nr:29, boek:"VI — De Laatste Herinnering", type:"hoofdstuk", nm:"De Rivier Lethe",
     periode:"Mythologische Eindwereld",
     verhaal:"Aan de oevers van een rivier die alle herinnering wist, wordt duidelijk hoe kostbaar het is om je iets te blijven herinneren — de laatste beproeving voor het orakel zelf zich toont. UITGEBREID 2026-08-16 (Gerbens verzoek): dit hoofdstuk is de schaduwzijde van Hoofdstuk 28 — waar Mnemosyne liet zien wat de speler bewaarde, laat Lethe zien wat de speler miste, negeerde, of waarin hij faalde (nooit content die nog niet gebouwd is, uitsluitend paden die het spel echt aanbood). Opent met Lethes oprechte bedankje voor de H24/H25-loslaat-keuzes, gevolgd door een reeks 'wat had kunnen zijn'-momenten (Hoofdstuk 1's ongekozen lijn, het ongelopen taalspoor, en zeven grote/kleinere zijde-keuzes verspreid door de hele campagne), en eindigt met een gedeeltelijke onthulling van Lethes eigen motieven — haar volledige 'vergeten hoort erbij'-filosofie blijft bewust gereserveerd voor de Finale.",
@@ -1895,6 +1895,257 @@ const SP_PUZZLES = {
   // vertalen normaal nooit Nederlands -> doeltaal (altijd andersom), dus vrije
   // productie hier zou een oneerlijke uitzondering zijn. Afleiders zijn steeds
   // al bekende, betekenisverwante signaalwoorden — geen willekeurige ruis.
+  /* ---- Hoofdstuk 23 — de enige echt NIEUWE Latijnse grammatica na Hoofdstuk
+     17 (Minerva 24). Hints staan hier wél voluit: dit is nieuwe stof, geen
+     herhaling (didactiek-checklist §7.36 punt 6). ---- */
+  /* ---- Hoofdstuk 18-22 — herhalingspuzzels. Post-build audit 2026-08-23:
+     na Hoofdstuk 17 stond de hele actieve taallaag stil (0 puzzels, 0
+     leesvallen, 1 gevecht in tien hoofdstukken). Deze puzzels halen bewust
+     al geleerde constructies terug — didactiek-checklist 7.36 punt 8 — en
+     hebben daarom bewust GEEN hint-veld (punt 6). ---- */
+  puzzle_ch18_gre_zeebond: { type:"multiple-choice",
+    vraag:"Een schrijver van de bond noteert: \u201c\u03bf\u1f31 \u03c3\u03cd\u03bc\u03bc\u03b1\u03c7\u03bf\u03b9 \u03c4\u03bf\u1fd6\u03c2 \u1f08\u03b8\u03b7\u03bd\u03b1\u03af\u03bf\u03b9\u03c2 \u03c7\u03c1\u03ae\u03bc\u03b1\u03c4\u03b1 \u03c0\u03b1\u03c1\u03ad\u03c7\u03bf\u03c5\u03c3\u03b9\u03bd\u201d. Welke functie heeft \u03c4\u03bf\u1fd6\u03c2 \u1f08\u03b8\u03b7\u03bd\u03b1\u03af\u03bf\u03b9\u03c2?",
+    opties:["meewerkend voorwerp (dativus)","lijdend voorwerp (accusativus)","onderwerp (nominativus)","bezitsbepaling (genitivus)"],
+    antwoord:"meewerkend voorwerp (dativus)" },
+  puzzle_ch18_gre_parthenon: { type:"multiple-choice",
+    vraag:"Over de bouw van het Parthenon staat geschreven: \u201c\u03c4\u1ff6\u03bd \u03c3\u03c5\u03bc\u03bc\u03ac\u03c7\u03c9\u03bd \u03c6\u03cc\u03c1\u03bf\u03bd \u03c6\u03b5\u03c1\u03cc\u03bd\u03c4\u03c9\u03bd, \u03bf\u1f31 \u1f08\u03b8\u03b7\u03bd\u03b1\u1fd6\u03bf\u03b9 \u03c4\u1f78\u03bd \u03bd\u03b5\u1f7c\u03bd \u1f60\u03ba\u03bf\u03b4\u03cc\u03bc\u03b7\u03c3\u03b1\u03bd\u201d. Wat voor constructie is \u03c4\u1ff6\u03bd \u03c3\u03c5\u03bc\u03bc\u03ac\u03c7\u03c9\u03bd \u03c6\u03b5\u03c1\u03cc\u03bd\u03c4\u03c9\u03bd?",
+    opties:["genitivus absolutus","gewone bezitsbepaling bij \u03c6\u03cc\u03c1\u03bf\u03bd","lijdend voorwerp bij \u1f60\u03ba\u03bf\u03b4\u03cc\u03bc\u03b7\u03c3\u03b1\u03bd","vergelijking (genitivus comparationis)"],
+    antwoord:"genitivus absolutus" },
+  puzzle_ch18_lat_comparativus: { type:"multiple-choice",
+    vraag:"Over de twee broers wordt gezegd: \u201cGaius fratre audacior erat\u201d \u2014 Gaius was roekelozer dan zijn broer. Welke naamval is fratre, en waarom?",
+    opties:["ablativus \u2014 ablativus comparationis na een comparativus","dativus \u2014 meewerkend voorwerp","genitivus \u2014 bezitsbepaling","accusativus \u2014 lijdend voorwerp"],
+    antwoord:"ablativus \u2014 ablativus comparationis na een comparativus" },
+  puzzle_ch18_lat_aci: { type:"multiple-choice",
+    vraag:"Over Sulla's proscripties schrijft een tijdgenoot: \u201cSulla credebat neminem sibi resistere posse\u201d. Welke functie heeft neminem?",
+    opties:["onderwerp van de infinitivus (A.C.I.)","lijdend voorwerp van credebat","meewerkend voorwerp bij sibi","bijstelling bij Sulla"],
+    antwoord:"onderwerp van de infinitivus (A.C.I.)" },
+
+  puzzle_ch19_gre_perikles: { type:"multiple-choice",
+    vraag:"Over Perikles\u2019 strategie staat: \u201c\u1f41 \u03a0\u03b5\u03c1\u03b9\u03ba\u03bb\u1fc6\u03c2 \u03c4\u03bf\u1f7a\u03c2 \u03c0\u03bf\u03bb\u03af\u03c4\u03b1\u03c2 \u03b5\u1f30\u03c2 \u03c4\u1f74\u03bd \u03c0\u03cc\u03bb\u03b9\u03bd \u1f24\u03b3\u03b1\u03b3\u03b5\u03bd\u201d. In welke tijd staat \u1f24\u03b3\u03b1\u03b3\u03b5\u03bd?",
+    opties:["aoristus","imperfectum","praesens","futurum"],
+    antwoord:"aoristus" },
+  puzzle_ch19_gre_boetheo: { type:"multiple-choice",
+    vraag:"Alkibiades vertelt later over Potidaea: \u201c\u1f41 \u03a3\u03c9\u03ba\u03c1\u03ac\u03c4\u03b7\u03c2 \u03bc\u03bf\u03b9 \u1f10\u03b2\u03bf\u03ae\u03b8\u03b7\u03c3\u03b5\u03bd\u201d \u2014 Socrates hielp mij. Waarom staat \u03bc\u03bf\u03b9 in de dativus?",
+    opties:["\u03b2\u03bf\u03b7\u03b8\u03ad\u03c9 (te hulp komen) regeert een dativus","het is een dativus van bezit","het is een dativus na een voorzetsel","het is het lijdend voorwerp"],
+    antwoord:"\u03b2\u03bf\u03b7\u03b8\u03ad\u03c9 (te hulp komen) regeert een dativus" },
+  puzzle_ch19_lat_deponens: { type:"multiple-choice",
+    vraag:"Over de drie machthebbers staat: \u201cCaesar Pompeium diu secutus est\u201d. Wat betekent secutus est hier?",
+    opties:["hij volgde","hij werd gevolgd","hij zal volgen","hij moet gevolgd worden"],
+    antwoord:"hij volgde" },
+  puzzle_ch19_lat_gerundium: { type:"multiple-choice",
+    vraag:"Over Caesars oversteek staat: \u201cCaesar Rhenum transeundi causa pontem fecit\u201d \u2014 om de Rijn over te steken bouwde Caesar een brug. Wat voor vorm is transeundi?",
+    opties:["gerundium in de genitivus","gerundivum bij Rhenum","participium praesens","infinitivus perfectum"],
+    antwoord:"gerundium in de genitivus" },
+
+  puzzle_ch20_gre_gordion: { type:"multiple-choice",
+    vraag:"Over de knoop van Gordion staat: \u201c\u1f08\u03bb\u03ad\u03be\u03b1\u03bd\u03b4\u03c1\u03bf\u03c2 \u03c4\u1ff7 \u03be\u03af\u03c6\u03b5\u03b9 \u03c4\u1f78\u03bd \u03b4\u03b5\u03c3\u03bc\u1f78\u03bd \u1f14\u03bb\u03c5\u03c3\u03b5\u03bd\u201d. Welke functie heeft \u03c4\u1ff7 \u03be\u03af\u03c6\u03b5\u03b9?",
+    opties:["dativus van het middel \u2014 met zijn zwaard","meewerkend voorwerp \u2014 aan zijn zwaard","onderwerp \u2014 het zwaard doet het","bezitsbepaling \u2014 van zijn zwaard"],
+    antwoord:"dativus van het middel \u2014 met zijn zwaard" },
+  puzzle_ch20_gre_bucephalus: { type:"multiple-choice",
+    vraag:"Over het paard staat: \u201c\u1f41 \u1f35\u03c0\u03c0\u03bf\u03c2 \u03c4\u1f74\u03bd \u03c3\u03ba\u03b9\u1f70\u03bd \u1f10\u03c6\u03bf\u03b2\u03b5\u1fd6\u03c4\u03bf\u201d \u2014 het paard was bang voor zijn eigen schaduw. In welke tijd staat \u1f10\u03c6\u03bf\u03b2\u03b5\u1fd6\u03c4\u03bf?",
+    opties:["imperfectum","aoristus","praesens","futurum"],
+    antwoord:"imperfectum" },
+  puzzle_ch20_lat_ablabs: { type:"multiple-choice",
+    vraag:"Over de veldtocht staat: \u201cHostibus victis, Caesar castra movit\u201d. Wat voor constructie is hostibus victis?",
+    opties:["ablativus absolutus","dativus van de handelende persoon","ablativus comparationis","gerundivumconstructie"],
+    antwoord:"ablativus absolutus" },
+  puzzle_ch20_lat_gerundivum: { type:"multiple-choice",
+    vraag:"Vercingetorix laat rondsturen: \u201cGallia tota liberanda est\u201d. Wat staat hier precies?",
+    opties:["heel Galli\u00eb moet bevrijd worden","heel Galli\u00eb is bevrijd","heel Galli\u00eb bevrijdt zichzelf","heel Galli\u00eb zal bevrijden"],
+    antwoord:"heel Galli\u00eb moet bevrijd worden" },
+
+  puzzle_ch21_gre_ouden: { type:"multiple-choice",
+    vraag:"Socrates\u2019 bekendste zin: \u201c\u1f13\u03bd \u03bf\u1f36\u03b4\u03b1 \u1f45\u03c4\u03b9 \u03bf\u1f50\u03b4\u1f72\u03bd \u03bf\u1f36\u03b4\u03b1\u201d. Welke functie heeft \u03bf\u1f50\u03b4\u1f72\u03bd in de bijzin?",
+    opties:["lijdend voorwerp bij het tweede \u03bf\u1f36\u03b4\u03b1","onderwerp van de bijzin","bijwoord bij \u1f45\u03c4\u03b9","meewerkend voorwerp"],
+    antwoord:"lijdend voorwerp bij het tweede \u03bf\u1f36\u03b4\u03b1" },
+  puzzle_ch21_gre_peri: { type:"multiple-choice",
+    vraag:"Over het Lyceum staat: \u201c\u1f08\u03c1\u03b9\u03c3\u03c4\u03bf\u03c4\u03ad\u03bb\u03b7\u03c2 \u03c0\u03b5\u03c1\u1f76 \u03c4\u1ff6\u03bd \u03b6\u1ff4\u03c9\u03bd \u1f14\u03b3\u03c1\u03b1\u03c8\u03b5\u03bd\u201d. Welke naamval regeert \u03c0\u03b5\u03c1\u03af hier, en wat betekent het?",
+    opties:["genitivus \u2014 \u2018over, aangaande\u2019","accusativus \u2014 \u2018rondom\u2019","dativus \u2014 \u2018bij\u2019","nominativus \u2014 \u03c0\u03b5\u03c1\u03af regeert geen naamval"],
+    antwoord:"genitivus \u2014 \u2018over, aangaande\u2019" },
+  puzzle_ch21_lat_passief: { type:"multiple-choice",
+    vraag:"Over Cicero\u2019s ballingschap staat: \u201cCicero in exilium ire coactus est\u201d. Wat voor vorm is coactus est?",
+    opties:["perfectum passief \u2014 hij werd gedwongen","perfectum actief \u2014 hij dwong","praesens passief \u2014 hij wordt gedwongen","gerundivum \u2014 hij moet gedwongen worden"],
+    antwoord:"perfectum passief \u2014 hij werd gedwongen" },
+  puzzle_ch21_lat_ut: { type:"multiple-choice",
+    vraag:"Over zijn filosofische werk staat: \u201cCicero scripsit ut Romani philosophiam intellegerent\u201d. Wat drukt de ut-zin hier uit?",
+    opties:["een doel \u2014 opdat de Romeinen de filosofie zouden begrijpen",
+            "een gevolg \u2014 zodat de Romeinen de filosofie begrepen, en dat gebeurde ook",
+            "een tijd \u2014 toen de Romeinen de filosofie begrepen",
+            "een vergelijking \u2014 zoals de Romeinen de filosofie begrepen"],
+    antwoord:"een doel \u2014 opdat de Romeinen de filosofie zouden begrijpen" },
+
+  puzzle_ch22_gre_medium: { type:"multiple-choice",
+    vraag:"Over de generaals van Alexander staat: \u201c\u03bf\u1f31 \u03c3\u03c4\u03c1\u03b1\u03c4\u03b7\u03b3\u03bf\u1f76 \u03c4\u1f74\u03bd \u1f00\u03c1\u03c7\u1f74\u03bd \u03b4\u03b9\u03b5\u03bd\u03b5\u03af\u03bc\u03b1\u03bd\u03c4\u03bf\u201d. Wat voegt de mediale vorm hier toe?",
+    opties:["zij verdeelden het rijk onder elkaar, in hun eigen belang",
+            "zij werden zelf verdeeld","zij lieten het rijk door anderen verdelen","niets \u2014 het is gewoon actief"],
+    antwoord:"zij verdeelden het rijk onder elkaar, in hun eigen belang" },
+  puzzle_ch22_gre_futurum: { type:"multiple-choice",
+    vraag:"De vraag die boven alle Diadochenoorlogen hangt: \u201c\u03c4\u03af\u03c2 \u03c4\u1f74\u03bd \u03b2\u03b1\u03c3\u03b9\u03bb\u03b5\u03af\u03b1\u03bd \u03bb\u03ae\u03c8\u03b5\u03c4\u03b1\u03b9;\u201d In welke tijd staat \u03bb\u03ae\u03c8\u03b5\u03c4\u03b1\u03b9?",
+    opties:["futurum","aoristus","imperfectum","praesens"],
+    antwoord:"futurum" },
+  puzzle_ch22_lat_gerundivum: { type:"multiple-choice",
+    vraag:"Over het Tweede Triumviraat staat: \u201cTres viri rem publicam constituendam curaverunt\u201d \u2014 de drie mannen zorgden ervoor dat de staat opnieuw ingericht werd. Waarmee congrueert constituendam?",
+    opties:["met rem publicam","met tres viri","met curaverunt","met niets \u2014 het is onveranderlijk"],
+    antwoord:"met rem publicam" },
+  puzzle_ch22_lat_plusquam: { type:"multiple-choice",
+    vraag:"Over de derde dodenlijst staat: \u201cNomina in tabulis iam scripta erant\u201d. In welke tijd staat scripta erant?",
+    opties:["plusquamperfectum passief","perfectum passief","imperfectum actief","futurum exactum"],
+    antwoord:"plusquamperfectum passief" },
+
+  /* ---- Hoofdstuk 24-27 — herhalingspuzzels (zelfde post-build-auditronde als
+     de blokken hierboven). Ook hier bewust GEEN hint-velden: SP_CAMPAIGN noemt
+     deze hoofdstukken alle vier expliciet herhaling. ---- */
+  puzzle_ch24_gre_superlativus: { type:"multiple-choice",
+    vraag:"Onder het fries staat, in oud schrift: “τὸ ἄγαλμα τοῦ Φειδίου κάλλιστον ἦν”. Welke trap van vergelijking is κάλλιστον?",
+    opties:["superlativus — het mooiste","comparativus — mooier","positivus — mooi","geen van drieën — het is een bijwoord"],
+    antwoord:"superlativus — het mooiste" },
+  puzzle_ch24_gre_comparatio: { type:"multiple-choice",
+    vraag:"Over de Kolossus staat: “ὁ κολοσσὸς μείζων ἦν πάντων τῶν ἀνδριάντων”. Waarom staat πάντων τῶν ἀνδριάντων in de genitivus?",
+    opties:["genitivus comparationis — waarmee vergeleken wordt na een comparativus",
+            "bezitsbepaling — de beelden bezaten de kolossus",
+            "genitivus absolutus","het is een genitivus van tijd"],
+    antwoord:"genitivus comparationis — waarmee vergeleken wordt na een comparativus" },
+  puzzle_ch24_lat_romam: { type:"multiple-choice",
+    vraag:"In de stenen van de Via Appia staat gekrast: “Omnes viae Romam ducunt”. Waarom staat Romam in de accusativus, zonder voorzetsel?",
+    opties:["accusativus van richting — bij namen van steden vervalt het voorzetsel",
+            "lijdend voorwerp bij ducunt","accusativus van tijdsduur","het is een bijstelling bij viae"],
+    antwoord:"accusativus van richting — bij namen van steden vervalt het voorzetsel" },
+  puzzle_ch24_lat_congruentie: { type:"multiple-choice",
+    vraag:"Vitruvius’ eigen regel, kort samengevat: “Aedificium firmum, utile, venustum esse debet”. Waarom staat er firmum en niet firmus?",
+    opties:["het congrueert met het onzijdige aedificium",
+            "het is een bijwoord","het is een accusativus als lijdend voorwerp","het congrueert met debet"],
+    antwoord:"het congrueert met het onzijdige aedificium" },
+
+  puzzle_ch25_gre_arche: { type:"multiple-choice",
+    vraag:"Pythagoras’ stelling, kort opgeschreven: “οἱ ἀριθμοὶ πάντων ἀρχή εἰσιν” — de getallen zijn het begin van alles. In welke naamval staat πάντων?",
+    opties:["genitivus","dativus","accusativus","nominativus"],
+    antwoord:"genitivus" },
+  puzzle_ch25_gre_onzijdig_mv: { type:"multiple-choice",
+    vraag:"Over de Bibliotheek staat: “τὰ βιβλία ἐν τῇ βιβλιοθήκῃ ἐφυλάττετο”. Waarom staat het werkwoord in het enkelvoud, terwijl τὰ βιβλία meervoud is?",
+    opties:["een onzijdig meervoud krijgt in het Grieks een werkwoord in het enkelvoud",
+            "ἐφυλάττετο is helemaal geen enkelvoud",
+            "het onderwerp is in werkelijkheid βιβλιοθήκῃ",
+            "omdat het een passieve vorm is"],
+    antwoord:"een onzijdig meervoud krijgt in het Grieks een werkwoord in het enkelvoud" },
+  puzzle_ch25_lat_aci: { type:"multiple-choice",
+    vraag:"Plinius de Jongere schrijft aan Tacitus: “scripsi avunculum meum navem solvisse”. Welke functie heeft avunculum?",
+    opties:["onderwerp van de infinitivus (A.C.I.)","lijdend voorwerp van scripsi","bijstelling bij navem","meewerkend voorwerp"],
+    antwoord:"onderwerp van de infinitivus (A.C.I.)" },
+  puzzle_ch25_lat_dum: { type:"multiple-choice",
+    vraag:"Over Plinius de Oudere staat: “Dum alios servare vult, ipse perit”. Wat drukt dum met een praesens hier uit?",
+    opties:["gelijktijdigheid — ‘terwijl hij anderen wil redden’, ook al gaat het verhaal in het verleden",
+            "een voorwaarde — ‘als hij anderen wil redden’",
+            "een reden — ‘omdat hij anderen wil redden’",
+            "een doel — ‘om anderen te redden’"],
+    antwoord:"gelijktijdigheid — ‘terwijl hij anderen wil redden’, ook al gaat het verhaal in het verleden" },
+
+  puzzle_ch26_gre_teleo: { type:"multiple-choice",
+    vraag:"Op de voltooide Olympieion staat: “ὁ ναὸς ὑπὸ Ἁδριανοῦ ἐτελέσθη”. Wat voor vorm is ἐτελέσθη?",
+    opties:["aoristus passief","aoristus actief","imperfectum medium","perfectum actief"],
+    antwoord:"aoristus passief" },
+  puzzle_ch26_gre_ouketi: { type:"multiple-choice",
+    vraag:"Een priesteres in Delphi zucht: “οἱ ἄνθρωποι οὐκέτι ἔρχονται”. Wat betekent οὐκέτι?",
+    opties:["niet meer","nog niet","nooit","niet alleen"],
+    antwoord:"niet meer" },
+  puzzle_ch26_lat_fore: { type:"multiple-choice",
+    vraag:"Over Nerva’s keuze staat: “Senatus credidit Traianum optimum principem fore”. Wat voor vorm is fore?",
+    opties:["infinitivus futuri van esse — ‘dat hij zou zijn’",
+            "infinitivus perfecti van esse","imperativus van fero","coniunctivus van fio"],
+    antwoord:"infinitivus futuri van esse — ‘dat hij zou zijn’" },
+  puzzle_ch26_lat_fieri: { type:"multiple-choice",
+    vraag:"Over de Constitutio Antoniniana staat: “Omnes cives Romani facti sunt”. Wat voor vorm is facti sunt hier?",
+    opties:["perfectum van fio — ‘zij zijn geworden’",
+            "perfectum actief van facio — ‘zij hebben gemaakt’",
+            "plusquamperfectum passief","gerundivum met esse"],
+    antwoord:"perfectum van fio — ‘zij zijn geworden’" },
+
+  puzzle_ch27_gre_metaxu: { type:"multiple-choice",
+    vraag:"Over de ligging van de nieuwe hoofdstad staat: “ἡ πόλις μεταξὺ δύο θαλασσῶν κεῖται”. Welke naamval regeert μεταξύ?",
+    opties:["genitivus","dativus","accusativus","geen — het is een bijwoord"],
+    antwoord:"genitivus" },
+  puzzle_ch27_gre_perfectum: { type:"multiple-choice",
+    vraag:"Over Justinianus’ wetboek staat: “ὁ νόμος πᾶσιν ἀνθρώποις γέγραπται”. In welke tijd staat γέγραπται?",
+    opties:["perfectum","aoristus","imperfectum","praesens"],
+    antwoord:"perfectum" },
+  puzzle_ch27_lat_ablativus_tijd: { type:"multiple-choice",
+    vraag:"Onder het Edict van Milaan staat de datering: “Anno trecentesimo tertio decimo edictum datum est”. Waarom staat anno in de ablativus?",
+    opties:["ablativus van tijdstip — ‘in het jaar’",
+            "ablativus van het middel","ablativus absolutus","ablativus comparationis"],
+    antwoord:"ablativus van tijdstip — ‘in het jaar’" },
+  puzzle_ch27_lat_imperativus: { type:"multiple-choice",
+    vraag:"De koerier roept je toe: “viam cape!” In welke wijs staat cape?",
+    opties:["imperativus — een bevel","coniunctivus — een wens","indicativus — een mededeling","infinitivus — een onbepaalde wijs"],
+    antwoord:"imperativus — een bevel" },
+
+  /* ---- Hoofdstuk 28 — de vier taalspoor-vleugels (post-build audit
+     2026-08-23). Gespiegeld per paar, zodat een 'beide'-speler tweemaal
+     dezelfde constructie in twee talen naast elkaar ziet. Geen hints:
+     dit hoofdstuk is per definitie herhaling. ---- */
+  puzzle_ch28_gre_polla: { type:"multiple-choice",
+    vraag:"Mnemosyne’s regel over jou: “Σὺ πολλὰ ἔμαθες καὶ πολλὰ ἐμνημόνευσας”. Welke functie heeft πολλά?",
+    opties:["lijdend voorwerp — accusativus onzijdig meervoud",
+            "onderwerp — nominativus onzijdig meervoud",
+            "bijwoord bij ἔμαθες",
+            "bezitsbepaling bij Σύ"],
+    antwoord:"lijdend voorwerp — accusativus onzijdig meervoud" },
+  puzzle_ch28_lat_multa: { type:"multiple-choice",
+    vraag:"Mnemosyne’s regel over jou: “Tu multa vidisti; tu multa meministi”. Welke functie heeft multa?",
+    opties:["lijdend voorwerp — accusativus onzijdig meervoud",
+            "onderwerp — nominativus onzijdig meervoud",
+            "bijwoord bij vidisti",
+            "ablativus van het middel"],
+    antwoord:"lijdend voorwerp — accusativus onzijdig meervoud" },
+  puzzle_ch28_gre_genitivus: { type:"multiple-choice",
+    vraag:"En in de gang van de namen: “Πολλῶν ὀνόματα ἤκουσας· ὀλίγων ἐμνήσθης”. Waarom staat ὀλίγων in de genitivus?",
+    opties:["werkwoorden van herinneren regeren in het Grieks een genitivus",
+            "het is een genitivus absolutus",
+            "het hoort als bezitsbepaling bij ὀνόματα",
+            "het is een genitivus comparationis"],
+    antwoord:"werkwoorden van herinneren regeren in het Grieks een genitivus" },
+  puzzle_ch28_lat_genitivus: { type:"multiple-choice",
+    vraag:"En in de gang van de namen: “Multorum nomina audivisti; paucorum meministi”. Waarom staat paucorum in de genitivus?",
+    opties:["memini regeert een genitivus — net als de Griekse werkwoorden van herinneren",
+            "het is een genitivus van bezit bij nomina",
+            "het is een genitivus van tijd",
+            "het is het lijdend voorwerp van meministi"],
+    antwoord:"memini regeert een genitivus — net als de Griekse werkwoorden van herinneren" },
+
+  puzzle_ch23_lat_nci: { type:"multiple-choice",
+    vraag:"Livius laat je zien hoe men het later zal opschrijven: “Augustus rem publicam restituisse dicitur” — wat staat hier precies?",
+    opties:["men zegt dat Augustus de Republiek heeft hersteld",
+            "Augustus zegt dat de Republiek hersteld is",
+            "de Republiek wordt door Augustus hersteld",
+            "Augustus wordt gedwongen de Republiek te herstellen"],
+    antwoord:"men zegt dat Augustus de Republiek heeft hersteld",
+    hint:"dicitur is passief: 'er wordt gezegd'. Augustus staat in de nominativus en hoort bij de infinitivus restituisse — dat is de nominativus cum infinitivo, de passieve tegenhanger van de A.C.I. die je al kent." },
+  puzzle_ch23_lat_semideponens: { type:"typed-latin",
+    vraag:"Over Tiberius’ laatste jaren noteert Livius: “Romam redire non ___” — hij durfde niet naar Rome terug te keren. Typ de perfectumvorm (3e persoon enkelvoud) van audeo — twee woorden.",
+    antwoord:"ausus est",
+    hint:"audeo is een semi-deponens: actief van vorm in het praesens (audet), maar vanaf het perfectum passief van vorm — met een actieve betekenis, net als bij een gewoon deponens." },
+  puzzle_ch23_lat_vraagpartikel: { type:"multiple-choice",
+    vraag:"Een officier van de Garde vraagt, vlak voor de moord op Caligula, voorzichtig aan een collega: “Num imperatorem amas?” — welk antwoord verwacht hij?",
+    opties:["nee — num verwacht een ontkennend antwoord",
+            "ja — num verwacht een bevestigend antwoord",
+            "geen van beide — num is neutraal",
+            "dat hangt af van de woordvolgorde"],
+    antwoord:"nee — num verwacht een ontkennend antwoord",
+    hint:"Drie partikels, drie verwachtingen: -ne is neutraal, nonne verwacht ‘ja’ (‘toch zeker wel?’), num verwacht ‘nee’ (‘toch zeker niet?’)." },
+
+  /* ---- Hoofdstuk 23, Grieks — bewuste herhaling (Pallas 2 is na les 29 op),
+     dus GEEN hint-velden: het medium/passief (Hoofdstuk 7/9) en de aoristus
+     (Hoofdstuk 16). ---- */
+  puzzle_ch23_gre_polemeo: { type:"multiple-choice",
+    vraag:"Een Alexandrijnse handelaar vat de Romeinse oorlogsverklaring samen: “οἱ Ῥωμαῖοι τῇ βασιλίσσῃ πολεμοῦσιν”. In welke naamval staat τῇ βασιλίσσῃ, en waarom?",
+    opties:["dativus — πολεμέω (oorlog voeren tegen) regeert een dativus",
+            "accusativus — het is het lijdend voorwerp",
+            "genitivus — het hoort bij οἱ Ῥωμαῖοι",
+            "nominativus — het is het onderwerp"],
+    antwoord:"dativus — πολεμέω (oorlog voeren tegen) regeert een dativus" },
+  puzzle_ch23_gre_alexandergraf: { type:"multiple-choice",
+    vraag:"Een priester bij Alexanders graf vertelt het naderhand door: “ὁ Ῥωμαῖος στέφανον ἔθηκεν” — de Romein legde een krans neer. In welke tijd staat ἔθηκεν?",
+    opties:["aoristus","praesens","imperfectum","futurum"],
+    antwoord:"aoristus" },
+
   puzzle_fin_gre_deuro: { type:"multiple-choice",
     vraag:"Het eerste woord van je verklaring lost al op — het woord voor 'hierheen', waarmee je zegt dat je bewust bent teruggekeerd. Welk woord was het?",
     opties:["δεῦρο","ἐνταῦθα","νῦν","τότε"], antwoord:"δεῦρο",
@@ -3153,6 +3404,46 @@ const SP_CODEX_ENTRIES = {
     tekst:"Hermes hielp Athena niet enkel omdat zij het vroeg (Hoofdstuk 28). Zijn diepere reden, tot de Finale verzwegen: als boodschapper van de goden is hij zelf zelden meer dan een middel — deze ene keer wilde hij deel uitmaken van iets groters dan de boodschap die hij droeg." },
   codex_pamphile_eigen_stem: { cat:"geschiedenis", titel:"Pamphile, Voor Zichzelf",
     tekst:"Pamphile van Epidaurus, de historica achter 'de Boodschapper van Chronos' (Hoofdstuk 28), spreekt in de Finale voor het eerst niet namens haar rol maar namens zichzelf: van haar eigen, echte geschiedwerken overleefden in werkelijkheid nauwelijks meer dan een handvol citaten bij latere auteurs." },
+  /* ---- Hoofdstuk 23 — Minerva 24 (N.C.I., semi-deponentia, transitief/
+     intransitief, vraagpartikels). Post-build audit 2026-08-23: deze les stond
+     wél in SP_CAMPAIGN.ch23, maar kwam nergens in het gebouwde spel voor —
+     geen puzzel, geen tabel, geen zin. Zelfde patroon als Hoofdstuk 1-4/8-17:
+     de losse entries ontgrendelen vroeg (CH23_LAT_001, zodat een mislukte
+     puzzel meteen op te zoeken is), het overzicht pas bij de afsluiting. ---- */
+  codex_grammatica_ch23_nci: { cat:"grammatica", taal:"latijn",
+    titel:"Grammatica: de nominativus cum infinitivo (N.C.I.)",
+    tekst:"De A.C.I. ken je al sinds Hoofdstuk 9: na een werkwoord van zeggen of menen staat een accusativus met een infinitivus (dicunt Augustum vicisse — men zegt dat Augustus heeft gewonnen). Staat dat werkwoord van zeggen zelf in het passief, dan schuift die accusativus naar voren en wordt hij nominativus: Augustus vicisse dicitur — letterlijk 'Augustus wordt gezegd gewonnen te hebben', dus: men zegt dat Augustus heeft gewonnen. Het werkwoord van zeggen congrueert dan met die nominativus, niet met een onpersoonlijk 'men'.",
+    table:{ headers:["Constructie","Voorbeeld","Vertaling"], rows:[
+      ["A.C.I. (actief hoofdwerkwoord)","dicunt Augustum vicisse","men zegt dat Augustus gewonnen heeft"],
+      ["N.C.I. (passief hoofdwerkwoord)","Augustus vicisse dicitur","men zegt dat Augustus gewonnen heeft"],
+      ["N.C.I. in het meervoud","principes clementes fuisse dicuntur","men zegt dat de principes mild zijn geweest"],
+      ["let op de congruentie","Cleopatra capta esse videtur","het schijnt dat Cleopatra gevangen is"]]} },
+  codex_grammatica_ch23_semideponentia: { cat:"grammatica", taal:"latijn",
+    titel:"Grammatica: semi-deponentia",
+    tekst:"Deponentia (Hoofdstuk 7) zien er in élke tijd passief uit, maar hebben een actieve betekenis. Semi-deponentia doen dat maar half: in het praesens, imperfectum en futurum zijn ze gewoon actief van vorm, en pas vanaf het perfectum worden ze passief van vorm — met, ook daar, een actieve betekenis. Er zijn er vier die je echt moet kennen.",
+    table:{ headers:["Werkwoord","Praesens (actief van vorm)","Perfectum (passief van vorm)","Betekenis"], rows:[
+      ["audeo","audeo","ausus sum","durven"],
+      ["gaudeo","gaudeo","gavisus sum","zich verheugen"],
+      ["soleo","soleo","solitus sum","gewoon zijn te"],
+      ["fido","fido","fisus sum","vertrouwen"]]} },
+  codex_grammatica_ch23_vraagpartikels: { cat:"grammatica", taal:"latijn",
+    titel:"Grammatica: vraagpartikels (-ne, nonne, num)",
+    tekst:"Het Latijn markeert een vraag met een partikel. Wélk partikel er staat, verraadt meteen welk antwoord de spreker verwacht — dat is het hele punt ervan, en precies waar je bij het vertalen op moet letten. Vergelijk het Griekse ἆρα, dat je al kent: dat is neutraal, net als -ne.",
+    table:{ headers:["Partikel","Voorbeeld","Vertaling","Verwacht antwoord"], rows:[
+      ["-ne (aangehecht)","Vidistine urbem?","Heb je de stad gezien?","neutraal, geen voorkeur"],
+      ["nonne","Nonne urbem vidisti?","Je hebt de stad toch zeker gezien?","ja"],
+      ["num","Num urbem vidisti?","Je hebt de stad toch niet gezien?","nee"],
+      ["ter vergelijking: Grieks","ἆρα τὴν πόλιν εἶδες;","Heb je de stad gezien?","neutraal"]]} },
+  codex_grammatica_ch23_transitief: { cat:"grammatica", taal:"latijn",
+    titel:"Grammatica: transitief en intransitief",
+    tekst:"Een transitief werkwoord kan een lijdend voorwerp (accusativus) bij zich hebben: urbem capere — een stad innemen. Een intransitief werkwoord kan dat niet: manere (blijven), venire (komen), cadere (vallen). Dat verschil bepaalt wat er met het passief kan: alleen transitieve werkwoorden hebben een gewoon persoonlijk passief (urbs capitur — de stad wordt ingenomen). Intransitieve werkwoorden vormen hooguit een onpersoonlijk passief: itur — er wordt gegaan.",
+    table:{ headers:["Werkwoord","Soort","Passief"], rows:[
+      ["capio (innemen)","transitief","urbs capitur — de stad wordt ingenomen"],
+      ["venio (komen)","intransitief","venitur — er wordt gekomen (onpersoonlijk)"],
+      ["maneo (blijven)","intransitief","manetur — er wordt gebleven (onpersoonlijk)"]]} },
+  codex_grammatica_ch23_overzicht: { cat:"grammatica", taal:"latijn",
+    titel:"Grammatica: Hoofdstuk 23 — N.C.I., semi-deponentia en vraagpartikels",
+    tekst:"Dit hoofdstuk is aan de Latijnse kant het laatste met echt nieuwe grammatica (Minerva 24; Minerva 25 is vertaalvaardigheid, geen nieuwe vormleer). Vier onderwerpen: de nominativus cum infinitivo als passieve tegenhanger van de al bekende A.C.I.; de vier semi-deponentia (audeo, gaudeo, soleo, fido), die pas vanaf het perfectum passief van vorm worden; het verschil tussen transitieve en intransitieve werkwoorden, dat bepaalt of een persoonlijk passief überhaupt mogelijk is; en de drie vraagpartikels -ne, nonne en num, waarvan de laatste twee al verraden welk antwoord de spreker verwacht. Aan de Griekse kant is dit hoofdstuk bewuste herhaling — Pallas 2 eindigde bij les 29 (Hoofdstuk 20) en biedt daarna geen nieuwe stof meer; de Griekse puzzels hier halen het medium/passief en de aoristus terug." },
 };
 
 /* ---- PERSONEN — tweetraps-onthulling: een SPOILERVRIJE `intro`-tekst
@@ -4009,6 +4300,32 @@ const SP_COMBAT_ENEMIES = {
   // van fin_kennis_score/fin_herinnering_score — nergens anders gebeurt dat.
   fin_lethe: { nm:"Lethe", icon:"🌊", img:"assets/chronica/combat/fin_lethe.png", hp:130,
     intro:"Geen monster, geen leger — alleen Lethe zelf, rustig, onvermurwbaar, en vastberadener dan ooit sinds jullie eerste ontmoeting bij de rivier." },
+
+  /* ---- Hoofdstuk 18-27 — post-build audit 2026-08-23. Tot deze ronde had de
+     hele tweede helft van de campagne één enkel gevecht (de Bataven, H26).
+     Elf nieuwe tegenstanders, verdeeld over beide taalsporen. ---- */
+  naxos_afgescheidenen: { nm:"De Afgescheiden Naxiërs", icon:"🛡️", img:"assets/chronica/combat/naxos_afgescheidenen.png", hp:55,
+    intro:"Eilandbewoners die ooit vrijwillig toetraden en er nu vrijwillig uit willen — en die tot hun eigen verbazing moeten vechten tegen de vloot die hen kwam beschermen." },
+  senaatsknokploeg: { nm:"De Knuppelploeg van Nasica", icon:"🪵", img:"assets/chronica/combat/senaatsknokploeg.png", hp:55,
+    intro:"Senatoren met afgebroken bankpoten in hun handen, in hun eigen toga’s, op weg naar een tribuun die zij een koning noemen — het eerste politieke bloedvergieten binnen Rome zelf." },
+  korinthische_triere: { nm:"De Korinthische Trireme", icon:"⛵", img:"assets/chronica/combat/korinthische_triere.png", hp:60,
+    intro:"Een Korinthische oorlogsgalei die op Corcyra afkoerst — op zichzelf een grensconflict van niets, en tegelijk de vonk waaruit zevenentwintig jaar oorlog voortkomt." },
+  parthische_boogschutters: { nm:"De Parthische Boogschutters", icon:"🏹", img:"assets/chronica/combat/parthische_boogschutters.png", hp:65,
+    intro:"Lichte ruiterij die nooit stilstaat en nooit van dichtbij vecht — berucht om het Parthische schot: achterwaarts afgevuurd, midden in een schijnbare vlucht." },
+  perzische_onsterfelijken: { nm:"De Onsterfelijken van Darius", icon:"👑", img:"assets/chronica/combat/perzische_onsterfelijken.png", hp:75,
+    intro:"De keurtroepen van de Perzische koning, tienduizend man sterk gehouden doordat elke gevallene onmiddellijk wordt vervangen — vandaar hun naam, en vandaar het gevoel dat er nooit één minder komt te staan." },
+  gallische_ontzettingsmacht: { nm:"Het Gallische Ontzettingsleger", icon:"⚔️", img:"assets/chronica/combat/gallische_ontzettingsmacht.png", hp:80,
+    intro:"Heel Gallië, eenmaal in zijn geschiedenis verenigd, valt aan op de buitenste omwalling van Alesia — terwijl Vercingetorix van binnenuit tegelijk uitbreekt." },
+  nijlkrokodillen: { nm:"De Krokodillen van de Nijl", icon:"🐊", img:"assets/chronica/combat/nijlkrokodillen.png", hp:60,
+    intro:"De oversteek loopt mis, de stroom pakt de gelederen uiteen — en wat er daarna in het troebele water op de drenkelingen afkomt, staat in geen enkel Macedonisch veldslagverslag beschreven." },
+  proscriptie_sluipmoordenaars: { nm:"De Premiejagers van de Dodenlijst", icon:"🗡️", img:"assets/chronica/combat/proscriptie_sluipmoordenaars.png", hp:60,
+    intro:"Geen soldaten, geen vijandelijk leger — gewone burgers die een naam op een muur lazen en uitrekenden wat het hoofd erbij waard is." },
+  agrippas_vloot: { nm:"Agrippa’s Blokkade", icon:"⚓", img:"assets/chronica/combat/agrippas_vloot.png", hp:70,
+    intro:"Lichte, wendbare Romeinse schepen die de uitbraak uit de Ambracische Golf al wekenlang dichthouden — geduldig wachtend tot honger en ziekte het werk hebben gedaan." },
+  antonius_vloot: { nm:"Antonius’ Zware Schepen", icon:"🚢", img:"assets/chronica/combat/antonius_vloot.png", hp:70,
+    intro:"Hoge, zwaar getimmerde oorlogsschepen, gebouwd om te rammen en te enteren — en juist daardoor te log voor de zee waarop dit vandaag beslist wordt." },
+  visigoten: { nm:"De Visigoten in de Pas", icon:"🪓", img:"assets/chronica/combat/visigoten.png", hp:70,
+    intro:"Krijgers van een volk dat het rijk half binnenliet en half buitensloot — en dat op deze bergweg geen enkele reden meer ziet om te onderhandelen." },
 };
 
 /* ============================================================================
@@ -4158,6 +4475,88 @@ const SP_COMBAT_INTENTIES = {
       uitvoer:"De stroom trekt aan je benen alsof hij ergens heen wil met je." },
     { id:"rust", laden:2, type:"heal", waarde:0.07, aankondiging:"doet niets. Ze wacht gewoon.",
       uitvoer:"Wachten kost haar niets. Zij heeft alle tijd die er is." },
+  ],
+
+  /* ---- Hoofdstuk 18-27 (post-build audit 2026-08-23). vigor-waarden zijn
+     RELATIEVE gewichten binnen één vijand — niet met de hand uitbalanceren,
+     spCombatVigorSchaal() doet dat. ---- */
+  naxos_afgescheidenen: [
+    { id:"muur", laden:2, vigor:7, aankondiging:"sluiten hun schilden voor de stadspoort.",
+      uitvoer:"De linie houdt. Je loopt je stuk op mannen die hier gewoon wonen." },
+    { id:"verwijt", laden:1, type:"vb_roof", waarde:8, aankondiging:"roepen je in het Grieks iets toe over de eed van Delos.",
+      uitvoer:"Ze hebben gelijk, en dat is precies het vervelende eraan." },
+  ],
+  senaatsknokploeg: [
+    { id:"bankpoot", laden:2, vigor:8, aankondiging:"heffen de afgebroken bankpoten.",
+      uitvoer:"Het hout komt neer waar een zwaard nooit had gemogen — midden in de stad zelf." },
+    { id:"menigte", laden:1, vigor:5, aankondiging:"duwen de menigte tussen jou en de tribuun.",
+      uitvoer:"Je wordt meegesleurd door mensen die niet eens weten waarom ze duwen." },
+  ],
+  korinthische_triere: [
+    { id:"ram", laden:2, vigor:9, aankondiging:"draait haar bronzen ram jouw kant op.",
+      uitvoer:"De stoot dreunt door de hele romp; je houdt je vast aan wat er te pakken is." },
+    { id:"enteren", laden:1, vigor:5, aankondiging:"werpt haakijzers over de reling.",
+      uitvoer:"Ze trekken de schepen tegen elkaar aan en komen over de rand." },
+  ],
+  parthische_boogschutters: [
+    { id:"parthisch_schot", laden:2, vigor:8, aankondiging:"draaien hun paarden en doen alsof ze vluchten.",
+      uitvoer:"Halverwege de vlucht draaien ze in het zadel om en schieten — precies waar niemand kijkt." },
+    { id:"stof", laden:1, type:"vb_roof", waarde:8, aankondiging:"jagen hun paarden rond tot het stof de zon wegneemt.",
+      uitvoer:"In het stof zie je geen linie meer, alleen silhouetten die van richting veranderen." },
+    { id:"omtrekken", laden:1, vigor:5, aankondiging:"verspreiden zich over de flanken.",
+      uitvoer:"Waar je je ook naartoe draait, er is altijd een kant die je rug ziet." },
+  ],
+  perzische_onsterfelijken: [
+    { id:"speerwal", laden:2, vigor:9, aankondiging:"laten de eerste rij speren zakken.",
+      uitvoer:"Een muur van punten komt op je af, allemaal op precies dezelfde hoogte." },
+    { id:"vervanging", laden:2, type:"heal", waarde:0.09, aankondiging:"schuiven een nieuwe rij naar voren.",
+      uitvoer:"Waar je er één neerhaalde, staat er meteen weer iemand. Vandaar de naam." },
+    { id:"pracht", laden:1, type:"vb_roof", waarde:7, aankondiging:"heffen hun met goud beslagen schilden tegelijk.",
+      uitvoer:"Het licht slaat je even van je stuk — dat is precies waar die pracht voor gemaakt is." },
+  ],
+  gallische_ontzettingsmacht: [
+    { id:"twee_kanten", laden:2, vigor:10, aankondiging:"vallen tegelijk van buiten én van binnen aan.",
+      uitvoer:"Je staat tussen twee linies die allebei jouw kant op duwen." },
+    { id:"hoorns", laden:1, type:"vb_roof", waarde:8, aankondiging:"laten de carnyces over de hele vlakte schallen.",
+      uitvoer:"Het geluid komt overal vandaan en maakt het onmogelijk te horen wie waar staat." },
+    { id:"greppel", laden:1, vigor:5, aankondiging:"gooien takkenbossen in de Romeinse greppels.",
+      uitvoer:"Ze lopen over hun eigen vulling heen, sneller dan iemand had gedacht." },
+  ],
+  nijlkrokodillen: [
+    { id:"onder_water", laden:2, vigor:8, aankondiging:"verdwijnen alle drie tegelijk onder de bruine oppervlakte.",
+      uitvoer:"Je weet niet meer waar ze zijn tot er iets langs je been schuurt." },
+    { id:"rol", laden:1, vigor:6, aankondiging:"grijpt er één vast en begint te draaien.",
+      uitvoer:"De rol trekt je onder; je komt boven zonder te weten hoe." },
+    { id:"stroom", laden:1, type:"vb_roof", waarde:7, aankondiging:"laten de stroom het werk doen.",
+      uitvoer:"Het water duwt harder dan de dieren, en het wordt moeilijk te bedenken wat je eigenlijk wilde." },
+  ],
+  proscriptie_sluipmoordenaars: [
+    { id:"steeg", laden:2, vigor:7, aankondiging:"versperren beide uiteinden van de steeg.",
+      uitvoer:"Er is geen kant meer op. Dat was ook het idee." },
+    { id:"premie", laden:1, type:"vb_roof", waarde:9, aankondiging:"noemen hardop het bedrag dat op dit hoofd staat.",
+      uitvoer:"Het is minder dan je had verwacht, en juist dat blijft hangen." },
+  ],
+  agrippas_vloot: [
+    { id:"blokkade", laden:2, vigor:8, aankondiging:"sluiten de doorgang naar open zee.",
+      uitvoer:"Elke opening die je ziet, is er al geen meer tegen de tijd dat je hem bereikt." },
+    { id:"brandpijlen", laden:1, vigor:6, aankondiging:"leggen brandpijlen aan.",
+      uitvoer:"Er vat iets vlam op het achterdek; iemand schreeuwt om water." },
+    { id:"geduld", laden:2, type:"heal", waarde:0.08, aankondiging:"trekken zich een scheepslengte terug.",
+      uitvoer:"Ze hebben alle tijd. Dat is hun hele strategie geweest." },
+  ],
+  antonius_vloot: [
+    { id:"rammen", laden:2, vigor:9, aankondiging:"zetten hun zware boegen recht op je af.",
+      uitvoer:"Zwaar hout tegen zwaar hout; het hele dek gaat schuin." },
+    { id:"torens", laden:1, vigor:6, aankondiging:"bemannen de houten torens op het dek.",
+      uitvoer:"Van bovenaf regent het stenen en pijlen op je linie." },
+  ],
+  visigoten: [
+    { id:"hellingaanval", laden:2, vigor:8, aankondiging:"komen van boven de pas naar beneden.",
+      uitvoer:"De helling doet de helft van hun werk; je houdt je nauwelijks staande." },
+    { id:"bijl", laden:1, vigor:6, aankondiging:"halen uit met een lange strijdbijl.",
+      uitvoer:"De bijl splijt het schild waar je hem achter dacht te kunnen wegzetten." },
+    { id:"wij_wonen_hier", laden:1, type:"vb_roof", waarde:8, aankondiging:"roept er één je iets toe in het Latijn.",
+      uitvoer:"Hij spreekt jouw taal beter dan je had verwacht, en zegt dat hij hier al twee generaties woont." },
   ],
 };
 
@@ -24815,6 +25214,9 @@ ch18_gre_zeebond_delos.png
 CODEX:
 codex_delisch_attische_zeebond
 
+PUZZLE:
+puzzle_ch18_gre_zeebond
+
 CHOICES:
 * Zie hoe de eerste bondgenoot spijt krijgt van zijn lidmaatschap -> CH18_GRE_002
 
@@ -24841,6 +25243,9 @@ boodschapper
 SEVERITAS: "Een bondgenootschap dat niemand kan dwingen te blijven," zegt de Boodschapper zacht, "is meestal een bondgenootschap dat allang uiteengevallen is."
 CLEMENTIA: "En toch," zegt de Boodschapper, "noemt niemand het meer een bondgenootschap als er dwang voor nodig is."
 
+COMBAT:
+naxos_afgescheidenen
+
 CHOICES:
 * "Een bondgenootschap zonder dwang houdt nooit stand tegen een vijand als Perzië." [SEVERITAS] -> CH18_GRE_003
 * "Een bondgenoot die niet meer vrijwillig blijft, is eigenlijk geen bondgenoot meer." [CLEMENTIA] -> CH18_GRE_003
@@ -24862,6 +25267,37 @@ ch18_gre_schatkist_akropolis.png
 
 CODEX:
 codex_schatkist_naar_athene
+
+DIALOGUE:
+Perikles
+τοῖς Ἀθηναίοις ἐστὶ τὰ χρήματα.
+
+CHOICES:
+* Hoor er een bezitsvorm in — ‘de Atheners hebben het geld’ -> CH18_GRE_003_GOED
+* Hoor er een meewerkend voorwerp in — ‘het geld wordt aan de Atheners gegeven’ -> CH18_GRE_003_FOUT
+
+END
+
+=== SCENE: CH18_GRE_003_GOED ===
+
+TITLE:
+Hebben, in een Naamval
+
+TEXT:
+Je verstaat hem goed. Een dativus bij εἰμί drukt in het Grieks bezit uit: τοῖς Ἀθηναίοις ἐστί — ‘de Atheners hebben’, letterlijk ‘aan de Atheners is’. Er staat geen werkwoord van geven in de zin; er staat alleen dat het geld nu van hen is. Dat is precies het punt dat niemand hardop wil maken.
+
+CHOICES:
+* Zie waar dat geld allemaal naartoe gaat -> CH18_GRE_004
+
+END
+
+=== SCENE: CH18_GRE_003_FOUT ===
+
+TITLE:
+Hebben, in een Naamval
+
+TEXT:
+Toch niet — er staat helemaal geen werkwoord van geven in de zin. Een dativus bij εἰμί drukt in het Grieks bezit uit: τοῖς Ἀθηναίοις ἐστί betekent ‘de Atheners hebben’, letterlijk ‘aan de Atheners is’. Perikles zegt dus niet dat er iets wórdt overhandigd; hij stelt vast dat het geld nu van Athene ís.
 
 CHOICES:
 * Zie waar dat geld allemaal naartoe gaat -> CH18_GRE_004
@@ -25005,6 +25441,9 @@ Niet iedereen in Griekenland kijkt daar met bewondering naar. In Sparta en bij z
 VOCAB:
 grieks_symmachia, grieks_phoros, grieks_demos
 
+PUZZLE:
+puzzle_ch18_gre_parthenon
+
 CHOICES:
 * Keer terug naar het Orakel van Chronos [REQUIRE:taalspoor=grieks] -> CH18_EINDE
 * Steek over naar de Latijnse kant van het verhaal [REQUIRE:taalspoor=beide] -> CH18_LAT_001
@@ -25031,6 +25470,37 @@ codex_gracchen_landhervorming, codex_cornelia_moeder_gracchen
 
 VOCAB:
 latijn_ager, latijn_populus, latijn_avaritia, latijn_tribunus, latijn_senatus
+
+DIALOGUE:
+Tiberius Gracchus
+Militibus agros amittentibus, res publica ipsa perit.
+
+CHOICES:
+* Hoor er een losse bijzin in — ‘nu de soldaten hun akkers verliezen, gaat de staat zelf ten onder’ -> CH18_LAT_001_GOED
+* Hoor er een meewerkend voorwerp in — ‘voor de soldaten die hun akkers verliezen, gaat de staat zelf ten onder’ -> CH18_LAT_001_FOUT
+
+END
+
+=== SCENE: CH18_LAT_001_GOED ===
+
+TITLE:
+Een Bijzin Zonder Voegwoord
+
+TEXT:
+Je hoort het goed: militibus … amittentibus is een ablativus absolutus — een zelfstandige bijzin zonder voegwoord, die de omstandigheid schetst waaronder de hoofdzin geldt. Niet ‘voor de soldaten’, maar ‘terwijl / doordat de soldaten hun akkers verliezen’. De hoofdzin heeft zijn eigen onderwerp: res publica.
+
+CHOICES:
+* Zie welke wet Tiberius voorstelt -> CH18_LAT_002
+
+END
+
+=== SCENE: CH18_LAT_001_FOUT ===
+
+TITLE:
+Een Bijzin Zonder Voegwoord
+
+TEXT:
+Toch niet — dan had er een dativus moeten staan, en had de hoofdzin geen eigen onderwerp gehad. Militibus … amittentibus is een ablativus absolutus: een zelfstandige bijzin zonder voegwoord die de omstandigheid geeft waaronder de hoofdzin geldt — ‘terwijl de soldaten hun akkers verliezen’. Het onderwerp van de hoofdzin is res publica.
 
 CHOICES:
 * Zie welke wet Tiberius voorstelt -> CH18_LAT_002
@@ -25068,6 +25538,9 @@ Voor zover de overlevering weet, is dit het eerste politieke bloedvergieten binn
 CODEX:
 codex_tiberius_moord
 
+COMBAT:
+senaatsknokploeg
+
 CHOICES:
 * Zie hoe zijn jongere broer de strijd voortzet -> CH18_LAT_004
 
@@ -25085,6 +25558,9 @@ Wanneer de senaat uiteindelijk de wapens laat opnemen tegen zijn aanhangers, laa
 
 CODEX:
 codex_gaius_gracchus_dood
+
+PUZZLE:
+puzzle_ch18_lat_comparativus
 
 CHOICES:
 * Zie hoe een generaal het leger zelf verandert -> CH18_LAT_005
@@ -25239,6 +25715,9 @@ boodschapper
 CLEMENTIA: "Precies," zegt de Boodschapper. "Elke generatie belooft dat zij het anders zal doen. Weinig generaties houden zich eraan."
 SEVERITAS: "Misschien," zegt de Boodschapper, "maar oorlogen eindigen zelden met een handdruk. Sulla wist dat beter dan wie ook."
 
+PUZZLE:
+puzzle_ch18_lat_aci
+
 CHOICES:
 * "Wie zo terugslaat, wordt precies wat hij ooit bestreed." [CLEMENTIA] -> CH18_LAT_009
 * "Een oorlog eindigt pas echt als de tegenstander geen kracht meer heeft om terug te vechten." [SEVERITAS] -> CH18_LAT_009
@@ -25389,6 +25868,9 @@ In Sparta waarschuwt koning Archidamus zijn eigen volksvergadering voor een oorl
 CODEX:
 codex_eerste_vonk_peloponnesische_oorlog
 
+COMBAT:
+korinthische_triere
+
 CHOICES:
 * Zie hoe Athene zich op deze oorlog voorbereidt -> CH19_GRE_002
 
@@ -25413,6 +25895,9 @@ codex_pest_van_athene
 VOCAB:
 grieks_loimos
 
+PUZZLE:
+puzzle_ch19_gre_perikles
+
 CHOICES:
 * Zie wie er, tussen de gewone hoplieten, meevecht -> CH19_GRE_002B
 
@@ -25430,6 +25915,37 @@ Die ballingschap wordt zijn ongeluk én zijn kans: zonder functie in Athene reis
 
 CODEX:
 codex_thucydides_balling
+
+DIALOGUE:
+Thucydides
+ὑπὸ τῶν Ἀθηναίων ἐξεβλήθην.
+
+CHOICES:
+* Hoor er in dat de Atheners degenen zijn die hém verbanden -> CH19_GRE_002B_GOED
+* Hoor er in dat hij, onder Atheens gezag, zelf iemand verbande -> CH19_GRE_002B_FOUT
+
+END
+
+=== SCENE: CH19_GRE_002B_GOED ===
+
+TITLE:
+Wie Doet Wat
+
+TEXT:
+Je verstaat hem goed. ἐξεβλήθην is een aoristus passief in de eerste persoon: ‘ik werd verbannen’. ὑπό met een genitivus wijst bij een passieve vorm altijd de handelende persoon aan — hier dus de Atheners — en betekent daar niet ‘onder’.
+
+CHOICES:
+* Zie wie er, tussen de gewone hoplieten, meevecht -> CH19_GRE_003
+
+END
+
+=== SCENE: CH19_GRE_002B_FOUT ===
+
+TITLE:
+Wie Doet Wat
+
+TEXT:
+Toch niet — ἐξεβλήθην is een aoristus passief in de eerste persoon: ‘ik werd verbannen’, niet ‘ik verbande’. En ὑπό met een genitivus wijst bij zo’n passieve vorm de handelende persoon aan — de Atheners — niet een plaats of een gezag waaronder iets gebeurt.
 
 CHOICES:
 * Zie wie er, tussen de gewone hoplieten, meevecht -> CH19_GRE_003
@@ -25451,6 +25967,9 @@ ch19_gre_socrates_alkibiades.png
 
 CODEX:
 codex_socrates_alkibiades_slagveld
+
+PUZZLE:
+puzzle_ch19_gre_boetheo
 
 CHOICES:
 * Kies een kant in deze oorlog -> CH19_GRE_004
@@ -25493,6 +26012,9 @@ codex_eerste_triumviraat
 VOCAB:
 latijn_proditio
 
+PUZZLE:
+puzzle_ch19_lat_deponens
+
 CHOICES:
 * Zie wat Crassus met zijn deel van de macht doet -> CH19_LAT_002
 
@@ -25508,6 +26030,9 @@ Crassus is, ondanks zijn rijkdom en zijn aandeel in het Triumviraat, altijd de m
 
 CODEX:
 codex_crassus_parthen
+
+COMBAT:
+parthische_boogschutters
 
 CHOICES:
 * Zie hoe die veldtocht afloopt -> CH19_LAT_003
@@ -25527,6 +26052,37 @@ Zonder Crassus als stabiliserend tegenwicht blijft er van het Eerste Triumviraat
 CODEX:
 codex_carrhae_crassus_dood
 
+DIALOGUE:
+Crassus
+Timeo ne omnes pereant.
+
+CHOICES:
+* Hoor er in dat hij vreest dát allen zullen omkomen -> CH19_LAT_003_GOED
+* Hoor er in dat hij vreest dat allen niét zullen omkomen -> CH19_LAT_003_FOUT
+
+END
+
+=== SCENE: CH19_LAT_003_GOED ===
+
+TITLE:
+Een Ontkenning die Geen Ontkenning Is
+
+TEXT:
+Je hoort het goed. Na een werkwoord van vrezen betekent ne juist ‘dat’, niet ‘dat niet’ — het Latijn kijkt naar wat je hóópt te voorkomen. Wil je wél ‘dat niet’ zeggen, dan gebruik je ne non of ut. Crassus vreest dus precies wat er even later gebeurt.
+
+CHOICES:
+* Zie wat er, ondertussen, elders gebeurt -> CH19_LAT_004
+
+END
+
+=== SCENE: CH19_LAT_003_FOUT ===
+
+TITLE:
+Een Ontkenning die Geen Ontkenning Is
+
+TEXT:
+Toch niet — dit is de bekendste valkuil van het hele Latijn. Na een werkwoord van vrezen betekent ne juist ‘dat’, niet ‘dat niet’: je noemt wat je hóópt te voorkomen. Voor ‘dat niet’ zou er ne non of ut hebben gestaan. Crassus vreest dus precies wat er even later ook gebeurt.
+
 CHOICES:
 * Zie wat er, ondertussen, elders gebeurt -> CH19_LAT_004
 
@@ -25541,6 +26097,9 @@ TEXT:
 Even mengt een andere stem zich in het verhaal — niet die van een Romein, maar die van de Boodschapper van Chronos zelf. "Terwijl Crassus in het oosten zijn ondergang tegemoetrijdt, trekt Caesar zelf, ver naar het noorden, van overwinning naar overwinning door Gallië — hij steekt zelfs twee keer over naar het mistige eiland Britannia, en waagt zich uiteindelijk over de Rijn. Dat verhaal is minstens zo groot als dit. Maar het is niet het verhaal van vandaag. Een andere scheur, een andere keer, zal het je laten zien."
 
 De stem vervaagt weer, en het verhaal in Rome zelf gaat verder. De senaat, gealarmeerd door Caesars groeiende macht en populariteit in Gallië, beweegt onder aanvoering van optimates als Cato om hem terug te roepen — met of zonder zijn leger.
+
+PUZZLE:
+puzzle_ch19_lat_gerundium
 
 CHOICES:
 * Kies een kant in wat hierna komt -> CH19_LAT_005
@@ -26650,6 +27209,9 @@ ch20_gre_bucephalus_temmen.png
 CODEX:
 codex_bucephalus
 
+PUZZLE:
+puzzle_ch20_gre_bucephalus
+
 CHOICES:
 * Zie hoe die opvoeding eindigt -> CH20_GRE_004
 
@@ -26692,6 +27254,9 @@ ch20_gre_gordiaanse_knoop.png
 CODEX:
 codex_gordiaanse_knoop
 
+PUZZLE:
+puzzle_ch20_gre_gordion
+
 CHOICES:
 * Zie tegen wie hij het echt moet opnemen -> CH20_GRE_006
 
@@ -26712,6 +27277,9 @@ ch20_gre_issus_darius.png
 
 CODEX:
 codex_darius_III
+
+COMBAT:
+perzische_onsterfelijken
 
 CHOICES:
 * Zie wat er van Darius wordt -> CH20_GRE_007
@@ -26838,6 +27406,37 @@ codex_diadochen_ptolemaeus
 VOCAB:
 grieks_diadochos
 
+DIALOGUE:
+Alexander
+τῷ κρατίστῳ.
+
+CHOICES:
+* Hoor er een meewerkend voorwerp in — ‘aán de sterkste’ -> CH20_GRE_009_GOED
+* Hoor er een bezitsvorm in — ‘ván de sterkste’ -> CH20_GRE_009_FOUT
+
+END
+
+=== SCENE: CH20_GRE_009_GOED ===
+
+TITLE:
+Twee Letters, Een Heel Rijk
+
+TEXT:
+Je verstaat hem goed: τῷ κρατίστῳ is een dativus — ‘aan de sterkste’. Hij wijst geen erfgenaam aan, hij zet een prijs uit. Was het τοῦ κρατίστου geweest, een genitivus, dan had er iets heel anders gestaan. Zijn generaals zullen de komende veertig jaar over precies dit ene woord vechten.
+
+CHOICES:
+* Ga verder -> CH20_GRE_EINDE
+
+END
+
+=== SCENE: CH20_GRE_009_FOUT ===
+
+TITLE:
+Twee Letters, Een Heel Rijk
+
+TEXT:
+Toch niet — een genitivus zou τοῦ κρατίστου zijn geweest. Hier staat τῷ κρατίστῳ, een dativus: ‘aan de sterkste’. Hij wijst dus geen erfgenaam aan, hij zet een prijs uit — en zijn generaals zullen de komende veertig jaar over precies dit ene woord vechten.
+
 CHOICES:
 * Ga verder -> CH20_GRE_EINDE
 
@@ -26893,6 +27492,9 @@ In 55 v.Chr. trekken de Germaanse stammen Usipetes en Tencteri, zelf op de vluch
 
 CODEX:
 codex_slag_bij_kessel
+
+PUZZLE:
+puzzle_ch20_lat_ablabs
 
 CHOICES:
 * Zie wat Caesar daarna, nog dichter bij de Rijn, doet -> CH20_LAT_003
@@ -27102,6 +27704,37 @@ De winter van 54-53 v.Chr. dwingt Caesars legioenen, verspreid over Gallië, tot
 CODEX:
 codex_ambiorix_opstand
 
+DIALOGUE:
+Een Romeinse wachtpost
+Gallos appropinquantes audivimus.
+
+CHOICES:
+* Hoor er in dat zij de Galliërs hóórden naderen, op dat moment zelf -> CH20_LAT_007_GOED
+* Hoor er in dat zij hóórden dát de Galliërs genaderd waren -> CH20_LAT_007_FOUT
+
+END
+
+=== SCENE: CH20_LAT_007_GOED ===
+
+TITLE:
+Waarnemen, Niet Vernemen
+
+TEXT:
+Je hoort het goed. Na een werkwoord van waarneming staat in het Latijn geen A.C.I. maar een ACP: accusativus plus participium. Je neemt niet wáár dat iets het geval is, je neemt iemand waar die iets aan het doen is — de Galliërs die op dat moment naderen. Was het bericht van horen zeggen geweest, dan had er Gallos appropinquavisse gestaan.
+
+CHOICES:
+* Ga verder -> CH20_LAT_008
+
+END
+
+=== SCENE: CH20_LAT_007_FOUT ===
+
+TITLE:
+Waarnemen, Niet Vernemen
+
+TEXT:
+Toch niet — dan had er een infinitivus gestaan: Gallos appropinquavisse. Hier staat het participium appropinquantes, en dat maakt het een ACP: je neemt niet wáár dat iets het geval is, maar iemand waar die iets aan het doen is. De wachtpost hoort de Galliërs op dat moment zelf naderen.
+
 CHOICES:
 * Ga verder -> CH20_LAT_008
 
@@ -27197,6 +27830,9 @@ Jaren van Romeinse strafexpedities zoals die tegen de Eburonen, gedwongen inkwar
 CODEX:
 codex_vercingetorix
 
+PUZZLE:
+puzzle_ch20_lat_gerundivum
+
 CHOICES:
 * Zie hoe dit uiteindelijk wordt beslist -> CH20_LAT_011
 
@@ -27224,6 +27860,9 @@ codex_alesia
 
 VOCAB:
 latijn_deditio
+
+COMBAT:
+gallische_ontzettingsmacht
 
 CHOICES:
 * Ga verder -> CH20_LAT_EINDE
@@ -27366,6 +28005,9 @@ lysias=+1, socrates=+1
 
 CODEX:
 codex_socrates
+
+PUZZLE:
+puzzle_ch21_gre_ouden
 
 CHOICES:
 * Vraag Socrates wie hemzelf ooit iets leerde -> CH21_GRE_002B
@@ -27523,6 +28165,37 @@ ch21_gre_socrates_gifbeker.png
 CODEX:
 codex_socrates_dood, codex_xanthippe
 
+DIALOGUE:
+Socrates
+τῷ Ἀσκληπιῷ ὀφείλομεν ἀλεκτρυόνα.
+
+CHOICES:
+* Hoor er in dat wíj Asklepios een haan schuldig zijn -> CH21_GRE_005_GOED
+* Hoor er in dat Asklepios óns een haan schuldig is -> CH21_GRE_005_FOUT
+
+END
+
+=== SCENE: CH21_GRE_005_GOED ===
+
+TITLE:
+Wie Is Wie Iets Schuldig
+
+TEXT:
+Je verstaat hem goed. τῷ Ἀσκληπιῷ is een dativus — de god aan wie de schuld betaald moet worden — en ὀφείλομεν staat in de eerste persoon meervoud: ‘wij zijn schuldig’. Het offer aan de genezende god was gebruikelijk ná een genezing. Wat hij daarmee over de dood zegt, laat hij aan zijn vrienden over.
+
+CHOICES:
+* Volg Plato na de dood van zijn meester -> CH21_GRE_006
+
+END
+
+=== SCENE: CH21_GRE_005_FOUT ===
+
+TITLE:
+Wie Is Wie Iets Schuldig
+
+TEXT:
+Toch niet — dan had Ἀσκληπιός in de nominativus moeten staan en het werkwoord in de derde persoon. Hier staat τῷ Ἀσκληπιῷ (dativus: aan wie de schuld betaald wordt) bij ὀφείλομεν, eerste persoon meervoud: ‘wíj zijn schuldig’.
+
 CHOICES:
 * Volg Plato na de dood van zijn meester -> CH21_GRE_006
 
@@ -27678,6 +28351,9 @@ aristoteles=+1
 
 CODEX:
 codex_aristoteles
+
+PUZZLE:
+puzzle_ch21_gre_peri
 
 CHOICES:
 * Ga verder -> CH21_GRE_EINDE
@@ -27870,6 +28546,9 @@ Nog voordat de verdediging het woord kan voeren, beseft Verres dat de zaak verlo
 CODEX:
 codex_verres
 
+PUZZLE:
+puzzle_ch21_lat_passief
+
 CHOICES:
 * Enkele jaren later: de samenzwering van Catilina -> CH21_LAT_004
 
@@ -27958,6 +28637,37 @@ Vader des Vaderlands
 TEXT:
 De samenzwering wordt neergeslagen. Cicero wordt door de Senaat en het volk geëerd met de titel Pater Patriae. Toch zal zijn snelle handelen zonder formeel volksproces hem later door zijn politieke tegenstanders zwaar worden aangerekend.
 
+DIALOGUE:
+Cicero, in de Senaat
+Quo usque tandem abutere, Catilina, patientia nostra?
+
+CHOICES:
+* Hoor er in dat Catilina degene is die misbruik máákt -> CH21_LAT_006_GOED
+* Hoor er in dat Catilina degene is van wie misbruik gemáákt wordt -> CH21_LAT_006_FOUT
+
+END
+
+=== SCENE: CH21_LAT_006_GOED ===
+
+TITLE:
+Passief van Vorm, Actief van Betekenis
+
+TEXT:
+Je hoort het goed. Abutere ziet er passief uit, maar abutor is een deponens: passief van vorm, actief van betekenis. Het is bovendien geen infinitivus maar de tweede persoon futurum — ‘hoelang zul jij nog misbruik maken’. En patientia staat in de ablativus, want abutor regeert die naamval.
+
+CHOICES:
+* Bezoek Cicero in zijn studeervertrek -> CH21_LAT_007
+
+END
+
+=== SCENE: CH21_LAT_006_FOUT ===
+
+TITLE:
+Passief van Vorm, Actief van Betekenis
+
+TEXT:
+Toch niet — abutor is een deponens: passief van vorm, actief van betekenis. Abutere is bovendien geen infinitivus maar de tweede persoon futurum: ‘hoelang zul jíj nog misbruik maken’. Catilina is hier de dader, niet het slachtoffer — en patientia staat in de ablativus, omdat abutor die naamval regeert.
+
 CHOICES:
 * Bezoek Cicero in zijn studeervertrek -> CH21_LAT_007
 
@@ -27983,6 +28693,9 @@ codex_cicero_filosofie, codex_seneca_cameo
 
 VOCAB:
 latijn_humanitas, latijn_virtus
+
+PUZZLE:
+puzzle_ch21_lat_ut
 
 CHOICES:
 * Ga verder -> CH21_LAT_EINDE
@@ -28097,6 +28810,37 @@ perdikkas=+1
 VOCAB:
 grieks_diadochoi
 
+DIALOGUE:
+Een schrijver in Babylon
+οἱ στρατηγοὶ ἀλλήλους ἐφοβοῦντο.
+
+CHOICES:
+* Hoor er in dat de generaals elkáár vreesden -> CH22_GRE_001_GOED
+* Hoor er in dat de generaals door anderen gevréésd werden -> CH22_GRE_001_FOUT
+
+END
+
+=== SCENE: CH22_GRE_001_GOED ===
+
+TITLE:
+Medium, Geen Passief
+
+TEXT:
+Je verstaat het goed. ἐφοβοῦντο is medium van vorm met een actieve betekenis — ‘zij vreesden’ — en ἀλλήλους staat in de accusativus als lijdend voorwerp: elkaar. Was het passief bedoeld, dan had er een handelende persoon met ὑπό bij gestaan. Dat wantrouwen zal veertig jaar oorlog opleveren.
+
+CHOICES:
+* Zie hoe Perdikkas het gezag probeert te handhaven -> CH22_GRE_002
+
+END
+
+=== SCENE: CH22_GRE_001_FOUT ===
+
+TITLE:
+Medium, Geen Passief
+
+TEXT:
+Toch niet — dan had er een handelende persoon met ὑπό bij moeten staan. ἐφοβοῦντο is hier medium van vorm met een actieve betekenis: ‘zij vreesden’. En ἀλλήλους is een accusativus, lijdend voorwerp: elkaar. Zij zijn de vrezers, niet de gevreesden.
+
 CHOICES:
 * Zie hoe Perdikkas het gezag probeert te handhaven -> CH22_GRE_002
 
@@ -28109,6 +28853,9 @@ Scheuren in het Rijk
 
 TEXT:
 De spanningen onder de generaals lopen snel op. Ptolemaeus vestigt zich in Egypte en eist het lichaam van Alexander op, terwijl Antigonos zijn macht uitbreidt in Klein-Azië. Perdikkas ziet de afscheiding van Egypte als een directe bedreiging voor het centrale gezag en besluit een strafexpeditie uit te voeren naar de Nijldelta.
+
+PUZZLE:
+puzzle_ch22_gre_medium
 
 CHOICES:
 * Volg de veldtocht naar de Nijl -> CH22_GRE_003
@@ -28136,6 +28883,9 @@ ptolemaeus=+1
 CODEX:
 codex_perdikkas
 
+COMBAT:
+nijlkrokodillen
+
 CHOICES:
 * Bepaal op welk fundament de opvolging gebouwd moet worden -> CH22_GRE_004
 
@@ -28148,6 +28898,9 @@ De Keuze der Generaals
 
 TEXT:
 Met de dood van Perdikkas valt het idee van een centraal geleid eenheidsrijk uiteen. Twee visies staan tegenover elkaar. Ptolemaeus wil zich terugtrekken achter de natuurlijke grenzen van Egypte en een stabiele, rijke staat opbouwen vanuit Alexandrië. Antigonos Monophthalmos en zijn zoon Demetrios eisen daarentegen de heerschappij over het gehele rijk op en bereiden een grootschalige oorlog voor.
+
+PUZZLE:
+puzzle_ch22_gre_futurum
 
 CHOICES:
 * Steun Ptolemaeus en kies voor de consolidatie van Egypte -> CH22_GRE_PTO_001
@@ -28580,6 +29333,9 @@ antonius=+1, octavianus=+1
 CODEX:
 codex_tweede_triumviraat
 
+PUZZLE:
+puzzle_ch22_lat_gerundivum
+
 CHOICES:
 * Zie hoe de triumviren hun tegenstanders uitschakelen -> CH22_LAT_002
 
@@ -28595,6 +29351,9 @@ Om hun veldtochten te financieren en politieke afrekeningen te houden, stellen d
 
 VOCAB:
 latijn_proscriptio
+
+COMBAT:
+proscriptie_sluipmoordenaars
 
 CHOICES:
 * Zie welke naam bovenaan de lijst van Antonius staat -> CH22_LAT_003
@@ -28613,6 +29372,9 @@ REACTION:
 octavianus
 CLEMENTIA: Octavianus kijkt weg. "Ik zou willen dat ik het kon. Antonius' stem weegt op dit moment zwaarder dan de mijne."
 SEVERITAS: Octavianus knikt stijfjes, alsof hij zichzelf ervan overtuigt dat dit de juiste prijs is voor het triumviraat.
+
+PUZZLE:
+puzzle_ch22_lat_plusquam
 
 CHOICES:
 * Pleit bij Octavianus voor het behoud van Cicero's leven [CLEMENTIA] -> CH22_LAT_003_PLEIT
@@ -28669,6 +29431,37 @@ ch22_lat_cicero_dood.png
 
 CODEX:
 codex_cicero_dood
+
+DIALOGUE:
+Cicero
+Moriar in patria saepe servata.
+
+CHOICES:
+* Hoor er in dat het váderland vaak gered is -> CH22_LAT_004_GOED
+* Hoor er in dat híj zelf vaak gered is -> CH22_LAT_004_FOUT
+
+END
+
+=== SCENE: CH22_LAT_004_GOED ===
+
+TITLE:
+Waar het Participium bij Hoort
+
+TEXT:
+Je hoort het goed. Servata is een participium perfectum passief in de ablativus vrouwelijk enkelvoud — het congrueert met patria, niet met de spreker. ‘In het vaderland dat ik vaak heb gered.’ Had hij zichzelf bedoeld, dan had er servatus gestaan, in de nominativus.
+
+CHOICES:
+* Bekijk de nieuwe spanningen binnen Italië -> CH22_LAT_005
+
+END
+
+=== SCENE: CH22_LAT_004_FOUT ===
+
+TITLE:
+Waar het Participium bij Hoort
+
+TEXT:
+Toch niet — dan had er servatus gestaan, nominativus mannelijk. Hier staat servata: ablativus vrouwelijk enkelvoud, en dus congruerend met patria. ‘In het vaderland dat ik vaak heb gered.’ Het participium wijst de naamval en het geslacht aan van het woord waar het bij hoort.
 
 CHOICES:
 * Bekijk de nieuwe spanningen binnen Italië -> CH22_LAT_005
@@ -29059,6 +29852,9 @@ Vlak daarvoor al had Antonius zijn Romeinse vrouw Octavia formeel verstoten, in 
 CODEX:
 codex_actium_propaganda
 
+PUZZLE:
+puzzle_ch23_gre_polemeo
+
 CHOICES:
 * Zie de slag zelf, van Cleopatra's dek -> CH23_GRE_002
 
@@ -29079,6 +29875,9 @@ ch23_gre_actium_cleopatra.png
 
 CODEX:
 codex_slag_bij_actium
+
+COMBAT:
+agrippas_vloot
 
 CHOICES:
 * Zie dezelfde slag van de andere kant van het water [REQUIRE:taalspoor=beide] -> CH23_LAT_002
@@ -29193,13 +29992,44 @@ Cleopatra weet wat Octavianus met haar van plan is: haar levend naar Rome brenge
 
 DIALOGUE:
 Cleopatra
-Ik zal niet getriomfeerd worden.
+οὐ θριαμβεύσομαι.
 
 IMAGE:
 ch23_gre_dood_cleopatra.png
 
 CODEX:
 codex_dood_cleopatra
+
+CHOICES:
+* Hoor er in dat zij zelf geen triomftocht zal houden -> CH23_GRE_005_FOUT
+* Hoor er in dat zíj niet in andermans triomftocht zal meelopen -> CH23_GRE_005_GOED
+
+END
+
+=== SCENE: CH23_GRE_005_GOED ===
+
+TITLE:
+Een Uitgang die Alles Omdraait
+
+TEXT:
+Je verstaat haar goed. θριαμβεύω betekent actief ‘iemand in een triomftocht meevoeren’; θριαμβεύσομαι is medium van vorm en draait die rol om: ‘ik zal niet meegevoerd worden’. Ze zegt niet dat ze afziet van een eigen eerbetoon — ze zegt dat Octavianus haar nooit door de straten van Rome zal laten lopen.
+
+Ze heeft gelijk gekregen. Van alle beelden die Rome van deze oorlog bewaarde, ontbreekt precies dat ene.
+
+CHOICES:
+* Zie wat Augustus, na haar dood, als eerste doet -> CH23_GRE_006
+
+END
+
+=== SCENE: CH23_GRE_005_FOUT ===
+
+TITLE:
+Een Uitgang die Alles Omdraait
+
+TEXT:
+Toch niet — daarvoor had er een actieve vorm moeten staan. θριαμβεύω betekent actief ‘iemand in een triomftocht meevoeren’; θριαμβεύσομαι is medium van vorm en draait de rollen om: niet ‘ik zal geen triomftocht houden’, maar ‘ik zal niet meegevoerd worden’.
+
+Ze heeft gelijk gekregen. Van alle beelden die Rome van deze oorlog bewaarde, ontbreekt precies dat ene.
 
 CHOICES:
 * Zie wat Augustus, na haar dood, als eerste doet -> CH23_GRE_006
@@ -29220,6 +30050,9 @@ Regem, non mortuos, videre volui. — Ik wilde een koning zien, geen lijken.
 
 CODEX:
 codex_augustus_alexander_graf
+
+PUZZLE:
+puzzle_ch23_gre_alexandergraf
 
 CHOICES:
 * Zie wat er van Caesars eigen zoon wordt -> CH23_GRE_007
@@ -29282,7 +30115,7 @@ RELATION:
 octavia=+1
 
 CODEX:
-codex_octavia_verstoting
+codex_octavia_verstoting, codex_grammatica_ch23_nci, codex_grammatica_ch23_semideponentia, codex_grammatica_ch23_vraagpartikels, codex_grammatica_ch23_transitief
 
 CHOICES:
 * Zie eerst de aanloop tot de slag vanuit Cleopatra's eigen hof [REQUIRE:taalspoor=beide] -> CH23_GRE_001
@@ -29306,6 +30139,9 @@ ch23_lat_actium_agrippa.png
 CODEX:
 codex_slag_bij_actium
 
+COMBAT:
+antonius_vloot
+
 CHOICES:
 * Zie hoe het verder gaat met Antonius en Cleopatra [REQUIRE:taalspoor=beide] -> CH23_GRE_003
 * Zie wat Octavianus met deze overwinning doet [REQUIRE:taalspoor=latijn] -> CH23_LAT_003
@@ -29322,6 +30158,9 @@ In januari 27 v.Chr. biedt Octavianus de Senaat theatraal zijn buitengewone bevo
 
 CODEX:
 codex_augustus_vestiging
+
+PUZZLE:
+puzzle_ch23_lat_nci
 
 CHOICES:
 * Maak kennis met de man die dit alles zal opschrijven -> CH23_LAT_004
@@ -29427,6 +30266,9 @@ Sejanus' eigen ambities reiken verder dan hem lief is. Wanneer Tiberius er lucht
 CODEX:
 codex_tiberius_sejanus
 
+PUZZLE:
+puzzle_ch23_lat_semideponens
+
 CHOICES:
 * Zie wie na Tiberius de troon bestijgt -> CH23_LAT_009
 
@@ -29442,6 +30284,9 @@ Tiberius' opvolger, de jonge Caligula, begint zijn regering populair — maar on
 
 CODEX:
 codex_caligula
+
+PUZZLE:
+puzzle_ch23_lat_vraagpartikel
 
 CHOICES:
 * Zie wie de Garde vervolgens uitroept -> CH23_LAT_010
@@ -29548,7 +30393,7 @@ Hij doet het zoals hij zijn hele leven predikte: kalm, filosofisch, zijn aderen 
 
 DIALOGUE:
 Seneca
-Wij oefenen ons hele leven om te sterven — laat zien dat die oefening niet voor niets was.
+Wij oefenen ons hele leven om te sterven — laat zien dat die oefening niet voor niets was. Nonne satis vixi?
 
 "[[Ecce|zie hier]] — net als Socrates, generaties eerder," zegt Livius zacht, "kiest ook hij voor een kalme dood boven een oneervol leven."
 
@@ -29557,6 +30402,37 @@ ch23_lat_dood_seneca.png
 
 CODEX:
 codex_dood_seneca
+
+CHOICES:
+* Hoor er een vraag in die instemming verwacht — “ik heb toch zeker lang genoeg geleefd?” -> CH23_LAT_013_GOED
+* Hoor er een vraag in die ontkenning verwacht — “ik heb toch zeker niet lang genoeg geleefd?” -> CH23_LAT_013_FOUT
+
+END
+
+=== SCENE: CH23_LAT_013_GOED ===
+
+TITLE:
+Nonne, Niet Num
+
+TEXT:
+Je hoort het goed: nonne stelt een vraag waarop de spreker ‘ja’ verwacht — ‘ik heb toch zeker lang genoeg geleefd?’. Had Seneca num gebruikt, dan had hij precies het omgekeerde verwacht. Eén partikel, en de hele toon van een sterfbed kantelt.
+
+Zijn vrienden antwoorden niet. Dat hoeft ook niet — de vraag was nooit bedoeld om beantwoord te worden.
+
+CHOICES:
+* Ga verder -> CH23_LAT_EINDE
+
+END
+
+=== SCENE: CH23_LAT_013_FOUT ===
+
+TITLE:
+Nonne, Niet Num
+
+TEXT:
+Toch niet — daarvoor had er num moeten staan. Nonne doet juist het omgekeerde: het stelt een vraag waarop de spreker ‘ja’ verwacht, ‘ik heb toch zeker lang genoeg geleefd?’. Twee partikels, twee tegengestelde verwachtingen, en alleen het partikel zelf verraadt welke.
+
+Zijn vrienden antwoorden niet. Dat hoeft ook niet — de vraag was nooit bedoeld om beantwoord te worden.
 
 CHOICES:
 * Ga verder -> CH23_LAT_EINDE
@@ -29570,6 +30446,9 @@ Vier Keizers in één Adem
 
 TEXT:
 "[[Ecce|zie hier]] — Augustus, Tiberius, Caligula, Claudius, Nero," telt Livius op. "Eén die vrede bracht, en drie generaties later een die haar bijna weer vernietigde. Ik schrijf dit alles op, in de hoop dat iemand die het ooit leest, het verschil leert herkennen vóórdat het te laat is."
+
+CODEX:
+codex_grammatica_ch23_overzicht
 
 CHOICES:
 * Keer terug naar het Orakel van Chronos -> CH23_EINDE
@@ -29755,6 +30634,9 @@ ch24_gre_phidias_fries.png
 CODEX:
 codex_phidias_h24
 
+PUZZLE:
+puzzle_ch24_gre_superlativus
+
 CHOICES:
 * Onthoud dit fragment -> CH24_GRE_002_ONTHOUDEN
 * Laat het los -> CH24_GRE_002_LOSGELATEN
@@ -29922,6 +30804,37 @@ De Boodschapper kijkt er langer naar dan bij de andere stukken. Iets in haar gez
 CODEX:
 codex_amfoor_parisoordeel
 
+DIALOGUE:
+De Boodschapper, de signatuur voorlezend
+ὁ μὲν ἐποίησεν, ὁ δὲ ἔγραψεν.
+
+CHOICES:
+* Hoor er twee verschillende mensen in — de een vormde de vaas, de ander beschilderde hem -> CH24_GRE_005_GOED
+* Hoor er één persoon in die de vaas eerst vormde en daarna beschilderde -> CH24_GRE_005_FOUT
+
+END
+
+=== SCENE: CH24_GRE_005_GOED ===
+
+TITLE:
+De Een en de Ander
+
+TEXT:
+Je verstaat het goed. ὁ μέν … ὁ δέ betekent ‘de een … de ander’: twee verschillende personen, tegenover elkaar gezet. Een pottenbakker en een schilder werkten in Athene inderdaad vaak als twee vaklieden aan hetzelfde stuk, en signeerden dan ook allebei.
+
+CHOICES:
+* Ga verder naar iets dat niet meer bestaat -> CH24_GRE_006
+
+END
+
+=== SCENE: CH24_GRE_005_FOUT ===
+
+TITLE:
+De Een en de Ander
+
+TEXT:
+Toch niet — dan had er één onderwerp gestaan met μὲν … δὲ tussen de twee werkwoorden. Hier staat tweemaal het lidwoord: ὁ μέν … ὁ δέ, en dat betekent altijd ‘de een … de ander’. Een pottenbakker en een schilder werkten in Athene vaak als twee vaklieden aan hetzelfde stuk, en signeerden dan ook allebei.
+
 CHOICES:
 * Ga verder naar iets dat niet meer bestaat -> CH24_GRE_006
 
@@ -29944,6 +30857,9 @@ ch24_gre_kolossus_rhodos.png
 
 CODEX:
 codex_kolossus_rhodos
+
+PUZZLE:
+puzzle_ch24_gre_comparatio
 
 CHOICES:
 * Onthoud de Kolossus -> CH24_GRE_006_ONTHOUDEN
@@ -30076,6 +30992,37 @@ codex_romeinse_boogbouw
 
 VOCAB:
 latijn_saxum
+
+DIALOGUE:
+Vitruvius
+Quem lapidem ultimum ponunt, is totum arcum continet.
+
+CHOICES:
+* Hoor er in dat de steen die zij als laatste plaatsen, de hele boog bijeenhoudt -> CH24_LAT_001_GOED
+* Hoor er in dat zij als laatste een steen plaatsen op de boog die alles bijeenhoudt -> CH24_LAT_001_FOUT
+
+END
+
+=== SCENE: CH24_LAT_001_GOED ===
+
+TITLE:
+Het Antecedent Staat in de Bijzin
+
+TEXT:
+Je hoort het goed. Het antecedent lapidem is hier de bijzin ingetrokken en heeft de naamval van de bijzin gekregen; het hervattende is in de hoofdzin wijst er weer naar terug. Letterlijk: ‘welke steen zij als laatste plaatsen, dié houdt de hele boog bijeen’ — de sluitsteen.
+
+CHOICES:
+* Vraag Vitruvius waar hij zelf het meeste waarde aan hecht -> CH24_LAT_002
+
+END
+
+=== SCENE: CH24_LAT_001_FOUT ===
+
+TITLE:
+Het Antecedent Staat in de Bijzin
+
+TEXT:
+Toch niet — quem hoort bij lapidem, niet bij arcum: het antecedent is de bijzin ingetrokken en heeft daar de naamval van de bijzin gekregen. Het hervattende is in de hoofdzin wijst er weer naar terug. ‘Welke steen zij als laatste plaatsen, dié houdt de hele boog bijeen’ — de sluitsteen.
 
 CHOICES:
 * Vraag Vitruvius waar hij zelf het meeste waarde aan hecht -> CH24_LAT_002
@@ -30227,6 +31174,9 @@ vitruvius
 SEVERITAS: Vitruvius knikt. "Een weg dient eerst het leger. Alles wat erna nog over die stenen reist, is bijzaak."
 CLEMENTIA: Vitruvius glimlacht. "Ik bouw ze voor legers, toegegeven — maar het mooiste eraan is wat ze daarna nog meer worden."
 
+PUZZLE:
+puzzle_ch24_lat_romam
+
 CHOICES:
 * "Een weg dient eerst het leger — alles wat erna nog over die stenen reist, is bijzaak." [SEVERITAS] -> CH24_LAT_005
 * "Een weg wordt gebouwd voor een leger, maar het mooiste is wat ze daarna nog meer wordt — handel, ideeën, mensen die elkaar ontmoeten." [CLEMENTIA] -> CH24_LAT_005
@@ -30297,6 +31247,9 @@ Vitruvius houdt zijn eigen rol perkament omhoog — De Architectura, tien boeken
 
 CODEX:
 codex_vitruvius_boek
+
+PUZZLE:
+puzzle_ch24_lat_congruentie
 
 CHOICES:
 * Ga verder -> CH24_LAT_EINDE
@@ -30429,6 +31382,9 @@ ch25_gre_pythagoras.png
 CODEX:
 codex_pythagoras_h25
 
+PUZZLE:
+puzzle_ch25_gre_arche
+
 CHOICES:
 * Ga verder naar een dispuut dat nooit echt is opgelost -> CH25_GRE_003
 
@@ -30558,6 +31514,9 @@ Eeuwen later, ver van Milete, staat een gebouw dat de vragen van al deze denkers
 
 CODEX:
 codex_bibliotheek_alexandrie
+
+PUZZLE:
+puzzle_ch25_gre_onzijdig_mv
 
 CHOICES:
 * Maak kennis met een wiskundige die orde schept -> CH25_GRE_006
@@ -30796,6 +31755,9 @@ ch25_lat_plinius_aswolk.png
 CODEX:
 codex_plinius_brief
 
+PUZZLE:
+puzzle_ch25_lat_aci
+
 CHOICES:
 * Volg Plinius de Oudere de golf op -> CH25_LAT_005
 
@@ -30887,6 +31849,9 @@ ch25_lat_dood_plinius_oudere.png
 
 CODEX:
 codex_dood_plinius_oudere
+
+PUZZLE:
+puzzle_ch25_lat_dum
 
 CHOICES:
 * Ga verder -> CH25_LAT_EINDE
@@ -31047,6 +32012,9 @@ hadrianus
 CLEMENTIA: Hadrianus glimlacht, oprecht geraakt. "Niemand vroeg het me, nee. Dat maakte het juist de moeite waard."
 SEVERITAS: Hadrianus haalt zijn schouders licht op. "Een keizer die iets afmaakt, wordt nooit vergeten. Ook dat is een vorm van macht."
 
+PUZZLE:
+puzzle_ch26_gre_teleo
+
 CHOICES:
 * "Niemand vroeg het hem — dat maakt het juist bijzonder." [CLEMENTIA] -> CH26_GRE_003
 * "Een keizer die zoiets afmaakt, wordt nooit vergeten — ook dat is een vorm van macht." [SEVERITAS] -> CH26_GRE_003
@@ -31119,6 +32087,9 @@ Ook orakels, zie je, houden niet zomaar op te bestaan zodra er minder mensen naa
 
 IMAGE:
 ch26_gre_delphi_hadrianus.png
+
+PUZZLE:
+puzzle_ch26_gre_ouketi
 
 CHOICES:
 * Ga verder -> CH26_GRE_EINDE
@@ -31282,6 +32253,9 @@ REACTION:
 nerva
 CLEMENTIA: Nerva knikt vermoeid maar tevreden. "Bloed maakt geen goede bestuurder. Bekwaamheid wel."
 SEVERITAS: Nerva haalt zijn schouders op. "Een gok, toegegeven. Maar de Senaat had weinig andere goede opties over."
+
+PUZZLE:
+puzzle_ch26_lat_fore
 
 CHOICES:
 * "Bloed maakt geen goede bestuurder — hij koos precies goed." [CLEMENTIA] -> CH26_LAT_007
@@ -31503,6 +32477,9 @@ ch26_lat_constitutio_antoniniana.png
 
 CODEX:
 codex_constitutio_antoniniana
+
+PUZZLE:
+puzzle_ch26_lat_fieri
 
 CHOICES:
 * Zie het rijk daarna afglijden naar chaos -> CH26_LAT_013
@@ -31820,6 +32797,9 @@ In 313 n.Chr. vaardigen Constantijn en zijn mede-Augustus Licinius samen het Edi
 CODEX:
 codex_edict_van_milaan
 
+PUZZLE:
+puzzle_ch27_lat_ablativus_tijd
+
 CHOICES:
 * Zie hoe Constantijn zijn nieuwe hoofdstad kiest [REQUIRE:taalspoor=beide] -> CH27_GRE_004
 * Zie hoe het rijk daarna, onder een latere keizer, definitief verandert [REQUIRE:taalspoor=latijn] -> CH27_LAT_005
@@ -31860,6 +32840,9 @@ Hij wijst gehaast twee richtingen aan: een steile, korte bergpas, en een langere
 IMAGE:
 ch27_lat_bergpas_koerier.png
 
+PUZZLE:
+puzzle_ch27_lat_imperativus
+
 CHOICES:
 * Vertrouw de koerier en neem de langere weg langs de rivier -> CH27_LAT_006_WEG
 * Waag het toch via de kortere bergpas -> CH27_LAT_006_BERGPAS
@@ -31892,6 +32875,9 @@ De bergpas is korter, maar ruwer dan verwacht — je bereikt Rome sneller, maar 
 
 FLAG:
 ch27_lat_route=bergpas
+
+COMBAT:
+visigoten
 
 CHOICES:
 * Zie wat er van het West-Romeinse Rijk overblijft -> CH27_LAT_006_EINDE
@@ -32027,6 +33013,9 @@ ch27_gre_constantinopel_gesticht.png
 CODEX:
 codex_constantinopel_gesticht
 
+PUZZLE:
+puzzle_ch27_gre_metaxu
+
 CHOICES:
 * Zie hoe het rijk zich, generaties later, definitief splitst [REQUIRE:taalspoor=beide] -> CH27_LAT_005
 * Zie hoe het rijk zich, generaties later, definitief splitst [REQUIRE:taalspoor=grieks] -> CH27_GRE_005
@@ -32088,6 +33077,9 @@ theodora=+1
 
 CODEX:
 codex_justinianus_corpus_iuris
+
+PUZZLE:
+puzzle_ch27_gre_perfectum
 
 CHOICES:
 * Zie hoe die macht, jaren later, bijna instort -> CH27_GRE_008
@@ -32501,6 +33493,9 @@ Vijf van de potjes gloeien Aegeïsch blauw op. Mnemosyne leest, zachtjes, in het
 
 Je herinnert je Phidias, Polykleitos, Praxiteles, de Kolossus van Rhodos, de gebroken Nike — bij elk daarvan koos je, ooit, te onthouden of los te laten.
 
+PUZZLE:
+puzzle_ch28_gre_polla
+
 CHOICES:
 * Steek over naar wat Rome je vroeg [REQUIRE:taalspoor=beide] -> CH28_WING_B_LAT
 * Ga verder [REQUIRE:taalspoor=grieks] -> CH28_WING_B_DONE
@@ -32518,6 +33513,9 @@ Vier van de potjes gloeien oxblood-rood op. Mnemosyne leest, zachtjes, in het La
 "[[Tu multa vidisti; tu multa meministi.|Jij hebt veel gezien; jij hebt veel onthouden.]]"
 
 Je herinnert je het aquaduct, de Ara Pacis, Vitruvius' eigen drieslag, en, later, Plinius' brief aan Tacitus — bij elk daarvan koos je, ooit, te onthouden of los te laten.
+
+PUZZLE:
+puzzle_ch28_lat_multa
 
 CHOICES:
 * Ga verder -> CH28_WING_B_DONE
@@ -32612,6 +33610,9 @@ Doris, die je hielp toen niemand anders het deed. Straton, wiens argwaan je zelf
 CODEX:
 codex_mnemosyne_wing_c_gre
 
+PUZZLE:
+puzzle_ch28_gre_genitivus
+
 CHOICES:
 * Steek over naar de Latijnse portretten [REQUIRE:taalspoor=beide] -> CH28_WING_C_LAT
 * Ga verder [REQUIRE:taalspoor=grieks] -> CH28_WING_C_DONE
@@ -32630,6 +33631,9 @@ Fortunata, die je ofwel alleen liet, ofwel niet. Spartacus, die je herkende of j
 
 CODEX:
 codex_mnemosyne_wing_c_lat
+
+PUZZLE:
+puzzle_ch28_lat_genitivus
 
 CHOICES:
 * Ga verder -> CH28_WING_C_DONE

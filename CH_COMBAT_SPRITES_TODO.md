@@ -1,6 +1,15 @@
 # Chronica Classica — COMBAT-sprites: generatielijst
 
-**Status: 16 van de 17 compleet.** Alle 16 oorspronkelijke entries in
+> **Bijgewerkt 2026-08-23 (post-build audit).** Er zijn elf nieuwe
+> COMBAT-gevechten bijgekomen in Hoofdstuk 18 t/m 27 — tot die ronde had de
+> hele tweede helft van de campagne één enkel gevecht. **Alle elf sprites
+> ontbreken nog**; zie de aparte tabel onderaan dit bestand met een
+> kant-en-klare prompt per sprite. De gevechten zijn intussen gewoon
+> speelbaar: `spCombatSpriteHTML()` valt bij een ontbrekend bestand stil
+> terug op het emoji-icoon van de vijand, dus er is geen kapotte
+> afbeelding te zien.
+
+**Status: 16 van de 28 compleet.** Alle 16 oorspronkelijke entries in
 `SP_COMBAT_ENEMIES` (`certamen/singleplayer-data.js`) hebben een bestaand,
 correct ladend sprite-bestand in `certamen/assets/chronica/combat/` (zie het
 README daar). **Nieuw, nog ontbrekend (2026-08-18, Finale-koppeling)**:
@@ -68,3 +77,31 @@ OUTPUT FORMAT:
 - De resolutie van de afbeelding is een vierkant canvas van minimaal 512 bij 512 pixels.
 - Geen watermerk of tekst door de afbeelding, zodat deze in-game gebruikt kan worden.
 ```
+
+
+---
+
+## Nieuw, nog te genereren (11 sprites, Hoofdstuk 18-27 — 2026-08-23)
+
+Alle elf met dezelfde Gem hierboven te maken. De Gem is op Griekse mythologie
+ingesteld; deze elf zijn historisch in plaats van mythologisch, dus geef de
+korte beschrijving uit de derde kolom mee in plaats van alleen de naam. Bestand
+opslaan onder exact de naam uit kolom 1, in `certamen/assets/chronica/combat/`.
+
+| Bestand | Vijand (`SP_COMBAT_ENEMIES`) | Prompt om aan de Gem te geven |
+|---|---|---|
+| `naxos_afgescheidenen.png` | De Afgescheiden Naxiërs (H18, Grieks) | Een compacte groep Griekse eilandhoplieten uit de vijfde eeuw v.Chr., in een gesloten schildmuur voor een stadspoort: ronde hoplitenschilden, bronzen korinthische helmen, korte speren. Geen rijk uitgedoste keurtroepen — gewone eilandbewoners die hun eigen polis verdedigen tegen een vloot die hen ooit kwam beschermen. |
+| `senaatsknokploeg.png` | De Knuppelploeg van Nasica (H18, Latijn) | Een groep Romeinse senatoren in toga’s, 133 v.Chr., met afgebroken houten bankpoten als knuppels in de hand. Geen wapenrusting, geen zwaarden — juist het contrast tussen de deftige toga en het ruwe stuk hout maakt het dreigend. Woedende, vastberaden gezichten. |
+| `korinthische_triere.png` | De Korinthische Trireme (H19, Grieks) | Een Korinthische oorlogstrireme uit de vijfde eeuw v.Chr., schuin van voren gezien: bronzen ram op de waterlijn, geschilderd oog op de boeg, drie rijen riemen, bemanning aan dek met speren. Het schip zelf is de tegenstander, dreigend en groot in beeld. |
+| `parthische_boogschutters.png` | De Parthische Boogschutters (H19, Latijn) | Drie Parthische bereden boogschutters, eerste eeuw v.Chr., in het beroemde “Parthische schot”: paarden in volle galop van de kijker weg, ruiters in het zadel omgedraaid en achterwaarts schietend. Schubbenharnas, puntmutsen, samengestelde bogen, opstuivend woestijnstof. |
+| `perzische_onsterfelijken.png` | De Onsterfelijken van Darius (H20, Grieks) | Een geclusterde groep Perzische Onsterfelijken, keurtroepen van Darius III: rijk versierde lange gewaden, gevlochten baarden, tiara’s, rieten spara-schilden, speren met een gouden appel als tegengewicht. Goud- en purperaccenten, gesloten formatie, de rij lijkt zich achter hen eindeloos voort te zetten. |
+| `gallische_ontzettingsmacht.png` | Het Gallische Ontzettingsleger (H20, Latijn) | Een compacte groep Gallische krijgers, 52 v.Chr. bij Alesia: lange zwaarden, ovale beschilderde schilden, kalkstijve haren, torques om de hals, één krijger met een carnyx-oorlogshoorn met een everskop erop. Aanstormend, vanaf een aarden wal naar beneden. |
+| `nijlkrokodillen.png` | De Krokodillen van de Nijl (H22, Grieks) | Drie grote Nijlkrokodillen in troebel bruin rivierwater, half onder de oppervlakte, ogen en ruggenschilden net zichtbaar; één exemplaar op de voorgrond met opengesperde muil. Rondom drijvend wrakhout en Macedonisch wapentuig. Geen mensen in beeld. |
+| `proscriptie_sluipmoordenaars.png` | De Premiejagers van de Dodenlijst (H22, Latijn) | Drie gewone Romeinse burgers, 43 v.Chr., als premiejagers: eenvoudige tunica’s en mantels met de kap op, korte dolken en één kort zwaard, één met een opgerolde naamlijst in de hand. Nadrukkelijk geen soldaten — buurmannen, met een berekenende blik. Nachtelijke steeg. |
+| `agrippas_vloot.png` | Agrippa’s Blokkade (H23, Grieks) | Twee lichte, wendbare Romeinse liburnen in linie, 31 v.Chr. bij Actium, gezien vanaf een vijandelijk dek: lage romp, snelle riemslag, harpax-enterhaken klaar aan de boeg, brandpijlen op de bogen. Discipline en geduld uitstralend in plaats van woede. |
+| `antonius_vloot.png` | Antonius’ Zware Schepen (H23, Latijn) | Een enkel zwaar Hellenistisch oorlogsschip, 31 v.Chr. bij Actium: hoge boorden, zware bronzen ram, houten gevechtstorens op het dek met boogschutters erin, purperen zeilen half gestreken. Imposant en tegelijk log — te zwaar voor de zee waarop het vandaag beslist wordt. |
+| `visigoten.png` | De Visigoten in de Pas (H27, Latijn) | Drie Visigotische krijgers, begin vijfde eeuw n.Chr., hoog op een besneeuwde bergpas: lange strijdbijlen en speren, ronde schilden, wollen mantels met een fibula, deels Romeins buitgemaakt harnas. Geen “barbaren-karikatuur” — goed uitgeruste, gedisciplineerde mannen die al twee generaties binnen de rijksgrenzen wonen. |
+
+Als deze elf klaar zijn, is de lijst weer volledig (28 van 28) — op `fin_lethe.png`
+na, dat hierboven al als losse restpost stond en inmiddels wel in
+`certamen/assets/chronica/combat/` staat.
