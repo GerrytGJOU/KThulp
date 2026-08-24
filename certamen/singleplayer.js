@@ -4270,7 +4270,7 @@ function spStartCheckFromScene(scene){
 SCREENS.spCheck = function(){
   const r = SP_CHECK_RESULTAAT;
   if(!r){ go("spSlots"); return; }
-  const uitkomstLabel = { volledig:"Volledig geslaagd", deels:"Deels geslaagd", gefaald:"Gefaald", kritiek:"Kritiek gefaald" }[r.uitkomst];
+  const uitkomstLabel = { volledig:"Uitermate geslaagd", deels:"Geslaagd", gefaald:"Gefaald", kritiek:"Kritiek gefaald" }[r.uitkomst];
   H(brand(true)+`
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>${esc(SpTextResolver.resolve(r.sceneTitle||"Beproeving", SP_STATE))}</h2>${spAudioToggleHTML()}</div>
   <div class="panel" style="text-align:center">
