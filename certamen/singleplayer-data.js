@@ -33234,7 +33234,7 @@ TITLE:
 Wat de Muren Zagen
 
 TEXT:
-"Jij koos het strand," zegt Lethe. "Dus je zag de list zelf ontstaan, van buitenaf. Wat je niet zag: Troje van binnenuit, in haar laatste, onwetende dagen — Andromache die haar man smeekte binnen te blijven, een stad die niet wist dat ze haar laatste ochtend al achter zich had. Die kant bestond net zo goed. Jij was er niet bij."
+"Jij koos het strand," zegt Lethe. "Dus je zag de list zelf ontstaan, van buitenaf, en de slachting die er die nacht op volgde. Wat je niet zag: Troje van binnenuit, in haar laatste, onwetende uren — Sinons leugen die geloofd werd, Cassandra's waarschuwing die niemand hoorde, en een hele stad die feestvierde omdat ze dacht dat de oorlog eindelijk voorbij was, terwijl de Grieken allang in het paard zaten te wachten. Die kant bestond net zo goed. Jij was er niet bij."
 
 IMAGE:
 ch29_muren_gemiste_kant.png
