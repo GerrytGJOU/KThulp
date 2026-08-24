@@ -6191,7 +6191,7 @@ const SP_PAYOFFS = [
   // flag nodig om dat te toetsen, zelfde redenering als de Kadmos/Europa-
   // callback (Chronica.md §7.11-toevoeging, 2026-07-25). ----
   { id:"ch7_peleus_bruiloft_echo", type:"echo", trigger:{scene:"CH7_004"}, priority:0,
-    content:{text:`Je herkent hem meteen — dezelfde brede grijns die Peleus had toen hij, jaren geleden, als een van de eersten aan boord van de Argo stapte, gretig naar niets dan een nieuw avontuur. Toen was hij een van vele. Vandaag is hij de bruidegom, en de zeenimf naast hem is geen sterveling.`,
+    content:{text:`Je herkent hem meteen — dezelfde brede grijns die Peleus had toen hij, jaren geleden, als een van de eersten aan boord van de Argo stapte, gretig naar niets dan een nieuw avontuur. Toen was hij een van velen. Vandaag is hij de bruidegom, en de zeenimf naast hem is geen sterveling.`,
       kroniekTekst:"{subject_cap} herkende Peleus meteen — dezelfde grijns als toen hij, jaren eerder, aan boord van de Argo stapte. Vandaag was hij de bruidegom, naast een zeenimf die geen sterveling was."} },
   { id:"ch7_philoktetes_lemnos_echo", type:"echo", trigger:{scene:"CH7_018"}, priority:0,
     content:{text:`Diezelfde ongeëvenaarde precisie die je al opviel aan boord van de Argo, jaren geleden — toen nog een belofte, nu al legendarisch — verandert niets aan wat er nu gebeurt. Zelfs de beste boogschutter van Griekenland kan zichzelf niet redden van een addergif dat niemand aan boord weet te genezen.`,
@@ -14630,18 +14630,38 @@ Odysseus' voorstel klinkt eenvoudig, maar niet elke vrijer is meteen overtuigd �
 CHOICES:
 
 * Kijk toe hoe Odysseus zijn eigen overtuigingskracht gebruikt -> CH7_003
-* Help hem de eed zo scherp te formuleren dat zelfs de trotsten geen achterdeur meer vinden [STAT:ingenium:12] -> CH7_002D
-* Help hem de laatste twijfelaars zelf over te halen [STAT:gratia:12] -> CH7_002D
+* Help hem de eed zo scherp te formuleren dat zelfs de trotsten geen achterdeur meer vinden [STAT:ingenium:12] -> CH7_002D_ING
+* Help hem de laatste twijfelaars zelf over te halen [STAT:gratia:12] -> CH7_002D_GRA
 
 END
 
-=== SCENE: CH7_002D ===
+=== SCENE: CH7_002D_ING ===
 
 TITLE:
 Meegedacht
 
 TEXT:
-Je voegt je bij Odysseus terwijl hij van vrijer naar vrijer gaat — en het is jouw formulering die de eed net scherp genoeg maakt om geen enkele achterdeur open te laten, of jouw stem die de laatste, hardnekkigste twijfelaar over de streep trekt. Odysseus kijkt je aan met iets dat verdacht veel op oprechte waardering lijkt. "Ik onthoud wie hier heeft meegedacht," zegt hij. "Dat soort dingen vergeet ik niet snel."
+Je voegt je bij Odysseus terwijl hij van vrijer naar vrijer gaat — en het is jouw formulering die de eed net scherp genoeg maakt om geen enkele achterdeur open te laten. Odysseus kijkt je aan met iets dat verdacht veel op oprechte waardering lijkt. "Ik onthoud wie hier heeft meegedacht," zegt hij. "Dat soort dingen vergeet ik niet snel."
+
+RELATION:
+odysseus=+2
+
+FLAG:
+ch7_odysseus_geholpen=true
+
+CHOICES:
+
+* Zie de eed die daarop volgt -> CH7_003
+
+END
+
+=== SCENE: CH7_002D_GRA ===
+
+TITLE:
+Meegepraat
+
+TEXT:
+Je voegt je bij Odysseus terwijl hij van vrijer naar vrijer gaat — en het is jouw stem die de laatste, hardnekkigste twijfelaar over de streep trekt. Odysseus kijkt je aan met iets dat verdacht veel op oprechte waardering lijkt. "Ik onthoud wie hier heeft meegeholpen," zegt hij. "Dat soort dingen vergeet ik niet snel."
 
 RELATION:
 odysseus=+2
@@ -14677,7 +14697,7 @@ CHOICES:
 
 * Zweer de eed zelf mee, plechtig en in stilte [CLEMENTIA] -> CH7_003_EED
 * Zweer de eed zelf mee, kort en zakelijk, zoals de meeste vrijers om je heen [SEVERITAS] -> CH7_003_EED
-* Zweer mee, zonder er verder bij stil te staan [NEUTRAL] -> CH7_003_EED
+* Zweer de eed zelf mee, zonder er verder bij stil te staan [NEUTRAL] -> CH7_003_EED
 * Blijf terzijde staan — een boodschapper hoeft aan geen eed gebonden te zijn -> CH7_003_EED
 
 END
@@ -14747,7 +14767,7 @@ De Bruiloft van Peleus en Thetis
 TEXT:
 De zeenimf Thetis was ooit zo begeerd dat zelfs Zeus en Poseidon zelf om haar dongen — tot een profetie waarschuwde dat haar zoon zijn vader ooit zou overtreffen. Geen enkele god durfde dat risico te nemen. In plaats daarvan werd ze uitgehuwelijkt aan een sterveling: Peleus, een van de helden die je al kent van de tocht van de Argo.
 
-Bijna elke god en godin is uitgenodigd voor de bruiloft — een eer die zelden een sterveling ten deel valt. Muziek, wijn, geschenken zonder eind. Niemand let op de ene godin die niet op de gastenlijst stond, tot ze zelf besluit dat ook zij aanwezig zal zijn.
+Bijna elke god en godin is uitgenodigd voor de bruiloft — een eer die zelden een sterveling ten deel valt. Muziek, wijn, geschenken zonder eind. Niemand let op die ene godin die niet op de gastenlijst stond, tot ze zelf besluit dat ook zij aanwezig zal zijn.
 
 PERSON:
 thetis:intro
