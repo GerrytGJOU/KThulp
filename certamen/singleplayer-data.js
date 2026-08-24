@@ -2381,11 +2381,15 @@ const SP_CODEX_ENTRIES = {
       rows:[["ik","monebam"],["jij","monebas"],["hij/zij/het","monebat"],
             ["wij","monebamus"],["jullie","monebatis"],["zij","monebant"]] } },
   codex_grammatica_ch4_perfectum: { cat:"grammatica", taal:"latijn", titel:"Grammatica: de perfectum",
-    tekst:"De perfectum beschrijft een voltooide, eenmalige handeling in het verleden — 'hij wierp', één keer, klaar. Anders dan de imperfectum heeft de perfectum geen vast, voorspelbaar tussenvoegsel: elk werkwoord heeft zijn eigen perfectumstam, die je apart moet leren (net als esse/posse in Hoofdstuk 2 al onregelmatig waren).",
-    table:{ headers:["Werkwoord (infinitivus)","Perfectum (hij/zij-vorm)","Betekenis"],
-      rows:[["mittere","misit","hij/zij stuurde, wierp"],
-            ["monere","monuit","hij/zij waarschuwde"],
-            ["cadere","cecidit","hij/zij viel"]] } },
+    tekst:"De perfectum beschrijft een voltooide, eenmalige handeling in het verleden — 'hij wierp', één keer, klaar. Anders dan de imperfectum heeft de perfectum geen vast, voorspelbaar tussenvoegsel: elk werkwoord heeft zijn eigen perfectumstam, die je apart moet leren (net als esse/posse in Hoofdstuk 2 al onregelmatig waren). Onderstaand overzicht groeit mee met elk nieuw onregelmatig werkwoord dat je in de verhalen tegenkomt — kom hier gerust op terug als je een vorm kwijt bent. Deponentia (zoals sequi) en semi-deponentia (zoals audere) vormen hun perfectum anders, met een voltooid deelwoord + esse — die vind je apart terug in de Codex bij Hoofdstuk 23.",
+    table:{ headers:["Werkwoord (infinitivus)","Perfectum (hij/zij-vorm)","Perfectum (ik-vorm)","Betekenis"],
+      rows:[["mittere","misit","misi","sturen, werpen"],
+            ["monere","monuit","monui","waarschuwen"],
+            ["cadere","cecidit","cecidi","vallen"],
+            ["capere","cepit","cepi","nemen, grijpen"],
+            ["agere","egit","egi","doen, handelen"],
+            ["sepelire","sepelivit","sepelivi","begraven"],
+            ["noscere","novit","novi","leren kennen (perfectum = 'ik weet')"]] } },
   codex_grammatica_ch4_ablativus: { cat:"grammatica", taal:"latijn", titel:"Grammatica: de ablativus (van middel)",
     tekst:"Een ablativus van middel laat zien WAARMEE iets gebeurt, zonder voorzetsel: 'Theseus filo labyrinthum relinquit' — Theseus verlaat het labyrint MET (behulp van) de draad. Net als bij de genitivus/dativus (Hoofdstuk 3) hangt de exacte uitgang af van de declinatie van het woord.",
     table:{ headers:["Declinatie","Voorbeeld","Ablativus enkelvoud","Betekenis"],
@@ -14860,9 +14864,7 @@ TITLE:
 Hecuba's Visioen
 
 TEXT:
-Koning Priamus staat voor een verschrikkelijke keuze. Het kind, Paris, wordt naar de berg Ida gebracht om daar te sterven van de elementen — een lot dat, zoals wel vaker in dit soort profetieën, niet helemaal uitkomt zoals gepland.
-
-Koning Priamus staat voor een verschrikkelijke keuze. Het kind, Paris, wordt naar de berg Ida gebracht om daar te sterven van de elementen — een lot dat, zoals wel vaker in dit soort profetieën, niet helemaal uitkomt zoals gepland.
+Koning Priamus staat voor een verschrikkelijke keuze. Het kind, Paris, wordt naar de berg Ida gebracht om daar te sterven door blootstelling aan de elementen — een lot dat, zoals wel vaker in dit soort profetieën, niet helemaal uitkomt zoals gepland.
 
 CODEX:
 codex_geboorte_paris
@@ -14923,7 +14925,7 @@ TITLE:
 De Herder van de Berg Ida
 
 TEXT:
-Herders vinden het kind voor de elementen hun werk kunnen doen, en brengen het groot als een van de hunnen — zonder te weten, of zich erom te bekommeren, wiens zoon hij werkelijk is. Paris groeit op tussen de kuddes, sterk en eerlijk, met niets aan hem dat verraadt dat er koninklijk bloed door zijn aderen stroomt.
+Herders vinden het kind voor de elementen hun werk kunnen doen, en brengen het groot als een van hen — zonder te weten, of zich erom te bekommeren, wiens zoon hij werkelijk is. Paris groeit op tussen de kuddes, sterk en eerlijk, met niets aan hem dat verraadt dat er koninklijk bloed door zijn aderen stroomt.
 
 Op een dag, ver van elk paleis, zal precies die eerlijkheid voor het eerst op de proef gesteld worden.
 
