@@ -8981,14 +8981,17 @@ gevechten):
   CH23_LAT_EINDE. Lopende saves krijgen ze via de eerste echte
   `SP_PATCHES`-entry (`h23-minerva24-grammatica`, `vanaf:24`), die
   grieks-only-spelers overslaat.
-- **16 nieuwe leesvallen** in Hoofdstuk 18-24 (twee per hoofdstuk, één per
-  taalspoor) plus Hoofdstuk 23. Neutraal en symmetrisch geframed, elk op een
+- **14 nieuwe leesvallen** in Hoofdstuk 18-24 (twee per hoofdstuk, één per
+  taalspoor). Neutraal en symmetrisch geframed, elk op een
   echte grammaticale valkuil in plaats van een mythologisch bekend citaat:
   dativus possessivus, ablativus absolutus, `ὑπό` + genitivus bij een
   passieve aoristus, `timeo ne`, `τῷ κρατίστῳ` als dativus, ACP versus
   A.C.I., deponens `abutere`, medium `ἐφοβοῦντο`, participiumcongruentie
   in `patria saepe servata`, `ὁ μέν ... ὁ δέ`, en het ingesloten antecedent.
-  Totaal in de campagne: 44 leesvallen.
+  Totaal in de campagne: 42 leesvallen — 21 in Hoofdstuk 1-17, 21 in
+  Hoofdstuk 18-27. Alle 42 convergeren: geen enkel fout antwoord kost
+  voortgang, en bij `CH25_GRE_007` en `CH26_GRE_003` loopt de foutscene
+  bewust door naar de goede uitleg, zodat een leerling die alsnog leest.
 - **11 nieuwe Combat-bridge-gevechten** in Hoofdstuk 18-23 en 27, met evenveel
   nieuwe `SP_COMBAT_ENEMIES`- en `SP_COMBAT_INTENTIES`-entries. Hoofdstuk 21
   (filosofie), 24 (kunst) en 25 (Pompeii/wetenschap) bewust zonder — daar is
