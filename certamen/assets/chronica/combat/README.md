@@ -17,9 +17,11 @@ Alle andere sprites (incl. `cerberus.png` en `nemeische_leeuw.png`) zijn
 eigen, met de Gemini-Gem gegenereerde tekeningen — geen Boss Battle-materiaal.
 
 ## Status
-Alle 16 COMBAT-sprites zijn compleet. Zie `CH_COMBAT_SPRITES_TODO.md` in de
-repo-root voor de volledige lijst en de Gemini-Gem-prompt, te hergebruiken
-zodra er een nieuw COMBAT-gevecht bijkomt.
+Alle 28 COMBAT-sprites zijn compleet (2026-08-24) — de oorspronkelijke 16,
+`fin_lethe` (Finale-koppeling) en de 11 historische vijanden uit de
+post-build audit (Hoofdstuk 18-27, Chronica.md §7.107). Zie
+`CH_COMBAT_SPRITES_TODO.md` in de repo-root voor de volledige lijst en de
+Gemini-Gem-prompt, te hergebruiken zodra er een nieuw COMBAT-gevecht bijkomt.
 
 ## Nieuw sprite-bestand toevoegen
 1. Bestand hier plaatsen, exacte naam zoals in `SP_COMBAT_ENEMIES` (`img`-veld,
