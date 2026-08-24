@@ -1509,7 +1509,7 @@ const SP_PUZZLES = {
     opties:["ἔφυγον","φεύγουσι","φεύξονται","ἔφυγε"], antwoord:"ἔφυγον",
     hint:"De thematische (\"sterke\") aoristus heeft geen -σ-, maar een eigen, vaak onregelmatige stam: φεύγω → ἔφυγον." },
   puzzle_ch8_ach_3decl: { type:"typed-latin",
-    vraag:"“Achilles verba ___ audit” — Achilles luistert naar de woorden van de oude man (Phoenix). Typ de genitivus enkelvoud van senex, senis (oude man), een 3e-declinatie medeklinkerstam.",
+    vraag:"“Achilles verba ___ audit” — Achilles luistert naar de woorden van de oude man (Phoenix). Typ de genitivus enkelvoud van senex (oude man), een 3e-declinatie medeklinkerstam.",
     antwoord:"senis",
     hint:"3e declinatie, medeklinkerstam: senex, senis — genitivus enkelvoud eindigt op -is, net als rex, regis." },
   puzzle_ch8_ach_pronomen: { type:"multiple-choice",
@@ -1530,7 +1530,7 @@ const SP_PUZZLES = {
     opties:["ἔβαλε","βάλλει","βαλεῖ","ἔβαλλε"], antwoord:"ἔβαλε",
     hint:"De thematische (\"sterke\") aoristus heeft geen -σ-, maar een eigen stam: βάλλω → ἔβαλε." },
   puzzle_ch8_aga_3decl: { type:"typed-latin",
-    vraag:"“Hector scutum ___ frangit” — Hector breekt het schild van een soldaat. Typ de genitivus enkelvoud van miles, militis (soldaat), een 3e-declinatie medeklinkerstam.",
+    vraag:"“Hector scutum ___ frangit” — Hector breekt het schild van een soldaat. Typ de genitivus enkelvoud van miles (soldaat), een 3e-declinatie medeklinkerstam.",
     antwoord:"militis",
     hint:"3e declinatie, medeklinkerstam: miles, militis — genitivus enkelvoud eindigt op -is, net als rex, regis." },
   puzzle_ch8_aga_pronomen: { type:"multiple-choice",
@@ -2493,7 +2493,7 @@ const SP_CODEX_ENTRIES = {
   codex_aulis_iphigenia: { cat:"mythologie", titel:"Het Offer in Aulis",
     tekst:"De verzamelde Griekse vloot ligt wekenlang windstil in Aulis, tot de ziener Calchas onthult dat Agamemnon de godin Artemis heeft beledigd — enkel een offer van zijn eigen dochter Iphigenia kan gunstige wind afdwingen. Agamemnon, verscheurd tussen vader- en veldheerschap, laat haar naar Aulis lokken onder het mom van een huwelijk met Achilles. In sommige tradities wordt ze werkelijk geofferd; in andere grijpt Artemis zelf in en voert haar op het laatste moment weg naar Tauris, terwijl een hinde haar plaats inneemt op het altaar." },
   codex_philoktetes_lemnos: { cat:"mythologie", titel:"Philoktetes op Lemnos",
-    tekst:"Onderweg naar Troje wordt Philoktetes — dezelfde ongeëvenaarde boogschutter die de speler al kent van de Argonautentocht, inmiddels drager van Herakles' eigen boog — in de voet gebeten door een slang. De wond etterst en stinkt zo onhoudbaar, en zijn kreten van pijn verstoren de offerrituelen zo ernstig, dat de Grieken hem achterlaten op het verlaten eiland Lemnos, met niets dan die boog om te overleven." },
+    tekst:"Onderweg naar Troje wordt Philoktetes — dezelfde ongeëvenaarde boogschutter die de speler al kent van de Argonautentocht, inmiddels drager van Herakles' eigen boog — in de voet gebeten door een slang. De wond ettert en stinkt zo onhoudbaar, en zijn kreten van pijn verstoren de offerrituelen zo ernstig, dat de Grieken hem achterlaten op het verlaten eiland Lemnos, met niets dan die boog om te overleven." },
   codex_protesilaos_schild: { cat:"mythologie", titel:"Protesilaus en het Schild van Odysseus",
     tekst:"Een orakel had voorspeld dat de eerste Griek die voet aan Trojaanse land zet, zal sterven. Odysseus omzeilt het lot met een list: hij werpt zijn eigen schild op het strand en springt daarop, in plaats van rechtstreeks op het zand. Protesilaus, onbevreesder of minder behoedzaam, springt als allereerste écht aan land — en wordt op datzelfde moment gedood, de eerste Griekse dode van een oorlog die tien jaar zal duren." },
   codex_chryseis_briseis: { cat:"mythologie", titel:"Chryseis en Briseis",
@@ -15315,7 +15315,7 @@ TITLE:
 Philoktetes op Lemnos
 
 TEXT:
-Onderweg naar Troje wordt de vloot gedwongen te pauzeren voor een offer — en tijdens dat oponthoud wordt Philoktetes, dezelfde ongeëvenaarde boogschutter die inmiddels Herakles' eigen boog draagt, in zijn voet gebeten door een verborgen slang. De wond etterst binnen dagen zo erg, en zijn kreten van pijn worden zo ondraaglijk, dat ze de rituelen van de hele vloot verstoren.
+Onderweg naar Troje wordt de vloot gedwongen te pauzeren voor een offer — en tijdens dat oponthoud wordt Philoktetes, dezelfde ongeëvenaarde boogschutter die inmiddels Herakles' eigen boog draagt, in zijn voet gebeten door een verborgen slang. De wond ettert binnen dagen zo erg, en zijn kreten van pijn worden zo ondraaglijk, dat ze de rituelen van de hele vloot verstoren.
 
 De Grieken nemen een harde beslissing: ze laten Philoktetes achter op het verlaten eiland Lemnos, met niets dan zijn wond en de boog van Herakles om te overleven — in de stellige hoop dat ze hem nooit meer nodig zullen hebben.
 
@@ -15663,7 +15663,7 @@ Hector en Andromache
 TEXT:
 "Zelfs hier, in deze tent, ver van de muren van Troje," zegt de Boodschapper zacht, "laat ik je zien wat zich daar afspeelt — anders zou je nooit weten wat de andere kant van deze oorlog werkelijk voelt." Midden in de strijd keert Hector, Troje's beste verdediger, kort terug voor offers, en treft zijn vrouw Andromache met hun zoontje Astyanax op de stadsmuur.
 
-Ze smeekt hem te blijven. Hij weet, en zegt het haar bijna teder, dat Troje ooit zal vallen — maar dat hij zichzelf nooit meer zou kunnen aanzien als hij nu wegbleef. Het jongetje schrikt van zijn vaders glimmende helm, tot Hector hem lachend afzet en optilt.
+Ze smeekt hem te blijven. Hij weet, en zegt het haar bijna teder, dat Troje ooit zal vallen — maar dat hij zichzelf nooit meer zou kunnen aanzien als hij nu wegbleef. Het jongetje schrikt van zijn vaders glimmende helm, tot Hector zijn helm afzet en hem lachend optilt.
 
 IMAGE:
 ch8_hektor_andromache.png
@@ -16099,7 +16099,7 @@ Hector en Andromache
 TEXT:
 "Zelfs hier, midden op het slagveld," zegt de Boodschapper zacht, "laat ik je zien wat zich ondertussen binnen de muren van Troje afspeelt." Hector, Troje's beste verdediger, keert kort terug voor offers, en treft zijn vrouw Andromache met hun zoontje Astyanax op de stadsmuur.
 
-Ze smeekt hem te blijven. Hij weet, en zegt het haar bijna teder, dat Troje ooit zal vallen — maar dat hij zichzelf nooit meer zou kunnen aanzien als hij nu wegbleef. Het jongetje schrikt van zijn vaders glimmende helm, tot Hector hem lachend afzet en optilt.
+Ze smeekt hem te blijven. Hij weet, en zegt het haar bijna teder, dat Troje ooit zal vallen — maar dat hij zichzelf nooit meer zou kunnen aanzien als hij nu wegbleef. Het jongetje schrikt van zijn vaders glimmende helm, tot Hector zijn helm afzet en hem lachend optilt.
 
 IMAGE:
 ch8_hektor_andromache.png
