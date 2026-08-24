@@ -33323,7 +33323,7 @@ Welkom, kind — al heb je me nooit met naam genoemd horen worden, ik heb elke s
 Ze wijst met een vinger, en vier gangen tekenen zich af tussen de boekenkasten, elk met een eigen, subtiele gloed.
 
 IMAGE:
-ch28_mnemosyne_bibliotheek.png
+ch28_mnemosyne_bibliotheek_{klasse_beeldsuffix}.png
 
 VOCAB:
 grieks_ana, grieks_phemi, grieks_para, grieks_didomi, grieks_hotan, latijn_nam, latijn_immo, latijn_scilicet, latijn_tantum, grieks_anaginosko, grieks_anankazo, grieks_anechomai, grieks_anoigo, grieks_apatao, grieks_apokrinomai, grieks_aporeo, grieks_apophaino, grieks_haptomai, grieks_aresko, latijn_inquio, latijn_intelligo, latijn_parco, latijn_certe, latijn_concedo, latijn_convenio, latijn_valeo, latijn_fallo, latijn_occurro, latijn_statuo
