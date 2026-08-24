@@ -3536,7 +3536,14 @@ function spCombatAntwoordMC(idx){
 function spCombatAntwoordGetypt(){
   if(!SP_COMBAT || SP_COMBAT.fase!=="vraag") return;
   const raw = el("spCombatInput")?.value || "";
-  spCombatVerwerkAntwoord(CombatQuestions.controleer(SP_COMBAT.question, raw), SP_COMBAT.vorm, SP_COMBAT.vorm.id);
+  const q = SP_COMBAT.question;
+  const goed = CombatQuestions.controleer(q, raw);
+  // Leerlingfeedback (2026-08-24): zelfde spiritus-only-detectie als bij de
+  // typed-greek-puzzels — dezelfde herkenbare fout verdient hier ook een
+  // gerichte hint i.p.v. de generieke q.uitleg.
+  const spiritusIsOnlyFout = !goed && q?.invoer==="typed-greek" && typeof spNormalizeGreekNoSpiritus==="function"
+    && spNormalizeGreekNoSpiritus(raw)===spNormalizeGreekNoSpiritus(q.antwoord);
+  spCombatVerwerkAntwoord(goed, SP_COMBAT.vorm, SP_COMBAT.vorm.id, spiritusIsOnlyFout);
 }
 // Schermtoetsenbord-hulpjes voor getypt Grieks — hergebruiken de bestaande
 // puzzel-toetsen, maar op het combat-invoerveld.
@@ -3549,7 +3556,7 @@ function spCombatGreekModifier(type){
   if(map[last]) i.value = i.value.slice(0,-1) + map[last];
 }
 
-function spCombatVerwerkAntwoord(goed, vorm, vormId){
+function spCombatVerwerkAntwoord(goed, vorm, vormId, spiritusIsOnlyFout){
   const q = SP_COMBAT.question;
   // Leitner: fout → box 0 (opnieuw verdienen), goed → één box omhoog.
   if(q) CombatQuestions.noteerAntwoord(SP_STATE.mastery, q.masteryKey, goed);
@@ -3578,7 +3585,9 @@ function spCombatVerwerkAntwoord(goed, vorm, vormId){
     // MICRO-ONDERWIJS (COMBAT_OVERHAUL.md D): een fout antwoord is nu een
     // leermoment in plaats van alleen een straf. De uitleg blijft op het
     // keuzescherm staan terwijl de speler zijn volgende zet kiest.
-    SP_COMBAT.uitleg = q ? q.uitleg : null;
+    SP_COMBAT.uitleg = spiritusIsOnlyFout
+      ? "Bijna goed — alleen de spiritus (lenis ᾿ of asper ῾) klopt nog niet. Check of je die hebt gezet, het juiste teken gebruikt, en op de juiste lettergreep."
+      : (q ? q.uitleg : null);
     SP_COMBAT.laatsteFx = { speler:"evade" };
   }
 
