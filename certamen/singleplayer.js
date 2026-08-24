@@ -3059,6 +3059,17 @@ function spNormalizeGreek(str){
     .replace(/ς/g, "σ")
     .replace(/\s+/g, "");
 }
+// Leerlingfeedback (2026-08-24): een ontbrekende, verkeerde, of verkeerd
+// geplaatste spiritus is een herkenbare, specifieke fout (zie de eerdere
+// live-fout van een tester die spiritus asper op de verkeerde lettergreep
+// zette) — die verdient een gerichte hint in plaats van de generieke
+// puzzel-hint. Spiritus lenis/asper zijn U+0313/U+0314 na NFD-decompositie;
+// strip ze hier BOVENOP spNormalizeGreek() om te testen of ze de ENIGE
+// afwijking zijn.
+const SP_GREEK_SPIRITUS_RE = /[̓̔]/g;
+function spNormalizeGreekNoSpiritus(str){
+  return spNormalizeGreek(str).normalize("NFD").replace(SP_GREEK_SPIRITUS_RE, "").normalize("NFC");
+}
 function spRenderTypedGreekPuzzle(scene, puzzleId, puzzle, target){
   H(brand(true)+`
   <div class="scrhead">${spBackToMenuButtonHTML()}<h2>Chronica Classica</h2>${spAudioToggleHTML()}</div>
@@ -3087,7 +3098,17 @@ function spCheckTypedGreekPuzzle(puzzleId, target){
     // spiritus-tekens oogde bovendien als een gewone schuine streep.
     // spNormalizeGreek() negeert accenten (acuut/gravis/circumflex) al bij
     // het nakijken; die mogen dus nooit de reden zijn dat dit fout is.
-    if(err){ err.textContent = puzzle.hint || "Nog niet juist — probeer opnieuw. (Spiritus en iota subscriptum tellen mee, accenten zoals acuut of gravis niet.)"; err.style.display = ""; }
+    // Leerlingfeedback (2026-08-24): als spiritus de ENIGE afwijking is
+    // (ontbrekend, verkeerd type, of op de verkeerde lettergreep), is dat
+    // een specifieke, herkenbare fout — geef daar een gerichte hint voor
+    // in plaats van de generieke puzzel-hint.
+    if(err){
+      const spiritusIsOnlyFout = spNormalizeGreekNoSpiritus(raw) === spNormalizeGreekNoSpiritus(puzzle.antwoord);
+      err.textContent = spiritusIsOnlyFout
+        ? "Bijna goed — alleen de spiritus (lenis ᾿ of asper ῾) klopt nog niet. Check of je die hebt gezet, het juiste teken gebruikt, en op de juiste lettergreep."
+        : (puzzle.hint || "Nog niet juist — probeer opnieuw. (Spiritus en iota subscriptum tellen mee, accenten zoals acuut of gravis niet.)");
+      err.style.display = "";
+    }
   }
 }
 
