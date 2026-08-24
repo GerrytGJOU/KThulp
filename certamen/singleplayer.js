@@ -810,6 +810,27 @@ function spBackfillVocab(state, depth){
    pagina's werden alleen vroeger in het hoofdstuk uitgedeeld, de bestaande hook
    verderop kende ze al toe. */
 const SP_PATCHES = [
+  // Post-build audit 2026-08-23: Minerva 24 (N.C.I., semi-deponentia,
+  // transitief/intransitief, vraagpartikels) stond wel in SP_CAMPAIGN.ch23,
+  // maar kwam nergens in het gebouwde spel voor. De vijf nieuwe
+  // grammatica-pagina's worden nu uitgedeeld op CH23_LAT_001 en de
+  // overzichtspagina op CH23_LAT_EINDE — een lopende save die Hoofdstuk 23
+  // al voorbij is, zou ze anders nooit meer krijgen.
+  // Alleen voor spelers die de Latijnse lijn ook echt gelopen hebben:
+  // een grieks-only speler is CH23_LAT_001 nooit tegengekomen.
+  { id:"h23-minerva24-grammatica", vanaf:24,
+    omschrijving:"Vijf grammatica-codexpagina's + overzicht (Minerva 24) achteraf toegevoegd aan CH23_LAT_001/CH23_LAT_EINDE.",
+    melding:"De Codex Memoriae heeft er vijf grammaticabladzijden bij gekregen: de nominativus cum infinitivo, de semi-deponentia, transitief en intransitief, en de vraagpartikels.",
+    apply(state){
+      if((state.flags||{}).taalspoor === "grieks") return false;
+      const ids = ["codex_grammatica_ch23_nci","codex_grammatica_ch23_semideponentia",
+                   "codex_grammatica_ch23_vraagpartikels","codex_grammatica_ch23_transitief",
+                   "codex_grammatica_ch23_overzicht"];
+      const have = state.codex || [];
+      const fresh = ids.filter(id=>!have.includes(id));
+      if(!fresh.length) return false;
+      state.codex = [...have, ...fresh];
+    } },
 ];
 
 function spApplyPatches(state, depth){
@@ -1752,11 +1773,43 @@ function spSyncLeesvalOutcome(leesvalId, goed){
 }
 
 /* ---- NAVIGATIE ---- */
+/* ---- VERVOLG NA EEN GATE-SCENE (puzzel / gevecht / race) ----------------
+   Post-build audit 2026-08-23. spRenderPuzzle/spStartCombatFromScene/
+   spStartRaceFromScene sprongen na afloop altijd naar scene.choices[0].target.
+   Dat klopt zolang zo'n scène maar één uitgang heeft — maar niet als ze er
+   meer heeft: dan slikt de gate de keuze van de speler in, inclusief een
+   eventuele [CLEMENTIA]/[SEVERITAS]-tag of een [REQUIRE:taalspoor=...]-gate.
+   In het laatste geval kon een speler zelfs in het verkeerde taalspoor
+   belanden.
+
+   Dit ging al fout vóór deze audit (CH1_B06, CH1_C07, CH8_AGA_004 en de
+   getagde keuzes in CH4_T13/CH4_P03/CH4_P07), en de nieuwe puzzels en
+   gevechten in Hoofdstuk 18-28 maakten het breder. Oplossing: heeft de scène
+   meer dan één keuze, dan keren we na de gate terug naar diezelfde scène met
+   de gate afgevinkt, zodat de keuzes gewoon getoond worden.
+
+   De "gate afgevinkt"-stand staat in de save zelf (state.gateDone), niet in
+   een losse variabele: sluit een leerling de app tussen het gevecht en de
+   keuze, dan hoeft hij dat gevecht na het hervatten niet nog een keer te
+   doen. Oude saves hebben de sleutel niet; undefined gedraagt zich als
+   "nog niet afgevinkt", precies zoals het hoort. */
+const SP_NA_GATE = "@NA_GATE";
+function spSceneVervolg(scene){
+  return (scene.choices && scene.choices.length > 1) ? SP_NA_GATE : scene.choices[0]?.target;
+}
+
 function spGoCns(nodeId){
+  if(nodeId === SP_NA_GATE){ spSaveProgress({ gateDone: SP_STATE.node }); return go("spPlay"); }
   // Elke leesval-uitkomstscène eindigt op _GOED/_FOUT (B21/B29, zie
   // Chronica.md §7.17/§7.23) — generieke hook i.p.v. 13 losse call-sites.
-  const leesvalMatch = /^(.+)_(GOED|FOUT)$/.exec(nodeId);
-  if(leesvalMatch) spSyncLeesvalOutcome(leesvalMatch[1], leesvalMatch[2]==="GOED");
+  // Hoofdstuk 15-17 gebruiken een tweede, even oude naamgeving: _LV_A (goed)
+  // en _LV_B (fout). Die zes leesvallen bleven daardoor onzichtbaar in het
+  // docentscherm; ze tellen nu gewoon mee (post-build audit 2026-08-23).
+  const leesvalMatch = /^(.+)_(GOED|FOUT2?|LV_A|LV_B)$/.exec(nodeId);
+  if(leesvalMatch){
+    const goed = leesvalMatch[2]==="GOED" || leesvalMatch[2]==="LV_A";
+    spSyncLeesvalOutcome(leesvalMatch[1], goed);
+  }
   // Finale-router (Chronica.md §7.101): de vijf eindes hangen af van de
   // Clementia/Severitas-stand die tot en met Hoofdstuk 19 is opgebouwd
   // (zie chronica-finale-brainstorm-2026-08-17 in memory) — precies ÉÉN
@@ -1773,7 +1826,7 @@ function spGoCns(nodeId){
     const flags = {...(SP_STATE.flags||{}), fin_herinnering_score: String(spFinaleHerinneringScore(SP_STATE))};
     spSaveProgress({ flags });
   }
-  spSaveProgress({ node:nodeId });
+  spSaveProgress({ node:nodeId, gateDone:null });
   go("spPlay");
 }
 /* Klik op een keuzeknop: registreert eerst stil de Clementia/Severitas-tag (indien
@@ -2179,15 +2232,21 @@ SCREENS.spPlay = function(){
   const scene = SP_SCENES.get(SP_STATE.node);
   if(!scene){ go("singlePlayer"); return; }
 
-  spRunMetaHooks(scene.meta);
-  spHookSeenImage(scene);
-  spKroniekFinaleEindeLog(SP_STATE.node);
+  // De meta-hooks (FLAG/RELATION/CODEX/...) mogen maar EEN keer per bezoek
+  // draaien; komen we hier terug omdat de puzzel/het gevecht op deze scène
+  // net is afgerond (SP_SCENE_GATE_DONE), dan alleen de keuzes renderen.
+  const naGate = (SP_STATE.gateDone === SP_STATE.node);
+  if(!naGate){
+    spRunMetaHooks(scene.meta);
+    spHookSeenImage(scene);
+    spKroniekFinaleEindeLog(SP_STATE.node);
 
-  if(scene.meta.PUZZLE) return spRenderPuzzle(scene);
-  if(scene.meta.COMBAT) return spStartCombatFromScene(scene);
-  if(scene.meta.CHECK) return spStartCheckFromScene(scene);
-  if(scene.meta.RACE) return spStartRaceFromScene(scene);
-  if(scene.meta.MAP && SP_HUB_MAPS[scene.meta.MAP.trim()]) return spRenderMapHub(scene);
+    if(scene.meta.PUZZLE) return spRenderPuzzle(scene);
+    if(scene.meta.COMBAT) return spStartCombatFromScene(scene);
+    if(scene.meta.CHECK) return spStartCheckFromScene(scene);
+    if(scene.meta.RACE) return spStartRaceFromScene(scene);
+    if(scene.meta.MAP && SP_HUB_MAPS[scene.meta.MAP.trim()]) return spRenderMapHub(scene);
+  }
 
   const payoffs = spResolvePayoffs(SP_STATE.node);
   // Deze scènetekst stond al op het worp-resultaatscherm (spStartCheckFromScene)
@@ -2817,7 +2876,7 @@ function spHookQuest(text){
 function spRenderPuzzle(scene){
   const puzzleId = scene.meta.PUZZLE.trim();
   const puzzle = SP_PUZZLES[puzzleId];
-  const target = scene.choices[0]?.target;
+  const target = spSceneVervolg(scene);
   if(!puzzle){ console.error("Onbekende puzzel:", puzzleId); return spGoCns(target); }
   const type = puzzle.type||"greek-transliteration";
   if(type==="multiple-choice") return spRenderMCPuzzle(scene, puzzleId, puzzle, target);
@@ -3322,7 +3381,7 @@ function spFinaleLetheHp(baseHp, state){
 /* ---- Start -------------------------------------------------------------- */
 function spStartCombatFromScene(scene){
   const enemyId = scene.meta.COMBAT.trim();
-  const target = scene.choices[0]?.target;
+  const target = spSceneVervolg(scene);
   const enemy = SP_COMBAT_ENEMIES[enemyId];
   if(!enemy){ console.error("Onbekende vijand:", enemyId); return spGoCns(target); }
   const basis = enemyId==="fin_lethe" ? spFinaleLetheHp(enemy.hp, SP_STATE) : enemy.hp;
@@ -4012,7 +4071,7 @@ let SP_RACE = null;
 function spStartRaceFromScene(scene){
   const raceId = scene.meta.RACE.trim();
   const race = SP_RACES[raceId];
-  const target = scene.choices[0]?.target;
+  const target = spSceneVervolg(scene);
   if(!race){ console.error("Onbekende race:", raceId); return spGoCns(target); }
   SP_RACE = { raceId, player:0, opponent:0, applesLeft:race.appleCount, questionsAnswered:0, question:null, offerApple:false, sceneTitle:scene.title };
   spRaceNextQuestion();

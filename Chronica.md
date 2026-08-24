@@ -8925,6 +8925,118 @@ keer draaien voegt niets toe; dode `CH20_`- en `FIN_`-nodes landen op de juiste
 hoofdstukopening; en de patch-machinerie slaat over vóór `vanaf`, past toe erna,
 en doet de tweede keer niets.
 
+### 7.107 Tweede post-build audit: de actieve taallaag stopte bij Hoofdstuk 17 (2026-08-23)
+
+Op Gerbens verzoek, een week voor de lancering: de twee audits uit de
+bouwfase — de mythologische/KCV-audit (§7.64-§7.67) en de didactische audit
+(`didactiek/`, checklist §7.36) — opnieuw tegen de af gebouwde campagne
+gehouden.
+
+**Wat hield stand.** De mythologische canon (`SP_MYTH_CANON`, 54 items) is
+volledig gedekt; alleen Hippolytos, Hippodameia en Regulus blijven dunne
+vermeldingen. Geen enkele leesval verklapt zijn antwoord via de keuzeframing
+(§7.28 hield). De taalspoor-menging in `VOCAB:`-blokken die §7.105 repareerde
+is niet teruggekomen: nul fouten over het hele bestand. De `VOCAB:`-groei zit
+op 20-50 nieuwe woorden per hoofdstuk t/m Hoofdstuk 29, ruim boven de norm
+van 8-12 uit de checklist.
+
+**Wat niet hield: de actieve taallaag stopte abrupt na Hoofdstuk 17.**
+Gemeten over de hele campagne:
+
+| | H1-H17 | H18-H27 (vóór deze ronde) |
+|---|---|---|
+| `PUZZLE:` | 135 | **0** |
+| `COMBAT:`-bridge | 16 | **1** (H26, de Bataven) |
+| leesvallen | 21 | 7 (alleen H25/26/27) |
+| grammatica-codextabellen | 30 | **0** |
+
+Hoofdstuk 18 t/m 24 — zeven hoofdstukken, ruim 300 scènes — bevatten geen
+enkele actieve taaltoets. Nergens gedocumenteerd als bewuste keuze; het
+patroon van Hoofdstuk 15-17 (4-5 curriculumgebonden puzzels per hoofdstuk)
+houdt gewoon op. Twee gevolgen:
+
+1. **Minerva 24 ontbrak volledig in het gebouwde spel.** `SP_CAMPAIGN.ch23`
+   belooft N.C.I., semi-deponentia, transitief/intransitief en de
+   vraagpartikels. Geen van vieren kwam ergens in `singleplayer-data.js`
+   voor — geen puzzel, geen codextabel, geen zin. De enige harde
+   curriculumbreuk in de hele campagne.
+2. **De Combat-bridge draaide na Hoofdstuk 12 vrijwel niet meer**, terwijl de
+   `VOCAB:`-pool doorgroeide naar ruim 800 entries en de vraagbank op
+   2026-08-19 juist was uitgebouwd tot vijf vraagtypes met Leitner-mastery
+   (`combat-questions.js`). Precies de motor die de didactische audit aanwees
+   als de enige echte spaced repetition, stond de hele tweede helft van het
+   spel stil.
+
+**Wat er gebouwd is** (Gerbens keuze: volledig ritme herstellen, inclusief
+gevechten):
+
+- **45 nieuwe puzzels.** Hoofdstuk 18 t/m 27 krijgen er elk vier (twee per
+  taalspoor), Hoofdstuk 28 vier op zijn taalspoorvleugels. Op Hoofdstuk 23's
+  Minerva 24 na is alles herhaling, dus — conform checklist §7.36 punt 6 —
+  **zonder `hint`-veld**; alleen de drie Minerva 24-puzzels hebben hun hints
+  voluit.
+- **Minerva 24 gebouwd**: vier grammatica-codexentries met tabel
+  (`codex_grammatica_ch23_nci` / `_semideponentia` / `_vraagpartikels` /
+  `_transitief`) plus `_overzicht`, ontgrendeld op CH23_LAT_001 respectievelijk
+  CH23_LAT_EINDE. Lopende saves krijgen ze via de eerste echte
+  `SP_PATCHES`-entry (`h23-minerva24-grammatica`, `vanaf:24`), die
+  grieks-only-spelers overslaat.
+- **16 nieuwe leesvallen** in Hoofdstuk 18-24 (twee per hoofdstuk, één per
+  taalspoor) plus Hoofdstuk 23. Neutraal en symmetrisch geframed, elk op een
+  echte grammaticale valkuil in plaats van een mythologisch bekend citaat:
+  dativus possessivus, ablativus absolutus, `ὑπό` + genitivus bij een
+  passieve aoristus, `timeo ne`, `τῷ κρατίστῳ` als dativus, ACP versus
+  A.C.I., deponens `abutere`, medium `ἐφοβοῦντο`, participiumcongruentie
+  in `patria saepe servata`, `ὁ μέν ... ὁ δέ`, en het ingesloten antecedent.
+  Totaal in de campagne: 44 leesvallen.
+- **11 nieuwe Combat-bridge-gevechten** in Hoofdstuk 18-23 en 27, met evenveel
+  nieuwe `SP_COMBAT_ENEMIES`- en `SP_COMBAT_INTENTIES`-entries. Hoofdstuk 21
+  (filosofie), 24 (kunst) en 25 (Pompeii/wetenschap) bewust zonder — daar is
+  geen tegenstander die er inhoudelijk om vraagt. De elf sprites moeten nog
+  gegenereerd worden (`CH_COMBAT_SPRITES_TODO.md` heeft er een prompt per stuk
+  gekregen); tot die tijd valt `spCombatSpriteHTML()` stil terug op het
+  emoji-icoon, dus de gevechten zijn nu al speelbaar.
+
+**Twee bugs gevonden en gerepareerd, allebei ouder dan deze ronde:**
+
+1. **Leesval-analytics miste tien van de 28 bestaande leesvallen.**
+   `spGoCns()` herkende alleen scène-id's op `_GOED`/`_FOUT`. De zes
+   leesvallen in Hoofdstuk 15-17 gebruiken een tweede, even oude naamgeving
+   (`_LV_A`/`_LV_B`), en vier derde-afleiders eindigen op `_FOUT2`. Al die
+   uitkomsten telden nooit mee in het docentscherm. De regex herkent nu alle
+   drie de vormen.
+2. **Een `PUZZLE:`/`COMBAT:`/`RACE:`-scène sprong altijd naar
+   `scene.choices[0].target`.** Klopt zolang zo'n scène één uitgang heeft,
+   maar niet als ze er meer heeft — dan slikt de gate de keuze van de speler
+   in, inclusief een `[CLEMENTIA]`/`[SEVERITAS]`-tag of een
+   `[REQUIRE:taalspoor=...]`-gate. Dit ging al fout sinds ze gebouwd werden bij
+   `CH1_B06`, `CH1_C07`, `CH8_AGA_004` (twee getagde keuzes die nooit
+   aankwamen) en de drie getagde keuzemomenten in Hoofdstuk 4. Bij
+   `CH18_GRE_007` en `CH27_GRE_004` had het een grieks-only-speler zelfs in
+   het Latijnse spoor kunnen zetten. Opgelost met `spSceneVervolg()`: heeft de
+   scène meer dan één keuze, dan keert het spel na de gate terug naar dezelfde
+   scène met de gate afgevinkt (`state.gateDone`, in de save zodat een
+   onderbroken sessie het gevecht niet overdoet), en worden de keuzes gewoon
+   getoond. De meta-hooks draaien daarbij niet nog een keer.
+
+**Bewust niet aangepakt.** Hoofdstuk 29 en de Finale blijven zonder puzzel,
+leesval of CHECK: die zijn met opzet anders ontworpen (RELATION-clusters en
+dode-flag-credits als eigen reactiemechanisme, zie §7.105), en Gerben heeft
+voor de Finale eerder expliciet vastgelegd dat die "puur de afsluiting" is.
+
+**Validatie**: `node --check` op beide gewijzigde bestanden;
+`validate_chronica.js` bleef de hele operatie op 0 fouten (71 bekende
+dode-flag-waarschuwingen, ongewijzigd). Live in de browser doorlopen:
+de N.C.I.-puzzel, de Seneca-leesval, de Cleopatra-leesval, het
+Alesia-gevecht (inclusief de emoji-terugval voor de ontbrekende sprite en een
+vraag uit de opgebouwde vocabulairepool), en — na de gate-fix — de
+Diadochen-fork, de taalspoor-gates van CH18_GRE_007 en CH27_LAT_006, het
+Actium-gevecht met twee REQUIRE-routes, de hervatting na een afgeronde gate,
+en het herstelde `CH8_AGA_004`. Geen consolefouten; de enige 404's zijn de elf
+nog te tekenen sprites.
+
+---
+
 ## 11. Stats, Klassen en Skill Checks (D&D-model) — Stap 2 + 3 (basis) gebouwd
 
 Tweede laag bovenop de bestaande delayed-consequences/Latijn-als-skill-check-
