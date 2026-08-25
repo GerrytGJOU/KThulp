@@ -4387,6 +4387,21 @@ In afgesproken bouwvolgorde:
    `main_theme.mp3` — zie §7.4). Nieuwe scènes met eigen sfeermuziek hoeven
    alleen een `MUSIC:`-sectie toe te voegen; `SFX:` (korte geluidseffecten)
    bestaat nog niet.
+
+   **Gevechtsmuziek (Gerben, 2026-08-24).** Eén track voor álle gevechten:
+   `battle_of_heroes.mp3`, aangesloten via `SP_COMBAT_MUZIEK`. Start zodra
+   `spStartCombatFromScene()` draait (dus al op de intro-kaart) en niet via een
+   `MUSIC:`-sectie, want een gevecht kan vanuit elke scène beginnen.
+   `SP_COMBAT.muziekVoor` onthoudt wat er speelde; `spCombatHerstelMuziek()`
+   zet dat terug bij het verlaten van het gevecht — zowel na winst
+   (`spCombatVerder`) als bij afbreken via "Terug naar menu"
+   (`spRenderLanding`, die het gevecht daar ook echt opruimt). Speelde er
+   niets, dan valt de muziek stil in plaats van door te loopen. Twee gevechten
+   achter elkaar (bv. `CH2_H10` → `CH2_H11`) herstarten de track niet:
+   `spPlayMusic()` slaat een gelijke bestandsnaam over. Het bestand is bij het
+   aansluiten hernoemd van "Battle of Heroes.mp3" naar `battle_of_heroes.mp3`,
+   omdat spaties in een URL-pad gecodeerd moeten worden en alle andere assets
+   snake_case zijn.
 4. **Quest-overzichtsscherm** — data wordt al bewaard (`spHookQuest`); de
    Codex heeft inmiddels wél een eigen scherm (§7.2, `SCREENS.spCodex`), een
    vergelijkbaar overzicht voor quests ontbreekt nog.

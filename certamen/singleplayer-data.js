@@ -9268,10 +9268,10 @@ Waar geen wapen doorheen kwam, bleek Herakles' eigen kracht wél genoeg: hij wur
 
 Eurystheus, die eigenlijk had verwacht dat deze eerste taak Herakles' laatste zou zijn, is zo geschokt door zijn terugkeer dat hij voortaan een grote bronzen pot laat klaarzetten om zich in te verstoppen wanneer Herakles nadert.
 
+Voor hij verdergaat, houdt Herakles even stil en kijkt, met een blik die net iets te gericht is voor toeval, recht in jouw richting — alsof hij, net als Athena eerder dit hoofdstuk, iets aanvoelt van een aanwezigheid die niemand anders opmerkt. "Een boodschapper die dit allemaal ziet gebeuren, verdient beter dan vodden onder een geleende mantel," zegt hij, en gooit zijn eigen, nu overbodige harnas in jouw richting — het brons dat hij droeg voor de leeuwenhuid het overbodig maakte. "Ik heb het toch niet meer nodig." Het landt zwaarder in je handen dan je had verwacht, nog warm en ruikend naar ijzer en Nemeïsch stof.
+
 IMAGE:
 ch2_eurystheus_pot.png
-
-Voor hij verdergaat, houdt Herakles even stil en kijkt, met een blik die net iets te gericht is voor toeval, recht in jouw richting — alsof hij, net als Athena eerder dit hoofdstuk, iets aanvoelt van een aanwezigheid die niemand anders opmerkt. "Een boodschapper die dit allemaal ziet gebeuren, verdient beter dan vodden onder een geleende mantel," zegt hij, en gooit zijn eigen, nu overbodige harnas in jouw richting — het brons dat hij droeg voor de leeuwenhuid het overbodig maakte. "Ik heb het toch niet meer nodig." Het landt zwaarder in je handen dan je had verwacht, nog warm en ruikend naar ijzer en Nemeïsch stof.
 
 FLAG:
 herakles_harnas=true
@@ -21835,10 +21835,10 @@ De Verboden Kist
 TEXT:
 Twee van de drie zusters kunnen de nieuwsgierigheid niet weerstaan en openen de kist stiekem. Wat ze daarbinnen zien — het kind, bewaakt door slangen of zelf half slang, de bronnen lopen uiteen — drijft hen ogenblikkelijk tot waanzin. Ze storten zich van de rotsen van de Akropolis, liever dood dan met wat ze hebben gezien.
 
+Erichthonius overleeft, opgroeiend onder Athena's eigen, persoonlijke bescherming. Als volwassen man wordt hij zelf koning van Athene, waar hij bekendstaat als Erechtheus — de stichter van haar eerste echte tempel op de Akropolis, en de reden dat haar cultus in deze stad nooit meer zal verdwijnen.
+
 IMAGE:
 ch13_gre_verboden_kist.png
-
-Erichthonius overleeft, opgroeiend onder Athena's eigen, persoonlijke bescherming. Als volwassen man wordt hij zelf koning van Athene, waar hij bekendstaat als Erechtheus — de stichter van haar eerste echte tempel op de Akropolis, en de reden dat haar cultus in deze stad nooit meer zal verdwijnen.
 
 CHOICES:
 * Zie hoe Athena eens een sterveling met een heel ander soort gevaar hielp -> CH13_GRE_PERSEUS_01
