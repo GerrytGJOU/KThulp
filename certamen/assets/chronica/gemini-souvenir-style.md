@@ -575,3 +575,18 @@ bestand op schijf — de rest van de campagne (proloog t/m Finale) is compleet.
 > belongs to neither language track. No text, no speech bubbles, no
 > watermark, no modern objects, no people, no hands, no faces. 1:1 square
 > format, fills the entire frame.
+
+### 26. `souvenir_zwarte_wol.png` — Een Lok Zwarte Schapenwol (Hoofdstuk 11, Griekse lijn — Aegean blue)
+> Square (1:1) comic/graphic-novel style illustration, in the established
+> Chronica Classica house style (bold clean ink, cel shading, warm stone
+> palette with gold light accents). A single small museum-style display: a
+> small tuft of coarse black sheep's wool, a few strands stained a dark
+> reddish-brown at the tips as if once touched by blood now long dried,
+> resting on a small dark-red velvet cushion atop a small weathered stone
+> pedestal, entirely covered by an old glass bell jar/dome, faintly and
+> softly gold-lit from within as if quietly magical. Camera at eye level
+> with the pedestal, three-quarter lighting, background dark and blurred
+> (heavy vignette), the object in sharp focus. A thin Aegean-blue glow
+> glints faintly on the glass. No text, no speech bubbles, no watermark, no
+> modern objects, no people, no hands, no faces. 1:1 square format, fills
+> the entire frame.

@@ -3960,6 +3960,8 @@ const SP_SOUVENIRS = {
     caption:"Aarde van Ogygia, waar Odysseus vastzit, gemengd met as van de brandstapel waarop Dido stierf — twee reizen door het rijk van de doden, in één kleine buidel bewaard." },
   souvenir_maretak: { nm:"Een Twijgje Maretak", icon:"🌿", img:"souvenir_maretak.png",
     caption:"Een goudkleurig twijgje maretak, afgebroken van dezelfde boom waarin Aeneas de Gouden Tak vond — de sleutel tot de onderwereld, die zich alleen laat plukken door wie het lot toestaat." },
+  souvenir_zwarte_wol: { nm:"Een Lok Zwarte Schapenwol", icon:"🐑", img:"souvenir_zwarte_wol.png",
+    caption:"Een lok wol van het zwarte schaap dat Odysseus offerde aan de rand van de wereld — het bloed dat de schimmen even hun stem teruggaf." },
   souvenir_ara_maxima: { nm:"Een Steen van het Ara Maxima", icon:"🏛️", img:"souvenir_ara_maxima.png",
     caption:"Een stuk steen van het altaar dat de bewoners van Latium oprichtten nadat Hercules hen van Cacus verloste — eeuwen voor hier ooit een stad zou staan." },
   souvenir_athena_helm: { nm:"Een Twijgje van de Eerste Olijfboom", icon:"🫒", img:"souvenir_athena_helm.png",
@@ -20013,6 +20015,8 @@ Voor Kirke's eiland definitief achter hen verdwijnt, mist Odysseus één man bij
 
 Aan de rand van de wereld, waar Kirke had gewezen, graaft Odysseus een kuil en giet er een offer in — melk, honing, wijn, water, gerstemeel, en het bloed van een zwart schaap. De schimmen van de doden komen er in drommen op af, dorstig naar het bloed dat hun even een stem teruggeeft. De allereerste die naar voren treedt, is niet wie Odysseus verwachtte: Elpenor, zijn lichaam nog onbegraven, smeekt om een fatsoenlijke begrafenis zodra de vloot terugkeert — anders zal zijn schim hem blijven achtervolgen als een wraakvloek van de goden zelf.
 
+Terwijl het offerbloed nog wegtrekt in de kuil, grijp je zonder erbij na te denken een losse lok wol die aan de rand is blijven hangen — vochtig, zwart, het enige tastbare dat overblijft van een offer dat de doden even hun stem teruggaf.
+
 IMAGE:
 ch11_ody_elpenor.png
 
@@ -20021,6 +20025,9 @@ elpenor:intro
 
 CODEX:
 codex_elpenor
+
+SOUVENIR:
+souvenir_zwarte_wol
 
 CHOICES:
 * Beloof Elpenor zijn begrafenis, en laat de volgende schim naderen [REQUIRE:taalspoor=grieks] -> CH11_ODY_006
