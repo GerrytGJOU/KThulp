@@ -3958,6 +3958,8 @@ const SP_SOUVENIRS = {
     caption:"Zeewater dat nooit lijkt te verdampen — gevangen ergens tussen Odysseus' tien jaar op zee en Aeneas' zoektocht naar een thuis dat nog niet bestond." },
   souvenir_twee_deuren: { nm:"Een Buidel Aarde en As", icon:"⚱️", img:"souvenir_twee_deuren.png",
     caption:"Aarde van Ogygia, waar Odysseus vastzit, gemengd met as van de brandstapel waarop Dido stierf — twee reizen door het rijk van de doden, in één kleine buidel bewaard." },
+  souvenir_maretak: { nm:"Een Twijgje Maretak", icon:"🌿", img:"souvenir_maretak.png",
+    caption:"Een goudkleurig twijgje maretak, afgebroken van dezelfde boom waarin Aeneas de Gouden Tak vond — de sleutel tot de onderwereld, die zich alleen laat plukken door wie het lot toestaat." },
   souvenir_ara_maxima: { nm:"Een Steen van het Ara Maxima", icon:"🏛️", img:"souvenir_ara_maxima.png",
     caption:"Een stuk steen van het altaar dat de bewoners van Latium oprichtten nadat Hercules hen van Cacus verloste — eeuwen voor hier ooit een stad zou staan." },
   souvenir_athena_helm: { nm:"Een Twijgje van de Eerste Olijfboom", icon:"🫒", img:"souvenir_athena_helm.png",
@@ -20226,6 +20228,8 @@ Vlak voor de kust van Italië in zicht komt, verliest Aeneas zijn stuurman: Pali
 
 Aangekomen bij Cumae zoekt Aeneas de Sibylle op, Apollo's priesteres, die in extase toekomstige oorlogen in Italië voorspelt — "een tweede Achilles wacht ook hier al op je" — voor ze instemt hem naar de onderwereld te gidsen. De prijs: een Gouden Tak, gewijd aan Proserpina, die zich alleen laat plukken door wie het lot zelf toestaat. Venus' eigen duiven wijzen Aeneas de weg naar de juiste boom.
 
+Terwijl Aeneas de Tak losbreekt, valt je oog op een tweede, kleiner twijgje maretak, verderop aan diezelfde boom — te onbeduidend om te missen, te vreemd om te laten liggen. Je steekt het weg voor je verder loopt.
+
 IMAGE:
 ch11_aen_sibylle_cumae.png
 
@@ -20234,6 +20238,9 @@ dido:full
 
 CODEX:
 codex_sibylle_cumae
+
+SOUVENIR:
+souvenir_maretak
 
 CHOICES:
 * Ga de onderwereld binnen [REQUIRE:taalspoor=latijn] -> CH11_AEN_007
