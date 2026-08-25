@@ -4402,6 +4402,26 @@ In afgesproken bouwvolgorde:
    aansluiten hernoemd van "Battle of Heroes.mp3" naar `battle_of_heroes.mp3`,
    omdat spaties in een URL-pad gecodeerd moeten worden en alle andere assets
    snake_case zijn.
+
+   **Mute laadt niets meer (2026-08-24).** `spPlayMusic()` zette een track bij
+   mute wél klaar en speelde 'm af met `muted=true`: onhoorbaar, maar per scène
+   werd het hele bestand alsnog opgehaald — bij de gevechtsmuziek 5,5 MB over
+   een schoolnetwerk. Nu geldt bij mute `preload="none"` en wordt `play()`
+   overgeslagen; de track blijft in `SP_MUSIC_CURRENT` staan zodat
+   `spToggleAudioMuted()` 'm alsnog ophaalt zodra de speler geluid aanzet.
+   Gemeten: gemute een gevecht starten levert 0 netwerkverzoeken voor de mp3.
+
+   **De geluidsknop herstartte het gevecht (2026-08-24, opgelost).** Gevecht,
+   wedloop en skill-check worden rechtstreeks via `SCREENS.spCombat()` /
+   `spRace()` / `spCheck()` getekend, dus buiten `go()` om — `_screen` blijft
+   op `"spPlay"` staan. `spToggleAudioMuted()` eindigde met een blinde
+   `SCREENS[_screen]()`, die de verhaalscène opnieuw opbouwde en zo weer door
+   de `COMBAT:`/`RACE:`/`CHECK:`-router liep. Gevolg: op de geluidsknop drukken
+   midden in een gevecht zette HP terug op vol en de beurtteller op 1
+   (gemeten: 40 HP en beurt 7 → 88 HP en beurt 1), en wiste de
+   wedloopvoortgang. Nieuwe `spHertekenHuidigScherm()` kiest expliciet het
+   actieve deelscherm. Dit bestond al vóór de gevechtsmuziek, maar viel niet op
+   omdat er geen reden was om tijdens een gevecht aan het geluid te zitten.
 4. **Quest-overzichtsscherm** — data wordt al bewaard (`spHookQuest`); de
    Codex heeft inmiddels wél een eigen scherm (§7.2, `SCREENS.spCodex`), een
    vergelijkbaar overzicht voor quests ontbreekt nog.
