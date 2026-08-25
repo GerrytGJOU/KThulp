@@ -108,7 +108,7 @@ function bmAvatarMerge(saved){
 function bmAvatarSVG(av,size=60){
   const a=bmAvatarMerge(av);
   const col=a.kleur||"#b03a2e";
-  const armorFill={licht:"#9a8870",middel:"#6a5840",zwaar:"#3e3230",ceremonieel:col}[a.armor]||"#9a8870";
+  const armorFill={licht:"#9a8870",middel:"#6a5840",zwaar:"#3e3230",kampioen:"#c9a227",ceremonieel:col}[a.armor]||"#9a8870";
   const helmFill={standard:"#7a6a48",open:"#8a7a58",fedder:col,kroon:"#d4af37"}[a.helm]||"#7a6a48";
   const hairFill={kort:"#5c3c1a",lang:"#3c280c",kaal:null,vlecht:"#5c3c1a"}[a.haar];
   const skin="#d4a476"; const wc="#c8a860";
@@ -174,10 +174,21 @@ function bmCalcMastery(hist){
   const r=hist.rounds||0, tiers=[5,15,35,70,120];
   let stars=0; for(const t of tiers){if(r>=t)stars++;} return stars;
 }
+// Leest de Chronica Classica-saves (localStorage, zelfde apparaat/profiel als
+// Battle Mode — zie SP_SLOTS_KEY in singleplayer.js) en checkt of ÉÉN van de
+// slots de Finale ("Het Ceremoniële Harnas", FIN_BEKRONING) heeft gehaald.
+// Bewust alleen localStorage: dit is een synchrone check binnen bmIsUnlocked(),
+// en Chronica is toch al offline-first/localStorage-als-bron-van-waarheid.
+function bmChronicaFinaleVoltooid(){
+  try{
+    const slots = JSON.parse(localStorage.getItem("certamen_chronica_slots")||"{}");
+    return Object.values(slots).some(s=>s?.flags?.fin_ceremonieel_harnas===true);
+  }catch(e){ return false; }
+}
 function bmIsUnlocked(opt,ident,key){
   if(!opt.requires)return true;
   if(ident?.admin)return true;
-  const{level:rL,mastery:rM,coins:rC,achCategory:rCat,prestige:rP}=opt.requires;
+  const{level:rL,mastery:rM,coins:rC,achCategory:rCat,prestige:rP,spFinale:rSF}=opt.requires;
   // Coin-onderdeel: alleen ontgrendeld ná aankoop (staat in ident.unlocked).
   if(rC) return (ident?.unlocked||[]).includes(key);
   if(rL&&bmCalcLevel(ident?.xp||0).level<rL)return false;
@@ -185,6 +196,7 @@ function bmIsUnlocked(opt,ident,key){
   // prestige:N = pas ontgrendeld ná niveau 10, bij Legioenster N (of hoger) —
   // de hoogste-status-eis in het spel, zie core.js: calcPrestige().
   if(rP&&(bmCalcLevel(ident?.xp||0).prestige?.stars||0)<rP)return false;
+  if(rSF&&!bmChronicaFinaleVoltooid())return false;
   if(rCat){
     // Eerbewijzen staan verspreid over P.achievements (algemeen/klassiek) en
     // ident.achievements (Battle Mode/Boss Battle/Total War/mastery) — samen
@@ -209,6 +221,7 @@ function bmReqText(opt){
   if(r.mastery) return { short:r.mastery+"★",   full:r.mastery+"★ beheersing in één klasse (speel veel rondes met die klasse)" };
   if(r.coins)   return { short:r.coins+" 🪙",   full:"Koop voor "+r.coins+" "+bmCoinName() };
   if(r.prestige) return { short:"★"+r.prestige+" Legioen", full:"Bereik Legioenster ★"+r.prestige+" (niveau 10 + "+(r.prestige*PRESTIGE_XP_STEP)+" XP extra) — voor de echte legendes" };
+  if(r.spFinale)  return { short:"Chronica ✓", full:"Speel Chronica Classica (Single Player) volledig uit tot en met de Finale" };
   if(r.achCategory){
     const nm=ACH_CATEGORIES[r.achCategory]||r.achCategory;
     return { short:"Alle "+nm, full:"Behaal alle eerbewijzen in de categorie "+nm };
@@ -1937,6 +1950,10 @@ const PIXEL_ASSETS = {
             "middel":"assets/sprites/armor_middel.png",
             "zwaar":"assets/sprites/armor_zwaar.png",
             "hopliet":"assets/sprites/armor_hopliet.png",
+            // Kampioen hergebruikt de "zwaar"-sprite met een gouden tint
+            // (BM_ARMOR_TINT_FILTER) — geen apart bestand nodig, zelfde aanpak
+            // als BM_CAPEKLEUR_FILTER/BM_HAARKLEUR_FILTER hieronder.
+            "kampioen":"assets/sprites/armor_zwaar.png",
             "ceremonieel":"assets/sprites/armor_ceremonieel.png" },
   helm:   { "geen":"",
             "bandana":"assets/sprites/helm_bandana.png",
@@ -2042,6 +2059,10 @@ const BM_HAARKLEUR_SWATCH = {
 // heen, die zelf onveranderd blijven — een CSS-filter op de buitenste div
 // werkt op het al-samengestelde resultaat van de laag-filters eronder).
 const BM_PRESTIGE_FILTER = "sepia(0.85) saturate(4.5) hue-rotate(-8deg) brightness(1.08)";
+// Gouden tint voor het Kampioensharnas (hergebruikt armor_zwaar.png — zie
+// PIXEL_ASSETS.armor.kampioen), zodat de 5★-mastery-eis een eigen, herkenbaar
+// uiterlijk krijgt zonder een nieuwe sprite te tekenen.
+const BM_ARMOR_TINT_FILTER = { "kampioen": "sepia(0.7) saturate(3) hue-rotate(-12deg) brightness(1.05)" };
 
 // Bouwt de gelaagde sprite-lagen als HTML-string.
 // Z-index van achter naar voren (RPG Maker MV SV correct):
@@ -2097,7 +2118,7 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
     ${L(baseSrc)}
     ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
-    ${L(A.armor[cosm.armor||"licht"])}
+    ${L(A.armor[cosm.armor||"licht"],"", BM_ARMOR_TINT_FILTER[cosm.armor] ? `filter:${BM_ARMOR_TINT_FILTER[cosm.armor]}` : "")}
     ${baardLayers}
     ${L(A.extra[cosm.extra||"geen"])}
     ${L(A.schild[cosm.schild||"rond"])}

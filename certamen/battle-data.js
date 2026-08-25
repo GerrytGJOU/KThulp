@@ -252,7 +252,15 @@ const BM_AVATAR_PARTS = {
     { id:"middel",      nm:"Middel",       requires:{level:5} },
     { id:"hopliet",     nm:"Hopliet",      requires:{level:7} },
     { id:"zwaar",       nm:"Zwaar",        requires:{level:9} },
-    { id:"ceremonieel", nm:"Ceremonieel",  requires:{mastery:5} },
+    // Kampioensharnas: blijft een Battle Mode-eigen streven (5★ beheersing in
+    // één klasse), nu dat het Ceremoniële Harnas losgekoppeld is (zie hieronder).
+    { id:"kampioen",    nm:"Kampioen",     requires:{mastery:5} },
+    // Ceremonieel Harnas: het 100%-sluitstuk van Chronica Classica (Single
+    // Player) — bewust NIET meer via Battle Mode-mastery te ontgrendelen, zodat
+    // uitspelen van de campagne ook ná afloop nog zichtbaar blijft in de klas-
+    // arena (Gerbens verzoek 2026-08-25). Zie bmIsUnlocked()/bmChronicaFinaleVoltooid()
+    // in battle.js voor hoe dit uit de Chronica-saves (localStorage) gelezen wordt.
+    { id:"ceremonieel", nm:"Ceremonieel",  requires:{spFinale:true} },
   ]},
   helm:   { nm:"Helm",             opts:[
     { id:"geen",     nm:"Geen helm" },
