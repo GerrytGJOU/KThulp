@@ -1053,6 +1053,11 @@ function spCurrentCampaignChapter(node){
   return SP_CAMPAIGN[0];
 }
 function spRenderLanding(){
+  // Een lopend gevecht verlaten via "Terug naar menu": de gevechtsmuziek moet
+  // mee terug, anders loopt de battle-track door op het menuscherm. SP_COMBAT
+  // wordt hier ook echt leeggegooid — een verlaten gevecht begint bij
+  // terugkeer opnieuw (zie de toelichting boven SP_COMBAT).
+  if(SP_COMBAT){ spCombatHerstelMuziek(); SP_COMBAT = null; }
   const resuming = !!(SP_STATE.node && SP_STATE.node!==SP_SCENES.keys().next().value);
   // Savemigratie-meldingen (spMigrateSave): eenmalig tonen en meteen legen, ook
   // als de speler later terugkeert naar dit scherm binnen dezelfde sessie.
@@ -3419,6 +3424,20 @@ function spFinaleLetheHp(baseHp, state){
 }
 
 /* ---- Start -------------------------------------------------------------- */
+/* ---- Gevechtsmuziek (Gerben, 2026-08-24) — één track voor alle gevechten.
+   Start zodra het gevecht begint (dus al op de intro-kaart) en maakt bij het
+   verlaten plaats voor wat er daarvóór speelde: `muziekVoor` onthoudt de
+   lopende track, zodat het verhaal na afloop klinkt zoals het klonk. Speelde
+   er niets, dan valt de muziek netjes stil in plaats van door te loopen.
+   Autoplay-veilig: een gevecht begint altijd binnen een klik (spGoCns), dus
+   dit voldoet aan dezelfde iPad-eis als de rest van spPlayMusic(). ---- */
+const SP_COMBAT_MUZIEK = "battle_of_heroes.mp3";
+// Aangeroepen vanuit elk pad dat een gevecht verlaat: winst (spCombatVerder)
+// én afbreken via "Terug naar menu" (spRenderLanding).
+function spCombatHerstelMuziek(){
+  const vorige = SP_COMBAT?.muziekVoor;
+  if(vorige) spPlayMusic(vorige); else spStopMusic();
+}
 function spStartCombatFromScene(scene){
   const enemyId = scene.meta.COMBAT.trim();
   const target = spSceneVervolg(scene);
@@ -3436,7 +3455,9 @@ function spStartCombatFromScene(scene){
     goed:0, fout:0, vigorVerloren:0, vaardigheidGebruikt:false,
     itemsGebruikt:[], vermijd:[], gezien:{}, opvangGehad:false,
     bericht:null, uitleg:null, laatsteFx:null, vigorSchaal:1,
+    muziekVoor: SP_MUSIC_CURRENT,
   };
+  spPlayMusic(SP_COMBAT_MUZIEK);
   // Moet ná het zetten van SP_COMBAT: spCombatVigorSchaal() leest de
   // intentiepool van deze vijand op via SP_COMBAT.enemyId.
   SP_COMBAT.vigorSchaal = spCombatVigorSchaal(hp);
@@ -3791,6 +3812,9 @@ function spCombatEinde(){
 }
 function spCombatVerder(){
   const target = SP_COMBAT?.target;
+  // Eerst herstellen, dán navigeren: heeft de vervolgscène een eigen
+  // MUSIC:-sectie, dan overschrijft spRunMetaHooks() dit meteen daarna.
+  spCombatHerstelMuziek();
   SP_COMBAT = null;
   spGoCns(target);
 }
