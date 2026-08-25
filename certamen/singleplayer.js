@@ -2404,11 +2404,33 @@ function spSetAudioMuted(muted){
   try{ localStorage.setItem(SP_AUDIO_MUTED_KEY, muted?"1":"0"); }catch(e){}
   if(SP_MUSIC_EL) SP_MUSIC_EL.muted = muted;
 }
+/* Welk scherm moet er opnieuw getekend worden na de geluidsknop?
+   Gevecht, wedloop en skill-check draaien BUITEN go() om — ze worden
+   rechtstreeks via SCREENS.spCombat()/spRace()/spCheck() getekend, dus
+   `_screen` staat dan nog op "spPlay". Blind SCREENS[_screen]() aanroepen
+   bouwt in dat geval de onderliggende verhaalscène opnieuw op, en die loopt
+   zo weer door de COMBAT:/RACE:/CHECK:-router heen — met als gevolg dat het
+   gevecht van voren af aan begint (HP terug op vol, beurtteller op 1) of dat
+   de wedloopvoortgang verdwijnt. Vóór de gevechtsmuziek viel dat nauwelijks
+   op omdat niemand midden in een gevecht op de geluidsknop drukte; nu is daar
+   wél een reden voor. Vandaar deze expliciete volgorde. */
+function spHertekenHuidigScherm(){
+  if(SP_COMBAT) return SCREENS.spCombat();
+  if(typeof SP_RACE!=="undefined" && SP_RACE) return SCREENS.spRace();
+  if(typeof SP_CHECK_RESULTAAT!=="undefined" && SP_CHECK_RESULTAAT) return SCREENS.spCheck();
+  if(_screen && SCREENS[_screen]) SCREENS[_screen]();
+}
 function spToggleAudioMuted(){
   const nowMuted = !spAudioMuted();
   spSetAudioMuted(nowMuted);
-  if(!nowMuted && SP_MUSIC_EL) SP_MUSIC_EL.play().catch(()=>{});
-  if(_screen && SCREENS[_screen]) SCREENS[_screen]();
+  // Aanzetten terwijl er een track "loopt" die door de mute nooit gestart is
+  // (spPlayMusic laadt 'm dan niet): hier alsnog ophalen en starten.
+  if(!nowMuted && SP_MUSIC_EL && SP_MUSIC_CURRENT){
+    SP_MUSIC_EL.preload = "auto";
+    if(!SP_MUSIC_EL.getAttribute("src")) SP_MUSIC_EL.src = "assets/chronica/music/"+SP_MUSIC_CURRENT;
+    SP_MUSIC_EL.play().catch(()=>{});
+  }
+  spHertekenHuidigScherm();
 }
 function spAudioToggleHTML(){
   const muted = spAudioMuted();
@@ -2437,10 +2459,18 @@ function spPlayMusic(filename){
   if(!SP_MUSIC_EL){ SP_MUSIC_EL = new Audio(); SP_MUSIC_EL.loop = true; }
   if(SP_MUSIC_CURRENT === filename) return; // al aan het spelen — niet herstarten
   SP_MUSIC_CURRENT = filename;
+  const uit = spAudioMuted();
+  // Staat het geluid uit, dan starten we de stream niet eens (preload="none" +
+  // geen play()). Tot 2026-08-24 werd een track ook bij mute gewoon geladen en
+  // afgespeeld met muted=true: onhoorbaar, maar wel een paar megabyte over het
+  // schoolnetwerk per scène — en bij de gevechtsmuziek (5,5 MB) meteen merkbaar.
+  // De track blijft wél geregistreerd in SP_MUSIC_CURRENT, zodat de mute-knop
+  // (spToggleAudioMuted) 'm alsnog kan starten zodra de speler geluid aanzet.
+  SP_MUSIC_EL.preload = uit ? "none" : "auto";
   SP_MUSIC_EL.src = "assets/chronica/music/"+filename;
   SP_MUSIC_EL.volume = 0.5;
-  SP_MUSIC_EL.muted = spAudioMuted();
-  SP_MUSIC_EL.play().catch(()=>{});
+  SP_MUSIC_EL.muted = uit;
+  if(!uit) SP_MUSIC_EL.play().catch(()=>{});
 }
 function spStopMusic(){
   SP_MUSIC_CURRENT = null;
