@@ -379,21 +379,36 @@ body.greek .qcard .word{color:#143a5e}
 #bmField.bm-field-photo .bm-back1{display:none}
 #bmField.bm-field-photo .bm-back2{image-rendering:auto;background-position:center bottom}
 
-/* Formaties — diepte-effect: kolommen staan op de grond, achterste rij hoger */
-.bm-form{flex:1;display:flex;flex-direction:row;gap:0;align-items:flex-end;padding:0 4px;position:relative;z-index:2}
+/* Formaties — RPG Maker MV-achtig raster. Elke formatiegroep staat als blok
+   op de grond; binnen een blok staan de rijen achter elkaar: verder naar
+   achteren = hoger op het scherm, iets kleiner en iets verder van de vijand.
+   De plaatsen (--gl = laan, --d = diepte) komen uit bmFormationHTML() in
+   battle.js; 16 spelers per team vormen zo een 4×4-groep. */
+.bm-form{flex:1;display:flex;flex-direction:row;gap:0;align-items:flex-end;padding:0 4px;position:relative;z-index:2;
+  --bm-uw:96px;--bm-lanegap:62px;--bm-mingap:16px;--bm-rowgap:44px;--bm-rowshift:14px;--bm-pad:4px}
+@media(min-width:900px){.bm-form{--bm-uw:144px;--bm-lanegap:92px;--bm-mingap:24px;--bm-rowgap:64px;--bm-rowshift:22px;--bm-pad:8px}}
 #bmFormA{justify-content:flex-start}
 #bmFormB{justify-content:flex-end}
-/* Elke kolom (front/mid/back) staat op de grond; achterste kolom iets omhoog
-   zodat ze zichtbaar boven de voorste rij uitkomen (isometrisch effect). */
+/* Boss Battle: de hele klas (tot 32 spelers) staat op helft A — meer ruimte.
+   Het dichter op elkaar zetten van de rijen regelt bmFormationHTML() via --rg,
+   want dat hangt af van hoe diep de opstelling werkelijk is, niet van de modus. */
+#bmField.bm-boss #bmFormA{flex:1.7}
+/* Rastercontainer vult de eigen veldhelft; de poppetjes staan er absoluut in. */
+.bm-gridform{position:absolute;inset:0}
+.bm-gridform>.bm-av{position:absolute;width:var(--bm-uw);
+  bottom:calc(var(--d) * var(--rg,var(--bm-rowgap)));
+  transform-origin:bottom center;
+  transform:scale(calc(1 - var(--d) * .055))}
+/* Team A staat links (kijkt naar rechts), team B gespiegeld rechts. Lanen
+   worden bij beide vanaf de eigen buitenrand geteld; de voorste rij (--d 0)
+   schuift het verst naar de vijand toe. */
+#bmFormA .bm-gridform>.bm-av{left:calc(var(--bm-pad) + var(--gl) * var(--gap) + (var(--dmax) - var(--d)) * var(--bm-rowshift))}
+#bmFormB .bm-gridform>.bm-av{right:calc(var(--bm-pad) + var(--gl) * var(--gap) + (var(--dmax) - var(--d)) * var(--bm-rowshift))}
+/* Namen niet breder dan de laanafstand, anders lopen ze in elkaar over als
+   de poppetjes dicht op elkaar staan. */
+.bm-gridform>.bm-av .avn,.bm-gridform>.bm-av .avncls{max-width:var(--bm-lanegap)}
+/* De baas (Boss Battle) staat nog wel als losse kolom in #bmFormB */
 .bm-fcol{display:flex;flex-direction:column;gap:4px;align-items:center;margin:0 -4px}
-/* Team A: eerste kind = back, tweede = mid, derde = front */
-#bmFormA .bm-fcol:nth-child(1){transform:translateY(-20px);z-index:1}
-#bmFormA .bm-fcol:nth-child(2){transform:translateY(-10px);z-index:2}
-#bmFormA .bm-fcol:nth-child(3){transform:translateY(0px);z-index:3}
-/* Team B: eerste kind = front, tweede = mid, derde = back */
-#bmFormB .bm-fcol:nth-child(1){transform:translateY(0px);z-index:3}
-#bmFormB .bm-fcol:nth-child(2){transform:translateY(-10px);z-index:2}
-#bmFormB .bm-fcol:nth-child(3){transform:translateY(-20px);z-index:1}
 #bmBfx{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:10}
 
 /* â”€â”€ Landschapsachtergronden â”€â”€ */
@@ -431,22 +446,12 @@ body.greek .qcard .word{color:#143a5e}
 
 /* â”€â”€ Idle animatie (sprite) â”€â”€ */
 @keyframes bmIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-.bm-sprite{animation:bmIdle 2.6s ease-in-out infinite}
-.bm-av:nth-child(2) .bm-sprite{animation-delay:.35s}
-.bm-av:nth-child(3) .bm-sprite{animation-delay:.7s}
-.bm-av:nth-child(4) .bm-sprite{animation-delay:1.05s}
-.bm-av:nth-child(5) .bm-sprite{animation-delay:1.4s}
-.bm-av:nth-child(6) .bm-sprite{animation-delay:1.75s}
-.bm-av:nth-child(7) .bm-sprite{animation-delay:2.1s}
+/* Elk poppetje deint uit de pas: --bm-idle wordt per rasterplek gezet in
+   bmSlotAvHTML() (battle.js), zodat een hele groep niet synchroon wiebelt. */
+.bm-sprite{animation:bmIdle 2.6s ease-in-out infinite;animation-delay:var(--bm-idle,0s)}
 /* Team B: idle zonder scaleX(-1) interferentie */
 #bmFormB .bm-av .bm-sprite{animation-name:bmIdleB}
 @keyframes bmIdleB{0%,100%{transform:scaleX(-1) translateY(0)}50%{transform:scaleX(-1) translateY(-4px)}}
-#bmFormB .bm-av:nth-child(2) .bm-sprite{animation-delay:.35s}
-#bmFormB .bm-av:nth-child(3) .bm-sprite{animation-delay:.7s}
-#bmFormB .bm-av:nth-child(4) .bm-sprite{animation-delay:1.05s}
-#bmFormB .bm-av:nth-child(5) .bm-sprite{animation-delay:1.4s}
-#bmFormB .bm-av:nth-child(6) .bm-sprite{animation-delay:1.75s}
-#bmFormB .bm-av:nth-child(7) .bm-sprite{animation-delay:2.1s}
 
 /* â”€â”€ Sideview Battler Paper Doll (RPG Maker MV, 64Ã—64 per frame) â”€â”€ */
 /* Body/cosmetic sheets zijn SV-battler grids: 576Ã—384 = 9 kolommen Ã— 6 rijen
@@ -496,13 +501,8 @@ body.greek .qcard .word{color:#143a5e}
   .mv-motion-layer{--cell:144px}
 }
 @keyframes svIdleL{from{background-position-x:0}to{background-position-x:-432px}}
-/* Stagger idle-cyclus per speler */
-.bm-av:nth-child(2) .sprite-layer{animation-delay:.15s}
-.bm-av:nth-child(3) .sprite-layer{animation-delay:.3s}
-.bm-av:nth-child(4) .sprite-layer{animation-delay:.45s}
-.bm-av:nth-child(5) .sprite-layer{animation-delay:.6s}
-.bm-av:nth-child(6) .sprite-layer{animation-delay:.75s}
-.bm-av:nth-child(7) .sprite-layer{animation-delay:.9s}
+/* Stagger idle-cyclus per speler (zie --bm-idle in bmSlotAvHTML) */
+.bm-av .sprite-layer{animation-delay:var(--bm-idle,0s)}
 /* Eerste frame als animaties uit staan */
 .bm-noanim .sprite-layer{animation:none!important;background-position-x:0}
 /* Statische preview (editor/profiel): geen animatie, eerste frame; clip op box */
@@ -844,7 +844,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="battle-data.js?v=20260715a"></script>
 <script src="bossbattle.js?v=20260706f"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20260715b"></script>
+<script src="battle.js?v=20260828a"></script>
 <script src="map/provinces.js?v=20260712d"></script>
 <script src="totalwar.js?v=20260712g"></script>
 <script src="training.js?v=20260712a"></script>

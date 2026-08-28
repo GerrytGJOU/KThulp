@@ -205,11 +205,45 @@ Animaties draaien volledig **client-side**. De enige Firebase-sync is het log-ev
 
 Team A staat links (front rechts, richting vijand), Team B staat rechts (front links, richting vijand).
 
+**Raster-opstelling (RPG Maker MV-stijl).** Binnen elke groep (achter/midden/voor)
+staan de spelers niet in één verticale kolom boven elkaar, maar in een raster van
+**lanen** (breedte) × **rijen** (diepte) — vergelijk MV's
+`Sprite_Actor.setActorHome(600 + index*32, 280 + index*48)`. Per rij naar achteren
+staat een poppetje hoger op het scherm, 5,5 % kleiner en iets verder van de vijand,
+en het krijgt een lagere `z-index`; zo staat een groep achter elkáár op de grond in
+plaats van te zweven. Normaal 4 rijen diep, dus 16 spelers per team vormen een
+4×4-groep. Zit er meer volk op één helft — Boss Battle (hele klas, tot 32) of een
+uitzonderlijk grote klas met meer dan 16 in één team — dan gaat het raster automatisch
+5 rijen diep (`BM_GRID_ROWS_BOSS`), zodat het aantal lanen niet uit de hand loopt. Er
+is geen bovengrens: meer spelers levert simpelweg meer lanen op, die zichzelf
+samenknijpen.
+
+- `bmGridSlots(n, rowsMax)` (`certamen/battle.js`) verdeelt een groep kolomsgewijs
+  over lanen × rijen; elke laan is één volledige diagonale file.
+- `bmSlotAvHTML()` schrijft per poppetje `--gl` (laan-index) en `--d` (diepte vanaf
+  de voorste rij), plus een eigen `--bm-idle`-vertraging zodat de groep niet
+  synchroon deint.
+- `bmFormationHTML()` wikkelt alles in `.bm-gridform` met `--gap` (laanafstand) en
+  `--dmax`. `--gap` is `min(--bm-lanegap, (96 % − spritebreedte − rij-verspringing −
+  marge) / aantal laan-stappen)`, met `--bm-mingap` als ondergrens: bij veel lanen
+  knijpt de opstelling zichzelf samen zodat een leger altijd op de eigen veldhelft
+  blijft, en bij extreem veel spelers op een smal scherm schuiven de poppetjes verder
+  over elkaar heen in plaats van het veld uit te lopen. Getest tot 32 v 32.
+  `--rg` (rijafstand) wordt bij 5 rijen diep automatisch 22 % kleiner, zodat de
+  opstelling niet boven het veld uit groeit.
+- De vertaling naar `left`/`right`, `bottom`, schaal en labelbreedte staat in de
+  `.bm-gridform`-regels in `certamen/index.html`; de maatvoering zit in de
+  CSS-variabelen `--bm-uw/--bm-lanegap/--bm-rowgap/--bm-rowshift/--bm-pad` op
+  `.bm-form` (met een eigen set vanaf 900 px breed).
+- In Boss Battle krijgt helft A meer breedte (`#bmField.bm-boss #bmFormA{flex:1.7}`);
+  de baas zelf staat nog als losse `.bm-fcol`-kolom in `#bmFormB` (zie
+  `bmBossSpriteHTML()` in `bossbattle.js`).
+
 ### Animatie-overzicht
 
 | Type | CSS-keyframe | Trigger |
 |---|---|---|
-| Idle | `bmIdle` — 2px op-neer (staggered per avatar) | Altijd actief tussen rondes |
+| Idle | `bmIdle` — 2px op-neer (per rasterplek uit de pas via `--bm-idle`) | Altijd actief tussen rondes |
 | Correct antwoord | `bmOk` — schaal + sprong | `bmAnswer()` op spelerscherm |
 | Fout antwoord | `bmBad` — schud horizontaal | `bmAnswer()` op spelerscherm |
 | Aanval (melee) | `bmAtkR`/`bmAtkL` — 20px naar vijand | Log-event `anim:"attack"` |
