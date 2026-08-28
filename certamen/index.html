@@ -791,6 +791,22 @@ body.greek .qcard .word{color:#143a5e}
 .bm-fb span{display:block;font-size:12px;font-weight:400;opacity:.9;margin-top:2px}
 .bm-fb.ok{background:rgba(63,125,58,.28);border:1.5px solid var(--green-bright);color:var(--green-bright)}
 .bm-fb.bad{background:rgba(168,38,26,.26);border:1.5px solid #e07060;color:#ffb0a0}
+
+/* XP-/muntenwinst op het resultaatscherm: "huidig + verdiend = nieuw totaal",
+   met live oplopende getallen (bmRenderXpGain in battle.js). */
+.bm-gain{display:flex;flex-direction:column;align-items:center;gap:2px}
+.bm-gain-row{display:flex;align-items:baseline;justify-content:center;gap:8px;flex-wrap:wrap;font-family:'Optima',Palatino,serif}
+.bm-gain-ic{font-size:22px;line-height:1}
+.bm-gain-old{font-size:20px;color:var(--muted)}
+.bm-gain-plus{font-size:22px;font-weight:700;color:var(--green-bright);min-width:44px;text-align:center}
+.bm-gain-arrow{font-size:18px;color:var(--muted)}
+.bm-gain-new{font-size:30px;font-weight:800;color:var(--hi-bright);letter-spacing:.01em}
+.bm-gain-lbl{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+.bm-xpbar{width:100%;max-width:320px;height:9px;border-radius:5px;background:rgba(0,0,0,.45);overflow:hidden;margin:8px 0 3px}
+.bm-xpbar-fill{height:100%;width:0;border-radius:5px;background:linear-gradient(90deg,var(--hi-dim),var(--hi-bright));transition:width .9s cubic-bezier(.25,.9,.3,1)}
+.bm-gain-lvup{margin-top:10px;font-size:17px;color:var(--hi-bright);animation:bmGainPop .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes bmGainPop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.bm-noanim .bm-xpbar-fill{transition:none}
 /* Lage schermen (kleine telefoon, of landscape): nog een tandje compacter,
    zodat alle vier de antwoorden zonder scrollen in beeld blijven. */
 @media(max-height:700px){
@@ -931,7 +947,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="battle-data.js?v=20260828b"></script>
 <script src="bossbattle.js?v=20260828a"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20260828f"></script>
+<script src="battle.js?v=20260828g"></script>
 <script src="map/provinces.js?v=20260712d"></script>
 <script src="totalwar.js?v=20260712g"></script>
 <script src="training.js?v=20260712a"></script>

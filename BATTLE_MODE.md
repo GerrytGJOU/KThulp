@@ -712,6 +712,20 @@ schade, heling, winst) vast **vóór** zijn eerste `await`, zodat een snelle
 `bmResetMatchLocals()` de uitkering niet halverwege op nul zet; en `battleResult` toont
 nu altijd een regel — ook als er niets is bijgeschreven — in plaats van een leeg vak.
 
+### XP-winst in beeld (`bmRenderXpGain()`)
+
+Het resultaatscherm laat de winst zien als **huidig + verdiend = nieuw totaal**, met
+oplopende getallen (`bmCountTo()`), een XP-balk die meegroeit en — bij een niveau-
+omhoog — eerst volloopt, terugspringt en verder telt op het nieuwe niveau. Daarna
+verschijnen de niveau-melding, nieuwe eerbewijzen en een eventuele legendarische bonus.
+
+Dat is niet alleen mooi: het is de reden dát leerlingen op het scherm blijven. Zolang
+`bmAwardBattle()` loopt staat er "Je XP en {munten} worden bijgeschreven… blijf even op
+dit scherm", en zijn de twee wegklik-knoppen **disabled** — met een vangnet-timer van 6
+seconden, zodat niemand opgesloten raakt als het netwerk hapert. `bmAwardBattle()`
+levert daarvoor `oldXp`/`newXp` en `oldCoins`/`newCoins` mee terug. Met
+`meta.animations:false` verschijnen alle eindwaarden meteen, zonder tellen.
+
 `battlePlayerGame` vangt de status `"lobby"` ook zelf op, voor het geval een toestel de
 tussenliggende `"finished"`-stand mist (netwerkhikje, scherm op slot): dan blijft het
 niet hangen zonder vragen. Dat toestel loopt de XP van dat ene gevecht wel mis — de
