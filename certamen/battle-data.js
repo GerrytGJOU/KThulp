@@ -101,7 +101,7 @@ const BM_CLASSES = [
       iedereen +9 op — die stapeling schaalt lineair mee met de teamgrootte.
    Daarom drie grenzen. Alle drie zijn losse knoppen: verlaag BM_BE_MAX voor
    krappere keuzes, verhoog 'm als leerlingen te vaak niets kunnen doen. */
-const BM_BE_MAX = 12;               // maximale voorraad BE per speler (duurste ability kost 10)
+const BM_BE_MAX = 15;               // maximale voorraad BE per speler (duurste ability kost 10)
 const BM_BE_ROUND_BONUS_CAP = 4;    // max passief BE per ronde (synergie + passieven + mastery + traits samen)
 const BM_TEAMBE_ROUND_CAP = 4;      // max BE dat team_be-abilities + combo's samen per ronde aan een teamgenoot geven
 const BM_WRONG_BE_PENALTY = 2;      // BE die je kwijtraakt bij een fout antwoord (nooit onder 0)

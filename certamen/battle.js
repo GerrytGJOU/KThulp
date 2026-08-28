@@ -525,7 +525,7 @@ function bmCalcAbilityEffect(p,cls,abl){
 // Klem BE op 0..BM_BE_MAX. Overal gebruiken waar BE wordt weggeschreven —
 // zowel host-side (bmResolve/bmDistributeQs) als client-side (bmAnswer).
 function bmClampBE(v){
-  const max=(typeof BM_BE_MAX==="number"?BM_BE_MAX:12);
+  const max=(typeof BM_BE_MAX==="number"?BM_BE_MAX:15);  // fallback = zelfde waarde als in battle-data.js
   return Math.max(0,Math.min(max,Math.round(v||0)));
 }
 function bmCalcSynergy(players,team){
