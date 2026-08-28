@@ -404,7 +404,7 @@ Daarom drie grenzen, alle drie los in te stellen:
 
 | Constante | Waarde | Wat het begrenst |
 |---|---|---|
-| `BM_BE_MAX` | 12 | Maximale BE-voorraad per speler (duurste ability kost 10). Alles daarboven vervalt. |
+| `BM_BE_MAX` | 15 | Maximale BE-voorraad per speler (duurste ability kost 10). Alles daarboven vervalt. |
 | `BM_BE_ROUND_BONUS_CAP` | 4 | Passief BE per ronde: synergie + klassepassief + mastery + traits samén. |
 | `BM_TEAMBE_ROUND_CAP` | 4 | Wat `team_be`-abilities en combo's samen per ronde aan één teamgenoot geven. |
 
