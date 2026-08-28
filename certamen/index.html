@@ -905,6 +905,42 @@ body.greek .qcard .word{color:#143a5e}
 .bm-pdot.on{background:var(--green-bright)}
 .bm-pdot.locked{background:var(--hi)}
 
+/* Erepodium: alle eerbewijzen samen, met de klasscore eronder (bmRenderPodium
+   in battle.js). Blijft staan tot de docent doorklikt, zodat leerlingen die de
+   één-voor-één-onthulling misten hun naam alsnog zien. */
+.bm-podium-win{font-size:19px;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.bm-podium-win span{font-weight:700}
+.bm-podium-hd{font-family:'Optima',Palatino,serif;font-size:26px;color:var(--hi-bright);letter-spacing:.04em;margin-bottom:10px}
+.bm-podium{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;width:100%;max-width:760px}
+.bm-podium-card{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px 12px;
+  border-radius:14px;background:linear-gradient(160deg,var(--stone3),var(--stone2));
+  border:1.5px solid var(--hi-dim);box-shadow:0 0 18px rgba(212,175,55,.12);
+  animation:bmAwardIn .5s cubic-bezier(.34,1.56,.64,1) both}
+.bm-podium-card:nth-child(2){animation-delay:.07s}
+.bm-podium-card:nth-child(3){animation-delay:.14s}
+.bm-podium-card:nth-child(4){animation-delay:.21s}
+.bm-podium-card:nth-child(5){animation-delay:.28s}
+.bm-podium-card:nth-child(6){animation-delay:.35s}
+.bm-podium-emoji{font-size:26px;line-height:1}
+.bm-podium-nm{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;text-align:center}
+.bm-podium-player{font-size:15px;font-weight:700;text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bm-podium-val{font-size:13px;color:var(--hi-bright);text-align:center}
+.bm-classscore{margin-top:16px;padding:12px 18px 14px;border-radius:14px;width:100%;max-width:760px;
+  background:rgba(255,255,255,.04);border:1px solid var(--stone4);text-align:center}
+.bm-cs-lbl{font-size:11px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase}
+.bm-cs-big{font-family:'Optima',Palatino,serif;font-size:52px;font-weight:800;line-height:1.05;color:var(--hi-bright)}
+.bm-cs-row{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:14px;color:var(--cream);margin-top:4px}
+.bm-cs-row.bm-cs-sub{font-size:12px;color:var(--muted);margin-top:6px}
+@media(max-width:560px){.bm-cs-big{font-size:40px}.bm-podium-hd{font-size:21px}}
+/* Lage schermen (laptop 768px): alles op één scherm houden, want dit is een
+   projectorbeeld waar de klas naar kijkt — scrollen valt daar niemand op. */
+@media(max-height:820px){
+  .bm-podium-hd{font-size:21px;margin-bottom:6px}
+  .bm-podium-card{padding:7px 6px 9px}
+  .bm-classscore{margin-top:10px;padding:8px 14px 10px}
+  .bm-cs-big{font-size:40px}
+}
+
 /* Award-kaart (award ceremony) */
 @keyframes bmAwardIn{from{opacity:0;transform:scale(.55) translateY(28px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .bm-award-card{display:flex;flex-direction:column;align-items:center;gap:4px;
@@ -947,7 +983,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="battle-data.js?v=20260828b"></script>
 <script src="bossbattle.js?v=20260828a"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20260828i"></script>
+<script src="battle.js?v=20260828j"></script>
 <script src="map/provinces.js?v=20260712d"></script>
 <script src="totalwar.js?v=20260712g"></script>
 <script src="training.js?v=20260712a"></script>
