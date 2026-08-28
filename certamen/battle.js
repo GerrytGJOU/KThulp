@@ -272,13 +272,27 @@ async function bmAwardBattle(){
   if(!BM_IDENT||!fbDB)return null;
   const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
   if(!klas||!lcode)return null;
-  // Dubbele toekenning voorkomen per kamer-sessie
-  const guardKey="bm_award_"+BM_CODE;
-  if(sessionStorage.getItem(guardKey))return null;
+  // Eerst de eigen cijfers vastleggen, vóór de eerste await hieronder: zet de
+  // docent meteen een nieuw gevecht klaar, dan zet bmResetMatchLocals() deze
+  // tellers op nul terwijl de uitkering nog loopt.
+  const correct0=BM_MY_CORRECT||0, wrong0=BM_MY_WRONG||0;
+  const won0=BM_STATE.winner===BM_MY_TEAM;
+  const myDmg0=BM_MY_DMG||0, myHeal0=BM_MY_HEAL||0, myBe0=BM_MY_BE||0;
+  const myTeamHealth0=Math.max(0,BM_TEAMS[BM_MY_TEAM]?.health||0);
+  // Dubbele toekenning voorkomen — per GÉVECHT, niet per kamer. De kamer (en
+  // dus de spelcode) blijft bestaan als de docent "Nieuw gevecht — zelfde
+  // spelers" gebruikt; met de oude sleutel op BM_CODE kreeg iedereen dan vanaf
+  // het tweede gevecht niets meer. state/matchId wordt door bmDistributeQs()
+  // bij ronde 1 van elk gevecht ververst. Ontbreekt hij (oudere kamer), dan
+  // valt de sleutel terug op de spelcode — zelfde gedrag als voorheen.
+  let matchId=null;
+  try{ matchId=(await fbDB.ref("rooms/"+BM_CODE+"/state/matchId").once("value")).val(); }catch(e){}
+  const guardKey="bm_award_"+BM_CODE+"_"+(matchId||"legacy");
+  if(sessionStorage.getItem(guardKey))return{alreadyAwarded:true};
   try{sessionStorage.setItem(guardKey,"1");}catch(e){}
 
-  const correct=BM_MY_CORRECT||0, wrong=BM_MY_WRONG||0, total=correct+wrong;
-  const won=BM_STATE.winner===BM_MY_TEAM;
+  const correct=correct0, wrong=wrong0, total=correct+wrong;
+  const won=won0;
   const isScholar=total>=5&&correct/total>=0.9;
   // Boss Battle-context (ook belegeringen, zie totalwar.js: twStartAttack()
   // zet BM_META.mode="boss" + bossId="garrison") — voor de nieuwe
@@ -302,7 +316,7 @@ async function bmAwardBattle(){
   // gebeurde", niet bij het cross-device profiel — vandaar P.stats i.p.v.
   // Firebase, zelfde afweging als bestStreak/currentStreak.
   if(won){
-    const margin=Math.max(0,BM_TEAMS[BM_MY_TEAM]?.health||0);
+    const margin=myTeamHealth0;
     P.stats.lastWinMargins=[...(P.stats.lastWinMargins||[]),margin].slice(-3);
   } else {
     P.stats.lastWinMargins=[]; // reeks doorbroken bij verlies
@@ -335,8 +349,8 @@ async function bmAwardBattle(){
       next.classHistory={...(data.classHistory||{}),[cls]:{
         ...hist,
         rounds:(hist.rounds||0)+Math.max(1,total),
-        damage:(hist.damage||0)+(BM_MY_DMG||0),
-        healing:(hist.healing||0)+(BM_MY_HEAL||0),
+        damage:(hist.damage||0)+myDmg0,
+        healing:(hist.healing||0)+myHeal0,
       }};
       // trait_volledige_cirkel: legt vast in welke volgorde elke klasse voor
       // het eerst gespeeld werd (nooit herschreven zodra een klasse erin staat).
@@ -356,7 +370,7 @@ async function bmAwardBattle(){
   // Lokaal profiel (core.js) bijwerken
   P.stats.battlesPlayed++; if(won)P.stats.battlesWon++;
   P.stats.totalCorrect+=correct; P.stats.totalWrong+=wrong;
-  P.stats.totalDamage+=(BM_MY_DMG||0); P.stats.totalHealing+=(BM_MY_HEAL||0);
+  P.stats.totalDamage+=myDmg0; P.stats.totalHealing+=myHeal0;
   // skipSync=true: de xp-/muntenwinst staat al in de identities/{klas}/{lcode}-
   // transactie hierboven; nogmaals syncen zou 'm dubbel optellen. P.coins en
   // BM_IDENT.coins zijn dezelfde portemonnee (zie core.js: addCoins/syncCoinsDelta).
@@ -367,9 +381,9 @@ async function bmAwardBattle(){
   const totalPlayers=Object.keys(BM_PLAYERS||{}).length;
   const earned=await bmCheckAchievements(merged,{won,isScholar,isBoss,bossId,bossDifficulty,isSiegeWin,partySize,rageMaxed,
     clutchStreak:BM_MY_CLUTCH_BEST, noAbilitiesUsed:BM_MY_ABILITIES_USED===0, myClass:cls,
-    largeGame:totalPlayers>=12, healedEnough:(BM_MY_HEAL||0)>=40,
+    largeGame:totalPlayers>=12, healedEnough:myHeal0>=40,
     // Batch 2
-    noBeLeft:won&&(BM_MY_BE||0)===0, drieling, noCorrect:won&&correct===0,
+    noBeLeft:won&&myBe0===0, drieling, noCorrect:won&&correct===0,
     isPacifist:won&&cls==="priester"&&!BM_MY_DEALT_DMG_ABILITY,
     nightWatch:new Date().getHours()<5, marathonzitting,
     classPicks:BM_MY_CLASS_PICKS||0});
@@ -1553,6 +1567,12 @@ async function bmDistributeQs(roundN){
   up["state/status"]="playing";
   up["state/round"]={n:roundN,phase:"question",deadline:Date.now()+at*1000};
   up["state/winner"]=null;
+  // Unieke id per gevecht. De XP-/muntenuitkering gebruikt 'm als sleutel voor
+  // zijn "al toegekend"-guard (bmAwardBattle). Die guard stond eerst op de
+  // spelcode — maar sinds "Nieuw gevecht — zelfde spelers" blijft de kamer
+  // (en dus de code) bestaan, waardoor het tweede en volgende gevecht in
+  // dezelfde kamer geen XP en munten meer uitkeerde.
+  if(roundN===1) up["state/matchId"]=Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,7);
   up["teams/A/classes"]=clsA;
   up["teams/B/classes"]=clsB;
   await fbDB.ref("rooms/"+BM_CODE).update(up);
@@ -3650,6 +3670,12 @@ SCREENS.battlePlayerGame = function(){
       BM_STATE.status=s.val();
       if(BM_STATE.status==="finished"){
         fbDB.ref("rooms/"+BM_CODE+"/state/winner").once("value").then(ws=>{BM_STATE.winner=ws.val();cleanup();go("battleResult");});
+      } else if(BM_STATE.status==="lobby"){
+        // De docent heeft een nieuw gevecht klaargezet. Normaal ziet een
+        // leerling eerst het resultaatscherm (en krijgt daar zijn XP), maar als
+        // dit toestel de tussenliggende "finished"-stand mist — even geen
+        // netwerk, scherm op slot — zou het hier blijven hangen zonder vragen.
+        bmResetMatchLocals(); cleanup(); go("battlePlayerLobby");
       }
     });
   const rM=fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID),
@@ -3967,7 +3993,16 @@ SCREENS.battleResult = function(){
   // XP toekennen (fire-and-forget; toont resultaat in #bmXpResult)
   bmAwardBattle().then(r=>{
     const box=el("bmXpResult"); if(!box)return;
-    if(!r){box.textContent="";return;}
+    // Niets tonen was verwarrend: een leerling zag dan gewoon een leeg vak en
+    // wist niet of er XP was toegekend. Nu staat er altijd één regel.
+    if(r&&r.alreadyAwarded){
+      box.innerHTML=`<div class="note">XP en ${esc(bmCoinName())} voor dit gevecht zijn al bijgeschreven.</div>`;
+      return;
+    }
+    if(!r){
+      box.innerHTML=`<div class="note">XP kon niet worden bijgeschreven — controleer je verbinding. Je voortgang uit eerdere gevechten blijft bewaard.</div>`;
+      return;
+    }
     const lvUp=r.levelUp?`<div style="color:var(--hi-bright);font-size:16px;margin-top:6px">🎉 Niveau omhoog! Je bent nu ${esc(r.newLv.title)} (${r.newLv.level})</div>`:"";
     const achHTML=r.earned.length?`<div style="margin-top:6px;color:var(--hi)">${r.earned.map(id=>{const a=ACHIEVEMENTS_DEF.find(x=>x.id===id);return a?"🏅 "+esc(a.nm):""}).join(" · ")}</div>`:"";
     const legHTML=r.legendaryBonus?`<div style="margin-top:4px;font-size:12px;color:var(--hi)">⚡ ${esc(r.legendaryBonus.nm)}-bonus: ${esc(r.legendaryBonus.desc)}</div>`:"";
