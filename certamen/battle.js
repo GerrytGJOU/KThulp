@@ -108,59 +108,93 @@ function bmAvatarMerge(saved){
 function bmAvatarSVG(av,size=60){
   const a=bmAvatarMerge(av);
   const col=a.kleur||"#b03a2e";
-  const armorFill={licht:"#9a8870",middel:"#6a5840",zwaar:"#3e3230",kampioen:"#c9a227",ceremonieel:col}[a.armor]||"#9a8870";
-  const helmFill={standard:"#7a6a48",open:"#8a7a58",fedder:col,kroon:"#d4af37"}[a.helm]||"#7a6a48";
-  const hairFill={kort:"#5c3c1a",lang:"#3c280c",kaal:null,vlecht:"#5c3c1a"}[a.haar];
-  const skin="#d4a476"; const wc="#c8a860";
+  // Elke id uit BM_AVATAR_PARTS (battle-data.js) hoort hier een eigen vorm te
+  // hebben. Ontbreekt er een, dan valt de optie terug op een andere en lijken
+  // twee keuzes in de avatar-editor identiek. Zo "verdween" de Knuppel: die
+  // stond niet in weapons, viel dus terug op het zwaard, en zodra een leerling
+  // niveau 2 haalde en het échte Zwaard erbij kwam, leek de Knuppel er niet
+  // meer te zijn. Zelfde gold voor Geen helm/Geen schild, Bandana, Hopliet-helm,
+  // Baard en snor, Sik en snor en vijf haarstijlen.
+  const armorFill={vodden:"#8a7350",robe:"#6a5a8a",licht:"#9a8870",middel:"#6a5840",
+                   hopliet:"#a8712c",zwaar:"#3e3230",kampioen:"#c9a227",ceremonieel:col}[a.armor]||"#9a8870";
+  const helmFill={bandana:col,standard:"#7a6a48",open:"#8a7a58",hopliet:"#b07a30",kroon:"#d4af37"}[a.helm]||"#7a6a48";
+  const hairCol=(typeof BM_HAARKLEUR_SWATCH!=="undefined"&&BM_HAARKLEUR_SWATCH[a.haarkleur])||"#5c3c1a";
+  const hairFill=a.haar==="kaal"?null:hairCol;
+  const skin=a.huid==="donker"?"#8a5a34":"#d4a476"; const wc="#c8a860";
 
+  // Ook de drie vleugelcapes krijgen een eigen vorm — anders zijn ze in de
+  // editor niet te onderscheiden van "Geen cape".
+  const wing=(fill,d)=>`<path d="${d}" fill="${fill}" opacity=".8"/><path d="${d}" fill="${fill}" opacity=".8" transform="translate(60,0) scale(-1,1)"/>`;
   const cape=a.cape==="lang"
     ?`<path d="M18,30 Q7,55 10,76 Q30,70 50,76 Q53,55 42,30" fill="${col}" opacity=".65"/>`
     :a.cape==="kort"
     ?`<path d="M20,30 Q13,50 16,66 Q30,62 44,66 Q47,50 40,30" fill="${col}" opacity=".65"/>`
+    :a.cape==="engelenvleugels"
+    ?wing("#f2ead6","M24,32 Q10,26 4,36 Q10,38 6,46 Q14,46 16,52 Q22,44 24,32Z")
+    :a.cape==="duivelsvleugels"
+    ?wing("#7a2020","M24,32 Q10,24 3,32 L9,36 L4,42 L11,42 L9,50 Q19,46 24,32Z")
+    :a.cape==="vlindervleugels"
+    ?wing("#c07ad0","M24,32 Q12,22 5,30 Q3,38 12,40 Q4,44 8,52 Q18,50 24,32Z")
     :"";
 
   const shields={
+    geen:"",
     rond:`<circle cx="9" cy="44" r="8" fill="${col}" opacity=".85"/><circle cx="9" cy="44" r="5.5" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.2"/>`,
     ovaal:`<ellipse cx="9" cy="44" rx="6" ry="9" fill="${col}" opacity=".85"/>`,
     vierkant:`<rect x="2" y="36" width="14" height="16" rx="2" fill="${col}" opacity=".85"/>`,
     tower:`<path d="M3,32 L3,56 Q9,60 15,56 L15,32 Q12,28 9,32 Q6,28 3,32Z" fill="${col}" opacity=".85"/>`,
   };
   const weapons={
+    knuppel:`<path d="M50,58 L49,38 Q45,28 52,19 Q59,28 55,38 L54,58 Z" fill="#8a6a3a"/><circle cx="51" cy="28" r="1.8" fill="#6a4c26"/><circle cx="55" cy="33" r="1.5" fill="#6a4c26"/>`,
+    hooivork:`<line x1="52" y1="22" x2="52" y2="60" stroke="#a08040" stroke-width="2.5" stroke-linecap="round"/><line x1="45" y1="22" x2="59" y2="22" stroke="${wc}" stroke-width="2" stroke-linecap="round"/><line x1="46" y1="22" x2="46" y2="13" stroke="${wc}" stroke-width="2" stroke-linecap="round"/><line x1="52" y1="22" x2="52" y2="11" stroke="${wc}" stroke-width="2" stroke-linecap="round"/><line x1="58" y1="22" x2="58" y2="13" stroke="${wc}" stroke-width="2" stroke-linecap="round"/>`,
     zwaard:`<line x1="52" y1="24" x2="52" y2="54" stroke="${wc}" stroke-width="3" stroke-linecap="round"/><line x1="47" y1="37" x2="57" y2="37" stroke="${wc}" stroke-width="2.5" stroke-linecap="round"/>`,
     speer:`<line x1="52" y1="16" x2="52" y2="58" stroke="#a08040" stroke-width="2.5" stroke-linecap="round"/><polygon points="52,10 55,22 49,22" fill="${wc}"/>`,
     boog:`<path d="M52,18 Q62,38 52,58" fill="none" stroke="#a08040" stroke-width="2.5"/><line x1="52" y1="18" x2="52" y2="58" stroke="${wc}" stroke-width="1"/>`,
     staf:`<line x1="52" y1="14" x2="52" y2="60" stroke="#7a5030" stroke-width="3" stroke-linecap="round"/><circle cx="52" cy="12" r="5" fill="#d4af37" opacity=".9"/>`,
   };
   const helms={
+    geen:"",
+    bandana:`<path d="M18,20 Q30,14 42,20 L42,24 Q30,18 18,24 Z" fill="${helmFill}"/><path d="M42,21 Q47,24 46,30 Q43,27 41,24 Z" fill="${helmFill}" opacity=".85"/>`,
     standard:`<path d="M18,20 Q18,9 30,8 Q42,9 42,20 L40,24 L20,24 Z" fill="${helmFill}"/><rect x="18" y="24" width="24" height="3" rx="1" fill="${helmFill}" opacity=".75"/>`,
     open:`<path d="M19,22 Q19,10 30,9 Q41,10 41,22" fill="none" stroke="${helmFill}" stroke-width="4.5" stroke-linecap="round"/>`,
-    fedder:`<path d="M18,20 Q18,9 30,8 Q42,9 42,20 L40,24 L20,24 Z" fill="${helmFill}"/><rect x="18" y="24" width="24" height="3" rx="1" fill="${helmFill}" opacity=".75"/><path d="M22,9 Q14,2 9,6 Q13,14 20,16" fill="${col}" opacity=".9"/>`,
+    hopliet:`<path d="M18,20 Q18,9 30,8 Q42,9 42,20 L40,24 L20,24 Z" fill="${helmFill}"/><path d="M28,26 L28,20 Q30,17 32,20 L32,26 Z" fill="#3a2c1c"/><path d="M20,7 Q30,-2 40,7 Q30,3 20,7 Z" fill="${col}"/>`,
     kroon:`<path d="M18,22 L18,12 L24,17 L30,10 L36,17 L42,12 L42,22 Z" fill="${helmFill}"/>`,
   };
-  const hairSVG=!hairFill?"":a.haar==="vlecht"
-    ?`<path d="M24,20 Q21,28 24,34" fill="none" stroke="${hairFill}" stroke-width="4" stroke-linecap="round"/>`
+  const hairSVG=!hairFill?"":
+     a.haar==="vlecht"
+    ?`<path d="M20,22 Q20,14 30,13 Q40,14 40,22" fill="${hairFill}"/><path d="M24,22 Q21,30 24,36" fill="none" stroke="${hairFill}" stroke-width="4" stroke-linecap="round"/>`
     :a.haar==="lang"
-    ?`<path d="M20,22 Q17,32 20,42" fill="none" stroke="${hairFill}" stroke-width="5" stroke-linecap="round"/><path d="M40,22 Q43,32 40,42" fill="none" stroke="${hairFill}" stroke-width="5" stroke-linecap="round"/>`
+    ?`<path d="M20,22 Q20,14 30,13 Q40,14 40,22" fill="${hairFill}"/><path d="M20,22 Q17,32 20,42" fill="none" stroke="${hairFill}" stroke-width="5" stroke-linecap="round"/><path d="M40,22 Q43,32 40,42" fill="none" stroke="${hairFill}" stroke-width="5" stroke-linecap="round"/>`
+    :a.haar==="middel"
+    ?`<path d="M20,22 Q20,14 30,13 Q40,14 40,22" fill="${hairFill}"/><path d="M19,21 Q17,28 19,33" fill="none" stroke="${hairFill}" stroke-width="5" stroke-linecap="round"/><path d="M41,21 Q43,28 41,33" fill="none" stroke="${hairFill}" stroke-width="5" stroke-linecap="round"/>`
+    :a.haar==="wild"
+    ?`<path d="M19,22 Q20,13 30,12 Q40,13 41,22 L38,17 L35,21 L32,14 L28,21 L25,15 L22,20 Z" fill="${hairFill}"/>`
+    :a.haar==="knot"
+    ?`<path d="M20,22 Q20,14 30,13 Q40,14 40,22" fill="${hairFill}"/><circle cx="30" cy="8" r="4.5" fill="${hairFill}"/>`
+    :a.haar==="hanekam"
+    ?`<path d="M27,20 Q27,8 30,5 Q33,8 33,20 Z" fill="${hairFill}"/>`
     :`<path d="M20,22 Q20,14 30,13 Q40,14 40,22" fill="${hairFill}"/>`;
   const bc=hairFill||"#5c3c1a";
   const beards={
     geen:"",
     baard:`<path d="M22,32 Q30,40 38,32 Q37,38 30,41 Q23,38 22,32" fill="${bc}"/>`,
     snor:`<path d="M24,30 Q30,33 36,30 Q33,33 30,34 Q27,33 24,30" fill="${bc}"/>`,
+    baardsnor:`<path d="M22,32 Q30,40 38,32 Q37,38 30,41 Q23,38 22,32" fill="${bc}"/><path d="M24,30 Q30,33 36,30 Q33,33 30,34 Q27,33 24,30" fill="${bc}"/>`,
+    sikensnor:`<path d="M24,30 Q30,33 36,30 Q33,33 30,34 Q27,33 24,30" fill="${bc}"/><path d="M27,36 Q30,34 33,36 Q32,40 30,41 Q28,40 27,36 Z" fill="${bc}"/>`,
   };
   const w=size, h=Math.round(size*80/60);
   // Prestige-glans (zie _bmPixelLayers/BM_PRESTIGE_FILTER): dezelfde filter,
   // zodat de kleine onderdeel-swatches in de avatar-editor 'm ook tonen.
   const prestigeStyle = (a.prestige&&a.prestige!=="geen") ? `filter:${BM_PRESTIGE_FILTER};` : "";
   return `<svg viewBox="0 0 60 80" width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg" style="display:block;${prestigeStyle}">
-    ${cape}${shields[a.schild]||shields.rond}
+    ${cape}${shields[a.schild] ?? shields.rond}
     <rect x="19" y="30" width="22" height="24" rx="3" fill="${armorFill}"/>
     <rect x="19" y="30" width="22" height="5" rx="2" fill="${armorFill}" opacity=".65"/>
     <rect x="15" y="34" width="6" height="12" rx="2" fill="${armorFill}" opacity=".8"/>
     <rect x="39" y="34" width="6" height="12" rx="2" fill="${armorFill}" opacity=".8"/>
-    ${weapons[a.wapen]||weapons.zwaard}
+    ${weapons[a.wapen] ?? weapons.zwaard}
     <circle cx="30" cy="24" r="11" fill="${skin}"/>
-    ${hairSVG}${beards[a.baard]||""}${helms[a.helm]||helms.standard}
+    ${hairSVG}${beards[a.baard] ?? ""}${helms[a.helm] ?? helms.standard}
   </svg>`;
 }
 
@@ -782,8 +816,8 @@ SCREENS.battleFAQ = function(){
     tactische keuze.</div>
     <div class="note" style="margin-top:6px">Je kunt maximaal <b>${BM_BE_MAX} BE</b> in voorraad hebben; wat
     daarboven komt vervalt. Sparen heeft dus een grens — gebruik je BE.</div>
-    <div class="note" style="margin-top:6px">Een <b>fout antwoord</b> kost je <b>${BM_WRONG_BE_PENALTY} BE</b>
-    en levert niets op. Heb je daarna te weinig over voor je goedkoopste vaardigheid, dan kun je die ronde
+    <div class="note" style="margin-top:6px">Een <b>fout antwoord</b> kost je <b>${BM_WRONG_BE_PENALTY} BE</b>,
+    levert niets op én je loopt de passieve rondebonus (synergie, klassepassief) mis. Heb je daarna te weinig over voor je goedkoopste vaardigheid, dan kun je die ronde
     niet aanvallen. Je ziet na elk antwoord meteen of het goed of fout was, met het juiste antwoord erbij.</div>`)}
 
   ${sec("De acht klassen",false,classesHTML)}
@@ -1492,6 +1526,11 @@ async function bmDistributeQs(roundN){
     // gehaald, en dan is +6 per speler per ronde geen beloning meer maar
     // gratis basisinkomen.
     beBonus=Math.min(beBonus,BM_BE_ROUND_BONUS_CAP);
+    // Alleen ná een goed antwoord. Anders kwam een fout antwoord (−BM_WRONG_BE_
+    // PENALTY) aan het begin van de volgende ronde alsnog positief uit doordat
+    // de passieve bonus onvoorwaardelijk werd uitgekeerd. Ronde 1 is de
+    // uitzondering: dan heeft nog niemand kunnen antwoorden.
+    if(roundN>1&&!(p.lastAnswerRound===roundN-1&&p.lastAnswerOk===true)) beBonus=0;
     const pool=bmPersonalPool(pid,POOL);
     up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
     up["players/"+pid+"/answeredRound"]=-1;
@@ -1533,6 +1572,8 @@ async function bmDistributeQs(roundN){
         const action=chosenAbility?{type:"ability",abilityId:chosenAbility.id,cost:chosenAbility.cost||0}:null;
         const botUp={};
         botUp["players/"+pid+"/answeredRound"]=roundN;
+        botUp["players/"+pid+"/lastAnswerOk"]=correct;
+        botUp["players/"+pid+"/lastAnswerRound"]=roundN;
         botUp["players/"+pid+"/correct"]=(p.correct||0)+(correct?1:0);
         botUp["players/"+pid+"/wrong"]=(p.wrong||0)+(correct?0:1);
         botUp["players/"+pid+"/be"]=bmClampBE(botBe-(action?.cost||0));
@@ -3523,8 +3564,11 @@ SCREENS.battlePlayerLobby = function(){
   <div class="scrhead"><button class="back" onclick="cleanup();bmLeave();go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>${esc(fac.nm)}</h2></div>
   <div class="panel" style="display:flex;gap:14px;align-items:center">
     ${renderPixelHeroIcon(BM_IDENT?.avatar,56)}
-    <div style="flex:1">
-      <div style="font-size:18px;font-weight:700">${esc(BM_IDENT?.name||"")}</div>
+    <div style="flex:1;min-width:0">
+      <div style="display:flex;align-items:center;gap:6px;min-width:0">
+        <div style="font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(BM_IDENT?.name||"")}</div>
+        <button class="chip" onclick="bmRenameSelf('battlePlayerLobby')" title="Wijzig de naam die je klasgenoten zien" style="flex:0 0 auto;padding:3px 9px">✏️ Naam</button>
+      </div>
       <div class="pill" style="margin:4px 0">Niveau ${bmCalcLevel(BM_IDENT?.xp||0).level} · ${esc(bmCalcLevel(BM_IDENT?.xp||0).title)}</div>
       <div class="note">Code: ${BM_CODE}</div>
     </div>
@@ -3813,6 +3857,9 @@ function bmAnswer(idx){
     const upd={
       answeredRound:round.n||0,
       be:bmClampBE((p.be||0)+beGain),
+      // Uitslag van deze ronde — bmDistributeQs() geeft de passieve
+      // rondebonus alleen ná een goed antwoord (zie daar).
+      lastAnswerOk:ok, lastAnswerRound:round.n||0,
       correct:ok?(p.correct||0)+1:(p.correct||0),
       wrong:!ok?(p.wrong||0)+1:(p.wrong||0),
       totalResponseMs:(p.totalResponseMs||0)+elapsedMs,
@@ -3937,10 +3984,10 @@ SCREENS.battleResult = function(){
 // Leerling past zelf de getoonde naam aan (bv. na een grappig-bedoelde naam).
 // De inlog (klascode + leerlingcode) blijft ongewijzigd; alleen identities/.../name
 // verandert. Zo hoeft een leerling geen nieuw account aan te maken.
-async function bmRenameSelf(){
+async function bmRenameSelf(back){
   if(!BM_IDENT) return;
   const cur=BM_IDENT.name||"";
-  const nm=(prompt("Kies je nieuwe getoonde naam (je klascode en leerlingcode blijven gelijk):",cur)||"").trim();
+  const nm=(prompt("Kies je nieuwe naam — dit is de naam die je klasgenoten en de docent zien. \n(Je klascode en leerlingcode blijven gelijk.)",cur)||"").trim();
   if(!nm||nm===cur) return;
   if(nm.length>60){ toast("Te lang","Gebruik maximaal 60 tekens."); return; }
   BM_IDENT.name=nm;
@@ -3949,8 +3996,15 @@ async function bmRenameSelf(){
     if(fbDB && BM_IDENT.klascode && BM_IDENT.leerlingcode)
       await fbDB.ref("identities/"+BM_IDENT.klascode+"/"+BM_IDENT.leerlingcode+"/name").set(nm);
   }catch(e){ toast("Niet gesynct","Naam lokaal aangepast, maar kon niet online opslaan."); }
+  // Zit je al in een kamer, dan moet de naam daar óók mee — anders blijft de
+  // oude naam in de lobby, op het slagveld en op het docentscherm staan.
+  try{
+    if(fbDB && BM_CODE && BM_PID)
+      await fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID+"/name").set(nm);
+  }catch(e){}
   toast("Naam gewijzigd",nm);
-  SCREENS.battleProfile();
+  const scr=back||"battleProfile";
+  if(SCREENS[scr]) SCREENS[scr]();
 }
 
 /* ---- SCHERM: battleProfile ---- */
@@ -3997,7 +4051,7 @@ SCREENS.battleProfile = function(){
     <div style="flex:1;min-width:0">
       <div style="display:flex;align-items:center;gap:6px;min-width:0">
         <div style="font-size:20px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(BM_IDENT.name||"")}</div>
-        <button class="chip" onclick="bmRenameSelf()" title="Getoonde naam wijzigen" aria-label="Getoonde naam wijzigen" style="flex:0 0 auto;padding:3px 7px">${iconSVG("column",13,"currentColor")}</button>
+        <button class="chip" onclick="bmRenameSelf()" title="Wijzig de naam die anderen zien" style="flex:0 0 auto;padding:3px 9px">✏️ Naam</button>
       </div>
       <div class="pill" style="margin:4px 0">Niveau ${lv.level} · ${esc(lv.title)}${xb.starSuffix}</div>
       <div style="font-size:12px;color:var(--muted)">${xp} XP · ${battles} gevecht${battles!==1?"en":""} · ${BM_IDENT.coins||0} 🪙 ${esc(bmCoinName())}</div>

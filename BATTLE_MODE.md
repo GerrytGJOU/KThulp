@@ -387,6 +387,13 @@ Dit zijn alle getallen die je kunt bijstellen zonder in de logica te hoeven zitt
 | Cavalerie: correct én snel | +5 (passief be_on_fast: +2) |
 | Fout antwoord | −`BM_WRONG_BE_PENALTY` (= 2), nooit onder 0 |
 
+De passieve rondebonus (synergie + klassepassief + mastery + traits, zie hieronder)
+wordt in `bmDistributeQs()` alléén uitgekeerd aan spelers die de vórige ronde góéd
+beantwoordden (`lastAnswerOk`/`lastAnswerRound` op het player-node; ronde 1 is de
+uitzondering, want dan heeft nog niemand kunnen antwoorden). Zonder die voorwaarde
+kwam een fout antwoord alsnog positief uit: −2 BE, en aan het begin van de volgende
+ronde onvoorwaardelijk +4 terug.
+
 ### Grenzen aan de BE-economie (`battle-data.js`)
 
 In een gevecht met een hele klas liep de BE volledig uit de hand: leerlingen hadden
@@ -510,6 +517,43 @@ onderste antwoordknop buiten beeld en moest een leerling scrollen om te
 antwoorden. De hoogtes gebruiken `dvh` met een `vh`-fallback, want op mobiel
 telt `vh` de adresbalk mee. Binnen het paneel staan compactere varianten van
 `.qcard` en `.choice`, met vanaf `max-height:700px` nog een tandje kleiner.
+
+---
+
+## Avatar-weergave: elke optie een eigen vorm
+
+`bmAvatarSVG()` (`certamen/battle.js`) tekent de gestileerde SVG-avatar die in de
+avatar-editor, de lobbylijst en het profiel gebruikt wordt. **Elke id uit
+`BM_AVATAR_PARTS` moet daar een eigen vorm hebben.** Ontbreekt er een, dan valt de
+optie via de `??`-fallback terug op een andere en lijken twee keuzes identiek.
+
+Zo "verdween" de Knuppel: die stond niet in de `weapons`-tabel en viel dus terug op
+het zwaard. Op niveau 1 valt dat niemand op — maar zodra een leerling niveau 2 haalde
+en het échte Zwaard erbij kwam, stonden er twee identieke zwaarden en leek de Knuppel
+weg. Hetzelfde gold voor Geen helm, Geen schild, Bandana, Hopliet-helm, Baard en snor,
+Sik en snor, vijf haarstijlen (die renderden als kaal), de drie vleugelcapes en de
+harnaskleuren van Vodden/Mantel/Hopliet.
+
+Let op de valstrik die dat verergerde: "geen" is een lége string, en die is falsy.
+`helms[a.helm]||helms.standard` gaf dus óók een helm bij "Geen helm". Daarom staat er
+nu overal `??` in plaats van `||`.
+
+Bij het toevoegen van een nieuwe avatar-optie hoort dus altijd een vorm in
+`bmAvatarSVG()`. Een snelle controle: render elke optie van een categorie en
+vergelijk de SVG-strings — twee identieke strings betekent twee opties die er
+hetzelfde uitzien.
+
+---
+
+## Eigen naam wijzigen
+
+`bmRenameSelf(terugScherm)` laat een leerling zelf de naam aanpassen die klasgenoten
+en de docent zien. De knop staat op het profielscherm én in de spelerslobby (waar het
+er het meest toe doet: vlak voor een gevecht). De klascode en leerlingcode blijven
+gelijk, dus de leerling blijft dezelfde identiteit met dezelfde XP, munten en
+eerbewijzen. De naam gaat naar `identities/{klas}/{lcode}/name` én — als de leerling
+al in een kamer zit — naar `rooms/{code}/players/{pid}/name`, zodat de nieuwe naam
+meteen in de lobby, op het slagveld en op het docentscherm staat.
 
 ---
 
