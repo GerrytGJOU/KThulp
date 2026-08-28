@@ -721,8 +721,12 @@ verschijnen de niveau-melding, nieuwe eerbewijzen en een eventuele legendarische
 
 Dat is niet alleen mooi: het is de reden dát leerlingen op het scherm blijven. Zolang
 `bmAwardBattle()` loopt staat er "Je XP en {munten} worden bijgeschreven… blijf even op
-dit scherm", en zijn de twee wegklik-knoppen **disabled** — met een vangnet-timer van 6
-seconden, zodat niemand opgesloten raakt als het netwerk hapert. `bmAwardBattle()`
+dit scherm", en zijn de twee wegklik-knoppen **disabled**. Ze gaan open zodra de
+uitkering rond is, maar op zijn vroegst na `BM_RESULT_MIN_MS` (3 s) — het bijschrijven
+duurt meestal minder dan een seconde, en zonder die ondergrens klikte een snelle
+leerling door vóórdat hij zijn eigen winst had zien oplopen (de animatie loopt ~1,8 s).
+Een vangnet-timer opent ze na 6 seconden hoe dan ook, zodat niemand opgesloten raakt
+als het netwerk hapert. `bmAwardBattle()`
 levert daarvoor `oldXp`/`newXp` en `oldCoins`/`newCoins` mee terug. Met
 `meta.animations:false` verschijnen alle eindwaarden meteen, zonder tellen.
 

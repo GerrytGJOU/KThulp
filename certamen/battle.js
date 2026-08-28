@@ -4065,7 +4065,18 @@ SCREENS.battleResult = function(){
   ${foot()}`);
   // De knoppen staan uit tot de uitkering rond is: wie hier wegklikt vóórdat
   // bmAwardBattle() klaar is, loopt zijn XP en munten mis.
-  const unlock=()=>{["bmResHome","bmResProfile"].forEach(id=>{const b=el(id); if(b)b.disabled=false;});};
+  // … en ze gaan pas open als de teller ook echt uitgeteld is: minimaal
+  // BM_RESULT_MIN_MS na binnenkomst. Het bijschrijven duurt meestal minder dan
+  // een seconde, en zonder die ondergrens klikte een snelle leerling door
+  // vóórdat hij zijn eigen winst had zien oplopen (de animatie loopt ~1,8 s).
+  const BM_RESULT_MIN_MS=3000;
+  const t0=Date.now();
+  let unlocked=false;
+  const unlock=()=>{
+    if(unlocked)return; unlocked=true;
+    setTimeout(()=>{["bmResHome","bmResProfile"].forEach(id=>{const b=el(id); if(b)b.disabled=false;});},
+      Math.max(0,BM_RESULT_MIN_MS-(Date.now()-t0)));
+  };
   // Vangnet: blijft de uitkering hangen (geen netwerk), dan gaan de knoppen na
   // 6 seconden alsnog open — een leerling mag nooit opgesloten raken.
   setTimeout(unlock,6000);
