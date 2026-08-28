@@ -705,7 +705,10 @@ Twee zones:
 
 Sequentieel onthullen (~3,5s per kaart) met `bmNextAward()`:
 1. Winnaar-overlay (animatie)
-2. Zes awards berekend via `bmComputeAwards(players, log)`:
+2. Zes awards berekend via `bmComputeAwards(players, log)` — elk met een eigen
+   `icon` uit de app-iconenset (`iconSVG`), zodat ze in huisstijl staan en niet
+   afhangen van de emoji-font van een toestel. `bmAwardIcon()` valt terug op het
+   emoji-veld voor eerbewijzen die (nog) geen icoon hebben:
    - ⚔️ Meeste Schade — hoogste `damage`
    - 🛡️ Beste Verdediger — meeste schild-events in log
    - 💚 Beste Support — hoogste `healing`

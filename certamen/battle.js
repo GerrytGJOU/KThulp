@@ -3210,12 +3210,12 @@ function bmComputeAwards(players, log){
   const cmbTop=Object.entries(comboCnt).sort((a,b)=>b[1]-a[1])[0];
   const p2=(e)=>e?{...(pidMap[e[0]]||{}),_val:e[1]}:null;
   return[
-    {nm:"Meeste Schade",    emoji:"⚔️",  player:byDmg[0]||null,  value:byDmg[0]?(byDmg[0].damage||0)+" schade":""},
-    {nm:"Beste Verdediger", emoji:"🛡️",  player:p2(shldTop),      value:shldTop?shldTop[1]+" schild-acties":""},
-    {nm:"Beste Support",    emoji:"💚",  player:byHeal[0]||null,  value:byHeal[0]?(byHeal[0].healing||0)+" healing":""},
-    {nm:"Scholar",          emoji:"📚",  player:byAcc[0]||null,   value:byAcc[0]?Math.round((byAcc[0].correct||0)/((byAcc[0].correct||0)+(byAcc[0].wrong||0))*100)+"%":""},
-    {nm:"Snelste Denker",   emoji:"⚡",  player:bySpd[0]||null,   value:bySpd[0]?Math.round((bySpd[0].totalResponseMs||0)/(bySpd[0].respondCount||1)/100)/10+"s gem.":""},
-    {nm:"Beste Teamspeler", emoji:"🤝",  player:p2(cmbTop),       value:cmbTop?cmbTop[1]+" combo's":""},
+    {nm:"Meeste Schade",    icon:"trident", emoji:"⚔️",  player:byDmg[0]||null,  value:byDmg[0]?(byDmg[0].damage||0)+" schade":""},
+    {nm:"Beste Verdediger", icon:"shield",  emoji:"🛡️",  player:p2(shldTop),      value:shldTop?shldTop[1]+" schild-acties":""},
+    {nm:"Beste Support",    icon:"torch",   emoji:"💚",  player:byHeal[0]||null,  value:byHeal[0]?(byHeal[0].healing||0)+" healing":""},
+    {nm:"Scholar",          icon:"owl",     emoji:"📚",  player:byAcc[0]||null,   value:byAcc[0]?Math.round((byAcc[0].correct||0)/((byAcc[0].correct||0)+(byAcc[0].wrong||0))*100)+"%":""},
+    {nm:"Snelste Denker",   icon:"horse",   emoji:"⚡",  player:bySpd[0]||null,   value:bySpd[0]?Math.round((bySpd[0].totalResponseMs||0)/(bySpd[0].respondCount||1)/100)/10+"s gem.":""},
+    {nm:"Beste Teamspeler", icon:"column",  emoji:"🤝",  player:p2(cmbTop),       value:cmbTop?cmbTop[1]+" combo's":""},
   ];
 }
 
@@ -3236,16 +3236,16 @@ function bmComputeBossAwards(players, log){
   const finishEntry=entries.find(e=>e.finishingBlowPid);
   const finisher=finishEntry?pidMap[finishEntry.finishingBlowPid]:null;
   const awards=[
-    {nm:"De Sloper",             emoji:"⚔️", player:byDmg[0]||null,    value:byDmg[0]?(byDmg[0].damage||0)+" schade aan de baas":""},
-    {nm:"Medic van het Legioen", emoji:"💚", player:byHeal[0]||null,   value:byHeal[0]?(byHeal[0].healing||0)+" healing":""},
-    {nm:"De Onsterfelijke",      emoji:"🔥", player:byStreak[0]||null, value:byStreak[0]?byStreak[0].bestCorrectStreak+" op rij goed":""},
-    {nm:"Combo Koning",          emoji:"🤝", player:byChain[0]||null,  value:byChain[0]?byChain[0].chainCount+"x brede aanval":""},
-    {nm:"Geluksbrenger",         emoji:"💀", player:finisher||null,    value:finisher?"gaf de genadeklap":""},
+    {nm:"De Sloper",             icon:"trident", emoji:"⚔️", player:byDmg[0]||null,    value:byDmg[0]?(byDmg[0].damage||0)+" schade aan de baas":""},
+    {nm:"Medic van het Legioen", icon:"torch",   emoji:"💚", player:byHeal[0]||null,   value:byHeal[0]?(byHeal[0].healing||0)+" healing":""},
+    {nm:"De Onsterfelijke",      icon:"laurel",  emoji:"🔥", player:byStreak[0]||null, value:byStreak[0]?byStreak[0].bestCorrectStreak+" op rij goed":""},
+    {nm:"Combo Koning",          icon:"column",  emoji:"🤝", player:byChain[0]||null,  value:byChain[0]?byChain[0].chainCount+"x brede aanval":""},
+    {nm:"Geluksbrenger",         icon:"star",    emoji:"💀", player:finisher||null,    value:finisher?"gaf de genadeklap":""},
   ];
   // Minion Opruimer alleen tonen als er in dit gevecht daadwerkelijk
   // handlangers waren om op te ruimen.
   if(byMinionDmg.length) awards.push(
-    {nm:"Minion Opruimer", emoji:"🎯", player:byMinionDmg[0], value:(byMinionDmg[0].minionDamage||0)+" schade aan handlangers"}
+    {nm:"Minion Opruimer", icon:"eagle", emoji:"🎯", player:byMinionDmg[0], value:(byMinionDmg[0].minionDamage||0)+" schade aan handlangers"}
   );
   return awards;
 }
@@ -3343,6 +3343,15 @@ async function bmExportCSV(){
   XLSX.writeFile(wb,"battlemode_"+(BM_CODE||"export")+"_"+new Date().toISOString().substring(0,10)+".csv");
 }
 
+// Icoon van een eerbewijs: het eigen SVG-icoon uit de app (zelfde stijl als de
+// klasse-iconen, en niet afhankelijk van welke emoji-font een toestel heeft).
+// Valt terug op de emoji zolang een eerbewijs nog geen icoon meegekregen heeft.
+function bmAwardIcon(award,size){
+  return award&&award.icon
+    ? iconSVG(award.icon,size,"var(--hi-bright)")
+    : `<span style="font-size:${Math.round(size*0.8)}px;line-height:1">${(award&&award.emoji)||""}</span>`;
+}
+
 /* Erepodium: alle eerbewijzen nog één keer samen in beeld, met daaronder de
    totaalscore van de klas. De ceremonie laat ze één voor één zien (3,5 s per
    stuk) en dat gaat snel voorbij — wie even niet keek, miste zijn eigen naam.
@@ -3365,7 +3374,7 @@ function bmRenderPodium(stage){
     : `<div class="bm-podium-win">Gevecht gestopt</div>`;
   const cards=awards.map(a=>`
     <div class="bm-podium-card">
-      <div class="bm-podium-emoji">${a.emoji}</div>
+      <div class="bm-podium-ic">${bmAwardIcon(a,30)}</div>
       <div class="bm-podium-nm">${esc(a.nm)}</div>
       ${renderPixelHeroIcon(a.player.avatar,44)}
       <div class="bm-podium-player">${esc(a.player.name)}</div>
@@ -3429,7 +3438,7 @@ function bmNextAward(){
   if(!p||!p.name){BM_AWARD_STEP++;bmNextAward();return;} // geen winnaar → oversla
 
   stage.innerHTML=`<div class="bm-award-card">
-    <div style="font-size:36px">${award.emoji}</div>
+    <div class="bm-award-ic">${bmAwardIcon(award,44)}</div>
     <div style="font-size:14px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px">${esc(award.nm)}</div>
     ${renderPixelHeroIcon(p.avatar,80)}
     <div style="font-size:24px;font-weight:700;margin-top:8px">${esc(p.name)}</div>
