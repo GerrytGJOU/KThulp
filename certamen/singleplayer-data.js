@@ -6466,7 +6466,7 @@ function spStatpointCost(currentValue){
      hij op slot ("ontgrendelt later in het verhaal"). Nu alleen de drie
      wapens die je letterlijk in de proloog oppakt; nieuwe hoofdstukken breiden
      dit uit naarmate het verhaal nieuwe uitrusting oplevert. ---- */
-const SP_AVATAR_FREE_PARTS = ["geslacht","huid","haar","haarkleur","baard"];
+const SP_AVATAR_FREE_PARTS = ["huid","oogkleur","borstband","haar","haarkleur","baard"];
 const SP_AVATAR_STORY_UNLOCKS = {
   "wapen:boog":   { title:"boogschutter_orakel" },
   "wapen:speer":  { title:"hopliet_orakel" },

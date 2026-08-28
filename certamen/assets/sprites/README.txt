@@ -11,11 +11,26 @@ nature naar links; Team A wordt gespiegeld (kijkt naar rechts), Team B niet.
 Verwachte bestandsnamen
 -----------------------
 
-Lichamen (basis):
-  base_light.png
-  base_dark.png
-  base_light_female.png
-  base_dark_female.png
+Lichamen (basis) — GEGENEREERD, zie tools/gen_sprites.js:
+  base_zeerlicht.png
+  base_licht.png
+  base_getint.png
+  base_olijf.png
+  base_brons.png
+  base_donker.png
+
+Ogen (alleen de irispixels, los van de huidtint) — GEGENEREERD:
+  ogen_blauw.png  ogen_bruin.png  ogen_donkerbruin.png
+  ogen_groen.png  ogen_grijs.png  ogen_amber.png
+
+Borstband (losse schakelaar) — GEGENEREERD:
+  borstband.png
+
+Bronbestanden voor de generator (worden door het spel NIET meer geladen):
+  base_light.png          bron voor alle zes huidtinten en de zes ooglagen
+  base_light_female.png   bron voor de borstband
+  base_dark.png           referentie: het donkere uiteinde van de huidladder
+  base_dark_female.png    ongebruikt
 
 Helm:           (optie "Geen helm" = geen bestand, lege laag)
   helm_standaard.png
@@ -59,11 +74,22 @@ Cape:           (capekleur via CSS-filter; basis is goud/geel)
   cape_kort.png
   cape_lang.png           (vereist niveau 6)
 
+Genereren
+---------
+  cd certamen && node tools/gen_sprites.js
+
+Het script wisselt paletkleuren om in base_light.png (zes huidkleuren voor de
+tinten, twee iriskleuren voor de ogen) en licht de borstband uit het verschil
+met base_light_female.png. Handmatig bijwerken van deze bestanden heeft dus
+geen zin: de volgende run overschrijft het. Pas het script aan.
+
 Z-index laagvolgorde (van achter naar voren)
 ---------------------------------------------
   1. cape_*.png       Cape (achterste laag)
   2. wapen_*.png      Wapen (achterste hand, áchter het lichaam)
   3. base_*.png       Lichaam
+  3a. ogen_*.png      Oogkleur (direct op het lichaam)
+  3b. borstband.png   Borstband (onder de wapenrusting)
   4. baard_*.png      Gezichtshaar
   5. haar_*.png       Haar
   6. armor_*.png      Wapenrusting

@@ -230,13 +230,28 @@ const TW_CIV_COMMANDERS = {
 
 // Alle avatar-onderdelen. requires:{level:N} of {mastery:N} = vereist niveau/mastery om te ontgrendelen.
 const BM_AVATAR_PARTS = {
-  geslacht:{ nm:"Geslacht",        opts:[
-    { id:"man",   nm:"Man" },
-    { id:"vrouw", nm:"Vrouw" },
-  ]},
+  // Zes huidtinten. "licht" en "donker" zijn exact de twee oorspronkelijke
+  // sprites; de vier tussenvormen zijn er in 2026-08-28 uit gegenereerd
+  // (tools/gen_sprites.js) door de zes huidkleuren van het palet om te wisselen.
+  // Bestaande profielen hoeven dus niet gemigreerd te worden.
   huid:   { nm:"Huidskleur",       opts:[
-    { id:"licht",  nm:"Licht" },
-    { id:"donker", nm:"Donker" },
+    { id:"zeerlicht", nm:"Zeer licht" },
+    { id:"licht",     nm:"Licht" },
+    { id:"getint",    nm:"Getint" },
+    { id:"olijf",     nm:"Olijf" },
+    { id:"brons",     nm:"Brons" },
+    { id:"donker",    nm:"Donker" },
+  ]},
+  // Oogkleur: een eigen spritelaag over het lichaam heen (de iris bestaat uit
+  // precies twee paletkleuren), dus onafhankelijk van de huidtint. Wordt als
+  // ronde swatches getoond, net als haar- en capekleur.
+  oogkleur:{ nm:"Oogkleur",        opts:[
+    { id:"blauw",       nm:"Blauw" },
+    { id:"bruin",       nm:"Bruin" },
+    { id:"donkerbruin", nm:"Donkerbruin" },
+    { id:"groen",       nm:"Groen" },
+    { id:"grijs",       nm:"Grijs" },
+    { id:"amber",       nm:"Amber" },
   ]},
   haar:   { nm:"Haar",             opts:[
     { id:"kort",    nm:"Kort" },
@@ -259,9 +274,20 @@ const BM_AVATAR_PARTS = {
     { id:"blond",  nm:"Blond" },
     { id:"bruin",  nm:"Bruin" },
     { id:"zwart",  nm:"Zwart" },
+    { id:"grijs",  nm:"Grijs" },
+    { id:"wit",    nm:"Wit" },
     { id:"rood",   nm:"Rood" },
     { id:"blauw",  nm:"Blauw",            requires:{level:8} },
     { id:"groen",  nm:"Groen",            requires:{level:8} },
+  ]},
+  // Borstband: losse schakelaar in plaats van het oude "Geslacht"-onderdeel.
+  // Dat koos vroeger een compleet ander lichaam (base_*_female.png); die twee
+  // sprites bleken alleen in deze band te verschillen, dus is de band er als
+  // eigen laag uit gelicht en kiest iedereen 'm los van huidtint en oogkleur.
+  // Zit onder de wapenrusting: alleen zichtbaar bij vodden of een mantel.
+  borstband:{ nm:"Borstband",      opts:[
+    { id:"geen", nm:"Zonder" },
+    { id:"aan",  nm:"Met" },
   ]},
   armor:  { nm:"Wapenrusting",     opts:[
     { id:"vodden",      nm:"Vodden" },

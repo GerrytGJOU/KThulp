@@ -96,13 +96,27 @@ async function bmIdentCreate(klas,lcode,name){
 function bmAvatarDefaults(){
   return{helm:"geen",haar:"kort",baard:"geen",armor:"vodden",
          schild:"geen",wapen:"knuppel",cape:"geen",kleur:"#b03a2e",victoryAnim:"juichen",
-         huid:"licht",geslacht:"man",haarkleur:"blond",capekleur:"goud",
+         huid:"licht",haarkleur:"blond",capekleur:"goud",oogkleur:"blauw",borstband:"geen",
          extra:"geen",legendary:"geen",prestige:"geen"};
+}
+// Migratie van opgeslagen avatars naar het huidige onderdelenmodel. Draait in
+// zowel bmAvatarMerge() als spAvatarMerge() (singleplayer.js), zodat een oud
+// profiel in Battle Mode én in Chronica hetzelfde wordt bijgewerkt.
+//   geslacht (2026-08-28 vervallen): koos een compleet ander lichaam, terwijl
+//   base_light_female.png alleen in de borstband van base_light.png bleek te
+//   verschillen. "vrouw" wordt dus de borstband; het lichaam is nu enkel nog
+//   de huidtint. Het veld blijft in oude saves staan en wordt genegeerd.
+// "a" is het al samengevoegde object, "saved" de ruwe opgeslagen avatar — die
+// tweede is nodig omdat de defaults borstband altijd invullen, waardoor je aan
+// "a" alleen niet meer kunt zien of de speler er ooit zelf iets voor koos.
+function bmAvatarMigrate(a, saved){
+  if(saved && saved.borstband===undefined && saved.geslacht==="vrouw") a.borstband = "aan";
+  return a;
 }
 function bmAvatarMerge(saved){
   // backward compat: string-avatar (pre-M6) → object
   if(!saved||typeof saved==="string") return bmAvatarDefaults();
-  return{...bmAvatarDefaults(),...saved};
+  return bmAvatarMigrate({...bmAvatarDefaults(),...saved}, saved);
 }
 
 function bmAvatarSVG(av,size=60){
@@ -120,7 +134,11 @@ function bmAvatarSVG(av,size=60){
   const helmFill={bandana:col,standard:"#7a6a48",open:"#8a7a58",hopliet:"#b07a30",kroon:"#d4af37"}[a.helm]||"#7a6a48";
   const hairCol=(typeof BM_HAARKLEUR_SWATCH!=="undefined"&&BM_HAARKLEUR_SWATCH[a.haarkleur])||"#5c3c1a";
   const hairFill=a.haar==="kaal"?null:hairCol;
-  const skin=a.huid==="donker"?"#8a5a34":"#d4a476"; const wc="#c8a860";
+  // Zelfde ladder als de sprites (PIXEL_ASSETS.bases), maar dan als één vlakke
+  // kleur — dit is de SVG-terugval én de kleine voorbeeldpop in de editor.
+  const skin={zeerlicht:"#f0c3a4",licht:"#d4a476",getint:"#bd8f63",
+              olijf:"#a8804f",brons:"#8f6a48",donker:"#8a5a34"}[a.huid]||"#d4a476";
+  const wc="#c8a860";
 
   // Ook de drie vleugelcapes krijgen een eigen vorm — anders zijn ze in de
   // editor niet te onderscheiden van "Geen cape".
@@ -190,6 +208,9 @@ function bmAvatarSVG(av,size=60){
     ${cape}${shields[a.schild] ?? shields.rond}
     <rect x="19" y="30" width="22" height="24" rx="3" fill="${armorFill}"/>
     <rect x="19" y="30" width="22" height="5" rx="2" fill="${armorFill}" opacity=".65"/>
+    ${/* In de sprites zit de band ónder de wapenrusting; hier bewust erboven,
+          anders zijn "Zonder" en "Met" in de editor niet uit elkaar te houden. */
+      a.borstband==="aan"?`<rect x="19" y="36" width="22" height="4" rx="1" fill="#4a3f3a"/>`:""}
     <rect x="15" y="34" width="6" height="12" rx="2" fill="${armorFill}" opacity=".8"/>
     <rect x="39" y="34" width="6" height="12" rx="2" fill="${armorFill}" opacity=".8"/>
     ${weapons[a.wapen] ?? weapons.zwaard}
@@ -954,7 +975,10 @@ SCREENS.battleFAQ = function(){
       <li><b>Getoonde naam</b> — koos je een naam waar je spijt van hebt? Via <b>Mijn profiel</b> pas je
       met het potloodje naast je naam je getoonde naam aan. Je klascode en leerlingcode blijven gelijk, dus
       je hoeft geen nieuw account te maken en je voortgang blijft behouden.</li>
-      <li><b>Avatar</b> — pas je held-avatar aan via je profiel. De meeste onderdelen unlock je door te
+      <li><b>Avatar</b> — pas je held-avatar aan via je profiel. <b>Huidskleur</b> (zes tinten),
+      <b>Oogkleur</b>, <b>Haarkleur</b> en de schakelaar <b>Borstband</b> zijn vanaf het begin vrij: dat
+      is hoe jij eruitziet, niet iets wat je moet verdienen. Je kiest ze los van elkaar, dus elke
+      combinatie kan. De meeste andere onderdelen unlock je door te
       levelen; de categorieën <b>Extra's</b> en <b>Legendarisch</b> (onderaan) koop je met munten
       (denarii/drachmae). De laatste categorie, <b>Legioensglans</b>, kleurt je hele avatar goud zodra je
       álle eerbewijzen in één categorie hebt behaald (bv. alle Boss Battle- of alle Total War-eerbewijzen)
@@ -2108,10 +2132,26 @@ const BM_PIXEL_ART = true;
 // Character sprites: 576×384px (RPG Maker MV 8-char sheet, frame = 48×48).
 // Wapen sprites:     288×64px  (3 aanvals-frames, elk 96×64).
 const PIXEL_ASSETS = {
-  bases:  { "licht":       "assets/sprites/base_light.png",
-            "donker":      "assets/sprites/base_dark.png",
-            "licht_vrouw": "assets/sprites/base_light_female.png",
-            "donker_vrouw":"assets/sprites/base_dark_female.png" },
+  // Zes huidtinten, alle zes gegenereerd uit base_light.png door de zes
+  // huidkleuren van het palet om te wisselen — zie tools/gen_sprites.js.
+  // "licht" en "donker" zijn pixelgelijk aan de vroegere base_light.png /
+  // base_dark.png, dus bestaande avatars veranderen niet van uiterlijk.
+  bases:  { "zeerlicht":"assets/sprites/base_zeerlicht.png",
+            "licht":    "assets/sprites/base_licht.png",
+            "getint":   "assets/sprites/base_getint.png",
+            "olijf":    "assets/sprites/base_olijf.png",
+            "brons":    "assets/sprites/base_brons.png",
+            "donker":   "assets/sprites/base_donker.png" },
+  // Alleen de irispixels (twee paletkleuren), dus onafhankelijk van de huidtint.
+  ogen:   { "blauw":      "assets/sprites/ogen_blauw.png",
+            "bruin":      "assets/sprites/ogen_bruin.png",
+            "donkerbruin":"assets/sprites/ogen_donkerbruin.png",
+            "groen":      "assets/sprites/ogen_groen.png",
+            "grijs":      "assets/sprites/ogen_grijs.png",
+            "amber":      "assets/sprites/ogen_amber.png" },
+  // Het enige echte verschil tussen de vroegere man- en vrouw-sprites.
+  borstband:{ "geen":"",
+            "aan":"assets/sprites/borstband.png" },
   armor:  { "vodden":"assets/sprites/armor_vodden.png",
             "robe":"assets/sprites/armor_robe.png",
             "licht":"assets/sprites/armor_licht.png",
@@ -2176,22 +2216,29 @@ const PIXEL_ASSETS = {
 
 // Rendert een gelaagde pixel art held (RPG Maker MV paper doll).
 // Laagvolgorde: base → cape → armor → schild → wapen → haar → baard → helm.
+// (ogen en borstband liggen direct op de base, dus onder haar en wapenrusting.)
 // Valt terug op bmSpriteSVG() als BM_PIXEL_ART=false of base-asset ontbreekt.
-// Kiest de juiste base-sprite op basis van huid + geslacht.
+// De huidtint ís de sleutel naar de base-sprite. (Tot 2026-08-28 werd hier ook
+// het geslacht in verwerkt — dat koos een aparte "_female"-sprite; die bleek
+// alleen in de borstband te verschillen en is nu een eigen laag.)
 function _bmBaseKey(cosm){
   const h = cosm.huid || "licht";
-  return (cosm.geslacht === "vrouw") ? h + "_vrouw" : h;
+  return PIXEL_ASSETS.bases[h] ? h : "licht";
 }
 
 // Versie-achtervoegsel voor sprite-bestanden → forceert verse download na een
 // asset-wijziging (bump dit getal als je een PNG vervangt).
-const SPRITE_VER = "v=7";
+const SPRITE_VER = "v=8";
 
 // CSS-filters per haarkleur (sprites zijn standaard blond in RPG Maker MV).
 const BM_HAARKLEUR_FILTER = {
   "blond":  "none",
   "bruin":  "hue-rotate(-30deg) brightness(0.6) saturate(0.8)",
   "zwart":  "brightness(0.2) saturate(0.2)",
+  // De haarsprites zijn blond (luma 94-239); grijs is dus simpelweg alle
+  // kleur eruit, wit hetzelfde maar lichter opgetrokken.
+  "grijs":  "grayscale(1) brightness(0.8)",
+  "wit":    "grayscale(1) brightness(1.15)",
   "rood":   "hue-rotate(-20deg) saturate(1.5)",
   "blauw":  "hue-rotate(140deg) brightness(0.9)",
   "groen":  "hue-rotate(60deg) brightness(0.9)",
@@ -2218,8 +2265,14 @@ const BM_CAPEKLEUR_SWATCH = {
 };
 // Weergavekleur (swatch) per haarkleur — zelfde kleurenkiezer-stijl als de cape.
 const BM_HAARKLEUR_SWATCH = {
-  "blond":"#e3c56b","bruin":"#7a4a24","zwart":"#2a2a2a",
+  "blond":"#e3c56b","bruin":"#7a4a24","zwart":"#2a2a2a","grijs":"#9a9a95","wit":"#e8e6df",
   "rood":"#a5442a","blauw":"#3a6ea5","groen":"#3a7d3a",
+};
+// Weergavekleur (swatch) per oogkleur — het hooglicht van de iris uit
+// PIXEL_ASSETS.ogen, zodat de bolletjes in de editor de sprite volgen.
+const BM_OOGKLEUR_SWATCH = {
+  "blauw":"#68b8ff","bruin":"#9c6636","donkerbruin":"#684226",
+  "groen":"#6ab460","grijs":"#aab6bc","amber":"#de9e3a",
 };
 // Eén CSS-filter voor ALLE "prestige"-onderdelen (BM_AVATAR_PARTS.prestige,
 // battle-data.js) — ongeacht welke categorie ontgrendeld werd, is het effect
@@ -2234,7 +2287,7 @@ const BM_ARMOR_TINT_FILTER = { "kampioen": "sepia(0.7) saturate(3) hue-rotate(-1
 
 // Bouwt de gelaagde sprite-lagen als HTML-string.
 // Z-index van achter naar voren (RPG Maker MV SV correct):
-//   cape → wapen → base → haar → pantser → baard → schild → helm.
+//   cape → wapen → base → ogen → borstband → haar → pantser → baard → schild → helm.
 // Het wapen valt áchter het lichaam (achterste hand), vóór de cape; de baard
 // valt vóór het pantser (anders bedekt de kraag hem); het schild valt vóór het
 // pantser; de helm is de bovenste laag.
@@ -2285,6 +2338,8 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     ${L(A.wapen[cosm.wapen||"zwaard"]," sprite-weapon wpn-"+(cosm.wapen||"zwaard"),"",false)}
     ${L(A.cape[cosm.cape||"geen"],"",capeStyle)}
     ${L(baseSrc)}
+    ${L(A.ogen[cosm.oogkleur||"blauw"])}
+    ${L(A.borstband[cosm.borstband||"geen"])}
     ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
     ${L(A.armor[cosm.armor||"licht"],"", BM_ARMOR_TINT_FILTER[cosm.armor] ? `filter:${BM_ARMOR_TINT_FILTER[cosm.armor]}` : "")}
     ${baardLayers}
@@ -4363,7 +4418,8 @@ SCREENS.battleAvatarEdit = function(){
     const part=BM_AVATAR_PARTS[partId]; if(!part)return"";
     // Kleurenkiezers: cape- én haarkleur als ronde swatches (respecteren sloten).
     const SW = partId==="capekleur"?BM_CAPEKLEUR_SWATCH
-             : partId==="haarkleur"?BM_HAARKLEUR_SWATCH : null;
+             : partId==="haarkleur"?BM_HAARKLEUR_SWATCH
+             : partId==="oogkleur"?BM_OOGKLEUR_SWATCH : null;
     if(SW){
       const sw=part.opts.map(o=>{
         const key=partId+":"+o.id;

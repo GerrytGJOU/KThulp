@@ -58,7 +58,9 @@ const SP_AVATAR_KEY = "certamen_chronica_avatar";
 function spAvatarDefaults(){ return {...bmAvatarDefaults(), wapen:"hooivork"}; }
 function spAvatarMerge(saved){
   if(!saved || typeof saved==="string") return spAvatarDefaults();
-  return {...spAvatarDefaults(), ...saved};
+  // bmAvatarMigrate (battle.js) werkt oude onderdelen bij, bv. het vervallen
+  // "geslacht" dat nu de losse borstband-schakelaar is.
+  return bmAvatarMigrate({...spAvatarDefaults(), ...saved}, saved);
 }
 function spAvatarLoadLocal(){ try{ const r=localStorage.getItem(SP_AVATAR_KEY); return r?JSON.parse(r):null; }catch(e){ return null; } }
 function spAvatarSaveLocal(av){ try{ localStorage.setItem(SP_AVATAR_KEY, JSON.stringify(av)); }catch(e){} }
@@ -124,7 +126,8 @@ SCREENS.spAvatarEdit = function(){
     // Kleurenkiezers: haarkleur/capekleur als ronde swatches, net als in
     // SCREENS.battleAvatarEdit (battle.js) — zelfde look, eigen ontgrendellogica.
     const SW = partId==="capekleur"?BM_CAPEKLEUR_SWATCH
-             : partId==="haarkleur"?BM_HAARKLEUR_SWATCH : null;
+             : partId==="haarkleur"?BM_HAARKLEUR_SWATCH
+             : partId==="oogkleur"?BM_OOGKLEUR_SWATCH : null;
     if(SW){
       const sw=part.opts.map(o=>{
         const col=SW[o.id]||"#888";
