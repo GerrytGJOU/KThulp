@@ -4287,7 +4287,9 @@ const SP_COMBAT_ENEMIES = {
   // ---- Hoofdstuk 8 — De Wrok van Achilles ----
   trojaanse_voorhoede: { nm:"De Trojaanse Voorhoede", icon:"🔥", img:"assets/chronica/combat/trojaanse_voorhoede.png", hp:50,
     intro:"Een groep Trojaanse strijders, vlak bij de Griekse schepen, met fakkels in de hand — als de wal nu breekt, staat de hele vloot in brand voor de avond valt." },
-  hektor: { nm:"Hector", icon:"⚔️", img:"assets/chronica/combat/hektor.png", hp:90,
+  // flip:true — de illustratie toont Hector naar rechts (van de speler af)
+  // i.p.v. naar links (naar de speler toe); leerlingfeedback 2026-08-25.
+  hektor: { nm:"Hector", icon:"⚔️", img:"assets/chronica/combat/hektor.png", hp:90, flip:true,
     intro:"Troje's grootste verdediger, gedwongen door zijn eigen eer om te blijven staan — Athena, vermomd als zijn broer Deiphobus, heeft er net voor gezorgd dat hij niet meer kan vluchten." },
 
   // ---- Hoofdstuk 9 — Ilion in Vlammen ----
@@ -6295,8 +6297,8 @@ const SP_PAYOFFS = [
     content:{text:`Je herkent het woord van de appel meteen terug in wat er nu net is gebeurd: "τῇ καλλίστῃ" — aan de mooiste. Eén woord, gegraveerd in goud, en een oorlog is al onvermijdelijk voor hij goed en wel is begonnen.`,
       kroniekTekst:"\"τῇ καλλίστῃ\" — aan de mooiste — één woord in goud gegraveerd, en een oorlog was al onvermijdelijk voor hij goed en wel begon."} },
   { id:"ch8_epi008_echo_menis_patroklos", type:"echo", trigger:{scene:"CH8_EPI_008"}, priority:0,
-    content:{text:`"Πάτροκλος ἀπέθανεν" — dat was het hele nieuws, drie woorden maar. Kijkend naar wat Achilles zojuist met Hectors lichaam doet, besef je: dát is precies waarom hij geen greintje genade meer over heeft.`,
-      kroniekTekst:"\"Πάτροκλος ἀπέθανεν\" — drie woorden die verklaarden waarom Achilles geen greintje genade meer overhad."} },
+    content:{text:`"Πάτροκλος ἀπέθανεν" — dat was het hele nieuws, twee woorden maar. Kijkend naar wat Achilles zojuist met Hectors lichaam doet, besef je: dát is precies waarom hij geen greintje genade meer over heeft.`,
+      kroniekTekst:"\"Πάτροκλος ἀπέθανεν\" — twee woorden die verklaarden waarom Achilles geen greintje genade meer overhad."} },
   { id:"ch9_tro011_echo_sinon_leugen", type:"echo", trigger:{scene:"CH9_TRO_011"}, priority:0,
     content:{text:`Sinons woorden klinken nog na, terwijl het paard door de bres naar binnen wordt gesleept: "de Grieken zijn vertrokken." Het is, besef je, het laatste wat deze stad ooit voor waar zal aannemen.`,
       kroniekTekst:"Sinons leugen — \"de Grieken zijn vertrokken\" — was het laatste wat Troje ooit voor waar zou aannemen."} },
@@ -16610,11 +16612,11 @@ TITLE:
 Rond de Muren
 
 TEXT:
-Achilles sleept Hectors lichaam driemaal rond de muren van Troje, in het volle zicht van Priamus, Hecuba en Andromache, die van de muren toekijken. Priamus moet fysiek worden tegengehouden om niet naar buiten te rennen — een wachter grijpt hem bij de arm en schreeuwt boven het misbaar uit: "μὴ ἔξελθε."
+Achilles sleept Hectors lichaam driemaal rond de muren van Troje, in het volle zicht van Priamus, Hecuba en Andromache, die van de muren toekijken. Ver boven je, aan de Trojaanse kant van diezelfde muren, moet Priamus fysiek worden tegengehouden om niet naar buiten te rennen — een wachter grijpt hem bij de arm en schreeuwt boven het misbaar uit: "μὴ ἔξελθε."
 
 CHOICES:
 
-* Hoor er een bevel in — "ga niet naar buiten!" — en houd zelf ook je afstand van de poort -> CH8_EPI_009_GOED
+* Hoor er een bevel in — "ga niet naar buiten!" -> CH8_EPI_009_GOED
 * Hoor er een constatering in — "hij gaat niet naar buiten" — en denk dat het gevaar al geweken is -> CH8_EPI_009_FOUT
 
 END
@@ -16625,7 +16627,7 @@ TITLE:
 Een Bevel Verstaan
 
 TEXT:
-Je verstaat het bevel meteen zoals het bedoeld is, en helpt zelf mee Priamus tegen te houden — zijn wanhoop is te groot om op eigen kracht te bedwingen, en elke hand die meehelpt telt.
+Je verstaat het bevel meteen zoals het bedoeld is — een waarschuwing, geen constatering — en beseft, van ver buiten de muren, hoe weinig scheelt of de wachters daarboven hem nog in bedwang houden.
 
 CHOICES:
 

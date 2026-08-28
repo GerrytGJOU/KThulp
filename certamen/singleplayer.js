@@ -3483,7 +3483,7 @@ function spStartCombatFromScene(scene){
     intent:null, intentLaden:0,
     schild:false, schildmuur:0, zwakpunt:false,
     goed:0, fout:0, vigorVerloren:0, vaardigheidGebruikt:false,
-    itemsGebruikt:[], vermijd:[], gezien:{}, opvangGehad:false,
+    itemsGebruikt:[], vermijd:[], gezien:{}, opvangGehad:false, foutenLog:[],
     bericht:null, uitleg:null, laatsteFx:null, vigorSchaal:1,
     muziekVoor: SP_MUSIC_CURRENT,
   };
@@ -3657,6 +3657,13 @@ function spCombatVerwerkAntwoord(goed, vorm, vormId, bijnaGoedHint){
     // keuzescherm staan terwijl de speler zijn volgende zet kiest.
     SP_COMBAT.uitleg = bijnaGoedHint || (q ? q.uitleg : null);
     SP_COMBAT.laatsteFx = { speler:"evade" };
+    // Leerlingfeedback (2026-08-25): een overzicht van de gemiste vragen na
+    // afloop, zodat je zelf kunt nagaan wat je nog moet leren — gededupliceerd
+    // op de vraagtekst zelf (dezelfde vraag kan via de Leitner-box vaker
+    // terugkomen in één gevecht).
+    if(q && !SP_COMBAT.foutenLog.some(f=>f.vraag===q.vraag)){
+      SP_COMBAT.foutenLog.push({ vraag:q.vraag, antwoord:q.antwoord });
+    }
   }
 
   if(SP_COMBAT.hp<=0){ spCombatEinde(); return; }
@@ -3950,8 +3957,13 @@ function spCombatSpriteHTML(enemy){
       `<img src="${esc(h)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain">`
     ).join("");
   }
+  // enemy.flip: sommige illustraties zijn met het personage naar rechts
+  // gegenereerd i.p.v. naar links (naar de speler toe, die altijd rechts
+  // op het scherm staat) — spiegel die met een CSS-transform i.p.v. de
+  // afbeelding opnieuw te laten genereren.
+  const flipStyle = enemy.flip ? ";transform:scaleX(-1)" : "";
   return `<div style="position:relative;width:min(190px,42vw);aspect-ratio:1/1">
-    <img src="${esc(enemy.img)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain"
+    <img src="${esc(enemy.img)}" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain${flipStyle}"
       onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${esc(enemy.icon)}</span>'">
     ${headsHTML}
   </div>`;
@@ -4111,6 +4123,10 @@ SCREENS.spCombat = function(){
         ${SP_COMBAT.goed} van ${totaal} antwoorden juist · ${SP_COMBAT.beurt} beurten ·
         ${SP_COMBAT.vigorVerloren} Vigor verloren</p>
     </div>
+    ${SP_COMBAT.foutenLog?.length ? `<div class="panel">
+      <div class="eyebrow l">Deze had je nog niet meteen goed</div>
+      ${SP_COMBAT.foutenLog.map(f=>`<p class="note" style="margin:6px 0"><strong>${esc(f.vraag)}</strong><br>${esc(f.antwoord)}</p>`).join("")}
+    </div>` : ""}
     <button class="btn btn-gold btn-block lg" onclick="spCombatVerder()">Verder</button>
     ${foot()}`);
     setTimeout(spCombatSpeelFx, 30);
