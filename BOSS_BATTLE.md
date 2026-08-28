@@ -387,6 +387,25 @@ Boss Battle hoeft weinig from scratch te bouwen. Concreet te hergebruiken:
 
 ---
 
+## Bekende valkuil: AoE + handlangers (opgelost)
+
+Een Boss Battle tegen de Hydra bleef twee keer hángen zodra de baas in fase 2 kwam:
+de timer stopte, de leerlingen kregen geen nieuwe vragen meer, en de HP-balk bleef op
+de laatste stand staan. Oorzaak: in `bmResolve()` (`certamen/battle.js`) stond
+`targetMinion` als `const` bínnen de else-tak van de doelwitkeuze, terwijl
+`events.push()` er verderop bij wilde. Gebruikte iemand een **AoE**-ability
+(Pijlregen — een basisvaardigheid van 3 BE — of Vuurtoren) terwijl er handlangers
+leefden, dan gooide dat een `ReferenceError` midden in de resolutie. Handlangers
+verschijnen precies bij de overgang naar fase 2 (≤66 % HP), dus de crash trad
+altijd daar op.
+
+Twee dingen aangepast: `targetMinion` staat nu in de buitenste scope (en `target`
+wordt alleen meegeschreven als er echt een handlanger-doelwit was), en `bmResolve()`
+vangt onverwachte fouten op — het meldt ze aan de docent en deelt de volgende ronde
+alsnog uit, zodat één fout nooit meer een hele klas laat vastlopen.
+
+---
+
 ## Uitbreidbaarheid
 
 Nieuwe bazen toevoegen = één nieuwe entry in `BOSS_PRESETS` (id, naam, icon,
