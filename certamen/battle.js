@@ -2263,7 +2263,6 @@ function bmGlowFx(team,col){
   setTimeout(()=>d.remove(),950);
 }
 
-// Bouw formatie-HTML voor één team
 // Kleine HP-balk onder een held-sprite (alleen in heldenmodus)
 function bmHeroHpHTML(p){
   if(!BM_META?.heroMode||!p.maxHp)return"";
@@ -2281,33 +2280,97 @@ function bmHeroHpHTML(p){
       <div class="bm-hero-hp-fill" style="transform:scaleX(${pct});background:${col}"></div>
     </div>${p.armor?`<div class="bm-hero-armor">🛡 ${p.armor}</div>`:""}`;
 }
-function bmFormationHTML(team){
-  const members=Object.entries(BM_PLAYERS).filter(([,p])=>p.team===team);
-  const round=BM_STATE.round||{};
-  const cols={front:[],mid:[],back:[]};
-  for(const[pid,p]of members){
-    const pos=bmFormPos(p.class);
-    const hasAnswered=p.answeredRound===round.n;
-    const hasLocked=!!p.lockedAction;
-    const dotCls=hasAnswered?"on":hasLocked?"locked":"";
-    const dead=BM_META?.heroMode&&p.isAlive===false;
-    cols[pos].push(`<div class="bm-av cls-${p.class||""}${dead?" bm-hero-dead":""}" id="${bmAvId(pid)}" title="${esc(p.name)} · ${esc(bmClsNmThemed(p.class||""))}">
-      ${renderPixelHero(pid, p, team)}
+/* ── Opstelling op het slagveld (raster, RPG Maker MV-stijl) ──────────────
+   Elke formatiegroep (achter/midden/voor) staat als blok op het veld. Binnen
+   een blok worden de leden verdeeld over lanen (breedte) × rijen (diepte):
+   elke rij naar voren staat een stukje lager, iets dichter bij de vijand en
+   iets groter. Zo staat een groep achter elkáár op de grond in plaats van
+   recht boven elkaar te zweven — vergelijk MV's
+   Sprite_Actor.setActorHome(600 + index*32, 280 + index*48).
+   16 spelers per team passen zo in 4×4; Boss Battle zet de hele klas (tot 32)
+   op één helft en gaat daarom 5 rijen diep. */
+const BM_GRID_ROWS=4;        // max rijen diepte per formatiegroep
+const BM_GRID_ROWS_BOSS=5;   // Boss Battle: tot 32 spelers op één helft
+
+// Verdeelt n leden kolomsgewijs over lanen × rijen: elke laan is een volledige
+// diagonale file (zoals een MV-party), pas daarna begint de volgende laan.
+// row 0 = achterste rij (verst weg), row rows-1 = voorste rij (op de grond).
+function bmGridSlots(n,rowsMax){
+  const max=Math.max(1,rowsMax||BM_GRID_ROWS);
+  const lanes=Math.max(1,Math.ceil(n/max));
+  const rows=Math.max(1,Math.ceil(n/lanes));
+  const out=[];
+  for(let i=0;i<n;i++)out.push({lane:Math.floor(i/rows),row:i%rows,rows,lanes});
+  return out;
+}
+
+// Eén poppetje op een rasterplek. --gl = laan-index (breedte), --d = diepte
+// vanaf de voorste rij (0 = vooraan); de CSS in index.html vertaalt dat naar
+// links/rechts, hoogte, schaal en z-volgorde.
+function bmSlotAvHTML(pid,p,round,gl,d){
+  const hasAnswered=p.answeredRound===round.n;
+  const hasLocked=!!p.lockedAction;
+  const dotCls=hasAnswered?"on":hasLocked?"locked":"";
+  const dead=BM_META?.heroMode&&p.isAlive===false;
+  // Idle-animaties uit elkaar trekken zodat een groep niet synchroon deint
+  const idle=((gl*0.23+d*0.37)%2.4).toFixed(2);
+  return `<div class="bm-av cls-${p.class||""}${dead?" bm-hero-dead":""}" id="${bmAvId(pid)}"
+      style="--gl:${gl.toFixed(2)};--d:${d};--bm-idle:${idle}s;z-index:${100-d*5}"
+      title="${esc(p.name)} · ${esc(bmClsNmThemed(p.class||""))}">
+      ${renderPixelHero(pid, p, p.team)}
       <div class="bm-dot ${dotCls}"></div>
       <div class="avn">${esc(p.name)}</div>
       <div class="avncls">${esc(bmClsNmThemed(p.class||""))}</div>
       ${bmHeroHpHTML(p)}
-    </div>`);
-  }
-  // Team A: back | mid | front (front rechts, naar vijand)
-  // Team B: front | mid | back (front links, naar vijand)
-  const order=team==="A"?["back","mid","front"]:["front","mid","back"];
-  return order.map(k=>cols[k].length
-    ?`<div class="bm-fcol">${cols[k].join("")}</div>`
-    :""
-  ).join("");
+    </div>`;
 }
 
+function bmFormationHTML(team){
+  const round=BM_STATE.round||{};
+  const cols={front:[],mid:[],back:[]};
+  for(const[pid,p]of Object.entries(BM_PLAYERS))
+    if(p.team===team)cols[bmFormPos(p.class)].push([pid,p]);
+  // Diepte: normaal 4 rijen (16 spelers = 4×4). Zit er meer volk op één helft
+  // — Boss Battle (hele klas, tot 32) of een uitzonderlijk grote klas met meer
+  // dan 16 in één team — dan gaan we een rij dieper, zodat het aantal lanen
+  // (en dus de breedte) niet uit de hand loopt.
+  const total=cols.back.length+cols.mid.length+cols.front.length;
+  const rowsMax=(BM_META?.mode==="boss"||total>16)?BM_GRID_ROWS_BOSS:BM_GRID_ROWS;
+  // Blokken van achter naar voren. Lanen worden gemeten vanaf de eigen
+  // buitenrand van het veld, dus voor béide teams in dezelfde volgorde: het
+  // spiegelen zit in de CSS (team A left:, team B right:).
+  const out=[];
+  let lane0=0,dmax=0;
+  for(const k of ["back","mid","front"]){
+    const grp=cols[k];
+    if(!grp.length)continue;
+    const slots=bmGridSlots(grp.length,rowsMax);
+    dmax=Math.max(dmax,slots[0].rows-1);
+    grp.forEach(([pid,p],i)=>{
+      const s=slots[i];
+      out.push(bmSlotAvHTML(pid,p,round,lane0+s.lane,s.rows-1-s.row));
+    });
+    lane0+=slots[0].lanes+0.4;   // luchtje tussen twee blokken
+  }
+  if(!out.length)return "";
+  // Laanafstand: normaal de vaste --bm-lanegap, maar bij veel lanen knijpen we
+  // ze samen zodat de hele opstelling op de eigen veldhelft blijft staan. De
+  // beschikbare ruimte is de halve veldbreedte min de breedte van één poppetje,
+  // de schuine rij-verspringing en de randmarge; 96% laat een gootje vrij in
+  // het midden zodat de twee legers elkaar niet overlappen.
+  // De ondergrens (--bm-mingap) voorkomt dat de lanen bij extreem veel spelers
+  // op een smal scherm op nul of negatief uitkomen; ze schuiven dan gewoon
+  // verder over elkaar heen in plaats van de veldhelft uit te lopen.
+  const spread=lane0-0.4-1;                      // aantal laan-stappen
+  const gap=spread>0
+    ? `max(var(--bm-mingap),min(var(--bm-lanegap),calc((96% - var(--bm-uw) - ${dmax} * var(--bm-rowshift) - 2 * var(--bm-pad)) / ${spread.toFixed(2)})))`
+    : "var(--bm-lanegap)";
+  // Vijf rijen diep worden anders te hoog voor het veld: dan wat dichter op
+  // elkaar. Staat hier en niet in de CSS, want het hangt van de opstelling af,
+  // niet van de spelmodus.
+  const rg=dmax>3?"calc(var(--bm-rowgap) * .78)":"var(--bm-rowgap)";
+  return `<div class="bm-gridform" style="--gap:${gap};--rg:${rg};--dmax:${dmax}">${out.join("")}</div>`;
+}
 // (Her)bouw het volledige slagveld (aangeroepen na speler-update of ronde-start)
 function bmBuildBattlefield(){
   const fA=el("bmFormA"),fB=el("bmFormB");
@@ -2339,6 +2402,9 @@ function bmBuildBattlefield(){
     // Landscape-thema
     ["bm-bg-roman","bm-bg-greek","bm-bg-gods"].forEach(cl=>field.classList.remove(cl));
     field.classList.add(bmBgTheme(BM_META?.theme));
+    // Boss Battle: de hele klas staat op helft A — die helft krijgt in de CSS
+    // meer breedte, want daar kunnen tot 32 poppetjes in het raster staan.
+    field.classList.toggle("bm-boss",BM_META?.mode==="boss");
     if(BM_META?.animations===false)field.classList.add("bm-noanim");
     else field.classList.remove("bm-noanim");
     bmApplyArenaBg(field); // docent-gekozen battleback (overschrijft thema-bg)
