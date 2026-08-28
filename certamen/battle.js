@@ -902,7 +902,13 @@ SCREENS.battleFAQ = function(){
     <b>Geavanceerde instellingen</b> o.a. legersterkte, adaptief leren (foute woorden komen vaker terug),
     combo's aan/uit, mastery-bonussen, animaties (uit bij trage Chromebooks), geluid, en de
     <b>Heldenmodus</b> met HP-per-held en herrijz-drempel. Battle Mode vereist Firebase voor de realtime
-    synchronisatie en het identiteitssysteem.</div>`)}
+    synchronisatie en het identiteitssysteem.</div>
+    <div class="note" style="margin-top:6px">De ingestelde <b>legersterkte</b> geldt voor een team van vier
+    spelers; bij de start wordt hij automatisch omhoog geschaald met de grootte van je klas. Anders zou
+    een gevecht met een volle klas al na twee rondes voorbij zijn.</div>
+    <div class="note" style="margin-top:6px">Na afloop staat er onder de awards en de statistieken een knop
+    <b>↻ Nieuw gevecht — zelfde spelers</b>. Daarmee begin je meteen een nieuwe partij in dezelfde kamer:
+    de klas hoeft niet opnieuw in te loggen en houdt naam, avatar, team en klasse.</div>`)}
 
   ${foot()}`);
 };
@@ -1298,17 +1304,40 @@ function bmRenderHostLobby(){
   const fac=bmFaction(BM_META?.theme);
   const isBoss=BM_META?.mode==="boss";
   const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
-  pl.innerHTML=Object.entries(BM_PLAYERS).map(([pid,p])=>`<div class="ptag" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:5px 0;border-bottom:0.5px solid var(--stone4)">
-    <span style="flex:1;display:flex;align-items:center;gap:6px">
+  const row=([pid,p])=>`<div class="ptag" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:5px 0;border-bottom:0.5px solid var(--stone4)">
+    <span style="flex:1;display:flex;align-items:center;gap:6px;min-width:0">
       ${p.isBot?`<span style="font-size:16px" title="AI-bot">🤖</span>`:`${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],26)}`}
-      <span>${esc(p.name)}</span>
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name)}</span>
       ${p.title?`<span class="pill" style="font-size:10px;background:var(--hi-dim)">⭐ ${esc(p.title)}</span>`:""}
-      ${!isBoss&&p.team?`<span class="pill" style="background:${p.team==="A"?"var(--teamA)":"var(--teamB)"};border:none;font-size:11px">${esc(p.team==="A"?fac.teams.A.nm:fac.teams.B.nm)}</span>`:""}
       ${p.class?`<span class="pill" style="font-size:11px">${esc(bmClsName(p.class))}</span>`:""}
     </span>
     ${isBoss?"":`<button class="chip" style="font-size:11px" title="Wissel van team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>`}
     <button class="chip" style="font-size:11px;color:#e07060;border-color:rgba(90,18,12,.4)" title="Verwijder" onclick="bmKickPlayer(${q(pid)})">✕</button>
-  </div>`).join("")||`<div class="note">Wachten op spelers…</div>`;
+  </div>`;
+  const entries=Object.entries(BM_PLAYERS);
+  if(isBoss){
+    pl.classList.remove("bm-lobby-teams");
+    pl.innerHTML=entries.map(row).join("")||`<div class="note">Wachten op spelers…</div>`;
+  } else {
+    // Twee kolommen naast elkaar, in dezelfde volgorde als op het slagveld:
+    // team A links, team B rechts. Zo ziet de klas op de projector meteen bij
+    // wie ze horen en tegen wie ze straks spelen.
+    pl.classList.add("bm-lobby-teams");
+    const col=(t,nm)=>{
+      const mem=entries.filter(([,p])=>p.team===t);
+      return `<div class="bm-lteam side-${t.toLowerCase()}">
+        <div class="bm-lteam-hd">${esc(nm)} <span>${mem.length}</span></div>
+        ${mem.map(row).join("")||`<div class="note">Nog niemand</div>`}
+      </div>`;
+    };
+    const rest=entries.filter(([,p])=>p.team!=="A"&&p.team!=="B");
+    pl.innerHTML=col("A",fac.teams.A.nm)+col("B",fac.teams.B.nm)
+      +(rest.length?`<div class="bm-lteam side-none">
+        <div class="bm-lteam-hd">Nog niet ingedeeld <span>${rest.length}</span></div>
+        ${rest.map(row).join("")}
+        <div class="note">Druk op "Teams" om ze te verdelen.</div>
+      </div>`:"");
+  }
   const sb=el("bmSB"); if(sb)sb.disabled=Object.keys(BM_PLAYERS).length<1;
 }
 function bmSwitchTeam(pid){
@@ -1326,12 +1355,38 @@ function bmAutoTeams(){
   pids.forEach((pid,i)=>{up[pid+"/team"]=i%2===0?"A":"B";});
   fbDB.ref("rooms/"+BM_CODE+"/players").update(up);
 }
+/* ---- LEGER-HP SCHAALT MEE MET DE KLASGROOTTE ----
+   De HP-chips in de docentinstellingen (50/100/150/200) zijn getuned op een
+   team van BM_HP_REF_TEAM spelers: met ~2 aanvallen per ronde à ~8 schade duurt
+   100 HP dan een stuk of zes rondes. Met een hele klas in één gevecht deelt één
+   ronde al meer dan 100 schade uit — dan is het gevecht na twee antwoorden
+   voorbij. We schalen de legersterkte daarom lineair mee met de gemiddelde
+   teamgrootte, zodat een gevecht ongeveer even veel rondes duurt ongeacht hoe
+   groot de klas is. Boss Battle doet dit al langer op zijn eigen manier
+   (N*100 klas-HP), zie bmStartBossGame() hieronder.
+   De door de docent gekozen waarde blijft de ondergrens: kleine groepen
+   krijgen nooit minder HP dan ingesteld. */
+const BM_HP_REF_TEAM=4;
+function bmScaledArmyHP(players,base){
+  const b=base||100;
+  const n=Object.values(players||{}).filter(p=>p&&p.team).length;
+  const perTeam=Math.max(1,Math.round(n/2));
+  return Math.max(b,Math.round(b*perTeam/BM_HP_REF_TEAM));
+}
 async function bmStartGame(){
   if(BM_META?.mode==="boss"){await bmStartBossGame();return;}
   if(Object.keys(BM_PLAYERS).length<2){toast("Te weinig spelers","Wacht op minstens 2 deelnemers.");return;}
   const unassigned=Object.keys(BM_PLAYERS).filter(pid=>!BM_PLAYERS[pid]?.team);
   if(unassigned.length)bmAutoTeams();
   await new Promise(r=>setTimeout(r,300));
+  // Pas híer is het echte spelersaantal bekend (spelers joinen ná bmCreateRoom),
+  // dus pas hier kan de legersterkte geschaald worden. .update() i.p.v. .set(),
+  // want teams/{A,B}/classes wordt zo meteen door bmDistributeQs() gevuld.
+  const ah=bmScaledArmyHP(BM_PLAYERS,BM_META?.armyHealth);
+  await fbDB.ref("rooms/"+BM_CODE+"/teams").update(
+    {"A/health":ah,"A/maxHealth":ah,"B/health":ah,"B/maxHealth":ah});
+  BM_TEAMS={...BM_TEAMS,A:{...(BM_TEAMS.A||{}),health:ah,maxHealth:ah},
+                        B:{...(BM_TEAMS.B||{}),health:ah,maxHealth:ah}};
   await bmDistributeQs(1);
   go("battleHostGame");
 }
@@ -1592,10 +1647,15 @@ function bmHostUpdatePlayers(){
   const pb=el("bmPartBar"); if(pb)pb.style.width=pct+"%";
   const pp=el("bmPartPct"); if(pp)pp.textContent=answered+"/"+total+" ("+pct+"%)";
 
-  // Spelersgrid
+  // Spelersgrid — gesplitst per team, zodat de klas onder in beeld meteen ziet
+  // wie bij wie hoort en tegen wie ze spelen. In Boss Battle is er maar één
+  // team, dan blijft het één brede rij.
   const grid=el("bmPlayerGrid");if(!grid)return;
   const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
-  grid.innerHTML=entries.map(([pid,p])=>{
+  const isBoss=BM_META?.mode==="boss";
+  grid.classList.toggle("bm-dense",total>20);
+  const ic=total>24?26:32;
+  const card=([pid,p])=>{
     const cls=BM_CLASSES.find(c=>c.id===p.class);
     const col=cls?.color||"var(--muted)";
     const hasAnswered=p.answeredRound===round.n;
@@ -1604,17 +1664,36 @@ function bmHostUpdatePlayers(){
     const teamCol=p.team==="A"?"var(--teamA)":p.team==="B"?"var(--teamB)":"var(--muted)";
     return `<div class="bm-pcard" style="border-color:${col}44">
       <div style="position:relative">
-        ${p.isBot?`<span style="font-size:24px;line-height:32px;display:block;text-align:center">🤖</span>`:renderPixelHeroIcon(p.avatar,32)}
+        ${p.isBot?`<span style="font-size:${ic-8}px;line-height:${ic}px;display:block;text-align:center">🤖</span>`:renderPixelHeroIcon(p.avatar,ic)}
         <span class="bm-pdot ${dotCls}"></span>
       </div>
       <div class="bm-pname" style="border-bottom:2px solid ${teamCol}40">${esc(p.name)}</div>
       <div class="bm-pcls" style="color:${col}">${esc(cls?.nm||"")}</div>
-      <div style="display:flex;gap:4px;margin-top:4px;justify-content:center">
-        ${BM_META?.mode==="boss"?"":`<button class="chip" style="font-size:10px;padding:2px 6px" title="Wissel team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>`}
+      <div class="bm-pactions">
+        ${isBoss?"":`<button class="chip" style="font-size:10px;padding:2px 6px" title="Wissel team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>`}
         <button class="chip" style="font-size:10px;padding:2px 6px;color:#e07060;border-color:rgba(90,18,12,.4)" title="Verwijder" onclick="bmKickPlayer(${q(pid)})">✕</button>
       </div>
     </div>`;
-  }).join("");
+  };
+  if(isBoss){
+    grid.classList.remove("bm-pgrid-teams");
+    grid.innerHTML=`<div class="bm-pteam-cards">${entries.map(card).join("")}</div>`;
+  } else {
+    grid.classList.add("bm-pgrid-teams");
+    let html=["A","B"].map(t=>{
+      const mem=entries.filter(([,p])=>p.team===t);
+      const ans=mem.filter(([,p])=>p.answeredRound===round.n).length;
+      return `<div class="bm-pteam side-${t.toLowerCase()}">
+        <div class="bm-pteam-hd">${esc(bmTeamNm(t))} <span>${mem.length} · ${ans} beantwoord</span></div>
+        <div class="bm-pteam-cards">${mem.map(card).join("")||`<div class="note">Nog niemand</div>`}</div>
+      </div>`;
+    }).join("");
+    const rest=entries.filter(([,p])=>p.team!=="A"&&p.team!=="B");
+    if(rest.length)html+=`<div class="bm-pteam side-none">
+      <div class="bm-pteam-hd">Zonder team <span>${rest.length}</span></div>
+      <div class="bm-pteam-cards">${rest.map(card).join("")}</div></div>`;
+    grid.innerHTML=html;
+  }
 
   bmHostUpdateNote();
   if(el("bmFormA"))bmBuildBattlefield();
@@ -2863,6 +2942,53 @@ async function bmRestartRound(){
   bmHostStartTimer();
 }
 
+/* ---- NIEUW GEVECHT MET DEZELFDE SPELERS ----
+   Na afloop hoefde de klas voorheen opnieuw in te loggen: de docent verliet de
+   kamer en iedereen moest de spelcode en zijn leerlingcode opnieuw invoeren.
+   Deze functie hergebruikt dezelfde kamer en dezelfde players-tak — alleen de
+   wedstrijdgegevens worden gewist. De leerlingen zien hun resultaatscherm
+   vanzelf terugspringen naar de lobby (zie de status-listener in
+   SCREENS.battleResult), met hun naam, avatar, team en klasse nog ingevuld. */
+async function bmNewMatchSamePlayers(){
+  if(!fbDB||!BM_CODE){go("home");return;}
+  const btns=document.querySelectorAll(".bm-again-btn");
+  btns.forEach(b=>{b.disabled=true;b.textContent="Nieuw gevecht klaarzetten…";});
+  const base=BM_META?.armyHealth||100;   // definitieve HP wordt bij de start opnieuw geschaald
+  const up={
+    "state":{status:"lobby",round:null,winner:null},
+    "log":null,
+    "boss":null,
+    "teams":{A:{health:base,maxHealth:base},B:{health:base,maxHealth:base}}
+  };
+  // Per speler: alles wat bij dít gevecht hoorde op nul. Identiteit, avatar,
+  // eretitel, team, klasse, mastery- en traitvlaggen blijven staan, zodat
+  // niemand opnieuw hoeft in te loggen of te kiezen.
+  for(const pid of Object.keys(BM_PLAYERS)){
+    const b="players/"+pid+"/";
+    up[b+"be"]=0; up[b+"correct"]=0; up[b+"wrong"]=0;
+    up[b+"damage"]=0; up[b+"healing"]=0;
+    up[b+"answeredRound"]=-1; up[b+"lockedAction"]=null;
+    up[b+"currentQ"]=null; up[b+"missed"]=null; up[b+"inspired"]=null;
+    up[b+"hp"]=null; up[b+"maxHp"]=null; up[b+"armor"]=null;
+    up[b+"isAlive"]=null; up[b+"respawnMeter"]=null;
+  }
+  try{
+    await fbDB.ref("rooms/"+BM_CODE).update(up);
+  }catch(e){
+    toast("Mislukt","Kon geen nieuw gevecht klaarzetten: "+(e&&e.message?e.message:String(e)));
+    btns.forEach(b=>{b.disabled=false;b.textContent="↻ Nieuw gevecht — zelfde spelers";});
+    return;
+  }
+  cleanup();
+  BM_AWARD_DATA=null;BM_LOG=null;BM_AWARD_STEP=0;
+  if(BM_AWARD_TIMER){clearTimeout(BM_AWARD_TIMER);BM_AWARD_TIMER=null;}
+  BM_STATE={status:"lobby"};BM_PAUSED=false;BM_RESOLVING=false;_bmFormHash="";
+  BM_TEAMS={A:{health:base,maxHealth:base},B:{health:base,maxHealth:base}};
+  const appEl=document.getElementById("app");
+  if(appEl)appEl.classList.remove("bm-host-mode");
+  go("battleHostLobby");
+}
+
 /* ---- EINDE GEVECHT → AWARD-CEREMONY ---- */
 let BM_AWARD_DATA=null,BM_AWARD_STEP=0,BM_AWARD_TIMER=null;
 let BM_LOG=null;
@@ -3118,6 +3244,9 @@ SCREENS.battleHostAwards = async function(){
     <button class="btn btn-gold" style="flex:1" onclick="bmNextAward()">Volgende ▶</button>
     <button class="btn" onclick="go('battleHostAnalytics')">Sla over →</button>
   </div>
+  <div style="padding:0 16px 10px">
+    <button class="btn btn-block bm-again-btn" onclick="bmNewMatchSamePlayers()">↻ Nieuw gevecht — zelfde spelers</button>
+  </div>
   ${foot()}`);
   try{
     if(fbDB&&BM_CODE){const snap=await fbDB.ref("rooms/"+BM_CODE+"/log").once("value");BM_LOG=snap.val()||{};}
@@ -3146,7 +3275,8 @@ SCREENS.battleHostAnalytics = async function(){
     </div>
   </div>
   <div id="bmAnalContent"><div class="panel"><div class="note" style="text-align:center">Laden…</div></div></div>
-  <div style="padding:0 16px 8px">
+  <div style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px">
+    <button class="btn btn-gold btn-block bm-again-btn" onclick="bmNewMatchSamePlayers()">↻ Nieuw gevecht — zelfde spelers</button>
     <button class="btn btn-block" onclick="bmExportCSV()">📥 Exporteer CSV</button>
   </div>
   ${foot()}`);
@@ -3645,6 +3775,18 @@ function bmChooseCombo(comboId,cost){
 }
 
 /* ---- SCHERM: battleResult ---- */
+// Zet de per-gevecht-tellers van deze leerling terug op nul. Wordt gebruikt
+// als de docent een nieuw gevecht met dezelfde spelers start: de speler blijft
+// ingelogd in dezelfde kamer, maar begint wel met een schone lei.
+function bmResetMatchLocals(){
+  BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_RESOLVING=false;BM_MY_TARGET="boss";
+  BM_MY_BE=0;BM_MY_Q=null;
+  BM_MY_CORRECT=0;BM_MY_WRONG=0;BM_MY_DMG=0;BM_MY_HEAL=0;
+  BM_MY_CLUTCH_STREAK=0;BM_MY_CLUTCH_BEST=0;BM_MY_ABILITIES_USED=0;
+  BM_MY_CLASS_PICKS=0;BM_MY_DEALT_DMG_ABILITY=false;
+  BM_STATE={};BM_TEAMS={};BM_BOSS={};_bmFormHash="";
+}
+
 SCREENS.battleResult = function(){
   const w=BM_STATE.winner;
   H(brand(false)+`
@@ -3654,9 +3796,26 @@ SCREENS.battleResult = function(){
     <h2 style="color:var(--hi-bright);margin:8px 0">${w==="A"||w==="B"?esc(bmTeamNm(w))+" wint!":"Gevecht gestopt"}</h2>
   </div>
   <div id="bmXpResult" class="panel" style="text-align:center;color:var(--muted)">XP berekenen…</div>
+  <div class="note" style="text-align:center;margin-top:10px">Blijf hier als de docent nog een gevecht start — je springt dan vanzelf terug naar de lobby.</div>
   <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="bmLeave();go('home')">Terug naar hoofdmenu</button>
   <button class="btn btn-block" style="margin-top:8px" onclick="bmLeave();go('battleProfile')">Mijn profiel bekijken</button>
   ${foot()}`);
+  // Zet de docent een nieuw gevecht klaar met dezelfde spelers
+  // (bmNewMatchSamePlayers()), dan gaat state/status terug naar "lobby". De
+  // leerling hoeft dan niet opnieuw in te loggen: we springen gewoon terug
+  // naar de lobby van dezelfde kamer, met naam, avatar, team en klasse intact.
+  if(fbDB&&BM_CODE&&BM_PID){
+    const rSt=fbDB.ref("rooms/"+BM_CODE+"/state/status");
+    const fSt=rSt.on("value",snap=>{
+      const st=snap.val();
+      if(st!=="lobby"&&st!=="playing")return;
+      rSt.off("value",fSt);
+      bmResetMatchLocals();
+      toast("Nieuw gevecht","De docent start een nieuw gevecht.");
+      go(st==="playing"?"battlePlayerGame":"battlePlayerLobby");
+    });
+    BM_UNSUBS.push(()=>rSt.off("value",fSt));
+  }
   // XP toekennen (fire-and-forget; toont resultaat in #bmXpResult)
   bmAwardBattle().then(r=>{
     const box=el("bmXpResult"); if(!box)return;

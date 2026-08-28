@@ -238,11 +238,11 @@ function bmBossSpriteHTML(boss,nm){
       ? `<img src="${stageInfo.bgImg}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:.6" alt="" onerror="this.style.display='none'">`
       : "";
     art = stageInfo.img
-      ? `<div style="position:relative;width:168px;height:168px;margin:0 auto;filter:drop-shadow(0 0 10px ${preset.color}66)">
+      ? `<div class="bm-boss-art" style="filter:drop-shadow(0 0 14px ${preset.color}66)">
            ${bgLayer}
            <img src="${stageInfo.img}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="" onerror="this.style.display='none'">
          </div>`
-      : `<div style="font-size:64px;line-height:1;filter:drop-shadow(0 0 8px ${preset.color}88)">${preset.emoji}</div>`;
+      : `<div class="bm-boss-emoji" style="filter:drop-shadow(0 0 10px ${preset.color}88)">${preset.emoji}</div>`;
   } else if(preset.img){
     // Romp (met de kale stompjes al ingetekend) + optioneel losse koppen
     // erbovenop. Elke kop-laag is een even groot canvas als de romp, dus
@@ -255,9 +255,9 @@ function bmBossSpriteHTML(boss,nm){
         if(i<alive)layers.push(`<img src="${h}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="">`);
       });
     }
-    art=`<div style="position:relative;width:168px;height:168px;margin:0 auto;filter:drop-shadow(0 0 10px ${preset.color}66)">${layers.join("")}</div>`;
+    art=`<div class="bm-boss-art" style="filter:drop-shadow(0 0 14px ${preset.color}66)">${layers.join("")}</div>`;
   } else {
-    art=`<div style="font-size:64px;line-height:1;filter:drop-shadow(0 0 8px ${preset.color}88)">${preset.emoji}</div>`;
+    art=`<div class="bm-boss-emoji" style="filter:drop-shadow(0 0 10px ${preset.color}88)">${preset.emoji}</div>`;
   }
 
   return `<div class="bm-fcol" style="align-items:center;justify-content:center;flex:1">

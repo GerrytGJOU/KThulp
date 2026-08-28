@@ -204,6 +204,11 @@ Animaties draaien volledig **client-side**. De enige Firebase-sync is het log-ev
 ```
 
 Team A staat links (front rechts, richting vijand), Team B staat rechts (front links, richting vijand).
+Ook het spelersgrid onder aan het docentscherm en de spelerslijst in de lobby
+staan in twee teamkolommen — zelfde volgorde als op het slagveld — zodat de
+klas op de projector ziet bij wie ze horen en tegen wie ze spelen
+(`bmRenderHostLobby()` / `bmHostUpdatePlayers()` in `certamen/battle.js`,
+`.bm-lteam` / `.bm-pteam` in `certamen/index.html`).
 
 **Raster-opstelling (RPG Maker MV-stijl).** Binnen elke groep (achter/midden/voor)
 staan de spelers niet in één verticale kolom boven elkaar, maar in een raster van
@@ -394,6 +399,17 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 ### Legersterktes (instelbaar via host-settings)
 50 / 100 / 150 / 200 HP. Aanpassen: `battleHostSettings`-scherm of de chips in de code.
 
+**Schaalt mee met de klasgrootte.** De gekozen waarde geldt voor een team van
+`BM_HP_REF_TEAM` (= 4) spelers; `bmScaledArmyHP()` vermenigvuldigt 'm bij de
+start van het gevecht met `gemiddelde teamgrootte / 4`. Dat moet: met ~8 schade
+per aanval deelt een team van 16 in één ronde al meer dan 100 schade uit, en
+was een gevecht na twee antwoorden voorbij. Zo duurt een gevecht ongeveer even
+veel rondes, of je nu met 8 of met 36 leerlingen speelt. De gekozen waarde is
+de ondergrens: kleine groepen krijgen nooit minder dan ingesteld. Het schalen
+gebeurt in `bmStartGame()` en niet bij het aanmaken van de kamer, want pas bij
+de start is het echte spelersaantal bekend. Boss Battle deed dit al op zijn
+eigen manier (`N*100` klas-HP, zie BOSS_BATTLE.md).
+
 ### Antwoordtimer
 8 / 10 / 12 / 15 seconden. De "snelheidsbonus" treedt in werking als meer dan de helft van de tijd over is.
 
@@ -444,6 +460,20 @@ Het gratis Firebase Spark-plan staat **100 gelijktijdige verbindingen** toe per 
 Elke browsertab telt als één verbinding. Bij 50 leerlingen + 1 host = 51 verbindingen — ruim onder de grens van 100. Pas bij ~90 leerlingen wordt upgraden naar Blaze relevant. Op Blaze geldt $0,06 per GB download en geen verbindingslimiet.
 
 **Scoped listeners (M2):** spelers luisteren uitsluitend naar `state/round`, `state/status`, eigen `players/{pid}` en `teams`. Niet naar het volledige `players`-object (dat doet alleen de host). Dit beperkt ook de bandbreedte bij grote klassen.
+
+---
+
+## Speler-weergave (telefoon/Chromebook)
+
+`.bm-player-wrap` is een kolom van `.bm-player-field` (slagveld) en
+`.bm-player-panel` (vraag + antwoordknoppen). Het paneel krijgt de hoogte die het
+nódig heeft (`flex:0 1 auto`) en het slagveld krimpt mee (`flex:1 1 auto`,
+`min-height:18vh`), zodat alle vier de antwoorden altijd in beeld staan. Eerder
+had het veld een vaste 55 vh en het paneel een max van 45 vh — dan viel de
+onderste antwoordknop buiten beeld en moest een leerling scrollen om te
+antwoorden. De hoogtes gebruiken `dvh` met een `vh`-fallback, want op mobiel
+telt `vh` de adresbalk mee. Binnen het paneel staan compactere varianten van
+`.qcard` en `.choice`, met vanaf `max-height:700px` nog een tandje kleiner.
 
 ---
 
@@ -548,7 +578,14 @@ Twee zones:
 
 ### Live dashboard (`battleHostGame`)
 
-- **Avatar-kaarten** (`.bm-pcard`): inline SVG-avatar + naam + klasse per speler
+- **Avatar-kaarten** (`.bm-pcard`): inline SVG-avatar + naam + klasse per speler, in
+  **twee teamkolommen** (`.bm-pteam`, team A links / team B rechts — zelfde volgorde als
+  op het slagveld erboven). Boss Battle heeft één team en dus één brede rij.
+- **Schermindeling bij een volle klas**: het spelersgrid is begrensd op 26 vh en scrollt
+  zelf; `#bmField` heeft binnen `.bm-host-wrap` een `min-height` van 34 vh. Zonder die twee
+  drukte een klas van 36 het slagveld tot een streepje samen. Vanaf 20 spelers krijgt het
+  grid `.bm-dense` (kleinere kaartjes; de ⇄/✕-knopjes verschijnen dan pas bij hover),
+  vanaf 25 spelers worden ook de avatar-iconen kleiner.
 - **Statuspunt** (`.bm-pdot`): groen = antwoord gegeven · goud = actie vergrendeld · grijs = wacht
 - **Participatiebalk**: visuele voortgangsbalk + "X/Y (Z%)" teller
 - **Controlepaneel** (host-only):
@@ -572,6 +609,21 @@ Sequentieel onthullen (~3,5s per kaart) met `bmNextAward()`:
 3. Doorsturen naar Analytics
 
 Data-flow: `BM_PLAYERS` wordt bewaard als `BM_AWARD_DATA` vóór `cleanup()`. Log wordt async opgehaald uit `/rooms/{code}/log`.
+
+### Nieuw gevecht met dezelfde spelers (`bmNewMatchSamePlayers()`)
+
+Zowel het award- als het analytics-scherm heeft een knop **"↻ Nieuw gevecht — zelfde
+spelers"**. Die hergebruikt dezelfde kamer en dezelfde `players`-tak: alleen de
+wedstrijdgegevens (`state`, `log`, `boss`, `teams` en per speler `be`/`correct`/`wrong`/
+`damage`/`healing`/`answeredRound`/`lockedAction`/`currentQ`/`missed`/`inspired` plus de
+heldenmodus-velden) worden gewist, en `state/status` gaat terug naar `"lobby"`. Naam,
+avatar, eretitel, team, klasse, mastery- en traitvlaggen blijven staan.
+
+Aan de leerlingkant luistert `SCREENS.battleResult` op `state/status`: springt die terug
+naar `"lobby"` (of meteen naar `"playing"`), dan gaat de leerling vanzelf terug naar de
+lobby van dezelfde kamer — **zonder opnieuw in te loggen**. `bmResetMatchLocals()` zet
+daarbij de lokale per-gevecht-tellers op nul. Voorheen verliet de docent de kamer na
+afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
 
 ### Analytics (`battleHostAnalytics`)
 
