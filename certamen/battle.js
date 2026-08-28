@@ -3343,6 +3343,61 @@ async function bmExportCSV(){
   XLSX.writeFile(wb,"battlemode_"+(BM_CODE||"export")+"_"+new Date().toISOString().substring(0,10)+".csv");
 }
 
+/* Erepodium: alle eerbewijzen nog één keer samen in beeld, met daaronder de
+   totaalscore van de klas. De ceremonie laat ze één voor één zien (3,5 s per
+   stuk) en dat gaat snel voorbij — wie even niet keek, miste zijn eigen naam.
+   Dit scherm blijft staan tot de docent doorklikt. */
+function bmRenderPodium(stage){
+  const aw=BM_AWARD_DATA||{};
+  const players=aw.all||[];
+  const awards=(aw.awards||[]).filter(a=>a&&a.player&&a.player.name);
+  const w=aw.winner;
+  const tot=players.reduce((a,p)=>({
+    correct:a.correct+(p.correct||0), wrong:a.wrong+(p.wrong||0),
+    damage:a.damage+(p.damage||0), healing:a.healing+(p.healing||0),
+    shielding:a.shielding+(p.shielding||0),
+  }),{correct:0,wrong:0,damage:0,healing:0,shielding:0});
+  const vragen=tot.correct+tot.wrong;
+  const acc=vragen?Math.round(tot.correct/vragen*100):null;
+  const rondes=Object.keys(BM_LOG||{}).length;
+  const winHTML=(w==="A"||w==="B")
+    ? `<div class="bm-podium-win">${iconSVG(bmTeamIcon(w),26,"var(--team"+w+")")}<span style="color:var(--team${w})">${esc(bmTeamNm(w))}</span> wint</div>`
+    : `<div class="bm-podium-win">Gevecht gestopt</div>`;
+  const cards=awards.map(a=>`
+    <div class="bm-podium-card">
+      <div class="bm-podium-emoji">${a.emoji}</div>
+      <div class="bm-podium-nm">${esc(a.nm)}</div>
+      ${renderPixelHeroIcon(a.player.avatar,44)}
+      <div class="bm-podium-player">${esc(a.player.name)}</div>
+      <div class="bm-podium-val">${esc(String(a.value||""))}</div>
+    </div>`).join("")
+    || `<div class="note">Geen eerbewijzen — er is te weinig gespeeld om ze te bepalen.</div>`;
+  stage.innerHTML=`
+    ${winHTML}
+    <div class="bm-podium-hd">🏆 Erepodium</div>
+    <div class="bm-podium">${cards}</div>
+    <div class="bm-classscore">
+      <div class="bm-cs-lbl">Samen goed vertaald</div>
+      <div class="bm-cs-big">${tot.correct}</div>
+      <div class="bm-cs-row">
+        <span>${acc!==null?acc+"% juist":"—"}</span>
+        <span>${vragen} vragen</span>
+        <span>${rondes} ronde${rondes===1?"":"n"}</span>
+        <span>${players.length} spelers</span>
+      </div>
+      <div class="bm-cs-row bm-cs-sub">
+        <span>⚔️ ${tot.damage} schade</span>
+        <span>💚 ${tot.healing} heling</span>
+        <span>🛡️ ${tot.shielding} schild</span>
+      </div>
+    </div>`;
+  // Doorklik-knoppen aanpassen: de ceremonie is voorbij, dus "Volgende" wordt
+  // de doorgang naar het klassenoverzicht en "Sla over" heeft geen zin meer.
+  const nb=el("bmAwardNext");
+  if(nb){ nb.textContent="📊 Klassenoverzicht →"; nb.setAttribute("onclick","go('battleHostAnalytics')"); }
+  const sb=el("bmAwardSkip"); if(sb) sb.style.display="none";
+}
+
 function bmNextAward(){
   if(BM_AWARD_TIMER){clearTimeout(BM_AWARD_TIMER);BM_AWARD_TIMER=null;}
   BM_AWARD_STEP++;
@@ -3363,10 +3418,9 @@ function bmNextAward(){
   const awards=aw.awards||[];
   const idx=BM_AWARD_STEP-2;
   if(idx>=awards.length){
-    stage.innerHTML=`<div style="text-align:center"><div style="font-size:48px">📊</div>
-      <h2 style="color:var(--hi-bright);margin:10px 0">Klassenoverzicht</h2>
-      <div class="note">Momentje…</div></div>`;
-    BM_AWARD_TIMER=setTimeout(()=>go("battleHostAnalytics"),1500);
+    // Einde ceremonie: alles nóg een keer samen in beeld, en daar blijft het
+    // staan — geen timer die doorspringt naar het klassenoverzicht.
+    bmRenderPodium(stage);
     return;
   }
 
@@ -3396,8 +3450,8 @@ SCREENS.battleHostAwards = async function(){
     <div class="note" style="text-align:center">Laden…</div>
   </div>
   <div style="padding:0 16px 8px;display:flex;gap:8px">
-    <button class="btn btn-gold" style="flex:1" onclick="bmNextAward()">Volgende ▶</button>
-    <button class="btn" onclick="go('battleHostAnalytics')">Sla over →</button>
+    <button class="btn btn-gold" style="flex:1" id="bmAwardNext" onclick="bmNextAward()">Volgende ▶</button>
+    <button class="btn" id="bmAwardSkip" onclick="go('battleHostAnalytics')">Sla over →</button>
   </div>
   <div style="padding:0 16px 10px">
     <button class="btn btn-block bm-again-btn" onclick="bmNewMatchSamePlayers()">↻ Nieuw gevecht — zelfde spelers</button>

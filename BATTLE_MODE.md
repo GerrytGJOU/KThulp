@@ -712,7 +712,15 @@ Sequentieel onthullen (~3,5s per kaart) met `bmNextAward()`:
    - 📚 Scholar — hoogste correctheid (min. 3 vragen)
    - ⚡ Snelste Denker — laagste gemiddelde responstijd (min. 2 rondes)
    - 🤝 Beste Teamspeler — meeste combo-participaties (via `pids` in log-events)
-3. Doorsturen naar Analytics
+3. **Erepodium** (`bmRenderPodium()`) — daarna komen alle eerbewijzen nóg een keer
+   samen in beeld, met de winnaar erboven en de **totaalscore van de klas** eronder:
+   hoeveel woorden er samen goed vertaald zijn (het grote getal), het percentage juist,
+   het aantal vragen, rondes en spelers, en de opgetelde schade/heling/schild.
+   Dit scherm blijft staan — géén timer die doorspringt. De ceremonie toont elk
+   eerbewijs maar 3,5 seconde; wie even niet keek miste zijn eigen naam, en juist die
+   leerling moet 'm alsnog kunnen zien. De knop "Volgende" verandert hier in
+   "Klassenoverzicht" en "Sla over" verdwijnt.
+4. Doorsturen naar Analytics
 
 Data-flow: `BM_PLAYERS` wordt bewaard als `BM_AWARD_DATA` vóór `cleanup()`. Log wordt async opgehaald uit `/rooms/{code}/log`.
 
