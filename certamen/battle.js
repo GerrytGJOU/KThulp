@@ -362,6 +362,7 @@ async function bmAwardBattle(){
     return next;
   });
   const data=mergedData||{};
+  const oldCoins=Math.max(0,newCoins-coinsEarned);
   const oldLv=bmCalcLevel(oldXp), newLv=bmCalcLevel(newXp);
   const merged={...data,achievements:data.achievements||[]};
   BM_IDENT={...BM_IDENT,...merged};
@@ -391,7 +392,10 @@ async function bmAwardBattle(){
   // deelname/winst-munten hierboven) — zie TRAIT_COIN_BONUS.
   const coinBonus=earned.reduce((s,id)=>s+(TRAIT_COIN_BONUS[id]||0),0);
   if(coinBonus>0){ identRef.child("coins").transaction(cur=>(cur||0)+coinBonus); addCoins(coinBonus, true); }
-  return{xpEarned,coinsEarned,legendaryBonus:legBonus,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
+  // oldXp/newXp en oldCoins/newCoins gaan mee terug zodat het resultaatscherm
+  // "van … naar …" kan laten meetellen (bmRenderXpGain).
+  return{xpEarned,coinsEarned,oldXp,newXp,oldCoins,newCoins,
+         legendaryBonus:legBonus,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
 }
 async function bmCheckAchievements(ident,result={}){
   if(!fbDB||!BM_IDENT)return[];
@@ -3961,6 +3965,88 @@ function bmResetMatchLocals(){
   BM_STATE={};BM_TEAMS={};BM_BOSS={};_bmFormHash="";
 }
 
+/* Telt een getal in beeld op van `from` naar `to`. Staan animaties uit (of is
+   er niets te tellen), dan verschijnt de eindwaarde meteen. */
+function bmCountTo(id,from,to,ms,prefix){
+  const e=el(id); if(!e)return;
+  const fin=()=>{e.textContent=(prefix||"")+to;};
+  if(BM_META?.animations===false||from===to||typeof requestAnimationFrame!=="function"){fin();return;}
+  const t0=performance.now();
+  (function step(t){
+    if(!document.body.contains(e))return;
+    const p=Math.min(1,(t-t0)/ms);
+    const v=Math.round(from+(to-from)*(1-Math.pow(1-p,3)));  // ease-out
+    e.textContent=(prefix||"")+v;
+    if(p<1)requestAnimationFrame(step); else fin();
+  })(t0);
+}
+
+/* Toont de XP- en muntenwinst als "huidig + verdiend = nieuw totaal", met de
+   getallen live oplopend. Leerlingen zagen voorheen alleen een kaal eindgetal
+   (of een leeg vak) en klikten weg vóór de uitkering rond was. */
+function bmRenderXpGain(r){
+  const box=el("bmXpResult"); if(!box)return;
+  const oldXp=r.oldXp??0, newXp=r.newXp??oldXp+(r.xpEarned||0);
+  const oldCo=r.oldCoins??0, newCo=r.newCoins??oldCo+(r.coinsEarned||0);
+  const coinNm=bmCoinName();
+  const barOld=xpBarInfo(r.oldLv||bmCalcLevel(oldXp));
+  const barNew=xpBarInfo(r.newLv||bmCalcLevel(newXp));
+  box.innerHTML=`
+    <div class="bm-gain">
+      <div class="bm-gain-row">
+        <span class="bm-gain-ic">⚡</span>
+        <span class="bm-gain-old">${oldXp}</span>
+        <span class="bm-gain-plus" id="bmGainXpPlus">+0</span>
+        <span class="bm-gain-arrow">→</span>
+        <span class="bm-gain-new" id="bmGainXpNew">${oldXp}</span>
+        <span class="bm-gain-lbl">XP</span>
+      </div>
+      <div class="bm-xpbar"><div class="bm-xpbar-fill" id="bmGainBar" style="width:${barOld.pct}%"></div></div>
+      <div class="note" id="bmGainBarLbl">Niveau ${(r.oldLv||{}).level||1} · ${esc((r.oldLv||{}).title||"")}</div>
+      <div class="bm-gain-row" style="margin-top:12px">
+        <span class="bm-gain-ic">🪙</span>
+        <span class="bm-gain-old">${oldCo}</span>
+        <span class="bm-gain-plus" id="bmGainCoPlus">+0</span>
+        <span class="bm-gain-arrow">→</span>
+        <span class="bm-gain-new" id="bmGainCoNew">${oldCo}</span>
+        <span class="bm-gain-lbl">${esc(coinNm)}</span>
+      </div>
+      <div id="bmGainExtra"></div>
+    </div>`;
+  const dur=(BM_META?.animations===false)?0:1100;
+  bmCountTo("bmGainXpPlus",0,r.xpEarned||0,dur,"+");
+  bmCountTo("bmGainXpNew",oldXp,newXp,dur);
+  setTimeout(()=>{
+    bmCountTo("bmGainCoPlus",0,r.coinsEarned||0,dur,"+");
+    bmCountTo("bmGainCoNew",oldCo,newCo,dur);
+  },dur?350:0);
+  // XP-balk: bij niveau-omhoog eerst vol laten lopen, dan verder op het nieuwe niveau
+  const bar=el("bmGainBar"), lbl=el("bmGainBarLbl");
+  const setLbl=lv=>{ if(lbl) lbl.textContent="Niveau "+lv.level+" · "+(lv.title||""); };
+  if(bar){
+    if(!dur){ bar.style.width=barNew.pct+"%"; setLbl(r.newLv||{level:1,title:""}); }
+    else if(r.levelUp){
+      requestAnimationFrame(()=>{bar.style.width="100%";});
+      setTimeout(()=>{
+        bar.style.transition="none"; bar.style.width="0%";
+        setLbl(r.newLv||{level:1,title:""});
+        requestAnimationFrame(()=>{bar.style.transition=""; bar.style.width=barNew.pct+"%";});
+      },dur);
+    } else {
+      requestAnimationFrame(()=>{bar.style.width=barNew.pct+"%";});
+    }
+  }
+  // Niveau-omhoog, eerbewijzen en legendarische bonus komen ná het tellen
+  setTimeout(()=>{
+    const ex=el("bmGainExtra"); if(!ex)return;
+    const lvUp=r.levelUp?`<div class="bm-gain-lvup">🎉 Niveau omhoog! Je bent nu ${esc(r.newLv.title)} (${r.newLv.level})</div>`:"";
+    const achHTML=(r.earned||[]).length?`<div style="margin-top:6px;color:var(--hi)">${r.earned.map(id=>{const a=ACHIEVEMENTS_DEF.find(x=>x.id===id);return a?"🏅 "+esc(a.nm):""}).join(" · ")}</div>`:"";
+    const legHTML=r.legendaryBonus?`<div style="margin-top:4px;font-size:12px;color:var(--hi)">⚡ ${esc(r.legendaryBonus.nm)}-bonus: ${esc(r.legendaryBonus.desc)}</div>`:"";
+    ex.innerHTML=lvUp+achHTML+legHTML;
+  },dur?dur+300:0);
+  (r.earned||[]).forEach(id=>{const a=ACHIEVEMENTS_DEF.find(x=>x.id===id); if(a)toastAch(a);});
+}
+
 SCREENS.battleResult = function(){
   const w=BM_STATE.winner;
   H(brand(false)+`
@@ -3969,11 +4055,37 @@ SCREENS.battleResult = function(){
     <div style="font-size:56px">${w==="A"||w==="B"?iconSVG(bmTeamIcon(w),56,"var(--team"+w+")"):"⚔️"}</div>
     <h2 style="color:var(--hi-bright);margin:8px 0">${w==="A"||w==="B"?esc(bmTeamNm(w))+" wint!":"Gevecht gestopt"}</h2>
   </div>
-  <div id="bmXpResult" class="panel" style="text-align:center;color:var(--muted)">XP berekenen…</div>
+  <div id="bmXpResult" class="panel" style="text-align:center;color:var(--muted)">
+    <div style="font-size:15px;color:var(--hi-bright)">⚡ Je XP en ${esc(bmCoinName())} worden bijgeschreven…</div>
+    <div class="note" style="margin-top:4px">Blijf even op dit scherm.</div>
+  </div>
   <div class="note" style="text-align:center;margin-top:10px">Blijf hier als de docent nog een gevecht start — je springt dan vanzelf terug naar de lobby.</div>
-  <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="bmLeave();go('home')">Terug naar hoofdmenu</button>
-  <button class="btn btn-block" style="margin-top:8px" onclick="bmLeave();go('battleProfile')">Mijn profiel bekijken</button>
+  <button class="btn btn-gold btn-block lg" id="bmResHome" style="margin-top:14px" disabled onclick="bmLeave();go('home')">Terug naar hoofdmenu</button>
+  <button class="btn btn-block" id="bmResProfile" style="margin-top:8px" disabled onclick="bmLeave();go('battleProfile')">Mijn profiel bekijken</button>
   ${foot()}`);
+  // De knoppen staan uit tot de uitkering rond is: wie hier wegklikt vóórdat
+  // bmAwardBattle() klaar is, loopt zijn XP en munten mis.
+  const unlock=()=>{["bmResHome","bmResProfile"].forEach(id=>{const b=el(id); if(b)b.disabled=false;});};
+  // Vangnet: blijft de uitkering hangen (geen netwerk), dan gaan de knoppen na
+  // 6 seconden alsnog open — een leerling mag nooit opgesloten raken.
+  setTimeout(unlock,6000);
+  bmAwardBattle().then(r=>{
+    const box=el("bmXpResult");
+    if(box){
+      if(r&&r.alreadyAwarded){
+        box.innerHTML=`<div class="note">XP en ${esc(bmCoinName())} voor dit gevecht zijn al bijgeschreven.</div>`;
+      } else if(!r){
+        box.innerHTML=`<div class="note">XP kon niet worden bijgeschreven — controleer je verbinding. Je voortgang uit eerdere gevechten blijft bewaard.</div>`;
+      } else {
+        bmRenderXpGain(r);
+      }
+    }
+    unlock();
+  }).catch(()=>{
+    const b=el("bmXpResult");
+    if(b)b.innerHTML=`<div class="note">XP kon niet worden bijgeschreven — controleer je verbinding.</div>`;
+    unlock();
+  });
   // Zet de docent een nieuw gevecht klaar met dezelfde spelers
   // (bmNewMatchSamePlayers()), dan gaat state/status terug naar "lobby". De
   // leerling hoeft dan niet opnieuw in te loggen: we springen gewoon terug
@@ -3990,30 +4102,6 @@ SCREENS.battleResult = function(){
     });
     BM_UNSUBS.push(()=>rSt.off("value",fSt));
   }
-  // XP toekennen (fire-and-forget; toont resultaat in #bmXpResult)
-  bmAwardBattle().then(r=>{
-    const box=el("bmXpResult"); if(!box)return;
-    // Niets tonen was verwarrend: een leerling zag dan gewoon een leeg vak en
-    // wist niet of er XP was toegekend. Nu staat er altijd één regel.
-    if(r&&r.alreadyAwarded){
-      box.innerHTML=`<div class="note">XP en ${esc(bmCoinName())} voor dit gevecht zijn al bijgeschreven.</div>`;
-      return;
-    }
-    if(!r){
-      box.innerHTML=`<div class="note">XP kon niet worden bijgeschreven — controleer je verbinding. Je voortgang uit eerdere gevechten blijft bewaard.</div>`;
-      return;
-    }
-    const lvUp=r.levelUp?`<div style="color:var(--hi-bright);font-size:16px;margin-top:6px">🎉 Niveau omhoog! Je bent nu ${esc(r.newLv.title)} (${r.newLv.level})</div>`:"";
-    const achHTML=r.earned.length?`<div style="margin-top:6px;color:var(--hi)">${r.earned.map(id=>{const a=ACHIEVEMENTS_DEF.find(x=>x.id===id);return a?"🏅 "+esc(a.nm):""}).join(" · ")}</div>`:"";
-    const legHTML=r.legendaryBonus?`<div style="margin-top:4px;font-size:12px;color:var(--hi)">⚡ ${esc(r.legendaryBonus.nm)}-bonus: ${esc(r.legendaryBonus.desc)}</div>`:"";
-    box.innerHTML=`<div style="display:flex;justify-content:center;gap:18px">
-        <div><div style="font-size:22px;font-weight:700;color:var(--hi-bright)">+${r.xpEarned} XP</div></div>
-        <div><div style="font-size:22px;font-weight:700;color:var(--hi-bright)">+${r.coinsEarned} 🪙</div></div>
-      </div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px">Totaal: ${BM_IDENT?.xp||r.newLv.xp} XP · ${BM_IDENT?.coins||0} ${esc(bmCoinName())} · Niveau ${r.newLv.level} · ${esc(r.newLv.title)}</div>
-      ${lvUp}${achHTML}${legHTML}`;
-    r.earned.forEach(id=>{const a=ACHIEVEMENTS_DEF.find(x=>x.id===id); if(a)toastAch(a);});
-  }).catch(()=>{const b=el("bmXpResult");if(b)b.textContent="";});
 };
 
 // Leerling past zelf de getoonde naam aan (bv. na een grappig-bedoelde naam).
