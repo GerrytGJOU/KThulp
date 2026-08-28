@@ -598,20 +598,21 @@ meteen in de lobby, op het slagveld en op het docentscherm staat.
 
 ### Avatar
 
-Elke leerling heeft een vectoravatar opgebouwd uit **15 onderdelen**
+Elke leerling heeft een vectoravatar opgebouwd uit **16 onderdelen**
 (`BM_AVATAR_PARTS`, `certamen/battle-data.js`) — vier ontgrendel-types door
 elkaar (niveau, mastery, Legioenster-prestige, munten):
 
 | Onderdeel | Basisopties (geen ontgrendeling) | Vereist ontgrendeling |
 |---|---|---|
-| `geslacht` | Man, Vrouw | — |
-| `huid` | Licht, Donker | — |
+| `huid` | Zeer licht, Licht, Getint, Olijf, Brons, Donker | — |
+| `oogkleur` | Blauw, Bruin, Donkerbruin, Groen, Grijs, Amber | — |
+| `borstband` | Zonder, Met | — |
 | `armor` (Wapenrusting) | Vodden, Mantel | Licht (Niv. 2), Middel (Niv. 5), Hopliet (Niv. 7), Zwaar (Niv. 9), Ceremonieel (Mastery ★★★★★) |
 | `helm` | Geen, Bandana | Standaard (Niv. 2), Open (Niv. 4), Hopliet (Niv. 8), Kroon (Niv. 10) |
 | `schild` | Geen | Rond (Niv. 3), Puntig (Niv. 3), Metaal Rond (Niv. 6), Metaal Puntig (Niv. 6) |
 | `wapen` | Knuppel, Hooivork | Zwaard (Niv. 2), Speer (Niv. 2), Boog (Niv. 4), Staf (Niv. 4) |
 | `haar` | Kort, Lang, Kaal | Wild (Niv. 5), Vlecht/Middel (Niv. 6), Knot/Hanekam (Niv. 7) |
-| `haarkleur` | Blond, Bruin, Zwart, Rood | Blauw, Groen (beide Niv. 8) |
+| `haarkleur` | Blond, Bruin, Zwart, Grijs, Wit, Rood | Blauw, Groen (beide Niv. 8) |
 | `baard` (Gezichtshaar) | Geen, Snor, Baard, Baard en snor | Sik en snor (Niv. 7) |
 | `cape` | Geen | Kort (Niv. 5), Lang (Niv. 7), Engelen-/Duivels-/Vlindervleugels (elk Legioenster ★1) |
 | `capekleur` | 6 kleuren | — |
@@ -623,6 +624,47 @@ elkaar (niveau, mastery, Legioenster-prestige, munten):
 De avatar wordt gerenderd als inline SVG via `bmAvatarSVG(av, size)`. Backward-compat: pre-M6 string-avatars worden via `bmAvatarMerge()` omgezet naar het nieuwe objectformaat.
 
 Opgeslagen in `/identities/{klas}/{code}/avatar` (object).
+
+#### Identiteitsonderdelen zijn nooit ontgrendelbaar (2026-08-28)
+
+`huid`, `oogkleur`, `haarkleur` en `borstband` hebben bewust géén `requires`:
+dat is hoe een leerling eruitziet, niet iets om te verdienen. (Blauw en groen
+haar blijven wél op niveau 8 — dat zijn fantasiekleuren, geen identiteit.)
+Ze staan alle vier ook in `SP_AVATAR_FREE_PARTS` (`certamen/singleplayer-data.js`),
+zodat Chronica Classica ze vanaf de proloog vrijgeeft.
+
+#### `geslacht` vervallen → losse `borstband`
+
+Tot 2026-08-28 koos `geslacht` (Man/Vrouw) een compleet andere lichaamssprite
+(`base_*_female.png`). Een pixelvergelijking liet zien dat die sprites alleen
+in de **borstband** verschilden — silhouet, houding en schaduwen waren identiek,
+en wat op wimpers leek was enkel een iets fellere blauwe iris. De band is er
+daarom als eigen laag uit gelicht en is nu een losse schakelaar, zodat elke
+combinatie van huidtint, oogkleur en band kan.
+
+`bmAvatarMigrate(a, saved)` (`certamen/battle.js`) zet oude profielen om:
+`geslacht:"vrouw"` zonder eigen `borstband` wordt `borstband:"aan"`. De functie
+krijgt bewust óók de rúwe opgeslagen avatar mee, want de defaults vullen
+`borstband` altijd in — aan het samengevoegde object alleen kun je niet meer
+zien of de speler er ooit zelf iets voor koos. `spAvatarMerge()`
+(`certamen/singleplayer.js`) roept dezelfde functie aan.
+
+#### De sprites zijn gegenereerd, niet getekend
+
+`certamen/tools/gen_sprites.js` maakt de zes lichamen, zes ooglagen en de
+borstband uit één bron: `assets/sprites/base_light.png`. Dat kan omdat
+`base_dark.png` een exacte palet-omwisseling van `base_light.png` bleek (zes
+huidkleuren, al het andere byte-identiek) en de iris uit precies twee
+paletkleuren bestaat. `licht` en `donker` komen er pixelgelijk aan de oude
+sprites uit, dus bestaande avatars veranderen niet van uiterlijk.
+
+Draai `node tools/gen_sprites.js` vanuit `certamen/` en verhoog daarna
+`SPRITE_VER` in `battle.js`. `base_light.png` en `base_light_female.png` blijven
+in de map staan als bron voor de generator; het spel laadt ze niet meer.
+
+Laagvolgorde met de nieuwe lagen: cape → wapen → base → **ogen** →
+**borstband** → haar → pantser → baard → schild → helm. De band zit dus onder
+de wapenrusting en is alleen zichtbaar bij vodden of een mantel.
 
 ### XP en niveaus (1–10)
 
