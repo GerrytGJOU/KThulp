@@ -88,6 +88,24 @@ const BM_CLASSES = [
     ]},
 ];
 
+/* ---- CONFIGURATIETABEL: BE-ECONOMIE ----
+   In een gevecht met een hele klas liep de Battle Energy volledig uit de hand:
+   leerlingen hadden 65 BE of meer terwijl de duurste actie 10 kost. Twee
+   oorzaken, allebei met de klasgrootte meegegroeid:
+   1. De synergiebonus hieronder is per speler per ronde en gaat op klas-
+      diversiteit. Met 17 spelers per team zijn alle acht klassen altijd
+      vertegenwoordigd, dus wat als zeldzame beloning bedoeld was (+6) werd
+      gegarandeerd basisinkomen.
+   2. team_be-abilities (bv. Centurio's "Strijdformatie", +3 BE voor het team)
+      geven BE aan ÉLKE teamgenoot. Drie Centurio's die dat samen doen leveren
+      iedereen +9 op — die stapeling schaalt lineair mee met de teamgrootte.
+   Daarom drie grenzen. Alle drie zijn losse knoppen: verlaag BM_BE_MAX voor
+   krappere keuzes, verhoog 'm als leerlingen te vaak niets kunnen doen. */
+const BM_BE_MAX = 12;               // maximale voorraad BE per speler (duurste ability kost 10)
+const BM_BE_ROUND_BONUS_CAP = 4;    // max passief BE per ronde (synergie + passieven + mastery + traits samen)
+const BM_TEAMBE_ROUND_CAP = 4;      // max BE dat team_be-abilities + combo's samen per ronde aan een teamgenoot geven
+const BM_WRONG_BE_PENALTY = 2;      // BE die je kwijtraakt bij een fout antwoord (nooit onder 0)
+
 /* ---- CONFIGURATIETABEL: SYNERGIE ---- */
 // Flat BE-bonus per speler per ronde op basis van klasdiversiteit binnen het team.
 const BM_SYNERGY = [

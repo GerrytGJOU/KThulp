@@ -340,6 +340,18 @@ Faction-XP en -rang zouden persistent moeten zijn (blijven over gevechtssessies 
 
 **Host-autoritair**: alleen de host schrijft `teams.A.health` en `teams.B.health`. Nooit clientside.
 
+**Volgorde binnen de resolutie**: eerst álle schade van de ronde (spelers, schild-
+absorptie, heldenmodus-routering, en in Boss Battle ook de klap van de baas), dáárna
+pas de heling, en pas helémaal op het eind klemmen op `0..maxHealth` (`rawHA`/`rawHB`
+→ `newHA`/`newHB` in `bmResolve()`). Voorheen werd in Boss Battle `tick.classDamage`
+pás ná het klemmen verrekend: een Priester die healde terwijl de balk nog vol stond
+zag zijn heling verdampen, waarna de klap alsnog binnenkwam.
+
+**Foutbestendig**: `bmResolve()` heeft een `catch` die de fout logt, de docent een
+melding geeft en tóch de volgende ronde uitdeelt. Een uitzondering middenin de
+resolutie liet voorheen het hele gevecht bevriezen — timer stil, geen nieuwe vragen
+(zie de `targetMinion`-bug in BOSS_BATTLE.md).
+
 ---
 
 ## RTDB-datamodel
@@ -373,7 +385,31 @@ Dit zijn alle getallen die je kunt bijstellen zonder in de logica te hoeven zitt
 | Correct antwoord | +3 |
 | Correct én snel (> helft tijd resterend) | +4 (standaard) |
 | Cavalerie: correct én snel | +5 (passief be_on_fast: +2) |
-| Fout antwoord | 0 |
+| Fout antwoord | −`BM_WRONG_BE_PENALTY` (= 2), nooit onder 0 |
+
+### Grenzen aan de BE-economie (`battle-data.js`)
+
+In een gevecht met een hele klas liep de BE volledig uit de hand: leerlingen hadden
+65 BE of meer terwijl de duurste ability 10 kost. Twee oorzaken, allebei meegegroeid
+met de klasgrootte:
+
+1. De **synergiebonus** is per speler per ronde en hangt af van klasdiversiteit. Met
+   17 spelers per team zijn alle acht klassen altijd vertegenwoordigd, dus werd de
+   hoogste trap (+6) gegarandeerd basisinkomen in plaats van een zeldzame beloning.
+2. **`team_be`-abilities** (Centurio's "Strijdformatie", +3 BE voor het team) geven BE
+   aan élke teamgenoot. Drie Centurio's leveren iedereen +9 op — die stapeling schaalt
+   lineair met de teamgrootte.
+
+Daarom drie grenzen, alle drie los in te stellen:
+
+| Constante | Waarde | Wat het begrenst |
+|---|---|---|
+| `BM_BE_MAX` | 12 | Maximale BE-voorraad per speler (duurste ability kost 10). Alles daarboven vervalt. |
+| `BM_BE_ROUND_BONUS_CAP` | 4 | Passief BE per ronde: synergie + klassepassief + mastery + traits samén. |
+| `BM_TEAMBE_ROUND_CAP` | 4 | Wat `team_be`-abilities en combo's samen per ronde aan één teamgenoot geven. |
+
+Alle BE-schrijfacties lopen via `bmClampBE()` (host én client), dus de bovengrens geldt
+overal: antwoorden, rondebonus, ability-kosten, combo's, team-BE en bots.
 
 ### Ability-kosten en -effecten per klasse
 Zie tabel in §Klassen hierboven. Aanpassen: zoek de klasse in `BM_CLASSES` en wijzig `cost`, `dmg`, `heal`, `shld` of `teamBE`.

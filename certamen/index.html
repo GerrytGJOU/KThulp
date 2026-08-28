@@ -785,6 +785,12 @@ body.greek .qcard .word{color:#143a5e}
 .bm-player-panel .choice{padding:11px 13px;font-size:16px;border-radius:12px;gap:10px}
 .bm-player-panel .choice .n{width:24px;height:24px;font-size:13px}
 .bm-player-panel .tile{margin-bottom:5px!important}
+/* Uitslagbalk boven de vraag: goed (groen) of fout (rood, met het juiste
+   antwoord en de BE-boete). Zie bmPlayerRender() in battle.js. */
+.bm-fb{border-radius:12px;padding:9px 12px;margin-bottom:9px;text-align:center;font-size:15px;font-weight:700;line-height:1.35}
+.bm-fb span{display:block;font-size:12px;font-weight:400;opacity:.9;margin-top:2px}
+.bm-fb.ok{background:rgba(63,125,58,.28);border:1.5px solid var(--green-bright);color:var(--green-bright)}
+.bm-fb.bad{background:rgba(168,38,26,.26);border:1.5px solid #e07060;color:#ffb0a0}
 /* Lage schermen (kleine telefoon, of landscape): nog een tandje compacter,
    zodat alle vier de antwoorden zonder scrollen in beeld blijven. */
 @media(max-height:700px){
@@ -922,10 +928,10 @@ body.greek .qcard .word{color:#143a5e}
 <script src="core.js?v=20260817a"></script>
 <script src="net.js?v=20260816c"></script>
 <script src="games.js?v=20260816b"></script>
-<script src="battle-data.js?v=20260715a"></script>
+<script src="battle-data.js?v=20260828a"></script>
 <script src="bossbattle.js?v=20260828a"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20260828b"></script>
+<script src="battle.js?v=20260828c"></script>
 <script src="map/provinces.js?v=20260712d"></script>
 <script src="totalwar.js?v=20260712g"></script>
 <script src="training.js?v=20260712a"></script>

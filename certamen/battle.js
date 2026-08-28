@@ -522,6 +522,12 @@ function bmCalcAbilityEffect(p,cls,abl){
   if(abl.selfBE) fx.selfBE+=abl.selfBE; // rechtstreekse eigen-BE-vaardigheden (bv. Cavalerie: Snelle Uitval)
   return fx;
 }
+// Klem BE op 0..BM_BE_MAX. Overal gebruiken waar BE wordt weggeschreven —
+// zowel host-side (bmResolve/bmDistributeQs) als client-side (bmAnswer).
+function bmClampBE(v){
+  const max=(typeof BM_BE_MAX==="number"?BM_BE_MAX:12);
+  return Math.max(0,Math.min(max,Math.round(v||0)));
+}
 function bmCalcSynergy(players,team){
   const unique=new Set(Object.values(players).filter(p=>p.team===team&&p.class).map(p=>p.class)).size;
   let bonus=0;
@@ -612,6 +618,9 @@ let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={}, BM_BOSS={};
 let BM_MY_BE=0, BM_MY_Q=null, BM_MY_CLASS=null, BM_MY_TEAM=null;
 let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
 let BM_MY_TARGET="boss", BM_TARGET_ROUND=-1; // Minion Summon (BOSS_BATTLE.md §4): gekozen doelwit voor de volgende ability
+// Laatste antwoord van deze speler — nodig om de goed/fout-uitslag te blijven
+// tonen nadat de spelers-listener het paneel opnieuw heeft opgebouwd.
+let BM_MY_PICK=null, BM_MY_PICK_OK=false, BM_MY_PICK_ROUND=-1;
 // Verborgen-trait-tracking (session-only, zie ACHIEVEMENTS_DEF: trait_ciceronianus/trait_laconisch)
 let BM_MY_CLUTCH_STREAK=0, BM_MY_CLUTCH_BEST=0, BM_MY_ABILITIES_USED=0;
 // Batch 2: klassewissels in de lobby (trait_draaideur) + ooit een schade-
@@ -770,7 +779,12 @@ SCREENS.battleFAQ = function(){
     <div class="note">BE is je actiemunt. Je verdient het door vragen goed te beantwoorden. Elke ability kost
     BE (zie hieronder). Sommige klassen genereren extra BE voor zichzelf of het hele team. Spaar je BE op
     voor een krachtige <b>ultieme</b> ability, of geef het meteen uit aan goedkope acties — dat is jouw
-    tactische keuze.</div>`)}
+    tactische keuze.</div>
+    <div class="note" style="margin-top:6px">Je kunt maximaal <b>${BM_BE_MAX} BE</b> in voorraad hebben; wat
+    daarboven komt vervalt. Sparen heeft dus een grens — gebruik je BE.</div>
+    <div class="note" style="margin-top:6px">Een <b>fout antwoord</b> kost je <b>${BM_WRONG_BE_PENALTY} BE</b>
+    en levert niets op. Heb je daarna te weinig over voor je goedkoopste vaardigheid, dan kun je die ronde
+    niet aanvallen. Je ziet na elk antwoord meteen of het goed of fout was, met het juiste antwoord erbij.</div>`)}
 
   ${sec("De acht klassen",false,classesHTML)}
 
@@ -1473,11 +1487,16 @@ async function bmDistributeQs(roundN){
     // (permanent account-brede unlock, geen in-klas-verdiende bonus)
     if(p.traitGroot) beBonus+=1;
     if(p.traitNorage) beBonus+=1;
+    // Alle passieve bronnen samen begrensd — zie BM_BE_ROUND_BONUS_CAP in
+    // battle-data.js: met een volle klas is de hoogste synergietrap altijd
+    // gehaald, en dan is +6 per speler per ronde geen beloning meer maar
+    // gratis basisinkomen.
+    beBonus=Math.min(beBonus,BM_BE_ROUND_BONUS_CAP);
     const pool=bmPersonalPool(pid,POOL);
     up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
     up["players/"+pid+"/answeredRound"]=-1;
     up["players/"+pid+"/lockedAction"]=null;
-    if(beBonus>0) up["players/"+pid+"/be"]=(p.be||0)+beBonus;
+    if(beBonus>0) up["players/"+pid+"/be"]=bmClampBE((p.be||0)+beBonus);
     // Heldenmodus: initialiseer persoonlijke HP bij de eerste ronde
     if(roundN===1&&BM_META?.heroMode){
       const hhp=BM_META.heroMaxHp||15;
@@ -1506,7 +1525,7 @@ async function bmDistributeQs(roundN){
       const delay=1500+Math.random()*Math.max(0,(at-3)*1000);
       setTimeout(()=>{
         const correct=Math.random()<acc;
-        const botBe=(BM_PLAYERS[pid]?.be||0)+(correct?1:0);
+        const botBe=bmClampBE((BM_PLAYERS[pid]?.be||0)+(correct?1:0));
         const cls=BM_CLASSES.find(c=>c.id===p.class);
         const abilities=cls?.abilities||[];
         const affordable=abilities.filter(a=>(a.cost||0)<=botBe);
@@ -1516,7 +1535,7 @@ async function bmDistributeQs(roundN){
         botUp["players/"+pid+"/answeredRound"]=roundN;
         botUp["players/"+pid+"/correct"]=(p.correct||0)+(correct?1:0);
         botUp["players/"+pid+"/wrong"]=(p.wrong||0)+(correct?0:1);
-        botUp["players/"+pid+"/be"]=Math.max(0,botBe-(action?.cost||0));
+        botUp["players/"+pid+"/be"]=bmClampBE(botBe-(action?.cost||0));
         if(action) botUp["players/"+pid+"/lockedAction"]=action;
         fbDB.ref("rooms/"+BM_CODE).update(botUp).catch(()=>{});
       },delay);
@@ -2656,6 +2675,13 @@ async function bmResolve(roundN){
       // halvering over: ze raken de baas ÓÓk elke levende handlanger, elk
       // voor het volle schadegetal.
       let minionDmg=0;
+      // targetMinion staat bewust BÚITEN de if/else: hij wordt verderop in
+      // events.push() gelezen. Stond hij binnen de else-tak (met const), dan
+      // gooide een AoE-aanval op levende handlangers een ReferenceError — en
+      // omdat dat middenin bmResolve() gebeurt, bleef de hele ronde hángen:
+      // geen nieuwe vragen, timer stil. Dat kon pas gebeuren vanaf het moment
+      // dat er handlangers waren, dus vanaf de overgang naar fase 2.
+      let targetMinion=null;
       if(isBossFight&&mt==="A"&&fx.dmg>0&&fx.aoe){
         minions.filter(m=>m.hp>0).forEach(m=>{
           minionDmg+=Math.min(fx.dmg,m.hp);
@@ -2663,7 +2689,7 @@ async function bmResolve(roundN){
         });
         // fx.dmg blijft staan — telt hieronder ook nog naar de baas
       } else {
-        const targetMinion=(isBossFight&&mt==="A"&&fx.dmg>0&&action.target&&action.target!=="boss")
+        targetMinion=(isBossFight&&mt==="A"&&fx.dmg>0&&action.target&&action.target!=="boss")
           ? minions.find(m=>m.id===action.target&&m.hp>0) : null;
         if(targetMinion){
           minionDmg=Math.min(fx.dmg,targetMinion.hp);
@@ -2680,13 +2706,13 @@ async function bmResolve(roundN){
       for_[mt].heal+=fx.heal;
       for_[mt].teamBE+=fx.teamBE;
       if(isBossFight&&mt==="A"&&(fx.dmg>0||minionDmg>0)) chainContributors.add(pid);
-      pUpd[pid]={be:Math.max(0,(p.be||0)-(action.cost||0)+(fx.selfBE||0)),
+      pUpd[pid]={be:bmClampBE((p.be||0)-(action.cost||0)+(fx.selfBE||0)),
                  damage:(p.damage||0)+fx.dmg, healing:(p.healing||0)+fx.heal, lockedAction:null,
                  ...(usedInspiration?{inspired:false}:{}),
                  ...(minionDmg>0?{minionDamage:(p.minionDamage||0)+minionDmg}:{})};
       events.push({pid,abilityId:abl.id,team:mt,dmg:fx.dmg,heal:fx.heal,shld:fx.shld,
                    cls:p.class,anim:bmAblAnim(abl.type),
-                   ...(minionDmg>0?{minionDmg,target:targetMinion.id}:{})});
+                   ...(minionDmg>0?{minionDmg,...(targetMinion?{target:targetMinion.id}:{})}:{})});
     }
     // Brede-deelname-bonus (Boss Battle, herinterpretatie van BOSS_BATTLE.md
     // §5.1 "Combo Chain" voor de ronde-gebaseerde architectuur): ≥3
@@ -2724,17 +2750,21 @@ async function bmResolve(roundN){
       for(const[pid]of[pa,pb]){
         const p=players[pid];
         const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0};
-        pUpd[pid]={...prev,be:Math.max(0,prev.be-(combo.cost||4)),lockedAction:null};
+        pUpd[pid]={...prev,be:bmClampBE(prev.be-(combo.cost||4)),lockedAction:null};
       }
       events.push({type:"combo",comboId:combo.id,team:mt,pids:[pa[0],pb[0]]});
     }
 
-    // Pas 3: teamBE verdelen over alle teamgenoten
+    // Pas 3: teamBE verdelen over alle teamgenoten. Begrensd op
+    // BM_TEAMBE_ROUND_CAP: elke team_be-ability geeft BE aan élke teamgenoot,
+    // dus zonder grens stapelen meerdere Centurio's in een grote klas tot een
+    // onuitgeefbare berg BE (zie battle-data.js).
+    for(const t of["A","B"]) for_[t].teamBE=Math.min(for_[t].teamBE,BM_TEAMBE_ROUND_CAP);
     for(const[pid,p]of Object.entries(players)){
       const bonus=for_[p.team]?.teamBE||0;
       if(!bonus)continue;
       const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0,lockedAction:null};
-      pUpd[pid]={...prev,be:(prev.be)+bonus};
+      pUpd[pid]={...prev,be:bmClampBE((prev.be)+bonus)};
     }
 
     // Schrijf spelerupdates
@@ -2775,8 +2805,13 @@ async function bmResolve(roundN){
       armyDmgB-=absorbed;
       if(labyrinthShield<=0){ labyrinthShield=0; labyrinthBroken=true; }
     }
-    let newHA=Math.max(0,Math.min(tA.maxHealth,tA.health-armyDmgA+for_.A.heal));
-    let newHB=Math.max(0,Math.min(tB.maxHealth,tB.health-armyDmgB+for_.B.heal));
+    // Eerst álle schade van deze ronde verrekenen, dan pas de heling, en pas
+    // daarna klemmen op 0..maxHealth. Anders ging heling verloren: in Boss
+    // Battle werd de klap van de baas (tick.classDamage hieronder) pas ná het
+    // klemmen verrekend, dus healde een Priester tegen een nog volle balk
+    // terwijl de schade daarna alsnog binnenkwam.
+    let rawHA=tA.health-armyDmgA;
+    let rawHB=tB.health-armyDmgB;
 
     // Boss Battle: de baas (team B) is scripted i.p.v. speler-gestuurd — na de
     // normale schade-op-de-baas-berekening hierboven (die al vanzelf via de
@@ -2786,7 +2821,10 @@ async function bmResolve(roundN){
     let bossEvents=[];
     if(BM_META?.mode==="boss"){
       const diffM=bmBossDiff(BM_META.bossDifficulty).m;
-      const phase=bmBossPhaseFor(tB.maxHealth?newHB/tB.maxHealth:0);
+      // Fase op basis van de HP ná de schade van de klas, maar vóór heling
+      // (de baas heeft geen heling van team B; alleen zijn eigen regen hieronder).
+      const provHB=Math.max(0,Math.min(tB.maxHealth,rawHB));
+      const phase=bmBossPhaseFor(tB.maxHealth?provHB/tB.maxHealth:0);
       // Proxy voor "fout antwoord": speler deed mee maar bracht geen schade
       // toe (geen vergrendelde actie) — zo straffen we niet individueel maar
       // voedt het wel de rage-balk, conform het ontwerp.
@@ -2797,8 +2835,8 @@ async function bmResolve(roundN){
         classMaxHP:tA.maxHealth, bossMaxHP:tB.maxHealth, diffM, noDamageAnswerCount:noDamageCount,
         bossId:BM_META?.bossId, dmgDealtThisRound:efB, shieldThisRound:shldA, labyrinthBroken,
       });
-      newHA=Math.max(0,newHA-tick.classDamage);
-      newHB=Math.min(tB.maxHealth,newHB+(tick.bossHeal||0));
+      rawHA-=tick.classDamage;
+      rawHB+=(tick.bossHeal||0);
       bossEvents=tick.events;
       // rageMaxed is sticky (voor het "geheim_norage"-eerbewijs): eenmaal waar,
       // blijft waar voor de rest van het gevecht, ook al reset rage() zelf naar 0.
@@ -2818,6 +2856,9 @@ async function bmResolve(roundN){
       BM_BOSS=bossUpd;
     }
 
+    // Pas hier de heling erbij, en dan klemmen — zie de toelichting hierboven.
+    const newHA=Math.max(0,Math.min(tA.maxHealth,rawHA+for_.A.heal));
+    const newHB=Math.max(0,Math.min(tB.maxHealth,rawHB+for_.B.heal));
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
     const logWinner=newHA<=0?"B":newHB<=0?"A":null;
     const roundParticipants=Object.values(players).filter(p=>p.answeredRound===roundN).length;
@@ -2872,6 +2913,16 @@ async function bmResolve(roundN){
     }
     await bmDistributeQs(roundN+1);
     bmHostStartTimer();
+  }catch(e){
+    // Een onverwachte fout middenin het verrekenen mag nooit het hele gevecht
+    // laten vastlopen. Dat gebeurde wel bij de targetMinion-fout hierboven: de
+    // ronde werd nooit afgerond, dus stopte de timer en kregen de leerlingen
+    // geen nieuwe vragen meer. We melden het aan de docent en gaan door met de
+    // volgende ronde — een half verrekende ronde is minder erg dan een
+    // bevroren klas.
+    console.error("bmResolve",e);
+    toast("Ronde overgeslagen","Er ging iets mis bij het verrekenen van deze ronde. Het gevecht gaat door.");
+    try{ await bmDistributeQs(roundN+1); bmHostStartTimer(); }catch(e2){ console.error("bmResolve herstel",e2); }
   }finally{BM_RESOLVING=false;}
 }
 
@@ -3588,7 +3639,36 @@ function bmPlayerRender(){
   let content="";
   if(round.phase==="question"){
     if(BM_ANSWERED){
-      content=`<div class="panel" style="text-align:center"><div style="font-size:40px">✅</div><div class="note">Wachten op andere spelers…</div></div>`;
+      // Uitslag blijven tonen: vraag + antwoorden met groen/rood, en een
+      // duidelijke regel erboven. Zonder dit verving deze hertekening de
+      // markering meteen door een leeg wachtscherm en wist een leerling niet
+      // eens dat hij fout zat.
+      const showFb=BM_MY_Q&&BM_MY_Q._round===round.n&&BM_MY_PICK!==null&&BM_MY_PICK_ROUND===round.n;
+      if(showFb){
+        const goed=(BM_MY_Q.options||[])[BM_MY_Q.correctIdx]||"";
+        const pen=(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);
+        const banner=BM_MY_PICK_OK
+          ? `<div class="bm-fb ok">✅ Goed!</div>`
+          : `<div class="bm-fb bad">❌ Fout — het juiste antwoord is <b>${esc(goed)}</b><br>
+             <span>Je verliest ${pen} BE${BM_MY_BE<2?" en kunt deze ronde niets doen":""}.</span></div>`;
+        const lang=BM_META?.lang==="el"?"Griekse":"Latijnse";
+        content=`
+        ${banner}
+        <div class="qcard">
+          <div class="kick">Vertaal het ${lang} woord</div>
+          <div class="word">${esc(BM_MY_Q.la)}</div>
+          ${BM_MY_Q.pos?`<div class="pos">${esc(BM_MY_Q.pos)}</div>`:""}
+        </div>
+        <div class="choices">
+          ${(BM_MY_Q.options||[]).map((opt,i)=>{
+            const cl=i===BM_MY_Q.correctIdx?"correct":(i===BM_MY_PICK?"wrong":"dim");
+            return `<button class="choice ${cl}" disabled><span class="n">${i+1}</span>${esc(opt)}</button>`;
+          }).join("")}
+        </div>
+        <div class="note" style="text-align:center;margin-top:8px">Wachten op andere spelers…</div>`;
+      } else {
+        content=`<div class="panel" style="text-align:center"><div style="font-size:40px">✅</div><div class="note">Wachten op andere spelers…</div></div>`;
+      }
     } else if(!BM_MY_Q||BM_MY_Q._round!==round.n){
       fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID+"/currentQ").once("value").then(s=>{
         if(s.val()){try{BM_MY_Q={...JSON.parse(s.val()),_round:round.n};BM_ANSWERED=false;bmPlayerRender();}catch(e){}}
@@ -3637,8 +3717,17 @@ function bmPlayerRender(){
         content=`<div class="panel">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <span style="font-weight:700;color:${cls.color}">${cls.nm}</span>
-            <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE} BE — ${tl}s</span>
+            <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE}/${BM_BE_MAX} BE — ${tl}s</span>
           </div>
+          ${(()=>{
+            // Niets te doen deze ronde: meestal doordat een fout antwoord BE
+            // kostte. Benoem dat, anders lijken de vaardigheden gewoon stuk.
+            const goedkoopste=Math.min(...cls.abilities.map(a=>bmGetAbilityCost(cls,a)));
+            if(BM_MY_BE>=goedkoopste) return "";
+            const foutDezeRonde=BM_MY_PICK_ROUND===round.n&&BM_MY_PICK!==null&&!BM_MY_PICK_OK;
+            return `<div class="bm-fb bad" style="margin-bottom:8px">⚠️ Te weinig BE voor een actie${foutDezeRonde?" — je antwoord was fout":""}.<br>
+              <span>Je hebt ${BM_MY_BE} BE, je goedkoopste vaardigheid kost ${goedkoopste}. Beantwoord de volgende vraag goed.</span></div>`;
+          })()}
           ${inspired?`<div class="note" style="color:var(--hi-bright);margin-bottom:6px">⚡ Geïnspireerd! Je volgende aanval doet extra schade.</div>`:""}
           ${targetPicker}
           ${cls.abilities.map(a=>{
@@ -3685,6 +3774,11 @@ function bmAnswer(idx){
   if(BM_ANSWERED||!BM_MY_Q)return;
   BM_ANSWERED=true;
   const ok=idx===BM_MY_Q.correctIdx;
+  // Onthouden voor bmPlayerRender(): de spelers-listener hertekent het paneel
+  // meteen na het antwoord, en daarmee verdween voorheen de rood/groen-
+  // markering vóórdat een leerling 'm gezien had. Nu blijft de uitslag de hele
+  // vraagfase staan, mét het juiste antwoord erbij.
+  BM_MY_PICK=idx; BM_MY_PICK_OK=ok; BM_MY_PICK_ROUND=BM_STATE.round?.n;
   [0,1,2,3].forEach(i=>{
     const c=el("bmC"+i);if(!c)return;
     if(i===BM_MY_Q.correctIdx)c.classList.add("correct");
@@ -3700,6 +3794,12 @@ function bmAnswer(idx){
   const fast=ok&&timeLeft>at/2;
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
   let beGain=ok?3:0;
+  // Fout antwoord kost BE (BM_WRONG_BE_PENALTY, battle-data.js). Voorheen
+  // leverde fout simpelweg 0 BE op — geen zichtbare consequentie, en met de
+  // ruime BE-toevoer merkte een leerling er niets van. Kom je hierdoor onder
+  // de prijs van je goedkoopste vaardigheid, dan kun je deze ronde inderdaad
+  // niet aanvallen; dat is de bedoeling.
+  if(!ok) beGain=-(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);
   if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?cls.passive.val:1; }
   // Ciceronianus: opeenvolgende correcte antwoorden in de laatste 5 sec van de timer
   const clutch=ok&&timeLeft<=5;
@@ -3712,7 +3812,7 @@ function bmAnswer(idx){
     const p=s.val()||{};
     const upd={
       answeredRound:round.n||0,
-      be:(p.be||0)+beGain,
+      be:bmClampBE((p.be||0)+beGain),
       correct:ok?(p.correct||0)+1:(p.correct||0),
       wrong:!ok?(p.wrong||0)+1:(p.wrong||0),
       totalResponseMs:(p.totalResponseMs||0)+elapsedMs,
@@ -3784,6 +3884,7 @@ function bmResetMatchLocals(){
   BM_MY_CORRECT=0;BM_MY_WRONG=0;BM_MY_DMG=0;BM_MY_HEAL=0;
   BM_MY_CLUTCH_STREAK=0;BM_MY_CLUTCH_BEST=0;BM_MY_ABILITIES_USED=0;
   BM_MY_CLASS_PICKS=0;BM_MY_DEALT_DMG_ABILITY=false;
+  BM_MY_PICK=null;BM_MY_PICK_OK=false;BM_MY_PICK_ROUND=-1;
   BM_STATE={};BM_TEAMS={};BM_BOSS={};_bmFormHash="";
 }
 
