@@ -699,6 +699,24 @@ wedstrijdgegevens (`state`, `log`, `boss`, `teams` en per speler `be`/`correct`/
 heldenmodus-velden) worden gewist, en `state/status` gaat terug naar `"lobby"`. Naam,
 avatar, eretitel, team, klasse, mastery- en traitvlaggen blijven staan.
 
+**XP-guard: per gevecht, niet per kamer.** `bmAwardBattle()` gebruikt een
+`sessionStorage`-sleutel om te voorkomen dat XP en munten dubbel worden bijgeschreven.
+Die sleutel stond op de spelcode — maar omdat een rematch de kamer (en dus de code)
+hergebruikt, kreeg vanaf het tweede gevecht in dezelfde kamer niemand nog XP of munten.
+`bmDistributeQs()` schrijft daarom bij ronde 1 van elk gevecht een verse
+`state/matchId`, en de guard heet nu `bm_award_{code}_{matchId}`. Ontbreekt `matchId`
+(kamer van vóór deze wijziging), dan valt hij terug op de oude sleutel.
+
+Twee dingen die daarbij horen: `bmAwardBattle()` legt de eigen cijfers (goed/fout,
+schade, heling, winst) vast **vóór** zijn eerste `await`, zodat een snelle
+`bmResetMatchLocals()` de uitkering niet halverwege op nul zet; en `battleResult` toont
+nu altijd een regel — ook als er niets is bijgeschreven — in plaats van een leeg vak.
+
+`battlePlayerGame` vangt de status `"lobby"` ook zelf op, voor het geval een toestel de
+tussenliggende `"finished"`-stand mist (netwerkhikje, scherm op slot): dan blijft het
+niet hangen zonder vragen. Dat toestel loopt de XP van dat ene gevecht wel mis — de
+uitkering is client-side en hangt aan het resultaatscherm.
+
 Aan de leerlingkant luistert `SCREENS.battleResult` op `state/status`: springt die terug
 naar `"lobby"` (of meteen naar `"playing"`), dan gaat de leerling vanzelf terug naar de
 lobby van dezelfde kamer — **zonder opnieuw in te loggen**. `bmResetMatchLocals()` zet
