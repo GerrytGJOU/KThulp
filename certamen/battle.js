@@ -680,7 +680,7 @@ let BM_MY_CLUTCH_STREAK=0, BM_MY_CLUTCH_BEST=0, BM_MY_ABILITIES_USED=0;
 let BM_MY_CLASS_PICKS=0, BM_MY_DEALT_DMG_ABILITY=false;
 
 function bmLeave(){
-  _bmFormHash="";
+  _bmFormHash="";_bmRankRound=-1;_bmRankMap={};
   bmClearTheme();
   BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};BM_BOSS={};
   BM_MY_BE=0;BM_MY_Q=null;BM_MY_CLASS=null;BM_MY_TEAM=null;
@@ -825,7 +825,12 @@ SCREENS.battleFAQ = function(){
       <li><b>Resolutie</b> — alle acties van beide teams worden tegelijk uitgevoerd: schade, schilden en
         helingen verrekend, en het slagveld animeert het resultaat.</li>
     </ol>
-    <div class="note" style="margin-top:6px">Dit herhaalt zich tot een leger verslagen is.</div>`)}
+    <div class="note" style="margin-top:6px">Dit herhaalt zich tot een leger verslagen is.</div>
+    <div class="note" style="margin-top:6px"><b>Je plek op het slagveld.</b> Je klasse bepaalt in welk blok je
+    staat: Hopliet, Voorvechter en Bevelvoerder vooraan, Priester, Genie en Cavalerie in het midden,
+    Boogschutter en Verkenner achteraan. Binnen dat blok staat wie het meest bijdraagt het verst naar
+    voren — eerst telt je aantal goede antwoorden, bij gelijke stand je schade, heling en schild samen.
+    De volgorde wordt tussen twee rondes bijgewerkt.</div>`)}
 
   ${sec("Battle Energy (BE)",false,`
     <div class="note">BE is je actiemunt. Je verdient het door vragen goed te beantwoorden. Elke ability kost
@@ -2319,11 +2324,13 @@ function renderPixelHeroIcon(av, sizePx) {
   return `<span class="pixel-hero-mini" style="width:${sizePx}px;height:${sizePx}px"><span style="transform:scale(${scale})">${inner}</span></span>`;
 }
 
-// Klasse → formatiepositie (voor/midden/achter)
+// Klasse → formatiepositie (voor/midden/achter). Cavalerie staat bewust in het
+// midden en niet achteraan: ruiters vechten van dichtbij, dus ze horen vóór de
+// boogschutters en verkenners te staan.
 const BM_FORM_POS={
   front:["hopliet","spartaan","centurio"],
-  mid:["priester","genie"],
-  back:["boogschutter","cavalerie","verkenner"]
+  mid:["priester","genie","cavalerie"],
+  back:["boogschutter","verkenner"]
 };
 function bmFormPos(clsId){
   for(const[p,ids]of Object.entries(BM_FORM_POS))if(ids.includes(clsId))return p;
@@ -2455,16 +2462,35 @@ function bmHeroHpHTML(p){
 const BM_GRID_ROWS=4;        // max rijen diepte per formatiegroep
 const BM_GRID_ROWS_BOSS=5;   // Boss Battle: tot 32 spelers op één helft
 
-// Verdeelt n leden kolomsgewijs over lanen × rijen: elke laan is een volledige
-// diagonale file (zoals een MV-party), pas daarna begint de volgende laan.
-// row 0 = achterste rij (verst weg), row rows-1 = voorste rij (op de grond).
+// Verdeelt n leden rijsgewijs over lanen × rijen: eerst de voorste rij vullen,
+// dan de rij daarachter, enzovoort. row 0 = de VOORSTE rij (op de grond, het
+// dichtst bij de vijand), row rows-1 = de achterste. Rijsgewijs vullen is nodig
+// voor de rangorde hieronder: zo staan de eerste négen namen uit de sortering
+// ook echt vooraan in beeld, in plaats van verspreid over de lanen.
 function bmGridSlots(n,rowsMax){
   const max=Math.max(1,rowsMax||BM_GRID_ROWS);
   const lanes=Math.max(1,Math.ceil(n/max));
   const rows=Math.max(1,Math.ceil(n/lanes));
   const out=[];
-  for(let i=0;i<n;i++)out.push({lane:Math.floor(i/rows),row:i%rows,rows,lanes});
+  for(let i=0;i<n;i++)out.push({lane:i%lanes,row:Math.floor(i/lanes),rows,lanes});
   return out;
+}
+
+/* Rangorde binnen een formatieblok: wie het meest bijdraagt, staat vooraan.
+   Eerst het aantal goede antwoorden — dat is waar het spel over gaat, en het is
+   klasse-neutraal (een Priester kan net zo goed vooraan komen als een
+   Voorvechter). Bij gelijke stand telt de spelbijdrage: schade + heling +
+   schild. Wil je liever puur op spelbijdrage sorteren, dan is dit de enige plek
+   die je hoeft te wijzigen.
+   De sortering is stabiel, dus bij het begin van een gevecht (iedereen op nul)
+   blijft gewoon de volgorde van binnenkomst staan. De opstelling wordt per
+   ronde opnieuw opgebouwd, dus de rangorde schuift tussen rondes mee — niet
+   midden in een ronde. */
+function bmContribCompare(a,b){
+  const c=(b.correct||0)-(a.correct||0);
+  if(c) return c;
+  return ((b.damage||0)+(b.healing||0)+(b.shielding||0))
+       - ((a.damage||0)+(a.healing||0)+(a.shielding||0));
 }
 
 // Eén poppetje op een rasterplek. --gl = laan-index (breedte), --d = diepte
@@ -2490,6 +2516,15 @@ function bmSlotAvHTML(pid,p,round,gl,d){
 
 function bmFormationHTML(team){
   const round=BM_STATE.round||{};
+  // Rangorde één keer per ronde vastzetten. Tijdens de vraagfase verandert
+  // p.correct bij elk antwoord; zonder deze bevriezing zouden de poppetjes
+  // midden in het antwoorden van plaats wisselen.
+  const rn=round.n||0;
+  if(_bmRankRound!==rn){
+    _bmRankRound=rn; _bmRankMap={};
+    Object.entries(BM_PLAYERS).sort((x,y)=>bmContribCompare(x[1],y[1]))
+      .forEach(([pid],i)=>{_bmRankMap[pid]=i;});
+  }
   const cols={front:[],mid:[],back:[]};
   for(const[pid,p]of Object.entries(BM_PLAYERS))
     if(p.team===team)cols[bmFormPos(p.class)].push([pid,p]);
@@ -2507,11 +2542,12 @@ function bmFormationHTML(team){
   for(const k of ["back","mid","front"]){
     const grp=cols[k];
     if(!grp.length)continue;
+    grp.sort((x,y)=>(_bmRankMap[x[0]]??1e9)-(_bmRankMap[y[0]]??1e9)); // meeste bijdrage vooraan
     const slots=bmGridSlots(grp.length,rowsMax);
     dmax=Math.max(dmax,slots[0].rows-1);
     grp.forEach(([pid,p],i)=>{
       const s=slots[i];
-      out.push(bmSlotAvHTML(pid,p,round,lane0+s.lane,s.rows-1-s.row));
+      out.push(bmSlotAvHTML(pid,p,round,lane0+s.lane,s.row));
     });
     lane0+=slots[0].lanes+0.4;   // luchtje tussen twee blokken
   }
@@ -2772,7 +2808,10 @@ async function bmResolve(roundN){
       for_[mt].teamBE+=fx.teamBE;
       if(isBossFight&&mt==="A"&&(fx.dmg>0||minionDmg>0)) chainContributors.add(pid);
       pUpd[pid]={be:bmClampBE((p.be||0)-(action.cost||0)+(fx.selfBE||0)),
-                 damage:(p.damage||0)+fx.dmg, healing:(p.healing||0)+fx.heal, lockedAction:null,
+                 damage:(p.damage||0)+fx.dmg, healing:(p.healing||0)+fx.heal,
+                 // shielding telt mee in bmContribCompare(): zonder dit zou een
+                 // Hopliet die het hele gevecht schildt altijd achteraan staan.
+                 shielding:(p.shielding||0)+fx.shld, lockedAction:null,
                  ...(usedInspiration?{inspired:false}:{}),
                  ...(minionDmg>0?{minionDamage:(p.minionDamage||0)+minionDmg}:{})};
       events.push({pid,abilityId:abl.id,team:mt,dmg:fx.dmg,heal:fx.heal,shld:fx.shld,
@@ -2793,7 +2832,7 @@ async function bmResolve(roundN){
         // brede-deelname-bonus haalde" — alleen geteld als de bonus ook echt
         // toegepast werd.
         for(const pid of chainContributors){
-          const prev=pUpd[pid]||{be:players[pid].be||0,damage:players[pid].damage||0,healing:players[pid].healing||0,lockedAction:null};
+          const prev=pUpd[pid]||{be:players[pid].be||0,damage:players[pid].damage||0,healing:players[pid].healing||0,shielding:players[pid].shielding||0,lockedAction:null};
           pUpd[pid]={...prev,chainCount:(players[pid].chainCount||0)+1};
         }
       }
@@ -2814,7 +2853,7 @@ async function bmResolve(roundN){
       if(combo.shldRemove)from[mt].shldRemove+=(combo.shldRemove||0);
       for(const[pid]of[pa,pb]){
         const p=players[pid];
-        const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0};
+        const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0,shielding:p.shielding||0};
         pUpd[pid]={...prev,be:bmClampBE(prev.be-(combo.cost||4)),lockedAction:null};
       }
       events.push({type:"combo",comboId:combo.id,team:mt,pids:[pa[0],pb[0]]});
@@ -2828,7 +2867,7 @@ async function bmResolve(roundN){
     for(const[pid,p]of Object.entries(players)){
       const bonus=for_[p.team]?.teamBE||0;
       if(!bonus)continue;
-      const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0,lockedAction:null};
+      const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0,shielding:p.shielding||0,lockedAction:null};
       pUpd[pid]={...prev,be:bmClampBE((prev.be)+bonus)};
     }
 
@@ -3082,7 +3121,7 @@ async function bmNewMatchSamePlayers(){
   for(const pid of Object.keys(BM_PLAYERS)){
     const b="players/"+pid+"/";
     up[b+"be"]=0; up[b+"correct"]=0; up[b+"wrong"]=0;
-    up[b+"damage"]=0; up[b+"healing"]=0;
+    up[b+"damage"]=0; up[b+"healing"]=0; up[b+"shielding"]=0;
     up[b+"answeredRound"]=-1; up[b+"lockedAction"]=null;
     up[b+"currentQ"]=null; up[b+"missed"]=null; up[b+"inspired"]=null;
     up[b+"hp"]=null; up[b+"maxHp"]=null; up[b+"armor"]=null;
@@ -3098,7 +3137,7 @@ async function bmNewMatchSamePlayers(){
   cleanup();
   BM_AWARD_DATA=null;BM_LOG=null;BM_AWARD_STEP=0;
   if(BM_AWARD_TIMER){clearTimeout(BM_AWARD_TIMER);BM_AWARD_TIMER=null;}
-  BM_STATE={status:"lobby"};BM_PAUSED=false;BM_RESOLVING=false;_bmFormHash="";
+  BM_STATE={status:"lobby"};BM_PAUSED=false;BM_RESOLVING=false;_bmFormHash="";_bmRankRound=-1;_bmRankMap={};
   BM_TEAMS={A:{health:base,maxHealth:base},B:{health:base,maxHealth:base}};
   const appEl=document.getElementById("app");
   if(appEl)appEl.classList.remove("bm-host-mode");
@@ -3962,7 +4001,7 @@ function bmResetMatchLocals(){
   BM_MY_CLUTCH_STREAK=0;BM_MY_CLUTCH_BEST=0;BM_MY_ABILITIES_USED=0;
   BM_MY_CLASS_PICKS=0;BM_MY_DEALT_DMG_ABILITY=false;
   BM_MY_PICK=null;BM_MY_PICK_OK=false;BM_MY_PICK_ROUND=-1;
-  BM_STATE={};BM_TEAMS={};BM_BOSS={};_bmFormHash="";
+  BM_STATE={};BM_TEAMS={};BM_BOSS={};_bmFormHash="";_bmRankRound=-1;_bmRankMap={};
 }
 
 /* Telt een getal in beeld op van `from` naar `to`. Staan animaties uit (of is

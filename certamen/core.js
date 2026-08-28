@@ -651,6 +651,10 @@ let DRAFT = { game:"touwtrekken", lang:"la", source:"freq", fromN:1, toN:100, ca
   target:15, penalty:"back", freezeSec:4 };
 let myStreak=0;
 let BM_UNSUBS=[], BM_PHASE_TIMER=null, _bmTicking=false, _bmFormHash="";
+// Rangorde op het slagveld (bmContribCompare in battle.js), één keer per ronde
+// vastgezet. Zou hij bij elke wijziging herberekend worden, dan schoven de
+// poppetjes tijdens de vraagfase heen en weer terwijl leerlingen antwoorden.
+let _bmRankRound=-1, _bmRankMap={};
 let BM_MY_CORRECT=0, BM_MY_WRONG=0, BM_MY_DMG=0, BM_MY_HEAL=0; // voor XP/stats na gevecht
 let BM_AV_EDIT=null;                 // werkkopie in de avatar-editor
 

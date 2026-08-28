@@ -199,9 +199,13 @@ Animaties draaien volledig **client-side**. De enige Firebase-sync is het log-ev
 ```
 [ Achter (ranged) | Midden (support) | Voor (tanks) ]  vs  [ Voor (tanks) | Midden (support) | Achter (ranged) ]
   Boogschutter        Priester           Hopliet              Hopliet          Priester          Boogschutter
-  Cavalerie           Genie              Spartaan             Spartaan         Genie             Cavalerie
-  Verkenner                              Centurio             Centurio                           Verkenner
+  Verkenner           Genie              Voorvechter          Voorvechter      Genie             Verkenner
+                      Cavalerie          Bevelvoerder         Bevelvoerder     Cavalerie
 ```
+
+Cavalerie staat bewust in het **midden** en niet achteraan: ruiters vechten van dichtbij,
+dus ze horen vóór de boogschutters en verkenners. Een speler zonder gekozen klasse valt
+terug op het middenblok.
 
 Team A staat links (front rechts, richting vijand), Team B staat rechts (front links, richting vijand).
 Ook het spelersgrid onder aan het docentscherm en de spelerslijst in de lobby
@@ -223,8 +227,9 @@ uitzonderlijk grote klas met meer dan 16 in één team — dan gaat het raster a
 is geen bovengrens: meer spelers levert simpelweg meer lanen op, die zichzelf
 samenknijpen.
 
-- `bmGridSlots(n, rowsMax)` (`certamen/battle.js`) verdeelt een groep kolomsgewijs
-  over lanen × rijen; elke laan is één volledige diagonale file.
+- `bmGridSlots(n, rowsMax)` (`certamen/battle.js`) verdeelt een groep **rijsgewijs**
+  over lanen × rijen: eerst de voorste rij vullen, dan de rij daarachter. Rij 0 is de
+  voorste rij (op de grond, dichtst bij de vijand).
 - `bmSlotAvHTML()` schrijft per poppetje `--gl` (laan-index) en `--d` (diepte vanaf
   de voorste rij), plus een eigen `--bm-idle`-vertraging zodat de groep niet
   synchroon deint.
@@ -243,6 +248,27 @@ samenknijpen.
 - In Boss Battle krijgt helft A meer breedte (`#bmField.bm-boss #bmFormA{flex:1.7}`);
   de baas zelf staat nog als losse `.bm-fcol`-kolom in `#bmFormB` (zie
   `bmBossSpriteHTML()` in `bossbattle.js`).
+
+### Rangorde binnen een blok: wie bijdraagt, staat vooraan
+
+Binnen een formatieblok bepaalt niet de volgorde van binnenkomst de plek, maar de
+**bijdrage** — `bmContribCompare()`:
+
+1. aantal **goede antwoorden** (`correct`). Dat is waar het spel over gaat, en het is
+   klasse-neutraal: een Priester kan net zo goed vooraan komen als een Voorvechter.
+2. bij gelijke stand: **schade + heling + schild** (`damage + healing + shielding`).
+
+`shielding` wordt daarvoor per speler bijgehouden in `bmResolve()`; zonder dat veld zou
+een Hopliet die het hele gevecht schildt altijd achteraan blijven staan.
+
+De rangorde wordt **één keer per ronde** vastgezet (`_bmRankRound`/`_bmRankMap` in
+`core.js`). Dat moet: tijdens de vraagfase verandert `correct` bij elk antwoord, en zonder
+die bevriezing wisselden de poppetjes van plaats terwijl de klas nog zat te antwoorden.
+Bij gelijke stand is de sortering stabiel, dus aan het begin van een gevecht (iedereen op
+nul) staat gewoon de volgorde van binnenkomst.
+
+Wil je op iets anders sorteren — bijvoorbeeld puur op spelbijdrage — dan is
+`bmContribCompare()` de enige plek die je hoeft te wijzigen.
 
 ### Animatie-overzicht
 
