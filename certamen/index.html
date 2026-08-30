@@ -787,6 +787,29 @@ body.greek .qcard .word{color:#143a5e}
 .bm-player-wrap{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
 .bm-player-field{flex:1 1 auto;min-height:18vh;position:relative;overflow:hidden}
 .bm-player-field #bmField{position:absolute;inset:0;height:100%}
+/* Solo-slagveld (spelerscherm): alleen de eigen held, groot en gecentreerd.
+   Zie bmSoloFieldHTML() in battle.js. */
+#bmField.bm-field-solo #bmFormA{justify-content:center;padding-bottom:6px}
+#bmField.bm-field-solo #bmFormB{display:none}
+/* Schaal op de container, niet op .pixel-hero: de aanval-/treffer-animaties
+   zetten zelf een transform op .pixel-hero en zouden de vergroting anders
+   halverwege weggooien. */
+.bm-av.bm-solo{transform:scale(1.5);transform-origin:center bottom}
+@media(min-width:700px){.bm-av.bm-solo{transform:scale(1.9)}}
+.bm-av.bm-solo .avn{font-size:11px;max-width:120px}
+.bm-av.bm-solo .avncls{font-size:9px;max-width:120px}
+/* SVG-terugval (BM_PIXEL_ART=false): team B kijkt normaal naar links doordat
+   het in #bmFormB staat — in solo staat iedereen in #bmFormA, dus spiegelen we
+   hier expliciet. */
+.bm-av.bm-solo.bm-mirror .bm-sprite{transform:scaleX(-1)}
+/* HP-balken van beide legers boven in het spelerspaneel */
+.bm-mini-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid var(--stone4)}
+.bm-mini-vs{color:var(--muted2);font-size:13px;flex:0 0 auto}
+.bm-mini-hp{flex:1;min-width:0;display:flex;align-items:center;gap:6px}
+.bm-mini-nm{font-size:12px;max-width:78px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:0 1 auto}
+.bm-mini-track{flex:1;min-width:24px;height:10px;border-radius:5px;background:rgba(0,0,0,.45);overflow:hidden}
+.bm-mini-fill{height:100%;width:100%;transform-origin:left center;transition:transform .45s}
+.bm-mini-pct{font-size:12px;color:var(--muted);flex:0 0 auto;min-width:34px;text-align:right}
 .bm-player-panel{flex:0 1 auto;background:rgba(18,14,10,.88);backdrop-filter:blur(10px);border-top:1px solid var(--stone4);overflow-y:auto;padding:10px 12px;max-height:78vh;max-height:78dvh}
 /* Compacte vraagkaart en antwoordknoppen binnen het spelerspaneel, zodat vier
    opties ook op een kleine telefoon zonder scrollen passen. */
@@ -991,13 +1014,13 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <script src="vocab.js?v=20260630s"></script>
-<script src="core.js?v=20260828a"></script>
+<script src="core.js?v=20260829a"></script>
 <script src="net.js?v=20260816c"></script>
 <script src="games.js?v=20260816b"></script>
 <script src="battle-data.js?v=20260828b"></script>
 <script src="bossbattle.js?v=20260828a"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20260829b"></script>
+<script src="battle.js?v=20260829c"></script>
 <script src="map/provinces.js?v=20260712d"></script>
 <script src="totalwar.js?v=20260712g"></script>
 <script src="training.js?v=20260712a"></script>

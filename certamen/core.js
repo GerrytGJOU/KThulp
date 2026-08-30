@@ -655,6 +655,9 @@ let BM_UNSUBS=[], BM_PHASE_TIMER=null, _bmTicking=false, _bmFormHash="";
 // vastgezet. Zou hij bij elke wijziging herberekend worden, dan schoven de
 // poppetjes tijdens de vraagfase heen en weer terwijl leerlingen antwoorden.
 let _bmRankRound=-1, _bmRankMap={};
+// true op het spelerscherm: het slagveld toont dan alleen de eigen held.
+// De volledige opstelling staat op het projectorscherm in de klas.
+let BM_FIELD_SOLO=false;
 let BM_MY_CORRECT=0, BM_MY_WRONG=0, BM_MY_DMG=0, BM_MY_HEAL=0; // voor XP/stats na gevecht
 let BM_AV_EDIT=null;                 // werkkopie in de avatar-editor
 

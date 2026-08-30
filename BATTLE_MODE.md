@@ -563,6 +563,27 @@ Elke browsertab telt als één verbinding. Bij 50 leerlingen + 1 host = 51 verbi
 
 ## Speler-weergave (telefoon/Chromebook)
 
+### Alleen je eigen held op je eigen scherm
+
+Het spelerscherm toonde de vólledige opstelling van beide teams — hetzelfde beeld als
+op de beamer. Op een telefoon is dat niet te lezen, en het was verreweg het zwaarste
+wat er op een Chromebook gebeurde: bij 35 spelers 35 poppetjes van acht spritelagen,
+die bij elk antwoord van elke klasgenoot opnieuw getekend werden.
+
+`BM_FIELD_SOLO` (gezet in `SCREENS.battlePlayerGame`, uit in `battleHostGame`) laat
+`bmBuildBattlefield()` alleen de eigen held tekenen (`bmSoloFieldHTML()`), groot en
+gecentreerd. De hash die bepaalt of er hertekend wordt hangt in die stand **alleen aan
+de eigen speler**, dus een antwoord van een klasgenoot raakt dit toestel niet meer.
+
+Je eigen held blijft wél bewegen: `bmAnimAv()` zoekt de sprite op id, dus aanvallen,
+treffers en helingen spelen gewoon af. Team-brede animaties roepen `bmAnimAv()` voor
+elke speler aan; voor de klasgenoten die hier niet getekend staan is dat een no-op
+(`bmAnimTmp()` en de motion-lookup vangen een ontbrekend element af).
+
+De HP-balken van beide legers staan boven in het paneel, als **percentage** — sinds
+`bmTeamHP()` kunnen de twee maxima ver uit elkaar liggen en zeggen "10000" en "100"
+naast elkaar niets. Onder de 25 % kleurt het percentage rood.
+
 `.bm-player-wrap` is een kolom van `.bm-player-field` (slagveld) en
 `.bm-player-panel` (vraag + antwoordknoppen). Het paneel krijgt de hoogte die het
 nódig heeft (`flex:0 1 auto`) en het slagveld krimpt mee (`flex:1 1 auto`,
