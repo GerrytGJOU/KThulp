@@ -724,6 +724,14 @@ Twee zones:
 1. **Snelle instellingen** (altijd zichtbaar): factie/thema, antwoordtijd, knop "Gevecht aanmaken"
 2. **Geavanceerde instellingen** (inklapbaar via `BM_ADV_OPEN`): legersterkte, adaptief leren, combo's, mastery-bonussen, animaties, geluidseffecten
 
+### Teams verdelen in de lobby
+
+Naast het ⇄-knopje kun je leerlingen **slepen** tussen de twee teamkolommen
+(`bmDragStart`/`bmDragOver`/`bmDropTeam` in `certamen/battle.js`, `bmSetTeam()` schrijft
+`players/{pid}/team`). Bij een hele klas is dat een stuk sneller dan per leerling
+klikken. Het knopje blijft bestaan: HTML5-slepen werkt niet op een aanraakscherm, dus
+op een tablet is dat nog steeds de enige weg.
+
 ### Live dashboard (`battleHostGame`)
 
 - **Avatar-kaarten** (`.bm-pcard`): inline SVG-avatar + naam + klasse per speler, in
@@ -734,6 +742,10 @@ Twee zones:
   drukte een klas van 36 het slagveld tot een streepje samen. Vanaf 20 spelers krijgt het
   grid `.bm-dense` (kleinere kaartjes; de ⇄/✕-knopjes verschijnen dan pas bij hover),
   vanaf 25 spelers worden ook de avatar-iconen kleiner.
+- **Spelcode** (`.bm-cb-code`): blijft tijdens het gevecht linksboven staan, zodat een
+  leerling die te laat is of eruit vloog alsnog kan instappen. `bmDoJoin()` stond dat al
+  toe (late join → kleinste team, huidige ronde overslaan); alleen was de code nergens
+  meer te zien zodra het gevecht liep.
 - **Statuspunt** (`.bm-pdot`): groen = antwoord gegeven · goud = actie vergrendeld · grijs = wacht
 - **Participatiebalk**: visuele voortgangsbalk + "X/Y (Z%)" teller
 - **Controlepaneel** (host-only):
@@ -790,6 +802,27 @@ Twee dingen die daarbij horen: `bmAwardBattle()` legt de eigen cijfers (goed/fou
 schade, heling, winst) vast **vóór** zijn eerste `await`, zodat een snelle
 `bmResetMatchLocals()` de uitkering niet halverwege op nul zet; en `battleResult` toont
 nu altijd een regel — ook als er niets is bijgeschreven — in plaats van een leeg vak.
+
+### Later instappen: XP naar rato
+
+`bmDoJoin()` schrijft `joinRound` op het player-node (1 = vanaf het begin). `bmAwardBattle()`
+rekent daaruit een **aandeel** uit: `(rondes − joinRound + 1) / rondes`. De drie vaste
+bonussen (deelname +5, winst +15, scholar +8 XP; 3 + 10 munten) worden met dat aandeel
+vermenigvuldigd; wat een leerling zélf deed (+2 per goed antwoord, +1 per beantwoorde
+vraag) telt onverkort mee. Zonder dat onderscheid leverde instappen in de laatste ronde
+van een gewonnen gevecht evenveel op als het hele gevecht meespelen.
+
+Ter illustratie, bij een gevecht van 10 rondes met 8 goed en 2 fout:
+
+| Situatie | Aandeel | XP | Munten |
+|---|---|---|---|
+| Hele gevecht, gewonnen | 1,0 | 46 | 13 |
+| Hele gevecht, verloren | 1,0 | 31 | 3 |
+| Instap ronde 8, gewonnen (2 goed, 1 fout) | 0,3 | 13 | 4 |
+| Instap laatste ronde, gewonnen (1 goed) | 0,1 | 5 | 1 |
+
+Er is altijd een ondergrens van 1 XP en 1 munt, zodat instappen nooit helemáál niets
+oplevert. Het resultaatscherm legt de aftrek uit zodra het aandeel onder 1 ligt.
 
 ### XP-winst in beeld (`bmRenderXpGain()`)
 

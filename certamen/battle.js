@@ -300,6 +300,10 @@ async function bmAwardBattle(){
   const won0=BM_STATE.winner===BM_MY_TEAM;
   const myDmg0=BM_MY_DMG||0, myHeal0=BM_MY_HEAL||0, myBe0=BM_MY_BE||0;
   const myTeamHealth0=Math.max(0,BM_TEAMS[BM_MY_TEAM]?.health||0);
+  // Aandeel van het gevecht dat deze speler heeft meegemaakt (1 = vanaf ronde 1).
+  const rounds0=Math.max(1,BM_STATE.round?.n||1);
+  const joined0=Math.max(1,BM_PLAYERS[BM_PID]?.joinRound||1);
+  const share0=Math.min(1,Math.max(0,(rounds0-joined0+1))/rounds0);
   // Dubbele toekenning voorkomen — per GÉVECHT, niet per kamer. De kamer (en
   // dus de spelcode) blijft bestaan als de docent "Nieuw gevecht — zelfde
   // spelers" gebruikt; met de oude sleutel op BM_CODE kreeg iedereen dan vanaf
@@ -324,12 +328,18 @@ async function bmAwardBattle(){
   const isSiegeWin=!!(BM_META?.garrisonProvince)&&won;
   const partySize=Object.values(BM_PLAYERS||{}).filter(p=>p.team==="A").length||1;
   const rageMaxed=!!(BM_BOSS&&BM_BOSS.rageMaxed);
-  // Nieuwe XP-formule: +2/goed, +5/deelname, +1/ronde, +15/winst, +8/scholar
-  const xpEarned=correct*2+5+total*1+(won?15:0)+(isScholar?8:0);
+  // XP-formule: +2/goed, +1/beantwoorde vraag, +5 deelname, +15 winst, +8 scholar.
+  // De eerste twee zijn wat je zélf gedaan hebt en tellen onverkort mee; de drie
+  // vaste bonussen schalen met share0 — wie pas halverwege instapt, krijgt de
+  // halve deelname- en winstbonus. Zonder dat verschil leverde instappen in de
+  // laatste ronde van een gewonnen gevecht evenveel op als het hele gevecht
+  // meespelen, en dat is nu juist het gedrag dat we niet willen belonen.
+  const flatXp=5+(won?15:0)+(isScholar?8:0);
+  const xpEarned=Math.max(1,Math.round(correct*2+total*1+flatXp*share0));
   // Muntbeloning: alleen deelname + winst (geen munten per goed antwoord —
   // dat liep te snel op). Odysseus (legendarisch) geeft +% bonus.
   const legBonus=bmLegendaryOf(BM_IDENT);
-  let coinsEarned=3+(won?10:0);
+  let coinsEarned=Math.max(1,Math.round((3+(won?10:0))*share0));
   if(legBonus?.incomeMult) coinsEarned=Math.round(coinsEarned*(1+legBonus.incomeMult));
 
   // Batch 2 — lokale (device-only) toeval-tracking voor trait_drieling en
@@ -416,6 +426,7 @@ async function bmAwardBattle(){
   // oldXp/newXp en oldCoins/newCoins gaan mee terug zodat het resultaatscherm
   // "van … naar …" kan laten meetellen (bmRenderXpGain).
   return{xpEarned,coinsEarned,oldXp,newXp,oldCoins,newCoins,
+         joinRound:joined0,rounds:rounds0,share:share0,
          legendaryBonus:legBonus,oldLv,newLv,levelUp:newLv.level>oldLv.level,earned};
 }
 async function bmCheckAchievements(ident,result={}){
@@ -847,6 +858,9 @@ SCREENS.battleFAQ = function(){
         helingen verrekend, en het slagveld animeert het resultaat.</li>
     </ol>
     <div class="note" style="margin-top:6px">Dit herhaalt zich tot een leger verslagen is.</div>
+    <div class="note" style="margin-top:6px">Kom je later binnen? Dat kan: de spelcode staat tijdens het gevecht
+    bovenin op het docentscherm. Je doet vanaf de volgende ronde mee. Je deelname- en winstbonus tellen dan
+    naar rato van het aantal rondes dat je meespeelde — je goede antwoorden leveren gewoon volledig XP op.</div>
     <div class="note" style="margin-top:6px"><b>Je plek op het slagveld.</b> Je klasse bepaalt in welk blok je
     staat: Hopliet, Voorvechter en Bevelvoerder vooraan, Priester, Genie en Cavalerie in het midden,
     Boogschutter en Verkenner achteraan. Binnen dat blok staat wie het meest bijdraagt het verst naar
@@ -1001,6 +1015,11 @@ SCREENS.battleFAQ = function(){
     <div class="note" style="margin-top:6px">De ingestelde <b>legersterkte</b> geldt voor een team van vier
     spelers; bij de start wordt hij automatisch omhoog geschaald met de grootte van je klas. Anders zou
     een gevecht met een volle klas al na twee rondes voorbij zijn.</div>
+    <div class="note" style="margin-top:6px">In de lobby verdeel je de teams door leerlingen tussen de twee kolommen te
+    <b>slepen</b> (of met het ⇄-knopje, dat ook op een aanraakscherm werkt). Tijdens het gevecht blijft de
+    <b>spelcode</b> linksboven staan: een leerling die te laat is of eruit vloog kan alsnog instappen. Die krijgt
+    de deelname- en winstbonus naar rato van het aantal rondes dat hij meespeelde; goede antwoorden tellen
+    onverkort mee.</div>
     <div class="note" style="margin-top:6px">Na afloop staat er onder de awards en de statistieken een knop
     <b>↻ Nieuw gevecht — zelfde spelers</b>. Daarmee begin je meteen een nieuwe partij in dezelfde kamer:
     de klas hoeft niet opnieuw in te loggen en houdt naam, avatar, team en klasse.</div>`)}
@@ -1358,6 +1377,7 @@ SCREENS.battleHostLobby = function(){
       ${isBoss?"":`<button class="btn btn-ghost" style="padding:9px 14px" onclick="bmAutoTeams()">⚖ Teams</button>`}
     </div>
     <div class="plist" id="bmPlist"></div>
+    ${isBoss?"":`<div class="note" style="margin-top:8px">Sleep een leerling naar de andere kolom om van team te wisselen — of gebruik het ⇄-knopje (dat werkt ook op een aanraakscherm).</div>`}
   </div>
   <div class="panel">
     <label class="fld">AI-teamgenoten toevoegen</label>
@@ -1399,7 +1419,8 @@ function bmRenderHostLobby(){
   const fac=bmFaction(BM_META?.theme);
   const isBoss=BM_META?.mode==="boss";
   const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
-  const row=([pid,p])=>`<div class="ptag" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:5px 0;border-bottom:0.5px solid var(--stone4)">
+  const row=([pid,p])=>`<div class="ptag${isBoss?"":" bm-draggable"}"${isBoss?"":` draggable="true" ondragstart="bmDragStart(event,${q(pid)})" ondragend="bmDragEnd(event)" title="Sleep naar het andere team"`}
+    style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:5px 0;border-bottom:0.5px solid var(--stone4)">
     <span style="flex:1;display:flex;align-items:center;gap:6px;min-width:0">
       ${p.isBot?`<span style="font-size:16px" title="AI-bot">🤖</span>`:`${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],26)}`}
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name)}</span>
@@ -1420,7 +1441,8 @@ function bmRenderHostLobby(){
     pl.classList.add("bm-lobby-teams");
     const col=(t,nm)=>{
       const mem=entries.filter(([,p])=>p.team===t);
-      return `<div class="bm-lteam side-${t.toLowerCase()}">
+      return `<div class="bm-lteam side-${t.toLowerCase()}"
+        ondragover="bmDragOver(event)" ondragleave="bmDragLeave(event)" ondrop="bmDropTeam(event,'${t}')">
         <div class="bm-lteam-hd">${esc(nm)} <span>${mem.length}</span></div>
         ${mem.map(row).join("")||`<div class="note">Nog niemand</div>`}
       </div>`;
@@ -1435,10 +1457,47 @@ function bmRenderHostLobby(){
   }
   const sb=el("bmSB"); if(sb)sb.disabled=Object.keys(BM_PLAYERS).length<1;
 }
+function bmSetTeam(pid,team){
+  const p=BM_PLAYERS[pid]; if(!p||p.team===team) return;
+  fbDB.ref("rooms/"+BM_CODE+"/players/"+pid+"/team").set(team);
+}
 function bmSwitchTeam(pid){
   const p=BM_PLAYERS[pid]; if(!p) return;
-  const newTeam=p.team==="A"?"B":"A";
-  fbDB.ref("rooms/"+BM_CODE+"/players/"+pid+"/team").set(newTeam);
+  bmSetTeam(pid,p.team==="A"?"B":"A");
+}
+
+/* ---- SLEPEN TUSSEN TEAMS (docentlobby) ----
+   Sneller dan het ⇄-knopje bij een hele klas: pak een leerling op en laat 'm
+   in de andere kolom vallen. Het knopje blijft bestaan — HTML5-slepen werkt
+   niet op een aanraakscherm, dus op een tablet is dat nog steeds de weg. */
+let BM_DRAG_PID=null;
+function bmDragStart(ev,pid){
+  BM_DRAG_PID=pid;
+  try{ ev.dataTransfer.setData("text/plain",pid); ev.dataTransfer.effectAllowed="move"; }catch(e){}
+  ev.currentTarget.classList.add("bm-dragging");
+}
+function bmDragEnd(ev){
+  BM_DRAG_PID=null;
+  ev.currentTarget.classList.remove("bm-dragging");
+  document.querySelectorAll(".bm-drop-hover").forEach(e=>e.classList.remove("bm-drop-hover"));
+}
+function bmDragOver(ev){
+  ev.preventDefault();
+  try{ ev.dataTransfer.dropEffect="move"; }catch(e){}
+  ev.currentTarget.classList.add("bm-drop-hover");
+}
+function bmDragLeave(ev){
+  // Alleen opruimen als de muis de kolom écht verlaat, niet bij elk kind-element
+  if(ev.currentTarget.contains(ev.relatedTarget)) return;
+  ev.currentTarget.classList.remove("bm-drop-hover");
+}
+function bmDropTeam(ev,team){
+  ev.preventDefault();
+  ev.currentTarget.classList.remove("bm-drop-hover");
+  let pid=BM_DRAG_PID;
+  if(!pid){ try{ pid=ev.dataTransfer.getData("text/plain"); }catch(e){} }
+  BM_DRAG_PID=null;
+  if(pid) bmSetTeam(pid,team);
 }
 function bmKickPlayer(pid){
   const p=BM_PLAYERS[pid]; if(!p) return;
@@ -1668,6 +1727,7 @@ SCREENS.battleHostGame = function(){
   if(appEl)appEl.classList.add("bm-host-mode");
   H(`<div class="bm-host-wrap">
     <div class="bm-ctrl-bar">
+      <span class="bm-cb-code" title="Leerlingen kunnen hiermee ook tijdens het gevecht instappen">Code <b>${BM_CODE}</b></span>
       <span id="bmRndLabel" class="bm-cb-round">Ronde —</span>
       <span id="bmPhaseLabel" class="bm-cb-phase">—</span>
       <span id="bmTimer" class="bm-cb-timer">—</span>
@@ -3702,6 +3762,11 @@ async function bmDoJoin(){
   const pd={name:BM_IDENT.name,color:BM_IDENT.color||P.color,avatar:BM_IDENT.avatar||P.avatar,
     team,class:null,be:0,correct:0,wrong:0,damage:0,healing:0,
     answeredRound:isPlaying?(stateSnap.round?.n||0):- 1, // sla huidige ronde over bij late join
+    // Ronde waarin deze speler instapte (1 = vanaf het begin). bmAwardBattle()
+    // schaalt de vaste deelname- en winstbonus hiermee: wie pas in ronde 8 van
+    // 10 binnenkomt, krijgt niet dezelfde beloning als wie er het hele gevecht
+    // bij was. Wat je zélf doet (goede antwoorden) telt onverkort mee.
+    joinRound:isPlaying?(stateSnap.round?.n||1):1,
     lockedAction:null,online:true,
     // Chronica Classica-eretitel (indien gekozen): puur presentatie in de
     // lobby, zie SP_TITLES/spEquippedTitleDisplayName (singleplayer.js).
@@ -4168,6 +4233,7 @@ function bmRenderXpGain(r){
         <span class="bm-gain-new" id="bmGainCoNew">${oldCo}</span>
         <span class="bm-gain-lbl">${esc(coinNm)}</span>
       </div>
+      ${(r.share!==undefined&&r.share<0.999)?`<div class="note" style="margin-top:8px">Je stapte in vanaf ronde ${r.joinRound} van ${r.rounds}, dus je deelname- en winstbonus tellen naar rato. Je goede antwoorden tellen gewoon volledig mee.</div>`:""}
       <div id="bmGainExtra"></div>
     </div>`;
   const dur=(BM_META?.animations===false)?0:1100;

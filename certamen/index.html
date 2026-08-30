@@ -202,6 +202,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--hi-dim);
 .bm-lteam.side-a .bm-lteam-hd{color:var(--teamA)}
 .bm-lteam.side-b .bm-lteam-hd{color:var(--teamB)}
 .bm-lteam .ptag:last-child{border-bottom:none!important}
+/* Slepen tussen de twee teamkolommen (docentlobby). Het ⇄-knopje blijft
+   bestaan voor aanraakschermen, waar HTML5-slepen niet werkt. */
+.ptag.bm-draggable{cursor:grab}
+.ptag.bm-draggable:active{cursor:grabbing}
+.ptag.bm-dragging{opacity:.4}
+.bm-lteam.bm-drop-hover{outline:2px dashed var(--hi);outline-offset:2px;background:rgba(212,175,55,.08)}
 @media(max-width:560px){.plist.bm-lobby-teams{grid-template-columns:1fr}}
 .ptag{display:flex;align-items:center;gap:8px;border-radius:24px;padding:7px 13px 7px 7px;background:var(--stone3);border:1px solid var(--stone4);font-size:15px}
 .ptag .av{width:30px;height:30px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center}
@@ -357,6 +363,13 @@ body.greek .qcard .word{color:#143a5e}
 /* Controls-balk */
 .bm-ctrl-bar{display:flex;align-items:center;gap:6px;padding:6px 12px;flex-shrink:0;background:rgba(18,14,10,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--stone4);z-index:20;flex-wrap:wrap}
 .bm-ctrl-bar .bm-cb-round{font-size:18px;color:var(--muted2);white-space:nowrap;font-weight:600}
+/* Spelcode blijft tijdens het gevecht in beeld, zodat een leerling die te laat
+   is (of eruit vloog) alsnog kan instappen — bmDoJoin() laat dat toe zolang de
+   kamer niet op "finished" staat. */
+.bm-ctrl-bar .bm-cb-code{font-size:15px;color:var(--muted);white-space:nowrap;
+  padding:2px 10px;border-radius:8px;background:rgba(212,175,55,.10);border:1px solid var(--hi-dim)}
+.bm-ctrl-bar .bm-cb-code b{font-family:'Optima',Palatino,serif;font-size:22px;color:var(--hi-bright);
+  letter-spacing:.16em;margin-left:5px}
 .bm-ctrl-bar .bm-cb-phase{font-size:24px;font-weight:700;color:var(--hi-bright);flex:1;text-align:center;letter-spacing:.04em}
 .bm-ctrl-bar .bm-cb-timer{font-size:22px;font-weight:700;color:var(--hi);min-width:50px;text-align:right}
 .bm-ctrl-bar button{padding:4px 9px;border-radius:6px;border:1px solid var(--stone4);background:rgba(255,255,255,.07);color:var(--fg);font-size:12px;cursor:pointer;white-space:nowrap}
@@ -984,7 +997,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="battle-data.js?v=20260828b"></script>
 <script src="bossbattle.js?v=20260828a"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20260828k"></script>
+<script src="battle.js?v=20260829a"></script>
 <script src="map/provinces.js?v=20260712d"></script>
 <script src="totalwar.js?v=20260712g"></script>
 <script src="training.js?v=20260712a"></script>
