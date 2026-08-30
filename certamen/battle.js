@@ -1448,7 +1448,14 @@ function bmRenderHostLobby(){
       </div>`;
     };
     const rest=entries.filter(([,p])=>p.team!=="A"&&p.team!=="B");
-    pl.innerHTML=col("A",fac.teams.A.nm)+col("B",fac.teams.B.nm)
+    // Ongelijke teams zijn príma — de legersterkte compenseert dat (bmTeamHP).
+    // Wel even zeggen, anders lijken de twee HP-balken straks een fout.
+    const nA=entries.filter(([,p])=>p.team==="A").length;
+    const nB=entries.filter(([,p])=>p.team==="B").length;
+    const scheef=(nA&&nB&&nA!==nB)
+      ? `<div class="note" style="grid-column:1/-1;margin-top:2px">Teams zijn ongelijk (${nA} tegen ${nB}). Dat mag: het kleinste team krijgt evenredig méér legersterkte, zodat het gevecht voor allebei even lang duurt.</div>`
+      : "";
+    pl.innerHTML=col("A",fac.teams.A.nm)+col("B",fac.teams.B.nm)+scheef
       +(rest.length?`<div class="bm-lteam side-none">
         <div class="bm-lteam-hd">Nog niet ingedeeld <span>${rest.length}</span></div>
         ${rest.map(row).join("")}
@@ -1509,23 +1516,40 @@ function bmAutoTeams(){
   pids.forEach((pid,i)=>{up[pid+"/team"]=i%2===0?"A":"B";});
   fbDB.ref("rooms/"+BM_CODE+"/players").update(up);
 }
-/* ---- LEGER-HP SCHAALT MEE MET DE KLASGROOTTE ----
+/* ---- LEGER-HP SCHAALT MEE MET HET AANTAL TEGENSTANDERS ----
+   Een leger gaat kapot aan de schade van de óverkant, dus zijn HP hoort te
+   schalen met het aantal spelers dáár — niet met de eigen teamgrootte. Alleen
+   zo kost het beide teams evenveel rondes om verslagen te worden, en maakt het
+   niet uit of de teams even groot zijn.
+
+   Uiterste voorbeeld: 1 speler tegen 100. De honderd delen per ronde honderd
+   keer zoveel schade uit, dus als beide legers evenveel HP hebben is die ene
+   speler kansloos vóór hij één vraag beantwoord heeft. Met deze formule krijgt
+   hij honderd keer zoveel HP als zij, en duurt het aan beide kanten even lang.
+   In de praktijk gaat het om kleinere verschillen — 16 tegen 17 geeft 6 % —
+   maar ook één speler verschil hoort door te tellen.
+
    De HP-chips in de docentinstellingen (50/100/150/200) zijn getuned op een
    team van BM_HP_REF_TEAM spelers: met ~2 aanvallen per ronde à ~8 schade duurt
-   100 HP dan een stuk of zes rondes. Met een hele klas in één gevecht deelt één
-   ronde al meer dan 100 schade uit — dan is het gevecht na twee antwoorden
-   voorbij. We schalen de legersterkte daarom lineair mee met de gemiddelde
-   teamgrootte, zodat een gevecht ongeveer even veel rondes duurt ongeacht hoe
-   groot de klas is. Boss Battle doet dit al langer op zijn eigen manier
-   (N*100 klas-HP), zie bmStartBossGame() hieronder.
-   De door de docent gekozen waarde blijft de ondergrens: kleine groepen
-   krijgen nooit minder HP dan ingesteld. */
+   100 HP dan een stuk of zes rondes.
+
+   De gekozen waarde blijft de ondergrens voor het zwákste leger. Die ondergrens
+   werkt op beide legers tegelijk (dezelfde factor k), anders zou juist het
+   verschil dat we hier proberen te maken weer platgedrukt worden.
+
+   Boss Battle heeft geen tegenstander-team en rekent apart, zie
+   bmStartBossGame() hieronder. */
 const BM_HP_REF_TEAM=4;
-function bmScaledArmyHP(players,base){
+function bmTeamHP(players,base){
   const b=base||100;
-  const n=Object.values(players||{}).filter(p=>p&&p.team).length;
-  const perTeam=Math.max(1,Math.round(n/2));
-  return Math.max(b,Math.round(b*perTeam/BM_HP_REF_TEAM));
+  const all=Object.values(players||{});
+  const nA=Math.max(1,all.filter(p=>p&&p.team==="A").length);
+  const nB=Math.max(1,all.filter(p=>p&&p.team==="B").length);
+  // HP van een team volgt het aantal spelers aan de óverkant
+  const rawA=b*nB/BM_HP_REF_TEAM;
+  const rawB=b*nA/BM_HP_REF_TEAM;
+  const k=Math.max(1,b/Math.min(rawA,rawB));   // ondergrens, verhouding blijft
+  return {A:Math.max(1,Math.round(rawA*k)), B:Math.max(1,Math.round(rawB*k))};
 }
 async function bmStartGame(){
   if(BM_META?.mode==="boss"){await bmStartBossGame();return;}
@@ -1536,11 +1560,11 @@ async function bmStartGame(){
   // Pas híer is het echte spelersaantal bekend (spelers joinen ná bmCreateRoom),
   // dus pas hier kan de legersterkte geschaald worden. .update() i.p.v. .set(),
   // want teams/{A,B}/classes wordt zo meteen door bmDistributeQs() gevuld.
-  const ah=bmScaledArmyHP(BM_PLAYERS,BM_META?.armyHealth);
+  const hp=bmTeamHP(BM_PLAYERS,BM_META?.armyHealth);
   await fbDB.ref("rooms/"+BM_CODE+"/teams").update(
-    {"A/health":ah,"A/maxHealth":ah,"B/health":ah,"B/maxHealth":ah});
-  BM_TEAMS={...BM_TEAMS,A:{...(BM_TEAMS.A||{}),health:ah,maxHealth:ah},
-                        B:{...(BM_TEAMS.B||{}),health:ah,maxHealth:ah}};
+    {"A/health":hp.A,"A/maxHealth":hp.A,"B/health":hp.B,"B/maxHealth":hp.B});
+  BM_TEAMS={...BM_TEAMS,A:{...(BM_TEAMS.A||{}),health:hp.A,maxHealth:hp.A},
+                        B:{...(BM_TEAMS.B||{}),health:hp.B,maxHealth:hp.B}};
   await bmDistributeQs(1);
   go("battleHostGame");
 }
@@ -3402,7 +3426,12 @@ function bmCheckHostTraits(players, winnerTeam, exactTie){
 
 function bmComputeAnalytics(players,log){
   const logEntries=Object.values(log||{}).sort((a,b)=>(a.round||0)-(b.round||0));
-  const maxHP=(BM_TEAMS?.A?.maxHealth||BM_META?.armyHealth||100);
+  // Sinds de legersterkte per team met het aantal tegenstanders meeschaalt
+  // (bmTeamHP), kunnen de twee maxima ver uit elkaar liggen. De grafiek tekent
+  // daarom elk team als percentage van zijn éígen maximum — anders zou de lijn
+  // van het team met weinig HP plat op de bodem liggen.
+  const maxOf=(t,pick)=>(BM_TEAMS?.[t]?.maxHealth)
+    ||Math.max(1,BM_META?.armyHealth||100,...logEntries.map(e=>Math.max(0,pick(e)||0)));
   const hpTimeline=logEntries.map(e=>({round:e.round,hA:Math.max(0,e.newHA||0),hB:Math.max(0,e.newHB||0),part:e.participants||0}));
   const wordMap={};
   players.forEach(p=>Object.entries(p.missed||{}).forEach(([,v])=>{
@@ -3414,23 +3443,29 @@ function bmComputeAnalytics(players,log){
   const totC=players.reduce((s,p)=>s+(p.correct||0),0);
   const totA=players.reduce((s,p)=>s+(p.correct||0)+(p.wrong||0),0);
   const avgAcc=totA>0?Math.round(totC/totA*100):null;
-  return{hpTimeline,topMissed,avgAcc,maxHP,players};
+  const maxA=maxOf("A",e=>e.newHA), maxB=maxOf("B",e=>e.newHB);
+  return{hpTimeline,topMissed,avgAcc,maxA,maxB,players};
 }
 
-function bmHPChart(timeline,maxHP){
+function bmHPChart(timeline,maxA,maxB){
   if(!timeline.length)return`<div class="note" style="text-align:center">Geen rondedata beschikbaar.</div>`;
   const W=320,H=100,n=timeline.length;
+  const mA=Math.max(1,maxA||100), mB=Math.max(1,maxB||maxA||100);
   const px=i=>32+i*(W-42)/Math.max(1,n-1);
-  const py=v=>H-12-(Math.max(0,v)/maxHP)*(H-22);
-  const ptA=timeline.map((e,i)=>px(i)+","+py(e.hA)).join(" ");
-  const ptB=timeline.map((e,i)=>px(i)+","+py(e.hB)).join(" ");
+  // Verticale as = percentage van de eigen legersterkte (zie bmComputeAnalytics)
+  const pyPct=f=>H-12-Math.max(0,Math.min(1,f))*(H-22);
+  const py=f=>pyPct(f);
+  const ptA=timeline.map((e,i)=>px(i)+","+pyPct(e.hA/mA)).join(" ");
+  const ptB=timeline.map((e,i)=>px(i)+","+pyPct(e.hB/mB)).join(" ");
   const step=Math.max(1,Math.floor(n/7));
   const labels=timeline.map((e,i)=>{if(i%step!==0&&i!==n-1)return"";
     return`<text x="${px(i)}" y="${H-2}" fill="var(--muted)" font-size="8" text-anchor="middle">${e.round}</text>`;}).join("");
   const colA="var(--teamA)",colB="var(--teamB)";
   return`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-height:100px" xmlns="http://www.w3.org/2000/svg">
     <line x1="32" y1="${py(0)}" x2="${W-10}" y2="${py(0)}" stroke="var(--stone4)" stroke-width="1"/>
-    <line x1="32" y1="${py(maxHP*.5)}" x2="${W-10}" y2="${py(maxHP*.5)}" stroke="var(--stone4)" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="32" y1="${py(.5)}" x2="${W-10}" y2="${py(.5)}" stroke="var(--stone4)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="28" y="${py(1)+3}" fill="var(--muted)" font-size="8" text-anchor="end">100%</text>
+    <text x="28" y="${py(0)+3}" fill="var(--muted)" font-size="8" text-anchor="end">0%</text>
     <polyline points="${ptA}" fill="none" stroke="${colA}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
     <polyline points="${ptB}" fill="none" stroke="${colB}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
     <rect x="34" y="7" width="12" height="4" fill="${colA}" rx="1"/>
@@ -3620,7 +3655,7 @@ SCREENS.battleHostAnalytics = async function(){
   const an=bmComputeAnalytics(players,BM_LOG);
 
   if(BM_ANALYTICS_TAB==="klas"){
-    const chart=bmHPChart(an.hpTimeline,an.maxHP);
+    const chart=bmHPChart(an.hpTimeline,an.maxA,an.maxB);
     const missedHTML=an.topMissed.length
       ?an.topMissed.map(w=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--stone4)">
           <div><div style="font-size:13px">${esc(w.p)}</div><div style="font-size:11px;color:var(--muted)">${esc(w.a)}</div></div>
@@ -3628,7 +3663,7 @@ SCREENS.battleHostAnalytics = async function(){
       :`<div class="note">Geen gemiste woorden bijgehouden (vereist speeldata uit dit gevecht).</div>`;
     content.innerHTML=`
     <div class="panel">
-      <div class="eyebrow l">HP-verloop per ronde</div>
+      <div class="eyebrow l">HP-verloop per ronde (% van de eigen legersterkte)</div>
       ${chart}
     </div>
     <div class="panel">
