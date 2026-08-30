@@ -468,16 +468,45 @@ In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `s
 ### Legersterktes (instelbaar via host-settings)
 50 / 100 / 150 / 200 HP. Aanpassen: `battleHostSettings`-scherm of de chips in de code.
 
-**Schaalt mee met de klasgrootte.** De gekozen waarde geldt voor een team van
-`BM_HP_REF_TEAM` (= 4) spelers; `bmScaledArmyHP()` vermenigvuldigt 'm bij de
-start van het gevecht met `gemiddelde teamgrootte / 4`. Dat moet: met ~8 schade
-per aanval deelt een team van 16 in één ronde al meer dan 100 schade uit, en
-was een gevecht na twee antwoorden voorbij. Zo duurt een gevecht ongeveer even
-veel rondes, of je nu met 8 of met 36 leerlingen speelt. De gekozen waarde is
-de ondergrens: kleine groepen krijgen nooit minder dan ingesteld. Het schalen
-gebeurt in `bmStartGame()` en niet bij het aanmaken van de kamer, want pas bij
-de start is het echte spelersaantal bekend. Boss Battle deed dit al op zijn
-eigen manier (`N*100` klas-HP, zie BOSS_BATTLE.md).
+**Schaalt mee met het aantal tegenstanders.** Een leger gaat kapot aan de schade
+van de óverkant, dus `bmTeamHP()` schaalt de HP van een team met het aantal
+spelers **daar** — niet met de eigen teamgrootte:
+
+```
+HP(A) = basis × aantal spelers in B / BM_HP_REF_TEAM      (BM_HP_REF_TEAM = 4)
+HP(B) = basis × aantal spelers in A / BM_HP_REF_TEAM
+```
+
+Alleen zo kost het beide teams evenveel rondes om verslagen te worden, ongeacht
+of de teams even groot zijn. Uiterste voorbeeld: 1 speler tegen 100. De honderd
+delen per ronde honderd keer zoveel schade uit; met gelijke HP is die ene speler
+kansloos vóór hij één vraag beantwoord heeft. Met deze formule krijgt hij honderd
+keer zoveel HP en duurt het aan beide kanten even lang. In de praktijk gaat het
+om kleinere verschillen — 16 tegen 17 geeft 6 % — maar ook één speler verschil
+telt door.
+
+De gekozen waarde blijft de **ondergrens voor het zwakste leger**. Die ondergrens
+werkt op beide legers tegelijk (dezelfde factor), anders zou het verschil dat we
+hier juist willen maken weer platgedrukt worden.
+
+| A vs B | HP A | HP B | rondes A | rondes B |
+|---|---|---|---|---|
+| 8 vs 8 | 200 | 200 | gelijk | gelijk |
+| 16 vs 17 | 425 | 400 | gelijk | gelijk |
+| 10 vs 20 | 500 | 250 | gelijk | gelijk |
+| 1 vs 100 | 10000 | 100 | gelijk | gelijk |
+
+Het schalen gebeurt in `bmStartGame()` en niet bij het aanmaken van de kamer,
+want pas bij de start is het echte spelersaantal bekend. Twee gevolgen om te
+kennen: de lobby meldt het als de teams ongelijk zijn (anders lijken de twee
+HP-balken een fout), en de HP-grafiek in de analytics tekent elk team als
+percentage van zijn **eigen** legersterkte — met één gedeelde schaal zou de lijn
+van het team met weinig HP plat op de bodem liggen. Een leerling die halverwege
+instapt versterkt zijn team zonder dat de tegenstander HP bijkrijgt; bij één
+speler op zestien is dat ~6 % en dat laten we lopen.
+
+Boss Battle heeft geen tegenstander-team en rekent apart (`N*100` klas-HP, zie
+BOSS_BATTLE.md).
 
 ### Antwoordtimer
 8 / 10 / 12 / 15 seconden. De "snelheidsbonus" treedt in werking als meer dan de helft van de tijd over is.
