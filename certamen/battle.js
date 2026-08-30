@@ -712,7 +712,7 @@ let BM_MY_CLUTCH_STREAK=0, BM_MY_CLUTCH_BEST=0, BM_MY_ABILITIES_USED=0;
 let BM_MY_CLASS_PICKS=0, BM_MY_DEALT_DMG_ABILITY=false;
 
 function bmLeave(){
-  _bmFormHash="";_bmRankRound=-1;_bmRankMap={};
+  _bmFormHash="";_bmRankRound=-1;_bmRankMap={};BM_FIELD_SOLO=false;
   bmClearTheme();
   BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};BM_BOSS={};
   BM_MY_BE=0;BM_MY_Q=null;BM_MY_CLASS=null;BM_MY_TEAM=null;
@@ -1747,6 +1747,7 @@ function bmAdaptiveHintHTML(){
 /* ---- SCHERM: battleHostGame ---- */
 SCREENS.battleHostGame = function(){
   bmApplyTheme(BM_META?.theme);
+  BM_FIELD_SOLO=false; _bmFormHash="";  // projectorscherm: de hele opstelling
   const appEl=document.getElementById("app");
   if(appEl)appEl.classList.add("bm-host-mode");
   H(`<div class="bm-host-wrap">
@@ -2710,17 +2711,50 @@ function bmFormationHTML(team){
   return `<div class="bm-gridform" style="--gap:${gap};--rg:${rg};--dmax:${dmax}">${out.join("")}</div>`;
 }
 // (Her)bouw het volledige slagveld (aangeroepen na speler-update of ronde-start)
+/* Solo-slagveld voor het spelerscherm: alleen je eigen held. De hele opstelling
+   staat al op het bord in de klas; op een telefoon is die niet te lezen en kost
+   hij het meeste rekenwerk van alles — bij 35 spelers zijn dat 35 poppetjes van
+   acht spritelagen, die bij elk antwoord van elke klasgenoot opnieuw getekend
+   werden. Je eigen held blijft wél bewegen: bmAnimAv() zoekt de sprite op id, dus
+   aanvallen, treffers en helingen spelen gewoon op jouw poppetje af. */
+function bmSoloFieldHTML(){
+  const p=BM_PLAYERS[BM_PID];
+  if(!p)return"";
+  const round=BM_STATE.round||{};
+  const dotCls=p.answeredRound===round.n?"on":(p.lockedAction?"locked":"");
+  const dead=BM_META?.heroMode&&p.isAlive===false;
+  return `<div class="bm-av bm-solo cls-${p.class||""}${p.team==="B"?" bm-mirror":""}${dead?" bm-hero-dead":""}"
+      id="${bmAvId(BM_PID)}" title="${esc(p.name)}">
+      ${renderPixelHero(BM_PID, p, p.team)}
+      <div class="bm-dot ${dotCls}"></div>
+      <div class="avn">${esc(p.name)}</div>
+      <div class="avncls">${esc(bmClsNmThemed(p.class||""))}</div>
+      ${bmHeroHpHTML(p)}
+    </div>`;
+}
+
 function bmBuildBattlefield(){
   const fA=el("bmFormA"),fB=el("bmFormB");
-  // Herbouw formatie als samenstelling of participatiestatus wijzigt
-  const hash=Object.entries(BM_PLAYERS).map(([id,p])=>
-    id+":"+p.class+":"+p.team+":"+(p.answeredRound||0)+":"+(p.lockedAction?"L":"")
-    +":"+(p.hp??"")+":"+(p.armor||0)+":"+(p.isAlive===false?"D":"")+":"+(p.respawnMeter||0)
-  ).sort().join("|");
+  // Op het spelerscherm hangt de hash alleen aan de eigen speler, zodat een
+  // antwoord van een klasgenoot dit toestel niets meer laat hertekenen.
+  const hash=BM_FIELD_SOLO
+    ? (()=>{const p=BM_PLAYERS[BM_PID]||{};
+        return "solo:"+BM_PID+":"+p.class+":"+p.team+":"+(p.answeredRound||0)
+          +":"+(p.lockedAction?"L":"")+":"+(p.hp??"")+":"+(p.armor||0)
+          +":"+(p.isAlive===false?"D":"")+":"+(p.respawnMeter||0);})()
+    : Object.entries(BM_PLAYERS).map(([id,p])=>
+        id+":"+p.class+":"+p.team+":"+(p.answeredRound||0)+":"+(p.lockedAction?"L":"")
+        +":"+(p.hp??"")+":"+(p.armor||0)+":"+(p.isAlive===false?"D":"")+":"+(p.respawnMeter||0)
+      ).sort().join("|");
   if(hash!==_bmFormHash){
     _bmFormHash=hash;
-    if(fA)fA.innerHTML=bmFormationHTML("A");
-    if(fB)fB.innerHTML=BM_META?.mode==="boss"?"":bmFormationHTML("B");
+    if(BM_FIELD_SOLO){
+      if(fA)fA.innerHTML=bmSoloFieldHTML();
+      if(fB)fB.innerHTML="";
+    } else {
+      if(fA)fA.innerHTML=bmFormationHTML("A");
+      if(fB)fB.innerHTML=BM_META?.mode==="boss"?"":bmFormationHTML("B");
+    }
     // Verse DOM-nodes na een rebuild: elke avatar begint in idle. Een motion
     // die vlak hierna via bmAnimAv wordt getriggerd (bv. binnen dezelfde
     // ronde-resolutie) overschrijft dit meteen weer — zelfde volgorde-
@@ -3908,9 +3942,10 @@ function bmPickClass(cid){
 SCREENS.battlePlayerGame = function(){
   bmApplyTheme(BM_META?.theme);
   BM_ANSWERED=false;BM_ACTION_LOCKED=false;BM_MY_BE=0;BM_MY_Q=null;
+  BM_FIELD_SOLO=true; _bmFormHash="";   // alleen de eigen held op dit toestel
   H(`<div class="bm-player-wrap">
     <div class="bm-player-field" style="position:relative">
-      <div id="bmField" class="${bmBgTheme(BM_META?.theme)}" style="${bmArenaBgStyle()}">
+      <div id="bmField" class="${bmBgTheme(BM_META?.theme)} bm-field-solo" style="${bmArenaBgStyle()}">
         <div id="bmFormA" class="bm-form"></div>
         <div id="bmFormB" class="bm-form"></div>
         <div id="bmBfx"></div>
@@ -3957,14 +3992,18 @@ function bmPlayerRender(){
   if(round.n!==BM_TARGET_ROUND){ BM_TARGET_ROUND=round.n; BM_MY_TARGET="boss"; }
   const tl=round.deadline?Math.max(0,Math.round((round.deadline-Date.now())/1000)):0;
   const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
+  // Percentage i.p.v. het absolute getal: de twee legers kunnen sinds bmTeamHP()
+  // een heel verschillende maximale sterkte hebben (het kleinste team krijgt er
+  // meer), en dan zeggen "10000" en "100" naast elkaar niets. Het aandeel wel.
   function miniBar(nm,team,d){
-    const scale=d.maxHealth?Math.max(0,d.health/d.maxHealth):0;
+    const frac=d.maxHealth?Math.max(0,Math.min(1,d.health/d.maxHealth)):0;
     const col=team==="A"?"var(--teamA)":"var(--teamB)";
-    return `<div style="display:flex;align-items:center;gap:8px">
-      <span style="color:${col};font-size:12px;width:36px">${nm}</span>
-      <div style="flex:1;height:8px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
-        <div style="height:100%;width:100%;background:${col};transform:scaleX(${scale});transform-origin:left center;transition:transform .4s"></div>
-      </div><span style="font-size:11px;color:var(--muted)">${d.health}</span>
+    const crit=frac<0.25;
+    return `<div class="bm-mini-hp">
+      <span class="bm-mini-nm" style="color:${col}">${nm}</span>
+      <div class="bm-mini-track">
+        <div class="bm-mini-fill" style="background:${col};transform:scaleX(${frac})"></div>
+      </div><span class="bm-mini-pct"${crit?' style="color:#e07060"':""}>${Math.round(frac*100)}%</span>
     </div>`;
   }
   let content="";
@@ -4087,9 +4126,9 @@ function bmPlayerRender(){
     content=`<div class="panel" style="text-align:center"><div class="note">Resolutie…</div></div>`;
   }
   root.innerHTML=`
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid var(--stone4)">
+  <div class="bm-mini-row">
     ${miniBar(bmTeamNm("A"),"A",tA)}
-    <span style="color:var(--muted2);font-size:11px">vs</span>
+    <span class="bm-mini-vs">⚔</span>
     ${miniBar(bmTeamNm("B"),"B",tB)}
   </div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
