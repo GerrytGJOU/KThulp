@@ -862,7 +862,8 @@ SCREENS.battleFAQ = function(){
     je vaardigheden? Dan staan er drie gratis acties klaar: Steen gooien (kleine aanval), Dekking zoeken
     (klein schild) en Aanmoedigen (+1 BE voor je team). Ze zijn zwakker dan je klasse-vaardigheden, maar je
     zit nooit een ronde werkloos toe te kijken. Een klasse kiezen kan trouwens ook gewoon midden in het
-    gevecht.</div>
+    gevecht — maar wél één keer: eenmaal gekozen speel je dat gevecht als die klasse, anders klopt je
+    klassebeheersing (★) niet meer.</div>
     <div class="note" style="margin-top:6px">Kom je later binnen? Dat kan: de spelcode staat tijdens het gevecht
     bovenin op het docentscherm. Je doet vanaf de volgende ronde mee. Je deelname- en winstbonus tellen dan
     naar rato van het aantal rondes dat je meespeelde — je goede antwoorden leveren gewoon volledig XP op.</div>
@@ -1026,7 +1027,8 @@ SCREENS.battleFAQ = function(){
     de deelname- en winstbonus naar rato van het aantal rondes dat hij meespeelde; goede antwoorden tellen
     onverkort mee. Een leerling zonder klasse (late instapper, of vergeten in de lobby) kan er tijdens het
     gevecht alsnog één kiezen, en heeft ondertussen drie gratis <b>basisacties</b> — niemand zit nog
-    werkloos toe te kijken.</div>
+    werkloos toe te kijken. Een eenmaal gekozen klasse ligt vast voor dat gevecht, zodat de
+    klassebeheersing per klasse blijft kloppen. Boven het slagveld staat per team het aantal spelers.</div>
     <div class="note" style="margin-top:6px">Na afloop staat er onder de awards en de statistieken een knop
     <b>↻ Nieuw gevecht — zelfde spelers</b>. Daarmee begin je meteen een nieuwe partij in dezelfde kamer:
     de klas hoeft niet opnieuw in te loggen en houdt naam, avatar, team en klasse.</div>`)}
@@ -1809,6 +1811,7 @@ SCREENS.battleHostGame = function(){
   const rP=fbDB.ref("rooms/"+BM_CODE+"/players"),fP=rP.on("value",s=>{
     BM_PLAYERS=s.val()||{};
     bmHostUpdatePlayers();
+    bmHostUpdateArmies();   // spelersaantal naast de teamnaam bijwerken
   });
   const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),fT=rT.on("value",s=>{
     BM_TEAMS=s.val()||{};
@@ -1918,14 +1921,21 @@ function bmHostUpdateNote(){
   const bossNote=(typeof bmBossStatusNote==="function")?bmBossStatusNote():"";
   note.textContent=bossNote?(txt?txt+" · "+bossNote:bossNote):txt;
 }
+// Aantal spelers in een team — zichtbaar naast de teamnaam, zodat de klas ziet
+// hoe de teams verdeeld zijn (en waarom de legersterktes verschillen: die
+// schalen met het aantal tegenstanders, zie bmTeamHP).
+function bmTeamCount(team){
+  return Object.values(BM_PLAYERS||{}).filter(p=>p&&p.team===team).length;
+}
 function bmArmyBarHTML(team,nm,d){
   const scale=d.maxHealth?Math.max(0,d.health/d.maxHealth):0;
   const col=team==="A"?"var(--teamA)":"var(--teamB)";
   const crit=d.maxHealth&&d.health/d.maxHealth<0.25?" bm-crit":"";
   const isB=team==="B";
   const origin=isB?"right center":"left center";
+  const n=bmTeamCount(team);
   return `<div>
-    <div class="bm-hp-nm${isB?" side-b":""}" style="color:${col}">${esc(nm)}</div>
+    <div class="bm-hp-nm${isB?" side-b":""}" style="color:${col}">${esc(nm)}<span class="bm-hp-cnt">${n} speler${n===1?"":"s"}</span></div>
     <div class="bm-hp-track">
       <div class="bm-hp-fill${crit}" style="width:100%;background:${col};transform:scaleX(${scale});transform-origin:${origin};will-change:transform"></div>
     </div>
@@ -3901,11 +3911,13 @@ SCREENS.battlePlayerLobby = function(){
     <button class="btn" onclick="go('battleAvatarEdit')" title="Avatar aanpassen" style="flex:0 0 auto;padding:6px 10px">${iconSVG("column",18,"currentColor")}</button>
   </div>
   <div class="panel">
-    <div class="eyebrow l">Kies je klasse</div>
+    <div class="eyebrow l">${myClass?"Je klasse":"Kies je klasse"}</div>
+    ${myClass?`<div class="note" style="margin-bottom:8px">Je speelt dit gevecht als <b>${esc(bmClsName(myClass))}</b>. Die keuze ligt vast — anders klopt je klassebeheersing niet meer.</div>`:""}
     ${BM_CLASSES.map(c=>{
       const sel=myClass===c.id;
+      const uit=myClass&&!sel;   // keuze is gemaakt: de rest is niet meer aan te tikken
       const ms=bmCalcMastery(BM_IDENT?.classHistory?.[c.id]);
-      return `<button class="tile" style="margin-bottom:8px;padding:12px 14px${sel?";border:2px solid "+c.color:""}" onclick="bmPickClass('${c.id}')">
+      return `<button class="tile" style="margin-bottom:8px;padding:12px 14px${sel?";border:2px solid "+c.color:""}${uit?";opacity:.4;pointer-events:none":""}" onclick="bmPickClass('${c.id}')">
         <div style="display:flex;align-items:flex-start;gap:12px">
           ${iconSVG(c.icon,30,c.color)}
           <div style="flex:1">
@@ -3928,8 +3940,18 @@ SCREENS.battlePlayerLobby = function(){
   BM_UNSUBS=[()=>rSt.off("value",fSt)];
 };
 function bmPickClass(cid){
+  // Eenmalige keuze. Wisselen zou de class mastery onbetrouwbaar maken: die
+  // telt rondes, schade en heling per klásse op, en wie halverwege wisselt
+  // schrijft zijn bijdrage aan de verkeerde klasse bij. De keuze staat in
+  // Firebase (players/{pid}/class), dus we kijken dáárnaar en niet alleen naar
+  // de lokale variabele — een herladen tabblad weet het dan nog steeds.
+  const huidig=BM_PLAYERS[BM_PID]?.class||BM_MY_CLASS;
+  if(huidig){
+    if(huidig!==cid) toast("Klasse ligt vast","Je speelt dit gevecht als "+bmClsName(huidig)+". Kiezen kan één keer — anders klopt je klassebeheersing niet meer.");
+    return;
+  }
   BM_MY_CLASS=cid;
-  BM_MY_CLASS_PICKS++; // trait_draaideur: telt elke klassewissel in de lobby
+  BM_MY_CLASS_PICKS++;
   // mastery-bonus: ★★★+ geeft +1 starting BE (minimale spelbonus)
   const ms=bmCalcMastery(BM_IDENT?.classHistory?.[cid]);
   // Verborgen traits: alleen als vlag op het player-node te lezen voor de
@@ -4014,7 +4036,7 @@ function bmPlayerRender(){
     const col=team==="A"?"var(--teamA)":"var(--teamB)";
     const crit=frac<0.25;
     return `<div class="bm-mini-hp">
-      <span class="bm-mini-nm" style="color:${col}">${nm}</span>
+      <span class="bm-mini-nm" style="color:${col}">${nm} <span class="bm-mini-cnt">${bmTeamCount(team)}</span></span>
       <div class="bm-mini-track">
         <div class="bm-mini-fill" style="background:${col};transform:scaleX(${frac})"></div>
       </div><span class="bm-mini-pct"${crit?' style="color:#e07060"':""}>${Math.round(frac*100)}%</span>
