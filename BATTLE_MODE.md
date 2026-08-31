@@ -420,6 +420,36 @@ uitzondering, want dan heeft nog niemand kunnen antwoorden). Zonder die voorwaar
 kwam een fout antwoord alsnog positief uit: −2 BE, en aan het begin van de volgende
 ronde onvoorwaardelijk +4 terug.
 
+### Basisacties: niemand zit werkloos toe te kijken
+
+`BM_BASIC_ACTIONS` (`battle-data.js`) zijn drie gratis acties die iédereen kan doen,
+ook zonder gekozen klasse en met 0 BE:
+
+| Actie | Effect |
+|---|---|
+| Steen gooien | aanval +2 |
+| Dekking zoeken | schild +1 voor het team |
+| Aanmoedigen | +1 BE voor het team |
+
+Ze bestaan om één reden: een leerling zonder klasse (late instapper — die joint met
+`class:null` — of iemand die het in de lobby vergat) kreeg in de actiefase alleen de
+melding "kies eerst een klasse" en kon een heel gevecht lang niets doen. Sinds de
+BE-boete bij een fout antwoord overkwam dat ook spelers **mét** klasse die even niets
+konden betalen.
+
+Ze zijn bewust zwakker dan de goedkoopste klasse-ability (die doet ≥4 schade voor 2-3
+BE), zodat je eigen klasse altijd de betere keuze blijft. Gratis is geen probleem: je
+kunt toch maar één actie per ronde vergrendelen. De teamBE-grens
+(`BM_TEAMBE_ROUND_CAP`) vangt op dat een halve klas tegelijk "Aanmoedigen" kiest.
+
+De opzoeklogica valt in `bmResolve()` en `bmChooseAbility()` terug op deze lijst als de
+speler geen klasse heeft: `cls?.abilities.find(...) || BM_BASIC_ACTIONS.find(...)`.
+`bmCalcAbilityEffect()` kon al zonder `cls` — die leest alleen `cls?.passive`.
+
+Daarnaast kan een leerling **tijdens** het gevecht alsnog een klasse kiezen:
+`bmPickClass()` ververst dan het spelerspaneel in plaats van terug te springen naar de
+lobby, dus vanaf datzelfde moment staan de eigen vaardigheden er.
+
 ### Grenzen aan de BE-economie (`battle-data.js`)
 
 In een gevecht met een hele klas liep de BE volledig uit de hand: leerlingen hadden

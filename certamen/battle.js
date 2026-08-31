@@ -858,6 +858,11 @@ SCREENS.battleFAQ = function(){
         helingen verrekend, en het slagveld animeert het resultaat.</li>
     </ol>
     <div class="note" style="margin-top:6px">Dit herhaalt zich tot een leger verslagen is.</div>
+    <div class="note" style="margin-top:6px"><b>Basisacties.</b> Heb je nog geen klasse gekozen, of te weinig BE voor
+    je vaardigheden? Dan staan er drie gratis acties klaar: Steen gooien (kleine aanval), Dekking zoeken
+    (klein schild) en Aanmoedigen (+1 BE voor je team). Ze zijn zwakker dan je klasse-vaardigheden, maar je
+    zit nooit een ronde werkloos toe te kijken. Een klasse kiezen kan trouwens ook gewoon midden in het
+    gevecht.</div>
     <div class="note" style="margin-top:6px">Kom je later binnen? Dat kan: de spelcode staat tijdens het gevecht
     bovenin op het docentscherm. Je doet vanaf de volgende ronde mee. Je deelname- en winstbonus tellen dan
     naar rato van het aantal rondes dat je meespeelde — je goede antwoorden leveren gewoon volledig XP op.</div>
@@ -1019,7 +1024,9 @@ SCREENS.battleFAQ = function(){
     <b>slepen</b> (of met het ⇄-knopje, dat ook op een aanraakscherm werkt). Tijdens het gevecht blijft de
     <b>spelcode</b> linksboven staan: een leerling die te laat is of eruit vloog kan alsnog instappen. Die krijgt
     de deelname- en winstbonus naar rato van het aantal rondes dat hij meespeelde; goede antwoorden tellen
-    onverkort mee.</div>
+    onverkort mee. Een leerling zonder klasse (late instapper, of vergeten in de lobby) kan er tijdens het
+    gevecht alsnog één kiezen, en heeft ondertussen drie gratis <b>basisacties</b> — niemand zit nog
+    werkloos toe te kijken.</div>
     <div class="note" style="margin-top:6px">Na afloop staat er onder de awards en de statistieken een knop
     <b>↻ Nieuw gevecht — zelfde spelers</b>. Daarmee begin je meteen een nieuwe partij in dezelfde kamer:
     de klas hoeft niet opnieuw in te loggen en houdt naam, avatar, team en klasse.</div>`)}
@@ -2932,7 +2939,11 @@ async function bmResolve(roundN){
       const action=p.lockedAction;
       if(!action||action.type==="combo")continue;
       const cls=BM_CLASSES.find(c=>c.id===p.class);
-      const abl=cls?.abilities.find(a=>a.id===action.abilityId);
+      // Basisacties (BM_BASIC_ACTIONS) staan los van een klasse: een speler
+      // zonder gekozen klasse heeft hier geen `cls`, en dan moet de actie nog
+      // steeds gevonden worden.
+      const abl=cls?.abilities.find(a=>a.id===action.abilityId)
+             || BM_BASIC_ACTIONS.find(a=>a.id===action.abilityId);
       if(!abl)continue;
       const mt=p.team,et=mt==="A"?"B":"A";
       const fx=bmCalcAbilityEffect(p,cls,abl);
@@ -3935,7 +3946,10 @@ function bmPickClass(cid){
     traitPacifist:achs.includes("trait_pacifist"),
   });
   toast("Klasse gekozen",bmClsName(cid)+(ms>=3?" · +1 BE mastery-bonus":""));
-  SCREENS.battlePlayerLobby();
+  // Ook bruikbaar tijdens een lopend gevecht (late instappers kiezen daar hun
+  // klasse) — dan het spelerspaneel verversen i.p.v. terug naar de lobby.
+  if(_screen==="battlePlayerGame") bmPlayerRender();
+  else SCREENS.battlePlayerLobby();
 }
 
 /* ---- SCHERM: battlePlayerGame ---- */
@@ -4065,7 +4079,18 @@ function bmPlayerRender(){
     } else {
       const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
       if(!cls){
-        content=`<div class="panel"><div class="note warn">Kies eerst een klasse in de lobby voordat je een actie kunt uitvoeren.</div></div>`;
+        // Geen klasse gekozen — late instapper, of iemand die het in de lobby
+        // vergat. Die stond hier voorheen met een lege melding en kon een heel
+        // gevecht lang niets doen. Nu: alsnog een klasse kiezen (dat mag ook
+        // midden in een gevecht) én meteen de basisacties, zodat deze ronde
+        // niet verloren is.
+        content=`<div class="panel">
+          <div class="note" style="margin-bottom:8px">Je hebt nog geen klasse gekozen. Kies er hieronder één — dat kan gewoon nu — of doe deze ronde een basisactie.</div>
+          <div class="chips" style="margin-bottom:10px">
+            ${BM_CLASSES.map(c=>`<button class="chip" style="border-color:${c.color}66" onclick="bmPickClass('${c.id}')">${esc(c.nm)}</button>`).join("")}
+          </div>
+          ${bmBasicActionsHTML()}
+        </div>`;
       } else {
         const teamClasses=BM_TEAMS[BM_MY_TEAM||"A"]?.classes||[];
         const availCombos=BM_META?.combos===false?[]:BM_COMBOS.filter(combo=>
@@ -4095,8 +4120,9 @@ function bmPlayerRender(){
             const goedkoopste=Math.min(...cls.abilities.map(a=>bmGetAbilityCost(cls,a)));
             if(BM_MY_BE>=goedkoopste) return "";
             const foutDezeRonde=BM_MY_PICK_ROUND===round.n&&BM_MY_PICK!==null&&!BM_MY_PICK_OK;
-            return `<div class="bm-fb bad" style="margin-bottom:8px">⚠️ Te weinig BE voor een actie${foutDezeRonde?" — je antwoord was fout":""}.<br>
-              <span>Je hebt ${BM_MY_BE} BE, je goedkoopste vaardigheid kost ${goedkoopste}. Beantwoord de volgende vraag goed.</span></div>`;
+            return `<div class="bm-fb bad" style="margin-bottom:8px">⚠️ Te weinig BE voor je vaardigheden${foutDezeRonde?" — je antwoord was fout":""}.<br>
+              <span>Je hebt ${BM_MY_BE} BE, je goedkoopste vaardigheid kost ${goedkoopste}. Je kunt wel een basisactie doen.</span></div>
+              ${bmBasicActionsHTML("Basisacties — gratis")}`;
           })()}
           ${inspired?`<div class="note" style="color:var(--hi-bright);margin-bottom:6px">⚡ Geïnspireerd! Je volgende aanval doet extra schade.</div>`:""}
           ${targetPicker}
@@ -4224,18 +4250,30 @@ function bmAnswer(idx){
     fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update(upd);
   });
 }
+/* Knoppenrij met de basisacties (BM_BASIC_ACTIONS, battle-data.js). Iedereen
+   kan ze doen, ze kosten niets en ze zijn zwak — ze bestaan alleen zodat
+   niemand een ronde werkloos toekijkt. */
+function bmBasicActionsHTML(kop){
+  return `<div class="note" style="margin-bottom:4px">${esc(kop||"Basisacties — gratis, voor iedereen")}</div>
+    ${BM_BASIC_ACTIONS.map(a=>`
+      <button class="tile" style="margin-bottom:6px;padding:10px 13px" onclick="bmChooseAbility('${a.id}',0)">
+        <div style="font-size:13px;font-weight:700">${esc(a.nm)} <span class="pill">gratis</span></div>
+        <div class="note" style="margin-top:2px">${esc(a.desc)}</div>
+      </button>`).join("")}`;
+}
 function bmSetTarget(id){ BM_MY_TARGET=id; bmPlayerRender(); }
 function bmChooseAbility(abilityId,cost){
   if(BM_ACTION_LOCKED||BM_MY_BE<cost)return;
   BM_ACTION_LOCKED=true;
   BM_MY_ABILITIES_USED++;
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
-  const abl=cls?.abilities.find(a=>a.id===abilityId);
+  const abl=cls?.abilities.find(a=>a.id===abilityId)
+         || BM_BASIC_ACTIONS.find(a=>a.id===abilityId);
   if(abl&&BM_DMG_TYPES.includes(abl.type)) BM_MY_DEALT_DMG_ABILITY=true; // trait_pacifist
   // Minion Summon (BOSS_BATTLE.md §4): doelwit meegeven zolang er handlangers
   // leven; buiten Boss Battle of zonder handlangers is "boss" het enige zinnige.
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({lockedAction:{type:"ability",abilityId,cost,target:BM_MY_TARGET}});
-  toast("Actie vergrendeld",cls?.abilities.find(a=>a.id===abilityId)?.nm||abilityId);
+  toast("Actie vergrendeld",abl?.nm||abilityId);
   bmPlayerRender();
 }
 function bmChooseCombo(comboId,cost){
