@@ -420,6 +420,26 @@ uitzondering, want dan heeft nog niemand kunnen antwoorden). Zonder die voorwaar
 kwam een fout antwoord alsnog positief uit: −2 BE, en aan het begin van de volgende
 ronde onvoorwaardelijk +4 terug.
 
+### Klassekeuze is eenmalig
+
+`bmPickClass()` weigert een tweede keuze: wie eenmaal een klasse heeft, speelt dat
+gevecht als die klasse. De reden is de **class mastery** — die telt rondes, schade en
+heling per klásse op (`identities/{klas}/{lcode}/classHistory`), en wie halverwege
+wisselt schrijft zijn bijdrage aan de verkeerde klasse bij. De guard leest de stand uit
+`BM_PLAYERS[BM_PID].class` (dus uit Firebase) en niet alleen uit de lokale variabele,
+zodat een herladen tabblad de keuze ook nog kent. In de lobby worden de andere
+klassetegels grijs en niet-aantikbaar zodra er gekozen is.
+
+Twee gevolgen om te kennen:
+
+- Bij **"Nieuw gevecht — zelfde spelers"** blijft de klasse staan (niemand hoeft
+  opnieuw te kiezen), maar daardoor kan een leerling ook niet van klasse wisselen voor
+  dat volgende gevecht. Wil je dat wél, dan is het één regel in
+  `bmNewMatchSamePlayers()`: `up[b+"class"]=null` erbij.
+- Het geheime eerbewijs **"Draaideur"** (6× van klasse wisselen vóór het gevecht,
+  `core.js`) is hiermee onhaalbaar geworden. Het staat nog in `ACHIEVEMENTS_DEF`;
+  verwijderen of herbestemmen is een aparte keuze.
+
 ### Basisacties: niemand zit werkloos toe te kijken
 
 `BM_BASIC_ACTIONS` (`battle-data.js`) zijn drie gratis acties die iédereen kan doen,
@@ -822,6 +842,10 @@ op een tablet is dat nog steeds de enige weg.
   drukte een klas van 36 het slagveld tot een streepje samen. Vanaf 20 spelers krijgt het
   grid `.bm-dense` (kleinere kaartjes; de ⇄/✕-knopjes verschijnen dan pas bij hover),
   vanaf 25 spelers worden ook de avatar-iconen kleiner.
+- **Spelersaantal per team** (`.bm-hp-cnt`): naast elke teamnaam in de HP-balk, en in
+  compacte vorm ook op het spelerscherm. Maakt meteen zichtbaar waarom de twee
+  legersterktes verschillen — die schalen met het aantal tegenstanders (`bmTeamHP`).
+  De spelers-listener werkt de balken nu ook bij, niet alleen de teams-listener.
 - **Spelcode** (`.bm-cb-code`): blijft tijdens het gevecht linksboven staan, zodat een
   leerling die te laat is of eruit vloog alsnog kan instappen. `bmDoJoin()` stond dat al
   toe (late join → kleinste team, huidige ronde overslaan); alleen was de code nergens
