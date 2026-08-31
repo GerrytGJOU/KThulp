@@ -106,6 +106,22 @@ const BM_BE_ROUND_BONUS_CAP = 4;    // max passief BE per ronde (synergie + pass
 const BM_TEAMBE_ROUND_CAP = 4;      // max BE dat team_be-abilities + combo's samen per ronde aan een teamgenoot geven
 const BM_WRONG_BE_PENALTY = 2;      // BE die je kwijtraakt bij een fout antwoord (nooit onder 0)
 
+/* ---- CONFIGURATIETABEL: BASISACTIES ----
+   Acties die iédereen kan doen, ook zonder gekozen klasse en met 0 BE. Ze
+   bestaan om één reden: niemand zit een ronde werkloos toe te kijken. Dat
+   overkwam leerlingen die te laat instapten (die joinen zonder klasse) of die
+   in de lobby vergaten te kiezen — voor hen was er letterlijk geen knop. En het
+   overkomt sinds de BE-boete ook spelers mét klasse die even niets kunnen
+   betalen.
+   Ze zijn bewust zwak: minder dan de goedkoopste klasse-ability, zodat kiezen
+   voor je eigen klasse altijd beter blijft. Gratis, dus er valt niets af te
+   wegen — je kunt er toch maar één actie per ronde uitvoeren. */
+const BM_BASIC_ACTIONS = [
+  { id:"basic_worp",   nm:"Steen gooien",   tier:"basic", cost:0, desc:"Kleine aanval (+2)",              type:"attack",       dmg:2 },
+  { id:"basic_dekking",nm:"Dekking zoeken", tier:"basic", cost:0, desc:"Klein schild voor je team (+1)",  type:"team_shield",  shld:1 },
+  { id:"basic_moed",   nm:"Aanmoedigen",    tier:"basic", cost:0, desc:"+1 BE voor je hele team",         type:"team_be",      teamBE:1 },
+];
+
 /* ---- CONFIGURATIETABEL: SYNERGIE ---- */
 // Flat BE-bonus per speler per ronde op basis van klasdiversiteit binnen het team.
 const BM_SYNERGY = [
