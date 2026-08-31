@@ -420,25 +420,24 @@ uitzondering, want dan heeft nog niemand kunnen antwoorden). Zonder die voorwaar
 kwam een fout antwoord alsnog positief uit: −2 BE, en aan het begin van de volgende
 ronde onvoorwaardelijk +4 terug.
 
-### Klassekeuze is eenmalig
+### Klassekeuze: vrij in de lobby, vast tijdens het gevecht
 
-`bmPickClass()` weigert een tweede keuze: wie eenmaal een klasse heeft, speelt dat
-gevecht als die klasse. De reden is de **class mastery** — die telt rondes, schade en
-heling per klásse op (`identities/{klas}/{lcode}/classHistory`), en wie halverwege
-wisselt schrijft zijn bijdrage aan de verkeerde klasse bij. De guard leest de stand uit
+In de **lobby** mag een leerling zo vaak van klasse wisselen als hij wil. Zodra het
+gevecht **loópt** ligt de keuze vast — `bmPickClass()` weigert dan een wissel. De reden
+is de **class mastery**: die telt rondes, schade en heling per klásse op
+(`identities/{klas}/{lcode}/classHistory`), en wie halverwege een gevecht wisselt
+schrijft zijn bijdrage aan de verkeerde klasse bij.
+
+Wie op dat moment nog **géén** klasse heeft — vergeten in de lobby, of later ingestroomd
+— krijgt tijdens het gevecht precies één keuze, naast de basisacties hieronder.
+
+De guard is `_screen==="battlePlayerGame" && huidige klasse`. De huidige stand komt uit
 `BM_PLAYERS[BM_PID].class` (dus uit Firebase) en niet alleen uit de lokale variabele,
-zodat een herladen tabblad de keuze ook nog kent. In de lobby worden de andere
-klassetegels grijs en niet-aantikbaar zodra er gekozen is.
+zodat een herladen tabblad de keuze ook kent.
 
-Twee gevolgen om te kennen:
-
-- Bij **"Nieuw gevecht — zelfde spelers"** blijft de klasse staan (niemand hoeft
-  opnieuw te kiezen), maar daardoor kan een leerling ook niet van klasse wisselen voor
-  dat volgende gevecht. Wil je dat wél, dan is het één regel in
-  `bmNewMatchSamePlayers()`: `up[b+"class"]=null` erbij.
-- Het geheime eerbewijs **"Draaideur"** (6× van klasse wisselen vóór het gevecht,
-  `core.js`) is hiermee onhaalbaar geworden. Het staat nog in `ACHIEVEMENTS_DEF`;
-  verwijderen of herbestemmen is een aparte keuze.
+Bij **"Nieuw gevecht — zelfde spelers"** gaat iedereen terug naar de lobby met zijn
+klasse nog ingevuld: niemand hóéft opnieuw te kiezen, maar wie wil kan er vóór de start
+alsnog een andere kiezen.
 
 ### Basisacties: niemand zit werkloos toe te kijken
 

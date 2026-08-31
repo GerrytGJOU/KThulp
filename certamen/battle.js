@@ -861,9 +861,9 @@ SCREENS.battleFAQ = function(){
     <div class="note" style="margin-top:6px"><b>Basisacties.</b> Heb je nog geen klasse gekozen, of te weinig BE voor
     je vaardigheden? Dan staan er drie gratis acties klaar: Steen gooien (kleine aanval), Dekking zoeken
     (klein schild) en Aanmoedigen (+1 BE voor je team). Ze zijn zwakker dan je klasse-vaardigheden, maar je
-    zit nooit een ronde werkloos toe te kijken. Een klasse kiezen kan trouwens ook gewoon midden in het
-    gevecht — maar wél één keer: eenmaal gekozen speel je dat gevecht als die klasse, anders klopt je
-    klassebeheersing (★) niet meer.</div>
+    zit nooit een ronde werkloos toe te kijken. Heb je nog geen klasse, dan kun je er ook midden in het
+    gevecht één kiezen — daarna ligt die vast tot het gevecht voorbij is. In de lobby mag je zo vaak
+    wisselen als je wilt.</div>
     <div class="note" style="margin-top:6px">Kom je later binnen? Dat kan: de spelcode staat tijdens het gevecht
     bovenin op het docentscherm. Je doet vanaf de volgende ronde mee. Je deelname- en winstbonus tellen dan
     naar rato van het aantal rondes dat je meespeelde — je goede antwoorden leveren gewoon volledig XP op.</div>
@@ -1027,8 +1027,9 @@ SCREENS.battleFAQ = function(){
     de deelname- en winstbonus naar rato van het aantal rondes dat hij meespeelde; goede antwoorden tellen
     onverkort mee. Een leerling zonder klasse (late instapper, of vergeten in de lobby) kan er tijdens het
     gevecht alsnog één kiezen, en heeft ondertussen drie gratis <b>basisacties</b> — niemand zit nog
-    werkloos toe te kijken. Een eenmaal gekozen klasse ligt vast voor dat gevecht, zodat de
-    klassebeheersing per klasse blijft kloppen. Boven het slagveld staat per team het aantal spelers.</div>
+    werkloos toe te kijken. In de lobby mogen leerlingen onbeperkt van klasse wisselen; zodra het gevecht
+    lóópt ligt de keuze vast, zodat de klassebeheersing per klasse blijft kloppen. Boven het slagveld staat
+    per team het aantal spelers.</div>
     <div class="note" style="margin-top:6px">Na afloop staat er onder de awards en de statistieken een knop
     <b>↻ Nieuw gevecht — zelfde spelers</b>. Daarmee begin je meteen een nieuwe partij in dezelfde kamer:
     de klas hoeft niet opnieuw in te loggen en houdt naam, avatar, team en klasse.</div>`)}
@@ -3911,13 +3912,12 @@ SCREENS.battlePlayerLobby = function(){
     <button class="btn" onclick="go('battleAvatarEdit')" title="Avatar aanpassen" style="flex:0 0 auto;padding:6px 10px">${iconSVG("column",18,"currentColor")}</button>
   </div>
   <div class="panel">
-    <div class="eyebrow l">${myClass?"Je klasse":"Kies je klasse"}</div>
-    ${myClass?`<div class="note" style="margin-bottom:8px">Je speelt dit gevecht als <b>${esc(bmClsName(myClass))}</b>. Die keuze ligt vast — anders klopt je klassebeheersing niet meer.</div>`:""}
+    <div class="eyebrow l">Kies je klasse</div>
+    <div class="note" style="margin-bottom:8px">${myClass?`Je speelt als <b>${esc(bmClsName(myClass))}</b>. Wisselen mag, zolang het gevecht nog niet begonnen is.`:"Wisselen mag zo vaak je wilt — zodra het gevecht begint ligt je keuze vast."}</div>
     ${BM_CLASSES.map(c=>{
       const sel=myClass===c.id;
-      const uit=myClass&&!sel;   // keuze is gemaakt: de rest is niet meer aan te tikken
       const ms=bmCalcMastery(BM_IDENT?.classHistory?.[c.id]);
-      return `<button class="tile" style="margin-bottom:8px;padding:12px 14px${sel?";border:2px solid "+c.color:""}${uit?";opacity:.4;pointer-events:none":""}" onclick="bmPickClass('${c.id}')">
+      return `<button class="tile" style="margin-bottom:8px;padding:12px 14px${sel?";border:2px solid "+c.color:""}" onclick="bmPickClass('${c.id}')">
         <div style="display:flex;align-items:flex-start;gap:12px">
           ${iconSVG(c.icon,30,c.color)}
           <div style="flex:1">
@@ -3940,14 +3940,17 @@ SCREENS.battlePlayerLobby = function(){
   BM_UNSUBS=[()=>rSt.off("value",fSt)];
 };
 function bmPickClass(cid){
-  // Eenmalige keuze. Wisselen zou de class mastery onbetrouwbaar maken: die
-  // telt rondes, schade en heling per klásse op, en wie halverwege wisselt
-  // schrijft zijn bijdrage aan de verkeerde klasse bij. De keuze staat in
-  // Firebase (players/{pid}/class), dus we kijken dáárnaar en niet alleen naar
-  // de lokale variabele — een herladen tabblad weet het dan nog steeds.
+  // In de lobby mag je zo vaak wisselen als je wilt. Zodra het gevecht loópt
+  // ligt de keuze vast: class mastery telt rondes, schade en heling per klásse
+  // op, en wie halverwege wisselt schrijft zijn bijdrage aan de verkeerde
+  // klasse bij. Wie op dat moment nog géén klasse heeft — vergeten in de lobby,
+  // of later ingestroomd — krijgt dus precies één keuze.
+  // De huidige stand komt uit Firebase (players/{pid}/class) en niet alleen uit
+  // de lokale variabele, zodat een herladen tabblad 'm ook kent.
+  const inGevecht=_screen==="battlePlayerGame";
   const huidig=BM_PLAYERS[BM_PID]?.class||BM_MY_CLASS;
-  if(huidig){
-    if(huidig!==cid) toast("Klasse ligt vast","Je speelt dit gevecht als "+bmClsName(huidig)+". Kiezen kan één keer — anders klopt je klassebeheersing niet meer.");
+  if(inGevecht&&huidig){
+    if(huidig!==cid) toast("Klasse ligt vast","Je speelt dit gevecht als "+bmClsName(huidig)+". Wisselen kan alleen in de lobby, vóór het gevecht begint.");
     return;
   }
   BM_MY_CLASS=cid;
