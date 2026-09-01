@@ -662,6 +662,13 @@ function bmRespawnProgress(p){
 /* ---- FACTIE / THEMA HELPERS ---- */
 let BM_THEME_SAVED=[]; // opgeslagen originele CSS-var-waarden voor herstel bij bmLeave
 function bmFaction(id){ return BM_FACTIONS.find(f=>f.id===id)||BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]; }
+// Novelty-verval tegengaan: de voorgestelde factie wisselt per kalenderweek
+// i.p.v. altijd dezelfde default te tonen. Docent kan nog altijd overschrijven
+// via de dropdown in battleHostSettings; dit bepaalt alleen het startpunt.
+function bmWeekFactionId(){
+  const wk=Math.floor(Date.now()/(7*24*3600*1000));
+  return BM_FACTIONS[wk%BM_FACTIONS.length].id;
+}
 function bmApplyTheme(themeId){
   bmClearTheme(); // herstel eerst eventueel vorig thema
   const f=bmFaction(themeId);
@@ -1059,8 +1066,8 @@ SCREENS.battleIdentity = function(){
     <input id="bmKlas" type="text" placeholder="bv. LATIJN3B" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
     <label class="fld" style="margin-top:12px">Leerlingcode (zelf gekozen)</label>
     <input id="bmLcode" type="text" placeholder="bv. marcus42">
-    <label class="fld" style="margin-top:12px">Weergavenaam</label>
-    <input id="bmNaam" type="text" placeholder="bv. Marcus">
+    <label class="fld" style="margin-top:12px">Weergavenaam <small style="text-transform:none">(optioneel — leeg = klasse+avatar, bv. "Hopliet 42")</small></label>
+    <input id="bmNaam" type="text" placeholder="bv. Marcus of leeg laten">
   </div>
   <div id="bmIdentErr" class="note warn" style="display:none;margin-bottom:10px"></div>
   <button class="btn btn-gold btn-block lg" onclick="bmIdentLogin()">Aanmelden</button>
@@ -1079,8 +1086,11 @@ async function bmIdentDoLogin(klas,lcode,name){
   initFirebase(); // beste-effort; bmIdentGet/Create werken ook offline (lokale fallback)
   klas=(klas||"").trim().toUpperCase();
   lcode=(lcode||"").trim().toLowerCase();
-  name=(name||"").trim();
-  if(!klas||!lcode||!name) return{ok:false,error:"Vul alle velden in."};
+  // Weergavenaam is optioneel: leeg veld levert een klasse+avatar-badge op
+  // (bv. "Hopliet 42") i.p.v. verplichte vrije tekst — voorkomt dat leerlingen
+  // gedwongen worden een herkenbare of ongepaste naam te typen.
+  name=(name||"").trim()||bmAutoName();
+  if(!klas||!lcode) return{ok:false,error:"Vul klascode en leerlingcode in."};
   try{
     let data=await bmIdentGet(klas,lcode);
     const isNew=!data;
@@ -1107,6 +1117,12 @@ async function bmIdentDoLogin(klas,lcode,name){
     bmIdentSave({klascode:klas,leerlingcode:lcode,...data,name:effName});
     return{ok:true,ident:BM_IDENT};
   }catch(e){console.error("bmIdentDoLogin fout:",e);return{ok:false,error:"Aanmelden mislukt: "+(e?.message||e||"onbekende fout")};}
+}
+// Genereert een badge uit een willekeurige klassenaam (BM_CLASSES, dezelfde
+// lijst als de klassekeuze in het gevecht zelf) + volgnummer, als vervanging
+// voor een verplichte vrije-tekst weergavenaam.
+function bmAutoName(){
+  return pick(BM_CLASSES).nm+" "+(1+rand(99));
 }
 async function bmIdentLogin(){
   const klas=el("bmKlas")?.value, lcode=el("bmLcode")?.value, name=el("bmNaam")?.value;
@@ -1201,7 +1217,7 @@ SCREENS.battleHostSettings = function(){
   // verborgen garnizoen, nooit een keuze van de docent.
   const isSiege=!!BM_META.garrisonProvince;
   if(isSiege){ BM_META.mode="boss"; BM_META.bossId="garrison"; }
-  const th=BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id;
+  const th=BM_META.theme||bmWeekFactionId();
   if(!BM_META.theme)BM_META.theme=th;
   const mode=BM_META.mode||"pvp";
   if(!BM_META.mode)BM_META.mode=mode;
@@ -1333,7 +1349,7 @@ async function bmCreateRoom(){
   const meta={game:"battle",lang:DRAFT.lang,source:DRAFT.source,fromN:DRAFT.fromN,toN:DRAFT.toN,
     cat:DRAFT.cat,customText:DRAFT.customText||"",armyHealth:ah,
     answerTimer:BM_META.answerTimer||10,adaptive:BM_META.adaptive!==false,
-    theme:BM_META.theme||(BM_FACTIONS.find(f=>f.default)||BM_FACTIONS[0]).id,
+    theme:BM_META.theme||bmWeekFactionId(),
     background:BM_META.background||"geen",
     animations:BM_META.animations!==false,
     combos:BM_META.combos!==false,
@@ -1671,7 +1687,7 @@ async function bmDistributeQs(roundN){
     // de passieve bonus onvoorwaardelijk werd uitgekeerd. Ronde 1 is de
     // uitzondering: dan heeft nog niemand kunnen antwoorden.
     if(roundN>1&&!(p.lastAnswerRound===roundN-1&&p.lastAnswerOk===true)) beBonus=0;
-    const pool=bmPersonalPool(pid,POOL);
+    const pool=bmPersonalPool(pid,POOL,roundN);
     up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
     up["players/"+pid+"/answeredRound"]=-1;
     up["players/"+pid+"/lockedAction"]=null;
@@ -1729,15 +1745,20 @@ async function bmDistributeQs(roundN){
     }
   }
 }
-function bmPersonalPool(pid,pool){
+// Vervalteller (Leitner-achtig, zie benchmark-toetsing/02-wat-overnemen.md):
+// een gemist woord krijgt pas ná een oplopend aantal rondes weer extra
+// gewicht i.p.v. mogelijk de eerstvolgende ronde alweer. `due` (geschreven in
+// bmAnswer) is de rondeteller vanaf wanneer het woord weer meetelt.
+function bmPersonalPool(pid,pool,roundN){
   if(!BM_META?.adaptive)return pool;
   // Hergebruik de per-speler "missed"-telling die al naar Firebase geschreven
   // wordt bij een fout antwoord (zie bmAnswer) — geen apart lokaal register nodig.
   const missedEntries=Object.values(BM_PLAYERS[pid]?.missed||{});
   const w=[...pool];
   pool.forEach(word=>{
-    const c=missedEntries.find(m=>m.p===word.la)?.c||0;
-    for(let i=0;i<Math.min(c,3);i++)w.push(word);
+    const m=missedEntries.find(e=>e.p===word.la);
+    if(!m||(roundN!=null&&m.due!=null&&roundN<m.due))return;
+    for(let i=0;i<Math.min(m.c||0,3);i++)w.push(word);
   });
   return w.length?w:pool;
 }
@@ -4260,12 +4281,18 @@ function bmAnswer(idx){
       upd.bestCorrectStreak=Math.max(p.bestCorrectStreak||0, upd.correctStreak);
     }
     if(!ok&&BM_MY_Q){
-      // Gemist woord bijhouden voor analytics (host leest na afloop)
+      // Gemist woord bijhouden voor analytics (host leest na afloop) én voor
+      // de adaptieve pool. "due" (bmPersonalPool()) laat het woord pas na een
+      // oplopend aantal rondes weer extra gewicht krijgen — 1 ronde na de
+      // eerste fout, 2 na de tweede, 3 na de derde e.v. — i.p.v. mogelijk de
+      // eerstvolgende ronde alweer, zodat er echt sprake is van spreiding.
       const wk=bmWordKey(BM_MY_Q.la);
       const prev=p.missed?.[wk]||{c:0};
-      upd["missed/"+wk+"/c"]=(prev.c||0)+1;
+      const newC=(prev.c||0)+1;
+      upd["missed/"+wk+"/c"]=newC;
       upd["missed/"+wk+"/p"]=BM_MY_Q.la;
       upd["missed/"+wk+"/a"]=BM_MY_Q.options?.[BM_MY_Q.correctIdx]||"";
+      upd["missed/"+wk+"/due"]=(round.n||0)+Math.min(newC,3);
     }
     // Heldenmodus: gevallen held vult zijn herrijzingsmeter met goede antwoorden
     if(ok){

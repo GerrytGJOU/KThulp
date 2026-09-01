@@ -48,6 +48,7 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 |---|---|---|
 | Menutegel "🗺️ Total War" (BETA-badge) | `certamen/games.js` (`SCREENS.home`) | ✅ werkend — niet langer "Binnenkort" |
 | **Training Mode** (thuis oefenen, §3) | `certamen/training.js` (`SCREENS.trainingMode`) | ✅ werkend — leerlingen oefenen woordjes, bouwen automatisch mee aan het garnizoen (zie de TP-waarschuwing hierboven voor het verschil met het oorspronkelijke §3.2-ontwerp) |
+| **Formatieve hint bij een fout antwoord** | `certamen/training.js` (`trShowMissHint()`, aangeroepen vanuit `trAnswer()`) | ✅ werkend — toont naast de gemarkeerde juiste-antwoordknop ook de volledige vertaling (alle betekenissen uit `TR_POOL`, niet alleen de eerste die als keuzeoptie diende); zie `benchmark-toetsing/02-wat-overnemen.md` |
 | **Publieke leerling-veldtochtkaart** (alleen-lezen) | `certamen/totalwar.js` (`SCREENS.totalWarMap`, `twStartLiveReadOnly`) | ✅ werkend — legenda klas↔beschaving + seizoensrecords |
 | **Seizoenen** | `certamen/totalwar.js` (`/totalwar/season`, `TW_SEASON_TITLES`, `twStartNewSeason`) | ✅ werkend — docent kan een nieuw seizoen starten via de docentenweergave |
 | Publiek uitlegscherm (alleen-lezen demo-kaart) | `certamen/totalwar.js` (`SCREENS.totalWar`) | ✅ werkend, ongewijzigd (blijft demo, want puur illustratief voor niet-ingelogde bezoekers) |

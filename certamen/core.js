@@ -80,8 +80,22 @@ function senseSet(nl){
   );
 }
 
-function makeQuestion(pool){
-  const w = pick(pool);
+// Gewogen trekking i.p.v. uniform random: woorden die eerder in deze sessie
+// fout beantwoord zijn, krijgen extra kans om terug te komen (gespreide
+// herhaling binnen de kernmodus/Vrij Oefenen — zie BATTLE_MODE.md voor de
+// vergelijkbare, los ontwikkelde bmPersonalPool() in Battle Mode/Boss Battle).
+// weightFn(word) levert een extra gewicht (0 = geen bonus) bovenop de
+// standaard kans van elk woord.
+function pickWeighted(pool, weightFn){
+  if(!weightFn) return pick(pool);
+  let total=0;
+  const weights=pool.map(w=>{ const wt=1+Math.max(0,weightFn(w)||0); total+=wt; return wt; });
+  let r=Math.random()*total;
+  for(let i=0;i<pool.length;i++){ r-=weights[i]; if(r<=0) return pool[i]; }
+  return pool[pool.length-1];
+}
+function makeQuestion(pool, weightFn){
+  const w = pickWeighted(pool, weightFn);
   const correct = ansText(w);
   const qSenses = senseSet(w.nl);
   const opts=[correct];

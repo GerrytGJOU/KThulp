@@ -358,9 +358,24 @@ function trAnswer(idx){
   } else {
     TR_STATS.wrong++;
     P.stats.totalWrong++; P.stats.currentStreak=0; saveProfile();
+    trShowMissHint(q);
   }
   trUpdateStatsBar();
   setTimeout(trNextQuestion, ok?900:1400);
+}
+// Formatieve tussenstap bij een fout antwoord: toont de volledige vertaling
+// (alle betekenissen uit de vocabdata, niet alleen de eerste die als
+// keuzeoptie diende) i.p.v. alleen de gemarkeerde knop. Puur UI, geen nieuwe
+// datastroom — TR_POOL bevat het volledige woord al.
+function trShowMissHint(q){
+  const host=el("trQuestionHost"); if(!host) return;
+  const full=TR_POOL.find(w=>w.la===q.la);
+  const gloss=full?String(full.nl||"").replace(/\s*[;|]\s*/g,", "):q.options[q.correctIdx];
+  const div=document.createElement("div");
+  div.className="note";
+  div.style.marginTop="8px";
+  div.innerHTML=`<b>${esc(q.la)}</b> = ${esc(gloss)}`;
+  host.appendChild(div);
 }
 
 /* ------------------------------------------------------------------
