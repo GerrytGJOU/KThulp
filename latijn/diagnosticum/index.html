@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Diagnosticum — Diagnostische Grammaticatoets Latijn</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicons/latijn/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../assets/favicons/latijn/favicon-16x16.png">
+<link rel="apple-touch-icon" href="../../assets/favicons/latijn/apple-touch-icon.png">
+<style>
+  :root {
+    --ink:#1a1209;--parchment:#f5eedc;--parchment-dark:#e8dfc6;--parchment-deep:#d4c9a8;
+    --red:#8b1a1a;--red-light:#c44040;--gold:#a07820;--gold-light:#c8a040;
+    --blue:#1a3a6b;--blue-light:#2a5a9b;--green:#1a5a2a;--green-light:#2a8a3a;
+    --orange:#a35a12;--orange-light:#c97d2e;
+    --shadow:rgba(26,18,9,0.18);--border:#b8a878;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif;background:var(--parchment);color:var(--ink);min-height:100vh;
+    background-image:radial-gradient(ellipse at 20% 20%,rgba(160,120,32,.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 80%,rgba(139,26,26,.06) 0%,transparent 60%)}
+  header{background:var(--ink);color:var(--parchment);padding:18px 24px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:100}
+  header h1{font-family:Georgia,'Times New Roman',serif;font-size:1.45rem;font-weight:900;letter-spacing:.03em;line-height:1.1}
+  header h1 span{display:block;font-size:.7rem;font-weight:400;letter-spacing:.12em;color:var(--gold-light);text-transform:uppercase;font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif}
+  #voortgang-badge{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:3px;border:1.5px solid var(--gold-light);color:var(--gold-light);display:none}
+  .screen{display:none;padding:20px 16px 48px;max-width:720px;margin:0 auto}
+  .screen.active{display:block}
+  .home-title{font-family:Georgia,'Times New Roman',serif;font-size:2rem;font-weight:900;text-align:center;color:var(--ink);margin:20px 0 6px;line-height:1.15}
+  .home-sub{text-align:center;color:var(--gold);font-style:italic;font-size:1rem;margin-bottom:8px}
+  .home-intro{font-size:.88rem;color:#555;line-height:1.55;background:white;border:1.5px solid var(--border);border-radius:8px;padding:14px 16px;margin:16px 0 22px;box-shadow:0 1px 6px var(--shadow)}
+  .btn{display:inline-block;padding:12px 22px;border-radius:5px;font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif;font-size:.92rem;font-weight:600;cursor:pointer;border:2px solid transparent;transition:all .15s;text-align:center;-webkit-tap-highlight-color:transparent;min-height:44px}
+  .btn-primary{background:var(--blue);color:white;border-color:var(--blue)}.btn-primary:hover{background:var(--blue-light)}
+  .btn-red{background:var(--red);color:white;border-color:var(--red)}.btn-red:hover{background:var(--red-light)}
+  .btn-outline{background:transparent;color:var(--ink);border-color:var(--border)}.btn-outline:hover{background:var(--parchment-dark)}
+  .btn-gold{background:var(--gold);color:white;border-color:var(--gold)}.btn-gold:hover{background:var(--gold-light)}
+  .btn-full{display:block;width:100%;margin:8px 0}
+  .btn:disabled{opacity:.45;cursor:default}
+  .veld-label{font-size:.8rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin:18px 0 8px}
+  select#hoofdstuk-select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:6px;font-family:Palatino,'Palatino Linotype','Book Antiqua',Georgia,serif;font-size:.95rem;background:white;color:var(--ink);min-height:44px}
+  .snelkeuze-row{display:flex;gap:10px;margin:10px 0 4px;flex-wrap:wrap}
+  .snelkeuze-row .btn{flex:1;min-width:150px;font-size:.82rem;padding:10px 12px}
+  .flex-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .mt8{margin-top:8px}.mt16{margin-top:16px}.mt24{margin-top:24px}.mb16{margin-bottom:16px}
+  .divider{border:none;border-top:1px solid var(--parchment-deep);margin:18px 0}
+  .alert{padding:10px 14px;border-radius:5px;font-size:.85rem;margin:10px 0}
+  .alert-info{background:#eef4ff;border:1px solid var(--blue);color:var(--blue)}
+  .alert-warn{background:#fff8e6;border:1px solid var(--gold);color:#7a5500}
+  /* ── module-voortgangsbalk ── */
+  .module-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .module-titel{font-family:Georgia,'Times New Roman',serif;font-size:1.15rem;color:var(--ink)}
+  .module-teller{font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em}
+  .progress-bar-wrap{width:100%;background:var(--parchment-dark);border-radius:4px;height:8px;margin:6px 0 18px}
+  .progress-bar{height:8px;border-radius:4px;background:var(--blue);transition:width .3s}
+  .onderdelen-line{font-size:.8rem;color:#777;font-style:italic;margin-bottom:18px}
+  /* ── vraagkaart (kv-achtig) ── */
+  .kv-card{background:white;border:2px solid var(--border);border-radius:8px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 6px var(--shadow)}
+  .kv-vraag{font-family:Georgia,'Times New Roman',serif;font-size:1.1rem;color:var(--ink);margin-bottom:14px;line-height:1.4}
+  .kv-vraag em{color:var(--blue)}
+  .kv-opts{display:flex;flex-direction:column;gap:8px}
+  .kv-opt{padding:11px 14px;background:var(--parchment);border:1.5px solid var(--border);border-radius:6px;cursor:pointer;font-size:.92rem;text-align:left;transition:all .13s;-webkit-tap-highlight-color:transparent;min-height:44px}
+  .kv-opt:hover,.kv-opt:active{background:var(--parchment-dark)}
+  .kv-opt.correct{border-color:var(--green);background:#efffef;color:var(--green);font-weight:600}
+  .kv-opt.wrong{border-color:var(--red);background:#fff0f0;color:var(--red)}
+  .kv-opt:disabled,.kv-opt[disabled]{cursor:default}
+  .kv-uitleg{font-size:.82rem;color:#555;margin-top:10px;padding:10px 12px;background:var(--parchment);border-radius:5px;border-left:3px solid var(--gold);display:none}
+  .kv-uitleg.show{display:block}
+  /* ── zelfinschatting ── */
+  .zi-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0}
+  .zi-btn{background:white;border:2px solid var(--border);border-radius:10px;padding:20px 12px;text-align:center;cursor:pointer;transition:all .15s;box-shadow:0 2px 8px var(--shadow);min-height:44px}
+  .zi-btn:hover,.zi-btn:active{transform:translateY(-2px);border-color:var(--gold)}
+  .zi-emoji{font-size:2rem;margin-bottom:6px}
+  .zi-label{font-size:.85rem;font-weight:600;color:var(--ink)}
+  /* ── matrix-badges ── */
+  .matrix-badge{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:5px 12px;border-radius:14px;border:1.5px solid}
+  .matrix-beheerst{background:#e8f7ea;color:var(--green);border-color:var(--green)}
+  .matrix-verborgen{background:#e8f0fb;color:var(--blue);border-color:var(--blue)}
+  .matrix-hiaat{background:#fdf1e0;color:var(--orange);border-color:var(--orange)}
+  .matrix-blinde{background:#fbe6e6;color:var(--red);border-color:var(--red)}
+  /* ── resultaatscherm ── */
+  .score-box{background:white;border:2px solid var(--border);border-radius:8px;padding:22px;margin:16px 0;text-align:center;box-shadow:0 2px 8px var(--shadow)}
+  .score-pct{font-family:Georgia,'Times New Roman',serif;font-size:2.6rem;font-weight:900;color:var(--blue);line-height:1}
+  .score-label{font-size:.8rem;color:#777;margin-top:6px;letter-spacing:.06em;text-transform:uppercase}
+  .fout-item{background:white;border:1.5px solid var(--red-light);border-radius:7px;padding:12px 14px;margin-bottom:10px}
+  .fout-vraag{font-size:.88rem;color:var(--ink);margin-bottom:5px}
+  .fout-uitleg{font-size:.82rem;color:#555}
+  /* ── eindrapport ── */
+  .rapport-bereik{background:var(--ink);color:var(--parchment);border-radius:8px;padding:14px 18px;margin-bottom:20px;text-align:center}
+  .rapport-bereik .r-hfst{font-family:Georgia,'Times New Roman',serif;font-size:1.3rem;color:var(--gold-light);font-weight:700}
+  .prio-item{background:white;border:1.5px solid var(--border);border-left:5px solid var(--border);border-radius:7px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 5px var(--shadow)}
+  .prio-item.prio-blinde{border-left-color:var(--red)}
+  .prio-item.prio-hiaat{border-left-color:var(--orange)}
+  .prio-item.prio-verborgen{border-left-color:var(--blue)}
+  .prio-item.prio-beheerst{border-left-color:var(--green)}
+  .prio-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+  .prio-naam{font-family:Georgia,'Times New Roman',serif;font-size:1.05rem;color:var(--ink)}
+  .prio-meta{font-size:.78rem;color:#888;margin-bottom:6px}
+  .prio-advies{font-size:.85rem;color:#444;line-height:1.4;font-style:italic}
+  .totaal-box{background:white;border:1.5px solid var(--border);border-radius:8px;padding:16px;text-align:center;margin:22px 0;color:#666;font-size:.85rem}
+  .totaal-box .t-pct{font-size:1.4rem;font-weight:700;color:var(--ink);font-family:Georgia,'Times New Roman',serif}
+  .print-only{display:none}
+  @media print{
+    .portal-back,header,#voortgang-badge,.no-print{display:none !important}
+    .screen{display:block !important;max-width:100%;padding:0}
+    body{background:white}
+    .print-only{display:block}
+    .kv-card,.score-box,.prio-item,.fout-item,.rapport-bereik,.totaal-box{box-shadow:none;break-inside:avoid}
+  }
+  footer{text-align:center;color:#999;font-size:.78rem;margin-top:34px;font-style:italic}
+</style>
+<style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+</head>
+<body>
+<a class="portal-back" href="../" onclick="if(!document.getElementById('screen-home').classList.contains('active')){event.preventDefault();if(confirm('Wil je teruggaan naar het portaal? Je voortgang blijft bewaard.'))window.location.href='../';}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<header>
+  <div style="display:flex;align-items:center;gap:12px">
+    <img src="../../assets/favicons/latijn/logo-original.png" width="34" height="34" alt="" style="border-radius:50%;flex:0 0 auto">
+    <h1>Diagnosticum <span>Diagnostische Grammaticatoets</span></h1>
+  </div>
+  <div id="voortgang-badge"></div>
+</header>
+
+<!-- ══════════════ SCHERM: HOME / HOOFDSTUKSELECTIE ══════════════ -->
+<div id="screen-home" class="screen active">
+  <div class="home-title">Diagnosticum</div>
+  <div class="home-sub">Diagnostische grammaticatoets Latijn</div>
+  <div class="home-intro">
+    Deze toets geeft geen cijfer, maar een <strong>diagnose</strong>: hij laat precies zien welke
+    grammatica je beheerst en welke nog aandacht nodig heeft. Na elk onderdeel geef je ook aan hoe
+    zeker je je voelde — dat is minstens zo belangrijk als de score zelf, want het verschil tussen
+    "dacht dat het goed ging, bleek fout" en "wist zelf al dat dit lastig was" vraagt een andere aanpak.
+  </div>
+
+  <div id="hervatten-blok" style="display:none" class="alert alert-info">
+    <strong>Je hebt een toets in uitvoering.</strong> Wil je verdergaan waar je gebleven was, of opnieuw beginnen?
+    <div class="flex-row mt8">
+      <button class="btn btn-primary btn-sm" onclick="hervatToets()">Verdergaan →</button>
+      <button class="btn btn-outline btn-sm" onclick="nieuweToetsBevestig()">Opnieuw beginnen</button>
+    </div>
+  </div>
+
+  <div class="veld-label">Tot en met welk hoofdstuk ben je getoetst op school?</div>
+  <div class="snelkeuze-row">
+    <button class="btn btn-outline" onclick="kiesSnel(13)">Minerva 1 compleet (t/m H13)</button>
+    <button class="btn btn-outline" onclick="kiesSnel(25)">Alles (t/m H25)</button>
+  </div>
+  <select id="hoofdstuk-select"></select>
+
+  <button class="btn btn-primary btn-full mt24" onclick="startNieuweToets()">Start Diagnosticum →</button>
+
+  <div id="voorbeschouwing" class="mt16"></div>
+
+  <footer>Diagnosticum · © Gerben de Jong · 2026</footer>
+</div>
+
+<!-- ══════════════ SCHERM: MODULE (VRAGEN) ══════════════ -->
+<div id="screen-module" class="screen">
+  <div class="module-header">
+    <div class="module-titel" id="module-titel"></div>
+    <div class="module-teller" id="module-teller"></div>
+  </div>
+  <div class="progress-bar-wrap"><div class="progress-bar" id="module-progress" style="width:0%"></div></div>
+  <div class="onderdelen-line" id="module-onderdelen"></div>
+  <div id="module-vragen-content"></div>
+</div>
+
+<!-- ══════════════ SCHERM: ZELFINSCHATTING ══════════════ -->
+<div id="screen-zelfinschatting" class="screen">
+  <div class="module-titel mb16" id="zi-module-titel"></div>
+  <p style="font-size:.95rem;color:#444">Hoe vond je dit onderdeel gaan?</p>
+  <div class="zi-grid">
+    <button class="zi-btn" onclick="kiesZelfinschatting('makkelijk')"><div class="zi-emoji">😊</div><div class="zi-label">Makkelijk</div></button>
+    <button class="zi-btn" onclick="kiesZelfinschatting('ging_wel')"><div class="zi-emoji">🙂</div><div class="zi-label">Ging wel</div></button>
+    <button class="zi-btn" onclick="kiesZelfinschatting('lastig')"><div class="zi-emoji">😕</div><div class="zi-label">Lastig</div></button>
+    <button class="zi-btn" onclick="kiesZelfinschatting('snap_niet')"><div class="zi-emoji">😣</div><div class="zi-label">Snap ik niet</div></button>
+  </div>
+</div>
+
+<!-- ══════════════ SCHERM: RESULTAAT PER MODULE ══════════════ -->
+<div id="screen-resultaat" class="screen">
+  <div class="module-titel mb16" id="res-module-titel"></div>
+  <div id="resultaat-content"></div>
+  <button class="btn btn-primary btn-full mt24" id="volgende-onderdeel-btn" onclick="volgendOnderdeel()">Volgende onderdeel →</button>
+</div>
+
+<!-- ══════════════ SCHERM: EINDRAPPORT ══════════════ -->
+<div id="screen-eindrapport" class="screen">
+  <div class="module-titel mb16">Eindrapport</div>
+  <div id="eindrapport-content"></div>
+  <div class="flex-row mt24 no-print">
+    <button class="btn btn-gold" onclick="window.print()">🖨️ Printen / als PDF opslaan</button>
+    <button class="btn btn-outline" onclick="nieuweToetsBevestig()">Nieuwe toets starten</button>
+  </div>
+  <footer class="no-print">Diagnosticum · © Gerben de Jong · 2026</footer>
+</div>
+
+<script>
+'use strict';
+
+// ══════════════════════════════════════════════════════
+//  DATA: HOOFDSTUKKEN (Minerva 1 + 2, thema per hoofdstuk)
+// ══════════════════════════════════════════════════════
+const CHAPTERS = [
+  {h:1, naam:'Het Latijn en de Romeinen (intro)'},
+  {h:2, naam:'Midas: van koning tot ezel'},
+  {h:3, naam:'Latona: een wrekende godin'},
+  {h:4, naam:'Jupiter en Io: een goddelijke affaire'},
+  {h:5, naam:'Phaëthon: een menselijke ruiter'},
+  {h:6, naam:'De Familia (Titus Manlius, Coriolanus)'},
+  {h:7, naam:'Slavernij'},
+  {h:8, naam:'Onderwijs'},
+  {h:9, naam:'Het ontstaan van de mens (Deucalion & Pyrrha)'},
+  {h:10, naam:'Aeneas (het houten paard)'},
+  {h:11, naam:'Het begin van Rome (Hercules & Cacus; Romulus & Remus)'},
+  {h:12, naam:'Tirannen en vrienden'},
+  {h:13, naam:'Waarheid en wijsheid'},
+  {h:14, naam:'Rome: multiculturele samenleving (Abraham & Izaäk)'},
+  {h:15, naam:'Samson en Judith'},
+  {h:16, naam:'Dieren in het Romeinse Rijk'},
+  {h:17, naam:'Hannibal over de Alpen'},
+  {h:18, naam:'Hannibal verslagen (de slimme list)'},
+  {h:19, naam:'Dagelijks leven in Rome'},
+  {h:20, naam:'Vermaak in Rome'},
+  {h:21, naam:'De Romeinen en de dood (grafschriften)'},
+  {h:22, naam:'Caesars carrière (Belgen bij Bibrax, Dumnorix)'},
+  {h:23, naam:'Caesar in België en Nederland (Nervii)'},
+  {h:24, naam:'Keizers van Rome: Augustus en Nero'},
+  {h:25, naam:'Hartstocht en spanning (Catullus, Petronius)'},
+];
+
+// ══════════════════════════════════════════════════════
+//  DATA: MODULES + placeholder-vragenbank
+//  ── LET OP: elke module heeft nu 3 placeholders i.p.v. 2, zodat de
+//  drempel-logica (§4, <3 vragen = module vervalt) ook daadwerkelijk
+//  te testen is. In milestones 2/3 groeit de pool naar 15-25 per module;
+//  dan is dit verschil niet meer zichtbaar.
+// ══════════════════════════════════════════════════════
+const MODULES = [
+  {
+    id:1, naam:'Naamvallen basis',
+    onderdelen:'verbuiging groep 1-3 (zn + bn), congruentie, bijstelling',
+    vragen:[
+      {id:'m1q1', hoofdstuk:2, vraag:'Welke naamval is <em>servi</em> in "<em>servi dominum timent</em>" (de slaven vrezen de meester)?',
+        opties:['Nominativus meervoud','Genitivus enkelvoud','Nominativus enkelvoud','Accusativus meervoud'],
+        antwoord:0, uitleg:'<em>Servi</em> is hier onderwerp (meervoud): "de slaven" — dus nominativus meervoud, niet de genitivus-vorm die er hetzelfde uitziet.'},
+      {id:'m1q2', hoofdstuk:4, vraag:'Welk bijvoeglijk naamwoord congrueert correct met <em>puella</em> (het meisje, vrouwelijk)?',
+        opties:['bonus','bonum','bona','boni'],
+        antwoord:2, uitleg:'Congruentie: naamval, getal én geslacht moeten kloppen. <em>Puella</em> is vrouwelijk enkelvoud nominativus → <em>bona</em>.'},
+      {id:'m1q3', hoofdstuk:7, vraag:'In "<em>Marcus, servus fidelis, dominum adiuvat</em>" — wat is <em>servus fidelis</em>?',
+        opties:['Bijstelling (appositie) bij Marcus','Lijdend voorwerp','Bijvoeglijke bepaling bij dominum','Onderwerp van een bijzin'],
+        antwoord:0, uitleg:'<em>Servus fidelis</em> geeft extra uitleg bij <em>Marcus</em> en staat in dezelfde naamval — dat is een bijstelling.'},
+    ]
+  },
+  {
+    id:2, naam:'Voornaamwoorden',
+    onderdelen:'is/ea/id, hic/haec/hoc, ille/iste/ipse/idem, persoonlijk, betrekkelijk, vragend, onbepaald',
+    vragen:[
+      {id:'m2q1', hoofdstuk:8, vraag:'Wat betekent <em>is/ea/id</em> meestal in een Latijnse zin?',
+        opties:['hij/zij/het (verwijzend)','deze (dichtbij)','zichzelf (nadruk)','wie? (vragend)'],
+        antwoord:0, uitleg:'<em>Is/ea/id</em> is het gewone verwijzende voornaamwoord: hij, zij, het, hen.'},
+      {id:'m2q2', hoofdstuk:14, vraag:'Welke vorm hoort bij <em>hic</em> (dit/deze, onzijdig)?',
+        opties:['hic','haec','hoc','huius'],
+        antwoord:2, uitleg:'<em>Hic</em> (m), <em>haec</em> (v), <em>hoc</em> (o) — het onzijdig enkelvoud nominativus/accusativus is <em>hoc</em>.'},
+      {id:'m2q3', hoofdstuk:19, vraag:'"<em>Puella quae cantat</em>" (het meisje dat zingt) — wat voor voornaamwoord is <em>quae</em>?',
+        opties:['Betrekkelijk voornaamwoord','Vragend voornaamwoord','Aanwijzend voornaamwoord','Onbepaald voornaamwoord'],
+        antwoord:0, uitleg:'<em>Quae</em> leidt hier een bijzin in die <em>puella</em> nader bepaalt — dat is de betrekkelijke bijzin.'},
+    ]
+  },
+  {
+    id:3, naam:'Werkwoord — praesenssysteem',
+    onderdelen:'praesens (alle stammen), esse/posse/ire/velle/nolle/fieri, imperativus, imperfectum, futurum, futurum exactum',
+    vragen:[
+      {id:'m3q1', hoofdstuk:3, vraag:'Welke vorm is <em>amat</em>?',
+        opties:['3e persoon enkelvoud praesens','2e persoon enkelvoud praesens','3e persoon meervoud praesens','1e persoon enkelvoud imperfectum'],
+        antwoord:0, uitleg:'<em>Amat</em> = "hij/zij houdt van" — 3e persoon enkelvoud praesens.'},
+      {id:'m3q2', hoofdstuk:6, vraag:'Wat betekent <em>poterat</em> (van <em>posse</em>)?',
+        opties:['hij kon','hij kan','hij zal kunnen','hij is geweest'],
+        antwoord:0, uitleg:'<em>Posse</em> in het imperfectum: <em>poterat</em> = "hij kon".'},
+      {id:'m3q3', hoofdstuk:17, vraag:'<em>Veniet</em> — welke tijd is dit?',
+        opties:['Futurum','Praesens','Imperfectum','Futurum exactum'],
+        antwoord:0, uitleg:'<em>Veniet</em> = "hij zal komen" — futurum enkelvoud, 3e persoon.'},
+    ]
+  },
+  {
+    id:4, naam:'Werkwoord — perfectumsysteem (actief)',
+    onderdelen:'perfectum, plusquamperfectum, perfectum met praesensbetekenis',
+    vragen:[
+      {id:'m4q1', hoofdstuk:5, vraag:'<em>Venit</em> kan twee dingen betekenen, afhankelijk van de klinkerlengte. Welke twee?',
+        opties:['praesens ("hij komt") of perfectum ("hij is gekomen")','imperfectum of futurum','passief of actief','enkelvoud of meervoud'],
+        antwoord:0, uitleg:'<em>Vĕnit</em> (kort) = praesens, <em>vēnit</em> (lang) = perfectum — een klassieke valkuil.'},
+      {id:'m4q2', hoofdstuk:9, vraag:'Wat is de vertaling van <em>venerat</em>?',
+        opties:['hij was gekomen','hij komt','hij zal gekomen zijn','hij komt vaak'],
+        antwoord:0, uitleg:'<em>Venerat</em> is plusquamperfectum: "hij was gekomen" — een handeling vóór een ander verleden moment.'},
+      {id:'m4q3', hoofdstuk:19, vraag:'<em>Novi</em> (van <em>noscere</em>, leren kennen) staat in het perfectum, maar betekent...',
+        opties:['ik ken (nu, in het heden)','ik heb leren kennen (afgesloten)','ik zal kennen','ik kende'],
+        antwoord:0, uitleg:'Sommige perfecta (zoals <em>novi</em>, <em>memini</em>, <em>odi</em>) hebben een praesensbetekenis: "ik ken", niet "ik heb gekend".'},
+    ]
+  },
+  {
+    id:5, naam:'Passief & deponentia',
+    onderdelen:'passief praesens t/m plusquamperfectum, PPP, deponentia, semi-deponentia',
+    vragen:[
+      {id:'m5q1', hoofdstuk:11, vraag:'<em>Urbs capitur</em> — welke vorm is <em>capitur</em>?',
+        opties:['3e persoon enkelvoud passief praesens','3e persoon enkelvoud actief praesens','PPP','deponens perfectum'],
+        antwoord:0, uitleg:'<em>Capitur</em> = "wordt genomen" — passief praesens, 3e persoon enkelvoud.'},
+      {id:'m5q2', hoofdstuk:11, vraag:'Wat is een deponens werkwoord?',
+        opties:['Een werkwoord met passieve vorm maar actieve betekenis','Een werkwoord zonder perfectum','Een onregelmatig werkwoord als esse','Een werkwoord dat alleen in de imperativus voorkomt'],
+        antwoord:0, uitleg:'Deponentia zien er passief uit (bv. <em>loquitur</em>) maar betekenen actief: "hij spreekt".'},
+      {id:'m5q3', hoofdstuk:24, vraag:'Het PPP van <em>amare</em> is <em>amatus/-a/-um</em>. Welk geslacht past bij <em>puella amata est</em>?',
+        opties:['vrouwelijk (-a)','mannelijk (-us)','onzijdig (-um)','geen van drie'],
+        antwoord:0, uitleg:'Het PPP congrueert met het onderwerp: <em>puella</em> is vrouwelijk → <em>amata</em>. (Gebruik altijd "PPP", nooit "supinum".)'},
+    ]
+  },
+  {
+    id:6, naam:'Participia & Ablativus Absolutus',
+    onderdelen:'ptc. praesens/perfectum + gebruik, ACP, AblAbs',
+    vragen:[
+      {id:'m6q1', hoofdstuk:15, vraag:'<em>Puella cantans</em> ("het zingende meisje") — wat voor vorm is <em>cantans</em>?',
+        opties:['Participium praesens actief','PPP','Participium futurum','Gerundivum'],
+        antwoord:0, uitleg:'<em>Cantans</em> is het participium praesens actief: "zingend".'},
+      {id:'m6q2', hoofdstuk:16, vraag:'"<em>Video puellam cantantem</em>" (ik zie het meisje zingen) — welke constructie is dit?',
+        opties:['ACP (accusativus cum participio)','AcI (accusativus cum infinitivo)','Ablativus absolutus','Genitivus absolutus'],
+        antwoord:0, uitleg:'Een waarneming (video) + accusativus + participium = ACP.'},
+      {id:'m6q3', hoofdstuk:18, vraag:'"<em>Urbe capta, milites discesserunt</em>" (Nadat de stad veroverd was...) — <em>urbe capta</em> is:',
+        opties:['Ablativus absolutus','ACP','AcI','Bijstelling'],
+        antwoord:0, uitleg:'Een naamwoord + PPP, allebei in de ablativus, los van de zinsconstructie: dat is de ablativus absolutus.'},
+    ]
+  },
+  {
+    id:7, naam:'Conjunctivus',
+    onderdelen:'vormen + gebruik in hoofd- en bijzin, cum-zinnen, qui+conj, afhankelijke vraagzin',
+    vragen:[
+      {id:'m7q1', hoofdstuk:12, vraag:'"<em>Cum Roma venisset, ...</em>" — welke tijd/wijs staat er in <em>venisset</em>?',
+        opties:['Conjunctivus plusquamperfectum','Indicativus plusquamperfectum','Conjunctivus perfectum','Indicativus perfectum'],
+        antwoord:0, uitleg:'Na <em>cum</em> in verhalende zin (cum historicum) staat de conjunctivus — hier plusquamperfectum.'},
+      {id:'m7q2', hoofdstuk:19, vraag:'"<em>Nescio quis venerit</em>" (ik weet niet wie er gekomen is) — wat voor bijzin is dit?',
+        opties:['Afhankelijke vraagzin','Betrekkelijke bijzin','Bijzin van reden','AcI'],
+        antwoord:0, uitleg:'Na een werkwoord van (niet-)weten volgt een afhankelijke vraagzin, met de conjunctivus.'},
+      {id:'m7q3', hoofdstuk:21, vraag:'Welke vorm is <em>veniat</em>?',
+        opties:['Conjunctivus praesens, 3e persoon enkelvoud','Indicativus praesens','Conjunctivus imperfectum','Imperativus'],
+        antwoord:0, uitleg:'<em>Veniat</em> = conjunctivus praesens, 3e persoon enkelvoud: "dat hij kome" / "hij zou moeten komen".'},
+    ]
+  },
+  {
+    id:8, naam:'Infinitivus-constructies',
+    onderdelen:'AcI, NcI, gebruik infinitivus',
+    vragen:[
+      {id:'m8q1', hoofdstuk:10, vraag:'"<em>Video milites venire</em>" (ik zie dat de soldaten komen) — welke constructie?',
+        opties:['AcI (accusativus cum infinitivo)','ACP','Ablativus absolutus','Betrekkelijke bijzin'],
+        antwoord:0, uitleg:'Werkwoorden van waarnemen/zeggen/denken + accusativus + infinitivus = AcI.'},
+      {id:'m8q2', hoofdstuk:22, vraag:'In een AcI staat het onderwerp van de infinitivuszin in de...',
+        opties:['accusativus','nominativus','ablativus','genitivus'],
+        antwoord:0, uitleg:'Het "onderwerp" van de infinitivus staat in de accusativus — dat is precies wat de naam AcI zegt.'},
+      {id:'m8q3', hoofdstuk:24, vraag:'"<em>Caesar dicitur venisse</em>" (men zegt dat Caesar gekomen is) — dit is een voorbeeld van:',
+        opties:['NcI (nominativus cum infinitivo)','AcI','Ablativus absolutus','Gerundivumconstructie'],
+        antwoord:0, uitleg:'Bij passieve werkwoorden als <em>dicitur</em> wordt het onderwerp nominativus + infinitivus: de NcI.'},
+    ]
+  },
+  {
+    id:9, naam:'Gerundium & gerundivum',
+    onderdelen:'vorm en vertaalstrategieën van beide',
+    vragen:[
+      {id:'m9q1', hoofdstuk:22, vraag:'"<em>ars scribendi</em>" (de kunst van het schrijven) — <em>scribendi</em> is:',
+        opties:['Gerundium (genitivus)','Gerundivum','PPP','Participium praesens'],
+        antwoord:0, uitleg:'Het gerundium is een werkwoordelijk zelfstandig naamwoord: hier genitivus, "van het schrijven".'},
+      {id:'m9q2', hoofdstuk:22, vraag:'Wat is het belangrijkste verschil tussen gerundium en gerundivum?',
+        opties:['Gerundium is onzijdig/onveranderlijk; gerundivum congrueert als bijvoeglijk naamwoord','Ze zijn identiek in gebruik','Gerundivum bestaat alleen in het perfectum','Gerundium komt alleen in bijzinnen voor'],
+        antwoord:0, uitleg:'Het gerundium is een vast zelfstandig-naamwoordvorm; het gerundivum congrueert (naamval/getal/geslacht) met het naamwoord dat het beschrijft.'},
+      {id:'m9q3', hoofdstuk:23, vraag:'"<em>Urbs delenda est</em>" (de stad moet verwoest worden) — dit is een voorbeeld van:',
+        opties:['Gerundivum met noodzakelijkheidsbetekenis','Gerundium','Ablativus absolutus','AcI'],
+        antwoord:0, uitleg:'Gerundivum + vorm van <em>esse</em> drukt een verplichting/noodzaak uit: "moet ... worden".'},
+    ]
+  },
+  {
+    id:10, naam:'Naamvallen verdieping & vertaalaanpak',
+    onderdelen:'genitivus subjectivus/objectivus, comparativus/superlativus, algemene signaalwoorden/vertaalstrategie',
+    vragen:[
+      {id:'m10q1', hoofdstuk:13, vraag:'"<em>metus hostium</em>" kan betekenen "angst van de vijanden" (zij zijn bang) of "angst voor de vijanden" (wij zijn bang voor hen). Dit heet:',
+        opties:['Genitivus subjectivus vs. objectivus','Genitivus partitivus','Genitivus qualitatis','Dativus possessivus'],
+        antwoord:0, uitleg:'Subjectivus: de vijanden vrezen zelf. Objectivus: men is bang voor de vijanden. De context beslist.'},
+      {id:'m10q2', hoofdstuk:20, vraag:'Welke vorm is <em>fortior</em>?',
+        opties:['Comparativus ("sterker")','Superlativus ("sterkst")','Positivus ("sterk")','Gerundivum'],
+        antwoord:0, uitleg:'<em>Fortior</em> = comparativus: "sterker". Superlativus zou <em>fortissimus</em> zijn.'},
+      {id:'m10q3', hoofdstuk:25, vraag:'Welk signaalwoord wijst meestal op een cum-zin met conjunctivus (reden/tijd, verhalend)?',
+        opties:['cum','ut (met indicativus)','et','sed'],
+        antwoord:0, uitleg:'<em>Cum</em> gevolgd door een conjunctivus-vorm in een verhalende context (cum historicum) is een van de belangrijkste vertaalsignalen.'},
+    ]
+  },
+];
+
+// ══════════════════════════════════════════════════════
+//  CONSTANTEN
+// ══════════════════════════════════════════════════════
+const DREMPEL_MIN_VRAGEN = 3;      // module vervalt bij minder dan dit aantal vragen binnen bereik
+const VRAGEN_PER_SESSIE = 6;       // richtgetal voor de volledige vragenbank (milestone 2/3); nu begrensd door de pool
+const LS_KEY_VOORTGANG = 'diagnosticum_voortgang_v1';
+const LS_KEY_GEZIEN = 'diagnosticum_gezien_v1';
+const LS_KEY_RESULTATEN = 'diagnosticum_resultaten_v1';
+
+const ZI_LABELS = {makkelijk:'😊 Makkelijk', ging_wel:'🙂 Ging wel', lastig:'😕 Lastig', snap_niet:'😣 Snap ik niet'};
+const ZI_ZEKER = new Set(['makkelijk','ging_wel']); // "zeker" pool voor de matrix
+
+// ══════════════════════════════════════════════════════
+//  HULPFUNCTIES
+// ══════════════════════════════════════════════════════
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5);}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ── localStorage: gezien-ids per module (voor herhaalbaarheid, §8) ──
+function ladenGezien(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY_GEZIEN))||{}; }catch(e){ return {}; }
+}
+function opslaanGezien(g){
+  localStorage.setItem(LS_KEY_GEZIEN, JSON.stringify(g));
+}
+function markeerAlsGezien(moduleId, ids){
+  const g = ladenGezien();
+  const lijst = g[moduleId] || [];
+  const nieuw = lijst.concat(ids);
+  // bewaar alleen de laatste 2x de sessiegrootte, zodat oudere vragen weer vrijkomen
+  g[moduleId] = nieuw.slice(-VRAGEN_PER_SESSIE*2);
+  opslaanGezien(g);
+}
+
+// ── vraag-selectiefunctie: klaar voor een pool van 15-25, werkt ook nu met 3 ──
+function kiesVragenVoorModule(moduleId, gefilterdePool){
+  const gezienMap = ladenGezien();
+  const gezien = new Set(gezienMap[moduleId] || []);
+  const aantal = Math.min(VRAGEN_PER_SESSIE, gefilterdePool.length);
+  let nietGezien = gefilterdePool.filter(v=>!gezien.has(v.id));
+  let welGezien = gefilterdePool.filter(v=>gezien.has(v.id));
+  let kandidaten = shuffle(nietGezien).concat(shuffle(welGezien)); // niet-geziene eerst, dan de rest
+  const gekozen = kandidaten.slice(0, aantal);
+  markeerAlsGezien(moduleId, gekozen.map(v=>v.id));
+  return gekozen;
+}
+
+// ══════════════════════════════════════════════════════
+//  HOOFDSTUKSELECTIE (§4)
+// ══════════════════════════════════════════════════════
+function vulHoofdstukSelect(){
+  const sel = document.getElementById('hoofdstuk-select');
+  sel.innerHTML = CHAPTERS.map(c=>`<option value="${c.h}">H${c.h} — ${escHtml(c.naam)}</option>`).join('');
+  sel.value = 25;
+  sel.addEventListener('change', toonVoorbeschouwing);
+  toonVoorbeschouwing();
+}
+function kiesSnel(h){
+  document.getElementById('hoofdstuk-select').value = h;
+  toonVoorbeschouwing();
+}
+
+// Bouwt, gegeven een grens, de lijst modules die meedoen + hun gefilterde vragenpool
+function bepaalActieveModules(grens){
+  const actief = [];
+  MODULES.forEach(m=>{
+    const pool = m.vragen.filter(v=>v.hoofdstuk<=grens);
+    if(pool.length === 0) return; // volledig buiten bereik: overslaan, niet grijs tonen
+    if(pool.length < DREMPEL_MIN_VRAGEN) return; // te weinig vragen over: vervalt ook
+    actief.push({module:m, pool});
+  });
+  return actief;
+}
+
+function toonVoorbeschouwing(){
+  const grens = parseInt(document.getElementById('hoofdstuk-select').value, 10);
+  const actief = bepaalActieveModules(grens);
+  const el = document.getElementById('voorbeschouwing');
+  if(actief.length === 0){
+    el.innerHTML = `<div class="alert alert-warn">Bij dit hoofdstukbereik zijn nog geen modules met genoeg vragen beschikbaar. Kies een hoger hoofdstuk.</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="alert alert-info">Bij dit bereik draaien <strong>${actief.length} van de ${MODULES.length}</strong> modules mee: ${actief.map(a=>escHtml(a.module.naam)).join(', ')}.</div>`;
+}
+
+// ══════════════════════════════════════════════════════
+//  TOETSSTATUS
+// ══════════════════════════════════════════════════════
+let toets = null; // { grens, actieveModules:[{module,pool}], moduleIndex, resultaten:[...], huidigeVragen, antwoorden, huidigeVraagIdx }
+
+function ladenVoortgang(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY_VOORTGANG)); }catch(e){ return null; }
+}
+function opslaanVoortgang(){
+  localStorage.setItem(LS_KEY_VOORTGANG, JSON.stringify(toets));
+}
+function wisVoortgang(){
+  localStorage.removeItem(LS_KEY_VOORTGANG);
+}
+
+function nieuweToetsBevestig(){
+  if(toets && confirm('Wil je de huidige toets afbreken en opnieuw beginnen? Je voortgang in deze toets gaat verloren.')){
+    wisVoortgang();
+    toets = null;
+    showScreen('home');
+    document.getElementById('voortgang-badge').style.display='none';
+    checkHervattenBlok();
+  } else if(!toets){
+    wisVoortgang();
+    showScreen('home');
+    checkHervattenBlok();
+  }
+}
+
+function checkHervattenBlok(){
+  const opgeslagen = ladenVoortgang();
+  document.getElementById('hervatten-blok').style.display = opgeslagen ? '' : 'none';
+}
+
+function hervatToets(){
+  const opgeslagen = ladenVoortgang();
+  if(!opgeslagen) return;
+  toets = opgeslagen;
+  document.getElementById('hoofdstuk-select').value = toets.grens;
+  gaNaarModule(toets.moduleIndex);
+}
+
+function startNieuweToets(){
+  const grens = parseInt(document.getElementById('hoofdstuk-select').value, 10);
+  const actief = bepaalActieveModules(grens);
+  if(actief.length === 0){
+    alert('Bij dit hoofdstukbereik zijn nog geen modules beschikbaar.');
+    return;
+  }
+  toets = {
+    grens,
+    actieveModules: actief.map(a=>({moduleId:a.module.id, poolIds:a.pool.map(v=>v.id)})),
+    moduleIndex: 0,
+    resultaten: [],
+  };
+  opslaanVoortgang();
+  gaNaarModule(0);
+}
+
+function huidigeModuleInfo(idx){
+  const ref = toets.actieveModules[idx];
+  const module = MODULES.find(m=>m.id===ref.moduleId);
+  const pool = module.vragen.filter(v=>ref.poolIds.includes(v.id));
+  return {module, pool};
+}
+
+// ══════════════════════════════════════════════════════
+//  MODULE-FLOW (§6)
+// ══════════════════════════════════════════════════════
+function gaNaarModule(idx){
+  toets.moduleIndex = idx;
+  opslaanVoortgang();
+  const {module, pool} = huidigeModuleInfo(idx);
+  const gekozenVragen = kiesVragenVoorModule(module.id, pool);
+  toets.huidigeVragen = gekozenVragen;
+  toets.antwoorden = new Array(gekozenVragen.length).fill(null);
+  toets.huidigeVraagIdx = 0;
+
+  document.getElementById('voortgang-badge').style.display='';
+  document.getElementById('voortgang-badge').textContent = `Onderdeel ${idx+1} / ${toets.actieveModules.length}`;
+
+  document.getElementById('module-titel').textContent = module.naam;
+  document.getElementById('module-onderdelen').textContent = module.onderdelen;
+  renderVraag();
+  showScreen('module');
+}
+
+function renderVraag(){
+  const vragen = toets.huidigeVragen;
+  const i = toets.huidigeVraagIdx;
+  const v = vragen[i];
+  document.getElementById('module-teller').textContent = `Vraag ${i+1} / ${vragen.length}`;
+  document.getElementById('module-progress').style.width = Math.round((i/vragen.length)*100)+'%';
+
+  let html = `<div class="kv-card"><div class="kv-vraag">${v.vraag}</div><div class="kv-opts">`;
+  v.opties.forEach((opt,j)=>{
+    html += `<button class="kv-opt" id="opt${j}" onclick="beantwoordVraag(${j})">${escHtml(opt)}</button>`;
+  });
+  html += `</div><div class="kv-uitleg" id="kv-uitleg"></div></div>`;
+  html += `<div class="flex-row mt8"><button class="btn btn-primary" id="volgende-vraag-btn" style="display:none" onclick="volgendeVraag()">${i+1<vragen.length ? 'Volgende vraag →' : 'Naar zelfinschatting →'}</button></div>`;
+  document.getElementById('module-vragen-content').innerHTML = html;
+}
+
+function beantwoordVraag(gekozenIdx){
+  const vragen = toets.huidigeVragen;
+  const i = toets.huidigeVraagIdx;
+  const v = vragen[i];
+  if(toets.antwoorden[i] !== null) return; // al beantwoord
+  toets.antwoorden[i] = gekozenIdx;
+
+  v.opties.forEach((opt,j)=>{
+    const btn = document.getElementById('opt'+j);
+    btn.disabled = true;
+    if(j===v.antwoord) btn.classList.add('correct');
+    else if(j===gekozenIdx) btn.classList.add('wrong');
+  });
+  if(gekozenIdx !== v.antwoord){
+    const uitlegEl = document.getElementById('kv-uitleg');
+    uitlegEl.innerHTML = v.uitleg;
+    uitlegEl.classList.add('show');
+  }
+  document.getElementById('volgende-vraag-btn').style.display='';
+}
+
+function volgendeVraag(){
+  if(toets.huidigeVraagIdx + 1 < toets.huidigeVragen.length){
+    toets.huidigeVraagIdx++;
+    renderVraag();
+  } else {
+    document.getElementById('zi-module-titel').textContent = huidigeModuleInfo(toets.moduleIndex).module.naam;
+    showScreen('zelfinschatting');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  ZELFINSCHATTING + MATRIX (§1)
+// ══════════════════════════════════════════════════════
+function bepaalMatrixCategorie(scoreGoed, zelfinschatting){
+  const zeker = ZI_ZEKER.has(zelfinschatting);
+  if(scoreGoed && zeker) return 'beheerst';
+  if(!scoreGoed && zeker) return 'blinde';      // blinde vlek: hoogste prioriteit
+  if(!scoreGoed && !zeker) return 'hiaat';      // bewust hiaat
+  return 'verborgen';                            // score fout=false hier => goed & onzeker
+}
+
+const MATRIX_INFO = {
+  beheerst:  {label:'Beheerst', klasse:'matrix-beheerst',
+    advies:'Geen actie nodig — dit onderdeel beheers je.'},
+  verborgen: {label:'Verborgen kunde', klasse:'matrix-verborgen',
+    advies:'Dit ging beter dan je zelf dacht — vertrouwen mag hier omhoog.'},
+  hiaat:     {label:'Bewust hiaat', klasse:'matrix-hiaat',
+    advies:'Dit wist je zelf al — gewoon nog even gericht oefenen.'},
+  blinde:    {label:'Blinde vlek', klasse:'matrix-blinde',
+    advies:'Dit voelde vertrouwd, maar de score laat zien dat er iets net verkeerd zit. Dit is een onderdeel om samen met uitleg opnieuw door te nemen, niet alleen te herhalen.'},
+};
+// prioriteitsvolgorde voor het eindrapport
+const PRIO_VOLGORDE = {blinde:0, hiaat:1, verborgen:2, beheerst:3};
+
+function kiesZelfinschatting(waarde){
+  const vragen = toets.huidigeVragen;
+  const goedAantal = toets.antwoorden.filter((a,i)=>a===vragen[i].antwoord).length;
+  const totaal = vragen.length;
+  const pct = Math.round(goedAantal/totaal*100);
+  const scoreGoed = pct >= 70; // drempel voor "score: goed" in de matrix
+
+  const categorie = bepaalMatrixCategorie(scoreGoed, waarde);
+  const {module} = huidigeModuleInfo(toets.moduleIndex);
+
+  const foutVragen = vragen.filter((v,i)=>toets.antwoorden[i]!==v.antwoord);
+
+  toets.resultaten.push({
+    moduleId: module.id,
+    moduleNaam: module.naam,
+    goed: goedAantal, totaal, pct,
+    zelfinschatting: waarde,
+    categorie,
+    foutVragen: foutVragen.map(v=>({vraag:v.vraag, uitleg:v.uitleg})),
+  });
+  opslaanVoortgang();
+
+  toonResultaatScherm(module.naam, goedAantal, totaal, pct, categorie, foutVragen);
+}
+
+function toonResultaatScherm(moduleNaam, goed, totaal, pct, categorie, foutVragen){
+  document.getElementById('res-module-titel').textContent = moduleNaam;
+  const info = MATRIX_INFO[categorie];
+  let html = `<div class="score-box">
+    <div class="score-pct">${goed} / ${totaal}</div>
+    <div class="score-label">${pct}% goed</div>
+    <div class="mt16"><span class="matrix-badge ${info.klasse}">${info.label}</span></div>
+    <p style="font-size:.85rem;color:#555;margin-top:12px;font-style:italic">${info.advies}</p>
+  </div>`;
+  if(foutVragen.length){
+    html += `<div class="veld-label">Uitleg bij foute vragen</div>`;
+    foutVragen.forEach(v=>{
+      html += `<div class="fout-item"><div class="fout-vraag">${v.vraag}</div><div class="fout-uitleg">${v.uitleg}</div></div>`;
+    });
+  }
+  document.getElementById('resultaat-content').innerHTML = html;
+
+  const isLaatste = toets.moduleIndex + 1 >= toets.actieveModules.length;
+  document.getElementById('volgende-onderdeel-btn').textContent = isLaatste ? 'Naar eindrapport →' : 'Volgende onderdeel →';
+  showScreen('resultaat');
+}
+
+function volgendOnderdeel(){
+  const volgendeIdx = toets.moduleIndex + 1;
+  if(volgendeIdx < toets.actieveModules.length){
+    gaNaarModule(volgendeIdx);
+  } else {
+    toonEindrapport();
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  EINDRAPPORT (§7)
+// ══════════════════════════════════════════════════════
+function toonEindrapport(){
+  const resultaten = toets.resultaten;
+  const grens = toets.grens;
+  const chObj = CHAPTERS.find(c=>c.h===grens);
+
+  const gesorteerd = [...resultaten].sort((a,b)=>PRIO_VOLGORDE[a.categorie]-PRIO_VOLGORDE[b.categorie]);
+  const totaalGoed = resultaten.reduce((s,r)=>s+r.goed,0);
+  const totaalVragen = resultaten.reduce((s,r)=>s+r.totaal,0);
+  const totaalPct = totaalVragen ? Math.round(totaalGoed/totaalVragen*100) : 0;
+
+  let html = `<div class="rapport-bereik">Getoetst t/m hoofdstuk <span class="r-hfst">H${grens}</span> — ${escHtml(chObj?chObj.naam:'')}<br>
+    <span style="font-size:.75rem;opacity:.8">${grens<=13?'Minerva 1':'Minerva 1 + 2'}</span></div>`;
+
+  html += `<div class="veld-label">Prioriteitenlijst — waar begin je mee?</div>`;
+  gesorteerd.forEach(r=>{
+    const info = MATRIX_INFO[r.categorie];
+    html += `<div class="prio-item prio-${r.categorie}">
+      <div class="prio-head"><span class="prio-naam">${escHtml(r.moduleNaam)}</span><span class="matrix-badge ${info.klasse}">${info.label}</span></div>
+      <div class="prio-meta">Score: ${r.goed}/${r.totaal} (${r.pct}%) — Zelfinschatting: ${ZI_LABELS[r.zelfinschatting]}</div>
+      <div class="prio-advies">${info.advies}</div>
+    </div>`;
+  });
+
+  html += `<div class="totaal-box">Totaalscore: <span class="t-pct">${totaalGoed} / ${totaalVragen} (${totaalPct}%)</span><br>
+    <span style="font-size:.72rem">(context, geen doel op zich — de prioriteitenlijst hierboven is het belangrijkste onderdeel van dit rapport)</span></div>`;
+
+  html += `<p class="print-only" style="font-size:.75rem;color:#888;margin-top:20px">Diagnosticum · Gerben de Jong · afgedrukt op ${new Date().toLocaleDateString('nl-NL')}</p>`;
+
+  document.getElementById('eindrapport-content').innerHTML = html;
+  document.getElementById('voortgang-badge').style.display='none';
+
+  // Bewaar resultaat (los van de lopende-voortgang-key) en wis de lopende toets
+  try{
+    const bewaard = JSON.parse(localStorage.getItem(LS_KEY_RESULTATEN))||[];
+    bewaard.push({datum:new Date().toISOString(), grens, resultaten, totaalPct});
+    localStorage.setItem(LS_KEY_RESULTATEN, JSON.stringify(bewaard.slice(-10)));
+  }catch(e){}
+  wisVoortgang();
+
+  showScreen('eindrapport');
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+vulHoofdstukSelect();
+checkHervattenBlok();
+</script>
+</body>
+</html>
