@@ -15,6 +15,7 @@ let FP_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all", customTe
 let FP_POOL = [];
 let FP_Q = null;
 let FP_STATS = { correct:0, wrong:0, xp:0, coins:0 };
+let FP_WRONG_COUNTS = {}; // gespreide herhaling: fout beantwoorde woorden komen vaker terug (zie core.js: pickWeighted)
 
 SCREENS.freePractice = function(){
   document.body.classList.remove("greek");
@@ -55,6 +56,7 @@ function fpStart(){
   FP_POOL = buildPool(FP_DRAFT);
   if(FP_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort."); return; }
   FP_STATS = { correct:0, wrong:0, xp:0, coins:0 };
+  FP_WRONG_COUNTS = {};
   go("freePracticePlay");
 }
 
@@ -78,7 +80,7 @@ function fpUpdateStatsBar(){
 }
 
 function fpNextQuestion(){
-  FP_Q = makeQuestion(FP_POOL);
+  FP_Q = makeQuestion(FP_POOL, w=>2*(FP_WRONG_COUNTS[w.la]||0));
   const host = el("fpQuestionHost"); if(!host) return;
   const lang = FP_DRAFT.lang==="el"?"Griekse":"Latijnse";
   host.innerHTML = `
@@ -113,6 +115,7 @@ function fpAnswer(idx){
   } else {
     FP_STATS.wrong++;
     P.stats.totalWrong++; P.stats.currentStreak=0; saveProfile();
+    FP_WRONG_COUNTS[q.la]=(FP_WRONG_COUNTS[q.la]||0)+1;
     beep("bad");
   }
   fpUpdateStatsBar();

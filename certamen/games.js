@@ -355,6 +355,11 @@ function startBots(){
 }
 
 /* gedeelde antwoord-afhandeling (gebruikt door bots op host én door spelers lokaal) */
+// Snelvuur-score telt fout beantwoorden mee (nooit onder 0): puur gokken om
+// zoveel mogelijk te klikken levert zo geen voordeel meer op t.o.v. rustig
+// nadenken. Zie benchmark-toetsing/01-risicos.md (Hanus & Fox / Blooket-euvel
+// / Kahoot-tempo, alle drie samenkomend in Snelvuur).
+function snelScore(p){ return Math.max(0,(p.correct||0)-(p.wrong||0)); }
 function applyAnswer(pid, p, ok){
   if(META.game==="snelvuur"){
     Net.updatePlayer(CODE, pid, ok?{correct:(p.correct||0)+1}:{wrong:(p.wrong||0)+1});
@@ -388,7 +393,7 @@ function hostCheckEnd(){
     else if(rp>=META.target){ _ending=true; Net.setState(CODE,{status:"finished",winner:"B"}); }
   } else if(META.game==="snelvuur"){
     if(STATE.deadline && Date.now() >= STATE.deadline){
-      const sorted=Object.entries(PLAYERS).sort((a,b)=>(b[1].correct||0)-(a[1].correct||0));
+      const sorted=Object.entries(PLAYERS).sort((a,b)=>snelScore(b[1])-snelScore(a[1]));
       _ending=true;
       Net.setState(CODE,{status:"finished",winner:sorted.length?sorted[0][0]:"_stopped"});
     }
@@ -431,13 +436,13 @@ function updateGameView(){
   if(!el("gameRoot"))return;
   if(META.game==="snelvuur"){
     const sl=el("scoreList"); if(!sl)return;
-    const sorted=Object.values(PLAYERS).sort((a,b)=>(b.correct||0)-(a.correct||0));
+    const sorted=Object.values(PLAYERS).sort((a,b)=>snelScore(b)-snelScore(a));
     sl.innerHTML=sorted.map((p,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:7px 10px;background:var(--stone3);border-radius:8px">
       <span style="font-size:18px;font-weight:700;color:var(--muted);min-width:22px">${i+1}</span>
       ${avatarHTML(p.avatar,p.color,30)}
       <span style="flex:1;font-size:14px">${esc(p.name)}</span>
-      <span style="font-size:20px;font-weight:700;color:var(--hi)">${p.correct||0}</span>
-      <span style="font-size:11px;color:var(--muted)">goed</span>
+      <span style="font-size:20px;font-weight:700;color:var(--hi)">${snelScore(p)}</span>
+      <span style="font-size:11px;color:var(--muted)">score</span>
     </div>`).join("") || `<div class="note">Nog geen antwoorden…</div>`;
     return;
   }
@@ -471,10 +476,10 @@ function showResultHost(){
   let title, medal, podium="";
   if(META.game==="snelvuur"){
     const w=PLAYERS[winner];
-    title = w?`${esc(w.name)} wint met ${w.correct||0} goede antwoorden!`:"Wedstrijd gestopt";
+    title = w?`${esc(w.name)} wint met score ${snelScore(w)}!`:"Wedstrijd gestopt";
     medal = medalSVG("crown",120);
-    const order=Object.values(PLAYERS).sort((a,b)=>(b.correct||0)-(a.correct||0));
-    podium=`<div class="podium">${order.slice(0,6).map((p,i)=>`<div class="podline"><span class="rk">${i+1}</span><span class="av">${avatarHTML(p.avatar,p.color,32)}</span><span class="nm">${esc(p.name)}</span><span class="sc">${p.correct||0} goed</span></div>`).join("")}</div>`;
+    const order=Object.values(PLAYERS).sort((a,b)=>snelScore(b)-snelScore(a));
+    podium=`<div class="podium">${order.slice(0,6).map((p,i)=>`<div class="podline"><span class="rk">${i+1}</span><span class="av">${avatarHTML(p.avatar,p.color,32)}</span><span class="nm">${esc(p.name)}</span><span class="sc">${snelScore(p)} score</span></div>`).join("")}</div>`;
   } else if(META.game==="touwtrekken"){
     const team = winner==="A"?"Rubri (Rood)":winner==="B"?"Caerulei (Blauw)":null;
     title = team?`${team} wint!`:"Wedstrijd gestopt";
@@ -551,8 +556,8 @@ SCREENS.joinDetails = function(){
   H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('join')">${iconSVG("shield",20,"currentColor")}</button><h2>Meedoen</h2></div>
   <div class="panel">
     <div class="note">Code: <b>${esc(JOIN_CODE)}</b></div>
-    <label class="fld" style="margin-top:10px">Jouw naam</label>
-    <input type="text" id="joinName" maxlength="16" placeholder="bv. ${esc(P.name||"Sofia")}" value="${esc(P.name)}">
+    <label class="fld" style="margin-top:10px">Jouw naam <small style="text-transform:none">(optioneel — leeg = je avatarnaam)</small></label>
+    <input type="text" id="joinName" maxlength="16" placeholder="bv. ${esc(autoJoinName())}" value="${esc(P.name)}">
   </div>
   <div class="panel">
     <label class="fld">Kleur</label>
@@ -565,12 +570,17 @@ SCREENS.joinDetails = function(){
 };
 function setColor(c){ P.color=c; saveProfile(); SCREENS.joinDetails(); }
 function setAvatar(id){ P.avatar=id; saveProfile(); SCREENS.joinDetails(); }
+// Kernmodus: leerlingen mogen anoniem meedoen — geen naam invullen levert een
+// label uit hun avatar op ("Uil 42") i.p.v. verplichte vrije tekst.
+function autoJoinName(){
+  const a=AVATARS.find(x=>x.id===P.avatar);
+  return (a?a.nm:"Speler")+" "+(1+rand(99));
+}
 
 async function doJoin(){
   const c=JOIN_CODE;
-  const nm=(el("joinName").value||"").trim();
+  const nm=(el("joinName").value||"").trim()||autoJoinName();
   if(!c){ go("join"); return; }
-  if(!nm){ toast("Naam ontbreekt","Vul je naam in."); return; }
   P.name=nm; saveProfile();
   chooseNet();
   if(Net===DemoNet){ toast("Geen verbinding","Deze code werkt alleen met Firebase. Vraag je docent of dit is ingesteld."); return; }
@@ -612,8 +622,12 @@ SCREENS.playerLobby = function(){
 
 /* ---- LEERLING: spelen ---- */
 let curQ=null, answered=false;
+// Gespreide herhaling binnen één sessie: telt hoe vaak elk woord deze sessie
+// fout ging (voor de gewogen trekking in makeQuestion) en bewaart welke
+// woorden/antwoorden dat waren (voor het overzicht op het resultaatscherm).
+let WRONG_COUNTS={}, MISSED_WORDS=[];
 SCREENS.playerGame = function(){
-  myStreak=0; answered=false;
+  myStreak=0; answered=false; WRONG_COUNTS={}; MISSED_WORDS=[];
   unsubState = Net.onState(CODE, s=>{ STATE=s||{}; if(STATE.status==="finished")go("result"); else updatePlayerMini(); });
   unsubPlayers = Net.onPlayers(CODE, ps=>{ PLAYERS=ps||{}; updatePlayerMini(); });
   drawQuestion();
@@ -629,7 +643,7 @@ function miniHTML(){
     const left=STATE.deadline?Math.max(0,Math.ceil((STATE.deadline-Date.now())/1000)):0;
     const pct=META.target?Math.round(left/META.target*100):100;
     return `<div class="ministat">
-      <span style="font-weight:700">Score: ${me.correct||0}</span>
+      <span style="font-weight:700">Score: ${snelScore(me)}</span>
       <div class="seg"><i style="left:0;width:${pct}%;background:linear-gradient(90deg,var(--hi-dim),var(--hi))"></i></div>
       <span style="font-weight:700;color:${left<=10?"#e05555":"var(--hi)"}">${left}s</span></div>
       <div class="note" style="text-align:center;margin-top:-6px;margin-bottom:10px">Zo snel mogelijk goede antwoorden geven!</div>`;
@@ -656,7 +670,7 @@ function drawQuestion(){
   const me=myPlayer();
   if(me.frozenUntil && nowMs()<me.frozenUntil){ return drawFrozen(me.frozenUntil); }
   answered=false;
-  curQ = makeQuestion(POOL);
+  curQ = makeQuestion(POOL, w=>2*(WRONG_COUNTS[w.la]||0));
   H(brand(false)+`<div id="mini">${miniHTML()}</div>
     <div class="qcard"><div class="kick">${META.lang==="el"?"Grieks":"Latijn"} → Nederlands</div>
       <div class="word">${esc(curQ.la)}</div>${curQ.pos?`<div class="pos">${esc(curQ.pos)}</div>`:""}</div>
@@ -687,10 +701,17 @@ function answer(i){
   if(ok){ myStreak++; P.stats.totalCorrect++; P.stats.currentStreak++;
     if(P.stats.currentStreak>P.stats.bestStreak)P.stats.bestStreak=P.stats.currentStreak;
     addCoins(2); beep("good"); }
-  else { myStreak=0; P.stats.currentStreak=0; P.stats.totalWrong++; beep("bad"); }
+  else { myStreak=0; P.stats.currentStreak=0; P.stats.totalWrong++; beep("bad");
+    WRONG_COUNTS[curQ.la]=(WRONG_COUNTS[curQ.la]||0)+1;
+    if(!MISSED_WORDS.some(m=>m.la===curQ.la)) MISSED_WORDS.push({la:curQ.la, correct:curQ.options[curQ.correctIdx]});
+  }
   saveProfile();
   applyAnswer(PID, me, ok);
-  const delay=META.game==="snelvuur"?600:(ok?520:900);
+  // Snelvuur had voorheen een vaste pauze ongeacht goed/fout — daardoor kostte
+  // blind gokken niets. Nu net als de andere spellen: een fout antwoord duurt
+  // langer (900ms) dan een goed antwoord (520ms), zodat gokken binnen de
+  // sessietijd ook echt tijd (en dus vragen) kost.
+  const delay=ok?520:900;
   setTimeout(()=>{ if(STATE.status==="playing")drawQuestion(); }, delay);
 }
 
@@ -705,7 +726,7 @@ SCREENS.result = function(){
   } else if(META.game==="snelvuur"){
     won = STATE.winner===PID;
     const w=PLAYERS[STATE.winner];
-    line = w?(won?`Jij wint met ${me.correct||0} goede antwoorden!`:`${esc(w.name)} wint (${w.correct||0} goed)`):"Wedstrijd gestopt";
+    line = w?(won?`Jij wint met score ${snelScore(me)}!`:`${esc(w.name)} wint (score ${snelScore(w)})`):"Wedstrijd gestopt";
   } else {
     won = STATE.winner===PID;
     const w=PLAYERS[STATE.winner];
@@ -737,6 +758,10 @@ SCREENS.result = function(){
         <div style="height:100%;width:${_xpFill}%;background:var(--hi);border-radius:4px;transition:width .6s"></div></div>
       <div style="display:flex;justify-content:space-between;margin-top:4px"><span>Totaal goed</span><b>${P.stats.totalCorrect}</b></div>
     </div>
+    ${MISSED_WORDS.length?`<div class="panel" style="text-align:left">
+      <div class="fld">Deze woorden gingen fout</div>
+      ${MISSED_WORDS.map(m=>`<div style="display:flex;justify-content:space-between;margin-top:6px"><span>${esc(m.la)}</span><b style="color:var(--hi)">${esc(m.correct)}</b></div>`).join("")}
+    </div>`:""}
     <button class="btn btn-gold btn-block lg" onclick="backToLobbyPlayer()">Wachten op volgende ronde</button>
     <button class="btn btn-ghost btn-block" style="margin-top:10px" onclick="leaveAll();go('collection')">Mijn verzameling</button>
   </div>${foot()}`);

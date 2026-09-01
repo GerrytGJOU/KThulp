@@ -14,6 +14,8 @@ Leerlingen loggen in met een **klascode** (van de docent) en een **zelf gekozen 
 - Velden: `name`, `coins`, `xp`, `avatar`, `color`, `classHistory`, `achievements`
 - Lokaal opgeslagen in `localStorage` onder sleutel `certamen_battle_identity`
 
+**Weergavenaam is optioneel** (`SCREENS.battleIdentity`, `bmIdentDoLogin()`). Een leerling hoeft geen vrije tekst in te typen — leeg gelaten genereert `bmAutoName()` een badge uit een willekeurige vechtklasse + volgnummer (bv. "Priester 86", uit dezelfde `BM_CLASSES`-lijst als de klassekeuze in het gevecht). Dit voorkomt dat leerlingen gedwongen worden een herkenbare of ongepaste naam te kiezen, terwijl de naam nog steeds vrij aan te passen blijft via "Mijn profiel" (`bmRenameSelf()`). Zie de benchmark-toetsing (`benchmark-toetsing/00-checklist-per-modus.md`, checklistpunt 3) voor de aanleiding.
+
 ### Cross-device sync (ook buiten Battle Mode)
 
 **Principe: opgebouwde progressie (xp, en later coins/andere resources) hoort
@@ -158,12 +160,24 @@ De docent kiest vóór het gevecht een **factie**. Dit herthemert de volledige p
 
 | Id | Naam | Team A | Team B |
 |---|---|---|---|
-| `rome_gaul` | Romeinen vs Galliërs *(standaard)* | Legio Romani (rood) | Gallische Stam (groen) |
+| `rome_gaul` | Romeinen vs Galliërs *(vaste fallback)* | Legio Romani (rood) | Gallische Stam (groen) |
 | `athene_sparta` | Athene vs Sparta | Atheners (blauw) | Spartanen (donkerrood) |
 | `grieken_perzen` | Grieken vs Perzen | Hellenen (blauw) | Perzen (paars) |
 | `rome_carthago` | Romeinen vs Carthago | Legio Romani (rood) | Carthago (goud) |
 | `grieken_trojanen` | Grieken vs Trojanen | Grieken (blauw) | Trojanen (goud) |
 | `goden_titanen` | Goden vs Titanen | Olympiërs (goud) | Titanen (dieppaars) |
+
+### Voorgestelde default rouleert per week
+
+`rome_gaul` (`default:true`) is alleen nog de fallback als er geen weekgebonden
+factie te bepalen valt (bv. corrupte/onbekende `theme`-id, zie `bmFaction()`).
+De **voorgestelde** default in `battleHostSettings` en bij het aanmaken van
+een nieuw gevecht wordt bepaald door `bmWeekFactionId()`: een kalenderweek-
+gebaseerde rotatie over `BM_FACTIONS` (`week-nummer % aantal facties`). Dit
+bestrijdt novelty-verval (elke week automatisch een andere sfeer, zonder dat
+de docent eraan hoeft te denken) — zie `benchmark-toetsing/00-checklist-per-modus.md`,
+checklistpunt 7. De docent kan de voorgestelde factie nog altijd handmatig
+overschrijven via de bestaande dropdown; er is geen nieuwe instelling nodig.
 
 ### CSS-themasysteem
 
@@ -1030,7 +1044,7 @@ maar in `certamen/core.js` — gedeeld met alle spelmodi, zie M6/M9 hierboven.
 
 - **Battle Mode vereist Firebase.** De drie bestaande modi werken ook in oefenmodus (DemoNet).
 - **Host-autoritair patroon.** Alle HP-mutaties gaan via de hostbrowser. Bij host-disconnect stopt het gevecht.
-- **Adaptief leren is rudimentair.** Gemiste woorden komen vaker terug via gewicht in `bmPersonalPool()`, maar er is geen volledige spaced-repetition-logica.
+- **Adaptief leren blijft sessie-lokaal.** Gemiste woorden komen vaker terug via gewicht in `bmPersonalPool()`, en sinds de vervalteller (`missed/{woord}/due`, geschreven in `bmAnswer()`) pas ná een oplopend aantal rondes (1/2/3+) weer extra gewicht geeft, is er nu ook echte spreiding bínnen één gevecht — maar het register verdwijnt nog steeds bij het verlaten van de kamer, geen persistentie over gevechten heen.
 - **Maximale schaalgrootte niet getest boven 50 spelers.** Firebase-listeners zijn per room, maar rendering in `bmHostUpdatePlayers()` vervangt de volledige grid bij elke update.
 - **Geen persistentie van Analytics.** Alle analytics worden client-side berekend uit het Firebase-log. Als de host de sessie afsluit vóór de analytics-pagina, is het log niet meer beschikbaar.
 
