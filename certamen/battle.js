@@ -3256,7 +3256,10 @@ async function bmResolve(roundN){
       // bij verlies). Alleen relevant als dit gevecht vanuit twStartAttack()
       // gestart is.
       if(gp) twResolveSiege(winner,curStageKey||"towers",tB.maxHealth,newHB,players).catch(()=>{});
-      setTimeout(()=>Net.deleteRoom(BM_CODE).catch(()=>{}), 5000);
+      // De kamer bewust laten staan: de award-ceremonie en de statistieken
+      // lezen het log nog, en "Nieuw gevecht — zelfde spelers" heeft de
+      // spelers nodig. Opruimen gebeurt in bmHostFinish(), als de docent de
+      // nabespreking verlaat.
       return;
     }
     await bmDistributeQs(roundN+1);
@@ -3292,9 +3295,25 @@ function bmUpdateMastery(players,pUpd,events){
   }
 }
 function bmEndGame(){
-  if(fbDB)fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:"_stopped"})
-    .then(()=>Net.deleteRoom(BM_CODE)).catch(()=>{});
-  cleanup();bmLeave();go("home");
+  // Vroeger sprong dit meteen naar het hoofdmenu en wiste het de kamer. Een
+  // docent die halverwege stopte — les afgelopen, of gewoon genoeg gespeeld —
+  // zag daardoor nooit wie er goed had gespeeld. Nu loopt een handmatig einde
+  // door dezelfde afronding als een gewonnen gevecht: eerbewijzen, erepodium,
+  // klasscore en statistieken. De kamer blijft bestaan tot de docent daar
+  // wegklikt (bmHostFinish), zodat het log leesbaar blijft én "Nieuw gevecht —
+  // zelfde spelers" nog kan.
+  if(fbDB)fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:"_stopped"}).catch(()=>{});
+  BM_STATE={...BM_STATE,status:"finished",winner:"_stopped"};
+  bmHostResult();
+}
+
+// De docent verlaat de nabespreking: nu pas de kamer opruimen. Zolang die
+// bestaat kan hij nog door de statistieken bladeren en een nieuw gevecht met
+// dezelfde spelers starten.
+function bmHostFinish(){
+  const code=BM_CODE;
+  if(fbDB&&code) Net.deleteRoom(code).catch(()=>{});
+  bmLeave(); go("home");
 }
 
 /* ---- GEVECHTSCONTROLE (host-side, live) ---- */
@@ -3741,7 +3760,7 @@ SCREENS.battleHostAnalytics = async function(){
   const players=BM_AWARD_DATA?.all||Object.values(BM_PLAYERS);
   H(brand(false)+`
   <div class="scrhead">
-    <button class="back" onclick="bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button>
+    <button class="back" onclick="bmHostFinish()">${iconSVG("shield",20,"currentColor")}</button>
     <h2>📊 Klassenoverzicht</h2>
   </div>
   <div class="panel" style="padding:8px 12px">
@@ -3753,6 +3772,7 @@ SCREENS.battleHostAnalytics = async function(){
   <div id="bmAnalContent"><div class="panel"><div class="note" style="text-align:center">Laden…</div></div></div>
   <div style="padding:0 16px 8px;display:flex;flex-direction:column;gap:8px">
     <button class="btn btn-gold btn-block bm-again-btn" onclick="bmNewMatchSamePlayers()">↻ Nieuw gevecht — zelfde spelers</button>
+    <button class="btn btn-block" onclick="bmHostFinish()">✓ Afsluiten — kamer sluiten</button>
     <button class="btn btn-block" onclick="bmExportCSV()">📥 Exporteer CSV</button>
   </div>
   ${foot()}`);
