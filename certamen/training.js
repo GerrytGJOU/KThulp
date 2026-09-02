@@ -24,7 +24,7 @@
 /* ---- Lokale oefeninstellingen: BEWUST een eigen object, niet de gedeelde
    DRAFT (die wordt door docent-gehoste spellen gebruikt en zou anders door
    Training Mode overschreven kunnen worden op hetzelfde toestel). ---- */
-let TR_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all" };
+let TR_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all", vf:vfqDefaultDraft("la") };
 let TR_TRACK = (function(){ try{ return localStorage.getItem("certamen_training_track")||"militia"; }catch(e){ return "militia"; } })();
 let TR_CIV = null;            // civId van de beschaving van BM_IDENT.klascode
 let TR_OWNED_PROVINCES = [];  // provincies van TR_CIV, met hun huidige puntentellers
@@ -167,10 +167,18 @@ function trRenderModeBody(){
   <div class="panel">
     <label class="fld">Taal</label>
     <div class="chips">
-      <button class="chip ${TR_DRAFT.lang==='la'?'on':''}" onclick="TR_DRAFT.lang='la';trRenderModeBody()">Latijn</button>
-      <button class="chip ${TR_DRAFT.lang==='el'?'on':''}" onclick="TR_DRAFT.lang='el';trRenderModeBody()">Grieks</button>
+      <button class="chip ${TR_DRAFT.lang==='la'?'on':''}" onclick="trSetLang('la')">Latijn</button>
+      <button class="chip ${TR_DRAFT.lang==='el'?'on':''}" onclick="trSetLang('el')">Grieks</button>
     </div>
   </div>
+  <div class="panel">
+    <label class="fld">Bron</label>
+    <div class="chips">
+      <button class="chip ${TR_DRAFT.source==='freq'?'on':''}" onclick="TR_DRAFT.source='freq';trRenderModeBody()">Frequentielijst</button>
+      <button class="chip ${TR_DRAFT.source==='verbforms'?'on':''}" onclick="TR_DRAFT.source='verbforms';trRenderModeBody()">Werkwoordsvormen</button>
+    </div>
+  </div>
+  ${TR_DRAFT.source==="verbforms" ? vfqFilterHTML(TR_DRAFT.vf, TR_DRAFT.lang, "TR_DRAFT.vf", "trRenderModeBody()") : `
   <div class="panel">
     <label class="fld">Frequentiebereik — woord nr.</label>
     <div class="row">
@@ -187,10 +195,12 @@ function trRenderModeBody(){
     <div class="chips">
       ${CATS.map(c=>`<button class="chip ${TR_DRAFT.cat===c.id?'on':''}" onclick="TR_DRAFT.cat='${c.id}';trRenderModeBody()">${c.nm} <small>${catCount(list,c.id)}</small></button>`).join("")}
     </div>
-  </div>
+  </div>`}
   <button class="btn btn-gold btn-block lg" onclick="trStart()">Beginnen</button>
   <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('trainingGarrison')">🏰 Bekijk je gebied</button>`;
 }
+
+function trSetLang(lang){ TR_DRAFT.lang=lang; TR_DRAFT.vf=vfqDefaultDraft(lang); trRenderModeBody(); }
 
 function trSetTrack(key){
   TR_TRACK=key;
@@ -236,8 +246,8 @@ function trTrackProgressHTML(){
 }
 
 async function trStart(){
-  TR_POOL = buildPool(TR_DRAFT);
-  if(TR_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort."); return; }
+  TR_POOL = TR_DRAFT.source==="verbforms" ? vfqBuildPool(TR_DRAFT.vf, TR_DRAFT.lang) : buildPool(TR_DRAFT);
+  if(TR_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort/tijd."); return; }
   TR_STATS = { correct:0, wrong:0, points:0, xp:0 };
   TR_CLASS_SIZE = await twGetClassSize(BM_IDENT.klascode);
   TR_CAP_TODAY = await trLoadDailyCap();
@@ -286,13 +296,24 @@ function trRenderTarget(){
 }
 
 function trNextQuestion(){
-  TR_Q = makeQuestion(TR_POOL);
   const host = el("trQuestionHost"); if(!host) return;
-  const lang = TR_DRAFT.lang==="el"?"Griekse":"Latijnse";
+  if(TR_DRAFT.source==="verbforms" && TR_DRAFT.vf.mode==="typed"){
+    TR_Q = vfqMakeTypedQuestion(TR_POOL);
+    host.innerHTML = `
+    <div class="qcard"><div class="kick">${TR_Q.taal==="el"?"Grieks":"Latijn"} — getypte vorm</div>
+      <div class="word" style="font-size:20px">${TR_Q.vraag}</div></div>
+    <div class="panel"><input type="text" id="trTyped" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="typ de vorm..." style="width:100%;font-size:18px" onkeydown="if(event.key==='Enter')trAnswerTyped()">
+      <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="trAnswerTyped()">Controleer</button></div>`;
+    el("trTyped").focus();
+    return;
+  }
+  TR_Q = TR_DRAFT.source==="verbforms" ? vfqMakeQuestion(TR_POOL) : makeQuestion(TR_POOL);
+  const kick = TR_DRAFT.source==="verbforms" ? "Welke vertaling hoort bij deze vorm?" : `Vertaal het ${TR_DRAFT.lang==="el"?"Griekse":"Latijnse"} woord`;
+  const woord = TR_DRAFT.source==="verbforms" ? TR_Q.vorm : TR_Q.la;
   host.innerHTML = `
   <div class="qcard">
-    <div class="kick">Vertaal het ${lang} woord</div>
-    <div class="word">${esc(TR_Q.la)}</div>
+    <div class="kick">${kick}</div>
+    <div class="word">${esc(woord)}</div>
     ${TR_Q.pos?`<div class="pos">${esc(TR_Q.pos)}</div>`:""}
   </div>
   <div class="choices">
@@ -311,6 +332,22 @@ function trAnswer(idx){
     else c.classList.add("dim");
     c.disabled=true;
   });
+  trScoreAnswer(ok, ()=>trShowMissHint(q));
+}
+
+function trAnswerTyped(){
+  if(!TR_Q) return;
+  const q = TR_Q; TR_Q = null;
+  const box = el("trTyped");
+  const typed = box ? box.value : "";
+  const ok = vfqControleer(q, typed);
+  const host = el("trQuestionHost");
+  if(host) host.insertAdjacentHTML("beforeend", `<div class="panel" style="text-align:center;color:${ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${ok?"Goed!":"Fout — juiste antwoord: "+esc(q.antwoord)}</div>`);
+  if(box) box.disabled = true;
+  trScoreAnswer(ok, null);
+}
+
+function trScoreAnswer(ok, missHintFn){
   if(ok){
     // Klasgrootte-schaling (TOTAL_WAR.md §7.4): elke leerling draagt minder
     // per antwoord bij naarmate de klas groter is (1/√N), zodat een klas van
@@ -358,7 +395,7 @@ function trAnswer(idx){
   } else {
     TR_STATS.wrong++;
     P.stats.totalWrong++; P.stats.currentStreak=0; saveProfile();
-    trShowMissHint(q);
+    if(missHintFn) missHintFn();
   }
   trUpdateStatsBar();
   setTimeout(trNextQuestion, ok?900:1400);

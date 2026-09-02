@@ -99,6 +99,7 @@ SCREENS.hostSource = function(){
       <button class="chip ${DRAFT.source==='freq'&&DRAFT.lang==='la'?'on':''}" onclick="setSrc('freq','la')">Latijn — frequentielijst <small>${baseLA}</small></button>
       <button class="chip ${DRAFT.source==='freq'&&DRAFT.lang==='el'?'on':''}" onclick="setSrc('freq','el')">Grieks — frequentielijst <small>${baseEL}</small></button>
       <button class="chip ${DRAFT.source==='custom'?'on':''}" onclick="setSrc('custom','')">Eigen lijst</button>
+      <button class="chip ${DRAFT.source==='verbforms'?'on':''}" onclick="setSrc('verbforms',DRAFT.lang)">Werkwoordsvormen</button>
     </div>
   </div>
   <div id="srcBody"></div>
@@ -106,9 +107,18 @@ SCREENS.hostSource = function(){
   ${foot()}`);
   renderSrcBody();
 };
-function setSrc(src,lang){ DRAFT.source=src; if(lang)DRAFT.lang=lang; SCREENS.hostSource(); }
+function setSrc(src,lang){ DRAFT.source=src; if(lang)DRAFT.lang=lang; if(src==="verbforms"&&!DRAFT.vf)DRAFT.vf=vfqDefaultDraft(DRAFT.lang); SCREENS.hostSource(); }
+function setSrcVfLang(lang){ DRAFT.lang=lang; DRAFT.vf=vfqDefaultDraft(lang); renderSrcBody(); }
 function renderSrcBody(){
   const body = el("srcBody"); if(!body) return;
+  if(DRAFT.source==="verbforms"){
+    if(!DRAFT.vf) DRAFT.vf = vfqDefaultDraft(DRAFT.lang);
+    body.innerHTML = `<div class="panel"><label class="fld">Taal</label><div class="chips">
+        <button class="chip ${DRAFT.lang==='la'?'on':''}" onclick="setSrcVfLang('la')">Latijn</button>
+        <button class="chip ${DRAFT.lang==='el'?'on':''}" onclick="setSrcVfLang('el')">Grieks</button>
+      </div></div>` + vfqFilterHTML(DRAFT.vf, DRAFT.lang, "DRAFT.vf", "renderSrcBody()");
+    return;
+  }
   if(DRAFT.source==="custom"){
     body.innerHTML = `<div class="panel">
       <label class="fld">Plak je woorden — één per regel: <b>woord = betekenis</b></label>
@@ -192,8 +202,8 @@ function ingestRows(rows){
 }
 function confirmSource(){
   if(DRAFT.source==="custom"){ const box=el("customBox"); if(box)DRAFT.customText=box.value; }
-  const pool=buildPool(DRAFT);
-  if(pool.length<4){ toast("Te weinig woorden","Kies een groter bereik of voeg meer woorden toe."); return; }
+  const pool = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang) : buildPool(DRAFT);
+  if(pool.length<4){ toast("Te weinig woorden","Kies een groter bereik/meer werkwoorden of tijden."); return; }
   if(DRAFT.game==="battle"){ go("battleHostSettings"); return; }
   go("hostSettings");
 }
@@ -201,7 +211,7 @@ function confirmSource(){
 /* ---- HOST: instellingen ---- */
 SCREENS.hostSettings = function(){
   const g=DRAFT.game;
-  const poolN = buildPool(DRAFT).length;
+  const poolN = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang).length : buildPool(DRAFT).length;
   const gameNm=g==="touwtrekken"?"Touwtrekken":g==="snelvuur"?"Snelvuur":"Marathon";
   H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('hostSource')">${iconSVG("shield",20,"currentColor")}</button><h2>Instellingen</h2></div>
   <div class="panel"><div class="note">Spel: <b>${gameNm}</b> · ${poolN} woorden geselecteerd.</div></div>
@@ -237,9 +247,10 @@ function chooseNet(){
 }
 async function createRoom(){
   chooseNet();
-  const pool = buildPool(DRAFT);
+  const pool = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang) : buildPool(DRAFT);
   POOL = pool;
-  const meta = { game:DRAFT.game, lang:DRAFT.lang, target:DRAFT.target, penalty:DRAFT.penalty, freezeSec:DRAFT.freezeSec, createdAt:Net.serverTime() };
+  const meta = { game:DRAFT.game, lang:DRAFT.lang, target:DRAFT.target, penalty:DRAFT.penalty, freezeSec:DRAFT.freezeSec, createdAt:Net.serverTime(),
+    source:DRAFT.source, vfMode: DRAFT.source==="verbforms" ? DRAFT.vf.mode : null };
   META = meta;
   // unieke code
   let c = code4();
@@ -670,10 +681,22 @@ function drawQuestion(){
   const me=myPlayer();
   if(me.frozenUntil && nowMs()<me.frozenUntil){ return drawFrozen(me.frozenUntil); }
   answered=false;
-  curQ = makeQuestion(POOL, w=>2*(WRONG_COUNTS[w.la]||0));
+  if(META.source==="verbforms" && META.vfMode==="typed"){
+    curQ = vfqMakeTypedQuestion(POOL);
+    H(brand(false)+`<div id="mini">${miniHTML()}</div>
+      <div class="qcard"><div class="kick">${curQ.taal==="el"?"Grieks":"Latijn"} — getypte vorm</div>
+        <div class="word" style="font-size:20px">${curQ.vraag}</div></div>
+      <div class="panel"><input type="text" id="playerTyped" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="typ de vorm..." style="width:100%;font-size:18px" onkeydown="if(event.key==='Enter')answerTyped()">
+        <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="answerTyped()">Controleer</button></div>`);
+    const box=el("playerTyped"); if(box)box.focus();
+    return;
+  }
+  curQ = META.source==="verbforms" ? vfqMakeQuestion(POOL) : makeQuestion(POOL, w=>2*(WRONG_COUNTS[w.la]||0));
+  const kick = META.source==="verbforms" ? "Welke vertaling hoort bij deze vorm?" : `${META.lang==="el"?"Grieks":"Latijn"} → Nederlands`;
+  const woord = META.source==="verbforms" ? curQ.vorm : curQ.la;
   H(brand(false)+`<div id="mini">${miniHTML()}</div>
-    <div class="qcard"><div class="kick">${META.lang==="el"?"Grieks":"Latijn"} → Nederlands</div>
-      <div class="word">${esc(curQ.la)}</div>${curQ.pos?`<div class="pos">${esc(curQ.pos)}</div>`:""}</div>
+    <div class="qcard"><div class="kick">${kick}</div>
+      <div class="word">${esc(woord)}</div>${curQ.pos?`<div class="pos">${esc(curQ.pos)}</div>`:""}</div>
     <div class="choices" id="choices">${curQ.options.map((o,i)=>`<button class="choice" onclick="answer(${i})"><span class="n">${i+1}</span><span>${esc(o)}</span></button>`).join("")}</div>`);
 }
 function drawFrozen(until){
@@ -690,20 +713,32 @@ function drawFrozen(until){
 function answer(i){
   if(answered)return; answered=true;
   const ok = i===curQ.correctIdx;
-  const me=myPlayer();
-  // visuele feedback
+  const key = curQ.vorm||curQ.la;
   document.querySelectorAll("#choices .choice").forEach((b,k)=>{
     if(k===curQ.correctIdx)b.classList.add("correct");
     else if(k===i)b.classList.add("wrong"); else b.classList.add("dim");
     b.onclick=null;
   });
-  // stats + munten
+  if(!ok && !MISSED_WORDS.some(m=>m.la===key)) MISSED_WORDS.push({la:key, correct:curQ.options[curQ.correctIdx]});
+  scoreAnswer(ok, key);
+}
+function answerTyped(){
+  if(answered)return; answered=true;
+  const box=el("playerTyped"); const typed=box?box.value:"";
+  const ok = vfqControleer(curQ, typed);
+  if(box)box.disabled=true;
+  const app=document.getElementById("app");
+  if(app) app.insertAdjacentHTML("beforeend", `<div class="panel" style="text-align:center;color:${ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${ok?"Goed!":"Fout — juiste antwoord: "+esc(curQ.antwoord)}</div>`);
+  if(!ok && !MISSED_WORDS.some(m=>m.la===curQ.antwoord)) MISSED_WORDS.push({la:curQ.antwoord, correct:curQ.antwoord});
+  scoreAnswer(ok, curQ.antwoord);
+}
+function scoreAnswer(ok, wrongKey){
+  const me=myPlayer();
   if(ok){ myStreak++; P.stats.totalCorrect++; P.stats.currentStreak++;
     if(P.stats.currentStreak>P.stats.bestStreak)P.stats.bestStreak=P.stats.currentStreak;
     addCoins(2); beep("good"); }
   else { myStreak=0; P.stats.currentStreak=0; P.stats.totalWrong++; beep("bad");
-    WRONG_COUNTS[curQ.la]=(WRONG_COUNTS[curQ.la]||0)+1;
-    if(!MISSED_WORDS.some(m=>m.la===curQ.la)) MISSED_WORDS.push({la:curQ.la, correct:curQ.options[curQ.correctIdx]});
+    WRONG_COUNTS[wrongKey]=(WRONG_COUNTS[wrongKey]||0)+1;
   }
   saveProfile();
   applyAnswer(PID, me, ok);
