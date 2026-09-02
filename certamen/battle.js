@@ -865,6 +865,11 @@ SCREENS.battleFAQ = function(){
         helingen verrekend, en het slagveld animeert het resultaat.</li>
     </ol>
     <div class="note" style="margin-top:6px">Dit herhaalt zich tot een leger verslagen is.</div>
+    <div class="note" style="margin-top:6px"><b>Woordbron.</b> Bij het instellen van de vraagbron kan de docent
+    kiezen voor de gewone frequentielijst, een eigen lijst, of <b>Werkwoordsvormen</b>: je krijgt dan een
+    Latijnse of Griekse werkwoordsvorm te zien (bv. <i>vocat</i>) en moet de juiste Nederlandse vertaling
+    kiezen — de afleiders komen altijd uit hetzelfde werkwoord, dus dit toetst echt de vorm, niet de woordenschat.
+    De docent kan hier ook kiezen voor een <b>getypte</b> vraag ("geef de vorm van...") in plaats van meerkeuze.</div>
     <div class="note" style="margin-top:6px"><b>Basisacties.</b> Heb je nog geen klasse gekozen, of te weinig BE voor
     je vaardigheden? Dan staan er drie gratis acties klaar: Steen gooien (kleine aanval), Dekking zoeken
     (klein schild) en Aanmoedigen (+1 BE voor je team). Ze zijn zwakker dan je klasse-vaardigheden, maar je
@@ -1341,13 +1346,14 @@ SCREENS.battleHostSettings = function(){
 /* ---- KAMER AANMAKEN ---- */
 async function bmCreateRoom(){
   if(!initFirebase()){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
-  const pool=buildPool(DRAFT);
-  if(pool.length<4){toast("Te weinig woorden","Kies een groter bereik of voeg meer woorden toe.");return;}
+  const pool = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang) : buildPool(DRAFT);
+  if(pool.length<4){toast("Te weinig woorden","Kies een groter bereik/meer werkwoorden of tijden.");return;}
   POOL=pool;
   if(!BM_META)BM_META={};
   const ah=BM_META.armyHealth||100;
   const meta={game:"battle",lang:DRAFT.lang,source:DRAFT.source,fromN:DRAFT.fromN,toN:DRAFT.toN,
-    cat:DRAFT.cat,customText:DRAFT.customText||"",armyHealth:ah,
+    cat:DRAFT.cat,customText:DRAFT.customText||"",
+    vfMode: DRAFT.source==="verbforms" ? DRAFT.vf.mode : null, armyHealth:ah,
     answerTimer:BM_META.answerTimer||10,adaptive:BM_META.adaptive!==false,
     theme:BM_META.theme||bmWeekFactionId(),
     background:BM_META.background||"geen",
@@ -1688,7 +1694,10 @@ async function bmDistributeQs(roundN){
     // uitzondering: dan heeft nog niemand kunnen antwoorden.
     if(roundN>1&&!(p.lastAnswerRound===roundN-1&&p.lastAnswerOk===true)) beBonus=0;
     const pool=bmPersonalPool(pid,POOL,roundN);
-    up["players/"+pid+"/currentQ"]=JSON.stringify(makeQuestion(pool));
+    const q = BM_META?.source==="verbforms"
+      ? (BM_META.vfMode==="typed" ? vfqMakeTypedQuestion(pool) : vfqMakeQuestion(pool))
+      : makeQuestion(pool);
+    up["players/"+pid+"/currentQ"]=JSON.stringify(q);
     up["players/"+pid+"/answeredRound"]=-1;
     up["players/"+pid+"/lockedAction"]=null;
     if(beBonus>0) up["players/"+pid+"/be"]=bmClampBE((p.be||0)+beBonus);
@@ -1756,7 +1765,7 @@ function bmPersonalPool(pid,pool,roundN){
   const missedEntries=Object.values(BM_PLAYERS[pid]?.missed||{});
   const w=[...pool];
   pool.forEach(word=>{
-    const m=missedEntries.find(e=>e.p===word.la);
+    const m=missedEntries.find(e=>e.p===(word.vorm||word.la));
     if(!m||(roundN!=null&&m.due!=null&&roundN<m.due))return;
     for(let i=0;i<Math.min(m.c||0,3);i++)w.push(word);
   });
@@ -4124,28 +4133,23 @@ function bmPlayerRender(){
       // duidelijke regel erboven. Zonder dit verving deze hertekening de
       // markering meteen door een leeg wachtscherm en wist een leerling niet
       // eens dat hij fout zat.
-      const showFb=BM_MY_Q&&BM_MY_Q._round===round.n&&BM_MY_PICK!==null&&BM_MY_PICK_ROUND===round.n;
+      const showFb=BM_MY_Q&&BM_MY_Q._round===round.n&&(BM_MY_PICK!==null||BM_MY_Q.mode==="typed")&&BM_MY_PICK_ROUND===round.n;
       if(showFb){
-        const goed=(BM_MY_Q.options||[])[BM_MY_Q.correctIdx]||"";
+        const goed=BM_MY_Q.mode==="typed"?(BM_MY_Q.antwoord||""):(BM_MY_Q.options||[])[BM_MY_Q.correctIdx]||"";
         const pen=(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);
         const banner=BM_MY_PICK_OK
           ? `<div class="bm-fb ok">✅ Goed!</div>`
           : `<div class="bm-fb bad">❌ Fout — het juiste antwoord is <b>${esc(goed)}</b><br>
              <span>Je verliest ${pen} BE${BM_MY_BE<2?" en kunt deze ronde niets doen":""}.</span></div>`;
-        const lang=BM_META?.lang==="el"?"Griekse":"Latijnse";
         content=`
         ${banner}
-        <div class="qcard">
-          <div class="kick">Vertaal het ${lang} woord</div>
-          <div class="word">${esc(BM_MY_Q.la)}</div>
-          ${BM_MY_Q.pos?`<div class="pos">${esc(BM_MY_Q.pos)}</div>`:""}
-        </div>
-        <div class="choices">
+        ${bmQuestionCardHTML(BM_MY_Q)}
+        ${BM_MY_Q.mode==="typed" ? "" : `<div class="choices">
           ${(BM_MY_Q.options||[]).map((opt,i)=>{
             const cl=i===BM_MY_Q.correctIdx?"correct":(i===BM_MY_PICK?"wrong":"dim");
             return `<button class="choice ${cl}" disabled><span class="n">${i+1}</span>${esc(opt)}</button>`;
           }).join("")}
-        </div>
+        </div>`}
         <div class="note" style="text-align:center;margin-top:8px">Wachten op andere spelers…</div>`;
       } else {
         content=`<div class="panel" style="text-align:center"><div style="font-size:40px">✅</div><div class="note">Wachten op andere spelers…</div></div>`;
@@ -4155,14 +4159,15 @@ function bmPlayerRender(){
         if(s.val()){try{BM_MY_Q={...JSON.parse(s.val()),_round:round.n};BM_ANSWERED=false;bmPlayerRender();}catch(e){}}
       });
       content=`<div class="note" style="text-align:center">Vraag laden…</div>`;
-    } else {
-      const lang=BM_META?.lang==="el"?"Griekse":"Latijnse";
+    } else if(BM_MY_Q.mode==="typed"){
       content=`
-      <div class="qcard">
-        <div class="kick">Vertaal het ${lang} woord</div>
-        <div class="word">${esc(BM_MY_Q.la)}</div>
-        ${BM_MY_Q.pos?`<div class="pos">${esc(BM_MY_Q.pos)}</div>`:""}
-      </div>
+      ${bmQuestionCardHTML(BM_MY_Q)}
+      <div class="panel"><input type="text" id="bmTyped" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="typ de vorm..." style="width:100%;font-size:18px" onkeydown="if(event.key==='Enter')bmAnswerTyped()">
+        <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="bmAnswerTyped()">Controleer</button></div>`;
+      setTimeout(()=>{ const b=el("bmTyped"); if(b)b.focus(); },0);
+    } else {
+      content=`
+      ${bmQuestionCardHTML(BM_MY_Q)}
       <div class="choices">
         ${(BM_MY_Q.options||[]).map((opt,i)=>`
           <button class="choice" id="bmC${i}" onclick="bmAnswer(${i})">
@@ -4263,9 +4268,24 @@ function bmPlayerRender(){
   ${content}`;
 }
 function bmWordKey(w){ return (w||"").replace(/[.#$\[\]\/]/g,"_").substring(0,80); }
+// Vraagkaart: drie mogelijke vormen — de gewone woord->betekenis-vraag
+// (makeQuestion, geen .mode), of de twee werkwoordsvorm-varianten uit
+// verbquiz.js (vfqMakeQuestion "mc" / vfqMakeTypedQuestion "typed").
+function bmQuestionCardHTML(q){
+  if(q.mode==="typed"){
+    return `<div class="qcard"><div class="kick">${q.taal==="el"?"Grieks":"Latijn"} — getypte vorm</div>
+      <div class="word" style="font-size:20px">${q.vraag}</div></div>`;
+  }
+  if(q.mode==="mc"){
+    return `<div class="qcard"><div class="kick">Welke vertaling hoort bij deze vorm?</div>
+      <div class="word">${esc(q.vorm)}</div></div>`;
+  }
+  const lang=BM_META?.lang==="el"?"Griekse":"Latijnse";
+  return `<div class="qcard"><div class="kick">Vertaal het ${lang} woord</div>
+    <div class="word">${esc(q.la)}</div>${q.pos?`<div class="pos">${esc(q.pos)}</div>`:""}</div>`;
+}
 function bmAnswer(idx){
   if(BM_ANSWERED||!BM_MY_Q)return;
-  BM_ANSWERED=true;
   const ok=idx===BM_MY_Q.correctIdx;
   // Onthouden voor bmPlayerRender(): de spelers-listener hertekent het paneel
   // meteen na het antwoord, en daarmee verdween voorheen de rood/groen-
@@ -4279,6 +4299,21 @@ function bmAnswer(idx){
     else c.classList.add("dim");
     c.disabled=true;
   });
+  bmFinishAnswer(ok);
+}
+// Getypte werkwoordsvorm-vraag (vfqMakeTypedQuestion): geen keuzeknoppen, dus
+// controle via vfqControleer() i.p.v. index-vergelijking. Zelfde afhandeling
+// verder als bmAnswer() hierboven.
+function bmAnswerTyped(){
+  if(BM_ANSWERED||!BM_MY_Q)return;
+  const box=el("bmTyped");
+  const ok=vfqControleer(BM_MY_Q, box?box.value:"");
+  BM_MY_PICK=null; BM_MY_PICK_OK=ok; BM_MY_PICK_ROUND=BM_STATE.round?.n;
+  if(box)box.disabled=true;
+  bmFinishAnswer(ok);
+}
+function bmFinishAnswer(ok){
+  BM_ANSWERED=true;
   beep(ok?"good":"bad");
   bmAnimAv(BM_PID,ok?"anim-ok":"anim-bad",600);
   const round=BM_STATE.round||{};
@@ -4337,12 +4372,12 @@ function bmAnswer(idx){
       // oplopend aantal rondes weer extra gewicht krijgen — 1 ronde na de
       // eerste fout, 2 na de tweede, 3 na de derde e.v. — i.p.v. mogelijk de
       // eerstvolgende ronde alweer, zodat er echt sprake is van spreiding.
-      const wk=bmWordKey(BM_MY_Q.la);
+      const wk=bmWordKey(BM_MY_Q.vorm||BM_MY_Q.la);
       const prev=p.missed?.[wk]||{c:0};
       const newC=(prev.c||0)+1;
       upd["missed/"+wk+"/c"]=newC;
-      upd["missed/"+wk+"/p"]=BM_MY_Q.la;
-      upd["missed/"+wk+"/a"]=BM_MY_Q.options?.[BM_MY_Q.correctIdx]||"";
+      upd["missed/"+wk+"/p"]=BM_MY_Q.vorm||BM_MY_Q.la;
+      upd["missed/"+wk+"/a"]=BM_MY_Q.antwoord||(BM_MY_Q.options?.[BM_MY_Q.correctIdx]||"");
       upd["missed/"+wk+"/due"]=(round.n||0)+Math.min(newC,3);
     }
     // Heldenmodus: gevallen held vult zijn herrijzingsmeter met goede antwoorden

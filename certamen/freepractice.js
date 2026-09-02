@@ -11,7 +11,7 @@
    (dezelfde als het Battle Mode-speler-vraagscherm).
    ============================================================================ */
 
-let FP_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all", customText:"" };
+let FP_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all", customText:"", vf:vfqDefaultDraft("la") };
 let FP_POOL = [];
 let FP_Q = null;
 let FP_STATS = { correct:0, wrong:0, xp:0, coins:0 };
@@ -27,11 +27,34 @@ SCREENS.freePractice = function(){
   <div class="panel">
     <label class="fld">Taal</label>
     <div class="chips">
-      <button class="chip ${FP_DRAFT.lang==='la'?'on':''}" onclick="FP_DRAFT.lang='la';SCREENS.freePractice()">Latijn</button>
-      <button class="chip ${FP_DRAFT.lang==='el'?'on':''}" onclick="FP_DRAFT.lang='el';SCREENS.freePractice()">Grieks</button>
+      <button class="chip ${FP_DRAFT.lang==='la'?'on':''}" onclick="fpSetLang('la')">Latijn</button>
+      <button class="chip ${FP_DRAFT.lang==='el'?'on':''}" onclick="fpSetLang('el')">Grieks</button>
     </div>
   </div>
   <div class="panel">
+    <label class="fld">Bron</label>
+    <div class="chips">
+      <button class="chip ${FP_DRAFT.source==='freq'?'on':''}" onclick="FP_DRAFT.source='freq';SCREENS.freePractice()">Frequentielijst</button>
+      <button class="chip ${FP_DRAFT.source==='verbforms'?'on':''}" onclick="FP_DRAFT.source='verbforms';SCREENS.freePractice()">Werkwoordsvormen</button>
+    </div>
+  </div>
+  <div id="fpSrcBody"></div>
+  <button class="btn btn-gold btn-block lg" onclick="fpStart()">Beginnen</button>
+  ${foot()}`);
+  fpRenderSrcBody();
+};
+
+function fpSetLang(lang){ FP_DRAFT.lang=lang; FP_DRAFT.vf=vfqDefaultDraft(lang); SCREENS.freePractice(); }
+
+function fpRenderSrcBody(){
+  const body = el("fpSrcBody"); if(!body) return;
+  if(FP_DRAFT.source==="verbforms"){
+    body.innerHTML = vfqFilterHTML(FP_DRAFT.vf, FP_DRAFT.lang, "FP_DRAFT.vf", "fpRenderSrcBody()");
+    return;
+  }
+  const list = baseList(FP_DRAFT.lang).filter(usable);
+  const maxN = list.reduce((m,w)=>Math.max(m,w.f||0),0);
+  body.innerHTML = `<div class="panel">
     <label class="fld">Frequentiebereik — woord nr.</label>
     <div class="row">
       <div><input type="number" id="fpFromN" min="1" max="${maxN}" value="${FP_DRAFT.fromN}" oninput="FP_DRAFT.fromN=+this.value||1"></div>
@@ -39,22 +62,25 @@ SCREENS.freePractice = function(){
       <div><input type="number" id="fpToN" min="1" max="${maxN}" value="${Math.min(FP_DRAFT.toN,maxN)}" oninput="FP_DRAFT.toN=+this.value||1"></div>
     </div>
     <div class="chips" style="margin-top:12px">
-      ${[[1,50],[1,100],[100,300],[300,600],[1,maxN]].map(([a,b])=>`<button class="chip" onclick="FP_DRAFT.fromN=${a};FP_DRAFT.toN=${b};SCREENS.freePractice()">${a}–${b}</button>`).join("")}
+      ${[[1,50],[1,100],[100,300],[300,600],[1,maxN]].map(([a,b])=>`<button class="chip" onclick="FP_DRAFT.fromN=${a};FP_DRAFT.toN=${b};fpRenderSrcBody()">${a}–${b}</button>`).join("")}
     </div>
   </div>
   <div class="panel">
     <label class="fld">Woordsoort</label>
     <div class="chips">
-      ${CATS.map(c=>`<button class="chip ${FP_DRAFT.cat===c.id?'on':''}" onclick="FP_DRAFT.cat='${c.id}';SCREENS.freePractice()">${c.nm} <small>${catCount(list,c.id)}</small></button>`).join("")}
+      ${CATS.map(c=>`<button class="chip ${FP_DRAFT.cat===c.id?'on':''}" onclick="FP_DRAFT.cat='${c.id}';fpRenderSrcBody()">${c.nm} <small>${catCount(list,c.id)}</small></button>`).join("")}
     </div>
-  </div>
-  <button class="btn btn-gold btn-block lg" onclick="fpStart()">Beginnen</button>
-  ${foot()}`);
-};
+  </div>`;
+}
 
 function fpStart(){
-  FP_POOL = buildPool(FP_DRAFT);
-  if(FP_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort."); return; }
+  if(FP_DRAFT.source==="verbforms"){
+    FP_POOL = vfqBuildPool(FP_DRAFT.vf, FP_DRAFT.lang);
+    if(FP_POOL.length<4){ toast("Te weinig vormen","Kies meer werkwoorden of tijden."); return; }
+  } else {
+    FP_POOL = buildPool(FP_DRAFT);
+    if(FP_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort."); return; }
+  }
   FP_STATS = { correct:0, wrong:0, xp:0, coins:0 };
   FP_WRONG_COUNTS = {};
   go("freePracticePlay");
@@ -80,13 +106,24 @@ function fpUpdateStatsBar(){
 }
 
 function fpNextQuestion(){
-  FP_Q = makeQuestion(FP_POOL, w=>2*(FP_WRONG_COUNTS[w.la]||0));
   const host = el("fpQuestionHost"); if(!host) return;
-  const lang = FP_DRAFT.lang==="el"?"Griekse":"Latijnse";
+  if(FP_DRAFT.source==="verbforms" && FP_DRAFT.vf.mode==="typed"){
+    FP_Q = vfqMakeTypedQuestion(FP_POOL);
+    host.innerHTML = `
+    <div class="qcard"><div class="kick">${FP_Q.taal==="el"?"Grieks":"Latijn"} — getypte vorm</div>
+      <div class="word" style="font-size:20px">${FP_Q.vraag}</div></div>
+    <div class="panel"><input type="text" id="fpTyped" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="typ de vorm..." style="width:100%;font-size:18px" onkeydown="if(event.key==='Enter')fpAnswerTyped()">
+      <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="fpAnswerTyped()">Controleer</button></div>`;
+    el("fpTyped").focus();
+    return;
+  }
+  FP_Q = FP_DRAFT.source==="verbforms" ? vfqMakeQuestion(FP_POOL) : makeQuestion(FP_POOL, w=>2*(FP_WRONG_COUNTS[w.la]||0));
+  const kick = FP_DRAFT.source==="verbforms" ? "Welke vertaling hoort bij deze vorm?" : `Vertaal het ${FP_DRAFT.lang==="el"?"Griekse":"Latijnse"} woord`;
+  const woord = FP_DRAFT.source==="verbforms" ? FP_Q.vorm : FP_Q.la;
   host.innerHTML = `
   <div class="qcard">
-    <div class="kick">Vertaal het ${lang} woord</div>
-    <div class="word">${esc(FP_Q.la)}</div>
+    <div class="kick">${kick}</div>
+    <div class="word">${esc(woord)}</div>
     ${FP_Q.pos?`<div class="pos">${esc(FP_Q.pos)}</div>`:""}
   </div>
   <div class="choices">
@@ -105,6 +142,22 @@ function fpAnswer(idx){
     else c.classList.add("dim");
     c.disabled=true;
   });
+  fpScoreAnswer(ok, q.la);
+}
+
+function fpAnswerTyped(){
+  if(!FP_Q) return;
+  const q = FP_Q; FP_Q = null;
+  const box = el("fpTyped");
+  const typed = box ? box.value : "";
+  const ok = vfqControleer(q, typed);
+  const host = el("fpQuestionHost");
+  if(host) host.insertAdjacentHTML("beforeend", `<div class="panel" style="text-align:center;color:${ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${ok?"Goed!":"Fout — juiste antwoord: "+esc(q.antwoord)}</div>`);
+  if(box) box.disabled = true;
+  fpScoreAnswer(ok, null);
+}
+
+function fpScoreAnswer(ok, wrongKey){
   if(ok){
     FP_STATS.correct++; FP_STATS.xp+=2; FP_STATS.coins+=2;
     P.stats.totalCorrect++; P.stats.currentStreak++;
@@ -115,7 +168,7 @@ function fpAnswer(idx){
   } else {
     FP_STATS.wrong++;
     P.stats.totalWrong++; P.stats.currentStreak=0; saveProfile();
-    FP_WRONG_COUNTS[q.la]=(FP_WRONG_COUNTS[q.la]||0)+1;
+    if(wrongKey) FP_WRONG_COUNTS[wrongKey]=(FP_WRONG_COUNTS[wrongKey]||0)+1;
     beep("bad");
   }
   fpUpdateStatsBar();
