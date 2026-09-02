@@ -284,6 +284,12 @@ nul) staat gewoon de volgorde van binnenkomst.
 Wil je op iets anders sorteren — bijvoorbeeld puur op spelbijdrage — dan is
 `bmContribCompare()` de enige plek die je hoeft te wijzigen.
 
+### HP is altijd een heel getal
+
+`newHA`/`newHB` worden afgerond weggeschreven. Dat moet: de Hydra-regen is 2 % van zijn
+maximum en dus zelden rond, waardoor er `725.5999999999999/840 HP` op het scorebord
+kwam te staan.
+
 ### Slagveld-achtergronden (battleback)
 
 De docent kiest een decor uit `assets/battlebacks/`. Dat zijn RPG Maker MV-paren:
@@ -475,6 +481,28 @@ zodat een herladen tabblad de keuze ook kent.
 Bij **"Nieuw gevecht — zelfde spelers"** gaat iedereen terug naar de lobby met zijn
 klasse nog ingevuld: niemand hóéft opnieuw te kiezen, maar wie wil kan er vóór de start
 alsnog een andere kiezen.
+
+### Valkuil: `undefined` in een Firebase-schrijfactie laat de ronde stranden
+
+Firebase weigert elke schrijfactie waar ergens een `undefined` in zit
+(*"contains undefined in property …"*). Gebeurt dat middenin `bmResolve()`, dan wordt
+de ronde nooit afgerond — de vangnet-`catch` meldt "Ronde overgeslagen" en deelt de
+volgende ronde uit.
+
+Zo ging het mis bij de basisacties: een speler zonder gekozen klasse wordt aangemaakt
+met `class:null`, en **Firebase slaat `null` niet op**. Bij het teruglezen ontbreekt het
+veld dus en is `p.class` `undefined`. Dat ging één op één mee in het log-event
+(`cls:p.class`) en dus in de push. Herkenbaar patroon in de klas: de melding kwam in de
+eerste twee à drie rondes en daarna niet meer — precies zolang er nog leerlingen zonder
+klasse meespeelden.
+
+Twee dingen daartegen: het veld schrijft nu `p.class||null`, en het hele log-bericht
+gaat door `bmGeenUndefined()`, dat elke `undefined` in `null` verandert. De inhoud van
+dat bericht komt uit een stuk of vijf plekken (abilities, combo's, chain-bonus,
+baas-mechanics), dus daar niet op vertrouwen is verstandiger dan het per veld afvangen.
+
+De foutmelding toont sindsdien ook de echte tekst van de fout: een docent kan midden in
+een les geen console openen.
 
 ### Basisacties: niemand zit werkloos toe te kijken
 

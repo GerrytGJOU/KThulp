@@ -1955,9 +1955,12 @@ function bmArmyBarHTML(team,nm,d){
   const crit=d.maxHealth&&d.health/d.maxHealth<0.25?" bm-crit":"";
   const isB=team==="B";
   const origin=isB?"right center":"left center";
+  // In Boss Battle heeft team B geen spelers — dan geen "0 spelers" naast de baas.
   const n=bmTeamCount(team);
+  const telling=(BM_META?.mode==="boss"&&team==="B")?""
+    :`<span class="bm-hp-cnt">${n} speler${n===1?"":"s"}</span>`;
   return `<div>
-    <div class="bm-hp-nm${isB?" side-b":""}" style="color:${col}">${esc(nm)}<span class="bm-hp-cnt">${n} speler${n===1?"":"s"}</span></div>
+    <div class="bm-hp-nm${isB?" side-b":""}" style="color:${col}">${esc(nm)}${telling}</div>
     <div class="bm-hp-track">
       <div class="bm-hp-fill${crit}" style="width:100%;background:${col};transform:scaleX(${scale});transform-origin:${origin};will-change:transform"></div>
     </div>
@@ -2944,6 +2947,20 @@ async function bmTick(){
 }
 
 /* ---- RESOLUTIE (host-autoritair, data-gedreven) ---- */
+// Vervangt elke undefined door null. Firebase weigert een schrijfactie met
+// undefined erin ("contains undefined in property ..."), en zo'n weigering
+// midden in bmResolve() liet vroeger de hele ronde stranden.
+function bmGeenUndefined(v){
+  if(v===undefined) return null;
+  if(Array.isArray(v)) return v.map(bmGeenUndefined);
+  if(v&&typeof v==="object"&&v.constructor===Object){
+    const uit={};
+    for(const[k,x]of Object.entries(v)) uit[k]=bmGeenUndefined(x);
+    return uit;
+  }
+  return v;
+}
+
 async function bmResolve(roundN){
   BM_RESOLVING=true;
   try{
@@ -3031,7 +3048,11 @@ async function bmResolve(roundN){
                  ...(usedInspiration?{inspired:false}:{}),
                  ...(minionDmg>0?{minionDamage:(p.minionDamage||0)+minionDmg}:{})};
       events.push({pid,abilityId:abl.id,team:mt,dmg:fx.dmg,heal:fx.heal,shld:fx.shld,
-                   cls:p.class,anim:bmAblAnim(abl.type),
+                   // ||null : een speler zonder gekozen klasse heeft hier
+                   // undefined (Firebase slaat class:null niet op, dus bij het
+                   // teruglezen ontbreekt het veld), en Firebase weigert elke
+                   // undefined in een push — dat liet de hele ronde stranden.
+                   cls:p.class||null,anim:bmAblAnim(abl.type),
                    ...(minionDmg>0?{minionDmg,...(targetMinion?{target:targetMinion.id}:{})}:{})});
     }
     // Brede-deelname-bonus (Boss Battle, herinterpretatie van BOSS_BATTLE.md
@@ -3176,9 +3197,12 @@ async function bmResolve(roundN){
       BM_BOSS=bossUpd;
     }
 
-    // Pas hier de heling erbij, en dan klemmen — zie de toelichting hierboven.
-    const newHA=Math.max(0,Math.min(tA.maxHealth,rawHA+for_.A.heal));
-    const newHB=Math.max(0,Math.min(tB.maxHealth,rawHB+for_.B.heal));
+    // Pas hier de heling erbij, klemmen — zie de toelichting hierboven — en
+    // afronden. Dat laatste moet: de Hydra-regen is 2 % van zijn maximum en dus
+    // zelden een rond getal, waardoor er "725.5999999999999/840 HP" op het
+    // scorebord kwam te staan.
+    const newHA=Math.round(Math.max(0,Math.min(tA.maxHealth,rawHA+for_.A.heal)));
+    const newHB=Math.round(Math.max(0,Math.min(tB.maxHealth,rawHB+for_.B.heal)));
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
     const logWinner=newHA<=0?"B":newHB<=0?"A":null;
     const roundParticipants=Object.values(players).filter(p=>p.answeredRound===roundN).length;
@@ -3188,7 +3212,11 @@ async function bmResolve(roundN){
     // ronde, zelfde beperking als bij de brede-deelname-bonus).
     const finishingBlowPid=(isBossFight&&newHB<=0)
       ? (events.filter(e=>e.team==="A"&&e.dmg>0).sort((a,b)=>b.dmg-a.dmg)[0]?.pid||null) : null;
-    fbDB.ref("rooms/"+BM_CODE+"/log").push({round:roundN,events,efA,efB,blockedA,blockedB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants,bossEvents,finishingBlowPid});
+    // Vangnet: één undefined ergens in dit log-bericht laat Firebase de push
+    // weigeren, en dan strandt de hele ronde. De inhoud komt uit een stuk of
+    // vijf plekken (abilities, combo's, chain-bonus, baas-mechanics), dus we
+    // maken er hier nog één keer null van in plaats van erop te vertrouwen.
+    fbDB.ref("rooms/"+BM_CODE+"/log").push(bmGeenUndefined({round:roundN,events,efA,efB,blockedA,blockedB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants,bossEvents,finishingBlowPid}));
 
     // Mastery bijhouden in identities (fire-and-forget)
     bmUpdateMastery(players,pUpd,events);
@@ -3241,7 +3269,10 @@ async function bmResolve(roundN){
     // volgende ronde — een half verrekende ronde is minder erg dan een
     // bevroren klas.
     console.error("bmResolve",e);
-    toast("Ronde overgeslagen","Er ging iets mis bij het verrekenen van deze ronde. Het gevecht gaat door.");
+    // Het bericht meesturen: zonder tekst is er achteraf niets te herleiden —
+    // een docent kan de console niet openen midden in een les.
+    const msg=(e&&e.message?String(e.message):String(e)).slice(0,120);
+    toast("Ronde overgeslagen","Er ging iets mis bij het verrekenen: "+msg+" — het gevecht gaat door.");
     try{ await bmDistributeQs(roundN+1); bmHostStartTimer(); }catch(e2){ console.error("bmResolve herstel",e2); }
   }finally{BM_RESOLVING=false;}
 }
