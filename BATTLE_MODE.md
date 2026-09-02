@@ -284,6 +284,29 @@ nul) staat gewoon de volgorde van binnenkomst.
 Wil je op iets anders sorteren — bijvoorbeeld puur op spelbijdrage — dan is
 `bmContribCompare()` de enige plek die je hoeft te wijzigen.
 
+### Slagveld-achtergronden (battleback)
+
+De docent kiest een decor uit `assets/battlebacks/`. Dat zijn RPG Maker MV-paren:
+`…1.png` is de **vloer**, `…2.png` de **muur**. Beide 1000×740; de onderste helft van
+elke muur is transparant — gemeten houdt de tekening op tussen 43 % (Fort2) en 64 %
+(Sky2). Dáár hoort de vloer doorheen te schijnen.
+
+De CSS tekent ze daarom in dezelfde volgorde als MV zelf: **eerst de vloer over het
+héle veld** (`.bm-back1`, `center bottom`, z-index 0), **dan de muur erbovenop**
+(`.bm-back2`, `center top`, z-index 1). De overgang is dus de rand die de tekenaar zelf
+heeft getekend — geen masker of hoogteberekening nodig.
+
+Dat ging eerder mis: de muur stond op `center 45%` én erónder, en de vloer was maar
+62 % hoog met een vervagend masker. De transparante muurrand viel dan hóger dan waar de
+vloer begon te dekken, met op elk getest schermformaat een zwarte strook van 29 tot
+50 px ertussen (het ergst bij Fort, Underworld, Grassland en Temple — de muren met de
+kortste tekening).
+
+**Laagvolgorde in `#bmField`**: vloer 0 · muur 1 · commandant-schim 2 · strijders 3 ·
+effecten (`#bmBfx`) 10. De schim stond op dezelfde z-index als de vloer én wordt als
+eerste kind ingevoegd, waardoor de vloer eroverheen tekende en de commandant onzichtbaar
+bleef.
+
 ### Animatie-overzicht
 
 | Type | CSS-keyframe | Trigger |

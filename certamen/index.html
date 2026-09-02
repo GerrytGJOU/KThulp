@@ -407,9 +407,17 @@ body.greek .qcard .word{color:#143a5e}
    onderaan. Zo staan de sprites (z-index 2) altijd op de grond, ongeacht de
    beeldverhouding. Beide leeg => het CSS-thema-landschap eronder blijft zichtbaar. */
 .bm-back1,.bm-back2{position:absolute;left:0;right:0;pointer-events:none;background-repeat:no-repeat}
-.bm-back2{top:0;bottom:0;background-position:center 45%;background-size:cover;image-rendering:pixelated;z-index:0}
-.bm-back1{bottom:0;height:62%;background-position:center bottom;background-size:cover;image-rendering:pixelated;z-index:1;
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 16%);mask-image:linear-gradient(to bottom,transparent 0,#000 16%)}
+/* Laagvolgorde zoals RPG Maker MV zelf tekent: eerst de vloer (battleback1)
+   over het héle veld, daarna de muur (battleback2) daar bovenop. De onderste
+   helft van elke muur is transparant — gemeten houdt de tekening op tussen
+   43 % (Fort2) en 64 % (Sky2) — en juist daar schijnt de vloer doorheen. De
+   overgang is dus de rand die de tekenaar zelf heeft getekend.
+   Eerder lag het andersom: de muur stond op 'center 45%' én eronder, en de
+   vloer was maar 62 % hoog met een vervagend masker. Dan viel de transparante
+   muurrand hóger dan waar de vloer begon te dekken, en zag je op elk
+   schermformaat een zwarte strook van 29 tot 50 px daartussen. */
+.bm-back1{top:0;bottom:0;background-position:center bottom;background-size:cover;image-rendering:pixelated;z-index:0}
+.bm-back2{top:0;bottom:0;background-position:center top;background-size:cover;image-rendering:pixelated;z-index:1}
 /* Enkellaags foto (bv. Olympus): vloed het hele veld, niet gepixeld schalen */
 #bmField.bm-field-photo .bm-back1{display:none}
 #bmField.bm-field-photo .bm-back2{image-rendering:auto;background-position:center bottom}
@@ -419,7 +427,7 @@ body.greek .qcard .word{color:#143a5e}
    achteren = hoger op het scherm, iets kleiner en iets verder van de vijand.
    De plaatsen (--gl = laan, --d = diepte) komen uit bmFormationHTML() in
    battle.js; 16 spelers per team vormen zo een 4×4-groep. */
-.bm-form{flex:1;display:flex;flex-direction:row;gap:0;align-items:flex-end;padding:0 4px;position:relative;z-index:2;
+.bm-form{flex:1;display:flex;flex-direction:row;gap:0;align-items:flex-end;padding:0 4px;position:relative;z-index:3;
   --bm-uw:96px;--bm-lanegap:62px;--bm-mingap:16px;--bm-rowgap:44px;--bm-rowshift:14px;--bm-pad:4px}
 @media(min-width:900px){.bm-form{--bm-uw:144px;--bm-lanegap:92px;--bm-mingap:24px;--bm-rowgap:64px;--bm-rowshift:22px;--bm-pad:8px}}
 #bmFormA{justify-content:flex-start}
@@ -776,7 +784,7 @@ body.greek .qcard .word{color:#143a5e}
 .bm-confetti{position:absolute;pointer-events:none;width:9px;height:9px;border-radius:2px;will-change:transform,opacity;animation:bmConf 1.7s ease-out forwards;z-index:15}
 
 /* â”€â”€ Commander Spectre â”€â”€ */
-.bm-spectre{position:absolute;bottom:0;height:100%;width:50%;background-size:auto 85%;background-repeat:no-repeat;pointer-events:none;opacity:0;z-index:1;filter:drop-shadow(0 0 28px rgba(255,210,80,.5)) drop-shadow(0 0 60px rgba(255,180,40,.2))}
+.bm-spectre{position:absolute;bottom:0;height:100%;width:50%;background-size:auto 85%;background-repeat:no-repeat;pointer-events:none;opacity:0;z-index:2;filter:drop-shadow(0 0 28px rgba(255,210,80,.5)) drop-shadow(0 0 60px rgba(255,180,40,.2))}
 .bm-spectre-A{left:0;background-position:center bottom}
 .bm-spectre-B{right:0;background-position:center bottom;transform:scaleX(-1)}
 .bm-spectre-active{animation:bmSpectreFade 2.2s ease forwards}
