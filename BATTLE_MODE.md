@@ -949,6 +949,24 @@ Sequentieel onthullen (~3,5s per kaart) met `bmNextAward()`:
 
 Data-flow: `BM_PLAYERS` wordt bewaard als `BM_AWARD_DATA` vóór `cleanup()`. Log wordt async opgehaald uit `/rooms/{code}/log`.
 
+### Handmatig beëindigen loopt door dezelfde afronding
+
+"✕ Beëindig" sprong vroeger regelrecht naar het hoofdmenu én wiste de kamer. Een
+docent die halverwege stopte — les afgelopen, of gewoon genoeg gespeeld — zag daardoor
+nooit wie er goed had gespeeld. `bmEndGame()` schrijft nu alleen
+`status:"finished"` + `winner:"_stopped"` en roept `bmHostResult()` aan, dus een
+handmatig einde krijgt dezelfde afronding als een gewonnen gevecht: eerbewijzen,
+erepodium, klasscore en statistieken. De ceremonie en het podium tonen bij
+`_stopped` "Gevecht gestopt" in plaats van een winnaar; `bmComputeAwards()` levert
+gewoon minder winnaars op als er weinig gespeeld is.
+
+**Kamer opruimen verplaatst.** De kamer werd 5 seconden na het einde gewist — ook bij
+een normaal einde. Dat botste met twee dingen die er later bij kwamen: de
+award-ceremonie en de statistieken lezen `rooms/{code}/log`, en "Nieuw gevecht —
+zelfde spelers" heeft de `players`-tak nodig. Opruimen gebeurt daarom in
+`bmHostFinish()`, als de docent de nabespreking verlaat (de terugpijl of de knop
+"Afsluiten — kamer sluiten" op het statistiekenscherm).
+
 ### Nieuw gevecht met dezelfde spelers (`bmNewMatchSamePlayers()`)
 
 Zowel het award- als het analytics-scherm heeft een knop **"↻ Nieuw gevecht — zelfde
