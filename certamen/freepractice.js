@@ -107,6 +107,12 @@ function fpUpdateStatsBar(){
 
 function fpNextQuestion(){
   const host = el("fpQuestionHost"); if(!host) return;
+  if(FP_DRAFT.source==="verbforms" && FP_DRAFT.vf.mode==="ontleed"){
+    vfqOntleedReset();
+    FP_Q = vfqMakeOntleedQuestion(FP_POOL);
+    fpRenderOntleed();
+    return;
+  }
   if(FP_DRAFT.source==="verbforms" && FP_DRAFT.vf.mode==="typed"){
     FP_Q = vfqMakeTypedQuestion(FP_POOL);
     host.innerHTML = `
@@ -129,6 +135,21 @@ function fpNextQuestion(){
   <div class="choices">
     ${FP_Q.options.map((opt,i)=>`<button class="choice" id="fpC${i}" onclick="fpAnswer(${i})"><span class="n">${i+1}</span>${esc(opt)}</button>`).join("")}
   </div>`;
+}
+
+function fpRenderOntleed(){
+  const host = el("fpQuestionHost"); if(!host || !FP_Q) return;
+  host.innerHTML = vfqOntleedPickerHTML(FP_Q, "fpRenderOntleed()")
+    + `<button class="btn btn-gold btn-block" style="margin-top:10px"${vfqOntleedComplete(FP_Q)?"":" disabled"} onclick="fpCheckOntleed()">Controleer</button>`;
+}
+function fpCheckOntleed(){
+  if(!FP_Q) return;
+  const q = FP_Q; FP_Q = null;
+  const grade = vfqOntleedGrade(q);
+  const host = el("fpQuestionHost"); if(!host) return;
+  host.innerHTML = vfqOntleedResultHTML(q, grade)
+    + `<div class="panel" style="text-align:center;color:${grade.ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${grade.ok?"Goed!":"Niet helemaal — bekijk de rode/groene assen hierboven"}</div>`;
+  fpScoreAnswer(grade.ok, null);
 }
 
 function fpAnswer(idx){
