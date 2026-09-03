@@ -68,6 +68,32 @@ header p{font-size:.8rem;color:var(--dim);margin-top:2px;}
 .verb-card{background:var(--surf);border:1px solid var(--gold-d);border-radius:var(--r);padding:16px;text-align:center;margin-bottom:14px;}
 .verb-form{font-size:2.1rem;color:var(--gold-l);font-style:italic;margin-bottom:4px;}
 .verb-sub{font-size:.82rem;color:var(--dim);}
+/* ── KNIPPEN & BENOEMEN ── */
+.segment-area{background:var(--surf2);border:1px solid var(--surf3);border-radius:var(--r);padding:14px 12px;margin-bottom:12px;}
+.seg-title{font-size:.8rem;color:var(--dim);margin-bottom:12px;line-height:1.5;}
+.cut-form{display:flex;justify-content:center;align-items:stretch;flex-wrap:wrap;margin:18px 0 8px;row-gap:14px;}
+.cut-letter{font-size:1.9rem;font-style:italic;color:var(--gold-l);padding:4px 1px;user-select:none;line-height:1.2;}
+.cut-gap{width:18px;cursor:pointer;position:relative;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;}
+.cut-gap::before{content:"";width:2px;height:34px;background:transparent;border-radius:2px;transition:background .15s;}
+.cut-gap:hover::before{background:var(--gold-d);}
+.cut-gap.cut::before{background:var(--gold);width:3px;}
+.cut-gap.cut::after{content:"✂";position:absolute;top:-16px;font-size:.7rem;color:var(--gold);}
+.cut-hint{font-size:.76rem;color:var(--dim);text-align:center;min-height:18px;}
+.label-list{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.label-item{display:flex;align-items:center;gap:10px;background:var(--stone);border:1px solid var(--surf3);border-radius:8px;padding:8px 10px;}
+.label-piece{font-size:1.4rem;font-style:italic;color:var(--gold-l);min-width:54px;text-align:center;padding:2px 8px;background:var(--surf3);border-radius:6px;flex-shrink:0;}
+.label-sel{flex:1;}
+.label-sel select{width:100%;background:var(--surf2);border:1px solid var(--surf3);border-radius:6px;color:var(--text);font-family:inherit;font-size:.9rem;padding:8px 10px;}
+.label-sel select.ok{border-color:var(--green);color:var(--green-l);}
+.label-sel select.err{border-color:var(--red);color:var(--red-l);}
+.label-item.correct-row{border-color:var(--green);}
+.label-item.wrong-row{border-color:var(--red);}
+.label-fix{font-size:.78rem;color:var(--green-l);flex-shrink:0;}
+.vert-row{margin-top:10px;}
+.vert-row label{font-size:.8rem;color:var(--dim);display:block;margin-bottom:4px;}
+.vert-row input{width:100%;background:var(--surf2);border:1px solid var(--surf3);border-radius:6px;color:var(--text);font-family:inherit;font-size:.95rem;padding:8px 10px;}
+.vert-row input.correct{border-color:var(--green);color:var(--green-l);}
+.vert-row input.wrong{border-color:var(--red);color:var(--red-l);}
 .det-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:12px;}
 .det-field label{font-size:.8rem;color:var(--gold-l);display:block;margin-bottom:6px;}
 .vert-input{width:100%;background:var(--surf2);border:1px solid var(--surf3);border-radius:var(--r);color:var(--text);
@@ -118,7 +144,7 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
 <a class="portal-back" href="../" onclick="if(!document.getElementById('menu').classList.contains('active')){event.preventDefault();gotoScreen('menu');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
 <header>
   <h1>Latijnse Werkwoorden</h1>
-  <p>Determineren, vertalen &amp; paradigma's</p>
+  <p>Knippen, determineren, vertalen &amp; paradigma's</p>
 </header>
 <div class="meander"></div>
 
@@ -127,14 +153,19 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
   <div class="menu-inner">
     <div class="menu-section-label"><span>Oefenen</span></div>
     <div class="menu-grid">
+      <div class="menu-card" onclick="gotoSetup('knippen')">
+        <div class="mc-icon">🔍</div>
+        <div class="mc-label">① Knippen</div>
+        <div class="mc-desc">Wijs stam, tijdskenletter en persoonsuitgang aan in de werkwoordsvorm</div>
+      </div>
       <div class="menu-card" onclick="gotoSetup('determ')">
         <div class="mc-icon">📋</div>
-        <div class="mc-label">① Determineren</div>
+        <div class="mc-label">② Determineren</div>
         <div class="mc-desc">Wijs persoon, getal, tijd, wijs en genus van de gegeven vorm aan</div>
       </div>
       <div class="menu-card" onclick="gotoSetup('vertaal')">
         <div class="mc-icon">📖</div>
-        <div class="mc-label">② Vertalen</div>
+        <div class="mc-label">③ Vertalen</div>
         <div class="mc-desc">Vertaal de werkwoordsvorm naar het Nederlands</div>
       </div>
       <div class="menu-card wide" onclick="gotoScreen('paradigma')">
@@ -142,6 +173,73 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
         <div class="mc-label">Paradigma's</div>
         <div class="mc-desc">Bekijk de volledige vervoeging van elk werkwoord, per tijd/wijs/genus</div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ SETUP KNIPPEN ════════════════════════════════ -->
+<div id="setup-knippen" class="screen">
+  <div class="inner-nav"><button class="btn-back" onclick="gotoScreen('menu')">← Menu</button><span class="inner-title">🔍 Knippen</span></div>
+  <div class="setup-panel">
+    <h2>Werkwoordsvorm knippen &amp; benoemen</h2>
+    <p>Je ziet een Latijnse werkwoordsvorm. Knip 'm in stukken en benoem elk stuk: <strong style="color:#80e090">stam</strong> · <strong style="color:#f0b840">tijdskenletter</strong> · <strong style="color:#d080f0">persoonsuitgang</strong>. Bij het perfectumsysteem-passief (twee woorden) staat de knip al vast. Daarna geef je ook de Nederlandse vertaling.</p>
+    <div class="filter-group"><div class="filter-label">Werkwoorden</div><div class="chip-row" id="k-f-verb"></div></div>
+    <div class="filter-group"><div class="filter-label">Tijden</div>
+      <div class="chip-row" id="k-f-tijd">
+        <button class="fchip on" data-v="praesens">praesens</button>
+        <button class="fchip on" data-v="imperfectum">imperfectum</button>
+        <button class="fchip on" data-v="perfectum">perfectum</button>
+        <button class="fchip" data-v="plusquamperfectum">plusquamperf.</button>
+        <button class="fchip" data-v="futurum">futurum simplex</button>
+        <button class="fchip" data-v="futurumexactum">futurum exactum</button>
+      </div>
+    </div>
+    <div class="filter-group"><div class="filter-label">Wijs</div>
+      <div class="chip-row" id="k-f-wijs">
+        <button class="fchip on" data-v="indicativus">indicativus</button>
+        <button class="fchip" data-v="coniunctivus">coniunctivus</button>
+      </div>
+    </div>
+    <div class="filter-group"><div class="filter-label">Genus</div>
+      <div class="chip-row" id="k-f-genus">
+        <button class="fchip on" data-v="activum">activum</button>
+        <button class="fchip" data-v="passivum">passivum</button>
+      </div>
+    </div>
+    <div class="filter-group"><div class="filter-label">Aantal vragen</div><input type="number" id="k-cnt" value="10" min="3" max="40" class="cnt-input"></div>
+    <div class="filter-count" id="k-avail"></div>
+    <button class="btn-start" onclick="startExercise('knippen')">Start →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ EX KNIPPEN ════════════════════════════════ -->
+<div id="ex-knippen" class="screen">
+  <div class="inner-nav"><button class="btn-back" onclick="stopEx('knippen')">← Stop</button><span class="inner-title">Knippen</span></div>
+  <div class="ex-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="k-prog"></div></div>
+    <div class="ex-header"><span id="k-qn">Vraag 1/10</span><span class="score-pill">✓<span id="k-sc">0</span> ✗<span id="k-wr">0</span></span></div>
+    <div class="verb-card"><div class="verb-form" id="k-form">vocabat</div><div class="verb-sub" id="k-sub"></div></div>
+    <div class="segment-area">
+      <div class="seg-step" id="k-step1">
+        <div class="seg-title"><strong style="color:var(--gold-l)">Stap 1 — Knippen.</strong> Tik tussen de letters waar een grens hoort tussen stam, tijdskenletter en uitgang. Tik nog eens om een knip ongedaan te maken.</div>
+        <div class="cut-form" id="k-cutform"></div>
+        <div class="cut-hint" id="k-cuthint"></div>
+        <button class="btn btn-check" id="k-cut-done" onclick="cutDoneLa()" style="margin-top:12px;">Klaar met knippen →</button>
+      </div>
+      <div class="seg-step" id="k-step2" style="display:none;">
+        <div class="seg-title"><strong style="color:var(--gold-l)">Stap 2 — Benoemen.</strong> Geef elk stuk de juiste naam.</div>
+        <div class="label-list" id="k-labellist"></div>
+      </div>
+      <div class="vert-row" id="k-vertrow" style="margin-top:12px;display:none;">
+        <label>Vertaling van de hele vorm:</label>
+        <input type="text" id="k-vert" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="bv. hij riep">
+      </div>
+    </div>
+    <div class="fb" id="k-fb"></div>
+    <div class="btn-row">
+      <button class="btn btn-stop" onclick="stopEx('knippen')">✕</button>
+      <button class="btn btn-check" id="k-cbtn" onclick="checkKnippen()" style="display:none;">Controleer</button>
+      <button class="btn btn-next" id="k-nbtn" style="display:none" onclick="nextQ('knippen')">Volgende →</button>
     </div>
   </div>
 </div>
@@ -428,6 +526,114 @@ function laVorm(v,tijd,wijs,genus,i){
   return null;
 }
 
+// Ontleedt een vorm in stam(+tijdskenletter)+uitgang — voor de Knippen-oefening.
+// Bouwt exact dezelfde stukken op als laVorm() hierboven concateneert (zie
+// laVormFromParts()), dus per constructie consistent. Latijn kent geen
+// augment (dat is Grieks-specifiek); het perfectumsysteem-passief (twee
+// woorden: deelwoord + vorm van esse) krijgt geen tijdskenletter — dat wordt
+// altijd als deelwoord+esse-vorm onderwezen, nooit verder ontleed. De -v- in
+// het perfectum hoort bij de stam (v.perf, bv. vocav), niet bij de uitgang.
+function laVormParts(v,tijd,wijs,genus,i){
+  const s=v.stam;
+  if(wijs==="coniunctivus" && (tijd==="futurum"||tijd==="futurumexactum")) return null;
+  if(wijs==="coniunctivus"){
+    if(tijd==="perfectum"){
+      if(genus==="activum") return {stem:v.perf,tk:"",end:["erim","eris","erit","erimus","eritis","erint"][i],twoWord:false};
+      return {stem:v.ppp+(i<3?"us":"i"),tk:"",end:["sim","sis","sit","simus","sitis","sint"][i],twoWord:true};
+    }
+    if(tijd==="plusquamperfectum"){
+      if(genus==="activum") return {stem:v.perf,tk:"",end:["issem","isses","isset","issemus","issetis","issent"][i],twoWord:false};
+      return {stem:v.ppp+(i<3?"us":"i"),tk:"",end:["essem","esses","esset","essemus","essetis","essent"][i],twoWord:true};
+    }
+    const isConj1=v.conj===1;
+    if(tijd==="praesens"){
+      const kStem=isConj1?s.slice(0,-1):s, kTk=isConj1?"e":"a";
+      return genus==="activum"
+        ? {stem:kStem,tk:kTk,end:["m","s","t","mus","tis","nt"][i],twoWord:false}
+        : {stem:kStem,tk:kTk,end:["r","ris","tur","mur","mini","ntur"][i],twoWord:false};
+    }
+    if(tijd==="imperfectum"){
+      const iStem=v.conj==="3io"?s.slice(0,-1):s, iTk=(v.conj===3||v.conj==="3io")?"ere":"re";
+      return genus==="activum"
+        ? {stem:iStem,tk:iTk,end:["m","s","t","mus","tis","nt"][i],twoWord:false}
+        : {stem:iStem,tk:iTk,end:["r","ris","tur","mur","mini","ntur"][i],twoWord:false};
+    }
+    return null;
+  }
+  if(tijd==="perfectum"){
+    if(genus==="activum") return {stem:v.perf,tk:"",end:["i","isti","it","imus","istis","erunt"][i],twoWord:false};
+    return {stem:v.ppp+(i<3?"us":"i"),tk:"",end:["sum","es","est","sumus","estis","sunt"][i],twoWord:true};
+  }
+  if(tijd==="plusquamperfectum"){
+    if(genus==="activum") return {stem:v.perf,tk:"",end:["eram","eras","erat","eramus","eratis","erant"][i],twoWord:false};
+    return {stem:v.ppp+(i<3?"us":"i"),tk:"",end:["eram","eras","erat","eramus","eratis","erant"][i],twoWord:true};
+  }
+  if(tijd==="futurumexactum"){
+    if(genus==="activum") return {stem:v.perf,tk:"",end:["ero","eris","erit","erimus","eritis","erint"][i],twoWord:false};
+    return {stem:v.ppp+(i<3?"us":"i"),tk:"",end:["ero","eris","erit","erimus","eritis","erunt"][i],twoWord:true};
+  }
+  if(tijd==="imperfectum"){
+    const infix=(v.conj===1||v.conj===2)?"ba":"eba";
+    return genus==="activum"
+      ? {stem:s,tk:infix,end:["m","s","t","mus","tis","nt"][i],twoWord:false}
+      : {stem:s,tk:infix,end:["r","ris","tur","mur","mini","ntur"][i],twoWord:false};
+  }
+  if(tijd==="futurum"){
+    if(v.conj===1||v.conj===2){
+      return genus==="activum"
+        ? {stem:s,tk:"b",end:["o","is","it","imus","itis","unt"][i],twoWord:false}
+        : {stem:s,tk:"b",end:["or","eris","itur","imur","imini","untur"][i],twoWord:false};
+    }
+    const tk=i===0?"a":"e";
+    return genus==="activum"
+      ? {stem:s,tk,end:["m","s","t","mus","tis","nt"][i],twoWord:false}
+      : {stem:s,tk,end:["r","ris","tur","mur","mini","ntur"][i],twoWord:false};
+  }
+  // praesens
+  const bare=s.slice(0,-1);
+  switch(v.conj){
+    case 1:
+      if(i===0) return genus==="activum" ? {stem:bare,tk:"",end:"o",twoWord:false} : {stem:bare,tk:"",end:"or",twoWord:false};
+      return genus==="activum"
+        ? {stem:s,tk:"",end:["s","t","mus","tis","nt"][i-1],twoWord:false}
+        : {stem:s,tk:"",end:["ris","tur","mur","mini","ntur"][i-1],twoWord:false};
+    case 2:
+      if(i===0) return genus==="activum" ? {stem:s,tk:"",end:"o",twoWord:false} : {stem:s,tk:"",end:"or",twoWord:false};
+      return genus==="activum"
+        ? {stem:s,tk:"",end:["s","t","mus","tis","nt"][i-1],twoWord:false}
+        : {stem:s,tk:"",end:["ris","tur","mur","mini","ntur"][i-1],twoWord:false};
+    case 3:
+      if(genus==="activum"){
+        if(i===0) return {stem:s,tk:"",end:"o",twoWord:false};
+        if(i===5) return {stem:s,tk:"u",end:"nt",twoWord:false};
+        return {stem:s,tk:"i",end:["s","t","mus","tis"][i-1],twoWord:false};
+      }
+      if(i===0) return {stem:s,tk:"",end:"or",twoWord:false};
+      if(i===1) return {stem:s,tk:"e",end:"ris",twoWord:false};
+      if(i===5) return {stem:s,tk:"u",end:"ntur",twoWord:false};
+      return {stem:s,tk:"i",end:["tur","mur","mini"][i-2],twoWord:false};
+    case "3io":
+      if(genus==="activum"){
+        if(i===0) return {stem:s,tk:"",end:"o",twoWord:false};
+        if(i===5) return {stem:s,tk:"u",end:"nt",twoWord:false};
+        return {stem:bare,tk:"i",end:["s","t","mus","tis"][i-1],twoWord:false};
+      }
+      if(i===0) return {stem:s,tk:"",end:"or",twoWord:false};
+      if(i===1) return {stem:bare,tk:"e",end:"ris",twoWord:false};
+      if(i===5) return {stem:s,tk:"u",end:"ntur",twoWord:false};
+      return {stem:s,tk:"",end:["tur","mur","mini"][i-2],twoWord:false};
+    case 4:
+      if(genus==="activum"){
+        if(i===5) return {stem:s,tk:"u",end:"nt",twoWord:false};
+        return {stem:s,tk:"",end:["o","s","t","mus","tis"][i],twoWord:false};
+      }
+      if(i===5) return {stem:s,tk:"u",end:"ntur",twoWord:false};
+      return {stem:s,tk:"",end:["or","ris","tur","mur","mini"][i],twoWord:false};
+  }
+  return null;
+}
+function laVormFromParts(p){ return p.twoWord ? p.stem+(p.end?" "+p.end:"") : p.stem+p.tk+p.end; }
+
 // Nederlandse glans — aux ("hebben"/"zijn") bepaalt het hulpwerkwoord voor
 // perfectum/plusquamperfectum/futurum exactum activum (venio -> "ben gekomen").
 function laGlos(v,tijd,wijs,genus,i){
@@ -506,7 +712,11 @@ document.addEventListener('click',e=>{
   if(chip.closest('#p-f-verb, #p-f-genus')) return; // paradigma-chips: eigen handler
   chip.classList.toggle('on');
   const row=chip.closest('.chip-row');
-  if(row){ const mode=row.id.split('-')[0]==='d'?'determ':row.id.split('-')[0]==='v'?'vertaal':null; if(mode) updateAvail(mode); }
+  if(row){
+    const p=row.id.split('-')[0];
+    const mode=p==='k'?'knippen':p==='d'?'determ':p==='v'?'vertaal':null;
+    if(mode) updateAvail(mode);
+  }
 });
 
 function shuffle(a){ const r=[...a]; for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];} return r; }
@@ -536,7 +746,169 @@ function startExercise(mode){
   for(let i=0;i<cnt;i++) qs.push(shuffled[i%shuffled.length]);
   ST[mode]={qs:shuffle(qs),idx:0,sc:0,wr:0,res:[]};
   gotoScreen('ex-'+mode);
-  if(mode==='determ') drawDeterm(); else drawVertaal();
+  if(mode==='knippen') drawKnippen(); else if(mode==='determ') drawDeterm(); else drawVertaal();
+}
+
+/* ── KNIPPEN & BENOEMEN ──
+   Ontleedt elke vorm via laVormParts() (dezelfde stukken als laVorm()
+   concateneert, zie de validatie hierboven). Bij een tweewoordsvorm
+   (perfectumsysteem passief) staat de knip al vast bij de spatie — direct
+   naar het benoemen; bij een enkelwoordsvorm knipt de leerling zelf tussen
+   de letters. */
+const ROLE_NAMES_LA={stem:'Stam',tk:'Tijdskenletter',end:'Persoonsuitgang'};
+function laPieces(parts){
+  if(parts.twoWord) return [{t:parts.stem,r:'stem'},{t:parts.end,r:'end'}];
+  const arr=[{t:parts.stem,r:'stem'}];
+  if(parts.tk) arr.push({t:parts.tk,r:'tk'});
+  arr.push({t:parts.end,r:'end'});
+  return arr;
+}
+function computeExpectedCutsLa(pieces){
+  const cuts=new Set(); let acc=0;
+  for(let k=0;k<pieces.length-1;k++){ acc+=pieces[k].t.length; cuts.add(acc-1); }
+  return cuts;
+}
+function drawKnippen(){
+  const s=ST.knippen, q=s.qs[s.idx];
+  const v=VERBS.find(x=>x.lemma===q.lemma);
+  const parts=laVormParts(v,q.tijd,q.wijs,q.genus,q.persoonIdx);
+  updateHeader('knippen',s.idx,s.qs.length,s.sc,s.wr);
+  document.getElementById('k-form').textContent=q.vorm;
+  document.getElementById('k-sub').textContent='';
+  document.getElementById('k-fb').className='fb'; document.getElementById('k-fb').innerHTML='';
+  document.getElementById('k-cbtn').style.display='none';
+  document.getElementById('k-nbtn').style.display='none';
+  const vert=document.getElementById('k-vert');
+  vert.value=''; vert.className=''; vert.disabled=false;
+  document.getElementById('k-vertrow').style.display='none';
+
+  const step1=document.getElementById('k-step1'), step2=document.getElementById('k-step2');
+  step2.style.display='none';
+  step2.innerHTML='<div class="seg-title"><strong style="color:var(--gold-l)">Stap 2 — Benoemen.</strong> Geef elk stuk de juiste naam.</div><div class="label-list" id="k-labellist"></div>';
+
+  s.pieces=laPieces(parts);
+  s.twoWord=!!parts.twoWord;
+
+  if(s.twoWord){
+    step1.style.display='none';
+    s.studentPieces=s.pieces.map(p=>p.t);
+    renderLabelStepLa();
+    document.getElementById('k-vertrow').style.display='';
+    document.getElementById('k-cbtn').style.display='';
+    return;
+  }
+
+  step1.style.display='';
+  const cf=document.getElementById('k-cutform');
+  cf.innerHTML='';
+  const letters=[...q.vorm];
+  s.cutState={letters, cuts:new Set(), expectedCuts:computeExpectedCutsLa(s.pieces)};
+  letters.forEach((ltr,i)=>{
+    const span=document.createElement('span');
+    span.className='cut-letter'; span.textContent=ltr;
+    cf.appendChild(span);
+    if(i<letters.length-1){
+      const gap=document.createElement('span');
+      gap.className='cut-gap'; gap.dataset.pos=i;
+      gap.addEventListener('click',()=>toggleCutLa(gap));
+      cf.appendChild(gap);
+    }
+  });
+  document.getElementById('k-cuthint').textContent='';
+  document.getElementById('k-cut-done').style.display='';
+}
+function toggleCutLa(gap){
+  const pos=parseInt(gap.dataset.pos), cs=ST.knippen.cutState;
+  if(cs.cuts.has(pos)){ cs.cuts.delete(pos); gap.classList.remove('cut'); }
+  else { cs.cuts.add(pos); gap.classList.add('cut'); }
+}
+function cutDoneLa(){
+  const s=ST.knippen, cs=s.cutState;
+  const pieces=[]; let buf='';
+  cs.letters.forEach((ltr,i)=>{ buf+=ltr; if(cs.cuts.has(i)){ pieces.push(buf); buf=''; } });
+  if(buf) pieces.push(buf);
+  s.studentPieces=pieces;
+  document.getElementById('k-step1').style.display='none';
+  renderLabelStepLa();
+  document.getElementById('k-vertrow').style.display='';
+  document.getElementById('k-cbtn').style.display='';
+  document.getElementById('k-cut-done').style.display='none';
+}
+function renderLabelStepLa(){
+  const s=ST.knippen;
+  document.getElementById('k-step2').style.display='';
+  const list=document.getElementById('k-labellist');
+  list.innerHTML='';
+  s.studentPieces.forEach((pc,i)=>{
+    const row=document.createElement('div');
+    row.className='label-item';
+    row.innerHTML=`<span class="label-piece">${pc}</span>
+      <div class="label-sel"><select id="k-lbl-${i}">
+        <option value="">— kies onderdeel —</option>
+        <option value="stem">Stam</option>
+        <option value="tk">Tijdskenletter</option>
+        <option value="end">Persoonsuitgang</option>
+      </select></div>`;
+    list.appendChild(row);
+  });
+}
+function checkKnippen(){
+  const s=ST.knippen, q=s.qs[s.idx];
+  let fbLines=[];
+  let cutWasOk=true;
+  if(!s.twoWord){
+    const cs=s.cutState;
+    cutWasOk=(cs.cuts.size===cs.expectedCuts.size) && [...cs.expectedCuts].every(p=>cs.cuts.has(p));
+  }
+  const canon=s.pieces;
+  const studentLabels=s.studentPieces.map((pc,i)=>{
+    const sel=document.getElementById('k-lbl-'+i);
+    return {t:pc, r:sel?sel.value:''};
+  });
+  let labelsOk=true;
+  if(studentLabels.length===canon.length){
+    studentLabels.forEach((sp,i)=>{
+      const sel=document.getElementById('k-lbl-'+i);
+      const ok=sp.r===canon[i].r;
+      if(sel){ sel.classList.remove('ok','err'); sel.classList.add(ok?'ok':'err'); sel.disabled=true; }
+      const row=sel?sel.closest('.label-item'):null;
+      if(row) row.classList.add(ok?'correct-row':'wrong-row');
+      if(!ok){
+        labelsOk=false;
+        if(row){
+          const fix=document.createElement('span');
+          fix.className='label-fix'; fix.textContent='→ '+ROLE_NAMES_LA[canon[i].r];
+          row.appendChild(fix);
+        }
+      }
+    });
+  } else {
+    labelsOk=false;
+    studentLabels.forEach((sp,i)=>{
+      const sel=document.getElementById('k-lbl-'+i);
+      if(sel){ sel.classList.add('err'); sel.disabled=true; }
+    });
+  }
+  const structureOk=cutWasOk&&labelsOk;
+  if(!cutWasOk) fbLines.push(`<div class="fb-row"><span class="fb-lbl">Knippen:</span> de grenzen klopten nog niet. Juiste indeling: <span class="fb-cor">${canon.map(c=>c.t).join(' · ')}</span></div>`);
+  if(cutWasOk && !labelsOk){
+    const corr=canon.map(c=>`${c.t} = ${ROLE_NAMES_LA[c.r]}`).join(' · ');
+    fbLines.push(`<div class="fb-row"><span class="fb-lbl">Benoemen:</span> <span class="fb-cor">${corr}</span></div>`);
+  }
+  const vertEl=document.getElementById('k-vert');
+  const vertOk=matchNl(vertEl.value,q.glos);
+  vertEl.className=vertOk?'correct':'wrong'; vertEl.disabled=true;
+  if(!vertOk) fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${vertEl.value||'—'}</span> → <span class="fb-cor">${q.glos}</span></div>`);
+  const allOk=structureOk&&vertOk;
+  if(allOk){s.sc++;}else{s.wr++;}
+  s.res.push({f:q.vorm,lemma:q.lemma,ok:allOk});
+  document.getElementById('k-sc').textContent=s.sc;
+  document.getElementById('k-wr').textContent=s.wr;
+  const fb=document.getElementById('k-fb');
+  if(allOk){ fb.className='fb ok show'; fb.innerHTML='<strong style="color:var(--green-l)">✓ Correct!</strong>'; }
+  else { fb.className='fb err show'; fb.innerHTML=fbLines.join(''); }
+  document.getElementById('k-cbtn').style.display='none';
+  document.getElementById('k-nbtn').style.display='';
 }
 
 /* ── DETERMINEREN ── */
@@ -620,7 +992,10 @@ function checkVertaal(){
 /* ── NEXT / RESULTS ── */
 function nextQ(mode){
   const s=ST[mode]; s.idx++;
-  if(s.idx>=s.qs.length){ showResults(mode,s); } else { mode==='determ'?drawDeterm():drawVertaal(); }
+  if(s.idx>=s.qs.length){ showResults(mode,s); }
+  else if(mode==='knippen') drawKnippen();
+  else if(mode==='determ') drawDeterm();
+  else drawVertaal();
 }
 function showResults(mode,s){
   gotoScreen('results');
