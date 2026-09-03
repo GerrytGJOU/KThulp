@@ -165,6 +165,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--hi-dim);
 .chip.correct{border-color:var(--green-bright);background:linear-gradient(170deg,rgba(63,125,58,.5),rgba(40,80,36,.5))}
 .chip.wrong{border-color:#c8392a;background:linear-gradient(170deg,rgba(168,38,26,.44),rgba(90,18,12,.44))}
 .chip.dim{opacity:.4}
+.chip.partial{border-color:var(--hi-dim);background:linear-gradient(180deg,rgba(var(--glowA),.22),transparent)}
+.chip.small{padding:6px 11px;font-size:12.5px}
+.vfq-groepen{display:flex;flex-direction:column;gap:8px}
+.vfq-groep-row{display:flex;gap:7px;align-items:center}
+.vfq-expand{padding:9px 12px;flex:0 0 auto}
+.vfq-groep-detail{margin:2px 0 4px 0;padding-left:4px}
 .chip small{opacity:.7;font-size:12px;margin-left:3px}
 
 /* iPad-veilige bestandskiezer (zichtbaar input in label) */
@@ -1029,8 +1035,8 @@ body.greek .qcard .word{color:#143a5e}
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-database-compat.js"></script>
 
 <script src="vocab.js?v=20260630s"></script>
-<script src="verbforms.js?v=20260902a"></script>
-<script src="verbquiz.js?v=20260902b"></script>
+<script src="verbforms.js?v=20260903a"></script>
+<script src="verbquiz.js?v=20260903a"></script>
 <script src="core.js?v=20260831a"></script>
 <script src="net.js?v=20260816c"></script>
 <script src="games.js?v=20260902b"></script>
