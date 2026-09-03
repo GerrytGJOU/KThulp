@@ -1383,6 +1383,7 @@ function updateAvail(pref){
 document.addEventListener('click',e=>{
   const chip=e.target.closest('.fchip');
   if(!chip) return;
+  if(chip.closest('.det-field')) return; // det-*-chips beheren hun eigen .on via detPick()
   chip.classList.toggle('on');
   // figure out which mode prefix this chip belongs to
   const row=chip.closest('.chip-row');
