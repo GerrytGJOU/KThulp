@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Latijnse Werkwoorden</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicons/latijn/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../assets/favicons/latijn/favicon-16x16.png">
+<link rel="apple-touch-icon" href="../../assets/favicons/latijn/apple-touch-icon.png">
+<style>
+:root {
+  --gold:#c9a84c; --gold-l:#e8c96a; --gold-d:#8a6f2e; --ox:#7a1f1f; --ox-l:#a83030;
+  --stone:#1a1612; --surf:#251e18; --surf2:#332a22; --surf3:#3d3028;
+  --text:#f0e6cc; --dim:#9a8a6a; --green:#5a9a5a; --green-l:#7fc47f; --red:#b84040; --red-l:#e07a7a; --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Palatino Linotype',Palatino,'Book Antiqua','Noto Serif',Georgia,serif;
+  background:var(--stone);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+header{background:var(--surf);border-bottom:2px solid var(--ox);padding:14px 20px;text-align:center;}
+header h1{font-size:1.5rem;color:var(--gold-l);letter-spacing:.05em;}
+header p{font-size:.8rem;color:var(--dim);margin-top:2px;}
+.meander{height:10px;background:repeating-linear-gradient(90deg,var(--ox) 0,var(--ox) 3px,transparent 3px,transparent 7px);opacity:.4;}
+.screen{display:none;flex:1;flex-direction:column;overflow-y:auto;}
+.screen.active{display:flex;}
+#menu{align-items:center;justify-content:flex-start;padding:20px 16px 28px;}
+.menu-inner{width:100%;max-width:560px;}
+.menu-section-label{display:flex;align-items:center;gap:12px;margin:6px 0 14px;}
+.menu-section-label::before,.menu-section-label::after{content:"";flex:1;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-d),transparent);}
+.menu-section-label span{color:var(--gold-l);font-size:.95rem;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;width:100%;}
+@media(max-width:480px){.menu-grid{grid-template-columns:1fr;}}
+.menu-card{background:var(--surf);border:2px solid var(--surf3);border-radius:var(--r);
+  padding:18px 14px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;-webkit-tap-highlight-color:transparent;}
+.menu-card:hover,.menu-card:active{border-color:var(--gold);background:var(--surf2);}
+.menu-card .mc-icon{font-size:2rem;margin-bottom:8px;}
+.menu-card .mc-label{font-size:.95rem;color:var(--gold-l);font-weight:bold;margin-bottom:4px;}
+.menu-card .mc-desc{font-size:.78rem;color:var(--dim);line-height:1.4;}
+.menu-card.wide{grid-column:1/-1;}
+.inner-nav{background:var(--surf);border-bottom:1px solid var(--surf3);display:flex;align-items:center;gap:10px;padding:10px 14px;}
+.btn-back{background:none;border:1px solid var(--surf3);border-radius:6px;color:var(--dim);font-family:inherit;font-size:.85rem;padding:6px 12px;cursor:pointer;}
+.btn-back:hover{color:var(--text);border-color:var(--gold);}
+.inner-title{color:var(--gold-l);font-size:1rem;font-weight:bold;}
+.setup-panel{padding:20px 16px;max-width:560px;width:100%;margin:0 auto;}
+.setup-panel h2{color:var(--gold-l);font-size:1.05rem;margin-bottom:8px;}
+.setup-panel p{font-size:.84rem;color:var(--dim);margin-bottom:16px;line-height:1.5;}
+.filter-group{margin-bottom:16px;}
+.filter-label{font-size:.82rem;color:var(--gold-l);margin-bottom:8px;letter-spacing:.03em;}
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+.fchip{background:var(--surf2);border:1.5px solid var(--surf3);border-radius:20px;color:var(--dim);
+  font-family:inherit;font-size:.84rem;padding:7px 14px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.fchip:hover{border-color:var(--gold-d);}
+.fchip.on{background:#3a2416;border-color:var(--gold);color:var(--gold-l);}
+.fchip.correct{background:rgba(90,154,90,.3);border-color:var(--green);color:var(--green-l);}
+.fchip.wrong{background:rgba(184,64,64,.3);border-color:var(--red);color:var(--red-l);}
+.fchip.dim{opacity:.35;}
+.cnt-input{background:var(--surf2);border:1px solid var(--surf3);border-radius:6px;color:var(--text);font-family:inherit;font-size:.95rem;padding:7px 10px;width:80px;}
+.filter-count{font-size:.8rem;color:var(--dim);margin-bottom:14px;min-height:18px;}
+.filter-count.warn{color:var(--red-l);}
+.btn-start{display:block;width:100%;padding:14px;background:var(--ox);color:#fff;border:none;border-radius:var(--r);
+  font-family:inherit;font-size:1rem;font-weight:bold;cursor:pointer;letter-spacing:.04em;margin-top:6px;}
+.btn-start:hover{background:var(--ox-l);}
+.ex-wrap{flex:1;display:flex;flex-direction:column;padding:14px 16px;max-width:680px;width:100%;margin:0 auto;}
+.prog-bar{background:var(--surf2);border-radius:3px;height:5px;margin-bottom:10px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--gold);transition:width .3s;}
+.ex-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:.83rem;color:var(--dim);}
+.score-pill{background:var(--surf2);border:1px solid var(--surf3);border-radius:20px;padding:3px 12px;font-size:.83rem;}
+.verb-card{background:var(--surf);border:1px solid var(--gold-d);border-radius:var(--r);padding:16px;text-align:center;margin-bottom:14px;}
+.verb-form{font-size:2.1rem;color:var(--gold-l);font-style:italic;margin-bottom:4px;}
+.verb-sub{font-size:.82rem;color:var(--dim);}
+.det-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:12px;}
+.det-field label{font-size:.8rem;color:var(--gold-l);display:block;margin-bottom:6px;}
+.vert-input{width:100%;background:var(--surf2);border:1px solid var(--surf3);border-radius:var(--r);color:var(--text);
+  font-family:inherit;font-size:1rem;padding:12px;margin-bottom:12px;}
+.vert-input.ok{border-color:var(--green);}
+.vert-input.err{border-color:var(--red);}
+.fb{background:var(--surf2);border-radius:var(--r);padding:10px 14px;margin-bottom:10px;font-size:.86rem;display:none;}
+.fb.show{display:block;}
+.fb.ok{border-left:4px solid var(--green);}
+.fb.err{border-left:4px solid var(--red);}
+.fb-row{display:flex;gap:6px;margin-bottom:3px;flex-wrap:wrap;align-items:baseline;}
+.fb-lbl{color:var(--dim);min-width:90px;font-size:.8rem;}
+.fb-got{color:var(--red-l);}
+.fb-cor{color:var(--green-l);}
+.btn-row{display:flex;gap:10px;margin-top:auto;padding-top:8px;}
+.btn{flex:1;padding:13px;border:none;border-radius:var(--r);font-family:inherit;font-size:.95rem;cursor:pointer;font-weight:bold;}
+.btn-check{background:#3f6d8c;color:#fff;}
+.btn-next{background:var(--ox);color:#fff;}
+.btn-stop{background:var(--surf2);color:var(--dim);border:1px solid var(--surf3);flex:0;padding:13px 16px;}
+.btn:active{opacity:.8;}
+.para-wrap{padding:14px 14px 24px;max-width:760px;width:100%;margin:0 auto;}
+.para-section{margin-bottom:22px;}
+.para-section h2{color:var(--gold-l);font-size:1rem;margin-bottom:10px;padding-bottom:4px;border-bottom:1px solid var(--gold-d);}
+.para-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-bottom:8px;}
+.para-table th{background:var(--surf2);border:1px solid var(--surf3);padding:6px 8px;text-align:left;color:var(--gold-l);font-weight:normal;}
+.para-table td{border:1px solid var(--surf3);padding:5px 8px;vertical-align:top;}
+.para-table tr:nth-child(even) td{background:var(--surf2);}
+.para-table .la{font-style:italic;color:var(--gold-l);}
+.para-table .dim{color:var(--dim);font-size:.78rem;}
+.results-wrap{padding:20px 16px;max-width:520px;width:100%;margin:0 auto;text-align:center;}
+.results-wrap h2{color:var(--gold-l);font-size:1.2rem;margin-bottom:6px;}
+.big-score{font-size:2.8rem;color:var(--gold-l);margin:14px 0 4px;}
+.grade-txt{font-size:1rem;color:var(--dim);margin-bottom:18px;}
+.result-list{background:var(--surf2);border-radius:var(--r);padding:12px;margin-bottom:16px;text-align:left;}
+.result-list h3{color:var(--gold-l);font-size:.9rem;margin-bottom:8px;}
+.ri{display:flex;gap:6px;padding:5px 0;border-bottom:1px solid var(--surf3);font-size:.84rem;flex-wrap:wrap;align-items:baseline;}
+.ri:last-child{border-bottom:none;}
+.ri-verb{font-style:italic;color:var(--gold-l);min-width:100px;}
+.ri-dim{color:var(--dim);font-size:.78rem;}
+footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-top:1px solid var(--surf3);}
+.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}
+.portal-back svg{width:22px;height:22px;display:block;}
+.portal-back+header{padding-left:54px;}
+</style>
+</head>
+<body>
+<a class="portal-back" href="../" onclick="if(!document.getElementById('menu').classList.contains('active')){event.preventDefault();gotoScreen('menu');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<header>
+  <h1>Latijnse Werkwoorden</h1>
+  <p>Determineren, vertalen &amp; paradigma's</p>
+</header>
+<div class="meander"></div>
+
+<!-- ════════════════════════════════ HOOFDMENU ════════════════════════════════ -->
+<div id="menu" class="screen active">
+  <div class="menu-inner">
+    <div class="menu-section-label"><span>Oefenen</span></div>
+    <div class="menu-grid">
+      <div class="menu-card" onclick="gotoSetup('determ')">
+        <div class="mc-icon">📋</div>
+        <div class="mc-label">① Determineren</div>
+        <div class="mc-desc">Wijs persoon, getal, tijd, wijs en genus van de gegeven vorm aan</div>
+      </div>
+      <div class="menu-card" onclick="gotoSetup('vertaal')">
+        <div class="mc-icon">📖</div>
+        <div class="mc-label">② Vertalen</div>
+        <div class="mc-desc">Vertaal de werkwoordsvorm naar het Nederlands</div>
+      </div>
+      <div class="menu-card wide" onclick="gotoScreen('paradigma')">
+        <div class="mc-icon">📜</div>
+        <div class="mc-label">Paradigma's</div>
+        <div class="mc-desc">Bekijk de volledige vervoeging van elk werkwoord, per tijd/wijs/genus</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ SETUP DETERM ════════════════════════════════ -->
+<div id="setup-determ" class="screen">
+  <div class="inner-nav"><button class="btn-back" onclick="gotoScreen('menu')">← Menu</button><span class="inner-title">📋 Determineren</span></div>
+  <div class="setup-panel">
+    <h2>Werkwoordsvorm determineren</h2>
+    <p>Je ziet een Latijnse werkwoordsvorm zonder lemma. Geef persoon, getal, tijd, wijs en genus.</p>
+    <div class="filter-group"><div class="filter-label">Werkwoorden</div><div class="chip-row" id="d-f-verb"></div></div>
+    <div class="filter-group"><div class="filter-label">Tijden</div>
+      <div class="chip-row" id="d-f-tijd">
+        <button class="fchip on" data-v="praesens">praesens</button>
+        <button class="fchip on" data-v="imperfectum">imperfectum</button>
+        <button class="fchip on" data-v="perfectum">perfectum</button>
+        <button class="fchip" data-v="plusquamperfectum">plusquamperfectum</button>
+        <button class="fchip" data-v="futurum">futurum simplex</button>
+        <button class="fchip" data-v="futurumexactum">futurum exactum</button>
+      </div>
+    </div>
+    <div class="filter-group"><div class="filter-label">Wijs</div>
+      <div class="chip-row" id="d-f-wijs">
+        <button class="fchip on" data-v="indicativus">indicativus</button>
+        <button class="fchip" data-v="coniunctivus">coniunctivus</button>
+      </div>
+    </div>
+    <div class="filter-group"><div class="filter-label">Genus</div>
+      <div class="chip-row" id="d-f-genus">
+        <button class="fchip on" data-v="activum">activum</button>
+        <button class="fchip" data-v="passivum">passivum</button>
+      </div>
+    </div>
+    <div class="filter-group"><div class="filter-label">Aantal vragen</div><input type="number" id="d-cnt" value="10" min="3" max="40" class="cnt-input"></div>
+    <div class="filter-count" id="d-avail"></div>
+    <button class="btn-start" onclick="startExercise('determ')">Start →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ EX DETERM ════════════════════════════════ -->
+<div id="ex-determ" class="screen">
+  <div class="inner-nav"><button class="btn-back" onclick="stopEx('determ')">← Stop</button><span class="inner-title">Determineren</span></div>
+  <div class="ex-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="d-prog"></div></div>
+    <div class="ex-header"><span id="d-qn">Vraag 1/10</span><span class="score-pill">✓<span id="d-sc">0</span> ✗<span id="d-wr">0</span></span></div>
+    <div class="verb-card"><div class="verb-form" id="d-form">amabat</div></div>
+    <div class="det-grid">
+      <div class="det-field"><label>Persoon</label><div class="chip-row" id="d-pers-chips">
+        <button type="button" class="fchip" data-v="1" onclick="detPick('pers','1')">1e</button>
+        <button type="button" class="fchip" data-v="2" onclick="detPick('pers','2')">2e</button>
+        <button type="button" class="fchip" data-v="3" onclick="detPick('pers','3')">3e</button>
+      </div></div>
+      <div class="det-field"><label>Getal</label><div class="chip-row" id="d-getal-chips">
+        <button type="button" class="fchip" data-v="ev" onclick="detPick('getal','ev')">enkelvoud</button>
+        <button type="button" class="fchip" data-v="mv" onclick="detPick('getal','mv')">meervoud</button>
+      </div></div>
+      <div class="det-field"><label>Tijd</label><div class="chip-row" id="d-tijd-chips">
+        <button type="button" class="fchip" data-v="praesens" onclick="detPick('tijd','praesens')">praesens</button>
+        <button type="button" class="fchip" data-v="imperfectum" onclick="detPick('tijd','imperfectum')">imperfectum</button>
+        <button type="button" class="fchip" data-v="perfectum" onclick="detPick('tijd','perfectum')">perfectum</button>
+        <button type="button" class="fchip" data-v="plusquamperfectum" onclick="detPick('tijd','plusquamperfectum')">plusquamperf.</button>
+        <button type="button" class="fchip" data-v="futurum" onclick="detPick('tijd','futurum')">futurum simplex</button>
+        <button type="button" class="fchip" data-v="futurumexactum" onclick="detPick('tijd','futurumexactum')">futurum exactum</button>
+      </div></div>
+      <div class="det-field"><label>Wijs</label><div class="chip-row" id="d-wijs-chips">
+        <button type="button" class="fchip" data-v="indicativus" onclick="detPick('wijs','indicativus')">indicativus</button>
+        <button type="button" class="fchip" data-v="coniunctivus" onclick="detPick('wijs','coniunctivus')">coniunctivus</button>
+      </div></div>
+      <div class="det-field"><label>Genus</label><div class="chip-row" id="d-genus-chips">
+        <button type="button" class="fchip" data-v="activum" onclick="detPick('genus','activum')">activum</button>
+        <button type="button" class="fchip" data-v="passivum" onclick="detPick('genus','passivum')">passivum</button>
+      </div></div>
+    </div>
+    <div class="fb" id="d-fb"></div>
+    <div class="btn-row">
+      <button class="btn btn-stop" onclick="stopEx('determ')">✕</button>
+      <button class="btn btn-check" id="d-cbtn" onclick="checkDeterm()">Controleer</button>
+      <button class="btn btn-next" id="d-nbtn" style="display:none" onclick="nextQ('determ')">Volgende →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ SETUP VERTAAL ════════════════════════════════ -->
+<div id="setup-vertaal" class="screen">
+  <div class="inner-nav"><button class="btn-back" onclick="gotoScreen('menu')">← Menu</button><span class="inner-title">📖 Vertalen</span></div>
+  <div class="setup-panel">
+    <h2>Werkwoordsvorm vertalen</h2>
+    <p>Je ziet een Latijnse werkwoordsvorm mét het lemma. Typ de Nederlandse vertaling.</p>
+    <div class="filter-group"><div class="filter-label">Werkwoorden</div><div class="chip-row" id="v-f-verb"></div></div>
+    <div class="filter-group"><div class="filter-label">Tijden</div>
+      <div class="chip-row" id="v-f-tijd">
+        <button class="fchip on" data-v="praesens">praesens</button>
+        <button class="fchip on" data-v="imperfectum">imperfectum</button>
+        <button class="fchip on" data-v="perfectum">perfectum</button>
+        <button class="fchip" data-v="plusquamperfectum">plusquamperf.</button>
+        <button class="fchip" data-v="futurum">futurum simplex</button>
+        <button class="fchip" data-v="futurumexactum">futurum exactum</button>
+      </div>
+    </div>
+    <div class="filter-group"><div class="filter-label">Wijs</div>
+      <div class="chip-row" id="v-f-wijs">
+        <button class="fchip on" data-v="indicativus">indicativus</button>
+        <button class="fchip" data-v="coniunctivus">coniunctivus</button>
+      </div>
+    </div>
+    <div class="filter-group"><div class="filter-label">Genus</div>
+      <div class="chip-row" id="v-f-genus">
+        <button class="fchip on" data-v="activum">activum</button>
+        <button class="fchip" data-v="passivum">passivum</button>
+      </div>
+    </div>
+    <div class="filter-group"><div class="filter-label">Aantal vragen</div><input type="number" id="v-cnt" value="10" min="3" max="40" class="cnt-input"></div>
+    <div class="filter-count" id="v-avail"></div>
+    <button class="btn-start" onclick="startExercise('vertaal')">Start →</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ EX VERTAAL ════════════════════════════════ -->
+<div id="ex-vertaal" class="screen">
+  <div class="inner-nav"><button class="btn-back" onclick="stopEx('vertaal')">← Stop</button><span class="inner-title">Vertalen</span></div>
+  <div class="ex-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="v-prog"></div></div>
+    <div class="ex-header"><span id="v-qn">Vraag 1/10</span><span class="score-pill">✓<span id="v-sc">0</span> ✗<span id="v-wr">0</span></span></div>
+    <div class="verb-card"><div class="verb-form" id="v-form">amabat</div><div class="verb-sub" id="v-sub">amare — liefhebben</div></div>
+    <input type="text" id="v-vert" class="vert-input" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="typ de Nederlandse vertaling...">
+    <div class="fb" id="v-fb"></div>
+    <div class="btn-row">
+      <button class="btn btn-stop" onclick="stopEx('vertaal')">✕</button>
+      <button class="btn btn-check" id="v-cbtn" onclick="checkVertaal()">Controleer</button>
+      <button class="btn btn-next" id="v-nbtn" style="display:none" onclick="nextQ('vertaal')">Volgende →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ RESULTS ════════════════════════════════ -->
+<div id="results" class="screen">
+  <div class="results-wrap">
+    <h2>Resultaat</h2>
+    <div class="big-score" id="res-score">0/0</div>
+    <div class="grade-txt" id="res-grade"></div>
+    <div class="result-list" id="res-list"></div>
+    <button class="btn-start" id="res-again" onclick="">Nog een keer</button>
+    <button class="btn-back" style="margin-top:10px" onclick="gotoScreen('menu')">← Terug naar menu</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════ PARADIGMA'S ════════════════════════════════ -->
+<div id="paradigma" class="screen">
+  <div class="inner-nav"><button class="btn-back" onclick="gotoScreen('menu')">← Menu</button><span class="inner-title">📜 Paradigma's</span></div>
+  <div class="para-wrap">
+    <div class="filter-group"><div class="filter-label">Werkwoord</div><div class="chip-row" id="p-f-verb"></div></div>
+    <div class="filter-group"><div class="filter-label">Genus</div><div class="chip-row" id="p-f-genus">
+      <button class="fchip on" data-v="activum" onclick="paraSetGenus('activum')">activum</button>
+      <button class="fchip" data-v="passivum" onclick="paraSetGenus('passivum')">passivum</button>
+    </div></div>
+    <div id="para-body"></div>
+  </div>
+</div>
+
+<footer>Latijnse Werkwoorden &middot; &copy; Gerben de Jong &middot; 2026</footer>
+
+<script>
+"use strict";
+/* ══════════════════════════════════════════════
+   CONJUGATIE-ENGINE — zelfde algoritme als certamen/verbforms.js
+   (per-vervoeging eindingstabellen, gevalideerd tegen de volledige
+   Vocare-vervoeging). Zelfstandig gehouden i.p.v. cross-app geladen,
+   conform de KThulp-afspraak: één zelfstandig HTML-bestand per app.
+   ══════════════════════════════════════════════ */
+const PRONOMEN=["ik","jij","hij","wij","jullie","zij"];
+const TIJDEN=["praesens","imperfectum","perfectum","plusquamperfectum","futurum","futurumexactum"];
+const TIJD_NM={praesens:"praesens",imperfectum:"imperfectum",perfectum:"perfectum",plusquamperfectum:"plusquamperfectum",futurum:"futurum simplex",futurumexactum:"futurum exactum"};
+const WIJZEN=["indicativus","coniunctivus"];
+const GENERA=["activum","passivum"];
+
+const VERBS=[
+ {lemma:"amo",  stam:"ama", perf:"amav", ppp:"amat", conj:1,    betekenis:"liefhebben, houden van",
+   nl:{inf:"liefhebben",aux:"hebben",pres:["heb lief","hebt lief","heeft lief","hebben lief","hebben lief","hebben lief"],past:["had lief","had lief","had lief","hadden lief","hadden lief","hadden lief"],part:"liefgehad"}},
+ {lemma:"voco", stam:"voca",perf:"vocav",ppp:"vocat", conj:1,    betekenis:"roepen",
+   nl:{inf:"roepen",aux:"hebben",pres:["roep","roept","roept","roepen","roepen","roepen"],past:["riep","riep","riep","riepen","riepen","riepen"],part:"geroepen"}},
+ {lemma:"paro", stam:"para",perf:"parav",ppp:"parat", conj:1,    betekenis:"voorbereiden, klaarmaken",
+   nl:{inf:"voorbereiden",aux:"hebben",pres:["bereid voor","bereidt voor","bereidt voor","bereiden voor","bereiden voor","bereiden voor"],past:["bereidde voor","bereidde voor","bereidde voor","bereidden voor","bereidden voor","bereidden voor"],part:"voorbereid"}},
+ {lemma:"laudo",stam:"lauda",perf:"laudav",ppp:"laudat",conj:1,  betekenis:"prijzen",
+   nl:{inf:"prijzen",aux:"hebben",pres:["prijs","prijst","prijst","prijzen","prijzen","prijzen"],past:["prees","prees","prees","prezen","prezen","prezen"],part:"geprezen"}},
+ {lemma:"teneo",stam:"tene",perf:"tenu", ppp:"tent", conj:2,     betekenis:"vasthouden",
+   nl:{inf:"vasthouden",aux:"hebben",pres:["houd vast","houdt vast","houdt vast","houden vast","houden vast","houden vast"],past:["hield vast","hield vast","hield vast","hielden vast","hielden vast","hielden vast"],part:"vastgehouden"}},
+ {lemma:"moneo",stam:"mone",perf:"monu", ppp:"monit",conj:2,     betekenis:"waarschuwen",
+   nl:{inf:"waarschuwen",aux:"hebben",pres:["waarschuw","waarschuwt","waarschuwt","waarschuwen","waarschuwen","waarschuwen"],past:["waarschuwde","waarschuwde","waarschuwde","waarschuwden","waarschuwden","waarschuwden"],part:"gewaarschuwd"}},
+ {lemma:"video",stam:"vide",perf:"vid",  ppp:"vis",  conj:2,     betekenis:"zien",
+   nl:{inf:"zien",aux:"hebben",pres:["zie","ziet","ziet","zien","zien","zien"],past:["zag","zag","zag","zagen","zagen","zagen"],part:"gezien"}},
+ {lemma:"mitto",stam:"mitt",perf:"mis",  ppp:"miss", conj:3,     betekenis:"sturen, zenden",
+   nl:{inf:"sturen",aux:"hebben",pres:["stuur","stuurt","stuurt","sturen","sturen","sturen"],past:["stuurde","stuurde","stuurde","stuurden","stuurden","stuurden"],part:"gestuurd"}},
+ {lemma:"duco", stam:"duc", perf:"dux",  ppp:"duct", conj:3,     betekenis:"leiden",
+   nl:{inf:"leiden",aux:"hebben",pres:["leid","leidt","leidt","leiden","leiden","leiden"],past:["leidde","leidde","leidde","leidden","leidden","leidden"],part:"geleid"}},
+ {lemma:"rego", stam:"reg", perf:"rex",  ppp:"rect", conj:3,     betekenis:"regeren, besturen",
+   nl:{inf:"regeren",aux:"hebben",pres:["regeer","regeert","regeert","regeren","regeren","regeren"],past:["regeerde","regeerde","regeerde","regeerden","regeerden","regeerden"],part:"geregeerd"}},
+ {lemma:"capio",stam:"capi",perf:"cep",  ppp:"capt", conj:"3io", betekenis:"pakken, nemen, veroveren",
+   nl:{inf:"pakken",aux:"hebben",pres:["pak","pakt","pakt","pakken","pakken","pakken"],past:["pakte","pakte","pakte","pakten","pakten","pakten"],part:"gepakt"}},
+ {lemma:"facio",stam:"faci",perf:"fec",  ppp:"fact", conj:"3io", betekenis:"maken, doen",
+   nl:{inf:"maken",aux:"hebben",pres:["maak","maakt","maakt","maken","maken","maken"],past:["maakte","maakte","maakte","maakten","maakten","maakten"],part:"gemaakt"}},
+ {lemma:"audio",stam:"audi",perf:"audiv",ppp:"audit",conj:4,     betekenis:"horen",
+   nl:{inf:"horen",aux:"hebben",pres:["hoor","hoort","hoort","horen","horen","horen"],past:["hoorde","hoorde","hoorde","hoorden","hoorden","hoorden"],part:"gehoord"}},
+ {lemma:"venio",stam:"veni",perf:"ven",  ppp:"vent", conj:4,     betekenis:"komen",
+   nl:{inf:"komen",aux:"zijn",pres:["kom","komt","komt","komen","komen","komen"],past:["kwam","kwam","kwam","kwamen","kwamen","kwamen"],part:"gekomen"}},
+];
+
+function laInfinitief(v){
+  if(v.conj===3) return v.stam+"ere";
+  if(v.conj==="3io") return v.stam.slice(0,-1)+"ere";
+  return v.stam+"re";
+}
+
+// Genereert één Latijnse vorm. persoonIdx 0-5 = ik/jij/hij/wij/jullie/zij.
+// Retourneert null voor combinaties die niet bestaan (futurum(exactum) coniunctivus).
+function laVorm(v,tijd,wijs,genus,i){
+  const s=v.stam;
+  if(wijs==="coniunctivus" && (tijd==="futurum"||tijd==="futurumexactum")) return null;
+  if(wijs==="coniunctivus"){
+    if(tijd==="perfectum"){
+      if(genus==="activum") return v.perf+["erim","eris","erit","erimus","eritis","erint"][i];
+      const u=[" sim"," sis"," sit"," simus"," sitis"," sint"];
+      return v.ppp+(i<3?"us":"i")+u[i];
+    }
+    if(tijd==="plusquamperfectum"){
+      if(genus==="activum") return v.perf+["issem","isses","isset","issemus","issetis","issent"][i];
+      const u=[" essem"," esses"," esset"," essemus"," essetis"," essent"];
+      return v.ppp+(i<3?"us":"i")+u[i];
+    }
+    const isConj1=v.conj===1;
+    if(tijd==="praesens"){
+      const kern=isConj1?s.slice(0,-1)+"e":s+"a";
+      return genus==="activum" ? kern+["m","s","t","mus","tis","nt"][i] : kern+["r","ris","tur","mur","mini","ntur"][i];
+    }
+    if(tijd==="imperfectum"){
+      const inf=laInfinitief(v);
+      return genus==="activum" ? inf+["m","s","t","mus","tis","nt"][i] : inf+["r","ris","tur","mur","mini","ntur"][i];
+    }
+    return null;
+  }
+  if(tijd==="perfectum"){
+    if(genus==="activum") return v.perf+["i","isti","it","imus","istis","erunt"][i];
+    const u=[" sum"," es"," est"," sumus"," estis"," sunt"];
+    return v.ppp+(i<3?"us":"i")+u[i];
+  }
+  if(tijd==="plusquamperfectum"){
+    if(genus==="activum") return v.perf+["eram","eras","erat","eramus","eratis","erant"][i];
+    const u=[" eram"," eras"," erat"," eramus"," eratis"," erant"];
+    return v.ppp+(i<3?"us":"i")+u[i];
+  }
+  if(tijd==="futurumexactum"){
+    if(genus==="activum") return v.perf+["ero","eris","erit","erimus","eritis","erint"][i];
+    const u=[" ero"," eris"," erit"," erimus"," eritis"," erunt"];
+    return v.ppp+(i<3?"us":"i")+u[i];
+  }
+  if(tijd==="imperfectum"){
+    const infix=(v.conj===1||v.conj===2)?"ba":"eba";
+    return genus==="activum" ? s+infix+["m","s","t","mus","tis","nt"][i] : s+infix+["r","ris","tur","mur","mini","ntur"][i];
+  }
+  if(tijd==="futurum"){
+    if(v.conj===1||v.conj===2){
+      return genus==="activum" ? s+["bo","bis","bit","bimus","bitis","bunt"][i] : s+"b"+["or","eris","itur","imur","imini","untur"][i];
+    }
+    return genus==="activum" ? s+["am","es","et","emus","etis","ent"][i] : s+["ar","eris","etur","emur","emini","entur"][i];
+  }
+  switch(v.conj){
+    case 1:
+      if(genus==="activum") return [s.slice(0,-1)+"o",s+"s",s+"t",s+"mus",s+"tis",s+"nt"][i];
+      return [s.slice(0,-1)+"or",s+"ris",s+"tur",s+"mur",s+"mini",s+"ntur"][i];
+    case 2:
+      if(genus==="activum") return [s+"o",s+"s",s+"t",s+"mus",s+"tis",s+"nt"][i];
+      return [s+"or",s+"ris",s+"tur",s+"mur",s+"mini",s+"ntur"][i];
+    case 3:
+      if(genus==="activum") return [s+"o",s+"is",s+"it",s+"imus",s+"itis",s+"unt"][i];
+      return [s+"or",s+"eris",s+"itur",s+"imur",s+"imini",s+"untur"][i];
+    case "3io": {
+      const bare=s.slice(0,-1);
+      if(genus==="activum") return [s+"o",bare+"is",bare+"it",bare+"imus",bare+"itis",s+"unt"][i];
+      return [s+"or",bare+"eris",s+"tur",s+"mur",s+"mini",s+"untur"][i];
+    }
+    case 4:
+      if(genus==="activum") return [s+"o",s+"s",s+"t",s+"mus",s+"tis",s+"unt"][i];
+      return [s+"or",s+"ris",s+"tur",s+"mur",s+"mini",s+"untur"][i];
+  }
+  return null;
+}
+
+// Nederlandse glans — aux ("hebben"/"zijn") bepaalt het hulpwerkwoord voor
+// perfectum/plusquamperfectum/futurum exactum activum (venio -> "ben gekomen").
+function laGlos(v,tijd,wijs,genus,i){
+  const nl=v.nl, pron=PRONOMEN[i];
+  const zullen=["zal","zal","zal","zullen","zullen","zullen"][i];
+  const auxPres=(v.nl.aux==="zijn"?["ben","bent","is","zijn","zijn","zijn"]:["heb","hebt","heeft","hebben","hebben","hebben"])[i];
+  const auxPast=(v.nl.aux==="zijn"?["was","was","was","waren","waren","waren"]:["had","had","had","hadden","hadden","hadden"])[i];
+  const wordenPres=["word","wordt","wordt","worden","worden","worden"][i];
+  const wordenPast=["werd","werd","werd","werden","werden","werden"][i];
+  const zijnPres=["ben","bent","is","zijn","zijn","zijn"][i];
+  const zijnPast=["was","was","was","waren","waren","waren"][i];
+  let basis;
+  if(genus==="activum"){
+    basis = tijd==="praesens" ? `${pron} ${nl.pres[i]}`
+      : tijd==="imperfectum" ? `${pron} ${nl.past[i]}`
+      : tijd==="futurum" ? `${pron} ${zullen} ${nl.inf}`
+      : tijd==="perfectum" ? `${pron} ${auxPres} ${nl.part}`
+      : tijd==="plusquamperfectum" ? `${pron} ${auxPast} ${nl.part}`
+      : `${pron} ${zullen} ${v.nl.aux==="zijn"?"zijn":"hebben"} ${nl.part}`;
+  } else {
+    basis = tijd==="praesens" ? `${pron} ${wordenPres} ${nl.part}`
+      : tijd==="imperfectum" ? `${pron} ${wordenPast} ${nl.part}`
+      : tijd==="futurum" ? `${pron} ${zullen} worden ${nl.part}`
+      : tijd==="perfectum" ? `${pron} ${zijnPres} ${nl.part}`
+      : tijd==="plusquamperfectum" ? `${pron} ${zijnPast} ${nl.part}`
+      : `${pron} ${zullen} zijn ${nl.part}`;
+  }
+  return wijs==="coniunctivus" ? basis+" (coniunctivus)" : basis;
+}
+
+/* ══════════════════════════════════════════════
+   NAV + GEDEELDE STATE
+   ══════════════════════════════════════════════ */
+function gotoScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function gotoSetup(mode){ gotoScreen('setup-'+mode); renderVerbChips(mode[0]); updateAvail(mode); }
+function stopEx(mode){ gotoScreen('setup-'+mode); updateAvail(mode); }
+
+function renderVerbChips(pref){
+  const host=document.getElementById(pref+'-f-verb'); if(!host) return;
+  if(host.children.length) return; // eenmalig opbouwen
+  host.innerHTML=VERBS.map(v=>`<button class="fchip on" data-v="${v.lemma}">${v.lemma} <span style="opacity:.65;font-size:.78em">${v.betekenis.split(',')[0]}</span></button>`).join('');
+}
+
+function readFilters(mode){
+  const pref=mode[0];
+  const get=id=>[...document.querySelectorAll('#'+pref+'-f-'+id+' .fchip.on')].map(b=>b.dataset.v);
+  return { verbs:get('verb'), tijden:get('tijd'), wijzen:get('wijs'), genera:get('genus') };
+}
+
+// Bouwt de volledige vormenpool voor de gekozen filters — elke {verb,tijd,wijs,genus,persoonIdx}-
+// combinatie die een echte vorm oplevert (futurum(exactum) coniunctivus bestaat niet en valt vanzelf weg).
+function buildPool(filt){
+  const verbs=VERBS.filter(v=>filt.verbs.includes(v.lemma));
+  const pool=[];
+  for(const v of verbs) for(const tijd of filt.tijden) for(const wijs of filt.wijzen) for(const genus of filt.genera)
+    for(let i=0;i<6;i++){
+      const vorm=laVorm(v,tijd,wijs,genus,i); if(!vorm) continue;
+      pool.push({lemma:v.lemma,betekenis:v.betekenis,tijd,wijs,genus,persoonIdx:i,vorm,glos:laGlos(v,tijd,wijs,genus,i)});
+    }
+  return pool;
+}
+function updateAvail(mode){
+  const pref=mode[0], el=document.getElementById(pref+'-avail'); if(!el) return;
+  const n=buildPool(readFilters(mode)).length;
+  if(n===0){ el.className='filter-count warn'; el.textContent='Geen vormen bij deze selectie — kies meer opties.'; }
+  else { el.className='filter-count'; el.textContent=`${n} vormen beschikbaar bij deze selectie.`; }
+}
+document.addEventListener('click',e=>{
+  const chip=e.target.closest('.fchip');
+  if(!chip) return;
+  if(chip.closest('.det-field')) return; // exercise-antwoordchips beheren hun eigen .on
+  if(chip.closest('#p-f-verb, #p-f-genus')) return; // paradigma-chips: eigen handler
+  chip.classList.toggle('on');
+  const row=chip.closest('.chip-row');
+  if(row){ const mode=row.id.split('-')[0]==='d'?'determ':row.id.split('-')[0]==='v'?'vertaal':null; if(mode) updateAvail(mode); }
+});
+
+function shuffle(a){ const r=[...a]; for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];} return r; }
+function normalNl(s){ return (s||'').trim().toLowerCase().replace(/[,.;!]/g,'').replace(/\s+/g,' '); }
+function matchNl(user,correct){
+  const u=normalNl(user), c=normalNl(correct);
+  if(u===c) return true;
+  const words=c.split(' ').filter(w=>w.length>2 && !/^(het|een|ik|jij|hij|zij|wij|we|jullie|zich|de|der)$/.test(w));
+  if(!words.length) return u.includes(c.slice(0,4));
+  return words.filter(w=>u.includes(w)).length >= Math.ceil(words.length*.7);
+}
+function updateHeader(mode,idx,total,sc,wr){
+  const p=mode[0];
+  document.getElementById(p+'-qn').textContent=`Vraag ${idx+1}/${total}`;
+  document.getElementById(p+'-sc').textContent=sc;
+  document.getElementById(p+'-wr').textContent=wr;
+  document.getElementById(p+'-prog').style.width=`${(idx/total)*100}%`;
+}
+
+const ST={};
+function startExercise(mode){
+  const filt=readFilters(mode);
+  const pool=buildPool(filt);
+  if(!pool.length){ alert('Geen vormen beschikbaar — kies een ruimere selectie.'); return; }
+  const cnt=Math.min(+document.getElementById(mode[0]+'-cnt').value||10, pool.length*3);
+  const qs=[]; const shuffled=shuffle(pool);
+  for(let i=0;i<cnt;i++) qs.push(shuffled[i%shuffled.length]);
+  ST[mode]={qs:shuffle(qs),idx:0,sc:0,wr:0,res:[]};
+  gotoScreen('ex-'+mode);
+  if(mode==='determ') drawDeterm(); else drawVertaal();
+}
+
+/* ── DETERMINEREN ── */
+let DET_PICK={};
+function detPick(axis,val){
+  if(document.getElementById('d-cbtn').style.display==='none') return;
+  DET_PICK[axis]=val;
+  document.querySelectorAll('#d-'+axis+'-chips .fchip').forEach(b=>b.classList.toggle('on', b.dataset.v===val));
+}
+function drawDeterm(){
+  const s=ST.determ, q=s.qs[s.idx];
+  updateHeader('determ',s.idx,s.qs.length,s.sc,s.wr);
+  document.getElementById('d-form').textContent=q.vorm;
+  DET_PICK={};
+  ['pers','getal','tijd','wijs','genus'].forEach(axis=>{
+    document.querySelectorAll('#d-'+axis+'-chips .fchip').forEach(b=>{ b.classList.remove('on','correct','wrong','dim'); b.disabled=false; });
+  });
+  document.getElementById('d-fb').className='fb';
+  document.getElementById('d-cbtn').style.display='';
+  document.getElementById('d-nbtn').style.display='none';
+}
+function checkDeterm(){
+  const s=ST.determ, q=s.qs[s.idx];
+  const exp={pers:String((q.persoonIdx%3)+1), getal:q.persoonIdx<3?'ev':'mv', tijd:q.tijd, wijs:q.wijs, genus:q.genus};
+  const labels={pers:'Persoon',getal:'Getal',tijd:'Tijd',wijs:'Wijs',genus:'Genus'};
+  let allOk=true, fbLines=[];
+  Object.keys(exp).forEach(axis=>{
+    const got=DET_PICK[axis]||null, ok=got===exp[axis];
+    document.querySelectorAll('#d-'+axis+'-chips .fchip').forEach(b=>{
+      b.disabled=true;
+      if(b.dataset.v===exp[axis]) b.classList.add('correct');
+      else if(b.dataset.v===got) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
+    if(!ok){ allOk=false;
+      const disp=axis==='tijd'?(TIJD_NM[exp[axis]]||exp[axis]):axis==='getal'?(exp[axis]==='ev'?'enkelvoud':'meervoud'):axis==='pers'?exp[axis]+'e persoon':exp[axis];
+      fbLines.push(`<div class="fb-row"><span class="fb-lbl">${labels[axis]}:</span><span class="fb-got">${got||'—'}</span> → <span class="fb-cor">${disp}</span></div>`);
+    }
+  });
+  if(allOk){s.sc++;}else{s.wr++;}
+  s.res.push({f:q.vorm,lemma:q.lemma,ok:allOk});
+  document.getElementById('d-sc').textContent=s.sc;
+  document.getElementById('d-wr').textContent=s.wr;
+  const fb=document.getElementById('d-fb');
+  fb.className=allOk?'fb ok show':'fb err show';
+  fb.innerHTML=allOk?'<strong style="color:var(--green-l)">✓ Correct!</strong>':fbLines.join('');
+  document.getElementById('d-cbtn').style.display='none';
+  document.getElementById('d-nbtn').style.display='';
+}
+
+/* ── VERTALEN ── */
+function drawVertaal(){
+  const s=ST.vertaal, q=s.qs[s.idx];
+  updateHeader('vertaal',s.idx,s.qs.length,s.sc,s.wr);
+  document.getElementById('v-form').textContent=q.vorm;
+  document.getElementById('v-sub').textContent=`${q.lemma} — ${q.betekenis}`;
+  const v=document.getElementById('v-vert');
+  v.value=''; v.classList.remove('ok','err'); v.disabled=false;
+  document.getElementById('v-fb').className='fb';
+  document.getElementById('v-cbtn').style.display='';
+  document.getElementById('v-nbtn').style.display='none';
+  v.focus();
+}
+function checkVertaal(){
+  const s=ST.vertaal, q=s.qs[s.idx];
+  const v=document.getElementById('v-vert');
+  const ok=matchNl(v.value,q.glos);
+  v.classList.remove('ok','err'); v.classList.add(ok?'ok':'err'); v.disabled=true;
+  if(ok){s.sc++;}else{s.wr++;}
+  s.res.push({f:q.vorm,lemma:q.lemma,ok});
+  document.getElementById('v-sc').textContent=s.sc;
+  document.getElementById('v-wr').textContent=s.wr;
+  const fb=document.getElementById('v-fb');
+  fb.className=ok?'fb ok show':'fb err show';
+  fb.innerHTML=ok?`<strong style="color:var(--green-l)">✓ Correct!</strong> <span style="color:var(--dim)">${q.glos}</span>`
+    :`<div class="fb-row"><span class="fb-lbl">Jij:</span><span class="fb-got">${v.value||'—'}</span></div><div class="fb-row"><span class="fb-lbl">Correct:</span><span class="fb-cor">${q.glos}</span></div>`;
+  document.getElementById('v-cbtn').style.display='none';
+  document.getElementById('v-nbtn').style.display='';
+}
+
+/* ── NEXT / RESULTS ── */
+function nextQ(mode){
+  const s=ST[mode]; s.idx++;
+  if(s.idx>=s.qs.length){ showResults(mode,s); } else { mode==='determ'?drawDeterm():drawVertaal(); }
+}
+function showResults(mode,s){
+  gotoScreen('results');
+  const total=s.sc+s.wr, pct=total?Math.round(s.sc/total*100):0;
+  document.getElementById('res-score').textContent=`${s.sc}/${total}`;
+  const grade=pct>=90?'Uitstekend!':pct>=75?'Goed gedaan!':pct>=50?'Redelijk — blijf oefenen.':'Nog even oefenen.';
+  document.getElementById('res-grade').textContent=`${pct}% — ${grade}`;
+  const wrong=s.res.filter(r=>!r.ok);
+  const list=document.getElementById('res-list');
+  if(wrong.length){
+    list.innerHTML=`<h3>Nog te oefenen</h3>`+wrong.map(r=>`<div class="ri"><span class="ri-verb">${r.f}</span><span class="ri-dim">(${r.lemma})</span></div>`).join('');
+  } else {
+    list.innerHTML=`<h3>Alles goed!</h3><div class="ri-dim">Geen foute antwoorden — knap werk.</div>`;
+  }
+  document.getElementById('res-again').onclick=()=>{ gotoScreen('setup-'+mode); updateAvail(mode); };
+}
+
+/* ── PARADIGMA'S ── */
+let PARA_GENUS='activum';
+function paraSetGenus(g){
+  PARA_GENUS=g;
+  document.querySelectorAll('#p-f-genus .fchip').forEach(b=>b.classList.toggle('on', b.dataset.v===g));
+  renderParadigma();
+}
+function renderParadigma(){
+  const lemma=(document.querySelector('#p-f-verb .fchip.on')||{}).dataset?.v || VERBS[0].lemma;
+  const v=VERBS.find(x=>x.lemma===lemma) || VERBS[0];
+  const body=document.getElementById('para-body');
+  let html=`<div class="para-section"><h2>${v.lemma} — ${v.betekenis} (${v.conj===1?'1e':v.conj===2?'2e':v.conj===3?'3e':v.conj==='3io'?'3e op -io':'4e'} vervoeging), ${PARA_GENUS}</h2>`;
+  for(const wijs of WIJZEN){
+    const rows=[];
+    for(const tijd of TIJDEN){
+      const forms=[]; for(let i=0;i<6;i++){ const f=laVorm(v,tijd,wijs,PARA_GENUS,i); if(f) forms.push(f); }
+      if(forms.length) rows.push({tijd,forms});
+    }
+    if(!rows.length) continue;
+    html+=`<table class="para-table"><tr><th>tijd</th><th>ik</th><th>jij</th><th>hij</th><th>wij</th><th>jullie</th><th>zij</th></tr>`;
+    html+=`<tr><td colspan="7" class="dim">${wijs}</td></tr>`;
+    rows.forEach(r=>{ html+=`<tr><td class="dim">${TIJD_NM[r.tijd]}</td>${r.forms.map(f=>`<td class="la">${f}</td>`).join('')}</tr>`; });
+    html+=`</table>`;
+  }
+  html+=`</div>`;
+  body.innerHTML=html;
+}
+function initParaVerbChips(){
+  const host=document.getElementById('p-f-verb');
+  host.innerHTML=VERBS.map((v,i)=>`<button class="fchip ${i===0?'on':''}" data-v="${v.lemma}" onclick="paraPickVerb('${v.lemma}')">${v.lemma}</button>`).join('');
+}
+function paraPickVerb(lemma){
+  document.querySelectorAll('#p-f-verb .fchip').forEach(b=>b.classList.toggle('on', b.dataset.v===lemma));
+  renderParadigma();
+}
+initParaVerbChips();
+renderParadigma();
+</script>
+</body>
+</html>
