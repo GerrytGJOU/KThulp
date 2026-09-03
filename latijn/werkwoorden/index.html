@@ -190,8 +190,8 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
     <h2>Werkwoordsvorm knippen &amp; benoemen</h2>
     <p>Je ziet een Latijnse werkwoordsvorm. Knip 'm in stukken en benoem elk stuk: <strong style="color:#80e090">stam</strong> · <strong style="color:#f0b840">tijdskenletter</strong> · <strong style="color:#d080f0">persoonsuitgang</strong>. Bij het perfectumsysteem-passief (twee woorden) staat de knip al vast. Daarna geef je ook de Nederlandse vertaling.</p>
     <div class="filter-group"><div class="filter-label">Werkwoorden</div><div class="vfq-groepen" id="k-f-verb"></div></div>
-    <div class="filter-group"><div class="filter-label">Tijden</div>
-      <div class="chip-row" id="k-f-tijd">
+    <div class="filter-group"><div class="filter-label">Tijd — indicativus</div>
+      <div class="chip-row" id="k-f-tijdind">
         <button class="fchip on" data-v="praesens">praesens</button>
         <button class="fchip on" data-v="imperfectum">imperfectum</button>
         <button class="fchip on" data-v="perfectum">perfectum</button>
@@ -200,10 +200,12 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
         <button class="fchip" data-v="futurumexactum">futurum exactum</button>
       </div>
     </div>
-    <div class="filter-group"><div class="filter-label">Wijs</div>
-      <div class="chip-row" id="k-f-wijs">
-        <button class="fchip on" data-v="indicativus">indicativus</button>
-        <button class="fchip" data-v="coniunctivus">coniunctivus</button>
+    <div class="filter-group"><div class="filter-label">Tijd — coniunctivus</div>
+      <div class="chip-row" id="k-f-tijdconi">
+        <button class="fchip" data-v="praesens">praesens</button>
+        <button class="fchip" data-v="imperfectum">imperfectum</button>
+        <button class="fchip" data-v="perfectum">perfectum</button>
+        <button class="fchip" data-v="plusquamperfectum">plusquamperf.</button>
       </div>
     </div>
     <div class="filter-group"><div class="filter-label">Genus</div>
@@ -257,8 +259,8 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
     <h2>Werkwoordsvorm determineren</h2>
     <p>Je ziet een Latijnse werkwoordsvorm zonder lemma. Geef persoon, getal, tijd, wijs en genus.</p>
     <div class="filter-group"><div class="filter-label">Werkwoorden</div><div class="vfq-groepen" id="d-f-verb"></div></div>
-    <div class="filter-group"><div class="filter-label">Tijden</div>
-      <div class="chip-row" id="d-f-tijd">
+    <div class="filter-group"><div class="filter-label">Tijd — indicativus</div>
+      <div class="chip-row" id="d-f-tijdind">
         <button class="fchip on" data-v="praesens">praesens</button>
         <button class="fchip on" data-v="imperfectum">imperfectum</button>
         <button class="fchip on" data-v="perfectum">perfectum</button>
@@ -267,10 +269,12 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
         <button class="fchip" data-v="futurumexactum">futurum exactum</button>
       </div>
     </div>
-    <div class="filter-group"><div class="filter-label">Wijs</div>
-      <div class="chip-row" id="d-f-wijs">
-        <button class="fchip on" data-v="indicativus">indicativus</button>
-        <button class="fchip" data-v="coniunctivus">coniunctivus</button>
+    <div class="filter-group"><div class="filter-label">Tijd — coniunctivus</div>
+      <div class="chip-row" id="d-f-tijdconi">
+        <button class="fchip" data-v="praesens">praesens</button>
+        <button class="fchip" data-v="imperfectum">imperfectum</button>
+        <button class="fchip" data-v="perfectum">perfectum</button>
+        <button class="fchip" data-v="plusquamperfectum">plusquamperfectum</button>
       </div>
     </div>
     <div class="filter-group"><div class="filter-label">Genus</div>
@@ -335,8 +339,8 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
     <h2>Werkwoordsvorm vertalen</h2>
     <p>Je ziet een Latijnse werkwoordsvorm mét het lemma. Typ de Nederlandse vertaling.</p>
     <div class="filter-group"><div class="filter-label">Werkwoorden</div><div class="vfq-groepen" id="v-f-verb"></div></div>
-    <div class="filter-group"><div class="filter-label">Tijden</div>
-      <div class="chip-row" id="v-f-tijd">
+    <div class="filter-group"><div class="filter-label">Tijd — indicativus</div>
+      <div class="chip-row" id="v-f-tijdind">
         <button class="fchip on" data-v="praesens">praesens</button>
         <button class="fchip on" data-v="imperfectum">imperfectum</button>
         <button class="fchip on" data-v="perfectum">perfectum</button>
@@ -345,10 +349,12 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
         <button class="fchip" data-v="futurumexactum">futurum exactum</button>
       </div>
     </div>
-    <div class="filter-group"><div class="filter-label">Wijs</div>
-      <div class="chip-row" id="v-f-wijs">
-        <button class="fchip on" data-v="indicativus">indicativus</button>
-        <button class="fchip" data-v="coniunctivus">coniunctivus</button>
+    <div class="filter-group"><div class="filter-label">Tijd — coniunctivus</div>
+      <div class="chip-row" id="v-f-tijdconi">
+        <button class="fchip" data-v="praesens">praesens</button>
+        <button class="fchip" data-v="imperfectum">imperfectum</button>
+        <button class="fchip" data-v="perfectum">perfectum</button>
+        <button class="fchip" data-v="plusquamperfectum">plusquamperf.</button>
       </div>
     </div>
     <div class="filter-group"><div class="filter-label">Genus</div>
@@ -939,18 +945,27 @@ function renderVerbChips(pref){
 }
 function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 
+// Tijd en wijs zijn BEWUST losgekoppeld van een simpel kruisproduct: Minerva
+// leert coniunctivus per tijd gefaseerd (bv. imperfectum+plusquamperfectum
+// coniunctivus samen met het plusquamperfectum indicativus, terwijl praesens/
+// perfectum coniunctivus pas later komen) — dus twee losse tijd-chiprijen
+// (tijdind/tijdconi) i.p.v. één tijdenrij + een aparte wijs-rij.
 function readFilters(mode){
   const pref=mode[0];
   const get=id=>[...document.querySelectorAll('#'+pref+'-f-'+id+' .fchip.on')].map(b=>b.dataset.v);
-  return { verbs:[...verbSelSet(pref)], tijden:get('tijd'), wijzen:get('wijs'), genera:get('genus') };
+  return { verbs:[...verbSelSet(pref)], tijdenIndicativus:get('tijdind'), tijdenConiunctivus:get('tijdconi'), genera:get('genus') };
 }
 
 // Bouwt de volledige vormenpool voor de gekozen filters — elke {verb,tijd,wijs,genus,persoonIdx}-
 // combinatie die een echte vorm oplevert (futurum(exactum) coniunctivus bestaat niet en valt vanzelf weg).
 function buildPool(filt){
   const verbs=VERBS.filter(v=>filt.verbs.includes(v.lemma));
+  const combos=[
+    ...filt.tijdenIndicativus.map(tijd=>({tijd,wijs:'indicativus'})),
+    ...filt.tijdenConiunctivus.map(tijd=>({tijd,wijs:'coniunctivus'})),
+  ];
   const pool=[];
-  for(const v of verbs) for(const tijd of filt.tijden) for(const wijs of filt.wijzen) for(const genus of filt.genera)
+  for(const v of verbs) for(const {tijd,wijs} of combos) for(const genus of filt.genera)
     for(let i=0;i<6;i++){
       const vorm=laVorm(v,tijd,wijs,genus,i); if(!vorm) continue;
       pool.push({lemma:v.lemma,betekenis:v.betekenis,tijd,wijs,genus,persoonIdx:i,vorm,glos:laGlos(v,tijd,wijs,genus,i)});

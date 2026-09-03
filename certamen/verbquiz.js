@@ -6,10 +6,16 @@
    toetsen i.p.v. vormkennis. Wordt ná verbforms.js en core.js geladen. */
 "use strict";
 
-// vf-subdraft: {verbs:[lemma,...], tijden:[...], wijzen:[...], genera:[...], mode:"mc"|"typed"}
+// vf-subdraft. Grieks (alleen indicativus): {verbs, tijden:[...], genera, mode}.
+// Latijn: {verbs, tijdenIndicativus:[...], tijdenConiunctivus:[...], genera, mode}
+// — tijd en wijs zijn BEWUST losgekoppeld van een simpel kruisproduct, want
+// Minerva leert coniunctivus per tijd gefaseerd (bv. imperfectum+plusquam-
+// perfectum coniunctivus samen met het plusquamperfectum indicativus, terwijl
+// praesens/perfectum coniunctivus pas later komen) — zie git-geschiedenis.
 function vfqDefaultDraft(lang){
   const verbs = (lang==="el" ? VF_EL_VERBS : VF_LA_VERBS).map(v=>v.lemma);
-  return { verbs: verbs.slice(), tijden:["praesens"], wijzen:["indicativus"], genera:["activum"], mode:"mc" };
+  if(lang==="el") return { verbs: verbs.slice(), tijden:["praesens"], genera:["activum"], mode:"mc" };
+  return { verbs: verbs.slice(), tijdenIndicativus:["praesens"], tijdenConiunctivus:[], genera:["activum"], mode:"mc" };
 }
 
 function vfqToggleGuard(arr, id){
@@ -17,9 +23,17 @@ function vfqToggleGuard(arr, id){
   if(i>=0){ if(arr.length>1) arr.splice(i,1); }
   else arr.push(id);
 }
+// Vrij aan/uit te vinken, zonder minimum-1-restrictie — "geen coniunctivus"
+// (de standaardstand) of zelfs "geen enkele indicativus-tijd" (puur
+// coniunctivus oefenen) zijn allebei geldige, zinvolle keuzes.
+function vfqToggleFree(arr, id){
+  const i = arr.indexOf(id);
+  if(i>=0) arr.splice(i,1); else arr.push(id);
+}
 function vfqToggleVerb(vf,id){ vfqToggleGuard(vf.verbs,id); }
 function vfqToggleTijd(vf,id){ vfqToggleGuard(vf.tijden,id); }
-function vfqToggleWijs(vf,id){ vfqToggleGuard(vf.wijzen,id); }
+function vfqToggleTijdInd(vf,id){ vfqToggleFree(vf.tijdenIndicativus,id); }
+function vfqToggleTijdConi(vf,id){ vfqToggleFree(vf.tijdenConiunctivus,id); }
 function vfqToggleGenus(vf,id){ vfqToggleGuard(vf.genera,id); }
 function vfqSetMode(vf,mode){ vf.mode = mode; }
 
@@ -59,22 +73,28 @@ function vfqVerbGroupsHTML(vf, draftExpr, rerenderExpr){
 // kan meegeven (zelfde patroon als de bestaande chip-UI in games.js).
 function vfqFilterHTML(vf, lang, draftExpr, rerenderExpr){
   const verbs = lang==="el" ? VF_EL_VERBS : VF_LA_VERBS;
-  const tijden = lang==="el" ? VF_TIJDEN_EL : VF_TIJDEN_LA;
   // Latijn: gegroepeerd per stamgroep (klik = hele groep aan/uit, vergroot
   // om individuele werkwoorden te verfijnen). Grieks heeft geen stamgroepen
   // in dit datamodel — platte lijst, ongewijzigd.
   const verbChips = lang==="el"
     ? verbs.map(v=>`<button class="chip ${vf.verbs.includes(v.lemma)?'on':''}" onclick="vfqToggleVerb(${draftExpr},'${v.lemma}');${rerenderExpr}">${esc(v.lemma)} <small>${esc(v.betekenis.split(',')[0])}</small></button>`).join("")
     : vfqVerbGroupsHTML(vf, draftExpr, rerenderExpr);
-  const tijdChips = tijden.map(t=>`<button class="chip ${vf.tijden.includes(t)?'on':''}" onclick="vfqToggleTijd(${draftExpr},'${t}');${rerenderExpr}">${esc(VF_TIJD_NM[t]||t)}</button>`).join("");
   const verbWrapClass = lang==="el" ? "chips" : "vfq-groepen";
-  let out = `<div class="panel"><label class="fld">Werkwoord(en)</label><div class="${verbWrapClass}">${verbChips}</div></div>
-    <div class="panel"><label class="fld">Tijd</label><div class="chips">${tijdChips}</div></div>`;
-  if(lang!=="el"){
-    const wijsChips = VF_WIJZEN.map(w=>`<button class="chip ${vf.wijzen.includes(w)?'on':''}" onclick="vfqToggleWijs(${draftExpr},'${w}');${rerenderExpr}">${w}</button>`).join("");
+  let out = `<div class="panel"><label class="fld">Werkwoord(en)</label><div class="${verbWrapClass}">${verbChips}</div></div>`;
+  if(lang==="el"){
+    const tijdChips = VF_TIJDEN_EL.map(t=>`<button class="chip ${vf.tijden.includes(t)?'on':''}" onclick="vfqToggleTijd(${draftExpr},'${t}');${rerenderExpr}">${esc(VF_TIJD_NM[t]||t)}</button>`).join("");
+    out += `<div class="panel"><label class="fld">Tijd</label><div class="chips">${tijdChips}</div></div>`;
+  } else {
+    // Tijd per wijs los aan/uit te vinken (niet als kruisproduct) — zo kan
+    // bv. alleen imperfectum+plusquamperfectum coniunctivus aan staan terwijl
+    // praesens/perfectum coniunctivus nog uit staan, net als in Minerva.
+    const tijdIndChips = VF_TIJDEN_LA.map(t=>`<button class="chip ${vf.tijdenIndicativus.includes(t)?'on':''}" onclick="vfqToggleTijdInd(${draftExpr},'${t}');${rerenderExpr}">${esc(VF_TIJD_NM[t]||t)}</button>`).join("");
+    const coniTijden = VF_TIJDEN_LA.filter(t=>t!=="futurum" && t!=="futurumexactum"); // coniunctivus futurum bestaat niet
+    const tijdConiChips = coniTijden.map(t=>`<button class="chip ${vf.tijdenConiunctivus.includes(t)?'on':''}" onclick="vfqToggleTijdConi(${draftExpr},'${t}');${rerenderExpr}">${esc(VF_TIJD_NM[t]||t)}</button>`).join("");
+    out += `<div class="panel"><label class="fld">Tijd — indicativus</label><div class="chips">${tijdIndChips}</div></div>
+      <div class="panel"><label class="fld">Tijd — coniunctivus</label><div class="chips">${tijdConiChips}</div></div>`;
     const genusChips = VF_GENERA.map(g=>`<button class="chip ${vf.genera.includes(g)?'on':''}" onclick="vfqToggleGenus(${draftExpr},'${g}');${rerenderExpr}">${g}</button>`).join("");
-    out += `<div class="panel"><label class="fld">Wijs</label><div class="chips">${wijsChips}</div></div>
-      <div class="panel"><label class="fld">Genus</label><div class="chips">${genusChips}</div></div>`;
+    out += `<div class="panel"><label class="fld">Genus</label><div class="chips">${genusChips}</div></div>`;
   }
   const modeChips = [["mc","Meerkeuze"],["typed","Getypt"],["ontleed","Ontleden"]].map(([id,nm])=>`<button class="chip ${vf.mode===id?'on':''}" onclick="vfqSetMode(${draftExpr},'${id}');${rerenderExpr}">${nm}</button>`).join("");
   out += `<div class="panel"><label class="fld">Vraagvorm</label><div class="chips">${modeChips}</div></div>`;
@@ -100,16 +120,18 @@ function vfqBuildPool(vf, lang){
     return pool;
   }
   const verbs = VF_LA_VERBS.filter(v=>vf.verbs.includes(v.lemma));
+  const combos = [
+    ...(vf.tijdenIndicativus||[]).map(tijd=>({tijd, modus:"indicativus"})),
+    ...(vf.tijdenConiunctivus||[]).map(tijd=>({tijd, modus:"coniunctivus"})),
+  ];
   for(const v of verbs){
-    for(const tijd of vf.tijden){
-      for(const modus of vf.wijzen){
-        for(const genus of vf.genera){
-          for(let p=0;p<6;p++){
-            const vorm = vfLatijnVorm(v, tijd, modus, genus, p);
-            if(!vorm) continue;
-            const glos = vfLatijnGlos(v, tijd, modus, genus, p);
-            pool.push({ taal:"la", lemma:v.lemma, betekenis:v.betekenis, tijd, modus, genus, persoonIdx:p, vorm, glos });
-          }
+    for(const {tijd,modus} of combos){
+      for(const genus of vf.genera){
+        for(let p=0;p<6;p++){
+          const vorm = vfLatijnVorm(v, tijd, modus, genus, p);
+          if(!vorm) continue;
+          const glos = vfLatijnGlos(v, tijd, modus, genus, p);
+          pool.push({ taal:"la", lemma:v.lemma, betekenis:v.betekenis, tijd, modus, genus, persoonIdx:p, vorm, glos });
         }
       }
     }
