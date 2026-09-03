@@ -84,6 +84,8 @@ function vfqFilterHTML(vf, lang, draftExpr, rerenderExpr){
   if(lang==="el"){
     const tijdChips = VF_TIJDEN_EL.map(t=>`<button class="chip ${vf.tijden.includes(t)?'on':''}" onclick="vfqToggleTijd(${draftExpr},'${t}');${rerenderExpr}">${esc(VF_TIJD_NM[t]||t)}</button>`).join("");
     out += `<div class="panel"><label class="fld">Tijd</label><div class="chips">${tijdChips}</div></div>`;
+    const genusChipsEl = VF_GENERA_EL.map(g=>`<button class="chip ${vf.genera.includes(g)?'on':''}" onclick="vfqToggleGenus(${draftExpr},'${g}');${rerenderExpr}">${g}</button>`).join("");
+    out += `<div class="panel"><label class="fld">Genus</label><div class="chips">${genusChipsEl}</div></div>`;
   } else {
     // Tijd per wijs los aan/uit te vinken (niet als kruisproduct) — zo kan
     // bv. alleen imperfectum+plusquamperfectum coniunctivus aan staan terwijl
@@ -109,12 +111,22 @@ function vfqBuildPool(vf, lang){
     const verbs = VF_EL_VERBS.filter(v=>vf.verbs.includes(v.lemma));
     for(const v of verbs){
       for(const tijd of vf.tijden){
-        const vormen = v[tijd]; if(!vormen) continue;
-        const glossen = v.nl && v.nl[tijd];
-        vormen.forEach((vorm,p)=>{
-          pool.push({ taal:"el", lemma:v.lemma, betekenis:v.betekenis, tijd, modus:"indicativus", genus:"activum",
-                      persoonIdx:p, vorm, glos: glossen ? glossen[p] : v.betekenis });
-        });
+        for(const genus of vf.genera){
+          // Praesens/imperfectum: medium en passivum delen dezelfde Griekse
+          // vorm (v.medium), alleen de NL-glans verschilt. Aoristus heeft een
+          // eigen -θη-passiefvorm (v.passief.aoristus), los van de mediale
+          // aoristus. Deponentia (βούλομαι e.d.) hebben geen aparte
+          // medium/passief-tak — hun vormen staan al in v[tijd] (activum).
+          let vormen, glossen;
+          if(genus==="activum"){ vormen = v[tijd]; glossen = v.nl && v.nl[tijd]; }
+          else if(genus==="medium"){ vormen = v.medium && v.medium[tijd]; glossen = v.nlMedium && v.nlMedium[tijd]; }
+          else { vormen = (tijd==="aoristus" ? (v.passief && v.passief.aoristus) : (v.medium && v.medium[tijd])); glossen = v.nlPassief && v.nlPassief[tijd]; }
+          if(!vormen) continue;
+          vormen.forEach((vorm,p)=>{
+            pool.push({ taal:"el", lemma:v.lemma, betekenis:v.betekenis, tijd, modus:"indicativus", genus,
+                        persoonIdx:p, vorm, glos: glossen ? glossen[p] : v.betekenis });
+          });
+        }
       }
     }
     return pool;
@@ -168,7 +180,7 @@ function vfqMakeTypedQuestion(pool){
   const persoon = VF_PERSOONLABEL[base.persoonIdx];
   const opdracht = base.taal==="la"
     ? `Geef de <strong>${persoon} ${VF_TIJD_NM[base.tijd]}${VF_WIJS_KORT[base.modus]} ${base.genus}</strong> van <em>${esc(base.lemma)}</em>`
-    : `Geef de <strong>${persoon} ${base.tijd}</strong> van <em>${esc(base.lemma)}</em>`;
+    : `Geef de <strong>${persoon} ${base.tijd}${base.genus!=="activum"?" "+base.genus:""}</strong> van <em>${esc(base.lemma)}</em>`;
   return { mode:"typed", taal:base.taal, lemma:base.lemma, betekenis:base.betekenis,
             vraag: opdracht+` <span class="note">(${esc(base.betekenis)})</span>`, antwoord:base.vorm, glos:base.glos };
 }
