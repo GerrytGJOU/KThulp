@@ -23,6 +23,35 @@ function vfqToggleWijs(vf,id){ vfqToggleGuard(vf.wijzen,id); }
 function vfqToggleGenus(vf,id){ vfqToggleGuard(vf.genera,id); }
 function vfqSetMode(vf,mode){ vf.mode = mode; }
 
+// Welke stamgroepen momenteel uitgeklapt staan (los UI-gemak, geen onderdeel
+// van vf — net als VFQ_ONTLEED_SEL hieronder is dit bewust gedeelde state).
+let VFQ_EXPANDED = new Set();
+function vfqToggleExpand(groepId){
+  const key = String(groepId);
+  if(VFQ_EXPANDED.has(key)) VFQ_EXPANDED.delete(key); else VFQ_EXPANDED.add(key);
+}
+// Eén klik op een stamgroep-chip zet alle werkwoorden uit die groep in
+// één keer aan (of weer uit als ze al allemaal aanstonden) — vergroot
+// (uitklappen) om individuele werkwoorden binnen de groep uit te vinken.
+function vfqToggleGroep(vf, groepId){
+  const lemmas = VF_LA_VERBS.filter(v=>String(v.groep)===String(groepId)).map(v=>v.lemma);
+  const allOn = lemmas.every(l=>vf.verbs.includes(l));
+  if(allOn) vf.verbs = vf.verbs.filter(l=>!lemmas.includes(l));
+  else lemmas.forEach(l=>{ if(!vf.verbs.includes(l)) vf.verbs.push(l); });
+}
+function vfqVerbGroupsHTML(vf, draftExpr, rerenderExpr){
+  return VF_GROEP_VOLGORDE.map(g=>{
+    const lemmas = VF_LA_VERBS.filter(v=>String(v.groep)===String(g));
+    const onCount = lemmas.filter(v=>vf.verbs.includes(v.lemma)).length;
+    const allOn = onCount===lemmas.length, someOn = onCount>0 && !allOn;
+    const expanded = VFQ_EXPANDED.has(String(g));
+    const groepBtn = `<button class="chip ${allOn?'on':someOn?'partial':''}" onclick="vfqToggleGroep(${draftExpr},'${g}');${rerenderExpr}">${esc(VF_GROEP_NAMEN[g])} <small>${onCount}/${lemmas.length}</small></button>`;
+    const expandBtn = `<button class="chip vfq-expand" onclick="vfqToggleExpand('${g}');${rerenderExpr}" aria-label="Werkwoorden in ${esc(VF_GROEP_NAMEN[g])} ${expanded?'verbergen':'tonen'}">${expanded?'▾':'▸'}</button>`;
+    const detail = expanded ? `<div class="chips vfq-groep-detail">${lemmas.map(v=>`<button class="chip small ${vf.verbs.includes(v.lemma)?'on':''}" onclick="vfqToggleVerb(${draftExpr},'${v.lemma}');${rerenderExpr}">${esc(v.lemma)} <small>${esc(v.betekenis.split(',')[0])}</small></button>`).join("")}</div>` : "";
+    return `<div class="vfq-groep-row">${groepBtn}${expandBtn}</div>${detail}`;
+  }).join("");
+}
+
 // Bouwt het filterscherm (chips), in Pallas/Minerva-volgorde: werkwoord (per
 // vervoegingsgroep) -> tijd -> wijs -> genus -> vraagvorm. draftExpr/rerenderExpr
 // zijn letterlijke JS-uitdrukkingen (strings) die in de onclick-attributen
@@ -31,9 +60,15 @@ function vfqSetMode(vf,mode){ vf.mode = mode; }
 function vfqFilterHTML(vf, lang, draftExpr, rerenderExpr){
   const verbs = lang==="el" ? VF_EL_VERBS : VF_LA_VERBS;
   const tijden = lang==="el" ? VF_TIJDEN_EL : VF_TIJDEN_LA;
-  const verbChips = verbs.map(v=>`<button class="chip ${vf.verbs.includes(v.lemma)?'on':''}" onclick="vfqToggleVerb(${draftExpr},'${v.lemma}');${rerenderExpr}">${esc(v.lemma)} <small>${esc(v.betekenis.split(',')[0])}</small></button>`).join("");
+  // Latijn: gegroepeerd per stamgroep (klik = hele groep aan/uit, vergroot
+  // om individuele werkwoorden te verfijnen). Grieks heeft geen stamgroepen
+  // in dit datamodel — platte lijst, ongewijzigd.
+  const verbChips = lang==="el"
+    ? verbs.map(v=>`<button class="chip ${vf.verbs.includes(v.lemma)?'on':''}" onclick="vfqToggleVerb(${draftExpr},'${v.lemma}');${rerenderExpr}">${esc(v.lemma)} <small>${esc(v.betekenis.split(',')[0])}</small></button>`).join("")
+    : vfqVerbGroupsHTML(vf, draftExpr, rerenderExpr);
   const tijdChips = tijden.map(t=>`<button class="chip ${vf.tijden.includes(t)?'on':''}" onclick="vfqToggleTijd(${draftExpr},'${t}');${rerenderExpr}">${esc(VF_TIJD_NM[t]||t)}</button>`).join("");
-  let out = `<div class="panel"><label class="fld">Werkwoord(en)</label><div class="chips">${verbChips}</div></div>
+  const verbWrapClass = lang==="el" ? "chips" : "vfq-groepen";
+  let out = `<div class="panel"><label class="fld">Werkwoord(en)</label><div class="${verbWrapClass}">${verbChips}</div></div>
     <div class="panel"><label class="fld">Tijd</label><div class="chips">${tijdChips}</div></div>`;
   if(lang!=="el"){
     const wijsChips = VF_WIJZEN.map(w=>`<button class="chip ${vf.wijzen.includes(w)?'on':''}" onclick="vfqToggleWijs(${draftExpr},'${w}');${rerenderExpr}">${w}</button>`).join("");
