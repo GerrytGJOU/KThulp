@@ -297,6 +297,12 @@ function trRenderTarget(){
 
 function trNextQuestion(){
   const host = el("trQuestionHost"); if(!host) return;
+  if(TR_DRAFT.source==="verbforms" && TR_DRAFT.vf.mode==="ontleed"){
+    vfqOntleedReset();
+    TR_Q = vfqMakeOntleedQuestion(TR_POOL);
+    trRenderOntleed();
+    return;
+  }
   if(TR_DRAFT.source==="verbforms" && TR_DRAFT.vf.mode==="typed"){
     TR_Q = vfqMakeTypedQuestion(TR_POOL);
     host.innerHTML = `
@@ -319,6 +325,21 @@ function trNextQuestion(){
   <div class="choices">
     ${TR_Q.options.map((opt,i)=>`<button class="choice" id="trC${i}" onclick="trAnswer(${i})"><span class="n">${i+1}</span>${esc(opt)}</button>`).join("")}
   </div>`;
+}
+
+function trRenderOntleed(){
+  const host = el("trQuestionHost"); if(!host || !TR_Q) return;
+  host.innerHTML = vfqOntleedPickerHTML(TR_Q, "trRenderOntleed()")
+    + `<button class="btn btn-gold btn-block" style="margin-top:10px"${vfqOntleedComplete(TR_Q)?"":" disabled"} onclick="trCheckOntleed()">Controleer</button>`;
+}
+function trCheckOntleed(){
+  if(!TR_Q) return;
+  const q = TR_Q; TR_Q = null;
+  const grade = vfqOntleedGrade(q);
+  const host = el("trQuestionHost"); if(!host) return;
+  host.innerHTML = vfqOntleedResultHTML(q, grade)
+    + `<div class="panel" style="text-align:center;color:${grade.ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${grade.ok?"Goed!":"Niet helemaal — bekijk de rode/groene assen hierboven"}</div>`;
+  trScoreAnswer(grade.ok, null);
 }
 
 function trAnswer(idx){

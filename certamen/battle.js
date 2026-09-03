@@ -4133,32 +4133,40 @@ function bmPlayerRender(){
       // duidelijke regel erboven. Zonder dit verving deze hertekening de
       // markering meteen door een leeg wachtscherm en wist een leerling niet
       // eens dat hij fout zat.
-      const showFb=BM_MY_Q&&BM_MY_Q._round===round.n&&(BM_MY_PICK!==null||BM_MY_Q.mode==="typed")&&BM_MY_PICK_ROUND===round.n;
+      const showFb=BM_MY_Q&&BM_MY_Q._round===round.n&&(BM_MY_PICK!==null||BM_MY_Q.mode==="typed"||BM_MY_Q.mode==="ontleed")&&BM_MY_PICK_ROUND===round.n;
       if(showFb){
-        const goed=BM_MY_Q.mode==="typed"?(BM_MY_Q.antwoord||""):(BM_MY_Q.options||[])[BM_MY_Q.correctIdx]||"";
+        const goed=BM_MY_Q.mode==="typed"?(BM_MY_Q.antwoord||""):BM_MY_Q.mode==="ontleed"?"":(BM_MY_Q.options||[])[BM_MY_Q.correctIdx]||"";
         const pen=(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);
         const banner=BM_MY_PICK_OK
           ? `<div class="bm-fb ok">✅ Goed!</div>`
-          : `<div class="bm-fb bad">❌ Fout — het juiste antwoord is <b>${esc(goed)}</b><br>
+          : `<div class="bm-fb bad">❌ Fout${goed?` — het juiste antwoord is <b>${esc(goed)}</b>`:" — bekijk de rode/groene assen hieronder"}<br>
              <span>Je verliest ${pen} BE${BM_MY_BE<2?" en kunt deze ronde niets doen":""}.</span></div>`;
         content=`
         ${banner}
+        ${BM_MY_Q.mode==="ontleed" ? vfqOntleedResultHTML(BM_MY_Q, vfqOntleedGrade(BM_MY_Q)) : `
         ${bmQuestionCardHTML(BM_MY_Q)}
         ${BM_MY_Q.mode==="typed" ? "" : `<div class="choices">
           ${(BM_MY_Q.options||[]).map((opt,i)=>{
             const cl=i===BM_MY_Q.correctIdx?"correct":(i===BM_MY_PICK?"wrong":"dim");
             return `<button class="choice ${cl}" disabled><span class="n">${i+1}</span>${esc(opt)}</button>`;
           }).join("")}
-        </div>`}
+        </div>`}`}
         <div class="note" style="text-align:center;margin-top:8px">Wachten op andere spelers…</div>`;
       } else {
         content=`<div class="panel" style="text-align:center"><div style="font-size:40px">✅</div><div class="note">Wachten op andere spelers…</div></div>`;
       }
     } else if(!BM_MY_Q||BM_MY_Q._round!==round.n){
       fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID+"/currentQ").once("value").then(s=>{
-        if(s.val()){try{BM_MY_Q={...JSON.parse(s.val()),_round:round.n};BM_ANSWERED=false;bmPlayerRender();}catch(e){}}
+        if(s.val()){try{
+          BM_MY_Q={...JSON.parse(s.val()),_round:round.n};BM_ANSWERED=false;
+          if(BM_MY_Q.mode==="ontleed") vfqOntleedReset();
+          bmPlayerRender();
+        }catch(e){}}
       });
       content=`<div class="note" style="text-align:center">Vraag laden…</div>`;
+    } else if(BM_MY_Q.mode==="ontleed"){
+      content=vfqOntleedPickerHTML(BM_MY_Q, "bmPlayerRender()")
+        + `<button class="btn btn-gold btn-block" style="margin-top:10px"${vfqOntleedComplete(BM_MY_Q)?"":" disabled"} onclick="bmAnswerOntleed()">Controleer</button>`;
     } else if(BM_MY_Q.mode==="typed"){
       content=`
       ${bmQuestionCardHTML(BM_MY_Q)}
@@ -4311,6 +4319,14 @@ function bmAnswerTyped(){
   BM_MY_PICK=null; BM_MY_PICK_OK=ok; BM_MY_PICK_ROUND=BM_STATE.round?.n;
   if(box)box.disabled=true;
   bmFinishAnswer(ok);
+}
+// Ontleedvraag (vfqMakeOntleedQuestion): alle assen tegelijk beoordeeld,
+// alles-of-niets net als de CHECK-knop in Vice Verba/Hoi Polloi Logoi.
+function bmAnswerOntleed(){
+  if(BM_ANSWERED||!BM_MY_Q)return;
+  const grade=vfqOntleedGrade(BM_MY_Q);
+  BM_MY_PICK=null; BM_MY_PICK_OK=grade.ok; BM_MY_PICK_ROUND=BM_STATE.round?.n;
+  bmFinishAnswer(grade.ok);
 }
 function bmFinishAnswer(ok){
   BM_ANSWERED=true;

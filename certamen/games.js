@@ -681,6 +681,12 @@ function drawQuestion(){
   const me=myPlayer();
   if(me.frozenUntil && nowMs()<me.frozenUntil){ return drawFrozen(me.frozenUntil); }
   answered=false;
+  if(META.source==="verbforms" && META.vfMode==="ontleed"){
+    vfqOntleedReset();
+    curQ = vfqMakeOntleedQuestion(POOL);
+    renderOntleed();
+    return;
+  }
   if(META.source==="verbforms" && META.vfMode==="typed"){
     curQ = vfqMakeTypedQuestion(POOL);
     H(brand(false)+`<div id="mini">${miniHTML()}</div>
@@ -698,6 +704,22 @@ function drawQuestion(){
     <div class="qcard"><div class="kick">${kick}</div>
       <div class="word">${esc(woord)}</div>${curQ.pos?`<div class="pos">${esc(curQ.pos)}</div>`:""}</div>
     <div class="choices" id="choices">${curQ.options.map((o,i)=>`<button class="choice" onclick="answer(${i})"><span class="n">${i+1}</span><span>${esc(o)}</span></button>`).join("")}</div>`);
+}
+function renderOntleed(){
+  if(!curQ) return;
+  H(brand(false)+`<div id="mini">${miniHTML()}</div>`
+    + vfqOntleedPickerHTML(curQ, "renderOntleed()")
+    + `<button class="btn btn-gold btn-block" style="margin-top:10px"${vfqOntleedComplete(curQ)?"":" disabled"} onclick="checkOntleed()">Controleer</button>`);
+}
+function checkOntleed(){
+  if(answered||!curQ) return; answered=true;
+  const q=curQ;
+  const grade = vfqOntleedGrade(q);
+  H(brand(false)+`<div id="mini">${miniHTML()}</div>`
+    + vfqOntleedResultHTML(q, grade)
+    + `<div class="panel" style="text-align:center;color:${grade.ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${grade.ok?"Goed!":"Niet helemaal — bekijk de rode/groene assen hierboven"}</div>`);
+  if(!grade.ok && !MISSED_WORDS.some(m=>m.la===q.vorm)) MISSED_WORDS.push({la:q.vorm, correct:q.antwoord});
+  scoreAnswer(grade.ok, q.vorm);
 }
 function drawFrozen(until){
   H(brand(false)+`<div id="mini">${miniHTML()}</div>

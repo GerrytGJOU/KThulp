@@ -41,7 +41,7 @@ function vfqFilterHTML(vf, lang, draftExpr, rerenderExpr){
     out += `<div class="panel"><label class="fld">Wijs</label><div class="chips">${wijsChips}</div></div>
       <div class="panel"><label class="fld">Genus</label><div class="chips">${genusChips}</div></div>`;
   }
-  const modeChips = [["mc","Meerkeuze"],["typed","Getypt"]].map(([id,nm])=>`<button class="chip ${vf.mode===id?'on':''}" onclick="vfqSetMode(${draftExpr},'${id}');${rerenderExpr}">${nm}</button>`).join("");
+  const modeChips = [["mc","Meerkeuze"],["typed","Getypt"],["ontleed","Ontleden"]].map(([id,nm])=>`<button class="chip ${vf.mode===id?'on':''}" onclick="vfqSetMode(${draftExpr},'${id}');${rerenderExpr}">${nm}</button>`).join("");
   out += `<div class="panel"><label class="fld">Vraagvorm</label><div class="chips">${modeChips}</div></div>`;
   return out;
 }
@@ -129,4 +129,76 @@ function vfqControleer(q, antwoord){
     return geg.trim()===q.antwoord.trim();
   }
   return vfqNormLatin(geg)===vfqNormLatin(q.antwoord);
+}
+
+/* ---- Ontleden — à la Vice Verba/Hoi Polloi Logoi: alle grammaticale
+   kenmerken van de getoonde vorm in één keer aanklikken (geen vertaling),
+   met een CHECK die alle assen tegelijk beoordeelt. Grieks krijgt alleen
+   persoon/getal/tijd (net als grieks/werkwoorden se "Determineren") — onze
+   Griekse data kent geen coniunctivus/passivum, dus geen wijs/genus-as. ---- */
+function vfqOntleedAxes(taal){
+  const axes = [
+    {key:"persoon", label:"Persoon", opts:[["1","Eerste"],["2","Tweede"],["3","Derde"]]},
+    {key:"getal",   label:"Getal",   opts:[["ev","Enkelvoud"],["mv","Meervoud"]]},
+    {key:"tijd",    label:"Tijd",    opts:(taal==="el"?VF_TIJDEN_EL:VF_TIJDEN_LA).map(t=>[t, taal==="el"?t:(VF_TIJD_NM[t]||t)])},
+  ];
+  if(taal!=="el"){
+    axes.push({key:"modus", label:"Wijs",  opts:VF_WIJZEN.map(w=>[w,w])});
+    axes.push({key:"genus", label:"Genus", opts:VF_GENERA.map(g=>[g,g])});
+  }
+  return axes;
+}
+
+function vfqMakeOntleedQuestion(pool){
+  if(!pool.length) return null;
+  const it = pick(pool);
+  const correct = { persoon:String((it.persoonIdx%3)+1), getal: it.persoonIdx<3?"ev":"mv",
+                     tijd:it.tijd, modus:it.modus, genus:it.genus };
+  const antwoord = vfqOntleedAxes(it.taal).map(ax=>correct[ax.key]).filter(Boolean).join(" / ");
+  return { mode:"ontleed", taal:it.taal, lemma:it.lemma, betekenis:it.betekenis, vorm:it.vorm, correct, antwoord };
+}
+
+// Eén gedeeld selectie-object per actieve ontleedvraag — zelfde soort
+// module-level "huidige vraag"-state als curQ/TR_Q/FP_Q elders.
+let VFQ_ONTLEED_SEL = {};
+function vfqOntleedReset(){ VFQ_ONTLEED_SEL = {}; }
+function vfqOntleedPick(axisKey, val){ VFQ_ONTLEED_SEL[axisKey] = val; }
+function vfqOntleedComplete(q){
+  return vfqOntleedAxes(q.taal).every(ax => VFQ_ONTLEED_SEL[ax.key]);
+}
+
+function vfqOntleedCardHTML(q){
+  return `<div class="qcard"><div class="kick">Ontleed deze vorm</div><div class="word">${esc(q.vorm)}</div>
+    <div class="note" style="margin-top:4px">${esc(q.lemma)} — ${esc(q.betekenis)}</div></div>`;
+}
+
+// Nog te beantwoorden: klikbare chips, huidige keuze gemarkeerd met .on.
+function vfqOntleedPickerHTML(q, rerenderExpr){
+  const rows = vfqOntleedAxes(q.taal).map(ax=>`<div class="panel"><label class="fld">${esc(ax.label)}</label><div class="chips">
+    ${ax.opts.map(([val,label])=>`<button class="chip ${VFQ_ONTLEED_SEL[ax.key]===val?'on':''}" onclick="vfqOntleedPick('${ax.key}','${val}');${rerenderExpr}">${esc(label)}</button>`).join("")}
+  </div></div>`).join("");
+  return vfqOntleedCardHTML(q)+rows;
+}
+
+// Na CHECK: alle assen tegelijk beoordeeld (alles-of-niets, zoals de
+// referentie-apps), met per-as groen/rood/grijs terugkoppeling.
+function vfqOntleedGrade(q){
+  const rows = vfqOntleedAxes(q.taal).map(ax=>({ key:ax.key, label:ax.label,
+    picked:VFQ_ONTLEED_SEL[ax.key]||null, correct:q.correct[ax.key],
+    ok: VFQ_ONTLEED_SEL[ax.key]===q.correct[ax.key] }));
+  return { ok: rows.every(r=>r.ok), rows };
+}
+function vfqOntleedResultHTML(q, grade){
+  const rows = vfqOntleedAxes(q.taal).map(ax=>{
+    const r = grade.rows.find(x=>x.key===ax.key);
+    const chips = ax.opts.map(([val,label])=>{
+      let cls = "chip";
+      if(val===r.correct) cls+=" correct";
+      else if(val===r.picked) cls+=" wrong";
+      else cls+=" dim";
+      return `<button class="${cls}" disabled>${esc(label)}</button>`;
+    }).join("");
+    return `<div class="panel"><label class="fld">${esc(ax.label)}</label><div class="chips">${chips}</div></div>`;
+  }).join("");
+  return vfqOntleedCardHTML(q)+rows;
 }
