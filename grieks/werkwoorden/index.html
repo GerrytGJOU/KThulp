@@ -77,6 +77,12 @@ select,input[type=number]{background:var(--surf2);border:1px solid var(--border)
   transition:all .15s;-webkit-tap-highlight-color:transparent;}
 .fchip:hover{border-color:var(--gold-d);}
 .fchip.on{background:#2a2540;border-color:var(--gold);color:var(--gold-l);}
+.det-field .chip-row{gap:6px;}
+.det-field .fchip{padding:6px 12px;font-size:.82rem;}
+.fchip.correct{background:rgba(61,140,92,.35);border-color:var(--green);color:var(--green-l);}
+.fchip.wrong{background:rgba(176,64,64,.32);border-color:var(--red);color:var(--red-l);}
+.fchip.dim{opacity:.35;}
+.fchip:disabled,.fchip[disabled]{cursor:default;}
 .cnt-input{background:var(--surf2);border:1px solid var(--border);border-radius:6px;
   color:var(--text);font-family:inherit;font-size:.95rem;padding:7px 10px;width:80px;}
 .filter-count{font-size:.8rem;color:var(--dim);margin-bottom:14px;min-height:18px;}
@@ -501,23 +507,27 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
     <div class="det-grid">
       <div class="det-field">
         <label>Persoon</label>
-        <select id="d-pers"><option value="">— kies —</option>
-          <option value="1">1e persoon</option><option value="2">2e persoon</option><option value="3">3e persoon</option>
-        </select>
+        <div class="chip-row" id="d-pers-chips">
+          <button type="button" class="fchip" data-v="1" onclick="detPick('pers','1')">1e</button>
+          <button type="button" class="fchip" data-v="2" onclick="detPick('pers','2')">2e</button>
+          <button type="button" class="fchip" data-v="3" onclick="detPick('pers','3')">3e</button>
+        </div>
       </div>
       <div class="det-field">
         <label>Getal</label>
-        <select id="d-getal"><option value="">— kies —</option>
-          <option value="ev">enkelvoud</option><option value="mv">meervoud</option>
-        </select>
+        <div class="chip-row" id="d-getal-chips">
+          <button type="button" class="fchip" data-v="ev" onclick="detPick('getal','ev')">enkelvoud</button>
+          <button type="button" class="fchip" data-v="mv" onclick="detPick('getal','mv')">meervoud</button>
+        </div>
       </div>
       <div class="det-field">
         <label>Tijd</label>
-        <select id="d-tijd"><option value="">— kies —</option>
-          <option value="praesens">praesens</option><option value="imperfectum">imperfectum</option>
-          <option value="aoristus">aoristus</option><option value="futurum">futurum</option>
-          <option value="perfectum">perfectum</option>
-        </select>
+        <div class="chip-row" id="d-tijd-chips">
+          <button type="button" class="fchip" data-v="praesens" onclick="detPick('tijd','praesens')">praesens</button>
+          <button type="button" class="fchip" data-v="imperfectum" onclick="detPick('tijd','imperfectum')">imperfectum</button>
+          <button type="button" class="fchip" data-v="aoristus" onclick="detPick('tijd','aoristus')">aoristus</button>
+          <button type="button" class="fchip" data-v="futurum" onclick="detPick('tijd','futurum')">futurum</button>
+        </div>
       </div>
       <div class="det-field">
         <label>Vertaling</label>
@@ -1675,38 +1685,63 @@ function joinLetters(arr){ return arr.join(''); }
 // ══════════════════════════════════════════════
 //  DETERMINEER EXERCISE
 // ══════════════════════════════════════════════
+// Knoppenraster i.p.v. losse <select>-velden (Vice Verba/Hoi Polloi Logoi-
+// stijl): DET_PICK houdt de huidige keuze per as bij, detPick() zet 'm en
+// markeert de aangeklikte chip; checkDeterm() beoordeelt alle assen tegelijk.
+let DET_PICK={};
+function detPick(axis,val){
+  if(document.getElementById('d-cbtn').style.display==='none') return; // al gecontroleerd
+  DET_PICK[axis]=val;
+  document.querySelectorAll('#d-'+axis+'-chips .fchip').forEach(b=>b.classList.toggle('on', b.dataset.v===val));
+}
 function drawDeterm(){
   const s=ST.determ, q=s.qs[s.idx];
   updateHeader('determ',s.idx,s.qs.length,s.sc,s.wr);
   document.getElementById('d-form').textContent=q.f;
-  ['d-pers','d-getal','d-tijd','d-vert'].forEach(id=>{
-    const el=document.getElementById(id);
-    el.value='';el.classList.remove('ok','err');el.disabled=false;
+  DET_PICK={};
+  ['pers','getal','tijd'].forEach(axis=>{
+    document.querySelectorAll('#d-'+axis+'-chips .fchip').forEach(b=>{
+      b.classList.remove('on','correct','wrong','dim'); b.disabled=false;
+    });
   });
+  const vert=document.getElementById('d-vert');
+  vert.value='';vert.classList.remove('ok','err');vert.disabled=false;
   document.getElementById('d-fb').className='fb';
   document.getElementById('d-cbtn').style.display='';
   document.getElementById('d-nbtn').style.display='none';
-  document.getElementById('d-vert').focus();
+  vert.focus();
 }
 
 function checkDeterm(){
   const s=ST.determ, q=s.qs[s.idx];
   const checks=[
-    {id:'d-pers', exp:String(q.p),            label:'Persoon'},
-    {id:'d-getal',exp:q.n,                    label:'Getal'},
-    {id:'d-tijd', exp:q.t,                    label:'Tijd'},
-    {id:'d-vert', exp:q.tr, nl:true,          label:'Vertaling'},
+    {axis:'pers', exp:String(q.p),  label:'Persoon'},
+    {axis:'getal',exp:q.n,          label:'Getal'},
+    {axis:'tijd', exp:q.t,          label:'Tijd'},
   ];
   let allOk=true, fbLines=[];
   checks.forEach(c=>{
-    const el=document.getElementById(c.id);
-    const ok=c.nl?matchNl(el.value,c.exp):el.value===c.exp;
-    el.classList.remove('ok','err');el.classList.add(ok?'ok':'err');el.disabled=true;
+    const got=DET_PICK[c.axis]||null;
+    const ok=got===c.exp;
+    document.querySelectorAll('#d-'+c.axis+'-chips .fchip').forEach(b=>{
+      b.disabled=true;
+      if(b.dataset.v===c.exp) b.classList.add('correct');
+      else if(b.dataset.v===got) b.classList.add('wrong');
+      else b.classList.add('dim');
+    });
     if(!ok){allOk=false;
-      const disp=c.id==='d-tijd'?tijdNl(c.exp):c.id==='d-getal'?(c.exp==='ev'?'enkelvoud':'meervoud'):c.id==='d-pers'?c.exp+'e persoon':c.exp;
-      fbLines.push(`<div class="fb-row"><span class="fb-lbl">${c.label}:</span><span class="fb-got">${el.value||'—'}</span> → <span class="fb-cor">${disp}</span></div>`);
+      const disp=c.axis==='tijd'?tijdNl(c.exp):c.axis==='getal'?(c.exp==='ev'?'enkelvoud':'meervoud'):c.exp+'e persoon';
+      fbLines.push(`<div class="fb-row"><span class="fb-lbl">${c.label}:</span><span class="fb-got">${got||'—'}</span> → <span class="fb-cor">${disp}</span></div>`);
     }
   });
+  {
+    const el=document.getElementById('d-vert');
+    const ok=matchNl(el.value,q.tr);
+    el.classList.remove('ok','err');el.classList.add(ok?'ok':'err');el.disabled=true;
+    if(!ok){allOk=false;
+      fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${el.value||'—'}</span> → <span class="fb-cor">${q.tr}</span></div>`);
+    }
+  }
   if(allOk){s.sc++;}else{s.wr++;}
   s.res.push({f:q.f,pres:q.pres,ok:allOk,t:q.t});
   document.getElementById('d-sc').textContent=s.sc;
