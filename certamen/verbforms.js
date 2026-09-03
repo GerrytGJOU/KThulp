@@ -13,6 +13,7 @@ const VF_TIJDEN_LA = ["praesens","imperfectum","perfectum","plusquamperfectum","
 const VF_TIJD_NM = {praesens:"praesens", imperfectum:"imperfectum", perfectum:"perfectum", plusquamperfectum:"plusquamperfectum", futurum:"futurum simplex", futurumexactum:"futurum exactum"};
 const VF_WIJZEN = ["indicativus","coniunctivus"];
 const VF_GENERA = ["activum","passivum"];
+const VF_GENERA_EL = ["activum","medium","passivum"];
 
 // Stamgroepen zoals Pallas/Minerva ze aanhoudt — groep is gelijk aan conj
 // voor reguliere werkwoorden (dus ook "3io", los van groep 3), en "irr"
@@ -438,6 +439,22 @@ function vfLatijnGlos(v, tijd, modus, genus, persoonIdx){
 // hergebruikt vaak dezelfde Nederlandse tekst als imperfectum met "(aor)"
 // erachter, zoals in de brontabel (ἔχω, λέγω, λαμβάνω) — Nederlands maakt geen
 // onderscheid tussen beide verleden tijden, alleen het Grieks wel.
+//
+// GENUS (medium/passivum, sinds Pallas hfst. 16): in praesens/imperfectum
+// vallen medium en passivum in het Grieks morfologisch samen (dezelfde vorm,
+// andere betekenis — exact wat Pallas zelf leert: "passief gebruik van het
+// medium"), maar de aoristus heeft een volledig eigen passiefvorming op -θην,
+// los van de mediale aoristus op -σα-/-όμην. Datamodel: v.medium.{praesens,
+// imperfectum,aoristus} = de mediale vorm; v.passief.aoristus = de losstaande
+// -θην-vorm. Voor praesens/imperfectum wordt bij genus="passivum" dezelfde
+// vorm als v.medium gebruikt (nlPassief geeft wél een eigen, passieve glos,
+// ook al is de Griekse vorm identiek aan het medium). λύω is woord-voor-woord
+// gecontroleerd tegen Gerbens eigen PowerPoint (Werkwoord - HET MEDIUM -
+// AORISTUS); ἀγγέλλω/ποιέω/λαμβάνω/λέγω zijn afgeleid met standaardregels
+// (ἐλήφθην bij λαμβάνω en ἐρρήθην bij λέγω zijn allebei bekende onregelmatige/
+// alternatieve vormen, met Gerben afgestemd) — ook een proefleesronde waard.
+// ἔχω blijft bewust zonder medium/passief (ἔχομαι heeft een afwijkende
+// betekenis, "zich vastklampen aan").
 const VF_TIJDEN_EL = ["praesens","imperfectum","aoristus","futurum"];
 const VF_EL_VERBS = [
   { lemma:"λύω", betekenis:"losmaken, verbreken",
@@ -448,7 +465,18 @@ const VF_EL_VERBS = [
     nl:{ praesens:   ["ik maak los","jij maakt los","hij maakt los","wij maken los","jullie maken los","zij maken los"],
          imperfectum:["ik maakte los / zij maakten los","jij maakte los","hij maakte los","wij maakten los","jullie maakten los","ik maakte los / zij maakten los"],
          aoristus:   ["ik maakte los / zij maakten los (aor)","jij maakte los (aor)","hij maakte los (aor)","wij maakten los (aor)","jullie maakten los (aor)","ik maakte los / zij maakten los (aor)"],
-         futurum:    ["ik zal losmaken","jij zal losmaken","hij zal losmaken","wij zullen losmaken","jullie zullen losmaken","zij zullen losmaken"] } },
+         futurum:    ["ik zal losmaken","jij zal losmaken","hij zal losmaken","wij zullen losmaken","jullie zullen losmaken","zij zullen losmaken"] },
+    // Woord-voor-woord gecontroleerd tegen Gerbens PowerPoint (slides 6 en 17).
+    medium:{ praesens:   ["λύομαι","λύει","λύεται","λυόμεθα","λύεσθε","λύονται"],
+             imperfectum:["ἐλυόμην","ἐλύου","ἐλύετο","ἐλυόμεθα","ἐλύεσθε","ἐλύοντο"],
+             aoristus:   ["ἐλυσάμην","ἐλύσω","ἐλύσατο","ἐλυσάμεθα","ἐλύσασθε","ἐλύσαντο"] },
+    passief:{ aoristus:  ["ἐλύθην","ἐλύθης","ἐλύθη","ἐλύθημεν","ἐλύθητε","ἐλύθησαν"] },
+    nlMedium:{ praesens:   ["ik maak me los","jij maakt je los","hij maakt zich los","wij maken ons los","jullie maken je los","zij maken zich los"],
+               imperfectum:["ik maakte me los","jij maakte je los","hij maakte zich los","wij maakten ons los","jullie maakten je los","zij maakten zich los"],
+               aoristus:   ["ik maakte me los (aor)","jij maakte je los (aor)","hij maakte zich los (aor)","wij maakten ons los (aor)","jullie maakten je los (aor)","zij maakten zich los (aor)"] },
+    nlPassief:{ praesens:   ["ik word losgemaakt","jij wordt losgemaakt","hij wordt losgemaakt","wij worden losgemaakt","jullie worden losgemaakt","zij worden losgemaakt"],
+                imperfectum:["ik werd losgemaakt","jij werd losgemaakt","hij werd losgemaakt","wij werden losgemaakt","jullie werden losgemaakt","zij werden losgemaakt"],
+                aoristus:   ["ik werd losgemaakt (aor)","jij werd losgemaakt (aor)","hij werd losgemaakt (aor)","wij werden losgemaakt (aor)","jullie werden losgemaakt (aor)","zij werden losgemaakt (aor)"] } },
   { lemma:"ἀγγέλλω", betekenis:"aankondigen, berichten",
     praesens:   ["ἀγγέλλω","ἀγγέλλεις","ἀγγέλλει","ἀγγέλλομεν","ἀγγέλλετε","ἀγγέλλουσι(ν)"],
     imperfectum:["ἤγγελλον","ἤγγελλες","ἤγγελλε(ν)","ἠγγέλλομεν","ἠγγέλλετε","ἤγγελλον"],
@@ -457,7 +485,17 @@ const VF_EL_VERBS = [
     nl:{ praesens:   ["ik kondig aan","jij kondigt aan","hij kondigt aan","wij kondigen aan","jullie kondigen aan","zij kondigen aan"],
          imperfectum:["ik kondigde aan / zij kondigden aan","jij kondigde aan","hij kondigde aan","wij kondigden aan","jullie kondigden aan","ik kondigde aan / zij kondigden aan"],
          aoristus:   ["ik kondigde aan / zij kondigden aan (aor)","jij kondigde aan (aor)","hij kondigde aan (aor)","wij kondigden aan (aor)","jullie kondigden aan (aor)","ik kondigde aan / zij kondigden aan (aor)"],
-         futurum:    ["ik zal aankondigen","jij zal aankondigen","hij zal aankondigen","wij zullen aankondigen","jullie zullen aankondigen","zij zullen aankondigen"] } },
+         futurum:    ["ik zal aankondigen","jij zal aankondigen","hij zal aankondigen","wij zullen aankondigen","jullie zullen aankondigen","zij zullen aankondigen"] },
+    medium:{ praesens:   ["ἀγγέλλομαι","ἀγγέλλει","ἀγγέλλεται","ἀγγελλόμεθα","ἀγγέλλεσθε","ἀγγέλλονται"],
+             imperfectum:["ἠγγελλόμην","ἠγγέλλου","ἠγγέλλετο","ἠγγελλόμεθα","ἠγγέλλεσθε","ἠγγέλλοντο"],
+             aoristus:   ["ἠγγειλάμην","ἠγγείλω","ἠγγείλατο","ἠγγειλάμεθα","ἠγγείλασθε","ἠγγείλαντο"] },
+    passief:{ aoristus:  ["ἠγγέλθην","ἠγγέλθης","ἠγγέλθη","ἠγγέλθημεν","ἠγγέλθητε","ἠγγέλθησαν"] },
+    nlMedium:{ praesens:   ["ik kondig aan","jij kondigt aan","hij kondigt aan","wij kondigen aan","jullie kondigen aan","zij kondigen aan"],
+               imperfectum:["ik kondigde aan","jij kondigde aan","hij kondigde aan","wij kondigden aan","jullie kondigden aan","zij kondigden aan"],
+               aoristus:   ["ik kondigde aan (aor)","jij kondigde aan (aor)","hij kondigde aan (aor)","wij kondigden aan (aor)","jullie kondigden aan (aor)","zij kondigden aan (aor)"] },
+    nlPassief:{ praesens:   ["ik word aangekondigd","jij wordt aangekondigd","hij wordt aangekondigd","wij worden aangekondigd","jullie worden aangekondigd","zij worden aangekondigd"],
+                imperfectum:["ik werd aangekondigd","jij werd aangekondigd","hij werd aangekondigd","wij werden aangekondigd","jullie werden aangekondigd","zij werden aangekondigd"],
+                aoristus:   ["ik werd aangekondigd (aor)","jij werd aangekondigd (aor)","hij werd aangekondigd (aor)","wij werden aangekondigd (aor)","jullie werden aangekondigd (aor)","zij werden aangekondigd (aor)"] } },
   { lemma:"ποιέω", betekenis:"maken, doen",
     praesens:   ["ποιῶ","ποιεῖς","ποιεῖ","ποιοῦμεν","ποιεῖτε","ποιοῦσι(ν)"],
     imperfectum:["ἐποίουν","ἐποίεις","ἐποίει","ἐποιοῦμεν","ἐποιεῖτε","ἐποίουν"],
@@ -466,7 +504,17 @@ const VF_EL_VERBS = [
     nl:{ praesens:   ["ik maak / doe","jij maakt / doet","hij maakt / doet","wij maken / doen","jullie maken / doen","zij maken / doen"],
          imperfectum:["ik maakte / deed, zij maakten / deden","jij maakte / deed","hij maakte / deed","wij maakten / deden","jullie maakten / deden","ik maakte / deed, zij maakten / deden"],
          aoristus:   ["ik maakte / deed (aor)","jij maakte / deed (aor)","hij maakte / deed (aor)","wij maakten / deden (aor)","jullie maakten / deden (aor)","zij maakten / deden (aor)"],
-         futurum:    ["ik zal maken / doen","jij zal maken / doen","hij zal maken / doen","wij zullen maken / doen","jullie zullen maken / doen","zij zullen maken / doen"] } },
+         futurum:    ["ik zal maken / doen","jij zal maken / doen","hij zal maken / doen","wij zullen maken / doen","jullie zullen maken / doen","zij zullen maken / doen"] },
+    medium:{ praesens:   ["ποιοῦμαι","ποιεῖ","ποιεῖται","ποιούμεθα","ποιεῖσθε","ποιοῦνται"],
+             imperfectum:["ἐποιούμην","ἐποιοῦ","ἐποιεῖτο","ἐποιούμεθα","ἐποιεῖσθε","ἐποιοῦντο"],
+             aoristus:   ["ἐποιησάμην","ἐποιήσω","ἐποιήσατο","ἐποιησάμεθα","ἐποιήσασθε","ἐποιήσαντο"] },
+    passief:{ aoristus:  ["ἐποιήθην","ἐποιήθης","ἐποιήθη","ἐποιήθημεν","ἐποιήθητε","ἐποιήθησαν"] },
+    nlMedium:{ praesens:   ["ik maak voor mezelf","jij maakt voor jezelf","hij maakt voor zichzelf","wij maken voor onszelf","jullie maken voor jezelf","zij maken voor zichzelf"],
+               imperfectum:["ik maakte voor mezelf","jij maakte voor jezelf","hij maakte voor zichzelf","wij maakten voor onszelf","jullie maakten voor jezelf","zij maakten voor zichzelf"],
+               aoristus:   ["ik maakte voor mezelf (aor)","jij maakte voor jezelf (aor)","hij maakte voor zichzelf (aor)","wij maakten voor onszelf (aor)","jullie maakten voor jezelf (aor)","zij maakten voor zichzelf (aor)"] },
+    nlPassief:{ praesens:   ["ik word gemaakt","jij wordt gemaakt","hij wordt gemaakt","wij worden gemaakt","jullie worden gemaakt","zij worden gemaakt"],
+                imperfectum:["ik werd gemaakt","jij werd gemaakt","hij werd gemaakt","wij werden gemaakt","jullie werden gemaakt","zij werden gemaakt"],
+                aoristus:   ["ik werd gemaakt (aor)","jij werd gemaakt (aor)","hij werd gemaakt (aor)","wij werden gemaakt (aor)","jullie werden gemaakt (aor)","zij werden gemaakt (aor)"] } },
   { lemma:"εἰμί", betekenis:"zijn",
     praesens:   ["εἰμῐ́","εἶ","ἐστῐ́(ν)","ἐσμέν","ἐστέ","εἰσῐ́(ν)"],
     imperfectum:["ἦ / ἦν","ἦσθᾰ","ἦν","ἦμεν","ἦτε","ἦσᾰν"],
@@ -485,12 +533,99 @@ const VF_EL_VERBS = [
     aoristus:   ["ἔλᾰβον","ἔλᾰβες","ἔλᾰβε(ν)","ἐλᾰ́βομεν","ἐλᾰ́βετε","ἔλᾰβον"],
     nl:{ praesens:   ["ik neem","jij neemt","hij/zij/het neemt","wij nemen","jullie nemen","zij nemen"],
          imperfectum:["ik nam / zij namen","jij nam","hij nam","wij namen","jullie namen","ik nam / zij namen"],
-         aoristus:   ["ik nam / zij namen (aor)","jij nam (aor)","hij nam (aor)","wij namen (aor)","jullie namen (aor)","ik nam / zij namen (aor)"] } },
+         aoristus:   ["ik nam / zij namen (aor)","jij nam (aor)","hij nam (aor)","wij namen (aor)","jullie namen (aor)","ik nam / zij namen (aor)"] },
+    // Mediale aoristus is thematisch (2e aoristus, zelfde stam λαβ- als de
+    // actieve aoristus ἔλαβον, geen -σα-). Passieve aoristus is onregelmatig/
+    // suppletief: ἐλήφθην (bekende, veelgeciteerde onregelmatige vorm).
+    medium:{ praesens:   ["λαμβάνομαι","λαμβάνει","λαμβάνεται","λαμβανόμεθα","λαμβάνεσθε","λαμβάνονται"],
+             imperfectum:["ἐλαμβανόμην","ἐλαμβάνου","ἐλαμβάνετο","ἐλαμβανόμεθα","ἐλαμβάνεσθε","ἐλαμβάνοντο"],
+             aoristus:   ["ἐλαβόμην","ἐλάβου","ἐλάβετο","ἐλαβόμεθα","ἐλάβεσθε","ἐλάβοντο"] },
+    passief:{ aoristus:  ["ἐλήφθην","ἐλήφθης","ἐλήφθη","ἐλήφθημεν","ἐλήφθητε","ἐλήφθησαν"] },
+    nlMedium:{ praesens:   ["ik neem voor mezelf","jij neemt voor jezelf","hij neemt voor zichzelf","wij nemen voor onszelf","jullie nemen voor jezelf","zij nemen voor zichzelf"],
+               imperfectum:["ik nam voor mezelf","jij nam voor jezelf","hij nam voor zichzelf","wij namen voor onszelf","jullie namen voor jezelf","zij namen voor zichzelf"],
+               aoristus:   ["ik nam voor mezelf (aor)","jij nam voor jezelf (aor)","hij nam voor zichzelf (aor)","wij namen voor onszelf (aor)","jullie namen voor jezelf (aor)","zij namen voor zichzelf (aor)"] },
+    nlPassief:{ praesens:   ["ik word genomen","jij wordt genomen","hij wordt genomen","wij worden genomen","jullie worden genomen","zij worden genomen"],
+                imperfectum:["ik werd genomen","jij werd genomen","hij werd genomen","wij werden genomen","jullie werden genomen","zij werden genomen"],
+                aoristus:   ["ik werd genomen (aor)","jij werd genomen (aor)","hij werd genomen (aor)","wij werden genomen (aor)","jullie werden genomen (aor)","zij werden genomen (aor)"] } },
   { lemma:"λέγω", betekenis:"zeggen",
     praesens:   ["λέγω","λέγεις","λέγει","λέγομεν","λέγετε","λέγουσῐ(ν)"],
     imperfectum:["ἔλεγον","ἔλεγες","ἔλεγε(ν)","ἐλέγομεν","ἐλέγετε","ἔλεγον"],
     aoristus:   ["εἶπον","εἶπες","εἶπε(ν)","εἴπομεν","εἴπετε","εἶπον"],
     nl:{ praesens:   ["ik zeg","jij zegt","hij/zij/het zegt","wij zeggen","jullie zeggen","zij zeggen"],
          imperfectum:["ik zei / zij zeiden","jij zei","hij zei","wij zeiden","jullie zeiden","ik zei / zij zeiden"],
-         aoristus:   ["ik zei / zij zeiden (aor)","jij zei (aor)","hij zei (aor)","wij zeiden (aor)","jullie zeiden (aor)","ik zei / zij zeiden (aor)"] } },
+         aoristus:   ["ik zei / zij zeiden (aor)","jij zei (aor)","hij zei (aor)","wij zeiden (aor)","jullie zeiden (aor)","ik zei / zij zeiden (aor)"] },
+    // Geen mediale aoristus opgenomen: bij het suppletieve εἶπον is die niet
+    // gangbaar/betrouwbaar genoeg om te generaliseren. Passieve aoristus:
+    // ἐρρήθην (ῥη-stam, hoort bij het onregelmatige futurum ἐρῶ) — met Gerben
+    // afgestemd tegenover het alternatief ἐλέχθην.
+    passief:{ aoristus:  ["ἐρρήθην","ἐρρήθης","ἐρρήθη","ἐρρήθημεν","ἐρρήθητε","ἐρρήθησαν"] },
+    nlMedium:{ praesens:   ["ik zeg","jij zegt","hij zegt","wij zeggen","jullie zeggen","zij zeggen"],
+               imperfectum:["ik zei","jij zei","hij zei","wij zeiden","jullie zeiden","zij zeiden"] },
+    nlPassief:{ praesens:   ["ik word gezegd","jij wordt gezegd","hij wordt gezegd","wij worden gezegd","jullie worden gezegd","zij worden gezegd"],
+                imperfectum:["ik werd gezegd","jij werd gezegd","hij werd gezegd","wij werden gezegd","jullie werden gezegd","zij werden gezegd"],
+                aoristus:   ["ik werd gezegd (aor)","jij werd gezegd (aor)","hij werd gezegd (aor)","wij werden gezegd (aor)","jullie werden gezegd (aor)","zij werden gezegd (aor)"] } },
+
+  // ---- Deponentia (mediale vorm, actieve betekenis) — de vormen staan in de
+  // gewone praesens/imperfectum/aoristus-sleutels (net als bij een genus-loos
+  // werkwoord), zodat ze bij de standaardselectie (genus "activum") gewoon
+  // meedoen; er is geen apart actief paradigma om ze los van te zetten. ----
+  { lemma:"βούλομαι", betekenis:"willen",
+    // Praesens/imperfectum woord-voor-woord gecontroleerd tegen Gerbens
+    // PowerPoint (slide 7). Aoristus ἐβουλήθην: bekende, met Gerben
+    // afgestemde vorm (zelfde -θη-patroon als bij δύναμαι, zie hieronder).
+    praesens:   ["βούλομαι","βούλει","βούλεται","βουλόμεθα","βούλεσθε","βούλονται"],
+    imperfectum:["ἐβουλόμην","ἐβούλου","ἐβούλετο","ἐβουλόμεθα","ἐβούλεσθε","ἐβούλοντο"],
+    aoristus:   ["ἐβουλήθην","ἐβουλήθης","ἐβουλήθη","ἐβουλήθημεν","ἐβουλήθητε","ἐβουλήθησαν"],
+    nl:{ praesens:   ["ik wil","jij wilt","hij wil","wij willen","jullie willen","zij willen"],
+         imperfectum:["ik wilde","jij wilde","hij wilde","wij wilden","jullie wilden","zij wilden"],
+         aoristus:   ["ik wilde (aor)","jij wilde (aor)","hij wilde (aor)","wij wilden (aor)","jullie wilden (aor)","zij wilden (aor)"] } },
+  { lemma:"δύναμαι", betekenis:"kunnen",
+    // Volledig gecontroleerd tegen Gerbens PowerPoint (slides 7-stijl-praesens
+    // + slide 18 voor de aoristus). De PPT toont bij de aoristus zowel een
+    // mediale vorm (ἐδυνησάμην) als een -θη-vorm (ἐδυνάσθην); net als bij
+    // βούλομαι/ἐβουλήθην is de -θη-vorm de gangbare, dus die is hier gebruikt.
+    praesens:   ["δύναμαι","δύνασαι","δύναται","δυνάμεθα","δύνασθε","δύνανται"],
+    imperfectum:["ἐδυνάμην","ἐδύνασο","ἐδύνατο","ἐδυνάμεθα","ἐδύνασθε","ἐδύναντο"],
+    aoristus:   ["ἐδυνάσθην","ἐδυνάσθης","ἐδυνάσθη","ἐδυνάσθημεν","ἐδυνάσθητε","ἐδυνάσθησαν"],
+    nl:{ praesens:   ["ik kan","jij kunt","hij kan","wij kunnen","jullie kunnen","zij kunnen"],
+         imperfectum:["ik kon","jij kon","hij kon","wij konden","jullie konden","zij konden"],
+         aoristus:   ["ik kon (aor)","jij kon (aor)","hij kon (aor)","wij konden (aor)","jullie konden (aor)","zij konden (aor)"] } },
+  { lemma:"γίγνομαι", betekenis:"worden, gebeuren",
+    // Gereduplificeerde praesensstam (γι-γν-), thematische (2e) aoristus
+    // ἐγενόμην op de stam γεν- — een ander aoristustype dan λαμβάνω/λέγω.
+    praesens:   ["γίγνομαι","γίγνει","γίγνεται","γιγνόμεθα","γίγνεσθε","γίγνονται"],
+    imperfectum:["ἐγιγνόμην","ἐγίγνου","ἐγίγνετο","ἐγιγνόμεθα","ἐγίγνεσθε","ἐγίγνοντο"],
+    aoristus:   ["ἐγενόμην","ἐγένου","ἐγένετο","ἐγενόμεθα","ἐγένεσθε","ἐγένοντο"],
+    nl:{ praesens:   ["ik word","jij wordt","hij wordt","wij worden","jullie worden","zij worden"],
+         imperfectum:["ik werd","jij werd","hij werd","wij werden","jullie werden","zij werden"],
+         aoristus:   ["ik werd (aor)","jij werd (aor)","hij werd (aor)","wij werden (aor)","jullie werden (aor)","zij werden (aor)"] } },
+  { lemma:"ἔρχομαι", betekenis:"komen, gaan",
+    // Suppletieve aoristus ἦλθον — bijzonder: ondanks dat ἔρχομαι een
+    // deponens is (mediale vorm), heeft de aoristus gewone ACTIEVE uitgangen.
+    praesens:   ["ἔρχομαι","ἔρχει","ἔρχεται","ἐρχόμεθα","ἔρχεσθε","ἔρχονται"],
+    imperfectum:["ἠρχόμην","ἤρχου","ἤρχετο","ἠρχόμεθα","ἤρχεσθε","ἤρχοντο"],
+    aoristus:   ["ἦλθον","ἦλθες","ἦλθε(ν)","ἤλθομεν","ἤλθετε","ἦλθον"],
+    nl:{ praesens:   ["ik kom","jij komt","hij komt","wij komen","jullie komen","zij komen"],
+         imperfectum:["ik kwam","jij kwam","hij kwam","wij kwamen","jullie kwamen","zij kwamen"],
+         aoristus:   ["ik kwam / zij kwamen (aor)","jij kwam (aor)","hij kwam (aor)","wij kwamen (aor)","jullie kwamen (aor)","ik kwam / zij kwamen (aor)"] } },
+  { lemma:"νικάω", betekenis:"overwinnen",
+    // Pallas' eigen voorbeeldwerkwoord voor de α-samentrekking (hfst. 21) —
+    // een derde contractietype naast ποιέω (-έω). Regelmatige samentrekking;
+    // de aoristus verlengt de themaklinker α tot η (νικη-) vóór de -σα-.
+    praesens:   ["νικῶ","νικᾷς","νικᾷ","νικῶμεν","νικᾶτε","νικῶσι(ν)"],
+    imperfectum:["ἐνίκων","ἐνίκας","ἐνίκα(ν)","ἐνικῶμεν","ἐνικᾶτε","ἐνίκων"],
+    aoristus:   ["ἐνίκησα","ἐνίκησας","ἐνίκησε(ν)","ἐνικήσαμεν","ἐνικήσατε","ἐνίκησαν"],
+    futurum:    ["νικήσω","νικήσεις","νικήσει","νικήσομεν","νικήσετε","νικήσουσι(ν)"],
+    nl:{ praesens:   ["ik overwin","jij overwint","hij overwint","wij overwinnen","jullie overwinnen","zij overwinnen"],
+         imperfectum:["ik overwon","jij overwon","hij overwon","wij overwonnen","jullie overwonnen","zij overwonnen"],
+         aoristus:   ["ik overwon (aor)","jij overwon (aor)","hij overwon (aor)","wij overwonnen (aor)","jullie overwonnen (aor)","zij overwonnen (aor)"],
+         futurum:    ["ik zal overwinnen","jij zal overwinnen","hij zal overwinnen","wij zullen overwinnen","jullie zullen overwinnen","zij zullen overwinnen"] } },
+  { lemma:"εἶμι", betekenis:"gaan",
+    // Athematisch werkwoord, door Pallas bewust naast εἰμί gezet (hfst. 24) —
+    // ze lijken sterk op elkaar (εἶ/εἶ, εἶσι/ἐστί) maar zijn totaal
+    // verschillende werkwoorden. Vaak met futurale betekenis gebruikt ("ik
+    // zal gaan", functioneert als futurum van ἔρχομαι); imperfectum is
+    // zeldzaam in de lesstof en daarom hier weggelaten.
+    praesens: ["εἶμι","εἶ","εἶσι(ν)","ἴμεν","ἴτε","ἴασι(ν)"],
+    nl:{ praesens: ["ik ga","jij gaat","hij gaat","wij gaan","jullie gaan","zij gaan"] } },
 ];
