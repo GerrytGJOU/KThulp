@@ -124,6 +124,18 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px;font-
 .inp{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--aegean4);border-radius:10px;padding:11px 14px;color:var(--cream);font-size:15px;outline:none;text-align:center;font-family:inherit;margin-bottom:14px}
 .inp:focus{border-color:var(--azure)}
 
+.blitz-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.blitz-hearts{font-size:20px;letter-spacing:4px;color:var(--terra3)}
+.blitz-score{font-family:'Optima',Palatino,Georgia,serif;font-size:18px;color:var(--gold-bright)}
+.blitz-target-panel{background:linear-gradient(170deg,var(--aegean3),var(--aegean2));border:1px solid var(--gold-dim);border-radius:12px;padding:12px 16px;margin-bottom:12px;text-align:center}
+.blitz-target-label{font-size:10px;letter-spacing:.15em;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.blitz-target-value{font-size:20px;color:var(--gold-bright);font-family:'Optima',Palatino,Georgia,serif;word-break:break-word}
+.blitz-arena{position:relative;height:min(60vh,420px);overflow:hidden;border-radius:16px;border:1px solid var(--aegean4);background:radial-gradient(ellipse at 50% 100%,rgba(58,123,213,.15),transparent 60%),linear-gradient(180deg,#050a14,#0d1928);margin-bottom:14px;touch-action:none}
+.blitz-obj{position:absolute;top:100%;font-size:36px;font-family:Georgia,'Times New Roman',serif;color:var(--marble);cursor:pointer;user-select:none;-webkit-user-select:none;padding:8px 14px;line-height:1;background:rgba(255,255,255,.04);border-radius:10px}
+.blitz-obj.correct-pop{color:var(--green-bright);transform:scale(1.5);opacity:0}
+.blitz-obj.wrong-pop{color:var(--terra3);transform:scale(1.3) rotate(12deg);opacity:0}
+.blitz-start-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(5,10,20,.9);text-align:center;padding:20px}
+
 @media print{
   .portal-back,.back-btn,.btn-row,.prog-wrap,.opt-grid,.feedback{display:none!important}
   body{background:#fff!important;color:#000!important}
@@ -143,30 +155,30 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px;font-
 // GRIEKS ALFABET — DATA
 // ═══════════════════════════════════════════════════
 const LETTERS = [
-  {u:'Α',l:'α',naam:'alfa',      tr:'a',   ui:'korte a, zoals in "pak"'},
-  {u:'Β',l:'β',naam:'bèta',      tr:'b',   ui:'b, zoals in "bal"'},
-  {u:'Γ',l:'γ',naam:'gamma',     tr:'g',   ui:'harde g, zoals de Engelse "g" in "go"'},
-  {u:'Δ',l:'δ',naam:'delta',     tr:'d',   ui:'d, zoals in "dag"'},
-  {u:'Ε',l:'ε',naam:'epsilon',   tr:'e',   ui:'korte e, zoals in "pet"'},
-  {u:'Ζ',l:'ζ',naam:'dzèta',     tr:'z',   ui:'dz-klank, meestal vereenvoudigd tot "z"'},
-  {u:'Η',l:'η',naam:'èta',       tr:'è',   ui:'lange è, zoals in het Franse "être"'},
-  {u:'Θ',l:'θ',naam:'thèta',     tr:'th',  ui:'aangeblazen t, vaak als Engelse "th" in "think"'},
-  {u:'Ι',l:'ι',naam:'iota',      tr:'i',   ui:'i, kort zoals in "pit" of lang zoals in "lied"'},
-  {u:'Κ',l:'κ',naam:'kappa',     tr:'k',   ui:'k, zoals in "kat"'},
-  {u:'Λ',l:'λ',naam:'lambda',    tr:'l',   ui:'l, zoals in "land"'},
-  {u:'Μ',l:'μ',naam:'mu',        tr:'m',   ui:'m, zoals in "man"'},
-  {u:'Ν',l:'ν',naam:'nu',        tr:'n',   ui:'n, zoals in "nee"'},
-  {u:'Ξ',l:'ξ',naam:'ksi',       tr:'x',   ui:'ks-klank, zoals in "vlaks"'},
-  {u:'Ο',l:'ο',naam:'omicron',   tr:'o',   ui:'korte o, zoals in "pot"'},
-  {u:'Π',l:'π',naam:'pi',        tr:'p',   ui:'p, zoals in "pot"'},
-  {u:'Ρ',l:'ρ',naam:'rho',       tr:'r',   ui:'rollende r'},
-  {u:'Σ',l:'σ',final:'ς',naam:'sigma',tr:'s', ui:'s, zoals in "sap"'},
-  {u:'Τ',l:'τ',naam:'tau',       tr:'t',   ui:'t, zoals in "tak"'},
-  {u:'Υ',l:'υ',naam:'ypsilon',   tr:'y',   ui:'Franse u, zoals in "lune"'},
-  {u:'Φ',l:'φ',naam:'phi',       tr:'ph',  ui:'aangeblazen p, meestal uitgesproken als "f"'},
-  {u:'Χ',l:'χ',naam:'chi',       tr:'ch',  ui:'aangeblazen k, zoals de Nederlandse harde ch in "acht"'},
-  {u:'Ψ',l:'ψ',naam:'psi',       tr:'ps',  ui:'ps-klank, zoals in "oeps"'},
-  {u:'Ω',l:'ω',naam:'omega',     tr:'ō',   ui:'lange o, zoals in "roos"'},
+  {u:'Α',l:'α',naam:'alfa',      tr:'a',   ui:'korte a, zoals in "pak"',                              klank:'A (kort)'},
+  {u:'Β',l:'β',naam:'bèta',      tr:'b',   ui:'b, zoals in "bal"',                                    klank:'B'},
+  {u:'Γ',l:'γ',naam:'gamma',     tr:'g',   ui:'harde g, zoals de Engelse "g" in "go"',                klank:'G (hard)'},
+  {u:'Δ',l:'δ',naam:'delta',     tr:'d',   ui:'d, zoals in "dag"',                                    klank:'D'},
+  {u:'Ε',l:'ε',naam:'epsilon',   tr:'e',   ui:'korte e, zoals in "pet"',                               klank:'E (kort)'},
+  {u:'Ζ',l:'ζ',naam:'dzèta',     tr:'z',   ui:'dz-klank, meestal vereenvoudigd tot "z"',               klank:'DZ'},
+  {u:'Η',l:'η',naam:'èta',       tr:'è',   ui:'lange è, zoals in het Franse "être"',                   klank:'È (lang)'},
+  {u:'Θ',l:'θ',naam:'thèta',     tr:'th',  ui:'aangeblazen t, vaak als Engelse "th" in "think"',       klank:'TH'},
+  {u:'Ι',l:'ι',naam:'iota',      tr:'i',   ui:'i, kort zoals in "pit" of lang zoals in "lied"',        klank:'I'},
+  {u:'Κ',l:'κ',naam:'kappa',     tr:'k',   ui:'k, zoals in "kat"',                                    klank:'K'},
+  {u:'Λ',l:'λ',naam:'lambda',    tr:'l',   ui:'l, zoals in "land"',                                    klank:'L'},
+  {u:'Μ',l:'μ',naam:'mu',        tr:'m',   ui:'m, zoals in "man"',                                    klank:'M'},
+  {u:'Ν',l:'ν',naam:'nu',        tr:'n',   ui:'n, zoals in "nee"',                                    klank:'N'},
+  {u:'Ξ',l:'ξ',naam:'ksi',       tr:'x',   ui:'ks-klank, zoals in "vlaks"',                            klank:'KS'},
+  {u:'Ο',l:'ο',naam:'omicron',   tr:'o',   ui:'korte o, zoals in "pot"',                               klank:'O (kort)'},
+  {u:'Π',l:'π',naam:'pi',        tr:'p',   ui:'p, zoals in "pot"',                                    klank:'P'},
+  {u:'Ρ',l:'ρ',naam:'rho',       tr:'r',   ui:'rollende r',                                           klank:'R'},
+  {u:'Σ',l:'σ',final:'ς',naam:'sigma',tr:'s', ui:'s, zoals in "sap"',                                 klank:'S'},
+  {u:'Τ',l:'τ',naam:'tau',       tr:'t',   ui:'t, zoals in "tak"',                                    klank:'T'},
+  {u:'Υ',l:'υ',naam:'ypsilon',   tr:'y',   ui:'Franse u, zoals in "lune"',                             klank:'U (Frans)'},
+  {u:'Φ',l:'φ',naam:'phi',       tr:'ph',  ui:'aangeblazen p, meestal uitgesproken als "f"',           klank:'F'},
+  {u:'Χ',l:'χ',naam:'chi',       tr:'ch',  ui:'aangeblazen k, zoals de Nederlandse harde ch in "acht"',klank:'CH'},
+  {u:'Ψ',l:'ψ',naam:'psi',       tr:'ps',  ui:'ps-klank, zoals in "oeps"',                             klank:'PS'},
+  {u:'Ω',l:'ω',naam:'omega',     tr:'ō',   ui:'lange o, zoals in "roos"',                              klank:'Ō (lang)'},
 ];
 
 const WORDS = [
@@ -190,23 +202,46 @@ const WORDS = [
   {gr:'πλανήτης',  tr:'planētēs',   nl:'planeet (letterlijk: "dwaler")'},
   {gr:'πρόβλημα',  tr:'problēma',   nl:'probleem'},
   {gr:'σύστημα',   tr:'systēma',    nl:'systeem'},
+  {gr:'ἄνθρωπος',  tr:'anthropos',  nl:'mens'},
+  {gr:'δημοκρατία',tr:'dēmokratia', nl:'democratie / volksmacht'},
+  {gr:'τραγῳδία',  tr:'tragōidia',  nl:'tragedie'},
+  {gr:'κωμῳδία',   tr:'kōmōidia',   nl:'komedie'},
+  {gr:'ἀριθμός',   tr:'arithmos',   nl:'getal'},
+  {gr:'γεωμετρία', tr:'geōmetria',  nl:'meetkunde'},
+  {gr:'ἀστρονομία',tr:'astronomia', nl:'sterrenkunde'},
+  {gr:'ναός',      tr:'naos',       nl:'tempel'},
+  {gr:'δῆμος',     tr:'dēmos',      nl:'volk'},
+  {gr:'νόμος',     tr:'nomos',      nl:'wet'},
+  {gr:'λόγος',     tr:'logos',      nl:'woord / rede'},
+  {gr:'τέχνη',     tr:'technē',     nl:'vaardigheid / kunst'},
+  {gr:'φύσις',     tr:'physis',     nl:'natuur'},
+  {gr:'αἴνιγμα',   tr:'ainigma',    nl:'raadsel'},
+  {gr:'ἐνέργεια',  tr:'energeia',   nl:'energie / activiteit'},
+  {gr:'σφαῖρα',    tr:'sphaira',    nl:'bol'},
+  {gr:'κύκλος',    tr:'kyklos',     nl:'cirkel'},
+  {gr:'πυραμίς',   tr:'pyramis',    nl:'piramide'},
+  {gr:'λαβύρινθος',tr:'labyrinthos',nl:'labyrint / doolhof'},
+  {gr:'ζῷον',      tr:'zōion',      nl:'levend wezen / dier'},
 ];
 
 // Langere woorden met spiritus lenis/asper en iota subscriptum,
-// voor de modus "Woord uitspreken".
+// voor de modus "Woord uitspreken" (typ-modus). `answer` is de canonieke
+// getypte vorm; normalizePron() maakt de check ongevoelig voor lange-klinker-
+// spelling (o/oo, e/ee) en voor de dz/zd/z-varianten van de dzèta.
 const WORDS_PRON = [
-  {gr:'ἀγορά',      tr:'agorá',       ui:'agora — geen h-klank (spiritus lenis)'},
-  {gr:'ὥρα',        tr:'hṓra',        ui:'hoora — mét h-klank (spiritus asper)'},
-  {gr:'Ἑλλάς',      tr:'Hellás',      ui:'Hellas — mét h-klank (spiritus asper)'},
-  {gr:'ῥήτωρ',      tr:'rhḗtōr',      ui:'rhètoor — een ρ aan het woordbegin krijgt altijd een spiritus asper (rh-)'},
-  {gr:'ὑπόθεσις',   tr:'hypóthesis',  ui:'hypothesis — mét h-klank (een beginnende υ krijgt altijd een spiritus asper)'},
-  {gr:'ᾠδή',        tr:'ōidḗ',        ui:'oodee — de iota onder de ω (iota subscriptum) hoor je niet apart'},
-  {gr:'ᾍδης',       tr:'Hāídēs',      ui:'Haadees — spiritus asper én iota subscriptum samen op de Α'},
-  {gr:'οἶκος',      tr:'oîkos',       ui:'oikos — geen h-klank (spiritus lenis)'},
-  {gr:'εἰρήνη',     tr:'eirḗnē',      ui:'eirènee — ει is één tweeklank, geen aparte i- en e-klank'},
-  {gr:'Ἀθῆναι',     tr:'Athēnai',     ui:'Athènai — geen h-klank (spiritus lenis)'},
-  {gr:'Ὀλυμπία',    tr:'Olympía',     ui:'Olympia — geen h-klank (spiritus lenis)'},
-  {gr:'τῷ ἀνθρώπῳ', tr:'tōi anthrṓpōi', ui:'too anthroopoo — iota subscriptum onder beide ω\'s, niet apart uitgesproken'},
+  {gr:'ἀγορά',      tr:'agorá',       answer:'agora',          ui:'agora — geen h-klank (spiritus lenis)'},
+  {gr:'ὥρα',        tr:'hṓra',        answer:'hoora',          ui:'hoora — mét h-klank (spiritus asper)'},
+  {gr:'Ἑλλάς',      tr:'Hellás',      answer:'hellas',         ui:'Hellas — mét h-klank (spiritus asper)'},
+  {gr:'ῥήτωρ',      tr:'rhḗtōr',      answer:'rhetoor',        ui:'rhètoor — een ρ aan het woordbegin krijgt altijd een spiritus asper (rh-)'},
+  {gr:'ὑπόθεσις',   tr:'hypóthesis',  answer:'hypothesis',     ui:'hypothesis — mét h-klank (een beginnende υ krijgt altijd een spiritus asper)'},
+  {gr:'ᾠδή',        tr:'ōidḗ',        answer:'oodee',          ui:'oodee — de iota onder de ω (iota subscriptum) hoor je niet apart'},
+  {gr:'ᾍδης',       tr:'Hāídēs',      answer:'haadees',        ui:'Haadees — spiritus asper én iota subscriptum samen op de Α'},
+  {gr:'οἶκος',      tr:'oîkos',       answer:'oikos',          ui:'oikos — geen h-klank (spiritus lenis)'},
+  {gr:'εἰρήνη',     tr:'eirḗnē',      answer:'eirenee',        ui:'eirènee — ει is één tweeklank, geen aparte i- en e-klank'},
+  {gr:'Ἀθῆναι',     tr:'Athēnai',     answer:'athenai',        ui:'Athènai — geen h-klank (spiritus lenis)'},
+  {gr:'Ὀλυμπία',    tr:'Olympía',     answer:'olympia',        ui:'Olympia — geen h-klank (spiritus lenis)'},
+  {gr:'τῷ ἀνθρώπῳ', tr:'tōi anthrṓpōi', answer:'too anthroopoo', ui:'too anthroopoo — iota subscriptum onder beide ω\'s, niet apart uitgesproken'},
+  {gr:'ζώνη',       tr:'zṓnē',        answer:'zoonee',         ui:'zoonee — de ζ mag je hier als z, dz óf zd uitspreken (dat verschilt per docent/traditie)'},
 ];
 
 // ═══════════════════════════════════════════════════
@@ -221,6 +256,7 @@ function defaultStats(){
     uitspraak:{correct:0,total:0,best:0},
     woorduitspraak:{correct:0,total:0,best:0},
     woorden:{correct:0,total:0,best:0},
+    blitz:{correct:0,total:0,best:0},
   }, fouten:{}, woordFouten:{}};
 }
 function loadStats(){
@@ -243,6 +279,7 @@ let STATS = loadStats();
 
 let SCREEN = 'home';
 let QUIZ = null; // active quiz state
+let BLITZ = null; // active Snelvuur (Blitz) game state
 
 // ═══════════════════════════════════════════════════
 // HELPERS
@@ -287,6 +324,7 @@ function esc(s){ return String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;'
 // ROUTER
 // ═══════════════════════════════════════════════════
 function go(screen){
+  if(SCREEN==='blitz') stopBlitz();
   SCREEN = screen;
   QUIZ = null;
   render();
@@ -297,6 +335,7 @@ function render(){
   const app = document.getElementById('app');
   if(SCREEN==='home') app.innerHTML = renderHome();
   else if(SCREEN==='overzicht') app.innerHTML = renderOverzicht();
+  else if(SCREEN==='blitz') app.innerHTML = renderBlitzIntro();
   else if(MODE_META[SCREEN]) renderQuizScreen(SCREEN);
 }
 
@@ -313,6 +352,12 @@ function renderHome(){
       <div class="ic">📜</div>
       <h3>Alfabet-overzicht</h3>
       <p>Alle 24 letters met naam en Nederlandse schooluitspraak, om na te slaan</p>
+    </div>
+    <div class="tile wide" onclick="go('blitz')" style="border-color:var(--terra2);background:linear-gradient(170deg,#3a1810,#210c07)">
+      <div class="ic" style="color:var(--terra3)">⚡</div>
+      <h3>Snelvuur <span style="font-size:10px;color:var(--gold-bright);border:1px solid var(--gold-dim);border-radius:8px;padding:1px 6px;margin-left:4px;vertical-align:middle">NIEUW</span></h3>
+      <p>Fruit-Ninja-stijl: tik de juiste letter weg voor hij wegzweeft. Het spel wordt steeds sneller — hoe lang hou jij het vol?</p>
+      <div class="tile-stat">${STATS.modes.blitz.total? 'Hoogste score: '+STATS.modes.blitz.best : 'Nog niet gespeeld'}</div>
     </div>
     <div class="tile" onclick="startQuiz('matchen')">
       <div class="ic">Αα</div>
@@ -335,7 +380,7 @@ function renderHome(){
     <div class="tile" onclick="startQuiz('woorduitspraak')">
       <div class="ic">🗣️</div>
       <h3>Woord uitspreken</h3>
-      <p>Kies de juiste uitspraak van een heel woord — met spiritus en iota subscriptum</p>
+      <p>Typ zelf de uitspraak van een heel woord — met spiritus en iota subscriptum</p>
       <div class="tile-stat">${STATS.modes.woorduitspraak.total? pct('woorduitspraak')+'% goed · '+STATS.modes.woorduitspraak.best+' op rij' : 'Nog niet geoefend'}</div>
     </div>
     <div class="tile wide" onclick="startQuiz('woorden')">
@@ -367,6 +412,13 @@ function renderOverzicht(){
     <button class="back-btn" onclick="go('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg></button>
     <h2>Alfabet-overzicht</h2>
   </div>
+  <div class="panel">
+    <table class="abc-table">
+      <thead><tr><th>Letter</th><th>Naam</th><th>Uitspraak (NL)</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p class="note">Dit is de klassieke ("Erasmiaanse") schooluitspraak zoals gebruikelijk in het Nederlandse voortgezet onderwijs.</p>
+  </div>
   <div class="panel" style="border-color:var(--gold-dim);background:linear-gradient(170deg,rgba(212,175,55,.14),var(--aegean2))">
     <h3 style="color:var(--gold);font-size:15px;margin-bottom:8px">Let op: de sigma heeft twee vormen!</h3>
     <p style="font-size:14px;line-height:1.65;color:var(--cream2)">
@@ -377,12 +429,6 @@ function renderOverzicht(){
       <span style="font-family:Georgia,serif;font-size:19px;color:var(--marble)">κόσμο<span style="color:var(--gold-bright)">ς</span></span>.
     </p>
   </div>
-  <div class="panel">
-    <table class="abc-table">
-      <thead><tr><th>Letter</th><th>Naam</th><th>Uitspraak (NL)</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>
-    <p class="note">Dit is de klassieke ("Erasmiaanse") schooluitspraak zoals gebruikelijk in het Nederlandse voortgezet onderwijs.</p>
   </div>
   `;
 }
@@ -396,6 +442,7 @@ const MODE_META = {
   uitspraak:      {title:'Nederlandse uitspraak',        icon:'🔊'},
   woorduitspraak: {title:'Woord uitspreken',             icon:'🗣️'},
   woorden:        {title:'Herken het woord',             icon:'📖'},
+  blitz:          {title:'Snelvuur',                      icon:'⚡'},
 };
 
 function startQuiz(mode){
@@ -423,13 +470,11 @@ function nextQuestion(){
     const letter = weightedPick(LETTERS, STATS.fouten, l=>l.u);
     const useUpper = Math.random() < 0.5;
     const distractors = shuffle(LETTERS.filter(l=>l.u!==letter.u)).slice(0,3);
-    const opts = shuffle([letter, ...distractors]).map(l=>({label:l.ui, ok:l.u===letter.u}));
-    QUIZ.current = {display:useUpper?letter.u:letter.l, sub:'HOE SPREEK JE DIT UIT?', opts, key:letter.u, kind:'uitspraak', refType:'letter', ref:letter};
+    const opts = shuffle([letter, ...distractors]).map(l=>({label:l.klank, ok:l.u===letter.u}));
+    QUIZ.current = {display:useUpper?letter.u:letter.l, sub:'HOE SPREEK JE DIT UIT?', opts, key:letter.u, kind:'uitspraak', refType:'letter', ref:letter, extra:letter.ui};
   } else if(QUIZ.mode === 'woorduitspraak'){
     const word = weightedPick(WORDS_PRON, STATS.woordFouten, w=>w.gr);
-    const distractors = shuffle(WORDS_PRON.filter(w=>w.gr!==word.gr)).slice(0,3);
-    const opts = shuffle([word, ...distractors]).map(w=>({label:w.ui, ok:w.gr===word.gr}));
-    QUIZ.current = {display:word.gr, sub:'HOE SPREEK JE DIT WOORD UIT?', opts, key:word.gr, kind:'woorduitspraak', refType:'word', ref:word};
+    QUIZ.current = {display:word.gr, sub:'TYP HOE JE DIT WOORD ZOU UITSPREKEN', key:word.gr, kind:'woorduitspraak', refType:'word', ref:word, answer:word.answer};
   } else if(QUIZ.mode === 'woorden'){
     const word = weightedPick(WORDS, STATS.woordFouten, w=>w.gr);
     const distractors = shuffle(WORDS.filter(w=>w.gr!==word.gr)).slice(0,3);
@@ -439,14 +484,27 @@ function nextQuestion(){
   render();
 }
 
-function answer(idx){
-  if(QUIZ.answered) return;
+// Normaliseert een getypte uitspraak zodat de check ongevoelig is voor:
+// - hoofdletters/spaties/leestekens
+// - lange-klinker-spelling (o/oo, e/ee — verschilt per docent/methode)
+// - de dz/zd/z-varianten van de dzèta (ζ)
+// Bewust géén algemene fuzzy-tolerantie voor andere fouten: of je de h van een
+// spiritus asper wel/niet typt, of ει/οι goed hebt, is precies waar deze modus
+// op toetst.
+function normalizePron(s){
+  return String(s).toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z]/g,'')
+    .replace(/dz|zd/g,'z')
+    .replace(/([aeiouy])\1+/g,'$1');
+}
+
+function resolveAnswer(ok){
   QUIZ.answered = true;
-  QUIZ.chosenIdx = idx;
-  const opt = QUIZ.current.opts[idx];
+  QUIZ.current.wasCorrect = ok;
   const mapName = QUIZ.current.refType === 'word' ? 'woordFouten' : 'fouten';
-  registerResult(QUIZ.mode, QUIZ.current.key, opt.ok, mapName);
-  if(opt.ok){
+  registerResult(QUIZ.mode, QUIZ.current.key, ok, mapName);
+  if(ok){
     QUIZ.correct++;
     QUIZ.streak++;
     if(QUIZ.streak > STATS.modes[QUIZ.mode].best){ STATS.modes[QUIZ.mode].best = QUIZ.streak; saveStats(); }
@@ -458,34 +516,68 @@ function answer(idx){
   setTimeout(()=>{
     QUIZ.round++;
     nextQuestion();
-  }, opt.ok ? 900 : 1900);
+  }, ok ? 900 : (QUIZ.current.kind==='woorduitspraak' ? 2600 : 1900));
+}
+
+function answer(idx){
+  if(QUIZ.answered) return;
+  QUIZ.chosenIdx = idx;
+  resolveAnswer(QUIZ.current.opts[idx].ok);
+}
+
+function answerTyped(){
+  if(QUIZ.answered) return;
+  const inputEl = document.getElementById('pron-input');
+  const typed = inputEl ? inputEl.value : '';
+  QUIZ.typedAnswer = typed;
+  const ok = typed.trim().length > 0 && normalizePron(typed) === normalizePron(QUIZ.current.answer);
+  resolveAnswer(ok);
 }
 
 function renderQuizScreen(mode){
   const app = document.getElementById('app');
   const meta = MODE_META[mode];
   const q = QUIZ.current;
-  const isBig = q.kind === 'woord' || q.kind === 'woorduitspraak';
-  const optsHtml = q.opts.map((o,i)=>{
-    let cls = 'opt-btn';
-    if(QUIZ.answered){
-      cls += ' disabled';
-      if(o.ok) cls += ' correct';
-      else if(i === QUIZ.chosenIdx) cls += ' wrong';
-    }
-    const label = q.kind==='matchen' ? `<span class="opt-gr">${esc(o.label)}</span>` : esc(o.label);
-    return `<button class="${cls}" onclick="answer(${i})">${label}</button>`;
-  }).join('');
+  const isTyped = q.kind === 'woorduitspraak';
+  const isBig = q.kind === 'woord' || isTyped;
+
   let feedback = '';
-  if(QUIZ.answered){
-    const correctOpt = q.opts.find(o=>o.ok);
-    const chosenOk = q.opts[QUIZ.chosenIdx].ok;
-    if(chosenOk){
-      feedback = `<div class="feedback ok">Goed zo!${q.extra?' ('+esc(q.extra)+')':''}</div>`;
-    } else {
-      feedback = `<div class="feedback err">Niet helemaal — het juiste antwoord is: <strong>${esc(correctOpt.label)}</strong>${q.extra?' ('+esc(q.extra)+')':''}</div>`;
+  let bodyHtml;
+
+  if(isTyped){
+    if(QUIZ.answered){
+      feedback = QUIZ.current.wasCorrect
+        ? `<div class="feedback ok">Goed zo! ${esc(q.ref.ui)}</div>`
+        : `<div class="feedback err">Niet helemaal — jij typte "${esc(QUIZ.typedAnswer||'')}". ${esc(q.ref.ui)}</div>`;
     }
+    bodyHtml = `
+    <input id="pron-input" class="inp" style="margin-bottom:10px" placeholder="Typ hoe je dit zou uitspreken..."
+      autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
+      ${QUIZ.answered?'disabled':''} onkeydown="if(event.key==='Enter')answerTyped()">
+    <button class="btn btn-gold btn-full" ${QUIZ.answered?'disabled':''} onclick="answerTyped()">Controleer</button>
+    `;
+  } else {
+    const optsHtml = q.opts.map((o,i)=>{
+      let cls = 'opt-btn';
+      if(QUIZ.answered){
+        cls += ' disabled';
+        if(o.ok) cls += ' correct';
+        else if(i === QUIZ.chosenIdx) cls += ' wrong';
+      }
+      const label = q.kind==='matchen' ? `<span class="opt-gr">${esc(o.label)}</span>` : esc(o.label);
+      return `<button class="${cls}" onclick="answer(${i})">${label}</button>`;
+    }).join('');
+    if(QUIZ.answered){
+      const correctOpt = q.opts.find(o=>o.ok);
+      if(QUIZ.current.wasCorrect){
+        feedback = `<div class="feedback ok">Goed zo!${q.extra?' ('+esc(q.extra)+')':''}</div>`;
+      } else {
+        feedback = `<div class="feedback err">Niet helemaal — het juiste antwoord is: <strong>${esc(correctOpt.label)}</strong>${q.extra?' ('+esc(q.extra)+')':''}</div>`;
+      }
+    }
+    bodyHtml = `<div class="opt-grid">${optsHtml}</div>`;
   }
+
   app.innerHTML = `
   <div class="scrhead">
     <button class="back-btn" onclick="go('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg></button>
@@ -500,8 +592,225 @@ function renderQuizScreen(mode){
     <div class="quiz-sub">${q.sub}</div>
   </div>
   ${feedback || '<div class="feedback" style="visibility:hidden">.</div>'}
-  <div class="opt-grid">${optsHtml}</div>
+  ${bodyHtml}
   `;
+  if(isTyped && !QUIZ.answered){
+    const inputEl = document.getElementById('pron-input');
+    if(inputEl) inputEl.focus();
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// SNELVUUR / BLITZ — Fruit-Ninja-achtige overlevingsmodus
+// ═══════════════════════════════════════════════════
+function renderBlitzIntro(){
+  return `
+  <div class="scrhead">
+    <button class="back-btn" onclick="go('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <h2>${MODE_META.blitz.title}</h2>
+  </div>
+  <div class="blitz-hud">
+    <div id="blitz-hearts" class="blitz-hearts">♡♡♡</div>
+    <div id="blitz-score" class="blitz-score">SCORE 0</div>
+  </div>
+  <div class="blitz-target-panel">
+    <div id="blitz-target-label" class="blitz-target-label">KLAAR VOOR SNELVUUR?</div>
+    <div id="blitz-target-value" class="blitz-target-value">—</div>
+  </div>
+  <div class="blitz-arena" id="blitz-arena">
+    <div class="blitz-start-overlay" id="blitz-overlay">
+      <p style="font-size:14px;color:var(--cream2);line-height:1.6;max-width:280px">
+        Tik zo snel mogelijk de letter weg die bij de opdracht hoort. Tik je fout, of laat je de juiste letter voorbij zweven, dan verlies je een leven.
+        Het spel wordt steeds sneller — hoe lang hou jij het vol?
+      </p>
+      <button class="btn btn-gold" onclick="startBlitz()">Start Snelvuur</button>
+    </div>
+  </div>
+  `;
+}
+
+// Kiest n verschillende letters (gewogen op eerdere fouten) die dit doel-tijdperk
+// als afleider gebruikt worden. Door afleiders uit een kleine, herhaalde pool te
+// trekken (i.p.v. steeds een nieuwe letter uit alle 23) is de doelletter niet meer
+// simpelweg "de letter die het vaakst voorbijkomt".
+function pickBlitzDecoyPool(target, n){
+  const candidates = LETTERS.filter(l=>l.u!==target.u);
+  const pool = [];
+  while(pool.length < n && candidates.length){
+    const chosen = weightedPick(candidates, STATS.fouten, l=>l.u);
+    pool.push(chosen);
+    candidates.splice(candidates.indexOf(chosen), 1);
+  }
+  return pool;
+}
+
+function pickNewBlitzTarget(){
+  const type = pick(['naam','naam','uitspraak','hk_lower','hk_upper']);
+  const letter = weightedPick(LETTERS, STATS.fouten, l=>l.u);
+  let label, value;
+  if(type === 'naam'){ label = 'TIK OP DE LETTER'; value = letter.naam; }
+  else if(type === 'uitspraak'){ label = 'TIK OP DE LETTER MET DEZE UITSPRAAK'; value = letter.ui; }
+  else if(type === 'hk_lower'){ label = 'TIK OP DE KLEINE LETTER VAN'; value = letter.u; }
+  else { label = 'TIK OP DE HOOFDLETTER VAN'; value = letter.l; }
+  const elapsed = BLITZ.startTime ? (Date.now()-BLITZ.startTime)/1000 : 0;
+  const poolSize = elapsed < 15 ? 3 : elapsed < 35 ? 4 : 5;
+  BLITZ.target = {type, letter, label, value, decoyPool: pickBlitzDecoyPool(letter, poolSize)};
+  BLITZ.targetSpawnsRemaining = 2;
+  BLITZ.targetAliveCount = 0;
+  updateTargetPanel();
+}
+
+function isBlitzTargetMatch(letterObj, caseUsed){
+  const t = BLITZ.target;
+  if(t.type === 'hk_lower') return letterObj.u === t.letter.u && caseUsed === 'lower';
+  if(t.type === 'hk_upper') return letterObj.u === t.letter.u && caseUsed === 'upper';
+  return letterObj.u === t.letter.u;
+}
+
+function updateHud(){
+  const heartsEl = document.getElementById('blitz-hearts');
+  if(heartsEl) heartsEl.textContent = '❤'.repeat(Math.max(0,BLITZ.lives)) + '♡'.repeat(Math.max(0,3-BLITZ.lives));
+  const scoreEl = document.getElementById('blitz-score');
+  if(scoreEl) scoreEl.textContent = 'SCORE ' + BLITZ.score;
+}
+function updateTargetPanel(){
+  const lbl = document.getElementById('blitz-target-label');
+  const val = document.getElementById('blitz-target-value');
+  if(lbl) lbl.textContent = BLITZ.target.label;
+  if(val) val.textContent = BLITZ.target.value;
+}
+
+function maybeAdvanceBlitzTarget(){
+  if(BLITZ.running && BLITZ.targetSpawnsRemaining <= 0 && BLITZ.targetAliveCount <= 0){
+    pickNewBlitzTarget();
+  }
+}
+
+function blitzHit(){
+  BLITZ.combo++;
+  BLITZ.score += 10 + BLITZ.combo*2;
+  updateHud();
+  maybeAdvanceBlitzTarget();
+}
+
+function blitzMiss(letterObj){
+  BLITZ.combo = 0;
+  BLITZ.lives--;
+  STATS.fouten[letterObj.u] = (STATS.fouten[letterObj.u]||0) + 1;
+  BLITZ.mistakes.push({type:'letter', ref:letterObj});
+  updateHud();
+  if(BLITZ.lives <= 0){ endBlitz(); return; }
+  maybeAdvanceBlitzTarget();
+}
+
+function spawnBlitzObject(){
+  if(!BLITZ || !BLITZ.running) return;
+  const arena = document.getElementById('blitz-arena');
+  if(!arena) return;
+  const t = BLITZ.target;
+  const forcedCase = t.type==='hk_lower' ? 'lower' : t.type==='hk_upper' ? 'upper' : null;
+  const spawnMatch = BLITZ.targetSpawnsRemaining > 0 && Math.random() < BLITZ.matchChance;
+  let letterObj, caseUsed;
+  if(spawnMatch){
+    letterObj = t.letter;
+    caseUsed = forcedCase || (Math.random()<0.5 ? 'upper' : 'lower');
+    BLITZ.targetSpawnsRemaining--;
+  } else {
+    letterObj = pick(t.decoyPool);
+    caseUsed = forcedCase || (Math.random()<0.5 ? 'upper' : 'lower');
+  }
+  const glyph = caseUsed === 'upper' ? letterObj.u : letterObj.l;
+  const isMatch = isBlitzTargetMatch(letterObj, caseUsed);
+  if(isMatch) BLITZ.targetAliveCount++;
+
+  const w = arena.clientWidth;
+  const el = document.createElement('div');
+  el.className = 'blitz-obj';
+  el.textContent = glyph;
+  const leftMax = Math.max(10, w-70);
+  el.style.left = Math.round(10+Math.random()*leftMax)+'px';
+  const riseDuration = BLITZ.riseDuration;
+
+  let dead = false;
+  const cleanup = ()=>{ if(el.parentNode) el.parentNode.removeChild(el); };
+
+  el.addEventListener('pointerdown', (e)=>{
+    e.preventDefault();
+    if(dead || !BLITZ.running) return;
+    dead = true;
+    el.style.transition = 'transform .25s,opacity .25s';
+    if(isMatch){
+      BLITZ.targetAliveCount--;
+      el.classList.add('correct-pop');
+      blitzHit();
+    } else {
+      el.classList.add('wrong-pop');
+      blitzMiss(t.letter);
+    }
+    setTimeout(cleanup, 260);
+  });
+
+  el.addEventListener('transitionend', (e)=>{
+    if(e.propertyName !== 'top' || dead) return;
+    dead = true;
+    if(isMatch){
+      BLITZ.targetAliveCount--;
+      if(BLITZ.running) blitzMiss(t.letter);
+    }
+    cleanup();
+  });
+
+  arena.appendChild(el);
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      if(dead || !el.parentNode) return;
+      el.style.transition = `top ${riseDuration}ms linear`;
+      el.style.top = '-70px';
+    });
+  });
+}
+
+function scheduleNextBlitzSpawn(){
+  if(!BLITZ || !BLITZ.running) return;
+  const elapsed = (Date.now()-BLITZ.startTime)/1000;
+  BLITZ.riseDuration = Math.max(1800, 4500 - elapsed*40);
+  BLITZ.matchChance = Math.max(0.12, 0.28 - elapsed*0.003);
+  const interval = Math.max(450, 1400 - elapsed*18);
+  BLITZ.timer = setTimeout(()=>{
+    spawnBlitzObject();
+    scheduleNextBlitzSpawn();
+  }, interval);
+}
+
+function startBlitz(){
+  BLITZ = {
+    running:true, lives:3, score:0, combo:0, mistakes:[],
+    startTime:Date.now(), timer:null,
+    riseDuration:4500, matchChance:0.4,
+    target:null, targetSpawnsRemaining:0, targetAliveCount:0,
+  };
+  const arena = document.getElementById('blitz-arena');
+  if(arena) arena.innerHTML = '';
+  updateHud();
+  pickNewBlitzTarget();
+  scheduleNextBlitzSpawn();
+}
+
+function stopBlitz(){
+  if(BLITZ){
+    if(BLITZ.timer) clearTimeout(BLITZ.timer);
+    BLITZ.running = false;
+  }
+}
+
+function endBlitz(){
+  stopBlitz();
+  const survived = Math.round((Date.now()-BLITZ.startTime)/1000);
+  STATS.modes.blitz.total++;
+  if(BLITZ.score > STATS.modes.blitz.best) STATS.modes.blitz.best = BLITZ.score;
+  saveStats();
+  QUIZ = {mode:'blitz', correct:BLITZ.score, mistakes:BLITZ.mistakes, survived};
+  renderResult();
 }
 
 function dedupeMistakes(mistakes){
@@ -514,15 +823,37 @@ function dedupeMistakes(mistakes){
   return out;
 }
 
+function formatDuration(sec){
+  const m = Math.floor(sec/60), s = sec%60;
+  return (m ? m+'m ' : '') + s + 's';
+}
+
 function renderResult(){
   const app = document.getElementById('app');
   const meta = MODE_META[QUIZ.mode];
-  const pct = Math.round(100*QUIZ.correct/10);
-  const fout = 10 - QUIZ.correct;
+  const isBlitz = QUIZ.mode === 'blitz';
   const uniek = dedupeMistakes(QUIZ.mistakes);
   let savedName = '';
   try{ savedName = localStorage.getItem(NAAM_KEY) || ''; }catch(e){}
   const datum = new Date().toLocaleString('nl-NL', {dateStyle:'medium', timeStyle:'short'});
+
+  const scoreBlock = isBlitz ? `
+    <div class="score-ring">
+      <div class="score-big">${QUIZ.correct}</div>
+      <div class="score-out">punten &middot; ${formatDuration(QUIZ.survived)} volgehouden &middot; ${esc(datum)}</div>
+    </div>
+    <div class="stats-row" style="justify-content:center">
+      <div class="stat-badge"><div class="val">${STATS.modes.blitz.best}</div><div class="lbl">Hoogste score</div></div>
+      <div class="stat-badge"><div class="val">${STATS.modes.blitz.total}</div><div class="lbl">Potjes gespeeld</div></div>
+    </div>` : `
+    <div class="score-ring">
+      <div class="score-big">${QUIZ.correct}/10</div>
+      <div class="score-out">${Math.round(100*QUIZ.correct/10)}% goed &middot; ${10-QUIZ.correct} fout &middot; ${esc(datum)}</div>
+    </div>
+    <div class="stats-row" style="justify-content:center">
+      <div class="stat-badge"><div class="val">${STATS.modes[QUIZ.mode].best}</div><div class="lbl">Beste reeks</div></div>
+      <div class="stat-badge"><div class="val">${STATS.modes[QUIZ.mode].total}</div><div class="lbl">Totaal geoefend</div></div>
+    </div>`;
 
   const herhaalHtml = uniek.length ? `
     <div class="panel" id="herhaal-panel">
@@ -548,18 +879,11 @@ function renderResult(){
   </div>
   <div class="panel" style="text-align:center" id="print-report">
     <input id="leerlingnaam" class="inp" placeholder="Naam leerling (voor de uitslag)" value="${esc(savedName)}" oninput="onNaamInput(this.value)">
-    <div class="score-ring">
-      <div class="score-big">${QUIZ.correct}/10</div>
-      <div class="score-out">${pct}% goed &middot; ${fout} fout &middot; ${esc(datum)}</div>
-    </div>
-    <div class="stats-row" style="justify-content:center">
-      <div class="stat-badge"><div class="val">${STATS.modes[QUIZ.mode].best}</div><div class="lbl">Beste reeks</div></div>
-      <div class="stat-badge"><div class="val">${STATS.modes[QUIZ.mode].total}</div><div class="lbl">Totaal geoefend</div></div>
-    </div>
+    ${scoreBlock}
   </div>
   ${herhaalHtml}
   <div class="btn-row" style="justify-content:center">
-    <button class="btn btn-gold" onclick="startQuiz('${QUIZ.mode}')">Nog een ronde</button>
+    <button class="btn btn-gold" onclick="${isBlitz ? "go('blitz')" : "startQuiz('"+QUIZ.mode+"')"}">Nog een ronde</button>
     <button class="btn btn-primary" onclick="printResult()">Print / bewaar als PDF</button>
     <button class="btn btn-ghost" id="copy-btn" onclick="copyResult()">Kopieer als tekst</button>
     <button class="btn btn-ghost" onclick="go('home')">Terug naar overzicht</button>
@@ -575,15 +899,17 @@ function copyResult(){
   const naamEl = document.getElementById('leerlingnaam');
   const naam = naamEl ? naamEl.value.trim() : '';
   const datum = new Date().toLocaleString('nl-NL', {dateStyle:'medium', timeStyle:'short'});
-  const fout = 10 - QUIZ.correct;
   const uniek = dedupeMistakes(QUIZ.mistakes);
   const lijst = uniek.map(m=> m.type==='letter'
     ? `${m.ref.u} ${m.ref.l} (${m.ref.naam})`
     : `${m.ref.gr} (${m.ref.tr})`);
+  const scoreLine = QUIZ.mode === 'blitz'
+    ? 'Score: ' + QUIZ.correct + ' punten, ' + formatDuration(QUIZ.survived) + ' volgehouden\n'
+    : 'Score: ' + QUIZ.correct + '/10 (' + Math.round(100*QUIZ.correct/10) + '%), ' + (10-QUIZ.correct) + ' fout\n';
   const tekst = 'Griekse Alfabet Trainer — ' + meta.title + '\n'
     + (naam ? 'Leerling: ' + naam + '\n' : '')
     + 'Datum: ' + datum + '\n'
-    + 'Score: ' + QUIZ.correct + '/10 (' + Math.round(100*QUIZ.correct/10) + '%), ' + fout + ' fout\n'
+    + scoreLine
     + (lijst.length ? 'Nog te herhalen: ' + lijst.join(', ') + '\n' : 'Alles goed beantwoord.\n');
   const btn = document.getElementById('copy-btn');
   const reset = ()=>{ if(btn) btn.textContent = 'Kopieer als tekst'; };
