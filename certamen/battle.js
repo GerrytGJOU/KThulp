@@ -1149,14 +1149,20 @@ async function bmIdentContinue(){
 async function bmGoogleLinkCurrentIdent(identOverride){
   const ident=identOverride||BM_IDENT||bmIdentLoad();
   if(!ident||!ident.klascode||!ident.leerlingcode){ toast("Geen profiel","Meld je eerst aan met je klascode en leerlingcode."); return; }
-  const r=await bmGoogleSignIn({action:"link", klas:ident.klascode, lid:ident.leerlingcode, returnScreen:_screen});
-  if(r.redirecting) return; // pagina navigeert weg; wordt afgehandeld na terugkomst
-  if(!r.ok){ toast("Koppelen mislukt", r.error||"Onbekende fout"); return; }
-  const w=await bmGoogleWriteLink(r.uid, ident.klascode, ident.leerlingcode);
-  if(!w.ok){ toast("Koppelen mislukt", w.error); return; }
-  if(BM_IDENT) BM_IDENT.googleUid=r.uid;
-  bmIdentSave({...ident, googleUid:r.uid});
-  toast("Gekoppeld!","Je kunt nu ook met dit Google-account inloggen op een nieuw toestel.");
+  try{
+    const r=await bmGoogleSignIn({action:"link", klas:ident.klascode, lid:ident.leerlingcode, returnScreen:_screen});
+    if(r.redirecting) return; // pagina navigeert weg; wordt afgehandeld na terugkomst
+    if(!r.ok){ toast("Koppelen mislukt", r.error||"Onbekende fout"); return; }
+    const w=await bmGoogleWriteLink(r.uid, ident.klascode, ident.leerlingcode);
+    if(!w.ok){ toast("Koppelen mislukt", w.error); return; }
+    if(BM_IDENT) BM_IDENT.googleUid=r.uid;
+    bmIdentSave({...ident, googleUid:r.uid});
+    toast("Gekoppeld!","Je kunt nu ook met dit Google-account inloggen op een nieuw toestel.");
+  }catch(e){
+    // Voorkomt een stille "unhandled rejection": zonder deze vangst leek de knop
+    // niets te doen als bmGoogleSignIn afwijst (bv. auth/unauthorized-domain).
+    toast("Koppelen mislukt", "Onverwachte fout: "+(e?.message||e||"onbekend"));
+  }
 }
 // Zoekt de gekoppelde identiteit op voor een zojuist ingelogde Google-uid en laadt hem in
 // BM_IDENT, precies zoals de klascode-flow dat doet. Gedeeld door bmGoogleLoginFresh
