@@ -392,15 +392,28 @@ function bmGoogleHandleRedirectResult(){
   try{ const r=localStorage.getItem(BM_GOOGLE_REDIRECT_KEY); if(r){ intent=JSON.parse(r); localStorage.removeItem(BM_GOOGLE_REDIRECT_KEY); } }catch(e){}
   if(!intent) return Promise.resolve(false);
   return firebase.auth().getRedirectResult().then(async result=>{
-    if(!result || !result.user){
-      // Geen pending credential gevonden terwijl we wél een opgeslagen intent hadden —
-      // meld dit i.p.v. stil niets te doen, anders lijkt de knop alsof hij werkt terwijl
-      // er nooit iets naar Firebase is geschreven.
+    let user = result && result.user;
+    if(!user){
+      // getRedirectResult() blijkt in de praktijk soms te vroeg te resolven zonder user,
+      // terwijl firebase.auth().currentUser een fractie later via onAuthStateChanged wél
+      // de zojuist ingelogde gebruiker krijgt (waargenomen 2026-09-07 via live reproductie:
+      // getRedirectResult() gaf niets terug, maar currentUser was meteen erna al gezet).
+      // Geef Firebase daarom nog een korte kans om de auth-state te laten settelen
+      // voordat we het als mislukt beschouwen.
+      user = await new Promise(resolve=>{
+        if(firebase.auth().currentUser){ resolve(firebase.auth().currentUser); return; }
+        const unsub=firebase.auth().onAuthStateChanged(u=>{ unsub(); resolve(u); });
+        setTimeout(()=>{ unsub(); resolve(firebase.auth().currentUser); }, 3000);
+      });
+    }
+    if(!user){
+      // Ook na de fallback geen gebruiker — meld dit i.p.v. stil niets te doen, anders
+      // lijkt de knop alsof hij werkt terwijl er nooit iets naar Firebase is geschreven.
       if(typeof toast==="function") toast("Koppelen mislukt","Geen Google-resultaat ontvangen na het inloggen. Probeer het nog eens.");
-      console.warn("bmGoogleHandleRedirectResult: getRedirectResult() gaf geen result.user", result);
+      console.warn("bmGoogleHandleRedirectResult: geen user via getRedirectResult() of onAuthStateChanged-fallback", result);
       return false;
     }
-    const uid=result.user.uid;
+    const uid=user.uid;
     if(intent.action==="link" && intent.klas && intent.lid){
       const w=await bmGoogleWriteLink(uid, intent.klas, intent.lid);
       if(!w.ok && typeof toast==="function") toast("Koppelen mislukt", w.error);
