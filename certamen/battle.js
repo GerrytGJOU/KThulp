@@ -2386,6 +2386,44 @@ const BM_HAARKLEUR_FILTER = {
   "groen":  "hue-rotate(60deg) brightness(0.9)",
 };
 
+/* ---- HELM × HAARSTIJL: uitstekende plukken verbergen ----
+   Twee haarstijlen steken door de bedekkende helmen heen: "wild" en "knot"
+   hebben punten die bóven de helmrand uitkomen. Nagemeten op de sprites zelf
+   (aantal haarpixels boven de bovenste helmpixel in dezelfde kolom, frame 1):
+
+       haar      standaard  open  hopliet
+       kort            1      2       0     ok
+       kaal            0      0       0     ok
+       hanekam         0      1       0     zit onder de helm, ok
+       lang            0      1       9     alleen in de nek, ok
+       vlecht          0      1      15     alleen in de nek, ok
+       middel          6      8      16     pluk naar voren — verbergen
+       wild           40     48      27     steekt uit — verbergen
+       knot           69    125      53     steekt uit — verbergen
+
+   De grens ligt bij "steekt er iets bóven de helmrand uit op álle drie de
+   bedekkende helmen". lang en vlecht scoren alleen op de Hoplietenhelm, en
+   dat is het haar dat in de nek hangt — dat hoort juist zo.
+
+   Bandana en Kroon staan hier bewust niet bij: die hóren haar te laten zien.
+
+   De keuze van de speler blijft staan — we tonen alleen tijdelijk een platte
+   stijl zolang zo'n helm op is. Kiest hij "Geen helm", "Bandana" of "Kroon",
+   dan komt zijn eigen kapsel meteen weer tevoorschijn. */
+const BM_HELM_BEDEKT = new Set(["standard","open","hopliet"]);
+const BM_HAAR_STEEKT_UIT = new Set(["wild","knot","middel"]);
+const BM_HAAR_ONDER_HELM = "kort";   // platte stijl, past onder alle drie
+// Nette naam van een avatar-optie (voor meldingen in de editor).
+function bmOptNaam(partId,id){
+  const o=BM_AVATAR_PARTS[partId]?.opts.find(x=>x.id===id);
+  return o?o.nm:(id||"");
+}
+function bmZichtbaarHaar(cosm){
+  const haar=cosm.haar||"kort";
+  return (BM_HELM_BEDEKT.has(cosm.helm) && BM_HAAR_STEEKT_UIT.has(haar))
+    ? BM_HAAR_ONDER_HELM : haar;
+}
+
 // CSS-filters per capekleur (cape_kort.png is goud/geel als basis).
 const BM_CAPEKLEUR_FILTER = {
   "goud":   "none",
@@ -2482,7 +2520,7 @@ function _bmPixelLayers(cosm, dirCls, extraClass="") {
     ${L(baseSrc)}
     ${L(A.ogen[cosm.oogkleur||"blauw"])}
     ${L(A.borstband[cosm.borstband||"geen"])}
-    ${L(A.haar[cosm.haar||"kort"],"",haarStyle)}
+    ${L(A.haar[bmZichtbaarHaar(cosm)],"",haarStyle)}
     ${L(A.armor[cosm.armor||"licht"],"", BM_ARMOR_TINT_FILTER[cosm.armor] ? `filter:${BM_ARMOR_TINT_FILTER[cosm.armor]}` : "")}
     ${baardLayers}
     ${L(A.extra[cosm.extra||"geen"])}
@@ -4821,8 +4859,14 @@ SCREENS.battleAvatarEdit = function(){
         ${bonusHTML}
       </button>`;
     }).join("");
+    // Uitleg als de gekozen haarstijl nu onder de helm verstopt zit — anders
+    // lijkt het alsof de keuze niet werkt (zie bmZichtbaarHaar).
+    const haarVerstopt = partId==="haar" && bmZichtbaarHaar(av)!==(av.haar||"kort");
+    const notitie = haarVerstopt
+      ? `<div class="note" style="margin:-8px 0 12px">Je ${esc(bmOptNaam("haar",av.haar))} zit onder de helm ${esc(bmOptNaam("helm",av.helm))} verstopt. Kies "Geen helm", "Bandana" of "Kroon" en je ziet 'm weer.</div>`
+      : "";
     return`<div class="eyebrow l">${esc(part.nm)}</div>
-      <div class="bm-opts">${opts}</div>`;
+      <div class="bm-opts">${opts}</div>${notitie}`;
   }
 
   H(brand(false)+`

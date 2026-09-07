@@ -710,6 +710,30 @@ telt `vh` de adresbalk mee. Binnen het paneel staan compactere varianten van
 
 ---
 
+## Helm × haarstijl: uitstekende plukken verbergen
+
+Drie haarstijlen steken door de bedekkende helmen heen. Nagemeten op de sprites zelf —
+aantal haarpixels bóven de bovenste helmpixel in dezelfde kolom, frame 1:
+
+| haar | standaard | open | hopliet | |
+|---|---|---|---|---|
+| kort | 1 | 2 | 0 | ok |
+| kaal | 0 | 0 | 0 | ok |
+| hanekam | 0 | 1 | 0 | zit onder de helm, ok |
+| lang | 0 | 1 | 9 | alleen in de nek, ok |
+| vlecht | 0 | 1 | 15 | alleen in de nek, ok |
+| **middel** | 6 | 8 | 16 | pluk naar voren — verbergen |
+| **wild** | 40 | 48 | 27 | steekt uit — verbergen |
+| **knot** | 69 | 125 | 53 | steekt uit — verbergen |
+
+`bmZichtbaarHaar()` (`certamen/battle.js`) toont voor die drie tijdelijk `kort` zolang
+een helm uit `BM_HELM_BEDEKT` op is. **De keuze van de speler wordt niet aangeraakt**:
+het is puur weergave in `_bmPixelLayers()`, dus bij "Geen helm", "Bandana" of "Kroon"
+staat het eigen kapsel er meteen weer. De avatar-editor zet er een regel bij als de
+gekozen stijl op dat moment verstopt zit, anders lijkt het alsof de keuze niet werkt.
+
+Bandana en Kroon staan bewust niet in `BM_HELM_BEDEKT`: die hóren haar te laten zien.
+
 ## Avatar-weergave: elke optie een eigen vorm
 
 `bmAvatarSVG()` (`certamen/battle.js`) tekent de gestileerde SVG-avatar die in de
