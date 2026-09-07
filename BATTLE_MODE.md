@@ -816,10 +816,31 @@ Opgeslagen in `/identities/{klas}/{code}/avatar` (object).
 #### Identiteitsonderdelen zijn nooit ontgrendelbaar (2026-08-28)
 
 `huid`, `oogkleur`, `haarkleur` en `borstband` hebben bewust géén `requires`:
-dat is hoe een leerling eruitziet, niet iets om te verdienen. (Blauw en groen
-haar blijven wél op niveau 8 — dat zijn fantasiekleuren, geen identiteit.)
+dat is hoe een leerling eruitziet, niet iets om te verdienen. (Blauw, groen en
+**oranje** haar blijven wél op niveau 8 — dat zijn fantasiekleuren, geen
+identiteit; oranje is feller dan een natuurlijke haarkleur.)
 Ze staan alle vier ook in `SP_AVATAR_FREE_PARTS` (`certamen/singleplayer-data.js`),
-zodat Chronica Classica ze vanaf de proloog vrijgeeft.
+zodat Chronica Classica ze vanaf de proloog vrijgeeft — daar geldt de
+niveau-eis dus niet, net zomin als voor blauw en groen.
+
+#### Rood haar vraagt een kleurmatrix, geen `hue-rotate`
+
+De haarsprites zijn blond en elke haarkleur is een CSS-filter erover
+(`BM_HAARKLEUR_FILTER`). Voor rood werkt dat niet: de lichtste pixels in het
+blonde haar hebben nauwelijks tint om te draaien, dus die bleven grijs en het
+geheel bleef **oranje** — precies wat er jarenlang onder de naam "Rood" stond,
+terwijl het kleurbolletje in de editor een echte roodtint liet zien.
+
+Rood gebruikt daarom `url(#haar-rood)`: een `feColorMatrix` (inline SVG in
+`index.html`, buiten `#app` omdat `H()` de inhoud daarvan vervangt). De
+coëfficiënten zijn met kleinste kwadraten gepast op 4400 echte haar- en
+baardpixels uit negen sprites, met als doel "zelfde lichtheid, tint 6°,
+verzadiging 0,65". Gemiddelde afwijking 3,3 per kanaal, tegen 23 voor de beste
+CSS-filterketen die een zoektocht over 11 varianten opleverde.
+
+Het oude oranje is niet verdwenen: dat is nu de aparte optie **Oranje**.
+`color-interpolation-filters="sRGB"` op de filter is nodig — SVG rekent
+standaard in linearRGB, en daar is de matrix niet op gepast.
 
 #### `geslacht` vervallen → losse `borstband`
 

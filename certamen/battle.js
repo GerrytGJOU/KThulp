@@ -2381,7 +2381,15 @@ const BM_HAARKLEUR_FILTER = {
   // kleur eruit, wit hetzelfde maar lichter opgetrokken.
   "grijs":  "grayscale(1) brightness(0.8)",
   "wit":    "grayscale(1) brightness(1.15)",
-  "rood":   "hue-rotate(-20deg) saturate(1.5)",
+  // Rood kan niet met hue-rotate: de haarsprites zijn blond en hun lichtste
+  // pixels hebben nauwelijks tint om te draaien, dus die bleven grijs en het
+  // geheel bleef oranje — precies wat er jarenlang onder de naam "Rood" stond.
+  // Dit is een feColorMatrix (zie <filter id="haar-rood"> in index.html), met
+  // kleinste kwadraten gepast op 4400 echte haar- en baardpixels: gemiddelde
+  // afwijking 3,3 per kanaal tegen 23 voor de beste filterketen.
+  "rood":   "url(#haar-rood)",
+  // En het oude "rood" leeft voort als wat het altijd al was: fel oranje.
+  "oranje": "hue-rotate(-20deg) saturate(1.5)",
   "blauw":  "hue-rotate(140deg) brightness(0.9)",
   "groen":  "hue-rotate(60deg) brightness(0.9)",
 };
@@ -2446,7 +2454,7 @@ const BM_CAPEKLEUR_SWATCH = {
 // Weergavekleur (swatch) per haarkleur — zelfde kleurenkiezer-stijl als de cape.
 const BM_HAARKLEUR_SWATCH = {
   "blond":"#e3c56b","bruin":"#7a4a24","zwart":"#2a2a2a","grijs":"#9a9a95","wit":"#e8e6df",
-  "rood":"#a5442a","blauw":"#3a6ea5","groen":"#3a7d3a",
+  "rood":"#b13729","oranje":"#e07b28","blauw":"#3a6ea5","groen":"#3a7d3a",
 };
 // Weergavekleur (swatch) per oogkleur — het hooglicht van de iris uit
 // PIXEL_ASSETS.ogen, zodat de bolletjes in de editor de sprite volgen.
