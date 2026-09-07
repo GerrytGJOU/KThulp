@@ -175,10 +175,12 @@ function trRenderModeBody(){
     <label class="fld">Bron</label>
     <div class="chips">
       <button class="chip ${TR_DRAFT.source==='freq'?'on':''}" onclick="TR_DRAFT.source='freq';trRenderModeBody()">Frequentielijst</button>
+      <button class="chip ${TR_DRAFT.source==='custom'?'on':''}" onclick="TR_DRAFT.source='custom';trRenderModeBody()">Eigen lijst</button>
       <button class="chip ${TR_DRAFT.source==='verbforms'?'on':''}" onclick="TR_DRAFT.source='verbforms';trRenderModeBody()">Werkwoordsvormen</button>
     </div>
   </div>
-  ${TR_DRAFT.source==="verbforms" ? vfqFilterHTML(TR_DRAFT.vf, TR_DRAFT.lang, "TR_DRAFT.vf", "trRenderModeBody()") : `
+  ${TR_DRAFT.source==="verbforms" ? vfqFilterHTML(TR_DRAFT.vf, TR_DRAFT.lang, "TR_DRAFT.vf", "trRenderModeBody()")
+  : TR_DRAFT.source==="custom" ? wlManagerHTML(TR_DRAFT, "TR_DRAFT", "trRenderModeBody()") : `
   <div class="panel">
     <label class="fld">Frequentiebereik — woord nr.</label>
     <div class="row">

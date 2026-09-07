@@ -35,6 +35,7 @@ SCREENS.freePractice = function(){
     <label class="fld">Bron</label>
     <div class="chips">
       <button class="chip ${FP_DRAFT.source==='freq'?'on':''}" onclick="FP_DRAFT.source='freq';SCREENS.freePractice()">Frequentielijst</button>
+      <button class="chip ${FP_DRAFT.source==='custom'?'on':''}" onclick="FP_DRAFT.source='custom';SCREENS.freePractice()">Eigen lijst</button>
       <button class="chip ${FP_DRAFT.source==='verbforms'?'on':''}" onclick="FP_DRAFT.source='verbforms';SCREENS.freePractice()">Werkwoordsvormen</button>
     </div>
   </div>
@@ -50,6 +51,10 @@ function fpRenderSrcBody(){
   const body = el("fpSrcBody"); if(!body) return;
   if(FP_DRAFT.source==="verbforms"){
     body.innerHTML = vfqFilterHTML(FP_DRAFT.vf, FP_DRAFT.lang, "FP_DRAFT.vf", "fpRenderSrcBody()");
+    return;
+  }
+  if(FP_DRAFT.source==="custom"){
+    body.innerHTML = wlManagerHTML(FP_DRAFT, "FP_DRAFT", "fpRenderSrcBody()");
     return;
   }
   const list = baseList(FP_DRAFT.lang).filter(usable);

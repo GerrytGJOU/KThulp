@@ -120,14 +120,7 @@ function renderSrcBody(){
     return;
   }
   if(DRAFT.source==="custom"){
-    body.innerHTML = `<div class="panel">
-      <label class="fld">Plak je woorden — één per regel: <b>woord = betekenis</b></label>
-      <textarea id="customBox" placeholder="servus = slaaf\namo = liefhebben, houden van\nμάχη = strijd, gevecht">${esc(DRAFT.customText)}</textarea>
-      <div class="note" style="margin:10px 0">Of upload een bestand (.csv, .txt of Excel .xlsx) met het woord in kolom 1 en de betekenis in kolom 2.</div>
-      <label class="filepick">${iconSVG("amphora",18,"currentColor")}<span>Bestand kiezen</span>
-        <input type="file" id="fileIn" accept=".csv,.txt,.tsv,.xlsx,.xls" onchange="handleFile(this)"></label>
-      <div id="customMsg" class="note" style="margin-top:8px"></div>
-    </div>`;
+    body.innerHTML = wlManagerHTML(DRAFT, "DRAFT", "renderSrcBody()");
   } else {
     const list = baseList(DRAFT.lang).filter(usable);
     const maxN = list.reduce((m,w)=>Math.max(m,w.f||0),0);
@@ -152,30 +145,6 @@ function renderSrcBody(){
 }
 function setRange(a,b){ DRAFT.fromN=a; DRAFT.toN=b; SCREENS.hostSource(); }
 function setCat(id){ DRAFT.cat=id; SCREENS.hostSource(); }
-function handleFile(input){
-  const file=input.files&&input.files[0]; if(!file)return;
-  const msg=el("customMsg"); if(msg)msg.textContent="Bestand lezen…";
-  const name=(file.name||"").toLowerCase();
-  const reader=new FileReader();
-  reader.onerror=()=>{ if(msg)msg.textContent="Kon het bestand niet lezen."; };
-  if(name.endsWith(".xlsx")||name.endsWith(".xls")){
-    // SheetJS alleen laden als het nodig is
-    loadSheetJS().then(XLSX=>{
-      reader.onload=e=>{ try{
-        const wb=XLSX.read(new Uint8Array(e.target.result),{type:"array"});
-        const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:""});
-        ingestRows(rows);
-      }catch(err){ if(msg)msg.textContent="Kon het Excel-bestand niet lezen."; } };
-      reader.readAsArrayBuffer(file);
-    }).catch(()=>{ if(msg)msg.textContent="Excel vereist internet. Plak de woorden anders als tekst."; });
-  } else {
-    reader.onload=e=>{ try{
-      const text=e.target.result, sep=text.indexOf("\t")>=0?"\t":(text.indexOf(";")>=0?";":",");
-      ingestRows(text.split(/\r?\n/).map(l=>l.split(sep)));
-    }catch(err){ if(msg)msg.textContent="Kon het bestand niet lezen."; } };
-    reader.readAsText(file);
-  }
-}
 function loadSheetJS(){
   return new Promise((res,rej)=>{
     if(window.XLSX) return res(window.XLSX);
@@ -184,24 +153,7 @@ function loadSheetJS(){
     s.onload=()=>res(window.XLSX); s.onerror=rej; document.head.appendChild(s);
   });
 }
-function ingestRows(rows){
-  const msg=el("customMsg");
-  if(!rows||!rows.length){ if(msg)msg.textContent="Leeg bestand."; return; }
-  let la=0,nl=1,start=0;
-  const head=rows[0].map(c=>String(c||"").toLowerCase());
-  const fi=head.findIndex(h=>/lat|grie|woord/.test(h)), ni=head.findIndex(h=>/vert|betek|meaning/.test(h));
-  if(fi>=0&&ni>=0){ la=fi;nl=ni;start=1; } else if(head.some(h=>/[a-zα-ω]/.test(h))){ start=1; }
-  const lines=[];
-  for(let r=start;r<rows.length;r++){ const row=rows[r]; if(!row)continue;
-    const a=String(row[la]==null?"":row[la]).trim(), b=String(row[nl]==null?"":row[nl]).trim();
-    if(a&&b)lines.push(a+" = "+b);
-  }
-  DRAFT.customText=lines.join("\n"); DRAFT.source="custom";
-  const box=el("customBox"); if(box)box.value=DRAFT.customText;
-  if(msg)msg.textContent="Ingelezen: "+lines.length+" woorden.";
-}
 function confirmSource(){
-  if(DRAFT.source==="custom"){ const box=el("customBox"); if(box)DRAFT.customText=box.value; }
   const pool = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang) : buildPool(DRAFT);
   if(pool.length<4){ toast("Te weinig woorden","Kies een groter bereik/meer werkwoorden of tijden."); return; }
   if(DRAFT.game==="battle"){ go("battleHostSettings"); return; }

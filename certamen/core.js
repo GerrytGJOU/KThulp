@@ -48,6 +48,10 @@ function baseList(lang){ return lang==="el" ? VOCAB_EL : VOCAB_LA; }
 
 function buildPool(draft){
   if(draft.source==="custom"){
+    // Een opgeslagen Eigen Lijst (zie wordlists.js) levert de woorden al kant-
+    // en-klaar aan via customWords; customText blijft als fallback bestaan
+    // voor eventuele oudere aanroepen die nog los tekst doorgeven.
+    if(draft.customWords && draft.customWords.length) return draft.customWords.map(w=>({la:w.la, nl:w.nl, pos:w.pos||""}));
     return parseCustom(draft.customText);
   }
   let list = baseList(draft.lang).filter(usable);
