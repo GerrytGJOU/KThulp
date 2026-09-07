@@ -50,8 +50,8 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | **Training Mode** (thuis oefenen, §3) | `certamen/training.js` (`SCREENS.trainingMode`) | ✅ werkend — leerlingen oefenen woordjes, bouwen automatisch mee aan het garnizoen (zie de TP-waarschuwing hierboven voor het verschil met het oorspronkelijke §3.2-ontwerp) |
 | **Formatieve hint bij een fout antwoord** | `certamen/training.js` (`trShowMissHint()`, aangeroepen vanuit `trAnswer()`) | ✅ werkend — toont naast de gemarkeerde juiste-antwoordknop ook de volledige vertaling (alle betekenissen uit `TR_POOL`, niet alleen de eerste die als keuzeoptie diende); zie `benchmark-toetsing/02-wat-overnemen.md` |
 | **Publieke leerling-veldtochtkaart** (alleen-lezen) | `certamen/totalwar.js` (`SCREENS.totalWarMap`, `twStartLiveReadOnly`) | ✅ werkend — legenda klas↔beschaving + seizoensrecords |
-| **Seizoenen** | `certamen/totalwar.js` (`/totalwar/season`, `TW_SEASON_TITLES`, `twStartNewSeason`) | ✅ werkend — docent kan een nieuw seizoen starten via de docentenweergave |
-| Publiek uitlegscherm (alleen-lezen demo-kaart) | `certamen/totalwar.js` (`SCREENS.totalWar`) | ✅ werkend, ongewijzigd (blijft demo, want puur illustratief voor niet-ingelogde bezoekers) |
+| **Seizoenen** | `certamen/totalwar.js` (`/totalwar/season`, `TW_SEASON_TITLES`, `twStartNewSeason`) | ✅ werkend — docent kan een nieuw seizoen starten via de docentenweergave; het seizoensnummer bij zo'n reset is sinds 2026-09-07 een bewerkbaar promptveld (voorgesteld = huidig+1) i.p.v. altijd blind +1, zodat een verkeerd genummerd testseizoen bij de volgende reset gecorrigeerd kan worden |
+| Publiek uitlegscherm — **live** kaart (niet langer een demo) | `certamen/totalwar.js` (`SCREENS.totalWar`) | ✅ werkend — toont sinds 2026-09-07 de echte, live veldtochtkaart van het huidige seizoen (`twLoadMap(true,true,false)`, alleen-lezen net als `SCREENS.totalWarMap`) met seizoensnaam/-nummer erboven (`#twSeasonBox`, `twLoadSeasonAndStats()`), i.p.v. de statische `TW_DEMO_OWN`/`TW_DEMO_DEF`-voorbeeldstand die dit scherm eerder toonde |
 | Docent-kaart: **echte, blijvende veldtocht** i.p.v. demo-voorbeeld | `certamen/totalwar.js` (`SCREENS.totalWarPreview`, `twStartLive`, `twApplyLive`) | ✅ werkend — live Firebase-listener op `/totalwar/provinces`, geen hardcoded stand meer |
 | **Echte, geometrisch accurate SVG-kaart van het Romeinse Rijk (Trajanus)** | `certamen/map/provinces.svg` | ✅ werkend — **46 aanklikbare provincies**, elk met stabiele `id` (bv. `italia`, `baetica`, `gallia_belgica`) |
 | Provincieregister (naam, steden+tags, buren, zeeroutes, bonus) | `certamen/map/provinces.json` | ✅ werkend — alle 46 provincies hebben 1-3 historische steden (met sfeertag) én een `bonus`-veld (§3.4 afgerond, zie §3.5 hieronder voor het mechanisme) |
@@ -60,7 +60,7 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | Provincie-CSS (neutraal/hover/selected/enemy/ally) | `certamen/map/provinces.css` | ✅ werkend |
 | JS-helper om provincies te kleuren/muteren | `certamen/map/provinces.js` (`MapAPI`) | ✅ werkend: `setProvinceOwner`, `setProvinceDefense`, `setProvinceBonus`, `highlightProvince`, `resetProvince`, `drawSeaRoutes` |
 | **Firebase-schema + eenmalige campagne-seed** | `certamen/totalwar.js` (`twEnsureCampaignSeeded`) | ✅ werkend — `/totalwar/provinces/{id}` + `/totalwar/civs/{civId}`, idempotent (zie §4, met de `klasCivs`-omkering uit §9.5) |
-| **Klas↔beschaving-koppeling (docentenportaal)** | `certamen/games.js` (`tpAssignKlasCiv`/`tpLoadKlasCivs`, paneel in `SCREENS.teacherPortal`) | ✅ werkend — schrijft naar `/totalwar/klasCivs/{klascode}`, gevalideerd tegen bestaande Battle Mode-klascodes |
+| **Klas↔beschaving-koppeling (docentenportaal + Total War zelf)** | `certamen/games.js` (`tpAssignKlasCiv`/`tpLoadKlasCivs`, paneel in `SCREENS.teacherPortal` én in `SCREENS.totalWarPreview`, `certamen/totalwar.js`) | ✅ werkend — schrijft naar `/totalwar/klasCivs/{klascode}`, gevalideerd tegen bestaande Battle Mode-klascodes. Sinds 2026-09-07 staat exact hetzelfde koppelpaneel ook op de docent-veldtochtkaart zelf (niet langer alleen in het docentenportaal) |
 | **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageschade per spoor (`siege.stageDamage.{militia,walls,towers}`, zie §5.4 — **niet** het platte `damageTaken`-veld dat §4/§5.4 hieronder nog beschrijven); winst/verlies schrijft terug naar de provincie |
 | **Slijtageslag-reparatie** | `certamen/training.js` (`twRepairStageDamage`, aangeroepen vanuit `trAnswer()`) | ✅ werkend — trainen op het doorbroken spoor verlaagt `siege.stageDamage` automatisch mee, zie §5.4 |
 | **8**-facties-tabel + thuislanden (seed-data) | `certamen/totalwar.js` (`TW_CIVS`, `TW_HOME_PROVINCES`) | ✅ werkend — **niet** 7: naast de 7 uit §2 bestaat ook `britanni` (Britten, thuisprovincie `britannia`) al in de seed-data, zie de correctie bij §2 hieronder |
@@ -133,42 +133,59 @@ is er ná dat plan alsnog bijgekomen en staat al in de echte seed-data,
 `TW_CIVS`/`TW_HOME_PROVINCES` in `certamen/totalwar.js`), elk met een
 thuisland dat **volledig binnen de bestaande 46-provinciekaart** ligt (zie
 §9.1 voor waarom dat een bewuste, afgedwongen keuze is t.o.v. het originele
-docx-plan):
+docx-plan).
 
-| Factie (`civId`) | Kleur | Thuisprovincie(s) op de echte kaart |
+> ⚠️ **Balanswijziging (2026-09-07, op verzoek, bij het starten van het
+> echte Seizoen 1).** Elke factie startte oorspronkelijk met 1–5 thuis­
+> provincies (tabel hieronder toonde dat als "Thuisprovincie(s)"). Dat gaf
+> grotere thuislanden (Rome, Perzen) een structurele voorsprong t.o.v.
+> kleinere (Britten, die toen al maar 1 hadden). Nu start **elke factie met
+> precies 1 basisprovincie** — altijd haar eigen vlaggenschip/hoofdstad
+> (§3.7, `twHomeFlagshipOf()`) — en bouwt de rest van haar rijk net als
+> ieder ander zelf op vanaf de neutrale kaart. `TW_HOME_PROVINCES`
+> (`certamen/totalwar.js`) is hierop aangepast; zowel de eenmalige
+> campagne-seed (`twEnsureCampaignSeeded()`) als elke latere
+> seizoensreset (`twStartNewSeason()`) gebruiken deze ene bron, dus beide
+> zijn automatisch meeveranderd.
+
+| Factie (`civId`) | Kleur | Basisprovincie op de echte kaart |
 |---|---|---|
-| `roma` (Romeinen) | `#a8261a` | `italia`, `sicilia`, `sardinia`, `corsica`, `dalmatia` |
-| `gallii` (Galliërs) | `#3f7d3a` | `gallia_lugdunensis`, `gallia_aquitania`, `gallia_belgica`, `gallia_narbonensis` |
-| `germani` (Germanen) *(nieuw t.o.v. huidige demo)* | `#4a2c11` | `germania_superior`, `germania_inferior` |
-| `athenae` (Grieken) | `#2e6fb0` | `achaea`, `macedonia`, `thracia` |
-| `persae` (Perzen) | `#8a4fb0` | `cappadocia`, `galatia`, `syria`, `armenia`, `mesopotamia` |
-| `carthago` (Carthagers) *(nieuw)* | `#550088` | `africa_proconsularis`, `mauretania_caesariensis`, `mauretania_tingitana` |
-| `aegyptii` (Egyptenaren) *(nieuw)* | `#e67e22` | `aegyptus`, `arabia`, `creta_et_cyrene` |
+| `roma` (Romeinen) | `#a8261a` | `italia` |
+| `gallii` (Galliërs) | `#3f7d3a` | `gallia_lugdunensis` |
+| `germani` (Germanen) *(nieuw t.o.v. huidige demo)* | `#4a2c11` | `germania_inferior` |
+| `athenae` (Grieken) | `#2e6fb0` | `achaea` |
+| `persae` (Perzen) | `#8a4fb0` | `syria` |
+| `carthago` (Carthagers) *(nieuw)* | `#550088` | `africa_proconsularis` |
+| `aegyptii` (Egyptenaren) *(nieuw)* | `#e67e22` | `aegyptus` |
 | `britanni` (Britten) | `#1f8a8a` | `britannia` |
 | `neutral` | `#dfd5c6` (perkament) | de rest — zie §2.1 |
 
-Let op: `gallii` verliest in dit plan `germania_superior`/`germania_inferior`
-(die nu in `TW_DEMO_OWN` nog aan de Galliërs hangen) aan de nieuwe Germaanse
-factie — logischer thematisch (het zijn letterlijk de "Germania"-provincies)
-én het maakt een 7-facties-kaart mogelijk zonder één vierkante centimeter aan
-de bestaande SVG te hoeven wijzigen. Zie §9.1.
+Elke basisprovincie hierboven is toevallig ook precies het vlaggenschip/
+hoofdstad van die factie (§3.7) — dat was al zo bij het origineel-ontworpen
+thuisland en is dus geen nieuwe koppeling, alleen zijn de vier andere
+thuisprovincies van bv. Rome (Sicilia/Sardinia/Corsica/Dalmatia) nu gewoon
+onderdeel van de neutrale bufferzone (§2.1) geworden.
 
 ### 2.1 Neutrale bufferprovincies (bij campagnestart)
 
-Alle overige 26 provincies starten **neutraal** (AI-bezet, zwak) en zijn de
-eerste veroveringsdoelen (`britannia` is **geen** neutrale provincie meer —
-zie de correctie bij §2 hierboven, dat is `britanni` se eigen thuisland):
+Alle overige **38** provincies starten **neutraal** (AI-bezet, zwak) en zijn
+de eerste veroveringsdoelen:
 
-`tarraconensis`, `lusitania`, `baetica`, `baleares`, `raetia`,
-`noricum`, `alpes_poeninae`, `alpes_cottiae`, `alpes_maritimae`,
-`pannonia_superior`, `pannonia_inferior`, `moesia_superior`, `moesia_inferior`,
-`dacia`, `asia`, `bithynia_et_pontus`, `lycia_et_pamphylia`, `cilicia`,
-`cyprus`, `judea`.
+`alpes_cottiae`, `alpes_maritimae`, `alpes_poeninae`, `arabia`, `armenia`,
+`asia`, `baetica`, `baleares`, `bithynia_et_pontus`, `cappadocia`, `cilicia`,
+`corsica`, `creta_et_cyrene`, `cyprus`, `dacia`, `dalmatia`, `galatia`,
+`gallia_aquitania`, `gallia_belgica`, `gallia_narbonensis`,
+`germania_superior`, `judea`, `lusitania`, `lycia_et_pamphylia`,
+`macedonia`, `mauretania_caesariensis`, `mauretania_tingitana`,
+`mesopotamia`, `moesia_inferior`, `moesia_superior`, `noricum`,
+`pannonia_inferior`, `pannonia_superior`, `raetia`, `sardinia`, `sicilia`,
+`tarraconensis`, `thracia`.
 
-Dit geeft elke factie 2–5 direct aangrenzende neutrale provincies om vroeg in
-het schooljaar te veroveren zonder meteen buurfacties te raken — precies het
-"bufferzone"-principe uit het originele docx-plan, nu toegepast op de echte
-geometrie.
+Dit geeft elke factie meerdere direct aangrenzende neutrale provincies om
+vroeg in het schooljaar te veroveren zonder meteen buurfacties te raken —
+hetzelfde "bufferzone"-principe uit het originele docx-plan, nu toegepast op
+de echte geometrie, maar met een grotere buffer dan het eerdere ontwerp (elke
+oorspronkelijke "extra" thuisprovincie is nu zelf ook gewoon buffergebied).
 
 ---
 
@@ -618,6 +635,19 @@ krijgt precies één weg terug: een **opstand** op haar eigen vlaggenschip­
 provincie (haar oude hoofdstad, zie §3.7/`twHomeFlagshipOf()`), ongeacht wie
 die nu bezet.
 
+**Hergebruikt sinds 2026-09-07 voor ongebruikte volkeren.** Een volk zonder
+gekoppelde klas dit seizoen (nog geen entry in `/totalwar/klasCivs`, zie
+§7.1) krijgt bij het seeden/resetten (`twEnsureCampaignSeeded()`/
+`twStartNewSeason()`) zijn basisprovincie helemaal niet toegewezen — die
+blijft gewoon neutraal, precies zoals de rest van de kaart. Dat volk bezit
+dus vanaf dag 1 al 0 provincies en is daarmee, zonder enige extra code,
+al "rebellen" in de zin van dit hoofdstuk. Koppelt een docent er later
+alsnog een klas aan (`tpAssignKlasCiv()`), dan begint die klas meteen met
+precies deze opstandsflow: de enige beschikbare aanvalsknop staat op hun
+eigen (nog altijd neutrale) basisprovincie. Geen apart "onbespeeld
+volk"-concept nodig — het is gewoon het bestaande rebellen-mechanisme,
+toegepast vanaf het allereerste moment i.p.v. pas na een latere nederlaag.
+
 Bewust **geen nieuw Firebase-veld**: `twCivIsWiped(civId)` (`totalwar.js`)
 leidt "uitgeroeid" puur af uit de live eigendomsstand (`_twLiveProvinces`) —
 nul provincies bezitten = rebellen. Zodra de opstand slaagt en de beschaving
@@ -677,10 +707,32 @@ strikt-gescheiden dimensie.
 
 ### 7.1 Klas ↔ beschaving-koppeling
 
-Nieuw scherm/sectie in het docentenportaal (`SCREENS.teacherPortal`,
-`certamen/games.js`): een dropdown per klascode om een `civId` toe te wijzen,
-weggeschreven naar `/totalwar/civs/{civId}/klascode`. Eén klascode = één
+> ⚠️ Het `civId`-doelveld hieronder is verouderd t.o.v. §9.5: er wordt
+> geschreven naar `/totalwar/klasCivs/{klascode}` (many-to-one), niet naar
+> `/totalwar/civs/{civId}/klascode`.
+
+Sectie in het docentenportaal (`SCREENS.teacherPortal`, `certamen/games.js`):
+een dropdown per klascode om een `civId` toe te wijzen. Eén klascode = één
 beschaving, permanent (wijzigen kan, maar reset niet automatisch de kaart).
+
+**Sinds 2026-09-07 staat exact hetzelfde koppelpaneel ook direct op de
+docent-veldtochtkaart** (`SCREENS.totalWarPreview`, `certamen/totalwar.js`,
+`twRenderTeacherPreview()`) — de docent hoeft niet meer terug naar het
+portaal om tijdens het bekijken van de kaart een nieuwe klas te koppelen.
+Beide plekken hergebruiken dezelfde `tpAssignKlasCiv()`/`tpLoadKlasCivs()`/
+`tpLoadClasses()`-functies (`games.js`) en dezelfde `#tpTwKlas`/`#tpTwCiv`/
+`#twKlasCivList`-ID's; omdat maar één scherm tegelijk gerenderd is, is dat
+veilig.
+
+Bij die gelegenheid is ook een auth-race gefikst: `SCREENS.totalWarPreview`
+is (anders dan `SCREENS.teacherPortal`) rechtstreeks bereikbaar vanaf de
+publieke `SCREENS.totalWar`-uitleg, zonder eerst via `SCREENS.teacherLogin`
+te gaan. Een synchrone `isTeacherLoggedIn()`-check faalde daardoor soms ten
+onrechte vlak na een page-load, terwijl Firebase de "onthouden"-sessie nog
+aan het herstellen was (`firebase.auth().currentUser` is dan nog even
+`null`, ook al staat `remember` op `LOCAL`-persistentie). `totalWarPreview`
+wacht nu, net als `teacherLogin` al deed, eerst op `authReady()` voordat het
+een docent linksom terugstuurt naar de login.
 
 ### 7.2 Aanval starten (in de les)
 

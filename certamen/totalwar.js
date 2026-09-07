@@ -37,17 +37,22 @@ const TW_CIVS = {
   britanni: { nm:"Britten",      color:"#1f8a8a", soft:"#0f4d4d" },
 };
 
-/* ---- Thuisprovincies per beschaving: uitsluitend seed-data voor een nieuwe
-   veldtocht (zie twEnsureCampaignSeeded()) — TOTAL_WAR.md §2. Alle overige
-   provincies starten neutraal (§2.1). ---- */
+/* ---- Thuisprovincie per beschaving: uitsluitend seed-data voor een nieuwe
+   veldtocht (zie twEnsureCampaignSeeded()) — TOTAL_WAR.md §2. Elke beschaving
+   start met precies ÉÉN basisprovincie (altijd haar vlaggenschip/hoofdstad,
+   zie twHomeFlagshipOf()) — alle overige provincies starten neutraal (§2.1),
+   ook de vroegere "extra" thuisprovincies uit een eerder ontwerp (bv. Sicilia/
+   Sardinia/Corsica/Dalmatia voor de Romeinen). Bewuste balanswijziging
+   (2026-09-07, op verzoek): een volk moet zijn rijk net als ieder ander
+   helemaal zelf opbouwen vanaf de kaart, niet met een voorsprong beginnen. ---- */
 const TW_HOME_PROVINCES = {
-  roma:     ["italia","sicilia","sardinia","corsica","dalmatia"],
-  gallii:   ["gallia_lugdunensis","gallia_aquitania","gallia_belgica","gallia_narbonensis"],
-  germani:  ["germania_superior","germania_inferior"],
-  athenae:  ["achaea","macedonia","thracia"],
-  persae:   ["cappadocia","galatia","syria","armenia","mesopotamia"],
-  carthago: ["africa_proconsularis","mauretania_caesariensis","mauretania_tingitana"],
-  aegyptii: ["aegyptus","arabia","creta_et_cyrene"],
+  roma:     ["italia"],
+  gallii:   ["gallia_lugdunensis"],
+  germani:  ["germania_inferior"],
+  athenae:  ["achaea"],
+  persae:   ["syria"],
+  carthago: ["africa_proconsularis"],
+  aegyptii: ["aegyptus"],
   britanni: ["britannia"],
 };
 
@@ -213,7 +218,6 @@ let _twSelectedId = null;
    ------------------------------------------------------------ */
 SCREENS.totalWar = function(){
   document.body.classList.remove("greek");
-  _twLiveMode = false; // deze uitlegkaart toont altijd de statische demo-stand
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
@@ -253,12 +257,17 @@ SCREENS.totalWar = function(){
       actieve kleine klas net zo sterk kan zijn als een grote.</p></div>
   </div>
 
+  <div class="panel" id="twSeasonBox" style="text-align:center"><div class="note">Laden…</div></div>
+
   <div class="panel">
-    <h3>Veldtochtkaart (voorbeeld)</h3>
-    <p class="note" style="margin-bottom:10px">Zo kan de kaart er tijdens een
-    veldtocht uitzien — elke kleur is een beschaving. (Alleen-lezen voorbeeld.)</p>
+    <h3>Veldtochtkaart</h3>
+    <p class="note" style="margin-bottom:10px">De echte, live stand van dit seizoen —
+    elke kleur is een beschaving. Verandert zodra een klas verovert of verliest.</p>
     <div id="twMapHost" style="background:#9fc7f4;border:1px solid var(--stone4);border-radius:14px;overflow:hidden;min-height:120px">
       <div class="note" style="padding:22px;text-align:center">Kaart laden…</div>
+    </div>
+    <div id="twInfo" class="panel" style="margin:12px 0 0">
+      <span class="note">Klik op een provincie voor details.</span>
     </div>
     <div id="twLegendBox" class="chips" style="margin-top:12px"></div>
   </div>
@@ -269,8 +278,8 @@ SCREENS.totalWar = function(){
   </div>
 
   <div class="panel" style="text-align:center">
-    <p class="note" style="margin-bottom:12px">Benieuwd hoe de veldtocht er nu echt voor staat? Bekijk de live kaart, wie welke beschaving speelt, en de seizoensrecords.</p>
-    <button class="btn btn-gold" onclick="go('totalWarMap')">🗺️ Bekijk de veldtocht</button>
+    <p class="note" style="margin-bottom:12px">Wil je ook zien wie welke beschaving speelt en de seizoensrecords?</p>
+    <button class="btn btn-gold" onclick="go('totalWarMap')">🗺️ Bekijk de veldtocht in detail</button>
   </div>
 
   <div class="panel" style="text-align:center">
@@ -278,7 +287,8 @@ SCREENS.totalWar = function(){
     <button class="btn btn-gold" onclick="go('totalWarPreview')">${iconSVG("column",18,"currentColor")} Docentenweergave</button>
   </div>
   ${foot()}`);
-  twLoadMap(false);
+  twLoadMap(true, true, false);
+  twLoadSeasonAndStats();
 };
 
 /* ------------------------------------------------------------
@@ -330,13 +340,34 @@ SCREENS.totalWarMap = function(){
    Echte provinciekaart van het Romeinse Rijk met voorbeeldstand.
    ------------------------------------------------------------ */
 SCREENS.totalWarPreview = function(){
-  // Alleen docenten: bij twijfel (of een auth-fout) terug naar de login.
+  // Alleen docenten. Dit scherm is (anders dan teacherPortal) rechtstreeks
+  // bereikbaar vanaf de publieke SCREENS.totalWar-uitleg, dus vlak na een
+  // page-load kan Firebase de "onthouden"-sessie nog aan het herstellen zijn
+  // — currentUser is dan nog even null terwijl de docent wél degelijk
+  // ingelogd blijft (zie FBNet.authReady). Een synchrone isTeacherLoggedIn()-
+  // check zou zo'n docent onterecht terugsturen naar de login. Daarom eerst
+  // authReady() afwachten, net als SCREENS.teacherLogin al deed.
   let loggedIn=false;
   try{ loggedIn = teacherNet().isTeacherLoggedIn(); }catch(e){ loggedIn=false; }
-  if(!loggedIn){
+  if(loggedIn){ twRenderTeacherPreview(); return; }
+  document.body.classList.remove("greek");
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('totalWar')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Total War — docentenweergave</h2>
+  </div>
+  <div class="panel" style="text-align:center"><div class="note">Inlogstatus controleren…</div></div>`);
+  teacherNet().authReady().then(()=>{
+    if(_screen!=="totalWarPreview") return; // ondertussen weggenavigeerd
+    let ok=false;
+    try{ ok = teacherNet().isTeacherLoggedIn(); }catch(e){ ok=false; }
+    if(ok){ twRenderTeacherPreview(); return; }
     toast("Alleen voor docenten","Log eerst in via het docentenportaal.");
-    go("teacherLogin"); return;
-  }
+    go("teacherLogin");
+  });
+};
+
+function twRenderTeacherPreview(){
   document.body.classList.remove("greek");
   H(brand(true)+`
   <div class="scrhead">
@@ -374,6 +405,21 @@ SCREENS.totalWarPreview = function(){
   </div>
 
   <div class="panel">
+    <label class="fld">Total War — klas ↔ beschaving</label>
+    <div class="note" style="margin:2px 0 8px">Koppel hier ook meteen nieuwe klassen aan een beschaving — precies dezelfde koppeling als in het docentenportaal (<code>/totalwar/klasCivs</code>).</div>
+    <div id="twKlasCivList" style="margin-top:6px"><div class="note" style="padding:4px 0">Laden…</div></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px">
+      <select id="tpTwKlas" style="flex:1;min-width:140px;padding:8px 10px;border-radius:8px;border:1px solid var(--stone4);background:var(--stone3);color:var(--cream);font-size:14px;font-family:inherit">
+        <option value="">— kies een klas —</option>
+      </select>
+      <select id="tpTwCiv" style="padding:8px 10px;border-radius:8px;border:1px solid var(--stone4);background:var(--stone3);color:var(--cream);font-size:14px;font-family:inherit">
+        ${Object.entries(TW_CIVS).filter(([id])=>id!=="neutral").map(([id,c])=>`<option value="${id}">${esc(c.nm)}</option>`).join("")}
+      </select>
+      <button class="btn btn-gold" style="padding:8px 14px" onclick="tpAssignKlasCiv()">Koppel</button>
+    </div>
+  </div>
+
+  <div class="panel">
     <h3>Seizoensbeheer</h3>
     <div class="note">Start een nieuw seizoen om de hele kaart te resetten (alle
     gebieden terug naar hun thuisland/neutraal, alle records gewist). Klas↔beschaving-
@@ -383,7 +429,9 @@ SCREENS.totalWarPreview = function(){
   ${foot()}`);
   twLoadMap(true, true);
   twLoadSeasonAndStats();
-};
+  tpLoadClasses();
+  tpLoadKlasCivs();
+}
 
 /* ---- Kaart laden (fetch + inline SVG) en eigendomsstatus toepassen ----
    interactive=false → alleen-lezen (geen klikselectie); default true.
@@ -507,8 +555,19 @@ async function twEnsureCampaignSeeded(){
     }catch(e){ console.warn("twEnsureCampaignSeeded: ownerSince-backfill mislukt", e); }
     return true;
   }
+  // Een volk zonder gekoppelde klas (nog) speelt dit seizoen niet mee — laat
+  // zijn basisprovincie dan gewoon neutraal in plaats van 'm alvast te
+  // bezetten. Kiest een docent dat volk later alsnog (tpAssignKlasCiv()),
+  // dan bezit het 0 provincies en start die klas automatisch via de al
+  // bestaande "rebellen"-opstandsmechanic (§5.7, twCivIsWiped()) op precies
+  // die (dan nog altijd neutrale) basisprovincie — geen apart mechanisme nodig.
+  const klasCivsSnap0 = await fbDB.ref("totalwar/klasCivs").once("value");
+  const activeCivs0 = new Set(Object.values(klasCivsSnap0.val()||{}));
   const ownerOf = {};
-  Object.entries(TW_HOME_PROVINCES).forEach(([civId,ids])=> ids.forEach(id=> ownerOf[id]=civId));
+  Object.entries(TW_HOME_PROVINCES).forEach(([civId,ids])=>{
+    if(!activeCivs0.has(civId)) return;
+    ids.forEach(id=> ownerOf[id]=civId);
+  });
   // Eerste keer seeden: nog steeds per-knooppunt geschreven (i.p.v. één
   // root-update) om dezelfde reden als de backfill hierboven.
   const writes = [];
@@ -779,16 +838,31 @@ function twRenderHighlights(){
    Dubbele bevestiging (typen) omdat dit onomkeerbaar is. ---- */
 async function twStartNewSeason(){
   if(!initFirebase()) return;
-  const nextNum = ((_twSeason&&_twSeason.number)||1)+1;
+  const suggestedNum = ((_twSeason&&_twSeason.number)||1)+1;
   const typed = prompt(`Nieuw seizoen starten? Dit reset de hele kaart (alle gebieden terug naar hun thuisland/neutraal) en alle records. Klas↔beschaving-koppelingen blijven staan.\n\nTyp NIEUW SEIZOEN om te bevestigen:`);
   if((typed||"").trim().toUpperCase()!=="NIEUW SEIZOEN"){
     if(typed!==null) toast("Geannuleerd","Er is niets gereset.");
     return;
   }
+  // Seizoensnummer is bewust aanpasbaar (niet blind +1): zo kan een docent een
+  // per ongeluk verkeerd genummerd testseizoen corrigeren bij de eerstvolgende
+  // echte reset (bv. "seizoen 1" was eigenlijk nog een test → hernummer de
+  // nieuwe start alsnog naar 1 i.p.v. 2).
+  const numInput = (prompt("Seizoensnummer voor de nieuwe veldtocht:", String(suggestedNum))||"").trim();
+  const nextNum = /^\d+$/.test(numInput) ? parseInt(numInput,10) : suggestedNum;
   const title = (prompt("Titel voor Seizoen "+nextNum+" (leeg = automatisch):","")||"").trim()
-    || TW_SEASON_TITLES[(nextNum-1)%TW_SEASON_TITLES.length];
+    || TW_SEASON_TITLES[Math.max(0,nextNum-1)%TW_SEASON_TITLES.length];
+  // Zelfde regel als in twEnsureCampaignSeeded(): een volk zonder gekoppelde
+  // klas dit seizoen krijgt zijn basisprovincie niet — die blijft neutraal,
+  // zodat het volk pas via de bestaande "rebellen"-opstand (§5.7) een eerste
+  // gebied verovert zodra een docent er alsnog een klas aan koppelt.
+  const klasCivsSnap = await fbDB.ref("totalwar/klasCivs").once("value");
+  const activeCivs = new Set(Object.values(klasCivsSnap.val()||{}));
   const ownerOf = {};
-  Object.entries(TW_HOME_PROVINCES).forEach(([civId,ids])=> ids.forEach(id=> ownerOf[id]=civId));
+  Object.entries(TW_HOME_PROVINCES).forEach(([civId,ids])=>{
+    if(!activeCivs.has(civId)) return;
+    ids.forEach(id=> ownerOf[id]=civId);
+  });
   const upd = {};
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
