@@ -1191,9 +1191,9 @@ async function bmGoogleUnlink(){
   if(!ident||!ident.googleUid) return;
   const r=await bmGoogleRemoveLink(ident.googleUid, ident.klascode, ident.leerlingcode);
   if(!r.ok){ toast("Ontkoppelen mislukt", r.error); return; }
-  if(BM_IDENT) delete BM_IDENT.googleUid;
+  if(BM_IDENT){ delete BM_IDENT.googleUid; delete BM_IDENT.googleEmail; }
   const saved=bmIdentLoad();
-  if(saved){ delete saved.googleUid; bmIdentSave(saved); }
+  if(saved){ delete saved.googleUid; delete saved.googleEmail; bmIdentSave(saved); }
   toast("Ontkoppeld","Je profiel is niet meer gekoppeld aan een Google-account.");
 }
 
@@ -4694,7 +4694,7 @@ SCREENS.battleProfile = function(){
   </div>
   ${BM_IDENT.googleUid?`
   <div class="panel" style="text-align:center;padding:10px 16px;margin:14px 0">
-    <div class="note">✅ Gekoppeld aan een Google-account</div>
+    <div class="note">✅ Gekoppeld aan${BM_IDENT.googleEmail?` <b>${esc(BM_IDENT.googleEmail)}</b>`:" een Google-account"}</div>
     <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="bmGoogleUnlink().then(()=>SCREENS.battleProfile())">Ontkoppelen</button>
   </div>
   `:`

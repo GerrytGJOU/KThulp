@@ -413,18 +413,18 @@ function bmGoogleHandleRedirectResult(){
       console.warn("bmGoogleHandleRedirectResult: geen user via getRedirectResult() of onAuthStateChanged-fallback", result);
       return false;
     }
-    const uid=user.uid;
+    const uid=user.uid, email=user.email||"";
     if(intent.action==="link" && intent.klas && intent.lid){
-      const w=await bmGoogleWriteLink(uid, intent.klas, intent.lid);
+      const w=await bmGoogleWriteLink(uid, intent.klas, intent.lid, email);
       if(!w.ok && typeof toast==="function") toast("Koppelen mislukt", w.error);
       else if(w.ok){
-        // Lokale cache moet ook meteen googleUid krijgen, anders blijft het scherm na
-        // go(returnScreen) hieronder nog de oude (ongekoppelde) status tonen — de
-        // schrijfactie hierboven raakt alleen Firebase, niet BM_IDENT/bmIdentSave.
-        if(typeof BM_IDENT!=="undefined" && BM_IDENT) BM_IDENT.googleUid=uid;
+        // Lokale cache moet ook meteen googleUid/googleEmail krijgen, anders blijft het
+        // scherm na go(returnScreen) hieronder nog de oude (ongekoppelde) status tonen —
+        // de schrijfactie hierboven raakt alleen Firebase, niet BM_IDENT/bmIdentSave.
+        if(typeof BM_IDENT!=="undefined" && BM_IDENT){ BM_IDENT.googleUid=uid; BM_IDENT.googleEmail=email; }
         if(typeof bmIdentLoad==="function" && typeof bmIdentSave==="function"){
           const cached=bmIdentLoad();
-          if(cached) bmIdentSave({...cached, googleUid:uid});
+          if(cached) bmIdentSave({...cached, googleUid:uid, googleEmail:email});
         }
         if(typeof toast==="function") toast("Gekoppeld!","Je kunt nu ook met dit Google-account inloggen op een nieuw toestel.");
       }
@@ -452,7 +452,7 @@ function bmGoogleLookupLink(uid){
   return fbDB.ref("googleLinks/"+uid).once("value").then(s=>s.exists()?s.val():null);
 }
 
-async function bmGoogleWriteLink(uid, klas, lid){
+async function bmGoogleWriteLink(uid, klas, lid, email){
   if(!fbDB) initFirebase();
   if(!fbDB) return {ok:false, error:"Firebase niet beschikbaar"};
   try{
@@ -468,7 +468,11 @@ async function bmGoogleWriteLink(uid, klas, lid){
     }
     const updates={};
     updates["identities/"+klas+"/"+lid+"/googleUid"]=uid;
-    updates["googleLinks/"+uid]={klas, lid, linkedAt: firebase.database.ServerValue.TIMESTAMP};
+    // E-mailadres erbij tonen zodat een leerling (of docent) ziet mét welk account
+    // gekoppeld is — belangrijk omdat schoolaccounts na het examen vaak worden
+    // ingetrokken en dan een ander (privé-)account gekoppeld moet worden.
+    updates["identities/"+klas+"/"+lid+"/googleEmail"]=email||"";
+    updates["googleLinks/"+uid]={klas, lid, email:email||"", linkedAt: firebase.database.ServerValue.TIMESTAMP};
     await fbDB.ref().update(updates);
     return {ok:true};
   }catch(e){ return {ok:false, error:"Koppelen mislukt: "+(e?.message||e||"onbekende fout")}; }
@@ -480,6 +484,7 @@ async function bmGoogleRemoveLink(uid, klas, lid){
   try{
     const updates={};
     updates["identities/"+klas+"/"+lid+"/googleUid"]=null;
+    updates["identities/"+klas+"/"+lid+"/googleEmail"]=null;
     updates["googleLinks/"+uid]=null;
     await fbDB.ref().update(updates);
     return {ok:true};
