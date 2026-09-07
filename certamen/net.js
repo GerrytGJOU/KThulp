@@ -397,7 +397,17 @@ function bmGoogleHandleRedirectResult(){
     if(intent.action==="link" && intent.klas && intent.lid){
       const w=await bmGoogleWriteLink(uid, intent.klas, intent.lid);
       if(!w.ok && typeof toast==="function") toast("Koppelen mislukt", w.error);
-      else if(w.ok && typeof toast==="function") toast("Gekoppeld!","Je kunt nu ook met dit Google-account inloggen op een nieuw toestel.");
+      else if(w.ok){
+        // Lokale cache moet ook meteen googleUid krijgen, anders blijft het scherm na
+        // go(returnScreen) hieronder nog de oude (ongekoppelde) status tonen — de
+        // schrijfactie hierboven raakt alleen Firebase, niet BM_IDENT/bmIdentSave.
+        if(typeof BM_IDENT!=="undefined" && BM_IDENT) BM_IDENT.googleUid=uid;
+        if(typeof bmIdentLoad==="function" && typeof bmIdentSave==="function"){
+          const cached=bmIdentLoad();
+          if(cached) bmIdentSave({...cached, googleUid:uid});
+        }
+        if(typeof toast==="function") toast("Gekoppeld!","Je kunt nu ook met dit Google-account inloggen op een nieuw toestel.");
+      }
     }else if(intent.action==="login" && typeof bmGoogleFinishLogin==="function"){
       const fin=await bmGoogleFinishLogin(uid);
       if(fin.ok && typeof BM_IDENT_RETURN!=="undefined") intent.returnScreen=BM_IDENT_RETURN||"battleJoin";
