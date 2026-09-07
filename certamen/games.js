@@ -949,7 +949,7 @@ function syncStatusHTML(bmIdent){
       🔗 Gekoppeld aan <b>${esc(bmIdent.klascode)}</b> · <b>${esc(bmIdent.leerlingcode)}</b> — je XP loopt gelijk op al je toestellen.</div>
       <div class="panel" style="text-align:center;padding:10px 16px;margin-top:6px">
         ${g?`
-        <div class="note">✅ Gekoppeld aan een Google-account.</div>
+        <div class="note">✅ Gekoppeld aan${bmIdent.googleEmail?` <b>${esc(bmIdent.googleEmail)}</b>`:" een Google-account"}.</div>
         <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="bmGoogleUnlink().then(()=>SCREENS.collection())">Ontkoppelen</button>
         `:`
         <div class="note">Koppel je Google-account om op een nieuw toestel in te loggen zonder codes te typen.</div>
