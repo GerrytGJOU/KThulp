@@ -338,8 +338,26 @@ FBNet.createKlascode = function(code){
 };
 FBNet.deleteKlascode = function(code){
   if(!fbDB) initFirebase();
-  return fbDB.ref("klascodes/"+code.toUpperCase()).remove()
+  code=code.toUpperCase();
+  return fbDB.ref("klascodes/"+code).remove()
+    .then(()=>{
+      // usedKlascodes/{code} moet mee weg, anders blijft de klas voor altijd
+      // terugkomen in het portaaloverzicht: tpBuildGroups/tpRenderKlascodes
+      // behandelen elke aanwezige sleutel in usedKlascodes als "klas bestaat
+      // nog", ook als de waarde na deleteIdentity al op 0 staat — alleen het
+      // wissen van klascodes/{code} volstond dus niet.
+      fbDB.ref("usedKlascodes/"+code).remove().catch(()=>{});
+    })
     .catch(e=>Promise.reject(FBNet._friendlyKlascodeError(e,"Verwijderen mislukt.")));
+};
+// Ruimt een losstaande usedKlascodes/{code}-indexvermelding op (bv. van vóór de
+// deleteKlascode-fix hierboven): een klas die al verwijderd was uit klascodes/
+// maar bleef terugkomen in het portaaloverzicht omdat de index-sleutel nooit
+// werd gewist, ook niet toen de teller op 0 uitkwam.
+FBNet.cleanupUsedKlascode = function(code){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("usedKlascodes/"+code.toUpperCase()).remove()
+    .catch(e=>Promise.reject(FBNet._friendlyKlascodeError(e,"Opruimen mislukt.")));
 };
 FBNet.validateKlascode = function(code){
   if(!fbDB) return Promise.resolve(true); // offline: altijd toestaan
@@ -544,6 +562,7 @@ DemoNet.assignStudent   = function(){ return Promise.reject("Niet beschikbaar in
 DemoNet.deleteRoom      = function(){ return Promise.resolve(); };
 DemoNet.createKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.deleteKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.cleanupUsedKlascode = function(){ return Promise.resolve(); };
 DemoNet.validateKlascode= function(){ return Promise.resolve(true); };
 let _demoWordlists = {};
 DemoNet.getWordlists = function(){ return Promise.resolve(JSON.parse(JSON.stringify(_demoWordlists))); };

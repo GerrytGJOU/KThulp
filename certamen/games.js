@@ -1341,9 +1341,23 @@ function tpRenderKlascodes(){
         ${isApproved
           ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="tpDeleteKlascode('${esc(code)}')">Verwijder</button>`
           :`<button class="chip" onclick="tpApproveKlascode('${esc(code)}')">Goedkeuren</button>`}
+        ${!isApproved&&!count
+          ?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" title="Verwijdert alleen de losstaande vermelding — er is geen actieve klascode meer" onclick="tpCleanupUsedKlascode('${esc(code)}')">Opruimen</button>`
+          :""}
       </div>
     </div>`;
   }).join("");
+}
+// Ruimt een niet-goedgekeurde klascode zonder leerlingen op die (door een
+// inmiddels gefixte bug) na verwijdering bleef terugkomen — zie
+// FBNet.cleanupUsedKlascode. Alleen voor lege, niet-goedgekeurde codes: een
+// goedgekeurde code hoort via tpDeleteKlascode te gaan (die ruimt dit ook
+// meteen mee op) en een code met leerlingen moet je bewust via 'Verwijder'
+// bij de klas zelf wissen, niet stilzwijgend hier.
+function tpCleanupUsedKlascode(code){
+  teacherNet().cleanupUsedKlascode(code)
+    .then(()=>{ toast("Opgeruimd",code); tpLoadKlascodes(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
 }
 
 // Vult de klas-dropdown van het Total War-koppelpaneel met de docent-eigen
