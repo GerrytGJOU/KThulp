@@ -953,7 +953,7 @@ function syncStatusHTML(bmIdent){
         <button class="btn btn-ghost" style="font-size:13px;margin-top:8px" onclick="bmGoogleUnlink().then(()=>SCREENS.collection())">Ontkoppelen</button>
         `:`
         <div class="note">Koppel je Google-account om op een nieuw toestel in te loggen zonder codes te typen.</div>
-        <button class="btn btn-gold" style="font-size:13px;margin-top:8px" onclick="bmGoogleLinkCurrentIdent(bmIdent).then(()=>SCREENS.collection())">Koppel Google-account</button>
+        <button class="btn btn-gold" style="font-size:13px;margin-top:8px" onclick="bmGoogleLinkCurrentIdent().then(()=>SCREENS.collection())">Koppel Google-account</button>
         `}
       </div>`;
   }
