@@ -877,6 +877,59 @@ async function twStartNewSeason(){
   }catch(e){ toast("Mislukt", (e&&e.message)||""); }
 }
 
+/* ---- Klas↔beschaving-koppeling grijpt sinds 2026-09-07 ook meteen in op de
+   provincie-eigendom, zodat een volk zonder gekoppelde klas nooit stilzwijgend
+   een provincie "blijft houden" en een net gekoppeld volk niet eerst de
+   rebellen-opstand (§5.7) hoeft te winnen om te mogen meedoen — die opstand
+   blijft gereserveerd voor een volk dat écht tijdens de veldtocht is
+   uitgeroeid. Aangeroepen vanuit tpAssignKlasCiv()/tpUnassignKlasCiv()
+   (games.js), ná de klasCivs-schrijfactie zelf. ---- */
+
+/* Geeft een net (opnieuw) gekoppelde beschaving meteen haar basisprovincie/
+   vlaggenschip — geen opstand nodig, want die provincie stond gewoon nog
+   neutraal te wachten (zie de seed-/resetregel in
+   twEnsureCampaignSeeded()/twStartNewSeason() hierboven).
+   UITZONDERING: staat het vlaggenschip inmiddels bij een ANDER volk (een
+   niet-gekoppeld volk se basisprovincie kon intussen als gewone neutrale
+   provincie veroverd zijn door een actieve buur), dan grijpt dit NIET in —
+   dat volk moet dan, net als elk ander volledig uitgeroeid volk, zijn
+   basisprovincie via de bestaande opstand-flow heroveren (§5.7,
+   twAttackButtonHTML() — die werkt toch al "ongeacht wie het nu bezet"). */
+async function twGrantFreshFlagshipIfUnowned(civId){
+  if(!initFirebase() || !civId || civId==="neutral") return;
+  await twEnsureRegistry();
+  const flagship = twHomeFlagshipOf(civId);
+  if(!flagship) return;
+  const snap = await fbDB.ref("totalwar/provinces/"+flagship).once("value");
+  const owner = (snap.val()||{}).owner;
+  if(owner && owner!=="neutral") return; // eigen bezit, of veroverd door een ander: geen gratis start
+  await fbDB.ref("totalwar/provinces/"+flagship).update({
+    owner: civId, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+    siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime(),
+  });
+}
+
+/* Maakt een beschaving weer volledig neutraal (alle provincies die ze op dit
+   moment bezit) zodra de LAATSTE klas die aan haar gekoppeld was, ontkoppeld
+   wordt — een onbespeeld volk mag nooit stilzwijgend gebied blijven
+   vasthouden. Doet niets zolang er nog een andere klascode aan dezelfde
+   beschaving gekoppeld is. */
+async function twReleaseCivIfUnassigned(civId){
+  if(!initFirebase() || !civId || civId==="neutral") return;
+  const klasCivsSnap = await fbDB.ref("totalwar/klasCivs").once("value");
+  const stillAssigned = Object.values(klasCivsSnap.val()||{}).includes(civId);
+  if(stillAssigned) return;
+  const provSnap = await fbDB.ref("totalwar/provinces").once("value");
+  const provinces = provSnap.val()||{};
+  const upd = {};
+  Object.entries(provinces).forEach(([id,p])=>{
+    if(!p || p.owner!==civId) return;
+    upd["totalwar/provinces/"+id] = { owner:"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+      siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
+  });
+  if(Object.keys(upd).length) await fbDB.ref().update(upd);
+}
+
 /* ---- Aanvalsflow: knop verschijnt alleen als de gekozen aanvaller de
    provincie nog niet bezit én er via land/zee grenst aan een provincie die
    de aanvaller wél bezit (TOTAL_WAR.md §5.5/§5.6). ---- */
