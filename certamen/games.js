@@ -817,7 +817,10 @@ SCREENS.collection = function(){
       <div style="display:flex;gap:14px;align-items:center;margin-bottom:12px">
         <div style="flex:0 0 auto">${renderPixelHeroIcon(bmIdent.avatar,64)}</div>
         <div style="flex:1;min-width:0">
-          <div style="font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(bmIdent.name||"")}</div>
+          <div style="display:flex;align-items:center;gap:6px;min-width:0">
+            <div style="font-size:18px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(bmIdent.name||"")}</div>
+            <button class="chip" onclick="bmRenameSelf('collection')" title="Wijzig de naam die anderen zien" style="flex:0 0 auto;padding:3px 9px">✏️ Naam</button>
+          </div>
           <div class="note">${esc(bmIdent.klascode||"")} · ${esc(bmIdent.leerlingcode||"")}</div>
           <div class="pill" style="margin:4px 0 0">${esc(bmLv.title||bmLv.rank)} · niveau ${bmLv.level}${bmXb.starSuffix}</div>
         </div>
