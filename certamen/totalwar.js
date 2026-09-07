@@ -283,6 +283,11 @@ SCREENS.totalWar = function(){
   </div>
 
   <div class="panel" style="text-align:center">
+    <p class="note" style="margin-bottom:12px">Benieuwd naar eerdere seizoenen? Bekijk de eindstand, de winnaar en de hoogtepunten van elk afgesloten seizoen.</p>
+    <button class="btn btn-gold" onclick="go('totalWarHallOfFame')">🏛️ Hall of Fame</button>
+  </div>
+
+  <div class="panel" style="text-align:center">
     <p class="note" style="margin-bottom:12px">Ben je docent? Open de veldtochtkaart om klassen te koppelen en aanvallen te starten.</p>
     <button class="btn btn-gold" onclick="go('totalWarPreview')">${iconSVG("column",18,"currentColor")} Docentenweergave</button>
   </div>
@@ -328,6 +333,10 @@ SCREENS.totalWarMap = function(){
   <div class="panel">
     <h3>Hoogtepunten van dit seizoen</h3>
     <div id="twHighlights"><div class="note">Laden…</div></div>
+  </div>
+
+  <div class="panel" style="text-align:center">
+    <button class="btn btn-ghost btn-block" onclick="go('totalWarHallOfFame')">🏛️ Hall of Fame — eerdere seizoenen</button>
   </div>
   ${foot()}`);
   twLoadMap(true, true, false);
@@ -422,7 +431,9 @@ function twRenderTeacherPreview(){
   <div class="panel">
     <h3>Seizoensbeheer</h3>
     <div class="note">Start een nieuw seizoen om de hele kaart te resetten (alle
-    gebieden terug naar hun thuisland/neutraal, alle records gewist). Klas↔beschaving-
+    gebieden terug naar hun thuisland/neutraal). Het huidige seizoen wordt eerst
+    bewaard in de <a href="#" onclick="event.preventDefault();go('totalWarHallOfFame')" style="color:var(--hi)">Hall of Fame</a>
+    (eindstand, winnaar, hoogtepunten) — niets gaat verloren. Klas↔beschaving-
     koppelingen blijven staan. Doe dit bijvoorbeeld eens per schooljaar.</div>
     <button class="btn btn-ghost btn-block" style="margin-top:10px;color:#e07060;border-color:rgba(90,18,12,.4)" onclick="twStartNewSeason()">🔄 Nieuw seizoen starten</button>
   </div>
@@ -839,7 +850,7 @@ function twRenderHighlights(){
 async function twStartNewSeason(){
   if(!initFirebase()) return;
   const suggestedNum = ((_twSeason&&_twSeason.number)||1)+1;
-  const typed = prompt(`Nieuw seizoen starten? Dit reset de hele kaart (alle gebieden terug naar hun thuisland/neutraal) en alle records. Klas↔beschaving-koppelingen blijven staan.\n\nTyp NIEUW SEIZOEN om te bevestigen:`);
+  const typed = prompt(`Nieuw seizoen starten? Dit reset de hele kaart (alle gebieden terug naar hun thuisland/neutraal). Het huidige seizoen wordt eerst bewaard in de Hall of Fame. Klas↔beschaving-koppelingen blijven staan.\n\nTyp NIEUW SEIZOEN om te bevestigen:`);
   if((typed||"").trim().toUpperCase()!=="NIEUW SEIZOEN"){
     if(typed!==null) toast("Geannuleerd","Er is niets gereset.");
     return;
@@ -856,7 +867,12 @@ async function twStartNewSeason(){
   // klas dit seizoen krijgt zijn basisprovincie niet — die blijft neutraal,
   // zodat het volk pas via de bestaande "rebellen"-opstand (§5.7) een eerste
   // gebied verovert zodra een docent er alsnog een klas aan koppelt.
-  const klasCivsSnap = await fbDB.ref("totalwar/klasCivs").once("value");
+  const [klasCivsSnap, endingSeasonSnap, provNowSnap, statsNowSnap] = await Promise.all([
+    fbDB.ref("totalwar/klasCivs").once("value"),
+    fbDB.ref("totalwar/season").once("value"),
+    fbDB.ref("totalwar/provinces").once("value"),
+    fbDB.ref("totalwar/stats").once("value"),
+  ]);
   const activeCivs = new Set(Object.values(klasCivsSnap.val()||{}));
   const ownerOf = {};
   Object.entries(TW_HOME_PROVINCES).forEach(([civId,ids])=>{
@@ -864,6 +880,32 @@ async function twStartNewSeason(){
     ids.forEach(id=> ownerOf[id]=civId);
   });
   const upd = {};
+  // Hall of Fame (op verzoek, 2026-09-07): vóór het resetten wordt het
+  // AFLOPENDE seizoen gearchiveerd onder /totalwar/history/{seizoensnummer} —
+  // eindstand per provincie, wie welke klas speelde, de winnaar (grootste
+  // rijk) en de bestaande /totalwar/stats-hoogtepunten (bloedigste veldslag/
+  // sterkste solo-speler/grootste bouwer). SCREENS.totalWarHallOfFame leest
+  // deze tak. Geen archief bij de allereerste seed (dan bestaat
+  // totalwar/season nog niet) — er is dan ook niets om te archiveren.
+  const endingSeason = endingSeasonSnap.val();
+  if(endingSeason){
+    const provNow = provNowSnap.val()||{};
+    const finalOwner = {};
+    const counts = {};
+    Object.entries(provNow).forEach(([id,p])=>{
+      const o = (p&&p.owner) || "neutral";
+      finalOwner[id] = o;
+      if(o!=="neutral") counts[o]=(counts[o]||0)+1;
+    });
+    const winnerEntry = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+    const winnerCivId = winnerEntry ? winnerEntry[0] : null;
+    upd["totalwar/history/"+endingSeason.number] = {
+      number: endingSeason.number, title: endingSeason.title||"", startedAt: endingSeason.startedAt||null,
+      endedAt: FBNet.serverTime(), finalOwner, klasCivs: klasCivsSnap.val()||{},
+      winnerCivId, winnerProvinces: winnerCivId ? counts[winnerCivId] : 0,
+      stats: statsNowSnap.val()||null,
+    };
+  }
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
     upd["totalwar/provinces/"+id] = { owner: ownerOf[id]||"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
@@ -928,6 +970,141 @@ async function twReleaseCivIfUnassigned(civId){
       siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
   });
   if(Object.keys(upd).length) await fbDB.ref().update(upd);
+}
+
+/* ------------------------------------------------------------------
+   HALL OF FAME (TOTAL_WAR.md, op verzoek 2026-09-07) — archief van
+   afgesloten seizoenen. Elk seizoen dat de docent afsluit via
+   twStartNewSeason() schrijft eenmalig een snapshot naar
+   /totalwar/history/{seizoensnummer} (zie de archiefstap daar): eindstand
+   per provincie, wie welke klas speelde, de winnaar (grootste rijk) en de
+   bestaande /totalwar/stats-hoogtepunten van dat seizoen. Publiek leesbaar
+   (zelfde /totalwar-regel als de rest), geen aparte rules nodig.
+   ------------------------------------------------------------------ */
+let _twHistory = null; // {seizoensnummer: record}, éénmalig geladen per bezoek
+
+SCREENS.totalWarHallOfFame = function(){
+  document.body.classList.remove("greek");
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('totalWar')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>🏛️ Hall of Fame</h2>
+  </div>
+  <div class="panel" style="border-color:var(--hi-dim);text-align:center">
+    <div class="note">Elk afgesloten seizoen van Total War staat hier voorgoed
+    vermeld: de eindstand van de kaart, wie won, en de hoogtepunten van dat
+    seizoen.</div>
+  </div>
+  <div id="twHofList"><div class="note" style="text-align:center;padding:20px">Laden…</div></div>
+  ${foot()}`);
+  twLoadHallOfFame();
+};
+
+function twLoadHallOfFame(){
+  const cont = el("twHofList"); if(!cont || !initFirebase()) return;
+  fbDB.ref("totalwar/history").once("value").then(snap=>{
+    _twHistory = snap.val()||{};
+    twRenderHallOfFame();
+  }).catch(()=>{ cont.innerHTML = `<div class="note warn">Kon de Hall of Fame niet laden.</div>`; });
+}
+
+function twRenderHallOfFame(){
+  const cont = el("twHofList"); if(!cont) return;
+  const seasons = Object.values(_twHistory||{}).sort((a,b)=>(b.number||0)-(a.number||0));
+  if(!seasons.length){
+    cont.innerHTML = `<div class="panel"><div class="note" style="text-align:center">Nog geen afgeronde seizoenen — de eerste
+      vermelding verschijnt zodra de docent het huidige seizoen afsluit.</div></div>`;
+    return;
+  }
+  cont.innerHTML = seasons.map(s=>twHallOfFameCardHTML(s)).join("");
+}
+
+/* Leesbare periode "3 sep 2026 – 7 sep 2026" voor één afgesloten seizoen. */
+function twFormatSeasonSpan(startedAt, endedAt){
+  const fmt = ts => ts ? new Date(ts).toLocaleDateString("nl-NL",{day:"numeric",month:"short",year:"numeric"}) : "?";
+  return fmt(startedAt) + " – " + fmt(endedAt);
+}
+
+function twHallOfFameCardHTML(s){
+  const winner = s.winnerCivId ? (TW_CIVS[s.winnerCivId]||TW_CIVS.neutral) : null;
+  const winnerKlassen = Object.entries(s.klasCivs||{}).filter(([,civId])=>civId===s.winnerCivId).map(([klas])=>klas);
+  const stats = s.stats||{};
+  const civNm = id => (TW_CIVS[id]||TW_CIVS.neutral).nm;
+  const highlightRows = [
+    stats.bloodiest ? `🩸 <b>Bloedigste veldslag:</b> ${esc(stats.bloodiest.province)} — ${Math.round(stats.bloodiest.dealt)} schade (${esc(civNm(stats.bloodiest.attackerCivId))} vs. ${esc(civNm(stats.bloodiest.defenderCivId))})` : null,
+    stats.topSolo ? `🌟 <b>Sterkste vechter:</b> ${esc(stats.topSolo.name)} (${esc(stats.topSolo.klas)}) — ${Math.round(stats.topSolo.damage)} schade in één gevecht` : null,
+    stats.topBuilder ? `🏗️ <b>Grootste bouwer:</b> ${esc(stats.topBuilder.name)} (${esc(stats.topBuilder.klas)}) — ${Math.round(stats.topBuilder.points)} bouwpunten` : null,
+  ].filter(Boolean);
+  return `<div class="panel">
+    <span class="pill" style="background:var(--stone4);color:var(--hi-bright)">Seizoen ${s.number}</span>
+    <h3 style="margin:8px 0 2px">${esc(s.title||"")}</h3>
+    <div class="note">${twFormatSeasonSpan(s.startedAt, s.endedAt)}</div>
+    ${winner ? `<div class="note" style="margin-top:10px">👑 <b>Winnaar:</b>
+      <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:${winner.color};margin:0 4px;vertical-align:middle"></span>
+      ${esc(winner.nm)}${winnerKlassen.length?` (${winnerKlassen.map(esc).join(", ")})`:""} — ${s.winnerProvinces||0} gebied${s.winnerProvinces!==1?"en":""}</div>`
+      : `<div class="note" style="margin-top:10px">Geen winnaar — er was geen enkel volk actief dit seizoen.</div>`}
+    ${twLegendFromOwnership(s.finalOwner)}
+    ${highlightRows.length ? `<div style="margin-top:8px">${highlightRows.map(r=>`<div class="note" style="margin-top:4px">${r}</div>`).join("")}</div>` : ""}
+    <button class="btn btn-ghost btn-block" style="margin-top:12px" onclick="twToggleHistoryMap(${s.number}, this)">🗺️ Bekijk eindkaart</button>
+    <div id="twHofMap${s.number}" style="margin-top:10px"></div>
+  </div>`;
+}
+
+/* Legenda-chips (gebiedentelling per volk) van een BEVROREN eigendomsstand
+   (finalOwner: {provincieId: civId}) — losstaand van twLegend(), dat werkt op
+   de live kaart en kent begrippen (verslagen/betwist) die op een afgesloten
+   seizoen niet meer van toepassing zijn. */
+function twLegendFromOwnership(finalOwner){
+  const counts = {};
+  Object.values(finalOwner||{}).forEach(civId=>{ if(civId && civId!=="neutral") counts[civId]=(counts[civId]||0)+1; });
+  return `<div class="chips" style="margin-top:10px">` + Object.entries(TW_CIVS).map(([id,c])=>{
+    if(id==="neutral") return "";
+    const owned = counts[id]||0;
+    return `<span class="chip"><span style="display:inline-block;width:12px;height:12px;border-radius:3px;
+      background:${c.color};margin-right:6px;vertical-align:middle"></span>${esc(c.nm)} <small>${owned} gebied${owned!==1?"en":""}</small></span>`;
+  }).join("") + `</div>`;
+}
+
+/* Rendert (lazy, pas bij klikken) de echte kaart-SVG met de bevroren
+   eindstand van dat seizoen in een eigen, niet-interactieve host — hergebruikt
+   de al gecachete SVG/registry (_twSvgCache/_twRegistry, zie twLoadMap())
+   zodat dit geen aparte fetch nodig heeft zolang de gebruiker al ergens een
+   live kaart bekeken heeft; anders wordt die cache hier voor het eerst gevuld. */
+async function twToggleHistoryMap(seasonNumber, btn){
+  const host = el("twHofMap"+seasonNumber); if(!host) return;
+  if(host.innerHTML){ host.innerHTML=""; if(btn) btn.textContent="🗺️ Bekijk eindkaart"; return; }
+  const record = (_twHistory||{})[seasonNumber]; if(!record) return;
+  if(btn) btn.textContent="Kaart laden…";
+  try{
+    if(!_twSvgCache){
+      const [svg] = await Promise.all([
+        fetch("map/provinces.svg?v=20260703a").then(r=>{ if(!r.ok) throw new Error("SVG "+r.status); return r.text(); }),
+        twEnsureRegistry(),
+      ]);
+      _twSvgCache = svg;
+    } else {
+      await twEnsureRegistry();
+    }
+    host.style.cssText = "background:#9fc7f4;border:1px solid var(--stone4);border-radius:14px;overflow:hidden";
+    host.innerHTML = _twSvgCache;
+    const svgEl = host.querySelector("svg");
+    if(svgEl){
+      svgEl.removeAttribute("width"); svgEl.removeAttribute("height");
+      svgEl.setAttribute("style","width:100%;height:auto;display:block");
+    }
+    Object.entries(record.finalOwner||{}).forEach(([id,civId])=>{
+      const c = civId && civId!=="neutral" ? TW_CIVS[civId] : null;
+      MapAPI.setProvinceOwner(id, c ? c.color : null, svgEl);
+    });
+    if(typeof MapAPI!=="undefined" && _twRegistry){
+      MapAPI.drawSeaRoutes(_twRegistry, host);
+      MapAPI.drawCityMarkers(_twRegistry, host);
+    }
+    if(btn) btn.textContent="🔼 Verberg eindkaart";
+  }catch(e){
+    host.innerHTML = `<div class="note warn" style="padding:12px">Kaart kon niet geladen worden (${esc(e.message)}).</div>`;
+    if(btn) btn.textContent="🗺️ Bekijk eindkaart";
+  }
 }
 
 /* ---- Aanvalsflow: knop verschijnt alleen als de gekozen aanvaller de

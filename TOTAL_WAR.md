@@ -50,7 +50,7 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | **Training Mode** (thuis oefenen, §3) | `certamen/training.js` (`SCREENS.trainingMode`) | ✅ werkend — leerlingen oefenen woordjes, bouwen automatisch mee aan het garnizoen (zie de TP-waarschuwing hierboven voor het verschil met het oorspronkelijke §3.2-ontwerp) |
 | **Formatieve hint bij een fout antwoord** | `certamen/training.js` (`trShowMissHint()`, aangeroepen vanuit `trAnswer()`) | ✅ werkend — toont naast de gemarkeerde juiste-antwoordknop ook de volledige vertaling (alle betekenissen uit `TR_POOL`, niet alleen de eerste die als keuzeoptie diende); zie `benchmark-toetsing/02-wat-overnemen.md` |
 | **Publieke leerling-veldtochtkaart** (alleen-lezen) | `certamen/totalwar.js` (`SCREENS.totalWarMap`, `twStartLiveReadOnly`) | ✅ werkend — legenda klas↔beschaving + seizoensrecords |
-| **Seizoenen** | `certamen/totalwar.js` (`/totalwar/season`, `TW_SEASON_TITLES`, `twStartNewSeason`) | ✅ werkend — docent kan een nieuw seizoen starten via de docentenweergave; het seizoensnummer bij zo'n reset is sinds 2026-09-07 een bewerkbaar promptveld (voorgesteld = huidig+1) i.p.v. altijd blind +1, zodat een verkeerd genummerd testseizoen bij de volgende reset gecorrigeerd kan worden |
+| **Seizoenen + Hall of Fame** | `certamen/totalwar.js` (`/totalwar/season`, `TW_SEASON_TITLES`, `twStartNewSeason`, `SCREENS.totalWarHallOfFame`, §11) | ✅ werkend — docent kan een nieuw seizoen starten via de docentenweergave; het seizoensnummer bij zo'n reset is sinds 2026-09-07 een bewerkbaar promptveld (voorgesteld = huidig+1) i.p.v. altijd blind +1, zodat een verkeerd genummerd testseizoen bij de volgende reset gecorrigeerd kan worden. Elke reset archiveert het afgesloten seizoen sindsdien eerst naar `/totalwar/history/{nummer}` (eindkaart, winnaar, hoogtepunten) — publiek te bekijken via de nieuwe Hall of Fame (§11), niets gaat meer verloren |
 | Publiek uitlegscherm — **live** kaart (niet langer een demo) | `certamen/totalwar.js` (`SCREENS.totalWar`) | ✅ werkend — toont sinds 2026-09-07 de echte, live veldtochtkaart van het huidige seizoen (`twLoadMap(true,true,false)`, alleen-lezen net als `SCREENS.totalWarMap`) met seizoensnaam/-nummer erboven (`#twSeasonBox`, `twLoadSeasonAndStats()`), i.p.v. de statische `TW_DEMO_OWN`/`TW_DEMO_DEF`-voorbeeldstand die dit scherm eerder toonde |
 | Docent-kaart: **echte, blijvende veldtocht** i.p.v. demo-voorbeeld | `certamen/totalwar.js` (`SCREENS.totalWarPreview`, `twStartLive`, `twApplyLive`) | ✅ werkend — live Firebase-listener op `/totalwar/provinces`, geen hardcoded stand meer |
 | **Echte, geometrisch accurate SVG-kaart van het Romeinse Rijk (Trajanus)** | `certamen/map/provinces.svg` | ✅ werkend — **46 aanklikbare provincies**, elk met stabiele `id` (bv. `italia`, `baetica`, `gallia_belgica`) |
@@ -905,6 +905,69 @@ een schildlaag krijgt, kan `towers` daaraan gekoppeld worden.
 8. ✅ **Comeback-eerbewijs "Wederopstanding"** (§5.7): beschavingsniveau-
    detectie (`twDetectWipedCivs()`) + lazy per-leerling-toekenning
    (`trCheckComebackAchievement()`).
+
+---
+
+## 11. Hall of Fame (seizoensarchief)
+
+**✅ Gebouwd (2026-09-07, op verzoek).** Een seizoensreset (`twStartNewSeason()`,
+`certamen/totalwar.js`) wist niet langer stilzwijgend de hoogtepunten van het
+afgesloten seizoen — vlak vóór de reset zelf schrijft dezelfde functie een
+onveranderlijk archiefrecord naar `/totalwar/history/{seizoensnummer}`:
+
+```
+/totalwar/history/{nummer}/
+  number, title, startedAt, endedAt
+  finalOwner        { provincieId: civId }   // eindstand van de kaart, alle 46 provincies
+  klasCivs          { klascode: civId }      // wie welke beschaving speelde dat seizoen
+  winnerCivId       civId | null             // grootste rijk bij het einde (null = geen enkel volk actief)
+  winnerProvinces   aantal gebieden van de winnaar
+  stats             de /totalwar/stats-hoogtepunten van dat seizoen (bloedigste veldslag/
+                     sterkste solo-speler/grootste bouwer), of null als er nog niets was
+```
+
+Geen aparte Firebase-rules nodig: `/totalwar` heeft al `.read: true` /
+`.write: "auth != null"` op het topniveau, en `history` heeft geen eigen
+`.validate`-regels die dit in de weg zouden zitten.
+
+**Nieuw publiek scherm** `SCREENS.totalWarHallOfFame` (`certamen/totalwar.js`,
+bereikbaar via een knop op `SCREENS.totalWar` en `SCREENS.totalWarMap`, geen
+docentenlogin nodig — net als de rest van de leerling-/publiekskant) toont elk
+afgesloten seizoen als een kaart, nieuwste eerst:
+
+- Seizoensnummer, titel en periode (`twFormatSeasonSpan()`).
+- 👑 Winnaar (kleur + naam + welke klas(sen) die beschaving speelden) en het
+  aantal gebieden waarmee gewonnen werd — of een nette melding als er geen
+  winnaar was (volledig ongebruikt seizoen).
+- Eindstand-legenda per volk (`twLegendFromOwnership()`) — een losstaande,
+  eenvoudigere variant van de live `twLegend()`: geen "verslagen"/"betwist"-
+  begrippen, want die zijn op een bevroren archiefrecord niet meer van
+  toepassing.
+- Dezelfde drie hoogtepunt-regels als de live kaart (bloedigste veldslag/
+  sterkste solo-speler/grootste bouwer), nu gelezen uit het gearchiveerde
+  `stats`-veld i.p.v. de live `/totalwar/stats`.
+- **"🗺️ Bekijk eindkaart"**: rendert pas bij klikken (lazy, om niet meteen
+  meerdere volledige SVG-kaarten tegelijk te laden) de echte provinciekaart
+  met de bevroren `finalOwner`-stand in een eigen host per seizoen
+  (`twToggleHistoryMap()`). Hergebruikt de gecachete SVG/registry
+  (`_twSvgCache`/`_twRegistry`) van de live kaartschermen.
+  **Technische correctie t.o.v. hoe de live kaart dit doet:** `MapAPI.
+  setProvinceOwner()`/`province()` (`certamen/map/provinces.js`) zoeken een
+  provincie op met `root(r).getElementById(id)` — dat vereist een object dat
+  `getElementById` ondersteunt (een `Document`, of legacy een `SVGSVGElement`
+  zelf), **niet** een gewone wrapper-`<div>`. De live kaart merkt dit nooit
+  omdat ze zonder `r`-argument aanroept en dus altijd op het globale
+  `document` werkt (er is toch maar één kaart tegelijk in beeld). Een
+  Hall-of-Fame-kaart leeft naast andere content in dezelfde pagina, dus moet
+  wél expliciet scopen — `twToggleHistoryMap()` geeft daarom het `<svg>`-
+  element zelf mee als root (`MapAPI.setProvinceOwner(id, kleur, svgEl)`),
+  niet de omhullende hostdiv.
+
+Bewust **niet** gebouwd: een geaggregeerd "seizoen-overzicht" (bv. een grafiek
+van winnaars over meerdere seizoenen) — met nog maar één afgesloten seizoen
+tegelijk is dat te vroeg om zinvol te ontwerpen; de ruwe data staat er wel al
+(elk record heeft `number`/`winnerCivId`), dus dat kan later alsnog bovenop
+gebouwd worden zonder het datamodel te wijzigen.
 
 ---
 
