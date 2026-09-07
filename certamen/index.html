@@ -1033,6 +1033,19 @@ body.greek .qcard .word{color:#143a5e}
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(_screen==='spPlay'||_screen==='spStats'||_screen==='spCodex'||_screen==='spWorldMap'){event.preventDefault();spRenderLanding();}else if(_screen!=='home'){event.preventDefault();goBack();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<!-- Kleurmatrix voor rood haar. Een CSS hue-rotate kan wit geen kleur geven, dus
+     de highlights werden grijs en het resultaat bleef oranje; deze matrix is met
+     kleinste kwadraten gepast op de échte haar- en baardpixels (zie
+     BM_HAARKLEUR_FILTER in battle.js). Staat buiten #app, want H() vervangt de
+     inhoud daarvan bij elke schermwissel. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <filter id="haar-rood" color-interpolation-filters="sRGB">
+    <feColorMatrix type="matrix" values="0.1433 0.9977 -0.2051 0 0.0019
+                                         0.7280 -0.7938 1.0086 0 -0.0012
+                                         0.7930 -0.9929 1.1435 0 -0.0015
+                                         0 0 0 1 0"/>
+  </filter>
+</defs></svg>
 <div class="wrap" id="app"></div>
 <div class="toast" id="toast"><span class="m" id="toastM"></span><div><div class="tt" id="toastT"></div><div class="tn" id="toastN"></div></div><button class="x" onclick="toastDismiss()" aria-label="Sluiten">&times;</button></div>
 <div class="achpop-bg" id="achpopBg" onclick="_achPopDismiss()"><div class="achpop">
@@ -1055,8 +1068,8 @@ body.greek .qcard .word{color:#143a5e}
 <script src="net.js?v=20260907f"></script>
 <script src="wordlists.js?v=20260907a"></script>
 <script src="games.js?v=20260907d"></script>
-<script src="battle-data.js?v=20260831a"></script>
-<script src="bossbattle.js?v=20260907a"></script>
+<script src="battle-data.js?v=20260907a"></script>
+<script src="bossbattle.js?v=20260907b"></script>
 <script src="battle-motion.js?v=20260705a"></script>
 <script src="battle.js?v=20260907c"></script>
 <script src="map/provinces.js?v=20260712d"></script>

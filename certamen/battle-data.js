@@ -293,8 +293,12 @@ const BM_AVATAR_PARTS = {
     { id:"grijs",  nm:"Grijs" },
     { id:"wit",    nm:"Wit" },
     { id:"rood",   nm:"Rood" },
+    // Vrije opties eerst, daarna oplopend op niveau (zie CLAUDE.md). Oranje is
+    // feller dan een natuurlijke haarkleur — net als blauw en groen fantasie,
+    // dus ook op niveau 8 in plaats van vrij zoals de andere haarkleuren.
     { id:"blauw",  nm:"Blauw",            requires:{level:8} },
     { id:"groen",  nm:"Groen",            requires:{level:8} },
+    { id:"oranje", nm:"Oranje",           requires:{level:8} },
   ]},
   // Borstband: losse schakelaar in plaats van het oude "Geslacht"-onderdeel.
   // Dat koos vroeger een compleet ander lichaam (base_*_female.png); die twee
