@@ -131,6 +131,56 @@ FBNet.assignStudent = function(classId, studentId, studentData){
   try{ return this.teacherRef().child("classes/"+classId+"/students/"+studentId).set(studentData); }
   catch(e){ return Promise.reject(e.message); }
 };
+/* ---- FBNet: eigen woordenlijsten (Eigen Lijst) ---- */
+FBNet.getWordlists = function(){
+  try{ return this.teacherRef().child("wordlists").once("value").then(s => s.val() || {}); }
+  catch(e){ return Promise.reject(e.message); }
+};
+// listId=null maakt een nieuwe lijst aan (push-key); anders wordt de bestaande
+// lijst overschreven. Bij shared:true/false wordt de klascode-kopie (voor
+// leerlingen zonder docent-login) meteen gelijkgetrokken, zie _syncWordlistShare.
+FBNet.saveWordlist = function(listId, data){
+  try{
+    if(!fbDB) initFirebase();
+    const ref = listId ? this.teacherRef().child("wordlists/"+listId) : this.teacherRef().child("wordlists").push();
+    const id = listId || ref.key;
+    const payload = {
+      name: data.name, lang: data.lang, words: data.words, shared: !!data.shared,
+      createdAt: data.createdAt || Date.now(), updatedAt: Date.now()
+    };
+    return ref.set(payload).then(()=>this._syncWordlistShare(id, payload)).then(()=>id);
+  }catch(e){ return Promise.reject(e.message); }
+};
+FBNet.deleteWordlist = function(listId){
+  try{
+    return this.teacherRef().child("wordlists/"+listId).remove()
+      .then(()=>this._syncWordlistShare(listId, null));
+  }catch(e){ return Promise.reject(e.message); }
+};
+// Spiegelt een lijst naar klascodes/{code}/wordlists/{listId} voor elke klas
+// van deze docent, zodat leerlingen 'm zonder docent-login kunnen vinden via
+// hun klascode (zelfde gedeeld-geheim-patroon als identities/{klas}, zie
+// CLAUDE.md). payload=null (verwijderde lijst) of shared:false ruimt de
+// kopie overal weer op. Nieuwe klassen die ná het delen worden aangemaakt
+// krijgen de kopie pas bij de eerstvolgende keer opslaan van de lijst.
+FBNet._syncWordlistShare = function(listId, payload){
+  return this.getClasses().then(classes=>{
+    const codes = Object.values(classes||{}).map(c=>c.code).filter(Boolean);
+    if(!codes.length) return;
+    const updates = {};
+    codes.forEach(code=>{
+      updates["klascodes/"+code.toUpperCase()+"/wordlists/"+listId] = (payload && payload.shared) ? payload : null;
+    });
+    return fbDB.ref().update(updates);
+  });
+};
+// Leerlingkant: gedeelde lijsten van een klascode opvragen, zonder docent-
+// login nodig (klascodes/$code heeft .read:true, zie database.rules.json).
+FBNet.getSharedWordlists = function(klascode){
+  if(!fbDB) initFirebase();
+  klascode=(klascode||"").trim().toUpperCase();
+  return fbDB.ref("klascodes/"+klascode+"/wordlists").once("value").then(s=>s.val()||{});
+};
 FBNet.removeAdminFlag = function(klascode, lid){
   if(!fbDB) initFirebase();
   return fbDB.ref("identities/"+klascode.toUpperCase()+"/"+lid+"/admin").remove();
@@ -442,6 +492,22 @@ DemoNet.deleteRoom      = function(){ return Promise.resolve(); };
 DemoNet.createKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.deleteKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.validateKlascode= function(){ return Promise.resolve(true); };
+let _demoWordlists = {};
+DemoNet.getWordlists = function(){ return Promise.resolve(JSON.parse(JSON.stringify(_demoWordlists))); };
+DemoNet.saveWordlist = function(listId, data){
+  const id = listId || ("demo_"+Date.now());
+  const existing = _demoWordlists[id];
+  _demoWordlists[id] = {
+    name: data.name, lang: data.lang, words: data.words, shared: !!data.shared,
+    createdAt: (existing && existing.createdAt) || data.createdAt || Date.now(), updatedAt: Date.now()
+  };
+  return Promise.resolve(id);
+};
+DemoNet.deleteWordlist = function(listId){ delete _demoWordlists[listId]; return Promise.resolve(); };
+DemoNet.getSharedWordlists = function(){
+  const out={}; Object.entries(_demoWordlists).forEach(([id,l])=>{ if(l.shared) out[id]=l; });
+  return Promise.resolve(out);
+};
 
 // In demo-modus bestaat er geen echte identities-tak. We spiegelen "groep = code"
 // op de in-memory _demoClasses: de code is de afgeleide klascode van de klasnaam
