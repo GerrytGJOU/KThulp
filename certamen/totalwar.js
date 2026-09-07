@@ -734,21 +734,33 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, player
     // "Betwist"-visualisatie (§5.3, herdefinitie): wie de laatste (nog niet
     // succesvolle) aanval deed, voor de gestreepte kaartweergave in twApplyLive().
     upd["siege/attackerCivId"] = BM_META.attackerCivId;
+    // Startpunt van deze belegeringsreeks — alleen zetten bij de EERSTE
+    // mislukte aanval erin (niet overschrijven bij een volgende mislukking),
+    // zodat "langste veldtocht" hieronder de tijd sinds het BEGIN van de
+    // reeks meet, niet sinds de laatste losse poging.
+    if(!(gp.siege && gp.siege.startedAt)) upd["siege/startedAt"] = FBNet.serverTime();
     upd["lastChanged"] = FBNet.serverTime();
     await ref.update(upd);
   }
-  twRecordBattleHighlights(gp, dealt, players).catch(()=>{});
+  twRecordBattleHighlights(gp, dealt, players, winner).catch(()=>{});
 }
 
-/* Twee losse seizoensrecords, puur motiverend (geen invloed op spelregels):
-   de zwaarste belegering (meeste schade in één stage) en de sterkste
-   solo-speler (meeste persoonlijke schade in één Total War-gevecht). Draait
+/* Seizoensrecords, puur motiverend (geen invloed op spelregels) — draait
    altijd op het docent-apparaat (host van de Boss Battle-siege, zie
    twStartAttack() — alleen bereikbaar via de docentenweergave), dus de
-   standaard totalwar-schrijfregel (auth != null) volstaat. */
-async function twRecordBattleHighlights(gp, dealt, players){
+   standaard totalwar-schrijfregel (auth != null) volstaat:
+   - bloodiest: zwaarste belegering (meeste schade in één stage)
+   - topSolo: sterkste solo-speler (meeste persoonlijke schade in één gevecht)
+   - biggestBattle: grootste veldslag (meeste échte deelnemers in één gevecht,
+     ongeacht winst/verlies — het gaat om de opkomst, niet de uitkomst)
+   - longestSiege: langste veldtocht (meeste eventtijd tussen de EERSTE
+     mislukte aanval in een belegeringsreeks en de uiteindelijke val, zie
+     siege/startedAt hierboven in twResolveSiege()) — alleen relevant bij een
+     verovering ná minstens één eerdere mislukking. */
+async function twRecordBattleHighlights(gp, dealt, players, winner){
   if(!fbDB) return;
   const nm = (_twRegistry && _twRegistry[gp.id] && _twRegistry[gp.id].displayName) || gp.id;
+  const realPlayers = Object.values(players||{}).filter(p=>p && p.identityKey && !String(p.identityKey).startsWith("bot:"));
   if(dealt>0){
     fbDB.ref("totalwar/stats/bloodiest").transaction(cur=>{
       if(cur && (cur.dealt||0)>=dealt) return cur;
@@ -756,9 +768,7 @@ async function twRecordBattleHighlights(gp, dealt, players){
         defenderCivId:gp.defenderCivId||"neutral", at:Date.now() };
     }).catch(()=>{});
   }
-  const top = Object.values(players||{})
-    .filter(p=>p && p.identityKey && !String(p.identityKey).startsWith("bot:"))
-    .sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
+  const top = realPlayers.slice().sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
   if(top && (top.damage||0)>0){
     fbDB.ref("totalwar/stats/topSolo").transaction(cur=>{
       if(cur && (cur.damage||0)>=top.damage) return cur;
@@ -766,6 +776,34 @@ async function twRecordBattleHighlights(gp, dealt, players){
         damage:top.damage, province:nm, at:Date.now() };
     }).catch(()=>{});
   }
+  const count = realPlayers.length;
+  if(count>0){
+    fbDB.ref("totalwar/stats/biggestBattle").transaction(cur=>{
+      if(cur && (cur.count||0)>=count) return cur;
+      return { count, province:nm, attackerCivId:BM_META.attackerCivId,
+        defenderCivId:gp.defenderCivId||"neutral", at:Date.now() };
+    }).catch(()=>{});
+  }
+  if(winner==="A" && gp.siege && gp.siege.startedAt){
+    const durationMs = Date.now() - gp.siege.startedAt;
+    if(durationMs>0){
+      fbDB.ref("totalwar/stats/longestSiege").transaction(cur=>{
+        if(cur && (cur.durationMs||0)>=durationMs) return cur;
+        return { durationMs, province:nm, attackerCivId:BM_META.attackerCivId,
+          defenderCivId:gp.defenderCivId||"neutral", at:Date.now() };
+      }).catch(()=>{});
+    }
+  }
+}
+
+/* Leesbare vaste tijdsduur ("3 dagen", "14 uur") — anders dan
+   twFormatDuration() hierboven, dat een lopende "sinds nu"-tijd formatteert. */
+function twFormatDurationMs(ms){
+  if(!ms || ms<0) return "?";
+  const hours = ms/3600000;
+  if(hours<24) return Math.max(1,Math.round(hours))+" uur";
+  const days = Math.round(hours/24);
+  return days+" dag"+(days===1?"":"en");
 }
 
 /* ---- Seizoensbadge + hoogtepunten: gedeeld door SCREENS.totalWarMap
@@ -834,6 +872,8 @@ function twRenderHighlights(){
     biggest ? `👑 <b>Grootste rijk:</b> ${esc(civNm(biggest[0]))} (${biggest[1]} gebied${biggest[1]!==1?"en":""})` : null,
     topConqueror ? `⚔️ <b>Meeste veroveringen:</b> ${esc(civNm(topConqueror[0]))} (${topConqueror[1]}×)` : null,
     stats.bloodiest ? `🩸 <b>Bloedigste veldslag:</b> ${esc(stats.bloodiest.province)} — ${Math.round(stats.bloodiest.dealt)} schade (${esc(civNm(stats.bloodiest.attackerCivId))} vs. ${esc(civNm(stats.bloodiest.defenderCivId))})` : null,
+    stats.biggestBattle ? `⚔️ <b>Grootste veldslag:</b> ${esc(stats.biggestBattle.province)} — ${stats.biggestBattle.count} deelnemers (${esc(civNm(stats.biggestBattle.attackerCivId))} vs. ${esc(civNm(stats.biggestBattle.defenderCivId))})` : null,
+    stats.longestSiege ? `⏳ <b>Langste veldtocht:</b> ${esc(stats.longestSiege.province)} — ${twFormatDurationMs(stats.longestSiege.durationMs)} belegerd vóór de val (${esc(civNm(stats.longestSiege.attackerCivId))} vs. ${esc(civNm(stats.longestSiege.defenderCivId))})` : null,
     stats.topSolo ? `🌟 <b>Sterkste solo-speler:</b> ${esc(stats.topSolo.name)} (${esc(stats.topSolo.klas)}) — ${Math.round(stats.topSolo.damage)} schade in één gevecht` : null,
     stats.topBuilder ? `🏗️ <b>Grootste bouwer:</b> ${esc(stats.topBuilder.name)} (${esc(stats.topBuilder.klas)}) — ${Math.round(stats.topBuilder.points)} bouwpunten` : null,
   ].filter(Boolean);
@@ -982,6 +1022,7 @@ async function twReleaseCivIfUnassigned(civId){
    (zelfde /totalwar-regel als de rest), geen aparte rules nodig.
    ------------------------------------------------------------------ */
 let _twHistory = null; // {seizoensnummer: record}, éénmalig geladen per bezoek
+let _twHofIsAdmin = false; // docent-status voor deze pagina — bepaalt of de beheerknoppen tonen
 
 SCREENS.totalWarHallOfFame = function(){
   document.body.classList.remove("greek");
@@ -1002,21 +1043,36 @@ SCREENS.totalWarHallOfFame = function(){
 
 function twLoadHallOfFame(){
   const cont = el("twHofList"); if(!cont || !initFirebase()) return;
+  try{ _twHofIsAdmin = teacherNet().isTeacherLoggedIn(); }catch(e){ _twHofIsAdmin=false; }
   fbDB.ref("totalwar/history").once("value").then(snap=>{
     _twHistory = snap.val()||{};
     twRenderHallOfFame();
   }).catch(()=>{ cont.innerHTML = `<div class="note warn">Kon de Hall of Fame niet laden.</div>`; });
+  // Dit scherm is publiek (geen login-eis), dus we wachten niet vooraf op
+  // authReady() zoals SCREENS.totalWarPreview wél doet — dat zou niet-
+  // docenten onnodig laten wachten. In plaats daarvan renderen we direct met
+  // de (mogelijk nog niet herstelde) synchrone status, en heroverwegen zodra
+  // een "onthouden" docentsessie alsnog binnenkomt: dan verschijnen de
+  // beheerknoppen alsnog, zonder dat de docent iets hoeft te doen.
+  teacherNet().authReady().then(()=>{
+    let nowAdmin=false; try{ nowAdmin = teacherNet().isTeacherLoggedIn(); }catch(e){}
+    if(nowAdmin!==_twHofIsAdmin){ _twHofIsAdmin=nowAdmin; twRenderHallOfFame(); }
+  });
 }
 
 function twRenderHallOfFame(){
   const cont = el("twHofList"); if(!cont) return;
-  const seasons = Object.values(_twHistory||{}).sort((a,b)=>(b.number||0)-(a.number||0));
+  const all = Object.values(_twHistory||{}).sort((a,b)=>(b.number||0)-(a.number||0));
+  // Verborgen seizoenen (zie twHofSetHidden()) blijven bestaan en zijn nog
+  // gewoon zichtbaar voor de docent (met een label + "weer tonen"-knop), maar
+  // verdwijnen uit de publieke/leerling-weergave.
+  const seasons = _twHofIsAdmin ? all : all.filter(s=>!s.hidden);
   if(!seasons.length){
     cont.innerHTML = `<div class="panel"><div class="note" style="text-align:center">Nog geen afgeronde seizoenen — de eerste
       vermelding verschijnt zodra de docent het huidige seizoen afsluit.</div></div>`;
     return;
   }
-  cont.innerHTML = seasons.map(s=>twHallOfFameCardHTML(s)).join("");
+  cont.innerHTML = seasons.map(s=>twHallOfFameCardHTML(s, _twHofIsAdmin)).join("");
 }
 
 /* Leesbare periode "3 sep 2026 – 7 sep 2026" voor één afgesloten seizoen. */
@@ -1025,18 +1081,37 @@ function twFormatSeasonSpan(startedAt, endedAt){
   return fmt(startedAt) + " – " + fmt(endedAt);
 }
 
-function twHallOfFameCardHTML(s){
+function twHallOfFameCardHTML(s, isAdmin){
   const winner = s.winnerCivId ? (TW_CIVS[s.winnerCivId]||TW_CIVS.neutral) : null;
   const winnerKlassen = Object.entries(s.klasCivs||{}).filter(([,civId])=>civId===s.winnerCivId).map(([klas])=>klas);
   const stats = s.stats||{};
   const civNm = id => (TW_CIVS[id]||TW_CIVS.neutral).nm;
+  // topSolo/topBuilder noemen een individuele leerlingnaam — daar krijgt de
+  // docent per regel een eigen "✕"-knop om precies díe naam te verwijderen
+  // (bv. een verkeerd gespelde naam, of een leerling die liever niet met
+  // naam op een openbaar scherm wil staan) zonder de rest van het seizoen
+  // aan te tasten. Bloedigste veldslag noemt alleen volken, geen "speler".
+  const statRow = (html, statKey) => `<div class="note" style="margin-top:4px;display:flex;align-items:center;gap:8px">
+    <span style="flex:1">${html}</span>
+    ${isAdmin ? `<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4);flex:0 0 auto" onclick="twHofRemoveStat(${s.number},'${statKey}')" title="Verwijder deze naam uit de Hall of Fame">✕</button>` : ""}
+  </div>`;
   const highlightRows = [
-    stats.bloodiest ? `🩸 <b>Bloedigste veldslag:</b> ${esc(stats.bloodiest.province)} — ${Math.round(stats.bloodiest.dealt)} schade (${esc(civNm(stats.bloodiest.attackerCivId))} vs. ${esc(civNm(stats.bloodiest.defenderCivId))})` : null,
-    stats.topSolo ? `🌟 <b>Sterkste vechter:</b> ${esc(stats.topSolo.name)} (${esc(stats.topSolo.klas)}) — ${Math.round(stats.topSolo.damage)} schade in één gevecht` : null,
-    stats.topBuilder ? `🏗️ <b>Grootste bouwer:</b> ${esc(stats.topBuilder.name)} (${esc(stats.topBuilder.klas)}) — ${Math.round(stats.topBuilder.points)} bouwpunten` : null,
+    stats.bloodiest ? `<div class="note" style="margin-top:4px">🩸 <b>Bloedigste veldslag:</b> ${esc(stats.bloodiest.province)} — ${Math.round(stats.bloodiest.dealt)} schade (${esc(civNm(stats.bloodiest.attackerCivId))} vs. ${esc(civNm(stats.bloodiest.defenderCivId))})</div>` : "",
+    stats.biggestBattle ? `<div class="note" style="margin-top:4px">⚔️ <b>Grootste veldslag:</b> ${esc(stats.biggestBattle.province)} — ${stats.biggestBattle.count} deelnemers (${esc(civNm(stats.biggestBattle.attackerCivId))} vs. ${esc(civNm(stats.biggestBattle.defenderCivId))})</div>` : "",
+    stats.longestSiege ? `<div class="note" style="margin-top:4px">⏳ <b>Langste veldtocht:</b> ${esc(stats.longestSiege.province)} — ${twFormatDurationMs(stats.longestSiege.durationMs)} belegerd vóór de val (${esc(civNm(stats.longestSiege.attackerCivId))} vs. ${esc(civNm(stats.longestSiege.defenderCivId))})</div>` : "",
+    stats.topSolo ? statRow(`🌟 <b>Sterkste vechter:</b> ${esc(stats.topSolo.name)} (${esc(stats.topSolo.klas)}) — ${Math.round(stats.topSolo.damage)} schade in één gevecht`, "topSolo") : "",
+    stats.topBuilder ? statRow(`🏗️ <b>Grootste bouwer:</b> ${esc(stats.topBuilder.name)} (${esc(stats.topBuilder.klas)}) — ${Math.round(stats.topBuilder.points)} bouwpunten`, "topBuilder") : "",
   ].filter(Boolean);
-  return `<div class="panel">
+  // Beheerbalk (uitsluitend voor ingelogde docenten, zie twLoadHallOfFame()):
+  // verbergen is omkeerbaar (blijft bewaard, alleen niet publiek zichtbaar),
+  // verwijderen is permanent — vandaar de typ-bevestiging in twHofDeleteSeason().
+  const adminBar = isAdmin ? `<div style="display:flex;gap:8px;margin-top:12px">
+    <button class="btn btn-ghost" style="flex:1" onclick="twHofSetHidden(${s.number}, ${s.hidden?"false":"true"})">${s.hidden?"👁️ Weer tonen":"🙈 Verbergen"}</button>
+    <button class="btn btn-ghost" style="flex:1;color:#e07060;border-color:rgba(90,18,12,.4)" onclick="twHofDeleteSeason(${s.number})">🗑️ Verwijderen</button>
+  </div>` : "";
+  return `<div class="panel"${s.hidden?' style="opacity:.65"':""}>
     <span class="pill" style="background:var(--stone4);color:var(--hi-bright)">Seizoen ${s.number}</span>
+    ${s.hidden ? `<span class="pill" style="background:var(--ox);color:#fff;margin-left:6px">🙈 Verborgen — alleen zichtbaar voor docenten</span>` : ""}
     <h3 style="margin:8px 0 2px">${esc(s.title||"")}</h3>
     <div class="note">${twFormatSeasonSpan(s.startedAt, s.endedAt)}</div>
     ${winner ? `<div class="note" style="margin-top:10px">👑 <b>Winnaar:</b>
@@ -1044,10 +1119,46 @@ function twHallOfFameCardHTML(s){
       ${esc(winner.nm)}${winnerKlassen.length?` (${winnerKlassen.map(esc).join(", ")})`:""} — ${s.winnerProvinces||0} gebied${s.winnerProvinces!==1?"en":""}</div>`
       : `<div class="note" style="margin-top:10px">Geen winnaar — er was geen enkel volk actief dit seizoen.</div>`}
     ${twLegendFromOwnership(s.finalOwner)}
-    ${highlightRows.length ? `<div style="margin-top:8px">${highlightRows.map(r=>`<div class="note" style="margin-top:4px">${r}</div>`).join("")}</div>` : ""}
+    ${highlightRows.length ? `<div style="margin-top:8px">${highlightRows.join("")}</div>` : ""}
     <button class="btn btn-ghost btn-block" style="margin-top:12px" onclick="twToggleHistoryMap(${s.number}, this)">🗺️ Bekijk eindkaart</button>
     <div id="twHofMap${s.number}" style="margin-top:10px"></div>
+    ${adminBar}
   </div>`;
+}
+
+/* ---- Docent-beheer van de Hall of Fame (op verzoek, voor als een seizoen
+   niet liep zoals gepland): verbergen/tonen en verwijderen per seizoen, en
+   losstaand het verwijderen van één individuele leerlingnaam uit een
+   seizoen se hoogtepunten. Firebase-rules staan dit al toe: /totalwar heeft
+   .write:"auth != null" op het topniveau en "history" heeft geen eigen
+   restrictievere .validate-regel. ---- */
+function twHofSetHidden(seasonNumber, hidden){
+  if(!initFirebase()) return;
+  return fbDB.ref("totalwar/history/"+seasonNumber+"/hidden").set(hidden)
+    .then(()=>{ toast(hidden?"Verborgen":"Weer zichtbaar","Seizoen "+seasonNumber); twLoadHallOfFame(); })
+    .catch(e=>toast("Fout", typeof e==="string"?e:(e&&e.message)||""));
+}
+
+async function twHofDeleteSeason(seasonNumber){
+  const typed = prompt(`Seizoen ${seasonNumber} PERMANENT uit de Hall of Fame verwijderen? Dit kan niet ongedaan gemaakt worden.\n\nTyp VERWIJDEREN om te bevestigen:`);
+  if((typed||"").trim().toUpperCase()!=="VERWIJDEREN"){
+    if(typed!==null) toast("Geannuleerd","Er is niets verwijderd.");
+    return;
+  }
+  if(!initFirebase()) return;
+  try{
+    await fbDB.ref("totalwar/history/"+seasonNumber).remove();
+    toast("Verwijderd","Seizoen "+seasonNumber+" is uit de Hall of Fame gehaald.");
+    twLoadHallOfFame();
+  }catch(e){ toast("Fout", typeof e==="string"?e:(e&&e.message)||""); }
+}
+
+function twHofRemoveStat(seasonNumber, statKey){
+  if(!confirm("Deze naam permanent uit de Hall of Fame verwijderen voor dit seizoen?")) return;
+  if(!initFirebase()) return;
+  return fbDB.ref("totalwar/history/"+seasonNumber+"/stats/"+statKey).remove()
+    .then(()=>{ toast("Verwijderd","Naam verwijderd uit Seizoen "+seasonNumber); twLoadHallOfFame(); })
+    .catch(e=>toast("Fout", typeof e==="string"?e:(e&&e.message)||""));
 }
 
 /* Legenda-chips (gebiedentelling per volk) van een BEVROREN eigendomsstand

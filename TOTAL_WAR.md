@@ -922,8 +922,9 @@ onveranderlijk archiefrecord naar `/totalwar/history/{seizoensnummer}`:
   klasCivs          { klascode: civId }      // wie welke beschaving speelde dat seizoen
   winnerCivId       civId | null             // grootste rijk bij het einde (null = geen enkel volk actief)
   winnerProvinces   aantal gebieden van de winnaar
-  stats             de /totalwar/stats-hoogtepunten van dat seizoen (bloedigste veldslag/
-                     sterkste solo-speler/grootste bouwer), of null als er nog niets was
+  stats             de /totalwar/stats-hoogtepunten van dat seizoen (zie hieronder), of
+                     null als er nog niets was
+  hidden            true | (afwezig) — docent-only "verbergen", zie de beheersectie onderaan
 ```
 
 Geen aparte Firebase-rules nodig: `/totalwar` heeft al `.read: true` /
@@ -943,9 +944,23 @@ afgesloten seizoen als een kaart, nieuwste eerst:
   eenvoudigere variant van de live `twLegend()`: geen "verslagen"/"betwist"-
   begrippen, want die zijn op een bevroren archiefrecord niet meer van
   toepassing.
-- Dezelfde drie hoogtepunt-regels als de live kaart (bloedigste veldslag/
-  sterkste solo-speler/grootste bouwer), nu gelezen uit het gearchiveerde
-  `stats`-veld i.p.v. de live `/totalwar/stats`.
+- Dezelfde hoogtepunt-regels als de live kaart, nu gelezen uit het
+  gearchiveerde `stats`-veld i.p.v. de live `/totalwar/stats`:
+  - 🩸 Bloedigste veldslag (meeste schade in één belegeringsstage)
+  - ⚔️ **Grootste veldslag** (nieuw, 2026-09-07) — het gevecht met de meeste
+    échte deelnemers (`totalwar/stats/biggestBattle`), ongeacht win/verlies:
+    het gaat om de opkomst, niet de uitkomst
+  - ⏳ **Langste veldtocht** (nieuw, 2026-09-07) — de provincie die het langst
+    (in echte tijd) standhield tussen de EERSTE mislukte aanval in een
+    belegeringsreeks en de uiteindelijke val (`totalwar/stats/longestSiege`,
+    `twFormatDurationMs()`). Vereist een nieuw `siege/startedAt`-veld
+    (`twResolveSiege()`, `certamen/totalwar.js`): gezet bij de eerste
+    mislukte aanval in een reeks, nooit overschreven door een volgende
+    mislukking in dezelfde reeks, en impliciet gewist zodra de provincie
+    alsnog valt (de hele `siege`-tak wordt dan vervangen). Een provincie die
+    in één keer valt heeft dus geen "veldtocht-duur" — logisch, er was geen
+    reeks om te meten.
+  - 🌟 Sterkste solo-speler, 🏗️ Grootste bouwer (ongewijzigd)
 - **"🗺️ Bekijk eindkaart"**: rendert pas bij klikken (lazy, om niet meteen
   meerdere volledige SVG-kaarten tegelijk te laden) de echte provinciekaart
   met de bevroren `finalOwner`-stand in een eigen host per seizoen
@@ -962,6 +977,38 @@ afgesloten seizoen als een kaart, nieuwste eerst:
   wél expliciet scopen — `twToggleHistoryMap()` geeft daarom het `<svg>`-
   element zelf mee als root (`MapAPI.setProvinceOwner(id, kleur, svgEl)`),
   niet de omhullende hostdiv.
+
+### 11.1 Docent-beheer (verbergen/verwijderen)
+
+**✅ Gebouwd (2026-09-07, op verzoek — "voor het geval een seizoen niet loopt
+zoals gepland").** `SCREENS.totalWarHallOfFame` bepaalt bij het laden de
+docentstatus (`teacherNet().isTeacherLoggedIn()`, met dezelfde `authReady()`-
+naverificatie als `SCREENS.totalWarPreview` voor een "onthouden" sessie die
+nog aan het herstellen is) en toont **alleen aan een ingelogde docent** drie
+extra acties, allemaal direct op `/totalwar/history` (geen aparte rules
+nodig — zelfde `auth != null`-schrijfregel als de rest van `/totalwar`):
+
+- **🙈 Verbergen / 👁️ Weer tonen** (`twHofSetHidden()`) — zet/wist
+  `history/{nummer}/hidden`. Omkeerbaar: het seizoen blijft volledig bewaard
+  en blijft zichtbaar voor de docent zelf (met een "Verborgen"-label), maar
+  verdwijnt uit `twRenderHallOfFame()` voor iedereen die niet is ingelogd.
+- **🗑️ Verwijderen** (`twHofDeleteSeason()`) — verwijdert het hele
+  `history/{nummer}`-record permanent, met dezelfde typ-bevestiging
+  ("VERWIJDEREN") als `twStartNewSeason()`'s reset-bevestiging.
+- **✕ per naam** (`twHofRemoveStat()`) — verwijdert precies één individuele
+  vermelding (`stats/topSolo` of `stats/topBuilder`) uit een seizoen, voor
+  als een leerlingnaam bijvoorbeeld verkeerd gespeld is of niet met naam op
+  een openbaar scherm zou moeten staan, zonder de rest van dat seizoen aan
+  te tasten. Niet toegepast op "bloedigste veldslag"/"grootste veldslag"/
+  "langste veldtocht": die noemen alleen volken, geen individuele leerling.
+
+**Kanttekening (geen beveiligingsgrens, wel eerlijk te vermelden):** `hidden`
+filtert alleen aan de cliëntkant (`twRenderHallOfFame()`) — `/totalwar` is
+`.read: true` voor iedereen, dus een verborgen seizoen is in theorie nog via
+een directe Firebase-call op te vragen. Voor een klassikale tool is dat
+voldoende (zelfde soort soft-hide als elders in de app, bv. niet-goedgekeurde
+klascodes); een harde leesblokkade zou een aparte, strengere rule per record
+vereisen en is hier bewust niet gebouwd.
 
 Bewust **niet** gebouwd: een geaggregeerd "seizoen-overzicht" (bv. een grafiek
 van winnaars over meerdere seizoenen) — met nog maar één afgesloten seizoen
