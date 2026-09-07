@@ -392,7 +392,14 @@ function bmGoogleHandleRedirectResult(){
   try{ const r=localStorage.getItem(BM_GOOGLE_REDIRECT_KEY); if(r){ intent=JSON.parse(r); localStorage.removeItem(BM_GOOGLE_REDIRECT_KEY); } }catch(e){}
   if(!intent) return Promise.resolve(false);
   return firebase.auth().getRedirectResult().then(async result=>{
-    if(!result || !result.user) return false;
+    if(!result || !result.user){
+      // Geen pending credential gevonden terwijl we wél een opgeslagen intent hadden —
+      // meld dit i.p.v. stil niets te doen, anders lijkt de knop alsof hij werkt terwijl
+      // er nooit iets naar Firebase is geschreven.
+      if(typeof toast==="function") toast("Koppelen mislukt","Geen Google-resultaat ontvangen na het inloggen. Probeer het nog eens.");
+      console.warn("bmGoogleHandleRedirectResult: getRedirectResult() gaf geen result.user", result);
+      return false;
+    }
     const uid=result.user.uid;
     if(intent.action==="link" && intent.klas && intent.lid){
       const w=await bmGoogleWriteLink(uid, intent.klas, intent.lid);
@@ -415,7 +422,15 @@ function bmGoogleHandleRedirectResult(){
     }
     if(intent.returnScreen && typeof go==="function") go(intent.returnScreen);
     return true;
-  }).catch(()=>false);
+  }).catch(err=>{
+    // Voorheen hier een stille catch(()=>false): een reject van getRedirectResult()
+    // (bv. auth/unauthorized-domain, auth/network-request-failed, een botsende
+    // credential) verdween dan spoorloos — de knop leek te "werken" (je zag Google's
+    // inlogscherm) terwijl er nooit iets naar Firebase werd geschreven.
+    if(typeof toast==="function") toast("Koppelen mislukt","Google-inloggen gaf een fout: "+(err?.message||err?.code||err||"onbekend"));
+    console.error("bmGoogleHandleRedirectResult fout:",err);
+    return false;
+  });
 }
 
 function bmGoogleLookupLink(uid){
