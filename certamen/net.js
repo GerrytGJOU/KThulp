@@ -481,6 +481,16 @@ async function bmGoogleWriteLink(uid, klas, lid, email){
 async function bmGoogleRemoveLink(uid, klas, lid){
   if(!fbDB) initFirebase();
   if(!fbDB) return {ok:false, error:"Firebase niet beschikbaar"};
+  // Ontkoppelen gebeurt zonder redirect/reload, dus vlak na page-load kan Firebase's
+  // sessieherstel nog bezig zijn — zonder deze wacht faalt de write dan met
+  // PERMISSION_DENIED omdat auth.uid nog leeg is terwijl de rules dat vereisen
+  // (zie ook FBNet.authReady hierboven, zelfde onderliggende race).
+  if(!firebase.auth().currentUser){
+    await new Promise(resolve=>{
+      const unsub=firebase.auth().onAuthStateChanged(u=>{unsub();resolve();});
+      setTimeout(()=>{unsub();resolve();},3000);
+    });
+  }
   try{
     const updates={};
     updates["identities/"+klas+"/"+lid+"/googleUid"]=null;
