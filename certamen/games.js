@@ -1141,13 +1141,23 @@ async function tpAssignKlasCiv(){
     if(el("tpTwKlas")) el("tpTwKlas").value="";
     toast("Gekoppeld",klas+" → "+(TW_CIVS[civId]?.nm||civId));
     tpLoadKlasCivs();
+    // Een volk dat nog nergens eigenaar van is (nooit gekoppeld, of net
+    // ontkoppeld en nu weer gekoppeld) krijgt meteen zijn basisprovincie —
+    // geen opstand nodig voor een vers begin, zie twGrantFreshFlagshipIfUnowned().
+    if(typeof twGrantFreshFlagshipIfUnowned==="function") await twGrantFreshFlagshipIfUnowned(civId);
   }catch(e){ toast("Fout",typeof e==="string"?e:(e?.message||"")); }
 }
 
-function tpUnassignKlasCiv(klas){
-  fbDB.ref("totalwar/klasCivs/"+klas).remove()
-    .then(()=>{ toast("Ontkoppeld",klas); tpLoadKlasCivs(); })
-    .catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"")));
+async function tpUnassignKlasCiv(klas){
+  const civId=_tpKlasCivs && _tpKlasCivs[klas];
+  try{
+    await fbDB.ref("totalwar/klasCivs/"+klas).remove();
+    toast("Ontkoppeld",klas);
+    tpLoadKlasCivs();
+    // Was dit de laatste klas van dit volk, dan mag het geen provincie(s)
+    // blijven vasthouden — zie twReleaseCivIfUnassigned().
+    if(civId && typeof twReleaseCivIfUnassigned==="function") await twReleaseCivIfUnassigned(civId);
+  }catch(e){ toast("Fout",typeof e==="string"?e:(e?.message||"")); }
 }
 
 // Laadt alles wat het portaaloverzicht nodig heeft in één keer: de docent-labels

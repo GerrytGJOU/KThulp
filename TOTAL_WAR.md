@@ -635,18 +635,36 @@ krijgt precies één weg terug: een **opstand** op haar eigen vlaggenschip­
 provincie (haar oude hoofdstad, zie §3.7/`twHomeFlagshipOf()`), ongeacht wie
 die nu bezet.
 
-**Hergebruikt sinds 2026-09-07 voor ongebruikte volkeren.** Een volk zonder
-gekoppelde klas dit seizoen (nog geen entry in `/totalwar/klasCivs`, zie
-§7.1) krijgt bij het seeden/resetten (`twEnsureCampaignSeeded()`/
+**Hergebruikt sinds 2026-09-07 voor ongebruikte volkeren, mét live
+koppelen/ontkoppelen (niet pas bij de volgende seizoensreset).** Een volk
+zonder gekoppelde klas (nog geen entry in `/totalwar/klasCivs`, zie §7.1)
+krijgt bij het seeden/resetten (`twEnsureCampaignSeeded()`/
 `twStartNewSeason()`) zijn basisprovincie helemaal niet toegewezen — die
 blijft gewoon neutraal, precies zoals de rest van de kaart. Dat volk bezit
-dus vanaf dag 1 al 0 provincies en is daarmee, zonder enige extra code,
-al "rebellen" in de zin van dit hoofdstuk. Koppelt een docent er later
-alsnog een klas aan (`tpAssignKlasCiv()`), dan begint die klas meteen met
-precies deze opstandsflow: de enige beschikbare aanvalsknop staat op hun
-eigen (nog altijd neutrale) basisprovincie. Geen apart "onbespeeld
-volk"-concept nodig — het is gewoon het bestaande rebellen-mechanisme,
-toegepast vanaf het allereerste moment i.p.v. pas na een latere nederlaag.
+dus vanaf dag 1 al 0 provincies en is daarmee al "rebellen" in de zin van
+dit hoofdstuk, zonder aparte "onbespeeld volk"-vlag.
+
+Twee acties in het docentenportaal/de docent-veldtochtkaart (`tpAssignKlasCiv()`/
+`tpUnassignKlasCiv()`, `certamen/games.js`) grijpen sindsdien ook **meteen**
+in op de provincie-eigendom, in plaats van te wachten tot de volgende
+seizoensreset:
+
+- **Ontkoppelen** (`tpUnassignKlasCiv()` → `twReleaseCivIfUnassigned()`,
+  `certamen/totalwar.js`): was dit de laatste klas van dat volk, dan gaan
+  ALLE provincies die het volk op dat moment bezit terug naar neutraal —
+  een onbespeeld volk mag nooit stilzwijgend gebied blijven vasthouden.
+  Blijft er nog een andere klas aan hetzelfde volk gekoppeld, dan gebeurt
+  er niets (dat volk speelt nog gewoon mee).
+- **(Opnieuw) koppelen** (`tpAssignKlasCiv()` → `twGrantFreshFlagshipIfUnowned()`):
+  staat de basisprovincie van dat volk nog **neutraal**, dan krijgt de klas
+  'm meteen — geen opstand nodig, er is niemand om iets van terug te
+  veroveren. Is die basisprovincie inmiddels door een **ander** volk
+  veroverd (kan, want een niet-gekoppeld volk se basisprovincie is verder
+  gewoon een normale neutrale provincie die een actieve buur kan innemen),
+  dan grijpt dit expliciet **niet** in: de nieuwe klas begint dan als
+  "verslagen" (0 provincies) en moet de bestaande opstandsflow hierboven
+  gebruiken om haar eigen basisprovincie te heroveren — precies zoals elk
+  ander tijdens de veldtocht uitgeroeid volk.
 
 Bewust **geen nieuw Firebase-veld**: `twCivIsWiped(civId)` (`totalwar.js`)
 leidt "uitgeroeid" puur af uit de live eigendomsstand (`_twLiveProvinces`) —
