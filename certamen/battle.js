@@ -4614,16 +4614,22 @@ SCREENS.battleResult = function(){
 // De inlog (klascode + leerlingcode) blijft ongewijzigd; alleen identities/.../name
 // verandert. Zo hoeft een leerling geen nieuw account aan te maken.
 async function bmRenameSelf(back){
-  if(!BM_IDENT) return;
-  const cur=BM_IDENT.name||"";
+  // Valt terug op de lokale cache i.p.v. alleen BM_IDENT, zodat dit ook werkt vanaf
+  // het algemene profielscherm (games.js SCREENS.collection) — daar is nog geen
+  // actieve Battle Mode-sessie geladen als de speler er niet eerst via Battle Mode
+  // zelf is binnengekomen, terwijl bmIdentLoad() de identiteit al wel lokaal heeft.
+  const ident=BM_IDENT||bmIdentLoad();
+  if(!ident) return;
+  const cur=ident.name||"";
   const nm=(prompt("Kies je nieuwe naam — dit is de naam die je klasgenoten en de docent zien. \n(Je klascode en leerlingcode blijven gelijk.)",cur)||"").trim();
   if(!nm||nm===cur) return;
   if(nm.length>60){ toast("Te lang","Gebruik maximaal 60 tekens."); return; }
-  BM_IDENT.name=nm;
-  try{ bmIdentSave({...(bmIdentLoad()||{}),...BM_IDENT,name:nm}); }catch(e){}
+  ident.name=nm;
+  if(BM_IDENT) BM_IDENT.name=nm;
+  try{ bmIdentSave({...(bmIdentLoad()||{}),...ident,name:nm}); }catch(e){}
   try{
-    if(fbDB && BM_IDENT.klascode && BM_IDENT.leerlingcode)
-      await fbDB.ref("identities/"+BM_IDENT.klascode+"/"+BM_IDENT.leerlingcode+"/name").set(nm);
+    if(fbDB && ident.klascode && ident.leerlingcode)
+      await fbDB.ref("identities/"+ident.klascode+"/"+ident.leerlingcode+"/name").set(nm);
   }catch(e){ toast("Niet gesynct","Naam lokaal aangepast, maar kon niet online opslaan."); }
   // Zit je al in een kamer, dan moet de naam daar óók mee — anders blijft de
   // oude naam in de lobby, op het slagveld en op het docentscherm staan.
