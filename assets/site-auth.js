@@ -35,6 +35,44 @@
 
   const IDENT_KEY = "certamen_battle_identity"; // zelfde sleutel als certamen/battle.js
 
+  // Site-root, afgeleid van het <script>-tag waarmee dit bestand zelf is
+  // ingesloten — zo werken cross-app links (profiel-pagina, widget) correct
+  // ongeacht of de pagina op het hoofdniveau staat, een niveau dieper (bv.
+  // profiel/), of twee niveaus dieper (bv. latijn/ludus/), en ongeacht of de
+  // site op "/" of onder "/KThulp/" (GitHub Pages) draait.
+  const SITE_ROOT = (function(){
+    const scripts = document.getElementsByTagName("script");
+    for(let i=0;i<scripts.length;i++){
+      const src = scripts[i].getAttribute("src")||"";
+      if(/(^|\/)assets\/site-auth\.js(\?.*)?$/.test(src)){
+        return new URL(src, document.baseURI).href.replace(/assets\/site-auth\.js(\?.*)?$/, "");
+      }
+    }
+    return "./";
+  })();
+
+  // Weergavenamen + link per app, gedeeld door de widget en de profielpagina.
+  // Zelfde appId's als KTScores.save() elders op de site gebruikt.
+  const APP_META = {
+    "ludus-la":        {label:"Ludus (Latijn)",        url:SITE_ROOT+"latijn/ludus/"},
+    "agora-gr":        {label:"Agora (Grieks)",         url:SITE_ROOT+"grieks/agora/"},
+    "diagnosticum-la": {label:"Diagnosticum (Latijn)",  url:SITE_ROOT+"latijn/diagnosticum/"},
+    "casus-la":        {label:"Casus (Latijn)",         url:SITE_ROOT+"latijn/casus/"},
+    "casus-gr":        {label:"Casus (Grieks)",         url:SITE_ROOT+"grieks/casus/"},
+    "clausula-la":     {label:"Clausula (Latijn)",      url:SITE_ROOT+"latijn/clausula/"},
+    "clausula-gr":     {label:"Clausula (Grieks)",      url:SITE_ROOT+"grieks/clausula/"},
+    "stamtijden-la":   {label:"Stamtijden (Latijn)",    url:SITE_ROOT+"latijn/stamtijden/"},
+    "stamtijden-gr":   {label:"Stamtijden (Grieks)",    url:SITE_ROOT+"grieks/stamtijden/"},
+    "structura-la":    {label:"Structura (Latijn)",     url:SITE_ROOT+"latijn/structura/"},
+    "structura-gr":    {label:"Structura (Grieks)",     url:SITE_ROOT+"grieks/structura/"},
+    "werkwoorden-la":  {label:"Werkwoorden (Latijn)",   url:SITE_ROOT+"latijn/werkwoorden/"},
+    "werkwoorden-gr":  {label:"Werkwoorden (Grieks)",   url:SITE_ROOT+"grieks/werkwoorden/"},
+    "verba-la":        {label:"Verba (Latijn)",         url:SITE_ROOT+"latijn/verba/"},
+    "verba-gr":        {label:"Verba (Grieks)",         url:SITE_ROOT+"grieks/verba/"},
+    "alfabet-gr":      {label:"Alfabet (Grieks)",       url:SITE_ROOT+"grieks/alfabet/"},
+    "certamen":        {label:"Certamen",               url:SITE_ROOT+"certamen/"}
+  };
+
   /* ---- Lazy Firebase-loader: alleen laden zodra echt nodig ---- */
   let fbReadyPromise = null;
   function loadScript(src){
@@ -122,6 +160,99 @@
     });
   }
 
+  /* ---- Leerling: profiel verversen vanaf Firebase (coins/xp/apps/Google-link) ---- */
+  async function refreshIdentity(){
+    const ident = identLoad();
+    if(!ident) return null;
+    const { db } = await ensureFirebase();
+    const snap = await db.ref("identities/"+ident.klascode+"/"+ident.leerlingcode).once("value");
+    if(!snap.exists()) return ident;
+    const merged = { ...ident, ...snap.val() };
+    identSave(merged);
+    notifyChange();
+    return merged;
+  }
+
+  /* ---- Leerling: Google-account koppelen (optioneel, naast klascode+leerlingcode) ----
+     Zelfde onderliggende data als certamen/battle.js's eigen Google-koppeling
+     (identities/{klas}/{lid}/googleUid + googleLinks/{uid}), hier zelfstandig
+     herhaald zodat ook pagina's buiten Certamen dit kunnen aanbieden. Gebruikt
+     een eigen redirect-sleutel (niet die van battle.js) zodat de twee losse
+     flows elkaar nooit kunnen kruisen. */
+  const GOOGLE_REDIRECT_KEY = "kt_profile_google_redirect_intent";
+  async function linkGoogle(){
+    const ident = identLoad();
+    if(!ident) throw new Error("Log eerst in als leerling.");
+    const { auth } = await ensureFirebase();
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({prompt:"select_account"});
+    try{ localStorage.setItem(GOOGLE_REDIRECT_KEY, JSON.stringify({klas:ident.klascode, lid:ident.leerlingcode})); }catch(e){}
+    await auth.signInWithRedirect(provider);
+  }
+  async function handleGoogleRedirect(){
+    let intent=null;
+    try{ const r=localStorage.getItem(GOOGLE_REDIRECT_KEY); if(r){ intent=JSON.parse(r); localStorage.removeItem(GOOGLE_REDIRECT_KEY); } }catch(e){}
+    if(!intent) return false;
+    const { auth, db } = await ensureFirebase();
+    let result=null;
+    try{ result = await auth.getRedirectResult(); }catch(e){ return false; }
+    let user = result && result.user;
+    if(!user){
+      // Zelfde race als certamen/battle.js (bmGoogleHandleRedirectResult): geef
+      // Firebase nog een korte kans om de auth-state te laten settelen.
+      user = await new Promise(resolve=>{
+        if(auth.currentUser){ resolve(auth.currentUser); return; }
+        const unsub = auth.onAuthStateChanged(u=>{ unsub(); resolve(u); });
+        setTimeout(()=>{ unsub(); resolve(auth.currentUser); }, 3000);
+      });
+    }
+    if(!user) return false;
+    const uid=user.uid, email=user.email||"";
+    const identSnap = await db.ref("identities/"+intent.klas+"/"+intent.lid+"/googleUid").once("value");
+    if(identSnap.exists() && identSnap.val()!==uid) throw new Error("Dit profiel is al gekoppeld aan een ander Google-account. Ontkoppel eerst.");
+    const linkSnap = await db.ref("googleLinks/"+uid).once("value");
+    if(linkSnap.exists() && (linkSnap.val().klas!==intent.klas || linkSnap.val().lid!==intent.lid)) throw new Error("Dit Google-account is al gekoppeld aan een ander profiel.");
+    const updates={};
+    updates["identities/"+intent.klas+"/"+intent.lid+"/googleUid"]=uid;
+    updates["identities/"+intent.klas+"/"+intent.lid+"/googleEmail"]=email;
+    updates["googleLinks/"+uid]={klas:intent.klas, lid:intent.lid, email, linkedAt:firebase.database.ServerValue.TIMESTAMP};
+    await db.ref().update(updates);
+    const ident = identLoad();
+    if(ident) identSave({...ident, googleUid:uid, googleEmail:email});
+    notifyChange();
+    return true;
+  }
+  async function unlinkGoogle(){
+    const ident = identLoad();
+    if(!ident || !ident.googleUid) return;
+    const { db } = await ensureFirebase();
+    const updates={};
+    updates["identities/"+ident.klascode+"/"+ident.leerlingcode+"/googleUid"]=null;
+    updates["identities/"+ident.klascode+"/"+ident.leerlingcode+"/googleEmail"]=null;
+    updates["googleLinks/"+ident.googleUid]=null;
+    await db.ref().update(updates);
+    const cleaned={...ident}; delete cleaned.googleUid; delete cleaned.googleEmail;
+    identSave(cleaned);
+    notifyChange();
+  }
+
+  /* ---- Docent: eigen klassen + roster opvragen (voor de profielpagina) ---- */
+  async function getTeacherClasses(){
+    const { db, auth } = await ensureFirebase();
+    const uid = auth.currentUser && auth.currentUser.uid;
+    if(!uid) return {};
+    const snap = await db.ref("teachers/"+uid+"/classes").once("value");
+    return snap.val()||{};
+  }
+  async function getClassRoster(code){
+    const { db } = await ensureFirebase();
+    const snap = await db.ref("identities/"+(code||"").trim().toUpperCase()).once("value");
+    if(!snap.exists()) return {};
+    const out={};
+    snap.forEach(child=>{ out[child.key]=child.val(); });
+    return out;
+  }
+
   /* ---- Score-sync: identities/{klas}/{lid}/apps/{appId} ---- */
   async function saveScore(appId, payload){
     const ident = identLoad();
@@ -151,11 +282,13 @@
       if(ident){
         el.innerHTML =
           '<div class="ktaBar"><span class="ktaWho">🎓 '+esc(ident.name)+' &middot; klas '+esc(ident.klascode)+'</span>'+
+          '<a class="ktaBtn" href="'+esc(SITE_ROOT+"profiel/")+'">Mijn profiel</a>'+
           '<button type="button" class="ktaBtn" data-kta="logout-student">Uitloggen</button></div>';
       }else if(teacher){
         el.innerHTML =
           '<div class="ktaBar"><span class="ktaWho">👩‍🏫 '+esc(teacher.email)+'</span>'+
-          '<a class="ktaBtn" href="certamen/">Docentenportaal</a>'+
+          '<a class="ktaBtn" href="'+esc(SITE_ROOT+"profiel/")+'">Mijn profiel</a>'+
+          '<a class="ktaBtn" href="'+esc(SITE_ROOT+"certamen/")+'">Docentenportaal</a>'+
           '<button type="button" class="ktaBtn" data-kta="logout-teacher">Uitloggen</button></div>';
       }else{
         el.innerHTML = '<button type="button" class="ktaBtn ktaBtn-main" data-kta="open">Inloggen (leerling / docent)</button>';
@@ -233,7 +366,13 @@
     loginStudent, logoutStudent,
     loginTeacher, logoutTeacher, authReady,
     onChange(cb){ listeners.push(cb); },
-    mountWidget
+    mountWidget,
+    ensureFirebase,
+    refreshIdentity,
+    linkGoogle, unlinkGoogle, handleGoogleRedirect,
+    getTeacherClasses, getClassRoster,
+    APPS: APP_META,
+    SITE_ROOT
   };
   global.KTScores = { save: saveScore };
 
