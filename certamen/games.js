@@ -1419,10 +1419,26 @@ SCREENS.teacherClass = function(){
   <div id="tpMissedWords"></div>
   <div id="tpChronicaStats"></div>
   <div id="tpStudentList"><div class="note" style="text-align:center;padding:16px">Laden…</div></div>
+  <div id="tpOtherApps"></div>
   ${foot()}`);
   tpLoadRoster();
   tpRenderClassAnalytics();
   tpRenderChronicaAnalytics();
+};
+
+// Weergavenamen voor de score-sync uit assets/site-auth.js (identities/{klas}/
+// {lid}/apps/{appId}). appId = "<mapnaam>-la"/"-gr", zie plan "site-brede
+// inlog": elke overige app op de site schrijft hier zelf zijn (score,detail).
+const APP_LABELS = {
+  "ludus-la":"Ludus (Latijn)", "agora-gr":"Agora (Grieks)",
+  "diagnosticum-la":"Diagnosticum (Latijn)",
+  "casus-la":"Casus (Latijn)", "casus-gr":"Casus (Grieks)",
+  "clausula-la":"Clausula (Latijn)", "clausula-gr":"Clausula (Grieks)",
+  "stamtijden-la":"Stamtijden (Latijn)", "stamtijden-gr":"Stamtijden (Grieks)",
+  "structura-la":"Structura (Latijn)", "structura-gr":"Structura (Grieks)",
+  "werkwoorden-la":"Werkwoorden (Latijn)", "werkwoorden-gr":"Werkwoorden (Grieks)",
+  "verba-la":"Verba (Latijn)", "verba-gr":"Verba (Grieks)",
+  "alfabet-gr":"Alfabet (Grieks)"
 };
 
 function tpOpenClass(code){
@@ -1489,8 +1505,29 @@ function tpRenderChronicaAnalytics(){
 function tpLoadRoster(){
   const code=_tpCurrentClass;
   return teacherNet().getIdentities(code)
-    .then(idents=>{ _tpRoster=idents||{}; tpRenderRoster(); })
-    .catch(()=>{ _tpRoster={}; tpRenderRoster(); }); // "niet gevonden" = nog geen leden
+    .then(idents=>{ _tpRoster=idents||{}; tpRenderRoster(); tpRenderOtherApps(); })
+    .catch(()=>{ _tpRoster={}; tpRenderRoster(); tpRenderOtherApps(); }); // "niet gevonden" = nog geen leden
+}
+
+// "Overige apps"-paneel: elke leerling in het al geladen _tpRoster kan een
+// "apps"-subtak hebben (identities/{klas}/{lid}/apps/{appId}: {score,detail,
+// updatedAt}), geschreven door assets/site-auth.js (KTScores.save) vanuit elke
+// losse app op de site. getIdentities() leest die al mee (hele subtree per
+// leerling), dus hier alleen renderen — geen extra Firebase-call nodig.
+function tpRenderOtherApps(){
+  const cont=el("tpOtherApps"); if(!cont) return;
+  const rows=[];
+  Object.entries(_tpRoster||{}).forEach(([lid,s])=>{
+    Object.entries(s.apps||{}).forEach(([appId,a])=>{
+      rows.push({name:s.name||lid, appId, label:APP_LABELS[appId]||appId, detail:a.detail||"", updatedAt:a.updatedAt||0});
+    });
+  });
+  if(!rows.length){ cont.innerHTML=""; return; }
+  rows.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+  cont.innerHTML=`<div class="panel"><h3>Overige apps</h3>
+    <table class="bm-tbl"><thead><tr><th>Leerling</th><th>App</th><th>Score</th><th>Laatst bijgewerkt</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr><td>${esc(r.name)}</td><td>${esc(r.label)}</td><td>${esc(r.detail)}</td><td>${r.updatedAt?new Date(r.updatedAt).toLocaleDateString("nl-NL"):"—"}</td></tr>`).join("")}
+    </tbody></table></div>`;
 }
 
 function tpRenderRoster(){

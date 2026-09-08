@@ -150,6 +150,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px;font-
 }
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+.wrap{padding-left:14px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(SCREEN!=='home'){event.preventDefault();go('home');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -285,7 +286,14 @@ function loadStats(){
   }catch(e){}
   return defaults;
 }
-function saveStats(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(STATS)); }catch(e){} }
+function saveStats(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(STATS)); }catch(e){}
+  if(typeof KTScores!=="undefined"){
+    let c=0,t=0; Object.values(STATS.modes).forEach(m=>{c+=m.correct||0;t+=m.total||0;});
+    const pct = STATS.test.attempts ? STATS.test.bestPct : (t?Math.round(100*c/t):0);
+    const detail = STATS.test.attempts ? "beste toets: "+STATS.test.bestPct+"%" : c+"/"+t+" goed geoefend";
+    KTScores.save("alfabet-gr",{score:pct, detail});
+  }
+}
 let STATS = loadStats();
 
 let SCREEN = 'home';

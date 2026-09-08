@@ -257,6 +257,7 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
   border-top:1px solid var(--border);}
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(!document.getElementById('menu').classList.contains('active')){event.preventDefault();gotoScreen('menu');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -1123,6 +1124,17 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
 <footer>Griekse Werkwoorden · © Gerben de Jong · 2026</footer>
 
 <script>
+// ── Generieke voortgangsteller (site-brede score-sync, zie assets/site-auth.js) ──
+// Deze app had voorheen geen enkele persistente voortgang; dit is de minimale
+// {goed,fout}-teller die bij elke beantwoorde vraag (in elke oefenmodus) wordt
+// bijgewerkt en naar de docent gesynct als de leerling is ingelogd.
+const KT_VOORTGANG_KEY = 'werkwoorden_gr_voortgang_v1';
+function ktRegTel(ok){
+  let v; try{ v=JSON.parse(localStorage.getItem(KT_VOORTGANG_KEY))||{goed:0,fout:0}; }catch(e){ v={goed:0,fout:0}; }
+  if(ok) v.goed++; else v.fout++;
+  try{ localStorage.setItem(KT_VOORTGANG_KEY, JSON.stringify(v)); }catch(e){}
+  if(typeof KTScores!=="undefined") KTScores.save('werkwoorden-gr',{score:v.goed, detail:v.goed+' goed, '+v.fout+' fout'});
+}
 // ══════════════════════════════════════════════════════
 //  VERB DATABASE  (segments: array of {chars, role})
 //  roles: aug | stem | tk | end  (null = irregular/whole)
@@ -1723,6 +1735,7 @@ function checkOntleed(){
 
   const allOk=structureOk&&vertOk;
   if(allOk){O.sc++;}else{O.wr++;}
+  ktRegTel(allOk);
   O.res.push({f:q.f,pres:q.pres,ok:allOk,t:q.t});
   document.getElementById('o-sc').textContent=O.sc;
   document.getElementById('o-wr').textContent=O.wr;
@@ -1802,6 +1815,7 @@ function checkDeterm(){
     }
   }
   if(allOk){s.sc++;}else{s.wr++;}
+  ktRegTel(allOk);
   s.res.push({f:q.f,pres:q.pres,ok:allOk,t:q.t});
   document.getElementById('d-sc').textContent=s.sc;
   document.getElementById('d-wr').textContent=s.wr;
@@ -1834,6 +1848,7 @@ function checkVertaal(){
   const ok=matchNl(v.value,q.tr);
   v.classList.remove('ok','err');v.classList.add(ok?'ok':'err');v.disabled=true;
   if(ok){s.sc++;}else{s.wr++;}
+  ktRegTel(ok);
   s.res.push({f:q.f,pres:q.pres,ok,t:q.t});
   document.getElementById('v-sc').textContent=s.sc;
   document.getElementById('v-wr').textContent=s.wr;

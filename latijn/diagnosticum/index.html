@@ -113,6 +113,7 @@
   footer{text-align:center;color:#999;font-size:.78rem;margin-top:34px;font-style:italic}
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(!document.getElementById('screen-home').classList.contains('active')){event.preventDefault();if(confirm('Wil je teruggaan naar het portaal? Je voortgang blijft bewaard.'))window.location.href='../';}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -1302,6 +1303,7 @@ function toonEindrapport(){
     const bewaard = JSON.parse(localStorage.getItem(LS_KEY_RESULTATEN))||[];
     bewaard.push({datum:new Date().toISOString(), grens, resultaten, totaalPct});
     localStorage.setItem(LS_KEY_RESULTATEN, JSON.stringify(bewaard.slice(-10)));
+    if(typeof KTScores!=="undefined") KTScores.save("diagnosticum-la",{score:totaalPct, detail:"laatste toets: "+totaalGoed+"/"+totaalVragen+" ("+totaalPct+"%)"});
   }catch(e){}
   wisVoortgang();
 

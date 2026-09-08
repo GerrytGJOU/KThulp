@@ -266,6 +266,7 @@
   .legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(!document.getElementById('screenLevel').classList.contains('active')){event.preventDefault();goToLevelSelect();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -347,6 +348,18 @@
 </div>
 
 <script>
+// ── Generieke voortgangsteller (site-brede score-sync, zie assets/site-auth.js) ──
+// Deze app had voorheen geen enkele persistente voortgang; dit is de minimale
+// {goed,fout}-teller die bij elke beantwoorde vraag (in elke oefenmodus) wordt
+// bijgewerkt en naar de docent gesynct als de leerling is ingelogd.
+const KT_VOORTGANG_KEY = 'structura_la_voortgang_v1';
+function ktRegTel(ok){
+  let v; try{ v=JSON.parse(localStorage.getItem(KT_VOORTGANG_KEY))||{goed:0,fout:0}; }catch(e){ v={goed:0,fout:0}; }
+  if(ok) v.goed++; else v.fout++;
+  try{ localStorage.setItem(KT_VOORTGANG_KEY, JSON.stringify(v)); }catch(e){}
+  if(typeof KTScores!=="undefined") KTScores.save('structura-la',{score:v.goed, detail:v.goed+' goed, '+v.fout+' fout'});
+}
+
 // ============================================================
 // STEP DEFINITIONS (all levels)
 // Per level a subset is shown; AcI only on levels 4-5.
@@ -1964,7 +1977,9 @@ function onWordTap(wordIndex){
 
 function handleP(wordIndex,zin,step){
   const correct=zin.psolmo.P;
-  if(correct.includes(wordIndex)){
+  const ok=correct.includes(wordIndex);
+  ktRegTel(ok);
+  if(ok){
     state.selectedWords[wordIndex]='P';
     renderWords();
     const allDone=correct.every(i=>state.selectedWords[i]==='P');
@@ -1977,7 +1992,9 @@ function handleP(wordIndex,zin,step){
 
 function handleS(wordIndex,zin,step){
   const allS=[...zin.psolmo.S.Sn,...zin.psolmo.S.So];
-  if(!allS.includes(wordIndex)){
+  const ok=allS.includes(wordIndex);
+  ktRegTel(ok);
+  if(!ok){
     shake(wordIndex);
     showFeedback(false,'Dit is geen voegwoord in deze zin.');
     return;
@@ -1994,9 +2011,11 @@ function confirmVoegwoord(type){
   const zin=state.zinnen[state.zinIndex];
   const step=PSOLMO.find(s=>s.key==='S');
   const correctType=zin.psolmo.S.Sn.includes(wordIndex)?'Sn':'So';
+  const ok=type===correctType;
+  ktRegTel(ok);
   document.getElementById('vwChooser').classList.remove('show');
   state.pendingVwIndex=null;
-  if(type===correctType){
+  if(ok){
     state.selectedWords[wordIndex]=type;
     renderWords();
     const allSn=zin.psolmo.S.Sn.every(i=>state.selectedWords[i]==='Sn');
@@ -2018,6 +2037,7 @@ function handleA(wordIndex,zin,step){
   if(!groups||groups.length===0){
     shake(wordIndex);
     showFeedback(false,'Er zijn geen attribuutgroepen in deze zin. Gebruik de knop hieronder.');
+    ktRegTel(false);
     return;
   }
 
@@ -2026,6 +2046,7 @@ function handleA(wordIndex,zin,step){
   if(groupIdx===-1){
     shake(wordIndex);
     showFeedback(false,'Dit woord is geen kern of attribuut van een woordgroep. Tik op het hoofdsubstantief van de groep.');
+    ktRegTel(false);
     return;
   }
 
@@ -2033,8 +2054,10 @@ function handleA(wordIndex,zin,step){
   // Only accept taps on the KERN word
   if(wordIndex!==group.kern){
     showFeedback(false,`Tik op het kernwoord van deze groep: <em>${zin.latijn[group.kern]}</em>. De app kleurt de attributen dan automatisch in.`);
+    ktRegTel(false);
     return;
   }
+  ktRegTel(true);
 
   // Assign group colour tag — kern keeps its O/L/M tag, only attrs get the A tag
   const groupTags=['A1','A2','A3','A4','A5'];
@@ -2066,7 +2089,9 @@ function handleA(wordIndex,zin,step){
 function handleDefault(wordIndex,zin,step){
   const key=step.key;
   const correct=zin.psolmo[key];
-  if(correct.includes(wordIndex)){
+  const ok=correct.includes(wordIndex);
+  ktRegTel(ok);
+  if(ok){
     state.selectedWords[wordIndex]=key;
     renderWords();
     const allDone=correct.every(i=>state.selectedWords[i]===key);
@@ -2176,6 +2201,7 @@ function skipStep(){
   } else {
     hasContent=(zin.psolmo[step.key]&&zin.psolmo[step.key].length>0);
   }
+  ktRegTel(!hasContent);
   if(hasContent){
     showFeedback(false,`Er ${step.key==='A'?'zijn':'is'} wél ${step.key==='A'?'attribuutgroepen':'een '+step.naam.toLowerCase()} in deze zin. Zoek goed!`);
     return;

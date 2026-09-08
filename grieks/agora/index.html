@@ -13,6 +13,7 @@
 <link rel="apple-touch-icon" href="../../assets/favicons/grieks/apple-touch-icon.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="../../assets/site-auth.js"></script>
 <style>
 :root{
   --aegean:#0d1f3c;--aegean2:#152a50;--aegean3:#1c3566;--aegean4:#24427d;
@@ -1440,7 +1441,9 @@ let PAIRS_TIMER = null;
 let QV = {}, QG = {}, QSP = null, QPR = {}, QF = {}, QW = {}, QS = {};
 
 function load(){try{const r=localStorage.getItem(KEY);return r?{...DEF,...JSON.parse(r)}:{...DEF};}catch(e){return{...DEF};}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+  if(typeof KTScores!=="undefined") KTScores.save("agora-gr",{score:S.xp||0,detail:(S.xp||0)+" xp, "+(S.totalCorrect||0)+" goed beantwoord"});
+}
 function getKey(){return(TEACHER_API_KEY&&TEACHER_API_KEY.trim())||S.apiKey||"";}
 function todayStr(){return new Date().toISOString().slice(0,10);}
 function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/86400000);}

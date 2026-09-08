@@ -220,6 +220,7 @@
   }
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(!document.getElementById('screen-home').classList.contains('active')){event.preventDefault();goHome();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -376,6 +377,18 @@
 <footer>Stamtijden Grieks · © Gerben de Jong · 2026</footer>
 
 <script>
+// ── Generieke voortgangsteller (site-brede score-sync, zie assets/site-auth.js) ──
+// Deze app had voorheen geen enkele persistente voortgang; dit is de minimale
+// {goed,fout}-teller die bij elke beantwoorde vraag (in elke oefenmodus) wordt
+// bijgewerkt en naar de docent gesynct als de leerling is ingelogd.
+const KT_VOORTGANG_KEY = 'stamtijden_gr_voortgang_v1';
+function ktRegTel(ok){
+  let v; try{ v=JSON.parse(localStorage.getItem(KT_VOORTGANG_KEY))||{goed:0,fout:0}; }catch(e){ v={goed:0,fout:0}; }
+  if(ok) v.goed++; else v.fout++;
+  try{ localStorage.setItem(KT_VOORTGANG_KEY, JSON.stringify(v)); }catch(e){}
+  if(typeof KTScores!=="undefined") KTScores.save('stamtijden-gr',{score:v.goed, detail:v.goed+' goed, '+v.fout+' fout'});
+}
+
 // ══════════════════════════════════════════════════════════════
 // VERBENDATABASE — Griekse onregelmatige stamtijden
 // Bronnen: Stamtijden_Grieks.xlsx + onregelmatige stamtijden CEVO-lijst
@@ -862,9 +875,11 @@ function registerCorrect(v) {
   state.correct++; state.sessionCorrect++; state.sessionTotal++;
   state.streak++; state.totalPts += 10 + (state.streak>=3?5:0);
   updatePts();
+  ktRegTel(true);
 }
 function registerWrong(v) {
   state.sessionTotal++; state.streak=0; state.missed.push(v); updatePts();
+  ktRegTel(false);
 }
 function updatePts() {
   document.getElementById('total-pts').textContent    = state.totalPts;

@@ -87,6 +87,7 @@
   footer{text-align:center;font-size:11px;color:var(--border);padding:20px 0 10px;font-style:italic;letter-spacing:.05em;width:100%;max-width:480px;}
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(!document.getElementById('screen-start').classList.contains('active')){event.preventDefault();showScreen('screen-start');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -139,13 +140,6 @@
     <div class="logo" style="font-size:26px;"><em>Docentenpaneel</em></div>
     <div class="subtitle">Vocabularium — Grieks</div>
     <div class="divider"></div>
-    <div class="card mb">
-      <div class="card-title">⚙ Google Sheets Webhook</div>
-      <label>Apps Script URL</label>
-      <input type="text" id="inp-webhook" placeholder="https://script.google.com/macros/s/..." autocomplete="off" autocorrect="off" spellcheck="false">
-      <button class="btn secondary small" onclick="slaWebhookOp()">Opslaan</button>
-      <div id="webhook-status" class="status-msg" style="margin-top:6px;"></div>
-    </div>
     <div class="card mb">
       <div class="card-title">✦ Sessie</div>
       <label>Sessiecode (bepaalt welke woorden worden gevraagd)</label>
@@ -299,7 +293,7 @@ const BRON_INFO = {
 let inst = {
   modus:'freq', bron:'basis',
   woordsoorten:['subst','verb','adj','bw','vw','vz','vnw'],
-  aantal:15, sessiecode:'', verplichtWoorden:[], webhookUrl:'',
+  aantal:15, sessiecode:'', verplichtWoorden:[],
 };
 let toetsBezig = false;
 let toets = { leerling:{naam:'',achternaam:'',klas:''}, sessiecode:'', vragen:[], huidig:0, antwoorden:[], tabWissels:0, tabLog:[] };
@@ -324,9 +318,6 @@ function checkPw(){
   }
 }
 function laadDocent(){
-  const hook=localStorage.getItem('vocab_grieks_webhook')||'';
-  document.getElementById('inp-webhook').value=hook;
-  inst.webhookUrl=hook;
   const sessie=localStorage.getItem('vocab_grieks_sessie')||'';
   document.getElementById('inp-sessie-docent').value=sessie;
   inst.sessiecode=sessie;
@@ -343,13 +334,6 @@ function laadDocent(){
   });
   updateBronToelichting();
   refreshPoolInfo();
-}
-function slaWebhookOp(){
-  const url=document.getElementById('inp-webhook').value.trim();
-  localStorage.setItem('vocab_grieks_webhook',url);
-  inst.webhookUrl=url;
-  const st=document.getElementById('webhook-status');
-  st.textContent='✓ Opgeslagen.'; st.className='status-msg ok';
 }
 function genereerSessie(){
   const d=new Date();
@@ -429,9 +413,7 @@ function slaInstellingenOp(){
   const sessie=document.getElementById('inp-sessie-docent').value.trim().toUpperCase();
   if(!sessie){alert('Vul eerst een sessiecode in.');return;}
   inst.sessiecode=sessie;
-  inst.webhookUrl=document.getElementById('inp-webhook').value.trim();
   inst.verplichtWoorden=document.getElementById('verplicht-woorden').value.trim().split('\n').map(s=>s.trim()).filter(Boolean);
-  localStorage.setItem('vocab_grieks_webhook',inst.webhookUrl);
   localStorage.setItem('vocab_grieks_sessie',sessie);
   localStorage.setItem('vocab_grieks_verplicht',document.getElementById('verplicht-woorden').value);
   localStorage.setItem('vocab_grieks_inst',JSON.stringify(inst));
@@ -503,7 +485,6 @@ function startToets(){
   err.style.display='none';
   const opg=localStorage.getItem('vocab_grieks_inst');
   if(opg) Object.assign(inst,JSON.parse(opg));
-  inst.webhookUrl=localStorage.getItem('vocab_grieks_webhook')||inst.webhookUrl||'';
   const pool=bouwPool(inst);
   if(pool.length===0){err.textContent='Geen woorden beschikbaar. Vraag je docent de instellingen te controleren.';err.style.display='block';return;}
   const vragen=selecteerVragen(pool,inst.aantal,sessie,naam+acht,inst.verplichtWoorden||[]);
@@ -652,24 +633,18 @@ function toggleTwijfel(idx){
 async function verzendResultaten(){
   const btn=document.getElementById('btn-verzend');
   const status=document.getElementById('verzend-status');
-  const hook=inst.webhookUrl||localStorage.getItem('vocab_grieks_webhook')||localStorage.getItem('vocab_webhook')||'';
-  if(!hook){status.textContent='⚠ Geen webhook ingesteld. Vraag je docent.';status.className='status-msg err';return;}
+  const ident=(typeof KTAuth!=="undefined")?KTAuth.getIdentity():null;
+  if(!ident){
+    status.textContent='⚠ Log eerst in via het knopje op het hoofdmenu (leerling) — daarna kan je docent je resultaten zien.';
+    status.className='status-msg err';
+    return;
+  }
   btn.disabled=true;
   btn.innerHTML='<span class="spinner"></span>Verzenden...';
   const ant=toets.antwoorden;
   const sc=berekenScore(ant);
-  const payload={
-    vak:'Grieks',
-    sessiecode:toets.sessiecode,
-    naam:toets.leerling.naam+' '+toets.leerling.achternaam,
-    klas:toets.leerling.klas,
-    tijdstip:new Date().toLocaleString('nl-NL'),
-    totaal:ant.length,goed:sc.goed,twijfel:sc.twijfel,misschien:sc.misschien,fout:sc.fout,score_pct:sc.pct,
-    tabWissels:toets.tabWissels,tabLog:toets.tabLog.join(', ')||'—',
-    antwoorden:ant.map(a=>({woord:a.woord,gegeven:a.gegeven,correct:a.vertaling.replace(/\n/g,' / '),uitslag:a.twijfel?'twijfel':a.uitslag})),
-  };
   try{
-    await fetch(hook,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    await KTScores.save('verba-gr',{score:sc.pct, detail:sc.goed+"/"+ant.length+" goed ("+sc.pct+"%), sessie "+toets.sessiecode});
     toetsBezig=false;
     window.removeEventListener('beforeunload',waarschuwVerlaten);
     toonEinde();
