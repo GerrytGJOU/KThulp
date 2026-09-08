@@ -1038,6 +1038,7 @@ SCREENS.teacherLogin = function(){
       Onthoud mij op dit apparaat
     </label>
     <button class="btn btn-gold btn-block lg" style="margin-top:16px" onclick="teacherDoLogin()">Inloggen</button>
+    <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('teacherSignup')">Account aanmaken</button>
   </div>
   ${foot()}`);
   setTimeout(()=>{ const e=el("tpEmail"); if(e)e.focus(); }, 120);
@@ -1060,9 +1061,96 @@ function teacherDoLogin(){
     .catch(e=>toast("Inloggen mislukt",typeof e==="string"?e:(e?.message||"Controleer je gegevens.")));
 }
 
-/* ---- SCHERM: klasoverzicht ---- */
+/* ---- SCHERM: nieuw docentaccount aanmaken (komt op "pending" te staan) ---- */
+SCREENS.teacherSignup = function(){
+  const demo = !hasFirebase;
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('teacherLogin')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Account aanmaken</h2>
+  </div>
+  <div class="panel">
+    ${demo?`<div class="note warn" style="margin-bottom:14px">Firebase niet ingesteld — registreren is hier niet beschikbaar.</div>`:""}
+    <div class="note" style="margin-bottom:14px">Na registreren moet de beheerder je account nog goedkeuren voordat je klassen kunt aanmaken.</div>
+    <label class="fld">E-mailadres</label>
+    <input type="email" id="tsEmail" placeholder="jouw@email.nl" autocomplete="email" style="width:100%;box-sizing:border-box">
+    <label class="fld" style="margin-top:12px">Wachtwoord</label>
+    <input type="password" id="tsPw" autocomplete="new-password" style="width:100%;box-sizing:border-box">
+    <label class="fld" style="margin-top:12px">Wachtwoord herhalen</label>
+    <input type="password" id="tsPw2" autocomplete="new-password" style="width:100%;box-sizing:border-box"
+      onkeydown="if(event.key==='Enter')teacherDoSignup()">
+    <button class="btn btn-gold btn-block lg" style="margin-top:16px" onclick="teacherDoSignup()">Registreren</button>
+  </div>
+  ${foot()}`);
+  setTimeout(()=>{ const e=el("tsEmail"); if(e)e.focus(); }, 120);
+};
+
+function teacherDoSignup(){
+  const email=(el("tsEmail")?.value||"").trim();
+  const pw=el("tsPw")?.value||"";
+  const pw2=el("tsPw2")?.value||"";
+  if(!email){ toast("E-mailadres vereist","Vul een e-mailadres in."); return; }
+  if(!pw || pw.length<6){ toast("Wachtwoord te kort","Kies een wachtwoord van minstens 6 tekens."); return; }
+  if(pw!==pw2){ toast("Wachtwoorden komen niet overeen",""); return; }
+  teacherNet().signupTeacher(email,pw)
+    .then(()=>{
+      H(brand(true)+`
+      <div class="scrhead">
+        <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
+        <h2>Account aangemaakt</h2>
+      </div>
+      <div class="panel">
+        <div class="note">Je account is aangemaakt en wacht op goedkeuring door de beheerder. Je krijgt hier geen automatisch bericht van — neem contact op met de beheerder als je denkt dat het lang duurt.</div>
+        <button class="btn btn-gold btn-block" style="margin-top:16px" onclick="go('home')">Terug naar start</button>
+      </div>
+      ${foot()}`);
+    })
+    .catch(e=>toast("Registreren mislukt",typeof e==="string"?e:(e?.message||"Onbekende fout.")));
+}
+
+/* ---- SCHERM: klasoverzicht ----
+   Voordat de klas-tools getoond worden, wordt eerst teacherStatus gecheckt:
+   "pending"/"revoked"/ontbrekend blokkeert (zie CLAUDE.md § Firebase-rules —
+   rules weigeren klascodes/wordlists-writes toch al voor niet-approved
+   docenten, dit is de bijbehorende UI-laag). Gerbens eigen (admin-)account
+   hoeft niet door deze wachtrij. */
+let _tpIsAdmin = false;
 SCREENS.teacherPortal = function(){
   if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Docentenportaal</h2>
+  </div>
+  <div class="note" style="text-align:center;padding:20px">Status controleren…</div>
+  ${foot()}`);
+  Promise.all([teacherNet().isAdmin(), teacherNet().getTeacherStatus()]).then(([isAdmin, status])=>{
+    if(_screen!=="teacherPortal") return;
+    _tpIsAdmin = !!isAdmin;
+    const approved = isAdmin || (status && status.status==="approved");
+    if(!approved){ tpRenderPortalBlocked(status); return; }
+    tpRenderPortalContent();
+  });
+};
+
+function tpRenderPortalBlocked(status){
+  const st=status && status.status;
+  const msg = st==="revoked"
+    ? "Je docenttoegang is ingetrokken door de beheerder."
+    : "Je account wacht nog op goedkeuring door de beheerder. Je kunt pas klassen aanmaken zodra dat is gebeurd.";
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Docentenportaal</h2>
+    <button class="chip" style="margin-left:auto" onclick="teacherLogout()">Uitloggen</button>
+  </div>
+  <div class="panel">
+    <div class="note warn">${esc(msg)}</div>
+  </div>
+  ${foot()}`);
+}
+
+function tpRenderPortalContent(){
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
@@ -1073,6 +1161,7 @@ SCREENS.teacherPortal = function(){
   <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
   <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('teacherStudentsBoard')">↔️ Leerlingen slepen tussen klassen</button>
   <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">🗺️ Total War — veldtochtkaart</button>
+  ${_tpIsAdmin?`<button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('adminOverview')">🛡️ Beheerdersoverzicht</button>`:""}
   <div class="panel" style="margin-top:16px">
     <label class="fld">Battle Mode — klascodes</label>
     <div class="note" style="margin:2px 0 8px">Elke klas hierboven is óók een inlogcode. Leerlingen die de code invoeren komen automatisch in de bijbehorende klas. Hier kun je losse codes goedkeuren of verwijderen.</div>
@@ -1099,7 +1188,7 @@ SCREENS.teacherPortal = function(){
   ${foot()}`);
   tpLoadClasses();
   tpLoadKlasCivs();
-};
+}
 
 /* ---- Total War: klas ↔ beschaving-koppeling (/totalwar/klasCivs, zie
    TOTAL_WAR.md §4/§7.1 — many-to-one t.o.v. de letterlijke docschema, want
@@ -1326,6 +1415,112 @@ function tpDeleteClass(code){
 
 function teacherLogout(){
   teacherNet().logoutTeacher().then(()=>go("teacherLogin"));
+}
+
+/* ============================================================
+   BEHEERDERSOVERZICHT — alleen voor admins/{uid} (zie
+   database.rules.json en CLAUDE.md § Firebase-rules). Toont wie
+   docent is (en keurt goed/trekt in), en per docent hun klassen,
+   leerlingaantal, laatst actief en eigen woordenlijsten — bewust
+   zonder leerlingnamen/scores of woordenlijstinhoud te tonen.
+   ============================================================ */
+let _aoStatuses = {};   // {uid: {status,email,requestedAt}}
+let _aoKlascodes = {};  // {code: {created,ownerUid}}
+
+SCREENS.adminOverview = function(){
+  if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('teacherPortal')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Beheerdersoverzicht</h2>
+  </div>
+  <div id="aoContent"><div class="note" style="text-align:center;padding:20px">Laden…</div></div>
+  ${foot()}`);
+  teacherNet().isAdmin().then(isAdmin=>{
+    if(!isAdmin){ toast("Geen toegang","Dit overzicht is alleen voor de beheerder."); go("teacherPortal"); return; }
+    aoLoad();
+  });
+};
+
+function aoLoad(){
+  Promise.all([teacherNet().listTeacherStatuses(), teacherNet().listAllKlascodes()])
+    .then(([statuses, klascodes])=>{
+      _aoStatuses=statuses||{};
+      _aoKlascodes=klascodes||{};
+      aoRender();
+    })
+    .catch(e=>{
+      const cont=el("aoContent");
+      if(cont) cont.innerHTML=`<div class="note warn">Kon overzicht niet laden: ${esc(typeof e==="string"?e:(e?.message||""))}</div>`;
+    });
+}
+
+function aoRender(){
+  const cont=el("aoContent"); if(!cont) return;
+  const uids=Object.keys(_aoStatuses||{});
+  if(!uids.length){ cont.innerHTML=`<div class="note">Nog geen docentaccounts geregistreerd.</div>`; return; }
+  const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
+  const statusLabel={pending:"In afwachting",approved:"Goedgekeurd",revoked:"Ingetrokken"};
+  const rows=uids.map(uid=>{
+    const s=_aoStatuses[uid]||{};
+    const codes=Object.entries(_aoKlascodes||{}).filter(([,kc])=>kc && kc.ownerUid===uid).map(([code])=>code);
+    return `<div class="panel" style="margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <div style="flex:1;min-width:180px">
+          <div style="font-weight:700">${esc(s.email||uid)}</div>
+          <div class="note">${statusLabel[s.status]||s.status||"onbekend"} · aangevraagd ${s.requestedAt?new Date(s.requestedAt).toLocaleDateString("nl-NL"):"?"}</div>
+        </div>
+        ${s.status!=="approved"?`<button class="chip" onclick="aoSetStatus(${q(uid)},'approved')">Goedkeuren</button>`:""}
+        ${s.status!=="revoked"?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="aoSetStatus(${q(uid)},'revoked')">Intrekken</button>`:""}
+      </div>
+      <div id="aoKlas_${esc(uid)}" style="margin-top:8px">${codes.length?`<div class="note">Klassen laden…</div>`:`<div class="note">Nog geen klassen.</div>`}</div>
+    </div>`;
+  });
+  cont.innerHTML = rows.join("");
+  uids.forEach(uid=>{
+    const codes=Object.entries(_aoKlascodes||{}).filter(([,kc])=>kc && kc.ownerUid===uid).map(([code,kc])=>({code,created:kc.created}));
+    if(codes.length) aoRenderTeacherClasses(uid, codes);
+  });
+}
+
+// Per docent: klassenlijst met leerlingaantal (usedKlascodes), aanmaakdatum en
+// laatst actief (klascodeMeta/lastActive), plus aantal + titels van eigen
+// woordenlijsten — nooit de woorden zelf (zie CLAUDE.md § Firebase-rules).
+function aoRenderTeacherClasses(uid, codes){
+  const cont=el("aoKlas_"+uid); if(!cont) return;
+  Promise.all(codes.map(c=>
+    Promise.all([
+      teacherNet().getKlascodeCounts([c.code]).catch(()=>({})),
+      teacherNet().getKlascodeMeta(c.code).catch(()=>({}))
+    ]).then(([counts,meta])=>({...c, count:(counts&&counts[c.code])||0, lastActive:meta&&meta.lastActive}))
+  )).then(rows=>{
+    if(!el("aoKlas_"+uid)) return; // scherm intussen verlaten
+    cont.innerHTML = `<table style="width:100%;font-size:13px;border-collapse:collapse">
+      <tr class="note"><td>Klascode</td><td>Leerlingen</td><td>Aangemaakt</td><td>Laatst actief</td></tr>
+      ${rows.map(r=>`<tr>
+        <td>${esc(r.code)}</td><td>${r.count}</td>
+        <td>${r.created?new Date(r.created).toLocaleDateString("nl-NL"):"?"}</td>
+        <td>${r.lastActive?new Date(r.lastActive).toLocaleDateString("nl-NL"):"—"}</td>
+      </tr>`).join("")}
+    </table>`;
+  });
+  fbDB.ref("teachers/"+uid+"/wordlists").once("value").then(snap=>{
+    if(!snap.exists()) return;
+    const lists=Object.values(snap.val()||{});
+    if(!lists.length) return;
+    const extra=document.createElement("div");
+    extra.className="note";
+    extra.style.marginTop="6px";
+    extra.textContent="Eigen woordenlijsten ("+lists.length+"): "+lists.map(l=>(l.name||"?")+" ("+(l.lang==="el"?"Grieks":"Latijn")+")").join(", ");
+    const target=el("aoKlas_"+uid);
+    if(target) target.appendChild(extra);
+  }).catch(()=>{});
+}
+
+function aoSetStatus(uid, status){
+  teacherNet().setTeacherStatus(uid, status)
+    .then(()=>{ toast(status==="approved"?"Goedgekeurd":"Ingetrokken",""); aoLoad(); })
+    .catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"")));
 }
 
 // Rendert de klascodelijst mét ledenaantal per code (uit _tpIdentCounts). "Accounts"

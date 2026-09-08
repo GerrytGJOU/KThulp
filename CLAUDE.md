@@ -66,8 +66,11 @@ spelregels, features of het datamodel raakt:
   Dit bestand MOET altijd gelijk zijn aan wat er live staat in Firebase Console
   → Build → Realtime Database → tabblad "Regels". Na elke wijziging in de
   Console: het bestand hier bijwerken (en omgekeerd, na elke wijziging hier:
-  de nieuwe inhoud plakken en publiceren in de Console — dit repo deployt niet
-  automatisch naar Firebase).
+  de nieuwe inhoud plakken en publiceren in de Console, of via
+  `firebase deploy --only database --project kthulp-certamen` met de Firebase
+  CLI — `.firebaserc`/`firebase.json` in de repo-root wijzen al naar dit
+  bestand, sinds 2026-09-08. Dit repo deployt nog steeds niet automatisch
+  (geen CI-hook); publiceren is en blijft een bewuste, losse actie).
 - Bij elke wijziging aan Firebase-rules: geef altijd het volledige nieuwe
   regelsbestand (oude + nieuwe regels samen), zodat het in één keer te
   kopiëren is. Nooit alleen het toegevoegde fragment losstaand tonen.
@@ -92,3 +95,39 @@ spelregels, features of het datamodel raakt:
   volledige boom precies één keer ooit, via `usedKlascodes/_seeded`), daarna
   groeit de index vanzelf mee via een `.transaction()` in `bmIdentCreate()`
   (`certamen/battle.js`) bij elke nieuwe leerling.
+- Rollensysteem docent/admin (sinds 2026-09-08): `admins/{uid}: true` wijst de
+  globale beheerder(s) aan — geen selfservice-pad, de eerste admin (Gerben)
+  wordt eenmalig handmatig in de Firebase Console gezet, daarna kan een admin
+  via `teacherStatus/{uid}.status` (`"pending"`/`"approved"`/`"revoked"`)
+  andere docenten goedkeuren/intrekken. Nieuwe docenten registreren zelf
+  (`FBNet.signupTeacher`, `certamen/net.js`) en komen op `"pending"` te staan;
+  ze kunnen dat veld zelf alleen aanmaken (nooit wijzigen) — alleen een admin
+  mag de status daarna zetten. `klascodes/{code}.write` en `teachers/{uid}.write`
+  eisen naast de bestaande ownerUid-check ook `status === "approved"` (of
+  admin), met een legacy-uitzondering voor accounts van vóór dit systeem
+  (geen `teacherStatus`-record maar wel al bestaande data) zodat die niet
+  ineens worden buitengesloten. Admin krijgt via `teachers/{uid}.read` en de
+  al wereld-leesbare `klascodes`-boom een overzicht (`SCREENS.adminOverview`,
+  `certamen/games.js`) van wie docent is, hun klassen/leerlingaantallen
+  (bestaande `usedKlascodes`-index) en eigen woordenlijsten — bewust alleen
+  titels/aantallen, nooit leerlingnamen of woordinhoud. "Laatst actief" per
+  klas komt uit het nieuwe `klascodeMeta/{code}/lastActive`
+  (best-effort-stempel bij `bmIdentCreate`/`bmAwardBattle` in
+  `certamen/battle.js`, zelfde losse-index-patroon als `usedKlascodes`).
+  Sinds de site-brede inlog (`assets/site-auth.js`, zie hieronder) heeft dat
+  bestand een eigen kopie van `signupTeacher`/`getTeacherStatus`/`isAdmin` die
+  dezelfde `admins/`/`teacherStatus/`-paden gebruikt (net als `certamen/net.js`
+  al zijn eigen kopie van de docent-login had vóór dit rollensysteem) — het
+  hoofdmenu-widgetje en `profiel/index.html` tonen zo ook "wacht op
+  goedkeuring"/"ingetrokken" voor docenten buiten Certamen. Werk bij een
+  wijziging aan het rollensysteem **beide kopieën** bij.
+- Site-brede inlog (`assets/site-auth.js`, sinds commit `727b2b5`,
+  2026-09-08): één gedeeld script, met `<script src="…/assets/site-auth.js">`
+  in élke Latijn/Grieks-app plus het hoofdmenu en `profiel/index.html`
+  ingesloten, hergebruikt bewust dezelfde leerling-identiteit
+  (`certamen_battle_identity` in localStorage, `identities/{klas}/{lid}`) en
+  dezelfde docent-Firebase Auth als Certamen. Het is een zelfstandige kopie
+  van certamen/net.js's inlog-logica (net.js hangt te veel aan de rest van
+  Certamen om los in te sluiten), dus login-/rollensysteem-wijzigingen daar
+  moeten hier bewust herhaald worden. De 16 losse apps schrijven hun score
+  naar `identities/{klas}/{lid}/apps/{appId}` via `KTScores.save()`.

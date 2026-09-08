@@ -90,6 +90,65 @@ FBNet.getTeacherUid = function(){
 FBNet.isTeacherLoggedIn = function(){
   return this.getTeacherUid() !== null;
 };
+/* ---- FBNet: docentgoedkeuring (admins/, teacherStatus/) ----
+   Nieuwe docenten registreren zelf en komen op "pending" te staan; alleen een
+   admin (admins/{uid}:true, handmatig gezet in de Firebase Console) mag ze
+   op "approved"/"revoked" zetten. Zie CLAUDE.md § Firebase-rules. */
+FBNet.signupTeacher = function(email, password){
+  if(!initFirebase()) return Promise.reject("Firebase niet beschikbaar");
+  return firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(cred=>{
+      const uid=cred.user.uid;
+      return fbDB.ref("teacherStatus/"+uid).set({
+        status:"pending", email, requestedAt: Date.now()
+      }).then(()=>uid);
+    });
+};
+// .catch(()=>...) i.p.v. de fout door te laten: zolang de nieuwe rules nog
+// niet gepubliceerd zijn in de Firebase Console (of bij een tijdelijke
+// netwerkstoring) geeft een lezing op admins//teacherStatus PERMISSION_DENIED
+// — dat moet "geen admin"/"onbekende status" opleveren i.p.v. de aanroepende
+// Promise.all() voor altijd te laten hangen (zie SCREENS.teacherPortal).
+FBNet.getTeacherStatus = function(uid){
+  if(!fbDB) initFirebase();
+  uid = uid || this.getTeacherUid();
+  if(!uid) return Promise.resolve(null);
+  return fbDB.ref("teacherStatus/"+uid).once("value").then(s=>s.val()).catch(()=>null);
+};
+FBNet.isAdmin = function(){
+  if(!fbDB) initFirebase();
+  const uid=this.getTeacherUid();
+  if(!uid) return Promise.resolve(false);
+  return fbDB.ref("admins/"+uid).once("value").then(s=>s.val()===true).catch(()=>false);
+};
+// Admin-only in de praktijk (rules weigeren dit voor niet-admins): volledige
+// teacherStatus-boom voor het adminoverzicht.
+FBNet.listTeacherStatuses = function(){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("teacherStatus").once("value").then(s=>s.val()||{});
+};
+FBNet.setTeacherStatus = function(uid, status){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("teacherStatus/"+uid+"/status").set(status);
+};
+// Admin-overzicht: klascodes zijn al wereld-leesbaar (.read:true), dus geen
+// aparte reverse-index per docent nodig — gewoon de hele boom lezen en
+// client-side op ownerUid groeperen.
+FBNet.listAllKlascodes = function(){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("klascodes").once("value").then(s=>s.val()||{});
+};
+FBNet.getKlascodeMeta = function(code){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("klascodeMeta/"+code.toUpperCase()).once("value").then(s=>s.val()||{});
+};
+// Best-effort "laatst actief"-stempel — geen volledige activity-log, gewoon
+// een timestamp-overschrijving bij leerlingactiviteit (nieuwe leerling,
+// gevecht afgerond). Faalt stil (bv. offline) zonder de aanroeper te raken.
+FBNet.stampKlascodeActive = function(code){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("klascodeMeta/"+code.toUpperCase()+"/lastActive").set(Date.now()).catch(()=>{});
+};
 FBNet.teacherRef = function(){
   const uid = this.getTeacherUid();
   if(!uid) throw new Error("Geen docent ingelogd");
@@ -559,6 +618,14 @@ DemoNet.setAdminFlag    = function(){ return Promise.reject("Niet beschikbaar in
 DemoNet.removeAdminFlag = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.grantAdmin      = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.assignStudent   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.signupTeacher   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.getTeacherStatus= function(){ return Promise.resolve({status:"approved", email:"demo@kthulp.nl", requestedAt:Date.now()}); };
+DemoNet.isAdmin         = function(){ return Promise.resolve(false); };
+DemoNet.listTeacherStatuses = function(){ return Promise.resolve({}); };
+DemoNet.setTeacherStatus= function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.listAllKlascodes= function(){ return Promise.resolve({}); };
+DemoNet.getKlascodeMeta = function(){ return Promise.resolve({}); };
+DemoNet.stampKlascodeActive = function(){ return Promise.resolve(); };
 DemoNet.deleteRoom      = function(){ return Promise.resolve(); };
 DemoNet.createKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.deleteKlascode  = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };

@@ -153,6 +153,24 @@
   }
 
   async function renderTeacher(teacher){
+    cont.innerHTML = '<div class="note" style="text-align:center">Status controleren…</div>';
+    // Zelfde goedkeuringssysteem als Certamen (admins/, teacherStatus/, zie
+    // CLAUDE.md § Firebase-rules) — een niet-goedgekeurde docent heeft hier
+    // toch nooit eigen klassen (klascodes-writes zijn rules-geblokkeerd),
+    // maar dit voorkomt dat "nog geen klassen" wordt getoond alsof er niets
+    // aan de hand is terwijl het account eigenlijk nog moet worden goedgekeurd.
+    const [status, admin] = await Promise.all([KTAuth.getTeacherStatus(), KTAuth.isAdmin()]);
+    const approved = admin || (status && status.status === "approved");
+    if(!approved){
+      const revoked = status && status.status === "revoked";
+      cont.innerHTML =
+        '<div class="panel"><h2>👩‍🏫 '+esc(teacher.email)+'</h2>'+
+          '<p class="note">'+(revoked
+            ? "Je docenttoegang is ingetrokken door de beheerder."
+            : "Je account wacht nog op goedkeuring door de beheerder.")+'</p>'+
+        '</div>';
+      return;
+    }
     cont.innerHTML = '<div class="note" style="text-align:center">Klassen ophalen…</div>';
     let classes = {};
     try{ classes = await KTAuth.getTeacherClasses(); }catch(e){}
