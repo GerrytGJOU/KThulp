@@ -14,6 +14,7 @@
      stack (Palatino/Georgia) so the app renders fully without a network. -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="../../assets/site-auth.js"></script>
 <style>
 :root{
   --oxblood:#5a120c; --oxblood2:#7d1a10; --red:#a8261a; --red-bright:#c8392a;
@@ -590,7 +591,9 @@ function migrate(s){
   if(!s.title)s.title="none";
   return s;
 }
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+  if(typeof KTScores!=="undefined") KTScores.save("ludus-la",{score:S.xp||0,detail:(S.xp||0)+" xp, "+(S.correctTotal||0)+" goed beantwoord"});
+}
 function getKey(){return (TEACHER_API_KEY&&TEACHER_API_KEY.trim())||S.apiKey||"";}
 function todayStr(){return new Date().toISOString().slice(0,10);}
 function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/86400000);}

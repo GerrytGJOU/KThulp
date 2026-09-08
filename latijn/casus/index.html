@@ -130,6 +130,7 @@
 
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(!document.getElementById('screen-home').classList.contains('active')){event.preventDefault();goHome();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -225,6 +226,18 @@
 
 <script>
 'use strict';
+
+// ── Generieke voortgangsteller (site-brede score-sync, zie assets/site-auth.js) ──
+// Deze app had voorheen geen enkele persistente voortgang; dit is de minimale
+// {goed,fout}-teller die bij elke beantwoorde vraag (in elke oefenmodus) wordt
+// bijgewerkt en naar de docent gesynct als de leerling is ingelogd.
+const KT_VOORTGANG_KEY = 'casus_la_voortgang_v1';
+function ktRegTel(ok){
+  let v; try{ v=JSON.parse(localStorage.getItem(KT_VOORTGANG_KEY))||{goed:0,fout:0}; }catch(e){ v={goed:0,fout:0}; }
+  if(ok) v.goed++; else v.fout++;
+  try{ localStorage.setItem(KT_VOORTGANG_KEY, JSON.stringify(v)); }catch(e){}
+  if(typeof KTScores!=="undefined") KTScores.save('casus-la',{score:v.goed, detail:v.goed+' goed, '+v.fout+' fout'});
+}
 
 // ═══════════════════════════════════════════════════════
 //  WOORDENLIJST
@@ -617,6 +630,7 @@ function selectDetOpt(i,label){
   detState.answered=true;detState.score.totaal++;
   const ok=detState.validLabels.has(label);
   if(ok)detState.score.goed++;
+  ktRegTel(ok);
   detState.options.forEach((opt,j)=>{
     const btn=document.getElementById('dopt'+j);
     if(detState.validLabels.has(opt))btn.className='det-opt-btn correct';
@@ -705,6 +719,7 @@ function clickZinTarget(el){
   const targetCas=vraagText.includes('accusativus')?3:vraagText.includes('genitivus')?1:vraagText.includes('dativus')?2:vraagText.includes('nominativus')?0:vraagText.includes('ablativus')?4:null;
   const ok=targetCas!==null&&z.woorden[idx].cas===targetCas;
   if(ok)zinState.score.goed++;
+  ktRegTel(ok);
   document.querySelectorAll('#zin-content .zin-target').forEach(btn=>{
     const j=parseInt(btn.dataset.idx);
     if(targetCas!==null&&z.woorden[j].cas===targetCas)btn.className='zin-target correct-zin';
@@ -909,6 +924,7 @@ function selectKv(i){
   const label=kvState.opts[i];
   const ok=q.correct.includes(label);
   if(ok)kvState.score.goed++;
+  ktRegTel(ok);
   kvState.opts.forEach((opt,j)=>{
     const btn=document.getElementById('kvopt'+j);
     if(q.correct.includes(opt))btn.className='kv-opt correct';
@@ -1140,6 +1156,7 @@ function ptsToCijfer(pts){
 
 function showUitslag({earnedPts,totalPts,breakdown}){
   const cijfer=ptsToCijfer(earnedPts);
+  if(typeof KTScores!=="undefined") KTScores.save('casus-la',{score:cijfer, detail:'laatste toets: '+earnedPts+'/'+totalPts+' pt, cijfer '+cijfer.toFixed(1)});
   const kleur=cijfer>=5.5?'var(--green)':'var(--red)';
   let html='';
   html+=`<div class="score-box">`;

@@ -145,6 +145,7 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
 .portal-back svg{width:22px;height:22px;display:block;}
 .portal-back+header{padding-left:54px;}
 </style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(!document.getElementById('menu').classList.contains('active')){event.preventDefault();gotoScreen('menu');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -415,6 +416,19 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);border-t
 
 <script>
 "use strict";
+
+// ── Generieke voortgangsteller (site-brede score-sync, zie assets/site-auth.js) ──
+// Deze app had voorheen geen enkele persistente voortgang; dit is de minimale
+// {goed,fout}-teller die bij elke beantwoorde vraag (in elke oefenmodus) wordt
+// bijgewerkt en naar de docent gesynct als de leerling is ingelogd.
+const KT_VOORTGANG_KEY = 'werkwoorden_la_voortgang_v1';
+function ktRegTel(ok){
+  let v; try{ v=JSON.parse(localStorage.getItem(KT_VOORTGANG_KEY))||{goed:0,fout:0}; }catch(e){ v={goed:0,fout:0}; }
+  if(ok) v.goed++; else v.fout++;
+  try{ localStorage.setItem(KT_VOORTGANG_KEY, JSON.stringify(v)); }catch(e){}
+  if(typeof KTScores!=="undefined") KTScores.save('werkwoorden-la',{score:v.goed, detail:v.goed+' goed, '+v.fout+' fout'});
+}
+
 /* ══════════════════════════════════════════════
    CONJUGATIE-ENGINE — zelfde algoritme als certamen/verbforms.js
    (per-vervoeging eindingstabellen, gevalideerd tegen de volledige
@@ -1175,6 +1189,7 @@ function checkKnippen(){
   if(!vertOk) fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${vertEl.value||'—'}</span> → <span class="fb-cor">${q.glos}</span></div>`);
   const allOk=structureOk&&vertOk;
   if(allOk){s.sc++;}else{s.wr++;}
+  ktRegTel(allOk);
   s.res.push({f:q.vorm,lemma:q.lemma,ok:allOk});
   document.getElementById('k-sc').textContent=s.sc;
   document.getElementById('k-wr').textContent=s.wr;
@@ -1223,6 +1238,7 @@ function checkDeterm(){
     }
   });
   if(allOk){s.sc++;}else{s.wr++;}
+  ktRegTel(allOk);
   s.res.push({f:q.vorm,lemma:q.lemma,ok:allOk});
   document.getElementById('d-sc').textContent=s.sc;
   document.getElementById('d-wr').textContent=s.wr;
@@ -1252,6 +1268,7 @@ function checkVertaal(){
   const ok=matchNl(v.value,q.glos);
   v.classList.remove('ok','err'); v.classList.add(ok?'ok':'err'); v.disabled=true;
   if(ok){s.sc++;}else{s.wr++;}
+  ktRegTel(ok);
   s.res.push({f:q.vorm,lemma:q.lemma,ok});
   document.getElementById('v-sc').textContent=s.sc;
   document.getElementById('v-wr').textContent=s.wr;

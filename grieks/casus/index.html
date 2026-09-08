@@ -219,6 +219,7 @@ select.inp{cursor:pointer}
 .hint-text{font-size:12px;color:var(--muted);margin-top:6px;font-style:italic}
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(SCREEN!=='home'){event.preventDefault();go('home');}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -694,7 +695,12 @@ function loadState(){
     return {totalOk:0, totalDone:0, streak:0, bestStreak:0, testScores:[]};
   }
 }
-function saveState(){try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){}}
+function saveState(){try{localStorage.setItem(KEY,JSON.stringify(ST));}catch(e){}
+  if(typeof KTScores!=="undefined"){
+    const pct=ST.totalDone?Math.round(100*ST.totalOk/ST.totalDone):0;
+    KTScores.save("casus-gr",{score:pct, detail:ST.totalOk+"/"+ST.totalDone+" goed ("+pct+"%)"});
+  }
+}
 
 function toast(msg){
   const w = document.getElementById("toasts");

@@ -286,6 +286,7 @@
   }
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" onclick="if(!document.getElementById('screenLevel').classList.contains('active')){event.preventDefault();goToLevelSelect();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -369,6 +370,17 @@
 </div>
 
 <script>
+// ── Generieke voortgangsteller (site-brede score-sync, zie assets/site-auth.js) ──
+// Deze app had voorheen geen enkele persistente voortgang; dit is de minimale
+// {goed,fout}-teller die bij elke beantwoorde vraag (in elke oefenmodus) wordt
+// bijgewerkt en naar de docent gesynct als de leerling is ingelogd.
+const KT_VOORTGANG_KEY = 'structura_gr_voortgang_v1';
+function ktRegTel(ok){
+  let v; try{ v=JSON.parse(localStorage.getItem(KT_VOORTGANG_KEY))||{goed:0,fout:0}; }catch(e){ v={goed:0,fout:0}; }
+  if(ok) v.goed++; else v.fout++;
+  try{ localStorage.setItem(KT_VOORTGANG_KEY, JSON.stringify(v)); }catch(e){}
+  if(typeof KTScores!=="undefined") KTScores.save('structura-gr',{score:v.goed, detail:v.goed+' goed, '+v.fout+' fout'});
+}
 // ============================================================
 // STAP-DEFINITIES
 // R = Rhèma (persoonsvorm), U = Hypotaxis (voegwoord), A = Antikeimenon (onderwerp),
@@ -1391,11 +1403,13 @@ function onWordTap(wordIndex){
 function handleP(wordIndex,zin,step){
   const correct=zin.psolmo.P;
   if(correct.includes(wordIndex)){
+    ktRegTel(true);
     state.selectedWords[wordIndex]='P';
     renderWords();
     const allDone=correct.every(i=>state.selectedWords[i]==='P');
     if(allDone){ stepDone(step,zin.uitleg.P); }
   } else {
+    ktRegTel(false);
     shake(wordIndex);
     showFeedback(false,'Niet de persoonsvorm. Zoek het vervoegde werkwoord.');
   }
@@ -1423,6 +1437,7 @@ function confirmVoegwoord(type){
   document.getElementById('vwChooser').classList.remove('show');
   state.pendingVwIndex=null;
   if(type===correctType){
+    ktRegTel(true);
     state.selectedWords[wordIndex]=type;
     renderWords();
     const allSn=zin.psolmo.S.Sn.every(i=>state.selectedWords[i]==='Sn');
@@ -1430,6 +1445,7 @@ function confirmVoegwoord(type){
     if(allSn&&allSo){ stepDone(step,zin.uitleg.S); }
     else { showFeedback(true,'Goed! Er zijn nog meer voegwoorden in deze zin.'); }
   } else {
+    ktRegTel(false);
     shake(wordIndex);
     const verwacht=correctType==='Sn'?'nevenschikkend':'onderschikkend';
     showFeedback(false,`Niet juist. Dit voegwoord is ${verwacht}. ${zin.uitleg.S}`);
@@ -1439,21 +1455,25 @@ function confirmVoegwoord(type){
 function handleA(wordIndex,zin,step){
   const groups=zin.psolmo.A;
   if(!groups||groups.length===0){
+    ktRegTel(false);
     shake(wordIndex);
     showFeedback(false,'Er zijn geen attribuutgroepen in deze zin. Gebruik de knop hieronder.');
     return;
   }
   const groupIdx=groups.findIndex(g=>g.kern===wordIndex||g.attr.includes(wordIndex));
   if(groupIdx===-1){
+    ktRegTel(false);
     shake(wordIndex);
     showFeedback(false,'Dit woord is geen kern of attribuut van een woordgroep. Tik op het hoofdsubstantief.');
     return;
   }
   const group=groups[groupIdx];
   if(wordIndex!==group.kern){
+    ktRegTel(false);
     showFeedback(false,`Tik op het kernwoord van deze groep: <em>${zin.latijn[group.kern]}</em>.`);
     return;
   }
+  ktRegTel(true);
   const groupTags=['A1','A2','A3','A4','A5'];
   const usedTags=new Set(Object.values(state.selectedWords).filter(t=>t&&t.startsWith('A')));
   const groupTag=groupTags.find(t=>!usedTags.has(t))||'A1';
@@ -1477,11 +1497,13 @@ function handleDefault(wordIndex,zin,step){
   const key=step.key;
   const correct=zin.psolmo[key];
   if(correct.includes(wordIndex)){
+    ktRegTel(true);
     state.selectedWords[wordIndex]=key;
     renderWords();
     const allDone=correct.every(i=>state.selectedWords[i]===key);
     if(allDone){ stepDone(step,zin.uitleg[key]); }
   } else {
+    ktRegTel(false);
     shake(wordIndex);
     if(correct.length===0){
       showFeedback(false,`Er is geen ${step.naam.toLowerCase()} in deze zin. Gebruik de knop hieronder.`);
@@ -1578,9 +1600,11 @@ function skipStep(){
     hasContent=(zin.psolmo[step.key]&&zin.psolmo[step.key].length>0);
   }
   if(hasContent){
+    ktRegTel(false);
     showFeedback(false,`Er is wél ${step.key==='A'?'een attribuutgroep':'een '+step.naam.toLowerCase()} in deze zin. Zoek goed!`);
     return;
   }
+  ktRegTel(true);
   const uitleg=zin.uitleg[step.key];
   if(uitleg){ showFeedback(true,uitleg); setTimeout(()=>{ hideFeedback(); stepDone(step,''); },1800); }
   else { stepDone(step,''); }

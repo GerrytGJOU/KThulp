@@ -18,6 +18,14 @@
           "xp": { ".validate": "newData.isNumber() && newData.val() >= 0" },
           "level": { ".validate": "newData.isNumber() && newData.val() >= 1" },
           "battles": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+          "apps": {
+            "$appId": {
+              ".validate": "newData.hasChildren(['score']) && newData.child('score').isNumber()",
+              "score": { ".validate": "newData.isNumber()" },
+              "detail": { ".validate": "newData.isString() && newData.val().length <= 200" },
+              "updatedAt": { ".validate": "newData.isNumber()" }
+            }
+          },
           "admin": {
             ".write": "auth != null",
             ".validate": "newData.isBoolean()"

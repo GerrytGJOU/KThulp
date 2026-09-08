@@ -955,6 +955,7 @@
   .hidden { display: none !important; }
 </style>
 <style>.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}.portal-back svg{width:22px;height:22px;display:block;}.portal-back+header{padding-left:54px;}</style>
+<script src="../../assets/site-auth.js"></script>
 </head>
 <body>
 <a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
@@ -1557,6 +1558,18 @@
 <footer>Clausula · © Gerben de Jong · 2026</footer>
 
 <script>
+// ── Generieke voortgangsteller (site-brede score-sync, zie assets/site-auth.js) ──
+// Deze app had voorheen geen enkele persistente voortgang; dit is de minimale
+// {goed,fout}-teller die bij elke beantwoorde vraag (in elke oefenmodus) wordt
+// bijgewerkt en naar de docent gesynct als de leerling is ingelogd.
+const KT_VOORTGANG_KEY = 'clausula_gr_voortgang_v1';
+function ktRegTel(ok){
+  let v; try{ v=JSON.parse(localStorage.getItem(KT_VOORTGANG_KEY))||{goed:0,fout:0}; }catch(e){ v={goed:0,fout:0}; }
+  if(ok) v.goed++; else v.fout++;
+  try{ localStorage.setItem(KT_VOORTGANG_KEY, JSON.stringify(v)); }catch(e){}
+  if(typeof KTScores!=="undefined") KTScores.save('clausula-gr',{score:v.goed, detail:v.goed+' goed, '+v.fout+' fout'});
+}
+
 /* ═══════════════════════════════════════════════════════
    DATA – zinnen database
    niveau: 1 = makkelijk, 2 = gemiddeld, 3 = moeilijk
@@ -4042,6 +4055,7 @@ function checkSort() {
   });
   const resultEl = document.getElementById('sort-result');
   if (total === 0) { resultEl.innerHTML = '<span class="badge badge-info">Sorteer eerst de woorden.</span>'; return; }
+  ktRegTel(correct === total);
   resultEl.innerHTML = `<span class="badge ${correct===total?'badge-correct':'badge-wrong'}">${correct} van ${total} correct</span>`;
   const fbEl = document.getElementById('sort-feedback');
   fbEl.style.display = 'block';
@@ -4197,6 +4211,7 @@ function checkAnalysis() {
     return false;
   }
   const subtypeOk = subtypeAccepted(subtype);
+  ktRegTel(correct === total && subtypeOk);
 
   function verwachtAntwoord() {
     const label = s.subtype_label.toLowerCase();
@@ -4408,6 +4423,7 @@ function checkColors(){
     if(exp!==null){total++;if(got===exp){correct++;if(btn)btn.style.outline='2px solid #4a7c59';}else{allOk=false;errors.push(`<em>${w}</em>: verwacht <strong>${names[exp]}</strong>, jij koos <strong>${names[got]||'geen kleur'}</strong>`);if(btn)btn.style.outline='2px solid #a03030';}}
     else{ if(got!==null){allOk=false;errors.push(`<em>${w}</em>: dit woord hoeft geen kleur (jij koos ${names[got]})`);if(btn)btn.style.outline='2px solid #a03030';} }
   });
+  if(total>0) ktRegTel(allOk);
   const r=document.getElementById('color-result');
   r.innerHTML=`<span class="badge ${allOk?'badge-correct':'badge-wrong'}">${correct} van ${total} markeringen correct</span>`;
   if(errors.length)r.innerHTML+=`<div style="margin-top:10px;font-size:.88rem;color:var(--cream2);line-height:1.9;">${errors.join('<br>')}</div>`;
@@ -4580,6 +4596,7 @@ function checkStructure(){
       }
     }
   });
+  ktRegTel(score === n);
   const r=document.getElementById('struct-result');
   r.innerHTML=`<span class="badge ${score===n?'badge-correct':'badge-wrong'}">${score} van ${n} zinsdelen correct geplaatst</span>`;
   if(feedback.length)r.innerHTML+=`<div style="margin-top:10px;font-size:.88rem;color:var(--cream2);line-height:2;">${feedback.join('<br>')}</div>`;
