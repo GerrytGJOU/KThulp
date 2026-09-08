@@ -140,11 +140,27 @@
   }
   function logoutStudent(){ identClear(); notifyChange(); }
 
-  /* ---- Docent-identiteit (Firebase Auth) ---- */
+  /* ---- Docent-identiteit (Firebase Auth) ----
+     Goedkeuringssysteem (admins/{uid}, teacherStatus/{uid}) hergebruikt hier
+     dezelfde paden als certamen/net.js (FBNet) — één rollensysteem voor de
+     hele site, zie CLAUDE.md § Firebase-rules. Nieuwe docenten registreren
+     via signupTeacher() en komen op "pending" te staan; alleen een admin kan
+     dat via het Beheerdersoverzicht in Certamen op "approved"/"revoked"
+     zetten. Rules dwingen de eigenlijke beperking af (klascodes/teachers
+     writes), dit is puur de UI-laag die dezelfde status ook buiten Certamen
+     zichtbaar maakt. */
   async function loginTeacher(email, wachtwoord){
     const { auth } = await ensureFirebase();
     await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
     const cred = await auth.signInWithEmailAndPassword(email, wachtwoord);
+    notifyChange();
+    return cred.user;
+  }
+  async function signupTeacher(email, wachtwoord){
+    const { auth, db } = await ensureFirebase();
+    const cred = await auth.createUserWithEmailAndPassword(email, wachtwoord);
+    const uid = cred.user.uid;
+    await db.ref("teacherStatus/"+uid).set({ status:"pending", email, requestedAt: Date.now() });
     notifyChange();
     return cred.user;
   }
@@ -158,6 +174,21 @@
     return new Promise(resolve=>{
       const unsub = auth.onAuthStateChanged(user=>{ unsub(); resolve(user); });
     });
+  }
+  // .catch(()=>...): zolang een lezing op admins/teacherStatus onverwacht
+  // geweigerd wordt (netwerkstoring e.d.) valt dit terug op "geen admin"/
+  // "onbekende status" i.p.v. de aanroeper te laten hangen op een reject.
+  async function isAdmin(){
+    const { db, auth } = await ensureFirebase();
+    const uid = auth.currentUser && auth.currentUser.uid;
+    if(!uid) return false;
+    return db.ref("admins/"+uid).once("value").then(s=>s.val()===true).catch(()=>false);
+  }
+  async function getTeacherStatus(){
+    const { db, auth } = await ensureFirebase();
+    const uid = auth.currentUser && auth.currentUser.uid;
+    if(!uid) return null;
+    return db.ref("teacherStatus/"+uid).once("value").then(s=>s.val()).catch(()=>null);
   }
 
   /* ---- Leerling: profiel verversen vanaf Firebase (coins/xp/apps/Google-link) ---- */
@@ -274,7 +305,12 @@
 
   function mountWidget(el){
     if(!el) return;
-    let tab = "leerling", busy=false, err="";
+    let tab = "leerling", busy=false, err="", msg="";
+    // Cache van teacherStatus/isAdmin per uid — voorkomt een oneindige fetch-
+    // render-fetch-lus (render() triggert de fetch, de fetch triggert opnieuw
+    // render(), maar dan met de cache al gevuld voor deze uid dus geen nieuwe
+    // fetch meer).
+    let statusCache = { uid:null, status:null, isAdmin:false };
 
     function render(){
       const ident = identLoad();
@@ -285,8 +321,20 @@
           '<a class="ktaBtn" href="'+esc(SITE_ROOT+"profiel/")+'">Mijn profiel</a>'+
           '<button type="button" class="ktaBtn" data-kta="logout-student">Uitloggen</button></div>';
       }else if(teacher){
+        if(statusCache.uid !== teacher.uid){
+          el.innerHTML = '<div class="ktaBar"><span class="ktaWho">👩‍🏫 '+esc(teacher.email)+'</span></div>';
+          Promise.all([getTeacherStatus(), isAdmin()]).then(([status, admin])=>{
+            statusCache = { uid: teacher.uid, status, isAdmin: admin };
+            render();
+          });
+          return;
+        }
+        const approved = statusCache.isAdmin || (statusCache.status && statusCache.status.status==="approved");
+        const statusNote = approved ? "" : (statusCache.status && statusCache.status.status==="revoked"
+          ? ' &middot; <span style="color:#e08a7a">toegang ingetrokken</span>'
+          : ' &middot; <span style="color:#e0b86a">wacht op goedkeuring</span>');
         el.innerHTML =
-          '<div class="ktaBar"><span class="ktaWho">👩‍🏫 '+esc(teacher.email)+'</span>'+
+          '<div class="ktaBar"><span class="ktaWho">👩‍🏫 '+esc(teacher.email)+statusNote+'</span>'+
           '<a class="ktaBtn" href="'+esc(SITE_ROOT+"profiel/")+'">Mijn profiel</a>'+
           '<a class="ktaBtn" href="'+esc(SITE_ROOT+"certamen/")+'">Docentenportaal</a>'+
           '<button type="button" class="ktaBtn" data-kta="logout-teacher">Uitloggen</button></div>';
@@ -313,14 +361,17 @@
                 '<button type="button" class="ktaBtn ktaBtn-main" data-kta="do-student">Inloggen</button>'
               : '<input class="ktaInput" id="ktaEmail" type="email" placeholder="E-mailadres">'+
                 '<input class="ktaInput" id="ktaPw" type="password" placeholder="Wachtwoord">'+
-                '<button type="button" class="ktaBtn ktaBtn-main" data-kta="do-teacher">Inloggen</button>')+
+                '<button type="button" class="ktaBtn ktaBtn-main" data-kta="do-teacher">Inloggen</button>'+
+                '<button type="button" class="ktaBtn" style="margin-top:8px" data-kta="do-teacher-signup">Account aanmaken</button>'+
+                '<div class="ktaNote" style="font-size:12px;opacity:.75;margin-top:6px">Na registreren moet de beheerder je account nog goedkeuren.</div>')+
             (err ? '<div class="ktaErr">'+esc(err)+'</div>' : '')+
+            (msg ? '<div class="ktaOk">'+esc(msg)+'</div>' : '')+
           '</div>'+
           '<button type="button" class="ktaClose" data-kta="close" aria-label="Sluiten">&times;</button>'+
         '</div>';
       document.body.appendChild(wrap);
       wrap.querySelectorAll("[data-ktatab]").forEach(b=>b.addEventListener("click", e=>{
-        tab = e.target.getAttribute("data-ktatab"); err=""; wrap.remove(); openModal();
+        tab = e.target.getAttribute("data-ktatab"); err=""; msg=""; wrap.remove(); openModal();
       }));
       wrap.querySelectorAll("[data-kta]").forEach(b=>b.addEventListener("click", e=>onAction(e, wrap)));
       wrap.addEventListener("click", e=>{ if(e.target===wrap) wrap.remove(); });
@@ -328,7 +379,7 @@
 
     async function onAction(e, wrap){
       const action = e.currentTarget.getAttribute("data-kta");
-      if(action==="open"){ err=""; openModal(); return; }
+      if(action==="open"){ err=""; msg=""; openModal(); return; }
       if(action==="close"){ wrap.remove(); return; }
       if(busy) return;
       if(action==="logout-student"){ logoutStudent(); return; }
@@ -353,6 +404,18 @@
         }catch(ex){ err = ex.message||String(ex); wrap.remove(); openModal(); }
         busy=false;
       }
+      if(action==="do-teacher-signup"){
+        busy=true;
+        const email = wrap.querySelector("#ktaEmail").value;
+        const pw = wrap.querySelector("#ktaPw").value;
+        try{
+          if(!pw || pw.length<6) throw new Error("Kies een wachtwoord van minstens 6 tekens.");
+          await signupTeacher(email, pw);
+          err=""; msg="Account aangemaakt — wacht op goedkeuring door de beheerder.";
+          wrap.remove(); openModal();
+        }catch(ex){ msg=""; err = ex.message||String(ex); wrap.remove(); openModal(); }
+        busy=false;
+      }
     }
 
     listeners.push(render);
@@ -365,6 +428,7 @@
     getIdentity: identLoad,
     loginStudent, logoutStudent,
     loginTeacher, logoutTeacher, authReady,
+    signupTeacher, getTeacherStatus, isAdmin,
     onChange(cb){ listeners.push(cb); },
     mountWidget,
     ensureFirebase,

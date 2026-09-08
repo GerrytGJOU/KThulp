@@ -87,6 +87,7 @@ async function bmIdentCreate(klas,lcode,name){
     // leerling — voorkomt dat het docentenportaal ooit weer de volledige
     // identities-boom hoeft te lezen.
     fbDB.ref("usedKlascodes/"+klas).transaction(cur=>(cur||0)+1).catch(()=>{});
+    FBNet.stampKlascodeActive(klas);
   }
   return d;
 }
@@ -392,6 +393,7 @@ async function bmAwardBattle(){
     mergedData=next;
     return next;
   });
+  FBNet.stampKlascodeActive(klas);
   const data=mergedData||{};
   const oldCoins=Math.max(0,newCoins-coinsEarned);
   const oldLv=bmCalcLevel(oldXp), newLv=bmCalcLevel(newXp);

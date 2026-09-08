@@ -1,0 +1,5 @@
+{
+  "database": {
+    "rules": "certamen/database.rules.json"
+  }
+}
