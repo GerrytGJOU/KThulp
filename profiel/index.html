@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mijn Profiel">
+<meta name="theme-color" content="#16110c">
+<title>MIJN PROFIEL — Klassieke Talen</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicons/hoofdscherm/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicons/hoofdscherm/favicon-16x16.png">
+<link rel="apple-touch-icon" href="../assets/favicons/hoofdscherm/apple-touch-icon.png">
+<script src="../assets/site-auth.js"></script>
+<style>
+  :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--cream:#f3e9d2;
+        --muted:#b9a883;--muted2:#8a7a5c;--s2:#16121a;--s3:#211c28;--s4:#2e2838;
+        --stone:#16110c;--green:#3f7d3a;--green-bright:#6db862;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'EB Garamond',Georgia,serif;min-height:100vh;color:var(--cream);
+    background:
+      radial-gradient(ellipse at 20% 50%,rgba(90,18,12,.14),transparent 55%),
+      radial-gradient(ellipse at 80% 50%,rgba(26,58,92,.14),transparent 55%),
+      linear-gradient(160deg,#0e0b10,#16121a 45%,#100e14);
+    background-attachment:fixed;padding:34px 16px 60px;}
+  .wrap{max-width:640px;margin:0 auto}
+  h1{font-family:'Cinzel',serif;font-weight:800;text-align:center;color:var(--goldb);
+     font-size:26px;letter-spacing:.03em;margin-bottom:6px}
+  .sub{text-align:center;color:var(--muted);font-size:13px;margin-bottom:26px}
+  .panel{background:rgba(255,255,255,.03);border:1px solid rgba(212,175,55,.25);
+    border-radius:14px;padding:18px 20px;margin-bottom:16px}
+  .panel h2{font-family:'Cinzel',serif;font-size:14px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--goldb);margin-bottom:12px}
+  .stat-row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:4px}
+  .stat{flex:1 1 100px;background:rgba(0,0,0,.25);border-radius:10px;padding:10px 12px;text-align:center}
+  .stat .n{font-size:20px;font-weight:700;color:var(--goldb)}
+  .stat .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .row:last-child{border-bottom:none}
+  .row .name{font-size:15px}
+  .row .meta{font-size:12.5px;color:var(--muted)}
+  .btn{font-family:'EB Garamond',Georgia,serif;font-size:13px;color:var(--goldb);
+    background:rgba(212,175,55,.08);border:1px solid var(--goldd);border-radius:20px;
+    padding:7px 16px;text-decoration:none;cursor:pointer;display:inline-block}
+  .btn:hover{background:rgba(212,175,55,.18)}
+  .btn-small{font-size:12px;padding:5px 12px}
+  .btn-danger{border-color:#9c3c2f;color:#e08a7a}
+  input{font-family:'EB Garamond',Georgia,serif;font-size:15px;background:#100e14;
+    color:var(--cream);border:1px solid #3d2f20;border-radius:8px;padding:9px 11px;
+    width:100%;margin-bottom:8px}
+  .note{color:var(--muted);font-size:13px;line-height:1.5}
+  .err{color:#e08a7a;font-size:13px;margin-top:8px}
+  .ok{color:var(--green-bright);font-size:13px;margin-top:8px}
+  .apps-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media (max-width:480px){.apps-grid{grid-template-columns:1fr}}
+  .app-card{display:block;background:rgba(0,0,0,.25);border:1px solid rgba(212,175,55,.15);
+    border-radius:10px;padding:12px 14px;text-decoration:none;color:var(--cream)}
+  .app-card:hover{border-color:var(--goldd)}
+  .app-card .lbl{font-size:14px;color:var(--goldb);margin-bottom:2px}
+  .app-card .det{font-size:12px;color:var(--muted)}
+  .klas-block{margin-bottom:18px}
+  .klas-block h3{font-size:14px;color:var(--goldb);margin-bottom:8px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.06)}
+  th{color:var(--muted);font-weight:400;font-size:11.5px;text-transform:uppercase}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:34px;font-style:italic}
+
+  .portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;
+    justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);
+    border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+  .portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}
+  .portal-back svg{width:22px;height:22px;display:block;}
+</style>
+</head>
+<body>
+<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<div class="wrap">
+  <h1>Mijn Profiel</h1>
+  <div class="sub">Eén inlog, alle apps</div>
+  <div id="pfContent"><div class="note" style="text-align:center">Laden…</div></div>
+  <footer>Mijn Profiel &middot; &copy; Gerben de Jong &middot; 2026</footer>
+</div>
+<script>
+(async function(){
+  const cont = document.getElementById('pfContent');
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+  function fmtDate(ts){ return ts ? new Date(ts).toLocaleDateString('nl-NL') : '—'; }
+
+  await KTAuth.handleGoogleRedirect().catch(()=>{});
+
+  async function render(){
+    const ident = KTAuth.getIdentity();
+    if(ident){ await renderStudent(ident); return; }
+    const teacher = await KTAuth.authReady();
+    if(teacher){ await renderTeacher(teacher); return; }
+    renderLoggedOut();
+  }
+
+  function renderLoggedOut(){
+    cont.innerHTML =
+      '<div class="panel"><h2>Niet ingelogd</h2>'+
+      '<p class="note" style="margin-bottom:14px">Log in als leerling (klascode + leerlingcode) of als docent om je profiel te zien.</p>'+
+      '<div id="pfWidget"></div></div>';
+    KTAuth.mountWidget(document.getElementById('pfWidget'));
+  }
+
+  async function renderStudent(identStale){
+    cont.innerHTML = '<div class="note" style="text-align:center">Gegevens ophalen…</div>';
+    const ident = await KTAuth.refreshIdentity().catch(()=>identStale) || identStale;
+    const apps = ident.apps || {};
+    const appRows = Object.keys(KTAuth.APPS).filter(id=>id!=='certamen').map(id=>{
+      const meta = KTAuth.APPS[id];
+      const a = apps[id];
+      return '<a class="app-card" href="'+esc(meta.url)+'">'+
+        '<div class="lbl">'+esc(meta.label)+'</div>'+
+        '<div class="det">'+(a ? esc(a.detail||('score: '+a.score)) + ' &middot; ' + fmtDate(a.updatedAt) : 'Nog niet gespeeld')+'</div>'+
+        '</a>';
+    }).join('');
+
+    const googleBlock = ident.googleUid
+      ? '<p class="note">Gekoppeld met <b>'+esc(ident.googleEmail||'Google-account')+'</b>.</p>'+
+        '<button type="button" class="btn btn-small btn-danger" id="pfUnlinkGoogle" style="margin-top:8px">Ontkoppelen</button>'
+      : '<p class="note">Koppel je Google-account zodat je op een nieuw toestel kunt inloggen zonder klascode/leerlingcode.</p>'+
+        '<button type="button" class="btn btn-small" id="pfLinkGoogle" style="margin-top:8px">Koppel Google-account</button>';
+
+    cont.innerHTML =
+      '<div class="panel"><h2>'+esc(ident.name)+' &middot; klas '+esc(ident.klascode)+'</h2>'+
+        '<div class="stat-row">'+
+          '<div class="stat"><div class="n">'+(ident.level||1)+'</div><div class="l">Niveau</div></div>'+
+          '<div class="stat"><div class="n">'+(ident.xp||0)+'</div><div class="l">XP</div></div>'+
+          '<div class="stat"><div class="n">'+(ident.coins||0)+'</div><div class="l">Munten</div></div>'+
+          '<div class="stat"><div class="n">'+(ident.battles||0)+'</div><div class="l">Gevechten</div></div>'+
+        '</div>'+
+        '<div style="margin-top:12px"><a class="btn btn-small" href="'+esc(KTAuth.APPS.certamen.url)+'">Open Certamen</a></div>'+
+      '</div>'+
+      '<div class="panel"><h2>Google-account</h2>'+googleBlock+'<div id="pfGoogleMsg"></div></div>'+
+      '<div class="panel"><h2>Voortgang per app</h2><div class="apps-grid">'+appRows+'</div></div>';
+
+    const linkBtn = document.getElementById('pfLinkGoogle');
+    if(linkBtn) linkBtn.addEventListener('click', async ()=>{
+      linkBtn.disabled=true; linkBtn.textContent='Bezig…';
+      try{ await KTAuth.linkGoogle(); }
+      catch(e){ document.getElementById('pfGoogleMsg').innerHTML='<div class="err">'+esc(e.message||String(e))+'</div>'; linkBtn.disabled=false; linkBtn.textContent='Koppel Google-account'; }
+    });
+    const unlinkBtn = document.getElementById('pfUnlinkGoogle');
+    if(unlinkBtn) unlinkBtn.addEventListener('click', async ()=>{
+      unlinkBtn.disabled=true;
+      try{ await KTAuth.unlinkGoogle(); render(); }
+      catch(e){ document.getElementById('pfGoogleMsg').innerHTML='<div class="err">'+esc(e.message||String(e))+'</div>'; unlinkBtn.disabled=false; }
+    });
+  }
+
+  async function renderTeacher(teacher){
+    cont.innerHTML = '<div class="note" style="text-align:center">Klassen ophalen…</div>';
+    let classes = {};
+    try{ classes = await KTAuth.getTeacherClasses(); }catch(e){}
+    const entries = Object.values(classes||{}).filter(c=>c && c.code);
+    let classesHTML = '';
+    if(!entries.length){
+      classesHTML = '<div class="panel"><p class="note">Nog geen klassen. Beheer je klassen in het volledige docentenportaal.</p></div>';
+    }else{
+      for(const c of entries){
+        const roster = await KTAuth.getClassRoster(c.code).catch(()=>({}));
+        const rows = [];
+        Object.entries(roster).forEach(([lid, s])=>{
+          Object.entries(s.apps||{}).forEach(([appId, a])=>{
+            const meta = KTAuth.APPS[appId];
+            rows.push({name:s.name||lid, label:meta?meta.label:appId, detail:a.detail||'', updatedAt:a.updatedAt||0});
+          });
+        });
+        rows.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+        const tbl = rows.length
+          ? '<table><thead><tr><th>Leerling</th><th>App</th><th>Score</th><th>Datum</th></tr></thead><tbody>'+
+            rows.map(r=>'<tr><td>'+esc(r.name)+'</td><td>'+esc(r.label)+'</td><td>'+esc(r.detail)+'</td><td>'+fmtDate(r.updatedAt)+'</td></tr>').join('')+
+            '</tbody></table>'
+          : '<p class="note">Nog geen gegevens voor deze klas.</p>';
+        classesHTML += '<div class="klas-block"><h3>'+esc(c.className||c.code)+' &middot; '+esc(c.code)+'</h3>'+tbl+'</div>';
+      }
+    }
+    cont.innerHTML =
+      '<div class="panel"><h2>👩‍🏫 '+esc(teacher.email)+'</h2>'+
+        '<a class="btn btn-small" href="'+esc(KTAuth.APPS.certamen.url)+'">Volledig docentenportaal</a>'+
+      '</div>'+
+      '<div class="panel"><h2>Overige apps — per klas</h2>'+classesHTML+'</div>';
+  }
+
+  KTAuth.onChange(render);
+  render();
+})();
+</script>
+</body>
+</html>
