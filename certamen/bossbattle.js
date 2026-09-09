@@ -178,6 +178,14 @@ function bmBossResolveTick(boss, ctx){
 function bmBossStatusNote(){
   if(BM_META?.mode!=="boss") return "";
   const preset=bmBossPreset(BM_META?.bossId);
+  // Total War-belegering: rondelimiet zichtbaar maken (TW_SIEGE_MAX_ROUNDS,
+  // totalwar.js §5.4.1) — zonder dit zou de klas niet weten dat er
+  // tijdsdruk staat vóórdat de terugtrekking ineens gebeurt.
+  if(BM_META?.garrisonProvince && typeof TW_SIEGE_MAX_ROUNDS==="number"){
+    const n=BM_STATE?.round?.n||1;
+    const left=Math.max(0,TW_SIEGE_MAX_ROUNDS-n+1);
+    return "⏳ Ronde "+n+"/"+TW_SIEGE_MAX_ROUNDS+(left<=5?" — nog "+left+" over, bijna terugtrekken!":"");
+  }
   // Minion Summon (BOSS_BATTLE.md §4): generieke "alle bazen"-mechanic, dus
   // vóór de per-baas-specifieke statusregels gecheckt.
   const liveMinions=(BM_BOSS?.minions||[]).filter(m=>m.hp>0);

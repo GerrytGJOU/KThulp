@@ -34,6 +34,23 @@ let TR_POOL = [];
 let TR_Q = null;
 let TR_STATS = { correct:0, wrong:0, points:0, xp:0 };
 let TR_HERO_EL = null;
+// Gespreide herhaling binnen deze sessie (op verzoek, 2026-09-09 — leerlingen
+// merkten dat hetzelfde woord vaak meteen achter elkaar terugkwam, want
+// TR_Q kwam tot dan uit het kale, gewichtloze makeQuestion(TR_POOL) i.p.v.
+// het gewogen makeQuestion(pool, weightFn)-patroon dat freepractice.js
+// (Vrij Oefenen) al gebruikte). Twee losse maatregelen, zie trPersonalPool()/
+// trNextQuestion()/trAnswer() hieronder:
+// - TR_WRONG_COUNTS: fout beantwoorde woorden komen vaker terug (zelfde
+//   gewichtsformule als FP_WRONG_COUNTS in freepractice.js: 2× het aantal
+//   keer fout, als extra gewicht bovenop de standaardkans van elk woord).
+// - TR_RECENT_WORDS: de laatst gevraagde woorden worden EERST uit de pool
+//   gefilterd (indien de pool dat toelaat) — dat kan pickWeighted() zelf
+//   niet (het minimumgewicht is 1, dus een weightFn kan een woord nooit
+//   helemaal uitsluiten), vandaar deze aparte stap vóór makeQuestion().
+// Allebei sessie-lokaal, gereset in trStart().
+let TR_WRONG_COUNTS = {};
+let TR_RECENT_WORDS = [];
+const TR_RECENT_WINDOW = 6; // hoeveel recent gevraagde woorden buiten beeld blijven
 let TR_CAP_TODAY = 0; // aantal volledige-XP-antwoorden dat vandaag al gegeven is (zie trAnswer())
 // Dagelijkse afroming: na dit aantal per dag nog wel halve bouwpunten (het
 // klasdoel groeit door) maar geen XP meer — remt solo-thuisgrind af zonder de
@@ -251,6 +268,7 @@ async function trStart(){
   TR_POOL = TR_DRAFT.source==="verbforms" ? vfqBuildPool(TR_DRAFT.vf, TR_DRAFT.lang) : buildPool(TR_DRAFT);
   if(TR_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort/tijd."); return; }
   TR_STATS = { correct:0, wrong:0, points:0, xp:0 };
+  TR_WRONG_COUNTS = {}; TR_RECENT_WORDS = []; // nieuwe sessie, nieuwe pool: geen oude herhaling meenemen
   TR_CLASS_SIZE = await twGetClassSize(BM_IDENT.klascode);
   TR_CAP_TODAY = await trLoadDailyCap();
   go("trainingPlay");
@@ -297,6 +315,22 @@ function trRenderTarget(){
   host.innerHTML = src ? `<img src="${src}?${SPRITE_VER}" style="width:100%" alt="" onerror="this.style.display='none'">` : "";
 }
 
+// Sluit de laatst gevraagde woorden uit vóór makeQuestion() een nieuw woord
+// kiest (zie de TR_RECENT_WORDS-toelichting hierboven) — een weightFn alleen
+// kan dit niet, want pickWeighted() se gewicht kan nooit onder 1 zakken.
+// Valt terug op de volle pool zodra uitsluiten 'm te klein zou maken (een
+// korte woordenlijst mag nooit vastlopen).
+function trPersonalPool(){
+  if(!TR_RECENT_WORDS.length) return TR_POOL;
+  const excluded = new Set(TR_RECENT_WORDS);
+  const avail = TR_POOL.filter(w=>!excluded.has(w.la));
+  return avail.length ? avail : TR_POOL;
+}
+function trTrackRecent(la){
+  TR_RECENT_WORDS.push(la);
+  if(TR_RECENT_WORDS.length>TR_RECENT_WINDOW) TR_RECENT_WORDS.shift();
+}
+
 function trNextQuestion(){
   const host = el("trQuestionHost"); if(!host) return;
   if(TR_DRAFT.source==="verbforms" && TR_DRAFT.vf.mode==="ontleed"){
@@ -315,7 +349,8 @@ function trNextQuestion(){
     el("trTyped").focus();
     return;
   }
-  TR_Q = TR_DRAFT.source==="verbforms" ? vfqMakeQuestion(TR_POOL) : makeQuestion(TR_POOL);
+  TR_Q = TR_DRAFT.source==="verbforms" ? vfqMakeQuestion(TR_POOL) : makeQuestion(trPersonalPool(), w=>2*(TR_WRONG_COUNTS[w.la]||0));
+  if(TR_DRAFT.source!=="verbforms" && TR_Q.la) trTrackRecent(TR_Q.la);
   const kick = TR_DRAFT.source==="verbforms" ? "Welke vertaling hoort bij deze vorm?" : `Vertaal het ${TR_DRAFT.lang==="el"?"Griekse":"Latijnse"} woord`;
   const woord = TR_DRAFT.source==="verbforms" ? TR_Q.vorm : TR_Q.la;
   host.innerHTML = `
@@ -348,6 +383,10 @@ function trAnswer(idx){
   if(!TR_Q) return;
   const q = TR_Q; TR_Q = null; // dubbelklikken tijdens de korte pauze voorkomen
   const ok = idx===q.correctIdx;
+  // Gespreide herhaling (zie TR_WRONG_COUNTS hierboven): een fout beantwoord
+  // woord krijgt extra gewicht bij de eerstvolgende trPersonalPool()-ronde
+  // waarin het weer meedoet.
+  if(!ok && q.la) TR_WRONG_COUNTS[q.la] = (TR_WRONG_COUNTS[q.la]||0)+1;
   [0,1,2,3].forEach(i=>{
     const c=el("trC"+i); if(!c) return;
     if(i===q.correctIdx) c.classList.add("correct");

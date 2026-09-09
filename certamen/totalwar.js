@@ -99,6 +99,20 @@ const TW_FLAGSHIP_LEGACY_WEEKS = 4;  // ononderbroken bezit nodig voor de Legacy
 const TW_TIER1_POINTS = 300;
 const TW_TIER2_POINTS = 900;
 
+// Rondelimiet per belegeringspoging (op verzoek, 2026-09-09): zonder dit kon
+// een klas een willekeurig zwaar versterkte provincie toch in één les
+// stukbeuken, simpelweg door door te blijven spelen — iedereen antwoordt
+// tegelijk, dus het aantal BENODIGDE rondes hangt (net als de HP zelf, zie
+// TW_STAGE_HP hierboven) nauwelijks af van de klasgrootte, wél van hoeveel
+// sporen er verdedigd zijn. Wordt deze limiet bereikt zonder dat de huidige
+// stage gevallen is, dan trekt de klas zich terug (bmResolve() in battle.js,
+// TW_STAGE_ORDER/zie TOTAL_WAR.md §5.4.1): geen overwinning, maar de tot dan
+// toegebrachte schade blijft via de bestaande slijtageslag-reparatie
+// (§5.4) gewoon staan — precies de spanningsboog die §5.4 al beschreef, nu
+// ook echt afgedwongen i.p.v. iets dat je met genoeg tijd altijd kon omzeilen.
+// Richtwaarde, makkelijk bij te stellen na live testen.
+const TW_SIEGE_MAX_ROUNDS = 20;
+
 // Volgorde waarin een belegering de sporen aanvalt (TOTAL_WAR.md-sessieplan:
 // militie/garnizoen staat vooraan, dan de muur, dan pas het fort). Militie
 // wordt — anders dan walls/towers — NOOIT overgeslagen, ook niet op tier 0:
