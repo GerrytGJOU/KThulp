@@ -349,16 +349,16 @@ SCREENS.totalWarMap = function(){
    Echte provinciekaart van het Romeinse Rijk met voorbeeldstand.
    ------------------------------------------------------------ */
 SCREENS.totalWarPreview = function(){
-  // Alleen docenten. Dit scherm is (anders dan teacherPortal) rechtstreeks
-  // bereikbaar vanaf de publieke SCREENS.totalWar-uitleg, dus vlak na een
-  // page-load kan Firebase de "onthouden"-sessie nog aan het herstellen zijn
-  // — currentUser is dan nog even null terwijl de docent wél degelijk
-  // ingelogd blijft (zie FBNet.authReady). Een synchrone isTeacherLoggedIn()-
-  // check zou zo'n docent onterecht terugsturen naar de login. Daarom eerst
-  // authReady() afwachten, net als SCREENS.teacherLogin al deed.
-  let loggedIn=false;
-  try{ loggedIn = teacherNet().isTeacherLoggedIn(); }catch(e){ loggedIn=false; }
-  if(loggedIn){ twRenderTeacherPreview(); return; }
+  // Alleen goedgekeurde docenten/admins. Dit scherm is (anders dan
+  // teacherPortal) rechtstreeks bereikbaar vanaf de publieke SCREENS.totalWar-
+  // uitleg, dus vlak na een page-load kan Firebase de "onthouden"-sessie nog
+  // aan het herstellen zijn — currentUser is dan nog even null terwijl de
+  // docent wél degelijk ingelogd blijft (zie FBNet.authReady). Een synchrone
+  // isTeacherLoggedIn()-check zou zo'n docent onterecht terugsturen naar de
+  // login. Daarom eerst authReady() afwachten, net als SCREENS.teacherLogin
+  // al deed — en daarna ook de goedkeuringsstatus, want de onderliggende
+  // /totalwar-writerule eist sinds het docent/admin-rollensysteem (CLAUDE.md
+  // § Firebase-rules) ook approved/admin, niet alleen "ingelogd".
   document.body.classList.remove("greek");
   H(brand(true)+`
   <div class="scrhead">
@@ -366,13 +366,18 @@ SCREENS.totalWarPreview = function(){
     <h2>Total War — docentenweergave</h2>
   </div>
   <div class="panel" style="text-align:center"><div class="note">Inlogstatus controleren…</div></div>`);
-  teacherNet().authReady().then(()=>{
+  teacherNet().authReady().then(twCanManage).then(ok=>{
     if(_screen!=="totalWarPreview") return; // ondertussen weggenavigeerd
-    let ok=false;
-    try{ ok = teacherNet().isTeacherLoggedIn(); }catch(e){ ok=false; }
     if(ok){ twRenderTeacherPreview(); return; }
-    toast("Alleen voor docenten","Log eerst in via het docentenportaal.");
-    go("teacherLogin");
+    let loggedIn=false;
+    try{ loggedIn = teacherNet().isTeacherLoggedIn(); }catch(e){ loggedIn=false; }
+    if(loggedIn){
+      toast("Nog niet goedgekeurd","Je docentaccount wacht nog op goedkeuring door de beheerder.");
+      go("teacherPortal");
+    }else{
+      toast("Alleen voor docenten","Log eerst in via het docentenportaal.");
+      go("teacherLogin");
+    }
   });
 };
 
@@ -1022,7 +1027,22 @@ async function twReleaseCivIfUnassigned(civId){
    (zelfde /totalwar-regel als de rest), geen aparte rules nodig.
    ------------------------------------------------------------------ */
 let _twHistory = null; // {seizoensnummer: record}, éénmalig geladen per bezoek
-let _twHofIsAdmin = false; // docent-status voor deze pagina — bepaalt of de beheerknoppen tonen
+// Ondanks de naam geen "is admin"-check maar "mag beheren" — bepaalt of de
+// beheerknoppen tonen. Sinds het docent/admin-rollensysteem (CLAUDE.md §
+// Firebase-rules) is dat niet meer "is er een docent ingelogd" maar "is deze
+// docent goedgekeurd (of admin)" — de onderliggende /totalwar-writerule eist
+// nu hetzelfde, dus knoppen tonen voor een nog niet goedgekeurde docent zou
+// alleen tot een PERMISSION_DENIED-toast leiden.
+let _twHofIsAdmin = false;
+// Gedeeld door de Hall of Fame-beheerknoppen én SCREENS.totalWarPreview
+// hieronder: "mag dit docentaccount beheerhandelingen in Total War doen".
+async function twCanManage(){
+  try{
+    if(!teacherNet().isTeacherLoggedIn()) return false;
+    const [isAdmin, status] = await Promise.all([teacherNet().isAdmin(), teacherNet().getTeacherStatus()]);
+    return isAdmin || (status && status.status==="approved");
+  }catch(e){ return false; }
+}
 
 SCREENS.totalWarHallOfFame = function(){
   document.body.classList.remove("greek");
@@ -1043,20 +1063,19 @@ SCREENS.totalWarHallOfFame = function(){
 
 function twLoadHallOfFame(){
   const cont = el("twHofList"); if(!cont || !initFirebase()) return;
-  try{ _twHofIsAdmin = teacherNet().isTeacherLoggedIn(); }catch(e){ _twHofIsAdmin=false; }
+  _twHofIsAdmin = false; // synchroon nog onbekend; async hieronder bijgewerkt
   fbDB.ref("totalwar/history").once("value").then(snap=>{
     _twHistory = snap.val()||{};
     twRenderHallOfFame();
   }).catch(()=>{ cont.innerHTML = `<div class="note warn">Kon de Hall of Fame niet laden.</div>`; });
   // Dit scherm is publiek (geen login-eis), dus we wachten niet vooraf op
   // authReady() zoals SCREENS.totalWarPreview wél doet — dat zou niet-
-  // docenten onnodig laten wachten. In plaats daarvan renderen we direct met
-  // de (mogelijk nog niet herstelde) synchrone status, en heroverwegen zodra
-  // een "onthouden" docentsessie alsnog binnenkomt: dan verschijnen de
-  // beheerknoppen alsnog, zonder dat de docent iets hoeft te doen.
-  teacherNet().authReady().then(()=>{
-    let nowAdmin=false; try{ nowAdmin = teacherNet().isTeacherLoggedIn(); }catch(e){}
-    if(nowAdmin!==_twHofIsAdmin){ _twHofIsAdmin=nowAdmin; twRenderHallOfFame(); }
+  // docenten onnodig laten wachten. In plaats daarvan renderen we direct
+  // zonder beheerknoppen, en heroverwegen zodra bekend is of er een
+  // goedgekeurde docent-/adminsessie is: dan verschijnen de beheerknoppen
+  // alsnog, zonder dat er iets hoeft te gebeuren.
+  teacherNet().authReady().then(twCanManage).then(canManage=>{
+    if(canManage!==_twHofIsAdmin){ _twHofIsAdmin=canManage; twRenderHallOfFame(); }
   });
 }
 
@@ -1129,9 +1148,12 @@ function twHallOfFameCardHTML(s, isAdmin){
 /* ---- Docent-beheer van de Hall of Fame (op verzoek, voor als een seizoen
    niet liep zoals gepland): verbergen/tonen en verwijderen per seizoen, en
    losstaand het verwijderen van één individuele leerlingnaam uit een
-   seizoen se hoogtepunten. Firebase-rules staan dit al toe: /totalwar heeft
-   .write:"auth != null" op het topniveau en "history" heeft geen eigen
-   restrictievere .validate-regel. ---- */
+   seizoen se hoogtepunten. Firebase-rules staan dit toe voor elke
+   goedgekeurde docent of admin: /totalwar's top-level .write eist sinds het
+   docent/admin-rollensysteem (CLAUDE.md § Firebase-rules) ook
+   teacherStatus/{uid}.status==="approved" (of admins/{uid}) — "history" heeft
+   zelf geen eigen rule, dus valt terug op die eis. Een nog niet goedgekeurd
+   docentaccount krijgt hier dus een PERMISSION_DENIED-toast. ---- */
 function twHofSetHidden(seasonNumber, hidden){
   if(!initFirebase()) return;
   return fbDB.ref("totalwar/history/"+seasonNumber+"/hidden").set(hidden)
