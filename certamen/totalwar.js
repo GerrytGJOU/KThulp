@@ -106,12 +106,16 @@ const TW_TIER2_POINTS = 900;
 // altijd als eerste (zie bmSiegeStageKeys() in battle.js).
 const TW_STAGE_ORDER = ["militia","walls","towers"];
 
-// Baas-HP per stage, per bereikte tier — richtwaarde, zelfde schaalorde als
-// de generieke N*15*8*Md-basisformule in bmStartBossGame() (battle.js), zodat
-// een klein aanvallend groepje niet kansloos staat. Tier 0 (alleen relevant
-// voor militia/"De Boeren") is bewust laag: nauwelijks weerstand, geen
-// vertraging voor het veroveren van verse neutrale provincies.
+// Baas-HP per stage, per bereikte tier — richtwaarde voor een REFERENTIEKLAS
+// van TW_STAGE_HP_REF_N spelers (zie twStageMaxHP() hieronder, dat dit
+// omrekent naar N × hp/speler — zelfde schaalprincipe als Boss Battle se
+// generieke N×1500×Md-formule, BOSS_BATTLE.md §2: een klein aanvallend
+// groepje mag niet kansloos staan, en een grote klas moet niet ineens
+// triviaal winnen). Tier 0 (alleen relevant voor militia/"De Boeren") is
+// bewust laag: nauwelijks weerstand, geen vertraging voor het veroveren van
+// verse neutrale provincies.
 const TW_STAGE_HP = { 0: 150, 1: 400, 2: 900 };
+const TW_STAGE_HP_REF_N = 20; // klasgrootte waarvoor TW_STAGE_HP hierboven getuned is
 
 // Per spoor: welk Firebase-veld, en welke sprite hoort bij welke tier.
 // img:null bij tier 0 van walls = niks getekend (alleen de
@@ -144,15 +148,26 @@ function twStructureTier(points){
 }
 
 /* Effectieve boss-HP voor één belegeringsstage (militia/walls/towers) van een
-   provincie: basis-tier-HP (TW_STAGE_HP) VERMENIGVULDIGD met de provinciebonus
-   als die toevallig dit spoor bevoordeelt — dezelfde bonus als Training Mode
+   provincie, geschaald naar het aantal AANVALLENDE spelers N — zelfde
+   schaalprincipe als de generieke Boss Battle-formule (BOSS_BATTLE.md §2:
+   N × baseHpPerPlayer × Md), zodat een klas van 4 en een klas van 30 een even
+   zware belegering ervaren i.p.v. dat een kleine klas relatief kansloos staat
+   (klasMaxHP schaalt al met N, zie bmStartBossGame() — de garnizoens-HP deed
+   dat vóór 2026-09-09 niet, ongevraagd nadeel voor kleine klassen).
+   basis-tier-HP (TW_STAGE_HP, getuned voor TW_STAGE_HP_REF_N spelers) wordt
+   herschaald naar N, en DAARNA vermenigvuldigd met de provinciebonus als die
+   toevallig dit spoor bevoordeelt — dezelfde bonus als Training Mode
    (provinces.json: "bonus":{track,pct,label}), nu ook echt voelbaar tijdens
-   het gevecht zelf, niet alleen bij het bouwen (TOTAL_WAR.md §3.6). Gedeeld
-   door bmStartBossGame()/bmResolve() (battle.js) — beide plekken waar een
-   stage-HP wordt bepaald (aanvalsstart, en overgang naar de volgende stage). */
-function twStageMaxHP(gp, stageKey){
+   het gevecht zelf, niet alleen bij het bouwen (TOTAL_WAR.md §3.6). De bonus
+   blijft zo altijd een vast PERCENTAGE van de (nu variabele) basis-HP, niet
+   een los absoluut getal. Gedeeld door bmStartBossGame()/bmResolve()
+   (battle.js) — beide plekken waar een stage-HP wordt bepaald (aanvalsstart,
+   en overgang naar de volgende stage) — die geven allebei de actuele N
+   (aantal spelers in de kamer) mee. */
+function twStageMaxHP(gp, stageKey, N){
   const tier = twStructureTier(gp[TW_STRUCTURES[stageKey].field]);
-  let hp = TW_STAGE_HP[tier] || TW_STAGE_HP[1];
+  const baseHp = TW_STAGE_HP[tier] || TW_STAGE_HP[1];
+  let hp = Math.max(1, Math.round(baseHp * Math.max(1,N||1) / TW_STAGE_HP_REF_N));
   const reg = _twRegistry && _twRegistry[gp.id];
   const bonus = reg && reg.bonus;
   if(bonus && bonus.track===stageKey) hp = Math.round(hp*(1+bonus.pct/100));

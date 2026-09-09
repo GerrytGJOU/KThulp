@@ -1652,7 +1652,7 @@ async function bmStartBossGame(){
       const resumeIdx=lastStage ? stageKeys.indexOf(lastStage) : 0;
       stageIdx=resumeIdx>=0 ? resumeIdx : 0;
       const stageKey=stageKeys[stageIdx];
-      const stageMax=twStageMaxHP(gp, stageKey);
+      const stageMax=twStageMaxHP(gp, stageKey, N);
       const dmg=(gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[stageKey])||0;
       bossMaxHP=stageMax;
       bossStartHP=Math.max(1, stageMax-dmg);
@@ -3301,7 +3301,7 @@ async function bmResolve(roundN){
       if(newHB<=0 && curStageKey && curStageIdx<stageKeys.length-1){
         const nextIdx=curStageIdx+1;
         const nextKey=stageKeys[nextIdx];
-        const nextMax=twStageMaxHP(gp, nextKey);
+        const nextMax=twStageMaxHP(gp, nextKey, Object.keys(players).length);
         const dmg=(gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[nextKey])||0;
         const nextStart=Math.max(1, nextMax-dmg);
         await fbDB.ref("rooms/"+BM_CODE+"/teams/B").set({health:nextStart,maxHealth:nextMax});
