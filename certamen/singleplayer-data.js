@@ -1564,10 +1564,15 @@ const SP_PUZZLES = {
   // SP_CAMPAIGN ch9.grammatica en Chronica.md §7.15. Twee gelijkwaardige
   // sets van vier puzzels (TRO/GRI-prefix), zelfde vier onderwerpen,
   // verschillende zinnen per kant — zelfde principe als Hoofdstuk 8.
+  // Was voorheen een letterlijk herhaalde Penthesileia-superlativuszin — zelfde
+  // voorbeeld als puzzle_ch9_tro_superlativus_grieks (2 scènes eerder), en
+  // paste bovendien niet bij de Memnon-scène waar deze puzzel aan hangt.
+  // Nu écht de comparativus (de andere helft van het grammaticapunt van dit
+  // hoofdstuk), met Memnon als onderwerp (leerlingfeedback 2026-08-25).
   puzzle_ch9_tro_comparativus: { type:"multiple-choice",
-    vraag:"“Penthesilea regina ___ omnium Amazonum erat” — koningin Penthesilea was de dapperste van alle Amazones. Welke vorm van fortis (dapper) past hier, superlativus?",
-    opties:["fortissima","fortior","fortis","fortius"], antwoord:"fortissima",
-    hint:"Superlativus van een derde-declinatie bijvoeglijk naamwoord als fortis eindigt op -issimus/-issima/-issimum." },
+    vraag:"“Memnon ___ quam multi milites erat” — Memnon was dapperder dan veel soldaten. Welke vorm van fortis (dapper) past hier, comparativus?",
+    opties:["fortior","fortissimus","fortis","fortius"], antwoord:"fortior",
+    hint:"Comparativus van een derde-declinatie bijvoeglijk naamwoord als fortis (mannelijk/vrouwelijk) eindigt op -ior: fortior." },
   puzzle_ch9_tro_superlativus_grieks: { type:"typed-greek",
     vraag:"“Ἡ Πενθεσίλεια ___ πασῶν τῶν Ἀμαζόνων ἦν” — Penthesileia was de dapperste van alle Amazones. Typ met het Griekse toetsenbord de superlativus, vrouwelijk nominativus enkelvoud, van ἀνδρεῖος (dapper).",
     antwoord:"ἀνδρειοτάτη",
@@ -2616,6 +2621,7 @@ const SP_CODEX_ENTRIES = {
     tekst:"De comparativus (vergrotende trap, 'dapperder') en superlativus (overtreffende trap, 'dapperst') van een 3e-declinatie bijvoeglijk naamwoord als fortis (dapper) volgen een vast patroon — de superlativus eindigt bij dit type altijd op -issimus/-issima/-issimum, afhankelijk van het geslacht van het woord waar hij bij hoort.",
     table:{ headers:["Trap","Vorm","Voorbeeld","Betekenis"],
       rows:[["Positief","fortis","miles fortis","de dappere soldaat"],
+            ["Comparativus (mnl./vr.)","fortior","Memnon fortior","Memnon, dapperder"],
             ["Superlativus (vr.)","fortissima","regina fortissima","de dapperste koningin"],
             ["Superlativus (mnl.)","fortissimus","Achilles fortissimus","de dapperste Achilles"]] } },
   // Leerlingfeedback (2026-08-19), zelfde patroon: comparativus/superlativus
@@ -16655,7 +16661,7 @@ TITLE:
 De Lijkspelen
 
 TEXT:
-Tussen zijn eigen woede door houdt Achilles zich ook aan een oudere plicht: Patroklos krijgt een brandstapel, en daarna de lijkspelen die een groot krijger toekomen — wagenrennen, worstelen, boksen, hardlopen, allemaal met rijke prijzen uit Achilles' eigen tent. Iemand duwt je een speer in handen: ook jij wordt uitgenodigd mee te doen aan het speerwerpen, voor de eer van het leger.
+Terug in het Griekse kamp bij de schepen, ver van de muren waarlangs Hectors lichaam nog is gesleept, houdt Achilles zich tussen zijn eigen woede door ook aan een oudere plicht: Patroklos krijgt een brandstapel, en daarna de lijkspelen die een groot krijger toekomen — wagenrennen, worstelen, boksen, hardlopen, allemaal met rijke prijzen uit Achilles' eigen tent. Iemand duwt je een speer in handen: ook jij wordt uitgenodigd mee te doen aan het speerwerpen, voor de eer van het leger.
 
 CHECK:
 ch8_epi_009b_lijkspelen
@@ -17220,7 +17226,7 @@ Achilles' Dood
 TEXT:
 Bij de Scaeïsche Poort gebeurt wat niemand in Troje nog had durven hopen: Paris, met Apollo's hand op zijn boog, treft Achilles precies in zijn hiel — de enige plek waar Thetis hem ooit niet in de Styx doopte. De sterkste held van Griekenland valt in het zand, binnen het zicht van de stad die hij bijna alleen al tien jaar had weten te belegeren.
 
-Om de muren barst gejuich los. Beneden, bij de Griekse linies, zie je een felle strijd om zijn lichaam losbarsten — Aias die het probeert te redden, Odysseus die de aanvallers afhoudt.
+Op de muren barst gejuich los. Beneden, bij de Griekse linies, zie je een felle strijd om zijn lichaam losbarsten — Aias die het probeert te redden, Odysseus die de aanvallers afhoudt.
 
 IMAGE:
 ch9_achilles_dood_pijl.png
@@ -17279,7 +17285,7 @@ TITLE:
 De Dood van Paris
 
 TEXT:
-Een Griekse boogschutter met een oude, herkenbare boog — Herakles' eigen wapen, zeggen sommigen — doodt Paris met een enkele pijl. De prins wiens oordeel over een gouden appel deze hele oorlog ooit in gang zette (je herinnert je het zelf nog, van lang geleden), sterft zoals hij leefde: van een afstand, buiten bereik van een eerlijk gevecht.
+Philoktetes — jaren geleden achtergelaten op Lemnos, maar stiekem door Odysseus en Diomedes teruggehaald zodra een gevangen Trojaanse ziener onthulde dat Troje niet zonder hem en zijn boog kon vallen — doodt Paris met een enkele pijl uit diezelfde boog, ooit van Herakles zelf. De prins wiens oordeel over een gouden appel deze hele oorlog ooit in gang zette (je herinnert je het zelf nog, van lang geleden), sterft zoals hij leefde: van een afstand, buiten bereik van een eerlijk gevecht.
 
 Troje verliest zijn tweede prins in evenveel weken.
 
