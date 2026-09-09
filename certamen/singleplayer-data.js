@@ -15871,7 +15871,7 @@ TEXT:
 Terwijl Patroklos zich in Achilles' eigen wapenrusting hijst, denkt Achilles heel even terug aan zijn eigen jeugd bij de wijze centaur Chiron — dezelfde leermeester die hem ooit dit alles voorbereidde, zonder ooit te kunnen voorbereiden op dit moment.
 
 IMAGE:
-ch8_patroklos_wapenrusting.png
+ch8_patroklos_wapenrusting.jpg
 
 PUZZLE:
 puzzle_ch8_ach_pronomen
