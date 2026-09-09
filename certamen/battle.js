@@ -615,9 +615,21 @@ function bmClampBE(v){
   return Math.max(0,Math.min(max,Math.round(v||0)));
 }
 function bmCalcSynergy(players,team){
-  const unique=new Set(Object.values(players).filter(p=>p.team===team&&p.class).map(p=>p.class)).size;
+  const teamPlayers=Object.values(players).filter(p=>p.team===team);
+  const unique=new Set(teamPlayers.filter(p=>p.class).map(p=>p.class)).size;
+  // Belegering: drempels proportioneel aan de teamgrootte (zie
+  // twSiegeScaledThreshold(), totalwar.js) i.p.v. de vaste BM_SYNERGY-
+  // koppentallen — anders kon een klas kleiner dan minClasses een tier
+  // structureel nooit bereiken. Gewoon Boss Battle/Team-vs-Team ongewijzigd.
+  // Bovengrens 8: er bestaan maar 8 klassen (BM_CLASSES) — zonder cap zou de
+  // hoogste tier voor een grote klas juist andersom onbereikbaar worden
+  // (bv. bij N=40 zou de ongeklemde drempel 14 zijn, letterlijk onhaalbaar).
+  const isSiege=!!BM_META?.garrisonProvince;
   let bonus=0;
-  for(const tier of BM_SYNERGY){if(unique>=tier.minClasses)bonus=tier.beBonus;}
+  for(const tier of BM_SYNERGY){
+    const need=isSiege?Math.min(8,twSiegeScaledThreshold(tier.minClasses,teamPlayers.length)):tier.minClasses;
+    if(unique>=need)bonus=tier.beBonus;
+  }
   return bonus;
 }
 
@@ -3126,8 +3138,17 @@ async function bmResolve(roundN){
     // §5.1 "Combo Chain" voor de ronde-gebaseerde architectuur): ≥3
     // verschillende spelers die deze ronde schade toebrachten geeft het team
     // een vlakke bonus, zodat één speler het gevecht niet alleen kan dragen.
+    // Belegering: de min-koppentallen proportioneel aan de teamgrootte (zie
+    // twSiegeScaledThreshold(), totalwar.js) — anders kon een klas kleiner
+    // dan 3 deze bonus structureel nooit halen. Gewoon Boss Battle
+    // ongewijzigd (isSiege check hieronder).
     if(isBossFight){
-      const tier=BM_CHAIN_BONUS.find(t=>chainContributors.size>=t.min);
+      const isSiege=!!BM_META?.garrisonProvince;
+      const teamACount=Object.values(players).filter(p=>p.team==="A").length;
+      const chainTable=isSiege
+        ? BM_CHAIN_BONUS.map(t=>({min:twSiegeScaledThreshold(t.min,teamACount),bonus:t.bonus}))
+        : BM_CHAIN_BONUS;
+      const tier=chainTable.find(t=>chainContributors.size>=t.min);
       if(tier){
         from.A.dmg+=tier.bonus;
         events.push({type:"chain_bonus",n:chainContributors.size,bonus:tier.bonus});

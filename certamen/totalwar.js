@@ -192,6 +192,23 @@ function twStageMaxHP(gp, stageKey, N){
   return hp;
 }
 
+/* Herschaalt een voor Team-vs-Team Battle Mode getunede ABSOLUTE koppental-
+   drempel (BM_SYNERGY se minClasses, BM_CHAIN_BONUS se min — battle-data.js)
+   naar de daadwerkelijke aanvallende teamgrootte N, op verzoek 2026-09-09.
+   Zelfde N/TW_STAGE_HP_REF_N-schaalregel als twStageMaxHP() hierboven, dus
+   bij de referentieklasgrootte (20) verandert er niets. Reden: die drempels
+   zijn eerlijk in gewoon Battle Mode (beide teams komen uit dezelfde klas,
+   profiteren dus evenveel), maar bij een Total War-belegering (klas vs
+   NPC-garnizoen, geen tegenteam) kon een klas kleiner dan de drempel een
+   synergie-/brede-deelname-bonus NOOIT bereiken, hoe goed ze ook speelden —
+   een ongevraagd nadeel bovenop de al bestaande garnizoens-HP-schaling.
+   Alleen aangeroepen voor een belegering (BM_META.garrisonProvince gezet,
+   zie bmCalcSynergy()/de brede-deelname-bonus in battle.js); gewoon Boss
+   Battle/Team-vs-Team blijft de vaste tabelwaarden gebruiken. */
+function twSiegeScaledThreshold(origMin, N){
+  return Math.max(1, Math.round(origMin * Math.max(1,N||1) / TW_STAGE_HP_REF_N));
+}
+
 /* Sprite-pad voor een spoor op een gegeven tier; "civ" (alleen militia-tier2)
    wordt vertaald naar het civ-specifieke garnizoensplaatje met terugval. */
 function twSpriteFor(structureKey, tier, civId){
@@ -1527,6 +1544,38 @@ function twSelectProvince(id){
    uitgebreidere variant met icoon; hier alleen de korte naam). */
 const TW_TRACK_NM = { militia:"garnizoen", walls:"muur", towers:"toren" };
 
+/* Percentage-weergave per garnizoensspoor (op verzoek 2026-09-09): puur
+   informatief, zodat andere klassen/leerlingen en de docent in één oogopslag
+   zien welke provincies fanatiek verdedigd (en aangevallen) worden, i.p.v.
+   alleen de kale tierlabel ("—"/"basis"/"volledig") zonder voortgang.
+   Twee losse percentages, allebei optioneel:
+   - bouwvoortgang naar de eerstvolgende tier (TW_TIER1_POINTS/TW_TIER2_POINTS),
+     zolang dit spoor nog niet op tier 2 (volledig) staat;
+   - resterend-HP% als dit precies het spoor is waar de laatste belegering op
+     strandde (siege.lastStage === trackKey) — berekend tegen de HP die dat
+     spoor bij de REFERENTIEklasgrootte (TW_STAGE_HP_REF_N) zou hebben, zodat
+     dit getal niet van de toevallige klasgrootte van de LAATSTE aanvaller
+     afhangt (dat weet dit informatieve paneel, buiten een lopend gevecht om,
+     ook niet). */
+function twTrackProgressLabel(trackKey, points, siege){
+  points = points||0;
+  const tier = twStructureTier(points);
+  let label = tier===0?"—":tier===1?"basis":"volledig";
+  if(tier<2){
+    const lo = tier===0?0:TW_TIER1_POINTS;
+    const hi = tier===0?TW_TIER1_POINTS:TW_TIER2_POINTS;
+    const pct = Math.max(0,Math.min(100,Math.round((points-lo)/(hi-lo)*100)));
+    label += ` (${pct}% naar ${tier===0?"basis":"volledig"})`;
+  }
+  const dmg = siege && siege.lastStage===trackKey ? (siege.stageDamage && siege.stageDamage[trackKey]||0) : 0;
+  if(dmg>0){
+    const refHp = TW_STAGE_HP[tier] || TW_STAGE_HP[1];
+    const remainPct = Math.max(0,Math.min(100,Math.round((1-dmg/refHp)*100)));
+    label += ` · ⚔ ${remainPct}% HP`;
+  }
+  return label;
+}
+
 function twProvinceInfo(id){
   const reg  = _twRegistry && _twRegistry[id];
   const nm   = (reg && reg.displayName) || id;
@@ -1546,11 +1595,10 @@ function twProvinceInfo(id){
   }
   const civ  = TW_CIVS[civId] || TW_CIVS.neutral;
   const owned= civId !== "neutral";
-  const tierLabel = t=> t===0?"—":t===1?"basis":"volledig";
   const tracksNote = _twLiveMode
-    ? `<div class="note" style="margin-top:6px">Fort: ${tierLabel(twStructureTier(p.towerPoints))} ·
-        Muur: ${tierLabel(twStructureTier(p.wallPoints))} ·
-        Garnizoen: ${tierLabel(twStructureTier(p.militiaPoints))}</div>`
+    ? `<div class="note" style="margin-top:6px">Fort: ${twTrackProgressLabel("towers",p.towerPoints,p.siege)} ·
+        Muur: ${twTrackProgressLabel("walls",p.wallPoints,p.siege)} ·
+        Garnizoen: ${twTrackProgressLabel("militia",p.militiaPoints,p.siege)}</div>`
     : (owned ? `<div class="note" style="margin-top:6px">Verdediging: ${TW_DEMO_DEF[id]||0}/${TW_DEFENSE_CAP}</div>` : "");
   // Onderbroken belegering (TOTAL_WAR.md §5.4-equivalent): een eerder
   // verloren aanval laat sporen na op de stage waar de klas strandde — zonder
