@@ -1117,7 +1117,7 @@ function teacherDoSignup(){
    hoeft niet door deze wachtrij. */
 let _tpIsAdmin = false;
 SCREENS.teacherPortal = function(){
-  if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
+  if(!teacherNet().isTeacherLoggedIn()){ goReplace("teacherLogin"); return; }
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
@@ -1445,7 +1445,7 @@ let _aoStatuses = {};   // {uid: {status,email,requestedAt}}
 let _aoKlascodes = {};  // {code: {created,ownerUid}}
 
 SCREENS.adminOverview = function(){
-  if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
+  if(!teacherNet().isTeacherLoggedIn()){ goReplace("teacherLogin"); return; }
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('teacherPortal')">${iconSVG("shield",20,"currentColor")}</button>
@@ -1618,8 +1618,8 @@ function tpDeleteKlascode(code){
 
 /* ---- SCHERM: leerlingen in één klas (roster = identities/{code}) ---- */
 SCREENS.teacherClass = function(){
-  if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
-  if(!_tpCurrentClass){ go("teacherPortal"); return; }
+  if(!teacherNet().isTeacherLoggedIn()){ goReplace("teacherLogin"); return; }
+  if(!_tpCurrentClass){ goReplace("teacherPortal"); return; }
   const code=_tpCurrentClass;
   const g=_tpGroups[code]||{code, name:code};
   H(brand(true)+`
@@ -1940,7 +1940,7 @@ function tpBoardDoMove(fromCode,toCode,lid){
 
 /* ---- SCHERM: alle leerlingen, kolommen per klas ---- */
 SCREENS.teacherStudentsBoard = function(){
-  if(!teacherNet().isTeacherLoggedIn()){ go("teacherLogin"); return; }
+  if(!teacherNet().isTeacherLoggedIn()){ goReplace("teacherLogin"); return; }
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('teacherPortal')">${iconSVG("shield",20,"currentColor")}</button>

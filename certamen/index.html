@@ -1046,7 +1046,7 @@ body.greek .qcard .word{color:#143a5e}
 <link rel="stylesheet" href="map/provinces.css?v=20260702m2">
 </head>
 <body>
-<a class="portal-back" href="../" onclick="if(_screen==='spPlay'||_screen==='spStats'||_screen==='spCodex'||_screen==='spWorldMap'){event.preventDefault();spRenderLanding();}else if(_screen!=='home'){event.preventDefault();goBack();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<a class="portal-back" href="../" onclick="if(_screen==='spPlay'||_screen==='spStats'||_screen==='spCodex'||_screen==='spWorldMap'){event.preventDefault();spRenderLanding();}else if(_screen==='battleHostLobby'){event.preventDefault();leaveAll();bmLeave();go('home');}else if(_screen==='battlePlayerLobby'||_screen==='battlePlayerGame'){event.preventDefault();cleanup();bmLeave();go('battleHome');}else if(_screen!=='home'){event.preventDefault();goBack();}" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
 <!-- Kleurmatrix voor rood haar. Een CSS hue-rotate kan wit geen kleur geven, dus
      de highlights werden grijs en het resultaat bleef oranje; deze matrix is met
      kleinste kwadraten gepast op de échte haar- en baardpixels (zie
