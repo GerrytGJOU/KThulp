@@ -3288,16 +3288,18 @@ async function bmResolve(roundN){
     // Mastery bijhouden in identities (fire-and-forget)
     bmUpdateMastery(players,pUpd,events);
 
+    // Total War-belegering: drie losse gevechten na elkaar. gp/stageKeys/
+    // curStageKey zijn ook nodig voor de rondelimiet hieronder, dus al hier
+    // (buiten de HP-check) bepaald.
+    const gp=BM_META?.garrisonProvince;
+    const stageKeys=gp?bmSiegeStageKeys(gp):[];
+    const curStageIdx=BM_BOSS?.stage||0;
+    const curStageKey=stageKeys[curStageIdx];
     if(newHA<=0||newHB<=0){
-      // Total War-belegering: drie losse gevechten na elkaar. Zodra de
-      // huidige stage (militie/garnizoen → muur → fort) op 0 komt maar er
-      // nog een volgende stage is, is dit GEEN einde van het gevecht — de
-      // klas-HP blijft ongewijzigd staan (geen gratis heal tussen stages),
-      // alleen de baas krijgt de volgende stage se verse HP.
-      const gp=BM_META?.garrisonProvince;
-      const stageKeys=gp?bmSiegeStageKeys(gp):[];
-      const curStageIdx=BM_BOSS?.stage||0;
-      const curStageKey=stageKeys[curStageIdx];
+      // Zodra de huidige stage (militie/garnizoen → muur → fort) op 0 komt
+      // maar er nog een volgende stage is, is dit GEEN einde van het gevecht
+      // — de klas-HP blijft ongewijzigd staan (geen gratis heal tussen
+      // stages), alleen de baas krijgt de volgende stage se verse HP.
       if(newHB<=0 && curStageKey && curStageIdx<stageKeys.length-1){
         const nextIdx=curStageIdx+1;
         const nextKey=stageKeys[nextIdx];
@@ -3327,6 +3329,22 @@ async function bmResolve(roundN){
       // lezen het log nog, en "Nieuw gevecht — zelfde spelers" heeft de
       // spelers nodig. Opruimen gebeurt in bmHostFinish(), als de docent de
       // nabespreking verlaat.
+      return;
+    }
+    // Rondelimiet (TW_SIEGE_MAX_ROUNDS, totalwar.js §5.4.1, op verzoek):
+    // zonder tijdsdruk kon een klas een willekeurig zwaar versterkte
+    // provincie toch in één les stukbeuken door simpelweg door te blijven
+    // spelen. Bereikt een belegering deze limiet zonder dat de HUIDIGE stage
+    // gevallen is, dan trekt de klas zich terug — geen overwinning, maar ook
+    // GEEN verlies-framing (zie SCREENS.battleResult/bmNextAward: state.
+    // timedOut zorgt daar voor een neutrale "tijd is om"-tekst i.p.v. "X
+    // wint!"). Mechanisch hergebruikt dit bewust hetzelfde pad als een
+    // gewoon verlies (winner="B" → twResolveSiege() se else-tak): de tot nu
+    // toe toegebrachte schade blijft via de bestaande slijtageslag-reparatie
+    // (§5.4) gewoon staan, precies zoals gevraagd.
+    if(gp && roundN>=TW_SIEGE_MAX_ROUNDS){
+      await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:"B",timedOut:true});
+      twResolveSiege("B",curStageKey||"towers",tB.maxHealth,newHB,players).catch(()=>{});
       return;
     }
     await bmDistributeQs(roundN+1);
@@ -3485,7 +3503,7 @@ function bmHostResult(){
   cleanup();
   BM_PAUSED=false;
   // Sla spelerdata op vóór BM_PLAYERS wordt gereset
-  BM_AWARD_DATA={winner:BM_STATE.winner,exactTie:!!BM_STATE.exactTie,all:Object.values(BM_PLAYERS)};
+  BM_AWARD_DATA={winner:BM_STATE.winner,exactTie:!!BM_STATE.exactTie,timedOut:!!BM_STATE.timedOut,all:Object.values(BM_PLAYERS)};
   bmSyncClassMissedWords(BM_AWARD_DATA.all);
   go("battleHostAwards");
 }
@@ -3759,7 +3777,13 @@ function bmNextAward(){
 
   if(BM_AWARD_STEP===1){
     const w=aw.winner;
-    const wonHTML=w==="A"||w==="B"
+    // Rondelimiet bereikt bij een belegering (TW_SIEGE_MAX_ROUNDS, totalwar.js
+    // §5.4.1): mechanisch een gewoon verlies (winner="B", slijtageslag blijft
+    // staan), maar dit mag niet als nederlaag AANVOELEN — vandaar een eigen,
+    // neutrale tekst i.p.v. "Het Garnizoen wint!".
+    const wonHTML=aw.timedOut
+      ?`<div style="font-size:64px">⏳</div><h2 style="color:var(--hi-bright);font-size:26px;margin:10px 0;animation:bmAwardIn .6s">De tijd is om — terugtrekking!</h2>`
+      : w==="A"||w==="B"
       ?`${iconSVG(bmTeamIcon(w),72,"var(--team"+w+")")}<h2 style="color:var(--hi-bright);font-size:28px;margin:10px 0;animation:bmAwardIn .6s">${esc(bmTeamNm(w))} wint!</h2>`
       :`<div style="font-size:64px">⚔️</div><h2 style="color:var(--muted);font-size:24px;margin:10px 0">Gevecht gestopt</h2>`;
     stage.innerHTML=`<div style="animation:bmWin .7s;text-align:center">${wonHTML}</div>`;
@@ -4143,7 +4167,14 @@ SCREENS.battlePlayerGame = function(){
     fSt=rSt.on("value",s=>{
       BM_STATE.status=s.val();
       if(BM_STATE.status==="finished"){
-        fbDB.ref("rooms/"+BM_CODE+"/state/winner").once("value").then(ws=>{BM_STATE.winner=ws.val();cleanup();go("battleResult");});
+        // timedOut (rondelimiet, TW_SIEGE_MAX_ROUNDS) meegehaald naast winner
+        // — zelfde smalle per-veld-ophaalpatroon als hier al gold, anders
+        // toont SCREENS.battleResult bij een leerling altijd de generieke
+        // "X wint!"-tekst i.p.v. de neutrale terugtrekkingstekst.
+        Promise.all([
+          fbDB.ref("rooms/"+BM_CODE+"/state/winner").once("value"),
+          fbDB.ref("rooms/"+BM_CODE+"/state/timedOut").once("value"),
+        ]).then(([ws,ts])=>{BM_STATE.winner=ws.val();BM_STATE.timedOut=!!ts.val();cleanup();go("battleResult");});
       } else if(BM_STATE.status==="lobby"){
         // De docent heeft een nieuw gevecht klaargezet. Normaal ziet een
         // leerling eerst het resultaatscherm (en krijgt daar zijn XP), maar als
@@ -4596,11 +4627,16 @@ function bmRenderXpGain(r){
 
 SCREENS.battleResult = function(){
   const w=BM_STATE.winner;
+  // Rondelimiet bereikt bij een belegering (TW_SIEGE_MAX_ROUNDS, totalwar.js
+  // §5.4.1) — zie de gelijke afweging bij bmNextAward() hierboven: mechanisch
+  // een gewoon verlies, maar geen nederlaag-framing.
+  const timedOut=!!BM_STATE.timedOut;
   H(brand(false)+`
   <div class="scrhead"><button class="back" onclick="bmLeave();go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>Gevecht voorbij</h2></div>
   <div class="panel" style="text-align:center">
-    <div style="font-size:56px">${w==="A"||w==="B"?iconSVG(bmTeamIcon(w),56,"var(--team"+w+")"):"⚔️"}</div>
-    <h2 style="color:var(--hi-bright);margin:8px 0">${w==="A"||w==="B"?esc(bmTeamNm(w))+" wint!":"Gevecht gestopt"}</h2>
+    <div style="font-size:56px">${timedOut?"⏳":w==="A"||w==="B"?iconSVG(bmTeamIcon(w),56,"var(--team"+w+")"):"⚔️"}</div>
+    <h2 style="color:var(--hi-bright);margin:8px 0">${timedOut?"De tijd is om — terugtrekking!":w==="A"||w==="B"?esc(bmTeamNm(w))+" wint!":"Gevecht gestopt"}</h2>
+    ${timedOut?`<div class="note" style="margin-top:4px">De schade die jullie hebben toegebracht blijft staan — kom later terug om het karwei af te maken.</div>`:""}
   </div>
   <div id="bmXpResult" class="panel" style="text-align:center;color:var(--muted)">
     <div style="font-size:15px;color:var(--hi-bright)">⚡ Je XP en ${esc(bmCoinName())} worden bijgeschreven…</div>

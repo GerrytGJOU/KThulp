@@ -393,6 +393,43 @@ Bewust (nog) **niet** gebouwd: cosmetische items (unieke sieraden/avatar-
 onderdelen) gekoppeld aan vlaggenschipbezit — de gesprekspartner gaf aan dat
 er nog geen geschikte sprites voor bestaan; latere uitbreiding.
 
+### 3.8 Gespreide herhaling in Training Mode (nieuw, 2026-09-09)
+
+**✅ Gebouwd, op verzoek — leerlingfeedback: hetzelfde woord kwam vaak
+meteen achter elkaar terug.** Oorzaak: `trNextQuestion()` (`certamen/
+training.js`) riep tot dan `makeQuestion(TR_POOL)` zónder gewicht aan —
+puur uniform-random, in tegenstelling tot Vrij Oefenen (`certamen/
+freepractice.js`), dat al langer `makeQuestion(FP_POOL, w=>2*(FP_WRONG_
+COUNTS[w.la]||0))` gebruikt om fout beantwoorde woorden vaker terug te laten
+komen.
+
+Training Mode kreeg dezelfde behandeling, plus een tweede maatregel:
+
+- **`TR_WRONG_COUNTS`** — zelfde gewichtsformule als Vrij Oefenen (2× het
+  aantal keer fout, als extra gewicht bovenop elk woord se standaardkans),
+  bijgehouden in `trAnswer()`.
+- **`TR_RECENT_WORDS`** (nieuw t.o.v. het Vrij-Oefenen-patroon) — de laatste
+  `TR_RECENT_WINDOW` (6) gevraagde woorden worden EERST uit de pool
+  gefilterd (`trPersonalPool()`), vóórdat `makeQuestion()` een gewogen keus
+  maakt. Dit lost specifiek het "twee keer meteen achter elkaar"-probleem
+  op, wat een weightFn alleen niet kan: `pickWeighted()` (`core.js`) se
+  gewicht is altijd minstens 1 (`1+Math.max(0,weightFn(w))`), dus een
+  weightFn kan een woord nooit volledig uitsluiten — enkel vaker/minder vaak
+  maken. Valt terug op de volle pool zodra uitsluiten 'm te klein zou maken,
+  zodat een korte woordenlijst nooit vastloopt.
+
+Beide zijn sessie-lokaal (gereset in `trStart()`), net als `FP_WRONG_
+COUNTS` in Vrij Oefenen — geen Firebase-veld nodig, dit is puur
+kortetermijnspreiding binnen één oefensessie, geen langetermijn-Leitner-
+systeem (dat bestaat al wel, maar los, voor Boss Battle/Battle Mode:
+`bmPersonalPool()` in `battle.js`, met een `due`-vervolgronde).
+
+Bewust **niet** aangepast: de werkwoordsvormen-submodus
+(`TR_DRAFT.source==="verbforms"`, `vfqMakeQuestion()`/`vfqMakeOntleedQuestion()`/
+`vfqMakeTypedQuestion()`) heeft een eigen, apart poolsysteem — buiten scope
+van deze fix, die zich richt op de gewone woordenschat-quiz (freq-lijst/
+eigen lijst), waar de leerlingfeedback over ging.
+
 ---
 
 ## 4. Datamodel (Firebase RTDB) — vervangt `TW_DEMO_OWN`/`TW_DEMO_DEF`
@@ -666,6 +703,49 @@ die wordt volledig vervangen door `twStageMaxHP()`, `Md` gold alleen voor de
 generieke niet-belegerings-basisformule. Dat blijft zo; deze fix raakt alleen
 de `N`-schaling, niet die bestaande asymmetrie (een apart, kleiner punt, niet
 wat hier gevraagd was).
+
+#### 5.4.2 Rondelimiet: een zwaar versterkte provincie moet écht meerdere lessen kosten
+
+**✅ Gebouwd, op verzoek — het eigenlijke gat achter de vraag "is een
+belegering wel moeilijk genoeg?".** Zelfs met §5.4.1's eerlijke HP-schaling
+kon een klas een willekeurig zwaar versterkte provincie in principe toch in
+één les stukbeuken: omdat alle spelers **tegelijk** (niet na elkaar)
+antwoorden, hangt het aantal BENODIGDE rondes nauwelijks af van de
+klasgrootte — alleen van hoeveel sporen (militie/muur/toren) verdedigd zijn.
+Met genoeg rondes in één lange zitting viel dus, zonder externe begrenzing,
+uiteindelijk elke provincie — precies tegengesteld aan wat §5.4 al beschreef
+("mag nooit praktisch onneembaar worden", maar ook nooit *triviaal* in één
+les).
+
+Fix: `TW_SIEGE_MAX_ROUNDS` (`certamen/totalwar.js`, richtwaarde **20**, na
+live testen bij te stellen) begrenst hoeveel rondes één belegeringspoging
+mag duren. Wordt die limiet bereikt zonder dat de HUIDIGE stage gevallen is,
+dan trekt de klas zich terug (`bmResolve()`, `certamen/battle.js`):
+
+- **Geen overwinning**, maar ook bewust **geen nederlaag-framing** — de
+  gebruiker wees expliciet "telt als verlies" af ten gunste van
+  "terugtrekking, voortgang blijft staan". Mechanisch hergebruikt dit toch
+  hetzelfde pad als een gewoon verlies (`winner:"B"` → `twResolveSiege()`'s
+  bestaande else-tak, dus de tot dan toegebrachte schade blijft via de
+  bestaande slijtageslag-reparatie (§5.4) gewoon staan) — alleen de
+  WEERGAVE is anders: `state.timedOut:true` laat `SCREENS.battleResult`
+  (leerling) en `bmNextAward()` (docent-award-ceremonie) een neutrale "⏳ De
+  tijd is om — terugtrekking!" tonen in plaats van "Het Garnizoen wint!".
+  `state.timedOut` wordt op het leerling-toestel apart opgehaald naast
+  `state.winner` (zelfde smalle per-veld-ophaalpatroon dat `exactTie` al
+  had — dat veld was al nooit op leerling-toestellen beschikbaar).
+- **Zichtbaar tijdens het gevecht**: `bmBossStatusNote()`
+  (`certamen/bossbattle.js`, docent-scherm/projectiescherm, net als de
+  Cycloop-countdown) toont "⏳ Ronde N/20", met een waarschuwing in de
+  laatste 5 rondes — zodat de klas de tijdsdruk voelt aankomen in plaats van
+  verrast te worden door een plotselinge terugtrekking.
+- **Alleen bij een belegering** (`BM_META.garrisonProvince` gezet) — een
+  gewone, losse Boss Battle (mythologische baas) heeft geen rondelimiet en
+  blijft ongewijzigd.
+
+Bewust **niet** gebouwd: een instelbare limiet per provincie/docent — één
+vaste constante is voorlopig genoeg, en makkelijk aan te passen zodra live
+spelen laat zien dat 20 te streng of te soepel is.
 
 ### 5.5 PvP alleen via gedeelde grenzen, altijd asynchroon
 
