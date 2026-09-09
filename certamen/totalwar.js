@@ -1452,9 +1452,18 @@ function twOnAttackerChange(){
 }
 
 /* Bereidt BM_META voor en stapt over naar het bestaande Boss Battle-hostflow
-   (battleHostSettings) — hergebruikt lobby/gevecht volledig ongewijzigd, zie
-   BOSS_BATTLE.md §7. bmStartBossGame() in battle.js leest garrisonProvince
-   uit om de garnizoensbonus/slijtageslag toe te passen. */
+   — hergebruikt lobby/gevecht volledig ongewijzigd, zie BOSS_BATTLE.md §7.
+   bmStartBossGame() in battle.js leest garrisonProvince uit om de
+   garnizoensbonus/slijtageslag toe te passen.
+
+   Gaat via SCREENS.hostSource (net als bmStartHost()/bmStartBossHost() in
+   battle.js), NIET rechtstreeks naar battleHostSettings — een eerdere versie
+   sloeg die stap over, waardoor de docent nooit de kans kreeg om de
+   woordenlijst (taal/frequentiebereik) te kiezen: DRAFT.lang/.source bleven
+   gewoon staan op wat er toevallig van een vorig, ongerelateerd spel over
+   was (vaak Latijn), zelfs voor een Griekse klas. confirmSource()
+   (games.js) stuurt bij DRAFT.game==="battle" vanzelf door naar
+   battleHostSettings zodra de docent de woordenlijst bevestigd heeft. */
 function twStartAttack(targetId, attackerCiv){
   const p = (_twLiveProvinces && _twLiveProvinces[targetId]) || {};
   if(!BM_META) BM_META = {};
@@ -1472,8 +1481,9 @@ function twStartAttack(targetId, attackerCiv){
   BM_META.attackerCivId = attackerCiv;
   BM_META.campaignOwner = _twOwner; // welke campagne twResolveSiege() straks moet bijwerken
   const nm = (_twRegistry?.[targetId]?.displayName) || targetId;
-  toast("Aanval voorbereid", nm+" — kies de moeilijkheidsgraad en start het gevecht.");
-  go("battleHostSettings");
+  toast("Aanval voorbereid", nm+" — kies eerst de woordenlijst.");
+  ROLE = "host"; DRAFT.game = "battle";
+  go("hostSource");
 }
 
 /* ---- Klik op een provincie → selecteren + detailpaneel bijwerken ---- */
