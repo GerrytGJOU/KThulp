@@ -1316,9 +1316,25 @@ function spCodexImagesHTML(){
   if(!imgs.length) return `<p class="codex-empty">Nog geen scènes met een illustratie bezocht.</p>`;
   return `<div class="codex-gallery">${imgs.map(i=>`
     <div class="codex-gallery-item">
-      <img src="assets/chronica/images/${esc(i.img)}" alt="" onerror="this.parentElement.style.display='none'">
+      <img src="assets/chronica/images/${esc(i.img)}" alt="" onclick="spOpenLightbox(this.src)" onerror="this.parentElement.style.display='none'">
       <div class="codex-gallery-caption">${esc(i.titel)}</div>
     </div>`).join("")}</div>`;
+}
+/* ---- CODEX-AFBEELDING-LIGTHBOX: elke <img> in de Codex-galerijen
+   (Afbeeldingen-tab hierboven, Herinneringen/Museum-tab bij
+   spSouvenirTileHTML/spSouvenirEmptyTileHTML) is aanklikbaar om vergroot te
+   tonen — Gerbens verzoek. #imgLightbox/#imgLightboxImg staan als vaste
+   markup in index.html, BUITEN #app (zelfde patroon als #toast/#achpopBg),
+   dus dit hoeft nooit een heel scherm opnieuw te renderen en blijft ook
+   intact als de speler ondertussen van Codex-tabblad wisselt. Klikken op de
+   overlay zelf, de knop, of de vergrote afbeelding sluit 'm allemaal weer —
+   geen aparte "klik ernaast"-precisie nodig, prettiger op een iPad. ---- */
+function spOpenLightbox(src){
+  el("imgLightboxImg").src = src;
+  el("imgLightbox").classList.add("show");
+}
+function spCloseLightbox(){
+  el("imgLightbox").classList.remove("show");
 }
 /* ---- KRONIEK-TAB (Chronica.md §12, Deel 1.5 van de spec: "een doorlopend,
    in-fictie logboek van beslissingen... geschreven als annalen, niet als
@@ -1399,7 +1415,8 @@ function spCodexSouvenirsHTML(){
 function spSouvenirTileHTML(def){
   return `<div class="codex-gallery-item">
       <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(90,58,26,.12);border-radius:6px;overflow:hidden">
-        <img src="assets/chronica/souvenirs/${esc(def.img||'')}" alt="" style="width:100%;height:100%;object-fit:contain"
+        <img src="assets/chronica/souvenirs/${esc(def.img||'')}" alt="" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in"
+          onclick="spOpenLightbox(this.src)"
           onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${esc(def.icon)}</span>'">
       </div>
       <div class="codex-gallery-caption">${esc(def.caption)}</div>
@@ -1409,7 +1426,8 @@ function spSouvenirEmptyTileHTML(id){
   const variant = spSouvenirPlaceholderVariant(id);
   return `<div class="codex-gallery-item" style="opacity:.55">
       <div style="width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;background:rgba(90,58,26,.12);border-radius:6px;overflow:hidden">
-        <img src="assets/chronica/souvenirs/museum_${variant.id}.png" alt="" style="width:100%;height:100%;object-fit:contain"
+        <img src="assets/chronica/souvenirs/museum_${variant.id}.png" alt="" style="width:100%;height:100%;object-fit:contain;cursor:zoom-in"
+          onclick="spOpenLightbox(this.src)"
           onerror="this.parentElement.innerHTML='<span style=&quot;font-size:40px&quot;>${variant.icon}</span>'">
       </div>
       <div class="codex-gallery-caption">${esc(variant.caption)}</div>
