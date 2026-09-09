@@ -327,6 +327,15 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
       </div>
     </div>
     <div class="filter-group">
+      <div class="filter-label">Modus</div>
+      <div class="chip-row" id="o-f-wijs">
+        <button class="fchip on" data-v="ind">Indicativus</button>
+        <button class="fchip" data-v="coni">Coniunctivus</button>
+        <button class="fchip" data-v="opt">Optativus</button>
+      </div>
+      <div style="font-size:.78rem;color:var(--dim);margin-top:6px">Coniunctivus en optativus zijn vooralsnog alleen beschikbaar voor λύω.</div>
+    </div>
+    <div class="filter-group">
       <div class="filter-label">Genus</div>
       <div class="chip-row" id="o-f-genus">
         <button class="fchip on" data-v="act">Actief</button>
@@ -372,6 +381,15 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
       </div>
     </div>
     <div class="filter-group">
+      <div class="filter-label">Modus</div>
+      <div class="chip-row" id="d-f-wijs">
+        <button class="fchip on" data-v="ind">Indicativus</button>
+        <button class="fchip" data-v="coni">Coniunctivus</button>
+        <button class="fchip" data-v="opt">Optativus</button>
+      </div>
+      <div style="font-size:.78rem;color:var(--dim);margin-top:6px">Coniunctivus en optativus zijn vooralsnog alleen beschikbaar voor λύω.</div>
+    </div>
+    <div class="filter-group">
       <div class="filter-label">Genus</div>
       <div class="chip-row" id="d-f-genus">
         <button class="fchip on" data-v="act">Actief</button>
@@ -415,6 +433,15 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
         <button class="fchip on" data-v="aoristus">Aoristus</button>
         <button class="fchip" data-v="futurum">Futurum</button>
       </div>
+    </div>
+    <div class="filter-group">
+      <div class="filter-label">Modus</div>
+      <div class="chip-row" id="v-f-wijs">
+        <button class="fchip on" data-v="ind">Indicativus</button>
+        <button class="fchip" data-v="coni">Coniunctivus</button>
+        <button class="fchip" data-v="opt">Optativus</button>
+      </div>
+      <div style="font-size:.78rem;color:var(--dim);margin-top:6px">Coniunctivus en optativus zijn vooralsnog alleen beschikbaar voor λύω.</div>
     </div>
     <div class="filter-group">
       <div class="filter-label">Genus</div>
@@ -1171,6 +1198,72 @@ const VERBS = [
   {f:'ἐλύθην',g:'med', t:'aoristus',  p:1,n:'ev',tr:'ik werd losgemaakt',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λύ',r:'stem'},{t:'θη',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'θη',r:'tk'},{c:'ν',r:'end'}]},
   {f:'ἐλύθη',g:'med',  t:'aoristus',  p:3,n:'ev',tr:'hij werd losgemaakt',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λύ',r:'stem'},{t:'θη',r:'tk'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'θη',r:'tk'},{c:'—',r:'end'}]},
   {f:'ἐλύθημεν',g:'med',t:'aoristus',  p:1,n:'mv',tr:'wij werden losgemaakt',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'λύ',r:'stem'},{t:'θη',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'λυ',r:'stem'},{c:'θη',r:'tk'},{c:'μεν',r:'end'}]},
+  // Coniunctivus/optativus — vooralsnog alleen bij λύω (zie startExercise's
+  // Modus-filter): woord-voor-woord overgenomen uit het overzichtsparadigma
+  // hierboven op deze pagina (§ "Volledig overzicht van λύω — alle vormen"),
+  // dus geen nieuwe vormen, alleen dezelfde al-geverifieerde tekst nu ook
+  // beschikbaar voor Ontleden/Determineren/Vertalen. Geen augment (bestaat
+  // niet buiten de indicativus van de historische tijden).
+  {f:'λύω',g:'act',    t:'praesens', w:'coni',p:1,n:'ev',tr:'ik maak los',   cut:{pieces:[{t:'λύ',r:'stem'},{t:'ω',r:'end'}],fused:false}},
+  {f:'λύῃς',g:'act',   t:'praesens', w:'coni',p:2,n:'ev',tr:'jij maakt los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'ῃς',r:'end'}],fused:false}},
+  {f:'λύῃ',g:'act',    t:'praesens', w:'coni',p:3,n:'ev',tr:'hij maakt los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'ῃ',r:'end'}],fused:false}},
+  {f:'λύωμεν',g:'act', t:'praesens', w:'coni',p:1,n:'mv',tr:'wij maken los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'ωμεν',r:'end'}],fused:false}},
+  {f:'λύητε',g:'act',  t:'praesens', w:'coni',p:2,n:'mv',tr:'jullie maken los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'ητε',r:'end'}],fused:false}},
+  {f:'λύωσι(ν)',g:'act',t:'praesens',w:'coni',p:3,n:'mv',tr:'zij maken los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'ωσι(ν)',r:'end'}],fused:false}},
+  {f:'λύωμαι',g:'med', t:'praesens', w:'coni',p:1,n:'ev',tr:'ik word losgemaakt',cut:{pieces:[{t:'λύ',r:'stem'},{t:'ωμαι',r:'end'}],fused:false}},
+  {f:'λύῃ',g:'med',    t:'praesens', w:'coni',p:2,n:'ev',tr:'jij wordt losgemaakt',cut:{pieces:[{t:'λύ',r:'stem'},{t:'ῃ',r:'end'}],fused:false}},
+  {f:'λύηται',g:'med', t:'praesens', w:'coni',p:3,n:'ev',tr:'hij wordt losgemaakt',cut:{pieces:[{t:'λύ',r:'stem'},{t:'ηται',r:'end'}],fused:false}},
+  {f:'λυώμεθα',g:'med',t:'praesens', w:'coni',p:1,n:'mv',tr:'wij worden losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'ώμεθα',r:'end'}],fused:false}},
+  {f:'λύησθε',g:'med', t:'praesens', w:'coni',p:2,n:'mv',tr:'jullie worden losgemaakt',cut:{pieces:[{t:'λύ',r:'stem'},{t:'ησθε',r:'end'}],fused:false}},
+  {f:'λύωνται',g:'med',t:'praesens', w:'coni',p:3,n:'mv',tr:'zij worden losgemaakt',cut:{pieces:[{t:'λύ',r:'stem'},{t:'ωνται',r:'end'}],fused:false}},
+  {f:'λύσω',g:'act',    t:'aoristus',w:'coni',p:1,n:'ev',tr:'ik maakte los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ω',r:'end'}],fused:false}},
+  {f:'λύσῃς',g:'act',   t:'aoristus',w:'coni',p:2,n:'ev',tr:'jij maakte los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ῃς',r:'end'}],fused:false}},
+  {f:'λύσῃ',g:'act',    t:'aoristus',w:'coni',p:3,n:'ev',tr:'hij maakte los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ῃ',r:'end'}],fused:false}},
+  {f:'λύσωμεν',g:'act', t:'aoristus',w:'coni',p:1,n:'mv',tr:'wij maakten los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ωμεν',r:'end'}],fused:false}},
+  {f:'λύσητε',g:'act',  t:'aoristus',w:'coni',p:2,n:'mv',tr:'jullie maakten los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ητε',r:'end'}],fused:false}},
+  {f:'λύσωσι(ν)',g:'act',t:'aoristus',w:'coni',p:3,n:'mv',tr:'zij maakten los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ωσι(ν)',r:'end'}],fused:false}},
+  {f:'λύσωμαι',g:'med', t:'aoristus',w:'coni',p:1,n:'ev',tr:'ik maakte voor mezelf los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ωμαι',r:'end'}],fused:false}},
+  {f:'λύσῃ',g:'med',    t:'aoristus',w:'coni',p:2,n:'ev',tr:'jij maakte voor jezelf los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ῃ',r:'end'}],fused:false}},
+  {f:'λύσηται',g:'med', t:'aoristus',w:'coni',p:3,n:'ev',tr:'hij maakte voor zichzelf los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ηται',r:'end'}],fused:false}},
+  {f:'λυσώμεθα',g:'med',t:'aoristus',w:'coni',p:1,n:'mv',tr:'wij maakten voor onszelf los',cut:{pieces:[{t:'λυ',r:'stem'},{t:'σ',r:'tk'},{t:'ώμεθα',r:'end'}],fused:false}},
+  {f:'λύσησθε',g:'med', t:'aoristus',w:'coni',p:2,n:'mv',tr:'jullie maakten voor jezelf los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ησθε',r:'end'}],fused:false}},
+  {f:'λύσωνται',g:'med',t:'aoristus',w:'coni',p:3,n:'mv',tr:'zij maakten voor zichzelf los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ωνται',r:'end'}],fused:false}},
+  {f:'λυθῶ',g:'med',    t:'aoristus',w:'coni',p:1,n:'ev',tr:'ik werd losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'ῶ',r:'end'}],fused:false}},
+  {f:'λυθῇς',g:'med',   t:'aoristus',w:'coni',p:2,n:'ev',tr:'jij werd losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'ῇς',r:'end'}],fused:false}},
+  {f:'λυθῇ',g:'med',    t:'aoristus',w:'coni',p:3,n:'ev',tr:'hij werd losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'ῇ',r:'end'}],fused:false}},
+  {f:'λυθῶμεν',g:'med', t:'aoristus',w:'coni',p:1,n:'mv',tr:'wij werden losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'ῶμεν',r:'end'}],fused:false}},
+  {f:'λυθῆτε',g:'med',  t:'aoristus',w:'coni',p:2,n:'mv',tr:'jullie werden losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'ῆτε',r:'end'}],fused:false}},
+  {f:'λυθῶσι(ν)',g:'med',t:'aoristus',w:'coni',p:3,n:'mv',tr:'zij werden losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'ῶσι(ν)',r:'end'}],fused:false}},
+  {f:'λύοιμι',g:'act',    t:'praesens',w:'opt',p:1,n:'ev',tr:'ik maak los',   cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'},{t:'μι',r:'end'}],fused:false}},
+  {f:'λύοις',g:'act',     t:'praesens',w:'opt',p:2,n:'ev',tr:'jij maakt los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'},{t:'ς',r:'end'}],fused:false}},
+  {f:'λύοι',g:'act',      t:'praesens',w:'opt',p:3,n:'ev',tr:'hij maakt los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'}],fused:false}},
+  {f:'λύοιμεν',g:'act',   t:'praesens',w:'opt',p:1,n:'mv',tr:'wij maken los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'},{t:'μεν',r:'end'}],fused:false}},
+  {f:'λύοιτε',g:'act',    t:'praesens',w:'opt',p:2,n:'mv',tr:'jullie maken los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'},{t:'τε',r:'end'}],fused:false}},
+  {f:'λύοιεν',g:'act',    t:'praesens',w:'opt',p:3,n:'mv',tr:'zij maken los', cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'},{t:'εν',r:'end'}],fused:false}},
+  {f:'λυοίμην',g:'med',   t:'praesens',w:'opt',p:1,n:'ev',tr:'ik word losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'οί',r:'tk'},{t:'μην',r:'end'}],fused:false}},
+  {f:'λύοιο',g:'med',     t:'praesens',w:'opt',p:2,n:'ev',tr:'jij wordt losgemaakt',cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'},{t:'ο',r:'end'}],fused:false}},
+  {f:'λύοιτο',g:'med',    t:'praesens',w:'opt',p:3,n:'ev',tr:'hij wordt losgemaakt',cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'},{t:'το',r:'end'}],fused:false}},
+  {f:'λυοίμεθα',g:'med',  t:'praesens',w:'opt',p:1,n:'mv',tr:'wij worden losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'οί',r:'tk'},{t:'μεθα',r:'end'}],fused:false}},
+  {f:'λύοισθε',g:'med',   t:'praesens',w:'opt',p:2,n:'mv',tr:'jullie worden losgemaakt',cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'},{t:'σθε',r:'end'}],fused:false}},
+  {f:'λύοιντο',g:'med',   t:'praesens',w:'opt',p:3,n:'mv',tr:'zij worden losgemaakt',cut:{pieces:[{t:'λύ',r:'stem'},{t:'οι',r:'tk'},{t:'ντο',r:'end'}],fused:false}},
+  {f:'λύσαιμι',g:'act',   t:'aoristus',w:'opt',p:1,n:'ev',tr:'ik maakte los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'αιμι',r:'end'}],fused:false}},
+  {f:'λύσειας',g:'act',   t:'aoristus',w:'opt',p:2,n:'ev',tr:'jij maakte los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ειας',r:'end'}],fused:false}},
+  {f:'λύσειε(ν)',g:'act', t:'aoristus',w:'opt',p:3,n:'ev',tr:'hij maakte los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ειε(ν)',r:'end'}],fused:false}},
+  {f:'λύσαιμεν',g:'act',  t:'aoristus',w:'opt',p:1,n:'mv',tr:'wij maakten los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'αιμεν',r:'end'}],fused:false}},
+  {f:'λύσαιτε',g:'act',   t:'aoristus',w:'opt',p:2,n:'mv',tr:'jullie maakten los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'αιτε',r:'end'}],fused:false}},
+  {f:'λύσειαν',g:'act',   t:'aoristus',w:'opt',p:3,n:'mv',tr:'zij maakten los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'ειαν',r:'end'}],fused:false}},
+  {f:'λυσαίμην',g:'med',  t:'aoristus',w:'opt',p:1,n:'ev',tr:'ik maakte voor mezelf los',cut:{pieces:[{t:'λυ',r:'stem'},{t:'σ',r:'tk'},{t:'αίμην',r:'end'}],fused:false}},
+  {f:'λύσαιο',g:'med',    t:'aoristus',w:'opt',p:2,n:'ev',tr:'jij maakte voor jezelf los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'αιο',r:'end'}],fused:false}},
+  {f:'λύσαιτο',g:'med',   t:'aoristus',w:'opt',p:3,n:'ev',tr:'hij maakte voor zichzelf los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'αιτο',r:'end'}],fused:false}},
+  {f:'λυσαίμεθα',g:'med', t:'aoristus',w:'opt',p:1,n:'mv',tr:'wij maakten voor onszelf los',cut:{pieces:[{t:'λυ',r:'stem'},{t:'σ',r:'tk'},{t:'αίμεθα',r:'end'}],fused:false}},
+  {f:'λύσαισθε',g:'med',  t:'aoristus',w:'opt',p:2,n:'mv',tr:'jullie maakten voor jezelf los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'αισθε',r:'end'}],fused:false}},
+  {f:'λύσαιντο',g:'med',  t:'aoristus',w:'opt',p:3,n:'mv',tr:'zij maakten voor zichzelf los',cut:{pieces:[{t:'λύ',r:'stem'},{t:'σ',r:'tk'},{t:'αιντο',r:'end'}],fused:false}},
+  {f:'λυθείην',g:'med',   t:'aoristus',w:'opt',p:1,n:'ev',tr:'ik werd losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'είην',r:'end'}],fused:false}},
+  {f:'λυθείης',g:'med',   t:'aoristus',w:'opt',p:2,n:'ev',tr:'jij werd losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'είης',r:'end'}],fused:false}},
+  {f:'λυθείη',g:'med',    t:'aoristus',w:'opt',p:3,n:'ev',tr:'hij werd losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'είη',r:'end'}],fused:false}},
+  {f:'λυθεῖμεν',g:'med',  t:'aoristus',w:'opt',p:1,n:'mv',tr:'wij werden losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'εῖμεν',r:'end'}],fused:false}},
+  {f:'λυθεῖτε',g:'med',   t:'aoristus',w:'opt',p:2,n:'mv',tr:'jullie werden losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'εῖτε',r:'end'}],fused:false}},
+  {f:'λυθεῖεν',g:'med',   t:'aoristus',w:'opt',p:3,n:'mv',tr:'zij werden losgemaakt',cut:{pieces:[{t:'λυ',r:'stem'},{t:'θ',r:'tk'},{t:'εῖεν',r:'end'}],fused:false}},
  ]},
  {pres:'λαμβάνω',type:'themat',meaning:'nemen, krijgen',forms:[
   {f:'λαμβάνω',g:'act', t:'praesens',   p:1,n:'ev',tr:'ik neem',   cut:{pieces:[{t:'λαμβάν',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'λαμβαν',r:'stem'},{c:'ω',r:'end'}]},
@@ -1416,17 +1509,23 @@ function getChips(rowId){
 function readFilters(pref){
   return {
     tenses: getChips(pref+'-f-tijd'),
+    wijzen: getChips(pref+'-f-wijs'),
     genera: getChips(pref+'-f-genus'),
     types:  getChips(pref+'-f-type'),
   };
 }
 
+// Vormen zonder expliciet 'w'-veld zijn indicativus — dat is verreweg de
+// meeste data, dus geen 'w:"ind"' op elke bestaande vorm nodig. Coniunctivus/
+// optativus zijn vooralsnog alleen bij λύω toegevoegd (zie VERBS), maar de
+// filter zelf werkt generiek voor elk werkwoord dat ze ooit krijgt.
 function buildPool(filt){
   const pool=[];
   VERBS.forEach(v=>{
     if(!filt.types.includes(v.type)) return;
     v.forms.forEach(f=>{
       if(!filt.tenses.includes(f.t)) return;
+      if(!filt.wijzen.includes(f.w||'ind')) return;
       if(!filt.genera.includes(f.g)) return;
       pool.push({...f,pres:v.pres,meaning:v.meaning,type:v.type});
     });
@@ -1502,6 +1601,7 @@ function startExercise(mode){
   const filt  = readFilters(pref);
   const cnt   = parseInt(document.getElementById(cntId).value)||10;
   if(!filt.tenses.length){alert('Kies minstens één tijd.');return;}
+  if(!filt.wijzen.length){alert('Kies minstens één modus (indicativus / coniunctivus / optativus).');return;}
   if(!filt.genera.length){alert('Kies minstens één genus (actief / medium).');return;}
   if(!filt.types.length){alert('Kies minstens één type werkwoord.');return;}
   const pool = buildPool(filt);
