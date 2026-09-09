@@ -248,6 +248,7 @@ const WORDS_PRON = [
   {gr:'Ὀλυμπία',    tr:'Olympía',     answer:'olympia',        ui:'Olympia — geen h-klank (spiritus lenis)'},
   {gr:'τῷ ἀνθρώπῳ', tr:'tōi anthrṓpōi', answer:'toi anthroopoi', ui:'toi anthroopoi — iota subscriptum onder beide ω\'s is hoorbaar: ω+ι klinkt als "oi"'},
   {gr:'ζώνη',       tr:'zṓnē',        answer:'zoonee',         ui:'zoonee — de ζ mag je hier als z, dz óf zd uitspreken (dat verschilt per docent/traditie)'},
+  {gr:'φωνή',       tr:'phōnḗ',       answer:'fonee',          ui:'fonee — de φ mag je schrijven en uitspreken als ph óf als f'},
 ];
 
 // ═══════════════════════════════════════════════════
@@ -573,6 +574,7 @@ function nextQuestion(){
 // - lange-klinker-spelling (o/oo, e/ee — verschilt per docent/methode)
 // - de dz/zd/z-varianten van de dzèta (ζ)
 // - de u/y-varianten van de ypsilon (υ, bij ons een "u"-klank, geschreven als u of y)
+// - de ph/f-varianten van de phi (φ, mag allebei)
 // Bewust géén algemene fuzzy-tolerantie voor andere fouten: of je de h van een
 // spiritus asper wel/niet typt, of ει/οι goed hebt, is precies waar deze modus
 // op toetst.
@@ -582,6 +584,7 @@ function normalizePron(s){
     .replace(/[^a-z]/g,'')
     .replace(/dz|zd/g,'z')
     .replace(/y/g,'u')
+    .replace(/ph/g,'f')
     .replace(/([aeiou])\1+/g,'$1');
 }
 
