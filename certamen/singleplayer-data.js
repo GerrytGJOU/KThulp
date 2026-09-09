@@ -17408,7 +17408,7 @@ TITLE:
 Het Palladium Verdwijnt
 
 TEXT:
-Pas dagen later wordt duidelijk wat er is gebeurd: het Palladium, het heilige beeld van Athena dat Troje al generaties beschermt, is uit zijn tempel gestolen. Niemand heeft de dief gezien vertrekken. Voor het eerst sinds het begin van het beleg voelt de stad zich werkelijk onbeschermd.
+Pas dagen later wordt duidelijk wat er is gebeurd: het Palladium, het heilige beeld van Athena dat Troje al generaties beschermt, is uit zijn tempel gestolen. Niemand heeft de dief zien vertrekken. Voor het eerst sinds het begin van het beleg voelt de stad zich werkelijk onbeschermd.
 
 CODEX:
 codex_palladium_diefstal
@@ -17502,7 +17502,7 @@ TITLE:
 Wantrouwen tot op het Bot
 
 TEXT:
-Je begrijpt Laocoön zoals hij het bedoelt: zijn wantrouwen geldt de Grieken zelf, niet enkel het paard dat ze achterlieten. Zelfs als het paard onschuldig zou zijn geweest, zou zijn waarschuwing nog altijd hebben gegolden — en dat maakt het des te wranger dat niemand naar hem luistert.
+Je begrijpt Laocoön zoals hij het bedoelt: zijn wantrouwen richt zich tegen de Grieken zelf, niet enkel het paard dat ze achterlieten. Zelfs als het paard onschuldig zou zijn geweest, zou zijn waarschuwing nog altijd hebben gegolden — en dat maakt het des te wranger dat niemand naar hem luistert.
 
 CHOICES:
 
@@ -17639,7 +17639,7 @@ De Poorten Gaan Open
 TEXT:
 Vlak voor middernacht zie je Helena, alleen, driemaal om het houten paard heen lopen — ze fluistert, telkens in een andere stem, de namen van vrouwen die ze in Griekenland ooit kende. Uit de buik van het paard klinkt, één keer, een onderdrukte zucht — een man die bijna antwoordt op een stem die hij als die van zijn eigen vrouw herkent, tot een hand over zijn mond hem tegenhoudt. Niemand, ook jij niet, weet zeker of ze hen probeerde te ontmaskeren, of juist, voor het laatst, wilde beschermen tegen de stad die haar nooit helemaal heeft vertrouwd.
 
-Midden in de nacht klimmen de verstopte Grieken alsnog uit het paard en openen de poorten van Troje van binnenuit. Ver weg, op zee, ziet een wachter een signaalvuur — de teruggekeerde vloot vaart al aan land. Binnen enkele ogenblikken stroomt het hele Griekse leger de slapende stad binnen.
+Midden in de nacht klimmen de verstopte Grieken alsnog uit het paard en openen de poorten van Troje van binnenuit. Vlakbij, achter het eiland Tenedos, ziet een wachter een signaalvuur — de hele nacht al klaarliggend, vaart de vloot in een oogwenk terug naar het strand. Binnen enkele ogenblikken stroomt het hele Griekse leger de slapende stad binnen.
 
 Wat volgt is geen veldslag meer. Het is een slachting. Door de straten klinkt van alle kanten hetzelfde ene woord: "Fuge!" — vlucht.
 
@@ -17736,7 +17736,7 @@ TITLE:
 De Dood van Priamus
 
 TEXT:
-Priamus vlucht met Hecuba naar het altaar van Zeus, in de hoop dat heiligdom hem zal beschermen. Neoptolemus, Achilles' eigen zoon, doorboort eerst Polites — Priamus' laatste levende zoon — voor de ogen van zijn vader, en doodt dan de oude koning zelf, midden op de trappen van zijn eigen altaar.
+Priamus vlucht met Hecuba naar het altaar van Zeus, in de hoop dat dit heiligdom hem zal beschermen. Neoptolemus, Achilles' eigen zoon, doorboort eerst Polites — Priamus' laatste levende zoon — voor de ogen van zijn vader, en doodt dan de oude koning zelf, midden op de trappen van dat altaar.
 
 De koning die ooit met moed naar Achilles' tent liep om zijn zoon terug te vragen, sterft zonder dat iemand hém ooit dezelfde genade toont.
 
@@ -17761,7 +17761,7 @@ CHOICES:
 
 * Vind dit de wreedste daad van de hele oorlog, zonder enig excuus [SEVERITAS] -> CH9_TRO_016
 * Erken, met tegenzin, de logica van mannen die een nieuwe wraakoorlog over generaties willen voorkomen [CLEMENTIA] -> CH9_TRO_016
-* Kun je hier geen woorden voor vinden, aan geen van beide kanten [NEUTRAL] -> CH9_TRO_016
+* Vind hier gewoon geen woorden voor, aan geen van beide kanten [NEUTRAL] -> CH9_TRO_016
 
 END
 
