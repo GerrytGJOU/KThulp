@@ -718,6 +718,17 @@ function goBack(){
   if(!prev || !SCREENS[prev]) _screenStack=[];
   _screen=target; cleanup(); document.body.classList.toggle("greek", themeFor(target)==="greek"); SCREENS[target](); window.scrollTo(0,0);
 }
+// Voor schermen die zichzelf meteen bij het renderen doorsturen (bv.
+// teacherLogin die al-ingelogde docenten automatisch naar teacherPortal
+// stuurt): dit VERVANGT het huidige scherm i.p.v. het (nogmaals) op de stack
+// te zetten. Zonder dit belandt zo'n doorstuur-scherm zelf in de historie —
+// en omdat het bij elk bezoek weer meteen doorstuurt, ping-pongt de globale
+// "Terug naar portaal"-pijl (index.html, gebruikt goBack()) daar oneindig
+// tussen (leerlingfeedback 2026-09-09: docent kwam niet weg uit het
+// klassenoverzicht).
+function goReplace(name){
+  _screen=name; cleanup(); document.body.classList.toggle("greek", themeFor(name)==="greek"); SCREENS[name](); window.scrollTo(0,0);
+}
 function themeFor(name){
   // marathon-gerelateerde schermen krijgen het Griekse thema
   if((ROLE==="host" && DRAFT.game==="marathon") || (META && META.game==="marathon")) {

@@ -773,6 +773,7 @@ SCREENS.result = function(){
     </div>`:""}
     <button class="btn btn-gold btn-block lg" onclick="backToLobbyPlayer()">Wachten op volgende ronde</button>
     <button class="btn btn-ghost btn-block" style="margin-top:10px" onclick="leaveAll();go('collection')">Mijn verzameling</button>
+    <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="leaveAll();go('home')">Terug naar hoofdmenu</button>
   </div>${foot()}`);
 };
 function backToLobbyPlayer(){
@@ -1019,7 +1020,7 @@ function teacherNet(){ return hasFirebase ? FBNet : DemoNet; }
 /* ---- SCHERM: inloggen ---- */
 SCREENS.teacherLogin = function(){
   const demo = !hasFirebase;
-  if(teacherNet().isTeacherLoggedIn()){ go("teacherPortal"); return; }
+  if(teacherNet().isTeacherLoggedIn()){ goReplace("teacherPortal"); return; }
   const remembered = localStorage.getItem("tpRemember")!=="0";
   H(brand(true)+`
   <div class="scrhead">
@@ -1044,7 +1045,7 @@ SCREENS.teacherLogin = function(){
   setTimeout(()=>{ const e=el("tpEmail"); if(e)e.focus(); }, 120);
   if(!demo){
     teacherNet().authReady().then(user=>{
-      if(user && _screen==="teacherLogin") go("teacherPortal");
+      if(user && _screen==="teacherLogin") goReplace("teacherPortal");
     });
   }
 };
