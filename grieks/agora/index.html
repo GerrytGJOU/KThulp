@@ -1442,7 +1442,8 @@ let QV = {}, QG = {}, QSP = null, QPR = {}, QF = {}, QW = {}, QS = {};
 
 function load(){try{const r=localStorage.getItem(KEY);return r?{...DEF,...JSON.parse(r)}:{...DEF};}catch(e){return{...DEF};}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
-  if(typeof KTScores!=="undefined") KTScores.save("agora-gr",{score:S.xp||0,detail:(S.xp||0)+" xp, "+(S.totalCorrect||0)+" goed beantwoord"});
+  if(typeof KTScores!=="undefined") KTScores.save("agora-gr",{score:S.xp||0,detail:(S.xp||0)+" xp, "+(S.totalCorrect||0)+" goed beantwoord",
+    stats:{xp:S.xp||0, denarii:S.denarii||0, streak:S.streak||0, woordenschat:S.totalCorrect||0, werkwoorden:S.verbCorrect||0, zinnen:S.sentCorrect||0, opzoeken:S.lookups||0}});
 }
 function getKey(){return(TEACHER_API_KEY&&TEACHER_API_KEY.trim())||S.apiKey||"";}
 function todayStr(){return new Date().toISOString().slice(0,10);}

@@ -73,6 +73,14 @@
     "certamen":        {label:"Certamen",               url:SITE_ROOT+"certamen/"}
   };
 
+  // Weergavenamen voor stats-onderdelen (payload.stats van KTScores.save),
+  // gedeeld zodat elke app dezelfde sleutelnamen kan hergebruiken.
+  const STAT_LABELS = {
+    xp:"XP", denarii:"Denarii", streak:"Reeks",
+    woordenschat:"Woordenschat", werkwoorden:"Werkwoorden & vormen",
+    zinnen:"Zinnen", opzoeken:"Vormen opgezocht"
+  };
+
   /* ---- Lazy Firebase-loader: alleen laden zodra echt nodig ---- */
   let fbReadyPromise = null;
   function loadScript(src){
@@ -191,7 +199,13 @@
     return db.ref("teacherStatus/"+uid).once("value").then(s=>s.val()).catch(()=>null);
   }
 
-  /* ---- Leerling: profiel verversen vanaf Firebase (coins/xp/apps/Google-link) ---- */
+  /* ---- Leerling: profiel verversen vanaf Firebase (coins/xp/apps/Google-link) ----
+     notifyChange() alleen bij een ECHTE wijziging: refreshIdentity() wordt op de
+     profielpagina zelf aangeroepen vanuit een render() die ook als onChange-
+     listener geregistreerd staat — zonder deze dirty-check triggert elke
+     ververs-aanroep zichzelf opnieuw (render → refreshIdentity → notifyChange →
+     render → …), een oneindige lus die de pagina/Firebase blijft belasten en
+     klikken laat "niets doen" doordat de DOM continu wordt vervangen. */
   async function refreshIdentity(){
     const ident = identLoad();
     if(!ident) return null;
@@ -199,8 +213,9 @@
     const snap = await db.ref("identities/"+ident.klascode+"/"+ident.leerlingcode).once("value");
     if(!snap.exists()) return ident;
     const merged = { ...ident, ...snap.val() };
+    const changed = JSON.stringify(merged) !== JSON.stringify(ident);
     identSave(merged);
-    notifyChange();
+    if(changed) notifyChange();
     return merged;
   }
 
@@ -284,18 +299,26 @@
     return out;
   }
 
-  /* ---- Score-sync: identities/{klas}/{lid}/apps/{appId} ---- */
+  /* ---- Score-sync: identities/{klas}/{lid}/apps/{appId} ----
+     payload.stats (optioneel): platte {onderdeel:getal}-object voor apps met
+     meerdere onderdelen (bv. Ludus/Agora: woordenschat/werkwoorden/zinnen)
+     — de profielpagina toont dit als een uitgebreid "scorebord" i.p.v. alleen
+     de ene score+detail-regel. Geen aparte rules-wijziging nodig: identities/
+     $klas/$lid/apps/$appId heeft geen closed schema, dus extra kinderen zoals
+     "stats" erven gewoon de bestaande write-rechten van $lid. */
   async function saveScore(appId, payload){
     const ident = identLoad();
     if(!ident || !ident.klascode || !ident.leerlingcode) return false; // stil niets doen: niemand ingelogd
     if(!payload || typeof payload.score !== "number") return false;
     try{
       const { db } = await ensureFirebase();
-      await db.ref("identities/"+ident.klascode+"/"+ident.leerlingcode+"/apps/"+appId).update({
+      const data = {
         score: payload.score,
         detail: String(payload.detail||"").slice(0,200),
         updatedAt: firebase.database.ServerValue.TIMESTAMP
-      });
+      };
+      if(payload.stats && typeof payload.stats === "object") data.stats = payload.stats;
+      await db.ref("identities/"+ident.klascode+"/"+ident.leerlingcode+"/apps/"+appId).update(data);
       return true;
     }catch(e){ return false; } // sync mag nooit de app zelf breken
   }
@@ -436,6 +459,7 @@
     linkGoogle, unlinkGoogle, handleGoogleRedirect,
     getTeacherClasses, getClassRoster,
     APPS: APP_META,
+    STAT_LABELS,
     SITE_ROOT
   };
   global.KTScores = { save: saveScore };
