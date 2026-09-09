@@ -79,8 +79,8 @@ SCREENS.trainingMode = function(){
    keuze is) de provincie met de laagste som van de drie tellers — die heeft
    versterking het hardst nodig. */
 async function trLoadOwnedProvinces(){
-  if(!initFirebase()) return;
-  const snap = await fbDB.ref("totalwar/provinces").once("value");
+  if(!initFirebase() || !_twOwner) return;
+  const snap = await fbDB.ref(twPath(_twOwner,"provinces")).once("value");
   const all = snap.val()||{};
   TR_OWNED_PROVINCES = Object.entries(all)
     .filter(([id,p])=>p && p.owner===TR_CIV)
@@ -527,12 +527,24 @@ function trProvinceOverviewHTML(p){
    FIREBASE-HELPERS — schrijven/lezen op het bestaande /totalwar-schema
    (zie certamen/totalwar.js: twEnsureCampaignSeeded()). Vereist de
    uitgebreide rules die leerling-schrijfacties (geen Firebase Auth) op
-   totalwar/provinces/{id} en totalwar/klasSize/{klas} toestaan.
+   totalwar/campaigns/{ownerUid}/provinces/{id} en .../klasSize/{klas}
+   toestaan.
    ------------------------------------------------------------------ */
+/* Zoekt eerst welke docent (ownerUid) deze klascode bezit (klascodes/{klas}/
+   ownerUid, al publiek leesbaar), en zet _twOwner (gedeeld met totalwar.js)
+   op die campagne — sinds het multi-tenant Total War-systeem (CLAUDE.md §
+   Firebase-rules) is dat de enige plek waar Training Mode "welke campagne"
+   bepaalt; alle overige Firebase-paden hieronder volgen _twOwner. Bestaat de
+   docent (nog) niet of heeft die nog geen campagne/klasCivs-koppeling, dan
+   geeft dit gewoon null terug — trRenderModeBody() toont dan al de bestaande
+   "geen beschaving gekoppeld"-melding, geen aparte lege staat nodig. */
 async function twLookupCivForKlas(klascode){
   if(!klascode || !initFirebase()) return null;
   try{
-    const snap = await fbDB.ref("totalwar/klasCivs/"+klascode).once("value");
+    const owner = await twOwnerOfKlas(klascode);
+    if(!owner) return null;
+    _twOwner = owner;
+    const snap = await fbDB.ref(twPath(owner,"klasCivs/"+klascode)).once("value");
     return snap.val() || null;
   }catch(e){ return null; }
 }
@@ -543,12 +555,12 @@ async function twLookupCivForKlas(klascode){
    (geen naam/score) — dus geen privacygevoelige data hoeft opengesteld te
    worden zoals de volledige /identities-node dat wel zou zijn. */
 async function twGetClassSize(klascode){
-  if(!klascode || !initFirebase()) return 1;
+  if(!klascode || !initFirebase() || !_twOwner) return 1;
   try{
     if(BM_IDENT && BM_IDENT.leerlingcode){
-      await fbDB.ref("totalwar/klasSize/"+klascode+"/students/"+BM_IDENT.leerlingcode).set(true);
+      await fbDB.ref(twPath(_twOwner,"klasSize/"+klascode+"/students/"+BM_IDENT.leerlingcode)).set(true);
     }
-    const snap = await fbDB.ref("totalwar/klasSize/"+klascode+"/students").once("value");
+    const snap = await fbDB.ref(twPath(_twOwner,"klasSize/"+klascode+"/students")).once("value");
     const n = snap.exists() ? Object.keys(snap.val()).length : 1;
     return Math.max(1, n);
   }catch(e){ return 1; }
@@ -558,10 +570,10 @@ async function twGetClassSize(klascode){
    .transaction() zodat gelijktijdige leerlingen elkaars bijdrage niet
    overschrijven (zelfde patroon als ropePull() in net.js). */
 async function twAwardStructurePoints(provinceId, trackKey, points){
-  if(!provinceId || !initFirebase()) return;
+  if(!provinceId || !initFirebase() || !_twOwner) return;
   const field = TW_STRUCTURES[trackKey] && TW_STRUCTURES[trackKey].field;
   if(!field) return;
-  try{ await fbDB.ref("totalwar/provinces/"+provinceId+"/"+field).transaction(cur=>(cur||0)+points); }catch(e){}
+  try{ await fbDB.ref(twPath(_twOwner,"provinces/"+provinceId+"/"+field)).transaction(cur=>(cur||0)+points); }catch(e){}
 }
 
 /* Slijtageslag-reparatie (TOTAL_WAR.md §5.4): verlaagt de opgestapelde
@@ -570,8 +582,8 @@ async function twAwardStructurePoints(provinceId, trackKey, points){
    onder 0 — aangeroepen vanuit trAnswer() zodra een leerling traint op
    precies het spoor dat momenteel doorbroken is (siege.lastStage). */
 async function twRepairStageDamage(provinceId, stageKey, points){
-  if(!provinceId || !initFirebase()) return;
-  try{ await fbDB.ref("totalwar/provinces/"+provinceId+"/siege/stageDamage/"+stageKey).transaction(cur=>Math.max(0,(cur||0)-points)); }catch(e){}
+  if(!provinceId || !initFirebase() || !_twOwner) return;
+  try{ await fbDB.ref(twPath(_twOwner,"provinces/"+provinceId+"/siege/stageDamage/"+stageKey)).transaction(cur=>Math.max(0,(cur||0)-points)); }catch(e){}
 }
 
 /* ---- Dagelijkse cap (TR_DAILY_CAP): lokaal gecachet bij sessiestart, per
@@ -621,9 +633,9 @@ async function trTrackContribution(track, pts){
    zelf (geen docent-sessie actief tijdens thuis-oefenen), dus dit pad staat
    in de rules expliciet open (database.rules.json: totalwar/stats/topBuilder). */
 async function trMaybeUpdateTopBuilder(total){
-  if(!fbDB || !BM_IDENT || total<=0) return;
+  if(!fbDB || !BM_IDENT || !_twOwner || total<=0) return;
   try{
-    await fbDB.ref("totalwar/stats/topBuilder").transaction(cur=>{
+    await fbDB.ref(twPath(_twOwner,"stats/topBuilder")).transaction(cur=>{
       if(cur && (cur.points||0)>=total) return cur;
       return { name:BM_IDENT.name||"?", klas:BM_IDENT.klascode||"", points:Math.round(total), at:Date.now() };
     });
@@ -653,14 +665,14 @@ async function trCheckTWAchievements(contrib){
    — gedeeld door alle leerlingen van die beschaving, zelfde lazy-per-leerling-
    patroon als trCheckFlagshipAchievements() hierboven. */
 async function trCheckComebackAchievement(){
-  if(!BM_IDENT || !fbDB || !TR_CIV || !TR_OWNED_PROVINCES.length) return;
+  if(!BM_IDENT || !fbDB || !_twOwner || !TR_CIV || !TR_OWNED_PROVINCES.length) return;
   const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
   if(!klas||!lcode) return;
   if((BM_IDENT.achievements||[]).includes("tw_wederopstanding")) return;
   try{
-    const snap=await fbDB.ref("totalwar/civs/"+TR_CIV+"/wasWiped").once("value");
+    const snap=await fbDB.ref(twPath(_twOwner,"civs/"+TR_CIV+"/wasWiped")).once("value");
     if(!snap.val()) return;
-    await fbDB.ref("totalwar/civs/"+TR_CIV+"/wasWiped").set(false); // voorkomt herhaalde toekenning
+    await fbDB.ref(twPath(_twOwner,"civs/"+TR_CIV+"/wasWiped")).set(false); // voorkomt herhaalde toekenning
     const updated=[...new Set([...(BM_IDENT.achievements||[]),"tw_wederopstanding"])];
     await fbDB.ref("identities/"+klas+"/"+lcode+"/achievements").set(updated);
     BM_IDENT={...BM_IDENT, achievements:updated};

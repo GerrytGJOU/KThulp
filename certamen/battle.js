@@ -771,7 +771,7 @@ function bmStartHost(){
   // erven van een eerder afgebroken twStartAttack() (certamen/totalwar.js) —
   // zonder deze reset zou bmCreateRoom() dat garrisonProvince/attackerCivId
   // per ongeluk meenemen naar een ongerelateerd gevecht.
-  if(BM_META){ BM_META.garrisonProvince=null; BM_META.attackerCivId=null; }
+  if(BM_META){ BM_META.garrisonProvince=null; BM_META.attackerCivId=null; BM_META.campaignOwner=null; }
   ROLE="host"; DRAFT.game="battle"; go("hostSource");
 }
 // Directe ingang vanuit het hoofdmenu: start het gevecht-hosten met Boss
@@ -783,7 +783,7 @@ function bmStartBossHost(){
   BM_META.mode="boss";
   // Zie bmStartHost() hierboven: ook deze losstaande ingang mag geen
   // Total War-belegering erven.
-  BM_META.garrisonProvince=null; BM_META.attackerCivId=null;
+  BM_META.garrisonProvince=null; BM_META.attackerCivId=null; BM_META.campaignOwner=null;
   ROLE="host"; DRAFT.game="battle"; go("hostSource");
 }
 
@@ -1375,12 +1375,16 @@ async function bmCreateRoom(){
     mode:BM_META.mode||"pvp",
     bossId:BM_META.bossId||BOSS_PRESET_ORDER[0],
     bossDifficulty:BM_META.bossDifficulty||"normal",
-    // Total War-belegering (zie twStartAttack() in totalwar.js): deze twee
+    // Total War-belegering (zie twStartAttack() in totalwar.js): deze drie
     // velden moeten expliciet worden overgenomen, anders gaan ze verloren
     // zodra BM_META hieronder vervangen wordt door dit meta-object — en dan
-    // ziet bmStartBossGame()/bmResolve() nooit dat dit gevecht een belegering is.
+    // ziet bmStartBossGame()/bmResolve() nooit dat dit gevecht een belegering
+    // is, en weet twResolveSiege() niet meer welke docent se campagne (sinds
+    // het multi-tenant Total War-systeem, CLAUDE.md § Firebase-rules) moet
+    // worden bijgewerkt.
     garrisonProvince:BM_META.garrisonProvince||null,
     attackerCivId:BM_META.attackerCivId||null,
+    campaignOwner:BM_META.campaignOwner||null,
     status:"lobby"};
   BM_META=meta;
   try{

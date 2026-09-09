@@ -19,6 +19,14 @@
 > docent voor via de docentenweergave. Zie [§0](#0-wat-is-er-al-gebouwd-nu) voor
 > de volledige, actuele stand.
 >
+> **Sinds 2026-09-09: multi-tenant.** Er is niet langer één gedeelde
+> veldtocht — elke goedgekeurde docent kan zijn **eigen, onafhankelijke**
+> Total War starten met eigen kaart, eigen klas↔beschaving-koppelingen, eigen
+> seizoenen en eigen Hall of Fame. Overal hieronder waar nog "de" of "één
+> gedeelde" veldtocht/kaart staat (§1, §4, §7.1, §7.3, §9.3, §9.5), lees:
+> "de campagne van de betreffende docent" — zie [§9.7](#97-multi-tenant-elke-docent-zijn-eigen-campagne)
+> voor het bijgewerkte datamodel en de precieze regels.
+>
 > **Wat NIET gebouwd is, ondanks dat §3/§5/§6/§9.2 hieronder het als een
 > werkend systeem beschrijven**: Trainingspunten (TP) als een **besteedbare**
 > valuta voor garnizoensupgrades. In werkelijkheid schrijft elk goed antwoord
@@ -870,6 +878,58 @@ Boss Battle heeft (nog) geen schild-mechanic (zie `BOSS_PRESETS`-commentaar in
 is daarom vereenvoudigd geïmplementeerd: `walls*50 + towers*20` telt volledig
 op bij `bossMaxHP` (geen apart `garrisonShield`-veld). Zodra Boss Battle zelf
 een schildlaag krijgt, kan `towers` daaraan gekoppeld worden.
+
+### 9.7 Multi-tenant: elke docent zijn eigen campagne
+
+Sinds 2026-09-09 (op verzoek) is Total War niet langer één wereldwijd gedeelde
+veldtocht. Elke goedgekeurde docent (of admin) kan zijn **eigen, onafhankelijke**
+campagne starten — eigen kaart, eigen klas↔beschaving-koppelingen (§9.5), eigen
+seizoenen, eigen Hall of Fame (§11) — zichtbaar en speelbaar door **zijn eigen**
+klassen, los van elke andere docent.
+
+**Datamodel** — alle §4-paden verhuisd van plat `/totalwar/{provinces,civs,
+klasCivs,season,stats,history,klasSize,meta}` naar
+`/totalwar/campaigns/{ownerUid}/{...zelfde subvorm...}`. `{ownerUid}` (de
+Firebase Auth-uid van de docent) ís de campagnesleutel — één actieve campagne
+per docent, geen apart `campaignId` nodig. Nieuw: `/totalwar/showcaseUid`
+wijst de docent-uid aan wiens campagne als publiek **uithangbord** dient voor
+niet-ingelogde bezoekers en leerlingen zonder eigen-docent-campagne. Voorlopig
+altijd Gerbens eigen uid — een latere stap (bewust uitgesteld) is om ook die
+showcase-campagne af te schermen voor leerlingen van andere docenten.
+
+**Welke campagne zie je?** (`certamen/totalwar.js`: `twResolveViewerCampaign()`/
+`twResolveHofOwner()`, `_twOwner`)
+- Ingelogde, goedgekeurde docent/admin op zijn eigen beheerscherm
+  (`SCREENS.totalWarPreview`) → altijd zijn eigen `campaigns/{eigen uid}`.
+  Heeft hij er nog geen, dan toont het scherm een expliciete **"Start eigen
+  Total War"**-knop (`twRenderStartCampaign()`/`twStartOwnCampaign()`) —
+  bewust geen impliciete seed meer bij het eerste bezoek.
+- Leerling met identiteit (`BM_IDENT.klascode`, Training Mode/publieke kaart)
+  → `klascodes/{klas}/ownerUid` (al bestaand, publiek leesbaar veld, zie
+  CLAUDE.md § Firebase-rules) wijst zijn docent aan; bestaat diens campagne
+  nog niet, dan zie je een lege staat ("je docent heeft nog geen eigen Total
+  War gestart") — nooit stilzwijgend een andere docent se kaart.
+- Niemand van bovenstaande (niet-ingelogde bezoeker, of leerling van een
+  docent zonder eigen campagne) → `totalwar/showcaseUid`.
+- Hall of Fame is een uitzondering: een ingelogde, goedgekeurde docent/admin
+  ziet daar altijd zíjn EIGEN geschiedenis (met beheerknoppen), ook als hij
+  toevallig op de kaart van een andere docent aan het kijken was.
+
+**Rules** (`certamen/database.rules.json`) mirroren het bestaande
+`klascodes/{code}/ownerUid`-patroon: `totalwar/campaigns/$ownerUid` is
+publiek leesbaar (zelfde afweging als klascodes/identities — zie CLAUDE.md §
+Firebase-rules), maar `klasCivs`/`season`/`history`/`meta` zijn alleen
+schrijfbaar door `auth.uid === $ownerUid` én een goedgekeurde docent/admin —
+dus nooit door een collega-docent (dat kon vóór deze migratie per ongeluk
+wél, via de oude platte `.write:"auth != null"`). `provinces/$id`, `civs/$id`,
+`klasSize/.../$lid` en `stats/topBuilder` blijven wereld-schrijfbaar zoals
+altijd — leerling-gameplay heeft geen auth.
+
+De aanvalsflow (`twStartAttack()` → Boss Battle → `bmResolve()` →
+`twResolveSiege()`) draagt de campagne-eigenaar mee als `BM_META.campaignOwner`
+(gezet bij het starten van de aanval, meegekopieerd in de room-state zodat
+elke deelnemer 'm kent) zodat het gevechtsresultaat naar de juiste campagne
+teruggeschreven wordt.
 
 ---
 

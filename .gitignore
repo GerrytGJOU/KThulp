@@ -2,3 +2,8 @@
 # Losse Word-schetsen en aantekeningen naast het project: de masterplannen
 # staan in de .md-bestanden in deze map (zie CLAUDE.md), niet in .docx.
 Eigenschappen Filmpje Opening.docx
+
+# Lokale back-ups van live Firebase-data, gemaakt vóór een rules-/datamodel-
+# migratie (bv. via `firebase database:get`) — puur ter eigen veiligheid,
+# horen niet in de repo.
+.backup/

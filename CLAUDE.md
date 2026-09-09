@@ -131,3 +131,18 @@ spelregels, features of het datamodel raakt:
   Certamen om los in te sluiten), dus login-/rollensysteem-wijzigingen daar
   moeten hier bewust herhaald worden. De 16 losse apps schrijven hun score
   naar `identities/{klas}/{lid}/apps/{appId}` via `KTScores.save()`.
+- Total War is sinds 2026-09-09 multi-tenant (op verzoek): geen platte
+  `/totalwar/{provinces,...}` meer, maar `/totalwar/campaigns/{ownerUid}/
+  {provinces,civs,klasCivs,season,stats,history,klasSize,meta}` — elke
+  goedgekeurde docent heeft zijn eigen, onafhankelijke campagne, alleen
+  zichtbaar/speelbaar voor zijn eigen klassen. `/totalwar/showcaseUid` is het
+  publieke uithangbord (voorlopig altijd Gerbens uid) voor niet-ingelogde
+  bezoekers en leerlingen zonder eigen-docent-campagne — een latere stap kan
+  ook dát nog afschermen. Zie `TOTAL_WAR.md` §9.7 voor het volledige
+  datamodel en `twResolveViewerCampaign()`/`twResolveHofOwner()`
+  (`certamen/totalwar.js`) voor hoe elk scherm bepaalt welke campagne het
+  toont. Campagnes blijven wereld-leesbaar (zelfde afweging als klascodes/
+  identities hierboven); alleen de eigenaar-docent (of admin) mag zijn eigen
+  campagne beheren (klasCivs/season/history/meta) — gameplay-paden
+  (provinces/civs/klasSize/stats) blijven wereld-schrijfbaar voor leerlingen
+  zonder auth.
