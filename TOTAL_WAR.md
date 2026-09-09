@@ -69,7 +69,7 @@ Dit is niet aspiratief — dit bestaat vandaag in de repo en werkt:
 | JS-helper om provincies te kleuren/muteren | `certamen/map/provinces.js` (`MapAPI`) | ✅ werkend: `setProvinceOwner`, `setProvinceDefense`, `setProvinceBonus`, `highlightProvince`, `resetProvince`, `drawSeaRoutes` |
 | **Firebase-schema + eenmalige campagne-seed** | `certamen/totalwar.js` (`twEnsureCampaignSeeded`) | ✅ werkend — `/totalwar/provinces/{id}` + `/totalwar/civs/{civId}`, idempotent (zie §4, met de `klasCivs`-omkering uit §9.5) |
 | **Klas↔beschaving-koppeling (docentenportaal + Total War zelf)** | `certamen/games.js` (`tpAssignKlasCiv`/`tpLoadKlasCivs`, paneel in `SCREENS.teacherPortal` én in `SCREENS.totalWarPreview`, `certamen/totalwar.js`) | ✅ werkend — schrijft naar `/totalwar/klasCivs/{klascode}`, gevalideerd tegen bestaande Battle Mode-klascodes. Sinds 2026-09-07 staat exact hetzelfde koppelpaneel ook op de docent-veldtochtkaart zelf (niet langer alleen in het docentenportaal) |
-| **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageschade per spoor (`siege.stageDamage.{militia,walls,towers}`, zie §5.4 — **niet** het platte `damageTaken`-veld dat §4/§5.4 hieronder nog beschrijven); winst/verlies schrijft terug naar de provincie |
+| **Aanvalsflow + garnizoensformule** | `certamen/totalwar.js` (`twStartAttack`) + `certamen/battle.js` (`bmStartBossGame`, `bmResolve`/`twResolveSiege`) | ✅ werkend — "Val aan"-knop op de kaart start een Boss Battle met muren/torens als extra boss-HP en slijtageschade per spoor (`siege.stageDamage.{militia,walls,towers}`, zie §5.4 — **niet** het platte `damageTaken`-veld dat §4/§5.4 hieronder nog beschrijven); winst/verlies schrijft terug naar de provincie. Garnizoens-HP schaalt sinds 2026-09-09 mee met het aantal aanvallende spelers, net als een gewone Boss Battle (§5.4.1) |
 | **Slijtageslag-reparatie** | `certamen/training.js` (`twRepairStageDamage`, aangeroepen vanuit `trAnswer()`) | ✅ werkend — trainen op het doorbroken spoor verlaagt `siege.stageDamage` automatisch mee, zie §5.4 |
 | **8**-facties-tabel + thuislanden (seed-data) | `certamen/totalwar.js` (`TW_CIVS`, `TW_HOME_PROVINCES`) | ✅ werkend — **niet** 7: naast de 7 uit §2 bestaat ook `britanni` (Britten, thuisprovincie `britannia`) al in de seed-data, zie de correctie bij §2 hieronder |
 | Voorbeeld-eigendom/verdediging voor de **publieke** demo-kaart | `certamen/totalwar.js` (`TW_DEMO_OWN`, `TW_DEMO_DEF`) | ✅ blijft bestaan, uitsluitend voor `SCREENS.totalWar` (niet-docenten) — inclusief één "betwist"-voorbeeld (`TW_DEMO_CONTESTED`, Raetia) |
@@ -307,7 +307,7 @@ Mode (dat zelf geen kaart laadt, maar de bonus wel moet kennen).
 
 Eerste uitbreiding van §3.5 richting "Rome: Total War"-achtige provincie-
 specialisaties (RTS-inspiratie, expliciet gevraagd): de bonus is niet meer
-uitsluitend een Training Mode-effect. `twStageMaxHP(gp, stageKey)`
+uitsluitend een Training Mode-effect. `twStageMaxHP(gp, stageKey, N)`
 (`totalwar.js`) berekent de boss-HP voor één belegeringsstage en verhoogt die
 met hetzelfde `pct` als de bonus toevallig dát spoor betreft — dus een
 provincie met een muur-bonus is niet alleen sneller te versterken, maar heeft
@@ -317,6 +317,10 @@ op **beide** plekken waar dat gebeurde: de aanvalsstart
 (`bmStartBossGame()`) én de overgang naar de volgende stage
 (`bmResolve()`) — bewust op één plek gehouden, anders zou een van de twee
 per ongeluk zonder bonus kunnen komen te zitten.
+
+> ⚠️ **`N`-parameter toegevoegd (2026-09-09), zie §5.4.1** — de bonus is nog
+> steeds een percentage, maar dat percentage werkt sindsdien op een
+> klasgrootte-geschaalde basis-HP in plaats van een vast getal.
 
 ### 3.7 Vlaggenschipprovincies — rijksbrede, niet-stapelende beloning (nieuw, 2026-07-07)
 
@@ -609,7 +613,59 @@ onneembaar worden. Daarom:
 
 De exacte boss-HP-formule die dit alles combineert met de bestaande
 Boss Battle-schaling staat in
-[BOSS_BATTLE.md §Garnizoensformule voor Total War-belegeringen](BOSS_BATTLE.md#garnizoensformule-voor-total-war-belegeringen).
+[BOSS_BATTLE.md §Garnizoensformule voor Total War-belegeringen](BOSS_BATTLE.md#garnizoensformule-voor-total-war-belegeringen)
+— **let op**, die sectie beschrijft zelf ook al een verouderde tussenstap
+(`walls*50+towers*20`, zie de eigen §9.6-waarschuwing daar); de écht actuele
+formule staat hieronder in §5.4.1.
+
+#### 5.4.1 Garnizoens-HP schaalt sinds 2026-09-09 mee met de aanvallende klasgrootte
+
+**✅ Gebouwd, op verzoek — bug/gat t.o.v. Boss Battle gedicht.** Buiten een
+belegering om schaalt een gewone Boss Battle altijd met het aantal
+deelnemers (`bmStartBossGame()`: `bossMaxHP = N × 15 × 8 × Md`, zie
+BOSS_BATTLE.md §2) — een klas van 4 heeft het net zo zwaar als een klas van
+30, want beide vechten tegen een boss die in verhouding tot hun eigen
+`klasMaxHP` (ook `N×100`) even sterk is. **Voor een Total War-belegering gold
+dit tot 2026-09-09 niet:** `twStageMaxHP()` gaf een vast, absoluut getal
+terug (`TW_STAGE_HP[tier]`, ongeacht wie er aanviel), terwijl de aanvallende
+klas se eigen HP-balk (`klasMaxHP=N×100`) wél gewoon meeschaalde. Een kleine
+klas kreeg zo een dubbel nadeel (kleinere eigen HP-balk tegen een even grote
+garnizoens-HP als een grote klas), precies omgekeerd aan de bedoeling van
+§7.4 hieronder.
+
+Fix: `twStageMaxHP(gp, stageKey, N)` (`certamen/totalwar.js`) neemt nu ook
+`N` (aantal spelers in de kamer op dat moment) en herschaalt de tier-HP
+ernaar:
+
+```
+baseHp(tier)        = TW_STAGE_HP[tier]            // 150/400/900, getuned voor TW_STAGE_HP_REF_N (20) spelers
+schaaldeHp(tier, N)  = round(baseHp(tier) × N / TW_STAGE_HP_REF_N)
+stageMaxHP           = schaaldeHp(tier, N) × (1 + bonus.pct/100)   // bonus ONVERANDERD, zie §3.6
+```
+
+Bij `N = TW_STAGE_HP_REF_N` (20) is dit exact hetzelfde getal als vóór deze
+wijziging — geen herbalancering voor een "gemiddelde" klas, alleen voor
+klassen die daarvan afwijken. De provinciebonus (§3.6) blijft precies zoals
+gevraagd een percentage van deze (nu variabele) basis — geen los absoluut
+bedrag — en de verhouding tussen de tiers (150→400→900, dus +166%/+125%)
+blijft ook bij elke klasgrootte gelijk, want die zit in `TW_STAGE_HP` zelf,
+niet in de N-schaling.
+
+Beide aanroeppunten geven `N` mee: `bmStartBossGame()` (`certamen/battle.js`)
+gebruikt `pids.length` bij de aanvalsstart, `bmResolve()` gebruikt
+`Object.keys(players).length` bij de overgang naar de volgende
+belegeringsstage (§5.4) — beide tellen dus de spelers die op dát moment in
+de kamer zitten, niet een vast getal bij het begin van de hele belegering
+(een late joiner tijdens stage 1 verhoogt dus ook de HP van stage 2/3, net
+zoals een gewone Boss Battle evengoed door blijft schalen).
+
+**Bewust ongewijzigd:** de moeilijkheidsgraad-multiplier `Md`
+(`BM_META.bossDifficulty`, door `twStartAttack()` afgeleid uit de
+garnizoenstiers) speelt al vóór deze fix geen rol in de belegerings-HP —
+die wordt volledig vervangen door `twStageMaxHP()`, `Md` gold alleen voor de
+generieke niet-belegerings-basisformule. Dat blijft zo; deze fix raakt alleen
+de `N`-schaling, niet die bestaande asymmetrie (een apart, kleiner punt, niet
+wat hier gevraagd was).
 
 ### 5.5 PvP alleen via gedeelde grenzen, altijd asynchroon
 
@@ -782,6 +838,10 @@ training.js` schaalt `basePts` per leerling met `5/Math.sqrt(TR_CLASS_SIZE||1)`
 — precies de voorgestelde `1/√klasgrootte`-afvlakking, hetzelfde principe als
 de Boss Battle-moeilijkheidsschaling
 ([BOSS_BATTLE.md §2](BOSS_BATTLE.md#2-moeilijkheidsgraden--het-schalingsmodel)).
+Dit gaat over hoe snel garnizoenspunten opgebouwd worden (thuis, Training
+Mode); zie §5.4.1 voor de aparte, later toegevoegde fix die ervoor zorgt dat
+de garnizoens-HP tíjdens de belegering zelf ook eerlijk meeschaalt met de
+grootte van de **aanvallende** klas.
 
 ---
 
