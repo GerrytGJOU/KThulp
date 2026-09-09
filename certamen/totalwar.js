@@ -211,6 +211,78 @@ let _twLiveMode = false;
 let _twLiveProvinces = null;
 let _twSelectedId = null;
 
+/* ------------------------------------------------------------------
+   MULTI-TENANT CAMPAGNES (sinds 2026-09-09, CLAUDE.md § Firebase-rules) —
+   elke goedgekeurde docent kan zijn eigen, onafhankelijke Total War starten.
+   Datamodel verhuisd van plat `/totalwar/{provinces,civs,...}` naar
+   `/totalwar/campaigns/{ownerUid}/{provinces,civs,...}` — {ownerUid} ís de
+   campagnesleutel (één actieve campagne per docent). `/totalwar/showcaseUid`
+   wijst de docent-uid aan wiens campagne als publiek "uithangbord" dient
+   voor niet-ingelogde bezoekers en leerlingen van docenten zonder eigen
+   campagne (voorlopig altijd Gerbens eigen uid, zie migratie-notitie in
+   CLAUDE.md — een latere stap kan dit ook afschermen).
+
+   _twOwner is de campagne die het HUIDIGE scherm laat zien/beheert — door
+   elk scherm bij binnenkomst opnieuw bepaald (nooit hergebruikt tussen
+   schermen): teacherNet().getTeacherUid() op de docentenschermen,
+   twResolveViewerCampaign()/twResolveHofOwner() op de publieke/leerling-
+   schermen. Alle overige totalwar.js/training.js/games.js-functies lezen
+   _twOwner op het moment dat ze draaien — geen aparte parameter nodig omdat
+   deze functies toch al alleen binnen de context van "het net geladen
+   scherm" worden aangeroepen (zelfde patroon als bestaande globals als
+   BM_META/_twLiveProvinces). ------------------------------------------ */
+let _twOwner = null;
+function twPath(owner, sub){ return "totalwar/campaigns/"+owner+"/"+sub; }
+
+/* Docent-eigenaar van een klascode — al bestaand, publiek leesbaar veld
+   (klascodes/{code}/ownerUid, zie database.rules.json). Dit is de enige
+   "join" die nodig is om een leerling-identiteit aan een campagne te
+   koppelen: geen aparte klas→campagne-index nodig. */
+async function twOwnerOfKlas(klas){
+  klas = (klas||"").trim().toUpperCase();
+  if(!klas || !initFirebase()) return null;
+  try{ const snap = await fbDB.ref("klascodes/"+klas+"/ownerUid").once("value"); return snap.val()||null; }
+  catch(e){ return null; }
+}
+async function twShowcaseUid(){
+  if(!initFirebase()) return null;
+  try{ const snap = await fbDB.ref("totalwar/showcaseUid").once("value"); return snap.val()||null; }
+  catch(e){ return null; }
+}
+async function twCampaignExists(owner){
+  if(!owner || !initFirebase()) return false;
+  try{ const snap = await fbDB.ref(twPath(owner,"meta/seeded")).once("value"); return !!snap.val(); }
+  catch(e){ return false; }
+}
+/* Voor de publieke/leerling-schermen (totalWar, totalWarMap): eigen docent
+   se campagne zodra die bestaat, anders het uithangbord — nooit andersom
+   (een leerling wiens eigen docent nog geen Total War gestart is, ziet dus
+   een lege staat, niet stiekem een andere docent se kaart). */
+async function twResolveViewerCampaign(){
+  if(typeof BM_IDENT!=="undefined" && BM_IDENT && BM_IDENT.klascode){
+    const owner = await twOwnerOfKlas(BM_IDENT.klascode);
+    if(owner){
+      const exists = await twCampaignExists(owner);
+      if(exists) return { owner, ownCampaign:true };
+      return { owner:null, ownCampaign:false, noCampaignYet:true };
+    }
+  }
+  const show = await twShowcaseUid();
+  return { owner: show, ownCampaign:false };
+}
+/* Voor de Hall of Fame: een ingelogde, goedgekeurde docent/admin ziet altijd
+   zíjn EIGEN geschiedenis (met beheerknoppen); iedereen anders volgt
+   dezelfde regel als twResolveViewerCampaign(). */
+async function twResolveHofOwner(){
+  const canManage = await twCanManage();
+  if(canManage){
+    const uid = teacherNet().getTeacherUid();
+    if(uid) return { owner:uid, isOwner:true };
+  }
+  const v = await twResolveViewerCampaign();
+  return { owner:v.owner, isOwner:false, noCampaignYet:v.noCampaignYet };
+}
+
 /* ------------------------------------------------------------
    SCHERM: publieke uitleg — Total War is Beta: Training Mode en de live
    veldtocht zijn allebei speelbaar. Zelf een belegering starten als leerling
@@ -292,8 +364,18 @@ SCREENS.totalWar = function(){
     <button class="btn btn-gold" onclick="go('totalWarPreview')">${iconSVG("column",18,"currentColor")} Docentenweergave</button>
   </div>
   ${foot()}`);
-  twLoadMap(true, true, false);
-  twLoadSeasonAndStats();
+  twResolveViewerCampaign().then(v=>{
+    if(_screen!=="totalWar") return; // ondertussen weggenavigeerd
+    _twOwner = v.owner;
+    if(v.noCampaignYet){
+      const host = el("twMapHost");
+      if(host) host.innerHTML = `<div class="note" style="padding:22px;text-align:center">Je docent heeft nog geen eigen Total War gestart.</div>`;
+      const box = el("twSeasonBox"); if(box) box.innerHTML = `<div class="note">Nog geen veldtocht.</div>`;
+      return;
+    }
+    twLoadMap(true, true, false);
+    twLoadSeasonAndStats();
+  });
 };
 
 /* ------------------------------------------------------------
@@ -339,9 +421,20 @@ SCREENS.totalWarMap = function(){
     <button class="btn btn-ghost btn-block" onclick="go('totalWarHallOfFame')">🏛️ Hall of Fame — eerdere seizoenen</button>
   </div>
   ${foot()}`);
-  twLoadMap(true, true, false);
-  twLoadSeasonAndStats();
-  twLoadKlasLegend();
+  twResolveViewerCampaign().then(v=>{
+    if(_screen!=="totalWarMap") return; // ondertussen weggenavigeerd
+    _twOwner = v.owner;
+    if(v.noCampaignYet){
+      const host = el("twMapHost");
+      if(host) host.innerHTML = `<div class="note" style="padding:22px;text-align:center">Je docent heeft nog geen eigen Total War gestart.</div>`;
+      const box = el("twSeasonBox"); if(box) box.innerHTML = `<div class="note">Nog geen veldtocht.</div>`;
+      const legend = el("twKlasLegend"); if(legend) legend.innerHTML = `<div class="note">—</div>`;
+      return;
+    }
+    twLoadMap(true, true, false);
+    twLoadSeasonAndStats();
+    twLoadKlasLegend();
+  });
 };
 
 /* ------------------------------------------------------------
@@ -366,9 +459,16 @@ SCREENS.totalWarPreview = function(){
     <h2>Total War — docentenweergave</h2>
   </div>
   <div class="panel" style="text-align:center"><div class="note">Inlogstatus controleren…</div></div>`);
-  teacherNet().authReady().then(twCanManage).then(ok=>{
+  teacherNet().authReady().then(twCanManage).then(async ok=>{
     if(_screen!=="totalWarPreview") return; // ondertussen weggenavigeerd
-    if(ok){ twRenderTeacherPreview(); return; }
+    if(ok){
+      _twOwner = teacherNet().getTeacherUid();
+      const exists = await twCampaignExists(_twOwner);
+      if(_screen!=="totalWarPreview") return;
+      if(exists) twRenderTeacherPreview();
+      else twRenderStartCampaign();
+      return;
+    }
     let loggedIn=false;
     try{ loggedIn = teacherNet().isTeacherLoggedIn(); }catch(e){ loggedIn=false; }
     if(loggedIn){
@@ -380,6 +480,32 @@ SCREENS.totalWarPreview = function(){
     }
   });
 };
+
+/* Docent zonder eigen campagne — expliciete opt-in i.p.v. impliciet seeden
+   bij het eerste bezoek (op verzoek, 2026-09-09): een campagne aanmaken is
+   een bewuste stap, geen bijwerking van "toevallig dit scherm geopend". */
+function twRenderStartCampaign(){
+  document.body.classList.remove("greek");
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('totalWar')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Total War — docentenweergave</h2>
+  </div>
+  <div class="panel" style="text-align:center">
+    <div class="note">Je hebt nog geen eigen Total War. Start er één om je eigen
+    klassen aan een beschaving te koppelen en een eigen veldtochtkaart en
+    Hall of Fame te krijgen — helemaal los van andere docenten.</div>
+    <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="twStartOwnCampaign()">🗺️ Start eigen Total War</button>
+  </div>
+  ${foot()}`);
+}
+
+async function twStartOwnCampaign(){
+  if(!_twOwner) return;
+  await twEnsureRegistry();
+  await twEnsureCampaignSeeded();
+  if(_screen==="totalWarPreview") twRenderTeacherPreview();
+}
 
 function twRenderTeacherPreview(){
   document.body.classList.remove("greek");
@@ -532,8 +658,8 @@ function twApplyDemo(){
 /* Eenmalige seed: schrijft alleen als /totalwar/meta/seeded nog ontbreekt,
    zodat een al lopende veldtocht nooit overschreven wordt. */
 async function twEnsureCampaignSeeded(){
-  if(!initFirebase()) return false;
-  const seeded = await fbDB.ref("totalwar/meta/seeded").once("value");
+  if(!initFirebase() || !_twOwner) return false;
+  const seeded = await fbDB.ref(twPath(_twOwner,"meta/seeded")).once("value");
   if(seeded.val()){
     // Veldtocht bestond al vóór seizoenen bestonden (deze code) — backfill
     // alléén het ontbrekende seizoen, de rest van de kaart blijft ongemoeid.
@@ -541,9 +667,9 @@ async function twEnsureCampaignSeeded(){
     // mislukte backfill mag de kaart zelf nooit blokkeren (vandaar try/catch
     // per stap i.p.v. de fout te laten doorborrelen naar twLoadMap()).
     try{
-      const seasonSnap = await fbDB.ref("totalwar/season").once("value");
+      const seasonSnap = await fbDB.ref(twPath(_twOwner,"season")).once("value");
       if(!seasonSnap.exists()){
-        await fbDB.ref("totalwar/season").set({ number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() });
+        await fbDB.ref(twPath(_twOwner,"season")).set({ number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() });
       }
     }catch(e){ console.warn("twEnsureCampaignSeeded: seizoen-backfill mislukt", e); }
     try{
@@ -558,11 +684,11 @@ async function twEnsureCampaignSeeded(){
       // foutmelding tot gevolg (zie CLAUDE.md-gesprek n.a.v. deze bugfix) —
       // los-per-provincie schrijven voorkomt zowel die onduidelijkheid als het
       // "één rotte appel verpest de hele batch"-risico.
-      const provSnap = await fbDB.ref("totalwar/provinces").once("value");
+      const provSnap = await fbDB.ref(twPath(_twOwner,"provinces")).once("value");
       const writes = [];
       Object.entries(provSnap.val()||{}).forEach(([id,p])=>{
         if(p && !p.ownerSince) writes.push(
-          fbDB.ref("totalwar/provinces/"+id).update({ownerSince: FBNet.serverTime()}).catch(e=>{
+          fbDB.ref(twPath(_twOwner,"provinces/"+id)).update({ownerSince: FBNet.serverTime()}).catch(e=>{
             console.warn("twEnsureCampaignSeeded: ownerSince-backfill mislukt voor", id, e);
           })
         );
@@ -577,7 +703,7 @@ async function twEnsureCampaignSeeded(){
   // dan bezit het 0 provincies en start die klas automatisch via de al
   // bestaande "rebellen"-opstandsmechanic (§5.7, twCivIsWiped()) op precies
   // die (dan nog altijd neutrale) basisprovincie — geen apart mechanisme nodig.
-  const klasCivsSnap0 = await fbDB.ref("totalwar/klasCivs").once("value");
+  const klasCivsSnap0 = await fbDB.ref(twPath(_twOwner,"klasCivs")).once("value");
   const activeCivs0 = new Set(Object.values(klasCivsSnap0.val()||{}));
   const ownerOf = {};
   Object.entries(TW_HOME_PROVINCES).forEach(([civId,ids])=>{
@@ -590,18 +716,18 @@ async function twEnsureCampaignSeeded(){
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
     const owner = ownerOf[id] || "neutral";
-    writes.push(fbDB.ref("totalwar/provinces/"+id).set({ owner, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+    writes.push(fbDB.ref(twPath(_twOwner,"provinces/"+id)).set({ owner, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
       siege:{ lastStage:0, stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() }));
   });
   Object.keys(TW_CIVS).forEach(civId=>{
     if(civId==="neutral") return;
-    writes.push(fbDB.ref("totalwar/civs/"+civId).set({ trainingPoints:0, bonusesUnlocked:[] }));
+    writes.push(fbDB.ref(twPath(_twOwner,"civs/"+civId)).set({ trainingPoints:0, bonusesUnlocked:[] }));
   });
-  writes.push(fbDB.ref("totalwar/season").set({ number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() }));
+  writes.push(fbDB.ref(twPath(_twOwner,"season")).set({ number:1, title:TW_SEASON_TITLES[0], startedAt:FBNet.serverTime() }));
   await Promise.all(writes);
   // meta/seeded pas ná alle andere writes zetten, zodat een gedeeltelijk
   // mislukte eerste seed niet als "voltooid" wordt gemarkeerd.
-  await fbDB.ref("totalwar/meta/seeded").set(true);
+  await fbDB.ref(twPath(_twOwner,"meta/seeded")).set(true);
   return true;
 }
 
@@ -638,7 +764,7 @@ async function twStartLive(){
   }
   await twEnsureCampaignSeeded();
   _twLiveMode = true;
-  const ref = fbDB.ref("totalwar/provinces");
+  const ref = fbDB.ref(twPath(_twOwner,"provinces"));
   ref.on("value", snap=>{
     const host = el("twMapHost");
     if(!host){ ref.off("value"); return; }
@@ -661,7 +787,7 @@ async function twStartLiveReadOnly(){
     return;
   }
   _twLiveMode = true;
-  const ref = fbDB.ref("totalwar/provinces");
+  const ref = fbDB.ref(twPath(_twOwner,"provinces"));
   ref.on("value", snap=>{
     const host = el("twMapHost");
     if(!host){ ref.off("value"); return; }
@@ -719,8 +845,9 @@ function twOverallDefensePct(p){
    gestart zijn, niet bij losse Boss Battles. */
 async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, players){
   const gp = BM_META && BM_META.garrisonProvince;
-  if(!gp || !fbDB) return;
-  const ref = fbDB.ref("totalwar/provinces/"+gp.id);
+  const owner = BM_META && BM_META.campaignOwner;
+  if(!gp || !owner || !fbDB) return;
+  const ref = fbDB.ref(twPath(owner,"provinces/"+gp.id));
   const dealt = Math.max(0, stageMaxHP - Math.max(0, stageFinalHP));
   if(winner==="A"){
     await ref.update({
@@ -729,7 +856,7 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, player
       siege: { lastStage:"", stageDamage:{militia:0,walls:0,towers:0} },
       lastChanged: FBNet.serverTime(),
     });
-    fbDB.ref("totalwar/stats/conquests/"+BM_META.attackerCivId)
+    fbDB.ref(twPath(owner,"stats/conquests/"+BM_META.attackerCivId))
       .set(firebase.database.ServerValue.increment(1)).catch(()=>{});
   } else {
     const prevDealt = (gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[stageKey]) || 0;
@@ -747,7 +874,7 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, player
     upd["lastChanged"] = FBNet.serverTime();
     await ref.update(upd);
   }
-  twRecordBattleHighlights(gp, dealt, players, winner).catch(()=>{});
+  twRecordBattleHighlights(owner, gp, dealt, players, winner).catch(()=>{});
 }
 
 /* Seizoensrecords, puur motiverend (geen invloed op spelregels) — draait
@@ -762,12 +889,12 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, player
      mislukte aanval in een belegeringsreeks en de uiteindelijke val, zie
      siege/startedAt hierboven in twResolveSiege()) — alleen relevant bij een
      verovering ná minstens één eerdere mislukking. */
-async function twRecordBattleHighlights(gp, dealt, players, winner){
-  if(!fbDB) return;
+async function twRecordBattleHighlights(owner, gp, dealt, players, winner){
+  if(!fbDB || !owner) return;
   const nm = (_twRegistry && _twRegistry[gp.id] && _twRegistry[gp.id].displayName) || gp.id;
   const realPlayers = Object.values(players||{}).filter(p=>p && p.identityKey && !String(p.identityKey).startsWith("bot:"));
   if(dealt>0){
-    fbDB.ref("totalwar/stats/bloodiest").transaction(cur=>{
+    fbDB.ref(twPath(owner,"stats/bloodiest")).transaction(cur=>{
       if(cur && (cur.dealt||0)>=dealt) return cur;
       return { dealt, province:nm, attackerCivId:BM_META.attackerCivId,
         defenderCivId:gp.defenderCivId||"neutral", at:Date.now() };
@@ -775,7 +902,7 @@ async function twRecordBattleHighlights(gp, dealt, players, winner){
   }
   const top = realPlayers.slice().sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
   if(top && (top.damage||0)>0){
-    fbDB.ref("totalwar/stats/topSolo").transaction(cur=>{
+    fbDB.ref(twPath(owner,"stats/topSolo")).transaction(cur=>{
       if(cur && (cur.damage||0)>=top.damage) return cur;
       return { name:top.name||"?", klas:(top.identityKey||"").split(":")[0]||"",
         damage:top.damage, province:nm, at:Date.now() };
@@ -783,7 +910,7 @@ async function twRecordBattleHighlights(gp, dealt, players, winner){
   }
   const count = realPlayers.length;
   if(count>0){
-    fbDB.ref("totalwar/stats/biggestBattle").transaction(cur=>{
+    fbDB.ref(twPath(owner,"stats/biggestBattle")).transaction(cur=>{
       if(cur && (cur.count||0)>=count) return cur;
       return { count, province:nm, attackerCivId:BM_META.attackerCivId,
         defenderCivId:gp.defenderCivId||"neutral", at:Date.now() };
@@ -792,7 +919,7 @@ async function twRecordBattleHighlights(gp, dealt, players, winner){
   if(winner==="A" && gp.siege && gp.siege.startedAt){
     const durationMs = Date.now() - gp.siege.startedAt;
     if(durationMs>0){
-      fbDB.ref("totalwar/stats/longestSiege").transaction(cur=>{
+      fbDB.ref(twPath(owner,"stats/longestSiege")).transaction(cur=>{
         if(cur && (cur.durationMs||0)>=durationMs) return cur;
         return { durationMs, province:nm, attackerCivId:BM_META.attackerCivId,
           defenderCivId:gp.defenderCivId||"neutral", at:Date.now() };
@@ -819,17 +946,19 @@ let _twSeason = null;
 let _twStats = null;
 
 function twLoadSeasonAndStats(){
-  if(!initFirebase()){
+  if(!initFirebase() || !_twOwner){
     const box = el("twSeasonBox"); if(box) box.innerHTML = `<div class="note warn">Firebase niet beschikbaar.</div>`;
     return;
   }
-  fbDB.ref("totalwar/season").on("value", snap=>{
-    if(!el("twSeasonBox")){ fbDB.ref("totalwar/season").off("value"); return; }
+  const seasonRef = fbDB.ref(twPath(_twOwner,"season"));
+  seasonRef.on("value", snap=>{
+    if(!el("twSeasonBox")){ seasonRef.off("value"); return; }
     _twSeason = snap.val();
     twRenderSeasonBox();
   });
-  fbDB.ref("totalwar/stats").on("value", snap=>{
-    if(!el("twHighlights")){ fbDB.ref("totalwar/stats").off("value"); return; }
+  const statsRef = fbDB.ref(twPath(_twOwner,"stats"));
+  statsRef.on("value", snap=>{
+    if(!el("twHighlights")){ statsRef.off("value"); return; }
     _twStats = snap.val() || {};
     twRenderHighlights();
   });
@@ -848,8 +977,8 @@ function twRenderSeasonBox(){
 /* Klas↔beschaving-legenda: leest /totalwar/klasCivs (publiek leesbaar), toont
    per klas de gekoppelde beschaving met kleur-swatch. */
 function twLoadKlasLegend(){
-  const cont = el("twKlasLegend"); if(!cont || !initFirebase()) return;
-  fbDB.ref("totalwar/klasCivs").once("value").then(snap=>{
+  const cont = el("twKlasLegend"); if(!cont || !initFirebase() || !_twOwner) return;
+  fbDB.ref(twPath(_twOwner,"klasCivs")).once("value").then(snap=>{
     const map = snap.val()||{};
     const entries = Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0]));
     if(!entries.length){ cont.innerHTML = `<div class="note">Nog geen klas gekoppeld aan een beschaving.</div>`; return; }
@@ -893,7 +1022,7 @@ function twRenderHighlights(){
    losstaande, permanente toewijzing (zie twEnsureCampaignSeeded()/§7.1).
    Dubbele bevestiging (typen) omdat dit onomkeerbaar is. ---- */
 async function twStartNewSeason(){
-  if(!initFirebase()) return;
+  if(!initFirebase() || !_twOwner) return;
   const suggestedNum = ((_twSeason&&_twSeason.number)||1)+1;
   const typed = prompt(`Nieuw seizoen starten? Dit reset de hele kaart (alle gebieden terug naar hun thuisland/neutraal). Het huidige seizoen wordt eerst bewaard in de Hall of Fame. Klas↔beschaving-koppelingen blijven staan.\n\nTyp NIEUW SEIZOEN om te bevestigen:`);
   if((typed||"").trim().toUpperCase()!=="NIEUW SEIZOEN"){
@@ -913,10 +1042,10 @@ async function twStartNewSeason(){
   // zodat het volk pas via de bestaande "rebellen"-opstand (§5.7) een eerste
   // gebied verovert zodra een docent er alsnog een klas aan koppelt.
   const [klasCivsSnap, endingSeasonSnap, provNowSnap, statsNowSnap] = await Promise.all([
-    fbDB.ref("totalwar/klasCivs").once("value"),
-    fbDB.ref("totalwar/season").once("value"),
-    fbDB.ref("totalwar/provinces").once("value"),
-    fbDB.ref("totalwar/stats").once("value"),
+    fbDB.ref(twPath(_twOwner,"klasCivs")).once("value"),
+    fbDB.ref(twPath(_twOwner,"season")).once("value"),
+    fbDB.ref(twPath(_twOwner,"provinces")).once("value"),
+    fbDB.ref(twPath(_twOwner,"stats")).once("value"),
   ]);
   const activeCivs = new Set(Object.values(klasCivsSnap.val()||{}));
   const ownerOf = {};
@@ -944,7 +1073,7 @@ async function twStartNewSeason(){
     });
     const winnerEntry = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
     const winnerCivId = winnerEntry ? winnerEntry[0] : null;
-    upd["totalwar/history/"+endingSeason.number] = {
+    upd[twPath(_twOwner,"history/"+endingSeason.number)] = {
       number: endingSeason.number, title: endingSeason.title||"", startedAt: endingSeason.startedAt||null,
       endedAt: FBNet.serverTime(), finalOwner, klasCivs: klasCivsSnap.val()||{},
       winnerCivId, winnerProvinces: winnerCivId ? counts[winnerCivId] : 0,
@@ -953,11 +1082,11 @@ async function twStartNewSeason(){
   }
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
-    upd["totalwar/provinces/"+id] = { owner: ownerOf[id]||"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+    upd[twPath(_twOwner,"provinces/"+id)] = { owner: ownerOf[id]||"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
       siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
   });
-  upd["totalwar/stats"] = null;
-  upd["totalwar/season"] = { number:nextNum, title, startedAt:FBNet.serverTime() };
+  upd[twPath(_twOwner,"stats")] = null;
+  upd[twPath(_twOwner,"season")] = { number:nextNum, title, startedAt:FBNet.serverTime() };
   try{
     await fbDB.ref().update(upd);
     toast("Nieuw seizoen gestart","Seizoen "+nextNum+": "+title);
@@ -982,15 +1111,15 @@ async function twStartNewSeason(){
    dat volk moet dan, net als elk ander volledig uitgeroeid volk, zijn
    basisprovincie via de bestaande opstand-flow heroveren (§5.7,
    twAttackButtonHTML() — die werkt toch al "ongeacht wie het nu bezet"). */
-async function twGrantFreshFlagshipIfUnowned(civId){
-  if(!initFirebase() || !civId || civId==="neutral") return;
+async function twGrantFreshFlagshipIfUnowned(campaignOwner, civId){
+  if(!initFirebase() || !campaignOwner || !civId || civId==="neutral") return;
   await twEnsureRegistry();
   const flagship = twHomeFlagshipOf(civId);
   if(!flagship) return;
-  const snap = await fbDB.ref("totalwar/provinces/"+flagship).once("value");
+  const snap = await fbDB.ref(twPath(campaignOwner,"provinces/"+flagship)).once("value");
   const owner = (snap.val()||{}).owner;
   if(owner && owner!=="neutral") return; // eigen bezit, of veroverd door een ander: geen gratis start
-  await fbDB.ref("totalwar/provinces/"+flagship).update({
+  await fbDB.ref(twPath(campaignOwner,"provinces/"+flagship)).update({
     owner: civId, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
     siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime(),
   });
@@ -1001,17 +1130,17 @@ async function twGrantFreshFlagshipIfUnowned(civId){
    wordt — een onbespeeld volk mag nooit stilzwijgend gebied blijven
    vasthouden. Doet niets zolang er nog een andere klascode aan dezelfde
    beschaving gekoppeld is. */
-async function twReleaseCivIfUnassigned(civId){
-  if(!initFirebase() || !civId || civId==="neutral") return;
-  const klasCivsSnap = await fbDB.ref("totalwar/klasCivs").once("value");
+async function twReleaseCivIfUnassigned(campaignOwner, civId){
+  if(!initFirebase() || !campaignOwner || !civId || civId==="neutral") return;
+  const klasCivsSnap = await fbDB.ref(twPath(campaignOwner,"klasCivs")).once("value");
   const stillAssigned = Object.values(klasCivsSnap.val()||{}).includes(civId);
   if(stillAssigned) return;
-  const provSnap = await fbDB.ref("totalwar/provinces").once("value");
+  const provSnap = await fbDB.ref(twPath(campaignOwner,"provinces")).once("value");
   const provinces = provSnap.val()||{};
   const upd = {};
   Object.entries(provinces).forEach(([id,p])=>{
     if(!p || p.owner!==civId) return;
-    upd["totalwar/provinces/"+id] = { owner:"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+    upd[twPath(campaignOwner,"provinces/"+id)] = { owner:"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
       siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
   });
   if(Object.keys(upd).length) await fbDB.ref().update(upd);
@@ -1021,10 +1150,14 @@ async function twReleaseCivIfUnassigned(civId){
    HALL OF FAME (TOTAL_WAR.md, op verzoek 2026-09-07) — archief van
    afgesloten seizoenen. Elk seizoen dat de docent afsluit via
    twStartNewSeason() schrijft eenmalig een snapshot naar
-   /totalwar/history/{seizoensnummer} (zie de archiefstap daar): eindstand
-   per provincie, wie welke klas speelde, de winnaar (grootste rijk) en de
-   bestaande /totalwar/stats-hoogtepunten van dat seizoen. Publiek leesbaar
-   (zelfde /totalwar-regel als de rest), geen aparte rules nodig.
+   totalwar/campaigns/{ownerUid}/history/{seizoensnummer} (zie de archiefstap
+   daar): eindstand per provincie, wie welke klas speelde, de winnaar
+   (grootste rijk) en de bestaande stats-hoogtepunten van dat seizoen.
+   Publiek leesbaar (zelfde regel als de rest van de campagne), geen aparte
+   rules nodig. Sinds het multi-tenant-systeem (CLAUDE.md § Firebase-rules)
+   toont dit scherm de EIGEN campagne van een ingelogde, goedgekeurde docent/
+   admin (met beheerknoppen), en anders de campagne van de eigen klas of het
+   publieke uithangbord (twResolveHofOwner()).
    ------------------------------------------------------------------ */
 let _twHistory = null; // {seizoensnummer: record}, éénmalig geladen per bezoek
 // Ondanks de naam geen "is admin"-check maar "mag beheren" — bepaalt of de
@@ -1064,18 +1197,23 @@ SCREENS.totalWarHallOfFame = function(){
 function twLoadHallOfFame(){
   const cont = el("twHofList"); if(!cont || !initFirebase()) return;
   _twHofIsAdmin = false; // synchroon nog onbekend; async hieronder bijgewerkt
-  fbDB.ref("totalwar/history").once("value").then(snap=>{
-    _twHistory = snap.val()||{};
-    twRenderHallOfFame();
-  }).catch(()=>{ cont.innerHTML = `<div class="note warn">Kon de Hall of Fame niet laden.</div>`; });
-  // Dit scherm is publiek (geen login-eis), dus we wachten niet vooraf op
-  // authReady() zoals SCREENS.totalWarPreview wél doet — dat zou niet-
-  // docenten onnodig laten wachten. In plaats daarvan renderen we direct
-  // zonder beheerknoppen, en heroverwegen zodra bekend is of er een
-  // goedgekeurde docent-/adminsessie is: dan verschijnen de beheerknoppen
-  // alsnog, zonder dat er iets hoeft te gebeuren.
-  teacherNet().authReady().then(twCanManage).then(canManage=>{
-    if(canManage!==_twHofIsAdmin){ _twHofIsAdmin=canManage; twRenderHallOfFame(); }
+  // Dit scherm is publiek (geen login-eis), dus we wachten niet blokkerend op
+  // authReady() — eerst resolven we welke campagne getoond wordt (eigen
+  // campagne voor een ingelogde docent/admin, anders de campagne van de
+  // eigen klas of het uithangbord, zie twResolveHofOwner()), pas dan laden.
+  teacherNet().authReady().then(twResolveHofOwner).then(({owner, isOwner, noCampaignYet})=>{
+    if(!el("twHofList")) return; // ondertussen weggenavigeerd
+    _twOwner = owner;
+    _twHofIsAdmin = isOwner;
+    if(noCampaignYet || !owner){
+      cont.innerHTML = `<div class="panel"><div class="note" style="text-align:center">Je docent heeft nog geen eigen Total War gestart.</div></div>`;
+      return;
+    }
+    fbDB.ref(twPath(owner,"history")).once("value").then(snap=>{
+      if(_twOwner!==owner) return; // ondertussen een andere campagne geladen
+      _twHistory = snap.val()||{};
+      twRenderHallOfFame();
+    }).catch(()=>{ cont.innerHTML = `<div class="note warn">Kon de Hall of Fame niet laden.</div>`; });
   });
 }
 
@@ -1155,8 +1293,8 @@ function twHallOfFameCardHTML(s, isAdmin){
    zelf geen eigen rule, dus valt terug op die eis. Een nog niet goedgekeurd
    docentaccount krijgt hier dus een PERMISSION_DENIED-toast. ---- */
 function twHofSetHidden(seasonNumber, hidden){
-  if(!initFirebase()) return;
-  return fbDB.ref("totalwar/history/"+seasonNumber+"/hidden").set(hidden)
+  if(!initFirebase() || !_twOwner) return;
+  return fbDB.ref(twPath(_twOwner,"history/"+seasonNumber+"/hidden")).set(hidden)
     .then(()=>{ toast(hidden?"Verborgen":"Weer zichtbaar","Seizoen "+seasonNumber); twLoadHallOfFame(); })
     .catch(e=>toast("Fout", typeof e==="string"?e:(e&&e.message)||""));
 }
@@ -1167,9 +1305,9 @@ async function twHofDeleteSeason(seasonNumber){
     if(typed!==null) toast("Geannuleerd","Er is niets verwijderd.");
     return;
   }
-  if(!initFirebase()) return;
+  if(!initFirebase() || !_twOwner) return;
   try{
-    await fbDB.ref("totalwar/history/"+seasonNumber).remove();
+    await fbDB.ref(twPath(_twOwner,"history/"+seasonNumber)).remove();
     toast("Verwijderd","Seizoen "+seasonNumber+" is uit de Hall of Fame gehaald.");
     twLoadHallOfFame();
   }catch(e){ toast("Fout", typeof e==="string"?e:(e&&e.message)||""); }
@@ -1177,8 +1315,8 @@ async function twHofDeleteSeason(seasonNumber){
 
 function twHofRemoveStat(seasonNumber, statKey){
   if(!confirm("Deze naam permanent uit de Hall of Fame verwijderen voor dit seizoen?")) return;
-  if(!initFirebase()) return;
-  return fbDB.ref("totalwar/history/"+seasonNumber+"/stats/"+statKey).remove()
+  if(!initFirebase() || !_twOwner) return;
+  return fbDB.ref(twPath(_twOwner,"history/"+seasonNumber+"/stats/"+statKey)).remove()
     .then(()=>{ toast("Verwijderd","Naam verwijderd uit Seizoen "+seasonNumber); twLoadHallOfFame(); })
     .catch(e=>toast("Fout", typeof e==="string"?e:(e&&e.message)||""));
 }
@@ -1262,13 +1400,13 @@ function twCivIsWiped(civId){
    heeft al .write:true. Schrijft alleen bij een ECHTE overgang (nog niet
    true) om onnodige writes bij elke snapshot te vermijden. */
 function twDetectWipedCivs(provinces){
-  if(!fbDB || !provinces) return;
+  if(!fbDB || !provinces || !_twOwner) return;
   Object.keys(TW_CIVS).forEach(civId=>{
     if(civId==="neutral") return;
     const wiped=!Object.values(provinces).some(p=>p&&p.owner===civId);
     if(!wiped) return;
-    fbDB.ref("totalwar/civs/"+civId+"/wasWiped").once("value").then(snap=>{
-      if(!snap.val()) fbDB.ref("totalwar/civs/"+civId+"/wasWiped").set(true);
+    fbDB.ref(twPath(_twOwner,"civs/"+civId+"/wasWiped")).once("value").then(snap=>{
+      if(!snap.val()) fbDB.ref(twPath(_twOwner,"civs/"+civId+"/wasWiped")).set(true);
     }).catch(()=>{});
   });
 }
@@ -1317,6 +1455,7 @@ function twStartAttack(targetId, attackerCiv){
     siege: p.siege || {lastStage:"", stageDamage:{militia:0,walls:0,towers:0}},
   };
   BM_META.attackerCivId = attackerCiv;
+  BM_META.campaignOwner = _twOwner; // welke campagne twResolveSiege() straks moet bijwerken
   const nm = (_twRegistry?.[targetId]?.displayName) || targetId;
   toast("Aanval voorbereid", nm+" — kies de moeilijkheidsgraad en start het gevecht.");
   go("battleHostSettings");

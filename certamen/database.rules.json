@@ -108,32 +108,41 @@
       }
     },
     "totalwar": {
-      ".read": true,
-      ".write": "auth != null && (root.child('admins').child(auth.uid).exists() || root.child('teacherStatus').child(auth.uid).child('status').val() === 'approved' || (!root.child('teacherStatus').child(auth.uid).exists() && root.child('teachers').child(auth.uid).exists()))",
-      "provinces": {
-        "$id": {
-          ".write": true,
-          ".validate": "newData.hasChildren(['owner','militiaPoints','wallPoints','towerPoints']) && newData.child('militiaPoints').isNumber() && newData.child('wallPoints').isNumber() && newData.child('towerPoints').isNumber()"
-        }
+      "showcaseUid": {
+        ".read": true,
+        ".write": "auth != null && root.child('admins').child(auth.uid).exists()",
+        ".validate": "newData.isString()"
       },
-      "civs": {
-        "$id": { ".write": true }
-      },
-      "klasSize": {
-        "$klas": {
+      "campaigns": {
+        "$ownerUid": {
           ".read": true,
-          "students": {
-            "$lid": {
+          ".write": "auth != null && auth.uid === $ownerUid && (root.child('admins').child(auth.uid).exists() || root.child('teacherStatus').child(auth.uid).child('status').val() === 'approved' || (!root.child('teacherStatus').child(auth.uid).exists() && root.child('teachers').child(auth.uid).exists()))",
+          "provinces": {
+            "$id": {
               ".write": true,
-              ".validate": "newData.isBoolean()"
+              ".validate": "newData.hasChildren(['owner','militiaPoints','wallPoints','towerPoints']) && newData.child('militiaPoints').isNumber() && newData.child('wallPoints').isNumber() && newData.child('towerPoints').isNumber()"
+            }
+          },
+          "civs": {
+            "$id": { ".write": true }
+          },
+          "klasSize": {
+            "$klas": {
+              ".read": true,
+              "students": {
+                "$lid": {
+                  ".write": true,
+                  ".validate": "newData.isBoolean()"
+                }
+              }
+            }
+          },
+          "stats": {
+            "topBuilder": {
+              ".write": true,
+              ".validate": "newData.hasChildren(['name','points']) && newData.child('points').isNumber()"
             }
           }
-        }
-      },
-      "stats": {
-        "topBuilder": {
-          ".write": true,
-          ".validate": "newData.hasChildren(['name','points']) && newData.child('points').isNumber()"
         }
       }
     },

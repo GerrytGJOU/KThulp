@@ -1190,13 +1190,18 @@ function tpRenderPortalContent(){
   tpLoadKlasCivs();
 }
 
-/* ---- Total War: klas ↔ beschaving-koppeling (/totalwar/klasCivs, zie
-   TOTAL_WAR.md §4/§7.1 — many-to-one t.o.v. de letterlijke docschema, want
-   meerdere klascodes horen vaak bij dezelfde beschaving). ---- */
+/* ---- Total War: klas ↔ beschaving-koppeling (totalwar/campaigns/{eigen uid}/
+   klasCivs, zie TOTAL_WAR.md §4/§7.1/§9 — many-to-one t.o.v. de letterlijke
+   docschema, want meerdere klascodes horen vaak bij dezelfde beschaving).
+   Sinds het multi-tenant Total War-systeem (CLAUDE.md § Firebase-rules)
+   altijd de EIGEN campagne van de ingelogde docent — nooit die van een
+   collega, ook al toont dit paneel alleen die docent se eigen klassen. ---- */
 function tpLoadKlasCivs(){
   const cont=el("twKlasCivList"); if(!cont) return;
   if(!initFirebase()){ cont.innerHTML=`<div class="note">Vereist Firebase.</div>`; return; }
-  fbDB.ref("totalwar/klasCivs").once("value")
+  const owner=teacherNet().getTeacherUid();
+  if(!owner){ cont.innerHTML=`<div class="note">Log eerst in.</div>`; return; }
+  fbDB.ref("totalwar/campaigns/"+owner+"/klasCivs").once("value")
     .then(snap=>{ _tpKlasCivs=snap.val()||{}; tpRenderKlasCivs(); })
     .catch(()=>{ cont.innerHTML=`<div class="note warn">Kon koppelingen niet laden.</div>`; });
 }
@@ -1223,29 +1228,40 @@ async function tpAssignKlasCiv(){
   const civId=el("tpTwCiv")?.value;
   if(!klas){ toast("Klascode vereist","Vul een klascode in."); return; }
   if(!initFirebase()){ toast("Firebase vereist",""); return; }
+  const owner=teacherNet().getTeacherUid();
+  if(!owner){ toast("Log eerst in",""); return; }
   try{
     const exists=await FBNet.validateKlascode(klas);
     if(!exists){ toast("Onbekende klascode",klas+" bestaat niet in Battle Mode."); return; }
-    await fbDB.ref("totalwar/klasCivs/"+klas).set(civId);
+    // Eerste klas↔beschaving-koppeling van deze docent is meteen ook zijn
+    // "Total War starten" — geen impliciete seed nodig op een ander scherm,
+    // en zonder seed zou de zo meteen aangeroepen twGrantFreshFlagshipIfUnowned()
+    // in een nog lege provincieboom schrijven.
+    _twOwner = owner;
+    await twEnsureRegistry();
+    await twEnsureCampaignSeeded();
+    await fbDB.ref("totalwar/campaigns/"+owner+"/klasCivs/"+klas).set(civId);
     if(el("tpTwKlas")) el("tpTwKlas").value="";
     toast("Gekoppeld",klas+" → "+(TW_CIVS[civId]?.nm||civId));
     tpLoadKlasCivs();
     // Een volk dat nog nergens eigenaar van is (nooit gekoppeld, of net
     // ontkoppeld en nu weer gekoppeld) krijgt meteen zijn basisprovincie —
     // geen opstand nodig voor een vers begin, zie twGrantFreshFlagshipIfUnowned().
-    if(typeof twGrantFreshFlagshipIfUnowned==="function") await twGrantFreshFlagshipIfUnowned(civId);
+    if(typeof twGrantFreshFlagshipIfUnowned==="function") await twGrantFreshFlagshipIfUnowned(owner, civId);
   }catch(e){ toast("Fout",typeof e==="string"?e:(e?.message||"")); }
 }
 
 async function tpUnassignKlasCiv(klas){
+  const owner=teacherNet().getTeacherUid();
+  if(!owner) return;
   const civId=_tpKlasCivs && _tpKlasCivs[klas];
   try{
-    await fbDB.ref("totalwar/klasCivs/"+klas).remove();
+    await fbDB.ref("totalwar/campaigns/"+owner+"/klasCivs/"+klas).remove();
     toast("Ontkoppeld",klas);
     tpLoadKlasCivs();
     // Was dit de laatste klas van dit volk, dan mag het geen provincie(s)
     // blijven vasthouden — zie twReleaseCivIfUnassigned().
-    if(civId && typeof twReleaseCivIfUnassigned==="function") await twReleaseCivIfUnassigned(civId);
+    if(civId && typeof twReleaseCivIfUnassigned==="function") await twReleaseCivIfUnassigned(owner, civId);
   }catch(e){ toast("Fout",typeof e==="string"?e:(e?.message||"")); }
 }
 
