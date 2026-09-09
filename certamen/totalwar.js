@@ -125,10 +125,14 @@ const TW_STAGE_ORDER = ["militia","walls","towers"];
 // omrekent naar N × hp/speler — zelfde schaalprincipe als Boss Battle se
 // generieke N×1500×Md-formule, BOSS_BATTLE.md §2: een klein aanvallend
 // groepje mag niet kansloos staan, en een grote klas moet niet ineens
-// triviaal winnen). Tier 0 (alleen relevant voor militia/"De Boeren") is
-// bewust laag: nauwelijks weerstand, geen vertraging voor het veroveren van
-// verse neutrale provincies.
-const TW_STAGE_HP = { 0: 150, 1: 400, 2: 900 };
+// triviaal winnen). Tier 0 (alleen relevant voor militia/"De Boeren") ligt
+// nog altijd het laagst van de drie, maar is sinds 2026-09-09 (op verzoek)
+// niet meer triviaal: het origineel (150/400/900) liet een onbewaakte
+// provincie in de praktijk in nog geen twee minuten vallen. Verdubbeld —
+// verhouding tussen de tiers (1 : 2,67 : 6) bewust ongewijzigd, de docent
+// vroeg om alle moeilijkheidsgraden proportioneel op te schalen, niet om de
+// tier0-tier1-tier2-curve zelf te herzien.
+const TW_STAGE_HP = { 0: 300, 1: 800, 2: 1800 };
 const TW_STAGE_HP_REF_N = 20; // klasgrootte waarvoor TW_STAGE_HP hierboven getuned is
 
 // Per spoor: welk Firebase-veld, en welke sprite hoort bij welke tier.
