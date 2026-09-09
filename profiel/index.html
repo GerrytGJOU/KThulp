@@ -90,7 +90,22 @@
 
   await KTAuth.handleGoogleRedirect().catch(()=>{});
 
+  // Kleine bescherming tegen overlappende renders (bv. twee onChange-signalen
+  // vlak na elkaar): een render die al bezig is wordt niet dubbel gestart,
+  // maar een wijziging die ondertussen binnenkwam plant nog wel één nieuwe
+  // (samengevoegde) pas in — verdedigingslinie naast de dirty-check in
+  // KTAuth.refreshIdentity() zelf.
+  let rendering = false, pendingRender = false;
   async function render(){
+    if(rendering){ pendingRender = true; return; }
+    rendering = true;
+    do{
+      pendingRender = false;
+      await renderOnce();
+    }while(pendingRender);
+    rendering = false;
+  }
+  async function renderOnce(){
     const ident = KTAuth.getIdentity();
     if(ident){ await renderStudent(ident); return; }
     const teacher = await KTAuth.authReady();
@@ -125,6 +140,23 @@
       : '<p class="note">Koppel je Google-account zodat je op een nieuw toestel kunt inloggen zonder klascode/leerlingcode.</p>'+
         '<button type="button" class="btn btn-small" id="pfLinkGoogle" style="margin-top:8px">Koppel Google-account</button>';
 
+    // Scorebord per app: apps met een payload.stats-object (Ludus, Agora — zie
+    // KTScores.save() in die apps' save()) hebben zelf meerdere onderdelen,
+    // net als Certamen (woordenschat/werkwoorden/zinnen/etc.) — dus een eigen
+    // paneel met stat-tegels i.p.v. één regel in de compacte apps-grid.
+    const scoreboardHTML = Object.keys(KTAuth.APPS).filter(id=>id!=='certamen').map(id=>{
+      const a = apps[id];
+      if(!a || !a.stats) return '';
+      const meta = KTAuth.APPS[id];
+      const tiles = Object.entries(a.stats).map(([k,v])=>
+        '<div class="stat"><div class="n">'+esc(v)+'</div><div class="l">'+esc(KTAuth.STAT_LABELS[k]||k)+'</div></div>'
+      ).join('');
+      return '<div class="panel"><h2>'+esc(meta.label)+' — scorebord</h2>'+
+        '<div class="stat-row">'+tiles+'</div>'+
+        '<div style="margin-top:12px"><a class="btn btn-small" href="'+esc(meta.url)+'">Open '+esc(meta.label)+'</a></div>'+
+        '</div>';
+    }).join('');
+
     cont.innerHTML =
       '<div class="panel"><h2>'+esc(ident.name)+' &middot; klas '+esc(ident.klascode)+'</h2>'+
         '<div class="stat-row">'+
@@ -136,6 +168,7 @@
         '<div style="margin-top:12px"><a class="btn btn-small" href="'+esc(KTAuth.APPS.certamen.url)+'">Open Certamen</a></div>'+
       '</div>'+
       '<div class="panel"><h2>Google-account</h2>'+googleBlock+'<div id="pfGoogleMsg"></div></div>'+
+      scoreboardHTML+
       '<div class="panel"><h2>Voortgang per app</h2><div class="apps-grid">'+appRows+'</div></div>';
 
     const linkBtn = document.getElementById('pfLinkGoogle');
