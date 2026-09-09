@@ -675,18 +675,30 @@ Fix: `twStageMaxHP(gp, stageKey, N)` (`certamen/totalwar.js`) neemt nu ook
 ernaar:
 
 ```
-baseHp(tier)        = TW_STAGE_HP[tier]            // 150/400/900, getuned voor TW_STAGE_HP_REF_N (20) spelers
+baseHp(tier)        = TW_STAGE_HP[tier]            // 300/800/1800, getuned voor TW_STAGE_HP_REF_N (20) spelers
 schaaldeHp(tier, N)  = round(baseHp(tier) × N / TW_STAGE_HP_REF_N)
 stageMaxHP           = schaaldeHp(tier, N) × (1 + bonus.pct/100)   // bonus ONVERANDERD, zie §3.6
 ```
 
-Bij `N = TW_STAGE_HP_REF_N` (20) is dit exact hetzelfde getal als vóór deze
-wijziging — geen herbalancering voor een "gemiddelde" klas, alleen voor
-klassen die daarvan afwijken. De provinciebonus (§3.6) blijft precies zoals
-gevraagd een percentage van deze (nu variabele) basis — geen los absoluut
-bedrag — en de verhouding tussen de tiers (150→400→900, dus +166%/+125%)
-blijft ook bij elke klasgrootte gelijk, want die zit in `TW_STAGE_HP` zelf,
-niet in de N-schaling.
+Bij `N = TW_STAGE_HP_REF_N` (20) is dit exact hetzelfde getal als vóór de
+oorspronkelijke N-schalingsfix — geen herbalancering voor een "gemiddelde"
+klas, alleen voor klassen die daarvan afwijken. De provinciebonus (§3.6)
+blijft precies zoals gevraagd een percentage van deze (nu variabele) basis
+— geen los absoluut bedrag — en de verhouding tussen de tiers (dus
++166%/+125% per tier omhoog) blijft ook bij elke klasgrootte gelijk, want
+die zit in `TW_STAGE_HP` zelf, niet in de N-schaling.
+
+> ⚠️ **`TW_STAGE_HP` verdubbeld (2026-09-09, ná live-testen van de
+> rondelimiet hierboven).** De oorspronkelijke waarden (150/400/900) waren,
+> ook mét de rondelimiet, nog te laag: een onbewaakte provincie was in de
+> praktijk in nog geen twee minuten veroverd. Op expliciet verzoek zijn
+> **alle** tiers proportioneel opgeschaald — `TW_STAGE_HP = {0:300, 1:800,
+> 2:1800}`, de verhouding (1 : 2,67 : 6) is bewust ongewijzigd. Richtwaarde,
+> makkelijk verder bij te stellen; de rondelimiet (`TW_SIEGE_MAX_ROUNDS`,
+> nog 20) is hierbij bewust niet meeverhoogd — een volledig gefortificeerde
+> provincie (alle 3 sporen tier 2, dus 3×90=270 HP/speler bij N=20) triggert
+> daardoor nu vaker een terugtrekking i.p.v. in één les te vallen, precies
+> de bedoeling.
 
 Beide aanroeppunten geven `N` mee: `bmStartBossGame()` (`certamen/battle.js`)
 gebruikt `pids.length` bij de aanvalsstart, `bmResolve()` gebruikt
