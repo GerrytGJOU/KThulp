@@ -611,6 +611,22 @@ daarvoor:
   blijft op provincieniveau (§3.5). Dit is dus geen openstaand vervolgpunt
   meer maar een gesloten beslissing; alleen heropenen bij een expliciete
   nieuwe vraag daarover.
+- **✅ Percentage-weergave per garnizoensspoor (nieuw, 2026-09-09).**
+  `twProvinceInfo()` toonde per spoor (Fort/Muur/Garnizoen) alleen het kale
+  tierlabel ("—"/"basis"/"volledig") — op verzoek, zodat andere klassen,
+  leerlingen én de docent in één oogopslag zien welke provincies fanatiek
+  verdedigd worden, laat `twTrackProgressLabel()` (`certamen/totalwar.js`,
+  vlak vóór `twProvinceInfo()`) er nu twee losse percentages bij zien, allebei
+  optioneel: (a) bouwvoortgang naar de eerstvolgende tier zolang een spoor nog
+  niet "volledig" is (bv. `basis (50% naar volledig)`), en (b) resterend-HP%
+  als dit precies het spoor is waar de laatste belegering strandde
+  (`siege.lastStage`), bv. `basis (8% naar volledig) · ⚔ 13% HP`. Het
+  resterend-HP% rekent tegen de HP bij de REFERENTIEklasgrootte
+  (`TW_STAGE_HP_REF_N`/`TW_STAGE_HP`, §5.4.1) — niet tegen de toevallige
+  klasgrootte van de laatste aanvaller, die dit informatieve paneel buiten
+  een lopend gevecht om toch niet kent. Gedeeld door zowel de docentenkaart
+  als de publieke/leerlingkaart (beide roepen dezelfde `twProvinceInfo()`
+  aan), dus meteen overal zichtbaar.
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 
@@ -758,6 +774,66 @@ dan trekt de klas zich terug (`bmResolve()`, `certamen/battle.js`):
 Bewust **niet** gebouwd: een instelbare limiet per provincie/docent — één
 vaste constante is voorlopig genoeg, en makkelijk aan te passen zodra live
 spelen laat zien dat 20 te streng of te soepel is.
+
+**Live getest (2026-09-09) met een enkele, goedspelende aanvaller**, om de
+rondelimiet te kalibreren tegen de verdubbelde `TW_STAGE_HP` (§5.4.1
+hierboven):
+
+| Scenario | Verloop | Uitkomst |
+|---|---|---|
+| Onbewaakt (tier 0 overal) | 4 rondes | Veroverd |
+| Matig verdedigd (tier 1 overal, "normal") | stage 1 klaar ronde 8, stage 2 klaar ronde 17 | **Rondelimiet sloeg toe** bij ronde 20, midden in stage 3 — precies het scenario waar de limiet voor gebouwd is |
+| Volledig verdedigd (tier 2 overal, "hard") | stage 1 nog niet eens klaar | **Klas verloor** (eigen HP op 0) bij ronde 16 — de rondelimiet kwam er niet eens aan te pas |
+
+Conclusie: 20 hoeft niet aangepast — bij een gemiddeld verdedigde provincie
+is dat precies het omslagpunt, bij een zwaar verdedigde grijpt het gewone
+verlies-mechanisme al eerder in. Dat een volledig verdedigde provincie voor
+één klas in de praktijk (bijna) onneembaar is, is bevestigd **bewust zo
+gewenst** — "dat is precies de bedoeling", een echte topverdediging hoort
+niet zomaar in één keer te vallen.
+
+#### 5.4.3 Synergie-/brede-deelname-bonus proportioneel aan klasgrootte (nieuw, 2026-09-09)
+
+**✅ Gebouwd, op verzoek — nog een klasgrootte-scheefheid ná de HP-fix.** Los
+van de garnizoens-HP (§5.4.1) bleken twee bestaande Battle Mode-mechanics
+zelf óók een structureel voordeel te geven aan grotere aanvallende klassen,
+via VASTE koppentallen i.p.v. een percentage:
+
+- **Synergiebonus** (`BM_SYNERGY`, `certamen/battle-data.js`,
+  `bmCalcSynergy()` in `battle.js`): +2/+4/+6 BE per speler per ronde zodra
+  het team ≥3/≥5/≥7 *unieke klassen* (Hopliet, Boogschutter, …) vertegen­
+  woordigt. Een team van 4 spelers kan de tiers ≥5/≥7 nooit bereiken, hoe
+  goed ze ook spelen — een harde plafond voor kleine klassen.
+- **Brede-deelname-bonus** (`BM_CHAIN_BONUS`, `bmResolve()` in `battle.js`):
+  een vlakke bonus van +3/+6 op de totale ronde-schade zodra ≥3/≥5
+  *verschillende spelers* die ronde schade toebrachten. Ook dit is een
+  absoluut koppental, geen percentage.
+
+Beide drempels zijn eerlijk in gewoon Team-vs-Team Battle Mode (beide teams
+komen uit dezelfde klas, profiteren dus evenveel) én in een gewone Boss
+Battle (geen vergelijking met een kleinere/grotere tegenstander relevant).
+Bij een Total War-belegering (klas vs NPC-garnizoen) is er echter geen
+tegenteam dat evenredig meeprofiteert, dus gaven ze daar een ongevraagd
+extra voordeel aan grotere klassen, bovenop de al bestaande lineaire
+HP-schaling.
+
+Fix: `twSiegeScaledThreshold(origMin, N)` (`certamen/totalwar.js`, vlak na
+`twStageMaxHP()`) herschaalt zo'n drempel naar de daadwerkelijke teamgrootte
+N met dezelfde `N/TW_STAGE_HP_REF_N`-regel als de garnizoens-HP — bij de
+referentieklasgrootte (20) dus exact hetzelfde als voorheen. Alleen
+toegepast wanneer `BM_META.garrisonProvince` gezet is (`bmCalcSynergy()`/de
+brede-deelname-bonus in `bmResolve()`); gewoon Boss Battle/Team-vs-Team
+gebruikt nog altijd de vaste tabelwaarden. Voor de synergiebonus is de
+herschaalde drempel bovendien geklemd op maximaal 8 (`Math.min(8,…)`) — er
+bestaan maar 8 klassen (`BM_CLASSES`), dus zonder die klem zou de hoogste
+tier voor een GROTE klas juist andersom onbereikbaar worden (bij bv. N=40
+zou de ongeklemde drempel 14 zijn).
+
+Geverifieerd met een losstaande berekening: bij N=20 exact 3/5/7 en 5/3
+(ongewijzigd); bij N=4 vallen alle drie synergietiers samen op drempel 1
+(voor zo'n kleine klas is een gelaagde diversiteitsladder toch niet
+zinvol te onderscheiden); bij N=40 blijft de synergiedrempel geklemd op
+maximaal 8.
 
 ### 5.5 PvP alleen via gedeelde grenzen, altijd asynchroon
 
