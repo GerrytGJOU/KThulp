@@ -671,8 +671,22 @@ body.greek .qcard .word{color:#143a5e}
 .codex-vocab-word{font-style:italic;font-weight:700}
 .codex-vocab-def{color:#5a3a1a}
 .codex-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-.codex-gallery-item img{width:100%;border-radius:6px;display:block;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.codex-gallery-item img{width:100%;border-radius:6px;display:block;box-shadow:0 2px 6px rgba(0,0,0,.35);cursor:zoom-in}
 .codex-gallery-caption{font-size:11px;text-align:center;margin-top:3px;font-style:italic;color:#5a3a1a}
+
+/* Codex-afbeelding-lightbox (Afbeeldingen-tab + Herinneringen/Museum-tab,
+   singleplayer.js): zelfde vaste-overlay-buiten-#app-patroon als .toast/
+   .achpop-bg hierboven — blijft dus intact ongeacht welk scherm H() erna
+   rendert, en spOpenLightbox/spCloseLightbox hoeven nooit een heel scherm
+   opnieuw op te bouwen voor zoiets simpels als een plaatje vergroten. */
+.img-lightbox{position:fixed;inset:0;z-index:95;background:rgba(6,4,2,.9);display:flex;align-items:center;justify-content:center;
+  padding:24px;opacity:0;pointer-events:none;transition:opacity .25s;cursor:zoom-out}
+.img-lightbox.show{opacity:1;pointer-events:auto}
+.img-lightbox img{max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.7);
+  transform:scale(.92);transition:transform .25s cubic-bezier(.2,1.4,.4,1);cursor:zoom-out}
+.img-lightbox.show img{transform:scale(1)}
+.img-lightbox .x{position:absolute;top:14px;right:16px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;
+  width:38px;height:38px;font-size:22px;line-height:1;cursor:pointer}
 .codex-empty{font-style:italic;color:#7a5a30}
 
 /* â”€â”€ Wapen-laag (288Ã—64 = 3 aanvals-frames van 96Ã—64) â”€â”€ */
@@ -1055,6 +1069,7 @@ body.greek .qcard .word{color:#143a5e}
   <div class="achpop-ds" id="achpopD"></div>
 </div></div>
 <div class="overlay" id="overlay"></div>
+<div class="img-lightbox" id="imgLightbox" onclick="spCloseLightbox()"><img id="imgLightboxImg" src="" alt=""><button class="x" onclick="spCloseLightbox()" aria-label="Sluiten">&times;</button></div>
 
 <!-- Firebase (compat) — alleen nodig voor echt multiplayer; faalt stil als offline/leeg -->
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
