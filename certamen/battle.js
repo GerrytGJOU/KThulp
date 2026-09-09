@@ -3397,7 +3397,15 @@ function bmEndGame(){
 // dezelfde spelers starten.
 function bmHostFinish(){
   const code=BM_CODE;
-  if(fbDB&&code) Net.deleteRoom(code).catch(()=>{});
+  // FBNet rechtstreeks, niet de gedeelde Net-variabele: die wordt alleen
+  // door de klassieke-spellenflow (chooseNet() in games.js) gezet en blijft
+  // in Battle Mode/Boss Battle altijd null, waardoor Net.deleteRoom() hier
+  // een ongeving TypeError gooide — de knop "Afsluiten" deed daardoor niets
+  // (de fout gebeurt synchroon bij het aanroepen, dus vóór .catch() ooit
+  // kon aanslaan, en de bmLeave()/go("home") twee regels verderop werden
+  // dan ook nooit bereikt). Battle Mode is sowieso Firebase-only (de fbDB-
+  // guard hierboven), dus FBNet is hier altijd de juiste implementatie.
+  if(fbDB&&code) FBNet.deleteRoom(code).catch(()=>{});
   bmLeave(); go("home");
 }
 

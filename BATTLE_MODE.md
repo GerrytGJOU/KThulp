@@ -779,6 +779,16 @@ meteen in de lobby, op het slagveld en op het docentscherm staat.
 - Firebase SDK: compat v10.12.5 (RTDB, geen Firestore)
 - `node --check` na elke wijziging aan scriptblok
 - Geen M2 beginnen zonder goedkeuring
+- **`Net` (net.js) is uitsluitend voor de klassieke spellen** (touwtrekken/
+  marathon/snelvuur) — alleen `chooseNet()` (`games.js`, aangeroepen vanuit
+  `createRoom()`/`joinDetectGame()`) zet 'm, en dat gebeurt nooit ergens in
+  de Battle Mode/Boss Battle-flow. Battle Mode is sowieso Firebase-only, dus
+  gebruik daar altijd rechtstreeks `FBNet`/`fbDB`, nooit de gedeelde `Net`-
+  variabele — die is er dan gewoon nog niet gezet (`null`), wat een
+  synchrone `TypeError` geeft vóórdat een `.catch()` er ooit aan te pas
+  komt. Bugfix 2026-09-09: `bmHostFinish()` deed precies dit
+  (`Net.deleteRoom()`), waardoor de "Afsluiten"-knop na een gevecht
+  stilzwijgend niets deed.
 
 ---
 
