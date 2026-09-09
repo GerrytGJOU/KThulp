@@ -109,7 +109,7 @@
     },
     "totalwar": {
       ".read": true,
-      ".write": "auth != null",
+      ".write": "auth != null && (root.child('admins').child(auth.uid).exists() || root.child('teacherStatus').child(auth.uid).child('status').val() === 'approved' || (!root.child('teacherStatus').child(auth.uid).exists() && root.child('teachers').child(auth.uid).exists()))",
       "provinces": {
         "$id": {
           ".write": true,
