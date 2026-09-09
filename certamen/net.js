@@ -290,13 +290,29 @@ FBNet._ensureUsedKlascodesIndex = function(codes){
     ));
   });
 };
+// klascodes/ zelf is wereld-leesbaar (nodig voor validateKlascode() e.d.),
+// maar het docentenportaal en de Total War-klas-dropdown mogen alleen DEZE
+// docent se eigen klassen tonen — niet elke klascode/leerlingaantal in de
+// hele database (ontdekt bij het testen van het multi-tenant Total War-
+// systeem, 2026-09-10). "Eigen" = ownerUid === ingelogde docent, of een
+// legacy-code van vóór het ownerUid-systeem (geen ownerUid gezet, zie
+// CLAUDE.md § Firebase-rules) — zelfde legacy-uitzondering als de rules zelf
+// al hanteren voor klascodes.write/identities.read.
+FBNet._isOwnKlascode = function(code, klascodesSnapshot){
+  const uid = this.getTeacherUid();
+  const rec = klascodesSnapshot && klascodesSnapshot[code];
+  return !rec || !rec.ownerUid || rec.ownerUid===uid;
+};
 FBNet.getKlascodes = function(){
   if(!fbDB) initFirebase();
   return fbDB.ref("klascodes").once("value").then(snap=>{
-    const approved=snap.exists()?Object.keys(snap.val()):[];
+    const all=snap.val()||{};
+    const approved=Object.keys(all).filter(code=>FBNet._isOwnKlascode(code, all));
     return FBNet._ensureUsedKlascodesIndex(approved).then(()=>
       fbDB.ref("usedKlascodes").once("value").then(iSnap=>{
-        const used=iSnap.exists()?Object.keys(iSnap.val()).filter(k=>k!=="_seeded"):[];
+        const used=iSnap.exists()
+          ? Object.keys(iSnap.val()).filter(k=>k!=="_seeded" && FBNet._isOwnKlascode(k, all))
+          : [];
         return {approved, used};
       })
     );
@@ -307,16 +323,21 @@ FBNet.getKlascodes = function(){
 // om live tellingen te tonen (groep = klascode). extraCodes = klascodes die de
 // docent zelf al kent (eigen klaslabels) maar die niet per se al in
 // klascodes/ (goedgekeurd) staan — anders zouden die nooit gebackfilld worden.
+// Geeft alleen tellingen van de EIGEN (of legacy) klascodes terug, zie
+// FBNet._isOwnKlascode() hierboven.
 FBNet.getKlascodeCounts = function(extraCodes){
   if(!fbDB) initFirebase();
   return fbDB.ref("klascodes").once("value").then(kcSnap=>{
-    const codes=new Set(kcSnap.exists()?Object.keys(kcSnap.val()):[]);
+    const all=kcSnap.val()||{};
+    const codes=new Set(Object.keys(all));
     (extraCodes||[]).forEach(c=>{ if(c) codes.add(c.toUpperCase()); });
-    return FBNet._ensureUsedKlascodesIndex([...codes]);
-  }).then(()=>
+    return FBNet._ensureUsedKlascodesIndex([...codes]).then(()=>({all}));
+  }).then(({all})=>
     fbDB.ref("usedKlascodes").once("value").then(snap=>{
-      const counts=snap.val()||{};
-      delete counts._seeded;
+      const raw=snap.val()||{};
+      delete raw._seeded;
+      const counts={};
+      Object.keys(raw).forEach(code=>{ if(FBNet._isOwnKlascode(code, all)) counts[code]=raw[code]; });
       return counts;
     })
   );
