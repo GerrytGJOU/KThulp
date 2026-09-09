@@ -572,6 +572,7 @@ function nextQuestion(){
 // - hoofdletters/spaties/leestekens
 // - lange-klinker-spelling (o/oo, e/ee — verschilt per docent/methode)
 // - de dz/zd/z-varianten van de dzèta (ζ)
+// - de u/y-varianten van de ypsilon (υ, bij ons een "u"-klank, geschreven als u of y)
 // Bewust géén algemene fuzzy-tolerantie voor andere fouten: of je de h van een
 // spiritus asper wel/niet typt, of ει/οι goed hebt, is precies waar deze modus
 // op toetst.
@@ -580,7 +581,8 @@ function normalizePron(s){
     .normalize('NFD').replace(/[̀-ͯ]/g,'')
     .replace(/[^a-z]/g,'')
     .replace(/dz|zd/g,'z')
-    .replace(/([aeiouy])\1+/g,'$1');
+    .replace(/y/g,'u')
+    .replace(/([aeiou])\1+/g,'$1');
 }
 
 function resolveAnswer(ok){
