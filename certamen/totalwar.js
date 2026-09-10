@@ -1639,9 +1639,16 @@ function twProvinceInfo(id){
    muur- (palissade/muur) en militie-laag (militia/civ-garnizoen) erboven —
    analoog aan bmBossSpriteHTML()'s koppen-stapeling in bossbattle.js.
    Gedeeld door twProvinceInfo() hierboven en SCREENS.trainingGarrison
-   (training.js). Ontbrekende afbeeldingen verdwijnen gracieus (onerror). ---- */
-function twGarrisonVisualHTML(p, civId){
+   (training.js). Ontbrekende afbeeldingen verdwijnen gracieus (onerror).
+   `size` (default 128) bepaalt het vak in pixels; de kleine (klikbare)
+   versie opent op verzoek (2026-09-10) een vergrote versie via het
+   generieke #overlay/.modal-mechanisme (zie twShowGarrisonZoom()
+   hieronder) — alleen de kleine versie zelf is klikbaar, de vergrote versie
+   (aangeroepen mét een expliciete size) niet nogmaals, dat zou anders in
+   een oneindige zoom-in-zoom-lus kunnen resulteren. ---- */
+function twGarrisonVisualHTML(p, civId, size){
   p = p||{};
+  size = size||128;
   const layers = [
     {type:"towers",  src:twSpriteFor("towers", twStructureTier(p.towerPoints), civId)},
     {type:"walls",   src:twSpriteFor("walls", twStructureTier(p.wallPoints), civId)},
@@ -1657,9 +1664,28 @@ function twGarrisonVisualHTML(p, civId){
   // zakken naar beneden, gebouw blijft gecentreerd → figuren staan er iets
   // onder/vóór i.p.v. er precies overheen geplakt.
   const posFor = type => type==="militia" ? ";object-position:center bottom" : "";
-  return `<div style="position:relative;width:128px;height:128px;flex:0 0 auto;background:#fff;border-radius:10px;box-sizing:border-box;overflow:hidden">
-    ${layers.map(l=>`<img src="${l.src}?${SPRITE_VER}" style="position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);object-fit:contain${posFor(l.type)}" alt="" onerror="this.style.display='none'">`).join("")}
+  const inset = Math.max(4, Math.round(size*0.0625)); // 8px bij de standaard 128px, schaalt mee
+  const clickable = size<=128;
+  const mp=Number(p.militiaPoints)||0, wp=Number(p.wallPoints)||0, tp=Number(p.towerPoints)||0;
+  return `<div style="position:relative;width:${size}px;height:${size}px;flex:0 0 auto;background:#fff;border-radius:10px;box-sizing:border-box;overflow:hidden${clickable?";cursor:zoom-in":""}"
+    ${clickable?`onclick="twShowGarrisonZoom(${mp},${wp},${tp},'${civId}')" title="Klik om te vergroten"`:""}>
+    ${layers.map(l=>`<img src="${l.src}?${SPRITE_VER}" style="position:absolute;inset:${inset}px;width:calc(100% - ${inset*2}px);height:calc(100% - ${inset*2}px);object-fit:contain${posFor(l.type)}" alt="" onerror="this.style.display='none'">`).join("")}
   </div>`;
+}
+
+/* Vergrote weergave van de garnizoensvisual, via het bestaande generieke
+   #overlay-mechanisme (zie closeOverlay()/core.js en bv. bmHostBackToLobby()
+   se eindstand-modal in games.js/battle.js voor hetzelfde patroon). Klikken
+   op de vergrote afbeelding zelf sluit 'm weer — geen aparte kruisknop
+   nodig, hetzelfde gebaar als 'm openen. */
+function twShowGarrisonZoom(militiaPoints, wallPoints, towerPoints, civId){
+  const ov = el("overlay"); if(!ov) return;
+  const big = twGarrisonVisualHTML({militiaPoints,wallPoints,towerPoints}, civId, 320);
+  ov.innerHTML = `<div style="cursor:zoom-out;text-align:center" onclick="closeOverlay()">
+    ${big}
+    <div class="note" style="margin-top:10px">Klik om te sluiten</div>
+  </div>`;
+  ov.classList.add("show");
 }
 
 /* ---- Legenda van beschavingen met aantal gebieden ---- */
