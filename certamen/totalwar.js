@@ -919,6 +919,7 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, player
     });
     fbDB.ref(twPath(owner,"stats/conquests/"+BM_META.attackerCivId))
       .set(firebase.database.ServerValue.increment(1)).catch(()=>{});
+    twMaybeRecordBiggestEmpire(owner, BM_META.attackerCivId).catch(()=>{});
   } else {
     const prevDealt = (gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[stageKey]) || 0;
     const upd = {};
@@ -934,8 +935,44 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, player
     if(!(gp.siege && gp.siege.startedAt)) upd["siege/startedAt"] = FBNet.serverTime();
     upd["lastChanged"] = FBNet.serverTime();
     await ref.update(upd);
+    // twResolveSiege() wordt vanuit bmResolve() (battle.js) precies ÉÉN keer
+    // per hele belegeringspoging aangeroepen met winner!=="A" — nooit bij een
+    // tussenstage-overgang (die regelt bmResolve() zelf lokaal, zonder deze
+    // functie aan te roepen). Elke keer dat we hier belanden is de aanval dus
+    // écht voorbij (verlies óf rondelimiet-terugtrekking), dus telt dit als
+    // een volledig afgeslagen belegering voor de verdediger — mits die een
+    // echt volk is (een onbewaakte/neutrale provincie heeft geen klas om te
+    // belonen). Zie de "Beste verdediger"-hoogtepunt in twRenderHighlights().
+    if(gp.defenderCivId && gp.defenderCivId!=="neutral"){
+      fbDB.ref(twPath(owner,"stats/defenses/"+gp.defenderCivId))
+        .set(firebase.database.ServerValue.increment(1)).catch(()=>{});
+    }
   }
   twRecordBattleHighlights(owner, gp, dealt, players, winner).catch(()=>{});
+}
+
+/* "Grootste rijk" als een ECHT bijgehouden seizoensrecord (op verzoek
+   2026-09-10) i.p.v. een live snapshot van de HUIDIGE eigendomsstand
+   (twRenderHighlights() deed dat voorheen door gewoon _twLiveProvinces te
+   tellen) — dat toonde altijd de stand op het moment van bekijken, niet het
+   grootste rijk dat een volk op enig moment tijdens het seizoen
+   daadwerkelijk gehad heeft (een volk dat later weer gebieden verloor,
+   kreeg zo onterecht geen credit meer voor zijn piek). Aangeroepen na elke
+   gebeurtenis die een volk se gebiedental kan VERHOGEN (verovering,
+   twResolveSiege() hierboven; vers vlaggenschip,
+   twGrantFreshFlagshipIfUnowned() verderop) — nooit bij verlies, want dat
+   kan per definitie nooit een nieuw record zijn. */
+async function twMaybeRecordBiggestEmpire(owner, civId){
+  if(!fbDB || !owner || !civId || civId==="neutral") return;
+  try{
+    const provSnap = await fbDB.ref(twPath(owner,"provinces")).once("value");
+    const count = Object.values(provSnap.val()||{}).filter(p=>p && p.owner===civId).length;
+    if(count<=0) return;
+    await fbDB.ref(twPath(owner,"stats/biggestEmpire")).transaction(cur=>{
+      if(cur && (cur.count||0)>=count) return cur;
+      return { civId, count, at:Date.now() };
+    });
+  }catch(e){}
 }
 
 /* Seizoensrecords, puur motiverend (geen invloed op spelregels) — draait
@@ -1051,21 +1088,27 @@ function twLoadKlasLegend(){
   }).catch(()=>{ cont.innerHTML = `<div class="note warn">Kon koppelingen niet laden.</div>`; });
 }
 
-/* Seizoenshoogtepunten: "grootste rijk" wordt live afgeleid uit de huidige
-   eigendomsstand (geen aparte opslag nodig); de rest komt uit /totalwar/stats,
-   bijgehouden door twRecordBattleHighlights()/trMaybeUpdateTopBuilder() (training.js). */
+/* Seizoenshoogtepunten uit /totalwar/stats, bijgehouden door
+   twRecordBattleHighlights()/twMaybeRecordBiggestEmpire() (allebei
+   totalwar.js) en trMaybeUpdateTopBuilder() (training.js).
+   "Grootste rijk" (2026-09-10, op verzoek) komt sindsdien uit het
+   bijgehouden `stats.biggestEmpire`-record (de PIEK die een volk ooit
+   tijdens het seizoen bereikte) i.p.v. — zoals hiervoor — live afgeleid uit
+   de HUIDIGE eigendomsstand: dat toonde alleen de stand op het moment van
+   bekijken, dus een volk dat zijn piek later weer kwijtraakte kreeg
+   daarvoor ten onrechte geen credit meer. */
 function twRenderHighlights(){
   const box = el("twHighlights"); if(!box) return;
   const stats = _twStats||{};
-  const counts = {};
-  Object.values(_twLiveProvinces||{}).forEach(p=>{ if(p&&p.owner&&p.owner!=="neutral") counts[p.owner]=(counts[p.owner]||0)+1; });
-  const biggest = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
   const conquests = stats.conquests||{};
   const topConqueror = Object.entries(conquests).sort((a,b)=>b[1]-a[1])[0];
+  const defenses = stats.defenses||{};
+  const topDefender = Object.entries(defenses).sort((a,b)=>b[1]-a[1])[0];
   const civNm = id=> (TW_CIVS[id]||TW_CIVS.neutral).nm;
   const rows = [
-    biggest ? `👑 <b>Grootste rijk:</b> ${esc(civNm(biggest[0]))} (${biggest[1]} gebied${biggest[1]!==1?"en":""})` : null,
+    stats.biggestEmpire ? `👑 <b>Grootste rijk ooit:</b> ${esc(civNm(stats.biggestEmpire.civId))} (${stats.biggestEmpire.count} gebied${stats.biggestEmpire.count!==1?"en":""} op zijn hoogtepunt)` : null,
     topConqueror ? `⚔️ <b>Meeste veroveringen:</b> ${esc(civNm(topConqueror[0]))} (${topConqueror[1]}×)` : null,
+    topDefender ? `🛡️ <b>Beste verdediger:</b> ${esc(civNm(topDefender[0]))} (${topDefender[1]}× een aanval afgeslagen)` : null,
     stats.bloodiest ? `🩸 <b>Bloedigste veldslag:</b> ${esc(stats.bloodiest.province)} — ${Math.round(stats.bloodiest.dealt)} schade (${esc(civNm(stats.bloodiest.attackerCivId))} vs. ${esc(civNm(stats.bloodiest.defenderCivId))})` : null,
     stats.biggestBattle ? `⚔️ <b>Grootste veldslag:</b> ${esc(stats.biggestBattle.province)} — ${stats.biggestBattle.count} deelnemers (${esc(civNm(stats.biggestBattle.attackerCivId))} vs. ${esc(civNm(stats.biggestBattle.defenderCivId))})` : null,
     stats.longestSiege ? `⏳ <b>Langste veldtocht:</b> ${esc(stats.longestSiege.province)} — ${twFormatDurationMs(stats.longestSiege.durationMs)} belegerd vóór de val (${esc(civNm(stats.longestSiege.attackerCivId))} vs. ${esc(civNm(stats.longestSiege.defenderCivId))})` : null,
@@ -1184,6 +1227,7 @@ async function twGrantFreshFlagshipIfUnowned(campaignOwner, civId){
     owner: civId, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
     siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime(),
   });
+  twMaybeRecordBiggestEmpire(campaignOwner, civId).catch(()=>{});
 }
 
 /* Maakt een beschaving weer volledig neutraal (alle provincies die ze op dit
@@ -1313,7 +1357,14 @@ function twHallOfFameCardHTML(s, isAdmin){
     <span style="flex:1">${html}</span>
     ${isAdmin ? `<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4);flex:0 0 auto" onclick="twHofRemoveStat(${s.number},'${statKey}')" title="Verwijder deze naam uit de Hall of Fame">✕</button>` : ""}
   </div>`;
+  const conquests = stats.conquests||{};
+  const topConqueror = Object.entries(conquests).sort((a,b)=>b[1]-a[1])[0];
+  const defenses = stats.defenses||{};
+  const topDefender = Object.entries(defenses).sort((a,b)=>b[1]-a[1])[0];
   const highlightRows = [
+    stats.biggestEmpire ? `<div class="note" style="margin-top:4px">👑 <b>Grootste rijk ooit:</b> ${esc(civNm(stats.biggestEmpire.civId))} (${stats.biggestEmpire.count} gebied${stats.biggestEmpire.count!==1?"en":""} op zijn hoogtepunt)</div>` : "",
+    topConqueror ? `<div class="note" style="margin-top:4px">⚔️ <b>Meeste veroveringen:</b> ${esc(civNm(topConqueror[0]))} (${topConqueror[1]}×)</div>` : "",
+    topDefender ? `<div class="note" style="margin-top:4px">🛡️ <b>Beste verdediger:</b> ${esc(civNm(topDefender[0]))} (${topDefender[1]}× een aanval afgeslagen)</div>` : "",
     stats.bloodiest ? `<div class="note" style="margin-top:4px">🩸 <b>Bloedigste veldslag:</b> ${esc(stats.bloodiest.province)} — ${Math.round(stats.bloodiest.dealt)} schade (${esc(civNm(stats.bloodiest.attackerCivId))} vs. ${esc(civNm(stats.bloodiest.defenderCivId))})</div>` : "",
     stats.biggestBattle ? `<div class="note" style="margin-top:4px">⚔️ <b>Grootste veldslag:</b> ${esc(stats.biggestBattle.province)} — ${stats.biggestBattle.count} deelnemers (${esc(civNm(stats.biggestBattle.attackerCivId))} vs. ${esc(civNm(stats.biggestBattle.defenderCivId))})</div>` : "",
     stats.longestSiege ? `<div class="note" style="margin-top:4px">⏳ <b>Langste veldtocht:</b> ${esc(stats.longestSiege.province)} — ${twFormatDurationMs(stats.longestSiege.durationMs)} belegerd vóór de val (${esc(civNm(stats.longestSiege.attackerCivId))} vs. ${esc(civNm(stats.longestSiege.defenderCivId))})</div>` : "",

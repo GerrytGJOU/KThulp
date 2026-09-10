@@ -1285,6 +1285,27 @@ afgesloten seizoen als een kaart, nieuwste eerst:
   toepassing.
 - Dezelfde hoogtepunt-regels als de live kaart, nu gelezen uit het
   gearchiveerde `stats`-veld i.p.v. de live `/totalwar/stats`:
+  - 👑 **Grootste rijk ooit** (`totalwar/stats/biggestEmpire`, herzien
+    2026-09-10 op verzoek) — vóór deze wijziging toonde "grootste rijk" de
+    HUIDIGE eigendomsstand op het moment van bekijken, dus een volk dat zijn
+    piek alweer kwijtgeraakt was kreeg daar geen credit meer voor. Nu een
+    écht bijgehouden record: `twMaybeRecordBiggestEmpire(owner, civId)`
+    (`certamen/totalwar.js`) telt na elke gebeurtenis die een volk se
+    gebiedental kan VERHOGEN (verovering in `twResolveSiege()`, vers
+    vlaggenschip in `twGrantFreshFlagshipIfUnowned()`) het actuele totaal
+    voor dat volk en bewaart het hoogste ooit — nooit aangeroepen bij
+    verlies, want dat kan per definitie geen nieuw record zijn.
+  - ⚔️ Meeste veroveringen (`totalwar/stats/conquests`, ongewijzigd)
+  - 🛡️ **Beste verdediger** (nieuw, 2026-09-10) — `totalwar/stats/defenses`,
+    per volk hoe vaak het een volledige belegeringspoging heeft afgeslagen
+    (verlies van de aanvaller óf een rondelimiet-terugtrekking, zie §5.4.2 —
+    `twResolveSiege()`'s `else`-tak wordt namelijk hoe dan ook maar één keer
+    per hele poging aangeroepen, nooit bij een tussenstage-overgang, dus
+    iedere keer dat die tak draait is de belegering echt voorbij). Alleen
+    geteld als `defenderCivId` een echt volk is (geen klas op een neutrale
+    provincie om te belonen) — directe tegenhanger van "meeste
+    veroveringen", bedoeld om verdedigen net zo motiverend te maken als
+    aanvallen.
   - 🩸 Bloedigste veldslag (meeste schade in één belegeringsstage)
   - ⚔️ **Grootste veldslag** (nieuw, 2026-09-07) — het gevecht met de meeste
     échte deelnemers (`totalwar/stats/biggestBattle`), ongeacht win/verlies:
@@ -1300,6 +1321,11 @@ afgesloten seizoen als een kaart, nieuwste eerst:
     in één keer valt heeft dus geen "veldtocht-duur" — logisch, er was geen
     reeks om te meten.
   - 🌟 Sterkste solo-speler, 🏗️ Grootste bouwer (ongewijzigd)
+
+  **Bewust een ander concept dan de "Winnaar" hierboven**: die blijft
+  gebaseerd op de eigendomsstand bij het EINDE van het seizoen (§9.7/de
+  archiveringsstap in `twStartNewSeason()`) — wie de veldtocht als geheel
+  wint, is terecht een ander gegeven dan wie ooit de grootste piek had.
 - **"🗺️ Bekijk eindkaart"**: rendert pas bij klikken (lazy, om niet meteen
   meerdere volledige SVG-kaarten tegelijk te laden) de echte provinciekaart
   met de bevroren `finalOwner`-stand in een eigen host per seizoen
