@@ -1306,6 +1306,37 @@ afgesloten seizoen als een kaart, nieuwste eerst:
     provincie om te belonen) — directe tegenhanger van "meeste
     veroveringen", bedoeld om verdedigen net zo motiverend te maken als
     aanvallen.
+  - 🔥 **Grootste comeback** (nieuw, 2026-09-10) — `totalwar/stats/biggestComeback`,
+    het hoogste aantal gebieden dat een volk ooit weer opbouwde NADAT het
+    volledig van de kaart was geveegd. Gebruikt een eigen
+    `civs/{civId}/comebackWiped`-vlag (`twDetectWipedCivs()` zet 'm
+    onvoorwaardelijk zodra een volk wordt weggevaagd), bewust GESCHEIDEN van
+    de bestaande `wasWiped`-vlag van het leerling-prestatiesysteem
+    (`trCheckComebackAchievement()`, `certamen/training.js`): die twee
+    vlaggen hebben een ander levenscyclus-doel (per-leerling-prestatie vs.
+    seizoensrecord) en zouden elkaar in de weg zitten als ze gedeeld werden.
+    `twMaybeRecordBiggestEmpire(owner, civId)` telt na elke gebiedswinst het
+    actuele totaal en werkt, als `comebackWiped` waar is, ook meteen
+    `biggestComeback` bij (zelfde transactie-patroon: alleen bijwerken als
+    het nieuwe aantal het record verslaat). `comebackWiped` wordt bij elke
+    `twStartNewSeason()` teruggezet naar `null` voor alle volken (de
+    `wasWiped`-vlag van het prestatiesysteem blijft daarbij bewust
+    ongemoeid).
+  - 🏃 **Meest actieve klas** (nieuw, 2026-09-10) — niet het klas met de
+    meeste goede antwoorden absoluut (dat bevoordeelt structureel grote
+    klassen), maar het hoogste gemiddelde per leerling:
+    `twComputeMostActiveKlas(klasActivity, klasSize)` (`certamen/
+    totalwar.js`) deelt `stats/klasActivity/{klascode}` (opgehoogd via
+    `ServerValue.increment(1)` bij elk goed antwoord, `trScoreAnswer()` in
+    `certamen/training.js`) door het aantal leerlingen in die klas en pakt
+    de klas met het hoogste quotiënt. Voor de live hoogtepunten-weergave
+    (`twRenderHighlights()`, nu async) wordt de actuele `klasSize`-boom
+    gebruikt (`twFetchKlasSizeMap()`); voor het Hall of Fame-archief wordt in
+    plaats daarvan een bevroren momentopname `klasSizeAtEnd` gebruikt die
+    `twStartNewSeason()` bij het afsluiten van het seizoen mee archiveert —
+    de live `klasSize`-boom blijft na een seizoenswissel doorlopen (leerlingen
+    komen en gaan), dus zonder die bevroren snapshot zou een oud seizoen met
+    de VERKEERDE, huidige klasgroottes herberekend worden.
   - 🩸 Bloedigste veldslag (meeste schade in één belegeringsstage)
   - ⚔️ **Grootste veldslag** (nieuw, 2026-09-07) — het gevecht met de meeste
     échte deelnemers (`totalwar/stats/biggestBattle`), ongeacht win/verlies:

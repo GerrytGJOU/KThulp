@@ -965,13 +965,28 @@ async function twResolveSiege(winner, stageKey, stageMaxHP, stageFinalHP, player
 async function twMaybeRecordBiggestEmpire(owner, civId){
   if(!fbDB || !owner || !civId || civId==="neutral") return;
   try{
-    const provSnap = await fbDB.ref(twPath(owner,"provinces")).once("value");
+    const [provSnap, comebackSnap] = await Promise.all([
+      fbDB.ref(twPath(owner,"provinces")).once("value"),
+      fbDB.ref(twPath(owner,"civs/"+civId+"/comebackWiped")).once("value"),
+    ]);
     const count = Object.values(provSnap.val()||{}).filter(p=>p && p.owner===civId).length;
     if(count<=0) return;
     await fbDB.ref(twPath(owner,"stats/biggestEmpire")).transaction(cur=>{
       if(cur && (cur.count||0)>=count) return cur;
       return { civId, count, at:Date.now() };
     });
+    // "Grootste comeback" (op verzoek, 2026-09-10): dit volk is ooit tijdens
+    // dit seizoen tot 0 gebieden teruggevallen (comebackWiped, zie
+    // twDetectWipedCivs() hierboven) — elke groei-gebeurtenis daarna is dus
+    // onderdeel van diezelfde comeback-verhaallijn. Bewaar het hoogste
+    // aantal gebieden dat sindsdien bereikt is, ongeacht latere terugval
+    // (net als stats/biggestEmpire hierboven een "hoogste ooit"-record).
+    if(comebackSnap.val()){
+      await fbDB.ref(twPath(owner,"stats/biggestComeback")).transaction(cur=>{
+        if(cur && (cur.count||0)>=count) return cur;
+        return { civId, count, at:Date.now() };
+      });
+    }
   }catch(e){}
 }
 
@@ -1088,6 +1103,41 @@ function twLoadKlasLegend(){
   }).catch(()=>{ cont.innerHTML = `<div class="note warn">Kon koppelingen niet laden.</div>`; });
 }
 
+/* "Meest actieve klas" (op verzoek, 2026-09-10) — puur rekenwerk, los van
+   waar de klasgroottes vandaan komen: LIVE uit klasSize/{klas}/students
+   (twFetchKlasSizeMap() hieronder), of gearchiveerd als klasSizeAtEnd in de
+   Hall of Fame (twStartNewSeason()/twHallOfFameCardHTML()). Genormaliseerd
+   per leerling (aantal goede antwoorden / klasgrootte) — zonder die
+   normalisatie zou een grote klas altijd winnen puur door koppental, ook al
+   is een kleine klas veel actiever per leerling (zelfde 1/√N-gedachte als
+   §7.4, hier als simpele /N omdat we ranglijst-volgorde willen, geen
+   afgevlakte puntenwaarde). */
+function twComputeMostActiveKlas(klasActivityMap, klasSizeMap){
+  const entries = Object.entries(klasActivityMap||{});
+  if(!entries.length) return null;
+  let best = null;
+  for(const [klas,count] of entries){
+    const size = Math.max(1, (klasSizeMap && klasSizeMap[klas]) || 1);
+    const perStudent = (count||0)/size;
+    if(!best || perStudent>best.perStudent) best = { klas, count:count||0, size, perStudent };
+  }
+  return best;
+}
+/* Haalt de HUIDIGE klasgrootte op voor elke klas in klasCodes — alleen voor
+   de live weergave; de Hall of Fame gebruikt in plaats daarvan de
+   gearchiveerde klasSizeAtEnd (klasgroottes veranderen na afloop van een
+   seizoen nog gewoon door, dus de huidige grootte zou een oud seizoen
+   verkeerd normaliseren). */
+async function twFetchKlasSizeMap(owner, klasCodes){
+  const pairs = await Promise.all(klasCodes.map(async klas=>{
+    try{
+      const snap = await fbDB.ref(twPath(owner,"klasSize/"+klas+"/students")).once("value");
+      return [klas, snap.exists() ? Object.keys(snap.val()).length : 1];
+    }catch(e){ return [klas, 1]; }
+  }));
+  return Object.fromEntries(pairs);
+}
+
 /* Seizoenshoogtepunten uit /totalwar/stats, bijgehouden door
    twRecordBattleHighlights()/twMaybeRecordBiggestEmpire() (allebei
    totalwar.js) en trMaybeUpdateTopBuilder() (training.js).
@@ -1096,8 +1146,14 @@ function twLoadKlasLegend(){
    tijdens het seizoen bereikte) i.p.v. — zoals hiervoor — live afgeleid uit
    de HUIDIGE eigendomsstand: dat toonde alleen de stand op het moment van
    bekijken, dus een volk dat zijn piek later weer kwijtraakte kreeg
-   daarvoor ten onrechte geen credit meer. */
-function twRenderHighlights(){
+   daarvoor ten onrechte geen credit meer. Deze functie is sinds diezelfde
+   datum ASYNC: "meest actieve klas" heeft een aparte, live klasgrootte-
+   opzoek nodig (twFetchKlasSizeMap()) die niet al in _twStats zit —
+   aanroepers wachten hier bewust niet op (fire-and-forget, zelfde patroon
+   als de rest van deze reactieve UI); alle ANDERE regels (incl. "grootste
+   comeback", dat wél gewoon synchroon uit stats.biggestComeback komt)
+   renderen meteen, "meest actieve klas" volgt zodra zijn data binnen is. */
+async function twRenderHighlights(){
   const box = el("twHighlights"); if(!box) return;
   const stats = _twStats||{};
   const conquests = stats.conquests||{};
@@ -1107,6 +1163,7 @@ function twRenderHighlights(){
   const civNm = id=> (TW_CIVS[id]||TW_CIVS.neutral).nm;
   const rows = [
     stats.biggestEmpire ? `👑 <b>Grootste rijk ooit:</b> ${esc(civNm(stats.biggestEmpire.civId))} (${stats.biggestEmpire.count} gebied${stats.biggestEmpire.count!==1?"en":""} op zijn hoogtepunt)` : null,
+    stats.biggestComeback ? `🔥 <b>Grootste comeback:</b> ${esc(civNm(stats.biggestComeback.civId))} — van volledig verslagen terug naar ${stats.biggestComeback.count} gebied${stats.biggestComeback.count!==1?"en":""}` : null,
     topConqueror ? `⚔️ <b>Meeste veroveringen:</b> ${esc(civNm(topConqueror[0]))} (${topConqueror[1]}×)` : null,
     topDefender ? `🛡️ <b>Beste verdediger:</b> ${esc(civNm(topDefender[0]))} (${topDefender[1]}× een aanval afgeslagen)` : null,
     stats.bloodiest ? `🩸 <b>Bloedigste veldslag:</b> ${esc(stats.bloodiest.province)} — ${Math.round(stats.bloodiest.dealt)} schade (${esc(civNm(stats.bloodiest.attackerCivId))} vs. ${esc(civNm(stats.bloodiest.defenderCivId))})` : null,
@@ -1118,6 +1175,20 @@ function twRenderHighlights(){
   box.innerHTML = rows.length
     ? rows.map(r=>`<div class="note" style="margin-top:6px">${r}</div>`).join("")
     : `<div class="note">Nog geen hoogtepunten — begin de veldtocht!</div>`;
+  // "Meest actieve klas" komt ná de rest (aparte, live klasgrootte-opzoek
+  // nodig, zie twFetchKlasSizeMap()) — toegevoegd zodra 'm binnen is, i.p.v.
+  // de rest van het paneel daarop te laten wachten.
+  const klasActivity = stats.klasActivity||{};
+  if(Object.keys(klasActivity).length && _twOwner){
+    try{
+      const sizeMap = await twFetchKlasSizeMap(_twOwner, Object.keys(klasActivity));
+      const most = twComputeMostActiveKlas(klasActivity, sizeMap);
+      if(most && el("twHighlights")===box){ // scherm intussen niet weggenavigeerd
+        box.insertAdjacentHTML("beforeend",
+          `<div class="note" style="margin-top:6px">🏃 <b>Meest actieve klas:</b> ${esc(most.klas)} — ${most.count} goede antwoorden (${most.perStudent.toFixed(1)} per leerling, ${most.size} leerling${most.size!==1?"en":""})</div>`);
+      }
+    }catch(e){}
+  }
 }
 
 /* ---- Nieuw seizoen starten (docent-only, SCREENS.totalWarPreview): reset de
@@ -1145,11 +1216,12 @@ async function twStartNewSeason(){
   // klas dit seizoen krijgt zijn basisprovincie niet — die blijft neutraal,
   // zodat het volk pas via de bestaande "rebellen"-opstand (§5.7) een eerste
   // gebied verovert zodra een docent er alsnog een klas aan koppelt.
-  const [klasCivsSnap, endingSeasonSnap, provNowSnap, statsNowSnap] = await Promise.all([
+  const [klasCivsSnap, endingSeasonSnap, provNowSnap, statsNowSnap, klasSizeSnap] = await Promise.all([
     fbDB.ref(twPath(_twOwner,"klasCivs")).once("value"),
     fbDB.ref(twPath(_twOwner,"season")).once("value"),
     fbDB.ref(twPath(_twOwner,"provinces")).once("value"),
     fbDB.ref(twPath(_twOwner,"stats")).once("value"),
+    fbDB.ref(twPath(_twOwner,"klasSize")).once("value"),
   ]);
   const activeCivs = new Set(Object.values(klasCivsSnap.val()||{}));
   const ownerOf = {};
@@ -1177,9 +1249,18 @@ async function twStartNewSeason(){
     });
     const winnerEntry = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
     const winnerCivId = winnerEntry ? winnerEntry[0] : null;
+    // klasSizeAtEnd: compacte {klascode: aantal-leerlingen}-samenvatting i.p.v.
+    // de ruwe klasSize/{klas}/students-boom (leerlingcodes) — nodig om "meest
+    // actieve klas" (twComputeMostActiveKlas()) later in de Hall of Fame
+    // correct te normaliseren, want de LEVENDE klasSize-boom verandert na
+    // afloop van dit seizoen gewoon door.
+    const klasSizeAtEnd = {};
+    Object.entries(klasSizeSnap.val()||{}).forEach(([klas,v])=>{
+      klasSizeAtEnd[klas] = Math.max(1, Object.keys((v&&v.students)||{}).length);
+    });
     upd[twPath(_twOwner,"history/"+endingSeason.number)] = {
       number: endingSeason.number, title: endingSeason.title||"", startedAt: endingSeason.startedAt||null,
-      endedAt: FBNet.serverTime(), finalOwner, klasCivs: klasCivsSnap.val()||{},
+      endedAt: FBNet.serverTime(), finalOwner, klasCivs: klasCivsSnap.val()||{}, klasSizeAtEnd,
       winnerCivId, winnerProvinces: winnerCivId ? counts[winnerCivId] : 0,
       stats: statsNowSnap.val()||null,
     };
@@ -1188,6 +1269,16 @@ async function twStartNewSeason(){
     if(id==="_meta") return;
     upd[twPath(_twOwner,"provinces/"+id)] = { owner: ownerOf[id]||"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
       siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
+  });
+  // comebackWiped (§5.7/"grootste comeback" hierboven) hoort bij dít
+  // seizoen — een nieuw seizoen begint met een schone lei, anders zou een
+  // volk dat VORIG seizoen ooit uitgeroeid was de rest van zijn bestaan
+  // "comeback-gerechtigd" blijven. wasWiped (het per-leerling-eerbewijs)
+  // blijft bewust ongemoeid: dat is eigendom van een ander systeem
+  // (trCheckComebackAchievement(), training.js) met een eigen levenscyclus.
+  Object.keys(TW_CIVS).forEach(civId=>{
+    if(civId==="neutral") return;
+    upd[twPath(_twOwner,"civs/"+civId+"/comebackWiped")] = null;
   });
   upd[twPath(_twOwner,"stats")] = null;
   upd[twPath(_twOwner,"season")] = { number:nextNum, title, startedAt:FBNet.serverTime() };
@@ -1361,10 +1452,19 @@ function twHallOfFameCardHTML(s, isAdmin){
   const topConqueror = Object.entries(conquests).sort((a,b)=>b[1]-a[1])[0];
   const defenses = stats.defenses||{};
   const topDefender = Object.entries(defenses).sort((a,b)=>b[1]-a[1])[0];
+  // "Meest actieve klas": normaliseert klasActivity tegen klasSizeAtEnd —
+  // de bevroren klasgrootte op het MOMENT dat dit seizoen afliep, niet de
+  // huidige (die loopt na afloop van een seizoen gewoon door). Ontbreekt
+  // klasSizeAtEnd (archiefrecords van vóór 2026-09-10), dan valt
+  // twComputeMostActiveKlas() terug op grootte 1 per klas — geen crash,
+  // wel een minder eerlijke ranglijst voor die oude seizoenen.
+  const mostActive = twComputeMostActiveKlas(stats.klasActivity, s.klasSizeAtEnd);
   const highlightRows = [
     stats.biggestEmpire ? `<div class="note" style="margin-top:4px">👑 <b>Grootste rijk ooit:</b> ${esc(civNm(stats.biggestEmpire.civId))} (${stats.biggestEmpire.count} gebied${stats.biggestEmpire.count!==1?"en":""} op zijn hoogtepunt)</div>` : "",
+    stats.biggestComeback ? `<div class="note" style="margin-top:4px">🔥 <b>Grootste comeback:</b> ${esc(civNm(stats.biggestComeback.civId))} — van volledig verslagen terug naar ${stats.biggestComeback.count} gebied${stats.biggestComeback.count!==1?"en":""}</div>` : "",
     topConqueror ? `<div class="note" style="margin-top:4px">⚔️ <b>Meeste veroveringen:</b> ${esc(civNm(topConqueror[0]))} (${topConqueror[1]}×)</div>` : "",
     topDefender ? `<div class="note" style="margin-top:4px">🛡️ <b>Beste verdediger:</b> ${esc(civNm(topDefender[0]))} (${topDefender[1]}× een aanval afgeslagen)</div>` : "",
+    mostActive ? `<div class="note" style="margin-top:4px">🏃 <b>Meest actieve klas:</b> ${esc(mostActive.klas)} — ${mostActive.count} goede antwoorden (${mostActive.perStudent.toFixed(1)} per leerling, ${mostActive.size} leerling${mostActive.size!==1?"en":""})</div>` : "",
     stats.bloodiest ? `<div class="note" style="margin-top:4px">🩸 <b>Bloedigste veldslag:</b> ${esc(stats.bloodiest.province)} — ${Math.round(stats.bloodiest.dealt)} schade (${esc(civNm(stats.bloodiest.attackerCivId))} vs. ${esc(civNm(stats.bloodiest.defenderCivId))})</div>` : "",
     stats.biggestBattle ? `<div class="note" style="margin-top:4px">⚔️ <b>Grootste veldslag:</b> ${esc(stats.biggestBattle.province)} — ${stats.biggestBattle.count} deelnemers (${esc(civNm(stats.biggestBattle.attackerCivId))} vs. ${esc(civNm(stats.biggestBattle.defenderCivId))})</div>` : "",
     stats.longestSiege ? `<div class="note" style="margin-top:4px">⏳ <b>Langste veldtocht:</b> ${esc(stats.longestSiege.province)} — ${twFormatDurationMs(stats.longestSiege.durationMs)} belegerd vóór de val (${esc(civNm(stats.longestSiege.attackerCivId))} vs. ${esc(civNm(stats.longestSiege.defenderCivId))})</div>` : "",
@@ -1520,6 +1620,15 @@ function twDetectWipedCivs(provinces){
     fbDB.ref(twPath(_twOwner,"civs/"+civId+"/wasWiped")).once("value").then(snap=>{
       if(!snap.val()) fbDB.ref(twPath(_twOwner,"civs/"+civId+"/wasWiped")).set(true);
     }).catch(()=>{});
+    // Losstaand van wasWiped hierboven (dat is eigendom van het per-leerling
+    // eerbewijssysteem, trCheckComebackAchievement() in training.js, en
+    // wordt lazy weer op false gezet zodra ÉÉN leerling de comeback ziet —
+    // te wisselvallig om "grootste comeback" (stats/biggestComeback,
+    // twMaybeRecordBiggestEmpire() hieronder) op te baseren). comebackWiped
+    // is puur voor die seizoensstat: blijft simpelweg true staan tot de
+    // volgende twStartNewSeason()-reset, ongeacht wat het eerbewijssysteem
+    // ondertussen met wasWiped doet.
+    fbDB.ref(twPath(_twOwner,"civs/"+civId+"/comebackWiped")).set(true).catch(()=>{});
   });
 }
 
