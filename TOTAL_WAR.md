@@ -667,6 +667,17 @@ daarvoor:
   (`?v=20260910a`) — anders zou een al bezocht toestel het nieuwe
   `terrain`-veld niet zien, los van de gewone script-cache-busting in
   `index.html`.
+- **✅ Sprite-schaalcorrectie per tier (nieuw, 2026-09-10).** De boerderij
+  (tier0-toren, `farm.png`) heeft van zichzelf weinig lege ruimte rondom het
+  gebouw en oogde daardoor GROTER dan de wachttoren (tier1, `watchtower.png`)
+  — terwijl die laatste juist de upgrade is, wat de progressie in de
+  visual tegensprak. `TW_SPRITE_SCALE` (`certamen/totalwar.js`, naast
+  `TW_STRUCTURES`) past dit puur cosmetisch aan via de inset in
+  `twGarrisonVisualHTML()` (boerderij ×0,8, wachttoren ×1,15) — geen
+  wijziging aan de bronafbeeldingen zelf nodig, en schaalt automatisch mee
+  met elke `size` (dus ook de 320px-vergrote versie). Ontbrekende sprites in
+  de tabel vallen terug op schaal 1 (ongewijzigd) — alleen deze twee sprites
+  hadden dit probleem, geen algemene herschaling van alle garnizoensplaatjes.
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 

@@ -148,6 +148,17 @@ const TW_STRUCTURES = {
   towers:  { field:"towerPoints",   tier0:"assets/bosses/farm.png", tier1:"assets/bosses/watchtower.png", tier2:"assets/bosses/fort.png" },
 };
 
+// Cosmetische schaalcorrectie per sprite-pad (op verzoek, 2026-09-10) — zie
+// twGarrisonVisualHTML() voor waar dit wordt toegepast (via de inset, geen
+// wijziging aan de bronafbeeldingen zelf). De boerderij (tier0-toren) heeft
+// van zichzelf weinig lege ruimte rondom het gebouw en oogde daardoor GROTER
+// dan de wachttoren (tier1) — terwijl die laatste juist de upgrade is.
+// Ontbrekende sprites vallen terug op schaal 1 (ongewijzigd).
+const TW_SPRITE_SCALE = {
+  "assets/bosses/farm.png": 0.8,
+  "assets/bosses/watchtower.png": 1.15,
+};
+
 // Volksnaam per beschaving, voor het civ-specifieke garnizoensplaatje
 // (assets/bosses/garrison_{volk}.png) — alle 7 beschavingen hebben er
 // inmiddels een; ontbrekende/toekomstige bestanden vallen terug op
@@ -1685,7 +1696,19 @@ function twGarrisonVisualHTML(p, civId, size, provinceId){
   const bgStyle = bg ? `background:url('${bg}') center/cover` : "background:#fff";
   return `<div style="position:relative;width:${size}px;height:${size}px;flex:0 0 auto;${bgStyle};border-radius:10px;box-sizing:border-box;overflow:hidden${clickable?";cursor:zoom-in":""}"
     ${clickable?`onclick="twShowGarrisonZoom(${mp},${wp},${tp},'${civId}','${provinceId||""}')" title="Klik om te vergroten"`:""}>
-    ${layers.map(l=>`<img src="${l.src}?${SPRITE_VER}" style="position:absolute;inset:${inset}px;width:calc(100% - ${inset*2}px);height:calc(100% - ${inset*2}px);object-fit:contain${posFor(l.type)}" alt="" onerror="this.style.display='none'">`).join("")}
+    ${layers.map(l=>{
+      // Sommige sprites hebben van zichzelf meer/minder lege ruimte rondom
+      // het gebouw dan andere, waardoor ze bij eenzelfde vak-grootte tóch
+      // verschillend "groot" ogen — een latere tier moet nooit kleiner
+      // aanvoelen dan de tier die 'm net verving (op verzoek 2026-09-10: de
+      // boerderij oogde groter dan de wachttoren, terwijl die laatste juist
+      // de upgrade is). TW_SPRITE_SCALE past dat per sprite-pad aan, puur
+      // cosmetisch via de inset — geen wijziging aan de bronafbeeldingen
+      // zelf nodig. Schaalt automatisch mee met `size` (dus ook de 320px-
+      // vergrote versie, twShowGarrisonZoom()).
+      const layerInset = Math.max(0, Math.round(inset - ((TW_SPRITE_SCALE[l.src]||1)-1)*size/2));
+      return `<img src="${l.src}?${SPRITE_VER}" style="position:absolute;inset:${layerInset}px;width:calc(100% - ${layerInset*2}px);height:calc(100% - ${layerInset*2}px);object-fit:contain${posFor(l.type)}" alt="" onerror="this.style.display='none'">`;
+    }).join("")}
   </div>`;
 }
 
