@@ -426,6 +426,16 @@ function trScoreAnswer(ok, missHintFn){
     const xpGain = fullRate ? (2 + (hasFlagship ? TW_FLAGSHIP_XP_BONUS : 0)) : 0;
     TR_STATS.correct++; TR_STATS.points+=pts; TR_STATS.xp+=xpGain;
     if(fullRate){ TR_CAP_TODAY++; trSaveDailyCap(TR_CAP_TODAY); }
+    // "Meest actieve klas" (TOTAL_WAR.md §11, op verzoek 2026-09-10) — ruwe
+    // telling van goede antwoorden per klas, dit seizoen. Bewust GEEN
+    // klasgrootte-schaling hier (dat gebeurt pas bij het weergeven, zie
+    // twComputeMostActiveKlas() in totalwar.js): deze teller moet de
+    // werkelijke totale inzet blijven, de normalisatie is een apart,
+    // wisselbaar weergave-detail.
+    if(_twOwner && BM_IDENT && BM_IDENT.klascode){
+      fbDB.ref(twPath(_twOwner,"stats/klasActivity/"+BM_IDENT.klascode))
+        .set(firebase.database.ServerValue.increment(1)).catch(()=>{});
+    }
     if(TR_PROVINCE_ID) twAwardStructurePoints(TR_PROVINCE_ID, TR_TRACK, pts);
     // Slijtageslag-reparatie (TOTAL_WAR.md §5.4): trainen op precies het spoor
     // dat momenteel doorbroken is, herstelt het tegelijk met bouwen — geen
