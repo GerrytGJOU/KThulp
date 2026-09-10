@@ -543,7 +543,7 @@ function trProvinceOverviewHTML(p){
   const dmg = p.siege && p.siege.lastStage && (p.siege.stageDamage && p.siege.stageDamage[p.siege.lastStage] || 0);
   return `<div class="panel">
     <div style="display:flex;align-items:center;gap:12px">
-      ${twGarrisonVisualHTML(p, p.owner)}
+      ${twGarrisonVisualHTML(p, p.owner, 128, p.id)}
       <div style="flex:1"><b>${esc(nm)}</b>
         ${bonus?`<div class="note" style="margin-top:2px">🎁 ${esc(bonus.label)} — +${bonus.pct}% ${TW_TRACK_NM[bonus.track]||bonus.track}punten</div>`:""}
         ${dmg?`<div class="note warn" style="margin-top:2px">⚔ Doorbroken bij ${TW_TRACK_NM[p.siege.lastStage]||p.siege.lastStage} (${Math.round(dmg)} schade) — train op dit spoor om te herstellen.</div>`:""}

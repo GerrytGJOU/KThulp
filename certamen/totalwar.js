@@ -638,7 +638,7 @@ function twRenderTeacherPreview(){
 async function twEnsureRegistry(){
   if(_twRegistry) return _twRegistry;
   try{
-    const reg = await fetch("map/provinces.json?v=20260712c").then(r=> r.ok ? r.json() : {});
+    const reg = await fetch("map/provinces.json?v=20260910a").then(r=> r.ok ? r.json() : {});
     _twRegistry = reg;
   }catch(e){ _twRegistry = {}; }
   return _twRegistry;
@@ -1614,7 +1614,7 @@ function twProvinceInfo(id){
       : "");
   return `
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-      ${_twLiveMode ? twGarrisonVisualHTML(p, civId) : ""}
+      ${_twLiveMode ? twGarrisonVisualHTML(p, civId, 128, id) : ""}
       <div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
           <b style="font-size:16px">${esc(nm)}</b>
@@ -1634,6 +1634,17 @@ function twProvinceInfo(id){
     ${_twLiveMode ? twAttackButtonHTML(id, civId) : ""}`;
 }
 
+/* Achtergrond achter de garnizoensvisual (op verzoek, 2026-09-10) — terrein
+   per provincie (provinces.json: "terrain", zie de _meta-toelichting daar),
+   ontbreekt het veld dan "grassland" (verreweg de meeste provincies liggen
+   in Europa). Alleen deze twee, zoals gevraagd — geen aparte achtergrond per
+   klimaatzone verzinnen zonder concreet verzoek. */
+const TW_TERRAIN_BG = { grassland:"assets/battlebacks/Grassland1.png", desert:"assets/battlebacks/Desert1.png" };
+function twTerrainBg(provinceId){
+  const terrain = (_twRegistry && _twRegistry[provinceId] && _twRegistry[provinceId].terrain) || "grassland";
+  return TW_TERRAIN_BG[terrain] || TW_TERRAIN_BG.grassland;
+}
+
 /* ---- Garnizoensvisual (Training Mode-opbouw): stapelt de torenspoor-
    basislaag (boerderij/wachttoren/fort, altijd aanwezig) met de optionele
    muur- (palissade/muur) en militie-laag (militia/civ-garnizoen) erboven —
@@ -1645,8 +1656,11 @@ function twProvinceInfo(id){
    generieke #overlay/.modal-mechanisme (zie twShowGarrisonZoom()
    hieronder) — alleen de kleine versie zelf is klikbaar, de vergrote versie
    (aangeroepen mét een expliciete size) niet nogmaals, dat zou anders in
-   een oneindige zoom-in-zoom-lus kunnen resulteren. ---- */
-function twGarrisonVisualHTML(p, civId, size){
+   een oneindige zoom-in-zoom-lus kunnen resulteren. `provinceId` (optioneel)
+   bepaalt de terreinachtergrond (twTerrainBg() hierboven, ook nieuw
+   2026-09-10) — ontbreekt hij (bv. een aanroeper die 'm niet kent), dan
+   valt dit terug op de originele effen witte achtergrond. ---- */
+function twGarrisonVisualHTML(p, civId, size, provinceId){
   p = p||{};
   size = size||128;
   const layers = [
@@ -1667,8 +1681,10 @@ function twGarrisonVisualHTML(p, civId, size){
   const inset = Math.max(4, Math.round(size*0.0625)); // 8px bij de standaard 128px, schaalt mee
   const clickable = size<=128;
   const mp=Number(p.militiaPoints)||0, wp=Number(p.wallPoints)||0, tp=Number(p.towerPoints)||0;
-  return `<div style="position:relative;width:${size}px;height:${size}px;flex:0 0 auto;background:#fff;border-radius:10px;box-sizing:border-box;overflow:hidden${clickable?";cursor:zoom-in":""}"
-    ${clickable?`onclick="twShowGarrisonZoom(${mp},${wp},${tp},'${civId}')" title="Klik om te vergroten"`:""}>
+  const bg = provinceId ? twTerrainBg(provinceId) : null;
+  const bgStyle = bg ? `background:url('${bg}') center/cover` : "background:#fff";
+  return `<div style="position:relative;width:${size}px;height:${size}px;flex:0 0 auto;${bgStyle};border-radius:10px;box-sizing:border-box;overflow:hidden${clickable?";cursor:zoom-in":""}"
+    ${clickable?`onclick="twShowGarrisonZoom(${mp},${wp},${tp},'${civId}','${provinceId||""}')" title="Klik om te vergroten"`:""}>
     ${layers.map(l=>`<img src="${l.src}?${SPRITE_VER}" style="position:absolute;inset:${inset}px;width:calc(100% - ${inset*2}px);height:calc(100% - ${inset*2}px);object-fit:contain${posFor(l.type)}" alt="" onerror="this.style.display='none'">`).join("")}
   </div>`;
 }
@@ -1678,9 +1694,9 @@ function twGarrisonVisualHTML(p, civId, size){
    se eindstand-modal in games.js/battle.js voor hetzelfde patroon). Klikken
    op de vergrote afbeelding zelf sluit 'm weer — geen aparte kruisknop
    nodig, hetzelfde gebaar als 'm openen. */
-function twShowGarrisonZoom(militiaPoints, wallPoints, towerPoints, civId){
+function twShowGarrisonZoom(militiaPoints, wallPoints, towerPoints, civId, provinceId){
   const ov = el("overlay"); if(!ov) return;
-  const big = twGarrisonVisualHTML({militiaPoints,wallPoints,towerPoints}, civId, 320);
+  const big = twGarrisonVisualHTML({militiaPoints,wallPoints,towerPoints}, civId, 320, provinceId);
   ov.innerHTML = `<div style="cursor:zoom-out;text-align:center" onclick="closeOverlay()">
     ${big}
     <div class="note" style="margin-top:10px">Klik om te sluiten</div>
