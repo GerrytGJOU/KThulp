@@ -640,6 +640,14 @@ daarvoor:
   dezelfde twee plekken als de percentage-weergave hierboven
   (`twProvinceInfo()` én `SCREENS.trainingGarrison`, `training.js`), dus ook
   hier automatisch overal.
+  **Aanvulling (2026-09-10):** een klik ERNAAST (overal op de donkere
+  overlay, niet alleen op de afbeelding/tekst zelf) sluit 'm nu ook —
+  `twShowGarrisonZoom()` zet daarvoor `ov.onclick` (op `#overlay` zelf, niet
+  alleen op een innerlijke wrapper-div). `closeOverlay()` (`certamen/
+  core.js`) is aangepast om die handler bij het sluiten weer op `null` te
+  zetten, zodat een latere, ANDERE `#overlay`-gebruiker (bv. het marathon-
+  podium in `games.js`, dat eigen knoppen heeft) dit klik-ernaast-gedrag
+  niet per ongeluk overerft.
 - **✅ Terreinachtergrond achter de garnizoensvisual (nieuw, 2026-09-10).**
   De visual had een effen witte achtergrond; op verzoek staat er nu een
   terreinafbeelding achter de sprites — `Grassland1.png` of `Desert1.png`
