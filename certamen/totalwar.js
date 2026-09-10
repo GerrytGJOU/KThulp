@@ -1692,15 +1692,21 @@ function twGarrisonVisualHTML(p, civId, size, provinceId){
 /* Vergrote weergave van de garnizoensvisual, via het bestaande generieke
    #overlay-mechanisme (zie closeOverlay()/core.js en bv. bmHostBackToLobby()
    se eindstand-modal in games.js/battle.js voor hetzelfde patroon). Klikken
-   op de vergrote afbeelding zelf sluit 'm weer — geen aparte kruisknop
-   nodig, hetzelfde gebaar als 'm openen. */
+   op de vergrote afbeelding sluit 'm weer, maar ook een klik ERNAAST (overal
+   op de donkere overlay zelf, niet alleen op de afbeelding/tekst) — vandaar
+   ov.onclick (op #overlay zelf, niet alleen op de innerlijke wrapper-div)
+   i.p.v. uitsluitend een inline onclick op de inhoud. closeOverlay() zet
+   ov.onclick weer op null zodra deze sluit, zodat een latere, andere
+   #overlay-gebruiker (bv. het marathon-podium in games.js) dit
+   klik-ernaast-gedrag niet per ongeluk overerft. */
 function twShowGarrisonZoom(militiaPoints, wallPoints, towerPoints, civId, provinceId){
   const ov = el("overlay"); if(!ov) return;
   const big = twGarrisonVisualHTML({militiaPoints,wallPoints,towerPoints}, civId, 320, provinceId);
-  ov.innerHTML = `<div style="cursor:zoom-out;text-align:center" onclick="closeOverlay()">
+  ov.innerHTML = `<div style="cursor:zoom-out;text-align:center">
     ${big}
     <div class="note" style="margin-top:10px">Klik om te sluiten</div>
   </div>`;
+  ov.onclick = closeOverlay;
   ov.classList.add("show");
 }
 

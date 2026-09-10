@@ -656,7 +656,12 @@ function _achPopDismiss(){
   bg.classList.remove("show");
   setTimeout(_achPopNext,400);
 }
-function closeOverlay(){ el("overlay").classList.remove("show"); }
+// .onclick weer op null: een aanroeper die #overlay-elk-klik-sluit-gedrag
+// wil (bv. twShowGarrisonZoom(), totalwar.js) zet die hier zelf op — zonder
+// deze reset zou die handler blijven hangen en per ongeluk ook een LATERE,
+// ongerelateerde overlay (bv. het marathon-podium in games.js) laten sluiten
+// op een klik buiten de eigen knoppen.
+function closeOverlay(){ const ov=el("overlay"); ov.classList.remove("show"); ov.onclick=null; }
 
 
 /* ============================================================================
