@@ -640,6 +640,25 @@ daarvoor:
   dezelfde twee plekken als de percentage-weergave hierboven
   (`twProvinceInfo()` én `SCREENS.trainingGarrison`, `training.js`), dus ook
   hier automatisch overal.
+- **✅ Terreinachtergrond achter de garnizoensvisual (nieuw, 2026-09-10).**
+  De visual had een effen witte achtergrond; op verzoek staat er nu een
+  terreinafbeelding achter de sprites — `Grassland1.png` of `Desert1.png`
+  (`certamen/assets/battlebacks/`, hergebruikt van de bestaande Boss
+  Battle-veldslagdecors, zie `BATTLE_BACKGROUNDS` in `battle.js`), gekozen
+  per provincie via een nieuw `"terrain"`-veld in `provinces.json` ("desert"
+  op de 11 aride/woestijnprovincies — Aegyptus, Arabia, Africa
+  Proconsularis, beide Mauretanies, Judea, Syria, Mesopotamia, Creta et
+  Cyrene, Cappadocia, Galatia — ontbreekt het veld, dan "grassland", de
+  overige 35). `twTerrainBg(provinceId)`/`twGarrisonVisualHTML()`
+  (`certamen/totalwar.js`) lezen dit uit `_twRegistry`; `provinceId` is
+  daarom als vierde, optionele parameter toegevoegd aan
+  `twGarrisonVisualHTML()` (en doorgegeven aan `twShowGarrisonZoom()` voor
+  de vergrote versie hierboven) — ontbreekt hij, dan blijft de originele
+  effen witte achtergrond gelden. De interne cache-busting-versie op de
+  `provinces.json`-fetch in `twEnsureRegistry()` moest hierbij ook omhoog
+  (`?v=20260910a`) — anders zou een al bezocht toestel het nieuwe
+  `terrain`-veld niet zien, los van de gewone script-cache-busting in
+  `index.html`.
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 
