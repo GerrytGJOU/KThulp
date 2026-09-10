@@ -627,6 +627,19 @@ daarvoor:
   een lopend gevecht om toch niet kent. Gedeeld door zowel de docentenkaart
   als de publieke/leerlingkaart (beide roepen dezelfde `twProvinceInfo()`
   aan), dus meteen overal zichtbaar.
+- **✅ Garnizoensvisual uitvergroten met een klik (nieuw, 2026-09-10).**
+  `twGarrisonVisualHTML()` (`certamen/totalwar.js`) accepteert nu een
+  optionele `size`-parameter (default 128); de standaard, kleine versie is
+  klikbaar (`cursor:zoom-in`) en opent via `twShowGarrisonZoom()` een 320px-
+  versie in het generieke `#overlay`/`.modal`-mechanisme dat elders in de
+  app al bestaat (zie `closeOverlay()`, `certamen/core.js`) — klikken op de
+  vergrote afbeelding zelf sluit 'm weer. De vergrote versie roept
+  `twGarrisonVisualHTML()` zelf aan met een expliciete `size`, en is
+  daardoor bewust NIET zelf nogmaals klikbaar (`clickable = size<=128`) —
+  anders zou dat een oneindige zoom-in-zoom-lus kunnen geven. Gedeeld door
+  dezelfde twee plekken als de percentage-weergave hierboven
+  (`twProvinceInfo()` én `SCREENS.trainingGarrison`, `training.js`), dus ook
+  hier automatisch overal.
 
 ### 5.4 De "slijtageslag" (meerdere-fasen-belegering)
 
