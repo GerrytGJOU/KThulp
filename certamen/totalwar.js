@@ -627,7 +627,7 @@ function twRenderTeacherPreview(){
     bewaard in de <a href="#" onclick="event.preventDefault();go('totalWarHallOfFame')" style="color:var(--hi)">Hall of Fame</a>
     (eindstand, winnaar, hoogtepunten) — niets gaat verloren. Klas↔beschaving-
     koppelingen blijven staan. Doe dit bijvoorbeeld eens per schooljaar.</div>
-    <button class="btn btn-ghost btn-block" style="margin-top:10px;color:#e07060;border-color:rgba(90,18,12,.4)" onclick="twStartNewSeason()">🔄 Nieuw seizoen starten</button>
+    <button class="btn btn-ghost btn-block" style="margin-top:10px;color:#e07060;border-color:rgba(90,18,12,.4)" onclick="go('totalWarNewSeason')">🔄 Nieuw seizoen starten</button>
   </div>
   ${foot()}`);
   twLoadMap(true, true);
@@ -1196,22 +1196,14 @@ async function twRenderHighlights(){
    beschaving-koppelingen (klasCivs) blijven bewust ongewijzigd — dat is een
    losstaande, permanente toewijzing (zie twEnsureCampaignSeeded()/§7.1).
    Dubbele bevestiging (typen) omdat dit onomkeerbaar is. ---- */
-async function twStartNewSeason(){
+/* ---- Nieuw seizoen starten: sinds 2026-09-11 een echt formulierscherm
+   (SCREENS.totalWarNewSeason hieronder) i.p.v. een keten van window.prompt()-
+   dialogen — dat schaalde niet meer zodra er per-seizoen-toggles (siege
+   weapons, seizoen 2 e.v.) bij moesten komen. twStartNewSeason() zelf doet nu
+   geen enkele prompt() meer en neemt alle keuzes als parameter aan; het
+   scherm doet zelf de "NIEUW SEIZOEN"-tekstbevestiging vóór het aanroept. ---- */
+async function twStartNewSeason(nextNum, title, siegeWeaponsEnabled){
   if(!initFirebase() || !_twOwner) return;
-  const suggestedNum = ((_twSeason&&_twSeason.number)||1)+1;
-  const typed = prompt(`Nieuw seizoen starten? Dit reset de hele kaart (alle gebieden terug naar hun thuisland/neutraal). Het huidige seizoen wordt eerst bewaard in de Hall of Fame. Klas↔beschaving-koppelingen blijven staan.\n\nTyp NIEUW SEIZOEN om te bevestigen:`);
-  if((typed||"").trim().toUpperCase()!=="NIEUW SEIZOEN"){
-    if(typed!==null) toast("Geannuleerd","Er is niets gereset.");
-    return;
-  }
-  // Seizoensnummer is bewust aanpasbaar (niet blind +1): zo kan een docent een
-  // per ongeluk verkeerd genummerd testseizoen corrigeren bij de eerstvolgende
-  // echte reset (bv. "seizoen 1" was eigenlijk nog een test → hernummer de
-  // nieuwe start alsnog naar 1 i.p.v. 2).
-  const numInput = (prompt("Seizoensnummer voor de nieuwe veldtocht:", String(suggestedNum))||"").trim();
-  const nextNum = /^\d+$/.test(numInput) ? parseInt(numInput,10) : suggestedNum;
-  const title = (prompt("Titel voor Seizoen "+nextNum+" (leeg = automatisch):","")||"").trim()
-    || TW_SEASON_TITLES[Math.max(0,nextNum-1)%TW_SEASON_TITLES.length];
   // Zelfde regel als in twEnsureCampaignSeeded(): een volk zonder gekoppelde
   // klas dit seizoen krijgt zijn basisprovincie niet — die blijft neutraal,
   // zodat het volk pas via de bestaande "rebellen"-opstand (§5.7) een eerste
@@ -1263,6 +1255,7 @@ async function twStartNewSeason(){
       endedAt: FBNet.serverTime(), finalOwner, klasCivs: klasCivsSnap.val()||{}, klasSizeAtEnd,
       winnerCivId, winnerProvinces: winnerCivId ? counts[winnerCivId] : 0,
       stats: statsNowSnap.val()||null,
+      featureFlags: endingSeason.featureFlags||null,
     };
   }
   Object.keys(_twRegistry||{}).forEach(id=>{
@@ -1281,11 +1274,78 @@ async function twStartNewSeason(){
     upd[twPath(_twOwner,"civs/"+civId+"/comebackWiped")] = null;
   });
   upd[twPath(_twOwner,"stats")] = null;
-  upd[twPath(_twOwner,"season")] = { number:nextNum, title, startedAt:FBNet.serverTime() };
+  upd[twPath(_twOwner,"season")] = { number:nextNum, title, startedAt:FBNet.serverTime(),
+    featureFlags: { siegeWeapons: !!siegeWeaponsEnabled } };
   try{
     await fbDB.ref().update(upd);
     toast("Nieuw seizoen gestart","Seizoen "+nextNum+": "+title);
+    if(_screen==="totalWarNewSeason") go("totalWarPreview");
   }catch(e){ toast("Mislukt", (e&&e.message)||""); }
+}
+
+/* ------------------------------------------------------------
+   SCHERM: nieuw seizoen starten (formulier, sinds 2026-09-11)
+   Vervangt de oude prompt()-keten van twStartNewSeason() — reikt de docent
+   dezelfde drie keuzes aan (seizoensnummer, titel, bevestiging) plus de
+   nieuwe per-seizoen-toggle(s), te beginnen met siege weapons (seizoen 2,
+   feature zelf nog niet gebouwd — deze toggle legt alvast de infrastructuur
+   vast zodat latere fases er meteen op kunnen lezen via
+   _twSeason.featureFlags.siegeWeapons).
+   ------------------------------------------------------------ */
+SCREENS.totalWarNewSeason = function(){
+  document.body.classList.remove("greek");
+  const suggestedNum = ((_twSeason&&_twSeason.number)||1)+1;
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('totalWarPreview')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>🔄 Nieuw seizoen starten</h2>
+  </div>
+  <div class="panel" style="border-color:rgba(90,18,12,.4)">
+    <div class="note">Dit reset de hele kaart (alle gebieden terug naar hun
+    thuisland/neutraal). Het huidige seizoen wordt eerst bewaard in de Hall of
+    Fame. Klas↔beschaving-koppelingen blijven staan.</div>
+  </div>
+  <div class="panel">
+    <label class="fld">Seizoensnummer</label>
+    <input id="twnsNum" type="number" min="1" step="1" value="${suggestedNum}"
+      style="width:100%;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
+    <div class="note" style="margin-top:4px">Bewust aanpasbaar (niet blind
+    +1): zo kun je een per ongeluk verkeerd genummerd testseizoen bij de
+    eerstvolgende echte reset alsnog corrigeren.</div>
+
+    <label class="fld" style="margin-top:14px">Titel</label>
+    <input id="twnsTitle" type="text" placeholder="Leeg = automatisch"
+      style="width:100%;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
+  </div>
+  <div class="panel">
+    <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
+      <input id="twnsSiegeWeapons" type="checkbox" style="width:18px;height:18px">
+      <span>⚔️ Siege weapons dit seizoen</span>
+    </label>
+    <div class="note" style="margin-top:6px">Nog te bouwen feature (seizoen
+    2) — met deze toggle kun je nu al vastleggen of een seizoen ermee speelt,
+    zodra de feature zelf klaar is.</div>
+  </div>
+  <div class="panel">
+    <label class="fld">Bevestiging</label>
+    <input id="twnsConfirm" type="text" placeholder="Typ NIEUW SEIZOEN"
+      style="width:100%;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
+    <button class="btn btn-ghost btn-block" style="margin-top:12px;color:#e07060;border-color:rgba(90,18,12,.4)" onclick="twSubmitNewSeason()">🔄 Seizoen starten</button>
+    <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('totalWarPreview')">Annuleren</button>
+  </div>
+  ${foot()}`);
+};
+
+function twSubmitNewSeason(){
+  const confirmVal = (el("twnsConfirm").value||"").trim().toUpperCase();
+  if(confirmVal!=="NIEUW SEIZOEN"){ toast("Niet bevestigd","Typ precies NIEUW SEIZOEN om te bevestigen."); return; }
+  const suggestedNum = ((_twSeason&&_twSeason.number)||1)+1;
+  const numInput = (el("twnsNum").value||"").trim();
+  const nextNum = /^\d+$/.test(numInput) ? parseInt(numInput,10) : suggestedNum;
+  const title = (el("twnsTitle").value||"").trim()
+    || TW_SEASON_TITLES[Math.max(0,nextNum-1)%TW_SEASON_TITLES.length];
+  const siegeWeaponsEnabled = !!el("twnsSiegeWeapons").checked;
+  twStartNewSeason(nextNum, title, siegeWeaponsEnabled);
 }
 
 /* ---- Klas↔beschaving-koppeling grijpt sinds 2026-09-07 ook meteen in op de

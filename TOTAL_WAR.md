@@ -986,6 +986,54 @@ die (en elke andere leerling die het daarna ook tegenkomt) het eerbewijs, en
 wordt de vlag teruggezet. Geen Firebase-rules-wijziging nodig (`totalwar/civs`
 had al `.write:true`).
 
+### 5.8 Seizoensstart-scherm + per-seizoen instellingen (`featureFlags`, nieuw 2026-09-11)
+
+**✅ Gebouwd, op verzoek** — voorbereiding voor seizoen 2 (zie de brainstorm
+in het gesprek van 2026-09-10/11: siege weapons, bos-terrein, verkenning,
+seizoensoverschrijdende eer-titels). `twStartNewSeason()` gebruikte tot dan
+een keten van `window.prompt()`-dialogen (seizoensnummer, titel, "NIEUW
+SEIZOEN"-bevestiging) — onhandig zodra er per-seizoen-toggles bij moeten
+komen. Vervangen door een echt formulierscherm, `SCREENS.totalWarNewSeason`
+(`certamen/totalwar.js`), bereikbaar via dezelfde "🔄 Nieuw seizoen
+starten"-knop in `twRenderTeacherPreview()` (nu `go('totalWarNewSeason')`
+i.p.v. een directe aanroep). Het scherm doet zelf de tekstbevestiging en
+roept dan `twStartNewSeason(nextNum, title, siegeWeaponsEnabled)` aan —
+`twStartNewSeason()` zelf bevat geen `prompt()` meer, alle keuzes komen als
+parameter binnen.
+
+Nieuw datamodel-veld: `season/featureFlags` (bv. `{siegeWeapons: true}`),
+gezet via de toggle op het formulier. Dit wordt de canonieke plek waar
+toekomstige per-seizoen-features op controleren (`_twSeason.featureFlags.
+siegeWeapons`, nog niet uitgelezen door enige gameplay-code — dat is aan de
+feature zelf, later). Bij een seizoenswissel archiveert `twStartNewSeason()`
+de `featureFlags` van het AFLOPENDE seizoen mee in `history/{nummer}` (naast
+`klasSizeAtEnd` e.d.), zodat een Hall-of-Fame-seizoen achteraf laat zien
+welke features toen aanstonden.
+
+**Vastgelegde scope voor seizoen 2** (brainstorm 2026-09-10/11, nog NIET
+gebouwd — alleen de toggle-infrastructuur hierboven staat klaar):
+- **Siege weapons**: 2-3 types, elk één eigen effect (bv. stormram = vaste
+  HP-korting vooraf, belegeringstoren = synergiedrempel omlaag, catapult =
+  extra rondes vóór de rondelimiet). Eenmalig verbruikt per aanval (moet na
+  gebruik herbouwd worden), losstaande bouwprogressie naast muur/fort/
+  garnizoen, klasgrootte-proportionele bouwkosten (zelfde `TW_STAGE_HP_REF_N`-
+  patroon als §3.6).
+- **Bos als derde terreintype** naast grasland/woestijn (§5.3-achtergrond).
+  Achtergrond wordt een gelaagde compositie: `forest1.png` (grasvloer) +
+  `forest2.png` (bomen erbovenop) — zelfde gelaagde aanpak als de
+  verdedigingswerk-sprites. Terrein beïnvloedt de effectiviteit van siege
+  weapons: grasland best, woestijn midden, bos slechtst.
+- **Verkenning**: kost bouwpunten, toont de exacte HP/opbouw én welke siege
+  weapons de verdedigende provincie heeft.
+- **Seizoensoverschrijdende eer-titels**: een civ/klas die 2 seizoenen op rij
+  hetzelfde record haalt (alleen "grootste rijk" en "grootste comeback", zie
+  §11) verdient een badge in de Hall of Fame — bouwt puur voort op bestaande
+  archiefdata (`history/*`), geen nieuwe gameplay-mechaniek.
+
+Afgesproken bouwvolgorde: eerst dit seizoensstart-scherm (✅ gedaan), dan
+siege weapons zelf, dan terrein/verkenning/eer-titels — elke fase apart
+gepland en live getest voor oplevering.
+
 ---
 
 ## 6. Progressie & economie — drie gescheiden potjes
