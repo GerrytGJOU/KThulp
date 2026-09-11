@@ -156,7 +156,7 @@ function loadSheetJS(){
 }
 function confirmSource(){
   const pool = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang) : buildPool(DRAFT);
-  if(pool.length<4){ toast("Te weinig woorden","Kies een groter bereik/meer werkwoorden of tijden."); return; }
+  if(pool.length<25){ toast("Te weinig woorden","Kies een groter bereik/meer werkwoorden of tijden (minimaal 25 woorden)."); return; }
   if(DRAFT.game==="battle"){ go("battleHostSettings"); return; }
   go("hostSettings");
 }

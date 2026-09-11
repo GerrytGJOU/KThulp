@@ -77,23 +77,42 @@ function setStatus(msg){ document.getElementById('status').textContent = msg; }
 
 async function load(){
   setStatus("Laden...");
-  const [svgTxt, json] = await Promise.all([
-    fetch('provinces.svg?_=' + Date.now()).then(r=>r.text()),
-    fetch('provinces.json?_=' + Date.now()).then(r=>r.json()),
-  ]);
-  REGISTRY = json;
-  if(!REGISTRY._seaRoutePoints) REGISTRY._seaRoutePoints = {};
-  const wrap = document.getElementById('mapWrap');
-  wrap.innerHTML = svgTxt;
-  const svgEl = wrap.querySelector('svg');
-  if(svgEl){
-    svgEl.removeAttribute('width');
-    svgEl.removeAttribute('height');
-    svgEl.setAttribute('style','width:100%;height:auto;display:block');
+  try{
+    const [svgRes, jsonRes] = await Promise.all([
+      fetch('provinces.svg?_=' + Date.now()),
+      fetch('provinces.json?_=' + Date.now()),
+    ]);
+    if(!svgRes.ok) throw new Error("provinces.svg: HTTP "+svgRes.status);
+    if(!jsonRes.ok) throw new Error("provinces.json: HTTP "+jsonRes.status);
+    const [svgTxt, json] = await Promise.all([svgRes.text(), jsonRes.json()]);
+    REGISTRY = json;
+    if(!REGISTRY._seaRoutePoints) REGISTRY._seaRoutePoints = {};
+    const wrap = document.getElementById('mapWrap');
+    wrap.innerHTML = svgTxt;
+    const svgEl = wrap.querySelector('svg');
+    if(svgEl){
+      svgEl.removeAttribute('width');
+      svgEl.removeAttribute('height');
+      svgEl.setAttribute('style','width:100%;height:auto;display:block');
+    }
+    computeRoutes();
+    redraw();
+    setStatus(ROUTES.length + " zeeroutes geladen.");
+  }catch(e){
+    // Meest voorkomende oorzaak (zelfde valkuil als twLoadMap() in
+    // totalwar.js): dit bestand rechtstreeks als los file://-bestand openen
+    // (dubbelklikken in Verkenner) i.p.v. via een webserver — dan blokkeert
+    // de browser fetch() naar de andere bestanden in dezelfde map, en bleef
+    // de pagina zonder duidelijke foutmelding leeg/zwart.
+    const wrap = document.getElementById('mapWrap');
+    wrap.innerHTML = '<div style="padding:20px;color:#f88;max-width:600px">'
+      + '<b>Kon de kaart niet laden</b> (' + (e && e.message ? e.message : String(e)) + ').<br><br>'
+      + 'Dit bestand moet via een webserver geopend worden, niet als los bestand '
+      + '(dubbelklikken in Verkenner geeft dit probleem). Open in plaats daarvan '
+      + '<a href="https://GerrytGJOU.github.io/KThulp/certamen/map/searoute-editor.html" '
+      + 'style="color:#e8c97a">de live versie op GitHub Pages</a>.</div>';
+    setStatus("Laden mislukt — zie de melding op de kaart.");
   }
-  computeRoutes();
-  redraw();
-  setStatus(ROUTES.length + " zeeroutes geladen.");
 }
 
 // Zelfde opsomming/sleutel als MapAPI.drawSeaRoutes() (provinces.js) —
