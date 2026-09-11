@@ -22,7 +22,12 @@
      ingewikkeld maken). In plaats daarvan groeit de SVG se eigen pixelbreedte
      mee met het zoomniveau — getBoundingClientRect()/getScreenCTM() geven dan
      vanzelf de juiste, grotere coördinaten terug, geen aparte zoom-wiskunde nodig. */
-  #mapWrap{ position:relative; display:inline-block; max-width:calc(100vw - 312px); max-height:calc(100vh - 140px); overflow:auto; vertical-align:top; background:#9fc7f4; }
+  /* min-width/min-height als vangnet: in een ingesloten/vernauwde weergave
+     (bv. een gedeeld browserpaneel) kan 100vw/100vh soms (bijna) 0 opleveren
+     — zonder ondergrens zou #mapWrap dan tot een onzichtbaar kiertje
+     inklappen (overflow:auto knipt alles wat erbuiten valt weg), waardoor de
+     grote sleeppunten wél in de DOM bestaan maar nergens zichtbaar zijn. */
+  #mapWrap{ position:relative; display:inline-block; max-width:calc(100vw - 312px); min-width:320px; max-height:calc(100vh - 140px); min-height:400px; overflow:auto; vertical-align:top; background:#9fc7f4; }
   #mapWrap svg{ display:block; }
   /* Kleine, niet-interactieve referentiestippen op ALLE eindpunten — puur ter
      oriëntatie. pointer-events:none zodat ze nooit een sleepactie kunnen
