@@ -707,7 +707,7 @@ function twRenderTeacherPreview(){
 async function twEnsureRegistry(){
   if(_twRegistry) return _twRegistry;
   try{
-    const reg = await fetch("map/provinces.json?v=20260910a").then(r=> r.ok ? r.json() : {});
+    const reg = await fetch("map/provinces.json?v=20260911a").then(r=> r.ok ? r.json() : {});
     _twRegistry = reg;
   }catch(e){ _twRegistry = {}; }
   return _twRegistry;

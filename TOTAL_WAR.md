@@ -910,6 +910,27 @@ voor de hand liggende routes toegevoegd: `gallia_narbonensis` ↔ `italia`
 (Massilia-Ostia, langs de kust in plaats van over de Alpen) en `judea` ↔
 `aegyptus` (Caesarea Maritima-Alexandria).
 
+**Handmatige eindpunt-overrides (nieuw, 2026-09-11).** Een zeeroute had van
+zichzelf geen opgeslagen coördinaten — de lijn werd altijd getekend tussen de
+automatisch berekende zwaartepunten van de twee provincies, wat soms niet naar
+de kust of een logische plek wees. `provinces.json` heeft nu een extra
+top-level sleutel `_seaRoutePoints` (naast `_meta`): per route-paar (sleutel
+`[id,otherId].sort().join("|")`, zelfde dedup-sleutel als `drawSeaRoutes()`
+al intern gebruikte) optioneel `{"a":{"x":..,"y":..},"b":{"x":..,"y":..}}`
+(a = alfabetisch eerste provincie-ID) in dezelfde lokale SVG-coördinaten­ruimte
+als `cities[].x/y`. `drawSeaRoutes()` gebruikt een override als die bestaat,
+anders (de meeste routes, nog) de oude live-berekening — 100% achterwaarts
+compatibel.
+
+Bewerken kan via een nieuwe devtool, `certamen/map/searoute-editor.html`
+(zelfde recept als de Chronica-pin-editor): laadt de echte `provinces.svg`/
+`provinces.json`, tekent alle 26 huidige zeeroutes met sleepbare eindpunt-
+handvatten (rood = alfabetisch eerste provincie, blauw = de andere), een
+"Reset naar automatisch"-knop per route, en een exportknop die de volledige
+`_seaRoutePoints`-json in een tekstvak zet om te kopiëren/opsturen — er is
+geen schrijftoegang tot het bestandssysteem vanuit een statisch gehoste
+GitHub Pages-app, dus opslaan blijft een bewuste, losse kopieerstap.
+
 ### 5.7 Rebellen: een volledig uitgeroeide beschaving verdwijnt niet (nieuw, 2026-07-08)
 
 Verliest een beschaving écht al haar provincies (elke provincie is door

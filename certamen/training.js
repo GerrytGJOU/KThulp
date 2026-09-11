@@ -394,7 +394,7 @@ function trNextQuestion(){
     el("trTyped").focus();
     return;
   }
-  TR_Q = TR_DRAFT.source==="verbforms" ? vfqMakeQuestion(TR_POOL) : makeQuestion(trPersonalPool(), w=>2*(TR_WRONG_COUNTS[w.la]||0));
+  TR_Q = TR_DRAFT.source==="verbforms" ? vfqMakeQuestion(TR_POOL) : makeQuestion(trPersonalPool(), w=>2*(TR_WRONG_COUNTS[w.la]||0), TR_POOL);
   if(TR_DRAFT.source!=="verbforms" && TR_Q.la) trTrackRecent(TR_Q.la);
   const kick = TR_DRAFT.source==="verbforms" ? "Welke vertaling hoort bij deze vorm?" : `Vertaal het ${TR_DRAFT.lang==="el"?"Griekse":"Latijnse"} woord`;
   const woord = TR_DRAFT.source==="verbforms" ? TR_Q.vorm : TR_Q.la;
