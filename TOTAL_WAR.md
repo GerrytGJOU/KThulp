@@ -1012,12 +1012,7 @@ welke features toen aanstonden.
 
 **Vastgelegde scope voor seizoen 2** (brainstorm 2026-09-10/11, nog NIET
 gebouwd — alleen de toggle-infrastructuur hierboven staat klaar):
-- **Siege weapons**: 2-3 types, elk één eigen effect (bv. stormram = vaste
-  HP-korting vooraf, belegeringstoren = synergiedrempel omlaag, catapult =
-  extra rondes vóór de rondelimiet). Eenmalig verbruikt per aanval (moet na
-  gebruik herbouwd worden), losstaande bouwprogressie naast muur/fort/
-  garnizoen, klasgrootte-proportionele bouwkosten (zelfde `TW_STAGE_HP_REF_N`-
-  patroon als §3.6).
+- **Siege weapons** — ✅ gebouwd, zie §5.9 hieronder.
 - **Bos als derde terreintype** naast grasland/woestijn (§5.3-achtergrond).
   Achtergrond wordt een gelaagde compositie: `forest1.png` (grasvloer) +
   `forest2.png` (bomen erbovenop) — zelfde gelaagde aanpak als de
@@ -1030,9 +1025,77 @@ gebouwd — alleen de toggle-infrastructuur hierboven staat klaar):
   §11) verdient een badge in de Hall of Fame — bouwt puur voort op bestaande
   archiefdata (`history/*`), geen nieuwe gameplay-mechaniek.
 
-Afgesproken bouwvolgorde: eerst dit seizoensstart-scherm (✅ gedaan), dan
-siege weapons zelf, dan terrein/verkenning/eer-titels — elke fase apart
+Afgesproken bouwvolgorde: eerst dit seizoensstart-scherm (✅), dan siege
+weapons zelf (✅, §5.9), dan terrein/verkenning/eer-titels — elke fase apart
 gepland en live getest voor oplevering.
+
+### 5.9 Siege weapons (nieuw, 2026-09-11)
+
+**✅ Gebouwd.** Een beschaving kan in haar EIGEN provincie een siege weapon
+bouwen — losstaand van muur/fort/garnizoen (geen trade-off, gewoon een extra
+"spoor"), en zet 'm bij een aanval op een AANGRENZENDE vijandelijke provincie
+eenmalig in voor een aanvalsvoordeel. Alleen actief als het lopende seizoen
+`season/featureFlags.siegeWeapons===true` heeft (§5.8) — bij een "gewoon"
+seizoen verandert er niets aan de bestaande flow.
+
+**Bouwen (Training Mode)**: hergebruikt het bestaande bouwmechanisme
+volledig — geen nieuwe economie. Drie nieuwe "sporen" naast militie/muur/
+toren, met dezelfde `5/√klasgrootte`-puntenschaling (`trScoreAnswer()`,
+`certamen/training.js`) en dezelfde `twAwardStructurePoints()`-transactie.
+Anders dan de bestaande drie sporen zijn siege weapons AAN/UIT (geen drie
+bouwstadia): bij `TW_SIEGE_READY_POINTS` (600 punten) is er geklaar. Nieuw,
+plat per-provincie datamodel (`provinces/{id}`, naast owner/militiaPoints/
+wallPoints/towerPoints): `ramPoints`, `siegeTowerPoints`, `catapultPoints` —
+toegevoegd aan alle vier plekken die een provincie-node volledig herschrijven
+(seed/reset/vlaggenschip-toewijzing/vrijgave). Bij verovering blijven deze
+velden bewust ongemoeid, precies zoals militiaPoints/wallPoints/towerPoints
+dat nu ook al doen (de veroveraar erft de bestaande bouwstand).
+
+**Drie types, elk precies één effect** (`TW_SIEGE_WEAPONS`, `certamen/
+totalwar.js`), bewust niet te combineren of stapelen:
+- 🐏 **Stormram**: −20% (`TW_SIEGE_RAM_HP_CUT_PCT`) HP vooraf op de EERSTE
+  stage van deze ene aanvalspoging (`bmStartBossGame()`, `certamen/battle.js`)
+  — geldt niet meer bij een latere stage-overgang binnen dezelfde doorlopende
+  poging, want dan is de ram al verbruikt.
+- 🗼 **Belegeringstoren**: de synergiedrempel/deelnamebonus 30%
+  (`TW_SIEGE_TOWER_SYNERGY_FACTOR`) lager dan normaal. `twSiegeScaledThreshold()`
+  kreeg hiervoor een derde, optionele parameter (extra vermenigvuldigfactor,
+  default 1 = ongewijzigd) — gebruikt door zowel `bmCalcSynergy()` als de
+  `chainTable`-opbouw in `bmResolve()` (`certamen/battle.js`).
+- 🎯 **Catapult**: +10 rondes (`TW_SIEGE_CATAPULT_BONUS_ROUNDS`) vóór de
+  rondelimiet (§5.4.2) voor deze ene aanvalspoging — `twEffectiveSiegeMaxRounds(gp)`
+  vervangt de kale `TW_SIEGE_MAX_ROUNDS`-constante in zowel de rondelimiet-
+  check (`bmResolve()`) als de statusregel (`bmBossStatusNote()`,
+  `certamen/bossbattle.js`).
+
+**Inzetten**: `twAttackButtonHTML()` toont — alleen als de toggle aanstaat en
+er ergens een klaarstaand type is — een keuzeveld vóór de "Val aan"-knop.
+`twFindSiegeWeaponReady(targetId, attackerCiv)` scant de eigen provincies die
+aan het doelwit grenzen (zelfde `neighbors`/`seaRoutes`-logica als de
+grens-eis zelf) en geeft per type het eerste gevonden brongebied terug. Geen
+selector bij een opstand/rebellenaanval (§5.7) — bewust simpel gehouden.
+**Verbruik**: `twStartAttack()` zet `BM_META.garrisonProvince.siegeWeaponUsed`
+en schrijft het brongebied se punten meteen terug naar 0 — **bij
+aanvalsstart, ongeacht winst/verlies/terugtrekking**. Een class die verliest
+moet de siege weapon dus opnieuw bouwen voor een volgende poging.
+
+**Bewust nog niet gebouwd**:
+- **Terreineffectiviteit** — deze fase geeft elk type een vaste sterkte,
+  ongeacht terrein. Zodra bos als terreintype bestaat (§5.3), volgt de
+  grasland/woestijn/bos-multiplier op siege weapons als aparte fase.
+- **Sprite-afbeeldingen** — Gerben levert deze later zelf aan, op precies deze
+  paden: `assets/bosses/ram.png`, `assets/bosses/siegetower.png`,
+  `assets/bosses/catapult.png` (één plaatje per type, geen tier0/1/2 zoals
+  bij de bestaande structuren, want siege weapons zijn AAN/UIT). Tot die tijd
+  toont Training Mode een tekst/voortgangsbalk-fallback (`onerror` verbergt
+  het ontbrekende bestand geruisloos, geen crash).
+- **Zichtbaarheid voor de tegenstander** — een provincie se siege-weapon-
+  voortgang staat NERGENS in het publieke `twProvinceInfo()`-paneel: alleen de
+  eigen klas ziet haar voortgang (Training Mode), en alleen de aanvaller ziet
+  welke ready siege weapons ze zelf kunnen inzetten. Bewust zo, zodat de
+  geplande verkenningsfeature hierboven straks iets te onthullen heeft — geen
+  harde beveiligingsgrens (de data is net als de rest van `/totalwar` publiek
+  leesbaar), gewoon geen UI die het toont.
 
 ---
 

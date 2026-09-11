@@ -625,9 +625,13 @@ function bmCalcSynergy(players,team){
   // hoogste tier voor een grote klas juist andersom onbereikbaar worden
   // (bv. bij N=40 zou de ongeklemde drempel 14 zijn, letterlijk onhaalbaar).
   const isSiege=!!BM_META?.garrisonProvince;
+  // Belegeringstoren (TOTAL_WAR.md §5.9): drempel nog een keer verlaagd
+  // bovenop de gewone N-schaling, ongewijzigd (factor 1) buiten een siege
+  // weapon-inzet om.
+  const towerActive = isSiege && BM_META.garrisonProvince.siegeWeaponUsed==="tower";
   let bonus=0;
   for(const tier of BM_SYNERGY){
-    const need=isSiege?Math.min(8,twSiegeScaledThreshold(tier.minClasses,teamPlayers.length)):tier.minClasses;
+    const need=isSiege?Math.min(8,twSiegeScaledThreshold(tier.minClasses,teamPlayers.length,towerActive?TW_SIEGE_TOWER_SYNERGY_FACTOR:1)):tier.minClasses;
     if(unique>=need)bonus=tier.beBonus;
   }
   return bonus;
@@ -1667,7 +1671,12 @@ async function bmStartBossGame(){
       const stageMax=twStageMaxHP(gp, stageKey, N);
       const dmg=(gp.siege && gp.siege.stageDamage && gp.siege.stageDamage[stageKey])||0;
       bossMaxHP=stageMax;
-      bossStartHP=Math.max(1, stageMax-dmg);
+      // Stormram (TOTAL_WAR.md §5.9): eenmalige HP-korting vooraf, alleen hier
+      // (aanvalsstart) — een latere stage-overgang (zie bmResolve() hieronder)
+      // roept twStageMaxHP() ook aan maar NIET deze aftrek, want de ram is dan
+      // al verbruikt.
+      const ramCut = gp.siegeWeaponUsed==="ram" ? Math.round(stageMax*TW_SIEGE_RAM_HP_CUT_PCT/100) : 0;
+      bossStartHP=Math.max(1, stageMax-dmg-ramCut);
     }
     // stageKeys.length===0: niks ooit getraind — generieke basisformule
     // hierboven blijft ongewijzigd staan, geen belegeringsfases.
@@ -3145,8 +3154,11 @@ async function bmResolve(roundN){
     if(isBossFight){
       const isSiege=!!BM_META?.garrisonProvince;
       const teamACount=Object.values(players).filter(p=>p.team==="A").length;
+      // Belegeringstoren (TOTAL_WAR.md §5.9): zelfde extra factor als
+      // bmCalcSynergy() hierboven, ook op de deelnamebonus.
+      const towerActive = isSiege && BM_META.garrisonProvince.siegeWeaponUsed==="tower";
       const chainTable=isSiege
-        ? BM_CHAIN_BONUS.map(t=>({min:twSiegeScaledThreshold(t.min,teamACount),bonus:t.bonus}))
+        ? BM_CHAIN_BONUS.map(t=>({min:twSiegeScaledThreshold(t.min,teamACount,towerActive?TW_SIEGE_TOWER_SYNERGY_FACTOR:1),bonus:t.bonus}))
         : BM_CHAIN_BONUS;
       const tier=chainTable.find(t=>chainContributors.size>=t.min);
       if(tier){
@@ -3363,7 +3375,7 @@ async function bmResolve(roundN){
     // gewoon verlies (winner="B" → twResolveSiege() se else-tak): de tot nu
     // toe toegebrachte schade blijft via de bestaande slijtageslag-reparatie
     // (§5.4) gewoon staan, precies zoals gevraagd.
-    if(gp && roundN>=TW_SIEGE_MAX_ROUNDS){
+    if(gp && roundN>=twEffectiveSiegeMaxRounds(gp)){
       await fbDB.ref("rooms/"+BM_CODE+"/state").update({status:"finished",winner:"B",timedOut:true});
       twResolveSiege("B",curStageKey||"towers",tB.maxHealth,newHB,players).catch(()=>{});
       return;

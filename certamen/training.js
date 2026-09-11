@@ -61,7 +61,15 @@ const TR_TRACK_LABELS = {
   militia: { nm:"Militie/Garnizoen trainen", icon:"⚔️" },
   towers:  { nm:"Wachttoren bouwen",         icon:"🗼" },
   walls:   { nm:"Palissade bouwen",          icon:"🪵" },
+  ram:      { nm:"Stormram bouwen",         icon:"🐏" },
+  tower:    { nm:"Belegeringstoren bouwen", icon:"🗼" },
+  catapult: { nm:"Catapult bouwen",         icon:"🎯" },
 };
+// Siege weapons (TOTAL_WAR.md §5.9, seizoen 2) zijn alleen trainbaar als het
+// lopende seizoen dat toestaat — eenmalig opgehaald in SCREENS.trainingMode,
+// naast de bestaande twLookupCivForKlas()-aanroep (geen live listener nodig,
+// de toggle verandert niet halverwege een sessie).
+let TR_SIEGE_WEAPONS_ENABLED = false;
 
 /* ------------------------------------------------------------------
    SCHERM: instapscherm — login-gate, beschaving + provincies opzoeken,
@@ -88,7 +96,17 @@ SCREENS.trainingMode = function(){
   twLookupCivForKlas(BM_IDENT.klascode).then(civId=>{
     TR_CIV = civId;
     if(!civId){ trRenderModeBody(); return; }
-    trLoadOwnedProvinces().then(trRenderModeBody);
+    // twLookupCivForKlas() heeft _twOwner net gezet — season/featureFlags
+    // ophalen kan dus nu pas (best-effort, geen crash bij ontbrekend seizoen).
+    Promise.all([
+      trLoadOwnedProvinces(),
+      fbDB.ref(twPath(_twOwner,"season/featureFlags/siegeWeapons")).once("value").then(s=>{ TR_SIEGE_WEAPONS_ENABLED=!!s.val(); }).catch(()=>{ TR_SIEGE_WEAPONS_ENABLED=false; }),
+    ]).then(()=>{
+      // Val terug op "militia" als een eerdere sessie (localStorage) nog een
+      // siege-spoor had gekozen terwijl dat nu niet (meer) toegestaan is.
+      if(!TR_SIEGE_WEAPONS_ENABLED && TW_SIEGE_WEAPONS[TR_TRACK]) trSetTrack("militia");
+      else trRenderModeBody();
+    });
   });
 };
 
@@ -177,7 +195,7 @@ function trRenderModeBody(){
   <div class="panel">
     <label class="fld">Wat train je?</label>
     <div class="chips">
-      ${Object.entries(TR_TRACK_LABELS).map(([key,t])=>`<button class="chip ${TR_TRACK===key?'on':''}" onclick="trSetTrack('${key}')">${t.icon} ${esc(t.nm)}</button>`).join("")}
+      ${Object.entries(TR_TRACK_LABELS).filter(([key])=>TW_SIEGE_WEAPONS[key]?TR_SIEGE_WEAPONS_ENABLED:true).map(([key,t])=>`<button class="chip ${TR_TRACK===key?'on':''}" onclick="trSetTrack('${key}')">${t.icon} ${esc(t.nm)}</button>`).join("")}
     </div>
     ${trTrackProgressHTML()}
   </div>
@@ -242,6 +260,7 @@ function trProvinceBonusMult(){
    bent — de eerstvolgende tier, of de voltooide sprite zelf bij tier 2. */
 function trTrackProgressHTML(){
   const p = trCurrentProvince(); if(!p) return "";
+  if(TW_SIEGE_WEAPONS[TR_TRACK]) return trSiegeProgressHTML(p);
   const pts = p[TW_STRUCTURES[TR_TRACK].field]||0;
   const tier = twStructureTier(pts);
   const next = tier>=2 ? null : (tier===0?TW_TIER1_POINTS:TW_TIER2_POINTS);
@@ -262,6 +281,27 @@ function trTrackProgressHTML(){
       </div>`:""}
     </div>
     ${bonusNote}`;
+}
+
+/* Siege weapons (TOTAL_WAR.md §5.9): AAN/UIT i.p.v. de drie bouwstadia van
+   TW_STRUCTURES hierboven — geen "volgende tier"-sprite, gewoon punten/
+   TW_SIEGE_READY_POINTS en de klaar-sprite (nog te leveren, vandaar de
+   onerror-fallback) pas zichtbaar zodra hij echt klaar is. */
+function trSiegeProgressHTML(p){
+  const def = TW_SIEGE_WEAPONS[TR_TRACK];
+  const pts = p[def.field]||0;
+  const ready = pts>=TW_SIEGE_READY_POINTS;
+  const pct = Math.min(100, Math.round(pts/TW_SIEGE_READY_POINTS*100));
+  return `<div class="note" style="margin-top:8px">Voortgang: ${Math.round(pts)}/${TW_SIEGE_READY_POINTS} punten${ready?" — klaar voor gebruik!":""}</div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
+      <div style="flex:1;height:8px;border-radius:4px;background:rgba(0,0,0,.4);overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:var(--hi);transition:width .3s"></div>
+      </div>
+      <div style="width:56px;height:56px;flex:0 0 auto;background:#fff;border-radius:8px;box-sizing:border-box;opacity:${ready?1:.35}">
+        <img src="${def.sprite}?${SPRITE_VER}" style="width:100%;height:100%;object-fit:contain;padding:6px;box-sizing:border-box" alt="" onerror="this.parentElement.style.display='none'">
+      </div>
+    </div>
+    <div class="note" style="margin-top:4px">Wordt in één keer verbruikt zodra je klas 'm bij een aanval op een aangrenzende provincie inzet — daarna moet je opnieuw bouwen.</div>`;
 }
 
 async function trStart(){
@@ -309,6 +349,11 @@ function trUpdateStatsBar(){
 function trRenderTarget(){
   const host = el("trTargetHost"); if(!host) return;
   const p = trCurrentProvince()||{};
+  if(TW_SIEGE_WEAPONS[TR_TRACK]){
+    const src = TW_SIEGE_WEAPONS[TR_TRACK].sprite;
+    host.innerHTML = src ? `<img src="${src}?${SPRITE_VER}" style="width:100%" alt="" onerror="this.style.display='none'">` : "";
+    return;
+  }
   const pts = (p[TW_STRUCTURES[TR_TRACK].field]||0) + TR_STATS.points;
   const tier = twStructureTier(pts);
   const src = twSpriteFor(TR_TRACK, tier, TR_CIV);
@@ -620,7 +665,8 @@ async function twGetClassSize(klascode){
    overschrijven (zelfde patroon als ropePull() in net.js). */
 async function twAwardStructurePoints(provinceId, trackKey, points){
   if(!provinceId || !initFirebase() || !_twOwner) return;
-  const field = TW_STRUCTURES[trackKey] && TW_STRUCTURES[trackKey].field;
+  const def = TW_STRUCTURES[trackKey] || TW_SIEGE_WEAPONS[trackKey];
+  const field = def && def.field;
   if(!field) return;
   try{ await fbDB.ref(twPath(_twOwner,"provinces/"+provinceId+"/"+field)).transaction(cur=>(cur||0)+points); }catch(e){}
 }
