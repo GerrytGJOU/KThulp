@@ -306,7 +306,7 @@ function trSiegeProgressHTML(p){
 
 async function trStart(){
   TR_POOL = TR_DRAFT.source==="verbforms" ? vfqBuildPool(TR_DRAFT.vf, TR_DRAFT.lang) : buildPool(TR_DRAFT);
-  if(TR_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort/tijd."); return; }
+  if(TR_POOL.length<25){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort/tijd (minimaal 25 woorden)."); return; }
   TR_STATS = { correct:0, wrong:0, points:0, xp:0 };
   TR_WRONG_COUNTS = {}; TR_RECENT_WORDS = []; // nieuwe sessie, nieuwe pool: geen oude herhaling meenemen
   TR_CLASS_SIZE = await twGetClassSize(BM_IDENT.klascode);

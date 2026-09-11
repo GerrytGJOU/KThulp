@@ -81,10 +81,10 @@ function fpRenderSrcBody(){
 function fpStart(){
   if(FP_DRAFT.source==="verbforms"){
     FP_POOL = vfqBuildPool(FP_DRAFT.vf, FP_DRAFT.lang);
-    if(FP_POOL.length<4){ toast("Te weinig vormen","Kies meer werkwoorden of tijden."); return; }
+    if(FP_POOL.length<25){ toast("Te weinig vormen","Kies meer werkwoorden of tijden (minimaal 25)."); return; }
   } else {
     FP_POOL = buildPool(FP_DRAFT);
-    if(FP_POOL.length<4){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort."); return; }
+    if(FP_POOL.length<25){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort (minimaal 25 woorden)."); return; }
   }
   FP_STATS = { correct:0, wrong:0, xp:0, coins:0 };
   FP_WRONG_COUNTS = {};
