@@ -113,6 +113,63 @@ const TW_TIER2_POINTS = 900;
 // Richtwaarde, makkelijk bij te stellen na live testen.
 const TW_SIEGE_MAX_ROUNDS = 20;
 
+/* ---- Siege weapons (seizoen 2, TOTAL_WAR.md §5.9, op verzoek 2026-09-11) ----
+   Een beschaving kan in haar EIGEN provincie een siege weapon bouwen —
+   losstaand van muur/fort/garnizoen (géén trade-off), zelfde bouwmechanisme
+   (twAwardStructurePoints()/training.js, dezelfde 1/√klasgrootte-schaling).
+   Bij TW_SIEGE_READY_POINTS is hij "klaar" en inzetbaar bij een aanval op een
+   AANGRENZENDE vijandelijke provincie (twFindSiegeWeaponReady()) — eenmalig
+   verbruikt bij aanvalsstart (twStartAttack()), ongeacht winst/verlies. Elk
+   type heeft precies één effect (bewust niet te combineren/stapelen):
+   - ram: -20% HP vooraf op de EERSTE stage van deze ene aanvalspoging
+     (bmStartBossGame(), battle.js) — geldt niet bij een latere stage-overgang
+     binnen dezelfde doorlopende poging, dat is al "verbruikt".
+   - tower: synergiedrempel/deelnamebonus 30% lager (twSiegeScaledThreshold()
+     se extra factor, bmCalcSynergy()/chainTable in bmResolve(), battle.js).
+   - catapult: +10 rondes vóór de rondelimiet (twEffectiveSiegeMaxRounds()).
+   Sprite-plaatjes bestaan nog niet — Gerben levert ze later aan op precies de
+   paden hieronder; tot dan valt de UI terug op tekst/voortgangsbalk (de
+   <img onerror>-fallback verbergt een ontbrekend bestand geruisloos).
+   Bewust ONZICHTBAAR voor andere beschavingen (geen regel in het publieke
+   twProvinceInfo()-paneel) — alleen de eigen klas ziet haar voortgang
+   (Training Mode) en alleen de aanvaller ziet welke ready siege weapons ze
+   zelf kunnen inzetten. Een latere verkenningsfeature kan dit ooit voor de
+   tegenstander onthullen; tot dan is dit geen harde beveiligingsgrens (zelfde
+   soort afweging als elders in dit bestand), gewoon geen UI die het toont. */
+const TW_SIEGE_READY_POINTS = 600;
+const TW_SIEGE_RAM_HP_CUT_PCT = 20;
+const TW_SIEGE_TOWER_SYNERGY_FACTOR = 0.7; // vermenigvuldigt de al-N-geschaalde drempel
+const TW_SIEGE_CATAPULT_BONUS_ROUNDS = 10;
+const TW_SIEGE_WEAPONS = {
+  ram:      { field:"ramPoints",        nm:"Stormram",         icon:"🐏", sprite:"assets/bosses/ram.png" },
+  tower:    { field:"siegeTowerPoints", nm:"Belegeringstoren", icon:"🗼", sprite:"assets/bosses/siegetower.png" },
+  catapult: { field:"catapultPoints",   nm:"Catapult",         icon:"🎯", sprite:"assets/bosses/catapult.png" },
+};
+
+// Scant de provincies van attackerCiv die aan targetId grenzen (zelfde
+// neighbors/seaRoutes-logica als twAttackButtonHTML()) en geeft {type:
+// sourceProvinceId} terug voor elk siege-weapon-type dat daar ergens klaar
+// staat (≥TW_SIEGE_READY_POINTS). Bij meerdere kandidaten telt de eerste
+// (alfabetisch op provincie-id) — puur voor determinisme, geen balanskeuze.
+function twFindSiegeWeaponReady(targetId, attackerCiv){
+  const reg = _twRegistry && _twRegistry[targetId];
+  const borders = [...(reg?.neighbors||[]), ...(reg?.seaRoutes||[])];
+  const owned = borders.filter(nid => (_twLiveProvinces?.[nid]||{}).owner===attackerCiv).sort();
+  const available = {};
+  Object.entries(TW_SIEGE_WEAPONS).forEach(([type,def])=>{
+    for(const pid of owned){
+      const pts = (_twLiveProvinces[pid]||{})[def.field] || 0;
+      if(pts>=TW_SIEGE_READY_POINTS){ available[type]=pid; break; }
+    }
+  });
+  return available;
+}
+
+// Catapult-effect: TW_SIEGE_MAX_ROUNDS opgehoogd voor deze ene aanvalspoging.
+function twEffectiveSiegeMaxRounds(gp){
+  return TW_SIEGE_MAX_ROUNDS + (gp && gp.siegeWeaponUsed==="catapult" ? TW_SIEGE_CATAPULT_BONUS_ROUNDS : 0);
+}
+
 // Volgorde waarin een belegering de sporen aanvalt (TOTAL_WAR.md-sessieplan:
 // militie/garnizoen staat vooraan, dan de muur, dan pas het fort). Militie
 // wordt — anders dan walls/towers — NOOIT overgeslagen, ook niet op tier 0:
@@ -216,8 +273,9 @@ function twStageMaxHP(gp, stageKey, N){
    Alleen aangeroepen voor een belegering (BM_META.garrisonProvince gezet,
    zie bmCalcSynergy()/de brede-deelname-bonus in battle.js); gewoon Boss
    Battle/Team-vs-Team blijft de vaste tabelwaarden gebruiken. */
-function twSiegeScaledThreshold(origMin, N){
-  return Math.max(1, Math.round(origMin * Math.max(1,N||1) / TW_STAGE_HP_REF_N));
+function twSiegeScaledThreshold(origMin, N, extraFactor){
+  const scaled = Math.max(1, Math.round(origMin * Math.max(1,N||1) / TW_STAGE_HP_REF_N));
+  return Math.max(1, Math.round(scaled * (extraFactor||1)));
 }
 
 /* Sprite-pad voor een spoor op een gegeven tier; "civ" (alleen militia-tier2)
@@ -777,7 +835,7 @@ async function twEnsureCampaignSeeded(){
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
     const owner = ownerOf[id] || "neutral";
-    writes.push(fbDB.ref(twPath(_twOwner,"provinces/"+id)).set({ owner, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+    writes.push(fbDB.ref(twPath(_twOwner,"provinces/"+id)).set({ owner, militiaPoints:0, wallPoints:0, towerPoints:0, ramPoints:0, siegeTowerPoints:0, catapultPoints:0, ownerSince: FBNet.serverTime(),
       siege:{ lastStage:0, stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() }));
   });
   Object.keys(TW_CIVS).forEach(civId=>{
@@ -1260,7 +1318,7 @@ async function twStartNewSeason(nextNum, title, siegeWeaponsEnabled){
   }
   Object.keys(_twRegistry||{}).forEach(id=>{
     if(id==="_meta") return;
-    upd[twPath(_twOwner,"provinces/"+id)] = { owner: ownerOf[id]||"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+    upd[twPath(_twOwner,"provinces/"+id)] = { owner: ownerOf[id]||"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ramPoints:0, siegeTowerPoints:0, catapultPoints:0, ownerSince: FBNet.serverTime(),
       siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
   });
   // comebackWiped (§5.7/"grootste comeback" hierboven) hoort bij dít
@@ -1375,7 +1433,7 @@ async function twGrantFreshFlagshipIfUnowned(campaignOwner, civId){
   const owner = (snap.val()||{}).owner;
   if(owner && owner!=="neutral") return; // eigen bezit, of veroverd door een ander: geen gratis start
   await fbDB.ref(twPath(campaignOwner,"provinces/"+flagship)).update({
-    owner: civId, militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+    owner: civId, militiaPoints:0, wallPoints:0, towerPoints:0, ramPoints:0, siegeTowerPoints:0, catapultPoints:0, ownerSince: FBNet.serverTime(),
     siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime(),
   });
   twMaybeRecordBiggestEmpire(campaignOwner, civId).catch(()=>{});
@@ -1396,7 +1454,7 @@ async function twReleaseCivIfUnassigned(campaignOwner, civId){
   const upd = {};
   Object.entries(provinces).forEach(([id,p])=>{
     if(!p || p.owner!==civId) return;
-    upd[twPath(campaignOwner,"provinces/"+id)] = { owner:"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ownerSince: FBNet.serverTime(),
+    upd[twPath(campaignOwner,"provinces/"+id)] = { owner:"neutral", militiaPoints:0, wallPoints:0, towerPoints:0, ramPoints:0, siegeTowerPoints:0, catapultPoints:0, ownerSince: FBNet.serverTime(),
       siege:{ lastStage:"", stageDamage:{militia:0,walls:0,towers:0} }, lastChanged: FBNet.serverTime() };
   });
   if(Object.keys(upd).length) await fbDB.ref().update(upd);
@@ -1709,7 +1767,23 @@ function twAttackButtonHTML(targetId, targetCivId){
   const borders = [...(reg?.neighbors||[]), ...(reg?.seaRoutes||[])];
   const canReach = borders.some(nid => (_twLiveProvinces?.[nid]||{}).owner===attackerCiv);
   if(!canReach) return "";
-  return `<button class="btn btn-gold btn-block" style="margin-top:10px" onclick="twStartAttack('${targetId}','${attackerCiv}')">
+  // Siege weapons (TOTAL_WAR.md §5.9, seizoen 2): alleen aanbieden als het
+  // lopende seizoen dat toestaat (season/featureFlags.siegeWeapons, fase 1)
+  // — geen selector bij de opstand-tak hierboven, bewust simpel gehouden.
+  let siegeSelectHTML = "";
+  if(_twSeason && _twSeason.featureFlags && _twSeason.featureFlags.siegeWeapons){
+    const avail = twFindSiegeWeaponReady(targetId, attackerCiv);
+    const opts = Object.entries(avail).map(([type])=>`<option value="${type}">${TW_SIEGE_WEAPONS[type].icon} ${esc(TW_SIEGE_WEAPONS[type].nm)}</option>`).join("");
+    if(opts){
+      siegeSelectHTML = `<label class="fld" style="margin-top:8px">Siege weapon inzetten (optioneel, wordt verbruikt)</label>
+      <select id="twSiegeChoice" style="width:100%;padding:8px 10px;background:var(--stone3);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;font-size:14px;font-family:inherit">
+        <option value="">— geen —</option>
+        ${opts}
+      </select>`;
+    }
+  }
+  return `${siegeSelectHTML}
+  <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="twStartAttack('${targetId}','${attackerCiv}')">
     ⚔ Val aan als ${esc(TW_CIVS[attackerCiv].nm)}</button>`;
 }
 
@@ -1746,6 +1820,17 @@ function twStartAttack(targetId, attackerCiv){
   };
   BM_META.attackerCivId = attackerCiv;
   BM_META.campaignOwner = _twOwner; // welke campagne twResolveSiege() straks moet bijwerken
+  // Siege weapon inzetten (TOTAL_WAR.md §5.9): verbruikt bij aanvalsstart,
+  // ongeacht de afloop van de aanval — het brongebied se punten gaan meteen
+  // terug naar 0 (fire-and-forget, zelfde stijl als de rest hier).
+  const siegeType = el("twSiegeChoice")?.value || "";
+  if(siegeType && TW_SIEGE_WEAPONS[siegeType]){
+    const sourcePid = twFindSiegeWeaponReady(targetId, attackerCiv)[siegeType];
+    if(sourcePid){
+      BM_META.garrisonProvince.siegeWeaponUsed = siegeType;
+      fbDB.ref(twPath(_twOwner,"provinces/"+sourcePid+"/"+TW_SIEGE_WEAPONS[siegeType].field)).set(0).catch(()=>{});
+    }
+  }
   const nm = (_twRegistry?.[targetId]?.displayName) || targetId;
   toast("Aanval voorbereid", nm+" — kies eerst de woordenlijst.");
   ROLE = "host"; DRAFT.game = "battle";

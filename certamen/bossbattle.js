@@ -182,9 +182,12 @@ function bmBossStatusNote(){
   // totalwar.js §5.4.1) — zonder dit zou de klas niet weten dat er
   // tijdsdruk staat vóórdat de terugtrekking ineens gebeurt.
   if(BM_META?.garrisonProvince && typeof TW_SIEGE_MAX_ROUNDS==="number"){
+    // Catapult (TOTAL_WAR.md §5.9) verhoogt deze limiet voor de duur van
+    // precies deze aanvalspoging — twEffectiveSiegeMaxRounds() (totalwar.js).
+    const maxRounds=twEffectiveSiegeMaxRounds(BM_META.garrisonProvince);
     const n=BM_STATE?.round?.n||1;
-    const left=Math.max(0,TW_SIEGE_MAX_ROUNDS-n+1);
-    return "⏳ Ronde "+n+"/"+TW_SIEGE_MAX_ROUNDS+(left<=5?" — nog "+left+" over, bijna terugtrekken!":"");
+    const left=Math.max(0,maxRounds-n+1);
+    return "⏳ Ronde "+n+"/"+maxRounds+(left<=5?" — nog "+left+" over, bijna terugtrekken!":"");
   }
   // Minion Summon (BOSS_BATTLE.md §4): generieke "alle bazen"-mechanic, dus
   // vóór de per-baas-specifieke statusregels gecheckt.
