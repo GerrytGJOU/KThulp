@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Total War — Zeeroute-editor (dev tool)</title>
+<link rel="stylesheet" href="provinces.css">
+<style>
+  :root{ color-scheme: dark; }
+  body{ margin:0; font-family:system-ui,sans-serif; background:#1b1712; color:#eee; }
+  header{ padding:10px 16px; background:#2a221a; border-bottom:2px solid #6b5636; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  header h1{ font-size:15px; margin:0; margin-right:auto; color:#e8c97a; }
+  button{ font:inherit; padding:6px 12px; border-radius:6px; border:1px solid #6b5636; background:#3a2f22; color:#eee; cursor:pointer; }
+  button:hover{ background:#4a3d2c; }
+  button.primary{ background:#8a6a2c; border-color:#c9a24a; font-weight:bold; }
+  button.primary:hover{ background:#a37e34; }
+  #mapWrap{ position:relative; display:inline-block; max-width:calc(100vw - 312px); vertical-align:top; background:#9fc7f4; }
+  #mapWrap svg{ display:block; width:100%; height:auto; }
+  .handle{
+    position:absolute; width:18px; height:18px; margin:-9px 0 0 -9px;
+    border-radius:50%; border:2px solid #fff; cursor:grab;
+    box-shadow:0 0 4px rgba(0,0,0,.7);
+  }
+  .handle:active{ cursor:grabbing; }
+  .handle.a{ background:#e33; }
+  .handle.b{ background:#39e; }
+  .handle.selected{ box-shadow:0 0 0 3px rgba(255,255,80,.7); }
+  #sidebar{
+    position:fixed; right:0; top:56px; bottom:0; width:300px; background:#241d15;
+    border-left:2px solid #6b5636; padding:12px; overflow:auto; font-size:13px;
+  }
+  #sidebar h2{ font-size:13px; color:#e8c97a; margin:12px 0 6px; }
+  #sidebar h2:first-child{ margin-top:0; }
+  #routeList{ list-style:none; padding:0; margin:0; }
+  #routeList li{ padding:5px 6px; border-radius:4px; cursor:pointer; display:flex; justify-content:space-between; gap:6px; align-items:center; }
+  #routeList li:hover{ background:#3a2f22; }
+  #routeList li.active{ background:#4a3d2c; color:#e8c97a; }
+  #routeList li .ov{ font-size:10px; color:#8c8; flex:0 0 auto; }
+  #status{ font-size:12px; color:#9c9; min-height:16px; }
+  textarea{ width:100%; height:200px; box-sizing:border-box; background:#12100c; color:#9f9; font-family:monospace; font-size:11px; border:1px solid #6b5636; border-radius:4px; }
+  main{ margin-right:300px; padding:10px; }
+  .legend{ font-size:11px; color:#987; margin-top:6px; }
+  .legend span{ display:inline-flex; align-items:center; gap:4px; margin-right:12px; }
+  .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Total War — Zeeroute-editor (alleen lokaal, dev tool)</h1>
+  <button id="exportBtn" class="primary">Exporteer overrides</button>
+  <span id="status"></span>
+</header>
+<main>
+  <div id="mapWrap"></div>
+  <div class="legend">
+    <span><span class="dot" style="background:#e33"></span>eindpunt A (alfabetisch eerste provincie)</span>
+    <span><span class="dot" style="background:#39e"></span>eindpunt B</span>
+  </div>
+</main>
+<div id="sidebar">
+  <h2>Zeeroutes (26)</h2>
+  <ul id="routeList"></ul>
+  <h2>Geselecteerde route</h2>
+  <div id="selInfo" style="color:#987">Klik een route in de lijst, of sleep een van de puntjes op de kaart.</div>
+  <button id="resetBtn" style="margin-top:8px;display:none">Reset naar automatisch</button>
+  <h2>Export (JSON)</h2>
+  <div style="color:#987;font-size:11px;margin-bottom:6px">Kopieer dit en plak/stuur het om <code>_seaRoutePoints</code> in <code>provinces.json</code> bij te werken.</div>
+  <button id="copyBtn">Kopieer naar klembord</button>
+  <textarea id="exportArea" readonly></textarea>
+</div>
+<script src="provinces.js"></script>
+<script>
+let REGISTRY = null;
+let ROUTES = [];      // [{key, aId, bId}], aId = alfabetisch eerste
+let selectedKey = null;
+
+function setStatus(msg){ document.getElementById('status').textContent = msg; }
+
+async function load(){
+  setStatus("Laden...");
+  const [svgTxt, json] = await Promise.all([
+    fetch('provinces.svg?_=' + Date.now()).then(r=>r.text()),
+    fetch('provinces.json?_=' + Date.now()).then(r=>r.json()),
+  ]);
+  REGISTRY = json;
+  if(!REGISTRY._seaRoutePoints) REGISTRY._seaRoutePoints = {};
+  const wrap = document.getElementById('mapWrap');
+  wrap.innerHTML = svgTxt;
+  const svgEl = wrap.querySelector('svg');
+  if(svgEl){
+    svgEl.removeAttribute('width');
+    svgEl.removeAttribute('height');
+    svgEl.setAttribute('style','width:100%;height:auto;display:block');
+  }
+  computeRoutes();
+  redraw();
+  setStatus(ROUTES.length + " zeeroutes geladen.");
+}
+
+// Zelfde opsomming/sleutel als MapAPI.drawSeaRoutes() (provinces.js) —
+// a/b hier is puur "alfabetisch eerste/tweede provincie-ID", niet gekoppeld
+// aan welk eindpunt visueel links/rechts ligt.
+function computeRoutes(){
+  const seen = new Set();
+  ROUTES = [];
+  Object.keys(REGISTRY).forEach(id=>{
+    if(id==='_meta'||id==='_seaRoutePoints') return;
+    (REGISTRY[id].seaRoutes||[]).forEach(otherId=>{
+      const [aId,bId] = [id,otherId].sort();
+      const key = aId+'|'+bId;
+      if(seen.has(key)) return;
+      seen.add(key);
+      ROUTES.push({key,aId,bId});
+    });
+  });
+  ROUTES.sort((r1,r2)=>r1.key.localeCompare(r2.key));
+}
+
+function nameOf(id){ return (REGISTRY[id]&&REGISTRY[id].displayName) || id; }
+
+function redraw(){
+  const wrap = document.getElementById('mapWrap');
+  MapAPI.drawSeaRoutes(REGISTRY, wrap);
+  wrap.querySelectorAll('.handle').forEach(h=>h.remove());
+  const svg = wrap.querySelector('svg');
+  const lines = svg ? svg.querySelectorAll('#mapSeaRoutes line') : [];
+  // drawSeaRoutes() tekent in dezelfde volgorde als computeRoutes() hierboven
+  // opsomt (zelfde dedup-logica) — zolang beide ongewijzigd blijven, komt
+  // lines[i] overeen met ROUTES[i].
+  ROUTES.forEach((route, i)=>{
+    const line = lines[i]; if(!line) return;
+    addHandle(route, 'a', +line.getAttribute('x1'), +line.getAttribute('y1'));
+    addHandle(route, 'b', +line.getAttribute('x2'), +line.getAttribute('y2'));
+  });
+  renderList();
+  renderSelInfo();
+}
+
+// Rekent een schermpositie (clientX/Y) om naar dezelfde lokale SVG-
+// coördinatenruimte als MapAPI.drawSeaRoutes() intern gebruikt (CTM van de
+// ouder van de eerste .province, niet van de root-svg — zie de toelichting
+// in provinces.js).
+function screenToLocal(clientX, clientY){
+  const wrap = document.getElementById('mapWrap');
+  const svg = wrap.querySelector('svg');
+  const firstProvince = svg.querySelector('.province');
+  const parent = firstProvince ? firstProvince.parentNode : svg;
+  const ctmSource = (parent && typeof parent.getScreenCTM==='function') ? parent : svg;
+  const ctm = ctmSource.getScreenCTM();
+  const pt = svg.createSVGPoint();
+  pt.x = clientX; pt.y = clientY;
+  const local = pt.matrixTransform(ctm.inverse());
+  return { x: local.x, y: local.y };
+}
+
+function addHandle(route, end, x, y){
+  const wrap = document.getElementById('mapWrap');
+  const svg = wrap.querySelector('svg');
+  const rect = svg.getBoundingClientRect();
+  // x/y zijn lokale SVG-coördinaten; terugrekenen naar wrap-pixels voor de
+  // absoluut-gepositioneerde HTML-handle erbovenop.
+  const firstProvince = svg.querySelector('.province');
+  const parent = firstProvince ? firstProvince.parentNode : svg;
+  const ctmSource = (parent && typeof parent.getScreenCTM==='function') ? parent : svg;
+  const ctm = ctmSource.getScreenCTM();
+  const pt = svg.createSVGPoint();
+  pt.x = x; pt.y = y;
+  const screenPt = pt.matrixTransform(ctm);
+  const wrapRect = wrap.getBoundingClientRect();
+  const handle = document.createElement('div');
+  handle.className = 'handle ' + end + (selectedKey===route.key ? ' selected' : '');
+  handle.style.left = (screenPt.x - wrapRect.left) + 'px';
+  handle.style.top = (screenPt.y - wrapRect.top) + 'px';
+  handle.title = (end==='a'?nameOf(route.aId):nameOf(route.bId)) + ' — ' + route.key;
+  wrap.appendChild(handle);
+  handle.addEventListener('pointerdown', (e)=>{
+    e.preventDefault();
+    selectedKey = route.key;
+    handle.setPointerCapture(e.pointerId);
+    const move = (ev)=>{
+      const local = screenToLocal(ev.clientX, ev.clientY);
+      setOverridePoint(route, end, local.x, local.y);
+      redraw();
+    };
+    const up = (ev)=>{
+      handle.releasePointerCapture(e.pointerId);
+      handle.removeEventListener('pointermove', move);
+      handle.removeEventListener('pointerup', up);
+    };
+    handle.addEventListener('pointermove', move);
+    handle.addEventListener('pointerup', up);
+  });
+}
+
+function setOverridePoint(route, end, x, y){
+  const ov = REGISTRY._seaRoutePoints;
+  const existing = ov[route.key] || {};
+  // Ontbrekend eindpunt aanvullen met het huidige (automatische) punt van de
+  // ANDERE kant, zodat een override altijd een compleet {a,b}-paar is —
+  // drawSeaRoutes() verwacht beide punten zodra er een override bestaat.
+  const otherEnd = end==='a' ? 'b' : 'a';
+  if(!existing[otherEnd]){
+    const wrap = document.getElementById('mapWrap');
+    const svg = wrap.querySelector('svg');
+    const lines = svg.querySelectorAll('#mapSeaRoutes line');
+    const idx = ROUTES.findIndex(r=>r.key===route.key);
+    const line = lines[idx];
+    if(line){
+      existing[otherEnd] = otherEnd==='a'
+        ? { x:+line.getAttribute('x1'), y:+line.getAttribute('y1') }
+        : { x:+line.getAttribute('x2'), y:+line.getAttribute('y2') };
+    }
+  }
+  existing[end] = { x: Math.round(x), y: Math.round(y) };
+  ov[route.key] = existing;
+}
+
+function resetOverride(key){
+  delete REGISTRY._seaRoutePoints[key];
+  redraw();
+}
+
+function renderList(){
+  const ul = document.getElementById('routeList');
+  ul.innerHTML = '';
+  ROUTES.forEach(route=>{
+    const li = document.createElement('li');
+    li.dataset.key = route.key;
+    if(route.key===selectedKey) li.classList.add('active');
+    const hasOv = !!REGISTRY._seaRoutePoints[route.key];
+    li.innerHTML = '<span>' + nameOf(route.aId) + ' ↔ ' + nameOf(route.bId) + '</span>'
+      + (hasOv ? '<span class="ov">aangepast</span>' : '');
+    li.onclick = ()=>{ selectedKey = route.key; redraw(); };
+    ul.appendChild(li);
+  });
+}
+
+function renderSelInfo(){
+  const info = document.getElementById('selInfo');
+  const resetBtn = document.getElementById('resetBtn');
+  const route = ROUTES.find(r=>r.key===selectedKey);
+  if(!route){
+    info.textContent = 'Klik een route in de lijst, of sleep een van de puntjes op de kaart.';
+    resetBtn.style.display = 'none';
+    return;
+  }
+  const hasOv = !!REGISTRY._seaRoutePoints[route.key];
+  info.innerHTML = '<b>' + nameOf(route.aId) + ' ↔ ' + nameOf(route.bId) + '</b><br>'
+    + (hasOv ? 'Handmatig aangepast.' : 'Nog automatisch berekend (zwaartepunt).');
+  resetBtn.style.display = hasOv ? 'block' : 'none';
+  resetBtn.onclick = ()=> resetOverride(route.key);
+}
+
+document.getElementById('exportBtn').onclick = ()=>{
+  const txt = JSON.stringify(REGISTRY._seaRoutePoints, null, 2);
+  document.getElementById('exportArea').value = txt;
+  setStatus("Export klaar in het tekstvak rechtsonder — kopieer en stuur naar Claude, of plak het zelf in provinces.json onder \"_seaRoutePoints\".");
+};
+document.getElementById('copyBtn').onclick = ()=>{
+  const area = document.getElementById('exportArea');
+  if(!area.value){ document.getElementById('exportBtn').click(); }
+  navigator.clipboard.writeText(area.value).then(()=>setStatus("Gekopieerd naar klembord!"));
+};
+
+window.addEventListener('resize', redraw);
+load();
+</script>
+</body>
+</html>

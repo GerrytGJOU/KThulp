@@ -186,14 +186,25 @@ const MapAPI = (function () {
         return { x: localPt.x, y: localPt.y };
       } catch (e) { return null; }
     };
+    // Handmatige eindpunt-overrides (searoute-editor.html, op verzoek
+    // 2026-09-11): een zeeroute heeft van zichzelf geen opgeslagen coördinaten
+    // (alleen een verwijzing tussen twee provincie-ID's) — de lijn liep dus
+    // altijd naar het automatisch berekende zwaartepunt, wat soms niet naar de
+    // kust of een logische plek wijst. registry._seaRoutePoints[key] (zelfde
+    // sorteer-sleutel als hieronder) mag dat per route overschrijven, in
+    // dezelfde lokale coördinatenruimte als cities[].x/y hierboven.
+    const overrides = registry._seaRoutePoints || {};
     const drawn = new Set();
     Object.keys(registry).forEach((id) => {
-      if (id === "_meta") return;
+      if (id === "_meta" || id === "_seaRoutePoints") return;
       (registry[id].seaRoutes || []).forEach((otherId) => {
         const key = [id, otherId].sort().join("|");
         if (drawn.has(key)) return;
         drawn.add(key);
-        const a = centerOf(id), b = centerOf(otherId);
+        const override = overrides[key];
+        const [firstId] = [id, otherId].sort();
+        const a = override ? override[firstId === id ? "a" : "b"] : centerOf(id);
+        const b = override ? override[firstId === id ? "b" : "a"] : centerOf(otherId);
         if (!a || !b) return;
         const line = document.createElementNS(ns, "line");
         line.setAttribute("x1", a.x); line.setAttribute("y1", a.y);

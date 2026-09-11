@@ -289,6 +289,18 @@ function bmShowLockInfo(optNm, full){
   toast("🔒 "+optNm, full+" om dit te ontgrendelen.");
 }
 
+// XP-korting bij een door een LEERLING zelf gehost gevecht (op verzoek,
+// 2026-09-11): zonder Training Mode se dagcap (TR_DAILY_CAP, training.js) kon
+// een leerling XP "boeren" door zelf onbeperkt Battle Mode/Boss Battle-
+// gevechten te hosten (bmCreateRoom() hieronder zette geen enkele vlag over
+// wie hostte). Een docent-gehost gevecht (inclusief elke Total War-
+// belegering, altijd gestart via het docent-only SCREENS.totalWarPreview)
+// blijft volledige XP geven — meta.hostedByTeacher (bmCreateRoom()) bepaalt
+// het onderscheid. Alleen XP wordt gekort, geen munten (niet gevraagd, en
+// coins lopen toch al niet zo snel op als XP). Richtwaarde, makkelijk bij te
+// stellen na een testperiode.
+const BM_SELF_HOST_XP_MULT = 0.5;
+
 // Toekennen van XP en achievements na afloop van een gevecht (player-side).
 async function bmAwardBattle(){
   if(!BM_IDENT||!fbDB)return null;
@@ -336,7 +348,8 @@ async function bmAwardBattle(){
   // laatste ronde van een gewonnen gevecht evenveel op als het hele gevecht
   // meespelen, en dat is nu juist het gedrag dat we niet willen belonen.
   const flatXp=5+(won?15:0)+(isScholar?8:0);
-  const xpEarned=Math.max(1,Math.round(correct*2+total*1+flatXp*share0));
+  let xpEarned=Math.max(1,Math.round(correct*2+total*1+flatXp*share0));
+  if(!BM_META?.hostedByTeacher) xpEarned=Math.max(1,Math.round(xpEarned*BM_SELF_HOST_XP_MULT));
   // Muntbeloning: alleen deelname + winst (geen munten per goed antwoord —
   // dat liep te snel op). Odysseus (legendarisch) geeft +% bonus.
   const legBonus=bmLegendaryOf(BM_IDENT);
@@ -1401,6 +1414,9 @@ async function bmCreateRoom(){
     garrisonProvince:BM_META.garrisonProvince||null,
     attackerCivId:BM_META.attackerCivId||null,
     campaignOwner:BM_META.campaignOwner||null,
+    // Zie BM_SELF_HOST_XP_MULT hierboven: onderscheidt een docent-gehost
+    // gevecht (volle XP) van een leerling die zelf host (gekorte XP).
+    hostedByTeacher: !!(typeof teacherNet==="function" && teacherNet().isTeacherLoggedIn()),
     status:"lobby"};
   BM_META=meta;
   try{

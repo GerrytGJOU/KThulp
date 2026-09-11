@@ -897,6 +897,18 @@ XP-winst per gevecht (`bmAwardBattle()`, `certamen/battle.js`):
 | Gewonnen als team | +15 |
 | Scholar (≥90% correct, min. 5 vragen) | +8 |
 
+**Korting bij een door een leerling zelf gehost gevecht (nieuw, 2026-09-11).**
+Zonder controle kon een leerling XP "boeren" door zelf onbeperkt Battle Mode/
+Boss Battle-gevechten te hosten (`ROLE="host"` is voor iedereen bereikbaar,
+niet alleen docenten — er was geen enkele registratie van wie een kamer
+aanmaakte). `bmCreateRoom()` zet nu `meta.hostedByTeacher` op basis van
+`teacherNet().isTeacherLoggedIn()` op het moment van aanmaken; `bmAwardBattle()`
+vermenigvuldigt `xpEarned` met `BM_SELF_HOST_XP_MULT` (0.5, richtwaarde) zodra
+die vlag `false` is. Munten blijven ongewijzigd. Een Total War-belegering is
+hierdoor automatisch nooit gekort: `twStartAttack()` (`certamen/totalwar.js`)
+is uitsluitend bereikbaar vanaf het docent-only `SCREENS.totalWarPreview`,
+dus `isTeacherLoggedIn()` staat daar altijd al op `true`.
+
 Niveaus en titels staan in `BM_LEVELS` (`certamen/battle-data.js`) — **10
 niveaus** (Tiro → Imperator), niet 20. Bij niveau-omhoog worden cosmetics
 ontgrendeld; alle ontgrendeling-checks via `bmIsUnlocked(opt, ident)`. Voorbij

@@ -98,7 +98,7 @@ function pickWeighted(pool, weightFn){
   for(let i=0;i<pool.length;i++){ r-=weights[i]; if(r<=0) return pool[i]; }
   return pool[pool.length-1];
 }
-function makeQuestion(pool, weightFn){
+function makeQuestion(pool, weightFn, distractorPool){
   const w = pickWeighted(pool, weightFn);
   const correct = ansText(w);
   const qSenses = senseSet(w.nl);
@@ -114,15 +114,22 @@ function makeQuestion(pool, weightFn){
     if(senseSet(x.nl).has(norm(correct))) return true;
     return false;
   };
-  const samePos = w.pos ? pool.filter(x=>x.pos===w.pos) : pool;
-  const distPool = samePos.length >= 4 ? samePos : pool;
+  // Afleiders komen uit distractorPool (default: pool) — apart van `pool`
+  // omdat een aanroeper `pool` soms al versmald heeft (bv. Training Mode se
+  // recent-herhaling-uitsluiting, trPersonalPool() in training.js). Zonder
+  // dit derde argument zou een kleine, versmalde `pool` (bv. nog maar 1 woord
+  // over) ook de afleiders opdrogen — dan blijft er geen bruikbare afleider
+  // meer over en valt de vraag terug op de "…"-placeholder hieronder.
+  const fullPool = distractorPool || pool;
+  const samePos = w.pos ? fullPool.filter(x=>x.pos===w.pos) : fullPool;
+  const distPool = samePos.length >= 4 ? samePos : fullPool;
   for(const x of shuffle(distPool)){
     if(!conflicts(x)){ opts.push(ansText(x)); if(opts.length>=4) break; }
   }
   // Te weinig bruikbare afleiders binnen dezelfde woordsoort? Verbreed naar de
   // hele pool, nog steeds zonder óók-juiste afleiders toe te laten.
-  if(opts.length<4 && distPool!==pool){
-    for(const x of shuffle(pool)){
+  if(opts.length<4 && distPool!==fullPool){
+    for(const x of shuffle(fullPool)){
       if(!conflicts(x)){ opts.push(ansText(x)); if(opts.length>=4) break; }
     }
   }
