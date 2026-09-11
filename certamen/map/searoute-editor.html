@@ -13,17 +13,42 @@
   button:hover{ background:#4a3d2c; }
   button.primary{ background:#8a6a2c; border-color:#c9a24a; font-weight:bold; }
   button.primary:hover{ background:#a37e34; }
-  #mapWrap{ position:relative; display:inline-block; max-width:calc(100vw - 312px); vertical-align:top; background:#9fc7f4; }
-  #mapWrap svg{ display:block; width:100%; height:auto; }
+  .zoomctl{ display:flex; align-items:center; gap:4px; }
+  .zoomctl button{ padding:6px 10px; }
+  #zoomLabel{ min-width:44px; text-align:center; color:#cbb; font-size:13px; }
+  /* Zelfde recept als de Chronica-pin-editor (assets/chronica/maps/pin-editor.html):
+     een vaste viewport die scrollt, geen CSS-transform-zoom (die zou de
+     getScreenCTM()-coördinatenwiskunde in redraw()/screenToLocal() extra
+     ingewikkeld maken). In plaats daarvan groeit de SVG se eigen pixelbreedte
+     mee met het zoomniveau — getBoundingClientRect()/getScreenCTM() geven dan
+     vanzelf de juiste, grotere coördinaten terug, geen aparte zoom-wiskunde nodig. */
+  #mapWrap{ position:relative; display:inline-block; max-width:calc(100vw - 312px); max-height:calc(100vh - 140px); overflow:auto; vertical-align:top; background:#9fc7f4; }
+  #mapWrap svg{ display:block; }
+  /* Kleine, niet-interactieve referentiestippen op ALLE eindpunten — puur ter
+     oriëntatie. pointer-events:none zodat ze nooit een sleepactie kunnen
+     onderscheppen (dat was precies het per-ongeluk-de-verkeerde-grijpen-
+     probleem: tot 4 zeeroutes delen soms hetzelfde provincie-eindpunt, dus
+     hun stippen lagen exact op elkaar). */
+  .dot-ref{
+    position:absolute; width:9px; height:9px; margin:-5px 0 0 -5px;
+    border-radius:50%; border:1px solid rgba(255,255,255,.7); opacity:.6;
+    pointer-events:none;
+  }
+  .dot-ref.a{ background:#e33; }
+  .dot-ref.b{ background:#39e; }
+  /* Grote, sleepbare handvatten — worden alleen getekend voor de in de lijst
+     GESELECTEERDE route (zie renderMapHandles()), dus nooit meer dan 2
+     tegelijk op de kaart. Dat is de eigenlijke fix voor het misklikken: geen
+     lijst met 52 kleine, overlappende doelwitten meer, maar steeds precies 2
+     grote. */
   .handle{
-    position:absolute; width:18px; height:18px; margin:-9px 0 0 -9px;
-    border-radius:50%; border:2px solid #fff; cursor:grab;
-    box-shadow:0 0 4px rgba(0,0,0,.7);
+    position:absolute; width:28px; height:28px; margin:-14px 0 0 -14px;
+    border-radius:50%; border:3px solid #fff; cursor:grab; z-index:5;
+    box-shadow:0 0 8px rgba(0,0,0,.9), 0 0 0 4px rgba(255,255,80,.85);
   }
   .handle:active{ cursor:grabbing; }
   .handle.a{ background:#e33; }
   .handle.b{ background:#39e; }
-  .handle.selected{ box-shadow:0 0 0 3px rgba(255,255,80,.7); }
   #sidebar{
     position:fixed; right:0; top:56px; bottom:0; width:300px; background:#241d15;
     border-left:2px solid #6b5636; padding:12px; overflow:auto; font-size:13px;
@@ -41,11 +66,21 @@
   .legend{ font-size:11px; color:#987; margin-top:6px; }
   .legend span{ display:inline-flex; align-items:center; gap:4px; margin-right:12px; }
   .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .coordblock{ margin-bottom:10px; }
+  .coordblock label{ display:block; margin-bottom:3px; color:#cbb; }
+  .coordblock .row{ display:flex; gap:6px; }
+  .coordblock input{ width:100%; box-sizing:border-box; padding:4px 6px; border-radius:4px; border:1px solid #6b5636; background:#3a2f22; color:#eee; font:inherit; }
+  #coordHint{ font-size:11px; color:#987; margin-top:2px; }
 </style>
 </head>
 <body>
 <header>
   <h1>Total War — Zeeroute-editor (alleen lokaal, dev tool)</h1>
+  <div class="zoomctl">
+    <button id="zoomOut">−</button>
+    <span id="zoomLabel">100%</span>
+    <button id="zoomIn">+</button>
+  </div>
   <button id="exportBtn" class="primary">Exporteer overrides</button>
   <span id="status"></span>
 </header>
@@ -54,13 +89,31 @@
   <div class="legend">
     <span><span class="dot" style="background:#e33"></span>eindpunt A (alfabetisch eerste provincie)</span>
     <span><span class="dot" style="background:#39e"></span>eindpunt B</span>
+    <span>Kies eerst een route in de lijst rechts — pas dan verschijnen de twee grote, sleepbare punten.</span>
   </div>
 </main>
 <div id="sidebar">
   <h2>Zeeroutes (26)</h2>
   <ul id="routeList"></ul>
   <h2>Geselecteerde route</h2>
-  <div id="selInfo" style="color:#987">Klik een route in de lijst, of sleep een van de puntjes op de kaart.</div>
+  <div id="selInfo" style="color:#987">Klik een route in de lijst om 'm te bewerken.</div>
+  <div id="coordFields" style="display:none">
+    <div class="coordblock">
+      <label>Eindpunt A — <span id="aName"></span></label>
+      <div class="row">
+        <input id="aX" type="number" step="200" title="x">
+        <input id="aY" type="number" step="200" title="y">
+      </div>
+    </div>
+    <div class="coordblock">
+      <label>Eindpunt B — <span id="bName"></span></label>
+      <div class="row">
+        <input id="bX" type="number" step="200" title="x">
+        <input id="bY" type="number" step="200" title="y">
+      </div>
+    </div>
+    <div id="coordHint">Slepen op de kaart kan ook. In een veld: pijltje-omhoog/omlaag verschuift met stapjes van 200.</div>
+  </div>
   <button id="resetBtn" style="margin-top:8px;display:none">Reset naar automatisch</button>
   <h2>Export (JSON)</h2>
   <div style="color:#987;font-size:11px;margin-bottom:6px">Kopieer dit en plak/stuur het om <code>_seaRoutePoints</code> in <code>provinces.json</code> bij te werken.</div>
@@ -72,6 +125,9 @@
 let REGISTRY = null;
 let ROUTES = [];      // [{key, aId, bId}], aId = alfabetisch eerste
 let selectedKey = null;
+let zoomPct = 100;
+const ZOOM_STEPS = [50,75,100,150,200,300,400];
+let baseSvgWidth = 0; // natuurlijke breedte bij 100%, vastgelegd na laden
 
 function setStatus(msg){ document.getElementById('status').textContent = msg; }
 
@@ -91,12 +147,15 @@ async function load(){
     wrap.innerHTML = svgTxt;
     const svgEl = wrap.querySelector('svg');
     if(svgEl){
-      svgEl.removeAttribute('width');
       svgEl.removeAttribute('height');
-      svgEl.setAttribute('style','width:100%;height:auto;display:block');
+      // Natuurlijke breedte = wat de SVG zou krijgen op de beschikbare
+      // breedte van #mapWrap bij 100% — daarna schaalt applyZoom() vanaf dit
+      // basisgetal, zodat "100%" altijd overeenkomt met "past precies".
+      baseSvgWidth = wrap.clientWidth || 1000;
+      svgEl.setAttribute('style','display:block;height:auto');
     }
     computeRoutes();
-    redraw();
+    applyZoom(); // zet de breedte + tekent
     setStatus(ROUTES.length + " zeeroutes geladen.");
   }catch(e){
     // Meest voorkomende oorzaak (zelfde valkuil als twLoadMap() in
@@ -114,6 +173,21 @@ async function load(){
     setStatus("Laden mislukt — zie de melding op de kaart.");
   }
 }
+
+function applyZoom(){
+  const svg = document.querySelector('#mapWrap svg');
+  if(svg && baseSvgWidth) svg.style.width = Math.round(baseSvgWidth * zoomPct/100) + 'px';
+  document.getElementById('zoomLabel').textContent = zoomPct + '%';
+  redraw();
+}
+document.getElementById('zoomIn').onclick = ()=>{
+  const next = ZOOM_STEPS.find(z=>z>zoomPct);
+  if(next){ zoomPct = next; applyZoom(); }
+};
+document.getElementById('zoomOut').onclick = ()=>{
+  const prev = [...ZOOM_STEPS].reverse().find(z=>z<zoomPct);
+  if(prev){ zoomPct = prev; applyZoom(); }
+};
 
 // Zelfde opsomming/sleutel als MapAPI.drawSeaRoutes() (provinces.js) —
 // a/b hier is puur "alfabetisch eerste/tweede provincie-ID", niet gekoppeld
@@ -139,7 +213,7 @@ function nameOf(id){ return (REGISTRY[id]&&REGISTRY[id].displayName) || id; }
 function redraw(){
   const wrap = document.getElementById('mapWrap');
   MapAPI.drawSeaRoutes(REGISTRY, wrap);
-  wrap.querySelectorAll('.handle').forEach(h=>h.remove());
+  wrap.querySelectorAll('.dot-ref, .handle').forEach(h=>h.remove());
   const svg = wrap.querySelector('svg');
   const lines = svg ? svg.querySelectorAll('#mapSeaRoutes line') : [];
   // drawSeaRoutes() tekent in dezelfde volgorde als computeRoutes() hierboven
@@ -147,8 +221,9 @@ function redraw(){
   // lines[i] overeen met ROUTES[i].
   ROUTES.forEach((route, i)=>{
     const line = lines[i]; if(!line) return;
-    addHandle(route, 'a', +line.getAttribute('x1'), +line.getAttribute('y1'));
-    addHandle(route, 'b', +line.getAttribute('x2'), +line.getAttribute('y2'));
+    const isSel = route.key===selectedKey;
+    addPoint(route, 'a', +line.getAttribute('x1'), +line.getAttribute('y1'), isSel);
+    addPoint(route, 'b', +line.getAttribute('x2'), +line.getAttribute('y2'), isSel);
   });
   renderList();
   renderSelInfo();
@@ -157,7 +232,8 @@ function redraw(){
 // Rekent een schermpositie (clientX/Y) om naar dezelfde lokale SVG-
 // coördinatenruimte als MapAPI.drawSeaRoutes() intern gebruikt (CTM van de
 // ouder van de eerste .province, niet van de root-svg — zie de toelichting
-// in provinces.js).
+// in provinces.js). Werkt bij elk zoomniveau: getScreenCTM() geeft altijd de
+// actuele, gerenderde transformatie terug.
 function screenToLocal(clientX, clientY){
   const wrap = document.getElementById('mapWrap');
   const svg = wrap.querySelector('svg');
@@ -171,12 +247,9 @@ function screenToLocal(clientX, clientY){
   return { x: local.x, y: local.y };
 }
 
-function addHandle(route, end, x, y){
+function localToWrapPixels(x, y){
   const wrap = document.getElementById('mapWrap');
   const svg = wrap.querySelector('svg');
-  const rect = svg.getBoundingClientRect();
-  // x/y zijn lokale SVG-coördinaten; terugrekenen naar wrap-pixels voor de
-  // absoluut-gepositioneerde HTML-handle erbovenop.
   const firstProvince = svg.querySelector('.province');
   const parent = firstProvince ? firstProvince.parentNode : svg;
   const ctmSource = (parent && typeof parent.getScreenCTM==='function') ? parent : svg;
@@ -185,15 +258,38 @@ function addHandle(route, end, x, y){
   pt.x = x; pt.y = y;
   const screenPt = pt.matrixTransform(ctm);
   const wrapRect = wrap.getBoundingClientRect();
+  // wrap.scrollLeft/Top erbij: getBoundingClientRect() geeft de zichtbare
+  // (gescrolde) positie, maar de handle wordt binnen #mapWrap se eigen,
+  // scrollende coördinatenruimte geplaatst (position:absolute in een
+  // overflow:auto-ouder), dus de scrollpositie moet erbij opgeteld worden.
+  return { x: screenPt.x - wrapRect.left + wrap.scrollLeft, y: screenPt.y - wrapRect.top + wrap.scrollTop };
+}
+
+// Kleine, vaste referentiestip — nooit interactief (zie .dot-ref hierboven).
+function addPoint(route, end, x, y, isSelectedRoute){
+  const wrap = document.getElementById('mapWrap');
+  const p = localToWrapPixels(x, y);
+  const dot = document.createElement('div');
+  dot.className = 'dot-ref ' + end;
+  dot.style.left = p.x + 'px';
+  dot.style.top = p.y + 'px';
+  wrap.appendChild(dot);
+  if(isSelectedRoute) addHandle(route, end, x, y);
+}
+
+// Groot, sleepbaar handvat — alleen voor de geselecteerde route (max. 2
+// tegelijk op de hele kaart, zie redraw()).
+function addHandle(route, end, x, y){
+  const wrap = document.getElementById('mapWrap');
+  const p = localToWrapPixels(x, y);
   const handle = document.createElement('div');
-  handle.className = 'handle ' + end + (selectedKey===route.key ? ' selected' : '');
-  handle.style.left = (screenPt.x - wrapRect.left) + 'px';
-  handle.style.top = (screenPt.y - wrapRect.top) + 'px';
+  handle.className = 'handle ' + end;
+  handle.style.left = p.x + 'px';
+  handle.style.top = p.y + 'px';
   handle.title = (end==='a'?nameOf(route.aId):nameOf(route.bId)) + ' — ' + route.key;
   wrap.appendChild(handle);
   handle.addEventListener('pointerdown', (e)=>{
     e.preventDefault();
-    selectedKey = route.key;
     handle.setPointerCapture(e.pointerId);
     const move = (ev)=>{
       const local = screenToLocal(ev.clientX, ev.clientY);
@@ -233,6 +329,19 @@ function setOverridePoint(route, end, x, y){
   ov[route.key] = existing;
 }
 
+function currentPoint(route, end){
+  const ov = REGISTRY._seaRoutePoints[route.key];
+  if(ov && ov[end]) return ov[end];
+  const wrap = document.getElementById('mapWrap');
+  const svg = wrap.querySelector('svg');
+  const lines = svg.querySelectorAll('#mapSeaRoutes line');
+  const idx = ROUTES.findIndex(r=>r.key===route.key);
+  const line = lines[idx];
+  if(!line) return {x:0,y:0};
+  return end==='a' ? {x:+line.getAttribute('x1'),y:+line.getAttribute('y1')}
+                    : {x:+line.getAttribute('x2'),y:+line.getAttribute('y2')};
+}
+
 function resetOverride(key){
   delete REGISTRY._seaRoutePoints[key];
   redraw();
@@ -255,19 +364,43 @@ function renderList(){
 
 function renderSelInfo(){
   const info = document.getElementById('selInfo');
+  const fields = document.getElementById('coordFields');
   const resetBtn = document.getElementById('resetBtn');
   const route = ROUTES.find(r=>r.key===selectedKey);
   if(!route){
-    info.textContent = 'Klik een route in de lijst, of sleep een van de puntjes op de kaart.';
+    info.textContent = 'Klik een route in de lijst om \'m te bewerken.';
+    fields.style.display = 'none';
     resetBtn.style.display = 'none';
     return;
   }
   const hasOv = !!REGISTRY._seaRoutePoints[route.key];
   info.innerHTML = '<b>' + nameOf(route.aId) + ' ↔ ' + nameOf(route.bId) + '</b><br>'
     + (hasOv ? 'Handmatig aangepast.' : 'Nog automatisch berekend (zwaartepunt).');
+  fields.style.display = 'block';
+  document.getElementById('aName').textContent = nameOf(route.aId);
+  document.getElementById('bName').textContent = nameOf(route.bId);
+  const pa = currentPoint(route,'a'), pb = currentPoint(route,'b');
+  // .value direct zetten (niet de inputs opnieuw aanmaken) zodat een veld dat
+  // je op dit moment aan het intypen bent zijn focus behoudt.
+  if(document.activeElement!==document.getElementById('aX')) document.getElementById('aX').value = Math.round(pa.x);
+  if(document.activeElement!==document.getElementById('aY')) document.getElementById('aY').value = Math.round(pa.y);
+  if(document.activeElement!==document.getElementById('bX')) document.getElementById('bX').value = Math.round(pb.x);
+  if(document.activeElement!==document.getElementById('bY')) document.getElementById('bY').value = Math.round(pb.y);
   resetBtn.style.display = hasOv ? 'block' : 'none';
   resetBtn.onclick = ()=> resetOverride(route.key);
 }
+
+['aX','aY','bX','bY'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', ()=>{
+    const route = ROUTES.find(r=>r.key===selectedKey); if(!route) return;
+    const end = id[0]; // 'a' of 'b'
+    const other = end==='a' ? currentPoint(route,'a') : currentPoint(route,'b');
+    const x = id[1]==='X' ? (+document.getElementById(end+'X').value||0) : other.x;
+    const y = id[1]==='Y' ? (+document.getElementById(end+'Y').value||0) : other.y;
+    setOverridePoint(route, end, x, y);
+    redraw();
+  });
+});
 
 document.getElementById('exportBtn').onclick = ()=>{
   const txt = JSON.stringify(REGISTRY._seaRoutePoints, null, 2);
@@ -280,7 +413,13 @@ document.getElementById('copyBtn').onclick = ()=>{
   navigator.clipboard.writeText(area.value).then(()=>setStatus("Gekopieerd naar klembord!"));
 };
 
-window.addEventListener('resize', redraw);
+window.addEventListener('resize', ()=>{
+  const wrap = document.getElementById('mapWrap');
+  // Alleen de basisbreedte herijken als er nog geen handmatig zoomniveau
+  // gekozen is — anders zou een resize een bewuste zoomkeuze ongedaan maken.
+  if(zoomPct===100 && wrap) baseSvgWidth = wrap.clientWidth || baseSvgWidth;
+  applyZoom();
+});
 load();
 </script>
 </body>
