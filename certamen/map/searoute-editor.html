@@ -151,7 +151,12 @@ async function load(){
       // Natuurlijke breedte = wat de SVG zou krijgen op de beschikbare
       // breedte van #mapWrap bij 100% — daarna schaalt applyZoom() vanaf dit
       // basisgetal, zodat "100%" altijd overeenkomt met "past precies".
-      baseSvgWidth = wrap.clientWidth || 1000;
+      // Ondergrens (700px): op een smal venster liet wrap.clientWidth soms
+      // maar een handvol pixels over (de vaste 300px-zijbalk plus overige
+      // marges), waardoor "100%" een vrijwel onbruikbaar mini-kaartje werd —
+      // #mapWrap scrollt toch al (overflow:auto), dus een breder minimum is
+      // altijd veilig.
+      baseSvgWidth = Math.max(700, wrap.clientWidth || 0) || 1000;
       svgEl.setAttribute('style','display:block;height:auto');
     }
     computeRoutes();
@@ -417,7 +422,7 @@ window.addEventListener('resize', ()=>{
   const wrap = document.getElementById('mapWrap');
   // Alleen de basisbreedte herijken als er nog geen handmatig zoomniveau
   // gekozen is — anders zou een resize een bewuste zoomkeuze ongedaan maken.
-  if(zoomPct===100 && wrap) baseSvgWidth = wrap.clientWidth || baseSvgWidth;
+  if(zoomPct===100 && wrap) baseSvgWidth = Math.max(700, wrap.clientWidth || 0) || baseSvgWidth;
   applyZoom();
 });
 load();
