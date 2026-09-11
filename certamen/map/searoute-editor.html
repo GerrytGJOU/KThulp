@@ -222,21 +222,46 @@ function nameOf(id){ return (REGISTRY[id]&&REGISTRY[id].displayName) || id; }
 
 function redraw(){
   const wrap = document.getElementById('mapWrap');
+  // MapAPI.drawSeaRoutes() tekent zelf de dunne stippellijnen (elke lijn
+  // berekent zijn EIGEN twee eindpunten intern, dus die kloppen sowieso).
   MapAPI.drawSeaRoutes(REGISTRY, wrap);
   wrap.querySelectorAll('.dot-ref, .handle').forEach(h=>h.remove());
-  const svg = wrap.querySelector('svg');
-  const lines = svg ? svg.querySelectorAll('#mapSeaRoutes line') : [];
-  // drawSeaRoutes() tekent in dezelfde volgorde als computeRoutes() hierboven
-  // opsomt (zelfde dedup-logica) — zolang beide ongewijzigd blijven, komt
-  // lines[i] overeen met ROUTES[i].
-  ROUTES.forEach((route, i)=>{
-    const line = lines[i]; if(!line) return;
+  // De stipjes/handvatten hierboven zijn een LOSSE overlay, bewust NIET
+  // gekoppeld aan de volgorde waarin drawSeaRoutes() se <line>-elementen in
+  // de DOM staan (die volgt de sleutelvolgorde van provinces.json, niet de
+  // alfabetisch gesorteerde ROUTES-lijst hieronder — bij een eerdere versie
+  // matchte dit toevallig via lines[i]===ROUTES[i], wat de VERKEERDE
+  // handvatten liet verschijnen zodra de twee volgordes uiteenliepen). Elke
+  // route berekent nu gewoon zijn eigen punt via currentPoint(), nooit via
+  // een DOM-index.
+  ROUTES.forEach(route=>{
     const isSel = route.key===selectedKey;
-    addPoint(route, 'a', +line.getAttribute('x1'), +line.getAttribute('y1'), isSel);
-    addPoint(route, 'b', +line.getAttribute('x2'), +line.getAttribute('y2'), isSel);
+    const pa = currentPoint(route,'a'), pb = currentPoint(route,'b');
+    addPoint(route, 'a', pa.x, pa.y, isSel);
+    addPoint(route, 'b', pb.x, pb.y, isSel);
   });
   renderList();
   renderSelInfo();
+}
+
+// Zwaartepunt van een provincie in lokale SVG-coördinaten — zelfde recept als
+// de private centerOf() in MapAPI.drawSeaRoutes() (provinces.js), hier
+// opnieuw nodig omdat die functie niet los aangeroepen kan worden.
+function localCenterOf(id){
+  const wrap = document.getElementById('mapWrap');
+  const svg = wrap.querySelector('svg');
+  const el = svg.querySelector('[id="'+id+'"], [data-province="'+id+'"]');
+  const firstProvince = svg.querySelector('.province');
+  const parent = firstProvince ? firstProvince.parentNode : svg;
+  const ctmSource = (parent && typeof parent.getScreenCTM==='function') ? parent : svg;
+  const ctm = ctmSource.getScreenCTM();
+  if(!el || !ctm) return {x:0,y:0};
+  const rect = el.getBoundingClientRect();
+  const pt = svg.createSVGPoint();
+  pt.x = rect.left + rect.width/2;
+  pt.y = rect.top + rect.height/2;
+  const local = pt.matrixTransform(ctm.inverse());
+  return {x: local.x, y: local.y};
 }
 
 // Rekent een schermpositie (clientX/Y) om naar dezelfde lokale SVG-
@@ -323,33 +348,19 @@ function setOverridePoint(route, end, x, y){
   // ANDERE kant, zodat een override altijd een compleet {a,b}-paar is —
   // drawSeaRoutes() verwacht beide punten zodra er een override bestaat.
   const otherEnd = end==='a' ? 'b' : 'a';
-  if(!existing[otherEnd]){
-    const wrap = document.getElementById('mapWrap');
-    const svg = wrap.querySelector('svg');
-    const lines = svg.querySelectorAll('#mapSeaRoutes line');
-    const idx = ROUTES.findIndex(r=>r.key===route.key);
-    const line = lines[idx];
-    if(line){
-      existing[otherEnd] = otherEnd==='a'
-        ? { x:+line.getAttribute('x1'), y:+line.getAttribute('y1') }
-        : { x:+line.getAttribute('x2'), y:+line.getAttribute('y2') };
-    }
-  }
+  if(!existing[otherEnd]) existing[otherEnd] = currentPoint(route, otherEnd);
   existing[end] = { x: Math.round(x), y: Math.round(y) };
   ov[route.key] = existing;
 }
 
+// Huidig eindpunt van één kant van een route: de override als die bestaat,
+// anders het automatisch berekende zwaartepunt van die specifieke provincie
+// (localCenterOf(), NIET via een DOM-index in de <line>-lijst — zie de
+// toelichting bij redraw() hierboven).
 function currentPoint(route, end){
   const ov = REGISTRY._seaRoutePoints[route.key];
   if(ov && ov[end]) return ov[end];
-  const wrap = document.getElementById('mapWrap');
-  const svg = wrap.querySelector('svg');
-  const lines = svg.querySelectorAll('#mapSeaRoutes line');
-  const idx = ROUTES.findIndex(r=>r.key===route.key);
-  const line = lines[idx];
-  if(!line) return {x:0,y:0};
-  return end==='a' ? {x:+line.getAttribute('x1'),y:+line.getAttribute('y1')}
-                    : {x:+line.getAttribute('x2'),y:+line.getAttribute('y2')};
+  return localCenterOf(end==='a' ? route.aId : route.bId);
 }
 
 function resetOverride(key){
