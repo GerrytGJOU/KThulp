@@ -220,11 +220,20 @@ function computeRoutes(){
 
 function nameOf(id){ return (REGISTRY[id]&&REGISTRY[id].displayName) || id; }
 
+// Alleen de dunne stippellijnen (MapAPI.drawSeaRoutes() vervangt enkel het
+// <g id="mapSeaRoutes">-element BINNEN de svg — dat raakt nooit onze eigen
+// .dot-ref/.handle-divs, die als losse kinderen van #mapWrap zelf hangen).
+// Bewust GEEN dot-ref/handle-herbouw hier: dit wordt ook tijdens het slepen
+// aangeroepen (zie addHandle() se move-handler hieronder), en het element
+// waarop net setPointerCapture() is gezet mag dan niet uit de DOM verdwijnen
+// — dat brak eerder het slepen na precies één pointermove-event.
+function redrawLines(){
+  MapAPI.drawSeaRoutes(REGISTRY, document.getElementById('mapWrap'));
+}
+
 function redraw(){
+  redrawLines();
   const wrap = document.getElementById('mapWrap');
-  // MapAPI.drawSeaRoutes() tekent zelf de dunne stippellijnen (elke lijn
-  // berekent zijn EIGEN twee eindpunten intern, dus die kloppen sowieso).
-  MapAPI.drawSeaRoutes(REGISTRY, wrap);
   wrap.querySelectorAll('.dot-ref, .handle').forEach(h=>h.remove());
   // De stipjes/handvatten hierboven zijn een LOSSE overlay, bewust NIET
   // gekoppeld aan de volgorde waarin drawSeaRoutes() se <line>-elementen in
@@ -329,12 +338,22 @@ function addHandle(route, end, x, y){
     const move = (ev)=>{
       const local = screenToLocal(ev.clientX, ev.clientY);
       setOverridePoint(route, end, local.x, local.y);
-      redraw();
+      // Lichte update tijdens het slepen: alleen DIT handvat verplaatsen en
+      // de lijn bijtekenen (redrawLines() raakt de .handle/.dot-ref-divs
+      // niet aan) — een volledige redraw() zou dit element (waar net
+      // setPointerCapture() op gezet is) meteen vervangen door een nieuwe,
+      // waardoor de sleepbeweging na precies één pointermove afbrak.
+      const p = localToWrapPixels(local.x, local.y);
+      handle.style.left = p.x + 'px';
+      handle.style.top = p.y + 'px';
+      redrawLines();
+      renderSelInfo(); // live coördinaten in de zijbalk tijdens het slepen
     };
     const up = (ev)=>{
       handle.releasePointerCapture(e.pointerId);
       handle.removeEventListener('pointermove', move);
       handle.removeEventListener('pointerup', up);
+      redraw(); // nu pas alles herbouwen: lijst-badge, andere dot-ref, etc.
     };
     handle.addEventListener('pointermove', move);
     handle.addEventListener('pointerup', up);
