@@ -1438,22 +1438,29 @@ afgesloten seizoen als een kaart, nieuwste eerst:
     provincie om te belonen) — directe tegenhanger van "meeste
     veroveringen", bedoeld om verdedigen net zo motiverend te maken als
     aanvallen.
-  - 🔥 **Grootste comeback** (nieuw, 2026-09-10) — `totalwar/stats/biggestComeback`,
-    het hoogste aantal gebieden dat een volk ooit weer opbouwde NADAT het
-    volledig van de kaart was geveegd. Gebruikt een eigen
-    `civs/{civId}/comebackWiped`-vlag (`twDetectWipedCivs()` zet 'm
-    onvoorwaardelijk zodra een volk wordt weggevaagd), bewust GESCHEIDEN van
-    de bestaande `wasWiped`-vlag van het leerling-prestatiesysteem
+  - 🔥 **Grootste comeback** (nieuw, 2026-09-10, verscherpt 2026-09-13) —
+    `totalwar/stats/biggestComeback`, het hoogste aantal gebieden dat een volk
+    ooit weer opbouwde NADAT het ECHT verslagen was (0 provincies door
+    verovering, niet "nog nooit een provincie gehad"). Gebruikt een eigen
+    `civs/{civId}/comebackWiped`-vlag, bewust GESCHEIDEN van de bestaande
+    `wasWiped`-vlag van het leerling-prestatiesysteem
     (`trCheckComebackAchievement()`, `certamen/training.js`): die twee
     vlaggen hebben een ander levenscyclus-doel (per-leerling-prestatie vs.
     seizoensrecord) en zouden elkaar in de weg zitten als ze gedeeld werden.
-    `twMaybeRecordBiggestEmpire(owner, civId)` telt na elke gebiedswinst het
-    actuele totaal en werkt, als `comebackWiped` waar is, ook meteen
-    `biggestComeback` bij (zelfde transactie-patroon: alleen bijwerken als
-    het nieuwe aantal het record verslaat). `comebackWiped` wordt bij elke
-    `twStartNewSeason()` teruggezet naar `null` voor alle volken (de
-    `wasWiped`-vlag van het prestatiesysteem blijft daarbij bewust
-    ongemoeid).
+    `twDetectWipedCivs()` zette dit oorspronkelijk onvoorwaardelijk zodra een
+    volk 0 provincies had — dat gaf tijdens het opzetten van een seizoen
+    (nieuwe klas/volk gekoppeld, maar het vlaggenschip nog niet toegekend)
+    onterecht een "comeback" zodra dat volk zijn eerste gebied kreeg. Sinds
+    2026-09-13 houdt een nieuwe vlag `civs/{civId}/everHeldProvince` bij of
+    een volk OOIT ECHT een gebied bezat; `comebackWiped`/`wasWiped` worden nu
+    alleen nog gezet als die vlag al waar was op het moment dat het volk op
+    0 provincies kwam. `twMaybeRecordBiggestEmpire(owner, civId)` telt na elke
+    gebiedswinst het actuele totaal en werkt, als `comebackWiped` waar is, ook
+    meteen `biggestComeback` bij (zelfde transactie-patroon: alleen bijwerken
+    als het nieuwe aantal het record verslaat). `comebackWiped` én
+    `everHeldProvince` worden bij elke `twStartNewSeason()` teruggezet naar
+    `null` voor alle volken (de `wasWiped`-vlag van het prestatiesysteem
+    blijft daarbij bewust ongemoeid).
   - 🏃 **Meest actieve klas** (nieuw, 2026-09-10) — niet het klas met de
     meeste goede antwoorden absoluut (dat bevoordeelt structureel grote
     klassen), maar het hoogste gemiddelde per leerling:
