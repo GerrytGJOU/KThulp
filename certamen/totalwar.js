@@ -1327,9 +1327,14 @@ async function twStartNewSeason(nextNum, title, siegeWeaponsEnabled){
   // "comeback-gerechtigd" blijven. wasWiped (het per-leerling-eerbewijs)
   // blijft bewust ongemoeid: dat is eigendom van een ander systeem
   // (trCheckComebackAchievement(), training.js) met een eigen levenscyclus.
+  // everHeldProvince (twDetectWipedCivs() hieronder) ook resetten: zonder
+  // dit zou elk volk dat VORIG seizoen ooit een gebied bezat, aan het begin
+  // van het nieuwe seizoen (vóórdat de eerste vlaggenschip-toewijzingen
+  // gebeurd zijn) meteen als "verslagen" gelden.
   Object.keys(TW_CIVS).forEach(civId=>{
     if(civId==="neutral") return;
     upd[twPath(_twOwner,"civs/"+civId+"/comebackWiped")] = null;
+    upd[twPath(_twOwner,"civs/"+civId+"/everHeldProvince")] = null;
   });
   upd[twPath(_twOwner,"stats")] = null;
   upd[twPath(_twOwner,"season")] = { number:nextNum, title, startedAt:FBNet.serverTime(),
@@ -1733,20 +1738,33 @@ function twDetectWipedCivs(provinces){
   if(!fbDB || !provinces || !_twOwner) return;
   Object.keys(TW_CIVS).forEach(civId=>{
     if(civId==="neutral") return;
-    const wiped=!Object.values(provinces).some(p=>p&&p.owner===civId);
-    if(!wiped) return;
-    fbDB.ref(twPath(_twOwner,"civs/"+civId+"/wasWiped")).once("value").then(snap=>{
-      if(!snap.val()) fbDB.ref(twPath(_twOwner,"civs/"+civId+"/wasWiped")).set(true);
+    const holds=Object.values(provinces).some(p=>p&&p.owner===civId);
+    const everRef=fbDB.ref(twPath(_twOwner,"civs/"+civId+"/everHeldProvince"));
+    if(holds){
+      // Blijvend bewijs dat dit volk ooit ECHT een gebied heeft bezeten —
+      // nodig om hieronder "verslagen" te kunnen onderscheiden van "heeft
+      // nog nooit een gebied gehad" (op verzoek 2026-09-13: een net
+      // toegevoegde klas/volk stond vlak vóór zijn vlaggenschip-toewijzing
+      // ook al op 0 provincies, en werd dan bij die eerste toewijzing
+      // onterecht als "grootste comeback" geteld).
+      everRef.once("value").then(snap=>{ if(!snap.val()) everRef.set(true); }).catch(()=>{});
+      return;
+    }
+    everRef.once("value").then(snap=>{
+      if(!snap.val()) return; // nooit een gebied bezeten → geen wipe, geen comeback
+      fbDB.ref(twPath(_twOwner,"civs/"+civId+"/wasWiped")).once("value").then(s2=>{
+        if(!s2.val()) fbDB.ref(twPath(_twOwner,"civs/"+civId+"/wasWiped")).set(true);
+      }).catch(()=>{});
+      // Losstaand van wasWiped hierboven (dat is eigendom van het per-leerling
+      // eerbewijssysteem, trCheckComebackAchievement() in training.js, en
+      // wordt lazy weer op false gezet zodra ÉÉN leerling de comeback ziet —
+      // te wisselvallig om "grootste comeback" (stats/biggestComeback,
+      // twMaybeRecordBiggestEmpire() hieronder) op te baseren). comebackWiped
+      // is puur voor die seizoensstat: blijft simpelweg true staan tot de
+      // volgende twStartNewSeason()-reset, ongeacht wat het eerbewijssysteem
+      // ondertussen met wasWiped doet.
+      fbDB.ref(twPath(_twOwner,"civs/"+civId+"/comebackWiped")).set(true).catch(()=>{});
     }).catch(()=>{});
-    // Losstaand van wasWiped hierboven (dat is eigendom van het per-leerling
-    // eerbewijssysteem, trCheckComebackAchievement() in training.js, en
-    // wordt lazy weer op false gezet zodra ÉÉN leerling de comeback ziet —
-    // te wisselvallig om "grootste comeback" (stats/biggestComeback,
-    // twMaybeRecordBiggestEmpire() hieronder) op te baseren). comebackWiped
-    // is puur voor die seizoensstat: blijft simpelweg true staan tot de
-    // volgende twStartNewSeason()-reset, ongeacht wat het eerbewijssysteem
-    // ondertussen met wasWiped doet.
-    fbDB.ref(twPath(_twOwner,"civs/"+civId+"/comebackWiped")).set(true).catch(()=>{});
   });
 }
 
@@ -1993,7 +2011,13 @@ function twGarrisonVisualHTML(p, civId, size, provinceId){
   // object-position verplaatst de afbeelding-in-het-vak wél echt: boeren
   // zakken naar beneden, gebouw blijft gecentreerd → figuren staan er iets
   // onder/vóór i.p.v. er precies overheen geplakt.
-  const posFor = type => type==="militia" ? ";object-position:center bottom" : "";
+  // Fort/wachttoren mag boven de muur uitsteken (op verzoek 2026-09-13, bij
+  // een volledig uitgebouwde provincie): "center top" laat de afbeelding
+  // binnen zijn vak naar BOVEN opschuiven i.p.v. verticaal centreren, zodat
+  // de top van het gebouw zo hoog mogelijk in het vak komt — geen wijziging
+  // aan de vakgrootte/inset nodig, object-fit:contain doet de rest.
+  const posFor = type => type==="militia" ? ";object-position:center bottom"
+    : type==="towers" ? ";object-position:center top" : "";
   const inset = Math.max(4, Math.round(size*0.0625)); // 8px bij de standaard 128px, schaalt mee
   const clickable = size<=128;
   const mp=Number(p.militiaPoints)||0, wp=Number(p.wallPoints)||0, tp=Number(p.towerPoints)||0;
