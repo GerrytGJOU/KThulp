@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Docentengids">
+<meta name="theme-color" content="#100e14">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<title>DOCENTENGIDS — Klassieke Talen</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicons/hoofdscherm/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicons/hoofdscherm/favicon-16x16.png">
+<link rel="apple-touch-icon" href="../assets/favicons/hoofdscherm/apple-touch-icon.png">
+<style>
+  :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--cream:#f3e9d2;
+        --muted:#b9a883;--muted2:#8a7a5c;--s2:#16121a;--s3:#211c28;--s4:#2e2838;
+        --ok:#8fbf7a;--warn:#e0a08f;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'EB Garamond',Georgia,serif;min-height:100vh;color:var(--cream);
+    background:
+      radial-gradient(ellipse at 20% 50%,rgba(90,18,12,.18),transparent 55%),
+      radial-gradient(ellipse at 80% 50%,rgba(26,58,92,.18),transparent 55%),
+      radial-gradient(ellipse at 50% -10%,rgba(212,175,55,.08),transparent 50%),
+      linear-gradient(160deg,#0e0b10,#16121a 45%,#100e14);
+    background-attachment:fixed;padding:34px 16px 60px;}
+  .wrap{max-width:720px;margin:0 auto}
+
+  h1{font-family:'Cinzel',serif;font-weight:800;text-align:center;color:var(--goldb);
+     font-size:clamp(26px,5vw,34px);letter-spacing:.03em;text-shadow:0 2px 8px rgba(0,0,0,.5);
+     margin-bottom:10px}
+  .sub{text-align:center;color:var(--muted);font-size:15px;max-width:520px;margin:0 auto 40px;
+    line-height:1.6}
+
+  h2{font-family:'Cinzel',serif;font-weight:700;font-size:19px;color:var(--goldb);margin-bottom:4px}
+  h3{font-family:'Cinzel',serif;font-weight:700;font-size:14px;color:var(--cream);
+     display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  p{line-height:1.6;margin:0 0 10px;font-size:15.5px}
+  p:last-child{margin-bottom:0}
+  a{color:var(--goldb)}
+
+  .steps{display:flex;flex-direction:column;margin-bottom:44px}
+  .step{display:grid;grid-template-columns:50px 1fr;gap:18px;padding:24px 0;
+    border-bottom:1px solid rgba(212,175,55,.16)}
+  .step:first-child{padding-top:0}
+  .step:last-child{border-bottom:none;padding-bottom:0}
+  .step-num{font-family:'Cinzel',serif;font-weight:800;font-size:24px;color:var(--gold);
+    opacity:.55;line-height:1}
+  .tag{display:inline-block;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;color:#e0b86a;background:rgba(212,175,55,.12);
+    border-radius:999px;padding:3px 10px;margin-bottom:8px}
+  .path{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14px;
+    background:var(--s2);border:1px solid var(--s4);border-radius:8px;
+    padding:8px 12px;margin:8px 0;color:var(--cream)}
+  .path b{color:var(--goldb);font-weight:600}
+  .path .arr{color:var(--muted2)}
+
+  .section{margin-bottom:36px}
+  .lede{color:var(--muted);font-size:14.5px;margin-bottom:16px;max-width:60ch}
+  .cap-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+  .cap{background:var(--s2);border:1px solid var(--s4);border-radius:12px;padding:16px 18px}
+  .cap p{font-size:14px;color:var(--muted);line-height:1.5}
+
+  .limits{background:rgba(168,72,58,.08);border:1px solid rgba(168,72,58,.28);
+    border-left:3px solid #a8483a;border-radius:4px 12px 12px 4px;padding:16px 20px;margin-top:18px}
+  .limits h3{color:var(--warn)}
+  .limits ul{margin:0;padding-left:20px;line-height:1.7;font-size:14.5px}
+
+  .callout{border:1px solid var(--s4);background:var(--s2);border-left:3px solid var(--gold);
+    border-radius:4px 12px 12px 4px;padding:16px 20px;margin-bottom:14px;font-size:14.5px}
+  .callout h3{color:var(--goldb)}
+
+  .portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;
+    justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);
+    border:1px solid rgba(212,175,55,.35);color:var(--gold);text-decoration:none;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7)}
+  .portal-back svg{width:22px;height:22px;display:block}
+
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:40px;font-style:italic}
+
+  @media (max-width:520px){
+    body{padding:26px 14px 50px}
+    .step{grid-template-columns:38px 1fr;gap:12px}
+  }
+</style>
+</head>
+<body>
+<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<div class="wrap">
+  <h1>Docentengids</h1>
+  <p class="sub">Hoe je als docent toegang krijgt tot KThulp, hoe je inlogt, en wat je daarna allemaal zelf kunt regelen voor je eigen klassen.</p>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h2>Vraag een account aan</h2>
+        <p>Dat kan meteen hier op de <a href="../">hoofdpagina</a> — je hoeft hiervoor niet eerst naar Certamen. Onderaan elke pagina van de site staat één inlogknopje.</p>
+        <div class="path"><b>Inloggen (leerling / docent)</b> <span class="arr">→</span> tabblad <b>Docent</b> <span class="arr">→</span> <b>Account aanmaken</b></div>
+        <p>Vul je e-mailadres en een wachtwoord in (minstens 6 tekens, twee keer ter controle) en klik op <b>Registreren</b>. Dit ene account werkt daarna overal op de site — ook in Certamen.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <span class="tag">Even wachten</span>
+        <h2>Wacht op goedkeuring</h2>
+        <p>Je account bestaat nu, maar staat op <b>"in afwachting"</b> tot de beheerder van de site het goedkeurt. Zolang dat niet is gebeurd, kun je wel inloggen en je status zien, maar nog geen klassen aanmaken of iets anders van de docent-functies gebruiken.</p>
+        <p>Er gaat geen automatisch bericht naar de beheerder — laat dus even weten dat je je hebt aangemeld, dan wordt je account goedgekeurd.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h2>Log in</h2>
+        <p>Zodra je bent goedgekeurd, log je met hetzelfde e-mailadres en wachtwoord in via datzelfde inlogknopje — op de hoofdpagina, in elke Latijn/Grieks-app, of rechtstreeks in Certamen: het is overal hetzelfde account. Vink <b>"Onthoud mij op dit apparaat"</b> aan zodat je niet elke keer opnieuw hoeft in te loggen.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section">
+    <h2 style="margin-bottom:10px">Wachtwoord vergeten &amp; inloggen met Google</h2>
+    <p class="lede">Twee manieren om nooit buitengesloten te raken.</p>
+    <div class="cap-grid">
+      <div class="cap">
+        <h3>🔑 Wachtwoord vergeten</h3>
+        <p>Klik in het inlogscherm op <b>"Wachtwoord vergeten?"</b>, direct onder de knoppen. Je krijgt een resetlink op je e-mailadres.</p>
+      </div>
+      <div class="cap">
+        <h3>🔗 Google koppelen</h3>
+        <p>Klik in het docentenportaal op <b>"Koppel Google"</b> om je Google-account aan je docentaccount te hangen — eenmalig, terwijl je al bent ingelogd.</p>
+      </div>
+      <div class="cap">
+        <h3>🚀 Inloggen met Google</h3>
+        <p>Eenmaal gekoppeld, log je voortaan ook in met <b>"Inloggen met Google"</b> in het inlogscherm — geen wachtwoord nodig.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Wat kun je als goedgekeurde docent?</h2>
+    <p class="lede">Alles hieronder geldt alleen voor je <b>eigen</b> klassen en gegevens — nooit die van een andere docent.</p>
+    <div class="cap-grid">
+
+      <div class="cap">
+        <h3>🏫 Klassen aanmaken</h3>
+        <p>Maak eigen klascodes aan. Zo'n code werkt meteen ook als leerling-inlogcode voor Battle Mode en de andere spelmodi.</p>
+      </div>
+
+      <div class="cap">
+        <h3>👥 Leerlingen beheren</h3>
+        <p>Bekijk je leerlingen per klas, hernoem een profiel, verplaats iemand naar een andere klas, of verwijder een profiel.</p>
+      </div>
+
+      <div class="cap">
+        <h3>📊 Voortgang inzien</h3>
+        <p>Op "Mijn profiel" zie je per klas een tabel met de scores van je leerlingen, over alle 16 losse oefenapps én Certamen heen.</p>
+      </div>
+
+      <div class="cap">
+        <h3>📚 Eigen woordenlijsten</h3>
+        <p>Upload of plak je eigen woordenlijst (csv, txt of Excel) en deel 'm met je klas — naast de standaard frequentielijsten en werkwoordenlijsten.</p>
+      </div>
+
+      <div class="cap">
+        <h3>🗺️ Eigen Total War starten</h3>
+        <p>Start je eigen, onafhankelijke veldtocht: koppel je klassen aan een beschaving, start aanvallen en later een nieuw seizoen. Volledig los van andere docenten se veldtocht.</p>
+      </div>
+
+      <div class="cap">
+        <h3>🏛️ Eigen Hall of Fame</h3>
+        <p>Elk seizoen dat je afsluit komt in je eigen Hall of Fame te staan. Een seizoen verbergen of verwijderen kan alleen jij, voor je eigen veldtocht.</p>
+      </div>
+
+    </div>
+
+    <div class="limits">
+      <h3>Wat kun je niet</h3>
+      <ul>
+        <li>Klassen, leerlingen of Total War-veldtochten van een andere docent bekijken of wijzigen.</li>
+        <li>Andere docenten goedkeuren of hun toegang intrekken — dat kan alleen de beheerder.</li>
+        <li>Het beheerdersoverzicht van de hele site inzien.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout">
+    <h3>Nog steeds "in afwachting"?</h3>
+    <p>Neem contact op met de beheerder van de site om je account te laten goedkeuren.</p>
+  </div>
+
+  <footer>Docentengids &middot; &copy; Gerben de Jong &middot; 2026</footer>
+</div>
+</body>
+</html>

@@ -86,6 +86,9 @@
     color:var(--cream);border:1px solid var(--stone4,#3d2f20);border-radius:8px;padding:10px 12px}
   .ktaErr{color:#e08a7a;font-size:12.5px}
   .ktaOk{color:#8fbf7a;font-size:12.5px}
+  .ktaLink{background:none;border:none;color:var(--muted);font-family:'EB Garamond',Georgia,serif;
+    font-size:12.5px;text-decoration:underline;cursor:pointer;padding:2px 0;text-align:left}
+  .ktaLink:hover{color:var(--goldb)}
   .ktaClose{position:absolute;top:10px;right:12px;background:none;border:none;
     color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
 </style>
@@ -165,11 +168,17 @@
 
   </div>
 
+  <div style="text-align:center;margin-top:26px">
+    <a href="docenten/" style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;
+      text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--goldd);
+      padding-bottom:2px">Docentengids — een account aanvragen</a>
+  </div>
+
   <div id="ktAuth"></div>
 
   <footer>Klassieke Talen &middot; &copy; Gerben de Jong &middot; 2026</footer>
 </div>
-<script src="assets/site-auth.js"></script>
+<script src="assets/site-auth.js?v=20260916a"></script>
 <script>KTAuth.mountWidget(document.getElementById('ktAuth'));</script>
 </body>
 </html>

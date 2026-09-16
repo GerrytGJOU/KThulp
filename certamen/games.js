@@ -1040,10 +1040,16 @@ SCREENS.teacherLogin = function(){
       Onthoud mij op dit apparaat
     </label>
     <button class="btn btn-gold btn-block lg" style="margin-top:16px" onclick="teacherDoLogin()">Inloggen</button>
+    <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="teacherDoGoogleLogin()">Inloggen met Google</button>
+    <div class="note" style="margin-top:4px">Alleen als je Google eerder aan dit docentaccount hebt gekoppeld (via het docentenportaal).</div>
     <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('teacherSignup')">Account aanmaken</button>
+    <button type="button" style="background:none;border:none;color:var(--muted);font-size:13px;text-decoration:underline;cursor:pointer;margin-top:10px;padding:0" onclick="teacherDoForgotPassword()">Wachtwoord vergeten?</button>
   </div>
   ${foot()}`);
   setTimeout(()=>{ const e=el("tpEmail"); if(e)e.focus(); }, 120);
+  // Een lopende Google-koppeling/inlog-redirect wordt al bij app-init
+  // afgehandeld (certamen/index.html), vóórdat dit scherm ooit gerenderd
+  // wordt — hier dus geen aparte handleTeacherGoogleRedirect()-aanroep nodig.
   if(!demo){
     teacherNet().authReady().then(user=>{
       if(user && _screen==="teacherLogin") goReplace("teacherPortal");
@@ -1061,6 +1067,19 @@ function teacherDoLogin(){
   teacherNet().loginTeacher(email,pw,remember)
     .then(()=>go("teacherPortal"))
     .catch(e=>toast("Inloggen mislukt",typeof e==="string"?e:(e?.message||"Controleer je gegevens.")));
+}
+
+function teacherDoGoogleLogin(){
+  teacherNet().loginTeacherWithGoogle?.()
+    .catch(e=>toast("Inloggen mislukt",typeof e==="string"?e:(e?.message||"")));
+}
+
+function teacherDoForgotPassword(){
+  const email=(el("tpEmail")?.value||"").trim();
+  if(!email){ toast("E-mailadres vereist","Vul eerst je e-mailadres in."); return; }
+  teacherNet().resetTeacherPassword(email)
+    .then(()=>toast("E-mail verstuurd","Resetlink verstuurd naar "+email+"."))
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
 }
 
 /* ---- SCHERM: nieuw docentaccount aanmaken (komt op "pending" te staan) ---- */
@@ -1153,11 +1172,13 @@ function tpRenderPortalBlocked(status){
 }
 
 function tpRenderPortalContent(){
+  const hasGoogle = !!(firebase.auth().currentUser?.providerData||[]).some(p=>p.providerId==="google.com");
   H(brand(true)+`
   <div class="scrhead">
     <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
     <h2>Docentenportaal</h2>
-    <button class="chip" style="margin-left:auto" onclick="teacherLogout()">Uitloggen</button>
+    ${hasGoogle?"":`<button class="chip" style="margin-left:auto" onclick="teacherDoLinkGoogle()">Koppel Google</button>`}
+    <button class="chip" style="${hasGoogle?"margin-left:auto":""}" onclick="teacherLogout()">Uitloggen</button>
   </div>
   <div id="tpClassList"><div class="note" style="text-align:center;padding:20px">Klassen laden…</div></div>
   <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
@@ -1433,6 +1454,11 @@ function tpDeleteClass(code){
 
 function teacherLogout(){
   teacherNet().logoutTeacher().then(()=>go("teacherLogin"));
+}
+
+function teacherDoLinkGoogle(){
+  teacherNet().linkTeacherGoogle?.()
+    .catch(e=>toast("Koppelen mislukt",typeof e==="string"?e:(e?.message||"")));
 }
 
 /* ============================================================
