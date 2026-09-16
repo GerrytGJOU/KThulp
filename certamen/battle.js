@@ -2074,6 +2074,7 @@ function bmBgTheme(theme){
 const BATTLE_BACKGROUNDS = {
   // Tweelaags (RPG Maker MV): floor = Battleback1, wall = Battleback2.
   "grasland":    { nm:"Grasvlakte",  floor:"assets/battlebacks/Grassland1.png",  wall:"assets/battlebacks/Grassland2.png" },
+  "bos":         { nm:"Bos",         floor:"assets/battlebacks/forest1.png",     wall:"assets/battlebacks/forest2.png" },
   "woestijn":    { nm:"Woestijn",    floor:"assets/battlebacks/Desert1.png",     wall:"assets/battlebacks/Desert2.png" },
   "tempel":      { nm:"Tempel",      floor:"assets/battlebacks/Temple1.png",     wall:"assets/battlebacks/Temple2.png" },
   "ruines":      { nm:"Ruïnes",      floor:"assets/battlebacks/Ruins1.png",      wall:"assets/battlebacks/Ruins2.png" },
