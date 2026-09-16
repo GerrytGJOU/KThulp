@@ -667,6 +667,22 @@ daarvoor:
   (`?v=20260910a`) — anders zou een al bezocht toestel het nieuwe
   `terrain`-veld niet zien, los van de gewone script-cache-busting in
   `index.html`.
+- **✅ "forest" als derde terreinwaarde (nieuw, 2026-09-16, puur visueel).**
+  `TW_TERRAIN_BG` (`certamen/totalwar.js`) geeft per terrein voortaan een
+  ARRAY van 1 of meer laag-paden i.p.v. één losse string, van boven naar
+  onder — grassland/desert blijven één laag, `forest` is er twee:
+  `forest2.png` (bomen, transparante onderste helft) bovenop `forest1.png`
+  (grasvloer), exact hetzelfde tweelaags-battleback-patroon als
+  `BATTLE_BACKGROUNDS`/`bmArenaBgStyle()` in `battle.js` (waar "bos" bij
+  dezelfde gelegenheid ook als keuzeoptie is toegevoegd, met dezelfde twee
+  bestanden als floor/wall). `twGarrisonVisualHTML()`'s `bgStyle` bouwt de
+  CSS-multi-background-string nu uit die array i.p.v. één `url()`. 9
+  provincies kregen `"terrain":"forest"` in `provinces.json` (beide
+  Germaniae, Raetia, Noricum, Gallia Belgica, Gallia Lugdunensis, Britannia,
+  Dacia, Moesia Superior) — historisch bosrijke streken. **Bewust nog geen
+  gameplay-effect**: het idee "terrein beïnvloedt siege-weapon-effectiviteit"
+  (§5.8 hierboven) is een latere, aparte fase; dit is voorlopig puur de
+  achtergrondafbeelding.
 - **✅ Sprite-schaalcorrectie per tier (nieuw, 2026-09-10).** De boerderij
   (tier0-toren, `farm.png`) heeft van zichzelf weinig lege ruimte rondom het
   gebouw en oogde daardoor GROTER dan de wachttoren (tier1, `watchtower.png`)
@@ -1034,11 +1050,11 @@ welke features toen aanstonden.
 **Vastgelegde scope voor seizoen 2** (brainstorm 2026-09-10/11, nog NIET
 gebouwd — alleen de toggle-infrastructuur hierboven staat klaar):
 - **Siege weapons** — ✅ gebouwd, zie §5.9 hieronder.
-- **Bos als derde terreintype** naast grasland/woestijn (§5.3-achtergrond).
-  Achtergrond wordt een gelaagde compositie: `forest1.png` (grasvloer) +
-  `forest2.png` (bomen erbovenop) — zelfde gelaagde aanpak als de
-  verdedigingswerk-sprites. Terrein beïnvloedt de effectiviteit van siege
-  weapons: grasland best, woestijn midden, bos slechtst.
+- **Bos als derde terreintype** naast grasland/woestijn — de VISUELE
+  achtergrond is ✅ gebouwd (2026-09-16, zie §5.6 hieronder); het
+  GAMEPLAY-effect op siege weapons (grasland best, woestijn midden, bos
+  slechtst) volgt in een latere fase, zodra siege-weapon-effectiviteit zelf
+  aan de beurt is.
 - **Verkenning**: kost bouwpunten, toont de exacte HP/opbouw én welke siege
   weapons de verdedigende provincie heeft.
 - **Seizoensoverschrijdende eer-titels**: een civ/klas die 2 seizoenen op rij

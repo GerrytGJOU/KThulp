@@ -707,7 +707,7 @@ function twRenderTeacherPreview(){
 async function twEnsureRegistry(){
   if(_twRegistry) return _twRegistry;
   try{
-    const reg = await fetch("map/provinces.json?v=20260912a").then(r=> r.ok ? r.json() : {});
+    const reg = await fetch("map/provinces.json?v=20260916a").then(r=> r.ok ? r.json() : {});
     _twRegistry = reg;
   }catch(e){ _twRegistry = {}; }
   return _twRegistry;
@@ -1968,12 +1968,24 @@ function twProvinceInfo(id){
     ${_twLiveMode ? twAttackButtonHTML(id, civId) : ""}`;
 }
 
-/* Achtergrond achter de garnizoensvisual (op verzoek, 2026-09-10) — terrein
-   per provincie (provinces.json: "terrain", zie de _meta-toelichting daar),
-   ontbreekt het veld dan "grassland" (verreweg de meeste provincies liggen
-   in Europa). Alleen deze twee, zoals gevraagd — geen aparte achtergrond per
-   klimaatzone verzinnen zonder concreet verzoek. */
-const TW_TERRAIN_BG = { grassland:"assets/battlebacks/Grassland1.png", desert:"assets/battlebacks/Desert1.png" };
+/* Achtergrond achter de garnizoensvisual (op verzoek, 2026-09-10; "forest"
+   erbij op verzoek 2026-09-16) — terrein per provincie (provinces.json:
+   "terrain", zie de _meta-toelichting daar), ontbreekt het veld dan
+   "grassland" (verreweg de meeste provincies liggen in Europa). Elke waarde
+   is een ARRAY van 1 of meer laag-paden, van BOVEN naar ONDER (zelfde
+   volgorde/CSS-multi-background-truc als BATTLE_BACKGROUNDS/bmArenaBgStyle()
+   in battle.js: de eerst genoemde laag wordt bovenop getekend). grassland/
+   desert zijn één laag; forest is er twee — forest2.png (bomen, met een
+   doorzichtige onderste helft) bovenop forest1.png (grasvloer), exact het
+   tweelaags-battleback-patroon dat Battle Mode al gebruikt.
+   Bewust NOG GEEN gameplay-effect (terreinbonus op siege weapons e.d.) —
+   dat is een latere, aparte fase (TOTAL_WAR.md §5.8/§5.9); dit is voorlopig
+   puur de visuele achtergrond. */
+const TW_TERRAIN_BG = {
+  grassland:["assets/battlebacks/Grassland1.png"],
+  desert:["assets/battlebacks/Desert1.png"],
+  forest:["assets/battlebacks/forest2.png","assets/battlebacks/forest1.png"],
+};
 function twTerrainBg(provinceId){
   const terrain = (_twRegistry && _twRegistry[provinceId] && _twRegistry[provinceId].terrain) || "grassland";
   return TW_TERRAIN_BG[terrain] || TW_TERRAIN_BG.grassland;
@@ -2021,8 +2033,8 @@ function twGarrisonVisualHTML(p, civId, size, provinceId){
   const inset = Math.max(4, Math.round(size*0.0625)); // 8px bij de standaard 128px, schaalt mee
   const clickable = size<=128;
   const mp=Number(p.militiaPoints)||0, wp=Number(p.wallPoints)||0, tp=Number(p.towerPoints)||0;
-  const bg = provinceId ? twTerrainBg(provinceId) : null;
-  const bgStyle = bg ? `background:url('${bg}') center/cover` : "background:#fff";
+  const bgLayers = provinceId ? twTerrainBg(provinceId) : null;
+  const bgStyle = bgLayers ? `background:${bgLayers.map(u=>`url('${u}') center/cover`).join(",")}` : "background:#fff";
   return `<div style="position:relative;width:${size}px;height:${size}px;flex:0 0 auto;${bgStyle};border-radius:10px;box-sizing:border-box;overflow:hidden${clickable?";cursor:zoom-in":""}"
     ${clickable?`onclick="twShowGarrisonZoom(${mp},${wp},${tp},'${civId}','${provinceId||""}')" title="Klik om te vergroten"`:""}>
     ${layers.map(l=>{
