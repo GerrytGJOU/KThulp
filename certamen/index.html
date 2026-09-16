@@ -1080,9 +1080,9 @@ body.greek .qcard .word{color:#143a5e}
 <script src="verbforms.js?v=20260903c"></script>
 <script src="verbquiz.js?v=20260903c"></script>
 <script src="core.js?v=20260911a"></script>
-<script src="net.js?v=20260910a"></script>
+<script src="net.js?v=20260916a"></script>
 <script src="wordlists.js?v=20260907a"></script>
-<script src="games.js?v=20260911a"></script>
+<script src="games.js?v=20260916a"></script>
 <script src="battle-data.js?v=20260907a"></script>
 <script src="bossbattle.js?v=20260911a"></script>
 <script src="battle-motion.js?v=20260705a"></script>
@@ -1102,6 +1102,16 @@ body.greek .qcard .word{color:#143a5e}
   const room = new URLSearchParams(location.search).get("room");
   const handled = (typeof bmGoogleHandleRedirectResult==="function") && await bmGoogleHandleRedirectResult();
   if(handled) return;
+  // Docent-Google-koppeling/inlog (FBNet.linkTeacherGoogle/loginTeacherWithGoogle,
+  // net.js) — eigen intent-sleutel, dus veilig om onvoorwaardelijk náást
+  // bmGoogleHandleRedirectResult() hierboven aan te roepen (zie net.js).
+  const twGoogle = (typeof FBNet!=="undefined" && FBNet.handleTeacherGoogleRedirect) ? await FBNet.handleTeacherGoogleRedirect() : {handled:false};
+  if(twGoogle.handled){
+    if(twGoogle.error && typeof toast==="function") toast("Google-koppeling mislukt", twGoogle.error);
+    else if(!twGoogle.error && typeof toast==="function") toast("Gekoppeld!","Je kunt nu ook met Google inloggen.");
+    go(twGoogle.returnScreen||"teacherPortal");
+    return;
+  }
   if(room){ go("join"); }
   else { go("home"); }
 })();

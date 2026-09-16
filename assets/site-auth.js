@@ -198,6 +198,45 @@
     if(!uid) return null;
     return db.ref("teacherStatus/"+uid).once("value").then(s=>s.val()).catch(()=>null);
   }
+  async function resetTeacherPassword(email){
+    const { auth } = await ensureFirebase();
+    return auth.sendPasswordResetEmail(email);
+  }
+  /* Docent-Google-koppeling: standaard Firebase-provider-linking (geen eigen
+     opzoektabel nodig, anders dan de leerling-Google-koppeling hieronder) —
+     zie certamen/net.js FBNet.linkTeacherGoogle()/loginTeacherWithGoogle()
+     voor de volledige toelichting. Altijd redirect, nooit een popup. */
+  async function linkTeacherGoogle(){
+    const { auth } = await ensureFirebase();
+    const user = auth.currentUser;
+    if(!user) throw new Error("Log eerst in als docent.");
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({prompt:"select_account"});
+    return user.linkWithRedirect(provider);
+  }
+  async function loginTeacherWithGoogle(){
+    const { auth } = await ensureFirebase();
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({prompt:"select_account"});
+    return auth.signInWithRedirect(provider);
+  }
+  async function handleTeacherGoogleRedirect(){
+    const { auth } = await ensureFirebase();
+    try{
+      const result = await auth.getRedirectResult();
+      notifyChange();
+      return { ok:true, handled: !!(result && result.user) };
+    }catch(err){
+      const code = err && err.code;
+      if(!code) return { ok:true, handled:false };
+      const msg = code==="auth/credential-already-in-use"
+        ? "Dit Google-account is al gekoppeld aan een ander docentaccount."
+        : code==="auth/email-already-in-use"
+          ? "Er bestaat al een docentaccount met dit e-mailadres — log eerst in met e-mail/wachtwoord en koppel Google daarna."
+          : ("Google-koppeling mislukt: "+(err.message||code));
+      return { ok:false, handled:true, error:msg };
+    }
+  }
 
   /* ---- Leerling: profiel verversen vanaf Firebase (coins/xp/apps/Google-link) ----
      notifyChange() alleen bij een ECHTE wijziging: refreshIdentity() wordt op de
@@ -334,6 +373,7 @@
     // render(), maar dan met de cache al gevuld voor deze uid dus geen nieuwe
     // fetch meer).
     let statusCache = { uid:null, status:null, isAdmin:false };
+    let googleLinkMsg = ""; // resultaat van handleTeacherGoogleRedirect(), zie onderaan
 
     function render(){
       const ident = identLoad();
@@ -356,11 +396,14 @@
         const statusNote = approved ? "" : (statusCache.status && statusCache.status.status==="revoked"
           ? ' &middot; <span style="color:#e08a7a">toegang ingetrokken</span>'
           : ' &middot; <span style="color:#e0b86a">wacht op goedkeuring</span>');
+        const googleProvider = (teacher.providerData||[]).some(p=>p.providerId==="google.com");
         el.innerHTML =
           '<div class="ktaBar"><span class="ktaWho">👩‍🏫 '+esc(teacher.email)+statusNote+'</span>'+
           '<a class="ktaBtn" href="'+esc(SITE_ROOT+"profiel/")+'">Mijn profiel</a>'+
           '<a class="ktaBtn" href="'+esc(SITE_ROOT+"certamen/")+'">Docentenportaal</a>'+
-          '<button type="button" class="ktaBtn" data-kta="logout-teacher">Uitloggen</button></div>';
+          (googleProvider ? '' : '<button type="button" class="ktaBtn" data-kta="link-teacher-google">Koppel Google-account</button>')+
+          '<button type="button" class="ktaBtn" data-kta="logout-teacher">Uitloggen</button></div>'+
+          (googleLinkMsg ? '<div class="ktaNote" style="margin-top:6px">'+esc(googleLinkMsg)+'</div>' : '');
       }else{
         el.innerHTML = '<button type="button" class="ktaBtn ktaBtn-main" data-kta="open">Inloggen (leerling / docent)</button>';
       }
@@ -385,8 +428,11 @@
               : '<input class="ktaInput" id="ktaEmail" type="email" placeholder="E-mailadres">'+
                 '<input class="ktaInput" id="ktaPw" type="password" placeholder="Wachtwoord">'+
                 '<button type="button" class="ktaBtn ktaBtn-main" data-kta="do-teacher">Inloggen</button>'+
+                '<button type="button" class="ktaBtn" style="margin-top:8px" data-kta="do-teacher-google">Inloggen met Google</button>'+
+                '<div class="ktaNote" style="font-size:12px;opacity:.75;margin-top:2px">Alleen als je Google eerder aan dit docentaccount hebt gekoppeld.</div>'+
                 '<button type="button" class="ktaBtn" style="margin-top:8px" data-kta="do-teacher-signup">Account aanmaken</button>'+
-                '<div class="ktaNote" style="font-size:12px;opacity:.75;margin-top:6px">Na registreren moet de beheerder je account nog goedkeuren.</div>')+
+                '<div class="ktaNote" style="font-size:12px;opacity:.75;margin-top:6px">Na registreren moet de beheerder je account nog goedkeuren.</div>'+
+                '<button type="button" class="ktaLink" style="margin-top:8px" data-kta="do-teacher-forgot">Wachtwoord vergeten?</button>')+
             (err ? '<div class="ktaErr">'+esc(err)+'</div>' : '')+
             (msg ? '<div class="ktaOk">'+esc(msg)+'</div>' : '')+
           '</div>'+
@@ -439,12 +485,40 @@
         }catch(ex){ msg=""; err = ex.message||String(ex); wrap.remove(); openModal(); }
         busy=false;
       }
+      if(action==="do-teacher-forgot"){
+        const email = wrap.querySelector("#ktaEmail").value;
+        if(!email){ err="Vul eerst je e-mailadres in."; msg=""; wrap.remove(); openModal(); return; }
+        busy=true;
+        try{
+          await resetTeacherPassword(email);
+          err=""; msg="E-mail met resetlink verstuurd naar "+email+".";
+        }catch(ex){ msg=""; err = ex.message||String(ex); }
+        wrap.remove(); openModal();
+        busy=false;
+      }
+      if(action==="do-teacher-google"){
+        busy=true;
+        try{ await loginTeacherWithGoogle(); } // navigeert weg (redirect); geen wrap.remove() nodig
+        catch(ex){ err = ex.message||String(ex); wrap.remove(); openModal(); busy=false; }
+      }
+      if(action==="link-teacher-google"){
+        try{ await linkTeacherGoogle(); } // navigeert weg (redirect)
+        catch(ex){ googleLinkMsg = ex.message||String(ex); render(); }
+      }
     }
 
     listeners.push(render);
     render();
     // Teacher-sessie herstelt async; her-render zodra Firebase dat weet.
-    ensureFirebase().then(()=>{ firebase.auth().onAuthStateChanged(render); }).catch(()=>{});
+    // Vangt ook een lopende linkTeacherGoogle()/loginTeacherWithGoogle()-
+    // redirect af (zie handleTeacherGoogleRedirect hierboven) — dit is de
+    // enige plek waar de widget zelf opstart, dus hier hoort die check thuis.
+    ensureFirebase().then(()=>{
+      firebase.auth().onAuthStateChanged(render);
+      return handleTeacherGoogleRedirect();
+    }).then(res=>{
+      if(res && res.error){ googleLinkMsg = res.error; render(); }
+    }).catch(()=>{});
   }
 
   global.KTAuth = {
@@ -452,6 +526,7 @@
     loginStudent, logoutStudent,
     loginTeacher, logoutTeacher, authReady,
     signupTeacher, getTeacherStatus, isAdmin,
+    resetTeacherPassword, linkTeacherGoogle, loginTeacherWithGoogle, handleTeacherGoogleRedirect,
     onChange(cb){ listeners.push(cb); },
     mountWidget,
     ensureFirebase,

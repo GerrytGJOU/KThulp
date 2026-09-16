@@ -90,6 +90,71 @@ FBNet.getTeacherUid = function(){
 FBNet.isTeacherLoggedIn = function(){
   return this.getTeacherUid() !== null;
 };
+// Stuurt een wachtwoord-resetlink naar het opgegeven docent-e-mailadres.
+// Werkt onafhankelijk van een gekoppeld Google-account — gewoon de
+// standaard Firebase Auth-flow, altijd beschikbaar als terugvaloptie.
+FBNet.resetTeacherPassword = function(email){
+  if(!initFirebase()) return Promise.reject("Firebase niet beschikbaar");
+  return firebase.auth().sendPasswordResetEmail(email);
+};
+/* ---- Docent: Google-account koppelen (alternatief voor wachtwoord) ----
+   Anders dan de leerling-Google-koppeling (bmGoogleWriteLink, battle.js) is
+   dit GEEN eigen opzoektabel: docenten hebben al een echt Firebase Auth-
+   account, dus Firebase se eigen provider-linking (linkWithRedirect) volstaat
+   — na het koppelen matcht signInWithRedirect(GoogleAuthProvider) vanzelf
+   terug naar hetzelfde account (zelfde uid, zelfde teacherStatus/klassen).
+   Gebruikt bewust signInWithRedirect/linkWithRedirect, nooit een popup —
+   zelfde reden als bmGoogleSignIn() in net.js hieronder: een popup kan na
+   een asynchrone Firebase-config-load stil geblokkeerd worden, een redirect
+   niet, en dat werkt ook betrouwbaar op iPad/Chromebook. */
+// Eigen redirect-sleutel (niet BM_GOOGLE_REDIRECT_KEY van de leerling-flow
+// hierboven) — zowel om de twee flows nooit te laten kruisen als om
+// handleTeacherGoogleRedirect() vooraf, zonder een netwerkaanroep, te laten
+// weten of er überhaupt een lopende teacher-Google-redirect is (zie de
+// leerling-variant bmGoogleHandleRedirectResult voor hetzelfde patroon) —
+// zodat deze en de leerling-handler allebei onvoorwaardelijk bij elke
+// app-start aangeroepen kunnen worden zonder elkaar te storen.
+const TEACHER_GOOGLE_REDIRECT_KEY = "certamen_teacher_google_redirect_intent";
+FBNet.linkTeacherGoogle = function(returnScreen){
+  if(!initFirebase()) return Promise.reject("Firebase niet beschikbaar");
+  const user = firebase.auth().currentUser;
+  if(!user) return Promise.reject("Log eerst in als docent.");
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({prompt:"select_account"});
+  try{ localStorage.setItem(TEACHER_GOOGLE_REDIRECT_KEY, JSON.stringify({returnScreen: returnScreen||"teacherPortal"})); }catch(e){}
+  return user.linkWithRedirect(provider);
+};
+FBNet.loginTeacherWithGoogle = function(returnScreen){
+  if(!initFirebase()) return Promise.reject("Firebase niet beschikbaar");
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.setCustomParameters({prompt:"select_account"});
+  try{ localStorage.setItem(TEACHER_GOOGLE_REDIRECT_KEY, JSON.stringify({returnScreen: returnScreen||"teacherPortal"})); }catch(e){}
+  return firebase.auth().signInWithRedirect(provider);
+};
+// Rondt een linkTeacherGoogle()/loginTeacherWithGoogle()-redirect af. Anders
+// dan de leerling-variant (bmGoogleHandleRedirectResult) hoeft dit niets
+// zelf weg te schrijven — Firebase koppelt/logt zelf al aan het juiste
+// account — dit vangt alleen de eventuele fout op (bv. dit Google-account
+// hoort al bij een ANDER docentaccount: "auth/credential-already-in-use")
+// en geeft het scherm terug waar de aanroeper na afloop naartoe wilde.
+FBNet.handleTeacherGoogleRedirect = function(){
+  let intent=null;
+  try{ const r=localStorage.getItem(TEACHER_GOOGLE_REDIRECT_KEY); if(r){ intent=JSON.parse(r); localStorage.removeItem(TEACHER_GOOGLE_REDIRECT_KEY); } }catch(e){}
+  if(!intent) return Promise.resolve({ok:true, handled:false});
+  if(!hasFirebase || !initFirebase()) return Promise.resolve({ok:true, handled:false});
+  return firebase.auth().getRedirectResult().then(result=>{
+    if(!result || !result.user) return {ok:true, handled:false};
+    return {ok:true, handled:true, returnScreen:intent.returnScreen};
+  }).catch(err=>{
+    const code = err && err.code;
+    const msg = code==="auth/credential-already-in-use"
+      ? "Dit Google-account is al gekoppeld aan een ander docentaccount."
+      : code==="auth/email-already-in-use"
+        ? "Er bestaat al een docentaccount met dit e-mailadres — log eerst in met e-mail/wachtwoord en koppel Google daarna."
+        : ("Google-koppeling mislukt: "+(err.message||code||"onbekende fout"));
+    return {ok:false, handled:true, error:msg, returnScreen:intent.returnScreen};
+  });
+};
 /* ---- FBNet: docentgoedkeuring (admins/, teacherStatus/) ----
    Nieuwe docenten registreren zelf en komen op "pending" te staan; alleen een
    admin (admins/{uid}:true, handmatig gezet in de Firebase Console) mag ze
@@ -640,6 +705,10 @@ DemoNet.removeAdminFlag = function(){ return Promise.reject("Niet beschikbaar in
 DemoNet.grantAdmin      = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.assignStudent   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.signupTeacher   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.resetTeacherPassword = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.linkTeacherGoogle    = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.loginTeacherWithGoogle = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.handleTeacherGoogleRedirect = function(){ return Promise.resolve({ok:true, handled:false}); };
 DemoNet.getTeacherStatus= function(){ return Promise.resolve({status:"approved", email:"demo@kthulp.nl", requestedAt:Date.now()}); };
 DemoNet.isAdmin         = function(){ return Promise.resolve(false); };
 DemoNet.listTeacherStatuses = function(){ return Promise.resolve({}); };
