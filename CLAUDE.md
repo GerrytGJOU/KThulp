@@ -146,3 +146,18 @@ spelregels, features of het datamodel raakt:
   campagne beheren (klasCivs/season/history/meta) — gameplay-paden
   (provinces/civs/klasSize/stats) blijven wereld-schrijfbaar voor leerlingen
   zonder auth.
+- Docent-wachtwoordherstel + Google-koppeling (sinds 2026-09-16):
+  `FBNet.resetTeacherPassword()` stuurt een standaard Firebase-resetlink;
+  `FBNet.linkTeacherGoogle()`/`loginTeacherWithGoogle()` koppelen een Google-
+  account aan een bestaand docentaccount via gewone Firebase-provider-linking
+  (géén eigen opzoektabel zoals bij de leerling-Google-koppeling, want
+  docenten hebben al een echt Firebase Auth-account). Beide gespiegeld in
+  `assets/site-auth.js`. `certamen/index.html`'s init rondt de redirect af via
+  een eigen intent-sleutel (`TEACHER_GOOGLE_REDIRECT_KEY`, net.js) en
+  navigeert terug naar het scherm van vóór de redirect.
+- `assets/site-auth.js` wordt in alle insluitende pagina's geladen met een
+  `?v=`-cachebuster (sinds 2026-09-16, ontbrak daarvoor overal) — bij elke
+  wijziging aan dat bestand ook deze versie ophogen, anders blijven
+  terugkerende bezoekers een oude cache draaien. Zelfde geldt natuurlijk al
+  langer voor de `?v=`-strings van certamen se eigen scripts
+  (net.js/games.js/battle.js/totalwar.js/training.js in certamen/index.html).
