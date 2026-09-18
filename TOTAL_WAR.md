@@ -1120,12 +1120,12 @@ moet de siege weapon dus opnieuw bouwen voor een volgende poging.
 - **Terreineffectiviteit** — deze fase geeft elk type een vaste sterkte,
   ongeacht terrein. Zodra bos als terreintype bestaat (§5.3), volgt de
   grasland/woestijn/bos-multiplier op siege weapons als aparte fase.
-- **Sprite-afbeeldingen** — Gerben levert deze later zelf aan, op precies deze
-  paden: `assets/bosses/ram.png`, `assets/bosses/siegetower.png`,
+- **Sprite-afbeeldingen — ✅ geleverd (2026-09-18)**, op precies de al
+  bestaande paden: `assets/bosses/ram.png`, `assets/bosses/siegetower.png`,
   `assets/bosses/catapult.png` (één plaatje per type, geen tier0/1/2 zoals
-  bij de bestaande structuren, want siege weapons zijn AAN/UIT). Tot die tijd
-  toont Training Mode een tekst/voortgangsbalk-fallback (`onerror` verbergt
-  het ontbrekende bestand geruisloos, geen crash).
+  bij de bestaande structuren, want siege weapons zijn AAN/UIT). De
+  tekst/voortgangsbalk-fallback (`onerror` verbergt een ontbrekend bestand
+  geruisloos) blijft gewoon in de code staan als vangnet.
 - **Zichtbaarheid voor de tegenstander** — een provincie se siege-weapon-
   voortgang staat NERGENS in het publieke `twProvinceInfo()`-paneel: alleen de
   eigen klas ziet haar voortgang (Training Mode), en alleen de aanvaller ziet
