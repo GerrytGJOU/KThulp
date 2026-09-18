@@ -1126,6 +1126,21 @@ moet de siege weapon dus opnieuw bouwen voor een volgende poging.
   bij de bestaande structuren, want siege weapons zijn AAN/UIT). De
   tekst/voortgangsbalk-fallback (`onerror` verbergt een ontbrekend bestand
   geruisloos) blijft gewoon in de code staan als vangnet.
+- **✅ Zichtbaar tijdens het gevecht zelf (nieuw, 2026-09-18).** Een
+  ingezette siege weapon staat nu ook op het slagveld tijdens de belegering
+  zelf, aan de spelerskant — mirror van hoe de garnizoensverdediging al op
+  de baas-kant staat (`bmBossSpriteHTML()`, `certamen/bossbattle.js`). Nieuw
+  element `#bmSiegeWeapon` (`certamen/index.html`, sibling van `#bmFormA`/
+  `#bmFormB` binnen `#bmField`, in zowel `SCREENS.battleHostGame` als
+  `SCREENS.battlePlayerGame`), gevuld in `bmBuildBattlefield()`
+  (`certamen/battle.js`) op basis van `BM_META.garrisonProvince.
+  siegeWeaponUsed` — diezelfde vlag die al gesynct wordt naar elke speler
+  via `meta` (geen aparte sync nodig, zie §5.9 hierboven). CSS-truc: staat
+  op `z-index:2`, vlak ÓNDER `.bm-form`'s `z-index:3` — de klas se
+  poppetjes (die daarbinnen weer een eigen, nóg hogere z-index hebben)
+  staan er dus altijd vóór, en het wapentuig steekt erboven/erachter uit
+  waar geen poppetje overlapt. Leeg (geen element) als er geen siege weapon
+  is ingezet, of buiten een siege-belegering.
 - **Zichtbaarheid voor de tegenstander** — een provincie se siege-weapon-
   voortgang staat NERGENS in het publieke `twProvinceInfo()`-paneel: alleen de
   eigen klas ziet haar voortgang (Training Mode), en alleen de aanvaller ziet

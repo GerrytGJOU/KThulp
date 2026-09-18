@@ -480,6 +480,16 @@ body.greek .qcard .word{color:#143a5e}
 .bm-boss-art{position:relative;width:clamp(200px,26vw,460px);aspect-ratio:1/1;margin:0 auto}
 .bm-boss-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .bm-boss-emoji{font-size:clamp(64px,13vw,190px);line-height:1;text-align:center}
+/* Siege weapon (Total War-belegering, TOTAL_WAR.md §5.9): staat op de
+   speler-kant (#bmFormA), z-index 2 — ÓNDER de .bm-form-stacking-context
+   (z-index 3, zie hierboven) waar de spelerspoppetjes in staan, dus de
+   klas staat er letterlijk vóór, en het wapentuig steekt erboven/erachter
+   uit waar geen poppetje overlapt. Geen eigen stacking-context nodig: een
+   sibling van .bm-form binnen #bmField (zelf position:relative), dus puur
+   een lagere z-index is genoeg. Bewust geen aparte mobiele media query:
+   clamp() schaalt al vloeiend mee, net als .bm-boss-art. */
+#bmSiegeWeapon{position:absolute;left:4%;top:2%;width:clamp(90px,15vw,200px);aspect-ratio:1/1;z-index:2;pointer-events:none;filter:drop-shadow(0 8px 10px rgba(0,0,0,.55))}
+#bmSiegeWeapon img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 /* Naam en fase van de baas mogen navenant groter dan een spelerslabel */
 #bmFormB .bm-fcol .bm-av .avn{font-size:clamp(15px,1.5vw,24px);max-width:none}
 #bmFormB .bm-fcol .bm-av .avncls{font-size:clamp(11px,1.1vw,16px);max-width:none}
@@ -1086,7 +1096,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="battle-data.js?v=20260907a"></script>
 <script src="bossbattle.js?v=20260911a"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20260916a"></script>
+<script src="battle.js?v=20260918a"></script>
 <script src="map/provinces.js?v=20260911a"></script>
 <script src="totalwar.js?v=20260916a"></script>
 <script src="training.js?v=20260911c"></script>
