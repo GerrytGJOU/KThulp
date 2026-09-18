@@ -1862,6 +1862,7 @@ SCREENS.battleHostGame = function(){
       <div class="bm-back1" id="bmBack1"></div>
       <div id="bmFormA" class="bm-form"></div>
       <div id="bmFormB" class="bm-form"></div>
+      <div id="bmSiegeWeapon"></div>
       <div id="bmBfx"></div>
     </div>
     <div class="bm-status-row">
@@ -2916,6 +2917,19 @@ function bmBuildBattlefield(){
   // baas-placeholder (naam/fase/rage). Buiten de hash-gate: fase/rage
   // wijzigen immers los van de spelersformatie.
   if(fB&&BM_META?.mode==="boss")fB.innerHTML=bmBossSpriteHTML(BM_BOSS,bmTeamNm("B"));
+  // Siege weapon (Total War-belegering, TOTAL_WAR.md §5.9): als de klas er
+  // bij deze aanval een heeft ingezet (BM_META.garrisonProvince.siegeWeaponUsed,
+  // gezet door twStartAttack() en meegekomen via meta, zelfde als
+  // garrisonProvince zelf), staat het wapentuig op de spelerskant #bmFormA —
+  // buiten de hash-gate hierboven, want dit verandert nooit tijdens één
+  // gevecht (eenmalig gezet bij aanvalsstart), dus een keer per bouwbeurt
+  // opnieuw zetten is meer dan genoeg.
+  const sw=el("bmSiegeWeapon");
+  if(sw){
+    const swType=BM_META?.garrisonProvince?.siegeWeaponUsed;
+    const swDef=swType&&typeof TW_SIEGE_WEAPONS!=="undefined"?TW_SIEGE_WEAPONS[swType]:null;
+    sw.innerHTML=swDef?`<img src="${swDef.sprite}?${SPRITE_VER}" alt="" onerror="this.style.display='none'">`:"";
+  }
   const field=el("bmField");
   if(field){
     // Landscape-thema
@@ -4208,6 +4222,7 @@ SCREENS.battlePlayerGame = function(){
       <div id="bmField" class="${bmBgTheme(BM_META?.theme)} bm-field-solo" style="${bmArenaBgStyle()}">
         <div id="bmFormA" class="bm-form"></div>
         <div id="bmFormB" class="bm-form"></div>
+        <div id="bmSiegeWeapon"></div>
         <div id="bmBfx"></div>
       </div>
       <button class="bm-back-btn" onclick="cleanup();bmLeave();go('battleHome')" title="Verlaat gevecht">
