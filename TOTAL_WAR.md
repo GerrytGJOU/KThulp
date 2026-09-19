@@ -1141,6 +1141,15 @@ moet de siege weapon dus opnieuw bouwen voor een volgende poging.
   staan er dus altijd vóór, en het wapentuig steekt erboven/erachter uit
   waar geen poppetje overlapt. Leeg (geen element) als er geen siege weapon
   is ingezet, of buiten een siege-belegering.
+  **Aanvulling (2026-09-19):** grootte en hoogte worden per gevecht door
+  `bmPositionSiegeWeapon()` (`battle.js`) bepaald i.p.v. vaste CSS: de
+  belegeringstoren is groter en steekt duidelijk (60% van zijn zichtbare
+  hoogte) boven de bovenste speler uit, ram en catapult wat kleiner en maar
+  een klein beetje (30%) — ook bij een klas van 32. `BM_SIEGE_VIEW` houdt per
+  type de transparante canvasrand (de sprites zijn 1408×768) en de gewenste
+  uitsteekfactor bij. Herberekend bij een nieuwe opstelling of andere
+  schermgrootte, niet bij elke animatie, zodat het wapentuig niet meebeweegt
+  met de aanvallen.
 - **Zichtbaarheid voor de tegenstander** — een provincie se siege-weapon-
   voortgang staat NERGENS in het publieke `twProvinceInfo()`-paneel: alleen de
   eigen klas ziet haar voortgang (Training Mode), en alleen de aanvaller ziet

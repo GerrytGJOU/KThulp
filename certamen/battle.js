@@ -2881,6 +2881,44 @@ function bmSoloFieldHTML(){
     </div>`;
 }
 
+/* Siege weapon op het slagveld (TOTAL_WAR.md §5.9): staat achter de klas en
+   steekt ALTIJD een stuk boven de opstelling uit, ook bij een grote groep
+   (op verzoek 2026-09-19; belegeringstoren duidelijk, ram/catapult een
+   klein beetje). De sprites zijn 1408×768 canvassen met transparante rand
+   erom heen, dus per type staat hier hoeveel van het canvas leeg is
+   (padT/padB, als fractie van de canvashoogte), zodat we op het ZICHTBARE
+   wapentuig kunnen mikken. w = canvasbreedte als fractie van de veldbreedte
+   (maxPx = bovengrens op grote schermen), out = hoeveel van de zichtbare
+   hoogte boven de bovenste speler uitsteekt. */
+const BM_SIEGE_VIEW={
+  ram:     {w:.38,maxPx:460,padT:.036,padB:.068,out:.30},
+  catapult:{w:.38,maxPx:460,padT:.146,padB:.053,out:.30},
+  tower:   {w:.48,maxPx:580,padT:.172,padB:.047,out:.60},
+};
+let _bmSiegePosKey="";
+function bmPositionSiegeWeapon(force){
+  const sw=el("bmSiegeWeapon"),field=el("bmField");
+  if(!sw||!field)return;
+  const type=BM_META?.garrisonProvince?.siegeWeaponUsed;
+  const v=type&&BM_SIEGE_VIEW[type];
+  if(!v){sw.style.cssText="";_bmSiegePosKey="";return;}
+  const fr=field.getBoundingClientRect();
+  if(!fr.height)return;
+  // Alleen opnieuw meten als de opstelling/schermgrootte/type veranderd is —
+  // anders zou het wapentuig meebewegen met de aanval-animaties van de poppetjes.
+  const key=_bmFormHash+"|"+Math.round(fr.width)+"|"+Math.round(fr.height)+"|"+type;
+  if(!force&&key===_bmSiegePosKey&&sw.style.top)return;
+  _bmSiegePosKey=key;
+  const W=Math.min(fr.width*v.w,v.maxPx), hc=W*768/1408, vh=hc*(1-v.padT-v.padB);
+  const avs=[...field.querySelectorAll("#bmFormA .bm-av")];
+  const crowdTop=avs.length?Math.min(...avs.map(a=>a.getBoundingClientRect().top-fr.top)):fr.height*.55;
+  let top=crowdTop-v.out*vh-v.padT*hc;
+  const maxTop=fr.height*.95-hc*(1-v.padB);   // voeten nooit onder de grond
+  top=Math.max(4-v.padT*hc,Math.min(top,maxTop));
+  sw.style.width=W+"px"; sw.style.top=top+"px";
+}
+window.addEventListener("resize",()=>bmPositionSiegeWeapon(true));
+
 function bmBuildBattlefield(){
   const fA=el("bmFormA"),fB=el("bmFormB");
   // Op het spelerscherm hangt de hash alleen aan de eigen speler, zodat een
@@ -2929,6 +2967,7 @@ function bmBuildBattlefield(){
     const swType=BM_META?.garrisonProvince?.siegeWeaponUsed;
     const swDef=swType&&typeof TW_SIEGE_WEAPONS!=="undefined"?TW_SIEGE_WEAPONS[swType]:null;
     sw.innerHTML=swDef?`<img src="${swDef.sprite}?${SPRITE_VER}" alt="" onerror="this.style.display='none'">`:"";
+    bmPositionSiegeWeapon();
   }
   const field=el("bmField");
   if(field){
