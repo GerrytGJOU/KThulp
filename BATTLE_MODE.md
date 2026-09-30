@@ -1115,6 +1115,18 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
 
 **Leerlingen-tab:**
 - Tabel gesorteerd op accuratesse; klikbaar voor detailpopup
+- Kolommen Goed% / Bijdr. / Actief (platte getallen), met rechts daarvan
+  RPG-achtige statkolommen met vollopende balkjes (sinds 2026-09-30):
+  ⚔️ Schade (`damage`), 💚 Healing (`healing`), 🛡️ Schild (`shielding`),
+  🎯 Handlangers (`minionDamage`, alleen Boss Battle en alleen als er
+  handlangers waren), 🔥 Reeks (`bestCorrectStreak`) en ⚡ Snelheid
+  (gem. responstijd). Elke balk is relatief t.o.v. de beste leerling in die
+  kolom (die krijgt een volle balk + gouden getal); bij Snelheid is dat
+  omgekeerd — snelste = volle balk. De tabel scrollt horizontaal op smalle
+  schermen. `bestCorrectStreak` wordt daarvoor nu in álle modi bijgehouden
+  (was alleen Boss Battle), en "↻ Nieuw gevecht — zelfde spelers" zet
+  streak-, responstijd-, `minionDamage`- en `chainCount`-velden weer op nul
+  (liepen voorheen door naar het volgende gevecht).
 - Detailpopup: avatar, accuratesse, gem. responstijd, schade, healing, top-5 gemiste woorden
 
 **CSV-export** via `bmExportCSV()` (SheetJS) — kolommen: Naam, Klas, Klasse, Goed%, Goed, Fout, Gemiste woorden, Schade, Healing, Rondes actief.

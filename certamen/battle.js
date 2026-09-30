@@ -3604,6 +3604,9 @@ async function bmNewMatchSamePlayers(){
     const b="players/"+pid+"/";
     up[b+"be"]=0; up[b+"correct"]=0; up[b+"wrong"]=0;
     up[b+"damage"]=0; up[b+"healing"]=0; up[b+"shielding"]=0;
+    up[b+"minionDamage"]=null; up[b+"chainCount"]=null;
+    up[b+"correctStreak"]=null; up[b+"bestCorrectStreak"]=null; up[b+"wrongStreak"]=null;
+    up[b+"respondCount"]=null; up[b+"totalResponseMs"]=null;
     up[b+"answeredRound"]=-1; up[b+"lockedAction"]=null;
     up[b+"currentQ"]=null; up[b+"missed"]=null; up[b+"inspired"]=null;
     up[b+"hp"]=null; up[b+"maxHp"]=null; up[b+"armor"]=null;
@@ -4029,6 +4032,35 @@ SCREENS.battleHostAnalytics = async function(){
       const ta=(a.correct||0)+(a.wrong||0),tb=(b.correct||0)+(b.wrong||0);
       return tb>0&&ta>0?(b.correct||0)/tb-(a.correct||0)/ta:tb-ta;
     });
+    // RPG-achtige statkolommen met balkjes (naast Goed%/Bijdr./Actief): elke
+    // balk is relatief t.o.v. de beste leerling in die kolom, zodat verschillen
+    // in één oogopslag zichtbaar zijn. Snelheid is omgekeerd (sneller = voller).
+    const avgRt=p=>(p.respondCount||0)>0?(p.totalResponseMs||0)/p.respondCount:null;
+    const isBoss=BM_META?.mode==="boss";
+    const statCols=[
+      {h:"⚔️ Schade",  c:"#d9573f", val:p=>p.damage||0},
+      {h:"💚 Healing", c:"#5cc46a", val:p=>p.healing||0},
+      {h:"🛡️ Schild",  c:"#4f93d8", val:p=>p.shielding||0},
+      ...(isBoss&&players.some(p=>(p.minionDamage||0)>0)
+        ?[{h:"🎯 Handlangers", c:"#c77ad8", val:p=>p.minionDamage||0}]:[]),
+      {h:"🔥 Reeks",   c:"#e8b43c", val:p=>p.bestCorrectStreak||0},
+      {h:"⚡ Snelheid", c:"#8f7ce0", val:p=>avgRt(p), inverse:true,
+        fmt:v=>v===null?"—":(Math.round(v/100)/10)+"s"},
+    ];
+    statCols.forEach(col=>{
+      const vs=players.map(col.val).filter(v=>v!==null&&v>0);
+      col.best=vs.length?(col.inverse?Math.min(...vs):Math.max(...vs)):0;
+    });
+    const statCell=(col,p,i)=>{
+      const v=col.val(p);
+      const frac=v===null||!col.best?0:col.inverse?(v>0?col.best/v:0):v/col.best;
+      const pct=Math.round(Math.max(0,Math.min(1,frac))*100);
+      const txt=col.fmt?col.fmt(v):String(v);
+      return`<td class="bm-stat${i===0?" bm-stat-sep":""}${pct===100?" top":""}">
+        <div class="bm-stat-v">${txt}</div>
+        <div class="bm-stat-bar"><div class="bm-stat-fill" style="--c:${col.c}" data-w="${pct}"></div></div>
+      </td>`;
+    };
     const rows=sorted.map(p=>{
       const tot=(p.correct||0)+(p.wrong||0);
       const acc=tot>0?Math.round((p.correct||0)/tot*100):null;
@@ -4044,16 +4076,21 @@ SCREENS.battleHostAnalytics = async function(){
         <td style="text-align:center;font-weight:700;color:${acc!==null&&acc>=80?"var(--green-bright)":""}">${acc!==null?acc+"%":"—"}</td>
         <td style="text-align:center">${contrib}</td>
         <td style="text-align:center">${tot}</td>
+        ${statCols.map((col,i)=>statCell(col,p,i)).join("")}
       </tr>`;
     }).join("");
     content.innerHTML=`
-    <div class="panel" style="padding:0;overflow:hidden">
+    <div class="panel bm-tbl-wrap" style="padding:0">
       <table class="bm-tbl">
-        <thead><tr><th>Leerling</th><th>Goed%</th><th>Bijdr.</th><th>Actief</th></tr></thead>
+        <thead><tr><th>Leerling</th><th>Goed%</th><th>Bijdr.</th><th>Actief</th>${statCols.map((c,i)=>`<th class="bm-stat-h${i===0?" bm-stat-sep":""}">${c.h}</th>`).join("")}</tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>
     <div class="note" style="text-align:center;margin-bottom:8px">Klik op een leerling voor details.</div>`;
+    // Balken vanaf 0 laten vollopen (zoals een RPG-scorebord na het gevecht).
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      content.querySelectorAll(".bm-stat-fill").forEach(f=>{f.style.width=f.dataset.w+"%";});
+    }));
   }
 };
 
@@ -4600,12 +4637,12 @@ function bmFinishAnswer(ok){
       } else {
         upd.wrongStreak=prevWrongStreak+1;
       }
-      // "De Onsterfelijke" (Boss-Battle-scorebord, BOSS_BATTLE.md §8):
-      // langste foutloze reeks. Symmetrisch aan wrongStreak hierboven.
-      const prevCorrectStreak=p.correctStreak||0;
-      upd.correctStreak=ok?prevCorrectStreak+1:0;
-      upd.bestCorrectStreak=Math.max(p.bestCorrectStreak||0, upd.correctStreak);
     }
+    // Langste foutloze reeks: "De Onsterfelijke" (Boss-Battle-scorebord,
+    // BOSS_BATTLE.md §8) én de 🔥 Reeks-kolom in het Klassenoverzicht (alle modi).
+    const prevCorrectStreak=p.correctStreak||0;
+    upd.correctStreak=ok?prevCorrectStreak+1:0;
+    upd.bestCorrectStreak=Math.max(p.bestCorrectStreak||0, upd.correctStreak);
     // Moeilijke woorden over sessies heen (core.js: hwNote) — lokaal/in de
     // identiteit, én in de players-node zodat de host het meteen meeweegt.
     if(BM_MY_Q){
