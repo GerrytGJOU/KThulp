@@ -403,6 +403,22 @@ async function bmAwardBattle(){
         next.classPlayOrder=[...(data.classPlayOrder||[]),cls];
       }
     }
+    // Persoonlijke Total War-belegeringsstatistieken (op verzoek 2026-09-30,
+    // voor "Mijn statistieken"/SCREENS.twMyStats) — bewust GESCHEIDEN van
+    // classHistory hierboven, dat loopt over ALLE Battle Mode/Boss Battle-
+    // gevechten door elkaar (elk vak, geen siege-onderscheid). Alleen
+    // bijwerken als dit gevecht ECHT een Total War-belegering was
+    // (BM_META.garrisonProvince, gezet door twStartAttack() in totalwar.js).
+    if(BM_META?.garrisonProvince){
+      const tw=data.twBattleStats||{sieges:0,wins:0,damage:0,healing:0,maxDamage:0};
+      next.twBattleStats={
+        sieges:(tw.sieges||0)+1,
+        wins:(tw.wins||0)+(won?1:0),
+        damage:(tw.damage||0)+myDmg0,
+        healing:(tw.healing||0)+myHeal0,
+        maxDamage:Math.max(tw.maxDamage||0,myDmg0),
+      };
+    }
     mergedData=next;
     return next;
   });

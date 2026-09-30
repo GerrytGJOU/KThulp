@@ -234,7 +234,8 @@ function trRenderModeBody(){
     </div>
   </div>`}
   <button class="btn btn-gold btn-block lg" onclick="trStart()">Beginnen</button>
-  <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('trainingGarrison')">🏰 Bekijk je gebied</button>`;
+  <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('trainingGarrison')">🏰 Bekijk je gebied</button>
+  <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('twMyStats')">📊 Mijn statistieken</button>`;
 }
 
 function trSetLang(lang){ TR_DRAFT.lang=lang; TR_DRAFT.vf=vfqDefaultDraft(lang); trRenderModeBody(); }
