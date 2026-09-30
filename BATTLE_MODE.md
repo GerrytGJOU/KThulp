@@ -1142,7 +1142,7 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
   (liepen voorheen door naar het volgende gevecht).
 - Detailpopup: avatar, accuratesse, gem. responstijd, schade, healing, top-5 gemiste woorden
 
-**CSV-export** via `bmExportCSV()` (SheetJS) — kolommen: Naam, Klas, Klasse, Goed%, Goed, Fout, Gemiste woorden, Schade, Healing, Rondes actief.
+**CSV-export** via `bmExportCSV()` (SheetJS) — kolommen: Naam, Klas, Klasse, Goed%, Goed, Fout, Gemiste woorden, Schade, Healing, Rondes actief, Rondes totaal (zelfde totaal als "Actief x/totaal" in de tabel; bewust als aparte getalkolom, want Excel leest tekst als "5/12" als datum).
 
 ### Datamodel-uitbreidingen (M7)
 
