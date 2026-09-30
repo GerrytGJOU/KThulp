@@ -416,13 +416,22 @@ Training Mode kreeg dezelfde behandeling, plus een tweede maatregel:
   gewicht is altijd minstens 1 (`1+Math.max(0,weightFn(w))`), dus een
   weightFn kan een woord nooit volledig uitsluiten — enkel vaker/minder vaak
   maken. Valt terug op de volle pool zodra uitsluiten 'm te klein zou maken,
-  zodat een korte woordenlijst nooit vastloopt.
+  zodat een korte woordenlijst nooit vastloopt. **Sinds 2026-09-30 vervangen**
+  door de Certamen-brede `pickFresh()` in `core.js` (kanaal `"tr"`, venster
+  = helft van de unieke pool, max. 15, ook voor werkwoordsvormen).
 
 Beide zijn sessie-lokaal (gereset in `trStart()`), net als `FP_WRONG_
 COUNTS` in Vrij Oefenen — geen Firebase-veld nodig, dit is puur
 kortetermijnspreiding binnen één oefensessie, geen langetermijn-Leitner-
 systeem (dat bestaat al wel, maar los, voor Boss Battle/Battle Mode:
 `bmPersonalPool()` in `battle.js`, met een `due`-vervolgronde).
+
+**Aanvulling 2026-09-30:** er ís nu wel een langetermijngeheugen, in alle
+Certamen-modi (dus ook Training Mode): `hwNote()`/`hwMap()` in `core.js`
+houden per leerling de moeilijkste woorden bij in
+`identities/{klas}/{lid}/hardWords` (fout +2, goed −1, max. 6, max. 150
+woorden), en `pickFresh()` trekt met 30% kans uit de moeilijke woorden in de
+huidige pool. Zie BATTLE_MODE.md voor het volledige mechanisme.
 
 Bewust **niet** aangepast: de werkwoordsvormen-submodus
 (`TR_DRAFT.source==="verbforms"`, `vfqMakeQuestion()`/`vfqMakeOntleedQuestion()`/

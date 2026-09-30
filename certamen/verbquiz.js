@@ -166,7 +166,7 @@ function vfqMakeQuestion(pool, chan){
   }
   while(opts.length<2) opts.push("…");
   const shuffled = shuffle(opts);
-  return { mode:"mc", taal:it.taal, vorm:it.vorm, lemma:it.lemma, betekenis:it.betekenis,
+  return { mode:"mc", key:recentKeyOf(it), taal:it.taal, vorm:it.vorm, lemma:it.lemma, betekenis:it.betekenis,
             options:shuffled, correctIdx: shuffled.findIndex(o=>norm(o)===norm(it.glos)) };
 }
 
@@ -181,7 +181,7 @@ function vfqMakeTypedQuestion(pool, chan){
   const opdracht = base.taal==="la"
     ? `Geef de <strong>${persoon} ${VF_TIJD_NM[base.tijd]}${VF_WIJS_KORT[base.modus]} ${base.genus}</strong> van <em>${esc(base.lemma)}</em>`
     : `Geef de <strong>${persoon} ${base.tijd}${base.genus!=="activum"?" "+base.genus:""}</strong> van <em>${esc(base.lemma)}</em>`;
-  return { mode:"typed", taal:base.taal, lemma:base.lemma, betekenis:base.betekenis,
+  return { mode:"typed", key:recentKeyOf(base), taal:base.taal, lemma:base.lemma, betekenis:base.betekenis,
             vraag: opdracht+` <span class="note">(${esc(base.betekenis)})</span>`, antwoord:base.vorm, glos:base.glos };
 }
 
@@ -224,7 +224,7 @@ function vfqMakeOntleedQuestion(pool, chan){
   const correct = { persoon:String((it.persoonIdx%3)+1), getal: it.persoonIdx<3?"ev":"mv",
                      tijd:it.tijd, modus:it.modus, genus:it.genus };
   const antwoord = vfqOntleedAxes(it.taal).map(ax=>correct[ax.key]).filter(Boolean).join(" / ");
-  return { mode:"ontleed", taal:it.taal, lemma:it.lemma, betekenis:it.betekenis, vorm:it.vorm, correct, antwoord };
+  return { mode:"ontleed", key:recentKeyOf(it), taal:it.taal, lemma:it.lemma, betekenis:it.betekenis, vorm:it.vorm, correct, antwoord };
 }
 
 // Eén gedeeld selectie-object per actieve ontleedvraag — zelfde soort
