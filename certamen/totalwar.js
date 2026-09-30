@@ -538,6 +538,7 @@ SCREENS.totalWarMap = function(){
 
   <div class="panel" style="text-align:center">
     <button class="btn btn-ghost btn-block" onclick="go('totalWarHallOfFame')">🏛️ Hall of Fame — eerdere seizoenen</button>
+    ${BM_IDENT ? `<button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('twMyStats')">📊 Mijn statistieken</button>` : ""}
   </div>
   ${foot()}`);
   twResolveViewerCampaign().then(v=>{
@@ -1248,6 +1249,73 @@ async function twRenderHighlights(){
     }catch(e){}
   }
 }
+
+/* ---- SCHERM: persoonlijke Total War-statistieken (op verzoek, 2026-09-30) ----
+   "Mijn statistieken" naast de klas-/rijksbrede "Hoogtepunten van dit
+   seizoen" hierboven: wat heeft DEZE leerling zelf bijgedragen. Twee
+   databronnen op de identiteit (identities/{klas}/{lcode}), allebei al
+   voor dit doel opgezet:
+   - twContrib {total,militia,walls,towers} — bouwpunten, bijgehouden door
+     trTrackContribution() (training.js), los van de gedeelde
+     provincietellers.
+   - twBattleStats {sieges,wins,damage,healing,maxDamage} — nieuw
+     (bmAwardBattle(), battle.js), alleen bijgewerkt bij een ECHTE
+     belegering (BM_META.garrisonProvince), dus geschikt losstaand van de
+     bestaande classHistory (die alle Battle Mode/Boss Battle-gevechten
+     door elkaar telt).
+   Bewust GEEN seizoensgrens: dit is "je hele Total War-carrière op dit
+   account", net als het bestaande "Mijn profiel" (SCREENS.battleProfile)
+   ook nooit reset bij een nieuw seizoen — een aparte "dit seizoen"-variant
+   kan later alsnog, geen concreet verzoek nu. */
+SCREENS.twMyStats = function(){
+  if(!BM_IDENT){ BM_IDENT_RETURN="twMyStats"; go("battleIdentity"); return; }
+  document.body.classList.remove("greek");
+  const contrib = BM_IDENT.twContrib||{};
+  const tw = BM_IDENT.twBattleStats||{};
+  const achs = BM_IDENT.achievements||[];
+  const trackRow = (key)=> contrib[key] ? `<div class="note" style="margin-top:4px">— ${esc(TW_TRACK_NM[key])}: ${Math.round(contrib[key])} punten</div>` : "";
+  const twAchDef = ACHIEVEMENTS_DEF.filter(a=>a.cat==="totalwar");
+  const achHTML = achGroupsHTML(twAchDef, achs, a=>{
+    const got=achs.includes(a.id);
+    return `<div class="bm-ach${got?"":" locked"}">
+      <div class="aic">${got?iconSVG(a.icon,24,"var(--hi)"):iconSVG(a.icon,22,"var(--muted2)")}</div>
+      <div class="atx">
+        <div class="anm">${got?"":"🔒 "}${esc(a.nm)}</div>
+        <div class="ads">${esc(a.ds)}</div>
+      </div>
+    </div>`;
+  });
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="goBack()">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>📊 Mijn Total War-statistieken</h2>
+  </div>
+  <div class="panel" style="text-align:center">
+    <div style="font-size:16px;font-weight:700">${esc(BM_IDENT.name||"")}</div>
+    <div class="note" style="margin-top:2px">${esc(BM_IDENT.klascode||"")}</div>
+  </div>
+  <div class="panel">
+    <h3>🏗️ Bouwpunten bijgedragen</h3>
+    <div class="note">${Math.round(contrib.total||0)} punten in totaal</div>
+    ${trackRow("militia")}${trackRow("walls")}${trackRow("towers")}
+    ${!contrib.total ? `<div class="note" style="margin-top:6px">Nog niets bijgedragen — train in Training Mode om je provincie te versterken!</div>` : ""}
+  </div>
+  <div class="panel">
+    <h3>⚔️ Belegeringen</h3>
+    ${tw.sieges ? `
+    <div class="note">${tw.sieges} belegering${tw.sieges!==1?"en":""} meegevochten, ${tw.wins||0} gewonnen</div>
+    <div class="note" style="margin-top:4px">${Math.round(tw.damage||0)} schade toegebracht in totaal</div>
+    <div class="note" style="margin-top:4px">🌟 Beste eigen belegering: ${Math.round(tw.maxDamage||0)} schade in één gevecht</div>
+    ${tw.healing ? `<div class="note" style="margin-top:4px">${Math.round(tw.healing)} genezing gegeven</div>` : ""}
+    ` : `<div class="note">Nog geen belegering meegevochten.</div>`}
+  </div>
+  <div class="panel">
+    <h3>🏅 Total War-eerbewijzen</h3>
+    ${achHTML || `<div class="note">—</div>`}
+  </div>
+  ${foot()}`);
+  bmRefreshIdentCache("twMyStats");
+};
 
 /* ---- Nieuw seizoen starten (docent-only, SCREENS.totalWarPreview): reset de
    hele kaart naar de thuislanden/neutraal en wist de seizoensrecords. Klas↔

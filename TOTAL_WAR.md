@@ -1591,6 +1591,39 @@ tegelijk is dat te vroeg om zinvol te ontwerpen; de ruwe data staat er wel al
 (elk record heeft `number`/`winnerCivId`), dus dat kan later alsnog bovenop
 gebouwd worden zonder het datamodel te wijzigen.
 
+## 12. Persoonlijke statistieken ("Mijn statistieken")
+
+**✅ Gebouwd (2026-09-30, op verzoek).** Naast de klas-/rijksbrede
+"Hoogtepunten van dit seizoen" (§11 hierboven) kan een ingelogde leerling nu
+ook zijn/haar EIGEN bijdrage bekijken, via `SCREENS.twMyStats`
+(`certamen/totalwar.js`) — een knop "📊 Mijn statistieken" op zowel
+`SCREENS.totalWarMap` (alleen zichtbaar als `BM_IDENT` gezet is) als
+`SCREENS.trainingMode`. Geen login? Dan stuurt het scherm eerst door naar
+`battleIdentity` (via `BM_IDENT_RETURN`), net als de rest van Training Mode.
+
+Twee databronnen op de identiteit (`identities/{klas}/{lcode}`):
+
+- **`twContrib`** `{total, militia, walls, towers}` — bestond al
+  (`trTrackContribution()`, `certamen/training.js`, sinds de eerste
+  "steenhouwer"/"bouwmeester"-eerbewijzen), hier voor het eerst rechtstreeks
+  aan de leerling zelf getoond in plaats van alleen intern gebruikt voor
+  eerbewijs-checks en het seizoensrecord `stats/topBuilder`.
+- **`twBattleStats`** `{sieges, wins, damage, healing, maxDamage}` — nieuw.
+  Bijgewerkt in dezelfde transactie als de bestaande `classHistory`-update in
+  `bmAwardBattle()` (`certamen/battle.js`), maar bewust ALLEEN als
+  `BM_META.garrisonProvince` gezet is (dus een ECHTE Total War-belegering) —
+  `classHistory` zelf blijft ongewijzigd en telt nog steeds alle Battle
+  Mode-/Boss Battle-gevechten door elkaar (geen siege-onderscheid), dus was
+  niet bruikbaar om "schade in belegeringen" apart te tonen.
+
+Bewust **geen seizoensgrens**: dit is "je hele Total War-carrière op dit
+account", zoals het bestaande "Mijn profiel" (`SCREENS.battleProfile`) ook
+nooit reset bij een nieuw seizoen. De eerbewijzensectie hergebruikt de
+bestaande `achGroupsHTML()`-component (`certamen/core.js`), gefilterd op
+`cat==="totalwar"` — dat is niet alleen de vier bouw-eerbewijzen maar de
+volledige Total War-categorie (28 stuks: bouw, belegeraar, alle 22
+vlaggenschip-verovering/heerser-eerbewijzen, en "Wederopstanding").
+
 ---
 
 *Total War · Gerben de Jong · 2026*
