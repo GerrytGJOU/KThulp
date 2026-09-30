@@ -114,12 +114,12 @@ function fpNextQuestion(){
   const host = el("fpQuestionHost"); if(!host) return;
   if(FP_DRAFT.source==="verbforms" && FP_DRAFT.vf.mode==="ontleed"){
     vfqOntleedReset();
-    FP_Q = vfqMakeOntleedQuestion(FP_POOL);
+    FP_Q = vfqMakeOntleedQuestion(FP_POOL, "fp");
     fpRenderOntleed();
     return;
   }
   if(FP_DRAFT.source==="verbforms" && FP_DRAFT.vf.mode==="typed"){
-    FP_Q = vfqMakeTypedQuestion(FP_POOL);
+    FP_Q = vfqMakeTypedQuestion(FP_POOL, "fp");
     host.innerHTML = `
     <div class="qcard"><div class="kick">${FP_Q.taal==="el"?"Grieks":"Latijn"} — getypte vorm</div>
       <div class="word" style="font-size:20px">${FP_Q.vraag}</div></div>
@@ -128,7 +128,7 @@ function fpNextQuestion(){
     el("fpTyped").focus();
     return;
   }
-  FP_Q = FP_DRAFT.source==="verbforms" ? vfqMakeQuestion(FP_POOL) : makeQuestion(FP_POOL, w=>2*(FP_WRONG_COUNTS[w.la]||0));
+  FP_Q = FP_DRAFT.source==="verbforms" ? vfqMakeQuestion(FP_POOL, "fp") : makeQuestion(FP_POOL, w=>2*(FP_WRONG_COUNTS[w.la]||0), null, "fp");
   const kick = FP_DRAFT.source==="verbforms" ? "Welke vertaling hoort bij deze vorm?" : `Vertaal het ${FP_DRAFT.lang==="el"?"Griekse":"Latijnse"} woord`;
   const woord = FP_DRAFT.source==="verbforms" ? FP_Q.vorm : FP_Q.la;
   host.innerHTML = `

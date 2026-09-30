@@ -636,12 +636,12 @@ function drawQuestion(){
   answered=false;
   if(META.source==="verbforms" && META.vfMode==="ontleed"){
     vfqOntleedReset();
-    curQ = vfqMakeOntleedQuestion(POOL);
+    curQ = vfqMakeOntleedQuestion(POOL, "game");
     renderOntleed();
     return;
   }
   if(META.source==="verbforms" && META.vfMode==="typed"){
-    curQ = vfqMakeTypedQuestion(POOL);
+    curQ = vfqMakeTypedQuestion(POOL, "game");
     H(brand(false)+`<div id="mini">${miniHTML()}</div>
       <div class="qcard"><div class="kick">${curQ.taal==="el"?"Grieks":"Latijn"} — getypte vorm</div>
         <div class="word" style="font-size:20px">${curQ.vraag}</div></div>
@@ -650,7 +650,7 @@ function drawQuestion(){
     const box=el("playerTyped"); if(box)box.focus();
     return;
   }
-  curQ = META.source==="verbforms" ? vfqMakeQuestion(POOL) : makeQuestion(POOL, w=>2*(WRONG_COUNTS[w.la]||0));
+  curQ = META.source==="verbforms" ? vfqMakeQuestion(POOL, "game") : makeQuestion(POOL, w=>2*(WRONG_COUNTS[w.la]||0), null, "game");
   const kick = META.source==="verbforms" ? "Welke vertaling hoort bij deze vorm?" : `${META.lang==="el"?"Grieks":"Latijn"} → Nederlands`;
   const woord = META.source==="verbforms" ? curQ.vorm : curQ.la;
   H(brand(false)+`<div id="mini">${miniHTML()}</div>
