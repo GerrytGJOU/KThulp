@@ -398,6 +398,7 @@ function trCheckOntleed(){
   if(!TR_Q) return;
   const q = TR_Q; TR_Q = null;
   const grade = vfqOntleedGrade(q);
+  hwNote(q, grade.ok);
   const host = el("trQuestionHost"); if(!host) return;
   host.innerHTML = vfqOntleedResultHTML(q, grade)
     + `<div class="panel" style="text-align:center;color:${grade.ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${grade.ok?"Goed!":"Niet helemaal — bekijk de rode/groene assen hierboven"}</div>`;
@@ -412,6 +413,7 @@ function trAnswer(idx){
   // woord krijgt extra gewicht bij de eerstvolgende trekking
   // waarin het weer meedoet.
   if(!ok && q.la) TR_WRONG_COUNTS[q.la] = (TR_WRONG_COUNTS[q.la]||0)+1;
+  hwNote(q, ok); // en over sessies heen (core.js)
   [0,1,2,3].forEach(i=>{
     const c=el("trC"+i); if(!c) return;
     if(i===q.correctIdx) c.classList.add("correct");
@@ -431,6 +433,7 @@ function trAnswerTyped(){
   const host = el("trQuestionHost");
   if(host) host.insertAdjacentHTML("beforeend", `<div class="panel" style="text-align:center;color:${ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${ok?"Goed!":"Fout — juiste antwoord: "+esc(q.antwoord)}</div>`);
   if(box) box.disabled = true;
+  hwNote(q, ok);
   trScoreAnswer(ok, null);
 }
 

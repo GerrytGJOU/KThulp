@@ -111,18 +111,90 @@ function pickWeighted(pool, weightFn){
 const RECENT_MAX = 15;
 const RECENT_Q = {};
 // Werkwoordsvormen (verbquiz.js) op vorm, vocab op lemma (.la; Chronica-
-// entries heten .woord).
-function recentKeyOf(w){ return w.vorm!=null ? "v:"+(w.taal||"")+":"+w.vorm : "w:"+(w.la!=null?w.la:w.woord); }
-function pickFresh(pool, chan, weightFn){
-  if(!chan || !pool.length) return pickWeighted(pool, weightFn);
-  const recent = RECENT_Q[chan] || (RECENT_Q[chan] = []);
-  const uniq = new Set(pool.map(recentKeyOf)).size;
-  const win = Math.min(RECENT_MAX, Math.floor(uniq/2));
-  const excl = new Set(recent.slice(Math.max(0, recent.length-win)));
-  const avail = win>0 ? pool.filter(w=>!excl.has(recentKeyOf(w))) : pool;
-  const w = pickWeighted(avail.length ? avail : pool, weightFn);
-  recent.push(recentKeyOf(w));
-  if(recent.length>RECENT_MAX) recent.shift();
+// entries heten .woord). Firebase-veilig, want de sleutel wordt ook gebruikt
+// als pad in identities/{klas}/{lid}/hardWords en rooms/…/players/{pid}/hard.
+function recentKeyOf(w){
+  const k = w.vorm!=null ? "v:"+(w.taal||"")+":"+w.vorm : "w:"+(w.la!=null?w.la:w.woord);
+  return k.replace(/[.#$\[\]\/]/g,"_").substring(0,80);
+}
+
+// Moeilijke woorden per speler, óver sessies heen (op verzoek, 2026-09-30).
+// Eén score per woord (1..HW_MAX_SCORE): fout = +2, goed = −1, bij 0 valt het
+// woord uit de lijst — na een paar keer goed is een woord dus weer "gewoon".
+// Opslag: bij een gekoppelde leerling in de identiteit zelf
+// (identities/{klas}/{lid}/hardWords, lokaal gespiegeld in BM_IDENT/de
+// localStorage-identiteit, zelfde patroon als syncXpDelta) zodat het over
+// toestellen heen meegaat; zonder identiteit in een eigen localStorage-sleutel.
+// Gebruikt in álle Certamen-modi: pickFresh() hieronder trekt met kans
+// HW_SHARE een woord uit de moeilijke woorden die in de huidige pool zitten
+// (gewogen naar score), en anders gewoon willekeurig. Zo komen ze merkbaar
+// vaker terug, onafhankelijk van hoe groot de pool is — maar nooit meteen
+// opnieuw, want de recent-uitsluiting geldt ook voor hen.
+const HW_LOCAL_KEY = "certamen_hard_words";
+const HW_MAX_SCORE = 6, HW_MAX_WORDS = 150, HW_SHARE = 0.3;
+function hwIdent(){
+  const id = (typeof profileIdentity==="function") ? profileIdentity() : null;
+  return (id && id.klascode && id.leerlingcode) ? id : null;
+}
+function hwMap(){
+  const id = hwIdent();
+  if(id) return id.hardWords || {};
+  try{ return JSON.parse(localStorage.getItem(HW_LOCAL_KEY)||"{}")||{}; }catch(e){ return {}; }
+}
+// Registreert een antwoord; geeft de nieuwe score terug (0 = niet meer moeilijk).
+function hwNote(q, ok){
+  if(!q) return 0;
+  const key = q.key || recentKeyOf(q);
+  const map = {...hwMap()};
+  const prev = map[key]||0;
+  const next = ok ? Math.max(0, prev-1) : Math.min(HW_MAX_SCORE, prev+2);
+  if(next===prev) return next;
+  const changes = {};
+  if(next>0){ map[key]=next; changes[key]=next; } else { delete map[key]; changes[key]=null; }
+  // Lijst begrenzen: de makkelijkste moeilijke woorden vallen er als eerste af.
+  const keys = Object.keys(map);
+  if(keys.length>HW_MAX_WORDS){
+    keys.filter(k=>k!==key).sort((a,b)=>map[a]-map[b]).slice(0,keys.length-HW_MAX_WORDS)
+      .forEach(k=>{ delete map[k]; changes[k]=null; });
+  }
+  const id = hwIdent();
+  if(id){
+    if(typeof bmIdentSave==="function") bmIdentSave({...id, hardWords:map});
+    if(typeof BM_IDENT!=="undefined" && BM_IDENT && BM_IDENT.leerlingcode===id.leerlingcode) BM_IDENT.hardWords=map;
+    try{
+      if(typeof hasFirebase!=="undefined" && hasFirebase && typeof initFirebase==="function" && initFirebase() && typeof fbDB!=="undefined" && fbDB)
+        fbDB.ref("identities/"+id.klascode+"/"+id.leerlingcode+"/hardWords").update(changes).catch(()=>{});
+    }catch(e){}
+  } else {
+    try{ localStorage.setItem(HW_LOCAL_KEY, JSON.stringify(map)); }catch(e){}
+  }
+  return next;
+}
+
+// chanOrOpts: kanaalnaam (string), of {chan, hard} — hard = een eigen
+// moeilijke-woordenkaart (Battle Mode: die van de betreffende leerling, niet
+// van de docent die de vragen trekt), null = geen moeilijke-woordenvoorrang.
+// Zonder `hard` wordt die van de speler op dit toestel gebruikt.
+function pickFresh(pool, chanOrOpts, weightFn){
+  const o = typeof chanOrOpts==="string" ? {chan:chanOrOpts} : (chanOrOpts||{});
+  const chan = o.chan;
+  const hard = o.hard!==undefined ? o.hard : hwMap();
+  if(!pool.length) return pickWeighted(pool, weightFn);
+  let avail = pool, recent = null;
+  if(chan){
+    recent = RECENT_Q[chan] || (RECENT_Q[chan] = []);
+    const uniq = new Set(pool.map(recentKeyOf)).size;
+    const win = Math.min(RECENT_MAX, Math.floor(uniq/2));
+    const excl = new Set(recent.slice(Math.max(0, recent.length-win)));
+    if(win>0){ const f = pool.filter(w=>!excl.has(recentKeyOf(w))); if(f.length) avail = f; }
+  }
+  let w = null;
+  if(hard && Math.random()<HW_SHARE){
+    const hs = avail.filter(x=>hard[recentKeyOf(x)]>0);
+    if(hs.length) w = pickWeighted(hs, x=>hard[recentKeyOf(x)]-1);
+  }
+  if(!w) w = pickWeighted(avail, weightFn);
+  if(recent){ recent.push(recentKeyOf(w)); if(recent.length>RECENT_MAX) recent.shift(); }
   return w;
 }
 function makeQuestion(pool, weightFn, distractorPool, chan){
@@ -162,7 +234,7 @@ function makeQuestion(pool, weightFn, distractorPool, chan){
   }
   while(opts.length<2) opts.push("…");
   const shuffled = shuffle(opts);
-  return { la:w.la, pos:w.pos, options:shuffled, correctIdx: shuffled.findIndex(o=>norm(o)===norm(correct)) };
+  return { la:w.la, pos:w.pos, key:recentKeyOf(w), options:shuffled, correctIdx: shuffled.findIndex(o=>norm(o)===norm(correct)) };
 }
 
 /* ============================================================================

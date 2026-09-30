@@ -709,6 +709,7 @@ function answerTyped(){
 }
 function scoreAnswer(ok, wrongKey){
   const me=myPlayer();
+  hwNote(curQ, ok); // moeilijke woorden, over sessies heen (core.js)
   if(ok){ myStreak++; P.stats.totalCorrect++; P.stats.currentStreak++;
     if(P.stats.currentStreak>P.stats.bestStreak)P.stats.bestStreak=P.stats.currentStreak;
     addCoins(2); beep("good"); }

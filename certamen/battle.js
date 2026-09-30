@@ -1073,7 +1073,7 @@ SCREENS.battleFAQ = function(){
 
   ${sec("Voor docenten",false,`
     <div class="note">Bij het starten van een gevecht stel je in: woordbereik en taal, antwoordtijd, en onder
-    <b>Geavanceerde instellingen</b> o.a. legersterkte, adaptief leren (foute woorden komen vaker terug),
+    <b>Geavanceerde instellingen</b> o.a. legersterkte, adaptief leren (woorden die een leerling moeilijk vindt komen vaker terug — ook uit eerdere lessen en andere Certamen-spellen; nooit meteen achter elkaar),
     combo's aan/uit, mastery-bonussen, animaties (uit bij trage Chromebooks), geluid, en de
     <b>Heldenmodus</b> met HP-per-held en herrijz-drempel. Battle Mode vereist Firebase voor de realtime
     synchronisatie en het identiteitssysteem.</div>
@@ -1372,7 +1372,7 @@ SCREENS.battleHostSettings = function(){
   <div class="panel">
     <label class="fld">Adaptief leren</label>
     <div class="chips">${onoff("adaptive",adp)}</div>
-    <div class="note" style="margin-top:6px">Foute woorden komen vaker terug voor die leerling.</div>
+    <div class="note" style="margin-top:6px">Woorden die een leerling moeilijk vindt (ook uit eerdere lessen) komen vaker terug voor die leerling.</div>
   </div>
   <div class="panel">
     <label class="fld">Combo-abilities</label>
@@ -1759,9 +1759,13 @@ async function bmDistributeQs(roundN){
     // uitzondering: dan heeft nog niemand kunnen antwoorden.
     if(roundN>1&&!(p.lastAnswerRound===roundN-1&&p.lastAnswerOk===true)) beBonus=0;
     const pool=bmPersonalPool(pid,POOL,roundN);
+    // Geen woord kort na elkaar voor deze speler + voorrang voor zíjn
+    // moeilijke woorden over sessies heen (p.hard, meegegeven bij bmDoJoin —
+    // de host kent BM_IDENT van de leerling niet). Zie pickFresh() in core.js.
+    const qo={chan:"bm:"+pid, hard:BM_META?.adaptive?(p.hard||{}):null};
     const q = BM_META?.source==="verbforms"
-      ? (BM_META.vfMode==="typed" ? vfqMakeTypedQuestion(pool,"bm:"+pid) : vfqMakeQuestion(pool,"bm:"+pid))
-      : makeQuestion(pool, null, POOL, "bm:"+pid);
+      ? (BM_META.vfMode==="typed" ? vfqMakeTypedQuestion(pool,qo) : vfqMakeQuestion(pool,qo))
+      : makeQuestion(pool, null, POOL, qo);
     up["players/"+pid+"/currentQ"]=JSON.stringify(q);
     up["players/"+pid+"/answeredRound"]=-1;
     up["players/"+pid+"/lockedAction"]=null;
@@ -4152,7 +4156,10 @@ async function bmDoJoin(){
     // Chronica Classica-eretitel (indien gekozen): puur presentatie in de
     // lobby, zie SP_TITLES/spEquippedTitleDisplayName (singleplayer.js).
     title:spEquippedTitleDisplayName(),
-    identityKey:BM_IDENT.klascode+":"+BM_IDENT.leerlingcode};
+    identityKey:BM_IDENT.klascode+":"+BM_IDENT.leerlingcode,
+    // Moeilijke woorden van deze leerling (over sessies heen, core.js: hwMap),
+    // zodat de host er in bmDistributeQs() voorrang aan kan geven.
+    hard:hwMap()};
   const ref=fbDB.ref("rooms/"+code+"/players").push();
   ref.onDisconnect().update({online:false});
   await ref.set(pd);BM_PID=ref.key;
@@ -4176,7 +4183,7 @@ async function bmRejoin(){
     bmApplyTheme(meta.theme);
     const ref=fbDB.ref("rooms/"+code+"/players/"+pid);
     ref.onDisconnect().update({online:false});
-    await ref.update({online:true});
+    await ref.update({online:true,hard:hwMap()});
     go(st?.status==="playing"?"battlePlayerGame":"battlePlayerLobby");
     return true;
   }catch(e){return false;}
@@ -4598,6 +4605,12 @@ function bmFinishAnswer(ok){
       const prevCorrectStreak=p.correctStreak||0;
       upd.correctStreak=ok?prevCorrectStreak+1:0;
       upd.bestCorrectStreak=Math.max(p.bestCorrectStreak||0, upd.correctStreak);
+    }
+    // Moeilijke woorden over sessies heen (core.js: hwNote) — lokaal/in de
+    // identiteit, én in de players-node zodat de host het meteen meeweegt.
+    if(BM_MY_Q){
+      const hs=hwNote(BM_MY_Q,ok);
+      upd["hard/"+(BM_MY_Q.key||recentKeyOf(BM_MY_Q))]=hs>0?hs:null;
     }
     if(!ok&&BM_MY_Q){
       // Gemist woord bijhouden voor analytics (host leest na afloop) én voor

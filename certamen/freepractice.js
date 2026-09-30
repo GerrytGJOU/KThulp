@@ -151,6 +151,7 @@ function fpCheckOntleed(){
   if(!FP_Q) return;
   const q = FP_Q; FP_Q = null;
   const grade = vfqOntleedGrade(q);
+  hwNote(q, grade.ok);
   const host = el("fpQuestionHost"); if(!host) return;
   host.innerHTML = vfqOntleedResultHTML(q, grade)
     + `<div class="panel" style="text-align:center;color:${grade.ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${grade.ok?"Goed!":"Niet helemaal — bekijk de rode/groene assen hierboven"}</div>`;
@@ -168,6 +169,7 @@ function fpAnswer(idx){
     else c.classList.add("dim");
     c.disabled=true;
   });
+  hwNote(q, ok);
   fpScoreAnswer(ok, q.la);
 }
 
@@ -180,6 +182,7 @@ function fpAnswerTyped(){
   const host = el("fpQuestionHost");
   if(host) host.insertAdjacentHTML("beforeend", `<div class="panel" style="text-align:center;color:${ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${ok?"Goed!":"Fout — juiste antwoord: "+esc(q.antwoord)}</div>`);
   if(box) box.disabled = true;
+  hwNote(q, ok);
   fpScoreAnswer(ok, null);
 }
 
