@@ -3850,16 +3850,28 @@ function bmHPChart(timeline,maxA,maxB){
   </svg>`;
 }
 
+// Totaal aantal gespeelde rondes, voor "Actief" als x/totaal (Klassenoverzicht
+// + CSV): één log-entry per afgehandelde ronde. Max met het hoogste aantal
+// antwoorden, want bij een handmatig gestopt gevecht kan de laatste ronde al
+// beantwoord zijn zonder dat hij nog is afgehandeld (en dus zonder log-entry).
+function bmTotalRounds(players){
+  return Math.max(
+    new Set(Object.values(BM_LOG||{}).map(e=>e&&e.round)).size,
+    ...players.map(p=>(p.correct||0)+(p.wrong||0)), 0);
+}
+
 async function bmExportCSV(){
   const players=BM_AWARD_DATA?.all||Object.values(BM_PLAYERS);
   let XLSX;try{XLSX=await loadSheetJS();}catch(e){toast("Fout","SheetJS kon niet worden geladen.");return;}
+  // Totaal als eigen getalkolom i.p.v. tekst "23/28": Excel leest "5/12" als datum.
+  const totalRounds=bmTotalRounds(players);
   const rows=players.map(p=>{
     const total=(p.correct||0)+(p.wrong||0);
     const acc=total>0?Math.round((p.correct||0)/total*100):0;
     const missed=Object.values(p.missed||{}).sort((a,b)=>(b.c||0)-(a.c||0)).map(w=>w.p||"").join(", ");
     return{"Naam":p.name||"","Klas":(p.identityKey||"").split(":")[0]||"","Klasse":bmClsName(p.class)||"",
       "Goed%":acc,"Goed":p.correct||0,"Fout":p.wrong||0,"Gemiste woorden":missed,
-      "Schade":p.damage||0,"Healing":p.healing||0,"Rondes actief":total};
+      "Schade":p.damage||0,"Healing":p.healing||0,"Rondes actief":total,"Rondes totaal":totalRounds};
   });
   const ws=XLSX.utils.json_to_sheet(rows);
   const wb=XLSX.utils.book_new();
@@ -4062,13 +4074,7 @@ SCREENS.battleHostAnalytics = async function(){
     const accOf=p=>totOf(p)>0?(p.correct||0)/totOf(p):-1;   // nog niets beantwoord → onderaan
     const contribOf=p=>(p.damage||0)+(p.healing||0);
     const sortKeys={acc:[accOf,totOf],contrib:[contribOf,accOf],act:[totOf,accOf]};
-    // Totaal aantal gespeelde rondes, voor "Actief" als x/totaal: één log-entry
-    // per afgehandelde ronde. Max met het hoogste aantal antwoorden, want bij
-    // een handmatig gestopt gevecht kan de laatste ronde al beantwoord zijn
-    // zonder dat hij nog is afgehandeld (en dus zonder log-entry).
-    const totalRounds=Math.max(
-      new Set(Object.values(BM_LOG||{}).map(e=>e&&e.round)).size,
-      ...players.map(totOf), 0);
+    const totalRounds=bmTotalRounds(players);
     const [k1,k2]=sortKeys[BM_ANALYTICS_SORT]||sortKeys.acc;
     const sorted=[...players].sort((a,b)=>(k1(b)-k1(a))||(k2(b)-k2(a)));
     const sortTh=(key,label)=>{
