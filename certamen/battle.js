@@ -4062,6 +4062,13 @@ SCREENS.battleHostAnalytics = async function(){
     const accOf=p=>totOf(p)>0?(p.correct||0)/totOf(p):-1;   // nog niets beantwoord → onderaan
     const contribOf=p=>(p.damage||0)+(p.healing||0);
     const sortKeys={acc:[accOf,totOf],contrib:[contribOf,accOf],act:[totOf,accOf]};
+    // Totaal aantal gespeelde rondes, voor "Actief" als x/totaal: één log-entry
+    // per afgehandelde ronde. Max met het hoogste aantal antwoorden, want bij
+    // een handmatig gestopt gevecht kan de laatste ronde al beantwoord zijn
+    // zonder dat hij nog is afgehandeld (en dus zonder log-entry).
+    const totalRounds=Math.max(
+      new Set(Object.values(BM_LOG||{}).map(e=>e&&e.round)).size,
+      ...players.map(totOf), 0);
     const [k1,k2]=sortKeys[BM_ANALYTICS_SORT]||sortKeys.acc;
     const sorted=[...players].sort((a,b)=>(k1(b)-k1(a))||(k2(b)-k2(a)));
     const sortTh=(key,label)=>{
@@ -4113,7 +4120,7 @@ SCREENS.battleHostAnalytics = async function(){
         <td class="bm-stat"><div class="bm-stat-v" style="color:${acc!==null&&acc>=80?"var(--green-bright)":""}">${acc!==null?acc+"%":"—"}</div>
           <div class="bm-stat-bar"><div class="bm-stat-fill" style="--c:${acc===null?"transparent":acc>=80?"#5cc46a":acc>=55?"#e8b43c":"#d9573f"}" data-w="${acc||0}"></div></div></td>
         <td style="text-align:center">${contrib}</td>
-        <td style="text-align:center">${tot}</td>
+        <td style="text-align:center;white-space:nowrap">${tot}<span style="color:var(--muted)">/${totalRounds}</span></td>
         ${statCols.map((col,i)=>statCell(col,p,i)).join("")}
       </tr>`;
     }).join("");
