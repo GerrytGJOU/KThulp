@@ -1121,6 +1121,12 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
   twee); leerlingen zonder antwoorden staan bij Goed% onderaan. De statkolommen
   met balkjes zijn bewust niet sorteerbaar. De keuze blijft staan tot de pagina
   herladen wordt.
+- "Actief" = goed + fout = aantal rondes waarin de leerling antwoordde (max. één
+  antwoord per ronde; een antwoord betekent niet per se een actie — fout kost BE,
+  en zonder genoeg BE of zonder gekozen vaardigheid valt er niets). Getoond als
+  `x/totaal` (sinds 2026-09-30); totaal = aantal afgehandelde rondes in de log,
+  of het hoogste aantal antwoorden als dat hoger is (handmatig gestopt midden in
+  een ronde). Laatkomers tellen dus mee tegen het totaal van het hele gevecht.
 - Kolommen Goed% / Bijdr. / Actief (platte getallen), met rechts daarvan
   RPG-achtige statkolommen met vollopende balkjes (sinds 2026-09-30):
   ⚔️ Schade (`damage`), 💚 Healing (`healing`), 🛡️ Schild (`shielding`),
