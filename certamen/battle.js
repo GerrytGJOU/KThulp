@@ -1763,6 +1763,13 @@ async function bmDistributeQs(roundN){
     // moeilijke woorden over sessies heen (p.hard, meegegeven bij bmDoJoin —
     // de host kent BM_IDENT van de leerling niet). Zie pickFresh() in core.js.
     const qo={chan:"bm:"+pid, hard:BM_META?.adaptive?(p.hard||{}):null};
+    // Hint voor de leerling ("Je oefent nu extra op…"): alleen moeilijke
+    // woorden die in dít gevecht kunnen voorkomen — de leerling kent de pool
+    // niet, dus de host rekent het uit. Alleen schrijven als het verandert.
+    if(qo.hard){
+      const hint=bmHardHintFor(qo.hard);
+      if(JSON.stringify(hint)!==JSON.stringify(p.hardHint||[])) up["players/"+pid+"/hardHint"]=hint.length?hint:null;
+    }
     const q = BM_META?.source==="verbforms"
       ? (BM_META.vfMode==="typed" ? vfqMakeTypedQuestion(pool,qo) : vfqMakeQuestion(pool,qo))
       : makeQuestion(pool, null, POOL, qo);
@@ -1841,16 +1848,37 @@ function bmPersonalPool(pid,pool,roundN){
   return w.length?w:pool;
 }
 
-// Maakt bmPersonalPool()'s gewicht zichtbaar voor de speler zelf — puur
-// motiverende feedback, geen effect op de spellogica. Toont de (max 5)
-// woorden die deze sessie al eens fout gingen, dus dezelfde woorden die
-// bmPersonalPool() extra laat terugkomen.
+// Host-side: de (max 5) moeilijkste woorden uit een hard-kaart (core.js:
+// hwMap) die ook in de huidige POOL zitten, als leesbare tekst (lemma of
+// werkwoordsvorm). Sleutel→item-index wordt per POOL één keer opgebouwd.
+let _bmPoolKeyIdx=null,_bmPoolKeyIdxFor=null;
+function bmHardHintFor(hard){
+  if(_bmPoolKeyIdxFor!==POOL){
+    _bmPoolKeyIdx=new Map();
+    (POOL||[]).forEach(w=>{ const k=recentKeyOf(w); if(!_bmPoolKeyIdx.has(k)) _bmPoolKeyIdx.set(k, w.vorm!=null?w.vorm:w.la); });
+    _bmPoolKeyIdxFor=POOL;
+  }
+  return Object.keys(hard||{}).filter(k=>hard[k]>0&&_bmPoolKeyIdx.has(k))
+    .sort((a,b)=>hard[b]-hard[a]).slice(0,5).map(k=>_bmPoolKeyIdx.get(k));
+}
+
+// Maakt het adaptieve gewicht zichtbaar voor de speler zelf — puur
+// motiverende feedback, geen effect op de spellogica. Toont de woorden die
+// deze les al fout gingen (bmPersonalPool()) én, sinds 2026-09-30, de
+// moeilijke woorden uit eerdere lessen/andere spellen die in dit gevecht
+// kunnen terugkomen (players/{pid}/hardHint, berekend door de host in
+// bmDistributeQs() — pickFresh() geeft die voorrang). Samen max. 6.
 function bmAdaptiveHintHTML(){
   if(BM_META?.adaptive===false) return "";
-  const missed=Object.values(BM_PLAYERS[BM_PID]?.missed||{}).sort((a,b)=>(b.c||0)-(a.c||0));
-  const words=missed.slice(0,5).map(m=>m.p).filter(Boolean);
-  if(!words.length) return "";
-  return `<div class="note" style="margin-bottom:8px;color:var(--hi)">🎯 Je oefent nu extra op: <b>${words.map(esc).join(", ")}</b></div>`;
+  const me=BM_PLAYERS[BM_PID]||{};
+  const missed=Object.values(me.missed||{}).sort((a,b)=>(b.c||0)-(a.c||0));
+  const nu=missed.slice(0,5).map(m=>m.p).filter(Boolean);
+  const eerder=(me.hardHint||[]).filter(w=>w&&!nu.includes(w)).slice(0,Math.max(0,6-nu.length));
+  if(!nu.length&&!eerder.length) return "";
+  const delen=[];
+  if(nu.length) delen.push(`<b>${nu.map(esc).join(", ")}</b>${eerder.length?" (deze les)":""}`);
+  if(eerder.length) delen.push(`<b>${eerder.map(esc).join(", ")}</b> (uit eerdere lessen)`);
+  return `<div class="note" style="margin-bottom:8px;color:var(--hi)">🎯 Je oefent nu extra op: ${delen.join(" · ")}</div>`;
 }
 
 /* ---- SCHERM: battleHostGame ---- */
