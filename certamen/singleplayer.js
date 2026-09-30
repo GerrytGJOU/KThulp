@@ -4226,7 +4226,7 @@ function spRaceNextQuestion(){
     const gefilterd = entries.filter(e => e.taal===eigenTaal);
     if(gefilterd.length) entries = gefilterd;
   }
-  const w = pick(entries);
+  const w = pickFresh(entries, "sprace"); // geen woord kort na elkaar (core.js)
   const correct = w.betekenis;
   // Zelfde vorm-gebaseerde afleiderselectie als spCombatNextQuestion hierboven
   // (leerlingfeedback 2026-08-13) — voorkomt dat het goede antwoord al puur op

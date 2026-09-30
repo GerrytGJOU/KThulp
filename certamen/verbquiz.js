@@ -153,9 +153,9 @@ function vfqBuildPool(vf, lang){
 
 // Meerkeuzevraag: toont één vorm, de 4 opties zijn Nederlandse glossen — de
 // afleiders komen altijd uit hetzelfde werkwoord (nooit een ander lemma).
-function vfqMakeQuestion(pool){
+function vfqMakeQuestion(pool, chan){
   if(pool.length<2) return null;
-  const it = pick(pool);
+  const it = pickFresh(pool, chan);
   const sub = pool.filter(x=>x.lemma===it.lemma && x.taal===it.taal);
   const seen = new Set([norm(it.glos)]);
   const opts = [it.glos];
@@ -173,10 +173,10 @@ function vfqMakeQuestion(pool){
 const VF_WIJS_KORT = { indicativus:"", coniunctivus:" (coniunctivus)" };
 
 // Getypte productievraag: "Geef de <persoon> <tijd> van <werkwoord>".
-function vfqMakeTypedQuestion(pool){
+function vfqMakeTypedQuestion(pool, chan){
   if(!pool.length) return null;
   const typbaar = pool.filter(x=>!/[()]/.test(x.vorm));
-  const base = pick(typbaar.length ? typbaar : pool);
+  const base = pickFresh(typbaar.length ? typbaar : pool, chan);
   const persoon = VF_PERSOONLABEL[base.persoonIdx];
   const opdracht = base.taal==="la"
     ? `Geef de <strong>${persoon} ${VF_TIJD_NM[base.tijd]}${VF_WIJS_KORT[base.modus]} ${base.genus}</strong> van <em>${esc(base.lemma)}</em>`
@@ -218,9 +218,9 @@ function vfqOntleedAxes(taal){
   return axes;
 }
 
-function vfqMakeOntleedQuestion(pool){
+function vfqMakeOntleedQuestion(pool, chan){
   if(!pool.length) return null;
-  const it = pick(pool);
+  const it = pickFresh(pool, chan);
   const correct = { persoon:String((it.persoonIdx%3)+1), getal: it.persoonIdx<3?"ev":"mv",
                      tijd:it.tijd, modus:it.modus, genus:it.genus };
   const antwoord = vfqOntleedAxes(it.taal).map(ax=>correct[ax.key]).filter(Boolean).join(" / ");

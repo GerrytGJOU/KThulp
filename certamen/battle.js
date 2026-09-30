@@ -1760,8 +1760,8 @@ async function bmDistributeQs(roundN){
     if(roundN>1&&!(p.lastAnswerRound===roundN-1&&p.lastAnswerOk===true)) beBonus=0;
     const pool=bmPersonalPool(pid,POOL,roundN);
     const q = BM_META?.source==="verbforms"
-      ? (BM_META.vfMode==="typed" ? vfqMakeTypedQuestion(pool) : vfqMakeQuestion(pool))
-      : makeQuestion(pool);
+      ? (BM_META.vfMode==="typed" ? vfqMakeTypedQuestion(pool,"bm:"+pid) : vfqMakeQuestion(pool,"bm:"+pid))
+      : makeQuestion(pool, null, POOL, "bm:"+pid);
     up["players/"+pid+"/currentQ"]=JSON.stringify(q);
     up["players/"+pid+"/answeredRound"]=-1;
     up["players/"+pid+"/lockedAction"]=null;

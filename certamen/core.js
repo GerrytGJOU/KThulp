@@ -98,8 +98,35 @@ function pickWeighted(pool, weightFn){
   for(let i=0;i<pool.length;i++){ r-=weights[i]; if(r<=0) return pool[i]; }
   return pool[pool.length-1];
 }
-function makeQuestion(pool, weightFn, distractorPool){
-  const w = pickWeighted(pool, weightFn);
+// Anti-herhaling, Certamen-breed (op verzoek, 2026-09-30 — in Boss Battle
+// kregen leerlingen vaak meerdere keren kort na elkaar hetzelfde woord, want
+// elke trekking was puur willekeurig zonder geheugen). Elk "kanaal" (één
+// leerling in één modus: "bm:"+pid voor Battle/Boss, "game", "fp", "tr",
+// "sprace") onthoudt zijn laatst gevraagde woorden; die worden uit de
+// trekking gehouden zolang de pool dat toelaat. Het venster schaalt met de poolgrootte (max. de
+// helft van het aantal unieke woorden, plafond RECENT_MAX), zodat een korte
+// eigen lijst nooit vastloopt maar ook daar geen woord direct terugkomt.
+// Aanvullend op — niet in plaats van — de gewogen herhaling van foute woorden:
+// een gemist woord komt nog steeds vaker terug, alleen niet meteen.
+const RECENT_MAX = 15;
+const RECENT_Q = {};
+// Werkwoordsvormen (verbquiz.js) op vorm, vocab op lemma (.la; Chronica-
+// entries heten .woord).
+function recentKeyOf(w){ return w.vorm!=null ? "v:"+(w.taal||"")+":"+w.vorm : "w:"+(w.la!=null?w.la:w.woord); }
+function pickFresh(pool, chan, weightFn){
+  if(!chan || !pool.length) return pickWeighted(pool, weightFn);
+  const recent = RECENT_Q[chan] || (RECENT_Q[chan] = []);
+  const uniq = new Set(pool.map(recentKeyOf)).size;
+  const win = Math.min(RECENT_MAX, Math.floor(uniq/2));
+  const excl = new Set(recent.slice(Math.max(0, recent.length-win)));
+  const avail = win>0 ? pool.filter(w=>!excl.has(recentKeyOf(w))) : pool;
+  const w = pickWeighted(avail.length ? avail : pool, weightFn);
+  recent.push(recentKeyOf(w));
+  if(recent.length>RECENT_MAX) recent.shift();
+  return w;
+}
+function makeQuestion(pool, weightFn, distractorPool, chan){
+  const w = pickFresh(pool, chan, weightFn);
   const correct = ansText(w);
   const qSenses = senseSet(w.nl);
   const opts=[correct];
@@ -115,8 +142,8 @@ function makeQuestion(pool, weightFn, distractorPool){
     return false;
   };
   // Afleiders komen uit distractorPool (default: pool) — apart van `pool`
-  // omdat een aanroeper `pool` soms al versmald heeft (bv. Training Mode se
-  // recent-herhaling-uitsluiting, trPersonalPool() in training.js). Zonder
+  // omdat een aanroeper `pool` soms al versmald heeft (bv. Battle Mode se
+  // adaptieve pool, bmPersonalPool() in battle.js, met dubbele entries). Zonder
   // dit derde argument zou een kleine, versmalde `pool` (bv. nog maar 1 woord
   // over) ook de afleiders opdrogen — dan blijft er geen bruikbare afleider
   // meer over en valt de vraag terug op de "…"-placeholder hieronder.
