@@ -4009,6 +4009,8 @@ SCREENS.battleHostAwards = async function(){
 
 /* ---- SCHERM: battleHostAnalytics ---- */
 let BM_ANALYTICS_TAB="klas";
+// Sortering van de Leerlingen-tab: "acc" (Goed%, standaard), "contrib" (Bijdr.) of "act" (Actief).
+let BM_ANALYTICS_SORT="acc";
 SCREENS.battleHostAnalytics = async function(){
   const players=BM_AWARD_DATA?.all||Object.values(BM_PLAYERS);
   H(brand(false)+`
@@ -4056,10 +4058,16 @@ SCREENS.battleHostAnalytics = async function(){
       ${missedHTML}
     </div>`;
   } else {
-    const sorted=[...players].sort((a,b)=>{
-      const ta=(a.correct||0)+(a.wrong||0),tb=(b.correct||0)+(b.wrong||0);
-      return tb>0&&ta>0?(b.correct||0)/tb-(a.correct||0)/ta:tb-ta;
-    });
+    const totOf=p=>(p.correct||0)+(p.wrong||0);
+    const accOf=p=>totOf(p)>0?(p.correct||0)/totOf(p):-1;   // nog niets beantwoord → onderaan
+    const contribOf=p=>(p.damage||0)+(p.healing||0);
+    const sortKeys={acc:[accOf,totOf],contrib:[contribOf,accOf],act:[totOf,accOf]};
+    const [k1,k2]=sortKeys[BM_ANALYTICS_SORT]||sortKeys.acc;
+    const sorted=[...players].sort((a,b)=>(k1(b)-k1(a))||(k2(b)-k2(a)));
+    const sortTh=(key,label)=>{
+      const on=BM_ANALYTICS_SORT===key;
+      return`<th class="bm-stat-h bm-sort${on?" on":""}" onclick="BM_ANALYTICS_SORT='${key}';SCREENS.battleHostAnalytics()" title="Sorteer op ${label}">${label}${on?" ▼":""}</th>`;
+    };
     // RPG-achtige statkolommen met balkjes (naast Goed%/Bijdr./Actief): elke
     // balk is relatief t.o.v. de beste leerling in die kolom, zodat verschillen
     // in één oogopslag zichtbaar zijn. Snelheid is omgekeerd (sneller = voller).
@@ -4112,7 +4120,7 @@ SCREENS.battleHostAnalytics = async function(){
     content.innerHTML=`
     <div class="panel bm-tbl-wrap" style="padding:0">
       <table class="bm-tbl">
-        <thead><tr><th>Leerling</th><th class="bm-stat-h">Goed%</th><th>Bijdr.</th><th>Actief</th>${statCols.map((c,i)=>`<th class="bm-stat-h${i===0?" bm-stat-sep":""}">${c.h}</th>`).join("")}</tr></thead>
+        <thead><tr><th>Leerling</th>${sortTh("acc","Goed%")}${sortTh("contrib","Bijdr.")}${sortTh("act","Actief")}${statCols.map((c,i)=>`<th class="bm-stat-h${i===0?" bm-stat-sep":""}">${c.h}</th>`).join("")}</tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>

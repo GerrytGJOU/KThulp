@@ -1114,7 +1114,13 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
 - Top 5 gemiste woorden (opgeteld over alle spelers, uit `player.missed`)
 
 **Leerlingen-tab:**
-- Tabel gesorteerd op accuratesse; klikbaar voor detailpopup
+- Tabel standaard gesorteerd op accuratesse; klikbaar voor detailpopup
+- Sorteerbaar via de kolomkoppen Goed% / Bijdr. / Actief (`BM_ANALYTICS_SORT`:
+  `"acc"`/`"contrib"`/`"act"`, sinds 2026-09-30); actieve kop goud met ▼, altijd
+  aflopend. Bij gelijke stand beslist Actief (bij Goed%) of Goed% (bij de andere
+  twee); leerlingen zonder antwoorden staan bij Goed% onderaan. De statkolommen
+  met balkjes zijn bewust niet sorteerbaar. De keuze blijft staan tot de pagina
+  herladen wordt.
 - Kolommen Goed% / Bijdr. / Actief (platte getallen), met rechts daarvan
   RPG-achtige statkolommen met vollopende balkjes (sinds 2026-09-30):
   ⚔️ Schade (`damage`), 💚 Healing (`healing`), 🛡️ Schild (`shielding`),
