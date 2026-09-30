@@ -4063,6 +4063,7 @@ SCREENS.battleHostAnalytics = async function(){
     // RPG-achtige statkolommen met balkjes (naast Goed%/Bijdr./Actief): elke
     // balk is relatief t.o.v. de beste leerling in die kolom, zodat verschillen
     // in één oogopslag zichtbaar zijn. Snelheid is omgekeerd (sneller = voller).
+    // Goed% heeft ook een balk, maar absoluut (0-100%, groen/goud/rood).
     const avgRt=p=>(p.respondCount||0)>0?(p.totalResponseMs||0)/p.respondCount:null;
     const isBoss=BM_META?.mode==="boss";
     const statCols=[
@@ -4101,7 +4102,8 @@ SCREENS.battleHostAnalytics = async function(){
           <div><div style="font-size:12px;font-weight:700">${esc(p.name)}</div>
           <div style="font-size:10px;color:${cls?.color||"var(--muted)"}">${esc(cls?.nm||"")}</div></div>
         </div></td>
-        <td style="text-align:center;font-weight:700;color:${acc!==null&&acc>=80?"var(--green-bright)":""}">${acc!==null?acc+"%":"—"}</td>
+        <td class="bm-stat"><div class="bm-stat-v" style="color:${acc!==null&&acc>=80?"var(--green-bright)":""}">${acc!==null?acc+"%":"—"}</div>
+          <div class="bm-stat-bar"><div class="bm-stat-fill" style="--c:${acc===null?"transparent":acc>=80?"#5cc46a":acc>=55?"#e8b43c":"#d9573f"}" data-w="${acc||0}"></div></div></td>
         <td style="text-align:center">${contrib}</td>
         <td style="text-align:center">${tot}</td>
         ${statCols.map((col,i)=>statCell(col,p,i)).join("")}
@@ -4110,7 +4112,7 @@ SCREENS.battleHostAnalytics = async function(){
     content.innerHTML=`
     <div class="panel bm-tbl-wrap" style="padding:0">
       <table class="bm-tbl">
-        <thead><tr><th>Leerling</th><th>Goed%</th><th>Bijdr.</th><th>Actief</th>${statCols.map((c,i)=>`<th class="bm-stat-h${i===0?" bm-stat-sep":""}">${c.h}</th>`).join("")}</tr></thead>
+        <thead><tr><th>Leerling</th><th class="bm-stat-h">Goed%</th><th>Bijdr.</th><th>Actief</th>${statCols.map((c,i)=>`<th class="bm-stat-h${i===0?" bm-stat-sep":""}">${c.h}</th>`).join("")}</tr></thead>
         <tbody>${rows}</tbody>
       </table>
     </div>

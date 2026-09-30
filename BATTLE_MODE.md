@@ -1122,7 +1122,8 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
   handlangers waren), 🔥 Reeks (`bestCorrectStreak`) en ⚡ Snelheid
   (gem. responstijd). Elke balk is relatief t.o.v. de beste leerling in die
   kolom (die krijgt een volle balk + gouden getal); bij Snelheid is dat
-  omgekeerd — snelste = volle balk. De tabel scrollt horizontaal op smalle
+  omgekeerd — snelste = volle balk. Goed% heeft ook een balk, maar absoluut
+  (balk = het percentage zelf; groen ≥80%, goud ≥55%, anders rood). De tabel scrollt horizontaal op smalle
   schermen. `bestCorrectStreak` wordt daarvoor nu in álle modi bijgehouden
   (was alleen Boss Battle), en "↻ Nieuw gevecht — zelfde spelers" zet
   streak-, responstijd-, `minionDamage`- en `chainCount`-velden weer op nul
