@@ -1201,7 +1201,10 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
   (was alleen Boss Battle), en "↻ Nieuw gevecht — zelfde spelers" zet
   streak-, responstijd-, `minionDamage`- en `chainCount`-velden weer op nul
   (liepen voorheen door naar het volgende gevecht).
-- Detailpopup: avatar, accuratesse, gem. responstijd, schade, healing, top-5 gemiste woorden
+- Detailpopup: avatar, accuratesse, gem. responstijd, schade, healing, combo's
+  (sinds 2026-10-02: per combo + partner hoe vaak, met het gedeelde effect, uit
+  de `combo`-events in de log; sectie verborgen als combo's uitstaan), top-5
+  gemiste woorden
 
 **CSV-export** via `bmExportCSV()` (SheetJS) — kolommen: Naam, Klas, Klasse, Goed%, Goed, Fout, Gemiste woorden, Schade, Healing, Rondes actief, Rondes totaal, Combo's, Combo-schade/-schild/-healing (gedeeld) (zelfde totaal als "Actief x/totaal" in de tabel; bewust als aparte getalkolom, want Excel leest tekst als "5/12" als datum).
 

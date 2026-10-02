@@ -4288,6 +4288,27 @@ function bmShowPlayerDetail(pid){
         <div style="font-size:12px">${esc(w.p)} <span style="color:var(--muted)">→ ${esc(w.a)}</span></div>
         <div style="color:var(--acc2);font-weight:700;font-size:12px">${w.c}×</div></div>`).join("")
     :`<div class="note">Geen gemiste woorden.</div>`;
+  // Combo's van deze leerling (uit de gevechtslog, zie bmComboStats()):
+  // gegroepeerd per combo + partner, met het gedeelde effect.
+  const comboGroups={};
+  Object.values(BM_LOG||{}).forEach(e=>(e?.events||[]).forEach(ev=>{
+    if(ev.type!=="combo"||!(ev.pids||[]).includes(pid))return;
+    const partner=(ev.pids||[]).find(x=>x!==pid)||"";
+    const k=ev.comboId+"|"+partner;
+    (comboGroups[k]||(comboGroups[k]={comboId:ev.comboId,partner,n:0})).n++;
+  }));
+  const comboList=Object.values(comboGroups).sort((a,b)=>b.n-a.n);
+  const comboHTML=comboList.length
+    ?comboList.map(g=>{
+        const co=BM_COMBOS.find(c=>c.id===g.comboId)||{};
+        const fx=[co.dmg&&"⚔️"+co.dmg*g.n,co.shld&&"🛡️"+co.shld*g.n,co.heal&&"💚"+co.heal*g.n,
+                  co.teamBE&&"+"+co.teamBE*g.n+" BE p.p.",co.shldRemove&&"−"+co.shldRemove*g.n+" vijandschild"].filter(Boolean).join(" ");
+        return`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--stone4)">
+          <div><div style="font-size:12px">${esc(co.nm||g.comboId)} <span style="color:var(--muted)">met ${esc(BM_PLAYERS[g.partner]?.name||"?")}</span></div>
+            <div style="font-size:11px;color:var(--muted)">${fx}</div></div>
+          <div style="color:var(--hi-bright);font-weight:700;font-size:12px;flex:0 0 auto;margin-left:8px">${g.n}×</div></div>`;
+      }).join("")
+    :`<div class="note">Geen combo's gedaan.</div>`;
   const cls=BM_CLASSES.find(c=>c.id===p.class);
   const ov=el("overlay");if(!ov)return;
   ov.innerHTML=`<div class="modal">
@@ -4302,6 +4323,8 @@ function bmShowPlayerDetail(pid){
       <div class="panel" style="text-align:center;padding:10px"><div style="font-size:24px;font-weight:700">${p.damage||0}</div><div class="note">Schade</div></div>
       <div class="panel" style="text-align:center;padding:10px"><div style="font-size:24px;font-weight:700">${p.healing||0}</div><div class="note">Healing</div></div>
     </div>
+    ${BM_META?.combos===false?"":`<div class="eyebrow l">🤝 Combo's <span style="text-transform:none;letter-spacing:0">(gedeeld effect)</span></div>
+    <div style="margin-bottom:14px">${comboHTML}</div>`}
     <div class="eyebrow l">Gemiste woorden</div>
     <div style="margin-bottom:14px">${missedHTML}</div>
     <button class="btn btn-block" onclick="closeOverlay()">Sluiten</button>
