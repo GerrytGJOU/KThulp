@@ -11,7 +11,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicons/hoofdscherm/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicons/hoofdscherm/favicon-16x16.png">
 <link rel="apple-touch-icon" href="../assets/favicons/hoofdscherm/apple-touch-icon.png">
-<script src="../assets/site-auth.js?v=20261002b"></script>
+<script src="../assets/site-auth.js?v=20261002c"></script>
 <style>
   :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--cream:#f3e9d2;
         --muted:#b9a883;--muted2:#8a7a5c;--s2:#16121a;--s3:#211c28;--s4:#2e2838;
@@ -269,9 +269,11 @@
       const revoked = status && status.status === "revoked";
       cont.innerHTML =
         '<div class="panel"><h2>👩‍🏫 '+esc(teacher.email)+'</h2>'+
-          '<p class="note">'+(revoked
-            ? "Je docenttoegang is ingetrokken door de beheerder."
-            : "Je account wacht nog op goedkeuring door de beheerder.")+'</p>'+
+          '<p class="note">'+(status && status.status==="rejected"
+            ? 'Je docentaanvraag is niet goedgekeurd. Ga naar de <a href="../">hoofdpagina</a> om met je klascode als leerling verder te gaan.'
+            : revoked
+              ? "Je docenttoegang is ingetrokken door de beheerder."
+              : "Je account wacht nog op goedkeuring door de beheerder.")+'</p>'+
         '</div>';
       return;
     }

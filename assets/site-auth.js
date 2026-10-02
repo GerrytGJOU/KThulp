@@ -469,6 +469,7 @@
     // fetch meer).
     let statusCache = { uid:null, status:null, isAdmin:false };
     let googleLinkMsg = ""; // resultaat van handleTeacherGoogleRedirect(), zie onderaan
+    let rejErr = "";        // foutmelding in het "afgewezen docent → leerling"-formulier
 
     function render(){
       const ident = identLoad();
@@ -485,6 +486,25 @@
             statusCache = { uid: teacher.uid, status, isAdmin: admin };
             render();
           });
+          return;
+        }
+        // Afgewezen docent (admin klikte "Afwijzen"): geen docent, dus verder als
+        // leerling. Heeft dit toestel al een profiel → alleen docent uitloggen;
+        // anders vragen we hier meteen de klascode (+ leerlingcode/wachtwoord/naam).
+        if(statusCache.status && statusCache.status.status==="rejected" && !statusCache.isAdmin){
+          if(identLoad()){ logoutTeacher(); return; }
+          el.innerHTML =
+            '<div class="ktaBody" style="max-width:340px;margin:0 auto;text-align:left">'+
+              '<div class="ktaNote" style="font-size:13px">Je aanvraag voor een docentaccount is niet goedgekeurd. Je kunt wel als leerling meedoen: vul de klascode van je docent in.</div>'+
+              '<input class="ktaInput" id="ktaRjKlas" placeholder="Klascode" autocapitalize="characters">'+
+              '<input class="ktaInput" id="ktaRjCode" placeholder="Leerlingcode (zelf kiezen)" autocapitalize="none">'+
+              '<input class="ktaInput" id="ktaRjPw" type="password" placeholder="Wachtwoord (minstens '+PW_MIN+' tekens)" autocomplete="new-password">'+
+              '<input class="ktaInput" id="ktaRjNaam" placeholder="Naam">'+
+              (rejErr?'<div class="ktaErr">'+esc(rejErr)+'</div>':'')+
+              '<button type="button" class="ktaBtn ktaBtn-main" data-kta="reject-to-student">Verder als leerling</button>'+
+              '<button type="button" class="ktaLink" data-kta="logout-teacher">Uitloggen</button>'+
+            '</div>';
+          el.querySelectorAll("[data-kta]").forEach(b=>b.addEventListener("click", onAction));
           return;
         }
         const approved = statusCache.isAdmin || (statusCache.status && statusCache.status.status==="approved");
@@ -582,6 +602,17 @@
           wrap.remove(); openModal();
         }catch(ex){ msg=""; err = ex.message||String(ex); wrap.remove(); openModal(); }
         busy=false;
+      }
+      if(action==="reject-to-student"){
+        busy=true;
+        try{
+          await loginStudent(el.querySelector("#ktaRjKlas").value, el.querySelector("#ktaRjCode").value,
+                             el.querySelector("#ktaRjNaam").value, el.querySelector("#ktaRjPw").value);
+          rejErr="";
+          await logoutTeacher(); // docentsessie weg; de widget toont nu de leerlingbalk
+        }catch(ex){ rejErr = ex.message||String(ex); render(); }
+        busy=false;
+        return;
       }
       if(action==="do-teacher-forgot"){
         const email = wrap.querySelector("#ktaEmail").value;

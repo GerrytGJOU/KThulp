@@ -1194,8 +1194,48 @@ SCREENS.teacherPortal = function(){
   });
 };
 
+// Afgewezen docent ("rejected", gezet door de beheerder via Afwijzen): geen
+// docent, dus meteen verder als leerling. Heeft dit toestel al een leerlingprofiel
+// dan loggen we alleen het docentaccount uit; anders vragen we de klascode (+
+// leerlingcode, wachtwoord, naam) en maken/koppelen we het leerlingprofiel.
+function tpRenderRejected(){
+  if(typeof bmIdentLoad==="function" && bmIdentLoad()){
+    teacherNet().logoutTeacher().then(()=>{ toast("Ingelogd als leerling","Je docentaanvraag was niet goedgekeurd; je speelt verder met je leerlingprofiel."); go("home"); });
+    return;
+  }
+  H(brand(true)+`
+  <div class="scrhead">
+    <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
+    <h2>Verder als leerling</h2>
+    <button class="chip" style="margin-left:auto" onclick="teacherLogout()">Uitloggen</button>
+  </div>
+  <div class="panel">
+    <div class="note" style="margin-bottom:12px">Je aanvraag voor een docentaccount is niet goedgekeurd. Je kunt wel gewoon als leerling meedoen: vul de klascode van je docent in om meteen in de juiste klas te komen.</div>
+    <label class="fld">Klascode (van je docent)</label>
+    <input id="rjKlas" type="text" placeholder="bv. LATIJN3B" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+    <label class="fld" style="margin-top:12px">Leerlingcode (zelf kiezen)</label>
+    <input id="rjLcode" type="text" placeholder="bv. marcus42">
+    <label class="fld" style="margin-top:12px">Wachtwoord (minstens ${KT_PW_MIN} tekens)</label>
+    <input id="rjPw" type="password" autocomplete="new-password">
+    <label class="fld" style="margin-top:12px">Weergavenaam <small style="text-transform:none">(optioneel)</small></label>
+    <input id="rjNaam" type="text">
+    <div id="rjErr" class="note warn" style="display:none;margin-top:8px"></div>
+    <button class="btn btn-gold btn-block lg" style="margin-top:14px" onclick="tpRejectedToStudent()">Verder als leerling</button>
+  </div>
+  ${foot()}`);
+}
+async function tpRejectedToStudent(){
+  const err=el("rjErr"); if(err) err.style.display="none";
+  const r=await bmIdentDoLogin(el("rjKlas")?.value, el("rjLcode")?.value, el("rjNaam")?.value, el("rjPw")?.value);
+  if(!r.ok){ if(err){ err.textContent=r.error; err.style.display=""; } return; }
+  await teacherNet().logoutTeacher();
+  toast("Welkom!","Je speelt nu mee als leerling.");
+  go("home");
+}
+
 function tpRenderPortalBlocked(status){
   const st=status && status.status;
+  if(st==="rejected"){ tpRenderRejected(); return; }
   const msg = st==="revoked"
     ? "Je docenttoegang is ingetrokken door de beheerder."
     : "Je account wacht nog op goedkeuring door de beheerder. Je kunt pas klassen aanmaken zodra dat is gebeurd.";
@@ -1557,7 +1597,7 @@ function aoRender(){
   const uids=Object.keys(_aoStatuses||{});
   if(!uids.length){ cont.innerHTML=`<div class="note">Nog geen docentaccounts geregistreerd.</div>`; return; }
   const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
-  const statusLabel={pending:"In afwachting",approved:"Goedgekeurd",revoked:"Ingetrokken"};
+  const statusLabel={pending:"In afwachting",approved:"Goedgekeurd",revoked:"Ingetrokken",rejected:"Afgewezen (verder als leerling)"};
   const rows=uids.map(uid=>{
     const s=_aoStatuses[uid]||{};
     const codes=Object.entries(_aoKlascodes||{}).filter(([,kc])=>kc && kc.ownerUid===uid).map(([code])=>code);
@@ -1568,7 +1608,8 @@ function aoRender(){
           <div class="note">${statusLabel[s.status]||s.status||"onbekend"} · aangevraagd ${s.requestedAt?new Date(s.requestedAt).toLocaleDateString("nl-NL"):"?"}</div>
         </div>
         ${s.status!=="approved"?`<button class="chip" onclick="aoSetStatus(${q(uid)},'approved')">Goedkeuren</button>`:""}
-        ${s.status!=="revoked"?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="aoSetStatus(${q(uid)},'revoked')">Intrekken</button>`:""}
+        ${s.status==="pending"?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="aoSetStatus(${q(uid)},'rejected')" title="Geen docent: bij de volgende login wordt om een klascode gevraagd, zodat diegene als leerling verder kan">Afwijzen</button>`:""}
+        ${s.status==="approved"?`<button class="chip" style="color:#e07060;border-color:rgba(90,18,12,.4)" onclick="aoSetStatus(${q(uid)},'revoked')">Intrekken</button>`:""}
       </div>
       <div id="aoKlas_${esc(uid)}" style="margin-top:8px">${codes.length?`<div class="note">Klassen laden…</div>`:`<div class="note">Nog geen klassen.</div>`}</div>
     </div>`;
@@ -1616,7 +1657,7 @@ function aoRenderTeacherClasses(uid, codes){
 
 function aoSetStatus(uid, status){
   teacherNet().setTeacherStatus(uid, status)
-    .then(()=>{ toast(status==="approved"?"Goedgekeurd":"Ingetrokken",""); aoLoad(); })
+    .then(()=>{ toast(status==="approved"?"Goedgekeurd":status==="rejected"?"Afgewezen":"Ingetrokken",""); aoLoad(); })
     .catch(e=>toast("Fout",typeof e==="string"?e:(e?.message||"")));
 }
 
