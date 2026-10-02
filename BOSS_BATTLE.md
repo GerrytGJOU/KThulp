@@ -367,6 +367,11 @@ schaming:
 - **Combo Koning** — **herinterpretatie**: vaakst bijdrager aan een ronde die
   de brede-deelname-bonus haalde (zie §5.1), i.p.v. de nooit gebouwde
   Class-Combo-keten-telling. Nieuw per-speler veld `chainCount`.
+  Let op: dit is dus níet hetzelfde als de 🤝 Combo-kolom in het
+  Klassenoverzicht (sinds 2026-10-02, gedeeld met Team vs Team — zie
+  BATTLE_MODE.md "Analytics"): die telt echte klasse-combo's (`BM_COMBOS`,
+  `combo`-events in de log) en staat er zodra combo's in de instellingen
+  aanstaan.
 - **Geluksbrenger** — de genadeklap. Benadering: de speler met de hoogste
   schade in de ronde die de baas op 0 bracht (`finishingBlowPid`, meegegeven
   in het round-log-item) — de architectuur kent geen exacte volgorde binnen

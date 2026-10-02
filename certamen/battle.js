@@ -4227,14 +4227,15 @@ SCREENS.battleHostAnalytics = async function(){
     const avgRt=p=>(p.respondCount||0)>0?(p.totalResponseMs||0)/p.respondCount:null;
     const isBoss=BM_META?.mode==="boss";
     // Combo's staan los van Schade/Schild/Healing (die tellen combo's niet mee):
-    // eigen kolom met aantal + gedeeld effect. Alleen als er combo's waren.
+    // eigen kolom met aantal + gedeeld effect. Zichtbaar zodra combo's in de
+    // instellingen aanstaan (Team vs Team én Boss Battle), ook bij 0 combo's.
     const comboStats=bmComboStats();
     const comboOf=p=>comboStats[bmPidOf(p)]||{n:0,dmg:0,shld:0,heal:0,be:0};
     const statCols=[
       {h:"⚔️ Schade",  c:"#d9573f", val:p=>p.damage||0},
       {h:"💚 Healing", c:"#5cc46a", val:p=>p.healing||0},
       {h:"🛡️ Schild",  c:"#4f93d8", val:p=>p.shielding||0},
-      ...(Object.keys(comboStats).length
+      ...(BM_META?.combos!==false||Object.keys(comboStats).length
         ?[{h:"🤝 Combo", c:"#3fb8b0", val:p=>comboOf(p).n, fmt:v=>v+"×",
            sub:p=>{const o=comboOf(p);return[o.dmg&&"⚔️"+o.dmg,o.shld&&"🛡️"+o.shld,o.heal&&"💚"+o.heal,o.be&&"+"+o.be+" BE"].filter(Boolean).join(" ");}}]:[]),
       ...(isBoss&&players.some(p=>(p.minionDamage||0)>0)

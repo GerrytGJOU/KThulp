@@ -1185,7 +1185,7 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
 - Kolommen Goed% / Bijdr. / Actief (platte getallen), met rechts daarvan
   RPG-achtige statkolommen met vollopende balkjes (sinds 2026-09-30):
   ⚔️ Schade (`damage`), 💚 Healing (`healing`), 🛡️ Schild (`shielding`),
-  🤝 Combo (sinds 2026-10-02; alleen als er combo's waren — aantal combo's als
+  🤝 Combo (sinds 2026-10-02; zichtbaar in Team vs Team én Boss Battle zodra combo's in de instellingen aanstaan, ook bij 0 combo's — aantal combo's als
   balk, eronder het gedeelde effect, bv. "⚔️6 🛡️6"; berekend door
   `bmComboStats()` uit de `combo`-events in de log. Combo-effecten gaan in
   `bmResolve()` rechtstreeks naar het team en tellen bij géén van beide spelers
