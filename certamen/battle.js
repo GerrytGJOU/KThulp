@@ -227,8 +227,8 @@ function bmCalcLevel(xp){
 }
 function bmCalcMastery(hist){
   if(!hist)return 0;
-  const r=hist.rounds||0, tiers=[5,15,35,70,120];
-  let stars=0; for(const t of tiers){if(r>=t)stars++;} return stars;
+  const r=hist.rounds||0;
+  let stars=0; for(const t of BM_MASTERY_TIERS){if(r>=t)stars++;} return stars;
 }
 // Leest de Chronica Classica-saves (localStorage, zelfde apparaat/profiel als
 // Battle Mode — zie SP_SLOTS_KEY in singleplayer.js) en checkt of ÉÉN van de
@@ -593,9 +593,27 @@ function bmLegendaryOf(p){
 }
 
 /* ---- ABILITY HELPERS ---- */
-function bmGetAbilityCost(cls,abl){
+// ★★★★★ klasbeheersing → versterkte passief (passive.masterVal). Alleen als de
+// docent masteryBonuses aan heeft laten staan, net als de ★★★-BE-bonus.
+function bmMasteryBonusesOn(){ return BM_META?.masteryBonuses!==false; }
+function bmPassiveVal(cls,master){
+  const pv=cls?.passive; if(!pv) return 0;
+  return (master&&bmMasteryBonusesOn()&&pv.masterVal!=null)?pv.masterVal:pv.val;
+}
+// Is de eigen speler (client-side) meester in de gekozen klasse?
+// (Host-side leest bmCalcAbilityEffect de vlag p.masterPassive, zie bmPickClass.)
+function bmMyMaster(){
+  return !!BM_MY_CLASS&&bmCalcMastery(BM_IDENT?.classHistory?.[BM_MY_CLASS])>=5;
+}
+function bmGetAbilityCost(cls,abl,master){
   let c=abl.cost;
-  if(cls?.passive?.type==="cost_reduce"&&abl.tier==="basic") c=Math.max(1,c-cls.passive.val);
+  const pv=cls?.passive;
+  if(pv?.type==="cost_reduce"){
+    // Verkenner-meester: korting geldt ook voor medium (passive.masterTiers),
+    // want basis kost al het minimum van 1 BE.
+    const tiers=(master&&bmMasteryBonusesOn()&&pv.masterTiers)||["basic"];
+    if(tiers.includes(abl.tier)) c=Math.max(1,c-bmPassiveVal(cls,master));
+  }
   return c;
 }
 // Ability-types die schade toebrengen — canoniek gedeeld met bmChooseAbility()
@@ -604,19 +622,20 @@ const BM_DMG_TYPES=["attack","attack_bypass","attack_weakspot","attack_and_defen
 function bmCalcAbilityEffect(p,cls,abl){
   const fx={dmg:0,heal:0,shld:0,teamBE:0,selfBE:0,shldRemove:0,bypass:false,aoe:!!abl.aoe};
   const t=abl.type, pasv=cls?.passive, mt=p.team;
+  const pv=bmPassiveVal(cls,p.masterPassive); // ★5 → versterkte passief
   const leg=bmLegendaryOf(p); // legendarische avatar-bonus (Achilles/Ajax/Aeneas/Odysseus)
   const isDmg=BM_DMG_TYPES.includes(t);
   if(isDmg){
     let d=abl.dmg||0;
-    if(pasv?.type==="atk_flat")  d+=pasv.val;
-    if(pasv?.type==="atk_bonus") d=Math.round(d*(1+pasv.val));
+    if(pasv?.type==="atk_flat")  d+=pv;
+    if(pasv?.type==="atk_bonus") d=Math.round(d*(1+pv));
     if(t==="attack_weakspot"){
       const et=mt==="A"?"B":"A";const eh=BM_TEAMS[et]||{health:100,maxHealth:100};
       if(eh.maxHealth>0&&eh.health/eh.maxHealth<=0.30) d+=(abl.bonusDmg||0);
     }
     if(leg?.atkMult) d=Math.round(d*(1+leg.atkMult)); // Achilles
     fx.dmg=d; fx.bypass=(t==="attack_bypass");
-    if(pasv?.type==="shld_pierce") fx.shldRemove+=pasv.val; // genie passief
+    if(pasv?.type==="shld_pierce") fx.shldRemove+=pv; // genie passief
   }
   if(["team_shield","testudo","attack_and_defend","shield_and_heal"].includes(t)){
     let s=abl.shld||0;
@@ -625,9 +644,9 @@ function bmCalcAbilityEffect(p,cls,abl){
     if(p.traitPacifist) s+=1; // Pacifistische Priester: vlakke +1 schild
     fx.shld=s;
   }
-  if(["team_shield","testudo"].includes(t)&&pasv?.type==="be_on_defend") fx.selfBE+=pasv.val;
+  if(["team_shield","testudo"].includes(t)&&pasv?.type==="be_on_defend") fx.selfBE+=pv;
   if(["heal","heal_and_attack","shield_and_heal","testudo"].includes(t)){
-    let h=abl.heal||0; if(pasv?.type==="heal_flat") h+=pasv.val;
+    let h=abl.heal||0; if(pasv?.type==="heal_flat") h+=pv;
     if(leg?.healMult) h=Math.round(h*(1+leg.healMult)); // Aeneas
     if(p.traitHeal) h+=1; // Levensbron: vlakke +1 heling
     fx.heal=h;
@@ -856,7 +875,8 @@ SCREENS.battleFAQ = function(){
       <div style="display:flex;align-items:center;gap:10px">
         <span style="flex:0 0 auto">${iconSVG(c.icon,30,c.color)}</span>
         <div><div style="font-size:16px;font-weight:700;color:${c.color}">${esc(c.nm)}</div>
-        <div class="note">Passief: ${esc(c.passive?.desc||"—")}</div></div>
+        <div class="note">Passief: ${esc(c.passive?.desc||"—")}</div>
+        ${c.passive?.masterDesc?`<div class="note">★★★★★ meester: <span style="color:#d4af37">${esc(c.passive.masterDesc)}</span></div>`:""}</div>
       </div>
       <div style="margin-top:8px;display:flex;flex-direction:column;gap:5px">
         ${c.abilities.map(a=>`<div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap">
@@ -1047,7 +1067,11 @@ SCREENS.battleFAQ = function(){
     <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
       <li><b>XP &amp; rang</b> — je klimt van Tiro tot Imperator door te spelen en te winnen. Eenmaal
       Imperator loop je door met <b>Legioensterren</b> (★1, ★2, …) — er is dus geen harde eindstreep.</li>
-      <li><b>Klasbeheersing</b> — speel je vaak dezelfde klasse, dan verdien je sterren (★ tot ★★★★★).</li>
+      <li><b>Klasbeheersing</b> — speel je vaak dezelfde klasse, dan verdien je sterren (★ tot ★★★★★):
+      ★ na 5 rondes, ★★ na 15, ★★★ na 35, ★★★★ na 70 en ★★★★★ na 120 rondes met die klasse.
+      Vanaf ★★★ krijg je met die klasse +1 BE per ronde; met ★★★★★ ben je <b>meester</b> en wordt
+      de passieve eigenschap van die klasse sterker (zie "meester" bij elke klasse in "De acht klassen").
+      De docent kan deze bonussen uitzetten.</li>
       <li><b>Eerbewijzen</b> — speciale prestaties, ook geheime. Verschijnen op je profiel, inclusief eigen
       reeksen voor Boss Battle (bazen verslaan, solo, hoge moeilijkheidsgraad) en Total War/Training Mode
       (bijdragen aan garnizoen/muur/toren, belegeringen winnen).</li>
@@ -1382,7 +1406,7 @@ SCREENS.battleHostSettings = function(){
   <div class="panel">
     <label class="fld">Mastery-bonussen</label>
     <div class="chips">${onoff("masteryBonuses",mastery)}</div>
-    <div class="note" style="margin-top:6px">★★★+ klassemastery geeft +1 starting BE.</div>
+    <div class="note" style="margin-top:6px">★★★+ klassemastery geeft +1 BE per ronde; ★★★★★ geeft een versterkte passief.</div>
   </div>
   <div class="panel">
     <label class="fld">Slagveld-animaties</label>
@@ -1742,8 +1766,8 @@ async function bmDistributeQs(roundN){
     const p=BM_PLAYERS[pid]||{};
     const cls=BM_CLASSES.find(c=>c.id===p.class);
     let beBonus=p.team==="A"?synA:synB;
-    if(cls?.passive?.type==="be_passive") beBonus+=cls.passive.val;
-    if(BM_META?.masteryBonuses!==false) beBonus+=(p.masteryBonus||0);
+    if(cls?.passive?.type==="be_passive") beBonus+=bmPassiveVal(cls,p.masterPassive);
+    if(bmMasteryBonusesOn()) beBonus+=(p.masteryBonus||0);
     // Verborgen traits: vlakke +1 BE per ronde, los van de mastery-toggle
     // (permanent account-brede unlock, geen in-klas-verdiende bonus)
     if(p.traitGroot) beBonus+=1;
@@ -4324,9 +4348,9 @@ SCREENS.battlePlayerLobby = function(){
           ${iconSVG(c.icon,30,c.color)}
           <div style="flex:1">
             <div style="font-size:15px;font-weight:700;color:${c.color}">${c.nm} <span style="font-size:11px;opacity:.7">${bmStars(ms)}</span></div>
-            <div class="note" style="margin:2px 0">⚡ ${c.passive.desc}${ms>=3?" · +1 BE":""}</div>
+            <div class="note" style="margin:2px 0">⚡ ${ms>=5&&bmMasteryBonusesOn()&&c.passive.masterDesc?`<b style="color:#d4af37">${c.passive.masterDesc}</b> (meester)`:c.passive.desc}${ms>=3&&bmMasteryBonusesOn()?" · +1 BE":""}</div>
             <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">
-              ${c.abilities.map(a=>`<span class="pill" style="font-size:10px">${a.nm}&nbsp;${bmGetAbilityCost(c,a)}BE</span>`).join("")}
+              ${c.abilities.map(a=>`<span class="pill" style="font-size:10px">${a.nm}&nbsp;${bmGetAbilityCost(c,a,ms>=5)}BE</span>`).join("")}
             </div>
           </div>
           ${sel?`<span style="font-size:20px;align-self:center">✅</span>`:""}
@@ -4357,14 +4381,14 @@ function bmPickClass(cid){
   }
   BM_MY_CLASS=cid;
   BM_MY_CLASS_PICKS++;
-  // mastery-bonus: ★★★+ geeft +1 starting BE (minimale spelbonus)
+  // mastery-bonus: ★★★+ geeft +1 BE per ronde (minimale spelbonus)
   const ms=bmCalcMastery(BM_IDENT?.classHistory?.[cid]);
   // Verborgen traits: alleen als vlag op het player-node te lezen voor de
   // host (bmCalcAbilityEffect/bmRespawnProgress draaien host-side en kennen
   // BM_IDENT niet) — zelfde reden waarom masteryBonus al zo werkt.
   const achs=BM_IDENT?.achievements||[];
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
-    class:cid, masteryBonus:ms>=3?1:0,
+    class:cid, masteryBonus:ms>=3?1:0, masterPassive:ms>=5,
     traitLaconisch:achs.includes("trait_laconisch"),
     traitFeniks:achs.includes("trait_feniks"),
     traitHeal:achs.includes("geheim_heal"),
@@ -4556,7 +4580,7 @@ function bmPlayerRender(){
           ${(()=>{
             // Niets te doen deze ronde: meestal doordat een fout antwoord BE
             // kostte. Benoem dat, anders lijken de vaardigheden gewoon stuk.
-            const goedkoopste=Math.min(...cls.abilities.map(a=>bmGetAbilityCost(cls,a)));
+            const goedkoopste=Math.min(...cls.abilities.map(a=>bmGetAbilityCost(cls,a,bmMyMaster())));
             if(BM_MY_BE>=goedkoopste) return "";
             const foutDezeRonde=BM_MY_PICK_ROUND===round.n&&BM_MY_PICK!==null&&!BM_MY_PICK_OK;
             return `<div class="bm-fb bad" style="margin-bottom:8px">⚠️ Te weinig BE voor je vaardigheden${foutDezeRonde?" — je antwoord was fout":""}.<br>
@@ -4566,7 +4590,7 @@ function bmPlayerRender(){
           ${inspired?`<div class="note" style="color:var(--hi-bright);margin-bottom:6px">⚡ Geïnspireerd! Je volgende aanval doet extra schade.</div>`:""}
           ${targetPicker}
           ${cls.abilities.map(a=>{
-            const cost=bmGetAbilityCost(cls,a);
+            const cost=bmGetAbilityCost(cls,a,bmMyMaster());
             const ok=BM_MY_BE>=cost;
             return `<button class="tile" style="margin-bottom:6px;padding:11px 13px${ok?"":";opacity:.4;pointer-events:none"}" onclick="bmChooseAbility('${a.id}',${cost})">
               <div style="font-size:13px;font-weight:700">${a.nm} <span class="pill">${cost}&nbsp;BE</span> <span style="opacity:.6;font-size:10px">${tierDot(a.tier)}</span></div>
@@ -4674,7 +4698,7 @@ function bmFinishAnswer(ok){
   // de prijs van je goedkoopste vaardigheid, dan kun je deze ronde inderdaad
   // niet aanvallen; dat is de bedoeling.
   if(!ok) beGain=-(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);
-  if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?cls.passive.val:1; }
+  if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?bmPassiveVal(cls,bmMyMaster()):1; }
   // Ciceronianus: opeenvolgende correcte antwoorden in de laatste 5 sec van de timer
   const clutch=ok&&timeLeft<=5;
   if(clutch){ BM_MY_CLUTCH_STREAK++; BM_MY_CLUTCH_BEST=Math.max(BM_MY_CLUTCH_BEST,BM_MY_CLUTCH_STREAK); }

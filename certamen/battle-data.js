@@ -12,10 +12,13 @@
    beschikbaar. Balans is doorgerekend (waarde per BE, incl. passieven) zodat
    geen enkele klasse of los onderdeel ver uit de band valt; zie het gesprek
    d.d. 2026-07 voor de doorrekening. Alle balanswaarden staan hier. Pas
-   getallen aan zonder de logica te wijzigen. */
+   getallen aan zonder de logica te wijzigen.
+   passive.masterVal/masterTiers/masterDesc: versterkte passief bij ★★★★★ klasbeheersing
+   in die klasse (zie bmPassiveVal() in battle.js; volgt de docent-schakelaar
+   masteryBonuses). */
 const BM_CLASSES = [
   { id:"hopliet",      nm:"Hopliet",     icon:"shield", color:"#c8392a",
-    passive:{ desc:"+1 BE bij Verdedigen",                    type:"be_on_defend", val:1 },
+    passive:{ desc:"+1 BE bij Verdedigen",                    type:"be_on_defend", val:1, masterVal:2,    masterDesc:"+2 BE bij Verdedigen" },
     abilities:[
       { id:"schildmuur",    nm:"Schildmuur",    tier:"basic",    cost:2,  desc:"Geeft je team +4 schild",                   type:"team_shield",          shld:4 },
       { id:"schildslag",    nm:"Schildslag",    tier:"basic",    cost:2,  desc:"Aanval op het vijandelijk leger (+4)",      type:"attack",               dmg:4 },
@@ -24,7 +27,7 @@ const BM_CLASSES = [
       { id:"achilleshiel",  nm:"Achilleshiel",  tier:"legendary",cost:9,  desc:"Aanval (+10) die tegenschild omzeilt",      type:"attack_bypass",        dmg:10 },
     ]},
   { id:"spartaan",     nm:"Voorvechter", icon:"helmet", color:"#8B1A1A",
-    passive:{ desc:"+20% aanvalsschade",                       type:"atk_bonus",   val:0.20 },
+    passive:{ desc:"+20% aanvalsschade",                       type:"atk_bonus",   val:0.20, masterVal:0.30, masterDesc:"+30% aanvalsschade" },
     abilities:[
       { id:"speer",         nm:"Speerstoot",    tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+6)",      type:"attack",               dmg:6 },
       { id:"genadeslag",    nm:"Genadeslag",    tier:"basic",    cost:3,  desc:"Aanval (+3, of +8 als vijand ≤30% HP)",     type:"attack_weakspot",      dmg:3, bonusDmg:5 },
@@ -33,7 +36,7 @@ const BM_CLASSES = [
       { id:"leeuwensprong", nm:"Leeuwensprong", tier:"legendary",cost:10, desc:"Massieve aanval die schild omzeilt (+14)",  type:"attack_bypass",        dmg:14 },
     ]},
   { id:"boogschutter", nm:"Boogschutter",icon:"eagle",  color:"#2e6fb0",
-    passive:{ desc:"+1 schade bij aanval",                     type:"atk_flat",    val:1 },
+    passive:{ desc:"+1 schade bij aanval",                     type:"atk_flat",    val:1, masterVal:2,    masterDesc:"+2 schade bij aanval" },
     abilities:[
       { id:"pijlregen",     nm:"Pijlregen",     tier:"basic",    cost:3,  desc:"AoE-aanval op alle doelen (+5 elk)",        type:"attack",               dmg:5, aoe:true },
       { id:"gericht_schot", nm:"Gericht Schot", tier:"basic",    cost:3,  desc:"Aanval (+2) én vijandelijk schild −2",      type:"attack_and_shld_remove", dmg:2, shldRemove:2 },
@@ -42,7 +45,7 @@ const BM_CLASSES = [
       { id:"dodenarrow",    nm:"Dodenarrow",    tier:"legendary",cost:9,  desc:"Dodelijke pijl op het vijandelijk leger (+13)", type:"attack",           dmg:13 },
     ]},
   { id:"cavalerie",    nm:"Cavalerie",   icon:"column", color:"#9B6914",
-    passive:{ desc:"+2 BE bij snel correct antwoord",          type:"be_on_fast",  val:2 },
+    passive:{ desc:"+2 BE bij snel correct antwoord",          type:"be_on_fast",  val:2, masterVal:3,    masterDesc:"+3 BE bij snel correct antwoord" },
     abilities:[
       { id:"charge",        nm:"Charge",        tier:"basic",    cost:3,  desc:"Snelle aanval op het vijandelijk leger (+7)", type:"attack",             dmg:7 },
       { id:"snelle_uitval", nm:"Snelle Uitval", tier:"basic",    cost:3,  desc:"Aanval (+3) én +2 eigen BE",                type:"attack",               dmg:3, selfBE:2 },
@@ -51,7 +54,7 @@ const BM_CLASSES = [
       { id:"stormloop",     nm:"Stormloop",     tier:"legendary",cost:9,  desc:"Verwoestende aanval (+13)",                  type:"attack",               dmg:13 },
     ]},
   { id:"priester",     nm:"Priester",    icon:"torch",  color:"#3f9d52",
-    passive:{ desc:"+1 heling bij helen",                      type:"heal_flat",   val:1 },
+    passive:{ desc:"+1 heling bij helen",                      type:"heal_flat",   val:1, masterVal:2,    masterDesc:"+2 heling bij helen" },
     abilities:[
       { id:"gebed",         nm:"Gebed",         tier:"basic",    cost:3,  desc:"Heelt je eigen leger (+7)",                 type:"heal",                 heal:7 },
       { id:"vloek",         nm:"Vloek",         tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
@@ -60,7 +63,7 @@ const BM_CLASSES = [
       { id:"godenvuur",     nm:"Godenvuur",     tier:"legendary",cost:9,  desc:"Heelt leger (+12) én schaadt vijand (+4)",  type:"heal_and_attack",      heal:12, dmg:4 },
     ]},
   { id:"centurio",     nm:"Bevelvoerder",icon:"laurel", color:"#6B2D8B",
-    passive:{ desc:"+1 BE per ronde (altijd)",                 type:"be_passive",  val:1 },
+    passive:{ desc:"+1 BE per ronde (altijd)",                 type:"be_passive",  val:1, masterVal:2,    masterDesc:"+2 BE per ronde (altijd)" },
     abilities:[
       { id:"bevel",         nm:"Bevel",         tier:"basic",    cost:2,  desc:"Geeft je team +3 schild",                   type:"team_shield",          shld:3 },
       { id:"aanmoediging",  nm:"Aanmoediging",  tier:"basic",    cost:2,  desc:"Alle teamgenoten +1 BE",                    type:"team_be",              teamBE:1 },
@@ -69,7 +72,7 @@ const BM_CLASSES = [
       { id:"testudo",       nm:"Testudo",       tier:"legendary",cost:8,  desc:"Massiefschild (+7), team +2 BE, én heelt (+3)", type:"testudo",          shld:7, teamBE:2, heal:3 },
     ]},
   { id:"genie",        nm:"Genie",       icon:"amphora",color:"#C87533",
-    passive:{ desc:"Aanvallen verminderen ook vijandelijk schild (−2)", type:"shld_pierce", val:2 },
+    passive:{ desc:"Aanvallen verminderen ook vijandelijk schild (−2)", type:"shld_pierce", val:2, masterVal:3,    masterDesc:"Aanvallen verminderen ook vijandelijk schild (−3)" },
     abilities:[
       { id:"katapult",      nm:"Katapult",      tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
       { id:"valstrik",      nm:"Valstrik",      tier:"basic",    cost:3,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
@@ -78,7 +81,7 @@ const BM_CLASSES = [
       { id:"vuurtoren",     nm:"Vuurtoren",     tier:"legendary",cost:8,  desc:"Zware AoE-aanval op alle doelen (+9 elk) én schild weg (−4)", type:"attack_siege", dmg:9, shldRemove:4, aoe:true },
     ]},
   { id:"verkenner",    nm:"Verkenner",   icon:"eagle",  color:"#2D8B7A",
-    passive:{ desc:"Basis-abilities kosten 1 BE minder",       type:"cost_reduce", val:1 },
+    passive:{ desc:"Basis-abilities kosten 1 BE minder",       type:"cost_reduce", val:1, masterTiers:["basic","medium"], masterDesc:"Basis- én medium-abilities kosten 1 BE minder" },
     abilities:[
       { id:"verkenning",    nm:"Verkenning",    tier:"basic",    cost:2,  desc:"Aanval (+4) én saboteer vijandelijk schild (−2)", type:"attack_and_shld_remove", dmg:4, shldRemove:2 },
       { id:"sluipaanval",   nm:"Sluipaanval",   tier:"basic",    cost:2,  desc:"Aanval (+2, of +8 als vijand ≤30% HP)",     type:"attack_weakspot",      dmg:2, bonusDmg:6 },
@@ -445,15 +448,9 @@ const BM_LEVELS = [
   { level:10, xp:6000, title:"Imperator",  unlock:{part:"helm",       opt:"kroon",        nm:"Helm: Kroon"} },
 ];
 
-// score = rounds*5 + damage + healing  → mastery-sterren (0–5)
-const BM_MASTERY_TIERS = [
-  { stars:0, score:0   },
-  { stars:1, score:15  },
-  { stars:2, score:40  },
-  { stars:3, score:80  },
-  { stars:4, score:140 },
-  { stars:5, score:220 },
-];
+// Klasbeheersing: aantal gespeelde rondes met één klasse → ster 1 t/m 5
+// (index+1). Gelezen door bmCalcMastery() in battle.js.
+const BM_MASTERY_TIERS = [5, 15, 35, 70, 120];
 
 // Uitbreidbaar via één extra entry; geen andere code wijzigen.
 // BM_ACHIEVEMENTS is vervangen door ACHIEVEMENTS_DEF in core.js (geunificeerd systeem)

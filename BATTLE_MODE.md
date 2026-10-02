@@ -918,10 +918,29 @@ drie vleugel-capes hierboven.
 
 ### Class Mastery (0–5 sterren)
 
-Score per klasse = `rounds * 5 + damage + healing`. Drempelwaarden in `BM_MASTERY_TIERS`.
+Sterren per klasse = aantal gespeelde rondes met die klasse
+(`classHistory/{cls}/rounds`) tegen de drempels in `BM_MASTERY_TIERS`
+(5/15/35/70/120 → ★1–★5), berekend door `bmCalcMastery()`.
 
-- **★★★+**: +1 starting BE (minimale spelbonus; geschreven als `masteryBonus` op het player-node bij klassewissel)
-- **★★★★★**: cosmetic unlock (`ceremonieel`-wapenrusting)
+- **★★★+**: +1 BE per ronde met die klasse (geschreven als `masteryBonus` op het player-node bij klassekeuze, `bmPickClass()`)
+- **★★★★★ — meester (sinds 2026-10-02)**: versterkte passief van die klasse
+  (`passive.masterVal`/`masterTiers`/`masterDesc` in `BM_CLASSES`, gelezen via `bmPassiveVal()`;
+  host-side via de vlag `masterPassive` op het player-node, client-side via
+  `bmMyMaster()` voor BE-kosten en de snel-antwoord-BE):
+
+  | Klasse | Normaal | Meester |
+  |---|---|---|
+  | Hopliet | +1 BE bij Verdedigen | +2 |
+  | Voorvechter | +20% aanvalsschade | +30% |
+  | Boogschutter | +1 schade bij aanval | +2 |
+  | Cavalerie | +2 BE bij snel correct antwoord | +3 |
+  | Priester | +1 heling bij helen | +2 |
+  | Bevelvoerder | +1 BE per ronde | +2 |
+  | Genie | aanvallen: vijandschild −2 | −3 |
+  | Verkenner | basis-abilities −1 BE | ook medium-abilities −1 BE (`masterTiers`; basis kost al het minimum van 1) |
+
+  Daarnaast: cosmetic unlock `kampioen`-wapenrusting (★5 in één willekeurige klasse).
+- Beide spelbonussen (★3 en ★5) volgen de docent-schakelaar `masteryBonuses`.
 
 Mastery-voortgang staat in `/identities/{klas}/{code}/classHistory/{cls}`.
 
@@ -1196,7 +1215,7 @@ Alle globale variabelen zijn gedefinieerd in core.js (SCREENS, go, cleanup, DRAF
 | Legendarische bonussen | `BM_LEGENDARY_BONUS` | 4 legendarische strijders, elk met een vaste %-gevechtsbonus |
 | Eenmalige trait-munten | `TRAIT_COIN_BONUS` | Munten-bonus bij het ontgrendelen van bepaalde M9-traits |
 | Niveaudrempels | `BM_LEVELS` | 10 niveaus (Tiro–Imperator), XP-drempel + titel per niveau |
-| Mastery-tiers | `BM_MASTERY_TIERS` | 6 tiers (score → 0–5 sterren) |
+| Mastery-tiers | `BM_MASTERY_TIERS` | 5 rondes-drempels (5/15/35/70/120 → ★1–★5) |
 
 Eerbewijzen (`ACHIEVEMENTS_DEF`, 92 stuks) staan **niet** in battle-data.js
 maar in `certamen/core.js` — gedeeld met alle spelmodi, zie M6/M9 hierboven.
