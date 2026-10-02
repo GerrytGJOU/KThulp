@@ -25,6 +25,7 @@ const BM_CLASSES = [
       { id:"formatie",      nm:"Formatie",      tier:"medium",   cost:5,  desc:"Alle teamgenoten +2 BE",                    type:"team_be",              teamBE:2 },
       { id:"linie_sluiten", nm:"Linie Sluiten",  tier:"medium",   cost:5,  desc:"Geeft je team +7 schild",                   type:"team_shield",          shld:7 },
       { id:"achilleshiel",  nm:"Achilleshiel",  tier:"legendary",cost:9,  desc:"Aanval (+10) die tegenschild omzeilt",      type:"attack_bypass",        dmg:10 },
+      { id:"thermopylae",   nm:"Thermopylae",   tier:"prestige", cost:13, desc:"Onbreekbare falanx: schild voor je team (+14) én tegenstoot (+8)", type:"attack_and_defend", dmg:8, shld:14 },
     ]},
   { id:"spartaan",     nm:"Voorvechter", icon:"helmet", color:"#8B1A1A",
     passive:{ desc:"+20% aanvalsschade",                       type:"atk_bonus",   val:0.20, masterVal:0.30, masterDesc:"+30% aanvalsschade" },
@@ -34,6 +35,7 @@ const BM_CLASSES = [
       { id:"berserk",       nm:"Berserk",       tier:"medium",   cost:5,  desc:"Zware aanval op het vijandelijk leger (+9)",type:"attack",               dmg:9 },
       { id:"bloedroof",     nm:"Bloedroof",     tier:"medium",   cost:6,  desc:"Aanval (+6) én eigen leger heelt mee (+5) — levensroof", type:"heal_and_attack", dmg:6, heal:5 },
       { id:"leeuwensprong", nm:"Leeuwensprong", tier:"legendary",cost:10, desc:"Massieve aanval die schild omzeilt (+14)",  type:"attack_bypass",        dmg:14 },
+      { id:"aristeia",      nm:"Aristeia",      tier:"prestige", cost:13, desc:"Heldenmoment: verwoestende aanval die schild omzeilt (+20)", type:"attack_bypass", dmg:20 },
     ]},
   { id:"boogschutter", nm:"Boogschutter",icon:"eagle",  color:"#2e6fb0",
     passive:{ desc:"+1 schade bij aanval",                     type:"atk_flat",    val:1, masterVal:2,    masterDesc:"+2 schade bij aanval" },
@@ -43,6 +45,7 @@ const BM_CLASSES = [
       { id:"zwakpunt",      nm:"Zwak Punt",     tier:"medium",   cost:5,  desc:"Aanval (+7, of +17 als vijand ≤30% HP)",    type:"attack_weakspot",      dmg:7, bonusDmg:10 },
       { id:"doorborend",    nm:"Doorborend Schot", tier:"medium", cost:6,  desc:"Aanval (+7) die tegenschild omzeilt",       type:"attack_bypass",        dmg:7 },
       { id:"dodenarrow",    nm:"Dodenarrow",    tier:"legendary",cost:9,  desc:"Dodelijke pijl op het vijandelijk leger (+13)", type:"attack",           dmg:13 },
+      { id:"apollos_pijlen",nm:"Pijlen van Apollo", tier:"prestige", cost:13, desc:"Pijlenstorm op alle doelen (+14 elk) die schild omzeilt", type:"attack_bypass", dmg:14, aoe:true },
     ]},
   { id:"cavalerie",    nm:"Cavalerie",   icon:"column", color:"#9B6914",
     passive:{ desc:"+2 BE bij snel correct antwoord",          type:"be_on_fast",  val:2, masterVal:3,    masterDesc:"+3 BE bij snel correct antwoord" },
@@ -52,6 +55,7 @@ const BM_CLASSES = [
       { id:"flankbeweging", nm:"Flankbeweging", tier:"medium",   cost:5,  desc:"Aanval (+5) én schild voor je team (+3)",   type:"attack_and_defend",    dmg:5, shld:3 },
       { id:"stormram",      nm:"Stormram",      tier:"medium",   cost:6,  desc:"Aanval (+8) én vijandelijk schild −4",      type:"attack_and_shld_remove", dmg:8, shldRemove:4 },
       { id:"stormloop",     nm:"Stormloop",     tier:"legendary",cost:9,  desc:"Verwoestende aanval (+13)",                  type:"attack",               dmg:13 },
+      { id:"alexanders_charge", nm:"Charge van Alexander", tier:"prestige", cost:13, desc:"Doorbraak (+16) én vijandelijk schild −6", type:"attack_and_shld_remove", dmg:16, shldRemove:6 },
     ]},
   { id:"priester",     nm:"Priester",    icon:"torch",  color:"#3f9d52",
     passive:{ desc:"+1 heling bij helen",                      type:"heal_flat",   val:1, masterVal:2,    masterDesc:"+2 heling bij helen" },
@@ -61,6 +65,7 @@ const BM_CLASSES = [
       { id:"zegen",         nm:"Zegen",         tier:"medium",   cost:5,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
       { id:"reinigend_licht", nm:"Reinigend Licht", tier:"medium", cost:6, desc:"Heelt leger (+7) én schaadt vijand (+2)",  type:"heal_and_attack",      heal:7, dmg:2 },
       { id:"godenvuur",     nm:"Godenvuur",     tier:"legendary",cost:9,  desc:"Heelt leger (+12) én schaadt vijand (+4)",  type:"heal_and_attack",      heal:12, dmg:4 },
+      { id:"asklepios",     nm:"Hand van Asklepios", tier:"prestige", cost:13, desc:"Heelt leger (+20) én schaadt vijand (+6)", type:"heal_and_attack", heal:20, dmg:6 },
     ]},
   { id:"centurio",     nm:"Bevelvoerder",icon:"laurel", color:"#6B2D8B",
     passive:{ desc:"+1 BE per ronde (altijd)",                 type:"be_passive",  val:1, masterVal:2,    masterDesc:"+2 BE per ronde (altijd)" },
@@ -70,6 +75,7 @@ const BM_CLASSES = [
       { id:"strijdformatie",nm:"Strijdformatie",tier:"medium",   cost:4,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
       { id:"veldverzorging",nm:"Veldverzorging",tier:"medium",   cost:4,  desc:"Heelt je eigen leger (+9)",                 type:"heal",                 heal:9 },
       { id:"testudo",       nm:"Testudo",       tier:"legendary",cost:8,  desc:"Massiefschild (+7), team +2 BE, én heelt (+3)", type:"testudo",          shld:7, teamBE:2, heal:3 },
+      { id:"triumphus",     nm:"Triumphus",     tier:"prestige", cost:13, desc:"Schild (+10), team +3 BE én heelt (+6)", type:"testudo", shld:10, teamBE:3, heal:6 },
     ]},
   { id:"genie",        nm:"Genie",       icon:"amphora",color:"#C87533",
     passive:{ desc:"Aanvallen verminderen ook vijandelijk schild (−2)", type:"shld_pierce", val:2, masterVal:3,    masterDesc:"Aanvallen verminderen ook vijandelijk schild (−3)" },
@@ -79,6 +85,7 @@ const BM_CLASSES = [
       { id:"valgreppel",    nm:"Valgreppel",    tier:"medium",   cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
       { id:"veldreparatie", nm:"Veldreparatie", tier:"medium",   cost:4,  desc:"Schild (+3) én heling (+3) voor je team",   type:"shield_and_heal",      shld:3, heal:3 },
       { id:"vuurtoren",     nm:"Vuurtoren",     tier:"legendary",cost:8,  desc:"Zware AoE-aanval op alle doelen (+9 elk) én schild weg (−4)", type:"attack_siege", dmg:9, shldRemove:4, aoe:true },
+      { id:"archimedes",    nm:"Spiegels van Archimedes", tier:"prestige", cost:13, desc:"Brandende stralen op alle doelen (+14 elk) én schild weg (−8)", type:"attack_siege", dmg:14, shldRemove:8, aoe:true },
     ]},
   { id:"verkenner",    nm:"Verkenner",   icon:"eagle",  color:"#2D8B7A",
     passive:{ desc:"Basis-abilities kosten 1 BE minder",       type:"cost_reduce", val:1, masterTiers:["basic","medium"], masterDesc:"Basis- én medium-abilities kosten 1 BE minder" },
@@ -88,6 +95,7 @@ const BM_CLASSES = [
       { id:"sabotage",      nm:"Sabotage",      tier:"medium",   cost:4,  desc:"Verwijdert vijandelijk schild (−6)",        type:"shield_remove",        shldRemove:6 },
       { id:"ontwapenen",    nm:"Ontwapenen",    tier:"medium",   cost:4,  desc:"Aanval (+4) én vijandelijk schild −4",      type:"attack_and_shld_remove", dmg:4, shldRemove:4 },
       { id:"hinderlaag",    nm:"Hinderlaag",    tier:"legendary",cost:7,  desc:"Zware aanval (+10) én schild voor team (+3)", type:"attack_and_defend",   dmg:10, shld:3 },
+      { id:"teutoburg",     nm:"Teutoburgerwoud", tier:"prestige", cost:12, desc:"Vernietigende hinderlaag (+15) én schild voor team (+5)", type:"attack_and_defend", dmg:15, shld:5 },
     ]},
 ];
 
@@ -453,9 +461,19 @@ const BM_LEVELS = [
   { level:10, xp:6000, title:"Imperator",  unlock:{part:"helm",       opt:"kroon",        nm:"Helm: Kroon"} },
 ];
 
-// Klasbeheersing: aantal gespeelde rondes met één klasse → ster 1 t/m 5
-// (index+1). Gelezen door bmCalcMastery() in battle.js.
-const BM_MASTERY_TIERS = [5, 15, 35, 70, 120];
+// Klasbeheersing: onzichtbare klasse-XP (classHistory/{cls}/mxp) → ster
+// (index+1). Per gevecht vast BM_MASTERY_XP (zie bmMasteryXpForBattle() in
+// battle.js), dus de lengte van een gevecht maakt niet uit: gemiddeld ±12 per
+// gevecht → ★5 na ±10 gevechten, ★10 na ±50 met dezelfde klasse.
+// ★1–★5 gewoon, ★6–★10 = prestige (de vijf sterren "upgraden").
+// Exponentieel: elke stap kost meer dan de vorige (gaten 10, 15, 22, 32, 46 |
+// 60, 75, 95, 120, 150). ★10 = prestigeklasse → tier:"prestige"-vaardigheid
+// in BM_CLASSES. Gelezen door bmCalcMastery() in battle.js.
+const BM_MASTERY_TIERS = [10, 25, 47, 79, 125, 185, 260, 355, 475, 625];
+const BM_MASTERY_XP = { base:10, win:5 };  // per gevecht, vóór schaling
+// Oude profielen (alleen `rounds`, dubbel geteld) → mxp = rounds / deze deler.
+const BM_MASTERY_LEGACY_DIV = 3;
+const BM_MASTERY_PRESTIGE = 10; // ster waarop de prestige-vaardigheid vrijkomt
 
 // Uitbreidbaar via één extra entry; geen andere code wijzigen.
 // BM_ACHIEVEMENTS is vervangen door ACHIEVEMENTS_DEF in core.js (geunificeerd systeem)
