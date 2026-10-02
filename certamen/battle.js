@@ -4368,7 +4368,14 @@ SCREENS.battlePlayerLobby = function(){
           ${iconSVG(c.icon,30,c.color)}
           <div style="flex:1">
             <div style="font-size:15px;font-weight:700;color:${c.color}">${c.nm} <span style="font-size:11px;opacity:.7">${bmStars(ms)}</span></div>
-            <div class="note" style="margin:2px 0">⚡ ${ms>=5&&bmMasteryBonusesOn()&&c.passive.masterDesc?`<b style="color:#d4af37">${c.passive.masterDesc}</b> (meester)`:c.passive.desc}${ms>=3&&bmMasteryBonusesOn()?" · +1 BE":""}</div>
+            ${(()=>{
+              // ★5 → versterkte passief: oude passief doorgestreept, meesterbonus
+              // als eigen gouden regel; ★3/★4 → alleen de +1 BE-regel.
+              const on=bmMasteryBonusesOn(), master=on&&ms>=5&&c.passive.masterDesc;
+              return `<div class="note" style="margin:2px 0">⚡ ${master?`<s style="opacity:.6">${c.passive.desc}</s>`:c.passive.desc}</div>`
+                +(master?`<div style="margin:2px 0;font-size:12px;font-weight:700;color:#d4af37">★★★★★ Meesterbonus: ${c.passive.masterDesc} · +1 BE per ronde</div>`
+                  :on&&ms>=3?`<div class="note" style="margin:2px 0;color:#d4af37">★★★ Beheersingsbonus: +1 BE per ronde</div>`:"");
+            })()}
             <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">
               ${c.abilities.map(a=>`<span class="pill" style="font-size:10px">${a.nm}&nbsp;${bmGetAbilityCost(c,a,ms>=5)}BE</span>`).join("")}
             </div>
@@ -4416,7 +4423,9 @@ function bmPickClass(cid){
     traitNorage:achs.includes("geheim_norage"),
     traitPacifist:achs.includes("trait_pacifist"),
   });
-  toast("Klasse gekozen",bmClsName(cid)+(ms>=3?" · +1 BE mastery-bonus":""));
+  const mDesc=BM_CLASSES.find(c=>c.id===cid)?.passive?.masterDesc;
+  const mOn=bmMasteryBonusesOn();
+  toast("Klasse gekozen",bmClsName(cid)+(mOn&&ms>=5&&mDesc?" · Meester: "+mDesc+" · +1 BE":mOn&&ms>=3?" · +1 BE mastery-bonus":""));
   // Ook bruikbaar tijdens een lopend gevecht (late instappers kiezen daar hun
   // klasse) — dan het spelerspaneel verversen i.p.v. terug naar de lobby.
   if(_screen==="battlePlayerGame") bmPlayerRender();
