@@ -130,7 +130,9 @@ Normal): Boss HP = 3.000. Beide voelen relatief even zwaar aan.
 > puur visueel, `bmBossAliveHeads()`, geen effect op de aanvalstimer);
 > Cycloop dreigt elke 3 rondes met een 2-ronde-fuse "metgezellenmaaltijd"
 > (6% klas-schade + 4% zelfheling), alleen te onderbreken met ≥8×moeilijkheid
-> gezamenlijk schild in die ronde (geen losse "X correcte antwoorden"-teller,
+> gezamenlijk schild in één van de twee gewaarschuwde rondes (sinds
+> 2026-10-02 telt de ronde waarin de dreiging wordt aangekondigd niet meer
+> mee — toen wist nog niemand ervan) (geen losse "X correcte antwoorden"-teller,
 > geen Labyrinth-woordenpuzzel); Minotaurus gaat in Enrage (elke ronde
 > aanvallen i.p.v. de normale cadans) zodra zijn Labyrinth-schild breekt of
 > fase 3 bereikt wordt.
@@ -165,7 +167,21 @@ met de gebouwde versie:
   `bmResolve()` pas 1 (`certamen/battle.js`): spawn/opschonen gebeurt in het
   boss-blok, schaderouting in de per-speler ability-loop. Host ziet
   aantal/HP van de handlangers via `bmBossStatusNote()` (`certamen/
-  bossbattle.js`). Per-speler `minionDamage` gebruikt door de "Minion
+  bossbattle.js`).
+  **Zichtbaarheid (2026-10-02):** handlangers staan als kleinere, donkere
+  versies van de baas vóór hem op het slagveld, elk met HP-balk en een vast
+  nummer (`bmMinionLabel()`, uit het id — gelijk aan de doelwit-chip), en de
+  baas krijgt zolang ze leven een blauwe schildgloed. Actieve dreigingen
+  (`bmBossAlerts()`: Cycloop-maaltijd, handlangers, Labyrinth-schild) staan
+  als banner bovenin het projectieslagveld (`#bmBossAlert`) én bovenaan het
+  actiepaneel op de leerling-toestellen; de statusregel onder het slagveld
+  toont ze nu allemaal tegelijk (voorheen verborg de handlanger-regel de
+  maaltijdwaarschuwing). Wat de baas in een ronde dééd (log-entry
+  `bossEvents`: `boss_meal_warn/_interrupted/_attack`, `boss_rage_attack`,
+  `boss_regen`, `boss_minions`, `boss_minion_down`) verschijnt als grote,
+  kortstondige kaart midden op het slagveld (`bmBossAnnounce()`, aangeroepen
+  vanuit `bmPlayAnimations()` — ook met animaties uit), plus een drijvend
+  `+HP` bij zelfheling. Per-speler `minionDamage` gebruikt door de "Minion
   Opruimer"-categorie van het Boss-Battle-scorebord (zie §8 hieronder).
 - **AoE-vaardigheden (nieuw, niet in het oorspronkelijke docx-plan)** —
   **✅ gebouwd.** Boogschutter's Pijlregen (basic) en Genie's Vuurtoren

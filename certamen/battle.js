@@ -3003,6 +3003,14 @@ function bmBuildBattlefield(){
   // baas-placeholder (naam/fase/rage). Buiten de hash-gate: fase/rage
   // wijzigen immers los van de spelersformatie.
   if(fB&&BM_META?.mode==="boss")fB.innerHTML=bmBossSpriteHTML(BM_BOSS,bmTeamNm("B"));
+  // Actieve baas-dreigingen (Cycloop-maaltijd, handlangers, Labyrinth-schild)
+  // als banner bovenin het slagveld — host én leerling-toestel.
+  const alField=el("bmField");
+  if(alField){
+    let al=el("bmBossAlert");
+    if(!al&&BM_META?.mode==="boss"){al=document.createElement("div");al.id="bmBossAlert";alField.appendChild(al);}
+    if(al){const h=(BM_META?.mode==="boss"&&typeof bmBossAlertHTML==="function")?bmBossAlertHTML():"";if(al.dataset.h!==h){al.dataset.h=h;al.innerHTML=h;}}
+  }
   // Siege weapon (Total War-belegering, TOTAL_WAR.md §5.9): als de klas er
   // bij deze aanval een heeft ingezet (BM_META.garrisonProvince.siegeWeaponUsed,
   // gezet door twStartAttack() en meegekomen via meta, zelfde als
@@ -3040,6 +3048,9 @@ function bmBuildBattlefield(){
 
 // Hoofddispatcher: trigger animaties vanuit één log-entry
 function bmPlayAnimations(entry){
+  // Baas-meldingen (maaltijd/woede/handlangers…) zijn spelinformatie, geen
+  // decoratie — dus óók als de docent animaties heeft uitgezet.
+  if(entry&&typeof bmBossAnnounce==="function")bmBossAnnounce(entry.bossEvents);
   if(!entry||BM_META?.animations===false)return;
   const{events=[],efA=0,efB=0,blockedA=0,blockedB=0,healA=0,healB=0,winner}=entry;
 
@@ -3409,6 +3420,12 @@ async function bmResolve(roundN){
         const n=BM_MINION_COUNT_MIN+Math.floor(Math.random()*(BM_MINION_COUNT_MAX-BM_MINION_COUNT_MIN+1));
         const mHp=Math.max(1,Math.round(tB.maxHealth*BM_MINION_HP_PCT));
         liveMinions=Array.from({length:n},(_,i)=>({id:"m"+i,hp:mHp,maxHp:mHp}));
+        bossEvents.push({type:"boss_minions",n});
+      } else {
+        // Handlanger(s) deze ronde verslagen → melding voor de klas
+        // (bmBossAnnounce(), bossbattle.js).
+        const before=(BM_BOSS.minions||[]).filter(m=>m.hp>0).length;
+        if(liveMinions.length<before) bossEvents.push({type:"boss_minion_down",n:before-liveMinions.length,left:liveMinions.length});
       }
       const bossUpd={...tick.boss,rageMaxed,minions:liveMinions};
       await fbDB.ref("rooms/"+BM_CODE+"/boss").update(bossUpd);
@@ -4411,7 +4428,7 @@ SCREENS.battlePlayerGame = function(){
   const rT=fbDB.ref("rooms/"+BM_CODE+"/teams"),
     fT=rT.on("value",s=>{BM_TEAMS=s.val()||{};bmPlayerRender();});
   const rBoss=fbDB.ref("rooms/"+BM_CODE+"/boss"),
-    fBoss=rBoss.on("value",s=>{BM_BOSS=s.val()||{};bmBuildBattlefield();});
+    fBoss=rBoss.on("value",s=>{BM_BOSS=s.val()||{};bmBuildBattlefield();bmPlayerRender();});
   BM_UNSUBS=[()=>rP.off("value",fP),()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT),()=>rBoss.off("value",fBoss)];
   bmSubscribeLog(BM_CODE);
   bmBuildBattlefield();
@@ -4528,7 +4545,7 @@ function bmPlayerRender(){
           <div class="note" style="margin-bottom:4px">🎯 Doelwit</div>
           <div class="chips">
             <button class="chip ${BM_MY_TARGET==="boss"?"on":""}" onclick="bmSetTarget('boss')">Baas</button>
-            ${liveMinions.map((m,i)=>`<button class="chip ${BM_MY_TARGET===m.id?"on":""}" onclick="bmSetTarget('${m.id}')">Handlanger ${i+1} (${m.hp} HP)</button>`).join("")}
+            ${liveMinions.map((m,i)=>`<button class="chip ${BM_MY_TARGET===m.id?"on":""}" onclick="bmSetTarget('${m.id}')">${bmMinionLabel(m)} (${m.hp} HP)</button>`).join("")}
           </div>
         </div>`:"";
         content=`<div class="panel">
@@ -4585,6 +4602,7 @@ function bmPlayerRender(){
     <span style="color:var(--muted)">${tl}s</span>
   </div>
   ${bmAdaptiveHintHTML()}
+  ${(BM_META?.mode==="boss"&&typeof bmBossAlertHTML==="function")?`<div class="bm-boss-alerts-panel">${bmBossAlertHTML()}</div>`:""}
   ${content}`;
 }
 function bmWordKey(w){ return (w||"").replace(/[.#$\[\]\/]/g,"_").substring(0,80); }
