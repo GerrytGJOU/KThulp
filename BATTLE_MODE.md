@@ -916,11 +916,28 @@ niveau 10 loopt XP door als Legioenster-prestige (★, zie `calcPrestige()`/
 `xpBarInfo()` in `certamen/core.js`) — dat systeem ontgrendelt onder meer de
 drie vleugel-capes hierboven.
 
-### Class Mastery (0–5 sterren)
+### Class Mastery (0–10 sterren, sinds 2026-10-02 per gevecht)
 
-Sterren per klasse = aantal gespeelde rondes met die klasse
-(`classHistory/{cls}/rounds`) tegen de drempels in `BM_MASTERY_TIERS`
-(5/15/35/70/120 → ★1–★5), berekend door `bmCalcMastery()`.
+Sterren per klasse komen uit onzichtbare **klasse-XP** (`classHistory/{cls}/mxp`),
+tegen de drempels in `BM_MASTERY_TIERS` (`certamen/battle-data.js`), berekend
+door `bmCalcMastery()`/`bmMasteryXp()`.
+
+- **Per gevecht, niet per ronde** — de lengte van een gevecht doet er niet toe.
+  `bmMasteryXpForBattle()` (aangeroepen in `bmAwardBattle()`, in dezelfde
+  transactie als de gewone XP): `(BM_MASTERY_XP.base 10 + win 5) × share × act`,
+  met `share` = deel van het gevecht meegemaakt (zelfde als de gewone XP),
+  `act` = beantwoorde vragen / (helft van je rondes), max 1. Zonder één antwoord
+  0; zelf-gehost × `BM_SELF_HOST_XP_MULT`. Gemiddeld ±12 per gevecht.
+- **Exponentiële drempels** `[10, 25, 47, 79, 125, 185, 260, 355, 475, 625]`
+  (gaten 10/15/22/32/46 | 60/75/95/120/150): ★5 na ±10 gevechten met
+  dezelfde klasse, ★10 na ±50.
+- **Vroeger** telde `rounds` dubbel (host per ronde in het inmiddels verwijderde
+  `bmUpdateMastery()` + speler per gevecht in `bmAwardBattle()`), dus de sterren
+  gingen veel te snel. Oude profielen zonder `mxp` krijgen eenmalig
+  `rounds / BM_MASTERY_LEGACY_DIV (3)` als startwaarde; `rounds`/`damage`/`healing`
+  lopen als statistiek gewoon door.
+- Na een gevecht met een nieuwe ster: toast ("Ster n als …", "Meester als …",
+  "Prestige ★n/10", "Prestigeklasse!").
 
 - **★★★+**: +1 BE per ronde met die klasse (geschreven als `masteryBonus` op het player-node bij klassekeuze, `bmPickClass()`)
 - **★★★★★ — meester (sinds 2026-10-02)**: versterkte passief van die klasse
@@ -940,7 +957,26 @@ Sterren per klasse = aantal gespeelde rondes met die klasse
   | Verkenner | basis-abilities −1 BE | ook medium-abilities −1 BE (`masterTiers`; basis kost al het minimum van 1) |
 
   Daarnaast: cosmetic unlock `kampioen`-wapenrusting (★5 in één willekeurige klasse).
-- Beide spelbonussen (★3 en ★5) volgen de docent-schakelaar `masteryBonuses`.
+- **★6–★10 — prestige**: blijf je dezelfde klasse spelen, dan "upgraden" de
+  vijf sterren één voor één van goud naar paars (`bmStars()`, `BM_PRESTIGE_COLOR`).
+  Bij **★10 (`BM_MASTERY_PRESTIGE`) = prestigeklasse** komt per klasse een extra
+  `tier:"prestige"`-vaardigheid vrij (in `BM_CLASSES.abilities`, gefilterd via
+  `bmClassAbilities(cls, stars)`; host-side alleen met de vlag `prestigeClass`
+  op het player-node, gezet in `bmPickClass()`; bots gebruiken hem nooit; telt
+  als ultimate voor de CommanderSpectre-animatie):
+
+  | Klasse | Prestige-vaardigheid | BE | Effect |
+  |---|---|---|---|
+  | Hopliet | Thermopylae | 13 | schild +14 én aanval +8 |
+  | Voorvechter | Aristeia | 13 | aanval +20, omzeilt schild |
+  | Boogschutter | Pijlen van Apollo | 13 | AoE +14, omzeilt schild |
+  | Cavalerie | Charge van Alexander | 13 | aanval +16 én vijandschild −6 |
+  | Priester | Hand van Asklepios | 13 | heling +20 én schade +6 |
+  | Bevelvoerder | Triumphus | 13 | schild +10, team +3 BE, heling +6 |
+  | Genie | Spiegels van Archimedes | 13 | AoE +14 én schild −8 |
+  | Verkenner | Teutoburgerwoud | 12 | aanval +15 én schild +5 |
+
+- Alle spelbonussen (★3, ★5 en de ★10-vaardigheid) volgen de docent-schakelaar `masteryBonuses`.
 
 Mastery-voortgang staat in `/identities/{klas}/{code}/classHistory/{cls}`.
 
@@ -1207,7 +1243,7 @@ Alle globale variabelen zijn gedefinieerd in core.js (SCREENS, go, cleanup, DRAF
 
 | Tabel | Variabele | Inhoud |
 |---|---|---|
-| Klassen | `BM_CLASSES` | 8 klassen, elk met passive + 5 abilities |
+| Klassen | `BM_CLASSES` | 8 klassen, elk met passive (+ meesterversie) + 5 abilities + 1 prestige-ability (★10) |
 | Synergieën | `BM_SYNERGY` | Teambonus bij specifieke klassencombinatie |
 | Combo-abilities | `BM_COMBOS` | 7 combo's: vereisen 2 klassen + teamgenoot |
 | Facties/Thema's | `BM_FACTIONS` | 6 facties (zie §Facties hierboven) + CSS-vars |
@@ -1215,7 +1251,7 @@ Alle globale variabelen zijn gedefinieerd in core.js (SCREENS, go, cleanup, DRAF
 | Legendarische bonussen | `BM_LEGENDARY_BONUS` | 4 legendarische strijders, elk met een vaste %-gevechtsbonus |
 | Eenmalige trait-munten | `TRAIT_COIN_BONUS` | Munten-bonus bij het ontgrendelen van bepaalde M9-traits |
 | Niveaudrempels | `BM_LEVELS` | 10 niveaus (Tiro–Imperator), XP-drempel + titel per niveau |
-| Mastery-tiers | `BM_MASTERY_TIERS` | 5 rondes-drempels (5/15/35/70/120 → ★1–★5) |
+| Mastery-tiers | `BM_MASTERY_TIERS`, `BM_MASTERY_XP`, `BM_MASTERY_PRESTIGE` | 10 klasse-XP-drempels (★1–★5 + prestige ★6–★10), XP per gevecht, prestige-ster |
 
 Eerbewijzen (`ACHIEVEMENTS_DEF`, 92 stuks) staan **niet** in battle-data.js
 maar in `certamen/core.js` — gedeeld met alle spelmodi, zie M6/M9 hierboven.

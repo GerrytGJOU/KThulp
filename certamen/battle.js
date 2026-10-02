@@ -13,7 +13,7 @@
 const CommanderSpectre = (() => {
   // Automatisch afgeleid uit BM_CLASSES — loopt mee met toekomstige ability-wijzigingen.
   const ULTIMATE_IDS = new Set(
-    BM_CLASSES.flatMap(c => c.abilities.filter(a => a.tier === "legendary").map(a => a.id))
+    BM_CLASSES.flatMap(c => c.abilities.filter(a => a.tier === "legendary" || a.tier === "prestige").map(a => a.id))
   );
 
   function _ensureEls() {
@@ -225,10 +225,30 @@ function bmCalcLevel(xp){
   const lvDef=BM_LEVELS.find(l=>l.level===lv.level)||BM_LEVELS[0];
   return{...lv, title:lvDef.title, unlock:lvDef.unlock};
 }
+// 0–10 sterren: ★1–★5 gewoon, ★6–★10 prestige (zie BM_MASTERY_TIERS).
 function bmCalcMastery(hist){
+  const x=bmMasteryXp(hist);
+  let stars=0; for(const t of BM_MASTERY_TIERS){if(x>=t)stars++;} return stars;
+}
+// Onzichtbare klasse-XP (classHistory/{cls}/mxp), per gevecht toegekend in
+// bmAwardBattle(). Oude profielen (van vóór mxp, 2026-10-02) hebben alleen
+// `rounds` — die telde dubbel (host per ronde + speler per gevecht), dus
+// omgerekend naar een voorzichtige startwaarde.
+function bmMasteryXp(hist){
   if(!hist)return 0;
-  const r=hist.rounds||0;
-  let stars=0; for(const t of BM_MASTERY_TIERS){if(r>=t)stars++;} return stars;
+  if(typeof hist.mxp==="number") return hist.mxp;
+  return Math.floor((hist.rounds||0)/BM_MASTERY_LEGACY_DIV);
+}
+// Klasse-XP voor één gevecht: vast bedrag, onafhankelijk van hoe lang het
+// gevecht duurde. Volledig als je minstens de helft van "jouw" rondes
+// antwoordde, naar rato daaronder; geschaald met het deel van het gevecht dat
+// je meemaakte (share) en zonder één antwoord niets.
+function bmMasteryXpForBattle({answered,roundsPresent,share,won,selfHosted}){
+  if(!answered) return 0;
+  const act=Math.min(1,answered/Math.max(1,roundsPresent*0.5));
+  let x=(BM_MASTERY_XP.base+(won?BM_MASTERY_XP.win:0))*share*act;
+  if(selfHosted) x*=BM_SELF_HOST_XP_MULT;
+  return Math.max(1,Math.round(x));
 }
 // Leest de Chronica Classica-saves (localStorage, zelfde apparaat/profiel als
 // Battle Mode — zie SP_SLOTS_KEY in singleplayer.js) en checkt of ÉÉN van de
@@ -267,8 +287,24 @@ function bmCoinName(){
   const t=(BM_META&&BM_META.theme)||"";
   return /griek|greek|athen|sparta|troje|troy|goden|titan|olymp/i.test(t) ? "drachmae" : "denarii";
 }
+const BM_PRESTIGE_COLOR="#b36bff";
+// Altijd 5 vakjes: ★1–★5 goud; vanaf ★6 "upgraden" de sterren één voor één
+// naar prestige-paars (★10 = vijf paarse sterren, prestigeklasse).
 function bmStars(n,max=5){
-  return Array.from({length:max},(_,i)=>`<span style="color:${i<n?"#d4af37":"var(--stone4)"};font-size:14px">★</span>`).join("");
+  const pr=Math.max(0,n-max);
+  const tip=n>max?` title="Prestige ★${n}/10"`:` title="★${n}/5"`;
+  return `<span${tip}>`+Array.from({length:max},(_,i)=>{
+    const col=i<pr?BM_PRESTIGE_COLOR:i<n?"#d4af37":"var(--stone4)";
+    const glow=i<pr?`;text-shadow:0 0 6px ${BM_PRESTIGE_COLOR}`:"";
+    return `<span style="color:${col};font-size:14px${glow}">★</span>`;
+  }).join("")+`</span>`;
+}
+// Vaardigheden die een speler mag gebruiken: de prestige-vaardigheid alleen
+// bij ★10 (BM_MASTERY_PRESTIGE) in die klasse, en alleen als de docent de
+// mastery-bonussen aan heeft laten staan.
+function bmClassAbilities(cls,stars){
+  const all=cls?.abilities||[];
+  return (stars||0)>=BM_MASTERY_PRESTIGE&&bmMasteryBonusesOn() ? all : all.filter(a=>a.tier!=="prestige");
 }
 // Leesbare ontgrendel-voorwaarde voor een avatar-optie ({short, full} of null).
 function bmReqText(opt){
@@ -380,7 +416,9 @@ async function bmAwardBattle(){
   // nieuwste stand i.p.v. die overschrijven — xp/munten kunnen zo nooit
   // "verdwijnen" en blijven tussen toestellen synchroon.
   const cls=BM_MY_CLASS;
-  let oldXp=0,newXp=0,newCoins=0,battles=0,mergedData=null;
+  const mxpEarned=bmMasteryXpForBattle({answered:total,roundsPresent:rounds0-joined0+1,
+    share:share0,won,selfHosted:!BM_META?.hostedByTeacher});
+  let oldXp=0,newXp=0,newCoins=0,battles=0,mergedData=null,oldStars=0,newStars=0;
   const identRef=fbDB.ref("identities/"+klas+"/"+lcode);
   await identRef.transaction(cur=>{
     const data=cur||{};
@@ -393,6 +431,7 @@ async function bmAwardBattle(){
       const firstTime=!hist.rounds; // nog geen classHistory-entry voor deze klasse
       next.classHistory={...(data.classHistory||{}),[cls]:{
         ...hist,
+        mxp:(oldStars=bmCalcMastery(hist),bmMasteryXp(hist)+mxpEarned),
         rounds:(hist.rounds||0)+Math.max(1,total),
         damage:(hist.damage||0)+myDmg0,
         healing:(hist.healing||0)+myHeal0,
@@ -424,6 +463,17 @@ async function bmAwardBattle(){
   });
   FBNet.stampKlascodeActive(klas);
   const data=mergedData||{};
+  if(cls){
+    newStars=bmCalcMastery(data.classHistory?.[cls]);
+    if(newStars>oldStars){
+      const nm=bmClsName(cls);
+      const msg=newStars===BM_MASTERY_PRESTIGE?"Prestigeklasse! "+(BM_CLASSES.find(c=>c.id===cls)?.abilities.find(a=>a.tier==="prestige")?.nm||"")+" ontgrendeld"
+        :newStars>5?"Prestige ★"+newStars+"/10 als "+nm
+        :newStars===5?"Meester als "+nm+" — je passief is versterkt"
+        :"Ster "+newStars+" als "+nm;
+      setTimeout(()=>toast("Klasbeheersing "+"★".repeat(Math.min(5,newStars)),msg),1500);
+    }
+  }
   const oldCoins=Math.max(0,newCoins-coinsEarned);
   const oldLv=bmCalcLevel(oldXp), newLv=bmCalcLevel(newXp);
   const merged={...data,achievements:data.achievements||[]};
@@ -602,9 +652,10 @@ function bmPassiveVal(cls,master){
 }
 // Is de eigen speler (client-side) meester in de gekozen klasse?
 // (Host-side leest bmCalcAbilityEffect de vlag p.masterPassive, zie bmPickClass.)
-function bmMyMaster(){
-  return !!BM_MY_CLASS&&bmCalcMastery(BM_IDENT?.classHistory?.[BM_MY_CLASS])>=5;
+function bmMyStars(){
+  return BM_MY_CLASS?bmCalcMastery(BM_IDENT?.classHistory?.[BM_MY_CLASS]):0;
 }
+function bmMyMaster(){ return bmMyStars()>=5; }
 function bmGetAbilityCost(cls,abl,master){
   let c=abl.cost;
   const pv=cls?.passive;
@@ -859,7 +910,7 @@ function bmStartBossHost(){
    Conventie: bij elke Battle Mode-wijziging deze FAQ controleren/updaten.
    ============================================================================ */
 function bmTierBadge(tier){
-  const m={basic:["Basis","#3f9d52"],medium:["Middel","#2e6fb0"],legendary:["Legendarisch","#C87533"]};
+  const m={basic:["Basis","#3f9d52"],medium:["Middel","#2e6fb0"],legendary:["Legendarisch","#C87533"],prestige:["Prestige ★10",BM_PRESTIGE_COLOR]};
   const[lbl,col]=m[tier]||[tier,"var(--muted)"];
   return `<span class="pill" style="background:${col};border:none;font-size:10px">${lbl}</span>`;
 }
@@ -1067,10 +1118,14 @@ SCREENS.battleFAQ = function(){
     <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
       <li><b>XP &amp; rang</b> — je klimt van Tiro tot Imperator door te spelen en te winnen. Eenmaal
       Imperator loop je door met <b>Legioensterren</b> (★1, ★2, …) — er is dus geen harde eindstreep.</li>
-      <li><b>Klasbeheersing</b> — speel je vaak dezelfde klasse, dan verdien je sterren (★ tot ★★★★★):
-      ★ na 5 rondes, ★★ na 15, ★★★ na 35, ★★★★ na 70 en ★★★★★ na 120 rondes met die klasse.
+      <li><b>Klasbeheersing</b> — na elk gevecht verdien je ervaring met de klasse die je speelde. Hoe lang
+      het gevecht duurde maakt niet uit; wel dat je actief meedoet (antwoord minstens de helft van de vragen) en
+      winnen telt extra. Zo verdien je sterren (★ tot ★★★★★), en elke volgende ster kost meer gevechten dan de vorige.
       Vanaf ★★★ krijg je met die klasse +1 BE per ronde; met ★★★★★ ben je <b>meester</b> en wordt
       de passieve eigenschap van die klasse sterker (zie "meester" bij elke klasse in "De acht klassen").
+      Blijf je daarna dezelfde klasse spelen, dan worden je sterren één voor één
+      <b style="color:#b36bff">paars (prestige)</b>. Met vijf paarse sterren (★10) is het een <b>prestigeklasse</b>
+      en krijg je er een extra, peperdure vaardigheid bij (zie "Prestige ★10" bij elke klasse).
       De docent kan deze bonussen uitzetten.</li>
       <li><b>Eerbewijzen</b> — speciale prestaties, ook geheime. Verschijnen op je profiel, inclusief eigen
       reeksen voor Boss Battle (bazen verslaan, solo, hoge moeilijkheidsgraad) en Total War/Training Mode
@@ -1408,7 +1463,7 @@ SCREENS.battleHostSettings = function(){
   <div class="panel">
     <label class="fld">Mastery-bonussen</label>
     <div class="chips">${onoff("masteryBonuses",mastery)}</div>
-    <div class="note" style="margin-top:6px">★★★+ klassemastery geeft +1 BE per ronde; ★★★★★ geeft een versterkte passief.</div>
+    <div class="note" style="margin-top:6px">★★★+ klassemastery geeft +1 BE per ronde; ★★★★★ geeft een versterkte passief; ★10 (prestige) geeft een extra prestige-vaardigheid.</div>
   </div>
   <div class="panel">
     <label class="fld">Slagveld-animaties</label>
@@ -1840,7 +1895,7 @@ async function bmDistributeQs(roundN){
         const correct=Math.random()<acc;
         const botBe=bmClampBE((BM_PLAYERS[pid]?.be||0)+(correct?1:0));
         const cls=BM_CLASSES.find(c=>c.id===p.class);
-        const abilities=cls?.abilities||[];
+        const abilities=bmClassAbilities(cls,0);
         const affordable=abilities.filter(a=>(a.cost||0)<=botBe);
         const chosenAbility=affordable.length?affordable[Math.floor(Math.random()*affordable.length)]:null;
         const action=chosenAbility?{type:"ability",abilityId:chosenAbility.id,cost:chosenAbility.cost||0}:null;
@@ -3235,7 +3290,7 @@ async function bmResolve(roundN){
       // Basisacties (BM_BASIC_ACTIONS) staan los van een klasse: een speler
       // zonder gekozen klasse heeft hier geen `cls`, en dan moet de actie nog
       // steeds gevonden worden.
-      const abl=cls?.abilities.find(a=>a.id===action.abilityId)
+      const abl=bmClassAbilities(cls,p.prestigeClass?BM_MASTERY_PRESTIGE:0).find(a=>a.id===action.abilityId)
              || BM_BASIC_ACTIONS.find(a=>a.id===action.abilityId);
       if(!abl)continue;
       const mt=p.team,et=mt==="A"?"B":"A";
@@ -3480,8 +3535,8 @@ async function bmResolve(roundN){
     // maken er hier nog één keer null van in plaats van erop te vertrouwen.
     fbDB.ref("rooms/"+BM_CODE+"/log").push(bmGeenUndefined({round:roundN,events,efA,efB,blockedA,blockedB,healA:for_.A.heal,healB:for_.B.heal,newHA,newHB,winner:logWinner,participants:roundParticipants,bossEvents,finishingBlowPid}));
 
-    // Mastery bijhouden in identities (fire-and-forget)
-    bmUpdateMastery(players,pUpd,events);
+    // (Klasbeheersing loopt niet meer per ronde via de host, maar per gevecht
+    // via klasse-XP in bmAwardBattle() — zie BM_MASTERY_TIERS.)
 
     // Total War-belegering: drie losse gevechten na elkaar. gp/stageKeys/
     // curStageKey zijn ook nodig voor de rondelimiet hieronder, dus al hier
@@ -3560,20 +3615,6 @@ async function bmResolve(roundN){
   }finally{BM_RESOLVING=false;}
 }
 
-function bmUpdateMastery(players,pUpd,events){
-  if(!fbDB)return;
-  for(const[pid,p]of Object.entries(players)){
-    const cls=p.class;if(!cls||!p.identityKey)continue;
-    const[klas,lcode]=(p.identityKey||"").split(":");if(!klas||!lcode)continue;
-    const evs=events.filter(e=>e.pid===pid);
-    const contrib={
-      rounds:firebase.database.ServerValue.increment(1),
-      damage:firebase.database.ServerValue.increment(evs.reduce((s,e)=>s+(e.dmg||0),0)),
-      healing:firebase.database.ServerValue.increment(evs.reduce((s,e)=>s+(e.heal||0),0)),
-    };
-    fbDB.ref("identities/"+klas+"/"+lcode+"/classHistory/"+cls).update(contrib).catch(()=>{});
-  }
-}
 function bmEndGame(){
   // Vroeger sprong dit meteen naar het hoofdmenu en wiste het de kamer. Een
   // docent die halverwege stopte — les afgelopen, of gewoon genoeg gespeeld —
@@ -3728,7 +3769,7 @@ function bmHostResult(){
 // Telt gemiste woorden van dit gevecht bij de klasbrede, maandelijkse teller op
 // (los van bmComputeAnalytics(), dat alleen déze ene sessie toont) — zie
 // tpRenderClassAnalytics() in games.js voor de docentweergave "moeilijkste
-// woorden deze maand". Fire-and-forget, host-only (net als bmUpdateMastery).
+// woorden deze maand". Fire-and-forget, host-only.
 function bmSyncClassMissedWords(players){
   if(!fbDB) return;
   const month=new Date().toISOString().slice(0,7);
@@ -4375,10 +4416,12 @@ SCREENS.battlePlayerLobby = function(){
               const on=bmMasteryBonusesOn(), master=on&&ms>=5&&c.passive.masterDesc;
               return `<div class="note" style="margin:2px 0">⚡ ${master?`<s style="opacity:.6">${c.passive.desc}</s>`:c.passive.desc}</div>`
                 +(master?`<div style="margin:2px 0;font-size:12px;font-weight:700;color:#d4af37">★★★★★ Meesterbonus: ${c.passive.masterDesc} · +1 BE per ronde</div>`
-                  :on&&ms>=3?`<div class="note" style="margin:2px 0;color:#d4af37">★★★ Beheersingsbonus: +1 BE per ronde</div>`:"");
+                  :on&&ms>=3?`<div class="note" style="margin:2px 0;color:#d4af37">★★★ Beheersingsbonus: +1 BE per ronde</div>`:"")
+                +(on&&ms>=BM_MASTERY_PRESTIGE?`<div style="margin:2px 0;font-size:12px;font-weight:700;color:${BM_PRESTIGE_COLOR}">★10 Prestigeklasse: ${esc(c.abilities.find(a=>a.tier==="prestige")?.nm||"")} ontgrendeld</div>`
+                  :ms>5?`<div class="note" style="margin:2px 0;color:${BM_PRESTIGE_COLOR}">Prestige ★${ms}/10 — bij ★10: ${esc(c.abilities.find(a=>a.tier==="prestige")?.nm||"")}</div>`:"");
             })()}
             <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">
-              ${c.abilities.map(a=>`<span class="pill" style="font-size:10px">${a.nm}&nbsp;${bmGetAbilityCost(c,a,ms>=5)}BE</span>`).join("")}
+              ${bmClassAbilities(c,ms).map(a=>`<span class="pill" style="font-size:10px${a.tier==="prestige"?";border-color:"+BM_PRESTIGE_COLOR+";color:"+BM_PRESTIGE_COLOR:""}">${a.nm}&nbsp;${bmGetAbilityCost(c,a,ms>=5)}BE</span>`).join("")}
             </div>
           </div>
           ${sel?`<span style="font-size:20px;align-self:center">✅</span>`:""}
@@ -4416,7 +4459,7 @@ function bmPickClass(cid){
   // BM_IDENT niet) — zelfde reden waarom masteryBonus al zo werkt.
   const achs=BM_IDENT?.achievements||[];
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
-    class:cid, masteryBonus:ms>=3?1:0, masterPassive:ms>=5,
+    class:cid, masteryBonus:ms>=3?1:0, masterPassive:ms>=5, prestigeClass:ms>=BM_MASTERY_PRESTIGE,
     traitLaconisch:achs.includes("trait_laconisch"),
     traitFeniks:achs.includes("trait_feniks"),
     traitHeal:achs.includes("geheim_heal"),
@@ -4590,7 +4633,7 @@ function bmPlayerRender(){
           combo.classes.includes(BM_MY_CLASS)&&
           combo.classes.some(c=>c!==BM_MY_CLASS&&teamClasses.includes(c))
         );
-        const tierDot=t=>t==="basic"?"●":t==="medium"?"●●":"●●●";
+        const tierDot=t=>t==="basic"?"●":t==="medium"?"●●":t==="prestige"?`<span style="color:${BM_PRESTIGE_COLOR}">★ prestige</span>`:"●●●";
         const inspired=BM_META?.mode==="boss"&&BM_PLAYERS[BM_PID]?.inspired;
         // Minion Summon (BOSS_BATTLE.md §4): doelwit-chips alleen tonen als
         // er nog levende handlangers zijn — daarbuiten heeft "kiezen" geen zin.
@@ -4610,7 +4653,7 @@ function bmPlayerRender(){
           ${(()=>{
             // Niets te doen deze ronde: meestal doordat een fout antwoord BE
             // kostte. Benoem dat, anders lijken de vaardigheden gewoon stuk.
-            const goedkoopste=Math.min(...cls.abilities.map(a=>bmGetAbilityCost(cls,a,bmMyMaster())));
+            const goedkoopste=Math.min(...bmClassAbilities(cls,0).map(a=>bmGetAbilityCost(cls,a,bmMyMaster())));
             if(BM_MY_BE>=goedkoopste) return "";
             const foutDezeRonde=BM_MY_PICK_ROUND===round.n&&BM_MY_PICK!==null&&!BM_MY_PICK_OK;
             return `<div class="bm-fb bad" style="margin-bottom:8px">⚠️ Te weinig BE voor je vaardigheden${foutDezeRonde?" — je antwoord was fout":""}.<br>
@@ -4629,7 +4672,7 @@ function bmPlayerRender(){
           })():""}
           ${inspired?`<div class="note" style="color:var(--hi-bright);margin-bottom:6px">⚡ Geïnspireerd! Je volgende aanval doet extra schade.</div>`:""}
           ${targetPicker}
-          ${cls.abilities.map(a=>{
+          ${bmClassAbilities(cls,bmMyStars()).map(a=>{
             const cost=bmGetAbilityCost(cls,a,bmMyMaster());
             const ok=BM_MY_BE>=cost;
             return `<button class="tile" style="margin-bottom:6px;padding:11px 13px${ok?"":";opacity:.4;pointer-events:none"}" onclick="bmChooseAbility('${a.id}',${cost})">
