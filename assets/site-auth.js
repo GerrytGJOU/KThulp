@@ -495,7 +495,7 @@
         el.innerHTML =
           '<div class="ktaBar"><span class="ktaWho">👩‍🏫 '+esc(teacher.email)+statusNote+'</span>'+
           '<a class="ktaBtn" href="'+esc(SITE_ROOT+"profiel/")+'">Mijn profiel</a>'+
-          '<a class="ktaBtn" href="'+esc(SITE_ROOT+"certamen/")+'">Docentenportaal</a>'+
+          '<a class="ktaBtn" href="'+esc(SITE_ROOT+"certamen/?screen=teacherPortal")+'">Docentenportaal</a>'+
           (googleProvider ? '<span style="color:#8fbf7a">✓ Google gekoppeld</span>' : '<button type="button" class="ktaBtn" data-kta="link-teacher-google">Koppel Google-account</button>')+
           '<button type="button" class="ktaBtn" data-kta="logout-teacher">Uitloggen</button></div>'+
           (googleLinkMsg ? '<div class="ktaNote" style="margin-top:6px">'+esc(googleLinkMsg)+'</div>' : '');
