@@ -78,10 +78,12 @@ function bmIdentLoad(){ try{ const r=localStorage.getItem(BM_IDENT_KEY); return 
 function bmIdentSave(o){ try{ localStorage.setItem(BM_IDENT_KEY,JSON.stringify(o)); }catch(e){} }
 function bmIdentClear(){ try{ localStorage.removeItem(BM_IDENT_KEY); }catch(e){} }
 async function bmIdentGet(klas,lcode){ if(!fbDB)return null; const s=await fbDB.ref("identities/"+klas+"/"+lcode).once("value"); return s.exists()?s.val():null; }
-async function bmIdentCreate(klas,lcode,name){
-  const d={name,coins:0,xp:0,battles:0,level:1,avatar:bmAvatarDefaults(),color:P.color,classHistory:{},achievements:[]};
+async function bmIdentCreate(klas,lcode,name,pw){
+  const d={name,coins:0,xp:0,battles:0,level:1,avatar:bmAvatarDefaults(),color:P.color,classHistory:{},achievements:[],lastActive:Date.now()};
+  if(pw) d.pwHash=await ktPwMake(klas,lcode,pw); // wachtwoord: zie net.js "Leerlingwachtwoorden"
   if(fbDB){
     await fbDB.ref("identities/"+klas+"/"+lcode).set(d);
+    if(pw) fbDB.ref("studentSecrets/"+klas+"/"+lcode).set(pw).catch(()=>{});
     // Lichte klascode-index (usedKlascodes/{klas}, zie net.js:
     // FBNet.getKlascodes()/getKlascodeCounts()) meegroeien bij elke nieuwe
     // leerling — voorkomt dat het docentenportaal ooit weer de volledige
@@ -425,7 +427,7 @@ async function bmAwardBattle(){
     oldXp=data.xp||0; newXp=oldXp+xpEarned;
     newCoins=(data.coins||0)+coinsEarned;
     battles=(data.battles||0)+1;
-    const next={...data,xp:newXp,coins:newCoins,battles};
+    const next={...data,xp:newXp,coins:newCoins,battles,lastActive:Date.now()};
     if(cls){
       const hist=(data.classHistory&&data.classHistory[cls])||{};
       const firstTime=!hist.rounds; // nog geen classHistory-entry voor deze klasse
@@ -1212,6 +1214,8 @@ SCREENS.battleIdentity = function(){
     <input id="bmKlas" type="text" placeholder="bv. LATIJN3B" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
     <label class="fld" style="margin-top:12px">Leerlingcode (zelf gekozen)</label>
     <input id="bmLcode" type="text" placeholder="bv. marcus42">
+    <label class="fld" style="margin-top:12px">Wachtwoord <small style="text-transform:none">(nieuw profiel of nog geen wachtwoord: kies er nu een, minstens ${KT_PW_MIN} tekens)</small></label>
+    <input id="bmPw" type="password" autocomplete="current-password" placeholder="Wachtwoord" onkeydown="if(event.key==='Enter')bmIdentLogin()">
     <label class="fld" style="margin-top:12px">Weergavenaam <small style="text-transform:none">(optioneel — leeg = klasse+avatar, bv. "Hopliet 42")</small></label>
     <input id="bmNaam" type="text" placeholder="bv. Marcus of leeg laten">
   </div>
@@ -1228,10 +1232,11 @@ SCREENS.battleIdentity = function(){
 // als de "koppel dit toestel"-actie in het algemene profiel (SCREENS.collection),
 // zodat XP (en later munten) via dezelfde /identities/{klas}/{lcode}-node op
 // elk toestel gelijk blijven — niet alleen binnen Battle Mode.
-async function bmIdentDoLogin(klas,lcode,name){
+async function bmIdentDoLogin(klas,lcode,name,pw){
   initFirebase(); // beste-effort; bmIdentGet/Create werken ook offline (lokale fallback)
   klas=(klas||"").trim().toUpperCase();
   lcode=(lcode||"").trim().toLowerCase();
+  pw=pw||"";
   // Weergavenaam is optioneel: leeg veld levert een klasse+avatar-badge op
   // (bv. "Hopliet 42") i.p.v. verplichte vrije tekst — voorkomt dat leerlingen
   // gedwongen worden een herkenbare of ongepaste naam te typen.
@@ -1244,7 +1249,20 @@ async function bmIdentDoLogin(klas,lcode,name){
       const valid=await fbDB.ref("klascodes/"+klas).once("value");
       if(!valid.exists()) return{ok:false,error:"Klascode '"+klas+"' is onbekend. Vraag je docent om de juiste code."};
     }
-    if(!data)data=await bmIdentCreate(klas,lcode,name);
+    // Wachtwoord (net.js "Leerlingwachtwoorden"): bestaand profiel mét hash →
+    // controleren; nieuw profiel of oud profiel zónder hash → het ingevulde
+    // wachtwoord wordt het wachtwoord (minstens KT_PW_MIN tekens).
+    if(data && data.pwHash){
+      if(!(await ktPwCheck(data.pwHash,klas,lcode,pw)))
+        return{ok:false,error:"Onjuist wachtwoord. Vraag je docent om je wachtwoord, of log in met Google als je dat hebt gekoppeld."};
+    }else if(pw.length<KT_PW_MIN){
+      return{ok:false,error:isNew
+        ? "Kies een wachtwoord van minstens "+KT_PW_MIN+" tekens."
+        : "Dit profiel heeft nog geen wachtwoord. Vul nu een wachtwoord in (minstens "+KT_PW_MIN+" tekens) — dat wordt je wachtwoord."};
+    }
+    if(!data)data=await bmIdentCreate(klas,lcode,name,pw);
+    else if(!data.pwHash&&fbDB){ data={...data,pwHash:await ktPwStore(klas,lcode,pw)}; }
+    if(!isNew&&fbDB) fbDB.ref("identities/"+klas+"/"+lcode+"/lastActive").set(Date.now()).catch(()=>{});
     // Eenmalige migratie: lokaal profiel importeren als Firebase-identiteit nieuw is
     if(isNew&&fbDB){
       const localXp=P.xp||0, localCorrect=P.stats?.totalCorrect||0;
@@ -1271,10 +1289,10 @@ function bmAutoName(){
   return pick(BM_CLASSES).nm+" "+(1+rand(99));
 }
 async function bmIdentLogin(){
-  const klas=el("bmKlas")?.value, lcode=el("bmLcode")?.value, name=el("bmNaam")?.value;
+  const klas=el("bmKlas")?.value, lcode=el("bmLcode")?.value, name=el("bmNaam")?.value, pw=el("bmPw")?.value;
   const err=el("bmIdentErr");
   if(err)err.style.display="none";
-  const r=await bmIdentDoLogin(klas,lcode,name);
+  const r=await bmIdentDoLogin(klas,lcode,name,pw);
   if(!r.ok){ if(err){err.textContent=r.error;err.style.display="";} return; }
   go(BM_IDENT_RETURN||"battleJoin");
 }
@@ -1282,6 +1300,7 @@ async function bmIdentContinue(){
   const saved=bmIdentLoad(); if(!saved){SCREENS.battleIdentity();return;}
   BM_IDENT=saved;
   try{const d=await bmIdentGet(saved.klascode,saved.leerlingcode);if(d){BM_IDENT={...saved,...d};bmIdentSave({...saved,...d});}}catch(e){}
+  if(fbDB) fbDB.ref("identities/"+saved.klascode+"/"+saved.leerlingcode+"/lastActive").set(Date.now()).catch(()=>{});
   go(BM_IDENT_RETURN||"battleJoin");
 }
 
@@ -1315,6 +1334,7 @@ async function bmGoogleFinishLogin(uid){
   if(!data) return {ok:false, error:"Gekoppeld profiel niet gevonden."};
   BM_IDENT={klascode:link.klas, leerlingcode:link.lid, ...data, avatar:bmAvatarMerge(data.avatar)};
   bmIdentSave({klascode:link.klas, leerlingcode:link.lid, ...data});
+  if(fbDB) fbDB.ref("identities/"+link.klas+"/"+link.lid+"/lastActive").set(Date.now()).catch(()=>{});
   return {ok:true};
 }
 async function bmGoogleLoginFresh(){

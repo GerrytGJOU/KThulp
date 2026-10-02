@@ -18,6 +18,8 @@
           "xp": { ".validate": "newData.isNumber() && newData.val() >= 0" },
           "level": { ".validate": "newData.isNumber() && newData.val() >= 1" },
           "battles": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+          "lastActive": { ".validate": "newData.isNumber()" },
+          "pwHash": { ".validate": "newData.isString() && newData.val().length <= 200" },
           "apps": {
             "$appId": {
               ".validate": "newData.hasChildren(['score']) && newData.child('score').isNumber()",
@@ -38,6 +40,16 @@
             ".write": "auth != null && ((newData.exists() && root.child('identities/'+$klas+'/'+$lid+'/googleUid').val() === auth.uid) || (!newData.exists() && !root.child('identities/'+$klas+'/'+$lid+'/googleUid').exists()))",
             ".validate": "newData.isString() && newData.val().length <= 200"
           }
+        }
+      }
+    },
+    "studentSecrets": {
+      "$klas": {
+        ".read": "auth != null && root.child('klascodes/'+$klas+'/ownerUid').val() === auth.uid",
+        "$lid": {
+          ".read": "auth != null && root.child('googleLinks/'+auth.uid+'/klas').val() === $klas && root.child('googleLinks/'+auth.uid+'/lid').val() === $lid",
+          ".write": true,
+          ".validate": "newData.isString() && newData.val().length >= 4 && newData.val().length <= 40"
         }
       }
     },

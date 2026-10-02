@@ -148,7 +148,7 @@ FBNet.handleTeacherGoogleRedirect = function(){
   }).catch(err=>{
     const code = err && err.code;
     const msg = code==="auth/credential-already-in-use"
-      ? "Dit Google-account is al gekoppeld aan een ander docentaccount."
+      ? "Dit Google-account hoort al bij een ander account (bv. een leerlingprofiel of ander docentaccount). Gebruik een ander Google-account."
       : code==="auth/email-already-in-use"
         ? "Er bestaat al een docentaccount met dit e-mailadres — log eerst in met e-mail/wachtwoord en koppel Google daarna."
         : ("Google-koppeling mislukt: "+(err.message||code||"onbekende fout"));
@@ -664,6 +664,93 @@ async function bmGoogleRemoveLink(uid, klas, lid){
   }catch(e){ return {ok:false, error:"Ontkoppelen mislukt: "+(e?.message||e||"onbekende fout")}; }
 }
 
+/* ---- Leerlingwachtwoorden (sinds 2026-10-02) ----
+   Leerlingen loggen nog steeds NIET in via Firebase Auth (zie CLAUDE.md §
+   Firebase-rules) — het wachtwoord is een tweede gedeeld geheim náást de
+   leerlingcode, bedoeld om te voorkomen dat een klasgenoot "even" inlogt op
+   andermans profiel door diens leerlingcode te raden. Het is dus GEEN harde
+   beveiliging: identities/{klas}/{lid} blijft wereld-schrijfbaar.
+   Opslag:
+   - identities/{klas}/{lid}/pwHash = "v1$<salt>$<sha256-hex>" — wereld-
+     leesbaar maar gehasht; alleen hiermee wordt bij het inloggen gecontroleerd.
+   - studentSecrets/{klas}/{lid} = het wachtwoord zelf, ALLEEN leesbaar voor de
+     docent-eigenaar van de klas en (via googleLinks) voor de leerling zelf nadat
+     die met Google is ingelogd — zodat een docent het kan opzoeken en een
+     leerling met Google-koppeling het zelf kan terugzien. Schrijven is open
+     (leerlingen hebben geen auth), zelfde vertrouwensniveau als de rest.
+   assets/site-auth.js heeft een eigen kopie van deze helpers (zelfde afspraak
+   als de rest van het inlogsysteem). */
+const KT_PW_MIN = 4;
+async function ktSha256Hex(str){
+  if(!(window.crypto && crypto.subtle)) throw new Error("Wachtwoorden vereisen een beveiligde verbinding (https).");
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+async function ktPwMake(klas, lid, pw){
+  const salt = Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b=>b.toString(16).padStart(2,"0")).join("");
+  return "v1$"+salt+"$"+await ktSha256Hex(salt+"|"+klas+"|"+lid+"|"+pw);
+}
+async function ktPwCheck(stored, klas, lid, pw){
+  const m = /^v1\$([0-9a-f]+)\$([0-9a-f]{64})$/.exec(stored||"");
+  if(!m) return false;
+  return (await ktSha256Hex(m[1]+"|"+klas+"|"+lid+"|"+pw)) === m[2];
+}
+// Leesbaar, zonder verwarrende tekens (0/O, 1/l/I) — voor door de docent
+// gegenereerde (reset-)wachtwoorden.
+function ktPwGenerate(){
+  const abc="abcdefghjkmnpqrstuvwxyz23456789";
+  const a=crypto.getRandomValues(new Uint8Array(6));
+  return Array.from(a).map(b=>abc[b%abc.length]).join("");
+}
+// Schrijft hash (identiteit) + leesbare kopie (studentSecrets) weg.
+async function ktPwStore(klas, lid, pw){
+  if(!fbDB) initFirebase();
+  const hash = await ktPwMake(klas, lid, pw);
+  await fbDB.ref("identities/"+klas+"/"+lid+"/pwHash").set(hash);
+  await fbDB.ref("studentSecrets/"+klas+"/"+lid).set(pw);
+  return hash;
+}
+// Docent: haalt alle wachtwoorden van één (eigen) klas op — {lid: wachtwoord}.
+// Mislukt stil (lege lijst) voor klassen waar de rules geen leesrecht geven.
+FBNet.getStudentSecrets = function(klas){
+  if(!fbDB) initFirebase();
+  return fbDB.ref("studentSecrets/"+klas.toUpperCase()).once("value").then(s=>s.val()||{}).catch(()=>({}));
+};
+// Docent: nieuw (gegenereerd) wachtwoord voor één leerling, geeft het terug.
+FBNet.resetStudentPassword = async function(klas, lid){
+  klas=klas.toUpperCase();
+  const pw = ktPwGenerate();
+  await ktPwStore(klas, lid, pw);
+  return pw;
+};
+// Leerling met Google-koppeling: eigen wachtwoord terugzien. Werkt alleen als
+// er een Firebase-sessie van DAT gekoppelde Google-account actief is
+// (rules: studentSecrets/$klas/$lid.read via googleLinks/{uid}).
+async function ktPwReveal(klas, lid){
+  if(!initFirebase()) return {ok:false, error:"Firebase niet beschikbaar."};
+  const u = firebase.auth().currentUser;
+  const isGoogle = !!(u && (u.providerData||[]).some(p=>p.providerId==="google.com"));
+  if(!isGoogle) return {ok:false, needGoogle:true};
+  try{
+    const snap = await fbDB.ref("studentSecrets/"+klas+"/"+lid).once("value");
+    if(!snap.exists()) return {ok:false, error:"Er is nog geen wachtwoord ingesteld voor dit profiel."};
+    return {ok:true, pw:snap.val()};
+  }catch(e){
+    return {ok:false, needGoogle:true, error:"Log in met het Google-account dat aan dit profiel is gekoppeld."};
+  }
+}
+// Leerling: wachtwoord wijzigen — oud wachtwoord vereist (of een eerst via
+// Google herstelde sessie, dan mag oldPw leeg blijven: oldPw===null).
+async function ktPwChange(klas, lid, oldPw, newPw){
+  if(!initFirebase()) return {ok:false, error:"Firebase niet beschikbaar."};
+  if((newPw||"").length<KT_PW_MIN) return {ok:false, error:"Kies een wachtwoord van minstens "+KT_PW_MIN+" tekens."};
+  const snap = await fbDB.ref("identities/"+klas+"/"+lid+"/pwHash").once("value");
+  if(oldPw!==null && snap.exists() && !(await ktPwCheck(snap.val(), klas, lid, oldPw||"")))
+    return {ok:false, error:"Het huidige wachtwoord klopt niet."};
+  await ktPwStore(klas, lid, newPw);
+  return {ok:true};
+}
+
 /* ---- DemoNet: in-memory spiegel voor oefenmodus ---- */
 let _demoTeacherLoggedIn = false;
 let _demoClasses = {
@@ -706,6 +793,8 @@ DemoNet.grantAdmin      = function(){ return Promise.reject("Niet beschikbaar in
 DemoNet.assignStudent   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.signupTeacher   = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.resetTeacherPassword = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
+DemoNet.getStudentSecrets    = function(){ return Promise.resolve({}); };
+DemoNet.resetStudentPassword = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.linkTeacherGoogle    = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.loginTeacherWithGoogle = function(){ return Promise.reject("Niet beschikbaar in demo-modus."); };
 DemoNet.handleTeacherGoogleRedirect = function(){ return Promise.resolve({ok:true, handled:false}); };

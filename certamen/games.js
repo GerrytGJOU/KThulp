@@ -961,6 +961,15 @@ function syncStatusHTML(bmIdent){
         <div class="note">Koppel je Google-account om op een nieuw toestel in te loggen zonder codes te typen.</div>
         <button class="btn btn-gold" style="font-size:13px;margin-top:8px" onclick="bmGoogleLinkCurrentIdent().then(()=>SCREENS.collection())">Koppel Google-account</button>
         `}
+      </div>
+      <div class="panel" style="text-align:center;padding:10px 16px;margin-top:6px">
+        <div class="note">Wachtwoord van je profiel</div>
+        <div id="gpPwShown" class="note" style="margin-top:6px"></div>
+        <div class="btnrow" style="justify-content:center;margin-top:8px">
+          <button class="btn btn-ghost" style="font-size:13px" onclick="gpChangePw()">Wijzig wachtwoord</button>
+          ${g?`<button class="btn btn-ghost" style="font-size:13px" onclick="gpRevealPw()">Toon mijn wachtwoord</button>`:""}
+        </div>
+        ${g?`<div class="note" style="margin-top:6px;font-size:12px">Wachtwoord vergeten? "Toon mijn wachtwoord" laat het zien nadat je met je gekoppelde Google-account hebt ingelogd.</div>`:`<div class="note" style="margin-top:6px;font-size:12px">Wachtwoord vergeten? Vraag het je docent — of koppel hierboven je Google-account, dan kun je het zelf terugzien.</div>`}
       </div>`;
   }
   if(!_gpLinkOpen){
@@ -974,6 +983,8 @@ function syncStatusHTML(bmIdent){
     <input id="gpKlas" type="text" placeholder="bv. LATIJN3B" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
     <label class="fld" style="margin-top:12px">Leerlingcode (zelf gekozen)</label>
     <input id="gpLcode" type="text" placeholder="bv. marcus42">
+    <label class="fld" style="margin-top:12px">Wachtwoord <small style="text-transform:none">(nieuw profiel of nog geen wachtwoord: kies er nu een, minstens ${KT_PW_MIN} tekens)</small></label>
+    <input id="gpPw" type="password" autocomplete="current-password" placeholder="Wachtwoord">
     <label class="fld" style="margin-top:12px">Weergavenaam</label>
     <input id="gpNaam" type="text" placeholder="bv. Marcus">
     <div id="gpLinkErr" class="note warn" style="display:none;margin-top:8px"></div>
@@ -983,12 +994,37 @@ function syncStatusHTML(bmIdent){
     </div>
   </div>`;
 }
+// Toont het eigen wachtwoord — alleen mogelijk met een actieve sessie van het
+// gekoppelde Google-account (rules: studentSecrets via googleLinks). Zonder die
+// sessie sturen we door naar Google; na terugkomst klikt de leerling nogmaals.
+async function gpRevealPw(){
+  const ident=bmIdentLoad(); if(!ident) return;
+  const r=await ktPwReveal(ident.klascode, ident.leerlingcode);
+  const box=el("gpPwShown");
+  if(r.ok){ if(box) box.innerHTML=`Je wachtwoord: <b style="font-size:16px">${esc(r.pw)}</b>`; return; }
+  if(r.needGoogle){
+    toast("Log in met Google","Je wordt doorgestuurd. Klik daarna nogmaals op 'Toon mijn wachtwoord'.");
+    await bmGoogleSignIn({action:"login", returnScreen:"collection"});
+    return;
+  }
+  toast("Niet gelukt", r.error||"");
+}
+async function gpChangePw(){
+  const ident=bmIdentLoad(); if(!ident) return;
+  const oldPw=prompt("Huidig wachtwoord (laat leeg als je nog geen wachtwoord had):");
+  if(oldPw===null) return;
+  const nw=prompt("Nieuw wachtwoord (minstens "+KT_PW_MIN+" tekens):");
+  if(nw===null) return;
+  const r=await ktPwChange(ident.klascode, ident.leerlingcode, oldPw, nw);
+  if(!r.ok){ toast("Niet gewijzigd", r.error); return; }
+  toast("Wachtwoord gewijzigd","Gebruik vanaf nu je nieuwe wachtwoord.");
+}
 async function gpLinkProfile(){
   if(typeof bmIdentDoLogin!=="function")return;
-  const klas=el("gpKlas")?.value, lcode=el("gpLcode")?.value, name=el("gpNaam")?.value;
+  const klas=el("gpKlas")?.value, lcode=el("gpLcode")?.value, name=el("gpNaam")?.value, pw=el("gpPw")?.value;
   const err=el("gpLinkErr");
   if(err)err.style.display="none";
-  const r=await bmIdentDoLogin(klas,lcode,name);
+  const r=await bmIdentDoLogin(klas,lcode,name,pw);
   if(!r.ok){ if(err){err.textContent=r.error;err.style.display="";} return; }
   _gpLinkOpen=false;
   toast("Gekoppeld!","Je XP loopt nu gelijk op al je toestellen.");
@@ -1146,7 +1182,10 @@ SCREENS.teacherPortal = function(){
   </div>
   <div class="note" style="text-align:center;padding:20px">Status controleren…</div>
   ${foot()}`);
-  Promise.all([teacherNet().isAdmin(), teacherNet().getTeacherStatus()]).then(([isAdmin, status])=>{
+  // reload(): ververst currentUser.providerData (bevat google.com na een koppeling) —
+  // anders kan een net gekoppeld account nog als "niet gekoppeld" getoond worden.
+  const refreshUser = hasFirebase ? (firebase.auth().currentUser?.reload?.()||Promise.resolve()).catch(()=>{}) : Promise.resolve();
+  Promise.all([teacherNet().isAdmin(), teacherNet().getTeacherStatus(), refreshUser]).then(([isAdmin, status])=>{
     if(_screen!=="teacherPortal") return;
     _tpIsAdmin = !!isAdmin;
     const approved = isAdmin || (status && status.status==="approved");
@@ -1178,8 +1217,10 @@ function tpRenderPortalContent(){
   <div class="scrhead">
     <button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button>
     <h2>Docentenportaal</h2>
-    ${hasGoogle?"":`<button class="chip" style="margin-left:auto" onclick="teacherDoLinkGoogle()">Koppel Google</button>`}
-    <button class="chip" style="${hasGoogle?"margin-left:auto":""}" onclick="teacherLogout()">Uitloggen</button>
+    ${hasGoogle
+      ? `<button class="chip" style="margin-left:auto;color:var(--ok,#8fbf7a)" onclick="teacherGoogleInfo()">✓ Google gekoppeld</button>`
+      : `<button class="chip" style="margin-left:auto" onclick="teacherDoLinkGoogle()">Koppel Google</button>`}
+    <button class="chip" onclick="teacherLogout()">Uitloggen</button>
   </div>
   <div id="tpClassList"><div class="note" style="text-align:center;padding:20px">Klassen laden…</div></div>
   <button class="btn btn-gold btn-block" style="margin-top:10px" onclick="teacherAddClass()">+ Nieuwe klas</button>
@@ -1458,8 +1499,19 @@ function teacherLogout(){
 }
 
 function teacherDoLinkGoogle(){
-  teacherNet().linkTeacherGoogle?.()
-    .catch(e=>toast("Koppelen mislukt",typeof e==="string"?e:(e?.message||"")));
+  toast("Doorsturen naar Google…","Kies het Google-account dat je wilt koppelen.");
+  Promise.resolve(teacherNet().linkTeacherGoogle?.())
+    .catch(e=>{
+      const code=e&&e.code;
+      const msg = code==="auth/provider-already-linked" ? "Er is al een Google-account aan dit docentaccount gekoppeld."
+        : code==="auth/credential-already-in-use" ? "Dit Google-account hoort al bij een ander account (bv. een leerlingprofiel). Gebruik een ander Google-account."
+        : (typeof e==="string"?e:(e?.message||"Onbekende fout."));
+      toast("Koppelen mislukt",msg);
+    });
+}
+function teacherGoogleInfo(){
+  const g=(firebase.auth().currentUser?.providerData||[]).find(p=>p.providerId==="google.com");
+  toast("Google gekoppeld", g&&g.email ? "Gekoppeld aan "+g.email+". Je kunt voortaan ook inloggen met Google." : "Je kunt voortaan ook inloggen met Google.");
 }
 
 /* ============================================================
@@ -1655,7 +1707,7 @@ SCREENS.teacherClass = function(){
     <button class="back" onclick="go('teacherPortal')">${iconSVG("shield",20,"currentColor")}</button>
     <h2>${esc(g.name)}</h2>
   </div>
-  <div class="note" style="margin:-4px 0 10px">Inlogcode: <b>${esc(code)}</b> — leerlingen die deze code invoeren komen automatisch in deze klas.</div>
+  <div class="note" style="margin:-4px 0 10px">Inlogcode: <b>${esc(code)}</b> <button class="chip" style="padding:2px 8px" title="Kopieer klascode" onclick="tpCopy('${esc(code)}')">Kopieer</button> — leerlingen die deze code invoeren komen automatisch in deze klas.</div>
   <div id="tpMissedWords"></div>
   <div id="tpChronicaStats"></div>
   <div id="tpStudentList"><div class="note" style="text-align:center;padding:16px">Laden…</div></div>
@@ -1742,11 +1794,53 @@ function tpRenderChronicaAnalytics(){
 }
 
 // Laadt de echte leerlingprofielen (identities/{code}) van de open klas.
+let _tpSecrets = {};        // {leerlingcode: wachtwoord} van de open klas (studentSecrets, alleen eigen klassen)
 function tpLoadRoster(){
   const code=_tpCurrentClass;
-  return teacherNet().getIdentities(code)
-    .then(idents=>{ _tpRoster=idents||{}; tpRenderRoster(); tpRenderOtherApps(); })
-    .catch(()=>{ _tpRoster={}; tpRenderRoster(); tpRenderOtherApps(); }); // "niet gevonden" = nog geen leden
+  return Promise.all([
+      teacherNet().getIdentities(code).catch(()=>({})), // "niet gevonden" = nog geen leden
+      teacherNet().getStudentSecrets(code)
+    ])
+    .then(([idents,secrets])=>{ _tpRoster=idents||{}; _tpSecrets=secrets||{}; tpRenderRoster(); tpRenderOtherApps(); })
+    .catch(()=>{ _tpRoster={}; _tpSecrets={}; tpRenderRoster(); tpRenderOtherApps(); });
+}
+
+// "Laatst actief" per leerling: expliciete lastActive-stempel (login, gevecht,
+// Training, score-sync) of — voor profielen van vóór die stempel bestond — de
+// nieuwste updatedAt van een app-score.
+function tpLastActive(s){
+  let t=s.lastActive||0;
+  Object.values(s.apps||{}).forEach(a=>{ if(a && a.updatedAt>t) t=a.updatedAt; });
+  return t;
+}
+function tpFormatAgo(ts){
+  if(!ts) return "nog nooit";
+  const d=Math.floor((Date.now()-ts)/86400000);
+  if(d<1) return "vandaag";
+  if(d===1) return "gisteren";
+  if(d<14) return d+" dagen geleden";
+  return new Date(ts).toLocaleDateString("nl-NL");
+}
+// Kopieert tekst naar het klembord (met terugval voor iPad/oudere browsers waar
+// navigator.clipboard ontbreekt of geweigerd wordt).
+function tpCopy(text){
+  const done=()=>toast("Gekopieerd",text);
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>tpCopyFallback(text,done));
+  } else tpCopyFallback(text,done);
+}
+function tpCopyFallback(text,done){
+  const ta=document.createElement("textarea");
+  ta.value=text; ta.setAttribute("readonly",""); ta.style.cssText="position:fixed;top:-1000px";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); done(); }catch(e){ toast("Kopiëren mislukt","Selecteer de code en kopieer 'm handmatig."); }
+  ta.remove();
+}
+function tpResetStudentPw(code,lid,nm){
+  if(!confirm("Nieuw wachtwoord voor '"+nm+"' genereren? Het oude wachtwoord werkt daarna niet meer.")) return;
+  teacherNet().resetStudentPassword(code,lid)
+    .then(pw=>{ toast("Nieuw wachtwoord voor "+nm, pw); return tpLoadRoster(); })
+    .catch(e=>toast("Mislukt",typeof e==="string"?e:(e?.message||"")));
 }
 
 // "Overige apps"-paneel: elke leerling in het al geladen _tpRoster kan een
@@ -1786,10 +1880,20 @@ function tpRenderRoster(){
     const nm=s.name||lid;
     const lv=s.level||1;
     const selId="tpmv_"+i;
+    const pw=(_tpSecrets||{})[lid];
+    const la=tpLastActive(s);
     return `<div class="panel" style="margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
       <div style="flex:1;min-width:130px">
         <div style="font-weight:600">${esc(nm)}${s.admin?`<span class="pill" style="margin-left:6px;background:var(--hi);color:#000;border:none;font-size:11px">admin</span>`:""}</div>
-        <div class="note">Niveau ${lv}${s.coins?" · "+s.coins+" munten":""} · code ${esc(lid)}</div>
+        <div class="note">Niveau ${lv}${s.coins?" · "+s.coins+" munten":""} · laatst actief: ${esc(tpFormatAgo(la))}</div>
+        <div class="note" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:2px">
+          code <b>${esc(lid)}</b>
+          <button class="chip" style="padding:2px 8px" title="Kopieer leerlingcode" onclick="tpCopy(${q(lid)})">Kopieer</button>
+          ${pw
+            ? `· wachtwoord <b>${esc(pw)}</b> <button class="chip" style="padding:2px 8px" title="Kopieer wachtwoord" onclick="tpCopy(${q(pw)})">Kopieer</button>`
+            : (s.pwHash ? `· wachtwoord onbekend (door leerling gewijzigd?)` : `· nog geen wachtwoord`)}
+          <button class="chip" style="padding:2px 8px" onclick="tpResetStudentPw(${q(code)},${q(lid)},${q(nm)})">${pw||s.pwHash?"Nieuw wachtwoord":"Wachtwoord instellen"}</button>
+        </div>
       </div>
       <button class="chip" onclick="tpRenameStudent(${q(code)},${q(lid)},${q(nm)})">${iconSVG("column",13,"currentColor")} Naam</button>
       ${moveOpts?`
