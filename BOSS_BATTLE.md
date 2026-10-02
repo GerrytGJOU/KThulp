@@ -142,6 +142,22 @@ Normal): Boss HP = 3.000. Beide voelen relatief even zwaar aan.
 > geen Labyrinth-woordenpuzzel); Minotaurus gaat in Enrage (elke ronde
 > aanvallen i.p.v. de normale cadans) zodra zijn Labyrinth-schild breekt of
 > fase 3 bereikt wordt.
+>
+> **Minotaurus-Enrage herzien (2026-10-02):** Enrage is nu een blijvende
+> toestand (`boss.enraged`; voorheen gold het door een fout alleen in de
+> breekronde en in fase 3, en ging het alleen om de cadans, die vanaf fase 2
+> toch al elke ronde is). In Enrage doet elke basisaanval
+> `BOSS_ENRAGE_DMG_MULT` (×1,35) schade, en vangt gezamenlijk schild er tot
+> `BOSS_ENRAGE_MAX_BLOCK` (80%) van op — naar verhouding van
+> `bmBossShieldNeed()` (zelfde drempel als de Cycloop-maaltijd, ≈1,2×N).
+> Gewone schilden houden baasklappen verder níet tegen, dus dit is dé
+> overleg-tegenzet; iedereen krijgt tijdens Enrage ook de gratis actie
+> 🛡️ Schild heffen. Meldingen: kaart `boss_enrage` ("Het Labyrinth is
+> doorbroken!"), blijvende Enrage-banner (host + leerling-actiepaneel),
+> drijvend "🛡️ X opgevangen". Balans getoetst met een simulatie die op een
+> echt gewonnen Cycloop-gevecht (7 lln, 28 rondes) was gekalibreerd: zonder
+> schild verliest de klas, met ~30% van de klas op schild wint ze krap
+> (≈ samenwerkende klas vs. Cycloop), met meer schild veilig maar trager.
 
 Drie startbazen, elk met een uniek patroon (Grieks-Romeinse mythologie) —
 **origineel docx-ontwerp**, zie de waarschuwing hierboven voor het verschil
