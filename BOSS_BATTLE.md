@@ -364,10 +364,11 @@ schaming:
   §4). Categorie wordt weggelaten als niemand een handlanger heeft geraakt
   (bv. een gevecht dat in fase 1 eindigde).
 - **Medic van het Legioen** — meeste healing (`p.healing`, al bestaand).
-- **Combo Koning** — **herinterpretatie**: vaakst bijdrager aan een ronde die
+- **Schouder aan Schouder** (heette tot 2026-10-02 "Combo Koning"; hernoemd
+  omdat leerlingen het verwarden met echte klasse-combo's) — **herinterpretatie**: vaakst bijdrager aan een ronde die
   de brede-deelname-bonus haalde (zie §5.1), i.p.v. de nooit gebouwde
   Class-Combo-keten-telling. Nieuw per-speler veld `chainCount`.
-  Let op: dit is dus níet hetzelfde als de 🤝 Combo-kolom in het
+  Dit is dus níet hetzelfde als de 🤝 Combo-kolom in het
   Klassenoverzicht (sinds 2026-10-02, gedeeld met Team vs Team — zie
   BATTLE_MODE.md "Analytics"): die telt echte klasse-combo's (`BM_COMBOS`,
   `combo`-events in de log) en staat er zodra combo's in de instellingen
