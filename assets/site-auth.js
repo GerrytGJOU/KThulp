@@ -124,27 +124,118 @@
   const listeners = [];
   function notifyChange(){ listeners.forEach(cb=>{ try{ cb(); }catch(e){} }); }
 
-  async function loginStudent(klas, code, naam){
+  /* ---- Leerlingwachtwoorden — eigen kopie van de helpers in certamen/net.js
+     (zie het commentaarblok "Leerlingwachtwoorden" daar voor opslag en
+     beveiligingsniveau: pwHash op de identiteit, leesbare kopie in
+     studentSecrets/{klas}/{lid} voor docent-eigenaar of Google-gekoppelde
+     leerling). Houd beide kopieën gelijk. ---- */
+  const PW_MIN = 4;
+  async function sha256Hex(str){
+    if(!(window.crypto && crypto.subtle)) throw new Error("Wachtwoorden vereisen een beveiligde verbinding (https).");
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+  async function pwMake(klas, lid, pw){
+    const salt = Array.from(crypto.getRandomValues(new Uint8Array(8))).map(b=>b.toString(16).padStart(2,"0")).join("");
+    return "v1$"+salt+"$"+await sha256Hex(salt+"|"+klas+"|"+lid+"|"+pw);
+  }
+  async function pwCheck(stored, klas, lid, pw){
+    const m = /^v1\$([0-9a-f]+)\$([0-9a-f]{64})$/.exec(stored||"");
+    if(!m) return false;
+    return (await sha256Hex(m[1]+"|"+klas+"|"+lid+"|"+pw)) === m[2];
+  }
+  async function pwStore(db, klas, lid, pw){
+    const hash = await pwMake(klas, lid, pw);
+    await db.ref("identities/"+klas+"/"+lid+"/pwHash").set(hash);
+    await db.ref("studentSecrets/"+klas+"/"+lid).set(pw);
+    return hash;
+  }
+
+  async function loginStudent(klas, code, naam, password){
     klas = (klas||"").trim().toUpperCase();
-    code = (code||"").trim().toUpperCase();
+    code = (code||"").trim();
+    password = password||"";
     if(!klas || !code) throw new Error("Vul klascode en leerlingcode in.");
     const { db } = await ensureFirebase();
     const ok = await db.ref("klascodes/"+klas).once("value").then(s=>s.exists());
     if(!ok) throw new Error("Klascode '"+klas+"' niet gevonden.");
-    const snap = await db.ref("identities/"+klas+"/"+code).once("value");
+    // Certamen slaat leerlingcodes in kleine letters op, deze widget deed dat
+    // vroeger in hoofdletters — zoek daarom eerst de kleine-letter-variant en
+    // val terug op een bestaand hoofdletterprofiel; een nieuw profiel wordt
+    // altijd in kleine letters aangemaakt (dus gelijk aan Certamen).
+    let lid = code.toLowerCase();
+    let snap = await db.ref("identities/"+klas+"/"+lid).once("value");
+    if(!snap.exists() && code.toUpperCase()!==lid){
+      const alt = await db.ref("identities/"+klas+"/"+code.toUpperCase()).once("value");
+      if(alt.exists()){ snap = alt; lid = code.toUpperCase(); }
+    }
     let data;
     if(snap.exists()){
       data = snap.val();
+      if(data.pwHash){
+        if(!(await pwCheck(data.pwHash, klas, lid, password)))
+          throw new Error("Onjuist wachtwoord. Vraag je docent om je wachtwoord, of log in met Google als je dat hebt gekoppeld.");
+      }else{
+        if(password.length<PW_MIN) throw new Error("Dit profiel heeft nog geen wachtwoord. Vul nu een wachtwoord in (minstens "+PW_MIN+" tekens) — dat wordt je wachtwoord.");
+        data = { ...data, pwHash: await pwStore(db, klas, lid, password) };
+      }
+      db.ref("identities/"+klas+"/"+lid+"/lastActive").set(Date.now()).catch(()=>{});
     }else{
       if(!naam || !naam.trim()) throw new Error("Nieuw profiel: vul ook je naam in.");
-      data = { name: naam.trim(), coins:0, xp:0, battles:0, level:1, classHistory:{}, achievements:[] };
-      await db.ref("identities/"+klas+"/"+code).set(data);
+      if(password.length<PW_MIN) throw new Error("Kies een wachtwoord van minstens "+PW_MIN+" tekens.");
+      data = { name: naam.trim(), coins:0, xp:0, battles:0, level:1, classHistory:{}, achievements:[],
+               lastActive:Date.now(), pwHash: await pwMake(klas, lid, password) };
+      await db.ref("identities/"+klas+"/"+lid).set(data);
+      db.ref("studentSecrets/"+klas+"/"+lid).set(password).catch(()=>{});
       db.ref("usedKlascodes/"+klas).transaction(cur=>(cur||0)+1).catch(()=>{});
     }
-    const ident = { klascode:klas, leerlingcode:code, ...data };
+    const ident = { klascode:klas, leerlingcode:lid, ...data };
     identSave(ident);
     notifyChange();
     return ident;
+  }
+  // Leerling: wachtwoord wijzigen. Oud wachtwoord vereist, tenzij het profiel er
+  // nog geen heeft (dan mag oldPw leeg blijven).
+  async function changeStudentPassword(oldPw, newPw){
+    const ident = identLoad();
+    if(!ident) throw new Error("Log eerst in als leerling.");
+    if((newPw||"").length<PW_MIN) throw new Error("Kies een wachtwoord van minstens "+PW_MIN+" tekens.");
+    const { db } = await ensureFirebase();
+    const snap = await db.ref("identities/"+ident.klascode+"/"+ident.leerlingcode+"/pwHash").once("value");
+    if(snap.exists() && !(await pwCheck(snap.val(), ident.klascode, ident.leerlingcode, oldPw||"")))
+      throw new Error("Het huidige wachtwoord klopt niet.");
+    const hash = await pwStore(db, ident.klascode, ident.leerlingcode, newPw);
+    identSave({ ...ident, pwHash:hash });
+  }
+  // Leerling mét Google-koppeling: eigen wachtwoord terugzien. Vereist een
+  // sessie van het gekoppelde Google-account (rules: studentSecrets via
+  // googleLinks) — zo nodig sturen we eerst door naar Google (redirect) en
+  // toont de profielpagina het wachtwoord automatisch na terugkomst.
+  const REVEAL_FLAG = "kt_reveal_pw";
+  async function revealStudentPassword(){
+    const ident = identLoad();
+    if(!ident) throw new Error("Log eerst in als leerling.");
+    const { auth, db } = await ensureFirebase();
+    const u = auth.currentUser;
+    if(u && (u.providerData||[]).some(p=>p.providerId==="google.com")){
+      try{
+        const s = await db.ref("studentSecrets/"+ident.klascode+"/"+ident.leerlingcode).once("value");
+        sessionStorage.removeItem(REVEAL_FLAG);
+        if(s.exists()) return { ok:true, pw:s.val() };
+        return { ok:false, error:"Er is nog geen wachtwoord ingesteld voor dit profiel." };
+      }catch(e){
+        // Verkeerd Google-account (rules weigeren): niet blijven doorsturen.
+        if(sessionStorage.getItem(REVEAL_FLAG)==="back"){
+          sessionStorage.removeItem(REVEAL_FLAG);
+          return { ok:false, error:"Dit is niet het Google-account dat aan dit profiel is gekoppeld." };
+        }
+      }
+    }
+    try{ sessionStorage.setItem(REVEAL_FLAG, "back"); localStorage.setItem(GOOGLE_REDIRECT_KEY, JSON.stringify({action:"reveal", klas:ident.klascode, lid:ident.leerlingcode})); }catch(e){}
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({prompt:"select_account"});
+    await auth.signInWithRedirect(provider);
+    return { ok:false, redirecting:true };
   }
   function logoutStudent(){ identClear(); notifyChange(); }
 
@@ -230,7 +321,7 @@
       const code = err && err.code;
       if(!code) return { ok:true, handled:false };
       const msg = code==="auth/credential-already-in-use"
-        ? "Dit Google-account is al gekoppeld aan een ander docentaccount."
+        ? "Dit Google-account hoort al bij een ander account (bv. een leerlingprofiel of ander docentaccount). Gebruik een ander Google-account."
         : code==="auth/email-already-in-use"
           ? "Er bestaat al een docentaccount met dit e-mailadres — log eerst in met e-mail/wachtwoord en koppel Google daarna."
           : ("Google-koppeling mislukt: "+(err.message||code));
@@ -292,6 +383,9 @@
       });
     }
     if(!user) return false;
+    // Alleen "wachtwoord terugzien" (revealStudentPassword): de Google-sessie is
+    // genoeg — niets koppelen of wegschrijven.
+    if(intent.action==="reveal"){ notifyChange(); return true; }
     const uid=user.uid, email=user.email||"";
     const identSnap = await db.ref("identities/"+intent.klas+"/"+intent.lid+"/googleUid").once("value");
     if(identSnap.exists() && identSnap.val()!==uid) throw new Error("Dit profiel is al gekoppeld aan een ander Google-account. Ontkoppel eerst.");
@@ -358,6 +452,7 @@
       };
       if(payload.stats && typeof payload.stats === "object") data.stats = payload.stats;
       await db.ref("identities/"+ident.klascode+"/"+ident.leerlingcode+"/apps/"+appId).update(data);
+      db.ref("identities/"+ident.klascode+"/"+ident.leerlingcode+"/lastActive").set(Date.now()).catch(()=>{});
       return true;
     }catch(e){ return false; } // sync mag nooit de app zelf breken
   }
@@ -386,7 +481,7 @@
       }else if(teacher){
         if(statusCache.uid !== teacher.uid){
           el.innerHTML = '<div class="ktaBar"><span class="ktaWho">👩‍🏫 '+esc(teacher.email)+'</span></div>';
-          Promise.all([getTeacherStatus(), isAdmin()]).then(([status, admin])=>{
+          Promise.all([getTeacherStatus(), isAdmin(), Promise.resolve(teacher.reload&&teacher.reload()).catch(()=>{})]).then(([status, admin])=>{
             statusCache = { uid: teacher.uid, status, isAdmin: admin };
             render();
           });
@@ -401,7 +496,7 @@
           '<div class="ktaBar"><span class="ktaWho">👩‍🏫 '+esc(teacher.email)+statusNote+'</span>'+
           '<a class="ktaBtn" href="'+esc(SITE_ROOT+"profiel/")+'">Mijn profiel</a>'+
           '<a class="ktaBtn" href="'+esc(SITE_ROOT+"certamen/")+'">Docentenportaal</a>'+
-          (googleProvider ? '' : '<button type="button" class="ktaBtn" data-kta="link-teacher-google">Koppel Google-account</button>')+
+          (googleProvider ? '<span style="color:#8fbf7a">✓ Google gekoppeld</span>' : '<button type="button" class="ktaBtn" data-kta="link-teacher-google">Koppel Google-account</button>')+
           '<button type="button" class="ktaBtn" data-kta="logout-teacher">Uitloggen</button></div>'+
           (googleLinkMsg ? '<div class="ktaNote" style="margin-top:6px">'+esc(googleLinkMsg)+'</div>' : '');
       }else{
@@ -422,7 +517,9 @@
           '<div class="ktaBody">'+
             (tab==="leerling"
               ? '<input class="ktaInput" id="ktaKlas" placeholder="Klascode" autocapitalize="characters">'+
-                '<input class="ktaInput" id="ktaCode" placeholder="Leerlingcode" autocapitalize="characters">'+
+                '<input class="ktaInput" id="ktaCode" placeholder="Leerlingcode" autocapitalize="none">'+
+                '<input class="ktaInput" id="ktaPwS" type="password" placeholder="Wachtwoord" autocomplete="current-password">'+
+                '<div class="ktaNote" style="font-size:12px;opacity:.75;margin-top:-4px">Nieuw profiel, of nog geen wachtwoord? Kies er nu een (minstens '+PW_MIN+' tekens).</div>'+
                 '<input class="ktaInput" id="ktaNaam" placeholder="Naam (alleen nodig bij eerste keer)">'+
                 '<button type="button" class="ktaBtn ktaBtn-main" data-kta="do-student">Inloggen</button>'
               : '<input class="ktaInput" id="ktaEmail" type="email" placeholder="E-mailadres">'+
@@ -459,7 +556,8 @@
           await loginStudent(
             wrap.querySelector("#ktaKlas").value,
             wrap.querySelector("#ktaCode").value,
-            wrap.querySelector("#ktaNaam").value
+            wrap.querySelector("#ktaNaam").value,
+            wrap.querySelector("#ktaPwS").value
           );
           wrap.remove();
         }catch(ex){ err = ex.message||String(ex); wrap.remove(); openModal(); }
@@ -502,8 +600,15 @@
         catch(ex){ err = ex.message||String(ex); wrap.remove(); openModal(); busy=false; }
       }
       if(action==="link-teacher-google"){
+        googleLinkMsg = "Doorsturen naar Google…"; render();
         try{ await linkTeacherGoogle(); } // navigeert weg (redirect)
-        catch(ex){ googleLinkMsg = ex.message||String(ex); render(); }
+        catch(ex){
+          const c = ex && ex.code;
+          googleLinkMsg = c==="auth/provider-already-linked" ? "Er is al een Google-account aan dit docentaccount gekoppeld."
+            : c==="auth/credential-already-in-use" ? "Dit Google-account hoort al bij een ander account (bv. een leerlingprofiel). Gebruik een ander Google-account."
+            : (ex.message||String(ex));
+          render();
+        }
       }
     }
 
@@ -523,7 +628,7 @@
 
   global.KTAuth = {
     getIdentity: identLoad,
-    loginStudent, logoutStudent,
+    loginStudent, logoutStudent, changeStudentPassword, revealStudentPassword,
     loginTeacher, logoutTeacher, authReady,
     signupTeacher, getTeacherStatus, isAdmin,
     resetTeacherPassword, linkTeacherGoogle, loginTeacherWithGoogle, handleTeacherGoogleRedirect,

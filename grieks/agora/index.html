@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="../../assets/favicons/grieks/apple-touch-icon.png">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="../../assets/site-auth.js?v=20260916a"></script>
+<script src="../../assets/site-auth.js?v=20261002a"></script>
 <style>
 :root{
   --aegean:#0d1f3c;--aegean2:#152a50;--aegean3:#1c3566;--aegean4:#24427d;
@@ -1688,7 +1688,42 @@ function localMatch(answer,w){
   return meaningsOf(w).some(m=>norm(m)===a||norm(m).includes(a)||a.includes(norm(m)));
 }
 
+/* ---- DOCENTLIJSTEN: woordenlijsten die de docent in Certamen heeft geüpload en
+   gedeeld (teachers/{uid}/wordlists, gespiegeld naar klascodes/{KLAS}/wordlists/
+   {id}, wereld-leesbaar). Alleen zichtbaar als de leerling is ingelogd (site-
+   brede inlog, KTAuth.getIdentity()); de lijst van de eigen klas wordt lokaal
+   gecachet zodat hij ook offline blijft werken. In Certamen is `words` een array
+   {la,nl,pos} óók voor Grieks (de Griekse lemma staat in `la`, lang==="el") —
+   hier omgezet naar het Agora-itemformaat {gr,nl,...}. ---- */
+const TL_KEY="agora_tlists_v1";
+let TLISTS=(function(){try{const c=JSON.parse(localStorage.getItem(TL_KEY)||"null");
+  const id=(typeof KTAuth!=="undefined")&&KTAuth.getIdentity();
+  return (c&&id&&c.klas===String(id.klascode).toUpperCase())?c.lists:[];}catch(e){return [];}})();
+let TL_FETCHED=false;
+function tlEsc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+async function tlLoad(){
+  if(TL_FETCHED||typeof KTAuth==="undefined")return;
+  const id=KTAuth.getIdentity();
+  if(!id||!id.klascode){TLISTS=[];return;}
+  TL_FETCHED=true;
+  try{
+    const klas=String(id.klascode).toUpperCase();
+    const {db}=await KTAuth.ensureFirebase();
+    const v=(await db.ref("klascodes/"+klas+"/wordlists").once("value")).val()||{};
+    const lists=Object.entries(v).filter(([,l])=>l&&l.lang==="el").map(([lid,l])=>{
+      const raw=Array.isArray(l.words)?l.words:Object.values(l.words||{});
+      return {id:lid,name:tlEsc(l.name||"Lijst"),words:raw.filter(w=>w&&w.la&&w.nl).map(w=>({f:0,gr:w.la,tr:"",ex:"",ge:"",nl:w.nl,pos:w.pos||"",vw:""}))};
+    }).filter(l=>l.words.length);
+    const changed=JSON.stringify(lists)!==JSON.stringify(TLISTS);
+    TLISTS=lists;
+    try{localStorage.setItem(TL_KEY,JSON.stringify({klas,lists}));}catch(e){}
+    if(changed&&CURRENT==="setpick")RENDER.setpick();
+  }catch(e){TL_FETCHED=false;}
+}
 function pickSet(which){
+  // Docentlijst: eigen woordenset, dus bewust zonder frequentieband-filter (f:0
+  // zou anders buiten elke band vallen) — alleen de woordsoort-filter geldt.
+  if(which.indexOf("tl:")===0){const l=TLISTS.find(x=>"tl:"+x.id===which);return applyCategory(l?l.words:[]);}
   let pool=VOCAB;
   if(which==="import"&&S.imported&&S.imported.length)pool=S.imported;
   const band=S.curBand||"all";
@@ -1986,7 +2021,9 @@ RENDER.setpick=function(){
   '<div class="panel"><h3 style="color:var(--gold);margin-bottom:10px">Woordset</h3>'+
   '<button class="tile wide" onclick="startVocab(\'main\')" style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;align-items:center"><div><h3>GJOU-frequentielijst</h3><p>'+VOCAB.length+' woorden</p></div><span class="btn btn-primary">Oefenen →</span></div></button>'+
   (S.imported&&S.imported.length?'<button class="tile wide" onclick="startVocab(\'import\')"><div style="display:flex;justify-content:space-between;align-items:center"><div><h3>Mijn lijst</h3><p>'+S.imported.length+' woorden</p></div><span class="btn btn-primary">Oefenen →</span></div></button>':"")+
+  TLISTS.map(l=>'<button class="tile wide" style="margin-top:10px" onclick="startVocab(\'tl:'+l.id+'\')"><div style="display:flex;justify-content:space-between;align-items:center"><div><h3>Docent: '+l.name+'</h3><p>'+l.words.length+' woorden</p></div><span class="btn btn-primary">Oefenen →</span></div></button>').join("")+
   '</div>';
+  tlLoad();
 };
 
 function startVocab(which){

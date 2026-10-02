@@ -11,7 +11,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicons/hoofdscherm/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicons/hoofdscherm/favicon-16x16.png">
 <link rel="apple-touch-icon" href="../assets/favicons/hoofdscherm/apple-touch-icon.png">
-<script src="../assets/site-auth.js?v=20260916a"></script>
+<script src="../assets/site-auth.js?v=20261002a"></script>
 <style>
   :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--cream:#f3e9d2;
         --muted:#b9a883;--muted2:#8a7a5c;--s2:#16121a;--s3:#211c28;--s4:#2e2838;
@@ -202,6 +202,18 @@
         '<div style="margin-top:12px"><a class="btn btn-small" href="'+esc(KTAuth.APPS.certamen.url)+'">Open Certamen</a></div>'+
       '</div>'+
       '<div class="panel"><h2>Google-account</h2>'+googleBlock+'<div id="pfGoogleMsg"></div></div>'+
+      '<div class="panel"><h2>Wachtwoord</h2>'+
+        '<p class="note">Je logt in met je klascode, leerlingcode en dit wachtwoord.</p>'+
+        '<div id="pfPwShown" class="note" style="margin-top:8px"></div>'+
+        '<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">'+
+          '<button type="button" class="btn btn-small" id="pfChangePw">Wijzig wachtwoord</button>'+
+          (ident.googleUid ? '<button type="button" class="btn btn-small" id="pfRevealPw">Toon mijn wachtwoord</button>' : '')+
+        '</div>'+
+        '<p class="note" style="margin-top:8px;font-size:12px">'+(ident.googleUid
+          ? 'Wachtwoord vergeten? "Toon mijn wachtwoord" laat het zien nadat je met je gekoppelde Google-account hebt ingelogd.'
+          : 'Wachtwoord vergeten? Vraag het je docent — of koppel hierboven je Google-account, dan kun je het zelf terugzien.')+'</p>'+
+        '<div id="pfPwMsg"></div>'+
+      '</div>'+
       scoreboardHTML+
       '<div class="panel"><h2>Voortgang per app</h2><div class="apps-grid">'+appRows+'</div></div>';
 
@@ -217,6 +229,31 @@
       try{ await KTAuth.unlinkGoogle(); render(); }
       catch(e){ document.getElementById('pfGoogleMsg').innerHTML='<div class="err">'+esc(e.message||String(e))+'</div>'; unlinkBtn.disabled=false; }
     });
+
+    const pwMsg = m => { document.getElementById('pfPwMsg').innerHTML = m; };
+    const changeBtn = document.getElementById('pfChangePw');
+    if(changeBtn) changeBtn.addEventListener('click', async ()=>{
+      const oldPw = prompt('Huidig wachtwoord (leeg laten als je nog geen wachtwoord had):');
+      if(oldPw===null) return;
+      const newPw = prompt('Nieuw wachtwoord (minstens 4 tekens):');
+      if(newPw===null) return;
+      try{ await KTAuth.changeStudentPassword(oldPw, newPw); pwMsg('<div class="ok">Wachtwoord gewijzigd.</div>'); }
+      catch(e){ pwMsg('<div class="err">'+esc(e.message||String(e))+'</div>'); }
+    });
+    const revealBtn = document.getElementById('pfRevealPw');
+    const reveal = async ()=>{
+      try{
+        const r = await KTAuth.revealStudentPassword();
+        if(r.ok) document.getElementById('pfPwShown').innerHTML = 'Je wachtwoord: <b style="font-size:16px;color:var(--goldb)">'+esc(r.pw)+'</b>';
+        else if(!r.redirecting) pwMsg('<div class="err">'+esc(r.error||'Niet gelukt.')+'</div>');
+      }catch(e){ pwMsg('<div class="err">'+esc(e.message||String(e))+'</div>'); }
+    };
+    if(revealBtn) revealBtn.addEventListener('click', reveal);
+    // Na de Google-redirect van "Toon mijn wachtwoord" meteen laten zien.
+    // (De vlag wordt door KTAuth.revealStudentPassword() zelf opgeruimd — die
+    // gebruikt hem ook om te voorkomen dat een verkeerd Google-account eindeloos
+    // opnieuw wordt doorgestuurd.)
+    try{ if(revealBtn && sessionStorage.getItem('kt_reveal_pw')==='back') reveal(); }catch(e){}
   }
 
   async function renderTeacher(teacher){

@@ -155,6 +155,28 @@ spelregels, features of het datamodel raakt:
   `assets/site-auth.js`. `certamen/index.html`'s init rondt de redirect af via
   een eigen intent-sleutel (`TEACHER_GOOGLE_REDIRECT_KEY`, net.js) en
   navigeert terug naar het scherm van vóór de redirect.
+- Leerlingwachtwoorden (sinds 2026-10-02): leerlingen loggen nog steeds NIET in
+  via Firebase Auth, maar hebben nu naast de leerlingcode een wachtwoord —
+  tegen "even inloggen als een klasgenoot", géén harde beveiliging
+  (identities/{klas}/{lid} blijft wereld-schrijfbaar). Opslag:
+  `identities/.../pwHash` ("v1$salt$sha256", wereld-leesbaar maar gehasht, enige
+  plek waartegen bij login gecontroleerd wordt) + `studentSecrets/{klas}/{lid}`
+  (het wachtwoord zelf: leesbaar voor de docent-eigenaar van de klas, en voor de
+  leerling zelf via zijn Google-sessie/`googleLinks`; schrijven is open).
+  Nieuw profiel of oud profiel zónder hash: het ingevulde wachtwoord wordt het
+  wachtwoord. Docent kan per leerling opzoeken/kopiëren/resetten
+  (`FBNet.resetStudentPassword`, `tpRenderRoster` in games.js). Google-login
+  omzeilt het wachtwoord bewust. E-mailen van wachtwoorden kan niet (geen
+  backend) — de leerling ziet het op "Mijn profiel" na Google-login. Helpers
+  staan dubbel: net.js (`ktPw*`) en assets/site-auth.js (`pwMake/pwCheck/...`).
+  Leerlingcodes zijn in Certamen kleine letters; site-auth zoekt eerst de
+  kleine-letter-variant en valt terug op een oud hoofdletterprofiel.
+  `identities/.../lastActive` wordt gestempeld bij login, gevecht, Training en
+  score-sync (docent ziet "laatst actief" per leerling).
+- Docentlijsten in Ludus/Agora: `latijn/ludus` en `grieks/agora` tonen voor een
+  ingelogde leerling de gedeelde Certamen-woordenlijsten van de eigen klas
+  (`klascodes/{KLAS}/wordlists`, lang la resp. el) als "Docent: …"-set; lokaal
+  gecachet per klas.
 - `assets/site-auth.js` wordt in alle insluitende pagina's geladen met een
   `?v=`-cachebuster (sinds 2026-09-16, ontbrak daarvoor overal) — bij elke
   wijziging aan dat bestand ook deze versie ophogen, anders blijven
