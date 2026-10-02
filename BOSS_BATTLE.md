@@ -75,17 +75,38 @@ Kernfilosofie (ongewijzigd uit het docx-plan):
 Om even spannend te zijn met 2 als met 40 spelers, schaalt alles procentueel
 mee met het aantal spelers `N`.
 
-**Moeilijkheidsgraad-multiplier (`Md`)**
+**Moeilijkheidsgraden (✅ herzien 2026-10-02, `BOSS_DIFFICULTIES` in
+`certamen/bossbattle.js`)** — twee aparte factoren in plaats van één `Md`:
 
-| Graad | Multiplier |
-|---|---|
-| Easy | 0.5 |
-| Normal | 1.0 |
-| Hard | 1.5 |
-| Heroic | 2.2 |
-| Legendary | 3.5 |
+| Graad | Baas-HP (`hp`) | Klappen (`atk`) | Richtlijn goede antwoorden (`acc`) |
+|---|---|---|---|
+| Easy | ×0,7 | ×0,7 | ~50% |
+| Normal | ×1,0 | ×1,0 | ~70% |
+| Hard | ×1,2 | ×1,0 | ~85% |
+| Heroic | ×1,3 | ×1,0 | ~90% |
+| Legendary | ×1,4 | ×1,0 | ~95% |
 
-**Kernformules**
+Vroeger (0,5 / 1 / 1,5 / 2,2 / 3,5) vermenigvuldigde één factor zowel de
+baas-HP als álle klappen, waardoor Hard in feite ×2,25 was en vanaf Hard
+winnen bij élke trefzekerheid onmogelijk bleek. Uitgangspunt nu (Gerben):
+een hogere stand moet te winnen zijn **mits de klas meer goede antwoorden
+geeft**. Zwaardere klappen maken een baas abrupt onhaalbaar (de klas loopt
+sneller leeg dan ze kan helen); meer baas-HP vraagt geleidelijk meer goede
+antwoorden — daarom gaat boven Normal alleen `hp` omhoog. `atk` is de
+`diffM` die `bmBossResolveTick()` krijgt (basisaanval, maaltijd, rage,
+schilddrempel); `hp` gebruikt `bmStartBossGame()`. De `acc`-richtlijn staat
+bij de moeilijkheidskeuze en in de FAQ.
+
+*Hoe getoetst:* een simulatie met de echte `bmBossResolveTick()`, waarin
+schade per leerling volgt uit de trefzekerheid (goed +3 BE / +1 snel, fout
+−2 BE, ≈2 schade per BE), gekalibreerd op een echt gewonnen Cycloop-gevecht
+(79% goed, 7 lln, 28 rondes, 31% HP over). "Nodig" = minimale trefzekerheid
+om met ≥10% HP te winnen, slechtste geval over Hydra/Cycloop (samenwerkend
+op de maaltijd)/Minotaurus (~30% schild in Enrage) en 7 of 25 leerlingen:
+Easy 52%, Normal 71%, Hard 83%, Heroic 89%, Legendary 95%.
+
+**Kernformules** (oorspronkelijk ontwerp; de gebouwde versie gebruikt
+`N × 15 × 8 × hp` als baas-HP, zie `bmStartBossGame()`)
 
 ```
 Boss Max HP   = N × baseHpPerPlayer(1500) × Md
@@ -133,8 +154,8 @@ Normal): Boss HP = 3.000. Beide voelen relatief even zwaar aan.
 > gezamenlijk schild in één van de twee gewaarschuwde rondes (sinds
 > 2026-10-02 telt de ronde waarin de dreiging wordt aangekondigd niet meer
 > mee — toen wist nog niemand ervan). **Sinds 2026-10-02 ook:** de drempel is
-> niet meer vast 8×moeilijkheid maar `bmBossMealNeed()` = ⌈N × 1,2 ×
-> min(moeilijkheid, 1,5)⌉ (min. 3), vastgelegd in `boss.mealNeed` bij de
+> niet meer vast 8×moeilijkheid maar `bmBossShieldNeed()` = ⌈N × 1,2 ×
+> min(atk, 1,5)⌉ (min. 3), vastgelegd in `boss.mealNeed` bij de
 > aankondiging; en zolang de dreiging loopt krijgt iedereen de gratis actie
 > **🛡️ Schild heffen** (+2, `basic_schildheffen` in `BM_BASIC_ACTIONS`,
 > `bossMealOnly`). Aanleiding: een klas met alleen Voorvechters/Priesters/

@@ -13,12 +13,24 @@
    ============================================================================ */
 
 /* ---- CONFIGURATIETABEL: MOEILIJKHEIDSGRADEN ---- */
+// hp  = schaal op de baas-HP (bmStartBossGame, battle.js).
+// atk = schaal op álles wat de baas de klas aandoet (basisaanval, maaltijd,
+//       rage, schilddrempel) — dit is de `diffM` in bmBossResolveTick().
+// acc = richtlijn: zoveel goede antwoorden heeft een klas ongeveer nodig om
+//       te winnen (getoond bij de moeilijkheidskeuze en in de FAQ).
+// Vóór 2026-10-02 schaalde één factor m beide tegelijk (HP én klappen), dus
+// Hard was in feite ×2,25 en vanaf Hard was winnen bij élke trefzekerheid
+// onmogelijk. Zwaardere klappen maken een baas abrupt onhaalbaar (de klas
+// loopt sneller leeg dan ze kan helen), meer baas-HP vraagt geleidelijk
+// meer goede antwoorden — vandaar: boven Normal alleen nog hp omhoog.
+// Afgestemd met een simulatie, gekalibreerd op echte gewonnen gevechten
+// (79% goed, Cycloop, 7 lln, 28 rondes); zie BOSS_BATTLE.md §4.
 const BOSS_DIFFICULTIES = {
-  easy:      { id:"easy",      nm:"Easy",      m:0.5 },
-  normal:    { id:"normal",    nm:"Normal",    m:1.0 },
-  hard:      { id:"hard",      nm:"Hard",      m:1.5 },
-  heroic:    { id:"heroic",    nm:"Heroic",    m:2.2 },
-  legendary: { id:"legendary", nm:"Legendary", m:3.5 },
+  easy:      { id:"easy",      nm:"Easy",      hp:0.7, atk:0.7, acc:50 },
+  normal:    { id:"normal",    nm:"Normal",    hp:1.0, atk:1.0, acc:70 },
+  hard:      { id:"hard",      nm:"Hard",      hp:1.2, atk:1.0, acc:85 },
+  heroic:    { id:"heroic",    nm:"Heroic",    hp:1.3, atk:1.0, acc:90 },
+  legendary: { id:"legendary", nm:"Legendary", hp:1.4, atk:1.0, acc:95 },
 };
 const BOSS_DIFF_ORDER = ["easy","normal","hard","heroic","legendary"];
 
@@ -249,7 +261,7 @@ function bmBossStatusNote(){
 function bmBossAlerts(){
   if(BM_META?.mode!=="boss" || BM_META?.garrisonProvince) return [];
   const preset=bmBossPreset(BM_META?.bossId);
-  const diffM=bmBossDiff(BM_META?.bossDifficulty).m;
+  const diffM=bmBossDiff(BM_META?.bossDifficulty).atk;
   const out=[];
   if(preset.id==="cyclops" && BM_BOSS?.charging){
     const n=BM_BOSS.chargeLeft||0, need=BM_BOSS.mealNeed||Math.ceil(8*diffM);

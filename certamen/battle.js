@@ -910,7 +910,7 @@ SCREENS.battleFAQ = function(){
       <div><b style="font-size:13px;color:${p.color}">${esc(p.nm)}</b>
       <div class="note">${esc(p.desc)}</div></div>
     </div>`;}).join("");
-  const bossDiffHTML=BOSS_DIFF_ORDER.map(id=>`<li>${BOSS_DIFFICULTIES[id].nm} — schaalfactor ×${BOSS_DIFFICULTIES[id].m}</li>`).join("");
+  const bossDiffHTML=BOSS_DIFF_ORDER.map(id=>{const d=BOSS_DIFFICULTIES[id];return `<li>${d.nm} — baas-HP ×${d.hp}, klappen ×${d.atk} · richtlijn: zo'n ${d.acc}% goede antwoorden nodig</li>`;}).join("");
 
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('battleHome')">${iconSVG("shield",20,"currentColor")}</button><h2>Handleiding & FAQ</h2></div>
@@ -1362,6 +1362,7 @@ SCREENS.battleHostSettings = function(){
   <div class="panel">
     <label class="fld">Moeilijkheidsgraad</label>
     <div class="chips">${BOSS_DIFF_ORDER.map(id=>`<button class="chip ${bossDiff===id?"on":""}" onclick="BM_META.bossDifficulty='${id}';SCREENS.battleHostSettings()">${BOSS_DIFFICULTIES[id].nm}</button>`).join("")}</div>
+    <div class="note" style="margin-top:6px">Richtlijn: een klas heeft zo'n <b>${bmBossDiff(bossDiff).acc}% goede antwoorden</b> nodig om te winnen${bossDiff==="normal"?"":" (Normal: "+bmBossDiff("normal").acc+"%)"} — en moet samenwerken bij de speciale aanvallen van de baas.</div>
   </div>`:""}
   <div class="panel">
     <label class="fld">Antwoordtijd per ronde</label>
@@ -1704,7 +1705,7 @@ async function bmStartBossGame(){
   const pids=Object.keys(BM_PLAYERS);
   if(pids.length<1){toast("Geen spelers","Wacht op minstens 1 deelnemer.");return;}
   const N=pids.length;
-  const diffM=bmBossDiff(BM_META.bossDifficulty).m;
+  const diffM=bmBossDiff(BM_META.bossDifficulty).hp; // alleen baas-HP; klappen: .atk (bmResolve)
   const classMaxHP=N*100;
   // bossMaxHP = N * verwachte aantal correcte antwoorden per speler (15) *
   // gemiddelde schade per hit. De ontwerpdoc ging uit van DMG_base=100, maar
@@ -3416,7 +3417,7 @@ async function bmResolve(roundN){
     // Minotaurus-Enrage) zitten in bmBossResolveTick() (bossbattle.js).
     let bossEvents=[];
     if(BM_META?.mode==="boss"){
-      const diffM=bmBossDiff(BM_META.bossDifficulty).m;
+      const diffM=bmBossDiff(BM_META.bossDifficulty).atk;
       // Fase op basis van de HP ná de schade van de klas, maar vóór heling
       // (de baas heeft geen heling van team B; alleen zijn eigen regen hieronder).
       const provHB=Math.max(0,Math.min(tB.maxHealth,rawHB));
