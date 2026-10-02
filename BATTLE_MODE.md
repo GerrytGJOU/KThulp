@@ -1185,6 +1185,12 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
 - Kolommen Goed% / Bijdr. / Actief (platte getallen), met rechts daarvan
   RPG-achtige statkolommen met vollopende balkjes (sinds 2026-09-30):
   ⚔️ Schade (`damage`), 💚 Healing (`healing`), 🛡️ Schild (`shielding`),
+  🤝 Combo (sinds 2026-10-02; alleen als er combo's waren — aantal combo's als
+  balk, eronder het gedeelde effect, bv. "⚔️6 🛡️6"; berekend door
+  `bmComboStats()` uit de `combo`-events in de log. Combo-effecten gaan in
+  `bmResolve()` rechtstreeks naar het team en tellen bij géén van beide spelers
+  mee in Schade/Schild/Healing/Bijdr.; in deze kolom krijgen beide partners het
+  volledige gedeelde effect op hun naam),
   🎯 Handlangers (`minionDamage`, alleen Boss Battle en alleen als er
   handlangers waren), 🔥 Reeks (`bestCorrectStreak`) en ⚡ Snelheid
   (gem. responstijd). Elke balk is relatief t.o.v. de beste leerling in die
@@ -1197,7 +1203,7 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
   (liepen voorheen door naar het volgende gevecht).
 - Detailpopup: avatar, accuratesse, gem. responstijd, schade, healing, top-5 gemiste woorden
 
-**CSV-export** via `bmExportCSV()` (SheetJS) — kolommen: Naam, Klas, Klasse, Goed%, Goed, Fout, Gemiste woorden, Schade, Healing, Rondes actief, Rondes totaal (zelfde totaal als "Actief x/totaal" in de tabel; bewust als aparte getalkolom, want Excel leest tekst als "5/12" als datum).
+**CSV-export** via `bmExportCSV()` (SheetJS) — kolommen: Naam, Klas, Klasse, Goed%, Goed, Fout, Gemiste woorden, Schade, Healing, Rondes actief, Rondes totaal, Combo's, Combo-schade/-schild/-healing (gedeeld) (zelfde totaal als "Actief x/totaal" in de tabel; bewust als aparte getalkolom, want Excel leest tekst als "5/12" als datum).
 
 ### Datamodel-uitbreidingen (M7)
 

@@ -3956,18 +3956,39 @@ function bmTotalRounds(players){
     ...players.map(p=>(p.correct||0)+(p.wrong||0)), 0);
 }
 
+// Combo's per speler, uit de gevechtslog (events type "combo" met beide pids).
+// Combo-effecten gaan in bmResolve() rechtstreeks naar het team en tellen bij
+// géén van beide spelers mee in damage/shielding/healing — vandaar een eigen
+// kolom. Beide partners krijgen het volledige (gedeelde) effect op hun naam.
+function bmComboStats(){
+  const out={};
+  Object.values(BM_LOG||{}).forEach(e=>(e?.events||[]).forEach(ev=>{
+    if(ev.type!=="combo")return;
+    const co=BM_COMBOS.find(c=>c.id===ev.comboId)||{};
+    (ev.pids||[]).forEach(pid=>{
+      const o=out[pid]||(out[pid]={n:0,dmg:0,shld:0,heal:0,be:0});
+      o.n++; o.dmg+=co.dmg||0; o.shld+=co.shld||0; o.heal+=co.heal||0; o.be+=co.teamBE||0;
+    });
+  }));
+  return out;
+}
+const bmPidOf=p=>Object.keys(BM_PLAYERS).find(k=>BM_PLAYERS[k]===p)||"";
+
 async function bmExportCSV(){
   const players=BM_AWARD_DATA?.all||Object.values(BM_PLAYERS);
   let XLSX;try{XLSX=await loadSheetJS();}catch(e){toast("Fout","SheetJS kon niet worden geladen.");return;}
   // Totaal als eigen getalkolom i.p.v. tekst "23/28": Excel leest "5/12" als datum.
   const totalRounds=bmTotalRounds(players);
+  const combos=bmComboStats();
   const rows=players.map(p=>{
+    const cb=combos[bmPidOf(p)]||{n:0,dmg:0,shld:0,heal:0};
     const total=(p.correct||0)+(p.wrong||0);
     const acc=total>0?Math.round((p.correct||0)/total*100):0;
     const missed=Object.values(p.missed||{}).sort((a,b)=>(b.c||0)-(a.c||0)).map(w=>w.p||"").join(", ");
     return{"Naam":p.name||"","Klas":(p.identityKey||"").split(":")[0]||"","Klasse":bmClsName(p.class)||"",
       "Goed%":acc,"Goed":p.correct||0,"Fout":p.wrong||0,"Gemiste woorden":missed,
-      "Schade":p.damage||0,"Healing":p.healing||0,"Rondes actief":total,"Rondes totaal":totalRounds};
+      "Schade":p.damage||0,"Healing":p.healing||0,"Rondes actief":total,"Rondes totaal":totalRounds,
+      "Combo's":cb.n,"Combo-schade (gedeeld)":cb.dmg,"Combo-schild (gedeeld)":cb.shld,"Combo-healing (gedeeld)":cb.heal};
   });
   const ws=XLSX.utils.json_to_sheet(rows);
   const wb=XLSX.utils.book_new();
@@ -4190,10 +4211,17 @@ SCREENS.battleHostAnalytics = async function(){
     // Goed% heeft ook een balk, maar absoluut (0-100%, groen/goud/rood).
     const avgRt=p=>(p.respondCount||0)>0?(p.totalResponseMs||0)/p.respondCount:null;
     const isBoss=BM_META?.mode==="boss";
+    // Combo's staan los van Schade/Schild/Healing (die tellen combo's niet mee):
+    // eigen kolom met aantal + gedeeld effect. Alleen als er combo's waren.
+    const comboStats=bmComboStats();
+    const comboOf=p=>comboStats[bmPidOf(p)]||{n:0,dmg:0,shld:0,heal:0,be:0};
     const statCols=[
       {h:"⚔️ Schade",  c:"#d9573f", val:p=>p.damage||0},
       {h:"💚 Healing", c:"#5cc46a", val:p=>p.healing||0},
       {h:"🛡️ Schild",  c:"#4f93d8", val:p=>p.shielding||0},
+      ...(Object.keys(comboStats).length
+        ?[{h:"🤝 Combo", c:"#3fb8b0", val:p=>comboOf(p).n, fmt:v=>v+"×",
+           sub:p=>{const o=comboOf(p);return[o.dmg&&"⚔️"+o.dmg,o.shld&&"🛡️"+o.shld,o.heal&&"💚"+o.heal,o.be&&"+"+o.be+" BE"].filter(Boolean).join(" ");}}]:[]),
       ...(isBoss&&players.some(p=>(p.minionDamage||0)>0)
         ?[{h:"🎯 Handlangers", c:"#c77ad8", val:p=>p.minionDamage||0}]:[]),
       {h:"🔥 Reeks",   c:"#e8b43c", val:p=>p.bestCorrectStreak||0},
@@ -4212,6 +4240,7 @@ SCREENS.battleHostAnalytics = async function(){
       return`<td class="bm-stat${i===0?" bm-stat-sep":""}${pct===100?" top":""}">
         <div class="bm-stat-v">${txt}</div>
         <div class="bm-stat-bar"><div class="bm-stat-fill" style="--c:${col.c}" data-w="${pct}"></div></div>
+        ${col.sub&&v?`<div class="bm-stat-sub">${col.sub(p)}</div>`:""}
       </td>`;
     };
     const rows=sorted.map(p=>{
