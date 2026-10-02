@@ -1019,7 +1019,13 @@ SCREENS.battleFAQ = function(){
   ${sec("Combo-aanvallen",false,`
     <div class="note" style="margin-bottom:4px">Twee teamgenoten van de juiste klassen kiezen in dezelfde
     ronde allebei <b>Combo</b>. Dan voert het team samen een krachtige gecombineerde actie uit:</div>
-    ${comboHTML}`)}
+    ${comboHTML}
+    <div class="note" style="margin-top:6px"><b>Hoe tellen combo's mee na afloop?</b> Het effect van een combo
+    gaat naar het hele team en telt dus níet mee bij de Schade, het Schild of de Healing van één van beide
+    spelers. In het Klassenoverzicht staat er een eigen kolom <b>🤝 Combo</b> voor: hoe vaak je een combo
+    deed, met daaronder het gedeelde effect (bv. ⚔️6 🛡️6). Allebei de partners krijgen het volledige effect
+    op hun naam — jullie deden het tenslotte samen. In de detailpopup zie je per combo met wie je hem deed.
+    Wie de meeste combo's doet, maakt kans op het eerbewijs <b>Beste Teamspeler</b>.</div>`)}
 
   ${sec("Teamsynergie",false,`
     <div class="note" style="margin-bottom:4px">Hoe diverser je team, hoe meer bonus-BE iedereen krijgt:</div>
@@ -1170,7 +1176,16 @@ SCREENS.battleFAQ = function(){
     per team het aantal spelers.</div>
     <div class="note" style="margin-top:6px">Na afloop staat er onder de awards en de statistieken een knop
     <b>↻ Nieuw gevecht — zelfde spelers</b>. Daarmee begin je meteen een nieuwe partij in dezelfde kamer:
-    de klas hoeft niet opnieuw in te loggen en houdt naam, avatar, team en klasse.</div>`)}
+    de klas hoeft niet opnieuw in te loggen en houdt naam, avatar, team en klasse.</div>
+    <div class="note" style="margin-top:6px"><b>Klassenoverzicht.</b> Na de awards zie je per leerling
+    <b>Goed%</b>, <b>Bijdr.</b> (schade + heling) en <b>Actief</b> — het aantal rondes waarin de leerling een
+    antwoord gaf, uit het totaal aantal rondes (bv. 23/28). Een antwoord is niet altijd ook een actie: na een
+    fout antwoord kan er te weinig BE over zijn om aan te vallen. Klik op een van deze drie kolomkoppen om
+    erop te sorteren (standaard Goed%). Rechts daarvan staan balkjes zoals in een RPG-scorebord: Schade,
+    Healing, Schild, Combo, Reeks (langste reeks goed op rij) en Snelheid (gem. responstijd); bij Boss
+    Battle ook Handlangers. Elke balk is afgemeten aan de beste van de klas, die een volle balk en een
+    gouden getal krijgt. Klik op een leerling voor details (o.a. gemiste woorden en combo's per partner).
+    Met <b>📥 Exporteer CSV</b> krijg je dezelfde gegevens in een spreadsheet.</div>`)}
 
   ${foot()}`);
 };
