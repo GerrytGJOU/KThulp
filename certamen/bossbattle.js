@@ -102,7 +102,7 @@ const BOSS_ROUNDS_PER_ATTACK = {1:2, 2:1, 3:1};
      bossMaxHP aan schade toebrengt — beloont een paar gebundelde harde
      klappen (combo/legendarisch) boven constant kleine pokes.
    - Cycloop: iedere 3 rondes een "metgezellenmaaltijd"-dreiging met een
-     fuse van 2 rondes. Alleen gezamenlijk schild (team_shield-acties samen
+     fuse van 2 rondes (te tellen vanaf de ronde ná de aankondiging). Alleen gezamenlijk schild (team_shield-acties samen
      ≥ 8*Md die ronde) onderbreekt 'm. Loopt de fuse af: 6% van classMaxHP
      schade aan de klas, én de Cycloop heelt 4% van bossMaxHP (Polyfemus'
      dagelijkse maaltijd van Odysseus' metgezellen).
@@ -130,8 +130,11 @@ function bmBossResolveTick(boss, ctx){
   // ---- Cycloop: metgezellenmaaltijd-countdown ----
   if(bossId==="cyclops" && bossMaxHP){
     b.mealCycle=(b.mealCycle||0)+1;
-    if(!b.charging && b.mealCycle>=3){ b.charging=true; b.chargeLeft=2; b.mealCycle=0; }
-    if(b.charging){
+    // De dreiging begint pas NA deze ronde: het schild van de ronde waarin
+    // hij aangekondigd wordt telt niet mee (niemand wist er toen nog van) —
+    // zo heeft de klas echt 2 gewaarschuwde rondes om te reageren.
+    if(!b.charging && b.mealCycle>=3){ b.charging=true; b.chargeLeft=2; b.mealCycle=0; events.push({type:"boss_meal_warn"}); }
+    else if(b.charging){
       if(shieldThisRound>=8*diffM){
         b.charging=false; b.chargeLeft=0;
         events.push({type:"boss_meal_interrupted"});
@@ -189,21 +192,79 @@ function bmBossStatusNote(){
     const left=Math.max(0,maxRounds-n+1);
     return "⏳ Ronde "+n+"/"+maxRounds+(left<=5?" — nog "+left+" over, bijna terugtrekken!":"");
   }
-  // Minion Summon (BOSS_BATTLE.md §4): generieke "alle bazen"-mechanic, dus
-  // vóór de per-baas-specifieke statusregels gecheckt.
-  const liveMinions=(BM_BOSS?.minions||[]).filter(m=>m.hp>0);
-  if(liveMinions.length){
-    const totalHp=liveMinions.reduce((s,m)=>s+m.hp,0);
-    return "👹 "+liveMinions.length+" handlanger"+(liveMinions.length===1?"":"s")+" in leven ("+totalHp+" HP totaal)";
-  }
+  // Alle actieve dreigingen naast elkaar — vroeger gaf dit er maar één terug,
+  // waardoor de Cycloop-maaltijdwaarschuwing onzichtbaar bleef zolang er
+  // handlangers leefden (precies de fase waarin hij het vaakst dreigt).
+  return bmBossAlerts().map(a=>a.short).join(" · ");
+}
+
+// Actieve baas-dreigingen als lijst {id, kind, short, title, text}. Gedeeld
+// door de statusregel onder het slagveld (host) en de grote banner bovenin het
+// slagveld (host én leerling-toestellen, bmBossAlertHTML()).
+// kind: "danger" (rood, pulserend — nu ingrijpen!) of "info" (goud).
+function bmBossAlerts(){
+  if(BM_META?.mode!=="boss" || BM_META?.garrisonProvince) return [];
+  const preset=bmBossPreset(BM_META?.bossId);
+  const diffM=bmBossDiff(BM_META?.bossDifficulty).m;
+  const out=[];
   if(preset.id==="cyclops" && BM_BOSS?.charging){
-    const n=BM_BOSS.chargeLeft||0;
-    return "⚠️ Metgezellenmaaltijd over "+n+" ronde"+(n===1?"":"n")+" — onderbreek met gezamenlijk schild!";
+    const n=BM_BOSS.chargeLeft||0, need=Math.ceil(8*diffM);
+    out.push({id:"meal", kind:"danger",
+      short:"⚠️ Maaltijd "+(n<=1?"na DEZE ronde":"over "+n+" rondes")+" — samen ≥"+need+" schild!",
+      title:"🍖 Polyfemus wil eten! "+(n<=1?"Laatste kans: DEZE ronde":"Nog "+n+" rondes"),
+      text:"Zet samen minstens <b>"+need+" schild</b> in (één ronde) om hem te onderbreken — anders verslindt hij metgezellen: schade aan de klas én hij geneest zichzelf."});
   }
   if(preset.id==="minotaur" && (BM_BOSS?.labyrinthShield>0)){
-    return "🛡️ Labyrinth-schild: "+Math.round(BM_BOSS.labyrinthShield);
+    const s=Math.round(BM_BOSS.labyrinthShield);
+    out.push({id:"laby", kind:"info", short:"🛡️ Labyrinth-schild: "+s,
+      title:"🛡️ Labyrinth-schild: "+s, text:"Al je schade gaat eerst naar het schild. Daarna gaat de Minotaurus in Enrage!"});
   }
-  return "";
+  const live=(BM_BOSS?.minions||[]).filter(m=>m.hp>0);
+  if(live.length){
+    const tot=live.reduce((s,m)=>s+m.hp,0);
+    out.push({id:"minions", kind:"info",
+      short:"👹 "+live.length+" handlanger"+(live.length===1?"":"s")+" ("+tot+" HP) — schade op de baas gehalveerd",
+      title:"👹 "+live.length+" handlanger"+(live.length===1?" beschermt":"s beschermen")+" "+esc(preset.nm.split(" ")[0]),
+      text:"Zolang ze leven doet elke aanval op de baas maar <b>half</b> zoveel schade. Kies ze als <b>doelwit</b> — Pijlregen en Vuurtoren raken ze allemaal tegelijk."});
+  }
+  return out;
+}
+
+// Banner bovenin het slagveld met de actieve dreigingen (zie bmBossAlerts).
+function bmBossAlertHTML(){
+  return bmBossAlerts().map(a=>`<div class="bm-boss-alert ${a.kind}">
+    <div class="bm-boss-alert-t">${a.title}</div><div class="bm-boss-alert-x">${a.text}</div></div>`).join("");
+}
+
+// Grote, kortstondige melding midden op het slagveld voor wat de baas deze
+// ronde deed (log-entry.bossEvents, zie bmBossResolveTick hierboven en de
+// handlanger-oproep in bmResolve(), battle.js). Aangeroepen vanuit
+// bmPlayAnimations() — draait dus op het projectiescherm én de leerling-
+// toestellen. De gewone basisaanval krijgt bewust géén kaart (zou elke ronde
+// zijn), alleen een drijvend getal.
+function bmBossAnnounce(bossEvents){
+  if(BM_META?.mode!=="boss" || !Array.isArray(bossEvents) || !bossEvents.length) return;
+  const nm=bmBossPreset(BM_META?.bossId).nm.split(" ")[0];
+  const cards=[];
+  for(const e of bossEvents){
+    if(e.type==="boss_meal_warn") cards.push({k:"danger", t:"🍖 "+nm+" krijgt honger!", x:"Over 2 rondes eet hij metgezellen op. Zet samen schild in om hem te onderbreken!"});
+    else if(e.type==="boss_meal_interrupted") cards.push({k:"good", t:"🛡️ Maaltijd onderbroken!", x:"Jullie gezamenlijke schild hield "+nm+" tegen."});
+    else if(e.type==="boss_meal_attack") cards.push({k:"danger", t:"🍖 "+nm+" verslindt metgezellen!", x:"−"+e.dmg+" HP voor de klas · "+nm+" geneest +"+e.heal+" HP"});
+    else if(e.type==="boss_rage_attack") cards.push({k:"danger", t:"😡 "+nm+" ontsteekt in woede!", x:"Te veel gemiste antwoorden — extra aanval: −"+e.dmg+" HP"});
+    else if(e.type==="boss_regen") cards.push({k:"warn", t:"🐍 Koppen groeien terug!", x:"Te weinig schade deze ronde — de Hydra geneest +"+e.heal+" HP"});
+    else if(e.type==="boss_minions") cards.push({k:"warn", t:"👹 "+nm+" roept "+e.n+" handlangers op!", x:"Schade op de baas wordt gehalveerd tot ze verslagen zijn."});
+    else if(e.type==="boss_minion_down") cards.push({k:"good", t:"💀 Handlanger verslagen!", x:e.left?"Nog "+e.left+" over.":"Allemaal weg — volle schade op de baas!"});
+  }
+  const heal=bossEvents.reduce((s,e)=>s+((e.type==="boss_meal_attack"||e.type==="boss_regen")?(e.heal||0):0),0);
+  if(heal>0 && typeof bmFloat==="function") setTimeout(()=>bmFloat("+"+heal+" 🩸","var(--green-bright)",3),700);
+  const cont=document.getElementById("bmBfx"); if(!cont) return;
+  cards.forEach((c,i)=>setTimeout(()=>{
+    const d=document.createElement("div");
+    d.className="bm-boss-card "+c.k;
+    d.innerHTML=`<div class="bm-boss-card-t">${c.t}</div><div class="bm-boss-card-x">${c.x}</div>`;
+    cont.appendChild(d);
+    setTimeout(()=>d.remove(),3400);
+  },900+i*1800));
 }
 
 // Total War-belegering (BOSS_PRESETS.garrison): welk werk wordt nu bevochten
@@ -271,11 +332,39 @@ function bmBossSpriteHTML(boss,nm){
     art=`<div class="bm-boss-emoji" style="filter:drop-shadow(0 0 10px ${preset.color}88)">${preset.emoji}</div>`;
   }
 
+  // Handlangers (Minion Summon, BOSS_BATTLE.md §4) als kleinere figuren
+  // vóór de baas, elk met eigen HP-balk en hetzelfde nummer als de
+  // doelwit-chip op de leerling-toestellen (bmMinionLabel). Zolang ze leven
+  // krijgt de baas een blauwe schildgloed: schade op hem wordt gehalveerd.
+  const live=(boss?.minions||[]).filter(m=>m.hp>0);
+  // Zonder eigen handlanger-tekening: een kleinere, donkerdere versie van de
+  // baas zelf (Hydra: romp + alle koppen = een jonge hydra).
+  const mLayers=preset.minionImg?[preset.minionImg]:preset.img?[preset.img,...(preset.heads||[])]:[];
+  const minions=live.length?`<div class="bm-minions">${live.map(m=>{
+    const f=m.maxHp?Math.max(0,Math.min(1,m.hp/m.maxHp)):0;
+    return `<div class="bm-minion">
+      ${mLayers.length?`<div class="bm-minion-art">${mLayers.map(src=>`<img src="${src}?${SPRITE_VER}" alt="">`).join("")}</div>`:`<div class="bm-minion-emoji">${preset.emoji}</div>`}
+      <div class="bm-minion-hp"><div style="transform:scaleX(${f})"></div></div>
+      <div class="bm-minion-nm">${bmMinionLabel(m)} · ${m.hp} HP</div>
+    </div>`;}).join("")}</div>`:"";
+  if(live.length) art=art.replace('class="bm-boss-art"','class="bm-boss-art shielded"').replace('class="bm-boss-emoji"','class="bm-boss-emoji shielded"');
+
   return `<div class="bm-fcol" style="align-items:center;justify-content:center;flex:1">
-    <div class="bm-av" style="text-align:center">
-      ${art}
-      <div class="avn">${esc(displayNm)}</div>
-      <div class="avncls">Fase ${phase} · Rage ${rage}%</div>
+    <div class="bm-boss-row">
+      ${minions}
+      <div class="bm-av" style="text-align:center">
+        ${art}
+        <div class="avn">${esc(displayNm)}</div>
+        <div class="avncls">Fase ${phase} · Rage ${rage}%${live.length?" · 🛡️ beschermd":""}</div>
+      </div>
     </div>
   </div>`;
+}
+
+// Vast nummer per handlanger (uit zijn id "m0".."m3"), zodat "Handlanger 2"
+// op het slagveld en op de doelwit-chip dezelfde blijft, ook als nummer 1 al
+// verslagen is.
+function bmMinionLabel(m){
+  const n=parseInt(String(m?.id||"").replace(/\D/g,""),10);
+  return "Handlanger "+(isNaN(n)?"?":n+1);
 }

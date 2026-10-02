@@ -480,6 +480,44 @@ body.greek .qcard .word{color:#143a5e}
 .bm-boss-art{position:relative;width:clamp(200px,26vw,460px);aspect-ratio:1/1;margin:0 auto}
 .bm-boss-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .bm-boss-emoji{font-size:clamp(64px,13vw,190px);line-height:1;text-align:center}
+/* Handlangers (Minion Summon, BOSS_BATTLE.md §4) vóór de baas + schildgloed
+   op de baas zolang ze leven — bmBossSpriteHTML() in bossbattle.js. */
+.bm-boss-row{display:flex;align-items:flex-end;gap:clamp(6px,1.5vw,24px)}
+.bm-minions{display:flex;flex-wrap:wrap;gap:6px;max-width:clamp(130px,17vw,300px);justify-content:flex-end;align-items:flex-end}
+.bm-minion{display:flex;flex-direction:column;align-items:center;gap:2px;width:clamp(58px,7.5vw,128px)}
+.bm-minion-art{position:relative;width:100%;aspect-ratio:1/1;filter:brightness(.68) saturate(.6) drop-shadow(0 0 6px rgba(200,60,60,.6))}
+.bm-minion-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.bm-minion-emoji{font-size:clamp(28px,4vw,60px);line-height:1}
+.bm-minion-hp{width:90%;height:7px;background:rgba(0,0,0,.6);border-radius:4px;overflow:hidden;border:1px solid rgba(0,0,0,.7)}
+.bm-minion-hp>div{height:100%;background:#c0392b;transform-origin:left center;transition:transform .35s}
+.bm-minion-nm{font-size:clamp(9px,.9vw,14px);color:#fff;text-shadow:0 1px 3px #000,0 0 2px #000;white-space:nowrap}
+.bm-boss-art.shielded::after{content:"";position:absolute;inset:3%;border-radius:50%;border:3px solid rgba(110,170,255,.75);box-shadow:0 0 26px rgba(110,170,255,.6),inset 0 0 34px rgba(110,170,255,.3);animation:bmShieldPulse 2s ease-in-out infinite;pointer-events:none}
+@keyframes bmShieldPulse{0%,100%{opacity:.5}50%{opacity:1}}
+/* Actieve baas-dreigingen bovenin het slagveld (bmBossAlertHTML) */
+#bmBossAlert{position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:8;display:flex;flex-direction:column;gap:6px;width:min(94%,680px);pointer-events:none}
+#bmBossAlert:empty{display:none}
+.bm-boss-alert{background:rgba(22,12,8,.88);border:2px solid #d4af37;border-radius:10px;padding:6px 14px;text-align:center;color:#f3e7c9;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.bm-boss-alert.danger{border-color:#e05555;background:rgba(60,10,10,.9);animation:bmAlertPulse 1.1s ease-in-out infinite}
+.bm-boss-alert-t{font-weight:800;font-size:clamp(14px,1.7vw,28px);line-height:1.2}
+.bm-boss-alert-x{font-size:clamp(11px,1.1vw,18px);opacity:.92;line-height:1.3}
+.bm-boss-alert-x b{color:#ffd76a}
+@keyframes bmAlertPulse{0%,100%{box-shadow:0 0 0 rgba(224,85,85,0)}50%{box-shadow:0 0 24px rgba(224,85,85,.9)}}
+/* Leerlingtoestel: het mini-slagveld is te klein voor de banner — daar staat
+   hij in het actiepaneel (bmPlayerRender), vlak boven de vaardigheden. */
+.bm-field-solo #bmBossAlert{display:none}
+.bm-boss-alerts-panel:empty{display:none}
+.bm-boss-alerts-panel{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
+.bm-boss-alerts-panel .bm-boss-alert{padding:6px 10px;animation:none}
+.bm-boss-alerts-panel .bm-boss-alert.danger{box-shadow:0 0 14px rgba(224,85,85,.7)}
+.bm-boss-alerts-panel .bm-boss-alert-t{font-size:16px}
+.bm-boss-alerts-panel .bm-boss-alert-x{font-size:13px}
+/* Kortstondige melding van wat de baas deze ronde deed (bmBossAnnounce) */
+.bm-boss-card{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);z-index:12;min-width:min(80%,360px);max-width:92%;padding:12px 22px;border-radius:12px;text-align:center;color:#fff;background:rgba(22,12,8,.92);border:3px solid #d4af37;box-shadow:0 8px 30px rgba(0,0,0,.6);animation:bmBossCard 3.4s ease-out forwards}
+.bm-boss-card.danger{border-color:#e05555;background:rgba(70,10,10,.93)}
+.bm-boss-card.good{border-color:#5cc46a;background:rgba(12,48,20,.93)}
+.bm-boss-card-t{font-weight:800;font-size:clamp(18px,2.4vw,40px);line-height:1.15}
+.bm-boss-card-x{font-size:clamp(12px,1.3vw,22px);margin-top:4px;opacity:.95}
+@keyframes bmBossCard{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}10%{opacity:1;transform:translate(-50%,-50%) scale(1.06)}16%{transform:translate(-50%,-50%) scale(1)}85%{opacity:1}100%{opacity:0;transform:translate(-50%,-60%) scale(1)}}
 /* Siege weapon (Total War-belegering, TOTAL_WAR.md §5.9): staat op de
    speler-kant (#bmFormA), z-index 2 — ÓNDER de .bm-form-stacking-context
    (z-index 3, zie hierboven) waar de spelerspoppetjes in staan, dus de
@@ -1109,9 +1147,9 @@ body.greek .qcard .word{color:#143a5e}
 <script src="wordlists.js?v=20260907a"></script>
 <script src="games.js?v=20260930c"></script>
 <script src="battle-data.js?v=20260907a"></script>
-<script src="bossbattle.js?v=20260930d"></script>
+<script src="bossbattle.js?v=20261002a"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20260930h"></script>
+<script src="battle.js?v=20261002a"></script>
 <script src="map/provinces.js?v=20260911a"></script>
 <script src="totalwar.js?v=20260930a"></script>
 <script src="training.js?v=20260930c"></script>
