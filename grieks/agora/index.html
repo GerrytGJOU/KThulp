@@ -1783,7 +1783,7 @@ RENDER.home=function(){
   '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green-bright)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>'+
   '<span style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--green-bright)">Offline — werkt altijd, ook zonder internet</span></div>'+
   '<div class="tiles">'+
-  '<button class="tile" onclick="go(\'flashcards\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><h3>Φλάσκαρτα</h3><p>Flashcards — offline</p></button>'+
+  '<button class="tile" onclick="go(\'flashsetup\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><h3>Φλάσκαρτα</h3><p>Flashcards — offline</p></button>'+
   '<button class="tile" onclick="go(\'tachys\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg></div><h3>Ταχύς</h3><p>60 seconden snelmatch</p></button>'+
   '<button class="tile" onclick="go(\'grapheus\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div><h3>Γραφεύς</h3><p>Typ de vertaling — offline</p></button>'+
   '<button class="tile" onclick="go(\'sympleko\')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></div><h3>Συμπλέκω</h3><p>6 paren koppelen</p></button>'+
@@ -1967,7 +1967,7 @@ RENDER.help=function(){
   hs("verb","✍️","Werkwoorden & vormen","<p>De AI genereert 6 vervoegde Griekse werkwoordsvormen. Beschrijf persoon, getal, tijd, wijs en diathese. Je krijgt altijd de grammaticale ontleding te zien, ook bij een fout antwoord.</p>")+
   hs("sent","📜","Zinnen vertalen","<p>4 niveaus: <b>Ἁπλοῦν</b> (nominatief/accusatief, praesens), <b>Μέσον</b> (alle naamvallen, aoristus), <b>Χαλεπόν</b> (participia, A.c.I.), <b>Σοφόν</b> (optatief, ind. rede, ingewikkelde perioden). De AI beoordeelt je vertaling.</p>")+
   hs("lookup","🔍","Vormen opzoeken","<p>Typ een Grieks woord (of transliteratie) en zie direct de basisinfo uit de VOCAB. Met API-sleutel genereert de AI een volledig paradigma in Attisch Grieks.</p>")+
-  hs("offline","🎮","Offline spellen","<p><b>Φλάσκαρτα:</b> flashcards, klik om te omdraaien, 'Wist ik' of 'Nog niet'. <b>Ταχύς:</b> 60 seconden meerkeuze, fout kost 2 seconden. <b>Γραφεύς:</b> typ de Nederlandse vertaling. <b>Συμπλέκω:</b> koppel 6 Griekse woorden aan hun vertalingen.</p>")+
+  hs("offline","🎮","Offline spellen","<p><b>Φλάσκαρτα:</b> kies eerst een lijst en een bereik (bijv. woord 1–100), klik de kaart om en kies 'Wist ik' of 'Nog niet'. Je voortgang wordt per woord onthouden: een woord dat je niet wist komt in dezelfde ronde een paar kaarten later terug tot je het weet, en de volgende keer opnieuw. Woorden die je goed hebt komen steeds minder vaak terug (na 2, 4, 8, 16… dagen). <b>Ταχύς:</b> 60 seconden meerkeuze, fout kost 2 seconden. <b>Γραφεύς:</b> typ de Nederlandse vertaling. <b>Συμπλέκω:</b> koppel 6 Griekse woorden aan hun vertalingen.</p>")+
   hs("import","📂","Eigen woordenlijst","<p>Plak tekst (Grieks = Vertaling per regel) of upload .xlsx/.csv/.txt. Kolom A: Grieks, Kolom B: Nederlandse vertaling. Je lijst is daarna beschikbaar als woordset in alle oefeningen.</p>")+
   hs("ranks","🏛️","Rangen & XP","<p>Verdien XP door vragen goed te beantwoorden. Je klimt op van Νεόφυτος tot Σοφός. XP raken nooit verloren; bij iedere rangverhoging verschijnt een popup.</p>")+
   hs("shop","💰","Drachmen & Ἀγορά","<p>Elk goed antwoord levert ook drachmen (δρ.) op. Besteed ze in de Ἀγορά aan thema\'s (Χρώματα), muziek (Μουσική), schilden (Ἀσπίς) en titels (Τίτλοι).</p>");
@@ -2163,28 +2163,142 @@ async function aiParadigm(gr,tr,pos,ex){
   document.getElementById("paradigm_res").innerHTML='<div class="paradigm" style="margin-top:14px">'+(res||"Geen resultaat.").replace(/</g,"&lt;").replace(/>/g,"&gt;")+'</div>';
 }
 
-RENDER.flashcards=function(){
-  markPlayed("flash");
-  const pool=shuffle(pickSet("main"));
-  QF={pool,i:0,front:true,known:0,unknown:0};drawFlashcard();
+/* ---- Φλάσκαρτα: lijst/bereik kiezen + gespreid herhalen (Leitner) ----
+   Per woord: S.fcBox[sleutel]={b:bak 0-6,d:volgende beurt (ms),r:#goed,w:#fout}.
+   Bak 0 = fout, meteen weer aan de beurt. Elke "Wist ik" schuift een bak op;
+   de wachttijd loopt op volgens FC_DAYS. Binnen een ronde komt een "Nog niet"-
+   kaart FC_REQUEUE kaarten later terug, tot de leerling hem wél weet.
+   (Zelfde systeem als Cartae in latijn/ludus — wijzigingen daar ook doorvoeren.) */
+const FC_DAYS=[0,1,2,4,8,16,32];
+const FC_REQUEUE=4;
+const FC_DAY=86400000;
+const FC_RANGES=[[1,100],[101,300],[301,600],[601,1000]];
+function fcKey(w){return w.gr+"|"+(w.f||0);}
+function fcSt(w){return(S.fcBox||{})[fcKey(w)]||null;}
+function fcSel(){
+  const s={list:"main",from:1,to:100,n:20,...(S.fcSel||{})};
+  if(s.list==="import"&&!(S.imported&&S.imported.length))s.list="main";
+  return s;
+}
+function fcListWords(list){return list==="import"?(S.imported||[]):VOCAB;}
+function fcPool(sel){
+  // bereik = frequentienummer bij de GJOU-lijst, regelnummer bij een eigen lijst
+  const imp=sel.list==="import";
+  const pool=fcListWords(sel.list).filter((w,i)=>{const nr=imp?i+1:w.f;return nr>=sel.from&&nr<=sel.to;});
+  return imp?pool:applyCategory(pool);
+}
+function fcStats(pool){
+  const now=Date.now();const c={nieuw:0,fout:0,herhaal:0,later:0,beheerst:0};
+  pool.forEach(w=>{const st=fcSt(w);
+    if(!st)c.nieuw++;else if(st.b===0)c.fout++;else if(st.d<=now)c.herhaal++;else c.later++;
+    if(st&&st.b>=4)c.beheerst++;});
+  return c;
+}
+function fcBuild(pool,n){
+  const now=Date.now();const fout=[],herhaal=[],nieuw=[],later=[];
+  pool.forEach(w=>{const st=fcSt(w);
+    if(!st)nieuw.push(w);else if(st.b===0)fout.push(w);else if(st.d<=now)herhaal.push(w);else later.push(w);});
+  const byDue=(a,b)=>fcSt(a).d-fcSt(b).d;
+  herhaal.sort(byDue);later.sort(byDue);
+  // voorrang: fouten, dan wat aan de beurt is, dan nieuwe woorden (op lijst-
+  // volgorde, dus de frequentste eerst), pas daarna vroeg herhalen
+  return shuffle([...fout,...herhaal,...nieuw,...later].slice(0,n||pool.length));
+}
+function fcSetN(n){S.fcSel={...fcSel(),n};save();RENDER.flashsetup();}
+function fcSetRange(from,to){S.fcSel={...fcSel(),from,to};save();RENDER.flashsetup();}
+function fcSetList(list){
+  S.fcSel={...fcSel(),list,from:1,to:list==="import"?fcListWords(list).length:100};save();RENDER.flashsetup();
+}
+function fcReadRange(){
+  const sel=fcSel();const max=fcListWords(sel.list).length;
+  let a=parseInt(document.getElementById("fcFrom").value,10),b=parseInt(document.getElementById("fcTo").value,10);
+  if(!(a>=1))a=1;if(!(b>=1))b=max;a=Math.min(a,max);b=Math.min(b,max);if(a>b)[a,b]=[b,a];
+  fcSetRange(a,b);
+}
+function fcResetProgress(){
+  if(!confirm("Weet je zeker dat je je flashcard-voortgang (alle lijsten) wilt wissen?"))return;
+  S.fcBox={};save();toast("Flashcard-voortgang gewist.");RENDER.flashsetup();
+}
+RENDER.flashsetup=function(){
+  const sel=fcSel();const pool=fcPool(sel);const c=fcStats(pool);const tot=pool.length||1;
+  const imp=sel.list==="import";const max=fcListWords(sel.list).length;const due=c.fout+c.herhaal;
+  const chip=(on,click,label)=>'<button class="chip '+(on?"active":"")+'" onclick="'+click+'">'+label+'</button>';
+  const seg=(n,col)=>n?'<i style="display:block;width:'+(n/tot*100)+'%;background:'+col+'"></i>':"";
+  document.getElementById("app").innerHTML=scrhead("Φλάσκαρτα — Flashcards")+
+  '<div class="panel"><h3 style="color:var(--gold);margin-bottom:10px">Lijst</h3><div style="display:flex;flex-wrap:wrap;gap:8px">'+
+    chip(!imp,"fcSetList('main')","GJOU-frequentielijst ("+VOCAB.length+")")+
+    (S.imported&&S.imported.length?chip(imp,"fcSetList('import')","Mijn lijst ("+S.imported.length+")"):"")+
+  '</div></div>'+
+  '<div class="panel"><h3 style="color:var(--gold);margin-bottom:10px">Bereik</h3>'+
+    (imp?"":'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">'+
+      FC_RANGES.map(([a,b])=>chip(sel.from===a&&sel.to===b,"fcSetRange("+a+","+b+")",a+"–"+b)).join("")+
+      chip(sel.from===1&&sel.to===max,"fcSetRange(1,"+max+")","Alles")+'</div>')+
+    '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="color:var(--muted)">'+(imp?"Regel":"Woord")+'</span>'+
+    '<input class="inp" id="fcFrom" type="number" inputmode="numeric" min="1" max="'+max+'" value="'+sel.from+'" style="width:90px" onchange="fcReadRange()">'+
+    '<span style="color:var(--muted)">t/m</span>'+
+    '<input class="inp" id="fcTo" type="number" inputmode="numeric" min="1" max="'+max+'" value="'+sel.to+'" style="width:90px" onchange="fcReadRange()">'+
+    '<span style="color:var(--muted);font-size:13px">(van '+max+')</span></div></div>'+
+  (imp?"":'<div class="panel"><h3 style="color:var(--gold);margin-bottom:10px">Woordsoort</h3>'+catChips("RENDER.flashsetup")+'</div>')+
+  '<div class="panel"><h3 style="color:var(--gold);margin-bottom:10px">Kaarten per ronde</h3><div style="display:flex;flex-wrap:wrap;gap:8px">'+
+    [10,20,50,0].map(n=>chip(sel.n===n,"fcSetN("+n+")",n||"Alles")).join("")+'</div></div>'+
+  '<div class="panel"><h3 style="color:var(--gold);margin-bottom:10px">Jouw voortgang ('+pool.length+' woorden)</h3>'+
+    '<div style="display:flex;height:12px;border-radius:6px;overflow:hidden;background:rgba(0,0,0,.35);margin-bottom:10px">'+
+      seg(c.later,"var(--green-bright)")+seg(c.herhaal,"var(--gold)")+seg(c.fout,"#c8392a")+'</div>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px;font-size:14px;color:var(--cream2)">'+
+      '<div><b style="color:#e06a5a">'+c.fout+'</b> fout — komen eerst terug</div>'+
+      '<div><b style="color:var(--gold)">'+c.herhaal+'</b> nu te herhalen</div>'+
+      '<div><b style="color:var(--azure2)">'+c.nieuw+'</b> nog nieuw</div>'+
+      '<div><b style="color:var(--green-bright)">'+c.later+'</b> later weer aan de beurt</div>'+
+    '</div><div style="font-size:13px;color:var(--muted);margin-top:8px">Beheerst (8+ dagen onthouden): '+c.beheerst+' / '+pool.length+'</div></div>'+
+  '<button class="btn btn-primary" onclick="startFlash()" style="width:100%;margin-bottom:10px"'+(pool.length?"":" disabled")+'>Start'+(due?' — '+due+' te herhalen':'')+'</button>'+
+  '<button class="btn btn-ghost" onclick="fcResetProgress()" style="width:100%;font-size:13px">Flashcard-voortgang wissen</button>';
 };
+function startFlash(){
+  const sel=fcSel();const pool=fcPool(sel);if(!pool.length){toast("Geen woorden in dit bereik.");return;}
+  markPlayed("flash");
+  QF={pool:fcBuild(pool,sel.n),i:0,flipped:false,known:0,failed:{},relearned:0};go("flashcards");
+}
+RENDER.flashcards=function(){drawFlashcard();};
 function drawFlashcard(){
   const app=document.getElementById("app");if(!QF.pool||QF.i>=QF.pool.length)return finishFlash();
-  const w=QF.pool[QF.i];QF.front=true;S.fcCount=(S.fcCount||0)+1;save();checkAchievements();
-  app.innerHTML=scrhead("Φλάσκαρτα "+(QF.i+1)+"/"+QF.pool.length)+
-  '<div class="fcard" onclick="flipCard()"><div class="fgr">'+w.gr+'</div>'+(S.showTr&&w.tr?'<div class="ftr">'+w.tr+'</div>':'')+'<div class="fhint" style="margin-top:16px;font-size:12px;color:var(--muted)">Klik om om te draaien</div></div>'+
-  '<div style="display:flex;gap:12px"><button class="btn btn-ghost" onclick="QF.unknown++;QF.i++;drawFlashcard()" style="flex:1">✗ Nog niet</button><button class="btn btn-primary" onclick="QF.known++;QF.i++;drawFlashcard()" style="flex:1">✓ Wist ik</button></div>';
+  const w=QF.pool[QF.i];const st=fcSt(w);const back=QF.flipped;
+  const tag=QF.failed[fcKey(w)]?["Nog een keer","#e06a5a"]:!st?["Nieuw","var(--azure2)"]:st.b===0?["Was fout","#e06a5a"]:["Herhaling","var(--gold)"];
+  app.innerHTML='<div class="scrhead"><button class="back" onclick="go(\'flashsetup\')">'+ICONS.back+'</button><h2>Φλάσκαρτα · nog '+(QF.pool.length-QF.i)+'</h2></div>'+
+  '<div class="fcard" onclick="flipCard()"'+(back?' style="background:linear-gradient(170deg,#1a3a1a,#0d2010);border-color:var(--green)"':'')+'>'+
+    '<div style="font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:'+tag[1]+';margin-bottom:10px">'+tag[0]+'</div>'+
+    '<div class="fgr">'+w.gr+'</div>'+(S.showTr&&w.tr?'<div class="ftr">'+w.tr+'</div>':'')+
+    (back?'<div class="fnl">'+cleanNL(w.nl)+'</div>'+(w.ex?'<div class="fex">'+w.ex.replace(/\n/g,", ")+'</div>':""):'<div class="fhint" style="margin-top:16px;font-size:12px;color:var(--muted)">Klik om om te draaien</div>')+
+  '</div>'+
+  '<div style="display:flex;gap:12px"><button class="btn btn-ghost" onclick="fcAnswer(false)" style="flex:1">✗ Nog niet</button><button class="btn btn-primary" onclick="fcAnswer(true)" style="flex:1">✓ Wist ik</button></div>';
 }
-function flipCard(){
-  const app=document.getElementById("app");const w=QF.pool[QF.i];
-  app.innerHTML=scrhead("Φλάσκαρτα "+(QF.i+1)+"/"+QF.pool.length)+
-  '<div class="fcard" onclick="drawFlashcard()" style="background:linear-gradient(170deg,#1a3a1a,#0d2010);border-color:var(--green)"><div class="fgr">'+w.gr+'</div>'+(S.showTr&&w.tr?'<div class="ftr">'+w.tr+'</div>':'')+'<div class="fnl">'+cleanNL(w.nl)+'</div>'+(w.ex?'<div class="fex">'+w.ex.replace(/\n/g,", ")+'</div>':"")+'</div>'+
-  '<div style="display:flex;gap:12px"><button class="btn btn-ghost" onclick="QF.unknown++;QF.i++;drawFlashcard()" style="flex:1">✗ Nog niet</button><button class="btn btn-primary" onclick="QF.known++;QF.i++;drawFlashcard()" style="flex:1">✓ Wist ik</button></div>';
+function flipCard(){QF.flipped=!QF.flipped;drawFlashcard();}
+function fcAnswer(knew){
+  const w=QF.pool[QF.i];const k=fcKey(w);const now=Date.now();
+  if(!S.fcBox)S.fcBox={};
+  const old=S.fcBox[k];const st=old?{...old}:{b:1,d:0,r:0,w:0};
+  if(knew){
+    st.r++;
+    if(QF.failed[k]){st.b=1;st.d=now+FC_DAYS[1]*FC_DAY;QF.relearned++;}   // net opnieuw geleerd: morgen nog eens
+    else{
+      // vroeg herhalen (nog niet aan de beurt) laat de bak ongemoeid
+      if(!old||old.d<=now){st.b=Math.min(st.b+1,FC_DAYS.length-1);st.d=now+FC_DAYS[st.b]*FC_DAY;}
+      QF.known++;
+    }
+  }else{
+    st.w++;st.b=0;st.d=now;QF.failed[k]=true;
+    QF.pool.splice(Math.min(QF.i+1+FC_REQUEUE,QF.pool.length),0,w);
+  }
+  S.fcBox[k]=st;S.fcCount=(S.fcCount||0)+1;save();checkAchievements();
+  QF.i++;QF.flipped=false;drawFlashcard();
 }
 function finishFlash(){
   playFanfare();
+  const fails=Object.keys(QF.failed).length;
   document.getElementById("app").innerHTML=scrhead("Klaar!")+
-  '<div class="panel" style="text-align:center"><div style="font-size:60px">🃏</div><h2 style="color:var(--gold);margin-bottom:8px">Φλάσκαρτα voltooid!</h2><p>Geweten: '+(QF.known||0)+' · Nog niet: '+(QF.unknown||0)+'</p><div style="margin-top:18px;display:flex;flex-direction:column;gap:10px"><button class="btn btn-primary" onclick="RENDER.flashcards()">Opnieuw</button><button class="btn btn-ghost" onclick="go(\'home\')">Terug</button></div></div>';
+  '<div class="panel" style="text-align:center"><div style="font-size:60px">🃏</div><h2 style="color:var(--gold);margin-bottom:8px">Φλάσκαρτα voltooid!</h2>'+
+  '<p>Meteen geweten: '+QF.known+' · Na oefenen geleerd: '+QF.relearned+'</p>'+
+  (fails?'<p style="color:var(--muted);font-size:14px;margin-top:6px">De '+fails+' woord(en) die je eerst niet wist, komen morgen terug.</p>':'')+
+  '<div style="margin-top:18px;display:flex;flex-direction:column;gap:10px"><button class="btn btn-primary" onclick="startFlash()">Nog een ronde</button><button class="btn btn-ghost" onclick="go(\'flashsetup\')">Andere selectie</button><button class="btn btn-ghost" onclick="go(\'home\')">Terug</button></div></div>';
 }
 
 RENDER.tachys=function(){
