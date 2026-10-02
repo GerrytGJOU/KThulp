@@ -381,6 +381,15 @@ const I18N = {
     cat_all:"Alle woorden", cat_verb:"Werkwoorden", cat_noun:"Zelfstandige nw", cat_adj:"Bijvoeglijke nw", cat_adv:"Bijwoorden", cat_pron:"Voornaamwoorden", cat_prep:"Voorzetsels", cat_conj:"Voegwoorden", filter_label:"Woordsoort",
     offline_badge:"Offline",
     g_flash:"Cartae", g_flash_en:"Flashcards", g_flash_d:"Draai de kaart om en test jezelf.",
+    fc_title:"Cartae — Flashcards", fc_list:"Lijst", fc_main:"GJOU-frequentielijst", fc_range:"Bereik",
+    fc_word:"Woord", fc_line:"Regel", fc_to:"t/m", fc_of:"van", fc_all:"Alles", fc_per_round:"Kaarten per ronde",
+    fc_progress:"Jouw voortgang", fc_wrong:"fout — komen eerst terug", fc_due:"nu te herhalen", fc_new:"nog nieuw",
+    fc_later:"later weer aan de beurt", fc_mastered:"Beheerst (8+ dagen onthouden)", fc_to_review:"te herhalen",
+    fc_reset:"Flashcard-voortgang wissen", fc_reset_confirm:"Weet je zeker dat je je flashcard-voortgang (alle lijsten) wilt wissen?",
+    fc_reset_done:"Flashcard-voortgang gewist.", fc_empty:"Geen woorden in dit bereik.",
+    fc_tag_new:"Nieuw", fc_tag_again:"Nog een keer", fc_tag_wrong:"Was fout", fc_tag_review:"Herhaling", fc_left:"nog",
+    fc_first_try:"Meteen geweten", fc_relearned:"Na oefenen geleerd", fc_back_tomorrow:"woord(en) die je eerst niet wist, komen morgen terug",
+    fc_again_round:"Nog een ronde", fc_other_sel:"Andere selectie",
     g_speed:"Velox", g_speed_en:"Snelle match", g_speed_d:"Zo veel mogelijk goed in 60 seconden.",
     g_pairs:"Par", g_pairs_en:"Paren", g_pairs_d:"Koppel Latijn aan de betekenis.",
     flip:"Draai om", knew:"Wist ik", notyet:"Nog niet", tap_card:"Tik om om te draaien",
@@ -456,6 +465,15 @@ const I18N = {
     cat_all:"All words", cat_verb:"Verbs", cat_noun:"Nouns", cat_adj:"Adjectives", cat_adv:"Adverbs", cat_pron:"Pronouns", cat_prep:"Prepositions", cat_conj:"Conjunctions", filter_label:"Word type",
     offline_badge:"Offline",
     g_flash:"Cartae", g_flash_en:"Flashcards", g_flash_d:"Flip the card and test yourself.",
+    fc_title:"Cartae — Flashcards", fc_list:"List", fc_main:"GJOU frequency list", fc_range:"Range",
+    fc_word:"Word", fc_line:"Line", fc_to:"to", fc_of:"of", fc_all:"All", fc_per_round:"Cards per round",
+    fc_progress:"Your progress", fc_wrong:"wrong — come back first", fc_due:"due for review", fc_new:"new",
+    fc_later:"scheduled for later", fc_mastered:"Mastered (remembered 8+ days)", fc_to_review:"to review",
+    fc_reset:"Reset flashcard progress", fc_reset_confirm:"Are you sure you want to reset your flashcard progress (all lists)?",
+    fc_reset_done:"Flashcard progress reset.", fc_empty:"No words in this range.",
+    fc_tag_new:"New", fc_tag_again:"Once more", fc_tag_wrong:"Missed last time", fc_tag_review:"Review", fc_left:"left",
+    fc_first_try:"Known right away", fc_relearned:"Learned after practice", fc_back_tomorrow:"missed word(s) will return tomorrow",
+    fc_again_round:"Another round", fc_other_sel:"Change selection",
     g_speed:"Velox", g_speed_en:"Speed match", g_speed_d:"As many right as you can in 60 seconds.",
     g_pairs:"Par", g_pairs_en:"Pairs", g_pairs_d:"Match Latin to its meaning.",
     flip:"Flip", knew:"Knew it", notyet:"Not yet", tap_card:"Tap to flip",
@@ -1191,7 +1209,7 @@ RENDER.help=function(){
 
   const S4=`<h4>Hoe werkt het?</h4><p>Typ een Latijns woord (bv. <span class="ex">servus</span>, <span class="ex">amo</span> of <span class="ex">magnus</span>) en tik op <b>Zoek op</b>. Je krijgt:</p><ul><li>Voor zelfstandige naamwoorden en bijvoeglijke naamwoorden: alle naamvallen, enkelvoud en meervoud.</li><li>Voor werkwoorden: principale delen en de belangrijkste vormen.</li></ul><p>Als het woord in de ingebouwde lijst staat, zie je direct een basiskaart (ook offline). Met een Gemini-sleutel volgt het volledige paradigma.</p>`;
 
-  const S5=`<p>Deze vier spellen werken zonder internet en zonder Gemini-sleutel.</p><h4>&#127183; Cartae (Flashcards)</h4><p>Draai de kaart om door erop te tikken. Tik daarna <b>Wist ik</b> of <b>Nog niet</b>.</p><h4>&#9889; Velox (Snelle match)</h4><p>Kies zo snel mogelijk de juiste vertaling uit vier opties. Je hebt 60 seconden. Een foute keuze kost 2 seconden.</p><h4>&#9997;&#65039; Scriptor (Typen)</h4><p>Typ zelf de Nederlandse vertaling — puur offline. Gebruik <b>Toon antwoord</b> als je het niet weet.</p><h4>&#128279; Par (Paren)</h4><p>Koppel 6 Latijnse woorden aan de juiste betekenis. Tik twee tegels die bij elkaar horen. Hoe snel doe jij het?</p><div class="help-tip">&#128161; Vóór elk offline spel kun je filteren op woordsoort of kiezen voor je eigen geïmporteerde lijst.</div>`;
+  const S5=`<p>Deze vier spellen werken zonder internet en zonder Gemini-sleutel.</p><h4>&#127183; Cartae (Flashcards)</h4><p>Kies eerst een lijst en een bereik (bijv. woord 1–100). Draai de kaart om door erop te tikken en tik daarna <b>Wist ik</b> of <b>Nog niet</b>. Je voortgang wordt per woord onthouden: een woord dat je niet wist komt in dezelfde ronde een paar kaarten later terug tot je het weet, en de volgende keer opnieuw. Woorden die je goed hebt komen steeds minder vaak terug (na 2, 4, 8, 16… dagen).</p><h4>&#9889; Velox (Snelle match)</h4><p>Kies zo snel mogelijk de juiste vertaling uit vier opties. Je hebt 60 seconden. Een foute keuze kost 2 seconden.</p><h4>&#9997;&#65039; Scriptor (Typen)</h4><p>Typ zelf de Nederlandse vertaling — puur offline. Gebruik <b>Toon antwoord</b> als je het niet weet.</p><h4>&#128279; Par (Paren)</h4><p>Koppel 6 Latijnse woorden aan de juiste betekenis. Tik twee tegels die bij elkaar horen. Hoe snel doe jij het?</p><div class="help-tip">&#128161; Vóór elk offline spel kun je filteren op woordsoort of kiezen voor je eigen geïmporteerde lijst.</div>`;
 
   const S6=`<h4>Methode 1 — Tekst plakken</h4><p>Ga naar <b>Boeken</b> (boekenplankicoon onderaan) &#8594; <b>Eigen lijst importeren</b>. Plak je woorden in het tekstveld, één per regel:</p><ul><li><span class="ex">servus = slaaf</span></li><li><span class="ex">amo = liefhebben, houden van</span></li><li><span class="ex">magnus = groot, groots</span></li></ul><p>Scheid Latijn en betekenis met <b>=</b>, <b>:</b>, <b>—</b> of een tab. Tik daarna op <b>Lijst opslaan</b>.</p><h4>Methode 2 — Bestand uploaden</h4><p>Tik op <b>Bestand kiezen</b> en selecteer een bestand:</p><ul><li><span class="ex">.xlsx / .xls</span> — Excel. Latijn in kolom A, betekenis in kolom B.</li><li><span class="ex">.csv / .txt</span> — tekstbestand, gescheiden door komma, puntkomma of tab.</li></ul><p>Na het opslaan kun je bij alle oefeningen <span class="ex">Mijn lijst</span> kiezen als woordset.</p><div class="help-tip">&#128161; Heeft je docent een Studygo- of Quizlet-export gegeven? Kopieer de woorden of sla ze op als .xlsx — dan heb je precies de toetsstof in de app.</div>`;
 
@@ -1692,7 +1710,7 @@ async function doLookup(){
 /* ============================ OFFLINE GAMES ============================ */
 // The four offline games route through a small word-type chooser first.
 let PENDING_GAME=null;
-function chooseOffline(game){PENDING_GAME=game;go('offcat');}
+function chooseOffline(game){if(game==='flash')return go('flashsetup');PENDING_GAME=game;go('offcat');}
 RENDER.offcat=function(){
   const games={flash:"g_flash",speed:"g_speed",typeoff:"g_typeoff",pairs:"g_pairs"};
   app.innerHTML=scrhead(t(games[PENDING_GAME]||"offline_section"))+`
@@ -1743,19 +1761,121 @@ function bestRoundCard(medal,title,lines){
   return document.getElementById("endBtns");
 }
 
-/* ---- CARTAE (flashcards) ---- */
+/* ---- CARTAE (flashcards): lijst/bereik kiezen + gespreid herhalen (Leitner) ----
+   Per woord: S.fcBox[sleutel]={b:bak 0-6,d:volgende beurt (ms),r:#goed,w:#fout}.
+   Bak 0 = fout, meteen weer aan de beurt. Elke "Wist ik" schuift een bak op;
+   de wachttijd loopt op volgens FC_DAYS. Binnen een ronde komt een "Nog niet"-
+   kaart FC_REQUEUE kaarten later terug, tot de leerling hem wél weet.
+   (Zelfde systeem als Φλάσκαρτα in grieks/agora — wijzigingen daar ook doorvoeren.) */
+const FC_DAYS=[0,1,2,4,8,16,32];
+const FC_REQUEUE=4;
+const FC_DAY=86400000;
+const FC_RANGES=[[1,100],[101,300],[301,600],[601,1000]];
 let QF=null;
+function fcKey(w){return w.la+"|"+(w.f||0);}
+function fcSt(w){return(S.fcBox||{})[fcKey(w)]||null;}
+function fcSel(){
+  const s={list:"main",from:1,to:100,n:20,...(S.fcSel||{})};
+  if(s.list==="mine"&&!(S.myList&&S.myList.length))s.list="main";
+  return s;
+}
+function fcListWords(list){return list==="mine"?(S.myList||[]):VOCAB;}
+function fcMax(list){return list==="mine"?fcListWords(list).length:Math.max(...VOCAB.map(w=>w.f||0));}
+function fcPool(sel){
+  // bereik = frequentienummer bij de GJOU-lijst, regelnummer bij een eigen lijst
+  const mine=sel.list==="mine";
+  const pool=fcListWords(sel.list).filter((w,i)=>{const nr=mine?i+1:w.f;return nr>=sel.from&&nr<=sel.to&&w.nl&&primaryMeaning(w).length>0;});
+  return mine?pool:applyCategory(pool);
+}
+function fcStats(pool){
+  const now=Date.now();const c={nieuw:0,fout:0,herhaal:0,later:0,beheerst:0};
+  pool.forEach(w=>{const st=fcSt(w);
+    if(!st)c.nieuw++;else if(st.b===0)c.fout++;else if(st.d<=now)c.herhaal++;else c.later++;
+    if(st&&st.b>=4)c.beheerst++;});
+  return c;
+}
+function fcBuild(pool,n){
+  const now=Date.now();const fout=[],herhaal=[],nieuw=[],later=[];
+  pool.forEach(w=>{const st=fcSt(w);
+    if(!st)nieuw.push(w);else if(st.b===0)fout.push(w);else if(st.d<=now)herhaal.push(w);else later.push(w);});
+  const byDue=(a,b)=>fcSt(a).d-fcSt(b).d;
+  herhaal.sort(byDue);later.sort(byDue);
+  // voorrang: fouten, dan wat aan de beurt is, dan nieuwe woorden (op lijst-
+  // volgorde, dus de frequentste eerst), pas daarna vroeg herhalen
+  return shuffle([...fout,...herhaal,...nieuw,...later].slice(0,n||pool.length));
+}
+function fcSetN(n){S.fcSel={...fcSel(),n};save();RENDER.flashsetup();}
+function fcSetCat(id){CURCAT=id;RENDER.flashsetup();}
+function fcSetRange(from,to){S.fcSel={...fcSel(),from,to};save();RENDER.flashsetup();}
+function fcSetList(list){
+  S.fcSel={...fcSel(),list,from:1,to:list==="mine"?fcMax(list):100};save();RENDER.flashsetup();
+}
+function fcReadRange(){
+  const sel=fcSel();const max=fcMax(sel.list);
+  let a=parseInt(document.getElementById("fcFrom").value,10),b=parseInt(document.getElementById("fcTo").value,10);
+  if(!(a>=1))a=1;if(!(b>=1))b=max;a=Math.min(a,max);b=Math.min(b,max);if(a>b)[a,b]=[b,a];
+  fcSetRange(a,b);
+}
+function fcResetProgress(){
+  if(!confirm(t("fc_reset_confirm")))return;
+  S.fcBox={};save();toast(t("fc_reset_done"));RENDER.flashsetup();
+}
+function fcChip(on,click,label){
+  return `<button onclick="${click}" style="flex:0 0 auto;border-radius:20px;padding:8px 14px;font-family:'Cinzel',serif;font-size:13px;white-space:nowrap;border:1px solid ${on?'var(--gold-bright)':'var(--stone4)'};background:${on?'linear-gradient(180deg,var(--gold),var(--gold-dim))':'var(--stone3)'};color:${on?'#2a1d05':'var(--cream)'}">${label}</button>`;
+}
+RENDER.flashsetup=function(){
+  const sel=fcSel();const pool=fcPool(sel);const c=fcStats(pool);const tot=pool.length||1;
+  const mine=sel.list==="mine";const max=fcMax(sel.list);const due=c.fout+c.herhaal;
+  const seg=(n,col)=>n?`<i style="display:block;width:${n/tot*100}%;background:${col}"></i>`:"";
+  const numStyle="width:90px;background:rgba(0,0,0,.32);border:1px solid var(--stone4);border-radius:10px;color:var(--cream);padding:10px 12px;font-size:16px";
+  app.innerHTML=scrhead(t("fc_title"))+`
+  <div class="screen">
+    <div class="panel"><h3>${t("fc_list")}</h3><div style="display:flex;flex-wrap:wrap;gap:8px">
+      ${fcChip(!mine,"fcSetList('main')",`${t("fc_main")} <span style="opacity:.7;font-size:11px">${VOCAB.length}</span>`)}
+      ${S.myList&&S.myList.length?fcChip(mine,"fcSetList('mine')",`${t("set_mine")} <span style="opacity:.7;font-size:11px">${S.myList.length}</span>`):""}
+    </div></div>
+    <div class="panel"><h3>${t("fc_range")}</h3>
+      ${mine?"":`<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+        ${FC_RANGES.map(([a,b])=>fcChip(sel.from===a&&sel.to===b,`fcSetRange(${a},${b})`,`${a}–${b}`)).join("")}
+        ${fcChip(sel.from===1&&sel.to===max,`fcSetRange(1,${max})`,t("fc_all"))}</div>`}
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="note">${mine?t("fc_line"):t("fc_word")}</span>
+        <input id="fcFrom" type="number" inputmode="numeric" min="1" max="${max}" value="${sel.from}" style="${numStyle}" onchange="fcReadRange()">
+        <span class="note">${t("fc_to")}</span>
+        <input id="fcTo" type="number" inputmode="numeric" min="1" max="${max}" value="${sel.to}" style="${numStyle}" onchange="fcReadRange()">
+        <span class="note">(${t("fc_of")} ${max})</span>
+      </div></div>
+  </div>
+  ${mine?"":`<div class="note screen" style="margin:-4px 0 8px">${t("filter_label")}</div>${catChips("fcSetCat")}`}
+  <div class="screen">
+    <div class="panel"><h3>${t("fc_per_round")}</h3><div style="display:flex;flex-wrap:wrap;gap:8px">
+      ${[10,20,50,0].map(n=>fcChip(sel.n===n,`fcSetN(${n})`,n||t("fc_all"))).join("")}</div></div>
+    <div class="panel"><h3>${t("fc_progress")} (${pool.length} ${t("words")})</h3>
+      <div style="display:flex;height:12px;border-radius:6px;overflow:hidden;background:rgba(0,0,0,.35);margin-bottom:10px">
+        ${seg(c.later,"var(--green-bright)")}${seg(c.herhaal,"var(--gold)")}${seg(c.fout,"var(--red-bright)")}</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:6px;font-size:14px;color:var(--cream)">
+        <div><b style="color:var(--red-bright)">${c.fout}</b> ${t("fc_wrong")}</div>
+        <div><b style="color:var(--gold-bright)">${c.herhaal}</b> ${t("fc_due")}</div>
+        <div><b style="color:var(--cream)">${c.nieuw}</b> ${t("fc_new")}</div>
+        <div><b style="color:var(--green-bright)">${c.later}</b> ${t("fc_later")}</div>
+      </div>
+      <div class="note" style="margin-top:8px">${t("fc_mastered")}: ${c.beheerst} / ${pool.length}</div></div>
+    <button class="btn btn-gold btn-block" style="margin-bottom:10px${pool.length?"":";opacity:.4"}" onclick="startFlash()">${t("go_label")}${due?` — ${due} ${t("fc_to_review")}`:""}</button>
+    <button class="btn btn-ghost btn-block" style="font-size:13px" onclick="fcResetProgress()">${t("fc_reset")}</button>
+  </div>`;
+};
 function startFlash(){
-  const cards=quickPool(12);
-  if(!cards.length){go('vocablist');return;}
-  QF={cards,i:0,known:0,flipped:false};
+  const sel=fcSel();const pool=fcPool(sel);if(!pool.length){toast(t("fc_empty"));return;}
+  const cards=fcBuild(pool,sel.n);
+  QF={cards,unique:cards.length,i:0,known:0,relearned:0,failed:{},flipped:false};
   markPlayed("flash");touchDay();go('flashcards');
 }
 RENDER.flashcards=function(){drawFlash();};
 function drawFlash(){
   if(QF.i>=QF.cards.length)return finishFlash();
-  const w=QF.cards[QF.i];const prog=Math.round(QF.i/QF.cards.length*100);
-  app.innerHTML=gameTop(t("g_flash"),`${QF.i+1} / ${QF.cards.length}`)+`
+  const w=QF.cards[QF.i];const st=fcSt(w);const prog=Math.round(QF.i/QF.cards.length*100);
+  const tag=QF.failed[fcKey(w)]?t("fc_tag_again"):!st?t("fc_tag_new"):st.b===0?t("fc_tag_wrong"):t("fc_tag_review");
+  app.innerHTML=gameTop(t("g_flash"),`${t("fc_left")} ${QF.cards.length-QF.i}`,"go('flashsetup')")+`
   <div class="quiztop"><div class="qbar"><i style="width:${prog}%"></i></div></div>
   <div class="screen">
     <div class="card" style="cursor:pointer;min-height:220px;display:flex;flex-direction:column;justify-content:center" onclick="flipFlash()">
@@ -1764,8 +1884,9 @@ function drawFlash(){
         <div class="word" style="color:#5a120c">${cleanNL(w.nl)}</div>
         ${w.ex?`<div class="extra">${w.ex}</div>`:''}
       `:`
-        <div class="kicker">${t("tap_card")}</div>
+        <div class="kicker">${tag}</div>
         <div class="word">${w.la}</div>
+        <div class="extra">${t("tap_card")}</div>
       `}
     </div>
     ${QF.flipped?`
@@ -1778,17 +1899,37 @@ function drawFlash(){
 }
 function flipFlash(){QF.flipped=!QF.flipped;drawFlash();}
 function flashAnswer(knew){
-  if(knew){QF.known++;addPoints(4);beep("good");}
+  const w=QF.cards[QF.i];const k=fcKey(w);const now=Date.now();
+  if(!S.fcBox)S.fcBox={};
+  const old=S.fcBox[k];const st=old?{...old}:{b:1,d:0,r:0,w:0};
+  if(knew){
+    st.r++;beep("good");
+    if(QF.failed[k]){st.b=1;st.d=now+FC_DAYS[1]*FC_DAY;QF.relearned++;addPoints(2);}   // net opnieuw geleerd: morgen nog eens
+    else{
+      // vroeg herhalen (nog niet aan de beurt) laat de bak ongemoeid
+      if(!old||old.d<=now){st.b=Math.min(st.b+1,FC_DAYS.length-1);st.d=now+FC_DAYS[st.b]*FC_DAY;}
+      QF.known++;addPoints(4);
+    }
+  }else{
+    st.w++;st.b=0;st.d=now;QF.failed[k]=true;
+    QF.cards.splice(Math.min(QF.i+1+FC_REQUEUE,QF.cards.length),0,w);
+  }
+  S.fcBox[k]=st;save();
   QF.i++;QF.flipped=false;
   if(QF.i>=QF.cards.length)return finishFlash();
   drawFlash();window.scrollTo(0,0);
 }
 function finishFlash(){
   S.correctTotal+=QF.known;save();checkAchievements();
-  const pct=Math.round(QF.known/QF.cards.length*100);
+  const pct=Math.round(QF.known/QF.unique*100);
+  const fails=Object.keys(QF.failed).length;
   const medal=pct>=90?"wreath":pct>=50?"scroll":"shield";
-  const b=bestRoundCard(medal,t("round_done"),[`${QF.known} / ${QF.cards.length} ${t("knew").toLowerCase()}`]);
-  b.innerHTML=`<button class="btn btn-gold btn-block" onclick="closeOverlay();startFlash()">${t("again")}</button>
+  const lines=[`${t("fc_first_try")}: ${QF.known} / ${QF.unique}`];
+  if(QF.relearned)lines.push(`${t("fc_relearned")}: ${QF.relearned}`);
+  if(fails)lines.push(`${fails} ${t("fc_back_tomorrow")}`);
+  const b=bestRoundCard(medal,t("round_done"),lines);
+  b.innerHTML=`<button class="btn btn-gold btn-block" onclick="closeOverlay();startFlash()">${t("fc_again_round")}</button>
+  <button class="btn btn-ghost btn-block" onclick="closeOverlay();go('flashsetup')">${t("fc_other_sel")}</button>
   <button class="btn btn-ghost btn-block" onclick="closeOverlay();go('home')">${t("to_menu")}</button>`;
 }
 
