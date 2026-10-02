@@ -1197,6 +1197,10 @@ body.greek .qcard .word{color:#143a5e}
     go(twGoogle.returnScreen||"teacherPortal");
     return;
   }
+  // Rechtstreekse ingang vanaf het hoofdmenu (?screen=teacherPortal): het
+  // docentenportaal stuurt zelf door naar de login als je niet bent ingelogd.
+  const direct = new URLSearchParams(location.search).get("screen");
+  if(direct==="teacherPortal"){ go("teacherPortal"); return; }
   if(room){ go("join"); }
   else { go("home"); }
 })();
