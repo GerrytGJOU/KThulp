@@ -4607,13 +4607,14 @@ function bmPlayerRender(){
               <span>Je hebt ${BM_MY_BE} BE, je goedkoopste vaardigheid kost ${goedkoopste}. Je kunt wel een basisactie doen.</span></div>
               ${bmBasicActionsHTML("Basisacties — gratis")}`;
           })()}
-          ${(BM_META?.mode==="boss"&&BM_BOSS?.charging)?(()=>{
-            // Cycloop-maaltijd: iedereen kan gratis meehelpen met schild
-            // (BM_BASIC_ACTIONS.basic_schildheffen, battle-data.js).
+          ${(BM_META?.mode==="boss"&&(BM_BOSS?.charging||BM_BOSS?.enraged))?(()=>{
+            // Cycloop-maaltijd / Minotaurus-Enrage: iedereen kan gratis
+            // meehelpen met schild (BM_BASIC_ACTIONS.basic_schildheffen).
             const a=BM_BASIC_ACTIONS.find(x=>x.id==="basic_schildheffen");
+            const why=BM_BOSS?.charging?"Help de maaltijd te onderbreken":"Help zijn Enrage-klap op te vangen";
             return a?`<button class="tile bm-meal-shield" onclick="bmChooseAbility('${a.id}',0)">
               <div style="font-size:14px;font-weight:700">🛡️ ${esc(a.nm)} <span class="pill">gratis · +${a.shld} schild</span></div>
-              <div class="note" style="margin-top:2px">Help de maaltijd te onderbreken — in plaats van aan te vallen.</div>
+              <div class="note" style="margin-top:2px">${why} — in plaats van aan te vallen.</div>
             </button>`:"";
           })():""}
           ${inspired?`<div class="note" style="color:var(--hi-bright);margin-bottom:6px">⚡ Geïnspireerd! Je volgende aanval doet extra schade.</div>`:""}

@@ -103,23 +103,41 @@ const BOSS_ROUNDS_PER_ATTACK = {1:2, 2:1, 3:1};
      klappen (combo/legendarisch) boven constant kleine pokes.
    - Cycloop: iedere 3 rondes een "metgezellenmaaltijd"-dreiging met een
      fuse van 2 rondes (te tellen vanaf de ronde ná de aankondiging). Alleen gezamenlijk schild (team_shield-acties samen
-     ≥ 8*Md die ronde) onderbreekt 'm. Loopt de fuse af: 6% van classMaxHP
+     ≥ bmBossShieldNeed() die ronde, + de gratis actie "Schild heffen")
+     onderbreekt 'm. Loopt de fuse af: 6% van classMaxHP
      schade aan de klas, én de Cycloop heelt 4% van bossMaxHP (Polyfemus'
      dagelijkse maaltijd van Odysseus' metgezellen).
    - Minotaurus: het Labyrinth-schild zelf leeft NIET hier (dat is
      persistente baas-state en moet vóór newHB al worden verrekend in
      bmResolve() in battle.js) — hier alleen de Enrage-omschakeling: zodra
-     ctx.labyrinthBroken waar is (of fase 3 bereikt is), valt de baas
-     voortaan elke ronde aan i.p.v. volgens de normale cadans.
+     ctx.labyrinthBroken waar is (of fase 3 bereikt is) gaat b.enraged
+     blijvend aan: de baas valt dan elke ronde aan én elke klap doet
+     BOSS_ENRAGE_DMG_MULT keer zoveel schade. (Vóór 2026-10-02 was Enrage
+     niet blijvend — labyrinthBroken is alleen waar in de breekronde — en
+     ging het alleen om de cadans, wat vanaf fase 2 toch al elke ronde is.)
    ---------------------------------------------------------------------------- */
-// Benodigd gezamenlijk schild om de Cycloop-maaltijd te onderbreken. Schaalt
+// Benodigd gezamenlijk schild om de Cycloop-maaltijd te onderbreken (en om
+// een Enrage-klap van de Minotaurus maximaal op te vangen). Schaalt
 // met de klasgrootte (vroeger vast 8×moeilijkheid — onhaalbaar voor een klas
 // zonder Hopliet/Bevelvoerder). Op Normal ≈ 60% van de klas die "Schild
 // heffen" (+2, BM_BASIC_ACTIONS) kiest; de moeilijkheid telt maar tot ×1,5
 // mee, anders wordt het op Heroic/Legendary wiskundig onhaalbaar.
-function bmBossMealNeed(n,diffM){
+function bmBossShieldNeed(n,diffM){
   return Math.max(3, Math.ceil(Math.max(1,n||0)*1.2*Math.min(diffM||1,1.5)));
 }
+
+// Minotaurus-Enrage: zoveel keer zwaarder slaat hij per basisaanval, en
+// zoveel daarvan vangt gezamenlijk schild maximaal op (bij ≥
+// bmBossShieldNeed() schild die ronde; minder schild = naar verhouding
+// minder). Gewone schilden houden baasklappen verder NIET tegen (die gaan
+// buiten de schild-verrekening van bmResolve() om) — dit is dé
+// overleg-tegenzet tegen Enrage. Gebalanceerd (2026-10-02) met een
+// simulatie die op een echt gewonnen Cycloop-gevecht (7 lln, 28 rondes)
+// was gekalibreerd: zonder schild verliest de klas, met ~30% van de klas op
+// schild wint ze krap (vergelijkbaar met een samenwerkende klas tegen de
+// Cycloop), met meer schild wint ze veilig maar duurt het veel langer.
+const BOSS_ENRAGE_DMG_MULT = 1.35;
+const BOSS_ENRAGE_MAX_BLOCK = 0.8;
 
 function bmBossResolveTick(boss, ctx){
   const {classMaxHP, bossMaxHP, diffM, noDamageAnswerCount, bossId, dmgDealtThisRound=0, shieldThisRound=0, labyrinthBroken=false, playerCount=0} = ctx;
@@ -144,7 +162,7 @@ function bmBossResolveTick(boss, ctx){
     // zo heeft de klas echt 2 gewaarschuwde rondes om te reageren.
     if(!b.charging && b.mealCycle>=3){
       b.charging=true; b.chargeLeft=2; b.mealCycle=0;
-      b.mealNeed=bmBossMealNeed(playerCount,diffM);
+      b.mealNeed=bmBossShieldNeed(playerCount,diffM);
       events.push({type:"boss_meal_warn",need:b.mealNeed});
     }
     else if(b.charging){
@@ -164,15 +182,28 @@ function bmBossResolveTick(boss, ctx){
     }
   }
 
-  // ---- Basisaanval: Minotaurus valt in Enrage elke ronde aan ----
+  // ---- Minotaurus: Enrage (blijvend) zodra het Labyrinth breekt of fase 3 ----
+  if(bossId==="minotaur" && !b.enraged && (labyrinthBroken || (b.phase||1)>=3)){
+    b.enraged=true;
+    events.push({type:"boss_enrage", cause:labyrinthBroken?"laby":"phase"});
+  }
+  const enraged=bossId==="minotaur" && !!b.enraged;
+  if(enraged) b.parryNeed=bmBossShieldNeed(playerCount,diffM);
+
+  // ---- Basisaanval (in Enrage: elke ronde en zwaarder) ----
   b.roundsSinceAttack=(b.roundsSinceAttack||0)+1;
-  const enraged=bossId==="minotaur" && (labyrinthBroken || (b.phase||1)>=3);
   const cadence=enraged?1:(BOSS_ROUNDS_PER_ATTACK[b.phase||1]||1);
   if(b.roundsSinceAttack>=cadence){
     b.roundsSinceAttack=0;
-    const dmg=Math.round(classMaxHP*0.05*diffM);
+    let dmg=Math.round(classMaxHP*0.05*diffM*(enraged?BOSS_ENRAGE_DMG_MULT:1));
+    let blocked=0;
+    if(enraged && shieldThisRound>0){
+      const frac=Math.min(1, shieldThisRound/(b.parryNeed||1));
+      blocked=Math.round(dmg*BOSS_ENRAGE_MAX_BLOCK*frac);
+      dmg-=blocked;
+    }
     classDamage+=dmg;
-    events.push({type:"boss_attack",dmg});
+    events.push(enraged?{type:"boss_attack",dmg,enraged:true,blocked}:{type:"boss_attack",dmg});
   }
 
   if(noDamageAnswerCount>0){
@@ -230,17 +261,31 @@ function bmBossAlerts(){
   if(preset.id==="minotaur" && (BM_BOSS?.labyrinthShield>0)){
     const s=Math.round(BM_BOSS.labyrinthShield);
     out.push({id:"laby", kind:"info", short:"🛡️ Labyrinth-schild: "+s,
-      title:"🛡️ Labyrinth-schild: "+s, text:"Al je schade gaat eerst naar het schild. Daarna gaat de Minotaurus in Enrage!"});
+      title:"🛡️ Labyrinth-schild: "+s, text:"Al je schade gaat eerst naar het schild. Breekt het, dan raakt de Minotaurus in <b>Enrage</b> en slaat hij harder!"});
+  }
+  if(preset.id==="minotaur" && BM_BOSS?.enraged){
+    const pct=Math.round(BOSS_ENRAGE_DMG_MULT*100-100);
+    out.push({id:"enrage", kind:"danger", short:"😤 Enrage — elke ronde een aanval, +"+pct+"% schade",
+      title:"😤 De Minotaurus is in Enrage!",
+      text:"Hij valt <b>elke ronde</b> aan en slaat <b>"+pct+"% harder</b>. Vang zijn klap samen op: met <b>"+(BM_BOSS.parryNeed||"genoeg")+" schild</b> houd je "+Math.round(BOSS_ENRAGE_MAX_BLOCK*100)+"% tegen (minder schild = minder). Iedereen kan gratis <b>🛡️ Schild heffen</b> — verdeel de klas over schild en aanval!"});
   }
   const live=(BM_BOSS?.minions||[]).filter(m=>m.hp>0);
   if(live.length){
     const tot=live.reduce((s,m)=>s+m.hp,0);
     out.push({id:"minions", kind:"info",
       short:"👹 "+live.length+" handlanger"+(live.length===1?"":"s")+" ("+tot+" HP) — schade op de baas gehalveerd",
-      title:"👹 "+live.length+" handlanger"+(live.length===1?" beschermt":"s beschermen")+" "+esc(preset.nm.split(" ")[0]),
+      title:"👹 "+live.length+" handlanger"+(live.length===1?" beschermt":"s beschermen")+" "+esc(bmBossShortNm(preset.id,true)),
       text:"Zolang ze leven doet elke aanval op de baas maar <b>half</b> zoveel schade. Kies ze als <b>doelwit</b> — Pijlregen en Vuurtoren raken ze allemaal tegelijk."});
   }
   return out;
+}
+
+// Korte baasnaam voor meldingen: "Polyfemus", "De Hydra", "De Minotaurus".
+// mid=true: midden in een zin ("de Hydra").
+function bmBossShortNm(id,mid){
+  const w=bmBossPreset(id).nm.split(" ");
+  const s=w[0]==="De"?w.slice(0,2).join(" "):w[0];
+  return mid?s.replace(/^De /,"de "):s;
 }
 
 // Banner bovenin het slagveld met de actieve dreigingen (zie bmBossAlerts).
@@ -257,17 +302,23 @@ function bmBossAlertHTML(){
 // zijn), alleen een drijvend getal.
 function bmBossAnnounce(bossEvents){
   if(BM_META?.mode!=="boss" || !Array.isArray(bossEvents) || !bossEvents.length) return;
-  const nm=bmBossPreset(BM_META?.bossId).nm.split(" ")[0];
+  const nm=bmBossShortNm(BM_META?.bossId), nmMid=bmBossShortNm(BM_META?.bossId,true);
   const cards=[];
   for(const e of bossEvents){
     if(e.type==="boss_meal_warn") cards.push({k:"danger", t:"🍖 "+nm+" krijgt honger!", x:"Over 2 rondes eet hij metgezellen op. Zet samen "+(e.need?e.need+" ":"")+"schild in — iedereen kan gratis 🛡️ Schild heffen!"});
-    else if(e.type==="boss_meal_interrupted") cards.push({k:"good", t:"🛡️ Maaltijd onderbroken!", x:"Jullie gezamenlijke schild hield "+nm+" tegen."});
+    else if(e.type==="boss_meal_interrupted") cards.push({k:"good", t:"🛡️ Maaltijd onderbroken!", x:"Jullie gezamenlijke schild hield "+nmMid+" tegen."});
     else if(e.type==="boss_meal_attack") cards.push({k:"danger", t:"🍖 "+nm+" verslindt metgezellen!", x:"−"+e.dmg+" HP voor de klas · "+nm+" geneest +"+e.heal+" HP"});
     else if(e.type==="boss_rage_attack") cards.push({k:"danger", t:"😡 "+nm+" ontsteekt in woede!", x:"Te veel gemiste antwoorden — extra aanval: −"+e.dmg+" HP"});
     else if(e.type==="boss_regen") cards.push({k:"warn", t:"🐍 Koppen groeien terug!", x:"Te weinig schade deze ronde — de Hydra geneest +"+e.heal+" HP"});
+    else if(e.type==="boss_enrage") cards.push({k:"danger",
+      t:e.cause==="laby"?"💥 Het Labyrinth is doorbroken!":"😤 "+nm+" raakt in Enrage!",
+      x:e.cause==="laby"?nm+" raakt in Enrage: hij valt nu elke ronde aan en slaat "+Math.round(BOSS_ENRAGE_DMG_MULT*100-100)+"% harder!"
+                        :"Hij valt nu elke ronde aan en slaat "+Math.round(BOSS_ENRAGE_DMG_MULT*100-100)+"% harder. Vang zijn klappen samen op met schild!"});
     else if(e.type==="boss_minions") cards.push({k:"warn", t:"👹 "+nm+" roept "+e.n+" handlangers op!", x:"Schade op de baas wordt gehalveerd tot ze verslagen zijn."});
     else if(e.type==="boss_minion_down") cards.push({k:"good", t:"💀 Handlanger verslagen!", x:e.left?"Nog "+e.left+" over.":"Allemaal weg — volle schade op de baas!"});
   }
+  const parried=bossEvents.reduce((s,e)=>s+(e.type==="boss_attack"&&e.blocked?e.blocked:0),0);
+  if(parried>0 && typeof bmFloat==="function") setTimeout(()=>bmFloat("🛡️ "+parried+" opgevangen","#7fb2ff",2),800);
   const heal=bossEvents.reduce((s,e)=>s+((e.type==="boss_meal_attack"||e.type==="boss_regen")?(e.heal||0):0),0);
   if(heal>0 && typeof bmFloat==="function") setTimeout(()=>bmFloat("+"+heal+" 🩸","var(--green-bright)",3),700);
   const cont=document.getElementById("bmBfx"); if(!cont) return;

@@ -123,10 +123,11 @@ const BM_BASIC_ACTIONS = [
   { id:"basic_worp",   nm:"Steen gooien",   tier:"basic", cost:0, desc:"Kleine aanval (+2)",              type:"attack",       dmg:2 },
   { id:"basic_dekking",nm:"Dekking zoeken", tier:"basic", cost:0, desc:"Klein schild voor je team (+1)",  type:"team_shield",  shld:1 },
   { id:"basic_moed",   nm:"Aanmoedigen",    tier:"basic", cost:0, desc:"+1 BE voor je hele team",         type:"team_be",      teamBE:1 },
-  // Alleen zichtbaar zolang de Cycloop dreigt te eten (BM_BOSS.charging,
-  // bossbattle.js): zonder dit kon een klas zonder Hopliet/Bevelvoerder de
-  // maaltijd vrijwel nooit onderbreken. Kost je actie van die ronde.
-  { id:"basic_schildheffen", nm:"Schild heffen", tier:"basic", cost:0, desc:"Samen tegen de maaltijd: +2 schild voor je team", type:"team_shield", shld:2, bossMealOnly:true },
+  // Alleen zichtbaar zolang de Cycloop dreigt te eten (BM_BOSS.charging) of
+  // de Minotaurus in Enrage is (BM_BOSS.enraged) — bossbattle.js: zonder dit
+  // kon een klas zonder Hopliet/Bevelvoerder daar vrijwel niets tegen doen.
+  // Kost je actie van die ronde.
+  { id:"basic_schildheffen", nm:"Schild heffen", tier:"basic", cost:0, desc:"Samen schild: +2 schild voor je team", type:"team_shield", shld:2, bossMealOnly:true },
 ];
 
 /* ---- CONFIGURATIETABEL: SYNERGIE ---- */
