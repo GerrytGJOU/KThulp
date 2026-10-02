@@ -3390,7 +3390,8 @@ async function bmResolve(roundN){
       if(tier){
         from.A.dmg+=tier.bonus;
         events.push({type:"chain_bonus",n:chainContributors.size,bonus:tier.bonus});
-        // "Combo Koning" (Boss-Battle-scorebord, BOSS_BATTLE.md §8):
+        // "Schouder aan Schouder" (Boss-Battle-scorebord, BOSS_BATTLE.md §8;
+        // heette tot 2026-10-02 "Combo Koning" — verwarrend naast echte combo's):
         // herinterpretatie als "vaakst bijdrager aan een ronde die de
         // brede-deelname-bonus haalde" — alleen geteld als de bonus ook echt
         // toegepast werd.
@@ -3863,7 +3864,7 @@ function bmComputeBossAwards(players, log){
     {nm:"De Sloper",             icon:"trident", emoji:"⚔️", player:byDmg[0]||null,    value:byDmg[0]?(byDmg[0].damage||0)+" schade aan de baas":""},
     {nm:"Medic van het Legioen", icon:"torch",   emoji:"💚", player:byHeal[0]||null,   value:byHeal[0]?(byHeal[0].healing||0)+" healing":""},
     {nm:"De Onsterfelijke",      icon:"laurel",  emoji:"🔥", player:byStreak[0]||null, value:byStreak[0]?byStreak[0].bestCorrectStreak+" op rij goed":""},
-    {nm:"Combo Koning",          icon:"column",  emoji:"🤝", player:byChain[0]||null,  value:byChain[0]?byChain[0].chainCount+"x brede aanval":""},
+    {nm:"Schouder aan Schouder", icon:"column",  emoji:"🏛️", player:byChain[0]||null,  value:byChain[0]?byChain[0].chainCount+"x gezamenlijke aanval":""},
     {nm:"Geluksbrenger",         icon:"star",    emoji:"💀", player:finisher||null,    value:finisher?"gaf de genadeklap":""},
   ];
   // Minion Opruimer alleen tonen als er in dit gevecht daadwerkelijk
