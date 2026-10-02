@@ -112,8 +112,17 @@ const BOSS_ROUNDS_PER_ATTACK = {1:2, 2:1, 3:1};
      ctx.labyrinthBroken waar is (of fase 3 bereikt is), valt de baas
      voortaan elke ronde aan i.p.v. volgens de normale cadans.
    ---------------------------------------------------------------------------- */
+// Benodigd gezamenlijk schild om de Cycloop-maaltijd te onderbreken. Schaalt
+// met de klasgrootte (vroeger vast 8×moeilijkheid — onhaalbaar voor een klas
+// zonder Hopliet/Bevelvoerder). Op Normal ≈ 60% van de klas die "Schild
+// heffen" (+2, BM_BASIC_ACTIONS) kiest; de moeilijkheid telt maar tot ×1,5
+// mee, anders wordt het op Heroic/Legendary wiskundig onhaalbaar.
+function bmBossMealNeed(n,diffM){
+  return Math.max(3, Math.ceil(Math.max(1,n||0)*1.2*Math.min(diffM||1,1.5)));
+}
+
 function bmBossResolveTick(boss, ctx){
-  const {classMaxHP, bossMaxHP, diffM, noDamageAnswerCount, bossId, dmgDealtThisRound=0, shieldThisRound=0, labyrinthBroken=false} = ctx;
+  const {classMaxHP, bossMaxHP, diffM, noDamageAnswerCount, bossId, dmgDealtThisRound=0, shieldThisRound=0, labyrinthBroken=false, playerCount=0} = ctx;
   const b={...boss};
   let classDamage=0, bossHeal=0;
   const events=[];
@@ -133,9 +142,13 @@ function bmBossResolveTick(boss, ctx){
     // De dreiging begint pas NA deze ronde: het schild van de ronde waarin
     // hij aangekondigd wordt telt niet mee (niemand wist er toen nog van) —
     // zo heeft de klas echt 2 gewaarschuwde rondes om te reageren.
-    if(!b.charging && b.mealCycle>=3){ b.charging=true; b.chargeLeft=2; b.mealCycle=0; events.push({type:"boss_meal_warn"}); }
+    if(!b.charging && b.mealCycle>=3){
+      b.charging=true; b.chargeLeft=2; b.mealCycle=0;
+      b.mealNeed=bmBossMealNeed(playerCount,diffM);
+      events.push({type:"boss_meal_warn",need:b.mealNeed});
+    }
     else if(b.charging){
-      if(shieldThisRound>=8*diffM){
+      if(shieldThisRound>=(b.mealNeed||Math.ceil(8*diffM))){
         b.charging=false; b.chargeLeft=0;
         events.push({type:"boss_meal_interrupted"});
       } else {
@@ -208,11 +221,11 @@ function bmBossAlerts(){
   const diffM=bmBossDiff(BM_META?.bossDifficulty).m;
   const out=[];
   if(preset.id==="cyclops" && BM_BOSS?.charging){
-    const n=BM_BOSS.chargeLeft||0, need=Math.ceil(8*diffM);
+    const n=BM_BOSS.chargeLeft||0, need=BM_BOSS.mealNeed||Math.ceil(8*diffM);
     out.push({id:"meal", kind:"danger",
       short:"⚠️ Maaltijd "+(n<=1?"na DEZE ronde":"over "+n+" rondes")+" — samen ≥"+need+" schild!",
       title:"🍖 Polyfemus wil eten! "+(n<=1?"Laatste kans: DEZE ronde":"Nog "+n+" rondes"),
-      text:"Zet samen minstens <b>"+need+" schild</b> in (één ronde) om hem te onderbreken — anders verslindt hij metgezellen: schade aan de klas én hij geneest zichzelf."});
+      text:"Zet samen minstens <b>"+need+" schild</b> in (één ronde) om hem te onderbreken — iedereen kan gratis <b>🛡️ Schild heffen</b> (+2). Anders verslindt hij metgezellen: schade aan de klas én hij geneest zichzelf."});
   }
   if(preset.id==="minotaur" && (BM_BOSS?.labyrinthShield>0)){
     const s=Math.round(BM_BOSS.labyrinthShield);
@@ -247,7 +260,7 @@ function bmBossAnnounce(bossEvents){
   const nm=bmBossPreset(BM_META?.bossId).nm.split(" ")[0];
   const cards=[];
   for(const e of bossEvents){
-    if(e.type==="boss_meal_warn") cards.push({k:"danger", t:"🍖 "+nm+" krijgt honger!", x:"Over 2 rondes eet hij metgezellen op. Zet samen schild in om hem te onderbreken!"});
+    if(e.type==="boss_meal_warn") cards.push({k:"danger", t:"🍖 "+nm+" krijgt honger!", x:"Over 2 rondes eet hij metgezellen op. Zet samen "+(e.need?e.need+" ":"")+"schild in — iedereen kan gratis 🛡️ Schild heffen!"});
     else if(e.type==="boss_meal_interrupted") cards.push({k:"good", t:"🛡️ Maaltijd onderbroken!", x:"Jullie gezamenlijke schild hield "+nm+" tegen."});
     else if(e.type==="boss_meal_attack") cards.push({k:"danger", t:"🍖 "+nm+" verslindt metgezellen!", x:"−"+e.dmg+" HP voor de klas · "+nm+" geneest +"+e.heal+" HP"});
     else if(e.type==="boss_rage_attack") cards.push({k:"danger", t:"😡 "+nm+" ontsteekt in woede!", x:"Te veel gemiste antwoorden — extra aanval: −"+e.dmg+" HP"});
@@ -345,7 +358,7 @@ function bmBossSpriteHTML(boss,nm){
     return `<div class="bm-minion">
       ${mLayers.length?`<div class="bm-minion-art">${mLayers.map(src=>`<img src="${src}?${SPRITE_VER}" alt="">`).join("")}</div>`:`<div class="bm-minion-emoji">${preset.emoji}</div>`}
       <div class="bm-minion-hp"><div style="transform:scaleX(${f})"></div></div>
-      <div class="bm-minion-nm">${bmMinionLabel(m)} · ${m.hp} HP</div>
+      <div class="bm-minion-nm">${bmMinionLabel(m)}<br><span>${m.hp} HP</span></div>
     </div>`;}).join("")}</div>`:"";
   if(live.length) art=art.replace('class="bm-boss-art"','class="bm-boss-art shielded"').replace('class="bm-boss-emoji"','class="bm-boss-emoji shielded"');
 
@@ -368,3 +381,176 @@ function bmMinionLabel(m){
   const n=parseInt(String(m?.id||"").replace(/\D/g,""),10);
   return "Handlanger "+(isNaN(n)?"?":n+1);
 }
+
+/* ============================================================================
+   HALL OF FAME (BOSS_BATTLE.md §8.1)
+   Elke gewonnen Boss Battle (niet de Total War-belegeringen) wordt — als de
+   host als docent is ingelogd — vastgelegd onder bossHof/{docentUid}/{id}:
+   per docent gescheiden, net als de Total War-campagnes. De groep is de
+   klascode van de meeste deelnemers (identityKey "klas:leerling").
+   Records per baas: snelste / meeste schade één speler / minste HP verloren
+   per baas+moeilijkheid, "Hoogste moeilijkheid" over alle niveaus heen.
+   ============================================================================ */
+let BM_HOF_RETURN="battleHome", BM_HOF_BOSS=null, BM_HOF_DIFF="all", BM_HOF_CACHE=null, BM_HOF_RESULT=null;
+
+function bmBossHofOwner(){
+  return (typeof teacherNet==="function" && teacherNet().isTeacherLoggedIn()) ? teacherNet().getTeacherUid() : null;
+}
+// Klascode met de meeste deelnemers (bots en gasten zonder profiel tellen niet).
+function bmBossHofKlas(players){
+  const cnt={};
+  (players||[]).forEach(p=>{
+    const k=String(p?.identityKey||"").split(":")[0];
+    if(k && k!=="bot") cnt[k]=(cnt[k]||0)+1;
+  });
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
+  return top.length ? top[0][0] : "Gastgroep";
+}
+function bmHofDiffIdx(d){ return Math.max(0,BOSS_DIFF_ORDER.indexOf(d)); }
+function bmHofHpPct(e){ return e.hpMax ? Math.max(0,e.hpLeft||0)/e.hpMax : 0; }
+function bmHofDur(ms){ const m=Math.floor(ms/60000), s=Math.round((ms%60000)/1000); return m+":"+String(s).padStart(2,"0")+" min"; }
+function bmHofDate(ts){
+  const d=new Date(ts||0);
+  return d.toLocaleDateString("nl-NL",{day:"numeric",month:"short",year:"numeric"})+" "+d.toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"});
+}
+// Vergelijkers: <0 betekent "a is beter dan b".
+const BM_HOF_CATS=[
+  {id:"fast", nm:"Snelste overwinning", emoji:"⚡", perDiff:true,
+    cmp:(a,b)=>(a.rounds-b.rounds)||((a.durMs||1e12)-(b.durMs||1e12)),
+    val:e=>e.rounds+" rondes"+(e.durMs?" · "+bmHofDur(e.durMs):"")},
+  {id:"dmg", nm:"Meeste schade (één speler)", emoji:"⚔️", perDiff:true,
+    cmp:(a,b)=>(b.topDmg||0)-(a.topDmg||0),
+    val:e=>(e.topDmg||0)+" schade"+(e.topNm?" — "+e.topNm:"")},
+  {id:"hp", nm:"Minste klas-HP verloren", emoji:"🛡️", perDiff:true,
+    cmp:(a,b)=>bmHofHpPct(b)-bmHofHpPct(a),
+    val:e=>Math.round(bmHofHpPct(e)*100)+"% HP over"},
+  {id:"diff", nm:"Hoogste moeilijkheid", emoji:"👑", perDiff:false,
+    cmp:(a,b)=>(bmHofDiffIdx(b.diff)-bmHofDiffIdx(a.diff))||(a.rounds-b.rounds),
+    val:e=>bmBossDiff(e.diff).nm+" · "+e.rounds+" rondes"},
+];
+// Beste entry per categorie. diff="all": de perDiff-categorieën over alle
+// niveaus heen; anders alleen dat niveau ("Hoogste moeilijkheid" kijkt altijd
+// naar alles van deze baas).
+function bmBossHofRecords(entries,bossId,diff){
+  const ofBoss=entries.filter(e=>e.bossId===bossId);
+  return BM_HOF_CATS.map(cat=>{
+    const pool=(cat.perDiff&&diff!=="all")?ofBoss.filter(e=>e.diff===diff):ofBoss;
+    return {cat, best:[...pool].sort(cat.cmp)[0]||null};
+  });
+}
+async function bmBossHofLoad(owner){
+  if(!fbDB||!owner) return [];
+  const snap=await fbDB.ref("bossHof/"+owner).once("value");
+  return Object.entries(snap.val()||{}).map(([id,e])=>({id,...e}));
+}
+
+// Aangeroepen door bmHostResult() (battle.js) met een momentopname van het
+// gevecht, vóór cleanup()/reset. Resultaat komt in BM_HOF_RESULT terecht
+// (gelezen door de overwinningskaart in bmNextAward). Schrijffouten (bv.
+// rules nog niet gepubliceerd) mogen de prijsuitreiking nooit blokkeren.
+async function bmBossHofRecord(snap){
+  BM_HOF_RESULT=null;
+  try{
+    if(!snap || snap.mode!=="boss" || snap.garrison || snap.winner!=="A") return null;
+    if(!snap.bossId || !BOSS_PRESET_ORDER.includes(snap.bossId)) return null;
+    const owner=bmBossHofOwner();
+    if(!owner||!fbDB) return (BM_HOF_RESULT={saved:false, reason:"login"});
+    const players=snap.players||[];
+    const top=[...players].sort((a,b)=>(b.damage||0)-(a.damage||0))[0];
+    const now=Date.now();
+    const entry={
+      bossId:snap.bossId, diff:snap.diff||"normal", klas:bmBossHofKlas(players),
+      ts:now, rounds:Math.max(1,snap.rounds||1),
+      durMs:snap.startedAt?Math.max(0,now-snap.startedAt):0,
+      n:players.length, hpLeft:Math.max(0,Math.round(snap.hpLeft||0)), hpMax:Math.round(snap.hpMax||0),
+      topNm:String(top?.name||"").slice(0,40), topDmg:Math.round(top?.damage||0),
+      totalDmg:Math.round(players.reduce((s,p)=>s+(p.damage||0),0)),
+    };
+    const before=await bmBossHofLoad(owner);
+    const newRecords=bmBossHofRecords(before,entry.bossId,entry.diff)
+      .filter(({cat,best})=>best && cat.cmp(entry,best)<0).map(({cat})=>cat.emoji+" "+cat.nm);
+    const first=!before.some(e=>e.bossId===entry.bossId&&e.diff===entry.diff);
+    await fbDB.ref("bossHof/"+owner).push(entry);
+    BM_HOF_CACHE=null;
+    return (BM_HOF_RESULT={saved:true, entry, first, newRecords});
+  }catch(e){
+    console.warn("Hall of Fame opslaan mislukt",e);
+    return (BM_HOF_RESULT={saved:false, reason:"error"});
+  }
+}
+
+// HTML-blokje voor de overwinningskaart in de prijsuitreiking.
+function bmBossHofBadgeHTML(){
+  const r=BM_HOF_RESULT;
+  if(!r) return "";
+  if(!r.saved) return r.reason==="login"
+    ? `<div class="note" style="margin-top:8px">Log in als docent om overwinningen in de 🏆 Hall of Fame te bewaren.</div>` : "";
+  const lines=r.first
+    ? ["Eerste overwinning op "+esc(bmBossPreset(r.entry.bossId).nm)+" ("+esc(bmBossDiff(r.entry.diff).nm)+")!"]
+    : r.newRecords.map(t=>"Nieuw record: "+esc(t));
+  return `<div class="bm-hof-badge">
+    <div class="bm-hof-badge-t">🏆 ${esc(r.entry.klas)} staat in de Hall of Fame</div>
+    ${lines.map(l=>`<div class="bm-hof-badge-x">${l}</div>`).join("")}
+  </div>`;
+}
+
+function bmOpenBossHof(ret,bossId){
+  BM_HOF_RETURN=ret||"battleHome";
+  if(bossId && BOSS_PRESET_ORDER.includes(bossId)) BM_HOF_BOSS=bossId;
+  go("bossHallOfFame");
+}
+async function bmBossHofDelete(id){
+  const owner=bmBossHofOwner(); if(!owner||!id) return;
+  if(!confirm("Deze overwinning uit de Hall of Fame verwijderen?")) return;
+  try{ await fbDB.ref("bossHof/"+owner+"/"+id).remove(); BM_HOF_CACHE=null; SCREENS.bossHallOfFame(); }
+  catch(e){ toast("Verwijderen mislukt", String(e?.message||e).slice(0,100)); }
+}
+
+/* ---- SCHERM: bossHallOfFame ---- */
+SCREENS.bossHallOfFame = async function(){
+  const owner=bmBossHofOwner();
+  if(!BM_HOF_BOSS || !BOSS_PRESET_ORDER.includes(BM_HOF_BOSS)) BM_HOF_BOSS=BOSS_PRESET_ORDER[0];
+  const head=`<div class="scrhead"><button class="back" onclick="go(BM_HOF_RETURN)">${iconSVG("shield",20,"currentColor")}</button><h2>🏆 Hall of Fame</h2></div>`;
+  if(!owner){
+    H(brand(false)+head+`<div class="panel"><div class="note">De Hall of Fame wordt per docent bijgehouden. Log in als docent en host daarna je Boss Battle, dan worden de overwinningen van je klassen hier bewaard.</div></div>`+foot());
+    return;
+  }
+  H(brand(false)+head+`<div id="bmHofBody"><div class="panel"><div class="note" style="text-align:center">Laden…</div></div></div>`+foot());
+  let entries=null;
+  try{ entries=BM_HOF_CACHE||await bmBossHofLoad(owner); BM_HOF_CACHE=entries; }catch(e){}
+  const body=el("bmHofBody"); if(!body) return;
+  if(!entries){ body.innerHTML=`<div class="panel"><div class="note">Kon de Hall of Fame niet laden.</div></div>`; return; }
+  const bossId=BM_HOF_BOSS, preset=bmBossPreset(bossId), diff=BM_HOF_DIFF;
+  const recs=bmBossHofRecords(entries,bossId,diff);
+  const list=entries.filter(e=>e.bossId===bossId&&(diff==="all"||e.diff===diff)).sort((a,b)=>(b.ts||0)-(a.ts||0));
+  const cnt=id=>entries.filter(e=>e.bossId===id).length;
+  body.innerHTML=`
+  <div class="panel">
+    <div class="chips">${BOSS_PRESET_ORDER.map(id=>{const p=BOSS_PRESETS[id];return `<button class="chip ${bossId===id?"on":""}" onclick="BM_HOF_BOSS='${id}';SCREENS.bossHallOfFame()">${p.emoji} ${esc(p.nm)} (${cnt(id)})</button>`;}).join("")}</div>
+    <div class="chips" style="margin-top:6px">
+      <button class="chip ${diff==="all"?"on":""}" onclick="BM_HOF_DIFF='all';SCREENS.bossHallOfFame()">Alle niveaus</button>
+      ${BOSS_DIFF_ORDER.map(id=>`<button class="chip ${diff===id?"on":""}" onclick="BM_HOF_DIFF='${id}';SCREENS.bossHallOfFame()">${BOSS_DIFFICULTIES[id].nm}</button>`).join("")}
+    </div>
+  </div>
+  <div class="bm-hof-grid">
+    ${recs.map(({cat,best})=>`<div class="bm-hof-rec">
+      <div class="bm-hof-rec-h">${cat.emoji} ${esc(cat.nm)}${(!cat.perDiff&&diff!=="all")?` <span class="note">(alle niveaus)</span>`:""}</div>
+      ${best?`<div class="bm-hof-rec-klas" style="color:${preset.color}">${esc(best.klas)}</div>
+        <div class="bm-hof-rec-v">${esc(cat.val(best))}</div>
+        <div class="note">${esc(bmBossDiff(best.diff).nm)} · ${esc(bmHofDate(best.ts))}</div>`
+      :`<div class="note" style="margin-top:6px">Nog niet verslagen${diff!=="all"&&cat.perDiff?" op dit niveau":""}.</div>`}
+    </div>`).join("")}
+  </div>
+  <div class="panel">
+    <label class="fld">Alle overwinningen op ${esc(preset.nm)}${diff!=="all"?" ("+esc(bmBossDiff(diff).nm)+")":""}</label>
+    ${list.length?`<div style="overflow-x:auto"><table class="bm-hof-table">
+      <tr><th>Datum</th><th>Groep</th><th>Niveau</th><th>Rondes</th><th>Tijd</th><th>Spelers</th><th>HP over</th><th>Topschade</th><th></th></tr>
+      ${list.map(e=>`<tr>
+        <td>${esc(bmHofDate(e.ts))}</td><td><b>${esc(e.klas||"?")}</b></td><td>${esc(bmBossDiff(e.diff).nm)}</td>
+        <td>${e.rounds}</td><td>${e.durMs?esc(bmHofDur(e.durMs)):"—"}</td><td>${e.n||"—"}</td>
+        <td>${Math.round(bmHofHpPct(e)*100)}%</td><td>${e.topDmg||0}${e.topNm?" — "+esc(e.topNm):""}</td>
+        <td><button class="bm-hof-del" title="Verwijderen" onclick="bmBossHofDelete('${esc(e.id)}')">✕</button></td>
+      </tr>`).join("")}
+    </table></div>`:`<div class="note">Nog geen overwinningen${diff!=="all"?" op dit niveau":""}. Versla ${esc(preset.nm)} in Boss Battle om hier te verschijnen!</div>`}
+  </div>`;
+};

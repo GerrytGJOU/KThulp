@@ -483,14 +483,20 @@ body.greek .qcard .word{color:#143a5e}
 /* Handlangers (Minion Summon, BOSS_BATTLE.md §4) vóór de baas + schildgloed
    op de baas zolang ze leven — bmBossSpriteHTML() in bossbattle.js. */
 .bm-boss-row{display:flex;align-items:flex-end;gap:clamp(6px,1.5vw,24px)}
-.bm-minions{display:flex;flex-wrap:wrap;gap:6px;max-width:clamp(130px,17vw,300px);justify-content:flex-end;align-items:flex-end}
-.bm-minion{display:flex;flex-direction:column;align-items:center;gap:2px;width:clamp(58px,7.5vw,128px)}
+/* Formatie zoals de klas: rij 1 (handlangers 1-2) vooraan op de grond, de
+   rest half erachter en ernaast — wrap-reverse legt de eerste rij onderaan,
+   negatieve marge laat de rijen overlappen. */
+.bm-minions{--mw:clamp(58px,7.5vw,128px);display:flex;flex-wrap:wrap-reverse;width:calc(var(--mw) * 2 + 24px);justify-content:flex-end;align-items:flex-end;column-gap:8px;margin-bottom:2px}
+.bm-minion{display:flex;flex-direction:column;align-items:center;gap:2px;width:var(--mw);position:relative;z-index:2;margin-top:calc(var(--mw) * -0.18)}
+.bm-minion:nth-child(n+3){z-index:1;transform:translateX(-50%) scale(.9);transform-origin:bottom center}
+.bm-minion:nth-child(2){transform:translateY(-8%)}
 .bm-minion-art{position:relative;width:100%;aspect-ratio:1/1;filter:brightness(.68) saturate(.6) drop-shadow(0 0 6px rgba(200,60,60,.6))}
 .bm-minion-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .bm-minion-emoji{font-size:clamp(28px,4vw,60px);line-height:1}
 .bm-minion-hp{width:90%;height:7px;background:rgba(0,0,0,.6);border-radius:4px;overflow:hidden;border:1px solid rgba(0,0,0,.7)}
 .bm-minion-hp>div{height:100%;background:#c0392b;transform-origin:left center;transition:transform .35s}
-.bm-minion-nm{font-size:clamp(9px,.9vw,14px);color:#fff;text-shadow:0 1px 3px #000,0 0 2px #000;white-space:nowrap}
+.bm-minion-nm{font-size:clamp(9px,.9vw,14px);color:#fff;text-shadow:0 1px 3px #000,0 0 2px #000;white-space:nowrap;text-align:center;line-height:1.15}
+.bm-minion-nm span{color:#f0b0a0}
 .bm-boss-art.shielded::after{content:"";position:absolute;inset:3%;border-radius:50%;border:3px solid rgba(110,170,255,.75);box-shadow:0 0 26px rgba(110,170,255,.6),inset 0 0 34px rgba(110,170,255,.3);animation:bmShieldPulse 2s ease-in-out infinite;pointer-events:none}
 @keyframes bmShieldPulse{0%,100%{opacity:.5}50%{opacity:1}}
 /* Actieve baas-dreigingen bovenin het slagveld (bmBossAlertHTML) */
@@ -506,6 +512,21 @@ body.greek .qcard .word{color:#143a5e}
    hij in het actiepaneel (bmPlayerRender), vlak boven de vaardigheden. */
 .bm-field-solo #bmBossAlert{display:none}
 .bm-boss-alerts-panel:empty{display:none}
+/* Hall of Fame (bossHallOfFame, bossbattle.js) */
+.bm-hof-badge{margin:14px auto 0;max-width:520px;padding:10px 16px;border:2px solid #d4af37;border-radius:12px;background:rgba(212,175,55,.12);animation:bmAwardIn .6s}
+.bm-hof-badge-t{font-weight:800;font-size:20px;color:var(--hi-bright)}
+.bm-hof-badge-x{font-size:16px;margin-top:3px}
+.bm-hof-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;padding:0 16px;margin-bottom:12px}
+.bm-hof-rec{background:rgba(0,0,0,.25);border:1px solid #d4af3766;border-radius:12px;padding:12px 14px}
+.bm-hof-rec-h{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.bm-hof-rec-klas{font-size:24px;font-weight:800;margin-top:4px}
+.bm-hof-rec-v{font-size:15px;color:var(--hi-bright)}
+.bm-hof-table{width:100%;border-collapse:collapse;font-size:13px}
+.bm-hof-table th{text-align:left;color:var(--muted);font-weight:600;padding:4px 6px;border-bottom:1px solid rgba(255,255,255,.15);white-space:nowrap}
+.bm-hof-table td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.06);white-space:nowrap}
+.bm-hof-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px}
+.bm-hof-del:hover{color:#e05555}
+.bm-meal-shield{margin-bottom:8px;padding:10px 13px;border:2px solid #e05555!important;box-shadow:0 0 12px rgba(224,85,85,.5)}
 .bm-boss-alerts-panel{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
 .bm-boss-alerts-panel .bm-boss-alert{padding:6px 10px;animation:none}
 .bm-boss-alerts-panel .bm-boss-alert.danger{box-shadow:0 0 14px rgba(224,85,85,.7)}
@@ -1146,10 +1167,10 @@ body.greek .qcard .word{color:#143a5e}
 <script src="net.js?v=20260916a"></script>
 <script src="wordlists.js?v=20260907a"></script>
 <script src="games.js?v=20260930c"></script>
-<script src="battle-data.js?v=20261002a"></script>
-<script src="bossbattle.js?v=20261002a"></script>
+<script src="battle-data.js?v=20261002b"></script>
+<script src="bossbattle.js?v=20261002c"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20261002b"></script>
+<script src="battle.js?v=20261002c"></script>
 <script src="map/provinces.js?v=20260911a"></script>
 <script src="totalwar.js?v=20260930a"></script>
 <script src="training.js?v=20260930c"></script>

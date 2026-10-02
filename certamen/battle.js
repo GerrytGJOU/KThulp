@@ -1356,6 +1356,7 @@ SCREENS.battleHostSettings = function(){
     `:`
     <div class="chips">${BOSS_PRESET_ORDER.map(id=>{const p=BOSS_PRESETS[id];return `<button class="chip ${bossId===id?"on":""}" onclick="BM_META.bossId='${id}';SCREENS.battleHostSettings()">${p.emoji} ${esc(p.nm)}</button>`;}).join("")}</div>
     <div class="note" style="margin-top:6px">${esc(bmBossPreset(bossId).desc)}</div>
+    <button class="btn" style="margin-top:8px" onclick="bmOpenBossHof('battleHostSettings','${bossId}')">🏆 Hall of Fame</button>
     `}
   </div>
   <div class="panel">
@@ -1746,7 +1747,8 @@ async function bmStartBossGame(){
   // max-HP) — baas-eigen state, zie bmResolve() hieronder voor hoe dat
   // vóór newHB wordt verrekend, en bmBossResolveTick() (bossbattle.js)
   // voor de Enrage-omschakeling zodra het doorbroken is.
-  const bossInit={phase:1,rage:0,roundsSinceAttack:0,stage:stageIdx};
+  // startedAt: voor de speeltijd in de Hall of Fame (bmBossHofRecord, bossbattle.js).
+  const bossInit={phase:1,rage:0,roundsSinceAttack:0,stage:stageIdx,startedAt:Date.now()};
   if(BM_META.bossId==="minotaur") bossInit.labyrinthShield=Math.round(0.30*bossMaxHP);
   await fbDB.ref("rooms/"+BM_CODE+"/boss").set(bossInit);
   BM_TEAMS=teams;
@@ -3426,7 +3428,7 @@ async function bmResolve(roundN){
       const bossIn={...BM_BOSS,phase};
       if(BM_META?.bossId==="minotaur") bossIn.labyrinthShield=labyrinthShield;
       const tick=bmBossResolveTick(bossIn,{
-        classMaxHP:tA.maxHealth, bossMaxHP:tB.maxHealth, diffM, noDamageAnswerCount:noDamageCount,
+        classMaxHP:tA.maxHealth, bossMaxHP:tB.maxHealth, diffM, noDamageAnswerCount:noDamageCount, playerCount:Object.keys(players).length,
         bossId:BM_META?.bossId, dmgDealtThisRound:efB, shieldThisRound:shldA, labyrinthBroken,
       });
       rawHA-=tick.classDamage;
@@ -3703,6 +3705,17 @@ let BM_AWARD_DATA=null,BM_AWARD_STEP=0,BM_AWARD_TIMER=null;
 let BM_LOG=null;
 
 function bmHostResult(){
+  // Hall of Fame (BOSS_BATTLE.md §8.1): momentopname vóór cleanup()/reset;
+  // bmBossHofRecord() bepaalt zelf of dit een op te slaan overwinning is.
+  BM_HOF_RESULT=null;
+  if(BM_META?.mode==="boss" && typeof bmBossHofRecord==="function"){
+    bmBossHofRecord({
+      mode:"boss", winner:BM_STATE.winner, garrison:!!BM_META.garrisonProvince,
+      bossId:BM_META.bossId, diff:BM_META.bossDifficulty, rounds:BM_STATE.round?.n||0,
+      startedAt:BM_BOSS?.startedAt||0, hpLeft:BM_TEAMS?.A?.health||0, hpMax:BM_TEAMS?.A?.maxHealth||0,
+      players:Object.values(BM_PLAYERS||{}),
+    }).then(()=>{ const b=el("bmHofBadge"); if(b) b.innerHTML=bmBossHofBadgeHTML(); });
+  }
   cleanup();
   BM_PAUSED=false;
   // Sla spelerdata op vóór BM_PLAYERS wordt gereset
@@ -4001,7 +4014,9 @@ function bmNextAward(){
       : w==="A"||w==="B"
       ?`${iconSVG(bmTeamIcon(w),72,"var(--team"+w+")")}<h2 style="color:var(--hi-bright);font-size:28px;margin:10px 0;animation:bmAwardIn .6s">${esc(bmTeamNm(w))} wint!</h2>`
       :`<div style="font-size:64px">⚔️</div><h2 style="color:var(--muted);font-size:24px;margin:10px 0">Gevecht gestopt</h2>`;
-    stage.innerHTML=`<div style="animation:bmWin .7s;text-align:center">${wonHTML}</div>`;
+    const hof=(BM_META?.mode==="boss"&&w==="A"&&!aw.timedOut&&typeof bmBossHofBadgeHTML==="function")
+      ?`<div id="bmHofBadge">${bmBossHofBadgeHTML()}</div>`:"";
+    stage.innerHTML=`<div style="animation:bmWin .7s;text-align:center">${wonHTML}${hof}</div>`;
     beep("win");
     BM_AWARD_TIMER=setTimeout(bmNextAward,3500);
     return;
@@ -4012,6 +4027,7 @@ function bmNextAward(){
   if(idx>=awards.length){
     // Einde ceremonie: alles nóg een keer samen in beeld, en daar blijft het
     // staan — geen timer die doorspringt naar het klassenoverzicht.
+    aw.podiumShown=true;
     bmRenderPodium(stage);
     return;
   }
@@ -4047,12 +4063,16 @@ SCREENS.battleHostAwards = async function(){
   </div>
   <div style="padding:0 16px 10px">
     <button class="btn btn-block bm-again-btn" onclick="bmNewMatchSamePlayers()">↻ Nieuw gevecht — zelfde spelers</button>
+    ${(BM_META?.mode==="boss"&&!BM_META?.garrisonProvince)?`<button class="btn btn-block" style="margin-top:8px" onclick="bmOpenBossHof('battleHostAwards','${esc(BM_META.bossId||"")}')">🏆 Hall of Fame</button>`:""}
   </div>
   ${foot()}`);
   try{
     if(fbDB&&BM_CODE){const snap=await fbDB.ref("rooms/"+BM_CODE+"/log").once("value");BM_LOG=snap.val()||{};}
   }catch(e){BM_LOG={};}
   if(!el("bmAwardStage"))return;
+  // Terug uit de Hall of Fame: de ceremonie niet opnieuw afspelen, meteen
+  // weer het podium.
+  if(BM_AWARD_DATA.podiumShown&&BM_AWARD_DATA.awards){ bmRenderPodium(el("bmAwardStage")); return; }
   BM_AWARD_DATA.awards=BM_META?.mode==="boss"
     ? bmComputeBossAwards(BM_AWARD_DATA.all,BM_LOG)
     : bmComputeAwards(BM_AWARD_DATA.all,BM_LOG);
@@ -4587,6 +4607,15 @@ function bmPlayerRender(){
               <span>Je hebt ${BM_MY_BE} BE, je goedkoopste vaardigheid kost ${goedkoopste}. Je kunt wel een basisactie doen.</span></div>
               ${bmBasicActionsHTML("Basisacties — gratis")}`;
           })()}
+          ${(BM_META?.mode==="boss"&&BM_BOSS?.charging)?(()=>{
+            // Cycloop-maaltijd: iedereen kan gratis meehelpen met schild
+            // (BM_BASIC_ACTIONS.basic_schildheffen, battle-data.js).
+            const a=BM_BASIC_ACTIONS.find(x=>x.id==="basic_schildheffen");
+            return a?`<button class="tile bm-meal-shield" onclick="bmChooseAbility('${a.id}',0)">
+              <div style="font-size:14px;font-weight:700">🛡️ ${esc(a.nm)} <span class="pill">gratis · +${a.shld} schild</span></div>
+              <div class="note" style="margin-top:2px">Help de maaltijd te onderbreken — in plaats van aan te vallen.</div>
+            </button>`:"";
+          })():""}
           ${inspired?`<div class="note" style="color:var(--hi-bright);margin-bottom:6px">⚡ Geïnspireerd! Je volgende aanval doet extra schade.</div>`:""}
           ${targetPicker}
           ${cls.abilities.map(a=>{
@@ -4769,7 +4798,7 @@ function bmFinishAnswer(ok){
    niemand een ronde werkloos toekijkt. */
 function bmBasicActionsHTML(kop){
   return `<div class="note" style="margin-bottom:4px">${esc(kop||"Basisacties — gratis, voor iedereen")}</div>
-    ${BM_BASIC_ACTIONS.map(a=>`
+    ${BM_BASIC_ACTIONS.filter(a=>!a.bossMealOnly).map(a=>`
       <button class="tile" style="margin-bottom:6px;padding:10px 13px" onclick="bmChooseAbility('${a.id}',0)">
         <div style="font-size:13px;font-weight:700">${esc(a.nm)} <span class="pill">gratis</span></div>
         <div class="note" style="margin-top:2px">${esc(a.desc)}</div>
