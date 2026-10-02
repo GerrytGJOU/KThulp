@@ -132,7 +132,13 @@ Normal): Boss HP = 3.000. Beide voelen relatief even zwaar aan.
 > (6% klas-schade + 4% zelfheling), alleen te onderbreken met ≥8×moeilijkheid
 > gezamenlijk schild in één van de twee gewaarschuwde rondes (sinds
 > 2026-10-02 telt de ronde waarin de dreiging wordt aangekondigd niet meer
-> mee — toen wist nog niemand ervan) (geen losse "X correcte antwoorden"-teller,
+> mee — toen wist nog niemand ervan). **Sinds 2026-10-02 ook:** de drempel is
+> niet meer vast 8×moeilijkheid maar `bmBossMealNeed()` = ⌈N × 1,2 ×
+> min(moeilijkheid, 1,5)⌉ (min. 3), vastgelegd in `boss.mealNeed` bij de
+> aankondiging; en zolang de dreiging loopt krijgt iedereen de gratis actie
+> **🛡️ Schild heffen** (+2, `basic_schildheffen` in `BM_BASIC_ACTIONS`,
+> `bossMealOnly`). Aanleiding: een klas met alleen Voorvechters/Priesters/
+> Boogschutters/één Cavalerist kon de vaste 8 nooit halen (geen losse "X correcte antwoorden"-teller,
 > geen Labyrinth-woordenpuzzel); Minotaurus gaat in Enrage (elke ronde
 > aanvallen i.p.v. de normale cadans) zodra zijn Labyrinth-schild breekt of
 > fase 3 bereikt wordt.
@@ -332,6 +338,33 @@ schaming:
 Iedereen verdient munten op basis van individuele score (deelname + bijdrage,
 **niet** per losse vraag — zie de balanswaarschuwing in §3), besteedbaar in
 `SCREENS.collection` net als de rest van de app-economie.
+
+### 8.1 Hall of Fame (✅ gebouwd, 2026-10-02)
+
+Elke **gewonnen** Boss Battle (Hydra/Cycloop/Minotaurus — níet de Total
+War-belegeringen) wordt vastgelegd, mits de host als docent is ingelogd.
+Per docent gescheiden, zelfde afweging als de Total War-campagnes.
+
+- **Datamodel:** `bossHof/{docentUid}/{pushId}` = `{bossId, diff, klas, ts,
+  rounds, durMs, n, hpLeft, hpMax, topNm, topDmg, totalDmg}`. `klas` = de
+  klascode van de meeste deelnemers (`identityKey`), anders "Gastgroep".
+  `durMs` loopt vanaf `boss.startedAt` (gezet in `bmStartBossGame()`), dus
+  incl. pauzes. Rules: alleen de eigenaar leest; schrijven/verwijderen alleen
+  de eigenaar mits goedgekeurd/admin/legacy (zelfde voorwaarde als
+  `klascodes`) — `certamen/database.rules.json`.
+- **Opslaan:** `bmHostResult()` (`battle.js`) geeft een momentopname aan
+  `bmBossHofRecord()` (`bossbattle.js`), die vooraf vergelijkt met de
+  bestaande records. De overwinningskaart van de prijsuitreiking toont
+  "🏆 {klas} staat in de Hall of Fame" + "Eerste overwinning…" of de
+  gebroken records (`bmBossHofBadgeHTML()`).
+- **Records** (`BM_HOF_CATS`): ⚡ Snelste overwinning (minste rondes, dan
+  tijd), ⚔️ Meeste schade één speler, 🛡️ Minste klas-HP verloren — per baas
+  + moeilijkheid; 👑 Hoogste moeilijkheid — per baas over alle niveaus.
+- **Scherm:** `SCREENS.bossHallOfFame` — baas- en niveaukeuze, de vier
+  recordkaarten, en een tabel met alle overwinningen (datum/tijd, groep,
+  niveau, rondes, tijd, spelers, HP over, topschade) met ✕ om een
+  (test)overwinning te verwijderen. Bereikbaar via de knop bij de baaskeuze
+  (`battleHostSettings`) en onder de prijsuitreiking.
 
 ---
 
