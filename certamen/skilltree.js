@@ -136,6 +136,7 @@ function bmStCurve(g,x1,y1,x2,y2,color,lit){
   const my=(y1+y2)/2;
   bmStEl("path",{d:`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`,fill:"none",stroke:lit?color:BMST_DIM,"stroke-width":lit?5:2.5,opacity:lit?1:.6,filter:lit?"url(#bmStGlow)":""},g);
 }
+let BM_ST_CLIP_N=0;
 function bmStNode(g,x,y,n,color,state,onPick,meta){
   const t=BM_SKILLTREES[BM_ST_CLASS];
   const r=state==="fixed"&&n===t.root?40:34, nkey=(n.id||n.nm)+"@"+x;
@@ -145,7 +146,12 @@ function bmStNode(g,x,y,n,color,state,onPick,meta){
   bmStEl("polygon",{points:bmStHex(x,y,r),fill:lit?"url(#bmStFillLit)":"#1c150f",stroke:col,"stroke-width":lit?3:2,filter:lit?"url(#bmStGlow)":"",opacity:state==="locked"?.45:1},grp);
   if(lit) bmStEl("polygon",{points:bmStHex(x,y,r),fill:color,opacity:.18},grp);
   if(n.icon&&BM_ST_IMG_OK[n.icon]){
-    bmStEl("image",{href:"assets/skills/"+n.icon,x:x-r*.72,y:y-r*.72,width:r*1.44,height:r*1.44,opacity:state==="locked"?.3:state==="closed"?.45:1,style:"image-rendering:pixelated"},grp);
+    // Iconen zijn gekleurde tegels (Gemini-vellen): binnen de zeshoek knippen,
+    // zodat de tegel de hele zeshoek vult en de rand zichtbaar blijft.
+    const cid="bmStClip"+(++BM_ST_CLIP_N), svgDefs=g.ownerSVGElement?.querySelector("defs");
+    if(svgDefs){ const cp=bmStEl("clipPath",{id:cid},svgDefs); bmStEl("polygon",{points:bmStHex(x,y,r-1.5)},cp); }
+    const sz=r*2;
+    bmStEl("image",{href:"assets/skills/"+n.icon,x:x-sz/2,y:y-sz/2,width:sz,height:sz,"clip-path":svgDefs?`url(#${cid})`:"",preserveAspectRatio:"xMidYMid slice",opacity:state==="locked"?.3:state==="closed"?.45:1},grp);
   } else {
     const tx=bmStEl("text",{x,y:y+1,"text-anchor":"middle","dominant-baseline":"central","font-size":r*.85,fill:lit?"#fff6dc":state==="open"?color:"#6b5b45",opacity:state==="locked"?.5:1},grp);
     tx.textContent=(n.glyph||"?")+"︎";

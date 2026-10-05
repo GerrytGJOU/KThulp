@@ -27,13 +27,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) an arrow piercing straight through a cracked round bronze shield — dominant colour cool forest green.
 8. (row 2, column 4) a curved hunting horn made of animal horn with a leather strap — dominant colour burnt bronze-red.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -67,13 +67,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a black arrow with a bone-white arrowhead breaking through a shield — dominant colour cool forest green.
 8. (row 2, column 4) a radiant golden sun disc with an arrow through its centre — dominant colour cool forest green.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -107,13 +107,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a silver crescent moon with a silver arrow resting across it — dominant colour burnt bronze-red.
 8. (row 2, column 4) three arrows converging on one point from three directions — dominant colour burnt bronze-red.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -143,13 +143,13 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 3. (row 2, column 1) one huge golden arrow of light shot from a radiant sun — dominant colour cool forest green with extra gold.
 4. (row 2, column 2) a rain of silver arrows falling from a crescent moon — dominant colour burnt bronze-red with extra gold.
 
-LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -183,13 +183,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) raised hands of soldiers swearing an oath above a round shield — dominant colour cool polished steel blue.
 8. (row 2, column 4) a running hoplite's bronze greave and sandal in mid-stride — dominant colour blood red and bronze.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -223,13 +223,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a line of shields with golden light shining along their rims — dominant colour cool polished steel blue.
 8. (row 2, column 4) a Spartan lambda symbol on a shield standing in a narrow mountain pass — dominant colour cool polished steel blue.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -263,13 +263,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a crested Greek bronze helmet above a laurel branch — dominant colour blood red and bronze.
 8. (row 2, column 4) a charging hoplite shield with two spear tips bursting out from behind it — dominant colour blood red and bronze.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -299,13 +299,13 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 3. (row 2, column 1) a narrow mountain pass blocked by a wall of shields painted with a lambda — dominant colour cool polished steel blue with extra gold.
 4. (row 2, column 2) a line of hoplites running forward with lowered spears on a plain beside the sea — dominant colour blood red and bronze with extra gold.
 
-LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -339,13 +339,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a furious lion's head with a bronze helmet crest behind it — dominant colour fiery orange.
 8. (row 2, column 4) a round shield lying flat with a spear resting across it — dominant colour dark wine red.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -379,13 +379,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a golden victory wreath above a raised spear — dominant colour fiery orange.
 8. (row 2, column 4) the helmet of Ares, the war god, with burning red eyes — dominant colour fiery orange.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -419,13 +419,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a roaring lion with a red mane made of flames — dominant colour dark wine red.
 8. (row 2, column 4) a red sword piercing straight through a bronze shield — dominant colour dark wine red.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -455,13 +455,13 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 3. (row 2, column 1) a lone Greek hero in bronze armour surrounded by a blazing golden aura — dominant colour fiery orange with extra gold.
 4. (row 2, column 2) the war god's bronze spear dripping red, crossed with a laurel branch — dominant colour dark wine red with extra gold.
 
-LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -495,13 +495,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a war trumpet sounding with a horse charging out from behind it — dominant colour rusty copper orange.
 8. (row 2, column 4) a column of small horse silhouettes riding in a fast diagonal line — dominant colour wind teal.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -535,13 +535,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a hammer striking down onto an anvil shaped like a round shield — dominant colour rusty copper orange.
 8. (row 2, column 4) a black war horse with a white star on its forehead, rearing up — dominant colour rusty copper orange.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -575,13 +575,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) three riders in three directions around a small shield in the centre — dominant colour wind teal.
 8. (row 2, column 4) a horse spinning in a circle of dust and wind — dominant colour wind teal.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -611,13 +611,13 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 3. (row 2, column 1) a rider on a black horse leading a wedge of cavalry, spear raised — dominant colour rusty copper orange with extra gold.
 4. (row 2, column 2) a swirling storm of light riders throwing javelins around an enemy — dominant colour wind teal with extra gold.
 
-LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -651,13 +651,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a wooden staff with a single snake coiled around it — dominant colour soft healing green.
 8. (row 2, column 4) a purple flame burning in a bronze tripod — dominant colour mystic violet.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -691,13 +691,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a small glass vial of glowing golden medicine — dominant colour soft healing green.
 8. (row 2, column 4) a beam of golden light falling onto an open hand — dominant colour soft healing green.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -731,13 +731,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a winged female figure holding a sword and a measuring rod — dominant colour mystic violet.
 8. (row 2, column 4) a young priestess with wide eyes and a laurel band, seen from the side — dominant colour mystic violet.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -767,13 +767,13 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 3. (row 2, column 1) a glowing open hand with a snake-entwined staff behind it — dominant colour soft healing green with extra gold.
 4. (row 2, column 2) the Pythia seated on a bronze tripod above a crack with rising purple vapour — dominant colour mystic violet with extra gold.
 
-LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -807,13 +807,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a wax writing tablet with neat rows of tally marks and a stylus — dominant colour supply teal.
 8. (row 2, column 4) a golden Roman legion eagle with spread wings on top of a pole — dominant colour imperial violet.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -847,13 +847,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a Roman legionary carrying a heavy pack on a forked pole over his shoulder — dominant colour supply teal.
 8. (row 2, column 4) a closed circle of linked hands seen from above — dominant colour supply teal.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -887,13 +887,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a bundle of rods with an axe (fasces) tied with red leather straps — dominant colour imperial violet.
 8. (row 2, column 4) a golden eagle surrounded by shining rays of light — dominant colour imperial violet.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -923,13 +923,13 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 3. (row 2, column 1) a cargo ship full of grain sacks with a sheaf of wheat on its sail — dominant colour supply teal with extra gold.
 4. (row 2, column 2) a golden four-horse triumphal chariot seen from the front, a laurel wreath above it — dominant colour imperial violet with extra gold.
 
-LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -963,13 +963,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a clay pot with burning oil flying through the air — dominant colour fiery siege orange.
 8. (row 2, column 4) a covered pit trap with sharpened stakes visible at the bottom — dominant colour sage stone grey-green.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -1003,13 +1003,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a crowned helmet above a row of three small siege engines — dominant colour fiery siege orange.
 8. (row 2, column 4) a stone wall with a large hole smashed through its centre — dominant colour fiery siege orange.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -1043,13 +1043,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a rectangular Roman army camp with a wooden palisade and four gates, seen from above — dominant colour sage stone grey-green.
 8. (row 2, column 4) a long stone wall winding over green hills — dominant colour sage stone grey-green.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -1079,13 +1079,13 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 3. (row 2, column 1) large curved bronze mirrors focusing a beam of sunlight onto a burning ship — dominant colour fiery siege orange with extra gold.
 4. (row 2, column 2) high stone city walls above the sea with strange wooden cranes on top — dominant colour sage stone grey-green with extra gold.
 
-LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -1119,13 +1119,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a knife cutting through the leather strap of a shield — dominant colour smouldering ember red.
 8. (row 2, column 4) a narrow hidden path winding between tall dark forest trees — dominant colour deep forest green.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -1159,13 +1159,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) scorched black earth with smoking remains of wooden stakes — dominant colour smouldering ember red.
 8. (row 2, column 4) a two-faced mask, one side smiling and one side frowning — dominant colour smouldering ember red.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -1199,13 +1199,13 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 7. (row 2, column 3) a ghostly green mask made of leaves floating in a dark forest — dominant colour deep forest green.
 8. (row 2, column 4) a fallen Roman eagle standard lying in the mud of a forest — dominant colour deep forest green.
 
-LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 8 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -1235,13 +1235,13 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 3. (row 2, column 1) a collapsing burning wooden palisade with a lone hooded figure walking away — dominant colour smouldering ember red with extra gold.
 4. (row 2, column 2) a dark dense forest with many spear points hidden among the trees, a Roman eagle in the foreground — dominant colour deep forest green with extra gold.
 
-LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
 ```
 
 <details><summary>Indeling</summary>

@@ -7,3 +7,7 @@ Eigenschappen Filmpje Opening.docx
 # migratie (bv. via `firebase database:get`) — puur ter eigen veiligheid,
 # horen niet in de repo.
 .backup/
+
+# Gemini-icoonvellen voor de skill-trees (bron; de uitgesneden iconen in
+# certamen/assets/skills/ worden wel gecommit).
+certamen/assets/skills/sheets/
