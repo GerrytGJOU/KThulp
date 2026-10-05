@@ -2,8 +2,8 @@
 # een doeltint, optioneel met verzadigingsfactor (>1 maakt ook iets lichter).
 # Gebruik: python tools/skilltree-icon-recolor.py assets/skills/x.png 90 170 175 [0.65]
 # (Cavalerie vel 1: Gemini wisselde twee padkleuren om, zie de commit.)
+import sys, colorsys
 from PIL import Image
-# recolor.py file h_lo h_hi target_hue  : hues binnen [lo,hi] → target (graden)
 f, lo, hi, tgt = sys.argv[1], *map(float, sys.argv[2:5]); sk = float(sys.argv[5]) if len(sys.argv)>5 else 1.0
 im = Image.open(f).convert("RGBA"); px = im.load()
 for y in range(im.size[1]):
