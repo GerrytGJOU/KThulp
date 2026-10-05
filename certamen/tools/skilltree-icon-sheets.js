@@ -32,7 +32,7 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the ${n} subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-${list}
+${list}${sh.extra?"\n\n"+sh.extra:""}
 
 LAYOUT: an invisible grid of ${sh.cols} columns and ${sh.rows} rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -69,14 +69,18 @@ for(const cls of Object.keys(BM_SKILLTREES)){
 // skilltree-icon-sheets-order.js). fix_1 = eerste ronde (Gemini; fix_2 =
 // dezelfde prompt via ChatGPT), fix_3 = tweede ronde "kan mooier".
 const ord=require("./skilltree-icon-sheets-order.js");
-for(const [key,cols,rows,ratio,people,intro] of [
+for(const [key,cols,rows,ratio,people,intro,extra] of [
   ["1",4,3,"4:3","human figures or faces, except the rider in icon 10 and the sphinx head in icon 9",
    "Iconen die bij de eerste ronde misgingen of beter konden. Via ChatGPT opgeslagen als `fix_2` — die versie is gebruikt."],
   ["3",4,4,"1:1","human figures or faces, except the sleeping figure in icon 12, the Pythia in icon 13 and the hooded figure in icon 16",
    "Tweede ronde: iconen die klopten maar mooier of preciezer konden (middeleeuwse puntschilden, ontbrekende details, weinig contrast). Bedoeld voor ChatGPT."],
+  ["4",2,1,"16:9","human figures or faces",
+   "Derde ronde: Les van Delphi (werd een grafsteen) en de basis van de Bevelvoerder (kam liep van voor naar achter). Uitgebreide omschrijving per icoon.",
+   "EXTRA DETAIL FOR ICON 1 (Delphi omphalos): the stone must be clearly ROUNDED like an egg or beehive — it is NOT a flat slab, NOT a tablet, NOT a gravestone or tombstone, NOT a rectangle with a rounded top. Its whole surface shows a carved criss-cross net pattern of raised bands. It stands on a small low square plinth. Above its rounded top floats a small glowing eye with a few short light rays. No letters, no inscription, no cross, no flowers.\n\n"+
+   "EXTRA DETAIL FOR ICON 2 (centurion helmet): this is the helmet of a Roman centurion, whose crest is famously worn SIDEWAYS (transverse). Seen from the front, the red horsehair crest therefore appears as a broad fan or half-circle spreading out to the LEFT and RIGHT across the top of the helmet, wider than the helmet itself. It is NOT a front-to-back crest and NOT a narrow mohawk ridge. The helmet is bright polished silver steel with a brass brow band, two hinged cheek guards and a short neck guard visible at the sides. Nobody wears the helmet; no face inside."],
 ]){
   const cells=ord.fixList(key).map(i=>{ const f=ord.findIcon(BM_SKILLTREES,i); return {n:f.n,acc:f.acc,cls:f.t.nm}; });
-  const sh={key:"fix"+key, cols, rows, ratio, cells, label:"mixed icons from several classes", people};
+  const sh={key:"fix"+key, cols, rows, ratio, cells, label:"mixed icons from several classes", people, extra};
   sh.prompt=promptFor(null,sh);
   md+="\n---\n\n## Verbetervel "+key+" → `assets/skills/sheets/fix_"+key+".png`\n\n"+intro+"\n\n"+
       "```text\n"+sh.prompt+"\n```\n\n"+
