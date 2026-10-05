@@ -851,7 +851,7 @@ const BM_SKILLTREES = {
       B: { nm:"Vestingbouwer", accent:"#9fb7a0", accentNm:"sage stone grey-green", desc:"Bouwt een muur met eigen HP die klappen opvangt, en vallen voor wie hem wil bestormen." },
     },
     root: { nm:"Genie", desc:"Passief: je aanvallen halen ook 2 vijandelijk schild weg.", glyph:"⚙",
-            iconSubject:"a bronze gear wheel with a compass and a builder's square crossed over it",
+            iconSubject:"a bronze gear wheel with a wooden builder's hammer lying diagonally across it (no compass, no square, no triangle)",
             icon:"genie_root.png" },
     master: { star:5, nm:"Meester", desc:"Meesterpassief: je aanvallen halen 3 vijandelijk schild weg (in plaats van 2).", glyph:"✦",
               iconSubject:"a golden laurel wreath around a bronze gear wheel",

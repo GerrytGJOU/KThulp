@@ -1134,7 +1134,7 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a bronze gear wheel with a compass and a builder's square crossed over it — dominant colour burnt copper.
+1. (row 1, column 1) a bronze gear wheel with a wooden builder's hammer lying diagonally across it (no compass, no square, no triangle) — dominant colour burnt copper.
 2. (row 1, column 2) a golden laurel wreath around a bronze gear wheel — dominant colour warm gold.
 3. (row 2, column 1) large curved bronze mirrors focusing a beam of sunlight onto a burning ship — dominant colour fiery siege orange with extra gold.
 4. (row 2, column 2) high stone city walls above the sea with strange wooden cranes on top — dominant colour sage stone grey-green with extra gold.
