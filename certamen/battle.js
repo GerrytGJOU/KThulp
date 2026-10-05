@@ -1923,6 +1923,15 @@ async function bmStartBossGame(){
     // stageKeys.length===0: niks ooit getraind — generieke basisformule
     // hierboven blijft ongewijzigd staan, geen belegeringsfases.
   }
+  // Skill-trees: de baas groeit mee met de ervaring van de klas — HP én klap
+  // +3% per gemiddelde ster (balanssimulatie, tools/skilltree-balance.js).
+  // Niet bij een Total War-belegering (eigen stage-HP).
+  let starScale=1;
+  if(!gp&&BM_META.skillTrees&&bmMasteryBonusesOn()){
+    const avg=pids.reduce((a,pid)=>a+(+BM_PLAYERS[pid]?.stStars||0),0)/N;
+    starScale=+(1+0.03*Math.max(0,Math.min(10,avg))).toFixed(3);
+    bossMaxHP=bossStartHP=Math.max(1,Math.round(bossMaxHP*starScale));
+  }
   const teamUp={};
   for(const pid of pids)teamUp[pid+"/team"]="A";
   await fbDB.ref("rooms/"+BM_CODE+"/players").update(teamUp);
@@ -1934,6 +1943,7 @@ async function bmStartBossGame(){
   // voor de Enrage-omschakeling zodra het doorbroken is.
   // startedAt: voor de speeltijd in de Hall of Fame (bmBossHofRecord, bossbattle.js).
   const bossInit={phase:1,rage:0,roundsSinceAttack:0,stage:stageIdx,startedAt:Date.now()};
+  if(starScale>1) bossInit.starScale=starScale;
   if(BM_META.bossId==="minotaur") bossInit.labyrinthShield=Math.round(0.30*bossMaxHP);
   await fbDB.ref("rooms/"+BM_CODE+"/boss").set(bossInit);
   BM_TEAMS=teams;
@@ -3645,7 +3655,7 @@ async function bmResolve(roundN){
     // Minotaurus-Enrage) zitten in bmBossResolveTick() (bossbattle.js).
     let bossEvents=[];
     if(BM_META?.mode==="boss"){
-      const diffM=bmBossDiff(BM_META.bossDifficulty).atk;
+      const diffM=bmBossDiff(BM_META.bossDifficulty).atk*(+BM_BOSS?.starScale||1);
       // Fase op basis van de HP ná de schade van de klas, maar vóór heling
       // (de baas heeft geen heling van team B; alleen zijn eigen regen hieronder).
       const provHB=Math.max(0,Math.min(tB.maxHealth,rawHB));
@@ -4715,7 +4725,7 @@ function bmPickClass(cid){
   const stHere=!!BM_META?.skillTrees&&bmMasteryBonusesOn()&&typeof bmStPayloadFor==="function";
   const stPay=stHere?bmStPayloadFor(cid,(BM_IDENT?.skillTrees||{})[cid]?.picks,ms):null;
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
-    st:stPay&&stPay.nodes.length?stPay:null, stS:null,
+    st:stPay&&stPay.nodes.length?stPay:null, stS:null, stStars:stHere?ms:null,
     class:cid, masteryBonus:(!stHere&&ms>=3)?1:0, masterPassive:ms>=5, prestigeClass:ms>=BM_MASTERY_PRESTIGE,
     traitLaconisch:achs.includes("trait_laconisch"),
     traitFeniks:achs.includes("trait_feniks"),
