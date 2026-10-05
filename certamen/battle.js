@@ -646,7 +646,7 @@ function bmLegendaryOf(p){
 
 /* ---- ABILITY HELPERS ---- */
 // ★★★★★ klasbeheersing → versterkte passief (passive.masterVal). Alleen als de
-// docent masteryBonuses aan heeft laten staan, net als de ★★★-BE-bonus.
+// docent masteryBonuses aan heeft laten staan, net als de ★★★-AP-bonus.
 function bmMasteryBonusesOn(){ return BM_META?.masteryBonuses!==false; }
 function bmPassiveVal(cls,master){
   const pv=cls?.passive; if(!pv) return 0;
@@ -663,7 +663,7 @@ function bmGetAbilityCost(cls,abl,master){
   const pv=cls?.passive;
   if(pv?.type==="cost_reduce"){
     // Verkenner-meester: korting geldt ook voor medium (passive.masterTiers),
-    // want basis kost al het minimum van 1 BE.
+    // want basis kost al het minimum van 1 AP.
     const tiers=(master&&bmMasteryBonusesOn()&&pv.masterTiers)||["basic"];
     if(tiers.includes(abl.tier)) c=Math.max(1,c-bmPassiveVal(cls,master));
   }
@@ -706,10 +706,10 @@ function bmCalcAbilityEffect(p,cls,abl){
   }
   if(["team_be","testudo"].includes(t)) fx.teamBE=abl.teamBE||0;
   if(["shield_remove","attack_and_shld_remove","attack_siege"].includes(t)) fx.shldRemove+=(abl.shldRemove||0);
-  if(abl.selfBE) fx.selfBE+=abl.selfBE; // rechtstreekse eigen-BE-vaardigheden (bv. Cavalerie: Snelle Uitval)
+  if(abl.selfBE) fx.selfBE+=abl.selfBE; // rechtstreekse eigen-AP-vaardigheden (bv. Cavalerie: Snelle Uitval)
   return fx;
 }
-// Klem BE op 0..BM_BE_MAX. Overal gebruiken waar BE wordt weggeschreven —
+// Klem AP op 0..BM_BE_MAX. Overal gebruiken waar AP wordt weggeschreven —
 // zowel host-side (bmResolve/bmDistributeQs) als client-side (bmAnswer).
 function bmClampBE(v){
   const max=(typeof BM_BE_MAX==="number"?BM_BE_MAX:15);  // fallback = zelfde waarde als in battle-data.js
@@ -853,7 +853,7 @@ SCREENS.battleHome = function(){
   document.body.classList.remove("greek");
   H(brand(true)+`
   <div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>⚔️ Battle Mode</h2></div>
-  <div class="panel"><div class="note">Twee teams strijden om woordkennis. Verdien Battle Energy met goede antwoorden en kies je aanval.</div></div>
+  <div class="panel"><div class="note">Twee teams strijden om woordkennis. Verdien Actiepunten met goede antwoorden en kies je aanval.</div></div>
   <button class="tile" onclick="bmStartHost()">
     <span class="corner">${iconSVG("column",88,"currentColor")}</span>
     <span class="ic">${iconSVG("helmet",44,"currentColor")}</span>
@@ -908,7 +908,7 @@ function bmStartBossHost(){
    SCHERM: battleFAQ — Handleiding & uitleg
    Klassen, combo's en synergie worden DATA-GEDREVEN gerenderd uit BM_CLASSES /
    BM_COMBOS / BM_SYNERGY, zodat ze automatisch meelopen met spelwijzigingen.
-   De prozasecties (spelverloop, BE, heldenmodus, profiel) werk je handmatig bij.
+   De prozasecties (spelverloop, AP, heldenmodus, profiel) werk je handmatig bij.
    Conventie: bij elke Battle Mode-wijziging deze FAQ controleren/updaten.
    ============================================================================ */
 function bmTierBadge(tier){
@@ -935,7 +935,7 @@ SCREENS.battleFAQ = function(){
         ${c.abilities.map(a=>`<div style="display:flex;align-items:baseline;gap:6px;flex-wrap:wrap">
           ${bmTierBadge(a.tier)}
           <b style="font-size:13px">${esc(a.nm)}</b>
-          <span class="note" style="color:var(--hi)">${a.cost} BE</span>
+          <span class="note" style="color:var(--hi)">${a.cost} AP</span>
           <span class="note" style="flex:1 1 100%;margin-left:2px">${esc(a.desc)}</span>
         </div>`).join("")}
       </div>
@@ -944,17 +944,17 @@ SCREENS.battleFAQ = function(){
   // Combo's — data-gedreven uit BM_COMBOS
   const comboHTML=BM_COMBOS.map(co=>{
     const eff=[co.dmg?`schade +${co.dmg}`:"",co.shld?`schild +${co.shld}`:"",
-      co.heal?`heling +${co.heal}`:"",co.teamBE?`+${co.teamBE} BE p.p.`:"",
+      co.heal?`heling +${co.heal}`:"",co.teamBE?`+${co.teamBE} AP p.p.`:"",
       co.shldRemove?`vijandschild −${co.shldRemove}`:""].filter(Boolean).join(", ");
     const namen=co.classes.map(id=>bmClsName(id)).join(" + ");
     return `<div style="border-top:1px solid var(--stone4);padding:8px 0">
-      <b style="font-size:13px">${esc(co.nm)}</b> <span class="note" style="color:var(--hi)">${co.cost} BE p.p.</span>
+      <b style="font-size:13px">${esc(co.nm)}</b> <span class="note" style="color:var(--hi)">${co.cost} AP p.p.</span>
       <div class="note">${esc(namen)} — ${esc(eff)}</div>
       <div class="note" style="opacity:.8">${esc(co.desc)}</div></div>`;
   }).join("");
 
   // Synergie — data-gedreven uit BM_SYNERGY
-  const synHTML=BM_SYNERGY.map(s=>`<li>${s.minClasses}+ verschillende klassen in je team → <b>+${s.beBonus} BE</b> per speler per ronde</li>`).join("");
+  const synHTML=BM_SYNERGY.map(s=>`<li>${s.minClasses}+ verschillende klassen in je team → <b>+${s.beBonus} AP</b> per speler per ronde</li>`).join("");
 
   // Boss Battle — data-gedreven uit BOSS_PRESETS/BOSS_DIFFICULTIES
   const bossPresetsHTML=BOSS_PRESET_ORDER.map(id=>{const p=BOSS_PRESETS[id];return`
@@ -971,15 +971,15 @@ SCREENS.battleFAQ = function(){
   ${sec("Wat is Battle Mode?",true,`
     <div class="note">Battle Mode is een teamspel om woordkennis. Twee teams (A en B) strijden tot het
     leger van één team op 0 HP staat. Je verslaat de tegenstander niet door snelheid alleen, maar door
-    <b>samen te werken</b>: goede antwoorden geven je <b>Battle Energy (BE)</b>, en met die energie kies je
+    <b>samen te werken</b>: goede antwoorden geven je <b>Actiepunten (AP)</b>, en met die punten kies je
     aanvallen, schilden of helingen. Elke leerling speelt op een eigen apparaat; de docent projecteert het
     slagveld op het bord.</div>`)}
 
   ${sec("Hoe verloopt een ronde?",false,`
     <ol style="margin:0;padding-left:18px;font-size:13px;line-height:1.6">
-      <li><b>Vraagfase</b> — iedereen krijgt een woord en kiest het juiste antwoord. Goed = je verdient BE
+      <li><b>Vraagfase</b> — iedereen krijgt een woord en kiest het juiste antwoord. Goed = je verdient AP
         (sneller antwoorden kan extra opleveren).</li>
-      <li><b>Actiefase</b> — geef je BE uit aan een ability van je klasse. Je kunt ook samen een
+      <li><b>Actiefase</b> — geef je AP uit aan een ability van je klasse. Je kunt ook samen een
         <b>combo</b> kiezen.</li>
       <li><b>Resolutie</b> — alle acties van beide teams worden tegelijk uitgevoerd: schade, schilden en
         helingen verrekend, en het slagveld animeert het resultaat.</li>
@@ -990,9 +990,9 @@ SCREENS.battleFAQ = function(){
     Latijnse of Griekse werkwoordsvorm te zien (bv. <i>vocat</i>) en moet de juiste Nederlandse vertaling
     kiezen — de afleiders komen altijd uit hetzelfde werkwoord, dus dit toetst echt de vorm, niet de woordenschat.
     De docent kan hier ook kiezen voor een <b>getypte</b> vraag ("geef de vorm van...") in plaats van meerkeuze.</div>
-    <div class="note" style="margin-top:6px"><b>Basisacties.</b> Heb je nog geen klasse gekozen, of te weinig BE voor
+    <div class="note" style="margin-top:6px"><b>Basisacties.</b> Heb je nog geen klasse gekozen, of te weinig AP voor
     je vaardigheden? Dan staan er drie gratis acties klaar: Steen gooien (kleine aanval), Dekking zoeken
-    (klein schild) en Aanmoedigen (+1 BE voor je team). Ze zijn zwakker dan je klasse-vaardigheden, maar je
+    (klein schild) en Aanmoedigen (+1 AP voor je team). Ze zijn zwakker dan je klasse-vaardigheden, maar je
     zit nooit een ronde werkloos toe te kijken. Heb je nog geen klasse, dan kun je er ook midden in het
     gevecht één kiezen — daarna ligt die vast tot het gevecht voorbij is. In de lobby mag je zo vaak
     wisselen als je wilt.</div>
@@ -1005,14 +1005,14 @@ SCREENS.battleFAQ = function(){
     voren — eerst telt je aantal goede antwoorden, bij gelijke stand je schade, heling en schild samen.
     De volgorde wordt tussen twee rondes bijgewerkt.</div>`)}
 
-  ${sec("Battle Energy (BE)",false,`
-    <div class="note">BE is je actiemunt. Je verdient het door vragen goed te beantwoorden. Elke ability kost
-    BE (zie hieronder). Sommige klassen genereren extra BE voor zichzelf of het hele team. Spaar je BE op
+  ${sec("Actiepunten (AP)",false,`
+    <div class="note">AP is je actiemunt. Je verdient het door vragen goed te beantwoorden. Elke ability kost
+    AP (zie hieronder). Sommige klassen genereren extra AP voor zichzelf of het hele team. Spaar je AP op
     voor een krachtige <b>ultieme</b> ability, of geef het meteen uit aan goedkope acties — dat is jouw
     tactische keuze.</div>
-    <div class="note" style="margin-top:6px">Je kunt maximaal <b>${BM_BE_MAX} BE</b> in voorraad hebben; wat
-    daarboven komt vervalt. Sparen heeft dus een grens — gebruik je BE.</div>
-    <div class="note" style="margin-top:6px">Een <b>fout antwoord</b> kost je <b>${BM_WRONG_BE_PENALTY} BE</b>,
+    <div class="note" style="margin-top:6px">Je kunt maximaal <b>${BM_BE_MAX} AP</b> in voorraad hebben; wat
+    daarboven komt vervalt. Sparen heeft dus een grens — gebruik je AP.</div>
+    <div class="note" style="margin-top:6px">Een <b>fout antwoord</b> kost je <b>${BM_WRONG_BE_PENALTY} AP</b>,
     levert niets op én je loopt de passieve rondebonus (synergie, klassepassief) mis. Heb je daarna te weinig over voor je goedkoopste vaardigheid, dan kun je die ronde
     niet aanvallen. Je ziet na elk antwoord meteen of het goed of fout was, met het juiste antwoord erbij.</div>`)}
 
@@ -1030,7 +1030,7 @@ SCREENS.battleFAQ = function(){
     Wie de meeste combo's doet, maakt kans op het eerbewijs <b>Beste Teamspeler</b>.</div>`)}
 
   ${sec("Teamsynergie",false,`
-    <div class="note" style="margin-bottom:4px">Hoe diverser je team, hoe meer bonus-BE iedereen krijgt:</div>
+    <div class="note" style="margin-bottom:4px">Hoe diverser je team, hoe meer bonus-AP iedereen krijgt:</div>
     <ul style="margin:0;padding-left:18px;font-size:13px;line-height:1.6">${synHTML}</ul>
     <div class="note" style="margin-top:6px">Een gevarieerd team met verschillende rollen is dus sterker dan
     vijf dezelfde klassen.</div>`)}
@@ -1041,7 +1041,7 @@ SCREENS.battleFAQ = function(){
     <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
       <li>Vijandelijke schade treft <b>eerst de levende helden</b> (pantser, dan HP); pas als die vallen
         krijgt het leger klappen.</li>
-      <li>Een <b>gevallen held</b> blijft gewoon meespelen: je verdient nog BE en kiest acties — je held
+      <li>Een <b>gevallen held</b> blijft gewoon meespelen: je verdient nog AP en kiest acties — je held
         is alleen even geen schild meer voor het leger.</li>
       <li><b>Herrijzen:</b> beantwoord een aantal vragen goed (de docent stelt het aantal in) en je held
         keert terug met volle HP. De gouden meter <b>↻</b> onder je held toont je voortgang.</li>
@@ -1129,7 +1129,7 @@ SCREENS.battleFAQ = function(){
       <li><b>Klasbeheersing</b> — na elk gevecht verdien je ervaring met de klasse die je speelde. Hoe lang
       het gevecht duurde maakt niet uit; wel dat je actief meedoet (antwoord minstens de helft van de vragen) en
       winnen telt extra. Zo verdien je sterren (★ tot ★★★★★), en elke volgende ster kost meer gevechten dan de vorige.
-      Vanaf ★★★ krijg je met die klasse +1 BE per ronde; met ★★★★★ ben je <b>meester</b> en wordt
+      Vanaf ★★★ krijg je met die klasse +1 AP per ronde; met ★★★★★ ben je <b>meester</b> en wordt
       de passieve eigenschap van die klasse sterker (zie "meester" bij elke klasse in "De acht klassen").
       Blijf je daarna dezelfde klasse spelen, dan worden je sterren één voor één
       <b style="color:#b36bff">paars (prestige)</b>. Met vijf paarse sterren (★10) is het een <b>prestigeklasse</b>
@@ -1182,7 +1182,7 @@ SCREENS.battleFAQ = function(){
     <div class="note" style="margin-top:6px"><b>Klassenoverzicht.</b> Na de awards zie je per leerling
     <b>Goed%</b>, <b>Bijdr.</b> (schade + heling) en <b>Actief</b> — het aantal rondes waarin de leerling een
     antwoord gaf, uit het totaal aantal rondes (bv. 23/28). Een antwoord is niet altijd ook een actie: na een
-    fout antwoord kan er te weinig BE over zijn om aan te vallen. Klik op een van deze drie kolomkoppen om
+    fout antwoord kan er te weinig AP over zijn om aan te vallen. Klik op een van deze drie kolomkoppen om
     erop te sorteren (standaard Goed%). Rechts daarvan staan balkjes zoals in een RPG-scorebord: Schade,
     Healing, Schild, Combo, Reeks (langste reeks goed op rij) en Snelheid (gem. responstijd); bij Boss
     Battle ook Handlangers. Elke balk is afgemeten aan de beste van de klas, die een volle balk en een
@@ -1498,7 +1498,7 @@ SCREENS.battleHostSettings = function(){
   <div class="panel">
     <label class="fld">Mastery-bonussen</label>
     <div class="chips">${onoff("masteryBonuses",mastery)}</div>
-    <div class="note" style="margin-top:6px">★★★+ klassemastery geeft +1 BE per ronde; ★★★★★ geeft een versterkte passief; ★10 (prestige) geeft een extra prestige-vaardigheid.</div>
+    <div class="note" style="margin-top:6px">★★★+ klassemastery geeft +1 AP per ronde; ★★★★★ geeft een versterkte passief; ★10 (prestige) geeft een extra prestige-vaardigheid.</div>
   </div>
   <div class="panel">
     <label class="fld">Slagveld-animaties</label>
@@ -1852,7 +1852,7 @@ async function bmStartBossGame(){
 async function bmDistributeQs(roundN){
   const pids=Object.keys(BM_PLAYERS);if(!pids.length)return;
   const at=BM_META?.answerTimer||10;
-  // Synergiebonus (flat BE per speler) + passief BE voor Bevelvoerder
+  // Synergiebonus (flat AP per speler) + passief AP voor Bevelvoerder
   const synA=bmCalcSynergy(BM_PLAYERS,"A"),synB=bmCalcSynergy(BM_PLAYERS,"B");
   const up={};
   for(const pid of pids){
@@ -1861,7 +1861,7 @@ async function bmDistributeQs(roundN){
     let beBonus=p.team==="A"?synA:synB;
     if(cls?.passive?.type==="be_passive") beBonus+=bmPassiveVal(cls,p.masterPassive);
     if(bmMasteryBonusesOn()) beBonus+=(p.masteryBonus||0);
-    // Verborgen traits: vlakke +1 BE per ronde, los van de mastery-toggle
+    // Verborgen traits: vlakke +1 AP per ronde, los van de mastery-toggle
     // (permanent account-brede unlock, geen in-klas-verdiende bonus)
     if(p.traitGroot) beBonus+=1;
     if(p.traitNorage) beBonus+=1;
@@ -3444,9 +3444,9 @@ async function bmResolve(roundN){
     }
 
     // Pas 3: teamBE verdelen over alle teamgenoten. Begrensd op
-    // BM_TEAMBE_ROUND_CAP: elke team_be-ability geeft BE aan élke teamgenoot,
+    // BM_TEAMBE_ROUND_CAP: elke team_be-ability geeft AP aan élke teamgenoot,
     // dus zonder grens stapelen meerdere Centurio's in een grote klas tot een
-    // onuitgeefbare berg BE (zie battle-data.js).
+    // onuitgeefbare berg AP (zie battle-data.js).
     for(const t of["A","B"]) for_[t].teamBE=Math.min(for_[t].teamBE,BM_TEAMBE_ROUND_CAP);
     for(const[pid,p]of Object.entries(players)){
       const bonus=for_[p.team]?.teamBE||0;
@@ -4258,7 +4258,7 @@ SCREENS.battleHostAnalytics = async function(){
       {h:"🛡️ Schild",  c:"#4f93d8", val:p=>p.shielding||0},
       ...(BM_META?.combos!==false||Object.keys(comboStats).length
         ?[{h:"🤝 Combo", c:"#3fb8b0", val:p=>comboOf(p).n, fmt:v=>v+"×",
-           sub:p=>{const o=comboOf(p);return[o.dmg&&"⚔️"+o.dmg,o.shld&&"🛡️"+o.shld,o.heal&&"💚"+o.heal,o.be&&"+"+o.be+" BE"].filter(Boolean).join(" ");}}]:[]),
+           sub:p=>{const o=comboOf(p);return[o.dmg&&"⚔️"+o.dmg,o.shld&&"🛡️"+o.shld,o.heal&&"💚"+o.heal,o.be&&"+"+o.be+" AP"].filter(Boolean).join(" ");}}]:[]),
       ...(isBoss&&players.some(p=>(p.minionDamage||0)>0)
         ?[{h:"🎯 Handlangers", c:"#c77ad8", val:p=>p.minionDamage||0}]:[]),
       {h:"🔥 Reeks",   c:"#e8b43c", val:p=>p.bestCorrectStreak||0},
@@ -4339,7 +4339,7 @@ function bmShowPlayerDetail(pid){
     ?comboList.map(g=>{
         const co=BM_COMBOS.find(c=>c.id===g.comboId)||{};
         const fx=[co.dmg&&"⚔️"+co.dmg*g.n,co.shld&&"🛡️"+co.shld*g.n,co.heal&&"💚"+co.heal*g.n,
-                  co.teamBE&&"+"+co.teamBE*g.n+" BE p.p.",co.shldRemove&&"−"+co.shldRemove*g.n+" vijandschild"].filter(Boolean).join(" ");
+                  co.teamBE&&"+"+co.teamBE*g.n+" AP p.p.",co.shldRemove&&"−"+co.shldRemove*g.n+" vijandschild"].filter(Boolean).join(" ");
         return`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--stone4)">
           <div><div style="font-size:12px">${esc(co.nm||g.comboId)} <span style="color:var(--muted)">met ${esc(BM_PLAYERS[g.partner]?.name||"?")}</span></div>
             <div style="font-size:11px;color:var(--muted)">${fx}</div></div>
@@ -4501,16 +4501,16 @@ SCREENS.battlePlayerLobby = function(){
             <div style="font-size:15px;font-weight:700;color:${c.color}">${c.nm} <span style="font-size:11px;opacity:.7">${bmStars(ms)}</span></div>
             ${(()=>{
               // ★5 → versterkte passief: oude passief doorgestreept, meesterbonus
-              // als eigen gouden regel; ★3/★4 → alleen de +1 BE-regel.
+              // als eigen gouden regel; ★3/★4 → alleen de +1 AP-regel.
               const on=bmMasteryBonusesOn(), master=on&&ms>=5&&c.passive.masterDesc;
               return `<div class="note" style="margin:2px 0">⚡ ${master?`<s style="opacity:.6">${c.passive.desc}</s>`:c.passive.desc}</div>`
-                +(master?`<div style="margin:2px 0;font-size:12px;font-weight:700;color:#d4af37">★★★★★ Meesterbonus: ${c.passive.masterDesc} · +1 BE per ronde</div>`
-                  :on&&ms>=3?`<div class="note" style="margin:2px 0;color:#d4af37">★★★ Beheersingsbonus: +1 BE per ronde</div>`:"")
+                +(master?`<div style="margin:2px 0;font-size:12px;font-weight:700;color:#d4af37">★★★★★ Meesterbonus: ${c.passive.masterDesc} · +1 AP per ronde</div>`
+                  :on&&ms>=3?`<div class="note" style="margin:2px 0;color:#d4af37">★★★ Beheersingsbonus: +1 AP per ronde</div>`:"")
                 +(on&&ms>=BM_MASTERY_PRESTIGE?`<div style="margin:2px 0;font-size:12px;font-weight:700;color:${BM_PRESTIGE_COLOR}">★10 Prestigeklasse: ${esc(c.abilities.find(a=>a.tier==="prestige")?.nm||"")} ontgrendeld</div>`
                   :ms>5?`<div class="note" style="margin:2px 0;color:${BM_PRESTIGE_COLOR}">Prestige ★${ms}/10 — bij ★10: ${esc(c.abilities.find(a=>a.tier==="prestige")?.nm||"")}</div>`:"");
             })()}
             <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">
-              ${bmClassAbilities(c,ms).map(a=>`<span class="pill" style="font-size:10px${a.tier==="prestige"?";border-color:"+BM_PRESTIGE_COLOR+";color:"+BM_PRESTIGE_COLOR:""}">${a.nm}&nbsp;${bmGetAbilityCost(c,a,ms>=5)}BE</span>`).join("")}
+              ${bmClassAbilities(c,ms).map(a=>`<span class="pill" style="font-size:10px${a.tier==="prestige"?";border-color:"+BM_PRESTIGE_COLOR+";color:"+BM_PRESTIGE_COLOR:""}">${a.nm}&nbsp;${bmGetAbilityCost(c,a,ms>=5)}AP</span>`).join("")}
             </div>
           </div>
           ${sel?`<span style="font-size:20px;align-self:center">✅</span>`:""}
@@ -4541,7 +4541,7 @@ function bmPickClass(cid){
   }
   BM_MY_CLASS=cid;
   BM_MY_CLASS_PICKS++;
-  // mastery-bonus: ★★★+ geeft +1 BE per ronde (minimale spelbonus)
+  // mastery-bonus: ★★★+ geeft +1 AP per ronde (minimale spelbonus)
   const ms=bmCalcMastery(BM_IDENT?.classHistory?.[cid]);
   // Verborgen traits: alleen als vlag op het player-node te lezen voor de
   // host (bmCalcAbilityEffect/bmRespawnProgress draaien host-side en kennen
@@ -4558,7 +4558,7 @@ function bmPickClass(cid){
   });
   const mDesc=BM_CLASSES.find(c=>c.id===cid)?.passive?.masterDesc;
   const mOn=bmMasteryBonusesOn();
-  toast("Klasse gekozen",bmClsName(cid)+(mOn&&ms>=5&&mDesc?" · Meester: "+mDesc+" · +1 BE":mOn&&ms>=3?" · +1 BE mastery-bonus":""));
+  toast("Klasse gekozen",bmClsName(cid)+(mOn&&ms>=5&&mDesc?" · Meester: "+mDesc+" · +1 AP":mOn&&ms>=3?" · +1 AP mastery-bonus":""));
   // Ook bruikbaar tijdens een lopend gevecht (late instappers kiezen daar hun
   // klasse) — dan het spelerspaneel verversen i.p.v. terug naar de lobby.
   if(_screen==="battlePlayerGame") bmPlayerRender();
@@ -4655,7 +4655,7 @@ function bmPlayerRender(){
         const banner=BM_MY_PICK_OK
           ? `<div class="bm-fb ok">✅ Goed!</div>`
           : `<div class="bm-fb bad">❌ Fout${goed?` — het juiste antwoord is <b>${esc(goed)}</b>`:" — bekijk de rode/groene assen hieronder"}<br>
-             <span>Je verliest ${pen} BE${BM_MY_BE<2?" en kunt deze ronde niets doen":""}.</span></div>`;
+             <span>Je verliest ${pen} AP${BM_MY_BE<2?" en kunt deze ronde niets doen":""}.</span></div>`;
         content=`
         ${banner}
         ${BM_MY_Q.mode==="ontleed" ? vfqOntleedResultHTML(BM_MY_Q, vfqOntleedGrade(BM_MY_Q)) : `
@@ -4737,16 +4737,16 @@ function bmPlayerRender(){
         content=`<div class="panel">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
             <span style="font-weight:700;color:${cls.color}">${cls.nm}</span>
-            <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE}/${BM_BE_MAX} BE — ${tl}s</span>
+            <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE}/${BM_BE_MAX} AP — ${tl}s</span>
           </div>
           ${(()=>{
-            // Niets te doen deze ronde: meestal doordat een fout antwoord BE
+            // Niets te doen deze ronde: meestal doordat een fout antwoord AP
             // kostte. Benoem dat, anders lijken de vaardigheden gewoon stuk.
             const goedkoopste=Math.min(...bmClassAbilities(cls,0).map(a=>bmGetAbilityCost(cls,a,bmMyMaster())));
             if(BM_MY_BE>=goedkoopste) return "";
             const foutDezeRonde=BM_MY_PICK_ROUND===round.n&&BM_MY_PICK!==null&&!BM_MY_PICK_OK;
-            return `<div class="bm-fb bad" style="margin-bottom:8px">⚠️ Te weinig BE voor je vaardigheden${foutDezeRonde?" — je antwoord was fout":""}.<br>
-              <span>Je hebt ${BM_MY_BE} BE, je goedkoopste vaardigheid kost ${goedkoopste}. Je kunt wel een basisactie doen.</span></div>
+            return `<div class="bm-fb bad" style="margin-bottom:8px">⚠️ Te weinig AP voor je vaardigheden${foutDezeRonde?" — je antwoord was fout":""}.<br>
+              <span>Je hebt ${BM_MY_BE} AP, je goedkoopste vaardigheid kost ${goedkoopste}. Je kunt wel een basisactie doen.</span></div>
               ${bmBasicActionsHTML("Basisacties — gratis")}`;
           })()}
           ${(BM_META?.mode==="boss"&&(BM_BOSS?.charging||BM_BOSS?.enraged))?(()=>{
@@ -4765,7 +4765,7 @@ function bmPlayerRender(){
             const cost=bmGetAbilityCost(cls,a,bmMyMaster());
             const ok=BM_MY_BE>=cost;
             return `<button class="tile" style="margin-bottom:6px;padding:11px 13px${ok?"":";opacity:.4;pointer-events:none"}" onclick="bmChooseAbility('${a.id}',${cost})">
-              <div style="font-size:13px;font-weight:700">${a.nm} <span class="pill">${cost}&nbsp;BE</span> <span style="opacity:.6;font-size:10px">${tierDot(a.tier)}</span></div>
+              <div style="font-size:13px;font-weight:700">${a.nm} <span class="pill">${cost}&nbsp;AP</span> <span style="opacity:.6;font-size:10px">${tierDot(a.tier)}</span></div>
               <div class="note" style="margin-top:2px">${a.desc}</div>
               ${a.aoe?`<div class="note" style="color:var(--hi);margin-top:2px">🌪️ Raakt alle doelen — doelwitkeuze maakt hier niet uit</div>`:""}
             </button>`;
@@ -4774,12 +4774,12 @@ function bmPlayerRender(){
             const ok=BM_MY_BE>=combo.cost;
             const partnerNm=BM_CLASSES.find(c=>c.id===combo.classes.find(x=>x!==BM_MY_CLASS))?.nm||"";
             return `<button class="tile" style="margin-bottom:6px;padding:11px 13px;border:1px solid var(--hi)${ok?"":";opacity:.4;pointer-events:none"}" onclick="bmChooseCombo('${combo.id}',${combo.cost})">
-              <div style="font-size:13px;font-weight:700">⚡ ${combo.nm} <span class="pill">${combo.cost}&nbsp;BE</span></div>
+              <div style="font-size:13px;font-weight:700">⚡ ${combo.nm} <span class="pill">${combo.cost}&nbsp;AP</span></div>
               <div class="note" style="margin-top:2px">${combo.desc}</div>
               <div class="note" style="color:var(--hi);margin-top:2px">Vraag ${esc(partnerNm)} ook Combo te kiezen!</div>
             </button>`;
           }).join("")}
-          <div class="note" style="margin-top:6px">Geen keuze = BE sparen voor de volgende ronde.</div>
+          <div class="note" style="margin-top:6px">Geen keuze = AP sparen voor de volgende ronde.</div>
         </div>`;
       }
     }
@@ -4794,7 +4794,7 @@ function bmPlayerRender(){
   </div>
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
     <span class="pill">Ronde ${round.n||"—"}</span>
-    <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE} BE</span>
+    <span style="color:var(--hi-bright)">⚡ ${BM_MY_BE} AP</span>
     <span style="color:var(--muted)">${tl}s</span>
   </div>
   ${bmAdaptiveHintHTML()}
@@ -4864,9 +4864,9 @@ function bmFinishAnswer(ok){
   const fast=ok&&timeLeft>at/2;
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
   let beGain=ok?3:0;
-  // Fout antwoord kost BE (BM_WRONG_BE_PENALTY, battle-data.js). Voorheen
-  // leverde fout simpelweg 0 BE op — geen zichtbare consequentie, en met de
-  // ruime BE-toevoer merkte een leerling er niets van. Kom je hierdoor onder
+  // Fout antwoord kost AP (BM_WRONG_BE_PENALTY, battle-data.js). Voorheen
+  // leverde fout simpelweg 0 AP op — geen zichtbare consequentie, en met de
+  // ruime AP-toevoer merkte een leerling er niets van. Kom je hierdoor onder
   // de prijs van je goedkoopste vaardigheid, dan kun je deze ronde inderdaad
   // niet aanvallen; dat is de bedoeling.
   if(!ok) beGain=-(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);

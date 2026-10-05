@@ -395,7 +395,7 @@ const ACHIEVEMENTS_DEF = [
   // bewust NIET mode:"battle": ze ontstaan puur in Training Mode (en
   // eenzame_bouwer vereist juist dat er nooit Battle Mode gespeeld is), dus
   // horen in het algemene, lokale checkAch()-systeem, net als geheim_rij.
-  {id:"trait_exacte_nul",       nm:"Exacte Nul",             ds:"Een gevecht gewonnen met precies 0 BE over na de laatste ronde", icon:"star", secret:true, cat:"geheim", mode:"battle"},
+  {id:"trait_exacte_nul",       nm:"Exacte Nul",             ds:"Een gevecht gewonnen met precies 0 AP over na de laatste ronde", icon:"star", secret:true, cat:"geheim", mode:"battle"},
   {id:"trait_drieling",         nm:"Drieling",               ds:"3 gevechten op rij gewonnen met exact dezelfde hoeveelheid HP over", icon:"star", secret:true, cat:"geheim", mode:"battle"},
   {id:"trait_balans",           nm:"Perfect in Balans",      ds:"Een gevecht dat eindigde in een exact gelijkspel — beide legers op hetzelfde moment op 0 HP", icon:"star", secret:true, cat:"geheim", mode:"battle"},
   {id:"trait_stijlvol_verlies", nm:"Verlies met Stijl",      ds:"De meeste schade van het hele gevecht toegebracht, maar toch verloren", icon:"star", secret:true, cat:"geheim", mode:"battle"},
@@ -647,7 +647,7 @@ function checkAch(ctx={}){
   if(got.length){
     saveProfile();
     // Eenmalige munten-bonus, geen passief effect buiten Battle Mode (geen
-    // BE-/schild-economie om aan te haken in de klassieke spellen).
+    // AP-/schild-economie om aan te haken in de klassieke spellen).
     if(got.includes("geheim_rij")) addCoins(15);
     if(got.includes("trait_zondagsrust")) addCoins(10);
     if(got.includes("trait_eenzame_bouwer")) addCoins(15);

@@ -423,7 +423,7 @@ straks wel een cape maar geen enkele kleur ervoor beschikbaar.
   afwijkend paneel.
 - **`SP_TITLES`** (nu 7): `boogschutter_orakel`, `hopliet_orakel`,
   `cavalerist_orakel` (klassekeuze in de proloog), `bewaarder_herinnering`
-  (proloog voltooid, met een `bonus`-veld: +1 BE bij snel antwoord, scope
+  (proloog voltooid, met een `bonus`-veld: +1 AP bij snel antwoord, scope
   battle/boss/totalwar), en `ch1_a_midas`/`ch1_b_athena`/`ch1_c_prometheus`
   (welke lijn van Hoofdstuk 1 je voltooide — bewust zonder bonus, bonussen
   blijven voorbehouden aan grotere mijlpalen). Alle titels hebben
@@ -451,18 +451,18 @@ maar wel profiteert.
 
 | Titel (id, te maken) | Ontgrendeld bij | Bonus (voorstel) | Waarom dit thematisch past |
 |---|---|---|---|
-| `bewaarder_herinnering` | Proloog voltooid | +1 BE bij een snel juist antwoord | Al **gebouwd** — het bestaande precedent |
+| `bewaarder_herinnering` | Proloog voltooid | +1 AP bij een snel juist antwoord | Al **gebouwd** — het bestaande precedent |
 | `kroniekschrijver_boek_1` | Boek I compleet (Hoofdstuk 1 t/m 9, "De Ontwaakte Herinnering") | `streak_shield` — één fout antwoord per wedstrijd breekt je combo niet | Letterlijk Hoofdstuk 2's kernboodschap: "heldendom ontstaat niet wanneer het lot je gunstig gezind is, maar wanneer je weigert eraan ten onder te gaan" |
-| `kroniekschrijver_boek_2` | Boek II compleet (Hoofdstuk 10 t/m 14, "Helden en Koningen") | `be_head_start` — elke wedstrijd start met +5 BE | Een vliegende start na een lange thuisreis (Odysseus/Aeneas — dit hele boek gaat over thuiskomen) |
+| `kroniekschrijver_boek_2` | Boek II compleet (Hoofdstuk 10 t/m 14, "Helden en Koningen") | `be_head_start` — elke wedstrijd start met +5 AP | Een vliegende start na een lange thuisreis (Odysseus/Aeneas — dit hele boek gaat over thuiskomen) |
 | `kroniekschrijver_boek_3` | Boek III compleet (Hoofdstuk 15 t/m 17, "De Wereld van Mensen") | `coin_bonus_pct` (waarde 5) — +5% munten na afloop van een wedstrijd | Kritisch denken en wijsheid (Herodotos e.a.) vertaald naar beter beheer van middelen — een economische, geen gevechts-bonus, dus geen effect op win/verlies |
 | `kroniekschrijver_boek_4` | Boek IV compleet (Hoofdstuk 18 t/m 23, "Rome Verrijst") | `first_answer_free` — de eerste vraag van elke wedstrijd telt automatisch als goed beantwoord | Rome's fundament leggen — een gegarandeerd sterk begin, eenmalig per wedstrijd |
 | `kroniekschrijver_boek_5` | Boek V compleet (Hoofdstuk 24 t/m 27, "Erfenis van een Rijk" — nieuw sinds de KCV-audit, §7.65-66) | `coin_bonus_pct` (waarde 5) — +5% munten na afloop van een wedstrijd | Kunst, wetenschap en de nalatenschap van een rijk vertaald naar iets tastbaars dat je overhoudt |
-| `meester_der_herinnering` | Boek VI + Finale compleet (Hoofdstuk 28 t/m 29 + Finale — de VOLLEDIGE campagne) | `be_on_correct` (waarde 1) — +1 BE op ELK juist antwoord, niet alleen snelle | De sterkste bonus, bewust gereserveerd voor 100% van Chronica Classica — vereist het voltooien van alle 29 hoofdstukken + finale, dus vanzelf zeldzaam genoeg om niet overpowered te worden op schaal |
+| `meester_der_herinnering` | Boek VI + Finale compleet (Hoofdstuk 28 t/m 29 + Finale — de VOLLEDIGE campagne) | `be_on_correct` (waarde 1) — +1 AP op ELK juist antwoord, niet alleen snelle | De sterkste bonus, bewust gereserveerd voor 100% van Chronica Classica — vereist het voltooien van alle 29 hoofdstukken + finale, dus vanzelf zeldzaam genoeg om niet overpowered te worden op schaal |
 
 **Balansprincipe:** hoe dichter bij het einde van de campagne, hoe sterker de
 bonus mag zijn — maar elke bonus blijft een KLEINE, eenmalige of
 percentage-gebonden aanpassing (nooit een vermenigvuldiger op alle schade of
-een permanente flat-BE-verhoging zonder voorwaarde), en de duurste/sterkste
+een permanente flat-AP-verhoging zonder voorwaarde), en de duurste/sterkste
 titel is expres gekoppeld aan de zwaarste eis (de hele campagne, niet één
 hoofdstuk). Nieuwe `bonus.type`-waarden (`streak_shield`/`be_head_start`/
 `coin_bonus_pct`/`first_answer_free`/`be_on_correct`) bestaan nog nergens in

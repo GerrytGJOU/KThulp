@@ -2,7 +2,7 @@
 
 ## Kern-idee
 
-Twee teams strijden in realtime om woordkennis. Elk correct antwoord levert **Battle Energy (BE)** op. BE besteed je aan acties: aanvallen, verdedigen of helen. Het team waarvan de **Army Health** als eerste op nul staat, verliest. De docent is host en ziet beide legers op het projectiescherm.
+Twee teams strijden in realtime om woordkennis. Elk correct antwoord levert **Actiepunten (AP)** op (voorheen "Battle Energy/BE"; hernoemd op 2026-10-05 omdat leerlingen de afkorting verwarrend vonden — samen met HP vormt AP nu een duidelijk paar. Alleen de zichtbare tekst is hernoemd: code-identifiers zoals `BM_BE_MAX`, `teamBE`, `bmClampBE()` en de Firebase-velden blijven ongewijzigd). AP besteed je aan acties: aanvallen, verdedigen of helen. Het team waarvan de **Army Health** als eerste op nul staat, verliest. De docent is host en ziet beide legers op het projectiescherm.
 
 ---
 
@@ -60,16 +60,16 @@ battle.js`; `buyOrEquip()` in `certamen/games.js`) spiegelt nu ook lokaal naar
 
 ---
 
-## Battle Energy (BE)
+## Actiepunten (AP)
 
-| Situatie | BE-winst |
+| Situatie | AP-winst |
 |---|---|
-| Correct antwoord | +3 BE |
-| Correct én snel (> helft tijd resterend) | +4 BE |
-| Fout antwoord | 0 BE |
-| Hopliet kiest Verdedigen (passief) | +1 extra BE |
+| Correct antwoord | +3 AP |
+| Correct én snel (> helft tijd resterend) | +4 AP |
+| Fout antwoord | 0 AP |
+| Hopliet kiest Verdedigen (passief) | +1 extra AP |
 
-BE accumuleert over rondes. Acties kosten BE; als je niet genoeg hebt, kun je die actie niet kiezen.
+AP accumuleert over rondes. Acties kosten AP; als je niet genoeg hebt, kun je die actie niet kiezen.
 
 ---
 
@@ -82,16 +82,16 @@ representatief voorbeeld per kolom (Basis/Geavanceerd/Ultiem), niet alle 5.
 
 ### Alle 8 klassen
 
-| Klasse | Passief | Basis (BE) | Geavanceerd (BE) | Ultiem (BE) |
+| Klasse | Passief | Basis (AP) | Geavanceerd (AP) | Ultiem (AP) |
 |---|---|---|---|---|
-| **Hopliet** | +1 BE bij Verdedigen | Schildmuur +4 schild (2) | Formatie team +2 BE (5) | Achilleshiel bypass +6 (9) |
+| **Hopliet** | +1 AP bij Verdedigen | Schildmuur +4 schild (2) | Formatie team +2 AP (5) | Achilleshiel bypass +6 (9) |
 | **Spartaan** | +20% aanvalsschade | Speeraanval +6 dmg (3) | Berserk +9 dmg (5) | Leeuwensprong bypass +14 (10) |
 | **Boogschutter** | +1 schade bij aanval | Pijlregen +5 dmg (3) | Zwak punt +7/+17 dmg (5) | Dodenarrow +13 dmg (9) |
-| **Cavalerie** | +2 BE bij snel correct | Charge +7 dmg (3) | Flankbeweging +5 dmg +3 schild (5) | Stormloop +13 dmg (9) |
-| **Priester** | +1 heling bij helen | Gebed +9 heal (3) | Zegen team +3 BE (5) | Godenvuur +12 heal +4 dmg (9) |
-| **Centurio** | +1 BE per ronde (altijd) | Bevel +3 schild (2) | Strijdformatie team +3 BE (4) | Testudo +7 schild + team +2 BE (8) |
+| **Cavalerie** | +2 AP bij snel correct | Charge +7 dmg (3) | Flankbeweging +5 dmg +3 schild (5) | Stormloop +13 dmg (9) |
+| **Priester** | +1 heling bij helen | Gebed +9 heal (3) | Zegen team +3 AP (5) | Godenvuur +12 heal +4 dmg (9) |
+| **Centurio** | +1 AP per ronde (altijd) | Bevel +3 schild (2) | Strijdformatie team +3 AP (4) | Testudo +7 schild + team +2 AP (8) |
 | **Genie** | Aanvallen -2 vijandelijk schild | Katapult +5 dmg (3) | Valgreppel -6 vijandelijk schild (4) | Vuurtoren +9 dmg -4 schild (8) |
-| **Verkenner** | Basis-abilities -1 BE | Verkenning +4 dmg -2 schild (2) | Sabotage -6 vijandelijk schild (4) | Hinderlaag +10 dmg +3 schild (7) |
+| **Verkenner** | Basis-abilities -1 AP | Verkenning +4 dmg -2 schild (2) | Sabotage -6 vijandelijk schild (4) | Hinderlaag +10 dmg +3 schild (7) |
 
 ### M6-klassen (gepland)
 
@@ -112,23 +112,23 @@ Farao, Druide, Augur, Pontifex (fractieklassen -- zie Facties)
 | `team_shield` | Schild voor eigen team |
 | `heal` | Heling voor eigen team |
 | `heal_and_attack` | Heling + schade |
-| `team_be` | Bonus BE voor alle teamgenoten |
-| `testudo` | Schild + team BE |
+| `team_be` | Bonus AP voor alle teamgenoten |
+| `testudo` | Schild + team AP |
 | `shield_remove` | Verwijder vijandelijk schild |
 
-Schild absorbeert inkomende schade voor berekening. Bypass-schade telt apart. Niet bestede BE blijft behouden.
+Schild absorbeert inkomende schade voor berekening. Bypass-schade telt apart. Niet bestede AP blijft behouden.
 
 ---
 
 ## Synergie (M3)
 
-Flat BE-bonus per speler per ronde op basis van klassendiversiteit in het team:
+Flat AP-bonus per speler per ronde op basis van klassendiversiteit in het team:
 
-| Unieke klassen in team | BE-bonus per speler per ronde |
+| Unieke klassen in team | AP-bonus per speler per ronde |
 |---|---|
-| >= 3 | +2 BE |
-| >= 5 | +4 BE |
-| >= 7 | +6 BE |
+| >= 3 | +2 AP |
+| >= 5 | +4 AP |
+| >= 7 | +6 AP |
 
 Waarden in `BM_SYNERGY` in de code (aanpasbaar).
 
@@ -140,13 +140,13 @@ Beide spelers kiezen "Combo" in dezelfde ronde; de host detecteert het bij resol
 
 | Combo | Klassen | Kosten | Effect |
 |---|---|---|---|
-| Schildmuur met Schieten | Hopliet + Boogschutter | 4 BE elk | +6 schild + +6 dmg |
-| Strijdszegen | Priester + Spartaan | 4 BE elk | Heel team +5 BE |
-| Vuursalvo | Genie + Boogschutter | 4 BE elk | +12 dmg |
-| Testudo-formatie | Centurio + Hopliet | 4 BE elk | +10 schild voor team |
-| Hinderlaag & Aanval | Verkenner + Cavalerie | 4 BE elk | +13 dmg + -3 vijandelijk schild |
-| Genezende Vesting | Priester + Genie | 4 BE elk | +10 heal + -4 vijandelijk schild |
-| Verkende Aanval | Verkenner + Boogschutter | 4 BE elk | +10 dmg + -4 vijandelijk schild |
+| Schildmuur met Schieten | Hopliet + Boogschutter | 4 AP elk | +6 schild + +6 dmg |
+| Strijdszegen | Priester + Spartaan | 4 AP elk | Heel team +5 AP |
+| Vuursalvo | Genie + Boogschutter | 4 AP elk | +12 dmg |
+| Testudo-formatie | Centurio + Hopliet | 4 AP elk | +10 schild voor team |
+| Hinderlaag & Aanval | Verkenner + Cavalerie | 4 AP elk | +13 dmg + -3 vijandelijk schild |
+| Genezende Vesting | Priester + Genie | 4 AP elk | +10 heal + -4 vijandelijk schild |
+| Verkende Aanval | Verkenner + Boogschutter | 4 AP elk | +10 dmg + -4 vijandelijk schild |
 
 Waarden in `BM_COMBOS` (`certamen/battle-data.js`) in de code (aanpasbaar).
 
@@ -448,8 +448,8 @@ resolutie liet voorheen het hele gevecht bevriezen — timer stil, geen nieuwe v
 
 Dit zijn alle getallen die je kunt bijstellen zonder in de logica te hoeven zitten. Alles staat in de configuratietabellen in `certamen/battle-data.js` (zie [Overzicht configuratietabellen](#overzicht-configuratietabellen-battle-datajs)).
 
-### BE-economie (antwoordfase)
-| Situatie | BE |
+### AP-economie (antwoordfase)
+| Situatie | AP |
 |---|---|
 | Correct antwoord | +3 |
 | Correct én snel (> helft tijd resterend) | +4 (standaard) |
@@ -460,7 +460,7 @@ De passieve rondebonus (synergie + klassepassief + mastery + traits, zie hierond
 wordt in `bmDistributeQs()` alléén uitgekeerd aan spelers die de vórige ronde góéd
 beantwoordden (`lastAnswerOk`/`lastAnswerRound` op het player-node; ronde 1 is de
 uitzondering, want dan heeft nog niemand kunnen antwoorden). Zonder die voorwaarde
-kwam een fout antwoord alsnog positief uit: −2 BE, en aan het begin van de volgende
+kwam een fout antwoord alsnog positief uit: −2 AP, en aan het begin van de volgende
 ronde onvoorwaardelijk +4 terug.
 
 ### Klassekeuze: vrij in de lobby, vast tijdens het gevecht
@@ -507,22 +507,22 @@ een les geen console openen.
 ### Basisacties: niemand zit werkloos toe te kijken
 
 `BM_BASIC_ACTIONS` (`battle-data.js`) zijn drie gratis acties die iédereen kan doen,
-ook zonder gekozen klasse en met 0 BE:
+ook zonder gekozen klasse en met 0 AP:
 
 | Actie | Effect |
 |---|---|
 | Steen gooien | aanval +2 |
 | Dekking zoeken | schild +1 voor het team |
-| Aanmoedigen | +1 BE voor het team |
+| Aanmoedigen | +1 AP voor het team |
 
 Ze bestaan om één reden: een leerling zonder klasse (late instapper — die joint met
 `class:null` — of iemand die het in de lobby vergat) kreeg in de actiefase alleen de
 melding "kies eerst een klasse" en kon een heel gevecht lang niets doen. Sinds de
-BE-boete bij een fout antwoord overkwam dat ook spelers **mét** klasse die even niets
+AP-boete bij een fout antwoord overkwam dat ook spelers **mét** klasse die even niets
 konden betalen.
 
 Ze zijn bewust zwakker dan de goedkoopste klasse-ability (die doet ≥4 schade voor 2-3
-BE), zodat je eigen klasse altijd de betere keuze blijft. Gratis is geen probleem: je
+AP), zodat je eigen klasse altijd de betere keuze blijft. Gratis is geen probleem: je
 kunt toch maar één actie per ronde vergrendelen. De teamBE-grens
 (`BM_TEAMBE_ROUND_CAP`) vangt op dat een halve klas tegelijk "Aanmoedigen" kiest.
 
@@ -534,16 +534,16 @@ Daarnaast kan een leerling **tijdens** het gevecht alsnog een klasse kiezen:
 `bmPickClass()` ververst dan het spelerspaneel in plaats van terug te springen naar de
 lobby, dus vanaf datzelfde moment staan de eigen vaardigheden er.
 
-### Grenzen aan de BE-economie (`battle-data.js`)
+### Grenzen aan de AP-economie (`battle-data.js`)
 
-In een gevecht met een hele klas liep de BE volledig uit de hand: leerlingen hadden
-65 BE of meer terwijl de duurste ability 10 kost. Twee oorzaken, allebei meegegroeid
+In een gevecht met een hele klas liep de AP volledig uit de hand: leerlingen hadden
+65 AP of meer terwijl de duurste ability 10 kost. Twee oorzaken, allebei meegegroeid
 met de klasgrootte:
 
 1. De **synergiebonus** is per speler per ronde en hangt af van klasdiversiteit. Met
    17 spelers per team zijn alle acht klassen altijd vertegenwoordigd, dus werd de
    hoogste trap (+6) gegarandeerd basisinkomen in plaats van een zeldzame beloning.
-2. **`team_be`-abilities** (Centurio's "Strijdformatie", +3 BE voor het team) geven BE
+2. **`team_be`-abilities** (Centurio's "Strijdformatie", +3 AP voor het team) geven AP
    aan élke teamgenoot. Drie Centurio's leveren iedereen +9 op — die stapeling schaalt
    lineair met de teamgrootte.
 
@@ -551,12 +551,12 @@ Daarom drie grenzen, alle drie los in te stellen:
 
 | Constante | Waarde | Wat het begrenst |
 |---|---|---|
-| `BM_BE_MAX` | 15 | Maximale BE-voorraad per speler (duurste ability kost 10). Alles daarboven vervalt. |
-| `BM_BE_ROUND_BONUS_CAP` | 4 | Passief BE per ronde: synergie + klassepassief + mastery + traits samén. |
+| `BM_BE_MAX` | 15 | Maximale AP-voorraad per speler (duurste ability kost 10). Alles daarboven vervalt. |
+| `BM_BE_ROUND_BONUS_CAP` | 4 | Passief AP per ronde: synergie + klassepassief + mastery + traits samén. |
 | `BM_TEAMBE_ROUND_CAP` | 4 | Wat `team_be`-abilities en combo's samen per ronde aan één teamgenoot geven. |
 
-Alle BE-schrijfacties lopen via `bmClampBE()` (host én client), dus de bovengrens geldt
-overal: antwoorden, rondebonus, ability-kosten, combo's, team-BE en bots.
+Alle AP-schrijfacties lopen via `bmClampBE()` (host én client), dus de bovengrens geldt
+overal: antwoorden, rondebonus, ability-kosten, combo's, team-AP en bots.
 
 ### Ability-kosten en -effecten per klasse
 Zie tabel in §Klassen hierboven. Aanpassen: zoek de klasse in `BM_CLASSES` en wijzig `cost`, `dmg`, `heal`, `shld` of `teamBE`.
@@ -564,20 +564,20 @@ Zie tabel in §Klassen hierboven. Aanpassen: zoek de klasse in `BM_CLASSES` en w
 ### Passief-waarden
 | Klasse | Passief-type | Huidige waarde | Wat het doet |
 |---|---|---|---|
-| Hopliet | be_on_defend | 1 | Extra BE wanneer team_shield-ability gekozen |
+| Hopliet | be_on_defend | 1 | Extra AP wanneer team_shield-ability gekozen |
 | Spartaan | atk_bonus | 0.20 | Vermenigvuldigt aanvalsschade met (1 + val) |
 | Boogschutter | atk_flat | 1 | Telt op bij elke aanval |
-| Cavalerie | be_on_fast | 2 | Extra BE bovenop de standaard snelheidsbonus |
+| Cavalerie | be_on_fast | 2 | Extra AP bovenop de standaard snelheidsbonus |
 | Priester | heal_flat | 1 | Telt op bij elke healing-ability |
-| Centurio | be_passive | 1 | Elke ronde gratis BE (ook zonder actie) |
+| Centurio | be_passive | 1 | Elke ronde gratis AP (ook zonder actie) |
 | Genie | shld_pierce | 2 | Elke aanval verwijdert ook vijandelijk schild |
 | Verkenner | cost_reduce | 1 | Verlaagt kosten van basic-tier abilities (min. 1) |
 
 ### Synergiebonus
-In `BM_SYNERGY`: `{ minClasses, beBonus }`. Huidige waarden: 3 klassen → +2 BE, 5 → +4 BE, 7 → +6 BE per speler per ronde.
+In `BM_SYNERGY`: `{ minClasses, beBonus }`. Huidige waarden: 3 klassen → +2 AP, 5 → +4 AP, 7 → +6 AP per speler per ronde.
 
 ### Combo-kosten en -effecten
-In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `shld`, `heal`, `teamBE`, `shldRemove`. Huidige standaard: 4 BE per speler.
+In `BM_COMBOS`: elke combo heeft `cost` (per speler), en effect-velden `dmg`, `shld`, `heal`, `teamBE`, `shldRemove`. Huidige standaard: 4 AP per speler.
 
 ### Legersterktes (instelbaar via host-settings)
 50 / 100 / 150 / 200 HP. Aanpassen: `battleHostSettings`-scherm of de chips in de code.
@@ -939,22 +939,22 @@ door `bmCalcMastery()`/`bmMasteryXp()`.
 - Na een gevecht met een nieuwe ster: toast ("Ster n als …", "Meester als …",
   "Prestige ★n/10", "Prestigeklasse!").
 
-- **★★★+**: +1 BE per ronde met die klasse (geschreven als `masteryBonus` op het player-node bij klassekeuze, `bmPickClass()`)
+- **★★★+**: +1 AP per ronde met die klasse (geschreven als `masteryBonus` op het player-node bij klassekeuze, `bmPickClass()`)
 - **★★★★★ — meester (sinds 2026-10-02)**: versterkte passief van die klasse
   (`passive.masterVal`/`masterTiers`/`masterDesc` in `BM_CLASSES`, gelezen via `bmPassiveVal()`;
   host-side via de vlag `masterPassive` op het player-node, client-side via
-  `bmMyMaster()` voor BE-kosten en de snel-antwoord-BE):
+  `bmMyMaster()` voor AP-kosten en de snel-antwoord-AP):
 
   | Klasse | Normaal | Meester |
   |---|---|---|
-  | Hopliet | +1 BE bij Verdedigen | +2 |
+  | Hopliet | +1 AP bij Verdedigen | +2 |
   | Voorvechter | +20% aanvalsschade | +30% |
   | Boogschutter | +1 schade bij aanval | +2 |
-  | Cavalerie | +2 BE bij snel correct antwoord | +3 |
+  | Cavalerie | +2 AP bij snel correct antwoord | +3 |
   | Priester | +1 heling bij helen | +2 |
-  | Bevelvoerder | +1 BE per ronde | +2 |
+  | Bevelvoerder | +1 AP per ronde | +2 |
   | Genie | aanvallen: vijandschild −2 | −3 |
-  | Verkenner | basis-abilities −1 BE | ook medium-abilities −1 BE (`masterTiers`; basis kost al het minimum van 1) |
+  | Verkenner | basis-abilities −1 AP | ook medium-abilities −1 AP (`masterTiers`; basis kost al het minimum van 1) |
 
   Daarnaast: cosmetic unlock `kampioen`-wapenrusting (★5 in één willekeurige klasse).
 - **★6–★10 — prestige**: blijf je dezelfde klasse spelen, dan "upgraden" de
@@ -965,14 +965,14 @@ door `bmCalcMastery()`/`bmMasteryXp()`.
   op het player-node, gezet in `bmPickClass()`; bots gebruiken hem nooit; telt
   als ultimate voor de CommanderSpectre-animatie):
 
-  | Klasse | Prestige-vaardigheid | BE | Effect |
+  | Klasse | Prestige-vaardigheid | AP | Effect |
   |---|---|---|---|
   | Hopliet | Thermopylae | 13 | schild +14 én aanval +8 |
   | Voorvechter | Aristeia | 13 | aanval +20, omzeilt schild |
   | Boogschutter | Pijlen van Apollo | 13 | AoE +14, omzeilt schild |
   | Cavalerie | Charge van Alexander | 13 | aanval +16 én vijandschild −6 |
   | Priester | Hand van Asklepios | 13 | heling +20 én schade +6 |
-  | Bevelvoerder | Triumphus | 13 | schild +10, team +3 BE, heling +6 |
+  | Bevelvoerder | Triumphus | 13 | schild +10, team +3 AP, heling +6 |
   | Genie | Spiegels van Archimedes | 13 | AoE +14 én schild −8 |
   | Verkenner | Teutoburgerwoud | 12 | aanval +15 én schild +5 |
 
@@ -1177,8 +1177,8 @@ afloop en moest de hele klas spelcode + leerlingcode opnieuw invoeren.
   met balkjes zijn bewust niet sorteerbaar. De keuze blijft staan tot de pagina
   herladen wordt.
 - "Actief" = goed + fout = aantal rondes waarin de leerling antwoordde (max. één
-  antwoord per ronde; een antwoord betekent niet per se een actie — fout kost BE,
-  en zonder genoeg BE of zonder gekozen vaardigheid valt er niets). Getoond als
+  antwoord per ronde; een antwoord betekent niet per se een actie — fout kost AP,
+  en zonder genoeg AP of zonder gekozen vaardigheid valt er niets). Getoond als
   `x/totaal` (sinds 2026-09-30); totaal = aantal afgehandelde rondes in de log,
   of het hoogste aantal antwoorden als dat hoger is (handmatig gestopt midden in
   een ronde). Laatkomers tellen dus mee tegen het totaal van het hele gevecht.
@@ -1300,10 +1300,10 @@ onderaan) de echte tekst.
 | Trait (id) | Voorwaarde | Bonus | Waar |
 |---|---|---|---|
 | `geheim_rij` ("Onfeilbare Reeks") | 20 vragen op rij goed, in élke spelmodus (`s.bestStreak`) | Eenmalig +15 munten (geen passief effect — algemeen, geen Battle Mode-economie om aan te haken) | `checkAch()`, core.js |
-| `geheim_groot` ("Massale Slag") | Meegevochten in een Battle Mode-gevecht met ≥12 spelers (`totalPlayers`) | Vlak +1 BE per ronde | `bmDistributeQs()`, via `p.traitGroot` |
+| `geheim_groot` ("Massale Slag") | Meegevochten in een Battle Mode-gevecht met ≥12 spelers (`totalPlayers`) | Vlak +1 AP per ronde | `bmDistributeQs()`, via `p.traitGroot` |
 | `geheim_heal` ("Levensbron") | ≥40 HP genezen in één gevecht (`BM_MY_HEAL`) | Vlak +1 heling bij elke heal-ability | `bmCalcAbilityEffect()`, via `p.traitHeal` |
-| `geheim_norage` ("IJzeren Kalmte") | Boss Battle gewonnen zonder dat de baas se rage-meter ooit vol liep (`rageMaxed`, sticky) | Vlak +1 BE per ronde | `bmDistributeQs()`, via `p.traitNorage` |
-| `trait_ciceronianus` ("Ciceronianus") | 5 opeenvolgende antwoorden correct én binnen de laatste 5 sec. van de timer, in één gevecht (`BM_MY_CLUTCH_STREAK`/`BM_MY_CLUTCH_BEST`) | +1 extra BE bij elk snel-correct antwoord | `bmAnswer()` (client-side; de speler kent zijn eigen `BM_IDENT.achievements` al) |
+| `geheim_norage` ("IJzeren Kalmte") | Boss Battle gewonnen zonder dat de baas se rage-meter ooit vol liep (`rageMaxed`, sticky) | Vlak +1 AP per ronde | `bmDistributeQs()`, via `p.traitNorage` |
+| `trait_ciceronianus` ("Ciceronianus") | 5 opeenvolgende antwoorden correct én binnen de laatste 5 sec. van de timer, in één gevecht (`BM_MY_CLUTCH_STREAK`/`BM_MY_CLUTCH_BEST`) | +1 extra AP bij elk snel-correct antwoord | `bmAnswer()` (client-side; de speler kent zijn eigen `BM_IDENT.achievements` al) |
 | `trait_laconisch` ("Laconische Breviteit") | Gevecht gewonnen als Voorvechter (`spartaan`) zonder ooit een ability/combo te kiezen (`BM_MY_ABILITIES_USED===0`) | Vlak +1 schild bij elke `team_shield`/`testudo`-ability | `bmCalcAbilityEffect()`, via `p.traitLaconisch` |
 | `trait_feniks` ("Feniks") | Minstens 1x herrezen in Heldenmodus (`p.timesRevived`, zie `bmRespawnProgress()`) én die speler eindigt als MVP (hoogste `damage`) van het winnende team | 1 herrijzing eerder nodig (`respawnRequired-1`, min. 1) | Uniek: **host-granted**, niet player-side. `bmCheckHostTraits()` draait direct na `bmComputeAwards()` in `battleHostAwards` en schrijft het eerbewijs rechtstreeks naar `identities/{klas}/{lcode}/achievements` via het player-node se `identityKey` — de speler hoeft dit zelf niet te kunnen detecteren of uitlezen (spelers zien elkaars stats nooit live, zie M2 "scoped listeners") |
 
@@ -1329,7 +1329,7 @@ is).
 
 | Trait (id) | Voorwaarde | Bonus | Waar |
 |---|---|---|---|
-| `trait_exacte_nul` ("Exacte Nul") | Gevecht gewonnen met precies 0 BE over (`BM_MY_BE`) | Geen (badge) | `bmCheckAchievements()` |
+| `trait_exacte_nul` ("Exacte Nul") | Gevecht gewonnen met precies 0 AP over (`BM_MY_BE`) | Geen (badge) | `bmCheckAchievements()` |
 | `trait_drieling` ("Drieling") | 3 gevechten op rij gewonnen met exact dezelfde eigen restant-HP (`P.stats.lastWinMargins`, lokaal, cap 3, reset bij verlies) | Eenmalig +10 munten | `bmAwardBattle()` |
 | `trait_balans` ("Perfect in Balans") | Echt gelijktijdige dubbele-KO (`newHA<=0&&newHB<=0` in `bmResolve()`, nieuw veld `state.exactTie`) | Eenmalig +10 munten | **Host-granted**, voor alle spelers in de kamer, via `bmCheckHostTraits()` |
 | `trait_stijlvol_verlies` ("Verlies met Stijl") | Hoogste schade van het hele gevecht (beide teams), maar op het verliezende team | Eenmalig +5 munten (troostprijs) | **Host-granted**, via `bmCheckHostTraits()` |

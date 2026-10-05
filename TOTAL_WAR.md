@@ -876,7 +876,7 @@ zelf óók een structureel voordeel te geven aan grotere aanvallende klassen,
 via VASTE koppentallen i.p.v. een percentage:
 
 - **Synergiebonus** (`BM_SYNERGY`, `certamen/battle-data.js`,
-  `bmCalcSynergy()` in `battle.js`): +2/+4/+6 BE per speler per ronde zodra
+  `bmCalcSynergy()` in `battle.js`): +2/+4/+6 AP per speler per ronde zodra
   het team ≥3/≥5/≥7 *unieke klassen* (Hopliet, Boogschutter, …) vertegen­
   woordigt. Een team van 4 spelers kan de tiers ≥5/≥7 nooit bereiken, hoe
   goed ze ook spelen — een harde plafond voor kleine klassen.
