@@ -2,6 +2,8 @@
 # losse iconen en schrijft ze als assets/skills/<icon>.png (128 px, magenta
 # vrijgemaakt). De volgorde komt uit tools/skilltree-icon-sheets.js (via node).
 # Gebruik: python tools/skilltree-icon-slice.py boogschutter 1 [--order 1,2,...]
+#          [--boxes-from hopliet_2]  (tegelposities van een ander vel overnemen,
+#          als de achtergrond niet egaal magenta is)
 import sys, os, json, subprocess
 from PIL import Image
 
@@ -50,7 +52,15 @@ def main():
         if os.path.exists(p): src = p; break
     if not src: sys.exit("vel niet gevonden")
     im = Image.open(src).convert("RGBA")
-    boxes = components(im)
+    if "--boxes-from" in sys.argv:
+        ref = sys.argv[sys.argv.index("--boxes-from") + 1]
+        rp = next(os.path.join(ROOT, "assets", "skills", "sheets", ref + e) for e in (".png", ".jpg", ".jpeg", ".webp")
+                  if os.path.exists(os.path.join(ROOT, "assets", "skills", "sheets", ref + e)))
+        rim = Image.open(rp).convert("RGBA")
+        assert rim.size == im.size, "vellen verschillen van formaat"
+        boxes = components(rim)
+    else:
+        boxes = components(im)
     cells = cells_for(cls, key)
     print(f"{len(boxes)} blokken gevonden, {len(cells)} verwacht")
     if order: boxes = [boxes[i] for i in order]
