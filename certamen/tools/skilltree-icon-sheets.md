@@ -808,7 +808,7 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 
 1. (row 1, column 1) a burning bronze altar bowl with smoke curling upward — dominant colour temple green.
 2. (row 1, column 2) a golden laurel wreath around a small burning altar — dominant colour warm gold.
-3. (row 2, column 1) a glowing open hand with a snake-entwined staff behind it — dominant colour soft healing green with extra gold.
+3. (row 2, column 1) a glowing open hand in front of the rod of Asclepius: one plain wooden staff with exactly one snake coiled around it (NOT a caduceus: no wings, not two snakes) — dominant colour soft healing green with extra gold.
 4. (row 2, column 2) the Pythia seated on a bronze tripod above a crack with rising purple vapour — dominant colour mystic violet with extra gold.
 
 LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
