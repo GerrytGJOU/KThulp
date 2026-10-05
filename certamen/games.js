@@ -1575,7 +1575,9 @@ SCREENS.adminOverview = function(){
   ${foot()}`);
   teacherNet().isAdmin().then(isAdmin=>{
     if(!isAdmin){ toast("Geen toegang","Dit overzicht is alleen voor de beheerder."); go("teacherPortal"); return; }
-    aoLoad();
+    // Actuele stand van de skill-tree-schakelaar ophalen vóór het tekenen.
+    const flag=(typeof bmSkillTreesLoadFlag==="function")?bmSkillTreesLoadFlag():Promise.resolve();
+    flag.finally(()=>aoLoad());
   });
 };
 
@@ -1592,10 +1594,33 @@ function aoLoad(){
     });
 }
 
+// Skill-trees aan/uit voor alle leerlingen (skilltree.js, config/skillTrees).
+function aoSkillTreesPanelHTML(){
+  if(typeof bmSkillTreesOn!=="function") return "";
+  const on=bmSkillTreesOn();
+  return `<div class="panel" style="margin-bottom:12px;border-color:${on?"var(--green)":"var(--hi-dim)"}">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div style="font-weight:700">🌳 Skill-trees (Battle Mode, Boss Battle, Total War)</div>
+        <div class="note">${on?"<b>Aan</b> — leerlingen zien hun skill-trees in hun profiel en bij de klassekeuze.":"<b>Uit</b> — alleen jij ziet ze (om te testen). Leerlingen merken nog niets."}</div>
+      </div>
+      ${(on||BM_ST_ENGINE_READY)?`<button class="btn ${on?"btn-ghost":"btn-gold"}" onclick="aoToggleSkillTrees(${on?"false":"true"})">${on?"Uitzetten":"Aanzetten"}</button>`
+        :`<span class="pill" title="De effecten worden nog in de gevechten ingebouwd">⏳ Aanzetten kan zodra de effecten in de gevechten zitten</span>`}
+      <button class="chip" onclick="bmOpenSkillTree('hopliet','adminOverview')">Bekijken</button>
+    </div>
+  </div>`;
+}
+async function aoToggleSkillTrees(on){
+  if(on&&!confirm("Skill-trees aanzetten voor alle leerlingen?")) return;
+  try{ await bmSkillTreesSetEnabled(on); toast(on?"Skill-trees aan":"Skill-trees uit", on?"Leerlingen kunnen nu hun skill-trees invullen.":"Leerlingen zien de skill-trees niet meer."); }
+  catch(e){ toast("Niet gelukt","Kon de instelling niet opslaan: "+(e?.message||e)); }
+  aoRender();
+}
+
 function aoRender(){
   const cont=el("aoContent"); if(!cont) return;
   const uids=Object.keys(_aoStatuses||{});
-  if(!uids.length){ cont.innerHTML=`<div class="note">Nog geen docentaccounts geregistreerd.</div>`; return; }
+  if(!uids.length){ cont.innerHTML=aoSkillTreesPanelHTML()+`<div class="note">Nog geen docentaccounts geregistreerd.</div>`; return; }
   const q=s=>"'"+String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+"'";
   const statusLabel={pending:"In afwachting",approved:"Goedgekeurd",revoked:"Ingetrokken",rejected:"Afgewezen (verder als leerling)"};
   const rows=uids.map(uid=>{
@@ -1614,7 +1639,7 @@ function aoRender(){
       <div id="aoKlas_${esc(uid)}" style="margin-top:8px">${codes.length?`<div class="note">Klassen laden…</div>`:`<div class="note">Nog geen klassen.</div>`}</div>
     </div>`;
   });
-  cont.innerHTML = rows.join("");
+  cont.innerHTML = aoSkillTreesPanelHTML() + rows.join("");
   uids.forEach(uid=>{
     const codes=Object.entries(_aoKlascodes||{}).filter(([,kc])=>kc && kc.ownerUid===uid).map(([code,kc])=>({code,created:kc.created}));
     if(codes.length) aoRenderTeacherClasses(uid, codes);

@@ -1167,11 +1167,13 @@ body.greek .qcard .word{color:#143a5e}
 <script src="core.js?v=20261005a"></script>
 <script src="net.js?v=20261002a"></script>
 <script src="wordlists.js?v=20260907a"></script>
-<script src="games.js?v=20261005a"></script>
+<script src="games.js?v=20261005b"></script>
 <script src="battle-data.js?v=20261005b"></script>
-<script src="bossbattle.js?v=20261005e"></script>
+<script src="bossbattle.js?v=20261005f"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20261005e"></script>
+<script src="battle.js?v=20261005f"></script>
+<script src="skilltree-data.js?v=20261005a"></script>
+<script src="skilltree.js?v=20261005a"></script>
 <script src="map/provinces.js?v=20260911a"></script>
 <script src="totalwar.js?v=20260930a"></script>
 <script src="training.js?v=20260930c"></script>
@@ -1206,6 +1208,8 @@ body.greek .qcard .word{color:#143a5e}
   // Zat deze leerling (dit tabblad) nog in een Battle Mode-kamer? Dan de
   // kamer-wachter weer aanzetten, zodat "Start" hem terughaalt (battle.js).
   if(typeof bmRoomWatchResume==="function") bmRoomWatchResume();
+  // Skill-trees aan/uit (config/skillTrees, skilltree.js) — op de achtergrond.
+  if(typeof bmSkillTreesLoadFlag==="function") bmSkillTreesLoadFlag();
 })();
 </script>
 </body>

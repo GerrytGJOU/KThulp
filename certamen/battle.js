@@ -847,9 +847,11 @@ let BM_MY_CLASS_PICKS=0, BM_MY_DEALT_DMG_ABILITY=false;
    wordt hij teruggehaald (bmRejoin). Een open avatar-ontwerp wordt eerst
    bewaard. Wie zelf weggaat (terugknop → bmLeave) wordt niet teruggetrokken.
    Na herladen start bmRoomWatchResume() hem opnieuw vanuit sessionStorage. */
-let BM_ROOM_WATCH=null;
+let BM_ROOM_WATCH=null, _bmRoomStatus=null;
 const BM_ROOM_SCREENS=["battlePlayerLobby","battlePlayerGame","battleResult"];
-function bmRoomWatchStop(){ if(BM_ROOM_WATCH){ try{BM_ROOM_WATCH.off();}catch(e){} BM_ROOM_WATCH=null; } }
+function bmRoomWatchStop(){ if(BM_ROOM_WATCH){ try{BM_ROOM_WATCH.off();}catch(e){} BM_ROOM_WATCH=null; } _bmRoomStatus=null; }
+// Loopt er nu een gevecht waar deze leerling in zit? (skilltree.js: geen respec tijdens een gevecht)
+function bmRoomPlaying(){ return !!BM_ROOM_WATCH && _bmRoomStatus==="playing"; }
 function bmRoomWatchStart(code,pid){
   bmRoomWatchStop();
   if(!fbDB||!code||!pid) return;
@@ -857,6 +859,7 @@ function bmRoomWatchStart(code,pid){
   let first=true;
   const f=r.on("value",async s=>{
     const st=s.val(), wasFirst=first; first=false;
+    _bmRoomStatus=st;
     if(st==null){ bmRoomWatchStop(); return; }          // kamer bestaat niet meer
     if(st!=="playing") return;
     if(BM_ROOM_SCREENS.includes(_screen)) return;        // die schermen regelen het zelf
@@ -4586,6 +4589,13 @@ SCREENS.battlePlayerLobby = function(){
             <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">
               ${bmClassAbilities(c,ms).map(a=>`<span class="pill" style="font-size:10px${a.tier==="prestige"?";border-color:"+BM_PRESTIGE_COLOR+";color:"+BM_PRESTIGE_COLOR:""}">${a.nm}&nbsp;${bmGetAbilityCost(c,a,ms>=5)}AP</span>`).join("")}
             </div>
+            ${(typeof bmSkillTreesVisible==="function"&&bmSkillTreesVisible())?(()=>{
+              // Skill-tree (skilltree.js): eigen knop binnen de klassetegel — stopPropagation,
+              // anders kies je meteen ook de klasse. Toont het gekozen pad als dat er is.
+              const pk=(BM_IDENT?.skillTrees||{})[c.id]?.picks||{}, pth=skilltreePathOf(bmStEffectivePicks(c.id,pk,ms));
+              const nm=pth?BM_SKILLTREES[c.id].paths[pth].nm:"";
+              return `<span class="chip" role="button" tabindex="0" style="margin-top:6px;display:inline-block;font-size:12px" onclick="event.stopPropagation();bmOpenSkillTree('${c.id}','battlePlayerLobby')">🌳 Skill-tree${nm?" · "+esc(nm):""}</span>`;
+            })():""}
           </div>
           ${sel?`<span style="font-size:20px;align-self:center">✅</span>`:""}
         </div>
@@ -5263,10 +5273,12 @@ SCREENS.battleProfile = function(){
 
   const masteryHTML=BM_CLASSES.map(c=>{
     const ms=bmCalcMastery(BM_IDENT.classHistory?.[c.id]);
-    return `<div style="background:${c.color}18;border:1px solid ${c.color}44;border-radius:10px;padding:8px 4px;text-align:center">
+    const st=(typeof bmSkillTreesVisible==="function"&&bmSkillTreesVisible());
+    return `<div ${st?`role="button" tabindex="0" onclick="bmOpenSkillTree('${c.id}','battleProfile')" title="Skill-tree van ${esc(c.nm)}"`:""} style="background:${c.color}18;border:1px solid ${c.color}44;border-radius:10px;padding:8px 4px;text-align:center${st?";cursor:pointer":""}">
       ${iconSVG(c.icon,20,c.color)}
       <div style="font-size:9px;color:var(--muted);margin:2px 0">${esc(c.nm)}</div>
       <div style="line-height:1">${bmStars(ms)}</div>
+      ${st?`<div style="font-size:9px;color:var(--hi);margin-top:2px">🌳 skill-tree</div>`:""}
     </div>`;
   }).join("");
 
@@ -5342,7 +5354,7 @@ SCREENS.battleProfile = function(){
     </div>`;
   })()}
   ${spTitlesSectionHTML(spTitlesLoadLocal(), spEquippedTitleLoadLocal())}
-  <div class="eyebrow l">Class Mastery</div>
+  <div class="eyebrow l">Class Mastery${(typeof bmSkillTreesVisible==="function"&&bmSkillTreesVisible())?" · tik op een klasse voor de skill-tree":""}</div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px">${masteryHTML}</div>
   <div class="eyebrow l">Achievements (${bmAchievedIds.filter(id=>bmAchDef.some(a=>a.id===id)).length}/${bmAchDef.length})</div>
   <div style="margin-bottom:16px">${achHTML}</div>
