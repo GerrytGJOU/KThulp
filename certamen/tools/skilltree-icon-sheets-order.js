@@ -1,12 +1,19 @@
 // Volgorde van de iconen per vel (gedeeld door skilltree-icon-sheets.js en
 // skilltree-icon-slice.py): 1 = identiteit, 2 = pad A, 3 = pad B, 4 = kern.
-// Klasse "fix" = het verbetervel (sheets/fix_1): losse iconen uit alle bomen
-// die opnieuw moesten (zie FIX_ICONS).
+// Klasse "fix" = verbetervellen: losse iconen uit alle bomen die opnieuw
+// moesten. fix_1 (Gemini) en fix_2 (ChatGPT) = FIX_ICONS, fix_3 = FIX_ICONS_3.
 const FIX_ICONS=[
   "genie_root.png","hopliet_marathon.png","cavalerie_charge_van_alexander.png","cavalerie_numidische_storm.png",
   "verkenner_arminius.png","verkenner_kleine_steken.png","verkenner_woudgeest.png","verkenner_varus_ondergang.png",
   "priester_raadselspreuk.png","cavalerie_parthisch_schot.png","centurio_niemand_valt.png","priester_epidauros.png",
 ];
+const FIX_ICONS_3=[
+  "boogschutter_vaste_hand.png","boogschutter_koelbloedig.png","boogschutter_meesterschutter.png","hopliet_gedrilde_rijen.png",
+  "hopliet_taai_als_brons.png","hopliet_laatste_bolwerk.png","hopliet_opmars.png","spartaan_levensroof.png",
+  "spartaan_dorst.png","spartaan_brandend_bloed.png","priester_les_van_delphi.png","priester_tempelslaap.png",
+  "priester_orakel_van_delphi.png","centurio_root.png","centurio_signum.png","verkenner_infiltrant.png",
+];
+const fixList=key=>key==="3"?FIX_ICONS_3:FIX_ICONS;
 // Zoekt een knooppunt op bestandsnaam, met de tegelkleur die erbij hoort.
 function findIcon(TREES,icon){
   for(const t of Object.values(TREES)){
@@ -21,7 +28,7 @@ function findIcon(TREES,icon){
 }
 module.exports=function(TREES,cls,key){
   const n=x=>({nm:x.nm,icon:x.icon});
-  if(cls==="fix") return FIX_ICONS.map(i=>n(findIcon(TREES,i).n));
+  if(cls==="fix") return fixList(key).map(i=>n(findIcon(TREES,i).n));
   const t=TREES[cls];
   if(key==="1") return t.identity.flatMap(s=>[n(s.A),n(s.B)]);
   if(key==="2") return t.pathNodes.A.flatMap(s=>[n(s.a),n(s.b)]);
@@ -29,4 +36,5 @@ module.exports=function(TREES,cls,key){
   return [n(t.root),n(t.master),...t.prestige.map(n)];
 };
 module.exports.FIX_ICONS=FIX_ICONS;
+module.exports.fixList=fixList;
 module.exports.findIcon=findIcon;
