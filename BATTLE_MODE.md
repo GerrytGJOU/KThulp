@@ -65,7 +65,7 @@ battle.js`; `buyOrEquip()` in `certamen/games.js`) spiegelt nu ook lokaal naar
 | Situatie | AP-winst |
 |---|---|
 | Correct antwoord | +3 AP |
-| Correct én snel (> helft tijd resterend) | +4 AP |
+| Correct én snel (binnen het eerste kwart van de tijd, `BM_FAST_FRACTION`) | +4 AP |
 | Fout antwoord | 0 AP |
 | Hopliet kiest Verdedigen (passief) | +1 extra AP |
 
@@ -452,7 +452,7 @@ Dit zijn alle getallen die je kunt bijstellen zonder in de logica te hoeven zitt
 | Situatie | AP |
 |---|---|
 | Correct antwoord | +3 |
-| Correct én snel (> helft tijd resterend) | +4 (standaard) |
+| Correct én snel (binnen het eerste kwart van de tijd, `BM_FAST_FRACTION`) | +4 (standaard) |
 | Cavalerie: correct én snel | +5 (passief be_on_fast: +2) |
 | Fout antwoord | −`BM_WRONG_BE_PENALTY` (= 2), nooit onder 0 |
 
@@ -623,7 +623,10 @@ Boss Battle heeft geen tegenstander-team en rekent apart (`N*100` klas-HP, zie
 BOSS_BATTLE.md).
 
 ### Antwoordtimer
-8 / 10 / 12 / 15 seconden. De "snelheidsbonus" treedt in werking als meer dan de helft van de tijd over is.
+8 / 10 / 12 / 15 seconden. De "snelheidsbonus" geldt voor een goed antwoord binnen het eerste kwart van de tijd
+(`BM_FAST_FRACTION` = 0.25 in `battle-data.js`; bij 10 s dus binnen 2,5 s). Tot 2026-10-05 was dat "meer dan de
+helft van de tijd over" — te ruim: vrijwel elk goed antwoord telde als snel, waardoor de bonus (+1 AP, het
+Cavalerie-passief en de Ciceronianus-trait) eigenlijk een vaste toeslag was in plaats van een beloning.
 
 ---
 

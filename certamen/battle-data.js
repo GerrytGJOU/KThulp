@@ -116,6 +116,11 @@ const BM_BE_MAX = 15;               // maximale voorraad AP per speler (duurste 
 const BM_BE_ROUND_BONUS_CAP = 4;    // max passief AP per ronde (synergie + passieven + mastery + traits samen)
 const BM_TEAMBE_ROUND_CAP = 4;      // max AP dat team_be-abilities + combo's samen per ronde aan een teamgenoot geven
 const BM_WRONG_BE_PENALTY = 2;      // AP die je kwijtraakt bij een fout antwoord (nooit onder 0)
+// "Snel" antwoord: goed beantwoord binnen dit deel van de timer (0.25 = het
+// eerste kwart, bij 10 s dus binnen 2,5 s). Geeft +1 AP, het Cavalerie-passief
+// en de Ciceronianus-bonus. Was tot 2026-10-05 "meer dan de helft van de tijd
+// over" — dat bleek te ruim: bijna elk goed antwoord telde als snel.
+const BM_FAST_FRACTION = 0.25;
 
 /* ---- CONFIGURATIETABEL: BASISACTIES ----
    Acties die iédereen kan doen, ook zonder gekozen klasse en met 0 AP. Ze

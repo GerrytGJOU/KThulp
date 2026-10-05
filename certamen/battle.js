@@ -978,7 +978,7 @@ SCREENS.battleFAQ = function(){
   ${sec("Hoe verloopt een ronde?",false,`
     <ol style="margin:0;padding-left:18px;font-size:13px;line-height:1.6">
       <li><b>Vraagfase</b> — iedereen krijgt een woord en kiest het juiste antwoord. Goed = je verdient AP
-        (sneller antwoorden kan extra opleveren).</li>
+        (goed binnen het eerste kwart van de tijd telt als <b>snel</b> en levert 1 AP extra op).</li>
       <li><b>Actiefase</b> — geef je AP uit aan een ability van je klasse. Je kunt ook samen een
         <b>combo</b> kiezen.</li>
       <li><b>Resolutie</b> — alle acties van beide teams worden tegelijk uitgevoerd: schade, schilden en
@@ -4861,7 +4861,9 @@ function bmFinishAnswer(ok){
   const round=BM_STATE.round||{};
   const at=BM_META?.answerTimer||10;
   const timeLeft=round.deadline?Math.max(0,(round.deadline-Date.now())/1000):0;
-  const fast=ok&&timeLeft>at/2;
+  // Snel = goed binnen het eerste deel van de timer (BM_FAST_FRACTION, battle-data.js).
+  const fastFrac=(typeof BM_FAST_FRACTION==="number"?BM_FAST_FRACTION:0.25);
+  const fast=ok&&timeLeft>at*(1-fastFrac);
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
   let beGain=ok?3:0;
   // Fout antwoord kost AP (BM_WRONG_BE_PENALTY, battle-data.js). Voorheen
