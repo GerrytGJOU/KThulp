@@ -1092,6 +1092,24 @@ zelfde spelers" heeft de `players`-tak nodig. Opruimen gebeurt daarom in
 `bmHostFinish()`, als de docent de nabespreking verlaat (de terugpijl of de knop
 "Afsluiten — kamer sluiten" op het statistiekenscherm).
 
+### Automatisch terug naar het gevecht bij "Start" (kamer-wachter, sinds 2026-10-05)
+
+De statusluisteraars van lobby, gevecht en resultaatscherm horen bij dat
+scherm en worden door `cleanup()` opgeruimd zodra een leerling ergens anders
+heen gaat. Wie in de lobby even zijn avatar of profiel opende, miste daardoor
+de start. Nu draait er per leerling een **kamer-wachter** (`bmRoomWatchStart()`
+in `battle.js`) die buiten `cleanup()`/`BM_UNSUBS` valt: zodra
+`state/status` op `"playing"` springt en de leerling niet op een kamerscherm
+staat (`BM_ROOM_SCREENS`), haalt `bmRoomPullIn()` hem terug via `bmRejoin()`.
+Een open avatar-ontwerp (`BM_AV_EDIT`) wordt eerst bewaard.
+- Start bij `bmDoJoin()` en `bmRejoin()`; na herladen opnieuw via
+  `bmRoomWatchResume()` (index.html-init, leest `sessionStorage.bm_session`).
+  Loopt het gevecht al, dan gaat de leerling er meteen weer in.
+- Wie zelf weggaat (terugknop → `bmLeave()`) krijgt `left:true` in
+  `bm_session` en wordt niet teruggetrokken; "Heraansluiten" wist die vlag.
+- De avatar-knop in de lobby keert na opslaan terug naar de lobby
+  (`BM_AV_RETURN`), niet naar het profiel.
+
 ### Nieuw gevecht met dezelfde spelers (`bmNewMatchSamePlayers()`)
 
 Zowel het award- als het analytics-scherm heeft een knop **"↻ Nieuw gevecht — zelfde

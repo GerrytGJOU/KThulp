@@ -1171,7 +1171,7 @@ body.greek .qcard .word{color:#143a5e}
 <script src="battle-data.js?v=20261005b"></script>
 <script src="bossbattle.js?v=20261005e"></script>
 <script src="battle-motion.js?v=20260705a"></script>
-<script src="battle.js?v=20261005d"></script>
+<script src="battle.js?v=20261005e"></script>
 <script src="map/provinces.js?v=20260911a"></script>
 <script src="totalwar.js?v=20260930a"></script>
 <script src="training.js?v=20260930c"></script>
@@ -1203,6 +1203,9 @@ body.greek .qcard .word{color:#143a5e}
   if(direct==="teacherPortal"){ go("teacherPortal"); return; }
   if(room){ go("join"); }
   else { go("home"); }
+  // Zat deze leerling (dit tabblad) nog in een Battle Mode-kamer? Dan de
+  // kamer-wachter weer aanzetten, zodat "Start" hem terughaalt (battle.js).
+  if(typeof bmRoomWatchResume==="function") bmRoomWatchResume();
 })();
 </script>
 </body>
