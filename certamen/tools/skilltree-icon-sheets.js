@@ -32,13 +32,13 @@ CONTENT (most important rule): draw EXACTLY the ${n} subjects listed below, each
 
 ${list}
 
-LAYOUT: an invisible grid of ${sh.cols} columns and ${sh.rows} rows with equal cells; one icon centred in each cell, filling about 70% of the cell, with clear empty space between icons so they never touch each other or the image edge. No grid lines, frames, tiles, badges or circles behind the icons.
+LAYOUT: an invisible grid of ${sh.cols} columns and ${sh.rows} rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
 BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
 
-STYLE: drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32. Each icon is one bold symbol with a 1-pixel dark brown outline, max. 8 colours, clearly dominated by its listed colour, with gold (#d4af37) highlights and dark brown shadows; same line weight and top-left lighting for all icons.
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour; on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than ${n} icons.`;
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than ${n} icons.`;
 }
 
 let md=`# Skill-tree-iconen — Gemini-prompts per klasse
