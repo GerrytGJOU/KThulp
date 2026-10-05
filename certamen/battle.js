@@ -837,7 +837,68 @@ let BM_MY_CLUTCH_STREAK=0, BM_MY_CLUTCH_BEST=0, BM_MY_ABILITIES_USED=0;
 // type ability gekozen (trait_pacifist, "Pacifistische Priester")
 let BM_MY_CLASS_PICKS=0, BM_MY_DEALT_DMG_ABILITY=false;
 
+/* ---- KAMER-WACHTER: leerling terughalen zodra de docent op "Start" klikt ----
+   De statusluisteraars van de lobby/het gevecht horen bij dat scherm en worden
+   door cleanup() opgeruimd zodra een leerling ergens anders heen gaat (profiel,
+   avatar, skill-tree…). Dan miste hij de start (leerlingfeedback 2026-10-05:
+   "zat nog m'n avatar aan te passen"). Deze wachter staat los van cleanup()/
+   BM_UNSUBS en blijft lopen zolang de leerling in de kamer zit: zodra de
+   status op "playing" springt en de leerling niet op een kamerscherm staat,
+   wordt hij teruggehaald (bmRejoin). Een open avatar-ontwerp wordt eerst
+   bewaard. Wie zelf weggaat (terugknop → bmLeave) wordt niet teruggetrokken.
+   Na herladen start bmRoomWatchResume() hem opnieuw vanuit sessionStorage. */
+let BM_ROOM_WATCH=null;
+const BM_ROOM_SCREENS=["battlePlayerLobby","battlePlayerGame","battleResult"];
+function bmRoomWatchStop(){ if(BM_ROOM_WATCH){ try{BM_ROOM_WATCH.off();}catch(e){} BM_ROOM_WATCH=null; } }
+function bmRoomWatchStart(code,pid){
+  bmRoomWatchStop();
+  if(!fbDB||!code||!pid) return;
+  const r=fbDB.ref("rooms/"+code+"/state/status");
+  let first=true;
+  const f=r.on("value",async s=>{
+    const st=s.val(), wasFirst=first; first=false;
+    if(st==null){ bmRoomWatchStop(); return; }          // kamer bestaat niet meer
+    if(st!=="playing") return;
+    if(BM_ROOM_SCREENS.includes(_screen)) return;        // die schermen regelen het zelf
+    if(wasFirst && _screen==="battleJoin") return;       // bewust op het meedoen-scherm
+    await bmRoomPullIn();
+  });
+  BM_ROOM_WATCH={code,pid,off:()=>r.off("value",f)};
+}
+async function bmRoomPullIn(){
+  // Open avatar-ontwerp niet kwijtraken: bewaren zonder van scherm te wisselen.
+  if(_screen==="battleAvatarEdit"&&BM_AV_EDIT&&BM_IDENT){
+    try{
+      const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
+      if(fbDB) fbDB.ref("identities/"+klas+"/"+lcode+"/avatar").set(BM_AV_EDIT).catch(()=>{});
+      BM_IDENT={...BM_IDENT,avatar:{...BM_AV_EDIT}};
+      bmIdentSave({...bmIdentLoad(),...BM_IDENT});
+    }catch(e){}
+    BM_AV_EDIT=null;
+  }
+  if(typeof bmSkillTreeAutoSave==="function") bmSkillTreeAutoSave();
+  const ok=await bmRejoin();
+  if(ok) toast("Het gevecht begint!","Je bent teruggezet in het gevecht.");
+}
+// Bij het opstarten van de app: zat deze leerling (dit tabblad) nog in een kamer?
+async function bmRoomWatchResume(){
+  try{
+    const s=sessionStorage.getItem("bm_session"); if(!s) return;
+    const{pid,code,left}=JSON.parse(s); if(left||!pid||!code) return;
+    if(!fbDB&&typeof initFirebase==="function"&&!initFirebase()) return;
+    const st=(await fbDB.ref("rooms/"+code+"/state/status").once("value")).val();
+    if(st==null||st==="finished") return;
+    bmRoomWatchStart(code,pid);
+  }catch(e){}
+}
+function bmMarkSessionLeft(){
+  try{ const s=sessionStorage.getItem("bm_session"); if(!s) return;
+    sessionStorage.setItem("bm_session",JSON.stringify({...JSON.parse(s),left:true})); }catch(e){}
+}
+
 function bmLeave(){
+  // Zelf weggaan (terugknop): niet meer automatisch terugtrekken.
+  if(BM_ROOM_WATCH&&BM_PID&&BM_ROOM_WATCH.pid===BM_PID){ bmRoomWatchStop(); bmMarkSessionLeft(); }
   _bmFormHash="";_bmRankRound=-1;_bmRankMap={};BM_FIELD_SOLO=false;
   bmClearTheme();
   BM_CODE=null;BM_PID=null;BM_META=null;BM_STATE={};BM_TEAMS={};BM_PLAYERS={};BM_BOSS={};
@@ -4454,6 +4515,7 @@ async function bmDoJoin(){
   ref.onDisconnect().update({online:false});
   await ref.set(pd);BM_PID=ref.key;
   try{sessionStorage.setItem("bm_session",JSON.stringify({pid:BM_PID,code:BM_CODE}));}catch(e){}
+  bmRoomWatchStart(BM_CODE,BM_PID);
   go(isPlaying?"battlePlayerGame":"battlePlayerLobby");
 }
 
@@ -4474,6 +4536,8 @@ async function bmRejoin(){
     const ref=fbDB.ref("rooms/"+code+"/players/"+pid);
     ref.onDisconnect().update({online:false});
     await ref.update({online:true,hard:hwMap()});
+    try{sessionStorage.setItem("bm_session",JSON.stringify({pid,code}));}catch(e){} // "left"-vlag wissen
+    bmRoomWatchStart(code,pid);
     go(st?.status==="playing"?"battlePlayerGame":"battlePlayerLobby");
     return true;
   }catch(e){return false;}
@@ -4496,7 +4560,7 @@ SCREENS.battlePlayerLobby = function(){
       <div class="pill" style="margin:4px 0">Niveau ${bmCalcLevel(BM_IDENT?.xp||0).level} · ${esc(bmCalcLevel(BM_IDENT?.xp||0).title)}</div>
       <div class="note">Code: ${BM_CODE}</div>
     </div>
-    <button class="btn" onclick="go('battleAvatarEdit')" title="Avatar aanpassen" style="flex:0 0 auto;padding:6px 10px">${iconSVG("column",18,"currentColor")}</button>
+    <button class="btn" onclick="BM_AV_RETURN='battlePlayerLobby';go('battleAvatarEdit')" title="Avatar aanpassen" style="flex:0 0 auto;padding:6px 10px">${iconSVG("column",18,"currentColor")}</button>
   </div>
   <div class="panel">
     <div class="eyebrow l">Kies je klasse</div>
