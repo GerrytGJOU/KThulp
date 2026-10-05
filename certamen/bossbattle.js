@@ -243,7 +243,12 @@ function bmBossResolveTick(boss, ctx){
   if(b.roundsSinceAttack>=cadence){
     b.roundsSinceAttack=0;
     const headMult=bossId==="hydra"?1+HYDRA_HEAD_ATK*(b.headsGrown||0):1;
-    let dmg=Math.round(classMaxHP*0.05*diffM*(enraged?BOSS_ENRAGE_DMG_MULT:1)*headMult);
+    const baseDmg=Math.round(classMaxHP*0.05*diffM*(enraged?BOSS_ENRAGE_DMG_MULT:1));
+    let dmg=Math.round(baseDmg*headMult);
+    // Extra van aangegroeide Hydra-koppen apart (voor latere effecten die de
+    // gewone baasklap verzwakken, zoals de vloek uit de skill-trees: die mogen
+    // dit deel niet raken — het is de straf voor een mislukte gezamenlijke klap).
+    const headExtra=dmg-baseDmg;
     let blocked=0;
     if(enraged && shieldThisRound>0){
       const frac=Math.min(1, shieldThisRound/(b.parryNeed||1));
@@ -251,7 +256,7 @@ function bmBossResolveTick(boss, ctx){
       dmg-=blocked;
     }
     classDamage+=dmg;
-    events.push(enraged?{type:"boss_attack",dmg,enraged:true,blocked}:{type:"boss_attack",dmg});
+    events.push(enraged?{type:"boss_attack",dmg,enraged:true,blocked}:(headExtra>0?{type:"boss_attack",dmg,headExtra}:{type:"boss_attack",dmg}));
   }
 
   if(noDamageAnswerCount>0){
