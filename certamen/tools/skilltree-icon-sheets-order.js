@@ -13,7 +13,9 @@ const FIX_ICONS_3=[
   "spartaan_dorst.png","spartaan_brandend_bloed.png","priester_les_van_delphi.png","priester_tempelslaap.png",
   "priester_orakel_van_delphi.png","centurio_root.png","centurio_signum.png","verkenner_infiltrant.png",
 ];
-const fixList=key=>key==="3"?FIX_ICONS_3:FIX_ICONS;
+// fix_4: de twee uit fix_3 die nog niet goed waren, met een uitgebreidere prompt.
+const FIX_ICONS_4=["priester_les_van_delphi.png","centurio_root.png"];
+const fixList=key=>key==="4"?FIX_ICONS_4:key==="3"?FIX_ICONS_3:FIX_ICONS;
 // Zoekt een knooppunt op bestandsnaam, met de tegelkleur die erbij hoort.
 function findIcon(TREES,icon){
   for(const t of Object.values(TREES)){

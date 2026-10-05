@@ -683,7 +683,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 1. (row 1, column 1) a hand pressing a glowing green herb onto a bandaged wound — dominant colour soft healing green.
 2. (row 1, column 2) a dark purple cloud with a single downward bolt above a broken spear — dominant colour mystic violet.
 3. (row 1, column 3) a sacred spring pouring clear water from a stone lion's mouth — dominant colour soft healing green.
-4. (row 1, column 4) a smooth upright stone slab with a few simple carved lines (no letters) and a small glowing eye above it — dominant colour mystic violet.
+4. (row 1, column 4) the omphalos stone of Delphi: a rounded, egg-shaped stone (like a beehive or half an egg) standing on a low square base, its surface covered with a carved net or knotted-band pattern, with a small glowing eye floating just above its top — dominant colour mystic violet.
 5. (row 2, column 1) a shallow bowl with a snake drinking from it, bathed in soft light — dominant colour soft healing green.
 6. (row 2, column 2) a single staring painted eye on a dark clay amulet — dominant colour mystic violet.
 7. (row 2, column 3) a wooden staff with a single snake coiled around it — dominant colour soft healing green.
@@ -970,7 +970,7 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a Roman centurion's helmet in bright silver steel with a sideways red crest, seen from the front — dominant colour imperial purple.
+1. (row 1, column 1) a Roman centurion's helmet in bright silver steel seen exactly from the front, with a TRANSVERSE red crest that runs from ear to ear, so that from the front it shows as a wide half-circle fan of red bristles spreading left and right above the helmet — dominant colour imperial purple.
 2. (row 1, column 2) a golden laurel wreath around a centurion's vine staff (vitis) — dominant colour warm gold.
 3. (row 2, column 1) a cargo ship full of grain sacks with a sheaf of wheat on its sail — dominant colour supply teal with extra gold.
 4. (row 2, column 2) a golden four-horse triumphal chariot seen from the front, a laurel wreath above it — dominant colour imperial violet with extra gold.
@@ -1400,10 +1400,10 @@ CONTENT (most important rule): draw EXACTLY the 16 subjects listed below, each o
 8. (row 2, column 4) a sword blade with one red drop at its tip, the drop clearly shaped like a heart — dominant colour dark wine red.
 9. (row 3, column 1) a wide shallow Greek drinking cup (kylix) on a short foot with two small side handles, filled with dark red liquid — dominant colour dark wine red.
 10. (row 3, column 2) a red-glowing sword piercing straight through a ROUND Greek bronze shield — dominant colour dark wine red.
-11. (row 3, column 3) a smooth upright stone slab with a few simple carved lines (no letters) and a small glowing eye above it — dominant colour mystic violet.
+11. (row 3, column 3) the omphalos stone of Delphi: a rounded, egg-shaped stone (like a beehive or half an egg) standing on a low square base, its surface covered with a carved net or knotted-band pattern, with a small glowing eye floating just above its top — dominant colour mystic violet.
 12. (row 3, column 4) a sleeping figure on a stone temple bench with a small crescent moon above (plain tile colour behind, no night sky) — dominant colour soft healing green.
 13. (row 4, column 1) the Pythia in a pale white robe seated on a bronze tripod above a crack with rising violet vapour — dominant colour mystic violet with extra gold.
-14. (row 4, column 2) a Roman centurion's helmet in bright silver steel with a sideways red crest, seen from the front — dominant colour imperial purple.
+14. (row 4, column 2) a Roman centurion's helmet in bright silver steel seen exactly from the front, with a TRANSVERSE red crest that runs from ear to ear, so that from the front it shows as a wide half-circle fan of red bristles spreading left and right above the helmet — dominant colour imperial purple.
 15. (row 4, column 3) a square red military banner (vexillum) with a small golden eagle emblem, hanging from a crossbar (no letters) — dominant colour imperial violet.
 16. (row 4, column 4) a hooded figure slipping through a half-open wooden gate (plain tile colour behind, no night scene) — dominant colour smouldering ember red.
 
@@ -1436,5 +1436,43 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | 14 | Bevelvoerder | Bevelvoerder | `centurio_root.png` |
 | 15 | Bevelvoerder | Signum | `centurio_signum.png` |
 | 16 | Verkenner | Infiltrant | `verkenner_infiltrant.png` |
+
+</details>
+
+---
+
+## Verbetervel 4 → `assets/skills/sheets/fix_4.png`
+
+Derde ronde: Les van Delphi (werd een grafsteen) en de basis van de Bevelvoerder (kam liep van voor naar achter). Uitgebreide omschrijving per icoon.
+
+```text
+Wide 16:9 image: a sprite sheet of exactly 2 separate pixel-art game skill icons, arranged in 1 rows of 2, for an ancient Greek/Roman strategy game (mixed icons from several classes).
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
+CONTENT (most important rule): draw EXACTLY the 2 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
+
+1. (row 1, column 1) the omphalos stone of Delphi: a rounded, egg-shaped stone (like a beehive or half an egg) standing on a low square base, its surface covered with a carved net or knotted-band pattern, with a small glowing eye floating just above its top — dominant colour mystic violet.
+2. (row 1, column 2) a Roman centurion's helmet in bright silver steel seen exactly from the front, with a TRANSVERSE red crest that runs from ear to ear, so that from the front it shows as a wide half-circle fan of red bristles spreading left and right above the helmet — dominant colour imperial purple.
+
+EXTRA DETAIL FOR ICON 1 (Delphi omphalos): the stone must be clearly ROUNDED like an egg or beehive — it is NOT a flat slab, NOT a tablet, NOT a gravestone or tombstone, NOT a rectangle with a rounded top. Its whole surface shows a carved criss-cross net pattern of raised bands. It stands on a small low square plinth. Above its rounded top floats a small glowing eye with a few short light rays. No letters, no inscription, no cross, no flowers.
+
+EXTRA DETAIL FOR ICON 2 (centurion helmet): this is the helmet of a Roman centurion, whose crest is famously worn SIDEWAYS (transverse). Seen from the front, the red horsehair crest therefore appears as a broad fan or half-circle spreading out to the LEFT and RIGHT across the top of the helmet, wider than the helmet itself. It is NOT a front-to-back crest and NOT a narrow mohawk ridge. The helmet is bright polished silver steel with a brass brow band, two hinged cheek guards and a short neck guard visible at the sides. Nobody wears the helmet; no face inside.
+
+LAYOUT: an invisible grid of 2 columns and 1 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
+
+BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
+
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour (the inside of a tile is never magenta, pink or empty); on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
+
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 2 icons.
+```
+
+<details><summary>Indeling</summary>
+
+| Nr | Klasse | Knooppunt | Bestand |
+|---|---|---|---|
+| 1 | Priester | Les van Delphi | `priester_les_van_delphi.png` |
+| 2 | Bevelvoerder | Bevelvoerder | `centurio_root.png` |
 
 </details>
