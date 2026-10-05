@@ -47,9 +47,12 @@ def main():
     if "--order" in sys.argv:
         order = [int(v) - 1 for v in sys.argv[sys.argv.index("--order") + 1].split(",")]
     src = None
-    for ext in (".png", ".jpg", ".jpeg", ".webp"):
-        p = os.path.join(ROOT, "assets", "skills", "sheets", f"{cls}_{key}{ext}")
-        if os.path.exists(p): src = p; break
+    # vel mag ook de weergavenaam dragen (bv. voorvechter_1 voor klasse spartaan)
+    alias = {"spartaan": "voorvechter", "centurio": "bevelvoerder"}.get(cls, cls)
+    for pre in (cls, alias):
+        for ext in (".png", ".jpg", ".jpeg", ".webp"):
+            p = os.path.join(ROOT, "assets", "skills", "sheets", f"{pre}_{key}{ext}")
+            if os.path.exists(p) and not src: src = p
     if not src: sys.exit("vel niet gevonden")
     im = Image.open(src).convert("RGBA")
     if "--boxes-from" in sys.argv:
