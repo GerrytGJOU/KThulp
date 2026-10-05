@@ -65,16 +65,20 @@ for(const cls of Object.keys(BM_SKILLTREES)){
         sh.cells.map((x,i)=>`| ${i+1} | ${x.n.nm} | \`${x.n.icon}\` |`).join("\n")+"\n\n</details>\n";
   }
 }
-// Verbetervel: losse iconen uit alle bomen die opnieuw moesten (FIX_ICONS in
-// skilltree-icon-sheets-order.js). Opslaan als sheets/fix_1.
-{
-  const ord=require("./skilltree-icon-sheets-order.js");
-  const cells=ord.FIX_ICONS.map(i=>{ const f=ord.findIcon(BM_SKILLTREES,i); return {n:f.n,acc:f.acc,cls:f.t.nm}; });
-  const sh={key:"fix", cols:4, rows:3, ratio:"4:3", cells, label:"mixed icons from several classes",
-            people:"human figures or faces, except the rider in icon 10 and the sphinx head in icon 9"};
+// Verbetervellen: losse iconen uit alle bomen die opnieuw moesten (lijsten in
+// skilltree-icon-sheets-order.js). fix_1 = eerste ronde (Gemini; fix_2 =
+// dezelfde prompt via ChatGPT), fix_3 = tweede ronde "kan mooier".
+const ord=require("./skilltree-icon-sheets-order.js");
+for(const [key,cols,rows,ratio,people,intro] of [
+  ["1",4,3,"4:3","human figures or faces, except the rider in icon 10 and the sphinx head in icon 9",
+   "Iconen die bij de eerste ronde misgingen of beter konden. Via ChatGPT opgeslagen als `fix_2` — die versie is gebruikt."],
+  ["3",4,4,"1:1","human figures or faces, except the sleeping figure in icon 12, the Pythia in icon 13 and the hooded figure in icon 16",
+   "Tweede ronde: iconen die klopten maar mooier of preciezer konden (middeleeuwse puntschilden, ontbrekende details, weinig contrast). Bedoeld voor ChatGPT."],
+]){
+  const cells=ord.fixList(key).map(i=>{ const f=ord.findIcon(BM_SKILLTREES,i); return {n:f.n,acc:f.acc,cls:f.t.nm}; });
+  const sh={key:"fix"+key, cols, rows, ratio, cells, label:"mixed icons from several classes", people};
   sh.prompt=promptFor(null,sh);
-  md+="\n---\n\n## Verbetervel → `assets/skills/sheets/fix_1.png`\n\n"+
-      "Iconen die bij de eerste ronde misgingen of beter konden; de nieuwe onderwerpen staan al in `skilltree-data.js`.\n\n"+
+  md+="\n---\n\n## Verbetervel "+key+" → `assets/skills/sheets/fix_"+key+".png`\n\n"+intro+"\n\n"+
       "```text\n"+sh.prompt+"\n```\n\n"+
       "<details><summary>Indeling</summary>\n\n| Nr | Klasse | Knooppunt | Bestand |\n|---|---|---|---|\n"+
       cells.map((x,i)=>`| ${i+1} | ${x.cls} | ${x.n.nm} | \`${x.n.icon}\` |`).join("\n")+"\n\n</details>\n";

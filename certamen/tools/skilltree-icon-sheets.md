@@ -24,9 +24,9 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a steady open hand holding a single straight arrow horizontally — dominant colour cool forest green.
+1. (row 1, column 1) a hand firmly gripping one straight arrow by its shaft, the arrow held horizontally — dominant colour cool forest green.
 2. (row 1, column 2) an arrow stuck in the ground next to a small red hunting pennant — dominant colour burnt bronze-red.
-3. (row 1, column 3) a calm closed eye above a horizontal arrow, with a small frost crystal — dominant colour cool forest green.
+3. (row 1, column 3) a calm half-closed eye above one horizontal arrow whose arrowhead is covered in white frost — dominant colour cool forest green.
 4. (row 1, column 4) two wolf heads side by side in profile, facing each other — dominant colour burnt bronze-red.
 5. (row 2, column 1) a hawk's eye inside a round archery target — dominant colour cool forest green.
 6. (row 2, column 2) three arrows falling diagonally in parallel from the top left — dominant colour burnt bronze-red.
@@ -70,7 +70,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 2. (row 1, column 2) a falcon head in profile with a sharp focused eye — dominant colour cool forest green.
 3. (row 1, column 3) an arrow striking a cracked spot on a bronze breastplate — dominant colour cool forest green.
 4. (row 1, column 4) one last arrow in an almost empty leather quiver — dominant colour cool forest green.
-5. (row 2, column 1) a star-shaped gold medal with a bow engraved on it — dominant colour cool forest green.
+5. (row 2, column 1) a star-shaped gold medal with a small archer's bow (the weapon, with its string) engraved on it, not a ribbon bow — dominant colour cool forest green.
 6. (row 2, column 2) an archer's leather bracer with burning arrows flying past it — dominant colour cool forest green.
 7. (row 2, column 3) a black arrow with a bone-white arrowhead breaking through a shield — dominant colour cool forest green.
 8. (row 2, column 4) a radiant golden sun disc with an arrow through its centre — dominant colour cool forest green.
@@ -192,7 +192,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 2. (row 1, column 2) a spear thrusting out from behind a raised round shield — dominant colour blood red and bronze.
 3. (row 1, column 3) a closed wall of interlocking bronze shields with spear tips above it — dominant colour cool polished steel blue.
 4. (row 1, column 4) the bronze rim of a shield striking forward with short motion lines — dominant colour blood red and bronze.
-5. (row 2, column 1) three rows of small soldier silhouettes standing in perfect formation — dominant colour cool polished steel blue.
+5. (row 2, column 1) three neat rows of four small round shields seen from the front, perfectly aligned (no soldiers) — dominant colour cool polished steel blue.
 6. (row 2, column 2) a dented bronze shield with a sword crossed behind it — dominant colour blood red and bronze.
 7. (row 2, column 3) raised hands of soldiers swearing an oath above a round shield — dominant colour cool polished steel blue.
 8. (row 2, column 4) a running hoplite's bronze greave and sandal in mid-stride — dominant colour blood red and bronze.
@@ -232,10 +232,10 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 
 1. (row 1, column 1) a solid wall of bronze shields seen straight from the front — dominant colour cool polished steel blue.
 2. (row 1, column 2) a large concave hoplon shield with the arm strap visible on the inside — dominant colour cool polished steel blue.
-3. (row 1, column 3) a bronze shield with a crack held together by iron rivets — dominant colour cool polished steel blue.
+3. (row 1, column 3) a ROUND Greek bronze shield (hoplon) with a crack held together by three iron rivets — dominant colour cool polished steel blue.
 4. (row 1, column 4) two long rows of shields locking together like a closing gate — dominant colour cool polished steel blue.
 5. (row 2, column 1) a long ancient Greek war trumpet (salpinx) sounding above a line of shields — dominant colour cool polished steel blue.
-6. (row 2, column 2) a single shield standing upright amid a ruined stone wall — dominant colour cool polished steel blue.
+6. (row 2, column 2) a single ROUND Greek bronze shield standing upright amid a ruined stone wall — dominant colour cool polished steel blue.
 7. (row 2, column 3) a line of shields with golden light shining along their rims — dominant colour cool polished steel blue.
 8. (row 2, column 4) a Spartan lambda symbol on a shield standing in a narrow mountain pass — dominant colour cool polished steel blue.
 
@@ -276,7 +276,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 2. (row 1, column 2) one round shield smashing into another round shield, which cracks — dominant colour blood red and bronze.
 3. (row 1, column 3) a spear held upright behind a shield, both angled forward — dominant colour blood red and bronze.
 4. (row 1, column 4) a bronze shield with dark red stains on its surface — dominant colour blood red and bronze.
-5. (row 2, column 1) two curved arrows forming a circle around a shield and a spear — dominant colour blood red and bronze.
+5. (row 2, column 1) a round shield and an upright spear side by side, with two curved arrows circling around both — dominant colour blood red and bronze.
 6. (row 2, column 2) a spear point punching a hole through a bronze plate — dominant colour blood red and bronze.
 7. (row 2, column 3) a crested Greek bronze helmet above a laurel branch — dominant colour blood red and bronze.
 8. (row 2, column 4) a charging hoplite shield with two spear tips bursting out from behind it — dominant colour blood red and bronze.
@@ -353,7 +353,7 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a flame rising from the top of a bronze helmet — dominant colour fiery orange.
-2. (row 1, column 2) a sword blade with a red heart-shaped drop at its tip — dominant colour dark wine red.
+2. (row 1, column 2) a sword blade with one red drop at its tip, the drop clearly shaped like a heart — dominant colour dark wine red.
 3. (row 1, column 3) two crossed short swords surrounded by jagged red rage lines — dominant colour fiery orange.
 4. (row 1, column 4) a hand gripping a sword blade with a drop of blood falling into a bowl — dominant colour dark wine red.
 5. (row 2, column 1) a broken iron chain falling apart around a clenched fist — dominant colour fiery orange.
@@ -436,14 +436,14 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a bronze drinking cup (kylix) filled with dark red liquid — dominant colour dark wine red.
+1. (row 1, column 1) a wide shallow Greek drinking cup (kylix) on a short foot with two small side handles, filled with dark red liquid — dominant colour dark wine red.
 2. (row 1, column 2) a curved sickle-shaped blade with drops of red falling from it — dominant colour dark wine red.
 3. (row 1, column 3) a short Greek sword (xiphos) with a glowing red blade — dominant colour dark wine red.
 4. (row 1, column 4) a bronze bowl overflowing with red liquid onto a shield below it — dominant colour dark wine red.
 5. (row 2, column 1) a muscular arm wrapped in iron bands holding a sword — dominant colour dark wine red.
 6. (row 2, column 2) two hands clasped in a warrior's handshake, a red cord tied around them — dominant colour dark wine red.
 7. (row 2, column 3) a roaring lion with a red mane made of flames — dominant colour dark wine red.
-8. (row 2, column 4) a red sword piercing straight through a bronze shield — dominant colour dark wine red.
+8. (row 2, column 4) a red-glowing sword piercing straight through a ROUND Greek bronze shield — dominant colour dark wine red.
 
 LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -683,7 +683,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 1. (row 1, column 1) a hand pressing a glowing green herb onto a bandaged wound — dominant colour soft healing green.
 2. (row 1, column 2) a dark purple cloud with a single downward bolt above a broken spear — dominant colour mystic violet.
 3. (row 1, column 3) a sacred spring pouring clear water from a stone lion's mouth — dominant colour soft healing green.
-4. (row 1, column 4) the inscription stone of Delphi with a small glowing eye above it — dominant colour mystic violet.
+4. (row 1, column 4) a smooth upright stone slab with a few simple carved lines (no letters) and a small glowing eye above it — dominant colour mystic violet.
 5. (row 2, column 1) a shallow bowl with a snake drinking from it, bathed in soft light — dominant colour soft healing green.
 6. (row 2, column 2) a single staring painted eye on a dark clay amulet — dominant colour mystic violet.
 7. (row 2, column 3) a wooden staff with a single snake coiled around it — dominant colour soft healing green.
@@ -725,7 +725,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 1. (row 1, column 1) a running figure carrying a bowl of glowing green ointment — dominant colour soft healing green.
 2. (row 1, column 2) a bundle of dried healing herbs tied with string — dominant colour soft healing green.
 3. (row 1, column 3) a golden bowl with a snake coiled around its base, glowing liquid inside — dominant colour soft healing green.
-4. (row 1, column 4) a sleeping figure on a temple bench under a crescent moon — dominant colour soft healing green.
+4. (row 1, column 4) a sleeping figure on a stone temple bench with a small crescent moon above (plain tile colour behind, no night sky) — dominant colour soft healing green.
 5. (row 2, column 1) a small round Greek stone theatre with stepped semicircular seats, seen from the front, simple and bold (no sky, no landscape) — dominant colour soft healing green.
 6. (row 2, column 2) a green temple snake coiled in a spiral on a stone floor — dominant colour soft healing green.
 7. (row 2, column 3) a small glass vial of glowing golden medicine — dominant colour soft healing green.
@@ -809,7 +809,7 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 1. (row 1, column 1) a burning bronze altar bowl with smoke curling upward — dominant colour temple green.
 2. (row 1, column 2) a golden laurel wreath around a small burning altar — dominant colour warm gold.
 3. (row 2, column 1) a glowing open hand in front of the rod of Asclepius: one plain wooden staff with exactly one snake coiled around it (NOT a caduceus: no wings, not two snakes) — dominant colour soft healing green with extra gold.
-4. (row 2, column 2) the Pythia seated on a bronze tripod above a crack with rising purple vapour — dominant colour mystic violet with extra gold.
+4. (row 2, column 2) the Pythia in a pale white robe seated on a bronze tripod above a crack with rising violet vapour — dominant colour mystic violet with extra gold.
 
 LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -932,7 +932,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 2. (row 1, column 2) an open-mouthed Roman helmet with sound waves coming out — dominant colour imperial violet.
 3. (row 1, column 3) a tribune's narrow purple-striped cloak draped over a chair — dominant colour imperial violet.
 4. (row 1, column 4) a perfect square formation of shields seen from above (testudo) — dominant colour imperial violet.
-5. (row 2, column 1) a square red military banner (vexillum) hanging from a crossbar — dominant colour imperial violet.
+5. (row 2, column 1) a square red military banner (vexillum) with a small golden eagle emblem, hanging from a crossbar (no letters) — dominant colour imperial violet.
 6. (row 2, column 2) a kneeling veteran soldier with a long spear braced against the ground — dominant colour imperial violet.
 7. (row 2, column 3) a bundle of rods with an axe (fasces) tied with red leather straps — dominant colour imperial violet.
 8. (row 2, column 4) a golden eagle surrounded by shining rays of light — dominant colour imperial violet.
@@ -970,7 +970,7 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a Roman centurion's helmet with a sideways red crest, seen from the front — dominant colour imperial purple.
+1. (row 1, column 1) a Roman centurion's helmet in bright silver steel with a sideways red crest, seen from the front — dominant colour imperial purple.
 2. (row 1, column 2) a golden laurel wreath around a centurion's vine staff (vitis) — dominant colour warm gold.
 3. (row 2, column 1) a cargo ship full of grain sacks with a sheaf of wheat on its sail — dominant colour supply teal with extra gold.
 4. (row 2, column 2) a golden four-horse triumphal chariot seen from the front, a laurel wreath above it — dominant colour imperial violet with extra gold.
@@ -1219,7 +1219,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 3. (row 1, column 3) a wooden palisade with a large burnt hole through it — dominant colour smouldering ember red.
 4. (row 1, column 4) hands lifting the cover off a pit trap with sharpened stakes — dominant colour smouldering ember red.
 5. (row 2, column 1) a hawk's eye looking through a gap in a wooden wall — dominant colour smouldering ember red.
-6. (row 2, column 2) a hooded figure slipping through an open gate at night — dominant colour smouldering ember red.
+6. (row 2, column 2) a hooded figure slipping through a half-open wooden gate (plain tile colour behind, no night scene) — dominant colour smouldering ember red.
 7. (row 2, column 3) scorched black earth with smoking remains of wooden stakes — dominant colour smouldering ember red.
 8. (row 2, column 4) a two-faced mask, one side smiling and one side frowning — dominant colour smouldering ember red.
 
@@ -1325,9 +1325,9 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ---
 
-## Verbetervel → `assets/skills/sheets/fix_1.png`
+## Verbetervel 1 → `assets/skills/sheets/fix_1.png`
 
-Iconen die bij de eerste ronde misgingen of beter konden; de nieuwe onderwerpen staan al in `skilltree-data.js`.
+Iconen die bij de eerste ronde misgingen of beter konden. Via ChatGPT opgeslagen als `fix_2` — die versie is gebruikt.
 
 ```text
 Landscape 4:3 image: a sprite sheet of exactly 12 separate pixel-art game skill icons, arranged in 3 rows of 4, for an ancient Greek/Roman strategy game (mixed icons from several classes).
@@ -1374,5 +1374,67 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | 10 | Cavalerie | Parthisch Schot | `cavalerie_parthisch_schot.png` |
 | 11 | Bevelvoerder | Niemand Valt | `centurio_niemand_valt.png` |
 | 12 | Priester | Epidauros | `priester_epidauros.png` |
+
+</details>
+
+---
+
+## Verbetervel 3 → `assets/skills/sheets/fix_3.png`
+
+Tweede ronde: iconen die klopten maar mooier of preciezer konden (middeleeuwse puntschilden, ontbrekende details, weinig contrast). Bedoeld voor ChatGPT.
+
+```text
+Square 1:1 image: a sprite sheet of exactly 16 separate pixel-art game skill icons, arranged in 4 rows of 4, for an ancient Greek/Roman strategy game (mixed icons from several classes).
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
+CONTENT (most important rule): draw EXACTLY the 16 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
+
+1. (row 1, column 1) a hand firmly gripping one straight arrow by its shaft, the arrow held horizontally — dominant colour cool forest green.
+2. (row 1, column 2) a calm half-closed eye above one horizontal arrow whose arrowhead is covered in white frost — dominant colour cool forest green.
+3. (row 1, column 3) a star-shaped gold medal with a small archer's bow (the weapon, with its string) engraved on it, not a ribbon bow — dominant colour cool forest green.
+4. (row 1, column 4) three neat rows of four small round shields seen from the front, perfectly aligned (no soldiers) — dominant colour cool polished steel blue.
+5. (row 2, column 1) a ROUND Greek bronze shield (hoplon) with a crack held together by three iron rivets — dominant colour cool polished steel blue.
+6. (row 2, column 2) a single ROUND Greek bronze shield standing upright amid a ruined stone wall — dominant colour cool polished steel blue.
+7. (row 2, column 3) a round shield and an upright spear side by side, with two curved arrows circling around both — dominant colour blood red and bronze.
+8. (row 2, column 4) a sword blade with one red drop at its tip, the drop clearly shaped like a heart — dominant colour dark wine red.
+9. (row 3, column 1) a wide shallow Greek drinking cup (kylix) on a short foot with two small side handles, filled with dark red liquid — dominant colour dark wine red.
+10. (row 3, column 2) a red-glowing sword piercing straight through a ROUND Greek bronze shield — dominant colour dark wine red.
+11. (row 3, column 3) a smooth upright stone slab with a few simple carved lines (no letters) and a small glowing eye above it — dominant colour mystic violet.
+12. (row 3, column 4) a sleeping figure on a stone temple bench with a small crescent moon above (plain tile colour behind, no night sky) — dominant colour soft healing green.
+13. (row 4, column 1) the Pythia in a pale white robe seated on a bronze tripod above a crack with rising violet vapour — dominant colour mystic violet with extra gold.
+14. (row 4, column 2) a Roman centurion's helmet in bright silver steel with a sideways red crest, seen from the front — dominant colour imperial purple.
+15. (row 4, column 3) a square red military banner (vexillum) with a small golden eagle emblem, hanging from a crossbar (no letters) — dominant colour imperial violet.
+16. (row 4, column 4) a hooded figure slipping through a half-open wooden gate (plain tile colour behind, no night scene) — dominant colour smouldering ember red.
+
+LAYOUT: an invisible grid of 4 columns and 4 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
+
+BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
+
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour (the inside of a tile is never magenta, pink or empty); on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
+
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces, except the sleeping figure in icon 12, the Pythia in icon 13 and the hooded figure in icon 16; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 16 icons.
+```
+
+<details><summary>Indeling</summary>
+
+| Nr | Klasse | Knooppunt | Bestand |
+|---|---|---|---|
+| 1 | Boogschutter | Vaste Hand | `boogschutter_vaste_hand.png` |
+| 2 | Boogschutter | Koelbloedig | `boogschutter_koelbloedig.png` |
+| 3 | Boogschutter | Meesterschutter | `boogschutter_meesterschutter.png` |
+| 4 | Hopliet | Gedrilde Rijen | `hopliet_gedrilde_rijen.png` |
+| 5 | Hopliet | Taai als Brons | `hopliet_taai_als_brons.png` |
+| 6 | Hopliet | Laatste Bolwerk | `hopliet_laatste_bolwerk.png` |
+| 7 | Hopliet | Opmars | `hopliet_opmars.png` |
+| 8 | Voorvechter | Levensroof | `spartaan_levensroof.png` |
+| 9 | Voorvechter | Dorst | `spartaan_dorst.png` |
+| 10 | Voorvechter | Brandend Bloed | `spartaan_brandend_bloed.png` |
+| 11 | Priester | Les van Delphi | `priester_les_van_delphi.png` |
+| 12 | Priester | Tempelslaap | `priester_tempelslaap.png` |
+| 13 | Priester | Orakel van Delphi | `priester_orakel_van_delphi.png` |
+| 14 | Bevelvoerder | Bevelvoerder | `centurio_root.png` |
+| 15 | Bevelvoerder | Signum | `centurio_signum.png` |
+| 16 | Verkenner | Infiltrant | `verkenner_infiltrant.png` |
 
 </details>
