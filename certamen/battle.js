@@ -1062,9 +1062,16 @@ SCREENS.battleFAQ = function(){
     ${bossPresetsHTML}
     <div class="note" style="margin-top:8px;font-weight:700">Moeilijkheidsgraden</div>
     <ul style="margin:4px 0 0;padding-left:18px;font-size:13px;line-height:1.6">${bossDiffHTML}</ul>
-    <div class="note" style="margin-top:8px">Unieke baas-mechanics (bv. de Hydra die koppen laat groeien, of
-    het Labyrinth-schild van de Minotaurus) zijn nog in ontwikkeling — nu heeft elke baas dezelfde
-    generieke aanval/fase-opbouw.</div>`)}
+    <div class="note" style="margin-top:8px;font-weight:700">Wat elke baas bijzonder maakt</div>
+    <ul style="margin:4px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
+      <li><b>De Hydra</b> kondigt elke paar rondes een <b>nieuwe kop</b> aan. Doe dan binnen 2 rondes samen
+        genoeg schade in één ronde om de stomp dicht te schroeien. Lukt het niet, dan geneest hij en slaat hij
+        voortaan harder (per aangegroeide kop) — en zie je de kop terug op het slagveld.</li>
+      <li><b>De Cycloop</b> krijgt elke paar rondes honger. Zet binnen 2 rondes samen genoeg <b>schild</b> in
+        (iedereen kan gratis "Schild heffen") om de maaltijd te onderbreken.</li>
+      <li><b>De Minotaurus</b> zit eerst achter een Labyrinth-schild. Breekt dat, dan raakt hij in
+        <b>Enrage</b>: hij slaat elke ronde en harder — vang zijn klap samen op met schild.</li>
+    </ul>`)}
 
   ${sec("Total War & Training Mode",false,`
     <div class="note">Naast losse gevechten is er <b>Total War</b>: een doorlopende veldtocht op één
@@ -3507,7 +3514,7 @@ async function bmResolve(roundN){
     // Boss Battle: de baas (team B) is scripted i.p.v. speler-gestuurd — na de
     // normale schade-op-de-baas-berekening hierboven (die al vanzelf via de
     // bestaande team-A/B-engine loopt) valt de baas zelf de klas (team A) aan.
-    // Unieke bazen-mechanics (Hydra-regen/Cycloop-metgezellenmaaltijd/
+    // Unieke bazen-mechanics (Hydra-nieuwe-kop/Cycloop-metgezellenmaaltijd/
     // Minotaurus-Enrage) zitten in bmBossResolveTick() (bossbattle.js).
     let bossEvents=[];
     if(BM_META?.mode==="boss"){
@@ -3554,7 +3561,7 @@ async function bmResolve(roundN){
     }
 
     // Pas hier de heling erbij, klemmen — zie de toelichting hierboven — en
-    // afronden. Dat laatste moet: de Hydra-regen is 2 % van zijn maximum en dus
+    // afronden. Dat laatste moet: Hydra-heling (nu: aangegroeide kop, 3 %) is een percentage en dus
     // zelden een rond getal, waardoor er "725.5999999999999/840 HP" op het
     // scorebord kwam te staan.
     const newHA=Math.round(Math.max(0,Math.min(tA.maxHealth,rawHA+for_.A.heal)));
@@ -4762,6 +4769,8 @@ function bmPlayerRender(){
               <div class="note" style="margin-top:2px">${why} — in plaats van aan te vallen.</div>
             </button>`:"";
           })():""}
+          ${(BM_META?.mode==="boss"&&BM_META?.bossId==="hydra"&&BM_BOSS?.headWarn)?`<div class="bm-fb bad" style="margin-bottom:8px">🔥 Er groeit een nieuwe kop!<br>
+              <span>Val nu samen hard aan: jullie moeten in één ronde minstens ${BM_BOSS.headNeed||"veel"} schade doen om de stomp dicht te schroeien.</span></div>`:""}
           ${inspired?`<div class="note" style="color:var(--hi-bright);margin-bottom:6px">⚡ Geïnspireerd! Je volgende aanval doet extra schade.</div>`:""}
           ${targetPicker}
           ${bmClassAbilities(cls,bmMyStars()).map(a=>{

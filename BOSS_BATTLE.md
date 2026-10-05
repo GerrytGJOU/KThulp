@@ -11,15 +11,16 @@
 > rage/tegenaanval, en de [garnizoenskoppeling met Total War](#garnizoensformule-voor-total-war-belegeringen).
 > **Ook geïmplementeerd, ANDERS dan §4 hieronder beschrijft**: elke baas heeft
 > inmiddels een écht unieke mechanic — `bmBossResolveTick()` (`certamen/
-> bossbattle.js`) berekent per ronde de Hydra-regeneratie (heelt zichzelf als
-> de klas een te zwakke ronde draait), de Cycloop-"metgezellenmaaltijd"
+> bossbattle.js`) berekent per ronde de Hydra-"nieuwe kop" (aangekondigde
+> dreiging, alleen te stoppen met een gezamenlijke harde klap in één ronde —
+> zie §4.1), de Cycloop-"metgezellenmaaltijd"
 > (periodieke dreiging, alleen te onderbreken met gezamenlijk schild) en de
 > Minotaurus-Enrage (na het breken van het Labyrinth-schild valt hij elke
 > ronde aan i.p.v. volgens de normale cadans). Dit is een **lichtere,
 > ronde-gebaseerde versie** van wat het docx-plan voorstelde: geen losse
-> wall-clock-countdown-ticker, geen Labyrinth-woordenpuzzel, en de Hydra-
-> koppen (`bmBossAliveHeads()`) zijn puur visueel — ze verkorten de
-> aanvalstimer niet, zoals §4 nog beweert.
+> wall-clock-countdown-ticker en geen Labyrinth-woordenpuzzel. De Hydra-koppen
+> (`bmBossAliveHeads()`) verdwijnen met de HP, maar aangegroeide koppen komen
+> er zichtbaar weer bij (§4.1).
 >
 > **✅ Gebouwd, anders dan §5 hieronder beschrijft**: de twee anti-carry-
 > mechanics uit §5 zijn er, in een aan de ronde-gebaseerde architectuur
@@ -146,9 +147,8 @@ Normal): Boss HP = 3.000. Beide voelen relatief even zwaar aan.
 
 > ⚠️ **Tabel = origineel docx-ontwerp, niet de gebouwde versie.** De echte
 > mechanics (`bmBossResolveTick()`, `certamen/bossbattle.js`) zijn
-> ronde-gebaseerd (geen wall-clock-timers) en simpeler: Hydra geneest 2% van
-> zijn max-HP als de klas in een ronde onder de 3% schade blijft (koppen zijn
-> puur visueel, `bmBossAliveHeads()`, geen effect op de aanvalstimer);
+> ronde-gebaseerd (geen wall-clock-timers) en simpeler: Hydra kondigt elke 3
+> rondes een nieuwe kop aan (zie §4.1 hieronder);
 > Cycloop dreigt elke 3 rondes met een 2-ronde-fuse "metgezellenmaaltijd"
 > (6% klas-schade + 4% zelfheling), alleen te onderbreken met ≥8×moeilijkheid
 > gezamenlijk schild in één van de twee gewaarschuwde rondes (sinds
@@ -189,6 +189,33 @@ met de gebouwde versie:
 | **De Hydra van Lerna** | Regeneratie & koppen | Start met 3 koppen. Elke 25% HP-verlies groeit er een kop bij; elke actieve kop verkort de aanvalstimer met 10%. |
 | **Polyfemus de Cycloop** | Gefocuste countdown | Elke 45s een "oogstraal-countdown" van 12s. De klas moet gezamenlijk `X` correcte antwoorden geven om te verblinden, anders een zware AoE (25% klas-HP). |
 | **De Minotaurus** | Labyrinth-schild & enrage | Bij 50% HP: schild dat alle schade blokkeert; 5 "Labyrinth-woorden" verschijnen die specifiek opgelost moeten worden om het te slopen. Bij 15% HP: Enrage (dubbele aanvalssnelheid). |
+
+### 4.1 Hydra: "Nieuwe kop" (✅ gebouwd 2026-10-05, vervangt de regeneratie)
+
+Tegenhanger van de Cycloop-maaltijd en de Minotaurus-Enrage: die twee vragen
+**samen schild**, de Hydra vraagt **samen schade**. Naar de mythe: Herakles kon
+de Hydra pas verslaan toen Iolaos elke afgehakte stomp met een fakkel
+dichtschroeide, zodat er geen nieuwe koppen konden aangroeien.
+
+- Elke 3 rondes (`HYDRA_HEAD_EVERY`) kondigt de Hydra een nieuwe kop aan
+  (`boss_head_warn`); de aankondigingsronde zelf telt niet mee, daarna heeft de
+  klas 2 rondes (`HYDRA_HEAD_FUSE`).
+- Doet de klas in één van die rondes samen ≥4,5% van de baas-max-HP aan schade
+  (`HYDRA_HEAD_NEED_PCT`, getoond als absoluut getal), dan is de stomp
+  dichtgeschroeid (`boss_head_sealed`).
+- Zo niet, dan groeit de kop aan (`boss_head_grow`): de Hydra heelt 3%
+  (`HYDRA_HEAD_HEAL`) en elke basisaanval doet voortaan +15% per aangegroeide
+  kop (`HYDRA_HEAD_ATK`, stapelt, `b.headsGrown`).
+- In beeld: banner bovenin het slagveld met de benodigde schade, een kaart bij
+  aankondiging/dichtschroeien/aangroeien, een melding op het leerling-toestel
+  ("Val nu samen hard aan…"), en de aangegroeide koppen verschijnen weer op de
+  sprite (`bmBossAliveHeads(headCount, hpPct, headsGrown)`).
+- Waarom: de oude onzichtbare regeneratie (2% heling bij een ronde onder 3%
+  schade) liet een klas die alleen heelt en vervloekt de Hydra eindeloos
+  uitputten (balanssimulatie skill-trees: 8 Orakel-priesters wonnen Hard 100%).
+  Met de nieuwe kop: 8%. Gewone gemengde klassen merken vrijwel geen verschil
+  (beginners, 75% goed: Normal 89% → 88%, Hard 18% → 22%) — zie
+  `certamen/tools/skilltree-balance.js`.
 
 **Generieke mechanics (alle bazen):**
 - **Schildfase** — blauwe bar boven de HP-balk; schade gaat eerst van het
@@ -736,7 +763,7 @@ async function bossHandleAnswer(pid, isCorrect, target){
   onafhankelijke wall-clock-ticker, om race conditions met `bmResolve()` te
   vermijden.
 - **Special mechanics & events** — deels ✅ (zie de banner bovenaan dit
-  document): Hydra-regen/Cycloop-metgezellenmaaltijd/Minotaurus-Enrage
+  document): Hydra-nieuwe-kop/Cycloop-metgezellenmaaltijd/Minotaurus-Enrage
   bestaan, in een lichtere vorm. Random events (§6) zijn niet gebouwd.
 - **Scoreboard** — niet Boss-Battle-specifiek gebouwd; hergebruikt het
   generieke `bmComputeAwards()` (zie BATTLE_MODE.md M7), niet de eigen

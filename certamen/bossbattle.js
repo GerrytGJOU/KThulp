@@ -35,7 +35,7 @@ const BOSS_DIFFICULTIES = {
 const BOSS_DIFF_ORDER = ["easy","normal","hard","heroic","legendary"];
 
 /* ---- CONFIGURATIETABEL: BAZEN ---- */
-// Unieke fase-mechanics (Hydra-regen, Cycloop-metgezellenmaaltijd, Minotaurus-
+// Unieke fase-mechanics (Hydra-nieuwe-kop, Cycloop-metgezellenmaaltijd, Minotaurus-
 // Labyrinth-schild+Enrage) zitten in bmBossResolveTick() hieronder, per bossId
 // vertakt — gebalanceerd tegen de echte bossMaxHP/classMaxHP-formules uit
 // bmStartBossGame() (battle.js). Percentages die aan bossMaxHP hangen krijgen
@@ -50,7 +50,7 @@ const BOSS_DIFF_ORDER = ["easy","normal","hard","heroic","legendary"];
 // heeft geen commandant, zie CommanderSpectre.show() in battle.js).
 const BOSS_PRESETS = {
   hydra:    { id:"hydra",    nm:"De Hydra van Lerna",   emoji:"🐉", color:"#2e7d32",
-    desc:"Geneest zichzelf zodra de klas geen forse klap uitdeelt — koppen groeien terug.",
+    desc:"Laat steeds nieuwe koppen aangroeien — alleen een gezamenlijke harde klap schroeit de stomp dicht.",
     img:"assets/bosses/hydra.png",
     heads:["assets/bosses/hydrahead1.png","assets/bosses/hydrahead2.png","assets/bosses/hydrahead3.png",
            "assets/bosses/hydrahead4.png","assets/bosses/hydrahead5.png","assets/bosses/hydrahead6.png",
@@ -85,9 +85,25 @@ function bmBossPhaseFor(hpPct){ return hpPct<=0.33?3:hpPct<=0.66?2:1; }
 // zijn gelijk verdeeld over de HP-balk — bij 100% zijn alle 7 zichtbaar, bij
 // 0% geen. ceil() zorgt dat een kop pas verdwijnt zodra zijn 1/7e-aandeel
 // volledig weg is (dus niet al bij het eerste beetje schade).
-function bmBossAliveHeads(headCount,hpPct){
-  return Math.max(0,Math.min(headCount,Math.ceil((hpPct||0)*headCount)));
+function bmBossAliveHeads(headCount,hpPct,grown){
+  return Math.max(0,Math.min(headCount,Math.ceil((hpPct||0)*headCount)+(grown||0)));
 }
+
+// Hydra "Nieuwe kop" (sinds 2026-10-05, vervangt de onzichtbare regeneratie):
+// elke HYDRA_HEAD_EVERY rondes kondigt de Hydra een nieuwe kop aan; de klas heeft
+// HYDRA_HEAD_FUSE rondes om samen in één ronde ≥ HYDRA_HEAD_NEED_PCT van zijn max-HP
+// aan schade te doen (Iolaos schroeit de stomp dicht). Lukt dat niet, dan groeit de
+// kop aan: de Hydra heelt HYDRA_HEAD_HEAL van zijn max-HP en slaat voortaan
+// HYDRA_HEAD_ATK harder (stapelt per kop). Tegenhanger van de Cycloop-maaltijd en
+// de Minotaurus-Enrage (die vragen samen schild, dit vraagt samen schade) — en het
+// antwoord op een klas die alleen heelt/vervloekt en de Hydra zo eindeloos uitput.
+// Afgestemd met de balanssimulatie (certamen/tools/skilltree-balance.js):
+// gewone gemengde klassen merken vrijwel geen verschil met de oude regeneratie.
+const HYDRA_HEAD_EVERY = 3;
+const HYDRA_HEAD_FUSE = 2;
+const HYDRA_HEAD_NEED_PCT = 0.045;
+const HYDRA_HEAD_HEAL = 0.03;
+const HYDRA_HEAD_ATK = 0.15;
 
 // Aantal resolutie-rondes tussen elke basisaanval van de baas, per fase.
 // Ronden zijn hier de "klok" (i.p.v. een los wall-clock-ticker): dat voorkomt
@@ -110,9 +126,12 @@ const BOSS_ROUNDS_PER_ATTACK = {1:2, 2:1, 3:1};
      te brengen (proxy voor een gemist/fout antwoord — vermijdt individuele
      bestraffing) voedt de rage-balk met 5%*Md. Bij 100% volgt een extra
      tegenaanval van 8%*Md los van de normale cadans, rage reset naar 0.
-   - Hydra: geneest 2% van bossMaxHP zodra de klas dit ronde ONDER de 3% van
-     bossMaxHP aan schade toebrengt — beloont een paar gebundelde harde
-     klappen (combo/legendarisch) boven constant kleine pokes.
+   - Hydra: "Nieuwe kop" — elke 3 rondes een aankondiging met een fuse van 2
+     rondes; doet de klas in één van die rondes samen ≥4,5% van bossMaxHP aan
+     schade, dan wordt de stomp dichtgeschroeid. Anders groeit de kop aan: 3%
+     heling en elke basisaanval +15% per aangegroeide kop (stapelt). Zie
+     HYDRA_HEAD_* hierboven. (Tot 2026-10-05: onzichtbare regeneratie van 2%
+     bij een ronde onder 3% schade.)
    - Cycloop: iedere 3 rondes een "metgezellenmaaltijd"-dreiging met een
      fuse van 2 rondes (te tellen vanaf de ronde ná de aankondiging). Alleen gezamenlijk schild (team_shield-acties samen
      ≥ bmBossShieldNeed() die ronde, + de gratis actie "Schild heffen")
@@ -157,12 +176,28 @@ function bmBossResolveTick(boss, ctx){
   let classDamage=0, bossHeal=0;
   const events=[];
 
-  // ---- Hydra: regen bij een te zwakke ronde ----
+  // ---- Hydra: "Nieuwe kop" (zie HYDRA_HEAD_* bovenaan) ----
   if(bossId==="hydra" && bossMaxHP){
-    const threshold=0.03*bossMaxHP, regen=0.02*bossMaxHP;
-    if(dmgDealtThisRound<threshold){
-      bossHeal+=regen;
-      events.push({type:"boss_regen", heal:Math.round(regen)});
+    if(!b.headWarn){
+      b.headCycle=(b.headCycle||0)+1;
+      // Net als bij de Cycloop telt de aankondigingsronde zelf niet mee.
+      if(b.headCycle>=HYDRA_HEAD_EVERY){
+        b.headWarn=true; b.headLeft=HYDRA_HEAD_FUSE; b.headCycle=0;
+        b.headNeed=Math.ceil(HYDRA_HEAD_NEED_PCT*bossMaxHP);
+        events.push({type:"boss_head_warn", need:b.headNeed});
+      }
+    } else if(dmgDealtThisRound>=(b.headNeed||Math.ceil(HYDRA_HEAD_NEED_PCT*bossMaxHP))){
+      b.headWarn=false; b.headLeft=0;
+      events.push({type:"boss_head_sealed", dmg:Math.round(dmgDealtThisRound)});
+    } else {
+      b.headLeft=(b.headLeft||1)-1;
+      if(b.headLeft<=0){
+        b.headWarn=false;
+        b.headsGrown=(b.headsGrown||0)+1;
+        const heal=HYDRA_HEAD_HEAL*bossMaxHP;
+        bossHeal+=heal;
+        events.push({type:"boss_head_grow", heal:Math.round(heal), heads:b.headsGrown});
+      }
     }
   }
 
@@ -207,7 +242,8 @@ function bmBossResolveTick(boss, ctx){
   const cadence=enraged?1:(BOSS_ROUNDS_PER_ATTACK[b.phase||1]||1);
   if(b.roundsSinceAttack>=cadence){
     b.roundsSinceAttack=0;
-    let dmg=Math.round(classMaxHP*0.05*diffM*(enraged?BOSS_ENRAGE_DMG_MULT:1));
+    const headMult=bossId==="hydra"?1+HYDRA_HEAD_ATK*(b.headsGrown||0):1;
+    let dmg=Math.round(classMaxHP*0.05*diffM*(enraged?BOSS_ENRAGE_DMG_MULT:1)*headMult);
     let blocked=0;
     if(enraged && shieldThisRound>0){
       const frac=Math.min(1, shieldThisRound/(b.parryNeed||1));
@@ -270,6 +306,18 @@ function bmBossAlerts(){
       title:"🍖 Polyfemus wil eten! "+(n<=1?"Laatste kans: DEZE ronde":"Nog "+n+" rondes"),
       text:"Zet samen minstens <b>"+need+" schild</b> in (één ronde) om hem te onderbreken — iedereen kan gratis <b>🛡️ Schild heffen</b> (+2). Anders verslindt hij metgezellen: schade aan de klas én hij geneest zichzelf."});
   }
+  if(preset.id==="hydra" && BM_BOSS?.headWarn){
+    const n=BM_BOSS.headLeft||0, need=BM_BOSS.headNeed||"veel";
+    out.push({id:"head", kind:"danger",
+      short:"🔥 Nieuwe kop "+(n<=1?"na DEZE ronde":"over "+n+" rondes")+" — samen ≥"+need+" schade in één ronde!",
+      title:"🐍 Er groeit een nieuwe kop! "+(n<=1?"Laatste kans: DEZE ronde":"Nog "+n+" rondes"),
+      text:"Doe samen minstens <b>"+need+" schade</b> in één ronde om de stomp dicht te schroeien, zoals Iolaos met zijn fakkel. Bewaar je zware aanvallen en zet ze tegelijk in! Lukt het niet, dan geneest de Hydra en slaat hij voortaan harder."});
+  }
+  if(preset.id==="hydra" && (BM_BOSS?.headsGrown||0)>0){
+    const k=BM_BOSS.headsGrown;
+    out.push({id:"heads", kind:"info", short:"🐍 "+k+" nieuwe kop"+(k===1?"":"pen")+" — +"+Math.round(HYDRA_HEAD_ATK*100*k)+"% schade",
+      title:"🐍 "+k+" aangegroeide kop"+(k===1?"":"pen"), text:"Elke aangegroeide kop laat de Hydra <b>"+Math.round(HYDRA_HEAD_ATK*100)+"% harder</b> slaan — nu samen +"+Math.round(HYDRA_HEAD_ATK*100*k)+"%."});
+  }
   if(preset.id==="minotaur" && (BM_BOSS?.labyrinthShield>0)){
     const s=Math.round(BM_BOSS.labyrinthShield);
     out.push({id:"laby", kind:"info", short:"🛡️ Labyrinth-schild: "+s,
@@ -322,6 +370,9 @@ function bmBossAnnounce(bossEvents){
     else if(e.type==="boss_meal_attack") cards.push({k:"danger", t:"🍖 "+nm+" verslindt metgezellen!", x:"−"+e.dmg+" HP voor de klas · "+nm+" geneest +"+e.heal+" HP"});
     else if(e.type==="boss_rage_attack") cards.push({k:"danger", t:"😡 "+nm+" ontsteekt in woede!", x:"Te veel gemiste antwoorden — extra aanval: −"+e.dmg+" HP"});
     else if(e.type==="boss_regen") cards.push({k:"warn", t:"🐍 Koppen groeien terug!", x:"Te weinig schade deze ronde — de Hydra geneest +"+e.heal+" HP"});
+    else if(e.type==="boss_head_warn") cards.push({k:"danger", t:"🐍 Er groeit een nieuwe kop!", x:"Doe binnen 2 rondes samen ≥"+e.need+" schade in één ronde om de stomp dicht te schroeien!"});
+    else if(e.type==="boss_head_sealed") cards.push({k:"good", t:"🔥 Stomp dichtgeschroeid!", x:"Jullie gezamenlijke klap ("+e.dmg+" schade) hield de nieuwe kop tegen."});
+    else if(e.type==="boss_head_grow") cards.push({k:"danger", t:"🐍 Er is een kop aangegroeid!", x:nm+" geneest +"+e.heal+" HP en slaat voortaan +"+Math.round(HYDRA_HEAD_ATK*100*(e.heads||1))+"% harder."});
     else if(e.type==="boss_enrage") cards.push({k:"danger",
       t:e.cause==="laby"?"💥 Het Labyrinth is doorbroken!":"😤 "+nm+" raakt in Enrage!",
       x:e.cause==="laby"?nm+" raakt in Enrage: hij valt nu elke ronde aan en slaat "+Math.round(BOSS_ENRAGE_DMG_MULT*100-100)+"% harder!"
@@ -331,7 +382,7 @@ function bmBossAnnounce(bossEvents){
   }
   const parried=bossEvents.reduce((s,e)=>s+(e.type==="boss_attack"&&e.blocked?e.blocked:0),0);
   if(parried>0 && typeof bmFloat==="function") setTimeout(()=>bmFloat("🛡️ "+parried+" opgevangen","#7fb2ff",2),800);
-  const heal=bossEvents.reduce((s,e)=>s+((e.type==="boss_meal_attack"||e.type==="boss_regen")?(e.heal||0):0),0);
+  const heal=bossEvents.reduce((s,e)=>s+((e.type==="boss_meal_attack"||e.type==="boss_regen"||e.type==="boss_head_grow")?(e.heal||0):0),0);
   if(heal>0 && typeof bmFloat==="function") setTimeout(()=>bmFloat("+"+heal+" 🩸","var(--green-bright)",3),700);
   const cont=document.getElementById("bmBfx"); if(!cont) return;
   cards.forEach((c,i)=>setTimeout(()=>{
@@ -398,7 +449,7 @@ function bmBossSpriteHTML(boss,nm){
     // kop verdwijnt simpelweg (de stomp op de rompillustratie komt bloot).
     const layers=[`<img src="${preset.img}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="">`];
     if(preset.heads?.length){
-      const alive=bmBossAliveHeads(preset.heads.length,hpPct);
+      const alive=bmBossAliveHeads(preset.heads.length,hpPct,boss?.headsGrown);
       preset.heads.forEach((h,i)=>{
         if(i<alive)layers.push(`<img src="${h}?${SPRITE_VER}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain" alt="">`);
       });
