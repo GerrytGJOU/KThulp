@@ -317,7 +317,7 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 1. (row 1, column 1) a round bronze hoplite shield (aspis) with a Greek lambda painted on it — dominant colour deep crimson red.
 2. (row 1, column 2) a golden laurel wreath around a round bronze shield — dominant colour warm gold.
 3. (row 2, column 1) a narrow mountain pass blocked by a wall of shields painted with a lambda — dominant colour cool polished steel blue with extra gold.
-4. (row 2, column 2) a line of hoplites running forward with lowered spears on a plain beside the sea — dominant colour blood red and bronze with extra gold.
+4. (row 2, column 2) a single bronze spearhead pointing upward with a laurel branch, above stylised blue sea waves (no people) — dominant colour blood red and bronze with extra gold.
 
 LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -601,7 +601,7 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a horse galloping with wind lines streaming from its mane — dominant colour wind teal.
-2. (row 1, column 2) a mounted archer turning backwards in the saddle to shoot an arrow — dominant colour wind teal.
+2. (row 1, column 2) a horse galloping to the right while its rider twists backwards in the saddle and shoots an arrow to the LEFT, behind him — dominant colour wind teal.
 3. (row 1, column 3) an hourglass with a horseshoe hanging in front of it — dominant colour wind teal.
 4. (row 1, column 4) two horseshoes side by side with small motion lines between them — dominant colour wind teal.
 5. (row 2, column 1) a light rider on a small horse without a saddle, holding a javelin — dominant colour wind teal.
@@ -644,8 +644,8 @@ CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each on
 
 1. (row 1, column 1) a rearing horse's head and neck in profile with a bronze bridle — dominant colour dark ochre brown.
 2. (row 1, column 2) a golden laurel wreath around a horseshoe — dominant colour warm gold.
-3. (row 2, column 1) a rider on a black horse leading a wedge of cavalry, spear raised — dominant colour rusty copper orange with extra gold.
-4. (row 2, column 2) a swirling storm of light riders throwing javelins around an enemy — dominant colour wind teal with extra gold.
+3. (row 2, column 1) the head and neck of a black war horse in profile with a bronze face plate, a cavalry spear pointing forward past it (no rider, no other horses) — dominant colour rusty copper orange with extra gold.
+4. (row 2, column 2) a swirling whirlwind spiral with three javelins flying outward from it (no people, no horses) — dominant colour wind teal with extra gold.
 
 LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -726,7 +726,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 2. (row 1, column 2) a bundle of dried healing herbs tied with string — dominant colour soft healing green.
 3. (row 1, column 3) a golden bowl with a snake coiled around its base, glowing liquid inside — dominant colour soft healing green.
 4. (row 1, column 4) a sleeping figure on a temple bench under a crescent moon — dominant colour soft healing green.
-5. (row 2, column 1) the round stone theatre of Epidauros seen from above at dusk — dominant colour soft healing green.
+5. (row 2, column 1) a small round Greek stone theatre with stepped semicircular seats, seen from the front, simple and bold (no sky, no landscape) — dominant colour soft healing green.
 6. (row 2, column 2) a green temple snake coiled in a spiral on a stone floor — dominant colour soft healing green.
 7. (row 2, column 3) a small glass vial of glowing golden medicine — dominant colour soft healing green.
 8. (row 2, column 4) a beam of golden light falling onto an open hand — dominant colour soft healing green.
@@ -767,7 +767,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 1. (row 1, column 1) a heavy dark iron chain wrapped around a sword hilt — dominant colour mystic violet.
 2. (row 1, column 2) a black sun partly covered by a dark moon (eclipse) — dominant colour mystic violet.
 3. (row 1, column 3) a rolled papyrus scroll glowing with purple writing — dominant colour mystic violet.
-4. (row 1, column 4) a sphinx head in profile with a question-shaped curl of smoke — dominant colour mystic violet.
+4. (row 1, column 4) a Greek sphinx seated on a rock, seen from the side: lion body, eagle wings and a woman's head, with a question-mark-shaped curl of smoke above it (Greek, NOT Egyptian: no pharaoh headdress) — dominant colour mystic violet.
 5. (row 2, column 1) a bronze balance scale with a lightning bolt on one side — dominant colour mystic violet.
 6. (row 2, column 2) three ancient scrolls tied together with a purple ribbon — dominant colour mystic violet.
 7. (row 2, column 3) a winged female figure holding a sword and a measuring rod — dominant colour mystic violet.
@@ -893,7 +893,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 5. (row 2, column 1) a mule carrying packs and a pickaxe on its back — dominant colour supply teal.
 6. (row 2, column 2) a battered old Roman helmet with many dents and a scar-like scratch — dominant colour supply teal.
 7. (row 2, column 3) a Roman legionary carrying a heavy pack on a forked pole over his shoulder — dominant colour supply teal.
-8. (row 2, column 4) a closed circle of linked hands seen from above — dominant colour supply teal.
+8. (row 2, column 4) four forearms seen from above, each hand gripping the wrist of the next, together forming a closed square — dominant colour supply teal.
 
 LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -1260,10 +1260,10 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 2. (row 1, column 2) a small rolled message with a wax seal tied to an arrow — dominant colour deep forest green.
 3. (row 1, column 3) a cloaked figure vanishing into fog between trees — dominant colour deep forest green.
 4. (row 1, column 4) a coiled snake hiding under a rock, ready to strike — dominant colour deep forest green.
-5. (row 2, column 1) a Germanic chieftain's horned helmet resting on a round wooden shield — dominant colour deep forest green.
-6. (row 2, column 2) three small daggers stuck in a wooden post — dominant colour deep forest green.
-7. (row 2, column 3) a ghostly green mask made of leaves floating in a dark forest — dominant colour deep forest green.
-8. (row 2, column 4) a fallen Roman eagle standard lying in the mud of a forest — dominant colour deep forest green.
+5. (row 2, column 1) a Germanic chieftain's iron helmet with two curved horns resting on a round wooden shield (no Roman objects, no people) — dominant colour deep forest green.
+6. (row 2, column 2) three small daggers stuck point-first side by side in a vertical wooden post — dominant colour deep forest green.
+7. (row 2, column 3) a ghostly mask made of green leaves with two hollow glowing eyes, alone (no trees, no fog) — dominant colour deep forest green.
+8. (row 2, column 4) a golden Roman eagle standard fallen sideways in brown mud, its wooden pole broken in two — dominant colour deep forest green.
 
 LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -1320,5 +1320,59 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | 2 | Meester | `verkenner_meester.png` |
 | 3 | Grote Sabotage | `verkenner_grote_sabotage.png` |
 | 4 | Teutoburgerwoud | `verkenner_teutoburgerwoud.png` |
+
+</details>
+
+---
+
+## Verbetervel → `assets/skills/sheets/fix_1.png`
+
+Iconen die bij de eerste ronde misgingen of beter konden; de nieuwe onderwerpen staan al in `skilltree-data.js`.
+
+```text
+Landscape 4:3 image: a sprite sheet of exactly 12 separate pixel-art game skill icons, arranged in 3 rows of 4, for an ancient Greek/Roman strategy game (mixed icons from several classes).
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
+CONTENT (most important rule): draw EXACTLY the 12 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
+
+1. (row 1, column 1) a bronze gear wheel with a wooden builder's hammer lying diagonally across it (no compass, no square, no triangle) — dominant colour burnt copper.
+2. (row 1, column 2) a single bronze spearhead pointing upward with a laurel branch, above stylised blue sea waves (no people) — dominant colour blood red and bronze with extra gold.
+3. (row 1, column 3) the head and neck of a black war horse in profile with a bronze face plate, a cavalry spear pointing forward past it (no rider, no other horses) — dominant colour rusty copper orange with extra gold.
+4. (row 1, column 4) a swirling whirlwind spiral with three javelins flying outward from it (no people, no horses) — dominant colour wind teal with extra gold.
+5. (row 2, column 1) a Germanic chieftain's iron helmet with two curved horns resting on a round wooden shield (no Roman objects, no people) — dominant colour deep forest green.
+6. (row 2, column 2) three small daggers stuck point-first side by side in a vertical wooden post — dominant colour deep forest green.
+7. (row 2, column 3) a ghostly mask made of green leaves with two hollow glowing eyes, alone (no trees, no fog) — dominant colour deep forest green.
+8. (row 2, column 4) a golden Roman eagle standard fallen sideways in brown mud, its wooden pole broken in two — dominant colour deep forest green.
+9. (row 3, column 1) a Greek sphinx seated on a rock, seen from the side: lion body, eagle wings and a woman's head, with a question-mark-shaped curl of smoke above it (Greek, NOT Egyptian: no pharaoh headdress) — dominant colour mystic violet.
+10. (row 3, column 2) a horse galloping to the right while its rider twists backwards in the saddle and shoots an arrow to the LEFT, behind him — dominant colour wind teal.
+11. (row 3, column 3) four forearms seen from above, each hand gripping the wrist of the next, together forming a closed square — dominant colour supply teal.
+12. (row 3, column 4) a small round Greek stone theatre with stepped semicircular seats, seen from the front, simple and bold (no sky, no landscape) — dominant colour soft healing green.
+
+LAYOUT: an invisible grid of 4 columns and 3 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
+
+BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
+
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour (the inside of a tile is never magenta, pink or empty); on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
+
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces, except the rider in icon 10 and the sphinx head in icon 9; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 12 icons.
+```
+
+<details><summary>Indeling</summary>
+
+| Nr | Klasse | Knooppunt | Bestand |
+|---|---|---|---|
+| 1 | Genie | Genie | `genie_root.png` |
+| 2 | Hopliet | Marathon | `hopliet_marathon.png` |
+| 3 | Cavalerie | Charge van Alexander | `cavalerie_charge_van_alexander.png` |
+| 4 | Cavalerie | Numidische Storm | `cavalerie_numidische_storm.png` |
+| 5 | Verkenner | Arminius | `verkenner_arminius.png` |
+| 6 | Verkenner | Kleine Steken | `verkenner_kleine_steken.png` |
+| 7 | Verkenner | Woudgeest | `verkenner_woudgeest.png` |
+| 8 | Verkenner | Varus' Ondergang | `verkenner_varus_ondergang.png` |
+| 9 | Priester | Raadselspreuk | `priester_raadselspreuk.png` |
+| 10 | Cavalerie | Parthisch Schot | `cavalerie_parthisch_schot.png` |
+| 11 | Bevelvoerder | Niemand Valt | `centurio_niemand_valt.png` |
+| 12 | Priester | Epidauros | `priester_epidauros.png` |
 
 </details>

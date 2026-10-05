@@ -1,9 +1,32 @@
 // Volgorde van de iconen per vel (gedeeld door skilltree-icon-sheets.js en
 // skilltree-icon-slice.py): 1 = identiteit, 2 = pad A, 3 = pad B, 4 = kern.
+// Klasse "fix" = het verbetervel (sheets/fix_1): losse iconen uit alle bomen
+// die opnieuw moesten (zie FIX_ICONS).
+const FIX_ICONS=[
+  "genie_root.png","hopliet_marathon.png","cavalerie_charge_van_alexander.png","cavalerie_numidische_storm.png",
+  "verkenner_arminius.png","verkenner_kleine_steken.png","verkenner_woudgeest.png","verkenner_varus_ondergang.png",
+  "priester_raadselspreuk.png","cavalerie_parthisch_schot.png","centurio_niemand_valt.png","priester_epidauros.png",
+];
+// Zoekt een knooppunt op bestandsnaam, met de tegelkleur die erbij hoort.
+function findIcon(TREES,icon){
+  for(const t of Object.values(TREES)){
+    const P=t.paths, hit=(n,acc)=>n.icon===icon?{n,acc,t}:null;
+    let r=hit(t.root,t.colorNm)||hit(t.master,"warm gold");
+    for(const s of t.identity){ r=r||hit(s.A,P.A.accentNm)||hit(s.B,P.B.accentNm); }
+    for(const k of ["A","B"]) for(const s of t.pathNodes[k]){ r=r||hit(s.a,P[k].accentNm)||hit(s.b,P[k].accentNm); }
+    for(const p of t.prestige){ r=r||hit(p,P[p.path].accentNm+" with extra gold"); }
+    if(r) return r;
+  }
+  throw new Error("icoon niet gevonden: "+icon);
+}
 module.exports=function(TREES,cls,key){
-  const t=TREES[cls], n=x=>({nm:x.nm,icon:x.icon});
+  const n=x=>({nm:x.nm,icon:x.icon});
+  if(cls==="fix") return FIX_ICONS.map(i=>n(findIcon(TREES,i).n));
+  const t=TREES[cls];
   if(key==="1") return t.identity.flatMap(s=>[n(s.A),n(s.B)]);
   if(key==="2") return t.pathNodes.A.flatMap(s=>[n(s.a),n(s.b)]);
   if(key==="3") return t.pathNodes.B.flatMap(s=>[n(s.a),n(s.b)]);
   return [n(t.root),n(t.master),...t.prestige.map(n)];
 };
+module.exports.FIX_ICONS=FIX_ICONS;
+module.exports.findIcon=findIcon;

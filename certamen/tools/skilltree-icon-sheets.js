@@ -26,7 +26,7 @@ function promptFor(t,sh){
   const n=sh.cells.length;
   const list=sh.cells.map((x,i)=>
     `${i+1}. (row ${Math.floor(i/sh.cols)+1}, column ${i%sh.cols+1}) ${x.n.iconSubject} — dominant colour ${x.acc}.`).join("\n");
-  return `${sh.ratio==="1:1"?"Square 1:1":"Wide 16:9"} image: a sprite sheet of exactly ${n} separate pixel-art game skill icons, arranged in ${sh.rows} rows of ${sh.cols}, for an ancient Greek/Roman strategy game (class "${t.nm}").
+  return `${sh.ratio==="1:1"?"Square 1:1":sh.ratio==="4:3"?"Landscape 4:3":"Wide 16:9"} image: a sprite sheet of exactly ${n} separate pixel-art game skill icons, arranged in ${sh.rows} rows of ${sh.cols}, for an ancient Greek/Roman strategy game (${sh.label||`class "${t.nm}"`}).
 
 STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
@@ -40,7 +40,7 @@ BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gra
 
 STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour (the inside of a tile is never magenta, pink or empty); on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than ${n} icons.`;
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; ${sh.people||"human figures or faces"}; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than ${n} icons.`;
 }
 
 let md=`# Skill-tree-iconen — Gemini-prompts per klasse
@@ -64,6 +64,20 @@ for(const cls of Object.keys(BM_SKILLTREES)){
         `<details><summary>Indeling</summary>\n\n| Nr | Knooppunt | Bestand |\n|---|---|---|\n`+
         sh.cells.map((x,i)=>`| ${i+1} | ${x.n.nm} | \`${x.n.icon}\` |`).join("\n")+"\n\n</details>\n";
   }
+}
+// Verbetervel: losse iconen uit alle bomen die opnieuw moesten (FIX_ICONS in
+// skilltree-icon-sheets-order.js). Opslaan als sheets/fix_1.
+{
+  const ord=require("./skilltree-icon-sheets-order.js");
+  const cells=ord.FIX_ICONS.map(i=>{ const f=ord.findIcon(BM_SKILLTREES,i); return {n:f.n,acc:f.acc,cls:f.t.nm}; });
+  const sh={key:"fix", cols:4, rows:3, ratio:"4:3", cells, label:"mixed icons from several classes",
+            people:"human figures or faces, except the rider in icon 10 and the sphinx head in icon 9"};
+  sh.prompt=promptFor(null,sh);
+  md+="\n---\n\n## Verbetervel → `assets/skills/sheets/fix_1.png`\n\n"+
+      "Iconen die bij de eerste ronde misgingen of beter konden; de nieuwe onderwerpen staan al in `skilltree-data.js`.\n\n"+
+      "```text\n"+sh.prompt+"\n```\n\n"+
+      "<details><summary>Indeling</summary>\n\n| Nr | Klasse | Knooppunt | Bestand |\n|---|---|---|---|\n"+
+      cells.map((x,i)=>`| ${i+1} | ${x.cls} | ${x.n.nm} | \`${x.n.icon}\` |`).join("\n")+"\n\n</details>\n";
 }
 fs.writeFileSync(path.join(__dirname,"skilltree-icon-sheets.md"),md);
 console.log("ok");
