@@ -667,7 +667,7 @@ const BM_SKILLTREES = {
       { id:"hand_van_asklepios", nm:"Hand van Asklepios", cost:13, path:"A",
         desc:"Heelt je leger +22 en doet +4 schade; Noodhulp telt hier dubbel.", glyph:"⚕",
         fx:{ type:"heal_and_attack", heal:22, dmg:4, missingHpMult:2 },
-        iconSubject:"a glowing open hand with a snake-entwined staff behind it", icon:"priester_hand_van_asklepios.png" },
+        iconSubject:"a glowing open hand in front of the rod of Asclepius: one plain wooden staff with exactly one snake coiled around it (NOT a caduceus: no wings, not two snakes)", icon:"priester_hand_van_asklepios.png" },
       { id:"orakel_van_delphi", nm:"Orakel van Delphi", cost:13, path:"B",
         desc:"Aanval +12, heling +6, en een zware vloek: de vijand doet twee rondes lang 4 schade minder.", glyph:"Δ",
         fx:{ type:"heal_and_attack", dmg:12, heal:6, curse:4, curseRounds:2 },
