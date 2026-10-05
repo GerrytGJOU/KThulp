@@ -9,7 +9,7 @@
 /* ---- CONFIGURATIETABEL: KLASSEN (8 stuks) ----
    Elke klasse: 2 basis-vaardigheden (goedkoop, kies 1), 2 medium-vaardigheden
    (kies 1), 1 legendarische (duurst, geen keuze) — alle 5 elke ronde opnieuw
-   beschikbaar. Balans is doorgerekend (waarde per BE, incl. passieven) zodat
+   beschikbaar. Balans is doorgerekend (waarde per AP, incl. passieven) zodat
    geen enkele klasse of los onderdeel ver uit de band valt; zie het gesprek
    d.d. 2026-07 voor de doorrekening. Alle balanswaarden staan hier. Pas
    getallen aan zonder de logica te wijzigen.
@@ -18,11 +18,11 @@
    masteryBonuses). */
 const BM_CLASSES = [
   { id:"hopliet",      nm:"Hopliet",     icon:"shield", color:"#c8392a",
-    passive:{ desc:"+1 BE bij Verdedigen",                    type:"be_on_defend", val:1, masterVal:2,    masterDesc:"+2 BE bij Verdedigen" },
+    passive:{ desc:"+1 AP bij Verdedigen",                    type:"be_on_defend", val:1, masterVal:2,    masterDesc:"+2 AP bij Verdedigen" },
     abilities:[
       { id:"schildmuur",    nm:"Schildmuur",    tier:"basic",    cost:2,  desc:"Geeft je team +4 schild",                   type:"team_shield",          shld:4 },
       { id:"schildslag",    nm:"Schildslag",    tier:"basic",    cost:2,  desc:"Aanval op het vijandelijk leger (+4)",      type:"attack",               dmg:4 },
-      { id:"formatie",      nm:"Formatie",      tier:"medium",   cost:5,  desc:"Alle teamgenoten +2 BE",                    type:"team_be",              teamBE:2 },
+      { id:"formatie",      nm:"Formatie",      tier:"medium",   cost:5,  desc:"Alle teamgenoten +2 AP",                    type:"team_be",              teamBE:2 },
       { id:"linie_sluiten", nm:"Linie Sluiten",  tier:"medium",   cost:5,  desc:"Geeft je team +7 schild",                   type:"team_shield",          shld:7 },
       { id:"achilleshiel",  nm:"Achilleshiel",  tier:"legendary",cost:9,  desc:"Aanval (+10) die tegenschild omzeilt",      type:"attack_bypass",        dmg:10 },
       { id:"thermopylae",   nm:"Thermopylae",   tier:"prestige", cost:13, desc:"Onbreekbare falanx: schild voor je team (+14) én tegenstoot (+8)", type:"attack_and_defend", dmg:8, shld:14 },
@@ -48,10 +48,10 @@ const BM_CLASSES = [
       { id:"apollos_pijlen",nm:"Pijlen van Apollo", tier:"prestige", cost:13, desc:"Pijlenstorm op alle doelen (+14 elk) die schild omzeilt", type:"attack_bypass", dmg:14, aoe:true },
     ]},
   { id:"cavalerie",    nm:"Cavalerie",   icon:"column", color:"#9B6914",
-    passive:{ desc:"+2 BE bij snel correct antwoord",          type:"be_on_fast",  val:2, masterVal:3,    masterDesc:"+3 BE bij snel correct antwoord" },
+    passive:{ desc:"+2 AP bij snel correct antwoord",          type:"be_on_fast",  val:2, masterVal:3,    masterDesc:"+3 AP bij snel correct antwoord" },
     abilities:[
       { id:"charge",        nm:"Charge",        tier:"basic",    cost:3,  desc:"Snelle aanval op het vijandelijk leger (+7)", type:"attack",             dmg:7 },
-      { id:"snelle_uitval", nm:"Snelle Uitval", tier:"basic",    cost:3,  desc:"Aanval (+3) én +2 eigen BE",                type:"attack",               dmg:3, selfBE:2 },
+      { id:"snelle_uitval", nm:"Snelle Uitval", tier:"basic",    cost:3,  desc:"Aanval (+3) én +2 eigen AP",                type:"attack",               dmg:3, selfBE:2 },
       { id:"flankbeweging", nm:"Flankbeweging", tier:"medium",   cost:5,  desc:"Aanval (+5) én schild voor je team (+3)",   type:"attack_and_defend",    dmg:5, shld:3 },
       { id:"stormram",      nm:"Stormram",      tier:"medium",   cost:6,  desc:"Aanval (+8) én vijandelijk schild −4",      type:"attack_and_shld_remove", dmg:8, shldRemove:4 },
       { id:"stormloop",     nm:"Stormloop",     tier:"legendary",cost:9,  desc:"Verwoestende aanval (+13)",                  type:"attack",               dmg:13 },
@@ -62,20 +62,20 @@ const BM_CLASSES = [
     abilities:[
       { id:"gebed",         nm:"Gebed",         tier:"basic",    cost:3,  desc:"Heelt je eigen leger (+7)",                 type:"heal",                 heal:7 },
       { id:"vloek",         nm:"Vloek",         tier:"basic",    cost:3,  desc:"Aanval op het vijandelijk leger (+5)",      type:"attack",               dmg:5 },
-      { id:"zegen",         nm:"Zegen",         tier:"medium",   cost:5,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
+      { id:"zegen",         nm:"Zegen",         tier:"medium",   cost:5,  desc:"Alle teamgenoten +3 AP",                    type:"team_be",              teamBE:3 },
       { id:"reinigend_licht", nm:"Reinigend Licht", tier:"medium", cost:6, desc:"Heelt leger (+7) én schaadt vijand (+2)",  type:"heal_and_attack",      heal:7, dmg:2 },
       { id:"godenvuur",     nm:"Godenvuur",     tier:"legendary",cost:9,  desc:"Heelt leger (+12) én schaadt vijand (+4)",  type:"heal_and_attack",      heal:12, dmg:4 },
       { id:"asklepios",     nm:"Hand van Asklepios", tier:"prestige", cost:13, desc:"Heelt leger (+20) én schaadt vijand (+6)", type:"heal_and_attack", heal:20, dmg:6 },
     ]},
   { id:"centurio",     nm:"Bevelvoerder",icon:"laurel", color:"#6B2D8B",
-    passive:{ desc:"+1 BE per ronde (altijd)",                 type:"be_passive",  val:1, masterVal:2,    masterDesc:"+2 BE per ronde (altijd)" },
+    passive:{ desc:"+1 AP per ronde (altijd)",                 type:"be_passive",  val:1, masterVal:2,    masterDesc:"+2 AP per ronde (altijd)" },
     abilities:[
       { id:"bevel",         nm:"Bevel",         tier:"basic",    cost:2,  desc:"Geeft je team +3 schild",                   type:"team_shield",          shld:3 },
-      { id:"aanmoediging",  nm:"Aanmoediging",  tier:"basic",    cost:2,  desc:"Alle teamgenoten +1 BE",                    type:"team_be",              teamBE:1 },
-      { id:"strijdformatie",nm:"Strijdformatie",tier:"medium",   cost:4,  desc:"Alle teamgenoten +3 BE",                    type:"team_be",              teamBE:3 },
+      { id:"aanmoediging",  nm:"Aanmoediging",  tier:"basic",    cost:2,  desc:"Alle teamgenoten +1 AP",                    type:"team_be",              teamBE:1 },
+      { id:"strijdformatie",nm:"Strijdformatie",tier:"medium",   cost:4,  desc:"Alle teamgenoten +3 AP",                    type:"team_be",              teamBE:3 },
       { id:"veldverzorging",nm:"Veldverzorging",tier:"medium",   cost:4,  desc:"Heelt je eigen leger (+9)",                 type:"heal",                 heal:9 },
-      { id:"testudo",       nm:"Testudo",       tier:"legendary",cost:8,  desc:"Massiefschild (+7), team +2 BE, én heelt (+3)", type:"testudo",          shld:7, teamBE:2, heal:3 },
-      { id:"triumphus",     nm:"Triumphus",     tier:"prestige", cost:13, desc:"Schild (+10), team +3 BE én heelt (+6)", type:"testudo", shld:10, teamBE:3, heal:6 },
+      { id:"testudo",       nm:"Testudo",       tier:"legendary",cost:8,  desc:"Massiefschild (+7), team +2 AP, én heelt (+3)", type:"testudo",          shld:7, teamBE:2, heal:3 },
+      { id:"triumphus",     nm:"Triumphus",     tier:"prestige", cost:13, desc:"Schild (+10), team +3 AP én heelt (+6)", type:"testudo", shld:10, teamBE:3, heal:6 },
     ]},
   { id:"genie",        nm:"Genie",       icon:"amphora",color:"#C87533",
     passive:{ desc:"Aanvallen verminderen ook vijandelijk schild (−2)", type:"shld_pierce", val:2, masterVal:3,    masterDesc:"Aanvallen verminderen ook vijandelijk schild (−3)" },
@@ -88,7 +88,7 @@ const BM_CLASSES = [
       { id:"archimedes",    nm:"Spiegels van Archimedes", tier:"prestige", cost:13, desc:"Brandende stralen op alle doelen (+14 elk) én schild weg (−8)", type:"attack_siege", dmg:14, shldRemove:8, aoe:true },
     ]},
   { id:"verkenner",    nm:"Verkenner",   icon:"eagle",  color:"#2D8B7A",
-    passive:{ desc:"Basis-abilities kosten 1 BE minder",       type:"cost_reduce", val:1, masterTiers:["basic","medium"], masterDesc:"Basis- én medium-abilities kosten 1 BE minder" },
+    passive:{ desc:"Basis-abilities kosten 1 AP minder",       type:"cost_reduce", val:1, masterTiers:["basic","medium"], masterDesc:"Basis- én medium-abilities kosten 1 AP minder" },
     abilities:[
       { id:"verkenning",    nm:"Verkenning",    tier:"basic",    cost:2,  desc:"Aanval (+4) én saboteer vijandelijk schild (−2)", type:"attack_and_shld_remove", dmg:4, shldRemove:2 },
       { id:"sluipaanval",   nm:"Sluipaanval",   tier:"basic",    cost:2,  desc:"Aanval (+2, of +8 als vijand ≤30% HP)",     type:"attack_weakspot",      dmg:2, bonusDmg:6 },
@@ -99,30 +99,30 @@ const BM_CLASSES = [
     ]},
 ];
 
-/* ---- CONFIGURATIETABEL: BE-ECONOMIE ----
-   In een gevecht met een hele klas liep de Battle Energy volledig uit de hand:
-   leerlingen hadden 65 BE of meer terwijl de duurste actie 10 kost. Twee
+/* ---- CONFIGURATIETABEL: AP-ECONOMIE ----
+   In een gevecht met een hele klas liep de Actiepunten volledig uit de hand:
+   leerlingen hadden 65 AP of meer terwijl de duurste actie 10 kost. Twee
    oorzaken, allebei met de klasgrootte meegegroeid:
    1. De synergiebonus hieronder is per speler per ronde en gaat op klas-
       diversiteit. Met 17 spelers per team zijn alle acht klassen altijd
       vertegenwoordigd, dus wat als zeldzame beloning bedoeld was (+6) werd
       gegarandeerd basisinkomen.
-   2. team_be-abilities (bv. Centurio's "Strijdformatie", +3 BE voor het team)
-      geven BE aan ÉLKE teamgenoot. Drie Centurio's die dat samen doen leveren
+   2. team_be-abilities (bv. Centurio's "Strijdformatie", +3 AP voor het team)
+      geven AP aan ÉLKE teamgenoot. Drie Centurio's die dat samen doen leveren
       iedereen +9 op — die stapeling schaalt lineair mee met de teamgrootte.
    Daarom drie grenzen. Alle drie zijn losse knoppen: verlaag BM_BE_MAX voor
    krappere keuzes, verhoog 'm als leerlingen te vaak niets kunnen doen. */
-const BM_BE_MAX = 15;               // maximale voorraad BE per speler (duurste ability kost 10)
-const BM_BE_ROUND_BONUS_CAP = 4;    // max passief BE per ronde (synergie + passieven + mastery + traits samen)
-const BM_TEAMBE_ROUND_CAP = 4;      // max BE dat team_be-abilities + combo's samen per ronde aan een teamgenoot geven
-const BM_WRONG_BE_PENALTY = 2;      // BE die je kwijtraakt bij een fout antwoord (nooit onder 0)
+const BM_BE_MAX = 15;               // maximale voorraad AP per speler (duurste ability kost 10)
+const BM_BE_ROUND_BONUS_CAP = 4;    // max passief AP per ronde (synergie + passieven + mastery + traits samen)
+const BM_TEAMBE_ROUND_CAP = 4;      // max AP dat team_be-abilities + combo's samen per ronde aan een teamgenoot geven
+const BM_WRONG_BE_PENALTY = 2;      // AP die je kwijtraakt bij een fout antwoord (nooit onder 0)
 
 /* ---- CONFIGURATIETABEL: BASISACTIES ----
-   Acties die iédereen kan doen, ook zonder gekozen klasse en met 0 BE. Ze
+   Acties die iédereen kan doen, ook zonder gekozen klasse en met 0 AP. Ze
    bestaan om één reden: niemand zit een ronde werkloos toe te kijken. Dat
    overkwam leerlingen die te laat instapten (die joinen zonder klasse) of die
    in de lobby vergaten te kiezen — voor hen was er letterlijk geen knop. En het
-   overkomt sinds de BE-boete ook spelers mét klasse die even niets kunnen
+   overkomt sinds de AP-boete ook spelers mét klasse die even niets kunnen
    betalen.
    Ze zijn bewust zwak: minder dan de goedkoopste klasse-ability, zodat kiezen
    voor je eigen klasse altijd beter blijft. Gratis, dus er valt niets af te
@@ -130,7 +130,7 @@ const BM_WRONG_BE_PENALTY = 2;      // BE die je kwijtraakt bij een fout antwoor
 const BM_BASIC_ACTIONS = [
   { id:"basic_worp",   nm:"Steen gooien",   tier:"basic", cost:0, desc:"Kleine aanval (+2)",              type:"attack",       dmg:2 },
   { id:"basic_dekking",nm:"Dekking zoeken", tier:"basic", cost:0, desc:"Klein schild voor je team (+1)",  type:"team_shield",  shld:1 },
-  { id:"basic_moed",   nm:"Aanmoedigen",    tier:"basic", cost:0, desc:"+1 BE voor je hele team",         type:"team_be",      teamBE:1 },
+  { id:"basic_moed",   nm:"Aanmoedigen",    tier:"basic", cost:0, desc:"+1 AP voor je hele team",         type:"team_be",      teamBE:1 },
   // Alleen zichtbaar zolang de Cycloop dreigt te eten (BM_BOSS.charging) of
   // de Minotaurus in Enrage is (BM_BOSS.enraged) — bossbattle.js: zonder dit
   // kon een klas zonder Hopliet/Bevelvoerder daar vrijwel niets tegen doen.
@@ -139,11 +139,11 @@ const BM_BASIC_ACTIONS = [
 ];
 
 /* ---- CONFIGURATIETABEL: SYNERGIE ---- */
-// Flat BE-bonus per speler per ronde op basis van klasdiversiteit binnen het team.
+// Flat AP-bonus per speler per ronde op basis van klasdiversiteit binnen het team.
 const BM_SYNERGY = [
-  { minClasses:3, beBonus:2 },  // ≥3 unieke klassen → +2 BE per speler
-  { minClasses:5, beBonus:4 },  // ≥5 unieke klassen → +4 BE per speler
-  { minClasses:7, beBonus:6 },  // ≥7 unieke klassen → +6 BE per speler
+  { minClasses:3, beBonus:2 },  // ≥3 unieke klassen → +2 AP per speler
+  { minClasses:5, beBonus:4 },  // ≥5 unieke klassen → +4 AP per speler
+  { minClasses:7, beBonus:6 },  // ≥7 unieke klassen → +6 AP per speler
 ];
 
 /* ---- CONFIGURATIETABEL: BOSS BATTLE ANTI-CARRY (BOSS_BATTLE.md §5) ---- */
@@ -172,7 +172,7 @@ const BM_MINION_COUNT_MAX = 4;
 // Beide spelers moeten in dezelfde ronde "Combo" kiezen; host detecteert het bij resolutie.
 const BM_COMBOS = [
   { id:"schildmuur_schieten", nm:"Schildmuur met Schieten", classes:["hopliet","boogschutter"],     cost:4, desc:"Schild (+6) én gecombineerde pijlaanval (+6)",                  shld:6, dmg:6 },
-  { id:"strijdszegen",        nm:"Strijdszegen",            classes:["priester","spartaan"],         cost:4, desc:"Massale BE-bonus voor het hele team (+5 per speler)",            teamBE:5 },
+  { id:"strijdszegen",        nm:"Strijdszegen",            classes:["priester","spartaan"],         cost:4, desc:"Massale AP-bonus voor het hele team (+5 per speler)",            teamBE:5 },
   { id:"vuursalvo",           nm:"Vuursalvo",               classes:["genie","boogschutter"],        cost:4, desc:"Gecombineerde zware aanval (+12)",                               dmg:12 },
   { id:"testudo_formatie",    nm:"Testudo-formatie",         classes:["centurio","hopliet"],          cost:4, desc:"Massief gecombineerd schild voor het hele team (+10)",            shld:10 },
   { id:"hinderlaag_aanval",   nm:"Hinderlaag & Aanval",      classes:["verkenner","cavalerie"],       cost:4, desc:"Gecombineerde aanval (+13) én vijandelijk schild weg (−3)",     dmg:13, shldRemove:3 },

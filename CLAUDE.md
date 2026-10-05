@@ -16,7 +16,7 @@ repo-root. Dat masterplan is telkens de **enige bron van waarheid** voor die
 modus en vervangt eerdere schetsen/`.docx`-bestanden. Raadpleeg het bijbehorende
 document vóór je aan een modus werkt, en werk het bij na elke wijziging die de
 spelregels, features of het datamodel raakt:
-- `BATTLE_MODE.md` — klas-vs-klas woordkennis-arena (twee teams, Battle Energy).
+- `BATTLE_MODE.md` — klas-vs-klas woordkennis-arena (twee teams, Actiepunten).
 - `BOSS_BATTLE.md` — coöperatief PvE: de hele klas tegen één mythologische baas.
 - `TOTAL_WAR.md` — doorlopende veldtocht: elke klas is een beschaving en
   verovert samen de kaart van Europa.
@@ -49,7 +49,7 @@ spelregels, features of het datamodel raakt:
 - Battle Mode heeft een ingebouwde Handleiding/FAQ (`SCREENS.battleFAQ` in
   certamen/battle.js). De klassen-, combo- en synergiesecties zijn data-gedreven
   (uit BM_CLASSES/BM_COMBOS/BM_SYNERGY) en lopen vanzelf mee; de prozasecties
-  (spelverloop, BE, heldenmodus, profiel, docent-instellingen) niet. Werk bij
+  (spelverloop, AP, heldenmodus, profiel, docent-instellingen) niet. Werk bij
   elke Battle Mode-wijziging die de spelregels, klassen of features raakt ook
   deze FAQ bij.
 

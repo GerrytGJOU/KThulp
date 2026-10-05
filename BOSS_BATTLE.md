@@ -98,8 +98,8 @@ schilddrempel); `hp` gebruikt `bmStartBossGame()`. De `acc`-richtlijn staat
 bij de moeilijkheidskeuze en in de FAQ.
 
 *Hoe getoetst:* een simulatie met de echte `bmBossResolveTick()`, waarin
-schade per leerling volgt uit de trefzekerheid (goed +3 BE / +1 snel, fout
-−2 BE, ≈2 schade per BE), gekalibreerd op een echt gewonnen Cycloop-gevecht
+schade per leerling volgt uit de trefzekerheid (goed +3 AP / +1 snel, fout
+−2 AP, ≈2 schade per AP), gekalibreerd op een echt gewonnen Cycloop-gevecht
 (79% goed, 7 lln, 28 rondes, 31% HP over). "Nodig" = minimale trefzekerheid
 om met ≥10% HP te winnen, slechtste geval over Hydra/Cycloop (samenwerkend
 op de maaltijd)/Minotaurus (~30% schild in Enrage) en 7 of 25 leerlingen:
@@ -285,7 +285,7 @@ van een nieuw rollensysteem te verzinnen:
 - **Hoplieten/Spartanen** → correcte antwoorden bouwen een Klasse-Schild op
   voor de hele klas (absorbeert de volgende bossaanval).
 - **Priesters/Verkenners** → correcte antwoorden genezen de Klas-HP-balk of
-  leveren extra BE voor de rest.
+  leveren extra AP voor de rest.
 
 ### 5.3 Inspiratie-buff (catch-up)
 
@@ -486,7 +486,7 @@ de timer stopte, de leerlingen kregen geen nieuwe vragen meer, en de HP-balk ble
 de laatste stand staan. Oorzaak: in `bmResolve()` (`certamen/battle.js`) stond
 `targetMinion` als `const` bínnen de else-tak van de doelwitkeuze, terwijl
 `events.push()` er verderop bij wilde. Gebruikte iemand een **AoE**-ability
-(Pijlregen — een basisvaardigheid van 3 BE — of Vuurtoren) terwijl er handlangers
+(Pijlregen — een basisvaardigheid van 3 AP — of Vuurtoren) terwijl er handlangers
 leefden, dan gooide dat een `ReferenceError` midden in de resolutie. Handlangers
 verschijnen precies bij de overgang naar fase 2 (≤66 % HP), dus de crash trad
 altijd daar op.

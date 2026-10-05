@@ -49,7 +49,7 @@ const SP_MAX_SLOTS = 3;
    `bonus`: optionele passieve bonus voor Battle Mode/Boss Battle/Total War.
    BOUWSTATUS: alleen het DATA-veld en de lobby-weergave staan al; de bonus
    zelf nog NIET verrekend in de gevechtsberekening (battle.js se
-   bmCalcAbilityEffect/BE-gain zitten op meerdere plekken verspreid — dat
+   bmCalcAbilityEffect/AP-gain zitten op meerdere plekken verspreid — dat
    hoort bij de Combat-bridge-bouwstap, niet bij Titles zelf). Tot die tijd is
    een title.bonus puur informatief (getoond, niet toegepast).
 
@@ -75,7 +75,7 @@ const SP_TITLES = [
   { id:"bewaarder_herinnering", nm:"Bewaarder van de Herinnering", icon:"star", cat:"chronica", secret:true,
     ds:"Ontcijferde het Orakel van Chronos en voltooide de proloog.",
     bonus:{ scope:["battle","boss","totalwar"], type:"be_on_fast", val:1,
-            desc:"+1 BE bij een snel juist antwoord" } },
+            desc:"+1 AP bij een snel juist antwoord" } },
   // Hoofdstuk 1 — drie parallelle lijnen (A/B/C, zie SP_CH1_CNS). Elke lijn
   // leert de volledige hoofdstuk-1-grammatica; welke titel je krijgt hangt af
   // van welke lijn je speelde. Alle drie zonder bonus (bewust) — bonussen
@@ -177,7 +177,7 @@ const SP_TITLES = [
   { id:"meester_der_herinnering", nm:"Meester der Herinnering", icon:"star", cat:"chronica", secret:true,
     ds:"Voltooide heel Chronica Classica, van de eerste voetstap in Latium tot de laatste rivier.",
     bonus:{ scope:["battle","boss","totalwar"], type:"be_on_correct", val:1,
-            desc:"+1 BE op elk juist antwoord, niet alleen snelle" } },
+            desc:"+1 AP op elk juist antwoord, niet alleen snelle" } },
 ];
 
 /* ---- CAMPAGNEKAART — Proloog + 28 hoofdstukken (5 "Boeken"), gesynchroniseerd
