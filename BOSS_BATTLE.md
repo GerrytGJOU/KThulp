@@ -118,6 +118,13 @@ Boss basisschade per aanval = Klas Max HP × 5% × Md   // altijd 5% van de balk
 Voorbeeld (20 spelers, Normal): Boss HP = 30.000. Voorbeeld (2 spelers,
 Normal): Boss HP = 3.000. Beide voelen relatief even zwaar aan.
 
+**Sterrenschaal (alleen met skill-trees aan, 2026-10-05).** Doet de kamer mee
+met skill-trees, dan krijgt de baas bij de start ×(1 + 0,03 × gemiddelde
+klassester van de deelnemers) op zijn HP én op zijn klap (`boss.starScale`,
+`bmStartBossGame`/`bmResolve`; de ster gaat mee als `players/{pid}/stStars`).
+Niet bij Total War-belegeringen. Bron: balanssimulatie
+`certamen/tools/skilltree-balance.js`.
+
 ---
 
 ## 3. Vraag- en antwoordmechanica

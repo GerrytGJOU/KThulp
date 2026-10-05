@@ -1049,6 +1049,9 @@ werktuigen → doorwerken). In beeld: muur-balk/val/vloek onder de legerbalk
 (`bmStTeamExtrasHTML`), palissade-stadia `assets/bosses/palissade_midden_1-3.png`
 tussen de legers en werktuigen achter het eigen leger (`bmStRenderField`).
 
+**Baasschaal.** Met skill-trees aan groeien baas-HP en -klap +3% per
+gemiddelde ster van de klas (zie BOSS_BATTLE.md §2).
+
 **Getest** (2026-10-05, met een nagebootste Firebase): rondes Team-vs-Team en
 Cycloop met de echte `bmResolve`; met skill-trees uit is het gedrag gelijk
 aan vroeger.
