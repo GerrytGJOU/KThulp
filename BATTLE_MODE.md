@@ -1005,6 +1005,54 @@ lokaal in `P.achievements` (overige modi, zie M9's architectuurregel).
 
 ---
 
+## Skill-trees (gebouwd 2026-10-05, aan/uit via de beheerder)
+
+Per klasse een skill-tree die de klassebeheersing vervangt als bron van
+spelvoordeel. Volledig ontwerp per knooppunt: `certamen/skilltree-data.js`
+(commentaarblokken per klasse). Balans: `certamen/tools/skilltree-balance.js`
+(simulatie, geijkt op het echte Cycloop-gevecht) + `-report.md`.
+
+**Structuur.** ★1–4: per ster een keuze A/B; 3–4× A of B = dat pad, 2/2 =
+hybride pad (16 + 8 hybride paden). ★5: het bestaande meesterpassief (geen
+keuze). ★6–9: per pad een keuze a/b (hybride kiest tussen A.a en B.a). ★10:
+keuze tussen twee prestige-varianten (vervangt de oude `tier:"prestige"`-
+vaardigheid). De oude ★3-bonus (+1 AP per ronde) vervalt als de skill-trees
+meedoen. Alles volgt de docent-schakelaar `masteryBonuses`.
+
+**Bestanden.**
+- `skilltree-data.js` — `BM_SKILLTREES` (8 bomen), `skilltreePathOf()`,
+  `skilltreeOptionsFor()`, iconprompts (`SKILLTREE_ICON_PROMPT`; iconen in
+  `assets/skills/<node>.png`, plaatshouder-glyph zolang ze ontbreken).
+- `skilltree.js` — scherm `SCREENS.skillTree` (tempel-achtergrond, tooltips),
+  opslag in `identities/{klas}/{lid}/skillTrees/{cls}/picks`, gratis respec
+  behalve tijdens een lopend gevecht (`bmRoomPlaying()`), beheerder-
+  schakelaar `config/skillTrees/enabled` (rules: iedereen leest, alleen admin
+  schrijft). Toegang: Mijn profiel (Class Mastery-tegels) en de knop
+  "🌳 Skill-tree" per klasse in de lobby.
+- `skilltree-engine.js` — effecten in het gevecht, alleen actief als de kamer
+  met `BM_META.skillTrees` is aangemaakt (gezet in de room-meta zolang de
+  schakelaar aanstaat). Aanhaakpunten in `battle.js`: `bmPickClass` (stuurt
+  `players/{pid}/st` = gekozen knooppunten mee), `bmGetAbilityCost` (4e param
+  speler), `bmCalcAbilityEffect` → `bmStApplyEffect`, `bmResolve` (teamstaat
+  `rooms/{code}/st`, `bmStAfterPass1`, `bmStTeamBE`, `bmStAbsorb`,
+  `bmStBossHit`, `bmStFinishRound`), `bmDistributeQs` (`bmStRoundSelfBonus`,
+  `bmStRoundTeamGifts`), `bmFinishAnswer` (snel-drempel, foutboete, reeksen,
+  "moeilijk woord").
+
+**Nieuwe mechanismen.** Merkteken (sterkste telt, max. per ronde), vloek
+(vlak in PvP; tegen bazen een % van de gewone baasklap, nooit maaltijd/
+Enrage/het extra van Hydra-koppen), muur (eigen stenen HP-balk na het
+rondeschild, vangt ook baasklappen op, telt níet mee voor het schild tegen
+maaltijd/Enrage, plafond 12), val, werktuigen (vuren alleen als de eigenaar
+goed antwoordt), sabotage in lagen van de Saboteur (schild → muur →
+werktuigen → doorwerken). In beeld: muur-balk/val/vloek onder de legerbalk
+(`bmStTeamExtrasHTML`), palissade-stadia `assets/bosses/palissade_midden_1-3.png`
+tussen de legers en werktuigen achter het eigen leger (`bmStRenderField`).
+
+**Getest** (2026-10-05, met een nagebootste Firebase): rondes Team-vs-Team en
+Cycloop met de echte `bmResolve`; met skill-trees uit is het gedrag gelijk
+aan vroeger.
+
 ## M7 — Docent-dashboard & Analytics ✅
 
 ### Setup-scherm (< 30 sec)

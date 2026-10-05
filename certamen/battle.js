@@ -658,7 +658,7 @@ function bmMyStars(){
   return BM_MY_CLASS?bmCalcMastery(BM_IDENT?.classHistory?.[BM_MY_CLASS]):0;
 }
 function bmMyMaster(){ return bmMyStars()>=5; }
-function bmGetAbilityCost(cls,abl,master){
+function bmGetAbilityCost(cls,abl,master,p){
   let c=abl.cost;
   const pv=cls?.passive;
   if(pv?.type==="cost_reduce"){
@@ -667,6 +667,7 @@ function bmGetAbilityCost(cls,abl,master){
     const tiers=(master&&bmMasteryBonusesOn()&&pv.masterTiers)||["basic"];
     if(tiers.includes(abl.tier)) c=Math.max(1,c-bmPassiveVal(cls,master));
   }
+  if(p&&typeof bmStActive==="function"&&bmStActive(p)) c=bmStCost(p,abl,c,bmStCostCtx(p));
   return c;
 }
 // Ability-types die schade toebrengen — canoniek gedeeld met bmChooseAbility()
@@ -1229,6 +1230,25 @@ SCREENS.battleFAQ = function(){
     leerlingcode opnieuw te typen: "Inloggen met Google" op het aanmeldscherm vindt je profiel dan zelf.
     Koppelen is nooit verplicht; zonder koppeling blijft de klascode+leerlingcode gewoon werken.</div>`)}
 
+  ${(typeof bmSkillTreesVisible==="function"&&bmSkillTreesVisible())?sec("🌳 Skill-trees",false,`
+    <div class="note">Elke klasse heeft een eigen <b>skill-tree</b>. Je opent hem via <b>Mijn profiel</b> (tik op
+    een klasse bij Class Mastery) of via het knopje <b>🌳 Skill-tree</b> bij de klassekeuze in de lobby.</div>
+    <ul style="margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.6">
+      <li><b>Sterren = keuzes.</b> Bij ★1 t/m ★4 kies je telkens tussen twee eigenschappen. Kies je 3 of 4 keer
+        dezelfde kant, dan volg je dat <b>pad</b> (bv. Scherpschutter of Jager); 2 en 2 geeft het
+        <b>hybride</b> pad. ★5 is je meesterbonus, ★6 t/m ★9 zijn keuzes binnen je pad, en bij ★10 kies je je
+        <b>prestige-vaardigheid</b>.</li>
+      <li><b>Gratis opnieuw kiezen</b> mag altijd tussen gevechten, nooit tijdens een gevecht.</li>
+      <li>Met skill-trees vervalt de oude ★3-bonus (+1 AP per ronde): je boom vervangt die.</li>
+      <li>Sommige paden zijn sterk tegen bazen, andere in een gevecht tegen een ander team, en een team van
+        alleen dezelfde klasse heeft het moeilijk. Het loont dus om verschillende klassen te trainen.</li>
+      <li>Nieuw op het slagveld: de <b>muur</b> van de Genie (eigen stenen HP-balk die klappen opvangt —
+        geen schild, telt dus niet mee tegen de maaltijd van de Cycloop of de Enrage van de Minotaurus),
+        <b>werktuigen</b> die een paar rondes doorvuren, een <b>val</b>, een <b>vloek</b> (☋, de vijand slaat
+        minder hard) en een <b>merkteken</b> (je teamgenoten raken harder). De Saboteur (Verkenner) breekt
+        schild, muren en werktuigen van de tegenstander af.</li>
+    </ul>`):""}
+
   ${sec("Voor docenten",false,`
     <div class="note">Bij het starten van een gevecht stel je in: woordbereik en taal, antwoordtijd, en onder
     <b>Geavanceerde instellingen</b> o.a. legersterkte, adaptief leren (woorden die een leerling moeilijk vindt komen vaker terug — ook uit eerdere lessen en andere Certamen-spellen; nooit meteen achter elkaar),
@@ -1600,6 +1620,9 @@ async function bmCreateRoom(){
     animations:BM_META.animations!==false,
     combos:BM_META.combos!==false,
     masteryBonuses:BM_META.masteryBonuses!==false,
+    // Skill-trees (skilltree.js/skilltree-engine.js): vastgelegd bij het aanmaken,
+    // zodat iedereen in deze kamer met dezelfde regels speelt.
+    skillTrees:(typeof bmSkillTreesOn==="function"&&bmSkillTreesOn())===true,
     sfx:BM_META.sfx!==false,
     heroMode:BM_META.heroMode===true,
     heroMaxHp:BM_META.heroMaxHp||15,
@@ -1923,6 +1946,8 @@ async function bmStartBossGame(){
 async function bmDistributeQs(roundN){
   const pids=Object.keys(BM_PLAYERS);if(!pids.length)return;
   const at=BM_META?.answerTimer||10;
+  const stOnQ=typeof bmStOn==="function"&&bmStOn();
+  const stRoomQ=stOnQ?((await fbDB.ref("rooms/"+BM_CODE+"/st").once("value")).val()||{}):null;
   // Synergiebonus (flat AP per speler) + passief AP voor Bevelvoerder
   const synA=bmCalcSynergy(BM_PLAYERS,"A"),synB=bmCalcSynergy(BM_PLAYERS,"B");
   const up={};
@@ -1936,6 +1961,7 @@ async function bmDistributeQs(roundN){
     // (permanent account-brede unlock, geen in-klas-verdiende bonus)
     if(p.traitGroot) beBonus+=1;
     if(p.traitNorage) beBonus+=1;
+    if(stOnQ) beBonus+=bmStRoundSelfBonus(p,roundN,stRoomQ); // skill-trees: Signifer, Op de Loer, …
     // Alle passieve bronnen samen begrensd — zie BM_BE_ROUND_BONUS_CAP in
     // battle-data.js: met een volle klas is de hoogste synergietrap altijd
     // gehaald, en dan is +6 per speler per ronde geen beloning meer maar
@@ -1965,6 +1991,7 @@ async function bmDistributeQs(roundN){
     up["players/"+pid+"/answeredRound"]=-1;
     up["players/"+pid+"/lockedAction"]=null;
     if(beBonus>0) up["players/"+pid+"/be"]=bmClampBE((p.be||0)+beBonus);
+    if(stOnQ&&bmStHas(p,"verkenningsrapport")&&!(p.stS||{}).rapport) up["players/"+pid+"/stS/rapport"]=true;
     // Heldenmodus: initialiseer persoonlijke HP bij de eerste ronde
     if(roundN===1&&BM_META?.heroMode){
       const hhp=BM_META.heroMaxHp||15;
@@ -1975,6 +2002,10 @@ async function bmDistributeQs(roundN){
       up["players/"+pid+"/respawnMeter"]=0;
     }
   }
+  // Skill-trees: teamcadeaus aan het begin van de ronde (Muilezels van Marius, Aquila)
+  if(stOnQ){ const gifts=bmStRoundTeamGifts(BM_PLAYERS,roundN,stRoomQ);
+    for(const [gpid,g] of Object.entries(gifts)){ if(!g) continue; const key="players/"+gpid+"/be";
+      const cur=(up[key]!==undefined)?up[key]:(BM_PLAYERS[gpid]?.be||0); up[key]=bmClampBE(cur+g); } }
   // Team-klassenlijst schrijven zodat spelers combo's kunnen zien
   const clsA=[...new Set(Object.values(BM_PLAYERS).filter(p=>p.team==="A"&&p.class).map(p=>p.class))];
   const clsB=[...new Set(Object.values(BM_PLAYERS).filter(p=>p.team==="B"&&p.class).map(p=>p.class))];
@@ -2139,6 +2170,7 @@ SCREENS.battleHostGame = function(){
     if(el("bmFormA"))bmBuildBattlefield();
   });
   BM_UNSUBS.push(()=>rS.off("value",fS),()=>rP.off("value",fP),()=>rT.off("value",fT),()=>rBoss.off("value",fBoss));
+  if(typeof bmStSubscribe==="function") bmStSubscribe(()=>bmHostUpdateArmies()); // skill-trees: muur/vloek/werktuigen
   bmSubscribeLog(BM_CODE);
   bmBuildBattlefield();
   bmHostStartTimer();
@@ -2260,6 +2292,7 @@ function bmArmyBarHTML(team,nm,d){
       <div class="bm-hp-fill${crit}" style="width:100%;background:${col};transform:scaleX(${scale});transform-origin:${origin};will-change:transform"></div>
     </div>
     <div class="bm-hp-num${isB?" side-b":""}">${d.health}/${d.maxHealth} HP</div>
+    ${typeof bmStTeamExtrasHTML==="function"?bmStTeamExtrasHTML(team,false):""}
   </div>`;
 }
 // Toont kort een wit/zilver schild-segment vlak vóór (in de richting van inkomende
@@ -3228,6 +3261,7 @@ function bmBuildBattlefield(){
     else field.classList.remove("bm-noanim");
     bmApplyArenaBg(field); // docent-gekozen battleback (overschrijft thema-bg)
   }
+  if(typeof bmStRenderField==="function") bmStRenderField(); // skill-trees: palissades/werktuigen
   // Kritieke health check (nieuwe klasse bm-hp-fill)
   const tA=BM_TEAMS.A||{health:0,maxHealth:100};
   const tB=BM_TEAMS.B||{health:0,maxHealth:100};
@@ -3377,6 +3411,15 @@ async function bmResolve(roundN){
     await fbDB.ref("rooms/"+BM_CODE+"/state/resolvedRound").set(roundN);
 
     const players=BM_PLAYERS;
+    // Skill-trees (skilltree-engine.js): teamstaat (muur/val/vloek/merkteken…)
+    // en rondecontext, alleen als deze kamer met skill-trees is aangemaakt.
+    const stOn=typeof bmStOn==="function"&&bmStOn();
+    let stRoom=null, stCtx=null; const stRes=[];
+    if(stOn){
+      stRoom=(await fbDB.ref("rooms/"+BM_CODE+"/st").once("value")).val()||{};
+      stRoom.A=stRoom.A||{}; stRoom.B=stRoom.B||{};
+      stCtx=bmStRoundCtx(players,roundN,stRoom);
+    }
     // Effecten komend VAN elk team (richting het andere)
     const from={A:{dmg:0,bypassDmg:0,shldRemove:0},B:{dmg:0,bypassDmg:0,shldRemove:0}};
     // Effecten TEN VOORDELE van elk team
@@ -3399,11 +3442,13 @@ async function bmResolve(roundN){
       // Basisacties (BM_BASIC_ACTIONS) staan los van een klasse: een speler
       // zonder gekozen klasse heeft hier geen `cls`, en dan moet de actie nog
       // steeds gevonden worden.
-      const abl=bmClassAbilities(cls,p.prestigeClass?BM_MASTERY_PRESTIGE:0).find(a=>a.id===action.abilityId)
+      const ablList=bmClassAbilities(cls,p.prestigeClass?BM_MASTERY_PRESTIGE:0);
+      const abl=(stOn?bmStAbilityList(ablList,p):ablList).find(a=>a.id===action.abilityId)
              || BM_BASIC_ACTIONS.find(a=>a.id===action.abilityId);
       if(!abl)continue;
       const mt=p.team,et=mt==="A"?"B":"A";
       const fx=bmCalcAbilityEffect(p,cls,abl);
+      const stEx=stOn?bmStApplyEffect(p,cls,abl,fx,stCtx):null;
       // Inspiratie van Athena (Boss Battle, BOSS_BATTLE.md §5.3): verbruikt
       // bij de eerstvolgende ability-keuze, ongeacht schade, zodat de buff
       // nooit blijft hangen.
@@ -3462,6 +3507,7 @@ async function bmResolve(roundN){
                    // undefined in een push — dat liet de hele ronde stranden.
                    cls:p.class||null,anim:bmAblAnim(abl.type),
                    ...(minionDmg>0?{minionDmg,...(targetMinion?{target:targetMinion.id}:{})}:{})});
+      if(stOn) stRes.push({pid,p,abl,fx,ex:stEx,cost:action.cost||0});
     }
     // Brede-deelname-bonus (Boss Battle, herinterpretatie van BOSS_BATTLE.md
     // §5.1 "Combo Chain" voor de ronde-gebaseerde architectuur): ≥3
@@ -3496,6 +3542,8 @@ async function bmResolve(roundN){
       }
     }
 
+    if(stOn) bmStAfterPass1(players,roundN,stRes,from,for_,pUpd,events,stRoom,stCtx);
+
     // Pas 2: combo's — zoek overeenkomende paren binnen hetzelfde team
     const comboPids=Object.entries(players).filter(([,p])=>p.lockedAction?.type==="combo");
     for(const combo of BM_COMBOS){
@@ -3504,6 +3552,10 @@ async function bmResolve(roundN){
       const pb=comboPids.find(([,p])=>p.class===c1&&p.lockedAction?.comboId===combo.id&&p.team===(pa?.[1]?.team));
       if(!pa||!pb)continue;
       const mt=pa[1].team;
+      // Skill-trees: Roedelleider (+2 op het hoofdeffect), Bloedbroeders (Strijdszegen heelt +5)
+      const stLead=stOn&&(bmStHas(pa[1],"roedelleider")||bmStHas(pb[1],"roedelleider"))?2:0;
+      if(stLead){ if(combo.dmg) from[mt].dmg+=stLead; else if(combo.shld) for_[mt].shld+=stLead; else if(combo.heal) for_[mt].heal+=stLead; else if(combo.teamBE) for_[mt].teamBE+=stLead; }
+      if(stOn&&combo.id==="strijdszegen"&&(bmStHas(pa[1],"bloedbroeders")||bmStHas(pb[1],"bloedbroeders"))) for_[mt].heal+=5;
       if(combo.dmg)   from[mt].dmg+=(combo.dmg||0);
       if(combo.shld)  for_[mt].shld+=(combo.shld||0);
       if(combo.heal)  for_[mt].heal+=(combo.heal||0);
@@ -3512,7 +3564,8 @@ async function bmResolve(roundN){
       for(const[pid]of[pa,pb]){
         const p=players[pid];
         const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0,shielding:p.shielding||0};
-        pUpd[pid]={...prev,be:bmClampBE(prev.be-(combo.cost||4)),lockedAction:null};
+        const cCost=(combo.cost||4)-((stOn&&bmStHas(p,"roedel"))?1:0);
+        pUpd[pid]={...prev,be:bmClampBE(prev.be-cCost),lockedAction:null};
       }
       events.push({type:"combo",comboId:combo.id,team:mt,pids:[pa[0],pb[0]]});
     }
@@ -3521,12 +3574,15 @@ async function bmResolve(roundN){
     // BM_TEAMBE_ROUND_CAP: elke team_be-ability geeft AP aan élke teamgenoot,
     // dus zonder grens stapelen meerdere Centurio's in een grote klas tot een
     // onuitgeefbare berg AP (zie battle-data.js).
+    if(stOn) bmStTeamBE(players,roundN,stRes,for_,pUpd);
+    else {
     for(const t of["A","B"]) for_[t].teamBE=Math.min(for_[t].teamBE,BM_TEAMBE_ROUND_CAP);
     for(const[pid,p]of Object.entries(players)){
       const bonus=for_[p.team]?.teamBE||0;
       if(!bonus)continue;
       const prev=pUpd[pid]||{be:p.be||0,damage:p.damage||0,healing:p.healing||0,shielding:p.shielding||0,lockedAction:null};
       pUpd[pid]={...prev,be:bmClampBE((prev.be)+bonus)};
+    }
     }
 
     // Schrijf spelerupdates
@@ -3542,8 +3598,15 @@ async function bmResolve(roundN){
     // omzeilt het schild per definitie, dus telt hier niet mee.
     const blockedA=Math.min(shldA,from.B.dmg);
     const blockedB=Math.min(shldB,from.A.dmg);
-    const efA=Math.max(0,from.B.dmg-shldA)+from.B.bypassDmg;
-    const efB=Math.max(0,from.A.dmg-shldB)+from.A.bypassDmg;
+    let efA=Math.max(0,from.B.dmg-shldA)+from.B.bypassDmg;
+    let efB=Math.max(0,from.A.dmg-shldB)+from.A.bypassDmg;
+    let stAbsA=null, stAbsB=null;
+    if(stOn&&BM_META?.mode!=="boss"){
+      const rawA=efA, rawB=efB;
+      stAbsA=bmStAbsorb(players,"A",rawA,stRoom,events); stAbsB=bmStAbsorb(players,"B",rawB,stRoom,events);
+      efA=stAbsA.army+stAbsB.thorns; efB=stAbsB.army+stAbsA.thorns;
+      stAbsA.allBlocked=rawA>0&&stAbsA.army===0; stAbsB.allBlocked=rawB>0&&stAbsB.army===0;
+    }
     const tA=BM_TEAMS.A||{health:100,maxHealth:100},tB=BM_TEAMS.B||{health:100,maxHealth:100};
     // Heldenmodus: route schade eerst door de levende helden, overschot naar het leger
     let armyDmgA=efA, armyDmgB=efB;
@@ -3597,7 +3660,9 @@ async function bmResolve(roundN){
         classMaxHP:tA.maxHealth, bossMaxHP:tB.maxHealth, diffM, noDamageAnswerCount:noDamageCount, playerCount:Object.keys(players).length,
         bossId:BM_META?.bossId, dmgDealtThisRound:efB, shieldThisRound:shldA, labyrinthBroken,
       });
-      rawHA-=tick.classDamage;
+      const classDmgNow=stOn?bmStBossHit(players,tick,stRoom,events):tick.classDamage;
+      rawHA-=classDmgNow;
+      if(stOn&&tick._thorns) rawHB-=tick._thorns;
       rawHB+=(tick.bossHeal||0);
       bossEvents=tick.events;
       // rageMaxed is sticky (voor het "geheim_norage"-eerbewijs): eenmaal waar,
@@ -3630,6 +3695,20 @@ async function bmResolve(roundN){
     // scorebord kwam te staan.
     const newHA=Math.round(Math.max(0,Math.min(tA.maxHealth,rawHA+for_.A.heal)));
     const newHB=Math.round(Math.max(0,Math.min(tB.maxHealth,rawHB+for_.B.heal)));
+    if(stOn){
+      const ovA=Math.max(0,(rawHA+for_.A.heal)-tA.maxHealth), ovB=Math.max(0,(rawHB+for_.B.heal)-tB.maxHealth);
+      bmStFinishRound(players,roundN,stRoom,{
+        A:{shieldActs:stCtx.team.A.shieldActs,blocked:blockedA+(stAbsA?stAbsA.absorbedWall+stAbsA.absorbedTrap:0),overflow:ovA},
+        B:{shieldActs:stCtx.team.B.shieldActs,blocked:blockedB+(stAbsB?stAbsB.absorbedWall+stAbsB.absorbedTrap:0),overflow:ovB}});
+      await fbDB.ref("rooms/"+BM_CODE+"/st").set(bmGeenUndefined(stRoom));
+      // Geest van de 300: ving het team deze ronde álle vijandelijke schade op?
+      for(const [t,abs] of [["A",stAbsA],["B",stAbsB]]){
+        const allBlocked=abs?abs.allBlocked:((t==="A"?from.B.dmg:from.A.dmg)>0&&(t==="A"?efA:efB)===0);
+        if(!allBlocked) continue;
+        for(const [pid,q] of Object.entries(players)) if(q.team===t&&bmStHas(q,"geest_van_de_300"))
+          fbDB.ref("rooms/"+BM_CODE+"/players/"+pid+"/be").transaction(v=>bmClampBE((v||0)+2));
+      }
+    }
     await fbDB.ref("rooms/"+BM_CODE+"/teams").update({"A/health":newHA,"B/health":newHB});
     const logWinner=newHA<=0?"B":newHB<=0?"A":null;
     const roundParticipants=Object.values(players).filter(p=>p.answeredRound===roundN).length;
@@ -4631,8 +4710,13 @@ function bmPickClass(cid){
   // host (bmCalcAbilityEffect/bmRespawnProgress draaien host-side en kennen
   // BM_IDENT niet) — zelfde reden waarom masteryBonus al zo werkt.
   const achs=BM_IDENT?.achievements||[];
+  // Skill-trees (skilltree.js): gekozen knooppunten mee naar het gevecht; de
+  // oude ★3-bonus (+1 AP per ronde) vervalt dan (zie het ontwerp in skilltree-data.js).
+  const stHere=!!BM_META?.skillTrees&&bmMasteryBonusesOn()&&typeof bmStPayloadFor==="function";
+  const stPay=stHere?bmStPayloadFor(cid,(BM_IDENT?.skillTrees||{})[cid]?.picks,ms):null;
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
-    class:cid, masteryBonus:ms>=3?1:0, masterPassive:ms>=5, prestigeClass:ms>=BM_MASTERY_PRESTIGE,
+    st:stPay&&stPay.nodes.length?stPay:null, stS:null,
+    class:cid, masteryBonus:(!stHere&&ms>=3)?1:0, masterPassive:ms>=5, prestigeClass:ms>=BM_MASTERY_PRESTIGE,
     traitLaconisch:achs.includes("trait_laconisch"),
     traitFeniks:achs.includes("trait_feniks"),
     traitHeal:achs.includes("geheim_heal"),
@@ -4700,6 +4784,7 @@ SCREENS.battlePlayerGame = function(){
   const rBoss=fbDB.ref("rooms/"+BM_CODE+"/boss"),
     fBoss=rBoss.on("value",s=>{BM_BOSS=s.val()||{};bmBuildBattlefield();bmPlayerRender();});
   BM_UNSUBS=[()=>rP.off("value",fP),()=>rR.off("value",fR),()=>rSt.off("value",fSt),()=>rM.off("value",fM),()=>rT.off("value",fT),()=>rBoss.off("value",fBoss)];
+  if(typeof bmStSubscribe==="function") bmStSubscribe(()=>bmPlayerRender()); // skill-trees: muur/vloek/werktuigen
   bmSubscribeLog(BM_CODE);
   bmBuildBattlefield();
 };
@@ -4723,6 +4808,7 @@ function bmPlayerRender(){
       <div class="bm-mini-track">
         <div class="bm-mini-fill" style="background:${col};transform:scaleX(${frac})"></div>
       </div><span class="bm-mini-pct"${crit?' style="color:#e07060"':""}>${Math.round(frac*100)}%</span>
+      ${typeof bmStTeamExtrasHTML==="function"?bmStTeamExtrasHTML(team,true):""}
     </div>`;
   }
   let content="";
@@ -4826,7 +4912,7 @@ function bmPlayerRender(){
           ${(()=>{
             // Niets te doen deze ronde: meestal doordat een fout antwoord AP
             // kostte. Benoem dat, anders lijken de vaardigheden gewoon stuk.
-            const goedkoopste=Math.min(...bmClassAbilities(cls,0).map(a=>bmGetAbilityCost(cls,a,bmMyMaster())));
+            const goedkoopste=Math.min(...bmClassAbilities(cls,0).map(a=>bmGetAbilityCost(cls,a,bmMyMaster(),BM_PLAYERS[BM_PID])));
             if(BM_MY_BE>=goedkoopste) return "";
             const foutDezeRonde=BM_MY_PICK_ROUND===round.n&&BM_MY_PICK!==null&&!BM_MY_PICK_OK;
             return `<div class="bm-fb bad" style="margin-bottom:8px">⚠️ Te weinig AP voor je vaardigheden${foutDezeRonde?" — je antwoord was fout":""}.<br>
@@ -4847,8 +4933,8 @@ function bmPlayerRender(){
               <span>Val nu samen hard aan: jullie moeten in één ronde minstens ${BM_BOSS.headNeed||"veel"} schade doen om de stomp dicht te schroeien.</span></div>`:""}
           ${inspired?`<div class="note" style="color:var(--hi-bright);margin-bottom:6px">⚡ Geïnspireerd! Je volgende aanval doet extra schade.</div>`:""}
           ${targetPicker}
-          ${bmClassAbilities(cls,bmMyStars()).map(a=>{
-            const cost=bmGetAbilityCost(cls,a,bmMyMaster());
+          ${(typeof bmStAbilityList==="function"?bmStAbilityList(bmClassAbilities(cls,bmMyStars()),BM_PLAYERS[BM_PID]):bmClassAbilities(cls,bmMyStars())).map(a=>{
+            const cost=bmGetAbilityCost(cls,a,bmMyMaster(),BM_PLAYERS[BM_PID]);
             const ok=BM_MY_BE>=cost;
             return `<button class="tile" style="margin-bottom:6px;padding:11px 13px${ok?"":";opacity:.4;pointer-events:none"}" onclick="bmChooseAbility('${a.id}',${cost})">
               <div style="font-size:13px;font-weight:700">${a.nm} <span class="pill">${cost}&nbsp;AP</span> <span style="opacity:.6;font-size:10px">${tierDot(a.tier)}</span></div>
@@ -4948,7 +5034,9 @@ function bmFinishAnswer(ok){
   const at=BM_META?.answerTimer||10;
   const timeLeft=round.deadline?Math.max(0,(round.deadline-Date.now())/1000):0;
   // Snel = goed binnen het eerste deel van de timer (BM_FAST_FRACTION, battle-data.js).
-  const fastFrac=(typeof BM_FAST_FRACTION==="number"?BM_FAST_FRACTION:0.25);
+  const myP=BM_PLAYERS[BM_PID]||{};
+  const fastFrac0=(typeof BM_FAST_FRACTION==="number"?BM_FAST_FRACTION:0.25);
+  const fastFrac=(typeof bmStFastFraction==="function")?bmStFastFraction(myP,fastFrac0):fastFrac0;
   const fast=ok&&timeLeft>at*(1-fastFrac);
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
   let beGain=ok?3:0;
@@ -4957,7 +5045,8 @@ function bmFinishAnswer(ok){
   // ruime AP-toevoer merkte een leerling er niets van. Kom je hierdoor onder
   // de prijs van je goedkoopste vaardigheid, dan kun je deze ronde inderdaad
   // niet aanvallen; dat is de bedoeling.
-  if(!ok) beGain=-(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);
+  if(!ok){ const pen0=(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);
+    beGain=-((typeof bmStWrongPenalty==="function")?bmStWrongPenalty(myP,pen0):pen0); }
   if(fast){ beGain+=cls?.passive?.type==="be_on_fast"?bmPassiveVal(cls,bmMyMaster()):1; }
   // Ciceronianus: opeenvolgende correcte antwoorden in de laatste 5 sec van de timer
   const clutch=ok&&timeLeft<=5;
@@ -4995,6 +5084,17 @@ function bmFinishAnswer(ok){
     // BOSS_BATTLE.md §8) én de 🔥 Reeks-kolom in het Klassenoverzicht (alle modi).
     const prevCorrectStreak=p.correctStreak||0;
     upd.correctStreak=ok?prevCorrectStreak+1:0;
+    // Skill-trees (skilltree-engine.js): snel antwoord, reeksen en "moeilijk woord".
+    if(typeof bmStActive==="function"&&bmStActive(p)){
+      upd.lastFast=fast;
+      upd.stFastStreak=fast?(p.stFastStreak||0)+1:0;
+      if(ok){ upd.stLinie=(p.stLinie||0)+1; upd.stLinieForgave=false; }
+      else if(bmStHas(p,"taai_als_brons")&&!p.stLinieForgave&&(p.stLinie||0)>0){ upd.stLinieForgave=true; }
+      else upd.stLinie=0;
+      const hk=BM_MY_Q?(BM_MY_Q.key||recentKeyOf(BM_MY_Q)):null;
+      const wasHard=!!(hk&&((hwMap()[hk]||0)>0||(p.missed&&p.missed[bmWordKey(BM_MY_Q.vorm||BM_MY_Q.la)])));
+      upd.stHardOk=ok&&wasHard;
+    }
     upd.bestCorrectStreak=Math.max(p.bestCorrectStreak||0, upd.correctStreak);
     // Moeilijke woorden over sessies heen (core.js: hwNote) — lokaal/in de
     // identiteit, én in de players-node zodat de host het meteen meeweegt.
@@ -5041,7 +5141,8 @@ function bmChooseAbility(abilityId,cost){
   BM_ACTION_LOCKED=true;
   BM_MY_ABILITIES_USED++;
   const cls=BM_CLASSES.find(c=>c.id===BM_MY_CLASS);
-  const abl=cls?.abilities.find(a=>a.id===abilityId)
+  const myList=(typeof bmStAbilityList==="function")?bmStAbilityList(cls?.abilities||[],BM_PLAYERS[BM_PID]):(cls?.abilities||[]);
+  const abl=myList.find(a=>a.id===abilityId)
          || BM_BASIC_ACTIONS.find(a=>a.id===abilityId);
   if(abl&&BM_DMG_TYPES.includes(abl.type)) BM_MY_DEALT_DMG_ABILITY=true; // trait_pacifist
   // Minion Summon (BOSS_BATTLE.md §4): doelwit meegeven zolang er handlangers
