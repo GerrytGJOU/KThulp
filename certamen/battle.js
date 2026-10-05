@@ -3139,7 +3139,10 @@ function bmBuildBattlefield(){
   if(sw){
     const swType=BM_META?.garrisonProvince?.siegeWeaponUsed;
     const swDef=swType&&typeof TW_SIEGE_WEAPONS!=="undefined"?TW_SIEGE_WEAPONS[swType]:null;
-    sw.innerHTML=swDef?`<img src="${swDef.sprite}?${SPRITE_VER}" alt="" onerror="this.style.display='none'">`:"";
+    // catapult.png is getekend met de worp naar LINKS; de klas staat links, dus
+    // spiegelen zodat hij richting het garnizoen gooit (ram/toren kijken al naar rechts).
+    const swFlip=swType==="catapult"?` style="transform:scaleX(-1)"`:"";
+    sw.innerHTML=swDef?`<img src="${swDef.sprite}?${SPRITE_VER}" alt=""${swFlip} onerror="this.style.display='none'">`:"";
     bmPositionSiegeWeapon();
   }
   const field=el("bmField");
