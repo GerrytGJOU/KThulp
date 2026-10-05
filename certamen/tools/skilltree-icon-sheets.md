@@ -7,6 +7,10 @@ magenta achtergrond. Sla elk resultaat op als
 iconen uitgesneden, vrijgemaakt en als `assets/skills/<klasse>_<knooppunt>.png`
 weggeschreven.
 
+**Stijlvoorbeeld meegeven (belangrijk):** voeg bij elke prompt de afbeelding
+`assets/skills/sheets/boogschutter_1.jpg` toe — dat is de vastgestelde stijl
+(gekleurde tegels). Werkt in Gemini en ChatGPT. Begin per vel een nieuw gesprek.
+
 ---
 
 ## Boogschutter
@@ -15,6 +19,8 @@ weggeschreven.
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Boogschutter").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -56,6 +62,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Boogschutter").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a single arrow passing cleanly through the exact centre of a target — dominant colour cool forest green.
@@ -95,6 +103,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Boogschutter").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -136,6 +146,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Square 1:1 image: a sprite sheet of exactly 4 separate pixel-art game skill icons, arranged in 2 rows of 2, for an ancient Greek/Roman strategy game (class "Boogschutter").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a drawn ancient recurve bow with a nocked arrow pointing upward — dominant colour deep royal blue.
@@ -171,6 +183,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Hopliet").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -212,6 +226,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Hopliet").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a solid wall of bronze shields seen straight from the front — dominant colour cool polished steel blue.
@@ -251,6 +267,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Hopliet").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -292,6 +310,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Square 1:1 image: a sprite sheet of exactly 4 separate pixel-art game skill icons, arranged in 2 rows of 2, for an ancient Greek/Roman strategy game (class "Hopliet").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a round bronze hoplite shield (aspis) with a Greek lambda painted on it — dominant colour deep crimson red.
@@ -327,6 +347,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Voorvechter").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -368,6 +390,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Voorvechter").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a tall flame shaped like a warrior's crest — dominant colour fiery orange.
@@ -407,6 +431,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Voorvechter").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -448,6 +474,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Square 1:1 image: a sprite sheet of exactly 4 separate pixel-art game skill icons, arranged in 2 rows of 2, for an ancient Greek/Roman strategy game (class "Voorvechter").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a crested Corinthian bronze helmet with a red horsehair crest, seen from the side — dominant colour dark blood red.
@@ -483,6 +511,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Cavalerie").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -524,6 +554,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Cavalerie").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a long trail of hoofprints leading toward a single charging horse — dominant colour rusty copper orange.
@@ -563,6 +595,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Cavalerie").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -604,6 +638,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Square 1:1 image: a sprite sheet of exactly 4 separate pixel-art game skill icons, arranged in 2 rows of 2, for an ancient Greek/Roman strategy game (class "Cavalerie").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a rearing horse's head and neck in profile with a bronze bridle — dominant colour dark ochre brown.
@@ -639,6 +675,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Priester").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -680,6 +718,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Priester").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a running figure carrying a bowl of glowing green ointment — dominant colour soft healing green.
@@ -719,6 +759,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Priester").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -760,6 +802,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Square 1:1 image: a sprite sheet of exactly 4 separate pixel-art game skill icons, arranged in 2 rows of 2, for an ancient Greek/Roman strategy game (class "Priester").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a burning bronze altar bowl with smoke curling upward — dominant colour temple green.
@@ -795,6 +839,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Bevelvoerder").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -836,6 +882,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Bevelvoerder").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a Roman granary building with open doors full of grain — dominant colour supply teal.
@@ -875,6 +923,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Bevelvoerder").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -916,6 +966,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Square 1:1 image: a sprite sheet of exactly 4 separate pixel-art game skill icons, arranged in 2 rows of 2, for an ancient Greek/Roman strategy game (class "Bevelvoerder").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a Roman centurion's helmet with a sideways red crest, seen from the front — dominant colour imperial purple.
@@ -951,6 +1003,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Genie").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -992,6 +1046,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Genie").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a covered battering ram with a bronze ram's head on a wheeled frame — dominant colour fiery siege orange.
@@ -1031,6 +1087,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Genie").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -1072,6 +1130,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Square 1:1 image: a sprite sheet of exactly 4 separate pixel-art game skill icons, arranged in 2 rows of 2, for an ancient Greek/Roman strategy game (class "Genie").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a bronze gear wheel with a compass and a builder's square crossed over it — dominant colour burnt copper.
@@ -1107,6 +1167,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Verkenner").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
@@ -1148,6 +1210,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Verkenner").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a burning wooden siege engine wheel with small flames — dominant colour smouldering ember red.
@@ -1188,6 +1252,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 ```text
 Wide 16:9 image: a sprite sheet of exactly 8 separate pixel-art game skill icons, arranged in 2 rows of 4, for an ancient Greek/Roman strategy game (class "Verkenner").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) several spear points bursting out of thick bushes at once — dominant colour deep forest green.
@@ -1227,6 +1293,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 ```text
 Square 1:1 image: a sprite sheet of exactly 4 separate pixel-art game skill icons, arranged in 2 rows of 2, for an ancient Greek/Roman strategy game (class "Verkenner").
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
 CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
