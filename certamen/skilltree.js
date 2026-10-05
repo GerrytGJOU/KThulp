@@ -15,7 +15,7 @@
    ============================================================================ */
 // Zolang de effecten nog niet in de gevechtsengine zitten, kan de beheerder de
 // skill-trees wel bekijken maar niet aanzetten voor leerlingen.
-const BM_ST_ENGINE_READY=false;
+const BM_ST_ENGINE_READY=true;
 let BM_ST_ENABLED=null;          // null = nog niet geladen
 let BM_ST_ADMIN=false;           // ingelogde beheerder: mag ook kijken als het uit staat
 let BM_ST_CLASS="hopliet";

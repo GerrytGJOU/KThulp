@@ -309,7 +309,8 @@ function bmBossAlerts(){
     out.push({id:"meal", kind:"danger",
       short:"⚠️ Maaltijd "+(n<=1?"na DEZE ronde":"over "+n+" rondes")+" — samen ≥"+need+" schild!",
       title:"🍖 Polyfemus wil eten! "+(n<=1?"Laatste kans: DEZE ronde":"Nog "+n+" rondes"),
-      text:"Zet samen minstens <b>"+need+" schild</b> in (één ronde) om hem te onderbreken — iedereen kan gratis <b>🛡️ Schild heffen</b> (+2). Anders verslindt hij metgezellen: schade aan de klas én hij geneest zichzelf."});
+      text:"Zet samen minstens <b>"+need+" schild</b> in (één ronde) om hem te onderbreken — iedereen kan gratis <b>🛡️ Schild heffen</b> (+2). Anders verslindt hij metgezellen: schade aan de klas én hij geneest zichzelf."
+        +((typeof BM_ST_ROOM!=="undefined"&&BM_ST_ROOM&&BM_ST_ROOM.A&&BM_ST_ROOM.A.wall>0)?" <b>Jullie muur telt hier niet mee:</b> die vangt alleen klappen op.":"")});
   }
   if(preset.id==="hydra" && BM_BOSS?.headWarn){
     const n=BM_BOSS.headLeft||0, need=BM_BOSS.headNeed||"veel";
