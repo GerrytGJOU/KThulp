@@ -28,6 +28,8 @@ function promptFor(t,sh){
     `${i+1}. (row ${Math.floor(i/sh.cols)+1}, column ${i%sh.cols+1}) ${x.n.iconSubject} — dominant colour ${x.acc}.`).join("\n");
   return `${sh.ratio==="1:1"?"Square 1:1":"Wide 16:9"} image: a sprite sheet of exactly ${n} separate pixel-art game skill icons, arranged in ${sh.rows} rows of ${sh.cols}, for an ancient Greek/Roman strategy game (class "${t.nm}").
 
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
 CONTENT (most important rule): draw EXACTLY the ${n} subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 ${list}
@@ -49,6 +51,10 @@ magenta achtergrond. Sla elk resultaat op als
 \`assets/skills/sheets/<klasse>_<nr>.png\` (.jpg mag ook); daarna worden de
 iconen uitgesneden, vrijgemaakt en als \`assets/skills/<klasse>_<knooppunt>.png\`
 weggeschreven.
+
+**Stijlvoorbeeld meegeven (belangrijk):** voeg bij elke prompt de afbeelding
+\`assets/skills/sheets/boogschutter_1.jpg\` toe — dat is de vastgestelde stijl
+(gekleurde tegels). Werkt in Gemini en ChatGPT. Begin per vel een nieuw gesprek.
 `;
 for(const cls of Object.keys(BM_SKILLTREES)){
   md+=`\n---\n\n## ${BM_SKILLTREES[cls].nm}\n`;
