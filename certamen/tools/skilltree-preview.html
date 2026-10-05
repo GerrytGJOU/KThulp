@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Skill-tree-voorbeeld</title>
+<style>
+:root{
+  --stone:#16110c; --stone2:#221a12; --stone3:#2f241a; --stone4:#3d2f20;
+  --cream:#f3e9d2; --muted:#b9a883; --muted2:#8a7a5c;
+  --hi:#d4af37; --hi-bright:#f0cf6b; --hi-dim:#9c7c1f;
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 50% 30%,var(--stone3),var(--stone) 70%) fixed;background-color:var(--stone);
+  color:var(--cream);font-family:'Palatino Linotype',Palatino,'Book Antiqua','Noto Serif',Georgia,serif}
+.portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7)}
+.portal-back svg{width:22px;height:22px;display:block}
+header{padding:14px 16px 4px 64px}
+h1{font-family:'Optima','Palatino Linotype',Palatino,serif;color:var(--hi);margin:0;font-size:24px;letter-spacing:.04em}
+.sub{color:var(--muted);font-size:14px;margin-top:2px}
+.badge{display:inline-block;border:1px solid var(--hi-dim);color:var(--hi);border-radius:999px;padding:1px 10px;font-size:12px;margin-left:6px;vertical-align:middle}
+.wrap{max-width:1240px;margin:0 auto;padding:8px 16px 24px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}}
+.panel{background:linear-gradient(180deg,rgba(47,36,26,.92),rgba(22,17,12,.92));border:1px solid var(--stone4);border-radius:12px;padding:14px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:10px}
+.controls label{font-size:14px;color:var(--muted)}
+select,input[type=range]{accent-color:var(--hi)}
+select{background:var(--stone2);color:var(--cream);border:1px solid var(--stone4);border-radius:8px;padding:5px 8px;font:inherit}
+button.btn{background:var(--stone3);color:var(--hi);border:1px solid var(--hi-dim);border-radius:8px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}
+button.btn:hover{border-color:var(--hi)}
+.treebox{position:relative;background:rgba(0,0,0,.35);border:1px solid var(--stone4);border-radius:12px;overflow:visible;
+  box-shadow:inset 0 0 60px rgba(0,0,0,.6)}
+svg.tree{display:block;width:100%;height:auto}
+.t-rays{animation:tRays 9s ease-in-out infinite alternate}
+@keyframes tRays{from{opacity:.55}to{opacity:1}}
+.t-motes circle{transform-box:fill-box;animation-name:tMote;animation-timing-function:linear;animation-iteration-count:infinite}
+@keyframes tMote{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}85%{opacity:.9}100%{transform:translate(18px,-160px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.t-rays,.t-motes circle{animation:none}}
+.tip{position:absolute;z-index:5;max-width:260px;pointer-events:none;background:rgba(18,13,9,.97);border:1px solid var(--tipc,#d4af37);
+  border-radius:10px;padding:8px 11px;box-shadow:0 6px 20px rgba(0,0,0,.6);font-size:14px;line-height:1.35;opacity:0;transition:opacity .12s}
+.tip.on{opacity:1}
+.tip b{color:var(--tipc,#d4af37);font-size:15px}
+.tip .st{display:block;color:var(--muted2);font-size:12px;margin:1px 0 4px}
+.tip .lk{display:block;color:var(--muted);font-size:12px;margin-top:4px;font-style:italic}
+.node{cursor:pointer}
+.node text{pointer-events:none}
+svg.tree text{paint-order:stroke;stroke:#0d0906;stroke-width:4px;stroke-linejoin:round}
+.status{font-size:14px;color:var(--muted);margin:8px 2px 0}
+.status b{color:var(--hi)}
+.info h2{margin:0 0 2px;font-size:20px;color:var(--hi)}
+.info .meta{font-size:13px;color:var(--muted);margin-bottom:8px}
+.info p{margin:6px 0;font-size:15px;line-height:1.4}
+.prompt{background:var(--stone);border:1px dashed var(--stone4);border-radius:8px;padding:8px;font-family:Consolas,monospace;font-size:12px;
+  color:var(--muted);white-space:pre-wrap;word-break:break-word;max-height:220px;overflow:auto}
+.chosen{margin:10px 0 0;padding:0;list-style:none;font-size:14px}
+.chosen li{padding:4px 0;border-top:1px solid var(--stone3)}
+.chosen li span{color:var(--muted2);font-size:12px;margin-right:6px}
+h3{font-size:15px;color:var(--hi);margin:14px 0 4px}
+footer{text-align:center;color:var(--muted2);font-size:13px;padding:10px 16px 18px}
+</style>
+</head>
+<body>
+<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<header>
+  <h1>Skill-trees <span class="badge">ontwerp · niet actief</span></h1>
+  <div class="sub">Voorbeeldweergave voor Battle Mode, Boss Battle en Total War. Klik op knooppunten om keuzes te maken.</div>
+</header>
+
+<div class="wrap">
+  <div>
+    <div class="controls">
+      <label>Klasse <select id="cls"></select></label>
+      <label>Behaalde sterren <input id="stars" type="range" min="0" max="10" value="10"> <b id="starsOut">★10</b></label>
+      <button class="btn" id="respec">Respec (alles wissen)</button>
+    </div>
+    <div class="treebox" id="treebox"><svg class="tree" id="tree" viewBox="0 0 1000 1300" role="img" aria-label="Skill-tree"></svg><div class="tip" id="tip" role="tooltip"></div></div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <aside class="panel info" id="info">
+    <h2>Kies een knooppunt</h2>
+    <p class="meta">Tik of beweeg over een knooppunt voor de details en de beeldprompt voor het icoon.</p>
+  </aside>
+</div>
+
+<div class="wrap" style="padding-top:0">
+  <div class="panel" style="grid-column:1/-1">
+    <h3 style="margin-top:0">Alle beeldprompts voor deze klasse</h3>
+    <p class="status" style="margin-top:0">Iconen komen in <code>certamen/assets/skills/</code> onder de genoemde bestandsnaam; zodra een bestand bestaat, vervangt het de plaatshouder.</p>
+    <button class="btn" id="copyAll">Alle prompts kopiëren</button>
+    <div id="allPrompts"></div>
+  </div>
+</div>
+
+<footer>Certamen · Skill-tree-voorbeeld · © Gerben de Jong · 2026</footer>
+
+<script src="../skilltree-data.js"></script>
+<script>
+const SVGNS="http://www.w3.org/2000/svg";
+const ROOT_COLOR="#2e6fb0";
+const DIM="#4a3d2c";
+let TREE=null, STARS=10, PICKS={}, IMG_OK={}, HOVER=null;
+
+// ---- Geometrie ----
+const Y_ID={1:1110,2:1020,3:930,4:840}, X_A=380, X_B=620;
+const ROOT={x:500,y:1220}, MASTER={x:500,y:740};
+const BR_X={A:180,H:500,B:820}, BR_DX=62, Y_P={6:580,7:490,8:400,9:310};
+const Y_FORK=660, Y_PRES=148, X_PRES={A:330,B:670};
+
+function el(tag,attrs,parent){const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function hexPts(cx,cy,r){const p=[];for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-90);p.push((cx+r*Math.cos(a)).toFixed(1)+","+(cy+r*Math.sin(a)).toFixed(1))}return p.join(" ")}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+function path(){return skilltreePathOf(PICKS)}
+function promptFor(n,accentNm){return SKILLTREE_ICON_PROMPT.replace("{SUBJECT}",n.iconSubject).replace("{ACCENT}",accentNm)}
+
+// Zijn de iconen er al? Laad ze op de achtergrond; bij succes hertekenen.
+function probeIcons(){
+  allNodes().forEach(({n})=>{
+    if(!n.icon||n.icon in IMG_OK)return;
+    IMG_OK[n.icon]=false;
+    const im=new Image();
+    im.onload=()=>{IMG_OK[n.icon]=true;render()};
+    im.src="../assets/skills/"+n.icon;
+  });
+}
+
+function allNodes(){
+  const t=TREE,out=[{n:t.root,star:0,pathKey:null,accentNm:t.colorNm||"deep royal blue"},{n:t.master,star:5,pathKey:null,accentNm:"warm gold"}];
+  t.identity.forEach(r=>{out.push({n:r.A,star:r.star,pathKey:"A",accentNm:t.paths.A.accentNm});out.push({n:r.B,star:r.star,pathKey:"B",accentNm:t.paths.B.accentNm})});
+  ["A","B"].forEach(p=>t.pathNodes[p].forEach(r=>{out.push({n:r.a,star:r.star,pathKey:p,accentNm:t.paths[p].accentNm});out.push({n:r.b,star:r.star,pathKey:p,accentNm:t.paths[p].accentNm})}));
+  t.prestige.forEach(v=>out.push({n:v,star:10,pathKey:v.path,accentNm:t.paths[v.path].accentNm}));
+  return out;
+}
+
+// ---- Tekenen ----
+function line(g,x1,y1,x2,y2,color,lit,dash){
+  el("line",{x1,y1,x2,y2,stroke:lit?color:DIM,"stroke-width":lit?3.5:2,"stroke-dasharray":dash||"","stroke-linecap":"round",
+    opacity:lit?1:.7,filter:lit?"url(#glow)":""},g);
+}
+function curve(g,x1,y1,x2,y2,color,lit){
+  const my=(y1+y2)/2;
+  el("path",{d:`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`,fill:"none",stroke:lit?color:DIM,"stroke-width":lit?5:2.5,
+    opacity:lit?1:.6,filter:lit?"url(#glow)":""},g);
+}
+// state: "chosen" | "open" | "closed" (kan nu niet gekozen worden) | "locked" (te weinig sterren) | "fixed" (geen keuze, behaald)
+function node(g,x,y,n,color,state,onPick,meta){
+  const r=state==="fixed"&&n===TREE.root?40:34;
+  const nkey=(n.id||n.nm)+"@"+x;
+  const grp=el("g",{class:"node",tabindex:0,role:"button","aria-label":n.nm,"data-key":nkey},g);
+  const lit=state==="chosen"||state==="fixed";
+  const col=lit?color:state==="open"?color:DIM;
+  el("polygon",{points:hexPts(x,y,r+5),fill:"none",stroke:col,"stroke-width":lit?2:1,opacity:lit?.9:state==="open"?.6:.4},grp);
+  el("polygon",{points:hexPts(x,y,r),fill:lit?"url(#fillLit)":"#1c150f",stroke:col,"stroke-width":lit?3:2,
+    filter:lit?"url(#glow)":"",opacity:state==="locked"?.45:1},grp);
+  if(lit) el("polygon",{points:hexPts(x,y,r),fill:color,opacity:.18},grp);
+  if(n.icon&&IMG_OK[n.icon]){
+    el("image",{href:"../assets/skills/"+n.icon,x:x-r*.72,y:y-r*.72,width:r*1.44,height:r*1.44,
+      opacity:state==="locked"?.3:state==="closed"?.45:1,style:"image-rendering:pixelated"},grp);
+  } else {
+    const t=el("text",{x,y:y+1,"text-anchor":"middle","dominant-baseline":"central","font-size":r*.85,
+      fill:lit?"#fff6dc":state==="open"?color:"#6b5b45",opacity:state==="locked"?.5:1},grp);
+    t.textContent=(n.glyph||"?")+"︎"; // VS15: tekstweergave, geen kleuremoji
+  }
+  if(state==="locked"){const t=el("text",{x:x+r*.62,y:y-r*.6,"font-size":15,fill:"#8a7a5c","text-anchor":"middle"},grp);t.textContent="🔒"}
+  const lbl=el("text",{x,y:y+r+18,"text-anchor":"middle","font-size":14,fill:lit?"#f3e9d2":state==="open"?"#d9c9a3":"#7d6d52",
+    "font-weight":lit?700:400},grp);
+  lbl.textContent=n.nm;
+  const show=()=>{showInfo(n,meta);HOVER=nkey;showTip(grp,n,meta,state,color)};
+  grp._tip=()=>showTip(grp,n,meta,state,color);
+  grp.addEventListener("mouseenter",show);
+  grp.addEventListener("focus",show);
+  grp.addEventListener("mouseleave",hideTip);
+  grp.addEventListener("blur",hideTip);
+  grp.addEventListener("click",()=>{show();if(onPick&&(state==="open"||state==="chosen"))onPick()});
+  grp.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();grp.dispatchEvent(new Event("click"))}});
+}
+
+// ---- Achtergrond: een nauwelijks zichtbare Griekse tempel ----
+// Eenmalig getekend (de boom zelf wordt bij elke klik opnieuw opgebouwd, de
+// tempel niet — anders zouden de zwevende stofdeeltjes steeds verspringen).
+// Opbouw volgt de boom: wortel op de treden, takken tussen de zuilen,
+// prestige in het timpaan.
+function grad(defs,tag,id,attrs,stops){
+  const g=el(tag,Object.assign({id},attrs),defs);
+  stops.forEach(([o,c,a])=>el("stop",{offset:o,"stop-color":c,"stop-opacity":a},g));
+}
+function drawTemple(svg,defs){
+  const STONE="#2a2117", STONE2="#33281c", LINE="#4e3c28", GOLD="#d4af37";
+  grad(defs,"radialGradient","tGlow",{cx:"50%",cy:"10%",r:"70%"},[["0%",GOLD,.15],["45%",GOLD,.04],["100%",GOLD,0]]);
+  grad(defs,"linearGradient","tRay",{x1:0,y1:0,x2:0,y2:1},[["0%",GOLD,.2],["65%",GOLD,.07],["100%",GOLD,0]]);
+  grad(defs,"linearGradient","tRaySide",{x1:0,y1:0,x2:0,y2:1},[["0%",GOLD,.26],["55%",GOLD,.11],["100%",GOLD,.01]]);
+  grad(defs,"linearGradient","tCol",{x1:0,y1:0,x2:1,y2:0},[["0%","#18120c",1],["40%","#3a2d20",1],["60%","#3a2d20",1],["100%","#150f0a",1]]);
+  grad(defs,"radialGradient","tVign",{cx:"50%",cy:"55%",r:"75%"},[["55%","#000",0],["100%","#000",.45]]);
+  const bg=el("g",{id:"temple","aria-hidden":"true"},svg);
+
+  el("rect",{x:0,y:0,width:1000,height:1300,fill:"url(#tGlow)"},bg);
+  // zuilen: buitenste twee volledig, binnenste twee iets vager (staan achter de takken)
+  const column=(cx,w,op)=>{
+    const g=el("g",{opacity:op},bg), top=282, bot=1226, tw=w*.84;
+    el("rect",{x:cx-w/2-9,y:252,width:w+18,height:10,fill:STONE2,stroke:LINE,"stroke-width":1},g);           // abacus
+    el("polygon",{points:`${cx-w/2-6},262 ${cx+w/2+6},262 ${cx+tw/2},${top} ${cx-tw/2},${top}`,fill:STONE2,stroke:LINE,"stroke-width":1},g); // echinus
+    el("polygon",{points:`${cx-tw/2},${top} ${cx+tw/2},${top} ${cx+w/2},${bot} ${cx-w/2},${bot}`,fill:"url(#tCol)",stroke:LINE,"stroke-width":1},g);
+    for(let i=1;i<6;i++){const ft=cx-tw/2+tw*i/6, fb=cx-w/2+w*i/6;
+      el("line",{x1:ft,y1:top+4,x2:fb,y2:bot-4,stroke:"#0c0906","stroke-width":1.4,opacity:.7},g);}
+    el("rect",{x:cx-w/2-5,y:bot,width:w+10,height:12,rx:3,fill:STONE2,stroke:LINE,"stroke-width":1},g);    // basis
+  };
+  column(50,48,1); column(950,48,1); column(340,40,.55); column(660,40,.55);
+
+  // hoofdgestel: kroonlijst, fries met trigliefen, architraaf met meander
+  el("rect",{x:22,y:200,width:956,height:10,fill:STONE2,stroke:LINE,"stroke-width":1},bg);
+  el("rect",{x:30,y:210,width:940,height:26,fill:STONE,stroke:LINE,"stroke-width":1},bg);
+  for(let x=44;x<960;x+=58){
+    const g=el("g",{},bg);
+    el("rect",{x,y:212,width:22,height:22,fill:STONE2,stroke:LINE,"stroke-width":.8},g);
+    [x+7,x+15].forEach(gx=>el("line",{x1:gx,y1:213,x2:gx,y2:233,stroke:"#0c0906","stroke-width":2},g));
+  }
+  el("rect",{x:30,y:236,width:940,height:16,fill:STONE2,stroke:LINE,"stroke-width":1},bg);
+  let d=""; for(let x=40;x<956;x+=16){ d+=`M${x},248 v-9 h12 v6 h-6 v-3 `; }        // meander (Griekse sleutel)
+  el("path",{d,fill:"none",stroke:GOLD,"stroke-width":1.2,opacity:.24},bg);
+
+  // fronton met timpaan en akroteria
+  el("polygon",{points:"14,200 500,38 986,200",fill:STONE2,stroke:LINE,"stroke-width":1.5},bg);
+  el("polygon",{points:"78,192 500,56 922,192",fill:STONE,stroke:GOLD,"stroke-width":1,"stroke-opacity":.22},bg);
+  [[500,38],[14,200],[986,200]].forEach(([x,y])=>{
+    const g=el("g",{opacity:.5},bg);
+    el("path",{d:`M${x},${y-4} q-10,-10 -6,-24 q6,8 6,4 q0,4 6,-4 q4,14 -6,24 z`,fill:STONE2,stroke:GOLD,"stroke-width":.8,"stroke-opacity":.35},g);
+  });
+
+  // traptreden (krepis) waarop de wortel staat
+  [[24,1238,952,16],[12,1254,976,20],[0,1274,1000,26]].forEach(([x,y,w,h])=>{
+    el("rect",{x,y,width:w,height:h,fill:STONE2,stroke:LINE,"stroke-width":1},bg);
+    el("line",{x1:x+2,y1:y+.5,x2:x+w-2,y2:y+.5,stroke:GOLD,"stroke-width":1,opacity:.16},bg);
+  });
+
+  // lichtbundels vanuit het timpaan, elk op één van de drie takken (★6–9);
+  // pas ná de zuilen getekend, zodat het licht er zichtbaar overheen valt
+  const rays=el("g",{class:"t-rays"},bg);
+  [["A",452,482],["H",485,515],["B",518,548]].forEach(([k,a,b])=>{
+    const cx=BR_X[k], hw=k==="H"?100:112;
+    // de schuine bundels zijn langer en breder uitgesmeerd, dus iets feller
+    el("polygon",{points:`${a},200 ${b},200 ${cx+hw},${Y_FORK+40} ${cx-hw},${Y_FORK+40}`,fill:k==="H"?"url(#tRay)":"url(#tRaySide)",opacity:k==="H"?.8:1},rays);
+  });
+
+  // zwevende stofdeeltjes in het licht (vast patroon, geen Math.random)
+  const motes=el("g",{class:"t-motes"},bg);
+  let seed=7; const rnd=()=>(seed=(seed*9301+49297)%233280)/233280;
+  for(let i=0;i<22;i++){
+    el("circle",{cx:300+rnd()*400,cy:300+rnd()*900,r:.8+rnd()*1.6,fill:GOLD,opacity:.25+rnd()*.3,
+      style:`animation-duration:${14+rnd()*16}s;animation-delay:-${rnd()*20}s`},motes);
+  }
+  el("rect",{x:0,y:0,width:1000,height:1300,fill:"url(#tVign)"},bg);
+}
+
+function render(){
+  const t=TREE,svg=document.getElementById("tree");
+  if(!svg._init){
+    svg.innerHTML="";
+    const defs=el("defs",{},svg);
+    const f=el("filter",{id:"glow",x:"-50%",y:"-50%",width:"200%",height:"200%"},defs);
+    el("feGaussianBlur",{stdDeviation:"4",result:"b"},f);
+    const m=el("feMerge",{},f);el("feMergeNode",{in:"b"},m);el("feMergeNode",{in:"SourceGraphic"},m);
+    const lg=el("radialGradient",{id:"fillLit"},defs);
+    el("stop",{offset:"0%","stop-color":"#3a2c1c"},lg);el("stop",{offset:"100%","stop-color":"#140e09"},lg);
+    drawTemple(svg,defs);
+    el("g",{id:"dyn"},svg);
+    svg._init=true;
+  }
+  const dyn=document.getElementById("dyn");dyn.innerHTML="";
+  const gL=el("g",{},dyn), gN=el("g",{},dyn);
+  const p=path(), gold=t.paths.H.accent;
+  const colOf=k=>t.paths[k].accent;
+
+  // Sterlabels links
+  const starLbl=(y,s)=>{const tx=el("text",{x:24,y:y+5,"font-size":15,fill:s<=STARS?"#d4af37":"#5b4c37"},gL);tx.textContent="★"+s};
+  [1,2,3,4].forEach(s=>starLbl(Y_ID[s],s));starLbl(MASTER.y,5);[6,7,8,9].forEach(s=>starLbl(Y_P[s],s));starLbl(Y_PRES,10);
+
+  // Wortel → ★1
+  const idState=(s,side)=>s>STARS?"locked":PICKS[s]===side?"chosen":"open";
+  line(gL,ROOT.x,ROOT.y,X_A,Y_ID[1],colOf("A"),PICKS[1]==="A");
+  line(gL,ROOT.x,ROOT.y,X_B,Y_ID[1],colOf("B"),PICKS[1]==="B");
+  // ★1–4 ladders + horizontale keuzelijn
+  [1,2,3,4].forEach(s=>{
+    line(gL,X_A+40,Y_ID[s],X_B-40,Y_ID[s],gold,false,"4 6");
+    const tx=el("text",{x:500,y:Y_ID[s]-8,"text-anchor":"middle","font-size":12,fill:"#6b5b45"},gL);tx.textContent="of";
+    if(s<4){
+      [["A",X_A],["B",X_B]].forEach(([side,x])=>{
+        // verbind elke keuze met beide opties van de volgende ster (kruising)
+        [["A",X_A],["B",X_B]].forEach(([nside,nx])=>{
+          line(gL,x,Y_ID[s],nx,Y_ID[s+1],side===nside?colOf(side):gold,PICKS[s]===side&&PICKS[s+1]===nside);
+        });
+      });
+    }
+  });
+  // ★4 → meester
+  line(gL,X_A,Y_ID[4],MASTER.x,MASTER.y,colOf("A"),PICKS[4]==="A"&&STARS>=5);
+  line(gL,X_B,Y_ID[4],MASTER.x,MASTER.y,colOf("B"),PICKS[4]==="B"&&STARS>=5);
+
+  // Splitsing naar de drie takken
+  ["A","H","B"].forEach(k=>{
+    curve(gL,MASTER.x,MASTER.y,BR_X[k],Y_FORK,colOf(k),p===k&&STARS>=6);
+    const lbl=el("text",{x:BR_X[k],y:Y_FORK+30,"text-anchor":"middle","font-size":17,"letter-spacing":"3",
+      fill:p===k?colOf(k):"#6b5b45","font-weight":700},gL);
+    lbl.textContent=t.paths[k].nm.toUpperCase();
+    // stam van de tak
+    line(gL,BR_X[k],Y_FORK,BR_X[k],Y_P[9],colOf(k),p===k&&STARS>=6);
+  });
+
+  // ★6–9 per tak
+  ["A","H","B"].forEach(k=>{
+    [6,7,8,9].forEach(s=>{
+      const opts=skilltreeOptionsFor(t,k,s);
+      opts.forEach((n,i)=>{
+        const x=BR_X[k]+(i===0?-BR_DX:BR_DX), y=Y_P[s];
+        const chosen=p===k&&PICKS[s]===n.id;
+        line(gL,BR_X[k],y,x,y,colOf(k),chosen);
+        let state="closed";
+        if(s>STARS) state="locked";
+        else if(p===k) state=chosen?"chosen":"open";
+        // in de hybride tak toont de kleur de herkomst (A- of B-pad)
+        const c=k==="H"?(i===0?colOf("A"):colOf("B")):colOf(k);
+        node(gN,x,y,n,c,state,()=>{PICKS[s]=PICKS[s]===n.id?undefined:n.id;save();render()},
+          {star:s,where:t.paths[k].nm+(k==="H"?" (uit "+(i===0?t.paths.A.nm:t.paths.B.nm)+")":""),accentNm:(k==="H"?(i===0?t.paths.A:t.paths.B):t.paths[k]).accentNm});
+      });
+    });
+    // tak → beide prestige-varianten
+    ["A","B"].forEach(v=>{
+      const pv=t.prestige.find(x=>x.path===v);
+      line(gL,BR_X[k],Y_P[9],X_PRES[v],Y_PRES,colOf(v),p===k&&PICKS[10]===pv.id&&STARS>=10,p===k?"":"3 7");
+    });
+  });
+
+  // ★10 prestige
+  t.prestige.forEach(v=>{
+    const state=STARS<10?"locked":!p?"closed":PICKS[10]===v.id?"chosen":"open";
+    node(gN,X_PRES[v.path],Y_PRES,v,colOf(v.path),state,()=>{PICKS[10]=PICKS[10]===v.id?undefined:v.id;save();render()},
+      {star:10,where:"Prestige-variant ("+v.cost+" AP)",accentNm:t.paths[v.path].accentNm});
+  });
+  const pt=el("text",{x:500,y:Y_PRES-52,"text-anchor":"middle","font-size":15,"letter-spacing":"3",fill:STARS>=10?"#d4af37":"#5b4c37"},gL);
+  pt.textContent="PRESTIGE";
+
+  // ★1–4 knooppunten
+  t.identity.forEach(r=>{
+    [["A",X_A],["B",X_B]].forEach(([side,x])=>{
+      node(gN,x,Y_ID[r.star],r[side],colOf(side),idState(r.star,side),()=>{
+        PICKS[r.star]=PICKS[r.star]===side?undefined:side;
+        cleanAfterPathChange();save();render();
+      },{star:r.star,where:"Identiteitskeuze → "+t.paths[side].nm,accentNm:t.paths[side].accentNm});
+    });
+  });
+  // Meester en wortel
+  node(gN,MASTER.x,MASTER.y,t.master,gold,STARS>=5?"fixed":"locked",null,{star:5,where:"Vast knooppunt (geen keuze)",accentNm:"warm gold"});
+  node(gN,ROOT.x,ROOT.y,t.root,t.color||ROOT_COLOR,"fixed",null,{star:0,where:"Klasse",accentNm:t.colorNm||"deep royal blue"});
+
+  renderStatus();
+  // Na een klik wordt de boom opnieuw getekend: toon de tooltip opnieuw met de nieuwe status.
+  if(HOVER){const g=svg.querySelector('g.node[data-key="'+CSS.escape(HOVER)+'"]');if(g&&g._tip)g._tip();else hideTip()}
+}
+
+// ---- Tooltip bij hover/focus/tik ----
+function tipStatus(state,meta){
+  if(state==="chosen")return "✓ Gekozen";
+  if(state==="fixed")return meta.star===5?"Vast: krijg je automatisch bij ★5":"Je klasse";
+  if(state==="locked")return "🔒 Vrij vanaf ★"+meta.star;
+  if(state==="open")return "Klik om te kiezen";
+  return meta.star>=6&&meta.star<=9?"Niet op jouw huidige pad":"Kies eerst bij ★1–4 je pad";
+}
+function showTip(grp,n,meta,state,color){
+  const tip=document.getElementById("tip"),box=document.getElementById("treebox");
+  tip.style.setProperty("--tipc",color);
+  tip.innerHTML=`<b>${esc(n.nm)}</b><span class="st">${meta.star?"★"+meta.star+" · ":""}${esc(meta.where)}</span>${esc(n.desc)}<span class="lk">${esc(tipStatus(state,meta))}</span>`;
+  const r=(grp.querySelector("polygon")||grp).getBoundingClientRect(),b=box.getBoundingClientRect(); // buitenrand van de zeshoek, zonder gloed
+  tip.classList.add("on");
+  const tw=tip.offsetWidth,th=tip.offsetHeight;
+  let left=r.left-b.left+r.width/2-tw/2;
+  left=Math.max(6,Math.min(b.width-tw-6,left));
+  let top=r.top-b.top-th-8;                       // standaard boven het knooppunt
+  if(r.top-th-8<4) top=r.bottom-b.top+8;          // geen ruimte in het venster: eronder
+  tip.style.left=left+"px"; tip.style.top=top+"px";
+}
+function hideTip(){HOVER=null;document.getElementById("tip").classList.remove("on")}
+
+// Pad gewijzigd? Wis ★6–9-keuzes die op het nieuwe pad niet meer bestaan.
+function cleanAfterPathChange(){
+  const p=path();
+  [6,7,8,9].forEach(s=>{
+    if(!PICKS[s])return;
+    const ok=p&&skilltreeOptionsFor(TREE,p,s).some(n=>n.id===PICKS[s]);
+    if(!ok)delete PICKS[s];
+  });
+  if(!p)delete PICKS[10];
+}
+
+function renderStatus(){
+  const t=TREE,p=path();
+  const nA=[1,2,3,4].filter(s=>PICKS[s]==="A").length,nB=[1,2,3,4].filter(s=>PICKS[s]==="B").length;
+  document.getElementById("status").innerHTML=p
+    ? `Pad: <b>${esc(t.paths[p].nm)}</b> (${nA}× ${esc(t.paths.A.nm)}, ${nB}× ${esc(t.paths.B.nm)}) — ${esc(t.paths[p].desc)}`
+    : `Kies bij ★1–4 telkens één optie (${nA}× ${esc(t.paths.A.nm)}, ${nB}× ${esc(t.paths.B.nm)} gekozen). 3–4× dezelfde kant geeft dat pad, 2/2 geeft het hybride pad.`;
+}
+
+function showInfo(n,meta){
+  const t=TREE;
+  const pr=n.iconSubject?promptFor(n,meta.accentNm):"";
+  document.getElementById("info").innerHTML=`
+    <h2>${esc(n.nm)}</h2>
+    <div class="meta">${meta.star?"★"+meta.star+" · ":""}${esc(meta.where)}</div>
+    <p>${esc(n.desc)}</p>
+    ${n.icon?`<h3>Icoon</h3><div class="meta">Bestand: <code>assets/skills/${esc(n.icon)}</code> ${IMG_OK[n.icon]?"✓ aanwezig":"(nog niet aanwezig)"}</div>`:""}
+    ${pr?`<div class="prompt">${esc(pr)}</div><p><button class="btn" id="copyOne">Prompt kopiëren</button></p>`:""}
+    <h3>Gekozen in deze boom</h3>${chosenListHTML()}`;
+  const b=document.getElementById("copyOne");
+  if(b)b.onclick=()=>copy(pr,b);
+}
+
+function chosenListHTML(){
+  const t=TREE,p=path(),li=[];
+  t.identity.forEach(r=>{if(PICKS[r.star])li.push([r.star,r[PICKS[r.star]]])});
+  if(STARS>=5)li.push([5,t.master]);
+  if(p)[6,7,8,9].forEach(s=>{const n=skilltreeOptionsFor(t,p,s).find(x=>x.id===PICKS[s]);if(n)li.push([s,n])});
+  const pv=t.prestige.find(v=>v.id===PICKS[10]);if(pv)li.push([10,pv]);
+  if(!li.length)return `<p class="meta">Nog niets gekozen.</p>`;
+  return `<ul class="chosen">${li.map(([s,n])=>`<li><span>★${s}</span><b>${esc(n.nm)}</b> — ${esc(n.desc)}</li>`).join("")}</ul>`;
+}
+
+function renderAllPrompts(){
+  const lines=allNodes().filter(x=>x.n.iconSubject).map(({n,star,accentNm})=>
+    `### ${n.nm} (★${star}) → assets/skills/${n.icon}\n${promptFor(n,accentNm)}`);
+  const txt=lines.join("\n\n");
+  document.getElementById("allPrompts").innerHTML=lines.map(l=>`<div class="prompt" style="margin-top:8px">${esc(l)}</div>`).join("");
+  document.getElementById("copyAll").onclick=e=>copy(txt,e.target);
+}
+
+function copy(txt,btn){
+  const done=()=>{const o=btn.textContent;btn.textContent="Gekopieerd ✓";setTimeout(()=>btn.textContent=o,1400)};
+  if(navigator.clipboard)navigator.clipboard.writeText(txt).then(done,()=>fallback());else fallback();
+  function fallback(){const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done()}catch(e){}ta.remove()}
+}
+
+// Keuzes per klasse onthouden (alleen gemak voor de voorbeeldweergave).
+function key(){return "certamen_skilltree_preview_"+TREE.classId}
+function save(){try{localStorage.setItem(key(),JSON.stringify({picks:PICKS}))}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem(key())||"null");PICKS=(d&&d.picks)||{}}catch(e){PICKS={}}}
+
+function selectClass(id){TREE=BM_SKILLTREES[id];load();cleanAfterPathChange();probeIcons();render();renderAllPrompts()}
+
+(function init(){
+  const sel=document.getElementById("cls");
+  Object.values(BM_SKILLTREES).forEach(t=>{const o=document.createElement("option");o.value=t.classId;o.textContent=t.nm;sel.appendChild(o)});
+  sel.onchange=()=>selectClass(sel.value);
+  const st=document.getElementById("stars"),out=document.getElementById("starsOut");
+  st.oninput=()=>{STARS=+st.value;out.textContent="★"+STARS;render()};
+  document.getElementById("respec").onclick=()=>{PICKS={};save();render()};
+  selectClass(sel.value||Object.keys(BM_SKILLTREES)[0]);
+})();
+</script>
+</body>
+</html>
