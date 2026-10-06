@@ -1163,6 +1163,11 @@ Een open avatar-ontwerp (`BM_AV_EDIT`) wordt eerst bewaard.
   Loopt het gevecht al, dan gaat de leerling er meteen weer in.
 - Wie zelf weggaat (terugknop → `bmLeave()`) krijgt `left:true` in
   `bm_session` en wordt niet teruggetrokken; "Heraansluiten" wist die vlag.
+- Ook bij het **einde** (`status` → `"finished"`): wie dan niet op een
+  kamerscherm staat, gaat via `bmRoomShowResult()` naar `battleResult`, waar
+  `bmAwardBattle()` de XP/munten/klasse-XP uitkeert. Zonder dit liep een
+  leerling die op dat moment in profiel/avatar/skill-tree zat zijn beloning
+  mis (gevonden in het proefgevecht van 2026-10-06).
 - De avatar-knop in de lobby keert na opslaan terug naar de lobby
   (`BM_AV_RETURN`), niet naar het profiel.
 
