@@ -104,6 +104,7 @@ SCREENS.skillTree = function(){
   </div>
   <div class="bmst-box" id="bmStBox"><svg class="bmst-tree" id="bmStTree" viewBox="0 0 1000 1300" role="img" aria-label="Skill-tree ${esc(t.nm)}"></svg><div class="bmst-tip" id="bmStTip" role="tooltip"></div></div>
   <div class="note" style="text-align:center;margin:8px 0 16px">Sterren verdien je door met deze klasse te spelen. Elke ster opent een nieuwe keuze; bij ★10 kies je je prestige-vaardigheid.</div>
+  <div class="panel bmst-actbox" id="bmStActions"></div>
   ${foot()}`);
   bmStProbeIcons();
   bmStRender();
@@ -267,7 +268,95 @@ function bmStRender(){
   bmStNode(gN,BMST_MASTER.x,BMST_MASTER.y,t.master,gold,STARS>=5?"fixed":"locked",null,{star:5,where:"Vast (geen keuze)"});
   bmStNode(gN,BMST_ROOT.x,BMST_ROOT.y,t.root,t.color||"#2e6fb0","fixed",null,{star:0,where:"Klasse"});
   bmStRenderStatus(STARS);
+  bmStActionsRender();
   if(BM_ST_HOVER){ const g=svg.querySelector('g.bmst-node[data-key="'+CSS.escape(BM_ST_HOVER)+'"]'); if(g&&g._tip) g._tip(); else bmStHideTip(); }
+}
+/* ---- Acties in het gevecht (onder de boom) ----
+   Per vaardigheid de waarden mét de nu geldende keuzes doorgerekend (vaste
+   bonussen in het getal, voorwaardelijke als regel eronder). Spiegelt
+   bmCalcAbilityEffect/bmGetAbilityCost (battle.js) + bmStApplyEffect/bmStCost
+   (skilltree-engine.js); situaties die van de ronde afhangen (snel antwoord,
+   achterstand, merkteken, …) staan als tekst, niet in het getal. */
+const BMST_SHIELD_T=["team_shield","testudo","attack_and_defend","shield_and_heal"];
+const BMST_HEAL_T=["heal","heal_and_attack","shield_and_heal","testudo"];
+const BMST_REM_T=["shield_remove","attack_and_shld_remove","attack_siege"];
+function bmStAbilityStats(cls,abl,stars,pay){
+  const pas=cls.passive||{}, master=stars>=5, pv=master&&pas.masterVal!=null?pas.masterVal:(pas.val||0);
+  const t=abl.type, isDmg=BM_DMG_TYPES.includes(t);
+  const b={dmg:0,heal:0,shld:0,teamBE:0,shldRemove:0,selfBE:0,cost:abl.cost||0};
+  if(isDmg){ b.dmg=abl.dmg||0; if(pas.type==="atk_flat") b.dmg+=pv; if(pas.type==="atk_bonus") b.dmg=Math.round(b.dmg*(1+pv)); if(pas.type==="shld_pierce") b.shldRemove+=pv; }
+  if(BMST_SHIELD_T.includes(t)) b.shld=abl.shld||0;
+  if(BMST_HEAL_T.includes(t)){ b.heal=abl.heal||0; if(pas.type==="heal_flat") b.heal+=pv; }
+  if(["team_be","testudo"].includes(t)) b.teamBE=abl.teamBE||0;
+  if(BMST_REM_T.includes(t)) b.shldRemove+=abl.shldRemove||0;
+  if(abl.selfBE) b.selfBE+=abl.selfBE;
+  if(["team_shield","testudo"].includes(t)&&pas.type==="be_on_defend") b.selfBE+=pv;
+  if(pas.type==="cost_reduce"&&(master&&pas.masterTiers||["basic"]).includes(abl.tier)) b.cost=Math.max(1,b.cost-pv);
+  const n={...b}, nodes=pay?pay.nodes:[], has=id=>nodes.includes(id), N=id=>BM_ST_NODE[cls.id]?.[id];
+  const mods=nodes.map(N).filter(x=>x&&x.fx&&x.fx.type==="ability_mod"&&(x.fx.ability===abl.id||(x.fx.abilities||[]).includes(abl.id)));
+  const sum=k=>mods.reduce((s,x)=>s+(typeof x.fx[k]==="number"?x.fx[k]:0),0);
+  n.dmg+=sum("dmg"); n.heal+=sum("heal"); n.shld+=sum("shld"); n.teamBE+=sum("teamBE"); n.shldRemove+=sum("shldRemove"); n.cost+=sum("cost");
+  if(isDmg&&!abl.aoe&&n.dmg>0&&has("vaste_hand")) n.dmg+=1;
+  if(has("ondermijnen")&&["verkenning","sabotage","ontwapenen"].includes(abl.id)) n.dmg+=3;
+  if(isDmg&&n.dmg>0&&has("levensroof")) n.heal+=has("dorst")?2:1;
+  if(n.heal>0&&has("epidauros")) n.heal+=1;
+  for(const id of nodes){ const f=N(id)?.fx; if(!f) continue;
+    if(f.type==="shield_per_ally_counts_basic"&&f.ability===abl.id&&f.cost) n.cost+=f.cost;
+    if(f.type==="sabotage_layers"&&abl.id==="sabotage"&&f.sabotageCost) n.cost+=f.sabotageCost; }
+  if(b.cost>0) n.cost=Math.max(1,n.cost);
+  const bypass=t==="attack_bypass"||!!abl.bypass||mods.some(x=>x.fx.bypass);
+  // knooppunten die deze actie in de ronde zelf nog extra kunnen geven
+  const extra=mods.slice();
+  const cond={vaste_hand:isDmg&&!abl.aoe,levensroof:isDmg,dorst:isDmg,epidauros:n.heal>0,ondermijnen:["verkenning","sabotage","ontwapenen"].includes(abl.id)};
+  for(const id of Object.keys(cond)) if(cond[id]&&has(id)&&!extra.includes(N(id))) extra.push(N(id));
+  // overige knooppunten die over precies deze vaardigheid gaan (Meesterschutter, Moreel, Woudgeest, …)
+  for(const id of nodes){ const x=N(id), f=x?.fx; if(!f||extra.includes(x)) continue;
+    if(f.ability===abl.id||(f.abilities||[]).includes(abl.id)
+      ||(f.type==="weakspot_threshold"&&t==="attack_weakspot")
+      ||(/^hard_word_curse_bonus/.test(f.type)&&abl.id==="vloek")) extra.push(x); }
+  return {b,n,bypass,aoe:!!abl.aoe,mods:extra};
+}
+function bmStActionsRender(){
+  const box=document.getElementById("bmStActions"); if(!box) return;
+  const t=BM_SKILLTREES[BM_ST_CLASS], cls=BM_CLASSES.find(c=>c.id===BM_ST_CLASS); if(!t||!cls){ box.innerHTML=""; return; }
+  const stars=bmStStars(BM_ST_CLASS), eff=bmStEffectivePicks(BM_ST_CLASS,BM_ST_PICKS,stars);
+  const pay=(typeof bmStPayloadFor==="function"&&bmStPayloadFor(BM_ST_CLASS,BM_ST_PICKS,stars))||{nodes:[],prestige:null};
+  const ico=n=>n&&n.icon&&BM_ST_IMG_OK[n.icon]?`<img class="bmst-ai" src="assets/skills/${n.icon}" alt="">`:`<span class="bmst-ai g">${esc(n?.glyph||"◆")}</span>`;
+  const chips=s=>{ const out=[], d=(k)=>s.n[k]-s.b[k], up=k=>d(k)>0?` <i>+${d(k)}</i>`:d(k)<0?` <i class="dn">${d(k)}</i>`:"";
+    if(s.n.dmg) out.push(`<span class="bmst-c dmg" title="Schade">⚔ ${s.n.dmg}${s.aoe?" <small>elk</small>":""}${up("dmg")}</span>`);
+    if(s.n.heal) out.push(`<span class="bmst-c heal" title="Heling van je leger">✚ ${s.n.heal}${up("heal")}</span>`);
+    if(s.n.shld) out.push(`<span class="bmst-c shld" title="Schild voor je team">🛡 ${s.n.shld}${up("shld")}</span>`);
+    if(s.n.teamBE) out.push(`<span class="bmst-c be" title="AP voor elke teamgenoot">+${s.n.teamBE} AP team${up("teamBE")}</span>`);
+    if(s.n.selfBE) out.push(`<span class="bmst-c be" title="AP voor jezelf">+${s.n.selfBE} AP zelf${up("selfBE")}</span>`);
+    if(s.n.shldRemove) out.push(`<span class="bmst-c rem" title="Haalt vijandelijk schild weg">schild −${s.n.shldRemove}${up("shldRemove")}</span>`);
+    if(s.bypass) out.push(`<span class="bmst-c rem" title="Gaat door het vijandelijk schild heen">omzeilt schild</span>`);
+    if(s.aoe) out.push(`<span class="bmst-c" title="Raakt alle doelen">alle doelen</span>`);
+    return out.join(""); };
+  const tierNm={basic:"Basis",medium:"Gevorderd",legendary:"Legendarisch",prestige:"Prestige"};
+  const card=(abl,extraCls)=>{ const s=bmStAbilityStats(cls,abl,stars,pay), dc=s.n.cost-s.b.cost;
+    return `<div class="bmst-act ${abl.tier||""} ${extraCls||""}">
+      <div class="bmst-ah"><b>${esc(abl.nm)}</b><span class="bmst-tier">${tierNm[abl.tier]||""}</span>
+        <span class="bmst-cost" title="Kosten in AP">${dc?`<s>${s.b.cost}</s> `:""}${s.n.cost} AP</span></div>
+      <div class="bmst-ad">${esc(abl.desc||"")}</div>
+      <div class="bmst-cs">${chips(s)||'<span class="note">—</span>'}</div>
+      ${s.mods.length?`<div class="bmst-mods">${s.mods.map(n=>`<div>${ico(n)}<span><b>${esc(n.nm)}</b> · ${esc(n.desc)}</span></div>`).join("")}</div>`:""}
+    </div>`; };
+  const list=cls.abilities.filter(a=>a.tier!=="prestige");
+  const pres=pay.prestige?bmStPrestigeAbility(BM_ST_CLASS,pay.prestige):null;
+  const presCard=pres?card(pres,"pres")
+    :`<div class="bmst-act prestige locked"><div class="bmst-ah"><b>Prestige-vaardigheid</b><span class="bmst-tier">★10</span></div>
+       <div class="bmst-ad">${stars>=10?"Kies je prestige bovenin de boom":"Vrij bij ★10"}: ${t.prestige.map(v=>`<b>${esc(v.nm)}</b> (${v.cost} AP)`).join(" of ")}.</div></div>`;
+  // overige gekozen knooppunten: werken bij elke (passende) actie of in de ronde zelf
+  const used=new Set(); list.concat(pres?[pres]:[]).forEach(a=>bmStAbilityStats(cls,a,stars,pay).mods.forEach(n=>used.add(n.id)));
+  const other=pay.nodes.map(id=>BM_ST_NODE[BM_ST_CLASS]?.[id]).filter(n=>n&&!used.has(n.id));
+  const pas=cls.passive||{}, master=stars>=5;
+  box.innerHTML=`<h3 class="bmst-h">⚔ Acties in het gevecht</h3>
+    <div class="note" style="margin:-4px 0 10px">Met je huidige keuzes doorgerekend (${bmStars(stars)}). Een groen getal is je bonus uit de boom; wat van de ronde afhangt staat eronder.</div>
+    <div class="bmst-pas">${ico(t.root)}<span><b>Passief${master?" (meester)":""}</b> · ${esc(master&&pas.masterDesc?pas.masterDesc:pas.desc||"")}${!master&&pas.masterDesc?` <span class="note">— bij ★5: ${esc(pas.masterDesc)}</span>`:""}</span></div>
+    <div class="bmst-acts">${list.map(a=>card(a)).join("")}${presCard}</div>
+    ${other.length?`<h4 class="bmst-h4">Altijd actief uit je boom</h4><div class="bmst-mods wide">${other.map(n=>`<div>${ico(n)}<span><b>${esc(n.nm)}</b> · ${esc(n.desc)}</span></div>`).join("")}</div>`
+      :`<div class="note" style="margin-top:8px">${Object.keys(eff).length?"":"Nog geen keuzes gemaakt — kies in de boom en zie hier direct wat het doet."}</div>`}
+    <div class="note" style="margin-top:10px">Altijd beschikbaar (0 AP): ${BM_BASIC_ACTIONS.filter(a=>!a.bossMealOnly).map(a=>`<b>${esc(a.nm)}</b> (${esc(a.desc)})`).join(" · ")}.</div>`;
 }
 function bmStCleanAfterPathChange(){
   const p=bmStPath(), t=BM_SKILLTREES[BM_ST_CLASS];
@@ -318,6 +407,26 @@ function bmStInjectStyle(){
 .bmst-tip{position:absolute;z-index:5;max-width:260px;pointer-events:none;background:rgba(18,13,9,.97);border:1px solid var(--tipc,#d4af37);border-radius:10px;padding:8px 11px;box-shadow:0 6px 20px rgba(0,0,0,.6);font-size:14px;line-height:1.35;opacity:0;transition:opacity .12s}
 .bmst-tip.on{opacity:1}.bmst-tip b{color:var(--tipc,#d4af37);font-size:15px}
 .bmst-tip .st{display:block;color:var(--muted2);font-size:12px;margin:1px 0 4px}
-.bmst-tip .lk{display:block;color:var(--muted);font-size:12px;margin-top:4px;font-style:italic}`;
+.bmst-tip .lk{display:block;color:var(--muted);font-size:12px;margin-top:4px;font-style:italic}
+.bmst-actbox{margin-bottom:16px}
+.bmst-h{margin:0 0 6px;color:var(--hi)}.bmst-h4{margin:14px 0 6px;color:var(--hi);font-size:15px}
+.bmst-pas{display:flex;gap:8px;align-items:center;margin:0 0 10px;font-size:14px}
+.bmst-acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.bmst-act{background:rgba(0,0,0,.3);border:1px solid var(--stone4);border-radius:10px;padding:9px 11px;font-size:14px;line-height:1.35}
+.bmst-act.legendary{border-color:#8a6a2a}.bmst-act.prestige{border-color:#d4af37;box-shadow:0 0 12px rgba(212,175,55,.18)}
+.bmst-act.locked{opacity:.6}
+.bmst-ah{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}.bmst-ah b{color:#f3e9d2;font-size:15px}
+.bmst-tier{font-size:11px;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em}
+.bmst-cost{margin-left:auto;font-weight:700;color:#d4af37;white-space:nowrap}.bmst-cost s{color:var(--muted2);font-weight:400}
+.bmst-ad{color:var(--muted);font-size:13px;margin:3px 0 6px}
+.bmst-cs{display:flex;flex-wrap:wrap;gap:5px}
+.bmst-c{padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--stone4);font-size:13px;white-space:nowrap}
+.bmst-c i{font-style:normal;color:#7fd28a;font-weight:700}.bmst-c i.dn{color:#e08a7a}.bmst-c small{opacity:.7}
+.bmst-c.dmg{border-color:#8a4a3a}.bmst-c.heal{border-color:#3f7d52}.bmst-c.shld{border-color:#3f6a8d}.bmst-c.be{border-color:#8a7a3a}.bmst-c.rem{border-color:#6a4a8a}
+.bmst-mods{margin-top:7px;display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted)}
+.bmst-mods>div{display:flex;gap:7px;align-items:flex-start}.bmst-mods b{color:#e8dcc0}
+.bmst-mods.wide{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px 12px;font-size:13px}
+.bmst-ai{width:24px;height:24px;flex:none;border-radius:5px;image-rendering:pixelated}
+.bmst-ai.g{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.07);font-size:13px}`;
   document.head.appendChild(s);
 }
