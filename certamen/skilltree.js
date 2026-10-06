@@ -3,9 +3,10 @@
    ----------------------------------------------------------------------------
    Data: skilltree-data.js (BM_SKILLTREES). Ontwerp + balans: zie het
    commentaarblok daar en certamen/tools/skilltree-balance.js.
-   - Aan/uit: config/skillTrees/enabled (alleen een beheerder mag schrijven,
-     iedereen mag lezen — database.rules.json). Staat het uit, dan ziet alleen
-     een ingelogde beheerder de skill-trees (om te testen); leerlingen niet.
+   - Aan/uit: standaard AAN (live sinds 2026-10-06). config/skillTrees/enabled
+     (alleen een beheerder mag schrijven, iedereen mag lezen — database.rules.json)
+     is alleen nog een noodrem: alleen enabled:false zet ze uit. Staan ze uit,
+     dan ziet alleen een ingelogde beheerder de skill-trees; leerlingen niet.
    - Keuzes per klasse: identities/{klas}/{lid}/skillTrees/{cls}/picks
      ({1:"A",…,4:"B", 6:"<node-id>",…,9:…, 10:"<prestige-id>"}), lokaal gespiegeld
      in BM_IDENT.skillTrees. Respec is gratis, maar niet tijdens een lopend gevecht.
@@ -16,7 +17,7 @@
 // Zolang de effecten nog niet in de gevechtsengine zitten, kan de beheerder de
 // skill-trees wel bekijken maar niet aanzetten voor leerlingen.
 const BM_ST_ENGINE_READY=true;
-let BM_ST_ENABLED=null;          // null = nog niet geladen
+let BM_ST_ENABLED=true;          // standaard AAN (live sinds 2026-10-06); config/skillTrees/enabled=false is de noodrem
 let BM_ST_ADMIN=false;           // ingelogde beheerder: mag ook kijken als het uit staat
 let BM_ST_CLASS="hopliet";
 let BM_ST_RETURN="battleProfile";
@@ -28,10 +29,11 @@ let BM_ST_HOVER=null;
 /* ---- aan/uit ---- */
 async function bmSkillTreesLoadFlag(){
   try{
-    if(!fbDB && !(typeof initFirebase==="function" && initFirebase())){ BM_ST_ENABLED=false; return false; }
+    if(!fbDB && !(typeof initFirebase==="function" && initFirebase())) return BM_ST_ENABLED;
     const v=(await fbDB.ref("config/skillTrees").once("value")).val();
-    BM_ST_ENABLED=!!(v&&v.enabled);
-  }catch(e){ BM_ST_ENABLED=false; }
+    // alleen een expliciete enabled:false zet ze uit; ontbreekt de instelling, dan aan
+    BM_ST_ENABLED=!(v&&v.enabled===false);
+  }catch(e){ /* niet te lezen → laten zoals het is (aan) */ }
   try{
     if(typeof teacherNet==="function" && teacherNet().isTeacherLoggedIn()) BM_ST_ADMIN=!!(await teacherNet().isAdmin());
   }catch(e){}
@@ -47,6 +49,11 @@ async function bmSkillTreesSetEnabled(on){
 /* ---- opslag ---- */
 function bmStStars(cls){ return (typeof bmCalcMastery==="function")?bmCalcMastery(BM_IDENT?.classHistory?.[cls]):0; }
 function bmStLoadPicks(cls){ return {...((BM_IDENT?.skillTrees||{})[cls]?.picks||{})}; }
+// Aantal keuzes dat met de huidige sterren open staat (lobby-knop, statusregel).
+function bmStOpenCount(cls,picks,stars){
+  const eff=bmStEffectivePicks(cls,picks||{},stars||0), path=skilltreePathOf(eff);
+  return [1,2,3,4,6,7,8,9,10].filter(s=>s<=(stars||0)&&!eff[s]&&!(s>=6&&!path)).length;
+}
 // Keuzes die (nog) niet mogen gelden niet meetellen: te weinig sterren, of niet
 // op het huidige pad. Gebruikt door het scherm én (later) door de engine.
 function bmStEffectivePicks(cls,picks,stars){

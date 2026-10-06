@@ -4686,7 +4686,9 @@ SCREENS.battlePlayerLobby = function(){
               // anders kies je meteen ook de klasse. Toont het gekozen pad als dat er is.
               const pk=(BM_IDENT?.skillTrees||{})[c.id]?.picks||{}, pth=skilltreePathOf(bmStEffectivePicks(c.id,pk,ms));
               const nm=pth?BM_SKILLTREES[c.id].paths[pth].nm:"";
-              return `<span class="chip" role="button" tabindex="0" style="margin-top:6px;display:inline-block;font-size:12px" onclick="event.stopPropagation();bmOpenSkillTree('${c.id}','battlePlayerLobby')">🌳 Skill-tree${nm?" · "+esc(nm):""}</span>`;
+              // open keuzes opvallend tonen: zonder keuzes levert je boom nog niets op
+              const open=typeof bmStOpenCount==="function"?bmStOpenCount(c.id,pk,ms):0;
+              return `<span class="chip" role="button" tabindex="0" style="margin-top:6px;display:inline-block;font-size:12px${open?";border-color:#d4af37;color:#f3e9d2;background:rgba(212,175,55,.18)":""}" onclick="event.stopPropagation();bmOpenSkillTree('${c.id}','battlePlayerLobby')">🌳 Skill-tree${nm?" · "+esc(nm):""}${open?` · <b>${open} keuze${open===1?"":"s"} open</b>`:""}</span>`;
             })():""}
           </div>
           ${sel?`<span style="font-size:20px;align-self:center">✅</span>`:""}
