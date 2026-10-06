@@ -253,7 +253,10 @@ function bmStRender(){
   ["A","H","B"].forEach(k=>{
     [6,7,8,9].forEach(s=>{
       skilltreeOptionsFor(t,k,s).forEach((n,i)=>{
-        const x=BMST_BRX[k]+(i===0?-BMST_BRDX:BMST_BRDX), y=BMST_YP[s], chosen=p===k&&P[s]===n.id;
+        // De "a"-optie (die ook in het hybride pad staat) staat steeds aan de
+        // binnenkant, naast de middelste kolom: links dus rechts, rechts links.
+        const inner=i===0, dx=(k==="A"?(inner?1:-1):(inner?-1:1))*BMST_BRDX;
+        const x=BMST_BRX[k]+dx, y=BMST_YP[s], chosen=p===k&&P[s]===n.id;
         bmStLine(gL,BMST_BRX[k],y,x,y,colOf(k),chosen);
         let state="closed"; if(s>STARS) state="locked"; else if(p===k) state=chosen?"chosen":"open";
         const c=k==="H"?(i===0?colOf("A"):colOf("B")):colOf(k);
