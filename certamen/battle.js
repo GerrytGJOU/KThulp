@@ -3075,6 +3075,15 @@ function bmContribCompare(a,b){
 // Eén poppetje op een rasterplek. --gl = laan-index (breedte), --d = diepte
 // vanaf de voorste rij (0 = vooraan); de CSS in index.html vertaalt dat naar
 // links/rechts, hoogte, schaal en z-volgorde.
+// Sterren in de gekozen klasse, klein onder de klassenaam op het slagveld
+// (alleen gevulde sterren; paars = prestige boven ★5). clsStars komt mee bij
+// de klassekeuze (bmPickClass); oudere spelers: stStars.
+function bmAvStarsHTML(p){
+  const n=p&&(p.clsStars??p.stStars);
+  if(typeof n!=="number"||n<=0) return "";
+  const pr=Math.max(0,n-5), k=Math.min(n,5);
+  return `<div class="avnst" title="★${n}">${Array.from({length:k},(_,i)=>`<span${i<pr?' class="pr"':""}>★</span>`).join("")}</div>`;
+}
 function bmSlotAvHTML(pid,p,round,gl,d){
   const hasAnswered=p.answeredRound===round.n;
   const hasLocked=!!p.lockedAction;
@@ -3089,6 +3098,7 @@ function bmSlotAvHTML(pid,p,round,gl,d){
       <div class="bm-dot ${dotCls}"></div>
       <div class="avn">${esc(p.name)}</div>
       <div class="avncls">${esc(bmClsNmThemed(p.class||""))}</div>
+      ${bmAvStarsHTML(p)}
       ${bmHeroHpHTML(p)}
     </div>`;
 }
@@ -3168,6 +3178,7 @@ function bmSoloFieldHTML(){
       <div class="bm-dot ${dotCls}"></div>
       <div class="avn">${esc(p.name)}</div>
       <div class="avncls">${esc(bmClsNmThemed(p.class||""))}</div>
+      ${bmAvStarsHTML(p)}
       ${bmHeroHpHTML(p)}
     </div>`;
 }
