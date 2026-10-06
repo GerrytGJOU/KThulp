@@ -862,6 +862,13 @@ function bmRoomWatchStart(code,pid){
     const st=s.val(), wasFirst=first; first=false;
     _bmRoomStatus=st;
     if(st==null){ bmRoomWatchStop(); return; }          // kamer bestaat niet meer
+    // Afgelopen terwijl de leerling elders zat (avatar, profiel, skill-tree):
+    // alsnog naar het resultaatscherm, want daar wordt de XP uitgekeerd
+    // (proefgevecht 2026-10-06: zo liep een leerling zijn XP mis).
+    if(st==="finished"){
+      if(wasFirst||BM_ROOM_SCREENS.includes(_screen)) return;
+      await bmRoomShowResult(code); return;
+    }
     if(st!=="playing") return;
     if(BM_ROOM_SCREENS.includes(_screen)) return;        // die schermen regelen het zelf
     if(wasFirst && _screen==="battleJoin") return;       // bewust op het meedoen-scherm
@@ -869,8 +876,20 @@ function bmRoomWatchStart(code,pid){
   });
   BM_ROOM_WATCH={code,pid,off:()=>r.off("value",f)};
 }
-async function bmRoomPullIn(){
-  // Open avatar-ontwerp niet kwijtraken: bewaren zonder van scherm te wisselen.
+async function bmRoomShowResult(code){
+  bmRoomSaveDrafts();
+  try{
+    const[ws,ts]=await Promise.all([
+      fbDB.ref("rooms/"+code+"/state/winner").once("value"),
+      fbDB.ref("rooms/"+code+"/state/timedOut").once("value")]);
+    BM_STATE={...(BM_STATE||{}),status:"finished",winner:ws.val(),timedOut:!!ts.val()};
+  }catch(e){ BM_STATE={...(BM_STATE||{}),status:"finished"}; }
+  if(typeof cleanup==="function") cleanup();
+  go("battleResult");
+  toast("Het gevecht is afgelopen","Hier zie je je resultaat en verdiende XP.");
+}
+// Open avatar-ontwerp en skill-tree bewaren voordat de wachter van scherm wisselt.
+function bmRoomSaveDrafts(){
   if(_screen==="battleAvatarEdit"&&BM_AV_EDIT&&BM_IDENT){
     try{
       const{klascode:klas,leerlingcode:lcode}=BM_IDENT;
@@ -881,6 +900,9 @@ async function bmRoomPullIn(){
     BM_AV_EDIT=null;
   }
   if(typeof bmSkillTreeAutoSave==="function") bmSkillTreeAutoSave();
+}
+async function bmRoomPullIn(){
+  bmRoomSaveDrafts();
   const ok=await bmRejoin();
   if(ok) toast("Het gevecht begint!","Je bent teruggezet in het gevecht.");
 }
