@@ -801,10 +801,13 @@ SCREENS.collection = function(){
     const bmAchs=bmIdent.achievements||[];
     const masteryGrid=BM_CLASSES.map(c=>{
       const ms=bmCalcMastery(bmIdent.classHistory?.[c.id]);
-      return `<div style="background:${c.color}18;border:1px solid ${c.color}44;border-radius:10px;padding:8px 4px;text-align:center">
+      // Zelfde klikbare skill-tree-tegel als op het Battle Mode-profiel (battle.js: battleProfile).
+      const st=(typeof bmSkillTreesVisible==="function"&&bmSkillTreesVisible());
+      return `<div ${st?`role="button" tabindex="0" onclick="bmOpenSkillTree('${c.id}','collection')" title="Skill-tree van ${esc(c.nm)}"`:""} style="background:${c.color}18;border:1px solid ${c.color}44;border-radius:10px;padding:8px 4px;text-align:center${st?";cursor:pointer":""}">
         ${iconSVG(c.icon,20,c.color)}
         <div style="font-size:9px;color:var(--muted);margin:2px 0">${esc(c.nm)}</div>
         <div style="line-height:1;font-size:13px">${bmStars(ms)}</div>
+        ${st?`<div style="font-size:9px;color:var(--hi);margin-top:2px">🌳 skill-tree</div>`:""}
       </div>`;
     }).join("");
     const bmAchItems=ACHIEVEMENTS_DEF.filter(a=>a.mode==="battle"||["eerste_gevecht","overwinnaar","scholar","onbreekbaar","strateeg","commandant","combokunstenaar","legendarisch"].includes(a.id));
