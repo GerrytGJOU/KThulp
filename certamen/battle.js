@@ -1976,7 +1976,7 @@ async function bmStartBossGame(){
   // vóór newHB wordt verrekend, en bmBossResolveTick() (bossbattle.js)
   // voor de Enrage-omschakeling zodra het doorbroken is.
   // startedAt: voor de speeltijd in de Hall of Fame (bmBossHofRecord, bossbattle.js).
-  const bossInit={phase:1,rage:0,roundsSinceAttack:0,stage:stageIdx,startedAt:Date.now()};
+  const bossInit={phase:1,rage:0,roundsSinceAttack:0,stage:stageIdx,startedAt:Date.now(),scaledN:N};
   if(starScale>1) bossInit.starScale=starScale;
   if(BM_META.bossId==="minotaur") bossInit.labyrinthShield=Math.round(0.30*bossMaxHP);
   await fbDB.ref("rooms/"+BM_CODE+"/boss").set(bossInit);
@@ -3467,7 +3467,7 @@ function bmGeenUndefined(v){
       legers evenredig bijgesteld: de gezondheid-percentages blijven staan, alleen
       de schaal verandert — zo blijft het gevecht voor beide teams even lang. */
 async function bmHostBalanceLate(players){
-  if(BM_META?.mode==="boss") return;
+  if(BM_META?.mode==="boss"){ await bmHostBalanceLateBoss(players); return; }
   const all=Object.values(players);
   let cA=all.filter(p=>p.team==="A").length, cB=all.filter(p=>p.team==="B").length;
   const up={}, moved=[];
@@ -3488,6 +3488,33 @@ async function bmHostBalanceLate(players){
     {"A/health":nA.health,"A/maxHealth":nA.maxHealth,"B/health":nB.health,"B/maxHealth":nB.maxHealth});
   BM_TEAMS={...BM_TEAMS,A:{...tA,...nA},B:{...tB,...nB}};
   toast("Teams in balans",(moved.length?moved.join(", ")+" ingedeeld. ":"")+"Legersterkte aangepast aan het aantal spelers.");
+}
+
+// Boss Battle: iedereen zit in team A (bmDoJoin), dus alleen de schaal hoeft mee te
+// bewegen. Klas-HP en baas-HP zijn bij de start lineair in het spelersaantal N
+// (zie bmStartBossGame); `boss.scaledN` onthoudt voor welk N dat gold, en bij een
+// ander aantal worden beide max-HP's (en het Labyrinth-schild van de Minotaurus)
+// met N/scaledN vermenigvuldigd — het gezondheid-percentage blijft staan.
+async function bmHostBalanceLateBoss(players){
+  const N=Object.keys(players).length;
+  const n0=BM_BOSS?.scaledN;
+  const rec=async()=>{ await fbDB.ref("rooms/"+BM_CODE+"/boss").update({scaledN:N}); BM_BOSS={...(BM_BOSS||{}),scaledN:N}; };
+  const tA=BM_TEAMS?.A, tB=BM_TEAMS?.B;
+  if(!BM_BOSS||!tA||!tB||!tA.maxHealth||!tB.maxHealth||!N){ return; }
+  if(!n0){ await rec(); return; }        // gevecht van vóór deze regel: vanaf nu bijhouden
+  if(n0===N) return;
+  const r=N/n0;
+  const sc=t=>{ const max=Math.max(1,Math.round(t.maxHealth*r));
+    return {maxHealth:max,health:Math.max(0,Math.min(max,Math.round((t.health||0)/t.maxHealth*max)))}; };
+  const nA=sc(tA), nB=sc(tB);
+  await fbDB.ref("rooms/"+BM_CODE+"/teams").update(
+    {"A/health":nA.health,"A/maxHealth":nA.maxHealth,"B/health":nB.health,"B/maxHealth":nB.maxHealth});
+  BM_TEAMS={...BM_TEAMS,A:{...tA,...nA},B:{...tB,...nB}};
+  const bu={scaledN:N};
+  if(BM_BOSS.labyrinthShield>0) bu.labyrinthShield=Math.max(1,Math.round(BM_BOSS.labyrinthShield*r));
+  await fbDB.ref("rooms/"+BM_CODE+"/boss").update(bu);
+  BM_BOSS={...BM_BOSS,...bu};
+  toast("Klas en baas in balans","Sterkte aangepast aan het nieuwe aantal spelers ("+N+").");
 }
 
 async function bmResolve(roundN){
