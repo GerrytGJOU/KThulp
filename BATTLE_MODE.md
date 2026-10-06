@@ -1095,6 +1095,11 @@ op een tablet is dat nog steeds de enige weg.
   leerling die te laat is of eruit vloog alsnog kan instappen. `bmDoJoin()` stond dat al
   toe (late join → kleinste team, huidige ronde overslaan); alleen was de code nergens
   meer te zien zodra het gevecht liep.
+- **Late instappers in balans** (`bmHostBalanceLate()`, begin van elke `bmResolve()`): een speler
+  zonder team komt in het team met de minste leden (gelijk aantal → team A; Boss Battle blijft
+  altijd team A). Daarna wordt de legersterkte opnieuw met `bmTeamHP()` berekend en de HP van
+  beide legers evenredig bijgesteld (gezondheid-percentage blijft staan, alleen de schaal
+  verandert). De host krijgt een toast "Teams in balans".
 - **Statuspunt** (`.bm-pdot`): groen = antwoord gegeven · goud = actie vergrendeld · grijs = wacht
 - **Participatiebalk**: visuele voortgangsbalk + "X/Y (Z%)" teller
 - **Controlepaneel** (host-only):
