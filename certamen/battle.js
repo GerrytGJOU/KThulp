@@ -1239,6 +1239,9 @@ SCREENS.battleFAQ = function(){
         <b>hybride</b> pad. ★5 is je meesterbonus, ★6 t/m ★9 zijn keuzes binnen je pad, en bij ★10 kies je je
         <b>prestige-vaardigheid</b>.</li>
       <li><b>Gratis opnieuw kiezen</b> mag altijd tussen gevechten, nooit tijdens een gevecht.</li>
+      <li>Onder elke boom staat <b>Acties in het gevecht</b>: al je vaardigheden met kosten, schade, heling en
+        schild, al doorgerekend met je huidige keuzes (een groen getal is je bonus uit de boom). Wat van de
+        ronde afhangt (snel antwoord, achterstand, merkteken …) staat eronder uitgelegd.</li>
       <li>Met skill-trees vervalt de oude ★3-bonus (+1 AP per ronde): je boom vervangt die.</li>
       <li>Sommige paden zijn sterk tegen bazen, andere in een gevecht tegen een ander team, en een team van
         alleen dezelfde klasse heeft het moeilijk. Het loont dus om verschillende klassen te trainen.</li>

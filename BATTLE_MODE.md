@@ -1029,6 +1029,11 @@ meedoen. Alles volgt de docent-schakelaar `masteryBonuses`.
   schakelaar `config/skillTrees/enabled` (rules: iedereen leest, alleen admin
   schrijft). Toegang: Mijn profiel (Class Mastery-tegels) en de knop
   "🌳 Skill-tree" per klasse in de lobby.
+  Onder de boom: "Acties in het gevecht" (`bmStActionsRender`/`bmStAbilityStats`)
+  — alle vaardigheden met de vaste boombonussen in het getal doorgerekend
+  (spiegelt `bmCalcAbilityEffect`/`bmGetAbilityCost` + `bmStApplyEffect`/
+  `bmStCost`); voorwaardelijke knooppunten als regel per kaart, de rest onder
+  "Altijd actief uit je boom". Pas dit mee aan bij nieuwe ability_mod-velden.
 - `skilltree-engine.js` — effecten in het gevecht, alleen actief als de kamer
   met `BM_META.skillTrees` is aangemaakt (gezet in de room-meta zolang de
   schakelaar aanstaat). Aanhaakpunten in `battle.js`: `bmPickClass` (stuurt
