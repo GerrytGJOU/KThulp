@@ -3468,6 +3468,10 @@ async function bmResolve(roundN){
       const abl=(stOn?bmStAbilityList(ablList,p):ablList).find(a=>a.id===action.abilityId)
              || BM_BASIC_ACTIONS.find(a=>a.id===action.abilityId);
       if(!abl)continue;
+      // Een speler zonder (geldig) team kan geen effect hebben: from[undefined].dmg
+      // gooide anders "Cannot read properties of undefined (reading 'dmg')" en
+      // liet de hele ronde vervallen (leerlingfeedback 2026-10-06).
+      if(p.team!=="A"&&p.team!=="B")continue;
       const mt=p.team,et=mt==="A"?"B":"A";
       const fx=bmCalcAbilityEffect(p,cls,abl);
       const stEx=stOn?bmStApplyEffect(p,cls,abl,fx,stCtx):null;
@@ -3821,7 +3825,8 @@ async function bmResolve(roundN){
     // Het bericht meesturen: zonder tekst is er achteraf niets te herleiden —
     // een docent kan de console niet openen midden in een les.
     const msg=(e&&e.message?String(e.message):String(e)).slice(0,120);
-    toast("Ronde overgeslagen","Er ging iets mis bij het verrekenen: "+msg+" — het gevecht gaat door.");
+    const loc=(String(e&&e.stack||"").match(/([\w.-]+\.js):(\d+)/)||[]).slice(1).join(":");
+    toast("Ronde overgeslagen","Er ging iets mis bij het verrekenen: "+msg+(loc?" ["+loc+"]":"")+" — het gevecht gaat door.");
     try{ await bmDistributeQs(roundN+1); bmHostStartTimer(); }catch(e2){ console.error("bmResolve herstel",e2); }
   }finally{BM_RESOLVING=false;}
 }
