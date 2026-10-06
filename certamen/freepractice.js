@@ -11,7 +11,7 @@
    (dezelfde als het Battle Mode-speler-vraagscherm).
    ============================================================================ */
 
-let FP_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all", customText:"", vf:vfqDefaultDraft("la") };
+let FP_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all", customText:"", vf:vfqDefaultDraft("la"), cq:cqDefaultDraft("la") };
 let FP_POOL = [];
 let FP_Q = null;
 let FP_STATS = { correct:0, wrong:0, xp:0, coins:0 };
@@ -34,9 +34,10 @@ SCREENS.freePractice = function(){
   <div class="panel">
     <label class="fld">Bron</label>
     <div class="chips">
+      <button class="chip ${FP_DRAFT.source==='verbforms'?'on':''}" onclick="FP_DRAFT.source='verbforms';SCREENS.freePractice()">Werkwoorden</button>
+      <button class="chip ${FP_DRAFT.source==='naamvallen'?'on':''}" onclick="FP_DRAFT.source='naamvallen';FP_DRAFT.cq=cqFixDraft(FP_DRAFT.cq,FP_DRAFT.lang);SCREENS.freePractice()">Naamvallen</button>
       <button class="chip ${FP_DRAFT.source==='freq'?'on':''}" onclick="FP_DRAFT.source='freq';SCREENS.freePractice()">Frequentielijst</button>
-      <button class="chip ${FP_DRAFT.source==='custom'?'on':''}" onclick="FP_DRAFT.source='custom';SCREENS.freePractice()">Eigen lijst</button>
-      <button class="chip ${FP_DRAFT.source==='verbforms'?'on':''}" onclick="FP_DRAFT.source='verbforms';SCREENS.freePractice()">Werkwoordsvormen</button>
+      <button class="chip ${FP_DRAFT.source==='custom'?'on':''}" onclick="FP_DRAFT.source='custom';SCREENS.freePractice()">Eigen lijsten</button>
     </div>
   </div>
   <div id="fpSrcBody"></div>
@@ -45,12 +46,17 @@ SCREENS.freePractice = function(){
   fpRenderSrcBody();
 };
 
-function fpSetLang(lang){ FP_DRAFT.lang=lang; FP_DRAFT.vf=vfqDefaultDraft(lang); SCREENS.freePractice(); }
+function fpSetLang(lang){ FP_DRAFT.lang=lang; FP_DRAFT.vf=vfqDefaultDraft(lang); FP_DRAFT.cq=cqDefaultDraft(lang); SCREENS.freePractice(); }
 
 function fpRenderSrcBody(){
   const body = el("fpSrcBody"); if(!body) return;
   if(FP_DRAFT.source==="verbforms"){
     body.innerHTML = vfqFilterHTML(FP_DRAFT.vf, FP_DRAFT.lang, "FP_DRAFT.vf", "fpRenderSrcBody()");
+    return;
+  }
+  if(FP_DRAFT.source==="naamvallen"){
+    FP_DRAFT.cq = cqFixDraft(FP_DRAFT.cq, FP_DRAFT.lang);
+    body.innerHTML = cqFilterHTML(FP_DRAFT.cq, FP_DRAFT.lang, "FP_DRAFT.cq", "fpRenderSrcBody()");
     return;
   }
   if(FP_DRAFT.source==="custom"){
@@ -79,9 +85,9 @@ function fpRenderSrcBody(){
 }
 
 function fpStart(){
-  if(FP_DRAFT.source==="verbforms"){
-    FP_POOL = vfqBuildPool(FP_DRAFT.vf, FP_DRAFT.lang);
-    if(FP_POOL.length<25){ toast("Te weinig vormen","Kies meer werkwoorden of tijden (minimaal 25)."); return; }
+  if(srcIsForm(FP_DRAFT.source)){
+    FP_POOL = srcPoolFor(FP_DRAFT);
+    if(FP_POOL.length<25){ toast("Te weinig vormen","Kies meer werkwoorden, naamvallen of tijden (minimaal 25)."); return; }
   } else {
     FP_POOL = buildPool(FP_DRAFT);
     if(FP_POOL.length<25){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort (minimaal 25 woorden)."); return; }
@@ -112,6 +118,21 @@ function fpUpdateStatsBar(){
 
 function fpNextQuestion(){
   const host = el("fpQuestionHost"); if(!host) return;
+  if(FP_DRAFT.source==="naamvallen"){
+    FP_Q = cqMakeQuestion(FP_POOL, "fp");
+    if(FP_Q.mode==="naamval"){
+      cqStart(FP_Q, fpRenderNaamval, fpDoneNaamval);
+      fpRenderNaamval();
+      return;
+    }
+    host.innerHTML = `
+    <div class="qcard"><div class="kick">${FP_Q.taal==="el"?"Grieks":"Latijn"} — kies de juiste vorm</div>
+      <div class="word" style="font-size:20px">${FP_Q.vraag}</div></div>
+    <div class="choices">
+      ${FP_Q.options.map((opt,i)=>`<button class="choice" id="fpC${i}" onclick="fpAnswer(${i})"><span class="n">${i+1}</span>${esc(opt)}</button>`).join("")}
+    </div>`;
+    return;
+  }
   if(FP_DRAFT.source==="verbforms" && FP_DRAFT.vf.mode==="ontleed"){
     vfqOntleedReset();
     FP_Q = vfqMakeOntleedQuestion(FP_POOL, "fp");
@@ -142,6 +163,19 @@ function fpNextQuestion(){
   </div>`;
 }
 
+function fpRenderNaamval(){
+  const host = el("fpQuestionHost"); if(!host || !FP_Q) return;
+  host.innerHTML = cqQuestionHTML(FP_Q);
+}
+function fpDoneNaamval(ok){
+  if(!FP_Q) return;
+  const q = FP_Q; FP_Q = null;
+  hwNote(q, ok);
+  const host = el("fpQuestionHost"); if(!host) return;
+  host.innerHTML = cqResultHTML(q)
+    + `<div class="panel" style="text-align:center;color:${ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${ok?"Goed!":"Fout"}</div>`;
+  fpScoreAnswer(ok, null);
+}
 function fpRenderOntleed(){
   const host = el("fpQuestionHost"); if(!host || !FP_Q) return;
   host.innerHTML = vfqOntleedPickerHTML(FP_Q, "fpRenderOntleed()")

@@ -24,7 +24,7 @@
 /* ---- Lokale oefeninstellingen: BEWUST een eigen object, niet de gedeelde
    DRAFT (die wordt door docent-gehoste spellen gebruikt en zou anders door
    Training Mode overschreven kunnen worden op hetzelfde toestel). ---- */
-let TR_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all", vf:vfqDefaultDraft("la") };
+let TR_DRAFT = { lang:"la", source:"freq", fromN:1, toN:100, cat:"all", vf:vfqDefaultDraft("la"), cq:cqDefaultDraft("la") };
 let TR_TRACK = (function(){ try{ return localStorage.getItem("certamen_training_track")||"militia"; }catch(e){ return "militia"; } })();
 let TR_CIV = null;            // civId van de beschaving van BM_IDENT.klascode
 let TR_OWNED_PROVINCES = [];  // provincies van TR_CIV, met hun huidige puntentellers
@@ -205,12 +205,14 @@ function trRenderModeBody(){
   <div class="panel">
     <label class="fld">Bron</label>
     <div class="chips">
+      <button class="chip ${TR_DRAFT.source==='verbforms'?'on':''}" onclick="TR_DRAFT.source='verbforms';trRenderModeBody()">Werkwoorden</button>
+      <button class="chip ${TR_DRAFT.source==='naamvallen'?'on':''}" onclick="TR_DRAFT.source='naamvallen';TR_DRAFT.cq=cqFixDraft(TR_DRAFT.cq,TR_DRAFT.lang);trRenderModeBody()">Naamvallen</button>
       <button class="chip ${TR_DRAFT.source==='freq'?'on':''}" onclick="TR_DRAFT.source='freq';trRenderModeBody()">Frequentielijst</button>
-      <button class="chip ${TR_DRAFT.source==='custom'?'on':''}" onclick="TR_DRAFT.source='custom';trRenderModeBody()">Eigen lijst</button>
-      <button class="chip ${TR_DRAFT.source==='verbforms'?'on':''}" onclick="TR_DRAFT.source='verbforms';trRenderModeBody()">Werkwoordsvormen</button>
+      <button class="chip ${TR_DRAFT.source==='custom'?'on':''}" onclick="TR_DRAFT.source='custom';trRenderModeBody()">Eigen lijsten</button>
     </div>
   </div>
   ${TR_DRAFT.source==="verbforms" ? vfqFilterHTML(TR_DRAFT.vf, TR_DRAFT.lang, "TR_DRAFT.vf", "trRenderModeBody()")
+  : TR_DRAFT.source==="naamvallen" ? cqFilterHTML((TR_DRAFT.cq=cqFixDraft(TR_DRAFT.cq,TR_DRAFT.lang)), TR_DRAFT.lang, "TR_DRAFT.cq", "trRenderModeBody()")
   : TR_DRAFT.source==="custom" ? wlManagerHTML(TR_DRAFT, "TR_DRAFT", "trRenderModeBody()") : `
   <div class="panel">
     <label class="fld">Frequentiebereik — woord nr.</label>
@@ -234,7 +236,7 @@ function trRenderModeBody(){
   <button class="btn btn-ghost btn-block" style="margin-top:8px" onclick="go('twMyStats')">📊 Mijn statistieken</button>`;
 }
 
-function trSetLang(lang){ TR_DRAFT.lang=lang; TR_DRAFT.vf=vfqDefaultDraft(lang); trRenderModeBody(); }
+function trSetLang(lang){ TR_DRAFT.lang=lang; TR_DRAFT.vf=vfqDefaultDraft(lang); TR_DRAFT.cq=cqDefaultDraft(lang); trRenderModeBody(); }
 
 function trSetTrack(key){
   TR_TRACK=key;
@@ -302,7 +304,7 @@ function trSiegeProgressHTML(p){
 }
 
 async function trStart(){
-  TR_POOL = TR_DRAFT.source==="verbforms" ? vfqBuildPool(TR_DRAFT.vf, TR_DRAFT.lang) : buildPool(TR_DRAFT);
+  TR_POOL = srcPoolFor(TR_DRAFT);
   if(TR_POOL.length<25){ toast("Te weinig woorden","Kies een groter bereik of een andere woordsoort/tijd (minimaal 25 woorden)."); return; }
   TR_STATS = { correct:0, wrong:0, points:0, xp:0 };
   TR_WRONG_COUNTS = {}; // nieuwe sessie, nieuwe pool: geen oude herhaling meenemen
@@ -359,6 +361,21 @@ function trRenderTarget(){
 
 function trNextQuestion(){
   const host = el("trQuestionHost"); if(!host) return;
+  if(TR_DRAFT.source==="naamvallen"){
+    TR_Q = cqMakeQuestion(TR_POOL, "tr");
+    if(TR_Q.mode==="naamval"){
+      cqStart(TR_Q, trRenderNaamval, trDoneNaamval);
+      trRenderNaamval();
+      return;
+    }
+    host.innerHTML = `
+    <div class="qcard"><div class="kick">${TR_Q.taal==="el"?"Grieks":"Latijn"} — kies de juiste vorm</div>
+      <div class="word" style="font-size:20px">${TR_Q.vraag}</div></div>
+    <div class="choices">
+      ${TR_Q.options.map((opt,i)=>`<button class="choice" id="trC${i}" onclick="trAnswer(${i})"><span class="n">${i+1}</span>${esc(opt)}</button>`).join("")}
+    </div>`;
+    return;
+  }
   if(TR_DRAFT.source==="verbforms" && TR_DRAFT.vf.mode==="ontleed"){
     vfqOntleedReset();
     TR_Q = vfqMakeOntleedQuestion(TR_POOL, "tr");
@@ -389,6 +406,19 @@ function trNextQuestion(){
   </div>`;
 }
 
+function trRenderNaamval(){
+  const host = el("trQuestionHost"); if(!host || !TR_Q) return;
+  host.innerHTML = cqQuestionHTML(TR_Q);
+}
+function trDoneNaamval(ok){
+  if(!TR_Q) return;
+  const q = TR_Q; TR_Q = null;
+  hwNote(q, ok);
+  const host = el("trQuestionHost"); if(!host) return;
+  host.innerHTML = cqResultHTML(q)
+    + `<div class="panel" style="text-align:center;color:${ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${ok?"Goed!":"Fout"}</div>`;
+  trScoreAnswer(ok, null);
+}
 function trRenderOntleed(){
   const host = el("trQuestionHost"); if(!host || !TR_Q) return;
   host.innerHTML = vfqOntleedPickerHTML(TR_Q, "trRenderOntleed()")
@@ -421,7 +451,7 @@ function trAnswer(idx){
     else c.classList.add("dim");
     c.disabled=true;
   });
-  trScoreAnswer(ok, ()=>trShowMissHint(q));
+  trScoreAnswer(ok, q.mode==="nvkies" ? null : ()=>trShowMissHint(q));
 }
 
 function trAnswerTyped(){

@@ -114,7 +114,9 @@ const RECENT_Q = {};
 // entries heten .woord). Firebase-veilig, want de sleutel wordt ook gebruikt
 // als pad in identities/{klas}/{lid}/hardWords en rooms/…/players/{pid}/hard.
 function recentKeyOf(w){
-  const k = w.vorm!=null ? "v:"+(w.taal||"")+":"+w.vorm : "w:"+(w.la!=null?w.la:w.woord);
+  // Naamvallen (casusquiz.js): per woord en — bij "kies de vorm"-items — per cel.
+  const k = w.soort==="nv" ? "n:"+(w.taal||"")+":"+w.lemmaId+":"+(w.t==="k"?w.cas+w.num+":":"")+w.vorm
+          : w.vorm!=null ? "v:"+(w.taal||"")+":"+w.vorm : "w:"+(w.la!=null?w.la:w.woord);
   return k.replace(/[.#$\[\]\/]/g,"_").substring(0,80);
 }
 

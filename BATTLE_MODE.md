@@ -1456,3 +1456,13 @@ route per spelmodus nodig.
 ---
 
 *© Gerben de Jong · 2026*
+
+## Woordbronnen (sinds 2026-10-06)
+Bronkeuze (`SCREENS.hostSource`, games.js; zelfde volgorde in Training/Vrij oefenen):
+Werkwoorden — Naamvallen — Frequentielijst Latijn — Frequentielijst Grieks — Eigen lijsten
+(laatste altijd uiterst rechts). Alle bronnen leveren een pool via `srcPoolFor()` (casusquiz.js).
+**Naamvallen** (`certamen/casusquiz.js`, data `casusdata.js` = kopie van de paradigma's uit
+`latijn/casus` en `grieks/casus`): docent kiest taal, declinaties, losse woorden, naamvallen
+(incl. voc; abl alleen Latijn) en vraagvorm: *determineren* (vorm → naamval, dan ev/mv; elke geldige
+combinatie telt goed, `q.mode==="naamval"`), *juiste vorm kiezen* ("Geef de gen. ev. van rex", 4–6 opties,
+`q.mode==="nvkies"`) of gemengd. Wijzig je paradigma's in een Casus Trainer, spiegel ze in `casusdata.js`.

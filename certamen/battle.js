@@ -1089,7 +1089,12 @@ SCREENS.battleFAQ = function(){
     </ol>
     <div class="note" style="margin-top:6px">Dit herhaalt zich tot een leger verslagen is.</div>
     <div class="note" style="margin-top:6px"><b>Woordbron.</b> Bij het instellen van de vraagbron kan de docent
-    kiezen voor de gewone frequentielijst, een eigen lijst, of <b>Werkwoordsvormen</b>: je krijgt dan een
+    kiezen voor <b>Werkwoorden</b>, <b>Naamvallen</b>, een frequentielijst (Latijn of Grieks) of een eigen lijst.
+    Bij <b>Naamvallen</b> (dezelfde paradigma's als de Casus Trainer) kiest de docent de taal, de declinaties, eventueel
+    losse woorden en de naamvallen (ook de vocativus). Je krijgt een vorm te zien (bv. <i>regis</i>) en geeft twee snelle
+    antwoorden achter elkaar: eerst de naamval (Nom/Gen/Dat/Acc/Abl), dan enkelvoud of meervoud. Kan een vorm meerdere dingen
+    zijn, dan telt elk goed antwoord. Of de docent kiest de omgekeerde vraag: "Geef de genitivus enkelvoud van <i>rex</i>" met
+    4–6 vormen om uit te kiezen.<br>Bij <b>Werkwoorden</b> krijg je een
     Latijnse of Griekse werkwoordsvorm te zien (bv. <i>vocat</i>) en moet de juiste Nederlandse vertaling
     kiezen — de afleiders komen altijd uit hetzelfde werkwoord, dus dit toetst echt de vorm, niet de woordenschat.
     De docent kan hier ook kiezen voor een <b>getypte</b> vraag ("geef de vorm van...") in plaats van meerkeuze.</div>
@@ -1651,8 +1656,8 @@ SCREENS.battleHostSettings = function(){
 /* ---- KAMER AANMAKEN ---- */
 async function bmCreateRoom(){
   if(!initFirebase()){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
-  const pool = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang) : buildPool(DRAFT);
-  if(pool.length<25){toast("Te weinig woorden","Kies een groter bereik/meer werkwoorden of tijden (minimaal 25 woorden).");return;}
+  const pool = srcPoolFor(DRAFT);
+  if(pool.length<25){toast("Te weinig woorden","Kies een groter bereik/meer werkwoorden, naamvallen of tijden (minimaal 25 woorden).");return;}
   POOL=pool;
   if(!BM_META)BM_META={};
   const ah=BM_META.armyHealth||100;
@@ -2048,7 +2053,9 @@ async function bmDistributeQs(roundN){
       const hint=bmHardHintFor(qo.hard);
       if(JSON.stringify(hint)!==JSON.stringify(p.hardHint||[])) up["players/"+pid+"/hardHint"]=hint.length?hint:null;
     }
-    const q = BM_META?.source==="verbforms"
+    const q = BM_META?.source==="naamvallen"
+      ? cqMakeQuestion(pool,qo)
+      : BM_META?.source==="verbforms"
       ? (BM_META.vfMode==="typed" ? vfqMakeTypedQuestion(pool,qo) : vfqMakeQuestion(pool,qo))
       : makeQuestion(pool, null, POOL, qo);
     up["players/"+pid+"/currentQ"]=JSON.stringify(q);
@@ -4960,9 +4967,9 @@ function bmPlayerRender(){
       // duidelijke regel erboven. Zonder dit verving deze hertekening de
       // markering meteen door een leeg wachtscherm en wist een leerling niet
       // eens dat hij fout zat.
-      const showFb=BM_MY_Q&&BM_MY_Q._round===round.n&&(BM_MY_PICK!==null||BM_MY_Q.mode==="typed"||BM_MY_Q.mode==="ontleed")&&BM_MY_PICK_ROUND===round.n;
+      const showFb=BM_MY_Q&&BM_MY_Q._round===round.n&&(BM_MY_PICK!==null||BM_MY_Q.mode==="typed"||BM_MY_Q.mode==="ontleed"||BM_MY_Q.mode==="naamval")&&BM_MY_PICK_ROUND===round.n;
       if(showFb){
-        const goed=BM_MY_Q.mode==="typed"?(BM_MY_Q.antwoord||""):BM_MY_Q.mode==="ontleed"?"":(BM_MY_Q.options||[])[BM_MY_Q.correctIdx]||"";
+        const goed=(BM_MY_Q.mode==="typed"||BM_MY_Q.mode==="naamval")?(BM_MY_Q.antwoord||""):BM_MY_Q.mode==="ontleed"?"":(BM_MY_Q.options||[])[BM_MY_Q.correctIdx]||"";
         const pen=(typeof BM_WRONG_BE_PENALTY==="number"?BM_WRONG_BE_PENALTY:2);
         const banner=BM_MY_PICK_OK
           ? `<div class="bm-fb ok">✅ Goed!</div>`
@@ -4970,7 +4977,7 @@ function bmPlayerRender(){
              <span>Je verliest ${pen} AP${BM_MY_BE<2?" en kunt deze ronde niets doen":""}.</span></div>`;
         content=`
         ${banner}
-        ${BM_MY_Q.mode==="ontleed" ? vfqOntleedResultHTML(BM_MY_Q, vfqOntleedGrade(BM_MY_Q)) : `
+        ${BM_MY_Q.mode==="ontleed" ? vfqOntleedResultHTML(BM_MY_Q, vfqOntleedGrade(BM_MY_Q)) : BM_MY_Q.mode==="naamval" ? cqResultHTML(BM_MY_Q) : `
         ${bmQuestionCardHTML(BM_MY_Q)}
         ${BM_MY_Q.mode==="typed" ? "" : `<div class="choices">
           ${(BM_MY_Q.options||[]).map((opt,i)=>{
@@ -4987,10 +4994,13 @@ function bmPlayerRender(){
         if(s.val()){try{
           BM_MY_Q={...JSON.parse(s.val()),_round:round.n};BM_ANSWERED=false;
           if(BM_MY_Q.mode==="ontleed") vfqOntleedReset();
+          if(BM_MY_Q.mode==="naamval") cqStart(BM_MY_Q, bmPlayerRender, bmAnswerNaamval);
           bmPlayerRender();
         }catch(e){}}
       });
       content=`<div class="note" style="text-align:center">Vraag laden…</div>`;
+    } else if(BM_MY_Q.mode==="naamval"){
+      content=cqQuestionHTML(BM_MY_Q);
     } else if(BM_MY_Q.mode==="ontleed"){
       content=vfqOntleedPickerHTML(BM_MY_Q, "bmPlayerRender()")
         + `<button class="btn btn-gold btn-block" style="margin-top:10px"${vfqOntleedComplete(BM_MY_Q)?"":" disabled"} onclick="bmAnswerOntleed()">Controleer</button>`;
@@ -5124,6 +5134,10 @@ function bmQuestionCardHTML(q){
     return `<div class="qcard"><div class="kick">${q.taal==="el"?"Grieks":"Latijn"} — getypte vorm</div>
       <div class="word" style="font-size:20px">${q.vraag}</div></div>`;
   }
+  if(q.mode==="nvkies"){
+    return `<div class="qcard"><div class="kick">${q.taal==="el"?"Grieks":"Latijn"} — kies de juiste vorm</div>
+      <div class="word" style="font-size:20px">${q.vraag}</div></div>`;
+  }
   if(q.mode==="mc"){
     return `<div class="qcard"><div class="kick">Welke vertaling hoort bij deze vorm?</div>
       <div class="word">${esc(q.vorm)}</div></div>`;
@@ -5167,6 +5181,14 @@ function bmAnswerOntleed(){
   const grade=vfqOntleedGrade(BM_MY_Q);
   BM_MY_PICK=null; BM_MY_PICK_OK=grade.ok; BM_MY_PICK_ROUND=BM_STATE.round?.n;
   bmFinishAnswer(grade.ok);
+}
+// Naamval-determineervraag (casusquiz.js): twee stappen (naamval, getal); de
+// laatste stap meldt hier of het geheel goed was. Zelfde afhandeling als de rest.
+function bmAnswerNaamval(ok){
+  if(BM_ANSWERED||!BM_MY_Q)return;
+  BM_MY_PICK=null; BM_MY_PICK_OK=ok; BM_MY_PICK_ROUND=BM_STATE.round?.n;
+  bmFinishAnswer(ok);
+  bmPlayerRender();
 }
 function bmFinishAnswer(ok){
   BM_ANSWERED=true;
