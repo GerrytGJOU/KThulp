@@ -1084,7 +1084,7 @@ SCREENS.battleFAQ = function(){
     gevecht één kiezen — daarna ligt die vast tot het gevecht voorbij is. In de lobby mag je zo vaak
     wisselen als je wilt.</div>
     <div class="note" style="margin-top:6px">Kom je later binnen? Dat kan: de spelcode staat tijdens het gevecht
-    bovenin op het docentscherm. Je doet vanaf de volgende ronde mee. Je deelname- en winstbonus tellen dan
+    bovenin op het docentscherm. Je wordt automatisch ingedeeld bij het team met de minste spelers (bij gelijk aantal: team A), en de legersterkte van beide teams wordt meteen aangepast zodat het eerlijk blijft. Je doet vanaf de volgende ronde mee. Je deelname- en winstbonus tellen dan
     naar rato van het aantal rondes dat je meespeelde — je goede antwoorden leveren gewoon volledig XP op.</div>
     <div class="note" style="margin-top:6px"><b>Je plek op het slagveld.</b> Je klasse bepaalt in welk blok je
     staat: Hopliet, Voorvechter en Bevelvoerder vooraan, Priester, Genie en Cavalerie in het midden,
@@ -3458,6 +3458,38 @@ function bmGeenUndefined(v){
   return v;
 }
 
+/* ---- LATE INSTAPPERS: TEAM + LEGERSTERKTE IN BALANS (host, begin van elke ronde) ----
+   1. Een speler zonder team (late instapper, of een leerling die op een andere
+      manier ongedeeld bleef) komt in het team met de minste leden; bij gelijk
+      aantal in team A. Boss Battle kent maar één team (A) en wordt niet geraakt.
+   2. Daarna wordt de legersterkte opnieuw uit het huidige spelersaantal
+      berekend (bmTeamHP, dezelfde formule als bij de start) en de HP van beide
+      legers evenredig bijgesteld: de gezondheid-percentages blijven staan, alleen
+      de schaal verandert — zo blijft het gevecht voor beide teams even lang. */
+async function bmHostBalanceLate(players){
+  if(BM_META?.mode==="boss") return;
+  const all=Object.values(players);
+  let cA=all.filter(p=>p.team==="A").length, cB=all.filter(p=>p.team==="B").length;
+  const up={}, moved=[];
+  for(const [pid,p] of Object.entries(players)){
+    if(p.team==="A"||p.team==="B") continue;
+    const t=cA<=cB?"A":"B";
+    if(t==="A") cA++; else cB++;
+    p.team=t; up[pid+"/team"]=t; moved.push(p.name||pid);
+  }
+  if(moved.length) await fbDB.ref("rooms/"+BM_CODE+"/players").update(up);
+  const tA=BM_TEAMS?.A, tB=BM_TEAMS?.B;
+  if(!tA||!tB||!tA.maxHealth||!tB.maxHealth) return;
+  const hp=bmTeamHP(players,BM_META?.armyHealth);
+  if(tA.maxHealth===hp.A&&tB.maxHealth===hp.B) return;
+  const scale=(t,max)=>({maxHealth:max,health:Math.max(0,Math.min(max,Math.round((t.health||0)/t.maxHealth*max)))});
+  const nA=scale(tA,hp.A), nB=scale(tB,hp.B);
+  await fbDB.ref("rooms/"+BM_CODE+"/teams").update(
+    {"A/health":nA.health,"A/maxHealth":nA.maxHealth,"B/health":nB.health,"B/maxHealth":nB.maxHealth});
+  BM_TEAMS={...BM_TEAMS,A:{...tA,...nA},B:{...tB,...nB}};
+  toast("Teams in balans",(moved.length?moved.join(", ")+" ingedeeld. ":"")+"Legersterkte aangepast aan het aantal spelers.");
+}
+
 async function bmResolve(roundN){
   BM_RESOLVING=true;
   try{
@@ -3466,6 +3498,7 @@ async function bmResolve(roundN){
     await fbDB.ref("rooms/"+BM_CODE+"/state/resolvedRound").set(roundN);
 
     const players=BM_PLAYERS;
+    await bmHostBalanceLate(players);
     // Skill-trees (skilltree-engine.js): teamstaat (muur/val/vloek/merkteken…)
     // en rondecontext, alleen als deze kamer met skill-trees is aangemaakt.
     const stOn=typeof bmStOn==="function"&&bmStOn();
