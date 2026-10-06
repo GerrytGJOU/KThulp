@@ -1029,6 +1029,10 @@ meedoen. Alles volgt de docent-schakelaar `masteryBonuses`.
   schakelaar `config/skillTrees/enabled` — standaard aan; alleen `enabled:false` is een noodrem (rules: iedereen leest, alleen admin
   schrijft). Toegang: Mijn profiel (Class Mastery-tegels) en de knop
   "🌳 Skill-tree" per klasse in de lobby.
+  De FAQ-sectie "🌳 Skill-trees" sluit af met "De klassen en hun paden"
+  (`bmFaqSkillPathsHTML()`): per klasse de drie paden met hun korte
+  `desc` uit `BM_SKILLTREES.paths` — data-gedreven, dus een nieuwe
+  omschrijving van een pad hoeft alleen in `skilltree-data.js` te veranderen.
   Onder de boom: "Acties in het gevecht" (`bmStActionsRender`/`bmStAbilityStats`)
   — alle vaardigheden met de vaste boombonussen in het getal doorgerekend
   (spiegelt `bmCalcAbilityEffect`/`bmGetAbilityCost` + `bmStApplyEffect`/

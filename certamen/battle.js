@@ -1003,6 +1003,22 @@ function bmTierBadge(tier){
   const[lbl,col]=m[tier]||[tier,"var(--muted)"];
   return `<span class="pill" style="background:${col};border:none;font-size:10px">${lbl}</span>`;
 }
+// FAQ → Skill-trees: per klasse de drie paden met hun korte omschrijving
+// (data-gedreven uit BM_SKILLTREES, loopt dus vanzelf mee met de boom zelf).
+function bmFaqSkillPathsHTML(){
+  if(typeof BM_SKILLTREES==="undefined") return "";
+  return BM_CLASSES.filter(c=>BM_SKILLTREES[c.id]).map(c=>{
+    const t=BM_SKILLTREES[c.id];
+    const row=k=>{ const P=t.paths[k];
+      return `<div style="display:flex;gap:6px;align-items:baseline;margin-top:3px">
+        <span style="flex:0 0 auto;color:${P.accent};font-weight:700;font-size:13px">${esc(P.nm)}</span>
+        <span class="note" style="flex:1">${esc((d=>d.charAt(0).toUpperCase()+d.slice(1))(String(P.desc||"").replace(/^Hybride:\s*/i,"")))}</span></div>`; };
+    return `<div style="border-top:1px solid var(--stone4);padding:8px 0">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="flex:0 0 auto">${iconSVG(c.icon,20,c.color)}</span>
+        <b style="color:${c.color}">${esc(bmClsName(c.id))}</b></div>
+      ${row("A")}${row("H")}${row("B")}</div>`; }).join("");
+}
 SCREENS.battleFAQ = function(){
   document.body.classList.remove("greek");
   const sec=(title,open,body)=>`<details ${open?"open":""} style="margin-bottom:8px">
@@ -1272,7 +1288,11 @@ SCREENS.battleFAQ = function(){
         <b>werktuigen</b> die een paar rondes doorvuren, een <b>val</b>, een <b>vloek</b> (☋, de vijand slaat
         minder hard) en een <b>merkteken</b> (je teamgenoten raken harder). De Saboteur (Verkenner) breekt
         schild, muren en werktuigen van de tegenstander af.</li>
-    </ul>`):""}
+    </ul>
+    <div class="eyebrow l" style="margin:14px 0 4px">De klassen en hun paden</div>
+    <div class="note" style="margin-bottom:4px">Per klasse drie paden: twee <b>specialisaties</b> en daartussen het
+    <b>hybride</b> pad (de gematigde middenweg — de extremere keuzes bewaren de specialisten voor zichzelf).</div>
+    ${bmFaqSkillPathsHTML()}`):""}
 
   ${sec("Voor docenten",false,`
     <div class="note">Bij het starten van een gevecht stel je in: woordbereik en taal, antwoordtijd, en onder
