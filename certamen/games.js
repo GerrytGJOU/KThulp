@@ -97,10 +97,11 @@ SCREENS.hostSource = function(){
   <div class="panel">
     <label class="fld">Bron</label>
     <div class="chips" id="srcChips">
-      <button class="chip ${DRAFT.source==='freq'&&DRAFT.lang==='la'?'on':''}" onclick="setSrc('freq','la')">Latijn — frequentielijst <small>${baseLA}</small></button>
-      <button class="chip ${DRAFT.source==='freq'&&DRAFT.lang==='el'?'on':''}" onclick="setSrc('freq','el')">Grieks — frequentielijst <small>${baseEL}</small></button>
-      <button class="chip ${DRAFT.source==='custom'?'on':''}" onclick="setSrc('custom','')">Eigen lijst</button>
-      <button class="chip ${DRAFT.source==='verbforms'?'on':''}" onclick="setSrc('verbforms',DRAFT.lang)">Werkwoordsvormen</button>
+      <button class="chip ${DRAFT.source==='verbforms'?'on':''}" onclick="setSrc('verbforms',DRAFT.lang)">Werkwoorden</button>
+      <button class="chip ${DRAFT.source==='naamvallen'?'on':''}" onclick="setSrc('naamvallen',DRAFT.lang)">Naamvallen</button>
+      <button class="chip ${DRAFT.source==='freq'&&DRAFT.lang==='la'?'on':''}" onclick="setSrc('freq','la')">Frequentielijst Latijn <small>${baseLA}</small></button>
+      <button class="chip ${DRAFT.source==='freq'&&DRAFT.lang==='el'?'on':''}" onclick="setSrc('freq','el')">Frequentielijst Grieks <small>${baseEL}</small></button>
+      <button class="chip ${DRAFT.source==='custom'?'on':''}" onclick="setSrc('custom','')">Eigen lijsten</button>
     </div>
   </div>
   <div id="srcBody"></div>
@@ -108,8 +109,9 @@ SCREENS.hostSource = function(){
   ${foot()}`);
   renderSrcBody();
 };
-function setSrc(src,lang){ DRAFT.source=src; if(lang)DRAFT.lang=lang; if(src==="verbforms"&&!DRAFT.vf)DRAFT.vf=vfqDefaultDraft(DRAFT.lang); SCREENS.hostSource(); }
+function setSrc(src,lang){ DRAFT.source=src; if(lang)DRAFT.lang=lang; if(src==="verbforms"&&!DRAFT.vf)DRAFT.vf=vfqDefaultDraft(DRAFT.lang); if(src==="naamvallen")DRAFT.cq=cqFixDraft(DRAFT.cq,DRAFT.lang); SCREENS.hostSource(); }
 function setSrcVfLang(lang){ DRAFT.lang=lang; DRAFT.vf=vfqDefaultDraft(lang); renderSrcBody(); }
+function setSrcCqLang(lang){ DRAFT.lang=lang; DRAFT.cq=cqDefaultDraft(lang); renderSrcBody(); }
 function renderSrcBody(){
   const body = el("srcBody"); if(!body) return;
   if(DRAFT.source==="verbforms"){
@@ -118,6 +120,14 @@ function renderSrcBody(){
         <button class="chip ${DRAFT.lang==='la'?'on':''}" onclick="setSrcVfLang('la')">Latijn</button>
         <button class="chip ${DRAFT.lang==='el'?'on':''}" onclick="setSrcVfLang('el')">Grieks</button>
       </div></div>` + vfqFilterHTML(DRAFT.vf, DRAFT.lang, "DRAFT.vf", "renderSrcBody()");
+    return;
+  }
+  if(DRAFT.source==="naamvallen"){
+    DRAFT.cq = cqFixDraft(DRAFT.cq, DRAFT.lang);
+    body.innerHTML = `<div class="panel"><label class="fld">Taal</label><div class="chips">
+        <button class="chip ${DRAFT.lang==='la'?'on':''}" onclick="setSrcCqLang('la')">Latijn</button>
+        <button class="chip ${DRAFT.lang==='el'?'on':''}" onclick="setSrcCqLang('el')">Grieks</button>
+      </div></div>` + cqFilterHTML(DRAFT.cq, DRAFT.lang, "DRAFT.cq", "renderSrcBody()");
     return;
   }
   if(DRAFT.source==="custom"){
@@ -155,8 +165,8 @@ function loadSheetJS(){
   });
 }
 function confirmSource(){
-  const pool = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang) : buildPool(DRAFT);
-  if(pool.length<25){ toast("Te weinig woorden","Kies een groter bereik/meer werkwoorden of tijden (minimaal 25 woorden)."); return; }
+  const pool = srcPoolFor(DRAFT);
+  if(pool.length<25){ toast("Te weinig woorden","Kies een groter bereik/meer werkwoorden, naamvallen of tijden (minimaal 25 woorden)."); return; }
   if(DRAFT.game==="battle"){ go("battleHostSettings"); return; }
   go("hostSettings");
 }
@@ -164,7 +174,7 @@ function confirmSource(){
 /* ---- HOST: instellingen ---- */
 SCREENS.hostSettings = function(){
   const g=DRAFT.game;
-  const poolN = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang).length : buildPool(DRAFT).length;
+  const poolN = srcPoolFor(DRAFT).length;
   const gameNm=g==="touwtrekken"?"Touwtrekken":g==="snelvuur"?"Snelvuur":"Marathon";
   H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('hostSource')">${iconSVG("shield",20,"currentColor")}</button><h2>Instellingen</h2></div>
   <div class="panel"><div class="note">Spel: <b>${gameNm}</b> · ${poolN} woorden geselecteerd.</div></div>
@@ -200,7 +210,7 @@ function chooseNet(){
 }
 async function createRoom(){
   chooseNet();
-  const pool = DRAFT.source==="verbforms" ? vfqBuildPool(DRAFT.vf, DRAFT.lang) : buildPool(DRAFT);
+  const pool = srcPoolFor(DRAFT);
   POOL = pool;
   const meta = { game:DRAFT.game, lang:DRAFT.lang, target:DRAFT.target, penalty:DRAFT.penalty, freezeSec:DRAFT.freezeSec, createdAt:Net.serverTime(),
     source:DRAFT.source, vfMode: DRAFT.source==="verbforms" ? DRAFT.vf.mode : null };
@@ -634,6 +644,20 @@ function drawQuestion(){
   const me=myPlayer();
   if(me.frozenUntil && nowMs()<me.frozenUntil){ return drawFrozen(me.frozenUntil); }
   answered=false;
+  if(META.source==="naamvallen"){
+    curQ = cqMakeQuestion(POOL, "game");
+    if(curQ.mode==="naamval"){
+      cqStart(curQ, renderNaamval, answerNaamval);
+      renderNaamval();
+      return;
+    }
+    // "kies de juiste vorm": gewone meerkeuze, hieronder
+    H(brand(false)+`<div id="mini">${miniHTML()}</div>
+      <div class="qcard"><div class="kick">${curQ.taal==="el"?"Grieks":"Latijn"} — kies de juiste vorm</div>
+        <div class="word" style="font-size:20px">${curQ.vraag}</div></div>
+      <div class="choices" id="choices">${curQ.options.map((o,i)=>`<button class="choice" onclick="answer(${i})"><span class="n">${i+1}</span><span>${esc(o)}</span></button>`).join("")}</div>`);
+    return;
+  }
   if(META.source==="verbforms" && META.vfMode==="ontleed"){
     vfqOntleedReset();
     curQ = vfqMakeOntleedQuestion(POOL, "game");
@@ -657,6 +681,18 @@ function drawQuestion(){
     <div class="qcard"><div class="kick">${kick}</div>
       <div class="word">${esc(woord)}</div>${curQ.pos?`<div class="pos">${esc(curQ.pos)}</div>`:""}</div>
     <div class="choices" id="choices">${curQ.options.map((o,i)=>`<button class="choice" onclick="answer(${i})"><span class="n">${i+1}</span><span>${esc(o)}</span></button>`).join("")}</div>`);
+}
+function renderNaamval(){
+  if(!curQ) return;
+  H(brand(false)+`<div id="mini">${miniHTML()}</div>`+cqQuestionHTML(curQ));
+}
+function answerNaamval(ok){
+  if(answered||!curQ) return; answered=true;
+  const q=curQ;
+  H(brand(false)+`<div id="mini">${miniHTML()}</div>`+cqResultHTML(q)
+    + `<div class="panel" style="text-align:center;color:${ok?'var(--good,#4a4)':'var(--bad,#a44)'}">${ok?"Goed!":"Fout"}</div>`);
+  if(!ok && !MISSED_WORDS.some(m=>m.la===q.vorm)) MISSED_WORDS.push({la:q.vorm, correct:q.antwoord});
+  scoreAnswer(ok, q.vorm);
 }
 function renderOntleed(){
   if(!curQ) return;
