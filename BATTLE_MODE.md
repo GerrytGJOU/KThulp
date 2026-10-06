@@ -1005,7 +1005,7 @@ lokaal in `P.achievements` (overige modi, zie M9's architectuurregel).
 
 ---
 
-## Skill-trees (gebouwd 2026-10-05, aan/uit via de beheerder)
+## Skill-trees (gebouwd 2026-10-05, live voor iedereen sinds 2026-10-06)
 
 Per klasse een skill-tree die de klassebeheersing vervangt als bron van
 spelvoordeel. Volledig ontwerp per knooppunt: `certamen/skilltree-data.js`
@@ -1026,7 +1026,7 @@ meedoen. Alles volgt de docent-schakelaar `masteryBonuses`.
 - `skilltree.js` — scherm `SCREENS.skillTree` (tempel-achtergrond, tooltips),
   opslag in `identities/{klas}/{lid}/skillTrees/{cls}/picks`, gratis respec
   behalve tijdens een lopend gevecht (`bmRoomPlaying()`), beheerder-
-  schakelaar `config/skillTrees/enabled` (rules: iedereen leest, alleen admin
+  schakelaar `config/skillTrees/enabled` — standaard aan; alleen `enabled:false` is een noodrem (rules: iedereen leest, alleen admin
   schrijft). Toegang: Mijn profiel (Class Mastery-tegels) en de knop
   "🌳 Skill-tree" per klasse in de lobby.
   Onder de boom: "Acties in het gevecht" (`bmStActionsRender`/`bmStAbilityStats`)

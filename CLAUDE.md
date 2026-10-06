@@ -52,7 +52,7 @@ spelregels, features of het datamodel raakt:
   (spelverloop, AP, heldenmodus, profiel, docent-instellingen) niet. Werk bij
   elke Battle Mode-wijziging die de spelregels, klassen of features raakt ook
   deze FAQ bij.
-- Skill-trees (Battle Mode/Boss Battle/Total War, sinds 2026-10-05): data in
+- Skill-trees (Battle Mode/Boss Battle/Total War, sinds 2026-10-05, live voor alle leerlingen sinds 2026-10-06 — standaard aan, `config/skillTrees/enabled:false` is alleen een noodrem): data in
   `certamen/skilltree-data.js`, scherm in `skilltree.js`, gevechtseffecten in
   `skilltree-engine.js` — zie BATTLE_MODE.md §Skill-trees. Wijzig je een
   knooppunt, werk dan ook de balanssimulatie (`certamen/tools/
