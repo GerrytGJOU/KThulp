@@ -1718,6 +1718,15 @@ function bmAddBot(){
     avatar:bmAvatarDefaults(),color:cls.color||COLORS[0],identityKey:"bot:"+pid};
   fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).set(bot);
 }
+// Klasse-label in de lobby met daaronder de sterren in die klasse
+// (clsStars wordt bij de klassekeuze meegestuurd; oudere spelers: stStars).
+function bmLobbyClassTag(p){
+  const n=p.clsStars??p.stStars;
+  return `<span style="display:inline-flex;flex-direction:column;align-items:center;gap:1px;line-height:1">
+    <span class="pill" style="font-size:11px">${esc(bmClsName(p.class))}</span>
+    ${typeof n==="number"?`<span style="font-size:10px;letter-spacing:1px">${bmStars(n)}</span>`:""}
+  </span>`;
+}
 function bmRenderHostLobby(){
   const ln=el("bmLN"); if(ln)ln.textContent="("+Object.keys(BM_PLAYERS).length+")";
   const pl=el("bmPlist"); if(!pl)return;
@@ -1729,8 +1738,8 @@ function bmRenderHostLobby(){
     <span style="flex:1;display:flex;align-items:center;gap:6px;min-width:0">
       ${p.isBot?`<span style="font-size:16px" title="AI-bot">🤖</span>`:`${avatarHTML(p.avatar||"helmet",p.color||COLORS[0],26)}`}
       <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.name)}</span>
-      ${p.title?`<span class="pill" style="font-size:10px;background:var(--hi-dim)">⭐ ${esc(p.title)}</span>`:""}
-      ${p.class?`<span class="pill" style="font-size:11px">${esc(bmClsName(p.class))}</span>`:""}
+      ${p.title?`<span class="pill" style="font-size:10px;background:var(--hi-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px" title="${esc(p.title)}">⭐ ${esc(p.title)}</span>`:""}
+      ${p.class?bmLobbyClassTag(p):""}
     </span>
     ${isBoss?"":`<button class="chip" style="font-size:11px" title="Wissel van team" onclick="bmSwitchTeam(${q(pid)})">⇄</button>`}
     <button class="chip" style="font-size:11px;color:#e07060;border-color:rgba(90,18,12,.4)" title="Verwijder" onclick="bmKickPlayer(${q(pid)})">✕</button>
@@ -4731,7 +4740,7 @@ function bmPickClass(cid){
   const stPay=stHere?bmStPayloadFor(cid,(BM_IDENT?.skillTrees||{})[cid]?.picks,ms):null;
   fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID).update({
     st:stPay&&stPay.nodes.length?stPay:null, stS:null, stStars:stHere?ms:null,
-    class:cid, masteryBonus:(!stHere&&ms>=3)?1:0, masterPassive:ms>=5, prestigeClass:ms>=BM_MASTERY_PRESTIGE,
+    class:cid, clsStars:ms, masteryBonus:(!stHere&&ms>=3)?1:0, masterPassive:ms>=5, prestigeClass:ms>=BM_MASTERY_PRESTIGE,
     traitLaconisch:achs.includes("trait_laconisch"),
     traitFeniks:achs.includes("trait_feniks"),
     traitHeal:achs.includes("geheim_heal"),
