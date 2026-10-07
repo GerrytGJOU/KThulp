@@ -574,7 +574,8 @@ const K=+(process.argv[2]||200);
 const SCEN=["bm","bmAchter","hydra","cyclops","minotaur"];
 const out={generated:new Date().toISOString(),K,context:CONTEXT,classes:{}};
 const t0=Date.now();
-for(const cls of CLASS_IDS){
+const ONLY_CLASS=process.env.ONLY_CLASS||null; // bv. ONLY_CLASS=priester: alleen die klasse, naar skilltree-balance-result-<klasse>.json
+for(const cls of CLASS_IDS.filter(c=>!ONLY_CLASS||c===ONLY_CLASS)){
   _seed=1000+CLASS_IDS.indexOf(cls);
   const base={}; for(const s of SCEN) base[s]=measure(oldBuild(cls),s,K*2);
   const builds=allBuilds(cls);
@@ -582,6 +583,7 @@ for(const cls of CLASS_IDS){
   out.classes[cls]={base,rows};
   process.stderr.write(cls+" klaar ("+Math.round((Date.now()-t0)/1000)+"s)\n");
 }
+if(ONLY_CLASS){ fs.writeFileSync(path.join(__dirname,"skilltree-balance-result-"+ONLY_CLASS+".json"),JSON.stringify(out)); process.exit(0); }
 // Meting 2: winkansen tegen bazen. Ijkpunt = beginnende klas (★1, huidige regels).
 // Baas-HP groeit mee met de gemiddelde sterren: ×(1 + HP_PER_STAR × gem. ster).
 const HP_PER_STAR=+(process.env.HP_PER_STAR||0.03);
