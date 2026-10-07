@@ -1057,12 +1057,25 @@ goed antwoordt), sabotage in lagen van de Saboteur (schild → muur →
 werktuigen → doorwerken), heling over tijd (`stS.hot` = lijst {a,l}: Ambrosia
 laat Godenvuur direct 4 minder helen maar +4 in de 2 rondes erna; de
 Priester-knooppunten Zegenstroom, Lichtmantel en Gemeenschap staan in
-`skilltree-data.js`/`skilltree-engine.js` en in de balanssimulatie). In beeld: muur-balk/val/vloek onder de legerbalk
+`skilltree-data.js`/`skilltree-engine.js` en in de balanssimulatie), een
+team-schadebonus (`ctx.team[t].rally`: Aanvalsbevel en Victoria van de
+Aanvoerder), geblokkeerde schade die heelt (Herstelde Linie, Falanx), Menos
+dat het team beschermt (Heldenschild, Aristeia), een vloek na een Aanloop-aanval
+(Schokgolf, Cavalerie) en AP voor de zwakste teamgenoot na een snel antwoord
+(Koerierdienst). In beeld: muur-balk/val/vloek onder de legerbalk
 (`bmStTeamExtrasHTML`), palissade-stadia `assets/bosses/palissade_midden_1-3.png`
 tussen de legers en werktuigen achter het eigen leger (`bmStRenderField`).
 
 **Baasschaal.** Met skill-trees aan groeien baas-HP en -klap +3% per
 gemiddelde ster van de klas (zie BOSS_BATTLE.md §2).
+
+**Ontwerpregel (2026-10-07).** Elke klasse heeft minstens twee dimensies
+(niet alleen "meer schild", "meer schade" of "meer heling"), elke
+specialisatie heeft een eigen niche waarin hij de hybride én de andere
+specialisatie verslaat, en de twee prestige-varianten verschillen van profiel
+(niet één die in alle scenario's wint). Controleer dat met
+`ONLY_CLASS=<klasse> node certamen/tools/skilltree-balance.js 150` na elke
+wijziging van een boom.
 
 **Getest** (2026-10-05, met een nagebootste Firebase): rondes Team-vs-Team en
 Cycloop met de echte `bmResolve`; met skill-trees uit is het gedrag gelijk

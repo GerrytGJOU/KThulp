@@ -74,6 +74,8 @@ for(const [key,cols,rows,ratio,people,intro,extra] of [
    "Iconen die bij de eerste ronde misgingen of beter konden. Via ChatGPT opgeslagen als `fix_2` — die versie is gebruikt."],
   ["3",4,4,"1:1","human figures or faces, except the sleeping figure in icon 12, the Pythia in icon 13 and the hooded figure in icon 16",
    "Tweede ronde: iconen die klopten maar mooier of preciezer konden (middeleeuwse puntschilden, ontbrekende details, weinig contrast). Bedoeld voor ChatGPT."],
+  ["6",3,3,"1:1","human figures or faces, except the small statue of Victoria in icon 7 and the archer's hand in icon 8",
+   "Vijfde ronde: de negen nieuwe knooppunten van het pakket 'minder platte klassen' (raster van 3×3). Bedoeld voor ChatGPT; opslaan als fix_6."],
   ["5",2,2,"1:1","human figures or faces, except the small robed figures in icon 4",
    "Vierde ronde: de vier nieuwe Priester-knooppunten (Ambrosia, Zegenstroom, Lichtmantel, Gemeenschap). Bedoeld voor ChatGPT; opslaan als fix_5."],
   ["4",2,1,"16:9","human figures or faces",

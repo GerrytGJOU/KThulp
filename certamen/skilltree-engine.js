@@ -101,7 +101,13 @@ function bmStRoundCtx(players,round,stRoom){
       const abl=bmStAbilityList(bmClassAbilities(cls,q.prestigeClass?BM_MASTERY_PRESTIGE:0),q).find(x=>x.id===a.abilityId)||BM_BASIC_ACTIONS.find(x=>x.id===a.abilityId);
       return abl?{q,abl}:null; }).filter(Boolean);
     const T=BM_TEAMS?.[t]||{health:1,maxHealth:1};
+    // Aanvoerder: Aanvalsbevel (Bevel/Strijdformatie → team +1 schade) en Victoria (≥75% goed → +1)
+    let rally=0;
+    if(acts.some(x=>bmStHas(x.q,"aanvalsbevel")&&["bevel","strijdformatie"].includes(x.abl.id))) rally+=2;
+    if(mates.some(q=>bmStHas(q,"victoria"))&&((stRoom?.[t]?.accLast)??0)>=0.75) rally+=1;
+    if(mates.some(q=>bmStHas(q,"triarii"))&&stRoom?.[t]?.accLast!=null&&stRoom[t].accLast<0.5) rally+=2; // Triarii: slecht rondje → team +2
     ctx.team[t]={
+      rally,
       hpPct:T.maxHealth?T.health/T.maxHealth:1,
       shieldActs:acts.filter(x=>BM_ST_SHIELD_TYPES.includes(x.abl.type)).length,
       basicShieldActs:acts.filter(x=>x.abl.id==="basic_dekking"||x.abl.id==="basic_schildheffen").length,
@@ -172,14 +178,18 @@ function bmStApplyEffect(p,cls,abl,fx,ctx){
   }
   // --- aanvallen ---
   if(isAtk){
+    if(T.rally>0) d+=T.rally; // Aanvalsbevel / Victoria van de Aanvoerder
+    if(has("heldenschild")) fx.shld+=Math.min(2,S.menos||0); // Aristeia: Menos beschermt het team
     if(has("vaste_hand")&&!abl.aoe) d+=1;
     if(has("koelbloedig")&&bmStAcc(p)>=(has("kalm_onder_vuur")?0.70:0.80)) d+=1;
-    if(has("menos")){ let mn=S.menos||0; if(abl.id==="leeuwensprong"&&has("ontlading")) mn*=2; d+=mn;
+    if(has("menos")){ let mn=S.menos||0; if(abl.id==="leeuwensprong"&&has("ontlading")) mn*=3; d+=mn;
       const mx=has("heldenmoed")?3:2; if(has("ontketend")&&(S.menos||0)>=mx&&["berserk","leeuwensprong"].includes(abl.id)) d+=2;
-      if(has("onstuitbare_kracht")&&(S.menos||0)>=mx) fx.bypass=true; }
+      if(has("onstuitbare_kracht")&&(S.menos||0)>=mx){ fx.bypass=true; d+=2; } }
     if(has("tegenstoot")&&(S.lastShield===R-1||T.st.shieldLast>0||(S.tegen||0)>0)) d+=has("scherpe_rand")?4:3;
-    if(has("wraak_van_de_linie")&&(T.st.blockedLast||0)>=(has("bloed_op_het_brons")?3:5)) d+=2;
-    if(has("aanloop")&&(S.idle||0)>0){ let b=3*Math.min(S.idle,has("lange_aanloop")?2:1);
+    if(has("wraak_van_de_linie")&&(T.st.blockedLast||0)>=(has("bloed_op_het_brons")?3:5)) d+=has("bloed_op_het_brons")?4:2;
+    if(has("aanloop")&&(S.idle||0)>0){
+      if(has("schokgolf")) ex.curse=Math.max(ex.curse,1); // Schokgolf: Aanloop-aanval vervloekt het doel
+      let b=3*Math.min(S.idle,has("lange_aanloop")?2:1);
       if(has("hamer_en_aambeeld")&&T.shieldActs>0) b+=2; if(abl._st&&abl.idleMult) b*=abl.idleMult; d+=b; if(has("doorbraak")) fx.bypass=true; }
     if(has("eerste_inslag")&&!S.first) d+=4;
     if(has("op_de_flank")){ if(fast) d+=has("windruiter")?3:2; else if(ok&&has("wervelwind")) d+=1; }
@@ -192,7 +202,7 @@ function bmStApplyEffect(p,cls,abl,fx,ctx){
     if(has("hinderlaagtactiek")&&T.behind>0){ let b=Math.min(has("uit_het_struikgewas")?6:4,Math.floor(T.behind/0.15)); if(abl._st&&abl.behindMult) b*=abl.behindMult; d+=b; }
     if(has("varus_ondergang")&&abl.id==="hinderlaag"&&T.behind>0&&T.attackers-1>=2) d+=4;
     if(S.next) d+=S.next;
-    if(has("laatste_pijl")&&T.enemyHpPct<=0.15) fx.bypass=true;
+    if(has("laatste_pijl")&&T.enemyHpPct<=0.25) fx.bypass=true;
     // levensroof
     let lr=0; if(has("levensroof")) lr=has("dorst")?2:1; if(has("met_je_schild")&&T.behind>0) lr+=1; fx.heal+=lr;
     if(has("ontwijken")){ if(fast) fx.shld+=2; else if(ok&&has("overal_tegelijk")) fx.shld+=1; }
@@ -234,6 +244,8 @@ function bmStApplyEffect(p,cls,abl,fx,ctx){
   if(has("wonderheling")&&abl.id==="gebed"&&T.hpPct<0.20&&!S.wonder){ fx.heal*=2; ex.useWonder=true; }
   // --- team-AP ---
   fx.teamBE+=m("teamBE");
+  if(abl._st&&abl.teamBE&&!["team_be","testudo"].includes(abl.type)) fx.teamBE+=abl.teamBE; // prestige: extra team-AP
+  if(has("disciplina")&&abl.id==="strijdformatie") fx.teamBE+=1;
   if(has("tribunus")&&abl.id==="strijdformatie"&&(T.st.accLast??0)>=(has("signum")?0.50:0.60)) fx.teamBE+=1;
   // --- schild weghalen ---
   fx.shldRemove+=m("shldRemove");
@@ -273,6 +285,7 @@ function bmStAfterPass1(players,roundN,res,from,for_,pUpd,events,stRoom,ctx){
       if(S.healNext) for_[t].heal+=S.healNext;
       for(const h of (S.hot||[])) for_[t].heal+=h.a; }
     if(st.overflowShield){ for_[t].shld+=st.overflowShield; st.overflowShield=0; }
+    if((st.blockedLast||0)>=3&&bmStTeamHas(players,t,"herstelde_linie")) for_[t].heal+=Math.min(5,Math.floor(st.blockedLast/3)); // Falanx: wat je blokkeert, heelt
     // werktuigen vuren (eigenaar moet deze ronde goed antwoorden; vuur brandt altijd door)
     for(const [pid,p] of Object.entries(players)){ if(p.team!==t||!bmStActive(p)) continue; const S=p.stS||{};
       if(S.engine&&S.engine.rounds>0&&!res.some(r=>r.pid===pid&&r.ex&&r.ex.engine)){
@@ -288,12 +301,12 @@ function bmStAfterPass1(players,roundN,res,from,for_,pUpd,events,stRoom,ctx){
     st.markLinger=(best&&bmStHas(best.p,"vers_spoor"))?2:0;
     if(mark>0){ from[t].dmg+=mark; events.push({type:"st_mark",team:t,bonus:mark,pid:best?best.pid:null});
       if(best){ const u=upd(best.pid); u.damage=(u.damage||0)+mark;
-        if(bmStHas(best.p,"opjagen")) from[t].shldRemove+=2;
+        if(bmStHas(best.p,"opjagen")) from[t].shldRemove+=1;
         if(mark>=best.ex.mark.max){
           if(bmStHas(best.p,"lokroep")) u.be=bmClampBE((u.be??best.p.be??0)+1);
           if(bmStHas(best.p,"jachthoorn")){ const low=Object.entries(players).filter(([q,pp])=>pp.team===t&&q!==best.pid).sort((a,b)=>(a[1].be||0)-(b[1].be||0))[0];
             if(low){ const ul=upd(low[0]); ul.be=bmClampBE((ul.be??low[1].be??0)+1); } } }
-        if(bmStHas(best.p,"jachtpartij")&&hitters-1>=3) best._next=2; } }
+        if(bmStHas(best.p,"jachtpartij")&&hitters-1>=3) best._next=1; } }
     // vloek (sterkste) voor de volgende ronde, met Onheilsdag
     const newCurse=Math.max(0,...mine.map(r=>r.ex?r.ex.curse:0));
     st._curseThis=st.curse||0; // geldt in DEZE ronde (gezet vorige ronde)
@@ -342,13 +355,16 @@ function bmStAfterPass1(players,roundN,res,from,for_,pUpd,events,stRoom,ctx){
       if(atk){ S.lastAttack=roundN; S.first=true; S.idle=0; S.next=0; if((S.tegen||0)>0) S.tegen--;
         if(has("menos")){ if(r.abl.id==="leeuwensprong"&&has("ontlading")) S.menos=0; else S.menos=Math.min(has("heldenmoed")?3:2,(S.menos||0)+(has("snelle_woede")?2:1)); } }
       else { S.idle=(S.idle||0)+1; if(has("menos")) S.menos=has("nagloeien")?Math.floor((S.menos||0)/2):0; }
-      if(shieldAct){ S.lastShield=roundN; if(has("onstuitbaar")) S.tegen=2; }
+      if(shieldAct){ S.lastShield=roundN; if(has("onstuitbaar")) S.tegen=3; }
       S.noSpend=(spent&&!keepIdle)?0:(S.noSpend||0)+1;
       if(r.ex&&r.ex.useWonder) S.wonder=true;
       if(r.ex&&r.ex.healNext) S.healNext=r.ex.healNext;
       if(r.ex&&r.ex.hot&&r.ex.hot.length) S.hot=S.hot.concat(r.ex.hot.map(h=>({a:h.a,l:h.l})));
       if(r.ex&&r.ex.shieldNextRound) S.shieldNext=r.ex.shieldNextRound;
       if(r._next) S.next=r._next;
+      if(has("koerierdienst")&&bmStFastNow(p,roundN)){
+        const low=Object.entries(players).filter(([q,pp])=>pp.team===p.team&&q!==pid).sort((x,y)=>(x[1].be||0)-(y[1].be||0))[0];
+        if(low){ const ul=upd(low[0]); ul.be=bmClampBE((ul.be??low[1].be??0)+1); } }
       if(has("kleos")&&r.abl.id==="leeuwensprong"){ const u=upd(pid); u.be=bmClampBE((u.be??p.be??0)+2); }
       if(has("dubbelspel")&&r.abl.id==="sabotage"&&ctx.team[p.team].enemyShieldsNow){ const u=upd(pid); u.be=bmClampBE((u.be??p.be??0)+2); }
     } else {

@@ -67,13 +67,13 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a single arrow passing cleanly through the exact centre of a target — dominant colour cool forest green.
-2. (row 1, column 2) a falcon head in profile with a sharp focused eye — dominant colour cool forest green.
+2. (row 1, column 2) one arrow whose arrowhead drips dark green poison, with three small poison drops falling from it — dominant colour cool forest green.
 3. (row 1, column 3) an arrow striking a cracked spot on a bronze breastplate — dominant colour cool forest green.
-4. (row 1, column 4) one last arrow in an almost empty leather quiver — dominant colour cool forest green.
+4. (row 1, column 4) an archer's hand drawing a bowstring back, with a thin glowing line running from the arrowhead to a small round target — dominant colour cool forest green.
 5. (row 2, column 1) a star-shaped gold medal with a small archer's bow (the weapon, with its string) engraved on it, not a ribbon bow — dominant colour cool forest green.
 6. (row 2, column 2) an archer's leather bracer with burning arrows flying past it — dominant colour cool forest green.
 7. (row 2, column 3) a black arrow with a bone-white arrowhead breaking through a shield — dominant colour cool forest green.
-8. (row 2, column 4) a radiant golden sun disc with an arrow through its centre — dominant colour cool forest green.
+8. (row 2, column 4) a hawk's eye in extreme close-up with a thin crosshair circle over the pupil — dominant colour cool forest green.
 
 LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -89,13 +89,13 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
 | 1 | Zuivere Treffer | `boogschutter_zuivere_treffer.png` |
-| 2 | Valkenblik | `boogschutter_valkenblik.png` |
+| 2 | Verlammende Pijl | `boogschutter_verlammende_pijl.png` |
 | 3 | Genadeloos | `boogschutter_genadeloos.png` |
-| 4 | Laatste Pijl | `boogschutter_laatste_pijl.png` |
+| 4 | Scherpe Concentratie | `boogschutter_scherpe_concentratie.png` |
 | 5 | Meesterschutter | `boogschutter_meesterschutter.png` |
 | 6 | Kalm onder Vuur | `boogschutter_kalm_onder_vuur.png` |
 | 7 | Doodsoordeel | `boogschutter_doodsoordeel.png` |
-| 8 | Oog van Apollo | `boogschutter_oog_van_apollo.png` |
+| 8 | Havikoog | `boogschutter_havikoog.png` |
 
 </details>
 
@@ -231,7 +231,7 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a solid wall of bronze shields seen straight from the front — dominant colour cool polished steel blue.
-2. (row 1, column 2) a large concave hoplon shield with the arm strap visible on the inside — dominant colour cool polished steel blue.
+2. (row 1, column 2) a round bronze shield with a soft glowing green healing light and a clean white bandage wrapped around its rim — dominant colour cool polished steel blue.
 3. (row 1, column 3) two long rows of shields locking together like a closing gate — dominant colour cool polished steel blue.
 4. (row 1, column 4) a ROUND Greek bronze shield (hoplon) with a crack held together by three iron rivets — dominant colour cool polished steel blue.
 5. (row 2, column 1) a long ancient Greek war trumpet (salpinx) sounding above a line of shields — dominant colour cool polished steel blue.
@@ -253,7 +253,7 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
 | 1 | Bronzen Muur | `hopliet_bronzen_muur.png` |
-| 2 | Hoplon | `hopliet_hoplon.png` |
+| 2 | Herstelde Linie | `hopliet_herstelde_linie.png` |
 | 3 | Linie Vast | `hopliet_linie_vast.png` |
 | 4 | Taai als Brons | `hopliet_taai_als_brons.png` |
 | 5 | Snelle Formatie | `hopliet_snelle_formatie.png` |
@@ -401,7 +401,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 5. (row 2, column 1) three spears flying in parallel toward the upper right — dominant colour fiery orange.
 6. (row 2, column 2) a lion leaping forward in an explosion of fire — dominant colour fiery orange.
 7. (row 2, column 3) a golden victory wreath above a raised spear — dominant colour fiery orange.
-8. (row 2, column 4) the helmet of Ares, the war god, with burning red eyes — dominant colour fiery orange.
+8. (row 2, column 4) a round bronze shield engraved with a flaming helmet and small flames licking its rim — dominant colour fiery orange.
 
 LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -423,7 +423,7 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | 5 | Speerregen | `spartaan_speerregen.png` |
 | 6 | Ontlading | `spartaan_ontlading.png` |
 | 7 | Kleos | `spartaan_kleos.png` |
-| 8 | Woede van Ares | `spartaan_woede_van_ares.png` |
+| 8 | Heldenschild | `spartaan_heldenschild.png` |
 
 </details>
 
@@ -563,7 +563,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 3. (row 1, column 3) four horse hooves striking the ground with lightning-shaped cracks — dominant colour rusty copper orange.
 4. (row 1, column 4) a wedge-shaped formation of riders seen from above — dominant colour rusty copper orange.
 5. (row 2, column 1) a horse fully covered in scale armour, seen from the side — dominant colour rusty copper orange.
-6. (row 2, column 2) a heavy horse hoof crushing a bronze helmet — dominant colour rusty copper orange.
+6. (row 2, column 2) a horse hoof striking the ground sending a ring-shaped shockwave through a cloud of dust — dominant colour rusty copper orange.
 7. (row 2, column 3) a hammer striking down onto an anvil shaped like a round shield — dominant colour rusty copper orange.
 8. (row 2, column 4) a black war horse with a white star on its forehead, rearing up — dominant colour rusty copper orange.
 
@@ -585,7 +585,7 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | 3 | Donderende Hoeven | `cavalerie_donderende_hoeven.png` |
 | 4 | Wig | `cavalerie_wig.png` |
 | 5 | Kataphrakt | `cavalerie_kataphrakt.png` |
-| 6 | Verpletteren | `cavalerie_verpletteren.png` |
+| 6 | Schokgolf | `cavalerie_schokgolf.png` |
 | 7 | Hamer en Aambeeld | `cavalerie_hamer_en_aambeeld.png` |
 | 8 | Bucephalus | `cavalerie_bucephalus.png` |
 
@@ -603,7 +603,7 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 1. (row 1, column 1) a horse galloping to the right while its rider twists backwards in the saddle and shoots an arrow to the LEFT, behind him — dominant colour wind teal.
 2. (row 1, column 2) a horse galloping with wind lines streaming from its mane — dominant colour wind teal.
 3. (row 1, column 3) an hourglass with a horseshoe hanging in front of it — dominant colour wind teal.
-4. (row 1, column 4) two horseshoes side by side with small motion lines between them — dominant colour wind teal.
+4. (row 1, column 4) a galloping horse seen from the side carrying a small sealed message scroll that glows, with speed lines behind it — dominant colour wind teal.
 5. (row 2, column 1) several javelins flying in a fan shape from the side — dominant colour wind teal.
 6. (row 2, column 2) a light rider on a small horse without a saddle, holding a javelin — dominant colour wind teal.
 7. (row 2, column 3) three riders in three directions around a small shield in the centre — dominant colour wind teal.
@@ -625,7 +625,7 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | 1 | Parthisch Schot | `cavalerie_parthisch_schot.png` |
 | 2 | Windruiter | `cavalerie_windruiter.png` |
 | 3 | Ruitervaardigheid | `cavalerie_ruitervaardigheid.png` |
-| 4 | Ritme | `cavalerie_ritme.png` |
+| 4 | Koerierdienst | `cavalerie_koerierdienst.png` |
 | 5 | Speervuur | `cavalerie_speervuur.png` |
 | 6 | Numidische Ruiters | `cavalerie_numidische_ruiters.png` |
 | 7 | Overal Tegelijk | `cavalerie_overal_tegelijk.png` |
@@ -929,13 +929,13 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) an open-mouthed Roman helmet with sound waves coming out — dominant colour imperial violet.
-2. (row 1, column 2) a centurion's vine staff raised high with a golden ribbon — dominant colour imperial violet.
+2. (row 1, column 2) a raised short sword pointing forward with three spear tips flying ahead of it — dominant colour imperial violet.
 3. (row 1, column 3) a perfect square formation of shields seen from above (testudo) — dominant colour imperial violet.
 4. (row 1, column 4) a tribune's narrow purple-striped cloak draped over a chair — dominant colour imperial violet.
 5. (row 2, column 1) a square red military banner (vexillum) with a small golden eagle emblem, hanging from a crossbar (no letters) — dominant colour imperial violet.
 6. (row 2, column 2) a kneeling veteran soldier with a long spear braced against the ground — dominant colour imperial violet.
 7. (row 2, column 3) a bundle of rods with an axe (fasces) tied with red leather straps — dominant colour imperial violet.
-8. (row 2, column 4) a golden eagle surrounded by shining rays of light — dominant colour imperial violet.
+8. (row 2, column 4) a small golden statue of the winged goddess Victoria holding a laurel wreath above a row of three spear tips — dominant colour imperial violet.
 
 LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -951,13 +951,13 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
 | 1 | Strijdkreet | `centurio_strijdkreet.png` |
-| 2 | Optimus | `centurio_optimus.png` |
+| 2 | Aanvalsbevel | `centurio_aanvalsbevel.png` |
 | 3 | Disciplina | `centurio_disciplina.png` |
 | 4 | Tribunus | `centurio_tribunus.png` |
 | 5 | Signum | `centurio_signum.png` |
 | 6 | Triarii | `centurio_triarii.png` |
 | 7 | Imperium | `centurio_imperium.png` |
-| 8 | Gloria | `centurio_gloria.png` |
+| 8 | Victoria | `centurio_victoria.png` |
 
 </details>
 
@@ -1434,6 +1434,54 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | 13 | Bevelvoerder | Bevelvoerder | `centurio_root.png` |
 | 14 | Bevelvoerder | Signum | `centurio_signum.png` |
 | 15 | Verkenner | Infiltrant | `verkenner_infiltrant.png` |
+
+</details>
+
+---
+
+## Verbetervel 6 → `assets/skills/sheets/fix_6.png`
+
+Vijfde ronde: de negen nieuwe knooppunten van het pakket 'minder platte klassen' (raster van 3×3). Bedoeld voor ChatGPT; opslaan als fix_6.
+
+```text
+Square 1:1 image: a sprite sheet of exactly 9 separate pixel-art game skill icons, arranged in 3 rows of 3, for an ancient Greek/Roman strategy game (mixed icons from several classes).
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
+CONTENT (most important rule): draw EXACTLY the 9 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
+
+1. (row 1, column 1) a round bronze shield with a soft glowing green healing light and a clean white bandage wrapped around its rim — dominant colour cool polished steel blue.
+2. (row 1, column 2) one arrow whose arrowhead drips dark green poison, with three small poison drops falling from it — dominant colour cool forest green.
+3. (row 1, column 3) a galloping horse seen from the side carrying a small sealed message scroll that glows, with speed lines behind it — dominant colour wind teal.
+4. (row 2, column 1) a horse hoof striking the ground sending a ring-shaped shockwave through a cloud of dust — dominant colour rusty copper orange.
+5. (row 2, column 2) a round bronze shield engraved with a flaming helmet and small flames licking its rim — dominant colour fiery orange.
+6. (row 2, column 3) a raised short sword pointing forward with three spear tips flying ahead of it — dominant colour imperial violet.
+7. (row 3, column 1) a small golden statue of the winged goddess Victoria holding a laurel wreath above a row of three spear tips — dominant colour imperial violet.
+8. (row 3, column 2) an archer's hand drawing a bowstring back, with a thin glowing line running from the arrowhead to a small round target — dominant colour cool forest green.
+9. (row 3, column 3) a hawk's eye in extreme close-up with a thin crosshair circle over the pupil — dominant colour cool forest green.
+
+LAYOUT: an invisible grid of 3 columns and 3 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
+
+BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
+
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour (the inside of a tile is never magenta, pink or empty); on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
+
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces, except the small statue of Victoria in icon 7 and the archer's hand in icon 8; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 9 icons.
+```
+
+<details><summary>Indeling</summary>
+
+| Nr | Klasse | Knooppunt | Bestand |
+|---|---|---|---|
+| 1 | Hopliet | Herstelde Linie | `hopliet_herstelde_linie.png` |
+| 2 | Boogschutter | Verlammende Pijl | `boogschutter_verlammende_pijl.png` |
+| 3 | Cavalerie | Koerierdienst | `cavalerie_koerierdienst.png` |
+| 4 | Cavalerie | Schokgolf | `cavalerie_schokgolf.png` |
+| 5 | Voorvechter | Heldenschild | `spartaan_heldenschild.png` |
+| 6 | Bevelvoerder | Aanvalsbevel | `centurio_aanvalsbevel.png` |
+| 7 | Bevelvoerder | Victoria | `centurio_victoria.png` |
+| 8 | Boogschutter | Scherpe Concentratie | `boogschutter_scherpe_concentratie.png` |
+| 9 | Boogschutter | Havikoog | `boogschutter_havikoog.png` |
 
 </details>
 
