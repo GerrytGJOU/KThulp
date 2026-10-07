@@ -306,7 +306,7 @@ function bmStAbilityStats(cls,abl,stars,pay){
   if(isDmg){ b.dmg=abl.dmg||0; if(pas.type==="atk_flat") b.dmg+=pv; if(pas.type==="atk_bonus") b.dmg=Math.round(b.dmg*(1+pv)); if(pas.type==="shld_pierce") b.shldRemove+=pv; }
   if(BMST_SHIELD_T.includes(t)) b.shld=abl.shld||0;
   if(BMST_HEAL_T.includes(t)){ b.heal=abl.heal||0; if(pas.type==="heal_flat") b.heal+=pv; }
-  if(["team_be","testudo"].includes(t)) b.teamBE=abl.teamBE||0;
+  if(["team_be","testudo"].includes(t)) b.teamBE=abl.teamBE||0; else if(abl.teamBE) b.teamBE=abl.teamBE;
   if(BMST_REM_T.includes(t)) b.shldRemove+=abl.shldRemove||0;
   if(abl.selfBE) b.selfBE+=abl.selfBE;
   if(["team_shield","testudo"].includes(t)&&pas.type==="be_on_defend") b.selfBE+=pv;
@@ -318,6 +318,7 @@ function bmStAbilityStats(cls,abl,stars,pay){
   if(isDmg&&!abl.aoe&&n.dmg>0&&has("vaste_hand")) n.dmg+=1;
   if(has("ondermijnen")&&["verkenning","sabotage","ontwapenen"].includes(abl.id)) n.dmg+=3;
   if(isDmg&&n.dmg>0&&has("levensroof")) n.heal+=has("dorst")?2:1;
+  if(has("disciplina")&&abl.id==="strijdformatie") n.teamBE+=1;
   if(n.heal>0&&has("epidauros")) n.heal+=1;
   if(n.heal>0&&has("lichtmantel")) n.shld+=Math.min(4,Math.floor(n.heal/4));
   for(const id of nodes){ const f=N(id)?.fx; if(!f) continue;

@@ -17,7 +17,9 @@ const FIX_ICONS_3=[
 const FIX_ICONS_4=["priester_les_van_delphi.png","centurio_root.png"];
 // fix_5: de vier nieuwe Priester-knooppunten (Ambrosia, Zegenstroom, Lichtmantel, Gemeenschap).
 const FIX_ICONS_5=["priester_ambrosia.png","priester_zegenstroom.png","priester_lichtmantel.png","priester_gemeenschap.png"];
-const fixList=key=>key==="5"?FIX_ICONS_5:key==="4"?FIX_ICONS_4:key==="3"?FIX_ICONS_3:FIX_ICONS;
+// fix_6: de negen nieuwe knooppunten uit het pakket "minder platte klassen" (2026-10-07).
+const FIX_ICONS_6=["hopliet_herstelde_linie.png","boogschutter_verlammende_pijl.png","cavalerie_koerierdienst.png","cavalerie_schokgolf.png","spartaan_heldenschild.png","centurio_aanvalsbevel.png","centurio_victoria.png","boogschutter_scherpe_concentratie.png","boogschutter_havikoog.png"];
+const fixList=key=>key==="6"?FIX_ICONS_6:key==="5"?FIX_ICONS_5:key==="4"?FIX_ICONS_4:key==="3"?FIX_ICONS_3:FIX_ICONS;
 // Zoekt een knooppunt op bestandsnaam, met de tegelkleur die erbij hoort.
 function findIcon(TREES,icon){
   for(const t of Object.values(TREES)){
