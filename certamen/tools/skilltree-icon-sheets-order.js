@@ -10,12 +10,14 @@ const FIX_ICONS=[
 const FIX_ICONS_3=[
   "boogschutter_vaste_hand.png","boogschutter_koelbloedig.png","boogschutter_meesterschutter.png","hopliet_gedrilde_rijen.png",
   "hopliet_taai_als_brons.png","hopliet_laatste_bolwerk.png","hopliet_opmars.png","spartaan_levensroof.png",
-  "spartaan_dorst.png","spartaan_brandend_bloed.png","priester_les_van_delphi.png","priester_tempelslaap.png",
+  "spartaan_dorst.png","spartaan_brandend_bloed.png","priester_les_van_delphi.png",
   "priester_orakel_van_delphi.png","centurio_root.png","centurio_signum.png","verkenner_infiltrant.png",
 ];
 // fix_4: de twee uit fix_3 die nog niet goed waren, met een uitgebreidere prompt.
 const FIX_ICONS_4=["priester_les_van_delphi.png","centurio_root.png"];
-const fixList=key=>key==="4"?FIX_ICONS_4:key==="3"?FIX_ICONS_3:FIX_ICONS;
+// fix_5: de vier nieuwe Priester-knooppunten (Ambrosia, Zegenstroom, Lichtmantel, Gemeenschap).
+const FIX_ICONS_5=["priester_ambrosia.png","priester_zegenstroom.png","priester_lichtmantel.png","priester_gemeenschap.png"];
+const fixList=key=>key==="5"?FIX_ICONS_5:key==="4"?FIX_ICONS_4:key==="3"?FIX_ICONS_3:FIX_ICONS;
 // Zoekt een knooppunt op bestandsnaam, met de tegelkleur die erbij hoort.
 function findIcon(TREES,icon){
   for(const t of Object.values(TREES)){

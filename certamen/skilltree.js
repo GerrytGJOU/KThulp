@@ -137,12 +137,18 @@ function bmStProbeIcons(){
   nodes.forEach(n=>{ if(!n.icon||n.icon in BM_ST_IMG_OK) return; BM_ST_IMG_OK[n.icon]=false;
     const im=new Image(); im.onload=()=>{ BM_ST_IMG_OK[n.icon]=true; if(_screen==="skillTree") bmStRender(); }; im.src="assets/skills/"+n.icon; });
 }
+// Een perfect rechte lijn/curve (x1===x2 of y1===y2) heeft een bounding box met
+// breedte of hoogte 0: het gewone gloed-filter (objectBoundingBox-eenheden)
+// heeft dan een leeg gebied en de lijn verdwijnt juist als hij oplicht. Zulke
+// lijnen — o.a. de verticale curve naar het middelste (hybride) pad — krijgen
+// daarom een filter met vaste coördinaten (bmStGlowU).
+function bmStGlowFor(x1,y1,x2,y2){ return (x1===x2||y1===y2)?"url(#bmStGlowU)":"url(#bmStGlow)"; }
 function bmStLine(g,x1,y1,x2,y2,color,lit,dash){
-  bmStEl("line",{x1,y1,x2,y2,stroke:lit?color:BMST_DIM,"stroke-width":lit?3.5:2,"stroke-dasharray":dash||"","stroke-linecap":"round",opacity:lit?1:.7,filter:lit?"url(#bmStGlow)":""},g);
+  bmStEl("line",{x1,y1,x2,y2,stroke:lit?color:BMST_DIM,"stroke-width":lit?3.5:2,"stroke-dasharray":dash||"","stroke-linecap":"round",opacity:lit?1:.7,filter:lit?bmStGlowFor(x1,y1,x2,y2):""},g);
 }
 function bmStCurve(g,x1,y1,x2,y2,color,lit){
   const my=(y1+y2)/2;
-  bmStEl("path",{d:`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`,fill:"none",stroke:lit?color:BMST_DIM,"stroke-width":lit?5:2.5,opacity:lit?1:.6,filter:lit?"url(#bmStGlow)":""},g);
+  bmStEl("path",{d:`M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`,fill:"none",stroke:lit?color:BMST_DIM,"stroke-width":lit?5:2.5,opacity:lit?1:.6,filter:lit?bmStGlowFor(x1,y1,x2,y2):""},g);
 }
 let BM_ST_CLIP_N=0;
 function bmStNode(g,x,y,n,color,state,onPick,meta){
@@ -224,6 +230,9 @@ function bmStRender(){
     const f=bmStEl("filter",{id:"bmStGlow",x:"-50%",y:"-50%",width:"200%",height:"200%"},defs);
     bmStEl("feGaussianBlur",{stdDeviation:"4",result:"b"},f);
     const m=bmStEl("feMerge",{},f); bmStEl("feMergeNode",{in:"b"},m); bmStEl("feMergeNode",{in:"SourceGraphic"},m);
+    const fu=bmStEl("filter",{id:"bmStGlowU",filterUnits:"userSpaceOnUse",x:"-100",y:"-100",width:"1200",height:"1500"},defs);
+    bmStEl("feGaussianBlur",{stdDeviation:"4",result:"b"},fu);
+    const mu=bmStEl("feMerge",{},fu); bmStEl("feMergeNode",{in:"b"},mu); bmStEl("feMergeNode",{in:"SourceGraphic"},mu);
     const lg=bmStEl("radialGradient",{id:"bmStFillLit"},defs);
     bmStEl("stop",{offset:"0%","stop-color":"#3a2c1c"},lg); bmStEl("stop",{offset:"100%","stop-color":"#140e09"},lg);
     bmStDrawTemple(svg,defs); bmStEl("g",{id:"bmStDyn"},svg); svg._init=true;
@@ -324,7 +333,8 @@ function bmStAbilityStats(cls,abl,stars,pay){
     if(f.ability===abl.id||(f.abilities||[]).includes(abl.id)
       ||(f.type==="weakspot_threshold"&&t==="attack_weakspot")
       ||(/^hard_word_curse_bonus/.test(f.type)&&abl.id==="vloek")) extra.push(x); }
-  return {b,n,bypass,aoe:!!abl.aoe,mods:extra};
+  const hots=mods.filter(x=>x.fx.hot).map(x=>x.fx.hot); // heling over tijd (Ambrosia)
+  return {b,n,bypass,aoe:!!abl.aoe,mods:extra,hot:hots.length?{amt:hots.reduce((a,h)=>a+h.amt,0),rounds:Math.max(...hots.map(h=>h.rounds))}:null};
 }
 function bmStActionsRender(){
   const box=document.getElementById("bmStActions"); if(!box) return;
@@ -335,6 +345,7 @@ function bmStActionsRender(){
   const chips=s=>{ const out=[], d=(k)=>s.n[k]-s.b[k], up=k=>d(k)>0?` <i>+${d(k)}</i>`:d(k)<0?` <i class="dn">${d(k)}</i>`:"";
     if(s.n.dmg) out.push(`<span class="bmst-c dmg" title="Schade">⚔ ${s.n.dmg}${s.aoe?" <small>elk</small>":""}${up("dmg")}</span>`);
     if(s.n.heal) out.push(`<span class="bmst-c heal" title="Heling van je leger">✚ ${s.n.heal}${up("heal")}</span>`);
+    if(s.hot) out.push(`<span class="bmst-c heal" title="Extra heling in elk van de volgende rondes">✚ +${s.hot.amt} × ${s.hot.rounds} rondes erna</span>`);
     if(s.n.shld) out.push(`<span class="bmst-c shld" title="Schild voor je team">🛡 ${s.n.shld}${up("shld")}</span>`);
     if(s.n.teamBE) out.push(`<span class="bmst-c be" title="AP voor elke teamgenoot">+${s.n.teamBE} AP team${up("teamBE")}</span>`);
     if(s.n.selfBE) out.push(`<span class="bmst-c be" title="AP voor jezelf">+${s.n.selfBE} AP zelf${up("selfBE")}</span>`);

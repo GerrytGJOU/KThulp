@@ -74,6 +74,8 @@ for(const [key,cols,rows,ratio,people,intro,extra] of [
    "Iconen die bij de eerste ronde misgingen of beter konden. Via ChatGPT opgeslagen als `fix_2` — die versie is gebruikt."],
   ["3",4,4,"1:1","human figures or faces, except the sleeping figure in icon 12, the Pythia in icon 13 and the hooded figure in icon 16",
    "Tweede ronde: iconen die klopten maar mooier of preciezer konden (middeleeuwse puntschilden, ontbrekende details, weinig contrast). Bedoeld voor ChatGPT."],
+  ["5",2,2,"1:1","human figures or faces, except the small robed figures in icon 4",
+   "Vierde ronde: de vier nieuwe Priester-knooppunten (Ambrosia, Zegenstroom, Lichtmantel, Gemeenschap). Bedoeld voor ChatGPT; opslaan als fix_5."],
   ["4",2,1,"16:9","human figures or faces",
    "Derde ronde: Les van Delphi (werd een grafsteen) en de basis van de Bevelvoerder (kam liep van voor naar achter). Uitgebreide omschrijving per icoon.",
    "EXTRA DETAIL FOR ICON 1 (Delphi omphalos): the stone must be clearly ROUNDED like an egg or beehive — it is NOT a flat slab, NOT a tablet, NOT a gravestone or tombstone, NOT a rectangle with a rounded top. Its whole surface shows a carved criss-cross net pattern of raised bands. It stands on a small low square plinth. Above its rounded top floats a small glowing eye with a few short light rays. No letters, no inscription, no cross, no flowers.\n\n"+

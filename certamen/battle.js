@@ -1292,7 +1292,7 @@ SCREENS.battleFAQ = function(){
       <li>Nieuw op het slagveld: de <b>muur</b> van de Genie (eigen stenen HP-balk die klappen opvangt —
         geen schild, telt dus niet mee tegen de maaltijd van de Cycloop of de Enrage van de Minotaurus),
         <b>werktuigen</b> die een paar rondes doorvuren, een <b>val</b>, een <b>vloek</b> (☋, de vijand slaat
-        minder hard) en een <b>merkteken</b> (je teamgenoten raken harder). De Saboteur (Verkenner) breekt
+        minder hard), <b>heling over tijd</b> (de Priester heelt dan een paar rondes lang bij) en een <b>merkteken</b> (je teamgenoten raken harder). De Saboteur (Verkenner) breekt
         schild, muren en werktuigen van de tegenstander af.</li>
     </ul>
     <div class="eyebrow l" style="margin:14px 0 4px">De klassen en hun paden</div>

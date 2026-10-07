@@ -132,7 +132,7 @@ function accOf(p){ return p.answered>=4?p.correct/p.answered:0; }
 // Effect van een actie voor speler p in teamcontext T (T.enemyHpPct, T.ownHpPct, T.behind, T.boss, …)
 function effect(p,a,T){
   const fx={dmg:0,bypass:0,shld:0,heal:0,teamBE:0,shldRemove:0,selfBE:0,curse:0,mark:null,wall:0,engine:null,trap:0,
-            attack:isAttack(a),shieldAct:isShieldAct(a),healNext:0,linger:0,fort:0};
+            attack:isAttack(a),shieldAct:isShieldAct(a),healNext:0,hot:[],linger:0,fort:0};
   const pa=CLS[p.cls].passive, pv=passiveVal(p), t=a.type;
   const tree=p.b.mode==="tree";
   const F=(type)=>[...p.b.fx.values()].filter(f=>f.type===type);
@@ -208,6 +208,8 @@ function effect(p,a,T){
         if(a._treePres&&a.accuracyBonusPer10) h+=Math.min(a.accuracyBonusMax,Math.max(0,Math.floor((T.teamAccLast-0.5)*10)));
         if(has(p,"wonderheling")&&a.id==="gebed"&&T.ownHpPct<0.20&&!p.once.wonder){ h*=2; fx._useWonder=true; }
         for(const f of mods) if(f.healNextRound) fx.healNext+=f.healNextRound;
+        for(const f of mods) if(f.hot) fx.hot.push({a:f.hot.amt,l:f.hot.rounds});
+        if(has(p,"gemeenschap")&&T.teamAccLast>=0.75) h+=2;
       }
       fx.heal=h;
     }
@@ -369,7 +371,7 @@ function fight(teamA,teamB,opt){
     const res={};
     for(const [k,team,ek] of sides){
       const {T,list}=choices[k]; const own=S[k];
-      let dmg=0,byp=0,shld=0,heal=0,shRem=own.lingerRemove,sabRem=0,linger=0,lingerRounds=0,curse=0,wallAdd=0,trapAdd=0;
+      let dmg=0,byp=0,shld=(own.overflowShield||0),heal=0,shRem=own.lingerRemove,sabRem=0,linger=0,lingerRounds=0,curse=0,wallAdd=0,trapAdd=0;
       const per=[]; let attackers=0, shieldCount=0, bestMark=null, marker=null;
       for(const {p,ch} of list){
         const r={p,dmg:0,byp:0,shld:0,heal:0,shRem:0,teamBE:0,wall:0};
@@ -390,12 +392,15 @@ function fight(teamA,teamB,opt){
           if(fx.engine) p.engine={...fx.engine};
           if(fx._useWonder) p.once.wonder=true;
           if(fx.healNext) p.healNext+=fx.healNext;
+          p._hotNew=fx.hot&&fx.hot.length?fx.hot:null; r.abId=a.id;
           if(p.b.mode==="tree"&&has(p,"kleos")&&a.id==="leeuwensprong") addSelf(p,2);
           if(p.b.mode==="tree"&&has(p,"toeslaan_en_verdwijnen")&&a.id==="hinderlaag") p._shieldNext=2;
         } else { p.idleRounds++; p.noSpendRounds++; if(p.b.mode==="tree"&&has(p,"menos")) p.menos=has(p,"nagloeien")?Math.floor(p.menos/2):0; }
         // werktuigen vuren (alleen bij een goed antwoord van de eigenaar)
         if(p.engine&&p.engine.rounds>0&&!(ch&&ch.fx.engine)){ if(p.ok||p.engine.burn){ r.dmg+=p.engine.dmg; dmg+=p.engine.dmg; if(has(p,"stormram")){r.shRem+=2;shRem+=2;} } p.engine.rounds--; if(p.engine.rounds<=0)p.engine=null; }
         if(p.healNext){ r.heal+=p.healNext; heal+=p.healNext; p.healNext=0; }
+        if(p.hot&&p.hot.length){ const hs=p.hot.reduce((x,h)=>x+h.a,0); r.heal+=hs; heal+=hs; p.hot=p.hot.map(h=>({a:h.a,l:h.l-1})).filter(h=>h.l>0); }
+        if(p._hotNew){ p.hot=(p.hot||[]).concat(p._hotNew.map(h=>({a:h.a,l:h.l}))); p._hotNew=null; }
         if(p._shieldNext&&!(ch&&ch.a.id==="hinderlaag")){ r.shld+=p._shieldNext; shld+=p._shieldNext; p._shieldNext=0; }
         per.push(r);
       }
@@ -418,9 +423,11 @@ function fight(teamA,teamB,opt){
           let amt=r.teamBE;
           if(g.b.mode==="tree"){ if(has(g,"bevoorrading")&&lowest.indexOf(q)<lowN) amt+=has(g,"volle_schuren")?2:1;
             if(has(g,"opvangen")&&(!q.ok||(has(g,"vangnet")&&q.ap===0))) amt+=1;
-            if(r.lowestExtra&&lowest.indexOf(q)<lowN) amt+=r.lowestExtra; }
+            if(r.lowestExtra&&lowest.indexOf(q)<lowN) amt+=r.lowestExtra;
+            if(has(g,"zegenstroom")&&r.abId==="zegen"&&lowest.indexOf(q)<lowN) amt+=1; }
           const room=Math.min(TEAMBE_CAP-recv.get(q),AP_MAX-q.ap); const real=Math.max(0,Math.min(amt,room));
           q.ap+=real; recv.set(q,recv.get(q)+real); given+=real; }
+        if(g.b.mode==="tree"&&has(g,"zegenstroom")&&r.abId==="zegen"){ g.ap=Math.min(AP_MAX,g.ap+1); given+=1; }
         g.contrib+=given*1.6;
       }
       if(team.some(p=>p.b.mode==="tree"&&has(p,"niemand_valt"))&&team.every(q=>q.ap>=1)) for(const p of team) if(p.b.mode==="tree"&&has(p,"niemand_valt")) addSelf(p,4);
@@ -476,6 +483,7 @@ function fight(teamA,teamB,opt){
         const r=res[k], own=S[k];
         const missing=own.max-Math.max(0,own.hp); const healed=Math.min(missing,r.heal);
         own.hp+=healed; distHeal(r,healed);
+        own.overflowShield=(has_any(k,"lichtmantel")||has_any(k,"overvloeiend_bloed"))?Math.min(3,Math.max(0,r.heal-healed)):0;
         own.wall=Math.min(teamWallCap(k),own.wall+r.wallAdd); own.wallPeak=Math.max(own.wallPeak,own.wall);
         decayWall(k,own); own.trap=r.trapAdd;
         own.curseOnEnemy=r.curse>0?r.curse:(own.curseLinger>0?own.curseLinger:0); own.curseLinger=(r.curse>0&&has_any(k,"onheilsdag"))?Math.max(1,r.curse-1):0;

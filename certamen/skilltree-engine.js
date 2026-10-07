@@ -127,7 +127,7 @@ function bmStLadder(p,acc){
 /* ---- effect van één vaardigheid (host, na de basisberekening) ----
    Past fx aan en geeft extra's terug voor de teamverwerking na pas 1. */
 function bmStApplyEffect(p,cls,abl,fx,ctx){
-  const ex={curse:0,mark:null,wall:0,engine:null,trap:0,healNext:0,linger:0,lingerRounds:0,sab:false,useWonder:false,shieldNextRound:0};
+  const ex={curse:0,mark:null,wall:0,engine:null,trap:0,healNext:0,hot:[],linger:0,lingerRounds:0,sab:false,useWonder:false,shieldNextRound:0};
   if(!bmStActive(p)||!ctx) return ex;
   const R=ctx.round, T=ctx.team[p.team], S=p.stS||{}, t=abl.type;
   const has=id=>p.st.nodes.indexOf(id)>=0;
@@ -151,6 +151,7 @@ function bmStApplyEffect(p,cls,abl,fx,ctx){
     if(f.noShieldDmg&&!T.enemyShieldsNow) d+=f.noShieldDmg;
     if(f.fastShld&&fast) fx.shld+=f.fastShld;
     if(f.healNextRound) ex.healNext+=f.healNextRound;
+    if(f.hot) ex.hot.push({a:f.hot.amt,l:f.hot.rounds}); // heling over tijd (Ambrosia)
     if(f.curse) ex.curse=Math.max(ex.curse,f.curse);
     if(f.engine) ex.engine={dmg:has("zware_stenen")?3:f.engine.dmg,rounds:has("lange_belegering")?3:f.engine.rounds};
     // muur/val via ability_mod (Palissade, Gegraven Greppel, Valkuil) — Stenen Muur/Dubbele Gracht vervangen de waarde
@@ -224,6 +225,7 @@ function bmStApplyEffect(p,cls,abl,fx,ctx){
   if(fx.heal>0||h>0){
     if(has("noodhulp")){ let b=Math.min(has("snelle_hulp")?4:3,Math.floor((1-T.hpPct)/0.25)); if(abl._st&&abl.missingHpMult) b*=abl.missingHpMult; h+=b; }
     if(has("epidauros")) h+=1;
+    if(has("gemeenschap")&&(T.st.accLast??0)>=0.75) h+=2;
     if(has("veldheersblik")&&abl.id==="veldverzorging") h+=bmStLadder(p,T.st.accLast??0);
     if(abl._st&&abl.accuracyBonusPer10) h+=Math.min(abl.accuracyBonusMax,Math.max(0,Math.floor(((T.st.accLast??0)-0.5)*10)));
   }
@@ -267,7 +269,8 @@ function bmStAfterPass1(players,roundN,res,from,for_,pUpd,events,stRoom,ctx){
     // schild/heling die een ronde doorloopt
     for(const p of Object.values(players)){ if(p.team!==t||!bmStActive(p)) continue; const S=p.stS||{};
       if(S.shieldNext) for_[t].shld+=S.shieldNext;
-      if(S.healNext) for_[t].heal+=S.healNext; }
+      if(S.healNext) for_[t].heal+=S.healNext;
+      for(const h of (S.hot||[])) for_[t].heal+=h.a; }
     if(st.overflowShield){ for_[t].shld+=st.overflowShield; st.overflowShield=0; }
     // werktuigen vuren (eigenaar moet deze ronde goed antwoorden; vuur brandt altijd door)
     for(const [pid,p] of Object.entries(players)){ if(p.team!==t||!bmStActive(p)) continue; const S=p.stS||{};
@@ -331,6 +334,7 @@ function bmStAfterPass1(players,roundN,res,from,for_,pUpd,events,stRoom,ctx){
     const r=res.find(x=>x.pid===pid), S={...(p.stS||{}),...((pUpd[pid]&&pUpd[pid].stS)||{})};
     const has=id=>p.st.nodes.indexOf(id)>=0;
     S.shieldNext=0; S.healNext=0;
+    S.hot=(S.hot||[]).map(h=>({a:h.a,l:h.l-1})).filter(h=>h.l>0); // deze ronde toegepast; wat overblijft loopt door
     if(r){
       const atk=r.fx.dmg>0&&BM_DMG_TYPES.includes(r.abl.type), shieldAct=BM_ST_SHIELD_TYPES.includes(r.abl.type);
       const spent=(r.cost||0)>0, keepIdle=has("woudkennis")&&r.abl.id==="hinderlaag";
@@ -341,6 +345,7 @@ function bmStAfterPass1(players,roundN,res,from,for_,pUpd,events,stRoom,ctx){
       S.noSpend=(spent&&!keepIdle)?0:(S.noSpend||0)+1;
       if(r.ex&&r.ex.useWonder) S.wonder=true;
       if(r.ex&&r.ex.healNext) S.healNext=r.ex.healNext;
+      if(r.ex&&r.ex.hot&&r.ex.hot.length) S.hot=S.hot.concat(r.ex.hot.map(h=>({a:h.a,l:h.l})));
       if(r.ex&&r.ex.shieldNextRound) S.shieldNext=r.ex.shieldNextRound;
       if(r._next) S.next=r._next;
       if(has("kleos")&&r.abl.id==="leeuwensprong"){ const u=upd(pid); u.be=bmClampBE((u.be??p.be??0)+2); }
@@ -376,7 +381,9 @@ function bmStTeamBE(players,roundN,res,for_,pUpd){
         if(has("bevoorrading")&&low) extra+=has("volle_schuren")?2:1;
         if(has("opvangen")&&(!bmStOkNow(q,roundN)||(has("vangnet")&&(q.be||0)===0))) extra+=1;
         if(g.abl.lowestExtra&&low) extra+=g.abl.lowestExtra;
-        recv[pid]=Math.min(BM_TEAMBE_ROUND_CAP,recv[pid]+extra); } }
+        if(g.abl.id==="zegen"&&has("zegenstroom")&&low) extra+=1;
+        recv[pid]=Math.min(BM_TEAMBE_ROUND_CAP,recv[pid]+extra); }
+      if(g.abl.id==="zegen"&&has("zegenstroom")) recv[g.pid]=Math.min(BM_TEAMBE_ROUND_CAP,recv[g.pid]+1); }
     for(const [pid,q] of mates){ if(!recv[pid]) continue; const u=bmStUpd(players,pUpd,pid); u.be=bmClampBE((u.be??q.be??0)+recv[pid]); }
   }
 }
@@ -424,7 +431,7 @@ function bmStFinishRound(players,roundN,stRoom,info){
     st.accLast=mates.length?mates.filter(q=>bmStOkNow(q,roundN)).length/mates.length:1;
     st.shieldLast=(info&&info[t]&&info[t].shieldActs)||0;
     st.blockedLast=(info&&info[t]&&info[t].blocked)||0;
-    if(info&&info[t]&&info[t].overflow>0&&bmStTeamHas(players,t,"overvloeiend_bloed")) st.overflowShield=Math.min(3,info[t].overflow);
+    if(info&&info[t]&&info[t].overflow>0&&(bmStTeamHas(players,t,"overvloeiend_bloed")||bmStTeamHas(players,t,"lichtmantel"))) st.overflowShield=Math.min(3,info[t].overflow);
     if(!(st.wall>0)) st.wall=0;
   }
   return stRoom;
@@ -530,9 +537,10 @@ function bmStRenderField(){
 .bmst-pal.A{left:44%;transform:translateX(-50%)}
 .bmst-pal.B{left:56%;transform:translateX(-50%) scaleX(-1)}
 .bm-boss .bmst-pal.A{left:60%}
-.bmst-eng{position:absolute;bottom:34%;width:13%;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5));z-index:0}
-.bmst-eng.A{left:calc(26% + var(--i)*6%)}
-.bmst-eng.B{right:calc(26% + var(--i)*6%)}
+/* Werktuigen: hoog en aan de zijkant van het veld, zodat ze bij een grote klas niet achter de rij helden verdwijnen */
+.bmst-eng{position:absolute;bottom:56%;width:13%;filter:drop-shadow(0 6px 8px rgba(0,0,0,.5));z-index:3}
+.bmst-eng.A{left:calc(1% + var(--i)*14%)}
+.bmst-eng.B{right:calc(1% + var(--i)*14%)}
 .bmst-eng.A.catapult,.bmst-eng.B.ram,.bmst-eng.B.siegetower{transform:scaleX(-1)}
 .bm-field-solo .bmst-pal.A{left:62%}`;
   document.head.appendChild(s);
