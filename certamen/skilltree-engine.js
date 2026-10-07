@@ -225,11 +225,12 @@ function bmStApplyEffect(p,cls,abl,fx,ctx){
   if(fx.heal>0||h>0){
     if(has("noodhulp")){ let b=Math.min(has("snelle_hulp")?4:3,Math.floor((1-T.hpPct)/0.25)); if(abl._st&&abl.missingHpMult) b*=abl.missingHpMult; h+=b; }
     if(has("epidauros")) h+=1;
-    if(has("gemeenschap")&&(T.st.accLast??0)>=0.75) h+=2;
+    if(has("gemeenschap")&&(T.st.accLast??0)>=0.75) h+=3;
     if(has("veldheersblik")&&abl.id==="veldverzorging") h+=bmStLadder(p,T.st.accLast??0);
     if(abl._st&&abl.accuracyBonusPer10) h+=Math.min(abl.accuracyBonusMax,Math.max(0,Math.floor(((T.st.accLast??0)-0.5)*10)));
   }
   fx.heal+=h;
+  if(has("lichtmantel")&&fx.heal>0) fx.shld+=Math.min(4,Math.floor(fx.heal/4)); // Lichtmantel: heling geeft ook schild
   if(has("wonderheling")&&abl.id==="gebed"&&T.hpPct<0.20&&!S.wonder){ fx.heal*=2; ex.useWonder=true; }
   // --- team-AP ---
   fx.teamBE+=m("teamBE");
@@ -431,7 +432,7 @@ function bmStFinishRound(players,roundN,stRoom,info){
     st.accLast=mates.length?mates.filter(q=>bmStOkNow(q,roundN)).length/mates.length:1;
     st.shieldLast=(info&&info[t]&&info[t].shieldActs)||0;
     st.blockedLast=(info&&info[t]&&info[t].blocked)||0;
-    if(info&&info[t]&&info[t].overflow>0&&(bmStTeamHas(players,t,"overvloeiend_bloed")||bmStTeamHas(players,t,"lichtmantel"))) st.overflowShield=Math.min(3,info[t].overflow);
+    if(info&&info[t]&&info[t].overflow>0&&bmStTeamHas(players,t,"overvloeiend_bloed")) st.overflowShield=Math.min(3,info[t].overflow);
     if(!(st.wall>0)) st.wall=0;
   }
   return stRoom;

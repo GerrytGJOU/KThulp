@@ -319,6 +319,7 @@ function bmStAbilityStats(cls,abl,stars,pay){
   if(has("ondermijnen")&&["verkenning","sabotage","ontwapenen"].includes(abl.id)) n.dmg+=3;
   if(isDmg&&n.dmg>0&&has("levensroof")) n.heal+=has("dorst")?2:1;
   if(n.heal>0&&has("epidauros")) n.heal+=1;
+  if(n.heal>0&&has("lichtmantel")) n.shld+=Math.min(4,Math.floor(n.heal/4));
   for(const id of nodes){ const f=N(id)?.fx; if(!f) continue;
     if(f.type==="shield_per_ally_counts_basic"&&f.ability===abl.id&&f.cost) n.cost+=f.cost;
     if(f.type==="sabotage_layers"&&abl.id==="sabotage"&&f.sabotageCost) n.cost+=f.sabotageCost; }
