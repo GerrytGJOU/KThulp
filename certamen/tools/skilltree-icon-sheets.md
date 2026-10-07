@@ -232,12 +232,12 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 
 1. (row 1, column 1) a solid wall of bronze shields seen straight from the front — dominant colour cool polished steel blue.
 2. (row 1, column 2) a large concave hoplon shield with the arm strap visible on the inside — dominant colour cool polished steel blue.
-3. (row 1, column 3) a ROUND Greek bronze shield (hoplon) with a crack held together by three iron rivets — dominant colour cool polished steel blue.
-4. (row 1, column 4) two long rows of shields locking together like a closing gate — dominant colour cool polished steel blue.
+3. (row 1, column 3) two long rows of shields locking together like a closing gate — dominant colour cool polished steel blue.
+4. (row 1, column 4) a ROUND Greek bronze shield (hoplon) with a crack held together by three iron rivets — dominant colour cool polished steel blue.
 5. (row 2, column 1) a long ancient Greek war trumpet (salpinx) sounding above a line of shields — dominant colour cool polished steel blue.
 6. (row 2, column 2) a single ROUND Greek bronze shield standing upright amid a ruined stone wall — dominant colour cool polished steel blue.
-7. (row 2, column 3) a line of shields with golden light shining along their rims — dominant colour cool polished steel blue.
-8. (row 2, column 4) a Spartan lambda symbol on a shield standing in a narrow mountain pass — dominant colour cool polished steel blue.
+7. (row 2, column 3) a Spartan lambda symbol on a shield standing in a narrow mountain pass — dominant colour cool polished steel blue.
+8. (row 2, column 4) a line of shields with golden light shining along their rims — dominant colour cool polished steel blue.
 
 LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -254,12 +254,12 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 |---|---|---|
 | 1 | Bronzen Muur | `hopliet_bronzen_muur.png` |
 | 2 | Hoplon | `hopliet_hoplon.png` |
-| 3 | Taai als Brons | `hopliet_taai_als_brons.png` |
-| 4 | Linie Vast | `hopliet_linie_vast.png` |
+| 3 | Linie Vast | `hopliet_linie_vast.png` |
+| 4 | Taai als Brons | `hopliet_taai_als_brons.png` |
 | 5 | Snelle Formatie | `hopliet_snelle_formatie.png` |
 | 6 | Laatste Bolwerk | `hopliet_laatste_bolwerk.png` |
-| 7 | Gouden Linie | `hopliet_gouden_linie.png` |
-| 8 | Geest van de 300 | `hopliet_geest_van_de_300.png` |
+| 7 | Geest van de 300 | `hopliet_geest_van_de_300.png` |
+| 8 | Gouden Linie | `hopliet_gouden_linie.png` |
 
 </details>
 
@@ -272,8 +272,8 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a sharpened bronze shield rim gleaming along its edge — dominant colour blood red and bronze.
-2. (row 1, column 2) one round shield smashing into another round shield, which cracks — dominant colour blood red and bronze.
+1. (row 1, column 1) one round shield smashing into another round shield, which cracks — dominant colour blood red and bronze.
+2. (row 1, column 2) a sharpened bronze shield rim gleaming along its edge — dominant colour blood red and bronze.
 3. (row 1, column 3) a spear held upright behind a shield, both angled forward — dominant colour blood red and bronze.
 4. (row 1, column 4) a bronze shield with dark red stains on its surface — dominant colour blood red and bronze.
 5. (row 2, column 1) a round shield and an upright spear side by side, with two curved arrows circling around both — dominant colour blood red and bronze.
@@ -294,8 +294,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
-| 1 | Scherpe Rand | `hopliet_scherpe_rand.png` |
-| 2 | Schild als Wapen | `hopliet_schild_als_wapen.png` |
+| 1 | Schild als Wapen | `hopliet_schild_als_wapen.png` |
+| 2 | Scherpe Rand | `hopliet_scherpe_rand.png` |
 | 3 | Pantser en Speer | `hopliet_pantser_en_speer.png` |
 | 4 | Bloed op het Brons | `hopliet_bloed_op_het_brons.png` |
 | 5 | Opmars | `hopliet_opmars.png` |
@@ -396,10 +396,10 @@ CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each on
 
 1. (row 1, column 1) a tall flame shaped like a warrior's crest — dominant colour fiery orange.
 2. (row 1, column 2) two upward arrows made of fire — dominant colour fiery orange.
-3. (row 1, column 3) a spear smashing straight through a wooden shield in a burst of splinters — dominant colour fiery orange.
-4. (row 1, column 4) glowing embers in a bronze brazier — dominant colour fiery orange.
-5. (row 2, column 1) a lion leaping forward in an explosion of fire — dominant colour fiery orange.
-6. (row 2, column 2) three spears flying in parallel toward the upper right — dominant colour fiery orange.
+3. (row 1, column 3) glowing embers in a bronze brazier — dominant colour fiery orange.
+4. (row 1, column 4) a spear smashing straight through a wooden shield in a burst of splinters — dominant colour fiery orange.
+5. (row 2, column 1) three spears flying in parallel toward the upper right — dominant colour fiery orange.
+6. (row 2, column 2) a lion leaping forward in an explosion of fire — dominant colour fiery orange.
 7. (row 2, column 3) a golden victory wreath above a raised spear — dominant colour fiery orange.
 8. (row 2, column 4) the helmet of Ares, the war god, with burning red eyes — dominant colour fiery orange.
 
@@ -418,10 +418,10 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 |---|---|---|
 | 1 | Heldenmoed | `spartaan_heldenmoed.png` |
 | 2 | Snelle Woede | `spartaan_snelle_woede.png` |
-| 3 | Onstuitbare Kracht | `spartaan_onstuitbare_kracht.png` |
-| 4 | Nagloeien | `spartaan_nagloeien.png` |
-| 5 | Ontlading | `spartaan_ontlading.png` |
-| 6 | Speerregen | `spartaan_speerregen.png` |
+| 3 | Nagloeien | `spartaan_nagloeien.png` |
+| 4 | Onstuitbare Kracht | `spartaan_onstuitbare_kracht.png` |
+| 5 | Speerregen | `spartaan_speerregen.png` |
+| 6 | Ontlading | `spartaan_ontlading.png` |
 | 7 | Kleos | `spartaan_kleos.png` |
 | 8 | Woede van Ares | `spartaan_woede_van_ares.png` |
 
@@ -436,8 +436,8 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a wide shallow Greek drinking cup (kylix) on a short foot with two small side handles, filled with dark red liquid — dominant colour dark wine red.
-2. (row 1, column 2) a curved sickle-shaped blade with drops of red falling from it — dominant colour dark wine red.
+1. (row 1, column 1) a curved sickle-shaped blade with drops of red falling from it — dominant colour dark wine red.
+2. (row 1, column 2) a wide shallow Greek drinking cup (kylix) on a short foot with two small side handles, filled with dark red liquid — dominant colour dark wine red.
 3. (row 1, column 3) a short Greek sword (xiphos) with a glowing red blade — dominant colour dark wine red.
 4. (row 1, column 4) a bronze bowl overflowing with red liquid onto a shield below it — dominant colour dark wine red.
 5. (row 2, column 1) a muscular arm wrapped in iron bands holding a sword — dominant colour dark wine red.
@@ -458,8 +458,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
-| 1 | Dorst | `spartaan_dorst.png` |
-| 2 | Wrede Oogst | `spartaan_wrede_oogst.png` |
+| 1 | Wrede Oogst | `spartaan_wrede_oogst.png` |
+| 2 | Dorst | `spartaan_dorst.png` |
 | 3 | Rode Kling | `spartaan_rode_kling.png` |
 | 4 | Overvloeiend Bloed | `spartaan_overvloeiend_bloed.png` |
 | 5 | IJzeren Vlees | `spartaan_ijzeren_vlees.png` |
@@ -600,12 +600,12 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a horse galloping with wind lines streaming from its mane — dominant colour wind teal.
-2. (row 1, column 2) a horse galloping to the right while its rider twists backwards in the saddle and shoots an arrow to the LEFT, behind him — dominant colour wind teal.
+1. (row 1, column 1) a horse galloping to the right while its rider twists backwards in the saddle and shoots an arrow to the LEFT, behind him — dominant colour wind teal.
+2. (row 1, column 2) a horse galloping with wind lines streaming from its mane — dominant colour wind teal.
 3. (row 1, column 3) an hourglass with a horseshoe hanging in front of it — dominant colour wind teal.
 4. (row 1, column 4) two horseshoes side by side with small motion lines between them — dominant colour wind teal.
-5. (row 2, column 1) a light rider on a small horse without a saddle, holding a javelin — dominant colour wind teal.
-6. (row 2, column 2) several javelins flying in a fan shape from the side — dominant colour wind teal.
+5. (row 2, column 1) several javelins flying in a fan shape from the side — dominant colour wind teal.
+6. (row 2, column 2) a light rider on a small horse without a saddle, holding a javelin — dominant colour wind teal.
 7. (row 2, column 3) three riders in three directions around a small shield in the centre — dominant colour wind teal.
 8. (row 2, column 4) a horse spinning in a circle of dust and wind — dominant colour wind teal.
 
@@ -622,12 +622,12 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
-| 1 | Windruiter | `cavalerie_windruiter.png` |
-| 2 | Parthisch Schot | `cavalerie_parthisch_schot.png` |
+| 1 | Parthisch Schot | `cavalerie_parthisch_schot.png` |
+| 2 | Windruiter | `cavalerie_windruiter.png` |
 | 3 | Ruitervaardigheid | `cavalerie_ruitervaardigheid.png` |
 | 4 | Ritme | `cavalerie_ritme.png` |
-| 5 | Numidische Ruiters | `cavalerie_numidische_ruiters.png` |
-| 6 | Speervuur | `cavalerie_speervuur.png` |
+| 5 | Speervuur | `cavalerie_speervuur.png` |
+| 6 | Numidische Ruiters | `cavalerie_numidische_ruiters.png` |
 | 7 | Overal Tegelijk | `cavalerie_overal_tegelijk.png` |
 | 8 | Wervelwind | `cavalerie_wervelwind.png` |
 
@@ -722,14 +722,14 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a running figure carrying a bowl of glowing green ointment — dominant colour soft healing green.
-2. (row 1, column 2) a bundle of dried healing herbs tied with string — dominant colour soft healing green.
+1. (row 1, column 1) a bundle of dried healing herbs tied with string — dominant colour soft healing green.
+2. (row 1, column 2) a golden chalice slowly pouring a thin stream of glowing golden nectar, with three bright drops falling from it — dominant colour soft healing green.
 3. (row 1, column 3) a golden bowl with a snake coiled around its base, glowing liquid inside — dominant colour soft healing green.
-4. (row 1, column 4) a sleeping figure on a stone temple bench with a small crescent moon above (plain tile colour behind, no night sky) — dominant colour soft healing green.
+4. (row 1, column 4) one hand pouring a stream of golden light into the open bowl held by a second hand below it, with small sparks of light — dominant colour soft healing green.
 5. (row 2, column 1) a small round Greek stone theatre with stepped semicircular seats, seen from the front, simple and bold (no sky, no landscape) — dominant colour soft healing green.
-6. (row 2, column 2) a green temple snake coiled in a spiral on a stone floor — dominant colour soft healing green.
+6. (row 2, column 2) a glowing white priest's cloak spread out like a protective dome of light over a small altar flame — dominant colour soft healing green.
 7. (row 2, column 3) a small glass vial of glowing golden medicine — dominant colour soft healing green.
-8. (row 2, column 4) a beam of golden light falling onto an open hand — dominant colour soft healing green.
+8. (row 2, column 4) a ring of five small figures in white robes holding hands around a glowing bowl of fire, seen from slightly above — dominant colour soft healing green.
 
 LAYOUT: an invisible grid of 4 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -744,14 +744,14 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
-| 1 | Snelle Hulp | `priester_snelle_hulp.png` |
-| 2 | Kruiden | `priester_kruiden.png` |
+| 1 | Kruiden | `priester_kruiden.png` |
+| 2 | Ambrosia | `priester_ambrosia.png` |
 | 3 | Schaal van Hygieia | `priester_schaal_van_hygieia.png` |
-| 4 | Tempelslaap | `priester_tempelslaap.png` |
+| 4 | Zegenstroom | `priester_zegenstroom.png` |
 | 5 | Epidauros | `priester_epidauros.png` |
-| 6 | Heilige Slang | `priester_heilige_slang.png` |
+| 6 | Lichtmantel | `priester_lichtmantel.png` |
 | 7 | Panakeia | `priester_panakeia.png` |
-| 8 | Wonderheling | `priester_wonderheling.png` |
+| 8 | Gemeenschap | `priester_gemeenschap.png` |
 
 </details>
 
@@ -886,8 +886,8 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a Roman granary building with open doors full of grain — dominant colour supply teal.
-2. (row 1, column 2) a leather marching pack with a bread loaf and a water flask — dominant colour supply teal.
+1. (row 1, column 1) a leather marching pack with a bread loaf and a water flask — dominant colour supply teal.
+2. (row 1, column 2) a Roman granary building with open doors full of grain — dominant colour supply teal.
 3. (row 1, column 3) a bronze cooking pot steaming over a small camp fire — dominant colour supply teal.
 4. (row 1, column 4) a rope net stretched between two wooden posts — dominant colour supply teal.
 5. (row 2, column 1) a mule carrying packs and a pickaxe on its back — dominant colour supply teal.
@@ -908,8 +908,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
-| 1 | Volle Schuren | `centurio_volle_schuren.png` |
-| 2 | Marsrantsoen | `centurio_marsrantsoen.png` |
+| 1 | Marsrantsoen | `centurio_marsrantsoen.png` |
+| 2 | Volle Schuren | `centurio_volle_schuren.png` |
 | 3 | Veldkeuken | `centurio_veldkeuken.png` |
 | 4 | Vangnet | `centurio_vangnet.png` |
 | 5 | Bagagetrein | `centurio_bagagetrein.png` |
@@ -928,10 +928,10 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a centurion's vine staff raised high with a golden ribbon — dominant colour imperial violet.
-2. (row 1, column 2) an open-mouthed Roman helmet with sound waves coming out — dominant colour imperial violet.
-3. (row 1, column 3) a tribune's narrow purple-striped cloak draped over a chair — dominant colour imperial violet.
-4. (row 1, column 4) a perfect square formation of shields seen from above (testudo) — dominant colour imperial violet.
+1. (row 1, column 1) an open-mouthed Roman helmet with sound waves coming out — dominant colour imperial violet.
+2. (row 1, column 2) a centurion's vine staff raised high with a golden ribbon — dominant colour imperial violet.
+3. (row 1, column 3) a perfect square formation of shields seen from above (testudo) — dominant colour imperial violet.
+4. (row 1, column 4) a tribune's narrow purple-striped cloak draped over a chair — dominant colour imperial violet.
 5. (row 2, column 1) a square red military banner (vexillum) with a small golden eagle emblem, hanging from a crossbar (no letters) — dominant colour imperial violet.
 6. (row 2, column 2) a kneeling veteran soldier with a long spear braced against the ground — dominant colour imperial violet.
 7. (row 2, column 3) a bundle of rods with an axe (fasces) tied with red leather straps — dominant colour imperial violet.
@@ -950,10 +950,10 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
-| 1 | Optimus | `centurio_optimus.png` |
-| 2 | Strijdkreet | `centurio_strijdkreet.png` |
-| 3 | Tribunus | `centurio_tribunus.png` |
-| 4 | Disciplina | `centurio_disciplina.png` |
+| 1 | Strijdkreet | `centurio_strijdkreet.png` |
+| 2 | Optimus | `centurio_optimus.png` |
+| 3 | Disciplina | `centurio_disciplina.png` |
+| 4 | Tribunus | `centurio_tribunus.png` |
 | 5 | Signum | `centurio_signum.png` |
 | 6 | Triarii | `centurio_triarii.png` |
 | 7 | Imperium | `centurio_imperium.png` |
@@ -1092,10 +1092,10 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) a solid wall of cut stone blocks with a walkway on top — dominant colour sage stone grey-green.
-2. (row 1, column 2) a hammer and a roll of bandage lying on a wooden plank — dominant colour sage stone grey-green.
-3. (row 1, column 3) a wooden watchtower with a small roof and a lookout platform — dominant colour sage stone grey-green.
-4. (row 1, column 4) a builder's hammer striking a wooden beam with motion lines — dominant colour sage stone grey-green.
+1. (row 1, column 1) a hammer and a roll of bandage lying on a wooden plank — dominant colour sage stone grey-green.
+2. (row 1, column 2) a solid wall of cut stone blocks with a walkway on top — dominant colour sage stone grey-green.
+3. (row 1, column 3) a builder's hammer striking a wooden beam with motion lines — dominant colour sage stone grey-green.
+4. (row 1, column 4) a wooden watchtower with a small roof and a lookout platform — dominant colour sage stone grey-green.
 5. (row 2, column 1) a small square stone fort with four corner towers seen from above — dominant colour sage stone grey-green.
 6. (row 2, column 2) two parallel water-filled ditches in front of an earth wall — dominant colour sage stone grey-green.
 7. (row 2, column 3) a rectangular Roman army camp with a wooden palisade and four gates, seen from above — dominant colour sage stone grey-green.
@@ -1114,10 +1114,10 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
-| 1 | Stenen Muur | `genie_stenen_muur.png` |
-| 2 | Veldherstel | `genie_veldherstel.png` |
-| 3 | Wachttoren | `genie_wachttoren.png` |
-| 4 | Snelbouw | `genie_snelbouw.png` |
+| 1 | Veldherstel | `genie_veldherstel.png` |
+| 2 | Stenen Muur | `genie_stenen_muur.png` |
+| 3 | Snelbouw | `genie_snelbouw.png` |
+| 4 | Wachttoren | `genie_wachttoren.png` |
 | 5 | Vesting | `genie_vesting.png` |
 | 6 | Dubbele Gracht | `genie_dubbele_gracht.png` |
 | 7 | Castra | `genie_castra.png` |
@@ -1256,8 +1256,8 @@ STYLE REFERENCE: the attached image is the exact style to copy — same square t
 
 CONTENT (most important rule): draw EXACTLY the 8 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
-1. (row 1, column 1) several spear points bursting out of thick bushes at once — dominant colour deep forest green.
-2. (row 1, column 2) a small rolled message with a wax seal tied to an arrow — dominant colour deep forest green.
+1. (row 1, column 1) a small rolled message with a wax seal tied to an arrow — dominant colour deep forest green.
+2. (row 1, column 2) several spear points bursting out of thick bushes at once — dominant colour deep forest green.
 3. (row 1, column 3) a cloaked figure vanishing into fog between trees — dominant colour deep forest green.
 4. (row 1, column 4) a coiled snake hiding under a rock, ready to strike — dominant colour deep forest green.
 5. (row 2, column 1) a Germanic chieftain's iron helmet with two curved horns resting on a round wooden shield (no Roman objects, no people) — dominant colour deep forest green.
@@ -1278,8 +1278,8 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 
 | Nr | Knooppunt | Bestand |
 |---|---|---|
-| 1 | Uit het Struikgewas | `verkenner_uit_het_struikgewas.png` |
-| 2 | Verkenningsrapport | `verkenner_verkenningsrapport.png` |
+| 1 | Verkenningsrapport | `verkenner_verkenningsrapport.png` |
+| 2 | Uit het Struikgewas | `verkenner_uit_het_struikgewas.png` |
 | 3 | Toeslaan en Verdwijnen | `verkenner_toeslaan_en_verdwijnen.png` |
 | 4 | Opgespaarde Woede | `verkenner_opgespaarde_woede.png` |
 | 5 | Arminius | `verkenner_arminius.png` |
@@ -1384,11 +1384,11 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 Tweede ronde: iconen die klopten maar mooier of preciezer konden (middeleeuwse puntschilden, ontbrekende details, weinig contrast). Bedoeld voor ChatGPT.
 
 ```text
-Square 1:1 image: a sprite sheet of exactly 16 separate pixel-art game skill icons, arranged in 4 rows of 4, for an ancient Greek/Roman strategy game (mixed icons from several classes).
+Square 1:1 image: a sprite sheet of exactly 15 separate pixel-art game skill icons, arranged in 4 rows of 4, for an ancient Greek/Roman strategy game (mixed icons from several classes).
 
 STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
 
-CONTENT (most important rule): draw EXACTLY the 16 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
+CONTENT (most important rule): draw EXACTLY the 15 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
 
 1. (row 1, column 1) a hand firmly gripping one straight arrow by its shaft, the arrow held horizontally — dominant colour cool forest green.
 2. (row 1, column 2) a calm half-closed eye above one horizontal arrow whose arrowhead is covered in white frost — dominant colour cool forest green.
@@ -1401,11 +1401,10 @@ CONTENT (most important rule): draw EXACTLY the 16 subjects listed below, each o
 9. (row 3, column 1) a wide shallow Greek drinking cup (kylix) on a short foot with two small side handles, filled with dark red liquid — dominant colour dark wine red.
 10. (row 3, column 2) a red-glowing sword piercing straight through a ROUND Greek bronze shield — dominant colour dark wine red.
 11. (row 3, column 3) the omphalos stone of Delphi: a rounded, egg-shaped stone (like a beehive or half an egg) standing on a low square base, its surface covered with a carved net or knotted-band pattern, with a small glowing eye floating just above its top — dominant colour mystic violet.
-12. (row 3, column 4) a sleeping figure on a stone temple bench with a small crescent moon above (plain tile colour behind, no night sky) — dominant colour soft healing green.
-13. (row 4, column 1) the Pythia in a pale white robe seated on a bronze tripod above a crack with rising violet vapour — dominant colour mystic violet with extra gold.
-14. (row 4, column 2) a Roman centurion's helmet in bright silver steel seen exactly from the front, with a TRANSVERSE red crest that runs from ear to ear, so that from the front it shows as a wide half-circle fan of red bristles spreading left and right above the helmet — dominant colour imperial purple.
-15. (row 4, column 3) a square red military banner (vexillum) with a small golden eagle emblem, hanging from a crossbar (no letters) — dominant colour imperial violet.
-16. (row 4, column 4) a hooded figure slipping through a half-open wooden gate (plain tile colour behind, no night scene) — dominant colour smouldering ember red.
+12. (row 3, column 4) the Pythia in a pale white robe seated on a bronze tripod above a crack with rising violet vapour — dominant colour mystic violet with extra gold.
+13. (row 4, column 1) a Roman centurion's helmet in bright silver steel seen exactly from the front, with a TRANSVERSE red crest that runs from ear to ear, so that from the front it shows as a wide half-circle fan of red bristles spreading left and right above the helmet — dominant colour imperial purple.
+14. (row 4, column 2) a square red military banner (vexillum) with a small golden eagle emblem, hanging from a crossbar (no letters) — dominant colour imperial violet.
+15. (row 4, column 3) a hooded figure slipping through a half-open wooden gate (plain tile colour behind, no night scene) — dominant colour smouldering ember red.
 
 LAYOUT: an invisible grid of 4 columns and 4 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
 
@@ -1413,7 +1412,7 @@ BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gra
 
 STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour (the inside of a tile is never magenta, pink or empty); on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
 
-AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces, except the sleeping figure in icon 12, the Pythia in icon 13 and the hooded figure in icon 16; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 16 icons.
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces, except the sleeping figure in icon 12, the Pythia in icon 13 and the hooded figure in icon 16; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 15 icons.
 ```
 
 <details><summary>Indeling</summary>
@@ -1431,11 +1430,48 @@ AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, 
 | 9 | Voorvechter | Dorst | `spartaan_dorst.png` |
 | 10 | Voorvechter | Brandend Bloed | `spartaan_brandend_bloed.png` |
 | 11 | Priester | Les van Delphi | `priester_les_van_delphi.png` |
-| 12 | Priester | Tempelslaap | `priester_tempelslaap.png` |
-| 13 | Priester | Orakel van Delphi | `priester_orakel_van_delphi.png` |
-| 14 | Bevelvoerder | Bevelvoerder | `centurio_root.png` |
-| 15 | Bevelvoerder | Signum | `centurio_signum.png` |
-| 16 | Verkenner | Infiltrant | `verkenner_infiltrant.png` |
+| 12 | Priester | Orakel van Delphi | `priester_orakel_van_delphi.png` |
+| 13 | Bevelvoerder | Bevelvoerder | `centurio_root.png` |
+| 14 | Bevelvoerder | Signum | `centurio_signum.png` |
+| 15 | Verkenner | Infiltrant | `verkenner_infiltrant.png` |
+
+</details>
+
+---
+
+## Verbetervel 5 → `assets/skills/sheets/fix_5.png`
+
+Vierde ronde: de vier nieuwe Priester-knooppunten (Ambrosia, Zegenstroom, Lichtmantel, Gemeenschap). Bedoeld voor ChatGPT; opslaan als fix_5.
+
+```text
+Square 1:1 image: a sprite sheet of exactly 4 separate pixel-art game skill icons, arranged in 2 rows of 2, for an ancient Greek/Roman strategy game (mixed icons from several classes).
+
+STYLE REFERENCE: the attached image is the exact style to copy — same square tiles with slightly rounded corners and thin dark border, same tile size and spacing, same pixel size, same shading and same one-colour-per-tile look. Only the subjects and colours listed below are different.
+
+CONTENT (most important rule): draw EXACTLY the 4 subjects listed below, each one literally as described, in this order (left to right, top to bottom). Do not replace a subject with a more generic or different object, do not add weapons, helmets, shields, animals, people or objects that are not in the description, and draw every subject only once.
+
+1. (row 1, column 1) a golden chalice slowly pouring a thin stream of glowing golden nectar, with three bright drops falling from it — dominant colour soft healing green.
+2. (row 1, column 2) one hand pouring a stream of golden light into the open bowl held by a second hand below it, with small sparks of light — dominant colour soft healing green.
+3. (row 2, column 1) a glowing white priest's cloak spread out like a protective dome of light over a small altar flame — dominant colour soft healing green.
+4. (row 2, column 2) a ring of five small figures in white robes holding hands around a glowing bowl of fire, seen from slightly above — dominant colour soft healing green.
+
+LAYOUT: an invisible grid of 2 columns and 2 rows with equal cells; one icon tile centred in each cell, with clear magenta gaps between the tiles so they never touch each other or the image edge. No grid lines.
+
+BACKGROUND: one flat, uniform pure magenta (#FF00FF) everywhere, no texture, gradient, shadow or noise (it will be removed by chroma key). Never use magenta or pink inside an icon; violet must be clearly bluish.
+
+STYLE (keep exactly the same for every icon): each icon is a square tile with slightly rounded corners and a thin dark border, the whole tile filled with a medium shade of its listed colour (the inside of a tile is never magenta, pink or empty); on it one bold symbol, filling about 75% of the tile, drawn in lighter and darker shades of that same colour with a few small pale highlights (gold only where the list says so). Pixel art drawn as if at 64×64 pixels and enlarged with hard square pixel edges (no anti-aliasing), 16-bit RPG skill-icon style, front view, readable at 32×32; same line weight and top-left lighting for all icons.
+
+AVOID: letters, numbers, words, watermarks; photorealism, soft gradients, blur, glow larger than 2 pixels; drop shadows on the background; round or hexagonal tiles; tiles in a different colour than listed; human figures or faces, except the small robed figures in icon 4; crossbows, firearms, sci-fi; any object not named in the list; magenta or pink inside the icons; more or fewer than 4 icons.
+```
+
+<details><summary>Indeling</summary>
+
+| Nr | Klasse | Knooppunt | Bestand |
+|---|---|---|---|
+| 1 | Priester | Ambrosia | `priester_ambrosia.png` |
+| 2 | Priester | Zegenstroom | `priester_zegenstroom.png` |
+| 3 | Priester | Lichtmantel | `priester_lichtmantel.png` |
+| 4 | Priester | Gemeenschap | `priester_gemeenschap.png` |
 
 </details>
 

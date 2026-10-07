@@ -1054,7 +1054,10 @@ Enrage/het extra van Hydra-koppen), muur (eigen stenen HP-balk na het
 rondeschild, vangt ook baasklappen op, telt níet mee voor het schild tegen
 maaltijd/Enrage, plafond 12), val, werktuigen (vuren alleen als de eigenaar
 goed antwoordt), sabotage in lagen van de Saboteur (schild → muur →
-werktuigen → doorwerken). In beeld: muur-balk/val/vloek onder de legerbalk
+werktuigen → doorwerken), heling over tijd (`stS.hot` = lijst {a,l}: Ambrosia
+laat Godenvuur direct 4 minder helen maar +4 in de 2 rondes erna; de
+Priester-knooppunten Zegenstroom, Lichtmantel en Gemeenschap staan in
+`skilltree-data.js`/`skilltree-engine.js` en in de balanssimulatie). In beeld: muur-balk/val/vloek onder de legerbalk
 (`bmStTeamExtrasHTML`), palissade-stadia `assets/bosses/palissade_midden_1-3.png`
 tussen de legers en werktuigen achter het eigen leger (`bmStRenderField`).
 
