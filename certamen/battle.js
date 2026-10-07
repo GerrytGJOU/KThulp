@@ -826,6 +826,7 @@ function bmClsNmThemed(clsId){ return bmFaction(BM_META?.theme).classLabels?.[cl
 /* ---- BATTLE GAME STATE ---- */
 let BM_CODE=null, BM_PID=null, BM_META=null;
 let BM_STATE={}, BM_TEAMS={}, BM_PLAYERS={}, BM_BOSS={};
+let BM_QFETCH_BUSY=false, BM_QFETCH_ROUND=-1, BM_QFETCH_TRIES=0;
 let BM_MY_BE=0, BM_MY_Q=null, BM_MY_CLASS=null, BM_MY_TEAM=null;
 let BM_ANSWERED=false, BM_ACTION_LOCKED=false, BM_RESOLVING=false;
 let BM_MY_TARGET="boss", BM_TARGET_ROUND=-1; // Minion Summon (BOSS_BATTLE.md §4): gekozen doelwit voor de volgende ability
@@ -3732,8 +3733,15 @@ async function bmResolve(roundN){
     }
 
     // Schrijf spelerupdates
-    for(const[pid,upd]of Object.entries(pUpd)){
-      await fbDB.ref("rooms/"+BM_CODE+"/players/"+pid).update(upd);
+    // Eén multi-path-update i.p.v. één awaited schrijfactie per speler: bij een
+    // hele klas (30 leerlingen) kostte de rij losse round-trips seconden, en zolang
+    // stond bij iedere leerling "Resolutie…" en kwam de volgende vraag later
+    // (leerlingfeedback 2026-10-07).
+    {
+      const batch={};
+      for(const[pid,upd]of Object.entries(pUpd))
+        for(const[k,v]of Object.entries(upd)) batch[pid+"/"+k]=v;
+      if(Object.keys(batch).length) await fbDB.ref("rooms/"+BM_CODE+"/players").update(batch);
     }
 
     // Berekening effectieve schade (schild absorbeert, bypass negeert schild)
@@ -4990,15 +4998,35 @@ function bmPlayerRender(){
         content=`<div class="panel" style="text-align:center"><div style="font-size:40px">✅</div><div class="note">Wachten op andere spelers…</div></div>`;
       }
     } else if(!BM_MY_Q||BM_MY_Q._round!==round.n){
-      fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID+"/currentQ").once("value").then(s=>{
-        if(s.val()){try{
-          BM_MY_Q={...JSON.parse(s.val()),_round:round.n};BM_ANSWERED=false;
-          if(BM_MY_Q.mode==="ontleed") vfqOntleedReset();
-          if(BM_MY_Q.mode==="naamval") cqStart(BM_MY_Q, bmPlayerRender, bmAnswerNaamval);
+      // Eén ophaalactie tegelijk per ronde, met een herhaalpoging als de vraag er
+      // (nog) niet staat of niet te lezen is — voorheen bleef "Vraag laden…" staan
+      // tot er toevallig een andere hertekening kwam, en slikte een leesfout stilletjes.
+      if(BM_QFETCH_ROUND!==round.n){
+        BM_QFETCH_ROUND=round.n; BM_QFETCH_TRIES=0;
+      }
+      if(!BM_QFETCH_BUSY){
+        BM_QFETCH_BUSY=true;
+        setTimeout(()=>{ BM_QFETCH_BUSY=false; },4000); // vangnet als de ophaalactie nooit terugkomt
+        const rn=round.n;
+        fbDB.ref("rooms/"+BM_CODE+"/players/"+BM_PID+"/currentQ").once("value").then(s=>{
+          BM_QFETCH_BUSY=false;
+          if(BM_STATE.round?.n!==rn||BM_STATE.round?.phase!=="question") return;
+          let ok=false;
+          if(s.val()){try{
+            BM_MY_Q={...JSON.parse(s.val()),_round:rn};BM_ANSWERED=false;
+            if(BM_MY_Q.mode==="ontleed") vfqOntleedReset();
+            if(BM_MY_Q.mode==="naamval") cqStart(BM_MY_Q, bmPlayerRender, bmAnswerNaamval);
+            ok=true;
+          }catch(e){ console.error("currentQ onleesbaar",e); }}
+          if(ok){ bmPlayerRender(); return; }
+          BM_QFETCH_TRIES++;
+          setTimeout(()=>{ if(BM_STATE.round?.n===rn&&BM_STATE.round?.phase==="question"&&(!BM_MY_Q||BM_MY_Q._round!==rn)) bmPlayerRender(); },1000);
           bmPlayerRender();
-        }catch(e){}}
-      });
-      content=`<div class="note" style="text-align:center">Vraag laden…</div>`;
+        }).catch(()=>{ BM_QFETCH_BUSY=false; });
+      }
+      const me=BM_PLAYERS[BM_PID]||{};
+      const zitIn=BM_QFETCH_TRIES>=2&&me.joinRound&&me.joinRound>=round.n;
+      content=`<div class="note" style="text-align:center">${zitIn?"Je bent net ingestapt — je doet vanaf de volgende ronde mee.":"Vraag laden…"}</div>`;
     } else if(BM_MY_Q.mode==="naamval"){
       content=cqQuestionHTML(BM_MY_Q);
     } else if(BM_MY_Q.mode==="ontleed"){
