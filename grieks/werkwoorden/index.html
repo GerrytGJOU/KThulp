@@ -77,6 +77,12 @@ select,input[type=number]{background:var(--surf2);border:1px solid var(--border)
   transition:all .15s;-webkit-tap-highlight-color:transparent;}
 .fchip:hover{border-color:var(--gold-d);}
 .fchip.on{background:#2a2540;border-color:var(--gold);color:var(--gold-l);}
+.fchip.partial{background:#2a2410;border-color:var(--gold-d);color:var(--gold-l);}
+.fchip.small{padding:6px 11px;font-size:.8rem;}
+.vfq-groepen{display:flex;flex-direction:column;gap:8px;}
+.vfq-groep-row{display:flex;gap:7px;align-items:center;}
+.vfq-expand{padding:9px 12px;flex:0 0 auto;}
+.vfq-groep-detail{margin:2px 0 4px 0;padding-left:4px;}
 .det-field .chip-row{gap:6px;}
 .det-field .fchip{padding:6px 12px;font-size:.82rem;}
 .fchip.correct{background:rgba(61,140,92,.35);border-color:var(--green);color:var(--green-l);}
@@ -342,15 +348,7 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
         <button class="fchip on" data-v="med">Medium / passief</button>
       </div>
     </div>
-    <div class="filter-group">
-      <div class="filter-label">Type werkwoord</div>
-      <div class="chip-row" id="o-f-type">
-        <button class="fchip on" data-v="themat">Thematisch</button>
-        <button class="fchip on" data-v="contract">Contracta</button>
-        <button class="fchip on" data-v="athemat">Athematisch (-μι)</button>
-        <button class="fchip on" data-v="mediumdep">Deponentia</button>
-      </div>
-    </div>
+    <div class="filter-group"><div class="filter-label">Werkwoorden</div><div class="vfq-groepen" id="o-f-verb"></div></div>
     <div class="filter-group">
       <div class="filter-label">Aantal vragen</div>
       <input type="number" id="o-cnt" value="10" min="3" max="40" class="cnt-input">
@@ -396,15 +394,7 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
         <button class="fchip on" data-v="med">Medium / passief</button>
       </div>
     </div>
-    <div class="filter-group">
-      <div class="filter-label">Type werkwoord</div>
-      <div class="chip-row" id="d-f-type">
-        <button class="fchip on" data-v="themat">Thematisch</button>
-        <button class="fchip on" data-v="contract">Contracta</button>
-        <button class="fchip on" data-v="athemat">Athematisch (-μι)</button>
-        <button class="fchip on" data-v="mediumdep">Deponentia</button>
-      </div>
-    </div>
+    <div class="filter-group"><div class="filter-label">Werkwoorden</div><div class="vfq-groepen" id="d-f-verb"></div></div>
     <div class="filter-group">
       <div class="filter-label">Aantal vragen</div>
       <input type="number" id="d-cnt" value="10" min="3" max="40" class="cnt-input">
@@ -450,15 +440,7 @@ footer{text-align:center;padding:10px;font-size:.73rem;color:var(--dim);
         <button class="fchip on" data-v="med">Medium / passief</button>
       </div>
     </div>
-    <div class="filter-group">
-      <div class="filter-label">Type werkwoord</div>
-      <div class="chip-row" id="v-f-type">
-        <button class="fchip on" data-v="themat">Thematisch</button>
-        <button class="fchip on" data-v="contract">Contracta</button>
-        <button class="fchip on" data-v="athemat">Athematisch (-μι)</button>
-        <button class="fchip on" data-v="mediumdep">Deponentia</button>
-      </div>
-    </div>
+    <div class="filter-group"><div class="filter-label">Werkwoorden</div><div class="vfq-groepen" id="v-f-verb"></div></div>
     <div class="filter-group">
       <div class="filter-label">Aantal vragen</div>
       <input type="number" id="v-cnt" value="10" min="3" max="40" class="cnt-input">
@@ -1491,13 +1473,56 @@ function gotoScreen(id){
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
 }
-function gotoSetup(mode){ gotoScreen('setup-'+mode); updateAvail(mode[0]); }
-function stopEx(mode){ gotoScreen('setup-'+mode); updateAvail(mode[0]); }
+function gotoSetup(mode){ gotoScreen('setup-'+mode); renderVerbChips(mode[0]); updateAvail(mode[0]); }
+function stopEx(mode){ gotoScreen('setup-'+mode); renderVerbChips(mode[0]); updateAvail(mode[0]); }
 
 // ══════════════════════════════════════════════
 //  SHARED STATE
 // ══════════════════════════════════════════════
 const ST = {};
+
+// Werkwoordselectie per setup-scherm (pref o/d/v), gegroepeerd per type:
+// klik op de groepschip zet de hele groep aan/uit, vergroot (▸) klapt de
+// groep uit voor losse aan/uitvinkbare werkwoorden (zelfde idee als in Certamen).
+const GROEP_NAMEN={themat:'Thematisch',contract:'Contracta',athemat:'Athematisch (-μι)',mediumdep:'Deponentia'};
+const GROEP_VOLGORDE=['themat','contract','athemat','mediumdep'];
+const VERB_SEL={}, VERB_EXP={};
+const MODE_VAN_PREF={o:'ontleed',d:'determ',v:'vertaal'};
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function verbSelSet(pref){ if(!VERB_SEL[pref]) VERB_SEL[pref]=new Set(VERBS.map(v=>v.pres)); return VERB_SEL[pref]; }
+function verbExpSet(pref){ if(!VERB_EXP[pref]) VERB_EXP[pref]=new Set(); return VERB_EXP[pref]; }
+function toggleVerbSel(pref,pres){
+  const s=verbSelSet(pref);
+  if(s.has(pres)) s.delete(pres); else s.add(pres);
+  renderVerbChips(pref); updateAvail(pref);
+}
+function toggleGroepSel(pref,groep){
+  const s=verbSelSet(pref);
+  const lemmas=VERBS.filter(v=>v.type===groep).map(v=>v.pres);
+  const allOn=lemmas.every(l=>s.has(l));
+  if(allOn) lemmas.forEach(l=>s.delete(l)); else lemmas.forEach(l=>s.add(l));
+  renderVerbChips(pref); updateAvail(pref);
+}
+function toggleGroepExpand(pref,groep){
+  const s=verbExpSet(pref);
+  if(s.has(groep)) s.delete(groep); else s.add(groep);
+  renderVerbChips(pref);
+}
+function renderVerbChips(pref){
+  const host=document.getElementById(pref+'-f-verb'); if(!host) return;
+  const sel=verbSelSet(pref), exp=verbExpSet(pref);
+  host.innerHTML=GROEP_VOLGORDE.map(g=>{
+    const verbs=VERBS.filter(v=>v.type===g);
+    if(!verbs.length) return '';
+    const onCount=verbs.filter(v=>sel.has(v.pres)).length;
+    const allOn=onCount===verbs.length, someOn=onCount>0&&!allOn;
+    const expanded=exp.has(g);
+    const groepBtn=`<button class="fchip ${allOn?'on':someOn?'partial':''}" onclick="toggleGroepSel('${pref}','${g}')">${esc(GROEP_NAMEN[g])} <span style="opacity:.65;font-size:.78em">${onCount}/${verbs.length}</span></button>`;
+    const expandBtn=`<button class="fchip vfq-expand" onclick="toggleGroepExpand('${pref}','${g}')" aria-label="Werkwoorden in ${esc(GROEP_NAMEN[g])} ${expanded?'verbergen':'tonen'}">${expanded?'▾':'▸'}</button>`;
+    const detail=expanded?`<div class="chip-row vfq-groep-detail">${verbs.map(v=>`<button class="fchip small ${sel.has(v.pres)?'on':''}" onclick="toggleVerbSel('${pref}','${v.pres}')">${esc(v.pres)} <span style="opacity:.65;font-size:.78em">${esc(v.meaning.split(',')[0])}</span></button>`).join('')}</div>`:'';
+    return `<div class="vfq-groep-row">${groepBtn}${expandBtn}</div>${detail}`;
+  }).join('');
+}
 
 // ── FILTER CHIPS ──
 function getChips(rowId){
@@ -1511,7 +1536,7 @@ function readFilters(pref){
     tenses: getChips(pref+'-f-tijd'),
     wijzen: getChips(pref+'-f-wijs'),
     genera: getChips(pref+'-f-genus'),
-    types:  getChips(pref+'-f-type'),
+    verbs:  [...verbSelSet(pref)],
   };
 }
 
@@ -1522,7 +1547,7 @@ function readFilters(pref){
 function buildPool(filt){
   const pool=[];
   VERBS.forEach(v=>{
-    if(!filt.types.includes(v.type)) return;
+    if(!filt.verbs.includes(v.pres)) return;
     v.forms.forEach(f=>{
       if(!filt.tenses.includes(f.t)) return;
       if(!filt.wijzen.includes(f.w||'ind')) return;
@@ -1553,6 +1578,7 @@ document.addEventListener('click',e=>{
   const chip=e.target.closest('.fchip');
   if(!chip) return;
   if(chip.closest('.det-field')) return; // det-*-chips beheren hun eigen .on via detPick()
+  if(chip.closest('.vfq-groepen')) return; // werkwoordkeuze beheert zijn eigen state (toggleVerbSel e.d.)
   chip.classList.toggle('on');
   // figure out which mode prefix this chip belongs to
   const row=chip.closest('.chip-row');
@@ -1603,7 +1629,7 @@ function startExercise(mode){
   if(!filt.tenses.length){alert('Kies minstens één tijd.');return;}
   if(!filt.wijzen.length){alert('Kies minstens één modus (indicativus / coniunctivus / optativus).');return;}
   if(!filt.genera.length){alert('Kies minstens één genus (actief / medium).');return;}
-  if(!filt.types.length){alert('Kies minstens één type werkwoord.');return;}
+  if(!filt.verbs.length){alert('Kies minstens één werkwoord.');return;}
   const pool = buildPool(filt);
   if(!pool.length){alert('Geen vormen beschikbaar bij deze selectie. Kies meer opties.');return;}
   const qs = shuffle(pool).slice(0,Math.min(cnt,pool.length));
