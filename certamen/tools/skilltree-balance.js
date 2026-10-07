@@ -209,9 +209,10 @@ function effect(p,a,T){
         if(has(p,"wonderheling")&&a.id==="gebed"&&T.ownHpPct<0.20&&!p.once.wonder){ h*=2; fx._useWonder=true; }
         for(const f of mods) if(f.healNextRound) fx.healNext+=f.healNextRound;
         for(const f of mods) if(f.hot) fx.hot.push({a:f.hot.amt,l:f.hot.rounds});
-        if(has(p,"gemeenschap")&&T.teamAccLast>=0.75) h+=2;
+        if(has(p,"gemeenschap")&&T.teamAccLast>=0.75) h+=3;
       }
       fx.heal=h;
+      if(has(p,"lichtmantel")) fx.shld+=Math.min(4,Math.floor(h/4));
     }
   }
   if(tree&&fx.attack){ let lr=0; if(has(p,"levensroof")) lr=has(p,"dorst")?2:1; if(has(p,"met_je_schild")&&T.behind>0) lr+=1; fx.heal+=lr; }
@@ -483,7 +484,7 @@ function fight(teamA,teamB,opt){
         const r=res[k], own=S[k];
         const missing=own.max-Math.max(0,own.hp); const healed=Math.min(missing,r.heal);
         own.hp+=healed; distHeal(r,healed);
-        own.overflowShield=(has_any(k,"lichtmantel")||has_any(k,"overvloeiend_bloed"))?Math.min(3,Math.max(0,r.heal-healed)):0;
+        own.overflowShield=has_any(k,"overvloeiend_bloed")?Math.min(3,Math.max(0,r.heal-healed)):0;
         own.wall=Math.min(teamWallCap(k),own.wall+r.wallAdd); own.wallPeak=Math.max(own.wallPeak,own.wall);
         decayWall(k,own); own.trap=r.trapAdd;
         own.curseOnEnemy=r.curse>0?r.curse:(own.curseLinger>0?own.curseLinger:0); own.curseLinger=(r.curse>0&&has_any(k,"onheilsdag"))?Math.max(1,r.curse-1):0;
