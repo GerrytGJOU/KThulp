@@ -469,12 +469,12 @@ const BM_LEVELS = [
 // Klasbeheersing: onzichtbare klasse-XP (classHistory/{cls}/mxp) → ster
 // (index+1). Per gevecht vast BM_MASTERY_XP (zie bmMasteryXpForBattle() in
 // battle.js), dus de lengte van een gevecht maakt niet uit: gemiddeld ±12 per
-// gevecht → ★5 na ±10 gevechten, ★10 na ±50 met dezelfde klasse.
+// gevecht → ★5 na ±10 gevechten, ★10 na ±73 met dezelfde klasse.
 // ★1–★5 gewoon, ★6–★10 = prestige (de vijf sterren "upgraden").
 // Exponentieel: elke stap kost meer dan de vorige (gaten 10, 15, 22, 32, 46 |
-// 60, 75, 95, 120, 150). ★10 = prestigeklasse → tier:"prestige"-vaardigheid
+// 60, 90, 130, 190, 280). ★10 = prestigeklasse → tier:"prestige"-vaardigheid
 // in BM_CLASSES. Gelezen door bmCalcMastery() in battle.js.
-const BM_MASTERY_TIERS = [10, 25, 47, 79, 125, 185, 260, 355, 475, 625];
+const BM_MASTERY_TIERS = [10, 25, 47, 79, 125, 185, 275, 405, 595, 875];
 const BM_MASTERY_XP = { base:10, win:5 };  // per gevecht, vóór schaling
 // Oude profielen (alleen `rounds`, dubbel geteld) → mxp = rounds / deze deler.
 const BM_MASTERY_LEGACY_DIV = 3;

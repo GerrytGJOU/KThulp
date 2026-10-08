@@ -931,9 +931,9 @@ door `bmCalcMastery()`/`bmMasteryXp()`.
   met `share` = deel van het gevecht meegemaakt (zelfde als de gewone XP),
   `act` = beantwoorde vragen / (helft van je rondes), max 1. Zonder één antwoord
   0; zelf-gehost × `BM_SELF_HOST_XP_MULT`. Gemiddeld ±12 per gevecht.
-- **Exponentiële drempels** `[10, 25, 47, 79, 125, 185, 260, 355, 475, 625]`
-  (gaten 10/15/22/32/46 | 60/75/95/120/150): ★5 na ±10 gevechten met
-  dezelfde klasse, ★10 na ±50.
+- **Exponentiële drempels** `[10, 25, 47, 79, 125, 185, 275, 405, 595, 875]`
+  (gaten 10/15/22/32/46 | 60/90/130/190/280): ★5 na ±10 gevechten met
+  dezelfde klasse, ★10 na ±73 (sinds 2026-10-08 steiler vanaf ★7).
 - **Vroeger** telde `rounds` dubbel (host per ronde in het inmiddels verwijderde
   `bmUpdateMastery()` + speler per gevecht in `bmAwardBattle()`), dus de sterren
   gingen veel te snel. Oude profielen zonder `mxp` krijgen eenmalig
