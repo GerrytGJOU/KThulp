@@ -100,6 +100,7 @@
   .prio-naam{font-family:Georgia,'Times New Roman',serif;font-size:1.05rem;color:var(--ink)}
   .prio-meta{font-size:.78rem;color:#888;margin-bottom:6px}
   .prio-advies{font-size:.85rem;color:#444;line-height:1.4;font-style:italic}
+  .vergelijk-box{background:#f3f7ee;border:1.5px solid var(--green);border-radius:8px;padding:14px 16px;margin-bottom:20px}
   .totaal-box{background:white;border:1.5px solid var(--border);border-radius:8px;padding:16px;text-align:center;margin:22px 0;color:#666;font-size:.85rem}
   .totaal-box .t-pct{font-size:1.4rem;font-weight:700;color:var(--ink);font-family:Georgia,'Times New Roman',serif}
   .print-only{display:none}
@@ -108,7 +109,7 @@
     .screen{display:block !important;max-width:100%;padding:0}
     body{background:white}
     .print-only{display:block}
-    .kv-card,.score-box,.prio-item,.fout-item,.rapport-bereik,.totaal-box{box-shadow:none;break-inside:avoid}
+    .kv-card,.score-box,.prio-item,.fout-item,.rapport-bereik,.totaal-box,.vergelijk-box{box-shadow:none;break-inside:avoid}
   }
   footer{text-align:center;color:#999;font-size:.78rem;margin-top:34px;font-style:italic}
 </style>
@@ -302,6 +303,44 @@ const MODULES = [
       {id:'m1q15', hoofdstuk:6, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Rex populo suo leges bonas dedit.</em>"',
         modelantwoord:'De koning gaf zijn volk goede wetten.', uitleg:'<em>Populo</em> = dativus (meewerkend voorwerp), <em>leges bonas</em> = accusativus meervoud (lijdend voorwerp, met congruentie).'},
+      {id:'m1q16', hoofdstuk:2, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Welke naamval is <em>puellam</em> in "<em>Marcus puellam videt</em>"?',
+        opties:['Accusativus enkelvoud','Nominativus enkelvoud','Ablativus enkelvoud','Accusativus meervoud'],
+        antwoord:0, uitleg:'<em>-am</em> is de accusativus enkelvoud van de 1e declinatie: <em>puellam</em> is het lijdend voorwerp.'},
+      {id:'m1q17', hoofdstuk:4, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Welke naamval en welk getal is <em>amicis</em> in "<em>Amicis librum dedi</em>" (ik gaf een boek aan de vrienden)?',
+        opties:['Dativus meervoud','Genitivus meervoud','Nominativus meervoud','Accusativus meervoud'],
+        antwoord:0, uitleg:'<em>-is</em> is de uitgang van de dativus (en ablativus) meervoud; bij <em>dare</em> staat het meewerkend voorwerp in de dativus.'},
+      {id:'m1q18', hoofdstuk:2, moeilijkheidsgraad:1, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>accusativus meervoud</strong> van <em>rosa</em> (de roos, 1e declinatie).',
+        correctAntwoorden:['rosas'], uitleg:'1e declinatie: accusativus meervoud op <em>-as</em>.'},
+      {id:'m1q19', hoofdstuk:6, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>dativus enkelvoud</strong> van <em>rex, regis</em> (de koning, 3e declinatie).',
+        correctAntwoorden:['regi'], uitleg:'3e declinatie: stam <em>reg-</em> + dativus enkelvoud <em>-i</em>.'},
+      {id:'m1q20', hoofdstuk:4, moeilijkheidsgraad:2, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Magister discipulos bonos laudat.</em>" Wat is de functie van <em>bonos</em>?',
+        opties:['Bijvoeglijke bepaling bij discipulos (congruentie: acc. mv. mannelijk)','Onderwerp','Bijstelling bij magister','Meewerkend voorwerp'],
+        antwoord:0, uitleg:'<em>Bonos</em> congrueert in naamval, getal en geslacht met <em>discipulos</em>: "goede leerlingen".'},
+      {id:'m1q21', hoofdstuk:7, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Cicero, orator Romanus, senatum adiit.</em>" Wat is de functie van <em>orator Romanus</em>?',
+        opties:['Bijstelling bij Cicero','Lijdend voorwerp','Bijvoeglijke bepaling bij senatum','Onderwerp van een aparte zin'],
+        antwoord:0, uitleg:'<em>Orator Romanus</em> staat in dezelfde naamval als <em>Cicero</em> en geeft extra uitleg over dezelfde persoon: een bijstelling.'},
+      {id:'m1q22', hoofdstuk:6, moeilijkheidsgraad:2, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Pater filiabus donum dat</em>" is correct?',
+        opties:['De vader geeft de dochters een geschenk.','De dochters geven de vader een geschenk.','De vader geeft het geschenk van de dochters.','De vader geeft de dochter een geschenk.'],
+        antwoord:0, uitleg:'<em>Pater</em> = onderwerp (nom.), <em>filiabus</em> = meewerkend voorwerp (dat. mv.), <em>donum</em> = lijdend voorwerp.',
+        foutfeedback:{1:'<em>Pater</em> staat in de nominativus (onderwerp); <em>filiabus</em> is het meewerkend voorwerp — niet andersom.',2:'<em>Filiabus</em> is een dativus ("aan de dochters"); een genitivus meervoud zou <em>filiarum</em> zijn.',3:'<em>Filiabus</em> is meervoud (<em>-bus</em>), niet enkelvoud.'}},
+      {id:'m1q23', hoofdstuk:7, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Romulus, rex primus, urbem condidit</em>" is correct?',
+        opties:['Romulus, de eerste koning, stichtte de stad.','Romulus en de eerste koning stichtten de stad.','De eerste koning stichtte Romulus en de stad.','Romulus, de eerste koning, stichtte de steden.'],
+        antwoord:0, uitleg:'<em>Rex primus</em> is een bijstelling bij <em>Romulus</em>: dezelfde persoon.',
+        foutfeedback:{1:'<em>Rex primus</em> is een bijstelling bij <em>Romulus</em> (één persoon), geen tweede persoon; <em>condidit</em> is enkelvoud.',2:'<em>Romulus</em> en <em>rex primus</em> staan in de nominativus; <em>urbem</em> is het lijdend voorwerp.',3:'<em>Urbem</em> is accusativus enkelvoud, niet meervoud (dat zou <em>urbes</em> zijn).'}},
+      {id:'m1q24', hoofdstuk:2, moeilijkheidsgraad:1, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Agricola in agro laborat.</em>"',
+        modelantwoord:'De boer werkt op het land.', uitleg:'<em>Agricola</em> = onderwerp (nom. ev.), <em>in agro</em> = plaats waar (ablativus).'},
+      {id:'m1q25', hoofdstuk:6, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Filius regis urbem laudat.</em>"',
+        modelantwoord:'De zoon van de koning prijst de stad.', uitleg:'<em>Regis</em> = genitivus (bezit) bij <em>filius</em>; <em>urbem</em> = lijdend voorwerp.'},
     ]
   },
   {
@@ -365,6 +404,44 @@ const MODULES = [
       {id:'m2q15', hoofdstuk:14, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Femina, cuius filius aeger est, flet.</em>"',
         modelantwoord:'De vrouw, wier zoon ziek is, huilt.', uitleg:'<em>Cuius</em> is de genitivus van het betrekkelijk voornaamwoord ("wiens/wier").'},
+      {id:'m2q16', hoofdstuk:8, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Wat betekent <em>eos</em> (van <em>is/ea/id</em>) in "<em>Eos vidi</em>"?',
+        opties:['Hen (accusativus meervoud mannelijk)','Zij (nominativus meervoud mannelijk)','Hun (genitivus meervoud)','Hem (accusativus enkelvoud)'],
+        antwoord:0, uitleg:'<em>Eos</em> is de accusativus meervoud mannelijk: lijdend voorwerp, "hen".'},
+      {id:'m2q17', hoofdstuk:12, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>haec</em> in "<em>Haec puella cantat</em>"?',
+        opties:['Nominativus enkelvoud vrouwelijk van hic','Nominativus meervoud onzijdig van hic','Accusativus enkelvoud vrouwelijk van hic','Genitivus enkelvoud van hic'],
+        antwoord:0, uitleg:'<em>Haec</em> congrueert met <em>puella</em> (v., ev.). Let op: <em>haec</em> kan ook nom./acc. meervoud onzijdig zijn — de context beslist.'},
+      {id:'m2q18', hoofdstuk:14, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>genitivus enkelvoud</strong> van <em>hic</em> (deze; voor alle geslachten gelijk).',
+        correctAntwoorden:['huius'], uitleg:'De genitivus enkelvoud van <em>hic, haec, hoc</em> is in alle geslachten <em>huius</em>.'},
+      {id:'m2q19', hoofdstuk:16, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>dativus enkelvoud</strong> van <em>is/ea/id</em> (voor alle geslachten gelijk).',
+        correctAntwoorden:['ei'], uitleg:'De dativus enkelvoud van <em>is, ea, id</em> is in alle geslachten <em>ei</em>.'},
+      {id:'m2q20', hoofdstuk:19, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Cui librum dedisti?</em>" Wat voor voornaamwoord is <em>cui</em> en in welke naamval?',
+        opties:['Vragend voornaamwoord, dativus ("aan wie?")','Betrekkelijk voornaamwoord, nominativus','Vragend voornaamwoord, genitivus','Onbepaald voornaamwoord, accusativus'],
+        antwoord:0, uitleg:'<em>Cui</em> is de dativus van <em>quis</em>: "aan wie gaf je het boek?"'},
+      {id:'m2q21', hoofdstuk:20, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Puer ipse librum scripsit.</em>" Wat is de functie van <em>ipse</em>?',
+        opties:['Nadrukkelijk voornaamwoord bij puer ("de jongen zelf")','Lijdend voorwerp','Betrekkelijk voornaamwoord','Bijwoord van tijd'],
+        antwoord:0, uitleg:'<em>Ipse</em> legt nadruk op het woord waarbij het staat: "de jongen zélf schreef het boek".'},
+      {id:'m2q22', hoofdstuk:12, moeilijkheidsgraad:2, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Hic vir illam feminam amat</em>" is correct?',
+        opties:['Deze man houdt van die vrouw.','Die man houdt van deze vrouw.','Deze vrouw houdt van die man.','Deze mannen houden van die vrouw.'],
+        antwoord:0, uitleg:'<em>Hic</em> = "deze" (dichtbij), <em>illam</em> = "die" (veraf); <em>vir</em> is onderwerp, <em>feminam</em> lijdend voorwerp.',
+        foutfeedback:{1:'<em>Hic</em> = "deze" (dichtbij) en <em>illam</em> = "die" (veraf) — niet omgewisseld.',2:'<em>Vir</em> (nominativus) is het onderwerp, <em>feminam</em> (accusativus) het lijdend voorwerp — niet andersom.',3:'<em>Hic vir</em> en <em>amat</em> staan in het enkelvoud, niet in het meervoud.'}},
+      {id:'m2q23', hoofdstuk:19, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Idem consul ea dixit</em>" is correct?',
+        opties:['Dezelfde consul zei die dingen.','De consul zei dezelfde dingen.','De consul zelf zei die dingen.','Dezelfde consul zei die dingen niet.'],
+        antwoord:0, uitleg:'<em>Idem</em> staat bij <em>consul</em> (nom. ev.) en betekent "dezelfde"; <em>ea</em> = "die dingen".',
+        foutfeedback:{1:'<em>Idem</em> hoort bij <em>consul</em> (nominativus enkelvoud); "dezelfde dingen" zou <em>eadem</em> zijn.',2:'<em>Idem</em> betekent "dezelfde", niet "zelf" (dat is <em>ipse</em>).',3:'Er staat geen ontkenning in de Latijnse zin.'}},
+      {id:'m2q24', hoofdstuk:8, moeilijkheidsgraad:1, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Eum in horto vidimus.</em>"',
+        modelantwoord:'Wij zagen hem in de tuin.', uitleg:'<em>Eum</em> = accusativus enkelvoud van <em>is</em> (lijdend voorwerp).'},
+      {id:'m2q25', hoofdstuk:20, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Quis hoc fecit?</em>"',
+        modelantwoord:'Wie heeft dit gedaan?', uitleg:'<em>Quis</em> = vragend voornaamwoord (nom.); <em>hoc</em> = accusativus enkelvoud onzijdig van <em>hic</em>.'},
     ]
   },
   {
@@ -428,6 +505,44 @@ const MODULES = [
       {id:'m3q15', hoofdstuk:20, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Noli discedere antequam redibo!</em>"',
         modelantwoord:'Ga niet weg voordat ik terugkom!', uitleg:'<em>Noli</em> + infinitivus = enkelvoudig verbod; <em>redibo</em> = futurum van <em>redire</em>.'},
+      {id:'m3q16', hoofdstuk:3, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>amatis</em>?',
+        opties:['2e persoon meervoud praesens ("jullie houden van")','2e persoon enkelvoud praesens','3e persoon meervoud praesens','1e persoon meervoud praesens'],
+        antwoord:0, uitleg:'<em>-tis</em> = 2e persoon meervoud: "jullie".'},
+      {id:'m3q17', hoofdstuk:17, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Welke tijd en persoon is <em>laudabo</em>?',
+        opties:['Futurum, 1e persoon enkelvoud ("ik zal prijzen")','Imperfectum, 1e persoon enkelvoud','Praesens, 1e persoon enkelvoud','Perfectum, 1e persoon enkelvoud'],
+        antwoord:0, uitleg:'<em>-bo</em> is de futurum-uitgang (1e persoon) van de 1e en 2e conjugatie.'},
+      {id:'m3q18', hoofdstuk:6, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>imperfectum, 3e persoon meervoud</strong> van <em>portare</em> (dragen).',
+        correctAntwoorden:['portabant'], uitleg:'Stam <em>porta-</em> + <em>-ba-</em> + <em>-nt</em> = <em>portabant</em>.'},
+      {id:'m3q19', hoofdstuk:5, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>praesens, 3e persoon meervoud</strong> van <em>esse</em> (zijn).',
+        correctAntwoorden:['sunt'], uitleg:'<em>Esse</em> is onregelmatig: sum, es, est, sumus, estis, <em>sunt</em>.'},
+      {id:'m3q20', hoofdstuk:20, moeilijkheidsgraad:2, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Tace!</em>" Wat voor vorm is <em>tace</em> (van <em>tacere</em>)?',
+        opties:['Imperativus enkelvoud ("Zwijg!")','Imperativus meervoud','Praesens, 3e persoon enkelvoud','Futurum'],
+        antwoord:0, uitleg:'De imperativus enkelvoud is de kale stam; het meervoud zou <em>tacete</em> zijn.'},
+      {id:'m3q21', hoofdstuk:17, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Ibimus ad forum.</em>" Welke tijd is <em>ibimus</em> (van <em>ire</em>) en wat betekent het?',
+        opties:['Futurum: "wij zullen gaan"','Praesens: "wij gaan"','Imperfectum: "wij gingen"','Perfectum: "wij zijn gegaan"'],
+        antwoord:0, uitleg:'<em>Ire</em> heeft een futurum op <em>-bo, -bis, -bit, -bimus</em>; praesens zou <em>imus</em> zijn, imperfectum <em>ibamus</em>.'},
+      {id:'m3q22', hoofdstuk:5, moeilijkheidsgraad:2, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Puellae cantabant</em>" is correct?',
+        opties:['De meisjes zongen.','De meisjes zullen zingen.','De meisjes zingen.','Het meisje zong.'],
+        antwoord:0, uitleg:'<em>-bant</em> is de imperfectum-uitgang (3e persoon meervoud): een verleden tijd.',
+        foutfeedback:{1:'<em>-bant</em> is imperfectum (verleden), geen futurum; dat zou <em>cantabunt</em> zijn.',2:'<em>Cantabant</em> is imperfectum ("zongen"), geen praesens (dat zou <em>cantant</em> zijn).',3:'<em>Puellae</em> en <em>cantabant</em> staan in het meervoud.'}},
+      {id:'m3q23', hoofdstuk:20, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Nolo hoc facere</em>" is correct?',
+        opties:['Ik wil dit niet doen.','Ik wil dit doen.','Ik kan dit niet doen.','Hij wil dit niet doen.'],
+        antwoord:0, uitleg:'<em>Nolo</em> is de ontkende vorm van <em>velle</em>: "ik wil niet".',
+        foutfeedback:{1:'<em>Nolo</em> bevat de ontkenning ("ik wil niet"); die mag niet wegvallen.',2:'<em>Nolo</em> ("ik wil niet") is iets anders dan <em>non possum</em> ("ik kan niet").',3:'<em>Nolo</em> is 1e persoon ("ik"), geen 3e persoon.'}},
+      {id:'m3q24', hoofdstuk:3, moeilijkheidsgraad:1, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Magistra pueros docet.</em>"',
+        modelantwoord:'De lerares onderwijst de jongens.', uitleg:'<em>Docet</em> = praesens, 3e persoon enkelvoud (2e conjugatie).'},
+      {id:'m3q25', hoofdstuk:17, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Cras ad urbem veniemus.</em>"',
+        modelantwoord:'Morgen zullen wij naar de stad komen.', uitleg:'<em>Veniemus</em> = futurum (4e conjugatie: <em>-iemus</em>), 1e persoon meervoud.'},
     ]
   },
   {
@@ -491,6 +606,44 @@ const MODULES = [
       {id:'m4q15', hoofdstuk:19, moeilijkheidsgraad:2, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Numquam talem urbem vidimus.</em>"',
         modelantwoord:'Wij hebben nooit zo\'n stad gezien.', uitleg:'<em>Vidimus</em> = perfectum, 1e persoon meervoud.'},
+      {id:'m4q16', hoofdstuk:5, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>amavit</em>?',
+        opties:['3e persoon enkelvoud perfectum','3e persoon enkelvoud praesens','3e persoon enkelvoud plusquamperfectum','3e persoon enkelvoud imperfectum'],
+        antwoord:0, uitleg:'<em>-avit</em> is de perfectum-uitgang (3e persoon enkelvoud) van de 1e conjugatie: "hij heeft liefgehad".'},
+      {id:'m4q17', hoofdstuk:9, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>audiveramus</em>?',
+        opties:['1e persoon meervoud plusquamperfectum','1e persoon meervoud perfectum','1e persoon meervoud imperfectum','2e persoon meervoud plusquamperfectum'],
+        antwoord:0, uitleg:'Perfectumstam + <em>-eram, -eras, -erat, -eramus...</em> = plusquamperfectum: "wij hadden gehoord".'},
+      {id:'m4q18', hoofdstuk:5, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>perfectum, 3e persoon meervoud</strong> van <em>videre</em> (zien) — perfectumstam <em>vid-</em>.',
+        correctAntwoorden:['viderunt'], uitleg:'Perfectumstam <em>vid-</em> + <em>-erunt</em>.'},
+      {id:'m4q19', hoofdstuk:9, moeilijkheidsgraad:3, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>plusquamperfectum, 1e persoon enkelvoud</strong> van <em>esse</em> (zijn) — perfectumstam <em>fu-</em>.',
+        correctAntwoorden:['fueram'], uitleg:'Perfectumstam <em>fu-</em> + <em>-eram</em>.'},
+      {id:'m4q20', hoofdstuk:5, moeilijkheidsgraad:2, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Caesar Galliam vicit et in Italiam rediit.</em>" Welke tijd hebben beide werkwoorden?',
+        opties:['Perfectum (afgesloten handelingen na elkaar)','Imperfectum (duratief)','Plusquamperfectum','Praesens'],
+        antwoord:0, uitleg:'<em>Vicit</em> en <em>rediit</em> zijn perfecta: een reeks afgesloten handelingen in het verleden.'},
+      {id:'m4q21', hoofdstuk:19, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Odi hunc hominem.</em>" Waarom vertaal je <em>odi</em> met "ik haat" en niet met "ik heb gehaat"?',
+        opties:['<em>Odisse</em> heeft een perfectumvorm maar een praesensbetekenis','Het is een deponens','Het is een imperativus','Het is een futurum'],
+        antwoord:0, uitleg:'<em>Odi</em>, <em>novi</em> en <em>memini</em> zijn perfectumvormen met praesensbetekenis.'},
+      {id:'m4q22', hoofdstuk:5, moeilijkheidsgraad:2, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Hostes urbem ceperunt</em>" is correct?',
+        opties:['De vijanden hebben de stad ingenomen.','De vijanden nemen de stad in.','De stad heeft de vijanden ingenomen.','De vijand heeft de stad ingenomen.'],
+        antwoord:0, uitleg:'<em>Ceperunt</em> is perfectum, 3e persoon meervoud van <em>capere</em>.',
+        foutfeedback:{1:'<em>Ceperunt</em> is perfectum ("hebben ingenomen"), geen praesens (dat zou <em>capiunt</em> zijn).',2:'<em>Hostes</em> (nominativus) is het onderwerp, <em>urbem</em> (accusativus) het lijdend voorwerp.',3:'<em>Hostes</em> en <em>ceperunt</em> staan in het meervoud.'}},
+      {id:'m4q23', hoofdstuk:9, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Ubi advenerat, statim dormivit</em>" is correct?',
+        opties:['Toen hij was aangekomen, ging hij meteen slapen.','Toen hij zal aankomen, ging hij meteen slapen.','Terwijl hij aankwam, sliep hij al.','Toen hij was aangekomen, zal hij meteen slapen.'],
+        antwoord:0, uitleg:'<em>Advenerat</em> is plusquamperfectum (eerder voltooid), <em>dormivit</em> perfectum.',
+        foutfeedback:{1:'<em>Advenerat</em> is plusquamperfectum ("was aangekomen"), geen futurum.',2:'Het plusquamperfectum <em>advenerat</em> geeft een eerder voltooide handeling aan, geen gelijktijdige ("terwijl").',3:'<em>Dormivit</em> is perfectum ("ging slapen"), geen futurum.'}},
+      {id:'m4q24', hoofdstuk:5, moeilijkheidsgraad:1, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Milites fortiter pugnaverunt.</em>"',
+        modelantwoord:'De soldaten hebben dapper gevochten.', uitleg:'<em>Pugnaverunt</em> = perfectum, 3e persoon meervoud.'},
+      {id:'m4q25', hoofdstuk:9, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Epistulam, quam scripserat, misit.</em>"',
+        modelantwoord:'Hij stuurde de brief die hij geschreven had.', uitleg:'<em>Scripserat</em> = plusquamperfectum (vóór <em>misit</em>, perfectum).'},
     ]
   },
   {
@@ -554,6 +707,44 @@ const MODULES = [
       {id:'m5q15', hoofdstuk:11, moeilijkheidsgraad:2, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Hostes nos sequuntur.</em>" (<em>sequi</em> = deponens, volgen)',
         modelantwoord:'De vijanden volgen ons.', uitleg:'<em>Sequuntur</em> ziet er passief uit maar is deponens met actieve betekenis.'},
+      {id:'m5q16', hoofdstuk:11, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>laudantur</em>?',
+        opties:['3e persoon meervoud passief praesens','3e persoon meervoud actief praesens','3e persoon enkelvoud passief praesens','PPP meervoud'],
+        antwoord:0, uitleg:'<em>-ntur</em> = passieve uitgang, 3e persoon meervoud: "zij worden geprezen".'},
+      {id:'m5q17', hoofdstuk:24, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>missa erat</em>?',
+        opties:['Passief plusquamperfectum, 3e persoon enkelvoud (vrouwelijk)','Passief perfectum, 3e persoon enkelvoud','Actief plusquamperfectum','Passief imperfectum'],
+        antwoord:0, uitleg:'PPP (<em>missa</em>) + imperfectum van <em>esse</em> (<em>erat</em>) = passief plusquamperfectum: "was gestuurd".'},
+      {id:'m5q18', hoofdstuk:11, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>passief praesens, 3e persoon enkelvoud</strong> van <em>audire</em> (horen).',
+        correctAntwoorden:['auditur'], uitleg:'Stam <em>audi-</em> + <em>-tur</em> = <em>auditur</em>: "wordt gehoord".'},
+      {id:'m5q19', hoofdstuk:24, moeilijkheidsgraad:3, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>passief perfectum, 3e persoon meervoud mannelijk</strong> van <em>vocare</em> (roepen) — PPP <em>vocatus</em>.',
+        correctAntwoorden:['vocati sunt'], uitleg:'PPP meervoud (<em>vocati</em>) + <em>sunt</em> = passief perfectum: "zijn geroepen".'},
+      {id:'m5q20', hoofdstuk:11, moeilijkheidsgraad:2, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Ducem sequimur.</em>" Waarom vertaal je <em>sequimur</em> actief ("wij volgen")?',
+        opties:['<em>Sequi</em> is een deponens: passieve vorm, actieve betekenis','Het is een imperativus','Het is een futurum','Het is een passieve vorm met passieve betekenis'],
+        antwoord:0, uitleg:'Deponentia hebben passieve vormen maar een actieve betekenis.'},
+      {id:'m5q21', hoofdstuk:24, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Epistula a Caesare scripta est.</em>" Wat is <em>scripta</em>?',
+        opties:['PPP (nom. ev. vrouwelijk) dat met <em>est</em> het passief perfectum vormt','Participium praesens','Gerundivum','Actieve persoonsvorm'],
+        antwoord:0, uitleg:'PPP + vorm van <em>esse</em> = passief perfectum; het PPP congrueert met het onderwerp (<em>epistula</em>).'},
+      {id:'m5q22', hoofdstuk:11, moeilijkheidsgraad:2, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Milites a duce vocantur</em>" is correct?',
+        opties:['De soldaten worden door de aanvoerder geroepen.','De soldaten roepen de aanvoerder.','De aanvoerder wordt door de soldaten geroepen.','De soldaat wordt door de aanvoerder geroepen.'],
+        antwoord:0, uitleg:'<em>Vocantur</em> is passief; <em>a duce</em> geeft aan door wie.',
+        foutfeedback:{1:'<em>Vocantur</em> is passief ("worden geroepen"); de actieve vorm zou <em>vocant</em> zijn.',2:'<em>Milites</em> is het onderwerp en ondergaat de handeling; <em>a duce</em> is de handelende persoon.',3:'<em>Milites</em> en <em>vocantur</em> staan in het meervoud.'}},
+      {id:'m5q23', hoofdstuk:24, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Ager ab agricolis arabatur</em>" is correct?',
+        opties:['De akker werd door de boeren geploegd.','De akker is door de boeren geploegd.','De boeren ploegden de akker.','De akker wordt door de boeren geploegd.'],
+        antwoord:0, uitleg:'<em>Arabatur</em> = passief imperfectum: "werd geploegd".',
+        foutfeedback:{1:'<em>Arabatur</em> is passief imperfectum ("werd geploegd"), geen perfectum (dat zou <em>aratus est</em> zijn).',2:'<em>Arabatur</em> is passief: <em>ager</em> is het onderwerp en ondergaat de handeling.',3:'<em>-batur</em> is imperfectum (verleden), geen praesens (dat zou <em>aratur</em> zijn).'}},
+      {id:'m5q24', hoofdstuk:11, moeilijkheidsgraad:2, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Liber a puero legitur.</em>"',
+        modelantwoord:'Het boek wordt door de jongen gelezen.', uitleg:'Passief praesens + <em>a/ab</em> + ablativus (handelend voorwerp).'},
+      {id:'m5q25', hoofdstuk:24, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Urbs a Gallis deleta erat.</em>"',
+        modelantwoord:'De stad was door de Galliërs verwoest.', uitleg:'Passief plusquamperfectum: PPP <em>deleta</em> + <em>erat</em>.'},
     ]
   },
   {
@@ -617,6 +808,44 @@ const MODULES = [
       {id:'m6q15', hoofdstuk:18, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Duce interfecto, exercitus fugit.</em>"',
         modelantwoord:'Nadat de aanvoerder gedood was, vluchtte het leger.', uitleg:'Ablativus absolutus <em>duce interfecto</em>.'},
+      {id:'m6q16', hoofdstuk:15, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Wat is <em>laudatus</em> in "<em>Puer laudatus laetus est</em>"?',
+        opties:['PPP (nominativus enkelvoud mannelijk): "geprezen"','Participium praesens','Gerundivum','Participium futurum'],
+        antwoord:0, uitleg:'<em>-atus/-ata/-atum</em> is het PPP van de 1e conjugatie.'},
+      {id:'m6q17', hoofdstuk:16, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Wat is <em>venientem</em> in "<em>Video militem venientem</em>"?',
+        opties:['Participium praesens, accusativus enkelvoud','PPP, accusativus enkelvoud','Participium futurum','Infinitivus'],
+        antwoord:0, uitleg:'<em>-ens, -entis</em> is het participium praesens; <em>venientem</em> congrueert met <em>militem</em> (ACP).'},
+      {id:'m6q18', hoofdstuk:15, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>participium praesens, nominativus enkelvoud</strong> van <em>portare</em> (dragen).',
+        correctAntwoorden:['portans'], uitleg:'1e conjugatie: stam <em>porta-</em> + <em>-ns</em> = <em>portans</em>.'},
+      {id:'m6q19', hoofdstuk:18, moeilijkheidsgraad:3, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>PPP, nominativus enkelvoud mannelijk</strong> van <em>audire</em> (horen).',
+        correctAntwoorden:['auditus'], uitleg:'<em>Audire</em> → PPP <em>auditus/-a/-um</em>.'},
+      {id:'m6q20', hoofdstuk:16, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Audivi pueros cantantes.</em>" Wat is de functie van <em>cantantes</em>?',
+        opties:['Participium in een ACP, congrueert met pueros ("ik hoorde de jongens zingen")','Ablativus absolutus','Gerundivum','Bijstelling bij audivi'],
+        antwoord:0, uitleg:'Waarneming (<em>audivi</em>) + accusativus + participium praesens = ACP.'},
+      {id:'m6q21', hoofdstuk:18, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Hostibus victis, Romani domum redierunt.</em>" Waarom is <em>hostibus victis</em> een ablativus absolutus?',
+        opties:['Naamwoord + PPP in de ablativus, grammaticaal los van de rest van de zin','Het is het onderwerp van redierunt','Het is een lijdend voorwerp','Het is een bijstelling bij Romani'],
+        antwoord:0, uitleg:'Een ablativus absolutus staat los van de zinsconstructie: het geeft de omstandigheid aan ("nadat de vijanden overwonnen waren").'},
+      {id:'m6q22', hoofdstuk:15, moeilijkheidsgraad:2, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Milites cantantes urbem intraverunt</em>" is correct?',
+        opties:['De soldaten betraden zingend de stad.','De soldaten betraden de zingende stad.','De soldaten, die gezongen hadden, betraden de stad.','De soldaat betrad zingend de stad.'],
+        antwoord:0, uitleg:'<em>Cantantes</em> congrueert met <em>milites</em> en drukt een gelijktijdige handeling uit.',
+        foutfeedback:{1:'<em>Cantantes</em> congrueert met <em>milites</em> (nom. mv.), niet met <em>urbem</em> (acc. ev.).',2:'Het participium praesens drukt een gelijktijdige handeling uit ("zingend"), geen voorafgaande.',3:'<em>Milites</em> en <em>cantantes</em> staan in het meervoud.'}},
+      {id:'m6q23', hoofdstuk:18, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Urbe oppugnata, hostes discesserunt</em>" is correct?',
+        opties:['Nadat de stad bestormd was, vertrokken de vijanden.','Terwijl de stad bestormd werd, vertrokken de vijanden.','De stad bestormde de vijanden en daarna vertrokken zij.','Nadat de stad bestormd was, zullen de vijanden vertrekken.'],
+        antwoord:0, uitleg:'Ablativus absolutus met PPP: een voltooide handeling vóór de hoofdzin; <em>discesserunt</em> is perfectum.',
+        foutfeedback:{1:'Het PPP in een ablativus absolutus drukt een voltooide handeling uit ("nadat ... was bestormd"), geen gelijktijdige.',2:'<em>Urbe oppugnata</em> is passief: de stad ondergaat de aanval, ze bestormt niet zelf.',3:'<em>Discesserunt</em> is perfectum ("vertrokken"), geen futurum.'}},
+      {id:'m6q24', hoofdstuk:15, moeilijkheidsgraad:2, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Puella canens in horto ambulat.</em>"',
+        modelantwoord:'Het zingende meisje loopt in de tuin.', uitleg:'Participium praesens <em>canens</em> congrueert met <em>puella</em>.'},
+      {id:'m6q25', hoofdstuk:18, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Bello finito, milites domum redierunt.</em>"',
+        modelantwoord:'Nadat de oorlog beëindigd was, keerden de soldaten naar huis terug.', uitleg:'Ablativus absolutus <em>bello finito</em>.'},
     ]
   },
   {
@@ -680,6 +909,44 @@ const MODULES = [
       {id:'m7q15', hoofdstuk:21, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Tam fortis erat ut omnes eum admirarentur.</em>"',
         modelantwoord:'Hij was zo dapper dat iedereen hem bewonderde.', uitleg:'Gevolgzin (<em>tam...ut</em>) met conjunctivus (<em>admirarentur</em>).'},
+      {id:'m7q16', hoofdstuk:9, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>amet</em> (van <em>amare</em>)?',
+        opties:['Conjunctivus praesens, 3e persoon enkelvoud','Indicativus futurum, 3e persoon enkelvoud','Indicativus praesens, 3e persoon enkelvoud','Conjunctivus imperfectum, 3e persoon enkelvoud'],
+        antwoord:0, uitleg:'Bij de 1e conjugatie verschuift de klinker: <em>-et</em> is conjunctivus praesens (futurum zou <em>amabit</em> zijn).'},
+      {id:'m7q17', hoofdstuk:12, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>ferret</em> (van <em>ferre</em>)?',
+        opties:['Conjunctivus imperfectum, 3e persoon enkelvoud','Indicativus praesens','Conjunctivus perfectum','Indicativus futurum'],
+        antwoord:0, uitleg:'Het conjunctivus imperfectum is de infinitivus + persoonsuitgang: <em>ferre</em> + <em>-t</em> = <em>ferret</em>.'},
+      {id:'m7q18', hoofdstuk:20, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>conjunctivus imperfectum, 3e persoon meervoud</strong> van <em>amare</em> (houden van).',
+        correctAntwoorden:['amarent'], uitleg:'Infinitivus <em>amare</em> + <em>-nt</em> = <em>amarent</em>.'},
+      {id:'m7q19', hoofdstuk:21, moeilijkheidsgraad:3, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>conjunctivus plusquamperfectum, 3e persoon enkelvoud</strong> van <em>videre</em> (zien) — perfectumstam <em>vid-</em>.',
+        correctAntwoorden:['vidisset'], uitleg:'Perfectumstam <em>vid-</em> + <em>-isset</em>.'},
+      {id:'m7q20', hoofdstuk:19, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Narravit quid vidisset.</em>" Waarom staat <em>vidisset</em> in de conjunctivus?',
+        opties:['Het staat in een afhankelijke vraagzin','Omdat het een bevel is','Omdat het een wens is','Omdat het een futurum is'],
+        antwoord:0, uitleg:'In een afhankelijke vraagzin (<em>quid...</em>) staat de conjunctivus.'},
+      {id:'m7q21', hoofdstuk:20, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Ut omnes intellegerent, clare locutus est.</em>" Welke functie heeft de <em>ut</em>-zin?',
+        opties:['Doel ("opdat iedereen zou begrijpen")','Gevolg','Reden','Voorwaarde'],
+        antwoord:0, uitleg:'<em>Ut</em> + conjunctivus kan doel uitdrukken; hier: "opdat iedereen het zou begrijpen, sprak hij duidelijk".'},
+      {id:'m7q22', hoofdstuk:9, moeilijkheidsgraad:2, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Veniat!</em>" is correct?',
+        opties:['Laat hij komen!','Hij komt.','Hij kwam.','Kom!'],
+        antwoord:0, uitleg:'Een conjunctivus praesens in de hoofdzin kan een aansporing uitdrukken: "laat hij komen!".',
+        foutfeedback:{1:'<em>Veniat</em> is een conjunctivus (aansporing), geen gewone mededeling in de indicativus.',2:'<em>Veniat</em> is praesens, geen verleden tijd.',3:'<em>Veniat</em> is 3e persoon; "Kom!" (2e persoon) zou <em>veni</em> zijn.'}},
+      {id:'m7q23', hoofdstuk:21, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Tam fessus erat ut dormire non posset</em>" is correct?',
+        opties:['Hij was zo moe dat hij niet kon slapen.','Hij was moe opdat hij niet zou slapen.','Hij was zo moe dat hij kon slapen.','Hij zal zo moe zijn dat hij niet kan slapen.'],
+        antwoord:0, uitleg:'<em>Tam...ut</em> leidt een gevolgzin in; <em>non posset</em> = "niet kon".',
+        foutfeedback:{1:'<em>Tam...ut</em> leidt een gevolgzin in, geen doelzin ("opdat").',2:'<em>Non posset</em> bevat een ontkenning: "niet kon".',3:'<em>Erat</em> is imperfectum, geen futurum.'}},
+      {id:'m7q24', hoofdstuk:12, moeilijkheidsgraad:2, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Cum domum rediisset, cenavit.</em>"',
+        modelantwoord:'Toen hij naar huis teruggekeerd was, at hij.', uitleg:'Cum historicum: <em>cum</em> + conjunctivus plusquamperfectum (<em>rediisset</em>).'},
+      {id:'m7q25', hoofdstuk:20, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Milites missi sunt qui urbem defenderent.</em>"',
+        modelantwoord:'Er werden soldaten gestuurd om de stad te verdedigen.', uitleg:'Betrekkelijke bijzin van doel: <em>qui</em> + conjunctivus (<em>defenderent</em>).'},
     ]
   },
   {
@@ -743,6 +1010,44 @@ const MODULES = [
       {id:'m8q15', hoofdstuk:24, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Traditur Romulus urbem condidisse.</em>"',
         modelantwoord:'Er wordt overgeleverd dat Romulus de stad gesticht heeft.', uitleg:'NcI (<em>Romulus...condidisse</em>) bij het passieve <em>traditur</em>.'},
+      {id:'m8q16', hoofdstuk:10, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>esse</em> in "<em>Scio eum bonum esse</em>"?',
+        opties:['Infinitivus praesens','Infinitivus perfectum','Infinitivus futurum','Persoonsvorm'],
+        antwoord:0, uitleg:'<em>Esse</em> is de infinitivus praesens: gelijktijdig met <em>scio</em> ("ik weet dat hij goed is").'},
+      {id:'m8q17', hoofdstuk:22, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Welke constructie is "<em>Dicit se venturum esse</em>"?',
+        opties:['AcI met infinitivus futurum','NcI','Ablativus absolutus','Gerundivumconstructie'],
+        antwoord:0, uitleg:'<em>Se</em> (acc.) + <em>venturum esse</em> (infinitivus futurum) na <em>dicit</em>: "hij zegt dat hij zal komen".'},
+      {id:'m8q18', hoofdstuk:22, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>infinitivus praesens passief</strong> van <em>amare</em> (houden van).',
+        correctAntwoorden:['amari'], uitleg:'1e conjugatie: de infinitivus passief eindigt op <em>-ari</em>.'},
+      {id:'m8q19', hoofdstuk:24, moeilijkheidsgraad:3, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>infinitivus perfectum actief</strong> van <em>amare</em> (houden van) — perfectumstam <em>amav-</em>.',
+        correctAntwoorden:['amavisse'], uitleg:'Perfectumstam + <em>-isse</em>.'},
+      {id:'m8q20', hoofdstuk:10, moeilijkheidsgraad:2, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Puer dicit patrem venire.</em>" Wat is het onderwerp van <em>venire</em>?',
+        opties:['<em>patrem</em> (accusativus)','<em>puer</em>','<em>dicit</em>','Er is geen onderwerp'],
+        antwoord:0, uitleg:'In een AcI is de accusativus het "onderwerp" van de infinitivus: "de jongen zegt dat de vader komt".'},
+      {id:'m8q21', hoofdstuk:22, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Negat se errasse.</em>" Wat voor constructie is dit en wat betekent <em>negat</em>?',
+        opties:['AcI; <em>negat</em> = "hij ontkent / zegt dat niet"','NcI; <em>negat</em> = "hij zegt"','Ablativus absolutus; <em>negat</em> = "hij weigert"','Doelzin; <em>negat</em> = "opdat niet"'],
+        antwoord:0, uitleg:'<em>Negare</em> ("ontkennen") wordt gevolgd door een AcI: "hij ontkent dat hij zich vergist heeft".'},
+      {id:'m8q22', hoofdstuk:10, moeilijkheidsgraad:2, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Audimus milites cantare</em>" is correct?',
+        opties:['Wij horen de soldaten zingen.','De soldaten horen ons zingen.','Wij hoorden de soldaten zingen.','Wij horen de soldaat zingen.'],
+        antwoord:0, uitleg:'<em>Audimus</em> (wij) is het hoofdwerkwoord; <em>milites</em> is het "onderwerp" van de infinitivus.',
+        foutfeedback:{1:'<em>Audimus</em> (wij) is het hoofdwerkwoord; <em>milites</em> is onderwerp van de infinitivus (accusativus).',2:'<em>Audimus</em> is praesens, geen verleden tijd.',3:'<em>Milites</em> staat in het meervoud.'}},
+      {id:'m8q23', hoofdstuk:24, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Dux fortis fuisse dicitur</em>" is correct?',
+        opties:['Men zegt dat de aanvoerder dapper is geweest.','Men zegt dat de aanvoerder dapper zal zijn.','De aanvoerder zegt dat men dapper is geweest.','Men zei dat de aanvoerder dapper was.'],
+        antwoord:0, uitleg:'NcI: <em>dux</em> (nom.) + <em>fuisse</em> (infinitivus perfectum) bij het passieve <em>dicitur</em>.',
+        foutfeedback:{1:'<em>Fuisse</em> is infinitivus perfectum ("geweest zijn"), geen futurum.',2:'Bij het passieve <em>dicitur</em> is <em>dux</em> het onderwerp (NcI); de aanvoerder zegt zelf niets.',3:'<em>Dicitur</em> is praesens ("men zegt"), geen verleden tijd.'}},
+      {id:'m8q24', hoofdstuk:10, moeilijkheidsgraad:2, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Puto Romam magnam esse.</em>"',
+        modelantwoord:'Ik denk dat Rome groot is.', uitleg:'AcI na <em>puto</em>: <em>Romam</em> (acc.) + <em>esse</em>.'},
+      {id:'m8q25', hoofdstuk:22, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Speramus hostes mox discessuros esse.</em>"',
+        modelantwoord:'Wij hopen dat de vijanden spoedig zullen vertrekken.', uitleg:'AcI met infinitivus futurum (<em>discessuros esse</em>) na <em>speramus</em>.'},
     ]
   },
   {
@@ -806,6 +1111,44 @@ const MODULES = [
       {id:'m9q15', hoofdstuk:22, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Haec res facienda est nobis.</em>"',
         modelantwoord:'Deze zaak moet door ons gedaan worden.', uitleg:'Gerundivum + <em>esse</em> (noodzaak) + dativus auctoris (<em>nobis</em>, "door ons").'},
+      {id:'m9q16', hoofdstuk:22, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Wat is <em>legendus</em> in "<em>Liber legendus est</em>"?',
+        opties:['Gerundivum, congrueert met liber','Gerundium','PPP','Participium praesens'],
+        antwoord:0, uitleg:'<em>Legendus</em> congrueert met <em>liber</em> (nom. ev. m.): "het boek moet gelezen worden".'},
+      {id:'m9q17', hoofdstuk:23, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Wat is <em>gerendum</em> in "<em>ad bellum gerendum</em>" (om oorlog te voeren)?',
+        opties:['Gerundivum, congrueert met bellum','Gerundium (zelfstandig)','PPP','Infinitivus'],
+        antwoord:0, uitleg:'<em>Gerendum</em> congrueert met <em>bellum</em> (acc. ev. onz.): gerundivumconstructie.'},
+      {id:'m9q18', hoofdstuk:22, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>gerundium, genitivus</strong> van <em>videre</em> (zien) — "cupidus ___" (verlangend om te zien).',
+        correctAntwoorden:['videndi'], uitleg:'Gerundium genitivus op <em>-ndi</em>: <em>videndi</em>.'},
+      {id:'m9q19', hoofdstuk:23, moeilijkheidsgraad:3, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>gerundivum, nominativus enkelvoud vrouwelijk</strong> van <em>laudare</em> (prijzen) — "Virtus ___ est" (de deugd moet geprezen worden).',
+        correctAntwoorden:['laudanda'], uitleg:'Gerundivum congrueert met <em>virtus</em> (vrouwelijk): <em>laudanda</em>.'},
+      {id:'m9q20', hoofdstuk:22, moeilijkheidsgraad:2, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Pugnandi causa venerunt.</em>" Wat drukt <em>pugnandi causa</em> uit?',
+        opties:['Doel ("om te vechten")','Reden in het verleden','Plaats','Tijd'],
+        antwoord:0, uitleg:'Gerundium (genitivus) + <em>causa</em> drukt doel uit: "om te vechten".'},
+      {id:'m9q21', hoofdstuk:23, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Hostibus resistendum est.</em>" Wat voor constructie is dit?',
+        opties:['Onpersoonlijk gerundivum + esse (noodzaak): "men moet de vijanden weerstaan"','Ablativus absolutus','AcI','NcI'],
+        antwoord:0, uitleg:'<em>Resistere</em> neemt een dativus (<em>hostibus</em>); het gerundivum staat onpersoonlijk in het onzijdig: "er moet weerstand geboden worden aan de vijanden".'},
+      {id:'m9q22', hoofdstuk:22, moeilijkheidsgraad:2, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Studium legendi magnum est</em>" is correct?',
+        opties:['De zucht om te lezen is groot.','De zucht van de lezer is groot.','De zucht om te lezen was groot.','De zuchten om te lezen zijn groot.'],
+        antwoord:0, uitleg:'<em>Legendi</em> is een gerundium (genitivus): "van het lezen".',
+        foutfeedback:{1:'<em>Legendi</em> is een gerundium ("van het lezen"), geen persoon; "van de lezer" zou <em>lectoris</em> zijn.',2:'<em>Est</em> is praesens ("is"), geen verleden tijd.',3:'<em>Studium</em> en <em>magnum est</em> staan in het enkelvoud.'}},
+      {id:'m9q23', hoofdstuk:23, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Carthago delenda est</em>" is correct?',
+        opties:['Karthago moet verwoest worden.','Karthago is verwoest.','Karthago zal verwoest worden.','Karthago moet verwoesten.'],
+        antwoord:0, uitleg:'Gerundivum + <em>esse</em> drukt noodzaak uit: "moet ... worden".',
+        foutfeedback:{1:'Het gerundivum drukt noodzaak uit ("moet"), geen voltooide handeling (dat zou <em>deleta est</em> zijn).',2:'Het gerundivum drukt noodzaak uit, niet gewoon een toekomstige gebeurtenis (dat zou <em>delebitur</em> zijn).',3:'<em>Delenda est</em> is passief: Karthago wordt verwoest, het verwoest niet zelf.'}},
+      {id:'m9q24', hoofdstuk:22, moeilijkheidsgraad:2, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Ars bene dicendi difficilis est.</em>"',
+        modelantwoord:'De kunst van het goed spreken is moeilijk.', uitleg:'Gerundium genitivus (<em>dicendi</em>) bij <em>ars</em>.'},
+      {id:'m9q25', hoofdstuk:23, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Nobis pro patria pugnandum est.</em>"',
+        modelantwoord:'Wij moeten voor het vaderland vechten.', uitleg:'Onpersoonlijk gerundivum + <em>esse</em> met dativus auctoris (<em>nobis</em>).'},
     ]
   },
   {
@@ -869,6 +1212,44 @@ const MODULES = [
       {id:'m10q15', hoofdstuk:25, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
         vraag:'Vertaal: "<em>Tot hostes venerunt ut cives timerent.</em>"',
         modelantwoord:'Er kwamen zoveel vijanden dat de burgers bang werden.', uitleg:'<em>Tot...ut</em> (gevolgzin) met conjunctivus (<em>timerent</em>).'},
+      {id:'m10q16', hoofdstuk:20, moeilijkheidsgraad:1, type:'mc', vraagtype:'determineren',
+        vraag:'Welke vorm is <em>pulchrior</em>?',
+        opties:['Comparativus ("mooier")','Superlativus ("mooist")','Positivus ("mooi")','Adverbium'],
+        antwoord:0, uitleg:'<em>-ior</em> is het kenmerk van de comparativus; de superlativus zou <em>pulcherrimus</em> zijn.'},
+      {id:'m10q17', hoofdstuk:25, moeilijkheidsgraad:2, type:'mc', vraagtype:'determineren',
+        vraag:'Welk signaalwoord leidt meestal een voorwaardelijke zin in?',
+        opties:['si','postquam','dum','quamquam'],
+        antwoord:0, uitleg:'<em>Si</em> = "als/indien"; <em>postquam</em> = "nadat", <em>dum</em> = "terwijl", <em>quamquam</em> = "hoewel".'},
+      {id:'m10q18', hoofdstuk:13, moeilijkheidsgraad:2, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>superlativus, nominativus enkelvoud mannelijk</strong> van <em>altus</em> (hoog).',
+        correctAntwoorden:['altissimus'], uitleg:'Regelmatige superlativus: stam + <em>-issimus</em>.'},
+      {id:'m10q19', hoofdstuk:20, moeilijkheidsgraad:3, type:'invul', vraagtype:'vormen',
+        vraag:'Vul de gevraagde vorm in: <strong>comparativus, nominativus enkelvoud</strong> van <em>malus</em> (slecht).',
+        correctAntwoorden:['peior'], uitleg:'<em>Malus/peior/pessimus</em> is onregelmatig.'},
+      {id:'m10q20', hoofdstuk:13, moeilijkheidsgraad:2, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Caesar omnium fortissimus erat.</em>" Wat drukt <em>omnium</em> hier uit?',
+        opties:['Genitivus partitivus ("van allen")','Genitivus subjectivus','Genitivus objectivus','Bijstelling'],
+        antwoord:0, uitleg:'Bij een superlativus geeft de genitivus aan uit welke groep iemand de "meest" is: "de dapperste van allen".'},
+      {id:'m10q21', hoofdstuk:25, moeilijkheidsgraad:3, type:'mc', vraagtype:'functie',
+        vraag:'"<em>Dum haec geruntur, hostes advenerunt.</em>" Wat betekent <em>dum</em> hier?',
+        opties:['Terwijl','Totdat','Omdat','Indien'],
+        antwoord:0, uitleg:'<em>Dum</em> + indicativus praesens betekent "terwijl" (ook al is de handeling in het verleden).'},
+      {id:'m10q22', hoofdstuk:13, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Spes victoriae milites confirmat</em>" is correct?',
+        opties:['De hoop op de overwinning sterkt de soldaten.','De hoop van de overwinning sterkt de soldaten.','De soldaten sterken de hoop op de overwinning.','De hoop op de overwinning sterkt de soldaat.'],
+        antwoord:0, uitleg:'<em>Victoriae</em> is een genitivus objectivus: de hoop is gericht op de overwinning.',
+        foutfeedback:{1:'Hier is <em>victoriae</em> een genitivus objectivus: de hoop is gericht óp de overwinning; de overwinning "heeft" zelf geen hoop.',2:'<em>Spes</em> (nominativus) is het onderwerp, <em>milites</em> (accusativus) het lijdend voorwerp — niet andersom.',3:'<em>Milites</em> staat in het meervoud, niet in het enkelvoud.'}},
+      {id:'m10q23', hoofdstuk:25, moeilijkheidsgraad:3, type:'mc', vraagtype:'foutdetectie',
+        vraag:'Welke vertaling van "<em>Si hoc feceris, laetus ero</em>" is correct?',
+        opties:['Als je dit doet (gedaan hebt), zal ik blij zijn.','Als je dit deed, was ik blij.','Omdat je dit hebt gedaan, ben ik blij.','Als ik dit doe, zul jij blij zijn.'],
+        antwoord:0, uitleg:'<em>Feceris</em> (futurum exactum) en <em>ero</em> (futurum) verwijzen naar de toekomst.',
+        foutfeedback:{1:'<em>Feceris</em> (futurum exactum) en <em>ero</em> (futurum) verwijzen naar de toekomst, niet naar het verleden.',2:'<em>Si</em> betekent "als" (voorwaarde), niet "omdat".',3:'<em>Feceris</em> is 2e persoon ("jij"), <em>ero</em> is 1e persoon ("ik") — niet omgekeerd.'}},
+      {id:'m10q24', hoofdstuk:20, moeilijkheidsgraad:2, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Haec urbs maior est quam Roma.</em>"',
+        modelantwoord:'Deze stad is groter dan Rome.', uitleg:'Comparativus (<em>maior</em>) + <em>quam</em> ("dan").'},
+      {id:'m10q25', hoofdstuk:25, moeilijkheidsgraad:3, type:'vertaling', vraagtype:'vertaling',
+        vraag:'Vertaal: "<em>Dum haec geruntur, Caesar in castris manebat.</em>"',
+        modelantwoord:'Terwijl dit gebeurde, bleef Caesar in het kamp.', uitleg:'<em>Dum</em> + indicativus praesens = "terwijl".'},
     ]
   },
 ];
@@ -907,21 +1288,41 @@ function opslaanGezien(g){
 function markeerAlsGezien(moduleId, ids){
   const g = ladenGezien();
   const lijst = g[moduleId] || [];
-  const nieuw = lijst.concat(ids);
-  // bewaar alleen de laatste 2x de sessiegrootte, zodat oudere vragen weer vrijkomen
-  g[moduleId] = nieuw.slice(-VRAGEN_PER_SESSIE*2);
+  const nieuw = lijst.filter(id=>!ids.includes(id)).concat(ids);
+  // bewaar de laatste 3x de sessiegrootte (bij 25 vragen: ruim 3 pogingen zonder herhaling),
+  // zodat oudere vragen daarna weer vrijkomen
+  g[moduleId] = nieuw.slice(-VRAGEN_PER_SESSIE*3);
   opslaanGezien(g);
 }
 
-// ── vraag-selectiefunctie: klaar voor een pool van 15-25, werkt ook nu met 3 ──
+// ── vraag-selectiefunctie (pool 25 per module, ~6 per sessie) ──
+// Gestratificeerd: elk vraagtype komt ongeveer even vaak aan bod, zodat twee
+// pogingen qua opbouw vergelijkbaar blijven (nodig om vooruitgang te kunnen
+// vergelijken). Binnen elk type gaan niet-recent-geziene vragen voor.
 function kiesVragenVoorModule(moduleId, gefilterdePool){
   const gezienMap = ladenGezien();
   const gezien = new Set(gezienMap[moduleId] || []);
   const aantal = Math.min(VRAGEN_PER_SESSIE, gefilterdePool.length);
-  let nietGezien = gefilterdePool.filter(v=>!gezien.has(v.id));
-  let welGezien = gefilterdePool.filter(v=>gezien.has(v.id));
-  let kandidaten = shuffle(nietGezien).concat(shuffle(welGezien)); // niet-geziene eerst, dan de rest
-  const gekozen = kandidaten.slice(0, aantal);
+  const perType = {};
+  gefilterdePool.forEach(v=>{
+    const t = v.vraagtype || v.type || 'overig';
+    (perType[t] = perType[t] || []).push(v);
+  });
+  const rijen = shuffle(Object.keys(perType)).map(t=>{
+    const rij = perType[t];
+    const vers = shuffle(rij.filter(v=>!gezien.has(v.id)));
+    const oud = shuffle(rij.filter(v=>gezien.has(v.id)));
+    return {rij: vers.concat(oud), vers: vers.length};
+  })
+  // het type met de meeste nog onbekende vragen komt eerst aan de beurt (krijgt de "extra" vraag)
+  .sort((a,b)=>b.vers-a.vers)
+  .map(o=>o.rij);
+  const gekozen = [];
+  while(gekozen.length < aantal && rijen.some(r=>r.length)){
+    rijen.forEach(r=>{ if(gekozen.length < aantal && r.length) gekozen.push(r.shift()); });
+  }
+  // oplopend in moeilijkheid (stabiele sortering behoudt de willekeurige volgorde binnen een niveau)
+  gekozen.sort((a,b)=>(a.moeilijkheidsgraad||2)-(b.moeilijkheidsgraad||2));
   markeerAlsGezien(moduleId, gekozen.map(v=>v.id));
   return gekozen;
 }
@@ -1277,15 +1678,48 @@ function toonEindrapport(){
   const totaalVragen = resultaten.reduce((s,r)=>s+r.totaal,0);
   const totaalPct = totaalVragen ? Math.round(totaalGoed/totaalVragen*100) : 0;
 
+  // Vorige poging ophalen (vóór we deze bewaren), om vooruitgang te tonen
+  let vorige = null;
+  try{
+    const b = JSON.parse(localStorage.getItem(LS_KEY_RESULTATEN))||[];
+    vorige = b.length ? b[b.length-1] : null;
+  }catch(e){}
+  const vorigePerModule = {};
+  if(vorige && Array.isArray(vorige.resultaten)) vorige.resultaten.forEach(r=>{ vorigePerModule[r.moduleId] = r; });
+  const trend = d => d>0 ? `<span style="color:var(--green);font-weight:700">▲ +${d}%</span>`
+                   : d<0 ? `<span style="color:var(--red);font-weight:700">▼ ${d}%</span>`
+                   : `<span style="color:#777;font-weight:700">= gelijk</span>`;
+
   let html = `<div class="rapport-bereik">Getoetst t/m hoofdstuk <span class="r-hfst">H${grens}</span> — ${escHtml(chObj?chObj.naam:'')}<br>
     <span style="font-size:.75rem;opacity:.8">${grens<=13?'Minerva 1':'Minerva 1 + 2'}</span></div>`;
+
+  // Vergelijking over de onderdelen die in beide pogingen aan bod kwamen
+  const gedeeld = resultaten.filter(r=>vorigePerModule[r.moduleId]);
+  if(gedeeld.length){
+    const nuG = gedeeld.reduce((s,r)=>s+r.goed,0), nuT = gedeeld.reduce((s,r)=>s+r.totaal,0);
+    const voG = gedeeld.reduce((s,r)=>s+vorigePerModule[r.moduleId].goed,0), voT = gedeeld.reduce((s,r)=>s+vorigePerModule[r.moduleId].totaal,0);
+    const nuP = nuT ? Math.round(nuG/nuT*100) : 0, voP = voT ? Math.round(voG/voT*100) : 0;
+    const datum = vorige.datum ? new Date(vorige.datum).toLocaleDateString('nl-NL') : 'eerder';
+    html += `<div class="vergelijk-box">
+      <div class="veld-label" style="margin-top:0">Vergelijking met je vorige poging (${datum})</div>
+      <div style="font-size:1.05rem">${voP}% → <strong>${nuP}%</strong> ${trend(nuP-voP)}</div>
+      <div style="font-size:.76rem;color:#777;margin-top:6px">Over de ${gedeeld.length} onderdelen die beide keren aan bod kwamen. Elke poging krijgt andere vragen: een verschil van één vraag per onderdeel zegt dus weinig — kijk vooral naar de trend over meerdere onderdelen.</div>
+    </div>`;
+  }
 
   html += `<div class="veld-label">Prioriteitenlijst — waar begin je mee?</div>`;
   gesorteerd.forEach(r=>{
     const info = MATRIX_INFO[r.categorie];
+    const eerder = vorigePerModule[r.moduleId];
+    let vergelijk = '';
+    if(eerder){
+      const vorigeInfo = MATRIX_INFO[eerder.categorie];
+      vergelijk = `<div class="prio-meta">Vorige keer: ${eerder.pct}% → nu ${r.pct}% ${trend(r.pct-eerder.pct)}${eerder.categorie!==r.categorie && vorigeInfo ? ` — was: ${vorigeInfo.label}` : ''}</div>`;
+    }
     html += `<div class="prio-item prio-${r.categorie}">
       <div class="prio-head"><span class="prio-naam">${escHtml(r.moduleNaam)}</span><span class="matrix-badge ${info.klasse}">${info.label}</span></div>
       <div class="prio-meta">Score: ${r.goed}/${r.totaal} (${r.pct}%) — Zelfinschatting: ${ZI_LABELS[r.zelfinschatting]}</div>
+      ${vergelijk}
       <div class="prio-advies">${info.advies}</div>
     </div>`;
   });
