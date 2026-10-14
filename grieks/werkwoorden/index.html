@@ -1319,10 +1319,10 @@ const VERBS = [
   {f:'γράφομεν',g:'act',t:'praesens',  p:1,n:'mv',tr:'wij schrijven',cut:{pieces:[{t:'γράφ',r:'stem'},{t:'ο',r:'tk'},{t:'μεν',r:'end'}],fused:false},segs:[{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'μεν',r:'end'}]},
   {f:'ἔγραφον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik schreef', cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραφ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
   {f:'ἔγραφε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij schreef',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραφ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἔγραψα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik schreef', cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραψ',r:'stem'},{t:'α',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔγραψα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik schreef', cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραψ',r:'stem'},{t:'α',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
   {f:'ἔγραψας',g:'act',t:'aoristus',   p:2,n:'ev',tr:'jij schreef',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραψ',r:'stem'},{t:'α',r:'tk'},{t:'ς',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰς',r:'end'}]},
-  {f:'ἔγραψε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij schreef',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραψ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
-  {f:'γράψω',g:'act',  t:'futurum',    p:1,n:'ev',tr:'ik zal schrijven',cut:{pieces:[{t:'γράψ',r:'stem'},{t:'ω',r:'tk'}],fused:true},segs:[{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
+  {f:'ἔγραψε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij schreef',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'γραψ',r:'stem'},{t:'ε(ν)',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'γράψω',g:'act',  t:'futurum',    p:1,n:'ev',tr:'ik zal schrijven',cut:{pieces:[{t:'γράψ',r:'stem'},{t:'ω',r:'end'}],fused:true},segs:[{c:'γραφ',r:'stem'},{c:'σ',r:'tk'},{c:'ω',r:'end'}]},
  ]},
  {pres:'ποιέω',type:'contract',meaning:'maken, doen',forms:[
   {f:'ποιῶ',g:'act',   t:'praesens',   p:1,n:'ev',tr:'ik maak',    segs:null},
@@ -1406,15 +1406,15 @@ const VERBS = [
   {f:'νομίζει',g:'act',t:'praesens',   p:3,n:'ev',tr:'hij meent', cut:{pieces:[{t:'νομίζ',r:'stem'},{t:'ε',r:'tk'},{t:'ι',r:'end'}],fused:false},segs:[{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'ι',r:'end'}]},
   {f:'ἐνόμιζον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik meende',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμιζ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
   {f:'ἐνόμιζε(ν)',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij meende',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμιζ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'νομιζ',r:'stem'},{c:'ε',r:'tk'},{c:'—',r:'end'}]},
-  {f:'ἐνόμισα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik meende', cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμισ',r:'stem'},{t:'α',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἐνόμισε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij meende',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμισ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἐνόμισα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik meende', cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμισ',r:'stem'},{t:'α',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἐνόμισε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij meende',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νόμισ',r:'stem'},{t:'ε(ν)',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'νομισ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
  ]},
  {pres:'πείθω',type:'themat',meaning:'overtuigen',forms:[
   {f:'πείθω',g:'act',  t:'praesens',   p:1,n:'ev',tr:'ik overtuig',cut:{pieces:[{t:'πείθ',r:'stem'},{t:'ω',r:'end'}],fused:false},segs:[{c:'πειθ',r:'stem'},{c:'ω',r:'end'}]},
   {f:'πείθεις',g:'act',t:'praesens',   p:2,n:'ev',tr:'jij overtuigt',cut:{pieces:[{t:'πείθ',r:'stem'},{t:'ε',r:'tk'},{t:'ις',r:'end'}],fused:false},segs:[{c:'πειθ',r:'stem'},{c:'ε',r:'tk'},{c:'ις',r:'end'}]},
   {f:'ἔπειθον',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik overtuigde',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'πειθ',r:'stem'},{t:'ο',r:'tk'},{t:'ν',r:'end'}],fused:false},segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'ο',r:'tk'},{c:'ν',r:'end'}]},
-  {f:'ἔπεισα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik overtuigde',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'πεισ',r:'stem'},{t:'α',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
-  {f:'ἔπεισε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij overtuigde',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'πεισ',r:'stem'},{t:'ε(ν)',r:'tk'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
+  {f:'ἔπεισα',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik overtuigde',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'πεισ',r:'stem'},{t:'α',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ᾰ',r:'end'}]},
+  {f:'ἔπεισε(ν)',g:'act',t:'aoristus', p:3,n:'ev',tr:'hij overtuigde',cut:{pieces:[{t:'ἔ',r:'aug'},{t:'πεισ',r:'stem'},{t:'ε(ν)',r:'end'}],fused:true},segs:[{c:'ἐ',r:'aug'},{c:'πειθ',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
  ]},
  {pres:'βούλομαι',type:'mediumdep',meaning:'willen',forms:[
   {f:'βούλομαι',g:'med',t:'praesens',  p:1,n:'ev',tr:'ik wil',    cut:{pieces:[{t:'βούλ',r:'stem'},{t:'ο',r:'tk'},{t:'μαι',r:'end'}],fused:false},segs:[{c:'βουλ',r:'stem'},{c:'ο',r:'tk'},{c:'μαι',r:'end'}]},
@@ -1626,6 +1626,7 @@ function nlCanon(text,pres){
   let t=text
     .replace(/\bvoor (?:mezelf|jezelf|zichzelf|onszelf|mij|je|zich|ons)\b/g,' ')
     .replace(/\b(?:mee|even|maar|ook)\b/g,' ')
+    .replace(/\blos (\w+)/g,'los$1')
     .replace(/\b(\w+) los\b/g,'los$1')
     .replace(/\s+/g,' ').trim();
   const groups=NL_SYN[pres];
@@ -1646,13 +1647,36 @@ function matchNl(user,correct,pres){
   if(u===c) return true;
   u=nlCanon(u,pres); c=nlCanon(c,pres);
   if(u===c) return true;
-  const words=c.split(' ').filter(w=>w.length>2&&!/^(het|een|ik|jij|hij|zij|wij|we|jullie|zich|de|der)$/.test(w));
-  if(!words.length) return u.includes(c.slice(0,4));
-  return words.filter(w=>u.includes(w)).length >= Math.ceil(words.length*.7);
+  // Streng op persoon, getal en tijd (voorheen telde een deelstring: "ik maakte
+  // los" was goed voor "ik maak los", en "hij" voor "jij"). Het voornaamwoord
+  // moet in dezelfde groep vallen, de hulpwerkwoorden (zal/word/werd…) moeten
+  // gelijk zijn, en élk inhoudswoord van het juiste antwoord moet er als heel
+  // woord in staan. Extra woorden mogen.
+  const PRON={ik:'1',jij:'2',je:'2',u:'2',hij:'3',zij:'3',ze:'3',het:'3',er:'3',wij:'4',we:'4',jullie:'5'};
+  const AUX=/^(zal|zult|zullen|word|wordt|worden|werd|werden)$/;
+  const ut=u.split(' ').filter(Boolean), ct=c.split(' ').filter(Boolean);
+  const pg=ts=>{ const t=ts.find(w=>PRON[w]); return t?PRON[t]:null; };
+  const cp=pg(ct);
+  if(cp&&pg(ut)!==cp) return false;
+  const aux=ts=>ts.filter(w=>AUX.test(w)).sort().join(',');
+  if(aux(ut)!==aux(ct)) return false;
+  const content=ct.filter(w=>!PRON[w]&&!AUX.test(w));
+  if(!content.length) return false;
+  return content.every(w=>ut.includes(w));
 }
 
 function tijdNl(t){return{praesens:'praesens',imperfectum:'imperfectum',aoristus:'aoristus',futurum:'futurum',perfectum:'perfectum'}[t]||t;}
 function persNl(p,n){return{1:'1e',2:'2e',3:'3e'}[p]+' persoon '+(n==='ev'?'ev.':'mv.');}
+
+// Dezelfde Griekse vorm kan meerdere geldige ontledingen hebben (λύῃ = 3e ev.
+// act. én 2e ev. med.; λύσω = futurum én aoristus coni.; ἦν = 1e én 3e ev.).
+// Een antwoord dat bij één van die ontledingen past, is goed.
+function parsesOf(q){
+  const v=VERBS.find(x=>x.pres===q.pres);
+  const l=v?v.forms.filter(x=>x.f===q.f):[];
+  return l.length?l:[q];
+}
+function sameParse(x,q){ return x.p===q.p&&x.n===q.n&&x.t===q.t&&x.g===q.g&&(x.w||'ind')===(q.w||'ind'); }
 
 function updateHeader(mode,idx,total,sc,wr){
   document.getElementById(mode[0]+'-qn').textContent=`Vraag ${idx+1}/${total}`;
@@ -1902,7 +1926,7 @@ function checkOntleed(){
 
   // translation
   const vertEl=document.getElementById('o-vert');
-  const vertOk=matchNl(vertEl.value,q.tr,q.pres);
+  const vertOk=parsesOf(q).some(x=>matchNl(vertEl.value,x.tr,q.pres));
   vertEl.className=vertOk?'correct':'wrong';
   vertEl.disabled=true;
   if(!vertOk) fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${vertEl.value||'—'}</span> → <span class="fb-cor">${q.tr}</span></div>`);
@@ -1991,10 +2015,15 @@ function drawDeterm(){
 
 function checkDeterm(){
   const s=ST.determ, q=s.qs[s.idx];
+  // Kies de ontleding die het best bij de gegeven keuzes past (bij gelijke stand
+  // de gevraagde): zo is een andere geldige ontleding van dezelfde vorm ook goed.
+  const parses=parsesOf(q);
+  const score=x=>(String(x.p)===DET_PICK.pers)+(x.n===DET_PICK.getal)+(x.t===DET_PICK.tijd);
+  const best=parses.slice().sort((x,y)=>score(y)-score(x)||(sameParse(y,q)?1:0)-(sameParse(x,q)?1:0))[0]||q;
   const checks=[
-    {axis:'pers', exp:String(q.p),  label:'Persoon'},
-    {axis:'getal',exp:q.n,          label:'Getal'},
-    {axis:'tijd', exp:q.t,          label:'Tijd'},
+    {axis:'pers', exp:String(best.p),  label:'Persoon'},
+    {axis:'getal',exp:best.n,          label:'Getal'},
+    {axis:'tijd', exp:best.t,          label:'Tijd'},
   ];
   let allOk=true, fbLines=[];
   checks.forEach(c=>{
@@ -2013,11 +2042,15 @@ function checkDeterm(){
   });
   {
     const el=document.getElementById('d-vert');
-    const ok=matchNl(el.value,q.tr,q.pres);
+    const ok=parses.some(x=>matchNl(el.value,x.tr,q.pres));
     el.classList.remove('ok','err');el.classList.add(ok?'ok':'err');el.disabled=true;
     if(!ok){allOk=false;
-      fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${el.value||'—'}</span> → <span class="fb-cor">${q.tr}</span></div>`);
+      fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${el.value||'—'}</span> → <span class="fb-cor">${best.tr}</span></div>`);
     }
+  }
+  if(!allOk&&parses.length>1){
+    const alt=parses.map(x=>`${persNl(x.p,x.n)} ${tijdNl(x.t)}${x.g==='med'?' medium':x.g==='pass'?' passief':' actief'}${x.w==='coni'?' coniunctivus':x.w==='opt'?' optativus':''} (${x.tr})`);
+    fbLines.push(`<div class="fb-row"><span class="fb-lbl">Let op:</span> deze vorm kan meerdere dingen zijn: <span class="fb-cor">${alt.join(' &nbsp;/&nbsp; ')}</span></div>`);
   }
   if(allOk){s.sc++;}else{s.wr++;}
   ktRegTel(allOk);
@@ -2050,7 +2083,7 @@ function drawVertaal(){
 function checkVertaal(){
   const s=ST.vertaal, q=s.qs[s.idx];
   const v=document.getElementById('v-vert');
-  const ok=matchNl(v.value,q.tr,q.pres);
+  const ok=parsesOf(q).some(x=>matchNl(v.value,x.tr,q.pres));
   v.classList.remove('ok','err');v.classList.add(ok?'ok':'err');v.disabled=true;
   if(ok){s.sc++;}else{s.wr++;}
   ktRegTel(ok);
