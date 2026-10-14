@@ -139,6 +139,15 @@
 
   <div id="sync-status" class="alert alert-warn" style="font-size:.82rem"></div>
 
+  <div id="adoptie-blok" style="display:none" class="alert alert-info">
+    <strong>Eerdere resultaten op dit apparaat gevonden.</strong> Je maakte de toets eerder zonder in te loggen.
+    Zijn dat jouw resultaten? Neem ze dan mee naar je account, dan tellen ze mee in je vergelijking.
+    <div class="flex-row mt8">
+      <button class="btn btn-primary btn-sm" onclick="adopteerAnoniem()">Neem mijn eerdere resultaten mee</button>
+    </div>
+    <div style="font-size:.76rem;color:#555;margin-top:6px">Deel je dit apparaat met anderen? Neem ze dan alleen mee als ze van jou zijn.</div>
+  </div>
+
   <div id="hervatten-blok" style="display:none" class="alert alert-info">
     <strong>Je hebt een toets in uitvoering.</strong> Wil je verdergaan waar je gebleven was, of opnieuw beginnen?
     <div class="flex-row mt8">
@@ -1322,6 +1331,45 @@ function normGezien(obj){
   return JSON.stringify(uit);
 }
 
+// ── eerdere, anonieme resultaten van dit apparaat overnemen in het account ──
+function anoniemeData(){
+  let res = [], gez = {};
+  try{ const r = JSON.parse(localStorage.getItem(LS_KEY_RESULTATEN)); if(Array.isArray(r)) res = r; }catch(e){}
+  try{ const g = JSON.parse(localStorage.getItem(LS_KEY_GEZIEN)); if(g && typeof g==='object') gez = g; }catch(e){}
+  return {res, gez};
+}
+function toonAdoptieBlok(){
+  const el = document.getElementById('adoptie-blok');
+  if(!el) return;
+  const {res} = anoniemeData();
+  el.style.display = (huidigeIdentiteit() && res.length) ? '' : 'none';
+}
+function adopteerAnoniem(){
+  if(!huidigeIdentiteit()) return;
+  const {res, gez} = anoniemeData();
+  if(!res.length) return;
+  if(!confirm('Weet je zeker dat deze eerdere resultaten van jou zijn? Ze worden aan je account toegevoegd.')) return;
+  // geschiedenis samenvoegen op datum, laatste 10
+  const perDatum = {};
+  lokaleResultaten().concat(res).forEach(p=>{ if(p && p.datum) perDatum[p.datum] = p; });
+  const samen = Object.values(perDatum).sort((a,b)=>a.datum<b.datum?-1:1).slice(-10);
+  localStorage.setItem(lsKey(LS_KEY_RESULTATEN), JSON.stringify(samen));
+  // geziene vragen samenvoegen
+  const eigen = ladenGezien();
+  const uit = {};
+  Object.keys(Object.assign({}, eigen, gez)).forEach(m=>{
+    const u = [];
+    (Array.isArray(eigen[m])?eigen[m]:[]).concat(Array.isArray(gez[m])?gez[m]:[]).forEach(id=>{ if(!u.includes(id)) u.push(id); });
+    if(u.length) uit[m] = u.slice(-GEZIEN_MAX);
+  });
+  localStorage.setItem(lsKey(LS_KEY_GEZIEN), JSON.stringify(uit));
+  // anonieme kopie wissen, zodat ze niet nogmaals (of door een ander) kunnen worden overgenomen
+  localStorage.removeItem(LS_KEY_RESULTATEN);
+  localStorage.removeItem(LS_KEY_GEZIEN);
+  toonAdoptieBlok();
+  syncCloud();
+}
+
 let syncPromise = null;
 function syncCloud(){
   if(!huidigeIdentiteit()){ zetSyncStatus('uit'); return Promise.resolve('niet-ingelogd'); }
@@ -1905,9 +1953,10 @@ function toonEindrapport(){
 vulHoofdstukSelect();
 checkHervattenBlok();
 zetSyncStatus();
+toonAdoptieBlok();
 syncCloud();
 if(typeof KTAuth !== 'undefined' && KTAuth.onChange){
-  KTAuth.onChange(()=>{ checkHervattenBlok(); zetSyncStatus(); syncCloud(); });
+  KTAuth.onChange(()=>{ checkHervattenBlok(); zetSyncStatus(); toonAdoptieBlok(); syncCloud(); });
 }
 </script>
 </body>
