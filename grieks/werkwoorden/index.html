@@ -1598,8 +1598,53 @@ function normalNl(s){
   return (s||'').trim().toLowerCase().replace(/[,.;!]/g,'').replace(/\s+/g,' ');
 }
 
-function matchNl(user,correct){
-  const u=normalNl(user), c=normalNl(correct);
+// ── Alternatieve vertalingen ─────────────────────────────────────────────
+// Per werkwoord: groepen gelijkwaardige Nederlandse werkwoorden, elk met 8
+// vormen op vaste volgorde [inf, ik, jij, hij, mv, ovt.ev, ovt.mv, vd].
+// Een antwoord met een synoniem ("hij pakte" i.p.v. "hij nam") telt zo ook goed;
+// "voor zichzelf/mezelf…" en "mee" zijn bijzaak en worden genegeerd.
+const NL_SYN={
+ 'λύω':[['losmaken','losmaak','losmaakt','losmaakt','losmaken','losmaakte','losmaakten','losgemaakt'],['bevrijden','bevrijd','bevrijdt','bevrijdt','bevrijden','bevrijdde','bevrijdden','bevrijd'],['losbinden','losbind','losbindt','losbindt','losbinden','losbond','losbonden','losgebonden']],
+ 'λαμβάνω':[['nemen','neem','neemt','neemt','nemen','nam','namen','genomen'],['pakken','pak','pakt','pakt','pakken','pakte','pakten','gepakt'],['grijpen','grijp','grijpt','grijpt','grijpen','greep','grepen','gegrepen'],['krijgen','krijg','krijgt','krijgt','krijgen','kreeg','kregen','gekregen'],['ontvangen','ontvang','ontvangt','ontvangt','ontvangen','ontving','ontvingen','ontvangen']],
+ 'ἔχω':[['hebben','heb','hebt','heeft','hebben','had','hadden','gehad'],['houden','houd','houdt','houdt','houden','hield','hielden','gehouden'],['bezitten','bezit','bezit','bezit','bezitten','bezat','bezaten','bezeten']],
+ 'λέγω':[['zeggen','zeg','zegt','zegt','zeggen','zei','zeiden','gezegd'],['spreken','spreek','spreekt','spreekt','spreken','sprak','spraken','gesproken'],['vertellen','vertel','vertelt','vertelt','vertellen','vertelde','vertelden','verteld']],
+ 'ποιέω':[['maken','maak','maakt','maakt','maken','maakte','maakten','gemaakt'],['doen','doe','doet','doet','doen','deed','deden','gedaan']],
+ 'ὁράω':[['zien','zie','ziet','ziet','zien','zag','zagen','gezien'],['aanschouwen','aanschouw','aanschouwt','aanschouwt','aanschouwen','aanschouwde','aanschouwden','aanschouwd']],
+ 'ἀκούω':[['horen','hoor','hoort','hoort','horen','hoorde','hoorden','gehoord'],['luisteren','luister','luistert','luistert','luisteren','luisterde','luisterden','geluisterd']],
+ 'πάσχω':[['lijden','lijd','lijdt','lijdt','lijden','leed','leden','geleden'],['ondergaan','onderga','ondergaat','ondergaat','ondergaan','onderging','ondergingen','ondergaan'],['ervaren','ervaar','ervaart','ervaart','ervaren','ervoer','ervoeren','ervaren']],
+ 'γίγνομαι':[['worden','word','wordt','wordt','worden','werd','werden','geworden'],['gebeuren','gebeur','gebeurt','gebeurt','gebeuren','gebeurde','gebeurden','gebeurd'],['ontstaan','ontsta','ontstaat','ontstaat','ontstaan','ontstond','ontstonden','ontstaan']],
+ 'ἔρχομαι':[['komen','kom','komt','komt','komen','kwam','kwamen','gekomen'],['gaan','ga','gaat','gaat','gaan','ging','gingen','gegaan']],
+ 'φέρω':[['dragen','draag','draagt','draagt','dragen','droeg','droegen','gedragen'],['brengen','breng','brengt','brengt','brengen','bracht','brachten','gebracht']],
+ 'νομίζω':[['menen','meen','meent','meent','menen','meende','meenden','gemeend'],['denken','denk','denkt','denkt','denken','dacht','dachten','gedacht'],['geloven','geloof','gelooft','gelooft','geloven','geloofde','geloofden','geloofd'],['vinden','vind','vindt','vindt','vinden','vond','vonden','gevonden'],['beschouwen','beschouw','beschouwt','beschouwt','beschouwen','beschouwde','beschouwden','beschouwd']],
+ 'πείθω':[['overtuigen','overtuig','overtuigt','overtuigt','overtuigen','overtuigde','overtuigden','overtuigd'],['overreden','overreed','overreedt','overreedt','overreden','overreedde','overreedden','overreed']],
+ 'βούλομαι':[['willen','wil','wilt','wil','willen','wilde','wilden','gewild'],['wensen','wens','wenst','wenst','wensen','wenste','wensten','gewenst']],
+ 'καλέω':[['roepen','roep','roept','roept','roepen','riep','riepen','geroepen'],['noemen','noem','noemt','noemt','noemen','noemde','noemden','genoemd']],
+ 'νικάω':[['overwinnen','overwin','overwint','overwint','overwinnen','overwon','overwonnen','overwonnen'],['winnen','win','wint','wint','winnen','won','wonnen','gewonnen'],['verslaan','versla','verslaat','verslaat','verslaan','versloeg','versloegen','verslagen']],
+ 'εἶμι':[['gaan','ga','gaat','gaat','gaan','ging','gingen','gegaan']]
+};
+function nlCanon(text,pres){
+  let t=text
+    .replace(/\bvoor (?:mezelf|jezelf|zichzelf|onszelf|mij|je|zich|ons)\b/g,' ')
+    .replace(/\b(?:mee|even|maar|ook)\b/g,' ')
+    .replace(/\b(\w+) los\b/g,'los$1')
+    .replace(/\s+/g,' ').trim();
+  const groups=NL_SYN[pres];
+  if(!groups) return t;
+  const toks=t.split(' ');
+  const passAux=/^(word|wordt|worden|werd|werden)$/;
+  return toks.map((w,i)=>{
+    const hits=[];
+    groups.forEach(g=>g.forEach((f,ix)=>{ if(f===w) hits.push(ix); }));
+    if(!hits.length) return w;
+    const ix=(i>0&&passAux.test(toks[i-1])&&hits.includes(7))?7:hits[0];
+    return groups[0][ix];
+  }).join(' ');
+}
+
+function matchNl(user,correct,pres){
+  let u=normalNl(user), c=normalNl(correct);
+  if(u===c) return true;
+  u=nlCanon(u,pres); c=nlCanon(c,pres);
   if(u===c) return true;
   const words=c.split(' ').filter(w=>w.length>2&&!/^(het|een|ik|jij|hij|zij|wij|we|jullie|zich|de|der)$/.test(w));
   if(!words.length) return u.includes(c.slice(0,4));
@@ -1798,28 +1843,28 @@ function checkOntleed(){
     structureOk=true; // no structure to grade
   } else {
     // 1) Was the cut correct? (only matters for non-fused; fused boundaries are locked-correct)
+    // Er zijn soms twee even goede analyses (klinkerverbinding wel/niet als apart
+    // stuk, bv. νομίζ·ε·ι én νομίζ·ει): cutVariants() geeft ze allemaal.
     const cs=O.cutState;
-    let cutOk=true;
-    if(!cs.fused){
-      // student's cut set must equal expected
-      cutOk = (cs.cuts.size===cs.expectedCuts.size) &&
-              [...cs.expectedCuts].every(p=>cs.cuts.has(p));
-    }
-
-    // 2) Were the labels correct? Compare student's pieces+labels to the canonical pieces.
-    // Canonical pieces (role per piece) from q.cut.pieces
     const canon=q.cut.pieces.map(p=>({t:joinLetters(splitLetters(p.t)), r:p.r}));
+    const variants=cutVariants(canon);
+    let matched=null;
+    if(cs.fused) matched=variants[0];
+    else matched=variants.find(v=>v.length===O.studentPieces.length&&v.every((p,i)=>p.t===O.studentPieces[i]))||null;
+    const cutOk=!!matched;
+
+    // 2) Were the labels correct? Compare student's pieces+labels to the matched analysis.
     const studentLabels=O.studentPieces.map((pc,i)=>{
       const sel=document.getElementById('o-lbl-'+i);
       return {t:pc, r:sel?sel.value:''};
     });
 
     let labelsOk=true;
-    // If the cut was correct (same number of pieces as canon), grade piece-by-piece
-    if(studentLabels.length===canon.length){
+    // Klopt het knippen: beoordeel stuk voor stuk tegen de gematchte analyse.
+    if(cutOk){
       studentLabels.forEach((sp,i)=>{
         const sel=document.getElementById('o-lbl-'+i);
-        const ok = sp.r===canon[i].r;
+        const ok = sp.r===matched[i].r;
         if(sel){ sel.classList.remove('ok','err'); sel.classList.add(ok?'ok':'err'); sel.disabled=true; }
         const row=sel?sel.closest('.label-item'):null;
         if(row){ row.classList.add(ok?'correct-row':'wrong-row'); }
@@ -1828,33 +1873,36 @@ function checkOntleed(){
           if(row){
             const fix=document.createElement('span');
             fix.className='label-fix';
-            fix.textContent='→ '+ROLE_NAMES[canon[i].r];
+            fix.textContent='→ '+ROLE_NAMES[matched[i].r];
             row.appendChild(fix);
           }
         }
       });
     } else {
-      // cut count differs from canonical → mark all labels disabled, structure wrong
+      // Verkeerd geknipt: de gekozen namen horen bij stukken die zo niet bestaan,
+      // dus geen groen/rood per stuk (dat gaf "alles groen maar toch fout").
       labelsOk=false;
       studentLabels.forEach((sp,i)=>{
         const sel=document.getElementById('o-lbl-'+i);
-        if(sel){ sel.classList.add('err'); sel.disabled=true; }
+        if(sel){ sel.disabled=true; }
       });
     }
 
     structureOk=cutOk&&labelsOk;
     if(!cutOk){
-      fbLines.push(`<div class="fb-row"><span class="fb-lbl">Knippen:</span> de grenzen klopten nog niet. Juiste indeling: <span class="fb-cor">${canon.map(c=>c.t).join(' · ')}</span></div>`);
+      const show=v=>v.map(c=>`${c.t} = ${ROLE_NAMES[c.r]}`).join(' · ');
+      fbLines.push(`<div class="fb-row"><span class="fb-lbl">Knippen:</span> de grenzen klopten nog niet. Zo hoort het: <span class="fb-cor">${show(canon)}</span></div>`);
+      variants.slice(1).forEach(v=>fbLines.push(`<div class="fb-row"><span class="fb-lbl">Ook goed:</span> <span class="fb-cor">${show(v)}</span></div>`));
     }
     if(cutOk && !labelsOk){
-      const corr=canon.map(c=>`${c.t} = ${ROLE_NAMES[c.r]}`).join(' · ');
+      const corr=matched.map(c=>`${c.t} = ${ROLE_NAMES[c.r]}`).join(' · ');
       fbLines.push(`<div class="fb-row"><span class="fb-lbl">Benoemen:</span> <span class="fb-cor">${corr}</span></div>`);
     }
   }
 
   // translation
   const vertEl=document.getElementById('o-vert');
-  const vertOk=matchNl(vertEl.value,q.tr);
+  const vertOk=matchNl(vertEl.value,q.tr,q.pres);
   vertEl.className=vertOk?'correct':'wrong';
   vertEl.disabled=true;
   if(!vertOk) fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${vertEl.value||'—'}</span> → <span class="fb-cor">${q.tr}</span></div>`);
@@ -1879,6 +1927,37 @@ function checkOntleed(){
 }
 
 function joinLetters(arr){ return arr.join(''); }
+
+// Gelijkwaardige analyses van één vorm: de basis (zoals in de data) plus
+//  - samengevoegd: een kale thematische klinker (ε/ο) + uitgang als één uitgang
+//    (νομίζ·ει naast νομίζ·ε·ι);
+//  - gesplitst: een uitgang die met ε/ο + medeklinker begint, met die klinker
+//    als apart stuk (ἐ·λάβ·ε·το naast ἐ·λάβ·ετο).
+function cutVariants(canon){
+  const out=[canon];
+  const strip=t=>t.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const bareV=t=>/^[εο]$/.test(strip(t));
+  const merged=[]; let ch=false;
+  for(let i=0;i<canon.length;i++){
+    const p=canon[i], nx=canon[i+1];
+    if(p.r==='tk'&&bareV(p.t)&&nx&&nx.r==='end'){ merged.push({t:p.t+nx.t,r:'end'}); i++; ch=true; }
+    else merged.push(p);
+  }
+  if(ch) out.push(merged);
+  const split=[]; let ch2=false;
+  canon.forEach((p,i)=>{
+    const prev=canon[i-1];
+    if(p.r==='end'&&!(prev&&prev.r==='tk')){
+      const L=splitLetters(p.t), first=L[0]||'', rest=L.slice(1).join('');
+      if(bareV(first)&&rest&&/^[βγδζθκλμνξπρσςτφχψ]/.test(strip(rest))){
+        split.push({t:first,r:'tk'},{t:rest,r:'end'}); ch2=true; return;
+      }
+    }
+    split.push(p);
+  });
+  if(ch2) out.push(split);
+  return out;
+}
 
 // ══════════════════════════════════════════════
 //  DETERMINEER EXERCISE
@@ -1934,7 +2013,7 @@ function checkDeterm(){
   });
   {
     const el=document.getElementById('d-vert');
-    const ok=matchNl(el.value,q.tr);
+    const ok=matchNl(el.value,q.tr,q.pres);
     el.classList.remove('ok','err');el.classList.add(ok?'ok':'err');el.disabled=true;
     if(!ok){allOk=false;
       fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${el.value||'—'}</span> → <span class="fb-cor">${q.tr}</span></div>`);
@@ -1971,7 +2050,7 @@ function drawVertaal(){
 function checkVertaal(){
   const s=ST.vertaal, q=s.qs[s.idx];
   const v=document.getElementById('v-vert');
-  const ok=matchNl(v.value,q.tr);
+  const ok=matchNl(v.value,q.tr,q.pres);
   v.classList.remove('ok','err');v.classList.add(ok?'ok':'err');v.disabled=true;
   if(ok){s.sc++;}else{s.wr++;}
   ktRegTel(ok);
