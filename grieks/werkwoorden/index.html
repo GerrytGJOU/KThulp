@@ -1625,8 +1625,10 @@ const NL_SYN={
 function nlCanon(text,pres){
   let t=text
     .replace(/\bvoor (?:mezelf|jezelf|zichzelf|onszelf|mij|je|zich|ons)\b/g,' ')
+    .replace(/\b(?:mezelf|jezelf|zichzelf|onszelf|zich)\b/g,' ')
     .replace(/\bopdat\b/g,'dat')
     .replace(/\b(?:mee|even|maar|ook)\b/g,' ')
+    .replace(/\s+/g,' ')
     .replace(/\blos (\w+)/g,'los$1')
     .replace(/\b(\w+) los\b/g,'los$1')
     .replace(/\s+/g,' ').trim();
