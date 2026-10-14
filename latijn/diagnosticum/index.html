@@ -137,6 +137,8 @@
     "dacht dat het goed ging, bleek fout" en "wist zelf al dat dit lastig was" vraagt een andere aanpak.
   </div>
 
+  <div id="sync-status" class="alert alert-warn" style="font-size:.82rem"></div>
+
   <div id="hervatten-blok" style="display:none" class="alert alert-info">
     <strong>Je hebt een toets in uitvoering.</strong> Wil je verdergaan waar je gebleven was, of opnieuw beginnen?
     <div class="flex-row mt8">
@@ -1278,12 +1280,140 @@ function showScreen(id){
   window.scrollTo(0,0);
 }
 
+// ══════════════════════════════════════════════════════
+//  ACCOUNT + CLOUD-SYNC (Firebase, via de site-brede inlog)
+//  Ingelogde leerling: geschiedenis + recent geziene vragen staan onder
+//  identities/{klas}/{lid}/apps/diagnosticum-la/{history,gezien} en worden
+//  samengevoegd met localStorage. Niet ingelogd: alleen localStorage.
+//  Lokale sleutels zijn per account gescoped, zodat twee leerlingen op één
+//  apparaat elkaars resultaten niet zien of vermengen.
+// ══════════════════════════════════════════════════════
+const CLOUD_APP_ID = 'diagnosticum-la';
+const GEZIEN_MAX = VRAGEN_PER_SESSIE * 3;
+
+function huidigeIdentiteit(){
+  try{
+    const i = (typeof KTAuth !== 'undefined' && KTAuth.getIdentity) ? KTAuth.getIdentity() : null;
+    return (i && i.klascode && i.leerlingcode) ? i : null;
+  }catch(e){ return null; }
+}
+function lsKey(basis){
+  const i = huidigeIdentiteit();
+  return i ? basis + '::' + i.klascode + '::' + i.leerlingcode : basis;
+}
+
+function lokaleResultaten(){
+  try{ const r = JSON.parse(localStorage.getItem(lsKey(LS_KEY_RESULTATEN))); return Array.isArray(r) ? r : []; }
+  catch(e){ return []; }
+}
+function compacteerPoging(p){
+  return {
+    datum: p.datum, grens: p.grens, totaalPct: p.totaalPct,
+    resultaten: (p.resultaten||[]).map(r=>({moduleId:r.moduleId, moduleNaam:r.moduleNaam, goed:r.goed,
+      totaal:r.totaal, pct:r.pct, zelfinschatting:r.zelfinschatting, categorie:r.categorie}))
+  };
+}
+function pogingKey(p){ const t = Date.parse(p.datum); return String(isNaN(t) ? 0 : t); }
+// Firebase geeft lijsten soms als array, soms als object terug
+function alsLijst(v){ return Array.isArray(v) ? v.filter(x=>x!=null) : (v && typeof v==='object' ? Object.values(v) : []); }
+function normGezien(obj){
+  const uit = {};
+  Object.keys(obj||{}).sort().forEach(k=>{ const l = alsLijst(obj[k]); if(l.length) uit[k] = l; });
+  return JSON.stringify(uit);
+}
+
+let syncPromise = null;
+function syncCloud(){
+  if(!huidigeIdentiteit()){ zetSyncStatus('uit'); return Promise.resolve('niet-ingelogd'); }
+  if(syncPromise) return syncPromise.then(()=>syncCloud());
+  zetSyncStatus('bezig');
+  syncPromise = (async ()=>{
+    const ident = huidigeIdentiteit();
+    try{
+      const {db} = await KTAuth.ensureFirebase();
+      const ref = db.ref('identities/'+ident.klascode+'/'+ident.leerlingcode+'/apps/'+CLOUD_APP_ID);
+      const node = (await ref.once('value')).val() || {};
+
+      // geschiedenis: cloud + lokaal samenvoegen op datum (lokaal heeft de volledige versie), laatste 10
+      const perDatum = {};
+      alsLijst(node.history).forEach(p=>{ if(p && p.datum) perDatum[p.datum] = p; });
+      lokaleResultaten().forEach(p=>{ if(p && p.datum) perDatum[p.datum] = p; });
+      const samen = Object.values(perDatum).sort((a,b)=>a.datum<b.datum?-1:1).slice(-10);
+
+      // recent geziene vragen: cloud eerst, daarna lokaal; dubbelen eruit; per module de laatste GEZIEN_MAX
+      const cg = node.gezien || {};
+      const lg = ladenGezien();
+      const gez = {};
+      MODULES.forEach(m=>{
+        const c = alsLijst(cg['m'+m.id]);
+        const l = Array.isArray(lg[m.id]) ? lg[m.id] : [];
+        const u = [];
+        c.concat(l).forEach(id=>{ if(!u.includes(id)) u.push(id); });
+        if(u.length) gez[m.id] = u.slice(-GEZIEN_MAX);
+      });
+
+      // lokaal bijwerken
+      localStorage.setItem(lsKey(LS_KEY_RESULTATEN), JSON.stringify(samen));
+      localStorage.setItem(lsKey(LS_KEY_GEZIEN), JSON.stringify(gez));
+
+      // cloud bijwerken, alleen als er echt iets verschilt
+      const gezCloud = {}; Object.keys(gez).forEach(m=>{ gezCloud['m'+m] = gez[m]; });
+      const histNu = samen.map(p=>p.datum).join('|');
+      const histCloud = alsLijst(node.history).map(p=>p.datum).sort().join('|');
+      if(histNu !== histCloud || normGezien(gezCloud) !== normGezien(node.gezien)){
+        const upd = {};
+        const hist = {}; samen.forEach(p=>{ hist[pogingKey(p)] = compacteerPoging(p); });
+        upd.history = samen.length ? hist : null;
+        upd.gezien = Object.keys(gezCloud).length ? gezCloud : null;
+        if(typeof node.score !== 'number'){   // regels eisen een score op het app-knooppunt
+          upd.score = samen.length ? (samen[samen.length-1].totaalPct || 0) : 0;
+          upd.detail = 'Diagnosticum gesynchroniseerd';
+          upd.updatedAt = firebase.database.ServerValue.TIMESTAMP;
+        }
+        await ref.update(upd);
+      }
+      zetSyncStatus('ok');
+      return 'ok';
+    }catch(e){
+      zetSyncStatus('fout');
+      return 'fout';
+    }finally{
+      syncPromise = null;
+    }
+  })();
+  return syncPromise;
+}
+let syncTimer = null;
+function planSync(){ clearTimeout(syncTimer); syncTimer = setTimeout(()=>{ syncCloud(); }, 1500); }
+
+function zetSyncStatus(staat){
+  const el = document.getElementById('sync-status');
+  if(!el) return;
+  const i = huidigeIdentiteit();
+  if(!i){
+    el.className = 'alert alert-warn';
+    el.innerHTML = 'Je bent niet ingelogd: je resultaten blijven alleen op dit apparaat bewaard. '
+      + 'Log in via het <a href="../../">hoofdmenu</a> om je voortgang in je account te bewaren en op elk apparaat terug te zien.';
+    return;
+  }
+  const wie = escHtml(i.name || i.leerlingcode) + ' · klas ' + escHtml(i.klascode);
+  if(staat === 'fout'){
+    el.className = 'alert alert-warn';
+    el.innerHTML = 'Ingelogd als <strong>'+wie+'</strong>, maar synchroniseren lukt nu niet (offline?). '
+      + 'Je resultaten blijven op dit apparaat staan en worden de volgende keer alsnog in je account bewaard.';
+  } else {
+    el.className = 'alert alert-info';
+    el.innerHTML = 'Ingelogd als <strong>'+wie+'</strong> — je resultaten worden in je account bewaard'
+      + (staat === 'bezig' ? ' <em>(synchroniseren…)</em>' : '') + '.';
+  }
+}
+
 // ── localStorage: gezien-ids per module (voor herhaalbaarheid, §8) ──
 function ladenGezien(){
-  try{ return JSON.parse(localStorage.getItem(LS_KEY_GEZIEN))||{}; }catch(e){ return {}; }
+  try{ return JSON.parse(localStorage.getItem(lsKey(LS_KEY_GEZIEN)))||{}; }catch(e){ return {}; }
 }
 function opslaanGezien(g){
-  localStorage.setItem(LS_KEY_GEZIEN, JSON.stringify(g));
+  localStorage.setItem(lsKey(LS_KEY_GEZIEN), JSON.stringify(g));
 }
 function markeerAlsGezien(moduleId, ids){
   const g = ladenGezien();
@@ -1293,6 +1423,7 @@ function markeerAlsGezien(moduleId, ids){
   // zodat oudere vragen daarna weer vrijkomen
   g[moduleId] = nieuw.slice(-VRAGEN_PER_SESSIE*3);
   opslaanGezien(g);
+  planSync();
 }
 
 // ── vraag-selectiefunctie (pool 25 per module, ~6 per sessie) ──
@@ -1371,13 +1502,13 @@ function toonVoorbeschouwing(){
 let toets = null; // { grens, actieveModules:[{module,pool}], moduleIndex, resultaten:[...], huidigeVragen, antwoorden, huidigeVraagIdx }
 
 function ladenVoortgang(){
-  try{ return JSON.parse(localStorage.getItem(LS_KEY_VOORTGANG)); }catch(e){ return null; }
+  try{ return JSON.parse(localStorage.getItem(lsKey(LS_KEY_VOORTGANG))); }catch(e){ return null; }
 }
 function opslaanVoortgang(){
-  localStorage.setItem(LS_KEY_VOORTGANG, JSON.stringify(toets));
+  localStorage.setItem(lsKey(LS_KEY_VOORTGANG), JSON.stringify(toets));
 }
 function wisVoortgang(){
-  localStorage.removeItem(LS_KEY_VOORTGANG);
+  localStorage.removeItem(lsKey(LS_KEY_VOORTGANG));
 }
 
 function nieuweToetsBevestig(){
@@ -1407,12 +1538,20 @@ function hervatToets(){
   gaNaarModule(toets.moduleIndex);
 }
 
-function startNieuweToets(){
+let startBezig = false;
+async function startNieuweToets(){
+  if(startBezig) return;
   const grens = parseInt(document.getElementById('hoofdstuk-select').value, 10);
   const actief = bepaalActieveModules(grens);
   if(actief.length === 0){
     alert('Bij dit hoofdstukbereik zijn nog geen modules beschikbaar.');
     return;
+  }
+  if(huidigeIdentiteit()){
+    // geschiedenis + geziene vragen van andere apparaten binnenhalen (max 2 s wachten; offline mag nooit blokkeren)
+    startBezig = true;
+    try{ await Promise.race([syncCloud(), new Promise(r=>setTimeout(r, 2000))]); }catch(e){}
+    startBezig = false;
   }
   toets = {
     grens,
@@ -1681,7 +1820,7 @@ function toonEindrapport(){
   // Vorige poging ophalen (vóór we deze bewaren), om vooruitgang te tonen
   let vorige = null;
   try{
-    const b = JSON.parse(localStorage.getItem(LS_KEY_RESULTATEN))||[];
+    const b = JSON.parse(localStorage.getItem(lsKey(LS_KEY_RESULTATEN)))||[];
     vorige = b.length ? b[b.length-1] : null;
   }catch(e){}
   const vorigePerModule = {};
@@ -1729,19 +1868,35 @@ function toonEindrapport(){
 
   html += `<p class="print-only" style="font-size:.75rem;color:#888;margin-top:20px">Diagnosticum · Gerben de Jong · afgedrukt op ${new Date().toLocaleDateString('nl-NL')}</p>`;
 
+  html += `<div id="rapport-sync" class="no-print" style="font-size:.8rem;color:#666;margin-top:12px"></div>`;
+
   document.getElementById('eindrapport-content').innerHTML = html;
   document.getElementById('voortgang-badge').style.display='none';
 
   // Bewaar resultaat (los van de lopende-voortgang-key) en wis de lopende toets
   try{
-    const bewaard = JSON.parse(localStorage.getItem(LS_KEY_RESULTATEN))||[];
+    const bewaard = JSON.parse(localStorage.getItem(lsKey(LS_KEY_RESULTATEN)))||[];
     bewaard.push({datum:new Date().toISOString(), grens, resultaten, totaalPct});
-    localStorage.setItem(LS_KEY_RESULTATEN, JSON.stringify(bewaard.slice(-10)));
+    localStorage.setItem(lsKey(LS_KEY_RESULTATEN), JSON.stringify(bewaard.slice(-10)));
     if(typeof KTScores!=="undefined") KTScores.save("diagnosticum-la",{score:totaalPct, detail:"laatste toets: "+totaalGoed+"/"+totaalVragen+" ("+totaalPct+"%)"});
   }catch(e){}
   wisVoortgang();
 
   showScreen('eindrapport');
+
+  // naar het account wegschrijven (stil, mag de app nooit breken) en dat kort melden
+  const meld = document.getElementById('rapport-sync');
+  if(meld){
+    if(!huidigeIdentiteit()){
+      meld.innerHTML = 'Dit resultaat staat alleen op dit apparaat. Log in via het <a href="../../">hoofdmenu</a> om je voortgang in je account te bewaren.';
+    } else {
+      meld.textContent = 'Opslaan in je account…';
+      syncCloud().then(r=>{
+        meld.textContent = r === 'ok' ? '✓ Opgeslagen in je account — je ziet je vooruitgang ook op andere apparaten.'
+                                      : 'Kon nu niet in je account opslaan; het staat wel op dit apparaat en wordt later alsnog bewaard.';
+      });
+    }
+  }
 }
 
 // ══════════════════════════════════════════════════════
@@ -1749,6 +1904,11 @@ function toonEindrapport(){
 // ══════════════════════════════════════════════════════
 vulHoofdstukSelect();
 checkHervattenBlok();
+zetSyncStatus();
+syncCloud();
+if(typeof KTAuth !== 'undefined' && KTAuth.onChange){
+  KTAuth.onChange(()=>{ checkHervattenBlok(); zetSyncStatus(); syncCloud(); });
+}
 </script>
 </body>
 </html>
