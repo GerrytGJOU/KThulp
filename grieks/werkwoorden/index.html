@@ -1339,6 +1339,7 @@ const VERBS = [
   {f:'ποιοῦμεν',g:'act',t:'praesens',  p:1,n:'mv',tr:'wij maken',  segs:null},
   {f:'ποιεῖτε',g:'act',t:'praesens',   p:2,n:'mv',tr:'jullie maken',segs:null},
   {f:'ἐποίουν',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik maakte',  segs:null},
+  {f:'ἐποίουν',g:'act',t:'imperfectum',p:3,n:'mv',tr:'zij maakten',  segs:null},
   {f:'ἐποίει',g:'act', t:'imperfectum',p:3,n:'ev',tr:'hij maakte', segs:null},
   {f:'ἐποίησα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik maakte',  cut:{pieces:[{t:'ἐ',r:'aug'},{t:'ποίη',r:'stem'},{t:'σ',r:'tk'},{t:'α',r:'end'}],fused:false},segs:[{c:'ε',r:'aug'},{c:'ποιη',r:'stem'},{c:'σ',r:'tk'},{c:'α',r:'end'}]},
   {f:'ἐποίησε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij maakte', cut:{pieces:[{t:'ἐ',r:'aug'},{t:'ποίη',r:'stem'},{t:'σ',r:'tk'},{t:'ε(ν)',r:'end'}],fused:false},segs:[{c:'ε',r:'aug'},{c:'ποιη',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
@@ -1355,6 +1356,7 @@ const VERBS = [
   {f:'ὁρᾷ',g:'act',   t:'praesens',   p:3,n:'ev',tr:'hij ziet',   segs:null},
   {f:'ὁρῶμεν',g:'act',t:'praesens',   p:1,n:'mv',tr:'wij zien',   segs:null},
   {f:'ἑώρων',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik zag',     segs:null},
+  {f:'ἑώρων',g:'act', t:'imperfectum',p:3,n:'mv',tr:'zij zagen',     segs:null},
   {f:'ἑώρα',g:'act',  t:'imperfectum',p:3,n:'ev',tr:'hij zag',    segs:null},
   {f:'εἶδον',g:'act', t:'aoristus',   p:1,n:'ev',tr:'ik zag',     segs:null},
   {f:'εἶδον',g:'act', t:'aoristus',   p:3,n:'mv',tr:'zij zagen',     segs:null},
@@ -1446,6 +1448,7 @@ const VERBS = [
   {f:'καλεῖς',g:'act', t:'praesens',   p:2,n:'ev',tr:'jij roept', segs:null},
   {f:'καλεῖ',g:'act',  t:'praesens',   p:3,n:'ev',tr:'hij roept', segs:null},
   {f:'ἐκάλουν',g:'act',t:'imperfectum',p:1,n:'ev',tr:'ik riep',   segs:null},
+  {f:'ἐκάλουν',g:'act',t:'imperfectum',p:3,n:'mv',tr:'zij riepen',   segs:null},
   {f:'ἐκάλει',g:'act', t:'imperfectum',p:3,n:'ev',tr:'hij riep',  segs:null},
   {f:'ἐκάλεσα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik riep',   cut:{pieces:[{t:'ἐ',r:'aug'},{t:'κάλε',r:'stem'},{t:'σ',r:'tk'},{t:'α',r:'end'}],fused:false},segs:[{c:'ε',r:'aug'},{c:'καλε',r:'stem'},{c:'σ',r:'tk'},{c:'α',r:'end'}]},
   {f:'ἐκάλεσε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij riep',  cut:{pieces:[{t:'ἐ',r:'aug'},{t:'κάλε',r:'stem'},{t:'σ',r:'tk'},{t:'ε(ν)',r:'end'}],fused:false},segs:[{c:'ε',r:'aug'},{c:'καλε',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
@@ -1467,6 +1470,7 @@ const VERBS = [
   {f:'νικᾷ',g:'act',   t:'praesens',   p:3,n:'ev',tr:'hij overwint',segs:null},
   {f:'νικῶμεν',g:'act',t:'praesens',   p:1,n:'mv',tr:'wij overwinnen',segs:null},
   {f:'ἐνίκων',g:'act', t:'imperfectum',p:1,n:'ev',tr:'ik overwon',  segs:null},
+  {f:'ἐνίκων',g:'act', t:'imperfectum',p:3,n:'mv',tr:'zij overwonnen',  segs:null},
   {f:'ἐνίκα',g:'act',t:'imperfectum',p:3,n:'ev',tr:'hij overwon',segs:null},
   {f:'ἐνίκησα',g:'act',t:'aoristus',   p:1,n:'ev',tr:'ik overwon',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νίκη',r:'stem'},{t:'σ',r:'tk'},{t:'α',r:'end'}],fused:false},segs:[{c:'ε',r:'aug'},{c:'νικη',r:'stem'},{c:'σ',r:'tk'},{c:'α',r:'end'}]},
   {f:'ἐνίκησε(ν)',g:'act',t:'aoristus',p:3,n:'ev',tr:'hij overwon',cut:{pieces:[{t:'ἐ',r:'aug'},{t:'νίκη',r:'stem'},{t:'σ',r:'tk'},{t:'ε(ν)',r:'end'}],fused:false},segs:[{c:'ε',r:'aug'},{c:'νικη',r:'stem'},{c:'σ',r:'tk'},{c:'ε(ν)',r:'end'}]},
@@ -1696,7 +1700,9 @@ function persNl(p,n){return{1:'1e',2:'2e',3:'3e'}[p]+' persoon '+(n==='ev'?'ev.'
 // Een antwoord dat bij één van die ontledingen past, is goed.
 function parsesOf(q){
   const v=VERBS.find(x=>x.pres===q.pres);
-  const l=v?v.forms.filter(x=>x.f===q.f):[];
+  const l=v?v.forms.filter(x=>x.f===q.f).map(x=>({...x,pres:q.pres})):[];
+  // zelfde spelling bij een ander werkwoord (bv. εἶ = εἰμί 'jij bent' én εἶμι 'jij gaat')
+  VERBS.forEach(w=>{ if(w.pres!==q.pres) w.forms.forEach(x=>{ if(x.f===q.f) l.push({...x,pres:w.pres}); }); });
   return l.length?l:[q];
 }
 function sameParse(x,q){ return x.p===q.p&&x.n===q.n&&x.t===q.t&&x.g===q.g&&(x.w||'ind')===(q.w||'ind'); }
@@ -1949,7 +1955,7 @@ function checkOntleed(){
 
   // translation
   const vertEl=document.getElementById('o-vert');
-  const vertOk=parsesOf(q).some(x=>[x.tr,...(x.alt||[])].some(t=>matchNl(vertEl.value,t,q.pres)));
+  const vertOk=parsesOf(q).some(x=>[x.tr,...(x.alt||[])].some(t=>matchNl(vertEl.value,t,x.pres||q.pres)));
   vertEl.className=vertOk?'correct':'wrong';
   vertEl.disabled=true;
   if(!vertOk) fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${vertEl.value||'—'}</span> → <span class="fb-cor">${q.tr}</span></div>`);
@@ -2075,7 +2081,7 @@ function checkDeterm(){
   });
   {
     const el=document.getElementById('d-vert');
-    const ok=parses.some(x=>[x.tr,...(x.alt||[])].some(t=>matchNl(el.value,t,q.pres)));
+    const ok=parses.some(x=>[x.tr,...(x.alt||[])].some(t=>matchNl(el.value,t,x.pres||q.pres)));
     el.classList.remove('ok','err');el.classList.add(ok?'ok':'err');el.disabled=true;
     if(!ok){allOk=false;
       fbLines.push(`<div class="fb-row"><span class="fb-lbl">Vertaling:</span><span class="fb-got">${el.value||'—'}</span> → <span class="fb-cor">${best.tr}</span></div>`);
@@ -2116,7 +2122,7 @@ function drawVertaal(){
 function checkVertaal(){
   const s=ST.vertaal, q=s.qs[s.idx];
   const v=document.getElementById('v-vert');
-  const ok=parsesOf(q).some(x=>[x.tr,...(x.alt||[])].some(t=>matchNl(v.value,t,q.pres)));
+  const ok=parsesOf(q).some(x=>[x.tr,...(x.alt||[])].some(t=>matchNl(v.value,t,x.pres||q.pres)));
   v.classList.remove('ok','err');v.classList.add(ok?'ok':'err');v.disabled=true;
   if(ok){s.sc++;}else{s.wr++;}
   ktRegTel(ok);
