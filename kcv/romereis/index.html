@@ -123,7 +123,8 @@
 <div id="lb" role="dialog" aria-label="Afbeelding"><div class="bar"><span id="lbcap"></span><button id="lbz" type="button">Inzoomen</button><button id="lbx" type="button">Sluiten</button></div><div class="stage"><img id="lbimg" alt=""></div></div>
 <footer>Romereis Sint Ursula 2026 &middot; &copy; Gerben de Jong &middot; 2026</footer>
 
-<script src="../../assets/romereis/afbeeldingen.js?v=1"></script>
+<script src="../../assets/romereis/afbeeldingen.js?v=2"></script>
+<script src="../../assets/romereis/tips.js?v=1"></script>
 <script>
 /* ============================ DATA ============================ */
 /* Bron: Gids Rome 2026 (Sint-Ursula). Bewust zonder namen, telefoonnummers, e-mailadressen,
@@ -194,8 +195,10 @@ var PLEKKEN = {
          'Om het gewicht van de koepel te dragen, verdunden de bouwers de muren naar boven toe: onderaan 6,4 meter dik, rond de oculus nog maar 1,2 meter. Ook het beton werd naar boven toe lichter, en verzonken vakken (cassettes) in het plafond bespaarden extra gewicht.',
          'Sinds 609 is het Pantheon een christelijke kerk; onder anderen de schilder Rafaël ligt er begraven. De marmeren vloer is nog het originele Romeinse werk.'],
   feiten:[['Koepel','43,3 m hoog en breed'],['Oculus','8,9 m doorsnede'],['Bouwheer','Hadrianus, rond 118 n.Chr.'],['Zuilen portiek','16, elk 60 ton, uit Egypte']],
-  opdracht:'Kijk hoe het licht van de oculus over de dag door het gebouw wandelt. Wat gebeurt er als het regent?',
-  tip:'Rond het Pantheon (en de Piazza Navona) zijn koffie en frisdrank bespottelijk duur – liever aan de bar in een zijstraatje.'},
+  opdracht:'Lees samen het opschrift: M\u00b7AGRIPPA\u00b7L\u00b7F\u00b7COS\u00b7TERTIVM\u00b7FECIT. Los het op (Marcus Agrippa, zoon van Lucius, consul voor de derde keer, heeft dit gebouwd). Het klopt maar half: Agrippa bouwde 27\u201325 v.Chr. een eerste tempel, maar wat er nu staat is van Hadrianus (118\u2013125), die bescheiden de oude naam liet staan.',
+  haakje:'Paus Urbanus VIII (Barberini, zie de bijen bij de Spaanse Trappen) liet het brons van de voorhal weghalen. Spotters schreven: \u201cQuod non fecerunt barbari, fecerunt Barberini.\u201d Dat zinnetje hing aan Pasquino (stop 8).',
+  wist:[['Bloemen uit de hemel.','Elk jaar op Pinksteren gooien brandweerlieden vanaf het dak duizenden rode rozenblaadjes door de oculus naar binnen. Ze staan voor de Heilige Geest die neerdaalt.'],['Regent het binnen?','Ja, het regent door het gat naar binnen. De vloer loopt licht af naar het midden, waar kleine afvoergaatjes het water opvangen.'],['Het mooiste grafschrift van Rome.','Op het graf van Rafa\u00ebl staat een tweeregelig Latijns gedicht van Pietro Bembo: \u201cIlle hic est Raphael, timuit quo sospite vinci / rerum magna parens et moriente mori.\u201d Vertaal: de natuur vreesde door hem overtroffen te worden toen hij leefde, en zelf te sterven toen hij stierf.']],
+  tip:'Op de avondwandeling (stop 5, 15 min) gaan we niet naar binnen; het verhaal hoor je op het plein voor de voorhal. Rond het Pantheon en de Piazza Navona zijn koffie en frisdrank bespottelijk duur \u2013 liever aan de bar in een zijstraatje.'},
 
  'castel-santangelo': {naam:'Castel Sant’Angelo', sub:'Het Mausoleum van Hadrianus', coord:[41.9031,12.4663],
   tekst:['Keizer Hadrianus liet tussen 134 en 139 n.Chr. dit grafmonument bouwen voor zichzelf en zijn familie: een vierkante basis van 89 meter breed met daarop een ronde, 64 meter brede zuilentrommel.',
@@ -279,9 +282,84 @@ var PLEKKEN = {
          'Vanaf de Gianiculo, de heuvel erboven, heb je een mooi uitzicht over Rome – een prettige plek voor de lunchpauze.'],
   tip:'Ook hier geldt: koffie aan de bar is het goedkoopst; zitten op een terras is het duurst.'},
 
- 'centrum': {naam:'Wandeling door het centrum', sub:'Pantheon, Spaanse Trappen en meer', coord:[41.9000,12.4800],
-  tekst:['Op vrijdagavond maak je een wandeling door het centrum van Rome; de precieze route bepaalt je reisleider (denk aan het Pantheon en de Spaanse Trappen). Extra dingen die de moeite waard zijn: de Trevifontein (en vele andere fonteinen), Piazza Navona (met het stadion eronder), Campo dei Fiori, de Via del Corso en de Via Nazionale om te winkelen.',
-         'Drink de beste koffie bij Tazza d’Oro en eet het beste ijsje bij Giolitti.'],
+ 'wandeling': {naam:'De route in één oogopslag', sub:'Avondwandeling · 10 stops · ca. 3,2 km', coord:[41.9059,12.4823],
+  tekst:['De wandeling loopt van de Spaanse Trappen via de Trevifontein en het Pantheon naar Piazza Navona en Campo de’ Fiori, en eindigt bij Largo Argentina: de plek waar Caesar werd vermoord. Dat is ongeveer 3,2 km: zo’n 45 minuten puur lopen en 2 tot 2,5 uur met stops.',
+         'Rode draad: één aquaduct (de Aqua Virgo) en één wijk (het Marsveld) verbinden alle stops. Agrippa legt het water aan, Domitianus bouwt het stadion, Pompeius het theater waar Caesar sterft.'],
+  lijstTitel:'De tien stops',
+  lijst:['1. Piazza di Spagna: Spaanse Trappen en Barcaccia','2. Fontana di Trevi','3. Piazza di Pietra: Tempel van Hadrianus','4. Piazza Colonna en Montecitorio','5. Pantheon','6. Piazza della Minerva: Berninis olifantje (optioneel)','7. Piazza Navona','8. Piazza di Pasquino (optioneel)','9. Campo de’ Fiori','10. Largo di Torre Argentina: Theater van Pompeius en de moord op Caesar'],
+  tip:'Begin- en eindpunt, starttijd en terugweg naar het hotel hoor je van je reisleiding. Zakkenrollers: Trevi en de Via del Corso zijn het drukst; blijf bij de groep. Zitten op de Spaanse Trappen is verboden en wordt beboet. Wie tijd tekortkomt, schrapt stop 6 en 8. Het is vroeg donker (de zon gaat rond 17:05 onder): de pleinen en fonteinen zijn ’s avonds juist extra mooi.',
+  walk:true},
+
+ 'spaanse-trappen': {naam:'1. Spaanse Trappen en Barcaccia', sub:'Piazza di Spagna · 15 min', coord:[41.9059,12.4823],
+  tekst:['Het plein heet naar het Palazzo di Spagna, sinds de 17e eeuw de ambassade van Spanje bij de paus. De trappen zelf (1723–1726, Francesco De Sanctis) zijn betaald met Frans geld en leiden naar de Franse kerk Trinità dei Monti.',
+         'De Barcaccia (1627–1629) is van Pietro Bernini, waarschijnlijk met zoon Gian Lorenzo. Het half gezonken bootje lost een technisch probleem op: de waterdruk is hier te laag voor een hoge straal.',
+         'Let op de bijen en zonnen: het wapen van de familie Barberini (paus Urbanus VIII). Die familie komt bij het Pantheon terug.',
+         'Rechts onder aan de trappen stierf de dichter John Keats in 1821.'],
+  haakje:'Het water komt uit de Aqua Virgo, het aquaduct dat Agrippa in 19 v.Chr. aanlegde en dat nog steeds werkt. Het voedt ook Trevi en de Vierstromenfontein: vanavond volgen we het water.',
+  wist:[['Gestrande boot.','Volgens de legende spoelde bij de grote Tiberoverstroming van 1598 een boot aan op deze plek, die er bleef liggen toen het water zakte. Bernini zou het idee voor de fontein van dat gestrande bootje hebben.'],['Naam in water.','Keats wist dat hij stervende was en wilde geen naam op zijn graf, alleen de regel “Here lies one whose name was writ in water”. Na zijn dood werden volgens de wet van die tijd zijn meubels en spullen verbrand, uit angst voor besmetting met tbc.']],
+  tip:'Zitten op de trappen is verboden en wordt beboet. Verzamel onderaan bij de Barcaccia.'},
+
+ 'trevi': {naam:'2. Fontana di Trevi', sub:'15 min · 10 min lopen vanaf stop 1', coord:[41.9009,12.4833],
+  tekst:['Gebouwd 1732–1762 naar ontwerp van Nicola Salvi, voltooid door Giuseppe Pannini. Het is het eindpunt (mostra) van de Aqua Virgo.',
+         'In het midden staat Oceanus, niet Neptunus. Links Overvloed, rechts Gezondheid. De twee zeepaarden staan voor de kalme en de wilde zee.',
+         'De reliëfs bovenin vertellen het ontstaan: Agrippa keurt het plan goed, en een meisje wijst soldaten de bron.',
+         'Munt met de rechterhand over de linkerschouder: dan kom je terug in Rome. De munten gaan naar Caritas.'],
+  haakje:'Frontinus, De aquaeductibus 10: “Virgo appellata est, quod quaerentibus aquam militibus puella virguncula venas quasdam monstravit.” Vertaal: waarom heet het aquaduct ‘Maagd’?',
+  wist:[['De kapper en de vaas.','Rechts op de rand van de fontein staat een grote stenen vaas, de asso di coppe, genoemd naar de bekeraas uit het Italiaanse kaartspel. Volgens de legende had een kapper daar zijn zaak. Hij gaf Salvi steeds ongevraagd commentaar op het werk. Salvi zette de vaas zo neer dat de kapper niets meer van de fontein zag.'],['Munten vissen.','Er gaat ruim een miljoen euro per jaar aan munten in de fontein. De stad haalt ze eruit en ze gaan naar Caritas. Er zijn mensen betrapt die jarenlang ’s nachts met een magneet munten opvisten.'],['Vraag.','Romeinen gooiden ook al munten in bronnen en meren als offer aan de goden. Is het muntje in Trevi een christelijk of een heidens gebruik?']],
+  tip:'Het bassin in kost sinds februari 2026 € 2 p.p. Vanaf de rand van het plein zie je de fontein gratis. Hier is het erg druk: let op zakkenrollers.'},
+
+ 'piazza-di-pietra': {naam:'3. Piazza di Pietra: Tempel van Hadrianus', sub:'5 min · 5 min lopen vanaf stop 2', coord:[41.8995,12.4803],
+  tekst:['Elf Korinthische zuilen van de tempel voor de vergoddelijkte Hadrianus, in 145 ingewijd door zijn opvolger Antoninus Pius.',
+         'Later is er een gebouw tussen en achter gezet (o.a. de oude beurs). Zo leeft Rome: ruïnes worden hergebruikt, niet weggehaald.'],
+  opdracht:'Hoe hoog lag het Romeinse straatniveau? Kijk naar de basis van de zuilen, onder het huidige plein.',
+  wist:[['Belasting in een tempel.','In de 17e eeuw werd de tempel het pauselijke douanekantoor (Dogana di Terra). Kooplieden die Rome binnenkwamen, betaalden hier hun invoerrechten. Een tempel voor een keizer werd een kantoor voor de belastingdienst van de paus.']]},
+
+ 'piazza-colonna': {naam:'4. Piazza Colonna en Montecitorio', sub:'10 min · 3 min lopen vanaf stop 3', coord:[41.9007,12.4796],
+  tekst:['De zuil van Marcus Aurelius (voltooid rond 193) toont in een spiraal zijn oorlogen tegen Germaanse stammen aan de Donau, met het beroemde ‘regenwonder’. Bovenop staat sinds 1589 de apostel Paulus in plaats van de keizer.',
+         'Palazzo Chigi (premier) en Montecitorio (Tweede Kamer): hier zit de Italiaanse politiek.',
+         'De obelisk voor Montecitorio is van farao Psammetichus II (6e eeuw v.Chr.). Augustus haalde hem in 10 v.Chr. naar Rome als wijzer van een reusachtige zonnewijzer op het Marsveld (Plinius, Naturalis Historia 36.72).'],
+  haakje:'Egypte als oorlogsbuit: Augustus vierde zo de verovering van Egypte na Actium.',
+  wist:[['Wie maakte het regenwonder?','Op de zuil zie je een regengod met uitgespreide armen, die het Romeinse leger redt van dorst. Wie die regen veroorzaakte, werd een strijdvraag. Volgens Cassius Dio was het een Egyptische tovenaar in het gevolg van de keizer. Christelijke schrijvers zoals Tertullianus hielden vol dat het gebed van christelijke soldaten de regen bracht. Eén beeld, twee verhalen.'],['Een zonnewijzer die verkeerd liep.','Plinius schrijft al dat de schaduw van de obelisk een paar decennia na Augustus niet meer klopte. Hij geeft zelf mogelijke oorzaken: een veranderde stand van de zon, aardbevingen of verzakking. De obelisk raakte later bedolven en werd pas in de 18e eeuw onder huizen teruggevonden.']]},
+
+ 'minerva': {naam:'6. Olifantje van de Minerva (optioneel)', sub:'5 min · 2 min lopen vanaf het Pantheon', coord:[41.8977,12.4783],
+  tekst:['Bernini ontwierp in 1667 een olifant die een kleine Egyptische obelisk draagt. Die obelisk is hier vlakbij opgegraven, in het heiligdom van Isis.',
+         'De kerk Santa Maria sopra Minerva dankt haar naam aan het idee dat ze op een Minervatempel staat.',
+         'In het klooster ernaast moest Galileï in 1633 zijn leer afzweren.'],
+  opdracht:'Kijk op de gevel van de kerk. Rechts van de deur hangen marmeren plaatjes met handjes en jaartallen. Ze tonen hoe hoog de Tiber bij overstromingen kwam, de oudste uit 1422. Schat waar je zelf zou staan.',
+  wist:[['De olifant draait zijn kont naar de monniken.','Bernini wilde de olifant zonder steun onder zijn buik. Een Dominicaanse pater van het klooster ernaast eiste een blok eronder, anders zou het beeld omvallen. Bernini moest toegeven, maar volgens het verhaal draaide hij de olifant zo dat die zijn achterwerk naar het klooster keert. De kop kijkt nog even om, alsof hij grijnst.'],['Het olifantje heeft een bijnaam.','Romeinen noemen het beeld il Pulcino della Minerva, ‘het kuikentje van de Minerva’, omdat het zo klein en dik is.']]},
+
+ 'navona': {naam:'7. Piazza Navona', sub:'20 min · 7 min lopen vanaf stop 6', coord:[41.8992,12.4731],
+  tekst:['De vorm verraadt het: dit is het stadion van Domitianus (ca. 86 n.Chr.), voor Griekse atletiekwedstrijden met plaats voor zo’n 30.000 toeschouwers. De huizen staan op de oude tribunes.',
+         'De naam komt van in agone (Grieks ἀγών, wedstrijd), via ‘n’agone’ naar Navona.',
+         'De Vierstromenfontein (Bernini, 1651) voor paus Innocentius X: Nijl, Ganges, Donau en Río de la Plata, de vier bekende werelddelen. De Nijl heeft een doek over het hoofd: de bron was onbekend.',
+         'Het verhaal dat de Nijl de kerk van rivaal Borromini niet wil zien, is een mooie leugen: de fontein was eerder klaar dan de gevel van Sant’Agnese.',
+         'De obelisk lijkt Egyptisch, maar is in Rome gemaakt voor Domitianus; de hiërogliefen noemen hem.'],
+  haakje:'Volgens de overlevering werd de heilige Agnes onder de bogen van het stadion tentoongesteld in een bordeel. Een boog heet in het Latijn fornix; vandaar fornicatio.',
+  wist:[['Het hoofd in de muur (Piazza Navona nr. 34).','Zoek een klein marmeren gezicht in de gevel. Paus Sixtus V (1585–1590), bijgenaamd “Papa tosto” (‘de harde paus’), voerde een belasting op wijn in. Volgens de legende ging hij vermomd als bedelaar langs de herbergen om te horen wat het volk van hem vond. In een herberg aan dit plein bestelde hij kan na kan, en de herbergier vloekte steeds harder op de paus en zijn wijnbelasting. De volgende ochtend stond er een galg op het plein. De herbergier dacht dat het publiek zou trekken en dus klanten opleverde, maar de galg was voor hemzelf. Vrienden zouden zijn gezicht daarna in de muur hebben laten metselen, als waarschuwing: pas op wat je zegt tegen vreemden. Een volksverhaal zonder historisch bewijs, maar elke Romein kent het.'],['Een plein vol water.','Van de 17e tot in de 19e eeuw werd het plein op zomerse weekenden in augustus onder water gezet. De afvoeren van de fonteinen gingen dicht en adellijke families reden met hun koetsen door het water. Het oude stadion werd zo een soort zwembad.'],['Het haar van Agnes.','Volgens de legende werd Agnes, dertien jaar oud, in het bordeel onder de bogen gezet omdat ze weigerde te trouwen met de zoon van een stadsbestuurder. Haar haar groeide ter plekke zo lang dat het haar hele lichaam bedekte.'],['Het gezicht van de Moor.','De fontein aan de zuidkant (Fontana del Moro) toont in het midden een zeer gespierde man die met een dolfijn worstelt. Bernini ontwierp hem; Romeinen dachten bij de gelaatstrekken aan een Afrikaan en gaven de fontein zijn naam.']],
+  tip:'Koffie op dit plein is bespottelijk duur: liever een zijstraatje in.'},
+
+ 'pasquino': {naam:'8. Pasquino (optioneel)', sub:'5 min · 2 min lopen vanaf Piazza Navona', coord:[41.8976,12.4707],
+  tekst:['Een verweerd Hellenistisch beeld, waarschijnlijk Menelaos met het lichaam van Patroklos (Ilias, boek 17). Een leuk moment voor de Griekenlanders.',
+         'Sinds de 16e eeuw plakken Romeinen er anonieme spotverzen op tegen paus en macht: de ‘pasquinades’. Ook vandaag hangen er nog briefjes.'],
+  wist:[['Olim pia, nunc impia.','Het bekendste spotvers ging over Olimpia Maidalchini, de schoonzus van paus Innocentius X. Zij had zoveel macht dat ze ‘de pausin’ werd genoemd. Op Pasquino verscheen: “Olim-pia, nunc impia”, ‘vroeger vroom, nu goddeloos’. Het woordgrapje zit in haar naam.'],['Niet te stoppen.','Pausen probeerden de briefjes te verbieden en lieten het beeld bewaken. Het hielp niet: de volgende ochtend hingen er weer nieuwe.']]},
+
+ 'campo-de-fiori': {naam:'9. Campo de’ Fiori', sub:'10 min · 5 min lopen vanaf stop 8', coord:[41.8956,12.4722],
+  tekst:['Het enige grote plein in het centrum zonder kerk. ’s Ochtends markt, ’s avonds uitgaansplein.',
+         'Het beeld van Giordano Bruno (1889) staat waar hij op 17 februari 1600 levend werd verbrand voor ketterij. Hij kijkt bewust richting Vaticaan.'],
+  opdracht:'Waarom zou dit beeld juist in 1889, kort na de eenwording van Italië, zijn neergezet?',
+  wist:[['Waarom moest Bruno sterven?','Giordano Bruno was een Dominicaanse monnik die zijn klooster ontvluchtte en door heel Europa trok. Hij beweerde dat de sterren zonnen zijn met eigen planeten, dat er oneindig veel werelden bestaan en dat het heelal geen middelpunt heeft. Daarnaast twijfelde hij aan belangrijke leerstukken van de kerk. Na zeven jaar proces weigerde hij te herroepen.'],['Zijn laatste woorden aan de rechters.','Volgens een ooggetuige zei hij bij het vonnis: “Maiori forsan cum timore sententiam in me fertis quam ego accipiam”, ‘Misschien spreken jullie dit vonnis met meer angst uit dan ik het ontvang.’'],['Een gesnoerde mond.','Volgens de overlevering werd hij met een prop of klem op de tong naar de brandstapel gebracht, zodat hij niet meer tot de mensen kon spreken. Toen men hem op de brandstapel een kruisbeeld voorhield, wendde hij zijn hoofd af.'],['Een beeld als protest.','Het beeld werd in 1889 geplaatst door de nieuwe, antiklerikale stad Rome, tegen de wil van het Vaticaan. Bruno kijkt daarom met een strenge blik precies richting Sint-Pieter.']]},
+
+ 'largo-argentina': {naam:'10. Theater van Pompeius en Largo Argentina', sub:'15 min · 6 min lopen vanaf stop 9', coord:[41.8946,12.4767],
+  tekst:['Loop door Via di Grotta Pinta: de huizen volgen nog de ronding van het Theater van Pompeius (55 v.Chr.), het eerste stenen theater van Rome. Pompeius zette er een tempel voor Venus bovenop, zodat het ‘geen theater maar een tempel’ was.',
+         'Achter het theater lag een zuilenhal met aan het einde de Curia Pompeia, waar de senaat vergaderde op de Iden van maart 44 v.Chr. Resten daarvan liggen achter de tempels op Largo Argentina.',
+         'Op Largo Argentina vier tempels uit de Republiek; de ronde (tempel B) is voor Fortuna. Het terrein is ’s avonds verlicht en vanaf de straat goed te zien. Plus de kattenkolonie.',
+         'Na de moord liet men deze curia dichtmetselen (Suetonius, Divus Iulius 88).'],
+  haakje:'Suetonius, Divus Iulius 82: Caesar viel met 23 steekwonden, met slechts één kreun. “Etsi tradiderunt quidam Marco Bruto irruenti dixisse: καὶ σὺ τέκνον.” Latijn en Grieks in één zin: waarom zou Caesar Grieks spreken?',
+  wist:[['Een plein vernoemd naar Straatsburg.','Largo Argentina heeft niets met Argentinië te maken. Johannes Burckard, ceremoniemeester van paus Alexander VI Borgia, kwam uit Straatsburg, in het Latijn Argentoratum. Hij noemde de toren van zijn huis daarom ‘Argentina’, en het plein nam die naam over.'],['De waarschuwing die Caesar negeerde.','De ziener Spurinna had Caesar gewaarschuwd voor de Iden van maart. Op weg naar de curia lachte Caesar hem uit: de Iden waren er toch, en er was niets gebeurd? Spurinna antwoordde dat ze inderdaad gekomen waren, maar nog niet voorbij (Suetonius, Divus Iulius 81: “venisse quidem eas, sed non praeterisse”).'],['Vallen voor je rivaal.','Caesar viel volgens Plutarchus aan de voet van het standbeeld van Pompeius, zijn grote tegenstander, dat met zijn bloed werd bespat. Pompeius leek zo zelf wraak te nemen. Suetonius vertelt dat Caesar stervend zijn toga over zijn gezicht trok, zodat hij waardig zou vallen.'],['De katten van Caesar.','Tussen de tempels wonen tientallen zwerfkatten, verzorgd door vrijwilligers. Romeinen grappen dat het de lijfwachten zijn die Caesar in 44 v.Chr. miste.']]},
+
+ 'centrum': {naam:'Nog meer in het centrum', sub:'Voor een vrije avond', coord:[41.9000,12.4800],
+  tekst:['Extra dingen die de moeite waard zijn: de Spaanse Trappen, de Trevifontein (en vele andere fonteinen), Campo dei Fiori, de Via del Corso en de Via Nazionale om te winkelen.',
+         'Drink de beste koffie bij Tazza d\u2019Oro en eet het beste ijsje bij Giolitti.'],
   tip:'Op sommige monumenten mag je niet eten, drinken of zelfs zitten, bijvoorbeeld op de Spaanse Trappen en de trappen van het monument van Victor Emanuel II. Boetes zijn voor eigen rekening! Let in drukke straten op zakkenrollers.'},
 
  'vaticaanse-musea': {naam:'Vaticaanse Musea', sub:'Keuzemiddag · 14:00', coord:[41.9065,12.4536],
@@ -313,11 +391,11 @@ var DAGEN = [
   prog:[['07:00','Vertrek uit Rome'],['11:00','Aankomst in Pompeii'],['16:00','Vertrek uit Pompeii'],['20:00','Terug in Rome'],['Avond','Vrij.']],
   tips:['Draag goede wandelschoenen en regenkleding: er is veel loopwerk over onregelmatig plaveisel.','Neem water, een lunch en eventueel een pet of zonnebrandmiddel mee: in Pompeii is weinig schaduw.','Je hebt een lange dag: eet en drink genoeg en let op je spullen.','Sommige leerlingen gaan deze dag naar Ostia Antica en het strand in plaats van Pompeii (zie hieronder).'],
   plekken:['pompeii','ostia-antica']},
- {id:'vr', kort:'Vr', nr:'30', datum:'2026-10-30', naam:'Vrijdag 30 oktober', titel:'Sint-Pieter en keuzemiddag', samen:'Sint-Pieter · Engelenburcht · Keuzemiddag · Centrum',
+ {id:'vr', kort:'Vr', nr:'30', datum:'2026-10-30', naam:'Vrijdag 30 oktober', titel:'Sint-Pieter en keuzemiddag', samen:'Sint-Pieter · Keuzemiddag · Avondwandeling',
   intro:'De ochtend begint vroeg in het Vaticaan, bij de grootste kerk ter wereld. In de middag kies je zelf een activiteit; ’s avonds wandel je door het centrum van Rome.',
-  prog:[['08:30','Sint-Pieter (en de Engelenburcht).'],['Middag','Keuzemiddag. Start om 14:00: Vaticaanse Musea, Villa Borghese of Catacomben.'],['Avond','Wandeling door het centrum.']],
+  prog:[['08:30','Sint-Pieter (en de Engelenburcht).'],['Middag','Keuzemiddag. Start om 14:00: Vaticaanse Musea, Villa Borghese of Catacomben.'],['Avond','Avondwandeling door het centrum: tien stops van de Spaanse Trappen tot Largo Argentina (ca. 3,2 km, 2 tot 2,5 uur).']],
   tips:['Er is een beveiligingscontrole bij de Sint-Pieter: geen scherpe voorwerpen meenemen, en schouders en knieën bedekt.','Het is nog niet overal toegestaan om te zitten, eten of drinken op monumenten, zoals de Spaanse Trappen. Boetes zijn voor eigen rekening.','Facultatief avondprogramma op eigen gelegenheid: min. 4 personen, geen meisjes alleen, vooraf melden waar je heen gaat en je melden bij terugkomst.'],
-  plekken:['sint-pieter','castel-santangelo','vaticaanse-musea','villa-borghese','catacomben','pantheon','centrum']},
+  plekken:['sint-pieter','castel-santangelo','vaticaanse-musea','villa-borghese','catacomben','wandeling','spaanse-trappen','trevi','piazza-di-pietra','piazza-colonna','pantheon','minerva','navona','pasquino','campo-de-fiori','largo-argentina','centrum']},
  {id:'za', kort:'Za', nr:'31', datum:'2026-10-31', naam:'Zaterdag 31 oktober', titel:'Trastevere en afscheid', samen:'Trastevere · Thermen van Caracalla',
   intro:'Een laatste dag in Rome: in de ochtend verken je Trastevere. De middag is optioneel, met de Thermen van Caracalla. ’s Avonds vertrekt de bus. Vliegers vertrekken in de ochtend richting het vliegveld en missen dus de middag.',
   prog:[['Ochtend','Trastevere.'],['Middag','Thermen van Caracalla (optioneel).'],['Avond','Vertrek bus om 20.00 uur.']],
@@ -376,6 +454,7 @@ var EXTRA = {
     'Na Theodosius de Grote (dood in 395) was de splitsing tussen oost en west definitief. Rome werd geplunderd door de Visigoten (410) en de Vandalen (455). In 476 zette de Germaanse generaal Odoaker de laatste westelijke keizer, het kind Romulus Augustulus, af. Het oostelijke, Byzantijnse Rijk bleef nog bijna duizend jaar bestaan, tot 1453.']]
  ]},
  keizers:{naam:'Lijst van Romeinse keizers', samen:'Een selectie, van Augustus tot Romulus Augustulus'},
+ tips:{naam:'Tips en Tricks', samen:'Eten, drinken en slim reizen'},
  enverder:{naam:'En verder …', samen:'Meer om te zien in Rome', secties:[
   ['Je verveelt je nooit in Rome',['Als je na deze dagen cultuur nog niet genoeg gezien hebt, kun je je reisleiding altijd om tips vragen. Alvast een greep:']],
   ['Musea',['Capitolijnse Musea, Museo Nazionale Romano (vlak bij Termini).']],
@@ -424,7 +503,7 @@ function viewHome(){
   f.appendChild(g);
   f.appendChild(el('div',{class:'sec-label',text:'Voor onderweg'}));
   var g2 = el('div',{class:'grid two'});
-  ['praktisch','geschiedenis','keizers','enverder'].forEach(function(k){
+  ['tips','praktisch','geschiedenis','keizers','enverder'].forEach(function(k){
     g2.appendChild(el('a',{class:'card',href:'#/extra/'+k},[
       el('div',null,[el('h2',{text:EXTRA[k].naam}),el('p',{text:EXTRA[k].samen})]),
       el('span',{class:'arrow',text:'›'})
@@ -434,13 +513,19 @@ function viewHome(){
   return f;
 }
 
+var WANDELSTOPS = ['spaanse-trappen','trevi','piazza-di-pietra','piazza-colonna','pantheon','minerva','navona','pasquino','campo-de-fiori','largo-argentina'];
+function routeLink(){
+  var c = WANDELSTOPS.map(function(k){ return PLEKKEN[k].coord[0]+','+PLEKKEN[k].coord[1]; });
+  var url = 'https://www.google.com/maps/dir/?api=1&travelmode=walking&origin='+c[0]+'&destination='+c[c.length-1]+'&waypoints='+c.slice(1,-1).join('%7C');
+  return el('a',{href:url,target:'_blank',rel:'noopener',text:'Hele looproute in Google Maps ↗'});
+}
 function mapLinks(p){
   if (!p.coord) return el('div',{class:'leeg',text:'Locatie volgt van je reisleider.'});
   var lat=p.coord[0], lon=p.coord[1];
   return el('div',{class:'maplinks'},[
     el('a',{href:'https://www.openstreetmap.org/?mlat='+lat+'&mlon='+lon+'#map=17/'+lat+'/'+lon,target:'_blank',rel:'noopener',text:'OpenStreetMap ↗'}),
     el('a',{href:'https://www.google.com/maps/search/?api=1&query='+lat+','+lon,target:'_blank',rel:'noopener',text:'Google Maps ↗'})
-  ]);
+  ].concat(p.walk ? [routeLink()] : []));
 }
 
 function placeCard(id, open){
@@ -458,6 +543,11 @@ function placeCard(id, open){
     s[1].forEach(function(t){ body.appendChild(el('p',{text:t})); });
   });
   if (p.opdracht) body.appendChild(el('div',{class:'opdracht'},[el('b',{text:'Kijkopdracht'}),document.createTextNode(p.opdracht)]));
+  if (p.haakje) body.appendChild(el('div',{class:'opdracht'},[el('b',{text:'Haakje naar de les'}),document.createTextNode(p.haakje)]));
+  if (p.wist){
+    body.appendChild(el('h3',{class:'cin',text:'Wist je dat?',style:'font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:12px 0 4px'}));
+    p.wist.forEach(function(w){ body.appendChild(el('p',null,[el('strong',{text:w[0]+' '}),document.createTextNode(w[1])])); });
+  }
   if (p.tip) body.appendChild(el('div',{class:'opdracht',style:'border-left-color:var(--oxb)'},[el('b',{text:'Goed om te weten'}),document.createTextNode(p.tip)]));
   var d = el('details',{class:'place'},[
     el('summary',null,[el('h3',null,[document.createTextNode(p.naam),el('span',{class:'sub',text:p.sub||''})])]),
@@ -468,7 +558,7 @@ function placeCard(id, open){
 }
 
 /* afbeeldingen: laad per plek de bestanden uit afbeeldingen.js; ontbrekende worden stil verborgen */
-function gallery(keys, type, emptyText){
+function gallery(keys, type, emptyText, hideBox){
   var wrap = el('div');
   var data = window.ROMEREIS_AFBEELDINGEN || {};
   var items = [];
@@ -477,20 +567,22 @@ function gallery(keys, type, emptyText){
   var leeg = el('div',{class:'leeg',text:emptyText});
   wrap.appendChild(grid);
   var pending = items.length, shown = 0;
-  function done(){ leeg.style.display = shown ? 'none' : ''; }
+  function done(){
+    leeg.style.display = shown ? 'none' : '';
+    if (!pending && !shown && hideBox){ var b = wrap.closest('.box'); if (b) b.style.display = 'none'; }
+  }
   wrap.appendChild(leeg);
   if (!pending){ return wrap; }
   items.forEach(function(it){
     var src = '../../assets/romereis/'+it.k+'/'+encodeURIComponent(it.a.bestand);
     var img = new Image();
     img.alt = it.a.titel;
-    img.loading = 'lazy';
     var cap = it.a.titel + (it.a.bron ? ' — ' + it.a.bron : '');
     var fig = el('figure',{on:{click:function(){ openLb(src, cap); }}},[img, el('figcaption',{text:cap})]);
     fig.style.display = 'none';
     grid.appendChild(fig);
-    img.onload = function(){ fig.style.display=''; shown++; done(); };
-    img.onerror = function(){ fig.remove(); };
+    img.onload = function(){ fig.style.display=''; shown++; pending--; done(); };
+    img.onerror = function(){ fig.remove(); pending--; done(); };
     img.src = src;
   });
   return wrap;
@@ -538,7 +630,7 @@ function viewDay(id, tab){
     var all = keys.concat(['algemeen']);
     if (!keys.length) f.appendChild(el('p',{class:'intro',text:'Hier komen afbeeldingen bij deze dag.'}));
     d.plekken.forEach(function(k){
-      var g = gallery([k],'foto','');
+      var g = gallery([k],'foto','',true);
       f.appendChild(box(PLEKKEN[k].naam,[g]));
     });
     f.appendChild(el('div',{class:'sec-label',text:'Algemeen'}));
@@ -560,6 +652,22 @@ function viewExtra(k){
     t.appendChild(tb);
     f.appendChild(el('div',{class:'box',style:'overflow-x:auto'},[t]));
     f.appendChild(el('p',{class:'leeg',text:'Een selectie, niet uitputtend; vooral de chaotische derde eeuw kende tientallen kortstondige keizers.'}));
+  } else if (k==='tips'){
+    var T = window.ROMEREIS_TIPS || [];
+    f.appendChild(el('p',{class:'intro',text:'Aanraders van docenten en eerdere reizigers: restaurantjes, koffie, ijs en slimme trucs. Kom je iets tegen wat je anderen gunt? Vertel het je reisleider!'}));
+    T.forEach(function(sec){
+      var kids = [];
+      if (sec.intro) kids.push(el('p',{text:sec.intro,style:'margin-bottom:8px'}));
+      (sec.items||[]).forEach(function(it){
+        var line = el('div',{style:'margin:0 0 10px'},[el('strong',{text:it.naam}), el('div',{text:it.tekst})]);
+        if (it.coord) line.appendChild(el('div',{class:'maplinks'},[
+          el('a',{href:'https://www.openstreetmap.org/?mlat='+it.coord[0]+'&mlon='+it.coord[1]+'#map=18/'+it.coord[0]+'/'+it.coord[1],target:'_blank',rel:'noopener',text:'Kaart ↗'}),
+          el('a',{href:'https://www.google.com/maps/search/?api=1&query='+it.coord[0]+','+it.coord[1],target:'_blank',rel:'noopener',text:'Google Maps ↗'})]));
+        kids.push(line);
+      });
+      if (!(sec.items||[]).length) kids.push(el('p',{class:'leeg',text:'Aanraders volgen binnenkort.'}));
+      f.appendChild(box(sec.titel, kids));
+    });
   } else {
     x.secties.forEach(function(s){
       f.appendChild(box(s[0], s[1].length>1 || k==='praktisch' ? [ul(s[1])] : s[1].map(function(t){ return el('p',{text:t}); })));
