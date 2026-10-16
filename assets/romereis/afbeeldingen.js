@@ -92,7 +92,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "zuil-trajanus-reliefs.jpg",
    "titel": "Spiraalreliëfs op de Zuil van Trajanus",
    "type": "foto",
-   "bron": "Herkomst niet te achterhalen (Google-miniatuur)"
+   "bron": "Encyclopaedia Britannica (britannica.com), Western sculpture: Flavian"
   }
  ],
  "palatijn": [
@@ -230,7 +230,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "thermen-caracalla-2.jpg",
    "titel": "Ruïnes en mozaïekvloer in de Thermen van Caracalla",
    "type": "foto",
-   "bron": "Herkomst niet te achterhalen (Google-miniatuur)"
+   "bron": "RomeTips (rometips.nl)"
   },
   {
    "bestand": "thermen-caracalla-3.jpg",
@@ -372,7 +372,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "scala-sancta.jpg",
    "titel": "De Scala Sancta (Heilige Trap), met hout bedekt",
    "type": "foto",
-   "bron": "Squarespace-site (images.squarespace-cdn.com), herkomst niet verder te achterhalen"
+   "bron": "attitudeDRIVEN Adventure (attitudedrivenadventure.com)"
   },
   {
    "bestand": "baptisterium-buiten.jpg",
@@ -418,7 +418,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "afgietsels-1.jpg",
    "titel": "Gipsafgietsel van een slachtoffer tussen amforen",
    "type": "foto",
-   "bron": "Herkomst niet te achterhalen (Google-miniatuur)"
+   "bron": "Dreamstime (dreamstime.com), Tuin van de Vluchtelingen, Pompeii"
   },
   {
    "bestand": "afgietsels-2.jpg",
@@ -488,7 +488,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "centrum-1.jpg",
    "titel": "Daken en koepels van het centrum van Rome",
    "type": "foto",
-   "bron": "Herkomst niet te achterhalen (Google-miniatuur)"
+   "bron": "Baja Bikes (bajabikes), Rome centrum: hoe, wat en waar?"
   }
  ],
  "vaticaanse-musea": [
