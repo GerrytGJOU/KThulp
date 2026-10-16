@@ -49,6 +49,12 @@ window.ROMEREIS_AFBEELDINGEN = {
    "titel": "Panorama over het Forum Romanum",
    "type": "foto",
    "bron": "RomeTips (rometips.nl)"
+  },
+  {
+   "bestand": "boog-van-titus.jpg",
+   "titel": "Boog van Titus: reliëf met de buit uit de tempel van Jeruzalem (menora)",
+   "type": "foto",
+   "bron": "Stichting STILUS (stilus.nl)"
   }
  ],
  "keizersfora": [
@@ -81,6 +87,12 @@ window.ROMEREIS_AFBEELDINGEN = {
    "titel": "Forum van Trajanus met de Zuil van Trajanus",
    "type": "foto",
    "bron": "Gids Rome 2026 (oorspronkelijke bron niet vermeld)"
+  },
+  {
+   "bestand": "zuil-trajanus-reliefs.jpg",
+   "titel": "Spiraalreliëfs op de Zuil van Trajanus",
+   "type": "foto",
+   "bron": "Herkomst niet te achterhalen (Google-miniatuur)"
   }
  ],
  "palatijn": [
@@ -103,6 +115,18 @@ window.ROMEREIS_AFBEELDINGEN = {
    "titel": "De koepel met de oculus van het Pantheon",
    "type": "foto",
    "bron": "Gids Rome 2026 (oorspronkelijke bron niet vermeld)"
+  },
+  {
+   "bestand": "pantheon-fronton.jpg",
+   "titel": "Het Pantheon met het opschrift van Agrippa op het fronton",
+   "type": "foto",
+   "bron": "Ciao tutti (ciaotutti.nl)"
+  },
+  {
+   "bestand": "graf-rafael.jpg",
+   "titel": "Het graf van Rafaël in het Pantheon",
+   "type": "foto",
+   "bron": "Visit Rome in Italy (visit-rome-in-italy.com)"
   }
  ],
  "colosseum": [
@@ -135,6 +159,36 @@ window.ROMEREIS_AFBEELDINGEN = {
    "titel": "Reconstructie van de Colossus naast het Colosseum in aanbouw",
    "type": "foto",
    "bron": "Gids Rome 2026 (oorspronkelijke bron niet vermeld)"
+  },
+  {
+   "bestand": "hypogeum-1.jpg",
+   "titel": "De kelders (hypogeum) onder de arena",
+   "type": "foto",
+   "bron": "Colosseum Rome Tickets (colosseumrometickets.com)"
+  },
+  {
+   "bestand": "doorsnede-colosseum.jpg",
+   "titel": "Doorsnede van het Colosseum met de kelders onder de arena",
+   "type": "foto",
+   "bron": "Smithsonian Magazine (smithsonianmag.com)"
+  },
+  {
+   "bestand": "hypogeum-tekening.jpg",
+   "titel": "Tekening van de kelders: kooien, liften en gangen",
+   "type": "foto",
+   "bron": "Medium (miro.medium.com)"
+  },
+  {
+   "bestand": "ingang-colosseum.jpg",
+   "titel": "Een van de genummerde ingangen van het Colosseum (LII)",
+   "type": "foto",
+   "bron": "Foto: WarpFlyght, GFDL / CC BY-SA 3.0, via Wikimedia Commons"
+  },
+  {
+   "bestand": "colosseum-velarium.jpg",
+   "titel": "Reconstructie van het Colosseum met het zeildak (velarium)",
+   "type": "foto",
+   "bron": "Italy Rome Tour (italyrometour.com)"
   }
  ],
  "circus-maximus": [
@@ -313,6 +367,24 @@ window.ROMEREIS_AFBEELDINGEN = {
    "titel": "Plattegrond van Sint Jan van Lateranen",
    "type": "kaart",
    "bron": "Planetware.com, via Gids Rome 2026"
+  },
+  {
+   "bestand": "scala-sancta.jpg",
+   "titel": "De Scala Sancta (Heilige Trap), met hout bedekt",
+   "type": "foto",
+   "bron": "Squarespace-site (images.squarespace-cdn.com), herkomst niet verder te achterhalen"
+  },
+  {
+   "bestand": "baptisterium-buiten.jpg",
+   "titel": "Het Baptisterium van Sint Jan van Lateranen",
+   "type": "foto",
+   "bron": "Foto: Dnalor 01, CC BY-SA 3.0 AT, via Wikimedia Commons"
+  },
+  {
+   "bestand": "baptisterium-binnen.jpg",
+   "titel": "Het interieur van het Baptisterium",
+   "type": "foto",
+   "bron": "Walks in Rome (walksinrome.com)"
   }
  ],
  "quattro-coronati": [
@@ -341,6 +413,36 @@ window.ROMEREIS_AFBEELDINGEN = {
    "titel": "Plattegrond van Pompeii",
    "type": "kaart",
    "bron": "Gids Rome 2026 (oorspronkelijke bron niet vermeld)"
+  },
+  {
+   "bestand": "afgietsels-1.jpg",
+   "titel": "Gipsafgietsel van een slachtoffer tussen amforen",
+   "type": "foto",
+   "bron": "Herkomst niet te achterhalen (Google-miniatuur)"
+  },
+  {
+   "bestand": "afgietsels-2.jpg",
+   "titel": "Gipsafgietsels van slachtoffers van de uitbarsting",
+   "type": "foto",
+   "bron": "Parco Archeologico di Pompei (pompeiisites.org)"
+  },
+  {
+   "bestand": "pompeii-forum-vesuvius.jpg",
+   "titel": "Het Forum van Pompeii met de Vesuvius",
+   "type": "foto",
+   "bron": "Italien News (italien.news)"
+  },
+  {
+   "bestand": "wagensporen.jpg",
+   "titel": "Een straat van Pompeii met wagensporen en stapstenen",
+   "type": "foto",
+   "bron": "Travel Amalfi Coast (travelamalficoast.it)"
+  },
+  {
+   "bestand": "theater-pompeii.jpg",
+   "titel": "Het theater van Pompeii",
+   "type": "foto",
+   "bron": "World History Encyclopedia (worldhistory.org)"
   }
  ],
  "ostia-antica": [
@@ -519,6 +621,12 @@ window.ROMEREIS_AFBEELDINGEN = {
    "titel": "Piazza Navona (2)",
    "type": "foto",
    "bron": "Wereldreizigersclub (wereldreis.net), via Google-afbeeldingen"
+  },
+  {
+   "bestand": "hoofd-in-de-muur.jpg",
+   "titel": "Het marmeren hoofd in de muur aan de Piazza Navona",
+   "type": "foto",
+   "bron": "Italy Rome Tour (italyrometour.com)"
   }
  ],
  "pasquino": [
