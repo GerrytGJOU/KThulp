@@ -39,22 +39,16 @@ window.ROMEREIS_AFBEELDINGEN = {
  ],
  "forum-romanum": [
   {
-   "bestand": "plattegrond-forum-artistiek.jpg",
-   "titel": "Artistieke plattegrond van het Colosseum, het Forum Romanum en omgeving",
-   "type": "kaart",
-   "bron": "A View on Cities (aviewoncities.com), via Gids Rome 2026"
-  },
-  {
-   "bestand": "plattegrond-forum.png",
-   "titel": "Plattegrond van het Forum Romanum (schema)",
-   "type": "kaart",
-   "bron": "Eigen schema, Gids Rome 2026"
-  },
-  {
    "bestand": "forum-1.jpg",
-   "titel": "Het Forum Romanum",
+   "titel": "Het Forum Romanum gezien vanaf de Palatijn",
    "type": "foto",
-   "bron": ""
+   "bron": "Foto: MM (it.wiki), publiek domein, via Wikimedia Commons"
+  },
+  {
+   "bestand": "forum-2.jpg",
+   "titel": "Panorama over het Forum Romanum",
+   "type": "foto",
+   "bron": "RomeTips (rometips.nl)"
   }
  ],
  "keizersfora": [
@@ -173,16 +167,22 @@ window.ROMEREIS_AFBEELDINGEN = {
  ],
  "thermen-caracalla": [
   {
-   "bestand": "schema-thermen.png",
-   "titel": "De Thermen van Caracalla (schema)",
-   "type": "kaart",
-   "bron": "Eigen schema, Gids Rome 2026"
-  },
-  {
    "bestand": "thermen-caracalla-1.jpg",
    "titel": "De Thermen van Caracalla",
    "type": "foto",
-   "bron": ""
+   "bron": "RomeTips (rometips.nl)"
+  },
+  {
+   "bestand": "thermen-caracalla-2.jpg",
+   "titel": "Ruïnes en mozaïekvloer in de Thermen van Caracalla",
+   "type": "foto",
+   "bron": "Herkomst niet te achterhalen (Google-miniatuur)"
+  },
+  {
+   "bestand": "thermen-caracalla-3.jpg",
+   "titel": "De Thermen van Caracalla van boven",
+   "type": "foto",
+   "bron": "GetYourGuide (getyourguide.nl)"
   }
  ],
  "san-clemente": [
@@ -364,47 +364,89 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "santa-cecilia-1.jpg",
    "titel": "Santa Cecilia in Trastevere",
    "type": "foto",
-   "bron": ""
+   "bron": "Foto: Rita batacchi, CC BY-SA 4.0, via Wikimedia Commons"
+  },
+  {
+   "bestand": "santa-cecilia-2.jpg",
+   "titel": "Het graf van de heilige Cecilia",
+   "type": "foto",
+   "bron": "Travel Past 50 (travelpast50.com)"
   }
  ],
  "trastevere": [
   {
    "bestand": "trastevere-1.jpg",
-   "titel": "Trastevere",
+   "titel": "Trastevere bij zonsondergang",
    "type": "foto",
-   "bron": ""
+   "bron": "Tripadvisor (tripadvisor.nl)"
   }
  ],
  "centrum": [
   {
    "bestand": "centrum-1.jpg",
-   "titel": "Het centrum van Rome",
+   "titel": "Daken en koepels van het centrum van Rome",
    "type": "foto",
-   "bron": ""
+   "bron": "Herkomst niet te achterhalen (Google-miniatuur)"
   }
  ],
  "vaticaanse-musea": [
   {
    "bestand": "vaticaanse-musea-1.jpg",
-   "titel": "Vaticaanse Musea",
+   "titel": "De Vaticaanse Musea van boven",
    "type": "foto",
-   "bron": ""
+   "bron": "image.wmsm.co"
+  },
+  {
+   "bestand": "vaticaanse-musea-2.jpg",
+   "titel": "De Cortile della Pigna met de Sfera",
+   "type": "foto",
+   "bron": "Ciao tutti (ciaotutti.nl)"
+  },
+  {
+   "bestand": "vaticaanse-musea-3.jpg",
+   "titel": "Een galerij in de Vaticaanse Musea",
+   "type": "foto",
+   "bron": "Headout (headout.com)"
+  },
+  {
+   "bestand": "vaticaanse-musea-4.jpg",
+   "titel": "De beroemde wenteltrap van de Vaticaanse Musea",
+   "type": "foto",
+   "bron": "Reisroutes (reisroutes.be)"
   }
  ],
  "villa-borghese": [
   {
    "bestand": "villa-borghese-1.jpg",
-   "titel": "Villa Borghese",
+   "titel": "Galleria Borghese",
    "type": "foto",
-   "bron": ""
+   "bron": "RomeTips (rometips.nl)"
+  },
+  {
+   "bestand": "villa-borghese-2.jpg",
+   "titel": "De tuinen van Villa Borghese",
+   "type": "foto",
+   "bron": "Reisroutes (reisroutes.be)"
+  },
+  {
+   "bestand": "villa-borghese-3.jpg",
+   "titel": "De tempel van Aesculapius in het meer van Villa Borghese",
+   "type": "foto",
+   "bron": "ArcheoRoma (archeoroma.org)"
   }
  ],
  "catacomben": [
   {
    "bestand": "catacomben-1.jpg",
-   "titel": "Catacomben",
+   "titel": "Gang met grafnissen in de catacomben van San Pancrazio",
    "type": "foto",
-   "bron": ""
+   "bron": "Ciao tutti (ciaotutti.nl)"
+  },
+  {
+   "bestand": "catacomben-2.jpg",
+   "titel": "Beschilderde grafkamer in de catacomben",
+   "type": "foto",
+   "bron": "Droomplekken (droomplekken.nl)"
   }
  ],
  "spaanse-trappen": [
@@ -484,7 +526,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "pasquino-1.jpg",
    "titel": "Pasquino",
    "type": "foto",
-   "bron": ""
+   "bron": "Italy Perfect (italyperfect.com/blog, Pasquino_rome.jpg)"
   }
  ],
  "campo-de-fiori": [
@@ -492,7 +534,13 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "giordano-bruno-1.jpg",
    "titel": "Het standbeeld van Giordano Bruno",
    "type": "foto",
-   "bron": ""
+   "bron": "Foto: Jastrow, publiek domein, via Wikimedia Commons (Giordano Bruno Campo dei Fiori.jpg)"
+  },
+  {
+   "bestand": "giordano-bruno-2.jpg",
+   "titel": "Het standbeeld van Giordano Bruno (Ettore Ferrari, 1889)",
+   "type": "foto",
+   "bron": "Walks in Rome (walksinrome.com)"
   }
  ],
  "largo-argentina": [
@@ -500,7 +548,13 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "largo-argentina-1.jpg",
    "titel": "Largo Argentina met de tempels",
    "type": "foto",
-   "bron": ""
+   "bron": "Barceló (barcelo.com/guia-turismo)"
+  },
+  {
+   "bestand": "largo-argentina-2.jpg",
+   "titel": "De Area Sacra van Largo Argentina",
+   "type": "foto",
+   "bron": "Foto: Jastrow, publiek domein, via Wikimedia Commons (Area sacra Torre Argentina 2006.jpg)"
   }
  ]
 };
