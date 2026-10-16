@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Romereis">
+<meta name="theme-color" content="#16110c">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+<title>Romereis 2026</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicons/hulpmiddelen/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../assets/favicons/hulpmiddelen/favicon-16x16.png">
+<link rel="apple-touch-icon" href="../../assets/favicons/hulpmiddelen/apple-touch-icon.png">
+<style>
+  :root{--gold:#d4af37;--goldb:#f0cf6b;--goldd:#9c7c1f;--ox:#5a120c;--oxb:#a8261a;--cream:#f3e9d2;
+        --muted:#b9a883;--s2:#221a12;--s3:#2f241a;--s4:#3d2f20;}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'EB Garamond',Georgia,serif;min-height:100vh;color:var(--cream);font-size:17px;line-height:1.5;
+    background:radial-gradient(ellipse at 50% -10%,rgba(212,175,55,.10),transparent 55%),
+               radial-gradient(ellipse at 50% 120%,rgba(168,38,26,.16),transparent 55%),
+               linear-gradient(160deg,#120d08,#1c140d 45%,#160f09);
+    background-attachment:fixed;padding:24px 16px 60px;}
+  .portal-back{position:fixed;top:10px;left:10px;z-index:9999;display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;background:rgba(0,0,0,.4);border:1px solid rgba(212,175,55,.35);color:#d4af37;text-decoration:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+  .portal-back:hover{background:rgba(0,0,0,.65);border-color:rgba(212,175,55,.7);}
+  .portal-back svg{width:22px;height:22px;display:block;}
+  .wrap{max-width:720px;margin:0 auto;padding-top:38px}
+  h1,h2,h3,.cin{font-family:'Cinzel',serif}
+  .hero{text-align:center;margin-bottom:22px}
+  .hero .eyebrow{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+  .hero h1{font-weight:800;color:var(--goldb);font-size:30px;letter-spacing:.04em;margin:6px 0 4px;line-height:1.1}
+  .hero p{color:var(--muted);font-size:15px;font-style:italic}
+  .sec-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:var(--muted);
+    text-transform:uppercase;margin:26px 0 12px;text-align:center;display:flex;align-items:center;gap:10px}
+  .sec-label::before,.sec-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--goldd),transparent)}
+  .grid{display:grid;gap:12px}
+  .grid.two{grid-template-columns:1fr 1fr}
+  @media(max-width:480px){.grid.two{grid-template-columns:1fr}}
+  .card{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--cream);cursor:pointer;
+    background:linear-gradient(170deg,var(--s3),var(--s2));border:1px solid var(--s4);
+    border-radius:16px;padding:14px 16px;box-shadow:0 4px 16px rgba(0,0,0,.5);transition:transform .14s,border-color .14s;width:100%;text-align:left;font:inherit}
+  .card:active{transform:scale(.985)}
+  .card:hover{border-color:var(--goldd)}
+  .card.today{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 4px 16px rgba(0,0,0,.5)}
+  .badge{flex:0 0 auto;width:52px;text-align:center;font-family:'Cinzel',serif;color:var(--goldb);
+    border-right:1px solid var(--s4);padding-right:12px}
+  .badge b{display:block;font-size:24px;line-height:1;font-weight:800}
+  .badge span{font-size:9px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  .card h2{font-size:16px;color:var(--cream);margin-bottom:2px;letter-spacing:.02em}
+  .card p{font-size:14px;color:var(--muted);line-height:1.3}
+  .card .arrow{margin-left:auto;color:var(--gold);font-size:22px}
+  .pill{display:inline-block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    background:rgba(212,175,55,.14);color:var(--goldb);border:1px solid var(--goldd);border-radius:14px;padding:1px 8px;margin-left:6px;vertical-align:middle}
+  .crumb{display:inline-flex;align-items:center;gap:6px;color:var(--gold);text-decoration:none;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.1em;margin-bottom:12px;cursor:pointer;background:none;border:0}
+  .dayhead{margin-bottom:14px}
+  .dayhead .eyebrow{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+  .dayhead h1{font-size:26px;color:var(--goldb);font-weight:800;line-height:1.15;margin:4px 0 8px}
+  .intro{color:var(--cream);margin-bottom:14px}
+  .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 18px;position:sticky;top:0;z-index:50;padding:8px 0;
+    background:linear-gradient(#150f09 70%,transparent)}
+  .tab{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.06em;color:var(--cream);text-align:center;cursor:pointer;
+    background:var(--s3);border:1px solid var(--s4);border-radius:12px;padding:11px 6px;line-height:1.2}
+  .tab.on{background:var(--ox);border-color:var(--gold);color:var(--goldb)}
+  .tab .ico{display:block;font-size:18px;margin-bottom:2px}
+  .box{background:linear-gradient(170deg,var(--s3),var(--s2));border:1px solid var(--s4);border-radius:14px;padding:14px 16px;margin-bottom:12px}
+  .box h3{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .box.warn{border-color:var(--oxb)}
+  .box.warn h3{color:#e8a49b}
+  .prog{display:grid;grid-template-columns:86px 1fr;gap:6px 12px}
+  .prog dt{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--goldb);padding-top:3px}
+  .prog dd{color:var(--cream)}
+  .prog dd small{display:block;color:var(--muted);font-size:14px}
+  ul.tips{padding-left:20px}
+  ul.tips li{margin:3px 0}
+  details.place{background:linear-gradient(170deg,var(--s3),var(--s2));border:1px solid var(--s4);border-radius:14px;margin-bottom:10px;overflow:hidden}
+  details.place[open]{border-color:var(--goldd)}
+  details.place>summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;align-items:center;gap:10px}
+  details.place>summary::-webkit-details-marker{display:none}
+  details.place>summary h3{font-size:16px;color:var(--cream);letter-spacing:.02em;flex:1}
+  details.place>summary .sub{display:block;font-family:'EB Garamond',serif;font-size:14px;color:var(--muted);font-weight:400;letter-spacing:0}
+  details.place>summary::after{content:'+';color:var(--gold);font-size:22px;font-family:'Cinzel',serif}
+  details.place[open]>summary::after{content:'\2212'}
+  .pbody{padding:0 16px 14px}
+  .pbody p{margin:0 0 10px}
+  .facts{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:6px 0 12px;font-size:15px;
+    border-top:1px solid var(--s4);padding-top:10px}
+  .facts dt{color:var(--muted)}
+  .facts dd{color:var(--cream)}
+  .list{margin:6px 0 12px;padding-left:20px;font-size:16px}
+  .list li{margin:3px 0}
+  .opdracht{border-left:3px solid var(--gold);background:rgba(212,175,55,.08);padding:8px 12px;border-radius:0 10px 10px 0;margin-top:8px;font-size:16px}
+  .opdracht b{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--goldb);display:block;margin-bottom:2px}
+  table.t{width:100%;border-collapse:collapse;font-size:15px}
+  table.t th,table.t td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--s4);vertical-align:top}
+  table.t th{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+  table.t td:nth-child(2){white-space:nowrap;color:var(--muted)}
+  .maplinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .maplinks a{font-size:14px;color:var(--goldb);text-decoration:none;border:1px solid var(--goldd);border-radius:10px;padding:5px 11px;background:rgba(212,175,55,.08)}
+  .maplinks a:hover{background:rgba(212,175,55,.2)}
+  .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:8px}
+  .gal figure{background:var(--s2);border:1px solid var(--s4);border-radius:12px;overflow:hidden;cursor:zoom-in}
+  .gal img{display:block;width:100%;height:120px;object-fit:cover;background:#000}
+  .gal.kaart{grid-template-columns:1fr}
+  .gal.kaart img{height:auto;max-height:420px;object-fit:contain}
+  .gal figcaption{font-size:13px;color:var(--muted);padding:6px 9px;line-height:1.3}
+  .leeg{color:var(--muted);font-style:italic;font-size:15px;padding:6px 0}
+  #lb{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.93);display:none;flex-direction:column}
+  #lb.on{display:flex}
+  #lb .bar{display:flex;align-items:center;gap:10px;padding:10px 14px;color:var(--cream);font-size:15px}
+  #lb .bar span{flex:1}
+  #lb button{background:var(--s3);border:1px solid var(--s4);color:var(--goldb);border-radius:10px;padding:8px 14px;font:inherit;cursor:pointer}
+  #lb .stage{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;display:flex;align-items:center;justify-content:center}
+  #lb img{max-width:100%;max-height:100%;cursor:zoom-in}
+  #lb.zoom .stage{display:block}
+  #lb.zoom img{max-width:none;max-height:none;width:250%;cursor:zoom-out}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:34px;font-style:italic}
+  table.keizers td:first-child{color:var(--cream);font-weight:600}
+</style>
+</head>
+<body>
+<a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
+<div class="wrap" id="app"></div>
+<div id="lb" role="dialog" aria-label="Afbeelding"><div class="bar"><span id="lbcap"></span><button id="lbz" type="button">Inzoomen</button><button id="lbx" type="button">Sluiten</button></div><div class="stage"><img id="lbimg" alt=""></div></div>
+<footer>Romereis 2026 &middot; &copy; Gerben de Jong &middot; 2026</footer>
+
+<script src="../../assets/romereis/afbeeldingen.js?v=1"></script>
+<script>
+/* ============================ DATA ============================ */
+/* Bron: Gids Rome 2026 (Sint-Ursula). Bewust zonder namen, telefoonnummers, e-mailadressen,
+   groepsindelingen of hoteladressen: de pagina is openbaar. */
+
+var PLEKKEN = {
+ 'forum-romanum': {naam:'Het Forum Romanum', sub:'Het politieke hart van Rome', coord:[41.8925,12.4853],
+  tekst:['Rond 509 v.Chr., toen Rome een republiek werd, lag hier al het politieke hart van de stad. Eeuwen eerder hadden de Etruskische koningen het moerassige dal tussen de Palatijn, het Capitool en de Esquilijn drooggelegd met een groot rioleringskanaal, de Cloaca Maxima. Daardoor kon het Forum ontstaan.',
+         'Hier vergaderde de senaat, werden verkiezingen gehouden en trokken triomftochten voorbij. Wie er nu rondloopt ziet vooral losse stenen en zuilen, maar ooit stond dit kleine plein vol gebouwen.'],
+  lijst:['Boog van Septimius Severus (203 n.Chr.): triomfboog voor de overwinning op de Parthen, aan de voet van het Capitool.',
+         'Tempel van Saturnus: diende als staatskas (Aerarium); de huidige ruïne dateert van 42 v.Chr.',
+         'Curia: vergaderzaal van de senaat, goed bewaard doordat het gebouw later een kerk werd.',
+         'Rostra: sprekerspodium, versierd met scheepsrammen; hier hield Marcus Antonius zijn beroemde rede bij Caesars begrafenis.',
+         'Zuil van Phocas (608 n.Chr.): met 13,5 meter het jongste monument op het Forum.',
+         'Basilica Aemilia: de oudste basilica van het Forum (179 v.Chr.).',
+         'Basilica Julia: door Caesar gebouwde rechtbank voor burgerlijke zaken.',
+         'Tempel van Castor en Pollux: herdenkt een mythische overwinning met hulp van de goddelijke tweeling.',
+         'Tempel van Antoninus en Faustina: later omgevormd tot de kerk San Lorenzo in Miranda.',
+         'Tempel van Vesta en Huis van de Vestaalse Maagden: hier bewaakten de Vestaalse Maagden het eeuwige vuur van Rome.',
+         'Tempel van Romulus: rond gebouw, bewaard dankzij integratie in een latere kerk.',
+         'Basilica van Maxentius: een van de grootste gebouwen van het Forum, tot 35 meter hoog.',
+         'Tempel van Venus en Roma: het grootste tempelcomplex van het oude Rome, ontworpen door Hadrianus.',
+         'Boog van Titus (81 n.Chr.): herdenkt de Romeinse overwinning in de Joodse Oorlog.'],
+  lijstTitel:'Belangrijke plekken op het Forum',
+  opdracht:'Zoek de Curia en de Rostra. Welke gebouwen zijn alleen bewaard gebleven doordat ze later een kerk werden?'},
+
+ 'keizersfora': {naam:'De Keizersfora', sub:'Een tweede centrum naast het Forum Romanum', coord:[41.8957,12.4843],
+  tekst:['De keizerlijke fora vormden een tweede centrum van politiek, recht en religie naast het Forum Romanum. Ze werden tussen 46 v.Chr. en 113 n.Chr. door verschillende keizers gebouwd, deels uit noodzaak, deels om zichzelf te profileren als vrijgevige weldoeners.',
+         'In de jaren dertig van de twintigste eeuw liet dictator Mussolini er dwars doorheen een brede triomfweg aanleggen, de Via dei Fori Imperiali, tussen het Colosseum en de Piazza Venezia. Een groot deel van het opgravingsterrein ligt daardoor nog altijd onder asfalt.'],
+  lijst:['Forum van Caesar (46 v.Chr.): het eerste keizerlijke forum, met een tempel voor Venus, de goddelijke voorouder van Caesars familie, en een ruiterstandbeeld van Caesar zelf.',
+         'Forum van Augustus (2 v.Chr.): gebouwd als dank aan Mars Ultor (‘Mars de Wreker’) voor de overwinning op Caesars moordenaars. In de zuilengalerijen stonden beelden van beroemde mannen uit het verleden, zoals Aeneas en Romulus.',
+         'Forum van Nerva: begonnen door Domitianus voor Minerva, maar door zijn opvolger Nerva aan zichzelf gewijd. Vooral een doorgang naar de andere fora, vandaar de bijnaam Forum Transitorium.',
+         'Forum van de Vrede: open plein met de Tempel van de Vrede, gebouwd om de verovering van Jeruzalem te vieren. Hier werd o.a. de zevenarmige kandelaar bewaard.',
+         'Forum van Trajanus: het grootste en indrukwekkendste, gebouwd na de verovering van Dacië (het huidige Roemenië). Met plein, tempel, twee bibliotheken en de enorme Basilica Ulpia.',
+         'Zuil van Trajanus: 42 meter hoog en even hoog als de heuvel die voor de bouw werd afgegraven. Bovenop stond Trajanus; sinds 1588 staat er een beeld van de heilige Petrus.',
+         'Markten van Trajanus: een halfrond winkelcentrum naast het forum.'],
+  lijstTitel:'De fora op een rij',
+  opdracht:'Welke keizer liet zich het meest vereeuwigen op zijn forum? Zoek de reliëfs op de Zuil van Trajanus: wat wordt daar afgebeeld?'},
+
+ 'palatijn': {naam:'De Palatijn', sub:'De meest centrale van de zeven heuvels', coord:[41.8896,12.4875],
+  tekst:['De Palatijn ligt tussen het Forum Romanum, het Colosseum en het Circus Maximus en was al vanaf de tiende eeuw v.Chr. bewoond. Volgens de mythe werden de tweelingen Romulus en Remus hier door een wolvin opgevoed in de Lupercal-grot, en stichtte Romulus later op deze plek Rome.',
+         'Dankzij het uitzicht en de gezondere lucht werd de Palatijn tijdens de Republiek een geliefde woonplaats voor de elite, onder wie Augustus, Cicero en Marcus Antonius. Latere keizers bouwden er hun grote paleizen – ons woord ‘paleis’ komt van deze heuvel.',
+         'In de middeleeuwen verrezen er kerken en kloosters. In de zestiende eeuw liet kardinaal Alessandro Farnese op de ruïnes een van de eerste botanische tuinen van Europa aanleggen. Sindsdien wordt er vrijwel ononderbroken opgegraven; zo vond men het Palatijnse Huis, waar Augustus vermoedelijk geboren werd.'],
+  lijst:['Paleis van Domitianus (81 n.Chr.): het hart van de heuvel, met een privévleugel (Domus Augustana) en een publieke vleugel (Domus Flavia).',
+         'Huis van Livia: de woning van Augustus en zijn vrouw.',
+         'Resten van de paleizen van Septimius Severus en van Tiberius (ook wel het paleis van Caligula genoemd), aan weerszijden van de heuvel.'],
+  lijstTitel:'Wat je er ziet',
+  opdracht:'Kijk vanaf de Palatijn naar het Circus Maximus en het Forum. Waarom woonde de elite hier, en niet in het dal?'},
+
+ 'colosseum': {naam:'Het Colosseum', sub:'Het grootste amfitheater van de oudheid', coord:[41.8902,12.4922],
+  tekst:['Keizer Vespasianus begon in 72 n.Chr. met de bouw, op de plek van een kunstmatig meer dat deel uitmaakte van Nero’s Gouden Huis, vlak bij een tientallen meters hoog, vergulde reuzenstandbeeld van de keizer zelf. Deze ‘Colossus’ gaf het amfitheater uiteindelijk zijn bijnaam. Zijn zoon Titus voltooide het gebouw in het jaar 80.',
+         'Onder de arena lag een stelsel van kelders met dierenkooien die via hijssystemen omhoog konden worden gebracht. Tegen de felle zon werd een gigantisch zeildak gespannen, het velarium, dat door zo’n duizend man werd bediend.',
+         'De spelen waren gratis amusement dat keizers populariteit en aanzien opleverde. Ze konden een hele dag of langer duren, van komische acts en exotische dieren tot dodelijke gevechten tussen gladiatoren of tussen mens en dier. Voor de opening in het jaar 80 organiseerde Titus honderd dagen aan spelen, waarbij zo’n negenduizend dieren omkwamen.',
+         'Een aardbeving beschadigde in 847 de zuidkant; delen van de marmeren gevel werden later hergebruikt, o.a. voor de Sint-Pietersbasiliek.'],
+  feiten:[['Afmetingen','189 m lang, 156 m breed, 48 m hoog'],['Capaciteit','ca. 50.000 toeschouwers, via tachtig ingangen'],['Bouw','72 n.Chr. (Vespasianus) – 80 n.Chr. (Titus)'],['Zitplaatsen','Onderste rijen voor de elite, bovenste voor vrouwen en lagere klassen']],
+  opdracht:'Zoek het systeem van de tachtig ingangen: hoe kwamen 50.000 mensen snel op hun plaats? Waar zie je de kelders onder de arena?'},
+
+ 'circus-maximus': {naam:'Het Circus Maximus', sub:'Het grootste stadion van het oude Rome', coord:[41.8861,12.4851],
+  tekst:['Het Circus Maximus diende vooral voor wagenrennen. Plinius de Oudere sprak van 250.000 toeschouwers, maar moderne historici houden dat voor een overdrijving; realistischer is ruim 150.000 plaatsen.',
+         'De renbaan gaat terug tot de zesde eeuw v.Chr., toen koning Tarquinius Priscus tussen de Palatijn en de Aventijn een baan liet aanleggen. Op de spina, de middenmuur, hielden bronzen dolfijnen en (later vervangen) houten eieren het aantal gereden ronden bij.',
+         'Na branden in 31 v.Chr. en 64 n.Chr. (de beruchte stadsbrand onder Nero) werd het stadion telkens herbouwd, o.a. met een obelisk uit Heliopolis. Trajanus gaf het in 103 n.Chr. zijn definitieve, stenen vorm: drie verdiepingen hoog en circa 621 bij 118 meter groot.',
+         'Vier ploegen – rood, wit, groen en blauw – streden er met vierspannen (quadriga’s) om de gunst van een fanatiek publiek; de rivaliteit tussen de facties liep soms uit op geweld. De laatste races vonden plaats in 549 n.Chr. Nu is alleen nog het grondplan te zien; de bouwmaterialen zijn eeuwenlang hergebruikt.'],
+  tip:'Het Circus Maximus is ook het verzamelpunt in geval van nood, en een fijne plek om te rusten in de lunchpauze.'},
+
+ 'pantheon': {naam:'Het Pantheon', sub:'Na bijna 2000 jaar nog altijd overeind', coord:[41.8986,12.4769],
+  tekst:['Het Pantheon is een van de best bewaarde gebouwen uit de Romeinse oudheid. De dikke bakstenen muren en marmeren zuilen van het portiek maken meteen indruk, maar het bijzonderst is de koepel: met een hoogte én diameter van 43,3 meter is dit nog steeds de grootste ongewapende betonnen koepel ter wereld. Bovenin zit de oculus, een 8,9 meter brede opening die de enige lichtbron van het gebouw is.',
+         'Op deze plek stonden eerder twee andere tempels, die beide afbrandden. Keizer Hadrianus liet rond 118 n.Chr. de huidige, volledig ronde tempel bouwen. De zestien zuilen van het portiek wegen elk zestig ton en werden helemaal vanuit Egypte aangevoerd. Het opschrift vermeldt de naam van Marcus Agrippa, bouwer van de eerste tempel, hoewel het huidige gebouw van Hadrianus is.',
+         'Om het gewicht van de koepel te dragen, verdunden de bouwers de muren naar boven toe: onderaan 6,4 meter dik, rond de oculus nog maar 1,2 meter. Ook het beton werd naar boven toe lichter, en verzonken vakken (cassettes) in het plafond bespaarden extra gewicht.',
+         'Sinds 609 is het Pantheon een christelijke kerk; onder anderen de schilder Rafaël ligt er begraven. De marmeren vloer is nog het originele Romeinse werk.'],
+  feiten:[['Koepel','43,3 m hoog en breed'],['Oculus','8,9 m doorsnede'],['Bouwheer','Hadrianus, rond 118 n.Chr.'],['Zuilen portiek','16, elk 60 ton, uit Egypte']],
+  opdracht:'Kijk hoe het licht van de oculus over de dag door het gebouw wandelt. Wat gebeurt er als het regent?',
+  tip:'Rond het Pantheon (en de Piazza Navona) zijn koffie en frisdrank bespottelijk duur – liever aan de bar in een zijstraatje.'},
+
+ 'castel-santangelo': {naam:'Castel Sant’Angelo', sub:'Het Mausoleum van Hadrianus', coord:[41.9031,12.4663],
+  tekst:['Keizer Hadrianus liet tussen 134 en 139 n.Chr. dit grafmonument bouwen voor zichzelf en zijn familie: een vierkante basis van 89 meter breed met daarop een ronde, 64 meter brede zuilentrommel.',
+         'Rond het jaar 401 werd het gebouw omgevormd tot militair fort, en vanaf de dertiende eeuw bouwden de pausen het uit tot vluchtburcht. Paus Nicolaas III liet zelfs een geheime, overdekte gang naar het Vaticaan aanleggen, de Passetto di Borgo.',
+         'Het bronzen beeld van de aartsengel Michaël op de top herinnert aan een legende uit 590: de engel zou zijn zwaard in de schede hebben gestoken als teken dat de pest voorbij was. Daaraan dankt het gebouw zijn naam, Castel Sant’Angelo (‘Engelenburcht’). Tegenwoordig is het een museum.'],
+  feiten:[['Gebouwd','134–139 n.Chr., onder Hadrianus'],['Later','fort (ca. 401), pauselijke vluchtburcht (vanaf 13e eeuw), museum']]},
+
+ 'thermen-caracalla': {naam:'De Thermen van Caracalla', sub:'Een van de grootste badcomplexen van het Rijk', coord:[41.8792,12.4924],
+  tekst:['Keizer Caracalla liet tussen 212 en 216 n.Chr. een van de grootste badcomplexen van het Romeinse Rijk bouwen. Het hoofdgebouw was 214 bij 110 meter groot en tot 44 meter hoog, en bood plaats aan zo’n 1.600 badgasten tegelijk; op drukke dagen kwamen er wel 6.000 tot 8.000 bezoekers.',
+         'Naast de baden zelf (een koud, een lauw en een heet bad) telde het complex ook twee sportpleinen en twee bibliotheken, een voor Griekse en een voor Latijnse boekrollen.',
+         'Nadat de Ostrogoten in 537 n.Chr. de aanvoerleidingen doorsneden, raakten de thermen in onbruik. Vandaag worden de imposante ruïnes gebruikt als decor voor operavoorstellingen en concerten.'],
+  tip:'Een bezoek is optioneel en staat niet in het vaste programma.'},
+
+ 'san-clemente': {naam:'San Clemente', sub:'Drie bouwlagen boven elkaar', coord:[41.8895,12.4975],
+  tekst:['De basiliek van San Clemente ligt aan de Via San Giovanni in Laterano en is een van de best bewaarde oude kerken van Rome. Ze is gebouwd op de resten van een Romeins woonblok met een Mithrasheiligdom: drie bouwlagen boven elkaar, die je via een trap kunt bezoeken.',
+         'De onderste, oudste kerk werd in de vierde eeuw gewijd aan paus Clemens I, een vroege opvolger van Petrus. Volgens de legende werd hij verbannen naar de marmergroeven van de Krim, waar hij op wonderbaarlijke wijze water liet ontspringen voor zijn medegevangenen. Zijn vijanden verdronken hem met een anker om zijn hals – vandaar dat het anker zijn symbool werd.',
+         'Mithras, de Perzische zonnegod, was eeuwenlang de belangrijkste religieuze concurrent van het vroege christendom: zijn volgelingen vierden net als christenen een geboorte op 25 december en een offer dat de wereld moest redden. Op het reliëf doodt Mithras de kosmische stier.',
+         'De vierde-eeuwse kerk werd pas in 1857 herontdekt door de Ierse pater Joseph Mullooly. Op een fresco in de benedenkerk staat een van de oudst bekende Italiaanse teksten: een grappige scheldpartij tegen ossen die een zuil voorttrekken.',
+         'In 1108 werd de kerk herbouwd, nadat de Noormannen de oudere kerk in 1084 hadden verwoest. De marmeren vloer (cosmatenwerk: stukjes gekleurd marmer in geometrische patronen) en de zuilen zijn hergebruikt – de zuilen zelfs van het Forum Romanum. In de apsis zie je een zevende-eeuws mozaïek: de Boom des Levens, met Christus aan het kruis, omgeven door twaalf duiven (de apostelen).'],
+  feiten:[['Openingstijden*','dicht tussen 12:30 en 14:00']],
+  opdracht:'Loop naar beneden: in welke laag zie je het Mithrasheiligdom? Hoor je ergens water stromen?'},
+
+ 'santa-sabina': {naam:'Santa Sabina', sub:'Vroegchristelijke kerk op de Aventijn', coord:[41.8844,12.4797],
+  tekst:['De Santa Sabina is gesticht door de heilige Sabina als huiskerk en, na een verwoesting door de Goten, rond 430 herbouwd door de welgestelde Petrus van Illyrië. Van buiten is de kerk sober, van binnen een verrassing: vierentwintig antieke Korinthische zuilen (afkomstig uit een tempel) dragen een arcade, en dunne platen seleniet (maansteen) in de vensters zorgen voor een zacht gouden licht.',
+         'De houten toegangsdeuren uit de vijfde eeuw zijn origineel: het paneel met de kruisiging van Christus is een van de oudst bekende afbeeldingen daarvan.',
+         'Sinds 1219 is de kerk het hoofdkwartier van de dominicanen; ordestichter Dominicus woonde er zelf. Volgens de legende smeet de duivel ooit een steen uit de hel naar zijn hoofd tijdens het gebed – de steen miste en is nog te zien.']},
+
+ 'santa-maria-maggiore': {naam:'Santa Maria Maggiore', sub:'De kerk van het sneeuwwonder', coord:[41.8976,12.4984],
+  tekst:['De Santa Maria Maggiore dankt haar ontstaan aan een legende: in de nacht van 4 op 5 augustus 358 zou Maria aan paus Liberius zijn verschenen en hem hebben opgedragen een kerk te bouwen op de plek waar de volgende ochtend sneeuw zou liggen – midden in de Romeinse zomer. Dit ‘sneeuwwonder’ wordt nog jaarlijks herdacht.',
+         'Rond 420–440 kwam er een grotere kerk voor in de plaats, met het brede middenschip en de triomfboog die nog altijd het vroegchristelijke karakter bepalen. Later kwamen de 75 meter hoge klokkentoren (1377), de cosmatenvloer, het vergulde cassetteplafond (eind 15e eeuw) en de barokke gevel (1673).',
+         'De kerk is vooral beroemd om haar mozaïeken: die in het middenschip en op de triomfboog dateren uit de vijfde eeuw en tonen scènes uit het Oude en Nieuwe Testament. Het apsismozaïek (1295) toont de kroning van Maria door Christus. In de Cappella Sistina bevindt zich ook de kerstkribbe die volgens de overlevering van Bethlehem zelf afkomstig is.']},
+
+ 'sint-jan': {naam:'Sint Jan van Lateranen', sub:'Moeder van alle kerken', coord:[41.8858,12.5059],
+  tekst:['De Sint-Jan van Lateranen is de kathedraal van het bisdom Rome en herbergt de eigenlijke bisschopszetel (cathedra) van de paus – officieel de belangrijkste kerk van het katholicisme, in rang ouder dan de Sint-Pieter en daarom ‘moeder van alle kerken’. De basiliek werd in 313 gebouwd op last van Constantijn de Grote, die het terrein had geschonken aan paus Miltiades. Tot 1308 was het naastgelegen paleis de pauselijke residentie.',
+         'Na een verwoestende brand in de veertiende eeuw restaureerde Borromini de kerk rond 1650 en gaf haar het huidige barokke interieur. De bronzen deuren in de portiek zijn hergebruikt uit het senaatsgebouw op het Forum Romanum. In het middenschip staan reusachtige beelden van de twaalf apostelen.',
+         'Achter de basiliek staat de Obelisk van Lateranen: de hoogste (bijna 46 m met sokkel) én oudste obelisk van Rome. Hij werd rond 1400 v.Chr. gemaakt voor farao Thoetmosis III en stond oorspronkelijk bij de Amontempel in Thebe. Constantius II bracht hem in 357 naar Rome, waar hij op de spina van het Circus Maximus kwam te staan. Paus Sixtus V liet de in drie stukken gebroken obelisk in 1588 opgraven en oprichten op het huidige plein.',
+         'Tegenover de basiliek staat de Scala Sancta (‘Heilige Trap’), die volgens de overlevering uit het paleis van Pontius Pilatus in Jeruzalem komt; gelovigen beklimmen de treden op hun knieën. Het achthoekige Baptisterium naast de kerk geldt als de oudste doopkapel van Rome; volgens de overlevering is Constantijn hier zelf gedoopt.'],
+  feiten:[['Openingstijden*','Sint Jan: altijd open'],['','Heilige Trap: dicht tussen 13:30 en 15:00'],['','Baptisterium: altijd open']],
+  opdracht:'Waar heeft de obelisk in zijn 3400 jaar allemaal gestaan? Zet de plaatsen in volgorde.'},
+
+ 'quattro-coronati': {naam:'Santi Quattro Coronati', sub:'Een kerk als middeleeuwse vesting', coord:[41.8884,12.4979],
+  tekst:['Op de Caelius, tussen het Colosseum en de Sint-Jan van Lateranen, ligt een van de meest verrassende plekken van christelijk Rome: een complex dat van buiten op een middeleeuwse vesting lijkt. Kardinaal Stefano Conti liet het in de dertiende eeuw versterken, zodat de pausen er een veilig toevluchtsoord hadden tijdens conflicten met de Duitse keizers.',
+         'De kerk is gewijd aan vier naamloze soldaten die onder keizer Diocletianus de marteldood stierven omdat ze weigerden te offeren aan de god Aesculapius – vandaar ‘de vier gekroonden’. Na verwoesting door de Noormannen in 1084 herbouwde paus Paschalis II in 1116 een kleinere basiliek, die er nog staat.',
+         'Achter de kerk ligt een rustige kloostergang met cosmatenwerk uit de dertiende eeuw. Daarachter bevindt zich het kleine Oratorio di San Silvestro, met fresco’s uit 1247 over paus Silvester I en keizer Constantijn – waaronder de beroemde ‘Schenking van Constantijn’: een document waarmee de paus wereldlijke macht over het westen claimde, en dat pas eeuwen later als vervalsing werd ontmaskerd.'],
+  feiten:[['Openingstijden*','dicht tussen 12:45 en 15:15']]},
+
+ 'santa-cecilia': {naam:'Santa Cecilia in Trastevere', sub:'Optioneel avondprogramma', coord:[41.8876,12.4767],
+  tekst:['Santa Cecilia is een kerk in de wijk Trastevere, gewijd aan de heilige Cecilia, de patroonheilige van de muziek. Een bezoek is optioneel: het staat als facultatief avondprogramma op woensdag. Je reisleider vertelt je ter plekke meer.'],
+  tip:'Denk ook hier aan de kledingregel: schouders en knieën bedekt.'},
+
+ 'sint-pieter': {naam:'De Sint-Pieter', sub:'De grootste kerk ter wereld', coord:[41.9022,12.4539],
+  tekst:['De Sint-Pietersbasiliek is het centrum van het christendom. Het bouwwerk ontstond over ongeveer honderd jaar en werd gebouwd door enkele van de grootste architecten van hun tijd. De ligging op de Vaticaanse heuvel, ten westen van het centrum aan de overkant van de Tiber, is symbolisch: hier stierf Petrus, de belangrijkste apostel en eerste paus, als martelaar en werd hij begraven.',
+         'Voor de heuvel een kerkelijk centrum werd, lag hier het Circus van Caligula en Nero, waar volgens de overlevering ook Petrus de marteldood stierf.'],
+  secties:[
+   ['De eerste basiliek (4e eeuw)',['Constantijn, de eerste christelijke keizer, liet rond 320 op de Vaticaanse heuvel een basiliek bouwen op de plaats van een klein schrijn boven het vermoedelijke graf van Petrus. Ingewijd in 326, voltooid in 349. Om te kunnen bouwen werd het terrein afgevlakt en de necropolis waar Petrus was begraven vernield. De basiliek had een hoofdschip van 85 meter met vier zijbeuken en een atrium met een fontein.']],
+   ['De nieuwe basiliek (1506–1626)',['In 1506 besloot paus Julius II tot nieuwbouw. Architect volgde op architect: Bramante, later vooral Michelangelo, die op zijn 72e de leiding kreeg en de koepel ontwierp. Giacomo della Porta voltooide de koepel in 1590, na Michelangelo’s dood. Carlo Maderno gaf de kerk haar kruisvormige plattegrond en gevel (1614). In 1626 werd de kerk ingewijd – precies 1300 jaar na de eerste basiliek.',
+     'Het ellipsvormige Sint-Pietersplein werd medio zeventiende eeuw aangelegd door Bernini; de zuilengangen zijn versierd met 140 heiligenbeelden. Midden op het plein staat een Egyptische obelisk die in 37 n.Chr. naar Rome werd gebracht en oorspronkelijk op de spina van het Circus van Caligula stond.']],
+   ['Binnen',['Direct valt het bronzen baldakijn van Bernini op: 26 meter hoog, gegoten uit brons dat deels van het Pantheon afkomstig is. Eronder ligt de confessio bij het vermoedelijke graf van Petrus. In de apsis staat Bernini’s Cathedra Petri.',
+     'Het beroemdste kunstwerk is de Pietà: het enige werk dat Michelangelo signeerde, gemaakt toen hij pas 25 was. Sinds een hameraanval in 1972 staat het beeld achter kogelvrij glas. Een rode porfieren schijf in de vloer markeert de plek waar middeleeuwse keizers – onder wie Karel de Grote in 800 – werden gekroond. Onder het schip ligt de Vaticaanse grot met de graven van meer dan honderd pausen.',
+     'De koepel heeft een diameter van ruim 41 meter en rijst tot zo’n 137 meter boven het plein. Vanaf het platform aan de voet van de lantaarn (lift of nauwe wenteltrap) heb je een van de mooiste uitzichten over Rome.']]],
+  feiten:[['Lengte schip','ca. 220 m (met voorportaal)'],['Capaciteit','ca. 60.000 bezoekers'],['Gevel','45,5 m hoog; beelden van 5,7 m (Petrus ontbreekt)'],['Koepel','ca. 41 m doorsnede, ca. 137 m hoog']],
+  opdracht:'Zoek de Pietà en de rode porfieren schijf in de vloer. Welke twee dingen kwam je tegen die uit andere (Romeinse) gebouwen afkomstig zijn?',
+  tip:'Kleding: schouders en knieën bedekt, anders kom je er niet in. Neem ook geen scherpe voorwerpen mee: er is een beveiligingscontrole.'},
+
+ 'pompeii': {naam:'Pompeii', sub:'Een Romeinse stad bevroren in de tijd', coord:[40.7506,14.4869],
+  tekst:['Al voor de komst van de Romeinen was Pompeii een bruisende stad: na de Oskische bevolking vestigden zich vanaf de achtste eeuw v.Chr. achtereenvolgens Grieken, Etrusken en Samnieten in de streek. In de derde en tweede eeuw v.Chr. kende de stad een bloeiperiode met nieuwe tempels, thermen en een theater. Na de Bondgenotenoorlog – waarin Pompeii zich tegen Rome keerde en in 89 v.Chr. door Sulla werd belegerd – werd de stad een Romeinse colonia: het Latijn werd officiële taal en de bevolking groeide met de komst van Sulla’s veteranen.',
+         'In de keizertijd telde Pompeii zo’n 12.000 inwoners. In 59 n.Chr. ontaardden rellen in het amfitheater tussen Pompeianen en inwoners van Nuceria in een bloedbad, waarna de senaat de spelen tien jaar verbood. In 62 werd de stad getroffen door een zware aardbeving – een voorbode van wat zeventien jaar later zou volgen.',
+         'Op 24 augustus van het jaar 79 barstte de Vesuvius uit – al wijst recent onderzoek (herfstfruit in de puinlagen, kleding van slachtoffers) eerder op eind oktober! Urenlang regende het as en puimsteen. Van de ongeveer 12.000 inwoners kwamen zo’n 1.100 om; velen zochten vergeefs beschutting onder daken en in kelders. De dodelijkste klap kwam in de nacht: gloeiend hete aswolken (pyroclastische golven) van zo’n 400 graden die iedereen buiten in enkele seconden doodden.',
+         'Er bestaat een ooggetuigenverslag: Plinius de Jongere beschreef 28 jaar later, op verzoek van Tacitus, wat hij en zijn oom Plinius de Oudere die dagen meemaakten.',
+         'Pompeii verdween zeventien eeuwen onder een dikke laag as. Pas in 1748 begonnen, op last van de Napolitaanse koning Karel III, de eerste opgravingen: aanvankelijk niet meer dan een schattenjacht. In de tweede helft van de 19e eeuw ging Giuseppe Fiorelli systematisch te werk. Hij voerde huisnummering in en goot gips in de holtes in de aslaag waar lichamen waren vergaan – zo ontstonden de beroemde afgietsels. Inmiddels is ongeveer tweederde van de stad opgegraven.',
+         'Pompeii was een soort Rome in het klein, met een eigen ommuring, een Forum en twee hoofdstraten die elkaar kruisten.'],
+  feiten:[['Inwoners','ca. 12.000 (ca. 1.100 slachtoffers)'],['Uitbarsting','79 n.Chr. (24 augustus, of eind oktober)'],['Opgravingen','sinds 1748; ca. tweederde blootgelegd']],
+  opdracht:'Zoek het Forum, het amfitheater en een bakkerij of taverne. Welke sporen van het dagelijks leven (graffiti, wagensporen, mozaïeken) zie je?'},
+
+ 'ostia-antica': {naam:'Ostia Antica en het strand', sub:'Alternatief voor Pompeii op donderdag', coord:[41.7559,12.2915],
+  tekst:['Sommige leerlingen gaan op donderdag in plaats van naar Pompeii met de trein naar Ostia Antica en het strand van Lido di Ostia. Ostia was de havenstad van Rome en is, na Pompeii en Herculaneum, een van de best bewaarde Romeinse steden: de insulae (appartementengebouwen met meerdere verdiepingen) zijn hier zelfs beter bewaard, en op het Piazzale delle Corporazioni liggen tientallen zwart-witmozaïeken van de handelskantoren die hier ooit zaten.',
+         'Vanaf metrohalte Piramide brengt de Roma-Lido-trein je in ongeveer 30 minuten naar Ostia Antica; een paar haltes verder lig je op het strand.']},
+
+ 'trastevere': {naam:'Trastevere', sub:'De wijk aan de overkant van de Tiber', coord:[41.8883,12.4694],
+  tekst:['Trastevere (‘over de Tiber’) ligt aan de westkant van de rivier, met smalle straatjes en een levendige sfeer. De Aureliaanse Muur, die keizer Aurelianus (270–275) rond Rome liet bouwen, loopt ook rond deze wijk.',
+         'Vanaf de Gianiculo, de heuvel erboven, heb je een mooi uitzicht over Rome – een prettige plek voor de lunchpauze.'],
+  tip:'Ook hier geldt: koffie aan de bar is het goedkoopst; zitten op een terras is het duurst.'},
+
+ 'centrum': {naam:'Wandeling door het centrum', sub:'Pantheon, Spaanse Trappen en meer', coord:[41.9000,12.4800],
+  tekst:['Op vrijdagavond maak je een wandeling door het centrum van Rome; de precieze route bepaalt je reisleider (denk aan het Pantheon en de Spaanse Trappen). Extra dingen die de moeite waard zijn: de Trevifontein (en vele andere fonteinen), Piazza Navona (met het stadion eronder), Campo dei Fiori, de Via del Corso en de Via Nazionale om te winkelen.',
+         'Drink de beste koffie bij Tazza d’Oro en eet het beste ijsje bij Giolitti.'],
+  tip:'Op sommige monumenten mag je niet eten, drinken of zelfs zitten, bijvoorbeeld op de Spaanse Trappen en de trappen van het monument van Victor Emanuel II. Boetes zijn voor eigen rekening! Let in drukke straten op zakkenrollers.'},
+
+ 'vaticaanse-musea': {naam:'Vaticaanse Musea', sub:'Keuzemiddag · 14:00', coord:[41.9065,12.4536],
+  tekst:['Een van de keuzes voor de vrijdagmiddag, met een startijd van 14:00. De Vaticaanse Musea bevatten de enorme kunstverzamelingen van de pausen, met als hoogtepunt de Sixtijnse Kapel met Michelangelo’s plafondfresco’s.']},
+ 'villa-borghese': {naam:'Villa Borghese', sub:'Keuzemiddag · 14:00', coord:[41.9142,12.4923],
+  tekst:['Een van de keuzes voor de vrijdagmiddag, met een startijd van 14:00. Villa Borghese is het grootste stadspark van het centrum, met daarin het museum van de Galleria Borghese.']},
+ 'catacomben': {naam:'Catacomben', sub:'Keuzemiddag · 14:00', coord:null,
+  tekst:['Een van de keuzes voor de vrijdagmiddag, met een startijd van 14:00. De catacomben zijn ondergrondse begraafplaatsen uit de Romeinse tijd waar ook veel vroege christenen werden begraven.']}
+};
+
+var DAGEN = [
+ {id:'ma', kort:'Ma', nr:'26', datum:'2026-10-26', naam:'Maandag 26 oktober', titel:'Reisdag', samen:'De reis naar Rome begint',
+  intro:'Vandaag begint de reis. Vliegers vertrekken vroeg in de ochtend, de bus vertrekt in de loop van de middag. Alles wat je nodig hebt, moet nu in je tas zitten.',
+  prog:[['Onderweg','Reisdag: vliegen of bus naar Rome.']],
+  tips:['Zorg voor een geldig paspoort of een geldige Europese identiteitskaart (en een kopie ervan).','Geen scherpe voorwerpen (nagelvijltjes, zakmessen enz.) in je handbagage.','Neem je leerlingenpasje mee: dat maakt toegang tot musea soms makkelijker en goedkoper.','Geen bluetoothspeakers in bus of vliegtuig, wel oortjes of een headset.','Last van reisziekte? Voorzichtig met eten en drinken, en neem medicijnen mee.','Kostbaarheden (smartphone, camera, geld, reisdocumenten) bewaar je altijd op de persoon.'],
+  plekken:[]},
+ {id:'di', kort:'Di', nr:'27', datum:'2026-10-27', naam:'Dinsdag 27 oktober', titel:'Aankomst & Forum en Palatijn', samen:'Forum · Palatijn · Keizersfora',
+  intro:'Aankomst in Rome. In de middag wandel je rond het Forum en de Palatijn: het hart van het antieke Rome, waar de Republiek en het keizerrijk hun beslissingen namen.',
+  prog:[['Ochtend','Aankomst in Rome. Je bagage gaat in een depot in het hotel.'],['Middag','Wandeling rondom het Forum en de Palatijn.'],['Avond','Voetbal of een korte wandeling (optioneel).']],
+  tips:['Bij aankomst wordt de bagage in een depot in het hotel geplaatst: tot je terug bent van het programma kun je er niet bij. Zorg dat je alles voor de dag op zak hebt.','Kijk op de eerste avond waar de nooduitgang en de vluchtwegen zijn.','Een hotelborg van € 20 per leerling (in een envelop) wordt bij aankomst gevraagd.','Rustige plekken voor de pauze: Circus Maximus, het park op de Aventijn of de omgeving van het Colosseum. Winkels en loketten zijn vaak gesloten tussen 13.00 en 16.00 uur.'],
+  plekken:['forum-romanum','keizersfora','palatijn','circus-maximus']},
+ {id:'wo', kort:'Wo', nr:'28', datum:'2026-10-28', naam:'Woensdag 28 oktober', titel:'Colosseum en kerken', samen:'Colosseum · Palatijn · Forum · Kerken',
+  intro:'De ochtend staat in het teken van het Colosseum, de Palatijn en het Forum. In de middag bezoek je enkele van Romes oudste kerken, waar de antieke en de christelijke stad over elkaar heen liggen.',
+  prog:[['Ochtend','Colosseum (tijdsloten 8:30 en 10:30), Palatijn, Forum.'],['Middag','Kerken.'],['Avond','Santa Cecilia (optioneel).']],
+  tips:['Sluitingstijden* (tijden kunnen veranderen): Sint Jan: altijd open · Heilige Trap: dicht tussen 13:30 en 15:00 · Baptisterium: altijd open · San Clemente: dicht tussen 12:30 en 14:00 · Quattro Coronati: dicht tussen 12:45 en 15:15.','In de kerken: schouders en knieën bedekt, anders ben je niet welkom. Kleding in shorts of sportkleding valt in Rome uit de toon.','Welke kerken precies aan bod komen, bepaalt je reisleider; hieronder staan ze alle zes.','Tussen 12.00 en 14.00 uur zorg je zelf voor je lunch: koop brood en beleg in een supermarkt of bakkerij, of een stuk pizza.'],
+  plekken:['colosseum','palatijn','forum-romanum','san-clemente','santa-sabina','santa-maria-maggiore','sint-jan','quattro-coronati','santa-cecilia']},
+ {id:'do', kort:'Do', nr:'29', datum:'2026-10-29', naam:'Donderdag 29 oktober', titel:'Pompeii', samen:'De stad onder de as · (of Ostia Antica)',
+  intro:'Een hele dag Pompeii, de Romeinse stad die in het jaar 79 onder de as van de Vesuvius verdween. Je loopt door straten waar 2000 jaar geleden mensen woonden en werkten. De avond is vrij.',
+  prog:[['07:00','Vertrek uit Rome'],['11:00','Aankomst in Pompeii'],['16:00','Vertrek uit Pompeii'],['20:00','Terug in Rome'],['Avond','Vrij.']],
+  tips:['Draag goede wandelschoenen en regenkleding: er is veel loopwerk over onregelmatig plaveisel.','Neem water, een lunch en eventueel een pet of zonnebrandmiddel mee: in Pompeii is weinig schaduw.','Je hebt een lange dag: eet en drink genoeg en let op je spullen.','Sommige leerlingen gaan deze dag naar Ostia Antica en het strand in plaats van Pompeii (zie hieronder).'],
+  plekken:['pompeii','ostia-antica']},
+ {id:'vr', kort:'Vr', nr:'30', datum:'2026-10-30', naam:'Vrijdag 30 oktober', titel:'Sint-Pieter en keuzemiddag', samen:'Sint-Pieter · Engelenburcht · Keuzemiddag · Centrum',
+  intro:'De ochtend begint vroeg in het Vaticaan, bij de grootste kerk ter wereld. In de middag kies je zelf een activiteit; ’s avonds wandel je door het centrum van Rome.',
+  prog:[['08:30','Sint-Pieter (en de Engelenburcht).'],['Middag','Keuzemiddag. Start om 14:00: Vaticaanse Musea, Villa Borghese of Catacomben.'],['Avond','Wandeling door het centrum.']],
+  tips:['Er is een beveiligingscontrole bij de Sint-Pieter: geen scherpe voorwerpen meenemen, en schouders en knieën bedekt.','Het is nog niet overal toegestaan om te zitten, eten of drinken op monumenten, zoals de Spaanse Trappen. Boetes zijn voor eigen rekening.','Facultatief avondprogramma op eigen gelegenheid: min. 4 personen, geen meisjes alleen, vooraf melden waar je heen gaat en je melden bij terugkomst.'],
+  plekken:['sint-pieter','castel-santangelo','vaticaanse-musea','villa-borghese','catacomben','pantheon','centrum']},
+ {id:'za', kort:'Za', nr:'31', datum:'2026-10-31', naam:'Zaterdag 31 oktober', titel:'Trastevere en afscheid', samen:'Trastevere · Thermen van Caracalla',
+  intro:'Een laatste dag in Rome: in de ochtend verken je Trastevere. De middag is optioneel, met de Thermen van Caracalla. ’s Avonds vertrekt de bus. Vliegers vertrekken in de ochtend richting het vliegveld en missen dus de middag.',
+  prog:[['Ochtend','Trastevere.'],['Middag','Thermen van Caracalla (optioneel).'],['Avond','Vertrek bus om 20.00 uur.']],
+  tips:['Pak je koffer op tijd in; je bagage staat in het hotel in het depot.','Vliegers: ruim op tijd richting het vliegveld Fiumicino; vergeet je paspoort/ID niet.'],
+  plekken:['trastevere','thermen-caracalla']},
+ {id:'zo', kort:'Zo', nr:'1', datum:'2026-11-01', naam:'Zondag 1 november', titel:'Reisdag', samen:'Terug naar huis',
+  intro:'De terugreis. Vliegers landen in de loop van de middag op Schiphol; de bus rijdt de nacht door en komt ’s middags terug.',
+  prog:[['Onderweg','Reisdag (bus).']],
+  tips:['Controleer voor je vertrekt of je al je spullen hebt.','Neem iets te eten en drinken voor onderweg mee.','Dank voor een mooie reis!'],
+  plekken:[]}
+];
+
+var KEIZERS = [
+ ['Augustus','27 v.Chr.–14 n.Chr.','Eerste Romeinse keizer, adoptiezoon van Julius Caesar'],
+ ['Tiberius','14–37','Adoptiezoon van Augustus'],
+ ['Caligula','37–41','Liet bij het Vaticaan een circus aanleggen; de obelisk daaruit staat nu op het Sint-Pietersplein; vermoord door de Praetoriaanse garde'],
+ ['Claudius I','41–54','Veroverde Brittannië; vermoord'],
+ ['Nero','54–68','Keizer tijdens de grote brand van Rome (64); liet in zijn circus bij het Vaticaan christenen vervolgen; pleegde zelfmoord'],
+ ['Vierkeizerjaar','69','Galba, Otho en Vitellius volgden elkaar binnen één jaar op, tot Vespasianus de orde herstelde'],
+ ['Vespasianus','69–79','Begon de bouw van het Colosseum'],
+ ['Titus','79–81','Opende het Colosseum; zijn triomfboog staat op het Forum Romanum; keizer tijdens de uitbarsting van de Vesuvius'],
+ ['Domitianus','81–96','Laatste Flavische keizer; vermoord'],
+ ['Nerva','96–98','Adopteerde Trajanus; stichter van het adoptiefkeizerschap'],
+ ['Trajanus','98–117','Grootste gebiedsuitbreiding van het Rijk; zijn zuil en forum staan bij de Keizersfora'],
+ ['Hadrianus','117–138','Bouwheer van het Pantheon en zijn eigen mausoleum (nu Castel Sant’Angelo)'],
+ ['Antoninus Pius','138–161','Vreedzame regeerperiode, consolideerde Hadrianus’ beleid'],
+ ['Marcus Aurelius','161–180','‘Filosoof-keizer’; zijn zuil staat op de Piazza Colonna'],
+ ['Commodus','180–192','Trad op als gladiator; vermoord'],
+ ['Septimius Severus','193–211','Stichter van de Severische dynastie; zijn triomfboog staat op het Forum Romanum'],
+ ['Caracalla','211–217','Liet de Thermen van Caracalla bouwen; vermoord'],
+ ['Soldatenkeizers','235–284','Derde-eeuwse crisis: tientallen kortstondige keizers'],
+ ['Aurelianus','270–275','Bracht orde terug na decennia chaos; liet de Aureliaanse Muur rond Rome bouwen'],
+ ['Diocletianus','284–305','Herorganiseerde het rijk in de Tetrarchie; trad na 20 jaar vrijwillig af'],
+ ['Constantijn I','306–337','Eerste christelijke keizer; stichtte Constantinopel'],
+ ['Theodosius I','379–395','Laatste keizer over het hele rijk; verhief het christendom tot staatsgodsdienst'],
+ ['Honorius','395–423','Keizer tijdens de plundering van Rome door de Visigoten (410)'],
+ ['Romulus Augustulus','475–476','Laatste West-Romeinse keizer, afgezet door Odoaker']
+];
+
+var EXTRA = {
+ praktisch:{naam:'Praktisch', samen:'Kleding, geld, vervoer, regels', secties:[
+  ['Regels onderweg & in het hotel',['Jongens en meisjes slapen strikt gescheiden; de reisleiding maakt de kamerindeling (in overleg).','Het aantal slapers per kamer kan niet veranderd worden: dus geen gesleep met matrassen of bedden.','Houd je aan de regels van het hotel en de reisleiding, en blijf altijd als groep bij elkaar.','Kijk op de eerste avond waar de nooduitgang en vluchtwegen zijn.','Geen alcohol, geen roken en geen drugs. In het buitenland is men veel strenger dan in Nederland.','Houd het adres van het hotel altijd bij je (zie je papieren gids).']],
+  ['Kleding & schoenen',['De Romeinen zijn conservatief: in shorts, bermuda of sportkleding val je uit de toon. Met te veel bloot aan schouders en benen ben je in de kerken niet welkom.','’s Avonds kan het koel worden; de kans op regen is reîl, dus regenkleding of een paraplu komt goed van pas.','Je loopt veel: 100 km wandelen tijdens de reis is doorsnee. Neem goede wandelschoenen mee, die tegen regen en het slechte plaveisel kunnen, en eventueel blarenpleisters.','Op sommige monumenten mag je niet zitten, eten of drinken (bv. Spaanse Trappen, trappen van het monument van Victor Emanuel II). Boetes zijn voor eigen rekening.']],
+  ['Papieren & spullen',['Geldig paspoort of ID, plus minstens één kopie (of digitale kopie) die je in Rome altijd bij je draagt. Raak je je ID kwijt, dan kost het een hele dag en veel geld om bij de ambassade een laisser-passer te krijgen.','Leerlingenpasje van school mee: toegang tot musea is dan soms makkelijker en goedkoper.','Eventuele medicijnen: neem een recept mee met naam én samenstelling, zeker voor in de handbagage.','Neem een of twee handdoeken mee. Voor föhn en scheerapparaat is het 220 volt.']],
+  ['Eten, drinken & geld',['Ontbijt is in het hotel. Lunch en diner zijn op eigen gelegenheid.','Tip: koop brood en beleg bij een bakker of in een supermarkt, of een stuk pizza. Een fles gekoeld water is er niet duur. Op een terras kost het veel tot extreem veel geld: vermijd de meest toeristische plekken!','In een bar betaal je eerst aan de kassa, daarna bestel je met je bonnetje aan de bar. Staand aan de bar is het goedkoopst, zitten binnen duurder, op het terras het duurst (Piazza Navona en rond het Pantheon: soms € 8 voor een koffie).','De Romeinse folklore: enkele keren per dag een kopje koffie in een bar.']],
+  ['Vervoer',['Bus: Rome heeft 240 buslijnen (ATAC). Met je OV-kaart kun je in principe ook de bus nemen.','Metro (rood bord met witte M): lijn A (rood): Vaticaan (Ottaviano), Spaanse Trappen, Termini, San Giovanni, naar Anagnina. Lijn B (blauw): Rebibbia, Termini, Colosseo, Circus Maximus, naar Laurentina. Lijn C (groen): sinds december 2025 doorgetrokken tot Colosseo, met overstap op lijn B.','Let op zakkenrollers, vooral in drukke bussen en op toeristische plekken.']],
+  ['Vrije tijd & veiligheid',['Tussen ca. 12.00 en 14.00 uur zorg je zelf voor je lunch. Winkels zijn vaak gesloten van 13.00 tot 16.00/16.30 uur.','Facultatief avondprogramma: ga je zonder begeleider op stap, dan in groepen van minimaal 4 personen, geen meisjes alleen, zeg van tevoren waar je heen gaat en meld je terug bij de reisleiding.','Verzamelpunt in geval van nood: het Circus Maximus. Blijf rustig, volg de aanwijzingen van je begeleiders, blijf bij de groep en ga niet zelf op pad.']]
+ ]},
+ geschiedenis:{naam:'Een beetje geschiedenis', samen:'Van de koningen tot het einde van het West-Romeinse Rijk', secties:[
+  ['Koningstijd (753–509 v.Chr.)',['Rome zou in 753 v.Chr. gesticht zijn door de tweelingbroers Romulus en Remus, half-goddelijke afstammelingen van de oorlogsgod Mars en de Trojaanse held Aeneas. In werkelijkheid was het gebied al eeuwen bewoond en werd Rome pas zo’n anderhalve eeuw later een echte stadstaat, geregeerd door zeven koningen. De laatste drie waren Etrusken; de laatste van hen, de tiran Tarquinius Superbus, werd in 509 v.Chr. verjaagd. Daarmee begon de Republiek.']],
+  ['De Republiek (509–27 v.Chr.)',['Rome werd nu geleid door de Senaat en twee jaarlijks gekozen consuls. Door slimme uitbreiding van het burgerrecht onderwierp Rome heel Italië, en het versloeg in de Punische Oorlogen (264–146 v.Chr.) zijn grote rivaal Carthago. Maar het succes ondermijnde de Republiek zelf: de kloof tussen arm en rijk groeide, legioenen werden loyaler aan hun veldheer dan aan de staat, en burgeroorlogen volgden.',
+    'In 107 v.Chr. loste Marius dit deels op met een beroepsleger, maar dat maakte de troepen alleen maar afhankelijker van hun veldheer. Na Caesars overwinning op Pompeius werd hij dictator voor het leven – en op 15 maart 44 v.Chr. in de Senaat vermoord. Na een nieuwe ronde burgeroorlogen versloeg Caesars erfgenaam Octavianus zijn laatste rivaal bij Actium (31 v.Chr.) en werd alleenheerser.']],
+  ['Het Principaat (27 v.Chr.–235 n.Chr.)',['In 27 v.Chr. liet Octavianus zich door de Senaat tot princeps benoemen en nam hij de titel Augustus aan, samen met het opperbevel over het leger en het ambt van Pontifex Maximus. Officieel had hij de Republiek “gered”; in werkelijkheid was hij de eerste keizer. Het rijk bleef groeien en bereikte zijn hoogtepunt in de 2e eeuw onder de Adoptiefkeizers. Dat veranderde toen Marcus Aurelius in 180 werd opgevolgd door zijn zoon Commodus, die de regering verwaarloosde.']],
+  ['Crisis van de 3e eeuw (235–284)',['Na de moord op Commodus volgde uiteindelijk vijftig jaar chaos: meer dan twintig Soldatenkeizers werden door hun troepen naar voren geschoven en vaak weer vermoord. Het rijk viel korte tijd uiteen in drie delen. Pas Aurelianus herenigde het rijk (274), en Diocletianus stabiliseerde het in 284.']],
+  ['Dominaat en ondergang (284–476)',['Diocletianus liet zich als halfgoddelijke heerser vereren (dominus et deus) en verdeelde het bestuur over vier heersers (de Tetrarchie). In 313 won Constantijn de Grote de strijd om de macht; dat jaar sloot hij met Licinius een akkoord (vaak het Edict van Milaan genoemd) dat christenen vrijheid van godsdienst gaf, en hij stichtte zijn nieuwe hoofdstad Constantinopel.',
+    'Na Theodosius de Grote (dood in 395) was de splitsing tussen oost en west definitief. Rome werd geplunderd door de Visigoten (410) en de Vandalen (455). In 476 zette de Germaanse generaal Odoaker de laatste westelijke keizer, het kind Romulus Augustulus, af. Het oostelijke, Byzantijnse Rijk bleef nog bijna duizend jaar bestaan, tot 1453.']]
+ ]},
+ keizers:{naam:'Lijst van Romeinse keizers', samen:'Een selectie, van Augustus tot Romulus Augustulus'},
+ enverder:{naam:'En verder …', samen:'Meer om te zien in Rome', secties:[
+  ['Je verveelt je nooit in Rome',['Als je na deze dagen cultuur nog niet genoeg gezien hebt, kun je je reisleiding altijd om tips vragen. Alvast een greep:']],
+  ['Musea',['Capitolijnse Musea, Museo Nazionale Romano (vlak bij Termini).']],
+  ['Kerken',['Santa Maria della Vittoria, Sant’Ignazio, Santa Maria Sopra Minerva, Santa Maria degli Angeli e dei Martiri, Santa Maria del Popolo, Gesù, enz.']],
+  ['Andere bezienswaardigheden',['Campo dei Fiori, Spaanse Trappen, Trevifontein (en vele andere fonteinen), Villa Farnese, Catacomben, Protestants Kerkhof, Keats-Shelley House, het stadion onder de Piazza Navona, enz.']],
+  ['Winkelen & lekkers',['Winkelen: Via del Corso, Via Nazionale, straatjes bij Campo dei Fiori. Beste koffie: Tazza d’Oro. Beste ijsje: Giolitti.']]
+ ]}
+};
+
+/* ============================ HELPERS ============================ */
+var APP = document.getElementById('app');
+function el(tag, attrs, kids){
+  var n = document.createElement(tag);
+  if (attrs) for (var k in attrs){
+    if (k === 'class') n.className = attrs[k];
+    else if (k === 'text') n.textContent = attrs[k];
+    else if (k === 'on') { for (var ev in attrs.on) n.addEventListener(ev, attrs.on[ev]); }
+    else n.setAttribute(k, attrs[k]);
+  }
+  (kids || []).forEach(function(c){ if (c) n.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+  return n;
+}
+function go(h){ location.hash = h; }
+function dayById(id){ for (var i=0;i<DAGEN.length;i++) if (DAGEN[i].id===id) return DAGEN[i]; return null; }
+function isToday(dag){ try { var d=new Date(), s=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); return s===dag.datum; } catch(e){ return false; } }
+function ul(items, cls){ return el('ul', {class: cls || 'tips'}, items.map(function(t){ return el('li', {text:t}); })); }
+function box(title, kids, cls){ return el('div', {class:'box'+(cls?' '+cls:'')}, [el('h3',{text:title})].concat(kids)); }
+
+/* ============================ VIEWS ============================ */
+function viewHome(){
+  var f = document.createDocumentFragment();
+  f.appendChild(el('div',{class:'hero'},[
+    el('div',{class:'eyebrow',text:'Cultuur & Civilisatie'}),
+    el('h1',{text:'Romereis 2026'}),
+    el('p',{text:'26 oktober – 1 november · Je gids in de zak, per dag op een rij'})
+  ]));
+  f.appendChild(el('div',{class:'sec-label',text:'De dagen'}));
+  var g = el('div',{class:'grid'});
+  DAGEN.forEach(function(d){
+    g.appendChild(el('a',{class:'card'+(isToday(d)?' today':''),href:'#/dag/'+d.id},[
+      el('div',{class:'badge'},[el('b',{text:d.nr}),el('span',{text:d.kort})]),
+      el('div',null,[el('h2',{text:d.titel}),el('p',{text:d.samen})]),
+      el('span',{class:'arrow',text:'›'})
+    ]));
+  });
+  f.appendChild(g);
+  f.appendChild(el('div',{class:'sec-label',text:'Voor onderweg'}));
+  var g2 = el('div',{class:'grid two'});
+  ['praktisch','geschiedenis','keizers','enverder'].forEach(function(k){
+    g2.appendChild(el('a',{class:'card',href:'#/extra/'+k},[
+      el('div',null,[el('h2',{text:EXTRA[k].naam}),el('p',{text:EXTRA[k].samen})]),
+      el('span',{class:'arrow',text:'›'})
+    ]));
+  });
+  f.appendChild(g2);
+  return f;
+}
+
+function mapLinks(p){
+  if (!p.coord) return el('div',{class:'leeg',text:'Locatie volgt van je reisleider.'});
+  var lat=p.coord[0], lon=p.coord[1];
+  return el('div',{class:'maplinks'},[
+    el('a',{href:'https://www.openstreetmap.org/?mlat='+lat+'&mlon='+lon+'#map=17/'+lat+'/'+lon,target:'_blank',rel:'noopener',text:'OpenStreetMap ↗'}),
+    el('a',{href:'https://www.google.com/maps/search/?api=1&query='+lat+','+lon,target:'_blank',rel:'noopener',text:'Google Maps ↗'})
+  ]);
+}
+
+function placeCard(id, open){
+  var p = PLEKKEN[id];
+  var body = el('div',{class:'pbody'});
+  (p.tekst||[]).forEach(function(t){ body.appendChild(el('p',{text:t})); });
+  if (p.feiten){
+    var dl = el('dl',{class:'facts'});
+    p.feiten.forEach(function(r){ dl.appendChild(el('dt',{text:r[0]})); dl.appendChild(el('dd',{text:r[1]})); });
+    body.appendChild(dl);
+  }
+  if (p.lijst){ body.appendChild(el('h3',{class:'cin',text:p.lijstTitel||'', style:'font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:8px 0 4px'})); body.appendChild(ul(p.lijst,'list')); }
+  (p.secties||[]).forEach(function(s){
+    body.appendChild(el('h3',{class:'cin',text:s[0],style:'font-size:13px;color:var(--goldb);margin:12px 0 4px'}));
+    s[1].forEach(function(t){ body.appendChild(el('p',{text:t})); });
+  });
+  if (p.opdracht) body.appendChild(el('div',{class:'opdracht'},[el('b',{text:'Kijkopdracht'}),document.createTextNode(p.opdracht)]));
+  if (p.tip) body.appendChild(el('div',{class:'opdracht',style:'border-left-color:var(--oxb)'},[el('b',{text:'Goed om te weten'}),document.createTextNode(p.tip)]));
+  var d = el('details',{class:'place'},[
+    el('summary',null,[el('h3',null,[document.createTextNode(p.naam),el('span',{class:'sub',text:p.sub||''})])]),
+    body
+  ]);
+  if (open) d.open = true;
+  return d;
+}
+
+/* afbeeldingen: laad per plek de bestanden uit afbeeldingen.js; ontbrekende worden stil verborgen */
+function gallery(keys, type, emptyText){
+  var wrap = el('div');
+  var data = window.ROMEREIS_AFBEELDINGEN || {};
+  var items = [];
+  keys.forEach(function(k){ (data[k]||[]).forEach(function(a){ if (a.type===type) items.push({k:k,a:a}); }); });
+  var grid = el('div',{class:'gal'+(type==='kaart'?' kaart':'')});
+  var leeg = el('div',{class:'leeg',text:emptyText});
+  wrap.appendChild(grid);
+  var pending = items.length, shown = 0;
+  function done(){ leeg.style.display = shown ? 'none' : ''; }
+  wrap.appendChild(leeg);
+  if (!pending){ return wrap; }
+  items.forEach(function(it){
+    var src = '../../assets/romereis/'+it.k+'/'+encodeURIComponent(it.a.bestand);
+    var img = new Image();
+    img.alt = it.a.titel;
+    img.loading = 'lazy';
+    var cap = it.a.titel + (it.a.bron ? ' — ' + it.a.bron : '');
+    var fig = el('figure',{on:{click:function(){ openLb(src, cap); }}},[img, el('figcaption',{text:cap})]);
+    fig.style.display = 'none';
+    grid.appendChild(fig);
+    img.onload = function(){ fig.style.display=''; shown++; done(); };
+    img.onerror = function(){ fig.remove(); };
+    img.src = src;
+  });
+  return wrap;
+}
+
+function viewDay(id, tab){
+  var d = dayById(id);
+  if (!d) return viewHome();
+  tab = tab || 'info';
+  var f = document.createDocumentFragment();
+  f.appendChild(el('a',{class:'crumb',href:'#/'},['‹ Alle dagen']));
+  f.appendChild(el('div',{class:'dayhead'},[
+    el('div',{class:'eyebrow',text:d.naam}),
+    el('h1',{text:d.titel})
+  ]));
+  var tabs = el('div',{class:'tabs'});
+  [['info','ℹ️','Informatie'],['kaart','🗺️','Plattegrond & kaart'],['foto','🖼️','Afbeeldingen']].forEach(function(t){
+    tabs.appendChild(el('a',{class:'tab'+(tab===t[0]?' on':''),href:'#/dag/'+id+(t[0]==='info'?'':'/'+t[0])},[el('span',{class:'ico',text:t[1]}),document.createTextNode(t[2])]));
+  });
+  f.appendChild(tabs);
+
+  var keys = d.plekken.slice();
+  if (tab==='info'){
+    f.appendChild(el('p',{class:'intro',text:d.intro}));
+    var dl = el('dl',{class:'prog'});
+    d.prog.forEach(function(r){ dl.appendChild(el('dt',{text:r[0]})); dl.appendChild(el('dd',{text:r[1]})); });
+    f.appendChild(box('Programma',[dl]));
+    f.appendChild(box('Tips voor vandaag',[ul(d.tips)]));
+    if (d.plekken.length){
+      f.appendChild(el('div',{class:'sec-label',text:'Uitleg per plek'}));
+      d.plekken.forEach(function(p,i){ f.appendChild(placeCard(p, d.plekken.length===1)); });
+      if (d.plekken.some(function(p){ return /\*/.test(JSON.stringify(PLEKKEN[p].feiten||'')); }) || d.id==='wo')
+        f.appendChild(el('p',{class:'leeg',text:'* Tijden volgens het programma; kunnen wijzigen.'}));
+    }
+  } else if (tab==='kaart'){
+    if (!d.plekken.length) f.appendChild(el('p',{class:'intro',text:'Vandaag heb je geen vaste plekken in Rome. Hieronder vind je wel de algemene kaarten.'}));
+    d.plekken.forEach(function(k){
+      var p = PLEKKEN[k];
+      f.appendChild(box(p.naam,[mapLinks(p), gallery([k],'kaart','')]));
+    });
+    f.appendChild(el('div',{class:'sec-label',text:'Algemene kaarten'}));
+    f.appendChild(gallery(['kaarten'],'kaart','Kaarten komen binnenkort.'));
+    f.appendChild(el('p',{class:'leeg',text:'De knoppen openen een online kaart in een nieuw tabblad (internet nodig).'}));
+  } else {
+    var all = keys.concat(['algemeen']);
+    if (!keys.length) f.appendChild(el('p',{class:'intro',text:'Hier komen afbeeldingen bij deze dag.'}));
+    d.plekken.forEach(function(k){
+      var g = gallery([k],'foto','');
+      f.appendChild(box(PLEKKEN[k].naam,[g]));
+    });
+    f.appendChild(el('div',{class:'sec-label',text:'Algemeen'}));
+    f.appendChild(gallery(['algemeen'],'foto','Afbeeldingen komen binnenkort.'));
+  }
+  return f;
+}
+
+function viewExtra(k){
+  var x = EXTRA[k];
+  if (!x) return viewHome();
+  var f = document.createDocumentFragment();
+  f.appendChild(el('a',{class:'crumb',href:'#/'},['‹ Alle dagen']));
+  f.appendChild(el('div',{class:'dayhead'},[el('div',{class:'eyebrow',text:'Romereis 2026'}),el('h1',{text:x.naam})]));
+  if (k==='keizers'){
+    var t = el('table',{class:'t keizers'},[el('thead',null,[el('tr',null,[el('th',{text:'Keizer'}),el('th',{text:'Periode'}),el('th',{text:'Opmerkingen'})])])]);
+    var tb = el('tbody');
+    KEIZERS.forEach(function(r){ tb.appendChild(el('tr',null,r.map(function(c){ return el('td',{text:c}); }))); });
+    t.appendChild(tb);
+    f.appendChild(el('div',{class:'box',style:'overflow-x:auto'},[t]));
+    f.appendChild(el('p',{class:'leeg',text:'Een selectie, niet uitputtend; vooral de chaotische derde eeuw kende tientallen kortstondige keizers.'}));
+  } else {
+    x.secties.forEach(function(s){
+      f.appendChild(box(s[0], s[1].length>1 || k==='praktisch' ? [ul(s[1])] : s[1].map(function(t){ return el('p',{text:t}); })));
+    });
+  }
+  return f;
+}
+
+/* ============================ ROUTER ============================ */
+function render(){
+  var h = (location.hash || '#/').replace(/^#\/?/, '').split('/');
+  var view;
+  if (h[0]==='dag') view = viewDay(h[1], h[2]);
+  else if (h[0]==='extra') view = viewExtra(h[1]);
+  else view = viewHome();
+  APP.innerHTML = '';
+  APP.appendChild(view);
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', render);
+
+/* ============================ LIGHTBOX ============================ */
+var LB = document.getElementById('lb'), LBI = document.getElementById('lbimg');
+function openLb(src, cap){ LBI.src = src; document.getElementById('lbcap').textContent = cap; LB.classList.remove('zoom'); document.getElementById('lbz').textContent='Inzoomen'; LB.classList.add('on'); }
+function closeLb(){ LB.classList.remove('on'); LBI.removeAttribute('src'); }
+function toggleZoom(){ var z = LB.classList.toggle('zoom'); document.getElementById('lbz').textContent = z ? 'Uitzoomen' : 'Inzoomen'; }
+document.getElementById('lbx').addEventListener('click', closeLb);
+document.getElementById('lbz').addEventListener('click', toggleZoom);
+LBI.addEventListener('click', toggleZoom);
+document.addEventListener('keydown', function(e){ if (e.key==='Escape') closeLb(); });
+
+render();
+</script>
+</body>
+</html>
