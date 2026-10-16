@@ -428,7 +428,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "tempel-hadrianus-1.jpg",
    "titel": "De Tempel van Hadrianus aan de Piazza di Pietra",
    "type": "foto",
-   "bron": "Wikipedia: Tempel van Hadrianus (Rome) (nl.wikipedia.org/wiki/Tempel_van_Hadrianus_(Rome))"
+   "bron": "Foto: Labicanense, CC BY 4.0, via Wikimedia Commons (Tempio di Adriano - esterno.jpg)"
   },
   {
    "bestand": "tempel-hadrianus-2.jpg",
@@ -456,7 +456,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "olifantje-1.jpg",
    "titel": "Berninis olifantje",
    "type": "foto",
-   "bron": "Wikipedia: Olifantje van Bernini (nl.wikipedia.org/wiki/Olifantje_van_Bernini)"
+   "bron": "Foto: Merulana, CC BY-SA 4.0, via Wikimedia Commons (Obelisco della Minerva (Roma).jpg)"
   },
   {
    "bestand": "olifantje-2.jpg",
