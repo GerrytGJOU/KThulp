@@ -652,7 +652,21 @@ function render(){
   APP.appendChild(view);
   window.scrollTo(0,0);
 }
-window.addEventListener('hashchange', render);
+/* Terug-knop linksboven: eerst terug binnen de app, pas vanaf de startpagina naar het portaal */
+var navStack = [location.hash || '#/'];
+window.addEventListener('hashchange', function(){
+  var h = location.hash || '#/';
+  if (navStack.length > 1 && navStack[navStack.length-2] === h) navStack.pop();
+  else if (navStack[navStack.length-1] !== h) navStack.push(h);
+  render();
+});
+document.querySelector('.portal-back').addEventListener('click', function(e){
+  var h = (location.hash || '#/').replace(/^#\/?/, '').split('/');
+  if (h[0] === '') return;   /* startpagina: gewoon naar het portaal */
+  e.preventDefault();
+  if (navStack.length > 1) { history.back(); return; }
+  location.hash = (h[0] === 'dag' && h[2]) ? '#/dag/' + h[1] : '#/';   /* direct geopend: bovenliggende pagina */
+});
 
 /* ============================ LIGHTBOX ============================ */
 var LB = document.getElementById('lb'), LBI = document.getElementById('lbimg');
