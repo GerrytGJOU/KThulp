@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Romereis">
+<meta name="apple-mobile-web-app-title" content="Romereis Sint Ursula">
 <meta name="theme-color" content="#16110c">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
-<title>Romereis 2026</title>
+<title>Romereis Sint Ursula 2026</title>
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/favicons/hulpmiddelen/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="../../assets/favicons/hulpmiddelen/favicon-16x16.png">
 <link rel="apple-touch-icon" href="../../assets/favicons/hulpmiddelen/apple-touch-icon.png">
@@ -121,7 +121,7 @@
 <a class="portal-back" href="../" aria-label="Terug naar portaal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></a>
 <div class="wrap" id="app"></div>
 <div id="lb" role="dialog" aria-label="Afbeelding"><div class="bar"><span id="lbcap"></span><button id="lbz" type="button">Inzoomen</button><button id="lbx" type="button">Sluiten</button></div><div class="stage"><img id="lbimg" alt=""></div></div>
-<footer>Romereis 2026 &middot; &copy; Gerben de Jong &middot; 2026</footer>
+<footer>Romereis Sint Ursula 2026 &middot; &copy; Gerben de Jong &middot; 2026</footer>
 
 <script src="../../assets/romereis/afbeeldingen.js?v=1"></script>
 <script>
@@ -409,7 +409,7 @@ function viewHome(){
   var f = document.createDocumentFragment();
   f.appendChild(el('div',{class:'hero'},[
     el('div',{class:'eyebrow',text:'Cultuur & Civilisatie'}),
-    el('h1',{text:'Romereis 2026'}),
+    el("h1",{text:"Romereis Sint Ursula 2026"}),
     el('p',{text:'26 oktober – 1 november · Je gids in de zak, per dag op een rij'})
   ]));
   f.appendChild(el('div',{class:'sec-label',text:'De dagen'}));
@@ -552,7 +552,7 @@ function viewExtra(k){
   if (!x) return viewHome();
   var f = document.createDocumentFragment();
   f.appendChild(el('a',{class:'crumb',href:'#/'},['‹ Alle dagen']));
-  f.appendChild(el('div',{class:'dayhead'},[el('div',{class:'eyebrow',text:'Romereis 2026'}),el('h1',{text:x.naam})]));
+  f.appendChild(el('div',{class:'dayhead'},[el("div",{class:"eyebrow",text:"Romereis Sint Ursula 2026"}),el('h1',{text:x.naam})]));
   if (k==='keizers'){
     var t = el('table',{class:'t keizers'},[el('thead',null,[el('tr',null,[el('th',{text:'Keizer'}),el('th',{text:'Periode'}),el('th',{text:'Opmerkingen'})])])]);
     var tb = el('tbody');
