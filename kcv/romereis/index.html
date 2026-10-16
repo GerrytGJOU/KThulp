@@ -372,13 +372,13 @@ var PLEKKEN = {
 
 var DAGEN = [
  {id:'ma', kort:'Ma', nr:'26', datum:'2026-10-26', naam:'Maandag 26 oktober', titel:'Reisdag', samen:'De reis naar Rome begint',
-  intro:'Vandaag begint de reis. Vliegers vertrekken vroeg in de ochtend, de bus vertrekt in de loop van de middag. Alles wat je nodig hebt, moet nu in je tas zitten.',
-  prog:[['Onderweg','Reisdag: vliegen of bus naar Rome.']],
+  intro:'Vandaag begint de reis. Vliegers vertrekken om 06:50 van Schiphol, de bus vertrekt om 13:00. Alles wat je nodig hebt, moet nu in je tas zitten.',
+  prog:[['06:50','Vliegers: vertrek van Schiphol.'],['13:00','Bus: vertrek bij de school.'],['Onderweg','Reisdag: vliegen of bus naar Rome. De bus rijdt de nacht door.']],
   tips:['Zorg voor een geldig paspoort of een geldige Europese identiteitskaart (en een kopie ervan).','Geen scherpe voorwerpen (nagelvijltjes, zakmessen enz.) in je handbagage.','Neem je leerlingenpasje mee: dat maakt toegang tot musea soms makkelijker en goedkoper.','Geen bluetoothspeakers in bus of vliegtuig, wel oortjes of een headset.','Last van reisziekte? Voorzichtig met eten en drinken, en neem medicijnen mee.','Kostbaarheden (smartphone, camera, geld, reisdocumenten) bewaar je altijd op de persoon.'],
   plekken:[]},
  {id:'di', kort:'Di', nr:'27', datum:'2026-10-27', naam:'Dinsdag 27 oktober', titel:'Aankomst & Forum en Palatijn', samen:'Forum · Palatijn · Keizersfora',
   intro:'Aankomst in Rome. In de middag wandel je rond het Forum en de Palatijn: het hart van het antieke Rome, waar de Republiek en het keizerrijk hun beslissingen namen.',
-  prog:[['Ochtend','Aankomst in Rome. Je bagage gaat in een depot in het hotel.'],['Middag','Wandeling rondom het Forum en de Palatijn.'],['Avond','Voetbal of een korte wandeling (optioneel).']],
+  prog:[['09:10','Vliegers: aankomst op Rome Fiumicino.'],['09:30','Bus: aankomst bij het hotel in Rome.'],['Ochtend','Aankomst in Rome. Je bagage gaat in een depot in het hotel.'],['Middag','Wandeling rondom het Forum en de Palatijn.'],['Avond','Voetbal of een korte wandeling (optioneel).']],
   tips:['Bij aankomst wordt de bagage in een depot in het hotel geplaatst: tot je terug bent van het programma kun je er niet bij. Zorg dat je alles voor de dag op zak hebt.','Kijk op de eerste avond waar de nooduitgang en de vluchtwegen zijn.','Een hotelborg van € 20 per leerling (in een envelop) wordt bij aankomst gevraagd.','Rustige plekken voor de pauze: Circus Maximus, het park op de Aventijn of de omgeving van het Colosseum. Winkels en loketten zijn vaak gesloten tussen 13.00 en 16.00 uur.'],
   plekken:['forum-romanum','keizersfora','palatijn','circus-maximus']},
  {id:'wo', kort:'Wo', nr:'28', datum:'2026-10-28', naam:'Woensdag 28 oktober', titel:'Colosseum en kerken', samen:'Colosseum · Palatijn · Forum · Kerken',
@@ -398,12 +398,12 @@ var DAGEN = [
   plekken:['sint-pieter','castel-santangelo','vaticaanse-musea','villa-borghese','catacomben','wandeling','spaanse-trappen','trevi','piazza-di-pietra','piazza-colonna','pantheon','minerva','navona','pasquino','campo-de-fiori','largo-argentina','centrum']},
  {id:'za', kort:'Za', nr:'31', datum:'2026-10-31', naam:'Zaterdag 31 oktober', titel:'Trastevere en afscheid', samen:'Trastevere · Thermen van Caracalla',
   intro:'Een laatste dag in Rome: in de ochtend verken je Trastevere. De middag is optioneel, met de Thermen van Caracalla. ’s Avonds vertrekt de bus. Vliegers vertrekken in de ochtend richting het vliegveld en missen dus de middag.',
-  prog:[['Ochtend','Trastevere.'],['Middag','Thermen van Caracalla (optioneel).'],['Avond','Vertrek bus om 20.00 uur.']],
+  prog:[['Ochtend','Trastevere. Vliegers vertrekken in de ochtend richting het vliegveld.'],['Middag','Thermen van Caracalla (optioneel).'],['12:45','Vliegers: vertrek van Rome Fiumicino.'],['20:00','Bus: vertrek uit Rome.']],
   tips:['Pak je koffer op tijd in; je bagage staat in het hotel in het depot.','Vliegers: ruim op tijd richting het vliegveld Fiumicino; vergeet je paspoort/ID niet.'],
   plekken:['trastevere','thermen-caracalla']},
  {id:'zo', kort:'Zo', nr:'1', datum:'2026-11-01', naam:'Zondag 1 november', titel:'Reisdag', samen:'Terug naar huis',
-  intro:'De terugreis. Vliegers landen in de loop van de middag op Schiphol; de bus rijdt de nacht door en komt ’s middags terug.',
-  prog:[['Onderweg','Reisdag (bus).']],
+  intro:'De terugreis. Vliegers landen om 15:20 op Schiphol; de bus rijdt de nacht door en is om 17:00 terug bij de school.',
+  prog:[['15:20','Vliegers: aankomst op Schiphol.'],['17:00','Bus: aankomst bij de school.'],['Onderweg','Reisdag (bus).']],
   tips:['Controleer voor je vertrekt of je al je spullen hebt.','Neem iets te eten en drinken voor onderweg mee.','Dank voor een mooie reis!'],
   plekken:[]}
 ];
@@ -454,6 +454,12 @@ var EXTRA = {
     'Na Theodosius de Grote (dood in 395) was de splitsing tussen oost en west definitief. Rome werd geplunderd door de Visigoten (410) en de Vandalen (455). In 476 zette de Germaanse generaal Odoaker de laatste westelijke keizer, het kind Romulus Augustulus, af. Het oostelijke, Byzantijnse Rijk bleef nog bijna duizend jaar bestaan, tot 1453.']]
  ]},
  keizers:{naam:'Lijst van Romeinse keizers', samen:'Een selectie, van Augustus tot Romulus Augustulus'},
+ reizen:{naam:'Reizen', samen:'Heen- en terugreis: tijden en tips', secties:[
+  ['Heenreis',['Maandag 26 oktober · 06:50: vliegers vertrekken van Schiphol.','Maandag 26 oktober · 13:00: vertrek van de bus bij de school.','Dinsdag 27 oktober · 09:10: vliegers komen aan op Rome Fiumicino.','Dinsdag 27 oktober · 09:30: de bus komt aan bij het hotel in Rome.']],
+  ['Terugreis',['Zaterdag 31 oktober · 12:45: vliegers vertrekken van Rome Fiumicino (ze verlaten het hotel in de ochtend en missen dus de middag).','Zaterdag 31 oktober · 20:00: vertrek van de bus uit Rome.','Zondag 1 november · 15:20: vliegers landen op Schiphol.','Zondag 1 november · 17:00: de bus komt aan bij de school.']],
+  ['Belangrijk om te weten',['Zorg ervoor dat je geen scherpe voorwerpen zoals nagelvijltjes of zakmessen in je handbagage hebt.','Alle deelnemers moeten een geldig paspoort of een geldige Europese identiteitskaart tonen. Maak een kopie en bewaar die apart (of digitaal).','Bij aankomst in Rome gaat de bagage in een depot in het hotel. Tot je terug bent van het programma kom je er niet meer bij: houd daar rekening mee.','Kostbaarheden (smartphone, camera, geld, reisdocumenten) bewaar je op de persoon, niet in het hotel.','Bij aankomst wordt een hotelborg van € 20 per leerling gevraagd (in een envelop).']],
+  ['Regels voor de heen- en terugreis',['Niet roken en geen alcohol.','Muziek: geen bluetoothspeakers in de bus of het vliegtuig, wel oortjes of een headset.','Last van reisziekte? Wees voorzichtig met eten en drinken en neem medicijnen mee.','Drugs: wie wordt betrapt op het bezit van drugs, gaat regelrecht naar huis of naar de gevangenis. Het buitenland is hierin veel strenger dan Nederland.']]
+ ]},
  tips:{naam:'Tips en Tricks', samen:'Eten, drinken en slim reizen'},
  enverder:{naam:'En verder …', samen:'Meer om te zien in Rome', secties:[
   ['Je verveelt je nooit in Rome',['Als je na deze dagen cultuur nog niet genoeg gezien hebt, kun je je reisleiding altijd om tips vragen. Alvast een greep:']],
@@ -503,7 +509,7 @@ function viewHome(){
   f.appendChild(g);
   f.appendChild(el('div',{class:'sec-label',text:'Voor onderweg'}));
   var g2 = el('div',{class:'grid two'});
-  ['tips','praktisch','geschiedenis','keizers','enverder'].forEach(function(k){
+  ['reizen','tips','praktisch','geschiedenis','keizers','enverder'].forEach(function(k){
     g2.appendChild(el('a',{class:'card',href:'#/extra/'+k},[
       el('div',null,[el('h2',{text:EXTRA[k].naam}),el('p',{text:EXTRA[k].samen})]),
       el('span',{class:'arrow',text:'›'})
