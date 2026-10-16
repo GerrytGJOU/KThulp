@@ -412,7 +412,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "spaanse-trappen-1.jpg",
    "titel": "De Spaanse Trappen en de Barcaccia",
    "type": "foto",
-   "bron": ""
+   "bron": "Herkomst niet te achterhalen"
   }
  ],
  "trevi": [
@@ -420,7 +420,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "trevifontein-1.jpg",
    "titel": "De Trevifontein",
    "type": "foto",
-   "bron": ""
+   "bron": "Herkomst niet te achterhalen (veel gebruikt op reissites)"
   }
  ],
  "piazza-di-pietra": [
@@ -429,6 +429,12 @@ window.ROMEREIS_AFBEELDINGEN = {
    "titel": "De Tempel van Hadrianus aan de Piazza di Pietra",
    "type": "foto",
    "bron": ""
+  },
+  {
+   "bestand": "tempel-hadrianus-2.jpg",
+   "titel": "De Tempel van Hadrianus (2)",
+   "type": "foto",
+   "bron": "Stichting STILUS (stilus.nl)"
   }
  ],
  "piazza-colonna": [
@@ -436,7 +442,13 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "zuil-marcus-aurelius-1.jpg",
    "titel": "De zuil van Marcus Aurelius",
    "type": "foto",
-   "bron": ""
+   "bron": "Stichting STILUS (stilus.nl)"
+  },
+  {
+   "bestand": "zuil-marcus-aurelius-2.jpg",
+   "titel": "De zuil van Marcus Aurelius (2)",
+   "type": "foto",
+   "bron": "Wikimedia Commons (File:Detail.from.column.of.marcus.aurelius.arp.jpg)"
   }
  ],
  "minerva": [
@@ -445,6 +457,12 @@ window.ROMEREIS_AFBEELDINGEN = {
    "titel": "Berninis olifantje",
    "type": "foto",
    "bron": ""
+  },
+  {
+   "bestand": "olifantje-2.jpg",
+   "titel": "Berninis olifantje (2)",
+   "type": "foto",
+   "bron": "Ciao tutti (ciaotutti.nl)"
   }
  ],
  "navona": [
@@ -452,7 +470,13 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "piazza-navona-1.jpg",
    "titel": "Piazza Navona met de Vierstromenfontein",
    "type": "foto",
-   "bron": ""
+   "bron": "Herkomst niet te achterhalen (alleen gedeeld via sociale media)"
+  },
+  {
+   "bestand": "piazza-navona-2.jpg",
+   "titel": "Piazza Navona (2)",
+   "type": "foto",
+   "bron": "Wereldreizigersclub (wereldreis.net), via Google-afbeeldingen"
   }
  ],
  "pasquino": [
