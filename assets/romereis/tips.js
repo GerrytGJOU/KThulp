@@ -7,7 +7,7 @@
    de pagina is openbaar. */
 window.ROMEREIS_TIPS = [
   { titel: 'Restaurants en pizzeria’s',
-    intro: 'Vermijd de meest toeristische plekken (o.a. Piazza Navona en rond het Pantheon): daar betaal je veel voor weinig. Zoek zijstraten op, kijk waar Romeinen zelf zitten.',
+    intro: 'Vermijd de meest toeristische plekken (o.a. Piazza Navona en rond het Pantheon): daar betaal je veel voor weinig. Zoek zijstraten op, kijk waar Romeinen zelf zitten en let op het couvert (coperto) op de rekening.',
     items: [] },
   { titel: 'Koffie en ijs',
     items: [
@@ -23,7 +23,8 @@ window.ROMEREIS_TIPS = [
   { titel: 'Slim in een bar',
     items: [
       { naam: 'Eerst betalen, dan bestellen', tekst: 'In een bar betaal je eerst aan de kassa, daarna bestel je met je bonnetje aan de bar. Laat eventueel een fooi (ong. € 0,10) achter in het potje.' },
-      { naam: 'Staan is het goedkoopst', tekst: 'Staand aan de bar betaal je het minst, zitten binnen kost meer en op het terras betaal je het meest.' }
+      { naam: 'Staan is het goedkoopst', tekst: 'Staand aan de bar betaal je het minst, zitten binnen kost meer en op het terras betaal je het meest.' },
+      { naam: 'Gratis drinkwater', tekst: 'In Rome staan overal kleine drinkfonteinen (nasoni) met gratis, koel drinkwater. Neem een navulbare fles mee.' }
     ] },
   { titel: 'Slim reizen',
     items: [
