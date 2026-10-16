@@ -428,7 +428,7 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "tempel-hadrianus-1.jpg",
    "titel": "De Tempel van Hadrianus aan de Piazza di Pietra",
    "type": "foto",
-   "bron": ""
+   "bron": "Wikipedia: Tempel van Hadrianus (Rome) (nl.wikipedia.org/wiki/Tempel_van_Hadrianus_(Rome))"
   },
   {
    "bestand": "tempel-hadrianus-2.jpg",
@@ -456,13 +456,13 @@ window.ROMEREIS_AFBEELDINGEN = {
    "bestand": "olifantje-1.jpg",
    "titel": "Berninis olifantje",
    "type": "foto",
-   "bron": ""
+   "bron": "Wikipedia: Olifantje van Bernini (nl.wikipedia.org/wiki/Olifantje_van_Bernini)"
   },
   {
    "bestand": "olifantje-2.jpg",
    "titel": "Berninis olifantje (2)",
    "type": "foto",
-   "bron": "Ciao tutti (ciaotutti.nl)"
+   "bron": "Ciao tutti: Het Rome van Bernini (ciaotutti.nl/reizen-door-italie/rome/het-rome-van-bernini/)"
   }
  ],
  "navona": [
