@@ -35,10 +35,17 @@ HAAR
   de battler. Stijlen: wild, lang, middel, kort, knot, vlecht, hanekam (+ kaal = leeg).
   Levert de generator een nieuwe stijl: beide bestanden aanleveren, dan samenvoegen.
 
-VLEUGELS
+WAPENS
+  Er zijn bewust geen top-down wapensprites; Castra Heroum toont geen wapen.
+
+CAPES EN VLEUGELS
+  Capes (kort/lang) bestaan alleen als rij 'omhoog'; vleugels hebben ook voor- en
+  zijrijen. Het spel tekent ze van voren achter het lichaam en bij 'omhoog' over
+  lichaam en harnas.
   De top-down versies van de engelen-, duivels- en vlindervleugels komen als
   cape_engelenvleugels.png, cape_duivelsvleugels.png en cape_vlindervleugels.png
   (SV-bronnen: SV_Wing_p01 / p03 / p05 in _bron/, pixelgelijk aan de battler-capes).
+  Wing1 (achterkant) en Wing2 (voor/zij) zijn samengevoegd, net als bij het haar.
 
 GEKLEURDE HARNASSEN
   armor_middel.png, armor_ceremonieel.png en armor_robe.png zijn in de battler-versie herkleurd

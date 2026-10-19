@@ -12,7 +12,7 @@
    ============================================================================ */
 
 const CASTRA_SPRITE_DIR = "assets/sprites-topdown/";
-const CASTRA_SPRITE_VER = "v=5";   // ophogen na het vervangen van een PNG
+const CASTRA_SPRITE_VER = "v=6";   // ophogen na het vervangen van een PNG
 const CASTRA_FRAME = 48;           // MV-loopsheet: frame 48×48, 3 kolommen × 4 rijen
 const CASTRA_DIR_ROW = { down:0, left:1, right:2, up:3 };
 
@@ -59,22 +59,27 @@ function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
   const wrapF = prestigeOn ? `filter:${BM_PRESTIGE_FILTER};` : "";
   const scale = (sizePx/CASTRA_FRAME).toFixed(4);
   const legId = cosm.legendary && cosm.legendary!=="geen" ? cosm.legendary : null;
+  // Wapens bestaan niet als top-down sprite (bewust: in Castra Heroum draagt de dux
+  // geen zichtbaar wapen). Capes en vleugels bestaan alleen als achterkant (rij
+  // "omhoog"; zie README): van voren hangen ze achter het lichaam, maar wie van je
+  // wegloopt (dir "up") draagt ze óver lichaam en harnas heen.
+  const capeL = L(A.cape[cosm.cape||"geen"], capeF);
+  const capeBehind = dir==="up" ? "" : capeL, capeOver = dir==="up" ? capeL : "";
   let layers;
   if(legId && A.legendary[legId]){
-    // Legendarische held vervangt de paper doll (net als in battle.js); wapen en
-    // schild blijven de eigen keuze van de speler.
-    layers = L(A.wapen[cosm.wapen||"zwaard"]) + L(A.legendary[legId]) + L(A.schild[cosm.schild||"rond"]);
+    // Legendarische held vervangt de paper doll (net als in battle.js); het schild blijft de keuze van de speler.
+    layers = L(A.legendary[legId]) + L(A.schild[cosm.schild||"rond"]);
   } else {
     const baardId = cosm.baard||"geen";
     const baardL = baardId==="baardsnor" ? L(A.baard.baard,haarF)+L(A.baard.snor,haarF) : L(A.baard[baardId],haarF);
     layers =
-      L(A.wapen[cosm.wapen||"zwaard"]) +
-      L(A.cape[cosm.cape||"geen"], capeF) +
+      capeBehind +
       L(A.bases[_bmBaseKey(cosm)]) +
       L(A.ogen[cosm.oogkleur||"blauw"]) +
       L(A.borstband[cosm.borstband||"geen"]) +
-      L(A.haar[bmZichtbaarHaar(cosm)], haarF) +
       L(A.armor[cosm.armor||"licht"], BM_ARMOR_TINT_FILTER[cosm.armor]||"none") +
+      capeOver +
+      L(A.haar[bmZichtbaarHaar(cosm)], haarF) +
       baardL +
       L(A.extra[cosm.extra||"geen"]) +
       L(A.schild[cosm.schild||"rond"]) +
