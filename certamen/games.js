@@ -1817,12 +1817,14 @@ SCREENS.teacherClass = function(){
   <div class="note" style="margin:-4px 0 10px">Inlogcode: <b>${esc(code)}</b> <button class="chip" style="padding:2px 8px" title="Kopieer klascode" onclick="tpCopy('${esc(code)}')">Kopieer</button> — leerlingen die deze code invoeren komen automatisch in deze klas.</div>
   <div id="tpMissedWords"></div>
   <div id="tpChronicaStats"></div>
+  <div id="tpCastraStats"></div>
   <div id="tpStudentList"><div class="note" style="text-align:center;padding:16px">Laden…</div></div>
   <div id="tpOtherApps"></div>
   ${foot()}`);
   tpLoadRoster();
   tpRenderClassAnalytics();
   tpRenderChronicaAnalytics();
+  tpRenderCastraAnalytics();
 };
 
 // Weergavenamen voor de score-sync uit assets/site-auth.js (identities/{klas}/
@@ -1898,6 +1900,31 @@ function tpRenderChronicaAnalytics(){
       </tbody></table>` : "";
     cont.innerHTML=`<div class="panel"><h3>Chronica Classica — taalstatistieken deze maand</h3>${leesvalHTML}${puzzelHTML}</div>`;
   }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon Chronica-taalstatistieken niet laden.</div></div>`; });
+}
+
+// Castra Heroum — vertaalhulp (Latijn lezen), geaggregeerd per klas/maand. Geschreven door
+// castraHelpSync() (castra-latin.js); nooit gekoppeld aan een leerling. Woorden die veel
+// worden opgezocht zijn de woorden die de klas nog niet kent; zinnen die vaak worden
+// vertaald zijn te moeilijk of te nieuw.
+function tpRenderCastraAnalytics(){
+  const cont=el("tpCastraStats"); if(!cont) return;
+  const klas=_tpCurrentClass;
+  if(!klas || !initFirebase()){ cont.innerHTML=""; return; }
+  const month=new Date().toISOString().slice(0,7);
+  fbDB.ref("classAnalyticsCastra/"+klas+"/"+month).once("value").then(snap=>{
+    const rows=Object.values(snap.val()||{}).filter(r=>(r.c||0)>0);
+    const words=rows.filter(r=>r.k==="w").sort((a,b)=>b.c-a.c).slice(0,12);
+    const sents=rows.filter(r=>r.k==="s").sort((a,b)=>b.c-a.c).slice(0,8);
+    if(!words.length && !sents.length){
+      cont.innerHTML=`<div class="panel"><h3>Castra Heroum — vertaalhulp deze maand</h3><div class="note">Nog geen gegevens — speel Castra Heroum ingelogd met deze klascode.</div></div>`;
+      return;
+    }
+    const tbl=(title,list,col)=>list.length?`<h4 style="margin:12px 0 4px">${title}</h4>
+      <table class="bm-tbl"><thead><tr><th>${col}</th><th>Keer opgezocht</th></tr></thead><tbody>
+      ${list.map(r=>`<tr><td>${esc(r.p)}</td><td>${r.c}×</td></tr>`).join("")}</tbody></table>`:"";
+    cont.innerHTML=`<div class="panel"><h3>Castra Heroum — vertaalhulp deze maand</h3>
+      ${tbl("Woorden — meest opgezocht",words,"Woord")}${tbl("Zinnen — meest vertaald",sents,"Zin")}</div>`;
+  }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon Castra-statistieken niet laden.</div></div>`; });
 }
 
 // Laadt de echte leerlingprofielen (identities/{code}) van de open klas.

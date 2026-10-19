@@ -184,6 +184,13 @@ spelregels, features of het datamodel raakt:
   kleine-letter-variant en valt terug op een oud hoofdletterprofiel.
   `identities/.../lastActive` wordt gestempeld bij login, gevecht, Training en
   score-sync (docent ziet "laatst actief" per leerling).
+- Castra Heroum (sinds 2026-10-21, `CASTRA_HEROUM.md`): spelvoortgang staat als één
+  JSON-string in `identities/{klas}/{lid}/castra` (max 40000 tekens, rules in
+  `certamen/database.rules.json`); de vertaalhulp-statistiek voor de docent staat
+  geaggregeerd per klas/maand in `classAnalyticsCastra/{klas}/{YYYY-MM}/{w_woord|s_zin}`
+  (`{p,k,c}`, geen leerlingnamen; geschreven door `castraHelpSync()` in
+  `certamen/castra-latin.js`, getoond door `tpRenderCastraAnalytics()` in
+  `certamen/games.js`). Zelfde afweging als de rest: wereld-schrijfbaar zonder auth.
 - Docentlijsten in Ludus/Agora: `latijn/ludus` en `grieks/agora` tonen voor een
   ingelogde leerling de gedeelde Certamen-woordenlijsten van de eigen klas
   (`klascodes/{KLAS}/wordlists`, lang la resp. el) als "Docent: …"-set; lokaal
