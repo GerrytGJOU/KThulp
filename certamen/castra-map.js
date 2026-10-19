@@ -88,6 +88,7 @@ const CASTRA_BUILDING_ART = {
   metallum:    { fw:2, fh:2, pieces:[ {o:"rock_grey",dx:0,dy:0}, {o:"rock_brown",dx:1,dy:0}, {o:"rock_brown",dx:0,dy:1}, {o:"rock_grey",dx:1,dy:1} ] },
   horreum:     { fw:2, fh:2, pieces:[ {o:"crate_a",dx:0,dy:0}, {o:"crate_b",dx:1,dy:0}, {o:"crate_c",dx:0,dy:1}, {o:"crate_d",dx:1,dy:1} ] },
   campus:      { fw:2, fh:2, pieces:[ {o:"fence",dx:0,dy:0}, {o:"fence",dx:1,dy:0}, {o:"barrel",dx:0,dy:1}, {o:"bucket",dx:1,dy:1} ] },
+  heroum:      { fw:3, fh:3, pieces:[ {o:"tent_beige",dx:0,dy:0} ] },
   principia:   { fw:2, fh:2, pieces:[ {o:"sign",dx:0,dy:0}, {o:"pot",dx:1,dy:0}, {o:"well",dx:0,dy:1}, {o:"barrel",dx:1,dy:1} ] },
 };
 
@@ -146,8 +147,8 @@ function castraCampDef(){
     const art = CASTRA_BUILDING_ART[b.id]; if(!art) return;
     art.pieces.forEach(p=>pieces.push({ o:p.o, x:b.slot.x+p.dx, y:b.slot.y+p.dy, owner:b.id }));
   });
-  [ ["tree_a",1,2],["tree_b",2,1],["tree_a",14,9],["tree_b",1,9],["tree_big",10,9],["tree_b",14,3] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
-  [ ["flower_w",9,2],["flower_p",6,3],["flower_b",11,6],["flower_o",3,10],["plant_a",9,9],["plant_c",6,9],["fern",11,10],["flower_p",1,6],["stones",9,4] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
+  [ ["tree_a",1,2],["tree_b",2,1],["tree_a",14,9],["tree_b",1,9],["tree_b",14,3] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
+  [ ["flower_w",9,2],["flower_p",6,3],["flower_b",11,6],["flower_o",3,10],["plant_c",6,9],["fern",11,10],["flower_p",1,6],["stones",9,4] ].forEach(t=>pieces.push({ o:t[0], x:t[1], y:t[2] }));
   return { cols, rows, ground:g, pieces, walls };
 }
 // Gebouwvoetafdruk voor tikken/interactie (fw×fh uit de tegelkunst).

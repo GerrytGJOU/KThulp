@@ -33,7 +33,7 @@ function castraPLeave(){ CASTRA.pos = { x:14, y:5 }; castraSave(); go("castraHom
 
 /* ---------- gevecht ---------- */
 function castraBHealthy(){
-  const list = CASTRA.soldiers.filter(s=>!castraIsHurt(s));
+  const list = (CASTRA.heroes||[]).map(castraHeroAsUnit).concat(CASTRA.soldiers.filter(s=>!castraIsHurt(s)));
   return list.length ? list : [ { id:"dux", dux:true, line:"legioen", stage:0, lvl:1, name:"Dux" } ];
 }
 function castraBCap(){ return 4 + 2*castraLvl("praetorium"); }
@@ -125,7 +125,7 @@ function castraBDrawTower(t){
   const box = el("cbUnits"); if(!box) return;
   const d = document.createElement("div"); d.id = "cbT"+t.id;
   d.style.cssText = `position:absolute;left:${t.x*48}px;top:${t.y*48}px;width:48px;height:48px`;
-  d.innerHTML = castraAvatarHTML(castraPLook(t.line), "down", 1, 48) + (t.type==="sup"?`<div style="position:absolute;top:-4px;right:0;font-size:12px">✨</div>`:"");
+  d.innerHTML = castraAvatarHTML(t.look || castraPLook(t.line), "down", 1, 48) + (t.type==="sup"?`<div style="position:absolute;top:-4px;right:0;font-size:12px">✨</div>`:"");
   box.appendChild(d);
 }
 
@@ -151,10 +151,11 @@ function castraBRenderCards(){
   const B = CASTRA_B, box = el("cbCards"); if(!box) return;
   const list = castraBHealthy();
   box.innerHTML = `<div class="note" style="margin-bottom:6px">${castraLa("elige_loca")}</div>` + list.map(s=>{
-    const placed = !!B.placed[s.id], st = s.dux ? CASTRA_V_BAL.dux : castraStats(s), line = castraLine(s.line);
-    const sel = B.sel===s.id, nm = s.dux ? "Dux" : castraSoldierName(s), t = CASTRA_TYPE_LA[line.type];
+    const placed = !!B.placed[s.id], st = s.hero ? castraHeroStats(s.h) : s.dux ? CASTRA_V_BAL.dux : castraStats(s);
+    const ty = s.hero ? CASTRA_HERO_DATA[s.h.id].type : castraLine(s.line).type;
+    const sel = B.sel===s.id, nm = s.hero ? CASTRA_HERO_DATA[s.h.id].nm : s.dux ? "Dux" : castraSoldierName(s), t = CASTRA_TYPE_LA[ty];
     return `<button class="tile ${sel?"tile-primary":""}" ${placed?"disabled":""} style="${placed?"opacity:.45;":""}" onclick="castraBSelect('${s.id}')">
-      <h3>${s.insignis?"✨ ":""}${esc(nm)} <small>${castraLaText("gradus")} ${s.lvl||1} · ${esc(t.sg)}</small></h3>
+      <h3>${s.hero?"⭐ ":s.insignis?"✨ ":""}${esc(nm)} <small>${castraLaText("gradus")} ${s.lvl||1} · ${esc(t.sg)}</small></h3>
       <p>${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</p></button>`;
   }).join("");
 }
@@ -219,6 +220,10 @@ function castraBFinish(){
     Object.keys(m.reward).forEach(r=>{ CASTRA.res[r] = r==="gloria" ? (CASTRA.res[r]||0)+m.reward[r] : Math.min(cap, (CASTRA.res[r]||0)+m.reward[r]); });
     const lines = [];
     s.towers.forEach(t=>{
+      if(String(t.sid).indexOf("hero_")===0){
+        const hh = castraHero(String(t.sid).slice(5)); if(hh){ hh.xp += 8 + 4*m.waves.length; if(castraHeroLevelUp(hh)) lines.push(CASTRA_HERO_DATA[hh.id].nm); }
+        return;
+      }
       const sol = CASTRA.soldiers.find(x=>x.id===t.sid); if(!sol) return;
       sol.xp += 12 + 6*m.waves.length; if(castraLevelUp(sol)) lines.push(castraSoldierName(sol));
     });
