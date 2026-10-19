@@ -1,6 +1,6 @@
 # Castra Heroum — masterplan (Certamen-heldenspel)
 
-Opgesteld 19 oktober 2026 · Gerben de Jong · status: **ontwerp (fase 0)**, alleen tegel + placeholder-scherm (`SCREENS.castraHome`, `certamen/games.js`) bestaan.
+Opgesteld 19 oktober 2026 · Gerben de Jong · status: **fase 1 in aanbouw** — framework staat (begaanbare castra, grondstoffen, gebouwen, soldaten werven); venatio, proelium, helden en Legio zijn nog stubs.
 
 > Dit document is de **enige bron van waarheid** voor Castra Heroum (zie CLAUDE.md). Werk het bij na elke wijziging aan spelregels, features of datamodel. Pokémon-termen zijn alleen referentie; in het spel zelf staat alles in het Latijn.
 > Punten gemarkeerd met **Voor Claude Code** zijn technische aanvullingen; zie §Techniek en koppeling (nog in te vullen) en de open vragen onderaan.
@@ -333,6 +333,15 @@ Inventarisatie van de Certamen-code, 2026-10-19 (nog géén besluiten; dit is wa
 **Multiplayer (fase 4):** `rooms/{code}` is open lees/schrijfbaar en wordt al voor realtime gevechten gebruikt; actie-lockstep past daar in. Eerst een prototype met één klas meten voordat dit vastligt.
 
 **Bestandsindeling (voorstel, fase 1):** `certamen/castra.js` (scherm + spel), `castra-data.js` (soldaten, helden, gebouwen, Latijnse teksten als pure data), eigen `?v=`-cachebuster in `certamen/index.html`. Bij Firebase-wijzigingen geldt de regel uit CLAUDE.md: altijd het volledige regelsbestand tonen.
+
+## Stand van de bouw (framework, 2026-10-19)
+
+- `certamen/castra-data.js`: pure data (grondstoffen, stats, 19 gebouwen waarvan 7 geplaatst, 18 soldatenlijnen, 15 helden, regio's, balans, kaartindeling).
+- `certamen/castra.js`: staat + opslag (localStorage per klas/leerling, gast als terugval; best-effort sync naar `identities/{klas}/{lid}/castra`, nog zonder eigen Firebase-regel), grondstoffen via tijdstempels, upgrades (begrensd door praetorium-level), soldaten werven met seeded RNG (aanleg, karakter, insignis), en `SCREENS.castraHome`: top-down kamp 16×12 tegels met lopen (pijltjes/WASD, D-pad, tik-om-te-lopen met BFS), gebouwpanelen, poorten.
+- Gebouwen nu speelbaar: praetorium (levert frumentum), contubernia (soldatenlijst, testwerving), lignatio, metallum, horreum (opslagmaximum), campus en principia (stub).
+- Poorten (`porta decumana` → venatio, `porta praetoria` → proelium) en de principia (Legio) tonen nog alleen een melding.
+- Ontwerpkeuze, nog te bevestigen: het praetorium levert *frumentum* (de plannen noemen geen producent voor graan).
+- Nog niet: Firebase-regels voor de `castra`-tak (groottelimiet), Latijnse vertaalhulp per tik, venatio, tower defence, helden, Legio, docentoverzicht.
 
 ## Bronnen
 

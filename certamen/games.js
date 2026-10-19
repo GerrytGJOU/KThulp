@@ -59,25 +59,7 @@ SCREENS.home = function(){
   ${foot()}`);
 };
 
-/* ---- CASTRA HEROUM: tijdelijk startscherm (specs volgen) ---- */
-SCREENS.castraHome = function(){
-  document.body.classList.remove("greek");
-  H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>🏕️ Castra Heroum</h2></div>
-  <div class="panel"><div class="note">Castra Heroum is in aanbouw. Binnenkort speelbaar (BETA).</div></div>
-  ${BM_IDENT?`<div class="panel" style="text-align:center">
-    <div id="castraAvatar">${castraAvatarHTML(BM_IDENT.avatar,"down",1,96)}</div>
-    <div class="note" style="margin-top:6px"><b>${esc(BM_IDENT.name||"")}</b> — dux van je eigen castra</div>
-  </div>`:`<div class="panel"><div class="note">Meld je aan via Battle Mode of Meedoen om je avatar te gebruiken.</div></div>`}
-  ${foot()}`);
-  // Zodra de top-down base-sprite bestaat (assets/sprites-topdown/), de avatar
-  // ermee vervangen; anders blijft de battler-avatar staan.
-  if(BM_IDENT && typeof castraProbeBase==="function"){
-    castraProbeBase(bmAvatarMerge(BM_IDENT.avatar).huid).then(ok=>{
-      const t=el("castraAvatar"); if(ok&&t) t.innerHTML=castraAvatarHTML(BM_IDENT.avatar,"down",1,96);
-    });
-  }
-};
+/* Castra Heroum: SCREENS.castraHome staat in castra.js. */
 
 /* ---- HOST: spel kiezen ---- */
 function startHost(){ ROLE="host"; go("hostGamePick"); }
