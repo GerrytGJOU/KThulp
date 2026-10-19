@@ -1,0 +1,401 @@
+/* ============================================================================
+   CASTRA HEROUM — SPELFRAMEWORK (fase 1: de begaanbare castra)
+   ----------------------------------------------------------------------------
+   Ontwerp: CASTRA_HEROUM.md. Data: castra-data.js. Avatar: castra-avatar.js.
+   Dit bestand bevat: staat + opslag (lokaal, met best-effort Firebase-sync),
+   grondstoffen via tijdstempels, gebouwen upgraden, soldaten werven (seeded RNG,
+   aanleg/karakter/insignis) en het scherm SCREENS.castraHome (top-down kamp).
+   Venatio/Proelium/Legio zijn nog stubs (poorten, principia).
+   Laadt NA castra-data.js en castra-avatar.js.
+   ============================================================================ */
+
+const CASTRA_SAVE_VER = 1;
+let CASTRA = null;          // actieve spelstaat (zie castraNewState)
+let CASTRA_KEY = null;      // localStorage-sleutel van de actieve speler
+let CASTRA_UI = { px:0, py:0, dir:"up", frame:1, moving:false, panel:null, keyFn:null, resizeFn:null };
+
+/* ---------- hulpjes ---------- */
+function castraBuilding(id){ return CASTRA_BUILDINGS.find(b=>b.id===id); }
+function castraLine(id){ return CASTRA_LINES.find(l=>l.id===id); }
+function castraRes(id){ return CASTRA_RES.find(r=>r.id===id); }
+function castraNow(){ return Date.now(); }
+
+// Deterministische RNG (mulberry32): zelfde seed = zelfde uitkomst. Nu voor het
+// werven; later ook de basis voor de lockstep-simulatie van de tower defence.
+function castraRng(seed){
+  let a = seed>>>0;
+  return function(){
+    a = (a + 0x6D2B79F5)>>>0;
+    let t = a;
+    t = Math.imul(t ^ (t>>>15), t | 1);
+    t ^= t + Math.imul(t ^ (t>>>7), t | 61);
+    return ((t ^ (t>>>14))>>>0) / 4294967296;
+  };
+}
+
+/* ---------- staat + opslag ---------- */
+function castraNewState(){
+  const b = {};
+  CASTRA_BUILDINGS.filter(x=>x.phase===1).forEach(x=>{ b[x.id] = { lvl:1, t:castraNow() }; });
+  return {
+    v:CASTRA_SAVE_VER, savedAt:castraNow(),
+    seed: (Math.random()*4294967296)>>>0,
+    res: { ...CASTRA_START_RES },
+    b, soldiers:[], heroes:[],
+    pos: { x:CASTRA_MAP.start.x, y:CASTRA_MAP.start.y },
+  };
+}
+function castraSaveKey(){
+  const i = (typeof BM_IDENT!=="undefined") ? BM_IDENT : null;
+  return "castra_save_v1_" + (i && i.klascode ? i.klascode+"_"+i.leerlingcode : "gast");
+}
+function castraLoad(){
+  CASTRA_KEY = castraSaveKey();
+  let s = null;
+  try{ s = JSON.parse(localStorage.getItem(CASTRA_KEY)||"null"); }catch(e){}
+  if(!s || s.v!==CASTRA_SAVE_VER) s = castraNewState();
+  // Gebouwen die er sinds deze save bij gekomen zijn (phase 1) aanvullen.
+  CASTRA_BUILDINGS.filter(x=>x.phase===1).forEach(x=>{ if(!s.b[x.id]) s.b[x.id]={lvl:1,t:castraNow()}; });
+  CASTRA = s;
+  return s;
+}
+let _castraSyncT = null;
+function castraSave(){
+  if(!CASTRA) return;
+  CASTRA.savedAt = castraNow();
+  try{ localStorage.setItem(CASTRA_KEY, JSON.stringify(CASTRA)); }catch(e){}
+  // Best-effort sync naar het Certamen-profiel (identities/{klas}/{lid}/castra);
+  // alleen voor ingelogde leerlingen, gedebounced zodat lopen niets kost.
+  clearTimeout(_castraSyncT);
+  _castraSyncT = setTimeout(castraSync, 4000);
+}
+function castraSync(){
+  const i = (typeof BM_IDENT!=="undefined") ? BM_IDENT : null;
+  if(!CASTRA || !i || !i.klascode || !i.leerlingcode || typeof fbDB==="undefined" || !fbDB) return;
+  try{ fbDB.ref("identities/"+i.klascode+"/"+i.leerlingcode+"/castra").set(JSON.stringify(CASTRA)); }catch(e){}
+}
+// Haal bij het openen de cloudversie op en neem 'm over als die nieuwer is.
+function castraPullRemote(done){
+  const i = (typeof BM_IDENT!=="undefined") ? BM_IDENT : null;
+  if(!i || !i.klascode || !i.leerlingcode || typeof fbDB==="undefined" || !fbDB){ done(false); return; }
+  try{
+    fbDB.ref("identities/"+i.klascode+"/"+i.leerlingcode+"/castra").once("value").then(snap=>{
+      let r=null; try{ r=JSON.parse(snap.val()||"null"); }catch(e){}
+      if(r && r.v===CASTRA_SAVE_VER && (r.savedAt||0) > (CASTRA.savedAt||0)){
+        CASTRA = r; try{ localStorage.setItem(CASTRA_KEY, JSON.stringify(CASTRA)); }catch(e){}
+        done(true);
+      } else done(false);
+    }).catch(()=>done(false));
+  }catch(e){ done(false); }
+}
+
+/* ---------- gebouwen, grondstoffen ---------- */
+function castraLvl(id){ return (CASTRA.b[id] && CASTRA.b[id].lvl) || 0; }
+function castraWalletCap(){ return CASTRA_BAL.walletBase + CASTRA_BAL.walletPerHorreum*castraLvl("horreum"); }
+function castraBarracksCap(){ return CASTRA_BAL.barracksBase + CASTRA_BAL.barracksPerLvl*castraLvl("contubernia"); }
+function castraMaxLvl(id){
+  const b = castraBuilding(id);
+  return id==="praetorium" ? b.maxLvl : Math.min(b.maxLvl, castraLvl("praetorium"));
+}
+function castraUpgradeCost(id){
+  const b = castraBuilding(id), L = castraLvl(id), c = {};
+  Object.keys(b.cost||{}).forEach(r=>{ c[r] = Math.round(b.cost[r]*Math.pow(L, CASTRA_BAL.costExp)); });
+  return c;
+}
+function castraCanPay(cost){ return Object.keys(cost).every(r=>(CASTRA.res[r]||0)>=cost[r]); }
+function castraPay(cost){ Object.keys(cost).forEach(r=>{ CASTRA.res[r]-=cost[r]; }); }
+
+// Wat staat er klaar bij een producent? Puur uit tijdstempel + level (geen timer),
+// begrensd op producerStoreHours uur opbrengst — geen straf voor later terugkomen.
+function castraPending(id){
+  const b = castraBuilding(id), st = CASTRA.b[id];
+  if(!b || !b.prod || !st) return 0;
+  const hours = Math.min(CASTRA_BAL.producerStoreHours, Math.max(0,(castraNow()-st.t)/3600000));
+  return Math.floor(hours * b.prod.perHour * st.lvl * CASTRA_BAL.prodPerLevelMult);
+}
+function castraCollect(id){
+  const b = castraBuilding(id), amt = castraPending(id);
+  if(!b || !b.prod) return 0;
+  const room = Math.max(0, castraWalletCap() - (CASTRA.res[b.prod.res]||0));
+  const take = Math.min(amt, room);
+  if(take<=0) return 0;
+  CASTRA.res[b.prod.res] += take;
+  // Alleen het afgehaalde deel van de tijd "verbruiken"; past het niet in de
+  // opslag, dan blijft de rest staan.
+  const perMs = b.prod.perHour*CASTRA.b[id].lvl*CASTRA_BAL.prodPerLevelMult/3600000;
+  CASTRA.b[id].t = (take>=amt) ? castraNow() : CASTRA.b[id].t + take/perMs;
+  castraSave();
+  return take;
+}
+function castraUpgrade(id){
+  const L = castraLvl(id);
+  if(L>=castraMaxLvl(id)) return false;
+  const cost = castraUpgradeCost(id);
+  if(!castraCanPay(cost)) return false;
+  if(castraBuilding(id).prod) castraCollect(id);   // niets verliezen bij een upgrade
+  castraPay(cost);
+  CASTRA.b[id].lvl = L+1;
+  if(castraBuilding(id).prod) CASTRA.b[id].t = castraNow();
+  castraSave();
+  return true;
+}
+
+/* ---------- soldaten ---------- */
+// Stats van een soldaat: basis(type) × stadiumfactor + aanleg, karakter ±10%,
+// level +8% per level. Helden komen later (vaste waarden, geen aanleg).
+function castraStats(s){
+  const line = castraLine(s.line), base = CASTRA_BASE_STATS[line.type];
+  const mult = CASTRA_STAGE_MULT[Math.min(s.stage, CASTRA_STAGE_MULT.length-1)];
+  const ing = CASTRA_INGENIA.find(i=>i.id===s.ingenium);
+  const out = {};
+  CASTRA_STATS.forEach(st=>{
+    let v = base[st.id]*mult + (s.indoles[st.id]||0)*0.5;
+    if(ing && ing.up===st.id) v*=1.1;
+    if(ing && ing.down===st.id) v*=0.9;
+    v *= 1 + 0.08*((s.lvl||1)-1);
+    out[st.id] = Math.round(v);
+  });
+  return out;
+}
+function castraRollSoldier(lineId, stage=0){
+  const rng = castraRng(CASTRA.seed); CASTRA.seed = (CASTRA.seed + 1)>>>0;
+  const indoles = {}; CASTRA_STATS.forEach(st=>{ indoles[st.id] = Math.floor(rng()*(CASTRA_INDOLES_MAX+1)); });
+  const insignis = rng() < CASTRA_INSIGNIS_CHANCE;
+  if(insignis) CASTRA_STATS.forEach(st=>{ indoles[st.id] = Math.min(CASTRA_INDOLES_MAX, indoles[st.id]+3); });
+  return {
+    id: "s"+castraNow().toString(36)+Math.floor(rng()*1e6).toString(36),
+    line:lineId, stage, lvl:1, xp:0, indoles,
+    ingenium: CASTRA_INGENIA[Math.floor(rng()*CASTRA_INGENIA.length)].id,
+    insignis, hurtUntil:0,
+  };
+}
+function castraSoldierName(s){
+  const line = castraLine(s.line), n = line.stages[Math.min(s.stage,line.stages.length-1)];
+  return Array.isArray(n) ? n[0] : n;
+}
+function castraRecruitTest(){
+  if(CASTRA.soldiers.length >= castraBarracksCap()) return "Je barakken zitten vol.";
+  if(!castraCanPay(CASTRA_BAL.recruitCost)) return "Niet genoeg frumentum.";
+  castraPay(CASTRA_BAL.recruitCost);
+  const starters = CASTRA_LINES.filter(l=>["legioen","rangen","licht","ruiterij"].includes(l.id));
+  const rng = castraRng((CASTRA.seed ^ 0x9e3779b9)>>>0);
+  const s = castraRollSoldier(starters[Math.floor(rng()*starters.length)].id, 0);
+  CASTRA.soldiers.push(s); castraSave();
+  return null;
+}
+
+/* ---------- scherm: de castra ---------- */
+function castraBlockedMap(){
+  const m = {}, T = CASTRA_MAP;
+  for(let x=0;x<T.cols;x++){ m[x+","+0]=1; m[x+","+(T.rows-1)]=1; }
+  for(let y=0;y<T.rows;y++){ m[0+","+y]=1; m[(T.cols-1)+","+y]=1; }
+  CASTRA_MAP.gates.forEach(g=>g.tiles.forEach(t=>{ delete m[t.x+","+t.y]; }));
+  CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
+    for(let dx=0;dx<2;dx++)for(let dy=0;dy<2;dy++) m[(b.slot.x+dx)+","+(b.slot.y+dy)]=b.id;
+  });
+  return m;
+}
+function castraGateAt(x,y){ return CASTRA_MAP.gates.find(g=>g.tiles.some(t=>t.x===x&&t.y===y)); }
+function castraBuildingAt(x,y){
+  return CASTRA_BUILDINGS.find(b=>b.phase===1&&b.slot&&x>=b.slot.x&&x<b.slot.x+2&&y>=b.slot.y&&y<b.slot.y+2);
+}
+
+SCREENS.castraHome = function(){
+  document.body.classList.remove("greek");
+  castraLoad();
+  CASTRA_UI.panel = null; CASTRA_UI.moving = false;
+  CASTRA_UI.px = CASTRA.pos.x; CASTRA_UI.py = CASTRA.pos.y; CASTRA_UI.dir = "up"; CASTRA_UI.frame = 1;
+  const T = CASTRA_MAP;
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="castraLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>🏕️ Castra Heroum</h2></div>
+  <div id="castraRes" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:4px 0 8px"></div>
+  <div id="castraWrap" style="position:relative;width:100%;margin:0 auto;overflow:hidden;border:2px solid var(--hi,#d4af37);border-radius:10px;background:#2a2118">
+    <div id="castraMap" style="position:absolute;top:0;left:0;width:${T.cols*T.tile}px;height:${T.rows*T.tile}px;transform-origin:top left;background:
+      repeating-conic-gradient(#3b2f20 0% 25%,#35291b 0% 50%) 0 0/${T.tile*2}px ${T.tile*2}px;image-rendering:pixelated"></div>
+  </div>
+  <div id="castraPad" style="display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,52px);gap:6px;justify-content:center;margin:10px 0">
+    <span></span><button class="btn" onclick="castraStep('up')">▲</button><span></span>
+    <button class="btn" onclick="castraStep('left')">◀</button><button class="btn" onclick="castraStep('down')">▼</button><button class="btn" onclick="castraStep('right')">▶</button>
+  </div>
+  <div id="castraPanel"></div>
+  ${BM_IDENT?"":`<div class="panel"><div class="note">Je speelt als gast: voortgang blijft alleen op dit apparaat. Meld je aan via Battle Mode of Meedoen om je eigen avatar en cloud-opslag te gebruiken.</div></div>`}
+  ${foot()}`);
+  castraRenderMap();
+  castraRenderRes();
+  castraFit();
+  // Kaart pas na de probe met de top-down avatar hertekenen (valt anders terug op battler).
+  if(BM_IDENT && typeof castraProbeBase==="function"){
+    castraProbeBase(bmAvatarMerge(BM_IDENT.avatar).huid).then(()=>castraDrawAvatar());
+  }
+  castraPullRemote(changed=>{ if(changed && el("castraMap")){ CASTRA_UI.px=CASTRA.pos.x; CASTRA_UI.py=CASTRA.pos.y; castraRenderMap(); castraRenderRes(); } });
+  CASTRA_UI.keyFn = e=>{
+    if(!el("castraMap")){ document.removeEventListener("keydown",CASTRA_UI.keyFn); window.removeEventListener("resize",CASTRA_UI.resizeFn); return; }
+    const d = {ArrowUp:"up",w:"up",ArrowDown:"down",s:"down",ArrowLeft:"left",a:"left",ArrowRight:"right",d:"right"}[e.key];
+    if(d){ e.preventDefault(); castraStep(d); }
+  };
+  CASTRA_UI.resizeFn = castraFit;
+  document.addEventListener("keydown", CASTRA_UI.keyFn);
+  window.addEventListener("resize", CASTRA_UI.resizeFn);
+};
+function castraLeave(){
+  castraSave(); castraSync();
+  if(CASTRA_UI.keyFn) document.removeEventListener("keydown", CASTRA_UI.keyFn);
+  if(CASTRA_UI.resizeFn) window.removeEventListener("resize", CASTRA_UI.resizeFn);
+  go("home");
+}
+// Kaart (768×576) schalen naar de beschikbare breedte; tikken rekent met die schaal.
+function castraFit(){
+  const w = el("castraWrap"); if(!w) return;
+  const T = CASTRA_MAP, s = Math.min(1.25, w.clientWidth/(T.cols*T.tile));
+  CASTRA_UI.scale = s;
+  w.style.height = (T.rows*T.tile*s)+"px";
+  el("castraMap").style.transform = "scale("+s+")";
+}
+function castraRenderRes(){
+  const box = el("castraRes"); if(!box) return;
+  const cap = castraWalletCap();
+  box.innerHTML = CASTRA_RES.map(r=>`<span class="pill" title="${esc(r.nl)}" style="font-size:14px">${r.icon} ${esc(r.nm)} <b>${CASTRA.res[r.id]||0}</b>${r.id!=="gloria"?`<small>/${cap}</small>`:""}</span>`).join("");
+}
+function castraRenderMap(){
+  const map = el("castraMap"); if(!map) return;
+  const T = CASTRA_MAP, t = T.tile;
+  let h = "";
+  // kampmuur
+  const wall = (x,y)=>`<div style="position:absolute;left:${x*t}px;top:${y*t}px;width:${t}px;height:${t}px;background:#6b5b45;border:1px solid #4a3d2c;box-sizing:border-box"></div>`;
+  const blocked = castraBlockedMap();
+  for(let x=0;x<T.cols;x++)for(let y=0;y<T.rows;y++){
+    const edge = x===0||y===0||x===T.cols-1||y===T.rows-1;
+    if(edge && blocked[x+","+y]) h += wall(x,y);
+  }
+  // poorten
+  CASTRA_MAP.gates.forEach(g=>{
+    g.tiles.forEach(tl=>{ h += `<div style="position:absolute;left:${tl.x*t}px;top:${tl.y*t}px;width:${t}px;height:${t}px;background:#8a6d2f;opacity:.75"></div>`; });
+    const f=g.tiles[0], horiz = g.tiles[0].y===g.tiles[1].y;
+    const lx = f.x*t + (horiz? 0 : -(t*1.2)), ly = f.y*t + (horiz? t : 0);
+    h += `<div style="position:absolute;left:${lx}px;top:${ly}px;font-size:10px;color:#e8d9a8;white-space:nowrap;text-shadow:0 1px 2px #000;pointer-events:none">${esc(g.nm)}</div>`;
+  });
+  // gebouwen
+  CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
+    const lvl = castraLvl(b.id), pend = b.prod ? castraPending(b.id) : 0;
+    h += `<div onclick="castraOpen('${b.id}')" style="position:absolute;left:${b.slot.x*t}px;top:${b.slot.y*t}px;width:${2*t}px;height:${2*t}px;box-sizing:border-box;cursor:pointer;
+        background:linear-gradient(#5a4a33,#3e3223);border:2px solid #8a6d2f;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f1e6c4">
+      <div style="font-size:34px;line-height:1">${b.icon}</div>
+      <div style="font-size:11px;font-weight:700">${esc(b.nm)}</div>
+      ${b.fixed?"":`<div style="position:absolute;top:2px;left:4px;font-size:10px;background:#1b150e;border-radius:4px;padding:0 4px">Lv ${lvl}</div>`}
+      ${pend>0?`<div style="position:absolute;top:-6px;right:-6px;font-size:11px;background:#d4af37;color:#2a2118;border-radius:10px;padding:1px 6px;font-weight:700;animation:pulse 1.4s infinite">+${pend}</div>`:""}
+    </div>`;
+  });
+  h += `<div id="castraAv" style="position:absolute;width:${t}px;height:${t}px;transition:left .16s linear,top .16s linear;pointer-events:none;z-index:5"></div>`;
+  map.innerHTML = h;
+  map.onclick = castraMapTap;
+  castraDrawAvatar();
+}
+function castraDrawAvatar(){
+  const av = el("castraAv"); if(!av) return;
+  const t = CASTRA_MAP.tile;
+  av.style.left = CASTRA_UI.px*t+"px"; av.style.top = CASTRA_UI.py*t+"px";
+  const avatar = (typeof BM_IDENT!=="undefined" && BM_IDENT && BM_IDENT.avatar) ? BM_IDENT.avatar : (typeof bmAvatarDefaults==="function" ? bmAvatarDefaults() : null);
+  av.innerHTML = avatar ? castraAvatarHTML(avatar, CASTRA_UI.dir, CASTRA_UI.frame, t) : "";
+}
+
+/* ---------- bewegen ---------- */
+const CASTRA_DELTA = { up:[0,-1], down:[0,1], left:[-1,0], right:[1,0] };
+function castraStep(dir){
+  if(CASTRA_UI.moving || !el("castraMap")) return false;
+  const d = CASTRA_DELTA[dir]; if(!d) return false;
+  CASTRA_UI.dir = dir;
+  const nx = CASTRA_UI.px+d[0], ny = CASTRA_UI.py+d[1];
+  const blocked = castraBlockedMap(), hit = blocked[nx+","+ny];
+  if(hit){
+    castraDrawAvatar();
+    if(typeof hit==="string") castraOpen(hit);      // tegen een gebouw lopen = naar binnen
+    return false;
+  }
+  CASTRA_UI.moving = true;
+  CASTRA_UI.px = nx; CASTRA_UI.py = ny;
+  CASTRA_UI.frame = CASTRA_UI.frame===1 ? (Math.random()<.5?0:2) : 1;   // loopanimatie
+  castraDrawAvatar();
+  setTimeout(()=>{
+    CASTRA_UI.moving = false; CASTRA_UI.frame = 1;
+    CASTRA.pos = { x:CASTRA_UI.px, y:CASTRA_UI.py }; castraSave();
+    castraDrawAvatar();
+    const g = castraGateAt(nx,ny);
+    if(g) castraGate(g);
+  }, 170);
+  return true;
+}
+// Tik op de kaart: BFS naar die tegel en stap voor stap lopen.
+function castraMapTap(e){
+  const map = el("castraMap"); if(!map) return;
+  const r = map.getBoundingClientRect(), s = CASTRA_UI.scale||1, t = CASTRA_MAP.tile;
+  const tx = Math.floor((e.clientX-r.left)/s/t), ty = Math.floor((e.clientY-r.top)/s/t);
+  const b = castraBuildingAt(tx,ty);
+  if(b){ castraOpen(b.id); return; }
+  const path = castraPath(CASTRA_UI.px, CASTRA_UI.py, tx, ty);
+  if(path && path.length) castraWalk(path);
+}
+function castraPath(sx,sy,tx,ty){
+  const blocked = castraBlockedMap(), T = CASTRA_MAP;
+  if(tx<0||ty<0||tx>=T.cols||ty>=T.rows||blocked[tx+","+ty]) return null;
+  const prev = {}, q=[[sx,sy]]; prev[sx+","+sy] = null;
+  while(q.length){
+    const [x,y] = q.shift();
+    if(x===tx && y===ty) break;
+    for(const dir in CASTRA_DELTA){
+      const nx=x+CASTRA_DELTA[dir][0], ny=y+CASTRA_DELTA[dir][1], k=nx+","+ny;
+      if(nx<0||ny<0||nx>=T.cols||ny>=T.rows||(k in prev)||blocked[k]) continue;
+      prev[k] = {x,y,dir}; q.push([nx,ny]);
+    }
+  }
+  const end = tx+","+ty; if(!(end in prev)) return null;
+  const out=[]; let k=end;
+  while(prev[k]){ out.unshift(prev[k].dir); k = prev[k].x+","+prev[k].y; }
+  return out;
+}
+function castraWalk(path){
+  const next = ()=>{ if(!path.length||!el("castraMap")) return; if(castraStep(path.shift())) setTimeout(next, 190); else setTimeout(next,60); };
+  next();
+}
+function castraGate(g){
+  castraOpenPanel(`<div class="panel"><h3>${esc(g.nm)}</h3>
+    <div class="note">${esc(g.nl)} — volgt in een volgende stap (${g.to==="venatio"?"fase 1b":"fase 2"}).</div>
+    <button class="btn" onclick="castraClosePanel()">Terug het kamp in</button></div>`);
+}
+
+/* ---------- panelen ---------- */
+function castraOpenPanel(html){ const p = el("castraPanel"); if(p){ p.innerHTML = html; p.scrollIntoView({behavior:"smooth",block:"nearest"}); } }
+function castraClosePanel(){ CASTRA_UI.panel=null; const p=el("castraPanel"); if(p) p.innerHTML=""; }
+function castraOpen(id){
+  CASTRA_UI.panel = id;
+  const b = castraBuilding(id), lvl = castraLvl(id);
+  const maxL = castraMaxLvl(id), cost = castraUpgradeCost(id);
+  const costTxt = Object.keys(cost).map(r=>`${castraRes(r).icon} ${cost[r]}`).join("  ");
+  let extra = "";
+  if(b.prod){
+    const pend = castraPending(id), r = castraRes(b.prod.res);
+    extra += `<div class="note">Opbrengst: ${b.prod.perHour*lvl} ${esc(r.nl)} per uur · klaar: <b>${pend}</b> ${r.icon}</div>
+      <button class="btn btn-gold" ${pend>0?"":"disabled"} onclick="castraDoCollect('${id}')">Verzamel</button> `;
+  }
+  if(id==="horreum") extra += `<div class="note">Opslagmaximum nu: ${castraWalletCap()} per grondstof.</div>`;
+  if(id==="contubernia"){
+    const list = CASTRA.soldiers.map(s=>{
+      const st = castraStats(s), ing = CASTRA_INGENIA.find(i=>i.id===s.ingenium);
+      return `<div style="padding:4px 0;border-top:1px solid #4a3d2c">${s.insignis?"✨ ":""}<b>${esc(castraSoldierName(s))}</b> · Lv ${s.lvl} · <i>${esc(ing?ing.nm:"")}</i><br>
+        <small>${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</small></div>`;
+    }).join("") || `<div class="note">Nog geen soldaten.</div>`;
+    extra += `<div class="note">Soldaten: ${CASTRA.soldiers.length} / ${castraBarracksCap()}</div>${list}
+      <button class="btn" onclick="castraDoRecruit()">Werf een soldaat (test, ${Object.keys(CASTRA_BAL.recruitCost).map(r=>castraRes(r).icon+" "+CASTRA_BAL.recruitCost[r]).join(" ")})</button> `;
+  }
+  if(b.fixed) extra += `<div class="note">Klassenevenementen (Legio) volgen in fase 4.</div>`;
+  const up = b.fixed ? "" : (lvl>=maxL
+    ? `<div class="note">${lvl>=b.maxLvl?"Maximaal level.":"Verbeter eerst het praetorium."}</div>`
+    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('${id}')">Verbeter naar Lv ${lvl+1} — ${costTxt}</button>`);
+  castraOpenPanel(`<div class="panel"><h3>${b.icon} ${esc(b.nm)} ${b.fixed?"":`<small>Lv ${lvl}</small>`}</h3>
+    <div style="font-style:italic;margin-bottom:4px">${esc(b.lat||"")}</div>
+    <div class="note">${esc(b.desc||b.nl||"")}</div>${extra}${up}
+    <div style="margin-top:8px"><button class="btn" onclick="castraClosePanel()">Sluiten</button></div></div>`);
+}
+function castraRefresh(id){ castraRenderMap(); castraRenderRes(); castraOpen(id); }
+function castraDoCollect(id){ const n = castraCollect(id); if(!n) toast("Opslag vol","Maak eerst ruimte of verbeter het horreum."); castraRefresh(id); }
+function castraDoUpgrade(id){ if(castraUpgrade(id)) toast("Verbeterd", castraBuilding(id).nm+" is nu level "+castraLvl(id)); castraRefresh(id); }
+function castraDoRecruit(){ const err = castraRecruitTest(); if(err) toast("Niet gelukt", err); castraRefresh("contubernia"); }

@@ -606,6 +606,7 @@ body.greek .qcard .word{color:#143a5e}
    native). SV-sprites kijken van nature naar LINKS; facing per team via
    scaleX-spiegeling op de lagen. Schaal 1.5Ã— (mobiel 96px) / 2.25Ã— (â‰¥900px). */
 .pixel-hero{position:relative;width:96px;height:96px;overflow:visible;image-rendering:pixelated;image-rendering:crisp-edges;flex-shrink:0}
+@keyframes pulse{50%{transform:scale(1.15)}}
 .sprite-layer{position:absolute;inset:0;background-size:864px 576px;background-repeat:no-repeat}
 /* BATTLE MOTION (battle-motion.js): rij/kolom van het MV SV-Actor-grid (9x6)
    worden als CSS-custom-properties gezet door BattleMotion.play()/_applyFrame.
@@ -1171,12 +1172,14 @@ body.greek .qcard .word{color:#143a5e}
 <script src="core.js?v=20261019a"></script>
 <script src="net.js?v=20261002a"></script>
 <script src="wordlists.js?v=20260907a"></script>
-<script src="games.js?v=20261019b"></script>
+<script src="games.js?v=20261019c"></script>
 <script src="battle-data.js?v=20261008a"></script>
 <script src="bossbattle.js?v=20261006z"></script>
 <script src="battle-motion.js?v=20260705a"></script>
 <script src="battle.js?v=20261019a"></script>
 <script src="castra-avatar.js?v=20261019a"></script>
+<script src="castra-data.js?v=20261019a"></script>
+<script src="castra.js?v=20261019a"></script>
 <script src="skilltree-data.js?v=20261007e"></script>
 <script src="skilltree.js?v=20261007e"></script>
 <script src="skilltree-engine.js?v=20261007d"></script>
