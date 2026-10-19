@@ -60,7 +60,8 @@ const CASTRA_BUILDINGS = [
   // Nog niet geplaatst (zie CASTRA_HEROUM.md, tabel Gebouwen):
   { id:"ludus",        nm:"Ludus",        nl:"Nieuwe aanvallen leren", phase:9, slot:null, maxLvl:5, cost:{ lignum:80, aes:60 } },
   { id:"fabrica",      nm:"Fabrica",      nl:"Smederij",       phase:9, slot:null, maxLvl:5, cost:{ lignum:80, aes:80 } },
-  { id:"heroum",       nm:"Heroum",       nl:"Heldenzaal",     phase:9, slot:null, maxLvl:5, cost:{ lignum:100, aes:100 } },
+  { id:"heroum",       nm:"Heroum",       nl:"Heldenzaal",     icon:"⭐", phase:1, slot:{x:9,y:7}, maxLvl:5, cost:{ lignum:100, aes:100 },
+    lat:"Hic heroes habitant.", desc:"Hier wonen je helden: praat met ze, wijs ze toe aan een gebouw en neem ze mee het gevecht in." },
   { id:"valetudinarium",nm:"Valetudinarium",nl:"Herstel",      phase:9, slot:null, maxLvl:5, cost:{ lignum:60, aes:40 } },
   { id:"dilectus",     nm:"Dilectus",     nl:"Werving",        phase:9, slot:null, maxLvl:5, cost:{ lignum:60, aes:60 } },
   { id:"templum",      nm:"Templum",      nl:"Zegen van een god", phase:9, slot:null, maxLvl:5, cost:{ lignum:90, aes:90 } },

@@ -48,6 +48,8 @@ function castraWorldDef(){
     else { g[y][x]="water"; walls.push([x,y]); }
   }
   for(let y=1;y<rows-1;y++){ g[y][W.river.x0-1] = g[y][W.river.x0-1]==="grass" ? "sand2" : g[y][W.river.x0-1]; g[y][W.river.x1+1] = g[y][W.river.x1+1]==="grass" ? "sand2" : g[y][W.river.x1+1]; }
+  // plekken van personen vrijhouden (ze worden dynamisch geblokkeerd, zie castraWBlocked)
+  Object.keys(CASTRA_NPCS).forEach(id=>{ const n = CASTRA_NPCS[id]; used[n.world.x+","+n.world.y]=1; });
   // hoog gras per zone (niet op wegen), met vaste willekeur
   W.zones.forEach(z=>{
     for(let y=z.y;y<z.y+z.h;y++) for(let x=z.x;x<z.x+z.w;x++){
@@ -70,12 +72,12 @@ function castraWorldDef(){
       pieces.push({ o:["flower_w","flower_p","flower_b","flower_o","plant_a","plant_b","fern"][Math.floor(rng()*7)], x, y }); used[x+","+y]=1;
     }
   }
-  // personen: hun cel is geblokkeerd; praten via tegen ze aan lopen of tikken
-  Object.keys(CASTRA_NPCS).forEach(id=>{ const n = CASTRA_NPCS[id]; used[n.world.x+","+n.world.y]=1; walls.push([n.world.x,n.world.y]); });
   // bord naar het kamp bij de uitgang
   pieces.push({ o:"sign", x:14, y:rows-3 }); used["14,"+(rows-3)]=1;
   return { cols, rows, ground:g, pieces, walls, tall };
 }
+// Geblokkeerd = vaste kaart OF een zichtbare persoon op die cel.
+function castraWBlocked(x,y){ return !!castraWorldBuilt().blocked[x+","+y] || !!castraNpcAt(x,y); }
 function castraWorldBuilt(){
   if(!CASTRA_WORLD_BUILT){
     const def = castraWorldDef();
@@ -144,10 +146,10 @@ function castraWorldRender(){
 function castraWorldNpcs(){
   const box = el("cwNpcs"); if(!box) return;
   const draw = ()=>{ const b2 = el("cwNpcs"); if(!b2) return;
-    b2.innerHTML = Object.keys(CASTRA_NPCS).map(id=>{ const n = CASTRA_NPCS[id];
+    b2.innerHTML = castraVisibleNpcs().map(id=>{ const n = CASTRA_NPCS[id];
       return `<div style="position:absolute;left:${n.world.x*48}px;top:${n.world.y*48}px;width:48px;height:48px;z-index:4;pointer-events:none">${castraAvatarHTML(n.avatar, n.world.dir||"down", 1, 48)}</div>`; }).join(""); };
   draw();
-  castraProbeBase("getint").then(draw);
+  ["getint","licht","olijf"].forEach(h=>castraProbeBase(h).then(draw));
 }
 function castraWorldAvatar(){
   const av = el("cwAv"); if(!av) return;
@@ -178,9 +180,9 @@ function castraWStep(dir){
   CASTRA_W_UI.dir = dir;
   const nx = CASTRA_W_UI.px+d[0], ny = CASTRA_W_UI.py+d[1], W = CASTRA_WORLD;
   if(nx<0||ny<0||nx>=W.cols||ny>=W.rows){ castraWorldAvatar(); return false; }
-  if(castraWorldBuilt().blocked[nx+","+ny]){
+  if(castraWBlocked(nx,ny)){
     castraWorldAvatar();
-    const npc = Object.keys(CASTRA_NPCS).find(id=>CASTRA_NPCS[id].world.x===nx && CASTRA_NPCS[id].world.y===ny);
+    const npc = castraNpcAt(nx,ny);
     if(npc) castraNpcTalk(npc);
     return false;
   }
@@ -207,7 +209,7 @@ function castraWorldTap(e){
   const map = el("cwMap"); if(!map) return;
   const r = map.getBoundingClientRect(), s = CASTRA_W_UI.scale||1;
   const tx = Math.floor((e.clientX-r.left)/s/48), ty = Math.floor((e.clientY-r.top)/s/48);
-  const npc = Object.keys(CASTRA_NPCS).find(id=>CASTRA_NPCS[id].world.x===tx && CASTRA_NPCS[id].world.y===ty);
+  const npc = castraNpcAt(tx,ty);
   if(npc){
     const d = Math.abs(CASTRA_W_UI.px-tx)+Math.abs(CASTRA_W_UI.py-ty);
     if(d===1){ castraNpcTalk(npc); return; }
@@ -220,14 +222,14 @@ function castraWorldTap(e){
   if(path && path.length) castraWorldWalk(path);
 }
 function castraWorldPath(sx,sy,tx,ty){
-  const W = CASTRA_WORLD, blocked = castraWorldBuilt().blocked;
-  if(tx<0||ty<0||tx>=W.cols||ty>=W.rows||blocked[tx+","+ty]) return null;
+  const W = CASTRA_WORLD;
+  if(tx<0||ty<0||tx>=W.cols||ty>=W.rows||castraWBlocked(tx,ty)) return null;
   const prev = {}, q=[[sx,sy]]; prev[sx+","+sy] = null;
   while(q.length){
     const [x,y] = q.shift(); if(x===tx && y===ty) break;
     for(const dir in CASTRA_DELTA){
       const nx=x+CASTRA_DELTA[dir][0], ny=y+CASTRA_DELTA[dir][1], k=nx+","+ny;
-      if(nx<0||ny<0||nx>=W.cols||ny>=W.rows||(k in prev)||blocked[k]) continue;
+      if(nx<0||ny<0||nx>=W.cols||ny>=W.rows||(k in prev)||castraWBlocked(nx,ny)) continue;
       prev[k] = {x,y,dir}; q.push([nx,ny]);
     }
   }

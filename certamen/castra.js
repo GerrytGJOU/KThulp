@@ -113,7 +113,8 @@ function castraPending(id){
   const b = castraBuilding(id), st = CASTRA.b[id];
   if(!b || !b.prod || !st) return 0;
   const hours = Math.min(CASTRA_BAL.producerStoreHours, Math.max(0,(castraNow()-st.t)/3600000));
-  return Math.floor(hours * b.prod.perHour * st.lvl * CASTRA_BAL.prodPerLevelMult);
+  const bonus = (typeof castraHeroBonus==="function") ? castraHeroBonus(id) : 0;
+  return Math.floor(hours * b.prod.perHour * st.lvl * CASTRA_BAL.prodPerLevelMult * (100+bonus)/100);
 }
 function castraCollect(id){
   const b = castraBuilding(id), amt = castraPending(id);
@@ -124,7 +125,7 @@ function castraCollect(id){
   CASTRA.res[b.prod.res] += take;
   // Alleen het afgehaalde deel van de tijd "verbruiken"; past het niet in de
   // opslag, dan blijft de rest staan.
-  const perMs = b.prod.perHour*CASTRA.b[id].lvl*CASTRA_BAL.prodPerLevelMult/3600000;
+  const perMs = b.prod.perHour*CASTRA.b[id].lvl*CASTRA_BAL.prodPerLevelMult*(100+((typeof castraHeroBonus==="function")?castraHeroBonus(id):0))/100/3600000;
   CASTRA.b[id].t = (take>=amt) ? castraNow() : CASTRA.b[id].t + take/perMs;
   castraSave();
   return take;
@@ -378,6 +379,7 @@ function castraClosePanel(){ CASTRA_UI.panel=null; const p=el("castraPanel"); if
 function castraOpen(id){
   CASTRA_UI.panel = id;
   if(id==="campus"){ castraCampusOpen(); return; }
+  if(id==="heroum"){ castraHeroumOpen(); return; }
   const b = castraBuilding(id), lvl = castraLvl(id);
   const maxL = castraMaxLvl(id), cost = castraUpgradeCost(id);
   const costTxt = Object.keys(cost).map(r=>`${castraRes(r).icon} ${cost[r]}`).join("  ");

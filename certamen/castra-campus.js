@@ -13,7 +13,7 @@ function castraTrainToday(){
   if(t.day !== castraDay()){ t.day = castraDay(); t.n = 0; }
   return t;
 }
-function castraTrainXp(){ const T = CASTRA_BAL.train; return T.xpBase + T.xpPerCampusLvl*castraLvl("campus"); }
+function castraTrainXp(){ const T = CASTRA_BAL.train; return Math.floor((T.xpBase + T.xpPerCampusLvl*castraLvl("campus")) * (100+((typeof castraHeroBonus==="function")?castraHeroBonus("campus"):0))/100); }
 function castraLevelUp(s){
   const maxL = CASTRA_V_BAL.soldierMaxLvlPerPraetorium*castraLvl("praetorium"); let up = false;
   while(s.lvl<maxL && s.xp >= CASTRA_V_BAL.xpPerLvl*s.lvl){ s.xp -= CASTRA_V_BAL.xpPerLvl*s.lvl; s.lvl++; up = true; }
