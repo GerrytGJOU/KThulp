@@ -222,6 +222,8 @@ SCREENS.castraHome = function(){
   castraRenderMap();
   castraRenderRes();
   castraFit();
+  castraStickAttach(el("castraWrap"), { step:castraStep, tap:castraMapTap });
+  castraStickHidePad();
   // Kaart pas na de probe met de top-down avatar hertekenen (valt anders terug op battler).
   if(BM_IDENT && typeof castraProbeBase==="function"){
     castraProbeBase(bmAvatarMerge(BM_IDENT.avatar).huid).then(()=>castraDrawAvatar());
@@ -277,7 +279,6 @@ function castraRenderMap(){
   h += `<canvas id="cmAbove" style="position:absolute;left:0;top:0;pointer-events:none;image-rendering:pixelated;z-index:6"></canvas>`;
   map.innerHTML = h;
   map.style.background = "#3a4a2a";
-  map.onclick = castraMapTap;
   castraDrawAvatar();
   castraTsLoad().then(()=>{ const b=el("cmBelow"), a=el("cmAbove"); if(b&&a) castraDrawMapLayers(castraBuiltMap(), b, a); });
 }
@@ -292,7 +293,8 @@ function castraDrawAvatar(){
 /* ---------- bewegen ---------- */
 const CASTRA_DELTA = { up:[0,-1], down:[0,1], left:[-1,0], right:[1,0] };
 function castraStep(dir){
-  if(CASTRA_UI.moving || !el("castraMap")) return false;
+  if(CASTRA_UI.moving) return null;            // bezig met een stap (niet: geblokkeerd)
+  if(!el("castraMap")) return false;
   const d = CASTRA_DELTA[dir]; if(!d) return false;
   CASTRA_UI.dir = dir;
   const nx = CASTRA_UI.px+d[0], ny = CASTRA_UI.py+d[1];
