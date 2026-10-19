@@ -23,6 +23,18 @@ KLEUREN
   battler-sprites.
   Het Kampioensharnas hergebruikt armor_zwaar.png (net als in Battle Mode).
 
+GEGENEREERD (niet met de hand maken)
+  base_<huidtint>.png (6x) en ogen_<kleur>.png (6x) komen uit TV_Body_p01.png via
+  tools/gen_sprites_topdown.py (zelfde paletten als tools/gen_sprites.js).
+  TV_Body_p01.png is de bron: laat die staan. Na een wijziging het script draaien.
+
+GEKLEURDE HARNASSEN
+  armor_middel.png en armor_ceremonieel.png zijn in de battler-versie herkleurd
+  (grijs, resp. blauwgrijs/bruin). De top-down versies zijn naar dezelfde kleuren
+  omgezet met een pixel-voor-pixel koppeling tussen de ongekleurde en gekleurde
+  side view (assets/sprites-topdown/_bron/SV_Clothing2_p01 en _p22). Komt er een
+  nieuw herkleurd harnas bij: lever ook de ongekleurde side view in _bron/ aan.
+
 ZOLANG BESTANDEN ONTBREKEN
   Heeft Castra Heroum nog geen base_<huidtint>.png voor een avatar, dan toont het
   spel de battler-avatar als vervanging. Je kunt dus stap voor stap uploaden.
