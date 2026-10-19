@@ -13,6 +13,7 @@ Er staan **20 commits lokaal op `main` die nog niet gepusht zijn** (alles van Ca
 Vóór je pusht:
 
 - [ ] `git status`: alleen de ongevolgde `certamen/tools/skilltree-balance-result*.json` mogen nog los staan (dat zijn oude simulatie-uitvoerbestanden, niet van dit project).
+- [ ] **LET OP: de nieuwe regels voor Legio en Commercium (2026-10-27) zijn nog NIET gepubliceerd.** Zonder die regels geven `castraLegio/…` en `castraTrades/…` "permission denied": het evenement starten en ruilen werken dan niet (de rest van het spel wel). Publiceren: `firebase deploy --only database --project kthulp-certamen`.
 - [ ] **Firebase-regels staan live** (gepubliceerd op 2026-10-22 met `firebase deploy --only database --project kthulp-certamen`). Controle: Console → Realtime Database → Regels moet `classAnalyticsCastra` en `castra` onder `identities/$klas/$lid` bevatten. Zo niet: opnieuw publiceren vanuit `certamen/database.rules.json`.
 - [ ] Besluit bewust over de **RPG Maker MV-tilesets** (`certamen/assets/tilesets/`, 1,3 MB). Je gaf toestemming om ze in de repo te laten; de licentie voor gebruik buiten RPG Maker zelf is niet uitgezocht (zie README in die map).
 - [ ] Besluit over de **sprites van derden** in `certamen/assets/sprites-topdown/` (hiddenone-packs uit je Downloads). Zelfde vraag: mogen ze op een openbare site?
@@ -65,6 +66,7 @@ In de profieleditor (Battle Mode) blijft alles gewoon zichtbaar; het gaat alleen
 
 ### 2d. Techniek en risico's
 - **Opslag:** voortgang staat lokaal (`localStorage`, per klas+leerlingcode of "gast") en wordt best-effort naar Firebase gesynchroniseerd (4 s na de laatste wijziging). Bij wisselen van apparaat wint de **nieuwste** save; speel je tegelijk op twee apparaten, dan overschrijft de laatste de ander. Een zware save (34 soldaten, 15 helden, 550 opgezochte woorden) is 16 KB, ruim onder de 40 KB-grens in de regels.
+- **Legio en Commercium zijn alleen getest met een nep-database**, niet met meerdere echte apparaten. Test het evenement eerst met 2–3 devices in jouw eigen klas voordat de hele klas meedoet; let op of alle deelnemers dezelfde vijanden op dezelfde plek zien (zo niet: lockstep-fout, meld het). Het commercium en de Legio werken alleen voor ingelogde leerlingen; ruilen is wereld-schrijfbaar zoals de rest van Certamen (geen bescherming tegen een leerling die bewust andermans aanbod wist).
 - **Gastspelers** (niet ingelogd) hebben geen cloudopslag en komen niet in het docentoverzicht.
 - **Docentoverzicht** toont alleen woorden/zinnen die ingelogde leerlingen opzochten (per klas/maand, nooit per leerling). Er is nog geen overzicht van voortgang (welke helden, welke missies).
 - **Geen anti-valsspelen:** de analysebomen zijn wereld-schrijfbaar zonder auth (zelfde afweging als de rest van Certamen). Een leerling kan zijn eigen save in de console aanpassen.
@@ -75,7 +77,7 @@ In de profieleditor (Battle Mode) blijft alles gewoon zichtbaar; het gaat alleen
 - Het hoofdmenu heeft nu de tegel *Castra Heroum* (BETA) op de plek van Boss Battle; Boss Battle zit alleen nog in Battle Mode (via de speltype-keuze). De Battle Mode-FAQ is hierop **niet** aangepast.
 
 ### 2e. Bewust nog niet gebouwd
-Legio (klassenevenementen, ruilen, coöperatieve tower defence via Firebase), forum/templum/ludus/fabrica/navalia/stabula/bibliotheca/murus, oppugnatio en baasgevechten, kaartweergave van het proelium, een Griekse modus, geluid/muziek, Latijnse knoppen in de **bestaande Certamen-schermen** (alleen Castra zelf is Latijn).
+forum/templum/ludus/fabrica/navalia/stabula/bibliotheca/murus, oppugnatio en baasgevechten, kaartweergave van het proelium, een Griekse modus, geluid/muziek, Latijnse knoppen in de **bestaande Certamen-schermen** (alleen Castra zelf is Latijn).
 
 ---
 
