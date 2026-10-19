@@ -361,6 +361,12 @@ function castraGate(g){
     if(CASTRA_UI.resizeFn) window.removeEventListener("resize", CASTRA_UI.resizeFn);
     go("castraWorld"); return;
   }
+  if(g.to==="proelium"){
+    CASTRA.pos = { x:14, y:5 }; castraSave();
+    if(CASTRA_UI.keyFn) document.removeEventListener("keydown", CASTRA_UI.keyFn);
+    if(CASTRA_UI.resizeFn) window.removeEventListener("resize", CASTRA_UI.resizeFn);
+    go("castraProelium"); return;
+  }
   castraOpenPanel(`<div class="panel"><h3>${esc(g.nm)}</h3>
     <div class="note">${castraLa("porta_clausa")}</div>
     <button class="btn" onclick="castraClosePanel()">${castraLaText("redi")}</button></div>`);
