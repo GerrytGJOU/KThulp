@@ -81,10 +81,10 @@ function castraVRender(stage){
     const cards = healthy.map(s=>{
       const st = castraStats(s), t = CASTRA_TYPE_LA[castraLine(s.line).type];
       return `<button class="tile" onclick="castraVFight('${s.id}')"><span class="ic">${castraLine(s.line).type==="cav"?"🐎":castraLine(s.line).type==="rng"?"🏹":"🛡️"}</span>
-        <h3>${s.insignis?"✨ ":""}${esc(castraSoldierName(s))} <small>Lv ${s.lvl}</small></h3>
+        <h3>${s.insignis?"✨ ":""}${esc(castraSoldierName(s))} <small>${castraLaText("gradus")} ${s.lvl}</small></h3>
         <p><b>${esc(t.sg)}</b> · ${CASTRA_STATS.slice(0,3).map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</p></button>`;
     }).join("");
-    const hurt = CASTRA.soldiers.filter(castraIsHurt).map(s=>`<div class="note">🩹 ${esc(castraSoldierName(s))} — nog ${castraHurtMin(s)} min gewond</div>`).join("");
+    const hurt = CASTRA.soldiers.filter(castraIsHurt).map(s=>`<div class="note">🩹 ${esc(castraSoldierName(s))} — ${castraLaText("vulneratus").replace("Miles tuus","").trim()} (${castraHurtMin(s)} min)</div>`).join("");
     body = `<div class="panel"><div style="font-size:15px;opacity:.9">${castraLa("explorator")}</div>
       <div style="font-size:19px;margin:6px 0 10px">${castraLaHTML(la, nl, "scout")}</div>
       <div style="font-size:17px;margin-bottom:6px">${castraLa("quem_mittis")}</div>
@@ -101,7 +101,7 @@ function castraVRender(stage){
 
 function castraVSoldierStrip(){
   const n = CASTRA.soldiers.length;
-  return `<div class="note" style="margin-top:8px">Soldaten: ${n} / ${castraBarracksCap()} · Jacht in Latium — win een gevecht om nieuwe soldaten te werven.</div>`;
+  return `<div class="note" style="margin-top:8px">${castraLaText("milites")}: ${n} / ${castraBarracksCap()}</div>`;
 }
 
 function castraVStart(regionId){
@@ -141,7 +141,7 @@ function castraVBattleHTML(){
   return `<div class="panel">
     <div style="display:flex;gap:12px">
       <div style="flex:1"><b>${esc(myName)}</b> <small>(${esc(CASTRA_TYPE_LA[V.myType].sg)})</small>${castraVBar(V.myHp,V.myMax,"#3f9d52")}</div>
-      <div style="flex:1;text-align:right"><b>${esc(castraSoldierName(V.enemy))}</b> <small>Lv ${V.enemy.lvl} (${esc(CASTRA_TYPE_LA[line.type].sg)})</small>${castraVBar(V.enHp,V.enMax,"#c8392a")}</div>
+      <div style="flex:1;text-align:right"><b>${esc(castraSoldierName(V.enemy))}</b> <small>${castraLaText("gradus")} ${V.enemy.lvl} (${esc(CASTRA_TYPE_LA[line.type].sg)})</small>${castraVBar(V.enHp,V.enMax,"#c8392a")}</div>
     </div>
     <div id="castraVLog" style="min-height:96px;margin:10px 0;font-size:15px">${log}</div>
     <div style="display:flex;gap:10px"><button class="btn btn-gold" style="flex:1" onclick="castraVTurn('attack')">${castraLaText("oppugna")}</button>
@@ -214,7 +214,7 @@ function castraVResultHTML(){
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("vicisti")}</div>
       <div style="font-size:15px">${castraLa("hostis_fugit")}</div>`;
     if(V.loot) h += `<div style="margin-top:6px">${castraLa("praeda")} 🪙 +${V.loot.aes} · 🌾 +${V.loot.fru} · 🏆 +1</div>`;
-    if(V.leveled) h += `<div class="note">⭐ ${esc(castraSoldierName(V.mine))} → Lv ${castraSoldierLvl(V.mine)}</div>`;
+    if(V.leveled) h += `<div class="note">⭐ ${esc(castraSoldierName(V.mine))} → ${castraLaText("gradus")} ${castraSoldierLvl(V.mine)}</div>`;
     if(V.trace){ const hero = CASTRA_HEROES.find(x=>x.id===V.trace); h += `<div class="note" style="font-size:15px">${castraLa("vestigia")} <b>${esc(hero?hero.nm:"")}</b></div>`; }
     if(V.mine.dux || true){
       const full = CASTRA.soldiers.length >= castraBarracksCap();
@@ -223,7 +223,7 @@ function castraVResultHTML(){
       if(full) h += `<div class="note">${castraLa("castra_plena")}</div>`;
       h += `<div style="display:flex;gap:10px"><button class="btn btn-gold" ${full||V.recruited?"disabled":""} onclick="castraVRecruit()">${castraLaText("recipio")}</button>
         <button class="btn" onclick="castraVAfter()">${castraLaText("dimitto")}</button></div>`;
-      if(V.recruited) h += `<div class="note" style="margin-top:8px">✔ ${esc(castraSoldierName(V.enemy))} sluit zich bij je aan.</div>`;
+      if(V.recruited) h += `<div class="note" style="margin-top:8px">✔ ${esc(castraSoldierName(V.enemy))} ${castraLa("adiungit")}</div>`;
     }
   } else {
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa(V.over==="lose"?"victus_es":"hostis_fugit")}</div>`;

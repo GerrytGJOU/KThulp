@@ -176,8 +176,8 @@ function castraSoldierName(s){
   return Array.isArray(n) ? n[s.branch||0] : n;
 }
 function castraRecruitTest(){
-  if(CASTRA.soldiers.length >= castraBarracksCap()) return "Je barakken zitten vol.";
-  if(!castraCanPay(CASTRA_BAL.recruitCost)) return "Niet genoeg frumentum.";
+  if(CASTRA.soldiers.length >= castraBarracksCap()) return "castra_plena";
+  if(!castraCanPay(CASTRA_BAL.recruitCost)) return "frumentum_deest";
   castraPay(CASTRA_BAL.recruitCost);
   const starters = CASTRA_LINES.filter(l=>["legioen","rangen","licht","ruiterij"].includes(l.id));
   const rng = castraRng((CASTRA.seed ^ 0x9e3779b9)>>>0);
@@ -222,6 +222,10 @@ SCREENS.castraHome = function(){
   castraRenderMap();
   castraRenderRes();
   castraFit();
+  if(!CASTRA.introSeen){
+    castraOpenPanel(`<div class="panel"><div style="font-size:18px;margin-bottom:8px">${castraLa("intro")}</div>
+      <button class="btn btn-gold" onclick="CASTRA.introSeen=true;castraSave();castraClosePanel()">${castraLaText("intellego")}</button></div>`);
+  }
   castraStickAttach(el("castraWrap"), { step:castraStep, tap:castraMapTap });
   castraStickHidePad();
   // Kaart pas na de probe met de top-down avatar hertekenen (valt anders terug op battler).
@@ -358,8 +362,8 @@ function castraGate(g){
     go("castraWorld"); return;
   }
   castraOpenPanel(`<div class="panel"><h3>${esc(g.nm)}</h3>
-    <div class="note">${esc(g.nl)} — volgt in een volgende stap (${g.to==="venatio"?"fase 1b":"fase 2"}).</div>
-    <button class="btn" onclick="castraClosePanel()">Terug het kamp in</button></div>`);
+    <div class="note">${castraLa("porta_clausa")}</div>
+    <button class="btn" onclick="castraClosePanel()">${castraLaText("redi")}</button></div>`);
 }
 
 /* ---------- panelen ---------- */
@@ -374,30 +378,35 @@ function castraOpen(id){
   let extra = "";
   if(b.prod){
     const pend = castraPending(id), r = castraRes(b.prod.res);
-    extra += `<div class="note">Opbrengst: ${b.prod.perHour*lvl} ${esc(r.nl)} per uur · klaar: <b>${pend}</b> ${r.icon}</div>
-      <button class="btn btn-gold" ${pend>0?"":"disabled"} onclick="castraDoCollect('${id}')">Verzamel</button> `;
+    extra += `<div class="note">${castraLaText("proventus")}: ${b.prod.perHour*lvl} ${r.icon} / hora · ${castraLaText("paratum")}: <b>${pend}</b> ${r.icon}</div>
+      <button class="btn btn-gold" ${pend>0?"":"disabled"} onclick="castraDoCollect('${id}')">${castraLaText("collige")}</button> `;
   }
-  if(id==="horreum") extra += `<div class="note">Opslagmaximum nu: ${castraWalletCap()} per grondstof.</div>`;
+  if(id==="horreum") extra += `<div class="note">${castraLaText("capacitas")}: ${castraWalletCap()}</div>`;
   if(id==="contubernia"){
     const list = CASTRA.soldiers.map(s=>{
       const st = castraStats(s), ing = CASTRA_INGENIA.find(i=>i.id===s.ingenium);
-      return `<div style="padding:4px 0;border-top:1px solid #4a3d2c">${s.insignis?"✨ ":""}<b>${esc(castraSoldierName(s))}</b> · Lv ${s.lvl} · <i>${esc(ing?ing.nm:"")}</i><br>
+      return `<div style="padding:4px 0;border-top:1px solid #4a3d2c">${s.insignis?"✨ ":""}<b>${esc(castraSoldierName(s))}</b> · ${castraLaText("gradus")} ${s.lvl} · <i>${esc(ing?ing.nm:"")}</i><br>
         <small>${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</small>
         <button class="btn" style="float:right;margin-top:-26px" onclick="castraDoRelease('${s.id}')">${castraLaText("missio_honesta")}</button></div>`;
-    }).join("") || `<div class="note">Nog geen soldaten.</div>`;
-    extra += `<div class="note">Soldaten: ${CASTRA.soldiers.length} / ${castraBarracksCap()}</div>${list}
-      <button class="btn" onclick="castraDoRecruit()">Werf een soldaat (test, ${Object.keys(CASTRA_BAL.recruitCost).map(r=>castraRes(r).icon+" "+CASTRA_BAL.recruitCost[r]).join(" ")})</button> `;
+    }).join("") || `<div class="note">${castraLa("nullus_exercitus")}</div>`;
+    extra += `<div class="note">${castraLaText("milites")}: ${CASTRA.soldiers.length} / ${castraBarracksCap()}</div>${list}
+      <button class="btn" onclick="castraDoRecruit()">${castraLaText("conscribe")} (${Object.keys(CASTRA_BAL.recruitCost).map(r=>castraRes(r).icon+" "+CASTRA_BAL.recruitCost[r]).join(" ")})</button> `;
   }
-  if(b.fixed) extra += `<div class="note">Klassenevenementen (Legio) volgen in fase 4.</div>`;
+  if(b.fixed) extra += `<div class="note">${castraLa("legio_mox")}</div>`;
   const up = b.fixed ? "" : (lvl>=maxL
-    ? `<div class="note">${lvl>=b.maxLvl?"Maximaal level.":"Verbeter eerst het praetorium."}</div>`
-    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('${id}')">Verbeter naar Lv ${lvl+1} — ${costTxt}</button>`);
-  castraOpenPanel(`<div class="panel"><h3>${b.icon} ${esc(b.nm)} ${b.fixed?"":`<small>Lv ${lvl}</small>`}</h3>
-    <div style="font-style:italic;margin-bottom:4px">${esc(b.lat||"")}</div>
-    <div class="note">${esc(b.desc||b.nl||"")}</div>${extra}${up}
-    <div style="margin-top:8px"><button class="btn" onclick="castraClosePanel()">Sluiten</button></div></div>`);
+    ? `<div class="note">${castraLa(lvl>=b.maxLvl?"gradus_max":"praetorium_prius")}</div>`
+    : `<button class="btn" ${castraCanPay(cost)?"":"disabled"} onclick="castraDoUpgrade('${id}')">${castraLaText("meliora")} → ${castraLaText("gradus")} ${lvl+1} — ${costTxt}</button>`);
+  castraOpenPanel(`<div class="panel"><h3>${b.icon} ${esc(b.nm)} ${b.fixed?"":`<small>${castraLaText("gradus")} ${lvl}</small>`}</h3>
+    <div style="font-style:italic;margin-bottom:6px">${castraLaHTML(b.lat||"", b.desc||b.nl||"", "bld_"+id)}</div>${extra}${up}
+    <div style="margin-top:8px"><button class="btn" onclick="castraClosePanel()">${castraLaText("claude")}</button></div></div>`);
 }
 function castraRefresh(id){ castraRenderMap(); castraRenderRes(); castraOpen(id); }
-function castraDoCollect(id){ const n = castraCollect(id); if(!n) toast("Opslag vol","Maak eerst ruimte of verbeter het horreum."); castraRefresh(id); }
-function castraDoUpgrade(id){ if(castraUpgrade(id)) toast("Verbeterd", castraBuilding(id).nm+" is nu level "+castraLvl(id)); castraRefresh(id); }
-function castraDoRecruit(){ const err = castraRecruitTest(); if(err) toast("Niet gelukt", err); castraRefresh("contubernia"); }
+function castraToastLa(id, extra){ const t = CASTRA_LA[id]; toast(t.la, (extra?extra+" · ":"")+t.nl); }
+function castraDoCollect(id){
+  const b = castraBuilding(id), n = castraCollect(id);
+  if(!n) castraToastLa("plenum"); else castraToastLa("collectum", "+"+n+" "+castraRes(b.prod.res).nm);
+  castraRefresh(id);
+}
+function castraDoUpgrade(id){ if(castraUpgrade(id)) castraToastLa("melioratum", castraBuilding(id).nm+" → "+castraLaText("gradus")+" "+castraLvl(id)); castraRefresh(id); }
+function castraDoRecruit(){ const err = castraRecruitTest(); if(err) castraToastLa(err); castraRefresh("contubernia"); }
+
