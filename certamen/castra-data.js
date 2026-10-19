@@ -179,4 +179,11 @@ const CASTRA_BAL = {
   barracksBase: 6,         // aantal soldaten = base + perLvl × contubernia-level
   barracksPerLvl: 4,
   recruitCost: { frumentum:20 },   // testwerving (tot de Dilectus er is)
+  // Evolutie: stadium 1->2 en 2->3 vragen een soldaat-level én een campus-level.
+  evo: [ { lvl:5, campus:2 }, { lvl:10, campus:4 } ],
+  // Bijtrainen (Day Care): hooguit ~een kwart van wat vechten oplevert, kost
+  // frumentum, heeft een dagmaximum en loopt in realtime (tijdstempel).
+  train: { cost:{ frumentum:10 }, minutes:20, xpBase:5, xpPerCampusLvl:2, perDay:5 },
+  // Missio honesta: eervol ontslag geeft een deel van de grondstoffen terug.
+  releaseRefund: { frumentum:10, aes:5 },
 };

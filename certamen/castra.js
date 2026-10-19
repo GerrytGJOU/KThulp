@@ -173,7 +173,7 @@ function castraRollSoldier(lineId, stage=0){
 }
 function castraSoldierName(s){
   const line = castraLine(s.line), n = line.stages[Math.min(s.stage,line.stages.length-1)];
-  return Array.isArray(n) ? n[0] : n;
+  return Array.isArray(n) ? n[s.branch||0] : n;
 }
 function castraRecruitTest(){
   if(CASTRA.soldiers.length >= castraBarracksCap()) return "Je barakken zitten vol.";
@@ -376,6 +376,7 @@ function castraOpenPanel(html){ const p = el("castraPanel"); if(p){ p.innerHTML 
 function castraClosePanel(){ CASTRA_UI.panel=null; const p=el("castraPanel"); if(p) p.innerHTML=""; }
 function castraOpen(id){
   CASTRA_UI.panel = id;
+  if(id==="campus"){ castraCampusOpen(); return; }
   const b = castraBuilding(id), lvl = castraLvl(id);
   const maxL = castraMaxLvl(id), cost = castraUpgradeCost(id);
   const costTxt = Object.keys(cost).map(r=>`${castraRes(r).icon} ${cost[r]}`).join("  ");
@@ -390,7 +391,8 @@ function castraOpen(id){
     const list = CASTRA.soldiers.map(s=>{
       const st = castraStats(s), ing = CASTRA_INGENIA.find(i=>i.id===s.ingenium);
       return `<div style="padding:4px 0;border-top:1px solid #4a3d2c">${s.insignis?"✨ ":""}<b>${esc(castraSoldierName(s))}</b> · Lv ${s.lvl} · <i>${esc(ing?ing.nm:"")}</i><br>
-        <small>${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</small></div>`;
+        <small>${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</small>
+        <button class="btn" style="float:right;margin-top:-26px" onclick="castraDoRelease('${s.id}')">${castraLaText("missio_honesta")}</button></div>`;
     }).join("") || `<div class="note">Nog geen soldaten.</div>`;
     extra += `<div class="note">Soldaten: ${CASTRA.soldiers.length} / ${castraBarracksCap()}</div>${list}
       <button class="btn" onclick="castraDoRecruit()">Werf een soldaat (test, ${Object.keys(CASTRA_BAL.recruitCost).map(r=>castraRes(r).icon+" "+CASTRA_BAL.recruitCost[r]).join(" ")})</button> `;
