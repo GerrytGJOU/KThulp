@@ -1817,6 +1817,7 @@ SCREENS.teacherClass = function(){
   <div class="note" style="margin:-4px 0 10px">Inlogcode: <b>${esc(code)}</b> <button class="chip" style="padding:2px 8px" title="Kopieer klascode" onclick="tpCopy('${esc(code)}')">Kopieer</button> — leerlingen die deze code invoeren komen automatisch in deze klas.</div>
   <div id="tpMissedWords"></div>
   <div id="tpChronicaStats"></div>
+  <div id="tpCastraLegio"></div>
   <div id="tpCastraStats"></div>
   <div id="tpStudentList"><div class="note" style="text-align:center;padding:16px">Laden…</div></div>
   <div id="tpOtherApps"></div>
@@ -1825,6 +1826,7 @@ SCREENS.teacherClass = function(){
   tpRenderClassAnalytics();
   tpRenderChronicaAnalytics();
   tpRenderCastraAnalytics();
+  tpRenderCastraLegio();
 };
 
 // Weergavenamen voor de score-sync uit assets/site-auth.js (identities/{klas}/
@@ -1925,6 +1927,35 @@ function tpRenderCastraAnalytics(){
     cont.innerHTML=`<div class="panel"><h3>Castra Heroum — vertaalhulp deze maand</h3>
       ${tbl("Woorden — meest opgezocht",words,"Woord")}${tbl("Zinnen — meest vertaald",sents,"Zin")}</div>`;
   }).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon Castra-statistieken niet laden.</div></div>`; });
+}
+
+// Castra Heroum — Legio-evenement starten voor deze klas (castra-legio.js: castraLegioTeacher*).
+// Lobby -> de leerlingen melden zich ("Adsum!") in de principia -> "Start het gevecht" (10 s aftelling).
+let _tpLegioTimer = null;
+function tpRenderCastraLegio(){
+  const cont=el("tpCastraLegio"); if(!cont){ clearInterval(_tpLegioTimer); return; }
+  const klas=_tpCurrentClass;
+  if(!klas || !initFirebase() || typeof castraLegioTeacherCreate!=="function"){ cont.innerHTML=""; return; }
+  const draw=(ev,players)=>{
+    const n=Object.keys(players||{}).length;
+    let body;
+    if(!ev) body=`<div class="note">Geen evenement actief.</div><button class="btn btn-gold" onclick="tpLegioDo('create')">Start Legio: ${esc(CASTRA_LEGIO_MISSIONS.legio1.nm)}</button>`;
+    else if(ev.status==="lobby") body=`<div class="note"><b>${esc(ev.name||"Legio")}</b> — lobby. Aangemeld: <b>${n}</b>${n?" ("+Object.values(players).map(p=>esc(p.nm)).join(", ")+")":""}</div>
+      <button class="btn btn-gold" ${n<1?"disabled":""} onclick="tpLegioDo('launch')">Start het gevecht (10 s aftelling)</button> <button class="btn" onclick="tpLegioDo('end')">Annuleer</button>`;
+    else body=`<div class="note"><b>${esc(ev.name||"Legio")}</b> — loopt (${ev.players||n} deelnemers). Het gevecht verloopt automatisch; leerlingen kunnen tot het eind meedoen.</div><button class="btn" onclick="tpLegioDo('end')">Beëindig en wis het evenement</button>`;
+    cont.innerHTML=`<div class="panel"><h3>Castra Heroum — Legio (klassenevenement)</h3>${body}</div>`;
+  };
+  const poll=()=>{
+    if(!el("tpCastraLegio")){ clearInterval(_tpLegioTimer); return; }
+    Promise.all([fbDB.ref("castraLegio/"+klas+"/event").once("value"), fbDB.ref("castraLegio/"+klas+"/players").once("value")])
+      .then(([e,p])=>draw(e.val(),p.val())).catch(()=>{ cont.innerHTML=`<div class="panel"><div class="note warn">Kon het Legio-evenement niet laden (ben je ingelogd als eigenaar van deze klas?).</div></div>`; });
+  };
+  clearInterval(_tpLegioTimer); poll(); _tpLegioTimer=setInterval(poll,4000);
+}
+function tpLegioDo(what){
+  const klas=_tpCurrentClass; if(!klas) return;
+  const p = what==="create" ? castraLegioTeacherCreate(klas,"legio1") : what==="launch" ? castraLegioTeacherLaunch(klas) : castraLegioTeacherEnd(klas);
+  p.then(()=>tpRenderCastraLegio()).catch(e=>toast("Mislukt", String(e&&e.message||e)));
 }
 
 // Laadt de echte leerlingprofielen (identities/{code}) van de open klas.

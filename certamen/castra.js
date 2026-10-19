@@ -382,6 +382,7 @@ function castraOpen(id){
   CASTRA_UI.panel = id;
   if(id==="campus"){ castraCampusOpen(); return; }
   if(id==="heroum"){ castraHeroumOpen(); return; }
+  if(id==="principia"){ castraPrincipiaOpen(); return; }
   if(id==="valetudinarium"){ castraValetudinariumOpen(); return; }
   if(id==="dilectus"){ castraDilectusOpen(); return; }
   const b = castraBuilding(id), lvl = castraLvl(id);

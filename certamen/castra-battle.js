@@ -63,11 +63,11 @@ SCREENS.castraBattle = function(){
   castraBFit();
   castraBRenderHud(); castraBRenderCtl(); castraBRenderCards();
   B.resizeFn = castraBFit; window.addEventListener("resize", B.resizeFn);
-  B.timer = setInterval(castraBTick, CASTRA_P.tickMs);
+  B.timer = setInterval(B.legio ? castraLegioTick : castraBTick, CASTRA_P.tickMs);
 };
 function castraBExit(){
   if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
-  CASTRA_B = null; go("castraProelium");
+  const legio = CASTRA_B && CASTRA_B.legio; CASTRA_B = null; go(legio ? "castraHome" : "castraProelium");
 }
 function castraBBuildMap(){
   const B = CASTRA_B, mp = CASTRA_P_MAPS[B.mission.map], cols = CASTRA_P.cols, rows = CASTRA_P.rows;
@@ -109,6 +109,7 @@ function castraBMapTap(e){
   const B = CASTRA_B; if(!B || B.sim.over) return;
   const r = el("cbMap").getBoundingClientRect(), s = B.scale||1;
   const x = Math.floor((e.clientX-r.left)/s/48), y = Math.floor((e.clientY-r.top)/s/48);
+  if(B.legio){ castraLegioTap(x, y); return; }
   const tw = B.sim.towers.find(t=>t.x===x && t.y===y);
   if(tw){ if(!B.sim.waveActive){ castraBRemoveTower(tw); } return; }   // eigen soldaat terugnemen (alleen tussen golven)
   if(!B.sel || !castraBTileFree(x,y)) return;
@@ -140,6 +141,7 @@ function castraBRenderHud(){
 }
 function castraBRenderCtl(){
   const B = CASTRA_B, c = el("cbCtl"); if(!c) return; const s = B.sim;
+  if(B.legio){ c.innerHTML = ""; return; }
   const nextWave = s.waveActive ? s.wave : s.wave+1;
   c.innerHTML = `<button class="btn btn-gold" ${s.waveActive||s.over?"disabled":""} onclick="castraBStartWave()">${castraLaText("incipe")} ${!s.waveActive&&nextWave<B.mission.waves.length?"("+(nextWave+1)+"/"+B.mission.waves.length+")":""}</button>
     <button class="btn" onclick="castraBSpeed()">${B.speed===1?"▶":"⏩"} ${castraLaText("celerius")}</button>`;
