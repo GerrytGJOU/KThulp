@@ -20,7 +20,8 @@ const CASTRA_V_BAL = {
   dux: { vita:44, impetus:10, tutela:8, celeritas:6, ambitus:1 },
   wildMult: 1.0,              // wilde vijanden in Latium iets zwakker dan een geworven soldaat
 };
-let CASTRA_V = null;   // { region, terrain, enemy, enemyStats, mine, ... }
+let CASTRA_V = null;
+let CASTRA_V_PENDING = false;   // ontmoeting uit de wereld: start direct bij het verkenningsbericht   // { region, terrain, enemy, enemyStats, mine, ... }
 
 function castraWeightedPick(list, rng){
   const tot = list.reduce((a,x)=>a+x.w,0); let r = rng()*tot;
@@ -37,10 +38,10 @@ function castraTypeMult(att, def){
 }
 
 // Maak een wilde vijand voor deze regio/terrein; level schaalt met het praetorium.
-function castraMakeEncounter(regionId){
+function castraMakeEncounter(regionId, terrainId){
   const reg = CASTRA_VENATIO[regionId];
   const rng = castraRng((CASTRA.seed ^ 0x51ed270b)>>>0); CASTRA.seed = (CASTRA.seed + 7)>>>0;
-  const terrain = reg.terrains[Math.floor(rng()*reg.terrains.length)];
+  const terrain = (terrainId && reg.terrains.find(t=>t.id===terrainId)) || reg.terrains[Math.floor(rng()*reg.terrains.length)];
   const pick = castraWeightedPick(terrain.lines, rng);
   const e = castraRollSoldier(pick.id, 0);
   const cap = Math.min(reg.max, reg.min + castraLvl("praetorium") - 1);
@@ -54,11 +55,12 @@ function castraMakeEncounter(regionId){
 SCREENS.castraVenatio = function(){
   document.body.classList.remove("greek");
   if(!CASTRA) castraLoad();
+  if(CASTRA_V_PENDING && CASTRA_V){ CASTRA_V_PENDING = false; castraVRender("scout"); return; }
   CASTRA_V = null;
   castraVRender("kies");
 };
 
-function castraVBack(){ CASTRA_V=null; go("castraHome"); }
+function castraVBack(){ const w = CASTRA_V && CASTRA_V.fromWorld; CASTRA_V=null; go(w ? "castraWorld" : "castraHome"); }
 
 function castraVRender(stage){
   const reg = CASTRA_VENATIO.latium;
@@ -227,7 +229,9 @@ function castraVResultHTML(){
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa(V.over==="lose"?"victus_es":"hostis_fugit")}</div>`;
     if(V.over==="lose" && !V.mine.dux) h += `<div class="note">${castraLa("vulneratus")}</div>`;
   }
-  h += `<div style="display:flex;gap:10px;margin-top:14px"><button class="btn" onclick="castraVStart('${V.region}')">${castraLaText("iterum")}</button>
+  h += V.fromWorld
+    ? `<div style="display:flex;gap:10px;margin-top:14px"><button class="btn btn-gold" onclick="castraVBack()">${castraLaText("perge")}</button></div></div>`
+    : `<div style="display:flex;gap:10px;margin-top:14px"><button class="btn" onclick="castraVStart('${V.region}')">${castraLaText("iterum")}</button>
     <button class="btn" onclick="castraVBack()">${castraLaText("redi")}</button></div></div>`;
   return h;
 }
