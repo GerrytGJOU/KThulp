@@ -237,6 +237,8 @@ function castraBFinish(){
   } else {
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("castra_capta")}</div>`;
   }
+  const hurt = castraBattleWounds(s, s.over==="lose");
+  if(hurt.length) h += `<div class="note" style="margin-top:8px">🩹 ${castraLaHTML(hurt.length+" milites vulnerati sunt.", hurt.length+" soldaten zijn gewond geraakt.", "wounded_n")}</div>`;
   h += `<div style="display:flex;gap:10px;margin-top:14px"><button class="btn btn-gold" onclick="castraBExit()">${castraLaText("perge")}</button>
     <button class="btn" onclick="castraBStart('${m.id}')">${castraLaText("iterum_pugna")}</button></div></div>`;
   box.innerHTML = h; box.scrollIntoView({ behavior:"smooth", block:"nearest" });

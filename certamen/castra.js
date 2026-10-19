@@ -382,6 +382,8 @@ function castraOpen(id){
   CASTRA_UI.panel = id;
   if(id==="campus"){ castraCampusOpen(); return; }
   if(id==="heroum"){ castraHeroumOpen(); return; }
+  if(id==="valetudinarium"){ castraValetudinariumOpen(); return; }
+  if(id==="dilectus"){ castraDilectusOpen(); return; }
   const b = castraBuilding(id), lvl = castraLvl(id);
   const maxL = castraMaxLvl(id), cost = castraUpgradeCost(id);
   const costTxt = Object.keys(cost).map(r=>`${castraRes(r).icon} ${cost[r]}`).join("  ");
@@ -401,7 +403,7 @@ function castraOpen(id){
     }).join("") || `<div class="note">${castraLa("nullus_exercitus")}</div>`;
     const hs = (CASTRA.heroes||[]).map(h=>{ const d = CASTRA_HEROES.find(x=>x.id===h.id); return d?d.nm:h.id; });
     extra += (hs.length?`<div class="note">⭐ Heroes: <b>${esc(hs.join(", "))}</b></div>`:"") + `<div class="note">${castraLaText("milites")}: ${CASTRA.soldiers.length} / ${castraBarracksCap()}</div>${list}
-      <button class="btn" onclick="castraDoRecruit()">${castraLaText("conscribe")} (${Object.keys(CASTRA_BAL.recruitCost).map(r=>castraRes(r).icon+" "+CASTRA_BAL.recruitCost[r]).join(" ")})</button> `;
+      <div class="note">${castraLa("dilectus_hint")}</div> `;
   }
   if(b.fixed) extra += `<div class="note">${castraLa("legio_mox")}</div>`;
   const up = b.fixed ? "" : (lvl>=maxL

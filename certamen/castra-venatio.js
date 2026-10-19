@@ -183,8 +183,8 @@ function castraVFinish(){
   const V = CASTRA_V, soldier = V.mine.dux ? null : CASTRA.soldiers.find(s=>s.id===V.mine.id);
   V.loot = null; V.leveled = false; V.trace = null;
   if(soldier){
-    if(V.over==="lose") soldier.hurtUntil = castraNow() + CASTRA_V_BAL.hurtMinutesLoss*60000;
-    else if(V.dmgTaken > V.myMax*0.5) soldier.hurtUntil = castraNow() + CASTRA_V_BAL.hurtMinutesWin*60000;
+    if(V.over==="lose") castraHurtSoldier(soldier, CASTRA_V_BAL.hurtMinutesLoss);
+    else if(V.dmgTaken > V.myMax*0.5) castraHurtSoldier(soldier, CASTRA_V_BAL.hurtMinutesWin);
   }
   if(V.over==="win"){
     const rng = castraRng((CASTRA.seed ^ 0x2545f491)>>>0); CASTRA.seed = (CASTRA.seed+3)>>>0;
