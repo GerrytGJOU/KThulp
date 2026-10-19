@@ -154,23 +154,40 @@ function castraLaHTML(la, nl, sid){
     return `<span class="cl-w" data-w="${esc(castraNorm(p))}" onclick="castraTapWord(event,this)" style="cursor:pointer;border-bottom:1px dotted #b8975a">${esc(p)}</span>`;
   }).join("");
   const id = "cl"+Math.random().toString(36).slice(2,8);
-  return `<span class="cl-s">${words} <button class="cl-i" onclick="castraTapSentence('${id}','${esc(sid||la).replace(/'/g,"")}')" title="Vertaling" style="background:none;border:1px solid #8a6d2f;color:#d4af37;border-radius:50%;width:20px;height:20px;font-size:12px;line-height:1;padding:0;cursor:pointer">ⓘ</button><span id="${id}" class="cl-nl" style="display:none;font-size:13px;opacity:.85;font-style:italic"><br>${esc(nl)}</span></span>`;
+  return `<span class="cl-s">${words} <button class="cl-i" data-la="${esc(la)}" onclick="castraTapSentence('${id}','${esc(sid||la).replace(/'/g,"")}',this)" title="Vertaling" style="background:none;border:1px solid #8a6d2f;color:#d4af37;border-radius:50%;width:20px;height:20px;font-size:12px;line-height:1;padding:0;cursor:pointer">ⓘ</button><span id="${id}" class="cl-nl" style="display:none;font-size:13px;opacity:.85;font-style:italic"><br>${esc(nl)}</span></span>`;
 }
 function castraLa(id){ const t = CASTRA_LA[id]; return t ? castraLaHTML(t.la, t.nl, id) : esc(id); }
 function castraLaText(id){ return CASTRA_LA[id] ? CASTRA_LA[id].la : id; }
 
-function castraLogHelp(kind, key){
+function castraLogHelp(kind, key, text){
   if(typeof CASTRA==="undefined" || !CASTRA) return;
   const h = CASTRA.help || (CASTRA.help = { words:{}, sentences:{} });
   const m = h[kind] || (h[kind] = {});
   m[key] = (m[key]||0)+1;
   if(typeof castraSave==="function") castraSave();
+  castraHelpSync(kind, key, text);
+}
+// Geaggregeerd per klas/maand, nooit per leerling: classAnalyticsCastra/{klas}/{YYYY-MM}/{w_woord|s_zin}
+// = { p: tekst, k: "w"|"s", c: aantal }. Zelfde patroon als classAnalyticsChronica; alleen voor
+// ingelogde leerlingen (BM_IDENT). Docentweergave: tpRenderCastraAnalytics() in games.js.
+function castraHelpSync(kind, key, text){
+  try{
+    if(typeof fbDB==="undefined" || !fbDB || typeof BM_IDENT==="undefined" || !BM_IDENT || !BM_IDENT.klascode) return;
+    const month = new Date().toISOString().slice(0,7);
+    const k = (kind==="words" ? "w_" : "s_") + String(key).toLowerCase().replace(/[^a-z0-9]+/g,"_").slice(0,60);
+    const path = "classAnalyticsCastra/"+BM_IDENT.klascode+"/"+month+"/"+k+"/";
+    const upd = {};
+    upd[path+"p"] = String(text||key).slice(0,80);
+    upd[path+"k"] = kind==="words" ? "w" : "s";
+    upd[path+"c"] = firebase.database.ServerValue.increment(1);
+    fbDB.ref().update(upd).catch(()=>{});
+  }catch(e){}
 }
 function castraTapWord(ev, node){
   ev.stopPropagation();
   const w = node.getAttribute("data-w");
   const meaning = CASTRA_GLOSS[w] || "(geen vertaling beschikbaar)";
-  castraLogHelp("words", w);
+  castraLogHelp("words", w, node.textContent);
   let box = document.getElementById("castraGloss");
   if(!box){
     box = document.createElement("div"); box.id = "castraGloss";
@@ -181,9 +198,9 @@ function castraTapWord(ev, node){
   box.style.display = "block";
   clearTimeout(box._t); box._t = setTimeout(()=>{ box.style.display="none"; }, 3500);
 }
-function castraTapSentence(id, sid){
+function castraTapSentence(id, sid, btn){
   const n = document.getElementById(id); if(!n) return;
   const show = n.style.display==="none";
   n.style.display = show ? "inline" : "none";
-  if(show) castraLogHelp("sentences", sid);
+  if(show) castraLogHelp("sentences", sid, btn && btn.getAttribute("data-la"));
 }
