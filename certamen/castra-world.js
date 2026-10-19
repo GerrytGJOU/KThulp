@@ -94,10 +94,12 @@ SCREENS.castraWorld = function(){
     <span></span><button class="btn" onclick="castraWStep('up')">▲</button><span></span>
     <button class="btn" onclick="castraWStep('left')">◀</button><button class="btn" onclick="castraWStep('down')">▼</button><button class="btn" onclick="castraWStep('right')">▶</button>
   </div>
-  <div class="note" style="text-align:center">Loop door het <b>hoge, donkere gras</b>: daar kun je vijanden ontmoeten. ${castraLaHTML("Venare in herba alta!","Jaag in het hoge gras!","herba_alta")}</div>
+  <div class="note" style="text-align:center">Sleep met je duim over de kaart om te lopen, of tik ergens om daarheen te gaan. Loop door het <b>hoge, donkere gras</b>: daar kun je vijanden ontmoeten. ${castraLaHTML("Venare in herba alta!","Jaag in het hoge gras!","herba_alta")}</div>
   ${foot()}`);
   castraWorldRender();
   castraWorldFit();
+  castraStickAttach(el("cwWrap"), { step:castraWStep, tap:castraWorldTap });
+  castraStickHidePad();
   castraProbeBase(bmAvatarMerge((typeof BM_IDENT!=="undefined"&&BM_IDENT&&BM_IDENT.avatar)||bmAvatarDefaults()).huid).then(()=>castraWorldAvatar());
   CASTRA_W_UI.keyFn = e=>{
     if(!el("cwMap")){ document.removeEventListener("keydown",CASTRA_W_UI.keyFn); window.removeEventListener("resize",CASTRA_W_UI.resizeFn); return; }
@@ -121,7 +123,6 @@ function castraWorldRender(){
   map.innerHTML = `<canvas id="cwBelow" style="position:absolute;left:0;top:0;image-rendering:pixelated"></canvas>
     <div id="cwAv" style="position:absolute;width:48px;height:48px;transition:left .16s linear,top .16s linear;pointer-events:none;z-index:5"></div>
     <canvas id="cwAbove" style="position:absolute;left:0;top:0;pointer-events:none;image-rendering:pixelated;z-index:6"></canvas>`;
-  map.onclick = castraWorldTap;
   castraWorldAvatar();
   castraTsLoad().then(()=>{ const b=el("cwBelow"), a=el("cwAbove"); if(b&&a) castraDrawMapLayers(castraWorldBuilt(), b, a); });
 }
@@ -148,7 +149,8 @@ function castraWorldFit(){
 }
 
 function castraWStep(dir){
-  if(CASTRA_W_UI.moving || !el("cwMap")) return false;
+  if(CASTRA_W_UI.moving) return null;          // bezig met een stap (niet: geblokkeerd)
+  if(!el("cwMap")) return false;
   const d = CASTRA_DELTA[dir]; if(!d) return false;
   CASTRA_W_UI.dir = dir;
   const nx = CASTRA_W_UI.px+d[0], ny = CASTRA_W_UI.py+d[1], W = CASTRA_WORLD;
