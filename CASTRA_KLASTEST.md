@@ -58,8 +58,8 @@ In de profieleditor (Battle Mode) blijft alles gewoon zichtbaar; het gaat alleen
 
 ### 2c. Spelbalans (alleen gesimuleerd)
 - Gevechten zijn met een deterministische simulatie doorgerekend (`castraPRunHeadless`), niet door mensen gespeeld. De waarden per missie staan in `CASTRA_P_MISSIONS` (`hpMult`). Verwacht dat m1 en g1 te makkelijk/te moeilijk blijken en pas na de klastest goed afgesteld kunnen worden.
-- **Soldaten werven kan zonder jagen:** in de contubernia kost een testwerving alleen 20 frumentum (`CASTRA_BAL.recruitCost`) omdat de Dilectus (werving met kwaliteit) nog niet bestaat. Leerlingen kunnen dus soldaten "kopen" zonder te lezen. Voor de klastest prima, daarna vervangen.
-- Een verlies of doorbraak heeft **geen straf** (geen gewonde soldaten, geen verlies van grondstoffen). Het valetudinarium ontbreekt.
+- **Soldaten werven** kan via jagen (verslagen vijand opnemen) of de **Dilectus** (40 frumentum + 20 aes; de beoordeling is Latijn). Is de Dilectus te goedkoop of te duur: `CASTRA_MED.hireCost` in `castra-medical.js`.
+- **Gewonden:** na een proelium raken soldaten van de voorste linie gewond (bij doorbraken) of allemaal (bij verlies); herstel duurt 4–10 minuten, korter met een hoger valetudinarium. Geen verlies van grondstoffen bij verlies.
 - Er zijn geen oppugnatio- of baasgevechten, alleen verdediging.
 - Het proelium gaat uit van torens die niet kunnen sneuvelen; ruiters en boogschutters "vliegen" niet over het pad.
 
@@ -75,7 +75,7 @@ In de profieleditor (Battle Mode) blijft alles gewoon zichtbaar; het gaat alleen
 - Het hoofdmenu heeft nu de tegel *Castra Heroum* (BETA) op de plek van Boss Battle; Boss Battle zit alleen nog in Battle Mode (via de speltype-keuze). De Battle Mode-FAQ is hierop **niet** aangepast.
 
 ### 2e. Bewust nog niet gebouwd
-Legio (klassenevenementen, ruilen, coöperatieve tower defence via Firebase), valetudinarium (herstel), Dilectus, forum/templum/ludus/fabrica/navalia/stabula/bibliotheca/murus, oppugnatio en baasgevechten, kaartweergave van het proelium, een Griekse modus, geluid/muziek, Latijnse knoppen in de **bestaande Certamen-schermen** (alleen Castra zelf is Latijn).
+Legio (klassenevenementen, ruilen, coöperatieve tower defence via Firebase), forum/templum/ludus/fabrica/navalia/stabula/bibliotheca/murus, oppugnatio en baasgevechten, kaartweergave van het proelium, een Griekse modus, geluid/muziek, Latijnse knoppen in de **bestaande Certamen-schermen** (alleen Castra zelf is Latijn).
 
 ---
 
@@ -120,7 +120,7 @@ localStorage.removeItem("castra_save_v1_gast"); location.reload();
 2. Loop met je duim door het kamp; tik een gebouw: paneel opent in het Latijn, ⓘ en woord-tikken geven vertalingen.
 3. Verzamel bij het *metallum* na even wachten (of gebruik Kit A); verbeter het praetorium.
 4. Poort bovenaan → regiokeuze → Latium → loop in het donkere gras tot een ontmoeting begint → lees het bericht → kies een soldaat (of de dux) → win.
-5. Neem de verslagen soldaat op ("Recipio."); open de *campus*: laat hem trainen, kijk naar de evolutie-eis.
+5. Neem de verslagen soldaat op ("Recipio."); open de *campus*: laat hem trainen, kijk naar de evolutie-eis. Open ook de *Dilectus* (kantoor rechtsboven, naast de houthakker): kies een rekruut op basis van de Latijnse beoordeling.
 6. Praat met Aeneas (in Latium, links boven het kruispunt van de twee wegen), accepteer de opdracht.
 7. Poort rechts in het kamp → *Proelium* → missie 1 → plaats torens → "Incipe!" → win.
 8. Open het *heroum* en kijk of Aeneas na zijn keten (jagen → m1 → overtuigen) is aangekomen.
