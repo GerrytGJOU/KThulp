@@ -199,6 +199,7 @@ function castraVFinish(){
       const maxL = CASTRA_V_BAL.soldierMaxLvlPerPraetorium*castraLvl("praetorium");
       while(soldier.lvl<maxL && soldier.xp >= CASTRA_V_BAL.xpPerLvl*soldier.lvl){ soldier.xp -= CASTRA_V_BAL.xpPerLvl*soldier.lvl; soldier.lvl++; V.leveled = true; }
     }
+    V.quests = (typeof castraQuestOnWin==="function") ? castraQuestOnWin(V) : [];
     const reg = CASTRA_VENATIO[V.region];
     if(rng() < reg.traceChance){
       const left = reg.traces.filter(h=>!(CASTRA.traces&&CASTRA.traces[h]));
@@ -214,6 +215,7 @@ function castraVResultHTML(){
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("vicisti")}</div>
       <div style="font-size:15px">${castraLa("hostis_fugit")}</div>`;
     if(V.loot) h += `<div style="margin-top:6px">${castraLa("praeda")} 🪙 +${V.loot.aes} · 🌾 +${V.loot.fru} · 🏆 +1</div>`;
+    (V.quests||[]).forEach(m=>{ h += `<div class="note">📜 ${castraLaText("aeneas")}: ${m.n} / ${m.need}</div>`; });
     if(V.leveled) h += `<div class="note">⭐ ${esc(castraSoldierName(V.mine))} → ${castraLaText("gradus")} ${castraSoldierLvl(V.mine)}</div>`;
     if(V.trace){ const hero = CASTRA_HEROES.find(x=>x.id===V.trace); h += `<div class="note" style="font-size:15px">${castraLa("vestigia")} <b>${esc(hero?hero.nm:"")}</b></div>`; }
     if(V.mine.dux || true){

@@ -17,6 +17,7 @@ const CASTRA_TS_VER = "v=1";
 const CASTRA_TS_FILES = {
   A5: "assets/tilesets/Outside_A5.png",
   B:  "assets/tilesets/Outside_B.png",
+  A1: "assets/tilesets/Outside_A1.png",
 };
 const CASTRA_TS_IMG = {};
 let _castraTsPromise = null;
@@ -41,6 +42,8 @@ const CASTRA_GROUND = {
   stoneb:  { s:"A5", c:0, r:6 },
   cobble:  { s:"A5", c:2, r:4 },
   wall:    { s:"A5", c:0, r:9 },    // houten palissade
+  plank:   { s:"A5", c:2, r:0 },    // brugdek
+  water:   { s:"A1", px:24, py:72 }, // vulling van een waterautotile (pure water, geen oever)
 };
 
 /* ---- objecten (Outside_B); w×h in tegels; solid: all | bottom | none ---- */
@@ -114,9 +117,9 @@ function castraDrawMapLayers(built, cvBelow, cvAbove){
   cvBelow.width = cvAbove.width = built.cols*T; cvBelow.height = cvAbove.height = built.rows*T;
   const g = cvBelow.getContext("2d"), a = cvAbove.getContext("2d");
   g.imageSmoothingEnabled = a.imageSmoothingEnabled = false;
-  const draw = (ctx, t)=>{ const im = CASTRA_TS_IMG[t.s]; if(im) ctx.drawImage(im, t.c*T, t.r*T, T, T, t.x*T, t.y*T, T, T); };
+  const draw = (ctx, t)=>{ const im = CASTRA_TS_IMG[t.s]; if(im) ctx.drawImage(im, t.sx!=null?t.sx:t.c*T, t.sy!=null?t.sy:t.r*T, T, T, t.x*T, t.y*T, T, T); };
   for(let y=0; y<built.rows; y++) for(let x=0; x<built.cols; x++){
-    const k = CASTRA_GROUND[built.ground[y][x]]; if(k) draw(g, { s:k.s, c:k.c, r:k.r, x, y });
+    const k = CASTRA_GROUND[built.ground[y][x]]; if(k) draw(g, { s:k.s, c:k.c, r:k.r, sx:k.px, sy:k.py, x, y });
   }
   built.below.forEach(t=>draw(g,t));
   built.above.forEach(t=>draw(a,t));

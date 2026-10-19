@@ -389,7 +389,8 @@ function castraOpen(id){
         <small>${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</small>
         <button class="btn" style="float:right;margin-top:-26px" onclick="castraDoRelease('${s.id}')">${castraLaText("missio_honesta")}</button></div>`;
     }).join("") || `<div class="note">${castraLa("nullus_exercitus")}</div>`;
-    extra += `<div class="note">${castraLaText("milites")}: ${CASTRA.soldiers.length} / ${castraBarracksCap()}</div>${list}
+    const hs = (CASTRA.heroes||[]).map(h=>{ const d = CASTRA_HEROES.find(x=>x.id===h.id); return d?d.nm:h.id; });
+    extra += (hs.length?`<div class="note">⭐ Heroes: <b>${esc(hs.join(", "))}</b></div>`:"") + `<div class="note">${castraLaText("milites")}: ${CASTRA.soldiers.length} / ${castraBarracksCap()}</div>${list}
       <button class="btn" onclick="castraDoRecruit()">${castraLaText("conscribe")} (${Object.keys(CASTRA_BAL.recruitCost).map(r=>castraRes(r).icon+" "+CASTRA_BAL.recruitCost[r]).join(" ")})</button> `;
   }
   if(b.fixed) extra += `<div class="note">${castraLa("legio_mox")}</div>`;
