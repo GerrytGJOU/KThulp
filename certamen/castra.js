@@ -256,6 +256,8 @@ function castraFit(){
   CASTRA_UI.scale = s;
   w.style.height = (T.rows*T.tile*s)+"px";
   el("castraMap").style.transform = "scale("+s+")";
+  // op een telefoon is de kaart verkleind: labels meeschalen zodat ze leesbaar blijven
+  el("castraMap").style.setProperty("--lbl", Math.max(11, Math.round(11/s*0.95))+"px");
 }
 function castraRenderRes(){
   const box = el("castraRes"); if(!box) return;
@@ -271,14 +273,14 @@ function castraRenderMap(){
   CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
     const f = castraBuildingFoot(b), lvl = castraLvl(b.id), pend = b.prod ? castraPending(b.id) : 0;
     h += `<div onclick="castraOpen('${b.id}')" style="position:absolute;left:${b.slot.x*t}px;top:${b.slot.y*t}px;width:${f.fw*t}px;height:${f.fh*t}px;cursor:pointer;z-index:3">
-      <div style="position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-size:11px;font-weight:700;color:#f1e6c4;background:rgba(27,21,14,.85);border:1px solid #8a6d2f;border-radius:6px;padding:0 6px;white-space:nowrap">${b.icon} ${esc(b.nm)}${b.fixed?"":` · ${lvl}`}</div>
+      <div style="position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-size:var(--lbl,11px);font-weight:700;color:#f1e6c4;background:rgba(27,21,14,.85);border:1px solid #8a6d2f;border-radius:6px;padding:0 6px;white-space:nowrap">${b.icon} ${esc(b.nm)}${b.fixed?"":` · ${lvl}`}</div>
       ${pend>0?`<div style="position:absolute;top:-6px;right:-6px;font-size:11px;background:#d4af37;color:#2a2118;border-radius:10px;padding:1px 6px;font-weight:700;animation:pulse 1.4s infinite">+${pend}</div>`:""}
     </div>`;
   });
   CASTRA_MAP.gates.forEach(g=>{
     const f=g.tiles[0], horiz = g.tiles[0].y===g.tiles[1].y;
     const lx = f.x*t + (horiz? 0 : -(t*1.2)), ly = f.y*t + (horiz? t : 0);
-    h += `<div style="position:absolute;left:${lx}px;top:${ly}px;font-size:10px;color:#e8d9a8;white-space:nowrap;text-shadow:0 1px 2px #000;pointer-events:none;z-index:3">${esc(g.nm)}</div>`;
+    h += `<div style="position:absolute;left:${lx}px;top:${ly}px;font-size:var(--lbl,10px);color:#e8d9a8;white-space:nowrap;text-shadow:0 1px 2px #000;pointer-events:none;z-index:3">${esc(g.nm)}</div>`;
   });
   h += `<div id="castraAv" style="position:absolute;width:${t}px;height:${t}px;transition:left .16s linear,top .16s linear;pointer-events:none;z-index:5"></div>`;
   h += `<canvas id="cmAbove" style="position:absolute;left:0;top:0;pointer-events:none;image-rendering:pixelated;z-index:6"></canvas>`;
