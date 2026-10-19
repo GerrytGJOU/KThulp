@@ -979,18 +979,6 @@ function bmStartHost(){
   if(BM_META){ BM_META.garrisonProvince=null; BM_META.attackerCivId=null; BM_META.campaignOwner=null; }
   ROLE="host"; DRAFT.game="battle"; go("hostSource");
 }
-// Directe ingang vanuit het hoofdmenu: start het gevecht-hosten met Boss
-// Battle alvast als speltype vooringesteld (docent kan dit in de
-// instellingen alsnog terugzetten naar Team vs Team).
-function bmStartBossHost(){
-  if(!hasFirebase){toast("Firebase vereist","Stel Firebase in om Battle Mode te hosten.");return;}
-  if(!BM_META)BM_META={};
-  BM_META.mode="boss";
-  // Zie bmStartHost() hierboven: ook deze losstaande ingang mag geen
-  // Total War-belegering erven.
-  BM_META.garrisonProvince=null; BM_META.attackerCivId=null; BM_META.campaignOwner=null;
-  ROLE="host"; DRAFT.game="battle"; go("hostSource");
-}
 
 /* ============================================================================
    SCHERM: battleFAQ — Handleiding & uitleg

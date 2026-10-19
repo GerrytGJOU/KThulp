@@ -675,6 +675,7 @@ function iconSVG(name, size, color){
     column:`<rect x="16" y="12" width="16" height="4" fill="${c}"/><rect x="18" y="16" width="12" height="18" fill="${c}"/><rect x="14" y="34" width="20" height="4" fill="${c}"/><path d="M20 16v18M24 16v18M28 16v18" stroke="rgba(0,0,0,.3)" stroke-width="1.4"/>`,
     torch:`<path d="M24 10c4 5 7 8 7 12a7 7 0 01-14 0c0-3 2-5 4-8 .5 2 1.5 2.5 2 1 .5-3-1-4 1-5z" fill="${c}"/><rect x="22" y="28" width="4" height="10" rx="1.5" fill="${c}" opacity=".7"/>`,
     star:`<path d="M24 10l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z" fill="${c}"/>`,
+    tent:`<path d="M24 9l16 27H8z" fill="${c}"/><path d="M24 20l-6 16h12z" fill="rgba(0,0,0,.35)"/><path d="M24 9v-3l5 2-5 1z" fill="${c}" opacity=".7"/><rect x="6" y="36" width="36" height="3" rx="1.5" fill="${c}" opacity=".75"/>`,
   };
   return W+(P2[name]||P2.helmet)+`</svg>`;
 }

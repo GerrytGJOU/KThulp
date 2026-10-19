@@ -11,8 +11,10 @@
   om de wijziging in te dupliceren.
 
 ## Modus-documentatie (certamen/)
-De vier grote spelmodi binnen `certamen/` hebben elk een eigen masterplan in de
-repo-root. Dat masterplan is telkens de **enige bron van waarheid** voor die
+De grote spelmodi binnen `certamen/` hebben elk een eigen masterplan in de
+repo-root (`CASTRA_HEROUM.md` — Castra Heroum, in ontwerp, zie onder; Boss Battle
+staat sinds 2026-10-19 niet meer op het hoofdmenu maar alleen nog als speltype
+binnen Battle Mode). Dat masterplan is telkens de **enige bron van waarheid** voor die
 modus en vervangt eerdere schetsen/`.docx`-bestanden. Raadpleeg het bijbehorende
 document vóór je aan een modus werkt, en werk het bij na elke wijziging die de
 spelregels, features of het datamodel raakt:
@@ -20,6 +22,10 @@ spelregels, features of het datamodel raakt:
 - `BOSS_BATTLE.md` — coöperatief PvE: de hele klas tegen één mythologische baas.
 - `TOTAL_WAR.md` — doorlopende veldtocht: elke klas is een beschaving en
   verovert samen de kaart van Europa.
+- `CASTRA_HEROUM.md` — Castra Heroum: kamp-hub met soldaten/helden verzamelen,
+  jagen (venatio), tower defence (proelium) en klassenevenementen (legio),
+  alles in eenvoudig Latijn. Status: fase 0 (ontwerp), alleen tegel +
+  placeholder-scherm bestaan.
 - `Chronica.md` — Single Player Mode "Chronica Classica": narratieve,
   offline-first RPG (proloog t/m Hoofdstuk 16 speelbaar, Hoofdstuk 17
   gebouwd maar nog niet gekoppeld; campagne-metadata loopt door tot
