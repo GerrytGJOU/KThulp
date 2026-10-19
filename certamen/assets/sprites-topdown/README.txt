@@ -28,11 +28,23 @@ GEGENEREERD (niet met de hand maken)
   tools/gen_sprites_topdown.py (zelfde paletten als tools/gen_sprites.js).
   TV_Body_p01.png is de bron: laat die staan. Na een wijziging het script draaien.
 
+HAAR
+  De MV-generator levert per stijl twee bestanden: RearHair2 (voor- en zijkant) en
+  RearHair1 (achterkant, alleen de rij 'omhoog'). Die zijn samengevoegd tot één
+  haar_<stijl>.png met alle vier de richtingen, zodat het één laag blijft zoals bij
+  de battler. Stijlen: wild, lang, middel, kort, knot, vlecht, hanekam (+ kaal = leeg).
+  Levert de generator een nieuwe stijl: beide bestanden aanleveren, dan samenvoegen.
+
+VLEUGELS
+  De top-down versies van de engelen-, duivels- en vlindervleugels komen als
+  cape_engelenvleugels.png, cape_duivelsvleugels.png en cape_vlindervleugels.png
+  (SV-bronnen: SV_Wing_p01 / p03 / p05 in _bron/, pixelgelijk aan de battler-capes).
+
 GEKLEURDE HARNASSEN
-  armor_middel.png en armor_ceremonieel.png zijn in de battler-versie herkleurd
+  armor_middel.png, armor_ceremonieel.png en armor_robe.png zijn in de battler-versie herkleurd
   (grijs, resp. blauwgrijs/bruin). De top-down versies zijn naar dezelfde kleuren
   omgezet met een pixel-voor-pixel koppeling tussen de ongekleurde en gekleurde
-  side view (assets/sprites-topdown/_bron/SV_Clothing2_p01 en _p22). Komt er een
+  side view (_bron/SV_Clothing2_p01, _p22 en _p19). Komt er een
   nieuw herkleurd harnas bij: lever ook de ongekleurde side view in _bron/ aan.
 
 ZOLANG BESTANDEN ONTBREKEN

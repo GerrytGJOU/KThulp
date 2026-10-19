@@ -12,7 +12,7 @@
    ============================================================================ */
 
 const CASTRA_SPRITE_DIR = "assets/sprites-topdown/";
-const CASTRA_SPRITE_VER = "v=4";   // ophogen na het vervangen van een PNG
+const CASTRA_SPRITE_VER = "v=5";   // ophogen na het vervangen van een PNG
 const CASTRA_FRAME = 48;           // MV-loopsheet: frame 48×48, 3 kolommen × 4 rijen
 const CASTRA_DIR_ROW = { down:0, left:1, right:2, up:3 };
 
