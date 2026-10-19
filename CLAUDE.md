@@ -24,8 +24,12 @@ spelregels, features of het datamodel raakt:
   verovert samen de kaart van Europa.
 - `CASTRA_HEROUM.md` — Castra Heroum: kamp-hub met soldaten/helden verzamelen,
   jagen (venatio), tower defence (proelium) en klassenevenementen (legio),
-  alles in eenvoudig Latijn. Status: fase 0 (ontwerp), alleen tegel +
-  placeholder-scherm bestaan.
+  alles in eenvoudig Latijn. Status (2026-10-25): fase 1-3 gebouwd (kamp,
+  venatio, campus, proelium, heroum met 15 helden, drie regio's), Legio nog
+  niet; klastest-voorbereiding in `CASTRA_KLASTEST.md` (checklist, bekende
+  gaten, docent-testkit) en `CASTRA_LEERLINGTEST.md` (script voor leerlingen).
+  De avatar-sprites voor de top-down weergave staan in
+  `certamen/assets/sprites-topdown/` (README daar).
 - `Chronica.md` — Single Player Mode "Chronica Classica": narratieve,
   offline-first RPG (proloog t/m Hoofdstuk 16 speelbaar, Hoofdstuk 17
   gebouwd maar nog niet gekoppeld; campagne-metadata loopt door tot

@@ -12,7 +12,7 @@
    ============================================================================ */
 
 const CASTRA_SPRITE_DIR = "assets/sprites-topdown/";
-const CASTRA_SPRITE_VER = "v=7";   // ophogen na het vervangen van een PNG
+const CASTRA_SPRITE_VER = "v=8";   // ophogen na het vervangen van een PNG
 const CASTRA_FRAME = 48;           // MV-loopsheet: frame 48×48, 3 kolommen × 4 rijen
 const CASTRA_DIR_ROW = { down:0, left:1, right:2, up:3 };
 
@@ -23,15 +23,33 @@ function castraTdPath(battlerPath){
 
 // Welke top-down base-sprites bestaan al? Gecachet per huidtint; onbekend = null.
 const CASTRA_TD_READY = {};
+// Welke top-down bestanden bestaan er? Eénmalig per sessie gescand (alle PIXEL_ASSETS-paden, behalve wapens);
+// ontbrekende lagen worden daarna niet meer opgevraagd (geen 404-spam) en krijgen een terugval, zodat een
+// avatar nooit onzichtbaar of kaal wordt zolang er nog sprites ontbreken (zie assets/sprites-topdown/README.txt).
+let CASTRA_TD_EXISTS = null, _castraTdScanP = null;
+function castraTdScan(){
+  if(_castraTdScanP) return _castraTdScanP;
+  const paths = new Set();
+  Object.keys(PIXEL_ASSETS).forEach(cat=>{ if(cat==="wapen") return; Object.values(PIXEL_ASSETS[cat]).forEach(p=>{ if(p) paths.add(p); }); });
+  const map = {};
+  _castraTdScanP = Promise.all([...paths].map(p=>new Promise(res=>{
+    const im = new Image(); im.onload = ()=>{ map[p]=true; res(); }; im.onerror = ()=>{ map[p]=false; res(); };
+    im.src = castraTdPath(p) + "?" + CASTRA_SPRITE_VER;
+  }))).then(()=>{ CASTRA_TD_EXISTS = map; });
+  return _castraTdScanP;
+}
+function castraTdHas(src){ return !CASTRA_TD_EXISTS || CASTRA_TD_EXISTS[src]!==false; }
+
 function castraProbeBase(huid){
   const key = (typeof _bmBaseKey==="function") ? _bmBaseKey({huid}) : (huid||"licht");
-  if(key in CASTRA_TD_READY) return Promise.resolve(CASTRA_TD_READY[key]);
-  return new Promise(res=>{
+  const scan = castraTdScan();
+  if(key in CASTRA_TD_READY) return scan.then(()=>CASTRA_TD_READY[key]);
+  return scan.then(()=>new Promise(res=>{
     const img = new Image();
     img.onload  = ()=>{ CASTRA_TD_READY[key]=true;  res(true); };
     img.onerror = ()=>{ CASTRA_TD_READY[key]=false; res(false); };
     img.src = castraTdPath(PIXEL_ASSETS.bases[key]) + "?" + CASTRA_SPRITE_VER;
-  });
+  }));
 }
 function castraTdAvailable(av){
   const cosm = bmAvatarMerge(av);
@@ -49,7 +67,7 @@ function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
   const row = CASTRA_DIR_ROW[dir]!=null ? CASTRA_DIR_ROW[dir] : 0;
   const pos = `-${frame*CASTRA_FRAME}px -${row*CASTRA_FRAME}px`;
   function L(src, filter){
-    if(!src) return "";
+    if(!src || !castraTdHas(src)) return "";
     const url = castraTdPath(src) + "?" + CASTRA_SPRITE_VER;
     return `<div style="position:absolute;inset:0;background:url('${url}') ${pos}/${3*CASTRA_FRAME}px ${4*CASTRA_FRAME}px no-repeat;image-rendering:pixelated${filter&&filter!=="none"?";filter:"+filter:""}"></div>`;
   }
@@ -65,8 +83,11 @@ function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
   // wegloopt (dir "up") draagt ze óver lichaam en harnas heen.
   const capeL = L(A.cape[cosm.cape||"geen"], capeF);
   const capeBehind = dir==="up" ? "" : capeL, capeOver = dir==="up" ? capeL : "";
+  // Ontbreekt het gekozen harnas als top-down sprite, dan tonen we "middel" (of "vodden") i.p.v. een kale avatar.
+  const armorWant = A.armor[cosm.armor||"licht"];
+  const armorSrc = castraTdHas(armorWant) ? armorWant : (castraTdHas(A.armor.middel) ? A.armor.middel : A.armor.vodden);
   let layers;
-  if(legId && A.legendary[legId]){
+  if(legId && A.legendary[legId] && castraTdHas(A.legendary[legId])){
     // Legendarische held vervangt de paper doll (net als in battle.js); het schild blijft de keuze van de speler.
     layers = L(A.legendary[legId]) + L(A.schild[cosm.schild||"rond"]);
   } else {
@@ -77,7 +98,7 @@ function castraAvatarHTML(av, dir="down", frame=1, sizePx=48){
       L(A.bases[_bmBaseKey(cosm)]) +
       L(A.ogen[cosm.oogkleur||"blauw"]) +
       L(A.borstband[cosm.borstband||"geen"]) +
-      L(A.armor[cosm.armor||"licht"], BM_ARMOR_TINT_FILTER[cosm.armor]||"none") +
+      L(armorSrc, BM_ARMOR_TINT_FILTER[cosm.armor]||"none") +
       capeOver +
       L(A.haar[bmZichtbaarHaar(cosm)], haarF) +
       baardL +

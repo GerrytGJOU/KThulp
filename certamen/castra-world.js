@@ -175,15 +175,17 @@ function castraWorldAvatar(){
   castraWorldCamera();
 }
 // Camera: avatar in het midden, vastgeklemd aan de kaartranden.
+// Op een smal scherm (telefoon) tonen we een kleiner, staand uitsnede zodat tegels en avatar groot genoeg blijven.
+function castraWView(){ const w = el("cwWrap"); return (w && w.clientWidth < 520) ? { cols:10, rows:13 } : castraWorldCfg().view; }
 function castraWorldCamera(){
-  const W = castraWorldCfg(), V = W.view, s = CASTRA_W_UI.scale, m = el("cwMap"); if(!m) return;
+  const W = castraWorldCfg(), V = castraWView(), s = CASTRA_W_UI.scale, m = el("cwMap"); if(!m) return;
   const camX = Math.max(0, Math.min(W.cols*48 - V.cols*48, CASTRA_W_UI.px*48 + 24 - V.cols*24));
   const camY = Math.max(0, Math.min(W.rows*48 - V.rows*48, CASTRA_W_UI.py*48 + 24 - V.rows*24));
   m.style.transform = `translate(${-camX*s}px,${-camY*s}px) scale(${s})`;
   CASTRA_W_UI.camX = camX; CASTRA_W_UI.camY = camY;
 }
 function castraWorldFit(){
-  const w = el("cwWrap"); if(!w) return; const V = castraWorldCfg().view;
+  const w = el("cwWrap"); if(!w) return; const V = castraWView();
   CASTRA_W_UI.scale = Math.min(1.25, w.clientWidth/(V.cols*48));
   w.style.height = (V.rows*48*CASTRA_W_UI.scale)+"px";
   castraWorldCamera();
