@@ -52,7 +52,34 @@ const CASTRA_P_MISSIONS = [
             [ {line:"ruiterij",n:5,gap:16,lvl:3} ],
             [ {line:"rangen",n:2,gap:24,lvl:3}, {line:"legioen",n:6,gap:20,lvl:3}, {line:"licht",n:4,gap:18,lvl:3} ] ],
     reward:{ aes:110, frumentum:80, gloria:8 } },
+  /* Graecia (opent na m2) */
+  { id:"g1", region:"graecia", nm:"Labor primus", nl:"De eerste labor", map:"b", seed:2101, hpMult:4.4, needs:"m2",
+    waves:[ [ {line:"phalanx",n:5,gap:22,lvl:5} ],
+            [ {line:"kreta",n:5,gap:20,lvl:5} ],
+            [ {line:"macedonie",n:4,gap:18,lvl:5}, {line:"psili",n:4,gap:20,lvl:5} ],
+            [ {line:"phalanx",n:4,gap:20,lvl:5}, {line:"saters",n:3,gap:20,lvl:5} ] ],
+    reward:{ aes:150, frumentum:100, gloria:10 } },
+  { id:"g2", region:"graecia", nm:"Labyrinthus", nl:"Het labyrint", map:"a", seed:2202, hpMult:5.6, needs:"g1",
+    waves:[ [ {line:"psili",n:6,gap:18,lvl:6} ],
+            [ {line:"phalanx",n:6,gap:20,lvl:6}, {line:"kreta",n:3,gap:20,lvl:6} ],
+            [ {line:"macedonie",n:6,gap:16,lvl:6} ],
+            [ {line:"gryps",n:3,gap:24,lvl:6}, {line:"phalanx",n:6,gap:18,lvl:6}, {line:"psili",n:4,gap:18,lvl:6} ] ],
+    reward:{ aes:190, frumentum:130, gloria:12 } },
+  /* Troia (opent na g1) */
+  { id:"t1", region:"troia", nm:"Muri Troiae", nl:"De muren van Troje", map:"b", seed:3101, hpMult:5.0, needs:"g1",
+    waves:[ [ {line:"phalanx",n:6,gap:20,lvl:8} ],
+            [ {line:"macedonie",n:5,gap:18,lvl:8}, {line:"psili",n:4,gap:18,lvl:8} ],
+            [ {line:"kreta",n:6,gap:16,lvl:8} ],
+            [ {line:"phalanx",n:6,gap:16,lvl:8}, {line:"macedonie",n:4,gap:16,lvl:8}, {line:"rangen",n:2,gap:20,lvl:8} ] ],
+    reward:{ aes:240, frumentum:160, gloria:14 } },
+  { id:"t2", region:"troia", nm:"Equus ligneus", nl:"Het houten paard", map:"a", seed:3202, hpMult:6.5, needs:"t1",
+    waves:[ [ {line:"macedonie",n:7,gap:16,lvl:9} ],
+            [ {line:"phalanx",n:7,gap:18,lvl:9}, {line:"kreta",n:4,gap:18,lvl:9} ],
+            [ {line:"harpijen",n:4,gap:20,lvl:9}, {line:"psili",n:6,gap:16,lvl:9} ],
+            [ {line:"gryps",n:3,gap:22,lvl:9}, {line:"macedonie",n:6,gap:14,lvl:9}, {line:"phalanx",n:6,gap:16,lvl:9} ] ],
+    reward:{ aes:300, frumentum:200, gloria:18 } },
 ];
+for(const m of CASTRA_P_MISSIONS){ if(!m.region) m.region = "latium"; }
 
 /* Uiterlijk per soldatenlijn (alleen lagen waarvoor top-down sprites bestaan). */
 const CASTRA_P_LOOK = {

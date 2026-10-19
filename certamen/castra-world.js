@@ -10,28 +10,39 @@
    Laadt NA castra-map.js, castra.js en castra-venatio.js.
    ============================================================================ */
 
-const CASTRA_WORLD = {
-  cols:32, rows:24, seed:20261020, view:{ cols:16, rows:11 },
-  start:{ x:15, y:22 },
-  exit:[ {x:15,y:23}, {x:16,y:23} ],
-  river:{ x0:27, x1:28, bridgeY:[12,13] },   // de Tiber; alleen de brug is begaanbaar
-  encounterChance:0.14,
-  // Zones: het terrein (CASTRA_VENATIO.latium.terrains[].id) van het hoge gras erin.
-  zones:[
-    { t:"silva",   x:2,  y:3,  w:11, h:10 },
-    { t:"via",     x:14, y:1,  w:4,  h:9  },
-    { t:"campus",  x:18, y:11, w:12, h:9  },
-    { t:"tiberis", x:21, y:2,  w:6,  h:8  },
-  ],
+const CASTRA_WORLD_BASE = { cols:32, rows:24, view:{ cols:16, rows:11 }, start:{ x:15, y:22 }, exit:[ {x:15,y:23}, {x:16,y:23} ], encounterChance:0.14 };
+// Elke regio: ondergrond, wegen (rechthoeken), water (met optionele brug), zones (= terrein van het hoge gras),
+// bomenset. De NPC's (helden) staan in CASTRA_HERO_DATA[id].world / .region.
+const CASTRA_WORLDS = {
+  latium: { ...CASTRA_WORLD_BASE, id:"latium", nm:"Latium", icon:"🌿", seed:20261020, base:"grass", road:"sand", bank:"sand2",
+    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:12,x1:29,y1:13} ],
+    water:[ { x0:27, x1:28, bridgeY:[12,13] } ],               // de Tiber; alleen de brug is begaanbaar
+    zones:[ { t:"silva", x:2, y:3, w:11, h:10 }, { t:"via", x:14, y:1, w:4, h:9 }, { t:"campus", x:18, y:11, w:12, h:9 }, { t:"tiberis", x:21, y:2, w:6, h:8 } ],
+    trees:["tree_a","tree_b"], big:"tree_big", sparse:0.07, dense:0.22, denseZone:"silva" },
+  graecia: { ...CASTRA_WORLD_BASE, id:"graecia", nm:"Graecia", icon:"🏛️", seed:20261101, base:"sand2", road:"stone", bank:"sand",
+    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:8,x1:26,y1:9} ],
+    water:[ { x0:28, x1:29, bridgeY:null } ],                    // de Egeïsche Zee
+    zones:[ { t:"mons", x:2, y:2, w:10, h:6 }, { t:"olea", x:2, y:11, w:12, h:10 }, { t:"urbs", x:17, y:10, w:6, h:11 }, { t:"litus", x:23, y:2, w:5, h:19 } ],
+    trees:["tree_a","palm"], big:"tree_big2", sparse:0.06, dense:0.18, denseZone:"olea" },
+  troia: { ...CASTRA_WORLD_BASE, id:"troia", nm:"Troia", icon:"🏰", seed:20261201, base:"sand2", road:"sand", bank:"sand",
+    roads:[ {x0:15,y0:1,x1:16,y1:23}, {x0:2,y0:14,x1:27,y1:15} ],
+    water:[ { x0:10, x1:11, bridgeY:[14,15] }, { x0:28, x1:29, bridgeY:null } ],   // Scamander (met brug) en de zee
+    zones:[ { t:"scamander", x:3, y:2, w:6, h:20 }, { t:"muros", x:17, y:2, w:9, h:9 }, { t:"campus", x:17, y:16, w:9, h:6 }, { t:"litus", x:26, y:2, w:2, h:20 } ],
+    trees:["palm","tree_b"], big:"tree_big", sparse:0.05, dense:0.10, denseZone:"scamander" },
 };
-let CASTRA_WORLD_BUILT = null;
+let CASTRA_W_REGION = "latium";
+function castraWorldCfg(){ return CASTRA_WORLDS[CASTRA_W_REGION]; }
+// Regio's ontgrendelen via proelium-missies (zie CASTRA_P_MISSIONS)
+const CASTRA_REGION_NEEDS = { latium:null, graecia:"m2", troia:"g1" };
+function castraRegionOpen(id){ const n = CASTRA_REGION_NEEDS[id]; return !n || castraPMissionDone(n); }
+let CASTRA_WORLD_BUILT = {};   // per regio gecachet
 let CASTRA_W_UI = { px:0, py:0, dir:"up", frame:1, moving:false, scale:1, keyFn:null, resizeFn:null };
 
 function castraWorldDef(){
-  const W = CASTRA_WORLD, cols = W.cols, rows = W.rows, rng = castraMapRng(W.seed);
-  const g = castraGroundGrid(cols, rows, "grass"), tall = {}, used = {}, pieces = [], walls = [];
-  const road = (x,y)=> ((x===15||x===16) && y>=1) || ((y===12||y===13) && x>=2 && x<=29);
-  for(let y=0;y<rows;y++) for(let x=0;x<cols;x++) if(road(x,y)) g[y][x]="sand";
+  const W = castraWorldCfg(), cols = W.cols, rows = W.rows, rng = castraMapRng(W.seed);
+  const g = castraGroundGrid(cols, rows, W.base), tall = {}, used = {}, pieces = [], walls = [];
+  const road = (x,y)=>W.roads.some(r=>x>=r.x0&&x<=r.x1&&y>=r.y0&&y<=r.y1);
+  for(let y=0;y<rows;y++) for(let x=0;x<cols;x++) if(road(x,y)) g[y][x]=W.road;
   const zoneAt = (x,y)=>W.zones.find(z=>x>=z.x&&x<z.x+z.w&&y>=z.y&&y<z.y+z.h);
   const exitCell = (x,y)=>W.exit.some(e=>e.x===x&&e.y===y);
   // rand: bomen langs de rand (solide muur van bomen), met de uitgang open
@@ -39,17 +50,19 @@ function castraWorldDef(){
   for(let y=0;y<rows;y++) for(let x=0;x<cols;x++){
     if(!ring(x,y) || exitCell(x,y)) continue;
     walls.push([x,y]); used[x+","+y]=1;
-    if(y-1>=0 || true) pieces.push({ o:((x+y)%2?"tree_a":"tree_b"), x, y:y-1, noSolid:true });
+    pieces.push({ o:W.trees[(x+y)%2], x, y:y-1, noSolid:true });
   }
-  // de Tiber: water (geblokkeerd) met een brug waar de weg doorheen loopt
-  for(let y=1;y<rows-1;y++) for(let x=W.river.x0;x<=W.river.x1;x++){
-    used[x+","+y]=1;
-    if(W.river.bridgeY.includes(y)) g[y][x]="plank";
-    else { g[y][x]="water"; walls.push([x,y]); }
-  }
-  for(let y=1;y<rows-1;y++){ g[y][W.river.x0-1] = g[y][W.river.x0-1]==="grass" ? "sand2" : g[y][W.river.x0-1]; g[y][W.river.x1+1] = g[y][W.river.x1+1]==="grass" ? "sand2" : g[y][W.river.x1+1]; }
+  // water (geblokkeerd), met een brug waar de weg doorheen loopt
+  W.water.forEach(wt=>{
+    for(let y=1;y<rows-1;y++) for(let x=wt.x0;x<=wt.x1;x++){
+      used[x+","+y]=1;
+      if(wt.bridgeY && wt.bridgeY.includes(y)) g[y][x]="plank";
+      else { g[y][x]="water"; walls.push([x,y]); }
+    }
+    for(let y=1;y<rows-1;y++) [wt.x0-1, wt.x1+1].forEach(bx=>{ if(g[y][bx]===W.base) g[y][bx] = W.bank; });
+  });
   // plekken van personen vrijhouden (ze worden dynamisch geblokkeerd, zie castraWBlocked)
-  Object.keys(CASTRA_NPCS).forEach(id=>{ const n = CASTRA_NPCS[id]; used[n.world.x+","+n.world.y]=1; });
+  Object.keys(CASTRA_NPCS).forEach(id=>{ const n = CASTRA_NPCS[id]; if(n.region===W.id) used[n.world.x+","+n.world.y]=1; });
   // hoog gras per zone (niet op wegen), met vaste willekeur
   W.zones.forEach(z=>{
     for(let y=z.y;y<z.y+z.h;y++) for(let x=z.x;x<z.x+z.w;x++){
@@ -63,13 +76,13 @@ function castraWorldDef(){
   const free = (x,y)=>!used[x+","+y] && !road(x,y) && !tall[x+","+y] && !(Math.abs(x-W.start.x)<4 && Math.abs(y-W.start.y)<4);
   for(let y=2;y<rows-3;y++) for(let x=1;x<cols-1;x++){
     if(!free(x,y)) continue;
-    const z = zoneAt(x,y), p = z && z.t==="silva" ? 0.22 : 0.07, r = rng();
+    const z = zoneAt(x,y), p = z && z.t===W.denseZone ? W.dense : W.sparse, r = rng();
     if(r < p && free(x,y+1)){
       const big = rng()<0.25 && free(x+1,y) && free(x+1,y+1);
-      if(big){ pieces.push({ o:"tree_big", x, y }); [[x,y],[x+1,y],[x,y+1],[x+1,y+1]].forEach(c=>used[c[0]+","+c[1]]=1); }
-      else { pieces.push({ o:rng()<0.5?"tree_a":"tree_b", x, y }); used[x+","+y]=1; used[x+","+(y+1)]=1; }
+      if(big){ pieces.push({ o:W.big, x, y }); [[x,y],[x+1,y],[x,y+1],[x+1,y+1]].forEach(c=>used[c[0]+","+c[1]]=1); }
+      else { pieces.push({ o:W.trees[rng()<0.5?0:1], x, y }); used[x+","+y]=1; used[x+","+(y+1)]=1; }
     } else if(r < p+0.06){
-      pieces.push({ o:["flower_w","flower_p","flower_b","flower_o","plant_a","plant_b","fern"][Math.floor(rng()*7)], x, y }); used[x+","+y]=1;
+      pieces.push({ o:["flower_w","flower_p","flower_b","flower_o","plant_a","plant_b","fern","rock_brown","stones"][Math.floor(rng()*9)], x, y }); used[x+","+y]=1;
     }
   }
   // bord naar het kamp bij de uitgang
@@ -79,26 +92,26 @@ function castraWorldDef(){
 // Geblokkeerd = vaste kaart OF een zichtbare persoon op die cel.
 function castraWBlocked(x,y){ return !!castraWorldBuilt().blocked[x+","+y] || !!castraNpcAt(x,y); }
 function castraWorldBuilt(){
-  if(!CASTRA_WORLD_BUILT){
+  const rid = CASTRA_W_REGION;
+  if(!CASTRA_WORLD_BUILT[rid]){
     const def = castraWorldDef();
-    // ring-bomen: alleen tekenen, de muur zelf staat in def.walls
-    const logic = castraMapLogic({ ...def, pieces: def.pieces.map(p=>p.noSolid ? { ...p, o:p.o } : p) });
+    const logic = castraMapLogic(def);
     def.pieces.filter(p=>p.noSolid).forEach(p=>{
       const O = CASTRA_OBJ[p.o]; const bx = p.x, by = p.y+O.h-1;
       if(by>=0 && !def.walls.some(w=>w[0]===bx&&w[1]===by)) delete logic.blocked[bx+","+by];
     });
-    logic.tall = def.tall; CASTRA_WORLD_BUILT = logic;
+    logic.tall = def.tall; CASTRA_WORLD_BUILT[rid] = logic;
   }
-  return CASTRA_WORLD_BUILT;
+  return CASTRA_WORLD_BUILT[rid];
 }
 
 SCREENS.castraWorld = function(){
   document.body.classList.remove("greek");
   if(!CASTRA) castraLoad();
-  const W = CASTRA_WORLD, st = CASTRA.world || W.start;
+  const W = castraWorldCfg(), st = (CASTRA.worlds && CASTRA.worlds[W.id]) || (W.id==="latium" && CASTRA.world) || W.start;
   CASTRA_W_UI.px = st.x; CASTRA_W_UI.py = st.y; CASTRA_W_UI.dir = "up"; CASTRA_W_UI.frame = 1; CASTRA_W_UI.moving = false;
   H(brand(true)+`
-  <div class="scrhead"><button class="back" onclick="castraWorldLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>🌿 Latium</h2></div>
+  <div class="scrhead"><button class="back" onclick="castraWorldLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>${W.icon} ${W.nm}</h2></div>
   <div id="cwWrap" style="position:relative;width:100%;margin:0 auto;overflow:hidden;border:2px solid var(--hi,#d4af37);border-radius:10px;background:#2c3a1f">
     <div id="cwMap" style="position:absolute;top:0;left:0;width:${W.cols*48}px;height:${W.rows*48}px;transform-origin:top left;transition:transform .16s linear"></div>
   </div>
@@ -129,12 +142,15 @@ function castraWorldDetach(){
   if(CASTRA_W_UI.keyFn) document.removeEventListener("keydown", CASTRA_W_UI.keyFn);
   if(CASTRA_W_UI.resizeFn) window.removeEventListener("resize", CASTRA_W_UI.resizeFn);
 }
+function castraWorldSavePos(x, y){
+  const w = CASTRA.worlds || (CASTRA.worlds = {}); w[CASTRA_W_REGION] = { x, y }; castraSave();
+}
 function castraWorldLeave(){
-  CASTRA.world = { x:CASTRA_W_UI.px, y:CASTRA_W_UI.py }; castraSave(); castraWorldDetach();
-  CASTRA.pos = { x:7, y:1 }; castraSave(); go("castraHome");
+  castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraWorldDetach();
+  go("castraRegions");
 }
 function castraWorldRender(){
-  const map = el("cwMap"); if(!map) return; const W = CASTRA_WORLD;
+  const map = el("cwMap"); if(!map) return; const W = castraWorldCfg();
   map.innerHTML = `<canvas id="cwBelow" style="position:absolute;left:0;top:0;image-rendering:pixelated"></canvas>
     <div id="cwAv" style="position:absolute;width:48px;height:48px;transition:left .16s linear,top .16s linear;pointer-events:none;z-index:5"></div>
     <div id="cwNpcs"></div>
@@ -160,14 +176,14 @@ function castraWorldAvatar(){
 }
 // Camera: avatar in het midden, vastgeklemd aan de kaartranden.
 function castraWorldCamera(){
-  const W = CASTRA_WORLD, V = W.view, s = CASTRA_W_UI.scale, m = el("cwMap"); if(!m) return;
+  const W = castraWorldCfg(), V = W.view, s = CASTRA_W_UI.scale, m = el("cwMap"); if(!m) return;
   const camX = Math.max(0, Math.min(W.cols*48 - V.cols*48, CASTRA_W_UI.px*48 + 24 - V.cols*24));
   const camY = Math.max(0, Math.min(W.rows*48 - V.rows*48, CASTRA_W_UI.py*48 + 24 - V.rows*24));
   m.style.transform = `translate(${-camX*s}px,${-camY*s}px) scale(${s})`;
   CASTRA_W_UI.camX = camX; CASTRA_W_UI.camY = camY;
 }
 function castraWorldFit(){
-  const w = el("cwWrap"); if(!w) return; const V = CASTRA_WORLD.view;
+  const w = el("cwWrap"); if(!w) return; const V = castraWorldCfg().view;
   CASTRA_W_UI.scale = Math.min(1.25, w.clientWidth/(V.cols*48));
   w.style.height = (V.rows*48*CASTRA_W_UI.scale)+"px";
   castraWorldCamera();
@@ -178,7 +194,7 @@ function castraWStep(dir){
   if(!el("cwMap")) return false;
   const d = CASTRA_DELTA[dir]; if(!d) return false;
   CASTRA_W_UI.dir = dir;
-  const nx = CASTRA_W_UI.px+d[0], ny = CASTRA_W_UI.py+d[1], W = CASTRA_WORLD;
+  const nx = CASTRA_W_UI.px+d[0], ny = CASTRA_W_UI.py+d[1], W = castraWorldCfg();
   if(nx<0||ny<0||nx>=W.cols||ny>=W.rows){ castraWorldAvatar(); return false; }
   if(castraWBlocked(nx,ny)){
     castraWorldAvatar();
@@ -191,7 +207,7 @@ function castraWStep(dir){
   castraWorldAvatar();
   setTimeout(()=>{
     CASTRA_W_UI.moving = false; CASTRA_W_UI.frame = 1; castraWorldAvatar();
-    CASTRA.world = { x:nx, y:ny }; castraSave();
+    castraWorldSavePos(nx, ny);
     if(W.exit.some(e=>e.x===nx&&e.y===ny)){ castraWorldLeave(); return; }
     const terrain = castraWorldBuilt().tall[nx+","+ny];
     if(terrain && Math.random() < W.encounterChance) castraWorldEncounter(terrain);
@@ -199,8 +215,8 @@ function castraWStep(dir){
   return true;
 }
 function castraWorldEncounter(terrainId){
-  CASTRA.world = { x:CASTRA_W_UI.px, y:CASTRA_W_UI.py }; castraSave(); castraWorldDetach();
-  CASTRA_V = castraMakeEncounter("latium", terrainId);
+  castraWorldSavePos(CASTRA_W_UI.px, CASTRA_W_UI.py); castraSave(); castraWorldDetach();
+  CASTRA_V = castraMakeEncounter(CASTRA_W_REGION, terrainId);
   CASTRA_V.log = []; CASTRA_V.round = 0; CASTRA_V.fromWorld = true;
   CASTRA_V_PENDING = true;
   go("castraVenatio");
@@ -222,7 +238,7 @@ function castraWorldTap(e){
   if(path && path.length) castraWorldWalk(path);
 }
 function castraWorldPath(sx,sy,tx,ty){
-  const W = CASTRA_WORLD;
+  const W = castraWorldCfg();
   if(tx<0||ty<0||tx>=W.cols||ty>=W.rows||castraWBlocked(tx,ty)) return null;
   const prev = {}, q=[[sx,sy]]; prev[sx+","+sy] = null;
   while(q.length){
@@ -241,3 +257,24 @@ function castraWorldWalk(path, done){
   const next = ()=>{ if(!path.length){ if(done) setTimeout(done, 220); return; } if(!el("cwMap")) return; if(castraWStep(path.shift())) setTimeout(next,190); else setTimeout(next,60); };
   next();
 }
+
+/* ---------- regiokeuze (kaart van de wereld) ---------- */
+SCREENS.castraRegions = function(){
+  document.body.classList.remove("greek");
+  if(!CASTRA) castraLoad();
+  const cards = Object.keys(CASTRA_WORLDS).map(id=>{
+    const r = CASTRA_WORLDS[id], open = castraRegionOpen(id);
+    const heroes = Object.keys(CASTRA_HERO_DATA).filter(h=>CASTRA_HERO_DATA[h].region===id);
+    const got = heroes.filter(h=>castraHero(h)).length;
+    const need = CASTRA_REGION_NEEDS[id], nm = need ? CASTRA_P_MISSIONS.find(m=>m.id===need) : null;
+    return `<button class="tile" ${open?"":"disabled style=\"opacity:.5\""} onclick="castraGoRegion('${id}')">
+      <span class="ic" style="font-size:36px">${open?r.icon:"🔒"}</span>
+      <h3>${esc(r.nm)} <small>⭐ ${got} / ${heroes.length}</small></h3>
+      <p>${open ? castraLaText("venare_in")+" "+esc(r.nm)+"." : castraLaText("clausum")+": "+esc(nm?nm.nm:"")}</p></button>`;
+  }).join("");
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="castraRegionsLeave()">${iconSVG("shield",20,"currentColor")}</button><h2>🗺️ ${castraLaHTML("Quo venaris, dux?","Waar ga je jagen, leider?","regio_kies")}</h2></div>
+  ${cards}${foot()}`);
+};
+function castraGoRegion(id){ if(!castraRegionOpen(id)) return; CASTRA_W_REGION = id; go("castraWorld"); }
+function castraRegionsLeave(){ CASTRA.pos = { x:7, y:1 }; castraSave(); go("castraHome"); }

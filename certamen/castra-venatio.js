@@ -201,10 +201,12 @@ function castraVFinish(){
     }
     V.quests = (typeof castraQuestOnWin==="function") ? castraQuestOnWin(V) : [];
     const reg = CASTRA_VENATIO[V.region];
-    if(rng() < reg.traceChance){
-      const left = reg.traces.filter(h=>!(CASTRA.traces&&CASTRA.traces[h]));
-      if(left.length){ const h = left[Math.floor(rng()*left.length)]; (CASTRA.traces||(CASTRA.traces={}))[h]=1; V.trace = h; }
-    }
+    // Spoor naar een held: kans per winst, met een garantie na 5 winsten zonder spoor ("pity").
+    const left = reg.traces.filter(h=>!(CASTRA.traces&&CASTRA.traces[h]));
+    const pity = CASTRA.tracePity||0;
+    if(left.length && (rng() < reg.traceChance || pity >= 5)){
+      const h = left[Math.floor(rng()*left.length)]; (CASTRA.traces||(CASTRA.traces={}))[h]=1; V.trace = h; CASTRA.tracePity = 0;
+    } else if(left.length) CASTRA.tracePity = pity+1;
   }
   castraSave();
 }

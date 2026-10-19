@@ -16,9 +16,11 @@ function castraPMissionOpen(m){ return !m.needs || castraPMissionDone(m.needs); 
 SCREENS.castraProelium = function(){
   document.body.classList.remove("greek");
   if(!CASTRA) castraLoad();
+  let lastRegion = null;
   const cards = CASTRA_P_MISSIONS.map(m=>{
     const open = castraPMissionOpen(m), done = castraPMissionDone(m.id), sc = castraPScout(m);
-    return `<div class="panel" style="${open?"":"opacity:.5"}">
+    const head = m.region!==lastRegion ? (lastRegion = m.region, `<h3 style="margin:14px 2px 4px">${CASTRA_WORLDS[m.region].icon} ${esc(CASTRA_WORLDS[m.region].nm)}</h3>`) : "";
+    return head + `<div class="panel" style="${open?"":"opacity:.5"}">
       <h3>${done?"✔ ":open?"⚔️ ":"🔒 "}${castraLaHTML(m.nm, m.nl, "m_"+m.id)}</h3>
       ${open?`<div style="font-size:15px;margin:4px 0 8px"><span style="opacity:.8">${castraLaText("explorator")}</span> ${castraLaHTML(sc.la, sc.nl, "scout_"+m.id)}</div>
         <button class="btn btn-gold" onclick="castraBStart('${m.id}')">${castraLaText("proelium_ini")}</button>`
