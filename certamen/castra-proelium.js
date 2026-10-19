@@ -153,9 +153,10 @@ function castraPSim(mission, towerSoldiers){
 }
 function castraPMakeTower(sim, s, x, y){
   let st, type, look = null;
-  if(s.hero){ st = castraHeroStats(s.h); type = CASTRA_HERO_DATA[s.h.id].type; look = CASTRA_HERO_DATA[s.h.id].look; }
+  if(s.snap){ st = s.snap.st; type = s.snap.type; look = s.snap.look || null; }
+  else if(s.hero){ st = castraHeroStats(s.h); type = CASTRA_HERO_DATA[s.h.id].type; look = CASTRA_HERO_DATA[s.h.id].look; }
   else { st = s.dux ? { ...CASTRA_V_BAL.dux } : castraStats(s); type = castraLine(s.line).type; }
-  return { id:sim.nextId++, sid:s.id, line:s.line, look, type, x, y, cx:x*1000+500, cy:y*1000+500, st, cd:0,
+  return { id:sim.nextId++, sid:s.id, line:s.line, look, type, owner:s.owner||null, x, y, cx:x*1000+500, cy:y*1000+500, st, cd:0,
            range: CASTRA_P.rangeBase + st.ambitus*CASTRA_P.rangePerAmb, cooldown: Math.max(CASTRA_P.cdMin, CASTRA_P.cdBase - st.celeritas*CASTRA_P.cdPerCel), buffed:false };
 }
 // Start de volgende golf (maakt de spawnrij).
