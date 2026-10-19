@@ -13,8 +13,7 @@ Er staan **20 commits lokaal op `main` die nog niet gepusht zijn** (alles van Ca
 Vóór je pusht:
 
 - [ ] `git status`: alleen de ongevolgde `certamen/tools/skilltree-balance-result*.json` mogen nog los staan (dat zijn oude simulatie-uitvoerbestanden, niet van dit project).
-- [ ] **LET OP: de nieuwe regels voor Legio en Commercium (2026-10-27) zijn nog NIET gepubliceerd.** Zonder die regels geven `castraLegio/…` en `castraTrades/…` "permission denied": het evenement starten en ruilen werken dan niet (de rest van het spel wel). Publiceren: `firebase deploy --only database --project kthulp-certamen`.
-- [ ] **Firebase-regels staan live** (gepubliceerd op 2026-10-22 met `firebase deploy --only database --project kthulp-certamen`). Controle: Console → Realtime Database → Regels moet `classAnalyticsCastra` en `castra` onder `identities/$klas/$lid` bevatten. Zo niet: opnieuw publiceren vanuit `certamen/database.rules.json`.
+- [ ] **Firebase-regels staan live** (laatst gepubliceerd op 2026-10-27, incl. Legio en Commercium; eerder 2026-10-22, met `firebase deploy --only database --project kthulp-certamen`). Controle: Console → Realtime Database → Regels moet `classAnalyticsCastra` en `castra` onder `identities/$klas/$lid` bevatten. Zo niet: opnieuw publiceren vanuit `certamen/database.rules.json`.
 - [ ] Besluit bewust over de **RPG Maker MV-tilesets** (`certamen/assets/tilesets/`, 1,3 MB). Je gaf toestemming om ze in de repo te laten; de licentie voor gebruik buiten RPG Maker zelf is niet uitgezocht (zie README in die map).
 - [ ] Besluit over de **sprites van derden** in `certamen/assets/sprites-topdown/` (hiddenone-packs uit je Downloads). Zelfde vraag: mogen ze op een openbare site?
 
