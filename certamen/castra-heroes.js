@@ -27,7 +27,7 @@ const CASTRA_H = {
 /* ketenstappen: kill (n vijanden in terrein), win (proelium-missie), persuade (keuzevraag) */
 const CASTRA_HERO_DATA = {
   aeneas: {
-    nm:"Aeneas", type:"inf", affinity:"praetorium", always:true, world:{ x:13, y:11, dir:"right" },
+    nm:"Aeneas", region:"latium", type:"inf", affinity:"praetorium", always:true, world:{ x:13, y:11, dir:"right" },
     base:{ vita:64, impetus:13, tutela:12, celeritas:6, ambitus:3 },
     look:{ huid:"getint", haar:"kort", haarkleur:"bruin", baard:"baard", armor:"ceremonieel", cape:"lang", capekleur:"rood", helm:"geen", schild:"geen", wapen:"zwaard" },
     chain:[
@@ -56,7 +56,7 @@ const CASTRA_HERO_DATA = {
     ],
   },
   romulus: {
-    nm:"Romulus", type:"inf", affinity:"contubernia", world:{ x:14, y:5, dir:"right" },
+    nm:"Romulus", region:"latium", type:"inf", affinity:"praetorium", world:{ x:14, y:5, dir:"right" },
     base:{ vita:58, impetus:15, tutela:10, celeritas:7, ambitus:3 },
     look:{ huid:"licht", haar:"wild", haarkleur:"zwart", baard:"geen", armor:"ceremonieel", cape:"kort", capekleur:"rood", helm:"geen", schild:"geen", wapen:"zwaard" },
     chain:[
@@ -85,7 +85,7 @@ const CASTRA_HERO_DATA = {
     ],
   },
   horatius: {
-    nm:"Horatius Cocles", type:"inf", affinity:"campus", world:{ x:26, y:11, dir:"down" },
+    nm:"Horatius Cocles", region:"latium", type:"inf", affinity:"campus", world:{ x:26, y:11, dir:"down" },
     base:{ vita:70, impetus:12, tutela:15, celeritas:5, ambitus:2 },
     look:{ huid:"olijf", haar:"kort", haarkleur:"zwart", baard:"snor", armor:"middel", cape:"kort", capekleur:"rood", helm:"open", schild:"geen", wapen:"zwaard" },
     chain:[
@@ -114,6 +114,188 @@ const CASTRA_HERO_DATA = {
     ],
   },
 };
+
+
+/* ---------- compacte bouwstenen voor de overige helden ---------- */
+const _K = (region,terrain,need,ask,hud,done)=>({ kind:"kill", region, terrain, need, ask:{la:ask[0],nl:ask[1]}, hud:{la:hud[0],nl:hud[1]}, done:{la:done[0],nl:done[1]} });
+const _W = (mission,ask,hud,done)=>({ kind:"win", mission, ask:{la:ask[0],nl:ask[1]}, hud:{la:hud[0],nl:hud[1]}, done:{la:done[0],nl:done[1]} });
+const _P = (ask,good,b1,b2)=>({ kind:"persuade", ask:{la:ask[0],nl:ask[1]},
+  opts:[ {la:good[0],nl:good[1],ok:true}, {la:b1[0],nl:b1[1]}, {la:b2[0],nl:b2[1]} ], join:{ la:"Tecum venio, dux!", nl:"Ik ga met je mee, leider!" } });
+const _T = (t,q,good,b1,b2)=>({ la:t[0], nl:t[1], q:{ la:q[0], nl:q[1], opts:[ {la:good[0],nl:good[1],ok:true}, {la:b1[0],nl:b1[1]}, {la:b2[0],nl:b2[1]} ] } });
+const _look = (o)=>({ huid:"licht", haar:"kort", haarkleur:"bruin", baard:"geen", armor:"middel", cape:"geen", capekleur:"rood", helm:"geen", schild:"geen", wapen:"zwaard", ...o });
+const _WIN_M1 = ["Proelium primum vince.","Win het eerste gevecht."];
+
+Object.assign(CASTRA_HERO_DATA, {
+  /* ----- Latium ----- */
+  cloelia: { nm:"Cloelia", region:"latium", type:"cav", affinity:"lignatio", world:{ x:24, y:16, dir:"left" },
+    base:{ vita:48, impetus:14, tutela:7, celeritas:11, ambitus:3 },
+    look:_look({ huid:"licht", haar:"vlecht", haarkleur:"bruin", armor:"robe", cape:"kort", capekleur:"blauw" }),
+    chain:[
+      _K("latium","tiberis",3, ["Salve! Cloelia sum. Obses fui, sed ex castris fugi. Tres hostes ad Tiberim vince.","Gegroet! Ik ben Cloelia. Ik was gijzelaar, maar ik ben uit het kamp gevlucht. Versla drie vijanden bij de Tiber."], ["Hostes ad Tiberim vince!","Versla vijanden bij de Tiber!"], ["Optime! Tiberim defendisti.","Uitstekend! Je hebt de Tiber verdedigd."]),
+      _W("m3", ["Bene! Nunc Ardeam oppugna. Proelium tertium vince.","Goed! Val nu Ardea aan. Win het derde gevecht."], ["Proelium tertium vince!","Win het derde gevecht!"], ["Ardeam vicisti! Gratias tibi ago.","Je hebt Ardea verslagen! Ik dank je."]),
+      _P(["Per Tiberim equo transeo. Tu quoque audax es?","Ik steek de Tiber te paard over. Ben jij ook dapper?"], ["Ita, nihil timeo.","Ja, ik ben nergens bang voor."], ["Non, omnia timeo.","Nee, ik ben overal bang voor."], ["Domi maneo.","Ik blijf thuis."]),
+    ],
+    talks:[
+      _T(["Obses apud hostes eram. Nocte fugio.","Ik was gijzelaar bij de vijanden. 's Nachts vlucht ik."], ["Quando Cloelia fugit?","Wanneer vlucht Cloelia?"], ["Nocte.","'s Nachts."], ["Mane.","'s Ochtends."], ["Vespere.","'s Avonds."]),
+      _T(["Equum capio et Tiberim transeo.","Ik pak een paard en steek de Tiber over."], ["Quid Cloelia capit?","Wat pakt Cloelia?"], ["Equum.","Een paard."], ["Gladium.","Een zwaard."], ["Navem.","Een schip."]),
+      _T(["Romani me laudant. Statua mea in via est.","De Romeinen prijzen mij. Mijn standbeeld staat aan de weg."], ["Quis Cloeliam laudat?","Wie prijst Cloelia?"], ["Romani.","De Romeinen."], ["Hostes.","De vijanden."], ["Nemo.","Niemand."]),
+    ] },
+  mucius: { nm:"Mucius Scaevola", region:"latium", type:"inf", affinity:"metallum", world:{ x:20, y:7, dir:"down" },
+    base:{ vita:62, impetus:15, tutela:11, celeritas:6, ambitus:2 },
+    look:_look({ huid:"getint", haar:"kort", haarkleur:"zwart", baard:"sikensnor", armor:"middel", cape:"lang", capekleur:"groen", helm:"bandana" }),
+    chain:[
+      _K("latium","via",3, ["Salve! Mucius sum. Hostes in via sunt. Tres hostes in via vince.","Gegroet! Ik ben Mucius. Er zijn vijanden op de weg. Versla drie vijanden op de weg."], ["Hostes in via vince!","Versla vijanden op de weg!"], ["Optime! Viam purgavisti.","Uitstekend! Je hebt de weg schoongemaakt."]),
+      _W("m3", ["Bene! Nunc Ardeam oppugna. Proelium tertium vince.","Goed! Val nu Ardea aan. Win het derde gevecht."], ["Proelium tertium vince!","Win het derde gevecht!"], ["Ardeam vicisti! Gratias tibi ago.","Je hebt Ardea verslagen! Ik dank je."]),
+      _P(["Dextram in igne teneo. Num dolorem timeo?","Ik houd mijn rechterhand in het vuur. Ben ik soms bang voor pijn?"], ["Non timeo, nam patriam amo.","Nee, want ik hou van mijn vaderland."], ["Ita, dolorem timeo.","Ja, ik ben bang voor pijn."], ["Ignem amo.","Ik hou van vuur."]),
+    ],
+    talks:[
+      _T(["Ad regem hostium eo. Eum necare volo.","Ik ga naar de koning van de vijand. Ik wil hem doden."], ["Ad quem Mucius it?","Naar wie gaat Mucius?"], ["Ad regem.","Naar de koning."], ["Ad matrem.","Naar zijn moeder."], ["Ad amicum.","Naar een vriend."]),
+      _T(["Dextram in ignem pono.","Ik leg mijn rechterhand in het vuur."], ["Quid Mucius in ignem ponit?","Wat legt Mucius in het vuur?"], ["Dextram.","Zijn rechterhand."], ["Librum.","Een boek."], ["Pedem.","Zijn voet."]),
+      _T(["Rex me dimittit. Nomen meum Scaevola est.","De koning laat mij gaan. Mijn naam is Scaevola."], ["Quis Mucium dimittit?","Wie laat Mucius gaan?"], ["Rex.","De koning."], ["Mater.","Zijn moeder."], ["Dux.","De leider."]),
+    ] },
+  camilla: { nm:"Camilla", region:"latium", type:"rng", affinity:"lignatio", world:{ x:6, y:9, dir:"right" },
+    base:{ vita:44, impetus:15, tutela:6, celeritas:12, ambitus:7 },
+    look:_look({ huid:"olijf", haar:"lang", haarkleur:"zwart", armor:"vodden", cape:"lang", capekleur:"groen", helm:"bandana" }),
+    chain:[
+      _K("latium","silva",4, ["Salve! Camilla sum. In silva habito. Quattuor hostes in silva vince.","Gegroet! Ik ben Camilla. Ik woon in het bos. Versla vier vijanden in het bos."], ["Hostes in silva vince!","Versla vijanden in het bos!"], ["Optime! Silvam servavisti.","Uitstekend! Je hebt het bos gered."]),
+      _W("m3", ["Bene! Nunc Ardeam oppugna. Proelium tertium vince.","Goed! Val nu Ardea aan. Win het derde gevecht."], ["Proelium tertium vince!","Win het derde gevecht!"], ["Ardeam vicisti! Gratias tibi ago.","Je hebt Ardea verslagen! Ik dank je."]),
+      _P(["Celeriter curro et sagittas mitto. Quid tu facis?","Ik ren snel en schiet pijlen. Wat doe jij?"], ["Celeriter curro et hostes pugno.","Ik ren snel en vecht tegen de vijanden."], ["Lente ambulo.","Ik loop langzaam."], ["In casa dormio.","Ik slaap in een huisje."]),
+    ],
+    talks:[
+      _T(["Silvas amo. Cum equis curro.","Ik hou van de bossen. Ik ren met de paarden."], ["Quid Camilla amat?","Waar houdt Camilla van?"], ["Silvas.","Van de bossen."], ["Naves.","Van schepen."], ["Urbem.","Van de stad."]),
+      _T(["Sagittas mitto et hostes vinco.","Ik schiet pijlen en versla de vijanden."], ["Quid Camilla mittit?","Wat schiet Camilla?"], ["Sagittas.","Pijlen."], ["Libros.","Boeken."], ["Aquam.","Water."]),
+      _T(["Pater me in silva nutrivit.","Mijn vader heeft mij in het bos grootgebracht."], ["Ubi pater Camillam nutrivit?","Waar bracht de vader Camilla groot?"], ["In silva.","In het bos."], ["In urbe.","In de stad."], ["In mari.","In de zee."]),
+    ] },
+
+  /* ----- Graecia ----- */
+  hercules: { nm:"Hercules", region:"graecia", type:"inf", affinity:"campus", world:{ x:8, y:5, dir:"down" },
+    base:{ vita:90, impetus:19, tutela:14, celeritas:6, ambitus:2 },
+    look:_look({ huid:"brons", haar:"wild", haarkleur:"bruin", baard:"baard", armor:"vodden", cape:"lang", capekleur:"oranje" }),
+    chain:[
+      _K("graecia","mons",4, ["Salve! Hercules sum. Leones in monte sunt. Quattuor hostes in monte vince.","Gegroet! Ik ben Hercules. Er zijn leeuwen op de berg. Versla vier vijanden op de berg."], ["Hostes in monte vince!","Versla vijanden op de berg!"], ["Optime! Montem purgavisti.","Uitstekend! Je hebt de berg schoongemaakt."]),
+      _W("g1", ["Bene! Nunc primum laborem facimus. Proelium vince.","Goed! Nu doen we de eerste labor. Win het gevecht."], ["Laborem primum vince!","Win de eerste labor!"], ["Laborem confecisti! Gratias tibi ago.","Je hebt de labor volbracht! Ik dank je."]),
+      _P(["Labores multos facio. Tu quoque laboras?","Ik doe veel opdrachten. Werk jij ook hard?"], ["Ita, fortiter laboro.","Ja, ik werk dapper."], ["Non, otium amo.","Nee, ik hou van rust."], ["Numquam laboro.","Ik werk nooit."]),
+    ],
+    talks:[
+      _T(["Leonem Nemeaeum vinco. Pellis eius me tegit.","Ik versla de Nemeïsche leeuw. Zijn huid bedekt mij."], ["Quid Hercules vincit?","Wat verslaat Hercules?"], ["Leonem.","Een leeuw."], ["Navem.","Een schip."], ["Murum.","Een muur."]),
+      _T(["Duodecim labores facio.","Ik voer twaalf opdrachten uit."], ["Quot labores Hercules facit?","Hoeveel opdrachten voert Hercules uit?"], ["Duodecim.","Twaalf."], ["Tres.","Drie."], ["Centum.","Honderd."]),
+      _T(["Hydram in palude vinco.","Ik versla de Hydra in het moeras."], ["Ubi est Hydra?","Waar is de Hydra?"], ["In palude.","In het moeras."], ["In caelo.","In de lucht."], ["In urbe.","In de stad."]),
+    ] },
+  perseus: { nm:"Perseus", region:"graecia", type:"cav", affinity:"metallum", world:{ x:24, y:12, dir:"left" },
+    base:{ vita:56, impetus:18, tutela:8, celeritas:13, ambitus:4 },
+    look:_look({ huid:"licht", haar:"hanekam", haarkleur:"blond", armor:"ceremonieel", cape:"engelenvleugels", helm:"geen" }),
+    chain:[
+      _K("graecia","litus",3, ["Salve! Perseus sum. Gorgones prope litus habitant. Tres hostes ad litus vince.","Gegroet! Ik ben Perseus. De Gorgonen wonen bij de kust. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Litus servavisti.","Uitstekend! Je hebt de kust gered."]),
+      _W("g1", ["Bene! Nunc Medusam oppugnamus. Proelium primum vince.","Goed! Nu gaan we Medusa aanvallen. Win het eerste gevecht."], ["Proelium vince!","Win het gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
+      _P(["Caput Medusae portare possum. Tu me iuvas?","Ik kan het hoofd van Medusa dragen. Help jij mij?"], ["Ita, te libenter iuvo.","Ja, ik help je graag."], ["Non, Medusam timeo!","Nee, ik ben bang voor Medusa!"], ["Nihil audio.","Ik hoor niets."]),
+    ],
+    talks:[
+      _T(["Medusa serpentes in capite habet.","Medusa heeft slangen op haar hoofd."], ["Quid Medusa in capite habet?","Wat heeft Medusa op haar hoofd?"], ["Serpentes.","Slangen."], ["Flores.","Bloemen."], ["Aurum.","Goud."]),
+      _T(["Talaria alata habeo. Per aerem volo.","Ik heb gevleugelde sandalen. Ik vlieg door de lucht."], ["Quid Perseus habet?","Wat heeft Perseus?"], ["Talaria alata.","Gevleugelde sandalen."], ["Navem magnam.","Een groot schip."], ["Equum album.","Een wit paard."]),
+      _T(["Andromedam servo et Medusam vinco.","Ik red Andromeda en versla Medusa."], ["Quam Perseus servat?","Wie redt Perseus?"], ["Andromedam.","Andromeda."], ["Helenam.","Helena."], ["Cloeliam.","Cloelia."]),
+    ] },
+  theseus: { nm:"Theseus", region:"graecia", type:"inf", affinity:"praetorium", world:{ x:19, y:12, dir:"down" },
+    base:{ vita:72, impetus:16, tutela:12, celeritas:8, ambitus:3 },
+    look:_look({ huid:"licht", haar:"middel", haarkleur:"bruin", baard:"geen", armor:"ceremonieel", cape:"kort", capekleur:"blauw", helm:"geen" }),
+    chain:[
+      _K("graecia","urbs",4, ["Salve! Theseus sum. Minotaurus in labyrintho est. Quattuor hostes in urbe vince.","Gegroet! Ik ben Theseus. De Minotaurus zit in het labyrint. Versla vier vijanden in de stad."], ["Hostes in urbe vince!","Versla vijanden in de stad!"], ["Optime! Urbem servavisti.","Uitstekend! Je hebt de stad gered."]),
+      _W("g2", ["Bene! Nunc labyrinthum intramus. Proelium secundum vince.","Goed! Nu gaan we het labyrint in. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Labyrinthum vicisti! Gratias tibi ago.","Je hebt het labyrint verslagen! Ik dank je."]),
+      _P(["Minotaurum in labyrintho quaero. Tu mecum venis?","Ik zoek de Minotaurus in het labyrint. Ga jij met mij mee?"], ["Ita, te sequor et fratres servo.","Ja, ik volg je en ik red de broers."], ["Non, labyrinthum timeo.","Nee, ik ben bang voor het labyrint."], ["Minotaurus amicus meus est.","De Minotaurus is mijn vriend."]),
+    ],
+    talks:[
+      _T(["Minotaurus in labyrintho habitat.","De Minotaurus woont in het labyrint."], ["Ubi Minotaurus habitat?","Waar woont de Minotaurus?"], ["In labyrintho.","In het labyrint."], ["In silva.","In het bos."], ["In mari.","In de zee."]),
+      _T(["Ariadna mihi filum dat.","Ariadne geeft mij een draad."], ["Quid Ariadna dat?","Wat geeft Ariadne?"], ["Filum.","Een draad."], ["Gladium.","Een zwaard."], ["Pecuniam.","Geld."]),
+      _T(["Minotaurum vinco et ex labyrintho exeo.","Ik versla de Minotaurus en ga uit het labyrint."], ["Quem Theseus vincit?","Wie verslaat Theseus?"], ["Minotaurum.","De Minotaurus."], ["Leonem.","De leeuw."], ["Hydram.","De Hydra."]),
+    ] },
+  atalanta: { nm:"Atalanta", region:"graecia", type:"rng", affinity:"lignatio", world:{ x:7, y:15, dir:"right" },
+    base:{ vita:46, impetus:17, tutela:6, celeritas:14, ambitus:7 },
+    look:_look({ huid:"olijf", haar:"vlecht", haarkleur:"bruin", armor:"vodden", cape:"kort", capekleur:"groen", helm:"bandana" }),
+    chain:[
+      _K("graecia","olea",4, ["Salve! Atalanta sum. In oleis venor. Quattuor hostes in oleis vince.","Gegroet! Ik ben Atalanta. Ik jaag in de olijfgaarden. Versla vier vijanden in de olijfgaarden."], ["Hostes in oleis vince!","Versla vijanden in de olijfgaarden!"], ["Optime! Olea servavisti.","Uitstekend! Je hebt de olijfgaarden gered."]),
+      _W("g1", ["Bene! Nunc aprum quaerimus. Proelium vince.","Goed! Nu zoeken we het everzwijn. Win het gevecht."], ["Proelium vince!","Win het gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
+      _P(["Celerrima sum. Tu celeriter curris?","Ik ben de snelste. Ren jij snel?"], ["Celeriter curro, sed te non vinco.","Ik ren snel, maar ik verslaag jou niet."], ["Numquam curro.","Ik ren nooit."], ["Lente curro et dormio.","Ik ren langzaam en slaap."]),
+    ],
+    talks:[
+      _T(["Aprum Calydonium sagittis vinco.","Ik versla het Calydonische everzwijn met pijlen."], ["Quid Atalanta vincit?","Wat verslaat Atalanta?"], ["Aprum.","Een everzwijn."], ["Leonem.","Een leeuw."], ["Draconem.","Een draak."]),
+      _T(["In cursu omnes viros vinco.","In het hardlopen versla ik alle mannen."], ["Quis celerrima est?","Wie is de snelste?"], ["Atalanta.","Atalanta."], ["Hercules.","Hercules."], ["Iason.","Jason."]),
+      _T(["Mala aurea me tardant.","Gouden appels houden mij op."], ["Quid Atalantam tardat?","Wat houdt Atalanta op?"], ["Mala aurea.","Gouden appels."], ["Aqua.","Water."], ["Nix.","Sneeuw."]),
+    ] },
+  iason: { nm:"Iason", region:"graecia", type:"inf", affinity:"lignatio", world:{ x:25, y:18, dir:"left" },
+    base:{ vita:66, impetus:15, tutela:11, celeritas:8, ambitus:3 },
+    look:_look({ huid:"getint", haar:"kort", haarkleur:"blond", baard:"geen", armor:"middel", cape:"kort", capekleur:"goud", helm:"open" }),
+    chain:[
+      _K("graecia","litus",3, ["Salve! Iason sum. Navem Argo aedifico. Tres hostes ad litus vince.","Gegroet! Ik ben Jason. Ik bouw het schip Argo. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Litus liberavisti.","Uitstekend! Je hebt de kust bevrijd."]),
+      _W("g2", ["Bene! Nunc vellus aureum quaerimus. Proelium secundum vince.","Goed! Nu zoeken we het gouden vlies. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
+      _P(["Velleris aurei causa navigo. Habesne navem?","Ik zeil voor het gouden vlies. Heb jij een schip?"], ["Habeo navem et nautas fortes.","Ik heb een schip en dappere zeelieden."], ["Navem non habeo, sed timeo.","Ik heb geen schip, maar ik ben bang."], ["Aurum non amo.","Ik hou niet van goud."]),
+    ],
+    talks:[
+      _T(["Navem Argo aedifico.","Ik bouw het schip Argo."], ["Quam navem Iason aedificat?","Welk schip bouwt Jason?"], ["Argo.","De Argo."], ["Aquilam.","De Adelaar."], ["Lunam.","De Maan."]),
+      _T(["Vellus aureum in Colchide est.","Het gouden vlies is in Colchis."], ["Quid in Colchide est?","Wat is er in Colchis?"], ["Vellus aureum.","Het gouden vlies."], ["Urbs magna.","Een grote stad."], ["Murus altus.","Een hoge muur."]),
+      _T(["Medea me iuvat. Draconem dormire facit.","Medea helpt mij. Ze laat de draak slapen."], ["Quis Iasonem iuvat?","Wie helpt Jason?"], ["Medea.","Medea."], ["Circe.","Circe."], ["Hera.","Hera."]),
+    ] },
+
+  /* ----- Troia ----- */
+  achilles: { nm:"Achilles", region:"troia", type:"inf", affinity:"campus", world:{ x:20, y:18, dir:"up" },
+    base:{ vita:100, impetus:22, tutela:15, celeritas:9, ambitus:3 },
+    look:_look({ huid:"licht", haar:"middel", haarkleur:"blond", baard:"geen", armor:"ceremonieel", cape:"kort", capekleur:"rood", helm:"open" }),
+    chain:[
+      _K("troia","campus",4, ["Salve! Achilles sum. Troiani ante muros pugnant. Quattuor hostes in campo vince.","Gegroet! Ik ben Achilles. De Trojanen vechten voor de muren. Versla vier vijanden op het veld."], ["Hostes in campo vince!","Versla vijanden op het veld!"], ["Optime! Campum purgavisti.","Uitstekend! Je hebt het veld schoongemaakt."]),
+      _W("t1", ["Bene! Nunc muros Troiae oppugna. Proelium vince.","Goed! Val nu de muren van Troje aan. Win het gevecht."], ["Proelium vince!","Win het gevecht!"], ["Muros vicisti! Gratias tibi ago.","Je hebt de muren verslagen! Ik dank je."]),
+      _P(["Ira mea magna est. Cur pugnas?","Mijn woede is groot. Waarom vecht jij?"], ["Pro amicis pugno.","Ik vecht voor mijn vrienden."], ["Pro pecunia pugno.","Ik vecht voor geld."], ["Non pugno.","Ik vecht niet."]),
+    ],
+    talks:[
+      _T(["Mater mea dea est. Thetis vocatur.","Mijn moeder is een godin. Ze heet Thetis."], ["Quae dea mater Achillis est?","Welke godin is de moeder van Achilles?"], ["Thetis.","Thetis."], ["Athena.","Athena."], ["Venus.","Venus."]),
+      _T(["Talus meus infirmus est.","Mijn hiel is zwak."], ["Quid in Achille infirmum est?","Wat is er zwak aan Achilles?"], ["Talus.","De hiel."], ["Caput.","Het hoofd."], ["Manus.","De hand."]),
+      _T(["Patroclus amicus meus erat.","Patroclus was mijn vriend."], ["Quis Achillis amicus est?","Wie is de vriend van Achilles?"], ["Patroclus.","Patroclus."], ["Hector.","Hector."], ["Priamus.","Priamus."]),
+    ] },
+  hector: { nm:"Hector", region:"troia", type:"inf", affinity:"praetorium", world:{ x:20, y:6, dir:"down" },
+    base:{ vita:88, impetus:19, tutela:16, celeritas:8, ambitus:3 },
+    look:_look({ huid:"getint", haar:"kort", haarkleur:"zwart", baard:"baard", armor:"middel", cape:"lang", capekleur:"blauw", helm:"open" }),
+    chain:[
+      _K("troia","muros",4, ["Salve! Hector sum. Troiam defendo. Quattuor hostes ante muros vince.","Gegroet! Ik ben Hector. Ik verdedig Troje. Versla vier vijanden voor de muren."], ["Hostes ante muros vince!","Versla vijanden voor de muren!"], ["Optime! Muros servavisti.","Uitstekend! Je hebt de muren gered."]),
+      _W("t1", ["Bene! Nunc muros Troiae defende. Proelium vince.","Goed! Verdedig nu de muren van Troje. Win het gevecht."], ["Proelium vince!","Win het gevecht!"], ["Muros defendisti! Gratias tibi ago.","Je hebt de muren verdedigd! Ik dank je."]),
+      _P(["Pro patria pugno. Tu quoque patriam amas?","Ik vecht voor mijn vaderland. Hou jij ook van jouw vaderland?"], ["Ita, patriam et familiam amo.","Ja, ik hou van mijn vaderland en mijn familie."], ["Non, patriam odi.","Nee, ik haat mijn vaderland."], ["Patria mihi nihil est.","Mijn vaderland betekent niets voor mij."]),
+    ],
+    talks:[
+      _T(["Priamus pater meus est. Troiae rex est.","Priamus is mijn vader. Hij is de koning van Troje."], ["Quis Troiae rex est?","Wie is de koning van Troje?"], ["Priamus.","Priamus."], ["Agamemnon.","Agamemnon."], ["Achilles.","Achilles."]),
+      _T(["Andromacha uxor mea est.","Andromache is mijn vrouw."], ["Quae uxor Hectoris est?","Wie is de vrouw van Hector?"], ["Andromacha.","Andromache."], ["Helena.","Helena."], ["Cassandra.","Cassandra."]),
+      _T(["Ante muros cum Achille pugno.","Voor de muren vecht ik met Achilles."], ["Cum quo Hector pugnat?","Met wie vecht Hector?"], ["Cum Achille.","Met Achilles."], ["Cum Paride.","Met Paris."], ["Cum equo.","Met een paard."]),
+    ] },
+  ulixes: { nm:"Ulixes", region:"troia", type:"sup", affinity:"metallum", world:{ x:26, y:10, dir:"left" },
+    base:{ vita:60, impetus:11, tutela:10, celeritas:9, ambitus:6 },
+    look:_look({ huid:"olijf", haar:"kort", haarkleur:"bruin", baard:"baard", armor:"robe", cape:"kort", capekleur:"groen", helm:"standard" }),
+    chain:[
+      _K("troia","litus",3, ["Salve! Ulixes sum. Naves Graecorum ad litus sunt. Tres hostes ad litus vince.","Gegroet! Ik ben Odysseus. De schepen van de Grieken liggen aan de kust. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Naves servavisti.","Uitstekend! Je hebt de schepen gered."]),
+      _W("t2", ["Bene! Nunc equum ligneum aedificamus. Proelium secundum vince.","Goed! Nu bouwen we het houten paard. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Equum aedificavisti! Gratias tibi ago.","Je hebt het paard gebouwd! Ik dank je."]),
+      _P(["Callidus sum. Consilium capio. Quis tecum consilium capit?","Ik ben sluw. Ik maak plannen. Wie maakt plannen met jou?"], ["Ego tecum consilium capio.","Ik maak met jou plannen."], ["Nemo mihi consilium dat.","Niemand geeft mij een plan."], ["Equum timeo.","Ik ben bang voor het paard."]),
+    ],
+    talks:[
+      _T(["Equum ligneum aedifico. Milites in equo latent.","Ik bouw het houten paard. Soldaten verbergen zich in het paard."], ["Quid Ulixes aedificat?","Wat bouwt Odysseus?"], ["Equum ligneum.","Een houten paard."], ["Murum altum.","Een hoge muur."], ["Navem magnam.","Een groot schip."]),
+      _T(["Domum redire volo. Penelope me exspectat.","Ik wil naar huis terugkeren. Penelope wacht op mij."], ["Quis Ulixem exspectat?","Wie wacht op Odysseus?"], ["Penelope.","Penelope."], ["Circe.","Circe."], ["Calypso.","Calypso."]),
+      _T(["Polyphemus unum oculum habet.","Polyphemus heeft één oog."], ["Quot oculos Polyphemus habet?","Hoeveel ogen heeft Polyphemus?"], ["Unum.","Eén."], ["Duos.","Twee."], ["Tres.","Drie."]),
+    ] },
+  penthesilea: { nm:"Penthesilea", region:"troia", type:"rng", affinity:"campus", world:{ x:5, y:10, dir:"right" },
+    base:{ vita:54, impetus:19, tutela:8, celeritas:12, ambitus:7 },
+    look:_look({ huid:"licht", haar:"lang", haarkleur:"rood", armor:"middel", cape:"lang", capekleur:"paars", helm:"geen" }),
+    chain:[
+      _K("troia","scamander",3, ["Salve! Penthesilea sum. Ad Scamandrum pugno. Tres hostes ad Scamandrum vince.","Gegroet! Ik ben Penthesilea. Ik vecht bij de Scamander. Versla drie vijanden bij de Scamander."], ["Hostes ad Scamandrum vince!","Versla vijanden bij de Scamander!"], ["Optime! Scamandrum servavisti.","Uitstekend! Je hebt de Scamander gered."]),
+      _W("t2", ["Bene! Nunc Troiam iuvamus. Proelium secundum vince.","Goed! Nu helpen we Troje. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Troiam iuvisti! Gratias tibi ago.","Je hebt Troje geholpen! Ik dank je."]),
+      _P(["Amazonum regina sum. Tu pro Troia pugnas?","Ik ben de koningin van de Amazones. Vecht jij voor Troje?"], ["Ita, pro Troia pugno.","Ja, ik vecht voor Troje."], ["Non, pro hostibus pugno.","Nee, ik vecht voor de vijanden."], ["Domum eo.","Ik ga naar huis."]),
+    ],
+    talks:[
+      _T(["Amazones feminae fortes sunt.","De Amazones zijn dappere vrouwen."], ["Quae sunt Amazones?","Wie zijn de Amazones?"], ["Feminae fortes.","Dappere vrouwen."], ["Viri pigri.","Luie mannen."], ["Pueri parvi.","Kleine jongens."]),
+      _T(["Arcum et sagittas habeo.","Ik heb een boog en pijlen."], ["Quid Penthesilea habet?","Wat heeft Penthesilea?"], ["Arcum.","Een boog."], ["Librum.","Een boek."], ["Lyram.","Een lier."]),
+      _T(["Cum Achille pugno, sed vincor.","Ik vecht met Achilles, maar ik word verslagen."], ["Quis Penthesileam vincit?","Wie verslaat Penthesilea?"], ["Achilles.","Achilles."], ["Hector.","Hector."], ["Ulixes.","Odysseus."]),
+    ] },
+});
+
+/* Antwoordvolgorde schudden (deterministisch per vraag), zodat het goede antwoord niet altijd vooraan staat. */
+function castraOptOrder(n, seedStr){
+  let h = 2166136261>>>0; for(let i=0;i<seedStr.length;i++){ h ^= seedStr.charCodeAt(i); h = Math.imul(h, 16777619)>>>0; }
+  const r = castraMapRng(h), a = Array.from({length:n},(_,i)=>i);
+  for(let i=n-1;i>0;i--){ const j = Math.floor(r()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
+  return a;
+}
 
 /* ---------- helden in het spel ---------- */
 function castraHero(id){ return (CASTRA.heroes||[]).find(h=>h.id===id) || null; }
@@ -197,7 +379,7 @@ function castraHeroumOpen(){
       talk = `<div style="margin-top:8px;padding:8px;border:1px solid #8a6d2f;border-radius:8px;background:rgba(0,0,0,.2)">
         <div style="font-size:16px">${castraLaHTML(tk.la, tk.nl, "talk_"+h.id+T.i)}</div>
         <div style="margin:8px 0 4px;font-size:16px">${castraLaHTML(tk.q.la, tk.q.nl, "tq_"+h.id+T.i)}</div>
-        ${tk.q.opts.map((o,k)=>`<button class="btn ${T.answered===k?(o.ok?"btn-gold":""):""}" ${T.answered!==null?"disabled":""} style="margin:2px 4px 2px 0" onclick="castraHeroumAnswer(${k})">${esc(o.la)}</button>`).join("")}
+        ${castraOptOrder(tk.q.opts.length, h.id+T.i).map(k=>{ const o = tk.q.opts[k]; return `<button class="btn ${T.answered===k?(o.ok?"btn-gold":""):""}" ${T.answered!==null?"disabled":""} style="margin:2px 4px 2px 0" onclick="castraHeroumAnswer(${k})">${esc(o.la)}</button>`; }).join("")}
         ${T.answered!==null?`<div style="margin-top:6px"><button class="btn" onclick="castraHeroumEndTalk()">${castraLaText("claude")}</button></div>`:""}</div>`;
     }
     return `<div style="padding:8px 0;border-top:1px solid #4a3d2c"><div style="display:flex;gap:10px">

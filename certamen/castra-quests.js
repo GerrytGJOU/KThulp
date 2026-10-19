@@ -16,7 +16,7 @@
 const CASTRA_NPCS = {};
 Object.keys(CASTRA_HERO_DATA).forEach(id=>{
   const d = CASTRA_HERO_DATA[id];
-  if(d.world) CASTRA_NPCS[id] = { nm:d.nm, world:d.world, avatar:d.look, always:!!d.always };
+  if(d.world) CASTRA_NPCS[id] = { nm:d.nm, world:d.world, region:d.region||"latium", avatar:d.look, always:!!d.always };
 });
 
 function castraQState(id){
@@ -28,7 +28,7 @@ function castraNpcVisible(id){
   const n = CASTRA_NPCS[id]; if(!n || castraHero(id)) return false;
   return n.always || !!(CASTRA.traces && CASTRA.traces[id]);
 }
-function castraVisibleNpcs(){ return Object.keys(CASTRA_NPCS).filter(castraNpcVisible); }
+function castraVisibleNpcs(){ const rg = (typeof CASTRA_W_REGION!=="undefined") ? CASTRA_W_REGION : "latium"; return Object.keys(CASTRA_NPCS).filter(id=>CASTRA_NPCS[id].region===rg && castraNpcVisible(id)); }
 function castraNpcAt(x,y){ return castraVisibleNpcs().find(id=>CASTRA_NPCS[id].world.x===x && CASTRA_NPCS[id].world.y===y) || null; }
 
 function castraStepOf(id){ const q = castraQState(id); return CASTRA_HERO_DATA[id].chain[q.step] || null; }
@@ -45,7 +45,7 @@ function castraQuestOnWin(V){
   Object.keys(CASTRA_HERO_DATA).forEach(id=>{
     if(castraHero(id)) return;
     const s = castraStepOf(id), q = castraQState(id);
-    if(s && s.kind==="kill" && q.acc && s.terrain===V.terrain.id && q.n < s.need){ q.n++; msgs.push({ id, nm:CASTRA_HERO_DATA[id].nm, n:q.n, need:s.need }); }
+    if(s && s.kind==="kill" && q.acc && (s.region||"latium")===V.region && s.terrain===V.terrain.id && q.n < s.need){ q.n++; msgs.push({ id, nm:CASTRA_HERO_DATA[id].nm, n:q.n, need:s.need }); }
   });
   if(msgs.length) castraSave();
   return msgs;
@@ -69,7 +69,7 @@ function castraNpcTalk(id){
   let text, buttons = "";
   if(s.kind==="persuade"){
     text = castraLaHTML(s.ask.la, s.ask.nl, "ask_"+id+q.step);
-    buttons = s.opts.map((o,k)=>`<button class="btn" onclick="castraNpcPersuade('${id}',${k})">${esc(o.la)}</button>`).join("");
+    buttons = castraOptOrder(s.opts.length, id+q.step).map(k=>`<button class="btn" onclick="castraNpcPersuade('${id}',${k})">${esc(s.opts[k].la)}</button>`).join("");
   } else if(!q.acc){
     text = castraLaHTML(s.ask.la, s.ask.nl, "ask_"+id+q.step);
     buttons = `<button class="btn btn-gold" onclick="castraNpcAccept('${id}')">${castraLaText("accipio")}</button>
