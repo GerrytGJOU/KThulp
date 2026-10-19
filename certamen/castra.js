@@ -187,19 +187,16 @@ function castraRecruitTest(){
 }
 
 /* ---------- scherm: de castra ---------- */
-function castraBlockedMap(){
-  const m = {}, T = CASTRA_MAP;
-  for(let x=0;x<T.cols;x++){ m[x+","+0]=1; m[x+","+(T.rows-1)]=1; }
-  for(let y=0;y<T.rows;y++){ m[0+","+y]=1; m[(T.cols-1)+","+y]=1; }
-  CASTRA_MAP.gates.forEach(g=>g.tiles.forEach(t=>{ delete m[t.x+","+t.y]; }));
-  CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
-    for(let dx=0;dx<2;dx++)for(let dy=0;dy<2;dy++) m[(b.slot.x+dx)+","+(b.slot.y+dy)]=b.id;
-  });
-  return m;
+let CASTRA_BUILT = null;
+function castraBuiltMap(){
+  if(!CASTRA_BUILT) CASTRA_BUILT = castraMapLogic(castraCampDef());
+  return CASTRA_BUILT;
 }
+function castraBlockedMap(){ return castraBuiltMap().blocked; }
 function castraGateAt(x,y){ return CASTRA_MAP.gates.find(g=>g.tiles.some(t=>t.x===x&&t.y===y)); }
 function castraBuildingAt(x,y){
-  return CASTRA_BUILDINGS.find(b=>b.phase===1&&b.slot&&x>=b.slot.x&&x<b.slot.x+2&&y>=b.slot.y&&y<b.slot.y+2);
+  return CASTRA_BUILDINGS.find(b=>{ if(!(b.phase===1&&b.slot)) return false; const f = castraBuildingFoot(b);
+    return x>=b.slot.x&&x<b.slot.x+f.fw&&y>=b.slot.y&&y<b.slot.y+f.fh; });
 }
 
 SCREENS.castraHome = function(){
@@ -261,36 +258,28 @@ function castraRenderRes(){
 function castraRenderMap(){
   const map = el("castraMap"); if(!map) return;
   const T = CASTRA_MAP, t = T.tile;
-  let h = "";
-  // kampmuur
-  const wall = (x,y)=>`<div style="position:absolute;left:${x*t}px;top:${y*t}px;width:${t}px;height:${t}px;background:#6b5b45;border:1px solid #4a3d2c;box-sizing:border-box"></div>`;
-  const blocked = castraBlockedMap();
-  for(let x=0;x<T.cols;x++)for(let y=0;y<T.rows;y++){
-    const edge = x===0||y===0||x===T.cols-1||y===T.rows-1;
-    if(edge && blocked[x+","+y]) h += wall(x,y);
-  }
-  // poorten
-  CASTRA_MAP.gates.forEach(g=>{
-    g.tiles.forEach(tl=>{ h += `<div style="position:absolute;left:${tl.x*t}px;top:${tl.y*t}px;width:${t}px;height:${t}px;background:#8a6d2f;opacity:.75"></div>`; });
-    const f=g.tiles[0], horiz = g.tiles[0].y===g.tiles[1].y;
-    const lx = f.x*t + (horiz? 0 : -(t*1.2)), ly = f.y*t + (horiz? t : 0);
-    h += `<div style="position:absolute;left:${lx}px;top:${ly}px;font-size:10px;color:#e8d9a8;white-space:nowrap;text-shadow:0 1px 2px #000;pointer-events:none">${esc(g.nm)}</div>`;
-  });
-  // gebouwen
+  CASTRA_BUILT = null; castraBuiltMap();
+  // gebouwlabels en -badges (klikbaar) bovenop de tegelkunst
+  let h = `<canvas id="cmBelow" style="position:absolute;left:0;top:0;image-rendering:pixelated"></canvas>`;
   CASTRA_BUILDINGS.filter(b=>b.phase===1&&b.slot).forEach(b=>{
-    const lvl = castraLvl(b.id), pend = b.prod ? castraPending(b.id) : 0;
-    h += `<div onclick="castraOpen('${b.id}')" style="position:absolute;left:${b.slot.x*t}px;top:${b.slot.y*t}px;width:${2*t}px;height:${2*t}px;box-sizing:border-box;cursor:pointer;
-        background:linear-gradient(#5a4a33,#3e3223);border:2px solid #8a6d2f;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f1e6c4">
-      <div style="font-size:34px;line-height:1">${b.icon}</div>
-      <div style="font-size:11px;font-weight:700">${esc(b.nm)}</div>
-      ${b.fixed?"":`<div style="position:absolute;top:2px;left:4px;font-size:10px;background:#1b150e;border-radius:4px;padding:0 4px">Lv ${lvl}</div>`}
+    const f = castraBuildingFoot(b), lvl = castraLvl(b.id), pend = b.prod ? castraPending(b.id) : 0;
+    h += `<div onclick="castraOpen('${b.id}')" style="position:absolute;left:${b.slot.x*t}px;top:${b.slot.y*t}px;width:${f.fw*t}px;height:${f.fh*t}px;cursor:pointer;z-index:3">
+      <div style="position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);font-size:11px;font-weight:700;color:#f1e6c4;background:rgba(27,21,14,.85);border:1px solid #8a6d2f;border-radius:6px;padding:0 6px;white-space:nowrap">${b.icon} ${esc(b.nm)}${b.fixed?"":` · ${lvl}`}</div>
       ${pend>0?`<div style="position:absolute;top:-6px;right:-6px;font-size:11px;background:#d4af37;color:#2a2118;border-radius:10px;padding:1px 6px;font-weight:700;animation:pulse 1.4s infinite">+${pend}</div>`:""}
     </div>`;
   });
+  CASTRA_MAP.gates.forEach(g=>{
+    const f=g.tiles[0], horiz = g.tiles[0].y===g.tiles[1].y;
+    const lx = f.x*t + (horiz? 0 : -(t*1.2)), ly = f.y*t + (horiz? t : 0);
+    h += `<div style="position:absolute;left:${lx}px;top:${ly}px;font-size:10px;color:#e8d9a8;white-space:nowrap;text-shadow:0 1px 2px #000;pointer-events:none;z-index:3">${esc(g.nm)}</div>`;
+  });
   h += `<div id="castraAv" style="position:absolute;width:${t}px;height:${t}px;transition:left .16s linear,top .16s linear;pointer-events:none;z-index:5"></div>`;
+  h += `<canvas id="cmAbove" style="position:absolute;left:0;top:0;pointer-events:none;image-rendering:pixelated;z-index:6"></canvas>`;
   map.innerHTML = h;
+  map.style.background = "#3a4a2a";
   map.onclick = castraMapTap;
   castraDrawAvatar();
+  castraTsLoad().then(()=>{ const b=el("cmBelow"), a=el("cmAbove"); if(b&&a) castraDrawMapLayers(castraBuiltMap(), b, a); });
 }
 function castraDrawAvatar(){
   const av = el("castraAv"); if(!av) return;
@@ -364,7 +353,7 @@ function castraGate(g){
     CASTRA.pos = { x:g.tiles[0].x, y:1 }; castraSave();
     if(CASTRA_UI.keyFn) document.removeEventListener("keydown", CASTRA_UI.keyFn);
     if(CASTRA_UI.resizeFn) window.removeEventListener("resize", CASTRA_UI.resizeFn);
-    go("castraVenatio"); return;
+    go("castraWorld"); return;
   }
   castraOpenPanel(`<div class="panel"><h3>${esc(g.nm)}</h3>
     <div class="note">${esc(g.nl)} — volgt in een volgende stap (${g.to==="venatio"?"fase 1b":"fase 2"}).</div>

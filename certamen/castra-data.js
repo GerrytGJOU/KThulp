@@ -37,13 +37,13 @@ const CASTRA_STATS = [
    maxLvl: bovengrens; alle gebouwen behalve het praetorium zijn bovendien
            begrensd door het praetorium-level. */
 const CASTRA_BUILDINGS = [
-  { id:"praetorium",  nm:"Praetorium",  nl:"Hoofdgebouw", icon:"🏛️", phase:1, slot:{x:4,y:2},  maxLvl:5,
+  { id:"praetorium",  nm:"Praetorium",  nl:"Hoofdgebouw", icon:"🏛️", phase:1, slot:{x:3,y:1},  maxLvl:5,
     prod:{ res:"frumentum", perHour:8 }, cost:{ lignum:60, aes:60 },
     lat:"Hic est praetorium. Ibi dux habitat.", desc:"Bepaalt het maximale level van alle andere gebouwen." },
   { id:"contubernia", nm:"Contubernia", nl:"Barakken",    icon:"⛺", phase:1, slot:{x:10,y:2}, maxLvl:5,
     cost:{ lignum:50, aes:30 },
     lat:"Hic milites dormiunt.", desc:"Hier staan je soldaten. Meer level = meer soldaten tegelijk." },
-  { id:"lignatio",    nm:"Lignatio",    nl:"Houthakker",  icon:"🪓", phase:1, slot:{x:13,y:2}, maxLvl:5,
+  { id:"lignatio",    nm:"Lignatio",    nl:"Houthakker",  icon:"🪓", phase:1, slot:{x:13,y:1}, maxLvl:5,
     prod:{ res:"lignum", perHour:20 }, cost:{ lignum:40, aes:40 },
     lat:"Hic ligna caeduntur.", desc:"Levert lignum (hout)." },
   { id:"campus",      nm:"Campus",      nl:"Trainen en evolueren", icon:"🏟️", phase:1, slot:{x:2,y:6}, maxLvl:5,

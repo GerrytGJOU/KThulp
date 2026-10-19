@@ -47,6 +47,7 @@ const CASTRA_LA = {
   missio_honesta:  { la:"Missio honesta", nl:"Eervol ontslag" },
   nullus_exercitus:{ la:"Nullos milites habes.", nl:"Je hebt geen soldaten." },
   elige_viam:      { la:"Quam viam eligis?", nl:"Welke weg kies je?" },
+  perge:           { la:"Perge!", nl:"Ga verder!" },
   vestigia:        { la:"Vestigia viri magni vides.", nl:"Je ziet sporen van een groot man." },
 };
 
@@ -107,7 +108,7 @@ const CASTRA_GLOSS = {
   "dicit":"zegt", "te":"jou", "sequar":"ik zal volgen", "visne":"wil je?", "eum":"hem",
   "castra":"kamp", "recipere":"opnemen", "recipio":"ik neem op", "dimitto":"ik laat gaan",
   "plena":"vol", "redi":"keer terug!", "iterum":"opnieuw", "vestigia":"sporen",
-  "viri":"van een man", "martius":"van Mars", "exerce":"train!", "exercetur":"wordt getraind", "collige":"haal op!", "promove":"bevorder!", "missio":"ontslag", "honesta":"eervol", "quam":"welke", "viam":"weg (4e naamval)", "eligis":"je kiest", "nullos":"geen (4e naamval)", "milites":"soldaten", "magni":"groot", "vides":"je ziet",
+  "viri":"van een man", "perge":"ga verder!", "herba":"gras", "alta":"hoog", "martius":"van Mars", "exerce":"train!", "exercetur":"wordt getraind", "collige":"haal op!", "promove":"bevorder!", "missio":"ontslag", "honesta":"eervol", "quam":"welke", "viam":"weg (4e naamval)", "eligis":"je kiest", "nullos":"geen (4e naamval)", "milites":"soldaten", "magni":"groot", "vides":"je ziet",
 };
 
 /* ---- Weergave ---- */
