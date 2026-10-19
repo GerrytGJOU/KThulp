@@ -15,11 +15,11 @@ SCREENS.home = function(){
       <h3>⚔️ Battle Mode <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
       <p>Twee teams strijden om woordkennis. Verdien Actiepunten met goede antwoorden.</p>
     </button>
-    <button class="tile" onclick="bmStartBossHost()">
-      <span class="corner">${iconSVG("torch",88,"currentColor")}</span>
-      <span class="ic">${iconSVG("torch",44,"currentColor")}</span>
-      <h3>🐉 Boss Battle <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
-      <p>De hele klas vecht samen tegen één mythologische baas. Ook ideaal om in je eentje te trainen.</p>
+    <button class="tile" onclick="go('castraHome')">
+      <span class="corner">${iconSVG("tent",88,"currentColor")}</span>
+      <span class="ic">${iconSVG("tent",44,"currentColor")}</span>
+      <h3>🏕️ Castra Heroum <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
+      <p>Het kamp van de helden. Binnenkort meer informatie.</p>
     </button>
     <button class="tile" onclick="go('totalWar')">
       <span class="corner">${iconSVG("crown",88,"currentColor")}</span>
@@ -59,6 +59,26 @@ SCREENS.home = function(){
   ${foot()}`);
 };
 
+/* ---- CASTRA HEROUM: tijdelijk startscherm (specs volgen) ---- */
+SCREENS.castraHome = function(){
+  document.body.classList.remove("greek");
+  H(brand(true)+`
+  <div class="scrhead"><button class="back" onclick="go('home')">${iconSVG("shield",20,"currentColor")}</button><h2>🏕️ Castra Heroum</h2></div>
+  <div class="panel"><div class="note">Castra Heroum is in aanbouw. Binnenkort speelbaar (BETA).</div></div>
+  ${BM_IDENT?`<div class="panel" style="text-align:center">
+    <div id="castraAvatar">${castraAvatarHTML(BM_IDENT.avatar,"down",1,96)}</div>
+    <div class="note" style="margin-top:6px"><b>${esc(BM_IDENT.name||"")}</b> — dux van je eigen castra</div>
+  </div>`:`<div class="panel"><div class="note">Meld je aan via Battle Mode of Meedoen om je avatar te gebruiken.</div></div>`}
+  ${foot()}`);
+  // Zodra de top-down base-sprite bestaat (assets/sprites-topdown/), de avatar
+  // ermee vervangen; anders blijft de battler-avatar staan.
+  if(BM_IDENT && typeof castraProbeBase==="function"){
+    castraProbeBase(bmAvatarMerge(BM_IDENT.avatar).huid).then(ok=>{
+      const t=el("castraAvatar"); if(ok&&t) t.innerHTML=castraAvatarHTML(BM_IDENT.avatar,"down",1,96);
+    });
+  }
+};
+
 /* ---- HOST: spel kiezen ---- */
 function startHost(){ ROLE="host"; go("hostGamePick"); }
 SCREENS.hostGamePick = function(){
@@ -89,8 +109,8 @@ function pickGame(g){ DRAFT.game=g; DRAFT.target = g==="touwtrekken"?15:g==="sne
 SCREENS.hostSource = function(){
   const baseLA = VOCAB_LA.filter(usable).length, baseEL = VOCAB_EL.filter(usable).length;
   // Dit scherm wordt gedeeld door de klassieke spellen (via hostGamePick) én
-  // Battle Mode/Boss Battle (bmStartHost/bmStartBossHost slaan hostGamePick
-  // over en zetten DRAFT.game="battle" direct) — de terugknop moet dus naar
+  // Battle Mode/Boss Battle (bmStartHost slaat hostGamePick
+  // over en zet DRAFT.game="battle" direct) — de terugknop moet dus naar
   // de bijpassende vorige stap, niet altijd naar "Kies een spel".
   const backTarget = DRAFT.game==="battle" ? "battleHome" : "hostGamePick";
   H(brand(true)+`<div class="scrhead"><button class="back" onclick="go('${backTarget}')">${iconSVG("shield",20,"currentColor")}</button><h2>Welke woorden?</h2></div>

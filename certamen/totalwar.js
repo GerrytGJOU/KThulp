@@ -1882,7 +1882,7 @@ function twOnAttackerChange(){
    bmStartBossGame() in battle.js leest garrisonProvince uit om de
    garnizoensbonus/slijtageslag toe te passen.
 
-   Gaat via SCREENS.hostSource (net als bmStartHost()/bmStartBossHost() in
+   Gaat via SCREENS.hostSource (net als bmStartHost() in
    battle.js), NIET rechtstreeks naar battleHostSettings — een eerdere versie
    sloeg die stap over, waardoor de docent nooit de kans kreeg om de
    woordenlijst (taal/frequentiebereik) te kiezen: DRAFT.lang/.source bleven
