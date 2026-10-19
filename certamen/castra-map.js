@@ -17,7 +17,6 @@ const CASTRA_TS_VER = "v=1";
 const CASTRA_TS_FILES = {
   A5: "assets/tilesets/Outside_A5.png",
   B:  "assets/tilesets/Outside_B.png",
-  C:  "assets/tilesets/Outside_C.png",
 };
 const CASTRA_TS_IMG = {};
 let _castraTsPromise = null;
