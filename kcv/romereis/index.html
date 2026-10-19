@@ -124,7 +124,7 @@
 <footer>Romereis Sint Ursula 2026 &middot; &copy; Gerben de Jong &middot; 2026</footer>
 
 <script src="../../assets/romereis/afbeeldingen.js?v=2"></script>
-<script src="../../assets/romereis/tips.js?v=1"></script>
+<script src="../../assets/romereis/tips.js?v=2"></script>
 <script>
 /* ============================ DATA ============================ */
 /* Bron: Gids Rome 2026 (Sint-Ursula). Bewust zonder namen, telefoonnummers, e-mailadressen,
@@ -624,14 +624,22 @@ function viewExtra(k){
       var kids = [];
       if (sec.intro) kids.push(el('p',{text:sec.intro,style:'margin-bottom:8px'}));
       (sec.items||[]).forEach(function(it){
-        var line = el('div',{style:'margin:0 0 10px'},[el('strong',{text:it.naam}), el('div',{text:it.tekst})]);
-        if (it.coord) line.appendChild(el('div',{class:'maplinks'},[
-          el('a',{href:'https://www.openstreetmap.org/?mlat='+it.coord[0]+'&mlon='+it.coord[1]+'#map=18/'+it.coord[0]+'/'+it.coord[1],target:'_blank',rel:'noopener',text:'Kaart ↗'}),
-          el('a',{href:'https://www.google.com/maps/search/?api=1&query='+it.coord[0]+','+it.coord[1],target:'_blank',rel:'noopener',text:'Google Maps ↗'})]));
+        var line = el('div',{style:'margin:0 0 12px'},[el('strong',{text:it.naam}), el('div',{text:it.tekst})]);
+        if (it.adres) line.appendChild(el('div',{text:it.adres,style:'font-size:14px;color:var(--muted)'}));
+        var links = [];
+        if (it.coord) links.push(el('a',{href:'https://www.openstreetmap.org/?mlat='+it.coord[0]+'&mlon='+it.coord[1]+'#map=18/'+it.coord[0]+'/'+it.coord[1],target:'_blank',rel:'noopener',text:'Kaart \u2197'}));
+        var isMaps = it.link && /google\.com\/maps/.test(it.link);
+        if (it.coord) links.push(el('a',{href:'https://www.google.com/maps/search/?api=1&query='+it.coord[0]+','+it.coord[1],target:'_blank',rel:'noopener',text:'Google Maps \u2197'}));
+        else if (isMaps) links.push(el('a',{href:it.link,target:'_blank',rel:'noopener',text:'Google Maps \u2197'}));
+        else if (it.adres && !/^(Aventijn|Station|Bij |Testaccio|Via Appia)/.test(it.adres)) links.push(el('a',{href:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(it.naam.replace(/ [·(].*$/,'')+', '+it.adres.replace(/ \(.*\)$/,'')+', Roma'),target:'_blank',rel:'noopener',text:'Google Maps \u2197'}));
+        if (it.link && !isMaps) links.push(el('a',{href:it.link,target:'_blank',rel:'noopener',text:'Meer info \u2197'}));
+        if (links.length) line.appendChild(el('div',{class:'maplinks'},links));
         kids.push(line);
       });
-      if (!(sec.items||[]).length) kids.push(el('p',{class:'leeg',text:'Aanraders volgen binnenkort.'}));
-      f.appendChild(box(sec.titel, kids));
+      if (!(sec.items||[]).length && !sec.intro) kids.push(el('p',{class:'leeg',text:'Aanraders volgen binnenkort.'}));
+      var det = el('details',{class:'place'},[el('summary',null,[el('h3',null,[document.createTextNode(sec.titel)])]), el('div',{class:'pbody'},kids)]);
+      if (sec.titel==='Zo lees je deze lijst') det.open = true;
+      f.appendChild(det);
     });
   } else {
     x.secties.forEach(function(s){
