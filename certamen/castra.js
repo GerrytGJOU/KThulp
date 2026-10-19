@@ -5,7 +5,7 @@
    Dit bestand bevat: staat + opslag (lokaal, met best-effort Firebase-sync),
    grondstoffen via tijdstempels, gebouwen upgraden, soldaten werven (seeded RNG,
    aanleg/karakter/insignis) en het scherm SCREENS.castraHome (top-down kamp).
-   Venatio/Proelium/Legio zijn nog stubs (poorten, principia).
+   Venatio staat in castra-venatio.js; Proelium/Legio zijn nog stubs (poort, principia).
    Laadt NA castra-data.js en castra-avatar.js.
    ============================================================================ */
 
@@ -56,6 +56,8 @@ function castraLoad(){
   if(!s || s.v!==CASTRA_SAVE_VER) s = castraNewState();
   // Gebouwen die er sinds deze save bij gekomen zijn (phase 1) aanvullen.
   CASTRA_BUILDINGS.filter(x=>x.phase===1).forEach(x=>{ if(!s.b[x.id]) s.b[x.id]={lvl:1,t:castraNow()}; });
+  if(!s.help) s.help = { words:{}, sentences:{} };
+  if(!s.traces) s.traces = {};
   CASTRA = s;
   return s;
 }
@@ -357,6 +359,13 @@ function castraWalk(path){
   next();
 }
 function castraGate(g){
+  if(g.to==="venatio"){
+    // Terug uit de jacht sta je net binnen de poort, zodat de poort niet meteen opnieuw afgaat.
+    CASTRA.pos = { x:g.tiles[0].x, y:1 }; castraSave();
+    if(CASTRA_UI.keyFn) document.removeEventListener("keydown", CASTRA_UI.keyFn);
+    if(CASTRA_UI.resizeFn) window.removeEventListener("resize", CASTRA_UI.resizeFn);
+    go("castraVenatio"); return;
+  }
   castraOpenPanel(`<div class="panel"><h3>${esc(g.nm)}</h3>
     <div class="note">${esc(g.nl)} — volgt in een volgende stap (${g.to==="venatio"?"fase 1b":"fase 2"}).</div>
     <button class="btn" onclick="castraClosePanel()">Terug het kamp in</button></div>`);

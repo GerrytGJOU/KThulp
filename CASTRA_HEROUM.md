@@ -341,7 +341,10 @@ Inventarisatie van de Certamen-code, 2026-10-19 (nog géén besluiten; dit is wa
 - Gebouwen nu speelbaar: praetorium (levert frumentum), contubernia (soldatenlijst, testwerving), lignatio, metallum, horreum (opslagmaximum), campus en principia (stub).
 - Poorten (`porta decumana` → venatio, `porta praetoria` → proelium) en de principia (Legio) tonen nog alleen een melding.
 - Ontwerpkeuze, nog te bevestigen: het praetorium levert *frumentum* (de plannen noemen geen producent voor graan).
-- Nog niet: Firebase-regels voor de `castra`-tak (groottelimiet), Latijnse vertaalhulp per tik, venatio, tower defence, helden, Legio, docentoverzicht.
+- **Venatio** (`certamen/castra-venatio.js`, poort *porta decumana*): regio Latium (andere regio's op slot), 4 terreinen met eigen soldatenlijnen (saters alleen in het bos, nimfen en vloot bij de Tiber). Loop: Latijns verkenningsbericht noemt het vijandtype (*pedites/equites/sagittarii/auxilia/monstra*) → je kiest welke soldaat je stuurt (driehoek infanterie > ruiterij > afstand > infanterie, ×1,5 / ×0,75) → beurtgevecht *Oppugna!* / *Defende!* → buit, XP, level-up (max 4 × praetorium-level), 8% kans op een heldenspoor (alleen opgeslagen in `CASTRA.traces`, missies volgen in fase 3) → de verslagen vijand mag je opnemen (behoudt zijn eigen aanleg/karakter/insignis). Zonder soldaat vecht de dux zelf (vaste stats, geen blessure). Verlies = soldaat 10 min gewond.
+- Balans (gesimuleerd, 600 jachten): dux ≈ 50% winst; soldaat die het type níet leest ≈ 44%; soldaat die het juiste type kiest ≈ 99% — lezen loont dus sterk. Waarden in `CASTRA_V_BAL`.
+- **Latijnse laag** (`certamen/castra-latin.js`): vaste zinnen in `CASTRA_LA`, glossarium in `CASTRA_GLOSS`; tik op een woord = betekenis, tik op ⓘ = zinsvertaling, beide gratis. Gebruik wordt gelogd in `CASTRA.help` (`words`/`sentences`) voor het toekomstige docentoverzicht.
+- Nog niet: Firebase-regels voor de `castra`-tak (groottelimiet), docentoverzicht van het hulpgebruik, zorgbalk/herstel (valetudinarium), tower defence, helden en missieketens, Legio.
 
 ## Bronnen
 
