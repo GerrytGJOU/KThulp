@@ -1,6 +1,6 @@
 # Castra Heroum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M3 gebouwd (M3: 2026-10-31), wacht op goedkeuring voor M4** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M4 gebouwd (M4: 2026-11-01), wacht op goedkeuring voor M5** · hoort bij `CASTRA_HEROUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -133,7 +133,9 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 
 **M3 (2026-10-31):** wildmengsels per regio met zeldzame vreemdelingen (Latium: 80% Romeinen, rest Gladiatoren/Galliërs/Germanen/Grieken/Carthagers/Egyptenaren/Perzen; Graecia 66% Grieken; Troia 72% Trojanen), tierplafond per regio (Latium/Graecia 3, Troia 4), vreemdelingen krijgen de melding *Hostis peregrinus est*. Dilectus werft per volk en tier: tier 2 vanaf Dilectus 3 + praetorium 2 (25%), tier 3 vanaf Dilectus 5 + praetorium 4 (10%), hogere tiers komen op hun evolutiedrempel-level, geen vlootvormen/stallen-vormen in het aanbod, kosten tier 1/2/3 = 40+20 / 100+50 / 200+100.
 
-**Nog niet (volgende mijlpalen):** M4 codex, M5 Certamen-klassen, M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
+**M4 (2026-11-01):** `certamen/castra-codex.js`, knop 📖 Codex naast de grondstoffen in het kamp. Tabbladen per volk (12) + Helden; boom per tak met vormen genest onder hun ouder, per vorm type, tier, gebouweis, basisstats en volgende vormen. Een vorm is "ontmoet" (`CASTRA.codex`) zodra je hem of een nakomeling in je leger had of als wilde vijand zag; onontmoete vormen staan er dimmed zonder cijfers. Myrmido, Spartus en Lupus Martius hebben een korte Latijnse mythesamenvatting met vertaalhulp (`CASTRA_CODEX_LORE`). Het gebouw Bibliotheca is niet nodig gebleken.
+
+**Nog niet (volgende mijlpalen):** M5 Certamen-klassen, M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
 ## 7. Voorstel mijlpalen en open punten (oorspronkelijk)
 
