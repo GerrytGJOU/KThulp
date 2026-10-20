@@ -1,6 +1,6 @@
 # Castra Heroum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M4 gebouwd (M4: 2026-11-01), wacht op goedkeuring voor M5** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M5 gebouwd (M5: 2026-11-02), wacht op goedkeuring voor M6** · hoort bij `CASTRA_HEROUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -111,7 +111,7 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 | 2 Levels | "Meer zoals Pokémon: rond level 16, 32, 50, afhankelijk van type en tier" | evolueren bij level **16 / 32 / 50** (rekruut en infanterie), ruiterij 18/34/50, afstand 14/30/46, ondersteuning 14/28/44, mythisch 12/26/42 (`CASTRA_EVO.lvl`) |
 | 2b Level-schaal | *Cap 10 × praetorium* | levelcap = 10 × praetorium-level (max 50); XP naar het volgende level = 3 × level (`castraXpToNext`); +2,5% stats per level; tier-vermenigvuldiger 1 / 1,6 / 2,4 / 3,2. Oude levels ×3,2 bij migratie (max 50). |
 | 3 Stabula/Navalia | *Zichtbaar, niet kiesbaar* tot M2 | opties met `needs` tonen "Stabula deest" en zijn uitgeschakeld |
-| 4 Certamen-klassen | *In M5* | nog niet gedaan |
+| 4 Certamen-klassen | *In M5* | gedaan in M5, zie hieronder |
 | 5 Stijl | *Huidige stijl houden* | ongewijzigd (Palatino) |
 | 6 Sprites | *Avatar-lagen per rol/volk* | `castraFormLook`: uiterlijk per volk, rol en tier uit bestaande top-down lagen |
 
@@ -135,7 +135,9 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 
 **M4 (2026-11-01):** `certamen/castra-codex.js`, knop 📖 Codex naast de grondstoffen in het kamp. Tabbladen per volk (12) + Helden; boom per tak met vormen genest onder hun ouder, per vorm type, tier, gebouweis, basisstats en volgende vormen. Een vorm is "ontmoet" (`CASTRA.codex`) zodra je hem of een nakomeling in je leger had of als wilde vijand zag; onontmoete vormen staan er dimmed zonder cijfers. Myrmido, Spartus en Lupus Martius hebben een korte Latijnse mythesamenvatting met vertaalhulp (`CASTRA_CODEX_LORE`). Het gebouw Bibliotheca is niet nodig gebleken.
 
-**Nog niet (volgende mijlpalen):** M5 Certamen-klassen, M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
+**M5 (2026-11-02): mapping naar de 8 Certamen-klassen** (`castraFormClassId` in castra-troops.js; badge met icoon en kleur uit `BM_CLASSES` in codex, campus en Dilectus). Regels op volgorde: *Bevelvoerder* = Optio, Centurio, Lochagus, Polemarchus, Soldurius, Comes, Signifer, Aquilifer (8) · *Verkenner* = Explorator, Perioecus, Sciritas en de hele vloot (6) · *Voorvechter* = alle gladiatoren, Spartanen en de Securifera (12) · *Hopliet* = overige infanterie (22) · *Cavalerie* = alle ruiterij, wagens en olifanten (24) · *Boogschutter* = afstandstroepen (17) · *Genie* = Ballistarius, Architectus, Faber (3) · *Priester* = priesters, druïden, magiërs, zieneressen, Capsarius, Medicus (14). Rekruten (11) en mythische wezens (34) hebben geen klasse. Dit is een voorstel dat je kunt bijstellen in `castraFormClassId`; de klasse werkt nu alleen als label (geen speleffect).
+
+**Nog niet (volgende mijlpalen):** M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
 ## 7. Voorstel mijlpalen en open punten (oorspronkelijk)
 

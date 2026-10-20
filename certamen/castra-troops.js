@@ -168,6 +168,30 @@ function castraLine(id){ return CASTRA_FORMS[id] || CASTRA_FORMS["rom_tiro"]; }
 function castraFolkNm(formId){ const f = CASTRA_FORMS[formId]; return f ? (CASTRA_FOLKS[f.volk]||{nm:""}).nm : ""; }
 // Hoofdvolk van een regio = het volk met het hoogste gewicht; alles daarbuiten is een "vreemdeling".
 function castraMainFolk(region){ let best = null; Object.keys(region.folk).forEach(k=>{ if(!best || region.folk[k]>region.folk[best]) best = k; }); return best; }
+/* ---- Certamen-klassen (M5): elke rol in de bomen hoort bij een van de 8 klassen uit BM_CLASSES (battle-data.js).
+   Rekruten en mythische wezens hebben (nog) geen klasse. Regels op volgorde; eerste treffer wint. ---- */
+const CASTRA_CLASS_NAMES = {
+  centurio: /^(Optio|Centurio|Lochagus|Polemarchus|Soldurius|Comes|Signifer|Aquilifer)$/,
+  verkenner: /^(Explorator|Perioecus|Sciritas)$/,
+};
+function castraFormClassId(f){
+  if(!f || f.type==="rec" || f.type==="myth") return null;
+  if(CASTRA_CLASS_NAMES.centurio.test(f.nm)) return "centurio";
+  if(CASTRA_CLASS_NAMES.verkenner.test(f.nm)) return "verkenner";
+  if(f.volk==="gla" || f.volk==="spa" || f.nm==="Securifera") return "spartaan";      // gladiatoren, Spartanen en bijlkrijgers: voorvechters
+  if(f.tak==="Vloot") return "verkenner";
+  if(f.type==="inf") return "hopliet";
+  if(f.type==="cav") return "cavalerie";
+  if(f.type==="rng") return f.tak==="Technisch" ? "genie" : "boogschutter";
+  if(f.type==="sup") return f.tak==="Technisch" ? (f.nm==="Faber" ? "genie" : "priester") : "priester";
+  return null;
+}
+function castraFormClass(f){ const id = castraFormClassId(f); return id && typeof BM_CLASSES!=="undefined" ? (BM_CLASSES.find(c=>c.id===id)||null) : null; }
+// Kleine badge met icoon en naam van de Certamen-klasse (leeg voor rekruten en monsters).
+function castraClassBadge(f){
+  const c = castraFormClass(f); if(!c) return "";
+  return `<span title="Certamen-klasse: ${esc(c.nm)}" style="display:inline-flex;align-items:center;gap:3px;padding:0 6px;border:1px solid ${c.color};border-radius:10px;font-size:12px;color:#eee;background:rgba(0,0,0,.25)">${typeof iconSVG==="function"?iconSVG(c.icon,13,c.color):""}${esc(c.nm)}</span>`;
+}
 function castraFormByName(volk, nm){ return CASTRA_FORM_LIST.find(f=>f.volk===volk && f.nm===nm); }
 function castraFormRec(volk){ return CASTRA_FORM_LIST.find(f=>f.volk===volk && f.tier===1 && f.type==="rec") || null; }
 // Gebouweis: een vorm van tier t vraagt het gebouw op niveau max(1, t−1) (stabula voor ruiterij/wagens/olifanten, navalia voor de vloot).
