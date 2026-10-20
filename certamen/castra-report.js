@@ -37,21 +37,43 @@ function castraBReportData(B){
   if(B.sim.cmdOn && !B.cmdUsed && !win) obs.push(`Je gebruikte geen bevelen (${s.energy} ⚡ over). Impete! of State! kan een dreigende golf nog keren.`);
   return { rows, total, obs:obs.slice(0,3), st };
 }
+// Zelfde stijl als het resultaatscherm van Battle Mode (bm-gain, bm-xpbar): getallen die oplopen en balkjes die vollopen.
 function castraBReportHTML(B){
-  const D = castraBReportData(B), st = D.st, win = B.sim.over==="win";
-  const bars = D.rows.map(r=>`<div style="display:flex;align-items:center;gap:8px;margin:2px 0;font-size:14px"><span style="width:38%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(r.nm)}</span><span style="flex:1;height:10px;border-radius:5px;background:rgba(255,255,255,.12)"><span style="display:block;height:100%;border-radius:5px;background:#d4af37;width:${Math.round(100*r.d/D.total)}%"></span></span><span style="width:48px;text-align:right">${Math.round(100*r.d/D.total)}%</span></div>`).join("");
-  const facts = [];
-  if(st.muri) facts.push(`🧱 Murus et sagittae vertraagde vijanden ${st.muri}×`);
-  if(st.pers) facts.push(`🐎 Persecutio gaf ${st.pers} extra schade`);
-  if(st.imp) facts.push(`⚔️ Impete! gaf ${st.imp} extra schade`);
-  if(st.prev) facts.push(`🛡️ pantser en schilden voorkwamen ${st.prev} schade`);
-  if(st.heal) facts.push(`⚕️ genezers herstelden ${st.heal} levenspunten`);
-  const why = !win ? `<div id="cbWhy" style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(138,109,47,.4)"><div style="font-size:15px">${castraLaHTML("Quid difficile erat?", "Wat was moeilijk? (optioneel)", "why_q")}</div>
+  const D = castraBReportData(B), st = D.st, s = B.sim, win = s.over==="win", anim = [];
+  const row = (ic, id, val, lbl)=>{ anim.push({ id, val }); return `<div class="bm-gain-row" style="margin-top:8px"><span class="bm-gain-ic">${ic}</span><span class="bm-gain-plus" id="${id}">+0</span><span class="bm-gain-lbl" style="text-transform:none;letter-spacing:0;font-size:15px;color:var(--text,#f1e6c4)">${lbl}</span></div>`; };
+  const bar = (id, pct, grad)=>{ anim.push({ bar:id, pct }); return `<div class="bm-xpbar" style="margin:4px auto 2px"><div class="bm-xpbar-fill" id="${id}" style="${grad?`background:${grad}`:""}"></div></div>`; };
+  const hp = `<div class="bm-gain-row"><span class="bm-gain-ic">❤️</span><span class="bm-gain-new" id="crHp" style="color:${s.baseHp>=6?"var(--green-bright)":s.baseHp>=3?"var(--hi-bright)":"#e07060"}">0</span><span class="bm-gain-lbl">/ ${CASTRA_P.baseHp} levens van het kamp</span></div>`
+    + bar("crHpBar", Math.round(100*s.baseHp/CASTRA_P.baseHp), "linear-gradient(90deg,#2f7d3a,var(--green-bright))");
+  anim.push({ id:"crHp", val:s.baseHp, plain:true });
+  const soldiers = D.rows.map((r,i)=>{ const pct = Math.round(100*r.d/D.total);
+    return `<div style="margin-top:10px"><div class="bm-gain-row" style="justify-content:space-between;max-width:320px;margin:0 auto"><span style="font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:55%">${esc(r.nm)}</span><span><b class="bm-gain-plus" id="crD${i}" style="font-size:18px">+0</b> <span class="bm-gain-lbl">schade · ${pct}%</span></span></div>${bar("crB"+i, pct)}</div>`.replace('<b class="bm-gain-plus"','<b class="bm-gain-plus"'); }).join("");
+  D.rows.forEach((r,i)=>anim.push({ id:"crD"+i, val:r.d }));
+  const eff = [];
+  if(st.muri) eff.push(row("🧱","crE0",st.muri,"keer vertraagde Murus et sagittae een vijand"));
+  if(st.pers) eff.push(row("🐎","crE1",st.pers,"extra schade door Persecutio"));
+  if(st.imp)  eff.push(row("⚔️","crE2",st.imp,"extra schade door Impete!"));
+  if(st.prev) eff.push(row("🛡️","crE3",st.prev,"schade voorkomen door pantser en schilden"));
+  if(st.heal) eff.push(row("⚕️","crE4",st.heal,"levenspunten hersteld door genezers"));
+  const why = !win ? `<div id="cbWhy" style="margin-top:12px;padding-top:8px;border-top:1px solid rgba(138,109,47,.4)"><div style="font-size:15px">${castraLaHTML("Quid difficile erat?", "Wat was moeilijk? (optioneel)", "why_q")}</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px">${[["hard","te moeilijk"],["unclear","onduidelijk"],["setup","verkeerde opstelling"],["long","te lang"],["other","anders"]].map(([k,t])=>`<button class="btn" style="min-height:40px" onclick="castraBFeedback('${k}')">${t}</button>`).join("")}</div></div>` : "";
-  return `<div class="panel" style="margin-top:10px"><h3>📊 Gevechtsrapport</h3>
-    <div class="note" style="margin-bottom:4px">Schade per soldaat (aandeel van het totaal)</div>${bars}
-    ${facts.length?`<div style="margin-top:8px;font-size:14px">${facts.map(esc).join("<br>")}</div>`:""}
-    ${D.obs.length?`<div style="margin-top:8px;font-size:14px;opacity:.95">${D.obs.map(o=>"💡 "+esc(o)).join("<br>")}</div>`:""}${why}</div>`;
+  B._rep = anim;
+  return `<div class="panel" style="margin-top:10px"><h3>📊 Gevechtsrapport</h3><div class="bm-gain" style="max-width:340px;margin:0 auto;align-items:stretch">${hp}
+    <div class="note" style="margin:12px 0 0;text-align:center">Schade per soldaat</div>${soldiers}
+    ${eff.length?`<div class="note" style="margin:14px 0 0;text-align:center">Wat gebeurde er nog meer</div>${eff.join("")}`:""}</div>
+    ${D.obs.length?`<div style="margin-top:12px;font-size:14px;opacity:.95">${D.obs.map(o=>"💡 "+esc(o)).join("<br>")}</div>`:""}${why}</div>`;
+}
+// Balken laten vollopen en getallen laten oplopen (zoals bmRenderXpGain in battle.js); bij uitgeschakelde animaties direct.
+function castraBReportAnimate(B){
+  const list = B._rep || []; if(!list.length) return;
+  const dur = (typeof BM_META!=="undefined" && BM_META && BM_META.animations===false) ? 0 : 1000;
+  list.forEach((a,i)=>{
+    const go = ()=>{
+      if(a.bar){ const e = document.getElementById(a.bar); if(e) e.style.width = a.pct+"%"; }
+      else if(typeof bmCountTo==="function") bmCountTo(a.id, 0, a.val, dur, a.plain ? "" : "+");
+      else { const e = document.getElementById(a.id); if(e) e.textContent = (a.plain?"":"+")+a.val; }
+    };
+    if(!dur) go(); else setTimeout(()=>requestAnimationFrame(go), 120 + Math.floor(i/2)*110);
+  });
 }
 function castraBFeedback(k){
   const B = CASTRA_B, box = el("cbWhy"); if(!B || !box || B.fbDone) return; B.fbDone = true;
@@ -63,6 +85,6 @@ castraBFinish = function(){
   _castraBFinishRep0();
   const B = CASTRA_B; if(!B || B.legio || B.endless) return;
   const box = el("cbResult"); if(!box) return;
-  try{ box.insertAdjacentHTML("beforeend", castraBReportHTML(B)); }catch(e){}
+  try{ box.insertAdjacentHTML("beforeend", castraBReportHTML(B)); castraBReportAnimate(B); }catch(e){}
 };
 Object.assign(CASTRA_GLOSS, { "quid":"wat", "difficile":"moeilijk", "erat":"was", "gratias":"dank", "tibi":"aan jou", "ago":"ik doe" });
