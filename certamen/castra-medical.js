@@ -138,7 +138,7 @@ function castraDilectusOpen(){
   const cards = D.cands.map(s=>{
     const ap = castraAppraisal(s), ing = CASTRA_INGENIA.find(i=>i.id===s.ingenium), t = CASTRA_TYPE_LA[castraLine(s.line).type];
     return `<div style="padding:8px 0;border-top:1px solid #4a3d2c">
-      <div style="font-size:17px">${s.insignis?"✨ ":""}<b>${esc(castraSoldierName(s))}</b> <small>(${esc(castraFolkNm(s.line))} · ${esc(t.sg)} · tier ${castraLine(s.line).tier}${s.lvl>1?" · "+castraLaText("gradus")+" "+s.lvl:""})</small> · <i>${esc(ing?ing.nm:"")}</i></div>
+      <div style="font-size:17px">${s.insignis?"✨ ":""}<b>${esc(castraSoldierName(s))}</b> ${castraClassBadge(castraLine(s.line))} <small>(${esc(castraFolkNm(s.line))} · ${esc(t.sg)} · tier ${castraLine(s.line).tier}${s.lvl>1?" · "+castraLaText("gradus")+" "+s.lvl:""})</small> · <i>${esc(ing?ing.nm:"")}</i></div>
       <div style="font-size:16px;margin:4px 0">${castraLaHTML(ap.la, ap.nl, "apr_"+ap.strong+"_"+ap.weak)}</div>
       <button class="btn btn-gold" onclick="castraDoHire('${s.id}')">${castraLaText("conscribe_hunc")} (${Object.keys(castraHireCost(s)).map(r=>castraRes(r).icon+" "+castraHireCost(s)[r]).join(" ")})</button></div>`;
   }).join("") || `<div class="note">${castraLa("nulli_candidati")}</div>`;

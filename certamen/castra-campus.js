@@ -82,12 +82,12 @@ function castraCampusOpen(){
           evo.options.map(o=>{
             const st = castraStats({ ...s, line:o.id }), dis = !evo.canPay || o.missing;
             return `<div style="margin:3px 0"><button class="btn ${adv&&adv.pick===o.id?"btn-gold":""}" ${dis?"disabled":""} onclick="castraDoEvolve('${s.id}','${o.id}')">${castraLaText("evolve")} → ${esc(o.f.nm)}</button>
-              <small>${esc(o.f.tak)} · ${esc((CASTRA_TYPE_LA[o.f.type]||{}).sg||"")} · ${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" ")}</small>
+              <small>${castraClassBadge(o.f)} ${esc(o.f.tak)} · ${esc((CASTRA_TYPE_LA[o.f.type]||{}).sg||"")} · ${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" ")}</small>
               ${o.missing?`<small> · ${esc(castraBuilding(o.missing)?castraBuilding(o.missing).nm:o.missing)} ${castraLaText("gradus")} ${o.needLvl} ${castraLaText("deest")}</small>`:""}</div>`;
           }).join("");
       }
     }
-    return `<div style="padding:6px 0;border-top:1px solid #4a3d2c"><b>${s.insignis?"✨ ":""}${esc(castraSoldierName(s))}</b> <small>(${esc(castraLine(s.line).tak)} · tier ${castraLine(s.line).tier})</small> · ${castraLaText("gradus")} ${s.lvl} <small>(XP ${s.xp}/${castraXpToNext(s.lvl)})</small>
+    return `<div style="padding:6px 0;border-top:1px solid #4a3d2c"><b>${s.insignis?"✨ ":""}${esc(castraSoldierName(s))}</b> <small>${castraClassBadge(castraLine(s.line))} (${esc(castraLine(s.line).tak)} · tier ${castraLine(s.line).tier})</small> · ${castraLaText("gradus")} ${s.lvl} <small>(XP ${s.xp}/${castraXpToNext(s.lvl)})</small>
       <div style="margin-top:4px">${act}</div>${ev?`<div style="margin-top:4px">${ev}</div>`:""}</div>`;
   }).join("") || `<div class="note">${castraLa("nullus_exercitus")}</div>`;
   const up = lvl>=maxL ? `<div class="note">${castraLa(lvl>=castraBuilding("campus").maxLvl?"gradus_max":"praetorium_prius")}</div>`
