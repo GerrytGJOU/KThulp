@@ -1,6 +1,6 @@
 # Castra Heroum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M6 gebouwd; M7 deels: Gallia (2026-11-04) en Aegyptus (2026-11-05) gebouwd, Roma/Laconia, Germania, Persis, Africa en Themiscyra wachten per regio op goedkeuring** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M6 gebouwd; M7 deels: Gallia (2026-11-04), Aegyptus (2026-11-05) en Persis (2026-11-06) gebouwd, Roma/Laconia, Germania, Africa en Themiscyra wachten per regio op goedkeuring** · hoort bij `CASTRA_HEROUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -143,7 +143,9 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 
 **M7 — regio 2: Aegyptus (2026-11-05).** Opent na missie ga2. Wereld met Nijl (brug op de weg), terreinen *Ad Nilum / In templo / In urbe / In deserto*, wild: 70% Egyptenaren, rest Perzen/Carthagers/Grieken/Amazones/Romeinen/Trojanen, rekruten level 31–41, tierplafond 4; mythisch: Nimfen, Schimmen (tempel), Feniks, Draken. Dilectus werft er Egyptenaren. Missies **ae1 Ad Nilum** (level 46, hpMult 13,3) en **ae2 Pyramides** (level 50, hpMult 5,9), afgesteld met dezelfde proef als Gallia (12 torens, 5% marge). Geen helden of sporen.
 
-**Nog te bouwen regio's (M7, elk apart goed te keuren):** Roma/Laconia, Germania, Persis, Africa, Themiscyra. Per regio: wereld + terreinen + wildmengsel + 2 missies + eventueel Dilectus-volk.
+**M7 — regio 3: Persis (2026-11-06).** Opent na missie ae2. Wereld met bergen, koningsweg, stad en veld (Perzische Golf als zee), terreinen *In montibus / In via regia / In urbe / In campo*, wild: 72% Perzen, rest Egyptenaren/Grieken/Trojanen/Amazones/Carthagers/Galliërs/Romeinen, rekruten level 35–45, tierplafond 4; mythisch: Grijpvogels, Draken, Adelaars, Feniks, Gevleugelde paarden. Dilectus werft er Perzen. Missies **pe1 Via regia** (level 50, hpMult 7) en **pe2 Persepolis** (level 50, hpMult 5,3), zelfde proef (12 torens, 5% marge; bij pe1 verliest 70% van het level pas nipt niet, omdat de level-cap 50 de vijand niet verder laat groeien). Geen helden of sporen.
+
+**Nog te bouwen regio's (M7, elk apart goed te keuren):** Roma/Laconia, Germania, Africa, Themiscyra. Per regio: wereld + terreinen + wildmengsel + 2 missies + eventueel Dilectus-volk.
 
 **Nog niet (volgende mijlpalen):** de overige M7-regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
