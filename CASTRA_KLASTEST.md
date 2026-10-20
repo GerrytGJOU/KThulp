@@ -127,3 +127,74 @@ localStorage.removeItem("castra_save_v1_gast"); location.reload();
 8. Open het *heroum* en kijk of Aeneas na zijn keten (jagen → m1 → overtuigen) is aangekomen.
 9. Herlaad de pagina: voortgang moet er nog zijn.
 10. Kijk in de browserconsole: geen rode foutmeldingen anders dan 404's voor ontbrekende sprites.
+
+---
+
+## 5. Klastest tower defence (nieuwe functies, 2026-12)
+
+Hoort bij `CASTRA_TROEPENBOMEN.md` §25–§27. Doel van deze test is niet bewijzen dat het spel werkt, maar ontdekken wat nog niet werkt. De leerlingen mogen zelf beginnen zonder uitleg: kijk of de uitlegvensters genoeg zijn.
+
+### 5a. Vooraf klaarzetten
+
+- [x] **Firebase-regels voor de meetpunten staan live** (gepubliceerd 2026-12-08; de tak `classAnalyticsCastraTD` accepteert een getal en weigert een tekst). Het bestand `certamen/database.rules.json` is gelijk aan wat live staat.
+- [ ] Controleer op de docentpagina van de klas (Castra-blok) dat de tabel *tower defence deze maand* na één gevecht van een ingelogde leerling gevuld raakt.
+- [ ] **Privacy:** de meetpunten bevatten alleen tellers per klas en maand (geen namen, geen leerlingcode, geen tekst van leerlingen). Controle: in de Firebase Console onder `classAnalyticsCastraTD/<klascode>/<maand>` staan alleen sleutels als `m_<missie>`, `e_<regel>`, `ret_d1`, met getallen.
+- [ ] Ververs de pagina hard op elk testapparaat (cachebusters staan in `certamen/index.html`).
+- [ ] Test één keer zonder netwerk: het gevecht moet gewoon werken; een mislukte synchronisatie mag niets laten zien.
+- [ ] Zet een eigen testsave klaar met **Kit D** (hieronder) voor leerlingen die nog niet ver zijn.
+- [ ] Print het observatieblad (§5d).
+
+**Kit D — klaar voor de testmissie *Silva Gallica* (missie ga1: snelle verkenners en zware krijgers, twee banen, geen zware regels):**
+
+```js
+(()=>{ const C=CASTRA; C.proelium={done:{m1:true,m2:true,m3:true,ro1:true,ro2:true}}; C.seenTD={}; C.pxp=Math.max(C.pxp||0,1500);
+  C.soldiers=C.soldiers||[]; ["rom_hastatus","rom_hastatus","rom_veles","rom_veles","rom_eques","rom_eques","rom_faber","rom_princeps"].forEach((l,i)=>{ const s=castraRollSoldier(l); s.lvl=20; C.soldiers.push(s); });
+  C.res={frumentum:500,lignum:600,aes:600,gloria:10}; C.introSeen=true; castraSave(); go("castraProelium"); })()
+```
+
+### 5b. Les van 50 minuten
+
+| Tijd | Wat |
+|---|---|
+| 0–5 | Introductie en nulmeting: dit is een test van het spel, niet van hen. Wie heeft eerder tower defence of monsterverzamelspellen gespeeld? Ze loggen in met hun eigen account. |
+| 5–15 | Vrij spelen: leerlingen kiezen zelf de eerste beschikbare missie. Help alleen als ze vastlopen. Noteer of ze de uitlegvensters lezen, de gouden lijnen van synergieën opmerken en bevelen gebruiken. |
+| 15–27 | Gerichte opdracht: iedereen speelt *Silva Gallica* (Kit D voor wie er nog niet is). Laat ze vooraf voorspellen welke opstelling werkt, dan spelen, dan één keer opnieuw met een aanpassing. |
+| 27–37 | Experimenteren: één bewuste verandering (een ondersteuner vervangen, een andere synergie proberen, een bevel op een ander moment). Vraag wat ze verwachten dat er verandert. |
+| 37–45 | Reflectie, individueel: wat was leuk, wat was onduidelijk, wat wil je als eerste opnieuw proberen, speel je thuis uit jezelf verder en waarom? |
+| 45–50 | Vrije keuze: nieuwe missie, de wereld verkennen, een codexvermelding bekijken of de wekelijkse uitdaging. Observeer wat ze kiezen, zonder beloning. |
+
+Duurt inloggen te lang (meer dan 10 minuten), laat dan de eerste missie en de reflectie voorgaan.
+
+### 5c. Wat zit er in de meetpunten (docentpagina, blok *Castra Heroum — tower defence deze maand*)
+
+| Meting | Wat je ermee ziet | Let op |
+|---|---|---|
+| Gestart / gewonnen / afgebroken per missie | Waar leerlingen vastlopen of afhaken | Veel afbreken op één missie wijst op moeilijkheid of onduidelijkheid |
+| Duur (gem.) | Past een gevecht in de les? | Alleen het gemiddelde; uitschieters ontbreken |
+| Ander team dan vorige poging | Of ze experimenteren | Veel wissels kan nieuwsgierigheid of wanhoop zijn |
+| Waarom een missie moeilijk was | Optionele vraag na een verlies (te moeilijk, onduidelijk, opstelling, te lang, anders) | Alleen wie antwoordt telt mee |
+| Per rol en regel: gevechten en winst | Welke combinaties te zwaar zijn | Vergelijk alleen met voldoende pogingen |
+| Opstelling per soldatensoort | Dominante keuzes | Eén dominante keuze kan bij de missie passen |
+| Synergieën actief, bevelen gegeven | Of ze die gebruiken | "Actief" is niet "opgemerkt": vraag het ook |
+| Wanneer bevelen worden gegeven (levens, afstand, golf) | Of het een routine is of een keuze | Alleen opgeteld, geen tijdlijn |
+| Schooltijd of daarbuiten, sessielengte en activiteiten | Wie thuis speelt en wat er dan gebeurt | De categorie volgt uit het tijdstip (ma–vr 8–17 u), niet uit een bevestiging |
+| Spelers per dag en terugkeer | Vroege signalen of leerlingen terugkomen | Eén klas en een korte periode: geen bewijs van retentie |
+| Wekelijkse uitdaging | Verschijnt als missie "Wekelijkse uitdaging" in dezelfde tabel | |
+
+### 5d. Observatieblad (print of noteer in een tabel)
+
+| Leerling (initialen) | Begreep hoe je start | Las de uitlegvensters | Zag de synergielijnen | Gebruikte bevelen (wanneer) | Wisselde team na verlies | Zei zelf "nog een keer" | Opvallende verwarring of vraag |
+|---|---|---|---|---|---|---|---|
+| | | | | | | | |
+
+Noteer ook: hoeveel leerlingen na de les uit zichzelf een nieuwe missie kozen, en of iemand klaagde dat een gevecht "oneerlijk" voelde.
+
+### 5e. Wanneer zeg je: dit werkt (voorlopige beslisregels, geen normen)
+
+**Groen — doorbouwen:** de meeste leerlingen starten en voltooien zonder hulp een missie; ze kunnen minstens één tactische keuze uitleggen; na een verlies proberen meerdere leerlingen bewust iets anders; bevelen en synergieën worden zonder aanwijzen gebruikt; ze noemen concrete dingen die ze opnieuw willen proberen.
+
+**Oranje — gericht aanpassen:** leerlingen kijken vooral naar de hoogste statistieken; synergieën zijn vaak actief maar worden niet opgemerkt; bevelen worden bijna altijd op hetzelfde moment gebruikt; leerlingen winnen maar begrijpen niet waarom; één missieregel of vijandrol zorgt telkens voor onverwachte nederlagen.
+
+**Rood — eerst de kern repareren:** veel leerlingen begrijpen zonder hulp niet hoe ze een gevecht starten of plaatsen; verliezen voelen willekeurig; de nieuwe systemen worden niet herkend, zelfs niet na uitleg; gevechten duren zo lang dat er geen tijd is voor een tweede poging.
+
+Kijk bij een kleine klas naar individuele patronen en niet naar percentages. Na één week (thuisgebruik) kijk je opnieuw: wie speelde uit zichzelf? Trek pas na meerdere weken conclusies over retentie.
