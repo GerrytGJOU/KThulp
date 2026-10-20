@@ -31,7 +31,7 @@ function castraMenuBtn(){
   const wrap = document.getElementById("castraWrap");
   const b = document.createElement("button");
   b.id = "castraMenuBtn"; b.setAttribute("aria-label","Menu");
-  b.style.cssText = "position:absolute;top:6px;right:6px;z-index:60;min-width:44px;min-height:44px;font-size:22px;line-height:1;background:#fff;color:#000;border:3px solid #000;border-radius:8px;box-shadow:0 0 0 2px #fff;cursor:pointer;font-family:inherit";
+  b.style.cssText = "position:absolute;top:6px;right:6px;z-index:60;min-width:44px;min-height:44px;font-size:22px;line-height:1;background:linear-gradient(#efe1b9,#e4d2a1);color:#2b1d0e;border:3px solid #4a3416;border-radius:8px;box-shadow:0 0 0 2px #c9a24a;cursor:pointer;font-family:inherit";
   b.textContent = "☰";
   b.onclick = ev=>{ ev.stopPropagation(); castraMenuToggle(); };
   b.onpointerdown = ev=>ev.stopPropagation();
@@ -54,10 +54,10 @@ function castraMenuOpen(){
 function castraMenuRender(){
   const m = document.getElementById("castraMenu"); if(!m) return;
   const name = castraPlayerName() || "Dux";
-  const box = "background:#fff;color:#000;border:4px solid #000;border-radius:10px;box-shadow:0 0 0 3px #fff;font-family:inherit";
+  const box = "background:linear-gradient(#efe1b9,#e4d2a1);color:#2b1d0e;border:4px solid #4a3416;border-radius:10px;box-shadow:0 0 0 2px #c9a24a,0 6px 20px rgba(0,0,0,.5);font-family:inherit";
   const items = CASTRA_MENU_ITEMS.map(it=>{
     const on = CASTRA_MENU.view===it.id, la = it.id==="profiel" ? name : it.la;
-    return `<div role="button" tabindex="0" onclick="castraMenuPick('${it.id}')" style="padding:8px 10px 8px 22px;font-size:20px;cursor:pointer;position:relative;min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;${on?"background:#e8e8e8":""}">
+    return `<div role="button" tabindex="0" onclick="castraMenuPick('${it.id}')" style="padding:8px 10px 8px 22px;font-size:20px;cursor:pointer;position:relative;min-height:44px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;${on?"background:rgba(120,80,20,.18)":""}">
       <span style="position:absolute;left:6px;top:50%;transform:translateY(-50%);visibility:${on?"visible":"hidden"}" class="castra-cur">▶</span>
       <b>${esc(la)}</b><small style="opacity:.6;font-size:11px">${esc(it.nl)}</small></div>`;
   }).join("");
@@ -76,10 +76,10 @@ function castraMenuPick(id){
 }
 
 /* ---------- onderdelen ---------- */
-const CASTRA_MV_ROW = "display:flex;gap:10px;align-items:center;padding:6px 0;border-top:1px solid #ccc";
+const CASTRA_MV_ROW = "display:flex;gap:10px;align-items:center;padding:6px 0;border-top:1px solid #c2a96f";
 function castraMenuBar(cur, max, col){
   const p = Math.max(0, Math.min(100, Math.round(100*cur/Math.max(1,max))));
-  return `<div style="height:8px;background:#ddd;border:1px solid #000;border-radius:5px;overflow:hidden"><div style="width:${p}%;height:100%;background:${col}"></div></div>`;
+  return `<div style="height:8px;background:#d3bf8c;border:1px solid #4a3416;border-radius:5px;overflow:hidden"><div style="width:${p}%;height:100%;background:${col}"></div></div>`;
 }
 function castraMenuSprite(formId, look){
   return `<div style="flex:0 0 52px;width:52px;height:52px;position:relative">${castraFsprHas(formId,"td")===true ? castraFsprHTML(formId,"td",52,"") : castraAvatarHTML(look,"down",1,52)}</div>`;
@@ -155,5 +155,5 @@ function castraMenuProfile(){
     ["Codex", `${seen} / ${tot} vormen`],
   ];
   const av = (typeof BM_IDENT!=="undefined" && BM_IDENT && BM_IDENT.avatar) ? `<div style="flex:0 0 96px;width:96px;height:96px;position:relative">${castraAvatarHTML(BM_IDENT.avatar,"down",1,96)}</div>` : "";
-  return `<h3 style="margin:0 0 6px">${esc(name)}</h3><div style="display:flex;gap:12px;align-items:center">${av}<div style="flex:1">${rows.map(r=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid #ccc"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("")}</div></div>`;
+  return `<h3 style="margin:0 0 6px">${esc(name)}</h3><div style="display:flex;gap:12px;align-items:center">${av}<div style="flex:1">${rows.map(r=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid #c2a96f"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("")}</div></div>`;
 }
