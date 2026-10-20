@@ -44,6 +44,7 @@ function castraMakeEncounter(regionId, terrainId){
   const terrain = (terrainId && reg.terrains.find(t=>t.id===terrainId)) || reg.terrains[Math.floor(rng()*reg.terrains.length)];
   const pick = castraWildPick(reg, terrain, rng);
   const e = castraRollSoldier(pick.form.id);
+  if(typeof castraCodexSee==="function") castraCodexSee(pick.form.id);
   e.lvl = pick.lvl;
   const st = castraStats(e);
   Object.keys(st).forEach(k=>{ st[k] = Math.max(1, Math.round(st[k]*CASTRA_V_BAL.wildMult)); });
