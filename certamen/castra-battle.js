@@ -23,6 +23,7 @@ SCREENS.castraProelium = function(){
     return head + `<div class="panel" style="${open?"":"opacity:.5"}">
       <h3>${done?"✔ ":open?"⚔️ ":"🔒 "}${castraLaHTML(m.nm, m.nl, "m_"+m.id)}</h3>
       ${open?`<div style="font-size:15px;margin:4px 0 8px"><span style="opacity:.8">${castraLaText("explorator")}</span> ${castraLaHTML(sc.la, sc.nl, "scout_"+m.id)}</div>
+        ${typeof castraEdictChips==="function" ? castraEdictChips(m) : ""}
         <button class="btn btn-gold" onclick="castraBStart('${m.id}')">${castraLaText("proelium_ini")}</button>`
         : `<div class="note">${castraLa("clausum")}</div>`}
     </div>`;
@@ -39,7 +40,7 @@ function castraBHealthy(){
   const list = (CASTRA.heroes||[]).map(castraHeroAsUnit).concat(CASTRA.soldiers.filter(s=>!castraIsHurt(s)));
   return list.length ? list : [ { id:"dux", dux:true, line:"rom_hastatus", lvl:1, name:"Dux" } ];
 }
-function castraBCap(){ if(CASTRA_B && CASTRA_B.endless) return CASTRA_COLO.cap[CASTRA_B.div] || 8; return 4 + 2*castraLvl("praetorium"); }
+function castraBCap(){ if(CASTRA_B && CASTRA_B.endless) return CASTRA_COLO.cap[CASTRA_B.div] || 8; return Math.min(4 + 2*castraLvl("praetorium"), (CASTRA_B && CASTRA_B.ed) ? CASTRA_B.ed.cap : 99); }
 function castraBStart(missionId){
   const m = CASTRA_P_MISSIONS.find(x=>x.id===missionId); if(!m || !castraPMissionOpen(m)) return;
   if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
@@ -48,6 +49,7 @@ function castraBStart(missionId){
                boons:[], pick:null, offeredFor:-2, rewardMult:1, autoT:0, ctlSig:"" };
   CASTRA_B.sim.mods = { dmg:1, cd:1, rng:1, spd:1 };
   if(typeof castraCardApply==="function") castraCardApply(CASTRA_B);   // kaartbonussen (alleen solo)
+  if(typeof castraEdictApply==="function") castraEdictApply(CASTRA_B);   // missieregels (castra-roles.js)
   // vormsprites (indien aanwezig) vooraf controleren: alle vijanden van de missie en je eigen soldaten
   const ids = {}; m.waves.forEach(w=>w.forEach(g=>ids[g.line]=1)); (CASTRA.soldiers||[]).forEach(s=>ids[s.line]=1);
   castraFsprProbe(Object.keys(ids).map(i=>[i,"td"]), null);
@@ -72,8 +74,10 @@ SCREENS.castraBattle = function(){
   castraBRenderHud(); castraBRenderCtl(); castraBRenderCards();
   B.resizeFn = castraBFit; window.addEventListener("resize", B.resizeFn);
   B.timer = setInterval(B.legio ? castraLegioTick : castraBTick, CASTRA_P.tickMs);
+  if(typeof castraBIntroStart==="function") castraBIntroStart();   // uitleg van nieuwe missieregels (pauzeert tot begrepen)
 };
 function castraBExit(){
+  { const o = document.getElementById("cbIntro"); if(o) o.remove(); }
   if(CASTRA_B){ clearInterval(CASTRA_B.timer); window.removeEventListener("resize", CASTRA_B.resizeFn); }
   const legio = CASTRA_B && CASTRA_B.legio; CASTRA_B = null; go(legio ? "castraHome" : "castraProelium");
 }
@@ -94,9 +98,9 @@ function castraBBuildMap(){
   map.onclick = castraBMapTap;
   castraTsLoad().then(()=>{ const b=el("cbBelow"), a=el("cbAbove"); if(b&&a) castraDrawMapLayers(B.built, b, a); });
   // pad: begin- en eindpunt aanduiden
-  const P = mp.path, first = P[0], last = P[P.length-1];
-  el("cbPlace").innerHTML = `<div style="position:absolute;left:${first[0]*48}px;top:${first[1]*48}px;width:48px;height:48px;background:rgba(200,57,42,.35)"></div>
-    <div style="position:absolute;left:${last[0]*48}px;top:${last[1]*48}px;width:48px;height:48px;background:rgba(63,157,82,.35)"></div>`;
+  const lanes = mp.lanes || [mp.path], last = mp.path[mp.path.length-1];
+  el("cbPlace").innerHTML = lanes.map(L=>`<div style="position:absolute;left:${L[0][0]*48}px;top:${L[0][1]*48}px;width:48px;height:48px;background:rgba(200,57,42,.35)"></div>`).join("")
+    + `<div style="position:absolute;left:${last[0]*48}px;top:${last[1]*48}px;width:48px;height:48px;background:rgba(63,157,82,.35)"></div>`;
   // torens die al staan (bij hergebruik na een golf)
   B.sim.towers.forEach(castraBDrawTower);
 }
@@ -123,6 +127,7 @@ function castraBMapTap(e){
   if(!B.sel || !castraBTileFree(x,y)) return;
   if(B.sim.towers.length >= castraBCap()){ castraToastLa("acies_plena"); return; }
   const s0 = castraBHealthy().find(q=>q.id===B.sel); if(!s0) return;
+  if(typeof castraBBanned==="function" && castraBBanned(s0)){ toast("🚫", "Dit soort soldaat mag in deze missie niet meedoen."); return; }
   const tower = castraPMakeTower(B.sim, s0, x, y);
   B.sim.towers.push(tower); B.placed[s0.id] = true; B.sel = null;
   if(B.actions) B.actions.push({ t:B.sim.tick, k:"place", sid:s0.id, x, y });
@@ -147,7 +152,8 @@ function castraBRenderHud(){
   const B = CASTRA_B, h = el("cbHud"); if(!h) return; const s = B.sim, m = B.mission;
   h.innerHTML = `<span>❤️ ${castraLaText("vita_castrorum")}: <b>${s.baseHp}</b> / ${CASTRA_P.baseHp}</span>
     <span>${castraLaText("ala")}: <b>${Math.max(0,s.wave+(s.waveActive?1:0))}</b> / ${m.waves.length}</span>
-    <span>${castraLaText("milites")}: <b>${s.towers.length}</b> / ${castraBCap()}</span>`;
+    <span>${castraLaText("milites")}: <b>${s.towers.length}</b> / ${castraBCap()}</span>
+    ${(typeof castraEdictChips==="function") ? "<span style='flex-basis:100%'>"+castraEdictChips(m)+"</span>" : ""}`;
 }
 /* Dona (gunsten): na elke golf (behalve de laatste) kies je 1 van 2; ze gelden voor de rest van de missie (alleen solo). */
 const CASTRA_DONA = [
@@ -160,7 +166,7 @@ const CASTRA_DONA = [
 ];
 function castraBOfer(){
   const B = CASTRA_B, s = B.sim;
-  if(B.legio || B.endless || (typeof castraUnlocked==="function" && !castraUnlocked("dona")) || s.over || s.waveActive || s.wave<0 || s.wave>=B.mission.waves.length-1 || B.offeredFor===s.wave) return;
+  if(B.legio || B.endless || (B.ed && B.ed.noDona) || (typeof castraUnlocked==="function" && !castraUnlocked("dona")) || s.over || s.waveActive || s.wave<0 || s.wave>=B.mission.waves.length-1 || B.offeredFor===s.wave) return;
   B.offeredFor = s.wave;
   const pool = CASTRA_DONA.slice(); const a = pool.splice(Math.floor(Math.random()*pool.length),1)[0], b = pool.splice(Math.floor(Math.random()*pool.length),1)[0];
   B.pick = [a,b]; B.autoT = 0; castraBRenderCtl();
@@ -186,7 +192,8 @@ function castraBRenderCtl(){
   const have = (B.boons.length || cardTxt) ? `<div style="font-size:12px;opacity:.8;margin-top:4px">${B.boons.map(id=>{ const d = CASTRA_DONA.find(x=>x.id===id); return esc(d.la); }).join(" · ")}${cardTxt?`<div>🃏 ${esc(cardTxt)}</div>`:""}</div>` : "";
   c.innerHTML = pickHtml + `<button class="btn btn-gold" ${s.waveActive||s.over||B.pick?"disabled":""} onclick="castraBStartWave()">${castraLaText("incipe")} ${!s.waveActive&&nextWave<B.mission.waves.length?"("+(nextWave+1)+"/"+B.mission.waves.length+")":""}</button>
     <button class="btn" style="min-height:44px" onclick="castraBSpeed()">${B.speed===1?"▶":"⏩"} ${B.speed}× ${castraLaText("celerius")}</button>
-    <button class="btn ${B.auto?"btn-gold":""}" style="min-height:44px" onclick="castraBAutoToggle()" title="Start de volgende golf automatisch">⟳ Auto ${B.auto?"aan":"uit"}</button>` + have;
+    <button class="btn ${B.auto?"btn-gold":""}" style="min-height:44px" onclick="castraBAutoToggle()" title="Start de volgende golf automatisch">⟳ Auto ${B.auto?"aan":"uit"}</button>
+    <button class="btn" style="min-height:44px" onclick="castraBInfo()" title="Vijanden en regels in deze missie">ⓘ</button>` + have;
 }
 function castraBStartWave(){
   const B = CASTRA_B; if(!B || B.sim.over) return;
@@ -197,11 +204,11 @@ function castraBRenderCards(){
   const B = CASTRA_B, box = el("cbCards"); if(!box) return;
   const list = castraBHealthy();
   box.innerHTML = `<div class="note" style="margin-bottom:6px">${castraLa("elige_loca")}</div>` + list.map(s=>{
-    const placed = !!B.placed[s.id], st = s.hero ? castraHeroStats(s.h) : s.dux ? CASTRA_V_BAL.dux : castraStats(s);
+    const banned = typeof castraBBanned==="function" && castraBBanned(s), placed = !!B.placed[s.id] || banned, st = s.hero ? castraHeroStats(s.h) : s.dux ? CASTRA_V_BAL.dux : castraStats(s);
     const ty = s.hero ? CASTRA_HERO_DATA[s.h.id].type : castraLine(s.line).type;
     const sel = B.sel===s.id, nm = s.hero ? CASTRA_HERO_DATA[s.h.id].nm : s.dux ? "Dux" : castraSoldierName(s), t = CASTRA_TYPE_LA[ty];
     return `<button class="tile ${sel?"tile-primary":""}" ${placed?"disabled":""} style="${placed?"opacity:.45;":""}" onclick="castraBSelect('${s.id}')">
-      <h3>${s.hero?"⭐ ":s.insignis?"✨ ":""}${esc(nm)} <small>${castraLaText("gradus")} ${s.lvl||1} · ${esc(t.sg)}</small></h3>
+      <h3>${banned?"🚫 ":""}${s.hero?"⭐ ":s.insignis?"✨ ":""}${esc(nm)} <small>${castraLaText("gradus")} ${s.lvl||1} · ${esc(t.sg)}</small></h3>
       <p>${CASTRA_STATS.map(x=>x.nm.slice(0,3)+" "+st[x.id]).join(" · ")}</p></button>`;
   }).join("");
 }
@@ -211,11 +218,16 @@ function castraBSelect(id){ const B = CASTRA_B; B.sel = (B.sel===id ? null : id)
 function castraBTick(){
   const B = CASTRA_B; if(!B || !el("cbMap")){ if(B) clearInterval(B.timer); return; }
   if(B.finished) return;
+  if(B.paused) return;     // wacht op de uitleg (castra-roles.js)
   for(let i=0;i<B.speed && !B.sim.over;i++){
     castraPStep(B.sim);
+    let stop = false;
     B.sim.events.forEach(ev=>{
       if(ev.k==="hit"){ const t = B.sim.towers.find(x=>x.id===ev.t), e = B.sim.enemies.find(x=>x.id===ev.e); if(t&&e) B.fx.push({ x1:t.cx, y1:t.cy, x2:e.x, y2:e.y, ttl:3, type:t.type }); }
+      else if(ev.k==="heal"){ const m = B.sim.enemies.find(x=>x.id===ev.m), e = B.sim.enemies.find(x=>x.id===ev.e); if(m&&e) B.fx.push({ x1:m.x, y1:m.y, x2:e.x, y2:e.y, ttl:4, col:"#6f6" }); }
+      else if(ev.k==="newrole" && typeof castraBIntroRole==="function"){ if(castraBIntroRole(ev.role)) stop = true; }
     });
+    if(stop) break;
   }
   castraBDrawUnits(); castraBDrawFx(); castraBRenderHud();
   if(B.sim.over && !B.finished){ B.finished = true; castraBFinish(); }
@@ -235,7 +247,8 @@ function castraBDrawUnits(){
     if(!u){
       const d = document.createElement("div");
       d.style.cssText = "position:absolute;width:48px;height:48px;left:0;top:0;filter:drop-shadow(0 0 3px rgba(200,40,40,.9)) saturate(1.2)";
-      d.innerHTML = `<div class="av"></div><div style="position:absolute;left:6px;top:-2px;width:36px;height:5px;background:#2a1010;border-radius:3px"><div class="hp" style="height:100%;background:#c8392a;border-radius:3px"></div></div>`;
+      const rb = (e.role && typeof CASTRA_P_ROLES!=="undefined") ? `<div style="position:absolute;left:-2px;top:-10px;font-size:15px;line-height:1;text-shadow:0 0 3px #000">${CASTRA_P_ROLES[e.role].icon}</div>` : "";
+      d.innerHTML = `<div class="av"></div>${rb}<div style="position:absolute;left:6px;top:-2px;width:36px;height:5px;background:#2a1010;border-radius:3px"><div class="hp" style="height:100%;background:#c8392a;border-radius:3px"></div></div>`;
       box.appendChild(d); u = B.units[e.id] = { d, px, py, dir:"down", frame:-1 };
     }
     const dx = px-u.px, dy = py-u.py;
@@ -259,7 +272,7 @@ function castraBDrawFx(){
   g.clearRect(0,0,cv.width,cv.height);
   B.fx = B.fx.filter(f=>f.ttl>0);
   B.fx.forEach(f=>{
-    g.strokeStyle = f.type==="rng" ? "#f6dd8e" : f.type==="cav" ? "#9ad" : f.type==="myth" ? "#d8f" : "#fff";
+    g.strokeStyle = f.col ? f.col : f.type==="rng" ? "#f6dd8e" : f.type==="cav" ? "#9ad" : f.type==="myth" ? "#d8f" : "#fff";
     g.globalAlpha = f.ttl/3; g.lineWidth = 3; g.beginPath();
     g.moveTo(f.x1*48/1000, f.y1*48/1000); g.lineTo(f.x2*48/1000, f.y2*48/1000); g.stroke(); f.ttl--;
   });
