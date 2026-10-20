@@ -170,6 +170,19 @@ const CASTRA_P_MISSIONS = [
             [ {line:_fid("ger","Centenus"),n:9,gap:10,lvl:50} ],
             [ {line:_fid("ger","Comes"),n:5,gap:14,lvl:50}, {line:_fid("ger","Batavus"),n:8,gap:10,lvl:50}, {line:_fid("myt","Draco"),n:2,gap:26,lvl:50} ] ],
     reward:{ aes:1500, frumentum:1050, gloria:70 } },
+  /* Themiscyra (opent na gm2) */
+  { id:"th1", region:"themiscyra", nm:"Themiscyra", nl:"Het rijk van de Amazones", map:"a", seed:11101, hpMult:7.5, needs:"gm2",
+    waves:[ [ {line:_fid("ama","Sagittaria"),n:8,gap:14,lvl:50} ],
+            [ {line:_fid("ama","Peltasta Amazon"),n:7,gap:14,lvl:50} ],
+            [ {line:_fid("ama","Sagittaria equestris"),n:6,gap:14,lvl:50}, {line:_fid("ama","Sagittaria"),n:4,gap:14,lvl:50} ],
+            [ {line:_fid("ama","Securifera"),n:6,gap:14,lvl:50}, {line:_fid("ama","Sagittaria equestris"),n:5,gap:12,lvl:50} ] ],
+    reward:{ aes:1600, frumentum:1120, gloria:74 } },
+  { id:"th2", region:"themiscyra", nm:"Hippolyte", nl:"De strijd om Hippolyte", map:"b", seed:11202, hpMult:4.3, needs:"th1",
+    waves:[ [ {line:_fid("ama","Securifera"),n:8,gap:12,lvl:50} ],
+            [ {line:_fid("ama","Sagittaria equestris"),n:8,gap:10,lvl:50}, {line:_fid("ama","Peltasta Amazon"),n:4,gap:14,lvl:50} ],
+            [ {line:_fid("ama","Sagittaria"),n:9,gap:10,lvl:50}, {line:_fid("myt","Gryps"),n:3,gap:20,lvl:50} ],
+            [ {line:_fid("ama","Securifera"),n:7,gap:10,lvl:50}, {line:_fid("ama","Sagittaria equestris"),n:7,gap:10,lvl:50}, {line:_fid("myt","Equus alatus"),n:3,gap:20,lvl:50} ] ],
+    reward:{ aes:1800, frumentum:1260, gloria:80 } },
 ];
 for(const m of CASTRA_P_MISSIONS){ if(!m.region) m.region = "latium"; }
 
