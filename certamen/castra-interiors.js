@@ -79,7 +79,7 @@ function castraInteriorRegister(id){
     if(I.host) CASTRA_WENT.push({ id:I.host.id, region:id, kind:"npc", role:"host", nm:"Matrona", x:I.host.x, y:I.host.y, dir:"down", look:CASTRA_MATRONA_LOOK });
     if(I.book) CASTRA_WENT.push({ id:I.book.id, region:id, kind:"book", x:I.book.x, y:I.book.y, off:0 });
     (I.books||[]).forEach(b=>CASTRA_WENT.push({ id:b.id, region:id, kind:"book", x:b.x, y:b.y, off:b.off||0 }));
-    (I.npcs||[]).forEach(n=>CASTRA_WENT.push({ id:n.id, region:id, kind:"npc", role:n.role, nm:n.nm, x:n.x, y:n.y, dir:n.dir||"down", look:n.look }));
+    (I.npcs||[]).forEach(n=>CASTRA_WENT.push(Object.assign({ dir:"down" }, n, { region:id, kind:"npc" })));
     (I.pickups||[]).forEach(p=>CASTRA_WENT.push({ id:p.id, region:id, kind:"pickup", item:p.item, x:p.x, y:p.y, needs:p.needs }));
     (I.bosses||[]).forEach(b=>CASTRA_WENT.push(Object.assign({ icon:"👹" }, b, { region:id, kind:"boss" })));
   }

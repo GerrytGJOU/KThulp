@@ -137,7 +137,7 @@ function castraBossWon(V){
   const w = CASTRA.wday || (CASTRA.wday = {});
   if(w[b.key]===castraWDay()) return;
   w[b.key] = castraWDay();
-  const t = castraWGive(Object.assign(castraWScaled(b.reward, castraWScale("roma")), { gloria:b.gloria||2 }));
+  const t = castraWGive(Object.assign(castraWScaled(b.reward, castraWScale(V.region||"roma")), { gloria:b.gloria||2 }));
   if(typeof castraPxpAdd==="function") castraPxpAdd(b.pxp||25, b.why||"Baas verslagen");
   if(b.token && typeof castraCardToken==="function") castraCardToken(1, b.why||"baas verslagen");
   castraSave();

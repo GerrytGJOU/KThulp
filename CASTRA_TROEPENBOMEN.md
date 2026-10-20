@@ -301,3 +301,17 @@ Alle nieuwe objecten, trappen en aankomsttegels zijn gecontroleerd op bereikbaar
 - **Venator Romanus** bij de zuidingang: dagelijkse jachtopdracht (net als in Latium).
 
 Controles: alle objecten, deuren en aankomsttegels zijn bereikbaar (BFS), het Latijn staat in het glossarium, de gevechtsmoeilijkheid is nagerekend (een Princeps niv. 16 wint nipt van de kampioen, niv. 20 verliest ervan; Triarius niv. 20 wint ruim; Larva is verslaanbaar met een niv. 20-soldaat) en de winstbeloning, dagelijkse verberging en jachtopdracht zijn getest. Nog niet gedaan: de overige regio's op dezelfde manier uitbouwen (volgende: Gallia).
+
+## 22. Pokémon-formaat: Gallia, Graecia en Aegyptus 64 × 48 (2026-12-03)
+
+**Maatvergelijking.** In Pokémon Red/Blue is een stap 16 px (zoals onze tegel): Pallet Town 20 × 18, Viridian/Pewter 40 × 36, Celadon ±50 × 36, routes 20 × 36 tot 20 × 144 (Cycling Road). Ons beeld toont 16 × 11 tegels (Game Boy: 10 × 9), dus 64 × 48 = 3072 tegels voelt ongeveer als twee à drie Kanto-steden. Latium (64 × 48) en Roma (72 × 54) waren al zo groot; nu volgen **Gallia, Graecia en Aegyptus** (de overige vijf regio's blijven 32 × 24 tot ze aan de beurt zijn).
+
+**Aanpassingen.** De regio's hebben een eigen start (31,46), hoofdwegen op x 31–32 en een dwarsweg op `CASTRA_GEO[regio].row` (Gallia 24, Graecia 20, Aegyptus 24), met de rivier/zee en brug op de gate-rij; hubs op (28,44). Bewaarde posities gelden alleen nog bij dezelfde kaartmaat (`{x,y,s}` in `CASTRA.worlds`), zodat spelers na de vergroting niet in een muur of op een boom landen. Posities van kisten (nu 8 per regio), zoekplek, opdrachtgever, bouwer, puzzelmeester en bouwplaats zijn gekozen door een zoekscript (bereikbaar, niet in hoog gras, spreiding) en staan in `CASTRA_WPOS`.
+
+**Binnenruimtes en opdrachten per regio** (`certamen/castra-regions.js`, data-gedreven uit `CASTRA_REGSPEC`, drie per regio):
+- **Huis A** (Gallia: Domus Druidis · Graecia: Oraculum · Aegyptus: Templum Isidis): quizmaster (Bardus / Pythia / Sacerdos) met vertaalquiz van hele zinnen (18 basiszinnen + 6 eigen per regio, vanaf niveau 13), boekenkast, 2 kisten.
+- **Huis B** (Taberna · Gymnasium · Hortus Nili): rustplek (alle soldaten genezen + 12 XP, dagelijks) en een kampioen (dagelijks gevecht: Bellator Gallus 26 · Peltasta 38 · Custos Pharaonis 50).
+- **Grot** (Antrum · Labyrinthus · Pyramis): eigen verborgen terrein (40% mythisch), zoekopdracht voor de Grotwachter (viscum 🌿 · filum 🧵 · scarabaeus sacer 🪲; 150 aes + 75 frumentum geschaald, 2 gloria, 45 XP, kaarttrekking) en een dagelijkse baas (Centaurus 28 · Draco 40 · Mumia 54), 3 kisten.
+- **Venator** per regio: dagelijkse jachtopdracht.
+
+Generieke rollen: `gquiz`, `grest`, `gchamp`, `gfetch`, bazen via `kind:"boss"`; gevechten via `castraRegionFight(regio, terrein, vorm, niveau, boss)`. Controles: alle objecten, deuren, poorten (ook bij geopende doorgangen) en aankomsttegels zijn bereikbaar, het Latijn staat in het glossarium, de gevechten zijn nagerekend en de beloningsflow is getest. Nog niet gedaan: Laconia, Troia, Germania, Themiscyra, Persis en Africa op dezelfde manier uitbouwen.
