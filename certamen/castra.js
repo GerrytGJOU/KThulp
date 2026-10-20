@@ -387,7 +387,8 @@ function castraGate(g){
     CASTRA.pos = { x:g.tiles[0].x, y:1 }; castraSave();
     if(CASTRA_UI.keyFn) document.removeEventListener("keydown", CASTRA_UI.keyFn);
     if(CASTRA_UI.resizeFn) window.removeEventListener("resize", CASTRA_UI.resizeFn);
-    go("castraRegions"); return;
+    if(typeof castraGeoEnterWorld==="function") castraGeoEnterWorld(); else go("castraRegions");
+    return;
   }
   if(g.to==="proelium"){
     CASTRA.pos = { x:14, y:5 }; castraSave();
