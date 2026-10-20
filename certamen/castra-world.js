@@ -148,7 +148,8 @@ function castraWorldDef(){
       else { pieces.push({ o:W.trees[rng()<0.5?0:1], x, y }); used[x+","+y]=1; used[x+","+(y+1)]=1; }
     } else if(r < p+(BIO.decorP||0.06)){
       const dl = BIO.decor || ["flower_w","flower_p","flower_b","flower_o","plant_a","plant_b","fern","rock_brown","stones"];
-      pieces.push({ o:dl[Math.floor(rng()*dl.length)], x, y }); used[x+","+y]=1;
+      let o = dl[Math.floor(rng()*dl.length)]; if(z && z.g && o==="cactus") o = "plant_a";   // geen cactus in een groene strook
+      pieces.push({ o, x, y }); used[x+","+y]=1;
     }
   }
   // bord naar het kamp bij de uitgang
