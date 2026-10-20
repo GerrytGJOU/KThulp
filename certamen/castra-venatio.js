@@ -48,7 +48,7 @@ function castraMakeEncounter(regionId, terrainId){
   e.lvl = pick.lvl;
   const st = castraStats(e);
   Object.keys(st).forEach(k=>{ st[k] = Math.max(1, Math.round(st[k]*CASTRA_V_BAL.wildMult)); });
-  return { region:regionId, terrain, enemy:e, stats:st, stranger: pick.form.volk!=="myt" && pick.form.volk!==castraMainFolk(reg) };
+  return { region:regionId, terrain, enemy:e, stats:st, stranger: pick.form.volk!=="myt" && pick.form.volk!==castraMainFolk(reg, terrain) };
 }
 
 /* ---------- scherm ---------- */

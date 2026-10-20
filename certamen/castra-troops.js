@@ -167,7 +167,7 @@ const CASTRA_FORM_LIST = Object.keys(CASTRA_FORMS).map(k=>CASTRA_FORMS[k]);
 function castraLine(id){ return CASTRA_FORMS[id] || CASTRA_FORMS["rom_tiro"]; }
 function castraFolkNm(formId){ const f = CASTRA_FORMS[formId]; return f ? (CASTRA_FOLKS[f.volk]||{nm:""}).nm : ""; }
 // Hoofdvolk van een regio = het volk met het hoogste gewicht; alles daarbuiten is een "vreemdeling".
-function castraMainFolk(region){ let best = null; Object.keys(region.folk).forEach(k=>{ if(!best || region.folk[k]>region.folk[best]) best = k; }); return best; }
+function castraMainFolk(region, terrain){ const fk = (terrain && terrain.folk) || region.folk; let best = null; Object.keys(fk).forEach(k=>{ if(!best || fk[k]>fk[best]) best = k; }); return best; }
 /* ---- Certamen-klassen (M5): elke rol in de bomen hoort bij een van de 8 klassen uit BM_CLASSES (battle-data.js).
    Rekruten en mythische wezens hebben (nog) geen klasse. Regels op volgorde; eerste treffer wint. ---- */
 const CASTRA_CLASS_NAMES = {
@@ -253,7 +253,8 @@ function castraWildPick(region, terrain, rng){
     form = castraWeighted(useT.map(f=>({ f, w: f.tier===1 ? 6 : f.tier===2 ? 3 : 1 })), rng).f;
   } else {
     // 3. volk uit de regio (af en toe een vreemde), 4. vorm van die tier, gewogen op het terrein
-    const folk = castraWeighted(Object.keys(region.folk).map(k=>({ k, w:region.folk[k] })), rng).k;
+    const fk = terrain.folk || region.folk;        // een terrein kan een eigen volkenmengsel hebben (bv. de arena)
+    const folk = castraWeighted(Object.keys(fk).map(k=>({ k, w:fk[k] })), rng).k;
     let cand = [];
     for(let t=tier; t>=1 && !cand.length; t--) cand = CASTRA_FORM_LIST.filter(f=>f.volk===folk && f.tier===t);
     form = castraWeighted(cand.map(f=>({ f, w: f.tier===1 ? 1 : (terrain.prefs&&terrain.prefs[f.cat]!=null ? terrain.prefs[f.cat] : 0.4) })), rng).f;
