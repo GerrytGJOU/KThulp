@@ -19,7 +19,7 @@ SCREENS.home = function(){
       <span class="corner">${iconSVG("tent",88,"currentColor")}</span>
       <span class="ic">${iconSVG("tent",44,"currentColor")}</span>
       <h3>🏕️ Castra Heroum <span style="font-size:11px;background:var(--ox);color:#fff;border-radius:4px;padding:2px 5px;vertical-align:middle;margin-left:4px">BETA</span></h3>
-      <p>Bouw je kamp, verzamel soldaten en helden en trek erop uit in Latium, Graecia, Troia, Gallia, Aegyptus, Persis en Africa — alles in het Latijn.</p>
+      <p>Bouw je kamp, verzamel soldaten en helden en trek erop uit in Latium, Graecia, Troia, Gallia, Aegyptus, Persis, Africa, Roma en Laconia — alles in het Latijn.</p>
     </button>
     <button class="tile" onclick="go('totalWar')">
       <span class="corner">${iconSVG("crown",88,"currentColor")}</span>

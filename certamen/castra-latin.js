@@ -236,6 +236,26 @@ const CASTRA_VENATIO = {
     ],
     traces:[], traceChance:0,
   },
+  roma: {
+    nm:"Roma", min:40, max:50, tierMax:4, folk:{ rom:60, gla:20, gal:5, ger:4, gra:4, aeg:3, per:2, car:2 },
+    terrains:[
+      { id:"arena",  la:"In arena",     nl:"In de arena",        folk:{ gla:80, rom:12, gal:4, ger:4 }, prefs:{ inf:3, rng:1, sup:1 }, myth:{ p:0.04, taks:["Wolven van Mars"] } },
+      { id:"forum",  la:"In foro",      nl:"Op het Forum",       folk:{ rom:84, gla:8, gra:4, aeg:4 }, prefs:{ inf:3, sup:2, cav:1 }, myth:{ p:0.04, taks:["Adelaars van Jupiter"] } },
+      { id:"castra", la:"In castris",   nl:"In het legerkamp",   folk:{ rom:92, gla:4, ger:2, gal:2 }, prefs:{ inf:3, rng:2, cav:2, sup:1 }, myth:{ p:0.03, taks:["Wolven van Mars"] } },
+      { id:"via",    la:"In via Appia", nl:"Op de Via Appia",    prefs:{ cav:3, inf:2, rng:2 }, myth:{ p:0.05, taks:["Adelaars van Jupiter","Wolven van Mars"] } },
+    ],
+    traces:[], traceChance:0,
+  },
+  laconia: {
+    nm:"Laconia", min:42, max:50, tierMax:4, folk:{ spa:78, gra:8, per:4, rom:4, tro:3, aeg:3 },
+    terrains:[
+      { id:"mons",   la:"In montibus", nl:"In het Taygetosgebergte", prefs:{ inf:3, rng:3 }, myth:{ p:0.10, taks:["Grijpvogels","Centauren"] } },
+      { id:"urbs",   la:"In urbe",     nl:"In Sparta",                prefs:{ inf:4, rng:1, sup:1 }, myth:{ p:0.03, taks:["Gezaaide mannen"] } },
+      { id:"flumen", la:"Ad Eurotam",  nl:"Bij de Eurotas",           prefs:{ rng:3, inf:2 }, myth:{ p:0.15, taks:["Nimfen"] } },
+      { id:"campus", la:"In campo",    nl:"Op het veld",              prefs:{ inf:4, rng:2, cav:1 }, myth:{ p:0.04, taks:["Centauren"] } },
+    ],
+    traces:[], traceChance:0,
+  },
 };
 
 /* ---- Glossarium: woord (kleine letters, zonder leestekens) -> betekenis ---- */
@@ -260,7 +280,7 @@ const CASTRA_GLOSS = {
   "dicit":"zegt", "te":"jou", "sequar":"ik zal volgen", "visne":"wil je?", "eum":"hem",
   "castra":"kamp", "recipere":"opnemen", "recipio":"ik neem op", "dimitto":"ik laat gaan",
   "plena":"vol", "redi":"keer terug!", "iterum":"opnieuw", "vestigia":"sporen",
-  "aeacus":"Aeacus (koning, maakte mieren tot mensen)", "formicas":"mieren", "homines":"mensen", "mutavit":"veranderde", "myrmidones":"Myrmidonen", "achillem":"Achilles (4e naamval)", "sequuntur":"volgen", "cadmus":"Cadmus (stichter van Thebe)", "dentes":"tanden", "serit":"zaait", "armati":"gewapende", "terra":"aarde / grond", "surgunt":"rijzen op", "lupa":"wolvin", "romulum":"Romulus (4e naamval)", "remum":"Remus (4e naamval)", "nutrit":"voedt", "lupus":"wolf", "martis":"van Mars", "sacer":"heilig", "viri":"van een man", "gallica":"Gallisch", "carthago":"Carthago (stad in Africa)", "zamam":"Zama (4e naamval)", "montibus":"in de bergen", "regia":"koninklijk(e)", "persepolis":"Persepolis (Perzische hoofdstad)", "nilum":"de Nijl (4e naamval)", "templo":"in de tempel", "deserto":"in de woestijn", "pyramides":"piramiden", "alesia":"Alesia (Gallische vesting)", "oppido":"in de burcht (nederzetting)", "rhenum":"de Rijn (4e naamval)", "peregrinus":"vreemdeling / uit den vreemde", "aedifica":"bouw!", "aedificatum":"gebouwd", "nondum":"nog niet", "aperit":"opent", "equi":"paarden", "currus":"strijdwagens", "parantur":"worden klaargemaakt", "aedificantur":"worden gebouwd", "tiro":"rekruut", "tirones":"rekruten", "bonus":"goed", "fiet":"zal worden", "pedes":"voetsoldaat", "eques":"ruiter", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
+  "aeacus":"Aeacus (koning, maakte mieren tot mensen)", "formicas":"mieren", "homines":"mensen", "mutavit":"veranderde", "myrmidones":"Myrmidonen", "achillem":"Achilles (4e naamval)", "sequuntur":"volgen", "cadmus":"Cadmus (stichter van Thebe)", "dentes":"tanden", "serit":"zaait", "armati":"gewapende", "terra":"aarde / grond", "surgunt":"rijzen op", "lupa":"wolvin", "romulum":"Romulus (4e naamval)", "remum":"Remus (4e naamval)", "nutrit":"voedt", "lupus":"wolf", "martis":"van Mars", "sacer":"heilig", "viri":"van een man", "gallica":"Gallisch", "arena":"arena (zandvlak van de gladiatoren)", "foro":"op het Forum", "castris":"in het legerkamp", "appia":"van Appius (de Via Appia)", "eurotam":"de Eurotas (4e naamval)", "sparta":"Sparta", "forum":"Forum (marktplein van Rome)", "romanum":"Romeins", "thermopylae":"Thermopylae (bergpas)", "carthago":"Carthago (stad in Africa)", "zamam":"Zama (4e naamval)", "montibus":"in de bergen", "regia":"koninklijk(e)", "persepolis":"Persepolis (Perzische hoofdstad)", "nilum":"de Nijl (4e naamval)", "templo":"in de tempel", "deserto":"in de woestijn", "pyramides":"piramiden", "alesia":"Alesia (Gallische vesting)", "oppido":"in de burcht (nederzetting)", "rhenum":"de Rijn (4e naamval)", "peregrinus":"vreemdeling / uit den vreemde", "aedifica":"bouw!", "aedificatum":"gebouwd", "nondum":"nog niet", "aperit":"opent", "equi":"paarden", "currus":"strijdwagens", "parantur":"worden klaargemaakt", "aedificantur":"worden gebouwd", "tiro":"rekruut", "tirones":"rekruten", "bonus":"goed", "fiet":"zal worden", "pedes":"voetsoldaat", "eques":"ruiter", "pugnes":"(opdat) je vecht", "legio":"legioen", "commercium":"handel", "ut":"om te / zodat", "cum":"met", "legione":"legioen (met het legioen)", "intra":"ga naar binnen / log in!", "nulla":"geen", "convenit":"komt samen",
   "omnes":"allen", "post":"na / over", "incipit":"begint", "pugnat":"vecht", "finita":"afgelopen", "haec":"deze", "pugna":"vecht!", "victoria":"overwinning", "defendistis":"jullie hebben verdedigd", "capta":"ingenomen",
   "oblata":"aanbod", "mea":"mijn", "aliorum":"van anderen", "offer":"bied aan!", "revoca":"trek in!", "commuta":"ruil!", "quem":"wie / welke", "das":"je geeft", "commutatio":"ruil", "facta":"gedaan", "iam":"al", "captum":"genomen",
   "nihil":"niets", "offers":"je biedt aan", "idoneus":"geschikt", "legionarii":"legioensoldaten", "nullus":"geen", "adsum":"ik ben er", "hodie":"vandaag",
