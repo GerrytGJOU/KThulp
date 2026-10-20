@@ -71,16 +71,16 @@ const CASTRA_LA = {
   visne_dimittere: { la:"Visne hunc militem honeste dimittere?", nl:"Wil je deze soldaat eervol ontslaan?" },
   adiungit:        { la:"se tibi adiungit.", nl:"sluit zich bij je aan." },
   intellego:       { la:"Intellego.", nl:"Ik begrijp het." },
-  intro:           { la:"Salve, dux {naam}! Haec sunt castra tua. Collige ligna et aes, meliora praetorium, et venare in Latio.", nl:"Gegroet, leider {naam}! Dit is jouw kamp. Verzamel hout en brons, verbeter het praetorium en ga jagen in Latium." },
+  intro:           { la:"\"Salve, dux {naam}! Haec sunt castra tua. Collige ligna et aes, meliora praetorium, et venare in Latio.\"", nl:"\"Gegroet, leider {naam}! Dit is jouw kamp. Verzamel hout en brons, verbeter het praetorium en ga jagen in Latium.\"" },
   accipio:         { la:"Accipio.", nl:"Ik accepteer het." },
   non_nunc:        { la:"Non nunc.", nl:"Nu niet." },
   gratias:         { la:"Gratias!", nl:"Dank je!" },
   vale:            { la:"Vale!", nl:"Vaarwel!" },
   aeneas:          { la:"Aeneas", nl:"Aeneas" },
-  aen_hi:          { la:"Salve, hospes! Aeneas sum. Hostes in silva vexant. Tres hostes in silva vince, et auxilium meum habebis.", nl:"Gegroet, gast! Ik ben Aeneas. Vijanden in het bos zijn lastig. Versla drie vijanden in het bos, en je krijgt mijn hulp." },
-  aen_accepted:    { la:"Bene! Tres hostes in silva vince.", nl:"Goed! Versla drie vijanden in het bos." },
-  aen_done:        { la:"Optime! Tres hostes vicisti. Gratias tibi ago. Tecum venio.", nl:"Uitstekend! Je hebt drie vijanden verslagen. Ik dank je. Ik kom met je mee." },
-  aen_bye:         { la:"Vale, dux {naam}! Iter bonum!", nl:"Vaarwel, leider {naam}! Goede reis!" },
+  aen_hi:          { la:"\"Salve, hospes {naam}! Aeneas sum. Hostes in silva vexant. Tres hostes in silva vince, et auxilium meum habebis.\"", nl:"\"Gegroet, gast {naam}! Ik ben Aeneas. Vijanden in het bos zijn lastig. Versla drie vijanden in het bos, en je krijgt mijn hulp.\"" },
+  aen_accepted:    { la:"\"Bene! Tres hostes in silva vince.\"", nl:"\"Goed! Versla drie vijanden in het bos.\"" },
+  aen_done:        { la:"\"Optime, dux {naam}! Tres hostes vicisti. Gratias tibi ago. Tecum venio.\"", nl:"\"Uitstekend, leider {naam}! Je hebt drie vijanden verslagen. Ik dank je. Ik kom met je mee.\"" },
+  aen_bye:         { la:"\"Vale, dux {naam}! Iter bonum!\"", nl:"\"Vaarwel, leider {naam}! Goede reis!\"" },
   aen_joined:      { la:"Aeneas se tibi adiungit.", nl:"Aeneas sluit zich bij je aan." },
   proelium_titel:  { la:"Proelium", nl:"Het gevecht" },
   proelium_ini:    { la:"In proelium!", nl:"Het gevecht in!" },
@@ -330,6 +330,8 @@ function castraNorm(w){ return w.toLowerCase().replace(/[^a-zāēīōū]/g,"").r
 // la/nl mogen vrij samengesteld zijn (dynamische zinnen); sid = log-sleutel.
 // Naam van de speler (uit het profiel) voor aanspreking in het Latijn: "dux {naam}". De naam blijft onverbogen
 // (een Nederlandse naam heeft geen betrouwbare vocativus); zonder profiel valt "{naam}" weg.
+// Gesproken tekst tussen aanhalingstekens.
+function castraSay(t){ return t ? '"'+t+'"' : t; }
 function castraPlayerName(){ try{ return (typeof BM_IDENT!=="undefined" && BM_IDENT && BM_IDENT.name) ? String(BM_IDENT.name).trim() : ""; }catch(e){ return ""; } }
 function castraSub(t){ const n = castraPlayerName(); return String(t).replace(/ ?\{naam\}/g, m=>n ? (m.charAt(0)===" "?" ":"")+n : ""); }
 function castraLaHTML(la, nl, sid){

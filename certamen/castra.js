@@ -246,6 +246,7 @@ SCREENS.castraHome = function(){
   castraRenderMap();
   castraRenderRes();
   castraFit();
+  if(typeof castraMenuBtn==="function") castraMenuBtn();
   if(typeof castraTutOnHome==="function") castraTutOnHome();
   if(!CASTRA.introSeen && !(CASTRA.tut && CASTRA.tut.step<99)){   // het tutorial vervangt de oude introtekst
     castraOpenPanel(`<div class="panel"><div style="font-size:18px;margin-bottom:8px">${castraLa("intro")}</div>
