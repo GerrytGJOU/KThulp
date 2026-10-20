@@ -68,14 +68,14 @@ function castraNpcTalk(id){
   const portrait = castraAvatarHTML(d.look, "down", 1, 64);
   let text, buttons = "";
   if(s.kind==="persuade"){
-    text = castraLaHTML(s.ask.la, s.ask.nl, "ask_"+id+q.step);
+    text = castraLaHTML(castraSay(s.ask.la), castraSay(s.ask.nl), "ask_"+id+q.step);
     buttons = castraOptOrder(s.opts.length, id+q.step).map(k=>`<button class="btn" onclick="castraNpcPersuade('${id}',${k})">${esc(s.opts[k].la)}</button>`).join("");
   } else if(!q.acc){
-    text = castraLaHTML(s.ask.la, s.ask.nl, "ask_"+id+q.step);
+    text = castraLaHTML(castraSay(s.ask.la), castraSay(s.ask.nl), "ask_"+id+q.step);
     buttons = `<button class="btn btn-gold" onclick="castraNpcAccept('${id}')">${castraLaText("accipio")}</button>
       <button class="btn" onclick="castraNpcClose()">${castraLaText("non_nunc")}</button>`;
   } else if(castraStepSatisfied(id)){
-    text = castraLaHTML(s.done.la, s.done.nl, "done_"+id+q.step);
+    text = castraLaHTML(castraSay(s.done.la), castraSay(s.done.nl), "done_"+id+q.step);
     buttons = `<button class="btn btn-gold" onclick="castraNpcNext('${id}')">${castraLaText("gratias")}</button>`;
   } else {
     text = s.kind==="kill"
@@ -108,7 +108,7 @@ function castraNpcPersuade(id, k){
   const reward = 5; CASTRA.res.gloria = (CASTRA.res.gloria||0) + reward; castraSave();
   toast("Heros novus!", d.nm+" · "+CASTRA_LA.aen_joined.nl);
   el("cwPanel").innerHTML = `<div class="panel"><div style="display:flex;gap:12px"><div>${castraAvatarHTML(d.look,"down",1,64)}</div>
-    <div style="flex:1;font-size:17px">${castraLaHTML(s.join.la, s.join.nl, "join_"+id)}<div class="note" style="margin-top:6px">🏆 +${reward} · ${castraLa("heroum_novum")}</div>
+    <div style="flex:1;font-size:17px">${castraLaHTML(castraSay(s.join.la), castraSay(s.join.nl), "join_"+id)}<div class="note" style="margin-top:6px">🏆 +${reward} · ${castraLa("heroum_novum")}</div>
     <button class="btn" onclick="castraNpcClose();castraWorldNpcs()">${castraLaText("claude")}</button></div></div></div>`;
   castraNpcRefreshHud(); castraWorldNpcs();
 }

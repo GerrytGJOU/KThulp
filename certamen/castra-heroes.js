@@ -32,7 +32,7 @@ const CASTRA_HERO_DATA = {
     look:{ huid:"getint", haar:"kort", haarkleur:"bruin", baard:"baard", armor:"ceremonieel", cape:"lang", capekleur:"rood", helm:"geen", schild:"geen", wapen:"zwaard" },
     chain:[
       { kind:"kill", terrain:"silva", need:3,
-        ask:{ la:"Salve, hospes! Aeneas sum. Hostes in silva vexant. Tres hostes in silva vince, et auxilium meum habebis.", nl:"Gegroet, gast! Ik ben Aeneas. Vijanden in het bos zijn lastig. Versla drie vijanden in het bos, en je krijgt mijn hulp." },
+        ask:{ la:"Salve, hospes {naam}! Aeneas sum. Hostes in silva vexant. Tres hostes in silva vince, et auxilium meum habebis.", nl:"Gegroet, gast {naam}! Ik ben Aeneas. Vijanden in het bos zijn lastig. Versla drie vijanden in het bos, en je krijgt mijn hulp." },
         hud:{ la:"Hostes in silva vince!", nl:"Versla vijanden in het bos!" },
         done:{ la:"Optime! Tres hostes vicisti.", nl:"Uitstekend! Je hebt drie vijanden verslagen." } },
       { kind:"win", mission:"m1",
@@ -40,11 +40,11 @@ const CASTRA_HERO_DATA = {
         hud:{ la:"Proelium primum vince!", nl:"Win het eerste gevecht!" },
         done:{ la:"Castra defendisti! Gratias tibi ago.", nl:"Je hebt het kamp verdedigd! Ik dank je." } },
       { kind:"persuade",
-        ask:{ la:"Cur tecum veniam, dux?", nl:"Waarom zou ik met je meegaan, leider?" },
+        ask:{ la:"Cur tecum veniam, dux {naam}?", nl:"Waarom zou ik met je meegaan, leider {naam}?" },
         opts:[ { la:"Quia amicos servo et castra defendo.", nl:"Omdat ik vrienden bescherm en het kamp verdedig.", ok:true },
                { la:"Quia pecuniam amo.", nl:"Omdat ik van geld houd." },
                { la:"Quia pugnare nolo.", nl:"Omdat ik niet wil vechten." } ],
-        join:{ la:"Tecum venio, dux!", nl:"Ik ga met je mee, leider!" } },
+        join:{ la:"Tecum venio, dux {naam}!", nl:"Ik ga met je mee, leider {naam}!" } },
     ],
     talks:[
       { la:"Troia cecidit. Novam patriam quaero.", nl:"Troje is gevallen. Ik zoek een nieuw vaderland.",
@@ -61,7 +61,7 @@ const CASTRA_HERO_DATA = {
     look:{ huid:"licht", haar:"wild", haarkleur:"zwart", baard:"geen", armor:"ceremonieel", cape:"kort", capekleur:"rood", helm:"geen", schild:"geen", wapen:"zwaard" },
     chain:[
       { kind:"kill", terrain:"campus", need:4,
-        ask:{ la:"Salve! Romulus sum. Urbem novam condo. Quattuor hostes in campo vince, et mihi auxilio eris.", nl:"Gegroet! Ik ben Romulus. Ik sticht een nieuwe stad. Versla vier vijanden op het veld en je zult mij helpen." },
+        ask:{ la:"Salve, dux {naam}! Romulus sum. Urbem novam condo. Quattuor hostes in campo vince, et mihi auxilio eris.", nl:"Gegroet, leider {naam}! Ik ben Romulus. Ik sticht een nieuwe stad. Versla vier vijanden op het veld en je zult mij helpen." },
         hud:{ la:"Hostes in campo vince!", nl:"Versla vijanden op het veld!" },
         done:{ la:"Optime! Quattuor hostes vicisti.", nl:"Uitstekend! Je hebt vier vijanden verslagen." } },
       { kind:"win", mission:"m2",
@@ -73,7 +73,7 @@ const CASTRA_HERO_DATA = {
         opts:[ { la:"Muros aedifico et milites duco.", nl:"Ik bouw muren en leid soldaten.", ok:true },
                { la:"Domum meam relinquo.", nl:"Ik verlaat mijn huis." },
                { la:"Nihil facio.", nl:"Ik doe niets." } ],
-        join:{ la:"Tecum venio, dux!", nl:"Ik ga met je mee, leider!" } },
+        join:{ la:"Tecum venio, dux {naam}!", nl:"Ik ga met je mee, leider {naam}!" } },
     ],
     talks:[
       { la:"Lupa me nutrivit. Fratrem Remum habeo.", nl:"Een wolvin heeft mij gevoed. Ik heb een broer, Remus.",
@@ -90,7 +90,7 @@ const CASTRA_HERO_DATA = {
     look:{ huid:"olijf", haar:"kort", haarkleur:"zwart", baard:"snor", armor:"middel", cape:"kort", capekleur:"rood", helm:"open", schild:"geen", wapen:"zwaard" },
     chain:[
       { kind:"kill", terrain:"tiberis", need:3,
-        ask:{ la:"Salve! Horatius sum. Hostes ad Tiberim veniunt. Tres hostes ad Tiberim vince.", nl:"Gegroet! Ik ben Horatius. Vijanden komen naar de Tiber. Versla drie vijanden bij de Tiber." },
+        ask:{ la:"Salve, dux {naam}! Horatius sum. Hostes ad Tiberim veniunt. Tres hostes ad Tiberim vince.", nl:"Gegroet, leider {naam}! Ik ben Horatius. Vijanden komen naar de Tiber. Versla drie vijanden bij de Tiber." },
         hud:{ la:"Hostes ad Tiberim vince!", nl:"Versla vijanden bij de Tiber!" },
         done:{ la:"Optime! Pontem servavisti.", nl:"Uitstekend! Je hebt de brug gered." } },
       { kind:"win", mission:"m2",
@@ -102,7 +102,7 @@ const CASTRA_HERO_DATA = {
         opts:[ { la:"Etiam amicos nostros defendo.", nl:"Ik verdedig ook onze vrienden.", ok:true },
                { la:"Fugio.", nl:"Ik vlucht." },
                { la:"Pontem relinquo.", nl:"Ik verlaat de brug." } ],
-        join:{ la:"Tecum venio, dux!", nl:"Ik ga met je mee, leider!" } },
+        join:{ la:"Tecum venio, dux {naam}!", nl:"Ik ga met je mee, leider {naam}!" } },
     ],
     talks:[
       { la:"Pons Sublicius in Tiberi est. Hostes veniunt.", nl:"De Sublicische brug ligt over de Tiber. Vijanden komen.",
@@ -120,7 +120,7 @@ const CASTRA_HERO_DATA = {
 const _K = (region,terrain,need,ask,hud,done)=>({ kind:"kill", region, terrain, need, ask:{la:ask[0],nl:ask[1]}, hud:{la:hud[0],nl:hud[1]}, done:{la:done[0],nl:done[1]} });
 const _W = (mission,ask,hud,done)=>({ kind:"win", mission, ask:{la:ask[0],nl:ask[1]}, hud:{la:hud[0],nl:hud[1]}, done:{la:done[0],nl:done[1]} });
 const _P = (ask,good,b1,b2)=>({ kind:"persuade", ask:{la:ask[0],nl:ask[1]},
-  opts:[ {la:good[0],nl:good[1],ok:true}, {la:b1[0],nl:b1[1]}, {la:b2[0],nl:b2[1]} ], join:{ la:"Tecum venio, dux!", nl:"Ik ga met je mee, leider!" } });
+  opts:[ {la:good[0],nl:good[1],ok:true}, {la:b1[0],nl:b1[1]}, {la:b2[0],nl:b2[1]} ], join:{ la:"Tecum venio, dux {naam}!", nl:"Ik ga met je mee, leider {naam}!" } });
 const _T = (t,q,good,b1,b2)=>({ la:t[0], nl:t[1], q:{ la:q[0], nl:q[1], opts:[ {la:good[0],nl:good[1],ok:true}, {la:b1[0],nl:b1[1]}, {la:b2[0],nl:b2[1]} ] } });
 const _look = (o)=>({ huid:"licht", haar:"kort", haarkleur:"bruin", baard:"geen", armor:"middel", cape:"geen", capekleur:"rood", helm:"geen", schild:"geen", wapen:"zwaard", ...o });
 const _WIN_M1 = ["Proelium primum vince.","Win het eerste gevecht."];
@@ -131,7 +131,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:48, impetus:14, tutela:7, celeritas:11, ambitus:3 },
     look:_look({ huid:"licht", haar:"vlecht", haarkleur:"bruin", armor:"robe", cape:"kort", capekleur:"blauw" }),
     chain:[
-      _K("latium","tiberis",3, ["Salve! Cloelia sum. Obses fui, sed ex castris fugi. Tres hostes ad Tiberim vince.","Gegroet! Ik ben Cloelia. Ik was gijzelaar, maar ik ben uit het kamp gevlucht. Versla drie vijanden bij de Tiber."], ["Hostes ad Tiberim vince!","Versla vijanden bij de Tiber!"], ["Optime! Tiberim defendisti.","Uitstekend! Je hebt de Tiber verdedigd."]),
+      _K("latium","tiberis",3, ["Salve, dux {naam}! Cloelia sum. Obses fui, sed ex castris fugi. Tres hostes ad Tiberim vince.","Gegroet, leider {naam}! Ik ben Cloelia. Ik was gijzelaar, maar ik ben uit het kamp gevlucht. Versla drie vijanden bij de Tiber."], ["Hostes ad Tiberim vince!","Versla vijanden bij de Tiber!"], ["Optime! Tiberim defendisti.","Uitstekend! Je hebt de Tiber verdedigd."]),
       _W("m3", ["Bene! Nunc Ardeam oppugna. Proelium tertium vince.","Goed! Val nu Ardea aan. Win het derde gevecht."], ["Proelium tertium vince!","Win het derde gevecht!"], ["Ardeam vicisti! Gratias tibi ago.","Je hebt Ardea verslagen! Ik dank je."]),
       _P(["Per Tiberim equo transeo. Tu quoque audax es?","Ik steek de Tiber te paard over. Ben jij ook dapper?"], ["Ita, nihil timeo.","Ja, ik ben nergens bang voor."], ["Non, omnia timeo.","Nee, ik ben overal bang voor."], ["Domi maneo.","Ik blijf thuis."]),
     ],
@@ -144,7 +144,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:62, impetus:15, tutela:11, celeritas:6, ambitus:2 },
     look:_look({ huid:"getint", haar:"kort", haarkleur:"zwart", baard:"sikensnor", armor:"middel", cape:"lang", capekleur:"groen", helm:"bandana" }),
     chain:[
-      _K("latium","via",3, ["Salve! Mucius sum. Hostes in via sunt. Tres hostes in via vince.","Gegroet! Ik ben Mucius. Er zijn vijanden op de weg. Versla drie vijanden op de weg."], ["Hostes in via vince!","Versla vijanden op de weg!"], ["Optime! Viam purgavisti.","Uitstekend! Je hebt de weg schoongemaakt."]),
+      _K("latium","via",3, ["Salve, dux {naam}! Mucius sum. Hostes in via sunt. Tres hostes in via vince.","Gegroet, leider {naam}! Ik ben Mucius. Er zijn vijanden op de weg. Versla drie vijanden op de weg."], ["Hostes in via vince!","Versla vijanden op de weg!"], ["Optime! Viam purgavisti.","Uitstekend! Je hebt de weg schoongemaakt."]),
       _W("m3", ["Bene! Nunc Ardeam oppugna. Proelium tertium vince.","Goed! Val nu Ardea aan. Win het derde gevecht."], ["Proelium tertium vince!","Win het derde gevecht!"], ["Ardeam vicisti! Gratias tibi ago.","Je hebt Ardea verslagen! Ik dank je."]),
       _P(["Dextram in igne teneo. Num dolorem timeo?","Ik houd mijn rechterhand in het vuur. Ben ik soms bang voor pijn?"], ["Non timeo, nam patriam amo.","Nee, want ik hou van mijn vaderland."], ["Ita, dolorem timeo.","Ja, ik ben bang voor pijn."], ["Ignem amo.","Ik hou van vuur."]),
     ],
@@ -157,7 +157,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:44, impetus:15, tutela:6, celeritas:12, ambitus:7 },
     look:_look({ huid:"olijf", haar:"lang", haarkleur:"zwart", armor:"vodden", cape:"lang", capekleur:"groen", helm:"bandana" }),
     chain:[
-      _K("latium","silva",4, ["Salve! Camilla sum. In silva habito. Quattuor hostes in silva vince.","Gegroet! Ik ben Camilla. Ik woon in het bos. Versla vier vijanden in het bos."], ["Hostes in silva vince!","Versla vijanden in het bos!"], ["Optime! Silvam servavisti.","Uitstekend! Je hebt het bos gered."]),
+      _K("latium","silva",4, ["Salve, dux {naam}! Camilla sum. In silva habito. Quattuor hostes in silva vince.","Gegroet, leider {naam}! Ik ben Camilla. Ik woon in het bos. Versla vier vijanden in het bos."], ["Hostes in silva vince!","Versla vijanden in het bos!"], ["Optime! Silvam servavisti.","Uitstekend! Je hebt het bos gered."]),
       _W("m3", ["Bene! Nunc Ardeam oppugna. Proelium tertium vince.","Goed! Val nu Ardea aan. Win het derde gevecht."], ["Proelium tertium vince!","Win het derde gevecht!"], ["Ardeam vicisti! Gratias tibi ago.","Je hebt Ardea verslagen! Ik dank je."]),
       _P(["Celeriter curro et sagittas mitto. Quid tu facis?","Ik ren snel en schiet pijlen. Wat doe jij?"], ["Celeriter curro et hostes pugno.","Ik ren snel en vecht tegen de vijanden."], ["Lente ambulo.","Ik loop langzaam."], ["In casa dormio.","Ik slaap in een huisje."]),
     ],
@@ -172,7 +172,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:90, impetus:19, tutela:14, celeritas:6, ambitus:2 },
     look:_look({ huid:"brons", haar:"wild", haarkleur:"bruin", baard:"baard", armor:"vodden", cape:"lang", capekleur:"oranje" }),
     chain:[
-      _K("graecia","mons",4, ["Salve! Hercules sum. Leones in monte sunt. Quattuor hostes in monte vince.","Gegroet! Ik ben Hercules. Er zijn leeuwen op de berg. Versla vier vijanden op de berg."], ["Hostes in monte vince!","Versla vijanden op de berg!"], ["Optime! Montem purgavisti.","Uitstekend! Je hebt de berg schoongemaakt."]),
+      _K("graecia","mons",4, ["Salve, dux {naam}! Hercules sum. Leones in monte sunt. Quattuor hostes in monte vince.","Gegroet, leider {naam}! Ik ben Hercules. Er zijn leeuwen op de berg. Versla vier vijanden op de berg."], ["Hostes in monte vince!","Versla vijanden op de berg!"], ["Optime! Montem purgavisti.","Uitstekend! Je hebt de berg schoongemaakt."]),
       _W("g1", ["Bene! Nunc primum laborem facimus. Proelium vince.","Goed! Nu doen we de eerste labor. Win het gevecht."], ["Laborem primum vince!","Win de eerste labor!"], ["Laborem confecisti! Gratias tibi ago.","Je hebt de labor volbracht! Ik dank je."]),
       _P(["Labores multos facio. Tu quoque laboras?","Ik doe veel opdrachten. Werk jij ook hard?"], ["Ita, fortiter laboro.","Ja, ik werk dapper."], ["Non, otium amo.","Nee, ik hou van rust."], ["Numquam laboro.","Ik werk nooit."]),
     ],
@@ -185,7 +185,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:56, impetus:18, tutela:8, celeritas:13, ambitus:4 },
     look:_look({ huid:"licht", haar:"hanekam", haarkleur:"blond", armor:"ceremonieel", cape:"engelenvleugels", helm:"geen" }),
     chain:[
-      _K("graecia","litus",3, ["Salve! Perseus sum. Gorgones prope litus habitant. Tres hostes ad litus vince.","Gegroet! Ik ben Perseus. De Gorgonen wonen bij de kust. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Litus servavisti.","Uitstekend! Je hebt de kust gered."]),
+      _K("graecia","litus",3, ["Salve, dux {naam}! Perseus sum. Gorgones prope litus habitant. Tres hostes ad litus vince.","Gegroet, leider {naam}! Ik ben Perseus. De Gorgonen wonen bij de kust. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Litus servavisti.","Uitstekend! Je hebt de kust gered."]),
       _W("g1", ["Bene! Nunc Medusam oppugnamus. Proelium primum vince.","Goed! Nu gaan we Medusa aanvallen. Win het eerste gevecht."], ["Proelium vince!","Win het gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
       _P(["Caput Medusae portare possum. Tu me iuvas?","Ik kan het hoofd van Medusa dragen. Help jij mij?"], ["Ita, te libenter iuvo.","Ja, ik help je graag."], ["Non, Medusam timeo!","Nee, ik ben bang voor Medusa!"], ["Nihil audio.","Ik hoor niets."]),
     ],
@@ -198,7 +198,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:72, impetus:16, tutela:12, celeritas:8, ambitus:3 },
     look:_look({ huid:"licht", haar:"middel", haarkleur:"bruin", baard:"geen", armor:"ceremonieel", cape:"kort", capekleur:"blauw", helm:"geen" }),
     chain:[
-      _K("graecia","urbs",4, ["Salve! Theseus sum. Minotaurus in labyrintho est. Quattuor hostes in urbe vince.","Gegroet! Ik ben Theseus. De Minotaurus zit in het labyrint. Versla vier vijanden in de stad."], ["Hostes in urbe vince!","Versla vijanden in de stad!"], ["Optime! Urbem servavisti.","Uitstekend! Je hebt de stad gered."]),
+      _K("graecia","urbs",4, ["Salve, dux {naam}! Theseus sum. Minotaurus in labyrintho est. Quattuor hostes in urbe vince.","Gegroet, leider {naam}! Ik ben Theseus. De Minotaurus zit in het labyrint. Versla vier vijanden in de stad."], ["Hostes in urbe vince!","Versla vijanden in de stad!"], ["Optime! Urbem servavisti.","Uitstekend! Je hebt de stad gered."]),
       _W("g2", ["Bene! Nunc labyrinthum intramus. Proelium secundum vince.","Goed! Nu gaan we het labyrint in. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Labyrinthum vicisti! Gratias tibi ago.","Je hebt het labyrint verslagen! Ik dank je."]),
       _P(["Minotaurum in labyrintho quaero. Tu mecum venis?","Ik zoek de Minotaurus in het labyrint. Ga jij met mij mee?"], ["Ita, te sequor et fratres servo.","Ja, ik volg je en ik red de broers."], ["Non, labyrinthum timeo.","Nee, ik ben bang voor het labyrint."], ["Minotaurus amicus meus est.","De Minotaurus is mijn vriend."]),
     ],
@@ -211,7 +211,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:46, impetus:17, tutela:6, celeritas:14, ambitus:7 },
     look:_look({ huid:"olijf", haar:"vlecht", haarkleur:"bruin", armor:"vodden", cape:"kort", capekleur:"groen", helm:"bandana" }),
     chain:[
-      _K("graecia","olea",4, ["Salve! Atalanta sum. In oleis venor. Quattuor hostes in oleis vince.","Gegroet! Ik ben Atalanta. Ik jaag in de olijfgaarden. Versla vier vijanden in de olijfgaarden."], ["Hostes in oleis vince!","Versla vijanden in de olijfgaarden!"], ["Optime! Olea servavisti.","Uitstekend! Je hebt de olijfgaarden gered."]),
+      _K("graecia","olea",4, ["Salve, dux {naam}! Atalanta sum. In oleis venor. Quattuor hostes in oleis vince.","Gegroet, leider {naam}! Ik ben Atalanta. Ik jaag in de olijfgaarden. Versla vier vijanden in de olijfgaarden."], ["Hostes in oleis vince!","Versla vijanden in de olijfgaarden!"], ["Optime! Olea servavisti.","Uitstekend! Je hebt de olijfgaarden gered."]),
       _W("g1", ["Bene! Nunc aprum quaerimus. Proelium vince.","Goed! Nu zoeken we het everzwijn. Win het gevecht."], ["Proelium vince!","Win het gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
       _P(["Celerrima sum. Tu celeriter curris?","Ik ben de snelste. Ren jij snel?"], ["Celeriter curro, sed te non vinco.","Ik ren snel, maar ik verslaag jou niet."], ["Numquam curro.","Ik ren nooit."], ["Lente curro et dormio.","Ik ren langzaam en slaap."]),
     ],
@@ -224,7 +224,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:66, impetus:15, tutela:11, celeritas:8, ambitus:3 },
     look:_look({ huid:"getint", haar:"kort", haarkleur:"blond", baard:"geen", armor:"middel", cape:"kort", capekleur:"goud", helm:"open" }),
     chain:[
-      _K("graecia","litus",3, ["Salve! Iason sum. Navem Argo aedifico. Tres hostes ad litus vince.","Gegroet! Ik ben Jason. Ik bouw het schip Argo. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Litus liberavisti.","Uitstekend! Je hebt de kust bevrijd."]),
+      _K("graecia","litus",3, ["Salve, dux {naam}! Iason sum. Navem Argo aedifico. Tres hostes ad litus vince.","Gegroet, leider {naam}! Ik ben Jason. Ik bouw het schip Argo. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Litus liberavisti.","Uitstekend! Je hebt de kust bevrijd."]),
       _W("g2", ["Bene! Nunc vellus aureum quaerimus. Proelium secundum vince.","Goed! Nu zoeken we het gouden vlies. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Proelium vicisti! Gratias tibi ago.","Je hebt het gevecht gewonnen! Ik dank je."]),
       _P(["Velleris aurei causa navigo. Habesne navem?","Ik zeil voor het gouden vlies. Heb jij een schip?"], ["Habeo navem et nautas fortes.","Ik heb een schip en dappere zeelieden."], ["Navem non habeo, sed timeo.","Ik heb geen schip, maar ik ben bang."], ["Aurum non amo.","Ik hou niet van goud."]),
     ],
@@ -239,7 +239,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:100, impetus:22, tutela:15, celeritas:9, ambitus:3 },
     look:_look({ huid:"licht", haar:"middel", haarkleur:"blond", baard:"geen", armor:"ceremonieel", cape:"kort", capekleur:"rood", helm:"open" }),
     chain:[
-      _K("troia","campus",4, ["Salve! Achilles sum. Troiani ante muros pugnant. Quattuor hostes in campo vince.","Gegroet! Ik ben Achilles. De Trojanen vechten voor de muren. Versla vier vijanden op het veld."], ["Hostes in campo vince!","Versla vijanden op het veld!"], ["Optime! Campum purgavisti.","Uitstekend! Je hebt het veld schoongemaakt."]),
+      _K("troia","campus",4, ["Salve, dux {naam}! Achilles sum. Troiani ante muros pugnant. Quattuor hostes in campo vince.","Gegroet, leider {naam}! Ik ben Achilles. De Trojanen vechten voor de muren. Versla vier vijanden op het veld."], ["Hostes in campo vince!","Versla vijanden op het veld!"], ["Optime! Campum purgavisti.","Uitstekend! Je hebt het veld schoongemaakt."]),
       _W("t1", ["Bene! Nunc muros Troiae oppugna. Proelium vince.","Goed! Val nu de muren van Troje aan. Win het gevecht."], ["Proelium vince!","Win het gevecht!"], ["Muros vicisti! Gratias tibi ago.","Je hebt de muren verslagen! Ik dank je."]),
       _P(["Ira mea magna est. Cur pugnas?","Mijn woede is groot. Waarom vecht jij?"], ["Pro amicis pugno.","Ik vecht voor mijn vrienden."], ["Pro pecunia pugno.","Ik vecht voor geld."], ["Non pugno.","Ik vecht niet."]),
     ],
@@ -252,7 +252,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:88, impetus:19, tutela:16, celeritas:8, ambitus:3 },
     look:_look({ huid:"getint", haar:"kort", haarkleur:"zwart", baard:"baard", armor:"middel", cape:"lang", capekleur:"blauw", helm:"open" }),
     chain:[
-      _K("troia","muros",4, ["Salve! Hector sum. Troiam defendo. Quattuor hostes ante muros vince.","Gegroet! Ik ben Hector. Ik verdedig Troje. Versla vier vijanden voor de muren."], ["Hostes ante muros vince!","Versla vijanden voor de muren!"], ["Optime! Muros servavisti.","Uitstekend! Je hebt de muren gered."]),
+      _K("troia","muros",4, ["Salve, dux {naam}! Hector sum. Troiam defendo. Quattuor hostes ante muros vince.","Gegroet, leider {naam}! Ik ben Hector. Ik verdedig Troje. Versla vier vijanden voor de muren."], ["Hostes ante muros vince!","Versla vijanden voor de muren!"], ["Optime! Muros servavisti.","Uitstekend! Je hebt de muren gered."]),
       _W("t1", ["Bene! Nunc muros Troiae defende. Proelium vince.","Goed! Verdedig nu de muren van Troje. Win het gevecht."], ["Proelium vince!","Win het gevecht!"], ["Muros defendisti! Gratias tibi ago.","Je hebt de muren verdedigd! Ik dank je."]),
       _P(["Pro patria pugno. Tu quoque patriam amas?","Ik vecht voor mijn vaderland. Hou jij ook van jouw vaderland?"], ["Ita, patriam et familiam amo.","Ja, ik hou van mijn vaderland en mijn familie."], ["Non, patriam odi.","Nee, ik haat mijn vaderland."], ["Patria mihi nihil est.","Mijn vaderland betekent niets voor mij."]),
     ],
@@ -265,7 +265,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:60, impetus:11, tutela:10, celeritas:9, ambitus:6 },
     look:_look({ huid:"olijf", haar:"kort", haarkleur:"bruin", baard:"baard", armor:"robe", cape:"kort", capekleur:"groen", helm:"standard" }),
     chain:[
-      _K("troia","litus",3, ["Salve! Ulixes sum. Naves Graecorum ad litus sunt. Tres hostes ad litus vince.","Gegroet! Ik ben Odysseus. De schepen van de Grieken liggen aan de kust. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Naves servavisti.","Uitstekend! Je hebt de schepen gered."]),
+      _K("troia","litus",3, ["Salve, dux {naam}! Ulixes sum. Naves Graecorum ad litus sunt. Tres hostes ad litus vince.","Gegroet, leider {naam}! Ik ben Odysseus. De schepen van de Grieken liggen aan de kust. Versla drie vijanden bij de kust."], ["Hostes ad litus vince!","Versla vijanden bij de kust!"], ["Optime! Naves servavisti.","Uitstekend! Je hebt de schepen gered."]),
       _W("t2", ["Bene! Nunc equum ligneum aedificamus. Proelium secundum vince.","Goed! Nu bouwen we het houten paard. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Equum aedificavisti! Gratias tibi ago.","Je hebt het paard gebouwd! Ik dank je."]),
       _P(["Callidus sum. Consilium capio. Quis tecum consilium capit?","Ik ben sluw. Ik maak plannen. Wie maakt plannen met jou?"], ["Ego tecum consilium capio.","Ik maak met jou plannen."], ["Nemo mihi consilium dat.","Niemand geeft mij een plan."], ["Equum timeo.","Ik ben bang voor het paard."]),
     ],
@@ -278,7 +278,7 @@ Object.assign(CASTRA_HERO_DATA, {
     base:{ vita:54, impetus:19, tutela:8, celeritas:12, ambitus:7 },
     look:_look({ huid:"licht", haar:"lang", haarkleur:"rood", armor:"middel", cape:"lang", capekleur:"paars", helm:"geen" }),
     chain:[
-      _K("troia","scamander",3, ["Salve! Penthesilea sum. Ad Scamandrum pugno. Tres hostes ad Scamandrum vince.","Gegroet! Ik ben Penthesilea. Ik vecht bij de Scamander. Versla drie vijanden bij de Scamander."], ["Hostes ad Scamandrum vince!","Versla vijanden bij de Scamander!"], ["Optime! Scamandrum servavisti.","Uitstekend! Je hebt de Scamander gered."]),
+      _K("troia","scamander",3, ["Salve, dux {naam}! Penthesilea sum. Ad Scamandrum pugno. Tres hostes ad Scamandrum vince.","Gegroet, leider {naam}! Ik ben Penthesilea. Ik vecht bij de Scamander. Versla drie vijanden bij de Scamander."], ["Hostes ad Scamandrum vince!","Versla vijanden bij de Scamander!"], ["Optime! Scamandrum servavisti.","Uitstekend! Je hebt de Scamander gered."]),
       _W("t2", ["Bene! Nunc Troiam iuvamus. Proelium secundum vince.","Goed! Nu helpen we Troje. Win het tweede gevecht."], ["Proelium secundum vince!","Win het tweede gevecht!"], ["Troiam iuvisti! Gratias tibi ago.","Je hebt Troje geholpen! Ik dank je."]),
       _P(["Amazonum regina sum. Tu pro Troia pugnas?","Ik ben de koningin van de Amazones. Vecht jij voor Troje?"], ["Ita, pro Troia pugno.","Ja, ik vecht voor Troje."], ["Non, pro hostibus pugno.","Nee, ik vecht voor de vijanden."], ["Domum eo.","Ik ga naar huis."]),
     ],
@@ -377,7 +377,7 @@ function castraHeroumOpen(){
     if(T && T.hid===h.id){
       const tk = d.talks[T.i];
       talk = `<div style="margin-top:8px;padding:8px;border:1px solid #8a6d2f;border-radius:8px;background:rgba(0,0,0,.2)">
-        <div style="font-size:16px">${castraLaHTML(tk.la, tk.nl, "talk_"+h.id+T.i)}</div>
+        <div style="font-size:16px">${castraLaHTML(castraSay(tk.la), castraSay(tk.nl), "talk_"+h.id+T.i)}</div>
         <div style="margin:8px 0 4px;font-size:16px">${castraLaHTML(tk.q.la, tk.q.nl, "tq_"+h.id+T.i)}</div>
         ${castraOptOrder(tk.q.opts.length, h.id+T.i).map(k=>{ const o = tk.q.opts[k]; return `<button class="btn ${T.answered===k?(o.ok?"btn-gold":""):""}" ${T.answered!==null?"disabled":""} style="margin:2px 4px 2px 0" onclick="castraHeroumAnswer(${k})">${esc(o.la)}</button>`; }).join("")}
         ${T.answered!==null?`<div style="margin-top:6px"><button class="btn" onclick="castraHeroumEndTalk()">${castraLaText("claude")}</button></div>`:""}</div>`;
