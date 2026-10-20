@@ -22,6 +22,7 @@ const CASTRA_MENU_ITEMS = [
   { id:"opus",   la:"Opus",     nl:"opdracht" },
   { id:"profiel",la:"",         nl:"jouw kaart" },          // la = naam van de speler
   { id:"servare",la:"Servare",  nl:"opslaan" },
+  { id:"restart",la:"Restart",  nl:"opnieuw beginnen" },          // bewust Nederlands/Engels, geen Latijn
   { id:"exeo",   la:"Exeo",     nl:"terug naar het portaal" },
 ];
 let CASTRA_MENU = { open:false, view:null };
@@ -72,7 +73,7 @@ function castraMenuPick(id){
   if(id==="codex"){ castraMenuClose(); castraCodexOpen(); return; }
   if(id==="servare"){ castraSave(); castraToastLa("recte", "💾 Servatum"); castraMenuClose(); return; }
   if(id==="exeo"){ castraMenuClose(); castraLeave(); return; }
-  CASTRA_MENU.view = id; castraMenuRender();
+  CASTRA_MENU.view = id; CASTRA_MENU.rs = 0; castraMenuRender();
 }
 
 /* ---------- onderdelen ---------- */
@@ -90,6 +91,7 @@ function castraMenuView(id){
   if(id==="sacculus") return castraMenuBag();
   if(id==="opus") return castraMenuQuest();
   if(id==="profiel") return castraMenuProfile();
+  if(id==="restart") return castraMenuRestart();
   return "";
 }
 function castraMenuTeam(){
@@ -156,4 +158,30 @@ function castraMenuProfile(){
   ];
   const av = (typeof BM_IDENT!=="undefined" && BM_IDENT && BM_IDENT.avatar) ? `<div style="flex:0 0 96px;width:96px;height:96px;position:relative">${castraAvatarHTML(BM_IDENT.avatar,"down",1,96)}</div>` : "";
   return `<h3 style="margin:0 0 6px">${esc(name)}</h3><div style="display:flex;gap:12px;align-items:center">${av}<div style="flex:1">${rows.map(r=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-top:1px solid #c2a96f"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("")}</div></div>`;
+}
+
+/* ---------- Restart (alles wissen en opnieuw beginnen, met tutorial) ---------- */
+function castraMenuRestart(){
+  const step = CASTRA_MENU.rs || 0;
+  const list = "soldaten, helden, gebouwen, grondstoffen, behaalde missies, codex en je tutorial-voortgang";
+  if(step===0) return `<h3 style="margin:0 0 6px">Restart</h3>
+    <p style="font-size:15px">Wil je Castra Heroum <b>helemaal opnieuw beginnen</b>? Dan begin je weer met het tutorial en een leeg kamp.</p>
+    <p style="font-size:14px;opacity:.8">Je verliest: ${list}.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuPick('profiel')">Nee, terug</button>
+      <button class="btn" style="min-height:44px" onclick="CASTRA_MENU.rs=1;castraMenuRender()">Ja, opnieuw beginnen…</button></div>`;
+  return `<h3 style="margin:0 0 6px;color:#8a1c10">Weet je het zeker?</h3>
+    <p style="font-size:15px"><b>Dit kan niet ongedaan worden gemaakt.</b> Alles wat je met ${esc(castraPlayerName()||"je profiel")} in Castra Heroum hebt opgebouwd wordt gewist, ook in de cloud-opslag van je profiel.</p>
+    <p style="font-size:13px;opacity:.8">Je Battle Mode-profiel, avatar en munten blijven gewoon bestaan.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <button class="btn btn-gold" style="min-height:44px" onclick="castraMenuPick('profiel')">Annuleren</button>
+      <button class="btn" style="min-height:44px;border-color:#8a1c10;color:#8a1c10" onclick="castraRestartNow()">Ja, alles wissen</button></div>`;
+}
+function castraRestartNow(){
+  castraDlgClose(true);
+  CASTRA = castraNewState();
+  CASTRA.help = { words:{}, sentences:{} }; CASTRA.traces = {};
+  castraSave(); castraSync();                  // meteen ook naar de cloud, anders haalt een herlaad de oude save terug
+  castraMenuClose();
+  go("castraHome");
 }
