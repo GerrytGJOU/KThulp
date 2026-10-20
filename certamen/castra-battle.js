@@ -286,7 +286,7 @@ function castraBFinish(){
     (CASTRA.proelium || (CASTRA.proelium = { done:{} })).done = CASTRA.proelium.done || {};
     const first = !CASTRA.proelium.done[m.id];
     CASTRA.proelium.done[m.id] = true; castraSave();
-    if(typeof castraPxpAdd==="function") castraPxpAdd(first ? 40+5*m.waves.length : 10, first ? "Missie voor het eerst gewonnen" : "");
+    if(typeof castraPxpAdd==="function") castraPxpAdd(first ? castraMissionXp(CASTRA_P_MISSIONS.findIndex(x=>x.id===m.id), m.waves.length) : 10, first ? "Missie voor het eerst gewonnen" : "");
     if(first && typeof castraCardToken==="function") castraCardToken(1, "missie voor het eerst gewonnen");
     h += `<div style="font-size:22px;margin-bottom:6px">${castraLa("castra_defensa")}</div>
       <div>${castraLaText("praemium")}: ${Object.keys(rw).map(r=>castraRes(r).icon+" +"+rw[r]).join(" · ")}${B.rewardMult>1?" ("+castraLaText("praemium")+" ×"+B.rewardMult.toFixed(2)+")":""}</div>
