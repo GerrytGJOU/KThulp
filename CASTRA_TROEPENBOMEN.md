@@ -1,6 +1,6 @@
 # Castra Heroum — troepenbomen per volk (151 vormen)
 
-Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M5 gebouwd (M5: 2026-11-02), wacht op goedkeuring voor M6** · hoort bij `CASTRA_HEROUM.md`.
+Wijzigingsverzoek van Gerben, 2026-10-20 · status: **M1–M6 gebouwd (M6: 2026-11-03), wacht op goedkeuring voor M7** · hoort bij `CASTRA_HEROUM.md`.
 Dit document is de bron van waarheid voor de troepenbomen; het vervangt de huidige losse evolutielijnen (`CASTRA_LINES` in `certamen/castra-data.js`). De 15 helden (`CASTRA_HERO_DATA`) blijven ongewijzigd.
 
 ## 1. Idee en regels
@@ -137,7 +137,9 @@ Drie afbeeldingen per vorm (498 in totaal), gemaakt met ChatGPT volgens de stijl
 
 **M5 (2026-11-02): mapping naar de 8 Certamen-klassen** (`castraFormClassId` in castra-troops.js; badge met icoon en kleur uit `BM_CLASSES` in codex, campus en Dilectus). Regels op volgorde: *Bevelvoerder* = Optio, Centurio, Lochagus, Polemarchus, Soldurius, Comes, Signifer, Aquilifer (8) · *Verkenner* = Explorator, Perioecus, Sciritas en de hele vloot (6) · *Voorvechter* = alle gladiatoren, Spartanen en de Securifera (12) · *Hopliet* = overige infanterie (22) · *Cavalerie* = alle ruiterij, wagens en olifanten (24) · *Boogschutter* = afstandstroepen (17) · *Genie* = Ballistarius, Architectus, Faber (3) · *Priester* = priesters, druïden, magiërs, zieneressen, Capsarius, Medicus (14). Rekruten (11) en mythische wezens (34) hebben geen klasse. Dit is een voorstel dat je kunt bijstellen in `castraFormClassId`; de klasse werkt nu alleen als label (geen speleffect).
 
-**Nog niet (volgende mijlpalen):** M6 sprites-pijplijn, M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
+**M6 (2026-11-03): sprites-pijplijn** (`certamen/castra-sprites.js`, map `certamen/assets/sprites-forms/` met README.txt). Bestandsnamen `[vorm-id]_battle_front.png` / `_battle_back.png` (96×96) en `_td.png` (48×48); vorm-id = volk_naam (zie MANIFEST.md). Elk bestand wordt één keer geprobeerd (`castraFsprProbe`) en onthouden; ontbreekt het, dan blijft de avatar-laagcombinatie de placeholder, dus per vorm uploaden kan. Gebruik: beurtgevecht (venatio) toont jouw soldaat van achter en de vijand van voren; tower defence toont `_td` voor torens en vijanden (spiegeling bij links, lichte huppel in de looptakt); de codex toont `_td` als miniatuur bij ontmoete vormen. Helden en het dux-personage blijven avatar-gebaseerd. Voortgang: `node certamen/tools/castra-sprites-manifest.js` schrijft `assets/sprites-forms/MANIFEST.md` (nu 0 / 453). Na het vervangen van een PNG: `CASTRA_FSPR.ver` ophogen. Getest met tijdelijke testbestanden (daarna verwijderd): sprites verschijnen, fallback werkt. De 15 helden hebben hier nog geen eigen spritebestanden (die zouden 45 extra bestanden zijn).
+
+**Nog niet (volgende mijlpalen):** M7 nieuwe regio's. Buiten dit verzoek: de **helden** zijn niet meegeschaald (vaste stats, cap level 20), waardoor ze op hoge soldatenlevels relatief zwakker worden; een mogelijke volgende afstemming.
 
 ## 7. Voorstel mijlpalen en open punten (oorspronkelijk)
 

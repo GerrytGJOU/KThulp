@@ -128,7 +128,7 @@ function castraVFight(sid){
   V.enHp = V.enMax = V.stats.vita;
   V.enType = castraLine(V.enemy.line).type;
   V.log = []; V.round = 0; V.over = null; V.dmgTaken = 0;
-  castraVRender("battle");
+  castraFsprProbe([[mine.line,"battle_back"],[V.enemy.line,"battle_front"]], ()=>{ if(CASTRA_V===V) castraVRender("battle"); });
 }
 function castraVBar(cur,max,col){
   const p = Math.max(0, Math.round(100*cur/max));
@@ -138,7 +138,13 @@ function castraVBattleHTML(){
   const V = CASTRA_V, line = castraLine(V.enemy.line);
   const myName = V.mine.dux ? "Dux" : castraSoldierName(V.mine);
   const log = V.log.slice(-6).map(l=>`<div style="padding:2px 0">${l}</div>`).join("");
+  const mySpr = castraFsprHTML(V.mine.line, "battle_back", 96, castraAvatarHTML(castraPLook(V.mine.line), "up", 1, 96), false);
+  const enSpr = castraFsprHTML(V.enemy.line, "battle_front", 96, castraAvatarHTML(castraPLook(V.enemy.line), "down", 1, 96), false);
   return `<div class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
+      <div style="position:relative;width:96px;height:96px">${mySpr}</div>
+      <div style="position:relative;width:96px;height:96px">${enSpr}</div>
+    </div>
     <div style="display:flex;gap:12px">
       <div style="flex:1"><b>${esc(myName)}</b> <small>(${esc(CASTRA_TYPE_LA[V.myType].sg)})</small>${castraVBar(V.myHp,V.myMax,"#3f9d52")}</div>
       <div style="flex:1;text-align:right"><b>${esc(castraSoldierName(V.enemy))}</b> <small>${castraLaText("gradus")} ${V.enemy.lvl} (${esc(CASTRA_TYPE_LA[line.type].sg)})</small>${castraVBar(V.enHp,V.enMax,"#c8392a")}</div>
